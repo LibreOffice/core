@@ -44,7 +44,7 @@ published service Dim3DDiagram
     [optional] interface ::com::sun::star::chart::X3DDefaultSetter;
 
 
-    /** If set to <TRUE/>, the chart becomes a three-dimensional
+    /** If set to `TRUE`, the chart becomes a three-dimensional
         chart.  Otherwise it is two-dimensional.
     */
     [property] boolean Dim3D;

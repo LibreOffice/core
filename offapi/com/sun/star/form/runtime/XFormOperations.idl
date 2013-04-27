@@ -93,13 +93,13 @@ interface XFormOperations : ::com::sun::star::lang::XComponent
         For instance, you could imagine a toolbar button which is associated with a given feature.
         This button would be enabled if and only if the respective feature is currently
         available, and be checked if and only if the feature state is a <code>boolean</code>
-        evaluating to <TRUE/>.<p>
+        evaluating to `TRUE`.<p>
 
         @param Feature
             the feature whose state is to be determined. Must be one of the FormFeature
             constants.<br/>
             An invalid value here will be silently ignored, and simply return a FeatureState
-            indicating <em>disabled</em> with a <NULL/> state.</p>
+            indicating <em>disabled</em> with a `NULL` state.</p>
     */
     FeatureState    getState(
                         [in] short Feature
@@ -113,7 +113,7 @@ interface XFormOperations : ::com::sun::star::lang::XComponent
         @param Feature
             the feature whose state is to be determined. Must be one of the FormFeature
             constants.<br/>
-            An invalid value here will be silently ignored, and simply return <FALSE/>.
+            An invalid value here will be silently ignored, and simply return `FALSE`.
     */
     boolean         isEnabled(
                         [in] short Feature
@@ -181,11 +181,11 @@ interface XFormOperations : ::com::sun::star::lang::XComponent
     /** commits the current record of the form
 
         @param RecordInserted
-            will be <TRUE/> if a record has been inserted, i.e. the form was positioned
+            will be `TRUE` if a record has been inserted, i.e. the form was positioned
             on the insertion row.
 
         @return
-            <TRUE/> if and only if the current record needed being committed. That's the
+            `TRUE` if and only if the current record needed being committed. That's the
             case if the record or the active control of the form were modified.
 
         @throws ::com::sun::star::sdbc::SQLException
@@ -231,7 +231,7 @@ interface XFormOperations : ::com::sun::star::lang::XComponent
 
     /** denotes the instance which should be notified about features whose state might have changed.
 
-        <p>If this attribute is not <NULL/>, the instance which it denotes will be notified
+        <p>If this attribute is not `NULL`, the instance which it denotes will be notified
         whenever the state of any supported feature might have changed.</p>
 
         <p>For instance, imagine a form whose current row has just been moved to another

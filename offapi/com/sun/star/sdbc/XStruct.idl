@@ -67,7 +67,7 @@ published interface XStruct: com::sun::star::uno::XInterface
              This method uses the given type map for customizations of the type
              mappings. If there is no entry in the given type map that matches or
              the given type map is
-             <NULL/>
+             `NULL`
              , the structured type that this
              <code>Struct</code>
              object represents, the driver uses
@@ -76,7 +76,7 @@ published interface XStruct: com::sun::star::uno::XInterface
                 is a map object that contains mappings of SQL type names to
                 services. If the
                 <code>typeMap</code>is
-                <NULL/>
+                `NULL`
                 , the type-map
                    associated with the connection for customizations of the type-mappings
                 is used.

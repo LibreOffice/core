@@ -77,18 +77,18 @@ interface XFormControllerContext;
     is displayed to the user, the control is focused, and the update of the record is vetoed.</p>
 
     <p>Second, the controls are examined for NULL values. If a control is bound to a database field which
-    is declared to be <code>NOT NULL</code>, no auto-increment field, but still <NULL/>, then an error
+    is declared to be <code>NOT NULL</code>, no auto-increment field, but still `NULL`, then an error
     message is shown to the user saying that input is required, the respective control is focused, and
     the update of the record is vetoed.</p>
 
-    <p>Note that you can present the second check - for database fields containing <NULL/> values - on
+    <p>Note that you can present the second check - for database fields containing `NULL` values - on
     a per-form and a per-database basis.<br/>
     For the former, you need to add a boolean property <code>FormsCheckRequiredFields</code> to the form
     (aka the <code>FormController</code>'s model), using its
     com::sun::star::beans::XPropertyContainer::addProperty() method, with a value
-    of <FALSE/>.<br/>
+    of `FALSE`.<br/>
     For the latter, you need to set the respective property of the data source's <code>Settings</code>
-    (also named <code>FormsCheckRequiredFields</code>) to <FALSE/>.</p>
+    (also named <code>FormsCheckRequiredFields</code>) to `FALSE`.</p>
 
     <p>Alternatively, you can prevent the check on a per-control basis, using the
     DataAwareControlModel::InputRequired property of a single control model.</p>
@@ -137,7 +137,7 @@ interface XFormControllerContext;
         notified when the record count changes.<br/>
         The status value which is being notified (com::sun::star::frame::FeatureStateEvent::State)
         is a string which can be used to display the record count. In particular, if the record count is not yet known
-        (com::sun::star::sdb::RowSet::IsRowCountFinal is <FALSE/>), this is indicated in the
+        (com::sun::star::sdb::RowSet::IsRowCountFinal is `FALSE`), this is indicated in the
         string, too.</td>
       </tr>
 
@@ -332,7 +332,7 @@ interface XFormController
     */
     [attribute] XFormControllerContext  Context;
 
-    /** used (if not <NULL/>) for user interactions triggered by the form controller.
+    /** used (if not `NULL`) for user interactions triggered by the form controller.
     */
     [attribute] ::com::sun::star::task::XInteractionHandler InteractionHandler;
 
@@ -348,7 +348,7 @@ interface XFormController
 
     /** adds a controller to the list of child controllers
         @throws ::com::sun::star::lang::IllegalArgumentException
-            if the given controller is <NULL/>, or cannot rightfully be a child controller. Since controllers
+            if the given controller is `NULL`, or cannot rightfully be a child controller. Since controllers
             mirror the hierarchy of the forms the are responsible for, this means that the form of the given
             child controller must be a child of the controller at which the method is invoked.
     */

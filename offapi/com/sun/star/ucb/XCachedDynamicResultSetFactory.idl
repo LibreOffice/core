@@ -42,7 +42,7 @@ published interface XCachedDynamicResultSetFactory: com::sun::star::uno::XInterf
 
         @param SourceStub
         must be an instance of service CachedDynamicResultSetStub.
-        It can be <NULL/>. In this case you can use the interface
+        It can be `NULL`. In this case you can use the interface
         XSourceInitialization of the returned
         CachedDynamicResultSet to set the stub later.
 

@@ -154,7 +154,7 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
 
       @returns
                 a Layer object providing access to the layer data,
-                <NULL/> if the layer is newer than indicated by the timestamp.
+                `NULL` if the layer is newer than indicated by the timestamp.
 
       @throws   com::sun::star::lang::IllegalArgumentException
                 if the layer id is invalid or
@@ -203,7 +203,7 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
                    position.
                 </p>
                 <p> For layers that are newer than indicated by the
-                   timestamp, the list contains a <NULL/> element.
+                   timestamp, the list contains a `NULL` element.
                 </p>
 
       @throws   com::sun::star::lang::IllegalArgumentException
@@ -257,7 +257,7 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
                    position.
                 </p>
                 <p> For layers that are newer than indicated by the corresponding
-                   timestamp, the list contains a <NULL/> element.
+                   timestamp, the list contains a `NULL` element.
                 </p>
 
       @throws   com::sun::star::lang::IllegalArgumentException

@@ -50,7 +50,7 @@ interface XLayerContentDescriber : ::com::sun::star::uno::XInterface
              all required property information
 
       @throws com::sun::star::lang::NullPointerException
-              if a <NULL/> handler is passed.
+              if a `NULL` handler is passed.
       @throws com::sun::star::configuration::backend::MalformedDataException
               if the data read from the layer is rejected as invalid by the
               XLayerHandler.

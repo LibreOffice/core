@@ -119,8 +119,8 @@ interface XAccessibleHyperlink :
         like e.g. sending an appropriate event.</p>
 
         @return
-            Returns <TRUE/> if the referenced document is still valid and
-            <FALSE/> otherwise.
+            Returns `TRUE` if the referenced document is still valid and
+            `FALSE` otherwise.
     */
     boolean isValid ();
 };

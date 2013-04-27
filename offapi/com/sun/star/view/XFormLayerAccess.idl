@@ -45,7 +45,7 @@ interface XFormLayerAccess
         with the form layer, as long as the form is not in design mode.</p>
 
         @return
-            the requested form controller, or <NULL/> if the view's
+            the requested form controller, or `NULL` if the view's
             form layer is currently in design mode. Note that the returned
             instance becomes non-functional as soon as the form layer is switched
             to design mode.

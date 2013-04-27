@@ -38,15 +38,15 @@ published service DatabasePatternField
     service com::sun::star::form::DataAwareControlModel;
 
 
-    /** determines if an empty text should be treated as a <NULL/> value.
+    /** determines if an empty text should be treated as a `NULL` value.
 
         <p>When the user enters text into a pattern field, and after this, the control
         content is to be committed into the database field the control is bound to,
         a decision must be made how to deal with empty strings.<br/>
         This is controlled by this property.</p>
 
-        <p>If the property is set to <TRUE/>, and an empty text is to be commited, this is
-        converted into <NULL/>, else it is written as empty string.</p>
+        <p>If the property is set to `TRUE`, and an empty text is to be commited, this is
+        converted into `NULL`, else it is written as empty string.</p>
      */
     [property] boolean ConvertEmptyToNull;
 

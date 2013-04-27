@@ -68,7 +68,7 @@ published interface XHierarchicalPropertySet: com::sun::star::uno::XInterface
                 supplies this interface.
 
         @returns
-                <NULL/> if the implementation cannot or will
+                `NULL` if the implementation cannot or will
                 not provide information about the properties; otherwise the
                 interface XHierarchicalPropertySetInfo is returned.
      */

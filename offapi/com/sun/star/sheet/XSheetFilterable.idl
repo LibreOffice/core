@@ -37,8 +37,8 @@ published interface XSheetFilterable: com::sun::star::uno::XInterface
     /** creates a filter descriptor.
 
         @param bEmpty
-            if set to <TRUE/>, creates an empty filter descriptor. If set to
-            <FALSE/>, fills the filter descriptor with previous settings of
+            if set to `TRUE`, creates an empty filter descriptor. If set to
+            `FALSE`, fills the filter descriptor with previous settings of
             the current object (i.e. a database range).
      */
     com::sun::star::sheet::XSheetFilterDescriptor

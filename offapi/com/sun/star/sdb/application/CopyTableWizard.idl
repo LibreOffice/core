@@ -142,7 +142,7 @@ service CopyTableWizard : XCopyTableWizard
 
         @throws ::com::sun::star::lang::IllegalArgumentException
             if
-            <ul><li>either <code>Source</code> or <code>Destination</code> is <NULL/></li>
+            <ul><li>either <code>Source</code> or <code>Destination</code> is `NULL`</li>
                 <li>either <code>Source</code> or <code>Destination</code> are not sufficient
                     to describe a database connection.</li>
                 <li><code>Source</code> is not sufficient to describe the to-be-copied data</li>

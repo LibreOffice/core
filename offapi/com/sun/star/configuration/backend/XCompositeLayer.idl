@@ -68,7 +68,7 @@ published interface XCompositeLayer : XLayer
             </p>
 
       @throws com::sun::star::lang::NullPointerException
-              if a <NULL/> handler is passed.
+              if a `NULL` handler is passed.
       @throws com::sun::star::lang::IllegalArgumentException
               if the identifier is invalid.
       @throws com::sun::star::lang::WrappedTargetException

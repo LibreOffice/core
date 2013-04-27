@@ -31,7 +31,7 @@
 /** This service specifies a check box which is data-aware, and can be bound to a database field.
 
     <p>Mostly, you will create data-aware checkboxes as tristate checkboxes, because this
-    is a requirement to correctly handle <NULL/> values in databases.</p>
+    is a requirement to correctly handle `NULL` values in databases.</p>
 
     @see ::com::sun::star::awt::UnoControlCheckBoxModel::TriState
  */

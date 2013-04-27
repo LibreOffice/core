@@ -101,7 +101,7 @@ published interface XParameters: com::sun::star::uno::XInterface
         @param parameterIndex
             the first parameter is 1, the second is 2, ...
         @param sqlType
-            the type of the column to set to <NULL/>
+            the type of the column to set to `NULL`
         @param typeName
             the name of the type
         @throws SQLException

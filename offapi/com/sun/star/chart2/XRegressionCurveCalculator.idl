@@ -75,7 +75,7 @@ interface XRegressionCurveCalculator : com::sun::star::uno::XInterface
         instead of nPointCount() points.  This is only
         allowed if the parameter
         bMaySkipPointsInCalculation() is set to
-        <TRUE/>.
+        `TRUE`.
 
         <p>It is important that a renderer takes the scalings into
         account. When one of these parameters is unknown, no
@@ -83,7 +83,7 @@ interface XRegressionCurveCalculator : com::sun::star::uno::XInterface
 
         @param bMaySkipPointsInCalculation determines whether it is
                allowed to skip points in the calculation. When this
-               parameter is <TRUE/> it is assumed that the underlying
+               parameter is `TRUE` it is assumed that the underlying
                coordinate system is Cartesian.
 
         @param xScalingX a scaling that is used for the values in

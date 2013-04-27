@@ -53,7 +53,7 @@ exception DependencyException: com::sun::star::uno::Exception {
        value of that attribute to the user.</p>
 
        <p>The sequence must not be empty, and none of the elements may be
-       <NULL/>.</p>
+       `NULL`.</p>
     */
     sequence< com::sun::star::xml::dom::XElement > UnsatisfiedDependencies;
 };

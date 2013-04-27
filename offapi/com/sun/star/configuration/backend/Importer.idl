@@ -52,7 +52,7 @@ published service Importer
 
         <dl>
             <dt><code>Notify</code> : `boolean`</dt>
-            <dd>If <TRUE/>, specifies that the backend should trigger
+            <dd>If `TRUE`, specifies that the backend should trigger
              notification to its listeners.
             </dd>
         </dl>

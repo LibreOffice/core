@@ -39,7 +39,7 @@ published interface XStyle: com::sun::star::container::XNamed
 
 
     /** @returns
-                    <TRUE/> if this type is used in the document.
+                    `TRUE` if this type is used in the document.
      */
     boolean isInUse();
 

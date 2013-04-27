@@ -44,8 +44,8 @@ published interface XFormulaQuery: com::sun::star::uno::XInterface
         the original cell.</p>
 
         @param bRecursive
-            <FALSE/> = queries cells dependent from the original range(s),
-            <TRUE/> = repeats query with all found cells
+            `FALSE` = queries cells dependent from the original range(s),
+            `TRUE` = repeats query with all found cells
             (finds dependents of dependents, and so on).
 
         @return
@@ -62,8 +62,8 @@ published interface XFormulaQuery: com::sun::star::uno::XInterface
         cell.</p>
 
         @param bRecursive
-            <FALSE/> = queries precedent cells of the original range(s),
-            <TRUE/> = repeats query with all found cells
+            `FALSE` = queries precedent cells of the original range(s),
+            `TRUE` = repeats query with all found cells
             (finds precedents of precedents, and so on).
 
         @return

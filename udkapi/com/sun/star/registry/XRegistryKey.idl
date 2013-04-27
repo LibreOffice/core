@@ -341,9 +341,9 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
     /** creates a new link in the registry.
 
         @returns
-        <TRUE/> if the link was created. If the link already
+        `TRUE` if the link was created. If the link already
         exists or the link target does not exist, the
-        function returns <FALSE/>.
+        function returns `FALSE`.
 
         @param aLinkName
         specifies the relative path from the current key to

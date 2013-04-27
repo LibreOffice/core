@@ -45,9 +45,9 @@ published interface XFetchProviderForContentAccess: com::sun::star::uno::XInterf
         the count of rows
 
         @param bDirection
-        <TRUE/>, if you want the rows to be read in the same order, as they
-        are contained in the result set ( <TRUE/> &lt;-&gt; forward step;
-        <FALSE/> &lt;-&gt; backward step )
+        `TRUE`, if you want the rows to be read in the same order, as they
+        are contained in the result set ( `TRUE` &lt;-&gt; forward step;
+        `FALSE` &lt;-&gt; backward step )
     */
     com::sun::star::ucb::FetchResult
          fetchContentIdentifierStrings( [in] long nRowStartPosition
@@ -68,9 +68,9 @@ published interface XFetchProviderForContentAccess: com::sun::star::uno::XInterf
         the count of rows
 
         @param bDirection
-        <TRUE/>, if you want the rows to be read in the same order, as they
-        are contained in the result set ( <TRUE/> &lt;-&gt; forward step;
-        <FALSE/> &lt;-&gt; backward step )
+        `TRUE`, if you want the rows to be read in the same order, as they
+        are contained in the result set ( `TRUE` &lt;-&gt; forward step;
+        `FALSE` &lt;-&gt; backward step )
     */
     com::sun::star::ucb::FetchResult
          fetchContentIdentifiers( [in] long nRowStartPosition
@@ -90,9 +90,9 @@ published interface XFetchProviderForContentAccess: com::sun::star::uno::XInterf
         the count of rows
 
         @param bDirection
-        <TRUE/>, if you want the rows to be read in the same order, as they
-        are contained in the result set ( <TRUE/> &lt;-&gt; forward step;
-        <FALSE/> &lt;-&gt; backward step )
+        `TRUE`, if you want the rows to be read in the same order, as they
+        are contained in the result set ( `TRUE` &lt;-&gt; forward step;
+        `FALSE` &lt;-&gt; backward step )
     */
     com::sun::star::ucb::FetchResult
          fetchContents( [in] long nRowStartPosition

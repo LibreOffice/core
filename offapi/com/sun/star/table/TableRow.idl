@@ -54,17 +54,17 @@ published service TableRow
     [property] long Height;
 
 
-    /** is <TRUE/>, if the row always keeps its optimal height.
+    /** is `TRUE`, if the row always keeps its optimal height.
      */
     [property] boolean OptimalHeight;
 
 
-    /** is <TRUE/>, if the row is visible.
+    /** is `TRUE`, if the row is visible.
      */
     [property] boolean IsVisible;
 
 
-    /** is <TRUE/>, if there is a manual vertical page break attached
+    /** is `TRUE`, if there is a manual vertical page break attached
         to the row.
      */
     [property] boolean IsStartOfNewPage;

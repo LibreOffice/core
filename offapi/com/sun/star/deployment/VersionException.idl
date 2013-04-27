@@ -47,7 +47,7 @@ exception VersionException: com::sun::star::uno::Exception {
     /**
        represents the already installed version of the deployment unit.
 
-       <p>Must not be <NULL/>.</p>
+       <p>Must not be `NULL`.</p>
     */
     XPackage Deployed;
 };

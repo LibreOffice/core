@@ -41,7 +41,7 @@ service FLATConnectionProperties
 {
     service com::sun::star::sdbc::FILEConnectionProperties;
 
-    /** <TRUE/> when the file contains a header line otherwise <FALSE/>
+    /** `TRUE` when the file contains a header line otherwise `FALSE`
     */
     [optional, property] boolean HeaderLine;
 

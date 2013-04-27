@@ -43,18 +43,18 @@ module com {  module sun {  module star {  module form {  module binding {
             The value will represent the value of the selected entry
             (taken from ValueList or read from BoundColumn).
             If more than one entry is selected,
-            <NULL/> will be transfered.
+            `NULL` will be transfered.
             In other words, the SelectedValue property.</li>
         <li><em>sequences of long integers</em>: When used, the integers in the sequence will represent
             the indexes of the selected entries of the list box.</li>
         <li><em>long integer value</em>: When used, the value will represent the index of the selected entry.
-            If no entry is selected, -1 will be transfered. If more than one entry is selected, <NULL/>
+            If no entry is selected, -1 will be transfered. If more than one entry is selected, `NULL`
             will be transfered.</li>
         <li><em>sequences of strings</em>: When used, the strings in the sequence present the texts
             of the selected entries of the list box.</li>
         <li><em>string values</em>: When used. the value will represent the text of the selected entry.
             If no entry is selected, an empty string will be transfered. If more than one entry is selected,
-            <NULL/> will be transfered.</li>
+            `NULL` will be transfered.</li>
     </ol></p>
 
     @see com::sun::star::form::binding::XValueBinding::supportsType

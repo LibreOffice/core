@@ -51,8 +51,8 @@ interface XDockableWindow : com::sun::star::uno::XInterface
     /** enable or disable docking, docking is disabled by default
 
         @param bEnable
-            <TRUE/> specifies that docking is enabled
-            <FALSE/> specifies that docking is disabled and no
+            `TRUE` specifies that docking is enabled
+            `FALSE` specifies that docking is disabled and no
                 com::sun::star::awt::XDockableWindowListener will be called
      */
     void enableDocking( [in] boolean bEnable );
@@ -60,8 +60,8 @@ interface XDockableWindow : com::sun::star::uno::XInterface
 
     /** queries the current window state
         @returns
-            <TRUE/> if the window is floating
-            <FALSE/> if the window is docked
+            `TRUE` if the window is floating
+            `FALSE` if the window is docked
      */
     boolean isFloating();
 
@@ -69,7 +69,7 @@ interface XDockableWindow : com::sun::star::uno::XInterface
     /** toggle between floating and docked state
         @param bFloating
             specifies the new floating mode:
-            <TRUE/> means floating, <FALSE/> means docked
+            `TRUE` means floating, `FALSE` means docked
      */
     void setFloatingMode( [in] boolean bFloating );
 
@@ -88,8 +88,8 @@ interface XDockableWindow : com::sun::star::uno::XInterface
 
     /** queries the current locking state
         @returns
-            <TRUE/> if the window is locked
-            <FALSE/> if the window is not locked
+            `TRUE` if the window is locked
+            `FALSE` if the window is not locked
      */
     boolean isLocked();
 
@@ -106,8 +106,8 @@ interface XDockableWindow : com::sun::star::uno::XInterface
 
     /** queries the current pop-up mode
         @returns
-            <TRUE/> if the window is in pop-up mode
-            <FALSE/> if the window is not in pop-up mode
+            `TRUE` if the window is in pop-up mode
+            `FALSE` if the window is not in pop-up mode
      */
     boolean isInPopupMode();
 };

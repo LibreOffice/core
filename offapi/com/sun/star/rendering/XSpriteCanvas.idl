@@ -127,13 +127,13 @@ interface XSpriteCanvas : XBitmapCanvas
         associated XSpriteCanvas instances.<p>
 
         @param bUpdateAll
-        When <TRUE/>, update the whole screen. When <FALSE/>,
+        When `TRUE`, update the whole screen. When `FALSE`,
         implementation is permitted to restrict update to areas the
         canvas itself changed (e.g. because of render operations, or
         changes on the sprites). The former is useful for updates
         after window expose events. the latter for animation display.
 
-        @return <TRUE/>, if the screen update was successfully
+        @return `TRUE`, if the screen update was successfully
         performed
      */
     boolean updateScreen( [in] boolean bUpdateAll );

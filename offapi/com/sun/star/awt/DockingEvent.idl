@@ -50,7 +50,7 @@ struct DockingEvent: com::sun::star::lang::EventObject
 
     /** specifies if the docking procedure is interactive which means that
         the user is currently dragging the window to a new position
-        if this member is <FALSE/> the window will be docked or undocked immediately
+        if this member is `FALSE` the window will be docked or undocked immediately
         using the returned tracking rectangle
      */
     boolean bInteractive;

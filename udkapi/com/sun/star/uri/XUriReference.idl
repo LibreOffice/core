@@ -55,7 +55,7 @@ published interface XUriReference: com::sun::star::uno::XInterface {
        returns whether this URI reference is absolute or relative.
 
        @returns
-       <TRUE/> if this URI reference is absolute, <FALSE/> if it is relative.
+       `TRUE` if this URI reference is absolute, `FALSE` if it is relative.
      */
     boolean isAbsolute();
 
@@ -93,7 +93,7 @@ published interface XUriReference: com::sun::star::uno::XInterface {
        always hierarchical.</p>
 
        @returns
-       <TRUE/> if this URI reference is hierarchical, <FALSE/> if it is opaque.
+       `TRUE` if this URI reference is hierarchical, `FALSE` if it is opaque.
      */
     boolean isHierarchical();
 
@@ -101,7 +101,7 @@ published interface XUriReference: com::sun::star::uno::XInterface {
        returns whether this (hierarchical) URI reference has an authority part.
 
        @returns
-       <TRUE/> if this URI reference is hierarchical and has an authority part.
+       `TRUE` if this URI reference is hierarchical and has an authority part.
      */
     boolean hasAuthority();
 
@@ -130,7 +130,7 @@ published interface XUriReference: com::sun::star::uno::XInterface {
        returns whether this (relative) URI reference has a relative path.
 
        @returns
-       <TRUE/> if this URI reference is relative and has a relative path.
+       `TRUE` if this URI reference is relative and has a relative path.
      */
     boolean hasRelativePath();
 
@@ -169,7 +169,7 @@ published interface XUriReference: com::sun::star::uno::XInterface {
        returns whether this (hierarchical) URI reference has a query part.
 
        @returns
-       <TRUE/> if this URI reference is hierarchical and has a query part.
+       `TRUE` if this URI reference is hierarchical and has a query part.
      */
     boolean hasQuery();
 
@@ -188,7 +188,7 @@ published interface XUriReference: com::sun::star::uno::XInterface {
        returns whether this URI reference has a fragment part.
 
        @returns
-       <TRUE/> if this URI reference has a fragment part.
+       `TRUE` if this URI reference has a fragment part.
      */
     boolean hasFragment();
 

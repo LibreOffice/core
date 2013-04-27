@@ -149,7 +149,7 @@ published interface XParametersSupplier;
     <h3>Deletions</h3>
     <p>Via com::sun::star::sdbc::XResultSetUpdate::deleteRow(), you can delete the current row of a
     RowSet. This deleted row then doesn't vanish immediately, but is still present, and subsequent calls to
-    com::sun::star::sdbc::XResultSet::rowDeleted() will return <TRUE/>. The deleted row "vanishes" from
+    com::sun::star::sdbc::XResultSet::rowDeleted() will return `TRUE`. The deleted row "vanishes" from
     the RowSet as soon as the cursor is moved away from it.<br/>
     As a consequence, the behavior of several other methods is affected:<br/>
     <dl>
@@ -246,7 +246,7 @@ published service RowSet
         </p>
         <p>
         If the row set is not alive (i.e., it was not executed before),
-        <NULL/>
+        `NULL`
         is returned.
         </p>
     */
@@ -287,7 +287,7 @@ published service RowSet
         It then can be to used to specify whether the SQL statement should be analyzed on the
         client side before sending it to the database server.<br/>
         The default value for com::sun::star::sdbc::RowSet::EscapeProcessing
-        is <TRUE/>. By switching it to <FALSE/>, you can pass backend-specific SQL statements,
+        is `TRUE`. By switching it to `FALSE`, you can pass backend-specific SQL statements,
         which are not standard SQL, to your database.</p>
 
         @see com::sun::star::sdb::CommandType
@@ -317,7 +317,7 @@ published service RowSet
 
 
     /** indicates whether the filter should be applied or not,
-        default is <FALSE/>.
+        default is `FALSE`.
      */
     [property] boolean ApplyFilter;
 

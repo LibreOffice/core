@@ -82,7 +82,7 @@ published service SheetFilterDescriptor
         position is saved for future calls.
 
         <p>This is only used if
-        SheetFilterDescriptor::CopyOutputData is <TRUE/>.</p>
+        SheetFilterDescriptor::CopyOutputData is `TRUE`.</p>
      */
     [property] boolean SaveOutputPosition;
 
@@ -107,7 +107,7 @@ published service SheetFilterDescriptor
     /** specifies the position where filtered data are to be copied.
 
         <p>This is only used if
-        SheetFilterDescriptor::CopyOutputData is <TRUE/>.</p>
+        SheetFilterDescriptor::CopyOutputData is `TRUE`.</p>
      */
     [property] com::sun::star::table::CellAddress OutputPosition;
 

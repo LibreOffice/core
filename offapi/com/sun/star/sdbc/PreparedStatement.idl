@@ -126,7 +126,7 @@ published service PreparedStatement
              for execution.
              <p>
              A driver implementing batch execution must return
-             <TRUE/>
+             `TRUE`
              for
              <member scope= "com::sun::star::sdbc">XDatabaseMetaData::supportsBatchUpdates()</member>
              </p>

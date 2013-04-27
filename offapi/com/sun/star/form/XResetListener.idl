@@ -51,7 +51,7 @@ published interface XResetListener: com::sun::star::lang::XEventListener
             the event happened.
 
         @returns
-            <TRUE/> when reset was approved, <FALSE/> when the reset operation should be canceled.
+            `TRUE` when reset was approved, `FALSE` when the reset operation should be canceled.
      */
     boolean approveReset( [in] com::sun::star::lang::EventObject rEvent );
 

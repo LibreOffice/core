@@ -57,7 +57,7 @@ published interface XSSOContext : ::com::sun::star::uno::XInterface
     /** retrieves whether or not the context supports mutual authentication
 
         @returns
-        <TRUE/> if mutual authentication is supported, <FALSE/> otherwise.
+        `TRUE` if mutual authentication is supported, `FALSE` otherwise.
      */
     boolean getMutual();
 };

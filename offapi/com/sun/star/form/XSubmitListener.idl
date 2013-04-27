@@ -48,7 +48,7 @@ published interface XSubmitListener: com::sun::star::lang::XEventListener
             the event happened
 
         @returns
-            <TRUE/> when submitting was approved, otherwise <FALSE/>.
+            `TRUE` when submitting was approved, otherwise `FALSE`.
      */
     boolean approveSubmit( [in] com::sun::star::lang::EventObject rEvent );
 

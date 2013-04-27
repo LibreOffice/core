@@ -57,7 +57,7 @@ published interface XText: com::sun::star::text::XSimpleText
 
         @param bAbsorb
             specifies whether the text spanned by <var>xRange</var> will be
-            replaced. If <TRUE/> then the content of <var>xRange</var> will
+            replaced. If `TRUE` then the content of <var>xRange</var> will
             be replaced by <var>xContent</var>, otherwise <var>xContent</var>
             will be inserted at the end of <var>xRange</var>.
      */

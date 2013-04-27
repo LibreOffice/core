@@ -170,10 +170,10 @@ published service ConfigurationProvider
         cache configuration data)
        <dl>
          <dt><code>"enableasync"</code> : `boolean`</dt>
-         <dd>controls how updates are handled in the cache. If <TRUE/>, the
+         <dd>controls how updates are handled in the cache. If `TRUE`, the
           cache may operate in <em>write-back</em> mode, where updates at
           first only affect the cache and are written to persistent storage
-          at some later time. If <FALSE/>, the cache must operate in
+          at some later time. If `FALSE`, the cache must operate in
           <em>write-through</em> mode, where updates are written to persistent
           storage at once - that is before
           com::sun::star::util::XChangesBatch::commitChanges()

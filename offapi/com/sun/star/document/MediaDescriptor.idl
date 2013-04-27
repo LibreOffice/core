@@ -64,8 +64,8 @@ service MediaDescriptor
 
         <p>
         Loading a component of type "template" creates a new untitled document
-        by default, but setting the "AsTemplate" property to <FALSE/> loads the
-        template document for editing. Setting "AsTemplate" to <TRUE/> creates a
+        by default, but setting the "AsTemplate" property to `FALSE` loads the
+        template document for editing. Setting "AsTemplate" to `TRUE` creates a
         new untitled document out of the loaded document, even if it has not
         a "template" type.
         </p>
@@ -307,7 +307,7 @@ service MediaDescriptor
     /** opens a new view for an already loaded document
 
         <p>
-        Setting this to <TRUE/> forces the component to create a new window on loading
+        Setting this to `TRUE` forces the component to create a new window on loading
         in any case. If the component supports multiple views, a second view is
         opened, if not, the component is loaded one more time. Otherwise the behavior
         depends on the default window handling of the com::sun::star::frame::Desktop environment.
@@ -319,7 +319,7 @@ service MediaDescriptor
     /** overwrite any existing file
 
         <p>
-        For storing only: overwrite any existing file, default is <FALSE/>,
+        For storing only: overwrite any existing file, default is `FALSE`,
         so an error occurs if the target file already exists.
         </p>
      */
@@ -361,9 +361,9 @@ service MediaDescriptor
     /** show preview
 
         <p>
-        Setting this to <TRUE/> tells the a loaded component that it is loaded as
+        Setting this to `TRUE` tells the a loaded component that it is loaded as
         a preview, so it can optimize loading and viewing for this special purpose.
-        Default is <FALSE/>.
+        Default is `FALSE`.
         </p>
      */
     [optional,property] boolean Preview;
@@ -409,7 +409,7 @@ service MediaDescriptor
     /** let the document be opened in repair mode
 
         <p>
-        For loading of corrupted zip packages: Setting this to <TRUE/> let the document
+        For loading of corrupted zip packages: Setting this to `TRUE` let the document
         be opened in repair mode, so as much as possible information will be retrieved.
         </p>
 
@@ -471,9 +471,9 @@ service MediaDescriptor
     /** regulate using of compressing
 
         <p>
-        For storing: Setting this to <TRUE/> means, don't use a zip file to save
+        For storing: Setting this to `TRUE` means, don't use a zip file to save
         the document, use a folder instead (only usable for UCB contents, that
-        support folders). Default is <FALSE/>.
+        support folders). Default is `FALSE`.
         </p>
      */
     [optional,property] boolean Unpacked;

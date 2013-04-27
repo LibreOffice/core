@@ -36,28 +36,28 @@ published service SearchDescriptor
 
     interface com::sun::star::beans::XPropertySet;
 
-    /** If <TRUE/>, the search is done backwards in the document.
+    /** If `TRUE`, the search is done backwards in the document.
      */
     [property] boolean SearchBackwards;
 
-    /** If <TRUE/>, the case of the letters is important for the match.
+    /** If `TRUE`, the case of the letters is important for the match.
      */
     [property] boolean SearchCaseSensitive;
 
-    /** If <TRUE/>, only complete words will be found.
+    /** If `TRUE`, only complete words will be found.
      */
     [property] boolean SearchWords;
 
-    /** If <TRUE/>, the search string is evaluated as a regular expression.
+    /** If `TRUE`, the search string is evaluated as a regular expression.
      */
     [property] boolean SearchRegularExpression;
 
-    /** If <TRUE/>, it is searched for positions where the paragraph style with
+    /** If `TRUE`, it is searched for positions where the paragraph style with
         the name of the search pattern is applied.
      */
     [property] boolean SearchStyles;
 
-    /** If <TRUE/>, a "similarity search" is performed.
+    /** If `TRUE`, a "similarity search" is performed.
 
         <p>In the case of a similarity search, the following properties
         specify the kind of similarity:
@@ -75,7 +75,7 @@ published service SearchDescriptor
      */
     [property] boolean SearchSimilarity;
 
-    /** If <TRUE/>, all similarity rules are applied together.
+    /** If `TRUE`, all similarity rules are applied together.
 
         <p>In the case of a relaxed similarity search, the following
         properties are applied together:

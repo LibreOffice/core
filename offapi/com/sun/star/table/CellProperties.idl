@@ -61,7 +61,7 @@ published service CellProperties
     [property] com::sun::star::util::Color CellBackColor;
 
 
-    /** is <TRUE/>, if the cell background is transparent.
+    /** is `TRUE`, if the cell background is transparent.
 
         <p>In this case the CellProperties::CellBackColor
         value is not used.</p>
@@ -83,7 +83,7 @@ published service CellProperties
     [property] long VertJustify;
 
 
-    /** is <TRUE/>, if text in the cells will be wrapped automatically
+    /** is `TRUE`, if text in the cells will be wrapped automatically
         at the right border.
      */
     [property] boolean IsTextWrapped;
@@ -197,7 +197,7 @@ published service CellProperties
     [optional, property] com::sun::star::table::BorderLine DiagonalBLTR;
 
 
-    /** is <TRUE/>, if the cell content will be shrunk to fit in the cell.
+    /** is `TRUE`, if the cell content will be shrunk to fit in the cell.
      */
     [optional, property] boolean ShrinkToFit;
 

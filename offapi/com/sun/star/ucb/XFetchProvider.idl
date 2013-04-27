@@ -44,9 +44,9 @@ published interface XFetchProvider: com::sun::star::uno::XInterface
         the count of rows
 
         @param bDirection
-        <TRUE/>, if you want the rows to be read in the same order, as they
-        are contained in the result set ( <TRUE/> &lt;-&gt; forward step;
-        <FALSE/> &lt;-&gt; backward step )
+        `TRUE`, if you want the rows to be read in the same order, as they
+        are contained in the result set ( `TRUE` &lt;-&gt; forward step;
+        `FALSE` &lt;-&gt; backward step )
     */
     com::sun::star::ucb::FetchResult fetch( [in] long nRowStartPosition
                                           , [in] long nRowCount

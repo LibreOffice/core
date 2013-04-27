@@ -44,7 +44,7 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
         @param column
             the first column is 1, the second is 2,
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -54,7 +54,7 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
         @param column
             the first column is 1, the second is 2,
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -64,7 +64,7 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
         @param column
             the first column is 1, the second is 2,
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -74,7 +74,7 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
         @param column
             the first column is 1, the second is 2,
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -84,7 +84,7 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
         @param column
             the first column is 1, the second is 2,
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -94,7 +94,7 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
         @param column
             the first column is 1, the second is 2,
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -205,7 +205,7 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
         @param column
             the first column is 1, the second is 2,
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -215,7 +215,7 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
         @param column
             the first column is 1, the second is 2,
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -225,7 +225,7 @@ published interface XResultSetMetaData: com::sun::star::uno::XInterface
         @param column
             the first column is 1, the second is 2,
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */

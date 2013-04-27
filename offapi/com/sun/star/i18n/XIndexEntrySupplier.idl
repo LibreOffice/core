@@ -50,8 +50,8 @@ published interface XIndexEntrySupplier : com::sun::star::uno::XInterface
         com::sun::star::lang::Locale.
 
         <p> For example, in English locale it returns <br/>
-        <b>"p."</b>  for <em>bMorePages</em> == <FALSE/> <br/>
-        <b>"pp."</b> for <em>bMorePages</em> == <TRUE/> </p>
+        <b>"p."</b>  for <em>bMorePages</em> == `FALSE` <br/>
+        <b>"pp."</b> for <em>bMorePages</em> == `TRUE` </p>
     */
     string getIndexFollowPageWord( [in] boolean bMorePages,
                                    [in] com::sun::star::lang::Locale aLocale );

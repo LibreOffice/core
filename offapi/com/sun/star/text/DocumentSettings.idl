@@ -42,7 +42,7 @@ published service DocumentSettings
 
     /** specifies if charts in text documents are updated automatically.
 
-        This has no effect if "FieldAutoUpdate" is <FALSE/>.
+        This has no effect if "FieldAutoUpdate" is `FALSE`.
     */
     [optional, property] boolean ChartAutoUpdate;
 
@@ -53,14 +53,14 @@ published service DocumentSettings
         table, you have defined spacing above and below each object,
         usually only the larger one of the two spaces is used.  If the
         spacing between the objects are to be added this property has
-        to be <TRUE/>.</p>
+        to be `TRUE`.</p>
     */
     [optional, property] boolean AddParaTableSpacing;
 
     /** specifies if top paragraph spacing is applied to paragraphs
         on the first page of text documents.
 
-        <p>If <TRUE/>, the paragraph or table spacing to the top will
+        <p>If `TRUE`, the paragraph or table spacing to the top will
         also be effective at the beginning of a page or column if the
         paragraph or table is positioned on the first page of the
         document.  The same applies for a page break.</p>
@@ -69,9 +69,9 @@ published service DocumentSettings
 
     /** specifies the alignment of tab stops in text documents.
 
-        <p>If <TRUE/> centered and right-aligned paragraphs containing
+        <p>If `TRUE` centered and right-aligned paragraphs containing
         tabs are formatted as a whole in the center or aligned to the
-        right. If <FALSE/>, only the text to the right of the last
+        right. If `FALSE`, only the text to the right of the last
         tab, for example, is aligned to the right, while the text to
         the left remains where it is.</p>
     */
@@ -100,13 +100,13 @@ published service DocumentSettings
         <p>This property controls how a set line spacing at a paragraph
         influences the formatting of the text lines and the spacing between
         paragraphs.
-        If <TRUE/>, the formatting till OpenOffice.org 1.1 is
+        If `TRUE`, the formatting till OpenOffice.org 1.1 is
         applied. This means, that a proportional line spacing is applied
         above and below a text line and that the maximum of the line spacing
         value between two paragraph is added respectively reckoned up with the
         paragraph spacing (adding or reckoning up is controlled by document
         option AddParaTableSpacing).
-        If <FALSE/> (default for documents since OpenOffice.org 2.0),
+        If `FALSE` (default for documents since OpenOffice.org 2.0),
         a proportional line spacing is only applied below a text line and
         it's always added to the paragraph spacing between two paragraphs.</p>
 
@@ -119,10 +119,10 @@ published service DocumentSettings
         <p>This property controls, if the spacing of the last paragraph
         respectively table of a table cell is added at the bottom of this
         table cells
-        If <TRUE/> (default for documents since OpenOffice.org 2.0),
+        If `TRUE` (default for documents since OpenOffice.org 2.0),
         the spacing of the last paragraph respectively table of a table
         cell is added at the bottom of this table cell.
-        If <FALSE/> (typically for documents till OpenOffice.org 1.1),
+        If `FALSE` (typically for documents till OpenOffice.org 1.1),
         the spacing of the last paragraph respectively table of a table
         cell isn't added at the bottom of this table cell.</p>
 
@@ -134,11 +134,11 @@ published service DocumentSettings
 
         <p>This property controls how floating screen objects (Writer
         fly frames and drawing objects are positioned.
-        If <TRUE/>, the object positioning till OpenOffice.org 1.1 is
+        If `TRUE`, the object positioning till OpenOffice.org 1.1 is
         applied. This means, that the top of a paragraph, at which a
         floating screen object orients its vertical position, includes
         the lower spacing and the line spacing of the previous paragraph.
-        If <FALSE/> (default for documents since OpenOffice.org 2.0),
+        If `FALSE` (default for documents since OpenOffice.org 2.0),
         the top of a paragraph, at which a floating screen object orients
         its vertical position, doesn't include the lower spacing and the
         line spacing of the previous paragraph.</p>
@@ -152,11 +152,11 @@ published service DocumentSettings
 
         <p>This property controls how floating screen objects (Writer
         fly frames and drawing objects) are positioned.
-        If <TRUE/>, the object positioning algorithm will consider
+        If `TRUE`, the object positioning algorithm will consider
         the text wrap style, set at the floating screen object.
         The attribute BaseFrameProperties::WrapInfluenceOnPosition
         specifies how the text wrap is considered.
-        If <FALSE/> (default value), the former object positioning
+        If `FALSE` (default value), the former object positioning
         algorithm (known from OpenOffice.org 1.1) is applied.</p>
 
         @since OOo 2.0

@@ -52,7 +52,7 @@ published interface XExportFilter: com::sun::star::uno::XInterface
           TypeDetection.xml (???)
 
       @returns
-          <TRUE/> if import process is successful
+          `TRUE` if import process is successful
      */
     boolean exporter(
              [in] sequence< com::sun::star::beans::PropertyValue > aSourceData,

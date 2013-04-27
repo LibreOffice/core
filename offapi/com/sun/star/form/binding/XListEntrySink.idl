@@ -38,7 +38,7 @@ interface XListEntrySink : com::sun::star::uno::XInterface
         filled with the entries from the new list source.</p>
 
         @param Source
-            the new source for the list entries. May be <NULL/>, in this
+            the new source for the list entries. May be `NULL`, in this
             case, the current source is revoked.
     */
     void    setListEntrySource( [in] XListEntrySource Source );

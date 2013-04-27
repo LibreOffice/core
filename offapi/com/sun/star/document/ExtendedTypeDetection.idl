@@ -73,7 +73,7 @@ published service ExtendedTypeDetection
         which contains information about the document which should be detected and must return
         <ul>
             <li>an internal type name for detected format</li>
-            <li>or <NULL/> if format is unknown nor supported.</li>
+            <li>or `NULL` if format is unknown nor supported.</li>
         </ul>
         May be that given descriptor already includes the opened document stream as parameter
         MediaDescriptor::InputStream. Then this one should be used every time.

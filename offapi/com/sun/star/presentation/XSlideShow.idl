@@ -74,8 +74,8 @@ interface XSlideShow : ::com::sun::star::uno::XInterface
         If there is currently no slide show running, this method does
         nothing.<p>
 
-        @return <TRUE/>, if the previous effect was successfully
-        triggered. This method returns <FALSE/>, if there is no show
+        @return `TRUE`, if the previous effect was successfully
+        triggered. This method returns `FALSE`, if there is no show
         running, the first effect on the first slide was not yet
         triggered, or the implementation failed to trigger the previous
         effect.
@@ -138,20 +138,20 @@ interface XSlideShow : ::com::sun::star::uno::XInterface
                 improvements
                 </li>
             <li>name: SkipAllMainSequenceEffects, value: boolean.
-                When <TRUE/> then all main sequence effects on the new slide
+                When `TRUE` then all main sequence effects on the new slide
                 are triggered.  This is typically used when going back one
                 effect leads to the previous slide.  On that slide all
                 effects have to be shown in order to continue the backward
                 traveling.
-                When <FALSE/>, the default, then no main sequence effect is
+                When `FALSE`, the default, then no main sequence effect is
                 triggered.
                 </li>
             <li>name: SkipSlideTransition, value: boolean.
-                When <TRUE/> then the slide transition animation, if there
+                When `TRUE` then the slide transition animation, if there
                 is any, is not displayed.  This is typically used when going
                 back one effect leads to the previous slide.  Typically used
-                together with SkipAllMainSequenceEffects also being <TRUE/>.
-                When <FALSE/>, the default, then the slide transition
+                together with SkipAllMainSequenceEffects also being `TRUE`.
+                When `FALSE`, the default, then the slide transition
                 effect, if it exists, is played.
                 </li>
         </ul>

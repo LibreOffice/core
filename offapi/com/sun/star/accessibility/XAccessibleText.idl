@@ -94,8 +94,8 @@ interface XAccessibleText : ::com::sun::star::uno::XInterface
             leads to insertion after the last character.
 
         @return
-            Returns <TRUE/> if the caret has been moved and <FALSE/>
-            otherwise.  A <TRUE/> value does not necessarily mean that the
+            Returns `TRUE` if the caret has been moved and `FALSE`
+            otherwise.  A `TRUE` value does not necessarily mean that the
             caret has been positioned exactly at the required position.
             If that position lies inside a read-only area the caret is
             positioned before or behind it.  Listen to the caret event to
@@ -296,8 +296,8 @@ interface XAccessibleText : ::com::sun::star::uno::XInterface
             The valid range is 0..length.
 
         @return
-            Returns <TRUE/> if the selection has been set successfully and
-            <FALSE/> otherwise or when selection is not supported.
+            Returns `TRUE` if the selection has been set successfully and
+            `FALSE` otherwise or when selection is not supported.
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the indices are invalid

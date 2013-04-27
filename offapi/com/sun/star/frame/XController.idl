@@ -49,22 +49,22 @@ published interface XController: com::sun::star::lang::XComponent
             the new model for this controller
 
         @return
-            <TRUE/>if attach was successfully
+            `TRUE`if attach was successfully
             <br>
-            <FALSE/>otherwise
+            `FALSE`otherwise
      */
     boolean attachModel( [in] XModel Model );
 
     /** is called to prepare the controller for closing the view
 
         @param Suspend
-            <TRUE/>force the controller to suspend his work
-            <FALSE/>try to reactivate the controller
+            `TRUE`force the controller to suspend his work
+            `FALSE`try to reactivate the controller
 
         @return
-            <TRUE/>if request was accepted and of course successfully finished
+            `TRUE`if request was accepted and of course successfully finished
             <br>
-            <FALSE/>otherwise
+            `FALSE`otherwise
      */
     boolean suspend( [in] boolean Suspend );
 

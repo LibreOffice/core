@@ -83,7 +83,7 @@ interface XUIElementFactory : ::com::sun::star::uno::XInterface
                 </li>
                 <li><b>Persistent</b><br>specifies if changes to a configurable
                     user interface element should be persistent. This is an
-                    optional argument. The default value is <TRUE/>.</li>
+                    optional argument. The default value is `TRUE`.</li>
             </ul>
 
         <p>

@@ -82,7 +82,7 @@ service TabularDataProviderArguments
         generic string like "Column C".</p>
 
         <p>If this property is not given as argument it is assumed to
-        be <FALSE/>, i.e., the default is "no labels".</p>
+        be `FALSE`, i.e., the default is "no labels".</p>
      */
     [property]   boolean                                       FirstCellAsLabel;
 
@@ -107,7 +107,7 @@ service TabularDataProviderArguments
      */
     [property]   sequence< long >                              SequenceMapping;
 
-    /** If <FALSE/> the data provider may create a data sequence
+    /** If `FALSE` the data provider may create a data sequence
         containing generated categories that fit the rest of the data,
         like e.g. "Row 12", "Row 13", etc.
 

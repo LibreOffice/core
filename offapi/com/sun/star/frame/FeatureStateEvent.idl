@@ -59,7 +59,7 @@ published struct FeatureStateEvent: com::sun::star::lang::EventObject
     /** contains the state of the feature in this dispatch.
 
         <p>
-        This can be, for example, simply <TRUE/> for a boolean feature like
+        This can be, for example, simply `TRUE` for a boolean feature like
         underline on/off. Some simple types like <code>string</code> or
         `boolean` are useful here for generic UI elements, like
         a checkmark in a menu.

@@ -33,7 +33,7 @@ published interface XStyleLoader: com::sun::star::uno::XInterface
 {
     /** loads styles from a document at the given URL.
         <p>
-        If <var>OverwriteStyles</var> is <TRUE/>, then all styles
+        If <var>OverwriteStyles</var> is `TRUE`, then all styles
         will be loaded.  Otherwise, only styles which are not already
         defined in this document are loaded.</p>
          @param string URL:

@@ -181,7 +181,7 @@ published interface XLocale: com::sun::star::uno::XInterface
              [in] com::sun::star::lang::Locale inLocale );
 
     /** @returns
-                <TRUE/> if the com::sun::star::lang::Locale <var>l1</var> is equal to the
+                `TRUE` if the com::sun::star::lang::Locale <var>l1</var> is equal to the
                 other one.
 
                 <p>A locale is deemed equal to another locale with identical

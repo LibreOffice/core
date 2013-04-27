@@ -78,7 +78,7 @@ published service DatabaseRange
 
 
     /** specifies the range where the filter can find the filter criteria.
-        <p>This is only used if SheetFilterDescriptor::UseFilterCriteriaSource is <TRUE/>.</p>
+        <p>This is only used if SheetFilterDescriptor::UseFilterCriteriaSource is `TRUE`.</p>
 
         @since OOo 1.1.2
      */

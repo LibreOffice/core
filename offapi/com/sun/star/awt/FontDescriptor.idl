@@ -135,8 +135,8 @@ published struct FontDescriptor
 
     /** specifies if only words get underlined.
 
-        <p><TRUE/> means that only non-space characters get underlined,
-        <FALSE/> means that the spacing also gets underlined.</p>
+        <p>`TRUE` means that only non-space characters get underlined,
+        `FALSE` means that the spacing also gets underlined.</p>
 
         <p>This property is only valid if the property
         com::sun::star::awt::FontDescriptor::Underline

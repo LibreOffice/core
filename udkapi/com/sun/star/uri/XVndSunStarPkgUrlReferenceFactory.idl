@@ -39,9 +39,9 @@ published interface XVndSunStarPkgUrlReferenceFactory {
        no fragment.</p>
 
        @param authority the authority of the created URL reference; must not be
-       <NULL/>, and should be an absolute URI reference with no fragment
+       `NULL`, and should be an absolute URI reference with no fragment
 
-       @return a new &ldquo;vnd.sun.star.pkg&rdquo; URL reference, or <NULL/> if
+       @return a new &ldquo;vnd.sun.star.pkg&rdquo; URL reference, or `NULL` if
        the given authority is either not an absolute URI reference or has a
        fragment
      */

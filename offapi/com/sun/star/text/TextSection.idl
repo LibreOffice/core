@@ -61,11 +61,11 @@ published service TextSection
     */
     [property] string Condition;
 
-    /** If this property is <FALSE/>, the text section is hidden.
+    /** If this property is `FALSE`, the text section is hidden.
     */
     [property] boolean IsVisible;
 
-    /** If this property is <TRUE/>, the text section is protected
+    /** If this property is `TRUE`, the text section is protected
         and cannot be modified from the user interface.
     */
     [property] boolean IsProtected;

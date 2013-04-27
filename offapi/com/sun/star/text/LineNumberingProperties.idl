@@ -29,7 +29,7 @@
 published service LineNumberingProperties
 {
 
-    /** If <TRUE/>, line numbering is used.
+    /** If `TRUE`, line numbering is used.
      */
     [property] boolean IsOn;
 
@@ -39,11 +39,11 @@ published service LineNumberingProperties
     [property] string CharStyleName;
 
 
-    /** If <TRUE/>, empty lines are counted.
+    /** If `TRUE`, empty lines are counted.
      */
     [property] boolean CountEmptyLines;
 
-    /** If <TRUE/>, lines in frames are included in counting.
+    /** If `TRUE`, lines in frames are included in counting.
      */
     [property] boolean CountLinesInFrames;
 
@@ -76,7 +76,7 @@ published service LineNumberingProperties
     /** specifies if the line numbering should start from the
         beginning at each page.
 
-        <p>If set to <FALSE/> the line numbering will be continuous.</p>
+        <p>If set to `FALSE` the line numbering will be continuous.</p>
 
         @since OOo 2.0
      */

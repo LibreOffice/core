@@ -66,7 +66,7 @@ interface XChartDocument : ::com::sun::star::frame::XModel
         stored in a sub-storage.</p>
 
         @param bCloneExistingData
-            if <TRUE/> and a data provider was previously attached,
+            if `TRUE` and a data provider was previously attached,
             its referred data will be copied to the new internal data
             provider.  Note, that the range representation set before
             will usually change after cloning.</p>
@@ -78,7 +78,7 @@ interface XChartDocument : ::com::sun::star::frame::XModel
     void createInternalDataProvider( [in] boolean bCloneExistingData )
         raises( com::sun::star::util::CloseVetoException );
 
-    /** @return <TRUE/> if the data provider set at the chart document
+    /** @return `TRUE` if the data provider set at the chart document
         is an internal one.
 
         <p>This is the case directly after

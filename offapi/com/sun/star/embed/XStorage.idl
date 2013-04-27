@@ -385,8 +385,8 @@ published interface XStorage
             the name of the element to check
 
         @returns
-            <TRUE/> in case the element is a stream
-            <FALSE/> - the element is a storage
+            `TRUE` in case the element is a stream
+            `FALSE` - the element is a storage
 
         @throws ::com::sun::star::container::NoSuchElementException
             there is no element with such name
@@ -415,8 +415,8 @@ published interface XStorage
             the name of the element to check
 
         @returns
-            <TRUE/> in case the element is a storage
-            <FALSE/> - the element is a stream
+            `TRUE` in case the element is a storage
+            `FALSE` - the element is a stream
 
         @throws ::com::sun::star::container::NoSuchElementException
             there is no element with such name

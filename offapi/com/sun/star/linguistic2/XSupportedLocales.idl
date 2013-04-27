@@ -53,7 +53,7 @@ published interface XSupportedLocales : com::sun::star::uno::XInterface
              by the object.
 
          @returns
-             <TRUE/> if the language is supported, otherwise <FALSE/>.
+             `TRUE` if the language is supported, otherwise `FALSE`.
     */
     boolean hasLocale( [in] com::sun::star::lang::Locale aLocale );
 };

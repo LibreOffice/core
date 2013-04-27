@@ -47,7 +47,7 @@ published struct GluePoint
      */
     short EscapeDirection;
 
-    /** If this is <TRUE/>, then the position of this GluePoint is
+    /** If this is `TRUE`, then the position of this GluePoint is
         absolute on a page and is not relative to a shape.
      */
     boolean PositionAbsolute;

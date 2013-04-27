@@ -88,7 +88,7 @@ published interface XLinguServiceManager : com::sun::star::uno::XInterface
         </P>
 
         @returns
-            <TRUE/> if the listener was successfully added, <FALSE/> otherwise.
+            `TRUE` if the listener was successfully added, `FALSE` otherwise.
 
         @param xListener
             the listener to be added.
@@ -99,7 +99,7 @@ published interface XLinguServiceManager : com::sun::star::uno::XInterface
     /** removes a listener from the list of event listeners.
 
         @returns
-            <TRUE/> if the listener was successfully removed, <FALSE/> otherwise.
+            `TRUE` if the listener was successfully removed, `FALSE` otherwise.
 
         @param xListener
             the listener to be removed.

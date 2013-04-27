@@ -107,9 +107,9 @@ published service DataAwareControlModel
 
     /** determines whether or not input into this field is required, when it is actually bound to a database field.
 
-        <p>If this property is set to <FALSE/>, then the form runtime will not check the control/model for
-        <NULL/> values before submitting data to the database. Usually, if a control model is bound to
-        a database field which cannot be <NULL/>, and the model itself does not have a value, then the database
+        <p>If this property is set to `FALSE`, then the form runtime will not check the control/model for
+        `NULL` values before submitting data to the database. Usually, if a control model is bound to
+        a database field which cannot be `NULL`, and the model itself does not have a value, then the database
         update is prevented, showing an error message to the user. To disable this behavior on a per-control
         basis, use the <code>InputRequired</code> property.</p>
 

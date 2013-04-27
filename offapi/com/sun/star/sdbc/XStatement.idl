@@ -51,7 +51,7 @@ published interface XStatement: com::sun::star::uno::XInterface
         @param sql
             the SQL statement which should be executed
         @returns
-            a ResultSet that contains the data produced by the query; never <NULL/>
+            a ResultSet that contains the data produced by the query; never `NULL`
         @throws SQLException
             if a database access error occurs.
      */
@@ -97,7 +97,7 @@ published interface XStatement: com::sun::star::uno::XInterface
         @param sql
             any SQL statement
         @returns
-            <TRUE/> if the next result is a ResultSet; <FALSE/> if it is an update count or there are no more results
+            `TRUE` if the next result is a ResultSet; `FALSE` if it is an update count or there are no more results
         @throws SQLException
             if a database access error occurs.
      */

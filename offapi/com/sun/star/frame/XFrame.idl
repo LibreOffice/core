@@ -192,9 +192,9 @@ published interface XFrame: com::sun::star::lang::XComponent
         </p>
 
         @return
-            <TRUE/> if frame supports top frame specification
+            `TRUE` if frame supports top frame specification
             <br>
-            <FALSE/> otherwise
+            `FALSE` otherwise
      */
     boolean isTop();
 
@@ -235,9 +235,9 @@ published interface XFrame: com::sun::star::lang::XComponent
     /** determines if the frame is active.
 
         @return
-            <TRUE/> for active or UI active frames
+            `TRUE` for active or UI active frames
             <br>
-            <FALSE/> otherwise
+            `FALSE` otherwise
 
         @see XFrame::activate()
         @see XFrame::deactivate()
@@ -247,14 +247,14 @@ published interface XFrame: com::sun::star::lang::XComponent
     /** sets a new component into the frame or release an existing one from a frame.
 
         @param xComponentWindow
-            the window of the new component or <NULL/> for release
+            the window of the new component or `NULL` for release
 
             <p>
             A valid component window should be a child of the frame container window.
             </p>
 
         @param xController
-            the controller of the new component or <NULL/> for release
+            the controller of the new component or `NULL` for release
 
             <p>
             Simple components may implement a com::sun::star::awt::XWindow only.
@@ -262,9 +262,9 @@ published interface XFrame: com::sun::star::lang::XComponent
             </p>
 
         @return
-            <TRUE/>if setting of new component or release of an existing one was successfully
+            `TRUE`if setting of new component or release of an existing one was successfully
             <br>
-            <FALSE/> otherwise (especially, if an existing controller disagree within his
+            `FALSE` otherwise (especially, if an existing controller disagree within his
             XController::suspend() call)
 
         @see XFrame::getComponentWindow()
@@ -284,7 +284,7 @@ published interface XFrame: com::sun::star::lang::XComponent
         @returns
             the current visible component in this frame
             <br>
-            or <NULL/> if no one currently exist
+            or `NULL` if no one currently exist
 
         @see XFrame::setComponent()
      */
@@ -302,7 +302,7 @@ published interface XFrame: com::sun::star::lang::XComponent
         @returns
             the current controller within this frame
             <br>
-            or <NULL/> if no one currently exist
+            or `NULL` if no one currently exist
 
         @see XFrame::setComponent()
      */

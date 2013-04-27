@@ -44,12 +44,12 @@ published struct DriverPropertyInfo
 
 
     /** is
-        <TRUE/>
+        `TRUE`
         if a value must be supplied for this property
         during
         <code>Driver.connect</code>
         and
-        <FALSE/>
+        `FALSE`
         otherwise.
      */
     boolean IsRequired;

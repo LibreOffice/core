@@ -34,7 +34,7 @@
  */
 published service MeasureProperties
 {
-    /** If this property is <TRUE/>, the measure is drawn below the
+    /** If this property is `TRUE`, the measure is drawn below the
         reference edge instead of above it.
      */
     [property] boolean MeasureBelowReferenceEdge;
@@ -68,11 +68,11 @@ published service MeasureProperties
      */
     [property] long MeasureOverhang;
 
-    /** If this is <TRUE/>, the unit of measure is shown in the measure text.
+    /** If this is `TRUE`, the unit of measure is shown in the measure text.
      */
     [property] boolean MeasureShowUnit;
 
-    /** If this is <TRUE/>, the angle of the measure is set automatically.
+    /** If this is `TRUE`, the angle of the measure is set automatically.
      */
     [property] boolean MeasureTextAutoAngle;
 
@@ -92,15 +92,15 @@ published service MeasureProperties
      */
     [property] com::sun::star::drawing::MeasureTextVertPos MeasureTextVerticalPosition;
 
-    /** If this value is <TRUE/>, the measure has a fixed angle.
+    /** If this value is `TRUE`, the measure has a fixed angle.
      */
     [property] boolean MeasureTextIsFixedAngle;
 
-    /** If this value is <TRUE/>, the text is rotated 90 degrees.
+    /** If this value is `TRUE`, the text is rotated 90 degrees.
      */
     [property] boolean MeasureTextRotate90;
 
-    /** If this value is <TRUE/>, the text is printed upside down.
+    /** If this value is `TRUE`, the text is printed upside down.
      */
     [property] boolean MeasureTextUpsideDown;
 

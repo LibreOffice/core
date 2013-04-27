@@ -44,7 +44,7 @@ service BindableIntegerValueRange
 
         <p>When the external (double) value changes, it's converted as follows to an integer
         value:
-        <ul><li>If the external value is <NULL/>, the current value of the control model
+        <ul><li>If the external value is `NULL`, the current value of the control model
                 will be set to it's minimum.</li>
             <li>If the external value is the <em>infinite</em> value, the control value will
                 be set to its maximum or minimum, depending on the sign of the external value.</li>

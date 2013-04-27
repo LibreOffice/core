@@ -126,7 +126,7 @@ service DataSequence
      */
     [property] DataSequenceRole                   Role;
 
-    /** If set to false <FALSE/>, values from hidden cells are not returned.
+    /** If set to false `FALSE`, values from hidden cells are not returned.
      */
     [optional, property] boolean                  IncludeHiddenCells;
 

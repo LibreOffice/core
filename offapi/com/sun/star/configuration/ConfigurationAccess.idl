@@ -96,7 +96,7 @@ module com { module sun { module star { module configuration {
         except for CR, LF and TAB [Unicode code points 9,10,13].
         For binary data, use type <strong>binary</strong> instead.</p>
     </li>
-    <li><strong>boolean</strong> can hold the values <TRUE/> or <FALSE/>.
+    <li><strong>boolean</strong> can hold the values `TRUE` or `FALSE`.
         <p>Values are represented as `boolean`.
         <p>Sequences are represented as <atom dim="[]">boolean</atom>.</p>
     </li>
@@ -130,7 +130,7 @@ module com { module sun { module star { module configuration {
 
  <p>If the schema marks a value as <em>nullable</em> (which is indicated by
  attribute com::sun::star::beans::PropertyAttribute::MAYBEVOID ),
- its contents may be <NULL/>.
+ its contents may be `NULL`.
  </p>
 
  <p>The configuration should support explicit access to default values

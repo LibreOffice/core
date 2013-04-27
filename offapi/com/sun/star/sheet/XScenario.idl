@@ -34,7 +34,7 @@ module com {  module sun {  module star {  module sheet {
 published interface XScenario: com::sun::star::uno::XInterface
 {
 
-    /** returns <TRUE/> if the current object is a scenario.
+    /** returns `TRUE` if the current object is a scenario.
      */
     boolean getIsScenario();
 

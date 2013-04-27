@@ -115,7 +115,7 @@ published interface XFrame2
         That means: if someone wishes to enable recoding on a frame he must set
         a supplier with a recorder object inside of it. Every user of dispatches
         has to check then if such supplier is available at this frame property.
-        If value of this property is <NULL/> he must call XDispatch::dispatch()
+        If value of this property is `NULL` he must call XDispatch::dispatch()
         on the original dispatch object. If it's a valid value he must use the supplier
         by calling his method XDispatchRecorderSupplier::dispatchAndRecord()
         with the original dispatch object as argument.

@@ -163,7 +163,7 @@ published service DataAccessDescriptor
     /** specifies if the #Command should be analyzed on the client side before sending it
         to the database server.
 
-        <p>The default value of this property is <TRUE/>. By switching it to <FALSE/>, you can pass
+        <p>The default value of this property is `TRUE`. By switching it to `FALSE`, you can pass
         backend-specific SQL statements, which are not standard SQL, to your database.</p>
 
         <p>This property is usually present together with the #Command and
@@ -216,8 +216,8 @@ published service DataAccessDescriptor
         <p>If present, #BookmarkSelection specifies the semantics of #Selection. If
         not present, it's up to the implementing component to specify this semantics.</p>
 
-        <p>If <TRUE/>, then the single elements of the array specified by #Selection are
-        bookmarks relative to the result set, if <FALSE/>, they're record numbers.</p>
+        <p>If `TRUE`, then the single elements of the array specified by #Selection are
+        bookmarks relative to the result set, if `FALSE`, they're record numbers.</p>
 
         @see com::sun::star::sdbcx::XRowLocate
         @see com::sun::star::sdbc::XResultSet

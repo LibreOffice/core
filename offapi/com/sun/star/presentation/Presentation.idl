@@ -65,26 +65,26 @@ published service Presentation
     [property] string FirstPage;
 
 
-    /** If this property is set to <TRUE/>, the window of the presentation is
+    /** If this property is set to `TRUE`, the window of the presentation is
         always on top of all other windows.
      */
     [property] boolean IsAlwaysOnTop;
 
 
-    /** If this property is <TRUE/>, all pages are changed automatically.
+    /** If this property is `TRUE`, all pages are changed automatically.
 
         <p>This overrides the properties of the pages.</p>
      */
     [property] boolean IsAutomatic;
 
 
-    /** If this property is set to <TRUE/>, the presentation is repeated
+    /** If this property is set to `TRUE`, the presentation is repeated
         endlessly.
      */
     [property] boolean IsEndless;
 
 
-    /** If this property is set to <TRUE/>, the presentation runs in
+    /** If this property is set to `TRUE`, the presentation runs in
         full-screen mode.
      */
     [property] boolean IsFullScreen;
@@ -97,7 +97,7 @@ published service Presentation
     [property] boolean IsLivePresentation;
 
 
-    /** If this property is <TRUE/>, the mouse is visible during the
+    /** If this property is `TRUE`, the mouse is visible during the
         presentation.
      */
     [property] boolean IsMouseVisible;
@@ -111,13 +111,13 @@ published service Presentation
     [property] long Pause;
 
 
-    /** If this is set to <TRUE/>, the Navigator is opened at the start of the
+    /** If this is set to `TRUE`, the Navigator is opened at the start of the
         presentation.
      */
     [property] boolean StartWithNavigator;
 
 
-    /** If this is <TRUE/>, a pen is shown during presentation.
+    /** If this is `TRUE`, a pen is shown during presentation.
 
         <p>You can draw on the presentation with this pen.</p>
      */

@@ -49,7 +49,7 @@ struct DocumentEvent : ::com::sun::star::lang::EventObject
 
     /** denotes the view respectively controller which the event applies to.
 
-        <p>Might be <NULL/> if the event is not related to a concrete view of
+        <p>Might be `NULL` if the event is not related to a concrete view of
         the document.</p>
     */
     ::com::sun::star::frame::XController2

@@ -94,7 +94,7 @@ published service FootnoteSettings
     [optional, property] short FootnoteCounting;
 
 
-    /** If <TRUE/>, the footnote text is shown at the end of the document.
+    /** If `TRUE`, the footnote text is shown at the end of the document.
 
         <p>For footnotes only.</p>
      */

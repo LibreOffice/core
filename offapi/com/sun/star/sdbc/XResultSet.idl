@@ -59,7 +59,7 @@ published interface XResultSet: com::sun::star::uno::XInterface
         The ResultSet's warning chain is cleared when a new row is read.
         </p>
         @returns
-         <TRUE/> if successful
+         `TRUE` if successful
         @throws SQLException
             if a database access error occurs.
      */
@@ -68,7 +68,7 @@ published interface XResultSet: com::sun::star::uno::XInterface
     /** indicates whether the cursor is before the first row in the result
         set.
         @returns
-         <TRUE/> if so
+         `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -77,7 +77,7 @@ published interface XResultSet: com::sun::star::uno::XInterface
     /** indicates whether the cursor is after the last row in the result
         set.
         @returns
-         <TRUE/> if so
+         `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -85,7 +85,7 @@ published interface XResultSet: com::sun::star::uno::XInterface
 
     /** indicates whether the cursor is on the first row of the result set.
         @returns
-         <TRUE/> if so
+         `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -104,7 +104,7 @@ published interface XResultSet: com::sun::star::uno::XInterface
         to determine whether the current row is the last row in the result set.
         </p>
         @returns
-         <TRUE/> if so
+         `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -126,7 +126,7 @@ published interface XResultSet: com::sun::star::uno::XInterface
 
     /** moves the cursor to the first row in the result set.
         @returns
-         <TRUE/> if successful
+         `TRUE` if successful
         @throws SQLException
             if a database access error occurs.
      */
@@ -134,7 +134,7 @@ published interface XResultSet: com::sun::star::uno::XInterface
 
     /** moves the cursor to the last row in the result set.
         @returns
-         <TRUE/> if successful
+         `TRUE` if successful
         @throws SQLException
             if a database access error occurs.
      */
@@ -209,7 +209,7 @@ published interface XResultSet: com::sun::star::uno::XInterface
         @param rows
             how many rows should be moved relative to the current row
         @returns
-         <TRUE/> if successful
+         `TRUE` if successful
         @throws SQLException
             if a database access error occurs.
      */
@@ -228,7 +228,7 @@ published interface XResultSet: com::sun::star::uno::XInterface
         when there is no current row.
         </p>
         @returns
-            <TRUE/> if successful
+            `TRUE` if successful
         @throws SQLException
             if a database access error occurs.
      */
@@ -265,7 +265,7 @@ published interface XResultSet: com::sun::star::uno::XInterface
     /** indicates whether the current row has been updated. The value returned
         depends on whether or not the result set can detect updates.
         @returns
-            <TRUE/> if successful
+            `TRUE` if successful
         @throws SQLException
             if a database access error occurs.
      */
@@ -274,7 +274,7 @@ published interface XResultSet: com::sun::star::uno::XInterface
     /** indicates whether the current row has had an insertion.  The value returned
         depends on whether or not the result set can detect visible inserts.
         @returns
-            <TRUE/> if successful
+            `TRUE` if successful
         @throws SQLException
             if a database access error occurs.
      */
@@ -285,7 +285,7 @@ published interface XResultSet: com::sun::star::uno::XInterface
         detect holes in a result set.  The value returned depends on whether
         or not the result set can detect deletions.
         @returns
-            <TRUE/> if successful
+            `TRUE` if successful
         @throws SQLException
             if a database access error occurs.
      */
@@ -296,7 +296,7 @@ published interface XResultSet: com::sun::star::uno::XInterface
         object. If the result set was generated some other way, such as by an
         com::sun::star::sdbc::XDatabaseMetaData
         method, this method returns
-        <NULL/>
+        `NULL`
         .
         @returns
             the statement object

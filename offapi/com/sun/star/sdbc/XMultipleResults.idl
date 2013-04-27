@@ -77,7 +77,7 @@ published interface XMultipleResults: com::sun::star::uno::XInterface
      */
     long getUpdateCount() raises (SQLException);
 
-    /** moves to a Statement's next result. It returns <TRUE/> if
+    /** moves to a Statement's next result. It returns `TRUE` if
         this result is a ResultSet.  This method also implicitly
         closes any current ResultSet obtained with getResultSet.
 
@@ -87,7 +87,7 @@ published interface XMultipleResults: com::sun::star::uno::XInterface
 
         </p>
         @returns
-            <TRUE/> if there exists more ResultSet objects
+            `TRUE` if there exists more ResultSet objects
         @throws SQLException
             if a database access error occurs.
      */

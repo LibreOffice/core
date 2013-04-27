@@ -59,7 +59,7 @@ interface XReportEngine
         @throws com::sun::star::lang::DisposedException
             If the report engine is already disposed.
         @throws com::sun::star::lang::IllegalArgumentException
-            If the report definition was not set or is <NULL/>.
+            If the report definition was not set or is `NULL`.
     */
     com::sun::star::frame::XModel createDocumentModel()
         raises( ::com::sun::star::lang::DisposedException,
@@ -72,7 +72,7 @@ interface XReportEngine
         @throws com::sun::star::lang::DisposedException
             If the report engine is already disposed.
         @throws com::sun::star::lang::IllegalArgumentException
-            If the report definition was not set or is <NULL/>.
+            If the report definition was not set or is `NULL`.
 
         OJ: Has to be discussed if this method is useful.
     */
@@ -87,7 +87,7 @@ interface XReportEngine
         @throws com::sun::star::lang::DisposedException
             If the report engine is already disposed.
         @throws com::sun::star::lang::IllegalArgumentException
-            If the report definition was not set or is <NULL/>.
+            If the report definition was not set or is `NULL`.
     */
     com::sun::star::util::URL createDocument()
         raises( ::com::sun::star::lang::DisposedException,

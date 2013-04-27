@@ -65,9 +65,9 @@ published service UnoControlButtonModel
 
     /** specifies whether the button control should grab the focus when clicked.
 
-        <p>If set to <TRUE/> (which is the default), the button control automatically grabs the
+        <p>If set to `TRUE` (which is the default), the button control automatically grabs the
         focus when the user clicks onto it with the mouse.<br/>
-        If set to <FALSE/>, the focus is preserved when the user operates the button control with
+        If set to `FALSE`, the focus is preserved when the user operates the button control with
         the mouse.</p>
 
         @since OOo 2.0
@@ -129,7 +129,7 @@ published service UnoControlButtonModel
         <p>If this property is present, it interacts with the #ImageURLin the
         following way:
         <ul><li>If #ImageURL is set, #Graphic will be reset
-            to an object as loaded from the given image URL, or <NULL/> if #ImageURL
+            to an object as loaded from the given image URL, or `NULL` if #ImageURL
             does not point to a valid image file.</li>
             <li>If #Graphic is set, #ImageURL will be reset
             to an empty string.</li>
@@ -166,7 +166,7 @@ published service UnoControlButtonModel
 
         <p>Normally, when you click a button with the mouse, you need to
         release the mouse button, and press it again. With this property
-        set to <TRUE/>, the button is repeatedly pressed while you hold
+        set to `TRUE`, the button is repeatedly pressed while you hold
         down the mouse button.</p>
 
         @since OOo 2.0
@@ -209,11 +209,11 @@ published service UnoControlButtonModel
 
     /** specifies whether the button should toggle on a single operation.
 
-        <p>If this property is set to <TRUE/>, a single operation of the button control (pressing space
+        <p>If this property is set to `TRUE`, a single operation of the button control (pressing space
         while it is focused, or clicking onto it) toggles it between a <em>pressed</em> and a <em>not
         pressed</em> state.</p>
 
-        <p>The default for this property is <FALSE/>, which means the button behaves like a usual
+        <p>The default for this property is `FALSE`, which means the button behaves like a usual
         push button.</p>
 
         @since OOo 2.0

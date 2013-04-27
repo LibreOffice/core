@@ -162,8 +162,8 @@ interface XLayoutManager : com::sun::star::uno::XInterface
             name.
 
         @return
-            returns <TRUE/> if the user interface element could be made visible, otherwise
-            <FALSE/> will be returned.
+            returns `TRUE` if the user interface element could be made visible, otherwise
+            `FALSE` will be returned.
 
         <p>
         If a user interface element should forced to the visible state
@@ -209,7 +209,7 @@ interface XLayoutManager : com::sun::star::uno::XInterface
             name.
 
         @return
-            returns <TRUE/> if the user interface element has been shown, otherwise <FALSE/> will be returned.
+            returns `TRUE` if the user interface element has been shown, otherwise `FALSE` will be returned.
     */
     boolean showElement( [in] string ResourceURL );
 
@@ -221,7 +221,7 @@ interface XLayoutManager : com::sun::star::uno::XInterface
             name.
 
         @return
-            returns <TRUE/> if the user interface element has been hidden, otherwise <FALSE/> will be returned.
+            returns `TRUE` if the user interface element has been hidden, otherwise `FALSE` will be returned.
     */
     boolean hideElement( [in] string ResourceURL );
 
@@ -239,7 +239,7 @@ interface XLayoutManager : com::sun::star::uno::XInterface
             specifies the position inside the docking area.
 
         @return
-            returns <TRUE/> if the user interface element has been docked, otherwise <FALSE/> will be returned.
+            returns `TRUE` if the user interface element has been docked, otherwise `FALSE` will be returned.
 
         @see com::sun::star::ui::DockingArea
     */
@@ -251,8 +251,8 @@ interface XLayoutManager : com::sun::star::uno::XInterface
             specifies which user interface element type should be docked.
 
         @return
-            returns <TRUE/> if all user interface elements of the requested type could be
-            docked, otherwise <FALSE/> will be returned.
+            returns `TRUE` if all user interface elements of the requested type could be
+            docked, otherwise `FALSE` will be returned.
 
         @see com::sun::star::ui::UIElementType
     */
@@ -266,7 +266,7 @@ interface XLayoutManager : com::sun::star::uno::XInterface
             name.
 
         @return
-            returns <TRUE/> if the user interface element has been docked, otherwise <FALSE/> will be returned.
+            returns `TRUE` if the user interface element has been docked, otherwise `FALSE` will be returned.
     */
     boolean floatWindow( [in] string ResourceURL );
 
@@ -278,7 +278,7 @@ interface XLayoutManager : com::sun::star::uno::XInterface
             name.
 
         @return
-            returns <TRUE/> if the user interface element has been locked, otherwise <FALSE/> will be returned.
+            returns `TRUE` if the user interface element has been locked, otherwise `FALSE` will be returned.
     */
     boolean lockWindow( [in] string ResourceURL );
 
@@ -290,8 +290,8 @@ interface XLayoutManager : com::sun::star::uno::XInterface
             to use ASCII characters for type and name.
 
         @return
-            returns <TRUE/> if the user interface element has been unlocked, otherwise
-            <FALSE/> will be returned.
+            returns `TRUE` if the user interface element has been unlocked, otherwise
+            `FALSE` will be returned.
     */
     boolean unlockWindow( [in] string ResourceURL );
 
@@ -357,7 +357,7 @@ interface XLayoutManager : com::sun::star::uno::XInterface
             name.
 
         @return
-            <TRUE/> if the user interface element is visible, otherwise <FALSE/>.
+            `TRUE` if the user interface element is visible, otherwise `FALSE`.
     */
     boolean isElementVisible( [in] string ResourceURL );
 
@@ -369,7 +369,7 @@ interface XLayoutManager : com::sun::star::uno::XInterface
             name.
 
         @return
-            <TRUE/> if the user interface element is floating, otherwise <FALSE/>.
+            `TRUE` if the user interface element is floating, otherwise `FALSE`.
     */
     boolean isElementFloating( [in] string ResourceURL );
 
@@ -381,7 +381,7 @@ interface XLayoutManager : com::sun::star::uno::XInterface
             name.
 
         @return
-            <TRUE/> if the user interface element is docked, otherwise <FALSE/>.
+            `TRUE` if the user interface element is docked, otherwise `FALSE`.
     */
     boolean isElementDocked( [in] string ResourceURL );
 
@@ -393,7 +393,7 @@ interface XLayoutManager : com::sun::star::uno::XInterface
             name.
 
         @return
-            <TRUE/> if the user interface element is locked, otherwise <FALSE/>.
+            `TRUE` if the user interface element is locked, otherwise `FALSE`.
     */
     boolean isElementLocked( [in] string ResourceURL  );
 
@@ -453,8 +453,8 @@ interface XLayoutManager : com::sun::star::uno::XInterface
         </p>
 
         @param Visible
-            provide <FALSE/> to make layout manager invisible otherwise this must be
-            set to <TRUE/>.
+            provide `FALSE` to make layout manager invisible otherwise this must be
+            set to `TRUE`.
     */
     void setVisible( [in] boolean Visible );
 

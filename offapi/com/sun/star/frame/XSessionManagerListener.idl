@@ -40,12 +40,12 @@ module com {  module sun {  module star {  module frame {
         on the session manager client service object.</p>
 
         @param bShutdown
-        <TRUE/> if a shutdown is in progress,
-        <FALSE/> if just a save point was requested
+        `TRUE` if a shutdown is in progress,
+        `FALSE` if just a save point was requested
 
         @param bCancelable
-        <TRUE/> if a shutdown in progress can be canceled by the listener,
-        <FALSE/> else
+        `TRUE` if a shutdown in progress can be canceled by the listener,
+        `FALSE` else
 
         <p>the listener may choose to ignore the saveDone()
         event in case no real shutdown is in progress. He
@@ -62,8 +62,8 @@ module com {  module sun {  module star {  module frame {
             interaction request was processed by the session manager
 
         @param bInteractionGranted
-        If <FALSE/> the listener must not interact with the user.
-        If <TRUE/> the listener can interact with the user now.
+        If `FALSE` the listener must not interact with the user.
+        If `TRUE` the listener can interact with the user now.
         After interaction the listener must call
         XSessionManagerClient::interactionDone()
         on the session manager client service object.

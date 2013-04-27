@@ -57,11 +57,11 @@ published constants RuleOperator
     */
     const short NOTEQUAL = 6;
 
-    /** "True" - Object has the value <TRUE/>.
+    /** "True" - Object has the value `TRUE`.
     */
     const short VALUE_TRUE = 7;
 
-    /** "False" - Object has the value <FALSE/>.
+    /** "False" - Object has the value `FALSE`.
     */
     const short VALUE_FALSE = 8;
 

@@ -63,7 +63,7 @@ published service DataForm
                 service have been sent, the DataForm resets itself, if all
                 com::sun::star::form::XResetListeners approve this.</li>
             <li>After the reset happened, the com::sun::star::sdb::RowSet::IsModified
-                property is reset to <FALSE/>. This property might have been switched to <TRUE/> during listener
+                property is reset to `FALSE`. This property might have been switched to `TRUE` during listener
                 notifications, since listeners are allowed to change field values. Also, the
                 com::sun::star::form::XReset::reset() implementations of bound control
                 models might have modified the fields they're bound to (by filling them with default values).</li>
@@ -164,7 +164,7 @@ published service DataForm
 
         <p>Note that this is a recommendation for user interface components displaying the
         form. Form implementations may decide to allow for insertions done via the API, even
-        if the property is set to <FALSE/>, but the user interface should respect the property
+        if the property is set to `FALSE`, but the user interface should respect the property
         value.</p>
     */
     [property] boolean AllowInserts;
@@ -173,7 +173,7 @@ published service DataForm
 
         <p>Note that this is a recommendation for user interface components displaying the
         form. Form implementations may decide to allow for updates done via the API, even
-        if the property is set to <FALSE/>, but the user interface should respect the property
+        if the property is set to `FALSE`, but the user interface should respect the property
         value.</p>
     */
     [property] boolean AllowUpdates;
@@ -182,7 +182,7 @@ published service DataForm
 
         <p>Note that this is a recommendation for user interface components displaying the
         form. Form implementations may decide to allow for deletions done via the API, even
-        if the property is set to <FALSE/>, but the user interface should respect the property
+        if the property is set to `FALSE`, but the user interface should respect the property
         value.</p>
     */
     [property] boolean AllowDeletes;

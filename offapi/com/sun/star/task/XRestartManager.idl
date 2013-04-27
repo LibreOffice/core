@@ -51,19 +51,19 @@ published interface XRestartManager : com::sun::star::uno::XInterface
 
         <p>
         The office has to call this method just before the main loop has been
-        started, with the <TRUE/> as argument, so that the implementation
-        knows that the office is initialized. If the method returns <TRUE/>,
+        started, with the `TRUE` as argument, so that the implementation
+        knows that the office is initialized. If the method returns `TRUE`,
         the office should restart without starting the main loop.
         </p>
 
         @param bInitialized
             specifies whether the office process is initialized already,
             if the caller does not have this information, he should provide
-            <FALSE/>.
+            `FALSE`.
 
         @returns
-            <TRUE/> if the office restart has been requested,
-            <FALSE/> otherwise
+            `TRUE` if the office restart has been requested,
+            `FALSE` otherwise
 
         @throws com::sun::star::uno::Exception
             to notify the caller about possible failures

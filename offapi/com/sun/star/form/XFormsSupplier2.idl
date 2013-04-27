@@ -34,7 +34,7 @@ interface XFormsSupplier2: XFormsSupplier
 
         <p>If you need read access to the forms collection, then you might check
         the existence of forms using hasForms(), and if it returns
-        <FALSE/>, you can do as if XFormsSupplier::getForms() would
+        `FALSE`, you can do as if XFormsSupplier::getForms() would
         have returned an empty container.</p>
 
         <p>Semantically, hasForms() is equivalent to calling

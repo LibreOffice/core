@@ -110,8 +110,8 @@ interface XReportComponent
     };
 
     /** Specifies that recurring values are printed.
-        If set to <TRUE/> then the value will be printed every time. If set to <FALSE/> then the value will only be printed once.
-        The default value is <TRUE/>.
+        If set to `TRUE` then the value will be printed every time. If set to `FALSE` then the value will only be printed once.
+        The default value is `TRUE`.
     */
     [attribute,bound] boolean PrintRepeatedValues
     {
@@ -166,7 +166,7 @@ interface XReportComponent
 
     /** Specifies the section where the control belongs to.
         This is a shortcut to get control hierarchy up.
-        This value is <NULL/> when the control was not inserted in any section.
+        This value is `NULL` when the control was not inserted in any section.
     */
     [attribute,readonly] com::sun::star::report::XSection Section;
 };

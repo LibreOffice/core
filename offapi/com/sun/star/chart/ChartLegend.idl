@@ -44,7 +44,7 @@ published service ChartLegend
     service com::sun::star::drawing::Shape;
 
 
-    /** If this property is <TRUE/> the position is calculated by the application automatically.
+    /** If this property is `TRUE` the position is calculated by the application automatically.
         Setting this property to false will have no effect. Instead use the interface com::sun::star::drawing::XShape
         to set a concrete position.
      */

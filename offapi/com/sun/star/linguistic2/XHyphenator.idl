@@ -61,7 +61,7 @@ published interface XHyphenator : com::sun::star::linguistic2::XSupportedLocales
         @returns
             the XHyphenatedWord for the last valid hyphenation position
              that is less than or equal to nMaxLeading - 1.
-            If there is no such valid hyphenation position, <NULL/> is returned.
+            If there is no such valid hyphenation position, `NULL` is returned.
 
         @param  aWord
             is the word to be hyphenated.
@@ -107,7 +107,7 @@ published interface XHyphenator : com::sun::star::linguistic2::XSupportedLocales
         @returns
             the information about the alternative spelling found at the
             specified position. Otherwise, if no alternative spelling was
-            found, <NULL/> is returned.
+            found, `NULL` is returned.
 
         @param  aWord
             is the original word to be looked at for having an alternative
@@ -145,7 +145,7 @@ published interface XHyphenator : com::sun::star::linguistic2::XSupportedLocales
         @returns
             an com::sun::star::linguistic2::XPossibleHyphens
             for the given word and language if there are any hyphenation
-            positions. <NULL/> otherwise.
+            positions. `NULL` otherwise.
 
         @param  aWord
             is the word for which information about the possible

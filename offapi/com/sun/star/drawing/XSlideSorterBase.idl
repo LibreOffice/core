@@ -53,44 +53,44 @@ interface XSlideSorterBase
     */
     [attribute] ::com::sun::star::container::XIndexAccess DocumentSlides;
 
-    /** Set this flag to <TRUE/> in order to have the current slide
+    /** Set this flag to `TRUE` in order to have the current slide
         highlighted.
-        <p>The default value is <FALSE/>.</p>
+        <p>The default value is `FALSE`.</p>
     */
     [attribute] boolean IsHighlightCurrentSlide;
 
-    /** Set this flag to <TRUE/> in order to visualize the selection of
+    /** Set this flag to `TRUE` in order to visualize the selection of
         slides (typically a bold frame around the selected slides).
-        <p>The default value is <TRUE/>.</p>
+        <p>The default value is `TRUE`.</p>
     */
     [attribute] boolean IsShowSelection;
 
-    /** Set this flag to <TRUE/> to visualize to where the focus is by
+    /** Set this flag to `TRUE` to visualize to where the focus is by
         showing a dotted rectangle around the focused slide.
-        <p>The default value is <TRUE/>.</p>
+        <p>The default value is `TRUE`.</p>
     */
     [attribute] boolean IsShowFocus;
 
-    /** When this flag has the value <TRUE/> then every time the current
+    /** When this flag has the value `TRUE` then every time the current
         slide is changed the visual area is shifted so that the new current
         slide is display in the center of the slide sorter window.
         <p>It is not always possible to move the current slide into the
         exact center of the window, for example when slides are located near
         the start or end of a document.</p>
-        <p>The default value is <FALSE/>.
+        <p>The default value is `FALSE`.
     */
     [attribute] boolean IsCenterSelection;
 
     /** This flag controls whether updates of previews are created during
-        full screen presentations (<FALSE/>) or not (<TRUE/>).  The
+        full screen presentations (`FALSE`) or not (`TRUE`).  The
         suspension of preview creations is an optimization for not slowing
         down a running presentation.
-        <p>The default value is <TRUE/>.</p>
+        <p>The default value is `TRUE`.</p>
     */
     [attribute] boolean IsSuspendPreviewUpdatesDuringFullScreenPresentation;
 
-    /** The orientation of a slide sorter can be either vertical (<TRUE/>)
-        or horizontal (<FALSE/>).
+    /** The orientation of a slide sorter can be either vertical (`TRUE`)
+        or horizontal (`FALSE`).
     */
     [attribute] boolean IsOrientationVertical;
 
@@ -105,7 +105,7 @@ interface XSlideSorterBase
 
     /** This flag controls whether the model can be modified by using
         keyboard or mouse.
-        <p>The default value is <TRUE/>.</p>
+        <p>The default value is `TRUE`.</p>
     */
     [attribute] boolean IsUIReadOnly;
 };

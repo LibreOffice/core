@@ -41,7 +41,7 @@ published interface XStatisticDisplay: com::sun::star::uno::XInterface
 
     /** @returns
             the properties of the up bars of a stock chart which has
-            StockDiagram::UpDown set to <TRUE/>.
+            StockDiagram::UpDown set to `TRUE`.
 
         <p>The <em>UpBar</em> is the box that is drawn between the
         open and close value of a stock, when the closing value is
@@ -54,7 +54,7 @@ published interface XStatisticDisplay: com::sun::star::uno::XInterface
 
     /** @returns
             the properties of the down bars of a stock chart which has
-            StockDiagram::UpDown set to <TRUE/>.
+            StockDiagram::UpDown set to `TRUE`.
 
         <p>The <em>DownBar</em> is the box that is drawn between the
         open and close value of a stock, when the closing value is

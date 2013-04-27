@@ -57,7 +57,7 @@ published interface XUriSchemeParser: com::sun::star::uno::XInterface {
        an object that supports
        com::sun::star::uri::XUriReference (and possibly also
        additional, scheme-specific interfaces), if the given input can be parsed
-       into an absolute URI; otherwise, <NULL/> is returned.
+       into an absolute URI; otherwise, `NULL` is returned.
      */
     XUriReference parse([in] string scheme, [in] string schemeSpecificPart);
 };

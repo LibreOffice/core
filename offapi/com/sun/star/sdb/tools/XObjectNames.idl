@@ -114,7 +114,7 @@ interface XObjectNames
             specifies the to-be-checked name of the object.
 
         @return
-            <TRUE/> if and only if the given name is legitimate as table respectively query name
+            `TRUE` if and only if the given name is legitimate as table respectively query name
             to be used in the database.
 
         @throws com::sun::star::lang::IllegalArgumentException

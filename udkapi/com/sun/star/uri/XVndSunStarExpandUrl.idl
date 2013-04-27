@@ -50,7 +50,7 @@ published interface XVndSunStarExpandUrl {
        returns the expanded content of this URL.
 
        @param expander
-       a macro expander; must not be <NULL/>.
+       a macro expander; must not be `NULL`.
 
        @returns
        the expanded content of this URL.

@@ -113,7 +113,7 @@ published service GraphicDescriptor
 
     /** Indicates that it is a transparent graphic
 
-        <p>This property is always <TRUE/> for vector graphics.
+        <p>This property is always `TRUE` for vector graphics.
         The status of this flag is not always clear if the
         graphic was not loaded at all, e.g. in case of just
         querying for the GraphicDescriptor.</p>

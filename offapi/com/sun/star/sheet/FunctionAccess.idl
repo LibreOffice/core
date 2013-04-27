@@ -46,7 +46,7 @@ published service FunctionAccess
     /** specifies whether the function call is performed as array function
         call.
 
-        <p>If set to <TRUE/>, the result of the function call will be
+        <p>If set to `TRUE`, the result of the function call will be
         calculated similar to array formulas in a spreadsheet document. The
         return value of the function call will usually be a sequence of
         sequences containing the values of the resulting array. Example: If the
@@ -54,14 +54,14 @@ published service FunctionAccess
         array containing the absolute values of the numbers contained in the
         specified cell range.</p>
 
-        <p>If set to <FALSE/>, the result of the function call will be
+        <p>If set to `FALSE`, the result of the function call will be
         calculated similar to simple cell formulas in a spreadsheet document.
         The return value of the function call will usually be a single value.
         Of course, some functions always return an array, for example the
         MUNIT function.</p>
 
         <p>For compatibility with older versions, the default value of this
-        property is <TRUE/>.</p>
+        property is `TRUE`.</p>
 
         @since OOo 3.3
      */

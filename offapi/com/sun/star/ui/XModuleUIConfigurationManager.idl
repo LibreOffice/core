@@ -62,8 +62,8 @@ interface XModuleUIConfigurationManager : ::com::sun::star::uno::XInterface
             characters for type and name.
 
         @return
-            <TRUE/> if settings have been found in the default layer,
-            otherwise <FALSE/>.
+            `TRUE` if settings have been found in the default layer,
+            otherwise `FALSE`.
     */
     boolean isDefaultSettings( [in] string ResourceURL ) raises ( com::sun::star::lang::IllegalArgumentException );
 
@@ -77,8 +77,8 @@ interface XModuleUIConfigurationManager : ::com::sun::star::uno::XInterface
             characters for type and name.
 
         @return
-            <TRUE/> if default settings have been found in the default layer,
-            otherwise <FALSE/>.
+            `TRUE` if default settings have been found in the default layer,
+            otherwise `FALSE`.
     */
     ::com::sun::star::container::XIndexAccess getDefaultSettings( [in] string ResourceURL ) raises ( com::sun::star::container::NoSuchElementException, com::sun::star::lang::IllegalArgumentException );
 

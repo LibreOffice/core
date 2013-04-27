@@ -111,8 +111,8 @@ published interface XTextConversion : ::com::sun::star::uno::XInterface
         @param nTextConversionOptions
             Combination of TextConversionOption values.
         @returns
-            <TRUE/> if the entry is a valid entry for the dictionary
-            <FALSE/> otherwise.
+            `TRUE` if the entry is a valid entry for the dictionary
+            `FALSE` otherwise.
 
         @throws NoSupportException
             when <var>nConversionDictionaryType</var> is not known by the implementation,

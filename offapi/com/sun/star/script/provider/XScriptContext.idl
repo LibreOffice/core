@@ -56,10 +56,10 @@ interface XScriptContext : ::com::sun::star::uno::XInterface {
         itself. In this case, the <code>getInvocationContext</code> member allows
         to access this context.</p>
 
-        <p>Note that the returned context is allowed to be <NULL/>, in this case,
+        <p>Note that the returned context is allowed to be `NULL`, in this case,
         the document as returned by <code>getDocument</code> is the invocation context.</p>
 
-        <p>If the returned context is not <NULL/>, its <code>ScriptContainer</code> attribute
+        <p>If the returned context is not `NULL`, its <code>ScriptContainer</code> attribute
         equals the document as returned by <code>XScriptContext::getDocument</code>.</p>
 
         @since OOo 3.0

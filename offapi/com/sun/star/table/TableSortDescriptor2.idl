@@ -51,9 +51,9 @@ published service TableSortDescriptor2
     /** specifies if the columns or rows are to be sorted.
 
         <dl>
-            <dt><TRUE/></dt>
+            <dt>`TRUE`</dt>
             <dd>The columns are to be sorted.</dd>
-            <dt><FALSE/></dt>
+            <dt>`FALSE`</dt>
             <dd>The rows are to be sorted.</dd>
         </dl>
      */

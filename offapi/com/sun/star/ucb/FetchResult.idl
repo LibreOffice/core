@@ -51,7 +51,7 @@ published struct FetchResult
     /** indicates the orientation in which the rows are fetched and set into
         the sequence FetchResult::Rows.
 
-        <p>When FetchResult::Orientation equals <TRUE/>, the
+        <p>When FetchResult::Orientation equals `TRUE`, the
         rows in FetchResult::Rows are ordered in the same way
         as in the original result set.
     */

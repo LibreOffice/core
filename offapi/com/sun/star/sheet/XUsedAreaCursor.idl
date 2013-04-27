@@ -40,8 +40,8 @@ published interface XUsedAreaCursor: com::sun::star::uno::XInterface
     /** points the cursor to the start of the used area.
 
         @param bExpand
-            <TRUE/> = expands the current cursor range,
-            <FALSE/> = sets size of the cursor to a single cell.
+            `TRUE` = expands the current cursor range,
+            `FALSE` = sets size of the cursor to a single cell.
      */
     void gotoStartOfUsedArea( [in] boolean bExpand );
 
@@ -49,8 +49,8 @@ published interface XUsedAreaCursor: com::sun::star::uno::XInterface
     /** points the cursor to the end of the used area.
 
         @param bExpand
-            <TRUE/> = expands the current cursor range,
-            <FALSE/> = sets size of the cursor to a single cell.
+            `TRUE` = expands the current cursor range,
+            `FALSE` = sets size of the cursor to a single cell.
      */
     void gotoEndOfUsedArea( [in] boolean bExpand );
 

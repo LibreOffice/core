@@ -74,8 +74,8 @@ interface XAccessibleRelationSet : ::com::sun::star::uno::XInterface
             AccessibleRelationType.
 
         @return
-            Returns <TRUE/> if there is a (at least one) relation of the
-            given type and <FALSE/> if there is no such relation in the set.
+            Returns `TRUE` if there is a (at least one) relation of the
+            given type and `FALSE` if there is no such relation in the set.
     */
     boolean containsRelation ([in] short aRelationType);
 

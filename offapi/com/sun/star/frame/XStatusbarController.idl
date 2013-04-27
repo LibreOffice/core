@@ -117,7 +117,7 @@ interface XStatusbarController
             current information about the mouse pointer.
 
         @return
-            return <TRUE/> if the event should not be processed and <FALSE/>
+            return `TRUE` if the event should not be processed and `FALSE`
             if the event should be processed by the status bar.
     */
     boolean mouseButtonDown( [in] ::com::sun::star::awt::MouseEvent aMouseEvent );
@@ -131,7 +131,7 @@ interface XStatusbarController
             current information about the mouse pointer.
 
         @return
-            return <TRUE/> if the event should not be processed and <FALSE/>
+            return `TRUE` if the event should not be processed and `FALSE`
             if the event should be processed by the status bar.
     */
     boolean mouseMove( [in] ::com::sun::star::awt::MouseEvent aMouseEvent );
@@ -145,7 +145,7 @@ interface XStatusbarController
             current information about the mouse pointer.
 
         @return
-            return <TRUE/> if the event should not be processed and <FALSE/>
+            return `TRUE` if the event should not be processed and `FALSE`
             if the event should be processed by the status bar.
     */
     boolean mouseButtonUp( [in] ::com::sun::star::awt::MouseEvent aMouseEvent );
@@ -161,7 +161,7 @@ interface XStatusbarController
             possible values.
 
         @param bMouseEvent
-            <TRUE/> if the command is based on a mouse event, otherwise <FALSE/>.
+            `TRUE` if the command is based on a mouse event, otherwise `FALSE`.
 
         @param aData
             for future use only.

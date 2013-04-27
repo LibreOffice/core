@@ -40,12 +40,12 @@ interface XDocumentRecovery
 
         <p>When saving a session, either in case of a emergency (when OpenOffice.org crashed), or during a
         periodic session save as configured by the user, storeToRecoveryFile() is called for every
-        document where <code>wasModifiedSinceLastSave</code> returns <TRUE/>.</p>
+        document where <code>wasModifiedSinceLastSave</code> returns `TRUE`.</p>
 
-        <p>It's allowed to implement this method sloppy, by returning <TRUE/> in cases where it is not sure whether
+        <p>It's allowed to implement this method sloppy, by returning `TRUE` in cases where it is not sure whether
         the document actually has been modified. So, the most simple implementation could simply delegate this call
         to com::sun::star::util::XModifiable::isModified(). (Well, actually that's the
-        second simple implementation, the <em>most</em> simple one would, still legitimately, always return <TRUE/>.)</p>
+        second simple implementation, the <em>most</em> simple one would, still legitimately, always return `TRUE`.)</p>
 
         <p>However, in such a case, the document might be saved more often than needed. In particular during the
         periodic session save, this might become a problem when saving is expensive, for a single document

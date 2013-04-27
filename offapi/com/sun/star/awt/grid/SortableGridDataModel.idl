@@ -38,8 +38,8 @@ interface XMutableGridDataModel;
 
     <p>The service implementation is able to compare the default scalar types, plus strings.</p>
 
-    <p>For determining the data type of a column which the data should be sorted by, the first non-<VOID/> data encountered
-    in this column is taken into account. Further read requests to this column will assume that all non-<VOID/> data is of
+    <p>For determining the data type of a column which the data should be sorted by, the first non-`VOID` data encountered
+    in this column is taken into account. Further read requests to this column will assume that all non-`VOID` data is of
     the same type.</p>
 
     <p>Consequently, you cannot use this service with data sets containing heterogenous data in a given column.</p>
@@ -61,7 +61,7 @@ service SortableGridDataModel : XSortableMutableGridDataModel
         @param DelegatorModel
             the data model to which read requests are delegated.
         @throws ::com::sun::star::lang::IllegalArgumentException
-            if the given <code>DelegatorModel</code> is <NULL/>
+            if the given <code>DelegatorModel</code> is `NULL`
     */
     create(
             [in] XMutableGridDataModel DelegatorModel
@@ -75,7 +75,7 @@ service SortableGridDataModel : XSortableMutableGridDataModel
         @param Collator
             is the collator to be used for string comparison
         @throws ::com::sun::star::lang::IllegalArgumentException
-            if the given <code>DelegatorModel</code> is <NULL/>
+            if the given <code>DelegatorModel</code> is `NULL`
     */
     createWithCollator(
             [in] XMutableGridDataModel DelegatorModel,

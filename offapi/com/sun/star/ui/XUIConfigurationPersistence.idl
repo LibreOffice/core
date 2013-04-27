@@ -70,8 +70,8 @@ interface XUIConfigurationPersistence : ::com::sun::star::uno::XInterface
         instance.
 
         @return
-            <TRUE/> if the configuration manager has changed since the
-            last store() call. <FALSE/> if the configuration
+            `TRUE` if the configuration manager has changed since the
+            last store() call. `FALSE` if the configuration
             manager has not been changed.
     */
     boolean isModified();
@@ -82,8 +82,8 @@ interface XUIConfigurationPersistence : ::com::sun::star::uno::XInterface
         not support any changes to its configuration settings.
 
         @return
-            <TRUE/> if the configuration manager storage is read-only otherwise
-            <FALSE/>.
+            `TRUE` if the configuration manager storage is read-only otherwise
+            `FALSE`.
     */
     boolean isReadOnly();
 };

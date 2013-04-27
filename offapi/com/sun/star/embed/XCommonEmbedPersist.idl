@@ -53,8 +53,8 @@ published interface XCommonEmbedPersist: com::sun::star::uno::XInterface
     /** allows to detect if the data store is read-only.
 
         @returns
-            <TRUE/> if the data store is readonly or opened readonly
-            <FALSE/> otherwise
+            `TRUE` if the data store is readonly or opened readonly
+            `FALSE` otherwise
 
         @throws com::sun::star::embed::WrongStateException
             the object is in wrong state ( has no entry )

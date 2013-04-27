@@ -64,8 +64,8 @@ interface XMergeableCellRange : com::sun::star::uno::XInterface
 
 
     /** @returns
-            <TRUE/> if all cells from this range can be merged to one
-            or <FALSE/> otherwise.
+            `TRUE` if all cells from this range can be merged to one
+            or `FALSE` otherwise.
      */
     boolean isMergeable();
 };

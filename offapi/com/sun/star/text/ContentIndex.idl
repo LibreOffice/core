@@ -48,7 +48,7 @@ published service ContentIndex
      */
     [optional, property] com::sun::star::container::XIndexReplace LevelParagraphStyles;
 
-    /** contains <TRUE/> if the document index marks are included in this index.
+    /** contains `TRUE` if the document index marks are included in this index.
     */
     [optional, property] boolean CreateFromMarks;
 

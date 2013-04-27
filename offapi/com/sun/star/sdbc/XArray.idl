@@ -94,7 +94,7 @@ published interface XArray: com::sun::star::uno::XInterface
                 services. If the
                 <code>typeMap</code>
                 is
-                <NULL/>
+                `NULL`
                 , the type-map
                     associated with the connection for customizations of the type-mappings
                  is used.
@@ -127,7 +127,7 @@ published interface XArray: com::sun::star::uno::XInterface
                 services. If the
                 <code>typeMap</code>
                 is
-                <NULL/>
+                `NULL`
                 , the type-map
                    associated with the connection for customizations of the type-mappings
                 is used.
@@ -159,7 +159,7 @@ published interface XArray: com::sun::star::uno::XInterface
         or the
         <code>typeMap</code>
         is
-        <NULL/>
+        `NULL`
         ,
         the connection type mapping is used instead.
 
@@ -198,7 +198,7 @@ published interface XArray: com::sun::star::uno::XInterface
         or the
         <code>typeMap</code>
         is
-        <NULL/>
+        `NULL`
         ,
         the connection type mapping is used instead.
 

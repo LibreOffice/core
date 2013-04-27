@@ -73,7 +73,7 @@ published service SimpleSetUpdate
 
  <p>Objects to be inserted must not be contained in any set at the time of
  insertion. com::sun::star::container::XChild::getParent()
- must return <NULL/>. If a name had been assigned to the object prior to insertion
+ must return `NULL`. If a name had been assigned to the object prior to insertion
  (using com::sun::star::container::XNamed::setName()
  or by other means), this name is ignored and will be lost.
  After insertion the name of the object is the name that was used as argument

@@ -79,7 +79,7 @@ published service SubTotalDescriptor
 
         <p>This property is only used if
         SubTotalDescriptor::EnableUserSortList
-        is <TRUE/>.</p>
+        is `TRUE`.</p>
      */
     [property] long UserSortListIndex;
 
@@ -96,7 +96,7 @@ published service SubTotalDescriptor
 
 
     /** specifies the sorting order if
-        SubTotalDescriptor::EnableSort is set to <TRUE/>.
+        SubTotalDescriptor::EnableSort is set to `TRUE`.
      */
     [property] boolean SortAscending;
 

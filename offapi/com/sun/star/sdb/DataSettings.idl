@@ -41,7 +41,7 @@ published service DataSettings
 
 
     /** indicates whether the filter should be applied or not,
-        default is <FALSE/>.
+        default is `FALSE`.
      */
     [property] boolean ApplyFilter;
 

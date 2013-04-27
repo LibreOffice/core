@@ -51,11 +51,11 @@ interface XPopupMenuExtended
         is being executed as a result of invoking
         com::sun::star::awt::XPopupMenu::execute(); that is,
         for a PopupMenu activated by a MenuBar item,
-        this methods returns <FALSE/>.
+        this methods returns `FALSE`.
 
         @return
-            <TRUE/> if the com::sun::star::awt::PopupMenu
-            is being executed, <FALSE/> otherwise.
+            `TRUE` if the com::sun::star::awt::PopupMenu
+            is being executed, `FALSE` otherwise.
 
         @see com::sun::star::awt::XPopupMenu::execute()
 
@@ -97,7 +97,7 @@ interface XPopupMenuExtended
     /** specifies whether mnemonics are automatically assigned to menu items, or not.
 
         @param bEnable
-            if <TRUE/>, mnemonics are automatically assigned to menu items.
+            if `TRUE`, mnemonics are automatically assigned to menu items.
     */
     void enableAutoMnemonics( [in] boolean bEnable );
 
@@ -129,7 +129,7 @@ interface XPopupMenuExtended
 
         <p>The KeyEvent is <b>only</b> used as a container to transport
         the shortcut information, so that in this case
-        ::com::sun::star::lang::::EventObject::Source is <NULL/>.</p>
+        ::com::sun::star::lang::::EventObject::Source is `NULL`.</p>
 
         @param nItemId
             specifies the menu item identifier for which the KeyEvent should be retrieved.
@@ -221,7 +221,7 @@ interface XPopupMenuExtended
             specifies the image for the menu item.
 
         @param bScale
-            if <TRUE/>, the image will be scaled to the standard size used internally by
+            if `TRUE`, the image will be scaled to the standard size used internally by
             the implementation.
 
         @throws com::sun::star::container::NoSuchElementException
@@ -293,7 +293,7 @@ interface XPopupMenuExtended
             specifies the menu item identifier for which the mirror mode should be set.
 
         @param bMirror
-            if <TRUE/>, the item image is mirrored.
+            if `TRUE`, the item image is mirrored.
 
         @throws com::sun::star::container::NoSuchElementException
             if there is no menu item with the identifier specified in <var>nItemId</var>.
@@ -308,7 +308,7 @@ interface XPopupMenuExtended
         @param nItemId
             specifies the menu item identifier for which the image mirror mode should be checked.
 
-        @return <TRUE/> if the item image is mirrored, <FALSE/> otherwise.
+        @return `TRUE` if the item image is mirrored, `FALSE` otherwise.
 
         @throws com::sun::star::container::NoSuchElementException
             if there is no menu item with the identifier specified in <var>nItemId</var>.

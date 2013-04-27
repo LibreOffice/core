@@ -141,7 +141,7 @@ published service GridControl
 
     /** specifies the height of a row of the grid.
 
-        <p>If the value is set to <NULL/>, the height is determined automatically according
+        <p>If the value is set to `NULL`, the height is determined automatically according
         to the current font used.</p>
 
         @see GridControl::FontDescriptor

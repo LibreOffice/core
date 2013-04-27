@@ -123,7 +123,7 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
         of one word and EndPos of previous word. In this situation, the
         outcome of the algorithm can be indeterminate. In this situation
         the <em>bPreferForward</em> flag is used. If bPreferForward ==
-        <FALSE/>, <em>nPos</em> is considered to be the end of the word
+        `FALSE`, <em>nPos</em> is considered to be the end of the word
         and we look backwards for beginning of word, otherwise
         <em>nPos</em> is considered to be the start of the next word and
         we look forwards for the end of the word. </p>
@@ -156,7 +156,7 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
 
         <p> It is possible that both of this method
         and following method <em>isEndWord</em> all return
-        <TRUE/>, since StartPos of a word is inclusive
+        `TRUE`, since StartPos of a word is inclusive
         while EndPos of a word is exclusive.
         </p>
 

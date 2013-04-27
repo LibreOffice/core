@@ -45,9 +45,9 @@ published service RangeSelectionArguments
     /** specifies if the range selection is limited to a single
         cell only.
 
-        <p>If <TRUE/>, the selection is restricted to a
-        single cell.  If <FALSE/>, multiple adjoining cells can be
-        selected.  The default value is <FALSE/>.</p>
+        <p>If `TRUE`, the selection is restricted to a
+        single cell.  If `FALSE`, multiple adjoining cells can be
+        selected.  The default value is `FALSE`.</p>
 
     @since OOo 2.0.3
      */

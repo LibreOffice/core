@@ -111,7 +111,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             </p>
 
         @param bReset
-            if <TRUE/>, specifies that the node should be reset to its default
+            if `TRUE`, specifies that the node should be reset to its default
             state as given by lower layers and the schema or template prior
             to applying the changes.
 
@@ -544,7 +544,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
 
-    /** receives notification that a property having a non-<NULL/> value
+    /** receives notification that a property having a non-`NULL` value
         is added to the current node.
 
         <p> The current node must be extensible and

@@ -216,8 +216,8 @@ interface XAccessibleTable : ::com::sun::star::uno::XInterface
             Index of the row for which to determine whether it is selected.
 
         @return
-            Returns <TRUE/> if the specified row is selected completely and
-            <FALSE/> otherwise.
+            Returns `TRUE` if the specified row is selected completely and
+            `FALSE` otherwise.
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the specified row index is not valid, i.e. lies not inside
@@ -235,8 +235,8 @@ interface XAccessibleTable : ::com::sun::star::uno::XInterface
             selected.
 
         @return
-            Returns <TRUE/> if the specified column is selected completely
-            and <FALSE/> otherwise.
+            Returns `TRUE` if the specified column is selected completely
+            and `FALSE` otherwise.
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the specified column index is not valid, i.e. lies not inside
@@ -305,9 +305,9 @@ interface XAccessibleTable : ::com::sun::star::uno::XInterface
             accessible object that spans that cell is selected.
 
         @return
-            Returns <TRUE/> if the given row and column indices are valid
+            Returns `TRUE` if the given row and column indices are valid
             and the specified accessible object is selected.  Otherwise
-            <FALSE/> is returned.
+            `FALSE` is returned.
     */
     boolean isAccessibleSelected ([in] long nRow, [in] long nColumn)
         raises (::com::sun::star::lang::IndexOutOfBoundsException);

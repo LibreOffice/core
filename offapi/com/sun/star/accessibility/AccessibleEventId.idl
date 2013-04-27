@@ -172,7 +172,7 @@ constants AccessibleEventId
         <p>Not used: The AccessibleEventObject::OldValue and
         AccessibleEventObject::NewValue fields contain
         references to the old and new predecessor.  Note that both references
-        my be <NULL/> to indicate that a flow to the sending object has not
+        my be `NULL` to indicate that a flow to the sending object has not
         existed or does not exist anymore.</p>
     */
     const short CONTENT_FLOWS_FROM_RELATION_CHANGED = 12;
@@ -183,7 +183,7 @@ constants AccessibleEventId
         <p>Not used: The AccessibleEventObject::OldValue and
         AccessibleEventObject::NewValue fields contain
         references to the old and new successor.  Note that both references
-        my be <NULL/> to indicate that a flow from the sending object has not
+        my be `NULL` to indicate that a flow from the sending object has not
         existed or does not exist anymore.</p>
     */
     const short CONTENT_FLOWS_TO_RELATION_CHANGED = 13;

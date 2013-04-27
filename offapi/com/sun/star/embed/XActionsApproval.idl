@@ -44,7 +44,7 @@ published interface XActionsApproval: com::sun::star::uno::XInterface
             InstanceLocker does.
 
         @return
-            returns <TRUE/> in case the specified action is approved.
+            returns `TRUE` in case the specified action is approved.
      */
     boolean approveAction( [in] long nAction );
 };

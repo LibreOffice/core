@@ -45,7 +45,7 @@ published interface XSchemaSupplier : ::com::sun::star::uno::XInterface
 
       @returns
                 an object allowing access to the various parts of the schema,
-                <NULL/> if the component doesn't exist.
+                `NULL` if the component doesn't exist.
 
       @throws   com::sun::star::lang::IllegalArgumentException
                 if the component identifier is invalid.

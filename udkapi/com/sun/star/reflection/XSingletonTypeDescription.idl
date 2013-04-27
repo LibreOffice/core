@@ -44,7 +44,7 @@ published interface XSingletonTypeDescription : com::sun::star::reflection::XTyp
 
         @return the reflection of the service associated with the singleton, for
             an obsolete, service-based singleton; for an interface-based
-            singleton, <NULL/> is returned
+            singleton, `NULL` is returned
       */
     XServiceTypeDescription getService();
 

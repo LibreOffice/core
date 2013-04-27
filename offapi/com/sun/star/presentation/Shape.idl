@@ -48,18 +48,18 @@ published service Shape
     /** This is the color for dimming this shape.
 
         <p>This color is used if the property com::sun::star::drawing::Shape::DimPrev
-        is <TRUE/> and com::sun::star::drawing::Shape::DimHide is <FALSE/>.</p>
+        is `TRUE` and com::sun::star::drawing::Shape::DimHide is `FALSE`.</p>
      */
     [property] com::sun::star::util::Color DimColor;
 
 
     /** If this property and the property com::sun::star::drawing::Shape::DimPrev
-        are both <TRUE/>, the shape is hidden instead of dimmed to a color.
+        are both `TRUE`, the shape is hidden instead of dimmed to a color.
      */
     [property] boolean DimHide;
 
 
-    /** If this property is <TRUE/>, this shape is dimmed to the color of
+    /** If this property is `TRUE`, this shape is dimmed to the color of
         property com::sun::star::drawing::Shape::DimColor after executing its
         animation effect.
      */
@@ -72,12 +72,12 @@ published service Shape
 
 
     /** If this is a default presentation object and if it is empty,
-        this property is <TRUE/>.
+        this property is `TRUE`.
      */
     [property] boolean IsEmptyPresentationObject;
 
 
-    /** If this is a presentation object, this property is <TRUE/>.
+    /** If this is a presentation object, this property is `TRUE`.
         <p>Presentation objects are objects like TitleTextShape and
         OutlinerShape.</p>
      */
@@ -90,7 +90,7 @@ published service Shape
     [property] com::sun::star::presentation::ClickAction OnClick;
 
 
-    /** If this property is <TRUE/>, the sound of this shape is played in
+    /** If this property is `TRUE`, the sound of this shape is played in
         full.
 
         <p>The default behavior is to stop the sound after completing the
@@ -116,7 +116,7 @@ published service Shape
     [property] string Sound;
 
 
-    /** If this property is set to <TRUE/>, a sound is played while the
+    /** If this property is set to `TRUE`, a sound is played while the
         animation effect is executed.
      */
     [property] boolean SoundOn;

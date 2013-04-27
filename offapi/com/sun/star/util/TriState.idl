@@ -26,17 +26,17 @@ module com {  module sun {  module star {  module util {
 
 /** This enumeration represents a tristate value.<p>
 
-    This enumeration defines three values, <TRUE/>, <FALSE/> and a don't know
+    This enumeration defines three values, `TRUE`, `FALSE` and a don't know
     value.<p>
  */
 enum TriState
 {
-    /** The value is equivalent to <FALSE/>.
+    /** The value is equivalent to `FALSE`.
      */
     NO,
 
 
-    /** The value is equivalent to <TRUE/>.
+    /** The value is equivalent to `TRUE`.
      */
     YES,
 

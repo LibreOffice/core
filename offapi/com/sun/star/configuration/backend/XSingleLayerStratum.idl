@@ -71,7 +71,7 @@ published interface XSingleLayerStratum : ::com::sun::star::uno::XInterface
 
       @returns
                 a Layer object providing access to the layer data,
-                <NULL/> if the layer is newer than indicated by the timestamp.
+                `NULL` if the layer is newer than indicated by the timestamp.
 
       @throws   com::sun::star::lang::IllegalArgumentException
                 if the component identifier is invalid or

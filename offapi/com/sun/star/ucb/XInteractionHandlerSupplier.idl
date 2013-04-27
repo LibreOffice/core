@@ -38,9 +38,9 @@ published interface XInteractionHandlerSupplier: com::sun::star::uno::XInterface
         supplied.
 
         @returns
-        <TRUE/>, if an
+        `TRUE`, if an
         com::sun::star::task::XInteractionHandler can be
-        supplied, <FALSE/> otherwise.
+        supplied, `FALSE` otherwise.
     */
     boolean hasInteractionHandler();
 };

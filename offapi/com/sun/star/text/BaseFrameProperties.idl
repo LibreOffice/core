@@ -262,7 +262,7 @@ published service BaseFrameProperties
 
         <p>The value of this property is only evaluated for the positioning
         of the shape, if the text document setting ConsiderTextWrapOnObjPos
-        is <TRUE/>. Valid values are given by #WrapInfluenceOnPosition</p>
+        is `TRUE`. Valid values are given by #WrapInfluenceOnPosition</p>
 
         @since OOo 2.0
      */

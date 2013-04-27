@@ -50,8 +50,8 @@ published interface XStorable: com::sun::star::uno::XInterface
         or because it is stored there.
 
         @returns
-            <TRUE/> if the object knows a location where it is persistent
-            <FALSE/> otherwise
+            `TRUE` if the object knows a location where it is persistent
+            `FALSE` otherwise
      */
     boolean hasLocation();
 
@@ -67,8 +67,8 @@ published interface XStorable: com::sun::star::uno::XInterface
         when the data store is read-only.
 
         @returns
-            <TRUE/> if the data store is readonly or opened readonly
-            <FALSE/> otherwise
+            `TRUE` if the data store is readonly or opened readonly
+            `FALSE` otherwise
      */
     boolean isReadonly();
 

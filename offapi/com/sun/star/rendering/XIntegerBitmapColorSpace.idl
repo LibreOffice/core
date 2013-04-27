@@ -69,7 +69,7 @@ interface XIntegerBitmapColorSpace : XColorSpace
 
     /** Query whether color data bytes need to be swapped.<p>
 
-        @return <TRUE/>, This method returns the endianness of the color
+        @return `TRUE`, This method returns the endianness of the color
         data. The value is one of the Endianness
         constants. If color data is represented using more than one
         byte, the actual channel positions are specified using bit

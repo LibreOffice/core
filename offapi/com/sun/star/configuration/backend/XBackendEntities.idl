@@ -82,8 +82,8 @@ published interface XBackendEntities : ::com::sun::star::uno::XInterface
                 if an error occurs while accessing the backend.
 
         @returns
-            <TRUE/>, if aEntity is a valid, existing entity for this backend,
-            <FALSE/> otherwise.
+            `TRUE`, if aEntity is a valid, existing entity for this backend,
+            `FALSE` otherwise.
     */
     boolean supportsEntity([in] string aEntity)
         raises( BackendAccessException );
@@ -99,8 +99,8 @@ published interface XBackendEntities : ::com::sun::star::uno::XInterface
             The name of another entity.
 
         @returns
-            <TRUE/>, if aEntity and aOtherEntity denote the same entity
-            within this backend, <FALSE/> otherwise.
+            `TRUE`, if aEntity and aOtherEntity denote the same entity
+            within this backend, `FALSE` otherwise.
 
         @throws   com::sun::star::configuration::backend::BackendAccessException
                 if an error occurs while accessing the backend.

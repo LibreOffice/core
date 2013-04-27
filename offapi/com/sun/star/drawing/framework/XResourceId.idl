@@ -53,7 +53,7 @@ interface XResourceId
     com::sun::star::util::URL getFullResourceURL ();
 
     /** Return whether there is a non-empty anchor URL.  When this method
-        returns <FALSE/> then getAnchorURLs() will return an empty list.
+        returns `FALSE` then getAnchorURLs() will return an empty list.
     */
     boolean hasAnchor ();
 
@@ -105,7 +105,7 @@ interface XResourceId
             The resource id of the anchor.
         @param eMode
             This mode specifies how the called resource has to be bound to
-            the given anchor in order to have this function return <TRUE/>.
+            the given anchor in order to have this function return `TRUE`.
             <p>If eMode is DIRECT then the anchor of the called resource id
             has to be identical to the given anchor. If eMode is
             INDIRECT then the given anchor has to be a part

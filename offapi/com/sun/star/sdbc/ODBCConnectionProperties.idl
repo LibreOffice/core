@@ -64,7 +64,7 @@ service ODBCConnectionProperties
     [optional, property] string CharSet;
 
     /** specifies if retrieving of auto generated values should be enabled or not.
-        If <TRUE/> than the statement will support the XGeneratedResultSet (future concept) interface, otherwise not.
+        If `TRUE` than the statement will support the XGeneratedResultSet (future concept) interface, otherwise not.
     */
     [optional, property] boolean IsAutoRetrievingEnabled;
 

@@ -42,7 +42,7 @@ published interface XPropertyMatcher : com::sun::star::uno::XInterface
          Command Processor.  It may be null.
 
         @returns
-        <TRUE/> if the properties match, <FALSE/> otherwise.
+        `TRUE` if the properties match, `FALSE` otherwise.
     */
     boolean matches([in] com::sun::star::ucb::XCommandProcessor Properties,
                     [in] com::sun::star::ucb::XCommandEnvironment Environment);

@@ -32,36 +32,36 @@ published service ViewSettings
 {
     interface com::sun::star::beans::XPropertySet;
 
-    /** If this property is <TRUE/>, annotations (notes) are visible.
+    /** If this property is `TRUE`, annotations (notes) are visible.
      */
     [property] boolean ShowAnnotations;
 
-    /** If this property is <TRUE/>, paragraph line breaks are visible.
+    /** If this property is `TRUE`, paragraph line breaks are visible.
      */
     [property] boolean ShowBreaks;
 
-    /** If this property is <TRUE/>, shapes are visible.
+    /** If this property is `TRUE`, shapes are visible.
      */
     [property] boolean ShowDrawings;
 
-    /** If this property is <TRUE/>, text fields are shown with their commands; otherwise
+    /** If this property is `TRUE`, text fields are shown with their commands; otherwise
         the content is visible.
      */
     [property] boolean ShowFieldCommands;
 
-    /** If this property is <TRUE/>, footnotes symbols are displayed with gray background.
+    /** If this property is `TRUE`, footnotes symbols are displayed with gray background.
      */
     [property] boolean ShowFootnoteBackground;
 
-    /** If this property is <TRUE/>, graphic objects are visible.
+    /** If this property is `TRUE`, graphic objects are visible.
      */
     [property] boolean ShowGraphics;
 
-    /** If this property is <TRUE/>, hidden paragraphs are displayed.
+    /** If this property is `TRUE`, hidden paragraphs are displayed.
      */
     [property] boolean ShowHiddenParagraphs;
 
-    /** If this property is <TRUE/>, hidden text is displayed.
+    /** If this property is `TRUE`, hidden text is displayed.
      */
     [property] boolean ShowHiddenText;
 
@@ -71,76 +71,76 @@ published service ViewSettings
         [property] boolean ShowRulers;
 
 
-        /** If this property is <TRUE/> and the property ShowRulers is <TRUE/>,
+        /** If this property is `TRUE` and the property ShowRulers is `TRUE`,
            the horizontal ruler is displayed.
      */
     [property] boolean ShowHoriRuler;
 
 
-        /** If this property is <TRUE/> and the property ShowRulers is <TRUE/>,
+        /** If this property is `TRUE` and the property ShowRulers is `TRUE`,
            the horizontal scroll bar is displayed.
      */
     [property] boolean ShowHoriScrollBar;
 
-    /** If this property is <TRUE/>, index marks are displayed with gray background.
+    /** If this property is `TRUE`, index marks are displayed with gray background.
      */
     [property] boolean ShowIndexMarkBackground;
 
-    /** If this property is <TRUE/>, paragraph breaks are visible.
+    /** If this property is `TRUE`, paragraph breaks are visible.
      */
     [property] boolean ShowParaBreaks;
 
-    /** If this property is <TRUE/>, protected spaces (hard spaces) are displayed with gray
+    /** If this property is `TRUE`, protected spaces (hard spaces) are displayed with gray
         background.
      */
     [property] boolean ShowProtectedSpaces;
 
-    /** If this property is <TRUE/>, soft hyphens are displayed with gray background.
+    /** If this property is `TRUE`, soft hyphens are displayed with gray background.
      */
     [property] boolean ShowSoftHyphens;
 
-    /** If this property is <TRUE/>, spaces are displayed with dots.
+    /** If this property is `TRUE`, spaces are displayed with dots.
      */
     [property] boolean ShowSpaces;
 
-    /** If this property is <TRUE/>, table boundaries are displayed.
+    /** If this property is `TRUE`, table boundaries are displayed.
      */
     [property] boolean ShowTableBoundaries;
 
-    /** If this property is <TRUE/>, tables are visible.
+    /** If this property is `TRUE`, tables are visible.
      */
     [property] boolean ShowTables;
 
-    /** If this property is <TRUE/>, tab stops are visible.
+    /** If this property is `TRUE`, tab stops are visible.
      */
     [property] boolean ShowTabstops;
 
-    /** If this property is <TRUE/>, text boundaries are displayed.
+    /** If this property is `TRUE`, text boundaries are displayed.
      */
     [property] boolean ShowTextBoundaries;
 
-    /** If this property is <TRUE/>, text fields are displayed with gray background.
+    /** If this property is `TRUE`, text fields are displayed with gray background.
      */
     [property] boolean ShowTextFieldBackground;
 
-    /** If this property is <TRUE/>, the vertical ruler is displayed.
+    /** If this property is `TRUE`, the vertical ruler is displayed.
      */
     [property] boolean ShowVertRuler;
 
-    /** If this property is <TRUE/>, the vertical scroll bar is displayed.
+    /** If this property is `TRUE`, the vertical scroll bar is displayed.
      */
     [property] boolean ShowVertScrollBar;
 
-    /** If this property is <TRUE/>, smooth scrolling is active.
+    /** If this property is `TRUE`, smooth scrolling is active.
      */
     [property] boolean SmoothScrolling;
 
-    /** If this property is <TRUE/>, the vertical ruler is aligned to the right side
+    /** If this property is `TRUE`, the vertical ruler is aligned to the right side
      of the view and the vertical scrollbar is on the left.
      */
     [property] boolean IsVertRulerRightAligned;
 
-    /** If this property is <TRUE/> the document will be displayed as if it
+    /** If this property is `TRUE` the document will be displayed as if it
         were a HTML document.
      */
     [property] boolean ShowOnlineLayout;
@@ -156,7 +156,7 @@ published service ViewSettings
         com::sun::star::view::DocumentZoomType::BY_VALUE.
      */
     [property] short ZoomValue;
-    /** If this property is <TRUE/> hyperlinks in the document are executed (loaded) on
+    /** If this property is `TRUE` hyperlinks in the document are executed (loaded) on
      mouse click. Otherwise they are handled like normal text.
          */
     [optional, property] boolean IsExecuteHyperlinks;
@@ -220,12 +220,12 @@ published service ViewSettings
      */
     [optional, property] long RasterResolutionY;
 
-    /** If this property is <TRUE/>, hidden characters are displayed
+    /** If this property is `TRUE`, hidden characters are displayed
 
         @since OOo 3.0
      */
     [optional, property] boolean ShowHiddenCharacters;
-    /** If this property is <TRUE/>, the settings of non-printing characters are applied.
+    /** If this property is `TRUE`, the settings of non-printing characters are applied.
 
         <p>This option controls the use of the settings ShowHiddenCharacters,
         ShowTabstops, ShowSpaces, ShowBreaks and ShowParaBreaks </p>

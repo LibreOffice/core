@@ -103,25 +103,25 @@ published service ChartAxis
 
 
     /** The maximum value of the axis scale is calculated by the chart if
-        this property is <TRUE/>.
+        this property is `TRUE`.
      */
     [optional, property] boolean AutoMax;
 
 
     /** The minimum value of the axis scale is calculated by the chart if
-        this property is <TRUE/>.
+        this property is `TRUE`.
      */
     [optional, property] boolean AutoMin;
 
 
     /** The distance between the main tick marks is calculated by the chart
-        if this property is <TRUE/>.
+        if this property is `TRUE`.
      */
     [optional, property] boolean AutoStepMain;
 
 
     /** The number of help intervals within a main interval is calculated by the
-        chart if this property is <TRUE/>.
+        chart if this property is `TRUE`.
     */
     [optional, property] boolean AutoStepHelp;
 
@@ -167,7 +167,7 @@ published service ChartAxis
     [optional, property] double Origin;
 
 
-    /** The origin is calculated by the chart if this property is <TRUE/>.
+    /** The origin is calculated by the chart if this property is `TRUE`.
      */
     [optional, property] boolean AutoOrigin;
 
@@ -234,7 +234,7 @@ published service ChartAxis
 
 
     /** Determines if certain labels are hidden, if they would otherwise overlap.
-        In this case, the value of this property must be set to <FALSE/>.
+        In this case, the value of this property must be set to `FALSE`.
      */
     [property] boolean TextCanOverlap;
 

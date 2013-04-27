@@ -39,16 +39,16 @@ service CandleStickChartType
      */
     service ChartType;
 
-    /** If this property is <TRUE/>, the candlesticks are shown as
+    /** If this property is `TRUE`, the candlesticks are shown as
         Japanese candlesticks.  This implies that the property
-        #ShowFirst is also <TRUE/>.
+        #ShowFirst is also `TRUE`.
 
         <p>Japanese candlesticks show the first and last value as
         boxes.  A rising course (i.e. if the last value is greater
         than the first one) is shown by a white box.  A falling course
         is shown by a black box.</p>
 
-        <p>Default is <FALSE/>.</p>
+        <p>Default is `FALSE`.</p>
 
         @see WhiteDay
         @see BlackDay
@@ -56,7 +56,7 @@ service CandleStickChartType
     [maybedefault, property] boolean Japanese;
 
     /** If the candlestick chart shows Japanese candlesticks, that is
-        the property #Japanese is <TRUE/>, the
+        the property #Japanese is `TRUE`, the
         property set given here contains the formatting attributes of
         the white boxes, i.e. the boxes shown for rising values.</p>
 
@@ -69,7 +69,7 @@ service CandleStickChartType
     [maybevoid, property] com::sun::star::beans::XPropertySet WhiteDay;
 
     /** If the candlestick chart shows Japanese candlesticks, that is
-        the property #Japanese is <TRUE/>, the
+        the property #Japanese is `TRUE`, the
         property set given here contains the formatting attributes of
         the black boxes, i.e. the boxes shown for falling values.</p>
 
@@ -81,7 +81,7 @@ service CandleStickChartType
      */
     [maybevoid, property] com::sun::star::beans::XPropertySet BlackDay;
 
-    /** If this property is <TRUE/>, the first value (which would be
+    /** If this property is `TRUE`, the first value (which would be
         the opening course in a stock chart) is shown in the chart.
         This also makes the role "values-first" mandatory.
 
@@ -89,15 +89,15 @@ service CandleStickChartType
         candlestick charts, as Japanese candlesticks always require to
         show the first value.</p>
 
-        <p>Default is <FALSE/>.</p>
+        <p>Default is `FALSE`.</p>
      */
     [maybedefault, property] boolean ShowFirst;
 
-    /** If this property is <TRUE/>, the low and high values are shown
+    /** If this property is `TRUE`, the low and high values are shown
         in the chart.  This also makes the roles "values-min" and
         "values-max" mandatory.
 
-        <p>Default is <TRUE/>.</p>
+        <p>Default is `TRUE`.</p>
      */
     [maybedefault, property] boolean ShowHighLow;
 };

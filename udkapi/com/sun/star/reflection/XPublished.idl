@@ -94,7 +94,7 @@ interface XPublished {
     /**
        Returns the &ldquo;published&rdquo; status of a UNOIDL entity.
 
-       @return <TRUE/> if the UNOIDL entity represented by this object is
+       @return `TRUE` if the UNOIDL entity represented by this object is
        published
      */
     boolean isPublished();

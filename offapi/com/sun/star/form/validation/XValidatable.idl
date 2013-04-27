@@ -40,7 +40,7 @@ interface XValidatable : com::sun::star::uno::XInterface
         <p>Any previously active validator will be revoked - there can be only one!</p>
 
         @param Validator
-            the new validator which is to be used by the component. May be <NULL/>,
+            the new validator which is to be used by the component. May be `NULL`,
             in this case only the current validator is revoked.
 
         @throws com::sun::star::util::VetoException

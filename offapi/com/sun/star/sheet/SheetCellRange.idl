@@ -105,7 +105,7 @@ published service SheetCellRange
 
         <p>The property
         com::sun::star::util::SearchDescriptor::SearchWords
-        has a different meaning in spreadsheets: If set to <TRUE/>, the
+        has a different meaning in spreadsheets: If set to `TRUE`, the
         spreadsheet searches for cells containing the search text only.</p>
      */
     interface com::sun::star::util::XReplaceable;

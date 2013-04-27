@@ -36,7 +36,7 @@ interface XRelocatableResource
         @param xNewAnchor
             The new anchor.
         @return
-            Returns <TRUE/> when the relocation was successful.
+            Returns `TRUE` when the relocation was successful.
     */
     boolean relocateToAnchor ([in] XResource xNewAnchor);
 };

@@ -59,9 +59,9 @@ interface XPropertyHandler
 
     /** binds the property handler to a new component
         @param Component
-            the component to inspect. Must not be <NULL/>
+            the component to inspect. Must not be `NULL`
         @throws com::sun::star::lang::NullPointerException
-            if the component is <NULL/>
+            if the component is `NULL`
     */
     void inspect( [in] com::sun::star::uno::XInterface Component )
         raises( com::sun::star::lang::NullPointerException );
@@ -106,13 +106,13 @@ interface XPropertyHandler
             the name of the property whose user interface is to be described
             implementation
         @param ControlFactory
-            a factory for creating XPropertyControl instances. Must not be <NULL/>.
+            a factory for creating XPropertyControl instances. Must not be `NULL`.
         @return
             the descriptor of the property line.
         @throws com::sun::star::beans::UnknownPropertyException
             if the given property is not supported by this handler
         @throws com::sun::star::lang::NullPointerException
-            if ControlFactory is <NULL/>.
+            if ControlFactory is `NULL`.
         @see PropertyControlType
         @see LineDescriptor
     */
@@ -215,7 +215,7 @@ interface XPropertyHandler
         @param Listener
             the listener to notify about property changes
         @throws com::sun::star::lang::NullPointerException
-            if the listener is <NULL/>
+            if the listener is `NULL`
         @see removePropertyChangeListener
     */
     void
@@ -340,7 +340,7 @@ interface XPropertyHandler
             The name of the property whose browse button has been clicked
 
         @param Primary
-            <TRUE/> if and only if the primary button has been clicked, <FALSE/> otherwise
+            `TRUE` if and only if the primary button has been clicked, `FALSE` otherwise
 
         @param out_Data
             If the method returns InteractiveSelectionResult::ObtainedValue,
@@ -359,7 +359,7 @@ interface XPropertyHandler
         @throws com::sun::star::beans::UnknownPropertyException
             if the given property is not supported by the property handler
         @throws com::sun::star::lang::NullPointerException
-            if InspectorUI is <NULL/>
+            if InspectorUI is `NULL`
 
         @see describePropertyLine
         @see addPropertyChangeListener
@@ -388,17 +388,17 @@ interface XPropertyHandler
         @param InspectorUI
             a callback for updating the object inspector UI
         @param FirstTimeInit
-            If <TRUE/>, the method is called for the first-time update of the respective property, that
+            If `TRUE`, the method is called for the first-time update of the respective property, that
             is, when the property browser is just initializing with the properties of the introspected
             object.<br/>
-            If <FALSE/>, there was a real com::sun::star::beans::XPropertyChangeListener::propertyChange()
+            If `FALSE`, there was a real com::sun::star::beans::XPropertyChangeListener::propertyChange()
             event which triggered the call.<br/>
             <br/>
             In some cases it may be necessary to differentiate between both situations. For instance,
             if you want to set the value of another property when an actuating property's value changed,
-            you should definitely not do this when FirstTimeInit is <TRUE/>.
+            you should definitely not do this when FirstTimeInit is `TRUE`.
         @throws com::sun::star::lang::NullPointerException
-            if InspectorUI is <NULL/>
+            if InspectorUI is `NULL`
     */
     void
         actuatingPropertyChanged(
@@ -427,12 +427,12 @@ interface XPropertyHandler
         by the handler should have been closed when it returns from the suspend() call.</p>
 
         @param Suspend
-            Whether the handler is to be suspended <TRUE/> or reactivated (<FALSE/>). The
+            Whether the handler is to be suspended `TRUE` or reactivated (`FALSE`). The
             latter happens if a handler was successfully suspended, but an external instance
             vetoed the whole suspension process.
 
         @return
-            <TRUE/> if the handler does allow suspension, <FALSE/> if it vetoes it.
+            `TRUE` if the handler does allow suspension, `FALSE` if it vetoes it.
     */
     boolean suspend( [in] boolean Suspend );
 };

@@ -54,10 +54,10 @@ interface XAccessibleAction : ::com::sun::star::uno::XInterface
 
         @param nIndex
             This index specifies the action to perform.  If it lies outside
-            the valid range <FALSE/> is returned and no action is performed.
+            the valid range `FALSE` is returned and no action is performed.
         @return
-            Returns <TRUE/> if the action was successfully performed.  If
-            the action could not be performed successfully <FALSE/> is
+            Returns `TRUE` if the action was successfully performed.  If
+            the action could not be performed successfully `FALSE` is
             returned.
 
         @throws IndexOutOfBoundsException

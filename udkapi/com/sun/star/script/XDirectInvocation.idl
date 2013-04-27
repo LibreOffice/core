@@ -47,7 +47,7 @@ published interface XDirectInvocation: com::sun::star::uno::XInterface
                     com::sun::star::script::CannotConvertException,
                     com::sun::star::reflection::InvocationTargetException );
 
-    /** returns <TRUE/> if the method or property with the specified name exists, else <FALSE/>.
+    /** returns `TRUE` if the method or property with the specified name exists, else `FALSE`.
      */
     boolean hasMember( [in] string aName );
 };

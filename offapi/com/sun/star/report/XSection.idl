@@ -87,7 +87,7 @@ interface XSection
     [attribute,bound] boolean BackTransparent;
 
     /** Defines the expression which is executed before printing the section.
-        If the return value of the expression is <TRUE/> then the section will be printed.
+        If the return value of the expression is `TRUE` then the section will be printed.
     */
     [attribute,bound] string ConditionalPrintExpression;
 

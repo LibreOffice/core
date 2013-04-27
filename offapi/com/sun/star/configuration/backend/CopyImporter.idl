@@ -54,7 +54,7 @@ published service CopyImporter
             com::sun::star::beans::NamedValue:
         <dl>
             <dt><code>Overwrite</code> : `boolean`</dt>
-            <dd>If <FALSE/>, specifies that the data should be applied
+            <dd>If `FALSE`, specifies that the data should be applied
                 only if the existing layer is empty.
             </dd>
         </dl>

@@ -61,8 +61,8 @@ published interface XHierarchicalPropertySetInfo: com::sun::star::uno::XInterfac
 
 
     /** @returns
-                <TRUE/> if a property with the specified name exists;
-                otherwise <FALSE/> is returned.
+                `TRUE` if a property with the specified name exists;
+                otherwise `FALSE` is returned.
 
         @param  aHierarchicalName
                 specifies the name of the property.

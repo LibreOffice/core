@@ -42,7 +42,7 @@ published interface XMouseListener: com::sun::star::lang::XEventListener
         then you will receive one call to mousePressed() indicating
         the mouse click, and another one indicating the context menu request. For
         the latter, the MouseEvent::PopupTrigger member of the
-        event will be set to <TRUE/>.</p>
+        event will be set to `TRUE`.</p>
     */
     void mousePressed( [in] com::sun::star::awt::MouseEvent e );
 

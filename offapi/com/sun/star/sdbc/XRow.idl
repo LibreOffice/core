@@ -59,7 +59,7 @@ published interface XRow: com::sun::star::uno::XInterface
         SQL NULL.
 
         @returns
-            <TRUE/> if last column read was SQL NULL and <FALSE/> otherwise
+            `TRUE` if last column read was SQL NULL and `FALSE` otherwise
         @throws SQLException
                 if a database access error occurs.
      */

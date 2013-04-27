@@ -73,8 +73,8 @@ published interface XInplaceObject: com::sun::star::uno::XInterface
         </p>
 
         @param bEnable
-            <TRUE/> to enable object modeless
-            <FALSE/> to disable it
+            `TRUE` to enable object modeless
+            `FALSE` to disable it
 
         @throws com::sun::star::embed::WrongStateException
             the object is in wrong state

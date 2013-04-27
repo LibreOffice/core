@@ -49,7 +49,7 @@ interface XSolver: com::sun::star::uno::XInterface
     /// executes the calculation and tries to find a solution.
     void solve();
 
-    /// contains <TRUE/> if a solution was found.
+    /// contains `TRUE` if a solution was found.
     [attribute, readonly] boolean Success;
 
     /// contains the objective value for the solution, if a solution was found.

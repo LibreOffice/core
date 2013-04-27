@@ -86,7 +86,7 @@ published service TextProperties
      */
     [optional] service com::sun::star::style::ParagraphPropertiesComplex;
 
-    /** If this is <TRUE/>, numbering is ON for the text of
+    /** If this is `TRUE`, numbering is ON for the text of
         this Shape.
      */
     [optional, property] boolean IsNumbering;
@@ -101,26 +101,26 @@ published service TextProperties
     [optional, property] com::sun::star::container::XIndexReplace NumberingRules;
 
 
-    /** If this value is <TRUE/>, the height of the Shape is
+    /** If this value is `TRUE`, the height of the Shape is
         automatically expanded/shrunk when text is added to or removed from
         the Shape.
      */
     [property] boolean TextAutoGrowHeight;
 
 
-    /** If this value is <TRUE/>, the width of the Shape is
+    /** If this value is `TRUE`, the width of the Shape is
         automatically expanded/shrunk when text is added to or removed from
         the Shape.
      */
     [property] boolean TextAutoGrowWidth;
 
-    /** If this value is <TRUE/>, the left edge of every line of text is
+    /** If this value is `TRUE`, the left edge of every line of text is
         aligned with the left edge of this Shape.
      */
     [property] boolean TextContourFrame;
 
 
-    /** With this set to <TRUE/>, the text inside of the Shape
+    /** With this set to `TRUE`, the text inside of the Shape
         is stretched to fit into the Shape.
      */
     [property] com::sun::star::drawing::TextFitToSizeType TextFitToSize;
@@ -142,7 +142,7 @@ published service TextProperties
         to the left edge of the text.
         <p>This is only useful if Text::TextHorizontalAdjust is
         BLOCK or STRETCH or if
-        Text::TextFitSize is <TRUE/>.</p>
+        Text::TextFitSize is `TRUE`.</p>
      */
     [property] long TextLeftDistance;
 
@@ -152,7 +152,7 @@ published service TextProperties
 
         <p>This is only useful if Text::TextHorizontalAdjust is
         BLOCK or STRETCH
-        or if Text::TextFitSize is <TRUE/>.</p>
+        or if Text::TextFitSize is `TRUE`.</p>
      */
     [property] long TextRightDistance;
 
@@ -162,7 +162,7 @@ published service TextProperties
 
         <p>This is only useful if Text::TextVerticalAdjust is
         BLOCK or if Text::TextFitSize is
-        <TRUE/>.</p>
+        `TRUE`.</p>
      */
     [property] long TextUpperDistance;
 
@@ -174,7 +174,7 @@ published service TextProperties
 
         <p>This is only useful if Text::TextVerticalAdjust is
         BLOCK or if Text::TextFitSize is
-        <TRUE/>.</p>
+        `TRUE`.</p>
      */
     [property] long TextLowerDistance;
 
@@ -234,13 +234,13 @@ published service TextProperties
     [property] com::sun::star::drawing::TextAnimationKind TextAnimationKind;
 
 
-    /** If this value is <TRUE/>, the text is visible at the start of the
+    /** If this value is `TRUE`, the text is visible at the start of the
         animation.
      */
     [property] boolean TextAnimationStartInside;
 
 
-    /** If this value is <TRUE/>, the text is visible at the end of the
+    /** If this value is `TRUE`, the text is visible at the end of the
         animation.
      */
     [property] boolean TextAnimationStopInside;

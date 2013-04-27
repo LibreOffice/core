@@ -43,8 +43,8 @@
     the following structures for different types:</p>
 
     <p><strong>
-     StockDiagram::Volume is <FALSE/><br>
-     StockDiagram::UpDown is <FALSE/>
+     StockDiagram::Volume is `FALSE`<br>
+     StockDiagram::UpDown is `FALSE`
     </strong>
     <table border>
      <tr><td>Low</td><td>High</td><td>Close</td></tr>
@@ -52,8 +52,8 @@
     </table></p>
 
     <p><strong>
-     StockDiagram::Volume is <TRUE/><br>
-     StockDiagram::UpDown is <FALSE/>
+     StockDiagram::Volume is `TRUE`<br>
+     StockDiagram::UpDown is `FALSE`
     </strong>
     <table border>
      <tr><td><strong>Volume</strong></td><td>Low</td><td>High</td><td>Close</td></tr>
@@ -61,8 +61,8 @@
     </table></p>
 
     <p><strong>
-     StockDiagram::Volume is <FALSE/><br>
-     StockDiagram::UpDown is <TRUE/>
+     StockDiagram::Volume is `FALSE`<br>
+     StockDiagram::UpDown is `TRUE`
     </strong>
     <table border>
      <tr><td><strong>Open</strong></td><td>Low</td><td>High</td><td>Close</td></tr>
@@ -70,8 +70,8 @@
     </table></p>
 
     <p><strong>
-     StockDiagram::Volume is <TRUE/><br>
-     StockDiagram::UpDown is <TRUE/>
+     StockDiagram::Volume is `TRUE`<br>
+     StockDiagram::UpDown is `TRUE`
     </strong>
     <table border>
      <tr><td><strong>Volume</strong></td><td><strong>Open</strong></td><td>Low</td><td>High</td><td>Close</td></tr>
@@ -93,7 +93,7 @@ published service StockDiagram
         <p>The values of the volume are represented as columns like
         those of a BarDiagram.</p>
 
-        <p>If this property is set to <TRUE/>, the values of the first
+        <p>If this property is set to `TRUE`, the values of the first
         series of the chart data are interpreted as volume.</p>
      */
     [property] boolean Volume;
@@ -106,14 +106,14 @@ published service StockDiagram
         of the bar will be significant for positive or negative
         differences between open and closed data.</p>
 
-        <p>If this property is <FALSE/>, the values of the first
+        <p>If this property is `FALSE`, the values of the first
         series (or second if StockDiagram::Volume is
-        <TRUE/>) of the chart data are interpreted as the day's lowest
+        `TRUE`) of the chart data are interpreted as the day's lowest
         value.  The next series is interpreted as the day's highest
         value, and the last series is interpreted as the closing
         value.</p>
 
-        <p>If this property is set to <TRUE/>, one additional series
+        <p>If this property is set to `TRUE`, one additional series
         is needed with the opening value of the stocks.  It is assumed
         as the series before the series with the day's lowest
         value.</p>

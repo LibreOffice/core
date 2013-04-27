@@ -42,7 +42,7 @@ service ValueBinding
         represents a cell in a spreadsheet document, and whose value is readonly
         as long as the spreadsheet is locked.</p>
 
-        <p>As long as this property is <TRUE/>, the value binding should throw
+        <p>As long as this property is `TRUE`, the value binding should throw
         a InvalidBindingStateException when its
         XValueBinding::setValue() method is invoked.</p>
     */
@@ -53,14 +53,14 @@ service ValueBinding
         <p>In a more complex scenario, where different form controls are bound to different
         values, which all are part of a larger data structure, some of the items in this
         data structure may not be relevant currently. This is indicated by the
-        #Relevant property being <FALSE/>.</p>
+        #Relevant property being `FALSE`.</p>
 
         <p>XBindableValues which are bound to this binding may or may not
         react in certain ways on the (ir)relevance of their bound value.</p>
 
         <p>One possible reaction could be that user interface elements which are associated
         with the XBindableValue are disabled as long as #Relevant
-        is <FALSE/>.</p>
+        is `FALSE`.</p>
     */
     [optional, property, bound, readonly]  boolean  Relevant;
 

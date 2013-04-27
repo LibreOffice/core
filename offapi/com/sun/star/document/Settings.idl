@@ -159,13 +159,13 @@ published service Settings
 
         <p>Note, that you have to print in duplex mode, if both,
         #IsPrintBookletFront and
-        #IsPrintBookletBack are set to <TRUE/>.</p>
+        #IsPrintBookletBack are set to `TRUE`.</p>
      */
     [optional, property] boolean IsPrintBooklet;
 
     // Draw and Impress
     /** is only effective, if #IsPrintBooklet is
-        <TRUE/>.  If this property is also <TRUE/>, only the fronts of
+        `TRUE`.  If this property is also `TRUE`, only the fronts of
         the pages of your booklet are printed.
 
         <p>This is especially useful, if your printer does not supply
@@ -175,7 +175,7 @@ published service Settings
 
     // Draw and Impress
     /** is only effective, if #IsPrintBooklet is
-        <TRUE/>.  If this property is also <TRUE/>, only the backs of
+        `TRUE`.  If this property is also `TRUE`, only the backs of
         the pages of your booklet are printed.
 
         <p>This is especially useful, if your printer does not supply

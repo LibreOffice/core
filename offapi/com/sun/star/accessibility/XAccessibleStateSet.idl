@@ -41,8 +41,8 @@ interface XAccessibleStateSet : ::com::sun::star::uno::XInterface
     /** Checks whether the current state set is empty.
 
         @return
-            Returns <TRUE/> if there is no state in this state set and
-            <FALSE/> if there is at least one set state in it.
+            Returns `TRUE` if there is no state in this state set and
+            `FALSE` if there is at least one set state in it.
     */
     boolean isEmpty ();
 
@@ -54,8 +54,8 @@ interface XAccessibleStateSet : ::com::sun::star::uno::XInterface
             the constants of AccessibleStateType.
 
         @return
-            Returns <TRUE/> if the given state is a member of this object's
-            state set and <FALSE/> otherwise.
+            Returns `TRUE` if the given state is a member of this object's
+            state set and `FALSE` otherwise.
     */
     boolean contains ([in] short aState);
 
@@ -69,8 +69,8 @@ interface XAccessibleStateSet : ::com::sun::star::uno::XInterface
             constants of AccessibleStateType.
 
         @return
-            Returns <TRUE/> if all states of the given state set are members
-            of this object's state set.  <FALSE/> is returned if at least
+            Returns `TRUE` if all states of the given state set are members
+            of this object's state set.  `FALSE` is returned if at least
             one of the states in the given state is not a member of this
             object's state set.
     */

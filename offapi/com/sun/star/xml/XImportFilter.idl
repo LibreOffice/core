@@ -55,7 +55,7 @@ published interface XImportFilter: com::sun::star::uno::XInterface
           target for the XML document representation
 
       @returns
-          <TRUE/> if import process is successful
+          `TRUE` if import process is successful
      */
     boolean importer(
              [in] sequence< com::sun::star::beans::PropertyValue > aSourceData,

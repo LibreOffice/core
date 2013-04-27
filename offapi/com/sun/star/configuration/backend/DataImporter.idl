@@ -47,7 +47,7 @@ published service DataImporter
             that indicates the status of job execution. The type and meaning of
             such status indicators depend on the implementation.
         </p>
-         <p>If `VOID` or <TRUE/> is returned, this indicates successful
+         <p>If `VOID` or `TRUE` is returned, this indicates successful
             execution. If an
             com::sun::star::uno::Exception is returned,
             it represents an error condition encountered during execution.
@@ -65,14 +65,14 @@ published service DataImporter
                 By default, a MergeImporter should be used.
             </dd>
             <dt><code>OverwriteExisting</code> : <atom >boolean</atom></dt>
-            <dd>If <TRUE/>, specifies that no existing data should be
+            <dd>If `TRUE`, specifies that no existing data should be
                 overwritten by the import. If the Importer used
                 does not support such protection, an error may be raised.
                 If some data is not imported, because there is existing
                 data, this is indicated by returning an appropriate exception.
             </dd>
             <dt><code>TruncateExisting</code> : <atom >boolean</atom></dt>
-            <dd>If <TRUE/>, specifies that existing data should be
+            <dd>If `TRUE`, specifies that existing data should be
                 discarded and replaced by the imported data.
                 If the Importer used does not support this
                 operation, an error may be raised.

@@ -203,9 +203,9 @@ published interface XTransliteration: com::sun::star::uno::XInterface
         <p> Returns the number of matched code points in any case, even if
         strings are not equal, for example: <br/>
         equals( "a", 0, 1, nMatch1, "aaa", 0, 3, nMatch2 ) <br/>
-        returns <FALSE/> and nMatch:=1 and nMatch2:=1 <br/>
+        returns `FALSE` and nMatch:=1 and nMatch2:=1 <br/>
         equals( "aab", 0, 3, nMatch1, "aaa", 0, 3, nMatch2 ) <br/>
-        returns <FALSE/> and nMatch:=2 and nMatch2:=2 <br/> </p>
+        returns `FALSE` and nMatch:=2 and nMatch2:=2 <br/> </p>
 
         @param aStr1
             First string to match.
@@ -232,9 +232,9 @@ published interface XTransliteration: com::sun::star::uno::XInterface
             Returns number of matched code points in aStr2.
 
         @returns
-            <TRUE/> if the substrings are equal per this
+            `TRUE` if the substrings are equal per this
             transliteration <br/>
-            <FALSE/> else.
+            `FALSE` else.
      */
 
     boolean equals( [in] string aStr1, [in] long nPos1, [in] long nCount1,

@@ -53,7 +53,7 @@ published service TableValidation
     /** specifies the title of the window showing the input message.
 
         <p>This is only used if TableValidation::ShowInputMessage
-        is set to <TRUE/>.</p>
+        is set to `TRUE`.</p>
      */
     [property] string InputTitle;
 
@@ -61,7 +61,7 @@ published service TableValidation
     /** specifies the text of the input message.
 
         <p>This is only used if TableValidation::ShowInputMessage
-        is set to <TRUE/>.</p>
+        is set to `TRUE`.</p>
      */
     [property] string InputMessage;
 
@@ -75,7 +75,7 @@ published service TableValidation
     /** specifies the title of the window showing the error message.
 
         <p>This is only used if TableValidation::ShowErrorMessage
-        is set to <TRUE/>.</p>
+        is set to `TRUE`.</p>
      */
     [property] string ErrorTitle;
 
@@ -83,7 +83,7 @@ published service TableValidation
     /** specifies the text of the error message.
 
         <p>This is only used if TableValidation::ShowErrorMessage
-        is set to <TRUE/>.</p>
+        is set to `TRUE`.</p>
      */
     [property] string ErrorMessage;
 
@@ -96,7 +96,7 @@ published service TableValidation
     /** specifies the style of the error message.
 
         <p>This is used only if TableValidation::ShowErrorMessage
-        is set to <TRUE/>.</p>
+        is set to `TRUE`.</p>
      */
     [property] com::sun::star::sheet::ValidationAlertStyle ErrorAlertStyle;
 

@@ -70,7 +70,7 @@ published interface XConversionDictionaryList : com::sun::star::uno::XInterface
         @returns
             an empty dictionary with the given name, locale and
             conversion type.
-             <NULL/> on failure.
+             `NULL` on failure.
 
         @param  aName
             is the name of the dictionary (should be unique).

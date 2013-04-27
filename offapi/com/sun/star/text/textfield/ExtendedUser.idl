@@ -39,7 +39,7 @@ published service ExtendedUser
         <p> This property is especially useful for import/export purposes. </p>
      */
     [property]string CurrentPresentation;
-    /** If this flag is set to <FALSE/> the content is regularly updated.
+    /** If this flag is set to `FALSE` the content is regularly updated.
      */
     [property]boolean IsFixed;
     /** specifies which part of the user data is displayed as described in

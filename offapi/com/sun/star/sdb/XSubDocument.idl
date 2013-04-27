@@ -74,7 +74,7 @@ interface XSubDocument
 
     /** closes the sub document, if it had previously been opened in either mode
 
-        @return <TRUE/> if and only if the document could be closed, <FALSE/> otherwise,
+        @return `TRUE` if and only if the document could be closed, `FALSE` otherwise,
             e.g. if the closing has been vetoed by the user.
 
         @throws ::com::sun::star::lang::WrappedTargetException

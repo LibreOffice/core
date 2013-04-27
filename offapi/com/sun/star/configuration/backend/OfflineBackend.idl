@@ -40,7 +40,7 @@ published service OfflineBackend
     /** provides access to configuration data from a SingleBackend.
 
       <p>If no backend is provided during initialization or if the context
-        contains an <code>Offline</code> flag that is <TRUE/>, then off-line mode
+        contains an <code>Offline</code> flag that is `TRUE`, then off-line mode
         is activated. This may fail, if the off-line cache has not been filled
         during a previous execution.
       </p>

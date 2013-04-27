@@ -36,10 +36,10 @@ published service Statement
 
 
     /** returns
-        <TRUE/>
+        `TRUE`
         if a result set should allow navigation with bookmarks or not.
         The default is
-        <FALSE/>
+        `FALSE`
         .
      */
     [property] boolean UseBookmarks;

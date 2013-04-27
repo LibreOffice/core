@@ -46,7 +46,7 @@ published service Custom
      */
     [property] string CurrentPresentation;
 
-    /** If this flag is set to <FALSE/>, the content is updated when
+    /** If this flag is set to `FALSE`, the content is updated when
         the document information changes.
      */
     [property] boolean IsFixed;

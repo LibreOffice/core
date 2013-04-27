@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module awt {  module tree {
     to get notifications when editing of a node starts and ends.
 
     <p>You have to set the TreeControlModel::Editable property to
-    <TRUE/> before a tree supports editing.</p>
+    `TRUE` before a tree supports editing.</p>
  */
 interface XTreeEditListener : ::com::sun::star::lang::XEventListener
 {

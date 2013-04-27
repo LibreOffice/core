@@ -62,9 +62,9 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
             specifies the target
 
         @return
-            <TRUE/> if operation was successful
+            `TRUE` if operation was successful
             <br>
-            <FALSE/> otherwise
+            `FALSE` otherwise
 
         @see XDocumentTemplates::addTemplate()
      */
@@ -86,9 +86,9 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
             specifies the position of template
 
         @return
-            <TRUE/> if operation was successful
+            `TRUE` if operation was successful
             <br>
-            <FALSE/> otherwise
+            `FALSE` otherwise
 
         @see XDocumentTemplates::storeTemplate()
      */
@@ -106,9 +106,9 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
             specifies the template for delete
 
         @return
-            <TRUE/> if operation was successful
+            `TRUE` if operation was successful
             <br>
-            <FALSE/> otherwise
+            `FALSE` otherwise
      */
     boolean removeTemplate(
         [in] string GroupName,
@@ -123,9 +123,9 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
             specifies the template for renaming
 
         @return
-            <TRUE/> if operation was successful
+            `TRUE` if operation was successful
             <br>
-            <FALSE/> otherwise
+            `FALSE` otherwise
      */
     boolean renameTemplate(
         [in] string GroupName,
@@ -138,9 +138,9 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
             the name of the group to be created
 
         @return
-            <TRUE/> if operation was successful
+            `TRUE` if operation was successful
             <br>
-            <FALSE/> otherwise
+            `FALSE` otherwise
     */
     boolean addGroup( [in] string GroupName );
 
@@ -150,9 +150,9 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
             the name of the group to be removed
 
         @return
-            <TRUE/> if operation was successful
+            `TRUE` if operation was successful
             <br>
-            <FALSE/> otherwise
+            `FALSE` otherwise
      */
     boolean removeGroup( [in] string GroupName );
 
@@ -165,9 +165,9 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
             the new name of the group
 
         @return
-            <TRUE/> if operation was successful
+            `TRUE` if operation was successful
             <br>
-            <FALSE/> otherwise
+            `FALSE` otherwise
      */
     boolean renameGroup(
         [in] string OldGroupName,

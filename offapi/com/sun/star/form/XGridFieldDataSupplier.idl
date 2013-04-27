@@ -51,8 +51,8 @@ published interface XGridFieldDataSupplier: com::sun::star::uno::XInterface
         To check if the type you need is supported by the columns, use this method.</p>
 
         @return
-            A sequence of boolean flags. Each flag corresponds to the respective column, and <TRUE/> indicates
-            that the column content can be retrieved in the requested format, <FALSE/> denies this.
+            A sequence of boolean flags. Each flag corresponds to the respective column, and `TRUE` indicates
+            that the column content can be retrieved in the requested format, `FALSE` denies this.
 
         @see XGridColumnFactory
         @see DataAwareControlModel
@@ -62,7 +62,7 @@ published interface XGridFieldDataSupplier: com::sun::star::uno::XInterface
 
     /** retrieves the actual column data for the given row
 
-        <p>If a column does not support the requested type, <NULL/> is returned at the respective
+        <p>If a column does not support the requested type, `NULL` is returned at the respective
         position.</p>
 
         @see XGridFieldDataSupplier::queryFieldDataType

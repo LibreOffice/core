@@ -35,7 +35,7 @@ published interface XBoundControl: com::sun::star::uno::XInterface
     /** determines whether the input is currently locked or not.
 
         @returns
-            <TRUE/> when it is currently locked, otherwise <FALSE/>.
+            `TRUE` when it is currently locked, otherwise `FALSE`.
      */
     boolean getLock();
 

@@ -54,8 +54,8 @@ published interface XNumberFormats: com::sun::star::uno::XInterface
                         the language of number formats to return.
 
                 @param  bCreate
-                        <TRUE/>: create new entries if no formats for the selected language exist<BR>
-                        <FALSE/>: return an empty list if no formats for the selected language exist
+                        `TRUE`: create new entries if no formats for the selected language exist<BR>
+                        `FALSE`: return an empty list if no formats for the selected language exist
      */
     sequence<long> queryKeys( [in] short nType,
              [in] com::sun::star::lang::Locale nLocale,

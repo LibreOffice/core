@@ -31,11 +31,11 @@ published service ViewSettings
 {
     interface com::sun::star::beans::XPropertySet;
 
-    /** If this property is <TRUE/>, the horizontal ruler is displayed.
+    /** If this property is `TRUE`, the horizontal ruler is displayed.
      */
     [optional, property] boolean ShowHoriRuler;
 
-    /** If this property is <TRUE/>, the horizontal scroll bar is displayed.
+    /** If this property is `TRUE`, the horizontal scroll bar is displayed.
      */
     [optional, property] boolean ShowHoriScrollBar;
 
@@ -43,11 +43,11 @@ published service ViewSettings
      */
     [optional, property] short ZoomValue;
 
-    /** If this property is <TRUE/>, the vertical ruler is displayed.
+    /** If this property is `TRUE`, the vertical ruler is displayed.
      */
     [optional, property] boolean ShowVertRuler;
 
-    /** If this property is <TRUE/>, the vertical scroll bar is displayed.
+    /** If this property is `TRUE`, the vertical scroll bar is displayed.
      */
     [optional, property] boolean ShowVertScrollBar;
 };

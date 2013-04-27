@@ -78,7 +78,7 @@ published service CommandButton
     /** specifies the default toggle state for the button, used when it is reset.
 
         <p>This property is meaningful only when com::sun::star::awt::UnoControlButtonModel::Toggle
-        is <TRUE/>. In this case, the <code>DefaultState</code> controls to which <code>State</code> the button will
+        is `TRUE`. In this case, the <code>DefaultState</code> controls to which <code>State</code> the button will
         be reset.</p>
 
         <p>For a given implementation of the interface, if this (optional) property is present, then also the optional
@@ -89,7 +89,7 @@ published service CommandButton
     /** allows resetting the button
 
         <p>This property is meaningful only when com::sun::star::awt::UnoControlButtonModel::Toggle
-        is <TRUE/>. In this case, the <code>DefaultState</code> controls to which <code>State</code> the button will
+        is `TRUE`. In this case, the <code>DefaultState</code> controls to which <code>State</code> the button will
         be reset, when com::sun::star::form::XReset::reset() is invoked.</p>
 
         <p>For a given implementation of the interface, if this (optional) interface is present, then also the optional

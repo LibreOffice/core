@@ -46,7 +46,7 @@ interface XWizardPage : ::com::sun::star::lang::XComponent
 
     /** is called when the page is about to be left
 
-        <p>An implementation can veto the leave by returning <FALSE/> here. Usually, the decision about this
+        <p>An implementation can veto the leave by returning `FALSE` here. Usually, the decision about this
         depends on the current state of the page.</p>
 
         @param Reason
@@ -58,7 +58,7 @@ interface XWizardPage : ::com::sun::star::lang::XComponent
     /** determines whether it is allowed to travel to a later page in the wizard
 
         <p>You should base this decision on the state of the page only, not on a global state of the wizard. Usually,
-        you return <FALSE/> here if and only if not all necessary input on the page has been provided by the user,
+        you return `FALSE` here if and only if not all necessary input on the page has been provided by the user,
         or the provided input is not valid.</p>
 
         <p>If checked for validity is expensive, or if you prefer giving your user more detailed feedback on validity

@@ -92,8 +92,8 @@ published interface XLinkageSupport: XCommonEmbedPersist
         </p>
 
         @return
-            <TRUE/> - the object is a linked one.
-            <FALSE/> - otherwise
+            `TRUE` - the object is a linked one.
+            `FALSE` - otherwise
 
         @throws com::sun::star::embed::WrongStateException
             the object is in wrong state

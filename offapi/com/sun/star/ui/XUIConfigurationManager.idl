@@ -102,7 +102,7 @@ interface XUIConfigurationManager : ::com::sun::star::uno::XInterface
             characters for type and name.
 
         @return
-            <TRUE/> if settings have been found, otherwise <FALSE/>.
+            `TRUE` if settings have been found, otherwise `FALSE`.
     */
     boolean hasSettings( [in] string ResourceURL ) raises ( com::sun::star::lang::IllegalArgumentException );
 
@@ -115,8 +115,8 @@ interface XUIConfigurationManager : ::com::sun::star::uno::XInterface
             characters for type and name.
 
         @param bWriteable
-            must be <TRUE/> if the retrieved settings should be a writable.
-            Otherwise <FALSE/> should be provided to get a shareable reference
+            must be `TRUE` if the retrieved settings should be a writable.
+            Otherwise `FALSE` should be provided to get a shareable reference
             to the settings data.
 
         @return

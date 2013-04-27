@@ -42,7 +42,7 @@
     </dd>
     <dt>    <b>isValid</b>
     </dt>
-    <dd> checks if registry1 is valid. If the interface is not <NULL/>
+    <dd> checks if registry1 is valid. If the interface is not `NULL`
     then registry1 should always be valid.
 
     </dd>

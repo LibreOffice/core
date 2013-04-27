@@ -44,7 +44,7 @@ exception InvalidRemovedParameterException: com::sun::star::uno::Exception {
        <code>url</code> parameter during
        XPackageRegistry::bindPackage().
 
-       <p>Must not be <NULL/>.</p>
+       <p>Must not be `NULL`.</p>
     */
     XPackage Extension;
 };

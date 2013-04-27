@@ -61,7 +61,7 @@ published interface XDriver: com::sun::star::uno::XInterface
 
     /** attempts to make a database connection to the given URL.
         The driver should return
-        <NULL/>
+        `NULL`
         if it realizes it is the wrong kind
         of driver to connect to the given URL.  This will be common, as when
         the driver manager is asked to connect to a given URL it passes
@@ -105,15 +105,15 @@ published interface XDriver: com::sun::star::uno::XInterface
                 [in]sequence<com::sun::star::beans::PropertyValue> info)
         raises (SQLException);
 
-    /** returns <TRUE/> if the driver thinks that it can open a connection
-        to the given URL.  Typically drivers will return <TRUE/> if they
-        understand the subprotocol specified in the URL and <FALSE/> if
+    /** returns `TRUE` if the driver thinks that it can open a connection
+        to the given URL.  Typically drivers will return `TRUE` if they
+        understand the subprotocol specified in the URL and `FALSE` if
         they do not.
 
         @param url
             is the URL of the database to which to connect.
         @returns
-            <TRUE/> if this driver can connect to the given URL.
+            `TRUE` if this driver can connect to the given URL.
         @throws SQLException
             if a database access error occurs.
      */

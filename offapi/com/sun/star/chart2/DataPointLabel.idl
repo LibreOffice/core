@@ -31,7 +31,7 @@ module chart2
 
 struct DataPointLabel
 {
-    /** if <TRUE/>, the value that is represented by a data point is
+    /** if `TRUE`, the value that is represented by a data point is
         displayed next to it.
 
         @see #ShowNumberInPercent
@@ -39,7 +39,7 @@ struct DataPointLabel
     boolean                     ShowNumber;
 
     /** This is only effective, if #ShowNumber is
-        <TRUE/>.  If this member is also <TRUE/>, the numbers are
+        `TRUE`.  If this member is also `TRUE`, the numbers are
         displayed as percentages of a category.
 
         <p>That means, if a data point is the first one of a series,

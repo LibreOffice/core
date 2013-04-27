@@ -52,7 +52,7 @@ published interface XCalculatable: com::sun::star::uno::XInterface
         calculation.</p>
 
         @returns
-            <TRUE/>, if automatic calculation is enabled.
+            `TRUE`, if automatic calculation is enabled.
      */
     boolean isAutomaticCalculationEnabled();
 
@@ -65,7 +65,7 @@ published interface XCalculatable: com::sun::star::uno::XInterface
         calculation.</p>
 
         @param bEnabled
-            <TRUE/> to enable automatic calculation, <FALSE/> to disable.
+            `TRUE` to enable automatic calculation, `FALSE` to disable.
      */
     void enableAutomaticCalculation( [in] boolean bEnabled );
 

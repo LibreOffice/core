@@ -180,7 +180,7 @@ published service UnoControlListBoxModel
 
     /** specifies where an item separator - a horizontal line - is drawn.
 
-        <p>If this is not <NULL/>, then a horizontal line will be drawn between the item at the given position,
+        <p>If this is not `NULL`, then a horizontal line will be drawn between the item at the given position,
         and the following item.</p>
 
         @since OOo 3.3

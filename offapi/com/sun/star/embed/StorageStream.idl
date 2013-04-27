@@ -142,15 +142,15 @@ published service StorageStream
     /** allows to detect if the stream is encrypted.
 
         <p>
-        The property value <TRUE/> means that the stream is currently encrypted.
-        <FALSE/> - the stream is not encrypted.
+        The property value `TRUE` means that the stream is currently encrypted.
+        `FALSE` - the stream is not encrypted.
         </p>
 
         <p>
         If somebody sets a password explicitly by using
         XEncryptionProtectedSource interface the value is
-        automatically set to <TRUE/>. If the interface is used to remove
-        the encryption - the value is automatically set to <FALSE/>.
+        automatically set to `TRUE`. If the interface is used to remove
+        the encryption - the value is automatically set to `FALSE`.
         </p>
 
      */
@@ -160,14 +160,14 @@ published service StorageStream
         common storage password holder is commited.
 
         <p>
-        The property value <TRUE/> means that the stream will become encrypted
+        The property value `TRUE` means that the stream will become encrypted
         after the closest storage in the parent hierarchy, that has common
         storage password, is commited.
-        <FALSE/> - the stream will not react to commit of such a storage.
+        `FALSE` - the stream will not react to commit of such a storage.
         </p>
 
         <p>
-        In case stream is not encrypted and the property is set to <TRUE/>,
+        In case stream is not encrypted and the property is set to `TRUE`,
         the stream will stay non-encrypted until the closest storage
         in the parent hierarchy, that has common storage password, is commited.
         On the commit the stream will be encrypted with the common storage
@@ -179,12 +179,12 @@ published service StorageStream
         <p>
         If somebody sets a password explicitly by using
         XEncryptionProtectedSource interface the value is
-        automatically set to <FALSE/> and the stream becomes encrypted
+        automatically set to `FALSE` and the stream becomes encrypted
         with specified password immediately.
         </p>
 
         <p>
-        In case stream is encrypted one and the value is set to <TRUE/>
+        In case stream is encrypted one and the value is set to `TRUE`
         the stream becomes non-encrypted until the common storage password
         holder is commited. The data about previously set password ( if any )
         will be removed and the stream can be accessed as non-encrypted stream.

@@ -34,7 +34,7 @@ interface XExecutableDialog
 
         @return
             The return value is dependent on the calling context. Usually, on
-            cancelling the dialog the implementation will return <FALSE/>,
+            cancelling the dialog the implementation will return `FALSE`,
             otherwise the return value will contain the expected result.
      */
     any execute();

@@ -65,14 +65,14 @@ published service Diagram
     [optional] interface com::sun::star::chart::XDiagramPositioning;
 
 
-    /** If this property is <TRUE/> the position is calculated by the application automatically.
+    /** If this property is `TRUE` the position is calculated by the application automatically.
         Setting this property to false will have no effect. Instead use the interface com::sun::star::drawing::XShape
         to set a concrete position (note com::sun::star::chart::XDiagram is derived from com::sun::star::drawing::XShape).
      */
     [optional, property] boolean AutomaticPosition;
 
 
-    /** If this property is <TRUE/> the size is calculated by the application automatically.
+    /** If this property is `TRUE` the size is calculated by the application automatically.
         Setting this property to false will have no effect. Instead use the interface com::sun::star::drawing::XShape
         to set a concrete size (note com::sun::star::chart::XDiagram is derived from com::sun::star::drawing::XShape).
      */

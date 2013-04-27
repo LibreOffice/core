@@ -67,9 +67,9 @@ published interface XModel: com::sun::star::lang::XComponent
             (see com::sun::star::document::MediaDescriptor)
 
         @return
-            <TRUE/> for success
+            `TRUE` for success
             <br>
-            <FALSE/> otherwise
+            `FALSE` otherwise
      */
     boolean attachResource(
         [in] string URL,
@@ -156,9 +156,9 @@ published interface XModel: com::sun::star::lang::XComponent
         </p>
 
         @return
-            <TRUE/> if any lock exist
+            `TRUE` if any lock exist
             <br>
-            <FALSE/> otherwise
+            `FALSE` otherwise
      */
     boolean hasControllersLocked();
 
@@ -169,7 +169,7 @@ published interface XModel: com::sun::star::lang::XComponent
             it will be returned. If not, the controller which was the last
             active of this model is returned. If no controller of this model
             ever was active, the controller first registered is returned. If no
-            controller is registered for this model, <NULL/> is returned.
+            controller is registered for this model, `NULL` is returned.
      */
     XController getCurrentController();
 
@@ -189,7 +189,7 @@ published interface XModel: com::sun::star::lang::XComponent
 
         @returns
             the current selection in the current controller.
-            If there is no current controller, it returns <NULL/>.
+            If there is no current controller, it returns `NULL`.
      */
     com::sun::star::uno::XInterface getCurrentSelection();
 };

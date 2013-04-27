@@ -56,7 +56,7 @@ service Title
     [property] double      TextRotation;
 
     /** writes the characters of the title on top of each other if set
-        to <TRUE/>.
+        to `TRUE`.
      */
     [property] boolean     StackCharacters;
 

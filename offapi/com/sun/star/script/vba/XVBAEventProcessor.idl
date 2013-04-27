@@ -43,7 +43,7 @@ interface XVBAEventProcessor
             sheet index for spreadsheet events.
 
         @return
-            <TRUE/>, if the VBA event handler exists.
+            `TRUE`, if the VBA event handler exists.
 
         @throws ::com::sun::star::lang::IllegalArgumentException
             if the passed event identifier is not supported, or if the passed
@@ -63,7 +63,7 @@ interface XVBAEventProcessor
             event handler.
 
         @return
-            <TRUE/>, if event handing is enabled, and the event handler macro
+            `TRUE`, if event handing is enabled, and the event handler macro
             exists and has been invoked.
 
         @throws ::com::sun::star::lang::IllegalArgumentException

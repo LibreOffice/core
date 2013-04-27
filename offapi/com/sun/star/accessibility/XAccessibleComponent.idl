@@ -83,7 +83,7 @@ interface XAccessibleComponent : ::com::sun::star::uno::XInterface
         <p>The test point's coordinates are defined relative to the
         coordinate system of the object.  That means that when the object is
         an opaque rectangle then both the points (0,0) and (with-1,height-1)
-        would yield a <TRUE/> value.</p>
+        would yield a `TRUE` value.</p>
 
         @param point
             Coordinates of the point to test.  The origin of the coordinate
@@ -93,8 +93,8 @@ interface XAccessibleComponent : ::com::sun::star::uno::XInterface
             system.
 
         @return
-            Returns <TRUE/> if the point lies within or on the object's bounding
-            box and <FALSE/> otherwise.
+            Returns `TRUE` if the point lies within or on the object's bounding
+            box and `FALSE` otherwise.
     */
     boolean containsPoint ([in] ::com::sun::star::awt::Point aPoint);
 
@@ -103,7 +103,7 @@ interface XAccessibleComponent : ::com::sun::star::uno::XInterface
         <p>The test point's coordinates are defined relative to the
         coordinate system of the object.  That means that when the object is
         an opaque rectangle then both the points (0,0) and (with-1,height-1)
-        would yield a <TRUE/> value.</p>
+        would yield a `TRUE` value.</p>
 
         @param aPoint
             Coordinates of the test point for which to find the Accessible
@@ -181,7 +181,7 @@ interface XAccessibleComponent : ::com::sun::star::uno::XInterface
     /** Grabs the focus to this object.
 
         <p>If this object can not accept the focus,
-        i.e. isFocusTraversable() returns <FALSE/> for this
+        i.e. isFocusTraversable() returns `FALSE` for this
         object then nothing happens.  Otherwise the object will attempt to
         take the focus.  Nothing happens if that fails, otherwise the object
         has the focus.  This method is called <code>requestFocus</code> in

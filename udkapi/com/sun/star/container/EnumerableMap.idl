@@ -33,7 +33,7 @@ module com { module sun { module star { module container {
     <p>For the keys put into the map using XMap::put() or createImmutable(),
     the following rules apply:
     <a name="keyrules"></a>
-    <ul><li>A <VOID/> key is not allowed.</li>
+    <ul><li>A `VOID` key is not allowed.</li>
         <li>If the key type is <code>BOOLEAN</code>, <code>CHAR</code>, <code>FLOAT</code>, <code>DOUBLE</code>,
             <code>STRING</code>, <code>TYPE</code>, or <code>UNSIGNED HYPER</code>, then only keys of exactly this
             type are accepted.</li>
@@ -52,7 +52,7 @@ module com { module sun { module star { module container {
     <p>For the values put into the map using XMap::put() or createImmutable(),
     the following rules apply:
     <a name="valuerules"></a>
-    <ul><li>The <VOID/> value will be accepted to be put into the map.</p>
+    <ul><li>The `VOID` value will be accepted to be put into the map.</p>
         <li>If the value type's class is com::sun::star::uno::TypeClass::ANY, any value
             will be accepted.</li>
         <li>If the value type is an interface type, then all values denoting objects which can be queried for

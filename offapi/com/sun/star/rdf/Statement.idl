@@ -40,7 +40,7 @@ struct Statement
     XURI      Predicate;
     /// the object of the RDF statement.
     XNode     Object;
-    /// the named graph that contains this statement, or <NULL/>.
+    /// the named graph that contains this statement, or `NULL`.
     XURI      Graph;
 };
 

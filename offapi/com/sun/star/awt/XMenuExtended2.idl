@@ -46,7 +46,7 @@ interface XMenuExtended2
     /** checks whether an XMenu is an XPopupMenu.
 
         @return
-                <TRUE/> if the menu is a PopupMenu, <FALSE/> if it is a MenuBar.
+                `TRUE` if the menu is a PopupMenu, `FALSE` if it is a MenuBar.
     */
     boolean isPopupMenu();
 
@@ -76,7 +76,7 @@ interface XMenuExtended2
     /** specifies whether disabled menu entries should be hidden, or not.
 
         @param bHide
-            if <TRUE/>, disabled menu entries are hidden.
+            if `TRUE`, disabled menu entries are hidden.
 
         @see
             com::sun::star::awt::XMenu::enableItem()

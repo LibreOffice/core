@@ -38,8 +38,8 @@ interface XSingletonTypeDescription2: XSingletonTypeDescription {
     /**
        Returns whether this object reflects an interface-based singleton.
 
-       @return <TRUE/> if this object reflects an interface-based singleton, and
-           <FALSE/> if this object reflects an obsolete, service-based singleton
+       @return `TRUE` if this object reflects an interface-based singleton, and
+           `FALSE` if this object reflects an obsolete, service-based singleton
      */
     boolean isInterfaceBased();
 
@@ -52,7 +52,7 @@ interface XSingletonTypeDescription2: XSingletonTypeDescription {
            or, in case of a typedef, <type
            scope="com::sun::star::reflection">XIndirectTypeDescription</type>),
            for an interface-based singleton; for an obsolete, service-based
-           singleton, <NULL/> is returned
+           singleton, `NULL` is returned
      */
     XTypeDescription getInterface();
 };

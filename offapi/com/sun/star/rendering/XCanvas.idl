@@ -472,10 +472,10 @@ interface XCanvas : ::com::sun::star::uno::XInterface
             0 completely disables kerning. Whether kerning is on or
             off by default is font-dependent.</il>
 
-            <il>IsEmphasisMarks: a boolean, where <TRUE/>
+            <il>IsEmphasisMarks: a boolean, where `TRUE`
             enables automatic placements of emphasis marks, e.g. for
             Hebrew. The default value, if this property is not
-            specified, is <FALSE/>.</il>
+            specified, is `FALSE`.</il>
 
             <il>ExpandedSpacing: a double value which is added
             between all cell distances for this font. The default value for

@@ -49,8 +49,8 @@ published interface XURLTransformer: com::sun::star::uno::XInterface
                 can be overwritten if the implementation corrected minor failures.
 
         @returns
-            <TRUE/> if parsing was successfully (means if given URL was syntactically correct)
-            or <FALSE/> otherwise.
+            `TRUE` if parsing was successfully (means if given URL was syntactically correct)
+            or `FALSE` otherwise.
      */
     boolean parseStrict( [inout] com::sun::star::util::URL aURL );
 
@@ -74,8 +74,8 @@ published interface XURLTransformer: com::sun::star::uno::XInterface
                 protocol which fit best.
 
         @returns
-                <TRUE/> if parsing was successful (means if URL::Complete could
-                be syntactically correct) or <FALSE/> otherwise.
+                `TRUE` if parsing was successful (means if URL::Complete could
+                be syntactically correct) or `FALSE` otherwise.
      */
     boolean parseSmart(
         [inout] com::sun::star::util::URL aURL,
@@ -91,7 +91,7 @@ published interface XURLTransformer: com::sun::star::uno::XInterface
                 is not defined.
 
         @returns
-            <TRUE/> if assembling was successfully or <FALSE/> otherwise.
+            `TRUE` if assembling was successfully or `FALSE` otherwise.
      */
     boolean assemble( [inout] com::sun::star::util::URL aURL );
 

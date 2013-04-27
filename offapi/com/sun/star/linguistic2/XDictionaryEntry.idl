@@ -55,8 +55,8 @@ published interface XDictionaryEntry : com::sun::star::uno::XInterface
 
     /**
         @returns
-            <TRUE/> if the word (entry) is a negative one and should not be
-             used, <FALSE/> otherwise.
+            `TRUE` if the word (entry) is a negative one and should not be
+             used, `FALSE` otherwise.
     */
     boolean isNegative();
 

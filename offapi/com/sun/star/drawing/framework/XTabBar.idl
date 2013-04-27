@@ -74,7 +74,7 @@ interface XTabBar
         @param aButton
             The tab bar button whose existence is tested.
         @return
-            Returns <TRUE/> when the button exists.
+            Returns `TRUE` when the button exists.
     */
     boolean hasTabBarButton ([in] TabBarButton aButton);
 

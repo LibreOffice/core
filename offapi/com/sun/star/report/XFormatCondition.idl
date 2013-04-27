@@ -37,7 +37,7 @@ interface XFormatCondition
     [attribute,bound] boolean Enabled;
 
     /** defines the formula of the format condition.
-        If the formula evaluates to <TRUE/> then the format will be applied.
+        If the formula evaluates to `TRUE` then the format will be applied.
     */
     [attribute,bound] string Formula;
 };

@@ -58,8 +58,8 @@ published service LocalHierarchyBrowser
                 so argument <code>SchemaDataUrl</code> should not be specified.
             </dd>
             <dt><code>FetchComponentNames</code> : `boolean`</dt>
-            <dd><ul><li>if <TRUE/> components will be returned as component names,</li>
-                    <li>if <FALSE/> components will be returned as fileURLs,</li>
+            <dd><ul><li>if `TRUE` components will be returned as component names,</li>
+                    <li>if `FALSE` components will be returned as fileURLs,</li>
                     <li>if this argument is not provided, the default is to
                         retrieve names when browsing schemas and URLs when
                         browsing layers.</li>

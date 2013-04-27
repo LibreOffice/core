@@ -89,7 +89,7 @@ struct LineDescriptor
         <p>This URL will be used to obtain an actual com::sun::star::graphic::XGraphic
         object from an com::sun::star::graphic::GraphicProvider.</p>
 
-        <p>The property will be ignored if #HasPrimaryButton is <FALSE/>.</p>
+        <p>The property will be ignored if #HasPrimaryButton is `FALSE`.</p>
 
         <p>If you need to specify a graphic which does not have an URL, but is available as
         com::sun::star::graphic::XGraphic only, then you must leave
@@ -101,7 +101,7 @@ struct LineDescriptor
 
     /** describes a graphics to display at the primary button, if any.
 
-        <p>The property will be ignored if #HasPrimaryButton is <FALSE/>, or
+        <p>The property will be ignored if #HasPrimaryButton is `FALSE`, or
         if #PrimaryButtonImageURL is a non-empty string.</p>
 
         @see HasPrimaryButton
@@ -134,7 +134,7 @@ struct LineDescriptor
         <p>This URL will be used to obtain an actual com::sun::star::graphic::XGraphic
         object from an com::sun::star::graphic::GraphicProvider.</p>
 
-        <p>The property will be ignored if #HasSecondaryButton is <FALSE/>.</p>
+        <p>The property will be ignored if #HasSecondaryButton is `FALSE`.</p>
 
         <p>If you need to specify a graphic which does not have an URL, but is available as
         com::sun::star::graphic::XGraphic only, then you must leave
@@ -146,7 +146,7 @@ struct LineDescriptor
 
     /** describes a graphics to display at the secondary button, if any.
 
-        <p>The property will be ignored if #HasSecondaryButton is <FALSE/>, or
+        <p>The property will be ignored if #HasSecondaryButton is `FALSE`, or
         if #SecondaryButtonImageURL is a non-empty string.</p>
 
         @see HasSecondaryButton

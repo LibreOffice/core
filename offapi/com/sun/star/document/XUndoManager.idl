@@ -164,7 +164,7 @@ interface XUndoManager
         will immediately be disposed, if applicable.</p>
 
         @throws ::com::sun::star::lang::IllegalArgumentException
-            if the given undo action is <NULL/>.
+            if the given undo action is `NULL`.
     */
     void    addUndoAction(
                 [in] XUndoAction i_action
@@ -223,7 +223,7 @@ interface XUndoManager
     /** determines whether undo() can reasonably be expected to succeed.
 
         @return
-            <FALSE/> if and only if the undo stack is currently empty, or there is an open and not-yet-closed
+            `FALSE` if and only if the undo stack is currently empty, or there is an open and not-yet-closed
             undo context.
     */
     boolean isUndoPossible();
@@ -231,7 +231,7 @@ interface XUndoManager
     /** determines whether redo() can reasonably be expected to succeed.
 
         @return
-            <FALSE/> if and only if the redo stack is currently empty, or there is an open and not-yet-closed
+            `FALSE` if and only if the redo stack is currently empty, or there is an open and not-yet-closed
             undo context.
     */
     boolean isRedoPossible();

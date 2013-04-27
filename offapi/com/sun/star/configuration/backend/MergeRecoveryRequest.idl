@@ -61,9 +61,9 @@ exception MergeRecoveryRequest: ::com::sun::star::uno::Exception
     /**
         specifies whether the requester wants to remove or skip the invalid layer.
 
-        <p> If <TRUE/> the requester wants to remove the underlying data of
+        <p> If `TRUE` the requester wants to remove the underlying data of
             the layer.<BR/>
-            If <FALSE/> the request is to skip the underlying data this time,
+            If `FALSE` the request is to skip the underlying data this time,
             but without removing it.
         </p>
     */

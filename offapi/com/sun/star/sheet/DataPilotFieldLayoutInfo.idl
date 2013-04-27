@@ -38,7 +38,7 @@ published struct DataPilotFieldLayoutInfo
         long LayoutMode;
 
 
-    /** If <TRUE/>, an empty row is inserted in the DataPilotTable
+    /** If `TRUE`, an empty row is inserted in the DataPilotTable
         result table after the data
         (including the subtotals) for each item of the field.
         */

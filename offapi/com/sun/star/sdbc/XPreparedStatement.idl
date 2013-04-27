@@ -73,7 +73,7 @@ published interface XPreparedStatement: com::sun::star::uno::XInterface
         form of statements handled by executeQuery and executeUpdate.
         </p>
         @returns
-            <TRUE/> if successful
+            `TRUE` if successful
         @throws SQLException
             if a database access error occurs.
      */

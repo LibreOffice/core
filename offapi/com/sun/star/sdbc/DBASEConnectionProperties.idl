@@ -41,7 +41,7 @@ service DBASEConnectionProperties
 {
     service com::sun::star::sdbc:: FILEConnectionProperties;
 
-    /** <TRUE/> when deleted rows should be shown, otherwise <FALSE/>
+    /** `TRUE` when deleted rows should be shown, otherwise `FALSE`
     */
     [optional, property] boolean ShowDeleted;
 };

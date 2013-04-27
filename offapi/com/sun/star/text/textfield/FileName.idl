@@ -40,7 +40,7 @@ published service FileName
         com::sun::star::text::FilenameDisplayFormat.
       */
     [property]short FileFormat;
-    /** If this flag is set to <FALSE/> the content is regularly updated.
+    /** If this flag is set to `FALSE` the content is regularly updated.
      */
     [property]boolean IsFixed;
 };

@@ -98,7 +98,7 @@ published service LineProperties
     [optional, property] com::sun::star::drawing::PolyPolygonBezierCoords LineEnd;
 
 
-    /** If this property is <TRUE/>, the line will
+    /** If this property is `TRUE`, the line will
         start from the center of the polygon.
      */
     [optional, property] boolean LineStartCenter;
@@ -109,7 +109,7 @@ published service LineProperties
     [optional, property] long LineStartWidth;
 
 
-    /** If this property is <TRUE/>, the line will end
+    /** If this property is `TRUE`, the line will end
         in the center of the polygon.
      */
     [optional, property] boolean LineEndCenter;

@@ -89,7 +89,7 @@ published service BaseIndex
      */
     [property] com::sun::star::util::Color BackColor;
 
-    /** If <TRUE/>, the background color value in "BackColor" is not visible.
+    /** If `TRUE`, the background color value in "BackColor" is not visible.
      */
     [property] boolean BackTransparent;
 

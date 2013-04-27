@@ -61,11 +61,11 @@ published service LayerUpdateMerger
             Implementations should support the following named arguments:
         <dl>
             <dt><code>Overwrite</code> : `boolean`</dt>
-            <dd>If <FALSE/>, specifies that changes should be applied
+            <dd>If `FALSE`, specifies that changes should be applied
                 only if the existing layer is empty.
             </dd>
             <dt><code>Truncate</code> : `boolean`</dt>
-            <dd>If <TRUE/> requests that changes should not be merged onto
+            <dd>If `TRUE` requests that changes should not be merged onto
                 existing data, but that the changes should be applied
                 to a layer that is completely empty.
             </dd>

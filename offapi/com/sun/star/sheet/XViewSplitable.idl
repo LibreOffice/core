@@ -33,13 +33,13 @@
 published interface XViewSplitable: com::sun::star::uno::XInterface
 {
 
-    /** returns <TRUE/> if the view is split
+    /** returns `TRUE` if the view is split
         into individual panes.
 
         <p>Only one of
         XViewSplitable::getIsWindowSplit() and
         XViewFreezable::hasFrozenPanes()
-        can be <TRUE/>.</p>
+        can be `TRUE`.</p>
      */
     boolean getIsWindowSplit();
 

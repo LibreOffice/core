@@ -47,15 +47,15 @@
     com::sun::star::sdbc::SQLException
     .
     After calling one of the getXXX() methods,
-    one can check whether that value is <NULL/>
+    one can check whether that value is `NULL`
     with the method com::sun::star::sdbc::XRow::wasNull().
-    In the text only "(may be <NULL/>)" is mentioned for this case.
+    In the text only "(may be `NULL`)" is mentioned for this case.
     </p>
     <p>Some of these methods take arguments that are String patterns. These
     arguments all have names such as fooPattern. Within a pattern String, "%"
     means match any substring of 0 or more characters, and "_" means match
     any one character. Only metadata entries matching the search pattern
-    are returned. If a search pattern argument is set to <VOID/>,
+    are returned. If a search pattern argument is set to `VOID`,
     that argument's criteria will be dropped from the search.
     </p>
     <p>
@@ -73,10 +73,10 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         current user?
 
         @return
-        <TRUE/>
+        `TRUE`
         if the user is allowed to call all procedures returned by getProcedures
         otherwise
-        <FALSE/>
+        `FALSE`
         .
         @throws SQLException
             if a database access error occurs.
@@ -86,7 +86,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** Can all the tables returned by getTable be SELECTed by the
         current user?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -102,7 +102,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** checks if the database in read-only mode.
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -110,7 +110,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Are NULL values sorted high?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
     */
@@ -118,7 +118,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Are NULL values sorted low?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
     */
@@ -126,7 +126,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Are NULL values sorted at the start regardless of sort order?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -134,7 +134,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /**  Are NULL values sorted at the end, regardless of sort order?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -166,7 +166,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** use the database local files to save the tables.
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -174,7 +174,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** use the database one local file to save for each table.
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -182,7 +182,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** use the database "mixed case unquoted SQL identifiers" case sensitive.
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -191,7 +191,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** Does the database treat mixed case unquoted SQL identifiers as
         case insensitive and store them in upper case?
             @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -200,7 +200,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** Does the database treat mixed case unquoted SQL identifiers as
         case insensitive and store them in lower case?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -209,7 +209,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** Does the database treat mixed case unquoted SQL identifiers as
         case insensitive and store them in mixed case?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -218,7 +218,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** Does the database treat mixed case quoted SQL identifiers as
         case sensitive and as a result store them in mixed case?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -227,7 +227,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** Does the database treat mixed case quoted SQL identifiers as
         case insensitive and store them in upper case?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -236,7 +236,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** Does the database treat mixed case quoted SQL identifiers as
         case insensitive and store them in lower case?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -245,7 +245,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** Does the database treat mixed case quoted SQL identifiers as
         case insensitive and store them in mixed case?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -254,7 +254,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** What's the string used to quote SQL identifiers?
         This returns a space " " if identifier quoting is not supported.
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -263,7 +263,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** gets a comma-separated list of all a database's SQL keywords
         that are NOT also SQL92 keywords.
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -273,7 +273,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         X/Open CLI math function names used in the SDBC function escape
         clause.
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -283,7 +283,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         X/Open CLI string function names used in the SDBC function escape
         clause.
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -293,7 +293,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         X/Open CLI system function names used in the SDBC function escape
         clause.
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -301,7 +301,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** gets a comma-separated list of time and date functions.
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -320,7 +320,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         more characters.
         </p>
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -329,7 +329,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** gets all the "extra" characters that can be used in unquoted
         identifier names (those beyond a-z, A-Z, 0-9 and _).
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -337,7 +337,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** support the Database "ALTER TABLE" with add column?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -345,7 +345,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** support the Database  "ALTER TABLE" with drop column?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -359,7 +359,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         computed columns or to provide alias names for columns as required.
         </p>
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -367,31 +367,31 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** are concatenations between NULL and non-NULL values NULL?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
     boolean nullPlusNonNullIsNull() raises (SQLException);
 
-    /** <TRUE/>
+    /** `TRUE`
             , if the Database supports the CONVERT function between SQL types,
             otherwise
-            <FALSE/>
+            `FALSE`
             .
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
     boolean supportsTypeConversion() raises (SQLException);
 
-    /**     <TRUE/>
+    /**     `TRUE`
             , if the Database supports the CONVERT between the given SQL types
             otherwise
-            <FALSE/>
+            `FALSE`
             .
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -400,7 +400,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Are table correlation names supported?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -409,7 +409,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** If table correlation names are supported, are they restricted
         to be different from the names of the tables?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -418,7 +418,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Are expressions in "ORDER BY" lists supported?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -426,7 +426,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Can an "ORDER BY" clause use columns not in the SELECT statement?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -434,7 +434,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Is some form of "GROUP BY" clause supported?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -442,7 +442,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Can a "GROUP BY" clause use columns not in the SELECT?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -451,7 +451,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** Can a "GROUP BY" clause add columns not in the SELECT
         provided it specifies all the columns in the SELECT?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -459,7 +459,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Is the escape character in "LIKE" clauses supported?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -467,7 +467,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Are multiple XResultSets from a single execute supported?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -476,7 +476,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** Can we have multiple transactions open at once (on different
         connections)?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -484,92 +484,92 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Can columns be defined as non-nullable?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
     boolean supportsNonNullableColumns() raises (SQLException);
 
-    /**     <TRUE/>, if the database supports ODBC Minimum SQL grammar,
-            otherwise <FALSE/>.
+    /**     `TRUE`, if the database supports ODBC Minimum SQL grammar,
+            otherwise `FALSE`.
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
     boolean supportsMinimumSQLGrammar() raises (SQLException);
 
-    /** <TRUE/>, if the database supports ODBC Core SQL grammar,
-            otherwise <FALSE/>.
+    /** `TRUE`, if the database supports ODBC Core SQL grammar,
+            otherwise `FALSE`.
             @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
     boolean supportsCoreSQLGrammar() raises (SQLException);
 
     /**
-            <TRUE/>, if the database supports ODBC Extended SQL grammar,
-            otherwise <FALSE/>.
+            `TRUE`, if the database supports ODBC Extended SQL grammar,
+            otherwise `FALSE`.
             @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
     boolean supportsExtendedSQLGrammar() raises (SQLException);
 
     /** @returns
-            <TRUE/>, if the database supports ANSI92 entry level SQL grammar,
-            otherwise <FALSE/>.
+            `TRUE`, if the database supports ANSI92 entry level SQL grammar,
+            otherwise `FALSE`.
             @throws SQLException
             if a database access error occurs.
      */
     boolean supportsANSI92EntryLevelSQL() raises (SQLException);
 
     /** @returns
-            <TRUE/>, if the database supports ANSI92 intermediate SQL grammar,
-            otherwise <FALSE/>.
+            `TRUE`, if the database supports ANSI92 intermediate SQL grammar,
+            otherwise `FALSE`.
             @throws SQLException
             if a database access error occurs.
      */
     boolean supportsANSI92IntermediateSQL() raises (SQLException);
 
     /** @returns
-            <TRUE/>, if the database supports ANSI92 full SQL grammar,
-            otherwise <FALSE/>.
+            `TRUE`, if the database supports ANSI92 full SQL grammar,
+            otherwise `FALSE`.
             @throws SQLException
             if a database access error occurs.
      */
     boolean supportsANSI92FullSQL() raises (SQLException);
 
     /** returns
-            <TRUE/>, if the Database supports SQL Integrity Enhancement Facility,
-            otherwise <FALSE/>.
+            `TRUE`, if the Database supports SQL Integrity Enhancement Facility,
+            otherwise `FALSE`.
             @throws SQLException
             if a database access error occurs.
      */
     boolean supportsIntegrityEnhancementFacility() raises (SQLException);
 
     /** @returns
-            <TRUE/>, if some form of outer join is supported,
-            otherwise <FALSE/>.
+            `TRUE`, if some form of outer join is supported,
+            otherwise `FALSE`.
             @throws SQLException
             if a database access error occurs.
      */
     boolean supportsOuterJoins() raises (SQLException);
 
     /** @returns
-            <TRUE/>, if full nested outer joins are supported,
-            otherwise <FALSE/>.
+            `TRUE`, if full nested outer joins are supported,
+            otherwise `FALSE`.
             @throws SQLException
             if a database access error occurs.
      */
     boolean supportsFullOuterJoins() raises (SQLException);
 
     /** @returns
-            <TRUE/>, if there is limited support for outer joins.
-            (This will be <TRUE/> if supportFullOuterJoins is <TRUE/>.)
-            <FALSE/> is returned otherwise.
+            `TRUE`, if there is limited support for outer joins.
+            (This will be `TRUE` if supportFullOuterJoins is `TRUE`.)
+            `FALSE` is returned otherwise.
             @throws SQLException
             if a database access error occurs.
      */
@@ -577,7 +577,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** return the database vendor's preferred term for "schema"
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -585,7 +585,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** return the database vendor's preferred term for "procedure"
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -593,7 +593,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** return the database vendor's preferred term for "catalog"
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -602,7 +602,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** Does a catalog appear at the start of a qualified table name?
         (Otherwise it appears at the end)
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -610,7 +610,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** return the separator between catalog and table name
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -618,7 +618,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Can a schema name be used in a data manipulation statement?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -626,7 +626,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Can a schema name be used in a procedure call statement?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -634,7 +634,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Can a schema name be used in a table definition statement?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -642,7 +642,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Can a schema name be used in an index definition statement?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -650,7 +650,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Can a schema name be used in a privilege definition statement?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -659,7 +659,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Can a catalog name be used in a data manipulation statement?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -667,7 +667,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Can a catalog name be used in a procedure call statement?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -675,7 +675,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Can a catalog name be used in a table definition statement?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -683,7 +683,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Can a catalog name be used in an index definition statement?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -691,7 +691,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Can a catalog name be used in a privilege definition statement?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -700,7 +700,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Is positioned DELETE supported?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -708,7 +708,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Is positioned UPDATE supported?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -716,7 +716,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Is SELECT for UPDATE supported?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -725,7 +725,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** Are stored procedure calls using the stored procedure escape
         syntax supported?
             @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -733,7 +733,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Are subqueries in comparison expressions supported?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -741,7 +741,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Are subqueries in "exists" expressions supported?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -749,7 +749,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Are subqueries in "in" statements supported?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -757,7 +757,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Are subqueries in quantified expressions supported?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -765,7 +765,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Are correlated subqueries supported?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -773,7 +773,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Is SQL UNION supported?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -781,7 +781,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Is SQL UNION ALL supported?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -789,7 +789,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Can cursors remain open across commits?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -797,7 +797,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Can cursors remain open across rollbacks?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -805,7 +805,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Can statements remain open across commits?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -813,7 +813,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Can statements remain open across rollbacks?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -822,7 +822,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** return the maximal number of hex characters in an inline binary literal
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -830,7 +830,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** return the max length for a character literal
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -838,7 +838,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** return the limit on column name length
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -846,7 +846,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** return the maximum number of columns in a "GROUP BY" clause
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -854,7 +854,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** return the maximum number of columns allowed in an index
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -862,7 +862,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** return the maximum number of columns in an "ORDER BY" clause
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -870,7 +870,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** return the maximum number of columns in a "SELECT" list
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -878,7 +878,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** return the maximum number of columns in a table
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -886,7 +886,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** return the number of active connections at a time to this database.
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -894,7 +894,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** return the maximum cursor name length
     @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -902,7 +902,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** return the maximum length of an index (in bytes)
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -910,7 +910,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** return the maximum length allowed for a schema name
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -918,7 +918,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** return the maximum length of a procedure name
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -926,7 +926,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** return the maximum length of a catalog name
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -934,7 +934,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** return the maximum length of a single row.
     @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -943,7 +943,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** Did getMaxRowSize() include LONGVARCHAR and LONGVARBINARY
         blobs?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -951,7 +951,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** return the maximum length of a SQL statement
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -959,7 +959,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** return the maximal number of open active statements at one time to this database
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -967,7 +967,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** return the maximum length of a table name
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -975,7 +975,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** return the maximum number of tables in a SELECT statement
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -983,7 +983,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** return the maximum length of a user name
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -993,7 +993,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         The values are defined in
         com::sun::star::sdbc::TransactionIsolation.
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
         @see com::sun::star::sdbc::XConnection
@@ -1006,7 +1006,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         is a noop and the
         isolation level is TransactionIsolation_NONE.
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -1014,7 +1014,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** Does this database support the given transaction isolation level?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
  @see com::sun::star::sdbc::Connection
@@ -1025,7 +1025,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** support the Database both data definition and data manipulation statements
         within a transaction?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
 <!-- JRH: Unclear on the intent of these many support questions.
@@ -1042,7 +1042,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** are only data manipulation statements within a transaction
         supported?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -1052,7 +1052,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** does a data definition statement within a transaction force the
         transaction to commit?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -1061,7 +1061,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** is a data definition statement within a transaction ignored?
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -1082,10 +1082,10 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </p>
         <ol>
         <li>
-        <b>PROCEDURE_CAT</b> string => procedure catalog (may be <NULL/>)
+        <b>PROCEDURE_CAT</b> string => procedure catalog (may be `NULL`)
         </li>
         <li>
-        <b>PROCEDURE_SCHEM</b> string => procedure schema (may be <NULL/>)
+        <b>PROCEDURE_SCHEM</b> string => procedure schema (may be `NULL`)
         </li>
         <li>
         <b>PROCEDURE_NAME</b> string => procedure name
@@ -1112,7 +1112,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </li>
         </ol>
         @param catalog
-            a catalog name; "" retrieves those without a catalog; <VOID/> means drop catalog name from the selection criteria
+            a catalog name; "" retrieves those without a catalog; `VOID` means drop catalog name from the selection criteria
         @param schemaPattern
             a schema name pattern; "" retrieves those without a schema
         @param procedureNamePattern
@@ -1141,10 +1141,10 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </p>
         <ol>
         <li>
-        <b>PROCEDURE_CAT</b> string => procedure catalog (may be <NULL/>)
+        <b>PROCEDURE_CAT</b> string => procedure catalog (may be `NULL`)
         </li>
         <li>
-        <b>PROCEDURE_SCHEM</b> string => procedure schema (may be <NULL/>)
+        <b>PROCEDURE_SCHEM</b> string => procedure schema (may be `NULL`)
         </li>
         <li>
         <b>PROCEDURE_NAME</b> string => procedure name
@@ -1209,7 +1209,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         REMARKS can be defined by the database.
         </p>
         @param catalog
-            a catalog name; "" retrieves those without a catalog; <VOID/> means drop catalog name from the selection criteria
+            a catalog name; "" retrieves those without a catalog; `VOID` means drop catalog name from the selection criteria
         @param schemaPattern
             a schema name pattern; "" retrieves those without a schema
         @param procedureNamePattern
@@ -1237,10 +1237,10 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </p>
         <ol>
         <li>
-        <b>TABLE_CAT</b> string => table catalog (may be <NULL/>)
+        <b>TABLE_CAT</b> string => table catalog (may be `NULL`)
         </li>
         <li>
-        <b>TABLE_SCHEM</b> string => table schema (may be <NULL/>)
+        <b>TABLE_SCHEM</b> string => table schema (may be `NULL`)
         </li>
         <li>
         <b>TABLE_NAME</b> string => table name
@@ -1259,7 +1259,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         all tables.
         </p>
         @param catalog
-            a catalog name; "" retrieves those without a catalog; <VOID/> means drop catalog name from the selection criteria
+            a catalog name; "" retrieves those without a catalog; `VOID` means drop catalog name from the selection criteria
         @param schemaPattern
             a schema name pattern; "" retrieves those without a schema
         @param tableNamePattern
@@ -1343,10 +1343,10 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </p>
         <ol>
         <li>
-        <b>TABLE_CAT</b> string => table catalog (may be <NULL/>)
+        <b>TABLE_CAT</b> string => table catalog (may be `NULL`)
         </li>
         <li>
-        <b>TABLE_SCHEM</b> string => table schema (may be <NULL/>)
+        <b>TABLE_SCHEM</b> string => table schema (may be `NULL`)
         </li>
         <li>
         <b>TABLE_NAME</b> string => table name
@@ -1387,10 +1387,10 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </ul>
         </li>
         <li>
-        <b>REMARKS</b> string => comment describing column (may be <NULL/>)
+        <b>REMARKS</b> string => comment describing column (may be `NULL`)
         </li>
         <li>
-        <b>COLUMN_DEF</b> string => default value (may be <NULL/>)
+        <b>COLUMN_DEF</b> string => default value (may be `NULL`)
         </li>
         <li>
         <b>SQL_DATA_TYPE</b> long => unused
@@ -1413,7 +1413,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </li>
         </ol>
         @param catalog
-            a catalog name; "" retrieves those without a catalog; <VOID/> means drop catalog name from the selection criteria
+            a catalog name; "" retrieves those without a catalog; `VOID` means drop catalog name from the selection criteria
         @param schemaPattern
             a schema name pattern; "" retrieves those without a schema
         @param tableNamePattern
@@ -1440,10 +1440,10 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </p>
         <ol>
         <li>
-        <b>TABLE_CAT</b> string => table catalog (may be <NULL/>)
+        <b>TABLE_CAT</b> string => table catalog (may be `NULL`)
         </li>
         <li>
-        <b>TABLE_SCHEM</b> string => table schema (may be <NULL/>)
+        <b>TABLE_SCHEM</b> string => table schema (may be `NULL`)
         </li>
         <li>
         <b>TABLE_NAME</b> string => table name
@@ -1452,7 +1452,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         <b>COLUMN_NAME</b> string => column name
         </li>
         <li>
-        <b>GRANTOR</b> => granter of access (may be <NULL/>)
+        <b>GRANTOR</b> => granter of access (may be `NULL`)
         </li>
         <li>
         <b>GRANTEE</b> string => grantee of access
@@ -1463,11 +1463,11 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </li>
         <li>
         <b>IS_GRANTABLE</b> string => "YES" if grantee is permitted
-        to grant to others; "NO" if not; <NULL/> if unknown
+        to grant to others; "NO" if not; `NULL` if unknown
         </li>
         </ol>
         @param catalog
-            a catalog name; "" retrieves those without a catalog; <VOID/> means drop catalog name from the selection criteria
+            a catalog name; "" retrieves those without a catalog; `VOID` means drop catalog name from the selection criteria
         @param schema
             a schema name ; "" retrieves those without a schema
         @param table
@@ -1485,8 +1485,8 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     /** gets a description of the access rights for each table available
         in a catalog. Note that a table privilege applies to one or
         more columns in the table. It would be wrong to assume that
-        this privilege applies to all columns (this may be <TRUE/> for
-        some systems but is not <TRUE/> for all.)
+        this privilege applies to all columns (this may be `TRUE` for
+        some systems but is not `TRUE` for all.)
 
 
         <p>Only privileges matching the schema and table name
@@ -1497,16 +1497,16 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </p>
         <ol>
         <li>
-        <b>TABLE_CAT</b> string => table catalog (may be <NULL/>)
+        <b>TABLE_CAT</b> string => table catalog (may be `NULL`)
         </li>
         <li>
-        <b>TABLE_SCHEM</b> string => table schema (may be <NULL/>)
+        <b>TABLE_SCHEM</b> string => table schema (may be `NULL`)
         </li>
         <li>
         <b>TABLE_NAME</b> string => table name
         </li>
         <li>
-        <b>GRANTOR</b> => granter of access (may be <NULL/>)
+        <b>GRANTOR</b> => granter of access (may be `NULL`)
         </li>
         <li>
         <b>GRANTEE</b> string => grantee of access
@@ -1517,11 +1517,11 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </li>
         <li>
         <b>IS_GRANTABLE</b> string => "YES" if grantee is permitted
-        to grant to others; "NO" if not; <NULL/> if unknown
+        to grant to others; "NO" if not; `NULL` if unknown
         </li>
         </ol>
         @param catalog
-            a catalog name; "" retrieves those without a catalog; <VOID/> means drop catalog name from the selection criteria
+            a catalog name; "" retrieves those without a catalog; `VOID` means drop catalog name from the selection criteria
         @param schemaPattern
             a schema name pattern; "" retrieves those without a schema
         @param tableNamePattern
@@ -1585,7 +1585,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </li>
         </ol>
         @param catalog
-            a catalog name; "" retrieves those without a catalog; <VOID/> means drop catalog name from the selection criteria
+            a catalog name; "" retrieves those without a catalog; `VOID` means drop catalog name from the selection criteria
         @param schema
             a schema name; "" retrieves those without a schema
         @param table
@@ -1646,7 +1646,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </li>
         </ol>
         @param catalog
-            a catalog name; "" retrieves those without a catalog; <VOID/> means drop catalog name from the selection criteria
+            a catalog name; "" retrieves those without a catalog; `VOID` means drop catalog name from the selection criteria
         @param schema
             a schema name; "" retrieves those without a schema
         @param table
@@ -1667,10 +1667,10 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </p>
         <ol>
         <li>
-        <b>TABLE_CAT</b> string => table catalog (may be <NULL/>)
+        <b>TABLE_CAT</b> string => table catalog (may be `NULL`)
         </li>
         <li>
-        <b>TABLE_SCHEM</b> string => table schema (may be <NULL/>)
+        <b>TABLE_SCHEM</b> string => table schema (may be `NULL`)
         </li>
         <li>
         <b>TABLE_NAME</b> string => table name
@@ -1682,11 +1682,11 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         <b>KEY_SEQ</b> short => sequence number within primary key
         </li>
         <li>
-        <b>PK_NAME</b> string => primary key name (may be <NULL/>)
+        <b>PK_NAME</b> string => primary key name (may be `NULL`)
         </li>
         </ol>
         @param catalog
-            a catalog name; "" retrieves those without a catalog; <VOID/> means drop catalog name from the selection criteria
+            a catalog name; "" retrieves those without a catalog; `VOID` means drop catalog name from the selection criteria
         @param schema
             a schema name; "" retrieves those without a schema
         @param table
@@ -1710,11 +1710,11 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         <ol>
         <li>
         <b>PKTABLE_CAT</b> string => primary key table catalog
-        being imported (may be <NULL/>)
+        being imported (may be `NULL`)
         </li>
         <li>
         <b>PKTABLE_SCHEM</b> string => primary key table schema
-        being imported (may be <NULL/>)
+        being imported (may be `NULL`)
         </li>
         <li>
         <b>PKTABLE_NAME</b> string => primary key table name
@@ -1725,10 +1725,10 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         being imported
         </li>
         <li>
-        <b>FKTABLE_CAT</b> string => foreign key table catalog (may be <NULL/>)
+        <b>FKTABLE_CAT</b> string => foreign key table catalog (may be `NULL`)
         </li>
         <li>
-        <b>FKTABLE_SCHEM</b> string => foreign key table schema (may be <NULL/>)
+        <b>FKTABLE_SCHEM</b> string => foreign key table schema (may be `NULL`)
         </li>
         <li>
         <b>FKTABLE_NAME</b> string => foreign key table name
@@ -1781,10 +1781,10 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </ul>
         </li>
         <li>
-        <b>FK_NAME</b> string => foreign key name (may be <NULL/>)
+        <b>FK_NAME</b> string => foreign key name (may be `NULL`)
         </li>
         <li>
-        <b>PK_NAME</b> string => primary key name (may be <NULL/>)
+        <b>PK_NAME</b> string => primary key name (may be `NULL`)
         </li>
         <li>
         <b>DEFERRABILITY</b> short => can the evaluation of foreign key
@@ -1800,7 +1800,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </li>
         </ol>
         @param catalog
-            a catalog name; "" retrieves those without a catalog; <VOID/> means drop catalog name from the selection criteria
+            a catalog name; "" retrieves those without a catalog; `VOID` means drop catalog name from the selection criteria
         @param schema
             a schema name; "" retrieves those without a schema
         @param table
@@ -1823,10 +1823,10 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </p>
         <ol>
         <li>
-        <b>PKTABLE_CAT</b> string => primary key table catalog (may be <NULL/>)
+        <b>PKTABLE_CAT</b> string => primary key table catalog (may be `NULL`)
         </li>
         <li>
-        <b>PKTABLE_SCHEM</b> string => primary key table schema (may be <NULL/>)
+        <b>PKTABLE_SCHEM</b> string => primary key table schema (may be `NULL`)
         </li>
         <li>
         <b>PKTABLE_NAME</b> string => primary key table name
@@ -1835,12 +1835,12 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         <b>PKCOLUMN_NAME</b> string => primary key column name
         </li>
         <li>
-        <b>FKTABLE_CAT</b> string => foreign key table catalog (may be <NULL/>)
-        being exported (may be <NULL/>)
+        <b>FKTABLE_CAT</b> string => foreign key table catalog (may be `NULL`)
+        being exported (may be `NULL`)
         </li>
         <li>
-        <b>FKTABLE_SCHEM</b> string => foreign key table schema (may be <NULL/>)
-        being exported (may be <NULL/>)
+        <b>FKTABLE_SCHEM</b> string => foreign key table schema (may be `NULL`)
+        being exported (may be `NULL`)
         </li>
         <li>
         <b>FKTABLE_NAME</b> string => foreign key table name
@@ -1895,10 +1895,10 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </ul>
         </li>
         <li>
-        <b>FK_NAME</b> string => foreign key name (may be <NULL/>)
+        <b>FK_NAME</b> string => foreign key name (may be `NULL`)
         </li>
         <li>
-        <b>PK_NAME</b> string => primary key name (may be <NULL/>)
+        <b>PK_NAME</b> string => primary key name (may be `NULL`)
         </li>
         <li>
         <b>DEFERRABILITY</b> short => can the evaluation of foreign key
@@ -1914,7 +1914,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </li>
         </ol>
         @param catalog
-            a catalog name; "" retrieves those without a catalog; <VOID/> means drop catalog name from the selection criteria
+            a catalog name; "" retrieves those without a catalog; `VOID` means drop catalog name from the selection criteria
         @param schema
             a schema name; "" retrieves those without a schema
         @param table
@@ -1940,10 +1940,10 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </p>
         <ol>
         <li>
-        <b>PKTABLE_CAT</b> string => primary key table catalog (may be <NULL/>)
+        <b>PKTABLE_CAT</b> string => primary key table catalog (may be `NULL`)
         </li>
         <li>
-        <b>PKTABLE_SCHEM</b> string => primary key table schema (may be <NULL/>)
+        <b>PKTABLE_SCHEM</b> string => primary key table schema (may be `NULL`)
         </li>
         <li>
         <b>PKTABLE_NAME</b> string => primary key table name
@@ -1952,12 +1952,12 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         <b>PKCOLUMN_NAME</b> string => primary key column name
         </li>
         <li>
-        <b>FKTABLE_CAT</b> string => foreign key table catalog (may be <NULL/>)
-        being exported (may be <NULL/>)
+        <b>FKTABLE_CAT</b> string => foreign key table catalog (may be `NULL`)
+        being exported (may be `NULL`)
         </li>
         <li>
-        <b>FKTABLE_SCHEM</b> string => foreign key table schema (may be <NULL/>)
-        being exported (may be <NULL/>)
+        <b>FKTABLE_SCHEM</b> string => foreign key table schema (may be `NULL`)
+        being exported (may be `NULL`)
         </li>
         <li>
         <b>FKTABLE_NAME</b> string => foreign key table name
@@ -2012,10 +2012,10 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </ul>
         </li>
         <li>
-        <b>FK_NAME</b> string => foreign key name (may be <NULL/>)
+        <b>FK_NAME</b> string => foreign key name (may be `NULL`)
         </li>
         <li>
-        <b>PK_NAME</b> string => primary key name (may be <NULL/>)
+        <b>PK_NAME</b> string => primary key name (may be `NULL`)
         </li>
         <li>
         <b>DEFERRABILITY</b> short => can the evaluation of foreign key
@@ -2031,13 +2031,13 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </li>
         </ol>
         @param primaryCatalog
-            a catalog name; "" retrieves those without a catalog; <VOID/> means drop catalog name from the selection criteria
+            a catalog name; "" retrieves those without a catalog; `VOID` means drop catalog name from the selection criteria
         @param primarySchema
             a schema name; "" retrieves those without a schema
         @param primaryTable
             the table name that exports the key
         @param foreignCatalog
-            a catalog name; "" retrieves those without a catalog; <VOID/> means drop catalog name from the selection criteria
+            a catalog name; "" retrieves those without a catalog; `VOID` means drop catalog name from the selection criteria
         @param foreignSchema
             a schema name; "" retrieves those without a schema
         @param foreignTable
@@ -2073,15 +2073,15 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </li>
         <li>
         <b>LITERAL_PREFIX</b> string => prefix used to quote a literal
-        (may be <NULL/>)
+        (may be `NULL`)
         </li>
         <li>
         <b>LITERAL_SUFFIX</b> string => suffix used to quote a literal
-        (may be <NULL/>)
+        (may be `NULL`)
         </li>
         <li>
         <b>CREATE_PARAMS</b> string => parameters used in creating
-        the type (may be <NULL/>)
+        the type (may be `NULL`)
         </li>
         <li>
         <b>NULLABLE</b> short => can you use NULL for this type?
@@ -2122,7 +2122,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </li>
         <li>
         <b>LOCAL_TYPE_NAME</b> string => localized version of type name
-        (may be <NULL/>)
+        (may be `NULL`)
         </li>
         <li>
         <b>MINIMUM_SCALE</b> short => minimum scale supported
@@ -2155,24 +2155,24 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </p>
         <ol>
         <li>
-        <b>TABLE_CAT</b> string => table catalog (may be <NULL/>)
+        <b>TABLE_CAT</b> string => table catalog (may be `NULL`)
         </li>
         <li>
-        <b>TABLE_SCHEM</b> string => table schema (may be <NULL/>)
+        <b>TABLE_SCHEM</b> string => table schema (may be `NULL`)
         </li>
         <li>
         <b>TABLE_NAME</b> string => table name
         </li>
         <li>
         <b>NON_UNIQUE</b> boolean => Can index values be non-unique?
-        <FALSE/> when TYPE is tableIndexStatistic
+        `FALSE` when TYPE is tableIndexStatistic
         </li>
         <li>
-        <b>INDEX_QUALIFIER</b> string => index catalog (may be <NULL/>);
-        <NULL/> when TYPE is tableIndexStatistic
+        <b>INDEX_QUALIFIER</b> string => index catalog (may be `NULL`);
+        `NULL` when TYPE is tableIndexStatistic
         </li>
         <li>
-        <b>INDEX_NAME</b> string => index name; <NULL/> when TYPE is
+        <b>INDEX_NAME</b> string => index name; `NULL` when TYPE is
         tableIndexStatistic
         </li>
         <li>
@@ -2194,13 +2194,13 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         within index; zero when TYPE is tableIndexStatistic
         </li>
         <li>
-        <b>COLUMN_NAME</b> string => column name; <NULL/> when TYPE is
+        <b>COLUMN_NAME</b> string => column name; `NULL` when TYPE is
         tableIndexStatistic
         </li>
         <li>
         <b>ASC_OR_DESC</b> string => column sort sequence, "A" => ascending,
-        "D" => descending, may be <NULL/> if sort sequence is not supported;
-        <NULL/> when TYPE is tableIndexStatistic
+        "D" => descending, may be `NULL` if sort sequence is not supported;
+        `NULL` when TYPE is tableIndexStatistic
         </li>
         <li>
         <b>CARDINALITY</b> long => When TYPE is tableIndexStatistic, then
@@ -2214,19 +2214,19 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </li>
         <li>
         <b>FILTER_CONDITION</b> string => Filter condition, if any.
-        (may be <NULL/>)
+        (may be `NULL`)
         </li>
         </ol>
         @param catalog
-            a catalog name; "" retrieves those without a catalog; <VOID/> means drop catalog name from the selection criteria
+            a catalog name; "" retrieves those without a catalog; `VOID` means drop catalog name from the selection criteria
         @param schema
             a schema name; "" retrieves those without a schema
         @param table
             the table name that exports the key
         @param unique
-            when <TRUE/>, return only indices for unique values; when <FALSE/>, return indices regardless of whether unique or not
+            when `TRUE`, return only indices for unique values; when `FALSE`, return indices regardless of whether unique or not
         @param approximate
-            when <TRUE/>, result is allowed to reflect approximate or out of data values; when <FALSE/>, results are requested to be accurate
+            when `TRUE`, result is allowed to reflect approximate or out of data values; when `FALSE`, results are requested to be accurate
         @returns
             each row is an index column description
         @throws SQLException
@@ -2241,7 +2241,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             defined in
             com::sun::star::sdbc::ResultSetType
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -2256,7 +2256,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             defined in
             com::sun::star::sdbc::ResultSetConcurrency
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -2269,7 +2269,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             defined in
             com::sun::star::sdbc::ResultSetType
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -2280,7 +2280,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             defined in
             com::sun::star::sdbc::ResultSetType
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -2291,7 +2291,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             defined in
             com::sun::star::sdbc::ResultSetType
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -2302,7 +2302,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             defined in
             com::sun::star::sdbc::ResultSetType
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -2313,7 +2313,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             defined in
             com::sun::star::sdbc::ResultSetType
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -2324,7 +2324,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             defined in
             com::sun::star::sdbc::ResultSetType
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -2337,7 +2337,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             defined in
             com::sun::star::sdbc::ResultSetType
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -2347,12 +2347,12 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         calling
         com::sun::star::sdbc::XResultSet::rowDeleted()
         . If deletesAreDetected()
-        returns <FALSE/>, then deleted rows are removed from the result set.
+        returns `FALSE`, then deleted rows are removed from the result set.
         @param setType
             defined in
             com::sun::star::sdbc::ResultSetType
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -2365,7 +2365,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
             defined in
             com::sun::star::sdbc::ResultSetType
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -2373,7 +2373,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** indicates whether the driver supports batch updates.
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws SQLException
             if a database access error occurs.
      */
@@ -2394,10 +2394,10 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         </p>
         <ol>
         <li>
-        <b>TYPE_CAT</b> string => the type's catalog (may be <NULL/>)
+        <b>TYPE_CAT</b> string => the type's catalog (may be `NULL`)
         </li>
         <li>
-        <b>TYPE_SCHEM</b> string => type's schema (may be <NULL/>)
+        <b>TYPE_SCHEM</b> string => type's schema (may be `NULL`)
         </li>
         <li>
         <b>TYPE_NAME</b> string => type name
@@ -2418,7 +2418,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         result set is returned.
         </p>
         @param catalog
-            a catalog name; "" retrieves those without a catalog; <VOID/> means drop catalog name from the selection criteria
+            a catalog name; "" retrieves those without a catalog; `VOID` means drop catalog name from the selection criteria
         @param schemaPattern
             a schema name pattern; "" retrieves those without a schema
         @param typeNamePattern

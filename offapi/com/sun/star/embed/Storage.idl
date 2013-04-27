@@ -294,7 +294,7 @@ published service Storage
     /** allows to detect if the storage contains encrypted entries.
 
         <p>
-        In case it is set to <TRUE/> the storage itself and/or a tree of
+        In case it is set to `TRUE` the storage itself and/or a tree of
         substorages contain encrypted streams. Usually in case this property
         is supported the implementation supports
         XEncryptionProtectedSource interface.
@@ -305,7 +305,7 @@ published service Storage
     /** allows to detect if the storage contains non-encrypted entries.
 
         <p>
-        In case it is set to <TRUE/> the storage itself and/or a tree of
+        In case it is set to `TRUE` the storage itself and/or a tree of
         substorages contains non-encrypted streams. Usually in case this
         property is supported the implementation supports
         XEncryptionProtectedSource interface.

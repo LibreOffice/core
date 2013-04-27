@@ -46,7 +46,7 @@ published interface XUpdateListener: com::sun::star::lang::XEventListener
             An event descriptor specifying the broadcaster of the change.
 
         @returns
-            <TRUE/> when the update was approved, otherwise <FALSE/>.
+            `TRUE` when the update was approved, otherwise `FALSE`.
      */
     boolean approveUpdate( [in] com::sun::star::lang::EventObject aEvent );
 

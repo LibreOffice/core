@@ -75,7 +75,7 @@ interface XLogHandler
     /** publish the given log record at the handler's output channel.
 
         @return
-            <TRUE/> if and only if the record was actually published. A handler
+            `TRUE` if and only if the record was actually published. A handler
             will not publish a record if its log level doesn't meet the handler's
             log level, if the record is filtered, or if any other handler-specified
             restrictions apply.

@@ -86,9 +86,9 @@ published interface XTypeDetection: com::sun::star::uno::XInterface
             means the MediaDescriptor which specify the resource for detection
 
         @param AllowDeep
-            if it is set to <TRUE/> a "deep" detection will be follow a "flat" detection
+            if it is set to `TRUE` a "deep" detection will be follow a "flat" detection
             <br>
-            if it is set to <FALSE/> a "flat" detection will be made only
+            if it is set to `FALSE` a "flat" detection will be made only
 
         @returns
             an internal type name which represent the detected format

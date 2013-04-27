@@ -86,7 +86,7 @@ published service FillProperties
     */
     [optional, property] Hatch FillHatch;
 
-    /** if this is <TRUE/>, the transparent background of a
+    /** if this is `TRUE`, the transparent background of a
         hatch filled area is drawn in the current background color.
     */
     [property] boolean FillBackground;
@@ -136,9 +136,9 @@ published service FillProperties
 
     /** specifies if the size is given in percentage or as an absolute value.
 
-        <p>If this is <TRUE/>, the properties #FillBitmapSizeX
+        <p>If this is `TRUE`, the properties #FillBitmapSizeX
         and #FillBitmapSizeY contain the size of the tile in
-        percent of the size of the original bitmap. If this is <FALSE/>, the
+        percent of the size of the original bitmap. If this is `FALSE`, the
         size of the tile is specified with 1/100th mm.
     */
     [property] boolean FillBitmapLogicalSize;
@@ -163,15 +163,15 @@ published service FillProperties
         FillBitmapStretch</member> and #FillBitmapTile.</p>
 
         <p>If set to BitmapMode::REPEAT, the property
-        FillBitmapStretch is set to <FALSE/>, and the property FillBitmapTile
-        is set to <TRUE/>.</p>
+        FillBitmapStretch is set to `FALSE`, and the property FillBitmapTile
+        is set to `TRUE`.</p>
 
         <p>If set to BitmapMode::STRETCH, the property
-        FillBitmapStretch is set to <TRUE/>, and the property FillBitmapTile
-        is set to <FALSE/>.</p>
+        FillBitmapStretch is set to `TRUE`, and the property FillBitmapTile
+        is set to `FALSE`.</p>
 
         <p>If set to BitmapMode::NO_REPEAT, both properties
-        FillBitmapStretch and FillBitmapTile are set to <FALSE/>.</p>
+        FillBitmapStretch and FillBitmapTile are set to `FALSE`.</p>
     */
     [property] BitmapMode FillBitmapMode;
 
@@ -181,11 +181,11 @@ published service FillProperties
         completeness. The #FillBitmapMode property can be used
         instead to set all supported bitmap modes.</p>
 
-        <p>If set to <TRUE/>, the value of the FillBitmapMode property changes
+        <p>If set to `TRUE`, the value of the FillBitmapMode property changes
         to BitmapMode::STRETCH. BUT: behavior is undefined, if
-        the property #FillBitmapTile is <TRUE/> too.</p>
+        the property #FillBitmapTile is `TRUE` too.</p>
 
-        <p>If set to <FALSE/>, the value of the FillBitmapMode property
+        <p>If set to `FALSE`, the value of the FillBitmapMode property
         changes to BitmapMode::REPEAT or <const>
         BitmapMode::NO_REPEAT</const>, depending on the current value of the
         #FillBitmapTile property.</p>
@@ -198,11 +198,11 @@ published service FillProperties
         completeness. The #FillBitmapMode property can be used
         instead to set all supported bitmap modes.</p>
 
-        <p>If set to <TRUE/>, the value of the FillBitmapMode property changes
+        <p>If set to `TRUE`, the value of the FillBitmapMode property changes
         to BitmapMode::REPEAT. BUT: behavior is undefined, if
-        the property #FillBitmapStretch is <TRUE/> too.</p>
+        the property #FillBitmapStretch is `TRUE` too.</p>
 
-        <p>If set to <FALSE/>, the value of the FillBitmapMode property
+        <p>If set to `FALSE`, the value of the FillBitmapMode property
         changes to BitmapMode::STRETCH or <const>
         BitmapMode::NO_REPEAT</const>, depending on the current value of the
         #FillBitmapStretch property.</p>

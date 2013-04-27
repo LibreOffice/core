@@ -92,20 +92,20 @@ published service Shape
     [optional, property] string LayerName;
 
 
-    /** If this is <FALSE/>, the Shape is not visible
+    /** If this is `FALSE`, the Shape is not visible
         on screen outputs. Please note that the Shape may still
         be visible when printed, see #Printable.
      */
     [optional, property] boolean Visible;
 
 
-    /** If this is <FALSE/>, the Shape is not visible
+    /** If this is `FALSE`, the Shape is not visible
         on printer outputs.
      */
     [optional, property] boolean Printable;
 
 
-    /** With this set to <TRUE/>, this Shape
+    /** With this set to `TRUE`, this Shape
         cannot be moved interactively in the user interface.
      */
     [optional, property] boolean MoveProtect;
@@ -116,7 +116,7 @@ published service Shape
     [optional, property] string Name;
 
 
-    /** With this set to <TRUE/>, this Shape may not be
+    /** With this set to `TRUE`, this Shape may not be
         sized interactively in the user interface.
      */
     [optional, property] boolean SizeProtect;

@@ -247,7 +247,7 @@ published interface XSQLInput: com::sun::star::uno::XInterface
 
     /** determines whether the last value read was null.
         @returns
-            <TRUE/> if the most recently gotten SQL value was null; otherwise, <FALSE/>
+            `TRUE` if the most recently gotten SQL value was null; otherwise, `FALSE`
         @throws SQLException
             if a database access error occurs.
      */

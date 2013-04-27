@@ -76,14 +76,14 @@ published interface XConversionDictionary : com::sun::star::uno::XInterface
     /** specifies whether the dictionary should be used or not .
 
         @param  bAcvtivate
-            <TRUE/> if the dictionary should be used, <FALSE/> otherwise.
+            `TRUE` if the dictionary should be used, `FALSE` otherwise.
 
     */
     void setActive( [in] boolean bActivate );
 
     /**
         @returns
-            <TRUE/> if the dictionary is active, <FALSE/> otherwise.
+            `TRUE` if the dictionary is active, `FALSE` otherwise.
     */
     boolean isActive();
 

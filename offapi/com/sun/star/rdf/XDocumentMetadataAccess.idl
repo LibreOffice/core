@@ -72,7 +72,7 @@ interface XDocumentMetadataAccess
 
         @returns
             the ODF element with the given metadata references if it exists,
-            else <NULL/>
+            else `NULL`
      */
     XMetadatable getElementByMetadataReference(
         [in] com::sun::star::beans::StringPair MetadataReference);
@@ -83,10 +83,10 @@ interface XDocumentMetadataAccess
             an URI that may identify an ODF element
 
         @returns
-            the ODF element that corresponds to the given URI, or <NULL/>
+            the ODF element that corresponds to the given URI, or `NULL`
 
         @throws com::sun::star::lang::IllegalArgumentException
-            if the given URI is <NULL/>
+            if the given URI is `NULL`
      */
     XMetadatable getElementByURI([in] XURI URI)
         raises( com::sun::star::lang::IllegalArgumentException );
@@ -101,7 +101,7 @@ interface XDocumentMetadataAccess
             property with the given Type as object
 
         @throws com::sun::star::lang::IllegalArgumentException
-            if the given Type is <NULL/>
+            if the given Type is `NULL`
      */
     sequence<XURI> getMetadataGraphsWithType([in] XURI Type)
         raises( com::sun::star::lang::IllegalArgumentException );
@@ -169,8 +169,8 @@ interface XDocumentMetadataAccess
             the name of the new graph
 
         @throws com::sun::star::lang::IllegalArgumentException
-            if the given stream is <NULL/>,
-            or BaseURI is <NULL/> and the format requires use of a base URI,
+            if the given stream is `NULL`,
+            or BaseURI is `NULL` and the format requires use of a base URI,
             or the FileName is invalid
 
         @throws com::sun::star::datatransfer::UnsupportedFlavorException
@@ -210,7 +210,7 @@ interface XDocumentMetadataAccess
             the name of the graph that is to be removed
 
         @throws com::sun::star::lang::IllegalArgumentException
-            if the given GraphName is <NULL/>
+            if the given GraphName is `NULL`
 
         @throws com::sun::star::container::NoSuchElementException
             if a graph with the given GraphName does not exist
@@ -298,7 +298,7 @@ interface XDocumentMetadataAccess
             an InteractionHandler, used for error reporting
 
         @throws com::sun::star::lang::IllegalArgumentException
-            if any argument is <NULL/>
+            if any argument is `NULL`
 
         @throws com::sun::star::lang::WrappedTargetException
             if an error occurs while loading and no InteractionHandler given
@@ -326,7 +326,7 @@ interface XDocumentMetadataAccess
             a storage, representing e.g. an ODF package file, or sub-document
 
         @throws com::sun::star::lang::IllegalArgumentException
-            if Storage argument is <NULL/>
+            if Storage argument is `NULL`
 
         @throws com::sun::star::lang::WrappedTargetException
             if an error occurs while loading

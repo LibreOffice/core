@@ -62,7 +62,7 @@ interface XUIConfigurationStorage : ::com::sun::star::uno::XInterface
     /** checks if an instance has already a storage to load/store its data.
 
         @return
-            <TRUE/> if the instance has a storage otherwise <FALSE/>.
+            `TRUE` if the instance has a storage otherwise `FALSE`.
     */
     boolean hasStorage();
 };

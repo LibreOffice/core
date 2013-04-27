@@ -53,7 +53,7 @@ published service SheetSortDescriptor
     /** specifies which user defined sorting list is used.
 
         <p>This property is only used, if
-        SheetSortDescriptor::IsUserListEnabled is <TRUE/>.</p>
+        SheetSortDescriptor::IsUserListEnabled is `TRUE`.</p>
      */
     [property] long UserListIndex;
 
@@ -67,7 +67,7 @@ published service SheetSortDescriptor
     /** specifies the position where sorted data are to be copied.
 
         <p>This property is only used, if
-        SheetSortDescriptor::CopyOutputData is <TRUE/>.</p>
+        SheetSortDescriptor::CopyOutputData is `TRUE`.</p>
      */
     [property] com::sun::star::table::CellAddress OutputPosition;
 

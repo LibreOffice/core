@@ -359,7 +359,7 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
 
     /** receives notification that a property is added to the current node.
 
-        <p> The property will have a default value of <NULL/>
+        <p> The property will have a default value of `NULL`
             (unless it is SchemaAttribute::REQUIRED).
         </p>
 

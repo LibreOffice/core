@@ -78,7 +78,7 @@ service ObjectInspector : XObjectInspector
     /** creates an instance of the ObjectInspector, using a given ObjectInspectorModel
 
         @throws ::com::sun::star::lang::IllegalArgumentException
-            if Model is <NULL/>.
+            if Model is `NULL`.
 
         @since OOo 2.2
     */

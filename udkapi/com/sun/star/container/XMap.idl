@@ -70,14 +70,14 @@ interface XMap
         @param Key
             is the key whose presence in the map is to be tested.
         @return
-            <TRUE/> if and only if the map contains a mapping for the given key.
+            `TRUE` if and only if the map contains a mapping for the given key.
 
         @throws ::com::sun::star::beans::IllegalTypeException
             if the given key is not of a type which is accepted by the map
         @throws ::com::sun::star::lang::IllegalArgumentException
             if the given key is not supported to be put into the map. It's up to the service
             implementing the <code>XMap</code> interface to specify which special values are not
-            supported. For instances, implementations might decide to not allow <VOID/> keys, or
+            supported. For instances, implementations might decide to not allow `VOID` keys, or
             to reject <code>Double.NaN</code> (<em>not a number</em>) to due its problematic
             behavior with respect to equality.
     */
@@ -90,7 +90,7 @@ interface XMap
         @param Value
             is the value whose presence in the map is to be tested.
         @return
-            <TRUE/> if and only one or more keys map to the given value.
+            `TRUE` if and only one or more keys map to the given value.
 
         @throws ::com::sun::star::beans::IllegalTypeException
             if the given value is not of a type which is accepted by the map. It's up to the service
@@ -116,7 +116,7 @@ interface XMap
         @throws ::com::sun::star::beans::IllegalArgumentException
             if the given key is not supported to be put into the map. It's up to the service
             implementing the <code>XMap</code> interface to specify which special values are not
-            supported. For instances, implementations might decide to not allow <VOID/> keys, or
+            supported. For instances, implementations might decide to not allow `VOID` keys, or
             to reject <code>Double.NaN</code> (<em>not a number</em>) to due its problematic
             behavior with respect to equality.
         @throws ::com::sun::star::container::NoSuchElementException
@@ -137,7 +137,7 @@ interface XMap
         @param Value
             is the value which should be associated with the given key
         @return
-            the value which was previously associated with the given key, or <VOID/>
+            the value which was previously associated with the given key, or `VOID`
             if there was no such previous association.
 
         @throws ::com::sun::star::beans::IllegalTypeException
@@ -146,7 +146,7 @@ interface XMap
             if the given key, or the given value, is not supported to be put into the map. It's up to
             the service implementing the <code>XMap</code> interface to specify which special values
             are not supported.<br/>
-            For instances, implementations might decide to not allow <VOID/> keys or values, or to
+            For instances, implementations might decide to not allow `VOID` keys or values, or to
             reject <code>Double.NaN</code> (<em>not a number</em>) to due its problematic behavior
             with respect to equality.
         @throws ::com::sun::star::beans::NoSupportException
@@ -169,7 +169,7 @@ interface XMap
         @throws ::com::sun::star::lang::IllegalArgumentException
             if the given key is not supported to be put into the map. It's up to the service
             implementing the <code>XMap</code> interface to specify which special values are not
-            supported. For instances, implementations might decide to not allow <VOID/> keys, or
+            supported. For instances, implementations might decide to not allow `VOID` keys, or
             to reject <code>Double.NaN</code> (<em>not a number</em>) to due its problematic
             behavior with respect to equality.
         @throws ::com::sun::star::beans::NoSupportException

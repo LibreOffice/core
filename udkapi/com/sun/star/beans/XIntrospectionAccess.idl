@@ -132,9 +132,9 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
         PropertyConcept</type>s.
 
         @returns
-            <TRUE/> if the property exists and accords to one of
+            `TRUE` if the property exists and accords to one of
             the demanded PropertyConcepts, otherwise
-            <FALSE/> is returned.
+            `FALSE` is returned.
 
         @param aName
             the name of the property.
@@ -194,9 +194,9 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
         </type>s.
 
         @returns
-            <TRUE/> if the method exists and accords to one of
+            `TRUE` if the method exists and accords to one of
             the demanded MethodConcepts, otherwise
-            <FALSE/> is returned.
+            `FALSE` is returned.
 
         @param aName
             the name of the method.

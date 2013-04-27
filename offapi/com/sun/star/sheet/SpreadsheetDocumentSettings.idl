@@ -95,8 +95,8 @@ published service SpreadsheetDocumentSettings
 
 
     /** specifies whether calculations are performed with the rounded
-        values displayed in cells (set to <TRUE/>) instead of the
-        internal values (set to <FALSE/>).
+        values displayed in cells (set to `TRUE`) instead of the
+        internal values (set to `FALSE`).
      */
     [property] boolean CalcAsShown;
 
@@ -115,7 +115,7 @@ published service SpreadsheetDocumentSettings
         anywhere on the sheet.
 
         <p>Explicitly defined label ranges are used even if this property
-        is set to <FALSE/>.</p>
+        is set to `FALSE`.</p>
 
         @see com::sun::star::sheet::LabelRanges
      */

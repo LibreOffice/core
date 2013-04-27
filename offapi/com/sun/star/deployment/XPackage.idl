@@ -63,8 +63,8 @@ interface XPackage
 
     /** checks if the package can be installed.
 
-        Only if the return value is <TRUE/> the package is allowed to be installed.
-        In case of <FALSE/> or in case of an exception, the package must be removed
+        Only if the return value is `TRUE` the package is allowed to be installed.
+        In case of `FALSE` or in case of an exception, the package must be removed
         completely.
         After return of this function no code from the extension may be used
         anymore, so that the extension can be safely removed from the hard disk.
@@ -75,7 +75,7 @@ interface XPackage
             indicates that an extension with the same identifier is already installed.
 
         @return
-            <NULL/> - all prerequisites are met. Otherwise, a value from
+            `NULL` - all prerequisites are met. Otherwise, a value from
             #Prerequisites indicating what prerequisites are missing.
      */
     long checkPrerequisites(
@@ -98,8 +98,8 @@ interface XPackage
                command environment for error handling and other interaction.
 
         @return
-            <TRUE/> - all dependencies are satisfied
-            <FALSE/> - at least one dependency failed.
+            `TRUE` - all dependencies are satisfied
+            `FALSE` - at least one dependency failed.
      */
     boolean checkDependencies(
         [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
@@ -113,11 +113,11 @@ interface XPackage
 
         @param xAbortChannel
                abort channel to asynchronously abort the registration process,
-               or <NULL/>
+               or `NULL`
         @param xCmdEnv
                command environment for error and progress handling
         @return
-                status whether the package is registered (<TRUE/>, <FALSE/>) or
+                status whether the package is registered (`TRUE`, `FALSE`) or
                 the status is ambiguous.  Additionally, a registration status
                 may not apply, e.g. in case of an empty package bundle.
     */
@@ -135,11 +135,11 @@ interface XPackage
 
         @param startup
                indicates that registration is adapted to the particular
-               startup scenario. That is, it is set to <TRUE/>, when called
+               startup scenario. That is, it is set to `TRUE`, when called
                from XExtensionManager::synchronize()
         @param xAbortChannel
                abort channel to asynchronously abort the registration process,
-               or <NULL/>
+               or `NULL`
         @param xCmdEnv
                command environment for error and progress handling
     */
@@ -159,11 +159,11 @@ interface XPackage
 
         @param startup
                indicates that registration is adapted to the particular
-               startup scenario. That is, it is set to <TRUE/>, when called
+               startup scenario. That is, it is set to `TRUE`, when called
                from XExtensionManager::synchronize()
         @param xAbortChannel
                abort channel to asynchronously abort the registration process,
-               or <NULL/>
+               or `NULL`
         @param xCmdEnv
                command environment for error and progress handling
     */
@@ -180,18 +180,18 @@ interface XPackage
         e.g. a zip (legacy) package file or a document hosting script packages.
 
         @return
-                <TRUE/> if this package is a package bundle, <FALSE/> otherwise
+                `TRUE` if this package is a package bundle, `FALSE` otherwise
     */
     boolean isBundle();
 
     /** Gets packages of the bundle.
 
-        If isRemoved() returns <TRUE/> then getBundle may return an
+        If isRemoved() returns `TRUE` then getBundle may return an
         empty sequence in case the object is not registered.
 
         @param xAbortChannel
                abort channel to asynchronously abort the registration process,
-               or <NULL/>
+               or `NULL`
         @param xCmdEnv
                command environment for error and progress handling
         @return
@@ -322,7 +322,7 @@ interface XPackage
             return high contrast icon
         @return
             the icon which should be used to represent the table in the
-            database application window, or <NULL/> if the default icon
+            database application window, or `NULL` if the default icon
             should be used.
     */
     com::sun::star::graphic::XGraphic getIcon( [in] boolean highContrast )
@@ -342,7 +342,7 @@ interface XPackage
         If registration data are created during registration, but the package is
         currently not registered, for example after calling
         XPackage::revokePackage(), then <member
-        scope="com::sun::star::beans">Optional::IsPresent</member> is <TRUE/> and
+        scope="com::sun::star::beans">Optional::IsPresent</member> is `TRUE` and
         the com::sun::star::beans::Optional::Value may
         be an empty string.
     */
@@ -351,7 +351,7 @@ interface XPackage
 
     /** indicates if this object represents a removed extension or extension
         item. This is the case when it was created by providing
-        <TRUE/> for the <code>removed</code> parameter in the function
+        `TRUE` for the <code>removed</code> parameter in the function
         XPackageRegistry::bindPackage().
      */
     boolean isRemoved();

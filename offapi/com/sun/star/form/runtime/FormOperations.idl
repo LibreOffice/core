@@ -39,7 +39,7 @@ service FormOperations : XFormOperations
     /** creates a <code>FormOperations</code> instance which works on a com::sun::star::form::FormController
         instance.
         @throws IllegalArgumentException
-            if the given form controller is <NULL/>, or does not have a model denoting a valid
+            if the given form controller is `NULL`, or does not have a model denoting a valid
             com::sun::star::form::component::DataForm instance.
     */
     createWithFormController(
@@ -53,7 +53,7 @@ service FormOperations : XFormOperations
         instance.
 
         @throws IllegalArgumentException
-            if the given form is <NULL/>, or does not support the com::sun::star::form::component::DataForm
+            if the given form is `NULL`, or does not support the com::sun::star::form::component::DataForm
             service.
     */
     createWithForm(

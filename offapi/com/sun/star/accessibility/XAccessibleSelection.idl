@@ -69,7 +69,7 @@ interface XAccessibleSelection : ::com::sun::star::uno::XInterface
             This index refers to all the children of this object.
 
         @return
-            Returns <TRUE/> if the specified child is selected and <FALSE/>
+            Returns `TRUE` if the specified child is selected and `FALSE`
             if it is not selected.
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the given index does not lie in the valid range of 0 up to

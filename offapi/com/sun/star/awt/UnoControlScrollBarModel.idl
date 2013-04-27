@@ -89,9 +89,9 @@ published service UnoControlScrollBarModel
 
     /** specifies the scrolling behavior of the control.
 
-        <p><TRUE/> means, that when the user moves the slider in the scroll bar,
+        <p>`TRUE` means, that when the user moves the slider in the scroll bar,
         the content of the window is updated immediately.
-        <FALSE/> means, that the window is only updated after the user has
+        `FALSE` means, that the window is only updated after the user has
         released the mouse button.</p>
 
         @since OOo 2.0

@@ -48,8 +48,8 @@ interface XCipherContextSupplier : com::sun::star::uno::XInterface
 
         @param bEncryption
             whether an encryption or decryption cipher should be created
-            <TRUE/> - Encryption
-            <FALSE/> - Decryption
+            `TRUE` - Encryption
+            `FALSE` - Decryption
 
         @param aParams
             optional parameters that could be used to initialize the cipher,

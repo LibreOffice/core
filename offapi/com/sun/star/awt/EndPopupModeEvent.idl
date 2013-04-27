@@ -32,14 +32,14 @@ struct EndPopupModeEvent: com::sun::star::lang::EventObject
 {
 
     /** specifies how the pop-up mode was ended
-        <TRUE/> means the window should be teared-off and positioned at FloatingPosition
-        <FALSE/> means the window was closed
+        `TRUE` means the window should be teared-off and positioned at FloatingPosition
+        `FALSE` means the window was closed
      */
     boolean bTearoff;
 
 
     /** specifies the new position of the floating window in frame coordinates
-         if bTearoff is <TRUE/>
+         if bTearoff is `TRUE`
      */
     com::sun::star::awt::Point FloatingPosition;
 };

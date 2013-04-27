@@ -32,10 +32,10 @@ published service ConditionalText
 {
     service  com::sun::star::text::TextField;
 
-    /** contains the text that is displayed if the condition evaluates to <TRUE/>.
+    /** contains the text that is displayed if the condition evaluates to `TRUE`.
      */
     [property] string TrueContent;
-    /** contains the text that is displayed if the condition evaluates to <FALSE/>.
+    /** contains the text that is displayed if the condition evaluates to `FALSE`.
      */
     [property] string FalseContent;
     /** contains the condition.

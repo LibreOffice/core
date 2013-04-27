@@ -66,8 +66,8 @@ published interface XPropertySetInfo: com::sun::star::uno::XInterface
 
 
     /** @returns
-            <TRUE/> if a property with the specified name exist;
-            otherwise <FALSE/> is returned.
+            `TRUE` if a property with the specified name exist;
+            otherwise `FALSE` is returned.
 
         @param aName
             specifies the name of the property.

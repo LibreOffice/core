@@ -52,7 +52,7 @@ interface XFastAttributeList: com::sun::star::uno::XInterface
             <b>or</b> operation.
 
         @returns
-            <TRUE/>, if the attribute is available
+            `TRUE`, if the attribute is available
     */
     boolean hasAttribute( [in] long Token );
 

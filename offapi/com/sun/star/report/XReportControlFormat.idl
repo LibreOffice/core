@@ -127,7 +127,7 @@ interface XReportControlFormat
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
 
-    /** If this optional property is <TRUE/>, then the characters are invisible.
+    /** If this optional property is `TRUE`, then the characters are invisible.
 
         @since OOo 2.0
      */
@@ -214,7 +214,7 @@ interface XReportControlFormat
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
 
-    /** If this optional property is <TRUE/>, then the characters are flashing.
+    /** If this optional property is `TRUE`, then the characters are flashing.
      */
     [attribute,bound] boolean CharFlash
     {
@@ -340,7 +340,7 @@ interface XReportControlFormat
         get raises ( com::sun::star::beans::UnknownPropertyException );
     };
 
-    /** If this attribute is <TRUE/>, the underline and strike-through
+    /** If this attribute is `TRUE`, the underline and strike-through
         properties are not applied to white spaces.
      */
     [attribute,bound] boolean CharWordMode

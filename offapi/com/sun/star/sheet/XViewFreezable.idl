@@ -32,12 +32,12 @@
 published interface XViewFreezable: com::sun::star::uno::XInterface
 {
 
-    /** returns <TRUE/> if the view has frozen panes.
+    /** returns `TRUE` if the view has frozen panes.
 
         <p>Only one of
         XViewSplitable::getIsWindowSplit() and
         XViewFreezable::hasFrozenPanes()
-        can be <TRUE/>.</p>
+        can be `TRUE`.</p>
      */
     boolean hasFrozenPanes();
 

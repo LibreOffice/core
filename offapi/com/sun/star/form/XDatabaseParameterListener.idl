@@ -39,7 +39,7 @@ published interface XDatabaseParameterListener: com::sun::star::lang::XEventList
             the event describing the parameter value request.
 
         @returns
-            <TRUE/> when the execution of the parametrized statement should continue, <FALSE/> otherwise.
+            `TRUE` when the execution of the parametrized statement should continue, `FALSE` otherwise.
 
         @see com::sun::star::form::DatabaseParameterEvent
      */

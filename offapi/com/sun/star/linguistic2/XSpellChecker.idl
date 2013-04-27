@@ -41,8 +41,8 @@ published interface XSpellChecker : com::sun::star::linguistic2::XSupportedLocal
     /** checks if a word is spelled correctly in a given language.
 
         @returns
-            <TRUE/> if the word is spelled correctly using
-             the specified language, <FALSE/> otherwise.
+            `TRUE` if the word is spelled correctly using
+             the specified language, `FALSE` otherwise.
 
         @param  aWord
             the word to be checked.
@@ -72,7 +72,7 @@ published interface XSpellChecker : com::sun::star::linguistic2::XSupportedLocal
         language.
 
         @returns
-            <NULL/> if <var>aWord</var> is spelled correctly using
+            `NULL` if <var>aWord</var> is spelled correctly using
              <var>aLocale</var>. Otherwise, an XSpellAlternatives
              object with information about the reason of failure and, if available,
              proposals for spelling alternatives will be returned.

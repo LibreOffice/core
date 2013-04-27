@@ -34,8 +34,8 @@
  */
 published interface XLibraryAccess: com::sun::star::uno::XInterface
 {
-    /** returns <TRUE/>, if the function is accessible through this library;
-        otherwise it returns <FALSE/>.
+    /** returns `TRUE`, if the function is accessible through this library;
+        otherwise it returns `FALSE`.
 
                 @param aFunctionName
                 the fully qualified name of a funtion.
@@ -43,7 +43,7 @@ published interface XLibraryAccess: com::sun::star::uno::XInterface
      */
     boolean isFunction( [in] string aFunctionName );
 
-    /** returns <TRUE/> if a fully qualified function name begins with this name.
+    /** returns `TRUE` if a fully qualified function name begins with this name.
 
                 @param aPathName
                 a part of a function name (e.g., "UtilLibrary").

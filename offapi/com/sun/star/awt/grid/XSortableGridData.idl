@@ -36,7 +36,7 @@ interface XSortableGridData
         @param ColumnIndex
             the index of the column whose data should be used as sort key
         @param SortAscending
-            is <TRUE/> if the data should be sorted ascending, <FALSE/> otherwise.
+            is `TRUE` if the data should be sorted ascending, `FALSE` otherwise.
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if <code>ColumnIndex</code> does not denote a valid column.
     */
@@ -52,8 +52,8 @@ interface XSortableGridData
         @return
             a structure describing the current sort order. ::com::sun::star::beans::Pair::First
             denotes the column by which the data is sorted, or -1 if the data is currently unsorted.
-            ::com::sun::star::beans::Pair::Second is <TRUE/> if the data is sorted ascending,
-            <FALSE/> otherwise.
+            ::com::sun::star::beans::Pair::Second is `TRUE` if the data is sorted ascending,
+            `FALSE` otherwise.
     */
     ::com::sun::star::beans::Pair< long, boolean >
             getCurrentSortOrder();

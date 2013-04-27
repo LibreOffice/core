@@ -41,14 +41,14 @@ published service PrintDateTime
         will be overridden by the current author
         each time the document is saved.
      */
-    /** If this flag is set to <FALSE/> the date or time
+    /** If this flag is set to `FALSE` the date or time
         is always displayed as the current date or time.
 
     @since OOo 1.1.2
      */
     [optional, property] boolean IsFixed;
-    /** If this flag is set to <TRUE/> this field represents,
-        a date with an optional time. If it is set to <FALSE/>
+    /** If this flag is set to `TRUE` this field represents,
+        a date with an optional time. If it is set to `FALSE`
         only the time is used here.
      */
     [property]boolean IsDate;

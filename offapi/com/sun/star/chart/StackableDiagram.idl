@@ -33,13 +33,13 @@ a helper service for stackable chart types (e.g., charts in
 published service StackableDiagram
 {
 
-    /** If <TRUE/>, the series of the diagram are stacked and each
+    /** If `TRUE`, the series of the diagram are stacked and each
         category sums up to 100%.
      */
     [property] boolean Percent;
 
 
-    /** If <TRUE/>, the series of the diagram are stacked.
+    /** If `TRUE`, the series of the diagram are stacked.
 
         <p>If you have a stacked bar chart, you can easily determine
         the sum of data in each category, by taking the top of the

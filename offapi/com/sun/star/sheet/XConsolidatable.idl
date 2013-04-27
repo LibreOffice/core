@@ -40,7 +40,7 @@ published interface XConsolidatable: com::sun::star::uno::XInterface
     /** creates a consolidation descriptor.
 
         @param bEmpty
-            <TRUE/> leaves the descriptor empty, <FALSE/> fills it with
+            `TRUE` leaves the descriptor empty, `FALSE` fills it with
             the settings from the last consolidation action.
 
         @see com::sun::star::sheet::ConsolidationDescriptor

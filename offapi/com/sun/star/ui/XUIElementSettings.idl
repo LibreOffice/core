@@ -52,8 +52,8 @@ interface XUIElementSettings : com::sun::star::uno::XInterface
         type supports it.
 
         @param bWriteable
-            must be <TRUE/> if the retrieved settings should be a writable.
-            Otherwise <FALSE/> should be provided to get a shareable reference
+            must be `TRUE` if the retrieved settings should be a writable.
+            Otherwise `FALSE` should be provided to get a shareable reference
             to the settings data.
 
         @return

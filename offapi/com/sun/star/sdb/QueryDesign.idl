@@ -121,14 +121,14 @@ module com {  module sun {  module star {  module sdb {
 
         <li><b>EscapeProcessing</b><br/>
         Specifies whether or not escape processing should be initially enabled in the query designer. If set
-        to <FALSE/>, then the designer can operate in text view only (as opposed to the graphical view). The
-        <a href="#graphical_design">GraphicalDesign</a> parameter will be ignored then, and assumed to be <FALSE/>.<br/>
-        If not present, <TRUE/> is assumed for this parameter.</li>
+        to `FALSE`, then the designer can operate in text view only (as opposed to the graphical view). The
+        <a href="#graphical_design">GraphicalDesign</a> parameter will be ignored then, and assumed to be `FALSE`.<br/>
+        If not present, `TRUE` is assumed for this parameter.</li>
 
         <li><a name="graphical_design"></a><b>GraphicalDesign</b><br/>
         This value indicates whether the designer should be opened in the graphical design view
-        (<TRUE/>) or in the text view (<FALSE/>).<br/>
-        If not present, <FALSE/> is assumed for this parameter.
+        (`TRUE`) or in the text view (`FALSE`).<br/>
+        If not present, `FALSE` is assumed for this parameter.
         </li>
     </ul>
     </p>

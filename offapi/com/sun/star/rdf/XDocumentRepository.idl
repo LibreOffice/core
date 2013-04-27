@@ -98,10 +98,10 @@ interface XDocumentRepository : XRepository
             `string`).
 
         @param RDFaDatatype
-            the <code>rdfa:datatype</code> attribute (may be <NULL/>)
+            the <code>rdfa:datatype</code> attribute (may be `NULL`)
 
         @throws com::sun::star::lang::IllegalArgumentException
-            if any parameter is <NULL/>, Predicates is empty,
+            if any parameter is `NULL`, Predicates is empty,
             or Object is of a type that can not have RDFa metadata attached.
 
         @throws RepositoryException
@@ -128,7 +128,7 @@ interface XDocumentRepository : XRepository
             the element whose RDFa statement(s) should be removed
 
         @throws com::sun::star::lang::IllegalArgumentException
-            if the given Element is <NULL/>, or of a type that can not have
+            if the given Element is `NULL`, or of a type that can not have
             RDFa metadata attached.
 
         @throws RepositoryException
@@ -158,7 +158,7 @@ interface XDocumentRepository : XRepository
             </ul>
 
         @throws com::sun::star::lang::IllegalArgumentException
-            if the given Element is <NULL/>, or of a type that can not have
+            if the given Element is `NULL`, or of a type that can not have
             RDFa metadata attached.
 
         @throws RepositoryException
@@ -180,7 +180,7 @@ interface XDocumentRepository : XRepository
         </p>
 
         <p>
-        Any parameter may be <NULL/>, which acts as a wildcard.
+        Any parameter may be `NULL`, which acts as a wildcard.
         For example, to get all statements about myURI:
         <code>getStatementsRDFa(myURI, null, null)</code>
         </p>

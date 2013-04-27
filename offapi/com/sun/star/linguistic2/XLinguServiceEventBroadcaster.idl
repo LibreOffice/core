@@ -46,8 +46,8 @@ published interface XLinguServiceEventBroadcaster : com::sun::star::uno::XInterf
 {
     /**
          @returns
-             <TRUE/> if the listener was successfully added,
-            <FALSE/> otherwise.
+             `TRUE` if the listener was successfully added,
+            `FALSE` otherwise.
 
         @param xLstnr
             the listener to be added.
@@ -57,8 +57,8 @@ published interface XLinguServiceEventBroadcaster : com::sun::star::uno::XInterf
 
     /**
          @returns
-             <TRUE/> if the listener was successfully removed,
-            <FALSE/> otherwise.
+             `TRUE` if the listener was successfully removed,
+            `FALSE` otherwise.
 
         @param xLstnr
             the listener to be removed.

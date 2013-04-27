@@ -149,7 +149,7 @@ interface XDatabaseDocumentUI
         listener registered at the component.</p>
 
         @return
-            <TRUE/> if and only if both suspending and closing all sub components succeeds.
+            `TRUE` if and only if both suspending and closing all sub components succeeds.
 
         @since OOo 3.0
     */
@@ -181,15 +181,15 @@ interface XDatabaseDocumentUI
             (as is the case form forms and reports), hierarchical names are supported here, too.
 
         @param ForEditing
-            specifies whether the object should be opened for editing (<TRUE/>) or viewing (<FALSE/>).
+            specifies whether the object should be opened for editing (`TRUE`) or viewing (`FALSE`).
 
             <p>For the different object types, this means the following
             <a name="component_types"></a>
             <table style="width:100%;" border="1 solid black" cellpadding="2" cellspacing="2"><tbody>
               <tr style="vertical-align: top;">
                 <td></td>
-                <td><code>ForEditing</code> = <TRUE/></td>
-                <td><code>ForEditing</code> = <FALSE/></td>
+                <td><code>ForEditing</code> = `TRUE`</td>
+                <td><code>ForEditing</code> = `FALSE`</td>
               </tr>
 
               <tr style="vertical-align: top;">
@@ -298,7 +298,7 @@ interface XDatabaseDocumentUI
             or DatabaseObject::REPORT, this will contain the com::sun::star::sdb::DocumentDefinition
             object which controls the sub component.<br/>
             You can use this object to control various aspects of the sub component. For instance, you could decide
-            to create the component hidden, by passing a <code>Hidden</code> flag (set to <TRUE/>) in Arguments,
+            to create the component hidden, by passing a <code>Hidden</code> flag (set to `TRUE`) in Arguments,
             manipulate the component, and then finally show it by invoking the <code>show</code> command at the
             definition object.
     */

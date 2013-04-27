@@ -39,7 +39,7 @@ published interface XTextField: com::sun::star::text::XTextContent
     /** @returns the display string of the text field either as the command
                  of the field or as the output string.
                 @param bShowCommand
-                    if <TRUE/> the command of the field will be returned
+                    if `TRUE` the command of the field will be returned
      */
     string getPresentation( [in] boolean bShowCommand );
 

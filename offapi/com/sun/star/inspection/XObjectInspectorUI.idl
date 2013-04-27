@@ -51,7 +51,7 @@ interface XObjectInspectorUI
         @param  PropertyName
             denotes the name of the property whose UI is to be enabled or disabled.
         @param  Enable
-            <TRUE/> if and only if the UI should be disabled, <FALSE/> otherwise.
+            `TRUE` if and only if the UI should be disabled, `FALSE` otherwise.
     */
     void    enablePropertyUI( [in] string PropertyName, [in] boolean Enable );
 
@@ -71,7 +71,7 @@ interface XObjectInspectorUI
             this does mean that this element's state is not affected by the call - it does
             <em>not</em> mean that it is disabled.
         @param  Enable
-            <TRUE/> if the elements denoted by _nElements should be enabled, <FALSE/> if
+            `TRUE` if the elements denoted by _nElements should be enabled, `FALSE` if
             they should be disabled.
     */
     void    enablePropertyUIElements(
@@ -123,7 +123,7 @@ interface XObjectInspectorUI
             the name of the property whose control should be retrieved
 
         @return
-            the XPropertyControl representing the given property, or <NULL/>
+            the XPropertyControl representing the given property, or `NULL`
             if there is no such property control.
     */
     XPropertyControl

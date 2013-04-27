@@ -40,7 +40,7 @@ interface XMutableTreeDataModel : XTreeDataModel
             as a textual representation of the created node.
 
         @param ChildrenOnDemand
-            if <TRUE/> is used as a parameter, the created node will be treated as a non-leaf
+            if `TRUE` is used as a parameter, the created node will be treated as a non-leaf
             node by the XTreeControl, even when it has no child nodes.
 
         @returns

@@ -42,8 +42,8 @@ published interface XElementAccess: com::sun::star::uno::XInterface
 
 
     /** @returns
-            <TRUE/> if the object contain elements,
-            otherwise <FALSE/>.
+            `TRUE` if the object contain elements,
+            otherwise `FALSE`.
      */
     boolean hasElements();
 

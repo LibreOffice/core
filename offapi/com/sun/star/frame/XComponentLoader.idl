@@ -108,7 +108,7 @@ published interface XComponentLoader: com::sun::star::uno::XInterface
             a com::sun::star::lang::XComponent for successfully loaded
             documents or
             <br>
-            <NULL/>if it failed
+            `NULL`if it failed
 
             <p>
             This interface is a generic one and can be used to start further requests on

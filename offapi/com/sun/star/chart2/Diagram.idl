@@ -80,10 +80,10 @@ service Diagram
 
     /** If bars of a bar or column chart are attached to different
         axis, this property determines how to display those.  If
-        <TRUE/>, the bars are grouped together in one block for each
+        `TRUE`, the bars are grouped together in one block for each
         axis, thus they are painted one group over the other.
 
-        <p>If <FALSE/>, the bars are displayed side-by-side, as if
+        <p>If `FALSE`, the bars are displayed side-by-side, as if
         they were all attached to the same axis.</p>
 
         <p>If all data series of a bar or column chart are attached to

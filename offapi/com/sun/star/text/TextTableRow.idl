@@ -43,7 +43,7 @@ published service TextTableRow
     [property] com::sun::star::util::Color BackColor;
 
 
-    /** If <TRUE/>, the background color value in "BackColor" is not visible.
+    /** If `TRUE`, the background color value in "BackColor" is not visible.
      */
     [property] boolean BackTransparent;
 
@@ -73,13 +73,13 @@ published service TextTableRow
     [property] long Height;
 
 
-    /** If the value of this property is <TRUE/>, the height of the table row
+    /** If the value of this property is `TRUE`, the height of the table row
         depends on the content of the table cells.
      */
     [property] boolean IsAutoHeight;
 
 
-        /** If <TRUE/>, the row is allowed to be split at page or column breaks.
+        /** If `TRUE`, the row is allowed to be split at page or column breaks.
 
                 @since OOo 2.0
          */

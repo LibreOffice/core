@@ -156,17 +156,17 @@ published service TableAutoFormatField
     [property] short CharUnderline;
 
 
-    /** is <TRUE/> if the characters are crossed out.
+    /** is `TRUE` if the characters are crossed out.
      */
     [property] boolean CharCrossedOut;
 
 
-    /** is <TRUE/> if the characters are contoured.
+    /** is `TRUE` if the characters are contoured.
      */
     [property] boolean CharContoured;
 
 
-    /** is <TRUE/> if the characters are shadowed.
+    /** is `TRUE` if the characters are shadowed.
      */
     [property] boolean CharShadowed;
 
@@ -181,7 +181,7 @@ published service TableAutoFormatField
     [property] com::sun::star::util::Color CellBackColor;
 
 
-    /** is <TRUE/> if the cell background is transparent.
+    /** is `TRUE` if the cell background is transparent.
 
         <p>In this case the TableAutoFormatField::CellBackColor
         value is not used.</p>
@@ -208,7 +208,7 @@ published service TableAutoFormatField
     [optional, property] long VertJustify;
 
 
-    /** is <TRUE/> if text breaks automatically at cell borders.
+    /** is `TRUE` if text breaks automatically at cell borders.
      */
     [optional, property] boolean IsTextWrapped;
 

@@ -47,21 +47,21 @@ service TreeControlModel
     [property] XTreeDataModel DataModel;
 
     /** Specifies if the root node of the tree is displayed.
-        <p>If <var>RootDisplayed</var> is set to <FALSE/>, the root node of a model is no longer
+        <p>If <var>RootDisplayed</var> is set to `FALSE`, the root node of a model is no longer
         a valid node for the XTreeControl and can't be used with any method of
         XTreeControl.
-        <p>The default value is <TRUE/></p>
+        <p>The default value is `TRUE`</p>
     */
     [property] boolean RootDisplayed;
 
     /** Specifies whether the node handles should be displayed.
         <p>The handles are doted lines that visualize the tree like hierarchy<p>
-        <p>The default value is <TRUE/></p>
+        <p>The default value is `TRUE`</p>
     */
     [property] boolean ShowsHandles;
 
     /** Specifies whether the node handles should also be displayed at root level.
-        <p>The default value is <TRUE/></p>
+        <p>The default value is `TRUE`</p>
     */
     [property] boolean ShowsRootHandles;
 
@@ -73,7 +73,7 @@ service TreeControlModel
     [property] long RowHeight;
 
     /** Specifies whether the nodes of the tree are editable.
-        <p>The default value is <FALSE/></p>
+        <p>The default value is `FALSE`</p>
 
         @see XTreeControl::startEditingAtNode()
         @see XTreeEditListener
@@ -82,9 +82,9 @@ service TreeControlModel
 
     /** Specifies what happens when editing is interrupted by selecting another node in the tree,
         a change in the tree's data, or by some other means.
-        <p>Setting this property to <TRUE/> causes the changes to be automatically saved when editing
-        is interrupted. <FALSE/> means that editing is canceled and changes are lost
-        <p>The default value is <FALSE/></p>
+        <p>Setting this property to `TRUE` causes the changes to be automatically saved when editing
+        is interrupted. `FALSE` means that editing is canceled and changes are lost
+        <p>The default value is `FALSE`</p>
     */
     [property] boolean InvokesStopNodeEditing;
 };

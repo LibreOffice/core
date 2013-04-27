@@ -38,8 +38,8 @@ interface XConfigurationControllerRequestQueue
 {
     /** Return whether there are pending requests for configuration changes.
         @return
-            Returns <TRUE/> when there is at least one request object in the
-            queue that has not yet been processed.  It returns <FALSE/> when
+            Returns `TRUE` when there is at least one request object in the
+            queue that has not yet been processed.  It returns `FALSE` when
             the queue is empty.
     */
     boolean hasPendingRequests ();

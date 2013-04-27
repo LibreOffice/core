@@ -35,8 +35,8 @@ published interface XMergeable: com::sun::star::uno::XInterface
     void merge( [in] boolean bMerge );
 
     /** @returns
-            <TRUE/> if the area specified by this object is merged,
-            or <FALSE/> otherwise.
+            `TRUE` if the area specified by this object is merged,
+            or `FALSE` otherwise.
      */
     boolean getIsMerged();
 

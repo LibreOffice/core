@@ -108,8 +108,8 @@ interface XRepository
             the imported graph
 
         @throws com::sun::star::lang::IllegalArgumentException
-            if the given stream or the GraphName is <NULL/>,
-            or BaseURI is <NULL/> and the format requires use of a base URI
+            if the given stream or the GraphName is `NULL`,
+            or BaseURI is `NULL` and the format requires use of a base URI
 
         @throws com::sun::star::datatransfer::UnsupportedFlavorException
             if the format requested is unknown or not supported
@@ -162,8 +162,8 @@ interface XRepository
             a base URI to resolve relative URI references
 
         @throws com::sun::star::lang::IllegalArgumentException
-            if the given stream or the GraphName is <NULL/>,
-            or BaseURI is <NULL/> and the format requires use of a base URI
+            if the given stream or the GraphName is `NULL`,
+            or BaseURI is `NULL` and the format requires use of a base URI
 
         @throws com::sun::star::datatransfer::UnsupportedFlavorException
             if the format requested is unknown or not supported
@@ -205,7 +205,7 @@ interface XRepository
             the name of the graph that is to be returned
 
         @returns
-            the graph with the given name if it exists, else <NULL/>
+            the graph with the given name if it exists, else `NULL`
 
         @throws com::sun::star::lang::IllegalArgumentException
             if the given GraphName is invalid
@@ -271,7 +271,7 @@ interface XRepository
     /** gets matching RDF statements from the repository.
 
         <p>
-        Any parameter may be <NULL/>, which acts as a wildcard.
+        Any parameter may be `NULL`, which acts as a wildcard.
         For example, to get all statements about myURI:
         <code>getStatements(myURI, null, null)</code>
         </p>
@@ -309,7 +309,7 @@ interface XRepository
         This method runs a SPARQL query that returns a list of variable
         bindings, i.e., a query beginning with "SELECT".
         The result is basically a (rectangular) table with labeled columns,
-        where individual cells may be <NULL/>.
+        where individual cells may be `NULL`.
         </p>
 
         @param Query

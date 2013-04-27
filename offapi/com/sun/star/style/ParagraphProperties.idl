@@ -55,7 +55,7 @@ published service ParagraphProperties
     [optional, property] com::sun::star::util::Color ParaBackColor;
 
 
-    /** This value is <TRUE/> if the paragraph background color
+    /** This value is `TRUE` if the paragraph background color
         is set to transparent.
      */
     [optional, property] boolean ParaBackTransparent;
@@ -201,7 +201,7 @@ published service ParagraphProperties
     [optional, property] boolean DropCapWholeWord;
 
 
-    /** Setting this property to <TRUE/> prevents page or column
+    /** Setting this property to `TRUE` prevents page or column
         breaks between this and the following paragraph.
 
 
@@ -211,7 +211,7 @@ published service ParagraphProperties
     [optional, property] boolean ParaKeepTogether;
 
 
-    /** Setting this property to <FALSE/> prevents the paragraph from
+    /** Setting this property to `FALSE` prevents the paragraph from
         getting split into two pages or columns.
      */
     [optional, property] boolean ParaSplit;
@@ -341,7 +341,7 @@ published service ParagraphProperties
          */
         [optional, property] com::sun::star::container::XNameContainer ParaUserDefinedAttributes;
 
-        /** returns <FALSE/> if the paragraph is part of a numbering, but has no
+        /** returns `FALSE` if the paragraph is part of a numbering, but has no
             numbering label.
 
             <p>A paragraph is part of a numbering, if a style for a numbering is

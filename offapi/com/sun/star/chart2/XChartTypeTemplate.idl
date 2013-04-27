@@ -63,7 +63,7 @@ interface XChartTypeTemplate : ::com::sun::star::uno::XInterface
         [in] sequence< com::sun::star::beans::PropertyValue > aArguments );
 
     /** @return
-            <TRUE/> if the template does support categories
+            `TRUE` if the template does support categories
      */
     boolean supportsCategories();
 
@@ -72,7 +72,7 @@ interface XChartTypeTemplate : ::com::sun::star::uno::XInterface
         creates a new diagram based on these series.
 
         <p>Note, that if matchesTemplate() returns
-        <TRUE/> for the given XDiagram, the latter should
+        `TRUE` for the given XDiagram, the latter should
         not be changed.</p>
 
         @param xDiagram
@@ -91,7 +91,7 @@ interface XChartTypeTemplate : ::com::sun::star::uno::XInterface
         template.</p>
 
         <p>Ideally a matchesTemplate() call for the
-        given diagram should return <TRUE/> before this method is
+        given diagram should return `TRUE` before this method is
         called.</p>
 
         @param xDataSource
@@ -130,19 +130,19 @@ interface XChartTypeTemplate : ::com::sun::star::uno::XInterface
             The diagram to be analyzed.
 
         @param bAdaptProperties
-            If <TRUE/> the properties of the template are set, such
+            If `TRUE` the properties of the template are set, such
             that the template matches more accurately.  E.g. for a
             line-chart with symbols the property "Symbol" would be set
-            to <TRUE/>.  If this parameter is <FALSE/> the template
+            to `TRUE`.  If this parameter is `FALSE` the template
             itself stays unmodified.
 
         @return
-            <TRUE/> if the diagram given is structurally identical to
+            `TRUE` if the diagram given is structurally identical to
             a diagram that was created using
             createDiagramByDataSource() or
-            changeDiagram().  If <FALSE/> is returned
+            changeDiagram().  If `FALSE` is returned
             the template stays unmodified even if
-            <code>bAdaptProperties</code> is <TRUE/>.
+            <code>bAdaptProperties</code> is `TRUE`.
      */
     boolean matchesTemplate( [in] XDiagram xDiagram,
                              [in] boolean bAdaptProperties );

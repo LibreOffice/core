@@ -130,7 +130,7 @@ interface XObjectInspectorModel
         section.
 
         <p>This property is ignored by the ObjectInspector if
-        #HasHelpSection is <FALSE/>.</p>
+        #HasHelpSection is `FALSE`.</p>
 
         <p>The layout of the ObjectInspector is undefined if
         #MinHelpTextLines is larger than
@@ -144,7 +144,7 @@ interface XObjectInspectorModel
         section.
 
         <p>This property is ignored by the ObjectInspector if
-        #HasHelpSection is <FALSE/>.</p>
+        #HasHelpSection is `FALSE`.</p>
 
         <p>The layout of the ObjectInspector is undefined if
         #MaxHelpTextLines is smaller than

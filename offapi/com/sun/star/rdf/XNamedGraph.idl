@@ -95,7 +95,7 @@ interface XNamedGraph : XURI
             the object of the RDF triple.
 
         @throws com::sun::star::lang::IllegalArgumentException
-            if any parameter is <NULL/>
+            if any parameter is `NULL`
 
         @throws com::sun::star::container::NoSuchElementException
             if this graph does not exist in the repository any more
@@ -120,7 +120,7 @@ interface XNamedGraph : XURI
         </p>
 
         <p>
-        Any parameter may be <NULL/>, which acts as a wildcard.
+        Any parameter may be `NULL`, which acts as a wildcard.
         For example, to remove all statements about myURI:
         <code>removeStatement(myURI, null, null)</code>
         </p>
@@ -156,7 +156,7 @@ interface XNamedGraph : XURI
         </p>
 
         <p>
-        Any parameter may be <NULL/>, which acts as a wildcard.
+        Any parameter may be `NULL`, which acts as a wildcard.
         For example, to get all statements about myURI:
         <code>getStatements(myURI, null, null)</code>
         </p>

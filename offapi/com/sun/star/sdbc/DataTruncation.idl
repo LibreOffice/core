@@ -44,14 +44,14 @@ published exception DataTruncation: SQLWarning
 
 
     /** is
-        <TRUE/>
+        `TRUE`
         if a parameter value is truncated.
      */
     boolean IsParameter;
 
 
     /** is
-        <TRUE/>
+        `TRUE`
         if a read was truncated.
      */
     boolean DuringRead;

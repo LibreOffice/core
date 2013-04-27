@@ -50,7 +50,7 @@ published interface XDevice: com::sun::star::uno::XInterface
     /** creates a new device which is compatible with this one.
 
         <p>If the device does not support the GETBITS device capability,
-        this method returns <NULL/>.</p>
+        this method returns `NULL`.</p>
      */
     XDevice createDevice( [in] long nWidth,
              [in] long nHeight );

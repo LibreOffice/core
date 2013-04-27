@@ -46,7 +46,7 @@ interface XDocumentEventBroadcaster
 
         @param _Listener
             the listener to register. The behavior of the method is undefined this listener
-            is <NULL/>.
+            is `NULL`.
     */
     void    addDocumentEventListener( [in] XDocumentEventListener _Listener );
 
@@ -54,7 +54,7 @@ interface XDocumentEventBroadcaster
 
         @param _Listener
             the listener to revoke. The behavior of the method is undefined this listener
-            is <NULL/>.
+            is `NULL`.
     */
     void    removeDocumentEventListener( [in] XDocumentEventListener _Listener );
 
@@ -74,7 +74,7 @@ interface XDocumentEventBroadcaster
         @param _EventName
             the name of the event to be notified.
         @param _ViewController
-            the view/controller which the event applies to. May be <NULL/>
+            the view/controller which the event applies to. May be `NULL`
         @param _Supplement
             supplemental information related to the event.
 

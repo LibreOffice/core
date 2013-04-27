@@ -54,7 +54,7 @@ interface XTableUIProvider
             com::sun::star::graphic::GraphicColorMode constants.
         @return
             the icon which should be used to represent the table in the
-            database application window, or <NULL/> if the default icon
+            database application window, or `NULL` if the default icon
             should be used.
     */
     com::sun::star::graphic::XGraphic getTableIcon(
@@ -74,7 +74,7 @@ interface XTableUIProvider
 
         @return
             a component which can be used to edit the definition of an
-            existing table, or <NULL/> if the default component should
+            existing table, or `NULL` if the default component should
             be used.<br/>
             Two component types are supported so far
             <ul><li>modal dialogs<br/>

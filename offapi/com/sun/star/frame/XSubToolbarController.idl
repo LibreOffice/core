@@ -42,7 +42,7 @@ interface XSubToolbarController : com::sun::star::uno::XInterface
     /** if the controller features a sub-toolbar.
 
         @return
-            <TRUE/> if the controller offers a sub toolbar, otherwise <FALSE/>.
+            `TRUE` if the controller offers a sub toolbar, otherwise `FALSE`.
 
         <p>
         Enables implementations to dynamically decide to support sub-toolbars

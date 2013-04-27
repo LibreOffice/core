@@ -67,12 +67,12 @@ interface XStorageBasedLibraryContainer
 
         @param RootStorage
             denotes the root storage into which the libraries should be written, which
-            must not be <NULL/>.<br/>
+            must not be `NULL`.<br/>
             Note that the actual libraries are written into a sub storage of this
             root storage, as usual.
 
         @throws ::com::sun::star::lang::IllegalArgumentException
-            if the <code>RootStorage</code> parameter is <NULL/>, or equals
+            if the <code>RootStorage</code> parameter is `NULL`, or equals
             #RootStorage.
 
         @throws ::com::sun::star::lang::WrappedTargetException

@@ -45,7 +45,7 @@ published interface XUriReferenceFactory: com::sun::star::uno::XInterface {
        an object that supports
        com::sun::star::uri::XUriReference (and possibly also
        additional, scheme-specific interfaces), if the given input can be parsed
-       into a URI reference; otherwise, <NULL/> is returned.
+       into a URI reference; otherwise, `NULL` is returned.
      */
     XUriReference parse([in] string uriReference);
 
@@ -64,10 +64,10 @@ published interface XUriReferenceFactory: com::sun::star::uno::XInterface {
        URI references.
 
        @param processSpecialBaseSegments
-       if <TRUE/>, special segments (&ldquo;<code>.</code>&rdquo; and
+       if `TRUE`, special segments (&ldquo;<code>.</code>&rdquo; and
        &ldquo;<code>..</code>&rdquo;) within the path of the base URI (except
        for the last, cut-off segment) are processed as suggested by
-       RFC&nbsp;2396.  If <FALSE/>, special segments within the path of the base
+       RFC&nbsp;2396.  If `FALSE`, special segments within the path of the base
        URI are treated like ordinary segments.
 
        @param excessParentSegments
@@ -80,10 +80,10 @@ published interface XUriReferenceFactory: com::sun::star::uno::XInterface {
        additional, scheme-specific interfaces), if the given
        <code>uriReference</code> is either already absolute, or can be resolved
        to an absolute URI reference, relative to the given
-       <code>baseUriReference</code>; otherwise, <NULL/> is returned.
-       Especially, if <code>baseUriReference</code> is <NULL/>, or is not an
+       <code>baseUriReference</code>; otherwise, `NULL` is returned.
+       Especially, if <code>baseUriReference</code> is `NULL`, or is not an
        absolute, hierarchical URI reference, or if <code>uriReference</code> is
-       <NULL/>, then <NULL/> is always returned.
+       `NULL`, then `NULL` is always returned.
      */
     XUriReference makeAbsolute(
         [in] XUriReference baseUriReference, [in] XUriReference uriReference,
@@ -106,9 +106,9 @@ published interface XUriReferenceFactory: com::sun::star::uno::XInterface {
        <code>uriReference</code> (e.g.,
        &ldquo;<code>scheme://auth//c/d</code>&rdquo;) have the same scheme and
        authority components, and the path component of <code>uriReference</code>
-       starts with &ldquo;<code>//</code>&rdquo;.  If <TRUE/>, the generated
+       starts with &ldquo;<code>//</code>&rdquo;.  If `TRUE`, the generated
        relative URI reference includes an authority component (e.g.,
-       &ldquo;<code>//auth//c/d</code>&rdquo;); if <FALSE/>, the generated
+       &ldquo;<code>//auth//c/d</code>&rdquo;); if `FALSE`, the generated
        relative URI reference has a relative path (e.g.,
        &ldquo;<code>..//c/d</code>&rdquo;).
 
@@ -119,12 +119,12 @@ published interface XUriReferenceFactory: com::sun::star::uno::XInterface {
        <code>uriReference</code> (e.g.,
        &ldquo;<code>scheme://auth/c/d</code>&rdquo;) have the same scheme and
        authority components (if present), but share no common path segments.  If
-       <TRUE/>, the generated relative URI reference has an absolute path (e.g.,
-       &ldquo;<code>/c/d</code>&rdquo;); if <FALSE/>, the generated relative URI
+       `TRUE`, the generated relative URI reference has an absolute path (e.g.,
+       &ldquo;<code>/c/d</code>&rdquo;); if `FALSE`, the generated relative URI
        reference has a relative path (e.g., &ldquo;<code>../c/d</code>&rdquo;).
 
        @param encodeRetainedSpecialSegments
-       if <TRUE/>, special segments (&ldquo;<code>.</code>&rdquo; and
+       if `TRUE`, special segments (&ldquo;<code>.</code>&rdquo; and
        &ldquo;<code>..</code>&rdquo;) that are already present in the path
        component of the given <code>uriReference</code> and which end up in a
        relative path returned from this method, are encoded (as
@@ -138,10 +138,10 @@ published interface XUriReferenceFactory: com::sun::star::uno::XInterface {
        hierarchical, or is of a different scheme than the given
        <code>baseUriReference</code>, or can be changed to a relative URI
        reference, relative to the given <code>baseUriReference</code>;
-       otherwise, <NULL/> is returned.  Especially, if
-       <code>baseUriReference</code> is <NULL/>, or is not an absolute,
-       hierarchical URI reference, or if <code>uriReference</code> is <NULL/>,
-       then <NULL/> is always returned.
+       otherwise, `NULL` is returned.  Especially, if
+       <code>baseUriReference</code> is `NULL`, or is not an absolute,
+       hierarchical URI reference, or if <code>uriReference</code> is `NULL`,
+       then `NULL` is always returned.
      */
     XUriReference makeRelative(
         [in] XUriReference baseUriReference, [in] XUriReference uriReference,

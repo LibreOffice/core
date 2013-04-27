@@ -40,8 +40,8 @@ interface XInplaceClient: com::sun::star::uno::XInterface
     /** checks if the container can activate the object inplace.
 
         @return
-            <TRUE/> the container can activate the object inplace.
-            <FALSE/> otherwise.
+            `TRUE` the container can activate the object inplace.
+            `FALSE` otherwise.
      */
     boolean canInplaceActivate();
 

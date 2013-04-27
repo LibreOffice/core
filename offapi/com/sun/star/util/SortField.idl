@@ -35,8 +35,8 @@ published struct SortField
      */
     long Field;
 
-    /** <TRUE/> if data are sorted in ascending order,
-        <FALSE/> if in descending order.
+    /** `TRUE` if data are sorted in ascending order,
+        `FALSE` if in descending order.
      */
     boolean SortAscending;
 

@@ -26,10 +26,10 @@
  module com {  module sun {  module star {  module lang {
 
 /** This exception is thrown when an application attempts to use
-    <NULL/> in a case where an object is required.
+    `NULL` in a case where an object is required.
 
     <p>Applications should throw instances of this class to indicate
-    other illegal uses of the <NULL/> object.  </p>
+    other illegal uses of the `NULL` object.  </p>
 
     @see com::sun::star::reflection::XIdlReflection::forName
  */

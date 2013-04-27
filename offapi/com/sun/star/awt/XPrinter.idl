@@ -74,7 +74,7 @@ published interface XPrinter: com::sun::star::awt::XPrinterPropertySet
         in or before the call to
         com::sun::star::awt::XPrinter::start(),
         com::sun::star::awt::XPrinter::terminate()
-        returns <FALSE/>. This call must not block the thread.</p>
+        returns `FALSE`. This call must not block the thread.</p>
 
         @see end
      */

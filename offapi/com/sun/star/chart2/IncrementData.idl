@@ -47,10 +47,10 @@ struct IncrementData
     #PostEquidistant rules whether the member #Distance
     describes a distance before or after the scaling is applied.
 
-    <p>If #PostEquidistant equals <TRUE/> #Distance
+    <p>If #PostEquidistant equals `TRUE` #Distance
     is given in values after XScaling is applied, thus resulting
     main tickmarks will always look equidistant on the screen.
-    If #PostEquidistant equals <FALSE/> #Distance
+    If #PostEquidistant equals `FALSE` #Distance
     is given in values before XScaling is applied.</p>
     */
     any         PostEquidistant;

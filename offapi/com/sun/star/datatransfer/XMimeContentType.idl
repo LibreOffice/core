@@ -69,8 +69,8 @@ published interface XMimeContentType : com::sun::star::uno::XInterface
         The name of the parameter to query for.
 
         @returns
-        A value of <TRUE/> if the MIME content-type has the specified parameter.
-        <p>A value of <FALSE/> if the MIME content-type has not the specified parameter.</p>
+        A value of `TRUE` if the MIME content-type has the specified parameter.
+        <p>A value of `FALSE` if the MIME content-type has not the specified parameter.</p>
     */
     boolean hasParameter( [in] string aName );
 

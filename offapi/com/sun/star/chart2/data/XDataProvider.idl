@@ -41,9 +41,9 @@ module data
  */
 interface XDataProvider  : ::com::sun::star::uno::XInterface
 {
-    /** If <TRUE/> is returned, a call to createDataSource with the
+    /** If `TRUE` is returned, a call to createDataSource with the
         same arguments must return a valid XDataSequence object.  If
-        <FALSE/> is returned, createDataSource throws an exception.
+        `FALSE` is returned, createDataSource throws an exception.
      */
     boolean createDataSourcePossible( [in] sequence< com::sun::star::beans::PropertyValue > aArguments );
 
@@ -102,9 +102,9 @@ interface XDataProvider  : ::com::sun::star::uno::XInterface
     sequence< com::sun::star::beans::PropertyValue > detectArguments(
         [in] XDataSource xDataSource );
 
-    /** If <TRUE/> is returned, a call to
+    /** If `TRUE` is returned, a call to
         createDataSequenceByRangeRepresentation with the same argument must
-        return a valid XDataSequence object.  If <FALSE/> is returned,
+        return a valid XDataSequence object.  If `FALSE` is returned,
         createDataSequenceByRangeRepresentation throws an exception.
      */
     boolean createDataSequenceByRangeRepresentationPossible( [in] string aRangeRepresentation );

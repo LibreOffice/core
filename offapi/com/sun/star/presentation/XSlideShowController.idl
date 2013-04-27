@@ -153,7 +153,7 @@ interface XSlideShowController
     void resume();
 
 
-    /** returns <TRUE/> if the slide show is currently paused.
+    /** returns `TRUE` if the slide show is currently paused.
 
         @see pause()
         @see resume()
@@ -187,9 +187,9 @@ interface XSlideShowController
     /** determines if the slide show is active.
 
         @return
-            <TRUE/> for UI active slide show
+            `TRUE` for UI active slide show
             <br>
-            <FALSE/> otherwise
+            `FALSE` otherwise
      */
     boolean isActive();
 
@@ -206,29 +206,29 @@ interface XSlideShowController
     long getNextSlideIndex();
 
 
-    /** returns <TRUE/> if the slide show was started to run endlessly.
+    /** returns `TRUE` if the slide show was started to run endlessly.
      */
     boolean isEndless();
 
 
-    /** Returns <TRUE/> if the slide show was started in full-screen mode.
+    /** Returns `TRUE` if the slide show was started in full-screen mode.
      */
     boolean isFullScreen();
 
 
-    /** If this attribute is set to <TRUE/>, the window of the slide show is
+    /** If this attribute is set to `TRUE`, the window of the slide show is
         always on top of all other windows.
      */
     [attribute] boolean AlwaysOnTop;
 
 
-    /** If this attribute is <TRUE/>, the mouse is visible during the
+    /** If this attribute is `TRUE`, the mouse is visible during the
         slide show.
      */
     [attribute] boolean MouseVisible;
 
 
-    /** If this is <TRUE/>, a pen is shown during presentation.
+    /** If this is `TRUE`, a pen is shown during presentation.
 
         <p>You can draw on the presentation with this pen.</p>
      */

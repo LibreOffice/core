@@ -104,7 +104,7 @@ published service UnoControlCheckBoxModel
         <p>If this property is present, it interacts with the #ImageURLin the
         following way:
         <ul><li>If #ImageURL is set, #Graphic will be reset
-            to an object as loaded from the given image URL, or <NULL/> if #ImageURL
+            to an object as loaded from the given image URL, or `NULL` if #ImageURL
             does not point to a valid image file.</li>
             <li>If #Graphic is set, #ImageURL will be reset
             to an empty string.</li>

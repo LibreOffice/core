@@ -52,9 +52,9 @@ interface XSlideShowListener : ::com::sun::star::animations::XAnimationListener
         e.g. the user has clicked on the slide.
         Calling displaySlide() twice will not issue this event.
         @param reverse
-            For the default order (forward) this flag is <FALSE/>.
+            For the default order (forward) this flag is `FALSE`.
             When the main sequence was traversed in reverse order then this
-            flag is <TRUE/>.
+            flag is `TRUE`.
     */
     void slideEnded( [in] boolean reverse );
 

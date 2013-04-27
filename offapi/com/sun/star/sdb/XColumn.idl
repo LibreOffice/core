@@ -58,7 +58,7 @@ published interface XColumn: com::sun::star::uno::XInterface
         <code>wasNull()</code>
         to see if the value read was SQL NULL.
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
      */

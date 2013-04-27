@@ -63,7 +63,7 @@ published struct MouseEvent: com::sun::star::awt::InputEvent
 
     /** specifies if this event is a pop-up menu trigger event.
 
-        <p>If this member is <TRUE/>, the event describes a request for a pop-up menu,
+        <p>If this member is `TRUE`, the event describes a request for a pop-up menu,
         also known as context menu, on an object.</p>
 
         <p>In this case, X and Y describe the position

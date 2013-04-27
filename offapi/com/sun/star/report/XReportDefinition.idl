@@ -172,7 +172,7 @@ interface XReportDefinition
     It then can be to used to specify whether the SQL statement should be analyzed on the
     client side before sending it to the database server.<br/>
     The default value for com::sun::star::sdbc::RowSet::EscapeProcessing
-    is <TRUE/>. By switching it to <FALSE/>, you can pass backend-specific SQL statements,
+    is `TRUE`. By switching it to `FALSE`, you can pass backend-specific SQL statements,
     which are not standard SQL, to your database.</p>
 
 
@@ -210,7 +210,7 @@ interface XReportDefinition
     /** specifies if the #Command should be analyzed on the client side before sending it
         to the database server.
 
-        <p>The default value of this property is <TRUE/>. By switching it to <FALSE/>, you can pass
+        <p>The default value of this property is `TRUE`. By switching it to `FALSE`, you can pass
         backend-specific SQL statements, which are not standard SQL, to your database.</p>
 
         <p>This property is usually present together with the #Command and
@@ -232,22 +232,22 @@ interface XReportDefinition
     [attribute,bound] string DataSourceName;
 
     /** Defines that the report header is on.
-        Default is <FALSE/>.
+        Default is `FALSE`.
     */
     [attribute,bound] boolean ReportHeaderOn;
 
     /** Defines that the report footer is on.
-        Default is <FALSE/>.
+        Default is `FALSE`.
     */
     [attribute,bound] boolean ReportFooterOn;
 
     /** Defines that the page header is on.
-        Default is <TRUE/>.
+        Default is `TRUE`.
     */
     [attribute,bound] boolean PageHeaderOn;
 
     /** Defines that the page footer is on.
-        Default is <TRUE/>.
+        Default is `TRUE`.
     */
     [attribute,bound] boolean PageFooterOn;
 
@@ -255,7 +255,7 @@ interface XReportDefinition
     */
     [attribute,readonly] com::sun::star::report::XGroups Groups;
 
-    /** returns the report header if the #ReportHeaderOnis <TRUE/>.
+    /** returns the report header if the #ReportHeaderOnis `TRUE`.
         @throws com::sun::star::container::NoSuchElementException
             If the report has the report header disabled.
         @see XSection
@@ -265,7 +265,7 @@ interface XReportDefinition
         get raises (com::sun::star::container::NoSuchElementException);
     };
 
-    /** returns the page header if the #PageHeaderOnis <TRUE/>.
+    /** returns the page header if the #PageHeaderOnis `TRUE`.
         @throws com::sun::star::container::NoSuchElementException
             If the report has the page header disabled.
         @see XSection
@@ -280,7 +280,7 @@ interface XReportDefinition
     */
     [attribute,readonly] com::sun::star::report::XSection Detail;
 
-    /** returns the page footer if the #PageFooterOnis <TRUE/>.
+    /** returns the page footer if the #PageFooterOnis `TRUE`.
         @throws com::sun::star::container::NoSuchElementException
             If the report has the page footer disabled.
         @see XSection
@@ -290,7 +290,7 @@ interface XReportDefinition
         get raises (com::sun::star::container::NoSuchElementException);
     };
 
-    /** returns the report footer if the #ReportFooterOnis <TRUE/>.
+    /** returns the report footer if the #ReportFooterOnis `TRUE`.
         @throws com::sun::star::container::NullPointerException
             If the report has the report footer disabled.
         @see XSection

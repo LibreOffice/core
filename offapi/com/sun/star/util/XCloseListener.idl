@@ -62,9 +62,9 @@ published interface XCloseListener: com::sun::star::lang::XEventListener
         <p>
         The parameter <var>GetsOwnership</var> regulate who has to try to close the listened object
         again, if this listener disagree with the request by throwing the exception.
-        If it's set to <FALSE/> the original caller of XCloseable::close()
+        If it's set to `FALSE` the original caller of XCloseable::close()
         will be the owner in every case. It's not allowed to call close() from this listener then.
-        If it's set to <TRUE/> this listener will be the new owner if he throw the exception,
+        If it's set to `TRUE` this listener will be the new owner if he throw the exception,
         otherwise not! If his still running processes will be finished he must call close() on
         listened object again then.
         </p>
@@ -79,10 +79,10 @@ published interface XCloseListener: com::sun::star::lang::XEventListener
             describes the source of the event (must be the listened object)
 
         @param GetsOwnership
-            <TRUE/> pass the ownership to this listener, if he throw the veto exception
+            `TRUE` pass the ownership to this listener, if he throw the veto exception
             (otherwise this parameter must be ignored!)
             <br>
-            <FALSE/> forbids to grab the ownership for the listened close object and call
+            `FALSE` forbids to grab the ownership for the listened close object and call
             close() on that any time.
 
         @throws CloseVetoException

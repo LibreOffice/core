@@ -43,7 +43,7 @@ published interface XSearchableDictionaryList : com::sun::star::linguistic2::XDi
     /** looks for an entry for a given word in the list of dictionaries.
 
         @returns
-            the dictionary entry that was found, <NULL/> otherwise.
+            the dictionary entry that was found, `NULL` otherwise.
 
         @param aWord
             the word (entry) to be looked for.
@@ -52,12 +52,12 @@ published interface XSearchableDictionaryList : com::sun::star::linguistic2::XDi
             the language of the word to be looked for.
 
         @param bSearchPosDic
-            <TRUE/> if only positive dictionaries should be searched.
-            <FALSE/> if only negative dictionaries should be searched.
+            `TRUE` if only positive dictionaries should be searched.
+            `FALSE` if only negative dictionaries should be searched.
 
         @param bSpellEntry
-            <TRUE/> if entries for purposes of spell checking are required.
-            <FALSE/> if only entries for hyphenation purposes are required.
+            `TRUE` if entries for purposes of spell checking are required.
+            `FALSE` if only entries for hyphenation purposes are required.
 */
     com::sun::star::linguistic2::XDictionaryEntry   queryDictionaryEntry(
         [in] string  aWord ,

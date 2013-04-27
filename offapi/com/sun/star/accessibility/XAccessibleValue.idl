@@ -59,8 +59,8 @@ interface XAccessibleValue : ::com::sun::star::uno::XInterface
             types for this argument is implementation dependent.
 
         @return
-            Returns <TRUE/> if the new value could successfully be set and
-            <FALSE/> otherwise.
+            Returns `TRUE` if the new value could successfully be set and
+            `FALSE` otherwise.
     */
     boolean setCurrentValue ([in] any aNumber);
 

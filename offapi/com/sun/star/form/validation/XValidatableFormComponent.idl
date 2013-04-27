@@ -87,7 +87,7 @@ interface XValidatableFormComponent : XValidatable
         of the validatable form component (the validity flag, or the value) changed.</p>
 
         @throws com::sun::star::lang::NullPointerException
-            if the given listener is <NULL/>
+            if the given listener is `NULL`
     */
     void    addFormComponentValidityListener( [in] XFormComponentValidityListener Listener )
                 raises( com::sun::star::lang::NullPointerException );
@@ -95,7 +95,7 @@ interface XValidatableFormComponent : XValidatable
     /** registers the given listener.
 
         @throws com::sun::star::lang::NullPointerException
-            if the given listener is <NULL/>
+            if the given listener is `NULL`
     */
     void    removeFormComponentValidityListener( [in] XFormComponentValidityListener Listener )
                 raises( com::sun::star::lang::NullPointerException );

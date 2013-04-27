@@ -82,7 +82,7 @@ published interface XHyphenatedWord : com::sun::star::uno::XInterface
          word is different from the word that was hyphenated.</p>
 
          @returns
-             <TRUE/> if it is an alternative spelling, <FALSE/> otherwise.
+             `TRUE` if it is an alternative spelling, `FALSE` otherwise.
     */
     boolean isAlternativeSpelling();
 

@@ -75,7 +75,7 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
         @param column
             the column which is used to create a filter
         @param  andCriteria
-            If <TRUE/> the filter condition will be appended as an AND condition, otherwise
+            If `TRUE` the filter condition will be appended as an AND condition, otherwise
             the new filter condition will be appended as OR criteria.
             E.g. (xx AND bb AND cc) OR newCriteria
         @param  filterOperator
@@ -144,7 +144,7 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
         @param column
             the column which is used to create a filter
         @param  andCriteria
-            If <TRUE/> the filter condition will be appended as an AND condition, otherwise
+            If `TRUE` the filter condition will be appended as an AND condition, otherwise
             the new filter condition will be appended as OR criteria.
             E.g. (xx AND bb AND cc) OR newCriteria
         @param  filterOperator
@@ -174,7 +174,7 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
         @param column
             the column which is used to create a order part
         @param  ascending
-            <TRUE/> when the order should be ascending, otherwise if <FALSE/> descending.
+            `TRUE` when the order should be ascending, otherwise if `FALSE` descending.
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
      */

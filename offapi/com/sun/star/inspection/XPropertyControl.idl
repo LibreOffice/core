@@ -68,9 +68,9 @@ interface XPropertyControl
     /** determines whether the control content is currently modified
 
         <p>An XPropertyControl internally manages a flag indicating whether
-        its content is modified. This flag is reset to <FALSE/> every time our
+        its content is modified. This flag is reset to `FALSE` every time our
         #ControlContext is notified of our current value. Also, the control
-        implementation must set this flag to <TRUE/> if and only if the user changed the
+        implementation must set this flag to `TRUE` if and only if the user changed the
         control content.</p>
 
         @see notifyModifiedValue
@@ -93,7 +93,7 @@ interface XPropertyControl
         <p>The ObjectInspector will automatically position and size this control
         as needed, care for its Z-order, and so on.</p>
 
-        <p>This Window must not be <NULL/>, else the whole control is not usable.</p>
+        <p>This Window must not be `NULL`, else the whole control is not usable.</p>
     */
     [attribute, readonly] com::sun::star::awt::XWindow ControlWindow;
 };

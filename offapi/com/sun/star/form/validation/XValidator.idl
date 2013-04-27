@@ -47,7 +47,7 @@ interface XValidator : com::sun::star::uno::XInterface
     @param aValue
         the value to check for validity
     @return
-        <TRUE/> if and only if the value is considered valid.
+        `TRUE` if and only if the value is considered valid.
     */
     boolean isValid( [in] any Value );
 
@@ -69,7 +69,7 @@ interface XValidator : com::sun::star::uno::XInterface
     call.</p>
 
     @throws com::sun::star::lang::NullPointerException
-        if the given listener is <NULL/>
+        if the given listener is `NULL`
     @see XValidityConstraintListener
     */
     void    addValidityConstraintListener( [in] XValidityConstraintListener Listener )
@@ -78,7 +78,7 @@ interface XValidator : com::sun::star::uno::XInterface
     /** revokes the given validity listener
 
     @throws com::sun::star::lang::NullPointerException
-        if the given listener is <NULL/>
+        if the given listener is `NULL`
     @see XValidityConstraintListener
     */
     void    removeValidityConstraintListener( [in] XValidityConstraintListener Listener )

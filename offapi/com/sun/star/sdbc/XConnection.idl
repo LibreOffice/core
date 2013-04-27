@@ -207,7 +207,7 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
         </p>
 
         @param autoCommit
-            <TRUE/> enables auto-commit; <FALSE/> disables auto-commit.
+            `TRUE` enables auto-commit; `FALSE` disables auto-commit.
         @throws SQLException
             if a database access error occurs.
      */
@@ -259,7 +259,7 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
         </p>
 
         @returns
-            <TRUE/> if the connection is closed; <FALSE/> if it's still open.
+            `TRUE` if the connection is closed; `FALSE` if it's still open.
         @throws SQLException
             if a database access error occurs.
      */
@@ -293,13 +293,13 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
         </b>
         This method cannot be called while in the
         middle of a transaction. Calling setReadOnly with
-        <TRUE/>
+        `TRUE`
         does not
         necessarily cause writes to be prohibited.
         </p>
 
         @param readONly
-            <TRUE/> enables read-only mode; <FALSE/> disables read-only mode.
+            `TRUE` enables read-only mode; `FALSE` disables read-only mode.
         @throws SQLException
             if a database access error occurs.
      */
@@ -307,7 +307,7 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
 
     /** tests to see if the connection is in read-only mode.
         @returns
-            <TRUE/> if connection is read-only and <FALSE/> otherwise.
+            `TRUE` if connection is read-only and `FALSE` otherwise.
         @throws SQLException
             if a database access error occurs.
      */

@@ -36,7 +36,7 @@ published struct TablePageBreakData
     long Position;
 
 
-    /** is <TRUE/> for a manual page break, <FALSE/> for an automatic one.
+    /** is `TRUE` for a manual page break, `FALSE` for an automatic one.
      */
     boolean ManualBreak;
 

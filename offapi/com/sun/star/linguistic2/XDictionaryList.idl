@@ -57,7 +57,7 @@ published interface XDictionaryList : com::sun::star::uno::XInterface
 
          @returns
             the XDictionary with the specified name. If no such
-            dictionary exists, <NULL/> will be returned.
+            dictionary exists, `NULL` will be returned.
 
         @param  aDictionaryName
             specifies the name of the dictionary to look for.
@@ -73,8 +73,8 @@ published interface XDictionaryList : com::sun::star::uno::XInterface
          event listeners of that dictionary.</P>
 
         @returns
-             <TRUE/> if the dictionary was added successfully,
-            <FALSE/> otherwise.
+             `TRUE` if the dictionary was added successfully,
+            `FALSE` otherwise.
 
         @param  xDictionary
             the dictionary to be added.
@@ -91,7 +91,7 @@ published interface XDictionaryList : com::sun::star::uno::XInterface
         dictionary event listeners of the dictionary.</P>
 
         @returns
-             <TRUE/> if the dictionary was removed successfully, <FALSE/>
+             `TRUE` if the dictionary was removed successfully, `FALSE`
              otherwise.
 
         @param  xDictionary
@@ -109,7 +109,7 @@ published interface XDictionaryList : com::sun::star::uno::XInterface
         com::sun::star::linguistic2::XDictionaryListEventListener::processDictionaryListEvent().</P>
 
         @returns
-            <TRUE/> if the entry was made, <FALSE/> otherwise.
+            `TRUE` if the entry was made, `FALSE` otherwise.
             If com::sun::star::lang::XEventListener::disposing()
             was called before, it will always fail.
 
@@ -117,7 +117,7 @@ published interface XDictionaryList : com::sun::star::uno::XInterface
             the object to be notified of dictionary-list events.
 
         @param  bReceiveVerbose
-            <TRUE/> if the listener requires more detailed event
+            `TRUE` if the listener requires more detailed event
             notification than usual.
 
         @see    com::sun::star::linguistic2::XDictionaryListEventListener
@@ -130,8 +130,8 @@ published interface XDictionaryList : com::sun::star::uno::XInterface
     /** removes an entry from the list of dictionary-list event listeners.
 
         @returns
-            <TRUE/> if the object to be removed was found and removed,
-            <FALSE/> otherwise.
+            `TRUE` if the object to be removed was found and removed,
+            `FALSE` otherwise.
 
         @param  xListener
             the object to be removed from the listener list.
@@ -194,7 +194,7 @@ published interface XDictionaryList : com::sun::star::uno::XInterface
 
         @returns
             an empty dictionary with the given name, language and type.
-             <NULL/> on failure.
+             `NULL` on failure.
 
         @param  aName
             is the name of the dictionary (should be unique).

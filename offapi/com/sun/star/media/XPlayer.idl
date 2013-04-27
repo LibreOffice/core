@@ -42,7 +42,7 @@ interface XPlayer
     /** indicates whether the stream is played or not.
 
         @returns
-            <TRUE/> if the stream is played, <FALSE/> otherwise
+            `TRUE` if the stream is played, `FALSE` otherwise
      */
     boolean isPlaying();
 
@@ -80,7 +80,7 @@ interface XPlayer
         start after the end of the stream.
 
         @param bSet
-            loops if set to <TRUE/>, otherwise stops at the end of the
+            loops if set to `TRUE`, otherwise stops at the end of the
             stream.
      */
     void setPlaybackLoop( [in] boolean bSet );
@@ -89,7 +89,7 @@ interface XPlayer
         end of the stream.
 
         @returns
-            <TRUE/> if the stream will loop, <FALSE/> otherwise.
+            `TRUE` if the stream will loop, `FALSE` otherwise.
      */
     boolean isPlaybackLoop();
 
@@ -110,8 +110,8 @@ interface XPlayer
     /** sets the volume to <code>0</code> or to its previous value.
 
         @param bSet
-            sets the volume to <code>0</code> if <TRUE/>, and switch
-            to the previous non-null value if <FALSE/>
+            sets the volume to <code>0</code> if `TRUE`, and switch
+            to the previous non-null value if `FALSE`
      */
     void setMute( [in] boolean bSet );
 
@@ -119,8 +119,8 @@ interface XPlayer
         or not.
 
         @returns
-            <TRUE/> if the volume is temporarily set to <code>0</code>,
-            <FALSE/> otherwise.
+            `TRUE` if the volume is temporarily set to <code>0</code>,
+            `FALSE` otherwise.
      */
     boolean isMute();
 

@@ -40,7 +40,7 @@
     </dd>
     <dt>    <b>isValid</b>
     </dt>
-    <dd> checks if the local registry is valid. If the interface is not <NULL/>
+    <dd> checks if the local registry is valid. If the interface is not `NULL`
     the local registry should always be valid.
     </dd>
     <dt>    <b>isReadOnly</b>  </dt>

@@ -47,8 +47,8 @@ sequence<string> getSupportedControls( );
         instance "OkButton" or "CancelButton".
 
     @returns
-        <TRUE/> if the specified control is supported.
-        <FALSE/> if the specified control is not supported.
+        `TRUE` if the specified control is supported.
+        `FALSE` if the specified control is not supported.
 */
 boolean isControlSupported( [in] string aControlName );
 
@@ -77,8 +77,8 @@ sequence<string> getSupportedControlProperties( [in] string aControlName )
         The control property to query for.
 
     @returns
-        <TRUE/> if the specified control action is supported.
-        <FALSE/> if the specified control action is not supported.
+        `TRUE` if the specified control action is supported.
+        `FALSE` if the specified control action is not supported.
 
     @throws com::sun::star::lang::IllegalArgumentException
         when the specified control is not supported.

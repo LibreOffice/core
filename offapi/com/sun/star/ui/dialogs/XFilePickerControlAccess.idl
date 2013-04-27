@@ -51,7 +51,7 @@ published interface XFilePickerControlAccess: com::sun::star::ui::dialogs::XFile
 
     @param aValue
     The value to set. For checkboxes aValue should be a boolean value that
-    should be <TRUE/> if the checkbox should be checked and <FALSE/> otherwise.
+    should be `TRUE` if the checkbox should be checked and `FALSE` otherwise.
 
     @see com::sun::star::ui::dialogs::CommonFilePickerElementIds
     @see com::sun::star::ui::dialogs::ExtendedFilePickerElementIds
@@ -71,8 +71,8 @@ void setValue( [in] short aControlId, [in] short aControlAction, [in] any aValue
 
     @returns
     The value of the specified element. If the specified control
-    is a checkbox the returned value is a boolean that is <TRUE/>
-    if the checkbox is checked <FALSE/> otherwise.
+    is a checkbox the returned value is a boolean that is `TRUE`
+    if the checkbox is checked `FALSE` otherwise.
     If the specified element doesn't exist or the specified element
     doesn't support the specified control action an empty any will be
     returned.
@@ -118,8 +118,8 @@ string getLabel( [in] short aControlId );
     Identifies the control.
 
     @param bEnable
-    <p>If <TRUE/> the specified control will be enabled.</p>
-    <p>If <FALSE/> the specified control will be disabled.</p>
+    <p>If `TRUE` the specified control will be enabled.</p>
+    <p>If `FALSE` the specified control will be disabled.</p>
 
     @see com::sun::star::ui::dialogs::CommonFilePickerElementIds
     @see com::sun::star::ui::dialogs::ExtendedFilePickerElementIds

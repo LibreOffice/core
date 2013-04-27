@@ -50,8 +50,8 @@ interface XBitmapPalette : ::com::sun::star::uno::XInterface
         The index of the palette entry to be retrieved. Valid range is
         [0,getNumberOfEntries()-1].
 
-        @return <TRUE/>, if the given palette entry should be displayed
-        opaque, and <FALSE/> if the entry should be displayed
+        @return `TRUE`, if the given palette entry should be displayed
+        opaque, and `FALSE` if the entry should be displayed
         transparent. This is sometimes used for so-called mask
         transparency, by flagging certain palette entries to be fully
         transparent when displaying the bitmap.
@@ -71,8 +71,8 @@ interface XBitmapPalette : ::com::sun::star::uno::XInterface
         device color format.
 
         @param transparency
-        When <TRUE/>, the specified palette entry is displayed as
-        opaque color. When <FALSE/>, the given entry displays as fully
+        When `TRUE`, the specified palette entry is displayed as
+        opaque color. When `FALSE`, the given entry displays as fully
         transparent during output.
 
         @param nIndex
@@ -80,7 +80,7 @@ interface XBitmapPalette : ::com::sun::star::uno::XInterface
         [0,getNumberOfEntries()-1].
 
         @return whether the palette entry was changed. For read-only
-        entries, this method always returns <FALSE/>.
+        entries, this method always returns `FALSE`.
 
         @throws com::sun::star::lang::IndexOutOfBoundsException
         if the index is smaller than zero or larger than

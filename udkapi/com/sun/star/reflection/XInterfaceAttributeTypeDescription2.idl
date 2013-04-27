@@ -41,7 +41,7 @@ interface XInterfaceAttributeTypeDescription2:
     /**
        Returns whether this object reflects a bound attribute.
 
-       @return <TRUE/> iff this object reflects a bound attribute
+       @return `TRUE` iff this object reflects a bound attribute
      */
     boolean isBound();
 

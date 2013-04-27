@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module frame { module status {
 struct Visibility
 {
 
-    /** <TRUE/> if the property is visible otherwise <FALSE/>.
+    /** `TRUE` if the property is visible otherwise `FALSE`.
      */
     boolean bVisible;
 };

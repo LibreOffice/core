@@ -63,7 +63,7 @@ published interface XGridColumn
 
     /** controls whether or not the column's width is fixed or not.
 
-        <p>If this is <TRUE/>, the user can interactively change the column's width. Also, the column is subject to
+        <p>If this is `TRUE`, the user can interactively change the column's width. Also, the column is subject to
         auto-resizing, if its #Flexibility attribute is greater <code>0</code>.</p>
     */
     [attribute] boolean Resizeable;
@@ -77,7 +77,7 @@ published interface XGridColumn
         other such columns, and the respective widths of the columns are changed in the same relationship.</p>
 
         <p>Note that a column's flexibility is ignored if its #Resizeable attribute is
-        <FALSE/>.</p>
+        `FALSE`.</p>
 
         <p>A column's flexibility cannot be negative, attempts to set a negative value will raise an exception.</p>
     */

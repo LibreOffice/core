@@ -38,8 +38,8 @@ published interface XSet: com::sun::star::container::XEnumerationAccess
 {
 
     /** @returns
-        <TRUE/> if the given element is a member of this container,
-        otherwise <FALSE/>.
+        `TRUE` if the given element is a member of this container,
+        otherwise `FALSE`.
      */
     boolean has( [in] any aElement );
 

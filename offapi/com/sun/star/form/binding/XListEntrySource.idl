@@ -62,7 +62,7 @@ interface XListEntrySource : com::sun::star::uno::XInterface
         reflected by the component.
 
         @throws com::sun::star::lang::NullPointerException
-            if the given listener is <NULL/>
+            if the given listener is `NULL`
     */
     void    addListEntryListener( [in] XListEntryListener Listener )
                 raises( com::sun::star::lang::NullPointerException );
@@ -71,7 +71,7 @@ interface XListEntrySource : com::sun::star::uno::XInterface
         be notified about changes in the entry list.
 
         @throws com::sun::star::lang::NullPointerException
-            if the given listener is <NULL/>
+            if the given listener is `NULL`
     */
     void    removeListEntryListener( [in] XListEntryListener Listener )
                 raises( com::sun::star::lang::NullPointerException );

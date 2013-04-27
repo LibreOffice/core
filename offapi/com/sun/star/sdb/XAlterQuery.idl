@@ -34,7 +34,7 @@ published interface XAlterQuery: com::sun::star::uno::XInterface
         @param command
             the SQL statement
         @param useEscapeProcessing
-            <TRUE/> when escape processing should be used
+            `TRUE` when escape processing should be used
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
      */

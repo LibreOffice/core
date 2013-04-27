@@ -56,7 +56,7 @@ published interface XDataPilotFieldGrouping: com::sun::star::uno::XInterface
 
         @returns
             the new created field if there is one created on the first call of
-            this method. <NULL/> is returned on subsequent calls.
+            this method. `NULL` is returned on subsequent calls.
 
         @see DataPilotField
         @see DataPilotFieldGroupInfo
@@ -80,29 +80,29 @@ published interface XDataPilotFieldGrouping: com::sun::star::uno::XInterface
 
             <ul>
             <li>If the member <member>DataPilotFieldGroupInfo::HasAutoStart
-            </member> is set to <FALSE/>, then the value of <member>
+            </member> is set to `FALSE`, then the value of <member>
             DataPilotFieldGroupInfo::Start</member> must be a floating-point
             value representing a valid date/time value (if <member>
-            DataPilotFieldGroupInfo::HasAutoStart</member> is set to <TRUE/>,
+            DataPilotFieldGroupInfo::HasAutoStart</member> is set to `TRUE`,
             the value of DataPilotFieldGroupInfo::Start will
             be ignored).</li>
 
             <li>If the member <member>DataPilotFieldGroupInfo::HasAutoEnd
-            </member> is set to <FALSE/>, then the value of <member>
+            </member> is set to `FALSE`, then the value of <member>
             DataPilotFieldGroupInfo::End</member> must be a floating-point
             value representing a valid date/time value( if <member>
-            DataPilotFieldGroupInfo::HasAutoEnd</member> is set to <TRUE/>,
+            DataPilotFieldGroupInfo::HasAutoEnd</member> is set to `TRUE`,
             the value of DataPilotFieldGroupInfo::End will be
             ignored).</li>
 
             <li>If the members <member>DataPilotFieldGroupInfo::HasAutoStart
             </member> and DataPilotFieldGroupInfo::HasAutoEnd
-            are set to <FALSE/> both, then the value of <member>
+            are set to `FALSE` both, then the value of <member>
             DataPilotFieldGroupInfo::Start</member> must be less than or equal
             to the value of DataPilotFieldGroupInfo::End.</li>
 
             <li>The member DataPilotFieldGroupInfo::HasDateValues
-            must be set to <TRUE/>.</li>
+            must be set to `TRUE`.</li>
 
             <li>The member DataPilotFieldGroupInfo::Step must
             be zero, unless ranges of days have to be grouped (see the
@@ -131,7 +131,7 @@ published interface XDataPilotFieldGrouping: com::sun::star::uno::XInterface
             </ul>
 
         @returns
-            the new created field if there is one created. <NULL/> is returned,
+            the new created field if there is one created. `NULL` is returned,
             if date grouping is performed inside this field (i.e. this field
             was not grouped by dates before).
 

@@ -55,7 +55,7 @@ published interface XAsyncJob : com::sun::star::uno::XInterface
             function XJobListener::jobFinished().
 
         @param Listener
-            specifies a listener which should be notified on events. May be <NULL/>.
+            specifies a listener which should be notified on events. May be `NULL`.
 
         @throws com::sun::star::lang::IllegalArgumentException
             if some of given arguments doesn't fill out the service specification or

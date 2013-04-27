@@ -93,9 +93,9 @@ published service TablePageStyle
 
     /** specifies the print order for the pages within each sheet.
 
-        <p>If <TRUE/>, the order for printing pages begins with
+        <p>If `TRUE`, the order for printing pages begins with
         top-to-bottom, then continues with the next set of cell columns
-        to the right. If <FALSE/>, the order for printing pages begins
+        to the right. If `FALSE`, the order for printing pages begins
         with left-to-right, then continues with the next set of cell
         rows to the bottom.</p>
      */

@@ -64,8 +64,8 @@ published interface XDropTargetDropContext : com::sun::star::uno::XInterface
     /** Signals that the drop is completed and if it was successful or not.
 
         @param success
-        A value of <TRUE/> means the drop completed successfully
-        <p>A value of <FALSE/> means the drop completed unsuccessfully.</p>
+        A value of `TRUE` means the drop completed successfully
+        <p>A value of `FALSE` means the drop completed unsuccessfully.</p>
     */
 
     void dropComplete( [in] boolean success );

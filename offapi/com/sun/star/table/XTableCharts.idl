@@ -50,11 +50,11 @@ published interface XTableCharts: com::sun::star::container::XNameAccess
             all cell ranges containing the source data of the chart.
 
         @param bColumnHeaders
-            if set to <TRUE/>, the topmost row of the source data will be
+            if set to `TRUE`, the topmost row of the source data will be
             used to set labels for the category axis or the legend.
 
         @param bRowHeaders
-            if set to <TRUE/>, the leftmost column of the source data will
+            if set to `TRUE`, the leftmost column of the source data will
             be used to set labels for the category axis or the legend.
      */
     void addNewByName(

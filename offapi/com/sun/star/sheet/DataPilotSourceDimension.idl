@@ -78,12 +78,12 @@ service DataPilotSourceDimension
 
 
     /** returns the name of the dimension from which this dimension was
-        cloned, or <NULL/> if it was not cloned.
+        cloned, or `NULL` if it was not cloned.
      */
     [readonly, property] com::sun::star::container::XNamed Original;
 
 
-    /** contains <TRUE/> if this is the dimension used to layout the
+    /** contains `TRUE` if this is the dimension used to layout the
         different data dimensions.
      */
     [readonly, property] boolean IsDataLayoutDimension;

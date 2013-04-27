@@ -29,7 +29,7 @@
 
     <p>
     Please use the service Frame instead of this deprecated Task. If it's
-    method XFrame.isTop() returns <TRUE/>, it's the same
+    method XFrame.isTop() returns `TRUE`, it's the same
     as a check for the Task service.
     </p>
 

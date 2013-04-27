@@ -69,7 +69,7 @@ interface XDataInterpreter  : ::com::sun::star::uno::XInterface
         without data loss.
 
         @return
-            <TRUE/>, if the data given in
+            `TRUE`, if the data given in
             <code>aInterpretedData</code> has a similar structure than
             the one required is used as output of the data interpreter.
      */

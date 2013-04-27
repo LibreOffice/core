@@ -83,7 +83,7 @@ service ConfigurableUIElement
     /** specifies the configuration source of this user interface element.
 
         <p>
-        If the property #Persistent is <TRUE/> changes on the structure of
+        If the property #Persistent is `TRUE` changes on the structure of
         the user interface element are written back to configuration source. When this property is
         changed, afterwards XUIElementSettings::updateSettings()  must be called so
         the user interface element tries to retrieve its settings from the new user interface

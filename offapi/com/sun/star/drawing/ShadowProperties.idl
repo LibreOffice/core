@@ -33,7 +33,7 @@ published service ShadowProperties
 
     /** enables/disables the shadow of a Shape.
         <p>The other shadow properties are only applied if this is
-        set to <TRUE/>.</p>
+        set to `TRUE`.</p>
      */
     [property] boolean Shadow;
 

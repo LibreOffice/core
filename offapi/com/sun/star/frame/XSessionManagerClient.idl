@@ -82,8 +82,8 @@ module com {  module sun {  module star {  module frame {
         /** Call cancelShutdown to try to cancel a desktop shutdown in progress
 
         @returns
-        <TRUE/> if shutdown was canceled,
-        <FALSE/> else.
+        `TRUE` if shutdown was canceled,
+        `FALSE` else.
         */
         boolean cancelShutdown();
     };

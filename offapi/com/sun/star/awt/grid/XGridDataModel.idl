@@ -65,7 +65,7 @@ published interface XGridDataModel
 
         <p>At the moment, only string tool tips are supported.</p>
 
-        <p>If <VOID/> is returned here, the cell's content will be displayed as tip, but only if it does
+        <p>If `VOID` is returned here, the cell's content will be displayed as tip, but only if it does
         not fit into the cell.</p>
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException

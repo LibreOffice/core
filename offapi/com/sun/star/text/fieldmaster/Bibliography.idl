@@ -34,12 +34,12 @@ published service Bibliography
 {
     service  com::sun::star::text::TextFieldMaster;
 
-    /** determines whether the bibliography text fields are numbered. If <FALSE/> the
+    /** determines whether the bibliography text fields are numbered. If `FALSE` the
      short name of the bibliography entry is displayed instead.
      */
     [property] boolean IsNumberEntries;
     /** determines whether the bibliography entries in a bibliography index are sorted
-     by the document position. If <FALSE/> the SortKey property determines the
+     by the document position. If `FALSE` the SortKey property determines the
      sorting of the entries.
      */
     [property] boolean IsSortByPosition;

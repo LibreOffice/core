@@ -41,8 +41,8 @@ published interface XSubTotalCalculatable: com::sun::star::uno::XInterface
     /** creates a subtotal descriptor.
 
         @param bEmpty
-            if set to <TRUE/>, creates an empty descriptor. If set to
-            <FALSE/>, fills the descriptor with previous settings of the
+            if set to `TRUE`, creates an empty descriptor. If set to
+            `FALSE`, fills the descriptor with previous settings of the
             current object (i.e. a database range).
      */
     com::sun::star::sheet::XSubTotalDescriptor createSubTotalDescriptor(
@@ -56,7 +56,7 @@ published interface XSubTotalCalculatable: com::sun::star::uno::XInterface
             operation.
 
         @param bReplace
-            if set to <TRUE/>, replaces previous subtotal results.
+            if set to `TRUE`, replaces previous subtotal results.
      */
     void applySubTotals(
             [in] com::sun::star::sheet::XSubTotalDescriptor xDescriptor,

@@ -92,12 +92,12 @@ published interface XFilePreview: com::sun::star::uno::XInterface
         that the preview implementation doesn't support hiding the preview.
 
         @param bShowState
-        A value of <TRUE/> shows the preview window.
-        <p>A value of <FALSE/> hides the preview window.</p>
+        A value of `TRUE` shows the preview window.
+        <p>A value of `FALSE` hides the preview window.</p>
 
         @returns
-        A value of <TRUE/> on success.
-        <p>A value of <FALSE/> if the operation fails for any reason or the preview
+        A value of `TRUE` on success.
+        <p>A value of `FALSE` if the operation fails for any reason or the preview
         implementation doesn't support hiding the preview.</p>
     */
     boolean setShowState( [in] boolean bShowState );
@@ -105,8 +105,8 @@ published interface XFilePreview: com::sun::star::uno::XInterface
     /** Returns the current show state of the preview.
 
         @returns
-        A value of <TRUE/> if the preview window is visible.
-        <p>A value of <FALSE/> if the preview window is invisible.</p>
+        A value of `TRUE` if the preview window is visible.
+        <p>A value of `FALSE` if the preview window is invisible.</p>
     */
     boolean getShowState( );
 };

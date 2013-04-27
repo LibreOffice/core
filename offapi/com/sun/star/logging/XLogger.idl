@@ -67,7 +67,7 @@ interface XLogger
 
         @param LogHandler
             the handler to add to the list of handlers. The call is ignored if this
-            parameter is <NULL/>.
+            parameter is `NULL`.
     */
     void    addLogHandler( [in] XLogHandler LogHandler );
 
@@ -75,7 +75,7 @@ interface XLogger
 
         @param LogHandler
             the handler to remove from the list of handlers. The call is ignored if this
-            parameter is <NULL/>, or if the handler has not previously been added.
+            parameter is `NULL`, or if the handler has not previously been added.
     */
     void    removeLogHandler( [in] XLogHandler LogHandler );
 
@@ -88,8 +88,8 @@ interface XLogger
             level to be checked against
 
         @returns
-            <TRUE/> if there would be some output for this XLogger for the given level, <FALSE/>
-            otherwise. Note that a return value of <FALSE/> could also indicate that the logger
+            `TRUE` if there would be some output for this XLogger for the given level, `FALSE`
+            otherwise. Note that a return value of `FALSE` could also indicate that the logger
             does not have any log handlers associated with it.
 
         @see addLogHandler

@@ -250,7 +250,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         in the range 0 up to the number of characters in the string.
 
         @param bExcludeLigatures
-        Set this to <TRUE/>, to skip the positions inside ligatures as
+        Set this to `TRUE`, to skip the positions inside ligatures as
         valid caret placements. That means, on cannot e.g. set the
         caret between the "f" and the "i" in a "fi" ligature.
 

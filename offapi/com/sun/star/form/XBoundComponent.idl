@@ -46,7 +46,7 @@ published interface XBoundComponent: com::sun::star::form::XUpdateBroadcaster
     /** commits the content of the component into the data source it is bound to.
 
         @returns
-            <TRUE/> when the commitment was successful, otherwise <FALSE/>.
+            `TRUE` when the commitment was successful, otherwise `FALSE`.
      */
     boolean commit();
 

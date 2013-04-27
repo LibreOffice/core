@@ -97,7 +97,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
             </p>
 
         @param bClear
-            if <TRUE/>, specifies that the node should be cleared to an empty
+            if `TRUE`, specifies that the node should be cleared to an empty
             state by removing all non-mandatory children from lower layers prior
             to applying the overrides.
 
@@ -306,7 +306,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
             </p>
 
         @param bClear
-            if <TRUE/>, specifies that the property should be cleared to an empty
+            if `TRUE`, specifies that the property should be cleared to an empty
             state by discarding all values from lower layers prior
             to applying the overrides.
 

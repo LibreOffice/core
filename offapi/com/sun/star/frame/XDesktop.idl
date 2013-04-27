@@ -54,9 +54,9 @@ published interface XDesktop: com::sun::star::uno::XInterface
         </p>
 
         @return
-            <TRUE/>if all listener agree with this request
+            `TRUE`if all listener agree with this request
             <br>
-            <FALSE/>otherwise
+            `FALSE`otherwise
 
         @see XTerminateListener
         @see TerminationVetoException

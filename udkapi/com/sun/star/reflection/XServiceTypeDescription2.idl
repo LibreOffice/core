@@ -40,8 +40,8 @@ interface XServiceTypeDescription2: XServiceTypeDescription {
        Returns whether this object reflects a single-interface&ndash;based
        service.
 
-       @return <TRUE/> if this object reflects a single-interface&ndash;based
-           service, and <FALSE/> if this object reflects an obsolete,
+       @return `TRUE` if this object reflects a single-interface&ndash;based
+           service, and `FALSE` if this object reflects an obsolete,
            accumulation-based service
      */
     boolean isSingleInterfaceBased();
@@ -55,7 +55,7 @@ interface XServiceTypeDescription2: XServiceTypeDescription {
            or, in case of a typedef, <type
            scope="com::sun::star::reflection">XIndirectTypeDescription</type>),
            for a single-interface&ndash;based service; for an obsolete,
-           accumulation-based service, <NULL/> is returned
+           accumulation-based service, `NULL` is returned
      */
     XTypeDescription getInterface();
 

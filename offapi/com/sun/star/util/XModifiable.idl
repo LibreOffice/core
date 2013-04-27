@@ -36,7 +36,7 @@ module com {  module sun {  module star {  module util {
 published interface XModifiable: com::sun::star::util::XModifyBroadcaster
 {
     /** @returns
-                <TRUE/> if the object is modified.
+                `TRUE` if the object is modified.
 
         <p>The modification is always in relation to a certain state
         (i.e., the initial, loaded, or last stored version).

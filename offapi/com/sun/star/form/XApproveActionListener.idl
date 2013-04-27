@@ -46,7 +46,7 @@ published interface XApproveActionListener: com::sun::star::lang::XEventListener
             A descriptor specifying the source of the event.
 
         @returns
-            <TRUE/> when the action is permitted, otherwise <FALSE/>.
+            `TRUE` when the action is permitted, otherwise `FALSE`.
      */
     boolean approveAction( [in] com::sun::star::lang::EventObject aEvent );
 

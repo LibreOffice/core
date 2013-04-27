@@ -98,7 +98,7 @@ service DataPointProperties
     [property] string HatchName;
     [property] string FillBitmapName;
 
-    /** If <TRUE/>, fills the background of a hatch with the color
+    /** If `TRUE`, fills the background of a hatch with the color
         given in the #Color property.
      */
     [property] boolean FillBackground;
@@ -200,10 +200,10 @@ service DataPointProperties
     /** specifies if the size is given in percentage or
         as an absolute value.
 
-        <p>If this is <TRUE/>, the properties FillBitmapSizeX
+        <p>If this is `TRUE`, the properties FillBitmapSizeX
         and  FillBitmapSizeY contain the size of the tile in percent
         of the size of the original bitmap. If this
-        is <FALSE/>, the size of the tile is specified
+        is `FALSE`, the size of the tile is specified
         with 1/100th mm.
     */
     [property] boolean FillBitmapLogicalSize;

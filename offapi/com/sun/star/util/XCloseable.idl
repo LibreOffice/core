@@ -75,13 +75,13 @@ published interface XCloseable: XCloseBroadcaster
         <p>
         If somewhere disagree with a CloseVetoException it will not clear who has to close the object again
         after still running processes was finished. The parameter <var>DeliverOwnership</var> regulate that.
-        If it is set to <FALSE/> the caller of the method close() will be the owner of this object in every case.
+        If it is set to `FALSE` the caller of the method close() will be the owner of this object in every case.
         Then it's not allowed to call close() from any other place (may a registered XCloseListener).
-        If it is set to <TRUE/> the caller gives up his ownership. If a XCloseListener throw the veto exception
+        If it is set to `TRUE` the caller gives up his ownership. If a XCloseListener throw the veto exception
         he will be the new owner of the closing object. This information is passed to the listener by a parameter of
         his notification method XCloseListener::queryClosing(). After his operations was finished
         he MUST try to close it again. If the closing object itself disagree by an exception and the parameter
-        <var>DeliverOwnership</var> was set to <TRUE/> the object will be his own owner with all consequences of that.
+        <var>DeliverOwnership</var> was set to `TRUE` the object will be his own owner with all consequences of that.
         <br><strong>Note:</strong><br>
         There is no way to get the ownership back if it was delivered!
         </p>
@@ -94,10 +94,10 @@ published interface XCloseable: XCloseBroadcaster
         </p>
 
         @param DeliverOwnership
-                <TRUE/> delegates the ownership of this closing object to any one which throw the CloseVetoException.
+                `TRUE` delegates the ownership of this closing object to any one which throw the CloseVetoException.
                 This new owner has to close the closing object again if his still running processes will be finished.
                 <br>
-                <FALSE/> let the ownership at the original one which called the close() method. He must react for possible
+                `FALSE` let the ownership at the original one which called the close() method. He must react for possible
                 CloseVetoExceptions and try it again at a later time. This can be useful for a generic UI handling.
 
         @throws CloseVetoException

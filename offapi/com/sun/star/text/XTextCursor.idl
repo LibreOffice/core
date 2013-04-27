@@ -56,12 +56,12 @@ published interface XTextCursor: com::sun::star::text::XTextRange
             be expanded or not.
 
         @returns
-            <TRUE/> if the command was successfully completed.
-            <FALSE/> otherwise.
+            `TRUE` if the command was successfully completed.
+            `FALSE` otherwise.
 
             <p>Note: Even if the command was not completed successfully
             it may be completed partially. E.g. if it was required to move
-            5 characters but it is only possible to move 3 <FALSE/> will
+            5 characters but it is only possible to move 3 `FALSE` will
             be returned and the cursor moves only those 3 characters.<p>
      */
     boolean goLeft( [in] short nCount,
@@ -78,12 +78,12 @@ published interface XTextCursor: com::sun::star::text::XTextRange
             be expanded or not.
 
         @returns
-            <TRUE/> if the command was successfully completed.
-            <FALSE/> otherwise.
+            `TRUE` if the command was successfully completed.
+            `FALSE` otherwise.
 
             <p>Note: Even if the command was not completed successfully
             it may be completed partially. E.g. if it was required to move
-            5 characters but it is only possible to move 3 <FALSE/> will
+            5 characters but it is only possible to move 3 `FALSE` will
             be returned and the cursor moves only those 3 characters.<p>
      */
     boolean goRight( [in] short nCount,

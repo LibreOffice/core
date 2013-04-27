@@ -53,7 +53,7 @@ published interface XCompatibilityNames: com::sun::star::uno::XInterface
         <p>If a locale is not present in the sequence of compatibility names,
         the first entry of the sequence is used. So the method should return
         a sequence which contains first the entry representing the current
-        locale.<TRUE/></p>
+        locale.`TRUE`</p>
 
         @param aProgrammaticName
             is the exact name of a method within its interface.

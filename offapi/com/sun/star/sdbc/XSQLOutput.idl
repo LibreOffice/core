@@ -197,7 +197,7 @@ published interface XSQLOutput: com::sun::star::uno::XInterface
         >When the
         <code>XSQLData</code>
         object is
-        <NULL/>
+        `NULL`
         , this method writes an SQL NULL to the stream.
         Otherwise, it calls the
         com::sun::star::sdbc::XSQLData::writeSQL()

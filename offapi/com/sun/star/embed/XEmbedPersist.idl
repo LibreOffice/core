@@ -196,8 +196,8 @@ published interface XEmbedPersist: XCommonEmbedPersist
         after "save as" operation.
 
         @param bUseNew
-            <TRUE/> the new storage should be used
-            <FALSE/> the old one
+            `TRUE` the new storage should be used
+            `FALSE` the old one
 
         @throws com::sun::star::embed::WrongStateException
             the object is in wrong state
@@ -213,8 +213,8 @@ published interface XEmbedPersist: XCommonEmbedPersist
     /** allows to detect if the object has entry.
 
         @returns
-            <TRUE/> if the object has own entry set
-            <FALSE/> otherwise
+            `TRUE` if the object has own entry set
+            `FALSE` otherwise
      */
     boolean hasEntry()
         raises( ::com::sun::star::embed::WrongStateException );

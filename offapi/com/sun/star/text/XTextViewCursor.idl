@@ -32,7 +32,7 @@
 published interface XTextViewCursor: com::sun::star::text::XTextCursor
 {
     /** @returns
-                <TRUE/> if this cursor is visible for the user.
+                `TRUE` if this cursor is visible for the user.
      */
     boolean isVisible();
 

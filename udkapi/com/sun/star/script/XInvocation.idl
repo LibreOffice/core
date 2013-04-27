@@ -44,7 +44,7 @@
  */
 published interface XInvocation: com::sun::star::uno::XInterface
 {
-    /** returns the introspection from this object or <NULL/>
+    /** returns the introspection from this object or `NULL`
         if the object does not provide this information.
      */
     com::sun::star::beans::XIntrospectionAccess getIntrospection();
@@ -95,7 +95,7 @@ published interface XInvocation: com::sun::star::uno::XInterface
     any getValue( [in] string aPropertyName )
             raises( com::sun::star::beans::UnknownPropertyException );
 
-    /** returns <TRUE/> if the method with the specified name exists, else <FALSE/>.
+    /** returns `TRUE` if the method with the specified name exists, else `FALSE`.
 
         <p>This optimizes the calling sequence
         ( XInvocation::hasMethod(),
@@ -106,7 +106,7 @@ published interface XInvocation: com::sun::star::uno::XInterface
      */
     boolean hasMethod( [in] string aName );
 
-    /** returns <TRUE/> if the property with the specified name exists, else <FALSE/>.
+    /** returns `TRUE` if the property with the specified name exists, else `FALSE`.
 
                 <p>This optimizes the calling sequence
                 ( XInvocation::hasProperty(),

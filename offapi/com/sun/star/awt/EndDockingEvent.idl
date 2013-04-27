@@ -36,7 +36,7 @@ struct EndDockingEvent: com::sun::star::lang::EventObject
     com::sun::star::awt::Rectangle WindowRectangle;
 
 
-    /** specifies if the window is now floating <TRUE/> or docked <FALSE/>
+    /** specifies if the window is now floating `TRUE` or docked `FALSE`
      */
     boolean bFloating;
 

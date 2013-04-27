@@ -41,9 +41,9 @@ service DefaultHelpProvider : com::sun::star::uno::XInterface
     /** creates a help provider instance
         @param InspectorUI
             provides access to the UI of the ObjectInspector which should be
-            observed. Must not be <NULL/>.
+            observed. Must not be `NULL`.
         @throws ::com::sun::star::lang::IllegalArgumentException
-            if the given inspector UI is <NULL/>.
+            if the given inspector UI is `NULL`.
     */
     create( [in] XObjectInspectorUI InspectorUI )
         raises ( ::com::sun::star::lang::IllegalArgumentException );

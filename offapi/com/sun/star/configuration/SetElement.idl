@@ -103,14 +103,14 @@ published service SetElement
  <p>In this service, this interface is mandatory</p>
 
  <p>com::sun::star::container::XChild::getParent()
- returns <NULL/>, if the object is currently not contained in a container.
+ returns `NULL`, if the object is currently not contained in a container.
  </p>
 
  <p>An implementation may also support
  com::sun::star::container::XChild::setParent().
  If it does, changing the parent has the effect of first removing the object
  from its old parent (if any) and then inserting it into the new parent
- (unless that is <NULL/>) under the same name. The new parent must be part of
+ (unless that is `NULL`) under the same name. The new parent must be part of
  the same hierarchy as the old one. The name of the object must have been set
  before.
  </p>
@@ -123,7 +123,7 @@ published service SetElement
  com::sun::star::lang::XComponent::dispose(), only if
  the object is currently not contained in a container (
  com::sun::star::container::XChild::getParent()
- returns <NULL/>).
+ returns `NULL`).
  </p>
 
  <p>Clients may register an com::sun::star::lang::XEventListener

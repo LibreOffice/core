@@ -49,7 +49,7 @@ interface XAnimatedImages
     /** specifies whether the animation should start over with the first image of the image series when the last image
         has been played.
 
-        <p>The default value for this attribute is <TRUE/>.</p>
+        <p>The default value for this attribute is `TRUE`.</p>
     */
     [attribute] boolean AutoRepeat;
 

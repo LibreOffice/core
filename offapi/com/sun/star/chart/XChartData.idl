@@ -81,7 +81,7 @@ published interface XChartData: com::sun::star::uno::XInterface
         result!</p>
 
         @returns
-            <TRUE/> if the number given is interpreted by the chart as
+            `TRUE` if the number given is interpreted by the chart as
             a missing value.
 
         @param nNumber

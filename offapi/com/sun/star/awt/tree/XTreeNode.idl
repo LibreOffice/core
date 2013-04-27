@@ -54,8 +54,8 @@ interface XTreeNode
     */
     long getIndex( [in] XTreeNode Node);
 
-    /** Returns <TRUE/> if the children of this node are created on demand.
-        <p>A TreeControl will handle a node that returns <TRUE/> always
+    /** Returns `TRUE` if the children of this node are created on demand.
+        <p>A TreeControl will handle a node that returns `TRUE` always
         like a node that has child nodes, even if getChildCount()
         returns 0.</p>
 

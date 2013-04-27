@@ -40,12 +40,12 @@ published interface XViewCursor: com::sun::star::uno::XInterface
             specifies the number of lines to go down.
 
         @param bExpand
-            determines whether the text range of the cursor is expanded (<TRUE/>)
-            or the cursor will be just at the new position after the move (<FALSE/>).
+            determines whether the text range of the cursor is expanded (`TRUE`)
+            or the cursor will be just at the new position after the move (`FALSE`).
 
         @returns
-            <TRUE/> if the cursor was moved,
-            or <FALSE/> if it was already in the bottom row.
+            `TRUE` if the cursor was moved,
+            or `FALSE` if it was already in the bottom row.
      */
     boolean goDown( [in] short nCount, [in] boolean bExpand );
 
@@ -55,11 +55,11 @@ published interface XViewCursor: com::sun::star::uno::XInterface
             specifies the number of lines to go up.
 
         @param bExpand
-            determines whether the text range of the cursor is expanded (<TRUE/>)
+            determines whether the text range of the cursor is expanded (`TRUE`)
 
         @returns
-            <TRUE/> if the cursor was moved,
-            or <FALSE/> if it was already in the top row.
+            `TRUE` if the cursor was moved,
+            or `FALSE` if it was already in the top row.
      */
     boolean goUp( [in] short nCount, [in] boolean bExpand );
 
@@ -69,11 +69,11 @@ published interface XViewCursor: com::sun::star::uno::XInterface
             specifies the number of characters to move.
 
         @param bExpand
-            determines whether the text range of the cursor is expanded (<TRUE/>)
+            determines whether the text range of the cursor is expanded (`TRUE`)
 
         @returns
-            <TRUE/> if the cursor was moved,
-            or <FALSE/> if it was already at the leftmost position.
+            `TRUE` if the cursor was moved,
+            or `FALSE` if it was already at the leftmost position.
      */
     boolean goLeft( [in] short nCount, [in] boolean bExpand );
 
@@ -83,11 +83,11 @@ published interface XViewCursor: com::sun::star::uno::XInterface
             specifies the number of characters to move.
 
         @param bExpand
-            determines whether the text range of the cursor is expanded (<TRUE/>)
+            determines whether the text range of the cursor is expanded (`TRUE`)
 
         @returns
-            <TRUE/> if the cursor was moved,
-            or <FALSE/> if it was already at the rightmost position.
+            `TRUE` if the cursor was moved,
+            or `FALSE` if it was already at the rightmost position.
      */
     boolean goRight( [in] short nCount, [in] boolean bExpand );
 

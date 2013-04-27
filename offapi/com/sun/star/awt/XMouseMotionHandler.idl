@@ -42,9 +42,9 @@ published interface XMouseMotionHandler: com::sun::star::lang::XEventListener
         bounds of the window).</p>
 
         @return
-            When <FALSE/> is returned the other handlers are called and a
+            When `FALSE` is returned the other handlers are called and a
             following handling of the event by the broadcaster takes place.
-            Otherwise, when <TRUE/> is returned, no other handler will be
+            Otherwise, when `TRUE` is returned, no other handler will be
             called and the broadcaster will take no further actions
             regarding the event.
 
@@ -56,9 +56,9 @@ published interface XMouseMotionHandler: com::sun::star::lang::XEventListener
         (with no buttons down).
 
         @return
-            When <FALSE/> is returned the other handlers are called and a
+            When `FALSE` is returned the other handlers are called and a
             following handling of the event by the broadcaster takes place.
-            Otherwise, when <TRUE/> is returned, no other handler will be
+            Otherwise, when `TRUE` is returned, no other handler will be
             called and the broadcaster will take no further actions
             regarding the event.
 

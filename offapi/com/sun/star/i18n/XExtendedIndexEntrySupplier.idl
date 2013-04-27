@@ -79,8 +79,8 @@ published interface XExtendedIndexEntrySupplier : ::com::sun::star::i18n::XIndex
             comparing index entries
 
         @return
-            <TRUE/> if algorithm successfully loaded,
-            <FALSE/> else.
+            `TRUE` if algorithm successfully loaded,
+            `FALSE` else.
      */
     boolean loadAlgorithm( [in] com::sun::star::lang::Locale aLocale,
                     [in] string aIndexAlgorithm,

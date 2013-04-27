@@ -55,7 +55,7 @@ published interface XLayerImporter : ::com::sun::star::uno::XInterface
             imported by <method>XLayerImporter::importLayer()<method/>.
 
         @throws com::sun::star::lang::NullPointerException
-            if the backend passed is <NULL/>.
+            if the backend passed is `NULL`.
     */
     void setTargetBackend([in] XBackend aBackend)
         raises (com::sun::star::lang::NullPointerException) ;
@@ -69,7 +69,7 @@ published interface XLayerImporter : ::com::sun::star::uno::XInterface
             a layer whose data will be imported into the backend
 
         @throws com::sun::star::lang::NullPointerException
-            if the layer passed is <NULL/> or no backend is available.
+            if the layer passed is `NULL` or no backend is available.
 
         @throws com::sun::star::configuration::backend::MalformedDataException
             if the layer passed is invalid
@@ -101,7 +101,7 @@ published interface XLayerImporter : ::com::sun::star::uno::XInterface
             a entity into whose data the layer will be imported
 
         @throws com::sun::star::lang::NullPointerException
-            if the layer passed is <NULL/> or no backend is available.
+            if the layer passed is `NULL` or no backend is available.
 
         @throws com::sun::star::configuration::backend::MalformedDataException
             if the layer passed is invalid

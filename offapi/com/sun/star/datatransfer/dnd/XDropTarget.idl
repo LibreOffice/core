@@ -70,8 +70,8 @@ published interface XDropTarget: com::sun::star::uno::XInterface
     /** Sets the drop target object active or inactive.
 
         @param active
-        A value of <TRUE/> sets the drop target object active.
-        <p>A value of <FALSE/> sets the drop target object inactive.
+        A value of `TRUE` sets the drop target object active.
+        <p>A value of `FALSE` sets the drop target object inactive.
     */
 
     void setActive( [in] boolean active );

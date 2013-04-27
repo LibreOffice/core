@@ -41,7 +41,7 @@ published service EditTime
         will be overridden by the current author
         each time the document is saved.
      */
-    /** If this flag is set to <FALSE/> the date or time
+    /** If this flag is set to `FALSE` the date or time
         is always displayed as the current date or time.
 
     @since OOo 1.1.2

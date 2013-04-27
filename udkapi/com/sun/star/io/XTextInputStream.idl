@@ -78,8 +78,8 @@ published interface XTextInputStream: com::sun::star::io::XInputStream
         by the next one).</p>
 
         @returns
-            <TRUE/>, if the end of file is reached, so that
-            no next string can be read. <FALSE/> otherwise
+            `TRUE`, if the end of file is reached, so that
+            no next string can be read. `FALSE` otherwise
      */
     boolean isEOF()
             raises( com::sun::star::io::IOException );

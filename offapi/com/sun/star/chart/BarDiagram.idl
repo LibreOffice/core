@@ -48,15 +48,15 @@ published service BarDiagram
     /** Determines if the bars of a chart are drawn vertically or
         horizontally.  Default is vertical.
 
-        <p>If Vertical is <FALSE/> you get a column chart rather than
+        <p>If Vertical is `FALSE` you get a column chart rather than
         a bar chart.</p>
      */
     [property] boolean Vertical;
 
 
-    /** If <TRUE/>, determines that in a three-dimensional bar chart
+    /** If `TRUE`, determines that in a three-dimensional bar chart
         the bars of each series are arranged behind each other in the
-        z-direction.  If <FALSE/> the arrangement of bars is like in
+        z-direction.  If `FALSE` the arrangement of bars is like in
         two-dimensional bar charts.
      */
     [optional, property] boolean Deep;
@@ -71,10 +71,10 @@ published service BarDiagram
 
     /** If bars of a bar or column chart are attached to different
         axis, this property determines how to display those.  If
-        <TRUE/>, the bars are grouped together in one block for each
+        `TRUE`, the bars are grouped together in one block for each
         axis, thus they are painted one group over the other.
 
-        <p>If <FALSE/>, the bars are displayed side-by-side, as if
+        <p>If `FALSE`, the bars are displayed side-by-side, as if
         they were all attached to the same axis.</p>
 
         <p>If all data series of a bar or column chart are attached to

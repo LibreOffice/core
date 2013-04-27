@@ -96,7 +96,7 @@ interface XWizard
             denotes the button to enable or disable, as one of the WizardButton constants. Must not be
             WizardButton::NONE.
         @param Enable
-            specifies whether the button should be enabled (<TRUE/>) or disabled (<FALSE/>)
+            specifies whether the button should be enabled (`TRUE`) or disabled (`FALSE`)
     */
     void    enableButton( [in] short WizardButton, [in] boolean Enable );
 
@@ -146,7 +146,7 @@ interface XWizard
     /** updates the wizard elements which are related to traveling.
 
         <p>For instance, the <em>Next</em> button is disabled if the current page's XWizardPage::canAdvance()
-        method returns <FALSE/>.</p>
+        method returns `FALSE`.</p>
 
         <p>You usually call this method from within a wizard page whose state changed in a way that it affects the
         user's ability to reach other pages.</p>
@@ -187,10 +187,10 @@ interface XWizard
         @param PathIndex
             the index of the path, as used in the Wizard::createMultiplePathsWizard() constructor.
         @param Final
-            <p>If <TRUE/>, the path will be completely activated, even if it is a conflicting path (i.e. there is another
+            <p>If `TRUE`, the path will be completely activated, even if it is a conflicting path (i.e. there is another
             path which shares the first <code>k</code> states with the to-be-activated path.)</p>
 
-            <p>If <FALSE/>, then the new path is checked for conflicts with other paths. If such conflicts exists, the path
+            <p>If `FALSE`, then the new path is checked for conflicts with other paths. If such conflicts exists, the path
             is not completely activated, but only up to the point where it does <em>not</em> conflict.</p>
 
             <p>In this latter case, you need another activatePath method (usually triggered by the user doing some decisions

@@ -71,7 +71,7 @@ interface XImageManager
             a command URL that should be checked for an associated image.
 
         @return
-            <TRUE/> if an image is associated, otherwise <FALSE/>.
+            `TRUE` if an image is associated, otherwise `FALSE`.
     */
     boolean hasImage( [in] short nImageType, [in] string aCommandURL ) raises ( com::sun::star::lang::IllegalArgumentException );
 

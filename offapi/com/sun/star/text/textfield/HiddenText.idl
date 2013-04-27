@@ -33,7 +33,7 @@ published service HiddenText
     service  com::sun::star::text::TextField;
 
     /** contains the text content of the hidden text field.
-        <p> The content is displayed if the condition evaluates to <FALSE/>.</p>
+        <p> The content is displayed if the condition evaluates to `FALSE`.</p>
      */
     [property] string Content;
     /** contains the condition.

@@ -33,7 +33,7 @@ interface XToolPanel
 {
     /** provides access to the tool panel's main window.
 
-    <p>It is allowed for an implementation to return <NULL/> here, but in this case some functionality, for instance
+    <p>It is allowed for an implementation to return `NULL` here, but in this case some functionality, for instance
     automatic positioning of the tool panel, might not be available, and must be implemented by the tool panel itself.</p>
     */
     [attribute, readonly] ::com::sun::star::awt::XWindow    Window;

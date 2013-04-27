@@ -188,18 +188,18 @@ published service DataSourceBrowser
             name or a SQL string is controller by the <em>CommandType</em> parameter.</li>
 
             <li><b>EnableBrowser</b><br/>
-            is a boolean value (defaulting to <TRUE/>), which specifies whether to enable the data source browser
+            is a boolean value (defaulting to `TRUE`), which specifies whether to enable the data source browser
             control. This is a tree control on the left hand side of the view, which allows to browse all registered
             data sources, including their tables and queries.</li>
 
             <li><b>ShowBrowser</b><br/>
-            is a boolean value (defaulting to <TRUE/>), which specifies whether to initially show the data source
-            browser control. If <code>EnableBrowser</code> is <FALSE/>, then this parameter is ignored. If
-            <code>EnableBrowser</code> is <TRUE/>, and <code>ShowBrowser</code> is <FALSE/>, then the control
+            is a boolean value (defaulting to `TRUE`), which specifies whether to initially show the data source
+            browser control. If <code>EnableBrowser</code> is `FALSE`, then this parameter is ignored. If
+            <code>EnableBrowser</code> is `TRUE`, and <code>ShowBrowser</code> is `FALSE`, then the control
             is initially hidden, but can be toggled by a toolbar button.</p>
 
             <li><b>ShowMenu</b><br/>
-            is a boolean value (defaulting to <TRUE/>), specifying whether or not to show a menu in the frame
+            is a boolean value (defaulting to `TRUE`), specifying whether or not to show a menu in the frame
             where the component is plugged.</li>
         </ul>
         </p>

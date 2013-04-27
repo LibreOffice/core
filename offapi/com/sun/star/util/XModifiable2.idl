@@ -43,8 +43,8 @@ interface XModifiable2: com::sun::star::util::XModifiable
 
         @returns the value that says whether the modified state change was
                 enabled before the call
-            <TRUE/> the changing of the modified state was already disabled
-            <FALSE/> the changing of the modified state was enabled
+            `TRUE` the changing of the modified state was already disabled
+            `FALSE` the changing of the modified state was enabled
 
      */
     boolean disableSetModified();
@@ -53,8 +53,8 @@ interface XModifiable2: com::sun::star::util::XModifiable
 
         @returns the value that says whether the modified state change was
                 enabled before the call
-            <TRUE/> the changing of the modified state was disabled
-            <FALSE/> the changing of the modified state was already enabled
+            `TRUE` the changing of the modified state was disabled
+            `FALSE` the changing of the modified state was already enabled
      */
     boolean enableSetModified();
 

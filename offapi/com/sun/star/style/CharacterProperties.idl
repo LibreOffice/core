@@ -132,12 +132,12 @@ published service CharacterProperties
     [optional, property] short CharCaseMap;
 
 
-    /** This property is <TRUE/> if the characters are crossed out.
+    /** This property is `TRUE` if the characters are crossed out.
      */
     [optional, property] boolean CharCrossedOut;
 
 
-    /** If this optional property is <TRUE/>, then the characters are flashing.
+    /** If this optional property is `TRUE`, then the characters are flashing.
      */
     [optional, property] boolean CharFlash;
 
@@ -148,7 +148,7 @@ published service CharacterProperties
     [optional, property] short CharStrikeout;
 
 
-    /** If this property is <TRUE/>, the underline and strike-through
+    /** If this property is `TRUE`, the underline and strike-through
         properties are not applied to white spaces.
      */
     [optional, property] boolean CharWordMode;
@@ -355,7 +355,7 @@ published service CharacterProperties
     [optional, property] sequence<string> CharStyleNames;
 
 
-    /** If this optional property is <TRUE/>, then the characters are invisible.
+    /** If this optional property is `TRUE`, then the characters are invisible.
 
         @since OOo 2.0
      */

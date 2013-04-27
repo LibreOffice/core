@@ -79,7 +79,7 @@ published interface XPropertyWithState: com::sun::star::uno::XInterface
                 an object representing the default state of this object (as a property).
 
             <p> If no default exists, is not known or is void,
-                then the return value is <NULL/>.
+                then the return value is `NULL`.
             </p>
 
             @throws  com::sun::star::lang::WrappedTargetException

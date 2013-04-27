@@ -69,8 +69,8 @@ published interface XTransferable: com::sun::star::uno::XInterface
         Describes the format that should be checked
 
         @returns
-        A value of <TRUE/> if the DataFlavor is supported by the transfer source.
-        <p>A value of <FALSE/> if the DataFlavor is unsupported by the transfer source.</p>
+        A value of `TRUE` if the DataFlavor is supported by the transfer source.
+        <p>A value of `FALSE` if the DataFlavor is unsupported by the transfer source.</p>
 
         <br/><br/><p><strong>Note: </strong>This method is only for analogy with the JAVA Clipboard interface. To
         avoid many calls, the caller should instead use

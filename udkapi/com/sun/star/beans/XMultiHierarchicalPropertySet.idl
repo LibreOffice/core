@@ -48,7 +48,7 @@ published interface XMultiHierarchicalPropertySet: com::sun::star::uno::XInterfa
                 supplies this interface.
 
         @returns
-                <NULL/> if the implementation cannot or will
+                `NULL` if the implementation cannot or will
                 not provide information about the properties; otherwise the
                 interface XHierarchicalPropertySetInfo is returned.
 
@@ -107,7 +107,7 @@ published interface XMultiHierarchicalPropertySet: com::sun::star::uno::XInterfa
         <p> The order of the values in the returned sequence will be the same
             as the order of the names in the argument.  </p>
 
-        <p> Unknown properties are ignored, in their place <NULL/> will be returned.  </p>
+        <p> Unknown properties are ignored, in their place `NULL` will be returned.  </p>
 
         @throws com::sun::star::lang::IllegalArgumentException
                 if one of the names is not a well-formed

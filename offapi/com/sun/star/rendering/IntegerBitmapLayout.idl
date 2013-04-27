@@ -95,15 +95,15 @@ struct IntegerBitmapLayout
     /** This member determines the bit order (only relevant if a pixel
         uses less than 8 bits, of course).<p>
 
-        When <TRUE/>, this member denotes that the leftmost pixel from
+        When `TRUE`, this member denotes that the leftmost pixel from
         an 8 bit amount of pixel data consists of the bits starting
-        with the most significant bit. When <FALSE/>, it's starting
+        with the most significant bit. When `FALSE`, it's starting
         with the least significant bit.<p>
 
         Example: for a 1bpp bitmap, each pixel is represented by
-        exactly one bit. If this member is <TRUE/>, the first pixel is
+        exactly one bit. If this member is `TRUE`, the first pixel is
         the MSB of the first byte, and the eighth pixel is the LSB of
-        the first byte. If this member is <FALSE/>, it's just the
+        the first byte. If this member is `FALSE`, it's just the
         opposite.
      */
     boolean                  IsMsbFirst;

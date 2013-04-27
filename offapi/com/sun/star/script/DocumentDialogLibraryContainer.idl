@@ -46,7 +46,7 @@ service DocumentDialogLibraryContainer : XStorageBasedLibraryContainer
 
         @param Document
             The document to which the container should belong to. Must not be
-            <NULL/>.
+            `NULL`.
 
         @throws ::com::sun::star::lang::IllegalArgumentException
             if <code>Document</code> does not denote a valid

@@ -55,13 +55,13 @@ published service SortDescriptor
 
         <dl>
         <dt>
-        <TRUE/>
+        `TRUE`
         </dt>
         <dd>The columns are sorted.
 
         </dd>
         <dt>
-        <FALSE/>
+        `FALSE`
         </dt>
         <dd>The rows are sorted.
         </dd>

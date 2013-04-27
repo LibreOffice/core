@@ -51,7 +51,7 @@ published interface XDispatchProvider: com::sun::star::uno::XInterface
         @return
             the dispatch object which provides queried functionality
             <br>
-            or <NULL/> if no dispatch object is available
+            or `NULL` if no dispatch object is available
 
         @see XFrame::findFrame()
         @see XDispatchProvider::queryDispatches()
@@ -72,7 +72,7 @@ published interface XDispatchProvider: com::sun::star::uno::XInterface
 
             <p>
             It's not allowed to pack it - because every request must match
-            to his real result. Means: don't delete <NULL/> entries inside this list.
+            to his real result. Means: don't delete `NULL` entries inside this list.
             </p>
      */
     sequence< XDispatch > queryDispatches(

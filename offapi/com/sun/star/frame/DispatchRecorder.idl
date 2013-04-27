@@ -33,7 +33,7 @@
     possible to generate e.g. Java/Basic or may Perl code.
     By using of a DispatchRecorderSupplier, which is available on
     a property of a Frame::DispatchRecorderSupplier, it's possible to change such code generation
-    for further requests or disable it in general by setting this property to <NULL/>.
+    for further requests or disable it in general by setting this property to `NULL`.
     </p>
 
     @see DispatchRecorderSupplier

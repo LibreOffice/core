@@ -54,8 +54,8 @@ published interface XHierarchicalNameAccess: com::sun::star::uno::XInterface
 
 
     /** @returns
-            <TRUE/> if an element with this name is in
-            the container, <FALSE/> otherwise.
+            `TRUE` if an element with this name is in
+            the container, `FALSE` otherwise.
 
         <p>In many cases, the next call is XNameAccess::getByName().
         You should optimize this case.

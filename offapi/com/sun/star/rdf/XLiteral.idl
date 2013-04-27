@@ -48,7 +48,7 @@ interface XLiteral : XNode
     [readonly, attribute] string Value;
     /// the language of the literal; may be the empty `string`
     [readonly, attribute] string Language;
-    /// the data type of the literal; may be <NULL/>
+    /// the data type of the literal; may be `NULL`
     [readonly, attribute] XURI   Datatype;
     //FIXME: TODO: have not looked at handling all kinds of types, maybe just have an any attr here...
 };

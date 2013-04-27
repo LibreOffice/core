@@ -70,7 +70,7 @@ interface XBufferController : ::com::sun::star::uno::XInterface
         with other things, e.g. sound playback.<p>
 
         @param bUpdateAll
-        When <TRUE/>, update the whole screen. When <FALSE/>,
+        When `TRUE`, update the whole screen. When `FALSE`,
         implementation is permitted to restrict update to areas the
         canvas itself changed (e.g. because of render operations, or
         changes on the sprites). The former is useful for updates
@@ -102,7 +102,7 @@ interface XBufferController : ::com::sun::star::uno::XInterface
         other things, e.g. sound playback.<p>
 
         @param bUpdateAll
-        When <TRUE/>, update the whole screen. When <FALSE/>,
+        When `TRUE`, update the whole screen. When `FALSE`,
         implementation is permitted to restrict update to areas the
         canvas itself changed (e.g. because of render operations, or
         changes on the sprites). The former is useful for updates

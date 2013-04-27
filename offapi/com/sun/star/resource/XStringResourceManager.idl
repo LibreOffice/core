@@ -49,7 +49,7 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
     /**
         Returns the resource's read only state
 
-        @return  <TRUE/> if the resource is read only, otherwise <FALSE/>
+        @return  `TRUE` if the resource is read only, otherwise `FALSE`
     */
     boolean isReadOnly();
 
@@ -63,7 +63,7 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
             <p>If true: If the exact locale that should be set is not available
             the method tries to find the closest match. E.g. if en_US is re-
             quired but not available, en would be the next choice. Finally
-            the default locale will be used <TRUE/>.
+            the default locale will be used `TRUE`.
 
             <p>If false: If the exact locale that should be set is not available
             a com::sun::star::lang::IllegalArgumentException

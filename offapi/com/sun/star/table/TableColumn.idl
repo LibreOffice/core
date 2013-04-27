@@ -62,17 +62,17 @@ published service TableColumn
     [property] long Width;
 
 
-    /** is <TRUE/>, if the column always keeps its optimal width.
+    /** is `TRUE`, if the column always keeps its optimal width.
      */
     [property] boolean OptimalWidth;
 
 
-    /** is <TRUE/>, if the column is visible.
+    /** is `TRUE`, if the column is visible.
      */
     [property] boolean IsVisible;
 
 
-    /** is <TRUE/>, if there is a manual horizontal page break attached
+    /** is `TRUE`, if there is a manual horizontal page break attached
         to the column.
      */
     [property] boolean IsStartOfNewPage;

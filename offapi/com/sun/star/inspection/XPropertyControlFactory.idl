@@ -43,13 +43,13 @@ interface XPropertyControlFactory
         @param CreateReadOnly
             determines whether the newly created control should be readonly.
 
-            <p>If this argument is <TRUE/>, this does not necessarily mean that the property cannot be
+            <p>If this argument is `TRUE`, this does not necessarily mean that the property cannot be
             changed at all in the ObjectInspector. Instead, an XPropertyHandler
             can still decide that there is a dedicated UI for entering the property value,
             which is usually triggered by a LineDescriptor::PrimaryButton.</p>
 
             <p>Note that this parameter might be ignored if the XObjectInspectorModel::IsReadOnly
-            attribute is <TRUE/>, in which case all created property controls must be readonly.</p>
+            attribute is `TRUE`, in which case all created property controls must be readonly.</p>
 
         @returns
             a control of the given type.

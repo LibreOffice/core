@@ -82,11 +82,11 @@ interface XConfiguration
         active, i.e. has a visible representation in the GUI.
         @param xResourceId
             The id of a resource.  May be empty (empty reference or empty
-            XResourceId object) in which case <FALSE/> is
+            XResourceId object) in which case `FALSE` is
             returned.
         @return
-            Returns <TRUE/> when the resource is part of the configuration
-            and <FALSE/> when it is not.
+            Returns `TRUE` when the resource is part of the configuration
+            and `FALSE` when it is not.
     */
     boolean hasResource ([in] XResourceId xResourceId);
 

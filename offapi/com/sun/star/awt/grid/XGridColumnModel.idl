@@ -82,7 +82,7 @@ published interface XGridColumnModel
             the index of new created column.
 
         @throws ::com::sun::star::lang::IllegalArgumentException
-            if the given column is not a valid element for the column container, or if it is <NULL/>.
+            if the given column is not a valid element for the column container, or if it is `NULL`.
     */
     long addColumn( [in] XGridColumn column )
         raises ( ::com::sun::star::lang::IllegalArgumentException );

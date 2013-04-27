@@ -48,8 +48,8 @@ interface XFlatParagraph: com::sun::star::text::XTextMarkup
     /** check whether the content has been modified
 
         @returns
-                <TRUE/>  if the content has been modified,
-                <FALSE/> otherwise.
+                `TRUE`  if the content has been modified,
+                `FALSE` otherwise.
     */
     boolean isModified();
 
@@ -60,8 +60,8 @@ interface XFlatParagraph: com::sun::star::text::XTextMarkup
                 type, see TextMarkupType.
 
         @param  bVal
-                <TRUE/>  the respective text node has been processed
-                <FALSE/> the respective text node needs to be processed again
+                `TRUE`  the respective text node has been processed
+                `FALSE` the respective text node needs to be processed again
                          later
     */
     void setChecked( [in] long nType, [in] boolean bVal );
@@ -72,8 +72,8 @@ interface XFlatParagraph: com::sun::star::text::XTextMarkup
                 type, see TextMarkupType.
 
         @returns
-                <TRUE/>  if the respective text node has been checked
-                <FALSE/> otherwise.
+                `TRUE`  if the respective text node has been checked
+                `FALSE` otherwise.
     */
     boolean isChecked( [in] long nType );
 

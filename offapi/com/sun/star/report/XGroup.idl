@@ -51,7 +51,7 @@ interface XGroup
     interface XFunctionsSupplier;
 
     /** Defines if the group is sorted ascending or descending.
-        The default is <TRUE/>.
+        The default is `TRUE`.
      */
     [attribute,bound] boolean SortAscending;
 

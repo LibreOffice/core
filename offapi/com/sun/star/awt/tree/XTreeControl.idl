@@ -47,14 +47,14 @@ interface XTreeControl
 
     // expanding/collapsing/visible
 
-    /** Returns <TRUE/> if <var>Node</var> is currently expanded.
+    /** Returns `TRUE` if <var>Node</var> is currently expanded.
 
         @param Node
             the XTreeNode specifying the node to check.
 
         @returns
-            <FALSE/> if <var>Node</var> or at least one of its parent nodes are collapsed,
-            <TRUE/> if <var>Node</var> and all of its parent nodes are expanded.
+            `FALSE` if <var>Node</var> or at least one of its parent nodes are collapsed,
+            `TRUE` if <var>Node</var> and all of its parent nodes are expanded.
 
         @throws ::com::sun::star::lang::IllegalArgumentException
             if <var>Node</var> is not a valid node of the corresponding XTreeDataModel.
@@ -62,14 +62,14 @@ interface XTreeControl
     boolean isNodeExpanded( [in] XTreeNode Node )
         raises( ::com::sun::star::lang::IllegalArgumentException );
 
-    /** Returns <TRUE/> if <var>Node</var> is currently collapsed.
+    /** Returns `TRUE` if <var>Node</var> is currently collapsed.
 
         @param Node
             the XTreeNode specifying the node to check
 
         @returns
-            <TRUE/> if <var>Node</var> or at least one of its parent nodes are collapsed,
-            <FALSE/> if <var>Node</var> and all of its parent nodes are expanded
+            `TRUE` if <var>Node</var> or at least one of its parent nodes are collapsed,
+            `FALSE` if <var>Node</var> and all of its parent nodes are expanded
 
         @throws ::com::sun::star::lang::IllegalArgumentException
             if <var>Node</var> is not a valid node of the corresponding XTreeDataModel.
@@ -95,11 +95,11 @@ interface XTreeControl
     void makeNodeVisible( [in] XTreeNode Node )
         raises( com::sun::star::lang::IllegalArgumentException, ExpandVetoException );
 
-    /** Returns <TRUE/> if <var>Node</var> is currently visible.
+    /** Returns `TRUE` if <var>Node</var> is currently visible.
         <p>Visible means it is either the root or all of its parents are expanded.</p>
 
         @returns
-            <TRUE/> if <var>Node</var> is visible, otherwise <FALSE/>
+            `TRUE` if <var>Node</var> is visible, otherwise `FALSE`
 
         @throws ::com::sun::star::lang::IllegalArgumentException
             if <var>Node</var> is not a valid node of the corresponding XTreeDataModel.
@@ -199,7 +199,7 @@ interface XTreeControl
         @param Node
             the node whose geometry should be obtained
         @throws ::com::sun::star::lang::IllegalArgumentException
-            if the given node is <NULL/>, or does not belong to the tree's data model
+            if the given node is `NULL`, or does not belong to the tree's data model
     */
     ::com::sun::star::awt::Rectangle
         getNodeRect( [in] XTreeNode Node )
@@ -207,11 +207,11 @@ interface XTreeControl
 
     // tree editing
 
-    /** Returns <TRUE/> if one of tree's nodes is being currently edited.
+    /** Returns `TRUE` if one of tree's nodes is being currently edited.
         <p>The node that is being edited can be obtained using com::sun::star::view::XSelectionSupplier::getSelection().
 
         @returns
-            <TRUE/> if the user is currently editing a node
+            `TRUE` if the user is currently editing a node
     */
     boolean isEditing();
 
@@ -220,7 +220,7 @@ interface XTreeControl
         <p>Has no effect if the tree isn't being edited.</p>
 
         @returns
-            <TRUE/> if editing was in progress and is now stopped, <FALSE/> if editing was not in progress
+            `TRUE` if editing was in progress and is now stopped, `FALSE` if editing was not in progress
     */
     boolean stopEditing();
 
@@ -231,7 +231,7 @@ interface XTreeControl
 
     /** Selects <var>Node</var> and initiates editing.
 
-        <p>If TreeControlModel::Editable is <FALSE/> or if there are no
+        <p>If TreeControlModel::Editable is `FALSE` or if there are no
         registered XTreeEditListener, this call has no effect.</p>
 
         <p>Calling this method also ensures that <var>Node</var> will become visible.</p>

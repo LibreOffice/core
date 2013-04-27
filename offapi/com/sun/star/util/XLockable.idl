@@ -30,7 +30,7 @@ module com { module sun { module star { module util {
 
     <p><code>lock</code> and <code>unlock</code> calls can be nested. However, they must be in
     pairs. As long as there has been one more call to <code>lock</code> than to <code>unlock</code>, the
-    component is considered locked, which is reflected by isLocked() returning <TRUE/>.</p>
+    component is considered locked, which is reflected by isLocked() returning `TRUE`.</p>
  */
 interface XLockable
 {

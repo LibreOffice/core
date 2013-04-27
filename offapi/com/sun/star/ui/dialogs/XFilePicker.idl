@@ -38,8 +38,8 @@ published interface XFilePicker: com::sun::star::ui::dialogs::XExecutableDialog
         may be selected by the user else only one file selection at a time is possible</p>
 
         @param bMode
-        <p>A value of <TRUE/> enables the multi-selection mode.</p>
-        <p>A value of <FALSE/> disables the multi-selection mode, this is the default.</p>
+        <p>A value of `TRUE` enables the multi-selection mode.</p>
+        <p>A value of `FALSE` disables the multi-selection mode, this is the default.</p>
     */
     void setMultiSelectionMode( [in] boolean bMode );
 

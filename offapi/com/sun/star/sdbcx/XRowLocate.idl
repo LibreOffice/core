@@ -59,7 +59,7 @@ published interface XRowLocate: com::sun::star::uno::XInterface
         @param bookmark
             the bookmark where to move
         @returns
-            <TRUE/> if successful
+            `TRUE` if successful
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
      */
@@ -81,7 +81,7 @@ published interface XRowLocate: com::sun::star::uno::XInterface
         @param rows
             count of rows move relative to the bookmark
         @returns
-            <TRUE/> if successful
+            `TRUE` if successful
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
      */
@@ -114,7 +114,7 @@ published interface XRowLocate: com::sun::star::uno::XInterface
 
     /** determines whether the bookmarks of a result set are ordered or not.
         @returns
-            <TRUE/> if so
+            `TRUE` if so
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
         @see com::sun::star::sdbcx::CompareBookmark

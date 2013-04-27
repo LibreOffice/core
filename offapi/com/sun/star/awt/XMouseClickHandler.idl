@@ -37,9 +37,9 @@ published interface XMouseClickHandler: ::com::sun::star::lang::XEventListener
     /** is invoked when a mouse button has been pressed on a window.
 
         @return
-            When <FALSE/> is returned the other handlers are called and a
+            When `FALSE` is returned the other handlers are called and a
             following handling of the event by the broadcaster takes place.
-            Otherwise, when <TRUE/> is returned, no other handler will be
+            Otherwise, when `TRUE` is returned, no other handler will be
             called and the broadcaster will take no further actions
             regarding the event.
      */
@@ -49,9 +49,9 @@ published interface XMouseClickHandler: ::com::sun::star::lang::XEventListener
     /** is invoked when a mouse button has been released on a window.
 
         @return
-            When <FALSE/> is returned the other handlers are called and a
+            When `FALSE` is returned the other handlers are called and a
             following handling of the event by the broadcaster takes place.
-            Otherwise, when <TRUE/> is returned, no other handler will be
+            Otherwise, when `TRUE` is returned, no other handler will be
             called and the broadcaster will take no further actions
             regarding the event.
     */

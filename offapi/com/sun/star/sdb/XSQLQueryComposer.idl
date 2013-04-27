@@ -113,7 +113,7 @@ published interface XSQLQueryComposer: com::sun::star::uno::XInterface
         @param column
             the column which is used to create a order part
         @param  ascending
-            <TRUE/> when the order should be ascending, otherwise <FALSE/>
+            `TRUE` when the order should be ascending, otherwise `FALSE`
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
      */

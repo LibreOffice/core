@@ -37,7 +37,7 @@
         <li>ImageURL: The image referenced by the URL is placed in the lower right corner
             of the control.</li>
         <li>Graphic: The graphic is placed in the lower right corner of the control.</li>
-        <li>Complete: When set to <FALSE/> a non interactive RoadmapItem is appended
+        <li>Complete: When set to `FALSE` a non interactive RoadmapItem is appended
             after the last roadmap item, labeled with three dots, indicating incompleteness.</li>
         <li>Interactive: When activating a RoadmapItem (see RoadmapItem) the
             information about which Item has been selected is passed over when an itemlistener

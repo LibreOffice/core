@@ -45,7 +45,7 @@ interface XMergeableCell: com::sun::star::table::XCell
     long getColumnSpan();
 
 
-    /** returns <TRUE/> if this cell is merged with another cell.
+    /** returns `TRUE` if this cell is merged with another cell.
      */
     boolean isMerged();
 };

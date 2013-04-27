@@ -41,7 +41,7 @@ published interface XConfirmDeleteListener: com::sun::star::lang::XEventListener
             A descriptor specifying the deletion request.
 
         @returns
-            <TRUE/> when the row can be deleted, otherwise <FALSE/>.
+            `TRUE` when the row can be deleted, otherwise `FALSE`.
      */
     boolean confirmDelete( [in] com::sun::star::sdb::RowChangeEvent aEvent );
 };

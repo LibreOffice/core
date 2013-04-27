@@ -46,9 +46,9 @@ published interface XSynchronousFrameLoader: com::sun::star::uno::XInterface
             the target frame which should contain the new loaded component
 
         @return
-            <TRUE/> if loading is successfully
+            `TRUE` if loading is successfully
             <br>
-            <FALSE/> otherwise
+            `FALSE` otherwise
      */
     boolean load(
         [in] sequence< com::sun::star::beans::PropertyValue > Descriptor,
@@ -60,7 +60,7 @@ published interface XSynchronousFrameLoader: com::sun::star::uno::XInterface
         No notifications (neither to the frame or the caller) must be notified.
         Because it's a synchronous process this cancel call can be forced by
         another thread the loader thread only. Method
-        XSynchronousFrameLoader::load() must return <FALSE/>
+        XSynchronousFrameLoader::load() must return `FALSE`
         then and caller of this method XSynchronousFrameLoader::cancel()
         already knows the state ...
         </p>

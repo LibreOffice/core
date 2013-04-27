@@ -46,8 +46,8 @@ interface XMultiSelectionSupplier: XSelectionSupplier
             either an Object that is selectable or a sequence of objects that are selectable.
 
         @returns
-            <TRUE/>/, if <var>Selection</var> was added to the current selection.
-            <FALSE/>, if <var>Selection</var> or parts of <var>Selection</var> could not be
+            `TRUE`/, if <var>Selection</var> was added to the current selection.
+            `FALSE`, if <var>Selection</var> or parts of <var>Selection</var> could not be
             added to the current selection. For example, if the selection already contains
             objects that are forbidden to be selected together with <var>Selection</var>
 
@@ -66,8 +66,8 @@ interface XMultiSelectionSupplier: XSelectionSupplier
             either an Object that is selectable or a sequence of objects that are selectable.
 
         @returns
-            <TRUE/>/, if <var>Selection</var> was added to the current selection.
-            <FALSE/>, if <var>Selection</var> or parts of <var>Selection</var> could not be
+            `TRUE`/, if <var>Selection</var> was added to the current selection.
+            `FALSE`, if <var>Selection</var> or parts of <var>Selection</var> could not be
             added to the current selection. For example, if the selection already contains
             objects that are forbidden to be selected together with <var>Selection</var>.
 

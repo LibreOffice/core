@@ -57,7 +57,7 @@ interface XBitmap : ::com::sun::star::uno::XInterface
         component flagged
         ColorComponentTag::ALPHA).<p>
 
-        @return <TRUE/>, if the bitmap has alpha data, or <FALSE/> if
+        @return `TRUE`, if the bitmap has alpha data, or `FALSE` if
         not.
       */
     boolean                                     hasAlpha();

@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module awt { module tree {
     <p>
     <h4>The Data Model</h4>
     <p>A specific node in a tree is identified by a XTreeNode.
-    A leaf node is a node without any children and that returns <FALSE/> when calling XTreeNode::hasChildrenOnDemand().
+    A leaf node is a node without any children and that returns `FALSE` when calling XTreeNode::hasChildrenOnDemand().
     An expanded node is a non-leaf node that will displays its children when all its ancestors are expanded.
     A collapsed node is one which hides them.
     A node is visible when all parent nodes are expanded and the node itself is in the display area.
@@ -61,7 +61,7 @@ module com {  module sun {  module star {  module awt { module tree {
     <h4>Adding child nodes on demand</h4>
     <p>If you want to add child nodes to your tree on demand you can do the following.
     <ul>
-    <li>Make sure the parent node returns <TRUE/> for XTreeNode::hasChildrenOnDemand() either
+    <li>Make sure the parent node returns `TRUE` for XTreeNode::hasChildrenOnDemand() either
     by implementing XTreeNode yourself or if you use the MutableTreeDataModel,
     use XMutableTreeNode::setHasChildrenOnDemand().</li>
     <li>Implement a XTreeExpansionListener and add the instance with the method

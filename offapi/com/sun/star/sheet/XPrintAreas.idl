@@ -59,7 +59,7 @@ published interface XPrintAreas: com::sun::star::uno::XInterface
         print pages to the right.
 
         @param bPrintTitleColumns
-            if <TRUE/>, title columns are repeated on each page.
+            if `TRUE`, title columns are repeated on each page.
      */
     void setPrintTitleColumns( [in] boolean bPrintTitleColumns );
 
@@ -100,7 +100,7 @@ published interface XPrintAreas: com::sun::star::uno::XInterface
         print pages to the bottom.
 
         @param bPrintTitleRows
-            if <TRUE/>, title rows are repeated on each page.
+            if `TRUE`, title rows are repeated on each page.
      */
     void setPrintTitleRows( [in] boolean bPrintTitleRows );
 

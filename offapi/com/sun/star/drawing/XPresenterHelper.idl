@@ -42,18 +42,18 @@ interface XPresenterHelper
         @param xParentWindow
             The parent window of the new window.
         @param bCreateSystemChildWindow
-            When <TRUE/> then the new window will be a system window that,
+            When `TRUE` then the new window will be a system window that,
             in the context of the presenter screen, can not be painted over
             by other windows that lie behind it.
         @param bInitiallyVisible
-            When <TRUE/> the new window will be visible from the start,
+            When `TRUE` the new window will be visible from the start,
             i.e. a window listener will not receive a windowShown signal.
         @param bEnableChildTransparentMode
-            When <TRUE/> the parent window is painted behind its child
+            When `TRUE` the parent window is painted behind its child
             windows. This is one half of allowing child windows to be
             transparent.
         @param bEnableParentClip
-            When <TRUE/> then the parent window is not clipped where its
+            When `TRUE` then the parent window is not clipped where its
             child windows are painted.  This is the other half of allowing
             child windows to be transparent.
     */
@@ -68,17 +68,17 @@ interface XPresenterHelper
         wrapper around the given shared canvas.  The wrapper only modifies
         the origin in all output and clipping methods.
         @param xUpdateCanvas
-            This canvas is used to call updateScreen() on.  May be <NULL/>
+            This canvas is used to call updateScreen() on.  May be `NULL`
         @param xUpdateWindow
             The window that belongs to the update canvas.  May also be
-            <NULL/> (is expected to b <NULL/> whenever xUpdateCanvas is.)
+            `NULL` (is expected to b `NULL` whenever xUpdateCanvas is.)
         @param xSharedCanvas
             The canvas that is shared by the wrapper.
         @param xSharedWindow
             The window of the shared canvas.  This is used to determine the
             proper offset.
         @param xWindow
-            The canvas is created for this window.  Must not be <NULL/>
+            The canvas is created for this window.  Must not be `NULL`
     */
     ::com::sun::star::rendering::XCanvas createSharedCanvas (
         [in] ::com::sun::star::rendering::XSpriteCanvas xUpdateCanvas,
@@ -89,7 +89,7 @@ interface XPresenterHelper
 
     /** Create a new canvas for the given window.
         @param xWindow
-            The canvas is created for this window.  Must not be <NULL/>
+            The canvas is created for this window.  Must not be `NULL`
         @param nRequestedCanvasFeatureList
             List of requested features that the new canvas should (has to)
             provide.  Use only values from the CanvasFeature

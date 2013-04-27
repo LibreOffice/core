@@ -42,7 +42,7 @@ published struct ShadowFormat
     short ShadowWidth;
 
 
-    /** is <TRUE/>, if shadow is transparent.
+    /** is `TRUE`, if shadow is transparent.
      */
     boolean IsTransparent;
 

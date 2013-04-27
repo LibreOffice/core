@@ -132,7 +132,7 @@ published service OfficeDocument
     /** controls the focus behavior of the form controls in the document
 
         <p>
-        If this flag is set to <TRUE/>, any view belonging to the document
+        If this flag is set to `TRUE`, any view belonging to the document
         should focus the first control in the document. With this, you may
         control if your document works primarily as a form document.
         </p>
@@ -141,8 +141,8 @@ published service OfficeDocument
 
     /** controls the initial (on-load) behavior of the form controls in the document
 
-        <p>If set to <TRUE/>, upon loading the document, the form controls will be in design mode.<br/>
-        If set to <FALSE/>, they will be alive, i.e. operational.<br/>
+        <p>If set to `TRUE`, upon loading the document, the form controls will be in design mode.<br/>
+        If set to `FALSE`, they will be alive, i.e. operational.<br/>
         With this, you may control if your document works primarily as a form document.
         </p>
     */

@@ -44,17 +44,17 @@ published service RichTextControl
 
     /** specifies whether text should be automatically wrapped to fit into the control.
 
-        <p>If set to <TRUE/>, users need to manually press the enter key to insert a line break.
-        If set to <FALSE/>, text is automatically wrapped at the control border.</p>
+        <p>If set to `TRUE`, users need to manually press the enter key to insert a line break.
+        If set to `FALSE`, text is automatically wrapped at the control border.</p>
     */
     [property] boolean HardLineBreaks;
 
     /** specifies whether the control should display the text including all its formatting.
 
-        <p>If this is set to <FALSE/>, the control will act as ordinary
+        <p>If this is set to `FALSE`, the control will act as ordinary
         com::sun::star::awt::UnoControlEditModel.</p>
 
-        <p>If the property is set to <TRUE/>, the control will ignore the following properties:
+        <p>If the property is set to `TRUE`, the control will ignore the following properties:
         <ul>
             <li>com::sun::star::awt::UnoControlEditModel::EchoChar</li>
             <li>com::sun::star::awt::UnoControlEditModel::MaxTextLen</li>

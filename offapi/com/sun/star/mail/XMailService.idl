@@ -191,7 +191,7 @@ interface XMailService: ::com::sun::star::uno::XInterface {
         currently exist or not.
 
         @returns
-        <TRUE/> if a connection to a mail service is established.
+        `TRUE` if a connection to a mail service is established.
     */
     boolean isConnected();
 };

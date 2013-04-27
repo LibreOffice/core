@@ -41,7 +41,7 @@ published interface XViewDataSupplier: com::sun::star::uno::XInterface
         @returns
             a com::sun::star::container::XIndexAccess,
             that gives access to a list of com::sun::star::beans::PropertyValue
-            for every open view. May <NULL/> if no view is currently available.
+            for every open view. May `NULL` if no view is currently available.
      */
     ::com::sun::star::container::XIndexAccess getViewData();
 
@@ -50,7 +50,7 @@ published interface XViewDataSupplier: com::sun::star::uno::XInterface
         @param Data
             a list of com::sun::star::beans::PropertyValues
             with information about last opened views to restore it
-            <NULL/> isn't allowed here.
+            `NULL` isn't allowed here.
      */
     void setViewData( [in] com::sun::star::container::XIndexAccess Data );
 };

@@ -55,7 +55,7 @@ published service PageProperties
 [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
 /** determines if the background color is transparent.
 
-    <p>If this property is set to <TRUE/>,
+    <p>If this property is set to `TRUE`,
     PageStyle::BackColor will not be used.</p>
  */
 [property] boolean BackTransparent;
@@ -159,7 +159,7 @@ published service PageProperties
 [property, maybevoid] long HeaderRightMargin;
 /** determines if the background color of the header is transparent.
 
-    <p>If this property is set to <TRUE/>,
+    <p>If this property is set to `TRUE`,
     PageStyle::HeaderBackColor will not be used.</p>
  */
 [property, maybevoid] boolean HeaderBackTransparent;

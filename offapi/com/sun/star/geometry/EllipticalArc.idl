@@ -61,13 +61,13 @@ struct EllipticalArc
     double  XAxisRotation;
 
 
-    /** If <TRUE/>, and there's a choice, take the longer one of two arcs
+    /** If `TRUE`, and there's a choice, take the longer one of two arcs
         connecting start and end point.
      */
     boolean IsLargeArc;
 
 
-    /** If <TRUE/>, and there's a choice, take the arc that goes
+    /** If `TRUE`, and there's a choice, take the arc that goes
         clock-wise from start to end point.
      */
     boolean IsClockwiseSweep;

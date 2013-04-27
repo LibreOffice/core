@@ -47,7 +47,7 @@ service DataProvider
      */
     [optional] interface ::com::sun::star::chart2::data::XRangeXMLConversion;
 
-    /** If set to false <FALSE/>, values from hidden cells are not returned.
+    /** If set to false `FALSE`, values from hidden cells are not returned.
      */
     [optional, property] boolean                  IncludeHiddenCells;
 };

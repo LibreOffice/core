@@ -33,9 +33,9 @@ module com {  module sun {  module star {  module form {  module binding {
     <p>The com::sun::star::form::binding::XValueBinding instance which
     can be associated with a BindableDatabaseRadioButton must support exchanging
     boolean values. The following mapping between external values and control states apply:
-    <ul><li><TRUE/> will be mapped to the button being checked, and vice versa</li>
-        <li><FALSE/> will be mapped to it being unchecked, and vice versa</li>
-        <li><NULL/> will be mapped to it being in undetermined state</li>
+    <ul><li>`TRUE` will be mapped to the button being checked, and vice versa</li>
+        <li>`FALSE` will be mapped to it being unchecked, and vice versa</li>
+        <li>`NULL` will be mapped to it being in undetermined state</li>
     </ul></p>
 
     <p>If the value binding associated with a BindableDatabaseRadioButton
@@ -43,7 +43,7 @@ module com {  module sun {  module star {  module form {  module binding {
     is <em>not</em> empty, then the radio button will exchange it's value as string:
     <ul><li>A string equal to the reference value will be mapped to the button being checked, and vice versa</li>
         <li>A string not equal to the reference value will be mapped to the button being unchecked, and vice versa</li>
-        <li><NULL/> will be mapped to it being in undetermined state</li>
+        <li>`NULL` will be mapped to it being in undetermined state</li>
     </ul></p>
 
     @see com::sun::star::form::binding::XValueBinding::supportsType

@@ -52,7 +52,7 @@ struct TextHit
         language (i.e. the leading edge of an Arabic glyph is the
         right half of it, whereas it is the left half of a Latin
         character). If the hit was on the leading edge, this member is
-        set to <TRUE/>.
+        set to `TRUE`.
      */
     boolean     IsLeadingEdge;
 };

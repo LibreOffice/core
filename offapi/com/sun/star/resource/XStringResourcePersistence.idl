@@ -79,10 +79,10 @@ interface XStringResourcePersistence: com::sun::star::resource::XStringResourceM
         provides the current modify state of the StringResourceManager instance.
 
         @return
-            <TRUE/> if the string table has changed since the last call to
+            `TRUE` if the string table has changed since the last call to
             store() or, if supported
             <code>XStringResourceWithStorage::storeAsStorage</code>.
-            <FALSE/> if the table hasn't changed.
+            `FALSE` if the table hasn't changed.
     */
     boolean isModified();
 
