@@ -236,7 +236,17 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
 	$(if $(filter unx,$(GUIBASE)),desktop_detector) \
     drawinglayer \
     editeng \
+    egi \
+    eme \
     $(if $(filter WNT,$(OS)),$(if $(DISABLE_ATL),,emser)) \
+    epb \
+    epg \
+    epp \
+    eps \
+    ept \
+    era \
+    eti \
+    exp \
 	file \
 	filterconfig \
     for \
@@ -248,6 +258,18 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     fwl \
 	fwm \
     $(if $(filter DESKTOP,$(BUILD_TYPE)),helplinker) \
+    icd \
+    icg \
+    idx \
+    ime \
+    ipb \
+    ipd \
+    ips \
+    ipt \
+    ipx \
+    ira \
+    itg \
+    iti \
     lng \
     $(if $(MERGELIBS),merged) \
     msfilter \
@@ -255,9 +277,11 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     sax \
     sb \
     sdbt \
+    sdfilt \
     sfx \
     sot \
     $(if $(ENABLE_HEADLESS),,spl) \
+    svgio \
     svl \
     svt \
     svx \
@@ -310,35 +334,13 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     calc \
     dbp \
     dbu \
-    egi \
-    eme \
-    epb \
-    epg \
-    epp \
-    eps \
-    ept \
-    era \
-    eti \
     evoab \
-    exp \
 	filtertracer \
 	flash \
 	flat \
     graphicfilter \
     guesslang \
     hyphen \
-	icd \
-	icg \
-	idx \
-	ime \
-	ipb \
-	ipd \
-	ips \
-	ipt \
-	ipx \
-	ira \
-	itg \
-	iti \
 	jdbc \
 	kab1 \
 	kabdrv1 \
@@ -368,7 +370,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     scui \
     sd \
     sdd \
-    sdfilt \
     sdui \
     simplecm \
     sm \
@@ -378,7 +379,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     spell \
     sts \
     svgfilter \
-	svgio \
     sw \
 	tdeab1 \
 	tdeabdrv1 \
