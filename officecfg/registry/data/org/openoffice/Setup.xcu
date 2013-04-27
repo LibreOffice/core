@@ -17,768 +17,767 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-data SYSTEM "../../../component-update.dtd">
-<oor:component-data oor:name="Setup" oor:package="org.openoffice" xmlns:oor="http://openoffice.org/2001/registry" xmlns:install="http://openoffice.org/2004/installation" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <node oor:name="Product">
-        <prop oor:name="ooName">
-            <value>${PRODUCTNAME}</value>
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:install="http://openoffice.org/2004/installation" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Setup" oor:package="org.openoffice">
+  <node oor:name="Product">
+    <prop oor:name="ooName">
+      <value>${PRODUCTNAME}</value>
+    </prop>
+    <prop oor:name="ooSetupVersion">
+      <value>${PRODUCTVERSION}</value>
+    </prop>
+    <prop oor:name="ooSetupVersionAboutBox">
+      <value>${ABOUTBOXPRODUCTVERSION}</value>
+    </prop>
+    <prop oor:name="ooSetupVersionAboutBoxSuffix">
+      <value>${ABOUTBOXPRODUCTVERSIONSUFFIX}</value>
+    </prop>
+    <prop oor:name="ooVendor">
+      <value>${OOOVENDOR}</value>
+    </prop>
+    <prop oor:name="ooSetupExtension">
+      <value>${PRODUCTEXTENSION}</value>
+    </prop>
+    <prop oor:name="ooXMLFileFormatVersion">
+      <value>${FILEFORMATVERSION}</value>
+    </prop>
+    <prop oor:name="ooXMLFileFormatName">
+      <value>${FILEFORMATNAME}</value>
+    </prop>
+    <prop oor:name="ooOpenSourceContext">
+      <value>${OPENSOURCE}</value>
+    </prop>
+  </node>
+  <node oor:name="Office">
+    <node oor:name="Factories">
+      <node oor:name="com.sun.star.sheet.SpreadsheetDocument" oor:op="replace" install:module="calc">
+        <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true">
+          <value>com.sun.star.sheet.SpreadsheetDocument</value>
         </prop>
-        <prop oor:name="ooSetupVersion">
-            <value>${PRODUCTVERSION}</value>
+        <prop oor:name="ooSetupFactoryCommandConfigRef">
+          <value>CalcCommands</value>
         </prop>
-        <prop oor:name="ooSetupVersionAboutBox">
-            <value>${ABOUTBOXPRODUCTVERSION}</value>
+        <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true">
+          <value>calc8</value>
         </prop>
-        <prop oor:name="ooSetupVersionAboutBoxSuffix">
-            <value>${ABOUTBOXPRODUCTVERSIONSUFFIX}</value>
+        <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true">
+          <value>calc8_template</value>
         </prop>
-        <prop oor:name="ooVendor">
-            <value>${OOOVENDOR}</value>
+        <prop oor:name="ooSetupFactoryDefaultFilter">
+          <value>calc8</value>
         </prop>
-
-        <prop oor:name="ooSetupExtension">
-            <value>${PRODUCTEXTENSION}</value>
+        <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true">
+          <value>private:factory/scalc</value>
         </prop>
-        <prop oor:name="ooXMLFileFormatVersion">
-            <value>${FILEFORMATVERSION}</value>
+        <prop oor:name="ooSetupFactoryWindowAttributes">
+          <value>,,,;4;</value>
         </prop>
-        <prop oor:name="ooXMLFileFormatName">
-            <value>${FILEFORMATNAME}</value>
+        <prop oor:name="ooSetupFactoryIcon">
+          <value>4</value>
         </prop>
-        <prop oor:name="ooOpenSourceContext">
-            <value>${OPENSOURCE}</value>
+        <prop oor:name="ooSetupFactoryTemplateFile">
+          <value/>
         </prop>
-    </node>
-    <node oor:name="Office">
-        <node oor:name="Factories">
-            <node oor:name="com.sun.star.sheet.SpreadsheetDocument" oor:op="replace" install:module="calc">
-                <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true">
-                    <value>com.sun.star.sheet.SpreadsheetDocument</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCommandConfigRef">
-                    <value>CalcCommands</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true">
-                    <value>calc8</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true">
-                    <value>calc8_template</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryDefaultFilter">
-                    <value>calc8</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true">
-                    <value>private:factory/scalc</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowAttributes">
-                    <value>,,,;4;</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryIcon">
-                    <value>4</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryTemplateFile">
-                    <value></value>
-                </prop>
-                <prop oor:name="ooSetupFactorySystemDefaultTemplateChanged">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryShortName">
-                    <value>scalc</value>
-                </prop>
-                           <prop oor:name="ooSetupFactoryUIName">
-                                  <value>Calc</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
-                    <value>CalcWindowState</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
-                    <value>GenericCategories</value>
-                </prop>
-            </node>
-            <node oor:name="com.sun.star.drawing.DrawingDocument" oor:op="replace" install:module="draw" >
-                <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true">
-                    <value>com.sun.star.drawing.DrawingDocument</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCommandConfigRef">
-                    <value>DrawImpressCommands</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true">
-                    <value>draw8</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true">
-                        <value>draw8_template</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryDefaultFilter">
-                    <value>draw8</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true">
-                    <value>private:factory/sdraw</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowAttributes">
-                    <value>,,,;4;</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryIcon">
-                    <value>6</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryTemplateFile">
-                    <value></value>
-                </prop>
-                <prop oor:name="ooSetupFactorySystemDefaultTemplateChanged">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryShortName">
-                    <value>sdraw</value>
-                </prop>
-                           <prop oor:name="ooSetupFactoryUIName">
-                                  <value>Draw</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
-                    <value>DrawWindowState</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
-                    <value>GenericCategories</value>
-                </prop>
-            </node>
-            <node oor:name="com.sun.star.presentation.PresentationDocument" oor:op="replace" install:module="impress">
-                <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true">
-                    <value>com.sun.star.presentation.PresentationDocument</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCommandConfigRef">
-                    <value>DrawImpressCommands</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true">
-                    <value>impress8</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true">
-                    <value>impress8_template</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryDefaultFilter">
-                    <value>impress8</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true">
-                    <value>private:factory/simpress</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowAttributes">
-                    <value>,,,;4;</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryIcon">
-                    <value>8</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryTemplateFile">
-                    <value></value>
-                </prop>
-                <prop oor:name="ooSetupFactorySystemDefaultTemplateChanged">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryShortName">
-                    <value>simpress</value>
-                </prop>
-                           <prop oor:name="ooSetupFactoryUIName">
-                                  <value>Impress</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
-                    <value>ImpressWindowState</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
-                    <value>GenericCategories</value>
-                </prop>
-            </node>
-            <node oor:name="com.sun.star.formula.FormulaProperties" oor:op="replace" install:module="math">
-                <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true">
-                    <value>com.sun.star.formula.FormulaProperties</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCommandConfigRef">
-                    <value>MathCommands</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true">
-                    <value>math8</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryDefaultFilter">
-                    <value>math8</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true">
-                    <value>private:factory/smath</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowAttributes">
-                    <value></value>
-                </prop>
-                <prop oor:name="ooSetupFactoryIcon">
-                    <value>13</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryTemplateFile">
-                    <value></value>
-                </prop>
-                <prop oor:name="ooSetupFactorySystemDefaultTemplateChanged">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryShortName">
-                    <value>smath</value>
-                </prop>
-                           <prop oor:name="ooSetupFactoryUIName">
-                                  <value>Math</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
-                    <value>MathWindowState</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
-                    <value>GenericCategories</value>
-                </prop>
-            </node>
-            <node oor:name="com.sun.star.text.GlobalDocument" oor:op="replace" install:module="writer">
-                <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true">
-                    <value>com.sun.star.text.GlobalDocument</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCommandConfigRef">
-                    <value>WriterCommands</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true">
-                    <value>writerglobal8</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryDefaultFilter">
-                    <value>writerglobal8</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true">
-                    <value>private:factory/swriter/GlobalDocument</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowAttributes">
-                    <value></value>
-                </prop>
-                <prop oor:name="ooSetupFactoryIcon">
-                    <value>10</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryTemplateFile">
-                    <value></value>
-                </prop>
-                <prop oor:name="ooSetupFactorySystemDefaultTemplateChanged">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryShortName">
-                    <value>sglobal</value>
-                </prop>
-                           <prop oor:name="ooSetupFactoryUIName">
-                                  <value>Writer</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
-                    <value>WriterGlobalWindowState</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
-                    <value>GenericCategories</value>
-                </prop>
-            </node>
-            <node oor:name="com.sun.star.text.TextDocument" oor:op="replace" install:module="writer">
-                <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true">
-                    <value>com.sun.star.text.TextDocument</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCommandConfigRef">
-                    <value>WriterCommands</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true">
-                    <value>writer8</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true">
-                    <value>writer8_template</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryDefaultFilter">
-                    <value>writer8</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true">
-                    <value>private:factory/swriter</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowAttributes">
-                    <value></value>
-                </prop>
-                <prop oor:name="ooSetupFactoryIcon">
-                    <value>2</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryTemplateFile">
-                    <value></value>
-                </prop>
-                <prop oor:name="ooSetupFactorySystemDefaultTemplateChanged">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryShortName">
-                    <value>swriter</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryUIName">
-                    <value>Writer</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
-                    <value>WriterWindowState</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
-                    <value>GenericCategories</value>
-                </prop>
-            </node>
-            <node oor:name="com.sun.star.sdb.FormDesign" oor:op="replace" install:module="writer">
-                <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true">
-                    <value>com.sun.star.text.TextDocument</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true">
-                    <value>writer8</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true">
-                    <value>writer8_template</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryDefaultFilter">
-                    <value>writer8</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true">
-                    <value>private:factory/swriter</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCommandConfigRef">
-                    <value>WriterCommands</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryIcon">
-                    <value>2</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryShortName">
-                    <value>swform</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryUIName">
-                    <value>Base: Database Form</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
-                    <value>WriterFormWindowState</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
-                    <value>GenericCategories</value>
-                </prop>
-            </node>
-            <node oor:name="com.sun.star.sdb.TextReportDesign" oor:op="replace" install:module="writer">
-                <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true">
-                    <value>com.sun.star.text.TextDocument</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true">
-                    <value>writer8</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true">
-                    <value>writer8_template</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryDefaultFilter">
-                    <value>writer8</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true">
-                    <value>private:factory/swriter</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCommandConfigRef">
-                    <value>WriterCommands</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryIcon">
-                    <value>2</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryShortName">
-                    <value>swreport</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryUIName">
-                    <value>Base: Report Design</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
-                    <value>WriterReportWindowState</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
-                    <value>GenericCategories</value>
-                </prop>
-            </node>
-            <node oor:name="com.sun.star.xforms.XMLFormDocument" oor:op="replace" install:module="writer">
-                <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true">
-                    <value>com.sun.star.text.TextDocument</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true">
-                    <value>writer8</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true">
-                    <value>writer8_template</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryDefaultFilter">
-                    <value>writer8</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true">
-                    <value>private:factory/swriter?slot=21053</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCommandConfigRef">
-                    <value>WriterCommands</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowAttributes">
-                    <value></value>
-                </prop>
-                <prop oor:name="ooSetupFactoryIcon">
-                    <value>2</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryShortName">
-                    <value>swxform</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryUIName">
-                    <value>XML Form Document</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
-                    <value>XFormsWindowState</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
-                    <value>GenericCategories</value>
-                </prop>
-            </node>
-            <node oor:name="com.sun.star.text.WebDocument" oor:op="replace">
-                <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true">
-                    <value>com.sun.star.text.WebDocument</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCommandConfigRef">
-                    <value>WriterCommands</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true">
-                    <value>HTML</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryDefaultFilter">
-                    <value>HTML</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true">
-                    <value>private:factory/swriter/web</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowAttributes">
-                    <value></value>
-                </prop>
-                <prop oor:name="ooSetupFactoryIcon">
-                    <value>11</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryTemplateFile">
-                    <value></value>
-                </prop>
-                <prop oor:name="ooSetupFactorySystemDefaultTemplateChanged">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryShortName">
-                    <value>sweb</value>
-                </prop>
-                           <prop oor:name="ooSetupFactoryUIName">
-                                  <value>Writer/Web</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
-                    <value>WriterWebWindowState</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
-                    <value>GenericCategories</value>
-                </prop>
-            </node>
-            <node oor:name="com.sun.star.sdb.RelationDesign" oor:op="replace" install:module="base">
-                <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryDefaultFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryCommandConfigRef">
-                    <value>DbuCommands</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryShortName">
-                    <value>dbrelation</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
-                    <value>DbRelationWindowState</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryIcon">
-                    <value>12</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
-                    <value>GenericCategories</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryUIName">
-                    <value>Base: Relation Design</value>
-                </prop>
-            </node>
-            <node oor:name="com.sun.star.sdb.QueryDesign" oor:op="replace" install:module="base">
-                <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryDefaultFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryCommandConfigRef">
-                    <value>DbuCommands</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryShortName">
-                    <value>dbquery</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
-                    <value>DbQueryWindowState</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryIcon">
-                    <value>12</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
-                    <value>GenericCategories</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryUIName">
-                    <value>Base: Query Design</value>
-                </prop>
-            </node>
-            <node oor:name="com.sun.star.sdb.ViewDesign" oor:op="replace" install:module="base">
-                <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryDefaultFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryCommandConfigRef">
-                    <value>DbuCommands</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryShortName">
-                    <value>dbquery</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
-                    <value>DbQueryWindowState</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryIcon">
-                    <value>12</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
-                    <value>GenericCategories</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryUIName">
-                    <value>Base: View Design</value>
-                </prop>
-            </node>
+        <prop oor:name="ooSetupFactorySystemDefaultTemplateChanged">
+          <value>false</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryShortName">
+          <value>scalc</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryUIName">
+          <value>Calc</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+          <value>CalcWindowState</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+          <value>GenericCategories</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.drawing.DrawingDocument" oor:op="replace" install:module="draw">
+        <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true">
+          <value>com.sun.star.drawing.DrawingDocument</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCommandConfigRef">
+          <value>DrawImpressCommands</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true">
+          <value>draw8</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true">
+          <value>draw8_template</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryDefaultFilter">
+          <value>draw8</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true">
+          <value>private:factory/sdraw</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowAttributes">
+          <value>,,,;4;</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryIcon">
+          <value>6</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryTemplateFile">
+          <value/>
+        </prop>
+        <prop oor:name="ooSetupFactorySystemDefaultTemplateChanged">
+          <value>false</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryShortName">
+          <value>sdraw</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryUIName">
+          <value>Draw</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+          <value>DrawWindowState</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+          <value>GenericCategories</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.presentation.PresentationDocument" oor:op="replace" install:module="impress">
+        <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true">
+          <value>com.sun.star.presentation.PresentationDocument</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCommandConfigRef">
+          <value>DrawImpressCommands</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true">
+          <value>impress8</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true">
+          <value>impress8_template</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryDefaultFilter">
+          <value>impress8</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true">
+          <value>private:factory/simpress</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowAttributes">
+          <value>,,,;4;</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryIcon">
+          <value>8</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryTemplateFile">
+          <value/>
+        </prop>
+        <prop oor:name="ooSetupFactorySystemDefaultTemplateChanged">
+          <value>false</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryShortName">
+          <value>simpress</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryUIName">
+          <value>Impress</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+          <value>ImpressWindowState</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+          <value>GenericCategories</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.formula.FormulaProperties" oor:op="replace" install:module="math">
+        <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true">
+          <value>com.sun.star.formula.FormulaProperties</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCommandConfigRef">
+          <value>MathCommands</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true">
+          <value>math8</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryDefaultFilter">
+          <value>math8</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true">
+          <value>private:factory/smath</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowAttributes">
+          <value/>
+        </prop>
+        <prop oor:name="ooSetupFactoryIcon">
+          <value>13</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryTemplateFile">
+          <value/>
+        </prop>
+        <prop oor:name="ooSetupFactorySystemDefaultTemplateChanged">
+          <value>false</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryShortName">
+          <value>smath</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryUIName">
+          <value>Math</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+          <value>MathWindowState</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+          <value>GenericCategories</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.text.GlobalDocument" oor:op="replace" install:module="writer">
+        <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true">
+          <value>com.sun.star.text.GlobalDocument</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCommandConfigRef">
+          <value>WriterCommands</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true">
+          <value>writerglobal8</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryDefaultFilter">
+          <value>writerglobal8</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true">
+          <value>private:factory/swriter/GlobalDocument</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowAttributes">
+          <value/>
+        </prop>
+        <prop oor:name="ooSetupFactoryIcon">
+          <value>10</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryTemplateFile">
+          <value/>
+        </prop>
+        <prop oor:name="ooSetupFactorySystemDefaultTemplateChanged">
+          <value>false</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryShortName">
+          <value>sglobal</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryUIName">
+          <value>Writer</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+          <value>WriterGlobalWindowState</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+          <value>GenericCategories</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.text.TextDocument" oor:op="replace" install:module="writer">
+        <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true">
+          <value>com.sun.star.text.TextDocument</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCommandConfigRef">
+          <value>WriterCommands</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true">
+          <value>writer8</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true">
+          <value>writer8_template</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryDefaultFilter">
+          <value>writer8</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true">
+          <value>private:factory/swriter</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowAttributes">
+          <value/>
+        </prop>
+        <prop oor:name="ooSetupFactoryIcon">
+          <value>2</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryTemplateFile">
+          <value/>
+        </prop>
+        <prop oor:name="ooSetupFactorySystemDefaultTemplateChanged">
+          <value>false</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryShortName">
+          <value>swriter</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryUIName">
+          <value>Writer</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+          <value>WriterWindowState</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+          <value>GenericCategories</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.sdb.FormDesign" oor:op="replace" install:module="writer">
+        <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true">
+          <value>com.sun.star.text.TextDocument</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true">
+          <value>writer8</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true">
+          <value>writer8_template</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryDefaultFilter">
+          <value>writer8</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true">
+          <value>private:factory/swriter</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCommandConfigRef">
+          <value>WriterCommands</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryIcon">
+          <value>2</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryShortName">
+          <value>swform</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryUIName">
+          <value>Base: Database Form</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+          <value>WriterFormWindowState</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+          <value>GenericCategories</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.sdb.TextReportDesign" oor:op="replace" install:module="writer">
+        <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true">
+          <value>com.sun.star.text.TextDocument</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true">
+          <value>writer8</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true">
+          <value>writer8_template</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryDefaultFilter">
+          <value>writer8</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true">
+          <value>private:factory/swriter</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCommandConfigRef">
+          <value>WriterCommands</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryIcon">
+          <value>2</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryShortName">
+          <value>swreport</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryUIName">
+          <value>Base: Report Design</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+          <value>WriterReportWindowState</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+          <value>GenericCategories</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.xforms.XMLFormDocument" oor:op="replace" install:module="writer">
+        <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true">
+          <value>com.sun.star.text.TextDocument</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true">
+          <value>writer8</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true">
+          <value>writer8_template</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryDefaultFilter">
+          <value>writer8</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true">
+          <value>private:factory/swriter?slot=21053</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCommandConfigRef">
+          <value>WriterCommands</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowAttributes">
+          <value/>
+        </prop>
+        <prop oor:name="ooSetupFactoryIcon">
+          <value>2</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryShortName">
+          <value>swxform</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryUIName">
+          <value>XML Form Document</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+          <value>XFormsWindowState</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+          <value>GenericCategories</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.text.WebDocument" oor:op="replace">
+        <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true">
+          <value>com.sun.star.text.WebDocument</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCommandConfigRef">
+          <value>WriterCommands</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true">
+          <value>HTML</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryDefaultFilter">
+          <value>HTML</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true">
+          <value>private:factory/swriter/web</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowAttributes">
+          <value/>
+        </prop>
+        <prop oor:name="ooSetupFactoryIcon">
+          <value>11</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryTemplateFile">
+          <value/>
+        </prop>
+        <prop oor:name="ooSetupFactorySystemDefaultTemplateChanged">
+          <value>false</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryShortName">
+          <value>sweb</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryUIName">
+          <value>Writer/Web</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+          <value>WriterWebWindowState</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+          <value>GenericCategories</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.sdb.RelationDesign" oor:op="replace" install:module="base">
+        <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryDefaultFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryCommandConfigRef">
+          <value>DbuCommands</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryShortName">
+          <value>dbrelation</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+          <value>DbRelationWindowState</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryIcon">
+          <value>12</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+          <value>GenericCategories</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryUIName">
+          <value>Base: Relation Design</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.sdb.QueryDesign" oor:op="replace" install:module="base">
+        <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryDefaultFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryCommandConfigRef">
+          <value>DbuCommands</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryShortName">
+          <value>dbquery</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+          <value>DbQueryWindowState</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryIcon">
+          <value>12</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+          <value>GenericCategories</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryUIName">
+          <value>Base: Query Design</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.sdb.ViewDesign" oor:op="replace" install:module="base">
+        <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryDefaultFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryCommandConfigRef">
+          <value>DbuCommands</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryShortName">
+          <value>dbquery</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+          <value>DbQueryWindowState</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryIcon">
+          <value>12</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+          <value>GenericCategories</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryUIName">
+          <value>Base: View Design</value>
+        </prop>
+      </node>
       <node oor:name="com.sun.star.sdb.TableDesign" oor:op="replace" install:module="base">
-                <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryDefaultFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryCommandConfigRef">
-                    <value>DbuCommands</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryShortName">
-                    <value>dbtable</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
-                    <value>DbTableWindowState</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryIcon">
-                    <value>12</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
-                    <value>GenericCategories</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryUIName">
-                    <value>Base: Table Design</value>
-                </prop>
-            </node>
-            <node oor:name="com.sun.star.sdb.DataSourceBrowser" oor:op="replace" install:module="base">
-                <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryDefaultFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryCommandConfigRef">
-                    <value>DbuCommands</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryShortName">
-                    <value>dbbrowser</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
-                    <value>DbBrowserWindowState</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryIcon">
-                    <value>12</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
-                    <value>GenericCategories</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryUIName">
-                    <value>Base: Data View</value>
-                </prop>
-            </node>
-            <node oor:name="com.sun.star.sdb.TableDataView" oor:op="replace" install:module="base">
-                <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryDefaultFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryCommandConfigRef">
-                    <value>DbuCommands</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryShortName">
-                    <value>dbtdata</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
-                    <value>DbTableDataWindowState</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryIcon">
-                    <value>12</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
-                    <value>GenericCategories</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryUIName">
-                    <value>Base: Table Data View</value>
-                </prop>
-            </node>
-            <node oor:name="com.sun.star.frame.Bibliography" oor:op="replace">
-                <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryDefaultFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryCommandConfigRef">
-                    <value>BibliographyCommands</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryShortName">
-                    <value>sbibliography</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
-                    <value>BibliographyWindowState</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
-                    <value>GenericCategories</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryUIName">
-                    <value>Bibliography</value>
-                </prop>
-            </node>
-            <node oor:name="com.sun.star.script.BasicIDE" oor:op="replace">
-                <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryDefaultFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryCommandConfigRef">
-                    <value>BasicIDECommands</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryShortName">
-                    <value>BasicIDE</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
-                    <value>BasicIDEWindowState</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
-                    <value>GenericCategories</value>
-                </prop>
-                           <prop oor:name="ooSetupFactoryUIName">
-                                  <value>Basic</value>
-                </prop>
-            </node>
-            <node oor:name="com.sun.star.frame.StartModule" oor:op="replace" install:module="start">
-                <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryDefaultFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryCommandConfigRef">
-                    <value>StartModuleCommands</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryShortName">
-                    <value>StartModule</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
-                    <value>StartModuleWindowState</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
-                    <value>GenericCategories</value>
-                </prop>
-            </node>
-            <node oor:name="com.sun.star.chart2.ChartDocument" oor:op="replace">
-                <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true">
-                    <value>com.sun.star.chart2.ChartDocument</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCommandConfigRef">
-                    <value>ChartCommands</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true">
-                    <value>chart8</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryDefaultFilter">
-                    <value>chart8</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true">
-                    <value>private:factory/schart</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowAttributes">
-                    <value></value>
-                </prop>
-                <prop oor:name="ooSetupFactoryIcon">
-                    <value>1</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryTemplateFile">
-                    <value></value>
-                </prop>
-                <prop oor:name="ooSetupFactorySystemDefaultTemplateChanged">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryShortName">
-                    <value>schart</value>
-                </prop>
-                           <prop oor:name="ooSetupFactoryUIName">
-                                  <value>Chart</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
-                    <value>ChartWindowState</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
-                    <value>GenericCategories</value>
-                </prop>
-            </node>
-            <node oor:name="com.sun.star.sdb.OfficeDatabaseDocument" oor:op="replace" install:module="base">
-                <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true">
-                    <value>com.sun.star.sdb.OfficeDatabaseDocument</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCommandConfigRef">
-                    <value>DbuCommands</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true">
-                    <value>StarOffice XML (Base)</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryDefaultFilter">
-                    <value>StarOffice XML (Base)</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true">
-                    <value>private:factory/sdatabase</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowAttributes">
-                    <value></value>
-                </prop>
-                <prop oor:name="ooSetupFactoryIcon">
-                    <value>12</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryTemplateFile">
-                    <value></value>
-                </prop>
-                <prop oor:name="ooSetupFactorySystemDefaultTemplateChanged">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryShortName">
-                    <value>dbapp</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
-                    <value>BaseWindowState</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
-                    <value>GenericCategories</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryUIName">
-                    <value>Base</value>
-                </prop>
-            </node>
-            <node oor:name="com.sun.star.report.ReportDefinition" oor:op="replace" install:module="reportbuilder">
-                <prop oor:name="ooSetupFactoryCommandConfigRef">
-                    <value>ReportCommands</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryShortName">
-                    <value>dbreport</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
-                    <value>DbReportWindowState</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryIcon">
-                    <value>12</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
-                    <value>GenericCategories</value>
-                </prop>
-                <prop oor:name="ooSetupFactoryUIName">
-                  <value>Base: Oracle Report Builder</value>
-                </prop>
-            </node>
-        </node>
+        <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryDefaultFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryCommandConfigRef">
+          <value>DbuCommands</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryShortName">
+          <value>dbtable</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+          <value>DbTableWindowState</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryIcon">
+          <value>12</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+          <value>GenericCategories</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryUIName">
+          <value>Base: Table Design</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.sdb.DataSourceBrowser" oor:op="replace" install:module="base">
+        <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryDefaultFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryCommandConfigRef">
+          <value>DbuCommands</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryShortName">
+          <value>dbbrowser</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+          <value>DbBrowserWindowState</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryIcon">
+          <value>12</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+          <value>GenericCategories</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryUIName">
+          <value>Base: Data View</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.sdb.TableDataView" oor:op="replace" install:module="base">
+        <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryDefaultFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryCommandConfigRef">
+          <value>DbuCommands</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryShortName">
+          <value>dbtdata</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+          <value>DbTableDataWindowState</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryIcon">
+          <value>12</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+          <value>GenericCategories</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryUIName">
+          <value>Base: Table Data View</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.frame.Bibliography" oor:op="replace">
+        <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryDefaultFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryCommandConfigRef">
+          <value>BibliographyCommands</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryShortName">
+          <value>sbibliography</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+          <value>BibliographyWindowState</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+          <value>GenericCategories</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryUIName">
+          <value>Bibliography</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.script.BasicIDE" oor:op="replace">
+        <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryDefaultFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryCommandConfigRef">
+          <value>BasicIDECommands</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryShortName">
+          <value>BasicIDE</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+          <value>BasicIDEWindowState</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+          <value>GenericCategories</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryUIName">
+          <value>Basic</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.frame.StartModule" oor:op="replace" install:module="start">
+        <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryDefaultFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryCommandConfigRef">
+          <value>StartModuleCommands</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryShortName">
+          <value>StartModule</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+          <value>StartModuleWindowState</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+          <value>GenericCategories</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.chart2.ChartDocument" oor:op="replace">
+        <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true">
+          <value>com.sun.star.chart2.ChartDocument</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCommandConfigRef">
+          <value>ChartCommands</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true">
+          <value>chart8</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryDefaultFilter">
+          <value>chart8</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true">
+          <value>private:factory/schart</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowAttributes">
+          <value/>
+        </prop>
+        <prop oor:name="ooSetupFactoryIcon">
+          <value>1</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryTemplateFile">
+          <value/>
+        </prop>
+        <prop oor:name="ooSetupFactorySystemDefaultTemplateChanged">
+          <value>false</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryShortName">
+          <value>schart</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryUIName">
+          <value>Chart</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+          <value>ChartWindowState</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+          <value>GenericCategories</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.sdb.OfficeDatabaseDocument" oor:op="replace" install:module="base">
+        <prop oor:name="ooSetupFactoryDocumentService" oor:finalized="true">
+          <value>com.sun.star.sdb.OfficeDatabaseDocument</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCommandConfigRef">
+          <value>DbuCommands</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true">
+          <value>StarOffice XML (Base)</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryDefaultFilter">
+          <value>StarOffice XML (Base)</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true">
+          <value>private:factory/sdatabase</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowAttributes">
+          <value/>
+        </prop>
+        <prop oor:name="ooSetupFactoryIcon">
+          <value>12</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryTemplateFile">
+          <value/>
+        </prop>
+        <prop oor:name="ooSetupFactorySystemDefaultTemplateChanged">
+          <value>false</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryShortName">
+          <value>dbapp</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+          <value>BaseWindowState</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+          <value>GenericCategories</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryUIName">
+          <value>Base</value>
+        </prop>
+      </node>
+      <node oor:name="com.sun.star.report.ReportDefinition" oor:op="replace" install:module="reportbuilder">
+        <prop oor:name="ooSetupFactoryCommandConfigRef">
+          <value>ReportCommands</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryShortName">
+          <value>dbreport</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+          <value>DbReportWindowState</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryIcon">
+          <value>12</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+          <value>GenericCategories</value>
+        </prop>
+        <prop oor:name="ooSetupFactoryUIName">
+          <value>Base: Oracle Report Builder</value>
+        </prop>
+      </node>
     </node>
+  </node>
   <node oor:name="Migration">
     <node oor:name="SupportedVersions">
       <node oor:name="OpenOffice.org3+OpenOffice.org2+StarOffice8+StarSuite8+Libreoffice3" oor:op="replace">
@@ -793,8 +792,7 @@
             <prop oor:name="IncludedFiles">
               <value>.*/database/biblio/biblio\.dbf</value>
             </prop>
-            <prop oor:name="ExcludedFiles">
-            </prop>
+            <prop oor:name="ExcludedFiles"/>
             <prop oor:name="IncludedNodes">
               <value>/org.openoffice.Office.DataAccess</value>
             </prop>
@@ -1086,5 +1084,5 @@
         </node>
       </node>
     </node>
-    </node>
+  </node>
 </oor:component-data>

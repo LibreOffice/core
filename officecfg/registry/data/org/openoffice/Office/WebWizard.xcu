@@ -17,1464 +17,1464 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
-<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="WebWizard" oor:package="org.openoffice.Office">
-    <node oor:name="WebWizard">
-        <prop oor:name="WorkDir">
-            <value>wizard/web</value>
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:install="http://openoffice.org/2004/installation" oor:name="WebWizard" oor:package="org.openoffice.Office">
+  <node oor:name="WebWizard">
+    <prop oor:name="WorkDir">
+      <value>wizard/web</value>
+    </prop>
+    <node oor:name="Exporters">
+      <node oor:name="copy-exporter" oor:op="replace">
+        <prop oor:name="Index">
+          <value>99</value>
         </prop>
-        <node oor:name="Exporters">
-            <node oor:name="copy-exporter" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>99</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Original file format</value>
-                </prop>
-                <prop oor:name="ExporterClass">
-                    <value>com.sun.star.wizards.web.export.CopyExporter</value>
-                </prop>
-                <prop oor:name="OwnDirectory">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="SupportsFilename">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="DefaultFilename">
-                    <value/>
-                </prop>
-                <prop oor:name="Extension">
-                    <value/>
-                </prop>
-                <prop oor:name="SupportedMimeTypes">
-                    <value/>
-                </prop>
-                <prop oor:name="Icon">
-                    <value/>
-                </prop>
-                <prop oor:name="Binary">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="PageType">
-                    <value>0</value>
-                </prop>
-                <node oor:name="Arguments"/>
-            </node>
-            <node oor:name="html-writer-exporter" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>0</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">HTML</value>
-                </prop>
-                <prop oor:name="ExporterClass">
-                    <value>com.sun.star.wizards.web.export.FilterExporter</value>
-                </prop>
-                <prop oor:name="OwnDirectory">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="SupportsFilename">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="DefaultFilename">
-                    <value/>
-                </prop>
-                <prop oor:name="Extension">
-                    <value>html</value>
-                </prop>
-                <prop oor:name="SupportedMimeTypes">
-                    <value>writer</value>
-                </prop>
-                <prop oor:name="Icon">
-                    <value>html.gif</value>
-                </prop>
-                <prop oor:name="Binary">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="PageType">
-                    <value>0</value>
-                </prop>
-                <prop oor:name="TargetType">
-                    <value>graphic_HTML</value>
-                </prop>
-                <node oor:name="Arguments">
-                    <node oor:name="Filter" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>HTML (StarWriter)</value>
-                        </prop>
-                    </node>
-                </node>
-            </node>
-            <node oor:name="html-calc-exporter" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>1</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">HTML</value>
-                </prop>
-                <prop oor:name="ExporterClass">
-                    <value>com.sun.star.wizards.web.export.FilterExporter</value>
-                </prop>
-                <prop oor:name="OwnDirectory">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="SupportsFilename">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="DefaultFilename">
-                    <value/>
-                </prop>
-                <prop oor:name="Extension">
-                    <value>html</value>
-                </prop>
-                <prop oor:name="SupportedMimeTypes">
-                    <value>calc</value>
-                </prop>
-                <prop oor:name="Icon">
-                    <value>html.gif</value>
-                </prop>
-                <prop oor:name="Binary">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="PageType">
-                    <value>0</value>
-                </prop>
-                <prop oor:name="TargetType">
-                    <value>graphic_HTML</value>
-                </prop>
-                <node oor:name="Arguments">
-                    <node oor:name="Filter" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>HTML (StarCalc)</value>
-                        </prop>
-                    </node>
-                </node>
-            </node>
-            <node oor:name="html-impress-exporter" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>2</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">HTML</value>
-                </prop>
-                <prop oor:name="ExporterClass">
-                    <value>com.sun.star.wizards.web.export.ImpressHTMLExporter</value>
-                </prop>
-                <prop oor:name="OwnDirectory">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="SupportsFilename">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="DefaultFilename">
-                    <value/>
-                </prop>
-                <prop oor:name="Extension">
-                    <value>html</value>
-                </prop>
-                <prop oor:name="SupportedMimeTypes">
-                    <value>impress</value>
-                </prop>
-                <prop oor:name="Icon">
-                    <value>html.gif</value>
-                </prop>
-                <prop oor:name="Binary">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="PageType">
-                    <value>2</value>
-                </prop>
-                <prop oor:name="TargetType">
-                    <value>graphic_HTML</value>
-                </prop>
-                <node oor:name="Arguments">
-                    <node oor:name="Filter" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>impress_html_Export</value>
-                        </prop>
-                    </node>
-                    <node oor:name="PublishMode" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>%1</value>
-                        </prop>
-                    </node>
-                    <node oor:name="IsExportContentsPage" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>true</value>
-                        </prop>
-                    </node>
-                    <node oor:name="IsExportNotes" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>false</value>
-                        </prop>
-                    </node>
-                    <node oor:name="Format" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>%1</value>
-                        </prop>
-                    </node>
-                    <node oor:name="Compression" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>$75%</value>
-                        </prop>
-                    </node>
-                    <node oor:name="EnableDownload" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>false</value>
-                        </prop>
-                    </node>
-                    <node oor:name="IsUseDocumentColors" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>true</value>
-                        </prop>
-                    </node>
-                </node>
-            </node>
-            <node oor:name="html-draw-exporter" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>3</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">HTML</value>
-                </prop>
-                <prop oor:name="ExporterClass">
-                    <value>com.sun.star.wizards.web.export.ImpressHTMLExporter</value>
-                </prop>
-                <prop oor:name="OwnDirectory">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="SupportsFilename">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="DefaultFilename">
-                    <value/>
-                </prop>
-                <prop oor:name="Extension">
-                    <value>html</value>
-                </prop>
-                <prop oor:name="SupportedMimeTypes">
-                    <value>draw</value>
-                </prop>
-                <prop oor:name="Icon">
-                    <value>html.gif</value>
-                </prop>
-                <prop oor:name="Binary">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="PageType">
-                    <value>2</value>
-                </prop>
-                <prop oor:name="TargetType">
-                    <value>graphic_HTML</value>
-                </prop>
-                <node oor:name="Arguments">
-                    <node oor:name="Filter" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>draw_html_Export</value>
-                        </prop>
-                    </node>
-                    <node oor:name="PublishMode" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>%1</value>
-                        </prop>
-                    </node>
-                    <node oor:name="IsExportContentsPage" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>true</value>
-                        </prop>
-                    </node>
-                    <node oor:name="IsExportNotes" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>false</value>
-                        </prop>
-                    </node>
-                    <node oor:name="Format" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>%1</value>
-                        </prop>
-                    </node>
-                    <node oor:name="Compression" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>$75%</value>
-                        </prop>
-                    </node>
-                    <node oor:name="EnableDownload" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>false</value>
-                        </prop>
-                    </node>
-                    <node oor:name="IsUseDocumentColors" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>true</value>
-                        </prop>
-                    </node>
-                </node>
-            </node>
-            <node oor:name="pdf-writer-exporter" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>10</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">PDF - Print optimized</value>
-                </prop>
-                <prop oor:name="ExporterClass">
-                    <value>com.sun.star.wizards.web.export.ConfiguredExporter</value>
-                </prop>
-                <prop oor:name="OwnDirectory">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="SupportsFilename">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="DefaultFilename">
-                    <value/>
-                </prop>
-                <prop oor:name="Extension">
-                    <value>pdf</value>
-                </prop>
-                <prop oor:name="SupportedMimeTypes">
-                    <value>writer</value>
-                </prop>
-                <prop oor:name="Icon">
-                    <value>pdf.gif</value>
-                </prop>
-                <prop oor:name="Binary">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="PageType">
-                    <value>1</value>
-                </prop>
-                <prop oor:name="TargetType">
-                    <value>pdf_Portable_Document_Format</value>
-                </prop>
-                <node oor:name="Arguments">
-                    <node oor:name="Filter" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>writer_pdf_Export</value>
-                        </prop>
-                    </node>
-                </node>
-            </node>
-            <node oor:name="pdf-calc-exporter" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>11</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">PDF - Print optimized</value>
-                </prop>
-                <prop oor:name="ExporterClass">
-                    <value>com.sun.star.wizards.web.export.ConfiguredExporter</value>
-                </prop>
-                <prop oor:name="OwnDirectory">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="SupportsFilename">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="DefaultFilename">
-                    <value/>
-                </prop>
-                <prop oor:name="Extension">
-                    <value>pdf</value>
-                </prop>
-                <prop oor:name="SupportedMimeTypes">
-                    <value>calc</value>
-                </prop>
-                <prop oor:name="Icon">
-                    <value>pdf.gif</value>
-                </prop>
-                <prop oor:name="Binary">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="PageType">
-                    <value>1</value>
-                </prop>
-                <prop oor:name="TargetType">
-                    <value>pdf_Portable_Document_Format</value>
-                </prop>
-                <node oor:name="Arguments">
-                    <node oor:name="Filter" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>calc_pdf_Export</value>
-                        </prop>
-                    </node>
-                </node>
-            </node>
-            <node oor:name="pdf-impress-exporter" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>12</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">PDF - Print optimized</value>
-                </prop>
-                <prop oor:name="ExporterClass">
-                    <value>com.sun.star.wizards.web.export.ConfiguredExporter</value>
-                </prop>
-                <prop oor:name="OwnDirectory">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="SupportsFilename">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="DefaultFilename">
-                    <value/>
-                </prop>
-                <prop oor:name="Extension">
-                    <value>pdf</value>
-                </prop>
-                <prop oor:name="SupportedMimeTypes">
-                    <value>impress</value>
-                </prop>
-                <prop oor:name="Icon">
-                    <value>pdf.gif</value>
-                </prop>
-                <prop oor:name="Binary">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="PageType">
-                    <value>1</value>
-                </prop>
-                <prop oor:name="TargetType">
-                    <value>pdf_Portable_Document_Format</value>
-                </prop>
-                <node oor:name="Arguments">
-                    <node oor:name="Filter" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>impress_pdf_Export</value>
-                        </prop>
-                    </node>
-                </node>
-            </node>
-            <node oor:name="pdf-draw-exporter" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>13</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">PDF - Print optimized</value>
-                </prop>
-                <prop oor:name="ExporterClass">
-                    <value>com.sun.star.wizards.web.export.ConfiguredExporter</value>
-                </prop>
-                <prop oor:name="OwnDirectory">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="SupportsFilename">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="DefaultFilename">
-                    <value/>
-                </prop>
-                <prop oor:name="Extension">
-                    <value>pdf</value>
-                </prop>
-                <prop oor:name="SupportedMimeTypes">
-                    <value>draw</value>
-                </prop>
-                <prop oor:name="Icon">
-                    <value>pdf.gif</value>
-                </prop>
-                <prop oor:name="Binary">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="PageType">
-                    <value>1</value>
-                </prop>
-                <prop oor:name="TargetType">
-                    <value>pdf_Portable_Document_Format</value>
-                </prop>
-                <node oor:name="Arguments">
-                    <node oor:name="Filter" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>draw_pdf_Export</value>
-                        </prop>
-                    </node>
-                </node>
-            </node>
-            <node oor:name="pdf-hq-writer-exporter" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>20</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">PDF - Press optimized</value>
-                </prop>
-                <prop oor:name="ExporterClass">
-                    <value>com.sun.star.wizards.web.export.ConfiguredExporter</value>
-                </prop>
-                <prop oor:name="OwnDirectory">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="SupportsFilename">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="DefaultFilename">
-                    <value/>
-                </prop>
-                <prop oor:name="Extension">
-                    <value>pdf</value>
-                </prop>
-                <prop oor:name="SupportedMimeTypes">
-                    <value>writer</value>
-                </prop>
-                <prop oor:name="Icon">
-                    <value>pdf.gif</value>
-                </prop>
-                <prop oor:name="Binary">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="PageType">
-                    <value>1</value>
-                </prop>
-                <prop oor:name="TargetType">
-                    <value>pdf_Portable_Document_Format</value>
-                </prop>
-                <node oor:name="Arguments">
-                    <node oor:name="CompressMode" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>%2</value>
-                        </prop>
-                    </node>
-                    <node oor:name="Filter" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>writer_pdf_Export</value>
-                        </prop>
-                    </node>
-                </node>
-            </node>
-            <node oor:name="pdf-calc-hq-exporter" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>21</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">PDF - Press optimized</value>
-                </prop>
-                <prop oor:name="ExporterClass">
-                    <value>com.sun.star.wizards.web.export.ConfiguredExporter</value>
-                </prop>
-                <prop oor:name="OwnDirectory">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="SupportsFilename">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="DefaultFilename">
-                    <value/>
-                </prop>
-                <prop oor:name="Extension">
-                    <value>pdf</value>
-                </prop>
-                <prop oor:name="SupportedMimeTypes">
-                    <value>calc</value>
-                </prop>
-                <prop oor:name="Icon">
-                    <value>pdf.gif</value>
-                </prop>
-                <prop oor:name="Binary">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="PageType">
-                    <value>1</value>
-                </prop>
-                <prop oor:name="TargetType">
-                    <value>pdf_Portable_Document_Format</value>
-                </prop>
-                <node oor:name="Arguments">
-                    <node oor:name="CompressMode" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>%2</value>
-                        </prop>
-                    </node>
-                    <node oor:name="Filter" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>calc_pdf_Export</value>
-                        </prop>
-                    </node>
-                </node>
-            </node>
-            <node oor:name="pdf-impress-hq-exporter" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>22</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">PDF - Press optimized</value>
-                </prop>
-                <prop oor:name="ExporterClass">
-                    <value>com.sun.star.wizards.web.export.ConfiguredExporter</value>
-                </prop>
-                <prop oor:name="OwnDirectory">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="SupportsFilename">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="DefaultFilename">
-                    <value/>
-                </prop>
-                <prop oor:name="Extension">
-                    <value>pdf</value>
-                </prop>
-                <prop oor:name="SupportedMimeTypes">
-                    <value>impress</value>
-                </prop>
-                <prop oor:name="Icon">
-                    <value>pdf.gif</value>
-                </prop>
-                <prop oor:name="Binary">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="PageType">
-                    <value>1</value>
-                </prop>
-                <prop oor:name="TargetType">
-                    <value>pdf_Portable_Document_Format</value>
-                </prop>
-                <node oor:name="Arguments">
-                    <node oor:name="CompressMode" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>%2</value>
-                        </prop>
-                    </node>
-                    <node oor:name="Filter" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>impress_pdf_Export</value>
-                        </prop>
-                    </node>
-                </node>
-            </node>
-            <node oor:name="pdf-draw-hq-exporter" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>23</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">PDF - Press optimized</value>
-                </prop>
-                <prop oor:name="ExporterClass">
-                    <value>com.sun.star.wizards.web.export.ConfiguredExporter</value>
-                </prop>
-                <prop oor:name="OwnDirectory">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="SupportsFilename">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="DefaultFilename">
-                    <value/>
-                </prop>
-                <prop oor:name="Extension">
-                    <value>pdf</value>
-                </prop>
-                <prop oor:name="SupportedMimeTypes">
-                    <value>draw</value>
-                </prop>
-                <prop oor:name="Icon">
-                    <value>pdf.gif</value>
-                </prop>
-                <prop oor:name="Binary">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="PageType">
-                    <value>1</value>
-                </prop>
-                <prop oor:name="TargetType">
-                    <value>pdf_Portable_Document_Format</value>
-                </prop>
-                <node oor:name="Arguments">
-                    <node oor:name="Filter" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>draw_pdf_Export</value>
-                        </prop>
-                    </node>
-                    <node oor:name="CompressMode" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>%2</value>
-                        </prop>
-                    </node>
-                </node>
-            </node>
-            <node oor:name="flash-impress-exporter" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>30</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Flash</value>
-                </prop>
-                <prop oor:name="ExporterClass">
-                    <value>com.sun.star.wizards.web.export.FilterExporter</value>
-                </prop>
-                <prop oor:name="OwnDirectory">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="SupportsFilename">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="DefaultFilename">
-                    <value/>
-                </prop>
-                <prop oor:name="Extension">
-                    <value>swf</value>
-                </prop>
-                <prop oor:name="SupportedMimeTypes">
-                    <value>impress</value>
-                </prop>
-                <prop oor:name="Icon">
-                    <value>fls.gif</value>
-                </prop>
-                <prop oor:name="Binary">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="PageType">
-                    <value>2</value>
-                </prop>
-                <prop oor:name="TargetType">
-                    <value>graphic_SWF</value>
-                </prop>
-                <node oor:name="Arguments">
-                    <node oor:name="Filter" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>impress_flash_Export</value>
-                        </prop>
-                    </node>
-                </node>
-            </node>
-            <node oor:name="flash-draw-exporter" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>31</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Flash</value>
-                </prop>
-                <prop oor:name="ExporterClass">
-                    <value>com.sun.star.wizards.web.export.FilterExporter</value>
-                </prop>
-                <prop oor:name="OwnDirectory">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="SupportsFilename">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="DefaultFilename">
-                    <value/>
-                </prop>
-                <prop oor:name="Extension">
-                    <value>swf</value>
-                </prop>
-                <prop oor:name="SupportedMimeTypes">
-                    <value>draw</value>
-                </prop>
-                <prop oor:name="Icon">
-                    <value>fls.gif</value>
-                </prop>
-                <prop oor:name="Binary">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="PageType">
-                    <value>2</value>
-                </prop>
-                <prop oor:name="TargetType">
-                    <value>graphic_SWF</value>
-                </prop>
-                <node oor:name="Arguments">
-                    <node oor:name="Filter" oor:op="replace">
-                        <prop oor:name="Value">
-                            <value>draw_flash_Export</value>
-                        </prop>
-                    </node>
-                </node>
-            </node>
-        </node>
-        <node oor:name="Layouts">
-            <node oor:name="table_3" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>0</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Table with 3 columns</value>
-                </prop>
-                <prop oor:name="FSName">
-                    <value>table_3</value>
-                </prop>
-            </node>
-            <node oor:name="table_2" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>1</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Table with 2 columns</value>
-                </prop>
-                <prop oor:name="FSName">
-                    <value>table_2</value>
-                </prop>
-            </node>
-            <node oor:name="simple" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>2</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Simple</value>
-                </prop>
-                <prop oor:name="FSName">
-                    <value>simple</value>
-                </prop>
-            </node>
-            <node oor:name="diagonal" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>3</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Diagonal</value>
-                </prop>
-                <prop oor:name="FSName">
-                    <value>diagonal</value>
-                </prop>
-            </node>
-            <node oor:name="zigzag" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>4</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Zigzag</value>
-                </prop>
-                <prop oor:name="FSName">
-                    <value>zigzag</value>
-                </prop>
-            </node>
-            <node oor:name="frame_left" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>5</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">HTML frameset, left</value>
-                </prop>
-                <prop oor:name="FSName">
-                    <value>frame_left</value>
-                </prop>
-            </node>
-            <node oor:name="frame_right" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>6</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">HTML frameset, right</value>
-                </prop>
-                <prop oor:name="FSName">
-                    <value>frame_right</value>
-                </prop>
-            </node>
-            <node oor:name="frame_top" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>7</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">HTML frameset, top</value>
-                </prop>
-                <prop oor:name="FSName">
-                    <value>frame_top</value>
-                </prop>
-            </node>
-            <node oor:name="frame_bottom" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>8</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">HTML frameset, bottom</value>
-                </prop>
-                <prop oor:name="FSName">
-                    <value>frame_bottom</value>
-                </prop>
-            </node>
-        </node>
-        <node oor:name="Styles">
-            <node oor:name="style1" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>0</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Beige</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>beige.css</value>
-                </prop>
-                <prop oor:name="BackgroundImage">
-                    <value/>
-                </prop>
-                <prop oor:name="IconSet">
-                    <value>iconset1</value>
-                </prop>
-            </node>
-            <node oor:name="style2" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>1</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Bright</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>bg.css</value>
-                </prop>
-                <prop oor:name="BackgroundImage">
-                    <value/>
-                </prop>
-                <prop oor:name="IconSet">
-                    <value>iconset1</value>
-                </prop>
-            </node>
-            <node oor:name="style3" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>2</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Bright Blue</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>bgr.css</value>
-                </prop>
-                <prop oor:name="BackgroundImage">
-                    <value/>
-                </prop>
-                <prop oor:name="IconSet">
-                    <value>iconset1</value>
-                </prop>
-            </node>
-            <node oor:name="style4" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>3</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Gray</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>bgrey.css</value>
-                </prop>
-                <prop oor:name="BackgroundImage">
-                    <value/>
-                </prop>
-                <prop oor:name="IconSet">
-                    <value>iconset1</value>
-                </prop>
-            </node>
-            <node oor:name="style5" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>4</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Blue</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>bwb.css</value>
-                </prop>
-                <prop oor:name="BackgroundImage">
-                    <value/>
-                </prop>
-                <prop oor:name="IconSet">
-                    <value>iconset1</value>
-                </prop>
-            </node>
-            <node oor:name="style6" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>5</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Contrast</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>bwo.css</value>
-                </prop>
-                <prop oor:name="BackgroundImage"/>
-                <prop oor:name="IconSet">
-                    <value>iconset1</value>
-                </prop>
-            </node>
-            <node oor:name="style7" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>6</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Blue &amp; Black</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>dark.css</value>
-                </prop>
-                <prop oor:name="BackgroundImage">
-                    <value/>
-                </prop>
-                <prop oor:name="IconSet">
-                    <value>iconset1</value>
-                </prop>
-            </node>
-            <node oor:name="style8" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>7</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Dark Red</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>dp.css</value>
-                </prop>
-                <prop oor:name="BackgroundImage">
-                    <value/>
-                </prop>
-                <prop oor:name="IconSet">
-                    <value>iconset1</value>
-                </prop>
-            </node>
-            <node oor:name="style9" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>8</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Light Gray</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>grey.css</value>
-                </prop>
-                <prop oor:name="BackgroundImage">
-                    <value/>
-                </prop>
-                <prop oor:name="IconSet">
-                    <value>iconset1</value>
-                </prop>
-            </node>
-            <node oor:name="style10" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>9</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Forest</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>forest.css</value>
-                </prop>
-                <prop oor:name="BackgroundImage">
-                    <value/>
-                </prop>
-                <prop oor:name="IconSet">
-                    <value>iconset1</value>
-                </prop>
-            </node>
-            <node oor:name="style11" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>10</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Orange &amp; Blue</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>rgb.css</value>
-                </prop>
-                <prop oor:name="BackgroundImage">
-                    <value/>
-                </prop>
-                <prop oor:name="IconSet">
-                    <value>iconset1</value>
-                </prop>
-            </node>
-            <node oor:name="style12" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>11</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Marine</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>marine.css</value>
-                </prop>
-                <prop oor:name="BackgroundImage">
-                    <value/>
-                </prop>
-                <prop oor:name="IconSet">
-                    <value>iconset1</value>
-                </prop>
-            </node>
-            <node oor:name="style13" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>12</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Orange</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>orange.css</value>
-                </prop>
-                <prop oor:name="BackgroundImage">
-                    <value/>
-                </prop>
-                <prop oor:name="IconSet">
-                    <value>iconset1</value>
-                </prop>
-            </node>
-            <node oor:name="style14" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>13</value>
-                </prop>
-                <prop oor:name="Name"  >
-                    <value xml:lang="en-US">Ice Blue</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>ibg.css</value>
-                </prop>
-                <prop oor:name="BackgroundImage">
-                    <value/>
-                </prop>
-                <prop oor:name="IconSet">
-                    <value>iconset1</value>
-                </prop>
-            </node>
-            <node oor:name="style15" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>14</value>
-                </prop>
-                <prop oor:name="Name"  >
-                    <value xml:lang="en-US">Blue &amp; Gray</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>ice.css</value>
-                </prop>
-                <prop oor:name="BackgroundImage">
-                    <value/>
-                </prop>
-                <prop oor:name="IconSet">
-                    <value>iconset1</value>
-                </prop>
-            </node>
-            <node oor:name="style16" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>15</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Water</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>water.css</value>
-                </prop>
-                <prop oor:name="BackgroundImage">
-                    <value/>
-                </prop>
-                <prop oor:name="IconSet">
-                    <value>iconset1</value>
-                </prop>
-            </node>
-            <node oor:name="style17" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>16</value>
-                </prop>
-                <prop oor:name="Name"  >
-                    <value xml:lang="en-US">Red</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>red.css</value>
-                </prop>
-                <prop oor:name="BackgroundImage">
-                    <value/>
-                </prop>
-                <prop oor:name="IconSet">
-                    <value>iconset1</value>
-                </prop>
-            </node>
-            <node oor:name="style18" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>17</value>
-                </prop>
-                <prop oor:name="Name"  >
-                    <value xml:lang="en-US">Colorful</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>strange.css</value>
-                </prop>
-                <prop oor:name="BackgroundImage">
-                    <value/>
-                </prop>
-                <prop oor:name="IconSet">
-                    <value>iconset1</value>
-                </prop>
-            </node>
-            <node oor:name="style19" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>18</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Green &amp; Red</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>greenred.css</value>
-                </prop>
-                <prop oor:name="BackgroundImage">
-                    <value/>
-                </prop>
-                <prop oor:name="IconSet">
-                    <value>iconset1</value>
-                </prop>
-            </node>
-            <node oor:name="style20" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>19</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Violet</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>violet.css</value>
-                </prop>
-                <prop oor:name="BackgroundImage">
-                    <value/>
-                </prop>
-                <prop oor:name="IconSet">
-                    <value>iconset1</value>
-                </prop>
-            </node>
-            <node oor:name="style21" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>20</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Green</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>green.css</value>
-                </prop>
-                <prop oor:name="BackgroundImage">
-                    <value/>
-                </prop>
-                <prop oor:name="IconSet">
-                    <value>iconset1</value>
-                </prop>
-            </node>
-        </node>
-        <node oor:name="BackgroundImages">
-            <node oor:name="1" oor:op="replace">
-                <prop oor:name="Href">
-                    <value>$(inst)/share/gallery/www-back/</value>
-                </prop>
-            </node>
-            <node oor:name="2" oor:op="replace">
-                <prop oor:name="Href">
-                    <value>$(inst)/share/gallery/surface</value>
-                </prop>
-            </node>
-            <node oor:name="3" oor:op="replace">
-                <prop oor:name="Href">
-                    <value>file:///c:/11.jpg</value>
-                </prop>
-            </node>
-        </node>
-        <node oor:name="IconSets">
-            <node oor:name="iconset0" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>0</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Round, 3D, blue &amp; gray</value>
-                </prop>
-                <prop oor:name="FNPrefix">
-                    <value>blu</value>
-                </prop>
-                <prop oor:name="FNPostfix">
-                    <value>.gif</value>
-                </prop>
-            </node>
-            <node oor:name="iconset1" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>1</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Round, 3D, blue &amp; green</value>
-                </prop>
-                <prop oor:name="FNPrefix">
-                    <value>gre</value>
-                </prop>
-                <prop oor:name="FNPostfix">
-                    <value>.gif</value>
-                </prop>
-            </node>
-            <node oor:name="iconset2" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>2</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Cubic, 3D, orange &amp; blue</value>
-                </prop>
-                <prop oor:name="FNPrefix">
-                    <value>cub</value>
-                </prop>
-                <prop oor:name="FNPostfix">
-                    <value>.gif</value>
-                </prop>
-            </node>
-            <node oor:name="iconset3" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>3</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Round, flat, black &amp; gray</value>
-                </prop>
-                <prop oor:name="FNPrefix">
-                    <value>sim</value>
-                </prop>
-                <prop oor:name="FNPostfix">
-                    <value>.gif</value>
-                </prop>
-            </node>
-        </node>
-        <node oor:name="SavedSessions"/>
-        <node oor:name="Filters">
-            <node oor:name="OO_documents" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>0</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">%PRODNAME documents</value>
-                </prop>
-                <prop oor:name="Filter">
-                    <value>*.odt;*.ott;*.odm;*.ods;*.ots;*.odp;*.otp;*.odg;*.otg;*.odf;*.sxw;*.sxc;*.sxd;*.sxi;*.stw;*.stc;*.std;*.sti;*.sdw;*.sdc;*.sdd;*.sdi;*.sda;*.sdp;*.vor;</value>
-                </prop>
-            </node>
-            <node oor:name="ms_documents" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>1</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Microsoft Office documents</value>
-                </prop>
-                <prop oor:name="Filter">
-                    <value>*.doc;*.xls;*.ppt;*.pps</value>
-                </prop>
-            </node>
-            <node oor:name="graphic_files" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>2</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">Graphics files</value>
-                </prop>
-                <prop oor:name="Filter">
-                    <value>*.jpg;*.gif;*.png;*.bmp;*.tiff;*.jpeg;*.jpe</value>
-                </prop>
-            </node>
-            <node oor:name="all_files" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>3</value>
-                </prop>
-                <prop oor:name="Name" >
-                    <value xml:lang="en-US">All files</value>
-                </prop>
-                <prop oor:name="Filter">
-                    <value>*</value>
-                </prop>
-            </node>
-        </node>
-        <node oor:name="DefaultSession">
-            <prop oor:name="Index">
-                <value>1</value>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Original file format</value>
+        </prop>
+        <prop oor:name="ExporterClass">
+          <value>com.sun.star.wizards.web.export.CopyExporter</value>
+        </prop>
+        <prop oor:name="OwnDirectory">
+          <value>false</value>
+        </prop>
+        <prop oor:name="SupportsFilename">
+          <value>true</value>
+        </prop>
+        <prop oor:name="DefaultFilename">
+          <value/>
+        </prop>
+        <prop oor:name="Extension">
+          <value/>
+        </prop>
+        <prop oor:name="SupportedMimeTypes">
+          <value/>
+        </prop>
+        <prop oor:name="Icon">
+          <value/>
+        </prop>
+        <prop oor:name="Binary">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PageType">
+          <value>0</value>
+        </prop>
+        <node oor:name="Arguments"/>
+      </node>
+      <node oor:name="html-writer-exporter" oor:op="replace">
+        <prop oor:name="Index">
+          <value>0</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">HTML</value>
+        </prop>
+        <prop oor:name="ExporterClass">
+          <value>com.sun.star.wizards.web.export.FilterExporter</value>
+        </prop>
+        <prop oor:name="OwnDirectory">
+          <value>false</value>
+        </prop>
+        <prop oor:name="SupportsFilename">
+          <value>true</value>
+        </prop>
+        <prop oor:name="DefaultFilename">
+          <value/>
+        </prop>
+        <prop oor:name="Extension">
+          <value>html</value>
+        </prop>
+        <prop oor:name="SupportedMimeTypes">
+          <value>writer</value>
+        </prop>
+        <prop oor:name="Icon">
+          <value>html.gif</value>
+        </prop>
+        <prop oor:name="Binary">
+          <value>false</value>
+        </prop>
+        <prop oor:name="PageType">
+          <value>0</value>
+        </prop>
+        <prop oor:name="TargetType">
+          <value>graphic_HTML</value>
+        </prop>
+        <node oor:name="Arguments">
+          <node oor:name="Filter" oor:op="replace">
+            <prop oor:name="Value">
+              <value>HTML (StarWriter)</value>
             </prop>
-            <prop oor:name="Name">
-                <value>DefaultSession</value>
-            </prop>
-            <prop oor:name="InDirectory">
-                <value>$(work)</value>
-            </prop>
-            <prop oor:name="OutDirectory">
-                <value>$(work)</value>
-            </prop>
-            <node oor:name="Content">
-                <prop oor:name="Index">
-                    <value>0</value>
-                </prop>
-                <prop oor:name="Name">
-                    <value>content</value>
-                </prop>
-                <prop oor:name="Description"/>
-                <node oor:name="Contents"/>
-                <node oor:name="Documents"/>
-            </node>
-            <node oor:name="Design">
-                <prop oor:name="Layout">
-                    <value>table_3</value>
-                </prop>
-                <prop oor:name="Style">
-                    <value>style16</value>
-                </prop>
-                <prop oor:name="BackgroundImage">
-                    <value/>
-                </prop>
-                <prop oor:name="IconSet">
-                    <value>0</value>
-                </prop>
-                <prop oor:name="OptimizeDisplaySize">
-                    <value>1</value>
-                </prop>
-                <prop oor:name="DisplayTitle">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="DisplayDescription">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="DisplayAuthor">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="DisplayCreateDate">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="DisplayUpdateDate">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="DisplayFilename">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="DisplayFileFormat">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="DisplayFormatIcon">
-                    <value>true</value>
-                </prop>
-                <prop oor:name="DisplayPages">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="DisplaySize">
-                    <value>true</value>
-                </prop>
-            </node>
-            <node oor:name="GeneralInfo">
-                <prop oor:name="Title"/>
-                <prop oor:name="Description"/>
-                <prop oor:name="Author"/>
-                <prop oor:name="CreationDate"/>
-                <prop oor:name="UpdateDate"/>
-                <prop oor:name="Email"/>
-                <prop oor:name="Copyright"/>
-            </node>
-            <node oor:name="Publishing">
-                <node oor:name="local" oor:op="replace">
-                    <prop oor:name="Publish">
-                        <value>true</value>
-                    </prop>
-                    <prop oor:name="URL">
-                        <value></value>
-                    </prop>
-                    <prop oor:name="Username">
-                        <value/>
-                    </prop>
-                </node>
-                <node oor:name="ftp" oor:op="replace">
-                    <prop oor:name="Publish">
-                        <value>false</value>
-                    </prop>
-                    <prop oor:name="URL">
-                        <value/>
-                    </prop>
-                    <prop oor:name="Username">
-                        <value/>
-                    </prop>
-                </node>
-                <node oor:name="zip" oor:op="replace">
-                    <prop oor:name="Publish">
-                        <value>false</value>
-                    </prop>
-                    <prop oor:name="URL">
-                        <value/>
-                    </prop>
-                    <prop oor:name="Username">
-                        <value/>
-                    </prop>
-                </node>
-            </node>
+          </node>
         </node>
+      </node>
+      <node oor:name="html-calc-exporter" oor:op="replace">
+        <prop oor:name="Index">
+          <value>1</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">HTML</value>
+        </prop>
+        <prop oor:name="ExporterClass">
+          <value>com.sun.star.wizards.web.export.FilterExporter</value>
+        </prop>
+        <prop oor:name="OwnDirectory">
+          <value>false</value>
+        </prop>
+        <prop oor:name="SupportsFilename">
+          <value>true</value>
+        </prop>
+        <prop oor:name="DefaultFilename">
+          <value/>
+        </prop>
+        <prop oor:name="Extension">
+          <value>html</value>
+        </prop>
+        <prop oor:name="SupportedMimeTypes">
+          <value>calc</value>
+        </prop>
+        <prop oor:name="Icon">
+          <value>html.gif</value>
+        </prop>
+        <prop oor:name="Binary">
+          <value>false</value>
+        </prop>
+        <prop oor:name="PageType">
+          <value>0</value>
+        </prop>
+        <prop oor:name="TargetType">
+          <value>graphic_HTML</value>
+        </prop>
+        <node oor:name="Arguments">
+          <node oor:name="Filter" oor:op="replace">
+            <prop oor:name="Value">
+              <value>HTML (StarCalc)</value>
+            </prop>
+          </node>
+        </node>
+      </node>
+      <node oor:name="html-impress-exporter" oor:op="replace">
+        <prop oor:name="Index">
+          <value>2</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">HTML</value>
+        </prop>
+        <prop oor:name="ExporterClass">
+          <value>com.sun.star.wizards.web.export.ImpressHTMLExporter</value>
+        </prop>
+        <prop oor:name="OwnDirectory">
+          <value>true</value>
+        </prop>
+        <prop oor:name="SupportsFilename">
+          <value>true</value>
+        </prop>
+        <prop oor:name="DefaultFilename">
+          <value/>
+        </prop>
+        <prop oor:name="Extension">
+          <value>html</value>
+        </prop>
+        <prop oor:name="SupportedMimeTypes">
+          <value>impress</value>
+        </prop>
+        <prop oor:name="Icon">
+          <value>html.gif</value>
+        </prop>
+        <prop oor:name="Binary">
+          <value>false</value>
+        </prop>
+        <prop oor:name="PageType">
+          <value>2</value>
+        </prop>
+        <prop oor:name="TargetType">
+          <value>graphic_HTML</value>
+        </prop>
+        <node oor:name="Arguments">
+          <node oor:name="Filter" oor:op="replace">
+            <prop oor:name="Value">
+              <value>impress_html_Export</value>
+            </prop>
+          </node>
+          <node oor:name="PublishMode" oor:op="replace">
+            <prop oor:name="Value">
+              <value>%1</value>
+            </prop>
+          </node>
+          <node oor:name="IsExportContentsPage" oor:op="replace">
+            <prop oor:name="Value">
+              <value>true</value>
+            </prop>
+          </node>
+          <node oor:name="IsExportNotes" oor:op="replace">
+            <prop oor:name="Value">
+              <value>false</value>
+            </prop>
+          </node>
+          <node oor:name="Format" oor:op="replace">
+            <prop oor:name="Value">
+              <value>%1</value>
+            </prop>
+          </node>
+          <node oor:name="Compression" oor:op="replace">
+            <prop oor:name="Value">
+              <value>$75%</value>
+            </prop>
+          </node>
+          <node oor:name="EnableDownload" oor:op="replace">
+            <prop oor:name="Value">
+              <value>false</value>
+            </prop>
+          </node>
+          <node oor:name="IsUseDocumentColors" oor:op="replace">
+            <prop oor:name="Value">
+              <value>true</value>
+            </prop>
+          </node>
+        </node>
+      </node>
+      <node oor:name="html-draw-exporter" oor:op="replace">
+        <prop oor:name="Index">
+          <value>3</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">HTML</value>
+        </prop>
+        <prop oor:name="ExporterClass">
+          <value>com.sun.star.wizards.web.export.ImpressHTMLExporter</value>
+        </prop>
+        <prop oor:name="OwnDirectory">
+          <value>true</value>
+        </prop>
+        <prop oor:name="SupportsFilename">
+          <value>true</value>
+        </prop>
+        <prop oor:name="DefaultFilename">
+          <value/>
+        </prop>
+        <prop oor:name="Extension">
+          <value>html</value>
+        </prop>
+        <prop oor:name="SupportedMimeTypes">
+          <value>draw</value>
+        </prop>
+        <prop oor:name="Icon">
+          <value>html.gif</value>
+        </prop>
+        <prop oor:name="Binary">
+          <value>false</value>
+        </prop>
+        <prop oor:name="PageType">
+          <value>2</value>
+        </prop>
+        <prop oor:name="TargetType">
+          <value>graphic_HTML</value>
+        </prop>
+        <node oor:name="Arguments">
+          <node oor:name="Filter" oor:op="replace">
+            <prop oor:name="Value">
+              <value>draw_html_Export</value>
+            </prop>
+          </node>
+          <node oor:name="PublishMode" oor:op="replace">
+            <prop oor:name="Value">
+              <value>%1</value>
+            </prop>
+          </node>
+          <node oor:name="IsExportContentsPage" oor:op="replace">
+            <prop oor:name="Value">
+              <value>true</value>
+            </prop>
+          </node>
+          <node oor:name="IsExportNotes" oor:op="replace">
+            <prop oor:name="Value">
+              <value>false</value>
+            </prop>
+          </node>
+          <node oor:name="Format" oor:op="replace">
+            <prop oor:name="Value">
+              <value>%1</value>
+            </prop>
+          </node>
+          <node oor:name="Compression" oor:op="replace">
+            <prop oor:name="Value">
+              <value>$75%</value>
+            </prop>
+          </node>
+          <node oor:name="EnableDownload" oor:op="replace">
+            <prop oor:name="Value">
+              <value>false</value>
+            </prop>
+          </node>
+          <node oor:name="IsUseDocumentColors" oor:op="replace">
+            <prop oor:name="Value">
+              <value>true</value>
+            </prop>
+          </node>
+        </node>
+      </node>
+      <node oor:name="pdf-writer-exporter" oor:op="replace">
+        <prop oor:name="Index">
+          <value>10</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">PDF - Print optimized</value>
+        </prop>
+        <prop oor:name="ExporterClass">
+          <value>com.sun.star.wizards.web.export.ConfiguredExporter</value>
+        </prop>
+        <prop oor:name="OwnDirectory">
+          <value>false</value>
+        </prop>
+        <prop oor:name="SupportsFilename">
+          <value>true</value>
+        </prop>
+        <prop oor:name="DefaultFilename">
+          <value/>
+        </prop>
+        <prop oor:name="Extension">
+          <value>pdf</value>
+        </prop>
+        <prop oor:name="SupportedMimeTypes">
+          <value>writer</value>
+        </prop>
+        <prop oor:name="Icon">
+          <value>pdf.gif</value>
+        </prop>
+        <prop oor:name="Binary">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PageType">
+          <value>1</value>
+        </prop>
+        <prop oor:name="TargetType">
+          <value>pdf_Portable_Document_Format</value>
+        </prop>
+        <node oor:name="Arguments">
+          <node oor:name="Filter" oor:op="replace">
+            <prop oor:name="Value">
+              <value>writer_pdf_Export</value>
+            </prop>
+          </node>
+        </node>
+      </node>
+      <node oor:name="pdf-calc-exporter" oor:op="replace">
+        <prop oor:name="Index">
+          <value>11</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">PDF - Print optimized</value>
+        </prop>
+        <prop oor:name="ExporterClass">
+          <value>com.sun.star.wizards.web.export.ConfiguredExporter</value>
+        </prop>
+        <prop oor:name="OwnDirectory">
+          <value>false</value>
+        </prop>
+        <prop oor:name="SupportsFilename">
+          <value>true</value>
+        </prop>
+        <prop oor:name="DefaultFilename">
+          <value/>
+        </prop>
+        <prop oor:name="Extension">
+          <value>pdf</value>
+        </prop>
+        <prop oor:name="SupportedMimeTypes">
+          <value>calc</value>
+        </prop>
+        <prop oor:name="Icon">
+          <value>pdf.gif</value>
+        </prop>
+        <prop oor:name="Binary">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PageType">
+          <value>1</value>
+        </prop>
+        <prop oor:name="TargetType">
+          <value>pdf_Portable_Document_Format</value>
+        </prop>
+        <node oor:name="Arguments">
+          <node oor:name="Filter" oor:op="replace">
+            <prop oor:name="Value">
+              <value>calc_pdf_Export</value>
+            </prop>
+          </node>
+        </node>
+      </node>
+      <node oor:name="pdf-impress-exporter" oor:op="replace">
+        <prop oor:name="Index">
+          <value>12</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">PDF - Print optimized</value>
+        </prop>
+        <prop oor:name="ExporterClass">
+          <value>com.sun.star.wizards.web.export.ConfiguredExporter</value>
+        </prop>
+        <prop oor:name="OwnDirectory">
+          <value>false</value>
+        </prop>
+        <prop oor:name="SupportsFilename">
+          <value>true</value>
+        </prop>
+        <prop oor:name="DefaultFilename">
+          <value/>
+        </prop>
+        <prop oor:name="Extension">
+          <value>pdf</value>
+        </prop>
+        <prop oor:name="SupportedMimeTypes">
+          <value>impress</value>
+        </prop>
+        <prop oor:name="Icon">
+          <value>pdf.gif</value>
+        </prop>
+        <prop oor:name="Binary">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PageType">
+          <value>1</value>
+        </prop>
+        <prop oor:name="TargetType">
+          <value>pdf_Portable_Document_Format</value>
+        </prop>
+        <node oor:name="Arguments">
+          <node oor:name="Filter" oor:op="replace">
+            <prop oor:name="Value">
+              <value>impress_pdf_Export</value>
+            </prop>
+          </node>
+        </node>
+      </node>
+      <node oor:name="pdf-draw-exporter" oor:op="replace">
+        <prop oor:name="Index">
+          <value>13</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">PDF - Print optimized</value>
+        </prop>
+        <prop oor:name="ExporterClass">
+          <value>com.sun.star.wizards.web.export.ConfiguredExporter</value>
+        </prop>
+        <prop oor:name="OwnDirectory">
+          <value>false</value>
+        </prop>
+        <prop oor:name="SupportsFilename">
+          <value>true</value>
+        </prop>
+        <prop oor:name="DefaultFilename">
+          <value/>
+        </prop>
+        <prop oor:name="Extension">
+          <value>pdf</value>
+        </prop>
+        <prop oor:name="SupportedMimeTypes">
+          <value>draw</value>
+        </prop>
+        <prop oor:name="Icon">
+          <value>pdf.gif</value>
+        </prop>
+        <prop oor:name="Binary">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PageType">
+          <value>1</value>
+        </prop>
+        <prop oor:name="TargetType">
+          <value>pdf_Portable_Document_Format</value>
+        </prop>
+        <node oor:name="Arguments">
+          <node oor:name="Filter" oor:op="replace">
+            <prop oor:name="Value">
+              <value>draw_pdf_Export</value>
+            </prop>
+          </node>
+        </node>
+      </node>
+      <node oor:name="pdf-hq-writer-exporter" oor:op="replace">
+        <prop oor:name="Index">
+          <value>20</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">PDF - Press optimized</value>
+        </prop>
+        <prop oor:name="ExporterClass">
+          <value>com.sun.star.wizards.web.export.ConfiguredExporter</value>
+        </prop>
+        <prop oor:name="OwnDirectory">
+          <value>false</value>
+        </prop>
+        <prop oor:name="SupportsFilename">
+          <value>true</value>
+        </prop>
+        <prop oor:name="DefaultFilename">
+          <value/>
+        </prop>
+        <prop oor:name="Extension">
+          <value>pdf</value>
+        </prop>
+        <prop oor:name="SupportedMimeTypes">
+          <value>writer</value>
+        </prop>
+        <prop oor:name="Icon">
+          <value>pdf.gif</value>
+        </prop>
+        <prop oor:name="Binary">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PageType">
+          <value>1</value>
+        </prop>
+        <prop oor:name="TargetType">
+          <value>pdf_Portable_Document_Format</value>
+        </prop>
+        <node oor:name="Arguments">
+          <node oor:name="CompressMode" oor:op="replace">
+            <prop oor:name="Value">
+              <value>%2</value>
+            </prop>
+          </node>
+          <node oor:name="Filter" oor:op="replace">
+            <prop oor:name="Value">
+              <value>writer_pdf_Export</value>
+            </prop>
+          </node>
+        </node>
+      </node>
+      <node oor:name="pdf-calc-hq-exporter" oor:op="replace">
+        <prop oor:name="Index">
+          <value>21</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">PDF - Press optimized</value>
+        </prop>
+        <prop oor:name="ExporterClass">
+          <value>com.sun.star.wizards.web.export.ConfiguredExporter</value>
+        </prop>
+        <prop oor:name="OwnDirectory">
+          <value>false</value>
+        </prop>
+        <prop oor:name="SupportsFilename">
+          <value>true</value>
+        </prop>
+        <prop oor:name="DefaultFilename">
+          <value/>
+        </prop>
+        <prop oor:name="Extension">
+          <value>pdf</value>
+        </prop>
+        <prop oor:name="SupportedMimeTypes">
+          <value>calc</value>
+        </prop>
+        <prop oor:name="Icon">
+          <value>pdf.gif</value>
+        </prop>
+        <prop oor:name="Binary">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PageType">
+          <value>1</value>
+        </prop>
+        <prop oor:name="TargetType">
+          <value>pdf_Portable_Document_Format</value>
+        </prop>
+        <node oor:name="Arguments">
+          <node oor:name="CompressMode" oor:op="replace">
+            <prop oor:name="Value">
+              <value>%2</value>
+            </prop>
+          </node>
+          <node oor:name="Filter" oor:op="replace">
+            <prop oor:name="Value">
+              <value>calc_pdf_Export</value>
+            </prop>
+          </node>
+        </node>
+      </node>
+      <node oor:name="pdf-impress-hq-exporter" oor:op="replace">
+        <prop oor:name="Index">
+          <value>22</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">PDF - Press optimized</value>
+        </prop>
+        <prop oor:name="ExporterClass">
+          <value>com.sun.star.wizards.web.export.ConfiguredExporter</value>
+        </prop>
+        <prop oor:name="OwnDirectory">
+          <value>false</value>
+        </prop>
+        <prop oor:name="SupportsFilename">
+          <value>true</value>
+        </prop>
+        <prop oor:name="DefaultFilename">
+          <value/>
+        </prop>
+        <prop oor:name="Extension">
+          <value>pdf</value>
+        </prop>
+        <prop oor:name="SupportedMimeTypes">
+          <value>impress</value>
+        </prop>
+        <prop oor:name="Icon">
+          <value>pdf.gif</value>
+        </prop>
+        <prop oor:name="Binary">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PageType">
+          <value>1</value>
+        </prop>
+        <prop oor:name="TargetType">
+          <value>pdf_Portable_Document_Format</value>
+        </prop>
+        <node oor:name="Arguments">
+          <node oor:name="CompressMode" oor:op="replace">
+            <prop oor:name="Value">
+              <value>%2</value>
+            </prop>
+          </node>
+          <node oor:name="Filter" oor:op="replace">
+            <prop oor:name="Value">
+              <value>impress_pdf_Export</value>
+            </prop>
+          </node>
+        </node>
+      </node>
+      <node oor:name="pdf-draw-hq-exporter" oor:op="replace">
+        <prop oor:name="Index">
+          <value>23</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">PDF - Press optimized</value>
+        </prop>
+        <prop oor:name="ExporterClass">
+          <value>com.sun.star.wizards.web.export.ConfiguredExporter</value>
+        </prop>
+        <prop oor:name="OwnDirectory">
+          <value>false</value>
+        </prop>
+        <prop oor:name="SupportsFilename">
+          <value>true</value>
+        </prop>
+        <prop oor:name="DefaultFilename">
+          <value/>
+        </prop>
+        <prop oor:name="Extension">
+          <value>pdf</value>
+        </prop>
+        <prop oor:name="SupportedMimeTypes">
+          <value>draw</value>
+        </prop>
+        <prop oor:name="Icon">
+          <value>pdf.gif</value>
+        </prop>
+        <prop oor:name="Binary">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PageType">
+          <value>1</value>
+        </prop>
+        <prop oor:name="TargetType">
+          <value>pdf_Portable_Document_Format</value>
+        </prop>
+        <node oor:name="Arguments">
+          <node oor:name="Filter" oor:op="replace">
+            <prop oor:name="Value">
+              <value>draw_pdf_Export</value>
+            </prop>
+          </node>
+          <node oor:name="CompressMode" oor:op="replace">
+            <prop oor:name="Value">
+              <value>%2</value>
+            </prop>
+          </node>
+        </node>
+      </node>
+      <node oor:name="flash-impress-exporter" oor:op="replace">
+        <prop oor:name="Index">
+          <value>30</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Flash</value>
+        </prop>
+        <prop oor:name="ExporterClass">
+          <value>com.sun.star.wizards.web.export.FilterExporter</value>
+        </prop>
+        <prop oor:name="OwnDirectory">
+          <value>false</value>
+        </prop>
+        <prop oor:name="SupportsFilename">
+          <value>true</value>
+        </prop>
+        <prop oor:name="DefaultFilename">
+          <value/>
+        </prop>
+        <prop oor:name="Extension">
+          <value>swf</value>
+        </prop>
+        <prop oor:name="SupportedMimeTypes">
+          <value>impress</value>
+        </prop>
+        <prop oor:name="Icon">
+          <value>fls.gif</value>
+        </prop>
+        <prop oor:name="Binary">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PageType">
+          <value>2</value>
+        </prop>
+        <prop oor:name="TargetType">
+          <value>graphic_SWF</value>
+        </prop>
+        <node oor:name="Arguments">
+          <node oor:name="Filter" oor:op="replace">
+            <prop oor:name="Value">
+              <value>impress_flash_Export</value>
+            </prop>
+          </node>
+        </node>
+      </node>
+      <node oor:name="flash-draw-exporter" oor:op="replace">
+        <prop oor:name="Index">
+          <value>31</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Flash</value>
+        </prop>
+        <prop oor:name="ExporterClass">
+          <value>com.sun.star.wizards.web.export.FilterExporter</value>
+        </prop>
+        <prop oor:name="OwnDirectory">
+          <value>false</value>
+        </prop>
+        <prop oor:name="SupportsFilename">
+          <value>true</value>
+        </prop>
+        <prop oor:name="DefaultFilename">
+          <value/>
+        </prop>
+        <prop oor:name="Extension">
+          <value>swf</value>
+        </prop>
+        <prop oor:name="SupportedMimeTypes">
+          <value>draw</value>
+        </prop>
+        <prop oor:name="Icon">
+          <value>fls.gif</value>
+        </prop>
+        <prop oor:name="Binary">
+          <value>true</value>
+        </prop>
+        <prop oor:name="PageType">
+          <value>2</value>
+        </prop>
+        <prop oor:name="TargetType">
+          <value>graphic_SWF</value>
+        </prop>
+        <node oor:name="Arguments">
+          <node oor:name="Filter" oor:op="replace">
+            <prop oor:name="Value">
+              <value>draw_flash_Export</value>
+            </prop>
+          </node>
+        </node>
+      </node>
     </node>
+    <node oor:name="Layouts">
+      <node oor:name="table_3" oor:op="replace">
+        <prop oor:name="Index">
+          <value>0</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Table with 3 columns</value>
+        </prop>
+        <prop oor:name="FSName">
+          <value>table_3</value>
+        </prop>
+      </node>
+      <node oor:name="table_2" oor:op="replace">
+        <prop oor:name="Index">
+          <value>1</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Table with 2 columns</value>
+        </prop>
+        <prop oor:name="FSName">
+          <value>table_2</value>
+        </prop>
+      </node>
+      <node oor:name="simple" oor:op="replace">
+        <prop oor:name="Index">
+          <value>2</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Simple</value>
+        </prop>
+        <prop oor:name="FSName">
+          <value>simple</value>
+        </prop>
+      </node>
+      <node oor:name="diagonal" oor:op="replace">
+        <prop oor:name="Index">
+          <value>3</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Diagonal</value>
+        </prop>
+        <prop oor:name="FSName">
+          <value>diagonal</value>
+        </prop>
+      </node>
+      <node oor:name="zigzag" oor:op="replace">
+        <prop oor:name="Index">
+          <value>4</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Zigzag</value>
+        </prop>
+        <prop oor:name="FSName">
+          <value>zigzag</value>
+        </prop>
+      </node>
+      <node oor:name="frame_left" oor:op="replace">
+        <prop oor:name="Index">
+          <value>5</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">HTML frameset, left</value>
+        </prop>
+        <prop oor:name="FSName">
+          <value>frame_left</value>
+        </prop>
+      </node>
+      <node oor:name="frame_right" oor:op="replace">
+        <prop oor:name="Index">
+          <value>6</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">HTML frameset, right</value>
+        </prop>
+        <prop oor:name="FSName">
+          <value>frame_right</value>
+        </prop>
+      </node>
+      <node oor:name="frame_top" oor:op="replace">
+        <prop oor:name="Index">
+          <value>7</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">HTML frameset, top</value>
+        </prop>
+        <prop oor:name="FSName">
+          <value>frame_top</value>
+        </prop>
+      </node>
+      <node oor:name="frame_bottom" oor:op="replace">
+        <prop oor:name="Index">
+          <value>8</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">HTML frameset, bottom</value>
+        </prop>
+        <prop oor:name="FSName">
+          <value>frame_bottom</value>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="Styles">
+      <node oor:name="style1" oor:op="replace">
+        <prop oor:name="Index">
+          <value>0</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Beige</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>beige.css</value>
+        </prop>
+        <prop oor:name="BackgroundImage">
+          <value/>
+        </prop>
+        <prop oor:name="IconSet">
+          <value>iconset1</value>
+        </prop>
+      </node>
+      <node oor:name="style2" oor:op="replace">
+        <prop oor:name="Index">
+          <value>1</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Bright</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>bg.css</value>
+        </prop>
+        <prop oor:name="BackgroundImage">
+          <value/>
+        </prop>
+        <prop oor:name="IconSet">
+          <value>iconset1</value>
+        </prop>
+      </node>
+      <node oor:name="style3" oor:op="replace">
+        <prop oor:name="Index">
+          <value>2</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Bright Blue</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>bgr.css</value>
+        </prop>
+        <prop oor:name="BackgroundImage">
+          <value/>
+        </prop>
+        <prop oor:name="IconSet">
+          <value>iconset1</value>
+        </prop>
+      </node>
+      <node oor:name="style4" oor:op="replace">
+        <prop oor:name="Index">
+          <value>3</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Gray</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>bgrey.css</value>
+        </prop>
+        <prop oor:name="BackgroundImage">
+          <value/>
+        </prop>
+        <prop oor:name="IconSet">
+          <value>iconset1</value>
+        </prop>
+      </node>
+      <node oor:name="style5" oor:op="replace">
+        <prop oor:name="Index">
+          <value>4</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Blue</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>bwb.css</value>
+        </prop>
+        <prop oor:name="BackgroundImage">
+          <value/>
+        </prop>
+        <prop oor:name="IconSet">
+          <value>iconset1</value>
+        </prop>
+      </node>
+      <node oor:name="style6" oor:op="replace">
+        <prop oor:name="Index">
+          <value>5</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Contrast</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>bwo.css</value>
+        </prop>
+        <prop oor:name="BackgroundImage"/>
+        <prop oor:name="IconSet">
+          <value>iconset1</value>
+        </prop>
+      </node>
+      <node oor:name="style7" oor:op="replace">
+        <prop oor:name="Index">
+          <value>6</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Blue &amp; Black</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>dark.css</value>
+        </prop>
+        <prop oor:name="BackgroundImage">
+          <value/>
+        </prop>
+        <prop oor:name="IconSet">
+          <value>iconset1</value>
+        </prop>
+      </node>
+      <node oor:name="style8" oor:op="replace">
+        <prop oor:name="Index">
+          <value>7</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Dark Red</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>dp.css</value>
+        </prop>
+        <prop oor:name="BackgroundImage">
+          <value/>
+        </prop>
+        <prop oor:name="IconSet">
+          <value>iconset1</value>
+        </prop>
+      </node>
+      <node oor:name="style9" oor:op="replace">
+        <prop oor:name="Index">
+          <value>8</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Light Gray</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>grey.css</value>
+        </prop>
+        <prop oor:name="BackgroundImage">
+          <value/>
+        </prop>
+        <prop oor:name="IconSet">
+          <value>iconset1</value>
+        </prop>
+      </node>
+      <node oor:name="style10" oor:op="replace">
+        <prop oor:name="Index">
+          <value>9</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Forest</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>forest.css</value>
+        </prop>
+        <prop oor:name="BackgroundImage">
+          <value/>
+        </prop>
+        <prop oor:name="IconSet">
+          <value>iconset1</value>
+        </prop>
+      </node>
+      <node oor:name="style11" oor:op="replace">
+        <prop oor:name="Index">
+          <value>10</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Orange &amp; Blue</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>rgb.css</value>
+        </prop>
+        <prop oor:name="BackgroundImage">
+          <value/>
+        </prop>
+        <prop oor:name="IconSet">
+          <value>iconset1</value>
+        </prop>
+      </node>
+      <node oor:name="style12" oor:op="replace">
+        <prop oor:name="Index">
+          <value>11</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Marine</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>marine.css</value>
+        </prop>
+        <prop oor:name="BackgroundImage">
+          <value/>
+        </prop>
+        <prop oor:name="IconSet">
+          <value>iconset1</value>
+        </prop>
+      </node>
+      <node oor:name="style13" oor:op="replace">
+        <prop oor:name="Index">
+          <value>12</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Orange</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>orange.css</value>
+        </prop>
+        <prop oor:name="BackgroundImage">
+          <value/>
+        </prop>
+        <prop oor:name="IconSet">
+          <value>iconset1</value>
+        </prop>
+      </node>
+      <node oor:name="style14" oor:op="replace">
+        <prop oor:name="Index">
+          <value>13</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Ice Blue</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>ibg.css</value>
+        </prop>
+        <prop oor:name="BackgroundImage">
+          <value/>
+        </prop>
+        <prop oor:name="IconSet">
+          <value>iconset1</value>
+        </prop>
+      </node>
+      <node oor:name="style15" oor:op="replace">
+        <prop oor:name="Index">
+          <value>14</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Blue &amp; Gray</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>ice.css</value>
+        </prop>
+        <prop oor:name="BackgroundImage">
+          <value/>
+        </prop>
+        <prop oor:name="IconSet">
+          <value>iconset1</value>
+        </prop>
+      </node>
+      <node oor:name="style16" oor:op="replace">
+        <prop oor:name="Index">
+          <value>15</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Water</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>water.css</value>
+        </prop>
+        <prop oor:name="BackgroundImage">
+          <value/>
+        </prop>
+        <prop oor:name="IconSet">
+          <value>iconset1</value>
+        </prop>
+      </node>
+      <node oor:name="style17" oor:op="replace">
+        <prop oor:name="Index">
+          <value>16</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Red</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>red.css</value>
+        </prop>
+        <prop oor:name="BackgroundImage">
+          <value/>
+        </prop>
+        <prop oor:name="IconSet">
+          <value>iconset1</value>
+        </prop>
+      </node>
+      <node oor:name="style18" oor:op="replace">
+        <prop oor:name="Index">
+          <value>17</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Colorful</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>strange.css</value>
+        </prop>
+        <prop oor:name="BackgroundImage">
+          <value/>
+        </prop>
+        <prop oor:name="IconSet">
+          <value>iconset1</value>
+        </prop>
+      </node>
+      <node oor:name="style19" oor:op="replace">
+        <prop oor:name="Index">
+          <value>18</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Green &amp; Red</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>greenred.css</value>
+        </prop>
+        <prop oor:name="BackgroundImage">
+          <value/>
+        </prop>
+        <prop oor:name="IconSet">
+          <value>iconset1</value>
+        </prop>
+      </node>
+      <node oor:name="style20" oor:op="replace">
+        <prop oor:name="Index">
+          <value>19</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Violet</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>violet.css</value>
+        </prop>
+        <prop oor:name="BackgroundImage">
+          <value/>
+        </prop>
+        <prop oor:name="IconSet">
+          <value>iconset1</value>
+        </prop>
+      </node>
+      <node oor:name="style21" oor:op="replace">
+        <prop oor:name="Index">
+          <value>20</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Green</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>green.css</value>
+        </prop>
+        <prop oor:name="BackgroundImage">
+          <value/>
+        </prop>
+        <prop oor:name="IconSet">
+          <value>iconset1</value>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="BackgroundImages">
+      <node oor:name="1" oor:op="replace">
+        <prop oor:name="Href">
+          <value>$(inst)/share/gallery/www-back/</value>
+        </prop>
+      </node>
+      <node oor:name="2" oor:op="replace">
+        <prop oor:name="Href">
+          <value>$(inst)/share/gallery/surface</value>
+        </prop>
+      </node>
+      <node oor:name="3" oor:op="replace">
+        <prop oor:name="Href">
+          <value>file:///c:/11.jpg</value>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="IconSets">
+      <node oor:name="iconset0" oor:op="replace">
+        <prop oor:name="Index">
+          <value>0</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Round, 3D, blue &amp; gray</value>
+        </prop>
+        <prop oor:name="FNPrefix">
+          <value>blu</value>
+        </prop>
+        <prop oor:name="FNPostfix">
+          <value>.gif</value>
+        </prop>
+      </node>
+      <node oor:name="iconset1" oor:op="replace">
+        <prop oor:name="Index">
+          <value>1</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Round, 3D, blue &amp; green</value>
+        </prop>
+        <prop oor:name="FNPrefix">
+          <value>gre</value>
+        </prop>
+        <prop oor:name="FNPostfix">
+          <value>.gif</value>
+        </prop>
+      </node>
+      <node oor:name="iconset2" oor:op="replace">
+        <prop oor:name="Index">
+          <value>2</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Cubic, 3D, orange &amp; blue</value>
+        </prop>
+        <prop oor:name="FNPrefix">
+          <value>cub</value>
+        </prop>
+        <prop oor:name="FNPostfix">
+          <value>.gif</value>
+        </prop>
+      </node>
+      <node oor:name="iconset3" oor:op="replace">
+        <prop oor:name="Index">
+          <value>3</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Round, flat, black &amp; gray</value>
+        </prop>
+        <prop oor:name="FNPrefix">
+          <value>sim</value>
+        </prop>
+        <prop oor:name="FNPostfix">
+          <value>.gif</value>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="SavedSessions"/>
+    <node oor:name="Filters">
+      <node oor:name="OO_documents" oor:op="replace">
+        <prop oor:name="Index">
+          <value>0</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">%PRODNAME documents</value>
+        </prop>
+        <prop oor:name="Filter">
+          <value>*.odt;*.ott;*.odm;*.ods;*.ots;*.odp;*.otp;*.odg;*.otg;*.odf;*.sxw;*.sxc;*.sxd;*.sxi;*.stw;*.stc;*.std;*.sti;*.sdw;*.sdc;*.sdd;*.sdi;*.sda;*.sdp;*.vor;</value>
+        </prop>
+      </node>
+      <node oor:name="ms_documents" oor:op="replace">
+        <prop oor:name="Index">
+          <value>1</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Microsoft Office documents</value>
+        </prop>
+        <prop oor:name="Filter">
+          <value>*.doc;*.xls;*.ppt;*.pps</value>
+        </prop>
+      </node>
+      <node oor:name="graphic_files" oor:op="replace">
+        <prop oor:name="Index">
+          <value>2</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Graphics files</value>
+        </prop>
+        <prop oor:name="Filter">
+          <value>*.jpg;*.gif;*.png;*.bmp;*.tiff;*.jpeg;*.jpe</value>
+        </prop>
+      </node>
+      <node oor:name="all_files" oor:op="replace">
+        <prop oor:name="Index">
+          <value>3</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">All files</value>
+        </prop>
+        <prop oor:name="Filter">
+          <value>*</value>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="DefaultSession">
+      <prop oor:name="Index">
+        <value>1</value>
+      </prop>
+      <prop oor:name="Name">
+        <value>DefaultSession</value>
+      </prop>
+      <prop oor:name="InDirectory">
+        <value>$(work)</value>
+      </prop>
+      <prop oor:name="OutDirectory">
+        <value>$(work)</value>
+      </prop>
+      <node oor:name="Content">
+        <prop oor:name="Index">
+          <value>0</value>
+        </prop>
+        <prop oor:name="Name">
+          <value>content</value>
+        </prop>
+        <prop oor:name="Description"/>
+        <node oor:name="Contents"/>
+        <node oor:name="Documents"/>
+      </node>
+      <node oor:name="Design">
+        <prop oor:name="Layout">
+          <value>table_3</value>
+        </prop>
+        <prop oor:name="Style">
+          <value>style16</value>
+        </prop>
+        <prop oor:name="BackgroundImage">
+          <value/>
+        </prop>
+        <prop oor:name="IconSet">
+          <value>0</value>
+        </prop>
+        <prop oor:name="OptimizeDisplaySize">
+          <value>1</value>
+        </prop>
+        <prop oor:name="DisplayTitle">
+          <value>true</value>
+        </prop>
+        <prop oor:name="DisplayDescription">
+          <value>true</value>
+        </prop>
+        <prop oor:name="DisplayAuthor">
+          <value>false</value>
+        </prop>
+        <prop oor:name="DisplayCreateDate">
+          <value>false</value>
+        </prop>
+        <prop oor:name="DisplayUpdateDate">
+          <value>false</value>
+        </prop>
+        <prop oor:name="DisplayFilename">
+          <value>false</value>
+        </prop>
+        <prop oor:name="DisplayFileFormat">
+          <value>false</value>
+        </prop>
+        <prop oor:name="DisplayFormatIcon">
+          <value>true</value>
+        </prop>
+        <prop oor:name="DisplayPages">
+          <value>false</value>
+        </prop>
+        <prop oor:name="DisplaySize">
+          <value>true</value>
+        </prop>
+      </node>
+      <node oor:name="GeneralInfo">
+        <prop oor:name="Title"/>
+        <prop oor:name="Description"/>
+        <prop oor:name="Author"/>
+        <prop oor:name="CreationDate"/>
+        <prop oor:name="UpdateDate"/>
+        <prop oor:name="Email"/>
+        <prop oor:name="Copyright"/>
+      </node>
+      <node oor:name="Publishing">
+        <node oor:name="local" oor:op="replace">
+          <prop oor:name="Publish">
+            <value>true</value>
+          </prop>
+          <prop oor:name="URL">
+            <value/>
+          </prop>
+          <prop oor:name="Username">
+            <value/>
+          </prop>
+        </node>
+        <node oor:name="ftp" oor:op="replace">
+          <prop oor:name="Publish">
+            <value>false</value>
+          </prop>
+          <prop oor:name="URL">
+            <value/>
+          </prop>
+          <prop oor:name="Username">
+            <value/>
+          </prop>
+        </node>
+        <node oor:name="zip" oor:op="replace">
+          <prop oor:name="Publish">
+            <value>false</value>
+          </prop>
+          <prop oor:name="URL">
+            <value/>
+          </prop>
+          <prop oor:name="Username">
+            <value/>
+          </prop>
+        </node>
+      </node>
+    </node>
+  </node>
 </oor:component-data>
