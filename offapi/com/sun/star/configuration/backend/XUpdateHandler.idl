@@ -315,7 +315,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
         @param aType
             specifies the type of the property.
 
-            <p> A <void/> type can be used to signify that
+            <p> A `VOID` type can be used to signify that
                 the type is unknown and should not be recorded.
             </p>
 
@@ -351,7 +351,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             <p> The value must match the type of the existing property.
                 If the property does not have the
                 SchemaAttribute::REQUIRED flag set,
-                the value can be <void/>.
+                the value can be `VOID`.
             </p>
 
         @throws com::sun::star::configuration::backend::MalformedDataException
@@ -381,7 +381,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             <p> The value must match the type of the existing property.
                 If the property does not have the
                 SchemaAttribute::REQUIRED flag set,
-                the value can be <void/>.
+                the value can be `VOID`.
             </p>
 
         @param aLocale
@@ -495,7 +495,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
 
-    /** receives notification that a property having a value of <void/>
+    /** receives notification that a property having a value of `VOID`
         is added to the current node.
 
         <p> The current node must be extensible and
@@ -572,7 +572,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             specifies the value of the new property.
 
             <p> The value also determines the type.
-                Therefore the value must not be <void/>.
+                Therefore the value must not be `VOID`.
             </p>
 
         @throws com::sun::star::configuration::backend::MalformedDataException
@@ -581,7 +581,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             <li>if there already was a change to a property of that name</li>
             <li>if a property of that name exists and is not removable</li>
             <li>if the type of the value is not an allowed type,
-                or if the value is <void/></li>
+                or if the value is `VOID`</li>
             <li>if the name is not a valid property name</li>
             <li>if the attributes are not valid for the property</li>
             </ul>

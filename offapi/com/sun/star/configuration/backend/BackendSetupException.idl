@@ -35,7 +35,7 @@ module backend {
 published exception BackendSetupException : ::com::sun::star::configuration::CannotLoadConfigurationException {
 
     /** The exception that is raised by the underlying backend implementation.
-        <p>May be a numeric error code, a message `string` or <void/>,
+        <p>May be a numeric error code, a message `string` or `VOID`,
         if the original exception is not represented as a
         com::sun::star::uno::Exception.
         </p>

@@ -43,7 +43,7 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
         com::sun::star::task::XInteractionContinuation::select(),
         and should only be called if
         XInteractionSupplyAuthentication::canSetRealm() returned
-        <true/>.</p>
+        `TRUE`.</p>
     */
     void setRealm( [in] string Realm );
 
@@ -57,7 +57,7 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
         com::sun::star::task::XInteractionContinuation::select(),
         and should only be called if
         XInteractionSupplyAuthentication::canSetUserName()
-        returned <true/>.</p>
+        returned `TRUE`.</p>
     */
     void setUserName( [in] string UserName );
 
@@ -71,7 +71,7 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
         com::sun::star::task::XInteractionContinuation::select(),
         and should only be called if
         XInteractionSupplyAuthentication::canSetPassword()
-        returned <true/>.</p>
+        returned `TRUE`.</p>
     */
     void setPassword( [in] string Password );
 
@@ -111,7 +111,7 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
         com::sun::star::task::XInteractionContinuation::select(),
         and should only be called if
         XInteractionSupplyAuthentication::canSetAccount()
-        returned <true/>.</p>
+        returned `TRUE`.</p>
 
     */
     void setAccount( [in] string Account );

@@ -39,7 +39,7 @@ interface XMissionTaker : com::sun::star::uno::XInterface
     /**
      * Forces a mission to make an end.
      *
-     * @return   <true/> if the mission is completed successfully, <false/>
+     * @return   `TRUE` if the mission is completed successfully, `FALSE`
      *           otherwise.
      */
     boolean endMission();

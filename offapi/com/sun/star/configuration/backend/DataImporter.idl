@@ -47,7 +47,7 @@ published service DataImporter
             that indicates the status of job execution. The type and meaning of
             such status indicators depend on the implementation.
         </p>
-         <p>If <void/> or <TRUE/> is returned, this indicates successful
+         <p>If `VOID` or <TRUE/> is returned, this indicates successful
             execution. If an
             com::sun::star::uno::Exception is returned,
             it represents an error condition encountered during execution.

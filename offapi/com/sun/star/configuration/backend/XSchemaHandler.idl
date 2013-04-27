@@ -415,7 +415,7 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
             specifies the value of the new property.
 
             <p> The value also determines the type.
-                Therefore the value must not be <void/>.
+                Therefore the value must not be `VOID`.
             </p>
 
         @throws com::sun::star::configuration::backend::MalformedDataException
@@ -423,7 +423,7 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
             <li>if there isn't a group or extensible node in progress currently</li>
             <li>if a property with the same name already exists</li>
             <li>if the type of the default value is not an allowed type,
-                or if the default value is <void/></li>
+                or if the default value is `VOID`</li>
             <li>if the name is not a valid property name</li>
             <li>if the attributes are not valid for a property</li>
             </ul>

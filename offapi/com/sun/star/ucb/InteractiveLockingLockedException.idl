@@ -33,8 +33,8 @@ module com { module sun { module star { module ucb {
 {
     /** The owner of the lock.
 
-        <true/>, the lock has been obtained by this OOo session.
-        <false/> the lock has been obtained by another principal.
+        `TRUE`, the lock has been obtained by this OOo session.
+        `FALSE` the lock has been obtained by another principal.
     */
     boolean SelfOwned;
 };

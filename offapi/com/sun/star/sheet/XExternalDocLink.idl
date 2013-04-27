@@ -51,9 +51,9 @@ interface XExternalDocLink
         @param aSheetName sheet name
 
         @param DynamicCache specify whether or not the cache can grow when
-        non-cached regions are queried.  If <true/>, querying a non-cached
+        non-cached regions are queried.  If `TRUE`, querying a non-cached
         cell in this sheet cache will allow Calc to try to access the source
-        document to fetch the value in first access.  If <false/>, the source
+        document to fetch the value in first access.  If `FALSE`, the source
         document will not be accessed, and the non-cached regions are treated
         as empty cells.
 

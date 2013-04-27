@@ -45,7 +45,7 @@ published interface XJavaVM: com::sun::star::uno::XInterface
         `long` or `hyper` integer (depending on the
         platform).  If the <code>processID</code> does not match the current
         process, or if the VM cannot be instantiated for whatever reason, a
-        <void/> `any` is returned.</p>
+        `VOID` `any` is returned.</p>
 
         <p>If the <code>processID</code> has an additional 17th byte of
         value&nbsp;<code>0</code>, the returned `any` contains a
@@ -57,7 +57,7 @@ published interface XJavaVM: com::sun::star::uno::XInterface
         pointer should be converted into a reference-counted reference as soon
         as possible).  Again, if the first 16 bytes of the
         <code>processID</code> do not match the current process, or if the VM
-        cannot be instantiated for whatever reason, a <void/> `any`
+        cannot be instantiated for whatever reason, a `VOID` `any`
         is returned.</p>
 
         <p>If the <code>processID</code> has an additional 17th byte of
@@ -69,7 +69,7 @@ published interface XJavaVM: com::sun::star::uno::XInterface
         com::sun::star::java::XJavaVM is valid.  Again, if
         the first 16 bytes of the <code>processID</code> do not match the
         current process, or if the VM cannot be instantiated for whatever
-        reason, a <void/> `any` is returned.</p>
+        reason, a `VOID` `any` is returned.</p>
 
         <p>The first form (returning a JNI <code>JavaVM</code> pointer) is
         mainly for backwards compatibility, new code should use the second form
@@ -92,15 +92,15 @@ published interface XJavaVM: com::sun::star::uno::XInterface
         @return
         On success, the `any` contains a pointer represented as
         `long` or `hyper`, otherwise the `any`
-        is <void/>.
+        is `VOID`.
      */
     any getJavaVM( [in] sequence<byte> processID );
 
-    /** returns <true/> if the VM is started successfully, otherwise <false/>.
+    /** returns `TRUE` if the VM is started successfully, otherwise `FALSE`.
      */
     boolean isVMStarted();
 
-    /** Returns <true/> if the VM is enabled.
+    /** Returns `TRUE` if the VM is enabled.
 
         <p>It is only possible to get the VM, if this method return 0. </p>
      */

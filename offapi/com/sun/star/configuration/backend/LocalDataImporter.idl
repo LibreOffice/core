@@ -48,14 +48,14 @@ published service LocalDataImporter
 
     /** provides for running an import job
 
-        <p> The implementation returns <void/> from
+        <p> The implementation returns `VOID` from
             com::sun::star::task::XJob::execute()
             to indicates successful execution. If import is not executed,
             because <code>OverwriteExisting = </code><TRUE/> was specified,
             a com::sun::star::lang::IllegalAccessException
             is returned.
         </p>
-         <p>If <void/> or <TRUE/> is returned, this indicates successful
+         <p>If `VOID` or <TRUE/> is returned, this indicates successful
             execution. If an
             com::sun::star::uno::Exception is returned,
             it represents an error condition encountered during execution.

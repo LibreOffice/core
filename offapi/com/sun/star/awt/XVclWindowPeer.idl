@@ -36,7 +36,7 @@
 published interface XVclWindowPeer: com::sun::star::awt::XWindowPeer
 {
 
-    /** returns <true/> if the window peer is a child, <false/> otherwise.
+    /** returns `TRUE` if the window peer is a child, `FALSE` otherwise.
      */
     boolean isChild( [in] com::sun::star::awt::XWindowPeer Peer );
 
@@ -46,8 +46,8 @@ published interface XVclWindowPeer: com::sun::star::awt::XWindowPeer
     void setDesignMode( [in] boolean bOn );
 
 
-    /** returns <true/> if the window peer is in design mode,
-        <false/> otherwise.
+    /** returns `TRUE` if the window peer is in design mode,
+        `FALSE` otherwise.
      */
     boolean isDesignMode();
 

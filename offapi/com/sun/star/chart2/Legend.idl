@@ -79,7 +79,7 @@ service Legend
         <p>If a relative position is given the legend is not automatically placed,
         but instead is placed relative on the page.</p>
 
-        <p>If <void/>, the legend position is solely determined by the
+        <p>If `VOID`, the legend position is solely determined by the
         #AnchorPosition.</p>
      */
     [property, maybevoid] ::com::sun::star::chart2::RelativePosition RelativePosition;

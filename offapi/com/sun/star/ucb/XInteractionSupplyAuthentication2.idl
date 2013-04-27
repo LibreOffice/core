@@ -43,15 +43,15 @@ interface XInteractionSupplyAuthentication2 : XInteractionSupplyAuthentication
         initially displayed to the user).
 
         @returns
-        <true/> if the issuer is able to obtain and use system credentials.
-        <false/> otherwise.
+        `TRUE` if the issuer is able to obtain and use system credentials.
+        `FALSE` otherwise.
     */
     boolean canUseSystemCredentials( [out] boolean Default );
 
     /** Set a new "use system credentials" value to hand back.
 
         @param UseSystemCredentials
-        <true/> means the request issuer shall obtain and use system credentials.
+        `TRUE` means the request issuer shall obtain and use system credentials.
      */
     void setUseSystemCredentials( [in] boolean UseSystemCredentials );
 

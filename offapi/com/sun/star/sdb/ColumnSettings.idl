@@ -40,7 +40,7 @@ published service ColumnSettings
         </p>
         <p>
         If the value is
-        <void/>
+        `VOID`
         , a default number format should be used according to the datatype of the column.
         </p>
 
@@ -57,7 +57,7 @@ published service ColumnSettings
         </pre>
         <p>
         If the value is
-        <void/>
+        `VOID`
         , a default alignment should be used according
         to the datatype of the column.
         </p>
@@ -69,7 +69,7 @@ published service ColumnSettings
 
         <p>
         If the value is
-        <void/>
+        `VOID`
         , a default width should be used according to the label of the column.
         </p>
      */
@@ -80,7 +80,7 @@ published service ColumnSettings
 
         <p>
         If the value is
-        <void/>
+        `VOID`
         , the default position should be taken according.
         </p>
      */

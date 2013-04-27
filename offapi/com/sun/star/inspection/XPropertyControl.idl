@@ -40,11 +40,11 @@ interface XPropertyControl
 
     /** denotes the current content of the control.
 
-        <p>At every point in time, this value is either <void/>, or of the type
+        <p>At every point in time, this value is either `VOID`, or of the type
         described by #ValueType.</p>
 
         @throws com::sun::star::beans::IllegalTypeException
-            if an attempt is made to set a value which is not <void/> and whose
+            if an attempt is made to set a value which is not `VOID` and whose
             type does not equal #ValueType.
     */
     [attribute] any Value

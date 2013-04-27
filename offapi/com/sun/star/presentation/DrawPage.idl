@@ -132,13 +132,13 @@ published service DrawPage
 
 
     /** defines the text that is displayed in a date and time textfield rendered on this
-        page. This value is only used if <code>IsDateTimeFixed</code> is <true/>.
+        page. This value is only used if <code>IsDateTimeFixed</code> is `TRUE`.
     */
     [optional, property] string DateTimeText;
 
 
     /** defines the format that is used to format a date and time text field on
-        this page. This is only used if <code>IsDateTimeFixed</code> is <false/>.
+        this page. This is only used if <code>IsDateTimeFixed</code> is `FALSE`.
     */
     [optional, property] long DateTimeFormat;
 

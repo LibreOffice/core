@@ -478,7 +478,7 @@ interface XAccessibleText : ::com::sun::star::uno::XInterface
             The valid range is 0..length.
 
         @return
-            Returns <true/> if the specified text has been copied
+            Returns `TRUE` if the specified text has been copied
             successfully into the clipboard.
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException

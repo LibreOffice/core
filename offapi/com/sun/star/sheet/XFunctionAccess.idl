@@ -58,7 +58,7 @@ published interface XFunctionAccess: com::sun::star::uno::XInterface
         <dd>for an array of textual values.</dd>
 
         <dt>`any[][]`</dt>
-        <dd>for a mixed array, where each element must be of <void/>,
+        <dd>for a mixed array, where each element must be of `VOID`,
         `long`, `double` or `string`
         type.</dd>
 
@@ -73,7 +73,7 @@ published interface XFunctionAccess: com::sun::star::uno::XInterface
             <p>Possible types for the result are:</p>
 
             <dl>
-            <dt><void/></dt>
+            <dt>`VOID`</dt>
             <dd>if no result is available.</dd>
 
             <dt>`double`</dt>

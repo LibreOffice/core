@@ -296,7 +296,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
                 (as indicated by
                 com::sun::star::uno::TypeClass::ANY.)
             </p>
-            <p> A <void/> type indicates that the type is unspecified
+            <p> A `VOID` type indicates that the type is unspecified
                 in this layer.
                 In this case any subsequent value may be of a generic type
                 (e.g. `string` or - for list values -
@@ -345,7 +345,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
             <p> The value must match the type of the current property.
                 If the property does not have the
                 SchemaAttribute::REQUIRED flag set,
-                the value can be <void/>.
+                the value can be `VOID`.
             </p>
             <p> If the current property is localized, this value applies
                 to the default locale.
@@ -379,7 +379,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
             <p> The value must match the type of the current property.
                 If the property does not have the
                 SchemaAttribute::REQUIRED flag set,
-                the value can be <void/>.
+                the value can be `VOID`.
             </p>
 
         @param aLocale
@@ -427,7 +427,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
 
-    /** receives notification that a property having a <void/> value is added
+    /** receives notification that a property having a `VOID` value is added
         to the current node.
 
         <p> The current node must be extensible.
@@ -473,7 +473,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
                     com::sun::star::lang::WrappedTargetException );
 
 
-    /** receives notification that a property having a non-<void/> value
+    /** receives notification that a property having a non-`VOID` value
         is added to the current node.
 
         <p> The current node must be extensible.
@@ -499,7 +499,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
             specifies the value of the new property.
 
             <p> The value also determines the type.
-                Therefore the value must not be <void/>.
+                Therefore the value must not be `VOID`.
             </p>
 
         @throws com::sun::star::configuration::backend::MalformedDataException
@@ -507,7 +507,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
             <li>if there isn't an extensible node in progress currently</li>
             <li>if a property with that name already exists</li>
             <li>if the type of the value is not an allowed type
-                or if the value is <void/></li>
+                or if the value is `VOID`</li>
             <li>if the name is not a valid property name</li>
             <li>if the value is not valid for the property</li>
             <li>if the attributes are not valid for the property</li>

@@ -46,7 +46,7 @@ published struct PropertyChangeEvent: com::sun::star::lang::EventObject
     string PropertyName;
 
 
-    /** contains <true/> if further events in the same transaction occur.
+    /** contains `TRUE` if further events in the same transaction occur.
      */
     boolean Further;
 

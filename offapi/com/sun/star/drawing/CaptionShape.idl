@@ -73,7 +73,7 @@ published service CaptionShape
 
     /** This property specifies if the escape angle of
         the line of a caption is fixed or free. If this
-        is set to <false/>, the application can choose
+        is set to `FALSE`, the application can choose
         the best possible angle. If not, the value in
         <code>CaptionAngle</code> is used.
     */
@@ -82,7 +82,7 @@ published service CaptionShape
     /** This property specifies the escape angle of
         the line of a caption.
         It is only used if <code>CaptionIsFixedAngle</code>
-        is set to <true/>
+        is set to `TRUE`
     */
     [property] long CaptionAngle;
 
@@ -98,7 +98,7 @@ published service CaptionShape
     */
     [property] long CaptionEscapeDirection;
 
-    /** If this property is <true/>, the property <code>CaptionEscapeRelative</code>
+    /** If this property is `TRUE`, the property <code>CaptionEscapeRelative</code>
         is used, else the property <code>CaptionEscapeAbsolute</code> is used.
     */
     [property] boolean CaptionIsEscapeRelative;
@@ -117,7 +117,7 @@ published service CaptionShape
     */
     [property] long CaptionLineLength;
 
-    /** If this property is <true/>, the application determines
+    /** If this property is `TRUE`, the application determines
         the best possible length for the caption line.
     */
     [property] boolean CaptionIsFitLineLength;

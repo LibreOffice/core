@@ -44,7 +44,7 @@ published interface XSentenceCursor: com::sun::star::text::XTextCursor
     /** moves the cursor to the start of the next sentence.
 
         @returns
-            <true/> if the cursor was moved. It returns <false/> it the
+            `TRUE` if the cursor was moved. It returns `FALSE` it the
             cursor can not advance further.
      */
     boolean gotoNextSentence( [in] boolean Expand );
@@ -53,7 +53,7 @@ published interface XSentenceCursor: com::sun::star::text::XTextCursor
     /** moves the cursor to the start of the previous sentence.
 
         @returns
-            <true/> if the cursor was moved. It returns <false/> it the
+            `TRUE` if the cursor was moved. It returns `FALSE` it the
             cursor can not advance further.
      */
     boolean gotoPreviousSentence( [in] boolean Expand );
@@ -62,8 +62,8 @@ published interface XSentenceCursor: com::sun::star::text::XTextCursor
     /** moves the cursor to the start of the current sentence.
 
         @returns
-            <true/> if the cursor is now at the start of a sentence,
-            <false/> otherwise. If <false/> was returned the cursor
+            `TRUE` if the cursor is now at the start of a sentence,
+            `FALSE` otherwise. If `FALSE` was returned the cursor
             will remain at its original position.
      */
     boolean gotoStartOfSentence( [in] boolean Expand );
@@ -72,8 +72,8 @@ published interface XSentenceCursor: com::sun::star::text::XTextCursor
     /** moves the cursor to the end of the current sentence.
 
         @returns
-            <true/> if the cursor is now at the end of a sentence,
-            <false/> otherwise. If <false/> was returned the cursor
+            `TRUE` if the cursor is now at the end of a sentence,
+            `FALSE` otherwise. If `FALSE` was returned the cursor
             will remain at its original position.
      */
     boolean gotoEndOfSentence( [in] boolean Expand );

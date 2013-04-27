@@ -76,7 +76,7 @@ interface XPackageTypeInfo
         @return
                 currently an unsigned short
                 (resource id for deploymentgui resource file),
-                <void/> any if none is available
+                `VOID` any if none is available
     */
     any getIcon( [in] boolean highContrast, [in] boolean smallIcon );
 };

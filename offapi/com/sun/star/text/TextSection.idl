@@ -56,8 +56,8 @@ published service TextSection
 
     /**  This property contains a conditional expression.
 
-    <p>If the result of the conditional expression is <true/> and the property
-    TextSection::IsVisible is <false/>, then the section is hidden.</p>
+    <p>If the result of the conditional expression is `TRUE` and the property
+    TextSection::IsVisible is `FALSE`, then the section is hidden.</p>
     */
     [property] string Condition;
 

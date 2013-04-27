@@ -257,7 +257,7 @@ published service MailMerge
 
 
     /** determines that the created mail merge document is sent as body in HTML format.
-        This property is only valid if the property "SendAsAttachment" is set to <false/>.
+        This property is only valid if the property "SendAsAttachment" is set to `FALSE`.
 
         <p>This property is only evaluated for e-Mail output.</p>
 
@@ -277,7 +277,7 @@ published service MailMerge
 
 
     /** contains the text of the mail body.
-        This property is only valid if the property "SendAsAttachment" is set to <true/>
+        This property is only valid if the property "SendAsAttachment" is set to `TRUE`
         <p>This property is only evaluated for e-Mail output.</p>
 
         @since OOo 2.0
@@ -286,7 +286,7 @@ published service MailMerge
 
 
     /** contains the name of the attachment.
-        This property is only valid if "SendAsAttachment" is set to <true/>.
+        This property is only valid if "SendAsAttachment" is set to `TRUE`.
 
         <p>This property is only evaluated for e-Mail output.</p>
 
@@ -296,7 +296,7 @@ published service MailMerge
 
 
     /** contains the name of the document filter to save the attached mail merge document.
-        This property is only valid if "SendAsAttachment" is set to <true/>.
+        This property is only valid if "SendAsAttachment" is set to `TRUE`.
 
         <p>This property is only evaluated for e-Mail output.</p>
 

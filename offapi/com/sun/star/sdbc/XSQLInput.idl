@@ -198,7 +198,7 @@ published interface XSQLInput: com::sun::star::uno::XInterface
 
         <br/>
         When the datum at the head of the stream is a SQL NULL,
-        the method returns <void/>. If the datum is a SQL structured or distinct
+        the method returns `VOID`. If the datum is a SQL structured or distinct
         type, it determines the SQL type of the datum at the head of the stream,
         constructs an object of the appropriate service, and calls the method
         com::sun::star::sdbc::XSQLData::readSQL()

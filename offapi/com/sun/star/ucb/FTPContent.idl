@@ -128,12 +128,12 @@ published service FTPContent
         "application/vnd.sun.staroffice.ftp-file" )
         </li>
         <li>
-        boolean IsDocument ( read-only, always <true/> for files, always
-        <false/> for directories )
+        boolean IsDocument ( read-only, always `TRUE` for files, always
+        `FALSE` for directories )
         </li>
         <li>
-        boolean IsFolder ( read-only ), always <false/> for files, always
-        <true/> for directories )
+        boolean IsFolder ( read-only ), always `FALSE` for files, always
+        `TRUE` for directories )
         </li>
         <li>
         boolean IsReadOnly ( read-only attribute )

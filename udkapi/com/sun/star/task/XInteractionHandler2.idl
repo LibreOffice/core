@@ -40,7 +40,7 @@ published interface XInteractionHandler2 : com::sun::star::task::XInteractionHan
 
         @param Request the inteaction request to handle.
 
-        @return <true/>, if the handler handled the request, <false/> otherwise.
+        @return `TRUE`, if the handler handled the request, `FALSE` otherwise.
      */
     boolean handleInteractionRequest(
         [in] com::sun::star::task::XInteractionRequest Request );

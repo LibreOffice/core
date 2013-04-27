@@ -88,8 +88,8 @@ interface XNode : com::sun::star::uno::XInterface
     constructor for nodes.
     <p></p>
     @param deep
-    <true/>: clone node together with any children<br>
-    <false/>: clone without children
+    `TRUE`: clone node together with any children<br>
+    `FALSE`: clone without children
     @returns
     the cloned node
     */

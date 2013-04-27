@@ -82,7 +82,7 @@ interface XDataPilotTable2: com::sun::star::sheet::XDataPilotTable
 
         @param aAddr address of a result cell
 
-        @returns <void/>
+        @returns `VOID`
      */
     void insertDrillDownSheet( [in] com::sun::star::table::CellAddress aAddr );
 

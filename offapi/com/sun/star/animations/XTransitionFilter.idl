@@ -51,22 +51,22 @@ interface XTransitionFilter : XAnimate
     [attribute] short Subtype;
 
     /** Indicates whether the transitionFilter's parent element will transition in or out.
-        Legal values are <true/> indicating that the parent media will become more visible as
-        the transition progress increases and <false/> indicating that the parent media will
+        Legal values are `TRUE` indicating that the parent media will become more visible as
+        the transition progress increases and `FALSE` indicating that the parent media will
         become less visible as the transition progress increases.
 
-        The default value is <true/>.
+        The default value is `TRUE`.
     */
     [attribute] boolean Mode;
 
     /** This specifies the direction the transition will run.
         <br>
-        The legal values are <true/> for forward and <false/> for reverse.
-        The default value is <true/>.
+        The legal values are `TRUE` for forward and `FALSE` for reverse.
+        The default value is `TRUE`.
         Note that this does not impact the media being transitioned to, but
         only affects the geometry of the transition.
         Transitions which do not have a reverse interpretation should ignore the
-        direction attribute and assume the default value of <true/>.
+        direction attribute and assume the default value of `TRUE`.
     */
     [attribute] boolean Direction;
 

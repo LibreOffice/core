@@ -66,7 +66,7 @@ published exception MalformedDataException: ::com::sun::star::uno::Exception
             <dd>for features that are not supported by the current implementation.</dd>
         </dl>
         </p>
-        <p> If no more detail information is available, this may be left <void/>.
+        <p> If no more detail information is available, this may be left `VOID`.
         </p>
     */
     any ErrorDetails;

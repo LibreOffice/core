@@ -139,7 +139,7 @@ published interface XTextTableCursor: com::sun::star::uno::XInterface
             for each cell contained in the range.
 
         @param bHorizontal
-            <true/> if the range should be split vertically.
+            `TRUE` if the range should be split vertically.
             Otherwise it will be split horizontally.
 
         @see com:sun::star::Cell

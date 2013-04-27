@@ -68,7 +68,7 @@ module com {  module sun {  module star {  module sheet {
     <dt>`any`</dt>
     <dd>Depending on the data, a `double`, a `string`,
     or an `any[][]` will be passed. If no argument is specified in
-    the function call, <void/> will be passed. This allows for optional
+    the function call, `VOID` will be passed. This allows for optional
     parameters.</dd>
 
     <dt>com::sun::star::table::XCellRange</dt>

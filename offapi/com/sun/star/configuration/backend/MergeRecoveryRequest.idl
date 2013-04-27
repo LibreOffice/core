@@ -48,7 +48,7 @@ exception MergeRecoveryRequest: ::com::sun::star::uno::Exception
             <dd>for layers that can't be accessed.</dd>
         </dl>
         </p>
-        <p> If no more detail information is available, this may be left <void/>.
+        <p> If no more detail information is available, this may be left `VOID`.
         </p>
     */
     any ErrorDetails;

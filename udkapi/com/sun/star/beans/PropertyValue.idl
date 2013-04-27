@@ -48,7 +48,7 @@ published struct PropertyValue
     long Handle;
 
 
-    /** contains the value of the property or <void/>,
+    /** contains the value of the property or `VOID`,
         if no value is available.
      */
     any Value;

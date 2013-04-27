@@ -67,7 +67,7 @@ published interface XGridRowSelection
 
     /** Returns whether rows are selected.
         @returns
-            <true/> if and only if at least one row is selected.
+            `TRUE` if and only if at least one row is selected.
     */
     boolean hasSelectedRows();
 
@@ -75,10 +75,10 @@ published interface XGridRowSelection
 
         @param RowIndex
             the index of a row. If the value does not denote a valid row index, i.e. is smaller than <code>0</code>
-            or greater than the number of rows, this is silently ignored, and <false/> is returned.
+            or greater than the number of rows, this is silently ignored, and `FALSE` is returned.
 
         @returns
-            <true/> if and only if there is a row with the given index, and it is selected currently.
+            `TRUE` if and only if there is a row with the given index, and it is selected currently.
     */
     boolean isRowSelected( [in] long RowIndex );
 

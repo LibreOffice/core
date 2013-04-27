@@ -96,12 +96,12 @@ published interface XControl: com::sun::star::lang::XComponent
     void setDesignMode( [in] boolean bOn );
 
 
-    /** returns <true/> if the control is in design mode, <false/> otherwise.
+    /** returns `TRUE` if the control is in design mode, `FALSE` otherwise.
      */
     boolean isDesignMode();
 
 
-    /** returns <true/> if the control is transparent, <false/> otherwise.
+    /** returns `TRUE` if the control is transparent, `FALSE` otherwise.
      */
     boolean isTransparent();
 

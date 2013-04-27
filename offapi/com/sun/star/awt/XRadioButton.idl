@@ -44,7 +44,7 @@ published interface XRadioButton: com::sun::star::uno::XInterface
     void removeItemListener( [in] com::sun::star::awt::XItemListener l );
 
 
-    /** returns <true/> if the button is checked, <false/> otherwise.
+    /** returns `TRUE` if the button is checked, `FALSE` otherwise.
      */
     boolean getState();
 

@@ -32,7 +32,7 @@ module com {  module sun {  module star {  module java {
  */
 published interface XJavaThreadRegister_11: com::sun::star::uno::XInterface
 {
-    /** returns <true/> if the current thread is already attached to the VM otherwise <false/>.
+    /** returns `TRUE` if the current thread is already attached to the VM otherwise `FALSE`.
      */
     boolean isThreadAttached();
 

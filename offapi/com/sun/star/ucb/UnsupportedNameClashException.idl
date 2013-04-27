@@ -38,7 +38,7 @@ module com { module sun { module star { module ucb {
     unable to create a valid new name after a suitable number of tries.
 
     <p>Command "insert": Used if the parameter ReplaceExisting of the
-    supplied InsertCommandArgument was set to <false/> and the
+    supplied InsertCommandArgument was set to `FALSE` and the
     implementation is unable to determine whether there are existing data.
     The member NameClash of the exception must be set to NameClash::ERROR
 

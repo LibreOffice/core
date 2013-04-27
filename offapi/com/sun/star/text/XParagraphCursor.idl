@@ -44,8 +44,8 @@ published interface XParagraphCursor: com::sun::star::text::XTextCursor
     /** moves the cursor to the start of the current paragraph.
 
         @returns
-            <true/> if the cursor is now at the start of a paragraph,
-            <false/> otherwise. If <false/> was returned the cursor
+            `TRUE` if the cursor is now at the start of a paragraph,
+            `FALSE` otherwise. If `FALSE` was returned the cursor
             will remain at its original position.
      */
     boolean gotoStartOfParagraph( [in] boolean bExpand );
@@ -54,8 +54,8 @@ published interface XParagraphCursor: com::sun::star::text::XTextCursor
     /** moves the cursor to the end of the current paragraph.
 
         @returns
-            <true/> if the cursor is now at the end of a paragraph,
-            <false/> otherwise. If <false/> was returned the cursor
+            `TRUE` if the cursor is now at the end of a paragraph,
+            `FALSE` otherwise. If `FALSE` was returned the cursor
             will remain at its original position.
      */
     boolean gotoEndOfParagraph( [in] boolean bExpand );
@@ -64,7 +64,7 @@ published interface XParagraphCursor: com::sun::star::text::XTextCursor
     /** moves the cursor to the next paragraph.
 
         @returns
-            <true/> if the cursor was moved. It returns <false/> it the
+            `TRUE` if the cursor was moved. It returns `FALSE` it the
             cursor can not advance further.
      */
     boolean gotoNextParagraph( [in] boolean bExpand );
@@ -73,7 +73,7 @@ published interface XParagraphCursor: com::sun::star::text::XTextCursor
     /** moves the cursor to the previous paragraph.
 
         @returns
-            <true/> if the cursor was moved. It returns <false/> it the
+            `TRUE` if the cursor was moved. It returns `FALSE` it the
             cursor can not advance further.
      */
     boolean gotoPreviousParagraph( [in] boolean bExpand );
