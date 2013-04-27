@@ -31,6 +31,11 @@
 # defined by platform
 #  gb_Executable_Executable_platform
 
+# NOTE: SDKBIN executables are already packaged in module odk
+gb_Executable_LAYER_DIRS := \
+    OOO:program \
+    UREBIN:ure/bin
+
 $(dir $(call gb_Executable_get_runtime_target,%)).dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
@@ -46,6 +51,11 @@ $(call gb_Executable_get_clean_target,%) :
 		rm -f $(call gb_Executable_get_target,$*) \
 			$(call gb_Executable_get_runtime_target,$*) \
 			$(AUXTARGETS))
+
+gb_Executable_get_packagename = Executable/$(1)
+
+gb_Executable__get_dir_for_layer = $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Executable_LAYER_DIRS)))
+gb_Executable__get_instdir = $(call gb_Executable__get_dir_for_layer,$(call gb_Executable_get_layer,$(1)))
 
 define gb_Executable_Executable
 $(call gb_Postprocess_get_target,AllExecutables) : $(call gb_Executable_get_target,$(1))
@@ -67,9 +77,28 @@ $(call gb_Executable_get_runtime_target,$(1)) :| $(dir $(call gb_Executable_get_
 $(call gb_Executable_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
 $(call gb_Executable_get_clean_target,$(1)) : AUXTARGETS :=
 $(call gb_Executable_Executable_platform,$(1),$(2))
+
+ifneq ($(gb_RUNNABLE_INSTDIR),)
+$(if $(filter $(call gb_Executable_get_layer,$(1)):%,$(gb_Executable_LAYER_DIRS)),\
+    $(call gb_Executable__Executable_package,$(1),$(call gb_Executable_get_packagename,$(1)),$(2),$(notdir $(call gb_Executable_get_target,$(1)))) \
+)
+endif
+
 $$(eval $$(call gb_Module_register_target,$(call gb_Executable_get_target,$(1)),$(call gb_Executable_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),Executable)
 $(call gb_Deliver_add_deliverable,$(call gb_Executable_get_target,$(1)),$(call gb_LinkTarget_get_target,$(2)),$(1))
+
+endef
+
+# gb_Executable__Executable_package executable package linktarget filename
+define gb_Executable__Executable_package
+$(call gb_Package_Package,$(2),$(WORKDIR))
+$(call gb_Package_set_outdir,$(2),$(INSTDIR))
+$(call gb_Package_add_file,$(2),$(call gb_Executable__get_instdir,$(1))/$(4),$(subst $(WORKDIR)/,,$(call gb_LinkTarget_get_target,$(3))))
+
+$(call gb_Executable_get_target,$(1)) :| $(call gb_Package_get_target,$(2))
+$(call gb_Package_get_target,$(2)) : $(call gb_LinkTarget_get_target,$(3))
+$(call gb_Executable_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(2))
 
 endef
 
