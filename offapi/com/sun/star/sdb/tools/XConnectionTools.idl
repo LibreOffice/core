@@ -89,10 +89,10 @@ interface XConnectionTools
 
         @param command
             the object. This may be a table name, a query name, or an SQL statement, depending on the value
-            of <arg>_nCommandType</arg>
+            of _nCommandType
 
         @param _rxCollectionOner
-            If (and only if) <arg>CommandType</arg> is CommandType.COMMAND, the fields collection which is returned
+            If (and only if) CommandType is CommandType.COMMAND, the fields collection which is returned
             by this function here is a temporary object. It is kept alive by another object, which is to be
             created temporarily, too. To ensure that the fields you get are valid as long as you need them,
             the owner which controls their life time is transfered to this parameter upon return.<br/>
@@ -117,7 +117,7 @@ interface XConnectionTools
 
         @param command
             the object. This may be a table name, a query name, or an SQL statement, depending on the value
-            of <arg>_nCommandType</arg>
+            of _nCommandType
         @return
             the composer filled with command and command type.
     */

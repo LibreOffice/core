@@ -51,7 +51,7 @@ published interface XGridColumnFactory: com::sun::star::uno::XInterface
             the new column object
 
         @throws com::sun::star::lang::IllegalArgumentException
-            if <arg>aColumnType</arg> is not available.
+            if aColumnType is not available.
      */
     com::sun::star::beans::XPropertySet createColumn( [in] string aColumnType )
             raises( com::sun::star::lang::IllegalArgumentException );

@@ -82,7 +82,7 @@ service EnumerableMap : XEnumerableMap
             denotes the type of the values in the to-be-created map
 
         @throws ::com::sun::star::beans::IllegalTypeException
-            if <arg>KeyType</arg> or <arg>ValueType</arg> are unsupported types.
+            if KeyType or ValueType are unsupported types.
             For values, all type classes except com::sun::star::uno::TypeClass::VOID
             and com::sun::star::uno::TypeClass::UNKNOWN are accepted.
             For keys, scalar types, strings, com::sun::star::uno::Type itself, and interface
@@ -104,7 +104,7 @@ service EnumerableMap : XEnumerableMap
             denote the values contained in the to-be-created map
 
         @throws ::com::sun::star::beans::IllegalTypeException
-            if <arg>KeyType</arg> or <arg>ValueType</arg> are unsupported types.
+            if KeyType or ValueType are unsupported types.
             For values, all type classes except com::sun::star::uno::TypeClass::VOID
             are accepted.<br/>
             For keys, scalar types, strings, com::sun::star::uno::Type itself, and interface

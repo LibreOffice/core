@@ -55,7 +55,7 @@ interface XPropertyControlFactory
             a control of the given type.
 
         @throws com::sun::star::lang::IllegalArgumentException
-            if the given <arg>ControlType</arg> is not a value PropertyControlType
+            if the given ControlType is not a value PropertyControlType
     */
     XPropertyControl    createPropertyControl( [in] short ControlType, [in] boolean CreateReadOnly )
         raises ( com::sun::star::lang::IllegalArgumentException );

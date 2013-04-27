@@ -80,7 +80,7 @@ interface XTableName
         @see CompositionType
 
         @throws com::sun::star::IllegalArgumentException
-            if the given <arg>Type</arg> does not denote a valid CompositionType
+            if the given Type does not denote a valid CompositionType
     */
     string  getComposedName( [in] long Type, [in] boolean Quote )
         raises ( com::sun::star::lang::IllegalArgumentException );

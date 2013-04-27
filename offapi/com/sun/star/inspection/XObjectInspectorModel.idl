@@ -110,7 +110,7 @@ interface XObjectInspectorModel
         @param PropertyName
             the property whose global order index should be retrieved
         @return
-            the global order index of <arg>PropertyName</arg>.
+            the global order index of PropertyName.
     */
     long    getPropertyOrderIndex( [in] string PropertyName );
 

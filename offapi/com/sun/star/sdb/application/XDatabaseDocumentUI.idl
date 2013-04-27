@@ -229,7 +229,7 @@ interface XDatabaseDocumentUI
             or an com::sun::star::frame::XController if the component does is model-less.
 
         @throws ::com::sun::star::lang::IllegalArgumentException
-            if <arg>ObjectType</arg> denotes an invalid object type
+            if ObjectType denotes an invalid object type
 
         @throws ::com::sun::star::container::NoSuchElementException
             if an object with the given name and of the given type does not exist
@@ -270,7 +270,7 @@ interface XDatabaseDocumentUI
             constants.
 
         @param DocumentDefinition
-            Upon successful return, and if and only if <arg>ObjectType</arg> equals DatabaseObject::FORM
+            Upon successful return, and if and only if ObjectType equals DatabaseObject::FORM
             or DatabaseObject::REPORT, this will contain the com::sun::star::sdb::DocumentDefinition
             object which controls the sub component.
     */
@@ -294,11 +294,11 @@ interface XDatabaseDocumentUI
             constants.
 
         @param DocumentDefinition
-            Upon successful return, and if and only if <arg>ObjectType</arg> equals DatabaseObject::FORM
+            Upon successful return, and if and only if ObjectType equals DatabaseObject::FORM
             or DatabaseObject::REPORT, this will contain the com::sun::star::sdb::DocumentDefinition
             object which controls the sub component.<br/>
             You can use this object to control various aspects of the sub component. For instance, you could decide
-            to create the component hidden, by passing a <code>Hidden</code> flag (set to <TRUE/>) in <arg>Arguments</arg>,
+            to create the component hidden, by passing a <code>Hidden</code> flag (set to <TRUE/>) in Arguments,
             manipulate the component, and then finally show it by invoking the <code>show</code> command at the
             definition object.
     */

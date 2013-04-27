@@ -42,7 +42,7 @@ published interface XFilterGroupManager : com::sun::star::uno::XInterface
 
     @param aFilters
         The filters which form a group. Every filter consists of two strings, where the first one is a display name
-        (as for <arg>sGroupTitle</arg>, it holds that these strings should be localized), and the second one the
+        (as for sGroupTitle, it holds that these strings should be localized), and the second one the
         semicolon separated list of wildcard expressions for the filter.<br/>
         Usually, the expressions are simply extensions (e.g. "*.txt"), but this must no necessarily be the case.
 

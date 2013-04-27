@@ -65,7 +65,7 @@ interface XModel
     /** submit form through given submission id
 
         <p>This is a convenience method. Calling it is equivalent to calling
-        <code>getSubmission()( <arg>id</arg> ).submit()</code>.</p>
+        <code>getSubmission()( id ).submit()</code>.</p>
 
         @param id
             the ID of the submission to execute
@@ -85,7 +85,7 @@ interface XModel
     /** submit form through given submission id
 
         <p>This is a convenience method. Calling it is equivalent to calling
-        <code>getSubmission()( <arg>id</arg>, <arg>handler</arg> ).submit()</code>.</p>
+        <code>getSubmission()( id, handler ).submit()</code>.</p>
 
         @param id
             the ID of the submission to execute

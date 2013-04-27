@@ -76,11 +76,11 @@ service ObjectInspectorModel : XObjectInspectorModel
             section.
 
         @throws ::com::sun::star::lang::IllegalArgumentException
-            if <arg>handlerFactories</arg> is empty.
+            if handlerFactories is empty.
 
         @throws ::com::sun::star::lang::IllegalArgumentException
-            if <arg>minHelpTextLines</arg> or <arg>maxHelpTextLines</arg> are negative,
-            or if <arg>minHelpTextLines</arg> is greater than <arg>maxHelpTextLines</arg>.
+            if minHelpTextLines or maxHelpTextLines are negative,
+            or if minHelpTextLines is greater than maxHelpTextLines.
 
         @see XObjectInspectorModel::HandlerFactories
         @see XObjectInspectorModel::HasHelpSection

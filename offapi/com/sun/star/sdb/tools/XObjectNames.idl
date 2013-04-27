@@ -80,7 +80,7 @@ interface XObjectNames
             base name will be used.
 
         @throws com::sun::star::lang::IllegalArgumentException
-            if <arg>CommandType</arg> specifies an invalid command type.
+            if CommandType specifies an invalid command type.
     */
     string  suggestName( [in] long CommandType, [in] string BaseName )
         raises ( com::sun::star::lang::IllegalArgumentException );
@@ -118,7 +118,7 @@ interface XObjectNames
             to be used in the database.
 
         @throws com::sun::star::lang::IllegalArgumentException
-            if <arg>CommandType</arg> specifies an invalid command type.
+            if CommandType specifies an invalid command type.
 
         @see checkNameIsUsed
     */

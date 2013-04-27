@@ -128,7 +128,7 @@ interface XFilterController
             and smaller than #FilterComponents.
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
-            if <arg>_Component</arg> is out of the allowed range.
+            if _Component is out of the allowed range.
 
         @see ::com::sun::star::form::component::DataAwareControlModel::BoundField
     */
@@ -151,7 +151,7 @@ interface XFilterController
             #DisjunctiveTerms.
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
-            if <arg>_Term</arg> is out of the allowed range.
+            if _Term is out of the allowed range.
     */
     void
         removeDisjunctiveTerm( [in] long _Term )

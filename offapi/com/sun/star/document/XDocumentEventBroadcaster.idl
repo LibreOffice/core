@@ -79,7 +79,7 @@ interface XDocumentEventBroadcaster
             supplemental information related to the event.
 
         @throws ::com::sun::star::lang::IllegalArgumentException
-            if <arg>_EventName</arg> is empty, or if <arg>_EventName</arg> is not supported by the
+            if _EventName is empty, or if _EventName is not supported by the
             document implementation.
 
         @throws ::com::sun::star::lang::NoSupportException

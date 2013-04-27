@@ -71,7 +71,7 @@ interface XObjectInspectorUI
             this does mean that this element's state is not affected by the call - it does
             <em>not</em> mean that it is disabled.
         @param  Enable
-            <TRUE/> if the elements denoted by <arg>_nElements</arg> should be enabled, <FALSE/> if
+            <TRUE/> if the elements denoted by _nElements should be enabled, <FALSE/> if
             they should be disabled.
     */
     void    enablePropertyUIElements(
@@ -89,7 +89,7 @@ interface XObjectInspectorUI
 
         <p>Note that the property whose UI should be rebuilt must not necessarily be (though usually <em>is</em>)
         in the responsibility of the handler which calls this method. The object inspector will look up the
-        handler with the responsibility for <arg>PropertyName</arg> and call its
+        handler with the responsibility for PropertyName and call its
         XPropertyHandler::describePropertyLine()</p>
 
         @param PropertyName

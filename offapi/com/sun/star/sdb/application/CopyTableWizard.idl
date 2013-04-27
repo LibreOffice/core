@@ -84,7 +84,7 @@ service CopyTableWizard : XCopyTableWizard
         a table from one database to another.
 
         <p>At creation time, an attempt will be made to obtain the connections described
-        by <arg>Source</arg> resp. <arg>Dest</arg>. Failing to do so will result in an
+        by Source resp. Dest. Failing to do so will result in an
         exception.</p>
 
         <p>If the connection has been newly created by the wizard (e.g. because the

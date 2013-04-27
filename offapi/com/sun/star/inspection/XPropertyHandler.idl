@@ -112,7 +112,7 @@ interface XPropertyHandler
         @throws com::sun::star::beans::UnknownPropertyException
             if the given property is not supported by this handler
         @throws com::sun::star::lang::NullPointerException
-            if <arg>ControlFactory</arg> is <NULL/>.
+            if ControlFactory is <NULL/>.
         @see PropertyControlType
         @see LineDescriptor
     */
@@ -344,7 +344,7 @@ interface XPropertyHandler
 
         @param out_Data
             If the method returns InteractiveSelectionResult::ObtainedValue,
-            then <arg>out_Data</arg> contains the value which has been interactively obtained
+            then out_Data contains the value which has been interactively obtained
             from the user, and which still needs to be set at the inspected component.
 
         @param InspectorUI
@@ -359,7 +359,7 @@ interface XPropertyHandler
         @throws com::sun::star::beans::UnknownPropertyException
             if the given property is not supported by the property handler
         @throws com::sun::star::lang::NullPointerException
-            if <arg>InspectorUI</arg> is <NULL/>
+            if InspectorUI is <NULL/>
 
         @see describePropertyLine
         @see addPropertyChangeListener
@@ -396,9 +396,9 @@ interface XPropertyHandler
             <br/>
             In some cases it may be necessary to differentiate between both situations. For instance,
             if you want to set the value of another property when an actuating property's value changed,
-            you should definitely not do this when <arg>FirstTimeInit</arg> is <TRUE/>.
+            you should definitely not do this when FirstTimeInit is <TRUE/>.
         @throws com::sun::star::lang::NullPointerException
-            if <arg>InspectorUI</arg> is <NULL/>
+            if InspectorUI is <NULL/>
     */
     void
         actuatingPropertyChanged(

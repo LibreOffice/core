@@ -71,7 +71,7 @@ published interface XVndSunStarScriptUrl: com::sun::star::uno::XInterface {
         specifies the non-escaped new name part of the URL.
 
         @throws ::com::sun::star::lang::IllegalArgumentException
-        if <arg>name</arg> is empty
+        if name is empty
 
         @since OOo 3.0
     */
@@ -116,7 +116,7 @@ published interface XVndSunStarScriptUrl: com::sun::star::uno::XInterface {
         Otherwise, a parameter with the given key/value will be appended.
 
         @throws ::com::sun::star::lang::IllegalArgumentException
-        if <arg>key</arg> is empty
+        if key is empty
 
         @since OOo 3.0
     */
