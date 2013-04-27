@@ -2032,6 +2032,7 @@ void ScTabView::FreezeSplitters( bool bFreeze )
     if ( bFreeze )
     {
         Point aWinStart = pWin->GetPosPixel();
+        aViewData.GetDocShell()->SetDocumentModified();
 
         Point aSplit;
         SCsCOL nPosX;
