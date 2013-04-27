@@ -55,7 +55,7 @@ interface XTreeDataModel : ::com::sun::star::lang::XComponent
     void addTreeDataModelListener( [in] XTreeDataModelListener Listener );
 
 
-    /** Removes a listener previously added with <method>addTreeDataModelListener()</method>.
+    /** Removes a listener previously added with addTreeDataModelListener().
 
         @param Listener
             the listener to remove.

@@ -27,7 +27,7 @@ module com { module sun { module star { module drawing {
 /** Listener for asynchronous preview creations.  Called when a slide
     preview has been created that was previously requested via a call to
     <method>XSlidePreviewCache::getSlidePreview()</method>.  The
-    implementor may then call <method>getSlidePreview()</method> a second
+    implementor may then call getSlidePreview() a second
     time to get the up-to-date version of the preview.
 */
 interface XSlidePreviewCacheListener

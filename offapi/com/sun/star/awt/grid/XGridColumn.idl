@@ -126,7 +126,7 @@ published interface XGridColumn
     void addGridColumnListener( [in] XGridColumnListener  listener);
 
 
-    /** Removes a listener previously added with <method>addColumnListener()</method>.
+    /** Removes a listener previously added with addColumnListener().
         @param Listener
             the listener to remove.
     */

@@ -35,7 +35,7 @@ interface XMergeableCellRange : com::sun::star::uno::XInterface
 
         @throws com::sun::star::lang::NoSupportException
             if a merge is not possible for this range. You can use
-            <method>isMergeable()</method> to check if a merge is possible.
+            isMergeable() to check if a merge is possible.
      */
     void merge() raises( ::com::sun::star::lang::NoSupportException );
 

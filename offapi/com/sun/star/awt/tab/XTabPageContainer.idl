@@ -75,7 +75,7 @@ published interface XTabPageContainer
     void addTabPageContainerListener( [in] XTabPageContainerListener  listener);
 
 
-    /** Removes a listener previously added with <method>addTabPageListener()</method>.
+    /** Removes a listener previously added with addTabPageListener().
         @param listener
             the listener to remove.
     */

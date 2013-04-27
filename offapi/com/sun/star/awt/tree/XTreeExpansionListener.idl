@@ -38,7 +38,7 @@ interface XTreeExpansionListener: com::sun::star::lang::XEventListener
 {
     /** Invoked when a node with children on demand is about to be expanded.
 
-        <p>This event is invoked before the <method>treeExpanding()</method>
+        <p>This event is invoked before the treeExpanding()
         event.</p>
     */
     void requestChildNodes( [in] TreeExpansionEvent Event );

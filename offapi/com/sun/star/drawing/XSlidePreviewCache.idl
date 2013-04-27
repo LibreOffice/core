@@ -92,7 +92,7 @@ interface XSlidePreviewCache
     void removePreviewCreationNotifyListener ([in] XSlidePreviewCacheListener xListener);
 
     /** Stop the asynchronous creation of previews temporarily.
-        Call <method>resume()</method> to restart it.
+        Call resume() to restart it.
     */
     void pause ();
 

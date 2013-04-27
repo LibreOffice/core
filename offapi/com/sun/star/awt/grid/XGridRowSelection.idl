@@ -88,7 +88,7 @@ published interface XGridRowSelection
     */
     void addSelectionListener( [in] XGridSelectionListener  listener);
 
-    /** Removes a listener previously added with <method>addSelectionListener()</method>.
+    /** Removes a listener previously added with addSelectionListener().
         @param listener
             the listener to remove.
     */
