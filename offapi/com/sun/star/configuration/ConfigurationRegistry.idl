@@ -75,7 +75,7 @@ published service ConfigurationRegistry
         service, all changes made to an configuration subtree have to be committed
         before they become persistent.
         To do this for a configuration accessed as a registry, call
-        <method scope="com::sun::star::util">XFlushable::flush</method>.
+        com::sun::star::util::XFlushable::flush().
         </p>
         <p><strong>Warning:</strong><em>Changes that are not flushed will be
         lost.</em>

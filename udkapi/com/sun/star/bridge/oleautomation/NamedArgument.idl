@@ -26,7 +26,7 @@ module com {  module sun {  module star {  module bridge {  module oleautomation
     <p>
     The Automation bridge accepts values of NamedArgument when a
     call to an Automation object is made. The call is done through the
-    <method scope="com::sun::star::script">XInvocation::invoke</method>
+    com::sun::star::script::XInvocation::invoke()
     method, which takes all arguments in a sequence of anys. Usually the order
     of the arguments must correspond to the order of arguments in the Automation
     method. By using instances of NamedArgument the arguments in the

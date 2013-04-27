@@ -69,7 +69,7 @@ published constants MethodConcept
         <code>create...Enumeration</code> and return an interface
         that is derived from <type scope="com::sun::star::container">
         XEnumeration</type> Additionally, the method
-        <method scope="com::sun::star::container">XEnumerationAccess::getElementType</method>
+        com::sun::star::container::XEnumerationAccess::getElementType()
         belongs to this concept.</p>
      */
     const long ENUMERATION = 8;
@@ -83,7 +83,7 @@ published constants MethodConcept
         <code>remove...ByName()</code>,
         <code>has...ByName()</code>, or
         <code>get...Names</code>.  In addition, the method
-        <method scope="com::sun::star::container">XEnumerationAccess::getElementType</method>
+        com::sun::star::container::XEnumerationAccess::getElementType()
         belongs to this concept. </p>
      */
     const long NAMECONTAINER = 16;

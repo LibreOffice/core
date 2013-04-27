@@ -132,7 +132,7 @@ published service Storage
                         <p>
                         The latest flashed version of the stream will be used.
                         The stream can be flashed explicitly by
-                        <method scope="com::sun::star::io">XOutputStream::flush</method>
+                        com::sun::star::io::XOutputStream::flush()
                         call.
                         </p>
 
@@ -166,7 +166,7 @@ published service Storage
                         <p>
                         The latest flashed version of the stream will be used.
                         The stream can be flashed explicitly by
-                        <method scope="com::sun::star::io">XOutputStream::flush</method>
+                        com::sun::star::io::XOutputStream::flush()
                         call.
                         </p>
 

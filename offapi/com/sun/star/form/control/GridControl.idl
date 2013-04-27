@@ -90,8 +90,8 @@ published service GridControl
 
     /** used to control the selection of rows in the grid control.
 
-        <p>The selection used with the methods <method scope="com::sun::star::view">XSelectionSupplier::getSelection</method>
-        and <method scope="com::sun::star::view">XSelectionSupplier::select</method> is a sequence of Any's.<br/>
+        <p>The selection used with the methods com::sun::star::view::XSelectionSupplier::getSelection()
+        and com::sun::star::view::XSelectionSupplier::select() is a sequence of Any's.<br/>
         Here the elements of the Sequence are the bookmarks (in the com::sun::star::sdb::RowSet)
         of the (to-be-) selected rows.</p>
     */

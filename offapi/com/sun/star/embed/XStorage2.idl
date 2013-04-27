@@ -39,7 +39,7 @@ interface XStorage2 : XStorage
 
         <p>
         In case the stream is open in readonly mode the
-        <method scope="com::sun::star::io">XStream::getOutputStream</method>
+        com::sun::star::io::XStream::getOutputStream()
         method will return an empty reference.
         </p>
 
@@ -94,7 +94,7 @@ interface XStorage2 : XStorage
 
         <p>
         The stream is open in readonly mode so the
-        <method scope="com::sun::star::io">XStream::getOutputStream</method>
+        com::sun::star::io::XStream::getOutputStream()
         method will return an empty reference.
         </p>
 

@@ -136,7 +136,7 @@ published interface XComponentLoader: com::sun::star::uno::XInterface
                     A model that in general can be shared between several view/controller pairs,
                     does not have an explicit owner. Every view and also the component that
                     loaded the document may consider itself as an owner.
-                    Simply calling <method scope="com::sun::star::lang">XComponent::dispose</method> on this model may
+                    Simply calling com::sun::star::lang::XComponent::dispose() on this model may
                     cause problems, if some members of the "owner community" are currently
                     busy working on the model. These problems are handled by explicit closing
                     negotiations through the interface com::sun::star::util::XCloseable.

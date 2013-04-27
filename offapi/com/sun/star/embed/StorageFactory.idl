@@ -31,14 +31,14 @@
 
     <p>
     In case
-    <method scope="com::sun::star::lang">XSingleServiceFactory::createInstance</method>
+    com::sun::star::lang::XSingleServiceFactory::createInstance()
     call is used the result storage will be open in read-write mode based
     on an arbitrary medium.
     </p>
 
     <p>
     In case
-    <method scope="com::sun::star::lang">XSingleServiceFactory::createInstanceWithArguments</method>
+    com::sun::star::lang::XSingleServiceFactory::createInstanceWithArguments()
     call is used a sequence of the following parameters can be used:
     </p>
 

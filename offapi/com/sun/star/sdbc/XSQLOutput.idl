@@ -53,13 +53,13 @@
     When an object of a class implementing interface
     com::sun::star::sdbc::XSQLData
     is passed as an argument to a SQL statement, the JDBC driver calls
-    <method scope="com::sun::star::sdbc">SQLData::getSQLType</method>
+    com::sun::star::sdbc::SQLData::getSQLType()
     to determine the kind of SQL datum being passed to the database.
     <br/>
     The driver then creates an instance of
     <code>XSQLOutput</code>
     and passes it to the method
-    <method scope="com::sun::star::sdbc">XSQLData::writeSQL</method>
+    com::sun::star::sdbc::XSQLData::writeSQL()
     . The method
     <code>writeSQL</code>
     in turn calls the appropriate

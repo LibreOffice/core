@@ -35,7 +35,7 @@
     service.</p>
 
     <p>In addition, this control can be used in HTML forms. It triggers the
-    <method scope="com::sun::star::form">XSubmit::submit</method> method of the form it belongs to if
+    com::sun::star::form::XSubmit::submit() method of the form it belongs to if
     the <em>enter</em> is pressed while it has the focus.</p>
 
     @see com::sun::star::awt::UnoControl

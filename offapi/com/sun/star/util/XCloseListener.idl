@@ -40,7 +40,7 @@
     </p>
 
     <p>
-    If an event <method scope="com::sun::star::lang">XEventListener::disposing</method>
+    If an event com::sun::star::lang::XEventListener::disposing()
     occurred, nobody called <method>XCloseable::close</method> on listened object before.
     Then it's not allowed to break this request - it must be accepted!
     </p>

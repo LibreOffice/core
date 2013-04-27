@@ -32,7 +32,7 @@
 */
 published interface XGraphicExportFilter
 {
-    /** calling <method scope="com::sun::star::document">XFilter::filter</method>
+    /** calling com::sun::star::document::XFilter::filter()
         starts the export of the graphic file.
 
         <p>The following properties from the

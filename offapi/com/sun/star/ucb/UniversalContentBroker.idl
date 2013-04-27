@@ -30,9 +30,9 @@ module com { module sun { module star { module ucb {
     <p>Traditionally, this service implements
     com::sun::star::lang::XInitialization and needed to be
     instantiated once with two arguments via
-    <method scope="com::sun::star::lang">XMultiComponentFactory::createInstanceWithArgumentsAndContext</method>
+    com::sun::star::lang::XMultiComponentFactory::createInstanceWithArgumentsAndContext()
     for configuration before it could be obtained via plain
-    <method scope="com::sun::star::lang">XMultiComponentFactory::createInstanceWithContext</method>.
+    com::sun::star::lang::XMultiComponentFactory::createInstanceWithContext().
 
     <p>However, the only pair of initialization arguments used in practice is
     <code>"Local"</code>/<code>"Office"</code>, so this service is simplified
@@ -42,7 +42,7 @@ module com { module sun { module star { module ucb {
     <p>(For backwards compatibility, the service implementation still supports
     com::sun::star::lang::XInitialization and can still
     explicitly be initialized via
-    <method scope="com::sun::star::lang">XMultiComponentFactory::createInstanceWithArgumentsAndContext</method>
+    com::sun::star::lang::XMultiComponentFactory::createInstanceWithArgumentsAndContext()
     with two arguments of type string.  These strings are used as a pair of keys
     to retrieve a set of content provider descriptions from the configuration
     management (stored at
@@ -57,7 +57,7 @@ published service UniversalContentBroker : XUniversalContentBroker
 
         <p>(This default constructor is only mentioned explicitly for technical
         reasons, so that its implementation calls the service implementation's
-        <method scope="com::sun::star::lang">XInitialization::initialize</method>.)
+        com::sun::star::lang::XInitialization::initialize().)
      */
     create();
 };

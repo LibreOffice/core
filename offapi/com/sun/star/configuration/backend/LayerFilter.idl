@@ -57,7 +57,7 @@ published service LayerFilter
     /**
       provides a means to set the source data for the filter.
 
-      <p> Call <method scope="com::sun::star::lang">XInitialization::initialize</method>()
+      <p> Call com::sun::star::lang::XInitialization::initialize()()
          with a single argument of type com::sun::star::beans::NamedValue,
          where com::sun::star::beans::NamedValue::Name is <code>"Source"</code>
          and com::sun::star::beans::NamedValue::Value

@@ -27,7 +27,7 @@
 module com {  module sun {  module star {  module awt {  module tree {
 
 
-/** You can implement this interface and register with <method scope="XTreeControl">addTreeEditListener</method>
+/** You can implement this interface and register with XTreeControl::addTreeEditListener()
     to get notifications when editing of a node starts and ends.
 
     <p>You have to set the TreeControlModel::Editable property to
@@ -40,7 +40,7 @@ interface XTreeEditListener : ::com::sun::star::lang::XEventListener
 
         @param Node
             the XTreeNode for that an edit request was fired by calling
-            <method scope="XTreeControl">startEditingAtNode</method>
+            XTreeControl::startEditingAtNode()
 
         @throws VetoException
             if thrown the editing will not start.
@@ -56,7 +56,7 @@ interface XTreeEditListener : ::com::sun::star::lang::XEventListener
 
         @param Node
             the XTreeNode for that an edit request was fired by calling
-            <method scope="XTreeControl">startEditingAtNode</method>
+            XTreeControl::startEditingAtNode()
 
         @param NewText
             the text that was entered by the user.

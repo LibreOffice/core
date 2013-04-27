@@ -850,7 +850,7 @@ published service Content
         implement this.
 
         <p><b>Important:</b> The implementation of
-        <method scope="com::sun::star::beans">XPropertyContainer::addProperty</method>
+        com::sun::star::beans::XPropertyContainer::addProperty()
         must at least support adding properties of the following basic data
         types:
 

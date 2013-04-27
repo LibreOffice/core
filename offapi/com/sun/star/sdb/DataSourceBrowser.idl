@@ -146,11 +146,11 @@ published service DataSourceBrowser
         <p>
         With a data source browser implementing this interface, external components have access to
         <ul><li>the grid control which is used to display the currently selected table/query
-            (see <method scope="com::sun::star::awt">XTabController::getControls</method>)
+            (see com::sun::star::awt::XTabController::getControls())
             </li>
             <li>the data form used for displaying objects. As always for components implementing this service,
             the object returned by
-            <method scope="com::sun::star::awt">XTabController::getModel</method> is a dataform.
+            com::sun::star::awt::XTabController::getModel() is a dataform.
             </li>
         </ul>
         </p>

@@ -37,7 +37,7 @@ module com {  module sun {  module star {  module lang {
     <p> Because a <code>Locale</code> object is just an identifier for a
     region, no validity check is performed.  If you want to see whether
     particular resources are available for the <code>Locale</code>, use
-    the <method scope="com::sun::star::resource">XLocale::getAvailableLocales</method> method to ask for the
+    the com::sun::star::resource::XLocale::getAvailableLocales() method to ask for the
     locales it supports.</p>
 
     <p> <strong>Note:</strong> When you ask for a resource for a

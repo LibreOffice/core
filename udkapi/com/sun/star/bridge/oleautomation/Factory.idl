@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module bridge {  module oleautomation
 
     <p>
     A COM object must have a ProgId since the ProgId is used as argument for
-    <method scope="com::sun::star::lang">XMultiServiceFactory::createInstance</method>.
+    com::sun::star::lang::XMultiServiceFactory::createInstance().
     The only interfaces which are mapped are <code>IUnknown</code> and
     <code>IDispatch</code>. The created UNO objects support
     com::sun::star::script::XInvocation if the original COM
@@ -38,7 +38,7 @@ module com {  module sun {  module star {  module bridge {  module oleautomation
     </p>
     <p>
     The optional parameters of the method
-    <method scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments</method>
+    com::sun::star::lang::XMultiServiceFactory::createInstanceWithArguments()
     are reserved for future use; at this time they are ignored.
     </p>
  */

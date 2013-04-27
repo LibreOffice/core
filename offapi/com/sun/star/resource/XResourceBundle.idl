@@ -190,7 +190,7 @@ published interface XResourceBundle: com::sun::star::container::XNameAccess
     /** contains the parent bundle of this bundle.
 
         <p>The parent bundle is searched by the method
-        <method scope="com::sun::star::container">XNameAccess::getByName</method>
+        com::sun::star::container::XNameAccess::getByName()
         when this bundle does not contain a particular resource.
      */
     [attribute] XResourceBundle Parent;

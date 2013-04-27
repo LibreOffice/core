@@ -36,7 +36,7 @@ module com { module sun { module star { module xml {
 published service XMLExportFilter
 {
     /** An com.sun.star.xml.sax.XDocumentHandler needs to be passed to
-       the <method scope="com::sun::star::lang">XInitialization::initialize</method> call.
+       the com::sun::star::lang::XInitialization::initialize() call.
     */
     service com::sun::star::document::ExportFilter;
 };
