@@ -67,6 +67,40 @@ bool ServerFontLayout::LayoutText( ImplLayoutArgs& rArgs )
 }
 
 // -----------------------------------------------------------------------
+long ServerFontLayout::GetTextWidth() const
+{
+    long nWidth;
+#if ENABLE_HARFBUZZ
+    const char* pUseHarfBuzz = getenv("SAL_USE_HARFBUZZ");
+    if (pUseHarfBuzz) {
+        GlyphVector aGlyphItems = GenericSalLayout::GetGlyphItems();
+
+        if( aGlyphItems.empty() )
+            return 0;
+
+        // initialize the extent
+        long nMinPos = 0;
+        long nMaxPos = 0;
+
+        for( GlyphVector::const_iterator pG = aGlyphItems.begin(), end = aGlyphItems.end(); pG != end ; ++pG )
+        {
+            // update the text extent with the glyph extent
+            long nXPos = pG->maLinearPos.X();
+            if( nMinPos > nXPos )
+                nMinPos = nXPos;
+            nXPos += pG->mnOrigWidth;
+            if( nMaxPos < nXPos )
+                nMaxPos = nXPos;
+        }
+
+        nWidth = nMaxPos - nMinPos;
+    }
+    else
+#endif
+    nWidth = GenericSalLayout::GetTextWidth();
+    return nWidth;
+}
+
 void ServerFontLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
     GenericSalLayout::AdjustLayout( rArgs );

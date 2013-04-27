@@ -324,6 +324,7 @@ public:
     virtual void    AdjustLayout( ImplLayoutArgs& );
     virtual void    ApplyDXArray( ImplLayoutArgs& );
     virtual void    DrawText( SalGraphics& ) const;
+    virtual long    GetTextWidth() const;
     ServerFont&     GetServerFont() const   { return mrServerFont; }
 };
 
