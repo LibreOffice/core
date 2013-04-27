@@ -5201,12 +5201,6 @@
                     <value xml:lang="en-US">Recent Doc~uments</value>
                 </prop>
             </node>
-            <!-- Not yet implemented: Hyperlink Bar:Find
-            <node oor:name=".uno:InternetSearch" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Find</value>
-                </prop>
-            </node> -->
             <node oor:name=".uno:DeleteAllNotes" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Delete All Comments</value>
