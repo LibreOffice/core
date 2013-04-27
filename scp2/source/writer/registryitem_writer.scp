@@ -292,7 +292,7 @@ RegistryItem gid_Regitem_Soffice_Starwriterdocument_6_AppUserModelID
     ComponentCondition = "VersionNT >= 601";
     Subkey = "soffice.StarWriterDocument.6";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Writer";
+    Value = "TheDocumentFoundation.LibreOffice";
 End
 
 RegistryItem gid_Regitem_Soffice_Starwriterdocument_6_FriendlyTypeName
@@ -413,7 +413,7 @@ RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_6_AppUserModelID
     ComponentCondition = "VersionNT >= 601";
     Subkey = "soffice.StarWriterGlobalDocument.6";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Writer";
+    Value = "TheDocumentFoundation.LibreOffice";
 End
 
 RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_6_FriendlyTypeName
@@ -500,7 +500,7 @@ RegistryItem gid_Regitem_Soffice_Starwritertemplate_6_AppUserModelID
     ComponentCondition = "VersionNT >= 601";
     Subkey = "soffice.StarWriterTemplate.6";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Writer";
+    Value = "TheDocumentFoundation.LibreOffice";
 End
 
 RegistryItem gid_Regitem_Soffice_Starwritertemplate_6_FriendlyTypeName
@@ -863,7 +863,7 @@ RegistryItem gid_Regitem_Openoffice_Writerdocument_1_AppUserModelID
     ComponentCondition = "VersionNT >= 601";
     Subkey = "LibreOffice.WriterDocument.1";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Writer";
+    Value = "TheDocumentFoundation.LibreOffice";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerdocument_1_FriendlyTypeName
@@ -1092,7 +1092,7 @@ RegistryItem gid_Regitem_Openoffice_Writertemplate_1_AppUserModelID
     ComponentCondition = "VersionNT >= 601";
     Subkey = "LibreOffice.WriterTemplate.1";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Writer";
+    Value = "TheDocumentFoundation.LibreOffice";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writertemplate_1_FriendlyTypeName
@@ -1244,7 +1244,7 @@ RegistryItem gid_Regitem_Openoffice_Writerglobaldocument_1_AppUserModelID
     ComponentCondition = "VersionNT >= 601";
     Subkey = "LibreOffice.WriterGlobalDocument.1";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Writer";
+    Value = "TheDocumentFoundation.LibreOffice";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerglobaldocument_1_FriendlyTypeName
@@ -1396,7 +1396,7 @@ RegistryItem gid_Regitem_Openoffice_WriterWebTemplate_1_AppUserModelID
     ComponentCondition = "VersionNT >= 601";
     Subkey = "LibreOffice.WriterWebTemplate.1";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Writer";
+    Value = "TheDocumentFoundation.LibreOffice";
 End
 
 RegistryItem gid_Regitem_Openoffice_WriterWebTemplate_1_FriendlyTypeName
