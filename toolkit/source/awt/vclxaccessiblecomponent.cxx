@@ -36,7 +36,7 @@
 #include <vcl/menu.hxx>
 
 #ifndef VCLEVENT_WINDOW_FRAMETITLECHANGED
-#define VCLEVENT_WINDOW_FRAMETITLECHANGED   1018    // pData = XubString* = oldTitle
+#define VCLEVENT_WINDOW_FRAMETITLECHANGED   1018
 #endif
 
 using namespace ::com::sun::star;
@@ -46,9 +46,6 @@ using namespace ::comphelper;
 DBG_NAME(VCLXAccessibleComponent)
 
 
-//  ----------------------------------------------------
-//  class VCLXAccessibleComponent
-//  ----------------------------------------------------
 VCLXAccessibleComponent::VCLXAccessibleComponent( VCLXWindow* pVCLXindow )
     : AccessibleExtendedComponentHelper_BASE( new VCLExternalSolarLock() )
     , OAccessibleImplementationAccess( )
@@ -218,20 +215,6 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
             mpVCLXindow = NULL;
         }
         break;
-        //
-        // dont handle CHILDCREATED events here
-        // they are handled separately as child events, see ProcessWindowChildEvent above
-        //
-        /*
-        case VCLEVENT_WINDOW_CHILDCREATED:
-        {
-            Window* pWindow = (Window*) rVclWindowEvent.GetData();
-            DBG_ASSERT( pWindow, "VCLEVENT_WINDOW_CHILDCREATED - Window=?" );
-            aNewValue <<= pWindow->GetAccessible();
-            NotifyAccessibleEvent( accessibility::AccessibleEventId::CHILD, aOldValue, aNewValue );
-        }
-        break;
-        */
         case VCLEVENT_WINDOW_CHILDDESTROYED:
         {
             Window* pWindow = (Window*) rVclWindowEvent.GetData();
@@ -243,39 +226,6 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
             }
         }
         break;
-
-        //
-        // show and hide will be handled as child events only and are
-        // responsible for sending create/destroy events, see ProcessWindowChildEvent above
-        //
-        /*
-        case VCLEVENT_WINDOW_SHOW:
-        {
-            aNewValue <<= accessibility::AccessibleStateType::VISIBLE;
-            NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
-
-            aNewValue <<= accessibility::AccessibleStateType::SHOWING;
-            NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
-
-            aNewValue.clear();
-            aOldValue <<= accessibility::AccessibleStateType::INVALID;
-            NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
-        }
-        break;
-        case VCLEVENT_WINDOW_HIDE:
-        {
-            aOldValue <<= accessibility::AccessibleStateType::VISIBLE;
-            NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
-
-            aOldValue <<= accessibility::AccessibleStateType::SHOWING;
-            NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
-
-            aOldValue.clear();
-            aNewValue <<= accessibility::AccessibleStateType::INVALID;
-            NotifyAccessibleEvent( accessibility::AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
-        }
-        break;
-        */
         case VCLEVENT_WINDOW_ACTIVATE:
         {
             // avoid notification if a child frame is already active
@@ -486,16 +436,6 @@ void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHel
                getAccessibleRole() == accessibility::AccessibleRole::DIALOG ) )  // #i18891#
             rStateSet.AddState( accessibility::AccessibleStateType::ACTIVE );
 
-        // #104290# MT: This way, a ComboBox doesn't get state FOCUSED.
-        // I also don't understand
-        // a) why WINDOW_FIRSTCHILD is used here (which btw is a border window in the case of a combo box)
-        // b) why HasFocus() is nout "enough" for a compound control
-        /*
-        Window* pChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
-        if ( ( !pWindow->IsCompoundControl() && pWindow->HasFocus() ) ||
-             ( pWindow->IsCompoundControl() && pChild && pChild->HasFocus() ) )
-            rStateSet.AddState( accessibility::AccessibleStateType::FOCUSED );
-        */
         if ( pWindow->HasFocus() || ( pWindow->IsCompoundControl() && pWindow->HasChildPathFocus() ) )
             rStateSet.AddState( accessibility::AccessibleStateType::FOCUSED );
 
@@ -615,17 +555,6 @@ sal_Int32 VCLXAccessibleComponent::getAccessibleIndexInParent(  ) throw (uno::Ru
             Window* pParent = GetWindow()->GetAccessibleParentWindow();
             if ( pParent )
             {
-                /*
-                for ( sal_uInt16 n = pParent->GetAccessibleChildWindowCount(); n; )
-                {
-                    Window* pChild = pParent->GetAccessibleChildWindow( --n );
-                    if ( pChild == GetWindow() )
-                    {
-                        nIndex = n;
-                        break;
-                    }
-                }
-                */
                 //  Iterate over all the parent's children and search for this object.
                 // this should be compatible with the code in SVX
                 uno::Reference< accessibility::XAccessible > xParentAcc( pParent->GetAccessible() );
