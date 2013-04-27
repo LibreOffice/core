@@ -55,6 +55,9 @@ SdCustomShowDlg::SdCustomShowDlg( Window* pWindow,
     get( m_pLbCustomShows, "customshowlist");
     get( m_pCbxUseCustomShow, "usecustomshows" );
 
+    m_pLbCustomShows->set_width_request(m_pLbCustomShows->approximate_char_width() * 32);
+    m_pLbCustomShows->SetDropDownLineCount(8);
+
     Link aLink( LINK( this, SdCustomShowDlg, ClickButtonHdl ) );
     m_pBtnNew->SetClickHdl( aLink );
     m_pBtnEdit->SetClickHdl( aLink );
