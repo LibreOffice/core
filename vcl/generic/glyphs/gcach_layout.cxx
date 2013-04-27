@@ -426,20 +426,20 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             if (hb_ot_layout_get_glyph_class(maHbFace, nGlyphIndex) == HB_OT_LAYOUT_GLYPH_CLASS_MARK)
                 nGlyphFlags |= GlyphItem::IS_DIACRITIC;
 
-            aHbPositions[i].x_offset =  aHbPositions[i].x_offset >> 6;
-            aHbPositions[i].y_offset =  aHbPositions[i].y_offset >> 6;
-            aHbPositions[i].x_advance = aHbPositions[i].x_advance >> 6;
-            aHbPositions[i].y_advance = aHbPositions[i].y_advance >> 6;
+            int32_t nXOffset =  aHbPositions[i].x_offset >> 6;
+            int32_t nYOffset =  aHbPositions[i].y_offset >> 6;
+            int32_t nXAdvance = aHbPositions[i].x_advance >> 6;
+            int32_t nYAdvance = aHbPositions[i].y_advance >> 6;
 
-            Point aNewPos = Point(aCurrPos.X() + aHbPositions[i].x_offset, -(aCurrPos.Y() + aHbPositions[i].y_offset));
+            Point aNewPos = Point(aCurrPos.X() + nXOffset, -(aCurrPos.Y() + nYOffset));
 
             GlyphItem aGI(nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth);
-            aGI.mnNewWidth = aHbPositions[i].x_advance;
+            aGI.mnNewWidth = nXAdvance;
 
             rLayout.AppendGlyph(aGI);
 
-            aCurrPos.X() += aHbPositions[i].x_advance;
-            aCurrPos.Y() += aHbPositions[i].y_advance;
+            aCurrPos.X() += nXAdvance;
+            aCurrPos.Y() += nYAdvance;
         }
 
         hb_buffer_destroy(aHbBuffer);
