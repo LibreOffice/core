@@ -25,14 +25,14 @@
 
  module com {  module sun {  module star {  module frame {
 
-/** use <type>XFrame</type> instead of this one
+/** use XFrame instead of this one
     @deprecated
  */
 published interface XTask: XFrame
 {
     /** use <type scope="com::sun::star::util">XCloseable</type> or
         <member scope="com::sun::star::lang">XComponent::dispose()</member>
-        at a <type>Frame</type> instead of this one
+        at a Frame instead of this one
         @deprecated
      */
     boolean close();

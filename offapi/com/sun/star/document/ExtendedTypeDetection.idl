@@ -24,11 +24,11 @@
 
 module com { module sun { module star { module document {
 
-/** describes a class of service which will be used for deep <type>TypeDetection</type>
+/** describes a class of service which will be used for deep TypeDetection
     in a generic way
 
     <p>
-    Due to the registered types, flat <type>TypeDetection</type> is already possible, i.e.
+    Due to the registered types, flat TypeDetection is already possible, i.e.
     the assignment of types (e.g. to a URL) only on the basis of configuration data.
     If, however, you imagine special cases (e.g. modifying the file extension of a
     Writer file from .sdw to .doc), it quickly becomes clear that you cannot always
@@ -57,7 +57,7 @@ module com { module sun { module star { module document {
         You can also implement and register detectors for groups of types.
         </li>
     </ul>
-    See service <type>TypeDetection</type> and his configuration for further information.
+    See service TypeDetection and his configuration for further information.
     </p>
 
     @see TypeDetection
@@ -69,7 +69,7 @@ published service ExtendedTypeDetection
         <p>
         Generic type detection searches for a registered DetectService for an
         already flat detected type. If any could be found it will be created and
-        used by calling methods of this interface. It gets a <type>MediaDescriptor</type>
+        used by calling methods of this interface. It gets a MediaDescriptor
         which contains information about the document which should be detected and must return
         <ul>
             <li>an internal type name for detected format</li>

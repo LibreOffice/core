@@ -39,11 +39,11 @@
  module com {  module sun {  module star {  module drawing {
 
 /** This abstract service is implemented by every page of a
-    <type>DrawingDocument</type>.
+    DrawingDocument.
 
 
 
-    @example create and insert a couple of <type>LineShape</type>s:
+    @example create and insert a couple of LineShapes:
 
     <listing>
     xPage = xDoc.DrawPages(0)
@@ -60,28 +60,28 @@
 published service GenericDrawPage
 {
 
-    /** manages the <type>Shape</type>s of this page.
+    /** manages the Shapes of this page.
 
-                <p>It also lets you add new <type>Shape</type>s. The program currently
-                requires that these <type>Shape</type>s be created by the factory of
+                <p>It also lets you add new Shapes. The program currently
+                requires that these Shapes be created by the factory of
                 the document.
 
-                @see    <type>DrawingDocument</type>
+                @see    DrawingDocument
      */
     interface com::sun::star::drawing::XShapes;
 
     /** With this interface you can group/ungroup a collection of
-                <type>Shape</type>s.
+                Shapes.
      */
     interface com::sun::star::drawing::XShapeGrouper;
 
     /** With this interface you can combine/split a collection of
-                <type>Shape</type>s.
+                Shapes.
      */
     [optional] interface com::sun::star::drawing::XShapeCombiner;
 
     /** With this interface you can bind/unbind a collection of
-                <type>Shape</type>s.
+                Shapes.
      */
     [optional] interface com::sun::star::drawing::XShapeBinder;
 
@@ -92,7 +92,7 @@ published service GenericDrawPage
     [optional] interface com::sun::star::container::XNamed;
 
     /** gives you access to the properties of this
-                <type>DrawPage</type>.
+                DrawPage.
      */
     [optional] interface com::sun::star::beans::XPropertySet;
 

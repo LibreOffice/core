@@ -39,7 +39,7 @@ interface XResourceId;
 
     <p>The set of used members and the exact meaning of their values is not the
     same for all types.  Therefore, the descriptions of the members are just
-    general guidelines.   See <type>XConfigurationController</type> for a
+    general guidelines.   See XConfigurationController for a
     list of event types used by the basic drawing framework.</p>
 */
 struct ConfigurationChangeEvent

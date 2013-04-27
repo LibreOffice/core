@@ -25,15 +25,15 @@
 
  module com {  module sun {  module star {  module drawing {
 
-/** A <type>LineDash</type> defines a non-continuous line.
+/** A LineDash defines a non-continuous line.
  */
 published struct LineDash
 {
-    /** This sets the style of this <type>LineDash</type>.
+    /** This sets the style of this LineDash.
      */
     com::sun::star::drawing::DashStyle Style;
 
-    /** This is the number of dots in this <type>LineDash</type>.
+    /** This is the number of dots in this LineDash.
      */
     short Dots;
 

@@ -34,7 +34,7 @@ module com {  module sun {  module star {  module beans {
 
     <p> This interface provides direct access to operations
         that are available if the containing property set
-        implements <type>XPropertyState</type>.
+        implements XPropertyState.
     </p>
 
     <p>The state contains the information if:</p>
@@ -46,7 +46,7 @@ module com {  module sun {  module star {  module beans {
     </ul>
 
     <p> Generally objects that implement this interface
-        also implement <type>XProperty</type>.
+        also implement XProperty.
     </p>
  */
 published interface XPropertyWithState: com::sun::star::uno::XInterface

@@ -28,7 +28,7 @@
 
 
 /** provides access to the numbering rules.
-    <p> Numbering rules may be set at a <type>Paragraph</type> object.  The numbering rules are
+    <p> Numbering rules may be set at a Paragraph object.  The numbering rules are
     levels of property values. Each level contains equal properties.
 
     </p>

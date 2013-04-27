@@ -39,7 +39,7 @@ module com {  module sun {  module star {  module geometry {
     </code><p>
 
     Thus, in common matrix language, with M being the
-    <type>AffineMatrix3D</type> and vs=[xs,ys,zs]^T, vd=[xd,yd,zd]^T two 3D
+    AffineMatrix3D and vs=[xs,ys,zs]^T, vd=[xd,yd,zd]^T two 3D
     vectors, the affine transformation is written as
     vd=M*vs. Concatenation of transformations amounts to
     multiplication of matrices, i.e. a translation, given by T,

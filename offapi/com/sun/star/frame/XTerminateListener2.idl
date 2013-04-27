@@ -33,7 +33,7 @@ interface XTerminateListener2 : ::com::sun::star::frame::XTerminateListener
         it's terminate request.
 
         <p>
-        Termination can be intercepted by throwing <type>TerminationVetoException</type>.
+        Termination can be intercepted by throwing TerminationVetoException.
         But if a listener was queried for termination .. doesn't throw a veto exception ...
         it doesn't know if termination will be real next time.
         Because any other listener can throw those exception too ... and so it can happen

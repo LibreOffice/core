@@ -26,7 +26,7 @@
 
 module com { module sun { module star { module ucb {
 
-/** Creates an <type>XPropertyMatcher</type>, given a set of search criteria.
+/** Creates an XPropertyMatcher, given a set of search criteria.
 */
 published interface XPropertyMatcherFactory : com::sun::star::uno::XInterface
 {

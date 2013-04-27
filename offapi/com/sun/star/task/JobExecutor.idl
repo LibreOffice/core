@@ -32,7 +32,7 @@ module com { module sun { module star { module task {
     own configuration and there lifetime. Such events are simple strings
     which meaning doesn't matter for any real service implementation of this
     specification. But triggered events must be available inside the
-    configuration and some <type>Job</type>s or <type>AsyncJob</type>s must be registered for that.
+    configuration and some Jobs or AsyncJobs must be registered for that.
     </p>
 
     @see Job

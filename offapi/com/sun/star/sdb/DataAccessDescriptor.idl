@@ -36,7 +36,7 @@ module com {  module sun {  module star {  module sdb {
     The <code>DataAccessDescriptor</code> describes the super set of the properties for the most common
     data access objects.</p>
 
-    <p>Every component providing or requiring a <type>DataAccessDescriptor</type> for some functionality
+    <p>Every component providing or requiring a DataAccessDescriptor for some functionality
     is urged to specify which properties are mandatory, and which ones optional. Additionally,
     it's free to specify any additional requirements about the relations of properties.</p>
 
@@ -46,7 +46,7 @@ published service DataAccessDescriptor
 {
     /** specifies the name of the datasource to access.
 
-        <p>This data source is usually used to create a <type>Connection</type>. If no DataSourceName is given
+        <p>This data source is usually used to create a Connection. If no DataSourceName is given
         and the <member>DatabaseLocation</member> and the <member>ConnectionResource</member> are empty, then an <member>ActiveConnection</member>
         is required.</p>
 
@@ -57,7 +57,7 @@ published service DataAccessDescriptor
 
     /** specifies the URL of the database file.
 
-        <p>This database location is usually used to create a <type>Connection</type>. If no DatabaseLocation is given
+        <p>This database location is usually used to create a Connection. If no DatabaseLocation is given
         and the <member>ConnectionResource</member> is empty, then an <member>ActiveConnection</member> is required.</p>
 
         @see com::sun::star::sdb::DatabaseContext
@@ -67,7 +67,7 @@ published service DataAccessDescriptor
 
     /** specifies the database URL which locates a database driver.
 
-        <p>This database URL is usually used to create a <type>Connection</type>. If no ConnectionResource is given,
+        <p>This database URL is usually used to create a Connection. If no ConnectionResource is given,
         then an <member>ActiveConnection</member> is required.</p>
 
         @see com::sun::star::sdb::DatabaseContext
@@ -89,10 +89,10 @@ published service DataAccessDescriptor
     /** is a connection to use.
 
         <p>This object is guaranteed to be a <type scope="com::sun::star::sdbc">Connection</type>, but usually
-        it will be a <type>Connection</type> from the module com::sun::star::sdb.<br/>
+        it will be a Connection from the module com::sun::star::sdb.<br/>
         Especially in the case where no <member>DataSourceName</member> is given, but
         <member>CommandType</member> is <member>CommandType::QUERY</member>, the ActiveConnection needs
-        to fully support the <type>Connection</type> service, to actually retrieve the query specified by
+        to fully support the Connection service, to actually retrieve the query specified by
         <member>Command</member></p>
 
         <p>If no ActiveConnection is given, then a <member>DataSourceName</member> is required.</p>
@@ -128,7 +128,7 @@ published service DataAccessDescriptor
         <code>WHERE</code>-string itself.</p>
 
         <p>If a <member>DataSourceName</member>, <member>Command</member> and <member>CommandType</member>
-        are specified, a <type>RowSet</type> can be created with this information. If the results provided by the
+        are specified, a RowSet can be created with this information. If the results provided by the
         row set are to be additionally filtered, the Filter property can be used.</p>
 
         <p>Note that the Filter property does not make sense if a <member>ResultSet</member> has been specified
@@ -241,7 +241,7 @@ published service DataAccessDescriptor
         with the <member>ColumnName</member> property.</p>
 
         <p>The object will at least support the <type scope="com::sun::star::sdbcx">Column</type> service, but more
-        often it will even be a <type>Column</type> from the com::sun::star::sdb module.</p>
+        often it will even be a Column from the com::sun::star::sdb module.</p>
     */
     [optional, property] com::sun::star::beans::XPropertySet Column;
 };

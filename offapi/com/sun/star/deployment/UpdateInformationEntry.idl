@@ -26,7 +26,7 @@ interface XElement;
 module com { module sun { module star { module deployment {
 
 /** Objects of this type are used as elements of the enumeration
-    returned by <type>XUpdateInformationProvider</type>.
+    returned by XUpdateInformationProvider.
 
     @since OOo 2.3
 */

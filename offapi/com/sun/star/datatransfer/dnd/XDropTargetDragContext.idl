@@ -41,7 +41,7 @@ published interface XDropTargetDragContext: com::sun::star::uno::XInterface
 {
     /** Accept the Drag.
 
-        <p>This method should be called from the methods of <type>XDropTargetListener</type>
+        <p>This method should be called from the methods of XDropTargetListener
         <ul>
             <li><member>XDropTargetListener::dragEnter()</member></li>
             <li><member>XDropTargetListener::dragOver()</member></li>

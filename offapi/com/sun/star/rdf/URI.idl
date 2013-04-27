@@ -65,10 +65,10 @@ service URI : XURI
     /** creates an URI RDF node for a well-known URI.
 
         @param Id
-            the URI, represented as a constant from <type>URIs</type>.
+            the URI, represented as a constant from URIs.
 
         @throws com::sun::star::lang::IllegalArgumentException
-            if the argument is not a valid constant from <type>URIs</type>
+            if the argument is not a valid constant from URIs
 
         @see URIs
      */

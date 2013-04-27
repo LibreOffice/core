@@ -24,11 +24,11 @@
 
 module com { module sun { module star { module graphic
 {
-/** The <code>GraphicObject</code> service can be used to create <type>XGraphicObject</type> instances.
+/** The <code>GraphicObject</code> service can be used to create XGraphicObject instances.
 
-    <p><type>XGraphicObject</type> objects are accessible using GraphicObject scheme URLs like
+    <p>XGraphicObject objects are accessible using GraphicObject scheme URLs like
     <code>vnd.sun.star.GraphicObject:10000000000001940000012FB99807BD</code>.
-    As long as at least one instance of <type>XGraphicObject</type> with a particular UniqueID exists,
+    As long as at least one instance of XGraphicObject with a particular UniqueID exists,
     the associated image/graphic is available.</p>
 
     @see GraphicObject
@@ -38,14 +38,14 @@ module com { module sun { module star { module graphic
 
 service GraphicObject : XGraphicObject
 {
-    /** Creates an <type>GraphicObject</type>
+    /** Creates an GraphicObject
     */
     create();
 
-    /** Creates an <type>GraphicObject</type> with <code>uniqueId</code>
+    /** Creates an GraphicObject with <code>uniqueId</code>
         @param uniqueId
-            If another <type>XGraphicObject</type> with <code>uniqueId</code> exists, this GraphicObject
-            is populated with the other <type>GraphicObject</type>'s data.
+            If another XGraphicObject with <code>uniqueId</code> exists, this GraphicObject
+            is populated with the other GraphicObject's data.
     */
     createWithId( [in] string uniqueId );
 };

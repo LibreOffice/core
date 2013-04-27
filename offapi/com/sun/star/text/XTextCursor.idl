@@ -100,7 +100,7 @@ published interface XTextCursor: com::sun::star::text::XTextRange
     void gotoEnd( [in] boolean bExpand );
 
 
-    /** moves or expands the cursor to a specified <type>TextRange</type>.
+    /** moves or expands the cursor to a specified TextRange.
      */
     void gotoRange( [in] com::sun::star::text::XTextRange xRange,
              [in] boolean bExpand );

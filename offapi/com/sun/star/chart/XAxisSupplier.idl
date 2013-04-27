@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module chart {
 interface XAxisSupplier : ::com::sun::star::uno::XInterface
 {
     /** @returns
-            the primary axis of the specified dimension. The returned object supports service <type>ChartAxis</type>.
+            the primary axis of the specified dimension. The returned object supports service ChartAxis.
 
         @param nDimensionIndex
             Parameter nDimensionIndex says whether it is a x, y or z-axis (0 for x).
@@ -38,7 +38,7 @@ interface XAxisSupplier : ::com::sun::star::uno::XInterface
     com::sun::star::chart::XAxis getAxis( [in] long nDimensionIndex );
 
     /** @returns
-            the secondary axis of the specified dimension. The returned object supports service <type>ChartAxis</type>.
+            the secondary axis of the specified dimension. The returned object supports service ChartAxis.
 
         @param nDimensionIndex
             Parameter nDimensionIndex says whether it is a x, y or z-axis (0 for x).

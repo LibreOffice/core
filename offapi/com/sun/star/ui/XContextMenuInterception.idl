@@ -30,12 +30,12 @@ module com {  module sun {  module star {  module ui {
  */
 published interface XContextMenuInterception : ::com::sun::star::uno::XInterface
 {
-    /** registers an <type>XContextMenuInterceptor</type>, which will become
+    /** registers an XContextMenuInterceptor, which will become
         the first interceptor in the chain of registered interceptors.
      */
 
     void registerContextMenuInterceptor( [in]XContextMenuInterceptor Interceptor);
-    /** removes an <type>XContextMenuInterceptor</type> which was previously registered
+    /** removes an XContextMenuInterceptor which was previously registered
         using <member>XContextMenuInterception::registerContextMenuInterceptor</member>.
 
         <p>The order of removals is arbitrary. It is not necessary to remove the last

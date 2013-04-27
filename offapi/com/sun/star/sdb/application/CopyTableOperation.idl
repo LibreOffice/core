@@ -24,7 +24,7 @@
 module com { module sun { module star { module sdb { module application {
 
 
-/** specifies the different basic operations a <type>CopyTableWizard</type>
+/** specifies the different basic operations a CopyTableWizard
     can do.
 
     @since OOo 2.4

@@ -25,7 +25,7 @@
 
 module com { module sun { module star { module rendering {
 
-/// Service providing an <type>XCanvas</type> interface
+/// Service providing an XCanvas interface
 service Canvas: XCanvas;
 
 }; }; }; };

@@ -34,7 +34,7 @@
  module com {  module sun {  module star {  module drawing {
 
 
-/** The <type>CaptionShape</type> represents a rectangular drawing shape
+/** The CaptionShape represents a rectangular drawing shape
     with an additional set of lines. It can be used as a description for
     a fixed point inside a drawing.
  */

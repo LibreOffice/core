@@ -34,7 +34,7 @@ published interface XViewSettingsSupplier: com::sun::star::uno::XInterface
 {
 
     /** @returns
-                an interface to the <type>ViewSettings</type>.
+                an interface to the ViewSettings.
 
         <p>Subclasses might be returned instead, offering more settings. </p>
      */

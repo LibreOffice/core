@@ -39,7 +39,7 @@ service TabularDataProviderArguments
     /** the range address string spanning all data.
 
         <p>The range address string must be interpretable by the
-        component that implements <type>XDataProvider</type> and gets
+        component that implements XDataProvider and gets
         this property as argument to
         <member>XDataProvider::detectArguments</member>.</p>
 
@@ -54,7 +54,7 @@ service TabularDataProviderArguments
         <p>When used as output of
         <member>XDataProvider::detectArguments</member> this is the
         range that spans the ranges of all given
-        <type>XDataSequence</type>s.  If the result is ambiguous,
+        XDataSequences.  If the result is ambiguous,
         i.e., a splitting of this range would not yield the same
         result, this property should be empty.  The latter is the
         case, when ranges are overlapping, the lengths of sequences
@@ -77,7 +77,7 @@ service TabularDataProviderArguments
         column will provide the labels for all sequences.
 
         <p>Even if this property is false, the
-        <type>XLabeledDataSequence</type> may contain a label, but
+        XLabeledDataSequence may contain a label, but
         this will not be the first cell of the selection.  It may be a
         generic string like "Column C".</p>
 
@@ -117,7 +117,7 @@ service TabularDataProviderArguments
         returned if it doesn't.</p>
 
         <p>The generic category labeled sequence returned should be
-        the first one in the returned <type>XDataSource</type>. It
+        the first one in the returned XDataSource. It
         needs no label. The values should have their role set to
         "categories".  The generic strings returned should also be
         localized.</p>

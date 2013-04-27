@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module xforms {
 interface XSubmission;
 
 
-/** represent a binding to one or more nodes in the DOM tree of an <type>XModel</type>.
+/** represent a binding to one or more nodes in the DOM tree of an XModel.
  */
 service Binding
 {

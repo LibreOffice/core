@@ -52,11 +52,11 @@ module com {  module sun {  module star {  module beans {
     </ul>
 
     <p>You can listen to changes of bound properties with the
-    <type>XPropertyChangeListener</type> and you can veto changes
-    of constrained properties with the <type>XVetoableChangeListener</type>.  </p>
+    XPropertyChangeListener and you can veto changes
+    of constrained properties with the XVetoableChangeListener.  </p>
 
     <p>To implement inaccurate name access, you must support the
-    interface <type>XExactName</type>. </p>
+    interface XExactName. </p>
 
     @see com::sun::star::beans::XExactName
  */
@@ -64,14 +64,14 @@ published interface XPropertySet: com::sun::star::uno::XInterface
 {
 
     /** @returns
-            the <type>XPropertySetInfo</type> interface, which
+            the XPropertySetInfo interface, which
             describes all properties of the object which supplies this
             interface.
 
         @returns
             <const>NULL</const> if the implementation cannot or will
             not provide information about the properties; otherwise the
-            interface <type>XPropertySetInfo</type> is returned.
+            interface XPropertySetInfo is returned.
      */
     com::sun::star::beans::XPropertySetInfo getPropertySetInfo();
 
@@ -115,7 +115,7 @@ published interface XPropertySet: com::sun::star::uno::XInterface
                     com::sun::star::lang::WrappedTargetException );
 
 
-    /** adds an <type>XPropertyChangeListener</type> to the specified property.
+    /** adds an XPropertyChangeListener to the specified property.
 
         <p>An empty name ("") registers the listener to all bound
         properties. If the property is not bound, the behavior is
@@ -132,7 +132,7 @@ published interface XPropertySet: com::sun::star::uno::XInterface
                     com::sun::star::lang::WrappedTargetException );
 
 
-    /** removes an <type>XPropertyChangeListener</type> from
+    /** removes an XPropertyChangeListener from
         the listener list.
 
         <p>It is a "noop" if the listener is not registered.  </p>
@@ -148,7 +148,7 @@ published interface XPropertySet: com::sun::star::uno::XInterface
                     com::sun::star::lang::WrappedTargetException );
 
 
-    /** adds an <type>XVetoableChangeListener</type> to the specified
+    /** adds an XVetoableChangeListener to the specified
         property with the name PropertyName.
 
         <p>An empty name ("") registers the listener to all
@@ -163,7 +163,7 @@ published interface XPropertySet: com::sun::star::uno::XInterface
                     com::sun::star::lang::WrappedTargetException );
 
 
-    /** removes an <type>XVetoableChangeListener</type> from the
+    /** removes an XVetoableChangeListener from the
         listener list.
 
         <p>It is a "noop" if the listener is not registered.  </p>

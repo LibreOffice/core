@@ -27,8 +27,8 @@
  module com {  module sun {  module star {  module text {
 
 
-/** is a <type>TextRange</type> which is explicitly marked
-    as an index entry for a <type>UserIndex</type>.
+/** is a TextRange which is explicitly marked
+    as an index entry for a UserIndex.
  */
 published service UserIndexMark
 {

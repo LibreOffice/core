@@ -22,7 +22,7 @@
 
 module com { module sun { module star { module linguistic2 {
 
-/** specifies the conversion dictionary type to be used with <type>XConversionDictionary</type>.
+/** specifies the conversion dictionary type to be used with XConversionDictionary.
 
      @since OOo 1.1.2
 */

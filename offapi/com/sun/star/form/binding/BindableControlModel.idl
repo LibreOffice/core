@@ -44,7 +44,7 @@ service BindableControlModel
 
     /** specifies support for being bound to an external value
 
-        <p>When a <type>BindableControlModel</type> is bound to an external value,
+        <p>When a BindableControlModel is bound to an external value,
         then every change in the control model's value is <em>immediately</em> reflected
         in the external binding.</p>
 

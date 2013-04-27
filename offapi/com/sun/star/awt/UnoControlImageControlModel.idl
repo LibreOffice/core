@@ -28,7 +28,7 @@
  module com {  module sun {  module star {  module awt {
 
 
-/** specifies the standard model of an <type>UnoControlImageControl</type>.
+/** specifies the standard model of an UnoControlImageControl.
  */
 published service UnoControlImageControlModel
 {
@@ -112,7 +112,7 @@ published service UnoControlImageControlModel
 
         <p>If this property is present, it supersedes the <member>ScaleImage</member> property.</p>
 
-        <p>The value of this property is one of the <type>ImageScaleMode</type> constants.</p>
+        <p>The value of this property is one of the ImageScaleMode constants.</p>
 
         @since OOo 3.1
     */

@@ -35,7 +35,7 @@ module com {  module sun {  module star {  module bridge {  module oleautomation
     <p>
     When calling Automation objects from UNO the distinction between
     <atom>hyper</atom> and a currency type is important. Therefore
-    <type>Currency</type> is declared as struct.
+    Currency is declared as struct.
     </p>
 
     @since OOo 1.1.2

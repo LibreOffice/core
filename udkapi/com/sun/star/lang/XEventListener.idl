@@ -41,7 +41,7 @@ published interface XEventListener: com::sun::star::uno::XInterface
 
         <p>This method is called for every listener registration
         of derived listener interfaced, not only for registrations
-        at <type>XComponent</type>. </p>
+        at XComponent. </p>
      */
     void disposing( [in] com::sun::star::lang::EventObject Source );
 

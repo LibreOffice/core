@@ -37,7 +37,7 @@
 
 
 /** Interface receiving calls from a plugin library.
-    A default context can be created using the <type>PluginManager</type>.
+    A default context can be created using the PluginManager.
 */
 published interface XPluginContext: com::sun::star::uno::XInterface
 {

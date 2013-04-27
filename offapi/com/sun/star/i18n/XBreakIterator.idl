@@ -40,7 +40,7 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
 {
     /** Traverses specified number of characters/cells in Text from
         <em>nStartPos</em> forwards.
-        <type>CharacterIteratorMode</type> can be cell based or
+        CharacterIteratorMode can be cell based or
         character based. A cell is made of more than one character.
 
         @param nCount
@@ -55,7 +55,7 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
 
     /** Traverses specified number of characters/cells in Text from
         <em>nStartPos</em> backwards.
-        <type>CharacterIteratorMode</type> can be cell based or
+        CharacterIteratorMode can be cell based or
         character based. A cell is made of more than one character.
 
         @param nCount
@@ -71,11 +71,11 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
     /** Traverses one word in Text from <em>nStartPos</em> forwards.
 
         @param nWordType
-            One of <type>WordType</type>, specifies the type of
+            One of WordType, specifies the type of
             traveling.
 
         @returns
-            The <type>Boundary</type> of the found word. Normally used for
+            The Boundary of the found word. Normally used for
             CTRL-Right.
      */
     Boundary nextWord( [in] string aText, [in] long nStartPos,
@@ -106,11 +106,11 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
             This is fixed in later versions. </p>
 
         @param nWordType
-            One of <type>WordType</type>, specifies the type of
+            One of WordType, specifies the type of
             traveling.
 
         @returns
-            The <type>Boundary</type> of the found word. Normally used for
+            The Boundary of the found word. Normally used for
             CTRL-Left.
     */
     Boundary previousWord( [in] string aText, [in] long nStartPos,
@@ -129,7 +129,7 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
         we look forwards for the end of the word. </p>
 
         @param nWordType
-            One of <type>WordType</type>.
+            One of WordType.
 
         @returns
             The Boundary of the current word.
@@ -140,10 +140,10 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
                       [in] boolean bPreferForward );
 
     /** @deprecated
-        Get the <type>WordType</type> of the word that starts at
+        Get the WordType of the word that starts at
         position <em>nPos</em>.
 
-        <p> This method is mis-defined, since <type>WordType</type>
+        <p> This method is mis-defined, since WordType
         is not an attribute of a word, but a way to break words,
         like excluding or including tail spaces for spell checker
         or cursor traveling. It returns 0 always.
@@ -196,7 +196,7 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
             Defines a minimum break position for hyphenated line break.
             When the position for hyphenated line break is less than
             <em>nMinBreakPos</em>, break position in
-            <type>LineBreakResults</type> is set to -1.
+            LineBreakResults is set to -1.
 
         @param aHyphOptions
             Defines if the hyphenator is to be used.
@@ -206,8 +206,8 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
             characters at the start/end of a line.
 
         @returns
-            The <type>LineBreakResults</type> contain the break
-            position of the line, <type>BreakType</type> and
+            The LineBreakResults contain the break
+            position of the line, BreakType and
             <type scope="com::sun::star::linguistic2">XHyphenatedWord</type>
      */
     LineBreakResults getLineBreak( [in] string aText, [in] long nStartPos,
@@ -220,7 +220,7 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
         the specified script type.
 
         @param nScriptType
-            One of <type>ScriptType</type>.
+            One of ScriptType.
 
         @returns
             The position where the script type starts.
@@ -232,7 +232,7 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
         specified script type.
 
         @param nScriptType
-            One of <type>ScriptType</type>.
+            One of ScriptType.
 
         @returns
             The position where the script type ends.
@@ -244,7 +244,7 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
         the specified script type.
 
         @param nScriptType
-            One of <type>ScriptType</type>.
+            One of ScriptType.
 
         @returns
             The position where the next script type starts.
@@ -256,7 +256,7 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
         of the specified script type.
 
         @param nScriptType
-            One of <type>ScriptType</type>.
+            One of ScriptType.
 
         @returns
             The position where the previous script type starts.
@@ -267,7 +267,7 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
     /** Get the script type of the character at position <em>nPos</em>.
 
         @returns
-            One of <type>ScriptType</type>.
+            One of ScriptType.
      */
     short   getScriptType( [in] string aText, [in] long nPos);
 
@@ -275,7 +275,7 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
         the specified character type.
 
         @param nCharType
-            One of <type>CharType</type>
+            One of CharType
 
         @returns
             The position where the character type starts
@@ -288,7 +288,7 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
         specified character type.
 
         @param nCharType
-            One of <type>CharType</type>
+            One of CharType
 
         @returns
             The position where the character type ends.
@@ -301,7 +301,7 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
         the specified character type.
 
         @param nCharType
-            One of <type>CharType</type>
+            One of CharType
 
         @returns
             The position where the next character type starts.
@@ -314,7 +314,7 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
         of the specified character type.
 
         @param nCharType
-            One of <type>CharType</type>
+            One of CharType
 
         @returns
             The position where the previous character type starts.

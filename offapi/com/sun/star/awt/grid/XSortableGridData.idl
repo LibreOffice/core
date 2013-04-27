@@ -27,7 +27,7 @@
 module com { module sun { module star { module awt { module grid {
 
 
-/** allows to sort the data represented by a <type>XGridDataModel</type>
+/** allows to sort the data represented by a XGridDataModel
  */
 interface XSortableGridData
 {

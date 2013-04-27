@@ -38,7 +38,7 @@
 
     <p>You must set a model and a stub to the UnoControl before using
     other methods.  The implementation only allows the change of the
-    graphics (<type>XView</type>) if the window is not visible. The
+    graphics (XView) if the window is not visible. The
     change of the graphics in visible state should redirect the output
     to these graphics, but this behavior is implementation-specific.</p>
 

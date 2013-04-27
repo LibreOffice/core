@@ -29,12 +29,12 @@ module com { module sun { module star { module datatransfer {
 /** Different platforms use different types to describe data formats available
     during data exchange operations like clipboard or drag&drop.
     Implementations of this service do convert system dependent data types to a
-    <type>DataFlavor</type> and vice versa.
+    DataFlavor and vice versa.
 
     @see com::sun::star::datatransfer::XDataFormatTranslator
     @see com::sun::star::datatransfer::DataFlavor
 
-    Converts a <type>DataFlavor</type> to system data types and vice versa.
+    Converts a DataFlavor to system data types and vice versa.
 */
 published service DataFormatTranslator : XDataFormatTranslator;
 

@@ -55,10 +55,10 @@ module com { module sun { module star { module configuration {
     Offers the same services and creates the same accessor objects as this
     service, but accesses the personal configuration.
 
-    <p>A <type> ConfigurationProvider</type> provides access to the personal
+    <p>A  ConfigurationProvider provides access to the personal
     layer of configuration data of the current user context. It should in
     most cases be used when <em>using</em> the configuration data, although
-    for most contexts a <type>AdministrationProvider</type> can be used as
+    for most contexts a AdministrationProvider can be used as
     a drop-in replacement.
     </p>
  */
@@ -76,20 +76,20 @@ published service AdministrationProvider
 
  <p>Using the first of these service specifiers requests a read-only view of
  the configuration.
- The object that is created implements service <type>ConfigurationAccess</type>.
+ The object that is created implements service ConfigurationAccess.
  To reflect its <em>element role</em> as root of the view, it implements
- service <type>AccessRootElement</type>.
+ service AccessRootElement.
  </p>
 
  <p>Using the second form requests an updatable view of the configuration.
  The object that is created should implement service
- <type>ConfigurationUpdateAccess</type>. To reflect its <em>element role</em>
+ ConfigurationUpdateAccess. To reflect its <em>element role</em>
  which includes controlling updates for the whole view, it implements
- service <type>UpdateRootElement</type>.
+ service UpdateRootElement.
  <BR />If the root element of the view is marked read-only (as indicated
  by <const scope="com::sun::star::beans">PropertyAttributes::READONLY</const>),
  the implementation may either raise an exception or return a (read-only)
- <type>ConfigurationAccess</type>/<type>AccessRootElement</type> instead.
+ ConfigurationAccess/AccessRootElement instead.
  </p>
 
  <p>The arguments passed to
@@ -113,7 +113,7 @@ published service AdministrationProvider
  This argument must contain the absolute path to an element of the
  configuration. The view that is selected consists of the named element and
  all its descendants. The administrative entity is the default for the
- <type>AdministrationProvider</type>. Usually this is the largest entity
+ AdministrationProvider. Usually this is the largest entity
  encompassing all entities accessible from this instance. In other words this
  can be used to influence as global a scope as possible.
  </p>
@@ -127,13 +127,13 @@ published service AdministrationProvider
  <p>An implementation may ignore unknown arguments.</p>
 
  <p>Some parameters that are commonly supported are described for service
- <type>ConfigurationProvider</type>.
+ ConfigurationProvider.
  </p>
  <p>One notable difference exists for parameter <code>"Locale"</code>. For a
- <type>ConfigurationProvider</type> the default behavior usually is to select
+ ConfigurationProvider the default behavior usually is to select
  the locale set up for the user. But this service by default gets data for all
  locales for which data is present. Locale-dependent values in this case are
- replaced by a <type>SetAccess</type> using the language names as accessors.
+ replaced by a SetAccess using the language names as accessors.
  This also allows targeted setting of values for selected locales.
  This behavior can be requested explicitly by specifying a special argument
  value <code>locale = "*"</code>.

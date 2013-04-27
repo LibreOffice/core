@@ -35,7 +35,7 @@ module com { module sun { module star { module logging {
  */
 interface XConsoleHandler : XLogHandler
 {
-    /** denotes the <type>LogLevel</type> threshold used to determine to which
+    /** denotes the LogLevel threshold used to determine to which
         console the events should be logged.
 
         <p>Events with a level greater or equal to <code>Threshold</code> will be

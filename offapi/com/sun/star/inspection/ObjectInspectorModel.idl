@@ -27,9 +27,9 @@ module com {  module sun {  module star {  module inspection {
 
 /** describes a default implementation of an ObjectInspectorModel
 
-    <p>This service simplifies usage of an <type>ObjectInspector</type>.</p>
+    <p>This service simplifies usage of an ObjectInspector.</p>
 
-    <p>The <type>XObjectInspectorModel</type> implemented by this service will not provide any property
+    <p>The XObjectInspectorModel implemented by this service will not provide any property
     categories, nor apply any particular order to the properties provided by its handler(s).</p>
 
     @see ObjectInspector
@@ -42,7 +42,7 @@ module com {  module sun {  module star {  module inspection {
 service ObjectInspectorModel : XObjectInspectorModel
 {
     /** creates a default ObjectInspectorModel, whose one and only handler factory
-        creates a <type>GenericPropertyHandler</type>.
+        creates a GenericPropertyHandler.
     */
     createDefault();
 

@@ -24,7 +24,7 @@
  module com {  module sun {  module star {  module drawing {
 
 
-/** The <type>BitmapMode</type> selects an algorithm for filling an area with
+/** The BitmapMode selects an algorithm for filling an area with
     a bitmap.
  */
 published enum BitmapMode

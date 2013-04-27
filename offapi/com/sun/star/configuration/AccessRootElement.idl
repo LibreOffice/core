@@ -62,7 +62,7 @@ module com { module sun { module star { module configuration {
     A complementary service, for children of a static heterogeneous collection.
 
  @see com::sun::star::configuration::ConfigurationProvider
-    Objects provided by a <type>ConfigurationProvider</type> implement this service.
+    Objects provided by a ConfigurationProvider implement this service.
 */
 published service AccessRootElement
 {

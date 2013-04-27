@@ -54,7 +54,7 @@ published service ChartAxis
      */
     service com::sun::star::style::CharacterProperties;
 
-    /** If a <type>ChartAxis</type> may be stored as XML element, this
+    /** If a ChartAxis may be stored as XML element, this
         service should be supported in order to preserve unparsed XML
         attributes.
 

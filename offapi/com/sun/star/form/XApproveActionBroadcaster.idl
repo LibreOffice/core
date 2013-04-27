@@ -31,7 +31,7 @@
 /** allows to probably veto actions to be performed on components.
 
     <p> Usually, a component which supports the
-    <type>XApproveActionBroadcaster</type> interface implements
+    XApproveActionBroadcaster interface implements
     <type scope="com::sun::star::awt">XActionListener</type> as well.</p>
  */
 published interface XApproveActionBroadcaster: com::sun::star::uno::XInterface

@@ -43,7 +43,7 @@ published interface XFilePickerControlAccess: com::sun::star::ui::dialogs::XFile
 
     @param aControlAction
         Specifies an action to perform with the given value.
-        aControlAction has to be one of the values defined in <type>ControlActions</type>.
+        aControlAction has to be one of the values defined in ControlActions.
         Not all of the values are valid for all controls.
         To add a new filter to the FilePicker use the interface XFilterManager, but
         optionally an implementation may also support adding new filter using this
@@ -66,7 +66,7 @@ void setValue( [in] short aControlId, [in] short aControlAction, [in] any aValue
 
     @param aControlAction
     Specifies which value to retrieve.
-    aControlAction has to be one of the values defined in <type>ControlActions</type>.
+    aControlAction has to be one of the values defined in ControlActions.
     Not all of the values are valid for all controls.
 
     @returns

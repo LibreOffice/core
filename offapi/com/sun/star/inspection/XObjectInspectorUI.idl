@@ -31,12 +31,12 @@ interface XPropertyControlObserver;
 /** grants access to certain aspects of the user interface of an object
     inspector
 
-    <p>This interface is used as callback for <type>XPropertyHandler</type>s.</p>
+    <p>This interface is used as callback for XPropertyHandlers.</p>
 
     <p>As a consequence, methods operating on the UI for a property, and taking the name of this property,
     are tolerant against properties which do not exist. For instance, if a property handler tries to
     disable the UI for property <code>Foo</code>, but another handler has superseded this property, then
-    the <type>ObjectInspector</type> will not <em>have</em> any UI for it. In this case, the call to
+    the ObjectInspector will not <em>have</em> any UI for it. In this case, the call to
     <code>enablePropertyUI( "Foo" )</code> will simply be ignored.</p>
 
     @since OOo 2.0.3
@@ -45,7 +45,7 @@ interface XObjectInspectorUI
 {
     /** enables or disables all components belonging to the UI representation of a property
 
-        <p>This is usually used by an <type>XPropertyHandler</type> if it handles properties,
+        <p>This is usually used by an XPropertyHandler if it handles properties,
         where one does only make sense if another one has a certain value.</p>
 
         @param  PropertyName
@@ -65,7 +65,7 @@ interface XObjectInspectorUI
             the name of the property whose user interface elements are to be enabled or disabled
 
         @param  Elements
-            a combination of <type>PropertyLineElement</type> flags specifying which elements are to be
+            a combination of PropertyLineElement flags specifying which elements are to be
             enabled or disabled.<br/>
             Note that if you don't set a particular bit here (say, <member>PropertyLineElement::PrimaryButton</member>),
             this does mean that this element's state is not affected by the call - it does
@@ -82,8 +82,8 @@ interface XObjectInspectorUI
 
     /** completely rebuilds the UI for the given property.
 
-        <p>This method might be used by an <type>XPropertyHandler</type> if it wants to change the type
-        of control (see <type>PropertyControlType</type>) used to display a certain property.</p>
+        <p>This method might be used by an XPropertyHandler if it wants to change the type
+        of control (see PropertyControlType) used to display a certain property.</p>
 
         <p>The object inspector will then call describePropertyLine again, and update its UI accordingly.</p>
 
@@ -123,7 +123,7 @@ interface XObjectInspectorUI
             the name of the property whose control should be retrieved
 
         @return
-            the <type>XPropertyControl</type> representing the given property, or <NULL/>
+            the XPropertyControl representing the given property, or <NULL/>
             if there is no such property control.
     */
     XPropertyControl

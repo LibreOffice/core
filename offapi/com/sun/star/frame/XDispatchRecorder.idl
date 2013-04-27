@@ -32,11 +32,11 @@ module com {  module sun {  module star {  module frame {
 
     <p>
     With such recorder it will be possible to record requests of type
-    <type>XDispatch</type> by using additional interface
-    <type>XRecordableDispatch</type>. The result of that will be a
+    XDispatch by using additional interface
+    XRecordableDispatch. The result of that will be a
     a script which can be used to start the dispatch at later time again.
-    Such recorder objects are available on a <type>XDispatchRecorderSupplier</type>
-    which is provided by the <type>Frame</type> service.
+    Such recorder objects are available on a XDispatchRecorderSupplier
+    which is provided by the Frame service.
     </p>
 
     @see Frame

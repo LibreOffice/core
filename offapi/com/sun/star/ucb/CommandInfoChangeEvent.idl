@@ -25,10 +25,10 @@
 
 module com { module sun { module star { module ucb {
 
-/** This event gets delivered whenever a <type>XCommandInfo</type> is changed.
+/** This event gets delivered whenever a XCommandInfo is changed.
 
-    <p>A <type>CommandInfoChangeEvent</type> object is sent to
-    <type>XCommandInfoChangeListener</type>s.
+    <p>A CommandInfoChangeEvent object is sent to
+    XCommandInfoChangeListeners.
 */
 published struct CommandInfoChangeEvent: com::sun::star::lang::EventObject
 {
@@ -44,7 +44,7 @@ published struct CommandInfoChangeEvent: com::sun::star::lang::EventObject
 
     /** contains the reason for the event.
 
-        <p>The value can be one of the <type>CommandInfoChange</type> constants.
+        <p>The value can be one of the CommandInfoChange constants.
     */
     long   Reason;
 };

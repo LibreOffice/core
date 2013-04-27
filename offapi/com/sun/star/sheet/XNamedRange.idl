@@ -67,7 +67,7 @@ published interface XNamedRange: com::sun::star::container::XNamed
     /** returns the type of the named range.
 
         <p>This is a combination of flags as defined in
-        <type>NamedRangeFlag</type>.</p>
+        NamedRangeFlag.</p>
      */
     long getType();
 
@@ -76,7 +76,7 @@ published interface XNamedRange: com::sun::star::container::XNamed
 
         @param nType
             a combination of flags that specify the type of a named range,
-            as defined in <type>NamedRangeFlag</type>.
+            as defined in NamedRangeFlag.
      */
     void setType( [in] long nType );
 

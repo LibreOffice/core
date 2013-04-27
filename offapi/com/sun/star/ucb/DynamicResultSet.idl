@@ -25,17 +25,17 @@
 module com { module sun { module star { module ucb {
 
 /** provides read access to a static or dynamically changing
-    <type>ContentResultSet</type>.
+    ContentResultSet.
 
-    <p>For example, a <type>DynamicResultSet</type> is returned from the
-    open-command executed by an <type>XCommandProcessor</type> of the service
-    <type>Content</type>.
+    <p>For example, a DynamicResultSet is returned from the
+    open-command executed by an XCommandProcessor of the service
+    Content.
 */
 
 published service DynamicResultSet
 {
     /** Provides read access to a static or a dynamically changing
-        <type>ContentResultSet</type>.
+        ContentResultSet.
 
         <p>This interface is required.
      */

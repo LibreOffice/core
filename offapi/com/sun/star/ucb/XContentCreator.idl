@@ -41,7 +41,7 @@ module com { module sun { module star { module ucb {
 
     @deprecated
 
-    <p>This interface is deprecated.  Use <type>Content</type> property
+    <p>This interface is deprecated.  Use Content property
        "CreatableContentsInfo" and command "createNewContent" instead.
 
     @version  1.0

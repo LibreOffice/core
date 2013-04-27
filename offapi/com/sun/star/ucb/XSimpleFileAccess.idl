@@ -190,7 +190,7 @@ published interface XSimpleFileAccess: com::sun::star::uno::XInterface
         An XOutputStream, if the file can be opened for writing
 
         @throws
-        <type>UnsupportedDataSinkException</type>, if the file cannot be
+        UnsupportedDataSinkException, if the file cannot be
         opened for random write access. Some resources do not allow random
         write access. To write data for those resources
         <member>XSimpleFileAccess2::writeFile</member> may be used.
@@ -207,7 +207,7 @@ published interface XSimpleFileAccess: com::sun::star::uno::XInterface
         An XStream, if the file can be opened for reading and writing
 
         @throws
-        <type>UnsupportedDataSinkException</type>, if the file cannot be
+        UnsupportedDataSinkException, if the file cannot be
         opened for random write access. Some resources do not allow random
         write access. To write data for those resources
         <member>XSimpleFileAccess2::writeFile</member> may be used.

@@ -37,7 +37,7 @@ module com { module sun { module star { module system {
 published interface XSimpleMailClientSupplier: com::sun::star::uno::XInterface
 {
     /** Allows a client to query for an object that implements
-        <type>XSimpleMailClient</type>.
+        XSimpleMailClient.
         @returns
         An interface to a simple mail client if there is one available on the system
         or an empty reference else.

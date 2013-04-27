@@ -49,11 +49,11 @@ published struct FormatElement
     string  formatType;
 
     /** Usage category, for example, "DATE" or "FIXED_NUMBER",
-        corresponding with <type>KNumberFormatUsage</type> values. */
+        corresponding with KNumberFormatUsage values. */
     string  formatUsage;
 
     /** The index used by the number formatter, predefined values
-        corresponding with <type>NumberFormatIndex</type> values. */
+        corresponding with NumberFormatIndex values. */
     short   formatIndex;
 
     /** If a format code is the default code of a <em>formatType</em>

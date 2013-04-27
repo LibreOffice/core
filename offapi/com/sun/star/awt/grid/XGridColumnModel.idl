@@ -31,10 +31,10 @@
 module com {  module sun {  module star {  module awt { module grid {
 
 
-/** An instance of this interface is used by the <type>UnoControlGrid</type> to
+/** An instance of this interface is used by the UnoControlGrid to
     retrieve the column structure that is displayed in the actual control.
 
-    If you do not need your own model implementation, you can also use the <type>DefaultGridColumnModel</type>.
+    If you do not need your own model implementation, you can also use the DefaultGridColumnModel.
 
     @since OOo 3.3
 */
@@ -71,7 +71,7 @@ published interface XGridColumnModel
 
         <p>You should use the <member>createColumn</member> member to create a new column. This gives
         implementations of the <code>XGridColumnModel</code> interface the possibility to provide own column
-        implementations which extend the basic <type>GridColumn</type> type.</p>
+        implementations which extend the basic GridColumn type.</p>
 
         <p>As soon as the column has been inserted into the model, the model takes ownership of it. This means when the
         column is removed, or when the column model is disposed, the grid column is disposed as well.</p>
@@ -101,7 +101,7 @@ published interface XGridColumnModel
 
     /** Returns all columns of the model.
         @returns
-                 all columns associated with the model in a sequence of <type>XGridColumn</type>.
+                 all columns associated with the model in a sequence of XGridColumn.
     */
     sequence<XGridColumn> getColumns();
 

@@ -25,7 +25,7 @@
 
  module com {  module sun {  module star {  module text {
 
-/** provides access to the paragraphs of an <type>XText</type>
+/** provides access to the paragraphs of an XText
     interface.
  */
 published service ParagraphEnumeration

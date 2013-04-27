@@ -29,7 +29,7 @@ module com {  module sun {  module star {  module lang {
     by the original target.
     <p>
     This exception should not be declared at interfaces, use
-    <type>WrappedTargetException</type> instead. It was defined
+    WrappedTargetException instead. It was defined
     to transport an exception via interface-methods, that do not
     specify the appropriate exceptions (so using this exception
     should in general be avoided).

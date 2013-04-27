@@ -25,7 +25,7 @@
 
 module com { module sun { module star { module drawing {
 
-/** This <type>Shape</type> encapsulates a plugin.
+/** This Shape encapsulates a plugin.
 
     <p>A plugin is a binary object that is plugged into a document to represent
     a media-type that is not handled natively by the application.
@@ -34,7 +34,7 @@ published service PluginShape
 {
     /** basic service for position, size and z-order.
 
-        <p>A <type>PluginShape</type> cannot be rotated.
+        <p>A PluginShape cannot be rotated.
      */
     service com::sun::star::drawing::Shape;
 

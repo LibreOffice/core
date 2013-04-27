@@ -37,8 +37,8 @@
     hierarchy.
 
     <p>
-    A root storage should be retrieved by using <type>StorageFactory</type>
-    service. Substorages are created through <type>XStorage</type> interface
+    A root storage should be retrieved by using StorageFactory
+    service. Substorages are created through XStorage interface
     of a parent storage.
     </p>
  */
@@ -56,7 +56,7 @@ published service Storage
             </dt>
             <dd>
                 <p>
-                A root storage is created by <type>StorageFactory</type>
+                A root storage is created by StorageFactory
                 and is controlled by refcounting. In case refcounting
                 is decreased to zero the storage will be disposed
                 automatically. It is still strongly recommended that
@@ -67,7 +67,7 @@ published service Storage
                 </p>
 
                 <p>
-                A substorage is created by <type>XStorage</type>
+                A substorage is created by XStorage
                 interface of storage. Each time a substorage is opened
                 it is locked ( in case it is opened in readonly mode
                 it is locked for writing, in case it is opened in
@@ -85,20 +85,20 @@ published service Storage
                 read-write mode all non-commited changes will be lost.
                 </p>
             </dd>
-            <dt>interface <type>XStorage</type></dt>
+            <dt>interface XStorage</dt>
             <dd>
                 <dl>
                     <dt><method>XStorage::openStreamElement</method></dt>
                     <dd>
                         <p>
-                        This method returns <type>StorageStream</type>
+                        This method returns StorageStream
                         service implementation.
                         </p>
 
                         <p>
                         If the child stream is an encrypted one a correct
                         common storage password should be set through
-                        <type>XEncryptionProtectedSource</type> interface to
+                        XEncryptionProtectedSource interface to
                         this storage or to a one of storages in parent
                         hierarchy. In case the password is not set or is a
                         wrong one an exception will be thrown.
@@ -111,21 +111,21 @@ published service Storage
                         stream explicitly. The password will be used to read
                         the stream. It is possible to specify a new password
                         for stream storing through
-                        <type>XEncryptionProtectedSource</type> interface. In
+                        XEncryptionProtectedSource interface. In
                         case a new password is not specified an old one will
                         be used for storing.
                     </dd>
 
                     <dt><method>XStorage::openStorageElement</method></dt>
                     <dd>
-                        This method returns <type>Storage</type> service
+                        This method returns Storage service
                         implementation.
                     </dd>
 
                     <dt><method>XStorage::cloneStreamElement</method></dt>
                     <dd>
                         <p>
-                        This method returns <type>StorageStream</type> service
+                        This method returns StorageStream service
                         implementation.
                         </p>
 
@@ -149,7 +149,7 @@ published service Storage
                         <p>
                         If the child stream is an encrypted one a correct
                         common storage password should be set through
-                        <type>XEncryptionProtectedSource</type> interface to
+                        XEncryptionProtectedSource interface to
                         this storage or to a one of storages in parent
                         hierarchy. In case the password is not set or is a
                         wrong one an exception will be thrown.
@@ -159,7 +159,7 @@ published service Storage
                     <dt><method>XStorage::cloneEncryptedStreamElement</method></dt>
                     <dd>
                         <p>
-                        This method returns <type>StorageStream</type> service
+                        This method returns StorageStream service
                         implementation.
                         </p>
 
@@ -183,7 +183,7 @@ published service Storage
 
                     <dt><method>XStorage::copyLastCommitTo</method></dt>
                     <dd>
-                        This method gets <type>Storage</type> service
+                        This method gets Storage service
                         implementation and fills it in with the latest
                         commited version of this storage. So in case the
                         storage was not commited after it was changed, the
@@ -193,7 +193,7 @@ published service Storage
                     <dt><method>XStorage::copyStorageElementLastCommitTo</method></dt>
                     <dd>
                         <p>
-                        This method gets <type>Storage</type> service
+                        This method gets Storage service
                         implementation and fills it in with the contents of
                         the requested substorage. The latest commited version
                         of child storage will be used. So in case the child
@@ -297,7 +297,7 @@ published service Storage
         In case it is set to <TRUE/> the storage itself and/or a tree of
         substorages contain encrypted streams. Usually in case this property
         is supported the implementation supports
-        <type>XEncryptionProtectedSource</type> interface.
+        XEncryptionProtectedSource interface.
         </p>
      */
     [property, optional, readonly] boolean HasEncryptedEntries;
@@ -308,7 +308,7 @@ published service Storage
         In case it is set to <TRUE/> the storage itself and/or a tree of
         substorages contains non-encrypted streams. Usually in case this
         property is supported the implementation supports
-        <type>XEncryptionProtectedSource</type> interface.
+        XEncryptionProtectedSource interface.
         </p>
      */
     [property, optional, readonly] boolean HasNonEncryptedEntries;

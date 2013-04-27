@@ -33,10 +33,10 @@ published interface XQueriesSupplier: com::sun::star::uno::XInterface
 
     /** returns the container of queries.
 
-        <p>The single elements of the container support the <type>Query</type> service.</p>
+        <p>The single elements of the container support the Query service.</p>
 
         @return
-            the queries belonging to database connection at which the <type>XQueriesSupplier</type> interface
+            the queries belonging to database connection at which the XQueriesSupplier interface
             is exposed.
      */
     com::sun::star::container::XNameAccess getQueries();

@@ -60,7 +60,7 @@ interface XItemListListener : ::com::sun::star::lang::XEventListener
         in single events.
 
         <p>Consumers of this event should discard their cached information about the current item list,
-        and completely refresh it from the <type>XItemList</type>'s current state.</p>
+        and completely refresh it from the XItemList's current state.</p>
     */
     void    itemListChanged(
                 [in] ::com::sun::star::lang::EventObject Event

@@ -46,8 +46,8 @@ service AccessiblePopupMenu
             help text.</li>
         <li>Children: The children of a pop-up menu are menus, menu items or
             menu separators, whose accessible context supports the services
-            <type>AccessibleMenu</type>, <type>AccessibleMenuItem</type> or
-            <type>AccessibleMenuSeparator</type>.</li>
+            AccessibleMenu, AccessibleMenuItem or
+            AccessibleMenuSeparator.</li>
         <li>Parent: The parent is the window that contains the pop-up menu.</li>
         <li>Relations: There are no relations.</li>
         <li>States: The states supported by this service are

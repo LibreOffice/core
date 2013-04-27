@@ -35,7 +35,7 @@ module com {  module sun {  module star {  module resource {
 /** makes it possible to load resource bundles.
 
     <p>The search algorithm is specified in the documentation of
-    <type>XResourceBundle</type>. The implementations must follow
+    XResourceBundle. The implementations must follow
     the name scheme, but it is allowed to search in several locations.
 
     @see MissingResourceException

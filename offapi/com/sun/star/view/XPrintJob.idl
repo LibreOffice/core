@@ -29,8 +29,8 @@ module com {  module sun {  module star {  module view {
 
 /** allows for getting information about a print job.
 
-    <p><type>XPrintJob</type> is implemented by print jobs that are created by
-    classes that implement <type>XPrintable</type>. It gives information about
+    <p>XPrintJob is implemented by print jobs that are created by
+    classes that implement XPrintable. It gives information about
     the context of the print job.</p>
 
     @see XPrintJobListener

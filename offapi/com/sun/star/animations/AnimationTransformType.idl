@@ -23,7 +23,7 @@
  module com {  module sun {  module star {  module animations {
 
 
-/** Specifies the transformation type for an <type>XAnimateTransform</type>.
+/** Specifies the transformation type for an XAnimateTransform.
 
     @see http://www.w3.org/TR/SVG/animate.html#AnimateTransformElementTypeAttribute
 */

@@ -37,7 +37,7 @@ module com {  module sun {  module star {  module sdb { module tools {
     Additionally, you have to respect the client-side settings which tell OpenOffice.org
     to use or not use catalogs and schemas in <code>SELECT</code> at all.</p>
 
-    <p>The <type>XTableName</type> interface eases this and other, similar tasks around table
+    <p>The XTableName interface eases this and other, similar tasks around table
     names.</p>
 
     <p>The component itself does not have life-time control mechanisms, i.e. you
@@ -80,7 +80,7 @@ interface XTableName
         @see CompositionType
 
         @throws com::sun::star::IllegalArgumentException
-            if the given <arg>Type</arg> does not denote a valid <type>CompositionType</type>
+            if the given <arg>Type</arg> does not denote a valid CompositionType
     */
     string  getComposedName( [in] long Type, [in] boolean Quote )
         raises ( com::sun::star::lang::IllegalArgumentException );

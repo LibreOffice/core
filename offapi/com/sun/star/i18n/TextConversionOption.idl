@@ -25,11 +25,11 @@
 module com {  module sun {  module star {  module i18n {
 
 
-/** Text conversion options to be used with <type>XTextConversion</type>.
+/** Text conversion options to be used with XTextConversion.
 
     <p>These text conversion options are usually selected by end users.
     The options can be combined and may be related to
-    <type>TextConversionType</type>. </p>
+    TextConversionType. </p>
 
      @since OOo 1.1.2
 */

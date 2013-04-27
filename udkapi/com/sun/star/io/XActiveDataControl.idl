@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module io {
 /** makes it possible to control an active data source.
 
     <p>This interface should be supported by objects which implement
-    <type>XActiveDataSource</type> or <type>XActiveDataSink</type>.</p>
+    XActiveDataSource or XActiveDataSink.</p>
  */
 published interface XActiveDataControl: com::sun::star::uno::XInterface
 {

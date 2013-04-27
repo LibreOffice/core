@@ -238,7 +238,7 @@ published service ParagraphProperties
 
 
         <p>The name must be one of the names which are available via
-        <type>XStyleFamiliesSupplier</type>.</p>
+        XStyleFamiliesSupplier.</p>
      */
     [optional, property] string NumberingStyleName;
 

@@ -44,12 +44,12 @@ published interface XConnectorShape: com::sun::star::drawing::XShape
     void connectEnd( [in] com::sun::star::drawing::XConnectableShape xShape,
              [in] com::sun::star::drawing::ConnectionType nPos );
 
-    /** disconnects the given <type>Shape</type> from the start of
+    /** disconnects the given Shape from the start of
         this instance.
      */
     void disconnectBegin( [in] com::sun::star::drawing::XConnectableShape xShape );
 
-    /** disconnects the given <type>Shape</type> from the end of
+    /** disconnects the given Shape from the end of
         this instance.
      */
     void disconnectEnd( [in] com::sun::star::drawing::XConnectableShape xShape );

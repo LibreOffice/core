@@ -25,7 +25,7 @@
  module com {  module sun {  module star {  module drawing {
 
 
-/** this is a container for <type>PointSequence</type>s
+/** this is a container for PointSequences
 
     <p>It is used for example to access the line ends that
     are used inside a document.
@@ -35,7 +35,7 @@
 */
 published service MarkerTable
 {
-    /** this container lets you access the <type>PointSequence</type>s that
+    /** this container lets you access the PointSequences that
         are indexed with a name.
 
         <p>Note: You can add new entries for later use, but you cannot

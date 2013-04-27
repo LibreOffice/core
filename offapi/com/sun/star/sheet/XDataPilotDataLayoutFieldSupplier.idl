@@ -26,7 +26,7 @@
 module com {  module sun {  module star {  module sheet {
 
 
-/** Provides access to the <type>DataPilotField</type> used to layout
+/** Provides access to the DataPilotField used to layout
     multiple data fields.
 
     <p>This data field can be inserted into the rows dimension or columns
@@ -42,7 +42,7 @@ module com {  module sun {  module star {  module sheet {
 published interface XDataPilotDataLayoutFieldSupplier
 {
 
-    /** Returns the <type>DataPilotField</type> used to layout multiple data
+    /** Returns the DataPilotField used to layout multiple data
         fields.
 
         <p>If the field does not exist yet, it will be created. It is possible

@@ -29,7 +29,7 @@ module com { module sun { module star { module ucb {
 /** This exception is used to indicate that the requested type of data sink
     is not supported.
 
-    <p>For example, each <type>OpenCommandArgument</type> supplied as argument
+    <p>For example, each OpenCommandArgument supplied as argument
     of the command "open" contains such a data sink.
 
     @version    1.0

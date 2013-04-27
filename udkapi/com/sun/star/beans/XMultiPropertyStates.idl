@@ -34,7 +34,7 @@ module com { module sun { module star { module beans {
 
     <p>The state of a property contains information about the source of
     the value, e.g. the object itself, a default or a stylesheet.
-    For more information see <type>PropertyState</type>.
+    For more information see PropertyState.
 */
 published interface XMultiPropertyStates: com::sun::star::uno::XInterface
 {

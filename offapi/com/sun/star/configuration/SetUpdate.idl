@@ -32,7 +32,7 @@ module com { module sun { module star { module configuration {
  Helps creates new elements to be added.
  </p>
 
- <p>This service extends <type>SetAccess</type> to support
+ <p>This service extends SetAccess to support
  modifying the container.
  </p>
 

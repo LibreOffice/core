@@ -41,7 +41,7 @@ published interface XDropTarget: com::sun::star::uno::XInterface
 {
     /** Add a DropTargetListener.
 
-        <p>The listener will be queried for the <type>XAutoscroll</type> interface
+        <p>The listener will be queried for the XAutoscroll interface
         to see if it supports autoscrolling.</p>
 
         @param dtl

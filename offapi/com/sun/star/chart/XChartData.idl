@@ -36,9 +36,9 @@ published interface XChartData: com::sun::star::uno::XInterface
 {
 
     /** allows a component supporting the
-        <type>XChartDataChangeEventListener</type> interface to
+        XChartDataChangeEventListener interface to
         register as listener.  The component will be notified with a
-        <type>ChartDataChangeEvent</type> every time the chart's data
+        ChartDataChangeEvent every time the chart's data
         changes.</p>
 
         @param aListener

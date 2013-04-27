@@ -32,7 +32,7 @@ struct NamedDatabaseObject
 {
     /** denotes the type of the object.
 
-        <p>This member is one of the <type>DatabaseObject</type> or <type>DatabaseObjectContainer</type> constants.</p>
+        <p>This member is one of the DatabaseObject or DatabaseObjectContainer constants.</p>
     */
     long    Type;
 

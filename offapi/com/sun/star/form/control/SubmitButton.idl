@@ -48,7 +48,7 @@ module com {  module sun {  module star {  module form {  module control {
             is present, it's <member scope="com::sun::star::form">XSubmit::submit</member> method is
             invoked.<br/>
             Since the parent object of a submit button can only be a <type scope="com::sun::star::form::component">Form</type>,
-            this means that <type>SubmitButton</type>s are also able to submit <type scope="com::sun::star::form::component">HTMLForm</type>s.
+            this means that SubmitButtons are also able to submit <type scope="com::sun::star::form::component">HTMLForm</type>s.
         </li>
     </ol>
     </p>

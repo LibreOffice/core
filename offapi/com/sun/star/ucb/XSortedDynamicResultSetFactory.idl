@@ -27,13 +27,13 @@
 
 module com { module sun { module star { module ucb {
 
-/** Provides a method to create an <type>XDynamicResultSet</type> which
+/** Provides a method to create an XDynamicResultSet which
     will be sorted according to the given sorting options.
 */
 
 published interface XSortedDynamicResultSetFactory: com::sun::star::uno::XInterface
 {
-    /** creates a sorted <type>XDynamicResultSet</type> depending on internal
+    /** creates a sorted XDynamicResultSet depending on internal
         data, an (unsorted) XDynamicResultSet and the sorting info.
 
         @returns

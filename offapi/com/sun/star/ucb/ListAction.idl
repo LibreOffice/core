@@ -24,7 +24,7 @@
 module com { module sun { module star { module ucb {
 
 /** This struct contains information needed in the notifications of a
-    <type>XDynamicResultSet</type>.
+    XDynamicResultSet.
 
     @see ListEvent
 */
@@ -60,7 +60,7 @@ published struct ListAction
         <tr align=left> <td>WELCOME</td>
                         <td>n/a</td>
                         <td>n/a</td>
-                        <td><type>WelcomeDynamicResultSetStruct</type> required</td></tr>
+                        <td>WelcomeDynamicResultSetStruct required</td></tr>
 
         <tr align=left> <td>CLEARED</td>
                         <td>n/a</td>
@@ -89,7 +89,7 @@ published struct ListAction
         </table>
 
         <p>The value for this member can be one of the
-        <type>ListActionType</type> constants group.
+        ListActionType constants group.
     */
     long ListActionType;
 

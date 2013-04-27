@@ -30,7 +30,7 @@ interface XSortableMutableGridDataModel;
 interface XMutableGridDataModel;
 
 
-/** provides a default implementation of a <type>XSortableGridData</type>.
+/** provides a default implementation of a XSortableGridData.
 
     <p>This service must be created with a secondary grid data model, which all actual data requests are delegated to.
     But before providing this data to the service's own clients, it is sorted, according to the sort order defined
@@ -44,7 +44,7 @@ interface XMutableGridDataModel;
 
     <p>Consequently, you cannot use this service with data sets containing heterogenous data in a given column.</p>
 
-    <p>All requests made via the <type>XMutableGridDataModel</type> are delegated to the <code>XMutableGridDataModel</code>
+    <p>All requests made via the XMutableGridDataModel are delegated to the <code>XMutableGridDataModel</code>
     instance passed in the service constructor.</p>
 
     <p>Note that changing the data might result in the sort order being destroyed. If you want to ensure

@@ -31,7 +31,7 @@
 /** Reflects an interface attribute type.
 
     <p>This type is superseded by
-    <type>XInterfaceAttributeTypeDescription2</type>, which supports extended
+    XInterfaceAttributeTypeDescription2, which supports extended
     attributes.</p>
 
     The type class of this type is TypeClass_INTERFACE_ATTRIBUTE.

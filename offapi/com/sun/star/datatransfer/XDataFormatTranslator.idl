@@ -26,7 +26,7 @@
 
 module com { module sun { module star { module datatransfer {
 
-/** Interface to be implemented by objects used to translate a <type>DataFlavor</type> to
+/** Interface to be implemented by objects used to translate a DataFlavor to
     a system dependent data transfer type and vice versa.
 
     <p>Different platforms use different types to describe data formats available
@@ -37,27 +37,27 @@ module com { module sun { module star { module datatransfer {
 
 published interface XDataFormatTranslator : com::sun::star::uno::XInterface
 {
-    /** Converts a <type>DataFlavor</type> to system dependent data type.
+    /** Converts a DataFlavor to system dependent data type.
 
         @param aDataFlavor
         Describes the format for which a system dependent data types is requested.
 
         @returns
-        A system dependent data transfer type for the given <type>DataFlavor</type>
+        A system dependent data transfer type for the given DataFlavor
         if there is one available.
-        <p>If the is no system dependent data type for a given <type>DataFlavor</type>
+        <p>If the is no system dependent data type for a given DataFlavor
         the returned any is empty.</p>
     */
     any getSystemDataTypeFromDataFlavor( [in] DataFlavor aDataFlavor );
 
-    /** Converts a system dependent data type to a <type>DataFlavor</type>.
+    /** Converts a system dependent data type to a DataFlavor.
 
         @param aSysDataType
-        A system dependent data type. If aSysDataType is empty so is the returned <type>DataFlavor</type>.
+        A system dependent data type. If aSysDataType is empty so is the returned DataFlavor.
 
         @returns
-        A <type>DataFlavor</type> for the given system dependent data transfer type.
-        <p>If there is no appropriate mapping for a system dependent data type, the returned <type>DataFlavor</type> will be empty.</p>
+        A DataFlavor for the given system dependent data transfer type.
+        <p>If there is no appropriate mapping for a system dependent data type, the returned DataFlavor will be empty.</p>
     */
     DataFlavor getDataFlavorFromSystemDataType( [in] any aSysDataType );
 };

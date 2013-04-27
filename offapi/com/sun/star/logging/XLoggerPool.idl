@@ -28,7 +28,7 @@ module com { module sun { module star { module logging {
 interface XLogger;
 
 
-/** implements a pool for named <type>XLogger</type> instances
+/** implements a pool for named XLogger instances
 
     @since OOo 2.3
  */

@@ -29,12 +29,12 @@ module com { module sun { module star { module graphic
 /** This interface acts as a container for the loaded graphic.
 
     <p>The interface itself can be retrieved by using the appropriate
-    methods of <type>XGraphicProvider</type> interface.
-    <type>XGraphicProvider</type> also offers a method to store
+    methods of XGraphicProvider interface.
+    XGraphicProvider also offers a method to store
     the graphic content at a specific location</p>
 
     <p>To render the graphic content onto a specific device, you
-    have to create a <type>XGraphicRenderer</type> interface and pass
+    have to create a XGraphicRenderer interface and pass
     this interface appropriately</p>
 
     @see XGraphicProvider

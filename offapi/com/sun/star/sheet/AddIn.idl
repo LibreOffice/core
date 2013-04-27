@@ -33,10 +33,10 @@ module com {  module sun {  module star {  module sheet {
 
     <p>Any AddIn implementation must implement a service describing its
     specific set of functions.
-    That service must contain the <type>AddIn</type> service, and the
+    That service must contain the AddIn service, and the
     functions that are implemented, in one or more interfaces.
     The <type scope="com::sun::star::lang">XServiceName</type> interface
-    must describe that service, and the <type>XAddIn</type> interface
+    must describe that service, and the XAddIn interface
     must describe the individual functions.</p>
 
     <p>Each AddIn function can take parameters of the following types:</p>
@@ -77,7 +77,7 @@ module com {  module sun {  module star {  module sheet {
 
     <dt><type scope="com::sun::star::beans">XPropertySet</type></dt>
     <dd>for a <type scope="com::sun::star::beans">XPropertySet</type>
-    interface to the <type>SpreadsheetDocument</type> making the function
+    interface to the SpreadsheetDocument making the function
     call. Only one parameter of this type is allowed in each function. It
     can be used to query document settings like
     <member>SpreadsheetDocumentSettings::NullDate</member>.</dd>
@@ -100,14 +100,14 @@ module com {  module sun {  module star {  module sheet {
     <li><atom>double[][]</atom></li>
     <li><atom>string[][]</atom></li>
     <li><atom>any[][]</atom></li>
-    <li><type>XVolatileResult</type></li>
+    <li>XVolatileResult</li>
     <li><atom>any</atom></li>
     </ul>
 
     <p>The sequences must contain arrays as described above for the
     parameter types.
-    An <type>XVolatileResult</type> return value must contain an object
-    implementing the <type>VolatileResult</type> service, that contains
+    An XVolatileResult return value must contain an object
+    implementing the VolatileResult service, that contains
     a volatile result. Subsequent calls with the same parameters must
     return the same object.
     An <atom>any</atom> return value can contain any of the other types.</p>

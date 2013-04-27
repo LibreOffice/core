@@ -33,12 +33,12 @@ module com { module sun { module star { module accessibility {
 
 /** Implement this interface to give read-only access to a text.
 
-    <p>The <type>XAccessibleText</type> interface should be implemented by
+    <p>The XAccessibleText interface should be implemented by
     all UNO components that present textual information on the display like
     buttons, text entry fields, or text portions of the document window.
     The interface provides access to the text's content, attributes, and
     spatial location.  However, text can not be modified with this
-    interface.  That is the task of the <type>XAccessibleEditableText</type>
+    interface.  That is the task of the XAccessibleEditableText
     interface.</p>
 
     <p>The text length, i.e. the number of characters in the text, is
@@ -364,7 +364,7 @@ interface XAccessibleText : ::com::sun::star::uno::XInterface
 
         @param nTextType
             The type of the text portion to return.  See
-            <type>AccessibleTextType</type> for the complete list.
+            AccessibleTextType for the complete list.
 
         @return
             Returns the requested text portion.  This portion may be empty
@@ -403,7 +403,7 @@ interface XAccessibleText : ::com::sun::star::uno::XInterface
 
         @param nTextType
             The type of the text portion to return.  See
-            <type>AccessibleTextType</type> for the complete list.
+            AccessibleTextType for the complete list.
 
         @return
             Returns the requested text portion.  This portion may be empty
@@ -441,7 +441,7 @@ interface XAccessibleText : ::com::sun::star::uno::XInterface
 
         @param nTextType
             The type of the text portion to return.  See
-            <type>AccessibleTextType</type> for the complete list.
+            AccessibleTextType for the complete list.
 
         @return
             Returns the requested text portion.  This portion may be empty
@@ -466,7 +466,7 @@ interface XAccessibleText : ::com::sun::star::uno::XInterface
         <p>The other clipboard related methods
         <member>XAccessibleEditableText::cutText</member> and
         <member>XAccessibleEditableText::deleteText</member> can be found in
-        the <type>XAccessibleEditableText</type> because of their
+        the XAccessibleEditableText because of their
         destructive nature.</p>
 
         @param nStartIndex

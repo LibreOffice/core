@@ -26,7 +26,7 @@
 
 /** specifies if the data rows (aka data series) displayed in the
     chart, take their values from the row or the column in the underlying
-    data source (<type>ChartDataArray</type>).
+    data source (ChartDataArray).
  */
 published enum ChartDataRowSource
 {

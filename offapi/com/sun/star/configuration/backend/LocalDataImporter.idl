@@ -27,12 +27,12 @@ module com { module sun { module star { module configuration { module backend {
 
 /**
     allows importing data from a local configuration data repository
-    or file into any <type>Backend</type>.
+    or file into any Backend.
 
     <p> Data to be imported can be a single layer either from a full local
         configuration database or from a particular OOR Update XML file.
     </p>
-    <p> Data is imported into the <type>DefaultBackend</type>.
+    <p> Data is imported into the DefaultBackend.
     </p>
 
     @see com::sun::star::configuration::backend::LocalHierarchyBrowser
@@ -82,8 +82,8 @@ published service LocalDataImporter
         </dl>
         </p>
         <p> Implementations may support additional parameters to select
-            a destination <type>Backend</type>, that is not the
-            <type>DefaultBackend</type>.
+            a destination Backend, that is not the
+            DefaultBackend.
         </p>
       */
     service DataImporter ;

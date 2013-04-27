@@ -54,7 +54,7 @@ service DefaultViewController
         in other places cannot be intercepted.</p>
 
         <p>For the aforementioned tree view, the selection supplied by the <code>ContextMenuEvent::Selection</code>
-        component is an array of <type>NamedDatabaseObject</type> instances.</p>
+        component is an array of NamedDatabaseObject instances.</p>
     */
     interface ::com::sun::star::ui::XContextMenuInterception;
 
@@ -66,7 +66,7 @@ service DefaultViewController
         provides access to the current selection inside the application window, and allows to change it
         programmatically
 
-        <p>The selection is an array of <type>NamedDatabaseObject</type> instances.</p>
+        <p>The selection is an array of NamedDatabaseObject instances.</p>
     */
     interface ::com::sun::star::view::XSelectionSupplier;
 

@@ -31,7 +31,7 @@
 
 
 
-    <p>In general this interface is supported by a <type>TextDocument</type>.</p>
+    <p>In general this interface is supported by a TextDocument.</p>
  */
 published interface XDocumentIndexesSupplier: com::sun::star::uno::XInterface
 {

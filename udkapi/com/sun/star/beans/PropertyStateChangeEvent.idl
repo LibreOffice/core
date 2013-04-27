@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module beans {
 /** is delivered whenever the state of a "bound" property is changed.
 
     <p>It is sent as an argument to the method of
-    <type>XPropertyStateChangeListener</type>.  </p>
+    XPropertyStateChangeListener.  </p>
 
     <p>Normally these events are accompanied by the name, and the old
     and new values of the changed property.  </p>
@@ -45,7 +45,7 @@ published struct PropertyStateChangeEvent: com::sun::star::lang::EventObject
     /** specifies the name of the property which changes its value.
 
         <p>This name identifies the property uniquely within an
-        <type>XPropertySet</type>. Upper and lower case are distinguished.</p>
+        XPropertySet. Upper and lower case are distinguished.</p>
      */
     string PropertyName;
 
@@ -53,7 +53,7 @@ published struct PropertyStateChangeEvent: com::sun::star::lang::EventObject
     /** contains the implementation handle for the property.
 
         <p>It may be -1 if the implementation has no handle. You can use this
-        handle to get values from the <type>XFastPropertySet</type>
+        handle to get values from the XFastPropertySet
         interface.</p>
      */
     long PropertyHandle;

@@ -29,7 +29,7 @@
 
     <p>
     Layout management is the process of determining the size and position of
-    user interface elements. By default, each <type>Frame</type> has a layout
+    user interface elements. By default, each Frame has a layout
     manager -- it performs layout management for the user interface elements
     within the frame. User interface elements can provide size and alignment
     hints to layout managers, but layout managers have the final decision on

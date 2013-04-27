@@ -23,7 +23,7 @@
 
  module com {  module sun {  module star {  module drawing {
 
-/** The <type>HatchStyle</type> defines the style of the lines in a hatch.
+/** The HatchStyle defines the style of the lines in a hatch.
  */
 published enum HatchStyle
 {

@@ -41,14 +41,14 @@ module com { module sun { module star { module rendering {
     All canvas interfaces standardize to sequences of IEEE doubles for
     color representation. As this is overly verbose when used for
     bitmap data, derived interfaces exist,
-    e.g. <type>XIntegerBitmapColorSpace</type>, which use sequences of
+    e.g. XIntegerBitmapColorSpace, which use sequences of
     integers for color representation.<p>
  */
 interface XColorSpace
 {
     /** Query type of this color space.<p>
 
-        @return a value from the <type>ColorSpaceType</type> constant
+        @return a value from the ColorSpaceType constant
         group.
      */
     byte                     getType();
@@ -60,7 +60,7 @@ interface XColorSpace
         in the final output color. This method returns a sequence of
         tags, specifying for each component of a color value, to what
         color attribute (if any) it corresponds. The values must be
-        one of the <type>ColorComponentTag</type> constants.<p>
+        one of the ColorComponentTag constants.<p>
 
         At the same time, the number of elements in this sequence
         corresponds to the number of color channels for this color
@@ -74,7 +74,7 @@ interface XColorSpace
 
     /** Query rendering intent of this color space.<p>
 
-        @return a value from the <type>RenderingIntent</type> constant
+        @return a value from the RenderingIntent constant
         group.
      */
     byte                     getRenderingIntent();
@@ -103,7 +103,7 @@ interface XColorSpace
         <type>sequence<byte></type>).
 
         @throws a
-        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        com::sun::star::lang::IllegalArgumentException,
         if the input sequence does not match the device color format
         (e.g. if the number of components is wrong)
      */
@@ -112,7 +112,7 @@ interface XColorSpace
 
     /** Convert color value in this color space to sRGB color values.<p>
 
-        Any information not representable in the <type>RGBColor</type>
+        Any information not representable in the RGBColor
         struct is discarded during the conversion. This includes alpha
         information.
 
@@ -125,7 +125,7 @@ interface XColorSpace
         space.
 
         @throws a
-        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        com::sun::star::lang::IllegalArgumentException,
         if the input sequence does not match the device color format.
 
         @see <member>convertToARGB</member>
@@ -147,7 +147,7 @@ interface XColorSpace
         space.
 
         @throws a
-        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        com::sun::star::lang::IllegalArgumentException,
         if the input sequence does not match the device color format.
      */
     sequence<ARGBColor>      convertToARGB( [in] sequence<ColorComponent> deviceColor )
@@ -171,7 +171,7 @@ interface XColorSpace
         space.
 
         @throws a
-        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        com::sun::star::lang::IllegalArgumentException,
         if the input sequence does not match the device color format.
      */
     sequence<ARGBColor>      convertToPARGB( [in] sequence<ColorComponent> deviceColor )
@@ -189,7 +189,7 @@ interface XColorSpace
         @return the corresponding sequence of device colors.
 
         @throws a
-        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        com::sun::star::lang::IllegalArgumentException,
         if the input sequence does not match the device color format.
      */
     sequence<ColorComponent> convertFromRGB( [in] sequence<RGBColor> rgbColor )
@@ -207,7 +207,7 @@ interface XColorSpace
         @return the corresponding sequence of device colors.
 
         @throws a
-        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        com::sun::star::lang::IllegalArgumentException,
         if the input sequence does not match the device color format.
      */
     sequence<ColorComponent> convertFromARGB( [in] sequence<ARGBColor> rgbColor )
@@ -228,7 +228,7 @@ interface XColorSpace
         @return the corresponding sequence of device colors.
 
         @throws a
-        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        com::sun::star::lang::IllegalArgumentException,
         if the input sequence does not match the device color format.
      */
     sequence<ColorComponent> convertFromPARGB( [in] sequence<ARGBColor> rgbColor )

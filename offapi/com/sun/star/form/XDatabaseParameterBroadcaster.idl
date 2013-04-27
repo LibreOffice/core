@@ -34,7 +34,7 @@
     <type scope="com::sun::star::form::component">DataForm</type> is such a component. When it is
     bound to a statement which contains parameters, or to a query which is based upon a parametrized
     statement, it needs values to fill in the parameters with actual values when it is being loaded.
-    One method to gather these values is calling the <type>XDatabaseParameterListener</type> listeners, which
+    One method to gather these values is calling the XDatabaseParameterListener listeners, which
     can fill them in.</p>
  */
 published interface XDatabaseParameterBroadcaster: com::sun::star::uno::XInterface

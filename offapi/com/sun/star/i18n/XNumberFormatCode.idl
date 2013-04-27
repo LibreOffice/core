@@ -39,10 +39,10 @@ published interface XNumberFormatCode : com::sun::star::uno::XInterface
         (usage group) for a given locale and format length type.
 
         @param nFormatType
-            one of the constants listed in <type>KNumberFormatType</type>
+            one of the constants listed in KNumberFormatType
 
         @param nFormatUsage
-            one of <type>KNumberFormatUsage</type> values
+            one of KNumberFormatUsage values
      */
     NumberFormatCode getDefault( [in] short nFormatType,
                                  [in] short nFormatUsage,
@@ -53,7 +53,7 @@ published interface XNumberFormatCode : com::sun::star::uno::XInterface
         a given locale.
 
         @param nFormatIndex
-            one of <type>NumberFormatIndex</type> values
+            one of NumberFormatIndex values
      */
     NumberFormatCode getFormatCode( [in] short nFormatIndex,
                                     [in] com::sun::star::lang::Locale rLocale );
@@ -62,7 +62,7 @@ published interface XNumberFormatCode : com::sun::star::uno::XInterface
         returns all format codes for a given <em>nFormatUsage</em> and locale.
 
         @param nFormatUsage
-            one of <type>KNumberFormatUsage</type> values
+            one of KNumberFormatUsage values
      */
     sequence< NumberFormatCode > getAllFormatCode(
                                 [in] short nFormatUsage,

@@ -45,7 +45,7 @@ module com { module sun { module star { module configuration {
  </p>
 
  <p>Implementations of this service usually also implement
- service <type>HierarchyElement</type>, which concerns the complementary role
+ service HierarchyElement, which concerns the complementary role
  of being accessible as an element of the hierarchy.
  </p>
 */

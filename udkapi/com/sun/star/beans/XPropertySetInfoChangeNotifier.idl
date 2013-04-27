@@ -26,7 +26,7 @@
 module com {  module sun {  module star {  module beans {
 
 
-/** a notifier for changes of <type>XPropertySetInfo</type>s.
+/** a notifier for changes of XPropertySetInfos.
 
     @see    PropertySetInfoChangeEvent
     @see    XPropertySetInfoChangeListener
@@ -34,7 +34,7 @@ module com {  module sun {  module star {  module beans {
 published interface XPropertySetInfoChangeNotifier: com::sun::star::uno::XInterface
 {
 
-    /** registers a listener for <type>PropertySetInfoChangeEvent</type>s.
+    /** registers a listener for PropertySetInfoChangeEvents.
 
         <p>It is suggested to allow multiple registration of the same listener,
         thus for each time a listener is added, it has to be removed.
@@ -43,7 +43,7 @@ published interface XPropertySetInfoChangeNotifier: com::sun::star::uno::XInterf
                             [in] XPropertySetInfoChangeListener Listener );
 
 
-    /** removes a listener for <type>PropertySetInfoChangeEvent</type>s.
+    /** removes a listener for PropertySetInfoChangeEvents.
 
         <p>It is suggested to allow multiple registration of the same listener,
         thus for each time a listener is added, it has to be removed.

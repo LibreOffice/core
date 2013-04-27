@@ -44,7 +44,7 @@ service AccessibleStatusBar
         <li>Description: There is no description.</li>
         <li>Children: The children of a status bar are status bar items,
             whose accessible context supports the service
-            <type>AccessibleStatusBarItem</type>.</li>
+            AccessibleStatusBarItem.</li>
         <li>Parent: The parent is the window that contains the status bar.</li>
         <li>Relations: There are no relations.</li>
         <li>States: The states supported by this service are

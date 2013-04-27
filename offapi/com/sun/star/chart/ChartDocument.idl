@@ -41,7 +41,7 @@
  */
 published service ChartDocument
 {
-    /** If a <type>ChartDocument</type> may be stored as XML file,
+    /** If a ChartDocument may be stored as XML file,
         this service should be supported in order to preserve unparsed
         XML attributes.
 

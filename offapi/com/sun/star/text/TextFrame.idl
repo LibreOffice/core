@@ -26,15 +26,15 @@
  module com {  module sun {  module star {  module text {
 
 
-/** specifies a rectangular shape which contains a <type>Text</type> object
-    and is attached to a piece of surrounding <type>Text</type>.
+/** specifies a rectangular shape which contains a Text object
+    and is attached to a piece of surrounding Text.
 
     @see Text
 
     @example StarBasic
 
-    <p>This example shows how to create a <type>TextFrame</type> and insert
-    it at the very beginning of <type>Text</type> component. The macro
+    <p>This example shows how to create a TextFrame and insert
+    it at the very beginning of Text component. The macro
     is ready to run, if it is a script within a text document. </p>
 
     <listing>

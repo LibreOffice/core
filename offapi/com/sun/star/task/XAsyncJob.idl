@@ -32,7 +32,7 @@ module com {  module sun {  module star {  module task {
 /** specifies a job which must be executed asynchronously
 
     <p>
-    Instead of <type>XJob</type> the implementation of this interface
+    Instead of XJob the implementation of this interface
     must be aware, that execution can be made real asynchronous (e.g. by using
     threads). Because the environment wish to have creation and using of threads
     under control, it's not allowed for a real job implementation to use such mechanism
@@ -50,7 +50,7 @@ published interface XAsyncJob : com::sun::star::uno::XInterface
         @param Arguments
             are arguments for executing the job. Their semantics is completely implementation dependent. Usually,
             a concrete implementation of a job specifies in its service descriptions which parameters are allowed
-            (or expected). This values are persistent by the configuration of the <type>JobExecutor</type>
+            (or expected). This values are persistent by the configuration of the JobExecutor
             which use this asynchronous job. It's possible to write it back by called listener
             function <member>XJobListener::jobFinished()</member>.
 

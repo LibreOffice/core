@@ -26,8 +26,8 @@
 module com { module sun { module star { module ucb {
 
 /** provides the possibility to load information offered by a
-    <type>XContentAccess</type> for several rows of a
-    <type>ContentResultSet</type> with a single function call.
+    XContentAccess for several rows of a
+    ContentResultSet with a single function call.
 */
 published interface XFetchProviderForContentAccess: com::sun::star::uno::XInterface
 {
@@ -54,12 +54,12 @@ published interface XFetchProviderForContentAccess: com::sun::star::uno::XInterf
                                       , [in] long nRowCount
                                       , [in] boolean bDirection );
 
-    /** returns the <type>XContentIdentifier</type>s of the columns of the
+    /** returns the XContentIdentifiers of the columns of the
         indicated rows
 
         @returns
         <member>FetchResult::Rows</member> contains a sequence of anys. Each
-        of these anys contains an <type>XContentIdentifier</type>.
+        of these anys contains an XContentIdentifier.
 
         @param nRowStartPosition
         the starting row of the result set
@@ -81,7 +81,7 @@ published interface XFetchProviderForContentAccess: com::sun::star::uno::XInterf
 
         @returns
         <member>FetchResult::Rows</member> contains a sequence of anys. Each
-        of these anys contains an <type>XContent</type>.
+        of these anys contains an XContent.
 
         @param nRowStartPosition
         the starting row of the result set

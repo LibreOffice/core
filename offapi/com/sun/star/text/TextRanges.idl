@@ -25,7 +25,7 @@
 
  module com {  module sun {  module star {  module text {
 
-/** provides a container for <type>XTextRange</type> objects.
+/** provides a container for XTextRange objects.
  */
 published service TextRanges
 {

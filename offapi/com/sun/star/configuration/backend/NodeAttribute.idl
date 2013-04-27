@@ -27,7 +27,7 @@ module com { module sun { module star { module configuration { module backend {
     in a layer.
 
     <p> The values were chosen so they can be combined with values from
-        <type>SchemaAttribute</type>
+        SchemaAttribute
     </p>
 
     @see com::sun::star::configuration::backend::SchemaAttribute

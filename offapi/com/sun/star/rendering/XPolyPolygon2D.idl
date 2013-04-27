@@ -57,11 +57,11 @@ interface XPolyPolygon2D : ::com::sun::star::uno::XInterface
         no effect on the poly-polygon it was added to.
 
         @throws a
-        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        com::sun::star::lang::IllegalArgumentException,
         if the XPolyPolygon2D parameter does not support one of the
         data-providing derivative interfaces
-        (<type>XBezierPolyPolygon2D</type>,
-        <type>XLinePolyPolygon2D</type>).
+        (XBezierPolyPolygon2D,
+        XLinePolyPolygon2D).
      */
     void        addPolyPolygon( [in] ::com::sun::star::geometry::RealPoint2D position, [in] XPolyPolygon2D polyPolygon )
         raises (com::sun::star::lang::IllegalArgumentException);

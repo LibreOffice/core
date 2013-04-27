@@ -69,7 +69,7 @@ interface XCopyTableListener : ::com::sun::star::lang::XEventListener
             happened.
 
         @return
-            how to continue with copying. Must be one of the <type>CopyTableContinuation</type>
+            how to continue with copying. Must be one of the CopyTableContinuation
             constants.
     */
     short   copyRowError( [in] CopyTableRowEvent Event );

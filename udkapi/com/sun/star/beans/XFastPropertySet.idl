@@ -36,7 +36,7 @@ module com {  module sun {  module star {  module beans {
 
 /** provides a fast way of accessing and changing property values.
 
-    <p>This interface is an extension to the <type>XPropertySet</type>
+    <p>This interface is an extension to the XPropertySet
     interface. The get and set methods use handles to access the
     property values instead of character strings.</p>
  */

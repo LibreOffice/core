@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module lang {
 /** Factory interface to produce instances of an implementation
     of a service specification.
 
-    This interface is deprecated.  Please use <type>XSingleComponentFactory</type>.
+    This interface is deprecated.  Please use XSingleComponentFactory.
 
     @see XInitialization
     @deprecated

@@ -58,7 +58,7 @@ published interface XOutputStream: com::sun::star::uno::XInterface
     /** gets called to indicate that all data has been written.
 
         <p>If this method has not yet been called, no attached
-        <type>XInputStream</type> receives an EOF signal. No further
+        XInputStream receives an EOF signal. No further
         bytes may be written after this method has been called.</p>
      */
     void closeOutput()

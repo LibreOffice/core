@@ -26,8 +26,8 @@
 
 module com { module sun { module star { module deployment {
 
-/** The <type>XPackageManagerFactory</type> interface is used to obtain
-    <type>XPackageManager</type> instances.
+/** The XPackageManagerFactory interface is used to obtain
+    XPackageManager instances.
     <p>
     You have to use the singleton
     <code>
@@ -38,12 +38,12 @@ module com { module sun { module star { module deployment {
 
     @since OOo 2.0
     @deprecated
-    Use <type>XExtensionManager</type>.
+    Use XExtensionManager.
 */
 interface XPackageManagerFactory
 {
     /** Method to create (or reusing and already existing)
-        <type>XPackageManager</type> object to add or remove UNO packages
+        XPackageManager object to add or remove UNO packages
         persistently.
         <p>
         Packages for context strings <code>"user"</code> and
@@ -52,7 +52,7 @@ interface XPackageManagerFactory
         </p>
         <!-- p>
         Document contexts (<code>"vnd.sun.star.tdoc:..."</code>) will get a
-        <type>XPackageManager</type> object that stores packages
+        XPackageManager object that stores packages
         in the given document and modify the manifest.
         </p -->
         <p>
@@ -79,7 +79,7 @@ interface XPackageManagerFactory
                </li -->
                </ul>
         @return
-               <type>XPackageManager</type> object
+               XPackageManager object
         @throws ::com::sun::star::lang::IllegalArgumentException
                 in case of an invalid context
     */

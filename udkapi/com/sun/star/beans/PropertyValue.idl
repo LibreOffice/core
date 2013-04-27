@@ -34,7 +34,7 @@ published struct PropertyValue
 {
     /** specifies the name of the property.
 
-        <p>The name is unique within a sequence of <type>PropertyValue</type>s.
+        <p>The name is unique within a sequence of PropertyValues.
         Upper and lower case are distinguished.</p>
      */
     string Name;

@@ -32,7 +32,7 @@ module com {  module sun {  module star {  module i18n {
     <p> Assumption - StartPos is inclusive and EndPos is exclusive. </p>
 
     <p> The <em>nScriptDirection</em> parameters are of type
-    <type>ScriptDirection</type></p>
+    ScriptDirection</p>
 
      @since OOo 1.1.2
 */
@@ -64,7 +64,7 @@ published interface XScriptTypeDetector : ::com::sun::star::uno::XInterface
     long endOfCTLScriptType( [in] string aText, [in] long nPos);
 
     /** @returns the CTL script type of the current position. <br/>
-        One of <type>CTLScriptType</type> constants.
+        One of CTLScriptType constants.
     */
     short   getCTLScriptType  ([in] string aText, [in] long nPos);
 };

@@ -26,7 +26,7 @@
 module com {   module sun {   module star {   module document {
 
 /** makes it possible to register listeners which are called whenever
-    a document event (see <type>EventObject</type>) occurs
+    a document event (see EventObject) occurs
 
     @deprecated
     @see XDocumentEventBroadcaster

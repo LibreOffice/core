@@ -28,16 +28,16 @@ module com { module sun { module star { module configuration { module backend {
 
 
 /**
-  provides a filtered version of a configuration data <type>Layer</type>.
+  provides a filtered version of a configuration data Layer.
 
-  <p> A layer filter wraps a source <type>XLayer</type> object and
+  <p> A layer filter wraps a source XLayer object and
      provides access to a filtered version of its data.
      The data read from the filter usually is produced from the source data
      by adding and removing elements or modifying values.
   </p>
 
   @see com::sun::star::configuration::backend::DataImporter
-        Service that supports applying a <type>LayerFilter</type> to imported data.
+        Service that supports applying a LayerFilter to imported data.
 
   @since OOo 2.0
   */
@@ -61,7 +61,7 @@ published service LayerFilter
          with a single argument of type <type scope="com::sun::star::beans">NamedValue</type>,
          where <member scope="com::sun::star::beans">NamedValue::Name</member> is <code>"Source"</code>
          and <member scope="com::sun::star::beans">NamedValue::Value</member>
-         is an object implementing <type>XLayer</type>.
+         is an object implementing XLayer.
      </p>
       */
     interface com::sun::star::lang::XInitialization ;

@@ -30,13 +30,13 @@
  module com {  module sun {  module star {  module drawing {
 
 /** Objects implementing this interface can be used to align
-    <type>Shape</type>s.
+    Shapes.
 
     @deprecated
  */
 published interface XShapeAligner: com::sun::star::uno::XInterface
 {
-    /** aligns the specified <type>Shape</type>s.
+    /** aligns the specified Shapes.
      */
     void alignShapes( [inout] com::sun::star::drawing::XShapes aShapes,
              [in] com::sun::star::drawing::Alignment eType );

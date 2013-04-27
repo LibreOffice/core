@@ -31,13 +31,13 @@ module com { module sun { module star { module accessibility {
 
 /** Implement this interface to expose the hypertext structure of a document.
 
-    <p>The <type>XAccessibleHypertext</type> interface is the main interface
+    <p>The XAccessibleHypertext interface is the main interface
     to expose hyperlinks in a document, typically a text document, that are
     used to reference other (parts of) documents.  For supporting the
     <member>XAccessibleHypertext::getLinkIndex</member> method of this
     interface and other character related methods of the
-    <type>XAccessibleHyperlink</type> interface, it is necessary to also
-    support the <type>XAccessibleText</type> interface.</p>
+    XAccessibleHyperlink interface, it is necessary to also
+    support the XAccessibleText interface.</p>
 
     @see XAccessibleHyperlink, XAccessibleText
 
@@ -57,7 +57,7 @@ interface XAccessibleHypertext
 
     /** Return the specified link.
 
-        <p>The returned <type>XAccessibleHyperlink</type> object
+        <p>The returned XAccessibleHyperlink object
         encapsulates the hyperlink and provides several kinds of information
         describing it.</p>
 
@@ -82,7 +82,7 @@ interface XAccessibleHypertext
 
         @param nCharIndex
             Index of the character for which to return the link index.  If
-            the <type>XAccessibleText</type> interface is used to represent
+            the XAccessibleText interface is used to represent
             the text containing the link, then the character index is only
             valid if it is greater than or equal to zero and lower then the
             number of characters in the text.  See that interface's

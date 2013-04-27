@@ -66,7 +66,7 @@ published interface XUniversalContentBroker
      */
     interface com::sun::star::ucb::XContentProviderManager;
 
-    /** creates <type>XContentIdentifier</type> implementation objects for
+    /** creates XContentIdentifier implementation objects for
         all kind of contents provided by the UCB.
 
         <p>This interface is required.
@@ -75,7 +75,7 @@ published interface XUniversalContentBroker
 
     /** Enables the caller to execute commands at the broker.
 
-        Is an enhanced version of <type>XCommandProcessor</type> that has an
+        Is an enhanced version of XCommandProcessor that has an
         additional method for releasing command identifiers obtained via
         <member>XCommandProcessor::createCommandIdentifier</member> to avoid
         resource leaks. For a detailed description of the problem refer to
@@ -100,7 +100,7 @@ published interface XUniversalContentBroker
         // This command obtains an interface which allows to query
         // information on commands supported by the Content Broker.
 
-        <type>XCommandInfo</type>
+        XCommandInfo
             getCommandInfo
                 void
 
@@ -109,12 +109,12 @@ published interface XUniversalContentBroker
         // The implementation must be able to handle Contents provided
         // by any Content Provider. This is different from the command
         // "transfer" that can be supported by a Content. That command
-        // typically can only handle <type>Content</type>s provided by one
-        // <type>ContentProvider</type>.
+        // typically can only handle Contents provided by one
+        // ContentProvider.
 
         void
             globalTransfer
-                <type>GlobalTransferCommandArgument</type>
+                GlobalTransferCommandArgument
         </pre>
 
      */

@@ -26,7 +26,7 @@
 
 module com {  module sun {  module star {  module lang {
 
-/** makes it possible to set a <type>Locale</type> to be used by the object.
+/** makes it possible to set a Locale to be used by the object.
  */
 published interface XLocalizable: com::sun::star::uno::XInterface
 {

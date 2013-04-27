@@ -25,19 +25,19 @@
 
 module com { module sun { module star { module drawing { module framework {
 
-/** See <type>XModuleController</type> for a description of the module
+/** See XModuleController for a description of the module
     controller.
 
-    <p>See <type>ConfigurationController</type> for a comment why this
+    <p>See ConfigurationController for a comment why this
     service may be removed in the future.</p>
 
-    <p>The <type>ModuleController</type> object for an application can be
-    obtained via the <type>XControllerManager</type> interface.</type>
+    <p>The ModuleController object for an application can be
+    obtained via the XControllerManager interface.</type>
 */
 service ModuleController : XModuleController
 {
-    /** Create a new instance of a <type>ModuleController</type> as sub
-        controller of the given <type>XController</type> object.
+    /** Create a new instance of a ModuleController as sub
+        controller of the given XController object.
     */
     create ([in] ::com::sun::star::frame::XController xController);
 };

@@ -29,7 +29,7 @@ module com { module sun { module star { module ui { module dialogs {
 
 /** Interface to be implemented by a FilePicker listener.
 
-    <p> The <type>XFilePickerListener</type> interface must be implemented by
+    <p> The XFilePickerListener interface must be implemented by
     the clients of the FilePicker service which need to be informed about
     events while the FilePicker service is displayed.</p>
 */
@@ -40,7 +40,7 @@ published interface XFilePickerListener: com::sun::star::lang::XEventListener
         FilePicker service dialog changes.
 
         @param aEvent
-        of type <type>FilePickerEvent</type> that describes the event
+        of type FilePickerEvent that describes the event
 
         @see com::sun::star::ui::dialogs::FilePickerEvent
     */
@@ -51,7 +51,7 @@ published interface XFilePickerListener: com::sun::star::lang::XEventListener
         FilePicker dialog changes.
 
         @param aEvent
-        Of type <type>FilePickerEvent</type> that describes the event.
+        Of type FilePickerEvent that describes the event.
 
         @see com::sun::star::ui::dialogs::FilePickerEvent
     */
@@ -61,7 +61,7 @@ published interface XFilePickerListener: com::sun::star::lang::XEventListener
         pressed.
 
         @param aEvent
-        of type <type>FilePickerEvent</type> that describes the event
+        of type FilePickerEvent that describes the event
 
         @returns
         A help string which the FilePicker dialog should use to display
@@ -78,7 +78,7 @@ published interface XFilePickerListener: com::sun::star::lang::XEventListener
         FilePicker service dialog changes.
 
         @param aEvent
-        of type <type>FilePickerEvent</type> that describes the event.
+        of type FilePickerEvent that describes the event.
 
         @see com::sun::star::ui::dialogs::FilePickerEvent
     */

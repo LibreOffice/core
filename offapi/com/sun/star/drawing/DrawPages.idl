@@ -29,7 +29,7 @@
 
  module com {  module sun {  module star {  module drawing {
 
-/** provides access to a container of <type>DrawPage</type>s
+/** provides access to a container of DrawPages
     and makes it possible for you to manipulate them.
 
     @see XDrawPagesSupplier
@@ -37,7 +37,7 @@
  */
 published service DrawPages
 {
-    /** lets you access and create <type>DrawPage</type>s
+    /** lets you access and create DrawPages
      */
     interface com::sun::star::drawing::XDrawPages;
 

@@ -23,7 +23,7 @@
 
 module com { module sun { module star { module accessibility {
 
-/** An <type>AccessibleRelation</type> object defines a one-to-many
+/** An AccessibleRelation object defines a one-to-many
     relation.
 
     <p>The represented relation points from the implementing object to a set
@@ -36,7 +36,7 @@ struct AccessibleRelation
     /** Type of the relation.
 
         <p>Its value has to be one of the constants defined by
-        <type>AccessibleRelationType</type>.  If that value is INVALID then
+        AccessibleRelationType.  If that value is INVALID then
         the whole relation is regarded as invalid.  The content of the
         TargetSet is then undefined.</p>
 

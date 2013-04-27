@@ -32,7 +32,7 @@ published interface XLineNumberingProperties: com::sun::star::uno::XInterface
 {
 
     /** @return
-        the <type>LineNumberingProperties</type> of the object.
+        the LineNumberingProperties of the object.
      */
     com::sun::star::beans::XPropertySet getLineNumberingProperties();
 };

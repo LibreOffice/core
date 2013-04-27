@@ -56,7 +56,7 @@ interface XAnimatedImages
     /** controls the way the images are scaled up or down, when the available space is larger or smaller
         than what is needed for them.
 
-        <p>Allowed values are those from the <type>ImageScaleMode</type> constants group.</p>
+        <p>Allowed values are those from the ImageScaleMode constants group.</p>
     */
     [attribute] short ScaleMode
     {

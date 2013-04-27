@@ -26,7 +26,7 @@
 #include <com/sun/star/sheet/XFormulaOpCodeMapper.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
 module com {  module sun {  module star {  module report { module meta {
-/** identifies a <type>XFormulaParser</type> which allows to retrieve the meta data of all supported functions.
+/** identifies a XFormulaParser which allows to retrieve the meta data of all supported functions.
 
 */
 interface XFormulaParser

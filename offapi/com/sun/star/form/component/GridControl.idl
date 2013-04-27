@@ -53,7 +53,7 @@
     display not only the current row of the form, but all rows (at least potentially, limited
     by the control size, of course).</p>
 
-    <p>The table rows in a grid control correspond to the rows in the <type>DataForm</type>
+    <p>The table rows in a grid control correspond to the rows in the DataForm
     the control belongs to, and the columns correspond to single columns of the form's row set.</p>
 
     <p>Columns of a grid control are modeled by own objects, too. They are very similar to usual
@@ -67,7 +67,7 @@ published service GridControl
     /** provides basic functionality of a container of <type scope="com::sun::star::form">FormComponent</type>s.
 
         <p>All the container-related methods of this service related to control models,
-        this is what are the container elements for a <type>GridControl</type>.</p>
+        this is what are the container elements for a GridControl.</p>
 
         <p>As the <type scope="com::sun::star::form">FormComponents</type> service also specifies
         the <type scope"com::sun::star::script">XEventAttacherManager</type> service, grid control models

@@ -38,7 +38,7 @@
  module com {  module sun {  module star {  module script {
 
 /** makes it possible to attach script events given by a sequence of
-    <type>ScriptEventDescriptor</type> structures to a given interface.
+    ScriptEventDescriptor structures to a given interface.
  */
 published interface XEventAttacher: com::sun::star::uno::XInterface
 {

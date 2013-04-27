@@ -31,13 +31,13 @@ module com {   module sun {   module star {   module document {
 /** interface is supplied by objects inside a document object model that have
     children that can be the target of a link inside a document.
 
-    <p>These targets implement the service <type>LinkTarget</type>.  </p>
+    <p>These targets implement the service LinkTarget.  </p>
  */
 published interface XLinkTargetSupplier: com::sun::star::uno::XInterface
 {
     /** @returns
             the names of possible links to children of this object inside  a
-            document object model. It implements the service  <type>LinkTargets</type>.
+            document object model. It implements the service  LinkTargets.
      */
     com::sun::star::container::XNameAccess getLinks();
 

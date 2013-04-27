@@ -90,7 +90,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
             specifies attribute values to be applied to the node.
 
             <p> The value is a combination of
-                <type>NodeAttribute</type> flags.
+                NodeAttribute flags.
             </p>
             <p> The attributes are combined cumulatively with those
                 set on lower layers.
@@ -144,7 +144,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
             specifies attribute values to be applied to the new node.
 
             <p> The value is a combination of
-                <type>NodeAttribute</type> flags.  Note that
+                NodeAttribute flags.  Note that
                 <member>NodeAttribute::FUSE</member> has an impact on the
                 semantics of this method.
             </p>
@@ -192,7 +192,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
             specifies attribute values to be applied to the new node.
 
             <p> The value is a combination of
-                <type>NodeAttribute</type> flags.  Note that
+                NodeAttribute flags.  Note that
                 <member>NodeAttribute::FUSE</member> has an impact on the
                 semantics of this method.
             </p>
@@ -282,7 +282,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
             specifies the new attributes of the property.
 
             <p> The value is a combination of
-                <type>NodeAttribute</type> flags.
+                NodeAttribute flags.
             </p>
             <p> The attributes are combined cumulatively with those
                 set on lower layers.
@@ -440,7 +440,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
             specifies the attributes of the new property.
 
             <p> The value is a combination of
-                <type>NodeAttribute</type> flags and may also contain the
+                NodeAttribute flags and may also contain the
                 <const>SchemaAttribute::REQUIRED</const> flag.
             </p>
             <p> <const>NodeAttribute::MANDATORY</const> need not be set,
@@ -486,7 +486,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
             specifies the attributes of the new property.
 
             <p> The value is a combination of
-                <type>NodeAttribute</type> flags and may also contain the
+                NodeAttribute flags and may also contain the
                 <const>SchemaAttribute::REQUIRED</const> flag.
             </p>
             </p>

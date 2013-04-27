@@ -30,7 +30,7 @@
  module com {  module sun {  module star {  module form {  module component {
 
 
-/** specifies a component which acts as a radio button as needed in <type>HTMLForm</type>s.
+/** specifies a component which acts as a radio button as needed in HTMLForms.
 
     <p>Radio buttons are controls which can be grouped together, and in every
     group, only one of the controls can be check. This means if one of them

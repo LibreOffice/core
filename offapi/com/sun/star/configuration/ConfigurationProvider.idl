@@ -47,7 +47,7 @@ module com { module sun { module star { module configuration {
  this applies to the parameters <code>"Locale"</code> and <code>"EnableAsync"</code>.
  </p>
 
- @deprecated Use <type>theDefaultProvider</type> instead.
+ @deprecated Use theDefaultProvider instead.
  */
 published service ConfigurationProvider
 {
@@ -63,20 +63,20 @@ published service ConfigurationProvider
 
  <p>Using the first of these service specifiers requests a read-only view of
  the configuration.
- The object that is created implements service <type>ConfigurationAccess</type>.
+ The object that is created implements service ConfigurationAccess.
  To reflect its <em>element role</em> as root of the view, it implements
- service <type>AccessRootElement</type>.
+ service AccessRootElement.
  </p>
 
  <p>Using the second form requests an updatable view of the configuration.
  The object that is created should implement service
- <type>ConfigurationUpdateAccess</type>. To reflect its <em>element role</em>
+ ConfigurationUpdateAccess. To reflect its <em>element role</em>
  which includes controlling updates for the whole view, it implements
- service <type>UpdateRootElement</type>.
+ service UpdateRootElement.
  <BR />If the root element of the view is marked read-only (as indicated
  by <const scope="com::sun::star::beans">PropertyAttributes::READONLY</const>),
  the implementation may either raise an exception or return a (read-only)
- <type>ConfigurationAccess</type>/<type>AccessRootElement</type> instead.
+ ConfigurationAccess/AccessRootElement instead.
  </p>
 
  <p>The arguments passed to

@@ -17,12 +17,12 @@ module com { module sun { module star { module lang {
 module com { module sun { module star { module configuration {
 
 /**
-   The default <type>ConfigurationProvider</type>.
+   The default ConfigurationProvider.
 
    <p>This singleton somewhat arbitrarily makes available the
    <type scope="com::sun::star::lang">XMultiServiceFactory</type> interface of
-   the (old-style) <type>DefaultProvider</type> service, as it is the most
-   frequently used one.  See the <type>DefaultProvider</type> service for
+   the (old-style) DefaultProvider service, as it is the most
+   frequently used one.  See the DefaultProvider service for
    details.</p>
 
    @since OOo 1.1.2

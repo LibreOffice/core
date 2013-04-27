@@ -35,7 +35,7 @@ module com {  module sun {  module star {  module sheet {
     <p>All container access methods return a sequence of
     <type scope="com::sun::star::beans">PropertyValue</type> structs.
     The properties contained in the sequence are collected in the
-    service <type>FunctionDescription</type>.</p>
+    service FunctionDescription.</p>
  */
 published service FunctionDescriptions
 {

@@ -26,7 +26,7 @@
  module com {  module sun {  module star {  module embed {
 
 
-/** This exception can wrap an exception thrown during <type>XStorage</type>
+/** This exception can wrap an exception thrown during XStorage
     methods execution.
  */
 published exception StorageWrappedTargetException: com::sun::star::lang::WrappedTargetException

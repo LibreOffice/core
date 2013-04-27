@@ -35,7 +35,7 @@
     belong to a data row (also known as data series).
 
     <p>For this service, the properties supported by
-    <type>ChartDataPointProperties</type> are applied to all data
+    ChartDataPointProperties are applied to all data
     point elements contained in this group.  They serve as a template;
     thus, when changing a data point property afterwards</p>
 
@@ -49,7 +49,7 @@ published service ChartDataRowProperties
     */
     [optional] service com::sun::star::chart::ChartStatistics;
 
-    /** If <type>ChartDataRowProperties</type> may be stored as XML
+    /** If ChartDataRowProperties may be stored as XML
         file, this service should be supported in order to preserve
         unparsed XML attributes.
 

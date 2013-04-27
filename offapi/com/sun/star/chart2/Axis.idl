@@ -99,7 +99,7 @@ service Axis
         means linked to the source format.</p>
 
         <p>To determine a source format, the axis can query the
-        <type>XDataSequence</type>s used by the data series attached
+        XDataSequences used by the data series attached
         to it (see <member>XDataSequence::getNumberFormatKeyByIndex</member>).
         </p>
      */
@@ -109,13 +109,13 @@ service Axis
 
     /** determines what kind of tickmarks should be shown for major ticks.
 
-         @see <type>TickmarkStyle</type>.
+         @see TickmarkStyle.
     */
     [property]      long      MajorTickmarks;
 
     /** determines what kind of tickmarks should be shown for minor ticks.
 
-        @see <type>TickmarkStyle</type>.
+        @see TickmarkStyle.
      */
     [property]      long      MinorTickmarks;
 

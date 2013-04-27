@@ -26,14 +26,14 @@
 
 module com { module sun { module star { module ucb {
 
-/** Allows an <type>XContent</type> to delete itself into the trash can.
+/** Allows an XContent to delete itself into the trash can.
 
     <p>This is an additional interface the XContent representing the trash
     can (URL: "vnd.sun.staroffice.trashcan:///") should support.
 */
 published interface XRecycler : com::sun::star::uno::XInterface
 {
-    /** Notify the trash can that an <type>XContent</type> is deleting itself
+    /** Notify the trash can that an XContent is deleting itself
         into it.
 
         @param Properties

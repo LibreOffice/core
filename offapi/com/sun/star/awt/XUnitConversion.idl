@@ -34,20 +34,20 @@
  */
 interface XUnitConversion: com::sun::star::uno::XInterface
 {
-    /** converts the given <type>Point</type>, which is specified in pixels, into the given logical unit
+    /** converts the given Point, which is specified in pixels, into the given logical unit
 
         @param Point
-            A given <type>Point</type> in a well known type
+            A given Point in a well known type
         @param TargetUnit
             A type from <type scope="com::sun::star::util">MeasureUnit</type> in which the Point will convert to.
 
         @return
-            Returns a new <type>Point</type> in the TargetUnit type format.
+            Returns a new Point in the TargetUnit type format.
      */
     com::sun::star::awt::Point convertPointToLogic( [in] com::sun::star::awt::Point Point, [in] short TargetUnit )
             raises ( com::sun::star::lang::IllegalArgumentException );
 
-    /** converts the given <type>Point</type>, which is specified in the given logical unit, into pixels
+    /** converts the given Point, which is specified in the given logical unit, into pixels
 
         @param Point
             A given Point in the SourceUnit type
@@ -55,34 +55,34 @@ interface XUnitConversion: com::sun::star::uno::XInterface
             The type from <type scope="com::sun::star::util">MeasureUnit</type> of the Point.
 
         @return
-            Return a new <type>Point</type> in Pixel type format.
+            Return a new Point in Pixel type format.
      */
     com::sun::star::awt::Point convertPointToPixel( [in] com::sun::star::awt::Point aPoint, [in] short SourceUnit )
             raises ( com::sun::star::lang::IllegalArgumentException );
 
 
-    /** converts the given <type>Size</type>, which is specified in pixels, into the given logical unit
+    /** converts the given Size, which is specified in pixels, into the given logical unit
 
         @param aSize
-            A given <type>Size</type> in a well known type
+            A given Size in a well known type
         @param TargetUnit
             A type from <type scope="com::sun::star::util">MeasureUnit</type> in which the Size will convert to.
 
         @return
-            Returns a new <type>Size</type> in the TargetUnit type format.
+            Returns a new Size in the TargetUnit type format.
      */
     com::sun::star::awt::Size convertSizeToLogic( [in] com::sun::star::awt::Size aSize, [in] short TargetUnit )
             raises ( com::sun::star::lang::IllegalArgumentException );
 
-    /** converts the given <type>Size</type>, which is specified in the given logical unit, into pixels
+    /** converts the given Size, which is specified in the given logical unit, into pixels
 
         @param Size
-            A given <type>Size</type> in a well known type
+            A given Size in a well known type
         @param TargetUnit
             The type from <type scope="com::sun::star::util">MeasureUnit</type> of the Size.
 
         @return
-            Returns a new <type>Size</type> in the TargetUnit type format.
+            Returns a new Size in the TargetUnit type format.
      */
     com::sun::star::awt::Size convertSizeToPixel( [in] com::sun::star::awt::Size aSize, [in] short SourceUnit )
             raises ( com::sun::star::lang::IllegalArgumentException );

@@ -29,8 +29,8 @@ module com { module sun { module star { module ucb {
     commands.
 
     <p>Supply an implementation of this interface together with an
-    <type>XCommandEnvironment</type> implementation, when executing a command
-    using <type>XCommandProcessor</type>.
+    XCommandEnvironment implementation, when executing a command
+    using XCommandProcessor.
 */
 interface XWebDAVCommandEnvironment : com::sun::star::uno::XInterface
 {

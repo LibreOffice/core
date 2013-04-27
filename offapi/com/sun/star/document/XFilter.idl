@@ -28,11 +28,11 @@ module com {  module sun {  module star {  module document {
 /** interface to filter documents
 
     <p>
-    This interface will be used by service <type>ImportFilter</type> or
-    <type>ExportFilter</type> to support loading/saving of documents in
+    This interface will be used by service ImportFilter or
+    ExportFilter to support loading/saving of documents in
     different formats. The target/source of such filter operations must
     be known <em>before</em> filtering will be started.
-    (see <type>XImporter</type> and <type>XExporter</type> too)
+    (see XImporter and XExporter too)
     Otherwise this interface can't work right.
     <p>
 
@@ -46,7 +46,7 @@ published interface XFilter: com::sun::star::uno::XInterface
         /** filter the document.
 
         <p>
-        The given <type>MediaDescriptor</type> holds all necessary information
+        The given MediaDescriptor holds all necessary information
         about the document.
 
         Don't hold hard references to the descriptor items. You must copy needed information!

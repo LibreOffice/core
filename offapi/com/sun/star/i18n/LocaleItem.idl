@@ -29,7 +29,7 @@ module com {  module sun {  module star {  module i18n {
     Constant values identifying specific locale data items.
 
     <p> These are not used with the API but with an OOo internal wrapper class
-    that caches the contents of an instance of <type>LocaleDataItem</type> and
+    that caches the contents of an instance of LocaleDataItem and
     uses these values to access it's members for faster access. </p>
 
     <p> Whenever locale data items were added these values and the wrapper

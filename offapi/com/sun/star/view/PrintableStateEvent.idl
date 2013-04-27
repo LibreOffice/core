@@ -26,10 +26,10 @@
 module com {  module sun {  module star {  module view {
 
 
-/** specifies the print progress of an <type>XPrintable</type>.
+/** specifies the print progress of an XPrintable.
 
     <p><member scope="com::sun::star::lang">EventObject::Source</member>
-    contains the <type>XPrintable</type> having changed its state</p>.
+    contains the XPrintable having changed its state</p>.
 
  */
 published struct PrintableStateEvent : com::sun::star::lang::EventObject

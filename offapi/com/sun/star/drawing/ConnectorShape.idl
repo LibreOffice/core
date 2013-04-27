@@ -37,8 +37,8 @@
  module com {  module sun {  module star {  module drawing {
 
 
-/** This service is for a <type>ConnectorShape</type>, a specialized <type>Shape</type>,
-    which can be connected to other <type>Shape</type>s or <type>GluePoint</type>s.
+/** This service is for a ConnectorShape, a specialized Shape,
+    which can be connected to other Shapes or GluePoints.
  */
 published service ConnectorShape
 {

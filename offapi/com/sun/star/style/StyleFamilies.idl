@@ -76,14 +76,14 @@ published service StyleFamilies
     /** This mandatory interface makes it possible to get access to the
                 style families by their names.
 
-                <p>The elements within this collection are <type>StyleFamily</type> instances.
+                <p>The elements within this collection are StyleFamily instances.
      */
     interface com::sun::star::container::XNameAccess;
 
     /** This optional interface makes it possible to get access to the
                 style families by index.
 
-                <p>The elements within this collection are <type>StyleFamily</type> instances.
+                <p>The elements within this collection are StyleFamily instances.
      */
     [optional] interface com::sun::star::container::XIndexAccess;
 

@@ -23,7 +23,7 @@
 module com { module sun { module star { module embed {
 
 /** This constant set contains possible actions that could be approved by
-<type>ActionsApproval</type> implementation.
+ActionsApproval implementation.
 */
 published constants Actions
 {

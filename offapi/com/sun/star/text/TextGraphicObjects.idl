@@ -27,21 +27,21 @@
  module com {  module sun {  module star {  module text {
 
 
-/** This is the collection of all <type>TextGraphicObject</type> instances within a
+/** This is the collection of all TextGraphicObject instances within a
     context (e.g. a document).
  */
 published service TextGraphicObjects
 {
 
 
-    /** This interface makes it possible to access all <type>TextGraphicObject</type>
+    /** This interface makes it possible to access all TextGraphicObject
                 instances within this context (e.g. a document) by its name.
 
                 <p>The type of the interfaces returned by this collection is
                 always "XTextContent".
      */
     interface com::sun::star::container::XNameAccess;
-    /** This interface makes it possible to access all <type>TextGraphicObject</type>
+    /** This interface makes it possible to access all TextGraphicObject
                 instances within this context (e.g. a document) by its index.
 
                 <p>The type of the interfaces returned by this collection is

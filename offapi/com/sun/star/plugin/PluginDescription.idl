@@ -25,7 +25,7 @@
 
 
 /** Describes a specific plugin.  If there are multiple mimetypes and/or
-    extensions, multiple <type>PluginDescription</type>s will be created.
+    extensions, multiple PluginDescriptions will be created.
 */
 published struct PluginDescription
 {

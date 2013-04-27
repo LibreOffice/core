@@ -28,10 +28,10 @@ module com { module sun { module star { module ui { module dialogs {
 /**  Used to notify listeners about dialog-closed events.
 
     <p>Registered listeners will be notified with a
-    <type>DialogClosedEvent</type> when a <type>XAsynchronousExecutableDialog</type> is closed.</p>
+    DialogClosedEvent when a XAsynchronousExecutableDialog is closed.</p>
 
-    @see <type>XAsynchronousExecutableDialog</type>
-    @see <type>DialogClosedEvent</type>
+    @see XAsynchronousExecutableDialog
+    @see DialogClosedEvent
 */
 
 
@@ -40,9 +40,9 @@ interface XDialogClosedListener: com::sun::star::lang::XEventListener
     /** A client receives this event if a dialog is closed.
 
         @param aEvent
-        of type <type>DialogClosedEvent</type> that describes the event
+        of type DialogClosedEvent that describes the event
 
-        @see <type>EndDialogEvent</type>
+        @see EndDialogEvent
     */
     void dialogClosed( [in] DialogClosedEvent aEvent );
 };

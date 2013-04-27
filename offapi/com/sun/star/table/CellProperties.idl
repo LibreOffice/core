@@ -217,7 +217,7 @@ published service CellProperties
 
 
     /** contains a description of the top border line of each cell.
-        Preferred over <type>BorderLine</type> <member>TopBorder</member>.
+        Preferred over BorderLine <member>TopBorder</member>.
 
         @since LibreOffice 3.6
      */
@@ -225,7 +225,7 @@ published service CellProperties
 
 
     /** contains a description of the bottom border line of each cell.
-        Preferred over <type>BorderLine</type> <member>BottomBorder</member>.
+        Preferred over BorderLine <member>BottomBorder</member>.
 
         @since LibreOffice 3.6
     */
@@ -233,7 +233,7 @@ published service CellProperties
 
 
     /** contains a description of the left border line of each cell.
-        Preferred over <type>BorderLine</type> <member>LeftBorder</member>.
+        Preferred over BorderLine <member>LeftBorder</member>.
 
         @since LibreOffice 3.6
      */
@@ -241,7 +241,7 @@ published service CellProperties
 
 
     /** contains a description of the right border line of each cell.
-        Preferred over <type>BorderLine</type> <member>RightBorder</member>.
+        Preferred over BorderLine <member>RightBorder</member>.
 
         @since LibreOffice 3.6
      */
@@ -249,7 +249,7 @@ published service CellProperties
 
 
     /** contains a description of the top left to bottom right diagonal line of each cell.
-        Preferred over <type>BorderLine</type> <member>DiagonalTLBR</member>.
+        Preferred over BorderLine <member>DiagonalTLBR</member>.
 
         @since LibreOffice 3.6
      */
@@ -257,7 +257,7 @@ published service CellProperties
 
 
     /** contains a description of the bottom left to top right diagonal line of each cell.
-        Preferred over <type>BorderLine</type> <member>DiagonalBLTR</member>.
+        Preferred over BorderLine <member>DiagonalBLTR</member>.
 
         @since LibreOffice 3.6
      */

@@ -25,7 +25,7 @@ module com { module sun { module star { module accessibility {
 /** Collection of state types.
 
     <p>This list of constants defines the available set of states that an
-    object that implements <type>XAccessibleContext</type> can be in.</p>
+    object that implements XAccessibleContext can be in.</p>
 
     <p>The comments describing the states is taken verbatim from the Java
     Accessibility API 1.4 documentation.</p>

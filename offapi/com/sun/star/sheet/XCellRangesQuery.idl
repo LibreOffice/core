@@ -58,9 +58,9 @@ published interface XCellRangesQuery: com::sun::star::uno::XInterface
     /** queries all cells with the specified content type(s).
 
         @param nContentFlags
-            a combination of <type>CellFlags</type> flags.
+            a combination of CellFlags flags.
 
-            <p>Attention: Despite the <type>CellFlags</type> flags are
+            <p>Attention: Despite the CellFlags flags are
             <atom>long</atom> values, this method expects a <atom>short</atom>
             parameter.</p>
 
@@ -80,7 +80,7 @@ published interface XCellRangesQuery: com::sun::star::uno::XInterface
     /** queries all formula cells with the specified result type.
 
         @param nResultFlags
-            a combination of <type>FormulaResult</type> flags.
+            a combination of FormulaResult flags.
 
         @returns
             all formula cells of the current cell range(s) with the

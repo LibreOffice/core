@@ -47,11 +47,11 @@ constants FormulaMapGroupSpecialOffset
         <li>A <atom dim="[][]">any</atom> for a literal array. The contained
         values shall be of type <atom>double</atom> or <atom>string</atom>.
         Floating-point values and strings may occur together in an array.</li>
-        <li>A struct of type <type>SingleReference</type> for a reference to a
+        <li>A struct of type SingleReference for a reference to a
         single cell in the own document.</li>
-        <li>A struct of type <type>ComplexReference</type> for a reference to
+        <li>A struct of type ComplexReference for a reference to
         a range of cells in the own document.</li>
-        <li>A struct of type <type>ExternalReference</type> for a reference to
+        <li>A struct of type ExternalReference for a reference to
         a cell, a range of cells, or a defined name in an external document.</li>
         </ul>
      */

@@ -36,7 +36,7 @@ published struct ResultEvent: com::sun::star::lang::EventObject
     /** contains the value.
 
         <p>This can be any of the possible return types described for the
-        <type>AddIn</type> service, except <type>XVolatileResult</type>.</p>
+        AddIn service, except XVolatileResult.</p>
      */
     any Value;
 

@@ -23,7 +23,7 @@
 
  module com {  module sun {  module star {  module drawing {
 
-/** The <type>TextureMode</type> defines in which way the texture color data
+/** The TextureMode defines in which way the texture color data
     replaces the object color data.
  */
 published enum TextureMode

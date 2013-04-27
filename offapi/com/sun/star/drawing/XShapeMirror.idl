@@ -33,21 +33,21 @@
 
 
 /** Objects implementing this interface can be used to mirror
-    <type>Shape</type>s.
+    Shapes.
 
     @deprecated
  */
 published interface XShapeMirror: com::sun::star::uno::XInterface
 {
 
-    /** mirrors the given <type>Shape</type>s
+    /** mirrors the given Shapes
         at the given axis.
      */
     void mirror( [inout] com::sun::star::drawing::XShapes aShapes,
              [in] com::sun::star::drawing::MirrorAxis eAxis );
 
 
-    /** mirrors the given <type>Shape</type>s at
+    /** mirrors the given Shapes at
         the given axis.
      */
     void mirrorAtAxis( [inout] com::sun::star::drawing::XShapes aShapes,

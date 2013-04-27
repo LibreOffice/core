@@ -27,7 +27,7 @@
 module com { module sun { module star { module sdbc {
 
 
-/** extends the <type>XDatabaseMetaData</type> interface to allow retrieval of additional
+/** extends the XDatabaseMetaData interface to allow retrieval of additional
     information.
  */
 interface XDatabaseMetaData2 : XDatabaseMetaData

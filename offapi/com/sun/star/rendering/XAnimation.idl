@@ -37,7 +37,7 @@ module com { module sun { module star { module rendering {
 /** This interface defines an animation sequence.<p>
 
     This interface must be implemented by every animation object. It
-    is used by the <type>XCanvas</type> interface to render generic
+    is used by the XCanvas interface to render generic
     animations.<p>
 
     @since OOo 2.0
@@ -79,7 +79,7 @@ interface XAnimation : ::com::sun::star::uno::XInterface
         range must always be [0,1], where 0 denotes the very beginning, and
         1 the end of the animation sequence.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if one of the passed parameters does not lie in the specified,
         permissible range.
      */
@@ -89,11 +89,11 @@ interface XAnimation : ::com::sun::star::uno::XInterface
 
     /** Request the attribute information for this animation.<p>
 
-        This method returns the <type>AnimationAttributes</type>
+        This method returns the AnimationAttributes
         structure, which defines more closely how to play this
         animation.<p>
 
-        @returns the requested <type>AnimationAttributes</type>
+        @returns the requested AnimationAttributes
         structure.
      */
     AnimationAttributes     getAnimationAttributes();

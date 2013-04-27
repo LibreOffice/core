@@ -28,7 +28,7 @@
  module com {  module sun {  module star {  module drawing {
 
 
-/** is implemented by views that display <type>DrawPage</type>s or <type>MasterPage</type>s.
+/** is implemented by views that display DrawPages or MasterPages.
  */
 published interface XDrawView: com::sun::star::uno::XInterface
 {
@@ -36,7 +36,7 @@ published interface XDrawView: com::sun::star::uno::XInterface
     /** changes the current page.
 
         @param xPage
-            this <type>DrawPage</type> or <type>MasterPage</type> will be
+            this DrawPage or MasterPage will be
             displayed inside this view.
      */
     void setCurrentPage( [in] com::sun::star::drawing::XDrawPage xPage );
@@ -45,7 +45,7 @@ published interface XDrawView: com::sun::star::uno::XInterface
     /** returns the current page.
 
         @return
-            the <type>DrawPage</type> or <type>MasterPage</type> that is
+            the DrawPage or MasterPage that is
             currently displayed.
      */
     com::sun::star::drawing::XDrawPage getCurrentPage();

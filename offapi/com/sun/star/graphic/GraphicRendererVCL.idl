@@ -28,11 +28,11 @@ module com { module sun { module star { module graphic
 {
 
 /** Service that describes the necessary interfaces and properties
-    to render a graphic container of <type>XGraphic</type> type
+    to render a graphic container of XGraphic type
 
-    <p>To render a <type>XGraphic</type> container, just create an
+    <p>To render a XGraphic container, just create an
     instance of this service, set the appropriate properties and use
-    the <type>XGraphicRenderer</type> interface to initiate the rendering
+    the XGraphicRenderer interface to initiate the rendering
     process itself</p>
  */
 service GraphicRendererVCL
@@ -46,7 +46,7 @@ service GraphicRendererVCL
     */
     interface ::com::sun::star::beans::XPropertySet;
 
-    /** Holds the device onto which the <type>XGraphic</type>
+    /** Holds the device onto which the XGraphic
         container should be rendered
 
         <p>In case of using VCL Devices, this property should

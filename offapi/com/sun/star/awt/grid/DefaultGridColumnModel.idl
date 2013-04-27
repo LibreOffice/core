@@ -25,7 +25,7 @@
  module com {  module sun {  module star {  module awt {  module grid {
 
 
-/** If you do not want to implement the <type>XGridColumnModel</type> yourself, use this service.
+/** If you do not want to implement the XGridColumnModel yourself, use this service.
     @since OOo 3.3
  */
 service DefaultGridColumnModel

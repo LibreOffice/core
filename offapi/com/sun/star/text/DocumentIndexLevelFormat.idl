@@ -100,7 +100,7 @@
     </li>
     <li>
     <p>ChapterFormat</p>
-    <p>Valid in chapter info and entry number only. See <type>ChapterFormat</type>.</p>
+    <p>Valid in chapter info and entry number only. See ChapterFormat.</p>
     <p>Other information.</p>
     <ul>
     <li>

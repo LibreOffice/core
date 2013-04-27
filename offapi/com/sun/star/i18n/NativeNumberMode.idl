@@ -27,7 +27,7 @@ module com { module sun { module star { module i18n {
 /**
     Constants to use with
     <member>XExtendedCalendar::getDisplayString()</member> and the
-    <type>XNativeNumberSupplier</type> methods.
+    XNativeNumberSupplier methods.
 
     <p> The constants have different meanings if used with different
     locales. However, <const>NATNUM1</const> always tries to convert to

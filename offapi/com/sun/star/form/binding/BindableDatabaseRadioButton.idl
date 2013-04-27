@@ -31,14 +31,14 @@ module com {  module sun {  module star {  module form {  module binding {
     database field, and additionally supports binding to arbitrary external values.
 
     <p>The <type scope="com::sun::star::form::binding">XValueBinding</type> instance which
-    can be associated with a <type>BindableDatabaseRadioButton</type> must support exchanging
+    can be associated with a BindableDatabaseRadioButton must support exchanging
     boolean values. The following mapping between external values and control states apply:
     <ul><li><TRUE/> will be mapped to the button being checked, and vice versa</li>
         <li><FALSE/> will be mapped to it being unchecked, and vice versa</li>
         <li><NULL/> will be mapped to it being in undetermined state</li>
     </ul></p>
 
-    <p>If the value binding associated with a <type>BindableDatabaseRadioButton</type>
+    <p>If the value binding associated with a BindableDatabaseRadioButton
     supports exchanging string values, <em>and</em> the <member scope="com::sun::star::form::component">RadioButton::RefValue</member>
     is <em>not</em> empty, then the radio button will exchange it's value as string:
     <ul><li>A string equal to the reference value will be mapped to the button being checked, and vice versa</li>

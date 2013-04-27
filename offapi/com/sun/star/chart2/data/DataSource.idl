@@ -33,7 +33,7 @@ module data
 {
 
 /** describes a service that allows reading two-dimensional data in
-    the form of a sequence of <type>DataSequence</type>s.
+    the form of a sequence of DataSequences.
   */
 service DataSource
 {

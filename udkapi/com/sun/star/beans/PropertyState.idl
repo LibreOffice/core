@@ -43,7 +43,7 @@ published enum PropertyState
 
         <p>The property value must be available and of the specified type.
         If the <member>PropertyAttribute</member> field in the struct
-        <type>Property</type> contains <const>PropertyAttribute::MAYBEVOID</const>,
+        Property contains <const>PropertyAttribute::MAYBEVOID</const>,
         then the value may be void. </p>
      */
     DIRECT_VALUE,
@@ -52,10 +52,10 @@ published enum PropertyState
     /** The value of the property is available from a master (e.g., template).
 
         <p>The <member>PropertyAttribute</member> field in the struct
-        <type>Property</type> must contain the
+        Property must contain the
         <const>PropertyAttribute::MAYBEDEFAULT</const> flag. The property
         value must be available and of the specified type. If the
-        <member>PropertyAttribute</member> field in the struct <type>Property</type>
+        <member>PropertyAttribute</member> field in the struct Property
         contains <const>PropertyAttribute::MAYBEVOID</const>, then the
         value may be void. </p>
      */
@@ -66,7 +66,7 @@ published enum PropertyState
         are multiple values for this property (e.g., from a multi selection).
 
         <p>The <member>PropertyAttribute</member> field in the struct
-        <type>Property</type> must contain the
+        Property must contain the
         <const>PropertyAttribute::MAYBEAMBIGUOUS</const> flag. The
         property value must be available and of the specified type.
         If the Attribute field in the struct Property contains

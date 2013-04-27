@@ -37,7 +37,7 @@ service DataPilotFieldGroupEnumeration
     /** provides methods to access the group members in the enumeration.
 
         <p>The elements of the enumeration are instances of
-        <type>DataPilotFieldGroupItem</type>.</p>
+        DataPilotFieldGroupItem.</p>
      */
     interface com::sun::star::container::XEnumeration;
 

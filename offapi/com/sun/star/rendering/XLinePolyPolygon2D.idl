@@ -79,7 +79,7 @@ interface XLinePolyPolygon2D : XPolyPolygon2D
         such that after this method completes, it contains exactly the
         specified point data.
 
-        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
+        @throws com::sun::star::lang::IndexOutOfBoundsException
         if one of the given values exceed the permissible range.
      */
     void setPoints( [in] sequence< sequence< ::com::sun::star::geometry::RealPoint2D > > points, [in] long nPolygonIndex )

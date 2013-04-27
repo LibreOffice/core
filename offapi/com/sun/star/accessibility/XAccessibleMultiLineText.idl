@@ -30,7 +30,7 @@ module com { module sun { module star { module accessibility {
     and line numbers.
 
     <p>This interface is typically used in conjunction with the
-    <type>XAccessibleText</type> interface and extents it with a notion
+    XAccessibleText interface and extents it with a notion
     of line numbers</p>
 
     @since OOo 3.0

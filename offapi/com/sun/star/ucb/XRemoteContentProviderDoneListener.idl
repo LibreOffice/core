@@ -27,7 +27,7 @@ module com { module sun { module star { module ucb {
  published interface XRemoteContentProviderAcceptor;
 
 /** A notification mechanism that a
-    <type>XRemoteContentProviderAcceptor</type> no longer needs a remote
+    XRemoteContentProviderAcceptor no longer needs a remote
     content provider.
 
     @version 1.0
@@ -36,7 +36,7 @@ module com { module sun { module star { module ucb {
 published interface XRemoteContentProviderDoneListener: com::sun::star::uno::XInterface
 {
     /** A notification that all remote content providers added to the given
-        <type>XRemoteContentProviderAcceptor</type> should be removed,
+        XRemoteContentProviderAcceptor should be removed,
         because the acceptor no longer needs them.
 
         @param Acceptor

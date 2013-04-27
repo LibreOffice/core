@@ -36,9 +36,9 @@ module com {  module sun {  module star {  module sdb {
     <ul>
         <li>forms</li>
         <li>reports</li>
-        <li>The table settings defined in <type>DataSettings</type></li>
-        <li>The query settings defined in <type>DataSettings</type></li>
-        <li>All properties of the service <type>DataSource</type></li>
+        <li>The table settings defined in DataSettings</li>
+        <li>The query settings defined in DataSettings</li>
+        <li>All properties of the service DataSource</li>
     </ul></p>
 
     @see com::sun::star::sdb::XOfficeDatabaseDocument
@@ -77,7 +77,7 @@ service OfficeDatabaseDocument
             <li>calling <code>XLoadable::load</code></li>
             <li>calling <code>XStorable::storeAsURL</code></li>
         </ul>
-        The third option was added for compatibility reasons, since a <type>DatabaseDocument</type>
+        The third option was added for compatibility reasons, since a DatabaseDocument
         in earlier versions of OpenOffice.org did not support the <code>XLoadable</code> interface,
         so the usual way of creating a document from scratch was to create it, set properties as
         needed, and store it.</p>
@@ -206,7 +206,7 @@ service OfficeDatabaseDocument
 
     /** implements life time control
 
-        <p>Whoever retrieves a <type>OfficeDatabaseDocument</type> should be aware of
+        <p>Whoever retrieves a OfficeDatabaseDocument should be aware of
         life time issues, since a document needs to be closed when nobody needs it anymore.</p>
 
         <p>This implies that clients of a document need to ensure that as soon as they don't

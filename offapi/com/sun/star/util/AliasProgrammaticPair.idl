@@ -23,7 +23,7 @@ module com {  module sun {  module star {  module util {
 
 
 /** represents an entry from a component which implements the
-    <type>XLocalizedAliases</type>.
+    XLocalizedAliases.
  */
 published struct AliasProgrammaticPair
 {

@@ -25,7 +25,7 @@ module com {  module sun {  module star {  module sheet {
 
 
 /** Constants designating the formula language used with
-    <type>XFormulaOpCodeMapper</type> methods.
+    XFormulaOpCodeMapper methods.
  */
 constants FormulaLanguage
 {

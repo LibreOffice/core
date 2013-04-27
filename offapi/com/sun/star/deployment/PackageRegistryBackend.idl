@@ -25,11 +25,11 @@
 
 module com { module sun { module star { module deployment {
 
-/** The <type>PackageRegistryBackend</type> service is used to bind
-    a specific type of <type>XPackage</type> which can be registered or revoked.
+/** The PackageRegistryBackend service is used to bind
+    a specific type of XPackage which can be registered or revoked.
     <p>
-    All <type>PackageRegistryBackend</type> objects
-    are related to a <type>XPackageManager</type> instance.
+    All PackageRegistryBackend objects
+    are related to a XPackageManager instance.
     </p>
 
     @since OOo 2.0

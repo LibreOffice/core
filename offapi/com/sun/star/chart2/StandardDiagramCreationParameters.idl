@@ -35,7 +35,7 @@ module chart2
  */
 service StandardDiagramCreationParameters
 {
-    /** States whether the first <type>XLabeledDataSequence</type> in
+    /** States whether the first XLabeledDataSequence in
         a data-source is used as categories.
      */
     [optional, property]    boolean       HasCategories;

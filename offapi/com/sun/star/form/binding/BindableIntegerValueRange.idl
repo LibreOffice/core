@@ -26,10 +26,10 @@
 module com {  module sun {  module star {  module form {  module binding {
 
 
-/** this service specifies a <type>BindableControlModel</type> which reflects
+/** this service specifies a BindableControlModel which reflects
     an integer value, out of a range of permitted integer values.
 
-    <p><type>BindableIntegerValueRange</type>s have a value property, a minimum, and a maximum,
+    <p>BindableIntegerValueRanges have a value property, a minimum, and a maximum,
     all of type integer.</p>
 */
 service BindableIntegerValueRange

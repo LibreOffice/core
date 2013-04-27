@@ -26,9 +26,9 @@
 module com {  module sun {  module star {  module awt {  module tree {
 
 
-/** This is the editable version of the <type>XTreeDataModel</type>.
+/** This is the editable version of the XTreeDataModel.
 
-    <p>Note that only <type>XTreeNode</type> created from the same instance with <member>createNode</member>
+    <p>Note that only XTreeNode created from the same instance with <member>createNode</member>
     are valid nodes for this instance.</p>
  */
 interface XMutableTreeDataModel : XTreeDataModel
@@ -36,15 +36,15 @@ interface XMutableTreeDataModel : XTreeDataModel
     /** creates a new tree node with the given value and given settings.
 
         @param DisplayValue
-            should be convertible to a string and is used by the <type>XTreeControl</type>
+            should be convertible to a string and is used by the XTreeControl
             as a textual representation of the created node.
 
         @param ChildrenOnDemand
             if <TRUE/> is used as a parameter, the created node will be treated as a non-leaf
-            node by the <type>XTreeControl</type>, even when it has no child nodes.
+            node by the XTreeControl, even when it has no child nodes.
 
         @returns
-            a new <type>XMutableTreeNode</type> that can be used for this model.
+            a new XMutableTreeNode that can be used for this model.
 
         @see XTreeNode::getDisplayValue()
         @see XTreeNode::hasChildrenOnDemand()
@@ -54,10 +54,10 @@ interface XMutableTreeDataModel : XTreeDataModel
     /** changes the root node of this model to <var>RootNode</var>.
 
         @param RootNode
-            the <type>XMutableTreeNode</type> that becomes the new root node of this model.
+            the XMutableTreeNode that becomes the new root node of this model.
 
         @throws ::com::sun::star::lang::IllegalArgumentException
-            if <var>RootNode</var> is not a valid node of this <type>XTreeDataModel</type>.
+            if <var>RootNode</var> is not a valid node of this XTreeDataModel.
     */
     void setRoot( [in] XMutableTreeNode RootNode )
         raises( ::com::sun::star::lang::IllegalArgumentException );

@@ -33,53 +33,53 @@
 
 
 /** This interface makes it possible to access and manage the
-    <type>Layer</type>s of a document.
+    Layers of a document.
 
     @see LayerManager
  */
 published interface XLayerManager: com::sun::star::container::XIndexAccess
 {
 
-    /** creates a new <type>Layer</type>
+    /** creates a new Layer
 
         @param nIndex
             the index at which the new layer is inserted
 
         @returns
-            the new created <type>Layer</type>
+            the new created Layer
      */
     com::sun::star::drawing::XLayer insertNewByIndex( [in] long nIndex );
 
 
-    /** removes a <type>Layer</type> and all <type>Shape</type>s on
-        this <type>Layer</type>.
+    /** removes a Layer and all Shapes on
+        this Layer.
 
         @param xLayer
-            this <type>Layer</type> will be removed and disposed
+            this Layer will be removed and disposed
      */
     void remove( [in] com::sun::star::drawing::XLayer xLayer )
             raises( com::sun::star::container::NoSuchElementException );
 
 
-    /** attaches a <type>Shape</type> to the given <type>Layer</type>.
+    /** attaches a Shape to the given Layer.
 
         @param xShape
-            this is the <type>Shape</type> that will be attached to a <type>Layer</type>
+            this is the Shape that will be attached to a Layer
 
         @param xLayer
-            this is the <type>Layer</type> that will be attached to a <type>Shape</type>
+            this is the Layer that will be attached to a Shape
      */
     void attachShapeToLayer( [in] com::sun::star::drawing::XShape xShape,
              [in] com::sun::star::drawing::XLayer xLayer );
 
 
-    /** queries the <type>Layer</type> that a <type>Shape</type> is attached to
+    /** queries the Layer that a Shape is attached to
 
         @param xShape
-            specifies the <type>Shape</type> for which the layer is requested.
+            specifies the Shape for which the layer is requested.
 
         @returns
-            the <type>Layer</type> to which the <type>Shape</type> is
+            the Layer to which the Shape is
             attached.
 
      */

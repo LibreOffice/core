@@ -31,19 +31,19 @@
  */
 published service DocumentIndexes
 {
-    /** This interface makes it possible to access all <type>BaseIndex</type>
+    /** This interface makes it possible to access all BaseIndex
                 instances within this context (e.g., a document) by its name.
 
                 <p>The type of the interfaces returned by this collection is
-                always <type>XDocumentIndex</type>.
+                always XDocumentIndex.
      */
     interface com::sun::star::container::XNameAccess;
 
-    /** This interface makes it possible to access all <type>BaseIndex</type>
+    /** This interface makes it possible to access all BaseIndex
                 instances within this context (e.g., a document) by its index.
 
                 <p>The type of the interfaces returned by this collection is
-                always <type>XDocumentIndex</type>.
+                always XDocumentIndex.
      */
     interface com::sun::star::container::XIndexAccess;
 

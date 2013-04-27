@@ -24,8 +24,8 @@
 
 module com { module sun { module star { module ucb {
 
-/** The WebDAV Content Provider (DCP) implements a <type>ContentProvider</type>
-    for the <type>UniversalContentBroker</type> (UCB).
+/** The WebDAV Content Provider (DCP) implements a ContentProvider
+    for the UniversalContentBroker (UCB).
 
     <p>It provides access to WebDAV and standard HTTP servers. The DCP
     communicates with the server using the WebDAV protocol which is an
@@ -45,11 +45,11 @@ published service WebDAVContentProvider
         <b>DCP Contents</b>
         <ol>
         <li>
-        A DCP Folder (<type>WebDAVFolderContent</type>) is a container for
+        A DCP Folder (WebDAVFolderContent) is a container for
         other DCP Folders or Documents.
         </li>
         <li>
-        A DCP Document (<type>WebDAVDocumentContent</type>) is a container for
+        A DCP Document (WebDAVDocumentContent) is a container for
         Document data/content. The data/content may be anything, a WebDAV
         server, like an HTTP server, does not necessarily mandate what type of
         data/content may be contained within Documents. The type of data/content

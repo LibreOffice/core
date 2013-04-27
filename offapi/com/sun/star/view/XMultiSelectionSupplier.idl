@@ -40,7 +40,7 @@ interface XMultiSelectionSupplier: XSelectionSupplier
 {
 
     /** adds the object or the objects represented by <var>Selection</var> to the selection
-        of this <type>XMultiSelectionSupplier</type>.
+        of this XMultiSelectionSupplier.
 
         @param Selection
             either an Object that is selectable or a sequence of objects that are selectable.
@@ -52,7 +52,7 @@ interface XMultiSelectionSupplier: XSelectionSupplier
             objects that are forbidden to be selected together with <var>Selection</var>
 
         @throws com::sun::star::lang::IllegalArgumentException
-            If <var>Selection</var> is not a selectable object for this <type>XMultiSelectionSupplier</type>.
+            If <var>Selection</var> is not a selectable object for this XMultiSelectionSupplier.
             <p>Adding an object to the selection that is already part of the selection should not raise this exception</p>
      */
     boolean addSelection( [in] any Selection )
@@ -60,7 +60,7 @@ interface XMultiSelectionSupplier: XSelectionSupplier
 
 
     /** remove the object or objects represented by <var>Selection</var> from the
-        selection of this <type>XMultiSelectionSupplier</type>.
+        selection of this XMultiSelectionSupplier.
 
         @param Selection
             either an Object that is selectable or a sequence of objects that are selectable.
@@ -72,32 +72,32 @@ interface XMultiSelectionSupplier: XSelectionSupplier
             objects that are forbidden to be selected together with <var>Selection</var>.
 
         @throws com::sun::star::lang::IllegalArgumentException
-            If <var>Selection</var> is not a selectable object for this <type>XMultiSelectionSupplier</type>.
+            If <var>Selection</var> is not a selectable object for this XMultiSelectionSupplier.
             <p>Removing an object from the selection that is not part of the selection should not raise this exception</p>
      */
     void removeSelection( [in] any Selection )
                 raises( com::sun::star::lang::IllegalArgumentException );
 
 
-    /** clears the selection of this <type>XMultiSelectionSupplier</type>.
+    /** clears the selection of this XMultiSelectionSupplier.
     */
     void clearSelection();
 
 
-    /** returns the number of selected objects of this <type>XMultiSelectionSupplier</type>.
+    /** returns the number of selected objects of this XMultiSelectionSupplier.
     */
     long getSelectionCount();
 
 
     /** @returns
-            a new object to enumerate the selection of this <type>XMultiSelectionSupplier</type>.
+            a new object to enumerate the selection of this XMultiSelectionSupplier.
             It returns NULL if there are no objects in the selection.
      */
     com::sun::star::container::XEnumeration createSelectionEnumeration();
 
 
     /** @returns
-            a new object to enumerate the selection of this <type>XMultiSelectionSupplier</type>
+            a new object to enumerate the selection of this XMultiSelectionSupplier
             in reverse order. If the order of the selected objects
             It returns NULL if there are no objects in the selection.
      */

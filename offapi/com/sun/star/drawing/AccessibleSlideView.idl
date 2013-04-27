@@ -27,7 +27,7 @@
 
 module com {  module sun {  module star {  module drawing {
 
-/** The <type>AccessibleSlideView</type> service is implemented by
+/** The AccessibleSlideView service is implemented by
     slide views of Impress documents.
 
     <p>An accessible slide view gives access to all visible slides of a

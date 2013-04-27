@@ -52,42 +52,42 @@
 published service TextProperties
 {
     /** The properties in this service set default formats for text
-        inside the <type>Shape</type>.
+        inside the Shape.
      */
     service com::sun::star::style::CharacterProperties;
 
 
     /** The properties in this service set default formats for Asian text
-        inside the <type>Shape</type>.
+        inside the Shape.
      */
     [optional] service com::sun::star::style::CharacterPropertiesAsian;
 
 
     /** The properties in this service set default formats for complex text
-        inside the <type>Shape</type>.
+        inside the Shape.
      */
     [optional] service com::sun::star::style::CharacterPropertiesComplex;
 
 
     /** The properties in this service set default formats for text
-        inside the <type>Shape</type>.
+        inside the Shape.
      */
     service com::sun::star::style::ParagraphProperties;
 
 
     /** The properties in this service set default formats for Asian text
-        inside the <type>Shape</type>.
+        inside the Shape.
      */
     [optional] service com::sun::star::style::ParagraphPropertiesAsian;
 
 
     /** The properties in this service set default formats for complex text
-        inside the <type>Shape</type>.
+        inside the Shape.
      */
     [optional] service com::sun::star::style::ParagraphPropertiesComplex;
 
     /** If this is <TRUE/>, numbering is ON for the text of
-        this <type>Shape</type>.
+        this Shape.
      */
     [optional, property] boolean IsNumbering;
 
@@ -101,44 +101,44 @@ published service TextProperties
     [optional, property] com::sun::star::container::XIndexReplace NumberingRules;
 
 
-    /** If this value is <TRUE/>, the height of the <type>Shape</type> is
+    /** If this value is <TRUE/>, the height of the Shape is
         automatically expanded/shrunk when text is added to or removed from
-        the <type>Shape</type>.
+        the Shape.
      */
     [property] boolean TextAutoGrowHeight;
 
 
-    /** If this value is <TRUE/>, the width of the <type>Shape</type> is
+    /** If this value is <TRUE/>, the width of the Shape is
         automatically expanded/shrunk when text is added to or removed from
-        the <type>Shape</type>.
+        the Shape.
      */
     [property] boolean TextAutoGrowWidth;
 
     /** If this value is <TRUE/>, the left edge of every line of text is
-        aligned with the left edge of this <type>Shape</type>.
+        aligned with the left edge of this Shape.
      */
     [property] boolean TextContourFrame;
 
 
-    /** With this set to <TRUE/>, the text inside of the <type>Shape</type>
-        is stretched to fit into the <type>Shape</type>.
+    /** With this set to <TRUE/>, the text inside of the Shape
+        is stretched to fit into the Shape.
      */
     [property] com::sun::star::drawing::TextFitToSizeType TextFitToSize;
 
 
     /** adjusts the horizontal position of the text inside of
-        the <type>Shape</type>.
+        the Shape.
      */
     [property] com::sun::star::drawing::TextHorizontalAdjust TextHorizontalAdjust;
 
 
     /** adjusts the vertical position of the text inside of
-        the <type>Shape</type>.
+        the Shape.
      */
     [property] com::sun::star::drawing::TextVerticalAdjust TextVerticalAdjust;
 
 
-    /** This is the distance from the left edge of the <type>Shape</type>
+    /** This is the distance from the left edge of the Shape
         to the left edge of the text.
         <p>This is only useful if <member>Text::TextHorizontalAdjust</member> is
         <const>BLOCK</const> or <const>STRETCH</const> or if
@@ -147,7 +147,7 @@ published service TextProperties
     [property] long TextLeftDistance;
 
 
-    /** This is the distance from the right edge of the <type>Shape</type>
+    /** This is the distance from the right edge of the Shape
         to the right edge of the text.
 
         <p>This is only useful if <member>Text::TextHorizontalAdjust</member> is
@@ -157,7 +157,7 @@ published service TextProperties
     [property] long TextRightDistance;
 
 
-    /** This is the distance from the upper edge of the <type>Shape</type> to
+    /** This is the distance from the upper edge of the Shape to
         the upper edge of the text.
 
         <p>This is only useful if <member>Text::TextVerticalAdjust</member> is
@@ -167,7 +167,7 @@ published service TextProperties
     [property] long TextUpperDistance;
 
 
-    /** This is the distance from the lower edge of the <type>Shape</type> to the
+    /** This is the distance from the lower edge of the Shape to the
         lower edge of the text.
 
 

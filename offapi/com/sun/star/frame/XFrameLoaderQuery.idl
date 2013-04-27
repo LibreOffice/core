@@ -29,25 +29,25 @@
    module star {
     module frame {
 
-/** use service <type>FrameLoaderFactory</type> instead of this
+/** use service FrameLoaderFactory instead of this
     @deprecated
  */
 published interface XFrameLoaderQuery: com::sun::star::uno::XInterface
 {
     /** use member <member scope="com::sun::star::container">XNameAccess::getElementNames()</member>
-        provided by service <type>FrameLoaderFactory</type> instead of this
+        provided by service FrameLoaderFactory instead of this
         @deprecated
      */
     sequence< string > getAvailableFilterNames();
 
     /** use member <member scope="com::sun::star::container">XNameAccess::getByName()</member>
-        provided by service <type>FrameLoaderFactory</type> instead of this
+        provided by service FrameLoaderFactory instead of this
         @deprecated
      */
     sequence< ::com::sun::star::beans::PropertyValue > getLoaderProperties( [in] string sFilterName );
 
     /** use member <type scope="com::sun::star::container">XContainerQuery</type>
-        provided by service <type>FrameLoaderFactory</type> instead of this
+        provided by service FrameLoaderFactory instead of this
         @deprecated
      */
     string searchFilter( [in] string sURL, [in] sequence< com::sun::star::beans::PropertyValue > seqArguments );

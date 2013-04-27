@@ -43,10 +43,10 @@ interface XMenuExtended2
 
 
 
-    /** checks whether an <type>XMenu</type> is an <type>XPopupMenu</type>.
+    /** checks whether an XMenu is an XPopupMenu.
 
         @return
-                <TRUE/> if the menu is a <type>PopupMenu</type>, <FALSE/> if it is a <type>MenuBar</type>.
+                <TRUE/> if the menu is a PopupMenu, <FALSE/> if it is a MenuBar.
     */
     boolean isPopupMenu();
 

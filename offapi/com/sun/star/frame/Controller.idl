@@ -35,9 +35,9 @@
     can offer
 
     <p>
-    Such components can be loaded into a <type>Frame</type> inside a <type>Desktop</type>
+    Such components can be loaded into a Frame inside a Desktop
     environment. A controller is a richer component then a pure window, but full featured
-    components need a <type>XModel</type> interface too.
+    components need a XModel interface too.
     <br>
     (see service <type scope="com::sun::star::document">OfficeDocument</type> for further information)
     <p>
@@ -46,7 +46,7 @@
  */
 published service Controller
 {
-    /** with this interface, components viewed in a <type>Frame</type> can serve
+    /** with this interface, components viewed in a Frame can serve
         events (by supplying dispatches)
      */
     interface XController;
@@ -54,7 +54,7 @@ published service Controller
     /** for certain functions which are useful at the UI
 
         <p>
-        Mostly used by the <type>Frame</type> service, which contains this
+        Mostly used by the Frame service, which contains this
         controller object. There will be an interception mechanism for dispatches
         available too.
         </p>
@@ -68,7 +68,7 @@ published service Controller
         change context menus or prevent them from being executed
 
         <p>
-        Don't mix it with <type>XDispatchProviderInterception</type> which
+        Don't mix it with XDispatchProviderInterception which
         intercept calls of <member>XDispatch::dispatch()</member>.
         </p>
      */

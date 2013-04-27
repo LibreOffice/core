@@ -32,12 +32,12 @@
  */
 published interface XFramesSupplier: XFrame
 {
-    /** provides access to this container and to all other <type>XFramesSupplier</type>
+    /** provides access to this container and to all other XFramesSupplier
         which are available from this node of frame tree
 
         @returns
             the collection of frames which is represented by
-            a <type>FramesContainer</type>.
+            a FramesContainer.
      */
     XFrames getFrames();
 
@@ -54,7 +54,7 @@ published interface XFramesSupplier: XFrame
         </p>
 
         @returns
-            the <type>Frame</type> which is active within this frame.
+            the Frame which is active within this frame.
      */
     XFrame getActiveFrame();
 
@@ -70,7 +70,7 @@ published interface XFramesSupplier: XFrame
         <p>
         In general this method first calls the method <member>XFramesSupplier::setActiveFrame()</member>
         at the creator frame with <var>this</var> as the current argument. Then it broadcasts
-        the <type>FrameActionEvent</type> <const>FrameAction::FRAME_ACTIVATED</const>.
+        the FrameActionEvent <const>FrameAction::FRAME_ACTIVATED</const>.
         </p>
 
         <p>

@@ -27,10 +27,10 @@
 /** specifies how the TAB key should be used in a form.
 
     <p>If the last control of a form is focused, and the user pressed the TAB key, there are
-    several possibilities how a <type>FormController</type> should handle this.
-    <type>TabulatorCycle</type> specifies these possibilities.</p>
+    several possibilities how a FormController should handle this.
+    TabulatorCycle specifies these possibilities.</p>
 
-    <p>Note that the <type>TabulatorCycle</type> determines what happens when SHIFT-TAB
+    <p>Note that the TabulatorCycle determines what happens when SHIFT-TAB
     is pressed on the <em>first</em> control of a form, as well as when TAB is pressed on the
     <em>last</em> control.</p>
 

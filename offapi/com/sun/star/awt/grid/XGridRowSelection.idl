@@ -26,7 +26,7 @@
 module com {  module sun {  module star {  module awt { module grid {
 
 
-/** This interfaces provides access to the selection of row for <type>UnoControlGrid</type>.
+/** This interfaces provides access to the selection of row for UnoControlGrid.
 
     @since LibreOffice 3.4
  */
@@ -82,7 +82,7 @@ published interface XGridRowSelection
     */
     boolean isRowSelected( [in] long RowIndex );
 
-    /** Adds a listener for the <type>GridSelectionEvent</type> posted after the grid changes.
+    /** Adds a listener for the GridSelectionEvent posted after the grid changes.
         @param listener
             the listener to add.
     */

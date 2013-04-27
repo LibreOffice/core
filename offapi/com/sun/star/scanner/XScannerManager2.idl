@@ -17,7 +17,7 @@ module com { module sun { module star { module scanner {
 
 
 /**
-    Extension of <type>XScannerManager</type>.
+    Extension of XScannerManager.
 
     @since LibreOffice 3.5
 */

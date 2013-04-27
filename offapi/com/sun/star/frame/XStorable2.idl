@@ -28,7 +28,7 @@
 
  module com {  module sun {  module star {  module frame {
 
-/** extends <type>XStorable</type>.
+/** extends XStorable.
  */
 published interface XStorable2: XStorable
 {

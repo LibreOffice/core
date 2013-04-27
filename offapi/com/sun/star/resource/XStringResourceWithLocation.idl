@@ -26,10 +26,10 @@
 module com { module sun { module star { module resource {
 
 /**
-    Extends <type>XStringResourcePersistence</type> by methods to handle an
+    Extends XStringResourcePersistence by methods to handle an
     associated location.
 
-    @see <type>XStringResourcePersistence</type>.
+    @see XStringResourcePersistence.
 */
 interface XStringResourceWithLocation: com::sun::star::resource::XStringResourcePersistence
 {

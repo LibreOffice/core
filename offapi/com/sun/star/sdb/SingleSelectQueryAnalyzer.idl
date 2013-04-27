@@ -52,10 +52,10 @@ service SingleSelectQueryAnalyzer
         <p>Note that OpenOffice.org since version 2.0.4 also supports queries which are
         based on other queries. For example, given that you have a database containing
         a query named <code>All Orders</code>, the SQL statement <code>SELECT * FROM "All Orders"</code>
-        is perfectly valid when used with a <type>SingleSelectQueryAnalyzer</type>.</p>
+        is perfectly valid when used with a SingleSelectQueryAnalyzer.</p>
 
         <p>In this case, the name container returned by <member scope="com::sun::star::sdbcx">XTablesSupplier::getTables</member>
-        will in fact not return a <type>Table</type>, but a <type>Query</type> object. Semantically, however,
+        will in fact not return a Table, but a Query object. Semantically, however,
         this object still acts as a table in the SQL statement.</p>
 
         @see XSingleSelectQueryAnalyzer::getQueryWithSubstitution

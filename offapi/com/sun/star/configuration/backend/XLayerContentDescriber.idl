@@ -39,7 +39,7 @@ interface XLayerContentDescriber : ::com::sun::star::uno::XInterface
 {
 
     /**
-      describes the contents of the layer to an <type>XLayerHandler</type>.
+      describes the contents of the layer to an XLayerHandler.
 
       @param aHandler
             Handler object that will receive calls
@@ -53,7 +53,7 @@ interface XLayerContentDescriber : ::com::sun::star::uno::XInterface
               if a <NULL/> handler is passed.
       @throws com::sun::star::configuration::backend::MalformedDataException
               if the data read from the layer is rejected as invalid by the
-              <type>XLayerHandler</type>.
+              XLayerHandler.
     */
     void describeLayer([in] XLayerHandler aHandler,
                        [in] sequence<PropertyInfo> aPropertyInfos)

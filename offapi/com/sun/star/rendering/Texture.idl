@@ -118,7 +118,7 @@ struct Texture
 
         The repeat mode is separated into x and y direction, this is
         the x direction part. Permissible values are from the
-        <type>TexturingMode</type> constants.<p>
+        TexturingMode constants.<p>
     */
     byte                                        RepeatModeX;
 
@@ -126,7 +126,7 @@ struct Texture
 
         The repeat mode is separated into x and y direction, this is
         the y direction part. Permissible values are from the
-        <type>TexturingMode</type> constants.<p>
+        TexturingMode constants.<p>
     */
     byte                                        RepeatModeY;
 

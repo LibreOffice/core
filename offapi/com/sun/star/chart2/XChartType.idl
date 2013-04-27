@@ -72,9 +72,9 @@ interface XChartType : com::sun::star::uno::XInterface
      */
     sequence< string >   getSupportedOptionalRoles();
 
-    /** Returns the role of the <type>XLabeledDataSequence</type> of
+    /** Returns the role of the XLabeledDataSequence of
         which the label will be taken to identify the
-        <type>DataSeries</type> in dialogs or the legend.
+        DataSeries in dialogs or the legend.
      */
     string getRoleOfSequenceForSeriesLabel();
 };

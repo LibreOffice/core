@@ -32,7 +32,7 @@
 
 /** Reflects an interface type.
 
-    <p>This type is superseded by <type>XInterfaceTypeDescription2</type>, which
+    <p>This type is superseded by XInterfaceTypeDescription2, which
     supports multiple inheritance.</p>
 
     @see XInterfaceMemberTypeDescription
@@ -43,7 +43,7 @@ published interface XInterfaceTypeDescription: com::sun::star::reflection::XType
         inherited from another.
 
         <p>This method is deprecated, as it only supports single inheritance.
-        See <type>XInterfaceTypeDescription2</type> for a replacement that
+        See XInterfaceTypeDescription2 for a replacement that
         supports multiple inheritance.</p>
 
         @return

@@ -31,13 +31,13 @@ interface XResourceId;
 
 /** Factory and possibly cache for creating and releasing resources.
     <p>A resource factory is created and used by the
-    <type>XConfigurationController</type> object.</p>
+    XConfigurationController object.</p>
     <p>A factory may want to implement a cache to reuse previously released
     resources.</p>
 */
 interface XResourceFactory
 {
-    /** Create a resource for the given <type>XResourceId</type> object.
+    /** Create a resource for the given XResourceId object.
         @param xResourceId
             The resource URL of this id specifies the type of resource to
             create.  The anchor can be used to obtain the associated object
@@ -45,7 +45,7 @@ interface XResourceFactory
             created, then the new object can be initialized with the pane
             that is its anchor.
             <p>Valid values are those for which the factory has previously been
-            registered at the <type>XConfigurationController</type></p>.
+            registered at the XConfigurationController</p>.
         @return
             Returns a resource object that has been just created or was
             taken from a cache.  When the requested resource can not be

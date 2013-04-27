@@ -28,7 +28,7 @@
 module com {  module sun {  module star {  module beans {
 
 
-/** is used to receive <type>PropertyChangeEvent</type>s
+/** is used to receive PropertyChangeEvents
     whenever a bound property is changed.
  */
 published interface XPropertyChangeListener: com::sun::star::lang::XEventListener

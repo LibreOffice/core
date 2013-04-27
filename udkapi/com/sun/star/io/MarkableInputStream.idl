@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module io {
 /** allows to set marks in an inputstream and to later jump back to these
     marks.
     <p>The implementation reads the original data from the input stream,
-    that has been set previously at the <type>XActiveDataSink</type>
+    that has been set previously at the XActiveDataSink
     interface. In general the implementation must buffer the data. </p>
  */
 published service MarkableInputStream

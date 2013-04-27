@@ -24,7 +24,7 @@
  module com {  module sun {  module star {  module drawing {
 
 
-/** specifies a single line for a <type>HomogenMatrix3</type>.
+/** specifies a single line for a HomogenMatrix3.
  */
 published struct HomogenMatrixLine3
 {

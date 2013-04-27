@@ -57,7 +57,7 @@ published service HierarchyBrowser
             is a list of components found. The format in which components are
             returned may depend on the implementation. Each implementation
             should support returning component identifiers that are compatible
-            with some implementation of <type>Backend</type>.
+            with some implementation of Backend.
         </p>
       */
     interface com::sun::star::task::XJob ;

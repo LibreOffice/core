@@ -27,7 +27,7 @@
 module com { module sun { module star { module sdb {
 
 
-/** allows operating on a sub document of an <type>OfficeDatabaseDocument</type>
+/** allows operating on a sub document of an OfficeDatabaseDocument
 
     @since OOo 3.1
  */

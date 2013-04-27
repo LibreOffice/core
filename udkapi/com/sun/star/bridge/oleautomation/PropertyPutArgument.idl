@@ -43,8 +43,8 @@ module com {  module sun {  module star {  module bridge {  module oleautomation
     operation on the Automation object. To make this decision, the
     caller has to provide the information if the current call is
     intended to be a write or read operation. This is done by
-    providing either instances of <type>PropertyPutArgument</type> or
-    <type>PropertyGetArgument</type> as arguments to
+    providing either instances of PropertyPutArgument or
+    PropertyGetArgument as arguments to
     <member scope="com::sun::star::script">XInvocation::Invoke</member>.
 
     @since OOo 1.1.2

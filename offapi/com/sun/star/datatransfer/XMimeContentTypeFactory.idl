@@ -36,7 +36,7 @@ module com { module sun { module star { module datatransfer {
 */
 published interface XMimeContentTypeFactory : com::sun::star::uno::XInterface
 {
-    /** Creates an object that implements <type>XMimeContentType</type>.
+    /** Creates an object that implements XMimeContentType.
 
         @param aContentType
         A string that represents a MIME content-type as specified in
@@ -44,7 +44,7 @@ published interface XMimeContentTypeFactory : com::sun::star::uno::XInterface
         <a href="ftp://ftp.isi.edu/in-notes/rfc2046.txt">Rfc2046</a>.
 
         @returns
-        An object that implements <type>XMimeContentType</type>.
+        An object that implements XMimeContentType.
 
         @throws com::sun::star::lang::IllegalArgumentException
         if the string does not conform to

@@ -48,7 +48,7 @@ interface XStorage2 : XStorage
 
         @param nOpenMode
             a mode the stream should be open in,
-            can be a combination of <type>ElementModes</type> values
+            can be a combination of ElementModes values
 
         @param aEncryptionData
             this parameter allowes to specify an encryption data to decrypt the

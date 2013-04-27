@@ -30,7 +30,7 @@ interface XCompoundTypeDescription;
    Reflects an interface attribute, supporting extended attributes that are
    bound or raise exceptions.
 
-   <p>This type supersedes <type>XInterfaceAttributeTypeDescription</type>,
+   <p>This type supersedes XInterfaceAttributeTypeDescription,
    which does not support extended attributes.</p>
 
    @since OOo 2.0

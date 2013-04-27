@@ -26,12 +26,12 @@
 
 module com { module sun { module star { module ucb {
 
-/** creates an <type>XAnyCompare</type> instance.
+/** creates an XAnyCompare instance.
 */
 
 published interface XAnyCompareFactory: com::sun::star::uno::XInterface
 {
-    /** creates an <type>XAnyCompare</type> instance.
+    /** creates an XAnyCompare instance.
 
         @param PropertyName
         is the name of a property

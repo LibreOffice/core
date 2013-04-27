@@ -32,7 +32,7 @@
  module com {  module sun {  module star {  module drawing {
 
 
-/** lets you do a basic transformation on a <type>Shape</type> and
+/** lets you do a basic transformation on a Shape and
     get its type.
  */
 published interface XShape: com::sun::star::drawing::XShapeDescriptor

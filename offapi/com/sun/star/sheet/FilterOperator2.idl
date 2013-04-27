@@ -26,7 +26,7 @@ module com {  module sun {  module star {  module sheet {
 
 /** specifies the type of a single condition in a filter descriptor.
 
-    <p>This constants group extends the <type>FilterOperator</type> enum by
+    <p>This constants group extends the FilterOperator enum by
     additional filter operators.</p>
 
     @since OOo 3.2

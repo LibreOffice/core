@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module view {
 
 /** receives events about print job progress.
 
-    <p><type>XPrintJobListener</type> can be registered to <type>XPrintJobBroadcaster</type>.
+    <p>XPrintJobListener can be registered to XPrintJobBroadcaster.
     Then, the client object will be notified when a new print job starts or its state changes.</p>
 
     @see XPrintJobBroadcaster
@@ -39,7 +39,7 @@ published interface XPrintJobListener : com::sun::star::lang::XEventListener
 {
     /** informs the user about the creation or the progress of a PrintJob
         @param Event
-        contains the <type>XPrintJob</type> having changed state and the new state.
+        contains the XPrintJob having changed state and the new state.
     */
     void printJobEvent( [in] PrintJobEvent Event );
 };

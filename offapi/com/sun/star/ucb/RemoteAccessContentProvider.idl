@@ -25,28 +25,28 @@
 
 module com { module sun { module star { module ucb {
 
-/** A <type>RemoteAccessContentProvider</type> is a
-    <type>ContentProvider</type> that provides access to contents available at
+/** A RemoteAccessContentProvider is a
+    ContentProvider that provides access to contents available at
     other (remote) UCBs.
 */
 published service RemoteAccessContentProvider
 {
-    /** A <type>RemoteAccessContentProvider</type> is a specialized
-        <type>ContentProvider</type>.
+    /** A RemoteAccessContentProvider is a specialized
+        ContentProvider.
      */
     service com::sun::star::ucb::ContentProvider;
 
-    /** allows configuration of the <type>RemoteAccessContentProvider</type>,
-        to specify that certain <type>XContentIdentifier</type>s map to
-        <type>XContent</type>s from a certain remote UCB.  The Arguments
+    /** allows configuration of the RemoteAccessContentProvider,
+        to specify that certain XContentIdentifiers map to
+        XContents from a certain remote UCB.  The Arguments
         string in the
         <member>XParameterizedContentProvider::registerInstance</member>
         call must contain the UNO URL of the remote UCB.
 
         @descr
-        The <type>XContentProvider</type>s obtained through this interface
-        implement the service <type>ContentProvider</type> and, if
-        appropriate, also the interface <type>XFileIdentifierConverter</type>.
+        The XContentProviders obtained through this interface
+        implement the service ContentProvider and, if
+        appropriate, also the interface XFileIdentifierConverter.
      */
     interface com::sun::star::ucb::XParameterizedContentProvider;
 };

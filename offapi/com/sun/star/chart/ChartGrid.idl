@@ -34,13 +34,13 @@
 
 
     <p>The distance between the grid lines depends on the distance of the help
-    or main tick marks, which may be set in <type>ChartAxis</type>.</p>@see ChartAxis
+    or main tick marks, which may be set in ChartAxis.</p>@see ChartAxis
  */
 published service ChartGrid
 {
     service com::sun::star::drawing::LineProperties;
 
-    /** If a <type>ChartGrid</type> may be stored as XML element, this
+    /** If a ChartGrid may be stored as XML element, this
         service should be supported in order to preserve unparsed XML
         attributes.
 

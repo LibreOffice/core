@@ -25,9 +25,9 @@ module com { module sun { module star { module accessibility {
 
 /** Every class has to support this service in order to be accessible.
 
-    <p>It provides the means to derive a <type>XAccessibleContext</type>
+    <p>It provides the means to derive a XAccessibleContext
     object--which may but usually is not the same object as the object that
-    supports the <type>XAccessible</type> interface--that provides the
+    supports the XAccessible interface--that provides the
     actual information that is needed to make it accessible.</p>
 
     <p>Service <code>Accessible</code> is just a wrapper for the interface

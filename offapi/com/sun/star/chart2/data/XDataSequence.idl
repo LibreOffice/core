@@ -52,14 +52,14 @@ interface XDataSequence : ::com::sun::star::uno::XInterface
     sequence< any >   getData();
 
     /** returns the (UI) range representation string used by this
-        <type>XDataSequence</type>.
+        XDataSequence.
      */
     string getSourceRangeRepresentation();
 
     /** creates a label that describes the origin of this data
         sequence.
 
-        <p>This is useful, if a <type>XLabeledDataSequence</type> has
+        <p>This is useful, if a XLabeledDataSequence has
         no label sequence.  In this case you can call this method at
         the value sequence to obtain a fitting replacement label.</p>
 
@@ -113,7 +113,7 @@ interface XDataSequence : ::com::sun::star::uno::XInterface
 
         <p>The number format key must be valid for the
         <type scope="com::sun::star::util">XNumberFormatsSupplier</type>
-        given by the <type>XDataProvider</type>, or 0 which is assumed
+        given by the XDataProvider, or 0 which is assumed
         to be always valid.</p>
      */
     long getNumberFormatKeyByIndex( [in] long nIndex )

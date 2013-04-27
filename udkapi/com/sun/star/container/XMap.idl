@@ -39,7 +39,7 @@ module com { module sun { module star { module container {
     two values are said to be equal if and only if they have the same type, and both denote the same element of this
     type's value set.</p>
 
-    @see <type>Map</type> for a default implementation of this interface
+    @see Map for a default implementation of this interface
 */
 interface XMap
 {

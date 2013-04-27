@@ -32,10 +32,10 @@ module com {  module sun {  module star {  module form { module validation {
     can interact with other components (well, except the trivial ones accessible
     by using <type scope="com::sun::star::beans">XPropertySet</type>):
     <ul><li>binding the value to an external component via <type scope="com::sun::star::form::binding">XBindableValue</type></li>
-        <li>validating the current value by an external component, via <type>XValidatable</type> and <type>XValidator</type></li>
+        <li>validating the current value by an external component, via XValidatable and XValidator</li>
     </ul></p>
 
-    <p>The <type>ValidatableBindableControlModel</type> services describes the interaction of these concepts
+    <p>The ValidatableBindableControlModel services describes the interaction of these concepts
     for control models which support both of them.</p>
 */
 service ValidatableBindableControlModel
@@ -49,7 +49,7 @@ service ValidatableBindableControlModel
         <p>If a value binding is established at the control model (by using
         <member scope="com::sun::star::form::binding">XBindableValue::setValueBinding</member> with a non-<NULL/>
         binding), this binding is analyzed for validation support. If it is present (read: if the
-        binding also supports the <type>XValidator</type> interface), the binding is also
+        binding also supports the XValidator interface), the binding is also
         established as validator, as if it has been passed to <member>XValidatable::setValidator</member>.<br/>
         If, while this binding is active (in both its roles as value binding and validator),
         an attempt is made to establish another validator, this is blocked with raising a

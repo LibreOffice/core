@@ -27,17 +27,17 @@ module com { module sun { module star { module ucb {
  published interface XContent;
  published interface XContentIdentifier;
 
-/** A mapping from a (source) set of <type>XContentIdentifier</type>s to
+/** A mapping from a (source) set of XContentIdentifiers to
     another (target) set of XContentIdentifiers.
 
     <p>For convenience and performance, mapping between the string
     representations of source/target XContentIdentifiers, as well as mapping
-    between <type>XContent</type>s identified by source/target
+    between XContents identified by source/target
     XContentIdentifiers is also supported.
 
     <p>This interface can be useful in cases where the identifiers (and
     associated contents) returned by the various methods of an
-    <type>XContentAccess</type> need to be mapped to some other space of
+    XContentAccess need to be mapped to some other space of
     identifiers (and associated contents).
 
     @see XContent
@@ -47,7 +47,7 @@ module com { module sun { module star { module ucb {
 
 published interface XContentIdentifierMapping: com::sun::star::uno::XInterface
 {
-    /** Map the string representation of an <type>XContentIdentifier</type>.
+    /** Map the string representation of an XContentIdentifier.
 
         @param Source  The string representation of an XContentIdentifier
         from the source set.
@@ -59,7 +59,7 @@ published interface XContentIdentifierMapping: com::sun::star::uno::XInterface
     */
     string mapContentIdentifierString([in] string Source);
 
-    /** Map an <type>XContentIdentifier</type>.
+    /** Map an XContentIdentifier.
 
         @param Source  An XContentIdentifier from the source set.
 
@@ -70,8 +70,8 @@ published interface XContentIdentifierMapping: com::sun::star::uno::XInterface
     */
     XContentIdentifier mapContentIdentifier([in] XContentIdentifier Source);
 
-    /** Map the <type>XContent</type> identified by an
-        <type>XContentIdentifier</type>.
+    /** Map the XContent identified by an
+        XContentIdentifier.
 
         @param Source  The XContent identified by an XContentIdentifier from
         the source set.

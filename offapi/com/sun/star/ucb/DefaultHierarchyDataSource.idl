@@ -24,14 +24,14 @@
 
 module com { module sun { module star { module ucb {
 
-/** is a concrete implementation of service <type>HierarchyDataSource</type>,
+/** is a concrete implementation of service HierarchyDataSource,
     which uses the service
     <type scope="com::sun::star::configuration">ConfigurationProvider</type>
     for reading and writing hierarchy data.
 */
 published service DefaultHierarchyDataSource
 {
-    /** is a concrete implementation of service <type>HierarchyDataSource</type>,
+    /** is a concrete implementation of service HierarchyDataSource,
         which uses the service
         <type scope="com::sun::star::configuration">ConfigurationProvider</type>
         for reading and writing hierarchy data.

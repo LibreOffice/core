@@ -22,7 +22,7 @@
 module com { module sun { module star { module rendering {
 
 /** These constants specify the result of the
-   <type>XCachedPrimitive</type> render operation.<p>
+   XCachedPrimitive render operation.<p>
 
    @since OOo 2.0
  */

@@ -30,17 +30,17 @@ module com {  module sun {  module star {  module chart {
 interface XAxis : ::com::sun::star::uno::XInterface
 {
     /** @returns
-            the title of the axis. The returned object supports the properties described in service <type>ChartTitle</type>.
+            the title of the axis. The returned object supports the properties described in service ChartTitle.
      */
     com::sun::star::beans::XPropertySet getAxisTitle();
 
     /** @returns
-            the properties of the major grid of the axis. The returned object supports service <type>ChartGrid</type>.
+            the properties of the major grid of the axis. The returned object supports service ChartGrid.
     */
     com::sun::star::beans::XPropertySet getMajorGrid();
 
     /** @returns
-            the properties of the minor grid of the axis. The returned object supports service <type>ChartGrid</type>.
+            the properties of the minor grid of the axis. The returned object supports service ChartGrid.
     */
     com::sun::star::beans::XPropertySet getMinorGrid();
 };

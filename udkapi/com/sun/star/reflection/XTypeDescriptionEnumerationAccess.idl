@@ -77,66 +77,66 @@ published interface XTypeDescriptionEnumerationAccess : com::sun::star::uno::XIn
             descriptions. Clients should be aware of the fact that specifiying
             <member>TypeDescriptionSearchDepth::INFINITE</member> can lead to
             larger delays when constructing or using the
-            <type>XTypeDescriptionEnumeration</type> instance.
+            XTypeDescriptionEnumeration instance.
 
         @returns
             an enumeration of type descriptions.
 
             <p>The enumeration returns implementations of
-            <type>XTypeDescription</type>. Following concrete UNOIDL parts
+            XTypeDescription. Following concrete UNOIDL parts
             represented by specialized interfaces derived from
-            <type>XTypeDescription</type> can be returned by the enumerator:
+            XTypeDescription can be returned by the enumerator:
 
             <table border="1">
                 <thead><tr><th>IDL</th><th>interface</th></tr></thead>
                 <tbody>
                     <tr>
                         <td>enum</td>
-                        <td><type>XEnumTypeDescription</type></td>
+                        <td>XEnumTypeDescription</td>
                     </tr>
                     <tr>
                         <td>struct</td>
-                        <td><type>XCompoundTypeDescription</type> (the returned
+                        <td>XCompoundTypeDescription (the returned
                         object should actually implement
-                        <type>XStructTypeDescription</type>)</td>
+                        XStructTypeDescription)</td>
                     </tr>
                     <tr>
                         <td>exception</td>
-                        <td><type>XCompoundTypeDescription</type></td>
+                        <td>XCompoundTypeDescription</td>
                     </tr>
                     <tr>
                         <td>interface</td>
-                        <td><type>XInterfaceTypeDescription</type> (the returned
+                        <td>XInterfaceTypeDescription (the returned
                         object should actually implement
-                        <type>XInterfaceTypeDescription2</type>)</td>
+                        XInterfaceTypeDescription2)</td>
                     </tr>
                     <tr>
                         <td>service</td>
-                        <td><type>XServiceTypeDescription</type> (the returned
+                        <td>XServiceTypeDescription (the returned
                         object should actually implement
-                        <type>XServiceTypeDescription2</type>)</td>
+                        XServiceTypeDescription2)</td>
                     </tr>
                     <tr>
                         <td>singleton</td>
-                        <td><type>XSingletonTypeDescription</type> (the returned
+                        <td>XSingletonTypeDescription (the returned
                         object should actually implement
-                        <type>XSingletonTypeDescription2</type>)</td>
+                        XSingletonTypeDescription2)</td>
                     </tr>
                     <tr>
                         <td>module</td>
-                        <td><type>XModuleTypeDescription</type></td>
+                        <td>XModuleTypeDescription</td>
                     </tr>
                     <tr>
                         <td>typedef</td>
-                        <td><type>XIndirectTypeDescription</type></td>
+                        <td>XIndirectTypeDescription</td>
                     </tr>
                     <tr>
                         <td>constant</td>
-                        <td><type>XConstantTypeDescription</type></td>
+                        <td>XConstantTypeDescription</td>
                     </tr>
                     <tr>
                         <td>constants</td>
-                        <td><type>XConstantsTypeDescription</type></td>
+                        <td>XConstantsTypeDescription</td>
                     </tr>
                 </tbody>
             </table>

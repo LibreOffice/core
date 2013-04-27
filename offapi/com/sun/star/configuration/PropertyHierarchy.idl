@@ -41,7 +41,7 @@ module com { module sun { module star { module configuration {
  implement <type scope="com::sun::star::beans">XProperty</type> to allow
  direct access to information about the object.
  If such objects have properties of their own, they should fully implement
- <type>PropertyHierarchy</type> again.
+ PropertyHierarchy again.
 */
 published service PropertyHierarchy
 {

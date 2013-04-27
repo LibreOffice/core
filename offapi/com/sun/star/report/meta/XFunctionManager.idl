@@ -27,7 +27,7 @@
 #include <com/sun/star/report/meta/XFunctionDescription.idl>
 
 module com {  module sun {  module star {  module report { module meta {
-/** identifies a <type>XFunctionManager</type> which allows to retrieve the meta data of all supported functions.
+/** identifies a XFunctionManager which allows to retrieve the meta data of all supported functions.
 
 */
 interface XFunctionManager

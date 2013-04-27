@@ -44,7 +44,7 @@ published interface XUniqueCellFormatRangesSupplier: com::sun::star::uno::XInter
 
         <p>All equal-formatted ranges are consolidated into one collection.
         These collections are the members contained in a
-        <type>UniqueCellFormatRanges</type> collection.</p>
+        UniqueCellFormatRanges collection.</p>
 
         @returns
             the collection of equal-formatted cell range collections.

@@ -38,7 +38,7 @@ published interface XLayer : ::com::sun::star::uno::XInterface
 {
 
     /**
-      describes the contents of the layer to an <type>XLayerHandler</type>.
+      describes the contents of the layer to an XLayerHandler.
 
       @param aHandler
             Handler object that will receive calls
@@ -50,7 +50,7 @@ published interface XLayer : ::com::sun::star::uno::XInterface
               if an error occurs in the access to or processing of the data.
       @throws com::sun::star::configuration::backend::MalformedDataException
               if the data read from the layer is rejected as invalid by the
-              <type>XLayerHandler</type>.
+              XLayerHandler.
     */
     void readData([in] XLayerHandler aHandler)
         raises (com::sun::star::lang::NullPointerException,

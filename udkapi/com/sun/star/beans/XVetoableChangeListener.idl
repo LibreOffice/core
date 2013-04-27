@@ -30,10 +30,10 @@
 module com {  module sun {  module star {  module beans {
 
 
-/** is used to receive <type>PropertyChangeEvent</type>s
+/** is used to receive PropertyChangeEvents
     whenever a "constrained" property is changed.
 
-    <p>You can register an <type>XVetoableChangeListener</type> with
+    <p>You can register an XVetoableChangeListener with
     a source object so as to be notified of any constrained property updates.</p>
  */
 published interface XVetoableChangeListener: com::sun::star::lang::XEventListener

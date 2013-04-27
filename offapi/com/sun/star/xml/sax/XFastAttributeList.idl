@@ -32,9 +32,9 @@ module com {  module sun {  module star {  module xml {  module sax {
 
     <br>Attributes are separated into known attributes and unknown attributes.
     <p>Known attributes have a local name that is known to the <type>XFastTokenHandler</token>
-    registered at the <type>XFastParser</type> which created the sax event containing
+    registered at the XFastParser which created the sax event containing
     this attributes. If an attribute also has a namespace, that must be registered
-    at the <type>XFastParser</type>, else this attribute is also unknown even if
+    at the XFastParser, else this attribute is also unknown even if
     the local name is known.
  */
 interface XFastAttributeList: com::sun::star::uno::XInterface
@@ -42,12 +42,12 @@ interface XFastAttributeList: com::sun::star::uno::XInterface
     /** checks if an attribute is available.<br>
 
         @param Token
-            contains the integer token from the <type>XFastTokenHandler</type>
-            registered at the <type>XFastParser</type>.<br>
+            contains the integer token from the XFastTokenHandler
+            registered at the XFastParser.<br>
 
             If the attribute name has a namespace that was registered with the
-            <type>XFastParser</type>, Token contains the integer token of the
-            attributes local name from the <type>XFastTokenHandler</type> and
+            XFastParser, Token contains the integer token of the
+            attributes local name from the XFastTokenHandler and
             the integer token of the namespace combined with an arithmetic
             <b>or</b> operation.
 
@@ -59,12 +59,12 @@ interface XFastAttributeList: com::sun::star::uno::XInterface
     /** retrieves the token of an attributes value.<br>
 
         @param Token
-            contains the integer token from the <type>XFastTokenHandler</type>
-            registered at the <type>XFastParser</type>.<br>
+            contains the integer token from the XFastTokenHandler
+            registered at the XFastParser.<br>
 
             If the attribute name has a namespace that was registered with the
-            <type>XFastParser</type>, Token contains the integer token of the
-            attributes local name from the <type>XFastTokenHandler</type> and
+            XFastParser, Token contains the integer token of the
+            attributes local name from the XFastTokenHandler and
             the integer token of the namespace combined with an arithmetic
             <b>or</b> operation.
 
@@ -81,12 +81,12 @@ interface XFastAttributeList: com::sun::star::uno::XInterface
     /**retrieves the token of an attributes value.<br>
 
         @param Token
-            contains the integer token from the <type>XFastTokenHandler</type>
-            registered at the <type>XFastParser</type>.<br>
+            contains the integer token from the XFastTokenHandler
+            registered at the XFastParser.<br>
 
             If the attribute name has a namespace that was registered with the
-            <type>XFastParser</type>, Token contains the integer token of the
-            attributes local name from the <type>XFastTokenHandler</type> and
+            XFastParser, Token contains the integer token of the
+            attributes local name from the XFastTokenHandler and
             the integer token of the namespace combined with an arithmetic
             <b>or</b> operation.
 
@@ -104,12 +104,12 @@ interface XFastAttributeList: com::sun::star::uno::XInterface
     /** retrieves the value of an attributes.<br>
 
         @param Token
-            contains the integer token from the <type>XFastTokenHandler</type>
-            registered at the <type>XFastParser</type>.<br>
+            contains the integer token from the XFastTokenHandler
+            registered at the XFastParser.<br>
 
             If the attribute name has a namespace that was registered with the
-            <type>XFastParser</type>, Token contains the integer token of the
-            attributes local name from the <type>XFastTokenHandler</type> and
+            XFastParser, Token contains the integer token of the
+            attributes local name from the XFastTokenHandler and
             the integer token of the namespace combined with an arithmetic
             <b>or</b> operation.
 
@@ -126,12 +126,12 @@ interface XFastAttributeList: com::sun::star::uno::XInterface
     /** retrieves the value of an attributes.<br>
 
         @param Token
-            contains the integer token from the <type>XFastTokenHandler</type>
-            registered at the <type>XFastParser</type>.<br>
+            contains the integer token from the XFastTokenHandler
+            registered at the XFastParser.<br>
 
             If the attribute name has a namespace that was registered with the
-            <type>XFastParser</type>, Token contains the integer token of the
-            attributes local name from the <type>XFastTokenHandler</type> and
+            XFastParser, Token contains the integer token of the
+            attributes local name from the XFastTokenHandler and
             the integer token of the namespace combined with an arithmetic
             <b>or</b> operation.
 

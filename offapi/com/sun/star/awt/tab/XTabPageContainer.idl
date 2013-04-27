@@ -67,7 +67,7 @@ published interface XTabPageContainer
     XTabPage getTabPageByID([in] short tabPageID);
 
 
-    /** Adds a listener for the <type>TabPageActivedEvent</type> posted after
+    /** Adds a listener for the TabPageActivedEvent posted after
         the tab page was activated.
         @param listener
             the listener to add.

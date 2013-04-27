@@ -38,10 +38,10 @@
 
     <p>The diagram is the object that contains the actual plot.</p>
 
-    <p>Different Diagram Types, e.g., <type>PieDiagram</type> or
-    <type>LineDiagram</type>, can be instantiated by the
+    <p>Different Diagram Types, e.g., PieDiagram or
+    LineDiagram, can be instantiated by the
     <type scope="com::sun::star::lang">XMultiServiceFactory</type> of
-    the <type>XChartDocument</type>.</p>
+    the XChartDocument.</p>
 
  */
 published service Diagram
@@ -82,7 +82,7 @@ published service Diagram
     interface com::sun::star::beans::XPropertySet;
 
 
-    /** If a <type>Diagram</type> may be stored as XML file, this
+    /** If a Diagram may be stored as XML file, this
         service should be supported in order to preserve unparsed XML
         attributes.
 

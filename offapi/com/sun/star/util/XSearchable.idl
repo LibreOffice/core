@@ -52,7 +52,7 @@ module com {  module sun {  module star {  module util {
  */
 published interface XSearchable: com::sun::star::uno::XInterface
 {
-    /** creates a <type>SearchDescriptor</type> which contains properties that
+    /** creates a SearchDescriptor which contains properties that
         specify a search in this container.@see SearchDescriptor
      */
     com::sun::star::util::XSearchDescriptor createSearchDescriptor();

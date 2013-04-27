@@ -25,7 +25,7 @@
  module com {  module sun {  module star {  module awt {  module grid {
 
 
-/** Represents a column as used by the <type>DefaultGridColumnModel</type>
+/** Represents a column as used by the DefaultGridColumnModel
 
     @since OOo 3.3
  */

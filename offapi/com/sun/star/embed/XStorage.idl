@@ -50,7 +50,7 @@ published interface XStorage
         It is also possible to use this interface to get read access to
         a child element by
         <method scope="com::sun::star::container">XNameAccess::getByName</method>
-        call. But the recommended way is to use <type>XStorage</type>
+        call. But the recommended way is to use XStorage
         interface for this purpose.
         </p>
      */
@@ -109,7 +109,7 @@ published interface XStorage
 
         @param nOpenMode
             a mode the stream should be open in,
-            can be a combination of <type>ElementModes</type> values
+            can be a combination of ElementModes values
 
         @throws ::com::sun::star::embed::InvalidStorageException
             this storage is in invalid state for any reason
@@ -153,7 +153,7 @@ published interface XStorage
 
         @param nOpenMode
             a mode the stream should be open in,
-            can be a combination of <type>ElementModes</type> values
+            can be a combination of ElementModes values
 
         @param sPassword
             this parameter allows to specify a reading password for the

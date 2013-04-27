@@ -32,7 +32,7 @@
  */
 published interface XHandoutMasterSupplier: com::sun::star::uno::XInterface
 {
-    /** returns the <type>DrawPage</type>.
+    /** returns the DrawPage.
      */
     com::sun::star::drawing::XDrawPage getHandoutMasterPage();
 };

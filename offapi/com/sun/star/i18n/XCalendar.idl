@@ -41,7 +41,7 @@ published interface XCalendar : com::sun::star::uno::XInterface
     void    loadCalendar( [in] string uniqueID,
                           [in] ::com::sun::star::lang::Locale rLocale );
 
-    /// Get the currently loaded <type>Calendar</type>.
+    /// Get the currently loaded Calendar.
     Calendar    getLoadedCalendar();
 
     /// Returns all available calendars for the given locale.
@@ -72,7 +72,7 @@ published interface XCalendar : com::sun::star::uno::XInterface
         Set the value of a field.
 
         @param nCalendarFieldIndex
-            One of <type>CalendarFieldIndex</type> values.
+            One of CalendarFieldIndex values.
 
         @param nValue
             A value of the allowed range for the field index.
@@ -83,7 +83,7 @@ published interface XCalendar : com::sun::star::uno::XInterface
         Get the value of a field.
 
         @param nCalendarFieldIndex
-            One of <type>CalendarFieldIndex</type> values.
+            One of CalendarFieldIndex values.
      */
     short   getValue( [in] short nCalendarFieldIndex );
 
@@ -99,19 +99,19 @@ published interface XCalendar : com::sun::star::uno::XInterface
         Add an amount to a field.
 
         @param nCalendarFieldIndex
-            One of <type>CalendarFieldIndex</type> values.
+            One of CalendarFieldIndex values.
 
         @param nAmount
             The amount to add.
      */
     void    addValue( [in] short nCalendarFieldIndex, [in] long nAmount );
 
-    /** returns the first day of a week, one of <type>Weekdays</type>
+    /** returns the first day of a week, one of Weekdays
         values.
      */
     short   getFirstDayOfWeek();
 
-    /** Set the first day of a week, one of <type>Weekdays</type>
+    /** Set the first day of a week, one of Weekdays
         values.
       */
     void    setFirstDayOfWeek( [in] short nDay );
@@ -132,12 +132,12 @@ published interface XCalendar : com::sun::star::uno::XInterface
     /// returns the number of days in a week, e.g. <b>7</b>
     short   getNumberOfDaysInWeek();
 
-    /** returns a sequence of <type>CalendarItem</type> describing the
+    /** returns a sequence of CalendarItem describing the
         month names.
      */
     sequence< CalendarItem >    getMonths();
 
-    /** returns a sequence of <type>CalendarItem</type> describing the
+    /** returns a sequence of CalendarItem describing the
         day names.
      */
     sequence< CalendarItem >    getDays();
@@ -146,19 +146,19 @@ published interface XCalendar : com::sun::star::uno::XInterface
         Returns a string (name to display) matching the given parameters.
 
         @param nCalendarDisplayIndex
-            One of <type>CalendarDisplayIndex</type> values
+            One of CalendarDisplayIndex values
 
         @param nIdx
             A value matching the <em>nCalendarDisplayIndex</em> type:
             <dl>
                 <dt><const>CalendarDisplayIndex::AM_PM</const></dt>
-                    <dd>one of <type>AmPmValue</type></dd>
+                    <dd>one of AmPmValue</dd>
                 <dt><const>CalendarDisplayIndex::DAY</const></dt>
-                    <dd>one of <type>Weekdays</type> or a number used as
+                    <dd>one of Weekdays or a number used as
                     an offset into the corresponding
                     <member>Calendar::Days</member> sequence</dd>
                 <dt><const>CalendarDisplayIndex::MONTH</const></dt>
-                    <dd>one of <type>Months</type> or a number used as
+                    <dd>one of Months or a number used as
                     an offset into the corresponding
                     <member>Calendar::Months</member> sequence</dd>
                 <dt><const>CalendarDisplayIndex::YEAR</const></dt>
@@ -175,12 +175,12 @@ published interface XCalendar : com::sun::star::uno::XInterface
 
             <p> The value should be obtained by a previous call to
             <member>XCalendar::getValue()</member> with an appropriate
-            <type>CalendarFieldIndex</type> argument. </p>
+            CalendarFieldIndex argument. </p>
 
         @param nNameType
             A value indicating whether to return the abbreviated or the
             full name, or the narrow name for some 
-            <type>CalendarDisplayIndex</type> values.
+            CalendarDisplayIndex values.
             <dl>
                 <dt> 0 </dt>
                     <dd>abbreviated name, e.g. <b>"Jan"</b></dd>

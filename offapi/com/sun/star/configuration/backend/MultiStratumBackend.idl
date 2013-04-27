@@ -27,7 +27,7 @@ module com { module sun { module star { module configuration { module backend {
 
 
 /**
-   implements <type>Backend</type>  provides access to a configuration database
+   implements Backend  provides access to a configuration database
     composed of one or more storage backends containing settings used by software modules.
 */
 service MultiStratumBackend

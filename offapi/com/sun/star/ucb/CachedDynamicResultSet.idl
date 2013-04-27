@@ -26,33 +26,33 @@
 module com { module sun { module star { module ucb {
 
 /** provides read access to a static or dynamically changing
-    <type>ContentResultSet</type>.
+    ContentResultSet.
 
-    <p>For example, a <type>DynamicResultSet</type> is returned from the
-    open-command executed by an <type>XCommandProcessor</type> of the service
-    <type>Content</type>.
+    <p>For example, a DynamicResultSet is returned from the
+    open-command executed by an XCommandProcessor of the service
+    Content.
 */
 
 published service CachedDynamicResultSet
 {
     /** Provides remote optimized read access to a static or a dynamically
-        changing <type>ContentResultSet</type>.
+        changing ContentResultSet.
 
         <p>The <type scope="com::sun::star::sdbc">XResultSet</type>s given to
         the listener in the first notification in the
-        <type>WelcomeDynamicResultSetStruct</type> are implementations of the
-        <type>CachedContentResultSet</type> service.
+        WelcomeDynamicResultSetStruct are implementations of the
+        CachedContentResultSet service.
 
         <p>This interface is required.
      */
     interface com::sun::star::ucb::XDynamicResultSet;
 
-    /** provides the initialization of the <type>CachedDynamicResultSet</type>
+    /** provides the initialization of the CachedDynamicResultSet
         with a source object.
 
         <p>The <var>Source</var> in
         <member>XSourceInitialization::setSource</member> has to be an
-        implementation of service <type>CachedDynamicResultSetStub</type>
+        implementation of service CachedDynamicResultSetStub
 
         <p>This interface is required.
      */

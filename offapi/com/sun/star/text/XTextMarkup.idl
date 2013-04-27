@@ -48,7 +48,7 @@ interface XTextMarkup
     /** submits a new markup range.
 
         @param nType
-                Type of text markup see <type>TextMarkupType</type>.
+                Type of text markup see TextMarkupType.
 
         @param aIdentifier
                 A string used to identify the caller.

@@ -43,21 +43,21 @@ interface XAxis : ::com::sun::star::uno::XInterface
     ScaleData getScaleData();
 
     /** the returned property set must support the service
-        <type>GridProperties</type>
+        GridProperties
     */
     com::sun::star::beans::XPropertySet getGridProperties();
 
     /** the returned property sets must support the service
-        <type>GridProperties</type>
+        GridProperties
 
         <p>If you do not want to render certain a sub-grid, in the
-        corresponding <type>XPropertySet</type> the property
+        corresponding XPropertySet the property
         <member>GridProperties::Show</member> must be <FALSE/>.</p>
      */
     sequence< com::sun::star::beans::XPropertySet > getSubGridProperties();
 
     /** the returned property sets must support the service
-        <type>TickProperties</type>
+        TickProperties
      */
     sequence< com::sun::star::beans::XPropertySet > getSubTickProperties();
 };

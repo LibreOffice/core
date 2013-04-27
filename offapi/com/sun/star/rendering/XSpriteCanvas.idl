@@ -67,11 +67,11 @@ interface XSpriteCanvas : XBitmapCanvas
         aligned.
 
         @param interpolationMode
-        Value of <type>InterpolationMode</type>, to determine whether
+        Value of InterpolationMode, to determine whether
         and how to interpolate between the provided bitmaps, if
         animation runs fast enough.
 
-        @throws <type>VolatileContentDestroyedException</type>
+        @throws VolatileContentDestroyedException
         if at least one of the bitmap is volatile, and its content has been destroyed by the system.
      */
     XAnimatedSprite createSpriteFromBitmaps( [in] sequence<XBitmap> animationBitmaps, [in] byte interpolationMode )

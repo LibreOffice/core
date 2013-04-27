@@ -26,7 +26,7 @@
  module com {  module sun {  module star {  module script {
 
 /** makes it possible to generate the adapters from specific
-    interfaces to the interface <type>XAllListener</type>.
+    interfaces to the interface XAllListener.
  */
 published service AllListenerAdapter
     : com::sun::star::script::XAllListenerAdapterService;

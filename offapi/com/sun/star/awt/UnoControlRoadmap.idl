@@ -30,7 +30,7 @@
 
 
 /** specifies a Roadmap control. The model of the Roadmap control must be a
-    <type>UnoControlRoadmapModel</type>
+    UnoControlRoadmapModel
 
     <p>The model properties are implemented in the control as follows:
     <ul><li>CurrentItem: The RGB code of the background color is RGB(194, 211, 238)</li>
@@ -39,7 +39,7 @@
         <li>Graphic: The graphic is placed in the lower right corner of the control.</li>
         <li>Complete: When set to <FALSE/> a non interactive RoadmapItem is appended
             after the last roadmap item, labeled with three dots, indicating incompleteness.</li>
-        <li>Interactive: When activating a RoadmapItem (see <type>RoadmapItem</type>) the
+        <li>Interactive: When activating a RoadmapItem (see RoadmapItem) the
             information about which Item has been selected is passed over when an itemlistener
             has been registered at the control.</li>
     </ul></p>

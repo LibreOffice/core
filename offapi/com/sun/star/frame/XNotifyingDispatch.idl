@@ -24,7 +24,7 @@
 
 module com {  module sun {  module star {  module frame {
 
-/** dispatch with guaranteed notify (instead of <type>XDispatch</type>)
+/** dispatch with guaranteed notify (instead of XDispatch)
 
     @see XDispatch
     @see XStatusListener

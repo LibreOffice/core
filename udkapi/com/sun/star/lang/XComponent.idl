@@ -61,7 +61,7 @@ published interface XComponent: com::sun::star::uno::XInterface
         as possible, thus it should ignore all calls
         in case it can comply with its specification (for instance addEventListener()).
         Often the object can't fulfill its specification anymore,
-        in this case it must throw the <type>DisposedException</type>
+        in this case it must throw the DisposedException
         (which is derived from <type scope="com::sun::star::uno">RuntimeException</type>)
     when it gets called.</p>
 

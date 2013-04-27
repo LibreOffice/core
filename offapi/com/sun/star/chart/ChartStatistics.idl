@@ -134,13 +134,13 @@ published service ChartStatistics
     [property] com::sun::star::chart::ChartRegressionCurveType RegressionCurves;
 
     /** contains a cell range string for positive error bars. This
-        property is used when the <type>ErrorBarCategory</type> is set
+        property is used when the ErrorBarCategory is set
         to <member>ErrorBarCategory::FROM_DATA</member>.
      */
     [optional, property] string ErrorBarRangePositive;
 
     /** contains a cell range string for negative error bars. This
-        property is used when the <type>ErrorBarCategory</type> is set
+        property is used when the ErrorBarCategory is set
         to <member>ErrorBarCategory::FROM_DATA</member>.
      */
     [optional, property] string ErrorBarRangeNegative;

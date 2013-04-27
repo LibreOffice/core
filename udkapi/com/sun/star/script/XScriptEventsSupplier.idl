@@ -36,7 +36,7 @@ published interface XScriptEventsSupplier: com::sun::star::uno::XInterface
 {
     /**
         Returns an XNameContainer containing instances
-        of <type>ScriptEventDescriptor</type>
+        of ScriptEventDescriptor
     */
     com::sun::star::container::XNameContainer getEvents();
 };

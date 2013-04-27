@@ -26,8 +26,8 @@
 
  module com {  module sun {  module star {  module text {
 
-/** A <type>TextViewCursor</type> is a <type>TextRange</type> which can travel
-    within a view of a <type>Text</type> object.
+/** A TextViewCursor is a TextRange which can travel
+    within a view of a Text object.
     @see TextDocumentView
  */
 published service TextViewCursor

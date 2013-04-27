@@ -27,13 +27,13 @@ module com {  module sun {  module star {  module inspection {
 
 interface XPropertyControlContext;
 
-/** defines the interface for a single control in an <type>ObjectInspector</type>
+/** defines the interface for a single control in an ObjectInspector
 
     @since OOo 2.0.3
 */
 interface XPropertyControl
 {
-    /** denotes the type of the control, as one of the <type>PropertyControlType</type>
+    /** denotes the type of the control, as one of the PropertyControlType
         constants
     */
     [attribute, readonly] short ControlType;
@@ -58,7 +58,7 @@ interface XPropertyControl
     */
     [attribute, readonly] type ValueType;
 
-    /** specifies the context of the control within the <type>ObjectInspector</type>.
+    /** specifies the context of the control within the ObjectInspector.
 
         <p>The property control should actively notify its state changes to the context.
         In particular, changes in the focus and the value of the control must be notified.
@@ -67,7 +67,7 @@ interface XPropertyControl
 
     /** determines whether the control content is currently modified
 
-        <p>An <type>XPropertyControl</type> internally manages a flag indicating whether
+        <p>An XPropertyControl internally manages a flag indicating whether
         its content is modified. This flag is reset to <FALSE/> every time our
         <member>ControlContext</member> is notified of our current value. Also, the control
         implementation must set this flag to <TRUE/> if and only if the user changed the
@@ -90,7 +90,7 @@ interface XPropertyControl
 
     /** denotes the window which is the real UI representation of the property control.
 
-        <p>The <type>ObjectInspector</type> will automatically position and size this control
+        <p>The ObjectInspector will automatically position and size this control
         as needed, care for its Z-order, and so on.</p>
 
         <p>This Window must not be <NULL/>, else the whole control is not usable.</p>

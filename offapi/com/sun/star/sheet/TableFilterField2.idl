@@ -29,9 +29,9 @@ module com {  module sun {  module star {  module sheet {
 
 /** describes a single condition in a filter descriptor.
 
-    <p>This struct has the <type>FilterOperator2</type> constants group as
-    member, whereas the <type>TableFilterField</type> struct uses the
-    <type>FilterOperator</type> enum.</p>
+    <p>This struct has the FilterOperator2 constants group as
+    member, whereas the TableFilterField struct uses the
+    FilterOperator enum.</p>
 
     @see SheetFilterDescriptor
     @since OOo 3.2
@@ -50,7 +50,7 @@ published struct TableFilterField2
 
 
     /** specifies the type of the condition as defined in
-        <type>FilterOperator2</type>.
+        FilterOperator2.
     */
     long Operator;
 

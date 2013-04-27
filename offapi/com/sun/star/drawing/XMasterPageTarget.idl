@@ -29,22 +29,22 @@
 
 
 /** is implemented by objects that can be linked to a
-    <type>MasterPage</type>.
+    MasterPage.
 
     @see DrawPage
  */
 published interface XMasterPageTarget: com::sun::star::uno::XInterface
 {
 
-    /** @returns the <type>MasterPage</type> linked to this object.
+    /** @returns the MasterPage linked to this object.
      */
     com::sun::star::drawing::XDrawPage getMasterPage();
 
 
-    /** links a <type>MasterPage</type> to this object.
+    /** links a MasterPage to this object.
 
         @param xMasterPage
-            the <type>MasterPage</type> that is linked to this object
+            the MasterPage that is linked to this object
      */
     void setMasterPage( [in] com::sun::star::drawing::XDrawPage xMasterPage );
 

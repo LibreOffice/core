@@ -24,12 +24,12 @@
 
 module com {  module sun {  module star {  module inspection {
 
-/** defines the interface for an <type>XPropertyControl</type> which, additionally
+/** defines the interface for an XPropertyControl which, additionally
     to the basic behavior, supports a list of strings interpreted as possible
     property values.
 
     <p>A control which would canonically implement this interface is a list box control:
-    The string list defined by <type>XStringListControl</type> would in the control be
+    The string list defined by XStringListControl would in the control be
     represented as drop-down list containing all the strings.</p>
 
     @since OOo 2.0.3

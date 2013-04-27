@@ -24,10 +24,10 @@
 module com { module sun { module star { module accessibility {
 
 /** this struct describes an accessible event, that is broadcasted from
-    the <type>XAccessibleEventBroadcaster</type> and notified to
-    <type>XAccessibleEventListener</type>.
+    the XAccessibleEventBroadcaster and notified to
+    XAccessibleEventListener.
 
-    <p>It is usually implemented by <type>AccessibleContext</type>.
+    <p>It is usually implemented by AccessibleContext.
 
     @since OOo 1.1.2
 */
@@ -35,7 +35,7 @@ struct AccessibleEventObject: ::com::sun::star::lang::EventObject
 {
     /** specifies the type of this event.
 
-        <p>For a list of possible events see <type>AccessibleEventId</type>.
+        <p>For a list of possible events see AccessibleEventId.
      */
     short EventId;
 

@@ -25,7 +25,7 @@
 module com { module sun { module star { module ucb {
 
 /** The Hierarchy Content Provider (HCP) implements a
-    <type>ContentProvider</type> for the <type>UniversalContentBroker</type>
+    ContentProvider for the UniversalContentBroker
     (UCB).
 
     <p>It provides access to a persistent, customizable hierarchy of contents
@@ -42,17 +42,17 @@ published service HierarchyContentProvider
         <b>HCP Contents</b>
         <ol>
         <li>
-        A HCP Link (<type>HierarchyLinkContent</type>) is a content which
+        A HCP Link (HierarchyLinkContent) is a content which
         points to another (UCB) content. It is always contained in HCP Folder.
         A HCP Link has no children.
         </li>
         <li>
-        A HCP Folder (<type>HierarchyFolderContent</type>) is a container for
+        A HCP Folder (HierarchyFolderContent) is a container for
         other HCP Folders and HCP Links.
         </li>
         <li>
         There is at most one instance of a HCP Root Folder
-        ( <type>HierarchyRootFolderContent</type> ) at a time.
+        ( HierarchyRootFolderContent ) at a time.
         All other HCP contents are children of this folder. The HCP Root
         Folder can contain HCP Folders and HCP Links. It has the URL
         "vnd.sun.star.hier:/".

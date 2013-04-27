@@ -37,12 +37,12 @@ module com { module sun { module star { module datatransfer {
 published interface XTransferableEx: com::sun::star::uno::XInterface
 {
     /** @param requestedFlavors
-        Sequence of <type>DataFlavor</type> of interest. Specify an empty sequence for interest
+        Sequence of DataFlavor of interest. Specify an empty sequence for interest
         in all data flavors with top-level MIME content-types. To get all MIME
         content-types, call <member scope="com::sun::star::datatransfer">XTransferable::getTransferDataFlavors()</member>.
 
         @returns
-        The list of the matching supported <type>DataFlavor</type> that were requested. For
+        The list of the matching supported DataFlavor that were requested. For
         each requested top-level MIME content-type, all supported subtypes are returned.
     */
     sequence < DataFlavor > queryTransferDataFlavors( [in] sequence< DataFlavor > requestedFlavors );

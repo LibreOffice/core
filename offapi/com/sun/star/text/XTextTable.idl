@@ -99,7 +99,7 @@ published interface XTextTable: com::sun::star::text::XTextContent
 
 
     /** creates a text table cursor and returns the
-        <type>XTextTableCursor</type> interface.
+        XTextTableCursor interface.
 
         <p>Initially the cursor is positioned in the cell with the specified name.
         </p>

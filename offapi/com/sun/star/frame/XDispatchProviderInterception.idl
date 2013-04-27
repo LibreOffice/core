@@ -26,13 +26,13 @@
 
  module com {  module sun {  module star {  module frame {
 
-/** makes it possible to register an <type>XDispatchProvider</type> which
-    intercepts all requests of <type>XDispatch</type> to this instance.
+/** makes it possible to register an XDispatchProvider which
+    intercepts all requests of XDispatch to this instance.
 
     <p>
     Note: Nobody can guarantee order of used interceptor objects if more then ones exist.
     Later registered ones will be used at first. But it's possible to increase the chance
-    for that by providing the optional interface <type>XInterceptorInfo</type>.
+    for that by providing the optional interface XInterceptorInfo.
     </p>
 
     @see XDispatchProvider
@@ -41,7 +41,7 @@
  */
 published interface XDispatchProviderInterception: com::sun::star::uno::XInterface
 {
-    /** registers an <type>XDispatchProviderInterceptor</type>, which will become
+    /** registers an XDispatchProviderInterceptor, which will become
         the first interceptor in the chain of registered interceptors.
 
         @param Interceptor
@@ -51,7 +51,7 @@ published interface XDispatchProviderInterception: com::sun::star::uno::XInterfa
      */
     void registerDispatchProviderInterceptor( [in] XDispatchProviderInterceptor Interceptor );
 
-    /** removes an <type>XDispatchProviderInterceptor</type> which was previously registered
+    /** removes an XDispatchProviderInterceptor which was previously registered
 
         <p>
         The order of removals is arbitrary. It is not necessary to remove the last

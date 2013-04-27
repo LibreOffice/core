@@ -39,7 +39,7 @@ published interface XSheetCellRange: com::sun::star::table::XCellRange
     /** returns the spreadsheet interface which contains the cell range.
 
         @returns
-            a <type>Spreadsheet</type> object.
+            a Spreadsheet object.
 
         @see com::sun::star::sheet::SheetCellRange
         @see com::sun::star::sheet::SheetCellRanges

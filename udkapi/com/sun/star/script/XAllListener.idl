@@ -33,7 +33,7 @@
     of a listener interface in a single generic call.
 
     <p>Without any output parameters, it is possible to adapt any interface
-    if the <type>XAllListenerAdapterService</type> can generate an adapter.</p>
+    if the XAllListenerAdapterService can generate an adapter.</p>
  */
 published interface XAllListener: com::sun::star::lang::XEventListener
 {

@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module inspection {
 
 interface XPropertyHandler;
 
-/** describes the model of an <type>ObjectInspector</type>
+/** describes the model of an ObjectInspector
 
     @see ObjectInspector
 
@@ -35,10 +35,10 @@ interface XPropertyHandler;
 */
 interface XObjectInspectorModel
 {
-    /** describes a set of factories for creating <type>XPropertyHandler</type>s
+    /** describes a set of factories for creating XPropertyHandlers
 
         <p>Every element of the sequence must contain information to create a
-        <type>XPropertyHandler</type> instance. Two ways are currently supported:
+        XPropertyHandler instance. Two ways are currently supported:
         <ul>
             <li>A service name:</br>
                 If a sequence element contains a string, this string is interpreted
@@ -50,7 +50,7 @@ interface XObjectInspectorModel
                 is used to create a property handler.</li>
         </ul></p>
 
-        <p>This attribute is usually only evaluated by the <type>ObjectInspector</type> instance
+        <p>This attribute is usually only evaluated by the ObjectInspector instance
         which the model is currently bound to.</p>
 
         <p>The order of factories is important: If two property handlers declare themselves responsible
@@ -69,13 +69,13 @@ interface XObjectInspectorModel
         attribute, which is filled in <member>XPropertyHandler::describePropertyLine</member>
         method of your property handler.<br/>
         Those names provided by the handlers are programmatic names. All other information
-        about categories is part of the <type>PropertyCategoryDescriptor</type>, and
+        about categories is part of the PropertyCategoryDescriptor, and
         <member>describeCategories</member> assembles information about all categories which
         all property handlers provided by the model use.</p>
 
         @return
             a sequence of category descriptors. Their relative ordering also describes
-            the relative ordering of the categories in the <type>ObjectInspector</type>'s
+            the relative ordering of the categories in the ObjectInspector's
             user interface.<br/>
             The sequence must not contain two entries with the same programmatic name.<br/>
             <br/>
@@ -92,7 +92,7 @@ interface XObjectInspectorModel
         <p>In the user interface of an ObjectInspector, single properties are represented by
         single lines, and those lines are displayed successively. To determine an order of
         the property lines, the inspector model can associate an "order index" with each property.
-        The <type>ObjectInspector</type> will then sort the property lines in a way that they
+        The ObjectInspector will then sort the property lines in a way that they
         have the same relative ordering as the "order indexes" of their properties.</p>
 
         <p>Note that the concrete value the model returns for a given property does not
@@ -101,7 +101,7 @@ interface XObjectInspectorModel
         of <code>Foo</code> should be greater than the order index of <code>Bar</code>.
 
         <p>If for two different properties the same order index is returned, the
-        <type>ObjectInspector</type> will assume the order in which those properties
+        ObjectInspector will assume the order in which those properties
         were provided by the respective property handler
         (<member>XPropertyHandler::getSupportedProperties</member>).<br/>
         If two such properties originate from different handlers, they will be ordered according
@@ -129,10 +129,10 @@ interface XObjectInspectorModel
     /** denotes the minimum number of lines of text to be reserved for the help
         section.
 
-        <p>This property is ignored by the <type>ObjectInspector</type> if
+        <p>This property is ignored by the ObjectInspector if
         <member>HasHelpSection</member> is <FALSE/>.</p>
 
-        <p>The layout of the <type>ObjectInspector</type> is undefined if
+        <p>The layout of the ObjectInspector is undefined if
         <member>MinHelpTextLines</member> is larger than
         <member>MaxHelpTextLines</member>.</p>
 
@@ -143,10 +143,10 @@ interface XObjectInspectorModel
     /** denotes the maximum number of lines of text to be reserved for the help
         section.
 
-        <p>This property is ignored by the <type>ObjectInspector</type> if
+        <p>This property is ignored by the ObjectInspector if
         <member>HasHelpSection</member> is <FALSE/>.</p>
 
-        <p>The layout of the <type>ObjectInspector</type> is undefined if
+        <p>The layout of the ObjectInspector is undefined if
         <member>MaxHelpTextLines</member> is smaller than
         <member>MinHelpTextLines</member>.</p>
 

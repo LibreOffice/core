@@ -25,7 +25,7 @@
  module com {  module sun {  module star {  module awt {  module grid {
 
 
-/** If you do not want to implement the <type>XGridDataModel</type> yourself, use this service.
+/** If you do not want to implement the XGridDataModel yourself, use this service.
 
     <p>The <code>DefaultGridDataModel</code> implementation is a dumb container of tabular data. You can add
     and remove rows, modify cell values, and the like.</p>

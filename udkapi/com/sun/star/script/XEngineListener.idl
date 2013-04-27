@@ -40,7 +40,7 @@ published interface XEngineListener: com::sun::star::lang::XEventListener
 
         <p>If you call the method, the execution stops.  So in this situation,
         the stack and variable values are still available by using the
-        appropriate <type>XDebugging</type> methods.
+        appropriate XDebugging methods.
         </p>
      */
     void interrupt( [in] com::sun::star::script::InterruptEngineEvent Evt );

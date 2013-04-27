@@ -26,12 +26,12 @@
 
  module com {  module sun {  module star {  module frame {
 
-/** extends an existing <type>XDispatch</type> implementation with functionality
+/** extends an existing XDispatch implementation with functionality
     for dispatch recording
 
     <p>
     This interface can be implemented as an additional one beside an existing
-    <type>XDispatch</type> one to provide record functionality of dispatches.
+    XDispatch one to provide record functionality of dispatches.
     Because it's an additional interface the status events are available there
     and not at this interface.
     </p>
@@ -39,7 +39,7 @@
     <p>
     But normally this interface mustn't be used directly.
     If a dispatch object is well known and recording was enabled
-    on a <type>XDispatchRecorderSupplier</type> it's possible to use method
+    on a XDispatchRecorderSupplier it's possible to use method
     <member>XDispatchRecorderSupplier::dispatchAndRecord()</member> of it
     to make dispatch and recording automatically. The interface XRecordableDispatch
     is used transparently there.

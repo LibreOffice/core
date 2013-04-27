@@ -37,7 +37,7 @@ published interface XChartDataChangeEventListener: com::sun::star::lang::XEventL
 
         <p>This interface must be implemented by components that wish
         to get notified of changes in chart data.  They can be
-        registered at an <type>XChartData</type> component.</p>
+        registered at an XChartData component.</p>
 
         @param aEvent
             the event that gives further information on what changed.

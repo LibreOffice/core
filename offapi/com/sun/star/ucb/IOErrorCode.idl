@@ -27,7 +27,7 @@ module com { module sun { module star { module ucb {
 
     <P>See <type scope="com::sun::star::task">InteractionHandler</type> for a
     description of what kinds of arguments
-    <type>InteractiveAugmentedIOException</type> should use with each of these
+    InteractiveAugmentedIOException should use with each of these
     error codes.</P>
 */
 published enum IOErrorCode

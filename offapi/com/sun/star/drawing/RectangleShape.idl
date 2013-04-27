@@ -35,7 +35,7 @@
  module com {  module sun {  module star {  module drawing {
 
 
-/** This service is for a rectangle <type>Shape</type>.
+/** This service is for a rectangle Shape.
  */
 published service RectangleShape
 {
@@ -52,7 +52,7 @@ published service RectangleShape
     service com::sun::star::drawing::RotationDescriptor;
 
 
-    /** For <type>Shape</type>s with rounded corners, this is the radius
+    /** For Shapes with rounded corners, this is the radius
         of the corners.
      */
     [property] long CornerRadius;

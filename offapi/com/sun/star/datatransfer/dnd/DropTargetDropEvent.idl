@@ -28,7 +28,7 @@ module com { module sun { module star { module datatransfer { module dnd {
 
  published interface XDropTargetDropContext;
 
-/** The <type>DropTargetDropEvent</type> is delivered from the drop target to
+/** The DropTargetDropEvent is delivered from the drop target to
     its currently registered drop target listener.
 
     <p>It contains sufficient information for the originator of the operation to
@@ -47,7 +47,7 @@ published struct DropTargetDropEvent: com::sun::star::datatransfer::dnd::DropTar
     /** This value represents the action or actions selected by the user at
         the time of the drop.
 
-        <p>If more than one action is specified, the <type>XDropTargetListener</type>
+        <p>If more than one action is specified, the XDropTargetListener
          should raise a dialog to ask the user which action to use.</p>
 
          @see com::sun::star::datatransfer::dnd::DNDConstants

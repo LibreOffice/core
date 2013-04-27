@@ -40,22 +40,22 @@ module data
  */
 interface XLabeledDataSequence : ::com::sun::star::uno::XInterface
 {
-    /** returns an <type>XDataSequence</type> containing the actual
+    /** returns an XDataSequence containing the actual
         data.
      */
     XDataSequence getValues();
 
-    /** sets a new <type>XDataSequence</type> containing the actual
+    /** sets a new XDataSequence containing the actual
         data.
      */
     void setValues( [in] XDataSequence xSequence );
 
-    /** returns an <type>XDataSequence</type> containing the label for
+    /** returns an XDataSequence containing the label for
         the labeled sequence.
      */
     XDataSequence getLabel();
 
-    /** sets a new <type>XDataSequence</type> containing the label for
+    /** sets a new XDataSequence containing the label for
         the labeled sequence.
      */
     void setLabel( [in] XDataSequence xSequence );

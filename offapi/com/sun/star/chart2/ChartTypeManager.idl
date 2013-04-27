@@ -30,12 +30,12 @@ module star
 module chart2
 {
 
-/** A factory for creating <type>ChartTypeTemplate</type>s.
+/** A factory for creating ChartTypeTemplates.
  */
 service ChartTypeManager
 {
     /** A factory for creating objects the support the service
-        <type>ChartTypeTemplate</type>.
+        ChartTypeTemplate.
      */
     service ::com::sun::star::lang::MultiServiceFactory;
 };

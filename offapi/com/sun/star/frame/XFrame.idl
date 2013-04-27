@@ -35,7 +35,7 @@
     <p>
     A frame can be (it's not a must!) a part of a frame tree. If not this frame won't be
     accessible by using the API. This mode make sense for previews.
-    The root node of the tree can be a <type>Desktop</type> implementation.
+    The root node of the tree can be a Desktop implementation.
     </p>
 
     @see Desktop
@@ -203,10 +203,10 @@ published interface XFrame: com::sun::star::lang::XComponent
         <p>
         At first the frame sets itself as the active frame of its
         creator by calling <member>XFramesSupplier::setActiveFrame()</member>,
-        then it broadcasts an <type>FrameActionEvent</type> with
+        then it broadcasts an FrameActionEvent with
         <const>FrameAction::FRAME_ACTIVATED</const>. The component within
         this frame may listen to this event to grab the focus on activation;
-        for simple components this can be done by the <type>FrameLoader</type>.
+        for simple components this can be done by the FrameLoader.
         </p>
 
         <p>
@@ -223,7 +223,7 @@ published interface XFrame: com::sun::star::lang::XComponent
 
         <p>
         At first the frame deactivates its active sub-frame, if any.
-        Then broadcasts a <type>FrameActionEvent</type> with
+        Then broadcasts a FrameActionEvent with
         <const>FrameAction::FRAME_DEACTIVATING</const>.
         </p>
 

@@ -34,9 +34,9 @@
 /** is a stream which allows reading the data of persistent objects.
 
     <p>Implementations of this service must fulfill the specifications of the
-    <type>DataInputStream</type> service. It must be chained to an
-    <type>XMarkableStream</type>. Therefore, it provides the
-    <type>XMarkableStream</type> interface, and delegates the calls to the
+    DataInputStream service. It must be chained to an
+    XMarkableStream. Therefore, it provides the
+    XMarkableStream interface, and delegates the calls to the
     chained object.  </p>
     <p>The written objects are held until this instance is destroyed.
     The references to the objects are read as four-byte integers.

@@ -49,8 +49,8 @@ service AccessibleMenuItem
         <li>Children: There are no children.</li>
         <li>Parent: The parent of a menu item is a menu bar, a pop-up menu or
             a menu, whose accessible context supports the services
-            <type>AccessibleMenuBar</type>, <type>AccessiblePopupMenu</type>
-            or <type>AccessibleMenu</type>.</li>
+            AccessibleMenuBar, AccessiblePopupMenu
+            or AccessibleMenu.</li>
         <li>Relations: There are no relations.</li>
         <li>States: The states supported by this service are
             <ul>

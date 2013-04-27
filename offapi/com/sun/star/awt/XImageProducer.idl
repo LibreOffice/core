@@ -37,7 +37,7 @@ published interface XImageProducer: com::sun::star::uno::XInterface
         the image data during a later reconstruction of the image.
 
         <p>The image producer may, at its discretion, start delivering the
-        image data to the consumer using the <type>XImageConsumer</type>
+        image data to the consumer using the XImageConsumer
         interface immediately, or when the next available image reconstruction
         is triggered by a call to the startProduction method.</p>
      */

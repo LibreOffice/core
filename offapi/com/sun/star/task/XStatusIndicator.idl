@@ -28,7 +28,7 @@
     longer actions to the user
 
     <p>
-    Such objects are provided by a <type>XStatusIndicatorFactory</type>.
+    Such objects are provided by a XStatusIndicatorFactory.
     </p>
 
     @see XStatusIndicatorFactory

@@ -45,11 +45,11 @@ published struct ParseResult
     /** Value of token in case of numeric. */
     double  Value;
 
-    /** <type>KParseType</type> token type like
+    /** KParseType token type like
         <const>KParseType::IDENTNAME</const>. */
     long    TokenType;
 
-    /** <type>KParseTokens</type> flags of first character of actual
+    /** KParseTokens flags of first character of actual
         token matched. If <em>TokenType</em> is a
         <const>KParseType::SINGLE_QUOTE_NAME</const> or a
         <const>KParseType::DOUBLE_QUOTE_STRING</const> the first
@@ -57,7 +57,7 @@ published struct ParseResult
         quote itself. */
     long    StartFlags;
 
-    /** <type>KParseTokens</type> flags of remaining characters of
+    /** KParseTokens flags of remaining characters of
         actual token matched. */
     long    ContFlags;
 

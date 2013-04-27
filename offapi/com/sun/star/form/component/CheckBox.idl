@@ -31,7 +31,7 @@
 /** specifies the model of a check box control
 
     <p>The model supports the properties required for HTML, thus you can build up
-    <type>HTMLForm</type>s with it</p>
+    HTMLForms with it</p>
  */
 published service CheckBox
 {
@@ -59,7 +59,7 @@ published service CheckBox
     /** contains a reference value which is used for submission in a HTML
         form
 
-        <p>When submitting a <type>HTMLForm</type> which contains a check box,
+        <p>When submitting a HTMLForm which contains a check box,
         which is checked, the RefValue is used for submission.
      */
     [property] string RefValue;

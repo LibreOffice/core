@@ -25,8 +25,8 @@
 
  module com {  module sun {  module star {  module mozilla {
 
-/** This interface is an extension for <type>XPluginInstancePeer</type> interface.
-    An object can support this interface in addition to <type>XPluginInstancePeer</type> interface.
+/** This interface is an extension for XPluginInstancePeer interface.
+    An object can support this interface in addition to XPluginInstancePeer interface.
  */
 published interface XPluginInstanceSyncPeer : com::sun::star::uno::XInterface
 {

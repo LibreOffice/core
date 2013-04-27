@@ -24,7 +24,7 @@
  module com {  module sun {  module star {  module beans {
 
 
-/** specifies reasons for sending <type>PropertySetInfoChangeEvent</type>s.
+/** specifies reasons for sending PropertySetInfoChangeEvents.
 
     @see PropertySetInfoChangeEvent
     @see XPropertySetInfo
@@ -32,12 +32,12 @@
 published constants PropertySetInfoChange
 {
 
-    /** A property was inserted into a <type>XPropertySetInfo</type>.
+    /** A property was inserted into a XPropertySetInfo.
      */
     const long PROPERTY_INSERTED = 0;
 
 
-    /** A property was removed from a <type>XPropertySetInfo</type>.
+    /** A property was removed from a XPropertySetInfo.
      */
     const long PROPERTY_REMOVED = 1;
 };

@@ -37,7 +37,7 @@ published constants SimpleMailClientFlags
     /** Does not show the current configured system mail client, but sends
         the mail without any further user interaction.
         If this flag is specified, a recipient address must have been
-        specified for the given <type>XSimpleMailMessage</type>
+        specified for the given XSimpleMailMessage
         object given to the method
         <member scope="com::sun::star::system">XSimpleMailClient::sendSimpleMailMessage()</member>.
      */

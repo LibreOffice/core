@@ -26,7 +26,7 @@ module com { module sun { module star { module i18n {
 
 
 /**
-    Field indices to be passed to various <type>XCalendar</type> methods.
+    Field indices to be passed to various XCalendar methods.
 
     <p> Field is writable only if marked both Get/Set. </p>
 
@@ -44,7 +44,7 @@ module com { module sun { module star { module i18n {
  */
 published constants CalendarFieldIndex
 {
-    /// Get     <type>AmPmValue</type>.
+    /// Get     AmPmValue.
     const short AM_PM           = 0;
     /// Get/Set day of month [1-31].
     const short DAY_OF_MONTH    = 1;

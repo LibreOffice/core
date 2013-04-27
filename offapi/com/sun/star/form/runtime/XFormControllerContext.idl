@@ -26,9 +26,9 @@
 module com { module sun { module star { module form { module runtime {
 
 
-/** provides a context for a <type>FormController</type>
+/** provides a context for a FormController
 
-<p>A <type>FormController</type> knows about the controls it is responsible
+<p>A FormController knows about the controls it is responsible
     for, and about the control container which those controls live in. However, it doesn't know
     about a possible larger context, like a scrollable view which the controls are embedded into.
     To compensate this, it can be provided a <code>XFormControllerContext</code>.</p>

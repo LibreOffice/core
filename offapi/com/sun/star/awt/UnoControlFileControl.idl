@@ -28,7 +28,7 @@
 
 /** specifies a file control.
 
-    <p>A file control extends the <type>UnoControlEdit</type> with a file
+    <p>A file control extends the UnoControlEdit with a file
     dialog.</p>
  */
 published service UnoControlFileControl

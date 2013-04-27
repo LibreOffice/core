@@ -30,12 +30,12 @@
  module com {  module sun {  module star {  module script {
 
 /** allows the generation of adapters from specific
-    interfaces to the <type>XAllListener</type> interface.
+    interfaces to the XAllListener interface.
  */
 published interface XAllListenerAdapterService: com::sun::star::uno::XInterface
 {
     /** creates a wrapper from the listener of type
-        <var>xListenerType</var> to the <type>XAllListener</type>
+        <var>xListenerType</var> to the XAllListener
         listener.
 
         To get the correct listener interface the returned

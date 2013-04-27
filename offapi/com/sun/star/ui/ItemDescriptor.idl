@@ -43,7 +43,7 @@ module com {  module sun {  module star {  module ui {
 service ItemDescriptor
 {
     /** specifies which type this item descriptor belongs to.<p>See constant definition
-        <type>ItemType</type>.</p>
+        ItemType.</p>
     */
     [property] short Type;
 
@@ -61,7 +61,7 @@ service ItemDescriptor
 
     /** different styles which influence the appearance of the item and its behavior.
         <p>This property is only valid if the item describes a toolbar or statusbar
-        item. See <type>ItemStyle</type> for more information about possible styles.</p>
+        item. See ItemStyle for more information about possible styles.</p>
     */
     [optional, property] short Style;
 

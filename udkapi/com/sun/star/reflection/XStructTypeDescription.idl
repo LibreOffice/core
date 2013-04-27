@@ -29,7 +29,7 @@ interface XTypeDescription;
 /**
    Reflects a struct type, supporting polymorphic struct types.
 
-   <p>This type supersedes <type>XCompoundTypeDescription</type>, which only
+   <p>This type supersedes XCompoundTypeDescription, which only
    supports plain struct types.</p>
 
    <p>This type is used to reflect all of the following:</p>

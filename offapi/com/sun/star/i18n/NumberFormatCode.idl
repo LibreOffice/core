@@ -25,14 +25,14 @@ module com {  module sun {  module star {  module i18n {
 
 /**
     Number format code information returned by various
-    <type>XNumberFormatCode</type> methods.
+    XNumberFormatCode methods.
  */
 
 published struct NumberFormatCode
 {
-    /// One of <type>KNumberFormatType</type> values.
+    /// One of KNumberFormatType values.
     short Type;
-    /// One of <type>KNumberFormatUsage</type> values.
+    /// One of KNumberFormatUsage values.
     short Usage;
     /// Format code, for example, "YYYY-MM-DD".
     string Code;
@@ -40,7 +40,7 @@ published struct NumberFormatCode
     string DefaultName;
     /// Message identifier to be used if the name of the format is localized.
     string NameID;
-    /// Index of the code as defined in <type>NumberFormatIndex</type>.
+    /// Index of the code as defined in NumberFormatIndex.
     short Index;
     /// If this format is the default format of the <em>Usage</em> group.
     boolean Default;

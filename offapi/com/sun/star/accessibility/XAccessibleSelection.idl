@@ -33,8 +33,8 @@ module com { module sun { module star { module accessibility {
     currently selected children.  Every object that has children that can be
     selected should support this interface.</p>
 
-    <p>The <type>XAccessibleSelection</type> interface has to be implemented
-    in conjunction with the <type>XAccessibleContext</type> interface that
+    <p>The XAccessibleSelection interface has to be implemented
+    in conjunction with the XAccessibleContext interface that
     provides the children on which the first operates.</p>
 
     <p>It depends on the class implementing this interface, whether it
@@ -44,7 +44,7 @@ module com { module sun { module star { module accessibility {
 */
 interface XAccessibleSelection : ::com::sun::star::uno::XInterface
 {
-    /** Selects the specified <type>Accessible</type> child of the
+    /** Selects the specified Accessible child of the
         object.
 
         <p>Depending on the implementing class the child is added to the
@@ -119,7 +119,7 @@ interface XAccessibleSelection : ::com::sun::star::uno::XInterface
         @return
             If the index is valid, i.e. not negative and lower than the
             number of selected children, then a valid reference to the
-            corresponding <type>XAccessible</type> child is returned.
+            corresponding XAccessible child is returned.
             Otherwise an exception is thrown.
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the given index does not lie in the valid range of 0 up to

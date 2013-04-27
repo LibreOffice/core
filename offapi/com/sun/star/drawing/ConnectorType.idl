@@ -23,7 +23,7 @@
 
  module com {  module sun {  module star {  module drawing {
 
-/** The <type>ConnectorType</type> specifies the appearance of a connector.
+/** The ConnectorType specifies the appearance of a connector.
  */
 published enum ConnectorType
 {

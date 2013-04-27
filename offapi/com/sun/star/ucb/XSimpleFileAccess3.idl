@@ -27,7 +27,7 @@
 
 module com { module sun { module star { module ucb {
 
-/** This is an extension to the interface <type>XSimpleFileAccess2</type>.
+/** This is an extension to the interface XSimpleFileAccess2.
 
     @since OOo 1.1.2
 */

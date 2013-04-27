@@ -103,7 +103,7 @@ published service TableValidation
 
     /** specifies if the list of possible values should be shown on the cell and how.
 
-        See also <type>TableValidationVisibility</type>
+        See also TableValidationVisibility
      */
     [optional,property] short ShowList;
 

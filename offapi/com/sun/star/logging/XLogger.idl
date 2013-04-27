@@ -55,7 +55,7 @@ interface XLogger
 
     /** adds the given handler to the list of handlers.
 
-        <p>When an event is logged, the logger will create a <type>LogRecord</type>
+        <p>When an event is logged, the logger will create a LogRecord
         for this event, and pass this record to all registered handlers. Single handlers
         might or might not log those records at their own discretion, and depending on
         additional restrictions such as filters specified at handler level.</p>

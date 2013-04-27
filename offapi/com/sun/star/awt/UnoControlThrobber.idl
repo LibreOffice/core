@@ -30,7 +30,7 @@
 /**
     @since OOo 2.2
     @deprecatd
-        You should use <type>AnimatedImagesControl</type>.
+        You should use AnimatedImagesControl.
  */
 published service UnoControlThrobber
 {

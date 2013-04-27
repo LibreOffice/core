@@ -26,7 +26,7 @@ module com { module sun { module star { module graphic
 {
 
 /** Service that describes the necessary interfaces and properties
-    to convert arbitrary graphic data to a <type>XGraphic</type>
+    to convert arbitrary graphic data to a XGraphic
     interface containing a pixel graphic, that can be rendered the usual
     ways.
  */

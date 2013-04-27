@@ -42,7 +42,7 @@ published service MergeImporter
     /** allows importing configuration data into a backend.
 
         <p> In this implementation, the changes are merged with any
-            <type>XLayer</type> data that already exists in the <type>Backend</type>,
+            XLayer data that already exists in the Backend,
             replacing it completely.
         </p>
 

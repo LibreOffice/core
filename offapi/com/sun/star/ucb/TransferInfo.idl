@@ -27,7 +27,7 @@ module com { module sun { module star { module ucb {
 
     <p>The transfer command is always called on the target folder. For a
     details description of the transfer command refer to the documentation
-    of service <type>Content</type>.
+    of service Content.
 */
 published struct TransferInfo
 {
@@ -56,7 +56,7 @@ published struct TransferInfo
         to be transferred to a folder already containing another file named
         "foo.txt".
 
-        <p>The value can be one of the <type>NameClash</type> constants.
+        <p>The value can be one of the NameClash constants.
 
         <p>Implementations that are not able to detect whether there is a
         clashing resource may ignore <member>NameClash::ERROR</member> and

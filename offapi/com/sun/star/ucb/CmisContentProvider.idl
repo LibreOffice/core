@@ -18,7 +18,7 @@
 
 module com { module sun { module star { module ucb {
 
-/** The Cmis Content Provider implements a <type>ContentProvider</type>
+/** The Cmis Content Provider implements a ContentProvider
     for the <Type>UniversalContentBroker</type> (UCB).
 
     <p>The served contents enable access to directories and files on a

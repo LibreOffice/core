@@ -29,7 +29,7 @@
 module com { module sun { module star { module ucb {
 
 /** Distribute a content broker to various
-    <type>XRemoteContentProviderAcceptor</type>s.
+    XRemoteContentProviderAcceptors.
 
     @version 1.0
     @author Stephan Bergmann
@@ -44,10 +44,10 @@ published interface XRemoteContentProviderDistributor: com::sun::star::uno::XInt
         which is responsible for raising any of the advertised exceptions. </p>
 
         @param Url  A Uno Url to address the
-        <type>XRemoteContentProviderAcceptor</type>.
+        XRemoteContentProviderAcceptor.
 
         @param Identifier  An identifier handed to the
-        <type>XRemoteContentProviderAcceptor</type>.
+        XRemoteContentProviderAcceptor.
 
         @returns success indicator.  Especially, if there's already a
         connection to the given Url, the call will fail, no matter whether
@@ -63,7 +63,7 @@ published interface XRemoteContentProviderDistributor: com::sun::star::uno::XInt
         content provider acceptor.
 
         @param Url  A Uno Url to address the
-        <type>XRemoteContentProviderAcceptor</type>.
+        XRemoteContentProviderAcceptor.
 
         @returns success indicator.
     */

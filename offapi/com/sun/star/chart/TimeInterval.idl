@@ -35,7 +35,7 @@ published struct TimeInterval
     long    Number;
 
     /** specifies a unit for the interval
-        <p>is a value out of the constant group <type>::com::sun::star::chart::TimeUnit</type>.</p>
+        <p>is a value out of the constant group ::com::sun::star::chart::TimeUnit.</p>
     */
     long    TimeUnit;
 };

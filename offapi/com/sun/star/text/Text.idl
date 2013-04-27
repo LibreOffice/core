@@ -57,7 +57,7 @@ published service Text
     interface XText;
 
 
-    /** optional interface to compare positions of <type>TextRange</type>
+    /** optional interface to compare positions of TextRange
                 instances within this text.
      */
     [optional] interface XTextRangeCompare;

@@ -38,7 +38,7 @@ published interface XNativeNumberSupplier : ::com::sun::star::uno::XInterface
     /** Returns native number string for given number string.
 
         @param nNativeNumberMode
-            One of <type>NativeNumberMode</type> values.
+            One of NativeNumberMode values.
      */
 
     string getNativeNumberString( [in] string aNumberString,
@@ -48,7 +48,7 @@ published interface XNativeNumberSupplier : ::com::sun::star::uno::XInterface
     /** Check if the NatNum is valid for the given locale.
 
         @param nNativeNumberMode
-            One of <type>NativeNumberMode</type> values.
+            One of NativeNumberMode values.
      */
 
     boolean isValidNatNum( [in] ::com::sun::star::lang::Locale aLocale,
@@ -58,7 +58,7 @@ published interface XNativeNumberSupplier : ::com::sun::star::uno::XInterface
         in the XML file format.
 
         @param nNativeNumberMode
-            One of <type>NativeNumberMode</type> values.
+            One of NativeNumberMode values.
      */
 
     NativeNumberXmlAttributes convertToXmlAttributes(
@@ -68,7 +68,7 @@ published interface XNativeNumberSupplier : ::com::sun::star::uno::XInterface
     /** Convert XML attributes to a NatNum value.
 
         @returns
-            One of <type>NativeNumberMode</type>
+            One of NativeNumberMode
      */
 
     short convertFromXmlAttributes( [in] NativeNumberXmlAttributes aAttr );

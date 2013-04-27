@@ -27,7 +27,7 @@
 
  module com {  module sun {  module star {  module text {
 
-/** makes it possible to access the <type>TextFrame</type> instances in this
+/** makes it possible to access the TextFrame instances in this
     context (e.g. document).
  */
 published interface XTextFramesSupplier: com::sun::star::uno::XInterface

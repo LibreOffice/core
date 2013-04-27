@@ -81,7 +81,7 @@ struct ScaleData
     /** describes the type of the axis.
 
         <p>It can be a real number axis or a category axis or something else.
-        AxisType is one value out of the constant group <type>AxisType</type>.</p>
+        AxisType is one value out of the constant group AxisType.</p>
     */
     long   AxisType;
 

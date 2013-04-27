@@ -33,7 +33,7 @@ published struct OpenCommandArgument
 {
     /** A mode.
 
-        <p>The value can be one of the <type>OpenMode</type> constants.
+        <p>The value can be one of the OpenMode constants.
     */
     long Mode;
 
@@ -62,7 +62,7 @@ published struct OpenCommandArgument
     com::sun::star::uno::XInterface Sink;
 
     /** The properties, for that the values shall be provided by the
-        <type>DynamicResultSet</type> returned by the command).
+        DynamicResultSet returned by the command).
     */
     sequence< com::sun::star::beans::Property > Properties;
 };

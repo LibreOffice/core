@@ -27,7 +27,7 @@
 
 module com { module sun { module star { module ucb {
 
-/** provides access to a set of <type>Content</type>s.
+/** provides access to a set of Contents.
 */
 published service ContentProvider
 {
@@ -35,7 +35,7 @@ published service ContentProvider
      */
     interface com::sun::star::ucb::XContentProvider;
 
-    /** creates special <type>XContentIdentifier</type> implementation
+    /** creates special XContentIdentifier implementation
         objects for the contents provided by this content provider.
 
         <p>This interface can be implemented in case the provider wants to
@@ -44,13 +44,13 @@ published service ContentProvider
      */
     [optional] interface com::sun::star::ucb::XContentIdentifierFactory;
 
-    /** allows a <type>ContentProvider</type> to adjust itself to special
+    /** allows a ContentProvider to adjust itself to special
         needs.
 
         <p>Whenever a ContentProvider that supports this interface is
-        registered at a <type>XContentProviderManager</type>, the method
+        registered at a XContentProviderManager, the method
         <member>XParameterizedContentProvider::registerInstance</member>
-        should first be called, using the returned <type>XContentProvider</type>
+        should first be called, using the returned XContentProvider
         to register at the XContentProviderManager.
      */
     [optional] interface com::sun::star::ucb::XParameterizedContentProvider;

@@ -23,7 +23,7 @@
 module com { module sun { module star { module ucb {
 
 /** These values are used to specify whether and which error has occurred
-    while fetching data of some <type>ContentResultSet</type> rows.
+    while fetching data of some ContentResultSet rows.
 
     @see FetchResult
 */
@@ -35,7 +35,7 @@ published constants FetchError
 
     /** indicates that during fetching we went beyond the last or first row.
 
-        <p>Therefore the <type>FetchResult</type> does not contain the full
+        <p>Therefore the FetchResult does not contain the full
         count of demanded rows, but the maximum possible count must be
         contained.
     */
@@ -44,8 +44,8 @@ published constants FetchError
     /** indicates that during fetching we got an exception.
 
         <p>The row, that causes the exception, and all following ( "following"
-        in read order! ) rows are not contained in the <type>FetchResult</type>.
-        Therefore the <type>FetchResult</type> does not contain the full count
+        in read order! ) rows are not contained in the FetchResult.
+        Therefore the FetchResult does not contain the full count
         of demanded rows. But all properly read rows so far must be contained.
     */
     const short EXCEPTION = 2;

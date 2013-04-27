@@ -28,7 +28,7 @@ module com { module sun { module star { module ucb {
  published interface XPropertySetRegistry;
 
 /** A persistent property set, which can be saved in and restored from a
-    <type>XPropertySetRegistry</type>.
+    XPropertySetRegistry.
 
      @version  1.0
      @author   Kai Sommerfeld

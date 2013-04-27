@@ -39,7 +39,7 @@ interface XSlideShowController
     /** returns true if the slide show is still running.
         If this returns false, this component is already disposed.
         You can start a new slide show and get a new instance
-        of <type>XSlideShowController</type> from <type>XPresentation2</type>
+        of XSlideShowController from XPresentation2
     */
     boolean isRunning();
 
@@ -239,10 +239,10 @@ interface XSlideShowController
     [attribute] long PenColor;
 
 
-    /** returns the actual <type>XSlideShow</type> instance that runs the
+    /** returns the actual XSlideShow instance that runs the
         slide show.
         <br>Normally all navigation should be done using this controller and
-        not the <type>XSlideShow</type> itself. */
+        not the XSlideShow itself. */
     XSlideShow getSlideShow();
 
 };

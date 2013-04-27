@@ -46,7 +46,7 @@ module com {  module sun {  module star {  module bridge { module oleautomation 
     ProgId is com.sun.star.ServiceManager.
     </p>
     <p>
-    <type>ApplicationRegistration</type> does not provide any particular
+    ApplicationRegistration does not provide any particular
     interface because the UNO objects are registered while instantiating this
     service and deregistered if the implementation, which makes use of this
     service, is being released.

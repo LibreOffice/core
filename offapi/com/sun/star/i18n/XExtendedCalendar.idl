@@ -53,10 +53,10 @@ published interface XExtendedCalendar : ::com::sun::star::i18n::XCalendar
         digits. <p/>
 
         @param nCalendarDisplayCode
-            One of <type>CalendarDisplayCode</type>
+            One of CalendarDisplayCode
 
         @param nNativeNumberMode
-            One of <type>NativeNumberMode</type>. <br/>
+            One of NativeNumberMode. <br/>
             This argument designates the basic transliteration mode as
             if specified for the year representation. However, depending
             on the locale, different conversions for year and month, for

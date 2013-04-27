@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module sheet {
 interface XExternalSheetCache
 {
     /** It sets a cached value for a specified cell position.  The value is expected
-        to be either of type <type>string</type> or of type <type>double</type>.  No
+        to be either of type string or of type double.  No
         other data types are supported.
 
         @param nRow row position (0-based)
@@ -44,7 +44,7 @@ interface XExternalSheetCache
             raises (com::sun::star::lang::IllegalArgumentException);
 
     /** It retrieves a cached value from a specified cell position.  The cached
-        value can be either <type>string</type> or <type>double</type>.
+        value can be either string or double.
 
         @return any cached cell value
      */
@@ -76,7 +76,7 @@ interface XExternalSheetCache
         external reference token.
 
         <p>Each external sheet cache has a unique index value inside the
-        <type>ExternalDocLink</type> instance.</p>
+        ExternalDocLink instance.</p>
 
         @see FormulaToken
         @see ExternalReference

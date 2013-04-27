@@ -28,7 +28,7 @@ module com { module sun { module star { module ui {
     interface configuration manager.
 
     <p>
-    The <type>XUIConfiguration</type> interface is provided for user
+    The XUIConfiguration interface is provided for user
     interface configuration managers which need to broadcast changes
     within the container; that means the actions of adding, replacing
     and removing elements are broadcast to listeners.

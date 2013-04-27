@@ -29,7 +29,7 @@
  module com {  module sun {  module star {  module task {
 
 
-/** Obtains human readable strings from an <type>XInteractionRequest</type>.
+/** Obtains human readable strings from an XInteractionRequest.
  */
 /* published */
 interface XInteractionRequestStringResolver : com::sun::star::uno::XInterface
@@ -41,7 +41,7 @@ interface XInteractionRequestStringResolver : com::sun::star::uno::XInterface
         <p>An informational interaction request contains not more than one
         interaction continuation (user has no choice; request is just
         informational). The supplies continuation must either be a
-        <type>XInteractionAbort</type> or <type>XInteractionApprove</type>
+        XInteractionAbort or XInteractionApprove
 
         @param Request the interaction request for that the message shall
         be obtained.

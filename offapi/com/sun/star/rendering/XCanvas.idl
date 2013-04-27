@@ -55,34 +55,34 @@ interface XTextLayout;
     the place where all draw methods are located.<p>
 
     Some notes are in order to explain the concepts used here. The
-    <type>XCanvas</type> interface is free of client-modifiable state,
+    XCanvas interface is free of client-modifiable state,
     i.e. it can be used safely and without external synchronization in
     a multi-threaded environment. On the other hand, this implies that
     for nearly every canvas operation, external state is
-    required. This is provided by <type>ViewState</type> and
-    <type>RenderState</type> in a unified fashion, supplemented by a
+    required. This is provided by ViewState and
+    RenderState in a unified fashion, supplemented by a
     few extra state parameters for some methods (e.g. textured
     polygons or text rendering).<p>
 
     When used careless, this scheme can be inefficient to some extend,
     because internally, view, render and other states have to be
     combined before rendering. This is especially expensive for
-    complex clip polygons, i.e. when both <type>ViewState</type> and
-    <type>RenderState</type> have a complex clip polygon set, which
+    complex clip polygons, i.e. when both ViewState and
+    RenderState have a complex clip polygon set, which
     have to be intersected before rendering. It is therefore
-    recommended to combine <type>ViewState</type> and
-    <type>RenderState</type> already at the client side, when objects
+    recommended to combine ViewState and
+    RenderState already at the client side, when objects
     are organized in a hierarchical way: the classic example are
     grouped draw shapes, whose parent group object imposes a
     common clipping and a common transformation on its siblings. The
-    group object would therefore merge the <type>ViewState</type> and
-    the <type>RenderState</type> it is called with into a new
-    <type>ViewState</type>, and call its siblings with a
-    <type>RenderState</type> containing only the local offset (and no
+    group object would therefore merge the ViewState and
+    the RenderState it is called with into a new
+    ViewState, and call its siblings with a
+    RenderState containing only the local offset (and no
     extra clipping).<p>
 
     Further on, this stateless nature provides easy ways for
-    caching. Every non-trivial operation on <type>XCanvas</type> can
+    caching. Every non-trivial operation on XCanvas can
     return a cache object, which, when called to redraw, renders the
     primitive usually much more quickly than the original method. Note
     that such caching is a lot more complicated, should the actual
@@ -91,7 +91,7 @@ interface XTextLayout;
     <type
     scope="::com::sun::star::drawing">::com::sun::star::drawing::XGraphics</type>
     interface).  Please note, though, that deciding whether to return
-    an <type>XCachedPrimitive</type> is completely up to the
+    an XCachedPrimitive is completely up to the
     implementation - don't rely on the methods returning something
     (this is because there might be cases when returning such a cache
     object will actually be a pessimization, since it involves memory
@@ -102,9 +102,9 @@ interface XTextLayout;
     can, in principle, roll your own implementations of these
     interfaces, wrap it around your internal representation of
     polygons and bitmaps, and render them. It might just not be overly
-    fast, because the <type>XCanvas</type> would need to convert for
+    fast, because the XCanvas would need to convert for
     each render call. It is therefore recommended to create such
-    objects via the <type>XGraphicDevice</type> factory (to be
+    objects via the XGraphicDevice factory (to be
     retrieved from every canvas object via the
     <member>getDevice()</member> call) - they will then internally
     optimize to the underlying graphics subsystem.<p>
@@ -117,7 +117,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
 
         This method clears the whole canvas area to the device default
         color (e.g. white for a printer, transparent for an
-        <type>XCustomSprite</type>).
+        XCustomSprite).
      */
     void                clear();
 
@@ -132,7 +132,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         @param aRenderState
         The render state to be used when drawing this point.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if one of the view and render state parameters are outside the
         specified range.
      */
@@ -155,7 +155,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         @param aRenderState
         The render state to be used when drawing this line.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if one of the view and render state parameters are outside the
         specified range.
      */
@@ -178,7 +178,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         @param aRenderState
         The render state to be used when drawing this curve.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if one of the view and render state parameters are outside the
         specified range.
      */
@@ -200,7 +200,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
 
         @return a handle to the cached rendering output.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if one of the view and render state parameters are outside the
         specified range.
      */
@@ -212,8 +212,8 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         specified stroke attributes.<p>
 
         This method considers the stroking of all polygons as an
-        atomic operation in relation to the <type>RenderState</type>'s
-        <type>CompositeOperationy</type> operation. That means,
+        atomic operation in relation to the RenderState's
+        CompositeOperationy operation. That means,
         overlapping strokes from distinct polygons will look exactly
         as overlapping segments of the same polygon, even with
         transparency.<p>
@@ -232,7 +232,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
 
         @return a handle to the cached rendering output.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if one of the view and render state parameters are outside the
         specified range.
      */
@@ -245,8 +245,8 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         with the specified texture graphics.<p>
 
         This method considers the stroking of all polygons as an
-        atomic operation in relation to the <type>RenderState</type>'s
-        <type>CompositeOp</type> operation. That means, overlapping
+        atomic operation in relation to the RenderState's
+        CompositeOp operation. That means, overlapping
         strokes from distinct polygons will look exactly as
         overlapping segments of the same polygon, even with
         transparency.<p>
@@ -269,11 +269,11 @@ interface XCanvas : ::com::sun::star::uno::XInterface
 
         @return a handle to the cached rendering output.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if one of the view and render state parameters are outside the
         specified range.
 
-        @throws <type>VolatileContentDestroyedException</type>
+        @throws VolatileContentDestroyedException
         if a texture bitmap was volatile, and the content was
         destroyed before the rendering could take place.
      */
@@ -288,8 +288,8 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         outline via the specified texture mapping.<p>
 
         This method considers the stroking of all polygons as an
-        atomic operation in relation to the <type>RenderState</type>'s
-        <type>CompositeOp</type> operation. That means, overlapping
+        atomic operation in relation to the RenderState's
+        CompositeOp operation. That means, overlapping
         strokes from distinct polygons will look exactly as
         overlapping segments of the same polygon, even with
         transparency.
@@ -316,11 +316,11 @@ interface XCanvas : ::com::sun::star::uno::XInterface
 
         @return a handle to the cached rendering output.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if one of the view and render state parameters are outside the
         specified range.
 
-        @throws <type>VolatileContentDestroyedException</type>
+        @throws VolatileContentDestroyedException
         if a texture bitmap was volatile, and the content was
         destroyed before the rendering could take place.
      */
@@ -352,7 +352,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         @return a poly-polygon describing the outline of the stroked
         area.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if one of the view and render state parameters are outside the
         specified range.
      */
@@ -363,7 +363,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
     /** Fill the given poly-polygon.<p>
 
         This method fills the given poly-polygon according to the
-        <type>RenderState</type>'s color and the poly-polygon's fill
+        RenderState's color and the poly-polygon's fill
         rule.<p>
 
         @param xPolyPolygon
@@ -377,7 +377,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
 
         @return a handle to the cached rendering output.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if one of the view and render state parameters are outside the
         specified range.
      */
@@ -388,7 +388,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
     /** Fill the given poly-polygon with a texture.<p>
 
         This method fills the given poly-polygon according to the
-        <type>RenderState</type>'s color, the given textures and
+        RenderState's color, the given textures and
         poly-polygon's fill rule.<p>
 
         @param xPolyPolygon
@@ -406,11 +406,11 @@ interface XCanvas : ::com::sun::star::uno::XInterface
 
         @return a handle to the cached rendering output.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if one of the view and render state parameters are outside the
         specified range.
 
-        @throws <type>VolatileContentDestroyedException</type>
+        @throws VolatileContentDestroyedException
         if a texture bitmap was volatile, and the content was
         destroyed before the rendering could take place.
     */
@@ -422,7 +422,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
     /** Fill the given poly-polygon with a mapped texture.<p>
 
         This method fills the given poly-polygon according to the
-        <type>RenderState</type>'s color, the given textures and
+        RenderState's color, the given textures and
         poly-polygon's fill rule. The texture is mapped to the
         poly-polygon's interior via the given texture mapping.<p>
 
@@ -445,11 +445,11 @@ interface XCanvas : ::com::sun::star::uno::XInterface
 
         @return a handle to the cached rendering output.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if one of the view and render state parameters are outside the
         specified range.
 
-        @throws <type>VolatileContentDestroyedException</type>
+        @throws VolatileContentDestroyedException
         if a texture bitmap was volatile, and the content was
         destroyed before the rendering could take place.
      */
@@ -468,16 +468,16 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         the following properties are recognized:
         <ul>
 
-            <il>Kerning: a <type>double</type> between 0 and 1, where
+            <il>Kerning: a double between 0 and 1, where
             0 completely disables kerning. Whether kerning is on or
             off by default is font-dependent.</il>
 
-            <il>IsEmphasisMarks: a <type>boolean</type>, where <TRUE/>
+            <il>IsEmphasisMarks: a boolean, where <TRUE/>
             enables automatic placements of emphasis marks, e.g. for
             Hebrew. The default value, if this property is not
             specified, is <FALSE/>.</il>
 
-            <il>ExpandedSpacing: a <type>double</type> value which is added
+            <il>ExpandedSpacing: a double value which is added
             between all cell distances for this font. The default value for
             this property is zero. Use negative values for condensed output,
             and positive values for expanded output.</il>
@@ -496,7 +496,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         @returns the requested font, or an invalid reference, if the
         request failed.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if one of the parameters is not within the allowed range.
      */
     XCanvasFont         createFont( [in] FontRequest aFontRequest, [in] sequence< ::com::sun::star::beans::PropertyValue > aExtraFontProperties, [in] ::com::sun::star::geometry::Matrix2D aFontMatrix )
@@ -507,7 +507,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
 
         @param aFilter
         Filter parameter to reduce the list of returned fonts. Every
-        member of <type>FontInfo</type> that is not the empty string
+        member of FontInfo that is not the empty string
         or the "don't care" value restricts the list of returned fonts
         to contain only those that have the specified attribute.
 
@@ -517,9 +517,9 @@ interface XCanvas : ::com::sun::star::uno::XInterface
 
         @returns the list of fonts matching the filter set.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if one of the font properties are invalid or not recognized,
-        or if one of the <type>FontInfo</type> members is not within
+        or if one of the FontInfo members is not within
         the permitted range.
      */
     sequence< FontInfo > queryAvailableFonts( [in] FontInfo aFilter, [in] sequence< ::com::sun::star::beans::PropertyValue > aFontProperties )
@@ -548,7 +548,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         The render state to be used when drawing this text.
 
         @param nTextDirection
-        A value from the <type>TextDirection</type> collection,
+        A value from the TextDirection collection,
         denoting the main writing direction for this string. The main
         writing direction determines the origin of the text output,
         i.e. the left edge for left-to-right and the right edge for
@@ -556,7 +556,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
 
         @return a handle to the cached rendering output.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if one of the view and render state parameters are outside the
         specified range.
      */
@@ -576,7 +576,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
 
         @param xLayoutetText
         An interface to the readily layouted text, obtained from a
-        <type>XCanvasFont</type> created at this canvas. The text
+        XCanvasFont created at this canvas. The text
         layout already carries intrinsic font information.
 
         @param aViewState
@@ -587,7 +587,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
 
         @return a handle to the cached rendering output.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if one of the view and render state parameters are outside the
         specified range.
      */
@@ -600,7 +600,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         This method renders the bitmap, at a position and shape as
         specified by the combined view and render transformations. For
         fast render speed, the bitmap should be created by the
-        corresponding <type>XGraphicDevice</type>'s
+        corresponding XGraphicDevice's
         <member>XGraphicDevice::createCompatibleBitmap()</member>
         method.<p>
 
@@ -615,11 +615,11 @@ interface XCanvas : ::com::sun::star::uno::XInterface
 
         @return a handle to the cached rendering output.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if one of the view and render state parameters are outside the
         specified range.
 
-        @throws <type>VolatileContentDestroyedException</type>
+        @throws VolatileContentDestroyedException
         if a texture bitmap was volatile, and the content was
         destroyed before the rendering could take place.
      */
@@ -632,7 +632,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         This method renders the bitmap, at a position and shape as
         specified by the combined view and render transformations. For
         fast render speed, the bitmap should be created by the
-        corresponding <type>XGraphicDevice</type>'s
+        corresponding XGraphicDevice's
         <member>XGraphicDevice::createCompatibleBitmap()</member>
         method. The bitmap's color channel values are multiplied with
         the device color values as specified in the render state.<p>
@@ -654,11 +654,11 @@ interface XCanvas : ::com::sun::star::uno::XInterface
 
         @return a handle to the cached rendering output.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if one of the view and render state parameters are outside the
         specified range.
 
-        @throws <type>VolatileContentDestroyedException</type>
+        @throws VolatileContentDestroyedException
         if a texture bitmap was volatile, and the content was
         destroyed before the rendering could take place.
      */
@@ -674,7 +674,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         rendering to such a device. This includes device resolution,
         color space, or bitmap formats.
 
-        @return the associated <type>XGraphicDevice</type>.
+        @return the associated XGraphicDevice.
      */
     XGraphicDevice          getDevice();
 };

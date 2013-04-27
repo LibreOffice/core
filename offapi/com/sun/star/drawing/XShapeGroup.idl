@@ -26,15 +26,15 @@
  module com {  module sun {  module star {  module drawing {
 
 
-/** is implemented by <type>Shape</type>s that contain other
-    <type>Shape</type>s.
+/** is implemented by Shapes that contain other
+    Shapes.
 
     @deprecated
  */
 published interface XShapeGroup: com::sun::star::drawing::XShape
 {
     /** enters the group which enables the editing function
-        for the parts of a grouped <type>Shape</type>. Then the parts can
+        for the parts of a grouped Shape. Then the parts can
         be edited instead of the group as a whole.
 
 
@@ -46,7 +46,7 @@ published interface XShapeGroup: com::sun::star::drawing::XShape
     void enterGroup();
 
     /** leaves the group, which disables the editing function
-        for the parts of a grouped <type>Shape</type>. Then only the
+        for the parts of a grouped Shape. Then only the
         group as a whole can be edited.
 
 

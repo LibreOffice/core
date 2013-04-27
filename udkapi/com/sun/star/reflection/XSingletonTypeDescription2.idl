@@ -29,7 +29,7 @@ interface XTypeDescription;
 /**
    Reflects a singleton, supporting interface-based singletons.
 
-   <p>This type supersedes <type>XSingletonTypeDescription</type>, which only
+   <p>This type supersedes XSingletonTypeDescription, which only
    supports obsolete, service-based singletons.</p>
 
    @since OOo 2.0

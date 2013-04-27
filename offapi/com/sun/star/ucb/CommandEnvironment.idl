@@ -26,7 +26,7 @@
 
 module com { module sun { module star { module ucb {
 
- /* This service implements an <type>XCommandEnvironment</type> that can be
+ /* This service implements an XCommandEnvironment that can be
     initialized with any implementation of
     <type scope="com::sun::star::task">XInteractionHandler</type> and
     <type scope="com::sun::star::ucb">XProgressHandler</type>. The respective

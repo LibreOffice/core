@@ -27,7 +27,7 @@
 module com {  module sun {  module star {  module awt { module tree {
 
 
-/** specifies the standard model of a <type>TreeControl</type>.
+/** specifies the standard model of a TreeControl.
  */
 service TreeControlModel
 {
@@ -39,17 +39,17 @@ service TreeControlModel
     */
     [property] ::com::sun::star::view::SelectionType SelectionType;
 
-    /** Specifies the <type>XTreeDataModel</type> that is providing the hierarchical data.
+    /** Specifies the XTreeDataModel that is providing the hierarchical data.
 
-        <p>You can implement your own instance of <type>XTreeDataModel</type> or use
-        the <type>MutableTreeDataModel</type>.
+        <p>You can implement your own instance of XTreeDataModel or use
+        the MutableTreeDataModel.
     */
     [property] XTreeDataModel DataModel;
 
     /** Specifies if the root node of the tree is displayed.
         <p>If <var>RootDisplayed</var> is set to <FALSE/>, the root node of a model is no longer
-        a valid node for the <type>XTreeControl</type> and can't be used with any method of
-        <type>XTreeControl</type>.
+        a valid node for the XTreeControl and can't be used with any method of
+        XTreeControl.
         <p>The default value is <TRUE/></p>
     */
     [property] boolean RootDisplayed;

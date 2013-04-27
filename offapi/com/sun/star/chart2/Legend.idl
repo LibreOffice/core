@@ -36,7 +36,7 @@ module star
 module chart2
 {
 
-/** Describes a legend for a <type>Diagram</type>.
+/** Describes a legend for a Diagram.
  */
 service Legend
 {

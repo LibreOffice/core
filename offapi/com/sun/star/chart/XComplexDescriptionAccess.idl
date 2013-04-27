@@ -27,7 +27,7 @@
 
 /** Offers access to complex column and row descriptions.
 
-<p>Can be obtained from interface <type>XChartDocument</type> via method getData().</p>
+<p>Can be obtained from interface XChartDocument via method getData().</p>
 
 @since OOo 3.3
 */

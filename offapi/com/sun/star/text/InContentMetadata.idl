@@ -30,25 +30,25 @@
 module com {  module sun {  module star {  module text {
 
 
-/** is a <type>TextContent</type> that can be used to attach RDF metadata
+/** is a TextContent that can be used to attach RDF metadata
     to a range of text.
 
     @since OOo 3.2
  */
 service InContentMetadata
 {
-    /** None of the properties of <type>TextContent</type> are
+    /** None of the properties of TextContent are
         supported. */
     service com::sun::star::text::TextContent;
 
-    /** The <type>InContentMetadata</type> can have RDF metadata attached. */
+    /** The InContentMetadata can have RDF metadata attached. */
     interface com::sun::star::rdf::XMetadatable;
 
-    /** The <type>TextContent</type>s that are contained in the
+    /** The TextContents that are contained in the
         annotated range of text can be enumerated. */
     interface com::sun::star::container::XEnumerationAccess;
 
-    /** The <type>TextContent</type> that is the parent of this text range.
+    /** The TextContent that is the parent of this text range.
         @since OOo 3.3
      */
     interface com::sun::star::container::XChild;

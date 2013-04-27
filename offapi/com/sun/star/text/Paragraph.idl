@@ -80,7 +80,7 @@ published service Paragraph
 
     /** This interface enumerates the text portions of this paragraph.
 
-                <p>A text portion is defined as the largest possible <type>TextRange</type>
+                <p>A text portion is defined as the largest possible TextRange
                 within a paragraph with the same property values and the same bound objects.
 
                 <p>In general this interface is used for exporting into file

@@ -26,7 +26,7 @@ module com { module sun { module star { module configuration { module backend {
 
 
 /**
-   implements <type>SingleLayerStratum</type> that
+   implements SingleLayerStratum that
     provides access to a singe layer of configuration data from local file system
 */
 service LocalSingleStratum

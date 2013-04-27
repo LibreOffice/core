@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module util {
 
 
 /** makes it possible to replace strings in a text described by a
-    <type>SearchDescriptor</type>.
+    SearchDescriptor.
 
     @example
     <listing>

@@ -46,7 +46,7 @@ published interface XDesktop: com::sun::star::uno::XInterface
 
         <p>
         First, every terminate listener is called by his <member>XTerminateListener::queryTermination()</member> method.
-        Throwing of a <type>TerminationVetoException</type> can break the termination process and the listener how has
+        Throwing of a TerminationVetoException can break the termination process and the listener how has
         done that will be the new "controller" of the desktop lifetime. He should try to terminate it by himself after
         his own processes will be finished.
         If nobody disagree with the termination request, every listener will be called by his
@@ -90,7 +90,7 @@ published interface XDesktop: com::sun::star::uno::XInterface
         The component is, by definition, the model of the control which
         is loaded into a frame, or if no model exists, into the control
         itself.
-        The service <type>Components</type> which is available from this
+        The service Components which is available from this
         method is a collection of all components of the desktop which are open
         within a frame of the desktop.
         </p>

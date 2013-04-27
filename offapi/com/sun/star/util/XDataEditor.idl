@@ -43,11 +43,11 @@ published interface XDataEditor: com::sun::star::uno::XInterface
      */
     com::sun::star::uno::XInterface getModel();
 
-    /** registers a listener to receive <type>DataEditorEvent</type>s.
+    /** registers a listener to receive DataEditorEvents.
      */
     void addDataEditorListener( [in] XDataEditorListener listener );
 
-    /** unregisters a listener which received <type>DataEditorEvent</type>s.
+    /** unregisters a listener which received DataEditorEvents.
      */
     void removeDataEditorListener( [in] XDataEditorListener listener );
 };

@@ -85,7 +85,7 @@ published service ExtendedTypeDetectionFactory
                 <td><em>Types</em></td>
                 <td>[sequence< string >]</td>
                 <td>It's a list of all types, which can be detected by this extended detection component.
-                    All items of this list must match an item of the <type>TypeDetection</type> container service.</td>
+                    All items of this list must match an item of the TypeDetection container service.</td>
             </tr>
         </table>
         </p>

@@ -27,7 +27,7 @@ module com { module sun { module star { module accessibility {
  interface XAccessibleEventListener;
 
 /** makes it possible to register listeners which are called whenever
-    an accessibility event (see <type>AccessibleEventObject</type>) occurs.
+    an accessibility event (see AccessibleEventObject) occurs.
 
     @see AccessibleEventObject
     @see XAccessibleEventListener
@@ -37,12 +37,12 @@ module com { module sun { module star { module accessibility {
 interface XAccessibleEventBroadcaster: ::com::sun::star::uno::XInterface
 {
 
-    /** registers the given <type>XAccessibleEventListener</type>.
+    /** registers the given XAccessibleEventListener.
      */
     void addAccessibleEventListener( [in] XAccessibleEventListener xListener );
 
 
-    /** unregisters the given <type>XAccessibleEventListener</type>.
+    /** unregisters the given XAccessibleEventListener.
      */
     void removeAccessibleEventListener( [in] XAccessibleEventListener xListener );
 };

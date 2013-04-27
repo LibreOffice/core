@@ -49,12 +49,12 @@
     See <member scope="com::sun::star::beans">
     XIntrospectionAccess::queryAdapter()</member></p>
 
-    <p>The <type>XExactName</type> interface has to be supported
+    <p>The XExactName interface has to be supported
     in order to implement inaccurate name access for all objects
     which implement the <type scope="com::sun::star::container">
-    XNameAccess</type> interface or <type>XPropertySet</type>.</p>
+    XNameAccess</type> interface or XPropertySet.</p>
 
-    <p>The <type>XMaterialHolder</type> interface has to be
+    <p>The XMaterialHolder interface has to be
     supported to give access to the inspected object.</p>
 
         @see XPropertySet
@@ -63,8 +63,8 @@
 published interface XIntrospectionAccess: com::sun::star::uno::XInterface
 {
     /** returns information about which method concepts described in
-        the <type>MethodConcept</type> constants group are supported
-        by this <type>XIntrospectionAccess</type> implementation.
+        the MethodConcept constants group are supported
+        by this XIntrospectionAccess implementation.
 
         <p>The minimum supported concepts should be:</p>
 
@@ -77,14 +77,14 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
         </ul>
 
         @returns
-            zero or more constants of the <type>MethodConcept</type>
+            zero or more constants of the MethodConcept
             constants group combined by an arithmetical or-operation.
      */
     long getSuppliedMethodConcepts();
 
     /** returns information about which property concepts described in
-        the <type>PropertyConcept</type> constants group are supported
-        by this <type>XIntrospectionAccess</type> implementation.
+        the PropertyConcept constants group are supported
+        by this XIntrospectionAccess implementation.
 
         <p>The minimum supported concepts should be:</p>
 
@@ -95,18 +95,18 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
         </ul>
 
         @returns
-            zero or more constants of the <type>PropertyConcept</type>
+            zero or more constants of the PropertyConcept
             constants group.combined by an arithmetical or-operation.
      */
     long getSuppliedPropertyConcepts();
 
     /** returns information about a property if a property with
         the demanded name exists and if it accords to one of the
-        demanded <type>PropertyConcept</type>s. The information
-        is provided as <type>Property</type> struct.
+        demanded PropertyConcepts. The information
+        is provided as Property struct.
 
         @returns
-            A <type>Property</type> struct providing
+            A Property struct providing
             information about the demanded property,
             if a corresponding property exists.
 
@@ -133,7 +133,7 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
 
         @returns
             <TRUE/> if the property exists and accords to one of
-            the demanded <type>PropertyConcept</type>s, otherwise
+            the demanded PropertyConcepts, otherwise
             <FALSE/> is returned.
 
         @param aName
@@ -151,7 +151,7 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
 
         @returns
             all properties of the introspected object which accord
-            to the demanded <type>PropertyConcept</type>s.
+            to the demanded PropertyConcepts.
 
         @param nPropertyConcepts
             zero or more constants of the <type>PropertyConcept
@@ -183,7 +183,7 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
 
         @throws NoSuchElementException
             when a method with the demanded name doesn't exist
-            or if it accords to a wrong <type>MethodConcept</type>.
+            or if it accords to a wrong MethodConcept.
      */
     com::sun::star::reflection::XIdlMethod getMethod( [in] string aName,
              [in] long nMethodConcepts )
@@ -195,7 +195,7 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
 
         @returns
             <TRUE/> if the method exists and accords to one of
-            the demanded <type>MethodConcept</type>s, otherwise
+            the demanded MethodConcepts, otherwise
             <FALSE/> is returned.
 
         @param aName
@@ -213,7 +213,7 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
 
         @returns
             all methods of the introspected object which accord
-            to the demanded <type>MethodConcept</type>s.
+            to the demanded MethodConcepts.
 
         @param nMethodConcepts
             zero or more constants of the <type>MethodConcept
@@ -242,8 +242,8 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
         specified type.
 
         <p>To access properties, query for the <type>XPropertySet
-        </type> interface. If the <type>XPropertySet</type> can
-        be queried, the <type>XFastPropertySet</type> interface
+        </type> interface. If the XPropertySet can
+        be queried, the XFastPropertySet interface
         must be supported too.  </p>
 
         <p>If the introspected object implements a name container,
@@ -269,8 +269,8 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
 
         <p>To implement inaccurate name access, at all objects,
         which implement the <type scope="com::sun::star::container">
-        XNameAccess</type> or <type>XPropertySet</type> interface,
-        the <type>XExactName</type> interface has to be supported.
+        XNameAccess</type> or XPropertySet interface,
+        the XExactName interface has to be supported.
         </p>
 
         @see com::sun::star::beans::XExactName

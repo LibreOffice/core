@@ -24,11 +24,11 @@
 module com {  module sun {  module star {  module view {
 
 
-/** specifies the print progress of an <type>XPrintable</type>.
+/** specifies the print progress of an XPrintable.
 
     <p>Printing consists of two abstract phases: rendering the document
     for the printer and then sending it to the printer (spooling).
-    <type>PrintableState</type> describes which phase is currently
+    PrintableState describes which phase is currently
     progressing or has failed.</p>
 
     @see PrintableStateEvent

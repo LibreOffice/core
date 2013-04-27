@@ -40,7 +40,7 @@ module com {  module sun {  module star {  module lang {
     support the service specified with the argument of
     <member scope="com::sun::star::container">XContentEnumerationAccess::createContentEnumeration</member>.
     The enumerator returns interfaces. The type of the interface is not specified.
-    Commonly this is <type>XSingleComponentFactory</type>.</p>
+    Commonly this is XSingleComponentFactory.</p>
 */
 published service MultiServiceFactory
 {

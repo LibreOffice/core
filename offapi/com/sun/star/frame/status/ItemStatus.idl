@@ -32,7 +32,7 @@ struct ItemStatus
 
     /** numerical value which describes the current state of an item.
 
-        @see <type>ItemState</type>
+        @see ItemState
      */
     short State;
 

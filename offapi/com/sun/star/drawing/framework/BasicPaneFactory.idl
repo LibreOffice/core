@@ -34,7 +34,7 @@ module com { module sun { module star { module drawing { module framework {
     <code>private:resource/floater/CenterPane</code> and
     <code>private:resource/floater/RightPane</code> respectively.</p>
     <p>This factory is typically created indirectly by registering it in the
-    configuration and have the <type>XModuleController</type> create it on
+    configuration and have the XModuleController create it on
     demand.</p>
 */
 service BasicPaneFactory : XResourceFactory

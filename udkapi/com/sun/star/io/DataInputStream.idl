@@ -29,7 +29,7 @@
 
 module com {  module sun {  module star { module io {
 
-/** reads structured data from a chained <type>XInputStream</type>.
+/** reads structured data from a chained XInputStream.
     <p>
     An implementation of this service in general does not need
     to buffer data itself.

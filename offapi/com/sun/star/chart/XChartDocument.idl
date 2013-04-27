@@ -77,7 +77,7 @@ published interface XChartDocument: com::sun::star::frame::XModel
         want to access properties of the background area of the
         diagram, in which the actual data is represented, you have to
         change the chart wall which you get from the
-        <type>X3DDisplay</type>.</p>
+        X3DDisplay.</p>
 
         @see ChartArea
         @see X3DDisplay
@@ -103,7 +103,7 @@ published interface XChartDocument: com::sun::star::frame::XModel
             create such a diagram component, you can use the
             <type scope="com::sun::star::lang">XMultiServiceFactory</type>,
             which should be implemented by an
-            <type>XChartDocument</type>.
+            XChartDocument.
      */
     void setDiagram( [in] com::sun::star::chart::XDiagram xDiagram );
 
@@ -111,13 +111,13 @@ published interface XChartDocument: com::sun::star::frame::XModel
     /** @returns
             the data of the chart.
 
-        <p>The returned object supports interface <type>XChartDataArray</type>
+        <p>The returned object supports interface XChartDataArray
         which can be used to access the concrete data.</p>
 
-        <p>Since OOo 3.3 the returned object also supports interface <type>XComplexDescriptionAccess</type>
+        <p>Since OOo 3.3 the returned object also supports interface XComplexDescriptionAccess
         which can be used to access complex hierarchical axis descriptions.</p>
 
-        <p>Since OOo 3.4 the returned object also supports interface <type>XDateCategories</type>.</p>
+        <p>Since OOo 3.4 the returned object also supports interface XDateCategories.</p>
 
         @see XChartData
         @see XChartDataArray
@@ -129,12 +129,12 @@ published interface XChartDocument: com::sun::star::frame::XModel
 
     /** attaches data to the chart.
 
-        <p>The given object needs to support interface <type>XChartDataArray</type>.</p>
+        <p>The given object needs to support interface XChartDataArray.</p>
 
-        <p>Since OOo 3.3 if the given object might support interface <type>XComplexDescriptionAccess</type>
+        <p>Since OOo 3.3 if the given object might support interface XComplexDescriptionAccess
         which allows to set complex hierarchical axis descriptions.</p>
 
-        <p>Since OOo 3.4 if the given object might support interface <type>XDateCategories</type>
+        <p>Since OOo 3.4 if the given object might support interface XDateCategories
         which allows to set date values as x values for category charts.</p>
 
         <p>The given data is copied before it is applied to the chart.

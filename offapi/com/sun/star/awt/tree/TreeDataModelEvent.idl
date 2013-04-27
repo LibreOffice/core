@@ -26,9 +26,9 @@
 module com {  module sun {  module star {  module awt { module tree {
 
 
-/** An event used by a <type>XTreeDataModel</type> to notify changes in the data
-    model to the <type>XTreeControl</type>.
-    You usually need to fill this event only if you implement the <type>XTreeDataModel</type>
+/** An event used by a XTreeDataModel to notify changes in the data
+    model to the XTreeControl.
+    You usually need to fill this event only if you implement the XTreeDataModel
     yourself.
 
     @see XTreeDataModel

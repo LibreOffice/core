@@ -31,7 +31,7 @@
 /** load components into a frame
 
     <p>
-    It's an asynchronous loading. For synchronous processes use <type>XSynchronousFrameLoader</type>
+    It's an asynchronous loading. For synchronous processes use XSynchronousFrameLoader
     instead of this one. The generic load algorithm of the office supports both ones - but preferred
     the synchronous interface.
     </p>
@@ -40,7 +40,7 @@
  */
 published interface XFrameLoader: com::sun::star::uno::XInterface
 {
-    /** starts the loading of the specified resource into the specified <type>Frame</type>.
+    /** starts the loading of the specified resource into the specified Frame.
 
         @param Frame
             specifies the loading target
@@ -73,7 +73,7 @@ published interface XFrameLoader: com::sun::star::uno::XInterface
         Because only the owner of this process who called load method
         before can cancel this process. And he doesn't need any notification about that.
         On the other hand - nobody then this owner himself can be registered as an
-        <type>XLoadEventListener</type> here.
+        XLoadEventListener here.
         </p>
      */
     void cancel();

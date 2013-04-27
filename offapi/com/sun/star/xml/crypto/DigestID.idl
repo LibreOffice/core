@@ -26,7 +26,7 @@ module com { module sun { module star { module xml { module crypto {
 /** The constant set contains identifiers of supported digest-creation
     algorithms.
 
-    @see <type>XDigestContextSupplier</type>
+    @see XDigestContextSupplier
     @since OOo 3.4
 */
 constants DigestID

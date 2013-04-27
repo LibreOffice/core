@@ -24,9 +24,9 @@
 module com { module sun { module star { module embed {
 
 /** The constant set contains IDs of formats that are supported by
-    <type>StorageFactory</type>.
+    StorageFactory.
 
-    @see <type>StorageFactory</type>
+    @see StorageFactory
     @since OOo 3.3
 */
 published constants StorageFormats

@@ -25,8 +25,8 @@
 
 module com { module sun { module star { module deployment {
 
-/** <type>thePackageManagerFactory</type> denotes the one and only
-    <type>XPackageManagerFactory</type> object to be used.
+/** thePackageManagerFactory denotes the one and only
+    XPackageManagerFactory object to be used.
     <p>
     The component context entry is
     <code>
@@ -36,7 +36,7 @@ module com { module sun { module star { module deployment {
 
     @since OOo 2.0
     @deprecated
-        Use <type>XExtensionManager</type>.
+        Use XExtensionManager.
 */
 singleton thePackageManagerFactory : XPackageManagerFactory;
 

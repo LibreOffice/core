@@ -38,14 +38,14 @@ service ListEntrySource
 
     /** allows life time control for the component
 
-        <p>An <type>ListEntrySource</type> will be known to one ore more components
-        supporting the <type>XListEntrySink</type> interface, which all work with
-        this source. However, they will not <em>own</em> the <type>ListEntrySource</type>.
+        <p>An ListEntrySource will be known to one ore more components
+        supporting the XListEntrySink interface, which all work with
+        this source. However, they will not <em>own</em> the ListEntrySource.
         The ownership is with another instance, which may also decide to obsolete
-        the <type>ListEntrySource</type> for whatever reasons (e.g. because the data model
-        which the binding reflected died). For this reason, a <type>ListEntrySource</type>
+        the ListEntrySource for whatever reasons (e.g. because the data model
+        which the binding reflected died). For this reason, a ListEntrySource
         must offer a possibility to be obsoleted by it's owner, and to notify this
-        obsoleteness to other interested parties, such as <type>XListEntrySink</type>s.</p>
+        obsoleteness to other interested parties, such as XListEntrySinks.</p>
     */
     interface com::sun::star::lang::XComponent;
 };

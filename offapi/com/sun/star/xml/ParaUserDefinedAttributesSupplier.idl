@@ -31,7 +31,7 @@ module com { module sun { module star { module xml {
 */
 published service ParaUserDefinedAttributesSupplier
 {
-    /** This container holds the <type>AttributeData</type> elements
+    /** This container holds the AttributeData elements
         that represent uninterpreted XML attributes of a paragraph.
 
         <p>The idea behind this property is that a parser can stow
@@ -41,7 +41,7 @@ published service ParaUserDefinedAttributesSupplier
 
         <p>The
         <type scope="com::sun::star::container">XNameContainer</type>
-        supports the service <type>AttributeContainer</type>.</p>
+        supports the service AttributeContainer.</p>
 
      */
     [property] ::com::sun::star::container::XNameContainer  ParaUserDefinedAttributes;

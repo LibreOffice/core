@@ -43,7 +43,7 @@ interface XFlatParagraphIteratorProvider: com::sun::star::uno::XInterface
     /** get XFlatParagraphIterator
 
         @param  nType
-                Type of text markup see <type>TextMarkupType</type>.
+                Type of text markup see TextMarkupType.
 
         @param  bAutomatic
                 Automatic or interactive checking.

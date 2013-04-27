@@ -31,7 +31,7 @@ interface XResourceId;
 */
 interface XResource
 {
-    /** Return an <type>XResourceId</type> object for the called resource.
+    /** Return an XResourceId object for the called resource.
         The returned id unambiguously identifies the resource.
     */
     XResourceId getResourceId ();

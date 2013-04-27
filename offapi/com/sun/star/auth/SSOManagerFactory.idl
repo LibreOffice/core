@@ -33,13 +33,13 @@ module com { module sun { module star { module auth {
        between the two parties. The steps which should be followed to
        successfully use the SSO APIs are as follows:
     <UL>
-        <LI>Create an <type>XSSOManagerFactory</type> instance</LI>
-        <LI>Use this factory to create/retrieve an <type>XSSOManager</type>
+        <LI>Create an XSSOManagerFactory instance</LI>
+        <LI>Use this factory to create/retrieve an XSSOManager
             instance.</LI>
         <LI>Depending on whether your code is acting as SSO source or target,
-            you should use the <type>XSSOManager</type> instance to create an
-            initiator security context, <type>XSSOInitiatorContext</type> or an
-            acceptor security context, <type>XSSOAcceptorContext</type>
+            you should use the XSSOManager instance to create an
+            initiator security context, XSSOInitiatorContext or an
+            acceptor security context, XSSOAcceptorContext
             respectively.</LI>
         <LI>On the initiator side, use the previously created context to process
             security tokens received from the acceptor side and to create
@@ -49,7 +49,7 @@ module com { module sun { module star { module auth {
             send to the initiator side.</LI>
     </UL>
 
-    The interface supports the creation of <type>XSSOManager</type> instances
+    The interface supports the creation of XSSOManager instances
     which can subsequently be used to create security contexts.
 
     @since OOo 1.1.2

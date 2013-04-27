@@ -27,7 +27,7 @@
 module com { module sun { module star { module text {
 
 /** This service specifies a footnote or an endnote in a
-    <type>TextDocument</type>.
+    TextDocument.
 */
 published service Footnote
 {

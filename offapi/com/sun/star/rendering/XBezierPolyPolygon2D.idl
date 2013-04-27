@@ -33,9 +33,9 @@ module com { module sun { module star { module rendering {
     cubic Bezier curves and straight lines. As the straight line is a
     special case of a cubic Bezier curve (control points collinear
     with the line through start and end point), this can be expressed
-    uniformly with a sequence of <type>RealBezierSegment2D</type>s.<p>
+    uniformly with a sequence of RealBezierSegment2Ds.<p>
 
-    By convention, a <type>RealBezierSegment2D</type> is a straight
+    By convention, a RealBezierSegment2D is a straight
     line segment, if all three contained points are strictly equal.<p>
 
     @since OOo 2.0
@@ -69,7 +69,7 @@ interface XBezierPolyPolygon2D : XPolyPolygon2D
 
         @returns the sequence of extracted points.
 
-        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
+        @throws com::sun::star::lang::IndexOutOfBoundsException
         if one of the given values exceed the permissible range.
      */
     sequence< sequence < ::com::sun::star::geometry::RealBezierSegment2D > > getBezierSegments( [in] long nPolygonIndex, [in] long nNumberOfPolygons, [in] long nPointIndex, [in] long nNumberOfPoints )
@@ -94,7 +94,7 @@ interface XBezierPolyPolygon2D : XPolyPolygon2D
         such that after this method completes, it contains exactly the
         specified Bezier segment data.
 
-        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
+        @throws com::sun::star::lang::IndexOutOfBoundsException
         if one of the given values exceed the permissible range.
      */
     void setBezierSegments( [in] sequence< sequence< ::com::sun::star::geometry::RealBezierSegment2D > > points, [in] long nPolygonIndex )
@@ -115,7 +115,7 @@ interface XBezierPolyPolygon2D : XPolyPolygon2D
 
         @returns the requested point.
 
-        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
+        @throws com::sun::star::lang::IndexOutOfBoundsException
         if one of the given values exceed the permissible range.
 
      */
@@ -144,7 +144,7 @@ interface XBezierPolyPolygon2D : XPolyPolygon2D
         nPolygonIndex, which is to be set.  This value must not
         exceed the number of points in this polygon.
 
-        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
+        @throws com::sun::star::lang::IndexOutOfBoundsException
         if one of the given values exceed the permissible range.
      */
     void setBezierSegment( [in] ::com::sun::star::geometry::RealBezierSegment2D point, [in] long nPolygonIndex, [in] long nPointIndex )

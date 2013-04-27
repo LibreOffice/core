@@ -89,7 +89,7 @@ published service OfficeDocument
      */
     interface com::sun::star::view::XPrintable;
 
-    /** is an old and deprecated version of the <type>XDocumentEventBroadcaster</type> interface
+    /** is an old and deprecated version of the XDocumentEventBroadcaster interface
         @deprecated
      */
     [optional] interface XEventBroadcaster;
@@ -119,7 +119,7 @@ published service OfficeDocument
     */
     [optional] interface XEmbeddedScripts;
 
-    /** access to the <type>DocumentProperties</type>.
+    /** access to the DocumentProperties.
 
         @since OOo 3.0
      */

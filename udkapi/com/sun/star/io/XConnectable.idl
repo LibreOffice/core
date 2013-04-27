@@ -31,7 +31,7 @@
     nearer to the source of the data. The successor-member is the element
     that is further away from the source of the data. (Note that this
     classification does not depend on whether the class implements
-    <type>XInputStream</type> or <type>XOutputStream</type>; it only
+    XInputStream or XOutputStream; it only
     depends on the direction of data flow.) </p>
     <p>This interface allows generic services to navigate between
     arbitrary elements of a connection.</p>

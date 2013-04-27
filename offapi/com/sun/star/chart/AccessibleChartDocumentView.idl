@@ -26,11 +26,11 @@
 
 module com {  module sun {  module star {  module chart {
 
-/** The <type>AccessibleChartDocumentView</type> service is supported
+/** The AccessibleChartDocumentView service is supported
     by a Component that represents the view of a Chart document to
     provide an entry point to the document tree for accessibility.
 
-    <p>An object that implements the <type>AccessibleChartDocumentView</type>
+    <p>An object that implements the AccessibleChartDocumentView
     service provides information about itself and about the chart
     subcomponents contained in the chart document displayed in a
     window.  This service gives a simplified view on the underlying
@@ -67,7 +67,7 @@ service AccessibleChartDocumentView
              titles, a legend and the diagram.  The diagram and the legend are
              the only children that themselves contain children.  The Chart
              subcomponents support the service
-             <type>AccessibleChartElement</type>.  Additionally, there may be
+             AccessibleChartElement.  Additionally, there may be
              shapes a user added via the clipboard.  For details see the
              <type scope="::com::sun::star::drawing">AccessibleShape</type>.
              </dd>
@@ -117,7 +117,7 @@ service AccessibleChartDocumentView
         subcomponents of a chart that cover a given test point.</p>
 
         <p>The accessible Chart subcomponents all support the service
-        <type>AccessibleChartElement</type></p>
+        AccessibleChartElement</p>
 
         @see AccessibleChartElement
     */

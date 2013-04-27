@@ -24,7 +24,7 @@
 
 module com { module sun { module star { module ucb {
 
-/** is a factory for <type>DynamicResultSet</type> implementations, which
+/** is a factory for DynamicResultSet implementations, which
     will be sorted according to the given sorting options.
 */
 published service SortedDynamicResultSetFactory

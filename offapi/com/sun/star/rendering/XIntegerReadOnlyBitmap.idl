@@ -33,7 +33,7 @@ module com { module sun { module star { module rendering {
 interface XBitmapPalette;
 
 /** This is a specialized interface for bitmaps having integer color
-    channels. In contrast to <type>XIntegerBitmap</type>, this
+    channels. In contrast to XIntegerBitmap, this
     interface only permits read-only access.<p>
 
     Use this interface for e.g. bitmaps that are calculated
@@ -41,11 +41,11 @@ interface XBitmapPalette;
     modified.<p>
 
     If you get passed an instance of
-    <type>XIntegerReadOnlyBitmap</type> that also supports the
-    <type>XVolatileBitmap</type> interface, things become a bit more
+    XIntegerReadOnlyBitmap that also supports the
+    XVolatileBitmap interface, things become a bit more
     complicated. When reading data, one has to check for both
-    <type>VolatileContentDestroyedException</type> and mismatching
-    <type>IntegerBitmapLayout</type> return values. If either of them
+    VolatileContentDestroyedException and mismatching
+    IntegerBitmapLayout return values. If either of them
     occurs, the whole bitmap read operation should be repeated, if you
     need consistent information.<p>
  */
@@ -70,16 +70,16 @@ interface XIntegerReadOnlyBitmap : XBitmap
         space returned therein needs to always match the current color
         space as would have been returned by getMemoryLayout(). This
         is necessary to ensure correct operation under changing
-        <type>XVolatileBitmap</type>.
+        XVolatileBitmap.
 
         @param rect
         A rectangle, within the bounds of the bitmap, to retrieve the
         consent from.
 
-        @throws <type>VolatileContentDestroyedException</type>
+        @throws VolatileContentDestroyedException
         if the bitmap is volatile, and the content has been destroyed by the system.
 
-        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
+        @throws com::sun::star::lang::IndexOutOfBoundsException
         if parts of the given rectangle are outside the permissible
         bitmap area.
      */
@@ -106,16 +106,16 @@ interface XIntegerReadOnlyBitmap : XBitmap
         space returned therein needs to always match the current color
         space as would have been returned by getMemoryLayout(). This
         is necessary to ensure correct operation under changing
-        <type>XVolatileBitmap</type>.
+        XVolatileBitmap.
 
         @param pos
         A position, within the bounds of the bitmap, to retrieve the
         color from.
 
-        @throws <type>VolatileContentDestroyedException</type>
+        @throws VolatileContentDestroyedException
         if the bitmap is volatile, and the content has been destroyed by the system.
 
-        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
+        @throws com::sun::star::lang::IndexOutOfBoundsException
         if the given position is outside the permissible bitmap area.
      */
     sequence<byte>      getPixel( [out] IntegerBitmapLayout bitmapLayout, [in] ::com::sun::star::geometry::IntegerPoint2D pos )

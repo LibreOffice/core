@@ -22,25 +22,25 @@
 module com {  module sun {  module star {  module ui {
 
 
-/** determines the action that is requested from the <type>XContextMenuInterceptor</type>.
+/** determines the action that is requested from the XContextMenuInterceptor.
  */
 published enum ContextMenuInterceptorAction
 {
-    /** the <type>XContextMenuInterceptor</type> has ignored the call. The next registered
-     <type>XContextMenuInterceptor</type> should be notified.
+    /** the XContextMenuInterceptor has ignored the call. The next registered
+     XContextMenuInterceptor should be notified.
      */
     IGNORED,
     /** the context menu must not be executed. The next registered
-     <type>XContextMenuInterceptor</type> should not be notified.
+     XContextMenuInterceptor should not be notified.
      */
     CANCELLED,
     /**
      the menu has been modified and should be executed without notifying the next registered
-     <type>XContextMenuInterceptor</type>.
+     XContextMenuInterceptor.
      */
     EXECUTE_MODIFIED,
     /**
-     the menu has been modified and the next registered <type>XContextMenuInterceptor</type>
+     the menu has been modified and the next registered XContextMenuInterceptor
      should be notified.
      */
     CONTINUE_MODIFIED

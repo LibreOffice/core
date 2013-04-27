@@ -58,11 +58,11 @@ published interface XTypeDetection: com::sun::star::uno::XInterface
     string queryTypeByURL( [in] string URL );
 
     /** make a "deep" detection or optional a "flat" detection by using a
-        <type>MediaDescriptor</type>
+        MediaDescriptor
 
         <p>
         Instead of <member>XTypeDetection::queryTypeByURL()</member> this function
-        use a <type>MediaDescriptor</type> to specify the document for detection.
+        use a MediaDescriptor to specify the document for detection.
         Such descriptor hold different information about the document.
         He will be passed to any part of made detection process and every part
         can change it to actualize it.
@@ -83,7 +83,7 @@ published interface XTypeDetection: com::sun::star::uno::XInterface
         </p>
 
         @param Descriptor
-            means the <type>MediaDescriptor</type> which specify the resource for detection
+            means the MediaDescriptor which specify the resource for detection
 
         @param AllowDeep
             if it is set to <TRUE/> a "deep" detection will be follow a "flat" detection

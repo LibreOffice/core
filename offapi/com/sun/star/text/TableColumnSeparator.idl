@@ -32,7 +32,7 @@
     </p>
 
     <p>A text table or a text table row provides the separators in a
-    sequence of <type>TableColumnSeparator</type>s. If the table only
+    sequence of TableColumnSeparators. If the table only
     consists of one column, then this sequence is empty.
 
     </p>

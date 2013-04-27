@@ -91,22 +91,22 @@ published interface XCharacterClassification : com::sun::star::uno::XInterface
     string   toTitle( [in] string aText, [in] long nPos, [in] long nCount,
                       [in] com::sun::star::lang::Locale aLocale );
 
-    /// Get <type>UnicodeType</type> of character at position <em>nPos</em>.
+    /// Get UnicodeType of character at position <em>nPos</em>.
     short    getType( [in] string aText, [in] long nPos );
 
-    /** Get <type>DirectionProperty</type> of character at position
+    /** Get DirectionProperty of character at position
         <em>nPos</em>.
      */
     short    getCharacterDirection( [in] string aText, [in] long nPos );
 
-    /// Get <type>UnicodeScript</type> of character at position <em>nPos</em>.
+    /// Get UnicodeScript of character at position <em>nPos</em>.
     short    getScript( [in] string aText, [in] long nPos );
 
-    /// Get <type>KCharacterType</type> of character at position <em>nPos</em>.
+    /// Get KCharacterType of character at position <em>nPos</em>.
     long getCharacterType( [in] string aText, [in] long nPos,
                            [in] com::sun::star::lang::Locale aLocale );
 
-    /** Get accumulated <type>KCharacterType</type>s of string starting
+    /** Get accumulated KCharacterTypes of string starting
         at position <em>nPos</em> of length <em>nCount</em> code points.
 
         @returns
@@ -122,7 +122,7 @@ published interface XCharacterClassification : com::sun::star::uno::XInterface
         Parse a string for a token starting at position <em>nPos</em>.
 
         <p> A name or identifier must match the
-        <type>KParseTokens</type> criteria passed in
+        KParseTokens criteria passed in
         <em>nStartCharFlags</em> and <em>nContCharFlags</em> and may
         additionally contain characters of
         <em>aUserDefinedCharactersStart</em> and/or
@@ -130,7 +130,7 @@ published interface XCharacterClassification : com::sun::star::uno::XInterface
 
 
         @returns
-            A filled <type>ParseResult</type> structure. If no
+            A filled ParseResult structure. If no
             unambiguous token could be parsed,
             <member>ParseResult::TokenType</member> will be set to
             <b>0</b> (zero), other fields will contain the values parsed
@@ -154,7 +154,7 @@ published interface XCharacterClassification : com::sun::star::uno::XInterface
             character type determination.
 
         @param  nStartCharFlags
-            A set of <type>KParseTokens</type> constants determining the
+            A set of KParseTokens constants determining the
             allowed characters a name or identifier may start with.
 
         @param  aUserDefinedCharactersStart
@@ -162,7 +162,7 @@ published interface XCharacterClassification : com::sun::star::uno::XInterface
             identifier may start with.
 
         @param  nContCharFlags
-            A set of <type>KParseTokens</type> constants determining the
+            A set of KParseTokens constants determining the
             allowed characters a name or identifier may continue with.
 
         @param  aUserDefinedCharactersCont
@@ -218,7 +218,7 @@ published interface XCharacterClassification : com::sun::star::uno::XInterface
         is returned. </p>
 
         @param  nTokenType
-            One or more of the <type>KParseType</type> constants.
+            One or more of the KParseType constants.
 
         @example:C++
         <listing>

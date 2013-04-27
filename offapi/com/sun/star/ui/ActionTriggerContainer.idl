@@ -33,16 +33,16 @@ module com {  module sun {  module star {  module ui {
     You could have a menu or a toolbox working with the same container
     describing their entries.</p>
 
-    <p>Possible elements of the <type>ActionTriggerContainer</type> are
+    <p>Possible elements of the ActionTriggerContainer are
         <ul>
-            <li><type>ActionTrigger</type> -
+            <li>ActionTrigger -
                         represents a simply clickable menu entry</li>
-            <li><type>ActionTriggerSeparator</type> -
+            <li>ActionTriggerSeparator -
                         represents a separator between two entries<br/>
                  This entry type is of interest for components rendering a an
-                 <type>ActionTriggerContainer</type>
+                 ActionTriggerContainer
              </li>
-            <li><type>ActionTriggerContainer</type> -
+            <li>ActionTriggerContainer -
                 represents a sub container</li>
         </ul>
     </p>
@@ -60,9 +60,9 @@ published service ActionTriggerContainer
 
     /** creates elements to be inserted into the container.
         <p>Usually, the <method>XMultiServiceFactory::getSupportedServiceNames</method>
-        gives you a <type>ActionTrigger</type> and
-        optionally <type>ActionTriggerContainer</type> and
-        <type>ActionTriggerSeparator</type>
+        gives you a ActionTrigger and
+        optionally ActionTriggerContainer and
+        ActionTriggerSeparator
 
      .</p>
      */

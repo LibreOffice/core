@@ -35,7 +35,7 @@ module com { module sun { module star { module ucb {
 published interface XRemoteContentProviderSupplier: com::sun::star::uno::XInterface
 {
     /** Get a factory through which a remote content provider's
-        <type>UniversalContentBroker</type> service can be instantiated.
+        UniversalContentBroker service can be instantiated.
 
         @param Identifier  An arbitrary identifier uniquely identifying a
         remote content provider.

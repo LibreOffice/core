@@ -32,7 +32,7 @@ interface XLogHandler;
 /** specifies a component implementing a log handler whose output
     channel is a file.
 
-    <p>The handler will use the <code>Encoding</code> attribute of <type>XLogHandler</type>
+    <p>The handler will use the <code>Encoding</code> attribute of XLogHandler
     to determine how to encode strings before actually writing them to the output
     file.</p>
 

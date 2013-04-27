@@ -29,7 +29,7 @@ module com {  module sun {  module star {  module inspection {
 interface XObjectInspectorModel;
 interface XObjectInspectorUI;
 
-/** describes the main interface of an <type>ObjectInspector</type>.
+/** describes the main interface of an ObjectInspector.
 
     @see ObjectInspector
 
@@ -40,7 +40,7 @@ interface XObjectInspector
     /** allows to plug the inspector into an <type scope="com::sun::star::frame">XFrame</type>
 
         <p>The <member scope="com::sun::star::frame">XController::setModel</member> method
-        accepts only <type>XObjectInspectorModel</type>s, and will return <FALSE/> if the
+        accepts only XObjectInspectorModels, and will return <FALSE/> if the
         to-be-attached model is not <NULL/>, but does not support this interface.</p>
 
         <p>If you do not want to support a full-blown <type scope="com::sun::star::frame">XModel</type>,
@@ -55,7 +55,7 @@ interface XObjectInspector
     /** allows to intercept functionality
 
         <p>This interface is inherited from the <type scope="com::sun::star::frame">Controller</type>
-        service, currently, there is no functionality to intercept at an <type>XObjectInspector</type>.</p>
+        service, currently, there is no functionality to intercept at an XObjectInspector.</p>
     */
     interface com::sun::star::frame::XDispatchProvider;
 
@@ -87,17 +87,17 @@ interface XObjectInspector
 
     /** inspects a new collection of one or more objects.
 
-        <p>If the sequence is empty, the UI of the <type>ObjectInspector</type> will be
+        <p>If the sequence is empty, the UI of the ObjectInspector will be
         cleared.</p>
 
-        <p>If the sequence contains more than one object, the <type>XObjectInspector</type>
+        <p>If the sequence contains more than one object, the XObjectInspector
         will create a complete set of property handlers (as indicated by
         <member>XObjectInspectorModel::HandlerFactories</member>) for <em>every</em> of
         the objects, and compose their output.</p>
 
         @throws com::sun::star::util::VetoException
             if the inspector cannot switch to another object set. This typically happens if
-            one of the active <type>XPropertyHandler</type>'s raised a non-modal user interface,
+            one of the active XPropertyHandler's raised a non-modal user interface,
             and vetoed suspension of this UI.
 
         @see XPropertyHandler::isComposable

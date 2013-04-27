@@ -33,7 +33,7 @@ module com { module sun { module star { module accessibility {
 
  interface XAccessible;
 
-/** The <type>XAccessibleComponent</type> interface should be supported by
+/** The XAccessibleComponent interface should be supported by
     any class that can be rendered on the screen.
 
     <p>This interface provides the standard mechanism for an assistive
@@ -43,7 +43,7 @@ module com { module sun { module star { module accessibility {
     and <code>javax.accessibility.AccessibleExtendedComponent</code>.</p>
 
     <p>Further information about the graphical appearance of an object can
-    be expressed with the <type>XAccessibleExtendedComponent</type>
+    be expressed with the XAccessibleExtendedComponent
     interface.</p>
 
     <p>Coordinates used by the functions of this interface are specified in
@@ -68,7 +68,7 @@ module com { module sun { module star { module accessibility {
     bindings are associated with actions and directly with a component.
     This distinction becomes important when there are more than one action.
     To get access to the key bindings you have to get the
-    <type>XAccessibleAction</type> interface of a component, provided that
+    XAccessibleAction interface of a component, provided that
     it is supported, and use the <method
     scope="XAccessibleAction">getAccessibleKeyBinding()</method>.</p>
 

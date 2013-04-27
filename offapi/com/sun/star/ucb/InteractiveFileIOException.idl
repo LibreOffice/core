@@ -29,7 +29,7 @@ module com { module sun { module star { module ucb {
 /** An input/output error while processing a file.
 
     <p>This exception is deprecated. Use
-    <type>InteractiveAugmentedIOException</type> instead.
+    InteractiveAugmentedIOException instead.
 
     @deprecated
 */

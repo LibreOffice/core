@@ -43,7 +43,7 @@ module com { module sun { module star { module configuration {
  <p>New set element instances generally are created through members of
  <type scope="com::sun::star::lang">XSingleServiceFactory</type> or,
  if supported, <type scope="com::sun::star::lang">XMultiServiceFactory</type>
- on an implementation of <type>SetUpdate</type>. Initially, they are not
+ on an implementation of SetUpdate. Initially, they are not
  contained in a set object and have no meaningful name.
  </p>
 
@@ -140,13 +140,13 @@ published service SetElement
 
  <p>If the object was created using interface
  <type scope="com::sun::star::lang">XSingleServiceFactory</type>
- on an implementation of <type>SetUpdate</type>, this interface describes the
- same template as interface <type>XTemplateContainer</type> on that
- <type>SetUpdate</type>.
+ on an implementation of SetUpdate, this interface describes the
+ same template as interface XTemplateContainer on that
+ SetUpdate.
  </p>
  <p>If the object was created using interface
  <type scope="com::sun::star::lang">XMultiServiceFactory</type>
- on an implementation of <type>SetUpdate</type>, this interface describes the
+ on an implementation of SetUpdate, this interface describes the
  template whose name was used as a service identifier for the factory method.
  </p>
  <p>Otherwise, the semantics of the information provided about the template depends on the

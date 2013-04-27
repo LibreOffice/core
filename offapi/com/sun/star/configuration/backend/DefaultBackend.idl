@@ -26,8 +26,8 @@ module com { module sun { module star { module configuration { module backend {
 
 
 /**
-    is a <type>DefaultBackend</type>, that is
-    the default <type>DefaultBackend</type> for its
+    is a DefaultBackend, that is
+    the default DefaultBackend for its
     <type scope="com::sun::star::uno">XComponentContext</type>.
 
     <p>This object is accessible as singleton within the context</p>.

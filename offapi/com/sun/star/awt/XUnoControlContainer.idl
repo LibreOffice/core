@@ -28,7 +28,7 @@
  module com {  module sun {  module star {  module awt {
 
 
-/** gives access to the tab controllers of a <type>UnoControlContainer</type>.
+/** gives access to the tab controllers of a UnoControlContainer.
  */
 published interface XUnoControlContainer: com::sun::star::uno::XInterface
 {

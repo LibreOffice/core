@@ -29,33 +29,33 @@
 
 module com { module sun { module star { module ucb {
 
-/** Provides read access to a <type>ContentResultSet</type>.
+/** Provides read access to a ContentResultSet.
 
     <p>
-    You can either get a simple static <type>ContentResultSet</type> or you can
+    You can either get a simple static ContentResultSet or you can
     listen to change-notifications and than swap from the old to a new
-    <type>ContentResultSet</type>.
+    ContentResultSet.
     </p>
 
     <p>The following describes the dynamic use:</p>
 
     <p>
-    <type>XDynamicResultSet</type> provides the possibility to get notifications
-    about changes on a <type>ContentResultSet</type> and have an
+    XDynamicResultSet provides the possibility to get notifications
+    about changes on a ContentResultSet and have an
     listener-controlled update from one version to the next version. Two
-    <type>ContentResultSet</type> implementations were given to the listener in
+    ContentResultSet implementations were given to the listener in
     the first notification as interface
     <type scope="com::sun::star::sdbc">XResultSet</type>.
     </p>
 
     <p>
     To get notifications the listener has to be of type
-    <type>XDynamicResultSetListener</type>.
+    XDynamicResultSetListener.
     </p>
 
     <p>
     After registration you will get notifications for events of type
-    <type>ListEvent</type>.
+    ListEvent.
     </p>
 
     <p>
@@ -70,7 +70,7 @@ module com { module sun { module star { module ucb {
     </p>
 
     <ol>
-      <li> The listener is allowed to access both <type>ContentResultSet</type>s,
+      <li> The listener is allowed to access both ContentResultSets,
          they must be both valid.</li>
       <li> It is not allowed to start a second notify-call.</li>
       <li> All additional things we want to send as notification are to be
@@ -84,10 +84,10 @@ module com { module sun { module star { module ucb {
 
     <ol>
     <li> The listener is allowed to access the new
-         <type>ContentResultSet</type>. The new one is first assigned in the
+         ContentResultSet. The new one is first assigned in the
          WELCOME-event and than the ResultSets are always swapped.</li>
     <li> The listener is not allowed to access the old
-         <type>ContentResultSet</type>.</li>
+         ContentResultSet.</li>
     </ol>
 */
 
@@ -97,13 +97,13 @@ published interface XDynamicResultSet: com::sun::star::lang::XComponent
 
         @returns
         an <type scope="com::sun::star::sdbc">XResultSet</type> that is
-        implemented as <type>ContentResultSet</type>. Its content will never
+        implemented as ContentResultSet. Its content will never
         change.
 
         @trows ListenerAlreadySetException
         if someone already has registered as listener via
         <member>XDynamicResultSet::setListener</member> or if someone has
-        established a connection to a <type>CachedDynamicResultSet</type>
+        established a connection to a CachedDynamicResultSet
         via <member>XDynamicResultSet::connectToCache</member>.
     */
     com::sun::star::sdbc::XResultSet getStaticResultSet()
@@ -123,17 +123,17 @@ published interface XDynamicResultSet: com::sun::star::lang::XComponent
         @throws ListenerAlreadySetException
         if this method is called more than once during the life of the
         implementation object or if this method is called if someone already
-        has fetched the <type>ContentResultSet</type> via
+        has fetched the ContentResultSet via
         <member>XDynamicResultSet::getStaticResultSet</member>.
 
     */
     void setListener( [in] XDynamicResultSetListener Listener )
         raises( com::sun::star::ucb::ListenerAlreadySetException );
 
-    /** Connects this to a <type>CachedDynamicResultSet</type> for optimized
+    /** Connects this to a CachedDynamicResultSet for optimized
         remote data transport.
 
-        <p>This method creates a <type>CachedDynamicResultSetStub</type>
+        <p>This method creates a CachedDynamicResultSetStub
         and sets it as Source to the given cache.
 
         <p>After this method has returned you can and have to use the given
@@ -141,11 +141,11 @@ published interface XDynamicResultSet: com::sun::star::lang::XComponent
 
         @param Cache
         has to be an implementation of the service
-        <type>CachedDynamicResultSet</type>. In particular it has to support
-        the interface <type>XSourceInitialization</type>.
+        CachedDynamicResultSet. In particular it has to support
+        the interface XSourceInitialization.
 
         @throws ListenerAlreadySetException
-        if if someone already has fetched the <type>ContentResultSet</type> via
+        if if someone already has fetched the ContentResultSet via
         <member>XDynamicResultSet::getStaticResultSet</member>.
 
         @throws AlreadyInitializedException
@@ -159,11 +159,11 @@ published interface XDynamicResultSet: com::sun::star::lang::XComponent
                 , com::sun::star::ucb::ServiceNotFoundException );
 
     /** Using this method you can get information, whether the offered
-        <type>ContentResultSet</type>s are sorted or filtered etc correctly as
-        demanded during the creation of the <type>XDynamicResultSet</type>.
+        ContentResultSets are sorted or filtered etc correctly as
+        demanded during the creation of the XDynamicResultSet.
 
         @returns
-        zero or more constants of the <type>ContentResultSetCapability</type>
+        zero or more constants of the ContentResultSetCapability
         constants group.
     */
     short getCapabilities();

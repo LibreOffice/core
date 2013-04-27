@@ -86,7 +86,7 @@ published interface XIdlClass: com::sun::star::uno::XInterface
     com::sun::star::uno::Uik getUik();
 
     /** If the reflected type is an interface, then the returned
-        sequence of <type>XIdlClass</type> reflect the base interfaces.
+        sequence of XIdlClass reflect the base interfaces.
         <br>
         If the reflected type is not an interface or an interface that is
         not derived from another, then an empty sequence is returned.
@@ -102,7 +102,7 @@ published interface XIdlClass: com::sun::star::uno::XInterface
     sequence<XIdlClass> getInterfaces();
 
     /** If the reflected type is an array or sequence, then this method
-        returns a <type>XIdlClass</type> interface reflecting
+        returns a XIdlClass interface reflecting
         the element.
 
         @return
@@ -112,7 +112,7 @@ published interface XIdlClass: com::sun::star::uno::XInterface
     XIdlClass getComponentType();
 
     /** If the reflected type is an interface, struct or union, then you
-        get a <type>XIdlField</type> interface reflecting the demanded
+        get a XIdlField interface reflecting the demanded
         field (/interface attribute) by name.
         <br>
         If the reflected type is not an interface, struct or union or the
@@ -127,7 +127,7 @@ published interface XIdlClass: com::sun::star::uno::XInterface
     XIdlField getField( [in] string aName );
 
     /** If the reflected type is an interface, struct or union, then you
-        get a sequence of <type>XIdlField</type> interfaces reflecting all fields
+        get a sequence of XIdlField interfaces reflecting all fields
         (/interface attributes).  This also includes all inherited
         fields (/interface attributes) of the interface, struct of union.
         <br>
@@ -141,7 +141,7 @@ published interface XIdlClass: com::sun::star::uno::XInterface
     sequence<XIdlField> getFields();
 
     /** If the reflected type is an interface, then you get
-        a <type>XIdlMethod</type> interface reflecting the demanded method by name.
+        a XIdlMethod interface reflecting the demanded method by name.
         <br>
         If the reflected type is not an interface or the interface does not have
         a method with the demanded name (including inherited methods),
@@ -155,7 +155,7 @@ published interface XIdlClass: com::sun::star::uno::XInterface
     XIdlMethod getMethod( [in] string aName );
 
     /** If the reflected type is an interface, then you get
-        a sequence of <type>XIdlMethod</type> interfaces reflecting all methods
+        a sequence of XIdlMethod interfaces reflecting all methods
         of the interface.  This also includes the inherited methods of the interface.
         <br>
         If the reflected type is not an interface or the interface
@@ -167,7 +167,7 @@ published interface XIdlClass: com::sun::star::uno::XInterface
     sequence<XIdlMethod> getMethods();
 
     /** If the reflected type is an array, then you get
-        a <type>XIdlArray</type> interface to modify instances of the array type.
+        a XIdlArray interface to modify instances of the array type.
         <br>
         If the reflected type is not an array, then a null-reference is returned.
 

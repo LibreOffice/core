@@ -40,20 +40,20 @@ service PresentationDocument
         only in a presentation application
 
         <ul>
-            <li><type>TitleTextShape</type></li>
-            <li><type>OutlinerShape</type></li>
-            <li><type>SubtitleShape</type></li>
-            <li><type>GraphicObjectShape</type></li>
-            <li><type>PageShape</type></li>
-            <li><type>OLE2Shape</type></li>
-            <li><type>ChartShape</type></li>
-            <li><type>NotesShape</type></li>
-            <li><type>HandoutShape</type></li>
-            <li><type>HeaderShape</type></li>
-            <li><type>FooterShape</type></li>
-            <li><type>SlideNumberShape</type></li>
-            <li><type>DateTimeShape</type></li>
-            <li><type>DocumentSettings</type></li>
+            <li>TitleTextShape</li>
+            <li>OutlinerShape</li>
+            <li>SubtitleShape</li>
+            <li>GraphicObjectShape</li>
+            <li>PageShape</li>
+            <li>OLE2Shape</li>
+            <li>ChartShape</li>
+            <li>NotesShape</li>
+            <li>HandoutShape</li>
+            <li>HeaderShape</li>
+            <li>FooterShape</li>
+            <li>SlideNumberShape</li>
+            <li>DateTimeShape</li>
+            <li>DocumentSettings</li>
             <li><type scope="textfield">Header</type></li>
             <li><type scope="textfield">Footer</type></li>
             <li><type scope="textfield">DateTime</type></li>

@@ -29,8 +29,8 @@
 
 /** specifies a spin button control.
 
-    <p>The model of an <type>UnoControlSpinButton</type> control must support
-    the <type>UnoControlSpinButtonModel</type> service.
+    <p>The model of an UnoControlSpinButton control must support
+    the UnoControlSpinButtonModel service.
  */
 service UnoControlSpinButton
 {

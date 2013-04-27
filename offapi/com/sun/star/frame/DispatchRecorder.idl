@@ -31,7 +31,7 @@
     and generate code which can be executed at later time to run same operations
     again. Which code will be generated depends from real implementation. So it's
     possible to generate e.g. Java/Basic or may Perl code.
-    By using of a <type>DispatchRecorderSupplier</type>, which is available on
+    By using of a DispatchRecorderSupplier, which is available on
     a property of a <member>Frame::DispatchRecorderSupplier</member>, it's possible to change such code generation
     for further requests or disable it in general by setting this property to <NULL/>.
     </p>

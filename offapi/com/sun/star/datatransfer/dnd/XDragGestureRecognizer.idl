@@ -38,20 +38,20 @@ module com { module sun { module star { module datatransfer { module dnd {
 
 published interface XDragGestureRecognizer: com::sun::star::uno::XInterface
 {
-    /** Registers a new <type>XDragGestureListener</type>.
+    /** Registers a new XDragGestureListener.
 
         @param dgl
-        The <type>XDragGestureListener</type> to register with this
-        <type>XDragGestureRecognizer</type>.
+        The XDragGestureListener to register with this
+        XDragGestureRecognizer.
     */
 
     void addDragGestureListener( [in] XDragGestureListener dgl );
 
-    /** Unregisters the specified <type>XDragGestureListener</type>.
+    /** Unregisters the specified XDragGestureListener.
 
         @param dgl
-        The <type>XDragGestureListener</type> to register with this
-        <type>XDragGestureRecognizer</type>.
+        The XDragGestureListener to register with this
+        XDragGestureRecognizer.
     */
 
     void removeDragGestureListener( [in] XDragGestureListener dgl );

@@ -28,7 +28,7 @@ interface XTypeDescription;
 
 /** Reflects an interface type, supporting multiple inheritance.
 
-    <p>This type supersedes <type>XInterfaceTypeDescription</type>, which only
+    <p>This type supersedes XInterfaceTypeDescription, which only
     supported single inheritance.</p>
 
     @since OOo 2.0

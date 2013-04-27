@@ -36,11 +36,11 @@ module com { module sun { module star { module i18n {
 
 published struct Calendar
 {
-    /// the days of the week, see also <type>CalendarItem</type>.
+    /// the days of the week, see also CalendarItem.
     sequence< CalendarItem >    Days;
-    /// the months of the year, see also <type>CalendarItem</type>.
+    /// the months of the year, see also CalendarItem.
     sequence< CalendarItem >    Months;
-    /// the possible eras, see also <type>CalendarItem</type>.
+    /// the possible eras, see also CalendarItem.
     sequence< CalendarItem >    Eras;
     /// the ID of the day with which the week begins.
     string                      StartOfWeek;

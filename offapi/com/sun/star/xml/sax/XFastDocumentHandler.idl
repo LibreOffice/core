@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module xml {  module sax {
 
 
 /** receives notification of sax document events from a
-    <type>XFastParser</type>
+    XFastParser
  */
 interface XFastDocumentHandler: XFastContextHandler
 {

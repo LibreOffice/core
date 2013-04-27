@@ -26,7 +26,7 @@
  module com {  module sun {  module star {  module util {
 
 
-/** contains properties specifying the behavior of a <type>NumberFormatter</type>.
+/** contains properties specifying the behavior of a NumberFormatter.
 
     @see NumberFormatter
  */

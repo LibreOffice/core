@@ -29,9 +29,9 @@ module com { module sun { module star { module configuration { module backend {
 /**
     applies updates to a configuration layer.
 
-    <p> The configuration layer data is read from a <type>XLayer</type>
-    and the changed layer is provided as <type>XLayer</type> again or
-    described to a <type>XLayerHandler</type>.
+    <p> The configuration layer data is read from a XLayer
+    and the changed layer is provided as XLayer again or
+    described to a XLayerHandler.
     </p>
 
     @see com::sun::star::configuration::backend::UpdatableLayer
@@ -50,9 +50,9 @@ published service LayerUpdateMerger
     /** allows initializing layer data source and target.
 
         <p> Both source and target of the update can be provided by passing a
-            <type>XUpdatableLayer</type> object. Alternatively they can be
-            provided individually by providing a <type>XLayer</type> object as
-            data source and an <type>XLayerHandler</type> object to receive the
+            XUpdatableLayer object. Alternatively they can be
+            provided individually by providing a XLayer object as
+            data source and an XLayerHandler object to receive the
             updated data.
         </p>
         <p> Implementations can provide more arguments to fine tune the behavior.

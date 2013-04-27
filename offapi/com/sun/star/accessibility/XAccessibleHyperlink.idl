@@ -31,7 +31,7 @@ module com { module sun { module star { module accessibility {
     <p>Single hyperlinks correspond to simple &lt;a href&gt; tags.  Groups
     of hyperlinks are contained in client side image maps.  Linked objects
     and anchors are implementation dependent.  This interface inherits the
-    <type>XAccessibleAction</type> interface.  Especially that interface's
+    XAccessibleAction interface.  Especially that interface's
     <member>XAccessibleAction::getActionCount</member> method is needed to
     obtain a maximum value for the indices passed to the
     <member>XAccessibleHyperlink::getAccessibleActionAnchor</member> and
@@ -40,7 +40,7 @@ module com { module sun { module star { module accessibility {
 
     <p>Furthermore, the object that implements this interface has to be
     connected implicitly or explicitly with an object that implements the
-    the <type>XAccessibleText</type> interface.  The
+    the XAccessibleText interface.  The
     <member>XAccessibleHyperlink::getStartIndex</member> and
     <member>XAccessibleHyperlink::getEndIndex</member> methods return
     indices with respect to the text exposed by that interface.</p>
@@ -91,24 +91,24 @@ interface XAccessibleHyperlink :
     /** Returns the index at which the textual representation of the
         hyperlink (group) starts.
 
-        <p>The returned value relates to the <type>XAccessibleText</type>
+        <p>The returned value relates to the XAccessibleText
         interface that owns this hyperlink.</p>
 
         @return
             The index relates to the text exposed by the
-            <type>XAccessibleHypertext</type> interface.
+            XAccessibleHypertext interface.
     */
     long getStartIndex ();
 
     /** Returns the index at which the textual representation of the
         hyperlink (group) ends.
 
-        <p>The returned value relates to the <type>XAccessibleText</type>
+        <p>The returned value relates to the XAccessibleText
         interface that owns this hyperlink.</p>
 
         @return
             The index relates to the text exposed by the
-            <type>XAccessibleText</type> interface.
+            XAccessibleText interface.
     */
     long getEndIndex ();
 

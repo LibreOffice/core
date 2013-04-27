@@ -23,12 +23,12 @@ module com {  module sun {  module star {  module ui {
 
 
 /** describes a separator entry. Such entries are of interest
-    for components rendering an <type>ActionTriggerContainer</type>.
+    for components rendering an ActionTriggerContainer.
 */
 published service ActionTriggerSeparator
 {
     /** determines the type of the separator using constants from
-        <type>ActionTriggerSeparatorType</type>.
+        ActionTriggerSeparatorType.
     */
     [optional, property] short SeparatorType;
 };

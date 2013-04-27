@@ -23,7 +23,7 @@
 module com {  module sun {  module star {  module i18n {
 
 
-/** Options to be used with <type>XCollator</type> methods.
+/** Options to be used with XCollator methods.
  */
 published constants CollatorOptions
 {

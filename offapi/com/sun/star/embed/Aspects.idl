@@ -30,7 +30,7 @@ module com { module sun { module star { module embed {
     can be used to specify the kind of object view.
     It can be used for example by container to request
     view representation of a certain kind from
-    <type>XEmbeddedObject</type>.
+    XEmbeddedObject.
     </p>
 
     <p>

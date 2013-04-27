@@ -23,7 +23,7 @@
 module com {  module sun {  module star {  module xsd {
 
 
-/** These constants specify the class used of an <type>XDataType</type>
+/** These constants specify the class used of an XDataType
 */
 constants DataTypeClass
 {

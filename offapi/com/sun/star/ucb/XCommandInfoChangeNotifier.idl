@@ -25,7 +25,7 @@
 
 module com { module sun { module star { module ucb {
 
-/** a notifier for changes of <type>XCommandInfo</type>s.
+/** a notifier for changes of XCommandInfos.
 
     @version  1.0
     @author   Kai Sommerfeld
@@ -34,7 +34,7 @@ module com { module sun { module star { module ucb {
 */
 published interface XCommandInfoChangeNotifier : com::sun::star::uno::XInterface
 {
-    /** registers a listener for <type>CommandInfoChangeEvent</type>s.
+    /** registers a listener for CommandInfoChangeEvents.
 
         @param Listener
         the listener to add.
@@ -42,7 +42,7 @@ published interface XCommandInfoChangeNotifier : com::sun::star::uno::XInterface
     void addCommandInfoChangeListener(
                             [in] XCommandInfoChangeListener Listener );
 
-    /** removes a listener for <type>CommandInfoChangeEvent</type>s.
+    /** removes a listener for CommandInfoChangeEvents.
 
         @param Listener
         the listener to remove.

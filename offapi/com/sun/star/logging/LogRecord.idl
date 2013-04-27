@@ -40,14 +40,14 @@ struct LogRecord
     /** specifies the name of the class, in which the record was logged.
 
         This name might be empty, in case the caller to one of the various
-        <code>log</code> methods of <type>XLogger</type> did not specify it.
+        <code>log</code> methods of XLogger did not specify it.
     */
     string  SourceClassName;
 
     /** specifies the name of the method, in which the record was logged.
 
         This name might be empty, in case the caller to one of the various
-        <code>log</code> methods of <type>XLogger</type> did not specify it.
+        <code>log</code> methods of XLogger did not specify it.
     */
     string  SourceMethodName;
 
@@ -60,7 +60,7 @@ struct LogRecord
 
     /** specifies the number of the log event.
 
-        Subsequent events get assigned increasing sequence numbers by the <type>XLogger</type>
+        Subsequent events get assigned increasing sequence numbers by the XLogger
         at which they're logged.
     */
     hyper   SequenceNumber;

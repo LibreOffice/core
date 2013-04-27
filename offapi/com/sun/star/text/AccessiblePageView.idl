@@ -85,7 +85,7 @@ service AccessiblePageView
                         >AccessibleTextFrameView</type>:
                         A child of this kind is returned for every text
                         frame that is contained in the page. These objects
-                        are children of the <type>AccessiblePageView</type>
+                        are children of the AccessiblePageView
                         regardless whether they are bound to the page, a
                         paragraph, a frame, or a character. The only
                         exception are text frames that are bound as
@@ -95,7 +95,7 @@ service AccessiblePageView
                         >AccessibleTextGraphicObject</type>:
                         A child of this kind is returned for every graphic that
                         is contained in the page. These objects are
-                        children of the <type>AccessiblePageView</type>
+                        children of the AccessiblePageView
                         regardless whether they are bound to a page, paragraph,
                         a frame or a character. The only exception
                         are text frames that are bound as character. They are
@@ -105,7 +105,7 @@ service AccessiblePageView
                         A child of this kind is returned for every embedded
                         object that is contained in the page.
                         These objects are children of the
-                        <type>AccessibleTextDocumentView</type> regardless
+                        AccessibleTextDocumentView regardless
                         whether they are bound to a page, a paragraph, a frame,
                         or a character.  They are children of the paragraph they
                         are contained in.
@@ -114,7 +114,7 @@ service AccessiblePageView
                         A child of this kind (or one of its derived
                         interfaces) is returned for every shape that is
                         contained in the page. These objects are children of
-                        the <type>AccessibleTextDocumentView</type>
+                        the AccessibleTextDocumentView
                         regardless whether they are bound to a page, a
                         paragraph, a frame or a character.
                 </ul>

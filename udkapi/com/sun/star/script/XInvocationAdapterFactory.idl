@@ -31,13 +31,13 @@
 /** Interface to create adapter objects giving a type to be supported and a
     an invocation interface incoming calls are delegated to.
 
-    This interface is deprecated.  Use <type>XInvocationAdapterFactory2</type>.
+    This interface is deprecated.  Use XInvocationAdapterFactory2.
     @deprecated
 */
 published interface XInvocationAdapterFactory: com::sun::star::uno::XInterface
 {
     /** Creates an adapter interface of given type for calling the given
-        <type>XInvocation</type> interface.
+        XInvocation interface.
 
         @param Invocation
                invocation interface being called on incoming adapter calls

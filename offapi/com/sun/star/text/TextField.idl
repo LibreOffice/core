@@ -28,7 +28,7 @@
  module com {  module sun {  module star {  module text {
 
 
-/** A <type>TextField</type> is a <type>TextContent</type> which fades its
+/** A TextField is a TextContent which fades its
     textual representation into the text range to which it is anchored.
  */
 published service TextField

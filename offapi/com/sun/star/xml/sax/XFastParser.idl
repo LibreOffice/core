@@ -48,10 +48,10 @@ module com {  module sun {  module star {  module xml {  module sax {
     namespaces and allows to have individual contexts for each XML element.
 
     <p>Before parsing is possible you have to set your
-    <type>XFastDocumentHandler</type> using <member>setFastDocumentHandler</member>.
+    XFastDocumentHandler using <member>setFastDocumentHandler</member>.
 
     <p>Parsing starts with calling <member>parseStream</member>. If the parser
-    finds a valid XML file with the given <type>InputSource</type>, it calls
+    finds a valid XML file with the given InputSource, it calls
     <member>XFastDocumentHandler::startDocument</member> first.
 
     <p>This parser generates either "fast" events that use integer token
@@ -61,13 +61,13 @@ module com {  module sun {  module star {  module xml {  module sax {
     <p>A namespace is unknown if the namespace URL was not registered with
     <member>registerNamespace</member>.
 
-    <p>An element is unknown if no <type>XFastTokenHandler</type> is set
-    or if the <type>XFastTokenHandler</type> does not return a valid
+    <p>An element is unknown if no XFastTokenHandler is set
+    or if the XFastTokenHandler does not return a valid
     identifier for the elements local name. An element is also unknown if
     the elements local name is known but it uses a namespace that is unknown.
 
-    <p>Setting a <type>XFastTokenHandler</type> with <member>setTokenHandler</member>
-    is optional, but without a <type>XFastTokenHandler</type> you will only
+    <p>Setting a XFastTokenHandler with <member>setTokenHandler</member>
+    is optional, but without a XFastTokenHandler you will only
     get unknown sax events. This can be useful if you are only interested
     in the namespace handling and/or the context feature.
 
@@ -76,7 +76,7 @@ module com {  module sun {  module star {  module xml {  module sax {
     <member>XFastContextHandler::createFastChildContext</member> for known
     elements or <member>XFastContextHandler::createUnknownChildContext</member>
     for unknown elements.
-    <br>The parent context for the root element is the <type>XFastDocumentHandler</type>
+    <br>The parent context for the root element is the XFastDocumentHandler
     itself.
 
     <p>If the parent context returns an empty reference, no further events for
@@ -90,12 +90,12 @@ module com {  module sun {  module star {  module xml {  module sax {
     <member>XFastContextHandler::endFastElement</member> for known elements or
     <member>XFastContextHandler::endUnknownElement</member> for unknown elements.
 
-    <p>It is valid to return one instance of <type>XFastContextHandler</type> more
-    than once. It is even possible to only use the <type>XFastDocumentHandler</type>
+    <p>It is valid to return one instance of XFastContextHandler more
+    than once. It is even possible to only use the XFastDocumentHandler
     by always returning a reference to itself for each create child context event.
 
     <p>After the last element is processed the parser generates an end document
-    event at the <type>XFastDocumentHandler</type> by calling
+    event at the XFastDocumentHandler by calling
     <member>XFastDocumentHandler::endDocument</member>.
 
     @see http://wiki.services.openoffice.org/wiki/FastParser

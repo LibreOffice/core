@@ -50,9 +50,9 @@ interface XFormControllerContext;
     Such a <code>FormController</code> is responsible for dialog processing,
     like controlling the tab order and the grouping of controls.</p>
 
-    <p>As a form may contain one or many subforms, a <type>FormController</type> may
-    contain one or more other <type>FormController</type>s, so the form model structure or hierarchy
-    is reflected in the structure of <type>FormController</type>s. That is, retrieving the parent of
+    <p>As a form may contain one or many subforms, a FormController may
+    contain one or more other FormControllers, so the form model structure or hierarchy
+    is reflected in the structure of FormControllers. That is, retrieving the parent of
     the model of a controller will give you the same object as retrieving the model of the parent of
     the controller. Similarly, retrieving the model of the <code>n</code><sup>th</sup> child of
     a controller gives you the same object as retrieving the <code>n</code><sup>th</sup> child of
@@ -65,7 +65,7 @@ interface XFormControllerContext;
     <p>This interface supersedes the <type scope="com::sun::star::form">FormController</type>.</p>
 
     <h3>Responsibilities</h3>
-    <p>A <type>FormController</type> is responsible for a <type scope="com::sun::star::awt">UnoControlContainer</type>,
+    <p>A FormController is responsible for a <type scope="com::sun::star::awt">UnoControlContainer</type>,
     and all controls therein.</p>
 
     <p>Furthermore, a form controller is responsible for preventing invalid user input. That is, if the form
@@ -313,7 +313,7 @@ interface XFormController
     /** allows controlling the filter mode.
 
         <p>If the form controller supports a <a href="#mode_selector">form based filter mode</a>, then it shall also
-        support the <type>XFilterController</type> interface, which allows controlling this mode.</p>
+        support the XFilterController interface, which allows controlling this mode.</p>
     */
     [optional] interface XFilterController;
 

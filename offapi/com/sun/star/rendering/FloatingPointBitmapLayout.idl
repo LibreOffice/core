@@ -84,14 +84,14 @@ struct FloatingPointBitmapLayout
 
     /** Endianness of the pixel values.
 
-        This value must be one of the <type>Endianness</type> constants
+        This value must be one of the Endianness constants
      */
     byte                Endianness;
 
     /** Format type of this bitmap.<p>
 
         This value must be one of the
-        <type>FloatingPointBitmapFormat</type> constants.<p>
+        FloatingPointBitmapFormat constants.<p>
     */
     byte                Format;
 };

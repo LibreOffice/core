@@ -26,10 +26,10 @@
 module com {  module sun {  module star {  module view {
 
 
-/** specifies the print progress of an <type>XPrintJob</type>.
+/** specifies the print progress of an XPrintJob.
 
     <p><member scope="com::sun::star::lang">EventObject::Source</member>
-    contains the <type>XPrintJob</type> having changed its state</p>.
+    contains the XPrintJob having changed its state</p>.
 
     @since OOo 1.1.2
 

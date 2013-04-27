@@ -25,14 +25,14 @@
 
 module com {  module sun {  module star {  module frame {
 
-/** provides <type>XDispatch</type> objects for certain functions which
+/** provides XDispatch objects for certain functions which
     are useful at the UI
 
     <p>
     Such dispatch objects must be queried explicitly and used for
     queried purposes only. They can handle requests with guaranteed
-    notifications (<type>XNotifyingDispatch</type>) or with possible
-    (but not guaranteed) notifications (<type>XDispatch</type>).
+    notifications (XNotifyingDispatch) or with possible
+    (but not guaranteed) notifications (XDispatch).
     </p>
 
     @see XNotifyingDispatch
@@ -44,7 +44,7 @@ published service DispatchProvider
     /** provides handling of dispatches with defined result state
 
         <p>
-        Base interface of <type>XNotifyingDispatch</type> is <type>XDispatch</type>
+        Base interface of XNotifyingDispatch is XDispatch
         and can be called for requests if result isn't necessary for dispatch operation.
         </p>
 
@@ -55,8 +55,8 @@ published service DispatchProvider
     /** provides dispatch interception
 
         <p>
-        It makes it possible to register an <type>XDispatchProvider</type> which
-        intercepts all requests of <type>XDispatch</type> to this instance.
+        It makes it possible to register an XDispatchProvider which
+        intercepts all requests of XDispatch to this instance.
         </p>
      */
     [optional] interface XDispatchProviderInterception;

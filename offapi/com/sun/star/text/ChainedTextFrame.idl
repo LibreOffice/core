@@ -28,8 +28,8 @@
  module com {  module sun {  module star {  module text {
 
 
-/** extends a <type>TextFrame</type> which shares the same <type>Text</type>
-    with other <type>ChainedTextFrame</type> instances that will make the text
+/** extends a TextFrame which shares the same Text
+    with other ChainedTextFrame instances that will make the text
     flow through the chained frames. The text flows in the next frame if
     there is no space left in the current frame.
  */

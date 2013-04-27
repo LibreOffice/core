@@ -23,7 +23,7 @@ module com { module sun { module star { module rendering {
 
 /** This structure contains the caret information.<p>
 
-    This structure is used from the <type>XTextLayout</type> interface
+    This structure is used from the XTextLayout interface
     to transport information regarding a text caret.<p>
 
     @since OOo 2.0

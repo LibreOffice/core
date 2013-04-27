@@ -41,10 +41,10 @@ exception MergeRecoveryRequest: ::com::sun::star::uno::Exception
         </p>
         <p> For example the following exceptions may be used:
         <dl>
-            <dt><type>MalformedException</type></dt>
+            <dt>MalformedException</dt>
             <dd>for layers containing invalid data.</dd>
 
-            <dt><type>BackendAccessException</type></dt>
+            <dt>BackendAccessException</dt>
             <dd>for layers that can't be accessed.</dd>
         </dl>
         </p>

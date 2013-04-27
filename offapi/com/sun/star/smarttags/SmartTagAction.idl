@@ -33,7 +33,7 @@ module com { module sun { module star { module smarttags {
 
     <p>An implementation of this service defines one or more actions
        that can be performed for a smart tag which has been recognized
-       by a <type>SmartTagRecognizer</type> service.</p>
+       by a SmartTagRecognizer service.</p>
 
     @since OOo 2.3
  */

@@ -28,12 +28,12 @@ module com { module sun { module star { module configuration {
 /** provides update control for a hierarchy of configuration items
  and information about the hierarchy as a whole as well as its root.
 
- <p>Extends <type>AccessRootElement</type> by adding support for
+ <p>Extends AccessRootElement by adding support for
  collecting changes and applying them to a backend store as a single batch.
  </p>
 
  <p>An implementation represents the root of a partial hierarchy. [See the
- documentation for <type>AccessRootElement</type>]. The hierarchy in turn is
+ documentation for AccessRootElement]. The hierarchy in turn is
  a <em>view</em> onto a fragment of persistent data tree that can be accessed
  through several such views, or even several processes, simultaneously.
  </p>

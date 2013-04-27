@@ -25,7 +25,7 @@
 
 module com { module sun { module star { module ucb {
 
-/** used to receive notifications from an <type>XDynamicResultSet</type>.
+/** used to receive notifications from an XDynamicResultSet.
 */
 
 published interface XDynamicResultSetListener: com::sun::star::lang::XEventListener
@@ -35,7 +35,7 @@ published interface XDynamicResultSetListener: com::sun::star::lang::XEventListe
         <p>In the first notify-call the listener gets two(!)
         <type scope="com::sun::star::sdbc">XResultSet</type>s and has to hold
         them. The <type scope="com::sun::star::sdbc">XResultSet</type>s are
-        implementations of the service <type>ContentResultSet</type>.
+        implementations of the service ContentResultSet.
 
         <p>The notified new
         <type scope="com::sun::star::sdbc">XResultSet</type> will stay valid

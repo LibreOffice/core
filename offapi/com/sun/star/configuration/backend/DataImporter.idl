@@ -60,13 +60,13 @@ published service DataImporter
         <dl>
             <dt><code>ImporterService</code> : <atom >string</atom></dt>
             <dd>A service or implementation name used to instantiate the
-                <type>Importer</type> to use for importing. If this parameter
+                Importer to use for importing. If this parameter
                 is missing, the implementation selects an appropriate importer.
-                By default, a <type>MergeImporter</type> should be used.
+                By default, a MergeImporter should be used.
             </dd>
             <dt><code>OverwriteExisting</code> : <atom >boolean</atom></dt>
             <dd>If <TRUE/>, specifies that no existing data should be
-                overwritten by the import. If the <type>Importer</type> used
+                overwritten by the import. If the Importer used
                 does not support such protection, an error may be raised.
                 If some data is not imported, because there is existing
                 data, this is indicated by returning an appropriate exception.
@@ -74,9 +74,9 @@ published service DataImporter
             <dt><code>TruncateExisting</code> : <atom >boolean</atom></dt>
             <dd>If <TRUE/>, specifies that existing data should be
                 discarded and replaced by the imported data.
-                If the <type>Importer</type> used does not support this
+                If the Importer used does not support this
                 operation, an error may be raised.
-                By default, a <type>CopyImporter</type> is used to perform
+                By default, a CopyImporter is used to perform
                 truncating import.
             </dd>
             <dt><code>Entity</code> : <atom >string</atom></dt>

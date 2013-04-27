@@ -32,7 +32,7 @@ published enum NavigationBarMode
     /** no navigation bar is provided and navigation on the current
         form is only possible with the keyboard (TAB/SHIFT TAB).
 
-        <p>Note that when this mode is set, a simultaneous <type>TabulatorCycle</type>
+        <p>Note that when this mode is set, a simultaneous TabulatorCycle
         value of <member>TabulatorCycle::CURRENT</member> means that you cannot travel
         between records anymore.</p>
 

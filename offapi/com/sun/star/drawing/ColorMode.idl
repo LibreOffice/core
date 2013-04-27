@@ -23,7 +23,7 @@
 
  module com {  module sun {  module star {  module drawing {
 
-/** The <type>ColorMode</type> defines the output style of colors
+/** The ColorMode defines the output style of colors
     for a graphic.
  */
 published enum ColorMode

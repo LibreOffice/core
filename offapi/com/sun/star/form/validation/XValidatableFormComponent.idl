@@ -45,7 +45,7 @@ interface XFormComponentValidityListener;
     </ul>
     </p>
 
-    <p>An <type>XValidatableFormComponent</type> allows to easily access both of these aspects.</p>
+    <p>An XValidatableFormComponent allows to easily access both of these aspects.</p>
 
     <p>Note that all of the information provided at this interface can also obtained by other means,
     but much more inconveniently.</p>
@@ -83,7 +83,7 @@ interface XValidatableFormComponent : XValidatable
 
     /** registers the given listener.
 
-        <p><type>XFormComponentValidityListener</type>s are called whenever <em>any</em> of the aspects
+        <p>XFormComponentValidityListeners are called whenever <em>any</em> of the aspects
         of the validatable form component (the validity flag, or the value) changed.</p>
 
         @throws <type scope="com::sun::star::lang">NullPointerException</type>

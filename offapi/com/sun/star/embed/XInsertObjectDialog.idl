@@ -39,7 +39,7 @@ published interface XInsertObjectDialog: com::sun::star::uno::XInterface
         <p>
         The dialog allows for user to do a number of choices that are container
         related. This information will be returned in the
-        <type>InsertedObjectInfo</type> object.
+        InsertedObjectInfo object.
         <p>
 
         @param xStorage

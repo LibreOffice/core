@@ -31,7 +31,7 @@ module com { module sun { module star { module sdb {
     wherever possible.<br/>
     That is, if an <code>SQLException</code> is raised by
     such a component, caused by an error condition which is included in the
-    <type>ErrorCondition</type> group, then the respective <em>negative</em> value
+    ErrorCondition group, then the respective <em>negative</em> value
     will be used as <code>ErrorCode</code>.</p>
 
     <p>This allows to determine specific error conditions in your client code, and
@@ -60,10 +60,10 @@ constants ErrorCondition
 {
     // = section ROW_SET - css.sdb.RowSet related error conditions
 
-    /** is used by and <type>RowSet</type> to indicate that an operation has been vetoed
+    /** is used by and RowSet to indicate that an operation has been vetoed
         by one of its approval listeners
 
-        <p>This error condition results in raising a <type>RowSetVetoException</type>.</p>
+        <p>This error condition results in raising a RowSetVetoException.</p>
         @see RowSet
         @see XRowSetApproveBroadcaster
         @see XRowSetApproveListener
@@ -77,7 +77,7 @@ constants ErrorCondition
         <p>Imagine you have a client-side query <code>SELECT * FROM table</code>, which is
         saved as &quot;query1&quot;. Additionally, there is a query &quot;query2&quot; defined
         as <code>SELECT * FROM query1</code>. Now if you try to change the statement of
-        <type>query1</type> to <code>SELECT * FROM query2</code>, this is prohibited, because
+        query1 to <code>SELECT * FROM query2</code>, this is prohibited, because
         it would lead to a cyclic sub query.
     */
     const long PARSER_CYCLIC_SUB_QUERIES = 200;

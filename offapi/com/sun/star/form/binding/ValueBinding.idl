@@ -38,12 +38,12 @@ service ValueBinding
 {
     /** determines whether the value is currently readonly
 
-        <p>For instance, you could imagine a <type>ValueBinding</type> which
+        <p>For instance, you could imagine a ValueBinding which
         represents a cell in a spreadsheet document, and whose value is readonly
         as long as the spreadsheet is locked.</p>
 
         <p>As long as this property is <TRUE/>, the value binding should throw
-        a <type>InvalidBindingStateException</type> when its
+        a InvalidBindingStateException when its
         <member>XValueBinding::setValue</member> method is invoked.</p>
     */
     [optional, property, bound, readonly]  boolean  ReadOnly;
@@ -55,11 +55,11 @@ service ValueBinding
         data structure may not be relevant currently. This is indicated by the
         <member>Relevant</member> property being <FALSE/>.</p>
 
-        <p><type>XBindableValue</type>s which are bound to this binding may or may not
+        <p>XBindableValues which are bound to this binding may or may not
         react in certain ways on the (ir)relevance of their bound value.</p>
 
         <p>One possible reaction could be that user interface elements which are associated
-        with the <type>XBindableValue</type> are disabled as long as <member>Relevant</member>
+        with the XBindableValue are disabled as long as <member>Relevant</member>
         is <FALSE/>.</p>
     */
     [optional, property, bound, readonly]  boolean  Relevant;
@@ -73,7 +73,7 @@ service ValueBinding
     interface XValueBinding;
 
     /** allows other components to be notified when the value represented
-        by the <type>ValueBinding</type> instance changes.
+        by the ValueBinding instance changes.
 
         <p>This interface is optional, since a binding may not support
         actively notifying changes in it's value. Note, however, that in case
@@ -85,14 +85,14 @@ service ValueBinding
 
     /** allows life time control for the component
 
-        <p>An <type>ValueBinding</type> may be known to one ore more components
-        supporting the <type>XBindableValue</type> interface, which all work with
-        this binding. However, they will not <em>own</em> the <type>ValueBinding</type>.
+        <p>An ValueBinding may be known to one ore more components
+        supporting the XBindableValue interface, which all work with
+        this binding. However, they will not <em>own</em> the ValueBinding.
         The ownership is with another instance, which may also decide to obsolete
-        the <type>ValueBinding</type> for whatever reasons (e.g. because the data model
-        which the binding reflected died). For this reason, a <type>ValueBinding</type>
+        the ValueBinding for whatever reasons (e.g. because the data model
+        which the binding reflected died). For this reason, a ValueBinding
         must offer a possibility to be obsoleted by it's owner, and to notify this
-        obsoleteness to other interested parties, such as <type>XBindableValue</type>s.</p>
+        obsoleteness to other interested parties, such as XBindableValues.</p>
     */
     interface com::sun::star::lang::XComponent;
 };

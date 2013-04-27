@@ -34,7 +34,7 @@ published interface XConnector: com::sun::star::uno::XInterface
 {
     /** creates a new connection interprocess connection.
         <p>
-        Tries to connect to an <type>XAcceptor</type>.  Behavior is unspecified
+        Tries to connect to an XAcceptor.  Behavior is unspecified
         if a call to connect is made when another call to connect either has not
         yet returned or has returned successfully without raising an exception.
 

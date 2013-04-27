@@ -131,7 +131,7 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
         (e.g. generated via createCompatibleBitmap()) is the fact that
         its content might vanish at any point in time (making any
         operation with them produce a
-        <type>VolatileContentDestroyedException</type>). The benefit,
+        VolatileContentDestroyedException). The benefit,
         on the other hand, is that they might be easy to
         hardware-accelerate on certain platforms, without the need to
         keep a safety copy of the content internally.
@@ -162,7 +162,7 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
         (e.g. generated via createCompatibleBitmap()) is the fact that
         its content might vanish at any point in time (making any
         operation with them produce a
-        <type>VolatileContentDestroyedException</type>). The benefit,
+        VolatileContentDestroyedException). The benefit,
         on the other hand, is that they might be easy to
         hardware-accelerate on certain platforms, without the need to
         keep a safety copy of the content internally.
@@ -207,7 +207,7 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
           * "EllipticalGradient" - this gradient has zeroth color
             index in the middle, and varies linearly between center
             and final color. The services takes an additional
-            parameter named "AspectRatio" of <type>double</type>
+            parameter named "AspectRatio" of double
             (width divided by height), if this aspect ratio is 1, the
             gradient is circular. If it's not 1, the gradient is
             elliptical, with the special twist that the aspect ratio
@@ -222,7 +222,7 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
             index in the middle, and varies linearly between center
             and final color via rectangular boxes
             around the center point. The services takes an additional
-            parameter named "AspectRatio" of <type>double</type>
+            parameter named "AspectRatio" of double
             (width divided by height), if this aspect ratio is 1, the
             gradient is quadratic. If it's not 1, the gradient is
             rectangular, with the special twist that the aspect ratio

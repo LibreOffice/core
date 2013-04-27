@@ -26,9 +26,9 @@ module com { module sun { module star { module accessibility {
 
 /** This structure lets an event give access to a change of a table model.
 
-    <p>The data members of the <type>AccessibleTableModelChange</type> structure
+    <p>The data members of the AccessibleTableModelChange structure
     give access to the type and cell range of a change of a table model.  See
-    <type>AccessibleTableModelChangeType</type> for details of the change
+    AccessibleTableModelChangeType for details of the change
     type.  The range of the affected rows, columns, and/or cells can be
     obtained by accessing the other four data members.</p>
 
@@ -37,11 +37,11 @@ module com { module sun { module star { module accessibility {
 struct AccessibleTableModelChange
 {
     /** The type of the event as defined in
-            <type>AccessibleTableModelChangeType</type>.
+            AccessibleTableModelChangeType.
 
         <p>The model change either inserted or deleted one or more rows
         and/or columns or modified the content of a number of cells.  See
-        <type>AccessibleTableModelChangeType</type> for details of the type
+        AccessibleTableModelChangeType for details of the type
         of the model change.</p>
     */
     short Type;

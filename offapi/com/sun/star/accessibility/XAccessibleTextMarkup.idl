@@ -33,13 +33,13 @@ module com { module sun { module star { module accessibility {
 
 /** Implement this interface to expose the text markups of a text.
 
-    <p>The <type>XAccessibleTextMarkup</type> interface is the main interface
+    <p>The XAccessibleTextMarkup interface is the main interface
     to expose text markups in a text, typically of a text document, that are
     used to reference other (parts of) documents. For supporting the
     <member>XAccessibleTextMarkup::getTextMarkupIndex</member> method of this
     interface and other character related methods of the
-    <type>XAccessibleTextMarkup</type> interface, it is necessary to also
-    support the <type>XAccessibleText</type> interface.</p>
+    XAccessibleTextMarkup interface, it is necessary to also
+    support the XAccessibleText interface.</p>
 
     @see XAccessibleText
 
@@ -51,12 +51,12 @@ interface XAccessibleTextMarkup
     /** Returns the number of text markup of the given text markup type
         of a text.
 
-        <p>Throws <type>IllegalArgumentException</type>, if given text
+        <p>Throws IllegalArgumentException, if given text
         markup type is out of valid range.</p>
 
         @param TextMarkupType
             This specifies the type of text markups, whose count should
-            be returned - see <type>TextMarkupType</type>.
+            be returned - see TextMarkupType.
 
         @return
             The number of text markup of the given text markup type.
@@ -68,9 +68,9 @@ interface XAccessibleTextMarkup
     /** Returns the text segment of the text markup of the given index and
         of the given text mark type
 
-        <p>Throws <type>IndexOutOfBoundsException</type>, if given index
+        <p>Throws IndexOutOfBoundsException, if given index
         is out of valid range.</p>
-        <p>Throws <type>IllegalArgumentException</type>, if given text
+        <p>Throws IllegalArgumentException, if given text
         markup type is out of valid range.</p>
 
         @param TextMarkupIndex
@@ -78,11 +78,11 @@ interface XAccessibleTextMarkup
 
         @param TextMarkupType
             This specifies the type of the text markup to be returned - see
-            <type>TextMarkupType</type>.
+            TextMarkupType.
 
         @return
             If the given index is in range [0..getTextMarkupCount(TextMarkupType)-1],
-            the text segment - see <type>TextSegment</type> - of the text markup
+            the text segment - see TextSegment - of the text markup
             of the given text markup type is returned.
     */
     TextSegment getTextMarkup ( [in] long TextMarkupIndex,
@@ -93,9 +93,9 @@ interface XAccessibleTextMarkup
     /** returns a sequence of the text segments of the text markups at the given
         character index and of the given text markup type.
 
-        <p>Throws <type>IndexOutOfBoundsException</type>, if given character
+        <p>Throws IndexOutOfBoundsException, if given character
         index is out of range [0..number of characters in the text).</p>
-        <p>Throws <type>IllegalArgumentException</type>, if given text
+        <p>Throws IllegalArgumentException, if given text
         markup type is out of valid range.</p>
 
         @param CharIndex
@@ -103,11 +103,11 @@ interface XAccessibleTextMarkup
 
         @param TextMarkupType
             This specifies the type of the text markups to be returned - see
-            <type>TextMarkupType</type>.
+            TextMarkupType.
 
         @return
             If character index is in range [0..number of characters in the text-1],
-            a sequence of <type>TextSegment</type>s of the text markups at
+            a sequence of TextSegments of the text markups at
             given character index of the given text markup type are returned.
             The sequence is empty, if no such text markup is found.
     */

@@ -53,7 +53,7 @@ published interface XSheetOperation: com::sun::star::uno::XInterface
     /** clears the specified contents of the current cell range(s).
 
         @param nContentFlags
-            a combination of <type>CellFlags</type> flags selecting the
+            a combination of CellFlags flags selecting the
             contents to be deleted.
      */
     void clearContents( [in] long nContentFlags );

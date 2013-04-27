@@ -33,15 +33,15 @@
 
 module com { module sun { module star { module ucb {
 
-/** A <type>Content</type> is a service that provides access to data of a
+/** A Content is a service that provides access to data of a
     content provided by an implementation of the service
-    <type>ContentProvider</type>.
+    ContentProvider.
 */
 published service Content
 {
 
     /** provides access to the identity and the type of the content and
-        allows the registration of listeners for <type>ContentEvent</type>s.
+        allows the registration of listeners for ContentEvents.
 
         <p>This interface is required.
      */
@@ -68,7 +68,7 @@ published service Content
     /** enables the caller to let the content execute commands.
 
         <p>It is strongly recommended that any implementation supports the
-        improved <type>XCommandProcessor2</type> interface.</p>
+        improved XCommandProcessor2 interface.</p>
 
         <p>Typical commands are "open", "delete", "getPropertyValues" and
         "setPropertyValues". Each content must support a set of standard
@@ -830,7 +830,7 @@ published service Content
         resource leaks. For a detailed description of the problem refer to
         <member>XCommandProcessor2::releaseCommandIdentifier</member>.
 
-        <p>Where many existing <type>Content</type> implementations do not
+        <p>Where many existing Content implementations do not
         (yet), every new implementation should support this interface.
      */
     [optional] interface com::sun::star::ucb::XCommandProcessor2;
@@ -846,7 +846,7 @@ published service Content
         properties from the content dynamically.
 
         <p>Note that the dynamic properties must be kept persistent. The
-        service <type>Store</type> (UCB persistence service) may be used to
+        service Store (UCB persistence service) may be used to
         implement this.
 
         <p><b>Important:</b> The implementation of
@@ -923,7 +923,7 @@ published service Content
 
         <p>The object returned by the implementation of the method
         <member scope="com::sun::star::container">XChild::getParent()</member>
-        must implement the service <type>Content</type>. If the content is a
+        must implement the service Content. If the content is a
         root object, an empty interface may be returned.
 
         <p>This interface must be implemented by a content which is a (logical)

@@ -25,7 +25,7 @@
 
 module com { module sun { module star { module drawing { module framework {
 
-/** The <type>BasicToolBarFactory</type> is a resource factory that provides
+/** The BasicToolBarFactory is a resource factory that provides
     (some of) the tool bars used by the Draw and Impress applications.
 
     <p>The factory recognizes the following URLs:<ul>
@@ -37,7 +37,7 @@ module com { module sun { module star { module drawing { module framework {
     </p>
 
     <p>This factory is typically created indirectly by registering it in the
-    configuration and have the <type>XModuleController</type> create it on
+    configuration and have the XModuleController create it on
     demand.</p>
 */
 service BasicToolBarFactory : XResourceFactory

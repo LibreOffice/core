@@ -55,7 +55,7 @@ published interface XCompositeLayer : XLayer
 
     /**
       Describes the content of a particular sublayer to
-      an <type>XLayerHandler</type>.
+      an XLayerHandler.
 
       @param aHandler
             Handler object that will receive calls
@@ -75,7 +75,7 @@ published interface XCompositeLayer : XLayer
               if an error occurs in the access to or processing of the data.
       @throws com::sun::star::configuration::backend::MalformedDataException
               if the data read from the layer is rejected as invalid by the
-              <type>XLayerHandler</type>.
+              XLayerHandler.
       */
     void readSubLayerData([in] XLayerHandler aHandler, [in] string aSubLayerId)
         raises (com::sun::star::lang::NullPointerException,

@@ -31,7 +31,7 @@
 module com { module sun { module star { module configuration { module backend {
 
 
-/** allows importing a layer into a <type>Backend</type>
+/** allows importing a layer into a Backend
 
   @since OOo 1.1.2
 */
@@ -41,7 +41,7 @@ published interface XLayerImporter : ::com::sun::star::uno::XInterface
     /** gets the target backend for importing.
 
         @returns
-            the <type>Backend</type> into which layers are
+            the Backend into which layers are
             imported by <member>XLayerImporter::importLayer()<member/>.
 
     */
@@ -51,7 +51,7 @@ published interface XLayerImporter : ::com::sun::star::uno::XInterface
     /** sets the target backend for importing.
 
         @param aBackend
-            a <type>Backend</type> into which layers should be
+            a Backend into which layers should be
             imported by <method>XLayerImporter::importLayer()<method/>.
 
         @throws com::sun::star::lang::NullPointerException

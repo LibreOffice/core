@@ -39,7 +39,7 @@ published service ChartArea
     service com::sun::star::drawing::FillProperties;
     service com::sun::star::drawing::LineProperties;
 
-    /** If the <type>ChartArea</type> may be stored as XML element,
+    /** If the ChartArea may be stored as XML element,
         this service should be supported in order to preserve unparsed
         XML attributes.
 

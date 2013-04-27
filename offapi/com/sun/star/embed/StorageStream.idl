@@ -32,8 +32,8 @@
  module com {  module sun {  module star {  module embed {
 
 /**  This is a service that represents a stream that can be provided by
-    <type>XStorage</type>::openStreamElement() call implemented by
-    <type>Storage</type> service.
+    XStorage::openStreamElement() call implemented by
+    Storage service.
 
     <p>
     In case a stream is open with read-write access only one instance
@@ -148,7 +148,7 @@ published service StorageStream
 
         <p>
         If somebody sets a password explicitly by using
-        <type>XEncryptionProtectedSource</type> interface the value is
+        XEncryptionProtectedSource interface the value is
         automatically set to <TRUE/>. If the interface is used to remove
         the encryption - the value is automatically set to <FALSE/>.
         </p>
@@ -178,7 +178,7 @@ published service StorageStream
 
         <p>
         If somebody sets a password explicitly by using
-        <type>XEncryptionProtectedSource</type> interface the value is
+        XEncryptionProtectedSource interface the value is
         automatically set to <FALSE/> and the stream becomes encrypted
         with specified password immediately.
         </p>

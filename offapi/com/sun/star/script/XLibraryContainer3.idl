@@ -27,7 +27,7 @@
 
 
 /**
-    Extension of <type>XLibraryContainer2</type>.
+    Extension of XLibraryContainer2.
  */
 published interface XLibraryContainer3: com::sun::star::script::XLibraryContainer2
 {

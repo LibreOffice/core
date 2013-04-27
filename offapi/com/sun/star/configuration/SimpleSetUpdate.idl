@@ -34,7 +34,7 @@ module com { module sun { module star { module configuration {
  Helps create new elements to be added.
  </p>
 
- <p>This service extends <type>SimpleSetAccess</type> to support
+ <p>This service extends SimpleSetAccess to support
  modifying the container. Any child objects shall in turn support
  modifying access.
  </p>
@@ -50,7 +50,7 @@ published service SimpleSetUpdate
 
  <p>This interface extends the interface
  <type scope="com::sun::star::container">XNameAccess</type> supported
- by service <type>SimpleSetAccess</type> to allow modifying the container.
+ by service SimpleSetAccess to allow modifying the container.
  </p>
 
  <p>If available, changes can be observed by registering a listener with interface
@@ -137,7 +137,7 @@ published service SimpleSetUpdate
  (as returned by
  <member scope="com::sun::star::container">XElementAccess::getElementType()</member>)
  is an object type, such as an interface. An implementation should also implement
- interface <type>XTemplateContainer</type> which is optional in this service.
+ interface XTemplateContainer which is optional in this service.
  </p>
 
  <p>The service identifier argument passed

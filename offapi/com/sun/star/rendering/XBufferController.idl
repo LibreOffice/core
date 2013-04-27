@@ -47,7 +47,7 @@ interface XBufferController : ::com::sun::star::uno::XInterface
         @return the number of actually generated buffers, which might
         be between 0 (no double-buffering available) and nBuffers.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if nBuffers is smaller than one.
       */
     long    createBuffers( [in] long nBuffers )
@@ -78,7 +78,7 @@ interface XBufferController : ::com::sun::star::uno::XInterface
 
         @return whether the switch was performed successfully.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if nBuffer is outside the permissible range.
      */
     boolean showBuffer( [in] boolean bUpdateAll );

@@ -23,7 +23,7 @@
 
 module com { module sun { module star { module frame {
 
-/** possible values for <type>DispatchResultEvent</type>
+/** possible values for DispatchResultEvent
  */
 published constants DispatchResultState
 {

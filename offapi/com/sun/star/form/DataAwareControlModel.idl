@@ -34,13 +34,13 @@
  module com {  module sun {  module star {  module form {
 
 
-/** is an abstract service for specialized <type>FormControlModel</type>s
+/** is an abstract service for specialized FormControlModels
     which are data aware and thus can be bound to a data source.
 
     <p>The connection between a data-aware control model and a form whose data the
     control should display is made by parentship relations. The parent of a data-aware
     control model (see <type scope="com::sun::star::container">XChild</type>, inherited
-    via the <type>FormControlModel</type> and <type>FormComponent</type> services) has
+    via the FormControlModel and FormComponent services) has
     always to be a <type scope="com::sun::star::form::component">DataForm</type>.</p>
  */
 published service DataAwareControlModel
@@ -65,10 +65,10 @@ published service DataAwareControlModel
     interface com::sun::star::form::XLoadListener;
 
 
-    /** Each <type>DataAwareControlModel</type> should be resettable for setting default values.
+    /** Each DataAwareControlModel should be resettable for setting default values.
 
         <p>In the context of a control model which is data-aware, the semantics of <em>default value</em>
-        (see <type>XReset</type>) is as follows:<br/>
+        (see XReset) is as follows:<br/>
         If (and only if) the control is valid bound to a column of it's <type scope="com::sun::star::form::component">DataForm</type>, and the form
         is not positioned on a new record (see <member scope="com::sun::star::sdb">RowSet::IsNew</member>), then
         <member>XReset::reset</member> does not reset the model's value to it's default value, but uses the
@@ -82,7 +82,7 @@ published service DataAwareControlModel
 
         <p>In the context of a <type scope="com::sun::star::form::component">DataForm</type>, controls are
         automatically reset when one of the following applies
-        <ul><li>The form is reset by invoking it's <type>XReset</type> interface.</li>
+        <ul><li>The form is reset by invoking it's XReset interface.</li>
             <li>The form moves to a new record.</li>
             <li>The changes in the current record of the form are undone</li>
         </ul>
@@ -99,7 +99,7 @@ published service DataAwareControlModel
         This member here describes the column of this result set which the control should act for.</p>
 
         <p>Not every control model can be bound to every database column. Usually, super services of the
-        <type>DataAwareControlModel</type> restrict the column types they can be used with.</p>
+        DataAwareControlModel restrict the column types they can be used with.</p>
 
         @see DataAwareControlModel::BoundField
      */

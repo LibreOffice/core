@@ -45,7 +45,7 @@ published interface XContentProviderManager: com::sun::star::uno::XInterface
 
         <p>This may be <NULL/>, in which case a later
         <member>XContentProvider::queryContent</member> with an
-        <type>XContentIdentifier</type> that matches the <var>Scheme</var>
+        XContentIdentifier that matches the <var>Scheme</var>
         will simply return <NULL/>. These "dummy" content providers are useful
         in combination with other content providers that are registered on a
         wildcard URL template: For example, imagine that you want to route all
@@ -95,8 +95,8 @@ published interface XContentProviderManager: com::sun::star::uno::XInterface
         match the same URLs as their <code>&lt;simple&gt:</code> counterparts,
         but they also describe how a (local) URL is mapped to another (remote)
         URL.  This mapping is only relevant for methods of the
-        <type>RemoteAccessContentProvider</type>'s
-          <type>XParameterizedContentProvider</type> interface; in all other
+        RemoteAccessContentProvider's
+          XParameterizedContentProvider interface; in all other
         cases, <code>&lt;translation&gt:</code> regexps have the same semantics
         as their <code>&lt;simple&gt:</code> counterparts.
 

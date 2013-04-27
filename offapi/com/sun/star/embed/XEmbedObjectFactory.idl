@@ -46,7 +46,7 @@ published interface XEmbedObjectFactory: com::sun::star::uno::XInterface
 
         <p>
         If the service implementation does not support
-        <type>XEmbedObjectCreator</type> interface, it must accept the empty
+        XEmbedObjectCreator interface, it must accept the empty
         aClassID parameter in case of loading from existing entry.
         </p>
 
@@ -64,7 +64,7 @@ published interface XEmbedObjectFactory: com::sun::star::uno::XInterface
 
         @param nEntryConnectionMode
             a mode in which the object should be initialized from entry
-            can take values from <type>EntryInitModes</type> constant set
+            can take values from EntryInitModes constant set
 
         @param aArgs
             optional parameters for the embedded document persistence

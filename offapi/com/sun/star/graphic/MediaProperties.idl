@@ -28,7 +28,7 @@ module com { module sun { module star { module graphic
 {
 
 /** This service describes the properties that are used
-    when using the <type>XGraphicProvider</type> interface methods
+    when using the XGraphicProvider interface methods
 */
 published service MediaProperties
 {

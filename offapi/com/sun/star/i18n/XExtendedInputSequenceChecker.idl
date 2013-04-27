@@ -42,7 +42,7 @@ published interface XExtendedInputSequenceChecker : ::com::sun::star::i18n::XInp
             Next nPos, or length of aText if nothing is corrected.
 
         @param nInputCheckMode
-            One of <type>InputSequenceCheckMode</type> constants.
+            One of InputSequenceCheckMode constants.
     */
     long correctInputSequence( [inout] string aText, [in] long nPos,
                 [in] char cInputChar, [in] short nInputCheckMode );

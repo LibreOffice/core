@@ -34,7 +34,7 @@ module com { module sun { module star { module ui {
 
     <p>
     User interface element factories must be registered at a
-    <type>UIElementFactoryManager</type> service to provide access to itself.
+    UIElementFactoryManager service to provide access to itself.
 
     Currently the following user interface element types are defined:
     <ul>

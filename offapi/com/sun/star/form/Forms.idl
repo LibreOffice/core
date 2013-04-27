@@ -27,7 +27,7 @@
 
 /** specifies the capabilities of a collection of forms.
 
-    <p>Basically, a <type>Forms</type> is a <type>FormComponents</type>,
+    <p>Basically, a Forms is a FormComponents,
     with the additional restriction that the contained elements support the
     <type scope="com::sun::star::form::component">Form</type> service.</p>
 

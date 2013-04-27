@@ -29,7 +29,7 @@
 
 /** Reflects a singleton.
 
-    <p>This type is superseded by <type>XSingletonTypeDescription2</type>, which
+    <p>This type is superseded by XSingletonTypeDescription2, which
     supports interface-based singletons, in addition to the obsolete,
     service-based singletons.</p>
 

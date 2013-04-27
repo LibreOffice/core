@@ -28,7 +28,7 @@ module com { module sun { module star { module rendering {
 
 // TODO: Multiple-inheritance interfaces
 
-/** This service provides the interfaces for a <type>XBitmapCanvas</type>
+/** This service provides the interfaces for a XBitmapCanvas
  */
 service BitmapCanvas
 {

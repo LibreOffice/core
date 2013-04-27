@@ -36,14 +36,14 @@ interface XModuleManager : com::sun::star::uno::XInterface
     /**
        @short  identifies the given module.
 
-       @descr  This identifier can then be used at the service <type>ModuleManager</type>
+       @descr  This identifier can then be used at the service ModuleManager
                to get more information about this module.
 
                For identification the interface <type scope="com::sun::star::lang">XServiceInfo</type>
                is requested on the given module. Because all module service registrations must be unique
                this value can be queried and checked against the configuration.
 
-               Since OOo 2.3.0 also the optional interface <type>XModule</type> will be used.
+               Since OOo 2.3.0 also the optional interface XModule will be used.
                If its exists it will be preferred.
 
        @param  Module
@@ -75,7 +75,7 @@ interface XModuleManager : com::sun::star::uno::XInterface
                    <li>or does not provide the needed interface XServiceInfo.</li>
                </ul>
 
-       @throws <type>UnknownModuleException</type>
+       @throws UnknownModuleException
                if the given module could not be identified.
                Note: If the module represent a XFrame instance with does not contain
                a document, this exception is thrown too!

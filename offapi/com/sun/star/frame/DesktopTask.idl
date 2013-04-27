@@ -30,25 +30,25 @@
 
  module com {  module sun {  module star {  module frame {
 
-/** use the <type>Frame</type> service instead of this
+/** use the Frame service instead of this
     @deprecated
  */
 published service DesktopTask
 {
-        /** use <type>Frame</type> service */
+        /** use Frame service */
         interface com::sun::star::frame::XDesktopTask;
 
-        /** use the same interface at the <type>Frame</type> service */
+        /** use the same interface at the Frame service */
     interface com::sun::star::frame::XFrame;
 
-        /** use the same interface at the <type>Frame</type> service */
+        /** use the same interface at the Frame service */
     interface com::sun::star::beans::XPropertySet;
 
         /** - */
     interface com::sun::star::frame::XWindowArranger;
 
-        /** use the same interface at the <type>Desktop</type> or
-            <type>Frame</type> service */
+        /** use the same interface at the Desktop or
+            Frame service */
     interface com::sun::star::frame::XFramesSupplier;
 
         /** use property <member>Frame::Title</member> instead of that */

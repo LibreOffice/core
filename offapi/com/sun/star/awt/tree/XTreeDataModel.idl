@@ -28,14 +28,14 @@
 module com {  module sun {  module star {  module awt {  module tree {
 
 
-/** An instance of this interface is used by the <type>TreeControl</type> to
+/** An instance of this interface is used by the TreeControl to
     retrieve the hierarchical outline data that is displayed in the actual control.
 
-    <p>If you implement your own <type>XTreeDataModel</type> you need to notify registered
-    <type>XTreeDataModelListener</type> if your model changes after the control is created.
-    If this is not done correctly the <type>TreeControl</type> will not update the data properly.</p>
+    <p>If you implement your own XTreeDataModel you need to notify registered
+    XTreeDataModelListener if your model changes after the control is created.
+    If this is not done correctly the TreeControl will not update the data properly.</p>
 
-    If you do not need your own model implementation, you can also use the <type>MutableTreeDataModel</type>.
+    If you do not need your own model implementation, you can also use the MutableTreeDataModel.
 */
 interface XTreeDataModel : ::com::sun::star::lang::XComponent
 {
@@ -47,7 +47,7 @@ interface XTreeDataModel : ::com::sun::star::lang::XComponent
     */
     XTreeNode getRoot();
 
-    /** Adds a listener for the <type>TreeDataModelEvent</type> posted after the tree changes.
+    /** Adds a listener for the TreeDataModelEvent posted after the tree changes.
 
         @param Listener
             the listener to add.

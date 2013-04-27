@@ -92,7 +92,7 @@ interface XPresenterHelper
             The canvas is created for this window.  Must not be <NULL/>
         @param nRequestedCanvasFeatureList
             List of requested features that the new canvas should (has to)
-            provide.  Use only values from the <type>CanvasFeature</type>
+            provide.  Use only values from the CanvasFeature
             constants group.
         @param sOptionalCanvasServiceName
             When an explicit service name is given then a new object of this

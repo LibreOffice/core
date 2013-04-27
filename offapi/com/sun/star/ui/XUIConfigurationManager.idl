@@ -88,7 +88,7 @@ interface XUIConfigurationManager : ::com::sun::star::uno::XInterface
 
         @return
             an empty user interface element settings data container, which
-            implements <type>UIElementSettings</type>.
+            implements UIElementSettings.
     */
     ::com::sun::star::container::XIndexContainer createSettings();
 
@@ -121,7 +121,7 @@ interface XUIConfigurationManager : ::com::sun::star::uno::XInterface
 
         @return
             settings data of an existing user interface element, which
-            implements <type>UIElementSettings</type>. If the settings data
+            implements UIElementSettings. If the settings data
             cannot be found a
             <type scope="com::sun::star::container">NoSuchElementException</type>
             is thrown.  If the <member>ResourceURL</member> is not valid or
@@ -141,7 +141,7 @@ interface XUIConfigurationManager : ::com::sun::star::uno::XInterface
 
         @param aNewData
             the new settings data of an existing user interface element, which
-            implements <type>UIElementSettings</type>.
+            implements UIElementSettings.
 
         <p>
         If the settings data cannot be found a
@@ -180,7 +180,7 @@ interface XUIConfigurationManager : ::com::sun::star::uno::XInterface
 
         @param aNewData
             the settings data of the new user interface element, which implements
-            <type>UIElementSettings</type>.
+            UIElementSettings.
 
         <p>
         If the settings data is already present a

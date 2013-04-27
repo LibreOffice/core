@@ -25,7 +25,7 @@
 
  module com {  module sun {  module star {  module text {
 
-/** provide special data of a <type>TextSection</type>.@see TextSection
+/** provide special data of a TextSection.@see TextSection
  */
 published interface XTextSection: com::sun::star::text::XTextContent
 {

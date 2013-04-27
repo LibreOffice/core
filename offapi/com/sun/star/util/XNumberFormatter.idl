@@ -38,18 +38,18 @@
 published interface XNumberFormatter: com::sun::star::uno::XInterface
 {
 
-    /** attaches an <type>XNumberFormatsSupplier</type> to this
-        <type>NumberFormatter</type>.
+    /** attaches an XNumberFormatsSupplier to this
+        NumberFormatter.
 
-        <p>This <type>NumberFormatter</type> will only use the <type>NumberFormats</type>
-        specified in the attached <type>XNumberFormatsSupplier</type>. Without an attached
-        <type>XNumberFormatsSupplier</type>, no formatting is possible.</p>
+        <p>This NumberFormatter will only use the NumberFormats
+        specified in the attached XNumberFormatsSupplier. Without an attached
+        XNumberFormatsSupplier, no formatting is possible.</p>
      */
     void attachNumberFormatsSupplier( [in] com::sun::star::util::XNumberFormatsSupplier xSupplier );
 
 
     /** @returns
-                the attached <type>XNumberFormatsSupplier</type>.
+                the attached XNumberFormatsSupplier.
      */
     com::sun::star::util::XNumberFormatsSupplier getNumberFormatsSupplier();
 

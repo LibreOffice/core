@@ -25,14 +25,14 @@
  module com {  module sun {  module star {  module drawing {
 
 
-/** must be supported to provide access to a container of <type>GluePoint2</type>.
+/** must be supported to provide access to a container of GluePoint2.
  */
 published interface XGluePointsSupplier: com::sun::star::uno::XInterface
 {
 
     /**
         @return
-                a container of <type>GluePoint2</type> structs.
+                a container of GluePoint2 structs.
      */
     com::sun::star::container::XIndexContainer getGluePoints();
 

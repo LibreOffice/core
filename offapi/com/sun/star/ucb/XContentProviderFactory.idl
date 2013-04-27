@@ -25,7 +25,7 @@
 
 module com { module sun { module star { module ucb {
 
-/** a factory for a <type>XContentProvider</type>.
+/** a factory for a XContentProvider.
 
      @version  1.0
      @author   Kai Sommerfeld
@@ -33,7 +33,7 @@ module com { module sun { module star { module ucb {
 */
 published interface XContentProviderFactory : com::sun::star::uno::XInterface
 {
-    /** creates a <type>XContentProvider</type> implementation object.
+    /** creates a XContentProvider implementation object.
 
         @param Service
         the name of the UNO service to be used to create the implementation of

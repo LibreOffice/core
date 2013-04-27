@@ -32,7 +32,7 @@ module com { module sun { module star { module rendering {
 
     The returned poly-polygon should normally be contained in the
     [0,1]x[0,1] rectangle. At least that is the dimension expected at
-    other places. e.g. <type>Texture</type>.
+    other places. e.g. Texture.
  */
 interface XParametricPolyPolygon2D : ::com::sun::star::uno::XInterface
 {

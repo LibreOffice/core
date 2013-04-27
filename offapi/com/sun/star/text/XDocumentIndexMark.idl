@@ -41,8 +41,8 @@ published interface XDocumentIndexMark: com::sun::star::text::XTextContent
 
 
 
-        <p>If empty, the string of the <type>TextRange</type> to which
-        the <type>TextContent</type> refers is used in the index.</p>
+        <p>If empty, the string of the TextRange to which
+        the TextContent refers is used in the index.</p>
      */
     void setMarkEntry( [in] string aIndexEntry );
 

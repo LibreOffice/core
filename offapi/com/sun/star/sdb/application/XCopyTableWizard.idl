@@ -47,7 +47,7 @@ interface XCopyTableWizard : ::com::sun::star::ui::dialogs::XExecutableDialog
 {
     /** specifies the basic operation for the wizard to execute.
 
-        <p>This must be one of the <type>CopyTableOperation</type> constants.</p>
+        <p>This must be one of the CopyTableOperation constants.</p>
 
         <p>At initialization time, you can use this attribute to control the
         initial operation in the wizard.</p>

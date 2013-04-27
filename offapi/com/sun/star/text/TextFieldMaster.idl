@@ -26,8 +26,8 @@
  module com {  module sun {  module star {  module text {
 
 
-/** A <type>TextFieldMaster</type> specifies important data for its
-    <type>DependentTextField</type>s.
+/** A TextFieldMaster specifies important data for its
+    DependentTextFields.
  */
 published service TextFieldMaster
 {

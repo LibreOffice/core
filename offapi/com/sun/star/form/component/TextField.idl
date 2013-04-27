@@ -41,7 +41,7 @@ published service TextField
     /** specifies optional capabilities for displaying and inputting formatted text.
 
         <p>If the <member>RichTextControl::RichText</member> property is set to <TRUE/>,
-        then the <type>TextField</type> component will disable it's reset capabilities. This means
+        then the TextField component will disable it's reset capabilities. This means
         that all calls to <member scope="com::sun::star::form">XReset::reset</member> will be ignored.</p>
     */
     [optional] service RichTextControl;

@@ -85,7 +85,7 @@ published interface XComponentLoader: com::sun::star::uno::XInterface
             </table>
 
         @param SearchFlags
-            use the values of <type>FrameSearchFlag</type> to specify
+            use the values of FrameSearchFlag to specify
             how to find the specified <var>TargetFrameName</var>
 
             <p>
@@ -123,7 +123,7 @@ published interface XComponentLoader: com::sun::star::uno::XInterface
                     only an interacting user can do this by closing the frame's window.
                 </li>
                 <li>
-                    <type>XController</type> for richer components<br/>
+                    XController for richer components<br/>
                     Should be used for real editable components which doesn't need a model.
                     It is not allowed to dispose it after use directly, because the frame
                     containing the component is its owner. Here the object can be disposed
@@ -132,7 +132,7 @@ published interface XComponentLoader: com::sun::star::uno::XInterface
                     should be asked for permission by calling <member>XController::suspend()</member> before.
                 </li>
                 <li>
-                    <type>XModel</type> for full featured components<br/>
+                    XModel for full featured components<br/>
                     A model that in general can be shared between several view/controller pairs,
                     does not have an explicit owner. Every view and also the component that
                     loaded the document may consider itself as an owner.

@@ -29,12 +29,12 @@
  published interface XText;
  published interface XTextRange;
 
-/** compares the positions of two <type>TextRange</type>s within a
-    <type>Text</type>.
+/** compares the positions of two TextRanges within a
+    Text.
 
 
 
-    <p>Only <type>TextRange</type> instances within the same <type>Text</type>
+    <p>Only TextRange instances within the same Text
     can be compared.
     </p>
  */

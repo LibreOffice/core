@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module sheet {
 
     <p>To insert a sheet link, the sheet used as linked sheet has to exist
     already. The method <member>XSheetLinkable::link</member> creates a
-    <type>SheetLink</type> object in the document's <type>SheetLinks</type>
+    SheetLink object in the document's SheetLinks
     collection and links the sheet to the specified external sheet.</p>
 
     @see com::sun::star::sheet::SheetLinks
@@ -71,7 +71,7 @@ published interface XSheetLinkable: com::sun::star::uno::XInterface
 
     /** sets the target URL of the link.
 
-        <p>A <type>SheetLink</type> object with the same file name must
+        <p>A SheetLink object with the same file name must
         exist already or the link will not work.</p>
      */
     void setLinkUrl( [in] string aLinkUrl );
@@ -84,7 +84,7 @@ published interface XSheetLinkable: com::sun::star::uno::XInterface
 
     /** sets the name of the linked sheet in the source document.
 
-        <p>This method sets the sheet name in the <type>SheetLink</type>
+        <p>This method sets the sheet name in the SheetLink
         object, it does not modify the sheet name in the source document.</p>
      */
     void setLinkSheetName( [in] string aLinkSheetName );
@@ -92,7 +92,7 @@ published interface XSheetLinkable: com::sun::star::uno::XInterface
 
     /** links the sheet to another sheet in another document.
 
-        <p>A <type>SheetLink</type> object is created if it does not exist,
+        <p>A SheetLink object is created if it does not exist,
         and the link mode, the URL of the linked document and the linked
         sheet name are set.</p>
      */

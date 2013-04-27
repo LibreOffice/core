@@ -33,12 +33,12 @@ module com { module sun { module star { module ucb {
 
     <p>If this exception is passed to an
     <type scope="com::sun::star::task">XInteractionHandler</type> an
-    <type>XInteractionSupplyName</type> and an
-    <type>XInteractionReplaceExistingData</type> should be supplied with
+    XInteractionSupplyName and an
+    XInteractionReplaceExistingData should be supplied with
     the <type scope="com::sun::star::task">XInteractionRequest</type>. On
-    return the <type>XInteractionSupplyName</type>, if selected, will contain
+    return the XInteractionSupplyName, if selected, will contain
     a new name supposed to resolve the name clash. The
-    <type>XInteractionReplaceExistingData</type> will be selected if the
+    XInteractionReplaceExistingData will be selected if the
     clashing resource shall be overwritten.
 
     @version    1.0

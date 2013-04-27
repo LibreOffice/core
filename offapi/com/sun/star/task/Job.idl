@@ -26,7 +26,7 @@
 
 module com { module sun { module star { module task {
 
-/** represent a synchronous job, which can be executed by the global <type>JobExecutor</type>
+/** represent a synchronous job, which can be executed by the global JobExecutor
     instance.
 
     @see AsyncJob

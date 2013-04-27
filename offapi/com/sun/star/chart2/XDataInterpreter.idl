@@ -47,7 +47,7 @@ interface XDataInterpreter  : ::com::sun::star::uno::XInterface
             service.
 
             <p>For standard parameters that may be used, see the
-            service <type>StandardDiagramCreationParameters</type>.
+            service StandardDiagramCreationParameters.
             </p>
 
         @param aSeriesToReUse

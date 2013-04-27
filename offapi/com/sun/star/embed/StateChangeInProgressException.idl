@@ -35,7 +35,7 @@ published exception StateChangeInProgressException: com::sun::star::embed::Wrong
     /** contains the target state the object tries to reach currently.
 
         <p>
-        Contains a value from <type>EmbedStates</type> constant set.
+        Contains a value from EmbedStates constant set.
         </p>
      */
     long TargetState;

@@ -30,11 +30,11 @@
     is called for closing
 
     <p>
-    Such close events are broadcasted by a <type>XCloseBroadcaster</type>
+    Such close events are broadcasted by a XCloseBroadcaster
     if somewhere tries to close it by calling <member>XCloseable::close()</member>.
     Listener can:
     <ul>
-        <li>break that by throwing <type>CloseVetoException</type></li>
+        <li>break that by throwing CloseVetoException</li>
         <li>or accept that by deregister himself at this broadcaster.</li>
     </ul>
     </p>
@@ -54,7 +54,7 @@ published interface XCloseListener: com::sun::star::lang::XEventListener
 
         <p>
         Is called before <member>XCloseListener::notifyClosing()</member>.
-        Listener has the chance to break that by throwing a <type>CloseVetoException</type>.
+        Listener has the chance to break that by throwing a CloseVetoException.
         This exception must be passed to the original caller of <member>XCloseable::close()</member>
         without any interaction.
         </p>

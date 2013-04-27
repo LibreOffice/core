@@ -28,7 +28,7 @@
  module com {  module sun {  module star {  module form {
 
 
-/** allows to be notified when the activation status of a <type>FormController</type> changes.
+/** allows to be notified when the activation status of a FormController changes.
 
     <p> A form controller is activated if a form control gains the
     focus and none of its controls currently owned the focus before.</p>

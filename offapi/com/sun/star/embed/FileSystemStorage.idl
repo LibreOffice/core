@@ -43,7 +43,7 @@ published service FileSystemStorage
             <dd>
                 <p>
                 A file system storage is created either by
-                <type>StorageFactory</type> or by <type>XStorage</type>
+                StorageFactory or by XStorage
                 interface and is controlled by refcounting. In case
                 refcounting is decreased to zero the storage will be
                 disposed automatically.
@@ -54,12 +54,12 @@ published service FileSystemStorage
                 ( substorages and substreams ) are not affected.
                 </p>
             </dd>
-            <dt>interface <type>XStorage</type></dt>
+            <dt>interface XStorage</dt>
             <dd>
                 <dl>
                     <dt><method>XStorage::openStorageElement</method></dt>
                     <dd>
-                        This method returns <type>FileSystemStorage</type>
+                        This method returns FileSystemStorage
                         service implementation.
                     </dd>
 

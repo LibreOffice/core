@@ -26,7 +26,7 @@
  module com {  module sun {  module star {  module form {
 
 
-/** identifies a <type>FormComponent</type> as being a (sub-) form.
+/** identifies a FormComponent as being a (sub-) form.
 
     <p>This interface does not really provide an own functionality, it is only for easier
     runtime identification of form components.</p>

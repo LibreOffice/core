@@ -62,7 +62,7 @@ interface XDataPilotTable2: com::sun::star::sheet::XDataPilotTable
 
         @param aAddr address of the cell whose information is to be returned.
 
-        @returns <type>DataPilotTablePositionData</type> which contains the
+        @returns DataPilotTablePositionData which contains the
         position type and the information for that cell position.
 
         @see com::sun::star::sheet::DataPilotTablePositionData
@@ -90,7 +90,7 @@ interface XDataPilotTable2: com::sun::star::sheet::XDataPilotTable
         per specified output range type.</p>
 
         @returns <type scope="com::sun::star::table">CellRangeAddress</type> depicting
-        the range specified.  See <type>DataPilotOutputRangeType</type> for a set
+        the range specified.  See DataPilotOutputRangeType for a set
         of possible output range types.
 
         @see com::sun::star::sheet::DataPilotOutputRangeType

@@ -25,9 +25,9 @@
  module com {  module sun {  module star {  module drawing {
 
 
-/** this is a container for <type>Hatch</type>s
+/** this is a container for Hatchs
 
-    <p>It is used for example to access the <type>Hatch</type>s that
+    <p>It is used for example to access the Hatchs that
     are used inside a document.
 
     @see DrawingDocumentFactory
@@ -35,7 +35,7 @@
 */
 published service HatchTable
 {
-    /** this container lets you access the <type>Hatch</type>s that
+    /** this container lets you access the Hatchs that
         are indexed with a name.
 
         <p>Note: You can add new entries for later use, but you cannot

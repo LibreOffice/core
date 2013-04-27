@@ -26,8 +26,8 @@ module com { module sun { module star { module configuration { module backend {
 
 
 /**
-    implements a <type>BackendAdapter</type> that requires that
-    the <type>SingleBackend</type> holding the data
+    implements a BackendAdapter that requires that
+    the SingleBackend holding the data
     is continuously accessible.
 
     @see com::sun::star::configuration::backend::OfflineBackend
@@ -37,7 +37,7 @@ module com { module sun { module star { module configuration { module backend {
 published service OnlineBackend
 {
 
-    /** provides access to configuration data from a <type>SingleBackend</type>.
+    /** provides access to configuration data from a SingleBackend.
 
       */
     service BackendAdapter ;

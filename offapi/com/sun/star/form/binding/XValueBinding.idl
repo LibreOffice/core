@@ -51,7 +51,7 @@ interface XValueBinding : com::sun::star::uno::XInterface
 
     /** retrieves the current value
 
-        @throws <type>IncompatibleTypesException</type>
+        @throws IncompatibleTypesException
             if the requested value type is not supported by the binding
         @see getSupportedValueTypes
         @see supportsType
@@ -61,9 +61,9 @@ interface XValueBinding : com::sun::star::uno::XInterface
 
     /** sets the current value
 
-        @throws <type>IncompatibleTypesException</type>
+        @throws IncompatibleTypesException
             if the given value type is not supported by the binding
-        @throws <type>InvalidBindingStateException</type>
+        @throws InvalidBindingStateException
             if the value currently cannot be changed, since the binding is not
             fully operational. Possible reasons for this include the binding being
             readonly, or the target of the binding not being present.

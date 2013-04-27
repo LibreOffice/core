@@ -36,7 +36,7 @@ interface XVBAEventProcessor
     /** Returns whether a VBA event handler exists.
 
         @param nEventId
-            The identifier of the event. Must be a constant from <type>VBAEventId</type>.
+            The identifier of the event. Must be a constant from VBAEventId.
 
         @param aArgs
             Additional arguments needed to identify some event handlers, e.g. a
@@ -56,7 +56,7 @@ interface XVBAEventProcessor
     /** Executes a VBA event handler.
 
         @param nEventId
-            The identifier of the event. Must be a constant from <type>VBAEventId</type>.
+            The identifier of the event. Must be a constant from VBAEventId.
 
         @param aArgs
             The input arguments needed to create the argument list of the VBA

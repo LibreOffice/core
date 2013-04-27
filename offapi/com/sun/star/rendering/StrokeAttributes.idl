@@ -97,7 +97,7 @@ struct StrokeAttributes
         The start point is the first point of every polygon of the
         path poly-polygon.<p>
 
-        @see <type>PathCapType</type>
+        @see PathCapType
      */
     byte                StartCapType;
 
@@ -107,7 +107,7 @@ struct StrokeAttributes
         The end point is the last point of every polygon of the path
         poly-polygon.<p>
 
-        @see <type>PathCapType</type>
+        @see PathCapType
      */
     byte                EndCapType;
 
@@ -121,7 +121,7 @@ struct StrokeAttributes
         connected, and therefore also not joined via the shape
         specified here.<p>
 
-        @see <type>PathJoinType</type>
+        @see PathJoinType
      */
     byte                JoinType;
 

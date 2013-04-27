@@ -47,7 +47,7 @@ service AccessibleTabPage
         <li>Children: The child of a tab page is a panel.</li>
         <li>Parent: The parent of a tab page is the tab control,
             whose accessible context supports the service
-            <type>AccessibleTabControl</type>.</li>
+            AccessibleTabControl.</li>
         <li>Relations: There are no relations.</li>
         <li>States: The states supported by this service are
             <ul>

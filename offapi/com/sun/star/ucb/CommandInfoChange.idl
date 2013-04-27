@@ -23,18 +23,18 @@
 
 module com { module sun { module star { module ucb {
 
-/** specifies reasons for sending <type>CommandInfoChangeEvent</type>s.
+/** specifies reasons for sending CommandInfoChangeEvents.
 
     @see CommandInfoChangeEvent
     @see XCommandInfo
 */
 published constants CommandInfoChange
 {
-    /** A command was inserted into a <type>XCommandInfo</type>.
+    /** A command was inserted into a XCommandInfo.
     */
     const long COMMAND_INSERTED = 0;
 
-    /** A command was removed from a <type>XCommandInfo</type>.
+    /** A command was removed from a XCommandInfo.
     */
     const long COMMAND_REMOVED = 1;
 };

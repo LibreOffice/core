@@ -155,7 +155,7 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
             specifies the attributes of the template.
 
             <p> The value is a combination of
-                <type>SchemaAttribute</type> flags.
+                SchemaAttribute flags.
             </p>
             <p> <const>SchemaAttribute::EXTENSIBLE</const> can be used
                 to describe a template for a node with an extensible
@@ -197,7 +197,7 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
             specifies the attributes of the template.
 
             <p> The value is a combination of
-                <type>SchemaAttribute</type> flags.
+                SchemaAttribute flags.
             </p>
             <p> <const>SchemaAttribute::EXTENSIBLE</const> can be used
                 to describe a template for a node with an extensible
@@ -266,7 +266,7 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
             specifies the attributes of the node.
 
             <p> The value is a combination of
-                <type>SchemaAttribute</type> flags.
+                SchemaAttribute flags.
             </p>
             <p> <const>SchemaAttribute::EXTENSIBLE</const> can be used
                 to describe a group with an extensible set of properties.
@@ -305,7 +305,7 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
             specifies the attributes of the node.
 
             <p> The value is a combination of
-                <type>SchemaAttribute</type> flags.
+                SchemaAttribute flags.
             </p>
             <p> <const>SchemaAttribute::EXTENSIBLE</const> can be used
                 to describe a set with an extensible set of properties.
@@ -370,7 +370,7 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
             specifies the attributes of the new property.
 
             <p> The value is a combination of
-                <type>SchemaAttribute</type> flags.
+                SchemaAttribute flags.
             </p>
 
         @param aType
@@ -408,7 +408,7 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
             specifies the attributes of the new property.
 
             <p> The value is a combination of
-                <type>SchemaAttribute</type> flags.
+                SchemaAttribute flags.
             </p>
 
         @param aDefaultValue

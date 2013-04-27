@@ -31,12 +31,12 @@
 published interface XPointer: com::sun::star::uno::XInterface
 {
 
-    /** selects a <type>SystemPointer</type> for this mouse pointer.
+    /** selects a SystemPointer for this mouse pointer.
      */
     void setType( [in] long nType );
 
 
-    /** returns the currently set <type>SystemPointer</type> of this mouse
+    /** returns the currently set SystemPointer of this mouse
         pointer.
      */
     long getType();

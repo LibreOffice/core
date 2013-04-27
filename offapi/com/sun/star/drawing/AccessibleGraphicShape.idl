@@ -25,11 +25,11 @@
 
 module com {  module sun {  module star {  module drawing {
 
-/** The <type>AccessibleGraphicShape</type> service is implemented by the
+/** The AccessibleGraphicShape service is implemented by the
     graphic object shapes shapes com.sun.star.drawing.GraphicObjectShape and
     com.sun.star.presentation.GraphicObjectShape.
 
-    <p>It differs from the included <type>AccessibleShape</type> "base"
+    <p>It differs from the included AccessibleShape "base"
     service by the additional support of the
     <type
     scope="::com::sun::star::accessibility">XAccessibleImage</type>
@@ -41,7 +41,7 @@ service AccessibleGraphicShape
 {
     /** Give access to information of generic shapes.
 
-        <p>See <type>AccessibleShape</type> for documentation and support of
+        <p>See AccessibleShape for documentation and support of
         the interfaces
         <type scope="::com::sun::star::accessibility">XAccessible</type>,
         <type scope="::com::sun::star::accessibility">XAccessibleContext</type>,
@@ -60,7 +60,7 @@ service AccessibleGraphicShape
         requires the shape to provide a description of the displayed image
         and the image's size in the screen coordinate system (pixel).  At
         the time being this interface does not provide information that is
-        not available through the <type>AccessibleShape</type> service:
+        not available through the AccessibleShape service:
         the size returned by the
         <member scope="::com::sun::star::accessibility"
         >XAccessibleImage::getWidth</member> and <member

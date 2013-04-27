@@ -33,7 +33,7 @@
 
     <p>This interface is proxy to the adapted object.
     In order to make it possible to have weak references to objects,
-    the <type>XAdapter</type> interface must be implemented to provide
+    the XAdapter interface must be implemented to provide
     a weak adapter for the clients.
 
     <h4>Concept of weak referencing:</h4>
@@ -61,14 +61,14 @@
 
     <dl>
     <dt>
-    <type>XWeak</type>
+    XWeak
     </dt>
     <dd>is the server-side interface of the referred object. This
-    referred object must support the <type>XAdapter</type> interface.
+    referred object must support the XAdapter interface.
 
     </dd>
     <dt>
-    <type>XReference</type>
+    XReference
     </dt>
     <dd>is a client-side interface which must be implemented by
     the holder of any weak reference. It is used for notification

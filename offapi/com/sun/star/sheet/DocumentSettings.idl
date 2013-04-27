@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module sheet {
 
     <p>For settings that affect view properties, these settings apply to
     subsequently created views and are saved with the document, while
-    <type>SpreadsheetViewSettings</type> can be used to alter a specific
+    SpreadsheetViewSettings can be used to alter a specific
     view that is already open.</p>
  */
 published service DocumentSettings

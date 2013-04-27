@@ -30,15 +30,15 @@
  module com {  module sun {  module star {  module text {
 
 
-/** makes it possible to attach this <type>TextField</type> to a
-    <type>TextFieldMaster</type>.
+/** makes it possible to attach this TextField to a
+    TextFieldMaster.
  */
 published interface XDependentTextField: com::sun::star::text::XTextField
 {
 
     /** method must be called to attach the
-        <type>TextFieldMaster</type> to this <type>TextField</type>.
-        <p>A <type>TextFieldMaster</type> can only be assigned once.
+        TextFieldMaster to this TextField.
+        <p>A TextFieldMaster can only be assigned once.
         </p>
 
         @example Create and insert a user field (with a
@@ -69,7 +69,7 @@ published interface XDependentTextField: com::sun::star::text::XTextField
 
 
     /** @returns
-                the previously attached <type>TextFieldMaster</type>
+                the previously attached TextFieldMaster
      */
     com::sun::star::beans::XPropertySet getTextFieldMaster();
 

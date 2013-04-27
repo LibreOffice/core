@@ -47,9 +47,9 @@ published struct ContentInfo
 
         <p>It is highly recommended to fill these flags very accurately, as
         they are very important when transferring contents between different
-        <type>ContentProvider</type>s.
+        ContentProviders.
 
-        <p>The value can be one of the <type>ContentInfoAttribute</type>
+        <p>The value can be one of the ContentInfoAttribute
            constants.
     */
     long Attributes;

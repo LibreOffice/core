@@ -47,7 +47,7 @@ published interface XVisualObject: ::com::sun::star::uno::XInterface
 
         @param nAspect
             the aspect specifying the form of object representation.
-            Can take values from <type>Aspects</type> constant set.
+            Can take values from Aspects constant set.
 
         @param aSize
             the new size of the visual area
@@ -76,7 +76,7 @@ published interface XVisualObject: ::com::sun::star::uno::XInterface
 
         @param nAspect
             the aspect specifying the form of object representation.
-            Can take values from <type>Aspects</type> constant set.
+            Can take values from Aspects constant set.
 
         @return
             the size of visual area
@@ -101,7 +101,7 @@ published interface XVisualObject: ::com::sun::star::uno::XInterface
 
         @param nAspect
             the aspect the representation is requested for.
-            Can take values from <type>Aspects</type> constant set.
+            Can take values from Aspects constant set.
 
         @return
             the visual representation of the object in the default format and
@@ -127,11 +127,11 @@ published interface XVisualObject: ::com::sun::star::uno::XInterface
 
         @param nAspect
             the aspect the map mode is requested for.
-            Can take values from <type>Aspects</type> constant set.
+            Can take values from Aspects constant set.
 
         @return
             the map mode the object communicates in, it can take values from
-            <type>EmbedMapUnits</type> constant
+            EmbedMapUnits constant
 
         @throws ::com::sun::star::embed::WrongStateException
             the object is in wrong state

@@ -45,7 +45,7 @@ published interface XConnectionPointContainer: com::sun::star::uno::XInterface
     sequence<type> getConnectionPointTypes();
 
     /** @returns
-            an <type>XConnectionPoint</type> interface of a
+            an XConnectionPoint interface of a
             connection point for a specified type if that type
             describes a supported outgoing interface. It is
             <const>NULL</const> on failure of the call.

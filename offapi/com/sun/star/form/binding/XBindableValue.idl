@@ -43,7 +43,7 @@ interface XBindableValue : com::sun::star::uno::XInterface
             the new binding which is to be used by the component. May be <NULL/>,
             in this case only the current binding is revoked.
 
-        @throws <type>IncompatibleTypesException</type>
+        @throws IncompatibleTypesException
             if the new binding (provided it's not <NULL/>) supports only types
             which are incompatible with the types of the bindable component.
      */

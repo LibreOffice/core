@@ -54,7 +54,7 @@ published service ChartLegend
     service com::sun::star::style::CharacterProperties;
 
 
-    /** If a <type>ChartLegend</type> may be stored as XML file,
+    /** If a ChartLegend may be stored as XML file,
         this service should be supported in order to preserve unparsed
         XML attributes.
 

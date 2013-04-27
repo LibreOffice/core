@@ -26,7 +26,7 @@ module com { module sun { module star { module configuration { module backend {
 
 
 /**
-   implements <type>MultiLayerStratum</type> that
+   implements MultiLayerStratum that
     provides access to a multiple layers of configuration data from LDAP source
 */
 service LdapMultiLayerStratum

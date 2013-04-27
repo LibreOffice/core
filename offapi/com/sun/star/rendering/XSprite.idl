@@ -31,7 +31,7 @@ module com { module sun { module star { module rendering {
 /** Interface to control a sprite object.<p>
 
     This is the basic interface to control a sprite object on a
-    <type>XSpriteCanvas</type>. Sprites are moving, back-buffered
+    XSpriteCanvas. Sprites are moving, back-buffered
     objects.<p>
  */
 interface XSprite : ::com::sun::star::uno::XInterface
@@ -41,7 +41,7 @@ interface XSprite : ::com::sun::star::uno::XInterface
         This method is useful for e.g. fading in/out of animations.<p>
 
         Please note that if this sprite is not animated, the
-        associated <type>XSpriteCanvas</type> does not update changed
+        associated XSpriteCanvas does not update changed
         sprites automatically, but has to be told to do so via
         <member>XSpriteCanvas::updateScreen()</member>.<p>
 
@@ -49,7 +49,7 @@ interface XSprite : ::com::sun::star::uno::XInterface
         New global alpha value to composite this sprite with the
         background. Valid range is [0,1].
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if nAlpha is not within the permissible range.
      */
     void setAlpha( [in] double nAlpha )
@@ -64,7 +64,7 @@ interface XSprite : ::com::sun::star::uno::XInterface
         coordinates) of the rendered sprite content.<p>
 
         Please note that if this sprite is not animated, the
-        associated <type>XSpriteCanva</type> does not update changed sprites
+        associated XSpriteCanva does not update changed sprites
         automatically, but has to be told to do so via
         <member>XSpriteCanvas::updateScreen()</member>.<p>
 
@@ -77,7 +77,7 @@ interface XSprite : ::com::sun::star::uno::XInterface
         @param aRenderState
         The render state to be used when interpreting aNewPos.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if one of the view and render state parameters are outside the
         specified range.
      */
@@ -97,19 +97,19 @@ interface XSprite : ::com::sun::star::uno::XInterface
         cached representation of the sprite at hand, to transform only
         this cached representation (e.g. a bitmap), instead of
         re-rendering the sprite from first principles. This is usually
-        the case for an implementation of a <type>XCustomSprite</type>
+        the case for an implementation of a XCustomSprite
         interface, since it typically has no other cached pictorial
         information at hand.<p>
 
         Please note that if this sprite is not animated, the
-        associated <type>XSpriteCanvas</type> does not update changed
+        associated XSpriteCanvas does not update changed
         sprites automatically, but has to be told to do so via
         <member>XSpriteCanvas::updateScreen()</member>.<p>
 
         @param aTransformation
         The transformation to apply to the sprite shape.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if the given transformation matrix is singular.
      */
     void transform( [in] com::sun::star::geometry::AffineMatrix2D aTransformation )
@@ -129,11 +129,11 @@ interface XSprite : ::com::sun::star::uno::XInterface
         clip-output only this cached representation (e.g. a bitmap),
         instead of re-rendering the sprite from first principles. This
         is usually the case for an implementation of a
-        <type>XCustomSprite</type> interface, since it typically has
+        XCustomSprite interface, since it typically has
         no other cached pictorial information at hand.<p>
 
         Please note that if this sprite is not animated, the
-        associated <type>XSpriteCanvas</type> does not update changed
+        associated XSpriteCanvas does not update changed
         sprites automatically, but has to be told to do so via
         <member>XSpriteCanvas::updateScreen()</member>.<p>
 

@@ -48,7 +48,7 @@ published constants NameClash
     */
     const long KEEP = 3;
 
-    /** Means to use a <type>NameClashResolveRequest</type> in order to solve
+    /** Means to use a NameClashResolveRequest in order to solve
         the name clash.
 
         @see com::sun::star::task::XInteractionHandler

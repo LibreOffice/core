@@ -44,7 +44,7 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
         <p>Exceptions of type
         <type scope="com::sun::star::beans">IntrospectionException</type> and
         <type scope="com::sun::star::script">CannotCreateAdapterException</type>
-        that can be thrown by methods of <type>XEventAttacher</type> are caught
+        that can be thrown by methods of XEventAttacher are caught
         and ignored.</p>
      */
     void registerScriptEvent( [in] long nIndex,
@@ -54,7 +54,7 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
     /** registers several events for an object identified by its index.
 
         <p>The result is the same as if the method <member>registerScriptEvent
-        </member> was called once for each <type>ScriptEventDescriptor</type>
+        </member> was called once for each ScriptEventDescriptor
         in the sequence.</p>
 
         <p>If any object is attached under this index, then this
@@ -63,7 +63,7 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
         <p>Exceptions of type
         <type scope="com::sun::star::beans">IntrospectionException</type> and
         <type scope="com::sun::star::script">CannotCreateAdapterException</type>
-        that can be thrown by methods of <type>XEventAttacher</type> are caught
+        that can be thrown by methods of XEventAttacher are caught
         and ignored.</p>
 
         @see registerScriptEvent
@@ -77,7 +77,7 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
 
         <p>The parameters <var>ListenerType</var> and
         <var>EventMethod</var> are equivalent to the first two
-        members of the <type>ScriptEventDescriptor</type>
+        members of the ScriptEventDescriptor
         used to register events. If this event at this index has
         been attached to any object, it is detached automatically
         (see <member>attach</member>).</p>
@@ -85,7 +85,7 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
         <p>Exceptions of type
         <type scope="com::sun::star::beans">IntrospectionException</type> and
         <type scope="com::sun::star::script">CannotCreateAdapterException</type>
-        that can be thrown by methods of <type>XEventAttacher</type> are caught
+        that can be thrown by methods of XEventAttacher are caught
         and ignored.</p>
 
         @see attach
@@ -139,13 +139,13 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
     sequence<com::sun::star::script::ScriptEventDescriptor> getScriptEvents( [in] long Index )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    /** attaches all the <type>ScriptEvent</type>s which are registered
+    /** attaches all the ScriptEvents which are registered
         for the given index to the given object.
 
         <p>Exceptions of type
         <type scope="com::sun::star::beans">IntrospectionException</type> and
         <type scope="com::sun::star::script">CannotCreateAdapterException</type>
-        that can be thrown by methods of <type>XEventAttacher</type> are caught
+        that can be thrown by methods of XEventAttacher are caught
         and ignored.</p>
      */
     void attach( [in] long nIndex,
@@ -154,23 +154,23 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
             raises( com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::lang::ServiceNotRegisteredException );
 
-    /** detaches all the <type>ScriptEvent</type>s from the given object
+    /** detaches all the ScriptEvents from the given object
         which are registered at this object for the given index.
 
         <p>Exceptions of type
         <type scope="com::sun::star::beans">IntrospectionException</type> and
         <type scope="com::sun::star::script">CannotCreateAdapterException</type>
-        that can be thrown by methods of <type>XEventAttacher</type> are caught
+        that can be thrown by methods of XEventAttacher are caught
         and ignored.</p>
      */
     void detach( [in] long nIndex,
              [in] com::sun::star::uno::XInterface xObject )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    /** adds an <type>XScriptListener</type> that will be notified when an
+    /** adds an XScriptListener that will be notified when an
         event takes place. For that a
-        <type>ScriptEventDescriptor</type> is registered at and
-        attached to an object by an <type>XEventAttacherManager</type>.
+        ScriptEventDescriptor is registered at and
+        attached to an object by an XEventAttacherManager.
 
        <p>It is suggested to allow multiple registration of the same listener,
         thus for each time a listener is added, it has to be removed.
@@ -180,7 +180,7 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
     void addScriptListener( [in] com::sun::star::script::XScriptListener xListener )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    /** removes a <type>XScriptListener</type> from the listener list.
+    /** removes a XScriptListener from the listener list.
 
         <p>Nothing happens if the listener is not registered.
 

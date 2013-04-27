@@ -30,34 +30,34 @@
  module com {  module sun {  module star {  module drawing {
 
 
-/** connects or breaks the lines of <type>Shape</type>s
+/** connects or breaks the lines of Shapes
  */
 published interface XShapeBinder: com::sun::star::uno::XInterface
 {
 
-    /** binds <type>Shape</type>s together.
+    /** binds Shapes together.
 
         @param xShapes
-            a container with <type>Shape</type>s that will be bind together.
-            All <type>Shapes</type> will be converted to a <type>PolyPolygonBezierShape</type>
+            a container with Shapes that will be bind together.
+            All Shapes will be converted to a PolyPolygonBezierShape
             and the lines will be connected. The <type>Shape</types>s in xShape will be
-            removed from the <type>GenericDrawPage</type> and disposed.
+            removed from the GenericDrawPage and disposed.
 
         @returns
-            a newly created <type>PolyPolygonBezierShape</type> which contains all
-            line segment from the supplied <type>Shape</type>s. It is also added
-            to the <type>GenericDrawPage</type> of the source <type>Shape</type>s.
+            a newly created PolyPolygonBezierShape which contains all
+            line segment from the supplied Shapes. It is also added
+            to the GenericDrawPage of the source Shapes.
      */
     com::sun::star::drawing::XShape bind( [in] com::sun::star::drawing::XShapes xShapes );
 
 
-    /** breaks a <type>Shape</type> into its line segments
+    /** breaks a Shape into its line segments
 
         @param xShape
-            the given <type>Shape</type> will be converted to a <type>PolyPolygonBezierShape</type>
-            and the line segments of this <type>Shape</type> will be used to create
-            new <type>PolyPolygonBezierShape</type> shapes. The original <type>Shape</type>
-            will be removed from its <type>GenericDrawPage</type> and disposed.
+            the given Shape will be converted to a PolyPolygonBezierShape
+            and the line segments of this Shape will be used to create
+            new PolyPolygonBezierShape shapes. The original Shape
+            will be removed from its GenericDrawPage and disposed.
      */
     void unbind( [in] com::sun::star::drawing::XShape xShape );
 

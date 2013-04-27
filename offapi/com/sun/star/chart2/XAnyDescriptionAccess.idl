@@ -28,7 +28,7 @@
 /** Offers any access to column and row descriptions.
 This allows to set date values as categories.
 
-<p>Can be obtained from interface <type>XChartDocument</type> via method getData().</p>
+<p>Can be obtained from interface XChartDocument via method getData().</p>
 
 @since OOo 3.4
 */

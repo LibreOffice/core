@@ -39,7 +39,7 @@ published interface XUpdateListener: com::sun::star::lang::XEventListener
 
     /** is invoked to check the current data.
 
-        <p>For a given update process, if one of the <type>XUpdateListener</type>s
+        <p>For a given update process, if one of the XUpdateListeners
         vetoes the change, the update is canceled, and no further notification happens.</p>
 
         @param aEvent

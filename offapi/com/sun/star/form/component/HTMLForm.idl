@@ -34,7 +34,7 @@
  module com {  module sun {  module star {  module form {  module component {
 
 
-/** This service specifies the special kind of <type>Form</type>s for HTML documents.
+/** This service specifies the special kind of Forms for HTML documents.
 
     <p>An HTMLForm fulfills the specification of forms in HTML. It supplies
     the possibility of submitting or resetting the contents of a form.

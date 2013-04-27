@@ -28,7 +28,7 @@ module com { module sun { module star { module task {
 /** this request is used in case a content can't keep files from overwriting
 
     <P>
-    It is supported by <type>InteractionHandler</type> service, and can
+    It is supported by InteractionHandler service, and can
     be used in case a content can not keep files from overwriting and
     user specifies to do so. Continuations for using with
     the mentioned service are Abort and Approve.

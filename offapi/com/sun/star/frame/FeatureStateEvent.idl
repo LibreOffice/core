@@ -26,7 +26,7 @@
 
  module com {  module sun {  module star {  module frame {
 
-/** This event is broadcast by a <type>Controller</type> whenever the state of
+/** This event is broadcast by a Controller whenever the state of
     the feature changes
 
     @see XController
@@ -46,10 +46,10 @@ published struct FeatureStateEvent: com::sun::star::lang::EventObject
      */
     boolean IsEnabled;
 
-    /** specifies whether the <type>XDispatch</type> has to be requeried.
+    /** specifies whether the XDispatch has to be requeried.
 
         <p>
-        Interest code should listen for <type>FrameActionEvent</type>
+        Interest code should listen for FrameActionEvent
         too, to update own feature states and dispatch listener on
         <const>FrameAction::CONTEXT_CHANGED</const>.
         </p>

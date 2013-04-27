@@ -34,14 +34,14 @@ published service CustomPresentationAccess
     /** This is the container of the custom presentations.
 
         <p>Each instance in this container implements the service
-        <type>CustomPresentation</type>.
+        CustomPresentation.
         <p>The methods insertByName and replaceByName both replace
-        the name of the given <type>CustomPresentation</type>
+        the name of the given CustomPresentation
      */
     interface com::sun::star::container::XNameContainer;
 
     /** This interface lets you create empty instances of
-                the service <type>CustomPresentation</type>.
+                the service CustomPresentation.
 
         <p>These services are needed for the <code>insertByName</code>
         and <code>replaceByName</code> methods of this service

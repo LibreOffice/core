@@ -28,7 +28,7 @@
  module com {  module sun {  module star {  module drawing {
 
 
-/** This service is for a <type>Shape</type> which contains a control.
+/** This service is for a Shape which contains a control.
     <p>
     @see Shape
     @see XControlShape

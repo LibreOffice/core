@@ -40,8 +40,8 @@ module com { module sun { module star { module ucb {
     for the node. This value must not be empty.
     <li>"TargetURL", which is of type <atom>string</atom></li> It may contain
     any URL, which will be treated as the target of a hierarchy link.
-    <li>"Children", which is of type <type>HierarchyDataReadAccess</type> or
-    of type <type>HierarchyDataReadWriteAccess</type></li>, depending on the
+    <li>"Children", which is of type HierarchyDataReadAccess or
+    of type HierarchyDataReadWriteAccess</li>, depending on the
     type of the node. This member provides access to the children of a node.
     </ul>
 */
@@ -56,9 +56,9 @@ published service HierarchyDataReadAccess
         </li>
         <li><code>getByName( "Children" )</code> will return an <atom>any</atom>
         containing an implementation of service
-        <type>HierarchyDataReadAccess</type>, if it was called on a read-only
+        HierarchyDataReadAccess, if it was called on a read-only
         node. It will return an implementation of service
-        <type>HierarchyDataReadWriteAccess</type> if it was called on a
+        HierarchyDataReadWriteAccess if it was called on a
         writable node.
         </li>
         </ul>
@@ -99,9 +99,9 @@ published service HierarchyDataReadAccess
         <code>getByHierarchicalName( "Children/['subnode1']" )</code> will give
         access to the child node named "subnode1" of the node. It will return
         an <atom>any</atom> containing an implementation of service
-        <type>HierarchyDataReadAccess</type>, if it was called on a read-only
+        HierarchyDataReadAccess, if it was called on a read-only
         node. It will return an implementation of service
-        <type>HierarchyDataReadWriteAccess</type> if it was called on a
+        HierarchyDataReadWriteAccess if it was called on a
         writable node.
         </li>
         <li>
@@ -115,9 +115,9 @@ published service HierarchyDataReadAccess
         will give direct access to the "Children" data member of the child node
         named "subnode3" of the node. It will return an <atom>any</atom>
         containing an implementation of service
-        <type>HierarchyDataReadAccess</type>, if it was called on a read-only
+        HierarchyDataReadAccess, if it was called on a read-only
         node. It will return an implementation of service
-        <type>HierarchyDataReadWriteAccess</type> if it was called on a
+        HierarchyDataReadWriteAccess if it was called on a
         writable node.
         </li>
         </ul>

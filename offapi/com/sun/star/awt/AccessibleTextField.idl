@@ -35,7 +35,7 @@ module com { module sun { module star { module awt {
 
 
 /** Text fields are like edit fields as described by the
-    <type>AccessibleEdit</type> service but without the ability to edit the
+    AccessibleEdit service but without the ability to edit the
     text.
     @see com::sun::star::accessibility::AccessibleContext
     @see com::sun::star::accessibility::XAccessibleComponent

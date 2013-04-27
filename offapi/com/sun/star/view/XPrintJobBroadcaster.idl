@@ -27,8 +27,8 @@ module com {  module sun {  module star {  module view {
 
 /** allows for getting information about a print job.
 
-    <p><type>XPrintJobBroadcaster</type> can be implemented by classes which
-    implement <type>XPrintable</type>. It allows a <type>XPrintJobListener</type>
+    <p>XPrintJobBroadcaster can be implemented by classes which
+    implement XPrintable. It allows a XPrintJobListener
     to be registered, thus a client object will learn about the print progress.</p>
 
     @see XPrintJobListener
@@ -37,11 +37,11 @@ module com {  module sun {  module star {  module view {
  */
 published interface XPrintJobBroadcaster : com::sun::star::uno::XInterface
 {
-    /** adds an <type>XPrintJobListener</type> to be notified about print progress.
+    /** adds an XPrintJobListener to be notified about print progress.
      */
     void addPrintJobListener( [in] XPrintJobListener xListener );
 
-    /** removes an <type>XPrintJobListener</type>.
+    /** removes an XPrintJobListener.
      */
     void removePrintJobListener( [in] XPrintJobListener xListener );
 };

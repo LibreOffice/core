@@ -25,7 +25,7 @@
 
 module com {  module sun {  module star {  module drawing {
 
-/** The <type>AccessibleOLEShape</type> service is implemented by
+/** The AccessibleOLEShape service is implemented by
     OLE shapes.
 
     <p>This includes generic OLE shapes, frames, plug-ins, and applets.</p>
@@ -50,7 +50,7 @@ service AccessibleOLEShape
 {
     /** Give access to information of generic shapes.
 
-        <p>See <type>AccessibleShape</type> for basic documentation and
+        <p>See AccessibleShape for basic documentation and
         support of the <type
         scope="::com::sun::star::accessibility"
         >XAccessibleContext</type>, and

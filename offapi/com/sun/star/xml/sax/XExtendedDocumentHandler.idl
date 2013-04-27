@@ -57,7 +57,7 @@ published interface XExtendedDocumentHandler: com::sun::star::xml::sax::XDocumen
             raises( com::sun::star::xml::sax::SAXException );
 
     /** informs a writer that it is allowable to insert a line break and
-        indentation before the next <type>XDocumentHandler</type>-call.
+        indentation before the next XDocumentHandler-call.
      */
     void allowLineBreak()
             raises( com::sun::star::xml::sax::SAXException );

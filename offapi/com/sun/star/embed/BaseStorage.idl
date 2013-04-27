@@ -44,7 +44,7 @@ published service BaseStorage
     /** allows to get the mode the storage is opened in.
 
         <p>
-        Can be a combination of values from <type>ElementModes</type>.
+        Can be a combination of values from ElementModes.
         </p>
      */
     [property, readonly] long OpenMode;

@@ -27,7 +27,7 @@
 /** specifies attributes for the VCL window implementation.
 
     <p><b>IMPORTANT:</b> These constants have to be disjunct with
-    constants in <type>WindowAttribute</type>.</p>
+    constants in WindowAttribute.</p>
 
     @deprecated
  */

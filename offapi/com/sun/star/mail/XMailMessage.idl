@@ -129,7 +129,7 @@ interface XMailMessage: ::com::sun::star::uno::XInterface {
     void addAttachment([in] MailAttachment aMailAttachment);
 
     /**
-        Return a sequence of <type>MailAttachment</type>'s that will
+        Return a sequence of MailAttachment's that will
         be attached to this mail message.
 
         @see com::sun::star::mail::MailAttachment

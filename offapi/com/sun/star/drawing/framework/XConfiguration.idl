@@ -35,8 +35,8 @@ interface XResourceId;
     configuration but also a requested configuration can be represented.
 
     <p>Direct manipulation of a configuration object is not advised with the
-    exception of the <type>ConfigurationController</type> and objects that
-    implement the <type>XConfigurationChangeRequest</type> interface.</p>
+    exception of the ConfigurationController and objects that
+    implement the XConfigurationChangeRequest interface.</p>
 
     @see XConfigurationController
 */
@@ -48,8 +48,8 @@ interface XConfiguration
         returned resource ids.
         @param xAnchorId
             This anchor typically is either a pane or an empty
-            <type>XResourceId</type> object.  An
-            empty reference is treated like an <type>XResourceId</type> object.
+            XResourceId object.  An
+            empty reference is treated like an XResourceId object.
         @param sURLPrefix
             When a non-empty string is given then resource ids are returned
             only when their resource URL matches this prefix, i.e. when it
@@ -82,7 +82,7 @@ interface XConfiguration
         active, i.e. has a visible representation in the GUI.
         @param xResourceId
             The id of a resource.  May be empty (empty reference or empty
-            <type>XResourceId</type> object) in which case <FALSE/> is
+            XResourceId object) in which case <FALSE/> is
             returned.
         @return
             Returns <TRUE/> when the resource is part of the configuration
@@ -92,7 +92,7 @@ interface XConfiguration
 
     /** Add a resource to the configuration.
         <p>This method should be used only by objects that implement the
-        <type>XConfigurationRequest</type> interface or by the configuration
+        XConfigurationRequest interface or by the configuration
         controller.</p>
         @param xResourceId
             The resource to add to the configuration.  When the specified
@@ -106,7 +106,7 @@ interface XConfiguration
 
     /** Remove a resource from the configuration.
         <p>This method should be used only by objects that implement the
-        <type>XConfigurationRequest</type> interface or by the configuration
+        XConfigurationRequest interface or by the configuration
         controller.</p>
         @param xResourceId
             The resource to remove from the configuration. When the

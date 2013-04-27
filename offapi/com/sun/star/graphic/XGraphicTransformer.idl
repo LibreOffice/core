@@ -26,9 +26,9 @@
 module com { module sun { module star { module graphic
 {
 
-/** This interface is allowing to transform a <type>XGraphic</type>
+/** This interface is allowing to transform a XGraphic
 
-    <p>To transform a <type>XGraphic</type>, just the corresponding
+    <p>To transform a XGraphic, just the corresponding
     method has to be used, a new XGraphic instance will be returned
     </p>
 */

@@ -29,7 +29,7 @@
 /**
     @since OOo 2.2
     @deprecated
-        You should use <type>AnimatedImagesControlModel</type>.
+        You should use AnimatedImagesControlModel.
  */
 
 published service UnoControlSimpleAnimationModel

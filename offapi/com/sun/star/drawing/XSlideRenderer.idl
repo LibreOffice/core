@@ -67,8 +67,8 @@ interface XSlideRenderer
 
     /** Exactly the same functionality as <member>createPreview()</member>,
         only a different return type:
-        <type>com::sun::star::rendering::XBitmap</type> instead
-        of <type>com::sun::star::awt::XBitmap</type>.
+        com::sun::star::rendering::XBitmap instead
+        of com::sun::star::awt::XBitmap.
         @see createPreview
         @param xCanvas
             This canvas is used create a canvas specific bitmap.

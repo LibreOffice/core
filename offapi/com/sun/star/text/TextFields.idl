@@ -25,14 +25,14 @@
 
  module com {  module sun {  module star {  module text {
 
-/** This is a collection of <type>TextField</type> instances.
+/** This is a collection of TextField instances.
  */
 published service TextFields
 {
     /** This interface makes it possible to create an enumeration through
                 all text fields in this container.
 
-        <p>All elements are of type <type>XTextField</type>.</p>
+        <p>All elements are of type XTextField.</p>
      */
     interface com::sun::star::container::XEnumerationAccess;
 

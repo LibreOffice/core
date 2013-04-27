@@ -91,7 +91,7 @@ published service StockDiagram
         volume of stocks.
 
         <p>The values of the volume are represented as columns like
-        those of a <type>BarDiagram</type>.</p>
+        those of a BarDiagram.</p>
 
         <p>If this property is set to <TRUE/>, the values of the first
         series of the chart data are interpreted as volume.</p>

@@ -28,7 +28,7 @@
 
 
 /** This abstract service specifies the general characteristics of an optional
-    text inside a <type>Shape</type>.
+    text inside a Shape.
  */
 published service Text
 {

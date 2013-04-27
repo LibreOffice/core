@@ -29,7 +29,7 @@
  module com {  module sun {  module star {  module form {
 
 
-/** specifies the capabilities of a collection of <type>FormComponent</type>s.
+/** specifies the capabilities of a collection of FormComponents.
 
     <p>The collection must provide the possibility of adding and removing
     components by name and by index. The name of a component is not
@@ -60,9 +60,9 @@ published service FormComponents
         for the contained components.
 
         <p>The interface allows managing of scripts associated with dependent components, accessed by index.
-        However, as a client of the <type>FormComponents</type> service, there's no need to bother with
+        However, as a client of the FormComponents service, there's no need to bother with
         the container aspect of the <type scope="com::sun::star::script">XEventAttacherManager</type>
-        directly. A <type>FormComponents</type> container will automatically synchronize the elements
+        directly. A FormComponents container will automatically synchronize the elements
         you put into it with the scripting information obtained at the
         <type scope="com::sun::star::script">XEventAttacherManager</type> interface.</p>
 

@@ -27,20 +27,20 @@
 
  module com {  module sun {  module star {  module text {
 
-/** This is the collection of all <type>TextFrame</type> instances within a
+/** This is the collection of all TextFrame instances within a
     context (e.g. a document).
  */
 published service TextFrames
 {
 
-    /** This interface makes it possible to access all <type>TextFrame</type>
+    /** This interface makes it possible to access all TextFrame
                 instances within this context (e.g. a document) by its name.
 
                 <p>The type of the interfaces returned by this collection is
                 always "XTextFrame".
      */
     interface com::sun::star::container::XNameAccess;
-    /** This interface makes it possible to access all <type>TextFrame</type>
+    /** This interface makes it possible to access all TextFrame
                 instances within this context (e.g. a document) by its index.
 
                 <p>The type of the interfaces returned by this collection is
@@ -49,7 +49,7 @@ published service TextFrames
     interface com::sun::star::container::XIndexAccess;
 
     /** This optional interface makes it possible to register for events
-                which occur upon insertion and removal of <type>TextFrame</type>
+                which occur upon insertion and removal of TextFrame
                 instances.
      */
     [optional] interface com::sun::star::container::XContainer;

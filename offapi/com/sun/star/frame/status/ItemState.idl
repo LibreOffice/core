@@ -24,7 +24,7 @@
 module com {  module sun {  module star {  module frame { module status {
 
 
-/** these constants describe a state of a <type>ItemStatus</type>.
+/** these constants describe a state of a ItemStatus.
 
     @see ItemStatus
 

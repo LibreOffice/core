@@ -46,10 +46,10 @@ published service SheetFilterDescriptor
 
     /** provides access to the collection of filter fields.
 
-        <p>This interface provides a sequence of <type>TableFilterField2</type>
+        <p>This interface provides a sequence of TableFilterField2
         structures supporting a wider range of comparison operators, compared
-        to the <type>TableFilterField</type> structure provided by interface
-        <type>XSheetFilterDescriptor</type>.
+        to the TableFilterField structure provided by interface
+        XSheetFilterDescriptor.
 
         @since OOo 3.2
      */

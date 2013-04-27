@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module beans {
     names to the existing names.  </p>
 
     <p>Example: A basic interpreter ignores the case of the names. So
-    it must query the <type>XExactName</type> interface and then call
+    it must query the XExactName interface and then call
     the method. </p>
 
     @see com::sun::star::beans::XPropertySet

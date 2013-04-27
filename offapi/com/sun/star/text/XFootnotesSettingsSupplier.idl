@@ -27,13 +27,13 @@
 
  module com {  module sun {  module star {  module text {
 
-/** makes it possible to access the <type>FootnoteSettings</type>
+/** makes it possible to access the FootnoteSettings
     with the context (e.g. document).
  */
 published interface XFootnotesSettingsSupplier: com::sun::star::uno::XInterface
 {
     /** @returns
-                     <type>FootnoteSettings</type> of the object.
+                     FootnoteSettings of the object.
      */
     com::sun::star::beans::XPropertySet getFootnotesSettings();
 

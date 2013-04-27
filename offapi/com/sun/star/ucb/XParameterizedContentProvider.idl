@@ -42,7 +42,7 @@ published interface XParameterizedContentProvider: com::sun::star::uno::XInterfa
         complex, an <type scope="com::sun::star::lang">IllegalArgumentException</type> may be raised.
 
         @param Arguments  Any supplementary arguments required by this
-        <type>XContentProvider</type>, represented as a single string.  If the
+        XContentProvider, represented as a single string.  If the
         input is malformed, an
         <type scope="com::sun::star::lang">IllegalArgumentException</type>
         may be raised.
@@ -53,12 +53,12 @@ published interface XParameterizedContentProvider: com::sun::star::uno::XInterfa
         already registered instance, the new registration is not performed,
         and null is returned.
 
-        @return  Either this <type>XContentProvider</type>, or another,
-        specially adjusted version of this <type>XContentProvider</type> (this
+        @return  Either this XContentProvider, or another,
+        specially adjusted version of this XContentProvider (this
         flexibility allows for different implementation strategies), or null
         if the given Template conflicts with an already registered instance
         and ReplaceExisting is false.  Note that the returned
-        <type>XContentProvider</type> must still be registered at the content
+        XContentProvider must still be registered at the content
         provider manager!
     */
     com::sun::star::ucb::XContentProvider
@@ -73,16 +73,16 @@ published interface XParameterizedContentProvider: com::sun::star::uno::XInterfa
         complex, an IllegalArgumentException may be raised.
 
         @param Arguments  Any supplementary arguments required by this
-        <type>XContentProvider</type>, represented as a single string.  If the
+        XContentProvider, represented as a single string.  If the
         input is malformed, an
         <type scope="com::sun::star::lang">IllegalArgumentException</type>
         may be raised.
 
-        @return  Either this <type>XContentProvider</type>, or another,
-        specially adjusted version of this <type>XContentProvider</type> (this
+        @return  Either this XContentProvider, or another,
+        specially adjusted version of this XContentProvider (this
         flexibility allows for different implementation strategies), or null
         if no instance is registered for the given Template.  Note that the
-        returned <type>XContentProvider</type> must still be deregistered at
+        returned XContentProvider must still be deregistered at
         the content provider manager!
     */
     com::sun::star::ucb::XContentProvider

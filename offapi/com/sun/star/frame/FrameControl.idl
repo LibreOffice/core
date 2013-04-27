@@ -48,7 +48,7 @@ published service FrameControl
     /** the frame held by this control
 
         <p>
-        The <type>Frame</type> is created if the control
+        The Frame is created if the control
         is shown and the <member>ComponentUrl</member> is set.
         </p>
      */

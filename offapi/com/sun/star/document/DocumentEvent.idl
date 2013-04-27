@@ -27,7 +27,7 @@
 module com { module sun { module star { module document {
 
 
-/** describes an event happening in an <type>OfficeDocument</type>
+/** describes an event happening in an OfficeDocument
 
     <p>The <member scope="com::sun::star::lang">EventObject::Source</member> member
     of the base type refers to the document which broadcasts the event.</p>
@@ -42,7 +42,7 @@ struct DocumentEvent : ::com::sun::star::lang::EventObject
 {
     /** specifies the name of the event.
 
-        <p>It's the responsibility of the component supporting the <type>XDocumentEventBroadcaster</type>
+        <p>It's the responsibility of the component supporting the XDocumentEventBroadcaster
         interface to specify which events it supports.</p>
     */
     string  EventName;

@@ -31,7 +31,7 @@
  */
 published service TextEmbeddedObjects
 {
-    /** This interface makes it possible to access all <type>TextEmbeddedObject</type>
+    /** This interface makes it possible to access all TextEmbeddedObject
                 instances within this context (e.g. a document) by its name.
 
                 <p>The type of the interfaces returned by this collection is
@@ -39,7 +39,7 @@ published service TextEmbeddedObjects
      */
     interface com::sun::star::container::XNameAccess;
 
-    /** This interface makes it possible to access all <type>TextEmbeddedObject</type>
+    /** This interface makes it possible to access all TextEmbeddedObject
                 instances within this context (e.g. a document) by its index.
 
                 <p>The type of the interfaces returned by this collection is

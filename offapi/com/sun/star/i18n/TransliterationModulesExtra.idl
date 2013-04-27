@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module i18n {
     <member>XTransliteration::loadModule()</member>
 
     The values used in this group need to be different from the ones in
-    <type>TransliterationModules</type> and <type>TransliterationModulesNew</type>!
+    TransliterationModules and TransliterationModulesNew!
  */
 
 

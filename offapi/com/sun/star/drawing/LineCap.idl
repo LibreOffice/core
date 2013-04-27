@@ -22,7 +22,7 @@
 //=============================================================================
 
  module com {  module sun {  module star {  module drawing {
-/** The <type>LineCap</type> defines rendering of ends of thick lines
+/** The LineCap defines rendering of ends of thick lines
  */
 published enum LineCap
 {

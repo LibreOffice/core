@@ -48,7 +48,7 @@ interface XButton : com::sun::star::uno::XInterface
     [attribute] long VerticalAlignment;
 
     /** Orientation (rotation) of the text. Must be a value from
-        <type>ooo::vba::excel::XlOrientation</type>. */
+        ooo::vba::excel::XlOrientation. */
     [attribute] long Orientation;
 
     /** Access to text and text formatting of the button caption. */

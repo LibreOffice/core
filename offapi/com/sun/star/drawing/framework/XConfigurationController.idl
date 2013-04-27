@@ -63,12 +63,12 @@ interface XResource;
     <member>requestResourceActivation()</member> or
     <member>requestResourceDeactivation()</member> results in one or more
     function objects, that each implement the
-    <type>XConfigurationChangeRequest</type> interface.  These are inserted
+    XConfigurationChangeRequest interface.  These are inserted
     into a queue.  The request objects in the queue are processed
     asynchronously one at a time in the order in which they are inserted.
     Only when one request object is processed a change to the requested
     configuration is made.  These changes are broadcasted to registered
-    <type>XConfigurationChangeListener</type> objects.  Listeners may
+    XConfigurationChangeListener objects.  Listeners may
     decide to make requests that then are added to the queue.  For example
     when the view in the center pane is replaced by another view, some
     listeners may want to turn some side panes on or off, or show other
@@ -129,13 +129,13 @@ interface XResource;
     activated, i.e. when a new object of a resource is created (or taken
     from a cash).</p>
     <p>The <member>ResourceId</member> and <member>ResourceObject</member>
-    members are set to the <type>XResourceId</type> and object reference of
+    members are set to the XResourceId and object reference of
     the activated resource.</p></li>
     <li><const>ResourceDeactivation</const> is sent when a resource is
     deactivated, i.e. when an object that previously was part of the
     configuration is removed from the configuration.</p>
     <p>The <member>ResourceId</member> and <member>ResourceObject</member>
-    members are set to <type>XResourceId</type> and object reference of the
+    members are set to XResourceId and object reference of the
     deactivated resource.</p></li>
     </ul></p>
 */

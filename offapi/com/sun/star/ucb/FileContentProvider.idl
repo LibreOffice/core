@@ -27,7 +27,7 @@
 
 module com { module sun { module star { module ucb {
 
-/** The File Content Provider (FCP) implements a <type>ContentProvider</type>
+/** The File Content Provider (FCP) implements a ContentProvider
     for the <Type>UniversalContentBroker</type> (UCB).
 
     <p>The served contents enable access to the local file system.
@@ -48,7 +48,7 @@ published service FileContentProvider
     interface com::sun::star::ucb::XContentProvider;
 
     /** This interface is implemented according to the specification of
-        service <type>ContentProvider</type>.
+        service ContentProvider.
     */
 
     interface com::sun::star::ucb::XContentIdentifierFactory;
@@ -70,7 +70,7 @@ published service FileContentProvider
            </li>
            <li>
            long FileSystemNotation ( read-only, the value is one of the
-        <type>FileSystemNotation</type> constants )
+        FileSystemNotation constants )
            </li>
            </ul>
 

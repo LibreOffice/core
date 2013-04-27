@@ -259,7 +259,7 @@ published interface XDocumentProperties
     /** provides access to a container for user-defined properties.
         <p>
         The returned object also implements the interface
-        <type>com::sun::star::beans::XPropertySet</type>.
+        com::sun::star::beans::XPropertySet.
         </p>
         @returns    a container that provides access to user-defined properties
      */
@@ -273,11 +273,11 @@ published interface XDocumentProperties
         </p>
 
         @param Storage
-            the <type>com::sun::star::embed::Storage</type> representing the
+            the com::sun::star::embed::Storage representing the
             ODF package
 
         @param Medium
-            the <type>com::sun::star::document::MediaDescriptor</type>
+            the com::sun::star::document::MediaDescriptor
             representing the source
             <p>
             This is unfortunately necessary in order to properly resolve
@@ -312,7 +312,7 @@ published interface XDocumentProperties
             </p>
 
         @param Medium
-            the <type>com::sun::star::document::MediaDescriptor</type>
+            the com::sun::star::document::MediaDescriptor
             representing the source
 
         @throws com::sun::star::io::WrongFormatException
@@ -335,15 +335,15 @@ published interface XDocumentProperties
         someone else, e.g., a document.
         Note that the implementation may choose to store the meta-data
         in either OOo or ODF format, depending on the MediaType property
-        of the given <type>Storage</type> argument.
+        of the given Storage argument.
         </p>
 
         @param Storage
-            the <type>com::sun::star::embed::Storage</type> representing the
+            the com::sun::star::embed::Storage representing the
             ODF package
 
         @param Medium
-            the <type>com::sun::star::document::MediaDescriptor</type>
+            the com::sun::star::document::MediaDescriptor
             representing the source
             <p>
             This is unfortunately necessary in order to properly resolve
@@ -375,7 +375,7 @@ published interface XDocumentProperties
             </p>
 
         @param Medium
-            the <type>com::sun::star::document::MediaDescriptor</type>
+            the com::sun::star::document::MediaDescriptor
             representing the target
 
         @throws com::sun::star::lang::WrappedTargetException

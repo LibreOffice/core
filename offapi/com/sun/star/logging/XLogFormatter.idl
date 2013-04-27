@@ -37,9 +37,9 @@ interface XLogFormatter
 {
     /** returns the header string for the log
 
-        <p>This can be used to generate a header string, which by the <type>XLogHandler</type>
+        <p>This can be used to generate a header string, which by the XLogHandler
         is emitted to its output channel before actually logging any concrete
-        <type>LogRecord</type>.</p>
+        LogRecord.</p>
 
         <p>For instance, a formatter might produce table-like plain text output,
         and could return a table-head string (potentially including line breaks)
@@ -49,7 +49,7 @@ interface XLogFormatter
 
     /** formats the given log record for output
 
-        <p>A <type>XLogHandler</type> will call this method to format a given
+        <p>A XLogHandler will call this method to format a given
         log record. The resulting string will be emitted to the handler's output
         channel, without processing it any further (except possibly encoding it with
         the handler's <code>Encoding</code>).</p>
@@ -58,7 +58,7 @@ interface XLogFormatter
 
     /** returns the footer string for the log
 
-        <p>This can be used to generate a footer string, which by the <type>XLogHandler</type>
+        <p>This can be used to generate a footer string, which by the XLogHandler
         is emitted to its output channel before it is finally being closed.</p>
     */
     string  getTail();

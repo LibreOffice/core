@@ -36,7 +36,7 @@ published interface XActivationEventListener: com::sun::star::lang::XEventListen
 
         <p>This interface must be implemented by components that wish
         to get notified of changes of the active Spreadsheet.
-        They can be registered at an <type>XSpreadsheetViewEventProvider</type> component.</p>
+        They can be registered at an XSpreadsheetViewEventProvider component.</p>
 
         @param aEvent
             the event that gives further information on which Spreadsheet is active now.

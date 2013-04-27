@@ -25,30 +25,30 @@
 
 
 /** This abstract service specifies the general characteristics of an optional
-    rotation and shearing for a <type>Shape</type>.
+    rotation and shearing for a Shape.
 
     This service is deprecated, instead please use the <code>Transformation</code>
-    property of the service <type>Shape</type>.
+    property of the service Shape.
 
     @deprecated
  */
 published service RotationDescriptor
 {
 
-    /** This is the angle for rotation of this <type>Shape</type>.
+    /** This is the angle for rotation of this Shape.
         The shape is rotated counter-clockwise around the center
         of the bounding box.
 
         This property contains an error, the rotation angle is mathematically
         inverted when You take into account that the Y-Axis of the coordinate
         system is pointing down. Please use the <code>Transformation</code>
-        property of the service <type>Shape</type> instead.
+        property of the service Shape instead.
         @deprecated
     */
     [property] long RotateAngle;
 
 
-    /** This is the amount of shearing for this <type>Shape</type>.
+    /** This is the amount of shearing for this Shape.
         The shape is sheared counter-clockwise around the center
         of the bounding box
 

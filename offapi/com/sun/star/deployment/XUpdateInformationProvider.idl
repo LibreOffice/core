@@ -91,7 +91,7 @@ interface XUpdateInformationProvider
                attribute of the atom:category tag matches extensionId are returned.
 
         @returns
-               an enumeration of <type>UpdateInformationEntry</type>.
+               an enumeration of UpdateInformationEntry.
     */
     com::sun::star::container::XEnumeration getUpdateInformationEnumeration(
         [in] sequence< string > repositories,

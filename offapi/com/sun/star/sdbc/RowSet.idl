@@ -60,7 +60,7 @@ published service RowSet
 
     /** used to execute and to add/remove listeners.
 
-        <p>To refresh the content of a <type>RowSet</type>, use this interface's <member>XRowSet::execute</member>
+        <p>To refresh the content of a RowSet, use this interface's <member>XRowSet::execute</member>
         method.</p>
     */
     interface XRowSet;

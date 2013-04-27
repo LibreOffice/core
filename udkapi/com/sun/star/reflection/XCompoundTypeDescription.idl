@@ -29,7 +29,7 @@
 /** Reflects a compound type, i.e. a struct or exception.
 
     <p>For struct types, this type is superseded by
-    <type>XStructTypeDescription</type>, which supports polymorphic struct
+    XStructTypeDescription, which supports polymorphic struct
     types.</p>
 */
 published interface XCompoundTypeDescription: com::sun::star::reflection::XTypeDescription

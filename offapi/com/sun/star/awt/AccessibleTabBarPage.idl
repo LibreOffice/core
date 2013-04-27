@@ -47,7 +47,7 @@ service AccessibleTabBarPage
         <li>Children: There are no children.</li>
         <li>Parent: The parent of a tabbar page is the tabbar page list,
             whose accessible context supports the service
-            <type>AccessibleTabBarPageList</type>.</li>
+            AccessibleTabBarPageList.</li>
         <li>Relations: There are no relations.</li>
         <li>States: The states supported by this service are
             <ul>

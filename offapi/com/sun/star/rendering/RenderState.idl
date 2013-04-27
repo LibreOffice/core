@@ -27,11 +27,11 @@ module com { module sun { module star { module rendering {
 interface XPolyPolygon2D;
 
 /** This structure contains information passed to each
-    <type>XCanvas</type> render operation.<p>
+    XCanvas render operation.<p>
 
     This structure contains information considered as the render
     state, i.e. the common setup required to render each individual
-    <type>XCanvas</type> primitive.<p>
+    XCanvas primitive.<p>
 
     @since OOo 2.0
  */
@@ -82,7 +82,7 @@ struct RenderState
 
         The composite mode determines in which way the primitive and
         possibly existing background is combined. The permissible
-        values must be one out of the <type>CompositeOperation</type>
+        values must be one out of the CompositeOperation
         constants.<p>
      */
     byte                                                CompositeOperation;

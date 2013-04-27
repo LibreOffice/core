@@ -76,8 +76,8 @@ published interface XGraphicExportFilter
     interface ::com::sun::star::document::XFilter;
 
     /** sets the source component for this export filter.
-        <p>This could either be a <type>DrawPage</type>, a <type>Shape</type>
-        or a <type>Shapes</type>.</p>
+        <p>This could either be a DrawPage, a Shape
+        or a Shapes.</p>
      */
     interface ::com::sun::star::document::XExporter;
 

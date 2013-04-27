@@ -26,17 +26,17 @@
 
  module com {  module sun {  module star {  module frame {
 
-/** loads a resource into a <type>Frame</type>.
+/** loads a resource into a Frame.
 
     <p>
-    Unlike the <type>XFrameLoader</type> interface, this loading will be synchronous.
+    Unlike the XFrameLoader interface, this loading will be synchronous.
      </p>
 
     @see XFrameLoader
  */
 published interface XSynchronousFrameLoader: com::sun::star::uno::XInterface
 {
-    /** starts the loading of the specified resource into the specified <type>Frame</type>.
+    /** starts the loading of the specified resource into the specified Frame.
 
         @param Descriptor
             describes the resource which should be loaded

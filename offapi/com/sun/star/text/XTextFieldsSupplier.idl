@@ -34,13 +34,13 @@
 published interface XTextFieldsSupplier: com::sun::star::uno::XInterface
 {
     /** @returns
-                the collection of <type>TextField</type> instances
+                the collection of TextField instances
                 in this context (i.e. this document).
      */
     com::sun::star::container::XEnumerationAccess getTextFields();
 
     /** @returns
-                the collection of <type>TextFieldMaster</type> instances
+                the collection of TextFieldMaster instances
                 which are defined in this context (i.e. this document).
      */
     com::sun::star::container::XNameAccess getTextFieldMasters();

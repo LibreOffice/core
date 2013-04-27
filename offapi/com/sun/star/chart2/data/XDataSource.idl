@@ -39,11 +39,11 @@ module data
 
     <p>If the data stored consists only of floating point numbers (double
     values), the returned instances should also support the service
-    <type>NumericalDataSequence</type>.</p>
+    NumericalDataSequence.</p>
 
     <p>If the data stored consists only of strings, the returned
     instances should also support the service
-    <type>TextualDataSequence</type>.</p>
+    TextualDataSequence.</p>
   */
 interface XDataSource  : ::com::sun::star::uno::XInterface
 // : ::com::sun::star::container::XIndexAccess
@@ -51,15 +51,15 @@ interface XDataSource  : ::com::sun::star::uno::XInterface
     /** returns data sequences.
 
         @return a sequence of objects that support at least the
-                service <type>DataSequence</type>.
+                service DataSequence.
 
         <p>If the data stored consist only of floating point numbers
         (double values), the returned instances should also support
-        the service <type>NumericalDataSequence</type>.</p>
+        the service NumericalDataSequence.</p>
 
         <p>If the data stored consist only of strings, the returned
         instances should also support the service
-        <type>TextualDataSequence</type>.</p>
+        TextualDataSequence.</p>
      */
     sequence< XLabeledDataSequence >  getDataSequences();
 };

@@ -35,7 +35,7 @@ service ListPositionCellBinding
     /** provides the basic functionality for exchanging values with a table cell.
 
         <p>Additionally to the types supported by the super service, the
-        <type>ListPositionCellBinding</type> allows exchanging integer values.</p>
+        ListPositionCellBinding allows exchanging integer values.</p>
 
         @see com::sun::star::form::binding::XValueBinding::getSupportedTypes
     */

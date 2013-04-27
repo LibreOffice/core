@@ -123,7 +123,7 @@ module com { module sun { module star { module configuration {
  </ul>
 
  <p>Within templates an additional type <strong>any</strong> can occur. When
- such a template is used to create a new <type>SetElement</type>, the type
+ such a template is used to create a new SetElement, the type
  of the element is initially reported as <atom>any</atom> (having no value).
  When the value of such an element is first set, it will assume the type used.
  </p>
@@ -140,7 +140,7 @@ module com { module sun { module star { module configuration {
 
  @see ConfigurationProvider
     Root instances of this service can be requested from a
-    <type>ConfigurationProvider</type>.
+    ConfigurationProvider.
 
  @see ConfigurationUpdateAccess
     an extended service that includes facilities for modifying
@@ -156,8 +156,8 @@ published service ConfigurationAccess
 
      <p>Implementations shall implement exactly one of:</p>
      <ul>
-        <li><type>SetAccess</type> if this element is a <em>Set</em>.</li>
-        <li><type>GroupAccess</type> if this element is a <em>Group</em>.</li>
+        <li>SetAccess if this element is a <em>Set</em>.</li>
+        <li>GroupAccess if this element is a <em>Group</em>.</li>
      </ul>
      */
     service HierarchyAccess;
@@ -171,57 +171,57 @@ published service ConfigurationAccess
 
      <p>Implementations shall implement exactly one of:</p>
      <ul>
-        <li><type>AccessRootElement</type> if this element is the
+        <li>AccessRootElement if this element is the
             <em>Root</em> of the whole hierarchy. Objects that can be
-            created directly by a <type>ConfigurationProvider</type>
+            created directly by a ConfigurationProvider
             implement this service.</li>
-        <li><type>SetElement</type> if this element may be contained in a
+        <li>SetElement if this element may be contained in a
             <em>Set</em>.</li>
-        <li><type>GroupElement</type> if this element is a child of a
+        <li>GroupElement if this element is a child of a
             <em>Group</em>.</li>
      </ul>
 
      */
     service HierarchyElement;
 
-    /** specializes <type>HierarchyAccess</type>, if this element is a <em>Set</em>.
+    /** specializes HierarchyAccess, if this element is a <em>Set</em>.
 
-         <p>This is an alternative to <type>GroupAccess</type>.
+         <p>This is an alternative to GroupAccess.
         </p>
     */
     [optional] service SetAccess;
 
-    /** specializes <type>HierarchyAccess</type>,
+    /** specializes HierarchyAccess,
      if this element is a <em>Group</em>.
-     <p>This is an alternative to <type>SetAccess</type>.
+     <p>This is an alternative to SetAccess.
      </p>
     */
     [optional] service GroupAccess;
 
-    /** specializes <type>HierarchyElement</type>,
+    /** specializes HierarchyElement,
      if this element is the <em>Root</em> of the whole hierarchy.
-     <p>This is an alternative to <type>SetElement</type>
-     or <type>GroupElement</type>.
+     <p>This is an alternative to SetElement
+     or GroupElement.
      </p>
 
      @see ConfigurationProvider
-        Instances obtained from a <type>ConfigurationProvider</type> will
-        implement this version of <type>HierarchyElement</type>.
+        Instances obtained from a ConfigurationProvider will
+        implement this version of HierarchyElement.
     */
     [optional] service AccessRootElement;
 
-    /** specializes <type>HierarchyElement</type>,
+    /** specializes HierarchyElement,
      if this element may be contained in a <em>Set</em>.
-     <p>This is an alternative to <type>AccessRootElement</type>
-     or <type>GroupElement</type>.
+     <p>This is an alternative to AccessRootElement
+     or GroupElement.
      </p>
     */
     [optional] service SetElement;
 
-    /** specializes <type>HierarchyElement</type>,
+    /** specializes HierarchyElement,
      if this element is a child of a <em>Group</em>.
-     <p>This is an alternative to <type>AccessRootElement</type>
-     or <type>SetElement</type>.
+     <p>This is an alternative to AccessRootElement
+     or SetElement.
      </p>
 */
     [optional] service GroupElement;

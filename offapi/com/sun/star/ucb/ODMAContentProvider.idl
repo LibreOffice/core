@@ -24,8 +24,8 @@
 
 module com { module sun { module star { module ucb {
 
-/** The ODMA Content Provider (OCP) implements a <type>ContentProvider</type>
-    for the <type>UniversalContentBroker</type> (UCB).
+/** The ODMA Content Provider (OCP) implements a ContentProvider
+    for the UniversalContentBroker (UCB).
 
     <p>It provides access to a document structure stored on a Document Management System (DMS).</p>
 

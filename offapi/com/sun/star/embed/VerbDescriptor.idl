@@ -47,7 +47,7 @@ published struct VerbDescriptor
     /** specifies the attributes of the verb.
 
         <p>
-        It can take values from <type>VerbAttributes</type>.
+        It can take values from VerbAttributes.
         </p>
      */
     long VerbAttributes;

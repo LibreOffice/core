@@ -26,7 +26,7 @@
 
 module com { module sun { module star { module deployment { module ui {
 
-/** The <type>PackageManagerDialog</type> is used to visually manage installed
+/** The PackageManagerDialog is used to visually manage installed
     packages of the user and shared installation as well as currently open
     documents.
 

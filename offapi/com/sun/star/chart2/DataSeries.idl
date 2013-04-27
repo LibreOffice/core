@@ -46,10 +46,10 @@ module chart2
 
 
 /** reflects the model data of the object that has all the information
-    for a <type>DataRenderer</type> to create a visible data series in
+    for a DataRenderer to create a visible data series in
     a chart.
 
-    <p>It combines one or more <type>DataSequence</type>s which are
+    <p>It combines one or more DataSequences which are
     interpreted by evaluating their role-string.</p>
 
     @see DataSequenceRole
@@ -101,7 +101,7 @@ service DataSeries
         are of type
         <type scope="com::sun::star::beans">XPropertySet</type>
         and support the service
-        <type>DataPoint</type>.
+        DataPoint.
     */
 //     interface ::com::sun::star::container::XIndexContainer;
 
@@ -141,7 +141,7 @@ service DataSeries
         in the data series.</p>
 
         <p>The indexes in this sequence match the indexes used by the
-        <type>XIndexContainer</type>.</p>
+        XIndexContainer.</p>
 
         <p>This property is especially useful for large data series
         with only some formatted data points, because you do not have

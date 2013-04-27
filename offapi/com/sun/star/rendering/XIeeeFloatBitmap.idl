@@ -63,11 +63,11 @@ interface XIeeeFloatBitmap : XIeeeFloatReadOnlyBitmap
         Destination rectangle, within the bounds of the bitmap, to set
         the data in.
 
-        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
+        @throws com::sun::star::lang::IndexOutOfBoundsException
         if parts of the given rectangle are outside the permissible
         bitmap area.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if the given memory layout does not match this bitmap's
         layout, or if the given data sequence has too few or too much
         elements.
@@ -98,10 +98,10 @@ interface XIeeeFloatBitmap : XIeeeFloatReadOnlyBitmap
         @param pos
         Pixel position with the bounds of the bitmap to set.
 
-        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
+        @throws com::sun::star::lang::IndexOutOfBoundsException
         if the given point is outside the permissible bitmap area.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if the given memory layout does not match this bitmap's
         layout, or if the given data sequence has too few or too much
         elements.

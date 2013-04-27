@@ -26,7 +26,7 @@
 module com { module sun { module star { module datatransfer {
 
 /** Interface to be implemented by  objects used to provide system dependent data
-    for a transfer operation. Those objects usually also implement <type>XTransferable</type>.
+    for a transfer operation. Those objects usually also implement XTransferable.
 */
 
 published interface XSystemTransferable: com::sun::star::uno::XInterface

@@ -24,33 +24,33 @@ module com { module sun { module star { module i18n {
 
     <p> It is derived from
     <type scope="::com::sun::star::i18n">XExtendedCalendar</type> and
-    provides additional methods to obtain <type>Calendar2</type> items
+    provides additional methods to obtain Calendar2 items
     that include the possessive genitive case month names and sequences 
-    of <type>CalendarItem2</type> items.. </p>
+    of CalendarItem2 items.. </p>
 
     @since LibreOffice 3.5
  */
 published interface XCalendar3 : com::sun::star::i18n::XExtendedCalendar
 {
-    /// Get the currently loaded <type>Calendar2</type>.
+    /// Get the currently loaded Calendar2.
     Calendar2   getLoadedCalendar2();
 
-    /** returns a sequence of <type>CalendarItem2</type> describing the
+    /** returns a sequence of CalendarItem2 describing the
         day names.
      */
     sequence< CalendarItem2 >    getDays2();
 
-    /** returns a sequence of <type>CalendarItem2</type> describing the
+    /** returns a sequence of CalendarItem2 describing the
         month names.
      */
     sequence< CalendarItem2 >    getMonths2();
 
-    /** returns a sequence of <type>CalendarItem2</type> describing the
+    /** returns a sequence of CalendarItem2 describing the
         genitive case month names.
      */
     sequence< CalendarItem2 >    getGenitiveMonths2();
 
-    /** returns a sequence of <type>CalendarItem2</type> describing the
+    /** returns a sequence of CalendarItem2 describing the
         partitive case month names.
      */
     sequence< CalendarItem2 >    getPartitiveMonths2();

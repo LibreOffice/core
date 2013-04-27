@@ -28,13 +28,13 @@ module com {   module sun {   module star {   module document {
     document
 
     <p>
-    Such Events will be broadcasted by a <type>XEventBroadcaster</type>
-    to any <type>XEventListener</type> packed as <type>EventObject</type>s.
+    Such Events will be broadcasted by a XEventBroadcaster
+    to any XEventListener packed as EventObjects.
     </p>
  */
 published service Events
 {
-    /** offers access to the list of <type>EventDescriptor</type>s
+    /** offers access to the list of EventDescriptors
 
         <p>
         The following events are usually available:

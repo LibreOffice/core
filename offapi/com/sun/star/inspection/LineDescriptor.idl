@@ -26,7 +26,7 @@ module com {  module sun {  module star {  module inspection {
 
 interface XPropertyControl;
 
-/** describes the appearance of a line representing a single property in an <type>ObjectInspector</type>.
+/** describes the appearance of a line representing a single property in an ObjectInspector.
 
     Such a line consists of
     <ul><li>a label with a human-readable name for the property</li>
@@ -160,20 +160,20 @@ struct LineDescriptor
         can be used to visually represent this fact. For this, the dependent property's
         indent level would be one larger than the indent level of the other property.</p>
 
-        <p>Normally, <type>XPropertyHandler</type>s will set this to <code>0</code> when describing
+        <p>Normally, XPropertyHandlers will set this to <code>0</code> when describing
         the UI for a normal property.
     */
     short IndentLevel;
 
-    /** describes the category into which the property should be sorted by the <type>ObjectInspector</type>.
+    /** describes the category into which the property should be sorted by the ObjectInspector.
 
-        <p>An <type>ObjectInspector</type> can visually group properties which semantically belong
+        <p>An ObjectInspector can visually group properties which semantically belong
         together (for instance using tab pages). The decision which properties actually belong together
         is made using this <member>Category</member> attribute.</p>
 
-        <p>For your implementation of <type>XPropertyHandler</type>, it's recommended that you document the programmatic
+        <p>For your implementation of XPropertyHandler, it's recommended that you document the programmatic
         names used for property categories. This way, your handler might be re-used in
-        different contexts, where only the <type>XObjectInspectorModel</type> needs to provide consistent
+        different contexts, where only the XObjectInspectorModel needs to provide consistent
         UI names for the categories.</p>
 
         @see XObjectInspectorModel::describeCategories

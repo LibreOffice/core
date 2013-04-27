@@ -36,7 +36,7 @@ interface XValidityConstraintListener;
 
     <p>Validators may additionally support dynamic validity constraints. In such a case,
     the validity of a given value may change, without the value changing itself.<br/>
-    To be notified about this, interested components should register as <type>XValidityConstraintListener</type>.
+    To be notified about this, interested components should register as XValidityConstraintListener.
 
     @see XValidatable
 */
@@ -62,7 +62,7 @@ interface XValidator : com::sun::star::uno::XInterface
 
     /** registers the given validity listener.
 
-    <p>Usually, an <type>XValidatable</type> instance will also add itself as validity listener,
+    <p>Usually, an XValidatable instance will also add itself as validity listener,
     as soon as the validator is introduced to it.</p>
 
     <p>Implementations which do not support dynamic validity constraints should simply ignore this

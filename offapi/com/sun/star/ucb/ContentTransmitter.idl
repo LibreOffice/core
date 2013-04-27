@@ -24,7 +24,7 @@
 
 module com { module sun { module star { module ucb {
 
-/** A <type>ContentTransmitter</type> is a service that provides
+/** A ContentTransmitter is a service that provides
 
     @deprecated
 */

@@ -35,7 +35,7 @@ published  struct SearchOptions  {
 
     /** some flags - can be mixed
 
-        @see <type>SearchFlags</type>
+        @see SearchFlags
     */
     long             searchFlag;
 

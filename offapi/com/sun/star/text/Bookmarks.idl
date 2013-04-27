@@ -26,19 +26,19 @@
 
  module com {  module sun {  module star {  module text {
 
-/** This service specifies a collection of <type>Bookmark</type>s.
+/** This service specifies a collection of Bookmarks.
  */
 published service Bookmarks
 {
 
     /** makes it possible to access the bookmarks by their names.
 
-                <p>All contents support the service <type>Bookmark</type>.
+                <p>All contents support the service Bookmark.
      */
     interface com::sun::star::container::XNameAccess;
     /** makes it possible to access the bookmarks by their index.
 
-                <p>All contents support the service <type>Bookmark</type>.
+                <p>All contents support the service Bookmark.
      */
     interface com::sun::star::container::XIndexAccess;
 

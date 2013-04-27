@@ -22,11 +22,11 @@
 
 module com { module sun { module star { module ucb {
 
-/** contains information for sorting a <type>ContentResultSet</type>.
+/** contains information for sorting a ContentResultSet.
 
-    <p> In contrast to the struct <type>SortingInfo</type> this struct is
+    <p> In contrast to the struct SortingInfo this struct is
     used to be on the safe side, that no one asks for sorting by a property
-    which is not contained in a <type>ContentResultSet</type>.
+    which is not contained in a ContentResultSet.
 */
 published struct NumberedSortingInfo
 {

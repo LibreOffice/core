@@ -27,7 +27,7 @@
 
 
 /** This service specifies the model for control which provides controller
-    functionality for a <type>DataForm</type>, such as navigating or filtering
+    functionality for a DataForm, such as navigating or filtering
     the form.
  */
 service NavigationToolBar

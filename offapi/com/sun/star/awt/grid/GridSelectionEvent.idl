@@ -25,7 +25,7 @@
 module com {  module sun {  module star {  module awt { module grid {
 
 
-/** An event used by a <type>XGridControl</type> to notify changes in its row selection.
+/** An event used by a XGridControl to notify changes in its row selection.
 
     @see XGridRowSelection
     @see XGridSelectionListener

@@ -45,7 +45,7 @@ module com {  module sun {  module star {  module frame {
         whenever this state changes or the control should re-get the value
     for the URL it is connected to. Additionally, a context-switch-event
     is to be broadcasted whenever the object may be out of scope,
-    to force the state listener to requery the <type>XDispatch</type>.
+    to force the state listener to requery the XDispatch.
     </p>
 
     @see Frame
@@ -56,7 +56,7 @@ published interface XDispatch: com::sun::star::uno::XInterface
     /** dispatches (executes) an URL asynchronously.
 
         <p>
-        It is only allowed to dispatch URLs for which this <type>XDispatch</type>
+        It is only allowed to dispatch URLs for which this XDispatch
         was explicitly queried. Additional arguments ("'#..." or "?...") are allowed.
         </p>
 
@@ -97,10 +97,10 @@ published interface XDispatch: com::sun::star::uno::XInterface
         at this object to receive status events.
 
         <p>
-        It is only allowed to register URLs for which this <type>XDispatch</type>
+        It is only allowed to register URLs for which this XDispatch
         was explicitly queried. Additional arguments ("#..." or "?...") will be ignored.
         </p>
-        Note: Notifications can't be guaranteed! This will be a part of interface <type>XNotifyingDispatch</type>.
+        Note: Notifications can't be guaranteed! This will be a part of interface XNotifyingDispatch.
 
         @param Control
             listener that wishes to be informed

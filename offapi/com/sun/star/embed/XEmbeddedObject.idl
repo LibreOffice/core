@@ -121,7 +121,7 @@ published interface XEmbeddedObject
 
         @param nVerbID
             specifies an action to perform, can take values from
-            <type>EmbedVerbs</type>
+            EmbedVerbs
 
         @throws ::com::sun::star::lang::IllegalArgumentException
             the verb is not supported
@@ -196,7 +196,7 @@ published interface XEmbeddedObject
 
         @param nMode
             the new update mode, can take values from
-            <type>EmbeddedUpdateModes</type>
+            EmbeddedUpdateModes
 
         @throws ::com::sun::star::embed::WrongStateException
             the object is in wrong state
@@ -211,7 +211,7 @@ published interface XEmbeddedObject
 
         @return
             the value specifying the status of the object for specified aspect
-            can take values from <type>EmbedMisc</type> constant set
+            can take values from EmbedMisc constant set
 
         @throws com::sun::star::embed::WrongStateException
             the object is in wrong state

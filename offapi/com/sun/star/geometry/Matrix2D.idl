@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module geometry {
 
     The matrix defined by this structure constitutes a linear
     mapping of a point in 2D to another point in 2D. In contrast to
-    the <type>com.sun.star.geometry.AffineMatrix2D</type>, this
+    the com.sun.star.geometry.AffineMatrix2D, this
     matrix does not include any translational components.<p>
 
     A linear mapping, as performed by this matrix, can be written out
@@ -41,7 +41,7 @@ module com {  module sun {  module star {  module geometry {
     </code><p>
 
     Thus, in common matrix language, with M being the
-    <type>Matrix2D</type> and vs=[xs,ys]^T, vd=[xd,yd]^T two 2D
+    Matrix2D and vs=[xs,ys]^T, vd=[xd,yd]^T two 2D
     vectors, the linear mapping is written as
     vd=M*vs. Concatenation of transformations amounts to
     multiplication of matrices, i.e. a scaling, given by S,

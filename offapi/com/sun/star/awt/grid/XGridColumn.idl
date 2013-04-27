@@ -119,7 +119,7 @@ published interface XGridColumn
     */
     [attribute] long DataColumnIndex;
 
-    /** Adds a listener for the <type>GridColumnEvent</type> posted after the grid changes.
+    /** Adds a listener for the GridColumnEvent posted after the grid changes.
         @param Listener
             the listener to add.
     */

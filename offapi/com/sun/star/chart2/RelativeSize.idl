@@ -39,14 +39,14 @@ struct RelativeSize
         defined by the object using this point.
 
         <p>Typically, the direction is determined by an
-        <type>Orientation</type>.  Another typical use would be the
+        Orientation.  Another typical use would be the
         direction of a given orientation-angle.</p>
 
         <p>The values are relative to the page or an object.  Values
         between 0 and 1 span the complete bounding rectangle of the
         page/object.</p>
 
-        <p>For a western <type>Orientation</type> this is the
+        <p>For a western Orientation this is the
         width.</p>
      */
     double       Primary;
@@ -55,14 +55,14 @@ struct RelativeSize
         defined by the object using this point.
 
         <p>Typically, the direction is determined by an
-        <type>Orientation</type>.  Another typical use would be the
+        Orientation.  Another typical use would be the
         direction perpendicular to a given orientation-angle.</p>
 
         <p>The values are relative to the page or an object.  Values
         between 0 and 1 span the complete bounding rectangle of the
         page/object.</p>
 
-        <p>For a western <type>Orientation</type> this is the
+        <p>For a western Orientation this is the
         height.</p>
      */
     double       Secondary;

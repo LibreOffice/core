@@ -23,7 +23,7 @@
 
  module com {  module sun {  module star {  module drawing {
 
-/** The <type>LineEndType</type> specifies the appearance of the bullet at the
+/** The LineEndType specifies the appearance of the bullet at the
     end of a line.
 
     @deprecated

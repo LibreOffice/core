@@ -28,14 +28,14 @@
 module com {  module sun {  module star {  module awt { module tree {
 
 
-/** Represents a mutable tree node as used by the <type>MutableTreeDataModel</type>
+/** Represents a mutable tree node as used by the MutableTreeDataModel
  */
 interface XMutableTreeNode : XTreeNode
 {
     /** appends <var>ChildNode</var> to this instance.
 
         @throws ::com::sun::star::lang::IllegalArgumentException
-            if <var>ChildNode</var> is not a valid node of the corresponding <type>XTreeDataModel</type>.
+            if <var>ChildNode</var> is not a valid node of the corresponding XTreeDataModel.
     */
     void appendChild( [in] XMutableTreeNode ChildNode )
         raises( com::sun::star::lang::IllegalArgumentException );
@@ -46,7 +46,7 @@ interface XMutableTreeNode : XTreeNode
             the index where the node will be inserted to this instance.
 
         @throws ::com::sun::star::lang::IllegalArgumentException
-            if <var>ChildNode</var> is not a valid node of the corresponding <type>XTreeDataModel</type>.
+            if <var>ChildNode</var> is not a valid node of the corresponding XTreeDataModel.
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if <var>Index</var> is less than 0 or greater then <member>XTreeNode::getChildCount()</member>.

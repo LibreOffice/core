@@ -28,7 +28,7 @@
 module com {  module sun {  module star {  module frame {
 
 
-/** extends the <type>XController</type> interface
+/** extends the XController interface
 
     @since OOo 3.0
 */

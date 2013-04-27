@@ -33,7 +33,7 @@
 
 
 /** This is the service provided by a <type scope="com::sun::star::drawing">DrawPage</type> inside a
-    <type>PresentationDocument</type>.
+    PresentationDocument.
 
     @see PresentationDocument
  */

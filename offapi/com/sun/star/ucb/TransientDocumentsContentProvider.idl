@@ -25,7 +25,7 @@
 module com { module sun { module star { module ucb {
 
 /** The Transient Documents Content Provider (TDCP) implements a
-    <type>ContentProvider</type> for the <type>UniversalContentBroker</type>
+    ContentProvider for the UniversalContentBroker
     (UCB).
 
     <p>It provides access to the hierarchical structure of the documents that
@@ -57,25 +57,25 @@ service TransientDocumentsContentProvider
         <b>TDCP Contents</b>
         <ol>
         <li>
-        A TDCP Stream (<type>TransientDocumentsStreamContent</type>) is a
+        A TDCP Stream (TransientDocumentsStreamContent) is a
         content which represents a data stream of an Office document. It is
         contained in a TDCP Folder or TDCP Document. A TDCP Stream has no
         children.
         </li>
         <li>
-        A TDCP Folder (<type>TransientDocumentsFolderContent</type>) is a
+        A TDCP Folder (TransientDocumentsFolderContent) is a
         container for other TDCP Folders and TDCP Streams. It may be contained
         in another TDCP Folder or in a TDCP Document.
         </li>
         <li>
-        A TDCP Document (<type>TransientDocumentsDocumentContent</type>)
+        A TDCP Document (TransientDocumentsDocumentContent)
         represents the root folder of a transient document. It is a container
         for other TDCP Folders and TDCP Streams. It is always a child of the
         TDCP Root.
         </li>
         <li>
         There is at most one instance of a TDCP Root
-        (<type>TransientDocumentsRootContent</type>) at a time. All other TDCP
+        (TransientDocumentsRootContent) at a time. All other TDCP
         contents are children of this folder. The TDCP Root Folder can contain
         only TDCP Documents. It has the fixed URL "vnd.sun.star.tdoc:/".
         </li>

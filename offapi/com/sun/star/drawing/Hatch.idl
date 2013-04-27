@@ -33,7 +33,7 @@
  */
 published struct Hatch
 {
-    /** The <type>HatchStyle</type> defines the kind of lines used to draw
+    /** The HatchStyle defines the kind of lines used to draw
         this hatch.
      */
     com::sun::star::drawing::HatchStyle Style;

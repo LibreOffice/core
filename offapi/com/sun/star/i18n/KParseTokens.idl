@@ -62,7 +62,7 @@ published constants KParseTokens
 
     /** Special value to allow anything below 128 except control
         characters. <strong>Not</strong> set in
-        <type>ParseResult</type>. */
+        ParseResult. */
     const long ASC_ANY_BUT_CONTROL  = 0x00000400;
 
     /** Additional flag set in <member>ParseResult::StartFlags</member>
@@ -117,7 +117,7 @@ published constants KParseTokens
         <method>ChararacterClassification::parseAnyToken</method> and
         <method>ChararacterClassification::parsePredefinedToken</method>,
         ignored on <em>nContCharFlags</em> parameter.
-        <strong>Not</strong> set in <type>ParseResult</type>. */
+        <strong>Not</strong> set in ParseResult. */
     const long IGNORE_LEADING_WS    = 0x40000000;
 
 

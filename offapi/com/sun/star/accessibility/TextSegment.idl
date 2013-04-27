@@ -24,7 +24,7 @@ module com { module sun { module star { module accessibility {
 
 /** This structure describes a text segment that is embedded in a larger
     portion of text.  It is used for example by the
-    <type>XAccessibleText</type> interface to describe a text portion that
+    XAccessibleText interface to describe a text portion that
     was inserted into or deleted from an accessible text.
 
     <p>The indices <member>TextSegment::SegmentStart</member> and
@@ -32,7 +32,7 @@ module com { module sun { module star { module accessibility {
     The <member>TextSegment::SegmentText</member> member contains the text
     between these two indices including the start index but not the end
     index.  With it you can use this structure without having to
-    access the <type>XAccessibleText</type> interface that represents the
+    access the XAccessibleText interface that represents the
     enclosing text.</p>
 
     <p>An empty text segment is expressed by

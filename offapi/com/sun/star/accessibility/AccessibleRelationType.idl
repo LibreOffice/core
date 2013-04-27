@@ -24,7 +24,7 @@ module com { module sun { module star { module accessibility {
 /** Collection of relation types.
 
     <p>This list of constants defines the available types of relations that
-    are usable by <type>AccessibleRelation</type>.</p>
+    are usable by AccessibleRelation.</p>
 
     <p>We are using constants instead of a more typesafe enum.  The reason
     for this is that IDL enums may not be extended.  Therefore, in order to

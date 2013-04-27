@@ -24,7 +24,7 @@
 module com {  module sun {  module star {  module sheet {
 
 
-/** contains the layout information of a <type>DataPilotField</type>.
+/** contains the layout information of a DataPilotField.
  */
 published struct DataPilotFieldLayoutInfo
 {
@@ -38,7 +38,7 @@ published struct DataPilotFieldLayoutInfo
         long LayoutMode;
 
 
-    /** If <TRUE/>, an empty row is inserted in the <type>DataPilotTable</type>
+    /** If <TRUE/>, an empty row is inserted in the DataPilotTable
         result table after the data
         (including the subtotals) for each item of the field.
         */

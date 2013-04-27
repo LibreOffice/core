@@ -24,8 +24,8 @@
 
 module com { module sun { module star { module ucb {
 
-/** The Package Content Provider (PCP) implements a <type>ContentProvider</type>
-    for the <type>UniversalContentBroker</type> (UCB).
+/** The Package Content Provider (PCP) implements a ContentProvider
+    for the UniversalContentBroker (UCB).
 
     <p>It provides access to packages ( zip / jar archive files ) containing
     folders and streams.
@@ -41,12 +41,12 @@ published service PackageContentProvider
         <b>PCP Contents</b>
         <ol>
         <li>
-        A PCP Stream (<type>PackageStreamContent</type>) is a content which
+        A PCP Stream (PackageStreamContent) is a content which
         represents a file inside a package. It is always contained in a PCP
         Folder. A PCP Stream has no children.
         </li>
         <li>
-        A PCP Folder (<type>PackageFolderContent</type>) is a container for
+        A PCP Folder (PackageFolderContent) is a container for
         other PCP Folders and PCP Streams.
         </li>
         </ol>

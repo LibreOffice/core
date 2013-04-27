@@ -23,7 +23,7 @@
 
  module com {  module sun {  module star {  module drawing {
 
-/** The <type>Alignment</type> enumeration is a general way to specify the
+/** The Alignment enumeration is a general way to specify the
     alignment of an object or sub-object relative to another object.
  */
 published enum Alignment

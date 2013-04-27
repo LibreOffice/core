@@ -73,7 +73,7 @@ interface XBitmapCanvas : XCanvas
         The render state to apply to the source of this copy
         operation. The render transformation must be non-singular, and
         the compositing mode must be one of the
-        <type>CompositingOperation</type> values.
+        CompositingOperation values.
 
         @param destRect
         Rectangle into which to copy the bitmap data. This rectangle
@@ -93,9 +93,9 @@ interface XBitmapCanvas : XCanvas
         The render state to apply to the destination of this copy
         operation. The render transformation must be non-singular, and
         the compositing mode must be one of the
-        <type>CompositingOperation</type> values.
+        CompositingOperation values.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if one of the parameters are not within the specified range.
      */
     void copyRect( [in] XBitmapCanvas sourceCanvas,

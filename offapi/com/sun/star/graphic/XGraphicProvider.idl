@@ -66,7 +66,7 @@ published interface XGraphicProvider : ::com::sun::star::uno::XInterface
 
 
 
-    /** Calling this method returns a <type>XGraphic</type> interface
+    /** Calling this method returns a XGraphic interface
         that holds the graphic content after loading the graphic
 
         @param MediaProperties
@@ -74,7 +74,7 @@ published interface XGraphicProvider : ::com::sun::star::uno::XInterface
             of the graphic from which the graphic is to be loaded
 
         @returns
-            The <type>XGraphic</type> interface
+            The XGraphic interface
 
         @see MediaProperties
         @see XGraphic
@@ -85,7 +85,7 @@ published interface XGraphicProvider : ::com::sun::star::uno::XInterface
                               ::com::sun::star::lang::IllegalArgumentException,
                              ::com::sun::star::lang::WrappedTargetException );
 
-    /** Store the graphic content, represented through the <type>XGraphic</type>
+    /** Store the graphic content, represented through the XGraphic
         interface at the specified location
 
         @param Graphic

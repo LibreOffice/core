@@ -26,11 +26,11 @@
 module com {  module sun {  module star {  module beans {
 
 
-/** gets delivered whenever an <type>XPropertySetInfo</type> is
+/** gets delivered whenever an XPropertySetInfo is
     changed.
 
-    <p>A <type>PropertySetInfoChangeEvent</type> object is sent
-    to <type>XPropertySetInfoChangeListener</type>s.</p>
+    <p>A PropertySetInfoChangeEvent object is sent
+    to XPropertySetInfoChangeListeners.</p>
  */
 published struct PropertySetInfoChangeEvent: com::sun::star::lang::EventObject
 {

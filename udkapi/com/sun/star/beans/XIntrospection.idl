@@ -46,7 +46,7 @@ published interface XIntrospection: com::sun::star::uno::XInterface
 
         <dl>
             <dt>property set </dt>
-            <dd>If the object supports an <type>XPropertySet</type>
+            <dd>If the object supports an XPropertySet
                 interface, all its properties are adopted.
             </dd>
 
@@ -79,11 +79,11 @@ published interface XIntrospection: com::sun::star::uno::XInterface
         <p>In addition, the inspect method identifies all listener
         access methods in the form <code>add...Listener</code>/
         <code>remove...Listener</code> (except methods of interface
-        <type>XPropertySet</type>) where "..." stands for the listener type.
+        XPropertySet) where "..." stands for the listener type.
         </p>
 
         <p>Methods which do not belong to a property nor which represent
-        a listener access nor which are methods of <type>XPropertySet</type>,
+        a listener access nor which are methods of XPropertySet,
         <type scope="com::sun::star::container">XNameAccess</type>,
         <type scope="com::sun::star::container">XIndexAccess</type>, or
         <type scope="com::sun::star::container">XEnumerationAccess</type>, are considered to be normal

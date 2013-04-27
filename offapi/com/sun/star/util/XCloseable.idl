@@ -41,7 +41,7 @@ module com {  module sun {  module star {  module util {
     </p>
 
     <p>
-    Base interface <type>XCloseBroadcaster</type> makes it possible that any listener
+    Base interface XCloseBroadcaster makes it possible that any listener
     which is interested on life time of listened object ...
     <ul>
         <li>can get a notification about closing of it</li>
@@ -62,12 +62,12 @@ published interface XCloseable: XCloseBroadcaster
         But nobody can guarantee real closing of called object - because it can disagree with that if any
         still running processes can't be canceled yet. It's not allowed to block this call till internal
         operations will be finished here. They must be canceled or call must return immediately by throwing
-        the <type>CloseVetoException</type>.  Otherwise (if nothing exist to disagree) it must return normally.
+        the CloseVetoException.  Otherwise (if nothing exist to disagree) it must return normally.
         </p>
 
         <p>
-        Before any internal processes will be canceled, all registered <type>XCloseListener</type>
-        must be notified. Any of them can disagree with a <type>CloseVetoException</type> too.
+        Before any internal processes will be canceled, all registered XCloseListener
+        must be notified. Any of them can disagree with a CloseVetoException too.
         It's forbidden to catch this exception inside the called close() method because the caller must
         get this information!
         </p>

@@ -31,7 +31,7 @@
     The algorithm as well as encryption data are specified on object creation.
     </p>
 
-    @see <type>XCipherContextSupplier</type>
+    @see XCipherContextSupplier
     @since OOo 3.4
  */
 interface XCipherContext : com::sun::star::uno::XInterface

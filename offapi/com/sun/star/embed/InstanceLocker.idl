@@ -49,8 +49,8 @@ published service InstanceLocker : com::sun::star::lang::XComponent
                 specifies the actions that should be done ( prevent closing,
                 prevent termination and/or etc. ). It must not be empty and can
                 currently contain following values or their combination:
-                <type>Actions</type>::PREVENT_CLOSE and
-                <type>Actions</type>::PREVENT_TERMINATION.
+                Actions::PREVENT_CLOSE and
+                Actions::PREVENT_TERMINATION.
      */
     InstanceLockerCtor1( [in] com::sun::star::uno::XInterface xInstance,
                          [in] long nActions )
@@ -68,17 +68,17 @@ published service InstanceLocker : com::sun::star::lang::XComponent
                 specifies the actions that should be done ( prevent closing,
                 prevent termination and/or etc. ). It must not be empty and can
                 currently contain following values or their combination:
-                <type>Actions</type>::PREVENT_CLOSE and
-                <type>Actions</type>::PREVENT_TERMINATION.
+                Actions::PREVENT_CLOSE and
+                Actions::PREVENT_TERMINATION.
 
         @param xApprove
-                The object implementing <type>XActionsApproval</type> interface.
+                The object implementing XActionsApproval interface.
                 If this parameter is an empty reference the object will proceed
                 with the specified in the first parameter action until it is
                 disposed ( just like in the case of the first constructor ).
                 If the instance is provided, it will be asked for approval each
                 time before proceeding with the action ( the action is
-                specified using <type>string</type> and can take following
+                specified using string and can take following
                 values in this case: "PreventClose", "PreventTermination" ).
      */
     InstanceLockerCtor2( [in] com::sun::star::uno::XInterface xInstance,

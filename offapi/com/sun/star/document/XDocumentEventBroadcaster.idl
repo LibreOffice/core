@@ -31,7 +31,7 @@ module com { module sun { module star { module document {
 interface XDocumentEventListener;
 
 
-/** allows to be notified of events happening in an <type>OfficeDocument</type>, and to cause notification
+/** allows to be notified of events happening in an OfficeDocument, and to cause notification
     of such events.
 
     <p>This interface is the successor of the XEventBroadcaster interface, which should not be used
@@ -60,7 +60,7 @@ interface XDocumentEventBroadcaster
 
     /** causes the broadcaster to notify all registered listeners of the given event
 
-        <p>The method will create a <type>DocumentEvent</type> instance with the given parameters,
+        <p>The method will create a DocumentEvent instance with the given parameters,
         and fill in the <code>Source</code> member (denoting the broadcaster) as appropriate.</p>
 
         <p>Whether the actual notification happens synchronously or asynchronously is up to the
@@ -85,7 +85,7 @@ interface XDocumentEventBroadcaster
         @throws ::com::sun::star::lang::NoSupportException
             if the broadcaster implementation does not supported broadcasting events induced externally.
             This is usually used for components which multiplex events from multiple sources, and thus would
-            be unable to fill in the <code>Source</code> member of the <type>DocumentEvent</type> instance.
+            be unable to fill in the <code>Source</code> member of the DocumentEvent instance.
     */
     void    notifyDocumentEvent(
                 [in] string _EventName,

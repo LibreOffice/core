@@ -32,7 +32,7 @@ module com {  module sun {  module star {  module beans {
 published interface XPropertiesChangeNotifier: com::sun::star::uno::XInterface
 {
 
-    /** adds an <type>XPropertiesChangeListener</type> to the
+    /** adds an XPropertiesChangeListener to the
         specified properties with the specified names.
      */
     void addPropertiesChangeListener(
@@ -40,7 +40,7 @@ published interface XPropertiesChangeNotifier: com::sun::star::uno::XInterface
             [in] com::sun::star::beans::XPropertiesChangeListener Listener );
 
 
-    /** removes an <type>XPropertiesChangeListener</type> from the
+    /** removes an XPropertiesChangeListener from the
         listener list.
      */
     void removePropertiesChangeListener(

@@ -30,12 +30,12 @@ module com { module sun { module star { module configuration {
 
 
 /**
-    is a <type>ConfigurationProvider</type>, that is
-    the default <type>ConfigurationProvider</type> for its
+    is a ConfigurationProvider, that is
+    the default ConfigurationProvider for its
     <type scope="com::sun::star::uno">XComponentContext</type>.
 
     <p>This object is accessible as singleton
-    <type>theDefaultProvider</type></p>.
+    theDefaultProvider</p>.
 
     @since OOo 1.1.2
 */

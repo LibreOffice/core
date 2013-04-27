@@ -27,7 +27,7 @@
  module com {  module sun {  module star {  module awt {
 
 
-/** specifies the standard model of an <type>UnoControlSpinButton</type>.
+/** specifies the standard model of an UnoControlSpinButton.
 
     <p>A spin button is a control which has a numeric value associated with it,
     and allows to change this value using two spin buttons.</p>
@@ -85,7 +85,7 @@ service UnoControlSpinButtonModel
     [property] long SpinIncrement;
 
 
-    /** specifies the <type>ScrollBarOrientation</type> of the control.
+    /** specifies the ScrollBarOrientation of the control.
      */
     [property] long Orientation;
 
@@ -140,7 +140,7 @@ service UnoControlSpinButtonModel
     /** defines how the mouse wheel can be used to scroll through the control's content.
 
         <p>Usually, the mouse wheel spins the numeric value displayed in the control. Using this property,
-        and one of the <type>MouseWheelBehavior</type> constants, you can control under which circumstances
+        and one of the MouseWheelBehavior constants, you can control under which circumstances
         this is possible.</p>
     */
     [optional, property] short MouseWheelBehavior;

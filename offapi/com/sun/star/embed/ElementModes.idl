@@ -31,7 +31,7 @@ module com { module sun { module star { module embed {
     are base modes. A result mode must include one of base modes.
     </p>
 
-    @see <type>XStorage</type>
+    @see XStorage
 */
 published constants ElementModes
 {
@@ -42,7 +42,7 @@ published constants ElementModes
     /** specifies opening of a seekable element.
 
         <p>
-        This mode is ignored for <type>Storage</type> elements.
+        This mode is ignored for Storage elements.
         This flag makes sense only in combination with
         <const>ElementModes::READ</const> and/or
         <const>ElementModes::WRITE</const>.

@@ -32,7 +32,7 @@ module com { module sun { module star { module configuration { module backend {
 
     <P>The well known requests handled by this service include
     <UL>
-        <LI><type>MergeRecoveryRequest</type>*</LI>
+        <LI>MergeRecoveryRequest*</LI>
     </UL>
     The requests marked with an asterisk are only handled if (a) their
     continuations match certain restrictions (see below), and (b) the

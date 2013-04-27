@@ -43,12 +43,12 @@ published interface XDropTargetListener: com::sun::star::lang::XEventListener
         has to wait until the method <method>XDropTargetDropContext::dropComplete</method>
         is called before releasing the data for the drop operation. This
         should occur before returning from drop in a normal flow of operation.
-        Also, the implementor of <type>XDropTargetListener</type> should not assume
-        the <type>DropTargetDropEvent</type> to be meaningful after returning
+        Also, the implementor of XDropTargetListener should not assume
+        the DropTargetDropEvent to be meaningful after returning
         from the <member>XDropTargetListener::drop()</member> method.</p>
 
         @param dtde
-        The <type>DropTargetDropEvent</type>.
+        The DropTargetDropEvent.
     */
 
     void drop( [in] DropTargetDropEvent dtde );
@@ -56,7 +56,7 @@ published interface XDropTargetListener: com::sun::star::lang::XEventListener
     /** Called when a drag operation has encountered the drop target.
 
         @param dtde
-        The <type>DropTargetDragEvent</type>.
+        The DropTargetDragEvent.
     */
 
     void dragEnter( [in] DropTargetDragEnterEvent dtdee );
@@ -64,7 +64,7 @@ published interface XDropTargetListener: com::sun::star::lang::XEventListener
     /** The drag operation has departed the drop target without dropping.
 
         @param dte
-        The <type>DropTargetEvent</type>.
+        The DropTargetEvent.
     */
 
     void dragExit( [in] DropTargetEvent dte );
@@ -72,7 +72,7 @@ published interface XDropTargetListener: com::sun::star::lang::XEventListener
     /** Called when a drag operation is ongoing on the drop target.
 
         @param dtde
-        The <type>DropTargetEvent</type>.
+        The DropTargetEvent.
     */
 
     void dragOver( [in] DropTargetDragEvent dtde );
@@ -80,7 +80,7 @@ published interface XDropTargetListener: com::sun::star::lang::XEventListener
     /** Called when the user has modified the drop gesture.
 
         @param dtde
-        The <type>DropTargetEvent</type>.
+        The DropTargetEvent.
     */
 
     void dropActionChanged( [in] DropTargetDragEvent dtde );

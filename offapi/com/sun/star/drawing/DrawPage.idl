@@ -41,7 +41,7 @@ published service DrawPage
      */
     service com::sun::star::drawing::GenericDrawPage;
 
-    /** provides the link to a <type>MasterPage</type>.
+    /** provides the link to a MasterPage.
      */
     interface com::sun::star::drawing::XMasterPageTarget;
 

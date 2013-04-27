@@ -31,12 +31,12 @@ module com { module sun { module star { module io {
 interface XTempFile
 {
     // INTERFACES
-    /** interface <type>XStream</type> offers read and write access to
+    /** interface XStream offers read and write access to
         the same stream.
     */
     interface XStream;
 
-    /** interface <type>XSeekable</type> makes it possible to seek to a
+    /** interface XSeekable makes it possible to seek to a
         certain position within a stream.
     */
     interface XSeekable;

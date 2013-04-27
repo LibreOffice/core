@@ -26,8 +26,8 @@
 
  module com {  module sun {  module star {  module embed {
 
-/** The <type>FileSystemStorageFactory</type> is a service that allows to
-    create a <type>FileSystemStorage</type> based on URL. The URL must point
+/** The FileSystemStorageFactory is a service that allows to
+    create a FileSystemStorage based on URL. The URL must point
     to a folder.
 
     <p>
@@ -53,7 +53,7 @@
         <dt>parameter 2</dt>
         <dd>
                   specifies mode the storage should be open in, can take
-                  values from <type>ElementModes</type> constant set.
+                  values from ElementModes constant set.
         </dd>
 
         <dt>parameter 3</dt>

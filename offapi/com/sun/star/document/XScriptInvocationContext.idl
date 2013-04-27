@@ -31,7 +31,7 @@ module com { module sun { module star { module document {
 
     <p>If the component implementing it is a document, which supports embedding scripts into
     itself, then <member>ScriptContainer</member> refers to the document itself. Implementing this
-    interface is unnecessary then, instead the document should simply implement <type>XEmbeddedScripts</type> directly.</p>
+    interface is unnecessary then, instead the document should simply implement XEmbeddedScripts directly.</p>
 
     <p>If the interface is implemented by a document which does not itself support embedding
     scripts into it, but which  is associated unambiguously with a document which does,

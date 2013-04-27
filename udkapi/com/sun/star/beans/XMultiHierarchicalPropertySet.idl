@@ -43,14 +43,14 @@ published interface XMultiHierarchicalPropertySet: com::sun::star::uno::XInterfa
     /** retrieve information about the hierarchy of properties
 
         @returns
-                the <type>XHierarchicalPropertySetInfo</type> interface,
+                the XHierarchicalPropertySetInfo interface,
                 which describes the property hierarchy of the object which
                 supplies this interface.
 
         @returns
                 <NULL/> if the implementation cannot or will
                 not provide information about the properties; otherwise the
-                interface <type>XHierarchicalPropertySetInfo</type> is returned.
+                interface XHierarchicalPropertySetInfo is returned.
 
         @see XHierarchicalPropertySet::getHierarchicalPropertySetInfo
      */
@@ -74,7 +74,7 @@ published interface XMultiHierarchicalPropertySet: com::sun::star::uno::XInterfa
 
         @throws PropertyVetoException
                 if one of the properties is constrained and the change is
-                vetoed by a <type>XVetoableChangeListener</type>.
+                vetoed by a XVetoableChangeListener.
 
         @throws com::sun::star::lang::IllegalArgumentException
                 if one of the values is not a legal value for the

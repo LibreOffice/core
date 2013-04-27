@@ -41,7 +41,7 @@ published service ContentHandler
     /** provides handling of dispatches with defined result state
 
         <p>
-        Base interface of <type>XNotifyingDispatch</type> is <type>XDispatch</type>
+        Base interface of XNotifyingDispatch is XDispatch
         and can be called for requests if result isn't necessary for dispatch operation.
         </p>
 

@@ -29,7 +29,7 @@
 
     <p>
     Example:
-    A type reflecting the interface <type>XInterface</type> is of type class
+    A type reflecting the interface XInterface is of type class
     INTERFACE and its name is "com.sun.star.uno.XInterface".
     </p>
 */

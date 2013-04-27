@@ -29,16 +29,16 @@ module com {  module sun {  module star {  module awt { module tree {
 
     <p>
     <h4>The Data Model</h4>
-    <p>A specific node in a tree is identified by a <type>XTreeNode</type>.
+    <p>A specific node in a tree is identified by a XTreeNode.
     A leaf node is a node without any children and that returns <FALSE/> when calling <member>XTreeNode::hasChildrenOnDemand()</member>.
     An expanded node is a non-leaf node that will displays its children when all its ancestors are expanded.
     A collapsed node is one which hides them.
     A node is visible when all parent nodes are expanded and the node itself is in the display area.
     </p>
 
-    <p>The nodes are retrieved from a <type>XTreeDataModel</type>.
-    You can implement it yourself or use the <type>MutableTreeDataModel</type>
-    which uses <type>XMutableTreeNode</type> and <type>XMutableTreeDataModel</type>
+    <p>The nodes are retrieved from a XTreeDataModel.
+    You can implement it yourself or use the MutableTreeDataModel
+    which uses XMutableTreeNode and XMutableTreeDataModel
     for a simple and mutable data model.
 
     <p>The data model must be set at the <member>TreeControlModel::TreeDataModel</member> property.</p>
@@ -62,16 +62,16 @@ module com {  module sun {  module star {  module awt { module tree {
     <p>If you want to add child nodes to your tree on demand you can do the following.
     <ul>
     <li>Make sure the parent node returns <TRUE/> for <member>XTreeNode::hasChildrenOnDemand()</member> either
-    by implementing <type>XTreeNode</type> yourself or if you use the <type>MutableTreeDataModel</type>,
+    by implementing XTreeNode yourself or if you use the MutableTreeDataModel,
     use <member>XMutableTreeNode::setHasChildrenOnDemand()</member>.</li>
-    <li>Implement a <type>XTreeExpansionListener</type> and add the instance with the method
+    <li>Implement a XTreeExpansionListener and add the instance with the method
     <member>XTreeControl::addTreeExpansionListener()</member>.</li>
     </ul>
     Now you get called when the node will become expanded or collapsed.
     So on <member>XTreeExpansionListener::treeExpanding()</member> you can
-    check the <type>TreeExpansionEvent</type> if the parent node with children on demand is going to
+    check the TreeExpansionEvent if the parent node with children on demand is going to
     be expanded and in that case add the missing child nodes. You can also veto the expansion or
-    collapsing of a parent node by using the <type>ExpandVetoException</type>.
+    collapsing of a parent node by using the ExpandVetoException.
     </p>
  */
 service TreeControl: XTreeControl

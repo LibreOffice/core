@@ -27,26 +27,26 @@
 
  module com {  module sun {  module star {  module drawing {
 
-/** This service is provided by documents to support <type>Layer</type>s.
+/** This service is provided by documents to support Layers.
 
     @see DrawingDocument
  */
 published service LayerManager
 {
 
-    /** gives you access to the existing <type>Layer</type>s by
-                index and makes it possible to add and remove <type>Layer</type>s and
-                to attach <type>Shape</type>s to <type>Layer</type>s.
+    /** gives you access to the existing Layers by
+                index and makes it possible to add and remove Layers and
+                to attach Shapes to Layers.
 
-                <p>The contents of the collection all support <type>Layer</type>
-                returned by <type>XLayer</type>.
+                <p>The contents of the collection all support Layer
+                returned by XLayer.
      */
     interface com::sun::star::drawing::XLayerManager;
 
-    /** gives access to the existing <type>Layer</type>s by name.
+    /** gives access to the existing Layers by name.
 
-                <p>The contents of the collection all support <type>Layer</type>
-                returned by <type>XLayer</type>.
+                <p>The contents of the collection all support Layer
+                returned by XLayer.
      */
     interface com::sun::star::container::XNameAccess;
 

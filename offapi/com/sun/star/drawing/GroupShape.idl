@@ -29,7 +29,7 @@
  module com {  module sun {  module star {  module drawing {
 
 
-/** This service is for a group of <type>Shape</type>s.
+/** This service is for a group of Shapes.
         @see XShapeGroup
         @see XShapes
  */
@@ -45,7 +45,7 @@ published service GroupShape
     interface com::sun::star::drawing::XShapeGroup;
 
 
-    /** lets you access the <type>Shape</type>s in this Group.
+    /** lets you access the Shapes in this Group.
      */
     interface com::sun::star::drawing::XShapes;
 

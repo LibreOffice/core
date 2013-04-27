@@ -29,7 +29,7 @@ module com {  module sun {  module star {  module geometry {
     This interface provides methods to define an arbitrary bijective
     mapping from R^2 to R^2, i.e. from the two-dimensional space of
     real numbers onto itself, as is representable by the
-    <type>double</type> floating point type. The mapping must be
+    double floating point type. The mapping must be
     bijective, i.e. map a pair of real numbers to exactly one other
     pair of real numbers an vice versa, to facilitate a working
     inverse. Bijectiveness also implies completeness, i.e. for every

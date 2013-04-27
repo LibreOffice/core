@@ -27,11 +27,11 @@
 module com {  module sun {  module star {  module util {
 
 /** makes it possible to receive status change events from an
-    <type>XDataEditor</type>.
+    XDataEditor.
  */
 published interface XDataEditorListener: com::sun::star::uno::XInterface
 {
-    /** is called when the state of a connected <type>XDataEditor</type> changes.
+    /** is called when the state of a connected XDataEditor changes.
      */
     void updateDataEditorState( [in] DataEditorEvent event );
 };

@@ -36,12 +36,12 @@ module com { module sun { module star { module ucb {
 service GnomeVFSDocumentContent
 {
     /** This interface is implemented according to the specification of
-        service <type>Content</type>.
+        service Content.
      */
     interface com::sun::star::lang::XComponent;
 
     /** This interface is implemented according to the specification of
-        service <type>Content</type>.
+        service Content.
      */
     interface com::sun::star::ucb::XContent;
 
@@ -50,27 +50,27 @@ service GnomeVFSDocumentContent
     [optional] interface com::sun::star::ucb::XCommandProcessor2;
 
     /** This interface is implemented according to the specification of
-        service <type>Content</type>.
+        service Content.
      */
     interface com::sun::star::beans::XPropertiesChangeNotifier;
 
     /** This interface is implemented according to the specification of
-        service <type>Content</type>.
+        service Content.
      */
     interface com::sun::star::beans::XPropertyContainer;
 
     /** This interface is implemented according to the specification of
-        service <type>Content</type>.
+        service Content.
      */
     interface com::sun::star::beans::XPropertySetInfoChangeNotifier;
 
     /** This interface is implemented according to the specification of
-        service <type>Content</type>.
+        service Content.
      */
     interface com::sun::star::ucb::XCommandInfoChangeNotifier;
 
     /** This interface is implemented according to the specification of
-        service <type>Content</type>.
+        service Content.
      */
     interface com::sun::star::container::XChild;
 };

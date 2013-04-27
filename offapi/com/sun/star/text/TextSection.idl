@@ -33,13 +33,13 @@
 
 module com { module sun { module star { module text {
 
-/** A <type>TextSection</type> is a range of complete paragraphs within a text.
+/** A TextSection is a range of complete paragraphs within a text.
 
     <p>The content of the section may be the content of a link into another
     document, a link from the same document, or the result of a DDE
     operation.
 
-    <p><type>TextSection</type> instances can be linked from and to other
+    <p>TextSection instances can be linked from and to other
     texts.
 
 */

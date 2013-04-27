@@ -23,7 +23,7 @@
 module com { module sun { module star { module script {
 
 /** These values are used to specify a member accessible by
-    <type>XInvocation</type>.
+    XInvocation.
 */
 published enum MemberType
 {

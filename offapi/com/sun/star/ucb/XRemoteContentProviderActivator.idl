@@ -27,7 +27,7 @@ module com { module sun { module star { module ucb {
  published interface XContentProviderManager;
 
 /** This interface should be implemented together with
-    <type>XRemoteContentProviderAcceptor</type> and allows for a lazy
+    XRemoteContentProviderAcceptor and allows for a lazy
     implementation of
     <member>XRemoteContentProviderAcceptor::addRemoteContentProvider</member>.
 
@@ -48,7 +48,7 @@ published interface XRemoteContentProviderActivator: com::sun::star::uno::XInter
         to be implemented in a lazy fashion (remember the remote content
         providers, but do not register them right away), which can increase
         performance in certain situations.  But it is not required that an
-        implementation of <type>XRemoteContentProviderAcceptor</type> uses this
+        implementation of XRemoteContentProviderAcceptor uses this
         lazy strategy (and thus also implements this interface).
 
         @return

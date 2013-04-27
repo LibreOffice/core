@@ -97,7 +97,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             current layer.
 
             <p> The value is a combination of
-                <type>NodeAttribute</type> flags.
+                NodeAttribute flags.
             </p>
             <p> Only attributes which are selected in aAttributeMask
                 are changed.
@@ -107,7 +107,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             specifies which attributes should be changed for the node.
 
             <p> The value is a combination of
-                <type>NodeAttribute</type> flags.
+                NodeAttribute flags.
             </p>
 
         @param bReset
@@ -159,7 +159,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             specifies attribute values to be applied to the new node.
 
             <p> The value is a combination of
-                <type>NodeAttribute</type> flags.  Note that
+                NodeAttribute flags.  Note that
                 <member>NodeAttribute::FUSE</member> has an impact on the
                 semantics of this method.
             </p>
@@ -206,7 +206,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             specifies attribute values to be applied to the new node.
 
             <p> The value is a combination of
-                <type>NodeAttribute</type> flags.  Note that
+                NodeAttribute flags.  Note that
                 <member>NodeAttribute::FUSE</member> has an impact on the
                 semantics of this method.
             </p>
@@ -296,7 +296,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             specifies new attributes of the property.
 
             <p> The value is a combination of
-                <type>NodeAttribute</type> flags.
+                NodeAttribute flags.
             </p>
             <p> Only attributes which are selected in aAttributeMask are changed.
             </p>
@@ -309,7 +309,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             specifies which attributes should be changed for the property.
 
             <p> The value is a combination of
-                <type>NodeAttribute</type> flags.
+                NodeAttribute flags.
             </p>
 
         @param aType
@@ -510,7 +510,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             specifies the attributes of the new property.
 
             <p> The value is a combination of
-                <type>NodeAttribute</type> flags and may also contain the
+                NodeAttribute flags and may also contain the
                 <const>SchemaAttribute::REQUIRED</const> flag.
             </p>
             </p>
@@ -559,7 +559,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             specifies the attributes of the new property.
 
             <p> The value is a combination of
-                <type>NodeAttribute</type> flags and may also contain the
+                NodeAttribute flags and may also contain the
                 <const>SchemaAttribute::REQUIRED</const> flag.
             </p>
             </p>

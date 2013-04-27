@@ -28,7 +28,7 @@
  published interface XConnection;
 /** is used for establishing isolated connections via a factory.
     <p>
-    The <type>XIsolatedConnection</type> allows to create connections which are not shared among others
+    The XIsolatedConnection allows to create connections which are not shared among others
     as it is the case when creating connections in normal way.
     </p>
     @see com::sun::star::sdb::DataSource

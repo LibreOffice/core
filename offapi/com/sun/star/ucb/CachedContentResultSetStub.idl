@@ -26,7 +26,7 @@
 
 module com { module sun { module star { module ucb {
 
-/** is used on provider side to access a <type>ContentResultSet</type>
+/** is used on provider side to access a ContentResultSet
     remote optimized.
 */
 
@@ -42,7 +42,7 @@ published service CachedContentResultSetStub
     interface com::sun::star::ucb::XFetchProvider;
 
     /** Provides the possibility load information offered by a
-        <type>XContentAccess</type> for several rows of one result set at once.
+        XContentAccess for several rows of one result set at once.
 
         <p>This interface is required.
     */

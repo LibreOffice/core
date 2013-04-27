@@ -26,16 +26,16 @@ module com {  module sun {  module star {  module inspection {
 
 interface XPropertyControl;
 
-/** a factory for <type>XPropertyControl</type>s
+/** a factory for XPropertyControls
 
     @since OOo 2.0.3
 */
 interface XPropertyControlFactory
 {
-    /** creates a <type>XPropertyControl</type>
+    /** creates a XPropertyControl
 
-        <p>A <type>XPropertyControlFactory</type> can create any of the control types denoted by
-        the <type>PropertyControlType</type> constants.</p>
+        <p>A XPropertyControlFactory can create any of the control types denoted by
+        the PropertyControlType constants.</p>
 
         @param ControlType
             the type of the requested control
@@ -44,7 +44,7 @@ interface XPropertyControlFactory
             determines whether the newly created control should be readonly.
 
             <p>If this argument is <TRUE/>, this does not necessarily mean that the property cannot be
-            changed at all in the <type>ObjectInspector</type>. Instead, an <type>XPropertyHandler</type>
+            changed at all in the ObjectInspector. Instead, an XPropertyHandler
             can still decide that there is a dedicated UI for entering the property value,
             which is usually triggered by a <member>LineDescriptor::PrimaryButton</member>.</p>
 
@@ -55,7 +55,7 @@ interface XPropertyControlFactory
             a control of the given type.
 
         @throws com::sun::star::lang::IllegalArgumentException
-            if the given <arg>ControlType</arg> is not a value <type>PropertyControlType</type>
+            if the given <arg>ControlType</arg> is not a value PropertyControlType
     */
     XPropertyControl    createPropertyControl( [in] short ControlType, [in] boolean CreateReadOnly )
         raises ( com::sun::star::lang::IllegalArgumentException );

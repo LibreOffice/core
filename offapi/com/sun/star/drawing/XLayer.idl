@@ -26,7 +26,7 @@
  module com {  module sun {  module star {  module drawing {
 
 
-/** identifies the object as a <type>Layer</type>.
+/** identifies the object as a Layer.
  */
 published interface XLayer: com::sun::star::beans::XPropertySet
 {

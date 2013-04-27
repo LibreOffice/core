@@ -47,7 +47,7 @@ interface XUIElementSettings : com::sun::star::uno::XInterface
     */
     void updateSettings();
 
-    /** provides a <type>UIElementSettings</type> instance that provides access
+    /** provides a UIElementSettings instance that provides access
         to the structure of user interface element if the user interface element
         type supports it.
 

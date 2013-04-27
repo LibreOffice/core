@@ -33,7 +33,7 @@
 
 
 /** This abstract service specifies the general characteristics of all
-    <type>Shape</type>s.
+    Shapes.
 
     @see XShape
     @see com::sun::star::lang::XComponent
@@ -48,20 +48,20 @@ published service Shape
     interface com::sun::star::beans::XPropertySet;
 
 
-    /** This gives you the size and position of this <type>Shape</type>
+    /** This gives you the size and position of this Shape
                 and lets you change it. You can use <member>getShapeType</member>
                 to determine what kind of shape this is.
      */
     interface com::sun::star::drawing::XShape;
 
 
-    /** is used for lifetime control of this <type>Shape</type>.
+    /** is used for lifetime control of this Shape.
      */
     interface com::sun::star::lang::XComponent;
 
 
-    /** The <type>XShapeDescriptor</type> tells you what kind of
-                <type>Shape</type> this instance is.
+    /** The XShapeDescriptor tells you what kind of
+                Shape this instance is.
      */
     interface com::sun::star::drawing::XShapeDescriptor;
 
@@ -76,47 +76,47 @@ published service Shape
         [optional] interface com::sun::star::beans::XTolerantMultiPropertySet;
 
 
-    /** is used to query or change the ZOrder of this <type>Shape</type>. */
+    /** is used to query or change the ZOrder of this Shape. */
     [optional, property] long ZOrder;
 
 
-    /** This is the ID of the <type>Layer</type> to which this
-        <type>Shape</type> is attached.
+    /** This is the ID of the Layer to which this
+        Shape is attached.
      */
     [optional, property] short LayerID;
 
 
-    /** This is the name of the <type>Layer</type> to which this
-        <type>Shape</type> is attached.
+    /** This is the name of the Layer to which this
+        Shape is attached.
      */
     [optional, property] string LayerName;
 
 
-    /** If this is <FALSE/>, the <type>Shape</type> is not visible
-        on screen outputs. Please note that the <type>Shape</type> may still
+    /** If this is <FALSE/>, the Shape is not visible
+        on screen outputs. Please note that the Shape may still
         be visible when printed, see <member>Printable</member>.
      */
     [optional, property] boolean Visible;
 
 
-    /** If this is <FALSE/>, the <type>Shape</type> is not visible
+    /** If this is <FALSE/>, the Shape is not visible
         on printer outputs.
      */
     [optional, property] boolean Printable;
 
 
-    /** With this set to <TRUE/>, this <type>Shape</type>
+    /** With this set to <TRUE/>, this Shape
         cannot be moved interactively in the user interface.
      */
     [optional, property] boolean MoveProtect;
 
 
-    /** This is the name of this <type>Shape</type>.
+    /** This is the name of this Shape.
      */
     [optional, property] string Name;
 
 
-    /** With this set to <TRUE/>, this <type>Shape</type> may not be
+    /** With this set to <TRUE/>, this Shape may not be
         sized interactively in the user interface.
      */
     [optional, property] boolean SizeProtect;

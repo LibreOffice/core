@@ -36,7 +36,7 @@ module com { module sun { module star { module sdb {
  */
 interface XDataAccessDescriptorFactory
 {
-    /** creates a <type>DataAccessDescriptor</type> which supports all properties
+    /** creates a DataAccessDescriptor which supports all properties
         defined for this service, even if they're normally optional only.
     */
     ::com::sun::star::beans::XPropertySet

@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module script {
 published interface XInvocationAdapterFactory2 : com::sun::star::uno::XInterface
 {
     /** Creates an adapter interface of given types for calling the given
-        <type>XInvocation</type> interface.
+        XInvocation interface.
 
         @param Invocation
                invocation interface being called on incoming adapter calls

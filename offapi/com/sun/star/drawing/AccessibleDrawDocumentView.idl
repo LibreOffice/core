@@ -26,10 +26,10 @@
 
 module com {  module sun {  module star {  module drawing {
 
-/** The <type>AccessibleDrawDocumentView</type> service is implemented by
+/** The AccessibleDrawDocumentView service is implemented by
     views of Draw and Impress documents.
 
-    <p>An object that implements the <type>AccessibleDrawDocumentView</type>
+    <p>An object that implements the AccessibleDrawDocumentView
     service provides information about the view of a Draw or Impress
     document in one of the various view modes.  With its children it gives
     access to the current page and the shapes on that page.</p>
@@ -115,7 +115,7 @@ service AccessibleDrawDocumentView
         of the currently visible area and to let the user find children
         (i.e. shapes) that cover a given test point.  The more interesting
         part of the graphical representation of a draw page lies in its
-        children.  See the <type>AccessibleShape</type> service for more
+        children.  See the AccessibleShape service for more
         information about shapes.</p>
 
         @see AccessibleShape

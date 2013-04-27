@@ -43,12 +43,12 @@ interface XAnimationNode : ::com::sun::star::container::XChild
             <li><atom>double</atom> describes the element begin as an offset in seconds from an implicit syncbase.
                 The definition of the implicit syncbase depends upon the element's parent time container.
                 The offset is measured in parent simple time.</li>
-            <li><type>Event</type> describes an event and an optional offset that determine the
+            <li>Event describes an event and an optional offset that determine the
                 element begin. The element begin is defined relative to the time that the event
                 is raised.</li>
             <li><const>Timing::INDEFINITE</const> the begin of the element will be determined by an
                 external event to the element.</li>
-            <li><type>sequence&lt;any&gt;</type> a sequence of values described above if more than
+            <li>sequence&lt;any&gt; a sequence of values described above if more than
                 one begin value is defined for this element.</li>
             <li><void/> if no begin behavior is defined for this element.</li>
             </ul>
@@ -78,12 +78,12 @@ interface XAnimationNode : ::com::sun::star::container::XChild
             <li><atom>double</atom> describes the element end as an offset in seconds from an implicit syncbase.
                 The definition of the implicit syncbase depends upon the element's parent time container.
                 The offset is measured in parent simple time.</li>
-            <li><type>Event</type> describes an event and an optional offset that determine the
+            <li>Event describes an event and an optional offset that determine the
                 element end. The element end is defined relative to the time that the event
                 is raised.</li>
             <li><const>Timing::INDEFINITE</const> the end of the element will be determined by an
                 external event to the element.</li>
-            <li><type>sequence&lt;any&gt;</type> a sequence of values described above if more than
+            <li>sequence&lt;any&gt; a sequence of values described above if more than
                 one begin value is defined for this element.</li>
             <li><void/> if no end behavior is defined for this element.</li>
             </ul>
@@ -101,7 +101,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
 
         <member>EndSync</member> is
             either a <atom>short</atom> constant from <const>EndSync</const>,
-            an interface reference to a child <type>XTimeContainer</type>
+            an interface reference to a child XTimeContainer
             or <void/>.
 
         @see http://www.w3.org/TR/smil20/smil-timing.html#adef-endsync

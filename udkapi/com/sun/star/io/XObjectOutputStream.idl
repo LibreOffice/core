@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module io {
 
 /** stores XPersistObject implementations into the stream
 
-    <p>An implementation of the type <type>XPersistObject</type>
+    <p>An implementation of the type XPersistObject
     uses this interface to write its internal state into a stream.
     Have a look there for the explanation of the concept.
 

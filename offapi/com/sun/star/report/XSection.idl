@@ -31,7 +31,7 @@
  module com {  module sun {  module star {  module report {
  interface XGroup;
 
-/** identifies a <type>XSection</type> inside a report.
+/** identifies a XSection inside a report.
 
     <p>A section acts like a container of report components. This generic
     construction allows the definition of hierarchies of reports and their

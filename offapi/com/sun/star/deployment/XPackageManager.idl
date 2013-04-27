@@ -34,7 +34,7 @@
 
 module com { module sun { module star { module deployment {
 
-/** The <type>XPackageManager</type> interface is used to add or remove
+/** The XPackageManager interface is used to add or remove
     packages to a specific repository. This interface represents a particular
     repository.
     Packages are deployable files, e.g. scripts or UNO components.
@@ -48,11 +48,11 @@ module com { module sun { module star { module deployment {
     </p>
     <p>
     All interface methods do neither register nor revoke an extension.
-    This happens exclusively by <type>XExtensionManager</type>.
+    This happens exclusively by XExtensionManager.
     </p>
     <p>
     Objects of this interface are created using the
-    <type>XPackageManagerFactory</type> service resp. the singleton
+    XPackageManagerFactory service resp. the singleton
     <code>
     /singletons/com.sun.star.deployment.thePackageManagerFactory
     </code>.
@@ -61,7 +61,7 @@ module com { module sun { module star { module deployment {
     @see thePackageManagerFactory
     @since OOo 2.0
     @deprecated
-         Use <type>XExtensionManager</type>.
+         Use XExtensionManager.
 */
 interface XPackageManager
 {
@@ -82,10 +82,10 @@ interface XPackageManager
     */
     string getContext();
 
-    /** gets the supported <type>XPackageTypeInfo</type>s.
+    /** gets the supported XPackageTypeInfos.
 
         @return
-                supported <type>XPackageTypeInfo</type>s.
+                supported XPackageTypeInfos.
     */
     sequence<XPackageTypeInfo> getSupportedPackageTypes();
 
@@ -115,7 +115,7 @@ interface XPackageManager
         @param xCmdEnv
                command environment for error and progress handling
         @return
-               <type>XPackage</type> handle
+               XPackage handle
     */
     XPackage addPackage( [in] string url,
                          [in] sequence<com::sun::star::beans::NamedValue> properties,
@@ -141,7 +141,7 @@ interface XPackageManager
         @param xCmdEnv
                command environment for error and progress handling
         @return
-               <type>XPackage</type> handle
+               XPackage handle
     */
     XPackage importExtension( [in] XPackage extension,
                          [in] com::sun::star::task::XAbortChannel xAbortChannel,
@@ -181,7 +181,7 @@ interface XPackageManager
         @param xCmdEnv
                command environment for error and progress handling
         @return
-               <type>XPackage</type> handle
+               XPackage handle
     */
     XPackage getDeployedPackage(
         [in] string identifier,
@@ -291,7 +291,7 @@ interface XPackageManager
         The extension must be managed by this package manager, that is, it must
         be recorded in its database.  The package manager calls
         XPackage::checkPrerequisites and updates its data base with the
-        result. The result, which is from <type>Prerequisites</type> will be
+        result. The result, which is from Prerequisites will be
         returned.
      */
     long checkPrerequisites(

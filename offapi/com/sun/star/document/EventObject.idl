@@ -37,7 +37,7 @@ published struct EventObject: com::sun::star::lang::EventObject
     /** specifies the name of the occurred event
 
         <p>
-        For a list of possible event names see <type>Events</type>.
+        For a list of possible event names see Events.
         </p>
      */
     string EventName;

@@ -57,7 +57,7 @@ published constants KCharacterType
     /// base form
     const long BASE_FORM  = 0x00000040;
 
-    /** any <type>UnicodeType</type>::..._LETTER.
+    /** any UnicodeType::..._LETTER.
         Note that a LETTER must not necessarily be ALPHA */
     const long LETTER     = 0x00000080;
 };

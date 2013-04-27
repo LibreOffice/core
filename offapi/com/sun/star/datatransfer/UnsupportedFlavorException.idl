@@ -26,7 +26,7 @@
 module com { module sun { module star { module datatransfer {
 
 /** Exception will be thrown if there is a request for data in a
-    <type>DataFlavor</type> that is not supported by a data source.
+    DataFlavor that is not supported by a data source.
 
     @see com::sun::star::datatransfer::DataFlavor
     @see com::sun::star::datatransfer::XTransferable

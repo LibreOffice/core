@@ -43,7 +43,7 @@ published interface XChangesSet: com::sun::star::container::XElementAccess
 {
     /** queries for all contained changes at once.
 
-        @returns an array of <type>ElementChange</type> holding information about
+        @returns an array of ElementChange holding information about
             each changes  that is part of this object.
      */
     sequence<ElementChange> getAllChanges();

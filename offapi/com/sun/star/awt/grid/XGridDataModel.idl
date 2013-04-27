@@ -28,10 +28,10 @@
 
 module com {  module sun {  module star {  module awt { module grid {
 
-/** An instance of this interface is used by the <type>UnoControlGrid</type> to
+/** An instance of this interface is used by the UnoControlGrid to
     retrieve the content data that is displayed in the actual control.
 
-    If you do not need your own model implementation, you can also use the <type>DefaultGridDataModel</type>.
+    If you do not need your own model implementation, you can also use the DefaultGridDataModel.
 
     @since OOo 3.3
 */

@@ -75,7 +75,7 @@ service TextRangeContentProperties
 
     /** may contain a nested text content.
 
-        For example, may contain an <type>InContentMetadata</type> or a
+        For example, may contain an InContentMetadata or a
         <type scope="com::sun::star::text::textfield">MetadataField</type>.
      */
     [optional, readonly, property] com::sun::star::text::XTextContent

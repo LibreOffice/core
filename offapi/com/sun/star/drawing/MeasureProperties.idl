@@ -30,7 +30,7 @@
  module com {  module sun {  module star {  module drawing {
 
 
-/** This service describes a <type>MeasureShape</type>.
+/** This service describes a MeasureShape.
  */
 published service MeasureProperties
 {
@@ -56,7 +56,7 @@ published service MeasureProperties
      */
     [property] long MeasureHelpLineOverhang;
 
-    /** This enumeration specifies the <type>MeasureKind</type>.
+    /** This enumeration specifies the MeasureKind.
      */
     [property] com::sun::star::drawing::MeasureKind MeasureKind;
 

@@ -25,7 +25,7 @@
 
 module com { module sun { module star { module ucb {
 
-/** is a factory for <type>CachedContentResultSet</type> implementations.
+/** is a factory for CachedContentResultSet implementations.
 */
 published service CachedContentResultSetFactory : XCachedContentResultSetFactory;
 

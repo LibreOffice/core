@@ -34,7 +34,7 @@ module com { module sun { module star { module deployment {
 */
 interface XPackageRegistry
 {
-    /** binds a package URL to a <type>XPackage</type> handle.
+    /** binds a package URL to a XPackage handle.
         The returned UNO package handle ought to late-initialize itself,
         thus the process of binding must not be an expensive operation, because
         it is not abortable.
@@ -48,7 +48,7 @@ interface XPackageRegistry
         may still contain all registration data of that extension, but the
         actual extension files do not exist anymore. The registration data must
         then be cleaned of all the remains of that extension. To to that one
-        creates an <type>XPackage</type> object on behalf of that extension and
+        creates an XPackage object on behalf of that extension and
         calls <member>XPackage::revokePakage</member>. The parameter
         <code>removed</code> indicates this case. The returned object may not
         rely on the file or folder to which refers <code>url</url>. Instead it
@@ -56,7 +56,7 @@ interface XPackageRegistry
         of this object (<member>XPackage::revokePackage</member>).
 
         The implementation must ensure that there is only one instance of
-        <type>XPackage</type> for the same <code>url</code> at any
+        XPackage for the same <code>url</code> at any
         time. Therefore calling <member>bindPackage</member> again with the same
         <code>url</code> but different <code>mediaType<code> (the exception is,
         if previously an empty string was provided to cause the determination
@@ -64,7 +64,7 @@ interface XPackageRegistry
         exception. An <type
         scope="com::sun::star::lang">IllegalArgumentException</type> will be
         thrown in case of a different <code>mediaType</code> parameter and a
-        <type>InvalidRemovedParameterException</type> is thrown if the
+        InvalidRemovedParameterException is thrown if the
         <code>removed</code> parameter is different.
 
         The <code>identifier</code> parameter must be provided when
@@ -88,7 +88,7 @@ interface XPackageRegistry
         @param xCmdEnv
                command environment for error and progress handling
         @return
-               <type>XPackage</type> handle
+               XPackage handle
     */
     XPackage bindPackage(
         [in] string url,
@@ -101,10 +101,10 @@ interface XPackageRegistry
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::lang::IllegalArgumentException);
 
-    /** gets the supported <type>XPackageTypeInfo</type>s.
+    /** gets the supported XPackageTypeInfos.
 
         @return
-                supported <type>XPackageTypeInfo</type>s.
+                supported XPackageTypeInfos.
     */
     sequence<XPackageTypeInfo> getSupportedPackageTypes();
 

@@ -52,20 +52,20 @@ module com {  module sun {  module star {  module lang {
     should support the following interfaces: </p>
 
     <dl>
-    <dt><type>XServiceInfo</type></dt>
+    <dt>XServiceInfo</dt>
     <dd>supported interfaces/ implementation name</dd>
 
-    <dt><type>XSingleComponentFactory</type>(optional)</dt>
+    <dt>XSingleComponentFactory(optional)</dt>
     <dd>is used to create instances of the implementation.</dd>
 
-    <dt><type>XComponent</type> (optional)</dt>
+    <dt>XComponent (optional)</dt>
     <dd>The service manager calls the method
     <member scope="com::sun::star::lang">XComponent::dispose</member>
     on the factory when going down (i.e. it is commonly disposed by the component context).</dd>
     </dl>
 
     <p>Since LibreOffice 3.6, in addition to instances of
-    <type>XServiceInfo</type> et al, the
+    XServiceInfo et al, the
     <type scope="com::sun::star::container">XSet</type> of at least the default
     C++ service manager implementation now also supports sequences of
     <type scope="com::sun::star::beans">NamedValue</type> in <code>insert</code>
@@ -104,7 +104,7 @@ published service ServiceManager
         It is possible to enumerate all implementations that support the
         service specified with the argument of the
         <member scope="com::sun::star::container">XContentEnumerationAccess::createContentEnumeration</member> method.
-        The enumerator commonly returns <type>XSingleComponentFactory</type>
+        The enumerator commonly returns XSingleComponentFactory
         interfaces.
         </p>
     */
@@ -114,7 +114,7 @@ published service ServiceManager
     */
     [optional] interface com::sun::star::beans::XPropertySet;
     /** specifies the default component context to be used, if instanciating services
-        via <type>XMultiServiceFactory</type>
+        via XMultiServiceFactory
     */
     [optional, property] com::sun::star::uno::XComponentContext DefaultContext;
 };

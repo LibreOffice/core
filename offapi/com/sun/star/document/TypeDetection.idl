@@ -31,7 +31,7 @@ module com { module sun { module star { module document {
 
     <p>
     It's possible to make a "flat" detection which may use internal configuration
-    data only - or a "deep" detection which use special <type>ExtendedTypeDetection</type>
+    data only - or a "deep" detection which use special ExtendedTypeDetection
     services to look into the document stream. Last mode can be suppressed to perform the operation.
     Of course the results can't be guaranteed then. (e.g. in case the extension was changed)
     </p>
@@ -97,7 +97,7 @@ published service TypeDetection
                 <td><em>ContentFormat</em></td>
                 <td>[string]</td>
                 <td>It's and identifier, which is used for a deep format detection.
-                    An <type>ExtendedTypeDetection</type> use this value to match
+                    An ExtendedTypeDetection use this value to match
                     a given content to this type. e.g. It's interpreted as the doc type
                     of an XML stream or as an identifier inside a file header.
                 </td>
@@ -108,7 +108,7 @@ published service TypeDetection
                 <td>This list contains different URL patterns, which identify this type.
                     E.g. data base contents can be described by an new defined protocol like "sql://select*".
                     In combination with a suitable <type scope="com::sun::star::frame">FrameLoader</type> or
-                    <type>ImportFilter</type>/<type>ExportFilter</type> it would be possible then, to
+                    ImportFilter/ExportFilter it would be possible then, to
                     layout a SQL query output into an office frame.</td>
             </tr>
             <tr>

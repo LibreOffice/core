@@ -27,7 +27,7 @@
 module com { module sun { module star { module document {
 
 
-/** allows to be notified of events happening in an <type>OfficeDocument</type>
+/** allows to be notified of events happening in an OfficeDocument
 
     <p>This interface is the successor of the XEventListener interface, which should not be used
     anymore.</p>

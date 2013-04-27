@@ -27,7 +27,7 @@
 
  module com {  module sun {  module star {  module text {
 
-/** is thrown whenever a method gets a <type>TextContent</type>
+/** is thrown whenever a method gets a TextContent
     as an actual argument when the text content cannot be used for that
     operation.
  */

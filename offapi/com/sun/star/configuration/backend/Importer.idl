@@ -29,8 +29,8 @@ module com { module sun { module star { module configuration { module backend {
 /**
     imports data into a configuration layer.
 
-    <p> The configuration changes are read from a <type>XLayer</type>
-        and stored into a <type>Backend</type>.
+    <p> The configuration changes are read from a XLayer
+        and stored into a Backend.
     </p>
 
     @since OOo 1.1.2

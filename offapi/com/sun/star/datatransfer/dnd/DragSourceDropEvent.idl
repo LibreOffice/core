@@ -25,8 +25,8 @@
 
 module com { module sun { module star { module datatransfer { module dnd {
 
-/** The <type>DragSourceDropEvent</type> is delivered from an object that implements
-    <type>XDragSourceContext</type> to its currently registered drag source listener's.
+/** The DragSourceDropEvent is delivered from an object that implements
+    XDragSourceContext to its currently registered drag source listener's.
 
     <p>It contains sufficient information for the originator of the operation to
     provide appropriate feedback to the end user when the operation completes.</p>

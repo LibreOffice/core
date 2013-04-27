@@ -24,7 +24,7 @@
 module com {  module sun {  module star {  module table {
 
 
-/** specifies the location of the shadow in a <type>ShadowFormat</type>.
+/** specifies the location of the shadow in a ShadowFormat.
  */
 published enum ShadowLocation
 {

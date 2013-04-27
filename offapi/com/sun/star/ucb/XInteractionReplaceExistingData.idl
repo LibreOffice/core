@@ -28,7 +28,7 @@ module com { module sun { module star { module ucb {
     existing data.
 
     <p>For example, this continuation can be selected when handling a
-    <type>NameClashResolveRequest</type> in order to instruct the requester
+    NameClashResolveRequest in order to instruct the requester
     to overwrite the clashing data.
 
     @version  1.0

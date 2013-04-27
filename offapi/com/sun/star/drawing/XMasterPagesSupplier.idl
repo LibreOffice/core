@@ -29,13 +29,13 @@
 
 
 /** must be supported to provide access to the
-    <type>MasterPage</type>s of a multi-page drawing-layer.
+    MasterPages of a multi-page drawing-layer.
  */
 published interface XMasterPagesSupplier: com::sun::star::uno::XInterface
 {
 
     /** @returns
-                an indexed container with the service <type>MasterPages</type>.
+                an indexed container with the service MasterPages.
      */
     com::sun::star::drawing::XDrawPages getMasterPages();
 

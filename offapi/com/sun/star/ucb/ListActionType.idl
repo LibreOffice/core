@@ -25,8 +25,8 @@ module com { module sun { module star { module ucb {
 
 /** These values are used to specify the type of change happened to a list.
 
-    <p>A change happened is sent from an <type>XDynamicResultSet</type>
-    as <type>ListAction</type> to a <type>XDynamicResultSetListener</type>.
+    <p>A change happened is sent from an XDynamicResultSet
+    as ListAction to a XDynamicResultSetListener.
 
     <p>The values are contained in <member>ListAction::ListActionType</member>.
 */
@@ -39,7 +39,7 @@ published constants ListActionType
     to a new listener.
 
     <p>The member <member>ListAction::ActionInfo</member> is required to
-    contain a struct <type>WelcomeDynamicResultSetStruct</type>.
+    contain a struct WelcomeDynamicResultSetStruct.
     This struct contains two
     <type scope="com::sun::star::sdbc">XResultSet</type>s (old and new).
     During and after the notification only the new set is valid for access.
@@ -134,7 +134,7 @@ published constants ListActionType
 
     The identity of a row has changed.
 
-    <p>This action is related to <type>ContentAction</type> == EXCHANGED.
+    <p>This action is related to ContentAction == EXCHANGED.
 
     <p>The members <member>ListAction::Count</member> and
     <member>ListAction::Position</member> contain the position and count of the

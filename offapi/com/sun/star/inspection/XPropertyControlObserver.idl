@@ -29,13 +29,13 @@ interface XPropertyControl;
 
 
 /** specifies an interface for components to observer certain aspects
-    of an <type>XPropertyControl</type>.
+    of an XPropertyControl.
 
     @since OOo 2.2
 */
 interface XPropertyControlObserver
 {
-    /** notifies the observer that a certain <type>XPropertyControl</type>'s UI
+    /** notifies the observer that a certain XPropertyControl's UI
         representation gained the focus.
 
         @param Control
@@ -43,7 +43,7 @@ interface XPropertyControlObserver
     */
     void   focusGained( [in] XPropertyControl Control );
 
-    /** notifies the observer that a certain <type>XPropertyControl</type>'s value
+    /** notifies the observer that a certain XPropertyControl's value
         changed.
 
         @param Control

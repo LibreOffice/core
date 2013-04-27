@@ -23,7 +23,7 @@
 
  module com {  module sun {  module star {  module text {
 
-/** These properties describe the way the <type>XPagePrintable</type> interface
+/** These properties describe the way the XPagePrintable interface
     prints the page on one printer page.
  */
 published service PagePrintSettings

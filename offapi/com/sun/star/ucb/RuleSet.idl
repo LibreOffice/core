@@ -25,11 +25,11 @@
 
 module com { module sun { module star { module ucb {
 
-/** describes a set of <type>Rule</type>s.
+/** describes a set of Rules.
 
     <p>A RuleSet is applied to a folder. It consists of a sequence of rules.
-    Each rule consists of a sequence of <type>RuleTerm</type>s describing the
-    objects to which the rule should by applied and the <type>RuleAction</type>
+    Each rule consists of a sequence of RuleTerms describing the
+    objects to which the rule should by applied and the RuleAction
     which should be performed on the matching objects.
 */
 published struct RuleSet

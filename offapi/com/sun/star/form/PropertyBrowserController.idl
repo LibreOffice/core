@@ -33,7 +33,7 @@
 
     <p>The controller can be plugged into an <type scope="com::sun::star::frame">XFrame</type>, and will
     provide a visual component for inspecting control properties. This means it allows to interactively control
-    several aspects of a <type>FormControlModel</type> or <type>DataAwareControlModel</type>, such as it's
+    several aspects of a FormControlModel or DataAwareControlModel, such as it's
     data binding, it's layout, and it's event binding</p>
 
     <p>For using a PropertyBrowserController, you need to
@@ -83,7 +83,7 @@ published service PropertyBrowserController
 
     /** controls the actually visible page.
 
-        <p>The aspects of a <type>DataAwareControlModel</type> which can be browsed and modified
+        <p>The aspects of a DataAwareControlModel which can be browsed and modified
         using this controller can be separated into 3 groups: common aspects, data-awareness
         related aspects, and bound events.</br>
         The appearance of the visual component created by the controller is that 3 tab pages, one for

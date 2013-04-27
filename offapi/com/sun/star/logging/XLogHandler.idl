@@ -28,7 +28,7 @@
 module com { module sun { module star { module logging {
 
 
-/** provides possibilities to send <type>LogRecord</type>s to an arbitrary output
+/** provides possibilities to send LogRecords to an arbitrary output
     channel.
 
     @see XLogger
@@ -60,7 +60,7 @@ interface XLogHandler
     /** specifies the log level of this handler
 
         <p>Different handlers can have different log levels, which again might be
-        different from the log level of the <type>XLogger</type> for which the handlers
+        different from the log level of the XLogger for which the handlers
         are used.</p>
     */
     [attribute] long    Level;

@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module sheet {
 
 /** represents a collection of groups in a data pilot field.
 
-    <p>The members of this collection are instances of <type>DataPilotFieldGroup</type>
+    <p>The members of this collection are instances of DataPilotFieldGroup
     containing the names of all items in the group.</p>
 
     @see DataPilotField

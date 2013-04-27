@@ -96,7 +96,7 @@ interface XSpinValue : com::sun::star::uno::XInterface
 
     /** controls the orientation of the control
         @param orientation
-            one of the <type>ScrollBarOrientation</type> values specifying the orientation
+            one of the ScrollBarOrientation values specifying the orientation
         @throws com::sun::star::lang::NoSupportException
             in case the given orientation is not supported
      */

@@ -26,7 +26,7 @@
  module com {  module sun {  module star {  module sheet {
 
 
-/** enables a <type>SpreadsheetView</type> to freeze
+/** enables a SpreadsheetView to freeze
     columns and rows of the view.
  */
 published interface XViewFreezable: com::sun::star::uno::XInterface

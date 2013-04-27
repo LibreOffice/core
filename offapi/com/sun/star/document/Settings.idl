@@ -62,7 +62,7 @@ published service Settings
     /** specifies the update mode for links when loading text documents.
 
         <p>For supported values see the constants group
-        <type>LinkUpdateModes</type>.</p>
+        LinkUpdateModes.</p>
     */
     [optional, property] short LinkUpdateMode;
 
@@ -230,7 +230,7 @@ published service Settings
     /** forbid use of printer metrics for layout
 
         <p>For supported values see the constants group
-        <type>PrinterIndependentLayout</type>.</p>
+        PrinterIndependentLayout.</p>
      */
     [optional, property] short PrinterIndependentLayout;
 

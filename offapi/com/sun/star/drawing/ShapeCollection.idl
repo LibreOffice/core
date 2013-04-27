@@ -25,11 +25,11 @@
 module com { module sun { module star { module drawing {
 
 /** This service describes a generic container to manage collections of
-    <type>Shape</type>. The <type>Shape</type> that are added to this
+    Shape. The Shape that are added to this
     collection are not owned by the collection.
 
     This service is used by the view f.e. to return a collection of
-    <type>Shape</type> that are selected at the ui.
+    Shape that are selected at the ui.
 */
 published service ShapeCollection : com::sun::star::drawing::XShapes;
 

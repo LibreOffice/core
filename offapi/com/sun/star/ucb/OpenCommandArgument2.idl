@@ -35,7 +35,7 @@ module com { module sun { module star { module ucb {
 published struct OpenCommandArgument2 : OpenCommandArgument
 {
     /** The sort criteria for the rows of the returned
-        <type>ContentResultSet</type>.
+        ContentResultSet.
 
         <p>The result set implementation may ignore this parameter, if it
         cannot sort the data by the given criteria in an efficient way (i.e.

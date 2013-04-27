@@ -26,8 +26,8 @@ module com { module sun { module star { module configuration { module backend {
 
 
 /**
-    implements <type>BackendAdapter</type> that maintains a cache so it
-    can operate even if the <type>SingleBackend</type> holding the data
+    implements BackendAdapter that maintains a cache so it
+    can operate even if the SingleBackend holding the data
     is inaccessible.
 
     @see com::sun::star::configuration::backend::OnlineBackend
@@ -37,19 +37,19 @@ module com { module sun { module star { module configuration { module backend {
 published service OfflineBackend
 {
 
-    /** provides access to configuration data from a <type>SingleBackend</type>.
+    /** provides access to configuration data from a SingleBackend.
 
       <p>If no backend is provided during initialization or if the context
         contains an <code>Offline</code> flag that is <TRUE/>, then off-line mode
         is activated. This may fail, if the off-line cache has not been filled
         during a previous execution.
       </p>
-      <p>Less entities may be available from <type>XBackendEntities</type>,
+      <p>Less entities may be available from XBackendEntities,
       when operating in off-line mode than when operating with an on-line
-      <type>SingleBackend</type>.
+      SingleBackend.
       </p>
       <p>If off-line mode is not invoked, the implementation behaves
-        like any other <type>BackendAdapter</type>.
+        like any other BackendAdapter.
       </p>
 
       */

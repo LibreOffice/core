@@ -61,7 +61,7 @@ published interface XAutoTextGroup: com::sun::star::container::XNameAccess
                     com::sun::star::container::ElementExistException,
                     com::sun::star::io::IOException );
 
-    /** creates a new <type>AutoTextEntry</type> entry.
+    /** creates a new AutoTextEntry entry.
      */
     com::sun::star::text::XAutoTextEntry insertNewByName( [in] string aName,
              [in] string aTitle,

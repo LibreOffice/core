@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module sheet {
  */
 struct ExternalLinkInfo
 {
-    /** Link type, one of <type>ExternalLinkType</type> constants.
+    /** Link type, one of ExternalLinkType constants.
      */
     long Type;
 
@@ -48,7 +48,7 @@ struct ExternalLinkInfo
         quotes cover both, the document name and the sheet name.</li>
 
         <li>If <member>Type</member> is <const>ExternalLinkType::DDE</const>,
-        this member shall contain a <type>DDELinkInfo</type> describing
+        this member shall contain a DDELinkInfo describing
         service name, topic, and all known items of a DDE link.</li>
         </ol></p>
      */

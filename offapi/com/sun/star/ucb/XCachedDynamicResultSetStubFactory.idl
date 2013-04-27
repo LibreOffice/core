@@ -27,48 +27,48 @@
 
 module com { module sun { module star { module ucb {
 
-/** creates a <type>CachedDynamicResultSetStub</type> and connects a non-remote
-    optimized <type>DynamicResultSet</type> to a remote optimized
-    <type>CachedDynamicResultSet</type>.
+/** creates a CachedDynamicResultSetStub and connects a non-remote
+    optimized DynamicResultSet to a remote optimized
+    CachedDynamicResultSet.
 
     <p>Pay attention to instantiate this helper on server side where your source
-    <type>DynamicResultSet</type> was instantiated.
+    DynamicResultSet was instantiated.
 
     <p>Method
     <member>XCachedDynamicResultSetStubFactory::createCachedDynamicResultSetStub</member>
     can be used to create a stub on server side.
 
-    <p>If you have instantiated a <type>CachedDynamicResultSet</type> on client
+    <p>If you have instantiated a CachedDynamicResultSet on client
     side already, use method <member>connectToCache</member> to connect your
     given DynamicResultSet with this Cache.
 
     <p>The needed cache on server side you can create using
-    <type>XCachedDynamicResultSetFactory</type>.
+    XCachedDynamicResultSetFactory.
 */
 
 published interface XCachedDynamicResultSetStubFactory: com::sun::star::uno::XInterface
 {
-    /** creates a remote optimizes <type>XDynamicResultSet</type>.
+    /** creates a remote optimizes XDynamicResultSet.
 
         @param Source
-        must be an instance of service <type>DynamicResultSet</type>.
+        must be an instance of service DynamicResultSet.
 
         @returns
-        an instance of service <type>CachedDynamicResultSetStub</type>.
+        an instance of service CachedDynamicResultSetStub.
     */
 
     com::sun::star::ucb::XDynamicResultSet  createCachedDynamicResultSetStub(
                 [in] com::sun::star::ucb::XDynamicResultSet Source );
 
-    /** If you have instantiated a <type>CachedDynamicResultSet</type> on
+    /** If you have instantiated a CachedDynamicResultSet on
         client side already, use this to connect your given Source on server
         side to the TargetCache.
 
         @param Source
-        is an instance of service <type>DynamicResultSet</type>.
+        is an instance of service DynamicResultSet.
 
         @param TargetCache
-        is an instance of service <type>CachedDynamicResultSet</type>.
+        is an instance of service CachedDynamicResultSet.
 
         @param SortingInfo
         can be an empty sequence. Otherwise, Source will be sorted according

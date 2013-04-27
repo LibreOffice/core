@@ -45,7 +45,7 @@ interface XAnimatedSprite : XSprite
         full [0,1] range of the <member>XAnimation::render</member>'s
         t parameter, or a full sequence of sprite bitmaps drawn). Once
         an animation is running, the associated
-        <type>XSpriteCanvas</type> handles screen updates
+        XSpriteCanvas handles screen updates
         automatically. That means, changes to position or alpha are
         reflected on screen automatically. Please note further that
         sprite visibility and animation are unrelated, i.e. a hidden
@@ -67,7 +67,7 @@ interface XAnimatedSprite : XSprite
         A subsequent <member>XAnimatedSprite::startAnimation</member>
         will commence the sequence at the point where it was stopped
         with here. Once an animation is stopped, the associated
-        <type>XSpriteCanvas</type> does not update changed sprites
+        XSpriteCanvas does not update changed sprites
         anymore.<p>
     */
     void stopAnimation();
@@ -78,7 +78,7 @@ interface XAnimatedSprite : XSprite
         If the animation is currently running, the next frame that is
         drawn after this method has finished, will be the first
         one. Please note that if an animation is not started, the
-        associated <type>XSpriteCanvas</type> does not update changed
+        associated XSpriteCanvas does not update changed
         sprites automatically.<p>
      */
     void resetAnimation();
@@ -89,7 +89,7 @@ interface XAnimatedSprite : XSprite
 
         This method has no effect when called for a bitmap-sequence
         sprite. Please note that if an animation is not started, the
-        associated <type>XSpriteCanvas</type> does not update changed
+        associated XSpriteCanvas does not update changed
         sprites automatically, but has to be told to do so via
         <member>XSpriteCanvas::updateScreen()</member>.<p>
      */
@@ -105,7 +105,7 @@ interface XAnimatedSprite : XSprite
         <member>XSpriteCanvas::updateAnimation()</member> after this
         method, as it automatically rerenders, if necessary. Please
         note that if an animation is not started, the associated
-        <type>XSpriteCanvas</type> does not update changed sprites
+        XSpriteCanvas does not update changed sprites
         automatically, but has to be told to do so via
         <member>XSpriteCanvas::updateScreen()</member>.<p>
 
@@ -114,7 +114,7 @@ interface XAnimatedSprite : XSprite
         <member>XAnimation::render()</member> method, or when drawing
         the sprite's bitmaps, respectively.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if the view transformation matrix is singular.
     */
     void setViewState( [in] ViewState aViewState )
@@ -128,7 +128,7 @@ interface XAnimatedSprite : XSprite
         redraws for every state change.<p>
 
         Please note that if an animation is not started, the
-        associated <type>XSpriteCanvas</type> does not update changed
+        associated XSpriteCanvas does not update changed
         sprites automatically, but has to be told to do so via
         <member>XSpriteCanvas::updateScreen()</member>.<p>
 
@@ -154,7 +154,7 @@ interface XAnimatedSprite : XSprite
         Whether this method should implicitly call
         <member>XSpriteCanvas::updateAnimation</member> or not.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if one of the passed parameters does not lie in the specified,
         permissible range.
      */

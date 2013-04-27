@@ -32,7 +32,7 @@ published interface XEventsSupplier: com::sun::star::uno::XInterface
         this object
 
         @returns
-            an <type>Events</type> description object
+            an Events description object
     */
     com::sun::star::container::XNameReplace getEvents();
 };

@@ -43,7 +43,7 @@ published service ChartTitle
     [optional, property] boolean AutomaticPosition;
 
 
-    /** If a <type>ChartTitle</type> may be stored as XML element,
+    /** If a ChartTitle may be stored as XML element,
         this service should be supported in order to preserve unparsed
         XML attributes.
 

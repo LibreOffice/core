@@ -33,7 +33,7 @@
 published interface XInfoPrinter: com::sun::star::awt::XPrinterPropertySet
 {
 
-    /** creates a new object which implements an <type>XDevice</type>.
+    /** creates a new object which implements an XDevice.
 
         <p>The current settings are used as a template.</p>
      */

@@ -25,7 +25,7 @@ module com { module sun { module star { module form { module runtime {
 
 
 /** specifies the operations on a user interface form, as supported by the
-    <type>XFormOperations</type> interface.
+    XFormOperations interface.
 
     @since OOo 2.2
 */
@@ -44,7 +44,7 @@ constants FormFeature
         including the potentially active insertion row.
 
         <p>This is not strictly an operation you can do on a form, but rather a
-        state you can retrieve (and display to the user) using the <type>XFormOperations</type>'s
+        state you can retrieve (and display to the user) using the XFormOperations's
         respective methods.</p>
 
         <p>The state obtained here is a string, not a number. This is because in an UI

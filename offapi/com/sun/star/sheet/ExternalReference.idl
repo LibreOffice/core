@@ -63,9 +63,9 @@ struct ExternalReference
 
     /** Reference data.
 
-        <p>This can store either <type>SingleReference</type> for a single
-        cell reference, <type>ComplexReference</type> for a cell range
-        reference, or simply a <type>string</type> for a defined name.</p>
+        <p>This can store either SingleReference for a single
+        cell reference, ComplexReference for a cell range
+        reference, or simply a string for a defined name.</p>
 
         <p>The <member>SingleReference::Sheet</member> member shall contain
         the index of the external sheet cache containing the values of the

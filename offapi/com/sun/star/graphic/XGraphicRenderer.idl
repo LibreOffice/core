@@ -27,11 +27,11 @@ module com { module sun { module star { module graphic
 {
 
 /** This interfaces exposes just one method to render
-    a <type>XGraphic</type> container
+    a XGraphic container
   */
 interface XGraphicRenderer : ::com::sun::star::uno::XInterface
 {
-    /** Renders the <type>XGraphic</type> container
+    /** Renders the XGraphic container
 
         @param Graphic
             The graphic container to be rendered

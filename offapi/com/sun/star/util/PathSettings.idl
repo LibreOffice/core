@@ -34,7 +34,7 @@ module com {  module sun {  module star {  module  util {
     (org/openoffice/Office/Common.xml).<br>
     This service supports the usage of path variables to define
     paths that a relative to other office or system directories.
-    See <type>PathSubstitution</type>
+    See PathSubstitution
     </p>
 
     @since OOo 1.1.2

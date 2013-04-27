@@ -33,7 +33,7 @@ module com { module sun { module star { module accessibility {
     are organized can be navigated in freely.  It typically represents
     spatial relationship of one object containing a set of children like a
     dialog box contains a set of buttons.  Additionally the
-    <type>XAccessibleContext</type> interface of this service exposes
+    XAccessibleContext interface of this service exposes
     methods that provide access to the actual object's content.  This can be
     the object's role, name, description, and so on.</p>
 

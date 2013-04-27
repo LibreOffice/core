@@ -48,30 +48,30 @@ service GenericDrawingDocument
     /** this factory lets you create various services that are
         used inside a drawing document
 
-        <p>The following services are <type>Shape</type>s.
+        <p>The following services are Shapes.
         They are created by the documents factory and must
-        be inserted into a <type>DrawPage</type> or <type>MasterPage</type>
+        be inserted into a DrawPage or MasterPage
         of this document.
 
         <ul>
-            <li><type>RectangleShape</type></li>
-            <li><type>EllipseShape</type></li>
-            <li><type>ControlShape</type></li>
-            <li><type>ConnectorShape</type></li>
-            <li><type>MeasureShape</type></li>
-            <li><type>LineShape</type></li>
-            <li><type>PolyPolygonShape</type></li>
-            <li><type>PolyLineShape</type></li>
-            <li><type>OpenBezierShape</type></li>
-            <li><type>ClosedBezierShape</type></li>
-            <li><type>GraphicObjectShape</type></li>
-            <li><type>GroupShape</type></li>
-            <li><type>TextShape</type></li>
-            <li><type>OLE2Shape</type></li>
-            <li><type>PageShape</type></li>
-            <li><type>CaptionShape</type></li>
-            <li><type>PluginShape</type></li>
-            <li><type>AppletShape</type></li>
+            <li>RectangleShape</li>
+            <li>EllipseShape</li>
+            <li>ControlShape</li>
+            <li>ConnectorShape</li>
+            <li>MeasureShape</li>
+            <li>LineShape</li>
+            <li>PolyPolygonShape</li>
+            <li>PolyLineShape</li>
+            <li>OpenBezierShape</li>
+            <li>ClosedBezierShape</li>
+            <li>GraphicObjectShape</li>
+            <li>GroupShape</li>
+            <li>TextShape</li>
+            <li>OLE2Shape</li>
+            <li>PageShape</li>
+            <li>CaptionShape</li>
+            <li>PluginShape</li>
+            <li>AppletShape</li>
         </ul>
 
         <p>The following services are all <type scope="com::sun::star::text">TextField</type>
@@ -112,7 +112,7 @@ service GenericDrawingDocument
         inside the document.
 
         <br>A <type scope="com::sun::star::image">ImageMap</type> can be obtained from a
-        <type>GraphicObjectShape</type>
+        GraphicObjectShape
 
         <ul>
             <li><type scope="com::sun::star::image">ImageMapRectangleObject</type></li>
@@ -139,22 +139,22 @@ service GenericDrawingDocument
 
 
     /** provides an object that is implementing the service
-                <type>DrawPage</type>s. With this service you have access to the
-                <type>DrawPage</type>s inside a document.
+                DrawPages. With this service you have access to the
+                DrawPages inside a document.
      */
     interface com::sun::star::drawing::XDrawPagesSupplier;
 
 
     /** returns an object that is implementing the service
-                <type>MasterPages</type>. With this service you have access to the
-                <type>MasterPage</type>s inside a document.
+                MasterPages. With this service you have access to the
+                MasterPages inside a document.
      */
     interface com::sun::star::drawing::XMasterPagesSupplier;
 
 
     /** returns an object that is implementing the service
-                <type>LayerManager</type>. This service lets you manipulate the
-                <type>Layer</type>s of this document.
+                LayerManager. This service lets you manipulate the
+                Layers of this document.
      */
     interface com::sun::star::drawing::XLayerSupplier;
 

@@ -96,9 +96,9 @@ interface XFormOperations : ::com::sun::star::lang::XComponent
         evaluating to <TRUE/>.<p>
 
         @param Feature
-            the feature whose state is to be determined. Must be one of the <type>FormFeature</type>
+            the feature whose state is to be determined. Must be one of the FormFeature
             constants.<br/>
-            An invalid value here will be silently ignored, and simply return a <type>FeatureState</type>
+            An invalid value here will be silently ignored, and simply return a FeatureState
             indicating <em>disabled</em> with a <NULL/> state.</p>
     */
     FeatureState    getState(
@@ -111,7 +111,7 @@ interface XFormOperations : ::com::sun::star::lang::XComponent
         <member>FeatureState::Enabled</member> member.</p>
 
         @param Feature
-            the feature whose state is to be determined. Must be one of the <type>FormFeature</type>
+            the feature whose state is to be determined. Must be one of the FormFeature
             constants.<br/>
             An invalid value here will be silently ignored, and simply return <FALSE/>.
     */
@@ -122,7 +122,7 @@ interface XFormOperations : ::com::sun::star::lang::XComponent
     /** executes the operation associated with the given feature
 
         @param Feature
-            the feature which is to be executed. Must be one of the <type>FormFeature</type>
+            the feature which is to be executed. Must be one of the FormFeature
             constants.
 
         @throws ::com::sun::star::lang::IllegalArgumentException
@@ -149,11 +149,11 @@ interface XFormOperations : ::com::sun::star::lang::XComponent
     /** executes the operation associated with the given feature, with passing arguments for execution
 
         @param Feature
-            the feature which is to be executed. Must be one of the <type>FormFeature</type>
+            the feature which is to be executed. Must be one of the FormFeature
             constants.
 
         @param Arguments
-            the named arguments for the feature to execute. See the <type>FormFeature</type> list
+            the named arguments for the feature to execute. See the FormFeature list
             for features which require arguments.
 
         @throws ::com::sun::star::lang::IllegalArgumentException

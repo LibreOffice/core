@@ -26,8 +26,8 @@
 module com { module sun { module star { module form { module runtime {
 
 
-/** implements a callback for a <type>XFormOperations</type> instance, which is called
-    when the state of one or more <type>FormFeature</type>s might have changed.
+/** implements a callback for a XFormOperations instance, which is called
+    when the state of one or more FormFeatures might have changed.
 
     @see XFormOperations
 
@@ -35,7 +35,7 @@ module com { module sun { module star { module form { module runtime {
 */
 interface XFeatureInvalidation
 {
-    /** invalidates the given <type>FormFeature</type>s
+    /** invalidates the given FormFeatures
 
         <p>Invalidation means that any user interface representation (such as toolbox buttons), or
         any dispatches associated with the features in question are potentially out-of-date, and

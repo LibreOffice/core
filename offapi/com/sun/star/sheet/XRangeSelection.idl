@@ -38,7 +38,7 @@ published interface XRangeSelection: com::sun::star::uno::XInterface
     /** starts the range selection.
 
         @param aArguments
-        the <type>RangeSelectionArguments</type> that specify how the
+        the RangeSelectionArguments that specify how the
         range selection is done.
      */
     void startRangeSelection(

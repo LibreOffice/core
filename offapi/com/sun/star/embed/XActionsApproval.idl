@@ -38,10 +38,10 @@ published interface XActionsApproval: com::sun::star::uno::XInterface
 
         @param nAction
             a value specifying the action that should be approved. Could take
-            values from <type>Actions</type> constants set. The explicit set
+            values from Actions constants set. The explicit set
             of the actions should be documented by the object that is going
             to use this interface for approval as for example
-            <type>InstanceLocker</type> does.
+            InstanceLocker does.
 
         @return
             returns <TRUE/> in case the specified action is approved.

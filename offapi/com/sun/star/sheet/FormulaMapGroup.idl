@@ -29,7 +29,7 @@ module com {  module sun {  module star {  module sheet {
     specify for which group of symbols the mappings are to be obtained.
 
     If no bit is set, a sequence of special mappings is returned in the
-    order that is defined by <type>FormulaMapGroupSpecialOffset</type>.
+    order that is defined by FormulaMapGroupSpecialOffset.
     Note that the special group and other groups are mutual exclusive.
  */
 constants FormulaMapGroup

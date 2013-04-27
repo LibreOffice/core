@@ -29,7 +29,7 @@
 
 
 /** Provides access to the controls within an
-    <type>UnoControlContainer</type>.
+    UnoControlContainer.
  */
 published interface XControlContainer: com::sun::star::uno::XInterface
 {

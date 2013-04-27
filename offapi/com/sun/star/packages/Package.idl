@@ -28,7 +28,7 @@
 
 module com {  module sun {  module star {  module packages {
 
-/** The <type>Package</type> is a service that provides access to a set of
+/** The Package is a service that provides access to a set of
     files and folders contained within a Package. One instance of the
     Package service exists for each Package file to be manipulated.
 

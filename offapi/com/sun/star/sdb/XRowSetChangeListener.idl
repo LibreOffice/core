@@ -27,7 +27,7 @@ module com { module sun { module star { module sdb {
 
 
 /** is implemented by components which want to be notified when the <code>RowSet</code> supplied
-    by a <type>XRowSetSupplier</type> changes.
+    by a XRowSetSupplier changes.
 
     @see XRowSetChangeBroadcaster
     @see XRowSetSupplier
@@ -35,7 +35,7 @@ module com { module sun { module star { module sdb {
  */
     interface XRowSetChangeListener : ::com::sun::star::lang::XEventListener
 {
-    /** notifies the listener that the <code>RowSet</code> associated with a <type>XRowSetSupplier</type>
+    /** notifies the listener that the <code>RowSet</code> associated with a XRowSetSupplier
         has changed.
     */
     void onRowSetChanged( [in] ::com::sun::star::lang::EventObject i_Event );

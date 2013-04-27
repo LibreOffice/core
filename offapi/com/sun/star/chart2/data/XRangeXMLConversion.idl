@@ -48,7 +48,7 @@ interface XRangeXMLConversion : ::com::sun::star::uno::XInterface
         raises( com::sun::star::lang::IllegalArgumentException );
 
     /** converts an XML-style range into the internal
-        <type>DataProvider</type>'s format.
+        DataProvider's format.
      */
     string convertRangeFromXML( [in] string aXMLRange )
         raises( com::sun::star::lang::IllegalArgumentException );

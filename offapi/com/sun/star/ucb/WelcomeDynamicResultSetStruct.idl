@@ -25,7 +25,7 @@
 module com { module sun { module star { module ucb {
 
 /** This struct is to be contained in the first notification of an
-    <type>XDynamicResultSet</type>.
+    XDynamicResultSet.
 
     @see XDynamicResultSet
     @see ListEvent

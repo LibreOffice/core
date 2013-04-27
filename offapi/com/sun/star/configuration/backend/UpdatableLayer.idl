@@ -59,8 +59,8 @@ published service UpdatableLayer
     /**
       provides write access to the contents of the layer.
 
-       <p> Depending of the actual type (simple, i.e pure <type>XLayer</type> or
-       composite, i.e <type>XCompositeLayer</type>) of the current layer and
+       <p> Depending of the actual type (simple, i.e pure XLayer or
+       composite, i.e XCompositeLayer) of the current layer and
        the provided replacement layer, the operation performed
        by <member>XUpdatableLayer::replaceWith()</member>, will vary.
        </p>
@@ -89,7 +89,7 @@ published service UpdatableLayer
            </dd>
 
        </dl>
-       <em> Not all implementations of <type>XUpdatableLayer</type>
+       <em> Not all implementations of XUpdatableLayer
             support conversions of the replacement layer.
             In such a case the sublayers of the provided layer may be ignored
             or all simple data be merged into the main layer.

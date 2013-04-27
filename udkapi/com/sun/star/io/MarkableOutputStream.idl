@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module io {
     marks.
     <p>The implementation stores the data as long as marks exists
     and later writes these data into the output stream,
-    that has been set previously at the <type>XActiveDataSource</type>
+    that has been set previously at the XActiveDataSource
     interface. </p>
  */
 published service MarkableOutputStream

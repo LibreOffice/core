@@ -28,7 +28,7 @@
  module com {  module sun {  module star {  module drawing {
 
 
-/** is implemented by a <type>ControlShape</type> to access the controls model.
+/** is implemented by a ControlShape to access the controls model.
 
     @see com::sun::star::drawing::ControlShape
     @see com::sun::star::awt::UnoControlModel
@@ -36,23 +36,23 @@
 published interface XControlShape: com::sun::star::drawing::XShape
 {
 
-    /** returns the control model of this <type>Shape</type>.
+    /** returns the control model of this Shape.
 
         @return
             if there is already a control model assigned
-            to this <type>ControlShape</type>, than its returned.
+            to this ControlShape, than its returned.
             Otherwise you get an empty reference.
      */
     com::sun::star::awt::XControlModel getControl();
 
 
-    /** sets the control model for this <type>Shape</type>.
+    /** sets the control model for this Shape.
 
         @param xControl
             this will be the new control model that is
             displayed with this shape. You may change
             the model more than once during the lifetime
-            of a <type>ControlShape</type>
+            of a ControlShape
 
      */
     void setControl( [in] com::sun::star::awt::XControlModel xControl );

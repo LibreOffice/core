@@ -25,7 +25,7 @@ module com { module sun { module star { module sdb {
 
 
 /** specifies different mode how boolean comparison predicates are to be generated
-    by a <type>SingleSelectQueryComposer</type>.
+    by a SingleSelectQueryComposer.
  */
 constants BooleanComparisonMode
 {

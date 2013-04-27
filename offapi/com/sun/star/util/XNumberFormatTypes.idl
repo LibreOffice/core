@@ -43,7 +43,7 @@ published interface XNumberFormatTypes: com::sun::star::uno::XInterface
 
                 @param nType
                 the type of the number format. Must be one of the
-                <type>NumberFormat</type> constants.
+                NumberFormat constants.
      */
     long getStandardFormat( [in] short nType,
              [in] com::sun::star::lang::Locale nLocale );

@@ -28,11 +28,11 @@ interface XObjectInspectorUI;
 
 
 /** implements a component which can default-fill the help section of an
-    <type>ObjectInspector</type>.
+    ObjectInspector.
 
-    <p>The component registers a <type>XPropertyControlObserver</type> at an
-    <type>XObjectInspectoryUI</type> interface. Whenever it then is notified
-    of a <type>XPropertyControl</type> getting the focus, it will try to deduce
+    <p>The component registers a XPropertyControlObserver at an
+    XObjectInspectoryUI interface. Whenever it then is notified
+    of a XPropertyControl getting the focus, it will try to deduce
     the extended help text of this control's window, and set this help text at the
     object inspector's help section.</p>
  */

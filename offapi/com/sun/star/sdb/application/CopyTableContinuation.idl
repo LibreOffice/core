@@ -25,7 +25,7 @@ module com { module sun { module star { module sdb { module application {
 
 
 /** specifies the possible continuations when copying a table row via a
-    <type>CopyTableWizard</type> failed.
+    CopyTableWizard failed.
  */
 constants CopyTableContinuation
 {
@@ -33,7 +33,7 @@ constants CopyTableContinuation
     */
     const short Proceed         = 0;
 
-    /** is used to indicate the next registered <type>XCopyTableListener</type> should be
+    /** is used to indicate the next registered XCopyTableListener should be
         called.
     */
     const short CallNextHandler = 1;

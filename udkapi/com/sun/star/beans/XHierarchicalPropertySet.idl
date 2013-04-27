@@ -40,12 +40,12 @@ module com {  module sun {  module star {  module beans {
     a hierarchy of properties from an implementation.
 
     <p> Usually an object that implements this interface
-        also implements <type>XPropertySet</type> and at
+        also implements XPropertySet and at
         least some of the properties have subproperties.  </p>
 
     <p> This interface allows direct access to subsubproperties, ...
         up to an arbitrary nesting depth. Often the intermediate
-        elements of the hierarchy implement <type>XProperty</type>.  </p>
+        elements of the hierarchy implement XProperty.  </p>
 
     <p> Each implementation specifies how the
         hierarchical property names, that are
@@ -63,14 +63,14 @@ published interface XHierarchicalPropertySet: com::sun::star::uno::XInterface
     /** retrieve information about the hierarchy of properties
 
         @returns
-                the <type>XHierarchicalPropertySetInfo</type> interface,
+                the XHierarchicalPropertySetInfo interface,
                 which describes the property hierarchy of the object which
                 supplies this interface.
 
         @returns
                 <NULL/> if the implementation cannot or will
                 not provide information about the properties; otherwise the
-                interface <type>XHierarchicalPropertySetInfo</type> is returned.
+                interface XHierarchicalPropertySetInfo is returned.
      */
     com::sun::star::beans::XHierarchicalPropertySetInfo
                 getHierarchicalPropertySetInfo();
@@ -89,7 +89,7 @@ published interface XHierarchicalPropertySet: com::sun::star::uno::XInterface
 
         @throws PropertyVetoException
                 if the property is constrained and the change is vetoed by a
-                <type>XVetoableChangeListener</type>.
+                XVetoableChangeListener.
 
         @throws com::sun::star::uno::lang::IllegalArgumentException
                 if <var>aValue</var> is not a legal value for this property or

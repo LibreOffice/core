@@ -30,10 +30,10 @@
     files will be opened in two different modes, registry1 will be opened with read/write
     rights and registry2 will be opened read-only.
     In the context of this service, the functions <code>open</code>, <code>close</code>,
-    and <code>destroy</code> from <type>XSimpleRegistry</type> are not supported and
+    and <code>destroy</code> from XSimpleRegistry are not supported and
     throw an exception if they are used.
     <dl>
-    <dt>Functions of <type>XSimpleRegistry</type>:
+    <dt>Functions of XSimpleRegistry:
     <dl>
     <dt>    <b>getURL</b>
     </dt>
@@ -64,7 +64,7 @@
     <br>
 
     </dt>
-    <dt>Functions of <type>XRegistryKey</type>:
+    <dt>Functions of XRegistryKey:
     <dl>
     <dt> <b>openKey</b>
     </dt>
@@ -107,7 +107,7 @@
     </dl>
     <br>
     How to initialize the registries:<br>
-    Use a sequence of <type>XSimpleRegistry</type> with two elements. The first element must be
+    Use a sequence of XSimpleRegistry with two elements. The first element must be
     the registry which is opened with read/write rights and the second element must be
     the read-only one.<br>
     Two different ways are possible:<br>

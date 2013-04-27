@@ -31,7 +31,7 @@ module com { module sun { module star { module document {
 
     <p>
     Such filters can be used for importing a content.
-    Of course it's possible to combine it with the service <type>ExportFilter</type>
+    Of course it's possible to combine it with the service ExportFilter
     if export functionality should be available at same implementation too.
     </p>
 
@@ -58,10 +58,10 @@ published service ImportFilter
 
         <p>
         Tip:<br>
-        If same implementation provides the service <type>ExportFilter</type> too,
+        If same implementation provides the service ExportFilter too,
         code must distinguish between filtering into a target document (for import) or
         filtering from a source document (for export). This can be recognized by saving
-        state of used interfaces <type>XExporter</type> or <type>XImporter</type>!
+        state of used interfaces XExporter or XImporter!
         Otherwise it's not clear which action is required here.
          </p>
      */
@@ -70,14 +70,14 @@ published service ImportFilter
     /** support initialization of filter with its own configuration
 
         <p>
-        A filter object must be created by global service <type>FilterFactory</type>.
+        A filter object must be created by global service FilterFactory.
         If filter supports this optional interface, he will be initialized by the factory directly
         after creation. The factory will pass follow information to this new instance:
             <ul>
                 <li>first item will be a set of configuration data of the filter</li>
                 <li>after that will follow may given optional parameters of call
                     <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
-                    of service <type>FilterFactory</type>.
+                    of service FilterFactory.
                 </li>
             </ul>
         See description of service <member>FilterFactory::XNameContainer</member> for a description of
@@ -89,7 +89,7 @@ published service ImportFilter
     /** provides access to the internal name of this filter
 
         <p>
-        This internal filter name can be used on service <type>FilterFactory</type>
+        This internal filter name can be used on service FilterFactory
         to get further information about it (e.g. his registration for mime types or extensions etc.)
         It's important that returned string is the "internal name" of the filter which must be
         unambiguous against all other registered filters in current installation.

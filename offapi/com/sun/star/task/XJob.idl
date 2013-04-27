@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module task {
 /** specifies a job which is to be executed synchronously
 
     <p>
-    Instead of <type>XAsyncJob</type> the implementation of this interface
+    Instead of XAsyncJob the implementation of this interface
     will be executed synchronously everytime. That means: they can be sure that the
     current stack context will be blocked till this job finish it's work.
     </p>
@@ -44,7 +44,7 @@ published interface XJob : com::sun::star::uno::XInterface
         @param Arguments
             are arguments for executing the job. Their semantics is completely implementation dependent. Usually,
             a concrete implementation of a job specifies in its service descriptions which parameters are allowed
-            (or expected). This values are persistent by the configuration of the <type>JobExecutor</type>
+            (or expected). This values are persistent by the configuration of the JobExecutor
             which use this synchronous job. It's possible to write it back by use special protocol
             in return value.
 

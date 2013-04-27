@@ -27,18 +27,18 @@ module com {  module sun {  module star {  module form { module inspection {
 
 
 /** implements a <type scope="com::sun::star::inspection">XObjectInspectorModel</type> for
-    inspecting form components, in particular all components implementing the <type>FormComponent</type>
+    inspecting form components, in particular all components implementing the FormComponent
     service.
 
-    <p>A <type>DefaultFormComponentInspectorModel</type> provides the following handlers by default:
-    <ul><li><type>ButtonNavigationHandler</type></li>
-        <li><type>CellBindingPropertyHandler</type></li>
-        <li><type>EditPropertyHandler</type></li>
-        <li><type>EventHandler</type></li>
-        <li><type>FormComponentPropertyHandler</type></li>
-        <li><type>SubmissionPropertyHandler</type></li>
-        <li><type>XMLFormsPropertyHandler</type></li>
-        <li><type>XSDValidationPropertyHandler</type></li>
+    <p>A DefaultFormComponentInspectorModel provides the following handlers by default:
+    <ul><li>ButtonNavigationHandler</li>
+        <li>CellBindingPropertyHandler</li>
+        <li>EditPropertyHandler</li>
+        <li>EventHandler</li>
+        <li>FormComponentPropertyHandler</li>
+        <li>SubmissionPropertyHandler</li>
+        <li>XMLFormsPropertyHandler</li>
+        <li>XSDValidationPropertyHandler</li>
     </ul></p>
 
     @see com::sun::star::inspection::XObjectInspectorModel::HandlerFactories

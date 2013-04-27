@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module container {
 /** supports quick access to the information if a container currently
     contains elements.
 
-    <p>The <type>XContainer</type> interface is provided for containers
+    <p>The XContainer interface is provided for containers
     which need to broadcast changes within the container; that means
     the actions of adding or removing elements are broadcast to the
     listeners.  </p>

@@ -25,7 +25,7 @@
 
 module com { module sun { module star { module ucb {
 
-/** creates a <type>CachedContentResultSetStub</type>.
+/** creates a CachedContentResultSetStub.
 */
 
 published interface XCachedContentResultSetStubFactory: com::sun::star::uno::XInterface
@@ -34,10 +34,10 @@ published interface XCachedContentResultSetStubFactory: com::sun::star::uno::XIn
         <type scope="com::sun::star::sdbc">XResultSet</type>.
 
         @param xSource
-        must be an instance of service <type>ContentResultSet</type>.
+        must be an instance of service ContentResultSet.
 
         @returns
-        an instance of service <type>CachedContentResultSetStub</type>.
+        an instance of service CachedContentResultSetStub.
     */
     com::sun::star::sdbc::XResultSet    createCachedContentResultSetStub(
                         [in] com::sun::star::sdbc::XResultSet xSource );

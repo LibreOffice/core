@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module bridge {  module oleautomation
     </p>
     <p>
     When calling Automation objects from UNO the distinction between
-    <atom>double</atom> and date type is important. Therefore <type>Date</type>
+    <atom>double</atom> and date type is important. Therefore Date
     is declared as struct.
     </p>
 

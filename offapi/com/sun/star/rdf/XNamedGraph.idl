@@ -33,7 +33,7 @@ module com {   module sun {   module star {   module rdf {
 /** represents an RDF named graph that is stored in an RDF Repository.
 
     <p>
-    Note that this interface inherits from <type>XResource</type>: the
+    Note that this interface inherits from XResource: the
     name of the graph is the string value of the RDF node.
     This is so that you can easily make RDF statements about named graphs.
     </p>
@@ -80,8 +80,8 @@ interface XNamedGraph : XURI
 
         <p>
         Note that the ODF elements that can have metadata attached all
-        implement the interface <type>XMetadatable</type>, which inherits
-        from <type>XResource</type>, meaning that you can simply pass them
+        implement the interface XMetadatable, which inherits
+        from XResource, meaning that you can simply pass them
         in as arguments here, and it will magically work.
         </p>
 
@@ -114,8 +114,8 @@ interface XNamedGraph : XURI
 
         <p>
         Note that the ODF elements that can have metadata attached all
-        implement the interface <type>XMetadatable</type>, which inherits
-        from <type>XResource</type>, meaning that you can simply pass them
+        implement the interface XMetadatable, which inherits
+        from XResource, meaning that you can simply pass them
         in as arguments here, and it will magically work.
         </p>
 
@@ -150,8 +150,8 @@ interface XNamedGraph : XURI
 
         <p>
         Note that the ODF elements that can have metadata attached all
-        implement the interface <type>XMetadatable</type>, which inherits
-        from <type>XResource</type>, meaning that you can simply pass them
+        implement the interface XMetadatable, which inherits
+        from XResource, meaning that you can simply pass them
         in as arguments here, and it will magically work.
         </p>
 
@@ -173,7 +173,7 @@ interface XNamedGraph : XURI
         @returns
             an iterator over all RDF statements in the graph that match
             the parameters, represented as an
-            enumeration of <type>Statement</type>
+            enumeration of Statement
 
         @throws com::sun::star::container::NoSuchElementException
             if this graph does not exist in the repository any more

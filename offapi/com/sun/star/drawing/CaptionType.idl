@@ -23,7 +23,7 @@
 
 module com { module sun { module star { module drawing {
 
-/** This constants specifies the geometry of the line of a <type>CaptionShape</type>.
+/** This constants specifies the geometry of the line of a CaptionShape.
 
     @see CaptionShape
 */

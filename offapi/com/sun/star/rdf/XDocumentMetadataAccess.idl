@@ -50,7 +50,7 @@ module com {   module sun {   module star {   module rdf {
     </p>
 
     <p>
-    Note that this interface inherits from <type>XURI</type>: the
+    Note that this interface inherits from XURI: the
     base URI of the document is the string value of the RDF node.
     This is so that you can easily make RDF statements about the document.
     </p>
@@ -342,7 +342,7 @@ interface XDocumentMetadataAccess
         error reporting.</p>
 
         @param Medium
-            the <type>com::sun::star::document::MediaDescriptor</type>
+            the com::sun::star::document::MediaDescriptor
             representing the source
 
         @throws com::sun::star::lang::IllegalArgumentException
@@ -361,7 +361,7 @@ interface XDocumentMetadataAccess
     /** stores document metadata to a medium.
 
         @param Medium
-            the <type>com::sun::star::document::MediaDescriptor</type>
+            the com::sun::star::document::MediaDescriptor
             representing the target
 
         @throws com::sun::star::lang::IllegalArgumentException

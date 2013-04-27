@@ -39,7 +39,7 @@ published interface XClipboardFactory: com::sun::star::uno::XInterface
     /** Creates a new named clipboard instance.
 
         @returns
-        A newly created instance of a <type>GenericClipboard</type>
+        A newly created instance of a GenericClipboard
         implementation.
 
         @param aName

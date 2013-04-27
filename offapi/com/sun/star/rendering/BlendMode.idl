@@ -24,7 +24,7 @@ module com { module sun { module star { module rendering {
 /** These constants determine some extra ways how the primitive color
     is combined with the background.<p>
 
-    @see <type>CompositeOperation</type>
+    @see CompositeOperation
 
     Please refer to the PDF specification for explanations of this
     constants.<p>

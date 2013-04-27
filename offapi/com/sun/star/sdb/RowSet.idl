@@ -148,9 +148,9 @@ published interface XParametersSupplier;
 
     <h3>Deletions</h3>
     <p>Via <member scope="com::sun::star::sdbc">XResultSetUpdate::deleteRow</member>, you can delete the current row of a
-    <type>RowSet</type>. This deleted row then doesn't vanish immediately, but is still present, and subsequent calls to
+    RowSet. This deleted row then doesn't vanish immediately, but is still present, and subsequent calls to
     <member scope="com::sun::star::sdbc">XResultSet::rowDeleted</member> will return <TRUE/>. The deleted row "vanishes" from
-    the <type>RowSet</type> as soon as the cursor is moved away from it.<br/>
+    the RowSet as soon as the cursor is moved away from it.<br/>
     As a consequence, the behavior of several other methods is affected:<br/>
     <dl>
         <dt><member scope="com::sun::star::sdbc">XResultSet::getRow</member></dt>
@@ -161,7 +161,7 @@ published interface XParametersSupplier;
         <dd>will let the deleted row vanish from the result set. As a consequence, the <member>RowCount</member>
             will decrease when you do such a move operation after deleting a row.<br/>
             A special case to note is the <code>next<code> call: When you delete row, say,
-            <code>15</code>, followed by <code>next</code>, then your <type>RowSet</type> afterwards
+            <code>15</code>, followed by <code>next</code>, then your RowSet afterwards
             still is on row 15, since the deleted row vanished with the move operation.</dd>
 
         <dt><member scope="com::sun::star::sdbc">XResultSet::refreshRow</member></dt>
@@ -199,7 +199,7 @@ published service RowSet
         <p>If you want a row set to be based on a parametrized query, you will usually use
         the <type scope="com::sun::star::sdbc">XParameters</type> interface.<br/>
         However, you can also choose to let an interaction handler supply such data. For this, you may
-        for instance instantiate an <type>InteractionHandler</type>, which asks the user for the
+        for instance instantiate an InteractionHandler, which asks the user for the
         data, or you may write your own one, which supplies the data from somewhere else.
         The default implementation will only ask for parameters which aren't set before through the <type scope="com::sun::star::sdbc">XParameters</type> interface.</p>
 
@@ -220,11 +220,11 @@ published service RowSet
 
         <p>The optional support of this interface is already implied with the support of the <type scope="com::sun::star::sdbc">ResultSet</type> service.</p>
 
-        <p>However, note that the additional support of the <type>XRowSetApproveBroadcaster</type> interface results
+        <p>However, note that the additional support of the XRowSetApproveBroadcaster interface results
         in a semantical extension: the methods <member scope="com::sun::star::sdbc">XResultSetUpdate::insertRow</member>,
         <member scope="com::sun::star::sdbc">XResultSetUpdate::updateRow</member> and <member scope="com::sun::star::sdbc">XResultSetUpdate::deleteRow</member>
-        will now throw the <type>RowSetVetoException</type> if the action which is to be performed was vetoed
-        by one of the <type>XRowSetApproveListener</type>'s.</p>
+        will now throw the RowSetVetoException if the action which is to be performed was vetoed
+        by one of the XRowSetApproveListener's.</p>
      */
     [optional] interface com::sun::star::sdbc::XResultSetUpdate;
 
@@ -232,10 +232,10 @@ published service RowSet
 
         <p>The optional support of this interface is already implied with the support of the <type scope="com::sun::star::sdbcx">ResultSet</type> service.</p>
 
-        <p>However, note that the additional support of the <type>XRowSetApproveBroadcaster</type> interface results
+        <p>However, note that the additional support of the XRowSetApproveBroadcaster interface results
         in a semantical extension: the method <member scope="com::sun::star::sdbcx">XDeleteRows::deleteRows</member>
-        will now throw the <type>RowSetVetoException</type> if the deletion was vetoed
-        by one of the <type>XRowSetApproveListener</type>'s.</p>
+        will now throw the RowSetVetoException if the deletion was vetoed
+        by one of the XRowSetApproveListener's.</p>
      */
     [optional] interface com::sun::star::sdbcx::XDeleteRows;
 

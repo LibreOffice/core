@@ -28,8 +28,8 @@ module com {   module sun {   module star {   module document {
     and user-defined fields.
 
     <p>
-    This service replaces the deprecated <type>DocumentInfo</type> and
-    <type>StandaloneDocumentInfo</type> services.
+    This service replaces the deprecated DocumentInfo and
+    StandaloneDocumentInfo services.
     </p>
 
     @since OOo 3.0

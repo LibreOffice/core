@@ -28,9 +28,9 @@ module com { module sun { module star { module datatransfer { module dnd {
  published interface XDragSource;
  published interface XDragSourceContext;
 
-/** This class is the base class for <type>DragSourceDragEvent</type> and <type>DragSourceDropEvent</type>.
+/** This class is the base class for DragSourceDragEvent and DragSourceDropEvent.
 
-    <p>To access the <type>XDragSource</type> that originated this event, use the
+    <p>To access the XDragSource that originated this event, use the
     <member scope="com::sun::star::lang">EventObject::Source</member> member of
     this object.</p>
 */

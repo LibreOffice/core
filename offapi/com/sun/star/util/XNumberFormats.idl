@@ -32,13 +32,13 @@
  module com {  module sun {  module star {  module util {
 
 
-/** provides access to multiple <type>NumberFormat</type>s.
+/** provides access to multiple NumberFormats.
  */
 published interface XNumberFormats: com::sun::star::uno::XInterface
 {
 
     /** @returns
-                    a readonly <type>NumberFormatProperties</type>.
+                    a readonly NumberFormatProperties.
      */
     com::sun::star::beans::XPropertySet getByKey( [in] long nKey );
 
@@ -48,7 +48,7 @@ published interface XNumberFormats: com::sun::star::uno::XInterface
 
                 @param  nType
                         the type of number formats to return. Must be one of the
-                        <type>NumberFormat</type> constants.
+                        NumberFormat constants.
 
                 @param  nLanguage
                         the language of number formats to return.

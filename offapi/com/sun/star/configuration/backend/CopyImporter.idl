@@ -38,7 +38,7 @@ published service CopyImporter
     /** allows importing configuration data into a backend.
 
         <p> In this implementation, the changes are copied over any
-            <type>XLayer</type> data that already exists in the <type>Backend</type>,
+            XLayer data that already exists in the Backend,
             replacing it completely.
         </p>
       */
@@ -48,7 +48,7 @@ published service CopyImporter
     /** allows initializing the implementation with settings that control
         its behavior .
 
-        <p> This interface, which is optional in <type>Importer</type>
+        <p> This interface, which is optional in Importer
             is mandatory in this service and supports the following arguments
             which must be provided as
             <type scope="com::sun::star::beans">NamedValue</type>:

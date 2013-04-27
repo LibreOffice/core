@@ -35,30 +35,30 @@ published enum ChartDataChangeType
 
 
     /** The range of columns and rows, given in the
-         <type>ChartDataChangeEvent</type>, has changed.
+         ChartDataChangeEvent, has changed.
      */
     DATA_RANGE,
 
 
-    /** The column given in the <type>ChartDataChangeEvent</type>, was
+    /** The column given in the ChartDataChangeEvent, was
         inserted.
      */
     COLUMN_INSERTED,
 
 
-    /** The row given in the <type>ChartDataChangeEvent</type>, was
+    /** The row given in the ChartDataChangeEvent, was
         inserted.
      */
     ROW_INSERTED,
 
 
-    /** The column given in the <type>ChartDataChangeEvent</type>, was
+    /** The column given in the ChartDataChangeEvent, was
         deleted.
     */
     COLUMN_DELETED,
 
 
-    /** The row given in the <type>ChartDataChangeEvent</type>, was
+    /** The row given in the ChartDataChangeEvent, was
         deleted.
      */
     ROW_DELETED

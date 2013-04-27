@@ -206,11 +206,11 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
         clauses.</p>
 
         <p>There are various use cases for this. For instance, you might want to use the
-        statement represented by a <type>QueryDefinition</type>, and extend it with additional
+        statement represented by a QueryDefinition, and extend it with additional
         filters or sort orders, while not touching the respective parts already present
         in <member>QueryDefinition::Command</member>. This can be achieved by setting the
         <member>QueryDefinition::Command</member> as <member>ElementaryQuery</member> of a
-        <type>SingleSelectQueryComposer</type>.</p>
+        SingleSelectQueryComposer.</p>
 
         <p>If, in such a scenario, you would be interested in the filter part of the
         <member>QueryDefinition::Command</member>, you would set it via
@@ -220,7 +220,7 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
         <p>If you'd be interested in the composed filter, you would set the
         <member>QueryDefinition::Command</member> as <member>ElementaryQuery</member>, add your
         filter, and propagate the resulting query (<member>XSingleSelectQueryAnalyzer::getQuery</member>)
-        to an <type>SingleSelectQueryAnalyzer</type> instance via
+        to an SingleSelectQueryAnalyzer instance via
         <member>XSingleSelectQueryAnalyzer::setQuery</member>.</p>
     */
     [attribute] string ElementaryQuery

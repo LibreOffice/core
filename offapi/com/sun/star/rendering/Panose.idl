@@ -23,34 +23,34 @@ module com { module sun { module star { module rendering {
 
 struct Panose
 {
-    /// <type>PanoseFamilyTypes</type>
+    /// PanoseFamilyTypes
     byte    FamilyType;
 
-    /// <type>PanoseSerifStyle</type>
+    /// PanoseSerifStyle
     byte    SerifStyle;
 
-    /// <type>PanoseWeight</type>
+    /// PanoseWeight
     byte    Weight;
 
-    /// <type>PanoseProportion</type>
+    /// PanoseProportion
     byte    Proportion;
 
-    /// <type>PanoseContrast</type>
+    /// PanoseContrast
     byte    Contrast;
 
-    /// <type>PanoseStrokeVariation</type>
+    /// PanoseStrokeVariation
     byte    StrokeVariation;
 
-    /// <type>PanoseArmStyle</type>
+    /// PanoseArmStyle
     byte    ArmStyle;
 
-    /// <type>PanoseLetterForm</type>
+    /// PanoseLetterForm
     byte    Letterform;
 
-    /// <type>PanoseMidline</type>
+    /// PanoseMidline
     byte    Midline;
 
-    /// <type>PanoseXHeight</type>
+    /// PanoseXHeight
     byte    XHeight;
 };
 

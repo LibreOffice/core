@@ -37,7 +37,7 @@ interface XFunction
     interface com::sun::star::lang::XComponent;
 
     /** allows the navigation to the functions object.
-        The method setParent from <type>XChild</type> is not supported and will throw an exception when called.
+        The method setParent from XChild is not supported and will throw an exception when called.
     */
     interface com::sun::star::container::XChild;
 

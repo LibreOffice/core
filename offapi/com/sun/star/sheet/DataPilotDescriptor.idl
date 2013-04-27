@@ -46,7 +46,7 @@ published service DataPilotDescriptor
     [optional] interface com::sun::star::beans::XPropertySet;
 
 
-    /** Provides access to the <type>DataPilotField</type> used to layout
+    /** Provides access to the DataPilotField used to layout
         multiple data fields.
      */
     [optional] interface XDataPilotDataLayoutFieldSupplier;
@@ -61,7 +61,7 @@ published service DataPilotDescriptor
     [optional, property] sequence< com::sun::star::beans::PropertyValue > ImportDescriptor;
 
 
-    /** specifies the name of a <type>DataPilotSource</type> implementation
+    /** specifies the name of a DataPilotSource implementation
         for the data pilot table.
 
     @since OOo 3.3

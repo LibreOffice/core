@@ -42,7 +42,7 @@ published interface XMultiPropertySet: com::sun::star::uno::XInterface
 {
 
     /** @returns
-            the <type>XPropertySetInfo</type> interface, which describes
+            the XPropertySetInfo interface, which describes
             all properties of the object to which this interface belongs.
             <const>NULL</const> is returned if the object cannot or will
             not provide information about the properties.
@@ -95,7 +95,7 @@ published interface XMultiPropertySet: com::sun::star::uno::XInterface
     sequence<any> getPropertyValues( [in] sequence<string> aPropertyNames );
 
 
-    /** adds an <type>XPropertiesChangeListener</type> to the
+    /** adds an XPropertiesChangeListener to the
         specified property with the specified names.
 
         <p>The implementation can ignore the names of the properties
@@ -116,7 +116,7 @@ published interface XMultiPropertySet: com::sun::star::uno::XInterface
              [in] com::sun::star::beans::XPropertiesChangeListener xListener );
 
 
-    /** removes an <type>XPropertiesChangeListener</type> from the listener list.
+    /** removes an XPropertiesChangeListener from the listener list.
 
         <p>It is a "noop" if the listener is not registered.  </p>
 
@@ -131,7 +131,7 @@ published interface XMultiPropertySet: com::sun::star::uno::XInterface
     void removePropertiesChangeListener( [in] com::sun::star::beans::XPropertiesChangeListener xListener );
 
 
-    /** fires a sequence of <type>PropertyChangeEvent</type>s to the specified
+    /** fires a sequence of PropertyChangeEvents to the specified
         listener.
 
         @param aPropertynames

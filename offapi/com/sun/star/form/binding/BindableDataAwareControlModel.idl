@@ -50,13 +50,13 @@ module com {  module sun {  module star {  module form { module binding {
     data of the control model is written into the associated
     <type scope="com::sun::star::form::component">DataForm</type> column.</p>
 
-    <p><type>BindableDataAwareControlModel</type>'s additionally support an alternative value
+    <p>BindableDataAwareControlModel's additionally support an alternative value
     binding, which forces them to exchange their value with another foreign instance.
     In some sense, they are an abstraction of the data aware control models, which only
     support a specialized, hard-coded value binding (namely the binding to a
     <type scope="com::sun::star::form::component">DataForm</type> column).</p>
 
-    <p>For this, they provide the <type>XBindableValue</type> interface which allows to
+    <p>For this, they provide the XBindableValue interface which allows to
     set an external component to exchange the value with.</p>
 
     <p>The following rules apply when a data aware control model is bound to an external value binding:
@@ -71,26 +71,26 @@ module com {  module sun {  module star {  module form { module binding {
                 of the control model is loaded (<type scope="com::sun::star::form">XLoadable</type>).
             </li>
             <li><b>Immediacy</b><br/>
-                When a <type>BindableDataAwareControlModel</type> is bound to an external value,
+                When a BindableDataAwareControlModel is bound to an external value,
                 then every change in the control model's value is <em>immediately</em> reflected
                 in the external binding. This is a difference to SQL bindings of most
                 <type scope="com::sun::star::form">DataAwareControlModel</type>'s, where changes
                 in the control model's value are only propagated to the bound column upon explicit
                 request via <member scope="com::sun::star::form">XBoundComponent::commit</member>.<br/>
-                Note that this restriction is inherited from the <type>BindableControlModel</type>.
+                Note that this restriction is inherited from the BindableControlModel.
             </li>
             <li><b>Cloning</b><br/>
                 <type scope="com::sun::star::form">FormControlModel</type>s support cloning themselves
                 via the <type scope="com::sun::star::util">XCloneable</type> interface which they
                 inherit from the <type scope="com::sun::star::awt">UnoControlModel</type> service.</br>
-                When a <type>BindableDataAwareControlModel</type> is cloned while it has an active
+                When a BindableDataAwareControlModel is cloned while it has an active
                 external value binding, then the clone is also bound to the same binding instance.<br/>
-                Note that this restriction is inherited from the <type>BindableControlModel</type>.
+                Note that this restriction is inherited from the BindableControlModel.
             </li>
         </ul>
     </p>
 
-    <p>When a <type>BindableDataAwareControlModel</type> is being bound to an external value,
+    <p>When a BindableDataAwareControlModel is being bound to an external value,
     using <member>XBindableValue::setValueBinding</member>,
     then the control model (it's value property, respectively) and the external value are
     initially synchronized by setting the external value (<member>XValueBinding::getValue</member>)

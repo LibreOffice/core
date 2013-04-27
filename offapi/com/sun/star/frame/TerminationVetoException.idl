@@ -24,11 +24,11 @@
 
  module com {  module sun {  module star {  module frame {
 
-/** can be thrown by a <type>XTerminateListener</type> to prevent the environment
+/** can be thrown by a XTerminateListener to prevent the environment
     (e.g., desktop) from terminating
 
     <p>
-    If a <type>XTerminateListener</type> use this exception for a veto against
+    If a XTerminateListener use this exception for a veto against
     the termination of the office, he will be the new "owner" of it.
     After his own operation will be finished, he MUST try to terminate the
     office again. Any other veto listener can intercept that again or office

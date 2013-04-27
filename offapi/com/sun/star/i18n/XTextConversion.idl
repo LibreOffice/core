@@ -48,11 +48,11 @@ published interface XTextConversion : ::com::sun::star::uno::XInterface
         @param aLocal
             Locale the conversion is referring to.
         @param nTextConversionType
-            One of <type>TextConversionType</type> values.
+            One of TextConversionType values.
         @param nTextConversionOptions
-            Combination of <type>TextConversionOption</type> values.
+            Combination of TextConversionOption values.
         @returns
-            <type>TextConversionResult</type>
+            TextConversionResult
 
         @throws NoSupportException
             when <var>nConversionDictionaryType</var> is not known by the implementation,
@@ -81,9 +81,9 @@ published interface XTextConversion : ::com::sun::star::uno::XInterface
         @param aLocal
             Locale the conversion is referring to.
         @param nTextConversionType
-            One of <type>TextConversionType</type> values.
+            One of TextConversionType values.
         @param nTextConversionOptions
-            Combination of <type>TextConversionOption</type> values.
+            Combination of TextConversionOption values.
         @returns
             Converted text
 
@@ -107,9 +107,9 @@ published interface XTextConversion : ::com::sun::star::uno::XInterface
         @param aLocal
             Locale the conversion is referring to.
         @param nTextConversionType
-            One of <type>TextConversionType</type> values.
+            One of TextConversionType values.
         @param nTextConversionOptions
-            Combination of <type>TextConversionOption</type> values.
+            Combination of TextConversionOption values.
         @returns
             <TRUE/> if the entry is a valid entry for the dictionary
             <FALSE/> otherwise.

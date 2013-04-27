@@ -32,17 +32,17 @@ module com {  module sun {  module star {  module drawing {
 /** This interface exists only because services do not directly support
     multiple inheritance and attributes.
     <p>It provides the interfaces and attributes that every object that
-    implements the <type>SlideSorter</type> service.</p>
+    implements the SlideSorter service.</p>
 */
 interface XSlideSorterBase
 {
-    /** This interface is included to mark a <type>SlideSorter</type> object
+    /** This interface is included to mark a SlideSorter object
         as view of the drawing framework and to provide a
-        <type>ResourceId</type>.
+        ResourceId.
     */
     interface ::com::sun::star::drawing::framework::XView;
 
-    /** The <type>XDrawView</type> interface is included to provide access
+    /** The XDrawView interface is included to provide access
         to the current slide (especially write access).
     */
     interface ::com::sun::star::drawing::XDrawView;

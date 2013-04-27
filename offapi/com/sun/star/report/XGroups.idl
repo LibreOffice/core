@@ -38,7 +38,7 @@ interface XGroups
     */
     interface com::sun::star::container::XContainer;
     /** gives access to the group elements.
-        The elements are of type <type>XGroup</type>.
+        The elements are of type XGroup.
     */
     interface com::sun::star::container::XIndexContainer;
 
@@ -50,7 +50,7 @@ interface XGroups
      */
     interface com::sun::star::lang::XComponent;
 
-    /** factory method for <type>XGroup</type>.
+    /** factory method for XGroup.
     */
     com::sun::star::report::XGroup createGroup();
 

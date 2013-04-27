@@ -17,9 +17,9 @@ module com {  module sun {  module star {  module sheet {
 
 /** provides access to a collection of filter conditions (filter fields).
 
-    <p>This interface uses the <type>TableFilterField3</type> struct.
-    whereas the <type>XSheetFilterDescriptor2</type> interface uses the
-    <type>TableFilterField2</type> struct.</p>
+    <p>This interface uses the TableFilterField3 struct.
+    whereas the XSheetFilterDescriptor2 interface uses the
+    TableFilterField2 struct.</p>
 
     @see SheetFilterDescriptor2
 

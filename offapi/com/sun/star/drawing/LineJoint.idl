@@ -23,7 +23,7 @@
 
  module com {  module sun {  module star {  module drawing {
 
-/** The <type>LineJoint</type> defines rendering of joints between thick lines
+/** The LineJoint defines rendering of joints between thick lines
  */
 published enum LineJoint
 {

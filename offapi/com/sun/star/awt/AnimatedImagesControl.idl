@@ -28,7 +28,7 @@ module com { module sun { module star { module awt {
 interface XAnimation;
 
 
-/** is the default control used for an <type>AnimatedImagesControlModel</type>, displayed a series of
+/** is the default control used for an AnimatedImagesControlModel, displayed a series of
     images.
 
     @since OOo 3.4

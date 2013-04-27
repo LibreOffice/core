@@ -57,7 +57,7 @@ published service PrintOptions
      */
     [property] string Pages;
 
-    /** if set to TRUE, the corresponding <type>XPrintable</type>.print() request will
+    /** if set to TRUE, the corresponding XPrintable.print() request will
         be executed synchronous.
 
             <p>Default is the asynchronous print mode.</p>
@@ -69,7 +69,7 @@ published service PrintOptions
 
     /** determines the duplex mode for the print job.
 
-        @see <type>DuplexMode</type> for more information about supported values
+        @see DuplexMode for more information about supported values
      */
     [optional, property] short DuplexMode;
 };

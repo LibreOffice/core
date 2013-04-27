@@ -63,7 +63,7 @@ published interface XFunctionAccess: com::sun::star::uno::XInterface
         type.</dd>
 
         <dt><type scope="com::sun::star::table">XCellRange</type></dt>
-        <dd>for a <type>SheetCellRange</type> object that contains the
+        <dd>for a SheetCellRange object that contains the
         data.</dd>
         </dl>
 

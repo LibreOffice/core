@@ -24,7 +24,7 @@
 
 module com {  module sun {  module star {  module inspection {
 
-/** specifies the interface of the context of an <type>XPropertyControl</type>.
+/** specifies the interface of the context of an XPropertyControl.
 
     @see XPropertyControl::ControlContext
 
@@ -32,7 +32,7 @@ module com {  module sun {  module star {  module inspection {
 */
 interface XPropertyControlContext : XPropertyControlObserver
 {
-    /** instructs the <type>XPropertyControlContext</type> to active the next control
+    /** instructs the XPropertyControlContext to active the next control
 
         @param CurrentControl
             denotes the control which initiated the request.

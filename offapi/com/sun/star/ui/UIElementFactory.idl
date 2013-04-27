@@ -33,7 +33,7 @@ module com { module sun { module star { module ui {
     It depends on the implementation which user interface element types can be
     created. It is also possible that a factory is only able to create one
     special user interface element. User interface element factories must be
-    registered at the single instance <type>UIElementFactoryManager</type>
+    registered at the single instance UIElementFactoryManager
     service to provide access to itself.
     </p>
 

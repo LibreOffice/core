@@ -32,7 +32,7 @@ module com { module sun { module star { module rendering {
 /** Specialized interface for bitmaps containing half floats as their
     color components. Half floats are 16 bit wide, and some high-end
     GPUs already have them as supported frame buffer format. In
-    contrast to <type>XHalfFloatBitmap</type>, this interface only
+    contrast to XHalfFloatBitmap, this interface only
     permits read-only access.<p>
 
     Use this interface for e.g. bitmaps that are calculated
@@ -40,11 +40,11 @@ module com { module sun { module star { module rendering {
     modified.<p>
 
     If you get passed an instance of
-    <type>XHalfFloatReadOnlyBitmap</type> that also supports the
-    <type>XVolatileBitmap</type> interface, things become a bit more
+    XHalfFloatReadOnlyBitmap that also supports the
+    XVolatileBitmap interface, things become a bit more
     complicated. When reading data, one has to check for both
-    <type>VolatileContentDestroyedException</type> and mismatching
-    <type>FloatingPointBitmapLayout</type> return values. If either of them
+    VolatileContentDestroyedException and mismatching
+    FloatingPointBitmapLayout return values. If either of them
     occurs, the whole bitmap read operation should be repeated.<p>
  */
 interface XHalfFloatReadOnlyBitmap : XBitmap
@@ -60,7 +60,7 @@ interface XHalfFloatReadOnlyBitmap : XBitmap
         integers across the API (which requires casting on both
         sides).<p>
 
-        @throws <type>VolatileContentDestroyedException</type>
+        @throws VolatileContentDestroyedException
         if the bitmap is volatile, and the content has been destroyed by the system.
      */
     sequence<short>             getData( [in] ::com::sun::star::geometry::IntegerRectangle2D rect )
@@ -71,7 +71,7 @@ interface XHalfFloatReadOnlyBitmap : XBitmap
     /** Get a single pixel of the bitmap, returning its color
         value.<p>
 
-        @throws <type>VolatileContentDestroyedException</type>
+        @throws VolatileContentDestroyedException
         if the bitmap is volatile, and the content has been destroyed by the system.
      */
     sequence<short>             getPixel( [in] ::com::sun::star::geometry::IntegerPoint2D pos )

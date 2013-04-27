@@ -26,8 +26,8 @@
 module com {  module sun {  module star {  module form { module binding {
 
 
-/** thrown to indicate that the types of an <type>XValueBinding</type> and
-    an <type>XBindableValue</type> are incompatible
+/** thrown to indicate that the types of an XValueBinding and
+    an XBindableValue are incompatible
 */
 exception IncompatibleTypesException: com::sun::star::uno::Exception
 {

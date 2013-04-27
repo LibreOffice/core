@@ -44,7 +44,7 @@ published interface XExecutableDialog: com::sun::star::uno::XInterface
     /** Executes (shows) the dialog.
 
         @returns
-        A status code of type <type>ExecutableDialogResults</type>.
+        A status code of type ExecutableDialogResults.
     */
     short execute();
 };

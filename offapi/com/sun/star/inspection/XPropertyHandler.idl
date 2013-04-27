@@ -36,8 +36,8 @@ interface XPropertyControlFactory;
 
 /** is the basic interface for object inspection.
 
-    <p>The <type>ObjectInspector</type> itself does not know anything about the object
-    it is inspecting, all information is obtained via <type>XPropertyHandler</type>s.
+    <p>The ObjectInspector itself does not know anything about the object
+    it is inspecting, all information is obtained via XPropertyHandlers.
     Also, property handlers are responsible for describing the user interface which should
     be used to interact with the user, with respect to a given aspect of the inspected
     component.</p>
@@ -106,7 +106,7 @@ interface XPropertyHandler
             the name of the property whose user interface is to be described
             implementation
         @param ControlFactory
-            a factory for creating <type>XPropertyControl</type> instances. Must not be <NULL/>.
+            a factory for creating XPropertyControl instances. Must not be <NULL/>.
         @return
             the descriptor of the property line.
         @throws com::sun::star::beans::UnknownPropertyException
@@ -136,7 +136,7 @@ interface XPropertyHandler
         @param PropertyName
             The name of the conversion's target property.
         @param ControlValue
-            The to-be-converted control value. This value has been obtained from an <type>XPropertyControl</type>,
+            The to-be-converted control value. This value has been obtained from an XPropertyControl,
             using its <member>Value</member> attribute.
 
         @throws com::sun::star::beans::UnknownPropertyException
@@ -163,7 +163,7 @@ interface XPropertyHandler
 
         <p>This method converts a property value, which has previously been obtained using
         <member>getPropertyValue</member>, into a control-compatible value, which can be used
-        with <type>XPropertyControl</type>'s <member>XPropertyControl::Value</member> attribute.</p>
+        with XPropertyControl's <member>XPropertyControl::Value</member> attribute.</p>
 
         <p>A usual application of this method are list boxes: There is a generic list box implementation,
         which is able to display a simple list of strings. Usually, every string represents one
@@ -181,9 +181,9 @@ interface XPropertyHandler
             The target type of the conversion. This type is determined by the control which
             is used to display the property, which in turn is determined by the handler itself
             in <member>describePropertyLine</member>.<br/>
-            Speaking strictly, this is passed for convenience only, since every <type>XPropertyHandler</type>
+            Speaking strictly, this is passed for convenience only, since every XPropertyHandler
             implementation should know exactly which type to expect, since it implicitly determined this type
-            in <member>describePropertyLine</member> by creating an appropriate <type>XPropertyControl</type>.
+            in <member>describePropertyLine</member> by creating an appropriate XPropertyControl.
 
         @throws com::sun::star::beans::UnknownPropertyException
             if the given property is not supported by the property handler
@@ -203,7 +203,7 @@ interface XPropertyHandler
 
     /** registers a listener for notification about property value changes
 
-        <p>An <type>XPropertyHandler</type> implementation might decide to ignore this call.
+        <p>An XPropertyHandler implementation might decide to ignore this call.
         However, in this case property value changes made by third party components are not
         reflected in the object inspector.</p>
 
@@ -253,7 +253,7 @@ interface XPropertyHandler
 
         <p>In such a case, simply return those properties here.</p>
 
-        <p>There is a precedence in the property handlers used by an <type>ObjectInspector</type>,
+        <p>There is a precedence in the property handlers used by an ObjectInspector,
         which also is important for the superseded properties. This precedence is implied by the
         precedence of factories to create the property handlers, as denoted in the
         <member>XObjectInspectorModel::HandlerFactories</member> attribute.</p>
@@ -261,7 +261,7 @@ interface XPropertyHandler
         <p>With this in mind, property handlers can only supersede properties which are supported
         by a handler preceding them, but not properties of handlers succeeding them.</p>
 
-        <p>For instance, imaging an <type>XObjectInspectorModel</type> which provides three
+        <p>For instance, imaging an XObjectInspectorModel which provides three
         factories, for handler <code>A</code>, <code>B</code>, and <code>C</code> - in this order.
         Now if <code>A</code> supports the property <code>Foo</code>, <code>C</code> supports
         <code>Bar</code>, and <code>B</code> supersedes both <code>Foo</code> and <code>Bar</code>,
@@ -316,11 +316,11 @@ interface XPropertyHandler
         Usually, this will be a modal dialog, but it can also be a non-modal user interface component.</p>
 
         <p>Availability of this feature is indicated by the <member>LineDescriptor::HasPrimaryButton</member>
-        and <member>LineDescriptor::HasSecondaryButton</member> members of a <type>LineDescriptor</type>,
-        which the <type>XPropertyHandler</type> fills in its <member>describePropertyLine</member> method.</p>
+        and <member>LineDescriptor::HasSecondaryButton</member> members of a LineDescriptor,
+        which the XPropertyHandler fills in its <member>describePropertyLine</member> method.</p>
 
         <p>When this method is called, the property handler should raise the UI needed to enter the
-        property value, and return the result of this (see <type>InteractiveSelectionResult</type>).</p>
+        property value, and return the result of this (see InteractiveSelectionResult).</p>
 
         <p>It is recommended that property handlers do not directly set the property value which has
         been obtained from the user, but store it in the output-parameter Data, and return
@@ -412,7 +412,7 @@ interface XPropertyHandler
 
     /** suspends the handler
 
-        <p>A <type>XPropertyHandler</type> is used by a <type>XObjectInspector</type> instance,
+        <p>A XPropertyHandler is used by a XObjectInspector instance,
         which implements the XController interface. By definition, a XObjectInspector always forwards
         all suspend requests (<member scope="com::sun::star::frame">XController::suspend</member>) to
         all it's handlers.</p>
@@ -421,7 +421,7 @@ interface XPropertyHandler
         for property value input. Such a component might have been opened during
         <member>onInteractivePropertySelection</member>. If a property handler receives a
         <member>suspend</member> call, it should forward the suspension request to the UI
-        component, and veto suspension of the <type>XObjectInspector</type> as appropriate.</p>
+        component, and veto suspension of the XObjectInspector as appropriate.</p>
 
         <p>If suspension is not to be vetoed, then all non-modal UI components opened
         by the handler should have been closed when it returns from the <member>suspend</member> call.</p>

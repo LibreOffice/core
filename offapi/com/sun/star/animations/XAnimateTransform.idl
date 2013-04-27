@@ -38,9 +38,9 @@
 
     <ul>
     <li><const>AnimationTransformType::TRANSLATE</const><br>
-        <type>ValuePair</type> of <i>tx</i> and <i>ty</i></li>
+        ValuePair of <i>tx</i> and <i>ty</i></li>
     <li><const>AnimationTransformType::SCALE</const><br>
-        <type>ValuePair</type> of <i>sx</i> and <i>sy</i></li>
+        ValuePair of <i>sx</i> and <i>sy</i></li>
     <li><const>AnimationTransformType::ROTATE</const><br>
         Values for a rotation angle</li>
     <li><const>AnimationTransformType::SKEWX</const><br>

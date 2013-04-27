@@ -25,8 +25,8 @@
  module com {  module sun {  module star {  module text {
 
 
-/** is a <type>TextRange</type> which is explicitly marked
-    as an index entry for a <type>DocumentIndex</type>.
+/** is a TextRange which is explicitly marked
+    as an index entry for a DocumentIndex.
     For Asian languages the user can provide an additional string
     which is used for sorting. If the user does not provide these
     strings, they are not considered for sorting.

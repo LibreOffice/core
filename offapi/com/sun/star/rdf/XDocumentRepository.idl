@@ -28,10 +28,10 @@
 
 module com {   module sun {   module star {   module rdf {
 
-/** extends <type>XRepository</type> with document-specific functionality.
+/** extends XRepository with document-specific functionality.
 
     <p>
-    This subclass of <type>XRepository</type> provides some methods which
+    This subclass of XRepository provides some methods which
     only make sense for repositories that are attached to a document.
     For example, the methods allow for manipulating in-content metadata,
     which is stored as RDFa.
@@ -79,7 +79,7 @@ interface XDocumentRepository : XRepository
         Also, they have rather unusual semantics;
         just using <member>XNamedGraph::addStatement</member> would be
         ambiguous:
-        if the object is a <type>XMetadatable</type>, do we insert
+        if the object is a XMetadatable, do we insert
         the object itself (URI) or its literal content (RDFa)?
         </p>
 
@@ -197,7 +197,7 @@ interface XDocumentRepository : XRepository
         @returns
             an iterator over all RDFa statements in the repository that match
             the parameters, represented as an
-            enumeration of <type>Statement</type>
+            enumeration of Statement
 
         @throws RepositoryException
             if an error occurs when accessing the repository.

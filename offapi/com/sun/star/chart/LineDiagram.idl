@@ -61,8 +61,8 @@ published service LineDiagram
         <p>If you set this property to
         <member>ChartSymbolType::AUTO</member>, you can change the
         symbol shape for objects supporting the service
-        <type>ChartDataPointProperties</type> or
-        <type>ChartDataRowProperties</type>.</p>
+        ChartDataPointProperties or
+        ChartDataRowProperties.</p>
 
         @see ChartDataPointProperties
         @see ChartDataRowProperties

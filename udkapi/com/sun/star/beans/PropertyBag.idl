@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module beans {
 
 
 /** Implementation of this service can keep any properties and is useful
-    when an <type>XPropertySet</type> is to be used, for example, as parameters for a method call.
+    when an XPropertySet is to be used, for example, as parameters for a method call.
 
     <p>Scripting engines might not be able to use such objects as normal
     property sets, giving direct access to the properties.  In this case,

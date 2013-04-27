@@ -31,7 +31,7 @@ module com { module sun { module star { module frame {
 */
 service TransientDocumentsDocumentContentFactory
 {
-    /** a factory for <type>TransientDocumentsDocumentContent</type>s.
+    /** a factory for TransientDocumentsDocumentContents.
      */
     interface com::sun::star::frame::XTransientDocumentsDocumentContentFactory;
 };

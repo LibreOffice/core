@@ -37,7 +37,7 @@ published struct SearchCommandArgument
     SearchInfo Info;
 
     /** the properties for which values shall be provided through the
-        <type>ContentResultSet</type> returned by the search command.
+        ContentResultSet returned by the search command.
     */
     sequence< com::sun::star::beans::Property > Properties;
 };

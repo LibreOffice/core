@@ -30,7 +30,7 @@
 
 /** Reflects a service.
 
-    <p>This type is superseded by <type>XServiceTypeDescription2</type>, which
+    <p>This type is superseded by XServiceTypeDescription2, which
     supports single-interface&ndash;based services, in addition to the obsolete,
     accumulation-based services.</p>
 

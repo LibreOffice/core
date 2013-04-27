@@ -35,7 +35,7 @@ interface XSubmission;
 */
 interface XSubmissionSupplier : com::sun::star::uno::XInterface
 {
-    /** specifies the <type>XSubmission</type> instance to which the submission
+    /** specifies the XSubmission instance to which the submission
         request should be delegated.
     */
     [attribute] XSubmission Submission;

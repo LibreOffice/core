@@ -29,7 +29,7 @@
 /** manages and creates frames.
 
     <p>
-    Frames may contain other frames (by implementing an <type>XFrames</type>
+    Frames may contain other frames (by implementing an XFrames
     interface) and may be contained in other frames.
     </p>
 
@@ -38,7 +38,7 @@
  */
 published interface XFrames: com::sun::star::container::XIndexAccess
 {
-    /** appends the specified <type>Frame</type> to the list of sub-frames.
+    /** appends the specified Frame to the list of sub-frames.
 
         @param xFrame
             new frame for inserting into this container
@@ -49,7 +49,7 @@ published interface XFrames: com::sun::star::container::XIndexAccess
         frames inside this container and her sub frames
 
         @param nSearchFlags
-            use combinations of <type>FrameSearchFlag</type> to specify which
+            use combinations of FrameSearchFlag to specify which
             frames should be found
 
         @return

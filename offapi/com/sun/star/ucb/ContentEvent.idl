@@ -33,7 +33,7 @@ published struct ContentEvent: com::sun::star::lang::EventObject
 {
     /** The action.
 
-        <p>The value can be one of the <type>ContentAction</type> constants.
+        <p>The value can be one of the ContentAction constants.
     */
     long Action;
 

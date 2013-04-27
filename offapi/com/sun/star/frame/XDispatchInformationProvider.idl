@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module frame {
     supported commands. This interface is normally used by configuration
     implementations to retrieve all supported commands.
     A dispatch information provider is normally supported by a
-    <type>Frame</type> service.
+    Frame service.
     </p>
 
     @see Frame

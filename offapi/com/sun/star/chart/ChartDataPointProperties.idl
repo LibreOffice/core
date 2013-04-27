@@ -39,7 +39,7 @@
 
     <p>Text properties correlate to the data description of the data
     point.  There is a similar service for a group of graphic elements
-    called <type>ChartDataRowProperties</type> for the properties of
+    called ChartDataRowProperties for the properties of
     whole data rows.</p>
 
     @see ChartDataRowProperties
@@ -58,7 +58,7 @@ published service ChartDataPointProperties
      */
     service com::sun::star::style::CharacterProperties;
 
-    /** If <type>ChartDataPointProperties</type> may be stored as XML
+    /** If ChartDataPointProperties may be stored as XML
         element, this service should be supported in order to preserve
         unparsed XML attributes.
 
@@ -68,7 +68,7 @@ published service ChartDataPointProperties
 
 
     /** is only available if the chart is of type
-        <type>BarDiagram</type> and <type>Dim3DDiagram</type> and the
+        BarDiagram and Dim3DDiagram and the
         property <member>ChartDataPointProperties::Dim3D</member> is
         set to <TRUE/>.
 
@@ -128,7 +128,7 @@ published service ChartDataPointProperties
      */
     [optional, property] string SymbolBitmapURL;
 
-    /** the offset by which pie segments in a <type>PieDiagram</type>
+    /** the offset by which pie segments in a PieDiagram
         are dragged outside from the center.  This value is given in
         percent of the radius.
      */

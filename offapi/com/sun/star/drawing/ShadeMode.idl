@@ -23,7 +23,7 @@
 
  module com {  module sun {  module star {  module drawing {
 
-/** The <type>ShadeMode</type> determines the quality of displaying the object.
+/** The ShadeMode determines the quality of displaying the object.
  */
 published enum ShadeMode
 {

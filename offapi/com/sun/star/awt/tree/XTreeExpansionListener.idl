@@ -28,7 +28,7 @@
 module com {  module sun {  module star {  module awt {  module tree {
 
 
-/** An instance of this interface can get notifications from a <type>TreeControl</type>
+/** An instance of this interface can get notifications from a TreeControl
     when nodes are expanded or collapsed.
 
     @see XTreeControl::addTreeExpansionListener
@@ -46,7 +46,7 @@ interface XTreeExpansionListener: com::sun::star::lang::XEventListener
     /** Invoked whenever a node in the tree is about to be expanded.
 
         @throws ExpandVetoException
-            to notify the calling <type>XTreeControl</type> that expanding
+            to notify the calling XTreeControl that expanding
             <member>TreeExpansionEvent::Node</member> should fail.
     */
     void treeExpanding( [in] TreeExpansionEvent Event )
@@ -55,7 +55,7 @@ interface XTreeExpansionListener: com::sun::star::lang::XEventListener
     /** Invoked whenever a node in the tree is about to be collapsed.
 
         @throws ExpandVetoException
-            to notify the calling <type>XTreeControl</type> that collapsing
+            to notify the calling XTreeControl that collapsing
             <member>TreeExpansionEvent::Node</member> should fail.
     */
     void treeCollapsing( [in] TreeExpansionEvent Event )

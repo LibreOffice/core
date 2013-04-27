@@ -59,13 +59,13 @@ interface XFormulaOpCodeMapper
             knows.
 
         @param Language
-            Formula language to be used, one of <type>FormulaLanguage</type>
+            Formula language to be used, one of FormulaLanguage
             constants. If a constant unknown to the implementation is passed,
             <type scope="com::sun::star::lang">IllegalArgumentException</type>
             is thrown.
 
         @returns
-            a sequence of <type>FormulaToken</type> matching the input
+            a sequence of FormulaToken matching the input
             sequence in order.
 
             <p>Each string element in parameter Names according to the formula
@@ -99,7 +99,7 @@ interface XFormulaOpCodeMapper
         a given formula language.
 
         @param Language
-            Formula language to be used, one of <type>FormulaLanguage</type>
+            Formula language to be used, one of FormulaLanguage
             constants. If a constant unknown to the implementation is passed,
             <type scope="com::sun::star::lang">IllegalArgumentException</type>
             is thrown.
@@ -109,10 +109,10 @@ interface XFormulaOpCodeMapper
             FormulaMapGroup</type> constants.
 
         @returns
-            Sequence of <type>FormulaOpCodeMapEntry</type>.
+            Sequence of FormulaOpCodeMapEntry.
 
             <p>Each element of the formula language in parameter Language is
-            mapped to a <type>FormulaToken</type> containing the internal
+            mapped to a FormulaToken containing the internal
             OpCode used by the spreadsheet application in <member>
             FormulaToken::OpCode</member> and by contract maybe additional
             information in <member>FormulaToken::Data</member>. See <member>

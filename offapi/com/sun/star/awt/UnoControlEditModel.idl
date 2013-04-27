@@ -30,7 +30,7 @@
  module com {  module sun {  module star {  module awt {
 
 
-/** specifies the standard model of an <type>UnoControlEdit</type>.
+/** specifies the standard model of an UnoControlEdit.
  */
 published service UnoControlEditModel
 {
@@ -154,7 +154,7 @@ published service UnoControlEditModel
         setting, so that the <member>Text</member> property always contains only
         line ends in the format specified.</p>
 
-        <p>Possible values are all constants from the <type>LineEndFormat</type> group.</p>
+        <p>Possible values are all constants from the LineEndFormat group.</p>
 
         <p>Note that this setting is usually not relevant when you set new text via the API.
         No matter which line end format is used in this new text then, usual control implementations

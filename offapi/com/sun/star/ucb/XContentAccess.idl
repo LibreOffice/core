@@ -30,7 +30,7 @@ module com { module sun { module star { module ucb {
 /** specifies methods for obtaining information on a content in different
     levels.
 
-    <p>For example, if there is a cursor which points to <type>XContent</type>s,
+    <p>For example, if there is a cursor which points to XContents,
     this interface could be used to give the user access to the content under
     the cursor. If the client only needs the identifier string of the content,
     there is no need to first create the content object, then to obtain the

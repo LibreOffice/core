@@ -30,7 +30,7 @@
  module com {  module sun {  module star {  module text {
 
 
-/** specifies a graphic which can be embedded in <type>Text</type>.
+/** specifies a graphic which can be embedded in Text.
  */
 published service TextGraphicObject
 {

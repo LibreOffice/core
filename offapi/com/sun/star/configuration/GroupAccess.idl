@@ -64,8 +64,8 @@ published service GroupAccess
 
  <p>This view is meaningful only for a static fragment of the hierarchy
  Object's properties may change, but not which properties they have.
- Therefore, dynamic elements of the hierarchy (see <type>SetAccess</type>)
- do not implement service <type>PropertyHierarchy</type>.
+ Therefore, dynamic elements of the hierarchy (see SetAccess)
+ do not implement service PropertyHierarchy.
  </p>
 
  <p>If such elements occur as properties or subproperties of an implementation,
@@ -95,7 +95,7 @@ published service GroupAccess
  </p>
 
  <p>For properties that are objects themselves, the semantic documented for
- service <type>HierarchyAccess</type> applies.
+ service HierarchyAccess applies.
  </p>
  */
     [optional] interface com::sun::star::beans::XPropertyState;
@@ -108,7 +108,7 @@ published service GroupAccess
  </p>
 
  <p>For properties that are objects themselves, the semantic documented for
- service <type>HierarchyAccess</type> applies.
+ service HierarchyAccess applies.
  </p>
 */
     [optional] interface com::sun::star::beans::XMultiPropertyStates;

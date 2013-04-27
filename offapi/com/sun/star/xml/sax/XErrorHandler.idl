@@ -39,7 +39,7 @@ module com {  module sun {  module star {  module xml {  module sax {
     <p>This interface is a slight adaption of the Java interface
     <code>org.xml.sax.ErrorHandler</code>. In IDL, no exception can be passed
     as an argument, so an <code>any</code> serves as the container. The type of the
-    exception is <type>SAXParseException</type> or an instance of a derived class.</p>
+    exception is SAXParseException or an instance of a derived class.</p>
  */
 published interface XErrorHandler: com::sun::star::uno::XInterface
 {

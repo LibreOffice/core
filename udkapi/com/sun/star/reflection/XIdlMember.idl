@@ -27,7 +27,7 @@
 
  published interface XIdlClass;
 
-/** Base interface for <type>XIdlField2</type>s and <type>XIdlMethod</type>s.
+/** Base interface for XIdlField2s and XIdlMethods.
 */
 published interface XIdlMember: com::sun::star::uno::XInterface
 {

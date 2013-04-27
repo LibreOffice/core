@@ -102,12 +102,12 @@ published interface XScrollBar: com::sun::star::uno::XInterface
     long getVisibleSize();
 
 
-    /** sets the <type>ScrollBarOrientation</type> of the scroll bar.
+    /** sets the ScrollBarOrientation of the scroll bar.
      */
     void setOrientation( [in] long n );
 
 
-    /** returns the currently set <type>ScrollBarOrientation</type> of the
+    /** returns the currently set ScrollBarOrientation of the
         scroll bar.
      */
     long getOrientation();

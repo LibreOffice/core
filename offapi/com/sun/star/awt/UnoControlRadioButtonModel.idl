@@ -30,7 +30,7 @@
  module com {  module sun {  module star {  module awt {
 
 
-/** specifies the standard model of an <type>UnoControlRadioButton</type>.
+/** specifies the standard model of an UnoControlRadioButton.
  */
 published service UnoControlRadioButtonModel
 {
@@ -89,7 +89,7 @@ published service UnoControlRadioButtonModel
 
     /** specifies the position of the image, if any, relative to the text, if any
 
-        <p>Valid values of this property are specified with <type>ImagePosition</type>.</p>
+        <p>Valid values of this property are specified with ImagePosition.</p>
     */
     [optional, property] short ImagePosition;
 
@@ -167,8 +167,8 @@ published service UnoControlRadioButtonModel
 
     /** specifies a visual effect to apply to the radio button control.
 
-        <p>Possible values for this property are <type>VisualEffect</type>::FLAT and
-        <type>VisualEffect</type>::LOOK3D.</p>
+        <p>Possible values for this property are VisualEffect::FLAT and
+        VisualEffect::LOOK3D.</p>
 
         @see com::sun::star::awt::VisualEffect
 

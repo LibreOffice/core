@@ -156,7 +156,7 @@ service MediaDescriptor
 
         <p>
         Name of a filter that should be used for loading or storing the component.
-        Names must match the names of the <type>TypeDetection</type> configuration,
+        Names must match the names of the TypeDetection configuration,
         invalid names are ignored. If a name is specified on loading,
         it still will be verified by a filter detection, but in case of doubt
         it will be preferred.
@@ -259,7 +259,7 @@ service MediaDescriptor
 
         <p>
         Type of the medium to load, that must match to one of the types defined
-        in the <type>TypeDetection</type> configuration (otherwise it's ignored).
+        in the TypeDetection configuration (otherwise it's ignored).
         This bypasses the type detection of the <type scope="com::sun::star::frame">Desktop</type> environment,
         so passing a wrong MediaType will cause failure of loading.
         </p>

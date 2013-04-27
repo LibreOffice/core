@@ -31,7 +31,7 @@
 module com { module sun { module star { module rendering {
 
 /** Specialized interface for bitmaps containing IEEE floats as their
-    color components. In contrast to <type>XIeeeFloatBitmap</type>,
+    color components. In contrast to XIeeeFloatBitmap,
     this interface only permits read-only access.<p>
 
     Use this interface for e.g. bitmaps that are calculated
@@ -39,11 +39,11 @@ module com { module sun { module star { module rendering {
     modified.<p>
 
     If you get passed an instance of
-    <type>XHalfFloatReadOnlyBitmap</type> that also supports the
-    <type>XVolatileBitmap</type> interface, things become a bit more
+    XHalfFloatReadOnlyBitmap that also supports the
+    XVolatileBitmap interface, things become a bit more
     complicated. When reading data, one has to check for both
-    <type>VolatileContentDestroyedException</type> and mismatching
-    <type>FloatingPointBitmapLayout</type> return values. If either of them
+    VolatileContentDestroyedException and mismatching
+    FloatingPointBitmapLayout return values. If either of them
     occurs, the whole bitmap read operation should be repeated.<p>
  */
 interface XIeeeFloatReadOnlyBitmap : XBitmap
@@ -66,10 +66,10 @@ interface XIeeeFloatReadOnlyBitmap : XBitmap
         A rectangle, within the bounds of the bitmap, to retrieve the
         consent from.
 
-        @throws <type>VolatileContentDestroyedException</type>
+        @throws VolatileContentDestroyedException
         if the bitmap is volatile, and the content has been destroyed by the system.
 
-        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
+        @throws com::sun::star::lang::IndexOutOfBoundsException
         if parts of the given rectangle are outside the permissible
         bitmap area.
      */
@@ -91,10 +91,10 @@ interface XIeeeFloatReadOnlyBitmap : XBitmap
         A position, within the bounds of the bitmap, to retrieve the
         color from.
 
-        @throws <type>VolatileContentDestroyedException</type>
+        @throws VolatileContentDestroyedException
         if the bitmap is volatile, and the content has been destroyed by the system.
 
-        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
+        @throws com::sun::star::lang::IndexOutOfBoundsException
         if the given position is outside the permissible bitmap area.
      */
     sequence<float>             getPixel( [out] FloatingPointBitmapLayout bitmapLayout, [in] ::com::sun::star::geometry::IntegerPoint2D pos )

@@ -153,7 +153,7 @@ interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
     /** returns the query previously set at the analyzer, with all application-level
         features being substituted by their database-level counterparts.
 
-        <p>The <type>XSingleSelectQueryAnalyzer</type> is an application-level component,
+        <p>The XSingleSelectQueryAnalyzer is an application-level component,
         which in some respect understands SQL features usually not present at the database
         level. As a prominent example, you might pass a <code>SELECT</code> statement to the analyzer
         which is based on another query.</p>
@@ -166,7 +166,7 @@ interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
         <p>For example, consider a database document which contains a client-side query named <code>All Orders</code>.
         This query is not known to the underlying database, so an SQL statement like
         <code>SELECT * from "All Orders"</code> would be rejected by the database. However, instantiating
-        a <type>SingleSelectQueryAnalyzer</type> at the <type>Connection</type> object, and passing it the above query,
+        a SingleSelectQueryAnalyzer at the Connection object, and passing it the above query,
         you can then use <code>getQueryWithSubstitution</code> to retrieve a statement where <code>"All Orders"</code>
         has been replaced with the <code>SELECT</code> statement which actually constitutes the <code>"All Orders"</code>
         query.</p>

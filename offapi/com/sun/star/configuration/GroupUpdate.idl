@@ -28,7 +28,7 @@ module com { module sun { module star { module configuration {
 /** provides write access to a predefined heterogeneous group of values
  and nested trees as part of a hierarchy.
 
- <p>This service extends <type>GroupAccess</type> to support
+ <p>This service extends GroupAccess to support
  modifying values.
  </p>
 */
@@ -48,9 +48,9 @@ published service GroupUpdate
 
  <p>This service extends the interface
  <type scope="com::sun::star::container">XNameAccess</type> supported
- by service <type>GroupAccess</type> to allow changing values.
+ by service GroupAccess to allow changing values.
  This strongly overlaps with functionality available through
- <type>PropertyHierarchy</type> (from <type>GroupAccess</type>), so that
+ PropertyHierarchy (from GroupAccess), so that
  <code>xGroup.setPropertyValue( aName, aValue )</code> is equivalent to
  <code>xGroup.replaceByName( aName, aValue )</code>.
  </p>

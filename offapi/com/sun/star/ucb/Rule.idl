@@ -27,8 +27,8 @@ module com { module sun { module star { module ucb {
 
 /** describes a rule that can be applies to a number of objects.
 
-    <p>A rule consists of a sequence of <type>RuleTerm</type>s describing the
-    objects to which the rule should be applied, the <type>RuleAction</type>
+    <p>A rule consists of a sequence of RuleTerms describing the
+    objects to which the rule should be applied, the RuleAction
     which should be used on the matching objects, and a parameter.
 */
 published struct Rule
@@ -38,7 +38,7 @@ published struct Rule
     */
     sequence<com::sun::star::ucb::RuleTerm> Terms;
 
-    /** Some <type>RuleAction</type>s require a parameter.
+    /** Some RuleActions require a parameter.
 
         <table border =1>
         <tr>
@@ -63,7 +63,7 @@ published struct Rule
 
     /** the action to perform on the matching objects.
 
-        <p>The value can be one of the <type>RuleAction</type> constants.
+        <p>The value can be one of the RuleAction constants.
     */
     short Action;
 

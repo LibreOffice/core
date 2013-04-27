@@ -30,7 +30,7 @@ module com { module sun { module star { module accessibility {
     representation.
 
     <p>This interface is typically used in conjunction with the
-    <type>XAccessibleText</type> interface and extents it about the ability
+    XAccessibleText interface and extents it about the ability
     to modify the text represented by that interface.</p>
 
     @since OOo 1.1.2

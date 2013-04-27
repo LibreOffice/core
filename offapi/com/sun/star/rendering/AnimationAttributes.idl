@@ -37,7 +37,7 @@ struct AnimationAttributes
 
         This value determines how the [0,1] parameter space of the animation
         should be swept through. Permissible values are given in
-        <type>AnimationRepeat</type>.<p>
+        AnimationRepeat.<p>
 
         @see AnimationRepeat.
      */
@@ -48,7 +48,7 @@ struct AnimationAttributes
 
         This value specifies the size of the animation when rendered
         with the identity view transform. This permits
-        e.g. <type>XSprite</type> implementations to cache rendered
+        e.g. XSprite implementations to cache rendered
         animation content in finite-sized bitmaps.<p>
      */
     ::com::sun::star::geometry::RealSize2D  UntransformedSize;

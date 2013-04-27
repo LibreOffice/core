@@ -36,7 +36,7 @@ published service StyleFamily
                 the style sheets within this family by name.
 
                 <p>The elements in this container support the service
-                <type>Style</type> and are accessed via an <type>XStyle</type>.
+                Style and are accessed via an XStyle.
      */
     interface com::sun::star::container::XNameAccess;
 
@@ -44,14 +44,14 @@ published service StyleFamily
                 remove the style sheets within this family by name.
 
                 <p>The elements in this container support the service
-                <type>Style</type> and are accessed via an <type>XStyle</type>.
+                Style and are accessed via an XStyle.
      */
     [optional] interface com::sun::star::container::XNameContainer;
     /** This optional interface makes it possible to access the style sheets
                 within this family by index.
 
                 <p>The elements in this container support the service
-                <type>Style</type> and are accessed via an <type>XStyle</type>.
+                Style and are accessed via an XStyle.
      */
     [optional] interface com::sun::star::container::XIndexAccess;
 

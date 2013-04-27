@@ -33,11 +33,11 @@ module com { module sun { module star { module auth {
 
 published interface XSSOManagerFactory : ::com::sun::star::uno::XInterface
 {
-    /** provides a <type>XSSOManager</type> to be used in subsequent security
+    /** provides a XSSOManager to be used in subsequent security
         context creation.
 
         @returns
-        the relevant <type>XSSOManager</type> instance
+        the relevant XSSOManager instance
      */
     XSSOManager getSSOManager();
 };

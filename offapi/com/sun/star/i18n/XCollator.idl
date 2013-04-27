@@ -80,7 +80,7 @@ published interface XCollator: com::sun::star::uno::XInterface
             The locale for this collator.
 
         @param nCollatorOptions
-            A mask of <type>CollatorOptions</type>.
+            A mask of CollatorOptions.
 
         @returns
             Returns 0 when loading was successful,
@@ -99,7 +99,7 @@ published interface XCollator: com::sun::star::uno::XInterface
             The locale for this collator.
 
         @param nCollatorOptions
-            A mask of <type>CollatorOptions</type>.
+            A mask of CollatorOptions.
 
         @returns
             Returns 0 when loading was successful,

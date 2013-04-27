@@ -22,7 +22,7 @@
 
 module com {  module sun {  module star {  module util {
 
-/** specifies the type of an event from an <type>XDataEditor</type>.
+/** specifies the type of an event from an XDataEditor.
  */
 published enum DataEditorEventType
 {

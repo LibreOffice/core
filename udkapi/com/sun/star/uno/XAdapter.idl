@@ -30,7 +30,7 @@
 
 /** This is the server-side interface to a weak adapter.
 
-    <p>The implementation of <type>XAdapter</type> must know
+    <p>The implementation of XAdapter must know
     but not hold the adapted object, because it must not
     affect the lifetime of the adapted object.
 

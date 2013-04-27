@@ -26,11 +26,11 @@
 
 module com { module sun { module star { module drawing { module framework {
 
-/** See <type>XConfigurationController</type> for a description of the
+/** See XConfigurationController for a description of the
     configuration controller.
 
     <p>This service is used at the moment by the
-    <type>XControllerManager</type> to create a configuration controller.
+    XControllerManager to create a configuration controller.
     This allows developers to replace the default implementation of the
     configuration controller with their own.  This may not be a useful
     feature.  Furthermore the sub controllers may need a tighter coupling

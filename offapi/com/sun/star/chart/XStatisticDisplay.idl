@@ -31,7 +31,7 @@
 /** gives access to statistical elements for the chart.
 
     <p>Statistical elements are used by a
-    <type>StockDiagram</type>.</p>
+    StockDiagram.</p>
 
     @see XChartDocument
     @see StockDiagram

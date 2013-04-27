@@ -29,9 +29,9 @@ module com {  module sun {  module star {  module sheet {
 
 /** provides access to a collection of filter conditions (filter fields).
 
-    <p>This interface uses the <type>TableFilterField2</type> struct,
-    whereas the <type>XSheetFilterDescriptor</type> interface uses the
-    <type>TableFilterField</type> struct.</p>
+    <p>This interface uses the TableFilterField2 struct,
+    whereas the XSheetFilterDescriptor interface uses the
+    TableFilterField struct.</p>
 
     @see SheetFilterDescriptor
     @since OOo 3.2

@@ -28,18 +28,18 @@
 /** This service is a single master page inside a drawing document.
 
 
-    <p>It serves as a background page for zero or more <type>DrawPage</type>s.
-    Since this service is derived from the service <type>GenericDrawPage</type>,
+    <p>It serves as a background page for zero or more DrawPages.
+    Since this service is derived from the service GenericDrawPage,
     it can be used as a draw page with three differences:
     </p>
     <ol>
-    <li>It is not linked to any other <type>MasterPage</type>.
+    <li>It is not linked to any other MasterPage.
     </li>
     <li>It cannot be removed from a document as long as one or
-    more instances of <type>DrawPage</type> are linked to it.
+    more instances of DrawPage are linked to it.
     </li>
-    <li>Modifications to a <type>MasterPage</type> are instantly visible on
-    every <type>DrawPage</type> that is linked to it.
+    <li>Modifications to a MasterPage are instantly visible on
+    every DrawPage that is linked to it.
     </li>
     </ol>
  */

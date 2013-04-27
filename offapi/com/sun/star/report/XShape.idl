@@ -30,7 +30,7 @@ interface XShape
 {
     interface XReportControlModel;
 
-    /** is used to query or change the ZOrder of this <type>Shape</type>. */
+    /** is used to query or change the ZOrder of this Shape. */
     [attribute,bound] long ZOrder;
 
     /** this property lets you get and set the transformation matrix

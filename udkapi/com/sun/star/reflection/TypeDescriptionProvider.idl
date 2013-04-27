@@ -46,9 +46,9 @@ published service TypeDescriptionProvider
         <code>"com.sun.star.uno.XInterface"</code>.</p>
 
         </p>The returned values are generally non-null references of type
-        <type>XTypeDescription</type>.  However, before LibreOffice&nbsp;4.1,
+        XTypeDescription.  However, before LibreOffice&nbsp;4.1,
         the value returned for a UNO constant was the value of the constant,
-        rather than a reference to an <type>XConstantTypeDescription</type>
+        rather than a reference to an XConstantTypeDescription
         object.  (It also appears that some implementations return values for
         individual UNO enum members, e.g.
         <code>"com.sun.star.uno.TypeClass.VOID"</code>, though this is probably
@@ -64,7 +64,7 @@ published service TypeDescriptionProvider
     interface com::sun::star::lang::XComponent;
 
     /** Interface for creating enumerations for type descriptions supported
-        by this <type>TypeDescriptionProvider</type>
+        by this TypeDescriptionProvider
 
     @since OOo 1.1.2
     */

@@ -30,7 +30,7 @@
  module com {  module sun {  module star {  module awt {
 
 
-/** specifies the standard model of an <type>UnoControlPatternField</type>.
+/** specifies the standard model of an UnoControlPatternField.
  */
 published service UnoControlPatternFieldModel
 {
@@ -166,7 +166,7 @@ published service UnoControlPatternFieldModel
     /** defines how the mouse wheel can be used to scroll through the control's content.
 
         <p>Usually, the mouse wheel spins the numeric value displayed in the control. Using this property,
-        and one of the <type>MouseWheelBehavior</type> constants, you can control under which circumstances
+        and one of the MouseWheelBehavior constants, you can control under which circumstances
         this is possible.</p>
     */
     [optional, property] short MouseWheelBehavior;

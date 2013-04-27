@@ -58,7 +58,7 @@ published service DataSource
     interface XCompletedConnection;
 
     /** useful for establishing isolated connections which are not shared among others
-        as it is the case when using <type>XCompletedConnection</type> or <type scope="com::sun::star::sdbc">XDataSource</type>.
+        as it is the case when using XCompletedConnection or <type scope="com::sun::star::sdbc">XDataSource</type>.
         @see XCompletedConnection
         @see com::sun::star::sdbc::XDataSource
         @since OOo 1.1.2
@@ -119,7 +119,7 @@ published service DataSource
 
     /** is a list of arbitrary string tag/value pairs as connection arguments
 
-        <p>The <type>DataSource</type> itself does not attempt to interpret any of those values.</p>
+        <p>The DataSource itself does not attempt to interpret any of those values.</p>
 
         <p>Instead, the values in this property have two use cases:
         <ul><li>Upon creating a connection, for every value in this sequence it's checked

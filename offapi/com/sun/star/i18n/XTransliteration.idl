@@ -39,7 +39,7 @@ module com { module sun { module star { module i18n {
 
     <p> In order to select transliteration modules for different
     purposes, they are classified with attributes of
-    <type>TransliterationType</type>. <p/>
+    TransliterationType. <p/>
 
     <p> For Western languages there would be three transliteration
     modules available to compare two mixed case strings: upper to lower,
@@ -101,7 +101,7 @@ published interface XTransliteration: com::sun::star::uno::XInterface
     string  getName();
 
     /** Return the attribute(s) associated with this transliteration
-        object, as defined in <type>TransliterationType</type>. The
+        object, as defined in TransliterationType. The
         value is determined by the transliteration modules. For example,
         for UPPERCASE_LOWERCASE, a ONE_TO_ONE is returned, for
         IGNORE_CASE, IGNORE is returned.
@@ -130,7 +130,7 @@ published interface XTransliteration: com::sun::star::uno::XInterface
         available transliteration modules for the locale. There are some
         transliteration modules that are always available. The names of
         those modules are listed as enum
-        <type>TransliterationModules</type> names. For modules not
+        TransliterationModules names. For modules not
         listed there it is possible to load them directly by their
         implName.
 
@@ -144,7 +144,7 @@ published interface XTransliteration: com::sun::star::uno::XInterface
     /** Load a sequence of instances of transliteration modules.
         Output of one module is fed as input to the next module in
         the sequence. The object created by this call has
-        <type>TransliterationType</type> CASCADE and IGNORE types.
+        TransliterationType CASCADE and IGNORE types.
 
         @param aImplNameList
             Only IGNORE type modules can be specified.
@@ -157,7 +157,7 @@ published interface XTransliteration: com::sun::star::uno::XInterface
 
         @param nType
             A bitmask field of values defined in
-            <type>TransliterationType</type>
+            TransliterationType
     */
     sequence<string>    getAvailableModules(
                             [in] ::com::sun::star::lang::Locale aLocale,
@@ -165,7 +165,7 @@ published interface XTransliteration: com::sun::star::uno::XInterface
 
 
     /** Transliterate a substring. This method can be called if the
-        object doesn't have <type>TransliterationType</type> IGNORE
+        object doesn't have TransliterationType IGNORE
         attribute.
 
         @param aStr
@@ -198,7 +198,7 @@ published interface XTransliteration: com::sun::star::uno::XInterface
         transliteration.
 
         <p> This method can be called if the object has
-        <type>TransliterationType</type> IGNORE attribute. </p>
+        TransliterationType IGNORE attribute. </p>
 
         <p> Returns the number of matched code points in any case, even if
         strings are not equal, for example: <br/>
@@ -245,7 +245,7 @@ published interface XTransliteration: com::sun::star::uno::XInterface
     /** Transliterate one set of characters to another.
 
         <p> This method is intended for getting corresponding ranges and
-        can be called if the object has <type>TransliterationType</type>
+        can be called if the object has TransliterationType
         IGNORE attribute. </p>
 
         <p> For example: generic CASE_IGNORE transliterateRange( "a", "i" )

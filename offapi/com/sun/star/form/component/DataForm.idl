@@ -51,16 +51,16 @@ published service DataForm
     /** is used to reset controls belonging to the form, and to reset database fields to which the
         controls are bound
 
-        <p>A <type>DataForm</type> is reset either on explicit request, or after it is moved
+        <p>A DataForm is reset either on explicit request, or after it is moved
         to the insertion row.</p>
 
         <p>The insertion row is a virtual row which is used to insert new records. It is reached
         by calling <member scope="com::sun::star::sdbc">XResultSetUpdate::moveToInsertRow</member>.
         The <type scope="com::sun::star::sdb">RowSet</type> service specifies exactly which notifications
         happen in which order when calling <member scope="com::sun::star::sdbc">XResultSetUpdate::moveToInsertRow</member>,
-        and a <type>DataForm</type> implementation extends this with the following contract:
+        and a DataForm implementation extends this with the following contract:
         <ul><li>After all notifications as defined in the <type scope="com::sun::star::sdb">RowSet</type>
-                service have been sent, the <type>DataForm</type> resets itself, if all
+                service have been sent, the DataForm resets itself, if all
                 <type scope="com::sun::star::form">XResetListeners</type> approve this.</li>
             <li>After the reset happened, the <member scope="com::sun::star::sdb">RowSet::IsModified</member>
                 property is reset to <FALSE/>. This property might have been switched to <TRUE/> during listener

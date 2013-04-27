@@ -28,7 +28,7 @@
 module com { module sun { module star { module awt { module grid {
 
 
-/** allows to modify the data represented by a <type>XGridDataModel</type>
+/** allows to modify the data represented by a XGridDataModel
  */
 published interface XMutableGridDataModel : XGridDataModel
 {

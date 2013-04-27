@@ -49,16 +49,16 @@ module com {  module sun {  module star {  module lang {
     that provide two related interfaces: </p>
 
     <ul>
-        <li><type>XConnectionPointContainer</type> </li>
-        <li><type>XConnectionPoint</type> </li>
+        <li>XConnectionPointContainer </li>
+        <li>XConnectionPoint </li>
     </ul>
 
-    <p>The <type>XConnectionPointContainer</type> interface is implemented
+    <p>The XConnectionPointContainer interface is implemented
     on the connectable object to indicate the existence of the outgoing
     interfaces. It provides a sequence of sub-objects.  It also provides
     access to all the connection point sub-objects, each of which
-    implements the <type>XConnectionPoint</type> interface. The
-    <type>XConnectionPoint</type> interface provides a sequence of
+    implements the XConnectionPoint interface. The
+    XConnectionPoint interface provides a sequence of
     sub-objects.  </p>
 
     <p>Each connection point is a separate sub-object to avoid circular
@@ -68,18 +68,18 @@ module com {  module sun {  module star {  module lang {
 
     <h4>When to use?</h4>
 
-    <p>A client can use the <type>XConnectionPointContainer</type> interface: </p>
+    <p>A client can use the XConnectionPointContainer interface: </p>
 
     <UL>
 
         <LI>to get a sequence of connection points for each outgoing type. </LI>
 
         <LI>to obtain access to connection point sub-objects with the
-            <type>XConnectionPoint</type> interface for each
+            XConnectionPoint interface for each
             outgoing type. Through the XConnectionPoint interface,
             a client starts or terminates an advisory loop with the
             connectable object and the client's own sink.  The
-            client can also use the <type>XConnectionPoint</type>
+            client can also use the XConnectionPoint
             interface to get a sequence of the connections that it
             knows about. </LI>
     </UL>
@@ -93,7 +93,7 @@ published interface XConnectionPoint: com::sun::star::uno::XInterface
                 connection point.
 
         <p>Using the <member>XConnectionPointContainer::getConnectionPoints</member>
-        method, a client can obtain an <type>XConnectionPoint</type>
+        method, a client can obtain an XConnectionPoint
         interface.  Using that interface and this method, the client
         can determine the type of each connection point enumerated. The
         type returned from this method must enable the caller to access
@@ -105,7 +105,7 @@ published interface XConnectionPoint: com::sun::star::uno::XInterface
     type getConnectionType();
 
     /** @returns
-            the <type>XConnectionPointContainer</type> interface on
+            the XConnectionPointContainer interface on
             the parent connectable object.
 
         @see XConnectionPointContainer
@@ -120,7 +120,7 @@ published interface XConnectionPoint: com::sun::star::uno::XInterface
         to add listeners or throw exceptions. One of these methods is
         <member scope="com::sun::star::beans">XPropertySet::addPropertyChangeListener</member>.
         We ignore the problem in this interface. A solution must be provided
-        in an additional <type>XConnectionPoint</type> interface.  </p>
+        in an additional XConnectionPoint interface.  </p>
 
         @param xListener
             specifies the listener interface on the client's advise sink.
@@ -145,7 +145,7 @@ published interface XConnectionPoint: com::sun::star::uno::XInterface
         parameters to add listeners or throw exceptions. One of these methods
         is <member scope="com::sun::star::beans">XPropertySet::removePropertyChangeListener</member>.
         We ignore the problem in this interface. A solution must be
-        provided in an additional <type>XConnectionPoint</type> interface.  </p>
+        provided in an additional XConnectionPoint interface.  </p>
 
         @param listener
             specifies the listener interface on the client's advise sink.

@@ -29,7 +29,7 @@ module com {  module sun {  module star {  module sheet {
 /** represents a volatile function result.
 
     <p>A volatile function result can change its value over time. The
-    <type>XVolatileResult</type> interface allows the addition of
+    XVolatileResult interface allows the addition of
     listeners which are notified when the value changes.</p>
 
     @see com::sun::star::sheet::AddIn

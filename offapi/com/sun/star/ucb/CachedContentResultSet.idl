@@ -24,10 +24,10 @@
 
 module com { module sun { module star { module ucb {
 
-/** is used on client side to access a <type>ContentResultSet</type>
+/** is used on client side to access a ContentResultSet
     remote optimized.
 
-    <p>The <type>CachedContentResultSet</type> will not load every single
+    <p>The CachedContentResultSet will not load every single
     property or even row just in that moment you ask for it, but load the data
     for some rows beforehand.
 

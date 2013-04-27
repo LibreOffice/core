@@ -25,7 +25,7 @@
 
  module com {  module sun {  module star {  module registry {
 
-/** is the implementation of the interface <type>XImplementationRegistration</type>.
+/** is the implementation of the interface XImplementationRegistration.
     This service can be used to install or uninstall components (implementations).
     Further, it is possible to check if all runtime dependencies (needed services) are
     available to use a specified component.

@@ -32,7 +32,7 @@ module com { module sun { module star { module document {
     Given URL can be used to decide between given two filters.
     Decision can be made e.g. by a dialog, on which the user must select one
     of these filters.
-    A possible continuation of type <type>XInteractionFilterSelect</type>
+    A possible continuation of type XInteractionFilterSelect
     transport this decision back to source of started interaction.
     </p>
 

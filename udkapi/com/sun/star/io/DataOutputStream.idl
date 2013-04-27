@@ -27,7 +27,7 @@
 
 module com {  module sun {  module star {  module io {
 
-/** writes structured data to a chained <type>XOutputStream</type>.
+/** writes structured data to a chained XOutputStream.
 
     <p>
     An implementation of this service in general does not need

@@ -30,13 +30,13 @@
 
     <p>The interface provides the possibility of committing its respective
     data to a data source it is bound to. A <member>commit</member> will be
-    performed by the environment (usually, a <type>FormController</type>).<br/>
+    performed by the environment (usually, a FormController).<br/>
     For example, suppose you have a data-bound control that is connected
     to a database field. Each time the control loses its focus, the
     model (component) of the control is triggered by the environment
     to store its value in the database field.</p>
 
-    <p>A commit may fail if an <type>XUpdateListener</type> vetoes the it.</p>
+    <p>A commit may fail if an XUpdateListener vetoes the it.</p>
 
     @see com::sun::star::form::XUpdateListener
  */

@@ -25,7 +25,7 @@
 
 module com {  module sun {  module star {  module inspection {
 
-/** defines the interface for an <type>XPropertyControl</type> which displays its value
+/** defines the interface for an XPropertyControl which displays its value
     in a hyperlink-like way
 
     <p>Hyperlink controls exchange their value (<member>XPropertyControl::Value</member>) as strings.</p>

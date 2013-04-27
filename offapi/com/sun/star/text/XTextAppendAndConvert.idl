@@ -28,8 +28,8 @@
  module com {  module sun {  module star {  module text {
 
 
-/** merges the functions of <type>XTextAppend</type>,
-    <type>XTextContentAppend</type> and <type>XTextConvert</type>.
+/** merges the functions of XTextAppend,
+    XTextContentAppend and XTextConvert.
  */
      interface XTextAppendAndConvert
 {

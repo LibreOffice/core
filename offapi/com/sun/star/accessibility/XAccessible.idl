@@ -29,20 +29,20 @@ module com { module sun { module star { module accessibility {
 /** This interface has to be implemented by any class that wants to be
     accessible.
 
-    <p>It is used to provide access to the <type>XAccessibleContext</type>
+    <p>It is used to provide access to the XAccessibleContext
     interface but allows at the same time that that interface is implemented
     by another class.</p>
 
-    <p>The distinction between the interfaces <type>XAccessible</type> and
-    <type>XAccessibleContext</type> makes it possible to split up the
+    <p>The distinction between the interfaces XAccessible and
+    XAccessibleContext makes it possible to split up the
     implementation of the
     class that is made accessible and the actual accessibility code into two
     (mostly) independent parts.  The only necessary dependence is the
     <member scope="XAccessible">getAccessibleContext()</member> function
     that returns the accessible context.  This one-way link has to be
     persistent in some sense: As long as there is at least one reference to
-    a specific <type>XAccessibleContext</type> object the
-    <type>XAccessible</type> object has to return the same context for every
+    a specific XAccessibleContext object the
+    XAccessible object has to return the same context for every
     call to <member scope="XAccessible">getAccessibleContext()</member>.
     This is necessary to allow the use of object identity for comparing
     accessibility contexts for being equal.</p>
@@ -56,11 +56,11 @@ interface XAccessible : ::com::sun::star::uno::XInterface
     /** Returns the AccessibleContext associated with this object.
 
         <p>The idea to let this interface only return an
-        <type>XAccessibleContext</type> instead of directly supporting its
+        XAccessibleContext instead of directly supporting its
         functions is to allow the separation of the implementation of the
         functions that make a class accessible from the implementation of
-        that class.  You may, of course, implement <type>XAccessible</type>
-        and <type>XAccessibleContext</type> in one class.</p>
+        that class.  You may, of course, implement XAccessible
+        and XAccessibleContext in one class.</p>
 
         @return
             A reference to the object that contains the actual accessibility

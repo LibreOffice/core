@@ -44,10 +44,10 @@ published interface XStringAbbreviation: com::sun::star::uno::XInterface
         wider than some given width.
 
         <p>The width of a string is an abstract concept here, measured via
-        an <type>XStringWidth</type> interface.  Examples are the number of
-        characters in the string (<type>XStringWidth</type> will measure the
+        an XStringWidth interface.  Examples are the number of
+        characters in the string (XStringWidth will measure the
         string's length), or the width in pixel when displayed with a specific
-        font (which <type>XStringWidth</type> would encapsulate).</p>
+        font (which XStringWidth would encapsulate).</p>
 
         @param xStringWidth
         The interface that makes concrete the abstract notion of string width.

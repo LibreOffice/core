@@ -27,7 +27,7 @@ module com { module sun { module star { module accessibility {
 
     <p>This collection describes the types of text portions that can be
     accessed with the help of the methods of the
-    <type>XAccessibleText</type> interface.</p>
+    XAccessibleText interface.</p>
 
     @since OOo 1.1.2
 */

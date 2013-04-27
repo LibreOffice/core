@@ -111,7 +111,7 @@ published interface XDataPilotFieldGrouping: com::sun::star::uno::XInterface
             The fractional part of the value will be ignored.</li>
 
             <li>The member <member>DataPilotFieldGroupInfo::GroupBy</member>
-            must contain exactly one of the flags from <type>DataPilotFieldGroupBy</type>.
+            must contain exactly one of the flags from DataPilotFieldGroupBy.
             A combination of several flags will not be accepted. If
             <const>DataPilotFieldGroupBy::DAYS</const> is specified, the
             value of the member <member>DataPilotFieldGroupInfo::Step</member>

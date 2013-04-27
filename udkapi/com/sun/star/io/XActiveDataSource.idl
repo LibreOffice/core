@@ -35,9 +35,9 @@ published interface XActiveDataSource: com::sun::star::uno::XInterface
 {
     /** plugs the output stream.
 
-        <p>If <type>XConnectable</type> is also implemented, this
+        <p>If XConnectable is also implemented, this
         method should query <var>aStream</var> for a
-        <type>XConnectable</type> and connect both.
+        XConnectable and connect both.
         </p>
      */
     void setOutputStream( [in] com::sun::star::io::XOutputStream aStream );

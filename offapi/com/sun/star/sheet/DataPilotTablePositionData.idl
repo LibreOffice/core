@@ -44,7 +44,7 @@ struct DataPilotTablePositionData
 {
 
     /** This parameter specifies which sub-area of a DataPilot table a given
-        cell is positioned.  See <type>DataPilotTablePositionType</type>
+        cell is positioned.  See DataPilotTablePositionType
         for how to interpret the value of this parameter.
 
         @see com::sun::star::sheet::DataPilotTablePositionType
@@ -57,7 +57,7 @@ struct DataPilotTablePositionData
 
         <p>When the value of <member>PositionType</member> is
         <const>DataPilotTablePositionType::RESULT</const>, <member>DataPilotTablePositionData::PositionData</member>
-        contains an instance of type <type>DataPilotTableResultData</type>,
+        contains an instance of type DataPilotTableResultData,
         whereas when the value of <member>DataPilotTablePositionData::PositionType</member>
         is either <const>DataPilotTablePositionType::ROW_HEADER</const>
         or <const>DataPilotTablePositionType::COLUMN_HEADER</const>, then the

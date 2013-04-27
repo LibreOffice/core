@@ -52,7 +52,7 @@ published interface XPropertyContainer: com::sun::star::uno::XInterface
             specifies the name of the new property.
 
         @param Attributes
-            specifies the property attributes, see <type>PropertyAttribute</type>.
+            specifies the property attributes, see PropertyAttribute.
 
         @param DefaultValue
             specifies the type of the new property and a potential default value.

@@ -21,7 +21,7 @@
 
 module com { module sun { module star { module accessibility {
 
-/** These constants identify the type of <type>AccessibleEventObject</type>
+/** These constants identify the type of AccessibleEventObject
     objects.
 
     <p>The <member>AccessibleEventObject::OldValue</member> and
@@ -148,15 +148,15 @@ constants AccessibleEventId
 
     /** A visible data event indicates the change of the visual appearance
         of an accessible object.  This includes for example most of the
-        attributes available over the <type>XAccessibleComponent</type> and
-        <type>XAccessibleExtendedComponent</type> interfaces.  The
+        attributes available over the XAccessibleComponent and
+        XAccessibleExtendedComponent interfaces.  The
         <member>AccessibleEventObject::OldValue</member> and
         <member>AccessibleEventObject::NewValue</member> fields are left empty.
     */
     const short VISIBLE_DATA_CHANGED = 10;
 
     /** This constant indicates changes of the value of an
-        <type>XAccessibleValue</type> interface.  The
+        XAccessibleValue interface.  The
         <member>AccessibleEventObject::OldValue</member> and
         <member>AccessibleEventObject::NewValue</member> field contain the
         old and new value as a number.  Its exact type is implementation
@@ -245,7 +245,7 @@ constants AccessibleEventId
 
     /** Events of this type signal changes of the selection.  The old or new
         selection is <em>not</em> available through the event object.  You
-        have to query the <type>XAccessibleText</type> interface of the
+        have to query the XAccessibleText interface of the
         event source for this information.  The type of content of  the
         <member>AccessibleEventObject::OldValue</member> and
         <member>AccessibleEventObject::NewValue</member> fields is not
@@ -254,8 +254,8 @@ constants AccessibleEventId
     const short TEXT_SELECTION_CHANGED = 21;
 
     /** Use this id to indicate general text changes, i.e. changes to text
-        that is exposed through the <type>XAccessibleText</type> and
-        <type>XAccessibleEditableText</type> interfaces.
+        that is exposed through the XAccessibleText and
+        XAccessibleEditableText interfaces.
 
         <p>The affected text ranges are represented by <type
         scope="com::sun::star::accessibility">TextSegment</type> structures.<p>
@@ -322,7 +322,7 @@ constants AccessibleEventId
     /** Constant used to indicate that the column header has changed.  The
         <member>AccessibleEventObject::OldValue</member> is empty, the
         <member>AccessibleEventObject::NewValue</member> field contains an
-        <type>AccessibleTableModelChange</type> representing the header
+        AccessibleTableModelChange representing the header
         change.
     */
     const short TABLE_COLUMN_HEADER_CHANGED = 27;
@@ -330,7 +330,7 @@ constants AccessibleEventId
     /** Constant used to indicate that the table data has changed.  The
         <member>AccessibleEventObject::OldValue</member> is empty, the
         <member>AccessibleEventObject::NewValue</member> field contains an
-        <type>AccessibleTableModelChange</type> representing the data
+        AccessibleTableModelChange representing the data
         change.
     */
     const short TABLE_MODEL_CHANGED = 28;
@@ -345,7 +345,7 @@ constants AccessibleEventId
     /** Constant used to indicate that the row header has changed.  The
         <member>AccessibleEventObject::OldValue</member> is empty, the
         <member>AccessibleEventObject::NewValue</member> field contains an
-        <type>AccessibleTableModelChange</type> representing the header
+        AccessibleTableModelChange representing the header
         change.
     */
     const short TABLE_ROW_HEADER_CHANGED = 30;

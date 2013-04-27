@@ -48,7 +48,7 @@ published struct FocusEvent: com::sun::star::lang::EventObject
 {
 
     /** specifies the reason for the focus change as an arithmetic-or
-        combination of <type>FocusChangeReason</type>.
+        combination of FocusChangeReason.
 
         @see FocusChangeReason
      */

@@ -63,12 +63,12 @@ interface XDiagram : ::com::sun::star::uno::XInterface
      */
     void setLegend( [in] XLegend xLegend );
 
-    /** returns an <type>XColorScheme</type> that defines the default
+    /** returns an XColorScheme that defines the default
         colors for data series (or data points) in the diagram.
      */
     XColorScheme   getDefaultColorScheme();
 
-    /** sets an <type>XColorScheme</type> that defines the default
+    /** sets an XColorScheme that defines the default
         colors for data series (or data points) in the diagram.
      */
     void setDefaultColorScheme( [in] XColorScheme xColorScheme );
@@ -77,7 +77,7 @@ interface XDiagram : ::com::sun::star::uno::XInterface
 
         @param xDataSource
             This data source will be interpreted in a chart-type
-            specific way and the <type>DataSeries</type> found in
+            specific way and the DataSeries found in
             <code>xDiagram</code> will be adapted to the new data.
             Missing data series will be created and unused ones will
             be deleted.
@@ -86,7 +86,7 @@ interface XDiagram : ::com::sun::star::uno::XInterface
             Arguments tells how to slice the given data.
 
             <p>For standard parameters that may be used, see the
-            service <type>StandardDiagramCreationParameters</type>.
+            service StandardDiagramCreationParameters.
             </p>
      */
     void setDiagramData( [in] com::sun::star::chart2::data::XDataSource xDataSource,

@@ -44,7 +44,7 @@ published constants OpenMode
         sharing.
 
         <p>Note: There must be a data sink supplied in the
-        <type>OpenCommandArgument</type> struct, if this value is set. This
+        OpenCommandArgument struct, if this value is set. This
         sink will be used by the content implementation to supply the document
         data.
     */
@@ -53,7 +53,7 @@ published constants OpenMode
     /** open a document. Allow shared read and write access.
 
         <p>Note: There must be a data sink supplied in the
-        <type>OpenCommandArgument</type> struct, if this value is set. This
+        OpenCommandArgument struct, if this value is set. This
         sink will be used by the content implementation to supply the document
         data.
     */
@@ -62,7 +62,7 @@ published constants OpenMode
     /** open a document. Deny shared write access.
 
         <p>Note: There must be a data sink supplied in the
-        <type>OpenCommandArgument</type> struct, if this value is set. This
+        OpenCommandArgument struct, if this value is set. This
         sink will be used by the content implementation to supply the document
         data.
     */

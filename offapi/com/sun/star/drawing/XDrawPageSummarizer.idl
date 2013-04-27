@@ -30,14 +30,14 @@
  module com {  module sun {  module star {  module drawing {
 
 /** is implemented by documents that can create summaries
-    of their <type>DrawPage</type>s.
+    of their DrawPages.
 
     @deprecated
  */
 published interface XDrawPageSummarizer: com::sun::star::uno::XInterface
 {
-    /** creates a new <type>DrawPage</type> with a summary of all
-        <type>DrawPage</type>s in the given collection.
+    /** creates a new DrawPage with a summary of all
+        DrawPages in the given collection.
      */
     com::sun::star::drawing::XDrawPage summarize( [in] com::sun::star::drawing::XDrawPages xPages );
 

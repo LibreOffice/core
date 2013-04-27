@@ -59,7 +59,7 @@ published interface XEmbedObjectCreator: com::sun::star::uno::XInterface
         @param aObjectArgs
             optional parameters for the object persistence initialization
             see also
-            <type>EmbeddedObjectDescriptor</type>
+            EmbeddedObjectDescriptor
 
         @throws ::com::sun::star::lang::IllegalArgumentException
             one of arguments is illegal
@@ -102,7 +102,7 @@ published interface XEmbedObjectCreator: com::sun::star::uno::XInterface
             object should be loaded from storage entry
 
         @param aObjectArgs
-            an object of type <type>EmbeddedObjectDescriptor</type>
+            an object of type EmbeddedObjectDescriptor
             contains object related properties
 
         @throws ::com::sun::star::lang::IllegalArgumentException
@@ -146,7 +146,7 @@ published interface XEmbedObjectCreator: com::sun::star::uno::XInterface
             specifies source
 
         @param aObjectArgs
-            an object of type <type>EmbeddedObjectDescriptor</type>
+            an object of type EmbeddedObjectDescriptor
             contains object related properties
 
         @throws ::com::sun::star::lang::IllegalArgumentException

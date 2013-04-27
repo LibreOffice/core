@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module xml {  module sax {
 
 /** interface to translate XML strings to integer tokens.
 
-    <p>An instance of this interface can be registered at a <type>XFastParser</type>.
+    <p>An instance of this interface can be registered at a XFastParser.
     It should be able to translate all XML names (element local names,
     attribute local names and constant attribute values) to integer tokens.
 

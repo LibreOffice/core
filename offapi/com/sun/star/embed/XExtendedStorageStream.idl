@@ -80,7 +80,7 @@ published interface XExtendedStorageStream
     /** allows to register a listener for transaction actions.
 
         <p>
-        If <type>XTransactedObject</type> interface is implemented this
+        If XTransactedObject interface is implemented this
         interface must be implemented as well.
         </p>
      */

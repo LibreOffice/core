@@ -163,7 +163,7 @@ interface XAccessibleContext : ::com::sun::star::uno::XInterface
 
         <p>The returned state set is a copy: Changing the returned state set
         will not be reflected by changing the object's set of states.  See
-        the documentation of <type>XAccessibleStateSet</type> for a
+        the documentation of XAccessibleStateSet for a
         description of the individual states.</p>
 
         @return
@@ -182,7 +182,7 @@ interface XAccessibleContext : ::com::sun::star::uno::XInterface
         @return
             If this object does not have a locale, the locale of its parent
             is returned.  If it does not have (yet) a parent it throws the
-            exception <type>IllegalAccessibleComponentStateException</type>.
+            exception IllegalAccessibleComponentStateException.
 
         @throws IllegalAccessibleComponentStateException
             when this object does not (yet) have a parent.

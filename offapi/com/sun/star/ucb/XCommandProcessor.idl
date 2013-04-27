@@ -72,7 +72,7 @@ published interface XCommandProcessor : com::sun::star::uno::XInterface
     /** executes a command.
 
         <p>Common command definitions can be found in the specification of the
-        service <type>Content</type>.
+        service Content.
 
         @param aCommand
         is the command to execute.
@@ -83,7 +83,7 @@ published interface XCommandProcessor : com::sun::star::uno::XInterface
         zero can be used, if the command never shall be aborted. Different
         threads MUST NOT share one command identifier (except <code>0</code>).
         This can easily achieved, if every thread that wants to use an
-        <type>XCommandProcessor</type>, obtains exactly one identifier
+        XCommandProcessor, obtains exactly one identifier
         using <member>XCommandProcessor::createCommandIdentifier</member>.
         This identifier can be used for every call to
         <member>XCommandProcessor::execute</member> done by that thread.

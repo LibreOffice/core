@@ -27,12 +27,12 @@ module com {  module sun {  module star {  module report { module inspection {
 
 
 /** implements a <type scope="com::sun::star::inspection">XObjectInspectorModel</type> for
-    inspecting form components, in particular all components implementing the <type>ReportComponent</type>
+    inspecting form components, in particular all components implementing the ReportComponent
     service.
 
-    <p>A <type>DefaultComponentInspectorModel</type> provides the following handlers by default:
-    <ul><li><type>GeometryHandler</type></li>
-        <li><type>ReportComponentHandler</type></li>
+    <p>A DefaultComponentInspectorModel provides the following handlers by default:
+    <ul><li>GeometryHandler</li>
+        <li>ReportComponentHandler</li>
         <li><type scope="com::sun::star::form::inspection">EditPropertyHandler</type></li>
     </ul></p>
 

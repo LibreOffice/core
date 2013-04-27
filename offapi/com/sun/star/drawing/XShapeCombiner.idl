@@ -35,32 +35,32 @@
 published interface XShapeCombiner: com::sun::star::uno::XInterface
 {
 
-    /** combines <type>Shape</type>s
+    /** combines Shapes
 
         @param xShapes
-            the <type>Shape</type>s inside this container are converted
-            to <type>PolyPolygonBezierShape</type>s and are than combined
-            into one <type>PolyPolygonBezierShape</type>.
+            the Shapes inside this container are converted
+            to PolyPolygonBezierShapes and are than combined
+            into one PolyPolygonBezierShape.
             The <type>Shape</types>s in xShape will be removed from the
-            <type>GenericDrawPage</type> and disposed.
+            GenericDrawPage and disposed.
 
         @returns
-            a newly created <type>PolyPolygonBezierShape</type> which contains all
-            converted <type>PolyPolygonBezierShape</type> combined. It is also added
-            to the <type>GenericDrawPage</type> of the source <type>Shape</type>s.
+            a newly created PolyPolygonBezierShape which contains all
+            converted PolyPolygonBezierShape combined. It is also added
+            to the GenericDrawPage of the source Shapes.
 
      */
     com::sun::star::drawing::XShape combine( [in] com::sun::star::drawing::XShapes xShapes );
 
 
-    /** splits <type>Shape</type>s.
+    /** splits Shapes.
 
         @param xShapes
-            the <type>Shape</type> is converted to a
-            <type>PolyPolygonBezierShape</type>s and then split into
-            several <type>PolyPolygonBezierShape</type>s
+            the Shape is converted to a
+            PolyPolygonBezierShapes and then split into
+            several PolyPolygonBezierShapes
             The <type>Shape</types>s in xShape will be removed from the
-            <type>GenericDrawPage</type> and disposed.
+            GenericDrawPage and disposed.
      */
     void split( [in] com::sun::star::drawing::XShape xGroup );
 

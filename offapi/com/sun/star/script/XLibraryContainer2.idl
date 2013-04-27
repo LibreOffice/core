@@ -27,7 +27,7 @@
 
 
 /**
-    Extension of <type>XLibraryContainer</type> to provide additional information
+    Extension of XLibraryContainer to provide additional information
     about the libraries contained in a library container
  */
 published interface XLibraryContainer2: com::sun::star::script::XLibraryContainer

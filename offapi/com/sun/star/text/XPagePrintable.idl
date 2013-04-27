@@ -56,7 +56,7 @@ published interface XPagePrintable: com::sun::star::uno::XInterface
      */
     void setPagePrintSettings( [in] sequence<com::sun::star::beans::PropertyValue> aSettings );
 
-    /** prints the pages according to the <type>PagePrintSettings</type>.
+    /** prints the pages according to the PagePrintSettings.
 
     @see com::sun::star::view::PrintOptions
      */

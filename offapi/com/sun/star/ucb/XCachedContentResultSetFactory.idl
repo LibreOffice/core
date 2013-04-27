@@ -26,7 +26,7 @@
 
 module com { module sun { module star { module ucb {
 
-/** creates a <type>CachedContentResultSet</type>.
+/** creates a CachedContentResultSet.
 */
 
 published interface XCachedContentResultSetFactory: com::sun::star::uno::XInterface
@@ -35,15 +35,15 @@ published interface XCachedContentResultSetFactory: com::sun::star::uno::XInterf
         <type scope="com::sun::star::sdbc">XResultSet</type>.
 
         @param xSource
-        must be an instance of service <type>CachedContentResultSetStub</type>.
+        must be an instance of service CachedContentResultSetStub.
 
         @param xMapping
         can be used for optimization of remote access via the interface
-        <type>XContentAccess</type> of the <type>CachedContentResultSet</type>.
+        XContentAccess of the CachedContentResultSet.
         This parameter can be <NULL/>.
 
         @returns
-        an instance of service <type>CachedContentResultSet</type>.
+        an instance of service CachedContentResultSet.
     */
     com::sun::star::sdbc::XResultSet    createCachedContentResultSet(
                 [in] com::sun::star::sdbc::XResultSet xSource,

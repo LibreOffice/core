@@ -116,7 +116,7 @@ published service GraphicDescriptor
         <p>This property is always <TRUE/> for vector graphics.
         The status of this flag is not always clear if the
         graphic was not loaded at all, e.g. in case of just
-        querying for the <type>GraphicDescriptor</type>.</p>
+        querying for the GraphicDescriptor.</p>
     */
     [optional, property] boolean Transparent;
 
@@ -124,7 +124,7 @@ published service GraphicDescriptor
 
         <p>The status of this flag is not always clear if the
         graphic was not loaded at all, e.g. in case of just
-        querying for the <type>GraphicDescriptor</type></p>
+        querying for the GraphicDescriptor</p>
     */
     [optional, property] boolean Alpha;
 
@@ -133,7 +133,7 @@ published service GraphicDescriptor
 
         <p>The status of this flag is not always clear if the
         graphic was not loaded at all, e.g. in case of just
-        querying for the <type>GraphicDescriptor</type></p>
+        querying for the GraphicDescriptor</p>
     */
     [optional, property] boolean Animated;
 };

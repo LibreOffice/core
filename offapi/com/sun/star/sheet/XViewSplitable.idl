@@ -26,7 +26,7 @@
  module com {  module sun {  module star {  module sheet {
 
 
-/** enables a <type>SpreadsheetView</type> to split the view.
+/** enables a SpreadsheetView to split the view.
 
     @deprecated
  */

@@ -40,7 +40,7 @@ published interface XSheetConditionalEntries: com::sun::star::container::XIndexA
         <p>Supported properties are:</p>
 
         <dl>
-        <dt><type>ConditionOperator</type> Operator</dt>
+        <dt>ConditionOperator Operator</dt>
         <dd>contains the operation to perform for this condition.</dd>
 
         <dt><atom>string</atom> Formula1</dt>

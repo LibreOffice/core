@@ -26,7 +26,7 @@
 
  module com {  module sun {  module star {  module frame {
 
-/** use <type>XFrame</type> instead of this
+/** use XFrame instead of this
     @deprecated
  */
 published interface XDesktopTask: com::sun::star::lang::XComponent

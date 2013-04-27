@@ -28,7 +28,7 @@
  module com {  module sun {  module star {  module awt {
 
 
-/** specifies the standard model of an <type>UnoControlProgressBar</type>.
+/** specifies the standard model of an UnoControlProgressBar.
  */
 published service UnoControlProgressBarModel
 {

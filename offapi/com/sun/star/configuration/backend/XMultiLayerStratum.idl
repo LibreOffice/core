@@ -61,7 +61,7 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
 
       @return
                 a list of layer identifiers that can be used to
-                retrieve <type>Layer</type> objects.
+                retrieve Layer objects.
                 <p> The list is ordered by priority. Typically
                    the most general layers (global defaults,
                    entire organization) are first, more specific layers
@@ -104,7 +104,7 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
 
       @returns
                 a layer identifier that can be used to obtain
-                an <type>UpdatableLayer</type> object.
+                an UpdatableLayer object.
 
       @throws   com::sun::star::lang::IllegalArgumentException
                 if the component identifier is invalid or
@@ -153,7 +153,7 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
                 </p>
 
       @returns
-                a <type>Layer</type> object providing access to the layer data,
+                a Layer object providing access to the layer data,
                 <NULL/> if the layer is newer than indicated by the timestamp.
 
       @throws   com::sun::star::lang::IllegalArgumentException
@@ -196,7 +196,7 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
                 </p>
 
       @returns
-                a list of <type>Layer</type> objects
+                a list of Layer objects
                 providing access to the layer data.
                 <p> The list has the same length as aLayerIds. Each layer
                    object is associated to the layer id in the corresponding
@@ -250,7 +250,7 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
                 </p>
 
       @returns
-                a list of <type>Layer</type> objects
+                a list of Layer objects
                 providing access to the layer data.
                 <p> The list has the same length as aLayerIds. Each layer
                    object is associated to the layer id in the corresponding
@@ -287,7 +287,7 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
                 </p>
 
       @return
-                an <type>UpdatableLayer</type> object providing
+                an UpdatableLayer object providing
                 write access to the layer
 
       @throws   com::sun::star::lang::IllegalArgumentException

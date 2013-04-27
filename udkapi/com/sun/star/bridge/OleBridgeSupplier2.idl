@@ -41,7 +41,7 @@ module com { module sun { module star { module bridge {
     COM interfaces,
     except for IUnknown, are not supported.UNO interfaces and structs are mapped to IDispatch.
 
-    <p>The service implements the <type>XBridgeSupplier2</type> interface
+    <p>The service implements the XBridgeSupplier2 interface
     and handles the model types
     <const>com::sun::star::bridge::ModelDependent::UNO</const> and
     <const>com::sun::star::bridge::ModelDependent::OLE</const>.

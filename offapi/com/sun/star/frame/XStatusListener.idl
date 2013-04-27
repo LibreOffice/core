@@ -29,8 +29,8 @@
 /** makes it possible to receive events when the state of a feature changes.
 
     <p>
-    Nobody guarantee any notification. Use combination of <type>XNotifyingDispatch</type>
-    and <type>XDispatchResultListener</type> for that.
+    Nobody guarantee any notification. Use combination of XNotifyingDispatch
+    and XDispatchResultListener for that.
     </p>
 
     @see XDispatch

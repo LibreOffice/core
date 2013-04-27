@@ -37,7 +37,7 @@ interface XRepositorySupplier
     /** provides the RDF Repository associated with this object.
 
         @returns
-            an object of type <type>XRepository</type>
+            an object of type XRepository
      */
     XRepository getRDFRepository();
 

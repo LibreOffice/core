@@ -29,7 +29,7 @@ module com { module sun { module star { module document {
 
     <p>
     A "deep" filter detection means looking into the document stream to detect
-    the format of it. Services of type <type>ExtendedTypeDetection</type> must support this
+    the format of it. Services of type ExtendedTypeDetection must support this
     interface to be called from generic load mechanism of the office for that.
     </p>
 
@@ -39,19 +39,19 @@ module com { module sun { module star { module document {
  */
 published interface XExtendedFilterDetection: com::sun::star::uno::XInterface
 {
-    /** controls agreement of a "flat" <type>TypeDetection</type>
+    /** controls agreement of a "flat" TypeDetection
         with given URL or arguments
 
         <p>
         Registered services in configuration, which support this interface for different mime types,
         will be called automatically to look into the document stream and decide which format it represent.
-        Add the collected information about detected documents in given <type>MediaDescriptor</type>
+        Add the collected information about detected documents in given MediaDescriptor
         <var>Descriptor</var>. The decision must be returned as any valid type name (which specifies
         the detected format) or an empty value for unknown formats.
         </p>
 
         @param Descriptor
-            represent a <type>MediaDescriptor</type> which can be used to get/set information
+            represent a MediaDescriptor which can be used to get/set information
             about the detected document
 
         @returns

@@ -34,7 +34,7 @@ interface XControllerBorder: com::sun::star::uno::XInterface
     /** allows to get current border sizes of the document.
 
         @return
-            <type>BorderWidths</type> representing the sizes of border
+            BorderWidths representing the sizes of border
      */
     BorderWidths getBorder();
 

@@ -28,7 +28,7 @@ interface XResourceId;
     offer the user the choice between different views to be displayed in
     one pane.
     <p>For identification only the <member>ResourceId</member> is used, so for
-    some methods of the <type>XTabBar</type> interface only the
+    some methods of the XTabBar interface only the
     <member>ResourceId</member> member is evaluated.</p>
 */
 struct TabBarButton
@@ -42,9 +42,9 @@ struct TabBarButton
     */
     string HelpText;
 
-    /** <type>XResourceId</type> object of the resource that is requested to be
+    /** XResourceId object of the resource that is requested to be
         displayed when the tab bar button is activated.
-        <p>For some methods of the <type>XTabBar</type> interface only this
+        <p>For some methods of the XTabBar interface only this
         member is evaluated.  That is because only this member is used to
         identify a tab bar button.</p>
     */

@@ -133,7 +133,7 @@ service DataPointProperties
         "com.sun.star.drawing.LineDashTable", that can be created via
         the
         <type scope="com::sun::star::uno">XMultiServiceFactory</type>
-        of the <type>ChartDocument</type>.
+        of the ChartDocument.
      */
     [optional, property] string                       BorderDashName;
 
@@ -163,7 +163,7 @@ service DataPointProperties
         "com.sun.star.drawing.LineDashTable", that can be created via
         the
         <type scope="com::sun::star::uno">XMultiServiceFactory</type>
-        of the <type>ChartDocument</type>.
+        of the ChartDocument.
      */
     [optional, property] string                       LineDashName;
 
@@ -240,7 +240,7 @@ service DataPointProperties
     [optional, property] double                       Offset;
 
     /** describes the geometry of a 3 dimensional data point.
-        Number is one of constant group <type>DataPointGeometry3D</type>.
+        Number is one of constant group DataPointGeometry3D.
         <p>This is especially used for 3D bar-charts.</p>
         <p>CUBOID==0 CYLINDER==1 CONE==2 PYRAMID==3 CUBOID==else</p>
     */
@@ -281,7 +281,7 @@ service DataPointProperties
         x-direction.
 
         <p>The <type scope="com::sun::star::beans">XPropertySet</type>
-        must support the service <type>ErrorBar</type>.</p>
+        must support the service ErrorBar.</p>
      */
     [optional, maybevoid, property] com::sun::star::beans::XPropertySet      ErrorBarX;
 
@@ -289,7 +289,7 @@ service DataPointProperties
         y-direction.
 
         <p>The <type scope="com::sun::star::beans">XPropertySet</type>
-        must support the service <type>ErrorBar</type>.</p>
+        must support the service ErrorBar.</p>
      */
     [optional, maybevoid, property] com::sun::star::beans::XPropertySet      ErrorBarY;
 

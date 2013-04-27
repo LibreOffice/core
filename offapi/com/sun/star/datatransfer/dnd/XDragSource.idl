@@ -31,7 +31,7 @@ module com { module sun { module star { module datatransfer { module dnd {
  published interface XDragSourceListener;
 
 /** This interface is implemented by a view or window that supports drag
-    operations and will be received as part of a <type>DragGestureEvent</type>
+    operations and will be received as part of a DragGestureEvent
     through a <member scope="com::sun::star::datatransfer::dnd">XDragGestureListener::dragGestureRecognized()</member>
     callback.
 
@@ -56,7 +56,7 @@ published interface XDragSource: com::sun::star::uno::XInterface
     /** To get the default cursor for a specified drag action.
 
         @param dragAction
-        A drag action as specified in <type>DNDConstants</type>.
+        A drag action as specified in DNDConstants.
 
         @returns
         The default drag cursor for the specified drag action.
@@ -78,11 +78,11 @@ published interface XDragSource: com::sun::star::uno::XInterface
         on the parameter listener with a DragSourceDragEvent showing a failure.</p>
 
         @param trigger
-        The <type>DragGestureEvent</type> that initiated the drag.
+        The DragGestureEvent that initiated the drag.
 
         @param sourceActions
         The action or actions supported for this transferable as defined
-        in <type>DNDConstants</type>.
+        in DNDConstants.
 
         @param cursor
         The initial drag cursor id or 0 as default.
@@ -94,7 +94,7 @@ published interface XDragSource: com::sun::star::uno::XInterface
         The transferable object dragged.
 
         @param listener
-        The <type>XDragSourceListener</type>.
+        The XDragSourceListener.
 
         @see com::sun::star::datatransfer::XTransferable
     */

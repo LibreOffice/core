@@ -58,7 +58,7 @@ service AccessibleSpreadsheetDocumentView
                 an object that supports this service is returned
                 for every shape that is at the current table. These
                 objects are children of the
-                <type>AccessibleSpreadsheetDocumentView</type> regardless
+                AccessibleSpreadsheetDocumentView regardless
                 whether they are bound to a table or a cell.</li>
             <li><type scope="::com::sun::star::text">AccessibleParagraphView</type>:
                 A child where calling <method>getAccessibleChild</method>

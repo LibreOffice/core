@@ -28,11 +28,11 @@
 /** A layer is an entity inside a document which contains shapes.
 
 
-    <p>There could be zero or more <type>Shape</type>s attached to
+    <p>There could be zero or more Shapes attached to
     such a layer.
 
     </p>
-    <p>The properties of a <type>Layer</type> instance affect all <type>Shape</type>s
+    <p>The properties of a Layer instance affect all Shapes
     attached to the Layer.
 
     </p>
@@ -43,28 +43,28 @@
 published service Layer
 {
 
-    /** The properties in this set affect all <type>Shape</type>s attached to
+    /** The properties in this set affect all Shapes attached to
                 this Layer.
      */
     interface com::sun::star::beans::XPropertySet;
 
-    /** The name of a <type>Layer</type> is used to identify the
-        <type>Layer</type> in the user interface.
+    /** The name of a Layer is used to identify the
+        Layer in the user interface.
      */
     [property] string Name;
 
-    /** If a <type>Layer</type> is not visible, the objects in this
-        <type>Layer</type> are not shown in the user interface.
+    /** If a Layer is not visible, the objects in this
+        Layer are not shown in the user interface.
      */
     [property] boolean IsVisible;
 
-    /** If a <type>Layer</type> is not printable, the objects in
-        this <type>Layer</type> are not printed.
+    /** If a Layer is not printable, the objects in
+        this Layer are not printed.
      */
     [property] boolean IsPrintable;
 
-    /** If a <type>Layer</type> is locked, the objects in this
-        <type>Layer</type> cannot be edited in the user interface.
+    /** If a Layer is locked, the objects in this
+        Layer cannot be edited in the user interface.
      */
     [property] boolean IsLocked;
 

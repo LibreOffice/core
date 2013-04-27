@@ -29,7 +29,7 @@ module com { module sun { module star { module ucb {
 /** An interaction continuation handing back some authentication data.
 
     <p> This continuation is typically used in conjunction with
-    <type>AuthenticationRequest</type>. </p>
+    AuthenticationRequest. </p>
 */
 published interface XInteractionSupplyAuthentication: com::sun::star::task::XInteractionContinuation
 {

@@ -29,9 +29,9 @@ module com { module sun { module star { module graphic
 /** This service acts as a container for graphics
 
     <p>The main interface that has to be implemented for this service
-    is the <type>XGraphic</type> interface, which itself exposes only
-    a few methods. Beside this, a <type>Graphic</type> service
-    incorporates the <type>GraphicDescriptor</type> to give
+    is the XGraphic interface, which itself exposes only
+    a few methods. Beside this, a Graphic service
+    incorporates the GraphicDescriptor to give
     access to the attributes of the graphic.
 
     @see XGraphic

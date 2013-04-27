@@ -35,8 +35,8 @@ module com {  module sun {  module star {  module sheet {
 
     <p>To create a linked sheet, the sheet which will be used as linked
     sheet has to exist already. The method
-    <member>XSheetLinkable::link</member> creates a <type>SheetLink</type>
-    object in the document's <type>SheetLinks</type> collection and links
+    <member>XSheetLinkable::link</member> creates a SheetLink
+    object in the document's SheetLinks collection and links
     the sheet to the specified external sheet.</p>
  */
 published service SheetLink

@@ -64,7 +64,7 @@ published service EmbeddedObjectDescriptor
     /** denotes the storage from which the embedded object is to be recovered.
 
         <p>Upon activating the embedded object, it is normally loaded from a storage as denoted by
-        the parameters to the <type>XEmbedObjectCreator</type> method calls.</p>
+        the parameters to the XEmbedObjectCreator method calls.</p>
 
         <p>You can pass a non-<NULL/> <code>RecoveryStorage</code> in the object descriptor if you wish to load the
         embedded object from an alternate storage.</p>

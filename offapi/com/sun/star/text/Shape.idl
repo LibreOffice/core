@@ -47,7 +47,7 @@ published service Shape
      */
     [property] com::sun::star::text::XTextFrame AnchorFrame;
     /** specifies how the text content is attached to its surrounding
-        <type>Text</type>.
+        Text.
     */
     [optional, property] com::sun::star::text::TextContentAnchorType AnchorType;
     /** determines the horizontal orientation of the object.

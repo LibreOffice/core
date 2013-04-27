@@ -30,8 +30,8 @@ module com { module sun { module star { module task {
     an ODF document was encountered which conforms to an ODF version unknown to the
     current OpenOffice.org version.
 
-    <p>An interaction request of this type usually comes with an <type>XInteractionApprove</type>,
-    and <type>XInteractionDisapprove</type>, and <type>XInteractionAskLater</type> continuation.</p>
+    <p>An interaction request of this type usually comes with an XInteractionApprove,
+    and XInteractionDisapprove, and XInteractionAskLater continuation.</p>
  */
 exception FutureDocumentVersionProductUpdateRequest : ClassifiedInteractionRequest
 {

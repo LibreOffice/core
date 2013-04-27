@@ -34,8 +34,8 @@
 
  module com {  module sun {  module star {  module text {
 
-/** A <type>TextCursor</type> is a <type>TextRange</type> which can be moved
-    within a <type>Text</type> object.
+/** A TextCursor is a TextRange which can be moved
+    within a Text object.
     @see TextRange
  */
 published service TextCursor

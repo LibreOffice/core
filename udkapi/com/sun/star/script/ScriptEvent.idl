@@ -27,7 +27,7 @@
 
 /** script event that gets delivered whenever a script event takes place.
     <p>For that to happen, a "ScriptEventDescriptor" must be registered at
-    and attached to an object by an <type>XEventAttacherManager</type>.</p>
+    and attached to an object by an XEventAttacherManager.</p>
  */
 published struct ScriptEvent: com::sun::star::script::AllEventObject
 {

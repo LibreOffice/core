@@ -28,9 +28,9 @@ module com { module sun { module star { module accessibility {
 
 /** Implement this interface to give access to an object's set of relations.
 
-    <p>Such relation are modeled with the <type>AccessibleRelation</type>
+    <p>Such relation are modeled with the AccessibleRelation
     structure.  This interface is used for representing sets of relations
-    between <type>Accessible</type> objects.  Most of the convenience
+    between Accessible objects.  Most of the convenience
     methods of the corresponding AccessibleRelationSet interface of the Java
     Accessibility API have been removed from this interface in order to
     clean it up.  These methods are <member>add</member>,
@@ -71,7 +71,7 @@ interface XAccessibleRelationSet : ::com::sun::star::uno::XInterface
         @param aRelationType
             The type of relation to look for in this set of relations.  This
             has to be one of the constants of
-            <type>AccessibleRelationType</type>.
+            AccessibleRelationType.
 
         @return
             Returns <TRUE/> if there is a (at least one) relation of the
@@ -83,7 +83,7 @@ interface XAccessibleRelationSet : ::com::sun::star::uno::XInterface
 
         @param aRelationType
             The type of the relation to return.  This has to be one of the
-            constants of <type>AccessibleRelationType</type>.
+            constants of AccessibleRelationType.
 
         @return
             If a relation with the given type could be found than (a copy

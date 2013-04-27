@@ -30,7 +30,7 @@ module com { module sun { module star { module ui { module dialogs {
 
     <p>The broadcaster who sends such event, must send the dialog as the source.</p>
 
-    @see <type>com::sun::star::lang::EventObject</type>
+    @see com::sun::star::lang::EventObject
 */
 struct DialogClosedEvent: com::sun::star::lang::EventObject
 {
@@ -38,7 +38,7 @@ struct DialogClosedEvent: com::sun::star::lang::EventObject
         @param DialogResult
         Identifies the result of a dialog.
 
-        @see <type>ExecutableDialogResults</type>
+        @see ExecutableDialogResults
     */
     short DialogResult;
 };

@@ -27,18 +27,18 @@
 
  module com {  module sun {  module star {  module drawing {
 
-/** represents something that provides a <type>DrawPage</type>.
+/** represents something that provides a DrawPage.
 
     <p>This interface is provided if the container only supports exactly
-    one <type>DrawPage</type>. For containers which support multiple
-    <type>DrawPage</type>s interface <type>XDrawPagesSupplier</type> is
+    one DrawPage. For containers which support multiple
+    DrawPages interface XDrawPagesSupplier is
     supported.</p>
 
     @deprecated
  */
 published interface XDrawPageSupplier: com::sun::star::uno::XInterface
 {
-    /** returns the <type>DrawPage</type>.
+    /** returns the DrawPage.
      */
     com::sun::star::drawing::XDrawPage getDrawPage();
 

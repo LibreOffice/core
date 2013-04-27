@@ -32,7 +32,7 @@ interface XConfigurationChangeRequest;
     <p>This interface allows callers to add requests to the back of the
     queue and to determine whether the queue is empty.  Using this interface
     should normally not be necessary for anyone else than the
-    <type>XConfigurationController</type>.  It may be removed in the future.</p>
+    XConfigurationController.  It may be removed in the future.</p>
 */
 interface XConfigurationControllerRequestQueue
 {

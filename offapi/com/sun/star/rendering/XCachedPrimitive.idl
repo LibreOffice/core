@@ -25,11 +25,11 @@
 
 module com { module sun { module star { module rendering {
 
-/** Interface for cached repaint of already drawn <type>XCanvas</type>
+/** Interface for cached repaint of already drawn XCanvas
     primitives.<p>
 
     This interface provides a method to quickly redraw some
-    <type>XCanvas</type> primitives, using cached data.<p>
+    XCanvas primitives, using cached data.<p>
 
     @since OOo 2.0
  */
@@ -44,10 +44,10 @@ interface XCachedPrimitive : ::com::sun::star::uno::XInterface
         view state is of course permitted to differ from the one used
         for initial rendering.
 
-        @return a value of type <type>RepaintResult</type>, denoting
+        @return a value of type RepaintResult, denoting
         the result of this operation.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if the view transformation matrix is singular.
      */
     byte redraw( [in] ViewState aState )

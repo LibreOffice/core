@@ -26,10 +26,10 @@ module com { module sun { module star { module configuration { module backend {
 
 
 /**
-    implements a simple <type>BackendAdapter</type> that can be used for
+    implements a simple BackendAdapter that can be used for
     normal configuration operation.
 
-    <p>All real functionality is provided by the wrapped <type>SingleBackend</type>.
+    <p>All real functionality is provided by the wrapped SingleBackend.
 
     @see com::sun::star::configuration::backend::OnlineBackend
 
@@ -38,7 +38,7 @@ module com { module sun { module star { module configuration { module backend {
 published service SingleBackendAdapter
 {
 
-    /** provides access to configuration data from a <type>SingleBackend</type>.
+    /** provides access to configuration data from a SingleBackend.
       */
     service BackendAdapter ;
 

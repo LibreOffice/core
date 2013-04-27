@@ -38,7 +38,7 @@ module com {  module sun {  module star {  module lang {
     persistent registry storage.
 
     For usage of the service manager have a look at service description
-    of <type>ServiceManager</type>.
+    of ServiceManager.
 
     @see ServiceManager
 */
@@ -56,8 +56,8 @@ published service RegistryServiceManager
         <li>a component context
         (<type scope="com::sun::star::uno">XComponentContext</type>)
         to be installed as "DefaultContext" property of the
-        <type>ServiceManager</type> which is the context to be used
-        using the <type>XMultiServiceFactory</type> interface.</li>
+        ServiceManager which is the context to be used
+        using the XMultiServiceFactory interface.</li>
         </ol>
     */
     interface com::sun::star::lang::XInitialization;

@@ -32,7 +32,7 @@ module com {  module sun {  module star {  module container {
 
 /** provides functionality to enumerate the contents of a container.
 
-    <p>An object that implements the <type>XEnumeration</type> interface
+    <p>An object that implements the XEnumeration interface
     generates a series of elements, one at a time. Successive calls to
     the <code>XEnumeration::nextElement</code> method return successive
     elements of the series.  </p>

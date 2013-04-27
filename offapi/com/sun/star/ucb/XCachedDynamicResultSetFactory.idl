@@ -26,34 +26,34 @@
 
 module com { module sun { module star { module ucb {
 
-/** creates a <type>CachedDynamicResultSet</type>.
+/** creates a CachedDynamicResultSet.
 
     <p>Pay attention to instantiate this helper on client side where your want
     to read the data respectively where you have instantiated the listener to
-    the <type>XDynamicResultSet</type>.
+    the XDynamicResultSet.
 
     <p>The needed stub on server side can be created using
-    <type>XCachedDynamicResultSetStubFactory</type>.
+    XCachedDynamicResultSetStubFactory.
 */
 
 published interface XCachedDynamicResultSetFactory: com::sun::star::uno::XInterface
 {
-    /** creates a remote optimizes <type>XDynamicResultSet</type>.
+    /** creates a remote optimizes XDynamicResultSet.
 
         @param SourceStub
-        must be an instance of service <type>CachedDynamicResultSetStub</type>.
+        must be an instance of service CachedDynamicResultSetStub.
         It can be <NULL/>. In this case you can use the interface
-        <type>XSourceInitialization</type> of the returned
-        <type>CachedDynamicResultSet</type> to set the stub later.
+        XSourceInitialization of the returned
+        CachedDynamicResultSet to set the stub later.
 
         @param ContentIdentifierMapping
         is not required, but can be set if it is necessary to change the
         identity of the contents accessible via the interface
-        <type>XContentAccess</type> of the <type>ContentResultSet</type>
+        XContentAccess of the ContentResultSet
         (e.g., if merging two sources of the same type).
 
         @returns
-        an instance of service <type>CachedDynamicResultSet</type>.
+        an instance of service CachedDynamicResultSet.
     */
     com::sun::star::ucb::XDynamicResultSet  createCachedDynamicResultSet(
           [in] com::sun::star::ucb::XDynamicResultSet SourceStub

@@ -51,8 +51,8 @@ interface XDrillDownDataSupplier: com::sun::star::uno::XInterface
         @returns a filtered subset of the original source data as 2-dimensional
         sequences of <type scope="com::sun::star::uno">Any</any>.  The first row
         must be the header row.  Each <type scope="com::sun::star::uno">Any</type>
-        instance must contain either <type>double</type> value for a numeric cell, or
-        a <type>string</type> value for a string cell.
+        instance must contain either double value for a numeric cell, or
+        a string value for a string cell.
 
         @see com::sun::star::sheet::DataPilotFieldFilter
         @see com::sun::star::sheet::XDataPilotTable2

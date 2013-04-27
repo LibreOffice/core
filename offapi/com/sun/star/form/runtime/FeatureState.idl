@@ -37,7 +37,7 @@ struct FeatureState
     boolean Enabled;
 
     /** determines the state of the feature. The concrete semantics depends
-        on the concrete <type>FormFeature</type>.
+        on the concrete FormFeature.
     */
     any State;
 };

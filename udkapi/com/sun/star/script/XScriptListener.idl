@@ -29,13 +29,13 @@
 
  module com {  module sun {  module star {  module script {
 
-/** makes it possible to receive <type>ScriptEvent</type>s.
+/** makes it possible to receive ScriptEvents.
  */
 published interface XScriptListener: com::sun::star::lang::XEventListener
 {
     /** gets called when an event takes place.  For that a
-        <type>ScriptEventDescriptor</type> is registered at and
-        attached to an object by an <type>XEventAttacherManager</type>.
+        ScriptEventDescriptor is registered at and
+        attached to an object by an XEventAttacherManager.
      */
     void firing( [in] com::sun::star::script::ScriptEvent aEvent );
 

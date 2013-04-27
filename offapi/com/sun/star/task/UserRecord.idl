@@ -22,7 +22,7 @@
 
 module com { module sun { module star { module task {
 
-/* Specifies user/password entries for <type>UrlRecord</type>.
+/* Specifies user/password entries for UrlRecord.
 */
 published struct UserRecord
 {

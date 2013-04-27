@@ -26,7 +26,7 @@
 
 module com {  module sun {  module star {  module drawing {
 
-/** The <type>AccessibleShape</type> service is implemented by UNO shapes to
+/** The AccessibleShape service is implemented by UNO shapes to
     provide accessibility information that describe the shape's features.
     A UNO shape is any object that implements the <type
     scope="::com::sun::star::drawing">XShape</type> interface.
@@ -35,14 +35,14 @@ module com {  module sun {  module star {  module drawing {
     and accessible text paragraphs.  The root of this (sub-)tree is the
     accessible draw document view.  An accessible shape implements either
     this service or one of the "derived" services
-    <type>AccessibleGraphicShape</type> or <type>AccessibleOLEShape</type>.
+    AccessibleGraphicShape or AccessibleOLEShape.
     See the section Children in the description of the
     <type scope="::com::sun::star::accessibility"
     >XAccessibleContext</type> interface support for more details.</p>
 
     <p>There are two services that extend this one:  the
-    <type>AccessibleGraphicShape</type> and the
-    <type>AccessibleOLEShape</type> services provide additional interfaces.
+    AccessibleGraphicShape and the
+    AccessibleOLEShape services provide additional interfaces.
     See there for details.</p>
 
     <p>A shape object is either fully or partially visible on the screen or
@@ -84,7 +84,7 @@ service AccessibleShape
             >AccessibleParagraphView</type> for details of
             how this text is represented.</li>
         <li>Parent: The parent is either the document view as represented by
-            <type>AccessibleDrawDocumentView</type> or a group shape, 3D
+            AccessibleDrawDocumentView or a group shape, 3D
             scene shape, or OLE shape.</li>
         <li>Relations: Are set and maintained from the outside.  See the
         service description of the object that has accessible shapes as

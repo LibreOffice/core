@@ -25,7 +25,7 @@
 module com { module sun { module star { module mail {
 
 /**
-   A <type>NoMailServiceProviderException</type> will be thrown if an
+   A NoMailServiceProviderException will be thrown if an
    appropriate provider for requested mail service could not be found or
    could not be created.
 

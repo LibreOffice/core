@@ -26,7 +26,7 @@
  module com {  module sun {  module star {  module drawing {
 
 
-/** provides access to a container of <type>MasterPage</type>s
+/** provides access to a container of MasterPages
     and makes it possible for them to be manipulated.
 
     @see XMasterPagesSupplier
@@ -34,7 +34,7 @@
  */
 published service MasterPages
 {
-    /** lets you access and create <type>MasterPage</type>s
+    /** lets you access and create MasterPages
      */
     interface com::sun::star::drawing::XDrawPages;
 

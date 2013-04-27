@@ -30,7 +30,7 @@
  module com {  module sun {  module star {  module awt {
 
 
-/** specifies the standard model of an <type>UnoControlFileControl</type>.
+/** specifies the standard model of an UnoControlFileControl.
  */
 published service UnoControlFileControlModel
 {

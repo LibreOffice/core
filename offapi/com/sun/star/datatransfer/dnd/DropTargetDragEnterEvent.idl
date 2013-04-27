@@ -26,7 +26,7 @@
 
 module com { module sun { module star { module datatransfer { module dnd {
 
-/** The <type>DropTargetDragEnterEvent</type> is delivered from the drop target to the
+/** The DropTargetDragEnterEvent is delivered from the drop target to the
     currently registered drop target listeners whenever the logical cursor
     associated with a Drag and Drop operation enters the visible geometry
     of a window associated with a drop target.

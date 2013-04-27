@@ -29,7 +29,7 @@
 
 
 /** makes it possible to access, add, and remove the
-    <type>Shape</type>s in a collection.
+    Shapes in a collection.
 
     @see DrawPage
     @see MasterPage
@@ -38,18 +38,18 @@
 published interface XShapes: com::sun::star::container::XIndexAccess
 {
 
-    /** inserts a <type>Shape</type> into this collection.
+    /** inserts a Shape into this collection.
 
         @param xShape
-            a <type>Shape</type> that will be inserted.
+            a Shape that will be inserted.
      */
     void add( [in] com::sun::star::drawing::XShape xShape );
 
 
-    /** removes a <type>Shape</type> from this collection.
+    /** removes a Shape from this collection.
 
         @param xShape
-            the <type>Shape</type> will be removed from the
+            the Shape will be removed from the
             collection and disposed.
      */
     void remove( [in] com::sun::star::drawing::XShape xShape );

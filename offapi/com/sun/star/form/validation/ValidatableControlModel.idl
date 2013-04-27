@@ -50,8 +50,8 @@ service ValidatableControlModel
     /** enables support for validating the value of the control model
 
         <p>Setting an retrieving the current validator of the control model is
-        possible via the <type>XValidatable</type> interface (which
-        <type>XValidatableFormComponent</type> is derived from).</p>
+        possible via the XValidatable interface (which
+        XValidatableFormComponent is derived from).</p>
 
         <p>Easy access to the current value of the control, as well as it's validity
         (relative to the active validator), is provided by the methods <member>XValidatableFormComponent::isValid</member>
@@ -66,8 +66,8 @@ service ValidatableControlModel
 
         <p>As soon as a validator is set via <member>XValidatable::setValidator</member>, the validatable
         control model registers itself as listener. If the validity constraint of the validator
-        changes, the <type>ValidatableControlModel</type> re-validates it's current valid, and
-        broadcasts any resuling changes to all its <type>XFormComponentValidityListener</type>, if
+        changes, the ValidatableControlModel re-validates it's current valid, and
+        broadcasts any resuling changes to all its XFormComponentValidityListener, if
         necessary.</p>
     */
     interface XValidityConstraintListener;

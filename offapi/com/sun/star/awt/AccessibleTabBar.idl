@@ -46,7 +46,7 @@ service AccessibleTabBar
         <li>Children: The children of a tabbar are tabbar buttons,
             the tabbar sizer and the tabbar page list,
             whose accessible context supports the service
-            <type>AccessibleTabBarPageList</type>.</li>
+            AccessibleTabBarPageList.</li>
         <li>Parent: The parent is the window that contains the
             tabbar.</li>
         <li>Relations: There are no relations.</li>

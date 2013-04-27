@@ -70,7 +70,7 @@ module com {  module sun {  module star {  module sdb {
         </li>
 
         <li><a name="data_source"></a><b>DataSourceName</b><br/>
-        specifies the name of the globally registered <type>DataSource</type> for which a query, view, or SQL
+        specifies the name of the globally registered DataSource for which a query, view, or SQL
         command is to be designed.<br/>
         The DataSourceName may be omitted if and only if a valid <a href="#active_connection">ActiveConnection</a>
         parameter is present.<br/>

@@ -25,7 +25,7 @@
 
 module com { module sun { module star { module ucb {
 
-/** a listener for events related to changing <type>XCommandInfo</type>s.
+/** a listener for events related to changing XCommandInfos.
 
     @version  1.0
     @author   Kai Sommerfeld
@@ -34,7 +34,7 @@ module com { module sun { module star { module ucb {
 */
 published interface XCommandInfoChangeListener : com::sun::star::lang::XEventListener
 {
-    /** gets called whenever changes of a <type>XCommandInfo</type> shall
+    /** gets called whenever changes of a XCommandInfo shall
         be propagated.
 
         @param evt

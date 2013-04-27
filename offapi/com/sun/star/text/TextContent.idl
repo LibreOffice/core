@@ -28,13 +28,13 @@
 module com { module sun { module star { module text {
 
 /** is an object which can be anchored in a text, like instances of
-    <type>TextFrame</type> or <type>TextField</type>.
+    TextFrame or TextField.
 
-    <p>If the concrete <type>TextContent</type> has a textual
+    <p>If the concrete TextContent has a textual
     representation which fades into the surrounding text, then
-    <type>XTextField</type> is used.
+    XTextField is used.
 
-    <p>If the concrete <type>TextContent</type> has a "floating" object,
+    <p>If the concrete TextContent has a "floating" object,
     like a graphic, <type scope="com::sun::star::drawing">XShape</type>
     is used.
 
@@ -54,7 +54,7 @@ published service TextContent
     interface com::sun::star::text::XTextContent;
 
     /** specifies how the text content is attached to its surrounding
-        <type>Text</type>.
+        Text.
     */
     [optional, property] com::sun::star::text::TextContentAnchorType AnchorType;
 

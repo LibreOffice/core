@@ -23,7 +23,7 @@
  module com {  module sun {  module star {  module beans {
 
 
-/** These values are used to specify the behavior of a <type>Property</type>.
+/** These values are used to specify the behavior of a Property.
  */
 published constants PropertyAttribute
 {
@@ -35,15 +35,15 @@ published constants PropertyAttribute
     const short MAYBEVOID = 1;
 
 
-    /** indicates that a <type>PropertyChangeEvent</type> will be fired
-        to all registered <type>XPropertyChangeListener</type>s whenever the
+    /** indicates that a PropertyChangeEvent will be fired
+        to all registered XPropertyChangeListeners whenever the
         value of this property changes.
      */
     const short BOUND = 2;
 
 
-    /** indicates that a <type>PropertyChangeEvent</type> will be fired
-        to all registered <type>XVetoableChangeListener</type>s whenever the
+    /** indicates that a PropertyChangeEvent will be fired
+        to all registered XVetoableChangeListeners whenever the
         value of this property is about to change.
 
             <p>This always implies that the property is <em>bound</em>, too. </p>

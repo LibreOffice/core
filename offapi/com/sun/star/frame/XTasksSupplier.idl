@@ -27,7 +27,7 @@
 
  module com {  module sun {  module star {  module frame {
 
-/** use <type>XFramesSupplier</type> instead of that
+/** use XFramesSupplier instead of that
     @deprecated
  */
 published interface XTasksSupplier: com::sun::star::uno::XInterface

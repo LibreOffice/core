@@ -34,7 +34,7 @@ published interface XDrawPagesSupplier: com::sun::star::uno::XInterface
 {
 
     /** @returns
-                an indexed container with the service <type>DrawPages</type>.
+                an indexed container with the service DrawPages.
      */
     com::sun::star::drawing::XDrawPages getDrawPages();
 

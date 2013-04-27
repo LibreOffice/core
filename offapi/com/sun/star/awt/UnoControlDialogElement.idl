@@ -24,8 +24,8 @@
 
 
 /** specifies a set of properties to describe the model of an
-    <type>UnoControl</type> which is embedded in a
-    <type>UnoControlDialogModel</type>.
+    UnoControl which is embedded in a
+    UnoControlDialogModel.
  */
 published service UnoControlDialogElement
 {

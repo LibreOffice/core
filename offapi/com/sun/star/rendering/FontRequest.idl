@@ -68,8 +68,8 @@ struct FontRequest
         used. That is, the size specified here corresponds to device
         pixel only if the combined render transformation during text
         output equals the identity transform. This also applies to all
-        query methods, for both <type>XCanvasFont</type> and
-        <type>XTextLayout</type>.<p>
+        query methods, for both XCanvasFont and
+        XTextLayout.<p>
     */
     double                          CellSize;
 

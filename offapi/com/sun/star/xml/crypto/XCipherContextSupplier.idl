@@ -38,7 +38,7 @@ interface XCipherContextSupplier : com::sun::star::uno::XInterface
 
         @param nCipherID
             the internal ID specifying the algorithm,
-            should take value from <type>CipherID</type>
+            should take value from CipherID
 
         @param aKey
             the key that should be used for the encryption

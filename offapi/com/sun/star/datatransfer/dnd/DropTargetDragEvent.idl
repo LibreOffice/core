@@ -27,7 +27,7 @@ module com { module sun { module star { module datatransfer { module dnd {
 
  published interface XDropTargetDragContext;
 
-/** The <type>DropTargetDragEvent</type> is delivered from the drop target
+/** The DropTargetDragEvent is delivered from the drop target
     to the currently registered drop target listener.
 
     <p>It contains information regarding the current state of the operation to enable

@@ -57,7 +57,7 @@ interface XSheetObject : ooo::vba::XHelperInterface
     [attribute] string OnAction;
 
     /** Anchor mode of the object (fixed or variable position and size). Must
-        be a value from <type>ooo::vba::excel::XlPlacement</type>. */
+        be a value from ooo::vba::excel::XlPlacement. */
     [attribute] long Placement;
 
     /** True = print object, false = skip object on printing. */

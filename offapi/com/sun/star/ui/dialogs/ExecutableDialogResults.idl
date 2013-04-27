@@ -23,7 +23,7 @@
 
 module com { module sun { module star { module ui { module dialogs {
 
-/** These constants are used to specify a result of executing a <type>XExecutableDialog</type>.
+/** These constants are used to specify a result of executing a XExecutableDialog.
 */
 
 published constants ExecutableDialogResults

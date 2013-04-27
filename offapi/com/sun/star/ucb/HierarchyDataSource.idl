@@ -45,14 +45,14 @@ published service HierarchyDataSource
         supports at least the service specifier
         <code>"com.sun.star.ucb.HierarchyDataReadAccess"</code>, which will
         create a <b>read-only view</b> to the data. The object that is created
-        implements the service <type>HierarchyDataReadAccess</type>.
+        implements the service HierarchyDataReadAccess.
 
         <p><b>Optionally</b> the factory may support <b>writable views</b>. A
         writable view is requested by passing the service specifier
         <code>"com.sun.star.ucb.HierarchyDataReadWriteAccess"</code> to
         <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments</member>
         The object that is created implements the service
-        <type>HierarchyDataReadWriteAccess</type>.
+        HierarchyDataReadWriteAccess.
 
         <p>The arguments passed to
         <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments</member>
@@ -70,7 +70,7 @@ published service HierarchyDataSource
         element and all its descendants. A path consists of segments that are
         separated by a single slash ("/"). There is neither a leading nor a
         trailing slash allowed. The <b>root</b> of the hierarchy data always
-        has an empty path. Refer to <type>HierarchyDataReadAccess</type> for
+        has an empty path. Refer to HierarchyDataReadAccess for
         more information on hierarchical names.
 
         <p>Other arguments can be used to control the behavior of the view.

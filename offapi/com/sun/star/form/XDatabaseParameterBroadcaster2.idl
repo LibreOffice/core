@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module form {
 /** provides the possibility of receiving an event for configuration of parameters.
 
     <p>Note that this interface provides exactly the same functionality as the
-    <type>XDatabaseParameterBroadcaster</type> interface. It exists purely for compatibility
+    XDatabaseParameterBroadcaster interface. It exists purely for compatibility
     with the <member scope="com::sun::star::script">XEventAttacher::attachSingleEventListener</member>:
     It expects the methods for adding and removing listeners to follow a certain naming scheme,
     respective to the name of the listener which is being added/removed.</p>

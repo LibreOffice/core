@@ -26,9 +26,9 @@
  module com {  module sun {  module star {  module text {
 
 
-/** is a <type>TextRange</type> which is explicitly marked
-    as an index entry. This is the base service of index marks for <type>DocumentIndex</type>,
-     <type>ContentIndex</type>, and <type>UserIndex</type>.
+/** is a TextRange which is explicitly marked
+    as an index entry. This is the base service of index marks for DocumentIndex,
+     ContentIndex, and UserIndex.
  */
 published service BaseIndexMark
 {

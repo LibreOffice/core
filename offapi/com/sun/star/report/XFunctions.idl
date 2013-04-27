@@ -39,12 +39,12 @@ interface XFunctions
     */
     interface com::sun::star::container::XContainer;
     /** gives access to the group elements.
-        The elements are of type <type>XFunction</type>.
+        The elements are of type XFunction.
     */
     interface com::sun::star::container::XIndexContainer;
 
     /** allows the navigation to the report or group object.
-        The method setParent from <type>XChild</type> is not supported and will throw an exception when called.
+        The method setParent from XChild is not supported and will throw an exception when called.
     */
     interface com::sun::star::container::XChild;
 
@@ -52,7 +52,7 @@ interface XFunctions
      */
     interface com::sun::star::lang::XComponent;
 
-    /** factory method for <type>XFunction</type>.
+    /** factory method for XFunction.
     */
     com::sun::star::report::XFunction createFunction();
 };

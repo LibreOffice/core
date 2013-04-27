@@ -32,7 +32,7 @@ module com {  module sun {  module star {  module bridge { module oleautomation 
     other ordinary UNO object. However, it may be desirable to have
     that distinction regardless, if a UNO client needs to take
     particular Automation specific characteristics into account.
-    By providing <type>XAutomationObject</type> an object declares
+    By providing XAutomationObject an object declares
     to be representing an Automation object.
 
     @since OOo 1.1.2

@@ -28,7 +28,7 @@
 /** special dispatch provider registered for URL protocols
 
     <p>
-    The generic dispatch mechanism on a <type>Frame</type>
+    The generic dispatch mechanism on a Frame
     search for such registered protocol handler and use it if it agrees with
     the dispatched URL.
     </p>

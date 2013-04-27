@@ -32,7 +32,7 @@ module com {  module sun {  module star {  module sheet {
 /** represents a collection of members in a data pilot field group.
 
     <p>The members (also called items) of this collection are instances of
-    <type>DataPilotFieldGroupItem</type>.</p>
+    DataPilotFieldGroupItem.</p>
 
     @see DataPilotField
     @see DataPilotFieldGroups
@@ -86,7 +86,7 @@ published service DataPilotFieldGroup
         group member.</li>
         <li>an object supporting the <type scope="com::sun::star::container">
         XNamed</type> interface, for example an instance of
-        <type>DataPilotFieldGroupItem</type> received from another group.</li>
+        DataPilotFieldGroupItem received from another group.</li>
         </ul></p>
 
         <p>The method <member scope="com::sun::star::container">

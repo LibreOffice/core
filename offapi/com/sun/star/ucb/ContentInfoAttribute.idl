@@ -31,7 +31,7 @@ published constants ContentInfoAttribute
     */
     const short NONE = 0;
 
-    /** Supply an input stream with the <type>InsertCommandArgument</type>,
+    /** Supply an input stream with the InsertCommandArgument,
         when committing the new content by executing the command "insert" at it.
     */
     const short INSERT_WITH_INPUTSTREAM = 1;

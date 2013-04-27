@@ -47,7 +47,7 @@ published interface XPropertySetInfo: com::sun::star::uno::XInterface
 
     /** @returns
             a sequence with all property descriptors which are specified
-            within this <type>XPropertySetInfo</type>.
+            within this XPropertySetInfo.
      */
     sequence<com::sun::star::beans::Property> getProperties();
 

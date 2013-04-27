@@ -30,7 +30,7 @@
 
 /** is supported by buttons which can be toggled between a "pressed" and an "unpressed" state
 
-    <p>Changes in the toggle state are broadcasted to <type>XItemListener</type> instances.</p>
+    <p>Changes in the toggle state are broadcasted to XItemListener instances.</p>
  */
 interface XToggleButton: XItemEventBroadcaster
 {

@@ -29,8 +29,8 @@
 
 
 /** This service is a presentation that is available from a
-    <type>PresentationDocument</type> via the
-    <type>XPresentationSupplier</type> interface.
+    PresentationDocument via the
+    XPresentationSupplier interface.
  */
 published service Presentation
 {

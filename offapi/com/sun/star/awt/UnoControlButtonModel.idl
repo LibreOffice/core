@@ -30,7 +30,7 @@
  module com {  module sun {  module star {  module awt {
 
 
-/** specifies the standard model of an <type>UnoControlButton</type>.
+/** specifies the standard model of an UnoControlButton.
  */
 published service UnoControlButtonModel
 {
@@ -103,14 +103,14 @@ published service UnoControlButtonModel
 
 
     /** specifies the alignment of the image inside the button as
-        <type>ImageAlign</type> value.
+        ImageAlign value.
      */
     [property] short ImageAlign;
 
 
     /** specifies the position of the image, if any, relative to the text, if any
 
-        <p>Valid values of this property are specified with <type>ImagePosition</type>.</p>
+        <p>Valid values of this property are specified with ImagePosition.</p>
 
         <p>If this property is present, it supersedes the <member>ImageAlign</member> property - setting
         one of both properties sets the other one to the best possible match.</p>
@@ -157,7 +157,7 @@ published service UnoControlButtonModel
     [property] boolean Printable;
 
 
-    /** specifies the default action of the button as <type>PushButtonType</type> value.
+    /** specifies the default action of the button as PushButtonType value.
      */
     [property] short PushButtonType;
 

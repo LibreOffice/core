@@ -34,7 +34,7 @@ struct PropertyCategoryDescriptor
 
         <p>This programmatic name is used internally: <member>XPropertyHandler::describePropertyLine</member>
         sets a programmatic category name at <member>LineDescriptor::Category</member>,
-        and an object inspector uses this to find the proper <type>PropertyCategoryDescriptor</type>.</p>
+        and an object inspector uses this to find the proper PropertyCategoryDescriptor.</p>
     */
     string  ProgrammaticName;
 

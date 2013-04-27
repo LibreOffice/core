@@ -27,7 +27,7 @@ module com { module sun { module star { module ucb {
 /** is an interaction continuation used to hand back a new name for something.
 
     <p>For example, this continuation can be selected when handling a
-    <type>NameClashResolveRequest</type> in order to supply a new name
+    NameClashResolveRequest in order to supply a new name
     for a clashing resource.
 
      @version  1.0

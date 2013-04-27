@@ -27,7 +27,7 @@
 
 
 /** This abstract service is implemented by every page of a
-    <type>SpreadsheetDocument</type>.
+    SpreadsheetDocument.
 
     @example create and insert a couple of <type scope="com::sun::star::drawing">LineShape</type>s:
 

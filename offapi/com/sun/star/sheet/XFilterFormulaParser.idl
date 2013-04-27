@@ -26,7 +26,7 @@
 module com {  module sun {  module star {  module sheet {
 
 
-/** Extends the interface <type>XFormulaParser</type> by an attribute that
+/** Extends the interface XFormulaParser by an attribute that
     specifies the namespace URL of the supported formula language.
  */
 interface XFilterFormulaParser : XFormulaParser

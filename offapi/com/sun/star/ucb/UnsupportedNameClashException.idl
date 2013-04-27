@@ -30,7 +30,7 @@ module com { module sun { module star { module ucb {
     it or if it is just not (yet) implemented.
 
     <p>Command "transfer": Used if the name clash directive specified in
-    parameter NameClash of the supplied <type>TransferInfo</type> is not
+    parameter NameClash of the supplied TransferInfo is not
     supported. For example, if the NameClash was set to NameClash::ERROR,
     to NameClash::RENAME or to NameClash::ASK, the implementation must be
     able determine whether there are existing data. This exception must also
@@ -38,7 +38,7 @@ module com { module sun { module star { module ucb {
     unable to create a valid new name after a suitable number of tries.
 
     <p>Command "insert": Used if the parameter ReplaceExisting of the
-    supplied <type>InsertCommandArgument</type> was set to <false/> and the
+    supplied InsertCommandArgument was set to <false/> and the
     implementation is unable to determine whether there are existing data.
     The member NameClash of the exception must be set to NameClash::ERROR
 
@@ -48,7 +48,7 @@ module com { module sun { module star { module ucb {
 */
 published exception UnsupportedNameClashException : com::sun::star::uno::Exception
 {
-    /** contains the <type>NameClash</type> that is not supported.
+    /** contains the NameClash that is not supported.
      */
     long NameClash;
 };

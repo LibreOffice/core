@@ -25,10 +25,10 @@
 
 module com { module sun { module star { module datatransfer { module dnd {
 
-/** This class is the base class for <type>DropTargetDragEvent</type> and
-     <type>DropTargetDropEvent</type>.
+/** This class is the base class for DropTargetDragEvent and
+     DropTargetDropEvent.
 
-    <p>To access the <type>XDropTarget</type> that originated this event, use the
+    <p>To access the XDropTarget that originated this event, use the
     <member scope="com::sun::star::lang">EventObject::Source</member> member of
     this object.</p>
 */

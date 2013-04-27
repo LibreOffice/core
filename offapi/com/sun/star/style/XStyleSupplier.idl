@@ -39,14 +39,14 @@ interface XStyleSupplier : ::com::sun::star::uno::XInterface
         @return the style.  If no style was set, the returned object
                 may be empty (null).  Otherwise, the returned object
                 must support the service
-                <type>PropertyTemplate</type>.
+                PropertyTemplate.
      */
     ::com::sun::star::style::XStyle getStyle();
 
     /** @param xStyle If you want to remove an existing style, you can
                set an empty (null) object.  Otherwise, the object
                given must support the service
-               <type>PropertyTemplate</type>.
+               PropertyTemplate.
      */
     void setStyle( [in] ::com::sun::star::style::XStyle xStyle )
         raises( com::sun::star::lang::IllegalArgumentException );

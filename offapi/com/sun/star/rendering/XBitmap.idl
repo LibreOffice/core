@@ -30,10 +30,10 @@ module com { module sun { module star { module rendering {
 /** This is a generic interface to a bitmap.<p>
 
     This interface contains the generic functionality to be used on
-    every <type>XCanvas</type> bitmap object. More format-specific
-    methods can be found at the <type>XIntegerBitmap</type>,
-    <type>XIeeeDoubleBitmap</type>, <type>XIeeeFloatBitmap</type> and
-    <type>XHalfFloatBitmap</type> interfaces.<p>
+    every XCanvas bitmap object. More format-specific
+    methods can be found at the XIntegerBitmap,
+    XIeeeDoubleBitmap, XIeeeFloatBitmap and
+    XHalfFloatBitmap interfaces.<p>
 
     @since OOo 2.0
  */
@@ -52,7 +52,7 @@ interface XBitmap : ::com::sun::star::uno::XInterface
 
         The method checks, whether the bitmap contains any alpha
         information. The same information is also available at the
-        <type>XColorSpace</type> associated with this bitmap, though
+        XColorSpace associated with this bitmap, though
         much easier to access here (the color space then has a
         component flagged
         <member>ColorComponentTag::ALPHA</member>).<p>
@@ -76,10 +76,10 @@ interface XBitmap : ::com::sun::star::uno::XInterface
 
         @returns the new scaled bitmap.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if the size components are outside the specified range.
 
-        @throws <type>VolatileContentDestroyedException</type>
+        @throws VolatileContentDestroyedException
         if the contents of a volatile bitmap have been destroyed, and
         thus cannot be read to generate the scaled bitmap.
      */

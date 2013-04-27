@@ -27,13 +27,13 @@
  module com {  module sun {  module star {  module frame {
 
 /** derivations of this abstract service are used to load components
-    into <type>Frame</type>s of the environment
+    into Frames of the environment
 
     <p>
     Concrete implementations of this service register, for example,
     for file name extensions or MIME types to load appropriate
-    components. The components loaded are at least <type>Controller</type>.
-    Instead of service <type>FrameLoader</type> this one use synchronous
+    components. The components loaded are at least Controller.
+    Instead of service FrameLoader this one use synchronous
     processes to load the component.
     </p>
 
@@ -49,7 +49,7 @@ published service SynchronousFrameLoader
 
         <p>
         Concrete implementations should use it to get her own configuration data
-        directly after creation by the <type>FrameLoaderFactory</type>.
+        directly after creation by the FrameLoaderFactory.
         Otherwise they must use normal configuration API to do so.
         </p>
      */
@@ -59,10 +59,10 @@ published service SynchronousFrameLoader
 
         <p>
         The internal name is a part of his configuration and will be passed by
-        the <type>FrameLoaderFactory</type> after creation
+        the FrameLoaderFactory after creation
         if optional interface <type scope="com::sun::star::lang">XInitialization</type>
         is supported. Value of function <member scope="com::sun::star::container">XNamed::getName()</member> can be
-        used on service <type>FrameLoaderFactory</type> to get further information about this loader.
+        used on service FrameLoaderFactory to get further information about this loader.
         Setting of this name by calling <member scope="com::sun::star::container">XNamed::setName()</member> must be
         forwarded to same factory service. He should decide, if it's allowed or not.
         The reason: prevent code against name ambiguities.

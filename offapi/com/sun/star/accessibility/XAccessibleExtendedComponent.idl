@@ -31,12 +31,12 @@
 
 module com { module sun { module star { module accessibility {
 
-/** The <type>XAccessibleExtendedComponent</type> interface contains
-    additional methods to those of the <type>XAccessibleComponent</type>
+/** The XAccessibleExtendedComponent interface contains
+    additional methods to those of the XAccessibleComponent
     interface.  These methods provide information that is used not as often.  The
     division into two interfaces allows classes to support the more
-    frequently used methods of the <type>XAccessibleComponent</type>
-    interface and only support the <type>XAccessibleExtendedComponent</type>
+    frequently used methods of the XAccessibleComponent
+    interface and only support the XAccessibleExtendedComponent
     interface if that makes sense for the class.
 
     <p>This interface provides extended access to retrieve information

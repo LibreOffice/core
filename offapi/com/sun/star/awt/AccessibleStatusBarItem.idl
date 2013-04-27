@@ -48,7 +48,7 @@ service AccessibleStatusBarItem
         <li>Children: There are no children.</li>
         <li>Parent: The parent of a status bar item is the status bar,
             whose accessible context supports the service
-            <type>AccessibleStatusBar</type>.</li>
+            AccessibleStatusBar.</li>
         <li>Relations: There are no relations.</li>
         <li>States: The states supported by this service are
             <ul>

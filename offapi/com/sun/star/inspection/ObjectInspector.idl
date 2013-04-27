@@ -42,7 +42,7 @@ module com {  module sun {  module star {  module inspection {
     <p>Even more, the inspector can optionally display a help section at the bottom of its
     window, which can display arbitrary (context-sensitive) help texts.</p>
 
-    <p>An <type>ObjectInspector</type> needs one or more property handlers which describe
+    <p>An ObjectInspector needs one or more property handlers which describe
     the facets of an inspected component - without such handlers, the inspector window will simply
     stay empty.</p>
 
@@ -53,7 +53,7 @@ module com {  module sun {  module star {  module inspection {
     <p>Since property handlers might have the need to raise UI, they will be created with a context
     value named "DialogParentWindow", which contains an XWindow which should be used as parent of
     any windows to raise.<br/>
-    If the <type scope="com::sun::star::uno">XComponentContext</type> in which the <type>ObjectInspector</type>
+    If the <type scope="com::sun::star::uno">XComponentContext</type> in which the ObjectInspector
     was created already contains such a value, it is not overwritten. Only if it doesn't, the inspector
     will add an own value - which contains the inspector's main window - to the context when creating
     handlers.</p>
@@ -75,7 +75,7 @@ service ObjectInspector : XObjectInspector
     */
     createDefault();
 
-    /** creates an instance of the ObjectInspector, using a given <type>ObjectInspectorModel</type>
+    /** creates an instance of the ObjectInspector, using a given ObjectInspectorModel
 
         @throws ::com::sun::star::lang::IllegalArgumentException
             if <arg>Model</arg> is <NULL/>.

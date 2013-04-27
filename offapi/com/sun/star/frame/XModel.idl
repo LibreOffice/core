@@ -42,7 +42,7 @@
     <p>
     Models can be controlled by controller components, which are usually
     views of the model.
-    (see <type>Controller</type> for further details)
+    (see Controller for further details)
     </p>
 
     <p>

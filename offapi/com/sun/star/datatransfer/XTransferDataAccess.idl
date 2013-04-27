@@ -35,26 +35,26 @@ module com { module sun { module star { module datatransfer {
 
 published interface XTransferDataAccess: com::sun::star::uno::XInterface
 {
-    /** To query for the summarized data size in bytes of a sequence of <type>DataFlavor</type>.
+    /** To query for the summarized data size in bytes of a sequence of DataFlavor.
 
         @param aFlavorList
-        A sequence of requested <type>DataFlavor</type>.
-        <p>An unsupported <type>DataFlavor</type> will be ignored.</p>
+        A sequence of requested DataFlavor.
+        <p>An unsupported DataFlavor will be ignored.</p>
 
         @returns
-        The number of bytes of the transfer data in the specified sequence of <type>DataFlavor</type>.
+        The number of bytes of the transfer data in the specified sequence of DataFlavor.
     */
     hyper queryDataSize( [in] sequence < DataFlavor > aFlavorList );
 
-    /** To get all the data of a sequence of <type>DataFlavor</type>.
+    /** To get all the data of a sequence of DataFlavor.
 
         @param aFlavorList
-        The sequence of requested <type>DataFlavor</type>.
-        <p>An unsupported <type>DataFlavor</type> will be ignored.</p>
+        The sequence of requested DataFlavor.
+        <p>An unsupported DataFlavor will be ignored.</p>
 
         @returns
-        The data in the requested <type>DataFlavor</type>.
-        <p>For unsupported <type>DataFlavor</type> an
+        The data in the requested DataFlavor.
+        <p>For unsupported DataFlavor an
         empty any will be returned.</p>
      */
     sequence < any > getData( [in] sequence < DataFlavor > aFlavorList );

@@ -41,7 +41,7 @@ published struct RuleTerm
     /** the operator used to compare the property of the document with
         the given value (e.g. "contains" or "greater equal").
 
-        <p>The value can be one of the <type>RuleOperator</type> constants.
+        <p>The value can be one of the RuleOperator constants.
     */
     short Operator;
 

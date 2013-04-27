@@ -27,7 +27,7 @@
  module com {  module sun {  module star {  module text {
 
 /** provides access to a text block in a group of
-    an <type>AutoTextContainer</type>.
+    an AutoTextContainer.
         @see com::sun::star::text::AutoTextContainer
         @see com::sun::star::text::AutoTextGroup
  */
@@ -35,7 +35,7 @@ published service AutoTextEntry
 {
     interface com::sun::star::text::XAutoTextEntry;
 
-    /** provides access to the <type>Text</type> of this entry.
+    /** provides access to the Text of this entry.
      */
     interface com::sun::star::text::XText;
 

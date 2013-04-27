@@ -25,10 +25,10 @@
 
 module com {   module sun {   module star {   module document {
 
-/** provides access to the <type>XDocumentProperties</type> instance of a
+/** provides access to the XDocumentProperties instance of a
     document.
     <p>
-    A <type>DocumentProperties</type> instance is available on loaded documents
+    A DocumentProperties instance is available on loaded documents
     via this supplier interface.
     </p>
 
@@ -42,7 +42,7 @@ published interface XDocumentPropertiesSupplier
     /** provides the document properties object.
 
         @returns
-            an object of type <type>XDocumentProperties</type>
+            an object of type XDocumentProperties
      */
     XDocumentProperties getDocumentProperties();
 };

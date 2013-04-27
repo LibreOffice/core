@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module form { module inspection {
 
     <p>The handler expects a value named "ContextDocument" in the context in which it is created.
     That is, the <type scope="com::sun::star::uno">XComponentContext</type> used for creating the
-    <type>CellBindingPropertyHandler</type> is examined for a value with this name. If the object in this
+    CellBindingPropertyHandler is examined for a value with this name. If the object in this
     value denotes a XML form document (indicated by supporting the <type scope="com::sun::star::xforms">XFormsSupplier</type>
     interface), this document is used to examine the XML submissions which the button can be bound to.</p>
 

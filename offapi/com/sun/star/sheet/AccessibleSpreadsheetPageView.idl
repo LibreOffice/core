@@ -71,7 +71,7 @@ service AccessibleSpreadsheetPageView
                 an object that supports this service is returned
                 for every shape that is at least partially visible. These
                 objects are children of the
-                <type>AccessibleSpreadsheetPageView</type> regardless
+                AccessibleSpreadsheetPageView regardless
                 whether they are bound to a table or a cell.</li>
             <li><type scope="::com::sun::star::text">AccessibleParagraphView</type>:
                 A child where calling

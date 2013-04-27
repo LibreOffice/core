@@ -39,7 +39,7 @@ module com {  module sun {  module star {  module beans {
 /** makes it possible to access all property values and to set them at once.
 
     <p>In most cases this interface will be in addition to
-    <type>XPropertySet</type>. It is especially useful for remote
+    XPropertySet. It is especially useful for remote
     communication because it lessens the number of calls for getting
     property values; that is especially important because these calls
     are necessarily synchronous.  </p>

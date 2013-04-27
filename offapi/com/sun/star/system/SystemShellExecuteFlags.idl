@@ -23,7 +23,7 @@
 
 module com { module sun { module star { module system {
 
-/** Different settings for the <type>SystemShellExecute</type> service.
+/** Different settings for the SystemShellExecute service.
  */
 
 published constants SystemShellExecuteFlags

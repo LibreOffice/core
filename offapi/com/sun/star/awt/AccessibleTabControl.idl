@@ -46,7 +46,7 @@ service AccessibleTabControl
             help text.</li>
         <li>Children: The children of a tab control are tab pages,
             whose accessible context supports the service
-            <type>AccessibleTabPage</type>.</li>
+            AccessibleTabPage.</li>
         <li>Parent: The parent is the window that contains the
             tab control.</li>
         <li>Relations: There are no relations.</li>

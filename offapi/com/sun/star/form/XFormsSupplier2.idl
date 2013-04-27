@@ -26,7 +26,7 @@
 module com {  module sun {  module star {  module form {
 
 
-/** extends the <type>XFormsSupplier</type> with convenience methods
+/** extends the XFormsSupplier with convenience methods
 */
 interface XFormsSupplier2: XFormsSupplier
 {

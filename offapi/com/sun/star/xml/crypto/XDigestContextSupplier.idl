@@ -38,7 +38,7 @@ interface XDigestContextSupplier : com::sun::star::uno::XInterface
 
         @param nDigestID
             the internal ID specifying the algorithm,
-            should take value from <type>DigestID</type>
+            should take value from DigestID
 
         @param aParams
             optional parameters that could be used to initialize the digest,

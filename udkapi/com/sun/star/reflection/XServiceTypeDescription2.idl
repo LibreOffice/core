@@ -30,7 +30,7 @@ interface XTypeDescription;
 /**
    Reflects a service, supporting single-interface&ndash;based services.
 
-   <p>This type supersedes <type>XServiceTypeDescription</type>, which only
+   <p>This type supersedes XServiceTypeDescription, which only
    supports obsolete, accumulation-based services.</p>
 
    @since OOo 2.0

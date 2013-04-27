@@ -29,10 +29,10 @@
     system registry for global information.
     In the context of this service,
     the functions <code>open</code>, <code>close</code>, and <code>destroy</code>
-    from <type>XSimpleRegistry</type> are not supported and throw an exception
+    from XSimpleRegistry are not supported and throw an exception
     if they are used.
     <dl>
-    <dt>Functions of <type>XSimpleRegistry</type>:
+    <dt>Functions of XSimpleRegistry:
     <dl>
     <dt>    <b>getURL</b>
     </dt>

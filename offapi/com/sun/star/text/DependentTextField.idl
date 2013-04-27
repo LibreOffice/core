@@ -27,15 +27,15 @@
 
  module com {  module sun {  module star {  module text {
 
-/** is a <type>TextField</type> which is not specified by itself,
-    but dependent on a <type>TextFieldMaster</type>.@see TextFieldMaster
+/** is a TextField which is not specified by itself,
+    but dependent on a TextFieldMaster.@see TextFieldMaster
  */
 published service DependentTextField
 {
     service com::sun::star::text::TextField;
 
     /** This interface makes it possible to attach a
-                <type>TextFieldMaster</type> to this <type>TextField</type>.
+                TextFieldMaster to this TextField.
      */
     interface com::sun::star::text::XDependentTextField;
 

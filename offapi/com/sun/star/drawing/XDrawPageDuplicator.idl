@@ -33,17 +33,17 @@
 published interface XDrawPageDuplicator: com::sun::star::uno::XInterface
 {
 
-    /** creates a duplicate of a <type>DrawPage</type> or <type>MasterPage</type>,
-        including the <type>Shape</type>s on that page and inserts it into the
+    /** creates a duplicate of a DrawPage or MasterPage,
+        including the Shapes on that page and inserts it into the
         same model.
 
         @param xPage
-            that is the source <type>DrawPage</type> or <type>MasterPage</type>
+            that is the source DrawPage or MasterPage
             that will be duplicated
 
         @return
-            a newly created <type>DrawPage</type> or <type>MasterPage</type>
-            that as all properties and copies of all <type>Shape</type>s from
+            a newly created DrawPage or MasterPage
+            that as all properties and copies of all Shapes from
             the source page.
      */
     com::sun::star::drawing::XDrawPage duplicate( [in] com::sun::star::drawing::XDrawPage xPage );

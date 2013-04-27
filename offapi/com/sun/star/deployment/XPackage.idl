@@ -39,7 +39,7 @@
 module com { module sun { module star { module deployment {
 
 /** Objects of this interface reflect a bound package and are issued by a
-    <type>PackageRegistryBackend</type>.
+    PackageRegistryBackend.
 
     @since OOo 2.0
 */
@@ -129,7 +129,7 @@ interface XPackage
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::ucb::CommandAbortedException);
 
-    /** registers this <type>XPackage</type>.
+    /** registers this XPackage.
 
         NEVER call this directly. This is done by the extension manager if necessary.
 
@@ -153,7 +153,7 @@ interface XPackage
                 com::sun::star::ucb::CommandAbortedException,
                 com::sun::star::lang::IllegalArgumentException);
 
-    /** revokes this <type>XPackage</type>.
+    /** revokes this XPackage.
 
         NEVER call this directly. This is done by the extension manager if necessary.
 
@@ -289,7 +289,7 @@ interface XPackage
 
     ::com::sun::star::beans::StringPair getPublisherInfo()
         raises (ExtensionRemovedException);
-    /** returns the <type>XPackageTypeInfo</type>, e.g. media-type etc.
+    /** returns the XPackageTypeInfo, e.g. media-type etc.
 
         @return
                 media type of package

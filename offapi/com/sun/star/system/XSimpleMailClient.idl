@@ -35,14 +35,14 @@ module com { module sun { module star { module system {
 published interface XSimpleMailClient: com::sun::star::uno::XInterface
 {
     /** Create a simple mail message object that implements the interface
-        <type>XSimpleMailMessage</type>.
+        XSimpleMailMessage.
         @returns
-        An object that implements the <type>XSimpleMailMessage</type> interface.
+        An object that implements the XSimpleMailMessage interface.
     */
     XSimpleMailMessage createSimpleMailMessage( );
 
     /** Sends a given simple mail message object that implements the interface
-        <type>XSimpleMailMessage</type>.
+        XSimpleMailMessage.
 
         @param xSimpleMailMessage
         Specifies a configured mail object to be sent.

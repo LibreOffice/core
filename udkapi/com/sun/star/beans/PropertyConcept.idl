@@ -51,8 +51,8 @@ published constants PropertyConcept
     const long DANGEROUS = 1;
 
     /** specifies all properties which are reachable by
-        <type>XPropertySet</type>, <type>XFastPropertySet</type> or
-        <type>XMultiPropertySet</type>.
+        XPropertySet, XFastPropertySet or
+        XMultiPropertySet.
      */
     const long PROPERTYSET = 2;
 

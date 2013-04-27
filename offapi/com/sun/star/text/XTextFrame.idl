@@ -26,14 +26,14 @@
 
  module com {  module sun {  module star {  module text {
 
-/** provides access to the <type>Text</type> of a <type>TextFrame</type>.
+/** provides access to the Text of a TextFrame.
     @see TextFrame
  */
 published interface XTextFrame: com::sun::star::text::XTextContent
 {
     /** @returns
                 the text within this frame. The returned interface belongs
-                to an object which implements the service <type>Text</type>.
+                to an object which implements the service Text.
      */
     com::sun::star::text::XText getText();
 

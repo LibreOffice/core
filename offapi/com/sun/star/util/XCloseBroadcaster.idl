@@ -30,7 +30,7 @@
     <p>
     The called object for closing must post the closing events immediately
     and before any internal cancel operations will be started.
-    If a listener disagree with that it should throw a <type>CloseVetoException</type>
+    If a listener disagree with that it should throw a CloseVetoException
     and called function <method>XCloseable::close</method> must be broken immediately.
     It's not allowed to catch it inside the close() request.
     If no listener nor internal processes hinder the object on closing

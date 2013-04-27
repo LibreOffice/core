@@ -28,9 +28,9 @@
 
 /** gets delivered whenever a "bound" or "constrained" property is changed.
 
-    <p>A <type>PropertyChangeEvent</type> object is sent as an
-    argument to the methods of <type>XPropertyChangeListener</type>
-    and <type>XVetoableChangeListener</type>. </p>
+    <p>A PropertyChangeEvent object is sent as an
+    argument to the methods of XPropertyChangeListener
+    and XVetoableChangeListener. </p>
 
     <p>Normally such events contain the name and the old and new
     value of the changed property.  </p>
@@ -54,7 +54,7 @@ published struct PropertyChangeEvent: com::sun::star::lang::EventObject
     /** contains the implementation handle for the property.
 
         <p>May be -1 if the implementation has no handle. You can use
-        this handle to get values from the <type>XFastPropertySet</type>.</p>
+        this handle to get values from the XFastPropertySet.</p>
      */
     long PropertyHandle;
 

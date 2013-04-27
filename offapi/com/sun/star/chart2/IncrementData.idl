@@ -28,10 +28,10 @@ module com {  module sun {  module star {  module chart2 {
 
 /** An IncrementData describes how tickmarks are positioned on the scale of an axis.
 
-@see <type>Axis</type>
-@see <type>Grid</type>
-@see <type>Scale</type>
-@see <type>XScaling</type>
+@see Axis
+@see Grid
+@see Scale
+@see XScaling
 */
 struct IncrementData
 {
@@ -48,10 +48,10 @@ struct IncrementData
     describes a distance before or after the scaling is applied.
 
     <p>If <member>PostEquidistant</member> equals <TRUE/> <member>Distance</member>
-    is given in values after <type>XScaling</type> is applied, thus resulting
+    is given in values after XScaling is applied, thus resulting
     main tickmarks will always look equidistant on the screen.
     If <member>PostEquidistant</member> equals <FALSE/> <member>Distance</member>
-    is given in values before <type>XScaling</type> is applied.</p>
+    is given in values before XScaling is applied.</p>
     */
     any         PostEquidistant;
 

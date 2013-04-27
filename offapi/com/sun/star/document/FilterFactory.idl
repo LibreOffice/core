@@ -30,7 +30,7 @@ module com { module sun { module star { module document {
 /** factory to create filter components.
 
     <p>
-    After a generic <type>TypeDetection</type> an internal type name
+    After a generic TypeDetection an internal type name
     will be known. Further a generic <type scope="com::sun::star::frame">FrameLoader</type>
     can use this information, to search a suitable filter (may the default filter) at
     this factory and use it for loading the document into a specified frame.
@@ -141,7 +141,7 @@ published service FilterFactory
                 <td><em>Type</em></td>
                 <td>[string]</td>
                 <td>Every filter is registered for a type. This value contains the internal name of it.
-                    (see service <type>TypeDetection</type> for further information)</td>
+                    (see service TypeDetection for further information)</td>
             </tr>
             <tr>
                 <td><em>DocumentService</em></td>

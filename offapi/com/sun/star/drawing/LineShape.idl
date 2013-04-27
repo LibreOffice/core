@@ -35,7 +35,7 @@
  module com {  module sun {  module star {  module drawing {
 
 
-/** This service is for a simple <type>Shape</type> with lines.
+/** This service is for a simple Shape with lines.
  */
 published service LineShape
 {

@@ -41,13 +41,13 @@ module data
 
 /** describes a container for a sequence of values.
 
-    <p>With the interface <type>XDataSequence</type> it is possible to
+    <p>With the interface XDataSequence it is possible to
     transfer a complete sequence of values.
 
     <p>With the optional
     <type scope="com::sun::star::container">XIndexReplace</type> it is
     possible to modify single elements, if the corresponding
-    <type>DataProvider</type> supports modification of its values.</p>
+    DataProvider supports modification of its values.</p>
   */
 service DataSequence
 {
@@ -72,7 +72,7 @@ service DataSequence
 
         <p>Only when supporting this interface, it is possible for
         client applications to modify the content of the data that is
-        provided by this <type>DataSequence</type>.</p>
+        provided by this DataSequence.</p>
      */
     [optional] interface ::com::sun::star::container::XIndexReplace;
 
@@ -86,7 +86,7 @@ service DataSequence
         one.</p>
 
         <p>Note that, when this interface is not implemented the
-        releasing of identifiers at the <type>XDataProvider</type>
+        releasing of identifiers at the XDataProvider
         will not work properly, because more than one object may use
         the same identifier.  So, when an object releases the
         identifier, another object might use a stale identifier.</p>

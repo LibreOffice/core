@@ -42,7 +42,7 @@ published interface XSimpleText: com::sun::star::text::XTextRange
 {
 
     /** @returns
-                a new instance of a <type>TextCursor</type> service which can
+                a new instance of a TextCursor service which can
                 be used to travel in the given text context.
 
                 @see com::sun::star::text::TextCursor
@@ -51,15 +51,15 @@ published interface XSimpleText: com::sun::star::text::XTextRange
 
 
     /** @returns
-                a new instance of a <type>TextCursor</type> which is located
-                at the specified <type>TextRange</type> to travel in the
+                a new instance of a TextCursor which is located
+                at the specified TextRange to travel in the
                 given text context.
 
                 <p>The initial position is set to <var>aTextPosition</var>.
 
                 @param aTextPosition
                 specifies the start position for the new
-                <type>TextCursor</type>.
+                TextCursor.
 
                 @see com::sun::star::text::TextCursor
      */
@@ -80,7 +80,7 @@ published interface XSimpleText: com::sun::star::text::XTextRange
         @param xRange
             specifies the position of insertion. For example,
             <method>XSimpleText::createTextCursor</member> can be used to
-            get an <type>XTextRange</type> for this argument.
+            get an XTextRange for this argument.
 
             <p>If the parameter <member>bAbsorb</member> was <TRUE/>
             the text range will contain the new inserted string, otherwise

@@ -54,7 +54,7 @@ published interface XNamedRanges: com::sun::star::container::XNameAccess
 
         @param nType
             a combination of flags that specify the type of a named range,
-            as defined in <type>NamedRangeFlag</type>.
+            as defined in NamedRangeFlag.
 
             <p>This parameter will be zero for any common named range.</p>
      */

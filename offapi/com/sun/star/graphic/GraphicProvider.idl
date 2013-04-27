@@ -30,7 +30,7 @@ module com { module sun { module star { module graphic
 
     <p>This service allows to load graphics from and to store graphics
     to any location. The one and only interface that has to be implemented
-    is the <type>XGraphicProvider</type> interface, that exposes the necessary
+    is the XGraphicProvider interface, that exposes the necessary
     methods for loading and storing the graphic contents and descriptors</p>
 
     @see XGraphicProvider

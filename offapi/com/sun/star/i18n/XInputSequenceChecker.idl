@@ -37,7 +37,7 @@ published interface XInputSequenceChecker : ::com::sun::star::uno::XInterface
     /** @returns true/false for the input check
 
         @param nInputCheckMode
-            One of <type>InputSequenceCheckMode</type> constants.
+            One of InputSequenceCheckMode constants.
     */
     boolean checkInputSequence( [in] string aText, [in] long nPos,
                 [in] char cInputChar, [in] short nInputCheckMode );

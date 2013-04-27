@@ -32,7 +32,7 @@ module com { module sun { module star { module resource {
     basic persistence functionality limited to operations that
     are independent from a associated location or storage.
 
-    @see <type>XStringResourceManager</type>.
+    @see XStringResourceManager.
 */
 interface XStringResourcePersistence: com::sun::star::resource::XStringResourceManager
 {
@@ -43,17 +43,17 @@ interface XStringResourcePersistence: com::sun::star::resource::XStringResourceM
         in a single file following the format of Java properties files.
 
         This interface is supported by the services
-        <type>StringResourceWithLocation</type> and
-        <type>StringResourceWithStorage</type>
+        StringResourceWithLocation and
+        StringResourceWithStorage
 
         The StringResourceWithLocation is initialized with an URL
         specifying a location used to load data from and store data to,
-        see <type>StringResourceWithLocation</type>.
+        see StringResourceWithLocation.
 
         The StringResourceWithStorage is initialized with an instance
         of <type scope="com::sun::star::embed">XStorage</type>
         used to load data from and store data to,
-        see <type>StringResourceWithStorage</type>.
+        see StringResourceWithStorage.
 
         If the string table isn't modified (see <member>isModified</member>)
         this method does nothing.
@@ -65,7 +65,7 @@ interface XStringResourcePersistence: com::sun::star::resource::XStringResourceM
         not handled by a previously specified
         <type scope="com::sun::star::task">XInteractionHandler</type>.
         The handler to be used for the store operation can be specified
-        during initialization of <type>StringResourceWithLocation</type>.
+        during initialization of StringResourceWithLocation.
 
         @throws <type scope="com::sun::star::lang">NoSupportException</type>
             if no URL or no valid storage are provided.
@@ -92,8 +92,8 @@ interface XStringResourcePersistence: com::sun::star::resource::XStringResourceM
 
         This interface method can be used to overwrite the comment used
         during initialization of the services
-        <type>StringResourceWithLocation</type> or
-        <type>StringResourceWithStorage</type>
+        StringResourceWithLocation or
+        StringResourceWithStorage
 
         @param Comment
             Comment stored first in each properties file followed by a line
@@ -109,9 +109,9 @@ interface XStringResourcePersistence: com::sun::star::resource::XStringResourceM
         Stores all string table data to the provided storage.
 
         Calling this method does not affect the association with a location
-        (in case of a <type>StringResourceWithLocation</type> instance)
+        (in case of a StringResourceWithLocation instance)
         respectively with a storage (in case of a
-        <type>StringResourceWithStorage</type> instance).
+        StringResourceWithStorage instance).
         The modified state isn't affected either.
 
         This method can be used to make a copy of the current string
@@ -147,9 +147,9 @@ interface XStringResourcePersistence: com::sun::star::resource::XStringResourceM
         passed URL string.
 
         Calling this method does not affect the association with a location
-        (in case of a <type>StringResourceWithLocation</type> instance)
+        (in case of a StringResourceWithLocation instance)
         respectively with a storage (in case of a
-        <type>StringResourceWithStorage</type> instance).
+        StringResourceWithStorage instance).
         The modified state isn't affected either.
 
         This method can be used to make a copy of the current string

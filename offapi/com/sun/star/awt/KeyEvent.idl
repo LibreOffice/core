@@ -35,7 +35,7 @@ published struct KeyEvent: com::sun::star::awt::InputEvent
 
     /** contains the integer code representing the key of the event.
 
-        <p>This is a constant from the constant group <type>Key</type>.</p>
+        <p>This is a constant from the constant group Key.</p>
      */
     short KeyCode;
 
@@ -48,7 +48,7 @@ published struct KeyEvent: com::sun::star::awt::InputEvent
     /** contains the function type of the key event.
 
         <p>This is a constant from the constant group
-        <type>KeyFunction</type>.</p>
+        KeyFunction.</p>
      */
     short KeyFunc;
 

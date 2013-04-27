@@ -30,7 +30,7 @@
 
 /** Reflects a method parameter.
 
-    <p>This type is superseded by <type>XParameter</type>, which supports
+    <p>This type is superseded by XParameter, which supports
     parameters of service constructors as well as parameters of interface
     methods.</p>
 

@@ -35,7 +35,7 @@
 published interface XShapeGrouper: com::sun::star::uno::XInterface
 {
 
-    /** groups the <type>Shape</type>s inside a collection.
+    /** groups the Shapes inside a collection.
 
         <p>Grouping of objects in text documents works only if none
         of the objects has an anchor of type
@@ -43,25 +43,25 @@ published interface XShapeGrouper: com::sun::star::uno::XInterface
         </p>.
 
         @param xShapes
-            the <type>Shape</type>s that will be grouped. They
-            must all be inserted into the same <type>GenericDrawPage</type>.
+            the Shapes that will be grouped. They
+            must all be inserted into the same GenericDrawPage.
 
         @returns
-            a newly created <type>GroupShape</type> that contains all
-            <type>Shape</type>s from xShapes and is also added to the
-            <type>GenericDrawPage</type> of the <type>Shape</type>s
+            a newly created GroupShape that contains all
+            Shapes from xShapes and is also added to the
+            GenericDrawPage of the Shapes
             in xShapes.
      */
     com::sun::star::drawing::XShapeGroup group( [in] com::sun::star::drawing::XShapes xShapes );
 
 
-    /** ungroups a given <type>GroupShape</type>.
+    /** ungroups a given GroupShape.
 
         @param aGroup
-            moves all <type>Shape</type>s from this <type>GroupShape</type>
-            to the parent <type>XShapes</type> of the <type>GroupShape</type>.
-            The <type>GroupShape</type> is than removed from the
-            <type>GenericDrawPage</type> and disposed.
+            moves all Shapes from this GroupShape
+            to the parent XShapes of the GroupShape.
+            The GroupShape is than removed from the
+            GenericDrawPage and disposed.
      */
     void ungroup( [in] com::sun::star::drawing::XShapeGroup aGroup );
 

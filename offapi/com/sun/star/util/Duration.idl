@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module util {
 /** represents a duration.
 
     <p>
-    A duration is the difference of 2 <type>DateTime</type>s.
+    A duration is the difference of 2 DateTimes.
     </p>
 
     <p>

@@ -29,7 +29,7 @@ module com {  module sun {  module star {  module sheet {
 
 /** information about a cell positioned within the result area of a DataPilot table.
 
-    <p><type>DataPilotTableResultData</type> contains information about a
+    <p>DataPilotTableResultData contains information about a
     particular cell positioned within the result area of a DataPilot table.</p>
 
     @see com::sun::star::sheet::DataPilotTablePositionData
@@ -58,7 +58,7 @@ struct DataPilotTableResultData
 
 
     /** more information about the result contained in the
-        <type>DataResult</type> type.
+        DataResult type.
 
         @see com::sun::star::sheet::DataResult
      */

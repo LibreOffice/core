@@ -25,7 +25,7 @@
 module com {  module sun {  module star {  module awt {  module grid {
 
 
-/** used to notify changes in the data represented by an <type>XMutableGridDataModel</type>.
+/** used to notify changes in the data represented by an XMutableGridDataModel.
 
     <p>Effectively, a <code>GridDataEvent</code> denotes a continuous two-dimensional cell range
     within a grid's data model, which is affected by a certain change.</p>

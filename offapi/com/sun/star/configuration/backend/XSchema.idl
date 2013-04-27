@@ -40,7 +40,7 @@ published interface XSchema : ::com::sun::star::uno::XInterface
 
     /**
       Describes the full schema (templates + component) to a
-      <type>XSchemaHandler</type>.
+      XSchemaHandler.
 
       @param aHandler
             schema handler that will receive calls
@@ -51,12 +51,12 @@ published interface XSchema : ::com::sun::star::uno::XInterface
               if a <NULL/> handler is passed.
       @throws com::sun::star::lang::WrappedTargetException
               if an error occurs in the access to or processing of the data or
-              if a subsequent call to any of the <type>XSchema</type>methods is made.
+              if a subsequent call to any of the XSchemamethods is made.
               The elements of a component schema are only parsed once,a repeat call
               leads to exception.
       @throws com::sun::star::configuration::backend::MalformedDataException
               if the data read from the layer is rejected as invalid by the
-              <type>XSchemaHandler</type>.
+              XSchemaHandler.
     */
     void readSchema([in] XSchemaHandler aHandler)
         raises (com::sun::star::lang::NullPointerException,
@@ -65,7 +65,7 @@ published interface XSchema : ::com::sun::star::uno::XInterface
 
 
     /**
-      Describes only the component definition to a <type>XSchemaHandler</type>.
+      Describes only the component definition to a XSchemaHandler.
 
       @param aHandler
             schema handler that will receive calls
@@ -76,12 +76,12 @@ published interface XSchema : ::com::sun::star::uno::XInterface
               if a <NULL/> handler is passed.
       @throws com::sun::star::lang::WrappedTargetException
               if an error occurs in the access to or processing of the data or
-              if a subsequent call to any of the <type>XSchema</type>methods is made.
+              if a subsequent call to any of the XSchemamethods is made.
               The elements of a component schema are only parsed once,a repeat call
               leads to exception.
       @throws com::sun::star::configuration::backend::MalformedDataException
               if the data read from the layer is rejected as invalid by the
-              <type>XSchemaHandler</type>.
+              XSchemaHandler.
     */
     void readComponent([in] XSchemaHandler aHandler)
         raises (com::sun::star::lang::NullPointerException,
@@ -90,7 +90,7 @@ published interface XSchema : ::com::sun::star::uno::XInterface
 
 
     /**
-      Describes the component templates to a <type>XSchemaHandler</type>.
+      Describes the component templates to a XSchemaHandler.
 
       @param aHandler
             schema handler that will receive calls
@@ -100,12 +100,12 @@ published interface XSchema : ::com::sun::star::uno::XInterface
               if a <NULL/> handler is passed.
       @throws com::sun::star::lang::WrappedTargetException
               if an error occurs in the access to or processing of the data or
-              if a subsequent call to any of the <type>XSchema</type>methods is made.
+              if a subsequent call to any of the XSchemamethods is made.
               The elements of a component schema are only parsed once,a repeat call
               leads to exception.
       @throws com::sun::star::configuration::backend::MalformedDataException
               if the data read from the layer is rejected as invalid by the
-              <type>XSchemaHandler</type>.
+              XSchemaHandler.
     */
     void readTemplates([in] XSchemaHandler aHandler)
         raises (com::sun::star::lang::NullPointerException,

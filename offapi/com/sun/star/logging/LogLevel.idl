@@ -34,7 +34,7 @@ constants LogLevel
 {
     /** specifies that no messages are to be logged at all
 
-        <p>This level can be set at an <type>XLogger</type> to completely prevent
+        <p>This level can be set at an XLogger to completely prevent
         logging. You will usually not use it with a concrete log event.</p>
     */
     const long  OFF       = 0x7FFFFFFF;
@@ -62,7 +62,7 @@ constants LogLevel
 
     /** specifies that all messages should be logged
 
-        <p>This level can be set at an <type>XLogger</type> to enable logging
+        <p>This level can be set at an XLogger to enable logging
         of absolutely all events. You will usually not use it with a concrete log event.</p>
     */
     const long  ALL       = -0x80000000;

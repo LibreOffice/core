@@ -39,8 +39,8 @@ module com {  module sun {  module star {  module view {
  module com {  module sun {  module star {  module drawing {
 
 
-/** This component integrates a view to a <type>DrawPage</type>s or
-    <type>MasterPage</type> from a <type>DrawingDocument</type>.
+/** This component integrates a view to a DrawPages or
+    MasterPage from a DrawingDocument.
  */
 published service DrawingDocumentDrawView
 {

@@ -37,7 +37,7 @@ interface XIntegerBitmapColorSpace : XColorSpace
     /** Query number of bits used per bitmap pixel.<p>
 
         This method yields the total number of bits used for a color
-        value. At the associated <type>XIntegerBitmap</type>, the
+        value. At the associated XIntegerBitmap, the
         <member>XIntegerBitmap::setPixel()</member> method will expect
         a sequence of ceil(BitsPerPixel/8) bytes, and the
         <member>XIntegerReadOnlyBitmap::getPixel()</member> will
@@ -55,7 +55,7 @@ interface XIntegerBitmapColorSpace : XColorSpace
         returned from <member>getBitsPerPixel()</member>. If the sum is
         less, excess bits are always kept in the most significant bits
         of a pixel. Color components will appear in the byte sequences
-        returned from the <type>XIntegerBitmap</type> methods in the
+        returned from the XIntegerBitmap methods in the
         order defined here, with the first element starting from the
         least significant bits of the pixel, etc.<p>
 
@@ -70,7 +70,7 @@ interface XIntegerBitmapColorSpace : XColorSpace
     /** Query whether color data bytes need to be swapped.<p>
 
         @return <TRUE/>, This method returns the endianness of the color
-        data. The value is one of the <type>Endianness</type>
+        data. The value is one of the Endianness
         constants. If color data is represented using more than one
         byte, the actual channel positions are specified using bit
         positions. Therefore, depending on the architecture, the
@@ -100,7 +100,7 @@ interface XIntegerBitmapColorSpace : XColorSpace
         target color space
 
         @throws a
-        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        com::sun::star::lang::IllegalArgumentException,
         if the input sequence does not match the device color format.
      */
     sequence<ColorComponent> convertFromIntegerColorSpace( [in] sequence<byte> deviceColor, [in] XColorSpace targetColorSpace )
@@ -121,7 +121,7 @@ interface XIntegerBitmapColorSpace : XColorSpace
         target color space
 
         @throws a
-        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        com::sun::star::lang::IllegalArgumentException,
         if the input sequence does not match the device color format.
      */
     sequence<byte>           convertToIntegerColorSpace( [in] sequence<byte> deviceColor, [in] XIntegerBitmapColorSpace targetColorSpace )
@@ -129,7 +129,7 @@ interface XIntegerBitmapColorSpace : XColorSpace
 
     /** Convert color value in this color space to sRGB color values.<p>
 
-        Any information not representable in the <type>RGBColor</type>
+        Any information not representable in the RGBColor
         struct is discarded during the conversion. This includes alpha
         information.  Color values are properly rounded and clipped,
         to be valid in the target color space.<p>
@@ -144,7 +144,7 @@ interface XIntegerBitmapColorSpace : XColorSpace
         @see <member>XIntegerBitmapColorSpace::convertIntegerToARGB</member>
 
         @throws a
-        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        com::sun::star::lang::IllegalArgumentException,
         if the input sequence does not match the device color format.
      */
     sequence<RGBColor>       convertIntegerToRGB( [in] sequence<byte> deviceColor )
@@ -166,7 +166,7 @@ interface XIntegerBitmapColorSpace : XColorSpace
         @return the corresponding sequence of sRGB colors.
 
         @throws a
-        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        com::sun::star::lang::IllegalArgumentException,
         if the input sequence does not match the device color format.
      */
     sequence<ARGBColor>      convertIntegerToARGB( [in] sequence<byte> deviceColor )
@@ -190,7 +190,7 @@ interface XIntegerBitmapColorSpace : XColorSpace
         @return the corresponding sequence of sRGB colors.
 
         @throws a
-        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        com::sun::star::lang::IllegalArgumentException,
         if the input sequence does not match the device color format.
      */
     sequence<ARGBColor>      convertIntegerToPARGB( [in] sequence<byte> deviceColor )
@@ -211,7 +211,7 @@ interface XIntegerBitmapColorSpace : XColorSpace
         @return the corresponding sequence of device colors.
 
         @throws a
-        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        com::sun::star::lang::IllegalArgumentException,
         if the input sequence does not match the device color format.
      */
     sequence<byte>           convertIntegerFromRGB( [in] sequence<RGBColor> rgbColor )
@@ -231,7 +231,7 @@ interface XIntegerBitmapColorSpace : XColorSpace
         @return the corresponding sequence of device colors.
 
         @throws a
-        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        com::sun::star::lang::IllegalArgumentException,
         if the input sequence does not match the device color format.
      */
     sequence<byte>           convertIntegerFromARGB( [in] sequence<ARGBColor> rgbColor )
@@ -254,7 +254,7 @@ interface XIntegerBitmapColorSpace : XColorSpace
         @return the corresponding sequence of device colors.
 
         @throws a
-        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        com::sun::star::lang::IllegalArgumentException,
         if the input sequence does not match the device color format.
      */
     sequence<byte>           convertIntegerFromPARGB( [in] sequence<ARGBColor> rgbColor )

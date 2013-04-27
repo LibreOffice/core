@@ -25,7 +25,7 @@
 module com { module sun { module star { module mail {
 
 /**
-    A <type>MailAttachment</type> specifies a mail message attachment.
+    A MailAttachment specifies a mail message attachment.
 
     @see ::com::sun::star::mail::XMailMessage
 

@@ -39,10 +39,10 @@ published interface XEntityResolver: com::sun::star::uno::XInterface
 {
 
     /** @returns
-                    <type>InputSource</type> for the external entity.
+                    InputSource for the external entity.
 
         <p>If <var>aInputStream</var> is a valid reference to an input stream,
-        the parser uses this <type>InputSource</type>. Otherwise the
+        the parser uses this InputSource. Otherwise the
         parser seeks for the entity using its default behavior.
      */
     InputSource resolveEntity( [in] string sPublicId, [in] string sSystemId );

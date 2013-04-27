@@ -247,7 +247,7 @@ interface XRepository
         repository.
 
         <p>
-        This invalidates any instances of <type>XNamedGraph</type>
+        This invalidates any instances of XNamedGraph
         for the argument.
         </p>
 
@@ -288,7 +288,7 @@ interface XRepository
         @returns
             an iterator over all RDF statements in the repository that match
             the parameters, represented as an
-            enumeration of <type>Statement</type>
+            enumeration of Statement
 
         @throws RepositoryException
             if an error occurs when accessing the repository.
@@ -347,7 +347,7 @@ interface XRepository
 
         @returns
             an iterator over the query result graph, represented as an
-            enumeration of <type>Statement</type>
+            enumeration of Statement
 
         @throws QueryException
             if the query is malformed, or evaluation fails

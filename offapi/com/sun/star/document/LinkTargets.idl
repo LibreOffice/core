@@ -31,7 +31,7 @@ module com {   module sun {   module star {   module document {
 
     <p>The <type scope="com::sun::star::container">XNameAccess</type> returns elements
     of <type scope="com::sun::star::beans">XPropertySet</type> that implement
-    the service <type>LinkTarget</type>.  </p>
+    the service LinkTarget.  </p>
  */
 published service LinkTargets
 {

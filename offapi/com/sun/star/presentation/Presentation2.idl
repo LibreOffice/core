@@ -26,7 +26,7 @@
  module com {  module sun {  module star {  module presentation {
 
 
-/** enhances the Presentation service to give access to a <type>XPresentation2</type> interface.
+/** enhances the Presentation service to give access to a XPresentation2 interface.
 
     @since OOo 3.0
 */
@@ -35,7 +35,7 @@ service Presentation2
     service Presentation;
 
     /** enhances the XPresentation interface to give access to
-        a <type>XSlideShowController</type>  and
+        a XSlideShowController  and
         to start a presentation with arguments.
      */
     interface com::sun::star::presentation::XPresentation2;

@@ -45,7 +45,7 @@ interface XOfficeDatabaseDocument
     */
     interface com::sun::star::document::XDocumentSubStorageSupplier;
 
-    /** provides access to the one and only <type>DataSource</type>
+    /** provides access to the one and only DataSource
         associated with this document
     */
     [readonly, attribute]   com::sun::star::sdbc::XDataSource DataSource;

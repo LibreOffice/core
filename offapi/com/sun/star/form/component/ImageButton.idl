@@ -59,7 +59,7 @@ published service ImageButton
         at its <type scope="com::sun::star::awt">XImageProducer</type>. Then, all
         <type scope="com::sun::star::awt">XImageConsumer</type>s are notified and supplied with
         the binary data of the image.<br/>
-        Usually, controls acting for an <type>ImageButton</type> model are consumers, and use the
+        Usually, controls acting for an ImageButton model are consumers, and use the
         data stream to display the image</p>
      */
     interface com::sun::star::form::XImageProducerSupplier;

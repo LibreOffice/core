@@ -27,9 +27,9 @@
 
 /** gives access to data represented as an array of rows.
 
-    <p>Can be obtained from interface <type>XChartDocument</type> via method getData().</p>
+    <p>Can be obtained from interface XChartDocument via method getData().</p>
 
-    <p>If used for an <type>XYDiagram</type>, the row number 0
+    <p>If used for an XYDiagram, the row number 0
     represents the <i>x</i>-values.</p>
  */
 published interface XChartDataArray: XChartData

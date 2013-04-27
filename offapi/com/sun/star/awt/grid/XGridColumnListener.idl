@@ -26,7 +26,7 @@
 module com {  module sun {  module star {  module awt { module grid {
 
 
-/** An instance of this interface is used by the <type>XGridColumnModel</type> to
+/** An instance of this interface is used by the XGridColumnModel to
     get notifications about column model changes.
 
     @since OOo 3.3

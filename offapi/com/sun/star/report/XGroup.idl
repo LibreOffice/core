@@ -27,7 +27,7 @@
  module com {  module sun {  module star {  module report {
 
 
-/** identifies a <type>XGroup</type>.
+/** identifies a XGroup.
     A group is always a child of the groups collection in the report.
     @see XReportDefinition
     @see XGroups

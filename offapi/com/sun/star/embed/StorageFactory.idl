@@ -26,7 +26,7 @@
 
  module com {  module sun {  module star {  module embed {
 
-/** The <type>StorageFactory</type> is a service that allows to create
+/** The StorageFactory is a service that allows to create
     a storage based on either stream or URL.
 
     <p>
@@ -60,7 +60,7 @@
         <dt>parameter 2</dt>
         <dd>
                   specifies mode the storage should be open in, can take
-                  values from <type>ElementModes</type> constant set.
+                  values from ElementModes constant set.
         </dd>
 
         <dt>parameter 3</dt>

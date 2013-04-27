@@ -79,13 +79,13 @@ interface XGraphicRasterizer : ::com::sun::star::uno::XInterface
                             [in] unsigned long DPI_Y,
                             [out] com::sun::star::awt::Size DefaultSizePixel );
 
-    /** Rasterizing the initialized data into a <type>XGraphic</type> container.
+    /** Rasterizing the initialized data into a XGraphic container.
 
-        <p>The <type>XGraphic</type> container will contain a pixel
+        <p>The XGraphic container will contain a pixel
         type graphic after a successful rasterization process</p>
 
         <p>In case of any fault during the rasterization process,
-        the <type>XGraphic</type> container will be empty afterwards and
+        the XGraphic container will be empty afterwards and
         the method will return false</p>
 
         @param Width

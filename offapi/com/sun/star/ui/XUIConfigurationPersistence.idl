@@ -38,7 +38,7 @@ interface XUIConfigurationPersistence : ::com::sun::star::uno::XInterface
 
         <p>
         It is up to the implementation if it defers the first loading process
-        until the first data request using <type>XUIConfigurationManager</type>
+        until the first data request using XUIConfigurationManager
         interface.
         </p>
     */

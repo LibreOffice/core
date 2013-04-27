@@ -31,7 +31,7 @@
 module com {  module sun {  module star {  module awt { module grid {
 
 
-/** specifies the standard model of a <type>UnoControlGrid</type> control.
+/** specifies the standard model of a UnoControlGrid control.
 
     @since OOo 3.3
  */
@@ -77,27 +77,27 @@ published service UnoControlGridModel
     */
     [property, maybevoid] long RowHeight;
 
-    /** Specifies the <type>XGridColumnModel</type> that is providing the column structure.
+    /** Specifies the XGridColumnModel that is providing the column structure.
 
-        <p>You can implement your own instance of <type>XGridColumnModel</type> or use
-        the <type>DefaultGridColumnModel</type>.
+        <p>You can implement your own instance of XGridColumnModel or use
+        the DefaultGridColumnModel.
 
         <p>The column model is in the ownership of the grid model: When you set a new column model, or dispose
         the grid model, then the (old) column model is disposed, too.</p>
 
-        <p>The default for this property is an empty instance of the <type>DefaultGridColumnModel</type>.</p>
+        <p>The default for this property is an empty instance of the DefaultGridColumnModel.</p>
     */
     [property] XGridColumnModel ColumnModel;
 
-    /** Specifies the <type>XGridDataModel</type> that is providing the hierarchical data.
+    /** Specifies the XGridDataModel that is providing the hierarchical data.
 
-        <p>You can implement your own instance of <type>XGridDataModel</type> or use
-        the <type>DefaultGridDataModel</type>.
+        <p>You can implement your own instance of XGridDataModel or use
+        the DefaultGridDataModel.
 
         <p>The data model is in the ownership of the grid model: When you set a new data model, or dispose
         the grid model, then the (old) data model is disposed, too.</p>
 
-        <p>The default for this property is an empty instance of the <type>DefaultGridDataModel</type>.</p>
+        <p>The default for this property is an empty instance of the DefaultGridDataModel.</p>
     */
     [property] XGridDataModel GridDataModel;
 

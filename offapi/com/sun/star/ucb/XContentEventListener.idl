@@ -25,7 +25,7 @@
 
 module com { module sun { module star { module ucb {
 
-/**  a listener for events related to <type>XContent</type>s.
+/**  a listener for events related to XContents.
 
     @version  1.0
     @author   Kai Sommerfeld

@@ -20,8 +20,8 @@ module com {  module sun {  module star {  module table {
     range.
 
     TableBorder2 is nearly identical to TableBorder, except that it has
-    members of <type>BorderLine2</type> instead of
-    <type>BorderLine</type>.
+    members of BorderLine2 instead of
+    BorderLine.
 
     <p>In a queried structure, the flags in
     <member>TableBorder2::Is...LineValid</member> indicate that not all

@@ -32,7 +32,7 @@
     to the outside world. They create a skeleton for the whole office API infrastructure
     by building frame hierarchies. These hierarchies contains all currently loaded
     documents and make it possible to walk during these trees.
-    A special service <type>Desktop</type> can(!) combine different of such trees
+    A special service Desktop can(!) combine different of such trees
     to a global one which life time will be controlled by it.
     </p>
 

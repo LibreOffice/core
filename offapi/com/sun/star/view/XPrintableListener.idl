@@ -29,7 +29,7 @@ module com {  module sun {  module star {  module view {
 
 /** receives events about print job progress.
 
-    <p><type>XPrintableListener</type> can be registered to <type>XPrintableBroadcaster</type>.
+    <p>XPrintableListener can be registered to XPrintableBroadcaster.
     Then, the client object will receive events about print progress.  </p>
 
     @see XPrintableBroadcaster
@@ -39,7 +39,7 @@ published interface XPrintableListener : com::sun::star::lang::XEventListener
     /** informs the user of the new state in print progress.
 
         @param Event
-            contains the <type>XPrintable</type> having changed state and the new state.
+            contains the XPrintable having changed state and the new state.
     */
     void stateChanged( [in] PrintableStateEvent Event );
 };

@@ -26,7 +26,7 @@
 
 module com { module sun { module star { module datatransfer { module dnd {
 
-/** This interface will be used by a <type>XDragGestureRecognizer</type>
+/** This interface will be used by a XDragGestureRecognizer
     when it detects a drag initiating gesture.
 
     <p>The implementor of this interface is responsible for starting the drag
@@ -36,7 +36,7 @@ module com { module sun { module star { module datatransfer { module dnd {
 
 published interface XDragGestureListener: com::sun::star::lang::XEventListener
 {
-    /** A <type>XDragGestureRecognizer</type> has detected a platform-dependent
+    /** A XDragGestureRecognizer has detected a platform-dependent
         drag initiating gesture and is notifying this listener in order
         for it to initiate the action for the user.
 

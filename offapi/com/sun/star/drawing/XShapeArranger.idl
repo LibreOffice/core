@@ -32,44 +32,44 @@
  module com {  module sun {  module star {  module drawing {
 
 /** Objects implementing this interface can be used to arrange
-    <type>Shape</type>s.
+    Shapes.
 
     @deprecated
  */
 published interface XShapeArranger: com::sun::star::uno::XInterface
 {
-    /** applies the specified <type>Arrangement</type> to
-        the specified collection of <type>Shape</type>s.
+    /** applies the specified Arrangement to
+        the specified collection of Shapes.
      */
     void arrange( [in] com::sun::star::drawing::XShapes xShapes,
              [in] com::sun::star::drawing::Arrangement eType );
 
-    /** moves the specified <type>Shape</type>s by a specified number
+    /** moves the specified Shapes by a specified number
         of objects more to the front.
      */
     void bringToFront( [in] com::sun::star::drawing::XShapes xShapes,
              [in] short nSteps );
 
-    /** moves the specified <type>Shape</type>s
+    /** moves the specified Shapes
         <var>nSteps</var> objects more to the back.
      */
     void sendToBack( [in] com::sun::star::drawing::XShapes xShapes,
              [in] short nSteps );
 
-    /** moves the specified collection of <type>Shape</type>s
-        behind the specified single <type>Shape</type>.
+    /** moves the specified collection of Shapes
+        behind the specified single Shape.
      */
     void setBehindShape( [in] com::sun::star::drawing::XShapes xShapes,
              [in] com::sun::star::drawing::XShape xShape );
 
-    /** moves the specified collection of <type>Shape</type>s in
-        front of the specified single <type>Shape</type>.
+    /** moves the specified collection of Shapes in
+        front of the specified single Shape.
      */
     void setInFrontOf( [in] com::sun::star::drawing::XShapes xShapes,
              [in] com::sun::star::drawing::XShape xShape );
 
     /** reverses the order of the specified collection of
-        <type>Shape</type>s.
+        Shapes.
      */
     void reverseOrder( [in] com::sun::star::drawing::XShapes xShapes );
 

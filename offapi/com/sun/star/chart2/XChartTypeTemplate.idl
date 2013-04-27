@@ -42,7 +42,7 @@ interface XChartTypeTemplate : ::com::sun::star::uno::XInterface
 
         @param xDataSource
             This data source will be interpreted in a chart-type
-            specific way and appropriate <type>DataSeries</type> will
+            specific way and appropriate DataSeries will
             be created which serve as input for the new diagram.
 
         @param aArguments
@@ -51,12 +51,12 @@ interface XChartTypeTemplate : ::com::sun::star::uno::XInterface
             service.
 
             <p>For standard parameters that may be used, see the
-            service <type>StandardDiagramCreationParameters</type>.
+            service StandardDiagramCreationParameters.
             </p>
 
         @return
             The new diagram which represents this
-            <type>ChartTypeTemplate</type>.
+            ChartTypeTemplate.
      */
     XDiagram createDiagramByDataSource(
         [in] com::sun::star::chart2::data::XDataSource xDataSource,
@@ -68,16 +68,16 @@ interface XChartTypeTemplate : ::com::sun::star::uno::XInterface
     boolean supportsCategories();
 
     /** Analyses the given diagram and reinterprets its
-        <type>DataSeries</type> and <type>Categories</type> and
+        DataSeries and Categories and
         creates a new diagram based on these series.
 
         <p>Note, that if <member>matchesTemplate</member> returns
-        <TRUE/> for the given <type>XDiagram</type>, the latter should
+        <TRUE/> for the given XDiagram, the latter should
         not be changed.</p>
 
         @param xDiagram
             The diagram given will be modified such that it represents
-            this <type>ChartTypeTemplate</type>.
+            this ChartTypeTemplate.
      */
     void changeDiagram( [in] XDiagram xDiagram );
 
@@ -96,7 +96,7 @@ interface XChartTypeTemplate : ::com::sun::star::uno::XInterface
 
         @param xDataSource
             This data source will be interpreted in a chart-type
-            specific way and the <type>DataSeries</type> found in
+            specific way and the DataSeries found in
             <code>xDiagram</code> will be adapted to the new data.
             Missing data series will be created and unused ones will
             be deleted in <code>xDiagram</code>.
@@ -107,7 +107,7 @@ interface XChartTypeTemplate : ::com::sun::star::uno::XInterface
             service.
 
             <p>For standard parameters that may be used, see the
-            service <type>StandardDiagramCreationParameters</type>.
+            service StandardDiagramCreationParameters.
             </p>
      */
     void changeDiagramData(
@@ -118,7 +118,7 @@ interface XChartTypeTemplate : ::com::sun::star::uno::XInterface
     /** States whether the given diagram could have been created by
         the template.
 
-        <p>The template will parse the <type>DataSeriesTree</type> of
+        <p>The template will parse the DataSeriesTree of
         the diagram to determine if the structure matches the one
         which would have been created by
         <member>createDiagramByDataSource</member>.</p>

@@ -42,7 +42,7 @@ published interface XTypeConverter: com::sun::star::uno::XInterface
 {
     /** Converts the value <code>aFrom</code> to the specified type
         <code>xDestinationType</code>.
-        Throws an <type>CannotConvertException</type> if the conversion
+        Throws an CannotConvertException if the conversion
         failed.
         @param aFrom
                source value
@@ -59,7 +59,7 @@ published interface XTypeConverter: com::sun::star::uno::XInterface
 
     /** Converts the value <code>aFrom</code> to the specified simple type
         <code>aDestinationType</code>.
-        Throws an <type>CannotConvertException</type> if the conversion
+        Throws an CannotConvertException if the conversion
         failed and an <type scope="com::sun::star::lang">IllegalArgumentException</type>
         if the destination
         <type scope="com::sun::star::uno">TypeClass</type> is not simple,

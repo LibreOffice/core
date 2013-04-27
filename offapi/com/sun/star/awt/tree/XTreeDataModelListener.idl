@@ -28,12 +28,12 @@
 module com {  module sun {  module star {  module awt {  module tree {
 
 
-/** An instance of this interface is used by the <type>TreeControl</type> to
+/** An instance of this interface is used by the TreeControl to
     get notifications about data model changes.
 
     <p>Usually you must not implement this interface yourself as it is already handled
-    by the <type>TreeControl</type>, but you must notify it correctly if
-    you implement the <type>XTreeDataModel</type> yourself</p>.
+    by the TreeControl, but you must notify it correctly if
+    you implement the XTreeDataModel yourself</p>.
  */
 interface XTreeDataModelListener: com::sun::star::lang::XEventListener
 {

@@ -34,7 +34,7 @@ module com { module sun { module star { module smarttags {
     <p>Implementations of this service are used to scan the document
        text for smart tags. Smart tags are pieces of text that can be
        associated with specific actions which are defined by
-       implementations of the <type>SmartTagAction</type> service.</p>
+       implementations of the SmartTagAction service.</p>
 
     @since OOo 2.3
  */

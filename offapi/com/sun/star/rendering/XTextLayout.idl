@@ -47,7 +47,7 @@ interface XPolyPolygon2D;
     or <member>XTextLayout::applyLogicalAdvancements()</member> are
     likely to change subsequent output of those query methods.<p>
 
-    Similar to <type>XCanvasFont</type>, all measurements and
+    Similar to XCanvasFont, all measurements and
     coordinates accepted and returned by this interface are relative
     to the font's local coordinate system (which only equals device
     coordinate space, if the combined render transformation used
@@ -67,9 +67,9 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
     /** Extract the polygonal shapes of the layouted text.<p>
 
         Each glyph is represented by a separate
-        <type>XPolyPolygon2D</type> in the returned sequence.<p>
+        XPolyPolygon2D in the returned sequence.<p>
 
-        @returns a sequence of <type>XPolyPolygon2D</type> in font
+        @returns a sequence of XPolyPolygon2D in font
         coordinate space, one for every glyph.
      */
     sequence<XPolyPolygon2D>    queryTextShapes();
@@ -80,7 +80,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
 
         Ink, or tight bounding boxes in this case means that for
         e.g. an "a", the bounding box for the
-        <type>XPolyPolygon2D</type> describing the glyph "a" is
+        XPolyPolygon2D describing the glyph "a" is
         returned, not the logical dimensions of the character in the
         font.<p>
 
@@ -121,7 +121,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         the layout via
         <member>XTextLayout::applyLogicalAdvancements()</member>.<p>
 
-        @returns a sequence of <type>double</type> specifying the
+        @returns a sequence of double specifying the
         advancements per character in font coordinate space.
 
         @see <member>XTextLayout::applyLogicalAdvancements()</member>
@@ -145,7 +145,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
 
         @see <member>XTextLayout::queryLogicalAdvancements()</member>
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if the size of aAdvancements does not match the number of
         characters in the text.
      */
@@ -167,7 +167,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
 
     /** Justify the text to the given size.<p>
 
-        This method is the core of the <type>XTextLayout</type>
+        This method is the core of the XTextLayout
         interface, because it layouts the text in a typographically
         correct way into the available space.<p>
 
@@ -183,7 +183,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         justification algorithm could compress the text, this value
         might even be significantly larger than nSize.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if nSize is 0 or negative.
      */
     double justify( [in] double nSize )
@@ -208,7 +208,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
 
         @param nSize
         The requested size of the text for <em>all</em>
-        <type>XTextLayout</type>s after justification in font
+        XTextLayouts after justification in font
         coordinate space (either width or height, depending on the
         writing mode).
 
@@ -219,7 +219,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         justification algorithm could compress the text, this value
         might even be significantly larger than nSize.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if one of the parameters are not in the valid range.
      */
     double combinedJustify( [in] sequence< XTextLayout > aNextLayouts, [in] double nSize )
@@ -256,7 +256,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
 
         @returns the generated Caret structure.
 
-        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
+        @throws com::sun::star::lang::IndexOutOfBoundsException
         if nInsertionIndex is outside the permissible range.
      */
     Caret getCaret( [in] long nInsertionIndex,
@@ -280,7 +280,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
 
         @returns the new insertion index.
 
-        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
+        @throws com::sun::star::lang::IndexOutOfBoundsException
         if nStartIndex or nCaretAdvancement is outside the permissible
         range.
      */
@@ -304,7 +304,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
 
         @return the highlight polygon in the font coordinate space.
 
-        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
+        @throws com::sun::star::lang::IndexOutOfBoundsException
         if nStartIndex or nEndIndex are outside the permissible
         range.
      */
@@ -329,7 +329,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
 
         @return the highlight polygon in the font coordinate space.
 
-        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
+        @throws com::sun::star::lang::IndexOutOfBoundsException
         if nStartIndex or nEndIndex are outside the permissible
         range.
      */

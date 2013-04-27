@@ -33,12 +33,12 @@ published interface XNumberFormatter2
 {
 
     /** is used to format or parse numbers using formats from a
-        <type>NumberFormats</type> object.
+        NumberFormats object.
      */
     interface com::sun::star::util::XNumberFormatter;
 
     /** is used to format numbers using a number format string
-        that is not inserted into a <type>NumberFormats</type> object.
+        that is not inserted into a NumberFormats object.
      */
     interface com::sun::star::util::XNumberFormatPreviewer;
 

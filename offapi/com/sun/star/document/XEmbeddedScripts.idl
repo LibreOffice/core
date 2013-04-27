@@ -26,7 +26,7 @@
 module com { module sun { module star { module document {
 
 
-/** is supported by <type>OfficeDocument</type>s which allow to embed scripts
+/** is supported by OfficeDocuments which allow to embed scripts
 
     @since OOo 2.4
  */
@@ -42,7 +42,7 @@ interface XEmbeddedScripts
 
     /** determines whether executing macros from this document is allowed.
 
-        <p>Effectively, this attribute is an evaluation of the document's <type>MacroExecMode</type>
+        <p>Effectively, this attribute is an evaluation of the document's MacroExecMode
         against possibly applicable configuration settings, the document location in relation to the
         trusted location, and the like.</p>
 

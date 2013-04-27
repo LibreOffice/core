@@ -30,17 +30,17 @@ module com {  module sun {  module star {  module form { module inspection {
     which provides properties related to binding form control models to XForm bindings and validating
     the form control content.
 
-    <p>By using an <type>XMLFormsPropertyHandler</type>, an <type scope="com::sun::star::inspection">ObjectInspector</type>
+    <p>By using an XMLFormsPropertyHandler, an <type scope="com::sun::star::inspection">ObjectInspector</type>
     can be used to bind form components to <type scope="com::sun::star::xforms">Binding</type> instances.
     Since those instances also support validating form control content (by supporting an
     <type scope="com::sun::star::form::validation">XValidator</type> interface), it seems reasonable to
     edit those validate-related properties (like the XSD data type to validate against) in the
-    <type scope="com::sun::star::inspection">ObjectInspector</type>, too. This is what an <type>XSDValidationPropertyHandler</type>
+    <type scope="com::sun::star::inspection">ObjectInspector</type>, too. This is what an XSDValidationPropertyHandler
     is good for.</p>
 
     <p>The handler expects a value named "ContextDocument" in the context in which it is created.
     That is, the <type scope="com::sun::star::uno">XComponentContext</type> used for creating the
-    <type>CellBindingPropertyHandler</type> is examined for a value with this name. If the object in this
+    CellBindingPropertyHandler is examined for a value with this name. If the object in this
     value denotes a XML form document (indicated by supporting the <type scope="com::sun::star::xforms">XFormsSupplier</type>
     interface), this document is used to do XML binding related work.</p>
 

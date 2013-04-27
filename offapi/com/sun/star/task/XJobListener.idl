@@ -34,14 +34,14 @@ published interface XJobListener : com::sun::star::lang::XEventListener
     /** indicates that the job is done
 
         @param Job
-            identifies the asynchronous job so the <type>JobExecutor</type>
+            identifies the asynchronous job so the JobExecutor
             can differ between more then ones.
 
         @param Result
             should be the same like for the synchronous mode on <member>XJob::execute()</member>.
             It provides information about success or failure of job execution. It's possible too,
             to use special protocol (which depends from real implementation) between
-            <type>JobExecutor</type> and a real job. So it can be possible to:
+            JobExecutor and a real job. So it can be possible to:
 
             <ul>
                 <li>deregister the job</li>

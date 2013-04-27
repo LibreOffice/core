@@ -48,7 +48,7 @@ published interface XEmbedObjectClipboardCreator: com::sun::star::uno::XInterfac
         <p>
         The clipboard can provide a number of choices that are container
         related. This information will be returned in the
-        <type>InsertedObjectInfo</type> object.
+        InsertedObjectInfo object.
         <p>
 
         @param xStorage
@@ -60,7 +60,7 @@ published interface XEmbedObjectClipboardCreator: com::sun::star::uno::XInterfac
         @param aObjectArgs
             optional parameters for the object persistence initialization
             see also
-            <type>EmbeddedObjectDescriptor</type>
+            EmbeddedObjectDescriptor
 
         @returns
             the structure containing the object and container related options

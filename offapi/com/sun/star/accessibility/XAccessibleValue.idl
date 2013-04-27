@@ -26,7 +26,7 @@ module com { module sun { module star { module accessibility {
 
 /** Implement this interface to give access to a single numerical value.
 
-    <p>The <type>XAccessibleValue</type> interface represents a single
+    <p>The XAccessibleValue interface represents a single
     numerical value and should be implemented by any class that supports
     numerical value like scroll bars and spin boxes.  This interface lets
     you access the value and its upper and lower bounds.</p>

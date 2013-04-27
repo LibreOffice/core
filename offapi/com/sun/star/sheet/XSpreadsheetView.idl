@@ -28,7 +28,7 @@
  module com {  module sun {  module star {  module sheet {
 
 
-/** is the main interface of a <type>SpreadsheetView</type>. It
+/** is the main interface of a SpreadsheetView. It
     manages the active sheet within this view.
  */
 published interface XSpreadsheetView: com::sun::star::uno::XInterface

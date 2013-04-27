@@ -68,8 +68,8 @@ interface XDataReceiver : ::com::sun::star::uno::XInterface
      */
     XDataSource getUsedData();
 
-    /** attaches an <type>XNumberFormatsSupplier</type> to this
-        <type>XDataReceiver</type>.
+    /** attaches an XNumberFormatsSupplier to this
+        XDataReceiver.
 
         <p>The given number formats will be used for display purposes.</p>
      */

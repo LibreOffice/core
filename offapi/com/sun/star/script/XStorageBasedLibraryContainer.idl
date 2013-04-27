@@ -28,7 +28,7 @@
 module com { module sun { module star { module script {
 
 
-/** is the interface for an <type>XLibraryContainer</type> which can be made
+/** is the interface for an XLibraryContainer which can be made
     persistent in an <type scope="com::sun::star::embed">XStorage</type>.
 
     <p>A persistent library container is associated with a root storage. The
@@ -61,7 +61,7 @@ interface XStorageBasedLibraryContainer
     /** stores the libraries to a storage other than the current container storage
 
         <p>Note that the library container is not automatically associated with the
-        new root storage. Instead, you need to manually set the <type>RootStroage</type>
+        new root storage. Instead, you need to manually set the RootStroage
         attribute afterwards. This separation allows for Save-To as well Save-As
         operations.</p>
 

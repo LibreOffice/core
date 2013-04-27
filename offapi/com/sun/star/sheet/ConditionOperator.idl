@@ -24,7 +24,7 @@
 module com {  module sun {  module star {  module sheet {
 
 
-/** is used to specify the type of <type>XSheetCondition</type>.
+/** is used to specify the type of XSheetCondition.
  */
 published enum ConditionOperator
 {

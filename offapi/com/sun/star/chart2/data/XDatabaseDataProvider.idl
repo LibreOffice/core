@@ -34,7 +34,7 @@
  module com {  module sun {  module star {  module chart2 { module data {
 
 
-/** identifies a <type>XDataProvider</type> for result sets.
+/** identifies a XDataProvider for result sets.
 
     @see XDataProvider
     @see DataProvider
@@ -135,7 +135,7 @@ interface XDatabaseDataProvider
         <p>The Filter string has to form a SQL WHERE-clause, <em>without</em> the WHERE-string itself.</p>
 
         <p>If a <member>DataSourceName</member>, <member>Command</member> and <member>CommandType</member>
-        are specified, a <type>RowSet</type> can be created with this information. If the results provided by the
+        are specified, a RowSet can be created with this information. If the results provided by the
         row set are to be additionally filtered, the Filter property can be used.</p>
 
         <p>Note that the Filter property does not make sense if a <member>ResultSet</member> has been specified

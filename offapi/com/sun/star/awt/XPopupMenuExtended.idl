@@ -50,7 +50,7 @@ interface XPopupMenuExtended
     /** queries if the <type scope="com::sun::star::awt">PopupMenu</type>
         is being executed as a result of invoking
         <member scope="com::sun::star::awt">XPopupMenu::execute()</member>; that is,
-        for a <type>PopupMenu</type> activated by a <type>MenuBar</type> item,
+        for a PopupMenu activated by a MenuBar item,
         this methods returns <FALSE/>.
 
         @return
@@ -73,19 +73,19 @@ interface XPopupMenuExtended
     void endExecute();
 
 
-    /** sets the <type>MenuLogo</type> for this <type>PopupMenu</type>.
+    /** sets the MenuLogo for this PopupMenu.
 
         @param aMenuLogo
-            the <type>MenuLogo</type>.
+            the MenuLogo.
 
         @since OOo 3.1
     */
     void setLogo( [in] ::com::sun::star::awt::MenuLogo aMenuLogo );
 
-    /** retrieves the <type>MenuLogo</type> for this <type>PopupMenu</type>.
+    /** retrieves the MenuLogo for this PopupMenu.
 
         @return
-            the <type>MenuLogo</type>.
+            the MenuLogo.
 
         @since OOo 3.1
     */
@@ -103,19 +103,19 @@ interface XPopupMenuExtended
 
 
 
-    /** sets the <type>KeyEvent</type> for the menu item.
+    /** sets the KeyEvent for the menu item.
 
-        <p>The <type>KeyEvent</type> is <b>only</b> used as a container to transport
+        <p>The KeyEvent is <b>only</b> used as a container to transport
         the shortcut information, this method only draws the text corresponding to
         this keyboard shortcut. The client code is responsible for listening to
-        keyboard events (typically done via <type>XUserInputInterception</type>),
+        keyboard events (typically done via XUserInputInterception),
         and dispatch the respective command.</p>
 
         @param nItemId
-            specifies the menu item identifier for which the <type>KeyEvent</type> should be set.
+            specifies the menu item identifier for which the KeyEvent should be set.
 
         @param aKeyEvent
-            specifies the <type>KeyEvent</type> for the menu item.
+            specifies the KeyEvent for the menu item.
 
         @throws <type scope="com::sun::star::container">NoSuchElementException</type>
             if there is no menu item with the identifier specified in <var>nItemId</var>.
@@ -125,17 +125,17 @@ interface XPopupMenuExtended
     void setAcceleratorKeyEvent( [in] short nItemId, [in] ::com::sun::star::awt::KeyEvent aKeyEvent )
         raises ( ::com::sun::star::container::NoSuchElementException );
 
-    /** retrieves the <type>KeyEvent</type> for the menu item.
+    /** retrieves the KeyEvent for the menu item.
 
-        <p>The <type>KeyEvent</type> is <b>only</b> used as a container to transport
+        <p>The KeyEvent is <b>only</b> used as a container to transport
         the shortcut information, so that in this case
         <member scope="::com::sun::star::lang::">EventObject::Source</member> is <NULL/>.</p>
 
         @param nItemId
-            specifies the menu item identifier for which the <type>KeyEvent</type> should be retrieved.
+            specifies the menu item identifier for which the KeyEvent should be retrieved.
 
         @return
-            the <type>KeyEvent</type> struct assigned to the requested menu item.
+            the KeyEvent struct assigned to the requested menu item.
 
         @throws <type scope="com::sun::star::container">NoSuchElementException</type>
             if there is no menu item with the identifier specified in <var>nItemId</var>.

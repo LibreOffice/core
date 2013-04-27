@@ -27,10 +27,10 @@ module com {  module sun {  module star {  module awt { module tree {
 
 
 /** An instance implementing this interface represents the model data for an entry in a
-    <type>XTreeDataModel</type>.
-    <p>The <type>TreeControl</type> uses this interface to retrieve the model
+    XTreeDataModel.
+    <p>The TreeControl uses this interface to retrieve the model
     information needed to display a hierarchical outline</p>
-    <p>Each XTreeNode in a <type>XTreeDataModel</type> must be unique.
+    <p>Each XTreeNode in a XTreeDataModel must be unique.
  */
 interface XTreeNode
 {
@@ -55,7 +55,7 @@ interface XTreeNode
     long getIndex( [in] XTreeNode Node);
 
     /** Returns <TRUE/> if the children of this node are created on demand.
-        <p>A <type>TreeControl</type> will handle a node that returns <TRUE/> always
+        <p>A TreeControl will handle a node that returns <TRUE/> always
         like a node that has child nodes, even if <member>getChildCount</member>
         returns 0.</p>
 

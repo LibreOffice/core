@@ -27,7 +27,7 @@
 module com {  module sun {  module star {  module form { module validation {
 
 
-/** is the listener interface to be notified of changes of a <type>XValidatableFormComponent</type>
+/** is the listener interface to be notified of changes of a XValidatableFormComponent
 */
 interface XFormComponentValidityListener : com::sun::star::lang::XEventListener
 {
@@ -36,7 +36,7 @@ interface XFormComponentValidityListener : com::sun::star::lang::XEventListener
 
         @param Source
             The member <member scope="com::sun::star::lang">EventObject::Source</member>
-            represents the <type>XValidatableFormComponent</type> whose validity, value, or text changed.
+            represents the XValidatableFormComponent whose validity, value, or text changed.
     */
     void    componentValidityChanged( [in] com::sun::star::lang::EventObject Source );
 };

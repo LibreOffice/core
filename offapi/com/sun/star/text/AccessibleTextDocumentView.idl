@@ -80,7 +80,7 @@ service AccessibleTextDocumentView
                         kind is returned for every text frame that is at
                         least partially visible. These objects are children
                         of the
-                        <type>AccessibleTextDocumentView</type> regardless
+                        AccessibleTextDocumentView regardless
                         whether they are bound to a page, a paragraph, a
                         frame, or a character. The only exception are text
                         frames that are bound as character. They are children
@@ -89,7 +89,7 @@ service AccessibleTextDocumentView
                         >AccessibleTextGraphicObject</type>:
                         A child of this kind is returned for every graphic that
                         is at least partially visible. These objects are
-                        children of the <type>AccessibleTextDocumentView</type>
+                        children of the AccessibleTextDocumentView
                         regardless whether they are bound to a page, paragraph,
                         a frame or a character. The only exception
                         are text frames that are bound as character. They are
@@ -99,7 +99,7 @@ service AccessibleTextDocumentView
                         A child of this kind is returned for every embedded
                         object that is at least partially visible.
                         These objects are children of the
-                        <type>AccessibleTextDocumentView</type> regardless
+                        AccessibleTextDocumentView regardless
                         whether they are bound to a page, a paragraph, a frame,
                         or a character.  They are children of the paragraph they
                         are contained in.
@@ -108,7 +108,7 @@ service AccessibleTextDocumentView
                         derived interface) is returned for every shape that
                         is at least partially visible. These objects are
                         children of the
-                        <type>AccessibleTextDocumentView</type> regardless
+                        AccessibleTextDocumentView regardless
                         whether they are bound to a page, a paragraph, a
                         frame or a character.
                 </ul>

@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module frame {
 
     <p>
     One important instance of this service is available from the
-    <type>Desktop</type> object via the <type>XDesktop</type> interface.
+    Desktop object via the XDesktop interface.
     </p>
 
     @see com::sun::star::lang::XComponent

@@ -24,9 +24,9 @@
 
 
 /** This constants are used for the members <member>fill</member> and <member>fillDefault</member>
-    of the an <type>XTimeContainer</type>.
+    of the an XTimeContainer.
 
-    @see <type>XTimeContainer</type>
+    @see XTimeContainer
     @see http://www.w3.org/TR/smil20/smil-timing.html#adef-fill
 */
 constants AnimationFill

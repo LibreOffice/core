@@ -27,7 +27,7 @@
 
 module com {  module sun {  module star {  module xforms {
 
-/** specifies a submission object, associated with an <type>XModel</type>
+/** specifies a submission object, associated with an XModel
 */
 interface XSubmission
 {

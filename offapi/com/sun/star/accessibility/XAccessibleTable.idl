@@ -29,13 +29,13 @@ module com { module sun { module star { module accessibility {
 
 /** Implement this interface to give access to a two-dimensional table.
 
-   <p>The <type>XAccessibleTable</type> interface is used to represent
+   <p>The XAccessibleTable interface is used to represent
    two-dimensional tables.  This interface combines the two interfaces
    <code>javax.accessibility.AccessibleTable</code> and
    <code>javax.accessibility.AccessibleExtendedTable</code> of the Java Accessibility API
    (version 1.4).</p>
 
-   <p>All <type>XAccessible</type> objects that represent cells or
+   <p>All XAccessible objects that represent cells or
    cell-clusters of a table have to be at the same time children of the
    table.  This is necessary to be able to convert row and column indices
    into child indices and vice versa with the methods
@@ -165,7 +165,7 @@ interface XAccessibleTable : ::com::sun::star::uno::XInterface
     long getAccessibleColumnExtentAt ([in] long nRow, [in] long nColumn)
         raises (::com::sun::star::lang::IndexOutOfBoundsException);
 
-    /** Returns the row headers as an <type>XAccessibleTable</type>
+    /** Returns the row headers as an XAccessibleTable
         object.
 
         <p>Content and size of the returned table are implementation
@@ -173,11 +173,11 @@ interface XAccessibleTable : ::com::sun::star::uno::XInterface
 
         @return
             Returns always a valid reference to an
-            <type>XAccessibleTable</type> object.
+            XAccessibleTable object.
     */
     XAccessibleTable getAccessibleRowHeaders ();
 
-    /** Returns the column headers as an <type>XAccessibleTable</type>
+    /** Returns the column headers as an XAccessibleTable
         object.
 
         <p>Content and size of the returned table are implementation
@@ -185,7 +185,7 @@ interface XAccessibleTable : ::com::sun::star::uno::XInterface
 
         @return
             Returns always a valid reference to an
-            <type>XAccessibleTable</type> object.
+            XAccessibleTable object.
     */
     XAccessibleTable getAccessibleColumnHeaders ();
 
@@ -246,7 +246,7 @@ interface XAccessibleTable : ::com::sun::star::uno::XInterface
     boolean isAccessibleColumnSelected ([in] long nColumn)
         raises (::com::sun::star::lang::IndexOutOfBoundsException);
 
-    /** Returns the <type>XAccessible</type> object at the specified row
+    /** Returns the XAccessible object at the specified row
         and column in the table.
 
         <p>This method has been renamed from the Java name
@@ -264,7 +264,7 @@ interface XAccessibleTable : ::com::sun::star::uno::XInterface
 
         @return
             If both row and column index are valid then the corresponding
-            <type>XAccessible</type> object is returned that represents the
+            XAccessible object is returned that represents the
             requested cell regardless of whether the cell is currently
             visible (on the screen).
 
@@ -288,7 +288,7 @@ interface XAccessibleTable : ::com::sun::star::uno::XInterface
 
         @return
             Returns a reference to an implementation dependent
-            <type>XAccessible</type> object representing the table's summary
+            XAccessible object representing the table's summary
             or an empty reference if the table does not support a summary.
     */
     XAccessible getAccessibleSummary ();

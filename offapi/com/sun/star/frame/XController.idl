@@ -27,7 +27,7 @@
  published interface XFrame;
  published interface XModel;
 
-/** With this interface, components viewed in a <type>Frame</type> can serve
+/** With this interface, components viewed in a Frame can serve
     events (by supplying dispatches).
 
     @see XFrame

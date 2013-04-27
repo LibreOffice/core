@@ -56,7 +56,7 @@ interface XBitmapPalette : ::com::sun::star::uno::XInterface
         transparency, by flagging certain palette entries to be fully
         transparent when displaying the bitmap.
 
-        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
+        @throws com::sun::star::lang::IndexOutOfBoundsException
         if the index is smaller than zero or larger than
         <member>XBitmapPalette::getNumberOfEntries()</member>-1.
      */
@@ -82,11 +82,11 @@ interface XBitmapPalette : ::com::sun::star::uno::XInterface
         @return whether the palette entry was changed. For read-only
         entries, this method always returns <FALSE/>.
 
-        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
+        @throws com::sun::star::lang::IndexOutOfBoundsException
         if the index is smaller than zero or larger than
         <member>XBitmapPalette::getNumberOfEntries()</member>-1.
 
-        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        @throws com::sun::star::lang::IllegalArgumentException
         if the given sequence of color components does not match the
         associated bitmap's device color format.
      */

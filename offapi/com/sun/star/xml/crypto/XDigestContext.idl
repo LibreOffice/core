@@ -30,7 +30,7 @@
     The algorithm to generate the digest is specified on object creation.
     </p>
 
-    @see <type>XDigestContextSupplier</type>
+    @see XDigestContextSupplier
     @since OOo 3.4
  */
 interface XDigestContext : com::sun::star::uno::XInterface

@@ -45,7 +45,7 @@ interface XDataSourceMetaData;
     <p>Most of the functionality provided here is meaningful only relative to
     a given database connection. For instance, for quoting table names, you need
     the meta data instance of the connection. Thus, the entry point for obtaining
-    a <type>XConnectionTools</type> instance is the
+    a XConnectionTools instance is the
     <type scope="com::sun::star::sdb">Connection</type> service.</p>
 
     <p>Note that nearly all functionality provided by this interface is also
@@ -55,14 +55,14 @@ interface XDataSourceMetaData;
 */
 interface XConnectionTools
 {
-    /** creates an instance supporting the <type>XTableName</type> interface,
+    /** creates an instance supporting the XTableName interface,
         which can be used to manipulate table names for various purposes.
 
         <p>The returned object is guaranteed to not be <NULL/>.</p>
     */
     XTableName      createTableName();
 
-    /** returns an instance supporting the <type>XObjectNames</type> interface,
+    /** returns an instance supporting the XObjectNames interface,
         which provides access to functionality around table and query names.
 
         <p>The returned object is guaranteed to not be <NULL/>.</p>

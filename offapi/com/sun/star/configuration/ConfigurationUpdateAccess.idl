@@ -29,22 +29,22 @@ module com { module sun { module star { module configuration {
 
 /** provides modifying access to a fragment of the configuration hierarchy.
 
- <p>Extends <type>ConfigurationAccess</type> to support modifying values
+ <p>Extends ConfigurationAccess to support modifying values
  or inserting and removing elements.
  </p>
 
  <p>Descendants of this service also implement this service
  unless they are marked <em>read-only</em> (which is indicated by attribute
  <const scope="com::sun::star::beans">PropertyAttribute::READONLY</const>),
- in which case they only need implement <type>ConfigurationAccess</type>.
+ in which case they only need implement ConfigurationAccess.
  </p>
 
  <p>The classification of implementations that is described for
- <type>ConfigurationAccess</type> applies to implementations of this service
+ ConfigurationAccess applies to implementations of this service
  as well. Therefore an implementation will support one of several alternate
  services describing its <em>Container</em> role and one of several alternate
  services describing its <em>Element</em> role. These services are
- extensions of the respective services documented for <type>ConfigurationAccess</type>.
+ extensions of the respective services documented for ConfigurationAccess.
  </p>
  <ul>
     <li><em>Container</em> role:
@@ -62,55 +62,55 @@ module com { module sun { module star { module configuration {
 
  @see ConfigurationProvider
     Root instances of this service can be requested from a
-    <type>ConfigurationProvider</type>
+    ConfigurationProvider
 */
 published service ConfigurationUpdateAccess
 {
     /** is the basic service providing read access to an element of the
      configuration hierarchy and its child and descendent elements.
 
-     <p>The <type>HierarchyAccess</type> specialization implemented will be
+     <p>The HierarchyAccess specialization implemented will be
      further specialized to support modifying access.
-     Implementations shall therefore implement one of <type>SetUpdate</type> or
-     <type>GroupUpdate</type> depending on the <em>Container</em> role.
+     Implementations shall therefore implement one of SetUpdate or
+     GroupUpdate depending on the <em>Container</em> role.
      </p>
 
-     <p>If the <type>HierarchyElement</type> specialization that is implemented
-     is <type>AccessRootElement</type>, the implementation must support the
-     extended functionality of <type>UpdateRootElement</type>. Otherwise, there
+     <p>If the HierarchyElement specialization that is implemented
+     is AccessRootElement, the implementation must support the
+     extended functionality of UpdateRootElement. Otherwise, there
      are no new requirements mandated by the <em>Element</em> role.
      </p>
 
     */
     service ConfigurationAccess;
 
-    /** specializes <type>SetAccess</type> to support modifying the element.
+    /** specializes SetAccess to support modifying the element.
 
      <p>Implemented, if this element is a <em>Set</em>.
-     Otherwise service <type>GroupUpdate</type> is provided.
+     Otherwise service GroupUpdate is provided.
      </p>
     */
     [optional] service SetUpdate;
 
-    /** specializes <type>GroupAccess</type> to support modifying contained
+    /** specializes GroupAccess to support modifying contained
      data.
 
      <p>Implemented, if this element is a <em>Group</em>.
-     Otherwise service <type>SetUpdate</type> is provided.
+     Otherwise service SetUpdate is provided.
      </p>
     */
     [optional] service GroupUpdate;
 
-    /** specializes <type>AccessRootElement</type> to support transaction-like
+    /** specializes AccessRootElement to support transaction-like
      control over a batch of changes accumulated within the tree fragment.
 
      <p>Implemented, if this element is the <em>Root</em> of the whole hierarchy.
-     Otherwise either <type>SetElement</type> or <type>GroupElement</type> is provided.
+     Otherwise either SetElement or GroupElement is provided.
      </p>
 
      @see ConfigurationProvider
-        Instances obtained from a <type>ConfigurationProvider</type> will
-        implement this version of <type>HierarchyElement</type>.
+        Instances obtained from a ConfigurationProvider will
+        implement this version of HierarchyElement.
     */
     [optional] service UpdateRootElement;
 };

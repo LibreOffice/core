@@ -29,7 +29,7 @@
  module com {  module sun {  module star {  module awt {
 
 
-/** specifies the standard model of an <type>UnoControlCheckBox</type>.
+/** specifies the standard model of an UnoControlCheckBox.
  */
 published service UnoControlCheckBoxModel
 {
@@ -88,7 +88,7 @@ published service UnoControlCheckBoxModel
 
     /** specifies the position of the image, if any, relative to the text, if any
 
-        <p>Valid values of this property are specified with <type>ImagePosition</type>.</p>
+        <p>Valid values of this property are specified with ImagePosition.</p>
      */
     [optional, property] short ImagePosition;
 
@@ -172,8 +172,8 @@ published service UnoControlCheckBoxModel
 
     /** specifies a visual effect to apply to the check box control
 
-        <p>Possible values for this property are <type>VisualEffect</type>::FLAT and
-        <type>VisualEffect</type>::LOOK3D.</p>
+        <p>Possible values for this property are VisualEffect::FLAT and
+        VisualEffect::LOOK3D.</p>
 
         @see com::sun::star::awt::VisualEffect
 

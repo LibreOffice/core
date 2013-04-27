@@ -29,7 +29,7 @@
 /** provides access to the record mechanism of dispatches
 
     <p>
-    With a <type>XDispatchRecorder</type> it's possible to record calls
+    With a XDispatchRecorder it's possible to record calls
     of <member>XDispatch::dispatch()</member>. The recorded data (may a script)
     can be used to automate recorded dispatch and start it at later time again.
     This supplier provides access to the recorder and supports some functionality
@@ -47,7 +47,7 @@ published interface XDispatchRecorderSupplier: com::sun::star::uno::XInterface
         Setting of a new recorder make it possible to change recording mode.
         May there can exist different implementations of a recorder (e.g. to
         generate Java, Basic or other formats). Changing between local recording
-        inside one <type>Frame</type> or global one by using more then ones can be
+        inside one Frame or global one by using more then ones can be
         forced too.
         </p>
 
@@ -79,7 +79,7 @@ published interface XDispatchRecorderSupplier: com::sun::star::uno::XInterface
         call. Otherwise follow algorithm is used:
         <ul>
             <li>If <var>Dispatcher</var> doesn't support the interface
-                <type>XRecordableDispatch</type> a normal dispatch() call
+                XRecordableDispatch a normal dispatch() call
                 will be made and depend from the result state of that
                 the request will be recorded. In this case it's possible
                 to record the incoming parameter (<var>URL</var> and
@@ -87,7 +87,7 @@ published interface XDispatchRecorderSupplier: com::sun::star::uno::XInterface
                 can't be recorded then and will be lost.
             </li>
             <li>If <var>Dispatcher</var> support the interface
-                <type>XRecordableDispatch</type> it will be used
+                XRecordableDispatch it will be used
                 to dispatch and record all necessary parameters of
                 the whole process.
             </li>

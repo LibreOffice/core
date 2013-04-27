@@ -25,29 +25,29 @@
 
  module com {  module sun {  module star {  module drawing {
 
-/** A <type>GluePoint</type> could be attached to a shape or to a page.
+/** A GluePoint could be attached to a shape or to a page.
 
 
 
-    <p>If a <type>GluePoint</type> is attached to a shape, it is moved when
+    <p>If a GluePoint is attached to a shape, it is moved when
     the shape moves.
-    The ends of connectors can be attached to <type>GluePoint</type>.</p>
+    The ends of connectors can be attached to GluePoint.</p>
 
     @deprecated
     @see GluePoint2
  */
 published struct GluePoint
 {
-    /** This is the position of this <type>GluePoint</type>.
+    /** This is the position of this GluePoint.
      */
     com::sun::star::awt::Point Position;
 
     /** This is the direction in which the connector line leaves the
-        <type>GluePoint</type>.
+        GluePoint.
      */
     short EscapeDirection;
 
-    /** If this is <TRUE/>, then the position of this <type>GluePoint</type> is
+    /** If this is <TRUE/>, then the position of this GluePoint is
         absolute on a page and is not relative to a shape.
      */
     boolean PositionAbsolute;

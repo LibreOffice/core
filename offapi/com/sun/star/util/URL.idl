@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module util {
 
     <p>
     If the structure represents a valid URL or not depends on prior usage of
-    the functions of <type>XURLTransformer</type>. Only after one of the functions
+    the functions of XURLTransformer. Only after one of the functions
     returned <TRUE/> this can be assumed.</br>
     It is not necessary to set all of the fields; either <member>URL::Complete</member>
     or (some of) the others are set. Additionally, most of the other
@@ -47,7 +47,7 @@ published struct URL
 
         <p>
         It is used as a central input/output or input parameter for the interfaces of
-        <type>XURLTransformer</type>. The usage of one of the <type>XURLTransformer</type>
+        XURLTransformer. The usage of one of the XURLTransformer
         function is mandatory to validate the URL. It cannot be assumed that
         <member>URL::Complete</member> represents always a valid URL!
         </p>
@@ -85,7 +85,7 @@ published struct URL
 
     /** contains the last segment of the hierarchical path of the URL, for the above example, "foo.txt"
         <p>
-        <strong>Attention:</strong>A service implementing the <type>XURLTransformer</type> interface
+        <strong>Attention:</strong>A service implementing the XURLTransformer interface
         will normally not detect if the last segment is a folder or a file. So it is possible that
         the last segment describes a folder. If you want to be sure that a file URL that references
         a folder will be correctly put into the URL fields you should append a "/" at the end of the

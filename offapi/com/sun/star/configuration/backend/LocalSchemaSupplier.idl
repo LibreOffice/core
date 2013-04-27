@@ -27,7 +27,7 @@ module com { module sun { module star { module configuration { module backend {
 
 
 /**
-    implements <type>SchemaSupplier</type> providing access to
+    implements SchemaSupplier providing access to
     local configuration schemas
 */
 service LocalSchemaSupplier

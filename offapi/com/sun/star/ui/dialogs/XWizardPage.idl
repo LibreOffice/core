@@ -26,7 +26,7 @@
 module com { module sun { module star { module ui { module dialogs {
 
 
-/** is a single page of a <type>Wizard</type>
+/** is a single page of a Wizard
  */
 interface XWizardPage : ::com::sun::star::lang::XComponent
 {
@@ -50,7 +50,7 @@ interface XWizardPage : ::com::sun::star::lang::XComponent
         depends on the current state of the page.</p>
 
         @param Reason
-            is one of the <type>WizardTravelType</type> constants denoting the reason why the page should be
+            is one of the WizardTravelType constants denoting the reason why the page should be
             committed.
     */
     boolean commitPage( [in] short Reason );

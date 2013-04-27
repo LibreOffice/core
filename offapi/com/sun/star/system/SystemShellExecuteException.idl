@@ -25,7 +25,7 @@
 
 module com { module sun { module star { module system {
 
-/** May be thrown in cases of errors executing a command using the <type>SystemShellExecute</type> service.
+/** May be thrown in cases of errors executing a command using the SystemShellExecute service.
     <member scope="com::sun::star::uno">Exception::Message</member> may contain a
     system error message, but it is not mandatory.
     The member PosixError specifies a POSIX conforming error code or -1 for

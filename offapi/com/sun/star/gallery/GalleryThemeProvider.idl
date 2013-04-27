@@ -27,14 +27,14 @@
 module com {  module sun {  module star {  module gallery {
 
 
-/** provides access to a container of <type>GalleryTheme</type>s
+/** provides access to a container of GalleryThemes
     and makes it possible for you to manipulate them.
 
     @see XGalleryThemeProvider
  */
 service GalleryThemeProvider
 {
-    /** lets you access and create <type>GalleryTheme</type>s
+    /** lets you access and create GalleryThemes
      */
     interface com::sun::star::gallery::XGalleryThemeProvider;
 

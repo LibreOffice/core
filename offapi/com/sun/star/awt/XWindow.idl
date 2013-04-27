@@ -65,7 +65,7 @@ published interface XWindow: com::sun::star::lang::XComponent
         the height of the window.
 
         @param Flags
-        Flags are of type <type>PosSize</type> and specify, which parameters
+        Flags are of type PosSize and specify, which parameters
         are taken into account when setting the outer bounds of the window.
     */
     void setPosSize( [in] long X,
@@ -98,7 +98,7 @@ published interface XWindow: com::sun::star::lang::XComponent
     /** adds a window listener to the object.
 
         @param xListener
-            the listener to add. If this listener also supports the <type>XWindowListener2</type> interface,
+            the listener to add. If this listener also supports the XWindowListener2 interface,
             it will receive the additional events declared in XWindowListener2.
      */
     void addWindowListener( [in] com::sun::star::awt::XWindowListener xListener );

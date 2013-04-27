@@ -25,7 +25,7 @@
 
 /** Specifies the interpolation mode for the animation.
 
-    @see <type>XAnimation</type>
+    @see XAnimation
     @see http://www.w3.org/TR/smil20/animation.html#adef-calcMode
     @see http://www.w3.org/TR/smil20/animation.html#adef-SplineAnimation-calcMode
 */

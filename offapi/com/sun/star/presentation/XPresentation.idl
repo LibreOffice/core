@@ -27,7 +27,7 @@
 
 
 /** With this interface you can control any object that implements
-    a <type>Presentation</type>.
+    a Presentation.
 */
 published interface XPresentation: com::sun::star::uno::XInterface
 {

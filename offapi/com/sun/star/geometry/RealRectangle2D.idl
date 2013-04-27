@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module geometry {
 /*  Removed, because XCanvas is private API until further notice.
 
     The values are stored as reals. Please note that the
-    <type>com.sun.star.rendering.XCanvas</type> defines the
+    com.sun.star.rendering.XCanvas defines the
     screen representation of rectangles in such a way that the lower
     and the rightmost line of the rectangle are not drawn on
     screen. Thus, if for two rectangles R1 and R2, R1.x2 equals R2.x1,

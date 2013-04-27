@@ -32,7 +32,7 @@
 module com {  module sun {  module star {  module awt {
 
 
-/** The <type>XExtendedToolkit</type> is an extension of the <type
+/** The XExtendedToolkit is an extension of the <type
     scope="::com::sun::star::awt">XToolkit</type> interface.  It basically
     provides access to three event broadcasters which are used for instance
     in the context of accessibility.  It is, however, not restricted to

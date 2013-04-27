@@ -29,7 +29,7 @@
     <p>
     All elements in this container support the service frame.
     Implementations of this service are available by interface
-    <type>XFramesSupplier</type>.
+    XFramesSupplier.
     </p>
 
     @see XFramesSupplier

@@ -43,19 +43,19 @@ service MetadataField
         <type scope="com::sun::star::text">TextContent</type> are supported. */
     service  com::sun::star::text::TextField;
 
-    /** The <type>MetadataField</type> can have RDF metadata attached. */
+    /** The MetadataField can have RDF metadata attached. */
     interface com::sun::star::rdf::XMetadatable;
 
     /** Allows for insertion of text content into, and creating cursors
-        that are bound within, the <type>MetadataField</type>. */
+        that are bound within, the MetadataField. */
     interface com::sun::star::text::XText;
 
     /** The <type scope="com::sun::star::text">TextContent</type>s that are
-        contained in the <type>MetadataField</type> can be enumerated. */
+        contained in the MetadataField can be enumerated. */
     interface com::sun::star::container::XEnumerationAccess;
 
     /** The <type scope="com::sun::star::text">TextContent</type>
-        that is the parent of this <type>MetadataField</type>.
+        that is the parent of this MetadataField.
         @since OOo 3.3
      */
     interface com::sun::star::container::XChild;

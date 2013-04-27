@@ -57,7 +57,7 @@ interface XFlatParagraph: com::sun::star::text::XTextMarkup
         text node as "processed"
 
         @param nType
-                type, see <type>TextMarkupType</type>.
+                type, see TextMarkupType.
 
         @param  bVal
                 <TRUE/>  the respective text node has been processed
@@ -69,7 +69,7 @@ interface XFlatParagraph: com::sun::star::text::XTextMarkup
     /** returns whether the respective text node has already been processed
 
         @param nType
-                type, see <type>TextMarkupType</type>.
+                type, see TextMarkupType.
 
         @returns
                 <TRUE/>  if the respective text node has been checked

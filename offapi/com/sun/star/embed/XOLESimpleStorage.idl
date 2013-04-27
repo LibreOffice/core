@@ -37,32 +37,32 @@ module com { module sun { module star { module embed {
 published interface XOLESimpleStorage
 {
     //INTERFACES
-    /** interface <type>XNameContainer</type> is the generic interface for
+    /** interface XNameContainer is the generic interface for
         supporting the insertion and removal of named elements.
 
         <p>The access to the elements is provided though
-        <type>XNameContainer</type> methods.</p>
+        XNameContainer methods.</p>
     */
     interface ::com::sun::star::container::XNameContainer;
 
-    /** interface <type>XComponent</type> allows to explicitly free resources
+    /** interface XComponent allows to explicitly free resources
         and break cyclic references.
     */
     interface ::com::sun::star::lang::XComponent;
 
-    /** interface <type>XTransactedObject</type> allows transacted access to
+    /** interface XTransactedObject allows transacted access to
         an object.
 
         <p>The storages are always opened in transacted mode, the
-        <type>XTransactedObject</type> interface allows to commit the storage.
+        XTransactedObject interface allows to commit the storage.
         </p>
     */
     interface XTransactedObject;
 
-    /** interface <type>XClassifiedObject</type> represents common
+    /** interface XClassifiedObject represents common
         functionality for embedded objects
 
-        <p>the <type>XClassifiedObject</type> interface allows to set/get the
+        <p>the XClassifiedObject interface allows to set/get the
         ClassID of the storage.</p>
     */
     interface XClassifiedObject;

@@ -25,10 +25,10 @@
 
 module com { module sun { module star { module document {
 
-/** makes it possible to connect a document with an <type>ImportFilter</type>
+/** makes it possible to connect a document with an ImportFilter
 
     <p>
-    An <type>ImportFilter</type> must know the target of his filter operation.
+    An ImportFilter must know the target of his filter operation.
     To set this on a filter is part of this interface.
     Same mechanism exist for export too.
     </p>

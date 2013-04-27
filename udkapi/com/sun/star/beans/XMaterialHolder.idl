@@ -31,8 +31,8 @@
     object's properties and methods. The result is represented as
     XIntrospectionAccess interface. The inspected object then is the
     material attached to the introspection tool and an implementation
-    of <type>XIntrospectionAccess</type> should also support
-    <type>XMaterialHolder</type> to give access to this material.</p>
+    of XIntrospectionAccess should also support
+    XMaterialHolder to give access to this material.</p>
 
     @see XIntrospectionAccess
  */

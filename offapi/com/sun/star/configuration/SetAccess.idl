@@ -40,7 +40,7 @@ module com { module sun { module star { module configuration {
  </p>
 
  @see com::sun::star::configuration::SetElement
-    Child objects of this service generally implement <type>SetElement</type>.
+    Child objects of this service generally implement SetElement.
     The template name returned by the child from
     <member>XTemplateInstance::getTemplateName()</member>
     corresponds to the name returned by the set from
@@ -66,7 +66,7 @@ published service SetAccess
  of a not necessarily hierarchical <em>set</em>.
 
  <p>Interface <type scope="com::sun::star::configuration">XTemplateContainer</type>,
- which is optional in <type>SimpleSetAccess</type> must always be implemented
+ which is optional in SimpleSetAccess must always be implemented
  in this service, if the elements are of object type.  </p>
 */
     service SimpleSetAccess;

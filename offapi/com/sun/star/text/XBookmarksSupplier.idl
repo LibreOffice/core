@@ -32,8 +32,8 @@
 published interface XBookmarksSupplier: com::sun::star::uno::XInterface
 {
     /** @returns
-                the collection of all <type>Bookmark</type> instances which are
-                within this context and which support the <type>Bookmarks</type> service.
+                the collection of all Bookmark instances which are
+                within this context and which support the Bookmarks service.
      */
     com::sun::star::container::XNameAccess getBookmarks();
 

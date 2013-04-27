@@ -28,7 +28,7 @@
 module com { module sun { module star { module container {
 
 
-/** extends <type>XMap</type> with enumeration capabilities.
+/** extends XMap with enumeration capabilities.
 
     <p>No assumption should be made about the ordering of the elements returned by the various enumerators.
     In particular, you cannot assume the elements are returned in the same order as they were inserted. Also,

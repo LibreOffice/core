@@ -115,7 +115,7 @@ interface XDatabaseDocumentUI
 
         @return
             a record describing the sub component. The first element of the returned pair is the type
-            of the component, denoted by one of the <type>DatabaseObject</type> constants. The second
+            of the component, denoted by one of the DatabaseObject constants. The second
             element is the name of the component. For object types which support nested structures (forms
             and reports, actually), this might be a hierarchical name. If the sub component has been newly created,
             and not yet saved, this name is empty.
@@ -173,7 +173,7 @@ interface XDatabaseDocumentUI
         @see connect
 
         @param ObjectType
-            specifies the type of the object, must be one of the <type>DatabaseObject</type>
+            specifies the type of the object, must be one of the DatabaseObject
             constants.
 
         @param ObjectName
@@ -266,7 +266,7 @@ interface XDatabaseDocumentUI
     /** creates a new sub component of the given type
 
         @param ObjectType
-            specifies the type of the object, must be one of the <type>DatabaseObject</type>
+            specifies the type of the object, must be one of the DatabaseObject
             constants.
 
         @param DocumentDefinition
@@ -290,7 +290,7 @@ interface XDatabaseDocumentUI
         services.</p>
 
         @param ObjectType
-            specifies the type of the object, must be one of the <type>DatabaseObject</type>
+            specifies the type of the object, must be one of the DatabaseObject
             constants.
 
         @param DocumentDefinition

@@ -48,18 +48,18 @@ published interface XScriptEventsAttacher: com::sun::star::uno::XInterface
 
         @param Objects
                             Sequence of all objects. Usually the objects should directly
-                            support <type>XScriptEventsAttacher</type> to define the events
+                            support XScriptEventsAttacher to define the events
                             but this is not strictly required. It's also possible that
-                            the object implementing <type>XScriptEventsAttacher</type>
+                            the object implementing XScriptEventsAttacher
                             knows how to get the necessary information for the objects.
         @param xListener
                             All events (if defined by XScriptEventsSupplier) that are fired
-                            by one of the objects are mapped into a <type>ScriptEvent</type>
+                            by one of the objects are mapped into a ScriptEvent
                             and passed to the methods of this XScriptListener.
         @param Helper
                             Helper object for the implementation. This value will be
                             passed to the XScriptListener as Helper property in the
-                            <type>ScriptEvent</type>.
+                            ScriptEvent.
     */
     void attachEvents(  [in] sequence< com::sun::star::uno::XInterface > Objects,
                         [in] com::sun::star::script::XScriptListener xListener,

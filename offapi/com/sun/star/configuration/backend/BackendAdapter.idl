@@ -28,8 +28,8 @@ module com { module sun { module star { module configuration { module backend {
 
 
 /**
-    implements <type>Backend</type> retrieving data
-    from a <type>SingleBackend</type>.
+    implements Backend retrieving data
+    from a SingleBackend.
 
     @since OOo 1.1.2
 */
@@ -42,7 +42,7 @@ published service BackendAdapter
 
 
     /**
-      This interface, that is optional in <type>Backend</type>, is
+      This interface, that is optional in Backend, is
       mandatory in this service.
       */
     interface XBackendEntities ;
@@ -51,7 +51,7 @@ published service BackendAdapter
     /**
       allows initializing the backend to use.
 
-      <p>If this interface is present, a <type>SingleBackend</type>
+      <p>If this interface is present, a SingleBackend
         may be passed, that is used to access the data.
         Also a <type scope="com::sun::star::configuration::bootstrap">BootstrapContext</type>
         can be passed, that provides further settings for the backend.

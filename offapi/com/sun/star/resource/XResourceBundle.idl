@@ -80,7 +80,7 @@ module com { module sun { module star { module resource {
     When your program needs a locale-specific object, it loads
 
     the <code>XResourceBundle</code> implementation using the
-    <type>XResourceBundleLoader</type> service:
+    XResourceBundleLoader service:
 
     <listing>
     XResourceBundle myResources = xLoader.getBundle("MyResources", currentLocale);

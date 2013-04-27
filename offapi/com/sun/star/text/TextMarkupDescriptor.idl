@@ -35,7 +35,7 @@ module com {  module sun {  module star {  module text {
 
 struct TextMarkupDescriptor
 {
-    /// Type of text markup see <type>TextMarkupType</type>
+    /// Type of text markup see TextMarkupType
     long        nType;
 
     /// A string used to identify the caller

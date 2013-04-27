@@ -24,7 +24,7 @@
  module com {  module sun {  module star {  module reflection {
 
 
-/** Denotes the access possibilities via <type>XIdlField2</type> to an
+/** Denotes the access possibilities via XIdlField2 to an
     interface attribute, enum or compound type (struct/exception).
 */
 published enum FieldAccessMode

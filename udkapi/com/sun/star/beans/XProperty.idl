@@ -32,15 +32,15 @@ module com {  module sun {  module star {  module beans {
 
     <p> Provides access to traits of this object that would
         otherwise only be available from a containing
-        <type>XPropertySet</type> via its
-        <type>XPropertySetInfo</type>.
+        XPropertySet via its
+        XPropertySetInfo.
     </p>
 
  */
 published interface XProperty: com::sun::star::uno::XInterface
 {
     /** @returns
-                the specification of this object as <type>Property</type>.
+                the specification of this object as Property.
 
      */
     com::sun::star::beans::Property getAsProperty();

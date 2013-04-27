@@ -39,7 +39,7 @@ published struct Property
 {
     /** specifies the name of the property.
 
-        <p>The name is unique within an <type>XPropertySet</type>.
+        <p>The name is unique within an XPropertySet.
         Upper and lower case are distinguished.</p>
      */
     string Name;
@@ -48,7 +48,7 @@ published struct Property
     /** contains an implementation-specific handle for the property.
 
         <p>It may be -1 if the implementation has no handle. You can use
-        this handle to get values from the <type>XFastPropertySet</type>.</p>
+        this handle to get values from the XFastPropertySet.</p>
      */
     long Handle;
 
@@ -64,7 +64,7 @@ published struct Property
 
 
     /** This field may contain zero or more constants of the
-        <type>PropertyAttribute</type> constants group.
+        PropertyAttribute constants group.
      */
     short Attributes;
 

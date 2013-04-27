@@ -25,12 +25,12 @@ module com { module sun { module star { module accessibility {
 /** Collection of roles.
 
     <p>This collection of constants defines the set of possible roles of
-    classes implementing the <type>XAccessible</type> interface according to
+    classes implementing the XAccessible interface according to
     the Java class javax.accessibility.AccessibleRole.  The role of an
     object describes its generic function like "button", "menu", or "text".
     You can obtain an object's role by calling the
     <member>getAccessibleRole</member> method of the
-    <type>XAccessibleContext</type> interface.</p>
+    XAccessibleContext interface.</p>
 
     <p>We are using constants instead of a more typesafe enum.  The reason
     for this is that IDL enums may not be extended.  Therefore, in order to

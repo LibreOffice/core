@@ -37,20 +37,20 @@ module data
     can only be written to.
 
     <p>If you want to be able to also read the data set here, your
-    component must also implement <type>XDataSource</type>.</p>
+    component must also implement XDataSource.</p>
   */
 interface XDataSink : ::com::sun::star::uno::XInterface
 {
     /** sets new data sequences.  The elements set here must support
-        the service <type>DataSequence</type>.
+        the service DataSequence.
 
         <p>If the data consist only of floating point numbers (double
         values), the instances set here should also support the
-        service <type>NumericalDataSequence</type>.</p>
+        service NumericalDataSequence.</p>
 
         <p>If the data consist only of strings, the instances set here
         should also support the service
-        <type>TextualDataSequence</type>.</p>
+        TextualDataSequence.</p>
 
         <p>If one of the derived services is supported by one element
         of the sequence, it should be available for all elements in

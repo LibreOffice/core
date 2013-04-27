@@ -33,7 +33,7 @@
 
 module com { module sun { module star { module deployment {
 
-/** The <type>XExtensionManager</type> interface is used to manage extensions
+/** The XExtensionManager interface is used to manage extensions
     in the user, shared and bundled repository.
 
     @see ExtensionManager
@@ -51,10 +51,10 @@ interface XExtensionManager
     interface com::sun::star::util::XModifyBroadcaster;
 
 
-    /** gets the supported <type>XPackageTypeInfo</type>s.
+    /** gets the supported XPackageTypeInfos.
 
         @return
-                supported <type>XPackageTypeInfo</type>s.
+                supported XPackageTypeInfos.
     */
     sequence<XPackageTypeInfo> getSupportedPackageTypes();
 
@@ -199,7 +199,7 @@ interface XExtensionManager
         @param xCmdEnv
                command environment for error and progress handling
         @return
-               <type>XPackage</type> object
+               XPackage object
     */
     XPackage getDeployedExtension(
         [in] string repository,

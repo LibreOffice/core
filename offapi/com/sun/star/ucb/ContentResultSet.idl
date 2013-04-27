@@ -61,7 +61,7 @@ published service ContentResultSet
         This interface mainly provides a cursor for the result set.
 
         <p>Note that every method of this interface implementation additionally
-        may throw a <type>ResultSetException</type> ( which is derived from
+        may throw a ResultSetException ( which is derived from
         <type scope="com::sun::star::sdbc">SQLException</type> to be compatible
         to that interface ). The new exception transports another exception,
         which indicates the reason for the failure of the method call.
@@ -73,7 +73,7 @@ published service ContentResultSet
     /** provides access to data of the content the cursor is pointing to.
 
         <p>Note that every method of this interface implementation additionally
-        may throw a <type>ResultSetException</type> ( which is derived from
+        may throw a ResultSetException ( which is derived from
         <type scope="com::sun::star::sdbc">SQLException</type> to be compatible
         to that interface ). The new exception transports another exception,
         which indicates the reason for the failure of the method call.
@@ -86,7 +86,7 @@ published service ContentResultSet
         retrieving data from a server ).
 
         <p>Note that every method of this interface implementation additionally
-        may throw a <type>ResultSetException</type> ( which is derived from
+        may throw a ResultSetException ( which is derived from
         <type scope="com::sun::star::sdbc">SQLException</type> to be compatible
         to that interface ). The new exception transports another exception,
         which indicates the reason for the failure of the method call.

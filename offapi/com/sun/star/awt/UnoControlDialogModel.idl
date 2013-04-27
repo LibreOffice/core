@@ -32,14 +32,14 @@
  module com {  module sun {  module star {  module awt {
 
 
-/** specifies the standard model of an <type>UnoControlDialog</type>.
+/** specifies the standard model of an UnoControlDialog.
  */
 published service UnoControlDialogModel
 {
     service com::sun::star::awt::UnoControlModel;
 
     /** allows to create control models, which support the
-        <type>UnoControlDialogElement</type> service and can be inserted into
+        UnoControlDialogElement service and can be inserted into
         this container.
      */
     interface com::sun::star::lang::XMultiServiceFactory;

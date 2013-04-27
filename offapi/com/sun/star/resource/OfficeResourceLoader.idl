@@ -24,11 +24,11 @@
 
 module com { module sun { module star { module resource {
 
-/** describes a <type>XResourceBundleLoader</type> which provides access to the OpenOffice.org
+/** describes a XResourceBundleLoader which provides access to the OpenOffice.org
     resource files.
 
     <p>An OpenOffice.org installation comes with a number of resource files in an proprietary
-    format, located inside the installation's program/resource directory. The <type>OfficeResoureLoader</type>
+    format, located inside the installation's program/resource directory. The OfficeResoureLoader
     singleton (available at a component context as value with the key
     <code>/singletons/com.sun.star.resource.OfficeResourceLoader</code>), provides access to some
     types of resources within those files.</p>
@@ -39,7 +39,7 @@ module com { module sun { module star { module resource {
     resource file naming conventions, and look up the respective resource file, for the requested locale,
     in OpenOffice.org's installation.</p>
 
-    <p>The lookup process uses the fallback mechanism as described at the <type>XResourceBundle</type> interface,
+    <p>The lookup process uses the fallback mechanism as described at the XResourceBundle interface,
     except that <code>Locale.getDefault()</code> is not used.</p>
 
     <p>Resource keys, as passed to the <member>XResourceBundle::getDirectElement</member> or
@@ -55,7 +55,7 @@ module com { module sun { module star { module resource {
     </p>
 
     <p>Since the numeric resource identifiers are highly build-dependent (e.g. can change with any next
-    OpenOffice.org build), you are <strong>strongly</strong> discouraged from using the <type>OfficeResoureLoader</type>
+    OpenOffice.org build), you are <strong>strongly</strong> discouraged from using the OfficeResoureLoader
     service in a component which targets more than one particular OpenOffice.org build.</p>
 
     @since OOo 2.0.3

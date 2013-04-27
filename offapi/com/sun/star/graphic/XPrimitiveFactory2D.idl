@@ -42,7 +42,7 @@ interface XPrimitive2D;
  */
 interface XPrimitiveFactory2D : ::com::sun::star::uno::XInterface
 {
-    /** Create primitives from <type>::com::sun::star::drawing::XShape</type>
+    /** Create primitives from ::com::sun::star::drawing::XShape
 
         @param xShape
         The XShape, for which the primitives are to be
@@ -60,7 +60,7 @@ interface XPrimitiveFactory2D : ::com::sun::star::uno::XInterface
         [in] ::com::sun::star::drawing::XShape xShape,
         [in] sequence< ::com::sun::star::beans::PropertyValue > aParms );
 
-    /** Create primitives from <type>::com::sun::star::drawing::XDrawPage</type>
+    /** Create primitives from ::com::sun::star::drawing::XDrawPage
 
         @param xDrawPage
         The XDrawPage, for which the primitives are to be

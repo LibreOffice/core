@@ -40,13 +40,13 @@ module chart2
 service ChartDocumentWrapper
 {
     /** This service will be available for a
-        <type>ChartDocument</type> (of namespace chart2) through this
+        ChartDocument (of namespace chart2) through this
         wrapper.
      */
     service ::com::sun::star::chart::ChartDocument;
 
     /** provides the possibility to forward requests to a
-        <type>ChartDocument</type>.
+        ChartDocument.
      */
     interface ::com::sun::star::uno::XAggregation;
 };

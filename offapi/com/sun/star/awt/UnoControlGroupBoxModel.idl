@@ -29,7 +29,7 @@
  module com {  module sun {  module star {  module awt {
 
 
-/** specifies the standard model of an <type>UnoControlGroupBox</type>.
+/** specifies the standard model of an UnoControlGroupBox.
  */
 published service UnoControlGroupBoxModel
 {

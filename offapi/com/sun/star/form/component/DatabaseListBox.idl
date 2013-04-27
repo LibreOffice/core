@@ -32,7 +32,7 @@
 
 /** This service specifies a data-aware list box control model.
 
-    <p>The base service for list boxes (<type>ListBox</type>) offers only
+    <p>The base service for list boxes (ListBox) offers only
     one possibility to specify the list entries:
     The display strings in the
     <member scope="com::sun::star::awt">UnoControlListBoxModel::StringItemList</member>

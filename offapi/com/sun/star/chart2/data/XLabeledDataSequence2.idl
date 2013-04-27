@@ -56,7 +56,7 @@ interface XLabeledDataSequence2
         is not supported, the same object will be shared if used by
         multiple objects.
 
-        <p>If a <type>LabeledDataSequence</type> is cloned, it has to
+        <p>If a LabeledDataSequence is cloned, it has to
         query its contents for the
         <type scope="com::sun::star::util">XCloneable</type> interface
         and use it if available.</p>

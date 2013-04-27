@@ -39,7 +39,7 @@ published interface XTerminateListener: com::sun::star::lang::XEventListener
     /** is called when the master environment (e.g., desktop) is about to terminate.
 
         <p>
-        Termination can be intercepted by throwing <type>TerminationVetoException</type>.
+        Termination can be intercepted by throwing TerminationVetoException.
         Interceptor will be the new owner of desktop and should call <member>XDesktop::terminate()</member>
         after finishing his own operations.
         </p>

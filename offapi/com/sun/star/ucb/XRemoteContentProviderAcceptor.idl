@@ -42,7 +42,7 @@ published interface XRemoteContentProviderAcceptor: com::sun::star::uno::XInterf
         remote content provider.
 
         @param Factory  A factory through which the remote content provider's
-        <type>UniversalContentBroker</type> service can be instantiated.
+        UniversalContentBroker service can be instantiated.
 
         @param Templates  A sequence of URL templates the remote content
         provider is willing to handle.
@@ -56,7 +56,7 @@ published interface XRemoteContentProviderAcceptor: com::sun::star::uno::XInterf
 
         To enable connection control, it is recommended that this argument
         also implements the interface
-        <type>XRemoteContentProviderConnectionControl</type>.
+        XRemoteContentProviderConnectionControl.
 
         @return  true if the remote content provider has successfully been
         added.

@@ -33,7 +33,7 @@
 /** gives access to the <i>x</i>-axis of a chart.
 
     <p>Note that not all diagrams are capable of displaying an
-    <i>x</i>-axis, e.g., the <type>PieDiagram</type>.</p>
+    <i>x</i>-axis, e.g., the PieDiagram.</p>
 
     @see XDiagram
  */

@@ -39,12 +39,12 @@ interface XPolyPolygon2D;
 
 /** Provides the basic graphical output operations for a canvas.<p>
 
-    This interface is a simplified version of the <type>XCanvas</type>
+    This interface is a simplified version of the XCanvas
     interface. It holds explicit state, i.e. the pen and fill color,
     the current transformation, clip and font are persistently
     remembered.<p>
 
-    In contrast to the <type>XCanvas</type> interface, XSimpleCanvas
+    In contrast to the XCanvas interface, XSimpleCanvas
     does not distinguish between stroke and fill operations; instead,
     switching between stroke and fill (or taking both) works by
     setting appropriate pen and fill colors.<p>
@@ -137,7 +137,7 @@ interface XSimpleCanvas: com::sun::star::uno::XInterface
         relative to the font baseline.
 
         @param nTextDirection
-        A value from the <type>TextDirection</type> collection,
+        A value from the TextDirection collection,
         denoting the main writing direction for this string. The main
         writing direction determines the origin of the text output,
         i.e. the left edge for left-to-right and the right edge for
@@ -167,12 +167,12 @@ interface XSimpleCanvas: com::sun::star::uno::XInterface
         rendering to such a device. This includes device resolution,
         color space, or bitmap formats.<p>
 
-        @return the associated <type>XGraphicDevice</type>.
+        @return the associated XGraphicDevice.
      */
     XGraphicDevice getDevice();
 
 
-    /** Query the underlying <type>XCanvas</type>.<p>
+    /** Query the underlying XCanvas.<p>
 
         @return the canvas interface this object is internally based
         on.

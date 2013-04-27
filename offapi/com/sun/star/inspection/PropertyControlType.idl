@@ -23,7 +23,7 @@
 module com {  module sun {  module star {  module inspection {
 
 /** describes pre-defined possible control types to be used to display and enter
-    property values within a <type>ObjectInspector</type>.
+    property values within a ObjectInspector.
 
     <p>The type of a control determines its visual appearance, its behavior, and - important
     for property handlers using a control - the expected type when reading and writing the
@@ -42,7 +42,7 @@ constants PropertyControlType
 
         <p>Controls of type <member>ListBox</member> exchange their values as <code>string</code>.</p>
 
-        <p>Additionally, those controls support the <type>XStringListControl</type> interface.</p>
+        <p>Additionally, those controls support the XStringListControl interface.</p>
     */
     const short ListBox = 1;
 
@@ -52,7 +52,7 @@ constants PropertyControlType
 
         <p>Controls of type <member>ComboBox</member> exchange their values as <code>string</code>.</p>
 
-        <p>Additionally, those controls support the <type>XStringListControl</type> interface.</p>
+        <p>Additionally, those controls support the XStringListControl interface.</p>
     */
     const short ComboBox = 2;
 
@@ -86,11 +86,11 @@ constants PropertyControlType
         <p>Controls of type <member>ColorListBox</member> usually exchange their values as
         <type scope="com::sun::star::util">Color</type>.</p>
 
-        <p>Additionally, those controls support the <type>XStringListControl</type> interface. If you use
+        <p>Additionally, those controls support the XStringListControl interface. If you use
         this interface to add additional entries to the list box, which have no color associated with it,
         then you can also exchange values as <code>string</code>. That is, if you write a string into
         <member>XPropertyControl::Value</member>, and if this string has previously been added to the list
-        using the <type>XStringListControl</type> interface, this string is selected. Vice versa, if the user
+        using the XStringListControl interface, this string is selected. Vice versa, if the user
         selects one of those non-color strings in the list, then reading <member>XPropertyControl::Value</member>
         will retrieve you this string.</p>
     */
@@ -100,7 +100,7 @@ constants PropertyControlType
 
         <p>Controls of type <member>NumericField</member> exchange their values as <code>double</code>.</p>
 
-        <p>Additionally, those controls support the <type>XNumericControl</type> interface.</p>
+        <p>Additionally, those controls support the XNumericControl interface.</p>
     */
     const short NumericField = 8;
 
@@ -126,11 +126,11 @@ constants PropertyControlType
 
         <p>Controls of type <member>HyperlinkField</member> exchange their values as <code>string</code>.</p>
 
-        <p>Additionally, those controls support the <type>XHyperlinkControl</type> interface.</p>
+        <p>Additionally, those controls support the XHyperlinkControl interface.</p>
     */
     const short HyperlinkField = 12;
 
-    /** denotes a non-standard property control, which is usually provided by an <type>XPropertyHandler</type>
+    /** denotes a non-standard property control, which is usually provided by an XPropertyHandler
     */
     const short Unknown = 13;
 };

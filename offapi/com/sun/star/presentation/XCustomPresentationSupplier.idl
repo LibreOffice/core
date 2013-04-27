@@ -38,7 +38,7 @@ published interface XCustomPresentationSupplier: com::sun::star::uno::XInterface
 {
 
     /** @returns
-                the <type>CustomPresentation</type>.
+                the CustomPresentation.
      */
     com::sun::star::container::XNameContainer getCustomPresentations();
 

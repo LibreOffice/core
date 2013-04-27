@@ -32,15 +32,15 @@ module com {  module sun {  module star {  module io {
 published interface XStream: com::sun::star::uno::XInterface
 {
     /** @returns
-            the <type>XInputStream</type> part of the stream.  Closing the returned
-            <type>XInputStream</type> also closes any <type>XOutputStream</type> part.
+            the XInputStream part of the stream.  Closing the returned
+            XInputStream also closes any XOutputStream part.
     */
     XInputStream getInputStream();
 
 
     /** @returns
-            the <type>XInputStream</type> part of the stream. Closing the returned
-            <type>XOutputStream</type> also closes the <type>XInputStream</type> part.
+            the XInputStream part of the stream. Closing the returned
+            XOutputStream also closes the XInputStream part.
     */
     XOutputStream getOutputStream();
 };

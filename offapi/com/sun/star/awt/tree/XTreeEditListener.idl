@@ -35,11 +35,11 @@ module com {  module sun {  module star {  module awt {  module tree {
  */
 interface XTreeEditListener : ::com::sun::star::lang::XEventListener
 {
-    /** This method is called from the <type>TreeControl</type> implementation when editing of
+    /** This method is called from the TreeControl implementation when editing of
         <var>Node</var> is requested by calling <member>XTreeControl::startEditingAtNode()</member>.
 
         @param Node
-            the <type>XTreeNode</type> for that an edit request was fired by calling
+            the XTreeNode for that an edit request was fired by calling
             <method scope="XTreeControl">startEditingAtNode</method>
 
         @throws VetoException
@@ -48,14 +48,14 @@ interface XTreeEditListener : ::com::sun::star::lang::XEventListener
     void nodeEditing( [in] XTreeNode Node )
         raises ( ::com::sun::star::util::VetoException );
 
-    /** This method is called from the <type>TreeControl</type> implementation when editing
+    /** This method is called from the TreeControl implementation when editing
         of <var>Node</var> is finished and was not canceled.
 
-        <p>Implementations that register a <type>XTreeEditListener</type> must update the
+        <p>Implementations that register a XTreeEditListener must update the
         display value at the Node.</p>
 
         @param Node
-            the <type>XTreeNode</type> for that an edit request was fired by calling
+            the XTreeNode for that an edit request was fired by calling
             <method scope="XTreeControl">startEditingAtNode</method>
 
         @param NewText

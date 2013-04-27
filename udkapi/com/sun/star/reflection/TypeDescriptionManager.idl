@@ -48,7 +48,7 @@ published service TypeDescriptionManager
     /** Interface to retrieve type descriptions.
 
         In addition to the semantics specified for the corresponding interface
-        of the <type>TypeDescriptionProvider</type> service (which changed
+        of the TypeDescriptionProvider service (which changed
         slightly for LibreOffice&nbsp;4.1; see there), this interface allows to
         retrieve the following entities:
         <ul>
@@ -90,7 +90,7 @@ published service TypeDescriptionManager
     [optional] interface com::sun::star::lang::XComponent;
 
     /** Interface for creating enumerations for type descriptions supported
-        by this <type>TypeDescriptionManager</type>
+        by this TypeDescriptionManager
 
     @since OOo 1.1.2
     */

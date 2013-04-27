@@ -26,8 +26,8 @@
 
  module com {  module sun {  module star {  module text {
 
-/** A <type>TextLayoutCursor</type> is a <type>TextRange</type> which can
-    travel within a layout of a <type>Text</type> object.
+/** A TextLayoutCursor is a TextRange which can
+    travel within a layout of a Text object.
  */
 published service TextLayoutCursor
 {

@@ -30,7 +30,7 @@ struct TableFilterField3
     long Field;
 
     /** specifies the type of the condition as defined in
-        <type>FilterOperator2</type>.
+        FilterOperator2.
     */
     long Operator;
 

@@ -41,7 +41,7 @@ module com {  module sun {  module star {  module presentation {
     be displayed simultaneously on multiple targets.<p>
 
     Note: To control a running slide show inside a presentation, please
-    use <type>XPresentation2</type> and <type>XSlideShowController</type>.
+    use XPresentation2 and XSlideShowController.
 
     @since OOo 3.0
  */

@@ -37,7 +37,7 @@ interface XOOXMLDocumentPropertiesImporter: com::sun::star::uno::XInterface
         <p>
         The implementation should parse the document properties from OOXML
         format storage and set them to the target
-        <type>XDocumentProperties</type> implementation.
+        XDocumentProperties implementation.
         </p>
 
         <p>
@@ -52,7 +52,7 @@ interface XOOXMLDocumentPropertiesImporter: com::sun::star::uno::XInterface
             the source storage representing OOXML document
 
         @param xDocumentProperties
-            the target <type>XDocumentProperties</type> interface implementation
+            the target XDocumentProperties interface implementation
 
         @throws ::com::sun::star::lang::IllegalArgumentException
             the exception is thrown in case unexpected arguments are provided

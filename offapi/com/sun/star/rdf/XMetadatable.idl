@@ -33,14 +33,14 @@ module com {   module sun {   module star {   module rdf {
 
     <p>
     To make using ODF elements as part of RDF statements more convenient,
-    this interface inherits from <type>XURI</type>.
+    this interface inherits from XURI.
     The URI is constructed by concatenating the URI of the document, the
     stream name, a fragment separator, and the XML ID.
     </p>
 
     <p>
-    Note that using the <type>XURI</type> interface on an instance of
-    <type>XMetadatable</type> may have the side effect of creating a metadata
+    Note that using the XURI interface on an instance of
+    XMetadatable may have the side effect of creating a metadata
     reference for the instance.
     </p>
 

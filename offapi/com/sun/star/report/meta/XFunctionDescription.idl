@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module report { module meta {
 
 interface XFunctionCategory;
 
-/** identifies a <type>XFunctionDescription</type> which allows to retrieve the meta data of all supported functions.
+/** identifies a XFunctionDescription which allows to retrieve the meta data of all supported functions.
 
 */
 interface XFunctionDescription

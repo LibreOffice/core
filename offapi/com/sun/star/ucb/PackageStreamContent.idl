@@ -42,17 +42,17 @@ module com { module sun { module star { module ucb {
 published service PackageStreamContent
 {
     /** This interface is implemented according to the specification of
-        service <type>Content</type>.
+        service Content.
      */
     interface com::sun::star::lang::XComponent;
 
     /** This interface is implemented according to the specification of
-        service <type>Content</type>.
+        service Content.
      */
     interface com::sun::star::ucb::XContent;
 
     /** This interface is implemented according to the specification of
-        service <type>Content</type>.
+        service Content.
 
         <p>
 
@@ -117,39 +117,39 @@ published service PackageStreamContent
      */
     interface com::sun::star::ucb::XCommandProcessor;
 
-    /** is an enhanced version of <type>XCommandProcessor</type> that has an
+    /** is an enhanced version of XCommandProcessor that has an
         additional method for releasing command identifiers obtained via
         <member>XCommandProcessor::createCommandIdentifier</member> to avoid
         resource leaks. For a detailed description of the problem refer to
         <member>XCommandProcessor2::releaseCommandIdentifier</member>.
 
-        <p>Where many existing <type>Content</type> implementations do not
+        <p>Where many existing Content implementations do not
         (yet), every new implementation should support this interface.
      */
     [optional] interface com::sun::star::ucb::XCommandProcessor2;
 
     /** This interface is implemented according to the specification of
-        service <type>Content</type>.
+        service Content.
      */
     interface com::sun::star::beans::XPropertiesChangeNotifier;
 
     /** This interface is implemented according to the specification of
-        service <type>Content</type>.
+        service Content.
      */
     interface com::sun::star::beans::XPropertyContainer;
 
     /** This interface is implemented according to the specification of
-        service <type>Content</type>.
+        service Content.
      */
     interface com::sun::star::beans::XPropertySetInfoChangeNotifier;
 
     /** This interface is implemented according to the specification of
-        service <type>Content</type>.
+        service Content.
      */
     interface com::sun::star::ucb::XCommandInfoChangeNotifier;
 
     /** This interface is implemented according to the specification of
-        service <type>Content</type>.
+        service Content.
      */
     interface com::sun::star::container::XChild;
 };

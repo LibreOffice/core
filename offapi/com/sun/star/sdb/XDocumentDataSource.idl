@@ -33,10 +33,10 @@
  */
 interface XDocumentDataSource
 {
-    /** provides access to the one and only <type>OfficeDatabaseDocument</type>
+    /** provides access to the one and only OfficeDatabaseDocument
         which the data source is based on.
 
-        <p>The component returned by this attribute is an <type>OfficeDatabaseDocument</type>.</p>
+        <p>The component returned by this attribute is an OfficeDatabaseDocument.</p>
 
         <p>Though there is a 1-to-1 relationship between database documents and data sources,
         each of the two can exist without its counterpart, but create this counterpart on request

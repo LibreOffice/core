@@ -23,7 +23,7 @@
 
 module com { module sun { module star { module ucb {
 
-/** Information about a single folder in a <type>FolderList</type>.
+/** Information about a single folder in a FolderList.
 */
 published struct FolderListEntry
 {

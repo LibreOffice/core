@@ -24,7 +24,7 @@
 module com { module sun { module star { module ui { module dialogs {
 
 /** These constants are deprecated and should not be used anymore. They're superseded
-    by <type>ControlActions</type>.
+    by ControlActions.
     @deprecated
  */
 

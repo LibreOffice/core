@@ -52,13 +52,13 @@ published interface XWindowPeer: com::sun::star::lang::XComponent
 
 
     /** invalidates the whole window with the specified
-        <type>InvalidateStyle</type>.
+        InvalidateStyle.
      */
     void invalidate( [in] short Flags );
 
 
     /** invalidates a rectangular area of the window with the specified
-        <type>InvalidateStyle</type>.
+        InvalidateStyle.
      */
     void invalidateRect( [in] Rectangle Rect, [in] short Flags );
 

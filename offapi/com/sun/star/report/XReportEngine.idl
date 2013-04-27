@@ -32,7 +32,7 @@
 #include <com/sun/star/uno/Exception.idl>
 
 module com {  module sun {  module star {  module report {
-/** identifies a <type>XReportEngine</type> which allows the creation of OpenDocument files.
+/** identifies a XReportEngine which allows the creation of OpenDocument files.
 
     <p>The following events are supported by the report engine.
         OnPageStarted       Is fired when a new page started.

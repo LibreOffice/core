@@ -30,15 +30,15 @@ module com {  module sun {  module star {  module io {
 /** makes it possible to read the corresponding object from an input stream.
 
     <p>If you want to allow control from outside, also implement the
-    <type>XActiveDataControl</type> interface. </p>
+    XActiveDataControl interface. </p>
  */
 published interface XActiveDataSink: com::sun::star::uno::XInterface
 {
     /** plugs the input stream.
 
-        <p>If <type>XConnectable</type> is also implemented, this
+        <p>If XConnectable is also implemented, this
         method should query <var>aStream</var> for an
-        <type>XConnectable</type> and connect both.</p>
+        XConnectable and connect both.</p>
      */
     void setInputStream( [in] com::sun::star::io::XInputStream aStream );
 

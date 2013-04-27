@@ -33,7 +33,7 @@ interface XSingleSelectQueryComposer;
     criteria. To get the new extended statement use the methods from <type scope="com::sun::star::sdb">SingleSelectQueryAnalyzer</type>.
     </p>
 
-    <p>A <type>SingleSelectQueryComposer</type> is usually obtained from a <type>Connection</type>
+    <p>A SingleSelectQueryComposer is usually obtained from a Connection
     using the <type scope="com::sun::star::lang">XMultiServiceFactory</type> interface.</p>
  */
 service SingleSelectQueryComposer

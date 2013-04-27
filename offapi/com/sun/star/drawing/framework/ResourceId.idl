@@ -24,7 +24,7 @@
 
 module com { module sun { module star { module drawing { module framework {
 
-/** The <type>ResourceId</type> service provides several constructors for
+/** The ResourceId service provides several constructors for
     resource ids.
     <p>They mainly differ in how the anchor is specified.</p>
 */
@@ -42,7 +42,7 @@ service ResourceId
     create ([in] string sResourceURL);
 
     /** Create a resource id for an anchor that is given as
-        <type>XResourceId</type> object.  This is the most general of the
+        XResourceId object.  This is the most general of the
         constructor variants.
     */
     createWithAnchor ([in] string sResourceURL, [in] XResourceId xAnchor);

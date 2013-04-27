@@ -29,10 +29,10 @@ module com { module sun { module star { module accessibility {
 
 /** Implement this interface to represent a set of states.
 
-    <p>The interface <type>XAccessibleStateSet</type> represents a set of
+    <p>The interface XAccessibleStateSet represents a set of
     states of an accessible object.  It can hold any combination of states
     defined by the constants collection
-    <type>AccessibleStateType</type>.</p>
+    AccessibleStateType.</p>
 
     @since OOo 1.1.2
 */
@@ -51,7 +51,7 @@ interface XAccessibleStateSet : ::com::sun::star::uno::XInterface
 
         @param aState
             The state for which to check membership.  This has to be one of
-            the constants of <type>AccessibleStateType</type>.
+            the constants of AccessibleStateType.
 
         @return
             Returns <TRUE/> if the given state is a member of this object's
@@ -66,7 +66,7 @@ interface XAccessibleStateSet : ::com::sun::star::uno::XInterface
             This sequence of states is interpreted as set and every of its
             members, duplicates are ignored, is checked for membership in
             this object's state set.  Each state has to be one of the
-            constants of <type>AccessibleStateType</type>.
+            constants of AccessibleStateType.
 
         @return
             Returns <TRUE/> if all states of the given state set are members
