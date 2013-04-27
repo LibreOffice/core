@@ -110,7 +110,7 @@ interface XPaneBorderPainter
 
     /** Paint the border around a pane where the border includes a call out
         that is anchored at the given point.  Most arguments have the same
-        meaning as in the <method>paintBorder</method>.
+        meaning as in the paintBorder().
         @param aCalloutAnchor
             The anchor point of the call out.  It is usually located outside
             the border.

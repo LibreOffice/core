@@ -24,7 +24,7 @@ interface XEventAttacher2: com::sun::star::script::XEventAttacher
     /** Register a multiple set of listeners listening for the same
         target.  Besides passing multiple listeners, the behavior of
         this method is identical to that of
-        <method>attachSingleEventListener</method>.
+        attachSingleEventListener().
 
         @see com::sun::star::script::XEventAttacher::attachSingleEventListener
      */

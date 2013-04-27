@@ -39,35 +39,35 @@ service AccessibleSpreadsheetDocumentView
         document.
 
     <ul>
-        <li>The parent returned by <method>getAccessibleParent</method>
+        <li>The parent returned by getAccessibleParent()
             is the window which contains the view of these document.</li>
-        <li>The children returned by <method>getAccessibleChild</method> all
+        <li>The children returned by getAccessibleChild() all
             support the interface XAccessible. Calling
-            <method>getAccessibleContext</method> for these children returns
+            getAccessibleContext() for these children returns
             an object that supports one of the following services.</li>
         <ul>
             <li>::com::sun::star::sheet::AccessibleSpreadsheet:
-                A child where calling <method>getAccessibleChild</method>
+                A child where calling getAccessibleChild()
                 an object that supports this service is returned for
                 the current spreadsheet which is showing in this document
                 window. There is everytime one child which supports this
                 service, because it is only possible to have one spreadsheet
                 in the current document window.</li>
             <li>::com::sun::star::drawing::AccessibleShape:
-                A child where calling <method>getAccessibleChild</method>
+                A child where calling getAccessibleChild()
                 an object that supports this service is returned
                 for every shape that is at the current table. These
                 objects are children of the
                 AccessibleSpreadsheetDocumentView regardless
                 whether they are bound to a table or a cell.</li>
             <li>::com::sun::star::text::AccessibleParagraphView:
-                A child where calling <method>getAccessibleChild</method>
+                A child where calling getAccessibleChild()
                 an object that supports this service is returned for
                 the current cell in edit mode. This is necessary to
                 have an object which allows event listeners. It exists
                 only if a cell is in edit mode.</li>
             <li>::com::sun::star::accessibility::AccessibleContext:
-                A child where calling <method>getAccessibleChild</method>
+                A child where calling getAccessibleChild()
                 an object that supports this service is returned for
                 the current OLE object in edit mode. It exists
                 only if a OLE object is in edit mode.</li>

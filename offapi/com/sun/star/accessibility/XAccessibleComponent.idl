@@ -52,15 +52,15 @@ module com { module sun { module star { module accessibility {
     are measured in pixel.  They differ in their respective origin:
     <ul><li>The screen coordinate system has its origin in the upper left
     corner of the current screen.  Used by the
-    <method>getLocationOnScreen</method> function.</li>
+    getLocationOnScreen() function.</li>
     <li>The origin of the parent coordinate system is the upper left corner
     of the parent's bounding box.  With no parent the screen coordinate
-    system is used instead.  Used by the <method>getLocation</method>
+    system is used instead.  Used by the getLocation()
     function.</li>
     <li>The object coordinate system is relative to the upper left corner of
     an object's bounding box.  It is relative to itself so to speak.  Used
-    by the <method>containsPoint</method> and
-    <method>getAccessibleAtPoint</method> functions.</li>
+    by the containsPoint() and
+    getAccessibleAtPoint() functions.</li>
     </ul></p>
 
     <p>Key bindings which are associated with an accessible component can be
@@ -88,7 +88,7 @@ interface XAccessibleComponent : ::com::sun::star::uno::XInterface
         @param point
             Coordinates of the point to test.  The origin of the coordinate
             system is the upper left corner of the object's bounding box as
-            returned by the <method>getBounds</method>.  The scale of the
+            returned by the getBounds().  The scale of the
             coordinate system is identical to that of the screen coordinate
             system.
 
@@ -109,7 +109,7 @@ interface XAccessibleComponent : ::com::sun::star::uno::XInterface
             Coordinates of the test point for which to find the Accessible
             child.  The origin of the coordinate system is the upper left
             corner of the object's bounding box as returned by the
-            <method>getBounds</method>.  The scale of the coordinate
+            getBounds().  The scale of the coordinate
             system is identical to that of the screen coordinate system.
 
         @return
@@ -127,8 +127,8 @@ interface XAccessibleComponent : ::com::sun::star::uno::XInterface
         <p>The returned bounding box has the form of a rectangle.  Its
         coordinates are relative to the object's parent coordinate system.
         Note that the two methods <method>getLocation</methodmber> and
-        <method>getSize</method> return the same information.  With method
-        <method>getLocationOnScreen</method> you can get the bound box
+        getSize() return the same information.  With method
+        getLocationOnScreen() you can get the bound box
         position in screen coordinates.</p>
 
         @return
@@ -158,7 +158,7 @@ interface XAccessibleComponent : ::com::sun::star::uno::XInterface
         bounding box in screen coordinates.
 
         <p>This method returns the same point as does the method
-        <method>getLocation</method>.  The difference is that the
+        getLocation().  The difference is that the
         coordinates are absolute screen coordinates of the screen to which
         the object is rendered instead of being relative to the object's
         parent.</p>
@@ -181,7 +181,7 @@ interface XAccessibleComponent : ::com::sun::star::uno::XInterface
     /** Grabs the focus to this object.
 
         <p>If this object can not accept the focus,
-        i.e. <method>isFocusTraversable</method> returns <FALSE/> for this
+        i.e. isFocusTraversable() returns <FALSE/> for this
         object then nothing happens.  Otherwise the object will attempt to
         take the focus.  Nothing happens if that fails, otherwise the object
         has the focus.  This method is called <code>requestFocus</code> in
