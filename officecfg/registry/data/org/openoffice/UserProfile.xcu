@@ -17,15 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-data SYSTEM "../../../component-update.dtd">
-<oor:component-data oor:name="UserProfile" oor:package="org.openoffice" xmlns:oor="http://openoffice.org/2001/registry" xmlns:install="http://openoffice.org/2004/installation" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
- <node oor:name="Data">
-  <prop oor:name="givenname">
-    <value install:module="unixdesktop" oor:external=
-        "com.sun.star.configuration.backend.DesktopBackend givenname"/>
-  </prop>
-  <prop oor:name="sn">
-    <value install:module="unixdesktop" oor:external=
-        "com.sun.star.configuration.backend.DesktopBackend sn"/>
-  </prop>
- </node>
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:install="http://openoffice.org/2004/installation" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="UserProfile" oor:package="org.openoffice">
+  <node oor:name="Data">
+    <prop oor:name="givenname">
+      <value install:module="unixdesktop" oor:external="com.sun.star.configuration.backend.DesktopBackend givenname"/>
+    </prop>
+    <prop oor:name="sn">
+      <value install:module="unixdesktop" oor:external="com.sun.star.configuration.backend.DesktopBackend sn"/>
+    </prop>
+  </node>
 </oor:component-data>

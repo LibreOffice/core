@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
  * This file is part of the LibreOffice project.
  *
@@ -18,29 +18,24 @@
  -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
 <oor:component-data xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Histories" oor:package="org.openoffice.Office">
-
-    <node oor:name="Histories">
-        <info>
-            <desc>All histories of OOo can be added to the same set. So e.g. extensions can define her own histories by using the same schema ...</desc>
-        </info>
-
-        <node oor:name="HelpBookmarks" oor:op="fuse" oor:mandatory="true">
-            <info>
-                <desc>Contains the most recently bookmarks of help application.</desc>
-            </info>
-        </node>
-
-        <node oor:name="URLHistory" oor:op="fuse" oor:mandatory="true">
-            <info>
-                <desc>Contains the most recently opened documents.</desc>
-            </info>
-        </node>
-
-        <node oor:name="PickList" oor:op="fuse" oor:mandatory="true">
-            <info>
-                <desc>Contains the most recently used documents displayed in the file menu.</desc>
-            </info>
-        </node>
+  <node oor:name="Histories">
+    <info>
+      <desc>All histories of OOo can be added to the same set. So e.g. extensions can define her own histories by using the same schema ...</desc>
+    </info>
+    <node oor:name="HelpBookmarks" oor:op="fuse" oor:mandatory="true">
+      <info>
+        <desc>Contains the most recently bookmarks of help application.</desc>
+      </info>
     </node>
-
+    <node oor:name="URLHistory" oor:op="fuse" oor:mandatory="true">
+      <info>
+        <desc>Contains the most recently opened documents.</desc>
+      </info>
+    </node>
+    <node oor:name="PickList" oor:op="fuse" oor:mandatory="true">
+      <info>
+        <desc>Contains the most recently used documents displayed in the file menu.</desc>
+      </info>
+    </node>
+  </node>
 </oor:component-data>

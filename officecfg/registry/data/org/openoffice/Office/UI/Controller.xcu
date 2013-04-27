@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../../component-update.dtd">
-<oor:component-data oor:name="Controller" oor:package="org.openoffice.Office.UI" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:install="http://openoffice.org/2004/installation" oor:name="Controller" oor:package="org.openoffice.Office.UI">
   <node oor:name="Registered">
     <node oor:name="PopupMenu">
       <node oor:name="c1" oor:op="replace">
@@ -143,13 +143,13 @@
       </node>
       <node oor:name="c13" oor:op="replace">
         <prop oor:name="Command">
-            <value>.uno:SetLanguageSelectionMenu</value>
+          <value>.uno:SetLanguageSelectionMenu</value>
         </prop>
         <prop oor:name="Module">
-            <value/>
+          <value/>
         </prop>
         <prop oor:name="Controller">
-            <value>com.sun.star.comp.framework.LanguageSelectionMenuController</value>
+          <value>com.sun.star.comp.framework.LanguageSelectionMenuController</value>
         </prop>
       </node>
       <node oor:name="c14" oor:op="replace">
@@ -160,18 +160,18 @@
           <value/>
         </prop>
         <prop oor:name="Controller">
-            <value>com.sun.star.comp.framework.LanguageSelectionMenuController</value>
+          <value>com.sun.star.comp.framework.LanguageSelectionMenuController</value>
         </prop>
       </node>
       <node oor:name="c15" oor:op="replace">
         <prop oor:name="Command">
-            <value>.uno:SetLanguageParagraphMenu</value>
+          <value>.uno:SetLanguageParagraphMenu</value>
         </prop>
         <prop oor:name="Module">
-            <value/>
+          <value/>
         </prop>
         <prop oor:name="Controller">
-            <value>com.sun.star.comp.framework.LanguageSelectionMenuController</value>
+          <value>com.sun.star.comp.framework.LanguageSelectionMenuController</value>
         </prop>
       </node>
     </node>
@@ -221,7 +221,7 @@
         </prop>
       </node>
       <node oor:name="AssignLayout" oor:op="replace">
-     <prop oor:name="Command">
+        <prop oor:name="Command">
           <value>.uno:AssignLayout</value>
         </prop>
         <prop oor:name="Module">
@@ -242,7 +242,7 @@
           <value>com.sun.star.comp.sd.InsertSlideController</value>
         </prop>
       </node>
-    <node oor:name="ExtrusionDirectionFloater" oor:op="replace">
+      <node oor:name="ExtrusionDirectionFloater" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:ExtrusionDirectionFloater</value>
         </prop>
@@ -429,7 +429,6 @@
           <value>com.sun.star.svx.UpSearchToolboxController</value>
         </prop>
       </node>
-
       <node oor:name="c4" oor:op="replace" install:module="reportbuilder">
         <prop oor:name="Command">
           <value>.uno:FontColor</value>
@@ -588,38 +587,37 @@
       </node>
       <node oor:name="c5" oor:op="replace">
         <prop oor:name="Command">
-            <value>.uno:StatusbarLogo</value>
+          <value>.uno:StatusbarLogo</value>
         </prop>
         <prop oor:name="Module">
-            <value/>
+          <value/>
         </prop>
         <prop oor:name="Controller">
-            <value>com.sun.star.comp.framework.LogoImageStatusbarController</value>
+          <value>com.sun.star.comp.framework.LogoImageStatusbarController</value>
         </prop>
       </node>
       <node oor:name="c6" oor:op="replace">
         <prop oor:name="Command">
-            <value>.uno:StatusbarLogoText</value>
+          <value>.uno:StatusbarLogoText</value>
         </prop>
         <prop oor:name="Module">
-            <value/>
+          <value/>
         </prop>
         <prop oor:name="Controller">
-            <value>com.sun.star.comp.framework.LogoTextStatusbarController</value>
+          <value>com.sun.star.comp.framework.LogoTextStatusbarController</value>
         </prop>
       </node>
       <node oor:name="c7" oor:op="replace">
         <prop oor:name="Command">
-            <value>.uno:LanguageStatus</value>
+          <value>.uno:LanguageStatus</value>
         </prop>
         <prop oor:name="Module">
-            <value/>
+          <value/>
         </prop>
         <prop oor:name="Controller">
-            <value>com.sun.star.comp.framework.LangSelectionStatusbarController</value>
+          <value>com.sun.star.comp.framework.LangSelectionStatusbarController</value>
         </prop>
       </node>
-
       <node oor:name="c8" oor:op="replace" install:module="reportbuilder">
         <prop oor:name="Command">
           <value>.uno:ZoomSlider</value>
@@ -642,7 +640,6 @@
           <value>com.sun.star.report.comp.StatusbarController</value>
         </prop>
       </node>
-
     </node>
   </node>
 </oor:component-data>

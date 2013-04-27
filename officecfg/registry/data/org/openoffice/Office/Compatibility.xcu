@@ -17,22 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
-<oor:component-data oor:name="Compatibility" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <node oor:name="WriterCompatibilityVersion">
-        <prop oor:name="OOo11" oor:type="xs:string">
-            <value>${WRITERCOMPATIBILITYVERSIONOOO11}</value>
-        </prop>
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:install="http://openoffice.org/2004/installation" oor:name="Compatibility" oor:package="org.openoffice.Office">
+  <node oor:name="WriterCompatibilityVersion">
+    <prop oor:name="OOo11" oor:type="xs:string">
+      <value>${WRITERCOMPATIBILITYVERSIONOOO11}</value>
+    </prop>
+  </node>
+  <node oor:name="AllFileFormats">
+    <node oor:name="_default" oor:op="replace">
+      <prop oor:name="Module">
+        <value>swriter</value>
+      </prop>
     </node>
-    <node oor:name="AllFileFormats">
-        <node oor:name="_default" oor:op="replace">
-            <prop oor:name="Module">
-                <value>swriter</value>
-            </prop>
-        </node>
-        <node oor:name="_user" oor:op="replace">
-            <prop oor:name="Module">
-                <value>swriter</value>
-            </prop>
-        </node>
+    <node oor:name="_user" oor:op="replace">
+      <prop oor:name="Module">
+        <value>swriter</value>
+      </prop>
     </node>
+  </node>
 </oor:component-data>

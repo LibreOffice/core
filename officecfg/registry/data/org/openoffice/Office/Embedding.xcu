@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
-<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:package="org.openoffice.Office" oor:name="Embedding">
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:install="http://openoffice.org/2004/installation" oor:package="org.openoffice.Office" oor:name="Embedding">
   <node oor:name="Verbs">
     <node oor:name="PRIMARY" oor:op="replace">
       <prop oor:name="VerbUIName">
@@ -269,7 +269,7 @@
         <value>PRIMARY SHOW OPEN HIDE UIACTIVATE IPACTIVATE</value>
       </prop>
     </node>
-    <node oor:name="80243D39-6741-46C5-926E-069164FF87BB" oor:op="replace" >
+    <node oor:name="80243D39-6741-46C5-926E-069164FF87BB" oor:op="replace">
       <prop oor:name="ObjectFactory">
         <value>com.sun.star.embed.OOoEmbeddedObjectFactory</value>
       </prop>

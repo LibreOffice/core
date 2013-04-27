@@ -17,12 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
-<oor:component-data oor:name="Jobs" oor:package="org.openoffice.Office"
-    xmlns:install="http://openoffice.org/2004/installation"
-    xmlns:oor="http://openoffice.org/2001/registry">
+<oor:component-data xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Jobs" oor:package="org.openoffice.Office">
   <node oor:name="Jobs">
-    <node oor:name="org.libreoffice.PresenterScreen" oor:op="replace"
-        install:module="impress">
+    <node oor:name="org.libreoffice.PresenterScreen" oor:op="replace" install:module="impress">
       <prop oor:name="Service">
         <value>org.libreoffice.comp.PresenterScreenJob</value>
       </prop>

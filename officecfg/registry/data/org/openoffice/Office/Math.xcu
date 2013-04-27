@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
-<oor:component-data oor:name="Math" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:install="http://openoffice.org/2004/installation" oor:name="Math" oor:package="org.openoffice.Office">
   <node oor:name="FontFormatList">
     <node oor:name="Id1" oor:op="replace">
       <prop oor:name="Name">
@@ -39,7 +39,6 @@
         <value>0</value>
       </prop>
     </node>
-
     <!-- only used for symbols with the 'Greek' symbol set name -->
     <node oor:name="Id2" oor:op="replace">
       <prop oor:name="Name">
@@ -62,7 +61,6 @@
       </prop>
     </node>
   </node>
-
   <node oor:name="SymbolList">
     <node oor:name="alpha" oor:op="replace">
       <prop oor:name="Char">

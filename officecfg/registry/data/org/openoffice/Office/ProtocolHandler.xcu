@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
-<oor:component-data oor:name="ProtocolHandler"
-    oor:package="org.openoffice.Office"
-    xmlns:install="http://openoffice.org/2004/installation"
-    xmlns:oor="http://openoffice.org/2001/registry">
+<oor:component-data xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="ProtocolHandler" oor:package="org.openoffice.Office">
   <node oor:name="HandlerSet">
     <node oor:name="com.sun.star.comp.sfx2.SfxMacroLoader" oor:op="replace">
       <prop oor:name="Protocols">
@@ -62,8 +59,7 @@
         <value>vnd.sun.star.findbar:*</value>
       </prop>
     </node>
-    <node oor:name="org.libreoffice.comp.PresenterScreenProtocolHandler"
-        oor:op="replace" install:module="impress">
+    <node oor:name="org.libreoffice.comp.PresenterScreenProtocolHandler" oor:op="replace" install:module="impress">
       <prop oor:name="Protocols">
         <value>vnd.org.libreoffice.presenterscreen:*</value>
       </prop>

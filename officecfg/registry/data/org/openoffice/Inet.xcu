@@ -17,72 +17,48 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-data SYSTEM "../../../component-update.dtd">
-<oor:component-data oor:name="Inet" oor:package="org.openoffice" xmlns:oor="http://openoffice.org/2001/registry" xmlns:install="http://openoffice.org/2004/installation" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:install="http://openoffice.org/2004/installation" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Inet" oor:package="org.openoffice">
   <node oor:name="Settings">
     <prop oor:name="ooInetNoProxy">
-      <value install:module="macosx" oor:external=
-          "com.sun.star.configuration.backend.MacOSXBackend ooInetNoProxy"/>
-      <value install:module="unixdesktop" oor:external=
-          "com.sun.star.configuration.backend.DesktopBackend ooInetNoProxy"/>
-      <value install:module="wnt" oor:external=
-          "com.sun.star.configuration.backend.WinInetBackend ooInetNoProxy"/>
+      <value install:module="macosx" oor:external="com.sun.star.configuration.backend.MacOSXBackend ooInetNoProxy"/>
+      <value install:module="unixdesktop" oor:external="com.sun.star.configuration.backend.DesktopBackend ooInetNoProxy"/>
+      <value install:module="wnt" oor:external="com.sun.star.configuration.backend.WinInetBackend ooInetNoProxy"/>
     </prop>
     <prop oor:name="ooInetProxyType">
       <value>1</value>
-      <value install:module="macosx" oor:external=
-          "com.sun.star.configuration.backend.MacOSXBackend ooInetProxyType"/>
-      <value install:module="unixdesktop" oor:external=
-          "com.sun.star.configuration.backend.DesktopBackend ooInetProxyType"/>
-      <value install:module="wnt" oor:external=
-          "com.sun.star.configuration.backend.WinInetBackend ooInetProxyType"/>
+      <value install:module="macosx" oor:external="com.sun.star.configuration.backend.MacOSXBackend ooInetProxyType"/>
+      <value install:module="unixdesktop" oor:external="com.sun.star.configuration.backend.DesktopBackend ooInetProxyType"/>
+      <value install:module="wnt" oor:external="com.sun.star.configuration.backend.WinInetBackend ooInetProxyType"/>
     </prop>
     <prop oor:name="ooInetFTPProxyName">
-      <value install:module="macosx" oor:external=
-         "com.sun.star.configuration.backend.MacOSXBackend ooInetFTPProxyName"/>
-      <value install:module="unixdesktop" oor:external=
-        "com.sun.star.configuration.backend.DesktopBackend ooInetFTPProxyName"/>
-      <value install:module="wnt" oor:external=
-        "com.sun.star.configuration.backend.WinInetBackend ooInetFTPProxyName"/>
+      <value install:module="macosx" oor:external="com.sun.star.configuration.backend.MacOSXBackend ooInetFTPProxyName"/>
+      <value install:module="unixdesktop" oor:external="com.sun.star.configuration.backend.DesktopBackend ooInetFTPProxyName"/>
+      <value install:module="wnt" oor:external="com.sun.star.configuration.backend.WinInetBackend ooInetFTPProxyName"/>
     </prop>
     <prop oor:name="ooInetFTPProxyPort">
-      <value install:module="macosx" oor:external=
-         "com.sun.star.configuration.backend.MacOSXBackend ooInetFTPProxyPort"/>
-      <value install:module="unixdesktop" oor:external=
-        "com.sun.star.configuration.backend.DesktopBackend ooInetFTPProxyPort"/>
-      <value install:module="wnt" oor:external=
-        "com.sun.star.configuration.backend.WinInetBackend ooInetFTPProxyPort"/>
+      <value install:module="macosx" oor:external="com.sun.star.configuration.backend.MacOSXBackend ooInetFTPProxyPort"/>
+      <value install:module="unixdesktop" oor:external="com.sun.star.configuration.backend.DesktopBackend ooInetFTPProxyPort"/>
+      <value install:module="wnt" oor:external="com.sun.star.configuration.backend.WinInetBackend ooInetFTPProxyPort"/>
     </prop>
     <prop oor:name="ooInetHTTPProxyName">
-      <value install:module="macosx" oor:external=
-        "com.sun.star.configuration.backend.MacOSXBackend ooInetHTTPProxyName"/>
-      <value install:module="unixdesktop" oor:external=
-       "com.sun.star.configuration.backend.DesktopBackend ooInetHTTPProxyName"/>
-      <value install:module="wnt" oor:external=
-       "com.sun.star.configuration.backend.WinInetBackend ooInetHTTPProxyName"/>
+      <value install:module="macosx" oor:external="com.sun.star.configuration.backend.MacOSXBackend ooInetHTTPProxyName"/>
+      <value install:module="unixdesktop" oor:external="com.sun.star.configuration.backend.DesktopBackend ooInetHTTPProxyName"/>
+      <value install:module="wnt" oor:external="com.sun.star.configuration.backend.WinInetBackend ooInetHTTPProxyName"/>
     </prop>
     <prop oor:name="ooInetHTTPProxyPort">
-      <value install:module="macosx" oor:external=
-        "com.sun.star.configuration.backend.MacOSXBackend ooInetHTTPProxyPort"/>
-      <value install:module="unixdesktop" oor:external=
-       "com.sun.star.configuration.backend.DesktopBackend ooInetHTTPProxyPort"/>
-      <value install:module="wnt" oor:external=
-       "com.sun.star.configuration.backend.WinInetBackend ooInetHTTPProxyPort"/>
+      <value install:module="macosx" oor:external="com.sun.star.configuration.backend.MacOSXBackend ooInetHTTPProxyPort"/>
+      <value install:module="unixdesktop" oor:external="com.sun.star.configuration.backend.DesktopBackend ooInetHTTPProxyPort"/>
+      <value install:module="wnt" oor:external="com.sun.star.configuration.backend.WinInetBackend ooInetHTTPProxyPort"/>
     </prop>
     <prop oor:name="ooInetHTTPSProxyName">
-      <value install:module="macosx" oor:external=
-       "com.sun.star.configuration.backend.MacOSXBackend ooInetHTTPSProxyName"/>
-      <value install:module="unixdesktop" oor:external=
-      "com.sun.star.configuration.backend.DesktopBackend ooInetHTTPSProxyName"/>
-      <value install:module="wnt" oor:external=
-      "com.sun.star.configuration.backend.WinInetBackend ooInetHTTPSProxyName"/>
+      <value install:module="macosx" oor:external="com.sun.star.configuration.backend.MacOSXBackend ooInetHTTPSProxyName"/>
+      <value install:module="unixdesktop" oor:external="com.sun.star.configuration.backend.DesktopBackend ooInetHTTPSProxyName"/>
+      <value install:module="wnt" oor:external="com.sun.star.configuration.backend.WinInetBackend ooInetHTTPSProxyName"/>
     </prop>
     <prop oor:name="ooInetHTTPSProxyPort">
-      <value install:module="macosx" oor:external=
-       "com.sun.star.configuration.backend.MacOSXBackend ooInetHTTPSProxyPort"/>
-      <value install:module="unixdesktop" oor:external=
-      "com.sun.star.configuration.backend.DesktopBackend ooInetHTTPSProxyPort"/>
-      <value install:module="wnt" oor:external=
-      "com.sun.star.configuration.backend.WinInetBackend ooInetHTTPSProxyPort"/>
+      <value install:module="macosx" oor:external="com.sun.star.configuration.backend.MacOSXBackend ooInetHTTPSProxyPort"/>
+      <value install:module="unixdesktop" oor:external="com.sun.star.configuration.backend.DesktopBackend ooInetHTTPSProxyPort"/>
+      <value install:module="wnt" oor:external="com.sun.star.configuration.backend.WinInetBackend ooInetHTTPSProxyPort"/>
     </prop>
   </node>
 </oor:component-data>

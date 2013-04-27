@@ -47,7 +47,7 @@
     <node oor:name="StarBaseReportChart" oor:op="replace">
       <prop oor:name="DetectService"/>
       <prop oor:name="URLPattern">
-        <value></value>
+        <value/>
       </prop>
       <prop oor:name="Extensions">
         <value>odc</value>

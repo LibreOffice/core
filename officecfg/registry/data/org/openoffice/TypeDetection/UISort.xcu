@@ -17,42 +17,42 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
-<oor:component-data oor:name="UISort" oor:package="org.openoffice.TypeDetection" xmlns:oor="http://openoffice.org/2001/registry" xmlns:install="http://openoffice.org/2004/installation" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <node oor:name="ModuleDependendFilterOrder">
-        <node oor:name="com.sun.star.sheet.SpreadsheetDocument" oor:op="replace" install:module="calc">
-            <prop oor:name="SortedFilterList">
-                <value oor:separator=";">calc8;calc8_template;StarOffice XML (Calc);calc_StarOffice_XML_Calc_Template;OpenDocument Spreadsheet Flat XML;UOF spreadsheet;Calc MS Excel 2007 XML;Calc MS Excel 2007 XML Template;Calc MS Excel 2007 Binary;MS Excel 2003 XML;MS Excel 97;MS Excel 97 Vorlage/Template;MS Excel 95;MS Excel 95 Vorlage/Template;MS Excel 5.0/95;MS Excel 5.0/95 Vorlage/Template;MS Excel 4.0;MS Excel 4.0 Vorlage/Template;;DIF;dBase;HTML (StarCalc);Lotus;Pocket Excel;Quattro Pro 6.0;Rich Text Format (StarCalc);SYLK;Text - txt - csv (StarCalc);calc_HTML_WebQuery;Calc Office Open XML;Calc Office Open XML Template</value>
-            </prop>
-        </node>
-        <node oor:name="com.sun.star.drawing.DrawingDocument" oor:op="replace" install:module="draw" >
-            <prop oor:name="SortedFilterList">
-                <value oor:separator=";">draw8;draw8_template;StarOffice XML (Draw);draw_StarOffice_XML_Draw_Template;OpenDocument Drawing Flat XML;draw_html_Export;draw_pdf_Export;draw_flash_Export;WordPerfect Graphics;DXF - AutoCAD Interchange;EMF - MS Windows Metafile;EPS - Encapsulated PostScript;MET - OS/2 Metafile;PCT - Mac Pict;SGF - StarOffice Writer SGF;SGV - StarDraw 2.0;SVM - StarView Metafile;WMF - MS Windows Metafile</value>
-            </prop>
-        </node>
-        <node oor:name="com.sun.star.presentation.PresentationDocument" oor:op="replace" install:module="impress">
-            <prop oor:name="SortedFilterList">
-                <value oor:separator=";">impress8;impress8_template;impress8_draw;StarOffice XML (Impress);impress_StarOffice_XML_Impress_Template;impress_StarOffice_XML_Draw;OpenDocument Presentation Flat XML;UOF presentation;Impress MS PowerPoint 2007 XML;Impress MS PowerPoint 2007 XML AutoPlay;Impress MS PowerPoint 2007 XML Template;MS PowerPoint 97;MS PowerPoint 97 AutoPlay;MS PowerPoint 97 Vorlage;CGM - Computer Graphics Metafile;Impress Office Open XML;Impress Office Open XML AutoPlay;Impress Office Open XML Template</value>
-            </prop>
-        </node>
-        <node oor:name="com.sun.star.formula.FormulaProperties" oor:op="replace" install:module="math">
-            <prop oor:name="SortedFilterList">
-                <value oor:separator=";">math8;StarOffice XML (Math);MathML XML (Math);MathType 3.x</value>
-            </prop>
-        </node>
-        <node oor:name="com.sun.star.text.GlobalDocument" oor:op="replace" install:module="writer">
-            <prop oor:name="SortedFilterList">
-                <value oor:separator=";">writerglobal8;writer_globaldocument_StarOffice_XML_Writer_GlobalDocument;writer_globaldocument_StarOffice_XML_Writer;Text (encoded) (StarWriter/GlobalDocument)</value>
-            </prop>
-        </node>
-        <node oor:name="com.sun.star.text.TextDocument" oor:op="replace" install:module="writer">
-            <prop oor:name="SortedFilterList">
-                <value oor:separator=";">writer8;writer8_template;StarOffice XML (Writer);writer_StarOffice_XML_Writer_Template;OpenDocument Text Flat XML;UOF text;MS Word 2007 XML;MS Word 2007 XML Template;MS Word 2003 XML;MS Word 97;MS Word 97 Vorlage;MS Word 95;MS Word 95 Vorlage;MS WinWord 6.0;MS WinWord 5;MS_Works;AportisDoc Palm DB;DocBook File;writer_MIZI_Hwp_97;HTML (StarWriter);LotusWordPro;PocketWord File;Rich Text Format;T602Document;Text;Text (encoded);WordPerfect;Office Open XML Text;Office Open XML Text Template</value>
-            </prop>
-        </node>
-        <node oor:name="com.sun.star.text.WebDocument" oor:op="replace" install:module="writer">
-            <prop oor:name="SortedFilterList">
-                <value oor:separator=";">HTML;writerweb8_writer;writerweb8_writer_template;writer_web_StarOffice_XML_Writer_Web_Template;writer_web_StarOffice_XML_Writer;Text (StarWriter/Web);Text (encoded) (StarWriter/Web)</value>
-            </prop>
-        </node>
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:install="http://openoffice.org/2004/installation" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="UISort" oor:package="org.openoffice.TypeDetection">
+  <node oor:name="ModuleDependendFilterOrder">
+    <node oor:name="com.sun.star.sheet.SpreadsheetDocument" oor:op="replace" install:module="calc">
+      <prop oor:name="SortedFilterList">
+        <value oor:separator=";">calc8;calc8_template;StarOffice XML (Calc);calc_StarOffice_XML_Calc_Template;OpenDocument Spreadsheet Flat XML;UOF spreadsheet;Calc MS Excel 2007 XML;Calc MS Excel 2007 XML Template;Calc MS Excel 2007 Binary;MS Excel 2003 XML;MS Excel 97;MS Excel 97 Vorlage/Template;MS Excel 95;MS Excel 95 Vorlage/Template;MS Excel 5.0/95;MS Excel 5.0/95 Vorlage/Template;MS Excel 4.0;MS Excel 4.0 Vorlage/Template;;DIF;dBase;HTML (StarCalc);Lotus;Pocket Excel;Quattro Pro 6.0;Rich Text Format (StarCalc);SYLK;Text - txt - csv (StarCalc);calc_HTML_WebQuery;Calc Office Open XML;Calc Office Open XML Template</value>
+      </prop>
     </node>
+    <node oor:name="com.sun.star.drawing.DrawingDocument" oor:op="replace" install:module="draw">
+      <prop oor:name="SortedFilterList">
+        <value oor:separator=";">draw8;draw8_template;StarOffice XML (Draw);draw_StarOffice_XML_Draw_Template;OpenDocument Drawing Flat XML;draw_html_Export;draw_pdf_Export;draw_flash_Export;WordPerfect Graphics;DXF - AutoCAD Interchange;EMF - MS Windows Metafile;EPS - Encapsulated PostScript;MET - OS/2 Metafile;PCT - Mac Pict;SGF - StarOffice Writer SGF;SGV - StarDraw 2.0;SVM - StarView Metafile;WMF - MS Windows Metafile</value>
+      </prop>
+    </node>
+    <node oor:name="com.sun.star.presentation.PresentationDocument" oor:op="replace" install:module="impress">
+      <prop oor:name="SortedFilterList">
+        <value oor:separator=";">impress8;impress8_template;impress8_draw;StarOffice XML (Impress);impress_StarOffice_XML_Impress_Template;impress_StarOffice_XML_Draw;OpenDocument Presentation Flat XML;UOF presentation;Impress MS PowerPoint 2007 XML;Impress MS PowerPoint 2007 XML AutoPlay;Impress MS PowerPoint 2007 XML Template;MS PowerPoint 97;MS PowerPoint 97 AutoPlay;MS PowerPoint 97 Vorlage;CGM - Computer Graphics Metafile;Impress Office Open XML;Impress Office Open XML AutoPlay;Impress Office Open XML Template</value>
+      </prop>
+    </node>
+    <node oor:name="com.sun.star.formula.FormulaProperties" oor:op="replace" install:module="math">
+      <prop oor:name="SortedFilterList">
+        <value oor:separator=";">math8;StarOffice XML (Math);MathML XML (Math);MathType 3.x</value>
+      </prop>
+    </node>
+    <node oor:name="com.sun.star.text.GlobalDocument" oor:op="replace" install:module="writer">
+      <prop oor:name="SortedFilterList">
+        <value oor:separator=";">writerglobal8;writer_globaldocument_StarOffice_XML_Writer_GlobalDocument;writer_globaldocument_StarOffice_XML_Writer;Text (encoded) (StarWriter/GlobalDocument)</value>
+      </prop>
+    </node>
+    <node oor:name="com.sun.star.text.TextDocument" oor:op="replace" install:module="writer">
+      <prop oor:name="SortedFilterList">
+        <value oor:separator=";">writer8;writer8_template;StarOffice XML (Writer);writer_StarOffice_XML_Writer_Template;OpenDocument Text Flat XML;UOF text;MS Word 2007 XML;MS Word 2007 XML Template;MS Word 2003 XML;MS Word 97;MS Word 97 Vorlage;MS Word 95;MS Word 95 Vorlage;MS WinWord 6.0;MS WinWord 5;MS_Works;AportisDoc Palm DB;DocBook File;writer_MIZI_Hwp_97;HTML (StarWriter);LotusWordPro;PocketWord File;Rich Text Format;T602Document;Text;Text (encoded);WordPerfect;Office Open XML Text;Office Open XML Text Template</value>
+      </prop>
+    </node>
+    <node oor:name="com.sun.star.text.WebDocument" oor:op="replace" install:module="writer">
+      <prop oor:name="SortedFilterList">
+        <value oor:separator=";">HTML;writerweb8_writer;writerweb8_writer_template;writer_web_StarOffice_XML_Writer_Web_Template;writer_web_StarOffice_XML_Writer;Text (StarWriter/Web);Text (encoded) (StarWriter/Web)</value>
+      </prop>
+    </node>
+  </node>
 </oor:component-data>

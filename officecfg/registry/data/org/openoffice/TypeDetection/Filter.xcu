@@ -39,7 +39,6 @@
         <value xml:lang="en-US">ODF Database Report</value>
       </prop>
     </node>
-
     <node oor:name="StarOffice XML (Base) Report Chart" oor:op="replace" oor:finalized="false" oor:mandatory="false">
       <prop oor:name="Flags">
         <value>IMPORT EXPORT OWN DEFAULT NOTINFILEDIALOG NOTINCHOOSER</value>

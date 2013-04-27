@@ -17,22 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
-<oor:component-data oor:name="Scripting" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:install="http://openoffice.org/2004/installation" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <node oor:name="ScriptRuntimes">
-        <node oor:name="BeanShell" oor:op="replace">
-            <prop oor:name="SupportedFileExtensions">
-                <value>bsh</value>
-            </prop>
-        </node>
-        <node oor:name="JavaScript" oor:op="replace">
-            <prop oor:name="SupportedFileExtensions">
-                <value>js</value>
-            </prop>
-        </node>
-        <node oor:name="Python" oor:op="replace" install:module="python">
-            <prop oor:name="SupportedFileExtensions">
-                <value>py</value>
-            </prop>
-        </node>
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:install="http://openoffice.org/2004/installation" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Scripting" oor:package="org.openoffice.Office">
+  <node oor:name="ScriptRuntimes">
+    <node oor:name="BeanShell" oor:op="replace">
+      <prop oor:name="SupportedFileExtensions">
+        <value>bsh</value>
+      </prop>
     </node>
+    <node oor:name="JavaScript" oor:op="replace">
+      <prop oor:name="SupportedFileExtensions">
+        <value>js</value>
+      </prop>
+    </node>
+    <node oor:name="Python" oor:op="replace" install:module="python">
+      <prop oor:name="SupportedFileExtensions">
+        <value>py</value>
+      </prop>
+    </node>
+  </node>
 </oor:component-data>

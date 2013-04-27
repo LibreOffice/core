@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
-<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="Views" oor:package="org.openoffice.Office">
- <node oor:name="Windows">
-  <node oor:name="5539" oor:op="replace">
-   <prop oor:name="Visible" oor:type="xs:boolean">
-    <value>false</value>
-   </prop>
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:install="http://openoffice.org/2004/installation" oor:name="Views" oor:package="org.openoffice.Office">
+  <node oor:name="Windows">
+    <node oor:name="5539" oor:op="replace">
+      <prop oor:name="Visible" oor:type="xs:boolean">
+        <value>false</value>
+      </prop>
+    </node>
   </node>
- </node>
 </oor:component-data>

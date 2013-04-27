@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE oor:component-data SYSTEM "../../../../../component-update.dtd">
-<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="DbBrowserWindowState" oor:package="org.openoffice.Office.UI">
- <node oor:name="UIElements">
-  <node oor:name="States">
-   <node oor:name="private:resource/toolbar/toolbar" oor:op="replace">
-    <prop oor:name="DockPos" oor:type="xs:string">
-     <value>0,1</value>
-    </prop>
-    <prop oor:name="Docked" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="DockingArea" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="Style" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Table Data</value>
-    </prop>
-    <prop oor:name="Visible" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-    <prop oor:name="NoClose" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="ContextSensitive" oor:type="xs:boolean">
-     <value>false</value>
-    </prop>
-   </node>
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:install="http://openoffice.org/2004/installation" oor:name="DbBrowserWindowState" oor:package="org.openoffice.Office.UI">
+  <node oor:name="UIElements">
+    <node oor:name="States">
+      <node oor:name="private:resource/toolbar/toolbar" oor:op="replace">
+        <prop oor:name="DockPos" oor:type="xs:string">
+          <value>0,1</value>
+        </prop>
+        <prop oor:name="Docked" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="DockingArea" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="Style" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Table Data</value>
+        </prop>
+        <prop oor:name="Visible" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+        <prop oor:name="NoClose" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+      </node>
+    </node>
   </node>
- </node>
 </oor:component-data>
