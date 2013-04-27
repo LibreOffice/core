@@ -338,7 +338,7 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 
     rLayout.Reserve(nGlyphCapacity);
 
-    Point aNewPos(0, 0);
+    Point aCurrPos(0, 0);
     while (true)
     {
         int nMinRunPos, nEndRunPos;
@@ -431,15 +431,15 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             aHbPositions[i].x_advance = aHbPositions[i].x_advance >> 6;
             aHbPositions[i].y_advance = aHbPositions[i].y_advance >> 6;
 
-            aNewPos = Point(aNewPos.X() + aHbPositions[i].x_offset, aNewPos.Y() - aHbPositions[i].y_offset);
+            Point aNewPos = Point(aCurrPos.X() + aHbPositions[i].x_offset, -(aCurrPos.Y() + aHbPositions[i].y_offset));
 
             GlyphItem aGI(nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth);
             aGI.mnNewWidth = aHbPositions[i].x_advance;
 
             rLayout.AppendGlyph(aGI);
 
-            aNewPos.X() += aHbPositions[i].x_advance;
-            aNewPos.Y() += aHbPositions[i].y_advance;
+            aCurrPos.X() += aHbPositions[i].x_advance;
+            aCurrPos.Y() += aHbPositions[i].y_advance;
         }
 
         hb_buffer_destroy(aHbBuffer);
