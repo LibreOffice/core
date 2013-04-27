@@ -113,7 +113,7 @@ published interface XDataPilotFieldGrouping: com::sun::star::uno::XInterface
             <li>The member DataPilotFieldGroupInfo::GroupBy
             must contain exactly one of the flags from DataPilotFieldGroupBy.
             A combination of several flags will not be accepted. If
-            <const>DataPilotFieldGroupBy::DAYS</const> is specified, the
+            DataPilotFieldGroupBy::DAYS is specified, the
             value of the member DataPilotFieldGroupInfo::Step
             will specify the type of day grouping (see above). If that value
             is zero, grouping is performed on all days of the year (e.g. the

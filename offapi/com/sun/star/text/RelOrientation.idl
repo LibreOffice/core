@@ -56,12 +56,12 @@ published constants RelOrientation
     const short FRAME_RIGHT = 6;
 
     /** page includes margins for page-anchored frames identical with
-                <const>RelOrientation::FRAME</const>
+                RelOrientation::FRAME
      */
     const short PAGE_FRAME = 7;
 
     /** page without borders (for page anchored frames identical with
-                <const>RelOrientation::PRINT_AREA</const>).
+                RelOrientation::PRINT_AREA).
 
 <!-- JRH: does not make sense -->
      */

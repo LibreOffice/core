@@ -79,12 +79,12 @@ interface XAccessibleText : ::com::sun::star::uno::XInterface
         <p>Setting the caret position may or may not alter the current
         selection.  A change of the selection is notified to the
         accessibility event listeners with an
-        <const>AccessibleEventId::ACCESSIBLE_SELECTION_EVENT</const>.</p>
+        AccessibleEventId::ACCESSIBLE_SELECTION_EVENT.</p>
 
         <p>When the new caret position differs from the old one (which, of
         course, is the standard case) this is notified to the accessibility
         event listeners with an
-        <const>AccessibleEventId::ACCESSIBLE_CARET_EVENT</const>.</p>
+        AccessibleEventId::ACCESSIBLE_CARET_EVENT.</p>
 
         @param nIndex
             The new index of the caret.  This caret is actually placed to
@@ -285,7 +285,7 @@ interface XAccessibleText : ::com::sun::star::uno::XInterface
         Typically the caret is moved to the position after the second
         argument.  When the caret is moved this is notified to the
         accessibility event listeners with an
-        <const>AccessibleEventId::ACCESSIBLE_CARET_EVENT</const>.</p>
+        AccessibleEventId::ACCESSIBLE_CARET_EVENT.</p>
 
         @param nStartIndex
             The first character of the new selection.

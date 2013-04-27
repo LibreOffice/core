@@ -119,7 +119,7 @@ published service CellProperties
     /** selects Asian character orientation in vertical orientation.
 
         <p>If the CellProperties::Orientation property is
-        <const>CellOrientation::STACKED</const>, in Asian mode only Asian
+        CellOrientation::STACKED, in Asian mode only Asian
         characters are printed in horizontal orientation instead of all
         characters.
         For other values of CellProperties::Orientation,

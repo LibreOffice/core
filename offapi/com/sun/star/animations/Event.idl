@@ -38,13 +38,13 @@ struct Event
     /** this is the trigger that fires this event. */
     short Trigger;
 
-    /** an optional offset in seconds or <const>Timing::INDEFINITE</const>. This is the timespan
+    /** an optional offset in seconds or Timing::INDEFINITE. This is the timespan
         between the triggering of the event and actually raising the event
     */
     any Offset;
 
     /** an option repeat value. If the #Trigger is
-        <const>EventTrigger</const>, this is the number of repeats
+        EventTrigger, this is the number of repeats
         after which the event is initially raised.
     */
     unsigned short Repeat;

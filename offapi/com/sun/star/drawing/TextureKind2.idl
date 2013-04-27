@@ -29,13 +29,13 @@
 published enum TextureKind2
 {
 
-    /** With TextureKind <const>LUMINANCE</const>, the texture
+    /** With TextureKind LUMINANCE, the texture
         and the lighting information are    mixed to produce the image, so a
         lit, textured object is achieved.
      */
     LUMINANCE,
 
-    /** With TextureKind <const>INTENSITY</const>, each texture
+    /** With TextureKind INTENSITY, each texture
         pixel is used as an intensity value.
      */
     INTENSITY,

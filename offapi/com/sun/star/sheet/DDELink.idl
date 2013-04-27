@@ -38,7 +38,7 @@ published service DDELink
 
     /** provides access to the name of the DDE link.
 
-        <p>A DDE link has the form <const>Application|Topic!Item</const>.</p>
+        <p>A DDE link has the form Application|Topic!Item.</p>
      */
     interface com::sun::star::container::XNamed;
 

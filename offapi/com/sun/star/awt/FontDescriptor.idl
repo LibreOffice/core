@@ -140,7 +140,7 @@ published struct FontDescriptor
 
         <p>This property is only valid if the property
         com::sun::star::awt::FontDescriptor::Underline
-        is not <const>FontUnderline::NONE</const>.</p>
+        is not FontUnderline::NONE.</p>
      */
     boolean WordLineMode;
 

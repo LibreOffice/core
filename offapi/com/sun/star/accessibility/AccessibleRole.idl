@@ -65,8 +65,8 @@ constants AccessibleRole
 
     /** Object that can be drawn into and is used to trap events.
 
-        <p>See also <const>FRAME</const>, <const>GLASS_PANE</const>, and
-        <const>LAYERED_PANE</const>.</p>
+        <p>See also FRAME, GLASS_PANE, and
+        LAYERED_PANE.</p>
     */
     const short CANVAS = 3;
 
@@ -75,8 +75,8 @@ constants AccessibleRole
         <p>A choice that can be checked or unchecked and provides a separate
         indicator for the current state.</p>
 
-        <p>See also <const>PUSH_BUTTON</const>, <const>TOGGLE_BUTTON</const>,
-        and <const>RADIO_BUTTON</const>.</p>
+        <p>See also PUSH_BUTTON, TOGGLE_BUTTON,
+        and RADIO_BUTTON.</p>
     */
     const short CHECK_BOX = 4;
 
@@ -99,15 +99,15 @@ constants AccessibleRole
 
     /** Date editor role.
 
-        <p>A <const>DATE_EDITOR</const> is a component that allows users to
+        <p>A DATE_EDITOR is a component that allows users to
         edit java.util.Date and java.util.Time objects.</p>
     */
     const short DATE_EDITOR = 8;
 
     /** An iconified internal frame in a DESKTOP_PANE.
 
-        <p>See also <const>DESKTOP_PANE</const> and
-        <const>INTERNAL_FRAME</const>.</p>
+        <p>See also DESKTOP_PANE and
+        INTERNAL_FRAME.</p>
     */
     const short DESKTOP_ICON = 9;
 
@@ -123,7 +123,7 @@ constants AccessibleRole
         <p>A pane that allows the user to navigate through and select the
         contents of a directory. May be used by a file chooser.</p>
 
-        <p>See also <const>FILE_CHOOSER</const>.</p>
+        <p>See also FILE_CHOOSER.</p>
     */
     const short DIRECTORY_PANE = 11;
 
@@ -133,7 +133,7 @@ constants AccessibleRole
         similar to a frame, but it has fewer properties and is often used as
         a secondary window for an application.</p>
 
-        <p>See also <const>FRAME</const> and <const>WINDOW</const>.</p>
+        <p>See also FRAME and WINDOW.</p>
     */
     const short DIALOG = 12;
 
@@ -160,7 +160,7 @@ constants AccessibleRole
         specify a filename. May use the directory pane to show the contents
         of a directory.</p>
 
-        <p>See also <const>DIRECTORY_PANE</const>.</p>
+        <p>See also DIRECTORY_PANE.</p>
     */
     const short FILE_CHOOSER = 16;
 
@@ -174,7 +174,7 @@ constants AccessibleRole
 
     /** Font chooser role.
 
-        <p>A <const>FONT_CHOOSER</const> is a component that lets the user pick various
+        <p>A FONT_CHOOSER is a component that lets the user pick various
         attributes for fonts.</p>
     */
     const short FONT_CHOOSER = 18;
@@ -193,8 +193,8 @@ constants AccessibleRole
         <p>A top level window with a title bar, border, menu bar, etc.  It
         is often used as the primary window for an application.</p>
 
-        <p>See also <const>DIALOG</const>, <const>CANVAS</const>, and
-        <const>WINDOW</const>.</p>
+        <p>See also DIALOG, CANVAS, and
+        WINDOW.</p>
     */
     const short FRAME = 21;
 
@@ -203,7 +203,7 @@ constants AccessibleRole
         <p>A pane that is guaranteed to be painted on top of all panes
         beneath it.</p>
 
-        <p>See also <const>ROOT_PANE</const> and <const>CANVAS</const>.</p>
+        <p>See also ROOT_PANE and CANVAS.</p>
     */
     const short GLASS_PANE = 22;
 
@@ -213,7 +213,7 @@ constants AccessibleRole
 
     /** Group box role.
 
-        <p>A <const>GROUP_BOX</const> is a simple container that contains a
+        <p>A GROUP_BOX is a simple container that contains a
         border around it and contains components inside it.</p>
     */
     const short GROUP_BOX = 24;
@@ -242,8 +242,8 @@ constants AccessibleRole
         used to create multiple document interfaces within an
         application.</p>
 
-        <p>See also <const>DESKTOP_ICON</const>, <const>DESKTOP_PANE</const>,
-        and <const>FRAME</const>.</p>
+        <p>See also DESKTOP_ICON, DESKTOP_PANE,
+        and FRAME.</p>
     */
     const short INTERNAL_FRAME = 29;
 
@@ -258,8 +258,8 @@ constants AccessibleRole
         that holds the menu bar as well as the pane that contains most of
         the visual components in a window.</p>
 
-        <p>See also <const>GLASS_PANE</const> and
-        <const>ROOT_PANE</const>.</p>
+        <p>See also GLASS_PANE and
+        ROOT_PANE.</p>
     */
     const short LAYERED_PANE = 31;
 
@@ -269,8 +269,8 @@ constants AccessibleRole
         the user to select one or more of them. A list is usually contained
         within a scroll pane.</p>
 
-        <p>See also <const>SCROLL_PANE</const> and
-        <const>LIST_ITEM</const>.</p>
+        <p>See also SCROLL_PANE and
+        LIST_ITEM.</p>
     */
     const short LIST = 32;
 
@@ -279,7 +279,7 @@ constants AccessibleRole
         <p>An object that presents an element in a list. A list is usually
         contained within a scroll pane.</p>
 
-        <p>See also <const>SCROLL_PANE</const> and <const>LIST</const>.</p>
+        <p>See also SCROLL_PANE and LIST.</p>
     */
     const short LIST_ITEM = 33;
 
@@ -292,9 +292,9 @@ constants AccessibleRole
         separators. For example, an application may have an "Edit" menu that
         contains menu items for "Cut" and "Paste."</p>
 
-        <p>See also <const>MENU_BAR</const>, <const>MENU_ITEM</const>,
-        <const>SEPARATOR</const>, <const>RADIO_BUTTON</const>,
-        <const>CHECK_BOX</const>, and <const>POPUP_MENU</const>.</p>
+        <p>See also MENU_BAR, MENU_ITEM,
+        SEPARATOR, RADIO_BUTTON,
+        CHECK_BOX, and POPUP_MENU.</p>
     */
     const short MENU = 34;
 
@@ -305,8 +305,8 @@ constants AccessibleRole
         from. For example, a menu bar might contain menus for "File,"
         "Edit," and "Help."</p>
 
-        <p>See also <const>MENU</const>, <const>POPUP_MENU</const>, and
-        <const>LAYERED_PANE</const>.</p>
+        <p>See also MENU, POPUP_MENU, and
+        LAYERED_PANE.</p>
     */
     const short MENU_BAR = 35;
 
@@ -317,14 +317,14 @@ constants AccessibleRole
         would be an action the user can select to cut the selected area of
         text in a document.</p>
 
-        <p>See also <const>MENUBAR</const>, <const>SEPARATOR</const>, and
-        <const>POPUP_MENU</const>.</p>
+        <p>See also MENUBAR, SEPARATOR, and
+        POPUP_MENU.</p>
     */
     const short MENU_ITEM = 36;
 
-    /** A specialized pane whose primary use is inside a <const>DIALOG</const>.
+    /** A specialized pane whose primary use is inside a DIALOG.
 
-        <p>See also <const>DIALOG</const>.</p>
+        <p>See also DIALOG.</p>
     */
     const short OPTION_PANE = 37;
 
@@ -334,7 +334,7 @@ constants AccessibleRole
         the panel that is to be presented to the user when the user selects
         the page tab from the list of tabs in the page tab list.</p>
 
-        <p>See also <const>PAGE_TAB_LIST</const>.</p>
+        <p>See also PAGE_TAB_LIST.</p>
     */
     const short PAGE_TAB = 38;
 
@@ -345,7 +345,7 @@ constants AccessibleRole
         common mechanism is a list of tabs at the top of the panel. The
         children of a page tab list are all page tabs.</p>
 
-        <p>See also <const>PAGE_TAB</const>.</p>
+        <p>See also PAGE_TAB.</p>
     */
     const short PAGE_TAB_LIST = 39;
 
@@ -370,7 +370,7 @@ constants AccessibleRole
         of choices, and then hides when the user selects one of those
         choices.</p>
 
-        <p>See also <const>MENU</const> and <const>MENU_ITEM</const>.</p>
+        <p>See also MENU and MENU_ITEM.</p>
     */
     const short POPUP_MENU = 43;
 
@@ -379,9 +379,9 @@ constants AccessibleRole
         <p>An object the user can manipulate to tell the application to do
         something.</p>
 
-        <p>See also <const>CHECK_BOX</const>, <const>TOGGLE_BUTTON</const>,
-        <const>RADIO_BUTTON</const>, <const>BUTTON_MENU</const> and
-        <const>BUTTON_DROPDOWN</const>.</p>
+        <p>See also CHECK_BOX, TOGGLE_BUTTON,
+        RADIO_BUTTON, BUTTON_MENU and
+        BUTTON_DROPDOWN.</p>
     */
     const short PUSH_BUTTON = 44;
 
@@ -394,8 +394,8 @@ constants AccessibleRole
         <p>A specialized check box that will cause other radio buttons in
         the same group to become unchecked when this one is checked.</p>
 
-        <p>See also <const>PUSH_BUTTON</const>, <const>TOGGLE_BUTTON</const>,
-        and <const>CHECK_BOX</const>.</p>
+        <p>See also PUSH_BUTTON, TOGGLE_BUTTON,
+        and CHECK_BOX.</p>
     */
     const short RADIO_BUTTON = 46;
 
@@ -414,7 +414,7 @@ constants AccessibleRole
         <p>A specialized pane that has a glass pane and a layered pane as
         its children.</p>
 
-        <p>See also <const>GLASS_PANE</const> and <const>LAYERED_PANE</const>.</p>
+        <p>See also GLASS_PANE and LAYERED_PANE.</p>
     */
     const short ROOT_PANE = 49;
 
@@ -423,7 +423,7 @@ constants AccessibleRole
         <p>An object usually used to allow a user to incrementally view a
         large amount of data. Usually used only by a scroll pane.</p>
 
-        <p>See also <const>SCROLL_PANE</const>.</p>
+        <p>See also SCROLL_PANE.</p>
     */
     const short SCROLL_BAR = 50;
 
@@ -433,7 +433,7 @@ constants AccessibleRole
         of information. Its children can include scroll bars and a
         viewport.</p>
 
-        <p>See also <const>SCROLL_BAR</const> and <const>VIEW_PORT</const>.</p>
+        <p>See also SCROLL_BAR and VIEW_PORT.</p>
     */
     const short SCROLL_PANE = 51;
 
@@ -452,7 +452,7 @@ constants AccessibleRole
         "Close," and "Exit," and will place a separator between "Close" and
         "Exit" menu items.</p>
 
-        <p>See also <const>MENU</const> and <const>MENU_ITEM</const>.</p>
+        <p>See also MENU and MENU_ITEM.</p>
     */
     const short SEPARATOR = 53;
 
@@ -466,7 +466,7 @@ constants AccessibleRole
 
     /** Spin box role.
 
-        <p>A <const>SPIN_BOX</const> is a simple spinner component and its
+        <p>A SPIN_BOX is a simple spinner component and its
         main use is for simple numbers.</p>
     */
     const short SPIN_BOX = 55;
@@ -481,7 +481,7 @@ constants AccessibleRole
 
     /** Status bar role.
 
-        <p>A <const>STATUS_BAR</const> is an simple component that can
+        <p>A STATUS_BAR is an simple component that can
         contain multiple labels of status information to the user.</p>
     */
     const short STATUS_BAR = 57;
@@ -502,7 +502,7 @@ constants AccessibleRole
         <p>An object that presents text to the user. The text is usually
         editable by the user as opposed to a label.</p>
 
-        <p>See also <const>LABEL</const>.</p>
+        <p>See also LABEL.</p>
     */
     const short TEXT = 60;
 
@@ -515,8 +515,8 @@ constants AccessibleRole
         <p>A specialized push button that can be checked or unchecked, but
         does not provide a separate indicator for the current state.</p>
 
-        <p>See also <const>PUSH_BUTTON</const>, <const>CHECK_BOX</const> and
-        <const>RADIO_BUTTON</const>.</p>
+        <p>See also PUSH_BUTTON, CHECK_BOX and
+        RADIO_BUTTON.</p>
     */
     const short TOGGLE_BUTTON = 62;
 
@@ -552,13 +552,13 @@ constants AccessibleRole
         manipulates the scroll bars, the contents of the viewport can
         change.</p>
 
-        <p>See also <const>SCROLL_PANE</const>.</p>
+        <p>See also SCROLL_PANE.</p>
     */
     const short VIEW_PORT = 66;
 
     /** A top level window with no title or border.
 
-        <p>See also <const>FRAME</const> and <const>DIALOG</const>.</p>
+        <p>See also FRAME and DIALOG.</p>
     */
     const short WINDOW = 67;
 
@@ -566,7 +566,7 @@ constants AccessibleRole
 
         <p>The object represents a button that drops down a list of items.</p>
 
-        <p>See also <const>PUSH_BUTTON</const> and <const>BUTTON_MENU</const>.</p>
+        <p>See also PUSH_BUTTON and BUTTON_MENU.</p>
 
         @since OOo 3.0
     */
@@ -576,7 +576,7 @@ constants AccessibleRole
 
         <p>The object represents a button that drops down a menu.</p>
 
-        <p>See also <const>PUSH_BUTTON</const> and <const>BUTTON_DROPDOWN</const>.</p>
+        <p>See also PUSH_BUTTON and BUTTON_DROPDOWN.</p>
 
         @since OOo 3.0
     */
@@ -665,7 +665,7 @@ constants AccessibleRole
 
         <p>An object that presents an element in a tree</p>
 
-        </p>See also <const>TREE</const> and <const>TREE_TABLE</const>.</p>
+        </p>See also TREE and TREE_TABLE.</p>
 
         @since OOo 3.0
     */
@@ -687,7 +687,7 @@ constants AccessibleRole
         annotates this document content position or a certain text range of the document content.
         In the OpenDocument file format a comment is known as an annotation.</p>
 
-        <p>See also <const>COMMENT_END</const>.</p>
+        <p>See also COMMENT_END.</p>
 
         @since OOo 3.2
     */
@@ -696,10 +696,10 @@ constants AccessibleRole
     /** Comment end role
 
         <p>An invisible object which represents the end position of a text range which
-        is annotated by a comment - see <const>COMMENT</const>.</p>
+        is annotated by a comment - see COMMENT.</p>
 
         <p>This object and the corresponding object representing the comment shall be
-        in relation of type <const>MEMBER_OF</const>.</p>
+        in relation of type MEMBER_OF.</p>
 
         @since OOo 3.2
     */

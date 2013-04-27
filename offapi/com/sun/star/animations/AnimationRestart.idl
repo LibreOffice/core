@@ -38,7 +38,7 @@ constants AnimationRestart
 
     /**  Specifies that the value of this attribute (and of the restart behavior) are
          inherited from the XTiming::RestartDefault value of the parent element.
-         If there is no parent element, the value is <const>AnimationRestart::ALWAYS</const>.
+         If there is no parent element, the value is AnimationRestart::ALWAYS.
          This is the default value for the XTiming::RestartDefault attribute.
     */
     const short INHERIT = 0;

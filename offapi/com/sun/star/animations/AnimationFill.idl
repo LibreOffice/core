@@ -35,13 +35,13 @@ constants AnimationFill
          This is the default value for the XTiming::Fill..
          If the application of fillDefault to an element would result in the element having a value
          of fill that is not allowed on that element, the element will instead have a fill value of
-         <const>AnimationFill::AUTO</const>.
+         AnimationFill::AUTO.
      */
     const short DEFAULT = 0;
 
     /** Specifies that the value of this attribute (and of the fill behavior) are
         inherited from the XTiming::FillDefault value
-        of the parent element. If there is no parent element, the value is <const>AnimationFill::AUTO</const>.
+        of the parent element. If there is no parent element, the value is AnimationFill::AUTO.
         This is the default value for the XTiming::FillDefault.
     */
     const short INHERIT = 0;
@@ -75,7 +75,7 @@ constants AnimationFill
         <ul>
         <li>If none of the attributes duration, end, repeatCount or repeatDuration are specified on
         the element, then the element will have a fill behavior identical to that if it were specified
-        as <const>AnimationFill::FREEZE</const>.</li>
+        as AnimationFill::FREEZE.</li>
         <li>Otherwise, the element will have a fill behavior identical to that if it were specified as
         <const>AnimationFill::REMOVE</const.</li>
         </ul>

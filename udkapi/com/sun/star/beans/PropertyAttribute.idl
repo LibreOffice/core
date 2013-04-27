@@ -77,7 +77,7 @@ published constants PropertyAttribute
     const short REMOVABLE = 128;
 
     /** @deprecated
-        same as <const>PropertyAttribute::REMOVABLE</const>.
+        same as PropertyAttribute::REMOVABLE.
      */
     const short REMOVEABLE = 128;
 

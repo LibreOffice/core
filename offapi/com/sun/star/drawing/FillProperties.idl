@@ -48,7 +48,7 @@ published service FillProperties
     /** This is the transparence of the filled area.
 
         <p>This property is only valid if the property <member>FillStyle
-        </member> is set to <const>FillStyle::SOLID</const>.
+        </member> is set to FillStyle::SOLID.
     */
     [property] short FillTransparence;
 
@@ -162,15 +162,15 @@ published service FillProperties
         <p>This property corresponds to the properties <member>
         FillBitmapStretch</member> and #FillBitmapTile.</p>
 
-        <p>If set to <const>BitmapMode::REPEAT</const>, the property
+        <p>If set to BitmapMode::REPEAT, the property
         FillBitmapStretch is set to <FALSE/>, and the property FillBitmapTile
         is set to <TRUE/>.</p>
 
-        <p>If set to <const>BitmapMode::STRETCH</const>, the property
+        <p>If set to BitmapMode::STRETCH, the property
         FillBitmapStretch is set to <TRUE/>, and the property FillBitmapTile
         is set to <FALSE/>.</p>
 
-        <p>If set to <const>BitmapMode::NO_REPEAT</const>, both properties
+        <p>If set to BitmapMode::NO_REPEAT, both properties
         FillBitmapStretch and FillBitmapTile are set to <FALSE/>.</p>
     */
     [property] BitmapMode FillBitmapMode;
@@ -182,11 +182,11 @@ published service FillProperties
         instead to set all supported bitmap modes.</p>
 
         <p>If set to <TRUE/>, the value of the FillBitmapMode property changes
-        to <const>BitmapMode::STRETCH</const>. BUT: behavior is undefined, if
+        to BitmapMode::STRETCH. BUT: behavior is undefined, if
         the property #FillBitmapTile is <TRUE/> too.</p>
 
         <p>If set to <FALSE/>, the value of the FillBitmapMode property
-        changes to <const>BitmapMode::REPEAT</const> or <const>
+        changes to BitmapMode::REPEAT or <const>
         BitmapMode::NO_REPEAT</const>, depending on the current value of the
         #FillBitmapTile property.</p>
      */
@@ -199,11 +199,11 @@ published service FillProperties
         instead to set all supported bitmap modes.</p>
 
         <p>If set to <TRUE/>, the value of the FillBitmapMode property changes
-        to <const>BitmapMode::REPEAT</const>. BUT: behavior is undefined, if
+        to BitmapMode::REPEAT. BUT: behavior is undefined, if
         the property #FillBitmapStretch is <TRUE/> too.</p>
 
         <p>If set to <FALSE/>, the value of the FillBitmapMode property
-        changes to <const>BitmapMode::STRETCH</const> or <const>
+        changes to BitmapMode::STRETCH or <const>
         BitmapMode::NO_REPEAT</const>, depending on the current value of the
         #FillBitmapStretch property.</p>
      */

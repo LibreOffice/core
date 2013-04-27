@@ -46,13 +46,13 @@ published struct ParseResult
     double  Value;
 
     /** KParseType token type like
-        <const>KParseType::IDENTNAME</const>. */
+        KParseType::IDENTNAME. */
     long    TokenType;
 
     /** KParseTokens flags of first character of actual
         token matched. If <em>TokenType</em> is a
-        <const>KParseType::SINGLE_QUOTE_NAME</const> or a
-        <const>KParseType::DOUBLE_QUOTE_STRING</const> the first
+        KParseType::SINGLE_QUOTE_NAME or a
+        KParseType::DOUBLE_QUOTE_STRING the first
         character is the first character inside the quotes, not the
         quote itself. */
     long    StartFlags;

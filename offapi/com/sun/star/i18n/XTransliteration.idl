@@ -95,7 +95,7 @@ published interface XTransliteration: com::sun::star::uno::XInterface
 
     /** Unique ASCII name to identify a module. This name is used
         to get its localized name for menus, dialogs etc. The behavior
-        is undefined for <const>TransliterationType::CASCADE</const>
+        is undefined for TransliterationType::CASCADE
         modules.
      */
     string  getName();

@@ -157,7 +157,7 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
             <p> The value is a combination of
                 SchemaAttribute flags.
             </p>
-            <p> <const>SchemaAttribute::EXTENSIBLE</const> can be used
+            <p> SchemaAttribute::EXTENSIBLE can be used
                 to describe a template for a node with an extensible
                 set of properties.
             </p>
@@ -199,7 +199,7 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
             <p> The value is a combination of
                 SchemaAttribute flags.
             </p>
-            <p> <const>SchemaAttribute::EXTENSIBLE</const> can be used
+            <p> SchemaAttribute::EXTENSIBLE can be used
                 to describe a template for a node with an extensible
                 set of properties.
             </p>
@@ -268,7 +268,7 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
             <p> The value is a combination of
                 SchemaAttribute flags.
             </p>
-            <p> <const>SchemaAttribute::EXTENSIBLE</const> can be used
+            <p> SchemaAttribute::EXTENSIBLE can be used
                 to describe a group with an extensible set of properties.
             </p>
 
@@ -307,7 +307,7 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
             <p> The value is a combination of
                 SchemaAttribute flags.
             </p>
-            <p> <const>SchemaAttribute::EXTENSIBLE</const> can be used
+            <p> SchemaAttribute::EXTENSIBLE can be used
                 to describe a set with an extensible set of properties.
             </p>
 
@@ -360,7 +360,7 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
     /** receives notification that a property is added to the current node.
 
         <p> The property will have a default value of <NULL/>
-            (unless it is <const>SchemaAttribute::REQUIRED</const>).
+            (unless it is SchemaAttribute::REQUIRED).
         </p>
 
         @param aName

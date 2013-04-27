@@ -151,23 +151,23 @@ published interface XCalendar : com::sun::star::uno::XInterface
         @param nIdx
             A value matching the <em>nCalendarDisplayIndex</em> type:
             <dl>
-                <dt><const>CalendarDisplayIndex::AM_PM</const></dt>
+                <dt>CalendarDisplayIndex::AM_PM</dt>
                     <dd>one of AmPmValue</dd>
-                <dt><const>CalendarDisplayIndex::DAY</const></dt>
+                <dt>CalendarDisplayIndex::DAY</dt>
                     <dd>one of Weekdays or a number used as
                     an offset into the corresponding
                     Calendar::Days sequence</dd>
-                <dt><const>CalendarDisplayIndex::MONTH</const></dt>
+                <dt>CalendarDisplayIndex::MONTH</dt>
                     <dd>one of Months or a number used as
                     an offset into the corresponding
                     Calendar::Months sequence</dd>
-                <dt><const>CalendarDisplayIndex::YEAR</const></dt>
+                <dt>CalendarDisplayIndex::YEAR</dt>
                     <dd>not used, empty string returned</dd>
-                <dt><const>CalendarDisplayIndex::ERA</const></dt>
+                <dt>CalendarDisplayIndex::ERA</dt>
                     <dd>a number used as an offset into the
                     corresponding Calendar:Eras
                     sequence</dd>
-                <dt><const>CalendarDisplayIndex::GENITIVE_MONTH</const></dt>
+                <dt>CalendarDisplayIndex::GENITIVE_MONTH</dt>
                     <dd>a number used as an offset into the
                     corresponding Calendar2:GenitiveMonth
                     sequence</dd>
@@ -188,15 +188,15 @@ published interface XCalendar : com::sun::star::uno::XInterface
                     <dd>full name, e.g. <b>"January"</b></dd>
                 <dt> 2 </dt>
                     <dd>narrow name, e.g. <b>"J"</b> <br>
-                    Valid only for <const>CalendarDisplayIndex::DAY</const>, 
-                    <const>CalendarDisplayIndex::MONTH</const> and 
-                    <const>CalendarDisplayIndex::GENITIVE_MONTH</const> <br>
+                    Valid only for CalendarDisplayIndex::DAY,
+                    CalendarDisplayIndex::MONTH and
+                    CalendarDisplayIndex::GENITIVE_MONTH <br>
                     @since LibreOffice 3.5
                     </dd>
 
             <p> This parameter is not used if the
             <em>nCalendarDisplayIndex</em> argument equals
-            <const>CalendarDisplayIndex::AM_PM</const> </p>
+            CalendarDisplayIndex::AM_PM </p>
      */
 
     string  getDisplayName( [in] short nCalendarDisplayIndex,

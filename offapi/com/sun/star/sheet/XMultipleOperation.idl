@@ -43,26 +43,26 @@ published interface XMultipleOperation: com::sun::star::uno::XInterface
 
         @param aFormulaRange
             the range that contains formula cells (modes
-            <const>TableOperationMode::ROW</const> or
-            <const>TableOperationMode::COLUMN</const>) or a single formula
-            cell (mode <const>TableOperationMode::BOTH</const>).
+            TableOperationMode::ROW or
+            TableOperationMode::COLUMN) or a single formula
+            cell (mode TableOperationMode::BOTH).
 
         @param nMode
             specifies the calculation mode to fill the cells.
 
         @param aColumnCell
             contains the address of the cell that is referenced by
-            formulas in a row (mode <const>TableOperationMode::ROW</const>)
+            formulas in a row (mode TableOperationMode::ROW)
             or by the formula cell used for two value series (mode
-            <const>TableOperationMode::BOTH</const>). This parameter is not
-            used if mode is <const>TableOperationMode::COLUMN</const>.
+            TableOperationMode::BOTH). This parameter is not
+            used if mode is TableOperationMode::COLUMN.
 
         @param aRowCell
             contains the address of the cell that is referenced by
-            formulas in a column (mode <const>TableOperationMode::COLUMN</const>)
+            formulas in a column (mode TableOperationMode::COLUMN)
             or by the formula cell used for two value series (mode
-            <const>TableOperationMode::BOTH</const>). This parameter is not
-            used if mode is <const>TableOperationMode::ROW</const>.
+            TableOperationMode::BOTH). This parameter is not
+            used if mode is TableOperationMode::ROW.
      */
     void setTableOperation(
             [in] com::sun::star::table::CellRangeAddress aFormulaRange,

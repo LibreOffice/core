@@ -69,7 +69,7 @@ interface XFastAttributeList: com::sun::star::uno::XInterface
             <b>or</b> operation.
 
         @returns
-            The integer token of the value from the attribute or <const>FastToken::Invalid</const>
+            The integer token of the value from the attribute or FastToken::Invalid
 
         @throws SAXEXception
             if the attribute is not available
@@ -95,7 +95,7 @@ interface XFastAttributeList: com::sun::star::uno::XInterface
 
         @returns
             If the attribute is available it returns the integer token of the value
-            from the attribute or <const>FastToken::Invalid</const>.
+            from the attribute or FastToken::Invalid.
             If not the value of <param>Default</param> is returned.
 
     */

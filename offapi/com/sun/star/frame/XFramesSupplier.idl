@@ -70,7 +70,7 @@ published interface XFramesSupplier: XFrame
         <p>
         In general this method first calls the method XFramesSupplier::setActiveFrame()
         at the creator frame with <var>this</var> as the current argument. Then it broadcasts
-        the FrameActionEvent <const>FrameAction::FRAME_ACTIVATED</const>.
+        the FrameActionEvent FrameAction::FRAME_ACTIVATED.
         </p>
 
         <p>

@@ -300,7 +300,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             </p>
             <p> Only attributes which are selected in aAttributeMask are changed.
             </p>
-            <p> <const>NodeAttribute::MANDATORY</const> need not be set
+            <p> NodeAttribute::MANDATORY need not be set
                 and can't be removed, as dynamic properties always are mandatory
                 in subsequent layers.
             </p>
@@ -350,7 +350,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
 
             <p> The value must match the type of the existing property.
                 If the property does not have the
-                <const>SchemaAttribute::REQUIRED</const> flag set,
+                SchemaAttribute::REQUIRED flag set,
                 the value can be <void/>.
             </p>
 
@@ -380,7 +380,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
 
             <p> The value must match the type of the existing property.
                 If the property does not have the
-                <const>SchemaAttribute::REQUIRED</const> flag set,
+                SchemaAttribute::REQUIRED flag set,
                 the value can be <void/>.
             </p>
 
@@ -511,10 +511,10 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
 
             <p> The value is a combination of
                 NodeAttribute flags and may also contain the
-                <const>SchemaAttribute::REQUIRED</const> flag.
+                SchemaAttribute::REQUIRED flag.
             </p>
             </p>
-            <p> <const>NodeAttribute::MANDATORY</const> need not be set,
+            <p> NodeAttribute::MANDATORY need not be set,
                 as dynamic properties always are mandatory
                 in subsequent layers.
             </p>
@@ -560,10 +560,10 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
 
             <p> The value is a combination of
                 NodeAttribute flags and may also contain the
-                <const>SchemaAttribute::REQUIRED</const> flag.
+                SchemaAttribute::REQUIRED flag.
             </p>
             </p>
-            <p> <const>NodeAttribute::MANDATORY</const> need not be set,
+            <p> NodeAttribute::MANDATORY need not be set,
                 as dynamic properties always are mandatory
                 in subsequent layers.
             </p>

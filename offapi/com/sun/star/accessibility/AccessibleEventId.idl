@@ -89,7 +89,7 @@ constants AccessibleEventId
         position then its is not necessary to send an event.
 
         <p>Use this event rather than the
-        <const>VISIBLE_DATA_EVENT</const> when really only the
+        VISIBLE_DATA_EVENT when really only the
         (relative) bounding box of an accessible object has changed.  It is
         much more specific than the later one and reduces the number of
         calls an AT-Tool has to make to retrieve all affected data.</p>
@@ -130,9 +130,9 @@ constants AccessibleEventId
     /** Use this event to tell the listeners to re-retrieve the whole set of
         children.  This should be used by a parent object which exchanges all
         or most of its children.  It is a short form of first sending one
-        <const>CHILD</const> event for every old child indicating that
+        CHILD event for every old child indicating that
         this child is about to be removed and then sending one
-        <const>CHILD</const> for every new child indicating that this
+        CHILD for every new child indicating that this
         child has been added to the list of children.
 
         <p>When this API is used by Java or Gnome AT-Tools then a bridge can

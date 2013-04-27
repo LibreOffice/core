@@ -163,7 +163,7 @@ published interface XFrame: com::sun::star::lang::XComponent
 
         <p>
         If no frame with the given name is found, a new top frame is
-        created; if this is allowed by a special flag <const>FrameSearchFlag::CREATE</const>.
+        created; if this is allowed by a special flag FrameSearchFlag::CREATE.
         The new frame also gets the desired name.
         </p>
 
@@ -187,7 +187,7 @@ published interface XFrame: com::sun::star::lang::XComponent
         <p>
         In general a top frame is the frame which is a direct child of
         a task frame or which does not have a parent. Possible frame searches must
-        stop the search at such a frame unless the flag <const>FrameSearchFlag::TASKS</const>
+        stop the search at such a frame unless the flag FrameSearchFlag::TASKS
         is set.
         </p>
 
@@ -204,7 +204,7 @@ published interface XFrame: com::sun::star::lang::XComponent
         At first the frame sets itself as the active frame of its
         creator by calling XFramesSupplier::setActiveFrame(),
         then it broadcasts an FrameActionEvent with
-        <const>FrameAction::FRAME_ACTIVATED</const>. The component within
+        FrameAction::FRAME_ACTIVATED. The component within
         this frame may listen to this event to grab the focus on activation;
         for simple components this can be done by the FrameLoader.
         </p>
@@ -224,7 +224,7 @@ published interface XFrame: com::sun::star::lang::XComponent
         <p>
         At first the frame deactivates its active sub-frame, if any.
         Then broadcasts a FrameActionEvent with
-        <const>FrameAction::FRAME_DEACTIVATING</const>.
+        FrameAction::FRAME_DEACTIVATING.
         </p>
 
         @see XFrame::activate()
@@ -314,7 +314,7 @@ published interface XFrame: com::sun::star::lang::XComponent
         <p>
         According to a call to this interface, the frame calls
         <method>XFrameEventListener::frameAction</method> with
-        <const>FrameAction::CONTEXT_CHANGED</const> to all listeners which
+        FrameAction::CONTEXT_CHANGED to all listeners which
         are registered using XFrame::addFrameActionListener().
         For external controllers this event can be used to requery dispatches.
 

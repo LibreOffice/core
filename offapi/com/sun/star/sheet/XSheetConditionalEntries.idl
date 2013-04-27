@@ -48,8 +48,8 @@ published interface XSheetConditionalEntries: com::sun::star::container::XIndexA
 
         <dt><atom>string</atom> Formula2</dt>
         <dd>contains the second value or formula for the operation (used with
-        <const>ConditionOperator::BETWEEN</const> or
-        <const>ConditionOperator::NOT_BETWEEN</const> operations).</dd>
+        ConditionOperator::BETWEEN or
+        ConditionOperator::NOT_BETWEEN operations).</dd>
 
         <dt>com::sun::star::table::CellAddress
         SourcePosition</dt>

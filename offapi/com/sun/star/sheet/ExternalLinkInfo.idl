@@ -47,7 +47,7 @@ struct ExternalLinkInfo
         the URI contained in the member #Data. Note that the
         quotes cover both, the document name and the sheet name.</li>
 
-        <li>If #Type is <const>ExternalLinkType::DDE</const>,
+        <li>If #Type is ExternalLinkType::DDE,
         this member shall contain a DDELinkInfo describing
         service name, topic, and all known items of a DDE link.</li>
         </ol></p>

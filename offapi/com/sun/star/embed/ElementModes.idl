@@ -27,7 +27,7 @@ module com { module sun { module star { module embed {
 
     <p>
     The modes can be combined by "or" operation.
-    <const>ElementModes::READ</const> and <const>ElementModes::WRITE</const>
+    ElementModes::READ and ElementModes::WRITE
     are base modes. A result mode must include one of base modes.
     </p>
 
@@ -44,8 +44,8 @@ published constants ElementModes
         <p>
         This mode is ignored for Storage elements.
         This flag makes sense only in combination with
-        <const>ElementModes::READ</const> and/or
-        <const>ElementModes::WRITE</const>.
+        ElementModes::READ and/or
+        ElementModes::WRITE.
         </p>
      */
     const long SEEKABLE = 2;
@@ -54,7 +54,7 @@ published constants ElementModes
 
         <p>
         This is just a combination of the previous two values. For storages
-        it is the same as <const>ElementModes::READ</const>.
+        it is the same as ElementModes::READ.
         </p>
      */
     const long SEEKABLEREAD = 3;
@@ -75,7 +75,7 @@ published constants ElementModes
 
         <p>
         This flag makes sense only in combination with
-        <const>ElementModes::WRITE</const>.
+        ElementModes::WRITE.
         </p>
      */
     const long TRUNCATE = 8;
@@ -85,7 +85,7 @@ published constants ElementModes
 
         <p>
         This flag makes sense only in combination with
-        <const>ElementModes::WRITE</const>.
+        ElementModes::WRITE.
         </p>
      */
     const long NOCREATE = 16;

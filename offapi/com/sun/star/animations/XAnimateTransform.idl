@@ -29,7 +29,7 @@
     animations to control translation, scaling, rotation and/or skewing.
 
     The member XAnimate::Attributes contains a short from
-    <const>AnimationTransformType</const>.
+    AnimationTransformType.
 
     Depending on the value in XAnimate::Attributes, the
     members XAnimate::From, XAnimate::To,
@@ -37,15 +37,15 @@
     contain the following
 
     <ul>
-    <li><const>AnimationTransformType::TRANSLATE</const><br>
+    <li>AnimationTransformType::TRANSLATE<br>
         ValuePair of <i>tx</i> and <i>ty</i></li>
-    <li><const>AnimationTransformType::SCALE</const><br>
+    <li>AnimationTransformType::SCALE<br>
         ValuePair of <i>sx</i> and <i>sy</i></li>
-    <li><const>AnimationTransformType::ROTATE</const><br>
+    <li>AnimationTransformType::ROTATE<br>
         Values for a rotation angle</li>
-    <li><const>AnimationTransformType::SKEWX</const><br>
+    <li>AnimationTransformType::SKEWX<br>
         Values for a skew-angle</li>
-    <li><const>AnimationTransformType::SKEWY</const><br>
+    <li>AnimationTransformType::SKEWY<br>
         Values for a skew-angle</li>
     </ul>
 
@@ -54,7 +54,7 @@
 interface XAnimateTransform : XAnimate
 {
     /**
-        @see <const>AnimationTransformType</const>
+        @see AnimationTransformType
     */
     [attribute] short TransformType;
 };

@@ -69,7 +69,7 @@ published interface XNamedRanges: com::sun::star::container::XNameAccess
 
         <p>The names for the named ranges are taken from title cells in the
         top or bottom row, or from the cells of the left or right column
-        of the range (depending on the parameter <const>aBorder</const>.
+        of the range (depending on the parameter aBorder.
         The named ranges refer to single columns or rows in the inner
         part of the original range, excluding the labels.</p>
 

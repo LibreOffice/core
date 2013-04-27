@@ -177,8 +177,8 @@ constants AccessibleStateType
 
     /** Object is displayed on the screen.
 
-        <p>An object has set the <const>SHOWING</const> state if itself and
-        all of its parents have set the <const>VISIBLE</const> state and it
+        <p>An object has set the SHOWING state if itself and
+        all of its parents have set the VISIBLE state and it
         lies at least partly inside the visible area of its parent.  It is,
         though, not necessarily visible on the screen because it may be
         occluded by other objects.</p>
@@ -203,10 +203,10 @@ constants AccessibleStateType
 
     /** Object wants to be displayed on the screen.
 
-        <p>A set <const>VISIBLE</const> state indicates that an object wants
+        <p>A set VISIBLE state indicates that an object wants
         to be displayed on the screen.  It is displayed, as indicated by a
-        set <const>SHOWING</const> state, if all of its parents have also
-        set the <const>VISIBLE</const> state and the object lies at least
+        set SHOWING state, if all of its parents have also
+        set the VISIBLE state and the object lies at least
         partly in the visible area of its parent.</p>
     */
     const short VISIBLE = 30;

@@ -30,7 +30,7 @@ module com { module sun { module star { module i18n {
     XNativeNumberSupplier methods.
 
     <p> The constants have different meanings if used with different
-    locales. However, <const>NATNUM1</const> always tries to convert to
+    locales. However, NATNUM1 always tries to convert to
     a string matching the native number mode of the corresponding
     locale. </p>
 

@@ -89,7 +89,7 @@ interface XResourceId
         @param xId
             The resource id to which the called resource id is compared.
         @return
-            Returns <const>0</const> when the called resource id is
+            Returns 0 when the called resource id is
             equivalent to the given resource id. Returns <code>-1</code> or
             <code>+1</code> when the two compared resource ids differ.
     */
@@ -106,9 +106,9 @@ interface XResourceId
         @param eMode
             This mode specifies how the called resource has to be bound to
             the given anchor in order to have this function return <TRUE/>.
-            <p>If eMode is <const>DIRECT</const> then the anchor of the called resource id
+            <p>If eMode is DIRECT then the anchor of the called resource id
             has to be identical to the given anchor. If eMode is
-            <const>INDIRECT</const> then the given anchor has to be a part
+            INDIRECT then the given anchor has to be a part
             of the anchor of the called resource.
     */
     boolean isBoundTo (

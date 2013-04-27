@@ -31,11 +31,11 @@ module com { module sun { module star { module accessibility {
         type of change that has been made to a table model.</p>
 
         <p>Two of the constants,
-        <const>AccessibleTableModelChangeType::INSERT</const> and
-        <const>AccessibleTableModelChangeType::DELETE</const> describe
+        AccessibleTableModelChangeType::INSERT and
+        AccessibleTableModelChangeType::DELETE describe
         changes to the table's geometry.  One or more rows and/or columns have
         been inserted or deleted.  In contrast, the remaining constant
-        <const>AccessibleTabelModelChangeType::UPDATE</const> specifies a
+        AccessibleTabelModelChangeType::UPDATE specifies a
         change of the table's content.</p>
 
     @since OOo 1.1.2

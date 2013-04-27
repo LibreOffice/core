@@ -46,7 +46,7 @@ published struct FinishEngineEvent: com::sun::star::lang::EventObject
     /** contains the return value.
 
         <p>This field is only valid if FinishEngineEvent::Finish is
-        <const>FinishReason::OK</const>.</p>
+        FinishReason::OK.</p>
      */
     any Return;
 

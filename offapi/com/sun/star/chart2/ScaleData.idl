@@ -65,8 +65,8 @@ struct ScaleData
 
         <p>If used at the Y axis in pie charts or doughnut charts, specifies
         the rotation direction of the pie. The value
-        <const>AxisOrientation::MATHEMATICAL</const> rotates the pie
-        counterclockwise, the value <const>AxisOrientation::REVERSE</const>
+        AxisOrientation::MATHEMATICAL rotates the pie
+        counterclockwise, the value AxisOrientation::REVERSE
         rotates the pie clockwise.</p>
 
         <p>Note: Is this a good place for the axis orientation? Two axes may

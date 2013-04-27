@@ -69,9 +69,9 @@ constants AccessibleTextType
     /** Single line.
 
         <p>Indicates that single lines, as displayed on the screen, are
-        used.  In contrast to the constants <const>CHARACTER</const>,
-        <const>WORD</const>, <const>SENTENCE</const>, and
-        <const>PARAGRAPH</const> which are content oriented this constant is
+        used.  In contrast to the constants CHARACTER,
+        WORD, SENTENCE, and
+        PARAGRAPH which are content oriented this constant is
         view oriented.  It can be used to retrieve hyphenation
         information.</p>
     */

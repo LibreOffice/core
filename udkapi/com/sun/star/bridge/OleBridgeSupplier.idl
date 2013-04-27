@@ -30,8 +30,8 @@
 /** makes it possible to generate OLE bridges to UNO objects and vice versa.
 
     <p>The service implements the XBridgeSupplier interface
-    and handles the model types <const>ModelDependent::UNO</const> and
-    <const>ModelDependent::OLE</const>.  The service does not specify any
+    and handles the model types ModelDependent::UNO and
+    ModelDependent::OLE.  The service does not specify any
     requirements on registering OLE objects and class factories.  </p>
     @deprecated
  */

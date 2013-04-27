@@ -56,7 +56,7 @@ module com { module sun { module star { module uno {
     <li>The destructor of a delegator has to reset the delegator in
     its aggregated objects by calling their method
     XAggregation::setDelegator() with
-    <const>NULL</const> before it releases its reference to
+    NULL before it releases its reference to
     its aggregated objects.
     </ol>
 
@@ -75,7 +75,7 @@ published interface XAggregation: com::sun::star::uno::XInterface
         @param xDelegator
         specifies the object which handles the calls to
         XInterface::queryInterface().
-        If <var>xDelegator</var> is <const>NULL</const>, the delegator is
+        If <var>xDelegator</var> is NULL, the delegator is
         removed and thus the object becomes its own delegator and has
         to handle calls to the method
         XInterface::queryInterface()

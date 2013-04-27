@@ -56,11 +56,11 @@ struct DataPilotTablePositionData
         position type specified in #PositionType member.</p>
 
         <p>When the value of #PositionType is
-        <const>DataPilotTablePositionType::RESULT</const>, DataPilotTablePositionData::PositionData
+        DataPilotTablePositionType::RESULT, DataPilotTablePositionData::PositionData
         contains an instance of type DataPilotTableResultData,
         whereas when the value of DataPilotTablePositionData::PositionType
-        is either <const>DataPilotTablePositionType::ROW_HEADER</const>
-        or <const>DataPilotTablePositionType::COLUMN_HEADER</const>, then the
+        is either DataPilotTablePositionType::ROW_HEADER
+        or DataPilotTablePositionType::COLUMN_HEADER, then the
         #PositionData member contains an instance of type <type>
         DataPilotTableHeaderData</type>.</p>
 

@@ -44,7 +44,7 @@ published interface XMultiPropertySet: com::sun::star::uno::XInterface
     /** @returns
             the XPropertySetInfo interface, which describes
             all properties of the object to which this interface belongs.
-            <const>NULL</const> is returned if the object cannot or will
+            NULL is returned if the object cannot or will
             not provide information about the properties.
 
         @see XPropertySet::getPropertySetInfo

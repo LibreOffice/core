@@ -138,9 +138,9 @@ published interface XCharacterClassification : com::sun::star::uno::XInterface
 
             <p> If a token may represent either a numeric value or a
             name according to the passed Start/Cont-Flags/Chars, both
-            <const>KParseType::ASC_NUM</const> (or
-            <const>KParseType::UNI_NUM</const>) and
-            <const>KParseType::IDENTNAME</const> are set in
+            KParseType::ASC_NUM (or
+            KParseType::UNI_NUM) and
+            KParseType::IDENTNAME are set in
             ParseResult::TokenType.
 
         @param  aText

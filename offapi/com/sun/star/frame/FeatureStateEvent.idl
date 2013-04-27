@@ -51,7 +51,7 @@ published struct FeatureStateEvent: com::sun::star::lang::EventObject
         <p>
         Interest code should listen for FrameActionEvent
         too, to update own feature states and dispatch listener on
-        <const>FrameAction::CONTEXT_CHANGED</const>.
+        FrameAction::CONTEXT_CHANGED.
         </p>
      */
     boolean Requery;

@@ -41,7 +41,7 @@ module com { module sun { module star { module accessibility {
     hand it gives access to objects that expose the represented content.
     That are role, state, name, description, and relations to other objects.
     Take an OK button of a dialog as an example.  Its role is
-    <const>AccessibleRole::BUTTON</const>, its name is "OK", and its description
+    AccessibleRole::BUTTON, its name is "OK", and its description
     is something like "Accepts all changes made in the dialog".</p>
 
     @since OOo 1.1.2

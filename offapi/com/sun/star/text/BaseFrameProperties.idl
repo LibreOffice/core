@@ -47,12 +47,12 @@ published service BaseFrameProperties
     /** contains the number of the page where the objects are anchored.
         <p> The value is valid only if the
         AnchorType is
-        <const>TextContentAnchorType::AT_PAGE</const>.</p>
+        TextContentAnchorType::AT_PAGE.</p>
      */
     [property] short AnchorPageNo;
     /** contains the text frame the current frame is anchored to.
         <p> The value is valid only if the
-        AnchorType is <const>TextContentAnchorType::AT_FRAME</const>.</p>
+        AnchorType is TextContentAnchorType::AT_FRAME.</p>
      */
     [property] com::sun::star::text::XTextFrame AnchorFrame;
     /** contains the color of the background of the object.
@@ -189,7 +189,7 @@ published service BaseFrameProperties
     /** contains the vertical position of the object (1/100 mm).
 
         It is only valid if TextEmbeddedObject::VertOrient is
-        <const>VertOrientation::NONE</const>.
+        VertOrientation::NONE.
      */
     [property] long VertOrientPosition;
 

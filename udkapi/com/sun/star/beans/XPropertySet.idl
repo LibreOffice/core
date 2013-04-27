@@ -69,7 +69,7 @@ published interface XPropertySet: com::sun::star::uno::XInterface
             interface.
 
         @returns
-            <const>NULL</const> if the implementation cannot or will
+            NULL if the implementation cannot or will
             not provide information about the properties; otherwise the
             interface XPropertySetInfo is returned.
      */

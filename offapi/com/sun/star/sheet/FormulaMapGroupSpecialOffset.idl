@@ -26,7 +26,7 @@ module com {  module sun {  module star {  module sheet {
 
 /** Constants designating the offsets within the sequence returned by
     XFormulaOpCodeMapper::getAvailableMappings() when
-    called for group <const>FormulaMapGroup::SPECIAL</const>.
+    called for group FormulaMapGroup::SPECIAL.
 
     <p>The number of constants may grow in future versions!</p>
  */

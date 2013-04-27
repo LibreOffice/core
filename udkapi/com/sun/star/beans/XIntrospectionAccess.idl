@@ -69,11 +69,11 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
         <p>The minimum supported concepts should be:</p>
 
         <ul>
-            <li> <const>MethodConcept::PROPERTY</const>, </li>
-            <li> <const>MethodConcept::LISTENER</const>, </li>
-            <li> <const>MethodConcept::ENUMERATION</const>, </li>
-            <li> <const>MethodConcept::NAMECONTAINER</const></li>
-            <li> <const>MethodConcept::INDEXCONTAINER</const>; </li>
+            <li> MethodConcept::PROPERTY, </li>
+            <li> MethodConcept::LISTENER, </li>
+            <li> MethodConcept::ENUMERATION, </li>
+            <li> MethodConcept::NAMECONTAINER</li>
+            <li> MethodConcept::INDEXCONTAINER; </li>
         </ul>
 
         @returns
@@ -89,9 +89,9 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
         <p>The minimum supported concepts should be:</p>
 
         <ul>
-            <li> <const>PropertyConcept::PROPERTYSET</const>, </li>
-            <li> <const>PropertyConcept::ATTRIBUTES</const> and </li>
-            <li> <const>PropertyConcept::METHODS</const>.  </li>
+            <li> PropertyConcept::PROPERTYSET, </li>
+            <li> PropertyConcept::ATTRIBUTES and </li>
+            <li> PropertyConcept::METHODS.  </li>
         </ul>
 
         @returns

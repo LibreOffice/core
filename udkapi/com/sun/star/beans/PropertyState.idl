@@ -43,7 +43,7 @@ published enum PropertyState
 
         <p>The property value must be available and of the specified type.
         If the #PropertyAttribute field in the struct
-        Property contains <const>PropertyAttribute::MAYBEVOID</const>,
+        Property contains PropertyAttribute::MAYBEVOID,
         then the value may be void. </p>
      */
     DIRECT_VALUE,
@@ -53,10 +53,10 @@ published enum PropertyState
 
         <p>The #PropertyAttribute field in the struct
         Property must contain the
-        <const>PropertyAttribute::MAYBEDEFAULT</const> flag. The property
+        PropertyAttribute::MAYBEDEFAULT flag. The property
         value must be available and of the specified type. If the
         #PropertyAttribute field in the struct Property
-        contains <const>PropertyAttribute::MAYBEVOID</const>, then the
+        contains PropertyAttribute::MAYBEVOID, then the
         value may be void. </p>
      */
     DEFAULT_VALUE,
@@ -67,10 +67,10 @@ published enum PropertyState
 
         <p>The #PropertyAttribute field in the struct
         Property must contain the
-        <const>PropertyAttribute::MAYBEAMBIGUOUS</const> flag. The
+        PropertyAttribute::MAYBEAMBIGUOUS flag. The
         property value must be available and of the specified type.
         If the Attribute field in the struct Property contains
-        <const>PropertyAttribute::MAYBEVOID</const>, then the value
+        PropertyAttribute::MAYBEVOID, then the value
         may be void. </p>
      */
     AMBIGUOUS_VALUE

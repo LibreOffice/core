@@ -30,7 +30,7 @@
 */
 interface XAnimationNode : ::com::sun::star::container::XChild
 {
-    /**  a value from <const>AnimationNodeType</const>.
+    /**  a value from AnimationNodeType.
 
         @see http://www.w3.org/TR/smil20/smil-timing.html#adef-timeContainer
     */
@@ -46,7 +46,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
             <li>Event describes an event and an optional offset that determine the
                 element begin. The element begin is defined relative to the time that the event
                 is raised.</li>
-            <li><const>Timing::INDEFINITE</const> the begin of the element will be determined by an
+            <li>Timing::INDEFINITE the begin of the element will be determined by an
                 external event to the element.</li>
             <li>sequence&lt;any&gt; a sequence of values described above if more than
                 one begin value is defined for this element.</li>
@@ -62,8 +62,8 @@ interface XAnimationNode : ::com::sun::star::container::XChild
         #Duration is
             <ul>
             <li><atom>double</atom> specifies the length of the simple duration in seconds.</li>
-            <li><const>Timing::INDEFINITE</const> specifies the simple duration as indefinite.</li>
-            <li><const>Timing::MEDIA</const> specifies the simple duration as the intrinsic media duration. This is only valid for elements that define media.</li>
+            <li>Timing::INDEFINITE specifies the simple duration as indefinite.</li>
+            <li>Timing::MEDIA specifies the simple duration as the intrinsic media duration. This is only valid for elements that define media.</li>
             <li><void/> the simple duration for the element is defined to be the implicit duration of the element.</li>
             </ul>
 
@@ -81,7 +81,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
             <li>Event describes an event and an optional offset that determine the
                 element end. The element end is defined relative to the time that the event
                 is raised.</li>
-            <li><const>Timing::INDEFINITE</const> the end of the element will be determined by an
+            <li>Timing::INDEFINITE the end of the element will be determined by an
                 external event to the element.</li>
             <li>sequence&lt;any&gt; a sequence of values described above if more than
                 one begin value is defined for this element.</li>
@@ -100,7 +100,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
         children (e.g. animate or area elements).
 
         #EndSync is
-            either a <atom>short</atom> constant from <const>EndSync</const>,
+            either a <atom>short</atom> constant from EndSync,
             an interface reference to a child XTimeContainer
             or <void/>.
 
@@ -117,13 +117,13 @@ interface XAnimationNode : ::com::sun::star::container::XChild
                 It can include partial iterations expressed as fraction values.
                 A fractional value describes a portion of the simple duration.
                 Values must be greater than 0.</li>
-            <li><const>Timing::INDEFINITE</const> the element is defined to repeat indefinitely
+            <li>Timing::INDEFINITE the element is defined to repeat indefinitely
                 (subject to the constraints of the parent time container).</li>
             <li><void/>
                 no repeat count is defined for this element.</li>
             </ul>
 
-        @see <const>EndSync</const>
+        @see EndSync
         @see http://www.w3.org/TR/smil20/smil-timing.html#adef-repeatCount
     */
     [attribute] any RepeatCount;
@@ -135,7 +135,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
             <li><atom>double</atom>
                 specifies the duration in element active time
                 to repeat the simple duration in seconds.</li>
-            <li><const>Timing::INDEFINITE</const> the element is defined to repeat indefinitely
+            <li>Timing::INDEFINITE the element is defined to repeat indefinitely
                 (subject to the constraints of the parent time container).</li>
             <li><void/>
                 No repeat duration is defined for this element. </li>
@@ -150,9 +150,9 @@ interface XAnimationNode : ::com::sun::star::container::XChild
         state of the element.
         <br>
         #Fill is
-            a value from <const>AnimationFill</const>.
+            a value from AnimationFill.
 
-        @see <const>Fill</const>
+        @see Fill
         @see http://www.w3.org/TR/smil20/smil-timing.html#adef-fill
     */
     [attribute] short Fill;
@@ -162,15 +162,15 @@ interface XAnimationNode : ::com::sun::star::container::XChild
         <br>
         #FillDefault is
             <ul>
-            <li>The values <const>AnimationFill::REMOVE</const>, <const>AnimationFill::FREEZE</const>,
-            <const>AnimationFill::HOLD</const>, <const>AnimationFill::TRANSITION</const> and <const>AnimationFill::AUTO</const>
+            <li>The values AnimationFill::REMOVE, AnimationFill::FREEZE,
+            AnimationFill::HOLD, AnimationFill::TRANSITION and AnimationFill::AUTO
             specify that the element fill behavior is the respective value.</li>
-            <li>The value <const>AnimationFill::INHERIT</const> specifies that the value of this attribute
+            <li>The value AnimationFill::INHERIT specifies that the value of this attribute
             (and of the fill behavior) are inherited from the #FillDefault value of the parent
-            element. If there is no parent element, the value is <const>AnimationFill::AUTO</const>.</li>
+            element. If there is no parent element, the value is AnimationFill::AUTO.</li>
             </ul>
 
-        @see <const>Fill</const>
+        @see Fill
         @see http://www.w3.org/TR/smil20/smil-timing.html#adef-fillDefault
     */
     [attribute] short FillDefault;
@@ -178,9 +178,9 @@ interface XAnimationNode : ::com::sun::star::container::XChild
     /** defines the restart behavior of this element.
         <br>
         #Restart is
-            a <atom>short</atom> value from <const>AnimationRestart</const>.
+            a <atom>short</atom> value from AnimationRestart.
 
-        @see <const>AnimationRestart</const>
+        @see AnimationRestart
         @see http://www.w3.org/TR/smil20/smil-timing.html#adef-restart
     */
     [attribute] short Restart;
@@ -188,9 +188,9 @@ interface XAnimationNode : ::com::sun::star::container::XChild
     /** defines the default restart behavior for this element and all descendants.
 
         @returns
-            a value from <const>Restart</const>.
+            a value from Restart.
 
-        @see <const>AnimationRestart</const>
+        @see AnimationRestart
         @see http://www.w3.org/TR/smil20/smil-timing.html#adef-restartDefault
     */
     [attribute] short RestartDefault;

@@ -44,8 +44,8 @@ published interface XSheetLinkable: com::sun::star::uno::XInterface
 
     /** returns the link mode of the spreadsheet.
 
-        <p>If the returned value is <const>SheetLinkMode::NORMAL</const>,
-        formulas are copied. With <const>SheetLinkMode::VALUE</const>,
+        <p>If the returned value is SheetLinkMode::NORMAL,
+        formulas are copied. With SheetLinkMode::VALUE,
         only results of formulas are used.</p>
      */
     com::sun::star::sheet::SheetLinkMode getLinkMode();
@@ -57,8 +57,8 @@ published interface XSheetLinkable: com::sun::star::uno::XInterface
         @param nLinkMode
             the value specifying the link mode for this spreadsheet.
 
-            <p>If the value is <const>SheetLinkMode::NORMAL</const>,
-            formulas are copied.  With <const>SheetLinkMode::VALUE</const>,
+            <p>If the value is SheetLinkMode::NORMAL,
+            formulas are copied.  With SheetLinkMode::VALUE,
             only results of formulas are used.</p>
      */
     void setLinkMode( [in] com::sun::star::sheet::SheetLinkMode nLinkMode );

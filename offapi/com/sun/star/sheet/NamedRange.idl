@@ -54,7 +54,7 @@ published service NamedRange
     /** returns the index used to refer to this name in token arrays.
 
         <p>A token describing a defined name shall contain the op-code obtained
-        from the <const>FormulaMapGroupSpecialOffset::NAME</const> offset and
+        from the FormulaMapGroupSpecialOffset::NAME offset and
         this index as data part.</p>
 
         @see com::sun::star::sheet::FormulaToken

@@ -35,7 +35,7 @@ interface XView;
     list in the office configuration which associates resource URLs with
     service names which in turn are associated with modules (or dlls).  The
     path to the office configuration list is
-    <const>MultiPaneGUI/Framework/ResourceFactories</const> in the
+    MultiPaneGUI/Framework/ResourceFactories in the
     Impress.xcu file.</p>
 */
 interface XModuleController

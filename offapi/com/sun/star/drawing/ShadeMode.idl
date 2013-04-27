@@ -27,23 +27,23 @@
  */
 published enum ShadeMode
 {
-    /** With <const>FLAT</const> shading, the faces of the object are
+    /** With FLAT shading, the faces of the object are
         rendered in a solid color.
      */
     FLAT,
 
-    /** With <const>PHONG</const> shading, the normal itself is interpolated
+    /** With PHONG shading, the normal itself is interpolated
         to get more realistic colors and light reflections.
      */
     PHONG,
 
 
-    /** With <const>SMOOTH</const> shading, the colors of the lit vertices is
+    /** With SMOOTH shading, the colors of the lit vertices is
         interpolated.
      */
     SMOOTH,
 
-    /** <const>DRAFT</const> is a special mode which uses a BSP tree and
+    /** DRAFT is a special mode which uses a BSP tree and
                 triangle subdivision for displaying.
      */
     DRAFT

@@ -31,9 +31,9 @@
     <p>
     The type of the result is dispatch action dependent. The member State
     can be set to one of the values defined in DispatchResultState.
-    If State is set to <const>DispatchResultState::FAILURE</const>, Result may
+    If State is set to DispatchResultState::FAILURE, Result may
     specify the reason (or is empty). The type is also dispatch action dependent.
-    If State is set to <const>DispatchResultState::DONTKNOW</const>, Result is empty.
+    If State is set to DispatchResultState::DONTKNOW, Result is empty.
     </p>
 
     @see DispatchResultState

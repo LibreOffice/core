@@ -32,8 +32,8 @@ module com {  module sun {  module star {  module xml {  module sax {
     attribute local names and constant attribute values) to integer tokens.
 
     A token value must be greater or equal to zero and less than
-    <const>FastToken::NAMESPACE</const>. If a string identifier is not known
-    to this instance, <const>FastToken::DONTKNOW</const> is returned.
+    FastToken::NAMESPACE. If a string identifier is not known
+    to this instance, FastToken::DONTKNOW is returned.
  */
 interface XFastTokenHandler: com::sun::star::uno::XInterface
 {
@@ -41,7 +41,7 @@ interface XFastTokenHandler: com::sun::star::uno::XInterface
     /** returns a integer token for the given string identifier.
 
         @returns
-            a unique integer token for the given String or <const>FastToken::DONTKNOW</const>
+            a unique integer token for the given String or FastToken::DONTKNOW
             if the identifier is not known to this instance.
     */
     long getToken( [in] string Identifier );
@@ -58,7 +58,7 @@ interface XFastTokenHandler: com::sun::star::uno::XInterface
             the string given as a byte sequence encoded in UTF-8
 
         @returns
-            a unique integer token for the given String or <const>FastToken::DONTKNOW</const>
+            a unique integer token for the given String or FastToken::DONTKNOW
             if the identifier is not known to this instance.
     */
     long getTokenFromUTF8( [in] sequence< byte > Identifier );

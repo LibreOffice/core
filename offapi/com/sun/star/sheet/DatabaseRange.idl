@@ -102,7 +102,7 @@ published service DatabaseRange
     /** returns the index used to refer to this range in token arrays.
 
         <p>A token describing a database range shall contain the op-code
-        obtained from the <const>FormulaMapGroupSpecialOffset::DB_AREA</const>
+        obtained from the FormulaMapGroupSpecialOffset::DB_AREA
         and this index as data part.</p>
 
         @see com::sun::star::sheet::FormulaToken

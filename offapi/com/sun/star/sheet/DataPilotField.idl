@@ -74,7 +74,7 @@ published service DataPilotField
     /** specifies the function used to calculate results for this field.
 
         <p>For column and row fields, this is the function for subtotals
-        (<const>GeneralFunction::NONE</const> means no subtotals).
+        (GeneralFunction::NONE means no subtotals).
         For data fields, this is the function shown in the data pilot
         table.</p>
      */
@@ -87,10 +87,10 @@ published service DataPilotField
 
         <p>An empty sequence means no subtotals. The same effect can be
         achieved by setting the property #Function to the
-        value <const>GeneralFunction::NONE</const>. If the length of the
+        value GeneralFunction::NONE. If the length of the
         sequence is greater then 1, then the sequence MUST NOT contain one of
-        the values <const>GeneralFunction::NONE</const> or
-        <const>GeneralFunction::AUTO</const>.</p>
+        the values GeneralFunction::NONE or
+        GeneralFunction::AUTO.</p>
 
         <p>The order of the functions in this sequence is reflected in the
         DataPilot table. Multiple entries of the same function are ignored

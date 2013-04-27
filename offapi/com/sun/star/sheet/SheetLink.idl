@@ -44,7 +44,7 @@ published service SheetLink
 
     /** provides access to the name of the linked document.
 
-        <p>This name is equal to the <const>Url</const> property.</p>
+        <p>This name is equal to the Url property.</p>
      */
     interface com::sun::star::container::XNamed;
 

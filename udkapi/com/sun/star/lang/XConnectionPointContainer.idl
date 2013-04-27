@@ -48,7 +48,7 @@ published interface XConnectionPointContainer: com::sun::star::uno::XInterface
             an XConnectionPoint interface of a
             connection point for a specified type if that type
             describes a supported outgoing interface. It is
-            <const>NULL</const> on failure of the call.
+            NULL on failure of the call.
 
         @param aType
             specifies the connection point's type.

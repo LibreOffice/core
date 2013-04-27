@@ -33,8 +33,8 @@ module com {  module sun {  module star {  module sheet {
     column or row header area of a DataPilot table.  This is the type that is
     contained in DataPilotTablePositionData::PositionData when
     the value of DataPilotTablePositionData::PositionType is
-    either <const>DataPilotTablePositionType::ROW_HEADER</const> or
-    <const>DataPilotTablePositionType::COLUMN_HEADER</const>.
+    either DataPilotTablePositionType::ROW_HEADER or
+    DataPilotTablePositionType::COLUMN_HEADER.
 
     @see com::sun::star::sheet::DataPilotTablePositionData
     @see com::sun::star::sheet::DataPilotTablePositionType

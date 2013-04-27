@@ -97,7 +97,7 @@ interface XResource;
 
     <p>The configuration controller sends the following events:
     <ul>
-    <li><const>ResourceActivationRequested</const> is sent when the
+    <li>ResourceActivationRequested is sent when the
     activation of a resource has been requested and the resource is not yet
     active in the requested configuration.  The event is sent when the
     configuration change request is executed, not when the
@@ -105,7 +105,7 @@ interface XResource;
     <p>The ConfigurationChangeEvent::ResourceId member is set to the requested
     resource.  The #ResourceObject member is not
     set.</p></li>
-    <li><const>ResourceDeactivationRequested</const> is sent when the
+    <li>ResourceDeactivationRequested is sent when the
     deactivation of a resource has been requested and the resource is active
     in the requested configuration.  The event is sent when the
     configuration change request is executed that is created when for
@@ -113,25 +113,25 @@ interface XResource;
     <p>The #ResourceId member is set to the requested
     resource.  The #ResourceObject member is not
     set.</p></li>
-    <li><const>ConfigurationUpdateStart</const> is sent before the update of
+    <li>ConfigurationUpdateStart is sent before the update of
     the current configuration starts.</p>
     <p>The requested configuration is available in the <member
     scope="ConfigurationChangeEvent">Configuration</member> member.  The
     #ResourceId and #ResourceObject members
     are not set.</p></li>
-    <li><const>ConfigurationUpdateEnd</const> is sent after the update of
+    <li>ConfigurationUpdateEnd is sent after the update of
     the current configuration ends.</p>
     <p>The requested configuration is
     available in the <member scope="ConfigurationChangeEvent"
     >Configuration</member> member.  The #ResourceId and
     #ResourceObject members are not set.</p></li>
-    <li><const>ResourceActivation</const> is sent when a resource is
+    <li>ResourceActivation is sent when a resource is
     activated, i.e. when a new object of a resource is created (or taken
     from a cash).</p>
     <p>The #ResourceId and #ResourceObject
     members are set to the XResourceId and object reference of
     the activated resource.</p></li>
-    <li><const>ResourceDeactivation</const> is sent when a resource is
+    <li>ResourceDeactivation is sent when a resource is
     deactivated, i.e. when an object that previously was part of the
     configuration is removed from the configuration.</p>
     <p>The #ResourceId and #ResourceObject
@@ -151,13 +151,13 @@ interface XConfigurationController
         @param xResourceId
             The resource whose activation is requested.
         @param eMode
-            <p>When eMode is <const>REPLACE</const> then, before adding the
+            <p>When eMode is REPLACE then, before adding the
             resource activation to the request queue, similar resources
             linked to the same anchor are removed.  This makes it easer to
             switch between resources whose activation is mutually exclusive.
             For example, there can only be one view per pane, so before
             activating a new view the old one has to be deactivated.</p>
-            <p>When eMode is <const>ADD</const> then the resource is requested
+            <p>When eMode is ADD then the resource is requested
             without further changes.</p>
     */
     void requestResourceActivation (
