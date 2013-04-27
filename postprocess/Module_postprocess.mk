@@ -26,4 +26,10 @@ $(eval $(call gb_Module_add_targets,postprocess,\
 ))
 endif
 
+ifneq ($(gb_RUNNABLE_INSTDIR),)
+$(eval $(call gb_Module_add_targets,postprocess,\
+	Package_images_install \
+))
+endif
+
 # vim: set noet sw=4 ts=4:
