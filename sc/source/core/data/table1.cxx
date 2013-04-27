@@ -2113,15 +2113,31 @@ ScFormulaVectorState ScTable::GetFormulaVectorState( SCCOL nCol, SCROW nRow ) co
     return aCol[nCol].GetFormulaVectorState(nRow);
 }
 
-bool ScTable::ResolveVectorReference( SCCOL nCol, SCROW nRow1, SCROW nRow2 )
+formula::FormulaTokenRef ScTable::ResolveStaticReference( SCCOL nCol, SCROW nRow )
 {
-    if (!ValidCol(nCol) || !ValidRow(nRow1) || !ValidRow(nRow2))
-        return false;
+    if (!ValidCol(nCol) || !ValidRow(nRow))
+        return formula::FormulaTokenRef();
 
-    if (!aCol[nCol].ResolveVectorReference(nRow1, nRow2))
-        return false;
+    return aCol[nCol].ResolveStaticReference(nRow);
+}
 
-    return true;
+formula::FormulaTokenRef ScTable::ResolveStaticReference( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
+{
+    if (nCol2 < nCol1 || nRow2 < nRow1)
+        return formula::FormulaTokenRef();
+
+    if (!ValidCol(nCol1) || !ValidCol(nCol2) || !ValidRow(nRow1) || !ValidRow(nRow2))
+        return formula::FormulaTokenRef();
+
+    ScMatrixRef pMat(new ScMatrix(nCol2-nCol1+1, nRow2-nRow1+1, 0.0));
+    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+    {
+        if (!aCol[nCol].ResolveStaticReference(*pMat, nCol2-nCol1, nRow1, nRow2))
+            // Column contains non-static cell. Failed.
+            return formula::FormulaTokenRef();
+    }
+
+    return formula::FormulaTokenRef(new ScMatrixToken(pMat));
 }
 
 ScRefCellValue ScTable::GetRefCellValue( SCCOL nCol, SCROW nRow )

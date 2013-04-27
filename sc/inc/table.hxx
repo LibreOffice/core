@@ -30,6 +30,7 @@
 #include "compressedarray.hxx"
 #include "postit.hxx"
 #include "types.hxx"
+#include "formula/types.hxx"
 
 #include <set>
 #include <map>
@@ -819,7 +820,8 @@ public:
     size_t GetFormulaHash( SCCOL nCol, SCROW nRow ) const;
 
     ScFormulaVectorState GetFormulaVectorState( SCCOL nCol, SCROW nRow ) const;
-    bool ResolveVectorReference( SCCOL nCol, SCROW nRow1, SCROW nRow2 );
+    formula::FormulaTokenRef ResolveStaticReference( SCCOL nCol, SCROW nRow );
+    formula::FormulaTokenRef ResolveStaticReference( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
 
     ScRefCellValue GetRefCellValue( SCCOL nCol, SCROW nRow );
 

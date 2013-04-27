@@ -27,8 +27,7 @@
 #include <tools/mempool.hxx>
 #include "formula/IFunctionDescription.hxx"
 #include "formula/formuladllapi.h"
-
-#include <boost/intrusive_ptr.hpp>
+#include "formula/types.hxx"
 
 namespace formula
 {
@@ -78,11 +77,6 @@ typedef sal_uInt8 StackVar;
 // have enum names in debugger
 typedef StackVarEnum StackVar;
 #endif
-
-
-class FormulaToken;
-typedef ::boost::intrusive_ptr<FormulaToken>        FormulaTokenRef;
-typedef ::boost::intrusive_ptr<const FormulaToken>  FormulaConstTokenRef;
 
 class FormulaTokenArray;
 

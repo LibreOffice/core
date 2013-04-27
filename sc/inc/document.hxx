@@ -32,6 +32,7 @@
 #include "sortparam.hxx"
 #include "types.hxx"
 #include "formula/grammar.hxx"
+#include "formula/types.hxx"
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include "typedstrdata.hxx"
 #include "compressedarray.hxx"
@@ -1940,14 +1941,8 @@ public:
 
     ScFormulaVectorState GetFormulaVectorState( const ScAddress& rPos ) const;
 
-    /**
-     * Check if the range contains any "dirty" formula cells.  In the future
-     * we'll use this function to interpret those "dirty" formula cells on
-     * demand.
-     *
-     * @return true if the range is totally clean, false otherwise.
-     */
-    bool ResolveVectorReference( const ScAddress& rPos, SCROW nEndRow );
+    formula::FormulaTokenRef ResolveStaticReference( const ScAddress& rPos );
+    formula::FormulaTokenRef ResolveStaticReference( const ScRange& rRange );
 
 private: // CLOOK-Impl-methods
 

@@ -25,10 +25,12 @@
 #include "address.hxx"
 #include "rangenam.hxx"
 #include "types.hxx"
-#include <boost/intrusive_ptr.hpp>
+#include "formula/types.hxx"
 
 #include <set>
 #include <vector>
+
+#include <boost/intrusive_ptr.hpp>
 
 #define DEBUG_COLUMN_STORAGE 0
 
@@ -448,7 +450,8 @@ public:
     size_t GetFormulaHash( SCROW nRow ) const;
 
     ScFormulaVectorState GetFormulaVectorState( SCROW nRow ) const;
-    bool ResolveVectorReference( SCROW nRow1, SCROW nRow2 );
+    formula::FormulaTokenRef ResolveStaticReference( SCROW nRow );
+    bool ResolveStaticReference( ScMatrix& rMat, SCCOL nMatCol, SCROW nRow1, SCROW nRow2 );
 
     ScRefCellValue GetRefCellValue( SCROW );
 

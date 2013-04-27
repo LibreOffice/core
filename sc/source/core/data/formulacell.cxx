@@ -2954,27 +2954,75 @@ bool ScFormulaCell::InterpretFormulaGroup()
     switch (pCode->GetVectorState())
     {
         case FormulaVectorEnabled:
+        case FormulaVectorCheckReference:
             // Good.
         break;
-        case FormulaVectorCheckReference:
-            // To support this we would need a real range-based dependency
-            // tracking. We can't support this right now.
-            return false;
         case FormulaVectorDisabled:
         case FormulaVectorUnknown:
         default:
+            // Not good.
             return false;
     }
 
-//    fprintf( stderr, "Interpret cell %d, %d\n", (int)aPos.Col(), (int)aPos.Row() );
-
     if (xGroup->mbInvariant)
     {
-//        fprintf( stderr, "struck gold - completely invariant for %d items !\n",
-//                 (int)xGroup->mnLength );
+        if (pCode->GetVectorState() == FormulaVectorCheckReference)
+        {
+            // An invariant group should only have absolute references, and no
+            // external references are allowed.
 
-        // calculate ourselves:
-        InterpretTail( SCITP_NORMAL );
+            ScTokenArray aCode;
+            pCode->Reset();
+            for (const formula::FormulaToken* p = pCode->First(); p; p = pCode->Next())
+            {
+                const ScToken* pToken = static_cast<const ScToken*>(p);
+                switch (pToken->GetType())
+                {
+                    case svSingleRef:
+                    {
+                        const ScSingleRefData& rRef = pToken->GetSingleRef();
+                        ScAddress aRefPos(rRef.nCol, rRef.nRow, rRef.nTab);
+                        formula::FormulaTokenRef pNewToken = pDocument->ResolveStaticReference(aRefPos);
+                        if (!pNewToken)
+                            return false;
+
+                        aCode.AddToken(*pNewToken);
+                    }
+                    break;
+                    case svDoubleRef:
+                    {
+                        const ScComplexRefData& rRef = pToken->GetDoubleRef();
+                        ScRange aRefRange(
+                            rRef.Ref1.nCol, rRef.Ref1.nRow, rRef.Ref1.nTab,
+                            rRef.Ref2.nCol, rRef.Ref2.nRow, rRef.Ref2.nTab);
+
+                        formula::FormulaTokenRef pNewToken = pDocument->ResolveStaticReference(aRefRange);
+                        if (!pNewToken)
+                            return false;
+
+                        aCode.AddToken(*pNewToken);
+                    }
+                    break;
+                    default:
+                        aCode.AddToken(*pToken);
+                }
+            }
+
+            ScCompiler aComp(pDocument, aPos, aCode);
+            aComp.SetGrammar(pDocument->GetGrammar());
+            aComp.CompileTokenArray(); // Create RPN token array.
+            ScInterpreter aInterpreter(this, pDocument, aPos, aCode);
+            aInterpreter.Interpret();
+            aResult.SetToken(aInterpreter.GetResultToken().get());
+        }
+        else
+        {
+            // Formula contains no references.
+            ScInterpreter aInterpreter(this, pDocument, aPos, *pCode);
+            aInterpreter.Interpret();
+            aResult.SetToken(aInterpreter.GetResultToken().get());
+        }
+
         for ( sal_Int32 i = 0; i < xGroup->mnLength; i++ )
         {
             ScAddress aTmpPos = aPos;
@@ -2993,37 +3041,35 @@ bool ScFormulaCell::InterpretFormulaGroup()
         }
         return true;
     }
-    else
-    {
-        // scan the formula ...
-        // have a document method: "Get2DRangeAsDoublesArray" that does the
-        // column-based heavy lifting call it for each absolute range from the
-        // first cell pos in the formula group.
-        //
-        // Project single references to ranges by adding their vector * xGroup->mnLength
-        //
-        // TODO:
-        //    elide multiple dimensional movement in vectors eg. =SUM(A1<1,1>)
-        //    produces a diagonal 'column' that serves no useful purpose for us.
-        //    these should be very rare. Should elide in GetDeltas anyway and
-        //    assert here.
-        //
-        // Having built our input data ...
-        // Throw it, and the formula over to some 'OpenCLCalculage' hook
-        //
-        // on return - release references on these double buffers
-        //
-        // transfer the result to the formula cells (as above)
-        // store the doubles in the columns' maDoubles array for
-        // dependent formulae
-        //
-        // TODO:
-        //    need to abort/fail when we get errors returned and fallback to
-        //    stock interpreting [ I guess ], unless we can use NaN etc. to
-        //    signal errors.
 
-        return false;
-    }
+    // scan the formula ...
+    // have a document method: "Get2DRangeAsDoublesArray" that does the
+    // column-based heavy lifting call it for each absolute range from the
+    // first cell pos in the formula group.
+    //
+    // Project single references to ranges by adding their vector * xGroup->mnLength
+    //
+    // TODO:
+    //    elide multiple dimensional movement in vectors eg. =SUM(A1<1,1>)
+    //    produces a diagonal 'column' that serves no useful purpose for us.
+    //    these should be very rare. Should elide in GetDeltas anyway and
+    //    assert here.
+    //
+    // Having built our input data ...
+    // Throw it, and the formula over to some 'OpenCLCalculage' hook
+    //
+    // on return - release references on these double buffers
+    //
+    // transfer the result to the formula cells (as above)
+    // store the doubles in the columns' maDoubles array for
+    // dependent formulae
+    //
+    // TODO:
+    //    need to abort/fail when we get errors returned and fallback to
+    //    stock interpreting [ I guess ], unless we can use NaN etc. to
+    //    signal errors.
+
+    return false;
 }
 
 void ScFormulaCell::StartListeningTo( ScDocument* pDoc )

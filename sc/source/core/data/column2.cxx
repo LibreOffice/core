@@ -1589,8 +1589,50 @@ ScFormulaVectorState ScColumn::GetFormulaVectorState( SCROW nRow ) const
     return pCell ? pCell->GetVectorState() : FormulaVectorUnknown;
 }
 
-bool ScColumn::ResolveVectorReference( SCROW nRow1, SCROW nRow2 )
+formula::FormulaTokenRef ScColumn::ResolveStaticReference( SCROW nRow )
 {
+    std::vector<ColEntry>::iterator itEnd = maItems.end();
+    // Find first cell whose position is equal or greater than nRow1.
+    ColEntry aBound;
+    aBound.nRow = nRow;
+    std::vector<ColEntry>::iterator it =
+        std::lower_bound(maItems.begin(), itEnd, aBound, ColEntry::Less());
+
+    if (it == itEnd || it->nRow != nRow)
+    {
+        // Empty cell.
+        return formula::FormulaTokenRef(new formula::FormulaDoubleToken(0.0));
+    }
+
+    ScBaseCell* pCell = it->pCell;
+    switch (pCell->GetCellType())
+    {
+        case CELLTYPE_VALUE:
+        {
+            ScValueCell* pVC = static_cast<ScValueCell*>(pCell);
+            return formula::FormulaTokenRef(new formula::FormulaDoubleToken(pVC->GetValue()));
+        }
+        case CELLTYPE_FORMULA:
+        {
+            ScFormulaCell* pFC = static_cast<ScFormulaCell*>(pCell);
+            if (pFC->GetDirty())
+                // Dirty formula cell is not considered static. Return null token.
+                return formula::FormulaTokenRef();
+
+            return formula::FormulaTokenRef(new formula::FormulaDoubleToken(pFC->GetResultDouble()));
+        }
+        default:
+            ;
+    }
+
+    return formula::FormulaTokenRef(new formula::FormulaDoubleToken(0.0));
+}
+
+bool ScColumn::ResolveStaticReference( ScMatrix& rMat, SCCOL nMatCol, SCROW nRow1, SCROW nRow2 )
+{
+    if (nRow1 > nRow2)
+        return false;
+
     std::vector<ColEntry>::iterator itEnd = maItems.end();
     // Find first cell whose position is equal or greater than nRow1.
     ColEntry aBound;
@@ -1598,19 +1640,27 @@ bool ScColumn::ResolveVectorReference( SCROW nRow1, SCROW nRow2 )
     std::vector<ColEntry>::iterator it =
         std::lower_bound(maItems.begin(), itEnd, aBound, ColEntry::Less());
 
-    if (it == itEnd)
-        return false;
-
     for (; it != itEnd && it->nRow <= nRow2; ++it)
     {
-        if (it->pCell->GetCellType() != CELLTYPE_FORMULA)
-            // Non-formula cells are fine.
-            continue;
+        switch (it->pCell->GetCellType())
+        {
+            case CELLTYPE_VALUE:
+            {
+                ScValueCell* pVC = static_cast<ScValueCell*>(it->pCell);
+                rMat.PutDouble(pVC->GetValue(), nMatCol, it->nRow - nRow1);
+            }
+            case CELLTYPE_FORMULA:
+            {
+                ScFormulaCell* pFC = static_cast<ScFormulaCell*>(it->pCell);
+                if (pFC->GetDirty())
+                    // Dirty formula cell is not considered static. Return null token.
+                    return false;
 
-        ScFormulaCell* pFC = static_cast<ScFormulaCell*>(it->pCell);
-        if (pFC->GetDirty())
-            // Dirty formula cells are not supported yet.
-            return false;
+                rMat.PutDouble(pFC->GetResultDouble(), nMatCol, it->nRow - nRow1);
+            }
+            default:
+                ;
+        }
     }
 
     return true;

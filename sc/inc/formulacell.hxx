@@ -282,6 +282,8 @@ public:
      */
     void            SetResultDouble( double n )     { aResult.SetDouble( n); }
 
+    double GetResultDouble() const { return aResult.GetDouble(); }
+
     void            SetErrCode( sal_uInt16 n );
     bool IsHyperLinkCell() const;
     EditTextObject* CreateURLObject();

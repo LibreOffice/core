@@ -1574,13 +1574,23 @@ ScFormulaVectorState ScDocument::GetFormulaVectorState( const ScAddress& rPos ) 
     return maTabs[nTab]->GetFormulaVectorState(rPos.Col(), rPos.Row());
 }
 
-bool ScDocument::ResolveVectorReference( const ScAddress& rPos, SCROW nEndRow )
+formula::FormulaTokenRef ScDocument::ResolveStaticReference( const ScAddress& rPos )
 {
     SCTAB nTab = rPos.Tab();
     if (!TableExists(nTab))
-        return false;
+        return formula::FormulaTokenRef();
 
-    return maTabs[nTab]->ResolveVectorReference(rPos.Col(), rPos.Row(), nEndRow);
+    return maTabs[nTab]->ResolveStaticReference(rPos.Col(), rPos.Row());
+}
+
+formula::FormulaTokenRef ScDocument::ResolveStaticReference( const ScRange& rRange )
+{
+    SCTAB nTab = rRange.aStart.Tab();
+    if (nTab != rRange.aEnd.Tab() || !TableExists(nTab))
+        return formula::FormulaTokenRef();
+
+    return maTabs[nTab]->ResolveStaticReference(
+        rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row());
 }
 
 bool ScDocument::CanFitBlock( const ScRange& rOld, const ScRange& rNew )

@@ -31,13 +31,11 @@
 #include "scdllapi.h"
 #include "formula/IFunctionDescription.hxx"
 #include "formula/token.hxx"
-
+#include "types.hxx"
 
 class ScJumpMatrix;
-class ScToken;
 
 typedef ::std::vector< ScComplexRefData > ScRefList;
-typedef ::boost::intrusive_ptr<ScToken> ScTokenRef;
 
 class SC_DLLPUBLIC ScToken : public formula::FormulaToken
 {
