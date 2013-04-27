@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#ifndef _DIALOGCUSTOMCONTROLS_CXX_
 #include "dialogcustomcontrols.hxx"
-#endif
 #include <osl/diagnose.h>
 
 //-----------------------------------

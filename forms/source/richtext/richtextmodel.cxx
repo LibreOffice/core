@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#ifndef FORMS_SOURCE_RICHTEXT_RICHTEXTMODEL_CXX
 #include "richtextmodel.hxx"
-#endif
 #include "richtextengine.hxx"
 #include "richtextunowrapper.hxx"
 
