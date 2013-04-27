@@ -42,14 +42,14 @@ struct AccessibleEventObject: ::com::sun::star::lang::EventObject
     /** for events that specifies a value change, this is
         the new value.
 
-        Depending on the <member>EventId</member>, this can be void.
+        Depending on the #EventId, this can be void.
     */
     any NewValue;
 
     /** for events that specifies a value change, this is
         the old value.
 
-        Depending on the <member>EventId</member>, this can be void.
+        Depending on the #EventId, this can be void.
     */
     any OldValue;
 };

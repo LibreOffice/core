@@ -65,7 +65,7 @@ struct ConfigurationChangeEvent
     */
     com::sun::star::uno::XInterface ResourceObject;
 
-    /** Each listener is called with exactly the <member>UserData</member>
+    /** Each listener is called with exactly the #UserData
         that was given when the listener was registered.
     */
     any UserData;

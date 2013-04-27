@@ -58,19 +58,19 @@ service NavigationToolBar
 
     /** specifies the text line color (as RGB value) of the control.
 
-        <p>This color is used if the <member>FontDescriptor</member> defines
+        <p>This color is used if the #FontDescriptor defines
         that the text in the control should be underlined or stroke out.</p>
      */
     [property] long TextLineColor;
 
-    /** specifies the relief for the font described in <member>FontDescriptor</member>
+    /** specifies the relief for the font described in #FontDescriptor
 
         <p>The value must be one of the com::sun::star::text::FontRelief
         constants.</p>
      */
     [property] long FontRelief;
 
-    /** specifies the emphasis mark for the font described in <member>FontDescriptor</member>
+    /** specifies the emphasis mark for the font described in #FontDescriptor
 
         <p>The value must be one of the com::sun::star::text::FontEmphasis
         constants.</p>

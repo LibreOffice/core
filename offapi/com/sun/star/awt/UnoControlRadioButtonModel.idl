@@ -102,12 +102,12 @@ published service UnoControlRadioButtonModel
 
     /** specifies a graphic to be displayed besides the label of the control
 
-        <p>If this property is present, it interacts with the <member>ImageURL</member>in the
+        <p>If this property is present, it interacts with the #ImageURLin the
         following way:
-        <ul><li>If <member>ImageURL</member> is set, <member>Graphic</member> will be reset
-            to an object as loaded from the given image URL, or <NULL/> if <member>ImageURL</member>
+        <ul><li>If #ImageURL is set, #Graphic will be reset
+            to an object as loaded from the given image URL, or <NULL/> if #ImageURL
             does not point to a valid image file.</li>
-            <li>If <member>Graphic</member> is set, <member>ImageURL</member> will be reset
+            <li>If #Graphic is set, #ImageURL will be reset
             to an empty string.</li>
         </ul></p>
 

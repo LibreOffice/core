@@ -82,7 +82,7 @@ published service UnoControlEditModel
 
     /** specifies the color of the border, if present
 
-        <p>Not every border style (see <member>Border</member>) may support coloring.
+        <p>Not every border style (see #Border) may support coloring.
         For instance, usually a border with 3D effect will ignore the BorderColor setting.</p>
 
         @since OOo 2.0
@@ -151,7 +151,7 @@ published service UnoControlEditModel
 
         <p>Controls working with this model care for this setting when the user enters
         text. Every line break entered into the control will be treated according to this
-        setting, so that the <member>Text</member> property always contains only
+        setting, so that the #Text property always contains only
         line ends in the format specified.</p>
 
         <p>Possible values are all constants from the LineEndFormat group.</p>

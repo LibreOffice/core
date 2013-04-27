@@ -76,7 +76,7 @@ interface XPackage
 
         @return
             <NULL/> - all prerequisites are met. Otherwise, a value from
-            <member>Prerequisites</member> indicating what prerequisites are missing.
+            #Prerequisites indicating what prerequisites are missing.
      */
     long checkPrerequisites(
         [in] com::sun::star::task::XAbortChannel xAbortChannel,

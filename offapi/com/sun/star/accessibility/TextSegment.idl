@@ -42,7 +42,7 @@ module com { module sun { module star { module accessibility {
     character of a text) all other values define the empty string at that
     position.</p>
 
-    <p>The <member>SegmentText</member> member is a copy of the
+    <p>The #SegmentText member is a copy of the
     corresponding text segment of the enclosing text.  Modifying this
     structure does not alter the enclosing text.</p>
 

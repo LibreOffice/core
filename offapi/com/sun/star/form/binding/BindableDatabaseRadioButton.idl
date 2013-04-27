@@ -64,7 +64,7 @@ service BindableDatabaseRadioButton
 
         <p><member scope="com::sun::star::form::component">RadioButton::RefValue</member> is transferred to
         possible external value bindings as soon as the radio button is selected. With the member
-        <member>SecondaryRefValue</member>, clients of the radio button can also associate a value with
+        #SecondaryRefValue, clients of the radio button can also associate a value with
         the <em>not selected</em> state of the control.</p>
     */
     [property] string SecondaryRefValue;

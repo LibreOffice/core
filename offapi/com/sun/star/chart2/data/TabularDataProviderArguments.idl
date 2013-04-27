@@ -49,7 +49,7 @@ service TabularDataProviderArguments
 
         <p>When used as input, this range will be split in columns or
         rows depending on the property
-        <member>DataRowSource</member>.</p>
+        #DataRowSource.</p>
 
         <p>When used as output of
         XDataProvider::detectArguments() this is the

@@ -159,9 +159,9 @@ published interface XDocumentProperties
         <p>
         An empty URL is valid and describes a case where the document shall be
         reloaded from its original location after some time described by the
-        attribute <member>AutoloadSecs</member>.
+        attribute #AutoloadSecs.
         An empty <atom>string</atom> together with an
-        <member>AutoloadSecs</member> value of 0
+        #AutoloadSecs value of 0
         describes a case where no autoload is specified.
         </p>
 
@@ -176,7 +176,7 @@ published interface XDocumentProperties
         <p>
         A value of 0 is valid and describes a redirection.
         A value of 0 together with an empty <atom>string</atom> as
-        <member>AutoloadURL</member>
+        #AutoloadURL
         describes a case where no autoload is specified.
         </p>
 
@@ -239,19 +239,19 @@ published interface XDocumentProperties
         This is a convenience method which resets several attributes at once,
         as follows:
         <ul>
-        <li><member>Author</member> is set to the given parameter.</li>
-        <li><member>CreationDate</member> is set to the current date and time.
+        <li>#Author is set to the given parameter.</li>
+        <li>#CreationDate is set to the current date and time.
         </li>
-        <li><member>ModifiedBy</member> is cleared.</li>
-        <li><member>ModificationDate</member> is cleared.</li>
-        <li><member>PrintedBy</member> is cleared.</li>
-        <li><member>PrintDate</member> is cleared.</li>
-        <li><member>EditingDuration</member> is cleared.</li>
-        <li><member>EditingCycles</member> is set to 1.</li>
+        <li>#ModifiedBy is cleared.</li>
+        <li>#ModificationDate is cleared.</li>
+        <li>#PrintedBy is cleared.</li>
+        <li>#PrintDate is cleared.</li>
+        <li>#EditingDuration is cleared.</li>
+        <li>#EditingCycles is set to 1.</li>
         </ul>
 
         @param Author
-            the new value of the <member>Author</member> attribute.
+            the new value of the #Author attribute.
         </p>
      */
     void resetUserData( [in] string Author );

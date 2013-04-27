@@ -50,7 +50,7 @@ published service View
     // gives access to the properties.
     interface com::sun::star::beans::XPropertySet;
 
-    /** allows changing the view's <member>Command</member>.
+    /** allows changing the view's #Command.
     */
     [optional] interface XAlterView;
 
@@ -76,7 +76,7 @@ published service View
 
         <p>This property might be empty when a backend does not support retrieving the current
         SQL command of a view. However, if the <code>View</code> supports altering its command
-        via the <member>XAlterView</member> interface, then it's required to also provide the
+        via the #XAlterView interface, then it's required to also provide the
         current SQL command in the <code>Command</code> property.</p>
      */
     [readonly, property] string Command;

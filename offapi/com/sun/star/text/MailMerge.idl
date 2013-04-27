@@ -65,9 +65,9 @@ published service MailMerge
     /** allows to specify the data which the mail merge should be based on.
 
         <p>This service describe the interaction between all data access related properties,
-        namely <member>DataSourceName</member>, <member>Command</member>, <member>CommandType</member>,
-        <member>Connection</member>, <member>Selection</member>, <member>ResultSet</member>,
-        <member>Filter</member> and <member>EscapeProcessing</member>
+        namely #DataSourceName, #Command, #CommandType,
+        #Connection, #Selection, #ResultSet,
+        #Filter and #EscapeProcessing
     */
     service com::sun::star::sdb::DataAccessDescriptor;
 
@@ -105,7 +105,7 @@ published service MailMerge
         com::sun::star::sdb::RowSet, or an instance obtained
         by calling com::sun::star::sdb::XResultSetAccess::createResultSet()
         on such a com::sun::star::sdb::RowSet. This becomes important in
-        conjunction with the <member>Selection</member> property.</p>
+        conjunction with the #Selection property.</p>
 
         <p>For the interaction of this property with other data access relevant properties, see
         the com::sun::star::sdb::DataAccessDescriptor service.</p>
@@ -123,14 +123,14 @@ published service MailMerge
 
     /** contains a selection that refers to bookmarks of the ResultSet.
 
-        <p>This property is relevant in conjunction with the <member>ResultSet</member>
+        <p>This property is relevant in conjunction with the #ResultSet
         only. A single element of this array describes a bookmark relative to the result set.<br/>
-        Note that this implies that the <member>ResultSet</member> needs to support the
+        Note that this implies that the #ResultSet needs to support the
         com::sun::star::sdbcx::XRowLocate interface.</p>
 
-        <p>If this array is empty, the whole result set, as described by <member>ResultSet</member>
-        respectively the triple (<member>DataSourceName</member>, <member>DataCommandType</member>,
-        <member>DataCommand</member>).</p>
+        <p>If this array is empty, the whole result set, as described by #ResultSet
+        respectively the triple (#DataSourceName, #DataCommandType,
+        #DataCommand).</p>
 
         <p>For the interaction of this property with other data access relevant properties, see
         the com::sun::star::sdb::DataAccessDescriptor service.</p>

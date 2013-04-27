@@ -27,9 +27,9 @@ interface XResourceId;
 /** Descriptor of a tab bar button.  Tab bar buttons are typically used to
     offer the user the choice between different views to be displayed in
     one pane.
-    <p>For identification only the <member>ResourceId</member> is used, so for
+    <p>For identification only the #ResourceId is used, so for
     some methods of the XTabBar interface only the
-    <member>ResourceId</member> member is evaluated.</p>
+    #ResourceId member is evaluated.</p>
 */
 struct TabBarButton
 {

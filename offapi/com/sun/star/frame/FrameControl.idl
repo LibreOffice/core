@@ -49,7 +49,7 @@ published service FrameControl
 
         <p>
         The Frame is created if the control
-        is shown and the <member>ComponentUrl</member> is set.
+        is shown and the #ComponentUrl is set.
         </p>
      */
     [property, readonly] string Frame;

@@ -100,7 +100,7 @@ interface XLogger
     /** logs a given message
 
         @param Level
-            the log level of this message. If this level is smaller than the logger's <member>Level</member>
+            the log level of this message. If this level is smaller than the logger's #Level
             attribute, then the call will be ignored.
 
         @param Message
@@ -112,7 +112,7 @@ interface XLogger
         event occurred.
 
         @param Level
-            the log level of this message. If this level is smaller than the logger's <member>Level</member>
+            the log level of this message. If this level is smaller than the logger's #Level
             attribute, then the call will be ignored.
 
         @param SourceClass

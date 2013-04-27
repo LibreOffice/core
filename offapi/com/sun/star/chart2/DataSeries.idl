@@ -133,7 +133,7 @@ service DataSeries
         properties that differ from the default.
 
         <p>The default values are determined by the properties set at
-        the <member>DataPointProperties</member> of the data
+        the #DataPointProperties of the data
         series.</p>
 
         <p>If the sequence is empty, that means that all data points

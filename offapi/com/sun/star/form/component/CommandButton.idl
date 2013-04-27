@@ -93,7 +93,7 @@ published service CommandButton
         be reset, when com::sun::star::form::XReset::reset() is invoked.</p>
 
         <p>For a given implementation of the interface, if this (optional) interface is present, then also the optional
-        property <member>DefaultState</member> must be present.</p>
+        property #DefaultState must be present.</p>
     */
     [optional] interface ::com::sun::star::form::XReset;
 };

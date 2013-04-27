@@ -71,7 +71,7 @@ published service DataPilotDescriptor
 
 
     /** specifies arguments that are passed to the implementation named by
-        <member>SourceServiceName</member>.
+        #SourceServiceName.
 
     @since OOo 3.3
 

@@ -104,8 +104,8 @@ interface XDatabaseDataProvider
 
     /** is the command which should be executed, the type of command depends
     on the CommandType.
-    <p>In case of a <member>CommandType</member> of <member>CommandType::COMMAND</member>,
-    means in case the <member>Command</member> specifies an SQL statement, the inherited
+    <p>In case of a #CommandType of <member>CommandType::COMMAND</member>,
+    means in case the #Command specifies an SQL statement, the inherited
     <member scope="com::sun::star::sdbc">RowSet::EscapeProcessing</member>
     becomes relevant:<br/>
     It then can be to used to specify whether the SQL statement should be analyzed on the
@@ -121,9 +121,9 @@ interface XDatabaseDataProvider
 
     /** specifies the type of the command to be executed to retrieve a result set.
 
-        <p><member>Command</member> needs to be interpreted depending on the value of this property.</p>
+        <p>#Command needs to be interpreted depending on the value of this property.</p>
 
-        <p>This property is only meaningful together with the <member>Command</member>
+        <p>This property is only meaningful together with the #Command
         property, thus either <em>both</em> or <em>none</em> of them are present.</p>
 
         @see com::sun::star::sdb::CommandType
@@ -134,11 +134,11 @@ interface XDatabaseDataProvider
 
         <p>The Filter string has to form a SQL WHERE-clause, <em>without</em> the WHERE-string itself.</p>
 
-        <p>If a <member>DataSourceName</member>, <member>Command</member> and <member>CommandType</member>
+        <p>If a #DataSourceName, #Command and #CommandType
         are specified, a RowSet can be created with this information. If the results provided by the
         row set are to be additionally filtered, the Filter property can be used.</p>
 
-        <p>Note that the Filter property does not make sense if a <member>ResultSet</member> has been specified
+        <p>Note that the Filter property does not make sense if a #ResultSet has been specified
         in the DataAccessDescriptor.</p>
 
         @see com::sun::star::sdb::RowSet
@@ -169,14 +169,14 @@ interface XDatabaseDataProvider
      */
     [attribute,bound] string Order;
 
-    /** specifies if the <member>Command</member> should be analyzed on the client side before sending it
+    /** specifies if the #Command should be analyzed on the client side before sending it
         to the database server.
 
         <p>The default value of this property is <TRUE/>. By switching it to <FALSE/>, you can pass
         backend-specific SQL statements, which are not standard SQL, to your database.</p>
 
-        <p>This property is usually present together with the <member>Command</member> and
-        <member>CommandType</member> properties, and is evaluated if and only if <member>CommandType</member>
+        <p>This property is usually present together with the #Command and
+        #CommandType properties, and is evaluated if and only if #CommandType
         equals <member>CommandType::COMMAND</member>.</p>
     */
     [attribute,bound] boolean EscapeProcessing;

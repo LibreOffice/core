@@ -42,7 +42,7 @@ published service DatabaseFormattedField
         <p>When the user enters text into a formatted field control, and after this, the control
         content is to be committed into the database field the control is bound to,
         a decision must be made how to deal with empty strings.<br/>
-        This is controlled by <member>ConvertEmptyToNull</member>.</p>
+        This is controlled by #ConvertEmptyToNull.</p>
 
         <p>If the property is set to <TRUE/>, and an empty text is to be commited, this is
         converted into <NULL/>, else it is written as empty string.</p>

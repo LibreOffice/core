@@ -40,7 +40,7 @@ published service DateField
 
     /** resets the control.
 
-        <p>If you do not set a value for the <member>DefaultDate</member>, then resetting the control
+        <p>If you do not set a value for the #DefaultDate, then resetting the control
         will result in setting to to the current system date. This is for HTML compatibility.</p>
     */
     interface com::sun::star::form::XReset;

@@ -33,7 +33,7 @@ published struct VisualRepresentation
      */
     ::com::sun::star::datatransfer::DataFlavor Flavor;
 
-    /** The data in the format specified by <member>Flavor</member>.
+    /** The data in the format specified by #Flavor.
      */
     any Data;
 

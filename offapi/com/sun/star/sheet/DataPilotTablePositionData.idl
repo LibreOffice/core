@@ -29,9 +29,9 @@ module com {  module sun {  module star {  module sheet {
 /** This structure contains information on a cell within a DataPilot table.
 
     <p>This structure contains information on a particular cell within a DataPilot
-    table, and is used to retrieve its metadata.  The <member>PositionType</member>
+    table, and is used to retrieve its metadata.  The #PositionType
     member specifies in which sub-area of the table the cell is positioned, which
-    in turn determines the type of metadata contained in the <member>PositionData</member>
+    in turn determines the type of metadata contained in the #PositionData
     member.</p>
 
     @see com::sun::star::sheet::DataPilotTablePositionType
@@ -53,15 +53,15 @@ struct DataPilotTablePositionData
 
 
     /** <p>This member contains a structure of different types depending on the
-        position type specified in <member>PositionType</member> member.</p>
+        position type specified in #PositionType member.</p>
 
-        <p>When the value of <member>PositionType</member> is
+        <p>When the value of #PositionType is
         <const>DataPilotTablePositionType::RESULT</const>, <member>DataPilotTablePositionData::PositionData</member>
         contains an instance of type DataPilotTableResultData,
         whereas when the value of <member>DataPilotTablePositionData::PositionType</member>
         is either <const>DataPilotTablePositionType::ROW_HEADER</const>
         or <const>DataPilotTablePositionType::COLUMN_HEADER</const>, then the
-        <member>PositionData</member> member contains an instance of type <type>
+        #PositionData member contains an instance of type <type>
         DataPilotTableHeaderData</type>.</p>
 
         @see com::sun::star::sheet::DataPiotTableResultData

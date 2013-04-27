@@ -79,7 +79,7 @@ struct LineDescriptor
         automating the OpenOffice.org UI via a dedicated separate application ("TestTool") requires
         such IDs.</p>
 
-        <p>If a primary button exists for a property's UI representation (<member>HasPrimaryButton</member>),
+        <p>If a primary button exists for a property's UI representation (#HasPrimaryButton),
         it gets the ID specified herein.</p>
     */
     string PrimaryButtonId;
@@ -89,11 +89,11 @@ struct LineDescriptor
         <p>This URL will be used to obtain an actual com::sun::star::graphic::XGraphic
         object from an com::sun::star::graphic::GraphicProvider.</p>
 
-        <p>The property will be ignored if <member>HasPrimaryButton</member> is <FALSE/>.</p>
+        <p>The property will be ignored if #HasPrimaryButton is <FALSE/>.</p>
 
         <p>If you need to specify a graphic which does not have an URL, but is available as
         com::sun::star::graphic::XGraphic only, then you must leave
-        <code>PrimaryButtonImageURL</code> empty, and use the <member>PrimaryButtonImage</member> property.
+        <code>PrimaryButtonImageURL</code> empty, and use the #PrimaryButtonImage property.
 
         @see PrimaryButtonImage
     */
@@ -101,8 +101,8 @@ struct LineDescriptor
 
     /** describes a graphics to display at the primary button, if any.
 
-        <p>The property will be ignored if <member>HasPrimaryButton</member> is <FALSE/>, or
-        if <member>PrimaryButtonImageURL</member> is a non-empty string.</p>
+        <p>The property will be ignored if #HasPrimaryButton is <FALSE/>, or
+        if #PrimaryButtonImageURL is a non-empty string.</p>
 
         @see HasPrimaryButton
         @see PrimaryButtonImageURL
@@ -113,7 +113,7 @@ struct LineDescriptor
         property value input.
 
         <p>A secondary button subordinated to the primary button. If no primary button exists
-        (<member>HasPrimaryButton</member>), this member is ignored.</p>
+        (#HasPrimaryButton), this member is ignored.</p>
 
         @see XPropertyHandler::onInteractivePropertySelection
         @see HasSecondaryButton
@@ -122,7 +122,7 @@ struct LineDescriptor
 
     /** describes a unique id to associate with the primary button
 
-        <p>If a secondary button exists for a property's UI representation (<member>HasSecondaryButton</member>),
+        <p>If a secondary button exists for a property's UI representation (#HasSecondaryButton),
         it gets the ID specified herein.</p>
 
         @see PrimaryButtonId
@@ -134,11 +134,11 @@ struct LineDescriptor
         <p>This URL will be used to obtain an actual com::sun::star::graphic::XGraphic
         object from an com::sun::star::graphic::GraphicProvider.</p>
 
-        <p>The property will be ignored if <member>HasSecondaryButton</member> is <FALSE/>.</p>
+        <p>The property will be ignored if #HasSecondaryButton is <FALSE/>.</p>
 
         <p>If you need to specify a graphic which does not have an URL, but is available as
         com::sun::star::graphic::XGraphic only, then you must leave
-        <code>SecondaryButtonImageURL</code> empty, and use the <member>SecondaryButtonImage</member> property.
+        <code>SecondaryButtonImageURL</code> empty, and use the #SecondaryButtonImage property.
 
         @see SecondaryButtonImage
     */
@@ -146,8 +146,8 @@ struct LineDescriptor
 
     /** describes a graphics to display at the secondary button, if any.
 
-        <p>The property will be ignored if <member>HasSecondaryButton</member> is <FALSE/>, or
-        if <member>SecondaryButtonImageURL</member> is a non-empty string.</p>
+        <p>The property will be ignored if #HasSecondaryButton is <FALSE/>, or
+        if #SecondaryButtonImageURL is a non-empty string.</p>
 
         @see HasSecondaryButton
         @see SecondaryButtonImageURL
@@ -169,7 +169,7 @@ struct LineDescriptor
 
         <p>An ObjectInspector can visually group properties which semantically belong
         together (for instance using tab pages). The decision which properties actually belong together
-        is made using this <member>Category</member> attribute.</p>
+        is made using this #Category attribute.</p>
 
         <p>For your implementation of XPropertyHandler, it's recommended that you document the programmatic
         names used for property categories. This way, your handler might be re-used in

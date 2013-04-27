@@ -29,7 +29,7 @@
 /** specifies an event from the mouse.
 
     <p>This event is also used for pop-up menu requests on objects.
-    See <member>PopupTrigger</member> for details.</p>
+    See #PopupTrigger for details.</p>
 
     @see XMouseListener
     @see XMouseMotionListener

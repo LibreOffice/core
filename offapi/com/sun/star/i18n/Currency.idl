@@ -44,7 +44,7 @@ published struct Currency
     /** Currency abbreviation used by banks and in money exchange, for
         example, <b>EUR</b> or <b>USD</b>. This usually should be
         identical to the ISO 4217 currency code also used in the
-        <member>ID</member>, but doesn't necessarily have to be. */
+        #ID, but doesn't necessarily have to be. */
     string BankSymbol;
 
     /** Name of the currency, for example, <b>Euro</b> or <b>US

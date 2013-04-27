@@ -64,7 +64,7 @@ published service UnoControlListBoxModel
 
     /** specifies the color of the border, if present
 
-        <p>Not every border style (see <member>Border</member>) may support coloring.
+        <p>Not every border style (see #Border) may support coloring.
         For instance, usually a border with 3D effect will ignore the BorderColor setting.</p>
 
         @since OOo 2.0
@@ -172,7 +172,7 @@ published service UnoControlListBoxModel
     [optional, property] short MouseWheelBehavior;
 
     /** allows manipulating the list of items in the list box more fine-grained than the
-        <member>StringItemList</member> property.
+        #StringItemList property.
 
         @since OOo 3.3
     */

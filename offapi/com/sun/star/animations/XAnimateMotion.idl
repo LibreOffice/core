@@ -33,8 +33,8 @@ interface XAnimateMotion : XAnimate
 {
     /** Specifies an optional path.
         <br>
-        If a path is used, the <member>From</member>, <member>To</member> and
-        <member>By</member> members are ignored.
+        If a path is used, the #From, #To and
+        #By members are ignored.
         The value type of the path depends on the used rendering system.
         Possible types maybe a svg:d path encoded in a string.
     */

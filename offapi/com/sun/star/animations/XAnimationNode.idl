@@ -38,7 +38,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
 
     /** a sequence of values that define the beginning of this element
         <br>
-        <member>Begin</member> is
+        #Begin is
             <ul>
             <li><atom>double</atom> describes the element begin as an offset in seconds from an implicit syncbase.
                 The definition of the implicit syncbase depends upon the element's parent time container.
@@ -59,7 +59,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
 
     /** defines the length of the simple duration.
         <br>
-        <member>Duration</member> is
+        #Duration is
             <ul>
             <li><atom>double</atom> specifies the length of the simple duration in seconds.</li>
             <li><const>Timing::INDEFINITE</const> specifies the simple duration as indefinite.</li>
@@ -73,7 +73,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
 
     /** a sequence of values that define the ending of this element
         <br>
-        <member>End</member> is
+        #End is
             <ul>
             <li><atom>double</atom> describes the element end as an offset in seconds from an implicit syncbase.
                 The definition of the implicit syncbase depends upon the element's parent time container.
@@ -99,7 +99,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
         par and excl time container elements, and media elements with timed
         children (e.g. animate or area elements).
 
-        <member>EndSync</member> is
+        #EndSync is
             either a <atom>short</atom> constant from <const>EndSync</const>,
             an interface reference to a child XTimeContainer
             or <void/>.
@@ -110,7 +110,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
 
     /** the number of iterations of the simple duration.
         <br>
-        <member>RepeatCount</member> is
+        #RepeatCount is
             <ul>
             <li><atom>double</atom>
                 this is a numeric value that specifies the number of iterations.
@@ -130,7 +130,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
 
     /** the total duration for repeat.
         <br>
-        <member>RepeatDuration</member> is
+        #RepeatDuration is
             <ul>
             <li><atom>double</atom>
                 specifies the duration in element active time
@@ -149,7 +149,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
         should be extended beyond the active duration by freezing the final
         state of the element.
         <br>
-        <member>Fill</member> is
+        #Fill is
             a value from <const>AnimationFill</const>.
 
         @see <const>Fill</const>
@@ -160,13 +160,13 @@ interface XAnimationNode : ::com::sun::star::container::XChild
     /** the default value for the fill behavior for this element and all
         descendants.
         <br>
-        <member>FillDefault</member> is
+        #FillDefault is
             <ul>
             <li>The values <const>AnimationFill::REMOVE</const>, <const>AnimationFill::FREEZE</const>,
             <const>AnimationFill::HOLD</const>, <const>AnimationFill::TRANSITION</const> and <const>AnimationFill::AUTO</const>
             specify that the element fill behavior is the respective value.</li>
             <li>The value <const>AnimationFill::INHERIT</const> specifies that the value of this attribute
-            (and of the fill behavior) are inherited from the <member>FillDefault</member> value of the parent
+            (and of the fill behavior) are inherited from the #FillDefault value of the parent
             element. If there is no parent element, the value is <const>AnimationFill::AUTO</const>.</li>
             </ul>
 
@@ -177,7 +177,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
 
     /** defines the restart behavior of this element.
         <br>
-        <member>Restart</member> is
+        #Restart is
             a <atom>short</atom> value from <const>AnimationRestart</const>.
 
         @see <const>AnimationRestart</const>
@@ -201,7 +201,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
         to a run rate, over the course of the specified proportion of the
         simple duration.
 
-        <member>Acceleration</member> is
+        #Acceleration is
             a value between 0 (no acceleration) and 1 (acceleration until end
             of the elements duration).
 
@@ -214,7 +214,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
         ending, over the course of the specified proportion of the
         simple duration.
 
-        <member>Decelerate</member> is
+        #Decelerate is
             a value between 0 (no deceleration) and 1 (deceleration from beginning
             of the elements duration).
 
@@ -224,7 +224,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
 
     /** defines the auto reverse settings for this element.
 
-        <member>AutoRevers</member> is
+        #AutoRevers is
             <ul>
             <li><false/> if the animation is played normal.</li>
             <li><true/> if the animation is played forwards and then backwards. This doubles the duration</li>

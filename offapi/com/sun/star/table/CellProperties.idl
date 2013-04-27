@@ -205,7 +205,7 @@ published service CellProperties
     //=== BorderLine2 / TableBorder2 optional properties, preferred ===========
 
     /** contains a description of the cell or cell range border.
-        Preferred over <type>TableBorder>/type> <member>TableBorder</member>.
+        Preferred over <type>TableBorder>/type> #TableBorder.
 
         <p>If used with a cell range, the top, left, right, and bottom
         lines are at the edges of the entire range, not at the edges of
@@ -217,7 +217,7 @@ published service CellProperties
 
 
     /** contains a description of the top border line of each cell.
-        Preferred over BorderLine <member>TopBorder</member>.
+        Preferred over BorderLine #TopBorder.
 
         @since LibreOffice 3.6
      */
@@ -225,7 +225,7 @@ published service CellProperties
 
 
     /** contains a description of the bottom border line of each cell.
-        Preferred over BorderLine <member>BottomBorder</member>.
+        Preferred over BorderLine #BottomBorder.
 
         @since LibreOffice 3.6
     */
@@ -233,7 +233,7 @@ published service CellProperties
 
 
     /** contains a description of the left border line of each cell.
-        Preferred over BorderLine <member>LeftBorder</member>.
+        Preferred over BorderLine #LeftBorder.
 
         @since LibreOffice 3.6
      */
@@ -241,7 +241,7 @@ published service CellProperties
 
 
     /** contains a description of the right border line of each cell.
-        Preferred over BorderLine <member>RightBorder</member>.
+        Preferred over BorderLine #RightBorder.
 
         @since LibreOffice 3.6
      */
@@ -249,7 +249,7 @@ published service CellProperties
 
 
     /** contains a description of the top left to bottom right diagonal line of each cell.
-        Preferred over BorderLine <member>DiagonalTLBR</member>.
+        Preferred over BorderLine #DiagonalTLBR.
 
         @since LibreOffice 3.6
      */
@@ -257,7 +257,7 @@ published service CellProperties
 
 
     /** contains a description of the bottom left to top right diagonal line of each cell.
-        Preferred over BorderLine <member>DiagonalBLTR</member>.
+        Preferred over BorderLine #DiagonalBLTR.
 
         @since LibreOffice 3.6
      */

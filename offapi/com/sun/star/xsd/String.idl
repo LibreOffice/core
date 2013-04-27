@@ -34,22 +34,22 @@ service String
 
     /** specifies the length of the string
 
-        <p>Note that you cannot specify <member>Length</member> together
-        with <member>MinLength</member> or <member>MaxLength</member>.</p>
+        <p>Note that you cannot specify #Length together
+        with #MinLength or #MaxLength.</p>
     */
     [property, maybevoid] long Length;
 
     /** specifies the minimum length of the string
 
-        <p>Note that you cannot specify <member>MinLength</member> together
-        with <member>Length</member>.</p>
+        <p>Note that you cannot specify #MinLength together
+        with #Length.</p>
     */
     [property, maybevoid] long MinLength;
 
     /** specifies the maximum length of the string
 
-        <p>Note that you cannot specify <member>MaxLength</member> together
-        with <member>Length</member>.</p>
+        <p>Note that you cannot specify #MaxLength together
+        with #Length.</p>
     */
     [property, maybevoid] long MaxLength;
 };

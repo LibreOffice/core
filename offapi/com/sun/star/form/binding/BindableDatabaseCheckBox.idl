@@ -67,7 +67,7 @@ service BindableDatabaseCheckBox
 
         <p><member scope="com::sun::star::form::component">CheckBox::RefValue</member> is transferred to
         possible external value bindings as soon as the check box is checked. With the member
-        <member>SecondaryRefValue</member>, clients of the check box can also associate a value with
+        #SecondaryRefValue, clients of the check box can also associate a value with
         the <em>not checked</em> state of the control.</p>
     */
     [property] string SecondaryRefValue;

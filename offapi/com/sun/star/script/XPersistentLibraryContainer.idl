@@ -52,7 +52,7 @@ interface XPersistentLibraryContainer
 
         <p>All operations of the library container take place in a location below
         the root location, the so-called container location, whose
-        name is exposed as <member>ContainerLocationName</member>.</p>
+        name is exposed as #ContainerLocationName.</p>
 
         @see ContainerLocationName
     */

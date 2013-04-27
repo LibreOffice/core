@@ -262,7 +262,7 @@ published service BaseFrameProperties
 
         <p>The value of this property is only evaluated for the positioning
         of the shape, if the text document setting ConsiderTextWrapOnObjPos
-        is <TRUE/>. Valid values are given by <member>WrapInfluenceOnPosition</member></p>
+        is <TRUE/>. Valid values are given by #WrapInfluenceOnPosition</p>
 
         @since OOo 2.0
      */
@@ -304,13 +304,13 @@ published service BaseFrameProperties
             @since LibreOffice 4.1
         */
         [optional, property] com::sun::star::drawing::FillStyle FillStyle;
-        /** If the property <member>FillStyle</member> is set to <const>
+        /** If the property #FillStyle is set to <const>
             FillStyle::GRADIENT</const>, this describes the gradient used.
 
             @since LibreOffice 4.1
         */
         [optional, property] com::sun::star::awt::Gradient FillGradient;
-        /** If the property <member>FillStyle</member> is set to <const>
+        /** If the property #FillStyle is set to <const>
             FillStyle::GRADIENT</const>, this is the name of the gradient used.
 
             @since LibreOffice 4.1

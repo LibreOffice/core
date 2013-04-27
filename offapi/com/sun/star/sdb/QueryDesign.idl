@@ -52,7 +52,7 @@ module com {  module sun {  module star {  module sdb {
         <li><a name="command_mode"</a><b>Command Mode</b>
         <p>In <code>Command Mode</code>, the designer is used to design an standalone SQL command.</p>
         <p>The client of the designer is then responsible to listen at changes in the
-        <member>ActiveCommand</member> and <member>EscapeProcessing</member> members, which are updated
+        #ActiveCommand and #EscapeProcessing members, which are updated
         every time the user saves the command.</p></li>
     </ul></p>
 
@@ -105,7 +105,7 @@ module com {  module sun {  module star {  module sdb {
             <li><member>CommandType::COMMAND</member> specifies the designer should operate in
             <a href="#command_mode">command mode</a>, that is, a standalone SQL command
             should be designed. When the user attempts to save the designed SQL statement,
-            the <member>ActiveCommand</member> and <member>EscapeProcessing</member> properties
+            the #ActiveCommand and #EscapeProcessing properties
             of the designer are updated.</li>
 
             <li><member>CommandType::TABLE</member> specifies the designer should operate in

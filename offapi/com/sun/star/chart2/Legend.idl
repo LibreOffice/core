@@ -80,7 +80,7 @@ service Legend
         but instead is placed relative on the page.</p>
 
         <p>If <void/>, the legend position is solely determined by the
-        <member>AnchorPosition</member>.</p>
+        #AnchorPosition.</p>
      */
     [property, maybevoid] ::com::sun::star::chart2::RelativePosition RelativePosition;
 };

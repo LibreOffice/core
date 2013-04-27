@@ -140,7 +140,7 @@ published service Shape
 
             <p>The value of this property is only evaluated for the positioning
             of the shape, if the text document setting ConsiderTextWrapOnObjPos
-            is <TRUE/>. Valid values are given by <member>WrapInfluenceOnPosition</member></p>
+            is <TRUE/>. Valid values are given by #WrapInfluenceOnPosition</p>
 
             @since OOo 2.0
          */
@@ -160,7 +160,7 @@ published service Shape
     /** determines layout direction the position attributes of the shape
         is given
 
-        <p>Valid values are given by <member>PositionLayoutDir</member></p>
+        <p>Valid values are given by #PositionLayoutDir</p>
 
         @since OOo 2.0
      */

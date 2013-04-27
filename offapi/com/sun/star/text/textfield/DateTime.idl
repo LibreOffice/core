@@ -56,7 +56,7 @@ published service DateTime
     [optional, property] long NumberFormat;
 
     /** this is the display format for this field.
-        Depending on <member>IsDate</member>, this
+        Depending on #IsDate, this
         is either a
         com::sun::star::text::DateDisplayFormat or
         com::sun::star::text::TimeDisplayFormat.

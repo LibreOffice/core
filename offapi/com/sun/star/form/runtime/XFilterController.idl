@@ -56,7 +56,7 @@ interface XFilterControllerListener;
     of those will actually exist). Since in a form based filter, there are only <em>n</em> filter controls, and each
     filter control displays exactly one <em>predicate expression</em>, this means that only a part of the complete
     filter can be displayed, in particular, only one <em>disjunctive term</em> can be displayed at a time. Thus,
-    the filter controller knows the concept of an <em>active term</em>, denoted by the <member>ActiveTerm</member>
+    the filter controller knows the concept of an <em>active term</em>, denoted by the #ActiveTerm
     attribute, controls which of the terms is currently displayed in the form controls.</p>
 
     @see XFormController
@@ -101,11 +101,11 @@ interface XFilterController
 
         @param _Component
             denotes the filter component whose expression is to be set. Must be greater than or equal to 0, and smaller than
-            <member>FilterComponents</member>.
+            #FilterComponents.
 
         @param _Term
             denotes the <em>disjunctive term</em> in which the expression is to be set. Must be greater than or equal to 0,
-            and smaller than <member>DisjunctiveTerms</member>.
+            and smaller than #DisjunctiveTerms.
 
         @param _PredicateExpression
             denotes the <em>predicate expression</em> to set for the given filter component in the given term.
@@ -125,7 +125,7 @@ interface XFilterController
 
         @param _Component
             denotes the index of the filter component whose control should be obtained. Must be greater than or equal to 0,
-            and smaller than <member>FilterComponents</member>.
+            and smaller than #FilterComponents.
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if <arg>_Component</arg> is out of the allowed range.
@@ -138,7 +138,7 @@ interface XFilterController
 
     /** retrieves the entirety of the <em>predicate expressions</em> represented by the filter controller.
 
-        <p>Each element of the returned sequence is a <em>disjunctive term</em>, having exactly <member>FilterComponents</member>
+        <p>Each element of the returned sequence is a <em>disjunctive term</em>, having exactly #FilterComponents
         elements, which denote the single <em>predicate expressions</em> of this term.</p>
     */
     sequence< sequence< string > >
@@ -148,7 +148,7 @@ interface XFilterController
 
         @param _Term
             the index of the term to remove. Must be greater than or equal to 0, and smaller than
-            <member>DisjunctiveTerms</member>.
+            #DisjunctiveTerms.
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if <arg>_Term</arg> is out of the allowed range.

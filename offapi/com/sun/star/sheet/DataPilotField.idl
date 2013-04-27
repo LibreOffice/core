@@ -86,7 +86,7 @@ published service DataPilotField
         <p>This property is supported by column and row fields only.</p>
 
         <p>An empty sequence means no subtotals. The same effect can be
-        achieved by setting the property <member>Function</member> to the
+        achieved by setting the property #Function to the
         value <const>GeneralFunction::NONE</const>. If the length of the
         sequence is greater then 1, then the sequence MUST NOT contain one of
         the values <const>GeneralFunction::NONE</const> or

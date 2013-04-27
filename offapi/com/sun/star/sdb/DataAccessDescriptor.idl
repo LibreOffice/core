@@ -47,7 +47,7 @@ published service DataAccessDescriptor
     /** specifies the name of the datasource to access.
 
         <p>This data source is usually used to create a Connection. If no DataSourceName is given
-        and the <member>DatabaseLocation</member> and the <member>ConnectionResource</member> are empty, then an <member>ActiveConnection</member>
+        and the #DatabaseLocation and the #ConnectionResource are empty, then an #ActiveConnection
         is required.</p>
 
         @see com::sun::star::sdb::DatabaseContext
@@ -58,7 +58,7 @@ published service DataAccessDescriptor
     /** specifies the URL of the database file.
 
         <p>This database location is usually used to create a Connection. If no DatabaseLocation is given
-        and the <member>ConnectionResource</member> is empty, then an <member>ActiveConnection</member> is required.</p>
+        and the #ConnectionResource is empty, then an #ActiveConnection is required.</p>
 
         @see com::sun::star::sdb::DatabaseContext
         @see ActiveConnection
@@ -68,7 +68,7 @@ published service DataAccessDescriptor
     /** specifies the database URL which locates a database driver.
 
         <p>This database URL is usually used to create a Connection. If no ConnectionResource is given,
-        then an <member>ActiveConnection</member> is required.</p>
+        then an #ActiveConnection is required.</p>
 
         @see com::sun::star::sdb::DatabaseContext
         @see ActiveConnection
@@ -90,12 +90,12 @@ published service DataAccessDescriptor
 
         <p>This object is guaranteed to be a com::sun::star::sdbc::Connection, but usually
         it will be a Connection from the module com::sun::star::sdb.<br/>
-        Especially in the case where no <member>DataSourceName</member> is given, but
-        <member>CommandType</member> is <member>CommandType::QUERY</member>, the ActiveConnection needs
+        Especially in the case where no #DataSourceName is given, but
+        #CommandType is <member>CommandType::QUERY</member>, the ActiveConnection needs
         to fully support the Connection service, to actually retrieve the query specified by
-        <member>Command</member></p>
+        #Command</p>
 
-        <p>If no ActiveConnection is given, then a <member>DataSourceName</member> is required.</p>
+        <p>If no ActiveConnection is given, then a #DataSourceName is required.</p>
 
         @see DataSourceName
      */
@@ -103,7 +103,7 @@ published service DataAccessDescriptor
 
     /** specifies the command to execute to retrieve a result set.
 
-        <p>This property is only meaningful together with the <member>CommandType</member>
+        <p>This property is only meaningful together with the #CommandType
         property, thus either <em>both</em> or <em>none</em> of them are present.</p>
 
         @see CommandType
@@ -113,9 +113,9 @@ published service DataAccessDescriptor
 
     /** specifies the type of the command to be executed to retrieve a result set.
 
-        <p><member>Command</member> needs to be interpreted depending on the value of this property.</p>
+        <p>#Command needs to be interpreted depending on the value of this property.</p>
 
-        <p>This property is only meaningful together with the <member>Command</member>
+        <p>This property is only meaningful together with the #Command
         property, thus either <em>both</em> or <em>none</em> of them are present.</p>
 
         @see com::sun::star::sdb::CommandType
@@ -127,11 +127,11 @@ published service DataAccessDescriptor
         <p>The Filter string has to form a <code>WHERE</code>-clause, <em>without</em> the
         <code>WHERE</code>-string itself.</p>
 
-        <p>If a <member>DataSourceName</member>, <member>Command</member> and <member>CommandType</member>
+        <p>If a #DataSourceName, #Command and #CommandType
         are specified, a RowSet can be created with this information. If the results provided by the
         row set are to be additionally filtered, the Filter property can be used.</p>
 
-        <p>Note that the Filter property does not make sense if a <member>ResultSet</member> has been specified
+        <p>Note that the Filter property does not make sense if a #ResultSet has been specified
         in the DataAccessDescriptor.</p>
 
         @see com::sun::star::sdb::RowSet
@@ -140,42 +140,42 @@ published service DataAccessDescriptor
     [optional, property] string Filter;
 
     /** specifies an additional <code>ORDER BY</code> clause which should be applied on top of
-        the given <member>Command</member>.
+        the given #Command.
 
         <p>The keyword <code>ORDER BY</code> itself is not part of this property.</p>
      */
     [optional, property] string Order;
 
     /** specifies an additional <code>HAVING</code> clause which should be applied on top of
-        the given <member>Command</member>.
+        the given #Command.
 
         <p>The keyword <code>HAVING</code> itself is not part of this property.</p>
      */
     [optional, property] string HavingClause;
 
     /** specifies an additional <code>GROUP BY</code> clause which should be applied on top of
-        the given <member>Command</member>.
+        the given #Command.
 
         <p>The keyword <code>GROUP BY</code> itself is not part of this property.</p>
      */
     [optional, property] string GroupBy;
 
-    /** specifies if the <member>Command</member> should be analyzed on the client side before sending it
+    /** specifies if the #Command should be analyzed on the client side before sending it
         to the database server.
 
         <p>The default value of this property is <TRUE/>. By switching it to <FALSE/>, you can pass
         backend-specific SQL statements, which are not standard SQL, to your database.</p>
 
-        <p>This property is usually present together with the <member>Command</member> and
-        <member>CommandType</member> properties, and is evaluated if and only if <member>CommandType</member>
+        <p>This property is usually present together with the #Command and
+        #CommandType properties, and is evaluated if and only if #CommandType
         equals <member>CommandType::COMMAND</member>.</p>
     */
     [optional, property] boolean EscapeProcessing;
 
     /** specifies an already existent result set to use.
 
-        <p>Usually, you use the properties <member>DataSourceName</member> (alternatively
-        <member>ActiveConnection</member>), <member>Command</member> and <member>CommandType</member> to specify
+        <p>Usually, you use the properties #DataSourceName (alternatively
+        #ActiveConnection), #Command and #CommandType to specify
         how to <em>obtain</em> a result set. However, in scenarios where the provider of a DataAccessDescriptor
         has access to an already existent result set, it can pass it along for reusage. This is encouraged
         to increase performance.</p>
@@ -187,7 +187,7 @@ published service DataAccessDescriptor
         com::sun::star::sdb::RowSet, or an instance obtained
         by calling com::sun::star::sdb::XResultSetAccess::createResultSet()
         on such a com::sun::star::sdb::RowSet. This becomes important in
-        conjunction with the <member>Selection</member> property.</p>
+        conjunction with the #Selection property.</p>
 
         @see com::sun::star::sdb::XResultSetAccess
     */
@@ -195,28 +195,28 @@ published service DataAccessDescriptor
 
     /** specifies a selection to confine the records in a result set.
 
-        <p>When you specify a result set either implicitly (<member>DataSourceName</member>, <member>Command</member>,
-        <member>CommandType</member>) or explicitly (<member>ResultSet</member>), the set of results can be
+        <p>When you specify a result set either implicitly (#DataSourceName, #Command,
+        #CommandType) or explicitly (#ResultSet), the set of results can be
         additionally refined with this property.</p>
 
-        <p>The single elements of the <member>Selection</member> are either record numbers (see
+        <p>The single elements of the #Selection are either record numbers (see
         com::sun::star::sdbc::XResultSet::getRow()), or bookmarks (see
         com::sun::star::sdbcx::XRowLocate::getBookmark()).<br/>
         It is up to the component which provides or requires a DataAccessDescriptor to specify which of the
         two alternatives it expects. If it does <em>not</em> specify this, then the property
-        <member>BookmarkSelection</member> becomes mandatory.</p>
+        #BookmarkSelection becomes mandatory.</p>
 
-        <p>If the elements specify bookmarks, and a <member>ResultSet</member> has been specified, then
+        <p>If the elements specify bookmarks, and a #ResultSet has been specified, then
         this result set is required to support the com::sun::star::sdbcx::XRowLocate interface.</p>
     */
     [optional, property] sequence< any > Selection;
 
-    /** specifies how to interpret <member>Selection</member>
+    /** specifies how to interpret #Selection
 
-        <p>If present, <member>BookmarkSelection</member> specifies the semantics of <member>Selection</member>. If
+        <p>If present, #BookmarkSelection specifies the semantics of #Selection. If
         not present, it's up to the implementing component to specify this semantics.</p>
 
-        <p>If <TRUE/>, then the single elements of the array specified by <member>Selection</member> are
+        <p>If <TRUE/>, then the single elements of the array specified by #Selection are
         bookmarks relative to the result set, if <FALSE/>, they're record numbers.</p>
 
         @see com::sun::star::sdbcx::XRowLocate
@@ -227,8 +227,8 @@ published service DataAccessDescriptor
 
     /** specifies a column name.
 
-        <p>This property is usually used together with the <member>Command</member> and
-        <member>CommandType</member> properties.</p>
+        <p>This property is usually used together with the #Command and
+        #CommandType properties.</p>
 
         @see Column
     */
@@ -238,7 +238,7 @@ published service DataAccessDescriptor
 
         <p>For reasons of performance and saving resources, a supplier of an DataAccessDescriptor which is
         used to describe a column object can pass this object directly, instead of specifying it only implicitly
-        with the <member>ColumnName</member> property.</p>
+        with the #ColumnName property.</p>
 
         <p>The object will at least support the com::sun::star::sdbcx::Column service, but more
         often it will even be a Column from the com::sun::star::sdb module.</p>

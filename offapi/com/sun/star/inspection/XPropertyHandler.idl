@@ -137,7 +137,7 @@ interface XPropertyHandler
             The name of the conversion's target property.
         @param ControlValue
             The to-be-converted control value. This value has been obtained from an XPropertyControl,
-            using its <member>Value</member> attribute.
+            using its #Value attribute.
 
         @throws com::sun::star::beans::UnknownPropertyException
             if the given property is not supported by the property handler

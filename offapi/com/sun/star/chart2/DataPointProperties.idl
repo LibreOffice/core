@@ -99,7 +99,7 @@ service DataPointProperties
     [property] string FillBitmapName;
 
     /** If <TRUE/>, fills the background of a hatch with the color
-        given in the <member>Color</member> property.
+        given in the #Color property.
      */
     [property] boolean FillBackground;
 
@@ -293,8 +293,8 @@ service DataPointProperties
      */
     [optional, maybevoid, property] com::sun::star::beans::XPropertySet      ErrorBarY;
 
-    /** In case <member>ErrorBarX</member> and
-        <member>ErrorBarY</member> both are set, and error bars are
+    /** In case #ErrorBarX and
+        #ErrorBarY both are set, and error bars are
         shown, a box spanning all error-indicators is rendered.
      */
     [optional, maybevoid, property] boolean           ShowErrorBox;

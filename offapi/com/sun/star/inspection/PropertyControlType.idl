@@ -40,7 +40,7 @@ constants PropertyControlType
     /** denotes a control which allows the user to choose from a list of
         possible property values
 
-        <p>Controls of type <member>ListBox</member> exchange their values as <code>string</code>.</p>
+        <p>Controls of type #ListBox exchange their values as <code>string</code>.</p>
 
         <p>Additionally, those controls support the XStringListControl interface.</p>
     */
@@ -50,7 +50,7 @@ constants PropertyControlType
         possible property values, combined with the possibility to enter a new
         property value.
 
-        <p>Controls of type <member>ComboBox</member> exchange their values as <code>string</code>.</p>
+        <p>Controls of type #ComboBox exchange their values as <code>string</code>.</p>
 
         <p>Additionally, those controls support the XStringListControl interface.</p>
     */
@@ -58,32 +58,32 @@ constants PropertyControlType
 
     /** denotes a control which allows the user to enter property values consisting of a single line of text
 
-        <p>Controls of type <member>TextField</member> exchange their values as <code>string</code>.</p>
+        <p>Controls of type #TextField exchange their values as <code>string</code>.</p>
     */
     const short TextField = 3;
 
     /** denotes a control which allows the user to enter pure text, including line breaks
 
-        <p>Controls of type <member>MultiLineTextField</member> exchange their values as <code>string</code>.</p>
+        <p>Controls of type #MultiLineTextField exchange their values as <code>string</code>.</p>
     */
     const short MultiLineTextField = 4;
 
     /** denotes a control which allows the user to enter a single character
 
-        <p>Controls of type <member>CharacterField</member> exchange their values as <code>short</code>,
+        <p>Controls of type #CharacterField exchange their values as <code>short</code>,
         being a single UTF-16 character.</p>
     */
     const short CharacterField = 5;
 
     /** denotes a control which allows the user to enter a list of single-line strings
 
-        <p>Controls of type <member>StringListField</member> exchange their values as <code>sequence&lt; string &gt;<code>.</p>
+        <p>Controls of type #StringListField exchange their values as <code>sequence&lt; string &gt;<code>.</p>
     */
     const short StringListField = 6;
 
     /** denotes a control which allows the user to choose from a list of colors.
 
-        <p>Controls of type <member>ColorListBox</member> usually exchange their values as
+        <p>Controls of type #ColorListBox usually exchange their values as
         com::sun::star::util::Color.</p>
 
         <p>Additionally, those controls support the XStringListControl interface. If you use
@@ -98,7 +98,7 @@ constants PropertyControlType
 
     /** denotes a control which allows the user to enter a numerical value
 
-        <p>Controls of type <member>NumericField</member> exchange their values as <code>double</code>.</p>
+        <p>Controls of type #NumericField exchange their values as <code>double</code>.</p>
 
         <p>Additionally, those controls support the XNumericControl interface.</p>
     */
@@ -106,25 +106,25 @@ constants PropertyControlType
 
     /** denotes a control which allows the user to enter a date value
 
-        <p>Controls of type <member>DateField</member> exchange their values as com::sun::star::util::Date.</p>
+        <p>Controls of type #DateField exchange their values as com::sun::star::util::Date.</p>
     */
     const short DateField = 9;
 
     /** denotes a control which allows the user to enter a time value
 
-        <p>Controls of type <member>TimeField</member> exchange their values as com::sun::star::util::Time.</p>
+        <p>Controls of type #TimeField exchange their values as com::sun::star::util::Time.</p>
     */
     const short TimeField = 10;
 
     /** denotes a control which allows the user to enter a combined date/time value
 
-        <p>Controls of type <member>DateTimeField</member> exchange their values as com::sun::star::util::DateTime.</p>
+        <p>Controls of type #DateTimeField exchange their values as com::sun::star::util::DateTime.</p>
     */
     const short DateTimeField = 11;
 
     /** denotes a control which displays a string in a hyperlink-like appearance
 
-        <p>Controls of type <member>HyperlinkField</member> exchange their values as <code>string</code>.</p>
+        <p>Controls of type #HyperlinkField exchange their values as <code>string</code>.</p>
 
         <p>Additionally, those controls support the XHyperlinkControl interface.</p>
     */

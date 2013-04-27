@@ -44,7 +44,7 @@ interface XTransitionFilter : XAnimate
 
     /** This is the subtype of the transition.
         <br>
-        This must be one of the transition subtypes appropriate for the specified <member>Type</member>
+        This must be one of the transition subtypes appropriate for the specified #Type
         as listed in <const>TransitionSubType</const>.
         <const>TransitionSubType::DEFAULT</const> is the default.
     */
@@ -70,8 +70,8 @@ interface XTransitionFilter : XAnimate
     */
     [attribute] boolean Direction;
 
-    /** If the value of the <member>Type</member> attribute is <const>TransitionType::FADE</const> and
-        the value of the <member>Subtype</member> attribute is  <const>TransitionSubType::FADETOCOLOR</const> or
+    /** If the value of the #Type attribute is <const>TransitionType::FADE</const> and
+        the value of the #Subtype attribute is  <const>TransitionSubType::FADETOCOLOR</const> or
         <const>TransitionSubType::FADEFROMCOLOR</const>, then this attribute specifies the starting or ending
         color of the fade.
         The default value is 0 (black).

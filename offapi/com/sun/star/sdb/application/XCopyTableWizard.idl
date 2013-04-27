@@ -93,7 +93,7 @@ interface XCopyTableWizard : ::com::sun::star::ui::dialogs::XExecutableDialog
         user can define an arbitrarily complex primary key, e.g. including multiple columns,
         which cannot be represented in this simple attribute anymore.</p>
 
-        <p>This attribute is ignored if <member>Operation</member> is
+        <p>This attribute is ignored if #Operation is
         <member>CopyTableOperation::AppendData</member>.</p>
 
         <p>Changing this attribute while the dialog is running is not supported, the

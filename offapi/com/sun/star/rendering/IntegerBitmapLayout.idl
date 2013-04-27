@@ -85,7 +85,7 @@ struct IntegerBitmapLayout
         contain direct color values (to be interpreted according to
         the associated color space). If this member references a valid
         palette, one of the pixel components as returned by the color
-        space referenced from the <member>ColorSpace</member> is
+        space referenced from the #ColorSpace is
         required to be of type
         <member>ColorComponentTag::INDEX</member>. That component is
         then used to index the palette.<p>

@@ -34,11 +34,11 @@ struct DataPointLabel
     /** if <TRUE/>, the value that is represented by a data point is
         displayed next to it.
 
-        @see <member>ShowNumberInPercent</member>
+        @see #ShowNumberInPercent
      */
     boolean                     ShowNumber;
 
-    /** This is only effective, if <member>ShowNumber</member> is
+    /** This is only effective, if #ShowNumber is
         <TRUE/>.  If this member is also <TRUE/>, the numbers are
         displayed as percentages of a category.
 

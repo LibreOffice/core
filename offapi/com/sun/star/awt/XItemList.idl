@@ -41,7 +41,7 @@ interface XItemList
 
         @param Position
             the position at which the item should be inserted. Must be greater or equal to 0, and
-            lesser than or equal to <member>ItemCount</member>.
+            lesser than or equal to #ItemCount.
 
         @param ItemText
             the text of the item to be inserted.
@@ -63,7 +63,7 @@ interface XItemList
 
         @param Position
             the position at which the item should be inserted. Must be greater or equal to 0, and
-            lesser than or equal to <member>ItemCount</member>.
+            lesser than or equal to #ItemCount.
 
         @param ItemText
             the text of the item to be inserted.
@@ -81,7 +81,7 @@ interface XItemList
 
         @param Position
             the position at which the item should be inserted. Must be greater or equal to 0, and
-            lesser than or equal to <member>ItemCount</member>.
+            lesser than or equal to #ItemCount.
 
         @param ItemImageURL
             the URL of the image to display for the item
@@ -99,7 +99,7 @@ interface XItemList
 
         @param Position
             the position of the item which should be removed. Must be greater or equal to 0, and
-            lesser than <member>ItemCount</member>.
+            lesser than #ItemCount.
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if <code>Position</code> is invalid.
@@ -117,7 +117,7 @@ interface XItemList
 
         @param Position
             the position of the item whose text is to be changed. Must be greater or equal to 0, and
-            lesser than <member>ItemCount</member>.
+            lesser than #ItemCount.
 
         @param ItemText
             the new text of the item
@@ -135,7 +135,7 @@ interface XItemList
 
         @param Position
             the position of the item whose image is to be changed. Must be greater or equal to 0, and
-            lesser than <member>ItemCount</member>.
+            lesser than #ItemCount.
 
         @param ItemImageURL
             the new URL of the image to display for the item
@@ -153,7 +153,7 @@ interface XItemList
 
         @param Position
             the position of the item whose text and image is to be changed. Must be greater or equal to 0, and
-            lesser than <member>ItemCount</member>.
+            lesser than #ItemCount.
 
         @param ItemText
             the new text of the item
@@ -178,7 +178,7 @@ interface XItemList
 
         @param Position
             the position of the item whose data value should be set. Must be greater or equal to 0, and
-            lesser than <member>ItemCount</member>.
+            lesser than #ItemCount.
 
         @param ItemData
             the data to associate with the list item
@@ -198,7 +198,7 @@ interface XItemList
 
         @param Position
             the position of the item whose text should be retrieved. Must be greater or equal to 0, and
-            lesser than <member>ItemCount</member>.
+            lesser than #ItemCount.
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if <code>Position</code> is invalid.
@@ -212,7 +212,7 @@ interface XItemList
 
         @param Position
             the position of the item whose image should be retrieved. Must be greater or equal to 0, and
-            lesser than <member>ItemCount</member>.
+            lesser than #ItemCount.
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if <code>Position</code> is invalid.
@@ -226,7 +226,7 @@ interface XItemList
 
         @param Position
             the position of the item whose text and image should be retrieved. Must be greater or equal to 0, and
-            lesser than <member>ItemCount</member>.
+            lesser than #ItemCount.
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if <code>Position</code> is invalid.
@@ -240,7 +240,7 @@ interface XItemList
     /** retrieves the implementation dependent value associated with the given list item.
         @param Position
             the position of the item whose data value should be retrieved. Must be greater or equal to 0, and
-            lesser than <member>ItemCount</member>.
+            lesser than #ItemCount.
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if <code>Position</code> is invalid.

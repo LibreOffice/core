@@ -80,10 +80,10 @@ published interface XCachedDynamicResultSetStubFactory: com::sun::star::uno::XIn
         properties that are involved in sorting.
 
         @throws ListenerAlreadySetException
-        if <member>Source</member> is already in use.
+        if #Source is already in use.
 
         @throws AlreadyInitializedException
-        if <member>TargetCache</member> already has been initialized.
+        if #TargetCache already has been initialized.
     */
     void connectToCache(
                   [in] com::sun::star::ucb::XDynamicResultSet Source

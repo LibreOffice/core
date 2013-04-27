@@ -124,7 +124,7 @@ interface XUIConfigurationManager : ::com::sun::star::uno::XInterface
             implements UIElementSettings. If the settings data
             cannot be found a
             com::sun::star::container::NoSuchElementException
-            is thrown.  If the <member>ResourceURL</member> is not valid or
+            is thrown.  If the #ResourceURL is not valid or
             describes an unknown type a
             com::sun::star::lang::IllegalArgumentException
             is thrown.
@@ -146,7 +146,7 @@ interface XUIConfigurationManager : ::com::sun::star::uno::XInterface
         <p>
         If the settings data cannot be found a
         com::sun::star::container::NoSuchElementException
-        is thrown. If the <member>ResourceURL</member> is not valid or describes
+        is thrown. If the #ResourceURL is not valid or describes
         an unknown type a
         com::sun::star::lang::IllegalArgumentException
         is thrown. If the configuration manager is read-only a
@@ -165,7 +165,7 @@ interface XUIConfigurationManager : ::com::sun::star::uno::XInterface
         <p>
         If the settings data cannot be found a
         com::sun::star::container::NoSuchElementException is
-        thrown. If the <member>ResourceURL</member> is not valid or describes an
+        thrown. If the #ResourceURL is not valid or describes an
         unknown type a com::sun::star::lang::IllegalArgumentException
         is thrown. If the configuration manager is read-only a
         com::sun::star::lang::IllegalAccessException is thrown.
@@ -185,7 +185,7 @@ interface XUIConfigurationManager : ::com::sun::star::uno::XInterface
         <p>
         If the settings data is already present a
         com::sun::star::container::ElementExistException
-        is thrown. If the <member>ResourceURL</member> is not valid or describes
+        is thrown. If the #ResourceURL is not valid or describes
         an unknown type a com::sun::star::lang::IllegalArgumentException
         is thrown. If the configuration manager is read-only a
         com::sun::star::lang::IllegalAccessException is thrown.

@@ -69,7 +69,7 @@ published constants WritingMode2
         <p>May not be used in page styles.</p>
 
         @deprecated
-            Use <member>CONTEXT</member> instead.
+            Use #CONTEXT instead.
     */
     const short PAGE = 4;
 

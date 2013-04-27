@@ -158,13 +158,13 @@ published service Settings
         a booklet.
 
         <p>Note, that you have to print in duplex mode, if both,
-        <member>IsPrintBookletFront</member> and
-        <member>IsPrintBookletBack</member> are set to <TRUE/>.</p>
+        #IsPrintBookletFront and
+        #IsPrintBookletBack are set to <TRUE/>.</p>
      */
     [optional, property] boolean IsPrintBooklet;
 
     // Draw and Impress
-    /** is only effective, if <member>IsPrintBooklet</member> is
+    /** is only effective, if #IsPrintBooklet is
         <TRUE/>.  If this property is also <TRUE/>, only the fronts of
         the pages of your booklet are printed.
 
@@ -174,7 +174,7 @@ published service Settings
     [optional, property] boolean IsPrintBookletFront;
 
     // Draw and Impress
-    /** is only effective, if <member>IsPrintBooklet</member> is
+    /** is only effective, if #IsPrintBooklet is
         <TRUE/>.  If this property is also <TRUE/>, only the backs of
         the pages of your booklet are printed.
 

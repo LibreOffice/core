@@ -105,7 +105,7 @@ interface XObjectInspectorModel
         were provided by the respective property handler
         (XPropertyHandler::getSupportedProperties()).<br/>
         If two such properties originate from different handlers, they will be ordered according
-        to the order of the handlers, as provided in the <member>HandlerFactories</member> attribute.</p>
+        to the order of the handlers, as provided in the #HandlerFactories attribute.</p>
 
         @param PropertyName
             the property whose global order index should be retrieved
@@ -130,11 +130,11 @@ interface XObjectInspectorModel
         section.
 
         <p>This property is ignored by the ObjectInspector if
-        <member>HasHelpSection</member> is <FALSE/>.</p>
+        #HasHelpSection is <FALSE/>.</p>
 
         <p>The layout of the ObjectInspector is undefined if
-        <member>MinHelpTextLines</member> is larger than
-        <member>MaxHelpTextLines</member>.</p>
+        #MinHelpTextLines is larger than
+        #MaxHelpTextLines.</p>
 
         @since OOo 2.2
     */
@@ -144,11 +144,11 @@ interface XObjectInspectorModel
         section.
 
         <p>This property is ignored by the ObjectInspector if
-        <member>HasHelpSection</member> is <FALSE/>.</p>
+        #HasHelpSection is <FALSE/>.</p>
 
         <p>The layout of the ObjectInspector is undefined if
-        <member>MaxHelpTextLines</member> is smaller than
-        <member>MinHelpTextLines</member>.</p>
+        #MaxHelpTextLines is smaller than
+        #MinHelpTextLines.</p>
 
         @since OOo 2.2
     */

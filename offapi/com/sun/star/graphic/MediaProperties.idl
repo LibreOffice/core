@@ -36,7 +36,7 @@ published service MediaProperties
         of the graphic as URL.
 
         <p>A URL can be used instead of the
-        <member>InputStream</member> or <member>OutputStream</member>
+        #InputStream or #OutputStream
         property</p>
 
         <p>In addition to the normal protocols like file:// or http://
@@ -65,8 +65,8 @@ And additionally, GraphicObject scheme URLs like
     /** This property is only used for loading graphics or querying
         graphic descriptors
 
-        <p>A <member>InputStream</member> can be used instead of the
-        <member>URL</member> property</p>
+        <p>A #InputStream can be used instead of the
+        #URL property</p>
 
         @see com::sun::star::io::XInputStream
     */
@@ -74,8 +74,8 @@ And additionally, GraphicObject scheme URLs like
 
     /** This property is only used for storing graphics
 
-        <p>A <member>OutputStream</member> can be used instead of the
-        <member>URL</member> property</p>
+        <p>A #OutputStream can be used instead of the
+        #URL property</p>
 
         @see com::sun::star::io::XStream
     */

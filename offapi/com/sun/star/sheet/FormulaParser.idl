@@ -42,7 +42,7 @@ service FormulaParser
 
         <p>Note: When changing this, an already existing <member>OpCodeMap
         </member> needs to be recreated internally, so for performance reasons
-        set this <em>before</em> setting the <member>OpCodeMap</member>.
+        set this <em>before</em> setting the #OpCodeMap.
      */
     [property] boolean CompileEnglish;
 

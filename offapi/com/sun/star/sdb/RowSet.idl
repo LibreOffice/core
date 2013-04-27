@@ -87,13 +87,13 @@ published interface XParametersSupplier;
             </td>
         </tr>
         <tr><td valign="top"><em>row state</em></td>
-            <td valign="top">If the operation leads to a change in the state of the <member>IsModified</member>
-            and/or <member>IsNew</member> property, this is notified next (in this order).
+            <td valign="top">If the operation leads to a change in the state of the #IsModified
+            and/or #IsNew property, this is notified next (in this order).
             </td>
         </tr>
         <tr><td valign="top"><em>row count</em></td>
             <td valign="top">If the operation leads to new knowledge about the number of rows in the result set,
-            the respective changes in the <member>RowCount</member> and <member>IsRowCountFinal</member>
+            the respective changes in the #RowCount and #IsRowCountFinal
             are notified last (in this order).
             </td>
         </tr>
@@ -158,7 +158,7 @@ published interface XParametersSupplier;
 
         <dt>com::sun::star::sdbc::XResultSet: <code>next</code>, <code>first</code>, <code>last</code>, <code>absolute</code>,
             <code>relative</code>, <code>previous</code>, <code>beforeFirst</code>, <code>afterLast</code></dt>
-        <dd>will let the deleted row vanish from the result set. As a consequence, the <member>RowCount</member>
+        <dd>will let the deleted row vanish from the result set. As a consequence, the #RowCount
             will decrease when you do such a move operation after deleting a row.<br/>
             A special case to note is the <code>next<code> call: When you delete row, say,
             <code>15</code>, followed by <code>next</code>, then your RowSet afterwards
@@ -180,7 +180,7 @@ published interface XParametersSupplier;
         <dd>will throw an exception when the cursor is on a deleted row.</dd>
 
         <dt>com::sun::star::sdbc::XResultSetUpdate::moveToInsertRow()</dt>
-        <dd>will let the deleted row vanish from the result set. As a consequence, the <member>RowCount</member>
+        <dd>will let the deleted row vanish from the result set. As a consequence, the #RowCount
             will decrease. Also, subsequent calls to
             com::sun::star::sdbc::XResultSetUpdate::moveToCurrentRow() will not
             be able to move back to the deleted row (since it vanished), but only to the
@@ -255,7 +255,7 @@ published service RowSet
     /** gives access to the parameters contained in the SQL statement represented by the component.
 
         <p>If your <code>RowSet</code> is bound to an SQL command or query which contains parameters, or has
-        a <member>Filter</member> or <member>Order</member> which contains parameters, then those can be accessed
+        a #Filter or #Order which contains parameters, then those can be accessed
         using the <code>XParametersSupplier</code> interface.</p>
 
         <p>The returned container contains parameter objects which do allow write access to the parameters (which
@@ -280,8 +280,8 @@ published service RowSet
     /** is the command which should be executed, the type of command depends
         on the CommandType.
 
-        <p>In case of a <member>CommandType</member> of <member>CommandType::COMMAND</member>,
-        means in case the <member>Command</member> specifies an SQL statement, the inherited
+        <p>In case of a #CommandType of <member>CommandType::COMMAND</member>,
+        means in case the #Command specifies an SQL statement, the inherited
         <member scope="com::sun::star::sdbc">RowSet::EscapeProcessing</member>
         becomes relevant:<br/>
         It then can be to used to specify whether the SQL statement should be analyzed on the

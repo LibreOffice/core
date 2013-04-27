@@ -79,9 +79,9 @@ published service RadioButton
     /** specifies a value which is to be associated with the control when it's <em>not</em>
         selected.
 
-        <p>In various situations, the <member>RefValue</member> is associated with the control
+        <p>In various situations, the #RefValue is associated with the control
         if and only if it is selected.<br/>
-        <member>UncheckedRefValue</member> provides a extensions of this concept: If present,
+        #UncheckedRefValue provides a extensions of this concept: If present,
         the value should be associated with the control when it is <em>not</em> selected.</p>
     */
     [optional, property] string UncheckedRefValue;

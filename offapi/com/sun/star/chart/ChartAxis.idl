@@ -206,7 +206,7 @@ published service ChartAxis
 
     /** determines whether to use the number format given by the
         container application, e.g.  a spreadsheet document, or from
-        the own property <member>NumberFormat</member>.
+        the own property #NumberFormat.
      */
     [optional, property] boolean LinkNumberFormatToSource;
 

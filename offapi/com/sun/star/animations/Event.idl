@@ -43,7 +43,7 @@ struct Event
     */
     any Offset;
 
-    /** an option repeat value. If the <member>Trigger</member> is
+    /** an option repeat value. If the #Trigger is
         <const>EventTrigger</const>, this is the number of repeats
         after which the event is initially raised.
     */

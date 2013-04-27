@@ -44,7 +44,7 @@ published service CachedContentResultSet
 
     <p>The default fetch size is implementation specific.
 
-    <p>Every negative value for parameter <member>FetchSize</member> will
+    <p>Every negative value for parameter #FetchSize will
     force an implementation specific value to be set.
     */
     [property] long FetchSize;

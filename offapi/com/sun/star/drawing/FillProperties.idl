@@ -40,7 +40,7 @@ published service FillProperties
     */
     [property] FillStyle FillStyle;
 
-    /** If the property <member>FillStyle</member> is set to <const>
+    /** If the property #FillStyle is set to <const>
         FillStyle::SOLID</const>, this is the color used.
     */
     [property] com::sun::star::util::Color FillColor;
@@ -64,24 +64,24 @@ published service FillProperties
     */
     [optional, property] com::sun::star::awt::Gradient FillTransparenceGradient;
 
-    /** If the property <member>FillStyle</member> is set to <const>
+    /** If the property #FillStyle is set to <const>
         FillStyle::GRADIENT</const>, this is the name of the used fill
         gradient style.
     */
     [property] string FillGradientName;
 
-    /** If the property <member>FillStyle</member> is set to <const>
+    /** If the property #FillStyle is set to <const>
         FillStyle::GRADIENT</const>, this describes the gradient used.
     */
     [optional, property] com::sun::star::awt::Gradient FillGradient;
 
-    /** If the property <member>FillStyle</member> is set to <const>
+    /** If the property #FillStyle is set to <const>
         FillStyle::HATCH</const>, this is the name of the used fill hatch
         style.
     */
     [property] string FillHatchName;
 
-    /** If the property <member>FillStyle</member> is set to <const>
+    /** If the property #FillStyle is set to <const>
         FillStyle::HATCH</const>, this describes the hatch used.
     */
     [optional, property] Hatch FillHatch;
@@ -91,18 +91,18 @@ published service FillProperties
     */
     [property] boolean FillBackground;
 
-    /** If the property <member>FillStyle</member> is set to <const>
+    /** If the property #FillStyle is set to <const>
         FillStyle::BITMAP</const>, this is the name of the used fill bitmap
         style.
     */
     [property] string FillBitmapName;
 
-    /** If the property <member>FillStyle</member> is set to <const>
+    /** If the property #FillStyle is set to <const>
         FillStyle::BITMAP</const>, this is the bitmap used.
     */
     [optional, property] com::sun::star::awt::XBitmap FillBitmap;
 
-    /** If the property <member>FillStyle</member> is set to <const>
+    /** If the property #FillStyle is set to <const>
         FillStyle::BITMAP</const>, this is a URL to the bitmap used.
     */
     [optional, property] string FillBitmapURL;
@@ -136,8 +136,8 @@ published service FillProperties
 
     /** specifies if the size is given in percentage or as an absolute value.
 
-        <p>If this is <TRUE/>, the properties <member>FillBitmapSizeX</member>
-        and <member>FillBitmapSizeY</member> contain the size of the tile in
+        <p>If this is <TRUE/>, the properties #FillBitmapSizeX
+        and #FillBitmapSizeY contain the size of the tile in
         percent of the size of the original bitmap. If this is <FALSE/>, the
         size of the tile is specified with 1/100th mm.
     */
@@ -145,14 +145,14 @@ published service FillProperties
 
     /** This is the width of the tile for filling.
 
-        <p>Depending on the property <member>FillBitmapLogicalSize</member>,
+        <p>Depending on the property #FillBitmapLogicalSize,
         this is either relative or absolute.
     */
     [property] long FillBitmapSizeX;
 
     /** This is the height of the tile for filling.
 
-        <p>Depending on the property <member>FillBitmapLogicalSize</member>,
+        <p>Depending on the property #FillBitmapLogicalSize,
         this is either relative or absolute.
     */
     [property] long FillBitmapSizeY;
@@ -160,7 +160,7 @@ published service FillProperties
     /** this enum selects how a area is filled with a single bitmap.
 
         <p>This property corresponds to the properties <member>
-        FillBitmapStretch</member> and <member>FillBitmapTile</member>.</p>
+        FillBitmapStretch</member> and #FillBitmapTile.</p>
 
         <p>If set to <const>BitmapMode::REPEAT</const>, the property
         FillBitmapStretch is set to <FALSE/>, and the property FillBitmapTile
@@ -178,34 +178,34 @@ published service FillProperties
     /** if set, the fill bitmap is stretched to fill the area of the shape.
 
         <p>This property should not be used anymore and is included here for
-        completeness. The <member>FillBitmapMode</member> property can be used
+        completeness. The #FillBitmapMode property can be used
         instead to set all supported bitmap modes.</p>
 
         <p>If set to <TRUE/>, the value of the FillBitmapMode property changes
         to <const>BitmapMode::STRETCH</const>. BUT: behavior is undefined, if
-        the property <member>FillBitmapTile</member> is <TRUE/> too.</p>
+        the property #FillBitmapTile is <TRUE/> too.</p>
 
         <p>If set to <FALSE/>, the value of the FillBitmapMode property
         changes to <const>BitmapMode::REPEAT</const> or <const>
         BitmapMode::NO_REPEAT</const>, depending on the current value of the
-        <member>FillBitmapTile</member> property.</p>
+        #FillBitmapTile property.</p>
      */
     [optional, property] boolean FillBitmapStretch;
 
     /** if set, the fill bitmap is repeated to fill the area of the shape.
 
         <p>This property should not be used anymore and is included here for
-        completeness. The <member>FillBitmapMode</member> property can be used
+        completeness. The #FillBitmapMode property can be used
         instead to set all supported bitmap modes.</p>
 
         <p>If set to <TRUE/>, the value of the FillBitmapMode property changes
         to <const>BitmapMode::REPEAT</const>. BUT: behavior is undefined, if
-        the property <member>FillBitmapStretch</member> is <TRUE/> too.</p>
+        the property #FillBitmapStretch is <TRUE/> too.</p>
 
         <p>If set to <FALSE/>, the value of the FillBitmapMode property
         changes to <const>BitmapMode::STRETCH</const> or <const>
         BitmapMode::NO_REPEAT</const>, depending on the current value of the
-        <member>FillBitmapStretch</member> property.</p>
+        #FillBitmapStretch property.</p>
      */
     [optional, property] boolean FillBitmapTile;
 

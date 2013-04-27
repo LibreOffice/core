@@ -36,7 +36,7 @@ published struct DataPilotFieldGroupInfo
         automatically from the minimum of the item values.
 
         <p><ul>
-        <li>If <FALSE/> is set, the value from <member>Start</member> will be
+        <li>If <FALSE/> is set, the value from #Start will be
         used as start value for the grouping.</li>
         <li>If <TRUE/> is set, the start value for the grouping will be
         calculated automatically from the minimum of all member values of the
@@ -50,7 +50,7 @@ published struct DataPilotFieldGroupInfo
         automatically from the maximum of the item values.
 
         <p><ul>
-        <li>If <FALSE/> is set, the value from <member>End</member> will be
+        <li>If <FALSE/> is set, the value from #End will be
         used as end value for the grouping.</li>
         <li>If <TRUE/> is set, the end value for the grouping will be
         calculated automatically from the maximum of all member values of the
@@ -63,13 +63,13 @@ published struct DataPilotFieldGroupInfo
     /** specifies whether date values are grouped by ranges of days.
 
         <p><ul>
-        <li>If <FALSE/> is set, and <member>GroupBy</member> contains zero,
+        <li>If <FALSE/> is set, and #GroupBy contains zero,
         grouping is performed inplace on the item values.</li>
-        <li>If <FALSE/> is set, and <member>GroupBy</member> contains one or
+        <li>If <FALSE/> is set, and #GroupBy contains one or
         more flags from DataPilotFieldGroupBy, grouping is
         performed on date or time.</li>
-        <li>If <TRUE/> is set, <member>Step</member> contains a value greater
-        than or equal to 1, and <member>GroupBy</member> set to <const>
+        <li>If <TRUE/> is set, #Step contains a value greater
+        than or equal to 1, and #GroupBy set to <const>
         DataPilotFieldGroupBy::DAYS</const>, grouping is performed on ranges
         of days (see descriptions for <member>
         XDataPilotFieldGrouping::createDateGroup</member> for more details
@@ -93,8 +93,8 @@ published struct DataPilotFieldGroupInfo
 
     /** specifies the size of the ranges for numeric or day grouping.
 
-        <p>Example: With <member>HasAutoStart</member> set to <FALSE/>,
-        <member>Start</member> set to 2, and <member>Step</member> set to 3,
+        <p>Example: With #HasAutoStart set to <FALSE/>,
+        #Start set to 2, and #Step set to 3,
         the first group will contain all values greater than or equal to 2 and
         less than 5. The second group will contain all values greater than or
         equal to 5 and less then 8, and so on.</p>

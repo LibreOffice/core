@@ -30,14 +30,14 @@ module com { module sun { module star { module document {
 /** indicates support for executing scripts contained in a, possibly foreign, document.
 
     <p>If the component implementing it is a document, which supports embedding scripts into
-    itself, then <member>ScriptContainer</member> refers to the document itself. Implementing this
+    itself, then #ScriptContainer refers to the document itself. Implementing this
     interface is unnecessary then, instead the document should simply implement XEmbeddedScripts directly.</p>
 
     <p>If the interface is implemented by a document which does not itself support embedding
     scripts into it, but which  is associated unambiguously with a document which does,
-    then this other document is denoted by <member>ScriptContainer</member>.</p>
+    then this other document is denoted by #ScriptContainer.</p>
 
-    <p>If the interface is implemented by a controller, then <member>ScriptContainer</member>
+    <p>If the interface is implemented by a controller, then #ScriptContainer
     refers to the document which supports embedding scripts, and which is unambiguously
     associated with the controller. This must not necessarily be the model returned by
     com::sun::star::frame::XController::getModel().</p>

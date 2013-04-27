@@ -135,9 +135,9 @@ published service DataAwareControlModel
         com::sun::star::form::component::TextField, which is bound to the e-mail
         column of your data source. Then you will probably add a
         com::sun::star::form::component::FixedText whose label is "E-Mail",
-        and associate it with the TextField by setting it as <member>LabelControl</member>.<br/>
+        and associate it with the TextField by setting it as #LabelControl.<br/>
         Now if you imagine a component offering data search in a form, this component will examine
-        the <member>LabelControl</member> property, find the com::sun::star::form::component::FixedText,
+        the #LabelControl property, find the com::sun::star::form::component::FixedText,
         examine it's label, and use this label to refer to the com::sun::star::form::component::TextField.
         </p>
         <p>When setting the property, a number of constraints apply:

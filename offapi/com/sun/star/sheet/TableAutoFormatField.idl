@@ -266,7 +266,7 @@ published service TableAutoFormatField
 
     /** property containing a description of the cell border.
         Preferred over com::sun::star::table::TableBorder
-        <member>TableBorder</member>.
+        #TableBorder.
 
         @since LibreOffice 3.6
      */

@@ -38,11 +38,11 @@ module com {  module sun {  module star {  module awt { module tree {
 struct TreeDataModelEvent : ::com::sun::star::lang::EventObject
 {
     /** contains the changed, added or removed nodes.
-        <p> All nodes must have <member>ParentNode</member> as parent. */
+        <p> All nodes must have #ParentNode as parent. */
     sequence< XTreeNode > Nodes;
 
     /** holds the parent node for changed, added or removed nodes.
-        <p> If this is null, <member>Nodes</member> must contain only the root node */
+        <p> If this is null, #Nodes must contain only the root node */
     XTreeNode ParentNode;
 };
 

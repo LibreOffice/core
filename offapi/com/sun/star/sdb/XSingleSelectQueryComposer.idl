@@ -199,7 +199,7 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
         the complete composed query.</p>
 
         <p>As a result, you can use the composer to build cumulative filter expressions. That
-        is, you can set <member>ElementaryQuery</member> to a statement already containing
+        is, you can set #ElementaryQuery to a statement already containing
         filters, and then use setFilter() to append additional filters.</p>
 
         <p>The very same holds for sort orders, <code>HAVING</code> and <code>GROUP BY</code>
@@ -209,7 +209,7 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
         statement represented by a QueryDefinition, and extend it with additional
         filters or sort orders, while not touching the respective parts already present
         in <member>QueryDefinition::Command</member>. This can be achieved by setting the
-        <member>QueryDefinition::Command</member> as <member>ElementaryQuery</member> of a
+        <member>QueryDefinition::Command</member> as #ElementaryQuery of a
         SingleSelectQueryComposer.</p>
 
         <p>If, in such a scenario, you would be interested in the filter part of the
@@ -218,7 +218,7 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
         part via XSingleSelectQueryAnalyzer::getFilter().</p>
 
         <p>If you'd be interested in the composed filter, you would set the
-        <member>QueryDefinition::Command</member> as <member>ElementaryQuery</member>, add your
+        <member>QueryDefinition::Command</member> as #ElementaryQuery, add your
         filter, and propagate the resulting query (XSingleSelectQueryAnalyzer::getQuery())
         to an SingleSelectQueryAnalyzer instance via
         XSingleSelectQueryAnalyzer::setQuery().</p>

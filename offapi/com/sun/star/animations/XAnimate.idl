@@ -95,7 +95,7 @@ interface XAnimate : XAnimationNode
     /** Specifies the starting value of the animation.
         <br>
         Must be a legal value for the specified attribute.
-        Ignored if the <member>Values</member> attribute is specified.
+        Ignored if the #Values attribute is specified.
 
         @see http://www.w3.org/TR/smil20/animation.html#adef-from
     */
@@ -104,7 +104,7 @@ interface XAnimate : XAnimationNode
     /** Specifies the ending value of the animation.
         <br>
         Must be a legal value for the specified attribute.
-        Ignored if the <member>Values</member> attribute is specified.
+        Ignored if the #Values attribute is specified.
 
         @see http://www.w3.org/TR/smil20/animation.html#adef-to
     */
@@ -115,7 +115,7 @@ interface XAnimate : XAnimationNode
         Must be a legal value of a domain for which addition to the attributeType
         domain is defined and which yields a value in the attributeType domain.
         Ignored if the values attribute is specified.
-        Ignored if the <member>Values</member> attribute is specified.
+        Ignored if the #Values attribute is specified.
 
         @see http://www.w3.org/TR/smil20/animation.html#adef-by
     */

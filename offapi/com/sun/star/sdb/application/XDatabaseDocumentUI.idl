@@ -111,7 +111,7 @@ interface XDatabaseDocumentUI
     /** identifies the given sub component
 
         @param SubComponent
-            the component to identify. Must be one of the components in <member>SubComponents</member>.
+            the component to identify. Must be one of the components in #SubComponents.
 
         @return
             a record describing the sub component. The first element of the returned pair is the type

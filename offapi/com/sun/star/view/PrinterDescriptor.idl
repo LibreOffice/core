@@ -53,14 +53,14 @@ published service PrinterDescriptor
         is a user-defined size.
 
         <p>Setting this property may change the value of
-        <member>PrinterDescriptor</member>PaperSize</member.</p>
+        #PrinterDescriptorPaperSize</member.</p>
      */
     [property] com::sun::star::view::PaperFormat PaperFormat;
 
     /** specifies the size of the paper in 100th mm.
 
         <p>Setting this property may change the value of
-        <member>PrinterDescriptor</member>PaperFormat</member.</p>
+        #PrinterDescriptorPaperFormat</member.</p>
      */
     [property] com::sun::star::awt::Size PaperSize;
 

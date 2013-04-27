@@ -64,7 +64,7 @@ published interface XGridColumn
     /** controls whether or not the column's width is fixed or not.
 
         <p>If this is <TRUE/>, the user can interactively change the column's width. Also, the column is subject to
-        auto-resizing, if its <member>Flexibility</member> attribute is greater <code>0</code>.</p>
+        auto-resizing, if its #Flexibility attribute is greater <code>0</code>.</p>
     */
     [attribute] boolean Resizeable;
 
@@ -76,7 +76,7 @@ published interface XGridColumn
         <p>If a column has a flexibility greater than 0, it is set in relationship to the flexibility of all
         other such columns, and the respective widths of the columns are changed in the same relationship.</p>
 
-        <p>Note that a column's flexibility is ignored if its <member>Resizeable</member> attribute is
+        <p>Note that a column's flexibility is ignored if its #Resizeable attribute is
         <FALSE/>.</p>
 
         <p>A column's flexibility cannot be negative, attempts to set a negative value will raise an exception.</p>
@@ -115,7 +115,7 @@ published interface XGridColumn
         necessarily needing to adjust the data model, too.</p>
 
         <p>If <code>DataColumnIndex</code> is negative, the it will be ignored, then the column's index within its
-        column model, as determined by the <member>Index</member> attribute, will be used.</p>
+        column model, as determined by the #Index attribute, will be used.</p>
     */
     [attribute] long DataColumnIndex;
 

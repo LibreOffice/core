@@ -50,7 +50,7 @@ published service UnoControlGridModel
 
         <p>The width is specified in application font units - see com::sun::star::util::MeasureUnit.</p>
 
-        <p>The value given here is ignored if <member>ShowRowHeader</member> is <FALSE/>.</p>
+        <p>The value given here is ignored if #ShowRowHeader is <FALSE/>.</p>
     */
     [property] long RowHeaderWidth;
 
@@ -64,7 +64,7 @@ published service UnoControlGridModel
 
         <p>The height is specified in application font units - see com::sun::star::util::MeasureUnit.</p>
 
-        <p>The value given here is ignored if <member>ShowColumnHeader</member> is <FALSE/>.</p>
+        <p>The value given here is ignored if #ShowColumnHeader is <FALSE/>.</p>
 
         <p>If the property is <void/>, the grid control shall automatically determine a height which conveniently allows,
         according to the used font, to display one line of text.</p>

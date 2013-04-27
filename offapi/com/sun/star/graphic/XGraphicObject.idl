@@ -32,7 +32,7 @@ interface XGraphic;
     <ul>
         <li>vnd.sun.star.GraphicObject:10000000000001940000012FB99807BD</li>
     </ul>
-    The numeric portion of the url is formed from <member>UniqueID</member>.
+    The numeric portion of the url is formed from #UniqueID.
     As long as at least one instance of <code>XGraphicObject</code> with a particular UniqueID exists,
     the associated image/graphic is available.</p>
 

@@ -85,7 +85,7 @@ interface XFormulaOpCodeMapper
             is returned for:
             <ul>
             <li>Add-in names: the programmatic name. The OpCode value used
-            for add-ins can be queried with the <member>OpCodeExternal</member>
+            for add-ins can be queried with the #OpCodeExternal
             getter method.</li>
             </ul></p>
      */

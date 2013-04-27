@@ -44,7 +44,7 @@ struct NamedArgument
     string Name;
 
     /** The value of the argument whoose name is the one as contained in the
-        member <member>Name</member>.
+        member #Name.
      */
     any Value;
 };

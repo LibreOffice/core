@@ -46,7 +46,7 @@ published service PrintOptions
     /** advises the printer to sort the pages of the copies.
 
         @deprecated
-            Use <member>Collate</member> instead.
+            Use #Collate instead.
      */
     [property] boolean Sort;
 

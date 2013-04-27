@@ -136,15 +136,15 @@ published service DataSource
     */
     [property] sequence<com::sun::star::beans::PropertyValue> Info;
 
-    /** is a convenience wrapper around the <member>Info</member> property.
+    /** is a convenience wrapper around the #Info property.
 
         <p>Since fiddling around with a sequence of property values is somewhat uncomfortable
         in all known UNO language bindings (especially for tasks like simply changing the value
-        of an existing value), the <member>Settings</member> property wraps the <member>Info</member>
+        of an existing value), the #Settings property wraps the #Info
         property for easier single-value access.</p>
 
-        <p>You should use the <member>Setting</member> property if you need to access a few properties only,
-        and the <member>Info</member> property if you need access to all existent settings at once.</p>
+        <p>You should use the #Setting property if you need to access a few properties only,
+        and the #Info property if you need access to all existent settings at once.</p>
 
         <p>The object represented by this property supports the com::sun::star::beans::PropertyBag
         service. That is, you can at runtime add arbitrary new properties to the bag.</p>
@@ -178,7 +178,7 @@ published service DataSource
         always made persistent, except when an explicit
         <member scope="com::sun::star::beans">PropertyAttribute::TRANSIENT</member> attribute prohibits this.</p>
 
-        <p>Similar, when you obtain the <member>Info</member> property of a <code>DataSource</code>, the
+        <p>Similar, when you obtain the #Info property of a <code>DataSource</code>, the
         <code>Settings</code> bag is asked for all its property values, and the ones which are removable and
         in state default are stripped, and <em>not</em> returned in the <code>Info</code> sequence.</p>
     */

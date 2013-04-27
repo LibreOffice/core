@@ -44,7 +44,7 @@ interface XObjectInspector
         to-be-attached model is not <NULL/>, but does not support this interface.</p>
 
         <p>If you do not want to support a full-blown com::sun::star::frame::XModel,
-        use the <member>InspectorModel</member> attribute instead.</p>
+        use the #InspectorModel attribute instead.</p>
 
         <p>The com::sun::star::frame::XController::getViewData() and
         com::sun::star::frame::XController::restoreViewData() exchange
