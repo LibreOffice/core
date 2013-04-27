@@ -582,6 +582,8 @@ namespace
             return (VclResId(SV_BUTTONTEXT_UNDO).toString());
         else if (rType == "gtk-paste")
             return (VclResId(SV_BUTTONTEXT_PASTE).toString());
+        else if (rType == "gtk-media-next")
+            return (VclResId(SV_BUTTONTEXT_NEXT).toString());
         SAL_WARN("vcl.layout", "unknown stock type: " << rType.getStr());
         return OUString();
     }

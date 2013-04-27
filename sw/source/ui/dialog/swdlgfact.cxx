@@ -1069,22 +1069,11 @@ AbstractGlossaryDlg* SwAbstractDialogFactory_Impl::CreateGlossaryDlg(SfxViewFram
     return new AbstractGlossaryDlg_Impl( pDlg );
 }
 
-AbstractFldInputDlg* SwAbstractDialogFactory_Impl::CreateFldInputDlg( int nResId,
-                                                Window *pParent, SwWrtShell &rSh,
-                                                SwField* pField, sal_Bool bNextButton ) //add for SwFldInputDlg
+AbstractFldInputDlg* SwAbstractDialogFactory_Impl::CreateFldInputDlg(Window *pParent,
+    SwWrtShell &rSh, SwField* pField, bool bNextButton) //add for SwFldInputDlg
 {
-    SwFldInputDlg* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_FLD_INPUT :
-            pDlg = new SwFldInputDlg( pParent, rSh, pField, bNextButton );
-            break;
-        default:
-            break;
-    }
-    if ( pDlg )
-        return new AbstractFldInputDlg_Impl( pDlg );
-    return 0;
+    SwFldInputDlg* pDlg = new SwFldInputDlg( pParent, rSh, pField, bNextButton );
+    return new AbstractFldInputDlg_Impl( pDlg );
 }
 
 AbstractInsFootNoteDlg* SwAbstractDialogFactory_Impl::CreateInsFootNoteDlg(

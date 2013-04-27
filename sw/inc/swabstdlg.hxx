@@ -410,9 +410,8 @@ public:
     virtual AbstractGlossaryDlg*        CreateGlossaryDlg(SfxViewFrame* pViewFrame,
                                                 SwGlossaryHdl* pGlosHdl,
                                                 SwWrtShell *pWrtShell) = 0; //add for SwGlossaryDlg
-    virtual AbstractFldInputDlg*        CreateFldInputDlg( int nResId,
-                                                Window *pParent, SwWrtShell &rSh,
-                                                SwField* pField, sal_Bool bNextButton = sal_False ) = 0; //add for SwFldInputDlg
+    virtual AbstractFldInputDlg*        CreateFldInputDlg(Window *pParent,
+        SwWrtShell &rSh, SwField* pField, bool bNextButton = false) = 0; //add for SwFldInputDlg
     virtual AbstractInsFootNoteDlg*     CreateInsFootNoteDlg(Window * pParent,
         SwWrtShell &rSh, sal_Bool bEd = sal_False) = 0; //add for SwInsFootNoteDlg
     virtual VclAbstractDialog*          CreateTitlePageDlg ( Window * pParent ) = 0;

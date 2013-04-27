@@ -80,6 +80,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/footnotepage \
 	sw/uiconfig/swriter/ui/footnoteareapage \
 	sw/uiconfig/swriter/ui/indexentry \
+	sw/uiconfig/swriter/ui/inputfielddialog \
 	sw/uiconfig/swriter/ui/insertbookmark \
 	sw/uiconfig/swriter/ui/insertbreak \
 	sw/uiconfig/swriter/ui/insertcaption \

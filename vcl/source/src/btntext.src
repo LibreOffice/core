@@ -136,4 +136,9 @@ String SV_BUTTONTEXT_PASTE
     Text [ en-US ] = "~Paste" ;
 };
 
+String SV_BUTTONTEXT_NEXT
+{
+    Text [ en-US ] = "~Next" ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

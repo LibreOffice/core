@@ -21,9 +21,9 @@
 
 #include <svx/stddlg.hxx>
 
-#include <svtools/svmedit.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/vclmedit.hxx>
 
 class SwInputField;
 class SwSetExpField;
@@ -40,26 +40,22 @@ class SwFldInputDlg: public SvxStandardDialog
     virtual void    Apply();
     virtual void    StateChanged( StateChangedType );
 
-    SwWrtShell         &rSh;
-    SwInputField*       pInpFld;
-    SwSetExpField*      pSetFld;
-    SwUserFieldType*    pUsrType;
+    SwWrtShell&       rSh;
+    SwInputField*     pInpFld;
+    SwSetExpField*    pSetFld;
+    SwUserFieldType*  pUsrType;
 
-    Edit                aLabelED;
+    Edit*             m_pLabelED;
 
-    MultiLineEdit       aEditED;
-    FixedLine           aEditFL;
+    VclMultiLineEdit* m_pEditED;
 
-    OKButton            aOKBT;
-    CancelButton        aCancelBT;
-    PushButton          aNextBT;
-    HelpButton          aHelpBT;
+    OKButton*         m_pOKBT;
+    PushButton*       m_pNextBT;
 
     DECL_LINK(NextHdl, void *);
 public:
     SwFldInputDlg(  Window *pParent, SwWrtShell &rSh,
                     SwField* pField, sal_Bool bNextButton = sal_False );
-    ~SwFldInputDlg();
 };
 
 

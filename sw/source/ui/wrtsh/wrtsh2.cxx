@@ -142,8 +142,7 @@ sal_Bool SwWrtShell::StartInputFldDlg( SwField* pFld, sal_Bool bNextButton,
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialogdiet fail!");
-    AbstractFldInputDlg* pDlg = pFact->CreateFldInputDlg( DLG_FLD_INPUT,
-                                                        pParentWin, *this, pFld, bNextButton);
+    AbstractFldInputDlg* pDlg = pFact->CreateFldInputDlg(pParentWin, *this, pFld, bNextButton);
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if(pWindowState && !pWindowState->isEmpty())
         pDlg->SetWindowState(*pWindowState);

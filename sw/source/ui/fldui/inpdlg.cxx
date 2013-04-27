@@ -29,48 +29,34 @@
 #include <fldmgr.hxx>
 
 #include <fldui.hrc>
-#include <inpdlg.hrc>
-
 
 /*--------------------------------------------------------------------
     Description: edit field-insert
  --------------------------------------------------------------------*/
 
 SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
-                              SwField* pField, sal_Bool bNextButton ) :
-
-    SvxStandardDialog(pParent,  SW_RES(DLG_FLD_INPUT)),
-
-    rSh( rS ),
-    pInpFld(0),
-    pSetFld(0),
-    pUsrType(0),
-
-    aLabelED    (this, SW_RES(ED_LABEL  )),
-    aEditED     (this, SW_RES(ED_EDIT   )),
-    aEditFL     (this, SW_RES(FL_EDIT       )),
-
-    aOKBT       (this, SW_RES(BT_OK     )),
-    aCancelBT   (this, SW_RES(BT_CANCEL )),
-    aNextBT     (this, SW_RES(PB_NEXT   )),
-    aHelpBT     (this, SW_RES(PB_HELP    ))
+                              SwField* pField, sal_Bool bNextButton )
+    : SvxStandardDialog( pParent, "InputFieldDialog",
+        "modules/swriter/ui/inputfielddialog.ui")
+    , rSh( rS )
+    , pInpFld(0)
+    , pSetFld(0)
+    , pUsrType(0)
 {
+    get(m_pLabelED, "name");
+    get(m_pEditED, "text");
+    m_pEditED->set_height_request(m_pEditED->GetTextHeight() * 9);
+    get(m_pNextBT, "next");
+    get(m_pOKBT, "ok");
     // switch font for Edit
-    Font aFont(aEditED.GetFont());
+    Font aFont(m_pEditED->GetFont());
     aFont.SetWeight(WEIGHT_LIGHT);
-    aEditED.SetFont(aFont);
+    m_pEditED->SetFont(aFont);
 
     if( bNextButton )
     {
-        aNextBT.Show();
-        aNextBT.SetClickHdl(LINK(this, SwFldInputDlg, NextHdl));
-    }
-    else
-    {
-        long nDiff = aCancelBT.GetPosPixel().Y() - aOKBT.GetPosPixel().Y();
-        Point aPos = aHelpBT.GetPosPixel();
-        aPos.Y() -= nDiff;
-        aHelpBT.SetPosPixel(aPos);
+        m_pNextBT->Show();
+        m_pNextBT->SetClickHdl(LINK(this, SwFldInputDlg, NextHdl));
     }
 
     // evaluation here
@@ -79,7 +65,7 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
     {   // it is an input field
         //
         pInpFld = (SwInputField*)pField;
-        aLabelED.SetText( pInpFld->GetPar2() );
+        m_pLabelED->SetText( pInpFld->GetPar2() );
         sal_uInt16 nSubType = pInpFld->GetSubType();
 
         switch(nSubType & 0xff)
@@ -109,29 +95,24 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
         }
         else
             aStr = sFormula;
-        aLabelED.SetText( pSetFld->GetPromptText() );
+        m_pLabelED->SetText( pSetFld->GetPromptText() );
     }
 
     // JP 31.3.00: Inputfields in readonly regions must be allowed to
     //              input any content. - 74639
     sal_Bool bEnable = !rSh.IsCrsrReadonly();
 
-    aOKBT.Enable( bEnable );
-    aEditED.SetReadOnly( !bEnable );
+    m_pOKBT->Enable( bEnable );
+    m_pEditED->SetReadOnly( !bEnable );
 
     if( aStr.Len() )
-        aEditED.SetText(convertLineEnd(aStr, GetSystemLineEnd()));
-    FreeResource();
-}
-
-SwFldInputDlg::~SwFldInputDlg()
-{
+        m_pEditED->SetText(convertLineEnd(aStr, GetSystemLineEnd()));
 }
 
 void SwFldInputDlg::StateChanged( StateChangedType nType )
 {
     if ( nType == STATE_CHANGE_INITSHOW )
-        aEditED.GrabFocus();
+        m_pEditED->GrabFocus();
     SvxStandardDialog::StateChanged( nType );
 }
 
@@ -141,7 +122,7 @@ void SwFldInputDlg::StateChanged( StateChangedType nType )
 
 void SwFldInputDlg::Apply()
 {
-    OUString aTmp(comphelper::string::remove(aEditED.GetText(), '\r'));
+    OUString aTmp(comphelper::string::remove(m_pEditED->GetText(), '\r'));
 
     rSh.StartAllAction();
     bool bModified = false;
