@@ -40,7 +40,7 @@ struct ExternalLinkInfo
 
         <ol>
         <li>If #Type is <const>ExternalLinkType::EXTERNAL
-        </const>, this member shall contain a <atom>string</atom> with the
+        </const>, this member shall contain a `string` with the
         <em>URI</em> of a document. The formula that would need this
         information for example would contain <code>=[1]Sheet1!A1</code> or
         <code>='[1]Sheet name'!A1</code> where <em>[1]</em> does resolve to

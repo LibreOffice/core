@@ -57,13 +57,13 @@ service DataSequence
 
     /** you may implement this interface to allow a fast access to
         numerical data.  With this interface you can get a
-        <atom>sequence</atom> of <atom>double</atom> values.
+        `sequence` of `double` values.
     */
     [optional] interface   XNumericalDataSequence;
 
     /** you may implement this interface to allow a fast access to
         textual data.  With this interface you can get a
-        <atom>sequence</atom> of <atom>string</atom> values.
+        `sequence` of `string` values.
     */
     [optional] interface   XTextualDataSequence;
 

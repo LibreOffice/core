@@ -90,30 +90,30 @@ module com { module sun { module star { module configuration {
 
  <ul>
     <li><strong>string</strong> can hold a human-readable text.
-        <p>Values are represented as <atom>string</atom>.</p>
+        <p>Values are represented as `string`.</p>
         <p>Sequences are represented as <atom dim="[]">string</atom>.</p>
         <p>"<em>human-readable</em>" here excludes non-printing characters
         except for CR, LF and TAB [Unicode code points 9,10,13].
         For binary data, use type <strong>binary</strong> instead.</p>
     </li>
     <li><strong>boolean</strong> can hold the values <TRUE/> or <FALSE/>.
-        <p>Values are represented as <atom>boolean</atom>.
+        <p>Values are represented as `boolean`.
         <p>Sequences are represented as <atom dim="[]">boolean</atom>.</p>
     </li>
     <li><strong>short</strong> can hold a 16-bit signed integer.
-        <p>Values are represented as <atom>short</atom>.</p>
+        <p>Values are represented as `short`.</p>
         <p>Sequences are represented as <atom dim="[]">short</atom>.</p>
     </li>
     <li><strong>int</strong> can hold a 32-bit signed integer.
-        <p>Values are represented as <atom>long</atom>.</p>
+        <p>Values are represented as `long`.</p>
         <p>Sequences are represented as <atom dim="[]">long</atom>.</p>
     </li>
     <li><strong>long</strong> can hold a 64-bit signed integer.
-        <p>Values are represented as <atom>hyper</atom>.</p>
+        <p>Values are represented as `hyper`.</p>
         <p>Sequences are represented as <atom dim="[]">hyper</atom>.</p>
     </li>
     <li><strong>double</strong> can hold a floating point number.
-        <p>Values are represented as <atom>double</atom>.</p>
+        <p>Values are represented as `double`.</p>
         <p>Sequences are represented as <atom dim="[]">double</atom>.</p>
     </li>
     <li><strong>binary</strong> can hold a sequence of octets.
@@ -124,7 +124,7 @@ module com { module sun { module star { module configuration {
 
  <p>Within templates an additional type <strong>any</strong> can occur. When
  such a template is used to create a new SetElement, the type
- of the element is initially reported as <atom>any</atom> (having no value).
+ of the element is initially reported as `any` (having no value).
  When the value of such an element is first set, it will assume the type used.
  </p>
 

@@ -30,7 +30,7 @@ published interface XUriSchemeParser;
 
    <p>The argument <code>scheme</code> of method
    com::sun::star::uri::XUriSchemeParser::parse() must
-   always be equal to the <atom>string</atom>
+   always be equal to the `string`
    <code>"vnd.sun.star.expand"</code>, ignoring case.  The objects returned by
    com::sun::star::uri::XUriSchemeParser::parse()
    implement

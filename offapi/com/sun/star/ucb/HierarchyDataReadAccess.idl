@@ -36,9 +36,9 @@ module com { module sun { module star { module ucb {
     <p>Each hierarchy data node has three data members:
 
     <ul>
-    <li>"Title", which is of type <atom>string</atom>. It contains a title
+    <li>"Title", which is of type `string`. It contains a title
     for the node. This value must not be empty.
-    <li>"TargetURL", which is of type <atom>string</atom></li> It may contain
+    <li>"TargetURL", which is of type `string`</li> It may contain
     any URL, which will be treated as the target of a hierarchy link.
     <li>"Children", which is of type HierarchyDataReadAccess or
     of type HierarchyDataReadWriteAccess</li>, depending on the
@@ -51,10 +51,10 @@ published service HierarchyDataReadAccess
 
         <p>Examples:
         <ul>
-        <li><code>getByName( "Title" )</code> will return an <atom>any</atom>
+        <li><code>getByName( "Title" )</code> will return an `any`
         containing a string containing the title of the node.
         </li>
-        <li><code>getByName( "Children" )</code> will return an <atom>any</atom>
+        <li><code>getByName( "Children" )</code> will return an `any`
         containing an implementation of service
         HierarchyDataReadAccess, if it was called on a read-only
         node. It will return an implementation of service
@@ -92,13 +92,13 @@ published service HierarchyDataReadAccess
         <ul>
         <li>
         <code>getByHierarchicalName( "Title" )</code> will return an
-        <atom>any</atom> containing a string containing the title of the node
+        `any` containing a string containing the title of the node
         itself.
         </li>
         <li>
         <code>getByHierarchicalName( "Children/['subnode1']" )</code> will give
         access to the child node named "subnode1" of the node. It will return
-        an <atom>any</atom> containing an implementation of service
+        an `any` containing an implementation of service
         HierarchyDataReadAccess, if it was called on a read-only
         node. It will return an implementation of service
         HierarchyDataReadWriteAccess if it was called on a
@@ -107,13 +107,13 @@ published service HierarchyDataReadAccess
         <li>
         <code>getByHierarchicalName( "Children/['subnode2']/TargetURL" )</code>
         will give direct access to the "TargetURL" data member of the child node
-        named "subnode2" of the node. It will return an <atom>any</atom>
-        containing a <atom>string</atom> containing the target URL of the node.
+        named "subnode2" of the node. It will return an `any`
+        containing a `string` containing the target URL of the node.
         </li>
         <li>
         <code>getByHierarchicalName( "Children/['subnode3']/Children" )</code>
         will give direct access to the "Children" data member of the child node
-        named "subnode3" of the node. It will return an <atom>any</atom>
+        named "subnode3" of the node. It will return an `any`
         containing an implementation of service
         HierarchyDataReadAccess, if it was called on a read-only
         node. It will return an implementation of service

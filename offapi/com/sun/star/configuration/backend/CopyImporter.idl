@@ -53,7 +53,7 @@ published service CopyImporter
             which must be provided as
             com::sun::star::beans::NamedValue:
         <dl>
-            <dt><code>Overwrite</code> : <atom>boolean</atom></dt>
+            <dt><code>Overwrite</code> : `boolean`</dt>
             <dd>If <FALSE/>, specifies that the data should be applied
                 only if the existing layer is empty.
             </dd>

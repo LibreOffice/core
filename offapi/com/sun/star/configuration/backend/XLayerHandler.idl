@@ -299,7 +299,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
             <p> A <void/> type indicates that the type is unspecified
                 in this layer.
                 In this case any subsequent value may be of a generic type
-                (e.g. <atom>string</atom> or - for list values -
+                (e.g. `string` or - for list values -
                 <atom dim="[]">string</atom>.) Such values may be
                 converted to the type defined in the schema by
                 the implementation.

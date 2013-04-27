@@ -132,7 +132,7 @@ published interface XDocumentProperties
 
     /** contains the name of the template from which the document was created.
         <p>
-        The value is an empty <atom>string</atom> if the document was not
+        The value is an empty `string` if the document was not
         created from a template or if it was detached from the template.
         </p>
      */
@@ -141,7 +141,7 @@ published interface XDocumentProperties
 
     /** contains the URL of the template from which the document was created.
         <p>
-        The value is an empty <atom>string</atom> if the document was not
+        The value is an empty `string` if the document was not
         created from a template or if it was detached from the template.
         </p>
      */
@@ -160,7 +160,7 @@ published interface XDocumentProperties
         An empty URL is valid and describes a case where the document shall be
         reloaded from its original location after some time described by the
         attribute #AutoloadSecs.
-        An empty <atom>string</atom> together with an
+        An empty `string` together with an
         #AutoloadSecs value of 0
         describes a case where no autoload is specified.
         </p>
@@ -175,7 +175,7 @@ published interface XDocumentProperties
         frame.
         <p>
         A value of 0 is valid and describes a redirection.
-        A value of 0 together with an empty <atom>string</atom> as
+        A value of 0 together with an empty `string` as
         #AutoloadURL
         describes a case where no autoload is specified.
         </p>

@@ -46,7 +46,7 @@ interface XLiteral : XNode
 {
     /// the content of the literal
     [readonly, attribute] string Value;
-    /// the language of the literal; may be the empty <atom>string</atom>
+    /// the language of the literal; may be the empty `string`
     [readonly, attribute] string Language;
     /// the data type of the literal; may be <NULL/>
     [readonly, attribute] XURI   Datatype;

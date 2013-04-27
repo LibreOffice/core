@@ -24,16 +24,16 @@ module com {  module sun {  module star {  module bridge {  module oleautomation
 
 /** is the UNO representation of the Automation type <code>DATE</code>.
     <p>
-    A <code>DATE</code> could actually be representd as<atom>double</atom> in
-    UNO and therefore a typedef from <atom>double</atom> to a date type would
+    A <code>DATE</code> could actually be representd as`double` in
+    UNO and therefore a typedef from `double` to a date type would
     do. But a typedef cannot be expressed in all language bindings. In the
     case where no typedefs are supported the actual type is used. That is, a
     typedef'd date type would be represented as <code>double</code> in Java.
-    The information that the <atom>double</atom> is a date type is lost.
+    The information that the `double` is a date type is lost.
     </p>
     <p>
     When calling Automation objects from UNO the distinction between
-    <atom>double</atom> and date type is important. Therefore Date
+    `double` and date type is important. Therefore Date
     is declared as struct.
     </p>
 

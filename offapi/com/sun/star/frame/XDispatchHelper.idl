@@ -57,7 +57,7 @@ published interface XDispatchHelper : com::sun::star::uno::XInterface
 
         @return
             A possible result of the executed internal dispatch.
-            The information behind this <atom>any</atom> depends on the dispatch!
+            The information behind this `any` depends on the dispatch!
 
         @see XDispatch::dispatch()
         */

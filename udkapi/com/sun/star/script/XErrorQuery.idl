@@ -30,7 +30,7 @@ interface XErrorQuery : ::com::sun::star::uno::XInterface
     Returns whether this object has an error
 
     @return
-    <atom>boolean</atom> indicating an error or not
+    `boolean` indicating an error or not
   */
   boolean hasError();
 

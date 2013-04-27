@@ -25,8 +25,8 @@ module com {  module sun {  module star {  module bridge {  module oleautomation
 /** is the UNO representation of the Automation type <code>CY</code>, also know
     as <code>CURRENCY</code>.
     <p>
-    A <code>CY</code> could actually be represented as <atom>hyper</atom> in UNO
-    and therefore a typedef from <atom>hyper</atom> to a currency type would do.
+    A <code>CY</code> could actually be represented as `hyper` in UNO
+    and therefore a typedef from `hyper` to a currency type would do.
     But a typedef cannot be expressed in all language bindings. In the case
     where no typedefs are supported the actual type is used. That is, a
     typedef'd currency type would be represented as <code>long</code> in Java.
@@ -34,7 +34,7 @@ module com {  module sun {  module star {  module bridge {  module oleautomation
     </p>
     <p>
     When calling Automation objects from UNO the distinction between
-    <atom>hyper</atom> and a currency type is important. Therefore
+    `hyper` and a currency type is important. Therefore
     Currency is declared as struct.
     </p>
 

@@ -41,35 +41,35 @@ published interface XJavaVM: com::sun::star::uno::XInterface
         <p>If the VM is not already instantiated, it will be now.</p>
 
         <p>If the <code>processID</code> is a normal 16-byte ID, the returned
-        <atom>any</atom> contains a JNI <code>JavaVM</code> pointer as a
-        <atom>long</atom> or <atom>hyper</atom> integer (depending on the
+        `any` contains a JNI <code>JavaVM</code> pointer as a
+        `long` or `hyper` integer (depending on the
         platform).  If the <code>processID</code> does not match the current
         process, or if the VM cannot be instantiated for whatever reason, a
-        <void/> <atom>any</atom> is returned.</p>
+        <void/> `any` is returned.</p>
 
         <p>If the <code>processID</code> has an additional 17th byte of
-        value&nbsp;<code>0</code>, the returned <atom>any</atom> contains a
+        value&nbsp;<code>0</code>, the returned `any` contains a
         non&ndash;reference-counted pointer to a (reference-counted) instance of
         the C++ <code>jvmaccess::VirtualMachine</code> class, always represented
-        as a <atom>hyper</atom> integer.  The pointer is guaranteed to be valid
+        as a `hyper` integer.  The pointer is guaranteed to be valid
         as long as the reference to this
         com::sun::star::java::XJavaVM is valid (but the
         pointer should be converted into a reference-counted reference as soon
         as possible).  Again, if the first 16 bytes of the
         <code>processID</code> do not match the current process, or if the VM
-        cannot be instantiated for whatever reason, a <void/> <atom>any</atom>
+        cannot be instantiated for whatever reason, a <void/> `any`
         is returned.</p>
 
         <p>If the <code>processID</code> has an additional 17th byte of
-        value&nbsp;<code>1</code>, the returned <atom>any</atom> contains a
+        value&nbsp;<code>1</code>, the returned `any` contains a
         non&ndash;reference-counted pointer to a (reference-counted) instance of
         the C++ <code>jvmaccess::UnoVirtualMachine</code> class, always
-        represented as a <atom>hyper</atom> integer.  The pointer is guaranteed
+        represented as a `hyper` integer.  The pointer is guaranteed
         to be valid as long as the reference to this
         com::sun::star::java::XJavaVM is valid.  Again, if
         the first 16 bytes of the <code>processID</code> do not match the
         current process, or if the VM cannot be instantiated for whatever
-        reason, a <void/> <atom>any</atom> is returned.</p>
+        reason, a <void/> `any` is returned.</p>
 
         <p>The first form (returning a JNI <code>JavaVM</code> pointer) is
         mainly for backwards compatibility, new code should use the second form
@@ -90,8 +90,8 @@ published interface XJavaVM: com::sun::star::uno::XInterface
         of value <code>0</code> or&nbsp;<code>1</code>.
 
         @return
-        On success, the <atom>any</atom> contains a pointer represented as
-        <atom>long</atom> or <atom>hyper</atom>, otherwise the <atom>any</atom>
+        On success, the `any` contains a pointer represented as
+        `long` or `hyper`, otherwise the `any`
         is <void/>.
      */
     any getJavaVM( [in] sequence<byte> processID );

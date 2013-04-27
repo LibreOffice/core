@@ -44,7 +44,7 @@ interface XDefaultProperty : ::com::sun::star::uno::XInterface
     Returns the name of the default property
 
     @return
-     The <atom>string</atom> name of default property
+     The `string` name of default property
   */
   string getDefaultPropertyName();
 

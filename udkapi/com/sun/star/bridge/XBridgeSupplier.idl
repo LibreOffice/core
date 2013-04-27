@@ -39,7 +39,7 @@
     provided by the UNO runtime.  </p>
 
     <p>All objects, whether they are part of the UNO object model or not,
-    are carried in an <atom>any</atom>.  The representation of this object
+    are carried in an `any`.  The representation of this object
     is heavily model-dependent and has to be specified in the following list: </p>
 
     <dl>
@@ -48,8 +48,8 @@
         struct, sequence, enum, or interface.  </dd>
 
         <dt>OLE:    </dt>
-        <dd>The any carries an <atom>unsigned long</atom> (on 32-bit systems)
-        or an <atom>unsigned hyper</atom> (on 64-bit systems), which is
+        <dd>The any carries an `unsigned long` (on 32-bit systems)
+        or an `unsigned hyper` (on 64-bit systems), which is
         interpreted as a variant pointer. The any does not control the
         lifetime of the represented variant. That implies that the caller
         has the responsibility of freeing the OLE resources represented

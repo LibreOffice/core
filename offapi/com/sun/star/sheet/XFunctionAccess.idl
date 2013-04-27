@@ -45,21 +45,21 @@ published interface XFunctionAccess: com::sun::star::uno::XInterface
         <p>Each element must be of one of the following types:</p>
 
         <dl>
-        <dt><atom>long</atom> or <atom>double</atom></dt>
+        <dt>`long` or `double`</dt>
         <dd>for a numeric value.</dd>
 
-        <dt><atom>string</atom></dt>
+        <dt>`string`</dt>
         <dd>for a textual value.</dd>
 
-        <dt><atom>long[][]</atom> or <atom>double[][]</atom></dt>
+        <dt>`long[][]` or `double[][]`</dt>
         <dd>for an array of numeric values.</dd>
 
-        <dt><atom>string[][]</atom></dt>
+        <dt>`string[][]`</dt>
         <dd>for an array of textual values.</dd>
 
-        <dt><atom>any[][]</atom></dt>
+        <dt>`any[][]`</dt>
         <dd>for a mixed array, where each element must be of <void/>,
-        <atom>long</atom>, <atom>double</atom> or <atom>string</atom>
+        `long`, `double` or `string`
         type.</dd>
 
         <dt>com::sun::star::table::XCellRange</dt>
@@ -76,15 +76,15 @@ published interface XFunctionAccess: com::sun::star::uno::XInterface
             <dt><void/></dt>
             <dd>if no result is available.</dd>
 
-            <dt><atom>double</atom></dt>
+            <dt>`double`</dt>
             <dd>for a numeric result.</dd>
 
-            <dt><atom>string</atom></dt>
+            <dt>`string`</dt>
             <dd>for a textual result.</dd>
 
-            <dt><atom>any[][]</atom></dt>
-            <dd>for an array result, containing <atom>double</atom> and
-            <atom>string</atom> values.</dd>
+            <dt>`any[][]`</dt>
+            <dd>for an array result, containing `double` and
+            `string` values.</dd>
             </dl>
 
         @throws com::sun::star::container::NoSuchElementException

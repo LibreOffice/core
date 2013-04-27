@@ -37,7 +37,7 @@ module data
  */
 interface XNumericalDataSequence : ::com::sun::star::uno::XInterface
 {
-    /** retrieves data as <atom>double</atom> values.
+    /** retrieves data as `double` values.
      */
     sequence< double >   getNumericalData();
 };

@@ -25,7 +25,7 @@
 module com {  module sun {  module star {  module util {
 
 
-/** provides a mapping from <atom>string</atom> to <atom>string</atom>
+/** provides a mapping from `string` to `string`
  */
 published interface XStringMapping: com::sun::star::uno::XInterface
 {

@@ -50,7 +50,7 @@ published interface XTimeStamped : ::com::sun::star::uno::XInterface
 
 
       @return
-        a <atom>string</atom> that represents a timestamp.
+        a `string` that represents a timestamp.
       */
     string getTimestamp() ;
 

@@ -41,11 +41,11 @@ constants FormulaMapGroupSpecialOffset
         the following values:</p>
 
         <ul>
-        <li>A value of type <atom>double</atom> for literal floating-point
+        <li>A value of type `double` for literal floating-point
         constants.</li>
-        <li>A <atom>string</atom> for literal text.</li>
+        <li>A `string` for literal text.</li>
         <li>A <atom dim="[][]">any</atom> for a literal array. The contained
-        values shall be of type <atom>double</atom> or <atom>string</atom>.
+        values shall be of type `double` or `string`.
         Floating-point values and strings may occur together in an array.</li>
         <li>A struct of type SingleReference for a reference to a
         single cell in the own document.</li>
@@ -76,7 +76,7 @@ constants FormulaMapGroupSpecialOffset
         used in formulas.
 
         <p>The FormulaToken::Data member shall contain a
-        <atom>string</atom> with the programmatic name of the function, e.g.
+        `string` with the programmatic name of the function, e.g.
         "com.sun.star.sheet.addin.Analysis.getEomonth" for the EOMONTH
         function from the Analysis add-in.</p>
      */
@@ -88,7 +88,7 @@ constants FormulaMapGroupSpecialOffset
         used in formulas.
 
         <p>The FormulaToken::Data member shall contain an
-        integer value of type <atom>long</atom> specifying the index of the
+        integer value of type `long` specifying the index of the
         defined name. This index can be obtained from the defined name using
         its NamedRange::TokenIndex property.</p>
 
@@ -124,7 +124,7 @@ constants FormulaMapGroupSpecialOffset
         able to parse.
 
         <p>The FormulaToken::Data member shall contain a
-        <atom>string</atom> with the bad data. This string will be displayed
+        `string` with the bad data. This string will be displayed
         literally in the formula.</p>
      */
     const long BAD = 7;
@@ -138,7 +138,7 @@ constants FormulaMapGroupSpecialOffset
         not affect the result of the formula.</p>
 
         <p>The FormulaToken::Data member shall contain a
-        positive integer value of type <atom>long</atom> specifying the number
+        positive integer value of type `long` specifying the number
         of space characters.</p>
 
         <p>Attention: This may change in next versions to support other
@@ -155,7 +155,7 @@ constants FormulaMapGroupSpecialOffset
         describe the reference to a database range used in formulas.
 
         <p>The FormulaToken::Data member shall contain an
-        integer value of type <atom>long</atom> specifying the index of the
+        integer value of type `long` specifying the index of the
         database range. This index can be obtained from the database range
         using its DatabaseRange::TokenIndex property.</p>
 
@@ -168,7 +168,7 @@ constants FormulaMapGroupSpecialOffset
         describe the reference to a macro function called in a formula.
 
         <p>The FormulaToken::Data member shall contain a
-        <atom>string</atom> specifying the name of the macro function.</p>
+        `string` specifying the name of the macro function.</p>
      */
     const long MACRO              = 11;
 

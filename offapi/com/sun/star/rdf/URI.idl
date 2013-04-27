@@ -39,7 +39,7 @@ service URI : XURI
     /** creates an URI RDF node.
 
         @param Value
-            the URI, represented as <atom>string</atom>.
+            the URI, represented as `string`.
 
         @throws com::sun::star::lang::IllegalArgumentException
             if the argument does not represent a valid URI
@@ -51,10 +51,10 @@ service URI : XURI
 
         @param Namespace
             the namespace prefix of the URI, represented as
-            <atom>string</atom>.
+            `string`.
 
         @param LocalName
-            the local name of the URI, represented as <atom>string</atom>.
+            the local name of the URI, represented as `string`.
 
         @throws com::sun::star::lang::IllegalArgumentException
             if the arguments do not represent a valid URI

@@ -34,7 +34,7 @@ published interface XElementAccess: com::sun::star::uno::XInterface
 {
 
     /** @returns
-            the type of the elements. <atom>void</atom> means that it is a
+            the type of the elements. `void` means that it is a
             multi-type container and you cannot determine the exact types
             with this interface.
      */

@@ -44,7 +44,7 @@ interface XServiceConstructorDescription {
        Returns the constructor's name.
 
        @return the constructor's name; for a default constructor, an empty
-           <atom>string</atom> is returned
+           `string` is returned
      */
     string getName();
 

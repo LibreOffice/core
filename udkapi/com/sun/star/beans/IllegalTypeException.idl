@@ -29,7 +29,7 @@ module com {  module sun {  module star {  module beans {
 /** This exception is thrown to indicate the use of a type which is
     not appropriate.
 
-    <p>This problem can occur, if you use an <atom>any</atom>.  </p>
+    <p>This problem can occur, if you use an `any`.  </p>
     @see PropertyContainer
  */
 published exception IllegalTypeException: com::sun::star::uno::Exception

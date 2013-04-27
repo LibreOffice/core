@@ -40,7 +40,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
         <br>
         #Begin is
             <ul>
-            <li><atom>double</atom> describes the element begin as an offset in seconds from an implicit syncbase.
+            <li>`double` describes the element begin as an offset in seconds from an implicit syncbase.
                 The definition of the implicit syncbase depends upon the element's parent time container.
                 The offset is measured in parent simple time.</li>
             <li>Event describes an event and an optional offset that determine the
@@ -61,7 +61,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
         <br>
         #Duration is
             <ul>
-            <li><atom>double</atom> specifies the length of the simple duration in seconds.</li>
+            <li>`double` specifies the length of the simple duration in seconds.</li>
             <li>Timing::INDEFINITE specifies the simple duration as indefinite.</li>
             <li>Timing::MEDIA specifies the simple duration as the intrinsic media duration. This is only valid for elements that define media.</li>
             <li><void/> the simple duration for the element is defined to be the implicit duration of the element.</li>
@@ -75,7 +75,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
         <br>
         #End is
             <ul>
-            <li><atom>double</atom> describes the element end as an offset in seconds from an implicit syncbase.
+            <li>`double` describes the element end as an offset in seconds from an implicit syncbase.
                 The definition of the implicit syncbase depends upon the element's parent time container.
                 The offset is measured in parent simple time.</li>
             <li>Event describes an event and an optional offset that determine the
@@ -100,7 +100,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
         children (e.g. animate or area elements).
 
         #EndSync is
-            either a <atom>short</atom> constant from EndSync,
+            either a `short` constant from EndSync,
             an interface reference to a child XTimeContainer
             or <void/>.
 
@@ -112,7 +112,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
         <br>
         #RepeatCount is
             <ul>
-            <li><atom>double</atom>
+            <li>`double`
                 this is a numeric value that specifies the number of iterations.
                 It can include partial iterations expressed as fraction values.
                 A fractional value describes a portion of the simple duration.
@@ -132,7 +132,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
         <br>
         #RepeatDuration is
             <ul>
-            <li><atom>double</atom>
+            <li>`double`
                 specifies the duration in element active time
                 to repeat the simple duration in seconds.</li>
             <li>Timing::INDEFINITE the element is defined to repeat indefinitely
@@ -178,7 +178,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
     /** defines the restart behavior of this element.
         <br>
         #Restart is
-            a <atom>short</atom> value from AnimationRestart.
+            a `short` value from AnimationRestart.
 
         @see AnimationRestart
         @see http://www.w3.org/TR/smil20/smil-timing.html#adef-restart

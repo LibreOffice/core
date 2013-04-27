@@ -61,7 +61,7 @@ published struct FeatureStateEvent: com::sun::star::lang::EventObject
         <p>
         This can be, for example, simply <TRUE/> for a boolean feature like
         underline on/off. Some simple types like <code>string</code> or
-        <atom>boolean</atom> are useful here for generic UI elements, like
+        `boolean` are useful here for generic UI elements, like
         a checkmark in a menu.
         </p>
      */

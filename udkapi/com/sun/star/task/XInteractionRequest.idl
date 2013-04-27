@@ -35,7 +35,7 @@ published interface XInteractionRequest: com::sun::star::uno::XInterface
 
         @returns
         an com::sun::star::uno::Exception, wrapped as an
-        <atom>any</atom>.
+        `any`.
      */
     any getRequest();
 

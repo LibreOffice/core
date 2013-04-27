@@ -54,7 +54,7 @@ published interface XImageConsumer: com::sun::star::uno::XInterface
              [in] long AlphaMask );
 
 
-    /** delivers a chunk of pixels as <atom>long</atom> values.
+    /** delivers a chunk of pixels as `long` values.
 
         <p>The pixels of the image are delivered using one or more calls
         to this method.  Each call specifies the location and size of the
@@ -73,7 +73,7 @@ published interface XImageConsumer: com::sun::star::uno::XInterface
              [in] long nScanSize );
 
 
-    /** delivers a chunk of pixels as <atom>byte</atom> values.
+    /** delivers a chunk of pixels as `byte` values.
 
         <p>The pixels of the image are delivered using one or more calls
         to this method.  Each call specifies the location and size of the

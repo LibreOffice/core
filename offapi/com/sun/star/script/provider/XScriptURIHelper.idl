@@ -38,7 +38,7 @@ interface XScriptURIHelper : ::com::sun::star::uno::XInterface {
         resulting string can be used to access the storage for this
         using the Universal Content Broker
 
-        @returns a URI to the storage as a <atom>string</atom>
+        @returns a URI to the storage as a `string`
     */
     string getRootStorageURI();
 
@@ -46,7 +46,7 @@ interface XScriptURIHelper : ::com::sun::star::uno::XInterface {
         Obtain the storage URI for a specific Scripting Framework
         script URI.
 
-        @returns a URI to the storage as a <atom>string</atom>
+        @returns a URI to the storage as a `string`
 
         @throws ::com::sun::star::lang::IllegalArgumentException
             if the storageURI is not a valid
@@ -57,7 +57,7 @@ interface XScriptURIHelper : ::com::sun::star::uno::XInterface {
     /**
         Obtain the Scripting Framework script URI for a specific UCB URI
 
-        @returns the URI as a <atom>string</atom>
+        @returns the URI as a `string`
 
         @throws ::com::sun::star::lang::IllegalArgumentException
             if the storageURI is not a valid

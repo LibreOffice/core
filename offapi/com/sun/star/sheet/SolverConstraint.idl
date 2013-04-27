@@ -37,7 +37,7 @@ struct SolverConstraint
     /// The type of the constraint.
     SolverConstraintOperator Operator;
 
-    /** The comparison value, of type <atom>double</atom> or
+    /** The comparison value, of type `double` or
         com::sun::star::table::CellAddress.
      */
     any Right;

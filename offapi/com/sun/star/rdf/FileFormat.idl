@@ -34,7 +34,7 @@ module com {   module sun {   module star {   module rdf {
 
     <p>
     Note that these are integers because UNO IDL does not permit
-    <atom>string</atom> constants.
+    `string` constants.
     </p>
 
     @since OOo 3.0

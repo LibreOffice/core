@@ -40,7 +40,7 @@ interface XDefaultMethod : ::com::sun::star::uno::XInterface
     Returns the name of the default method
 
     @return
-     The <atom>string</atom> name of default method
+     The `string` name of default method
   */
   string getDefaultMethodName();
 

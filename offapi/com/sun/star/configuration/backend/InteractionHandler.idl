@@ -78,7 +78,7 @@ published service InteractionHandler
             com::sun::star::awt::XWindow denotes the
             parent window for any GUI dialogs the interaction handler pops up;
             it is strongly recommended that this property is supplied;</LI>
-            <LI><code>"Context"</code> of type <atom>string</atom> is a
+            <LI><code>"Context"</code> of type `string` is a
             textual description of the current context (used, e.g., as a first
             line of text in error boxes); this property is optional.</LI>
         </UL></P>

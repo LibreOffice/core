@@ -42,13 +42,13 @@ interface XVersionedSchemaSupplier : XSchemaSupplier
                 component whose schema version will be determined
 
       @returns
-                a <atom>string</atom> that identifies the schema version for
+                a `string` that identifies the schema version for
                 the given component.
 
                 <p> The format of the version string is arbitrary. No meaning
                 should be attached to it, unless an implementing service
                 defines one. If no version can be determined, an empty
-                <atom>string</atom> may be returned.
+                `string` may be returned.
                 </p>
 
                 <p> Clients may assume that all instances of a schema with the

@@ -39,7 +39,7 @@ interface XParameter: XMethodParameter {
        <p>A rest parameter must always come last in a parameter list.</p>
 
        <p>Currently, only service constructors can have rest parameters, and
-       those rest parameters must be in parameters of type <atom>any</atom>.</p>
+       those rest parameters must be in parameters of type `any`.</p>
 
        @return <TRUE/> if and only if this parameter is a rest parameter
      */

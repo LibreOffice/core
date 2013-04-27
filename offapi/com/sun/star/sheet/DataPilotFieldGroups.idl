@@ -73,7 +73,7 @@ published service DataPilotFieldGroups
         implementation should support the following data types:
 
         <ul>
-        <li>an empty <atom>any</atom> to remove all items and leave the
+        <li>an empty `any` to remove all items and leave the
         group empty. The group can be filled later with new item names.</li>
         <li>a <atom dim="[]">string</atom> containing all item names that will
         be part of the group.</li>

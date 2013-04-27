@@ -37,11 +37,11 @@ published interface XProgressHandler: com::sun::star::uno::XInterface
         be an agreement between caller and callee of methods
         XProgressHandler::push() and
         XProgressHandler::update() as to which Status
-        arguments are meaningful.  For example, a <atom>string</atom> argument
+        arguments are meaningful.  For example, a `string` argument
         to XProgressHandler::push() should be used to transport
         some status text that describes the progress being made (possibly
         followed by one or more XProgressHandler::update()s with
-        <atom>string</atom> arguments, if the appropriate status text changes
+        `string` arguments, if the appropriate status text changes
         as progress is being made).
     */
     void push([in] any Status);

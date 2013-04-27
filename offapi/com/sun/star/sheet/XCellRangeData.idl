@@ -33,16 +33,16 @@ published interface XCellRangeData: com::sun::star::uno::XInterface
 {
     /** gets an array from the contents of the cell range.
 
-        <p>Each element of the result contains a <atom>double</atom>
-        or a <atom>string</atom>.</p>
+        <p>Each element of the result contains a `double`
+        or a `string`.</p>
      */
     sequence< sequence< any > > getDataArray();
 
     /** fills the cell range with values from an array.
 
         <p>The size of the array must be the same as the size of the cell
-        range. Each element of the array must contain a <atom>double</atom>
-        or a <atom>string</atom>.</p>
+        range. Each element of the array must contain a `double`
+        or a `string`.</p>
 
         @throws com::sun::star::uno::RuntimeException
             If the size of the array is different from the current size.

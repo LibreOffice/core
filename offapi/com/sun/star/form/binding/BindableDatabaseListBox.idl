@@ -34,12 +34,12 @@ module com {  module sun {  module star {  module form {  module binding {
     is set at a BindableDatabaseListBox, the types from the following list are
     tried in descending order: The first type supported by the binding is used for data exchange.
     <ol>
-        <li><em>sequences of <atom>any</atom>s</em>:
+        <li><em>sequences of `any`s</em>:
             The elements in the sequence will represent
             the values the selected entries of the list box
             (taken from ValueList or read from BoundColumn).
             In other words, the SelectedValues property.</li>
-        <li><em><atom>any</atom> value</em>:
+        <li><em>`any` value</em>:
             The value will represent the value of the selected entry
             (taken from ValueList or read from BoundColumn).
             If more than one entry is selected,

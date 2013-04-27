@@ -82,7 +82,7 @@ published service DataPilotFieldGroup
         argument. An implementation should support the following data types:
 
         <ul>
-        <li>a non-empty <atom>string</atom> specifying the new name of the
+        <li>a non-empty `string` specifying the new name of the
         group member.</li>
         <li>an object supporting the <type scope="com::sun::star::container">
         XNamed</type> interface, for example an instance of

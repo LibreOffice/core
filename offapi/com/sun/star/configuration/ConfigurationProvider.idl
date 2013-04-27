@@ -93,7 +93,7 @@ published service ConfigurationProvider
  </p>
 
  <p>With both of the standard service-specifiers above, an implementation must
- accept a single argument named <code>nodepath</code> of type <atom>string</atom>.
+ accept a single argument named <code>nodepath</code> of type `string`.
  This argument must contain the absolute path to an element of the
  configuration. The view that is selected consists of the named element and
  all its descendants.
@@ -113,9 +113,9 @@ published service ConfigurationProvider
     <li>
        <strong>Selecting data into a view:</strong>
        <dl>
-         <dt><code>"nodepath"</code> : <atom>string</atom></dt>
+         <dt><code>"nodepath"</code> : `string`</dt>
          <dd>specifies the location of the view root in the configuration.</dd>
-         <dt><code>"depth"</code> : <atom>short</atom></dt>
+         <dt><code>"depth"</code> : `short`</dt>
          <dd>specifies that elements of the hierarchy that are more than the given
           number of nesting levels away from the root need not be included in the
           view.
@@ -169,7 +169,7 @@ published service ConfigurationProvider
        <strong>Controlling cache behavior:</strong> (with providers that
         cache configuration data)
        <dl>
-         <dt><code>"enableasync"</code> : <atom>boolean</atom></dt>
+         <dt><code>"enableasync"</code> : `boolean`</dt>
          <dd>controls how updates are handled in the cache. If <TRUE/>, the
           cache may operate in <em>write-back</em> mode, where updates at
           first only affect the cache and are written to persistent storage
@@ -183,7 +183,7 @@ published service ConfigurationProvider
           </em></p>
          </dd>
 
-         <dt><code>"nocache"</code> : <atom>boolean</atom></dt>
+         <dt><code>"nocache"</code> : `boolean`</dt>
          <dd>This deprecated parameter
           specifies that data for the view is not taken from the cache, but
           read directly from storage. This may entail that future changes that

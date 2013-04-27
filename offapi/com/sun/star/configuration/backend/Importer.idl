@@ -51,7 +51,7 @@ published service Importer
             Implementations specify which arguments they support.
 
         <dl>
-            <dt><code>Notify</code> : <atom>boolean</atom></dt>
+            <dt><code>Notify</code> : `boolean`</dt>
             <dd>If <TRUE/>, specifies that the backend should trigger
              notification to its listeners.
             </dd>

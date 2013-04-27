@@ -28,7 +28,7 @@
 /**
     Base members XAnimate::Values, XAnimate::From,
     XAnimate::To and XAnimate::By can be used
-    with <atom>double</atom> values that set the transition progress the specific
+    with `double` values that set the transition progress the specific
     amount of time.
 
 

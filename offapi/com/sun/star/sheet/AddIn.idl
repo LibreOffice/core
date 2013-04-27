@@ -42,32 +42,32 @@ module com {  module sun {  module star {  module sheet {
     <p>Each AddIn function can take parameters of the following types:</p>
 
     <dl>
-    <dt><atom>long</atom></dt>
+    <dt>`long`</dt>
     <dd>for integer values.</dd>
 
-    <dt><atom>double</atom></dt>
+    <dt>`double`</dt>
     <dd>for floating point values.</dd>
 
-    <dt><atom>string</atom></dt>
+    <dt>`string`</dt>
     <dd>for text strings.</dd>
 
-    <dt><atom>long[][]</atom></dt>
+    <dt>`long[][]`</dt>
     <dd>for (two-dimensional) arrays of integer values.</dd>
 
-    <dt><atom>double[][]</atom></dt>
+    <dt>`double[][]`</dt>
     <dd>for (two-dimensional) arrays of floating point values.</dd>
 
-    <dt><atom>string[][]</atom></dt>
+    <dt>`string[][]`</dt>
     <dd>for (two-dimensional) arrays of text strings.</dd>
 
-    <dt><atom>any[][]</atom></dt>
-    <dd>for (two-dimensional) arrays of mixed contents. Each <atom>any</atom>
-    will contain a <atom>double</atom> or a <atom>string</atom>, depending on
+    <dt>`any[][]`</dt>
+    <dd>for (two-dimensional) arrays of mixed contents. Each `any`
+    will contain a `double` or a `string`, depending on
     the data.</dd>
 
-    <dt><atom>any</atom></dt>
-    <dd>Depending on the data, a <atom>double</atom>, a <atom>string</atom>,
-    or an <atom>any[][]</atom> will be passed. If no argument is specified in
+    <dt>`any`</dt>
+    <dd>Depending on the data, a `double`, a `string`,
+    or an `any[][]` will be passed. If no argument is specified in
     the function call, <void/> will be passed. This allows for optional
     parameters.</dd>
 
@@ -82,26 +82,26 @@ module com {  module sun {  module star {  module sheet {
     can be used to query document settings like
     SpreadsheetDocumentSettings::NullDate.</dd>
 
-    <dt><atom>any[]</atom></dt>
+    <dt>`any[]`</dt>
     <dd>for varying parameters. Only the last parameter of a function may
     have this type. It will be filled with the remaining arguments of the
     function call that were not used for the previous parameters. Each
-    element of the sequence will be filled as in the case of <atom>any</atom>
+    element of the sequence will be filled as in the case of `any`
     above.</dd>
     </dl>
 
     <p>Each AddIn function must have one of the following return types:</p>
 
     <ul>
-    <li><atom>long</atom></li>
-    <li><atom>double</atom></li>
-    <li><atom>string</atom></li>
-    <li><atom>long[][]</atom></li>
-    <li><atom>double[][]</atom></li>
-    <li><atom>string[][]</atom></li>
-    <li><atom>any[][]</atom></li>
+    <li>`long`</li>
+    <li>`double`</li>
+    <li>`string`</li>
+    <li>`long[][]`</li>
+    <li>`double[][]`</li>
+    <li>`string[][]`</li>
+    <li>`any[][]`</li>
     <li>XVolatileResult</li>
-    <li><atom>any</atom></li>
+    <li>`any`</li>
     </ul>
 
     <p>The sequences must contain arrays as described above for the
@@ -110,7 +110,7 @@ module com {  module sun {  module star {  module sheet {
     implementing the VolatileResult service, that contains
     a volatile result. Subsequent calls with the same parameters must
     return the same object.
-    An <atom>any</atom> return value can contain any of the other types.</p>
+    An `any` return value can contain any of the other types.</p>
  */
 published service AddIn
 {

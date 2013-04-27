@@ -57,7 +57,7 @@ published struct Property
         the property.
 
         <p>If the property has multiple types or the type is not
-        known, <strong>but not an <atom>any</atom></strong>, then
+        known, <strong>but not an `any`</strong>, then
         void must be returned.</p>
      */
     type Type;

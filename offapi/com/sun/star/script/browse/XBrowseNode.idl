@@ -37,7 +37,7 @@ interface XBrowseNode : ::com::sun::star::uno::XInterface
     Get the name of the node
 
     @return
-     The <atom>string</atom> name of this node
+     The `string` name of this node
   */
   string getName();
 
@@ -53,12 +53,12 @@ interface XBrowseNode : ::com::sun::star::uno::XInterface
     Indicates if this node contains any children
 
     @returns
-    <atom> boolean </atom> true if there are child nodes.
+    ` boolean ` true if there are child nodes.
   */
     boolean hasChildNodes();
 
     /** the type of the node.
-        @returns A <atom>short</atom> representing the type of this node.
+        @returns A `short` representing the type of this node.
     */
     short getType();
 

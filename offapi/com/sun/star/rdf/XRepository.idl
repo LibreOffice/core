@@ -313,7 +313,7 @@ interface XRepository
         </p>
 
         @param Query
-            the SPARQL query <atom>string</atom>
+            the SPARQL query `string`
 
         @returns
             an enumeration, containing
@@ -343,7 +343,7 @@ interface XRepository
         </p>
 
         @param Query
-            the SPARQL query <atom>string</atom>
+            the SPARQL query `string`
 
         @returns
             an iterator over the query result graph, represented as an
@@ -370,7 +370,7 @@ interface XRepository
         </p>
 
         @param Query
-            the SPARQL query <atom>string</atom>
+            the SPARQL query `string`
 
         @returns
             the boolean query result

@@ -65,7 +65,7 @@ published interface XUriReference: com::sun::star::uno::XInterface {
        @returns
        the textual representation of the scheme part (with the exact spelling
        retained; without the delimiting &ldquo;<code>:</code>&rdquo;), if this
-       is an absolute URI reference; otherwise, an empty <atom>string</atom> is
+       is an absolute URI reference; otherwise, an empty `string` is
        returned.
      */
     string getScheme();
@@ -111,7 +111,7 @@ published interface XUriReference: com::sun::star::uno::XInterface {
        @returns
        the textual representation of the authority part (with the exact spelling
        retained), if this is a hierarchical URI reference that has an authority
-       part; otherwise, an empty <atom>string</atom> is returned.
+       part; otherwise, an empty `string` is returned.
      */
     string getAuthority();
 
@@ -161,7 +161,7 @@ published interface XUriReference: com::sun::star::uno::XInterface {
        spelling retained, without any delimiting &ldquo;<code>/</code>&rdquo;),
        if this URI reference is hierarchical and has that many path segments;
        otherwise, and in particular if <code>index</code> is negative, an empty
-       <atom>string</atom> is returned.
+       `string` is returned.
      */
     string getPathSegment([in] long index);
 
@@ -180,7 +180,7 @@ published interface XUriReference: com::sun::star::uno::XInterface {
        the textual representation of the query part (with the exact spelling
        retained; without the delimiting &ldquo;<code>?</code>&rdquo;), if this
        is a hierarchical URI reference that has a query part; otherwise, an
-       empty <atom>string</atom> is returned.
+       empty `string` is returned.
      */
     string getQuery();
 
@@ -199,7 +199,7 @@ published interface XUriReference: com::sun::star::uno::XInterface {
        the textual representation of the fragment part (with the exact spelling
        retained; without the delimiting &ldquo;<code>#</code>&rdquo;), if this
        is a URI reference that has a fragment part; otherwise, an empty
-       <atom>string</atom> is returned.
+       `string` is returned.
      */
     string getFragment();
 

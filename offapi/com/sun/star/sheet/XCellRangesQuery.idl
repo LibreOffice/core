@@ -61,7 +61,7 @@ published interface XCellRangesQuery: com::sun::star::uno::XInterface
             a combination of CellFlags flags.
 
             <p>Attention: Despite the CellFlags flags are
-            <atom>long</atom> values, this method expects a <atom>short</atom>
+            `long` values, this method expects a `short`
             parameter.</p>
 
             <p>Attention: Empty cells in the range may be skipped depending on

@@ -24,12 +24,12 @@
 
 module com { module sun { module star { module ucb {
 
-/** compares two <atom>any</atom>s.
+/** compares two `any`s.
 */
 
 published interface XAnyCompare: com::sun::star::uno::XInterface
 {
-    /** allows comparison of two <atom>any</atom>s.
+    /** allows comparison of two `any`s.
 
         @param Any1
         is the first compare value

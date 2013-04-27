@@ -60,11 +60,11 @@ published service LayerUpdateMerger
             com::sun::star::beans::NamedValue.
             Implementations should support the following named arguments:
         <dl>
-            <dt><code>Overwrite</code> : <atom>boolean</atom></dt>
+            <dt><code>Overwrite</code> : `boolean`</dt>
             <dd>If <FALSE/>, specifies that changes should be applied
                 only if the existing layer is empty.
             </dd>
-            <dt><code>Truncate</code> : <atom>boolean</atom></dt>
+            <dt><code>Truncate</code> : `boolean`</dt>
             <dd>If <TRUE/> requests that changes should not be merged onto
                 existing data, but that the changes should be applied
                 to a layer that is completely empty.

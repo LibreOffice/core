@@ -47,17 +47,17 @@ published service LocalHierarchyBrowser
             com::sun::star::task::XJob::execute():<BR/>
 
         <dl>
-            <dt><code>SchemaDataUrl</code> : <atom>string</atom></dt>
+            <dt><code>SchemaDataUrl</code> : `string`</dt>
             <dd>Base directory to search for schema files.
                 If this is specified, schema files will be browsed,
                 so argument <code>LayerDataUrl</code> should not be specified.
             </dd>
-            <dt><code>LayerDataUrl</code> : <atom>string</atom></dt>
+            <dt><code>LayerDataUrl</code> : `string`</dt>
             <dd>Base directory to search for layer files.
                 If this is specified, layer files will be browsed,
                 so argument <code>SchemaDataUrl</code> should not be specified.
             </dd>
-            <dt><code>FetchComponentNames</code> : <atom>boolean</atom></dt>
+            <dt><code>FetchComponentNames</code> : `boolean`</dt>
             <dd><ul><li>if <TRUE/> components will be returned as component names,</li>
                     <li>if <FALSE/> components will be returned as fileURLs,</li>
                     <li>if this argument is not provided, the default is to

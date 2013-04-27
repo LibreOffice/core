@@ -26,8 +26,8 @@ module com {  module sun {  module star {  module bridge {  module oleautomation
     </p>
     <p>
     A <code>SCODE</code> is used to express errors in Automation.
-    In UNO it could be represented by a <atom>long</atom> and therefore a typedef
-    from <atom>long</atom> to a particular error type  would do. But a typedef
+    In UNO it could be represented by a `long` and therefore a typedef
+    from `long` to a particular error type  would do. But a typedef
     cannot be expressed in all language bindings. In the case where no typedefs
     are supported the actual type is used. That is, a typedef'd error type would
     be represented as <code>int</code> in Java. The information that the
@@ -35,7 +35,7 @@ module com {  module sun {  module star {  module bridge {  module oleautomation
     </p>
     <p>
     When calling Automation objects from UNO the distinction between error type
-    and <atom>long</atom> is important. Therefore the Scode is
+    and `long` is important. Therefore the Scode is
     declared as struct.
     </p>
 

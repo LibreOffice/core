@@ -43,10 +43,10 @@ published interface XSheetConditionalEntries: com::sun::star::container::XIndexA
         <dt>ConditionOperator Operator</dt>
         <dd>contains the operation to perform for this condition.</dd>
 
-        <dt><atom>string</atom> Formula1</dt>
+        <dt>`string` Formula1</dt>
         <dd>contains the value or formula for the operation.</dd>
 
-        <dt><atom>string</atom> Formula2</dt>
+        <dt>`string` Formula2</dt>
         <dd>contains the second value or formula for the operation (used with
         ConditionOperator::BETWEEN or
         ConditionOperator::NOT_BETWEEN operations).</dd>
@@ -56,7 +56,7 @@ published interface XSheetConditionalEntries: com::sun::star::container::XIndexA
         <dd>contains the base address for relative cell references in formulas.
         </dd>
 
-        <dt><atom>string</atom> StyleName</dt>
+        <dt>`string` StyleName</dt>
         <dd>contains the name of the cell style used by this condition.</dd>
         </dl>
 

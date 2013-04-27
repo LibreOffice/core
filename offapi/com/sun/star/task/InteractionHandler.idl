@@ -90,12 +90,12 @@ module com { module sun { module star { module task {
         <DT><code>"Uri"</code></DT>
         <DD>All error codes except
         com::sun::star::ucb::IOErrorCode::DIFFERENT_DEVICES.
-        The URI of the involved resource (a <atom>string</atom>).</DD>
+        The URI of the involved resource (a `string`).</DD>
 
         <DT><code>"ResourceName"</code></DT>
         <DD>All error codes except
         com::sun::star::ucb::IOErrorCode::DIFFERENT_DEVICES.
-        A name for the involved resource (a <atom>string</atom>) that might be
+        A name for the involved resource (a `string`) that might be
         more meaningful to the user than the URI.  For example, a
         (platform-dependent) path notation for file system resources.</DD>
 
@@ -104,7 +104,7 @@ module com { module sun { module star { module task {
         and
         com::sun::star::ucb::IOErrorCode::NOT_EXISTING
         only.  An identifier for the type of resource involved (a
-        <atom>string</atom>).  Currently understood values are
+        `string`).  Currently understood values are
         <code>"volume"</code> (e.g., a file system volume) and
         <code>"folder"</code> (i.e., a resource that contains other
         resources).</DD>
@@ -112,17 +112,17 @@ module com { module sun { module star { module task {
         <DT><code>"Removable"</code></DT>
         <DD>com::sun::star::ucb::IOErrorCode::NOT_EXISTING
         only.  A flag indicating whether the resource resides on a storage
-        medium that can be removed by the user (a <atom>boolean</atom>).</DD>
+        medium that can be removed by the user (a `boolean`).</DD>
 
         <DT><code>"Folder"</code></DT>
         <DD>com::sun::star::ucb::IOErrorCode::CANT_CREATE
         only.  The name of the folder in which a resource cannot be created (a
-        <atom>string</atom>).</DD>
+        `string`).</DD>
 
         <DT><code>"Volume"</code> and <code>"OtherVolume"</code></DT>
         <DD>com::sun::star::ucb::IOErrorCode::DIFFERENT_DEVICES
         only.  The names of the two volumes involved (two
-        <atom>string</atom>s).</DD>
+        `string`s).</DD>
     </DL></P>
 
     <a name="configuring_handlers"></a>

@@ -53,7 +53,7 @@ interface XDocumentRepository : XRepository
         <ol>
         <li>Remove all previously set RDFa statements for the Object parameter
              from the repository</li>
-        <li>If the RDFaContent parameter is the empty <atom>string</atom>,
+        <li>If the RDFaContent parameter is the empty `string`,
             for every Predicate in the given list of Predicates,
             add the following RDF statement to an unspecified named graph:
             <ul>
@@ -61,7 +61,7 @@ interface XDocumentRepository : XRepository
                       XLiteral(Object->getText()^^RDFaDatatype)</code></li>
             </ul>
         </li>
-        <li>If the RDFaContent parameter is not the empty <atom>string</atom>,
+        <li>If the RDFaContent parameter is not the empty `string`,
             for every Predicate in the given list of Predicates,
             add the following RDF statement to an unspecified named graph:
             <ul>
@@ -95,7 +95,7 @@ interface XDocumentRepository : XRepository
 
         @param RDFaContent
             the <code>rdfa:content</code> attribute (may be the empty
-            <atom>string</atom>).
+            `string`).
 
         @param RDFaDatatype
             the <code>rdfa:datatype</code> attribute (may be <NULL/>)

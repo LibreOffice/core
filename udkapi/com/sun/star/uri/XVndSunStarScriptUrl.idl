@@ -86,7 +86,7 @@ published interface XVndSunStarScriptUrl: com::sun::star::uno::XInterface {
 
        @returns
        <TRUE/> if this URL has at least one parameter with the given key.  In
-       particular, if <code>key</code> is an empty <atom>string</atom>, <FALSE/>
+       particular, if <code>key</code> is an empty `string`, <FALSE/>
        is returned.
      */
     boolean hasParameter([in] string key);
@@ -100,7 +100,7 @@ published interface XVndSunStarScriptUrl: com::sun::star::uno::XInterface {
        @returns
        the non-escaped value of the first parameter with the given key.  If
        there is no parameter with the given key, or if <code>key</code> is an
-       empty <atom>string</atom>, an empty <atom>string</atom> is returned.
+       empty `string`, an empty `string` is returned.
      */
     string getParameter([in] string key);
 

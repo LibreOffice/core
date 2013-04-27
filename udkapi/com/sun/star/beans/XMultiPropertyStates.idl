@@ -85,7 +85,7 @@ published interface XMultiPropertyStates: com::sun::star::uno::XInterface
 
         <p>If no default exists, is not known, or is void,
         then the return type at the corresponding position in the
-        sequence returned is <atom>void</atom>. </p>
+        sequence returned is `void`. </p>
 
         @param aPropertyName
             specifies the names of the properties. All names must be unique.
