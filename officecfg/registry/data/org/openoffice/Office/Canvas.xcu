@@ -1,112 +1,103 @@
-<?xml version='1.0' encoding='UTF-8'?>
-
-<oor:component-data oor:name="Canvas" oor:package="org.openoffice.Office" xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
- <node oor:name="DXCanvas">
-  <prop oor:name="MaxTextureSize" oor:type="xs:int">
-   <!-- Nvidia GeForce Go 6800 crashes with a bluescreen if we take the maximum texture size, which would be twice as large -->
-   <!-- NVidia Quadro NVS 285 simply refuses rendering (failing silently) if we take the maximum texture size -->
-   <value>2048</value>
-  </prop>
-  <prop oor:name="BlacklistCurrentDevice" oor:type="xs:boolean">
-   <value>false</value>
-  </prop>
-  <prop oor:name="DeviceBlacklist" oor:type="oor:int-list">
-   <value>
-    <!-- Matrox G550 - blank display on 2nd head -->
-    4139 9511 260313131 1 5 13 1 1320
-    <!-- Matrox G550 - blank display (single head?) -->
-    4139 9511 255987755 1 6 12 1 1930
-    <!-- Matrox G400 - random crashes -->
-    4139 1317 54005803 4 5 12 1 1200
-    <!-- Mobility Radeon M6 16MB - blank screen 1st slide on internal LCD -->
-    4098 19545 -2132340659 0 6 13 3265 0
-    <!-- ATI Mobility 128 AGP 2X - blank screen -->
-    4098 19526 11604008 2 5 10 0 1028
-    <!-- CPU-integrated HD4000 Graphic - busted max texture size - fdo#54417 -->
-    32902 354 -2067132349 9 9 17 10 2828
-   </value>
-  </prop>
- </node>
- <node oor:name="CanvasServiceList">
-  <node oor:name="com.sun.star.rendering.Canvas" oor:op="replace">
-   <prop oor:name="PreferredImplementations" oor:type="oor:string-list">
-    <value oor:separator=",">com.sun.star.comp.rendering.BitmapCanvas.GDI+,
-                             com.sun.star.comp.rendering.Canvas.GDI+,
-                             com.sun.star.comp.rendering.Canvas.Cairo,
-                             com.sun.star.comp.rendering.Canvas.GL,
-                             com.sun.star.comp.rendering.Canvas.Java,
-                             com.sun.star.comp.rendering.Canvas.VCL
-    </value>
-   </prop>
-   <prop oor:name="AcceleratedImplementations" oor:type="oor:string-list">
-    <value oor:separator=",">com.sun.star.comp.rendering.Canvas.GL,
-                             com.sun.star.comp.rendering.Canvas.Java
-    </value>
-   </prop>
-   <prop oor:name="AntialiasingImplementations" oor:type="oor:string-list">
-    <value oor:separator=",">com.sun.star.comp.rendering.BitmapCanvas.GDI+,
-                             com.sun.star.comp.rendering.Canvas.GDI+,
-                             com.sun.star.comp.rendering.Canvas.Cairo,
-                             com.sun.star.comp.rendering.Canvas.GL,
-                             com.sun.star.comp.rendering.Canvas.Java
-    </value>
-   </prop>
+<?xml version="1.0" encoding="UTF-8"?>
+<oor:component-data xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Canvas" oor:package="org.openoffice.Office">
+  <node oor:name="DXCanvas">
+    <prop oor:name="MaxTextureSize" oor:type="xs:int">
+      <!-- Nvidia GeForce Go 6800 crashes with a bluescreen if we take the maximum texture size, which would be twice as large -->
+      <!-- NVidia Quadro NVS 285 simply refuses rendering (failing silently) if we take the maximum texture size -->
+      <value>2048</value>
+    </prop>
+    <prop oor:name="BlacklistCurrentDevice" oor:type="xs:boolean">
+      <value>false</value>
+    </prop>
+    <prop oor:name="DeviceBlacklist" oor:type="oor:int-list">
+      <value><!-- Matrox G550 - blank display on 2nd head -->
+        4139 9511 260313131 1 5 13 1 1320
+        <!-- Matrox G550 - blank display (single head?) -->
+        4139 9511 255987755 1 6 12 1 1930
+        <!-- Matrox G400 - random crashes -->
+        4139 1317 54005803 4 5 12 1 1200
+        <!-- Mobility Radeon M6 16MB - blank screen 1st slide on internal LCD -->
+        4098 19545 -2132340659 0 6 13 3265 0
+        <!-- ATI Mobility 128 AGP 2X - blank screen -->
+        4098 19526 11604008 2 5 10 0 1028
+        <!-- CPU-integrated HD4000 Graphic - busted max texture size - fdo#54417 -->
+        32902 354 -2067132349 9 9 17 10 2828
+      </value>
+    </prop>
   </node>
-  <node oor:name="com.sun.star.rendering.SpriteCanvas" oor:op="replace">
-   <prop oor:name="PreferredImplementations" oor:type="oor:string-list">
-    <value oor:separator=",">com.sun.star.comp.rendering.SpriteCanvas.DX9,
-                             com.sun.star.comp.rendering.SpriteCanvas.DX5,
-                             com.sun.star.comp.rendering.SpriteCanvas.Cairo,
-                             com.sun.star.comp.rendering.SpriteCanvas.GL,
-                             com.sun.star.comp.rendering.SpriteCanvas.Java,
-                             com.sun.star.comp.rendering.SpriteCanvas.VCL
-    </value>
-   </prop>
-   <prop oor:name="AcceleratedImplementations" oor:type="oor:string-list">
-    <value oor:separator=",">com.sun.star.comp.rendering.SpriteCanvas.DX9,
-                             com.sun.star.comp.rendering.SpriteCanvas.DX5,
-                             com.sun.star.comp.rendering.SpriteCanvas.Cairo,
-                             com.sun.star.comp.rendering.SpriteCanvas.GL,
-                             com.sun.star.comp.rendering.SpriteCanvas.Java
-    </value>
-   </prop>
-   <prop oor:name="AntialiasingImplementations" oor:type="oor:string-list">
-    <value oor:separator=",">com.sun.star.comp.rendering.SpriteCanvas.DX9,
-                             com.sun.star.comp.rendering.SpriteCanvas.DX5,
-                             com.sun.star.comp.rendering.SpriteCanvas.Cairo,
-                             com.sun.star.comp.rendering.SpriteCanvas.GL,
-                             com.sun.star.comp.rendering.SpriteCanvas.Java
-    </value>
-   </prop>
+  <node oor:name="CanvasServiceList">
+    <node oor:name="com.sun.star.rendering.Canvas" oor:op="replace">
+      <prop oor:name="PreferredImplementations" oor:type="oor:string-list">
+        <value oor:separator=",">com.sun.star.comp.rendering.BitmapCanvas.GDI+,
+                                 com.sun.star.comp.rendering.Canvas.GDI+,
+                                 com.sun.star.comp.rendering.Canvas.Cairo,
+                                 com.sun.star.comp.rendering.Canvas.GL,
+                                 com.sun.star.comp.rendering.Canvas.Java,
+                                 com.sun.star.comp.rendering.Canvas.VCL
+        </value>
+      </prop>
+      <prop oor:name="AcceleratedImplementations" oor:type="oor:string-list">
+        <value oor:separator=",">com.sun.star.comp.rendering.Canvas.GL,
+                                 com.sun.star.comp.rendering.Canvas.Java
+        </value>
+      </prop>
+      <prop oor:name="AntialiasingImplementations" oor:type="oor:string-list">
+        <value oor:separator=",">com.sun.star.comp.rendering.BitmapCanvas.GDI+,
+                                 com.sun.star.comp.rendering.Canvas.GDI+,
+                                 com.sun.star.comp.rendering.Canvas.Cairo,
+                                 com.sun.star.comp.rendering.Canvas.GL,
+                                 com.sun.star.comp.rendering.Canvas.Java
+        </value>
+      </prop>
+    </node>
+    <node oor:name="com.sun.star.rendering.SpriteCanvas" oor:op="replace">
+      <prop oor:name="PreferredImplementations" oor:type="oor:string-list">
+        <value oor:separator=",">com.sun.star.comp.rendering.SpriteCanvas.DX9,
+                                 com.sun.star.comp.rendering.SpriteCanvas.DX5,
+                                 com.sun.star.comp.rendering.SpriteCanvas.Cairo,
+                                 com.sun.star.comp.rendering.SpriteCanvas.GL,
+                                 com.sun.star.comp.rendering.SpriteCanvas.Java,
+                                 com.sun.star.comp.rendering.SpriteCanvas.VCL
+        </value>
+      </prop>
+      <prop oor:name="AcceleratedImplementations" oor:type="oor:string-list">
+        <value oor:separator=",">com.sun.star.comp.rendering.SpriteCanvas.DX9,
+                                 com.sun.star.comp.rendering.SpriteCanvas.DX5,
+                                 com.sun.star.comp.rendering.SpriteCanvas.Cairo,
+                                 com.sun.star.comp.rendering.SpriteCanvas.GL,
+                                 com.sun.star.comp.rendering.SpriteCanvas.Java
+        </value>
+      </prop>
+      <prop oor:name="AntialiasingImplementations" oor:type="oor:string-list">
+        <value oor:separator=",">com.sun.star.comp.rendering.SpriteCanvas.DX9,
+                                 com.sun.star.comp.rendering.SpriteCanvas.DX5,
+                                 com.sun.star.comp.rendering.SpriteCanvas.Cairo,
+                                 com.sun.star.comp.rendering.SpriteCanvas.GL,
+                                 com.sun.star.comp.rendering.SpriteCanvas.Java
+        </value>
+      </prop>
+    </node>
+    <node oor:name="com.sun.star.rendering.Canvas.MultiScreen" oor:op="replace">
+      <prop oor:name="PreferredImplementations" oor:type="oor:string-list">
+        <value oor:separator=",">com.sun.star.comp.rendering.Canvas.VCL</value>
+      </prop>
+      <prop oor:name="AcceleratedImplementations" oor:type="oor:string-list">
+        <value oor:separator=",">com.sun.star.comp.rendering.Canvas.VCL</value>
+      </prop>
+      <prop oor:name="AntialiasingImplementations" oor:type="oor:string-list">
+        <value oor:separator=",">com.sun.star.comp.rendering.Canvas.VCL</value>
+      </prop>
+    </node>
+    <node oor:name="com.sun.star.rendering.SpriteCanvas.MultiScreen" oor:op="replace">
+      <prop oor:name="PreferredImplementations" oor:type="oor:string-list">
+        <value oor:separator=",">com.sun.star.comp.rendering.SpriteCanvas.VCL</value>
+      </prop>
+      <prop oor:name="AcceleratedImplementations" oor:type="oor:string-list">
+        <value oor:separator=",">com.sun.star.comp.rendering.SpriteCanvas.VCL</value>
+      </prop>
+      <prop oor:name="AntialiasingImplementations" oor:type="oor:string-list">
+        <value oor:separator=",">com.sun.star.comp.rendering.SpriteCanvas.VCL</value>
+      </prop>
+    </node>
   </node>
-  <node oor:name="com.sun.star.rendering.Canvas.MultiScreen" oor:op="replace">
-   <prop oor:name="PreferredImplementations" oor:type="oor:string-list">
-    <value oor:separator=",">com.sun.star.comp.rendering.Canvas.VCL
-    </value>
-   </prop>
-   <prop oor:name="AcceleratedImplementations" oor:type="oor:string-list">
-    <value oor:separator=",">com.sun.star.comp.rendering.Canvas.VCL
-    </value>
-   </prop>
-   <prop oor:name="AntialiasingImplementations" oor:type="oor:string-list">
-    <value oor:separator=",">com.sun.star.comp.rendering.Canvas.VCL
-    </value>
-   </prop>
-  </node>
-  <node oor:name="com.sun.star.rendering.SpriteCanvas.MultiScreen" oor:op="replace">
-   <prop oor:name="PreferredImplementations" oor:type="oor:string-list">
-    <value oor:separator=",">com.sun.star.comp.rendering.SpriteCanvas.VCL
-    </value>
-   </prop>
-   <prop oor:name="AcceleratedImplementations" oor:type="oor:string-list">
-    <value oor:separator=",">com.sun.star.comp.rendering.SpriteCanvas.VCL
-    </value>
-   </prop>
-   <prop oor:name="AntialiasingImplementations" oor:type="oor:string-list">
-    <value oor:separator=",">com.sun.star.comp.rendering.SpriteCanvas.VCL
-    </value>
-   </prop>
-  </node>
- </node>
 </oor:component-data>
-

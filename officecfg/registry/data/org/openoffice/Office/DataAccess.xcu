@@ -17,45 +17,45 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
-<oor:component-data oor:name="DataAccess" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:install="http://openoffice.org/2004/installation" oor:name="DataAccess" oor:package="org.openoffice.Office">
   <node oor:name="ReportEngines" install:module="reportbuilder">
     <prop oor:name="DefaultReportEngine" oor:type="xs:string">
-        <value>Pentaho Reporting Flow Engine</value>
+      <value>Pentaho Reporting Flow Engine</value>
     </prop>
     <node oor:name="ReportEngineNames">
-        <node oor:name="Pentaho Reporting Flow Engine" oor:op="replace">
-            <prop oor:name="UIName" oor:type="xs:string">
-                <value>Pentaho Reporting Flow Engine</value>
-            </prop>
-            <prop oor:name="ServiceName" oor:type="xs:string">
-                <value>org.libreoffice.report.pentaho.SOReportJobFactory</value>
-            </prop>
-        </node>
+      <node oor:name="Pentaho Reporting Flow Engine" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value>Pentaho Reporting Flow Engine</value>
+        </prop>
+        <prop oor:name="ServiceName" oor:type="xs:string">
+          <value>org.libreoffice.report.pentaho.SOReportJobFactory</value>
+        </prop>
+      </node>
     </node>
   </node>
   <node oor:name="ConnectionPool">
     <node oor:name="DriverSettings">
       <node oor:name="com.sun.star.comp.sdbc.evoab.OEvoabDriver" oor:op="replace">
-         <prop oor:name="DriverName">
-           <value>com.sun.star.comp.sdbc.evoab.OEvoabDriver</value>
-         </prop>
-         <prop oor:name="Enable">
-           <value>false</value>
-         </prop>
-         <prop oor:name="Timeout">
-           <value>60</value>
-         </prop>
+        <prop oor:name="DriverName">
+          <value>com.sun.star.comp.sdbc.evoab.OEvoabDriver</value>
+        </prop>
+        <prop oor:name="Enable">
+          <value>false</value>
+        </prop>
+        <prop oor:name="Timeout">
+          <value>60</value>
+        </prop>
       </node>
       <node oor:name="com.sun.star.comp.sdbc.kab.Driver" oor:op="replace">
-         <prop oor:name="DriverName">
-           <value>com.sun.star.comp.sdbc.kab.Driver</value>
-         </prop>
-         <prop oor:name="Enable">
-           <value>false</value>
-         </prop>
-         <prop oor:name="Timeout">
-           <value>60</value>
-         </prop>
+        <prop oor:name="DriverName">
+          <value>com.sun.star.comp.sdbc.kab.Driver</value>
+        </prop>
+        <prop oor:name="Enable">
+          <value>false</value>
+        </prop>
+        <prop oor:name="Timeout">
+          <value>60</value>
+        </prop>
       </node>
       <node oor:name="com.sun.star.comp.sdbc.ado.ODriver" oor:op="replace">
         <prop oor:name="DriverName">
@@ -149,20 +149,20 @@
   </node>
   <node oor:name="RegisteredNames">
     <node oor:name="EvolutionLocal" oor:op="replace" install:module="evoab2">
-        <prop oor:name="Location" oor:type="xs:string">
-            <value>$(userurl)/database/evolocal.odb</value>
-        </prop>
-        <prop oor:name="Name" oor:type="xs:string">
-            <value>EvolutionLocal</value>
-        </prop>
+      <prop oor:name="Location" oor:type="xs:string">
+        <value>$(userurl)/database/evolocal.odb</value>
+      </prop>
+      <prop oor:name="Name" oor:type="xs:string">
+        <value>EvolutionLocal</value>
+      </prop>
     </node>
     <node oor:name="org.openoffice.Bibliography" oor:op="replace">
-        <prop oor:name="Location" oor:type="xs:string">
-            <value>$(userurl)/database/biblio.odb</value>
-        </prop>
-        <prop oor:name="Name" oor:type="xs:string">
-            <value>Bibliography</value>
-        </prop>
+      <prop oor:name="Location" oor:type="xs:string">
+        <value>$(userurl)/database/biblio.odb</value>
+      </prop>
+      <prop oor:name="Name" oor:type="xs:string">
+        <value>Bibliography</value>
+      </prop>
     </node>
   </node>
   <node oor:name="Bibliography">
@@ -444,12 +444,12 @@
   <node oor:name="DriverSettings">
     <node oor:name="com.sun.star.comp.sdbc.MozabDriver">
       <node oor:name="MozillaPreferences">
-        <prop oor:name="PabDescription" >
+        <prop oor:name="PabDescription">
           <value xml:lang="en-US">Personal Address book</value>
-    </prop>
+        </prop>
         <prop oor:name="HisDescription">
           <value xml:lang="en-US">Collected Addresses</value>
-           </prop>
+        </prop>
       </node>
       <node oor:name="ColumnAliases">
         <prop oor:name="FirstName">

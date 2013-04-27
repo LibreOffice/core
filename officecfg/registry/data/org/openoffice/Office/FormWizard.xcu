@@ -17,119 +17,119 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
-<oor:component-data oor:name="FormWizard" oor:package="org.openoffice.Office" xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <node oor:name="FormWizard">
-        <node oor:name="Styles">
-            <node oor:name="style1" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>0</value>
-                </prop>
-                <prop oor:name="Name">
-                    <value xml:lang="en-US">Beige</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>beige.css</value>
-                </prop>
-            </node>
-            <node oor:name="style2" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>2</value>
-                </prop>
-                <prop oor:name="Name">
-                    <value xml:lang="en-US">Bright Blue</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>bgr.css</value>
-                </prop>
-            </node>
-            <node oor:name="style3" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>8</value>
-                </prop>
-                <prop oor:name="Name">
-                    <value xml:lang="en-US">Light Gray</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>grey.css</value>
-                </prop>
-            </node>
-            <node oor:name="style4" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>9</value>
-                </prop>
-                <prop oor:name="Name">
-                    <value xml:lang="en-US">Dark</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>dark.css</value>
-                </prop>
-            </node>
-            <node oor:name="style5" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>12</value>
-                </prop>
-                <prop oor:name="Name">
-                    <value xml:lang="en-US">Orange</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>orange.css</value>
-                </prop>
-            </node>
-            <node oor:name="style6" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>13</value>
-                </prop>
-                <prop oor:name="Name">
-                    <value xml:lang="en-US">Ice Blue</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>ibg.css</value>
-                </prop>
-            </node>
-            <node oor:name="style7" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>14</value>
-                </prop>
-                <prop oor:name="Name">
-                    <value xml:lang="en-US">Grey</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>ice.css</value>
-                </prop>
-            </node>
-            <node oor:name="style8" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>15</value>
-                </prop>
-                <prop oor:name="Name">
-                    <value xml:lang="en-US">Water</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>water.css</value>
-                </prop>
-            </node>
-            <node oor:name="style9" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>16</value>
-                </prop>
-                <prop oor:name="Name">
-                    <value xml:lang="en-US">Red</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>red.css</value>
-                </prop>
-            </node>
-            <node oor:name="style10" oor:op="replace">
-                <prop oor:name="Index">
-                    <value>19</value>
-                </prop>
-                <prop oor:name="Name">
-                    <value xml:lang="en-US">Violet</value>
-                </prop>
-                <prop oor:name="CssHref">
-                    <value>violet.css</value>
-                </prop>
-            </node>
-        </node>
+<oor:component-data xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="FormWizard" oor:package="org.openoffice.Office">
+  <node oor:name="FormWizard">
+    <node oor:name="Styles">
+      <node oor:name="style1" oor:op="replace">
+        <prop oor:name="Index">
+          <value>0</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Beige</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>beige.css</value>
+        </prop>
+      </node>
+      <node oor:name="style2" oor:op="replace">
+        <prop oor:name="Index">
+          <value>2</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Bright Blue</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>bgr.css</value>
+        </prop>
+      </node>
+      <node oor:name="style3" oor:op="replace">
+        <prop oor:name="Index">
+          <value>8</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Light Gray</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>grey.css</value>
+        </prop>
+      </node>
+      <node oor:name="style4" oor:op="replace">
+        <prop oor:name="Index">
+          <value>9</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Dark</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>dark.css</value>
+        </prop>
+      </node>
+      <node oor:name="style5" oor:op="replace">
+        <prop oor:name="Index">
+          <value>12</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Orange</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>orange.css</value>
+        </prop>
+      </node>
+      <node oor:name="style6" oor:op="replace">
+        <prop oor:name="Index">
+          <value>13</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Ice Blue</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>ibg.css</value>
+        </prop>
+      </node>
+      <node oor:name="style7" oor:op="replace">
+        <prop oor:name="Index">
+          <value>14</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Grey</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>ice.css</value>
+        </prop>
+      </node>
+      <node oor:name="style8" oor:op="replace">
+        <prop oor:name="Index">
+          <value>15</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Water</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>water.css</value>
+        </prop>
+      </node>
+      <node oor:name="style9" oor:op="replace">
+        <prop oor:name="Index">
+          <value>16</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Red</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>red.css</value>
+        </prop>
+      </node>
+      <node oor:name="style10" oor:op="replace">
+        <prop oor:name="Index">
+          <value>19</value>
+        </prop>
+        <prop oor:name="Name">
+          <value xml:lang="en-US">Violet</value>
+        </prop>
+        <prop oor:name="CssHref">
+          <value>violet.css</value>
+        </prop>
+      </node>
     </node>
+  </node>
 </oor:component-data>

@@ -16,107 +16,105 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
-
-<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    oor:name="ExtensionDependencies" oor:package="org.openoffice.Office">
-    <node oor:name="Extensions">
-        <node oor:name="com.oracle.Office.Connector.Professional" oor:op="replace">
-            <prop oor:name="Versions">
-                <value>
-                    <it>1.0.0</it>
-                </value>
-            </prop>
-            <prop oor:name="Dependencies">
-                <value>&lt;d:dependencies xmlns:d=&quot;http://openoffice.org/extensions/description/2006&quot;&gt;&lt;d:OpenOffice.org-maximal-version d:name=&quot;OpenOffice.org 3.3&quot; value="3.3"/&gt;&lt;/d:dependencies&gt;</value>
-            </prop>
-        </node>
-        <node oor:name="org.openoffice.bi.OracleBIConnector" oor:op="replace">
-            <prop oor:name="Versions">
-                <value>
-                    <it>1.0</it>
-                </value>
-            </prop>
-            <prop oor:name="Dependencies">
-                <value>&lt;d:dependencies xmlns:d=&quot;http://openoffice.org/extensions/description/2006&quot;&gt;&lt;d:OpenOffice.org-maximal-version d:name=&quot;OpenOffice.org 3.3&quot; value="3.3"/&gt;&lt;/d:dependencies&gt;</value>
-            </prop>
-        </node>
-        <node oor:name="com.sun.PresenterScreen-linux_x86" oor:op="replace">
-            <prop oor:name="Versions">
-                <value>
-                    <it>1.0</it>
-                    <it>1.0.1</it>
-                    <it>1.0.2</it>
-                    <it>1.0.3</it>
-                </value>
-            </prop>
-            <prop oor:name="Dependencies">
-                <value>&lt;d:dependencies xmlns:d=&quot;http://openoffice.org/extensions/description/2006&quot;&gt;&lt;d:OpenOffice.org-maximal-version d:name=&quot;OpenOffice.org 3.2&quot; value="3.2"/&gt;&lt;/d:dependencies&gt;</value>
-            </prop>
-        </node>
-        <node oor:name="com.sun.PresenterScreen-linux_x86_64" oor:op="replace">
-            <prop oor:name="Versions">
-                <value>
-                    <it>1.0</it>
-                    <it>1.0.1</it>
-                    <it>1.0.2</it>
-                    <it>1.0.3</it>
-                </value>
-            </prop>
-            <prop oor:name="Dependencies">
-                <value>&lt;d:dependencies xmlns:d=&quot;http://openoffice.org/extensions/description/2006&quot;&gt;&lt;d:OpenOffice.org-maximal-version d:name=&quot;OpenOffice.org 3.2&quot; value="3.2"/&gt;&lt;/d:dependencies&gt;</value>
-            </prop>
-        </node>
-        <node oor:name="com.sun.PresenterScreen-macosx_x86" oor:op="replace">
-            <prop oor:name="Versions">
-                <value>
-                    <it>1.0</it>
-                    <it>1.0.1</it>
-                    <it>1.0.2</it>
-                    <it>1.0.3</it>
-                </value>
-            </prop>
-            <prop oor:name="Dependencies">
-                <value>&lt;d:dependencies xmlns:d=&quot;http://openoffice.org/extensions/description/2006&quot;&gt;&lt;d:OpenOffice.org-maximal-version d:name=&quot;OpenOffice.org 3.2&quot; value="3.2"/&gt;&lt;/d:dependencies&gt;</value>
-            </prop>
-        </node>
-        <node oor:name="com.sun.PresenterScreen-windows_x86" oor:op="replace">
-            <prop oor:name="Versions">
-                <value>
-                    <it>1.0</it>
-                    <it>1.0.1</it>
-                    <it>1.0.2</it>
-                    <it>1.0.3</it>
-                </value>
-            </prop>
-            <prop oor:name="Dependencies">
-                <value>&lt;d:dependencies xmlns:d=&quot;http://openoffice.org/extensions/description/2006&quot;&gt;&lt;d:OpenOffice.org-maximal-version d:name=&quot;OpenOffice.org 3.2&quot; value="3.2"/&gt;&lt;/d:dependencies&gt;</value>
-            </prop>
-        </node>
-        <node oor:name="com.sun.PresenterScreen-solaris_x86" oor:op="replace">
-            <prop oor:name="Versions">
-                <value>
-                    <it>1.0</it>
-                    <it>1.0.1</it>
-                    <it>1.0.2</it>
-                    <it>1.0.3</it>
-                </value>
-            </prop>
-            <prop oor:name="Dependencies">
-                <value>&lt;d:dependencies xmlns:d=&quot;http://openoffice.org/extensions/description/2006&quot;&gt;&lt;d:OpenOffice.org-maximal-version d:name=&quot;OpenOffice.org 3.2&quot; value="3.2"/&gt;&lt;/d:dependencies&gt;</value>
-            </prop>
-        </node>
-        <node oor:name="com.sun.PresenterScreen-solaris_sparc" oor:op="replace">
-            <prop oor:name="Versions">
-                <value>
-                    <it>1.0</it>
-                    <it>1.0.1</it>
-                    <it>1.0.2</it>
-                    <it>1.0.3</it>
-                </value>
-            </prop>
-            <prop oor:name="Dependencies">
-                <value>&lt;d:dependencies xmlns:d=&quot;http://openoffice.org/extensions/description/2006&quot;&gt;&lt;d:OpenOffice.org-maximal-version d:name=&quot;OpenOffice.org 3.2&quot; value="3.2"/&gt;&lt;/d:dependencies&gt;</value>
-            </prop>
-        </node>
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="ExtensionDependencies" oor:package="org.openoffice.Office">
+  <node oor:name="Extensions">
+    <node oor:name="com.oracle.Office.Connector.Professional" oor:op="replace">
+      <prop oor:name="Versions">
+        <value>
+          <it>1.0.0</it>
+        </value>
+      </prop>
+      <prop oor:name="Dependencies">
+        <value>&lt;d:dependencies xmlns:d="http://openoffice.org/extensions/description/2006"&gt;&lt;d:OpenOffice.org-maximal-version d:name="OpenOffice.org 3.3" value="3.3"/&gt;&lt;/d:dependencies&gt;</value>
+      </prop>
     </node>
+    <node oor:name="org.openoffice.bi.OracleBIConnector" oor:op="replace">
+      <prop oor:name="Versions">
+        <value>
+          <it>1.0</it>
+        </value>
+      </prop>
+      <prop oor:name="Dependencies">
+        <value>&lt;d:dependencies xmlns:d="http://openoffice.org/extensions/description/2006"&gt;&lt;d:OpenOffice.org-maximal-version d:name="OpenOffice.org 3.3" value="3.3"/&gt;&lt;/d:dependencies&gt;</value>
+      </prop>
+    </node>
+    <node oor:name="com.sun.PresenterScreen-linux_x86" oor:op="replace">
+      <prop oor:name="Versions">
+        <value>
+          <it>1.0</it>
+          <it>1.0.1</it>
+          <it>1.0.2</it>
+          <it>1.0.3</it>
+        </value>
+      </prop>
+      <prop oor:name="Dependencies">
+        <value>&lt;d:dependencies xmlns:d="http://openoffice.org/extensions/description/2006"&gt;&lt;d:OpenOffice.org-maximal-version d:name="OpenOffice.org 3.2" value="3.2"/&gt;&lt;/d:dependencies&gt;</value>
+      </prop>
+    </node>
+    <node oor:name="com.sun.PresenterScreen-linux_x86_64" oor:op="replace">
+      <prop oor:name="Versions">
+        <value>
+          <it>1.0</it>
+          <it>1.0.1</it>
+          <it>1.0.2</it>
+          <it>1.0.3</it>
+        </value>
+      </prop>
+      <prop oor:name="Dependencies">
+        <value>&lt;d:dependencies xmlns:d="http://openoffice.org/extensions/description/2006"&gt;&lt;d:OpenOffice.org-maximal-version d:name="OpenOffice.org 3.2" value="3.2"/&gt;&lt;/d:dependencies&gt;</value>
+      </prop>
+    </node>
+    <node oor:name="com.sun.PresenterScreen-macosx_x86" oor:op="replace">
+      <prop oor:name="Versions">
+        <value>
+          <it>1.0</it>
+          <it>1.0.1</it>
+          <it>1.0.2</it>
+          <it>1.0.3</it>
+        </value>
+      </prop>
+      <prop oor:name="Dependencies">
+        <value>&lt;d:dependencies xmlns:d="http://openoffice.org/extensions/description/2006"&gt;&lt;d:OpenOffice.org-maximal-version d:name="OpenOffice.org 3.2" value="3.2"/&gt;&lt;/d:dependencies&gt;</value>
+      </prop>
+    </node>
+    <node oor:name="com.sun.PresenterScreen-windows_x86" oor:op="replace">
+      <prop oor:name="Versions">
+        <value>
+          <it>1.0</it>
+          <it>1.0.1</it>
+          <it>1.0.2</it>
+          <it>1.0.3</it>
+        </value>
+      </prop>
+      <prop oor:name="Dependencies">
+        <value>&lt;d:dependencies xmlns:d="http://openoffice.org/extensions/description/2006"&gt;&lt;d:OpenOffice.org-maximal-version d:name="OpenOffice.org 3.2" value="3.2"/&gt;&lt;/d:dependencies&gt;</value>
+      </prop>
+    </node>
+    <node oor:name="com.sun.PresenterScreen-solaris_x86" oor:op="replace">
+      <prop oor:name="Versions">
+        <value>
+          <it>1.0</it>
+          <it>1.0.1</it>
+          <it>1.0.2</it>
+          <it>1.0.3</it>
+        </value>
+      </prop>
+      <prop oor:name="Dependencies">
+        <value>&lt;d:dependencies xmlns:d="http://openoffice.org/extensions/description/2006"&gt;&lt;d:OpenOffice.org-maximal-version d:name="OpenOffice.org 3.2" value="3.2"/&gt;&lt;/d:dependencies&gt;</value>
+      </prop>
+    </node>
+    <node oor:name="com.sun.PresenterScreen-solaris_sparc" oor:op="replace">
+      <prop oor:name="Versions">
+        <value>
+          <it>1.0</it>
+          <it>1.0.1</it>
+          <it>1.0.2</it>
+          <it>1.0.3</it>
+        </value>
+      </prop>
+      <prop oor:name="Dependencies">
+        <value>&lt;d:dependencies xmlns:d="http://openoffice.org/extensions/description/2006"&gt;&lt;d:OpenOffice.org-maximal-version d:name="OpenOffice.org 3.2" value="3.2"/&gt;&lt;/d:dependencies&gt;</value>
+      </prop>
+    </node>
+  </node>
 </oor:component-data>

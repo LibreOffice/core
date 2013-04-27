@@ -1,55 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE oor:component-data SYSTEM "../../../../../component-update.dtd">
-<oor:component-data oor:name="BibliographyCommands" oor:package="org.openoffice.Office.UI" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <node oor:name="UserInterface">
-        <node oor:name="Commands">
-            <node oor:name=".uno:Bib/Mapping" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Column Arrangement...</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:Bib/standardFilter" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Filter...</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:Bib/DeleteRecord" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Delete ~Record</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:Bib/InsertRecord" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Record</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:Bib/sdbsource" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Choose Data Source...</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:Bib/source" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Table</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:Bib/query" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Search Key</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:Bib/autoFilter" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">AutoFilter</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:Bib/removeFilter" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Remove Filter</value>
-                </prop>
-            </node>
-        </node>
-        <node oor:name="Popups">
-        </node>
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:install="http://openoffice.org/2004/installation" oor:name="BibliographyCommands" oor:package="org.openoffice.Office.UI">
+  <node oor:name="UserInterface">
+    <node oor:name="Commands">
+      <node oor:name=".uno:Bib/Mapping" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Column Arrangement...</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:Bib/standardFilter" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Filter...</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:Bib/DeleteRecord" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Delete ~Record</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:Bib/InsertRecord" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Record</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:Bib/sdbsource" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Choose Data Source...</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:Bib/source" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Table</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:Bib/query" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Search Key</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:Bib/autoFilter" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">AutoFilter</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:Bib/removeFilter" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Remove Filter</value>
+        </prop>
+      </node>
     </node>
+    <node oor:name="Popups"/>
+  </node>
 </oor:component-data>

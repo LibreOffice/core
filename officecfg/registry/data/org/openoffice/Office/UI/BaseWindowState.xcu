@@ -1,108 +1,108 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE oor:component-data SYSTEM "../../../../../component-update.dtd">
-<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="BaseWindowState" oor:package="org.openoffice.Office.UI">
- <node oor:name="UIElements">
-  <node oor:name="States">
-  <node oor:name="private:resource/toolbar/tableobjectbar" oor:op="replace">
-    <prop oor:name="DockPos" oor:type="xs:string">
-     <value>0,0</value>
-    </prop>
-    <prop oor:name="Docked" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="DockingArea" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-     <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Table</value>
-    </prop>
-    <prop oor:name="Visible" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="ContextSensitive" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/queryobjectbar" oor:op="replace">
-    <prop oor:name="DockPos" oor:type="xs:string">
-     <value>0,0</value>
-    </prop>
-    <prop oor:name="Docked" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="DockingArea" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-     <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Query</value>
-    </prop>
-    <prop oor:name="Visible" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="ContextSensitive" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-   </node>
-  <node oor:name="private:resource/toolbar/reportobjectbar" oor:op="replace">
-    <prop oor:name="DockPos" oor:type="xs:string">
-     <value>0,0</value>
-    </prop>
-    <prop oor:name="Docked" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="DockingArea" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-     <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Report</value>
-    </prop>
-    <prop oor:name="Visible" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="ContextSensitive" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/formobjectbar" oor:op="replace">
-    <prop oor:name="DockPos" oor:type="xs:string">
-     <value>0,0</value>
-    </prop>
-    <prop oor:name="Docked" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="DockingArea" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-     <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Form</value>
-    </prop>
-    <prop oor:name="Visible" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="ContextSensitive" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-   </node>
-   <node oor:name="private:resource/toolbar/toolbar" oor:op="replace">
-    <prop oor:name="DockPos" oor:type="xs:string">
-     <value>0,0</value>
-    </prop>
-    <prop oor:name="Docked" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="DockingArea" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Standard</value>
-    </prop>
-    <prop oor:name="Visible" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-    <prop oor:name="ContextSensitive" oor:type="xs:boolean">
-     <value>true</value>
-    </prop>
-   </node>
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:install="http://openoffice.org/2004/installation" oor:name="BaseWindowState" oor:package="org.openoffice.Office.UI">
+  <node oor:name="UIElements">
+    <node oor:name="States">
+      <node oor:name="private:resource/toolbar/tableobjectbar" oor:op="replace">
+        <prop oor:name="DockPos" oor:type="xs:string">
+          <value>0,0</value>
+        </prop>
+        <prop oor:name="Docked" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="DockingArea" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Table</value>
+        </prop>
+        <prop oor:name="Visible" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/toolbar/queryobjectbar" oor:op="replace">
+        <prop oor:name="DockPos" oor:type="xs:string">
+          <value>0,0</value>
+        </prop>
+        <prop oor:name="Docked" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="DockingArea" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Query</value>
+        </prop>
+        <prop oor:name="Visible" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/toolbar/reportobjectbar" oor:op="replace">
+        <prop oor:name="DockPos" oor:type="xs:string">
+          <value>0,0</value>
+        </prop>
+        <prop oor:name="Docked" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="DockingArea" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Report</value>
+        </prop>
+        <prop oor:name="Visible" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/toolbar/formobjectbar" oor:op="replace">
+        <prop oor:name="DockPos" oor:type="xs:string">
+          <value>0,0</value>
+        </prop>
+        <prop oor:name="Docked" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="DockingArea" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Form</value>
+        </prop>
+        <prop oor:name="Visible" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/toolbar/toolbar" oor:op="replace">
+        <prop oor:name="DockPos" oor:type="xs:string">
+          <value>0,0</value>
+        </prop>
+        <prop oor:name="Docked" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="DockingArea" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Standard</value>
+        </prop>
+        <prop oor:name="Visible" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+      </node>
+    </node>
   </node>
- </node>
 </oor:component-data>

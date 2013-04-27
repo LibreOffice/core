@@ -1,76 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE oor:component-data SYSTEM "../../../../../component-update.dtd">
-<oor:component-data oor:name="BasicIDECommands" oor:package="org.openoffice.Office.UI" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <node oor:name="UserInterface">
-        <node oor:name="Commands">
-             <node oor:name=".uno:GotoLine" oor:op="replace">
-                 <prop oor:name="Label" oor:type="xs:string">
-                     <value xml:lang="en-US">Goto Line Number...</value>
-                 </prop>
-            </node>
-            <node oor:name=".uno:ShowLines" oor:op="replace">
-                 <prop oor:name="Label" oor:type="xs:string">
-                     <value xml:lang="en-US">Line Numbers</value>
-                 </prop>
-            </node>
-            <node oor:name=".uno:InsertFormRadio" oor:op="replace">
-                 <prop oor:name="Label" oor:type="xs:string">
-                     <value xml:lang="en-US">Form Option Button</value>
-                 </prop>
-                 <prop oor:name="Properties" oor:type="xs:int">
-                     <value>1</value>
-                 </prop>
-            </node>
-            <node oor:name=".uno:InsertFormCheck" oor:op="replace">
-                 <prop oor:name="Label" oor:type="xs:string">
-                     <value xml:lang="en-US">Form Check Box</value>
-                 </prop>
-                 <prop oor:name="Properties" oor:type="xs:int">
-                     <value>1</value>
-                 </prop>
-            </node>
-            <node oor:name=".uno:InsertFormList" oor:op="replace">
-                 <prop oor:name="Label" oor:type="xs:string">
-                     <value xml:lang="en-US">Form List Box</value>
-                 </prop>
-                 <prop oor:name="Properties" oor:type="xs:int">
-                     <value>1</value>
-                 </prop>
-            </node>
-            <node oor:name=".uno:InsertFormCombo" oor:op="replace">
-                 <prop oor:name="Label" oor:type="xs:string">
-                     <value xml:lang="en-US">Form Combo Box</value>
-                 </prop>
-                 <prop oor:name="Properties" oor:type="xs:int">
-                     <value>1</value>
-                 </prop>
-            </node>
-            <node oor:name=".uno:InsertFormVScroll" oor:op="replace">
-                 <prop oor:name="Label" oor:type="xs:string">
-                     <value xml:lang="en-US">Form Vertical Scroll Bar</value>
-                 </prop>
-                 <prop oor:name="Properties" oor:type="xs:int">
-                     <value>1</value>
-                 </prop>
-            </node>
-            <node oor:name=".uno:InsertFormHScroll" oor:op="replace">
-                 <prop oor:name="Label" oor:type="xs:string">
-                     <value xml:lang="en-US">Form Horizonal Scroll Bar</value>
-                 </prop>
-                 <prop oor:name="Properties" oor:type="xs:int">
-                     <value>1</value>
-                 </prop>
-            </node>
-            <node oor:name=".uno:InsertFormSpin" oor:op="replace">
-                 <prop oor:name="Label" oor:type="xs:string">
-                     <value xml:lang="en-US">Form Spin Button</value>
-                 </prop>
-                 <prop oor:name="Properties" oor:type="xs:int">
-                     <value>1</value>
-                 </prop>
-            </node>
-        </node>
-        <node oor:name="Popups">
-        </node>
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:install="http://openoffice.org/2004/installation" oor:name="BasicIDECommands" oor:package="org.openoffice.Office.UI">
+  <node oor:name="UserInterface">
+    <node oor:name="Commands">
+      <node oor:name=".uno:GotoLine" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Goto Line Number...</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ShowLines" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Line Numbers</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:InsertFormRadio" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Form Option Button</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:InsertFormCheck" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Form Check Box</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:InsertFormList" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Form List Box</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:InsertFormCombo" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Form Combo Box</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:InsertFormVScroll" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Form Vertical Scroll Bar</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:InsertFormHScroll" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Form Horizonal Scroll Bar</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:InsertFormSpin" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Form Spin Button</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
     </node>
+    <node oor:name="Popups"/>
+  </node>
 </oor:component-data>
