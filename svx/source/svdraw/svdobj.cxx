@@ -568,12 +568,24 @@ SdrObjList* SdrObject::GetObjList() const
 
 void SdrObject::SetPage(SdrPage* pNewPage)
 {
+    SdrModel* pOldModel = pModel;
+    SdrPage* pOldPage = pPage;
+
     pPage=pNewPage;
     if (pPage!=NULL) {
         SdrModel* pMod=pPage->GetModel();
         if (pMod!=pModel && pMod!=NULL) {
             SetModel(pMod);
         }}
+
+    // The creation of the UNO shape in SdrObject::getUnoShape is influenced
+    // by pPage, so when the page changes we need to discard the cached UNO
+    // shape so that a new one will be created.
+    // If the page is changing to another page with the same model, we
+    // assume they create compatible UNO shape objects so we shouldn't have
+    // to invalidate.
+    if (pOldPage != pPage && !(pOldPage && pPage && pOldModel == pModel))
+        setUnoShape(NULL);
 }
 
 SdrPage* SdrObject::GetPage() const
