@@ -39,8 +39,6 @@
 #include <symbol.hxx>
 #include <types.hxx>
 
-using namespace com::sun::star;
-
 class SmSym;
 class SmFormat;
 class Font;

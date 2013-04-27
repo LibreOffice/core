@@ -42,8 +42,6 @@
 #include <map>
 #include <algorithm>
 
-using namespace ::com::sun::star;
-
 class SvTreeListEntry;
 class ThesaurusAlternativesCtrl;
 

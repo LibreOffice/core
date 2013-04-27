@@ -113,6 +113,7 @@
 #include "WW8FibData.hxx"
 #include "numrule.hxx"//For i120928
 
+using namespace css;
 using namespace sw::util;
 using namespace sw::types;
 

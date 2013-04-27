@@ -26,6 +26,8 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 
+using namespace css;
+
 // -----------------------------------------------------------------------
 
 IMPL_LINK_NOARG(SSLWarnDialog, OKHdl_Impl)

@@ -44,8 +44,6 @@ class SwTableBox;
 class SwDoc;
 class SwPaM;
 
-using namespace com::sun::star;
-
 inline void SwFltClearFlag(sal_uLong& rFieldFlags, int no)
     { rFieldFlags &= ~(1L << no); }
 

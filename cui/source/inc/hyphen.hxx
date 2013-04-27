@@ -29,8 +29,6 @@
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/linguistic2/XPossibleHyphens.hpp>
 
-using namespace ::com::sun::star;
-
 class SvxSpellWrapper;
 
 class HyphenEdit : public Edit
@@ -54,8 +52,8 @@ class SvxHyphenWordDialog : public SfxModalDialog
     CloseButton*        m_pCloseBtn;
     String              aLabel;
     SvxSpellWrapper*    pHyphWrapper;
-    uno::Reference< linguistic2::XHyphenator >        xHyphenator;
-    uno::Reference< linguistic2::XPossibleHyphens >   xPossHyph;
+    css::uno::Reference< css::linguistic2::XHyphenator >        xHyphenator;
+    css::uno::Reference< css::linguistic2::XPossibleHyphens >   xPossHyph;
     String              aEditWord;      // aEditWord and aWordEdit.GetText() differ only by the character for the current selected hyphenation position
     String              aActWord;           // actual word to be hyphenated
     LanguageType        nActLanguage;       // and its language
@@ -67,7 +65,7 @@ class SvxHyphenWordDialog : public SfxModalDialog
 
 
     void            EnableLRBtn_Impl();
-    String          EraseUnusableHyphens_Impl( uno::Reference< linguistic2::XPossibleHyphens >  &rxPossHyph, sal_uInt16 nMaxHyphenationPos );
+    String          EraseUnusableHyphens_Impl( css::uno::Reference< css::linguistic2::XPossibleHyphens >  &rxPossHyph, sal_uInt16 nMaxHyphenationPos );
 
     void            InitControls_Impl();
     void            ContinueHyph_Impl( sal_uInt16 nInsPos = 0 );
@@ -85,7 +83,7 @@ class SvxHyphenWordDialog : public SfxModalDialog
 public:
     SvxHyphenWordDialog( const String &rWord, LanguageType nLang,
                          Window* pParent,
-                         uno::Reference< linguistic2::XHyphenator >  &xHyphen,
+                         css::uno::Reference< css::linguistic2::XHyphenator >  &xHyphen,
                          SvxSpellWrapper* pWrapper );
     virtual ~SvxHyphenWordDialog();
 

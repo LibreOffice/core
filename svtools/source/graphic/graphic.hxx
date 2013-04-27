@@ -28,8 +28,6 @@
 #include "descriptor.hxx"
 #include "transformer.hxx"
 
-using namespace com::sun::star;
-
 class Graphic;
 
 namespace unographic {

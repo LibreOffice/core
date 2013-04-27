@@ -68,6 +68,7 @@
 
 #define MAX_FIELDLEN 64000
 
+using namespace css;
 using namespace nsSwDocInfoSubType;
 
 

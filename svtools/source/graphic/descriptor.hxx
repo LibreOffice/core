@@ -53,8 +53,6 @@
 #define MIMETYPE_SVG        "image/svg+xml"
 #define MIMETYPE_VCLGRAPHIC "image/x-vclgraphic"
 
-using namespace com::sun::star;
-
 namespace comphelper { class PropertySetInfo; }
 namespace com { namespace sun { namespace star { namespace io { class XInputStream; } } } }
 

@@ -19,16 +19,12 @@
 #ifndef UUI_UNKNOWNAUTH_HXX
 #define UUI_UNKNOWNAUTH_HXX
 
-
 #include <vcl/dialog.hxx>
-
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-
-using namespace com::sun::star;
 
 //=====================================================================
 //= Https_UADialog

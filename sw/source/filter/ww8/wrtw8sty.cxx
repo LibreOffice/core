@@ -70,6 +70,7 @@
 #include "docxattributeoutput.hxx"
 #include "rtfattributeoutput.hxx"
 
+using namespace css;
 using namespace sw::util;
 using namespace nsHdFtFlags;
 

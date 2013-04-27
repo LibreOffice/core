@@ -27,9 +27,6 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XGraphicRenderer.hpp>
 
-
-using namespace com::sun::star;
-
 class OutputDevice;
 
 namespace unographic {

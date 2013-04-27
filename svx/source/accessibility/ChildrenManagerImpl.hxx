@@ -33,8 +33,6 @@
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
-using namespace ::com::sun::star;
-
 namespace accessibility {
 
 class AccessibleShape;

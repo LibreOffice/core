@@ -26,6 +26,8 @@
 
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 
+using namespace css;
+
 // -----------------------------------------------------------------------
 
 IMPL_LINK_NOARG(UnknownAuthDialog, OKHdl_Impl)

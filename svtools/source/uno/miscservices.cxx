@@ -34,6 +34,7 @@
 
 #include "cppuhelper/implementationentry.hxx"
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::lang;

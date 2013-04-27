@@ -25,8 +25,6 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 
-using namespace com::sun::star;
-
 namespace unographic {
 
 // -------------------

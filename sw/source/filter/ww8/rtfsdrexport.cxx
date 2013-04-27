@@ -29,6 +29,7 @@
 #include <vcl/cvtgrf.hxx>
 
 using namespace sw::util;
+using namespace css;
 
 RtfSdrExport::RtfSdrExport( RtfExport &rExport )
     : EscherEx( EscherExGlobalRef( new EscherExGlobal ), 0 ),

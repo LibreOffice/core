@@ -24,8 +24,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/graphic/XGraphicTransformer.hpp>
 
-using namespace com::sun::star;
-
 namespace unographic {
 
 // ----------------------

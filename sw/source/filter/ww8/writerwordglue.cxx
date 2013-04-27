@@ -50,6 +50,8 @@
 
 #define ASSIGN_CONST_ASC(s) AssignAscii(s)
 
+using namespace css;
+
 namespace myImplHelpers
 {
     SwTwips CalcHdFtDist(const SwFrmFmt& rFmt, sal_uInt16 nSpacing)

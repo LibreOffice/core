@@ -19,7 +19,6 @@
 #ifndef _SVX_THESDLG_HXX
 #define _SVX_THESDLG_HXX
 
-
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 
 #include <svx/checklbx.hxx>
@@ -29,8 +28,6 @@
 #include <svx/stddlg.hxx>
 
 #include <memory>
-
-using namespace ::com::sun::star;
 
 class SvxThesaurusDialog;
 
@@ -132,7 +129,7 @@ class SvxThesaurusDialog : public SvxStandardDialog
 
     OUString                m_aErrStr;
 
-    uno::Reference< linguistic2::XThesaurus >   xThesaurus;
+    css::uno::Reference< css::linguistic2::XThesaurus >   xThesaurus;
     OUString                aLookUpText;
     LanguageType            nLookUpLanguage;
     std::stack< OUString >  aLookUpHistory;
@@ -153,8 +150,8 @@ public:
 
     DECL_STATIC_LINK( SvxThesaurusDialog, SelectFirstHdl_Impl, SvxCheckListBox * );
 
-    uno::Sequence< uno::Reference< linguistic2::XMeaning > >
-            queryMeanings_Impl( OUString& rTerm, const lang::Locale& rLocale, const beans::PropertyValues& rProperties ) throw(lang::IllegalArgumentException, uno::RuntimeException);
+    css::uno::Sequence< css::uno::Reference< css::linguistic2::XMeaning > >
+            queryMeanings_Impl( OUString& rTerm, const css::lang::Locale& rLocale, const css::beans::PropertyValues& rProperties ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException);
 
     bool    UpdateAlternativesBox_Impl();
     void    LookUp( const String &rText );
@@ -163,7 +160,7 @@ public:
 
 public:
     SvxThesaurusDialog( Window* pParent,
-                        uno::Reference< linguistic2::XThesaurus >  xThesaurus,
+                        css::uno::Reference< css::linguistic2::XThesaurus >  xThesaurus,
                         const String &rWord, LanguageType nLanguage );
     ~SvxThesaurusDialog();
 
