@@ -39,7 +39,7 @@ interface XTreeControl
         <p>valid selection values for this interface are
         XTreeNode or sequence&lt;XTreeNode&gt;.</p>
 
-        <method scope="::com::sun::star::view">XSelectionSupplier::getSelection()</method>
+        ::com::sun::star::view::XSelectionSupplier::getSelection()
         returns an empty any for no selection, an any with XTreeNode for
         a single selection and a sequence&lt;XTreeNode&gt; for a multiselection.
     */
@@ -208,7 +208,7 @@ interface XTreeControl
     // tree editing
 
     /** Returns <TRUE/> if one of tree's nodes is being currently edited.
-        <p>The node that is being edited can be obtained using <method scope="com::sun::star::view">XSelectionSupplier::getSelection()</method>.
+        <p>The node that is being edited can be obtained using com::sun::star::view::XSelectionSupplier::getSelection().
 
         @returns
             <TRUE/> if the user is currently editing a node

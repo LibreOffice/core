@@ -73,7 +73,7 @@ published service DefinitionContainer
     /** can be used to create container elements.
         <p>
         If this interface is supported, the object created using it (e.g., the object returned by
-        <method scope="com.sun.star.lang">XSingleServiceFactory::createInstance()</method>
+        com.sun.star.lang::XSingleServiceFactory::createInstance()
         ) can be used as container elements.
         </p>
      */

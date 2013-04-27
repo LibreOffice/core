@@ -74,7 +74,7 @@ published service DataSource
     /** provides the access to DataSource related queries.
         <p>
         The object returned by the
-        <method scope="com::sun::star::sdb">XQueryDefinitionsSupplier::getQueryDefinitions()</method>
+        com::sun::star::sdb::XQueryDefinitionsSupplier::getQueryDefinitions()
         supports the
         com::sun::star::sdb::DefinitionContainer
         service.
@@ -89,7 +89,7 @@ published service DataSource
     /** provides access to bookmarks to documents associated with the data source
         <p>
         The object returned by the
-        <method scope="com::sun::star::sdb">XBookmarksSupplier::getBookmarks()</method>
+        com::sun::star::sdb::XBookmarksSupplier::getBookmarks()
         supports the
         com::sun::star::sdb::DefinitionContainer
         service.

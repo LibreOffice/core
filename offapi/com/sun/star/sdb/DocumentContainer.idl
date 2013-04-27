@@ -97,7 +97,7 @@ service DocumentContainer
     /** can be used to create container elements.
         <p>
         If this interface is supported, the object created using it (e.g., the object returned by
-        <method scope="com.sun.star.lang">XMultiServiceFactory::createInstanceWithArguments()</method>
+        com.sun.star.lang::XMultiServiceFactory::createInstanceWithArguments()
         ) can be used as container elements.
         </p>
      */

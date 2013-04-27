@@ -81,7 +81,7 @@ published service ResultColumn
 
     /** returns the fully-qualified name of the service whose instances
         are manufactured if the method
-        <method scope="com::sun::star::sdbc">XRow::getObject)=</method>
+        com::sun::star::sdbc::XRow::getObject)=
         is called to retrieve a value from the column.
      */
     [readonly, property] string ServiceName;
