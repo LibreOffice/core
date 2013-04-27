@@ -36,7 +36,7 @@
 #include <vcl/menu.hxx>
 
 #ifndef VCLEVENT_WINDOW_FRAMETITLECHANGED
-#define VCLEVENT_WINDOW_FRAMETITLECHANGED   1018    // pData = XubString* = oldTitle
+#define VCLEVENT_WINDOW_FRAMETITLECHANGED   1018
 #endif
 
 using namespace ::com::sun::star;
