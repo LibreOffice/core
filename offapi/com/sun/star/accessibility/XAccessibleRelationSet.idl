@@ -33,9 +33,9 @@ module com { module sun { module star { module accessibility {
     between Accessible objects.  Most of the convenience
     methods of the corresponding AccessibleRelationSet interface of the Java
     Accessibility API have been removed from this interface in order to
-    clean it up.  These methods are <member>add</member>,
-    <member>addAll</member>, <member>clear</member>, and
-    <member>remove</member>.  The other methods have been renamed to achieve
+    clean it up.  These methods are add(),
+    addAll(), clear(), and
+    remove().  The other methods have been renamed to achieve
     a greater conformance with the other accessibility interfaces.</p>
 
     @since OOo 1.1.2

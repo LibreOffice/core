@@ -212,7 +212,7 @@ published interface XCharacterClassification : com::sun::star::uno::XInterface
         at position <em>nPos</em>.
 
         <p> Other parameters are the same as in
-        <member>parseAnyToken</member>. If the actual token does not
+        parseAnyToken(). If the actual token does not
         match the passed <em>nTokenType</em> a
         <member>ParseResult::TokenType</member> set to <b>0</b> (zero)
         is returned. </p>

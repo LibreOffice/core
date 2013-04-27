@@ -71,7 +71,7 @@ interface XChartTypeTemplate : ::com::sun::star::uno::XInterface
         DataSeries and Categories and
         creates a new diagram based on these series.
 
-        <p>Note, that if <member>matchesTemplate</member> returns
+        <p>Note, that if matchesTemplate() returns
         <TRUE/> for the given XDiagram, the latter should
         not be changed.</p>
 
@@ -90,7 +90,7 @@ interface XChartTypeTemplate : ::com::sun::star::uno::XInterface
         diagram is compatible with the data-format of this
         template.</p>
 
-        <p>Ideally a <member>matchesTemplate</member> call for the
+        <p>Ideally a matchesTemplate() call for the
         given diagram should return <TRUE/> before this method is
         called.</p>
 
@@ -121,7 +121,7 @@ interface XChartTypeTemplate : ::com::sun::star::uno::XInterface
         <p>The template will parse the DataSeriesTree of
         the diagram to determine if the structure matches the one
         which would have been created by
-        <member>createDiagramByDataSource</member>.</p>
+        createDiagramByDataSource().</p>
 
         <p>For analysis all parts of the diagram may be used,
         e.g. also properties set at the data series (like symbols)./p>
@@ -139,8 +139,8 @@ interface XChartTypeTemplate : ::com::sun::star::uno::XInterface
         @return
             <TRUE/> if the diagram given is structurally identical to
             a diagram that was created using
-            <member>createDiagramByDataSource</member> or
-            <member>changeDiagram</member>.  If <FALSE/> is returned
+            createDiagramByDataSource() or
+            changeDiagram().  If <FALSE/> is returned
             the template stays unmodified even if
             <code>bAdaptProperties</code> is <TRUE/>.
      */
@@ -201,8 +201,8 @@ interface XChartTypeTemplate : ::com::sun::star::uno::XInterface
     /** Resets all styles that were changed from the default at any
         object in the chart and have not been later modified.
 
-        <p>In <member>createDiagramByDataSource</member> or
-        <member>changeDiagram</member> a template might e.g. change
+        <p>In createDiagramByDataSource() or
+        changeDiagram() a template might e.g. change
         the page background color or the line style of all data
         series.  This method should reset all objects that still have
         the changed settings to the default.</p>

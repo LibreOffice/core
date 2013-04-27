@@ -42,7 +42,7 @@ interface XValueBinding : com::sun::star::uno::XInterface
 
     /** determines whether a given type is supported by this binding for value exchange
 
-        <p>Calling this method is equal to calling <member>getSupportedValueTypes</member>,
+        <p>Calling this method is equal to calling getSupportedValueTypes(),
         and looking up the given type in the resulting type sequence.</p>
 
         @see getSupportedValueTypes

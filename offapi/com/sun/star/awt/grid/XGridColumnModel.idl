@@ -61,7 +61,7 @@ published interface XGridColumnModel
 
     /** creates a new column for use with the column model.
 
-        <p>The newly created column is not yet inserted into the column container, you need to call <member>addColumn</member>
+        <p>The newly created column is not yet inserted into the column container, you need to call addColumn()
         after you initialized the column object.</p>
     */
     XGridColumn
@@ -69,7 +69,7 @@ published interface XGridColumnModel
 
     /** Adds a column to the model.
 
-        <p>You should use the <member>createColumn</member> member to create a new column. This gives
+        <p>You should use the createColumn() member to create a new column. This gives
         implementations of the <code>XGridColumnModel</code> interface the possibility to provide own column
         implementations which extend the basic GridColumn type.</p>
 

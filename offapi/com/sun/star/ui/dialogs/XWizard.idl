@@ -54,16 +54,16 @@ interface XWizardPage;
     are not finally decided. In such a case, the roadmap will display future steps up to the point where the potential
     paths diverge, and then an item <quot><code>...</code></quot> indicating that the order of steps is undecided.</p>
 
-    <p>An XWizardController can declare a certain path as active path by calling the <member>activatePath</member>
+    <p>An XWizardController can declare a certain path as active path by calling the activatePath()
     method. Usually, this is done depending on user input. For instance, your wizard could have radio buttons on the
     first page which effectively decide about which path to take in the wizard.</p>
 
-    <p>Single steps in the wizard can be freely enabled and disabled, using the <member>enablePage</member> method.
+    <p>Single steps in the wizard can be freely enabled and disabled, using the enablePage() method.
     Disabled pages are skipped during sequential traveling, and not selectable in the roadmap.</p>
 
     <p>The state of the <em>Next</em> button in the dialog will be automatically maintained in most situations,
     depending on the results of calls to the <member>XWizardController::canAdvance</member> and <member>XWizardPage::canAdvance</member>
-    methods. More sophisticated wizard logic, however, will need manual calls to the <member>enableButton</member> method.
+    methods. More sophisticated wizard logic, however, will need manual calls to the enableButton() method.
     Also, the <em>Finish</em> button needs to be maintained by the wizard's controller, too, as it cannot be decided
     generically in which situations it should be enabled or disabled.</p>
 

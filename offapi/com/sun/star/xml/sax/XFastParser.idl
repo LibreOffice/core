@@ -48,9 +48,9 @@ module com {  module sun {  module star {  module xml {  module sax {
     namespaces and allows to have individual contexts for each XML element.
 
     <p>Before parsing is possible you have to set your
-    XFastDocumentHandler using <member>setFastDocumentHandler</member>.
+    XFastDocumentHandler using setFastDocumentHandler().
 
-    <p>Parsing starts with calling <member>parseStream</member>. If the parser
+    <p>Parsing starts with calling parseStream(). If the parser
     finds a valid XML file with the given InputSource, it calls
     <member>XFastDocumentHandler::startDocument</member> first.
 
@@ -59,14 +59,14 @@ module com {  module sun {  module star {  module xml {  module sax {
     elements that are unknown.
 
     <p>A namespace is unknown if the namespace URL was not registered with
-    <member>registerNamespace</member>.
+    registerNamespace().
 
     <p>An element is unknown if no XFastTokenHandler is set
     or if the XFastTokenHandler does not return a valid
     identifier for the elements local name. An element is also unknown if
     the elements local name is known but it uses a namespace that is unknown.
 
-    <p>Setting a XFastTokenHandler with <member>setTokenHandler</member>
+    <p>Setting a XFastTokenHandler with setTokenHandler()
     is optional, but without a XFastTokenHandler you will only
     get unknown sax events. This can be useful if you are only interested
     in the namespace handling and/or the context feature.

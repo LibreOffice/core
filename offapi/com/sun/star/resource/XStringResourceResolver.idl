@@ -80,7 +80,7 @@ interface XStringResourceResolver: com::sun::star::util::XModifyBroadcaster
         @param locale
             The locale the string should be resolved for.
             The locale has to match exactly with one of the locales provided by
-            <member>getLocales</member>. A closest match search is not supported.
+            getLocales(). A closest match search is not supported.
 
         @return  the localized string for the specified ID and Locale
 
@@ -117,7 +117,7 @@ interface XStringResourceResolver: com::sun::star::util::XModifyBroadcaster
         @param locale
             The locale the entry should be checked for.
             The locale has to match exactly with one of the locales provided by
-            <member>getLocales</member>. A closest match search is not supported.
+            getLocales(). A closest match search is not supported.
 
         @return  <TRUE/> if an entry exists, otherwise <FALSE/>
     */
@@ -142,7 +142,7 @@ interface XStringResourceResolver: com::sun::star::util::XModifyBroadcaster
         @param locale
             The locale the ResourceIDs should be returned for.
             The locale has to match exactly with one of the locales provided by
-            <member>getLocales</member>. A closest match search is not supported.
+            getLocales(). A closest match search is not supported.
 
         @return  a sequence of all valid Resource IDs
     */

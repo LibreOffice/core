@@ -59,7 +59,7 @@ interface XValidatableFormComponent : XValidatable
         at the validator.
 
         <p>Calling this is equal to calling <member>XValidator::isValid</member> with
-        the current value (see <member>getCurrentValue</member>) of the component, where
+        the current value (see getCurrentValue()) of the component, where
         the validator is obtained via <member>XValidatable::getValidator</member>.</p>
 
         <p>If no validator has been set (<member>XValidatable::setValidator</member>), this method

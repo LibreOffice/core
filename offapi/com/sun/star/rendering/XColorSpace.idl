@@ -128,7 +128,7 @@ interface XColorSpace
         com::sun::star::lang::IllegalArgumentException,
         if the input sequence does not match the device color format.
 
-        @see <member>convertToARGB</member>
+        @see convertToARGB()
      */
     sequence<RGBColor>       convertToRGB( [in] sequence<ColorComponent> deviceColor )
         raises (com::sun::star::lang::IllegalArgumentException);

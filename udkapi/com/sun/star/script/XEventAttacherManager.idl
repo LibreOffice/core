@@ -58,7 +58,7 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
         in the sequence.</p>
 
         <p>If any object is attached under this index, then this
-        event is attached automatically (see <member>attach</member>)</p>
+        event is attached automatically (see attach())</p>
 
         <p>Exceptions of type
         com::sun::star::beans::IntrospectionException and
@@ -80,7 +80,7 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
         members of the ScriptEventDescriptor
         used to register events. If this event at this index has
         been attached to any object, it is detached automatically
-        (see <member>attach</member>).</p>
+        (see attach()).</p>
 
         <p>Exceptions of type
         com::sun::star::beans::IntrospectionException and
@@ -100,7 +100,7 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
 
         <p>If the events at this index have been attached to any
         object, they are detached automatically.
-        (see <member>attach</member>).</p>
+        (see attach()).</p>
 
         @see attach
      */
@@ -120,7 +120,7 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
         <p>If any events are registered at this index, they will
         be revoked, too. So if the events at this index have been
         attached to any object they are detached automatically.
-        (see <member>attach</member>).</p>
+        (see attach()).</p>
 
         @see attach
      */

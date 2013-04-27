@@ -53,7 +53,7 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
 
     /** receives notification that the current schema description is complete.
 
-        <p> Must match a previous call to <member>startSchema</member>.
+        <p> Must match a previous call to startSchema().
         </p>
 
         @throws com::sun::star::configuration::backend::MalformedDataException
@@ -96,7 +96,7 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
     /** receives notification that a component description is started.
 
         <p> Subsequent calls describe the schema of the component
-            until a matching call to <member>endComponent</member>
+            until a matching call to endComponent()
             is encountered.
         </p>
 
@@ -122,7 +122,7 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
 
     /** receives notification that a component description is complete.
 
-        <p> Must match a previous call to <member>startComponent</member>.
+        <p> Must match a previous call to startComponent().
         </p>
 
         @throws com::sun::star::configuration::backend::MalformedDataException
@@ -144,7 +144,7 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
     /** receives notification that a template description is started for a group.
 
         <p> Subsequent calls describe the members and properties of the template
-            until a matching call to <member>endTemplate</member>
+            until a matching call to endTemplate()
             is encountered.
         </p>
 
@@ -186,7 +186,7 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
     /** receives notification that a template description is started for a set.
 
         <p> Subsequent calls describe the members and properties of the template
-            until a matching call to <member>endTemplate</member>
+            until a matching call to endTemplate()
             is encountered.
         </p>
 
@@ -232,8 +232,8 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
 
     /** receives notification that a template description is complete.
 
-        <p> Must match a previous call to <member>startGroupTemplate</member>
-            or <member>startSetTemplate</member>.
+        <p> Must match a previous call to startGroupTemplate()
+            or startSetTemplate().
         </p>
 
         @throws com::sun::star::configuration::backend::MalformedDataException
@@ -255,7 +255,7 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
     /** receives notification that a group description is started.
 
         <p> Subsequent calls describe the members and properties of the group
-            until a matching call to <member>endNode</member>
+            until a matching call to endNode()
             is encountered.
         </p>
 
@@ -294,7 +294,7 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
     /** receives notification that a set description is started.
 
         <p> Subsequent calls describe the item-types and properties of the set
-            until a matching call to <member>endNode</member>
+            until a matching call to endNode()
             is encountered.
         </p>
 
@@ -338,8 +338,8 @@ published interface XSchemaHandler: ::com::sun::star::uno::XInterface
 
     /** receives notification that a node description is complete.
 
-        <p> Must match the last open call to <member>startGroup</member>
-            or <member>startSet</member>.
+        <p> Must match the last open call to startGroup()
+            or startSet().
         </p>
 
         @throws com::sun::star::configuration::backend::MalformedDataException

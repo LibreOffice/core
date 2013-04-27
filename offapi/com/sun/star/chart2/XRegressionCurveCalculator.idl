@@ -72,9 +72,9 @@ interface XRegressionCurveCalculator : com::sun::star::uno::XInterface
     /** calculate multiple points of a regression curve at once. Note
         that this method may optimize the output by returning less
         points, e.g. for a line you may get only two resulting points
-        instead of <member>nPointCount</member> points.  This is only
+        instead of nPointCount() points.  This is only
         allowed if the parameter
-        <member>bMaySkipPointsInCalculation</member> is set to
+        bMaySkipPointsInCalculation() is set to
         <TRUE/>.
 
         <p>It is important that a renderer takes the scalings into

@@ -82,7 +82,7 @@ interface XChartDocument : ::com::sun::star::frame::XModel
         is an internal one.
 
         <p>This is the case directly after
-        <member>createInternalDataProvider</member> has been called,
+        createInternalDataProvider() has been called,
         but this is not necessary.  The chart can also create an
         internal data provider by other means, e.g. a call to
         <member scope="com::sun::star::frame">XModel::initNew</member>.
@@ -91,7 +91,7 @@ interface XChartDocument : ::com::sun::star::frame::XModel
     boolean hasInternalDataProvider();
 
     /** Returns the currently set data provider.  This may be an
-        internal one, if <member>createInternalDataProvider</member>
+        internal one, if createInternalDataProvider()
         has been called before, or an external one if
         <member>XDataReceiver::attachDataProvider</member> has been
         called.

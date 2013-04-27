@@ -45,7 +45,7 @@ interface XFormulaOpCodeMapper
     /** OpCode value used for unknown functions.
 
         <p>Used to identify which of the function names queried with
-        <member>getMappings</member> are unknown to the implementation.</p>
+        getMappings() are unknown to the implementation.</p>
      */
     [attribute, readonly] long OpCodeUnknown;
 

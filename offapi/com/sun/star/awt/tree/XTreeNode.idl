@@ -37,7 +37,7 @@ interface XTreeNode
     /** Returns the child tree node at <var>Index</var>.
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
-            if <var>Index</var> is less than 0 or equal or greater then <member>getChildCount</member>.
+            if <var>Index</var> is less than 0 or equal or greater then getChildCount().
     */
     XTreeNode getChildAt( [in] long Index )
         raises( com::sun::star::lang::IndexOutOfBoundsException );
@@ -56,7 +56,7 @@ interface XTreeNode
 
     /** Returns <TRUE/> if the children of this node are created on demand.
         <p>A TreeControl will handle a node that returns <TRUE/> always
-        like a node that has child nodes, even if <member>getChildCount</member>
+        like a node that has child nodes, even if getChildCount()
         returns 0.</p>
 
         @see TreeExpansionListener;

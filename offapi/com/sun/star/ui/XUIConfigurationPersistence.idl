@@ -45,17 +45,17 @@ interface XUIConfigurationPersistence : ::com::sun::star::uno::XInterface
     void reload() raises ( ::com::sun::star::uno::Exception );
 
     /** stores the configuration data to the storage provided by
-        <member>setStorage</member> from the storage and initialize the
+        setStorage() from the storage and initialize the
         user interface configuration manager instance with the newly
         data. This call can throw an
         com::sun::star::io::IOException if
-        <member>store</member> cannot store its data into the internal
+        store() cannot store its data into the internal
         storage.
     */
     void store() raises ( ::com::sun::star::uno::Exception );
 
     /** stores the configuration data to the provided storage, ignoring
-        the previously set storage by <member>setStorage</member>. Can
+        the previously set storage by setStorage(). Can
         be used to make copy of the current user interface configuration
         data to another storage. This call will throw an
         com::sun::star::io::IOException if the provided
@@ -71,7 +71,7 @@ interface XUIConfigurationPersistence : ::com::sun::star::uno::XInterface
 
         @return
             <TRUE/> if the configuration manager has changed since the
-            last <member>store</member> call. <FALSE/> if the configuration
+            last store() call. <FALSE/> if the configuration
             manager has not been changed.
     */
     boolean isModified();

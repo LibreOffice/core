@@ -35,7 +35,7 @@ interface XStringResourceWithStorage: com::sun::star::resource::XStringResourceP
 {
     /**
         Stores all string table data to a storage and associates this storage
-        to this instance as if <member>setStorage</member> was called with
+        to this instance as if setStorage() was called with
         this storage. The modified state will be unmodified after the call.
 
         This method can throw all exceptions thrown by the methods of
@@ -47,7 +47,7 @@ interface XStringResourceWithStorage: com::sun::star::resource::XStringResourceP
 
     /**
         Associates a storage to the StringResourceWithStorage instance
-        which is used on subsequent calls of <member>store</member>.
+        which is used on subsequent calls of store().
 
         @param Storage
             the storage to be associated to the StringResourceManager
@@ -58,7 +58,7 @@ interface XStringResourceWithStorage: com::sun::star::resource::XStringResourceP
         force the implementation to reload data from the previous storage
         before releasing it. The StringResourceManager will be modified
         after calling this method as the data isn't stored to the new
-        storage yet. <member>storeAsStorage</member> should be preferred
+        storage yet. storeAsStorage() should be preferred
         as it directly stores the data to the new storage and afterwards
         this storage is in sync with the resource data.
         </p>

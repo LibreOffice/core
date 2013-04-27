@@ -90,7 +90,7 @@ interface XAccessibleText : ::com::sun::star::uno::XInterface
             The new index of the caret.  This caret is actually placed to
             the left side of the character with that index.  An index of 0
             places the caret so that the next insertion goes before the
-            first character.  An index of <member>getCharacterCount</member>
+            first character.  An index of getCharacterCount()
             leads to insertion after the last character.
 
         @return

@@ -190,7 +190,7 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
         not covered by the various set and get methods of the composer. That is, if the
         elementary statement contains a filter clause, a call to
         <member>XSingleSelectQueryAnalyzer::getFilter</member> will not return you this
-        filter. Instead, only filters which have been set using for instance <member>setFilter</member>
+        filter. Instead, only filters which have been set using for instance setFilter()
         are covered by the get methods.</p>
 
         <p>The only methods which take all parts of the elementary statement into account are
@@ -200,7 +200,7 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
 
         <p>As a result, you can use the composer to build cumulative filter expressions. That
         is, you can set <member>ElementaryQuery</member> to a statement already containing
-        filters, and then use <member>setFilter</member> to append additional filters.</p>
+        filters, and then use setFilter() to append additional filters.</p>
 
         <p>The very same holds for sort orders, <code>HAVING</code> and <code>GROUP BY</code>
         clauses.</p>

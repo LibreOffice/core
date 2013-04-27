@@ -125,13 +125,13 @@ interface XPropertyHandler
 
     /** converts a given control-compatible value to a property value
 
-        <p>In <member>describePropertyLine</member>, a property handler declared which type of control
+        <p>In describePropertyLine(), a property handler declared which type of control
         should be used to display the value of a certain property. To allow to use the same control
         type for different properties, and in particular, for properties of different type,
         conversions between controls values and property values are needed.</p>
 
         <p>This method converts a control value into a property value, which subsequently can be used
-        in conjunction with <member>setPropertyValue</member>.</p>
+        in conjunction with setPropertyValue().</p>
 
         @param PropertyName
             The name of the conversion's target property.
@@ -156,19 +156,19 @@ interface XPropertyHandler
 
     /** converts a given property value to a control-compatible value
 
-        <p>In <member>describePropertyLine</member>, a property handler declared which type of control
+        <p>In describePropertyLine(), a property handler declared which type of control
         should be used to display the value of a certain property. To allow to use the same control
         type for different properties, and in particular, for properties of different type,
         conversions between controls values and property values are needed.</p>
 
         <p>This method converts a property value, which has previously been obtained using
-        <member>getPropertyValue</member>, into a control-compatible value, which can be used
+        getPropertyValue(), into a control-compatible value, which can be used
         with XPropertyControl's <member>XPropertyControl::Value</member> attribute.</p>
 
         <p>A usual application of this method are list boxes: There is a generic list box implementation,
         which is able to display a simple list of strings. Usually, every string represents one
         possible property value. To translate between those property values and the displayed strings,
-        <member>convertToControlValue</member> and <member>convertToPropertyValue</member> are used.</p>
+        convertToControlValue() and convertToPropertyValue() are used.</p>
 
         <p>The method is not invoked if the control's value type (<member>XPropertyControl::ValueType</member>
         equals the property's value type.</p>
@@ -180,10 +180,10 @@ interface XPropertyHandler
         @param ControlValueType
             The target type of the conversion. This type is determined by the control which
             is used to display the property, which in turn is determined by the handler itself
-            in <member>describePropertyLine</member>.<br/>
+            in describePropertyLine().<br/>
             Speaking strictly, this is passed for convenience only, since every XPropertyHandler
             implementation should know exactly which type to expect, since it implicitly determined this type
-            in <member>describePropertyLine</member> by creating an appropriate XPropertyControl.
+            in describePropertyLine() by creating an appropriate XPropertyControl.
 
         @throws com::sun::star::beans::UnknownPropertyException
             if the given property is not supported by the property handler
@@ -208,9 +208,9 @@ interface XPropertyHandler
         reflected in the object inspector.</p>
 
         <p>If a handler implementation supports property change listeners, it must be able to cope
-        with a call to <member>addPropertyChangeListener</member> even if currently no component is
+        with a call to addPropertyChangeListener() even if currently no component is
         being inspected. In this case, the listener must become active as soon as a new introspection
-        is set in the next <member>inspect</member> call.</p>
+        is set in the next inspect() call.</p>
 
         @param Listener
             the listener to notify about property changes
@@ -243,7 +243,7 @@ interface XPropertyHandler
 
     /** returns the properties which are to be superseded by this handler
 
-        <p>Besides defining an own set of properties (see <member>getSupportedProperties</member>),
+        <p>Besides defining an own set of properties (see getSupportedProperties()),
         a property handler can also declare that foreign properties (which it is
         <em>not</em> responsible for) are superseded by its own properties.</p>
 
@@ -269,7 +269,7 @@ interface XPropertyHandler
         <code>C</code>, so it cannot, by definition, supersede properties which are supported by
         <code>C</code>.</p>
 
-        <p>If <member>getSupportedProperties</member> returned an empty sequence, this method will
+        <p>If getSupportedProperties() returned an empty sequence, this method will
         not be called.</p>
 
         @see XObjectInspectorModel::HandlerFactories
@@ -287,9 +287,9 @@ interface XPropertyHandler
 
         <p>Whenever the value of an actuating property changes, all handlers which expressed
         their interest in this particular actuating properties are called with their
-        <member>actuatingPropertyChanged</member> method.</p>
+        actuatingPropertyChanged() method.</p>
 
-        <p>If <member>getSupportedProperties</member> returned an empty sequence, this method will
+        <p>If getSupportedProperties() returned an empty sequence, this method will
         not be called</p>
     */
     sequence< string >
@@ -317,7 +317,7 @@ interface XPropertyHandler
 
         <p>Availability of this feature is indicated by the <member>LineDescriptor::HasPrimaryButton</member>
         and <member>LineDescriptor::HasSecondaryButton</member> members of a LineDescriptor,
-        which the XPropertyHandler fills in its <member>describePropertyLine</member> method.</p>
+        which the XPropertyHandler fills in its describePropertyLine() method.</p>
 
         <p>When this method is called, the property handler should raise the UI needed to enter the
         property value, and return the result of this (see InteractiveSelectionResult).</p>
@@ -329,7 +329,7 @@ interface XPropertyHandler
         <p>If a handler sets the new property value directly, and returns
         <member>InteractiveSelectionResult::ObtainedValue</member>, this implies that the property
         cannot properly be handled in case the object inspector is inspecting an intersection of
-        multiple components, since in this case <member>onInteractivePropertySelection</member>
+        multiple components, since in this case onInteractivePropertySelection()
         will be called at one handler only, however the new property would have to be forwarded to
         all handlers.</p>
 
@@ -350,7 +350,7 @@ interface XPropertyHandler
         @param InspectorUI
             provides access to the object inspector UI. Implementations should use this if
             the property selection requires non-modal user input. In those cases,
-            <member>onInteractivePropertySelection</member> should return <member>InteractiveSelectionResult::Pending</member>,
+            onInteractivePropertySelection() should return <member>InteractiveSelectionResult::Pending</member>,
             and the UI for (at least) the property whose input is still pending should be disabled.
 
         @return
@@ -377,7 +377,7 @@ interface XPropertyHandler
     /** updates the UI of dependent properties when the value of a certain actuating property changed
 
         <p>This method is called whenever a property value changes, limited to those properties
-        whose changes the handler expressed interest in (see <member>getActuatingProperties</member>).</p>
+        whose changes the handler expressed interest in (see getActuatingProperties()).</p>
 
         @param ActuatingPropertyName
             the id of the actuating property.
@@ -419,12 +419,12 @@ interface XPropertyHandler
 
         <p>The usual use case for this method are non-modal user interface components used
         for property value input. Such a component might have been opened during
-        <member>onInteractivePropertySelection</member>. If a property handler receives a
-        <member>suspend</member> call, it should forward the suspension request to the UI
+        onInteractivePropertySelection(). If a property handler receives a
+        suspend() call, it should forward the suspension request to the UI
         component, and veto suspension of the XObjectInspector as appropriate.</p>
 
         <p>If suspension is not to be vetoed, then all non-modal UI components opened
-        by the handler should have been closed when it returns from the <member>suspend</member> call.</p>
+        by the handler should have been closed when it returns from the suspend() call.</p>
 
         @param Suspend
             Whether the handler is to be suspended <TRUE/> or reactivated (<FALSE/>). The

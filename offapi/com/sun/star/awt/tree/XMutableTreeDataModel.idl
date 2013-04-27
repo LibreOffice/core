@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module awt {  module tree {
 
 /** This is the editable version of the XTreeDataModel.
 
-    <p>Note that only XTreeNode created from the same instance with <member>createNode</member>
+    <p>Note that only XTreeNode created from the same instance with createNode()
     are valid nodes for this instance.</p>
  */
 interface XMutableTreeDataModel : XTreeDataModel

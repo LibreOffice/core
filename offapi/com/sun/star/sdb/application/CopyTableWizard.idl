@@ -52,7 +52,7 @@ module com { module sun { module star { module sdb { module application {
         </ul></p>
 
         <p>When you do not specify an interaction handler by using the
-        <member>createWithInteractionHandler</member> constructor, the wizard will use the interaction
+        createWithInteractionHandler() constructor, the wizard will use the interaction
         handler associated with the copy target, i.e. the interaction handler specified when loading
         the document which the copy target refers to. If the copy target cannot be associated with
         a database document (e.g. because it is a mere <code>ConnectionResource</code>, or a connection
@@ -63,7 +63,7 @@ module com { module sun { module star { module sdb { module application {
         the copy source and the copy target descriptors are used to create a Connection. For any
         interaction during this phase - including, for instance, necessary authentication -, the
         interaction handler of the respective data source is used, no matter what you specified
-        in <member>createWithInteractionHandler</member>. Only if there is no such interaction
+        in createWithInteractionHandler(). Only if there is no such interaction
         handler, the processing described above, to find another handler, is applied.</p>
     </dd>
 
@@ -173,7 +173,7 @@ service CopyTableWizard : XCopyTableWizard
     /** creates an executable wizard dialog, which is to guide the user through copying
         a table from one database to another.
 
-        <p>The only difference to the <member>create</member> constructor is that
+        <p>The only difference to the create() constructor is that
         <code>createWithInteractionHandler</code> takes an additional argument, which
         can be used to intercept interactions (such as error messages) during the wizard
         run.</p>

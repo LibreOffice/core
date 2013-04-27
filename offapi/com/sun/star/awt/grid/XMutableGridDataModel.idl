@@ -151,7 +151,7 @@ published interface XMutableGridDataModel : XGridDataModel
 
     /** updates the tooltip for all cells of a given row
 
-        <p>Effectively this method is a shortcut for calling <member>updateCellToolTip</member> multiple
+        <p>Effectively this method is a shortcut for calling updateCellToolTip() multiple
         times in a row, for all cells of a given row.</p>
 
         @see XGridDataModel::getCellToolTip
@@ -168,7 +168,7 @@ published interface XMutableGridDataModel : XGridDataModel
     void addGridDataListener( [in] XGridDataListener Listener );
 
 
-    /** revokes a listener which was previously registered via <member>addGridDataListener</member>
+    /** revokes a listener which was previously registered via addGridDataListener()
         @param Listener
             specifies the listener to revoke.
     */

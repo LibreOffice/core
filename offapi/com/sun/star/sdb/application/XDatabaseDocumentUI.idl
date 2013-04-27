@@ -247,7 +247,7 @@ interface XDatabaseDocumentUI
 
     /** loads the given sub component of the database document
 
-        <p>In opposite to <member>loadComponent</member>, this method allows you to specify
+        <p>In opposite to loadComponent(), this method allows you to specify
         additional arguments which are passed to the to-be-loaded component.</p>
 
         <p>The meaning of the arguments is defined at the service which is effectively
@@ -282,7 +282,7 @@ interface XDatabaseDocumentUI
 
     /** creates a new sub component of the given type
 
-        <p>In opposite to <member>createComponent</member>, this method allows you to specify
+        <p>In opposite to createComponent(), this method allows you to specify
         additional arguments which are passed to the to-be-loaded component.</p>
 
         <p>The meaning of the arguments is defined at the service which is effectively

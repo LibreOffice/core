@@ -35,26 +35,26 @@ module com { module sun { module star { module ui {
 interface XUIConfigurationStorage : ::com::sun::star::uno::XInterface
 {
     /** connects a storage to the user interface configuration manager
-        which is used on subsequent calls of <member>load</member> and
-        <member>store</member>.
+        which is used on subsequent calls of load() and
+        store().
 
         @param Storage
             all configuration data is loaded/stored from/into this storage.
-            If the storage is in read/write mode <member>load</member>
-            and <member>store</member> can be used otherwise only
-            <member>load</member> is possible.
+            If the storage is in read/write mode load()
+            and store() can be used otherwise only
+            load() is possible.
 
         <p>
         This call needs careful usage as data loss can occur. If the
         implementation has modified data and a new storage is set the
         implementation is not allowed to write back the data to the old
-        storage. This must be done explicitly with <member>store</member>.
+        storage. This must be done explicitly with store().
         In general a user interface configuration manager instance is
         created and initialize by the document model or the module user
         interface configuration supplier. Normally there is no need to
         set a storage for a user interface configuration manager. If a
         copy of the configuration data to another storage should be made,
-        use <member>storeToStorage</member>.
+        use storeToStorage().
         </p>
     */
     void setStorage( [in] ::com::sun::star::embed::XStorage Storage );

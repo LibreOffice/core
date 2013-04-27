@@ -175,7 +175,7 @@ interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
             if the query represented cannot be completely substituted. A usual case for this is a recursion in
             the sub queries: Consider a query named <code>foo</code>, which is defined as <code>SELECT * FROM "bar"</code>.
             Now assume that <code>bar</code> is a query defined as <code>SELECT * FROM "foo"</code>. Passing either
-            of those statements to an analyzer, and calling <member>getQueryWithSubstitution</member>, would result
+            of those statements to an analyzer, and calling getQueryWithSubstitution(), would result
             in an exception being thrown, since it's impossible to substitute the sub queries with their
             constituting statements.
 

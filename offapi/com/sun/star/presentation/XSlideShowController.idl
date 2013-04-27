@@ -143,7 +143,7 @@ interface XSlideShowController
 
     /** pauses the slide show. All effects are paused.
         <p>The slide show continues on next user input or if
-        <member>resume</member> is called.
+        resume() is called.
     */
     void pause();
 
@@ -155,8 +155,8 @@ interface XSlideShowController
 
     /** returns <TRUE/> if the slide show is currently paused.
 
-        @see <member>pause</member>
-        @see <member>resume</member>
+        @see pause()
+        @see resume()
     */
     boolean isPaused();
 

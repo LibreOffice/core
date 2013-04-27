@@ -40,7 +40,7 @@ published interface XTextInputStream: com::sun::star::io::XInputStream
         EOF is found and returns it as string (without CR, LF).
 
         <p>The read characters are converted according to the
-        encoding defined by <member>setEncoding</member>. If
+        encoding defined by setEncoding(). If
         EOF is already reached before calling this method
         an empty string is returned.<p>
 
@@ -57,7 +57,7 @@ published interface XTextInputStream: com::sun::star::io::XInputStream
         delimiter! So if no delimiter is defined or none of the
         delimiters is found, the stream will be read to EOF. The
         read characters are converted according to the encoding
-        defined by <member>setEncoding</member>. If EOF is already
+        defined by setEncoding(). If EOF is already
         reached before calling this method an empty string is returned.</p>
 
         @see setEncoding

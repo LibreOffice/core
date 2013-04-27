@@ -57,7 +57,7 @@ interface XPackageRegistry
 
         The implementation must ensure that there is only one instance of
         XPackage for the same <code>url</code> at any
-        time. Therefore calling <member>bindPackage</member> again with the same
+        time. Therefore calling bindPackage() again with the same
         <code>url</code> but different <code>mediaType<code> (the exception is,
         if previously an empty string was provided to cause the determination
         of the media type) or <code>removed</code> parameters will cause an

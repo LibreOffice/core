@@ -141,8 +141,8 @@ interface XObjectNames
     /** checks whether a given name is allowed for a to-be-created table or query in the
         database.
 
-        <p>This method basically does the same checks as <member>isNameUsed</member> and
-        <member>isNameValid</member>. In case the given name is not allowed, it throws an
+        <p>This method basically does the same checks as isNameUsed() and
+        isNameValid(). In case the given name is not allowed, it throws an
         exception. This error can be presented to the user, to give it a common experience
         in all cases where he's required to enter an object name.</p>
 

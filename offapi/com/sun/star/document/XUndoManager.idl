@@ -57,9 +57,9 @@ interface XUndoManagerListener;
     <h3>Hidden Undo actions</h3>
     <p>Hidden Undo actions are those which in no observable way contribute to the undo stack. That is,
     any method retrieving information about the stack will behave as if the undo action does not exist. Nonetheless,
-    calling <member>undo</member> respectively <member>redo</member> will include those actions.<br/>
-    Hidden Undo actions can be created by calling <member>enterHiddenUndoContext</member>, following by
-    <member>leaveUndoContext</member>.</p>
+    calling undo() respectively redo() will include those actions.<br/>
+    Hidden Undo actions can be created by calling enterHiddenUndoContext(), following by
+    leaveUndoContext().</p>
 
     <a name="locking"></a>
     <h3>Locking</h3>
@@ -87,11 +87,11 @@ interface XUndoManager
         it will not be directly accessible at the Undo manager, not appear in any user interface, and cannot be
         separately undone or re-done.</p>
 
-        <p>Each call to <code>enterUndoContext</code> must be paired by a call to <member>leaveUndoContext</member>,
+        <p>Each call to <code>enterUndoContext</code> must be paired by a call to leaveUndoContext(),
         otherwise, the document's undo stack is left in an inconsistent state.</p>
 
         <p>Undo contexts can be nested, i.e. it is legitimate to call <code>enterUndoContext</code> and
-        <member>enterHiddenUndoContext</member> multiple times without calling <member>leaveUndoContext</member> inbetween.</p>
+        enterHiddenUndoContext() multiple times without calling leaveUndoContext() inbetween.</p>
 
         @see leaveUndoContext
     */
@@ -103,9 +103,9 @@ interface XUndoManager
 
         <p>A hidden undo action does not, in any visible way, contribute to the undo stack. This means
         that
-        <ul><li>Calling <member>undo</member> when the top-element is a hidden undo action will transparently
+        <ul><li>Calling undo() when the top-element is a hidden undo action will transparently
                 undo this action, and also undo the new top element of the stack.</li>
-            <li>Calling <member>redo</member> when the top-element is a hidden action will transparently
+            <li>Calling redo() when the top-element is a hidden action will transparently
                 redo this action, and also redo the new top element of the stack.</li>
             <li>In any user interface presenting the current Undo or Redo actions to the user, a hidden
                 action will not be listed.</p>
@@ -115,11 +115,11 @@ interface XUndoManager
         added to the stack will be treated as sub action. This means it will not be directly accessible at the undo
         manager, not appear in any user interface, and cannot be separately undone or re-done.</p>
 
-        <p>Each call to <code>enterHiddenUndoContext</code> must be paired by a call to <member>leaveUndoContext</member>,
+        <p>Each call to <code>enterHiddenUndoContext</code> must be paired by a call to leaveUndoContext(),
         otherwise, the document's undo stack is left in an inconsistent state.</p>
 
-        <p>Undo contexts can be nested, i.e. it is legitimate to call <member>enterUndoContext</member> and
-        <code>enterHiddenUndoContext</code> multiple times without calling <member>leaveUndoContext</member> inbetween.</p>
+        <p>Undo contexts can be nested, i.e. it is legitimate to call enterUndoContext() and
+        <code>enterHiddenUndoContext</code> multiple times without calling leaveUndoContext() inbetween.</p>
 
         @throws EmptyUndoStackException
             if the undo stack is currently empty, in which case it is impossible to push a hidden undo action onto
@@ -131,8 +131,8 @@ interface XUndoManager
     void    enterHiddenUndoContext()
         raises( EmptyUndoStackException );
 
-    /** leaves the undo context previously opened via <member>enterUndoContext</member> respectively
-        <member>enterHiddenUndoContext</member>.
+    /** leaves the undo context previously opened via enterUndoContext() respectively
+        enterHiddenUndoContext().
 
         <p>If no undo action has been added since the context has been opened, the context is not only left,
         but silently removed, and does not contribute to the undo stack at all. In this case, possible
@@ -156,8 +156,8 @@ interface XUndoManager
         <p>The redo stack is cleared when a new action is pushed onto the undo stack.</p>
 
         <p>The Undo manager takes ownership of any actions pushed onto the undo stack. This means that if the
-        action is finally removed from the Undo manager's control (e.g. by calling <member>clear</member> resp.
-        <member>clearRedo</member>), it will be disposed, as long as it supports the <member scope="com::sun::star::lang">XComponent</member>
+        action is finally removed from the Undo manager's control (e.g. by calling clear() resp.
+        clearRedo()), it will be disposed, as long as it supports the <member scope="com::sun::star::lang">XComponent</member>
         interface.</p>
 
         <p>If the Undo manager is <a href="#locking">locked</a> at the moment the method is called, the call will be ignored, and the undo action
@@ -220,7 +220,7 @@ interface XUndoManager
                     ::com::sun::star::document::UndoContextNotClosedException,
                     ::com::sun::star::document::UndoFailedException );
 
-    /** determines whether <member>undo</member> can reasonably be expected to succeed.
+    /** determines whether undo() can reasonably be expected to succeed.
 
         @return
             <FALSE/> if and only if the undo stack is currently empty, or there is an open and not-yet-closed
@@ -228,7 +228,7 @@ interface XUndoManager
     */
     boolean isUndoPossible();
 
-    /** determines whether <member>redo</member> can reasonably be expected to succeed.
+    /** determines whether redo() can reasonably be expected to succeed.
 
         @return
             <FALSE/> if and only if the redo stack is currently empty, or there is an open and not-yet-closed

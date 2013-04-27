@@ -38,7 +38,7 @@ interface XStringResourcePersistence: com::sun::star::resource::XStringResourceM
 {
     /**
         Stores all string table data respectively all data modified since
-        the last call to <member>store</member> to the location or storage
+        the last call to store() to the location or storage
         associated with the StringResourceManager. Each locale is stored
         in a single file following the format of Java properties files.
 
@@ -55,7 +55,7 @@ interface XStringResourcePersistence: com::sun::star::resource::XStringResourceM
         used to load data from and store data to,
         see StringResourceWithStorage.
 
-        If the string table isn't modified (see <member>isModified</member>)
+        If the string table isn't modified (see isModified())
         this method does nothing.
 
         This method can throw all exceptions thrown by the methods of
@@ -80,7 +80,7 @@ interface XStringResourcePersistence: com::sun::star::resource::XStringResourceM
 
         @return
             <TRUE/> if the string table has changed since the last call to
-            <member>store</member> or, if supported
+            store() or, if supported
             <code>XStringResourceWithStorage::storeAsStorage</code>.
             <FALSE/> if the table hasn't changed.
     */
@@ -132,7 +132,7 @@ interface XStringResourcePersistence: com::sun::star::resource::XStringResourceM
 
         @param Comment
             Comment stored first in each properties file,
-            for a detailed description see <member>setComment</member>.
+            for a detailed description see setComment().
 
         This method can throw all exceptions thrown by the methods of
         com::sun::star::embed::XStorage
@@ -169,7 +169,7 @@ interface XStringResourcePersistence: com::sun::star::resource::XStringResourceM
 
         @param Comment
             Comment stored first in each properties file,
-            for a detailed description see <member>setComment</member>.
+            for a detailed description see setComment().
 
         @param Handler
             a com::sun::star::task::XInteractionHandler.
@@ -192,7 +192,7 @@ interface XStringResourcePersistence: com::sun::star::resource::XStringResourceM
         by com::sun::star::datatransfer::XTransferable and
         related interfaces.
 
-        See <member>importBinary</member>).
+        See importBinary()).
 
         @return  a sequence of byte representing the string resource.
     */
@@ -201,7 +201,7 @@ interface XStringResourcePersistence: com::sun::star::resource::XStringResourceM
 
     /**
         Initializes the string resource with binary data. This method
-        expects the data format returned by <member>exportBinary</member>.
+        expects the data format returned by exportBinary().
 
         All locales and strings previously added to the string resource
         will be deleted. So after calling this method the string resource
@@ -211,11 +211,11 @@ interface XStringResourcePersistence: com::sun::star::resource::XStringResourceM
         by com::sun::star::datatransfer::XTransferable and
         related interfaces.
 
-        See <member>importBinary</member>).
+        See importBinary()).
 
         @throws com::sun::star::lang::IllegalArgumentException
         if Data is empty or does not meet the binary format returned by
-        the current or earlier version of <member>exportBinary</member>).
+        the current or earlier version of exportBinary()).
     */
     void importBinary( [in] sequence<byte> Data )
         raises ( com::sun::star::lang::IllegalArgumentException );

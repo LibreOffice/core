@@ -62,18 +62,18 @@ interface XTransformation : ::com::sun::star::uno::XInterface
 
         @throws ::com::sun::star::lang::IllegalArgumentException
                if the dimension of the input vector is not equal to the
-               dimension given in <member>getSourceDimension</member>.
+               dimension given in getSourceDimension().
      */
     sequence< double > transform( [in] sequence< double > aValues )
         raises( ::com::sun::star::lang::IllegalArgumentException );
 
     /** the dimension of the input coordinate sequence that is to be
-        transformed by the <member>transform</member> method.
+        transformed by the transform() method.
      */
     long getSourceDimension();
 
     /** the dimension of the output coordinate sequence that is the
-        result of the <member>transform</member> method.
+        result of the transform() method.
      */
     long getTargetDimension();
 };

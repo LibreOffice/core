@@ -65,7 +65,7 @@ interface XDataInterpreter  : ::com::sun::star::uno::XInterface
     InterpretedData reinterpretDataSeries( [in] InterpretedData aInterpretedData );
 
     /** parses the given data and states, if a
-        <member>reinterpretDataSeries</member> call can be done
+        reinterpretDataSeries() call can be done
         without data loss.
 
         @return
@@ -76,10 +76,10 @@ interface XDataInterpreter  : ::com::sun::star::uno::XInterface
     boolean isDataCompatible( [in] InterpretedData aInterpretedData );
 
     /** Try to reverse the operation done in
-        <member>interpretDataSource</member>.
+        interpretDataSource().
 
         <p>In case <code>aInterpretedData</code> is the result of
-        <member>interpretDataSource</member>( <code>xSource</code> ),
+        interpretDataSource()( <code>xSource</code> ),
         the result of this method should be <code>xSource</code>.</p>
      */
     com::sun::star::chart2::data::XDataSource mergeInterpretedData( [in] InterpretedData aInterpretedData );

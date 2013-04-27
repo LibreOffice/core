@@ -61,7 +61,7 @@ interface XFeatureInvalidation;
     com::sun::star::form::component::DataForm.</p>
 
     <p>If you agree that this is ugly to do and maintain, then <code>XFormOperations</code>
-    is for you. It provides a <member>execute</member> method, which will do all of the above
+    is for you. It provides a execute() method, which will do all of the above
     for you; plus some similar convenient wrappers for similar functionality.</p>
 
     @see FormFeature
@@ -107,7 +107,7 @@ interface XFormOperations : ::com::sun::star::lang::XComponent
 
     /** determines whether a feature is currently enabled.
 
-        <p>Calling this is equivalent to calling <member>getState</member>, and evaluating the
+        <p>Calling this is equivalent to calling getState(), and evaluating the
         <member>FeatureState::Enabled</member> member.</p>
 
         @param Feature
@@ -235,7 +235,7 @@ interface XFormOperations : ::com::sun::star::lang::XComponent
         whenever the state of any supported feature might have changed.</p>
 
         <p>For instance, imagine a form whose current row has just been moved to another
-        record, using the <member>execute</member> method. This means that potentially, the state
+        record, using the execute() method. This means that potentially, the state
         of all movement-related features might have changed.</p>
 
         <p>Note that the instance does not actually notify changes in the feature states, but only

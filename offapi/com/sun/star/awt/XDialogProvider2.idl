@@ -103,7 +103,7 @@ interface XDialogProvider2 : ::com::sun::star::awt::XDialogProvider {
                 or a component supporting the XControl interface, so an <code>XWindowPeer</code> can be
                 obtained from it. The given window will be used as parent window for the to-be-created dialog.</li>
             <li><em>EventHandler</em> - specifies a component handling events in the dialog. See
-                <member>createDialogWithHandler</member> for a detailed specification of dialog event handling.</li>
+                createDialogWithHandler() for a detailed specification of dialog event handling.</li>
         </ul>
         </p>
     */

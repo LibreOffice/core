@@ -47,7 +47,7 @@ module com {  module sun {  module star {  module frame {
         <TRUE/> if a shutdown in progress can be canceled by the listener,
         <FALSE/> else
 
-        <p>the listener may choose to ignore the <member>saveDone</member>
+        <p>the listener may choose to ignore the saveDone()
         event in case no real shutdown is in progress. He
         still has to call
         <member>XSessionManagerClient::saveDone()</member>

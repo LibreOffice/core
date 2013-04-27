@@ -186,7 +186,7 @@ interface XPackage
 
     /** Gets packages of the bundle.
 
-        If <member>isRemoved</member> returns <TRUE/> then getBundle may return an
+        If isRemoved() returns <TRUE/> then getBundle may return an
         empty sequence in case the object is not registered.
 
         @param xAbortChannel

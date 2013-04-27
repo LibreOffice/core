@@ -62,7 +62,7 @@ interface XWizardPage : ::com::sun::star::lang::XComponent
         or the provided input is not valid.</p>
 
         <p>If checked for validity is expensive, or if you prefer giving your user more detailed feedback on validity
-        than a disabled <code>Next</code> button in the wizard, then move your checks to the <member>commitPage</member>
+        than a disabled <code>Next</code> button in the wizard, then move your checks to the commitPage()
         method.</p>
     */
     boolean canAdvance();

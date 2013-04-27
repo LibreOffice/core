@@ -85,8 +85,8 @@ interface XLayoutManager : com::sun::star::uno::XInterface
         <p>
         This call should be handled with care as all user interface elements will
         be destroyed and the layout manager is reseted to a state after a
-        <member>attachFrame</member> has been made. That means an attached frame
-        which has been set by <member>attachFrame</member> is not released.
+        attachFrame() has been made. That means an attached frame
+        which has been set by attachFrame() is not released.
         The layout manager itself calls reset after a component has been attached
         or reattached to a frame.
         </p>
@@ -307,7 +307,7 @@ interface XLayoutManager : com::sun::star::uno::XInterface
 
         <p>
         It is up to the layout manager to decide if the user interface element can be resized. The new size can be retrieved
-        by calling <member>getElementSize</member>.
+        by calling getElementSize().
         </p>
     */
     void setElementSize( [in] string ResourceURL, [in] com::sun::star::awt::Size Size );
@@ -324,7 +324,7 @@ interface XLayoutManager : com::sun::star::uno::XInterface
 
         <p>
         It is up to the layout manager to decide if the user interface element can be moved. The new position can be retrieved
-        by calling <member>getElementPos</member>.
+        by calling getElementPos().
         </p>
     */
     void setElementPos( [in] string ResourceURL, [in] com::sun::star::awt::Point Pos );
@@ -344,7 +344,7 @@ interface XLayoutManager : com::sun::star::uno::XInterface
 
         <p>
         It is up to the layout manager to decide if the user interface element can be moved and resized. The new position and size can
-        be retrieved by calling <member>getElementPos</member> and <member>getElementSize</member>.
+        be retrieved by calling getElementPos() and getElementSize().
         </p>
     */
     void setElementPosSize( [in] string ResourceURL, [in] com::sun::star::awt::Point Pos, [in] com::sun::star::awt::Size Size );

@@ -70,7 +70,7 @@ interface XObjectInspectorModel
         method of your property handler.<br/>
         Those names provided by the handlers are programmatic names. All other information
         about categories is part of the PropertyCategoryDescriptor, and
-        <member>describeCategories</member> assembles information about all categories which
+        describeCategories() assembles information about all categories which
         all property handlers provided by the model use.</p>
 
         @return

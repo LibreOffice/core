@@ -35,7 +35,7 @@ interface XStringResourceWithLocation: com::sun::star::resource::XStringResource
 {
     /**
         Stores all string table data to a location and associates this location
-        to this instance as if <member>setLocation</member> was called with this
+        to this instance as if setLocation() was called with this
         location. The modified state will be unmodified after the call.
 
         @param URL
@@ -47,7 +47,7 @@ interface XStringResourceWithLocation: com::sun::star::resource::XStringResource
 
     /**
         Associates a location to the StringResourceWithStorage instance
-        which is used on subsequent calls of <member>store</member>.
+        which is used on subsequent calls of store().
 
         @param URL
             the location to be associated to the StringResourceManager
@@ -58,7 +58,7 @@ interface XStringResourceWithLocation: com::sun::star::resource::XStringResource
         force the implementation to reload data from the previous
         location before releasing it. The StringResourceManager will
         be modified after calling this method as the data isn't stored
-        to the new location yet. <member>storeAsURL</member> should
+        to the new location yet. storeAsURL() should
         be preferred as it directly stores the data to the new location
         and afterwards this location is in sync with the resource data.
         </p>

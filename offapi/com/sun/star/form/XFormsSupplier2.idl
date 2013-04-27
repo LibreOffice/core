@@ -33,11 +33,11 @@ interface XFormsSupplier2: XFormsSupplier
     /** determines whether there are currently forms available at all
 
         <p>If you need read access to the forms collection, then you might check
-        the existence of forms using <member>hasForms</member>, and if it returns
+        the existence of forms using hasForms(), and if it returns
         <FALSE/>, you can do as if <member>XFormsSupplier::getForms</member> would
         have returned an empty container.</p>
 
-        <p>Semantically, <member>hasForms</member> is equivalent to calling
+        <p>Semantically, hasForms() is equivalent to calling
         <member>XElementAccess::hasElements</member> on the container returned by
         <member>XFormsSupplier::getForms</member>. But when using the latter, the
         implementation is forced to create a empty container, which might be potentially

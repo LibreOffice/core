@@ -61,7 +61,7 @@ interface XResourceFactoryManager
         [in] string sResourceURL);
 
     /** Remove a resource factory for all resource types it has been registered for.  Use
-        <member>removeResourceFactoryForURL</member> to remove a factory
+        removeResourceFactoryForURL() to remove a factory
         just for one resource type and to leave it registered for others.
         @param xResourceFactory
             The resource factory object to remove.

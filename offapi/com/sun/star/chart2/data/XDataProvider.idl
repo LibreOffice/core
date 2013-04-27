@@ -80,7 +80,7 @@ interface XDataProvider  : ::com::sun::star::uno::XInterface
         DataSource most probably was created.
 
         <p>if xDataSource is a data source that was created with
-        <member>createDataSource</member>, the arguments returned here
+        createDataSource(), the arguments returned here
          should be the same than the ones passed to the function.
          Of course, this cannot be guaranteed.  However, if detection
          is ambiguous, the returned arguments should be empty. </p>
@@ -96,7 +96,7 @@ interface XDataProvider  : ::com::sun::star::uno::XInterface
 
         @return
             Arguments that when being passed to
-            <member>createDataSource</member> should in an ideal case
+            createDataSource() should in an ideal case
             return the same data source as <code>xDataSource</code>.
      */
     sequence< com::sun::star::beans::PropertyValue > detectArguments(

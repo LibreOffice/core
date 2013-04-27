@@ -41,9 +41,9 @@ module com {   module sun {   module star {   module document {
     Such properties may be set from the outside via the setter methods
     (e.g. when importing arbitrary document formats that support
     document properties), or imported from an ODF package via the methods
-    <member>loadFromStorage</member> and <member>loadFromMedium</member>.
+    loadFromStorage() and loadFromMedium().
     The properties may also be stored via the methods
-    <member>storeToStorage</member> and <member>storeToMedium</member>.
+    storeToStorage() and storeToMedium().
     </p>
 
     @since OOo 3.0

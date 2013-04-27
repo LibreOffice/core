@@ -76,7 +76,7 @@ published interface XSortable: com::sun::star::uno::XInterface
         properties.
 
         <p>The specified properties are usually the same or a subset of
-        those obtained by calling <member>createSortDescriptor</member>
+        those obtained by calling createSortDescriptor()
         on the same type of object.<p>
 
         @see com::sun::star::util::SortDescriptor

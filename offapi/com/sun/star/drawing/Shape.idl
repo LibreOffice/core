@@ -49,7 +49,7 @@ published service Shape
 
 
     /** This gives you the size and position of this Shape
-                and lets you change it. You can use <member>getShapeType</member>
+                and lets you change it. You can use getShapeType()
                 to determine what kind of shape this is.
      */
     interface com::sun::star::drawing::XShape;

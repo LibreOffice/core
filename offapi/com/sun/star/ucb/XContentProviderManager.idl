@@ -125,7 +125,7 @@ published interface XContentProviderManager: com::sun::star::uno::XInterface
         @param Scheme
         the URL scheme for the provided contents. More generally, this
         may not only be a URL scheme, but a URL template (see
-        <member>registerContentProvider</member> for a discussion of URL
+        registerContentProvider() for a discussion of URL
         templates).
     */
     void deregisterContentProvider(

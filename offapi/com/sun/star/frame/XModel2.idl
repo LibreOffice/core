@@ -81,7 +81,7 @@ interface XModel2 : com::sun::star::frame::XModel
 
     /** creates the default view instance for this model.
 
-        <p>Effectively, this method is equivalent to calling <member>createView</member> with
+        <p>Effectively, this method is equivalent to calling createView() with
         the <code>ViewName</code> being <code>&quot;Default&quot;</code>.</p>
 
         @param Frame

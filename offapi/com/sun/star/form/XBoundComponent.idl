@@ -29,7 +29,7 @@
 /** specifies a (form) component which is bound to a data source.
 
     <p>The interface provides the possibility of committing its respective
-    data to a data source it is bound to. A <member>commit</member> will be
+    data to a data source it is bound to. A commit() will be
     performed by the environment (usually, a FormController).<br/>
     For example, suppose you have a data-bound control that is connected
     to a database field. Each time the control loses its focus, the

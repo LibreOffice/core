@@ -29,7 +29,7 @@
 
 /** provides a result set which gives access to automatically generated values after a new row was inserted.
 
-    <p>The relative order of columns in the result set returned by <member>getGeneratedValues</member> must be the same
+    <p>The relative order of columns in the result set returned by getGeneratedValues() must be the same
     as the relative order of the same columns as returned when executing a "SELECT * FROM table". This ensures that
     clients of this interface can reliably fetch the column values.</p>
 

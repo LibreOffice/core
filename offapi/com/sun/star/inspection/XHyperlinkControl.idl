@@ -40,7 +40,7 @@ interface XHyperlinkControl : XPropertyControl
     */
     void addActionListener( [in] com::sun::star::awt::XActionListener listener );
 
-    /** removes a listener which was previously added via <member>addActionListener</member>
+    /** removes a listener which was previously added via addActionListener()
         @param listener
             the listener to revoke
     */

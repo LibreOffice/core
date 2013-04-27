@@ -114,7 +114,7 @@ interface XMailService: ::com::sun::star::uno::XInterface {
             <li>
                 <b>ConnectionType</b> of type 'string'.
                 A list of supported connection types can be queried using
-                <member>getSupportedConnectionTypes</member>.
+                getSupportedConnectionTypes().
             </li>
             <li>
                 <b>Timeout</b> of type 'long' (Optional).

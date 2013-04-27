@@ -49,8 +49,8 @@ interface XAccessibleValue : ::com::sun::star::uno::XInterface
 
         <p>The argument is clipped to the valid interval whose upper and
         lower bounds are returned by the methods
-        <member>getMaximumAccessibleValue</member> and
-        <member>getMinimumAccessibleValue</member>, i.e. if it is lower than
+        getMaximumAccessibleValue() and
+        getMinimumAccessibleValue(), i.e. if it is lower than
         the minimum value the new value will be the minimum and if it is
         greater than the maximum then the new value will be the maximum.</p>
 
@@ -68,7 +68,7 @@ interface XAccessibleValue : ::com::sun::star::uno::XInterface
 
         <p>The type of the returned value is implementation dependent.  It
         does not have to be the same type as that returned by
-        <member>getCurrentAccessibleValue</member>.</p>
+        getCurrentAccessibleValue().</p>
 
         @return
             Returns the maximal value in an implementation dependent type.
@@ -81,7 +81,7 @@ interface XAccessibleValue : ::com::sun::star::uno::XInterface
 
         <p>The type of the returned value is implementation dependent.  It
         does not have to be the same type as that returned by
-        <member>getCurrentAccessibleValue</member>.</p>
+        getCurrentAccessibleValue().</p>
 
         @return
             Returns the minimal value in an implementation dependent type.

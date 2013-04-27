@@ -90,7 +90,7 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
             is thrown.
 
         @throws com::sun::star::lang::NoSupportException
-            if the resource is read only, see <member>isReadOnly</member>
+            if the resource is read only, see isReadOnly()
     */
     void setDefaultLocale( [in] com::sun::star::lang::Locale locale )
         raises( com::sun::star::lang::IllegalArgumentException,
@@ -110,7 +110,7 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
             String to be associated with the Resource ID.
 
         @throws com::sun::star::lang::NoSupportException
-            if the resource is read only, see <member>isReadOnly</member>
+            if the resource is read only, see isReadOnly()
     */
     void setString
     (
@@ -139,10 +139,10 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
         @param locale
             The locale the string should be set for.
             The locale has to match exactly with one of the locales provided by
-            <member>getLocales</member>. A closest match search is not supported.
+            getLocales(). A closest match search is not supported.
 
         @throws com::sun::star::lang::NoSupportException
-            if the resource is read only, see <member>isReadOnly</member>
+            if the resource is read only, see isReadOnly()
     */
     void setStringForLocale
     (
@@ -166,7 +166,7 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
 
         @throws
         com::sun::star::lang::NoSupportException
-        if the resource is read only, see <member>isReadOnly</member>
+        if the resource is read only, see isReadOnly()
     */
     void removeId( [in] string ResourceID )
         raises( com::sun::star::resource::MissingResourceException,
@@ -183,7 +183,7 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
         @param locale
             The locale the Resource ID should be removed for.
             The locale has to match exactly with one of the locales provided by
-            <member>getLocales</member>. A closest match search is not supported.
+            getLocales(). A closest match search is not supported.
 
         @throws
         com::sun::star::resource::MissingResourceException
@@ -191,7 +191,7 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
 
         @throws
         com::sun::star::lang::NoSupportException
-        if the resource is read only, see <member>isReadOnly</member>
+        if the resource is read only, see isReadOnly()
     */
     void removeIdForLocale( [in] string ResourceID, [in] com::sun::star::lang::Locale locale )
         raises( com::sun::star::resource::MissingResourceException,
@@ -217,7 +217,7 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
 
         @throws
         com::sun::star::lang::NoSupportException
-        if the resource is read only, see <member>isReadOnly</member>
+        if the resource is read only, see isReadOnly()
     */
     void newLocale( [in] com::sun::star::lang::Locale locale )
         raises( com::sun::star::container::ElementExistException,
@@ -235,7 +235,7 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
 
         @throws
         com::sun::star::lang::NoSupportException
-        if the resource is read only, see <member>isReadOnly</member>
+        if the resource is read only, see isReadOnly()
     */
     void removeLocale( [in] com::sun::star::lang::Locale locale )
         raises( com::sun::star::lang::IllegalArgumentException,
@@ -264,8 +264,8 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
         beginning of a Resource ID incremented by 1. When calling this
         method more than once always the same number will be returned
         until this number is really used at the beginning of a new
-        Resource ID passed to <member>setString</member> or
-        <member>setStringForLocale</member>.
+        Resource ID passed to setString() or
+        setStringForLocale().
 
         As the numeric id is guaranteed to be unique for the complete
         string table all locales are taken into account. So using this

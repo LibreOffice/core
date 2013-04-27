@@ -29,7 +29,7 @@ module com { module sun { module star { module accessibility {
     the Java class javax.accessibility.AccessibleRole.  The role of an
     object describes its generic function like "button", "menu", or "text".
     You can obtain an object's role by calling the
-    <member>getAccessibleRole</member> method of the
+    getAccessibleRole() method of the
     XAccessibleContext interface.</p>
 
     <p>We are using constants instead of a more typesafe enum.  The reason

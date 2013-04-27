@@ -82,7 +82,7 @@ published interface XSimpleText: com::sun::star::text::XTextRange
             <method>XSimpleText::createTextCursor</member> can be used to
             get an XTextRange for this argument.
 
-            <p>If the parameter <member>bAbsorb</member> was <TRUE/>
+            <p>If the parameter bAbsorb() was <TRUE/>
             the text range will contain the new inserted string, otherwise
             the range (and it's text) will remain unchanged.
 

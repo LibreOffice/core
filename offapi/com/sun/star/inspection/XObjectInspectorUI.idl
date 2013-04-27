@@ -58,8 +58,8 @@ interface XObjectInspectorUI
     /** enables or disables the single elements which can be part of the UI representation of a property
 
         <p>Note that the complete UI for the property must be enabled in order for these settings to
-        be evaluated. That is, <member>enablePropertyUIElements</member> does not have any effect if
-        somebody previously disabled the complete UI for this property with <member>enablePropertyUI</member>.</p>
+        be evaluated. That is, enablePropertyUIElements() does not have any effect if
+        somebody previously disabled the complete UI for this property with enablePropertyUI().</p>
 
         @param  PropertyName
             the name of the property whose user interface elements are to be enabled or disabled
