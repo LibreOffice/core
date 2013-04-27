@@ -29,7 +29,7 @@
       </info>
       <prop oor:name="Name" oor:type="xs:string">
         <info>
-          <desc>Name of the bitmap.  Used to look-up the bitmap in a container.</desc>
+          <desc>Name of the bitmap. Used to look-up the bitmap in a container.</desc>
         </info>
       </prop>
       <prop oor:name="Text" oor:type="xs:string" oor:localized="true">
@@ -197,7 +197,7 @@
       </prop>
       <prop oor:name="Anchor" oor:type="xs:string">
         <info>
-          <desc>Orientation of text.  Can be left, right, or centered.</desc>
+          <desc>Orientation of text. Can be left, right, or centered.</desc>
         </info>
         <constraints>
           <enumeration oor:value="Left">
@@ -259,12 +259,12 @@
       </info>
       <prop oor:name="Name" oor:type="xs:string">
         <info>
-          <desc>Name of the entry.  May be used to have mode dependant entries.</desc>
+          <desc>Name of the entry. May be used to have mode dependant entries.</desc>
         </info>
       </prop>
       <prop oor:name="Type" oor:type="xs:string">
         <info>
-          <desc>Type of the entry.  Examples are "Label" and "Button".</desc>
+          <desc>Type of the entry. Examples are "Label" and "Button".</desc>
         </info>
       </prop>
       <node-ref oor:name="Normal" oor:node-type="ToolBarDescription">
@@ -350,15 +350,15 @@
       </info>
       <prop oor:name="StyleName" oor:type="xs:string">
         <info>
-          <desc>Name of the style.  Used for referencing the style.
+          <desc>Name of the style. Used for referencing the style.
             Has to be unique among pane styles and view styles
             in one theme.</desc>
         </info>
       </prop>
       <prop oor:name="ParentStyle" oor:type="xs:string">
         <info>
-          <desc>Name of the parent style.  Values not supplied in this style
-            are taken from the parent style.  Empty string or missing
+          <desc>Name of the parent style. Values not supplied in this style
+            are taken from the parent style. Empty string or missing
             mean no parent.</desc>
         </info>
         <value/>
@@ -392,15 +392,15 @@
       </info>
       <prop oor:name="StyleName" oor:type="xs:string">
         <info>
-          <desc>Name of the style.  Used for referencing the style.
+          <desc>Name of the style. Used for referencing the style.
             Has to be unique among pane styles and view styles
             in one theme.</desc>
         </info>
       </prop>
       <prop oor:name="ParentStyle" oor:type="xs:string">
         <info>
-          <desc>Name of the parent style.  Values not supplied in this style
-            are taken from the parent style.  Empty string or missing
+          <desc>Name of the parent style. Values not supplied in this style
+            are taken from the parent style. Empty string or missing
             mean no parent.</desc>
         </info>
         <value/>
@@ -460,7 +460,7 @@
       </prop>
       <prop oor:name="Title" oor:type="xs:string" oor:localized="true">
         <info>
-          <desc>Title displayed for the component.  An empty or missing
+          <desc>Title displayed for the component. An empty or missing
             title means that no title is displayed.</desc>
         </info>
         <value/>
@@ -487,20 +487,20 @@
     </group>
     <group oor:name="PresenterTheme">
       <info>
-        <desc>Visual properties of the presenter view.  The values in a theme
+        <desc>Visual properties of the presenter view. The values in a theme
           are hints and can be ignored.</desc>
       </info>
       <prop oor:name="ThemeName" oor:type="xs:string">
         <info>
-          <desc>Name of the theme.  Used for referencing the theme.
-            Has to be unique among all themes.  The name of the
+          <desc>Name of the theme. Used for referencing the theme.
+            Has to be unique among all themes. The name of the
             default theme is 'DefaultTheme'</desc>
         </info>
       </prop>
       <prop oor:name="ParentTheme" oor:type="xs:string">
         <info>
-          <desc>Name of the parent theme.  Values not supplied in this theme
-            are taken from the parent theme.  Empty string or missing
+          <desc>Name of the parent theme. Values not supplied in this theme
+            are taken from the parent theme. Empty string or missing
             mean default theme.</desc>
         </info>
         <value/>
@@ -579,14 +579,14 @@
       </info>
       <prop oor:name="LayoutName" oor:type="xs:string">
         <info>
-          <desc>Name of the layout.  Used for referencing the layout.
+          <desc>Name of the layout. Used for referencing the layout.
             Has to be unique among all presenter layouts.</desc>
         </info>
       </prop>
       <prop oor:name="ParentLayout" oor:type="xs:string">
         <info>
-          <desc>Name of the parent layout.  Values not supplied in this layout
-            are taken from the parent layout.  Missing or empty string
+          <desc>Name of the parent layout. Values not supplied in this layout
+            are taken from the parent layout. Missing or empty string
             mean no parent layout.</desc>
         </info>
         <value/>
@@ -669,7 +669,7 @@
       </set>
       <prop oor:name="CurrentTheme" oor:type="xs:string">
         <info>
-          <desc>Name of the current theme.  An empty name or the string "DefaultTheme"
+          <desc>Name of the current theme. An empty name or the string "DefaultTheme"
             specify the default theme.</desc>
         </info>
         <value>DefaultTheme</value>
@@ -686,7 +686,7 @@
       </set>
       <prop oor:name="CurrentLayout" oor:type="xs:string">
         <info>
-          <desc>Name of the current layout.  An empty name or the
+          <desc>Name of the current layout. An empty name or the
             string "DefaultLayout" specify the default layout.</desc>
         </info>
         <value>DefaultLayout</value>
@@ -698,7 +698,7 @@
       </set>
       <prop oor:name="InitialViewMode" oor:type="xs:int">
         <info>
-          <desc>The view mode on start up of the extension.  Valid values are 0 for the Preview-only mode, 1 for the notes view, 2 for the slide overview.</desc>
+          <desc>The view mode on start up of the extension. Valid values are 0 for the Preview-only mode, 1 for the notes view, 2 for the slide overview.</desc>
         </info>
         <value>0</value>
       </prop>
