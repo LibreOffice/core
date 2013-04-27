@@ -80,7 +80,7 @@ published service ExportFilter
                     of service FilterFactory.
                 </li>
             </ul>
-        See description of service <member>FilterFactory::XNameContainer</member> for a description of
+        See description of service FilterFactory::XNameContainer for a description of
         possible configuration data.
         </p>
      */

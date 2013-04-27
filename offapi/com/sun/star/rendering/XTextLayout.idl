@@ -43,8 +43,8 @@ interface XPolyPolygon2D;
     This is the central interface for text-related tasks more
     complicated than simple string rendering. Note that all query
     methods are subject to the current layout state of this
-    object. That is, calls to <member>XTextLayout::justify()</member>
-    or <member>XTextLayout::applyLogicalAdvancements()</member> are
+    object. That is, calls to XTextLayout::justify()
+    or XTextLayout::applyLogicalAdvancements() are
     likely to change subsequent output of those query methods.<p>
 
     Similar to XCanvasFont, all measurements and
@@ -87,7 +87,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         @returns a sequence of rectangles in font coordinate space,
         specifying the bounds, one for every glyph.
 
-        @see <member>XTextLayout::queryMeasures()</member>
+        @see XTextLayout::queryMeasures()
      */
     sequence<::com::sun::star::geometry::RealRectangle2D >  queryInkMeasures();
 
@@ -98,12 +98,12 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         Logical bounding boxes means the space that the font allocates
         for the given character, which, e.g. for a ".", might be
         significantly broader than the bounds returned via
-        <member>XTextLayout::queryInkMeasures()</member>.
+        XTextLayout::queryInkMeasures().
 
         @returns a sequence of rectangles specifying the bounds in
         font coordinate space, one for every glyph.
 
-        @see <member>XTextLayout::queryInkMeasures()</member>
+        @see XTextLayout::queryInkMeasures()
      */
     sequence<::com::sun::star::geometry::RealRectangle2D>   queryMeasures();
 
@@ -119,12 +119,12 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         this method can be used to query for the layout's default
         advancements, which can subsequently be changed and applied to
         the layout via
-        <member>XTextLayout::applyLogicalAdvancements()</member>.<p>
+        XTextLayout::applyLogicalAdvancements().<p>
 
         @returns a sequence of double specifying the
         advancements per character in font coordinate space.
 
-        @see <member>XTextLayout::applyLogicalAdvancements()</member>
+        @see XTextLayout::applyLogicalAdvancements()
      */
     sequence<double>            queryLogicalAdvancements();
 
@@ -143,7 +143,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         A sequence of character advancements, in font coordinate
         space.
 
-        @see <member>XTextLayout::queryLogicalAdvancements()</member>
+        @see XTextLayout::queryLogicalAdvancements()
 
         @throws com::sun::star::lang::IllegalArgumentException
         if the size of aAdvancements does not match the number of
@@ -246,7 +246,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
 
         @param nInsertionIndex
         The insertion index, as e.g. returned by
-        <member>XTextLayout::getTextHit()</member>. This value must be
+        XTextLayout::getTextHit(). This value must be
         in the range 0 up to the number of characters in the string.
 
         @param bExcludeLigatures
@@ -344,7 +344,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         object, either measured from the top or the left edge,
         depending on the writing direction (horizontally or
         vertically). Since rendering this layout via
-        <member>XCanvas::drawTextLayout()</member> outputs relative to
+        XCanvas::drawTextLayout() outputs relative to
         the layout object's baseline, this method can be used to
         e.g. output relative to the left, top edge.<p>
 

@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module io {
 
     <p>This interfaces allows to read strings separated by
     delimiters and to read lines. The character encoding
-    to be used can be set by <member>setEncoding()</member>.
+    to be used can be set by setEncoding().
     Default encoding is "utf8".</p>
  */
 published interface XTextInputStream: com::sun::star::io::XInputStream

@@ -33,7 +33,7 @@ published enum ChartLegendPosition
     /** no chart legend is displayed.
 
         <p>To disable the legend you should set the property
-        <member>ChartDocument::HasLegend</member> to <FALSE/> instead
+        ChartDocument::HasLegend to <FALSE/> instead
         of setting this value.</p>
      */
     NONE,

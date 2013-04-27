@@ -163,14 +163,14 @@ interface XPropertyHandler
 
         <p>This method converts a property value, which has previously been obtained using
         getPropertyValue(), into a control-compatible value, which can be used
-        with XPropertyControl's <member>XPropertyControl::Value</member> attribute.</p>
+        with XPropertyControl's XPropertyControl::Value attribute.</p>
 
         <p>A usual application of this method are list boxes: There is a generic list box implementation,
         which is able to display a simple list of strings. Usually, every string represents one
         possible property value. To translate between those property values and the displayed strings,
         convertToControlValue() and convertToPropertyValue() are used.</p>
 
-        <p>The method is not invoked if the control's value type (<member>XPropertyControl::ValueType</member>
+        <p>The method is not invoked if the control's value type (XPropertyControl::ValueType
         equals the property's value type.</p>
 
         @param PropertyName
@@ -256,7 +256,7 @@ interface XPropertyHandler
         <p>There is a precedence in the property handlers used by an ObjectInspector,
         which also is important for the superseded properties. This precedence is implied by the
         precedence of factories to create the property handlers, as denoted in the
-        <member>XObjectInspectorModel::HandlerFactories</member> attribute.</p>
+        XObjectInspectorModel::HandlerFactories attribute.</p>
 
         <p>With this in mind, property handlers can only supersede properties which are supported
         by a handler preceding them, but not properties of handlers succeeding them.</p>
@@ -315,8 +315,8 @@ interface XPropertyHandler
         <p>Property handlers can raise a dedicated UI for entering or somehow changing a property value.
         Usually, this will be a modal dialog, but it can also be a non-modal user interface component.</p>
 
-        <p>Availability of this feature is indicated by the <member>LineDescriptor::HasPrimaryButton</member>
-        and <member>LineDescriptor::HasSecondaryButton</member> members of a LineDescriptor,
+        <p>Availability of this feature is indicated by the LineDescriptor::HasPrimaryButton
+        and LineDescriptor::HasSecondaryButton members of a LineDescriptor,
         which the XPropertyHandler fills in its describePropertyLine() method.</p>
 
         <p>When this method is called, the property handler should raise the UI needed to enter the
@@ -324,10 +324,10 @@ interface XPropertyHandler
 
         <p>It is recommended that property handlers do not directly set the property value which has
         been obtained from the user, but store it in the output-parameter Data, and return
-        <member>InteractiveSelectionResult::ObtainedValue</member>.</p>
+        InteractiveSelectionResult::ObtainedValue.</p>
 
         <p>If a handler sets the new property value directly, and returns
-        <member>InteractiveSelectionResult::ObtainedValue</member>, this implies that the property
+        InteractiveSelectionResult::ObtainedValue, this implies that the property
         cannot properly be handled in case the object inspector is inspecting an intersection of
         multiple components, since in this case onInteractivePropertySelection()
         will be called at one handler only, however the new property would have to be forwarded to
@@ -343,14 +343,14 @@ interface XPropertyHandler
             <TRUE/> if and only if the primary button has been clicked, <FALSE/> otherwise
 
         @param out_Data
-            If the method returns <member>InteractiveSelectionResult::ObtainedValue</member>,
+            If the method returns InteractiveSelectionResult::ObtainedValue,
             then <arg>out_Data</arg> contains the value which has been interactively obtained
             from the user, and which still needs to be set at the inspected component.
 
         @param InspectorUI
             provides access to the object inspector UI. Implementations should use this if
             the property selection requires non-modal user input. In those cases,
-            onInteractivePropertySelection() should return <member>InteractiveSelectionResult::Pending</member>,
+            onInteractivePropertySelection() should return InteractiveSelectionResult::Pending,
             and the UI for (at least) the property whose input is still pending should be disabled.
 
         @return

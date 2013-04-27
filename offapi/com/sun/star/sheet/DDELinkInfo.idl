@@ -34,8 +34,8 @@ module com {  module sun {  module star {  module sheet {
     <em>[1]</em> is an external link with DDE service name "excel" and the
     topic "X:\PATH\[FILE.XLSX]Sheet1", and <em>[2]</em> contains service
     "soffice" and topic "file:///X:/PATH/FILE.ODS". The service name is stored
-    in <member>DDELinkInfo::Service</member>, the topic is stored in
-    <member>DDELinkInfo::Topic</member>. Note that if the DDE item contains
+    in DDELinkInfo::Service, the topic is stored in
+    DDELinkInfo::Topic. Note that if the DDE item contains
     single quotes they are escaped by doubling them, as usual, for example
     <code>=[2]!'''Sheet name''.A1'</code> in a "soffice" service.</p>
 

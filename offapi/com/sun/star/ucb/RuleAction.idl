@@ -23,7 +23,7 @@
 
 module com { module sun { module star { module ucb {
 
-/**  These are the possible values for <member>Rule::Action</member>.
+/**  These are the possible values for Rule::Action.
 
      @see RuleSet
 */
@@ -57,12 +57,12 @@ published constants RuleAction
     */
     const short MARKUNREAD = 6;
 
-    /** "Move" - Moves object to <member>Rule::Parameter</member> when term
+    /** "Move" - Moves object to Rule::Parameter when term
         matches.
     */
     const short MOVE = 7;
 
-    /** "Copy" - Copies object to <member>Rule::Parameter</member> when term
+    /** "Copy" - Copies object to Rule::Parameter when term
         matches.
     */
     const short COPY = 8;
@@ -71,12 +71,12 @@ published constants RuleAction
     */
     const short DELETE = 9;
 
-    /** "Link" - Creates a link to <member>Rule::Parameter</member> when term
+    /** "Link" - Creates a link to Rule::Parameter when term
         matches.
     */
     const short LINK = 10;
 
-    /** "Forward" - Forwards object to <member>Rule::Parameter</member> when
+    /** "Forward" - Forwards object to Rule::Parameter when
         term matches.
     */
     const short FORWARD = 11;

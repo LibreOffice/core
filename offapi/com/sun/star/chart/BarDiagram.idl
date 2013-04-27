@@ -88,7 +88,7 @@ published service BarDiagram
         bars.
 
         <p>If this property differs from zero the last
-        <member>BarDiagram::NumberOfLines</member> data rows are shown as lines. It is
+        BarDiagram::NumberOfLines data rows are shown as lines. It is
         currently supported by two dimensional vertical bar charts only. </p>
 
         @deprecated

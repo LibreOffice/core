@@ -45,7 +45,7 @@ published interface XDispatchProviderInterceptor: XDispatchProvider
     XDispatchProvider getSlaveDispatchProvider();
 
     /** sets the slave XDispatchProvider to which calls to
-        <member>XDispatchProvider::queryDispatch()</member> can be forwarded
+        XDispatchProvider::queryDispatch() can be forwarded
         under control of this dispatch provider.
 
         @param xNewDispatchProvider
@@ -65,7 +65,7 @@ published interface XDispatchProviderInterceptor: XDispatchProvider
     XDispatchProvider getMasterDispatchProvider();
 
     /** sets the master XDispatchProvider, which may forward
-        calls to its <member>XDispatchProvider::queryDispatch()</member>
+        calls to its XDispatchProvider::queryDispatch()
         to this dispatch provider.
 
         @param NewSupplier

@@ -81,7 +81,7 @@ interface XTabBar
     /** Return a sequence of all the tab bar buttons.
         <p>Their order reflects the visible order in the tab bar.</p>
         <p>This method can be used when
-        <member>addTabBarButtonAfter()</member> does not provide enough
+        addTabBarButtonAfter() does not provide enough
         control as to where to insert a new button.</p>
     */
     sequence<TabBarButton> getTabBarButtons ();

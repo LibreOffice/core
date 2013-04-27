@@ -25,7 +25,7 @@ module com {  module sun {  module star {  module i18n {
 
 /**
     Implementation name details returned in a sequence by
-    <member>XLocaleData::getCollatorImplementations()</member>.
+    XLocaleData::getCollatorImplementations().
 
     @see XLocaleData
         for links to DTD of XML locale data files.

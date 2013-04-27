@@ -145,7 +145,7 @@ published service SimpleSetUpdate
  or <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
  names the template to be instantiated or otherwise identifies the structure
  to be built. The implementation must at least support using the template
- name obtained from <member>XTemplateContainer::getElementTemplateName()</member>
+ name obtained from XTemplateContainer::getElementTemplateName()
  as a service identifier, in which case the result shall be the same as if
  the corresponding member of com::sun::star::lang::XSingleServiceFactory
  had been called.

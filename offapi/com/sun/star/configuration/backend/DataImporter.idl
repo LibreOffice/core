@@ -82,9 +82,9 @@ published service DataImporter
             <dt><code>Entity</code> : <atom >string</atom></dt>
             <dd>An identifier for the entity in the destination backend for
                 which the imported data should apply. The value will be passed
-                to <member>XLayerImporter::importLayerForEntity()</member>.
+                to XLayerImporter::importLayerForEntity().
                 If this parameter is missing, the implementation uses
-                <member>XLayerImporter::importLayer()</member> instead.
+                XLayerImporter::importLayer() instead.
             </dd>
             <dt><code>Component</code> : <atom >string</atom></dt>
             <dd>Names the component for which to import data. If this

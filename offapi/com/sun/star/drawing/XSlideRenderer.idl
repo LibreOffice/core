@@ -65,7 +65,7 @@ interface XSlideRenderer
         [in] com::sun::star::awt::Size aMaximumPreviewPixelSize,
         [in] short nSuperSampleFactor);
 
-    /** Exactly the same functionality as <member>createPreview()</member>,
+    /** Exactly the same functionality as createPreview(),
         only a different return type:
         com::sun::star::rendering::XBitmap instead
         of com::sun::star::awt::XBitmap.

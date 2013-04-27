@@ -46,7 +46,7 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
         @param nCount
             Number of characters to traverse, it should not be less than 0.
             If you want to traverse in the opposite direction use
-            <member>XBreakIterator::previousCharacters()</member> instead.
+            XBreakIterator::previousCharacters() instead.
      */
     long nextCharacters( [in] string aText, [in] long nStartPos,
                      [in] ::com::sun::star::lang::Locale aLocale,
@@ -61,7 +61,7 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
         @param nCount
             Number of characters to traverse, it should not be less than 0.
             If you want to traverse in the opposite direction use
-            <member>XBreakIterator::nextCharacters()</member> instead.
+            XBreakIterator::nextCharacters() instead.
      */
     long previousCharacters( [in] string aText, [in] long nStartPos,
                      [in] ::com::sun::star::lang::Locale aLocale,

@@ -75,7 +75,7 @@ published interface XTypeDescriptionEnumerationAccess : com::sun::star::uno::XIn
         @param depth
             specifies the depth of search in the underlying tree of type
             descriptions. Clients should be aware of the fact that specifiying
-            <member>TypeDescriptionSearchDepth::INFINITE</member> can lead to
+            TypeDescriptionSearchDepth::INFINITE can lead to
             larger delays when constructing or using the
             XTypeDescriptionEnumeration instance.
 

@@ -42,7 +42,7 @@ interface XCopyTableListener : ::com::sun::star::lang::XEventListener
 
         @param Event
             describes the current state of the copy operation.
-            <member>CopyTableRowEvent::SourceData</member> is positioned at the row
+            CopyTableRowEvent::SourceData is positioned at the row
             which is about to be copied.
     */
     void    copyingRow( [in] CopyTableRowEvent Event );
@@ -54,7 +54,7 @@ interface XCopyTableListener : ::com::sun::star::lang::XEventListener
 
         @param Event
             describes the current state of the copy operation.
-            <member>CopyTableRowEvent::SourceData</member> is positioned at the row
+            CopyTableRowEvent::SourceData is positioned at the row
             which was just copied to the target database.
     */
     void    copiedRow( [in] CopyTableRowEvent Event );
@@ -63,9 +63,9 @@ interface XCopyTableListener : ::com::sun::star::lang::XEventListener
 
         @param Event
             describes the current state of the copy operation.
-            <member>CopyTableRowEvent::SourceData</member> is positioned at the row
+            CopyTableRowEvent::SourceData is positioned at the row
             which was attempted to be copied to the target database.
-            <member>CopyTableRowEvent::Error</member> will contain the actual error which
+            CopyTableRowEvent::Error will contain the actual error which
             happened.
 
         @return

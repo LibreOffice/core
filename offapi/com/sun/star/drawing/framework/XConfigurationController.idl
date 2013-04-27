@@ -41,8 +41,8 @@ interface XResource;
     resources.</li>
     <li>The requested configuration describes what the current configuration
     should be.  The requested configuration is changed usually by calling
-    <member>requestResourceActivation()</member> and
-    <member>requestResourceDeactivation()</member>.</li>
+    requestResourceActivation() and
+    requestResourceDeactivation().</li>
     </ul></p>
 
     <p>When the two configurations differ then the current configuration is
@@ -51,7 +51,7 @@ interface XResource;
     <ol>
     <li>when the last pending request for configuration changes has been
     processed,</li>
-    <li>when the <member>update()</member> method is called.</li>
+    <li>when the update() method is called.</li>
     <li>when the configuration manager it is unlocked after formerly being
     locked.</li>
     </ol></p>
@@ -60,8 +60,8 @@ interface XResource;
     <ol>
     <li>First the requested configuration is updated iteratively: Every
     request that is being made by calling
-    <member>requestResourceActivation()</member> or
-    <member>requestResourceDeactivation()</member> results in one or more
+    requestResourceActivation() or
+    requestResourceDeactivation() results in one or more
     function objects, that each implement the
     XConfigurationChangeRequest interface.  These are inserted
     into a queue.  The request objects in the queue are processed
@@ -101,7 +101,7 @@ interface XResource;
     activation of a resource has been requested and the resource is not yet
     active in the requested configuration.  The event is sent when the
     configuration change request is executed, not when the
-    <member>requestResourceActivation()</member> call is made.</p>
+    requestResourceActivation() call is made.</p>
     <p>The <member scope="ConfigurationChangeEvent">ResourceId</member> member is set to the requested
     resource.  The #ResourceObject member is not
     set.</p></li>
@@ -109,7 +109,7 @@ interface XResource;
     deactivation of a resource has been requested and the resource is active
     in the requested configuration.  The event is sent when the
     configuration change request is executed that is created when for
-    example <member>requestResourceDeactivation()</member> is called.</p>
+    example requestResourceDeactivation() is called.</p>
     <p>The #ResourceId member is set to the requested
     resource.  The #ResourceObject member is not
     set.</p></li>
@@ -192,15 +192,15 @@ interface XConfigurationController
         <p>This is only necessary when more than one change request is being
         made in a row.  It prevents an update being made (with all the visible UI
         changes) before all change requests are being made.</p>
-        <p>Recursive <member>lock()</member> calls are recognized: the
-        configuration controller is locked while <member>lock()</member> was
-        called more often than <member>unlock()</member>.</p>
+        <p>Recursive lock() calls are recognized: the
+        configuration controller is locked while lock() was
+        called more often than unlock().</p>
     */
     void lock ();
 
     /** Unlock the processing of configuration change requests.
-        <p>When <member>unlock()</member> is called as many times as
-        <member>lock()</member> and the queue of configuration change
+        <p>When unlock() is called as many times as
+        lock() and the queue of configuration change
         requests is not empty the configuration controller continues the
         processing of the change requests.  An update of the current
         configuration will eventually being made.</p>
@@ -229,8 +229,8 @@ interface XConfigurationController
 
     /** Replace the requested configuration with the given configuration and
         schedule an update of the current configuration.
-        <p>Together with the <member>getCurrentConfiguration()</member> and
-        <member>getRequestedConfiguration()</member> methods this
+        <p>Together with the getCurrentConfiguration() and
+        getRequestedConfiguration() methods this
         allows the saving and restoring of configurations.  However, the
         given configuration can have other origins then these methods.</p>
         <p>The given configuration is transformed into a list of of change
@@ -244,7 +244,7 @@ interface XConfigurationController
         configuration.</p>
         @param xConfiguration
             This typically is a configuration that was obtained with an
-            earlier <member>getRequestedConfiguration()</member> call.
+            earlier getRequestedConfiguration() call.
     */
     void restoreConfiguration ([in] XConfiguration xConfiguration);
 };

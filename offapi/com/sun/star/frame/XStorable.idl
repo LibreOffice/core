@@ -55,7 +55,7 @@ published interface XStorable: com::sun::star::uno::XInterface
      */
     boolean hasLocation();
 
-    /** After <member>XStorable::storeAsURL()</member> it returns the
+    /** After XStorable::storeAsURL() it returns the
         URL the object was stored to.
 
         @returns
@@ -63,7 +63,7 @@ published interface XStorable: com::sun::star::uno::XInterface
      */
     string getLocation();
 
-    /** It is not possible to call <member>XStorable::store()</member> successfully
+    /** It is not possible to call XStorable::store() successfully
         when the data store is read-only.
 
         @returns
@@ -93,9 +93,9 @@ published interface XStorable: com::sun::star::uno::XInterface
 
         <p>The change of the location makes it necessary to store the document in
         a format that the object can load. For this reason the implementation of
-        <member>XStorable::storeAsURL()</member> will throw an exception if a pure
+        XStorable::storeAsURL() will throw an exception if a pure
         export filter is used, it will accept only combined import/export filters.
-        For such filters the method <member>XStorable::storeToURL()</member>
+        For such filters the method XStorable::storeToURL()
         must be used that does not change the location of the object.</p>
 
         @param sURL

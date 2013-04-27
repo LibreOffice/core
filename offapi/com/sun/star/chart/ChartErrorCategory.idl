@@ -47,7 +47,7 @@ published enum ChartErrorCategory
 
     /** The length of the error indicators is calculated for each data
         point by taking the percentage given as
-        <member>ChartStatistics::PercentageError</member> of its
+        ChartStatistics::PercentageError of its
         value.
 
         @see ChartStatistics
@@ -57,7 +57,7 @@ published enum ChartErrorCategory
 
     /** The length of the error indicators for all data points is
         calculated by taking the percentage given as
-        <member>ChartStatistics::ErrorMargin</member> of the largest
+        ChartStatistics::ErrorMargin of the largest
         data point value.
 
         @see ChartStatistics
@@ -69,8 +69,8 @@ published enum ChartErrorCategory
         data points.
 
         <p>The values for these are given as absolute numbers in
-        <member>ChartStatistics::ConstantErrorLow</member> and
-        <member>ChartStatistics::ConstantErrorHigh</member></p>
+        ChartStatistics::ConstantErrorLow and
+        ChartStatistics::ConstantErrorHigh</p>
 
         @see ChartStatistics
      */

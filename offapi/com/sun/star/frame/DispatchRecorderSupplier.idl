@@ -27,7 +27,7 @@
 /** provides a DispatchRecorder
 
     <p>
-    This supplier regulate macro recording of <member>XDispatch::dispatch()</member>
+    This supplier regulate macro recording of XDispatch::dispatch()
     calls. For that it encapsulates a reference to a DispatchRecorder.
     Such recorder is used internally and can be used externally too.
     A supplier will be available on a Frame if recording was enabled,

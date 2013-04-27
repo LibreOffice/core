@@ -48,8 +48,8 @@ service BindableControlModel
         then every change in the control model's value is <em>immediately</em> reflected
         in the external binding.</p>
 
-        <p>If the binding set via this interface supports the <member>ValueBinding::ReadOnly</member>
-        and <member>ValueBinding::Relevant</member> properties, they're respected by the control model:
+        <p>If the binding set via this interface supports the ValueBinding::ReadOnly
+        and ValueBinding::Relevant properties, they're respected by the control model:
         <ul><li>The control model's own <code>ReadOnly</code> property (if present) is kept in sync with the
                 binding's <code>ReadOnly</code> property. That is, any control using the value
                 binding is read-only as long as the binding is.</li>
@@ -62,11 +62,11 @@ service BindableControlModel
         <p>In both cases, explicit changes of the model's property are ignored if they would relax
         the restriction imposed by the binding.<br/>
         For instance, if the binding declares it's value to
-        be read-only (indicated by <member>ValueBinding::ReadOnly</member> being <TRUE/>), then
+        be read-only (indicated by ValueBinding::ReadOnly being <TRUE/>), then
         any attempt to set the <code>ReadOnly</code> property of the control model to <FALSE/> will
         fail. However, if the binding's value is not read-only, then the <code>ReadOnly</code>
         property at the control model can be freely set.<br/>
-        The very same holds for the binding's <member>ValueBinding::Relevant</member> and the control
+        The very same holds for the binding's ValueBinding::Relevant and the control
         model's <code>Enabled</code> properties.</p>
     */
     interface XBindableValue;

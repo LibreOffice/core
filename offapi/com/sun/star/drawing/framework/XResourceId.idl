@@ -117,7 +117,7 @@ interface XResourceId
 
     /** Return whether the anchor of the called resource id object
         represents the same resource as the given anchor URL. This is a
-        convenience variant of the <member>isBoundTo()</member> function
+        convenience variant of the isBoundTo() function
         that can also be seen as an optimization for the case that the
         anchor consists of exactly one URL.
         @param xAnchor
@@ -125,7 +125,7 @@ interface XResourceId
         @param eMode
             This mode specifies how the called resource has to be bound to
             the given anchor in order to have this function return. See the
-            description of <member>isBoundTo()</member> for more
+            description of isBoundTo() for more
             information.
     */
     boolean isBoundToURL (

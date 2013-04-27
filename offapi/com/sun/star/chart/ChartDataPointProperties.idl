@@ -69,7 +69,7 @@ published service ChartDataPointProperties
 
     /** is only available if the chart is of type
         BarDiagram and Dim3DDiagram and the
-        property <member>ChartDataPointProperties::Dim3D</member> is
+        property ChartDataPointProperties::Dim3D is
         set to <TRUE/>.
 
         @see BarDiagram

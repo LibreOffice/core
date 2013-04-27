@@ -137,7 +137,7 @@ service CopyTableWizard : XCopyTableWizard
             must support the com::sun::star::sdb::Connection service. In particular,
             it is not sufficient to pass an SDBC-level connection.</p>
 
-            <p>Note that creating a view (see <member>CopyTableOperation::CreateAsView</member>) is
+            <p>Note that creating a view (see CopyTableOperation::CreateAsView) is
             not supported if the target connection is an SDBC-level connection only.</p>
 
         @throws ::com::sun::star::lang::IllegalArgumentException

@@ -74,7 +74,7 @@ published interface XNamedRanges: com::sun::star::container::XNameAccess
         part of the original range, excluding the labels.</p>
 
         <p>Example: The source range is A1:B3. The named ranges shall be
-        created using row titles. This requires <member>Border::TOP</member>
+        created using row titles. This requires Border::TOP
         for the second parameter. The method creates two named ranges. The
         name of the first is equal to the content of cell A1 and contains the
         range $Sheet.$A$2:$A$3 (excluding the title cell). The latter named

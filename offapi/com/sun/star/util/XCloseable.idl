@@ -32,7 +32,7 @@ module com {  module sun {  module star {  module util {
     If an object should be terminated, it can be:<br>
     <ul>
         <li>disposed (if it supports <member scope="com::sun::star::lang">XComponent::dispose()</member>)</li>
-        <li>closed   (if it supports <member>XCloseable::close()</member>)</li>
+        <li>closed   (if it supports XCloseable::close())</li>
     </ul>
     First version gives the object no chance to disagree with that (e.g. if a
     process is still running and can't be canceled really). Last version
@@ -79,7 +79,7 @@ published interface XCloseable: XCloseBroadcaster
         Then it's not allowed to call close() from any other place (may a registered XCloseListener).
         If it is set to <TRUE/> the caller gives up his ownership. If a XCloseListener throw the veto exception
         he will be the new owner of the closing object. This information is passed to the listener by a parameter of
-        his notification method <member>XCloseListener::queryClosing()</member>. After his operations was finished
+        his notification method XCloseListener::queryClosing(). After his operations was finished
         he MUST try to close it again. If the closing object itself disagree by an exception and the parameter
         <var>DeliverOwnership</var> was set to <TRUE/> the object will be his own owner with all consequences of that.
         <br><strong>Note:</strong><br>

@@ -28,7 +28,7 @@ module com { module sun { module star { module i18n {
 
 /**
     A calendar as returned in a sequence by
-    <member>XLocaleData::getAllCalendars()</member>.
+    XLocaleData::getAllCalendars().
 
     @see XLocaleData
         for links to DTD of XML locale data files.

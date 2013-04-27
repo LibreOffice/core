@@ -32,7 +32,7 @@
  */
 published interface XStatusIndicatorSupplier: com::sun::star::uno::XInterface
 {
-    /** use <member>XStatusIndicatorFactory::createStatusIndicator()</member>
+    /** use XStatusIndicatorFactory::createStatusIndicator()
         instead of this
 
         @deprecated

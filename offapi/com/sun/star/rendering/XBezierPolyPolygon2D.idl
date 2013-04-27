@@ -88,7 +88,7 @@ interface XBezierPolyPolygon2D : XPolyPolygon2D
         specifying 0 here, the given Bezier sequence will precede all
         existing polygons already within the poly-polygon). To append
         to a poly-polygon, call setPoints() with
-        <member>XBezierPolyPolygon2D::getNumberOfPolygons()</member>
+        XBezierPolyPolygon2D::getNumberOfPolygons()
         as the polygon index. If nPolygonIndex is -1, the given
         Bezier sequence <em>replaces</em> the poly-polygon content,
         such that after this method completes, it contains exactly the
@@ -127,9 +127,9 @@ interface XBezierPolyPolygon2D : XPolyPolygon2D
 
         The remaining points of the poly-polygon will not be changed by
         this method. Use
-        <member>XBezierPolyPolygon2D::getNumberOfPolygons()</member>
+        XBezierPolyPolygon2D::getNumberOfPolygons()
         or
-        <member>XBezierPolyPolygon2D::getNumberOfPolygonPoints()</member>
+        XBezierPolyPolygon2D::getNumberOfPolygonPoints()
         to append points or polygons, respectively.<p>
 
         @param point

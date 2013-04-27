@@ -56,7 +56,7 @@ published service PageProperties
 /** determines if the background color is transparent.
 
     <p>If this property is set to <TRUE/>,
-    <member>PageStyle::BackColor</member> will not be used.</p>
+    PageStyle::BackColor will not be used.</p>
  */
 [property] boolean BackTransparent;
 /** determines the left margin of the page.
@@ -160,7 +160,7 @@ published service PageProperties
 /** determines if the background color of the header is transparent.
 
     <p>If this property is set to <TRUE/>,
-    <member>PageStyle::HeaderBackColor</member> will not be used.</p>
+    PageStyle::HeaderBackColor will not be used.</p>
  */
 [property, maybevoid] boolean HeaderBackTransparent;
 /** determines the style of the left border line of the header.

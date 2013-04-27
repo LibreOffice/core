@@ -59,8 +59,8 @@ published struct TransferInfo
         <p>The value can be one of the NameClash constants.
 
         <p>Implementations that are not able to detect whether there is a
-        clashing resource may ignore <member>NameClash::ERROR</member> and
-        <member>NameClash::RENAME</member> always write the new data.
+        clashing resource may ignore NameClash::ERROR and
+        NameClash::RENAME always write the new data.
     */
     long NameClash;
 

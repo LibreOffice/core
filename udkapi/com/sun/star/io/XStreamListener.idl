@@ -37,11 +37,11 @@ published interface XStreamListener: com::sun::star::lang::XEventListener
         transfer is terminated from outside.
 
         <p>The termination could be done using the method
-        <member>XActiveDataControl::terminate()</member>.</p>
+        XActiveDataControl::terminate().</p>
      */
     void closed();
 
-    /** gets called when <member>XActiveDataControl::terminate()</member> is called.
+    /** gets called when XActiveDataControl::terminate() is called.
      */
     void terminated();
 

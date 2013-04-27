@@ -41,8 +41,8 @@ published service ChartStatistics
         data row.
 
         <p>this setting is effective if the
-        <member>ChartStatistics::ErrorCategory</member> is set to
-        <member>ChartErrorCategory::CONSTANT_VALUE</member>.</p>
+        ChartStatistics::ErrorCategory is set to
+        ChartErrorCategory::CONSTANT_VALUE.</p>
 
         @see ConstantErrorHigh
         @see ErrorCategory
@@ -54,8 +54,8 @@ published service ChartStatistics
         data row.
 
         <p>this setting is effective if the
-        <member>ChartStatistics::ErrorCategory</member> is set to
-        <member>ChartErrorCategory::CONSTANT_VALUE</member>.</p>
+        ChartStatistics::ErrorCategory is set to
+        ChartErrorCategory::CONSTANT_VALUE.</p>
 
         @see ConstantErrorLow
         @see ErrorCategory
@@ -96,8 +96,8 @@ published service ChartStatistics
         data point by taking the given percentage of its value.</p>
 
         <p>this setting is effective if the
-        <member>ChartStatistics::ErrorCategory</member> is set to
-        <member>ChartErrorCategory::PERCENT</member>.</p>
+        ChartStatistics::ErrorCategory is set to
+        ChartErrorCategory::PERCENT.</p>
 
         @see ErrorCategory
      */
@@ -110,8 +110,8 @@ published service ChartStatistics
         the percentage given of the largest data point value.</p>
 
         <p>this setting is effective if the
-        <member>ChartStatistics::ErrorCategory</member> is set to
-        <member>ChartErrorCategory::ERROR_MARGIN</member>.</p>
+        ChartStatistics::ErrorCategory is set to
+        ChartErrorCategory::ERROR_MARGIN.</p>
 
         @see ErrorCategory
      */
@@ -135,13 +135,13 @@ published service ChartStatistics
 
     /** contains a cell range string for positive error bars. This
         property is used when the ErrorBarCategory is set
-        to <member>ErrorBarCategory::FROM_DATA</member>.
+        to ErrorBarCategory::FROM_DATA.
      */
     [optional, property] string ErrorBarRangePositive;
 
     /** contains a cell range string for negative error bars. This
         property is used when the ErrorBarCategory is set
-        to <member>ErrorBarCategory::FROM_DATA</member>.
+        to ErrorBarCategory::FROM_DATA.
      */
     [optional, property] string ErrorBarRangeNegative;
 };

@@ -45,7 +45,7 @@ published interface XUpdatableLayer : XLayer
        <p> After the replacement has been performed, reading the
            layer will return the new content. Some implementations
            may not support this, so after an update
-           <member>XLayer::readData()</member> may fail.
+           XLayer::readData() may fail.
         </p>
 
        @param aNewLayer

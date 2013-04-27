@@ -31,7 +31,7 @@
 
     <p>
     Such close events are broadcasted by a XCloseBroadcaster
-    if somewhere tries to close it by calling <member>XCloseable::close()</member>.
+    if somewhere tries to close it by calling XCloseable::close().
     Listener can:
     <ul>
         <li>break that by throwing CloseVetoException</li>
@@ -53,16 +53,16 @@ published interface XCloseListener: com::sun::star::lang::XEventListener
     /** is called when somewhere tries to close listened object
 
         <p>
-        Is called before <member>XCloseListener::notifyClosing()</member>.
+        Is called before XCloseListener::notifyClosing().
         Listener has the chance to break that by throwing a CloseVetoException.
-        This exception must be passed to the original caller of <member>XCloseable::close()</member>
+        This exception must be passed to the original caller of XCloseable::close()
         without any interaction.
         </p>
 
         <p>
         The parameter <var>GetsOwnership</var> regulate who has to try to close the listened object
         again, if this listener disagree with the request by throwing the exception.
-        If it's set to <FALSE/> the original caller of <member>XCloseable::close()</member>
+        If it's set to <FALSE/> the original caller of XCloseable::close()
         will be the owner in every case. It's not allowed to call close() from this listener then.
         If it's set to <TRUE/> this listener will be the new owner if he throw the exception,
         otherwise not! If his still running processes will be finished he must call close() on
@@ -72,7 +72,7 @@ published interface XCloseListener: com::sun::star::lang::XEventListener
         <p>
         If this listener doesn't disagree with th close request it depends from his internal
         implementation if he deregister himself at the listened object.
-        But normally this must be done in <member>XCloseListener::notifyClosing()</member>.
+        But normally this must be done in XCloseListener::notifyClosing().
         </p>
 
         @param Source

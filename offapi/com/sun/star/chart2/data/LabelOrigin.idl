@@ -53,7 +53,7 @@ enum LabelOrigin
         SHORT_SIDE has the same effect as ROW, LONG_SIDE will have the
         same effect as COLUMN and the other way round.
 
-        @see <member>LabelOrigin::SHORT_SIDE</member>
+        @see LabelOrigin::SHORT_SIDE
      */
     LONG_SIDE,
 

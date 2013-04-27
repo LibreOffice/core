@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module i18n {
 /**
     The language and country identifiers and descriptive names of the
     loaded locale data returned by
-    <member>XLocaleData::getLanguageCountryInfo()</member>.
+    XLocaleData::getLanguageCountryInfo().
 
     @see XLocaleData
         for links to DTD of XML locale data files.

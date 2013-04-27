@@ -28,11 +28,11 @@ module com { module sun { module star { module rendering {
     font to be queried from XCanvas.<p>
 
     Note: Outline fonts are to be requested as a special family, set
-    <member>FontInfo::FamilyName</member> appropriately. Emboss/relief
+    FontInfo::FamilyName appropriately. Emboss/relief
     must be emulated by upper layers.<p>
 
-    Leave the <member>FontInfo::FamilyName</member> and
-    <member>FontInfo::StyleName</member> empty, if font selection
+    Leave the FontInfo::FamilyName and
+    FontInfo::StyleName empty, if font selection
     should only happen via the PANOSE description.
 
     @since OOo 2.0
@@ -51,7 +51,7 @@ struct FontRequest
 
         This value corresponds to the font height in Western scripts,
         but is independent of the writing direction (see
-        <member>FontRequest::IsVertical</member> below). That
+        FontRequest::IsVertical below). That
         means, the value specified here is always measured orthogonal
         to the text advancement (height for horizontal writing, and
         width for vertical writing).<p>
@@ -91,7 +91,7 @@ struct FontRequest
     /** The locale this font should be able to render.<p>
 
         This member supplements the
-        <member>FontInfo::UnicodeRange0</member> entry with a specific
+        FontInfo::UnicodeRange0 entry with a specific
         locale; this is e.g. important when selecting between
         traditional and simplified Chinese is necessary (since the
         letters have the same Unicode ranges and character values).<p>

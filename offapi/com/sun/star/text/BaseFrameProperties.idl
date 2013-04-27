@@ -140,12 +140,12 @@ published service BaseFrameProperties
     [property] long BottomMargin;
 
     /** contains the height of the object (1/100 mm).
-        <p>It is only valid if <member>TextEmbeddedObject::RelativeHeight</member> is zero.</p>
+        <p>It is only valid if TextEmbeddedObject::RelativeHeight is zero.</p>
      */
     [property] long Height;
 
     /** contains the width of the object (1/100 mm).
-        <p>It is only valid if <member>TextEmbeddedObject::RelativeWidth</member> is zero.</p>
+        <p>It is only valid if TextEmbeddedObject::RelativeWidth is zero.</p>
      */
     [property] long Width;
     /** contains the relative height of the object.
@@ -188,7 +188,7 @@ published service BaseFrameProperties
 
     /** contains the vertical position of the object (1/100 mm).
 
-        It is only valid if <member>TextEmbeddedObject::VertOrient</member> is
+        It is only valid if TextEmbeddedObject::VertOrient is
         <const>VertOrientation::NONE</const>.
      */
     [property] long VertOrientPosition;

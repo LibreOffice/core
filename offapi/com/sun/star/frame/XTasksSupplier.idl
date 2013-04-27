@@ -32,12 +32,12 @@
  */
 published interface XTasksSupplier: com::sun::star::uno::XInterface
 {
-    /** use <member>XFramesSupplier::getFrames()</member> instead of this one
+    /** use XFramesSupplier::getFrames() instead of this one
         @deprecated
      */
     com::sun::star::container::XEnumerationAccess getTasks();
 
-    /** use <member>XFramesSupplier::getActiveFrame()</member> instead of this one
+    /** use XFramesSupplier::getActiveFrame() instead of this one
         @deprecated
      */
     XTask getActiveTask();

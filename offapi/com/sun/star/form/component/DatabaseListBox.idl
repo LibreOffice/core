@@ -36,7 +36,7 @@
     one possibility to specify the list entries:
     The display strings in the
     <member scope="com::sun::star::awt">UnoControlListBoxModel::StringItemList</member>
-    property and the corresponding values in the <member>ListBox::ListSource</member>
+    property and the corresponding values in the ListBox::ListSource
     property.</p>
 
     <p>This service here extends this mimic. It allows to fill the list from a data source.
@@ -102,36 +102,36 @@ published service DatabaseListBox
 
     /** describes the kind of list source used.
 
-        <p>Depending on the value of this property, the way the value of <member>ListBox::ListSource</member>
+        <p>Depending on the value of this property, the way the value of ListBox::ListSource
         is evaluated varies.
             <dl>
                 <dt><member scope="com::sun::star::form">ListSourceType::VALUELIST</member></dt>
-                <dd>The elements in the string sequence in <member>ListBox::ListSource</member>
+                <dd>The elements in the string sequence in ListBox::ListSource
                 build up the entry list.</dd>
 
                 <dt><member scope="com::sun::star::form">ListSourceType::TABLE</member></dt>
-                <dd>The first element of the string sequence in <member>ListBox::ListSource</member>
+                <dd>The first element of the string sequence in ListBox::ListSource
                 determines the table which the list result set should be based on.</dd>
 
                 <dt><member scope="com::sun::star::form">ListSourceType::QUERY</member></dt>
-                <dd>The first element of the string sequence in <member>ListBox::ListSource</member>
+                <dd>The first element of the string sequence in ListBox::ListSource
                 determines the query which the list result set should be based on.<br/>
                 For retrieving the query, the connection which the data form is working with
                 (<member scope="com::sun::star::sdb">RowSet::ActiveConnection</member>) is queried for
                 the com::sun::star::sdb::XQueriesSupplier interface.</dd>
 
                 <dt><member scope="com::sun::star::form">ListSourceType::SQL</member></dt>
-                <dd>The first element of the string sequence in <member>ListBox::ListSource</member>
+                <dd>The first element of the string sequence in ListBox::ListSource
                 contains the SQL statement which the list result set should be based on.</p>
 
                 <dt><member scope="com::sun::star::form">ListSourceType::SQLPASSTHROUGH</member></dt>
-                <dd>The first element of the string sequence in <member>ListBox::ListSource</member>
+                <dd>The first element of the string sequence in ListBox::ListSource
                 contains the SQL statement which the list result set should be based on.<br/>
                 The statement is not analyzed by the parser. This means that you can use database specific
                 SQL features here, but, on the other hand, loose features like parameter value substitution.</dd>
 
                 <dt><member scope="com::sun::star::form">ListSourceType::TABLEFIELDS</member></dt>
-                <dd>The first element of the string sequence in <member>ListBox::ListSource</member>
+                <dd>The first element of the string sequence in ListBox::ListSource
                 determines the table whose column names should fill the list.</dd>
             </dl>
         </p>

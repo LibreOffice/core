@@ -25,12 +25,12 @@ module com {  module sun {  module star {  module i18n {
 
 /** Constants to specify the type of words.
 
-    <p> Used with <member>XBreakIterator::nextWord()</member>,
-    <member>XBreakIterator::previousWord()</member>,
-    <member>XBreakIterator::getWordBoundary()</member>,
-    <member>XBreakIterator::getWordType()</member>,
-    <member>XBreakIterator::isBeginWord()</member>,
-    <member>XBreakIterator::isEndWord()</member> </p>
+    <p> Used with XBreakIterator::nextWord(),
+    XBreakIterator::previousWord(),
+    XBreakIterator::getWordBoundary(),
+    XBreakIterator::getWordType(),
+    XBreakIterator::isBeginWord(),
+    XBreakIterator::isEndWord() </p>
 */
 published constants WordType
 {

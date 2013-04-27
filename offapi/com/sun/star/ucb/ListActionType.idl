@@ -28,7 +28,7 @@ module com { module sun { module star { module ucb {
     <p>A change happened is sent from an XDynamicResultSet
     as ListAction to a XDynamicResultSetListener.
 
-    <p>The values are contained in <member>ListAction::ListActionType</member>.
+    <p>The values are contained in ListAction::ListActionType.
 */
 
 published constants ListActionType
@@ -38,7 +38,7 @@ published constants ListActionType
     <p>This type of notification is required to be sent first and only once
     to a new listener.
 
-    <p>The member <member>ListAction::ActionInfo</member> is required to
+    <p>The member ListAction::ActionInfo is required to
     contain a struct WelcomeDynamicResultSetStruct.
     This struct contains two
     com::sun::star::sdbc::XResultSets (old and new).
@@ -47,40 +47,40 @@ published constants ListActionType
     com::sun::star::sdbc::XResultSets as he will not get
     another chance to get them again.
 
-    <p>The members <member>ListAction::Count</member> and
-    <member>ListAction::Position</member> are not used.
+    <p>The members ListAction::Count and
+    ListAction::Position are not used.
     */
     const long WELCOME = 20;
 
     /** One or more rows were inserted into the list.
 
-    <p>This action is related to <member>ContentAction::INSERTED</member>.
+    <p>This action is related to ContentAction::INSERTED.
 
-    <p>The members <member>ListAction::Count</member> and
-    <member>ListAction::Position</member> contain the position and count of
+    <p>The members ListAction::Count and
+    ListAction::Position contain the position and count of
     newly inserted rows. If the count is greater than one, the inserted rows
     have to be one after the other.
 
-    <p> <member>ListAction::ActionInfo</member> could contain something but
+    <p> ListAction::ActionInfo could contain something but
     this is not required. For example, it could contain the properties of
     the new rows (i.e. for remote optimizing), but this is not required
     nor unrestrictedly recommended.
 
     <p>@todo ... further description of allowed contents for
-    <member>ListAction::ActionInfo</member> is needed
+    ListAction::ActionInfo is needed
     */
     const long INSERTED = 21;
 
     /** One or more rows were removed from the list.
 
-    <p>This action is related to <member>ContentAction::REMOVED</member>.
+    <p>This action is related to ContentAction::REMOVED.
 
-    <p>The members <member>ListAction::Count</member> and
-    <member>ListAction::Position</member> contain the position and count of the
+    <p>The members ListAction::Count and
+    ListAction::Position contain the position and count of the
     removed rows. If the count is greater than one, the removed rows have to be
     one after the other.
 
-    <p>The member <member>ListAction::ListActionType</member> is not used.
+    <p>The member ListAction::ListActionType is not used.
     */
     const long REMOVED = 22;
 
@@ -89,20 +89,20 @@ published constants ListActionType
 
     <p>If "CLEARED" is sent you don't need to refer to the old ResultSet.
 
-    <p>The members <member>ListAction::ListActionType</member>,
-    <member>ListAction::Count</member> and <member>ListAction::Position</member>
+    <p>The members ListAction::ListActionType,
+    ListAction::Count and ListAction::Position
     are ignored.
     */
     const long CLEARED = 23;
 
     /** One or more rows were moved to another position.
 
-    <p>The members <member>ListAction::Count</member> and
-    <member>ListAction::Position</member> contain the position and count of the
+    <p>The members ListAction::Count and
+    ListAction::Position contain the position and count of the
     moved rows. If the count is greater than one, the moved rows have to be
     one after the other.
 
-    <p><member>ListAction::ListActionType</member> is required to contain a "long",
+    <p>ListAction::ListActionType is required to contain a "long",
     which gives the shift of position.
     (i.e. When two rows at position 3 and 4 are moved for a shift "+1",
     they will appear at the positions 4 and 5. In this action is included, that
@@ -115,18 +115,18 @@ published constants ListActionType
 
     <p>This action is related to a com::sun::star::beans::PropertyChangeEvent.
 
-    <p>The members <member>ListAction::Count</member> and
-    <member>ListAction::Position</member> contain the position and count of the
+    <p>The members ListAction::Count and
+    ListAction::Position contain the position and count of the
     rows, whose properties have changed. If the count is greater than one, the
     rows with modified properties have to be one after the other.
 
-    <p> <member>ListAction::ActionInfo</member> could contain something but
+    <p> ListAction::ActionInfo could contain something but
     this is not required. For example, it could contain the new properties
     (i.e. for remote optimizing), but this is not required nor unrestrictedly
     recommended.
 
     <p>@todo ... further description of allowed contents for
-    <member>ListAction::ActionInfo</member> is needed
+    ListAction::ActionInfo is needed
     */
     const long PROPERTIES_CHANGED = 25;
 
@@ -136,12 +136,12 @@ published constants ListActionType
 
     <p>This action is related to ContentAction == EXCHANGED.
 
-    <p>The members <member>ListAction::Count</member> and
-    <member>ListAction::Position</member> contain the position and count of the
+    <p>The members ListAction::Count and
+    ListAction::Position contain the position and count of the
     rows, whose identity have changed. If the count is greater than one, the
     rows with changed identity have to be one after the other.
 
-    <p><member>ListAction::ListActionType</member> must contain the new identities
+    <p>ListAction::ListActionType must contain the new identities
 
     <p>@todo ...
 
@@ -159,8 +159,8 @@ published constants ListActionType
     to send "COMPLETED". So a listener has the possibility to wait for
     "COMPLETED" e.g. to print the full result. )
 
-    <p>The members <member>ListAction::ListActionType</member>,
-    <member>ListAction::Count</member> and <member>ListAction::Position</member>
+    <p>The members ListAction::ListActionType,
+    ListAction::Count and ListAction::Position
     are useless.
     */
     const long COMPLETED = 27;

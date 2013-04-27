@@ -17,8 +17,8 @@ module com {  module sun {  module star {  module sheet {
  */
 struct FilterFieldValue
 {
-    /** selects whether the <member>TableFilterFieldValue::NumericValue</member>
-        or the <member>TableFilterFieldValue::StringValue</member> is used.
+    /** selects whether the TableFilterFieldValue::NumericValue
+        or the TableFilterFieldValue::StringValue is used.
      */
     boolean IsNumeric;
 

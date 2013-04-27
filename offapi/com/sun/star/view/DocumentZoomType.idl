@@ -41,7 +41,7 @@ published constants DocumentZoomType
     const short ENTIRE_PAGE = 2;
 
     /** The zoom is relative and is to be set via the property
-        <member>ViewSettings::ZoomValue</member>.
+        ViewSettings::ZoomValue.
      */
     const short BY_VALUE = 3;
     /** The page width at the current selection is fit into the view,

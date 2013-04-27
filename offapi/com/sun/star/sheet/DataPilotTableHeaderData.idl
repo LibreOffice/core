@@ -31,8 +31,8 @@ module com {  module sun {  module star {  module sheet {
 
     This struct contains information about a particular cell located within the
     column or row header area of a DataPilot table.  This is the type that is
-    contained in <member>DataPilotTablePositionData::PositionData</member> when
-    the value of <member>DataPilotTablePositionData::PositionType</member> is
+    contained in DataPilotTablePositionData::PositionData when
+    the value of DataPilotTablePositionData::PositionType is
     either <const>DataPilotTablePositionType::ROW_HEADER</const> or
     <const>DataPilotTablePositionType::COLUMN_HEADER</const>.
 

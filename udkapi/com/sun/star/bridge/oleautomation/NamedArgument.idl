@@ -39,7 +39,7 @@ module com {  module sun {  module star {  module bridge {  module oleautomation
 struct NamedArgument
 {
     /** The name of the argument, for which
-        <member>NamedArgument::Value</member> is intended.
+        NamedArgument::Value is intended.
      */
     string Name;
 

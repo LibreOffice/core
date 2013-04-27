@@ -35,20 +35,20 @@
     <h4>The Column Model</h4>
 
     <p>The horizontal structure of the grid is defined by the XGridColumnModel implemented in DefaultGridColumnModel
-    The XGridColumn implemented in GridColumn describes the properties and behavior of a single column. Use the <member>XGridColumnModel::addColumn()</member> to add a column to the column model.
+    The XGridColumn implemented in GridColumn describes the properties and behavior of a single column. Use the XGridColumnModel::addColumn() to add a column to the column model.
     </p>
 
     <h4>The Data Model</h4>
     <p> All row data are stored in the XGridDataModel.
-    Use the DefaultGridDataModel to add  <member>XGridDataModel::addRow()</member> or remove <member>XGridDataModel::removeRow()</member> rows.
+    Use the DefaultGridDataModel to add  XGridDataModel::addRow() or remove XGridDataModel::removeRow() rows.
     </p>
 
-    <p>The column and data model must be set at the <member>UnoControlGridModel::ColumnModel</member> and <member>UnoControlGridModel::GridDataModel</member> properties.</p>
+    <p>The column and data model must be set at the UnoControlGridModel::ColumnModel and UnoControlGridModel::GridDataModel properties.</p>
 
     <h4>Selection</h4>
     <p>If you are interested in knowing when the selection changes implement a
     XGridSelectionListener and add the instance with the method
-    <member>XGridRowSelection::addSelectionListener()</member>.
+    XGridRowSelection::addSelectionListener().
     You than will be notified for any selection change.</p>
 
     @since OOo 3.3

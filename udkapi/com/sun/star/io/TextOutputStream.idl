@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module io {
 /** provides functionality to write text data to a
     com::sun::star::io::XOutputStream
     that initially has to be passed to the method
-    <member>XActiveDataSource::setOutputStream()</member>.
+    XActiveDataSource::setOutputStream().
 
     <p>For details about the text functionality see
     com::sun::star::io::XTextOutputStream.

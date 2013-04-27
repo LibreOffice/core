@@ -62,7 +62,7 @@ published constants ChartSymbolType
     /** Take a Bitmap from a URL and use this as symbol.
 
         <p>The bitmap given by the URL set in the property
-        <member>ChartDataPointProperties::SymbolBitmapURL</member> is
+        ChartDataPointProperties::SymbolBitmapURL is
         copied so that the graphic is embedded.</p>
 
         @see ChartDataPointProperties

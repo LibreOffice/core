@@ -108,7 +108,7 @@ interface XFormOperations : ::com::sun::star::lang::XComponent
     /** determines whether a feature is currently enabled.
 
         <p>Calling this is equivalent to calling getState(), and evaluating the
-        <member>FeatureState::Enabled</member> member.</p>
+        FeatureState::Enabled member.</p>
 
         @param Feature
             the feature whose state is to be determined. Must be one of the FormFeature

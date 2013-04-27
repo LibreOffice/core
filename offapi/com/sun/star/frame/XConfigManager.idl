@@ -36,7 +36,7 @@ published interface XConfigManager: com::sun::star::uno::XInterface
         inside the real implementation
 
         <p>
-        Listener can update his text values by calling <member>XConfigManager::substituteVariables()</member>
+        Listener can update his text values by calling XConfigManager::substituteVariables()
         again. If <var>KeyName</var> specifies a group of keys, the listener gets one notify for each subkey.
         </p>
 

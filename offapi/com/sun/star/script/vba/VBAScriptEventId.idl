@@ -44,7 +44,7 @@ constants VBAScriptEventId
         XVBACompatibility::RunningVBAScripts</member>. The number returned
         there will already contain the new script notified with this event.</p>
 
-        <p>The member <member>VBAScriptEvent::ModuleName</member> of the event
+        <p>The member VBAScriptEvent::ModuleName of the event
         object will contain the name of the code module that contains the
         started script.</p>
      */
@@ -61,7 +61,7 @@ constants VBAScriptEventId
         there will not contain the stopped script notified with this event
         anymore.</p>
 
-        <p>The member <member>VBAScriptEvent::ModuleName</member> of the event
+        <p>The member VBAScriptEvent::ModuleName of the event
         object will contain the name of the code module that contains the
         script that has been stopped.</p>
      */
@@ -70,7 +70,7 @@ constants VBAScriptEventId
     /** This event is fired when a VBA script in the current document tries to
         instanciate a userform.
 
-        <p>The member <member>VBAScriptEvent::ModuleName</member> of the event
+        <p>The member VBAScriptEvent::ModuleName of the event
         object will contain the name of the userform module.</p>
      */
     const long INITIALIZE_USERFORM = 2;

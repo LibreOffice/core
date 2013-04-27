@@ -208,17 +208,17 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
         <p>There are various use cases for this. For instance, you might want to use the
         statement represented by a QueryDefinition, and extend it with additional
         filters or sort orders, while not touching the respective parts already present
-        in <member>QueryDefinition::Command</member>. This can be achieved by setting the
-        <member>QueryDefinition::Command</member> as #ElementaryQuery of a
+        in QueryDefinition::Command. This can be achieved by setting the
+        QueryDefinition::Command as #ElementaryQuery of a
         SingleSelectQueryComposer.</p>
 
         <p>If, in such a scenario, you would be interested in the filter part of the
-        <member>QueryDefinition::Command</member>, you would set it via
+        QueryDefinition::Command, you would set it via
         XSingleSelectQueryAnalyzer::setQuery(), and retrieve the filter
         part via XSingleSelectQueryAnalyzer::getFilter().</p>
 
         <p>If you'd be interested in the composed filter, you would set the
-        <member>QueryDefinition::Command</member> as #ElementaryQuery, add your
+        QueryDefinition::Command as #ElementaryQuery, add your
         filter, and propagate the resulting query (XSingleSelectQueryAnalyzer::getQuery())
         to an SingleSelectQueryAnalyzer instance via
         XSingleSelectQueryAnalyzer::setQuery().</p>

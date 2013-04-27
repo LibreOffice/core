@@ -67,7 +67,7 @@ interface XAccessibleMultiLineText
         <p>The number of lines can be obtained by calling
         XAccessibleMultiLineText::getLineNumberAtIndex()
         with the index of the last character. In a loop, the last line
-        has been reached when <member>TextSegment::SegmentEnd</member>
+        has been reached when TextSegment::SegmentEnd
         of the returned value is equal to the index of the last
         character of the text.</p>
 

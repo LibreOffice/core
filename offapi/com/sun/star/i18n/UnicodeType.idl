@@ -25,7 +25,7 @@ module com {  module sun {  module star {  module i18n {
 
 /**
     Constants to classify Unicode characters, returned by
-    <member>XCharacterClassification::getType()</member>
+    XCharacterClassification::getType()
  */
 
 published constants UnicodeType

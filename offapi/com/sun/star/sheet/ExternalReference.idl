@@ -67,7 +67,7 @@ struct ExternalReference
         cell reference, ComplexReference for a cell range
         reference, or simply a string for a defined name.</p>
 
-        <p>The <member>SingleReference::Sheet</member> member shall contain
+        <p>The SingleReference::Sheet member shall contain
         the index of the external sheet cache containing the values of the
         externally referenced cells.</p>
 

@@ -58,7 +58,7 @@ interface XBitmapPalette : ::com::sun::star::uno::XInterface
 
         @throws com::sun::star::lang::IndexOutOfBoundsException
         if the index is smaller than zero or larger than
-        <member>XBitmapPalette::getNumberOfEntries()</member>-1.
+        XBitmapPalette::getNumberOfEntries()-1.
      */
     boolean getIndex( [out] sequence<ColorComponent> entry, [in] long nIndex )
         raises (com::sun::star::lang::IndexOutOfBoundsException);
@@ -84,7 +84,7 @@ interface XBitmapPalette : ::com::sun::star::uno::XInterface
 
         @throws com::sun::star::lang::IndexOutOfBoundsException
         if the index is smaller than zero or larger than
-        <member>XBitmapPalette::getNumberOfEntries()</member>-1.
+        XBitmapPalette::getNumberOfEntries()-1.
 
         @throws com::sun::star::lang::IllegalArgumentException
         if the given sequence of color components does not match the

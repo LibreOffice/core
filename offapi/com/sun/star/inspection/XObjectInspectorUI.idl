@@ -67,7 +67,7 @@ interface XObjectInspectorUI
         @param  Elements
             a combination of PropertyLineElement flags specifying which elements are to be
             enabled or disabled.<br/>
-            Note that if you don't set a particular bit here (say, <member>PropertyLineElement::PrimaryButton</member>),
+            Note that if you don't set a particular bit here (say, PropertyLineElement::PrimaryButton),
             this does mean that this element's state is not affected by the call - it does
             <em>not</em> mean that it is disabled.
         @param  Enable
@@ -152,7 +152,7 @@ interface XObjectInspectorUI
         one.
 
         @throws NoSupportException
-            if the <member>XObjectInspectorModel::HasHelpSection</member> property
+            if the XObjectInspectorModel::HasHelpSection property
             requires the help section to be unavailable.
 
         @since OOo 2.2

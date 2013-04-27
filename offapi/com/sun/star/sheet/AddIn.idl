@@ -80,7 +80,7 @@ module com {  module sun {  module star {  module sheet {
     interface to the SpreadsheetDocument making the function
     call. Only one parameter of this type is allowed in each function. It
     can be used to query document settings like
-    <member>SpreadsheetDocumentSettings::NullDate</member>.</dd>
+    SpreadsheetDocumentSettings::NullDate.</dd>
 
     <dt><atom>any[]</atom></dt>
     <dd>for varying parameters. Only the last parameter of a function may

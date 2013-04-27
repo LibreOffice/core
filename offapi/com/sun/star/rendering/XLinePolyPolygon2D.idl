@@ -73,7 +73,7 @@ interface XLinePolyPolygon2D : XPolyPolygon2D
         specifying 0 here, the given point sequence will precede all
         existing polygons already within the poly-polygon). To append
         to a poly-polygon, call setPoints() with
-        <member>XLinePolyPolygon2D::getNumberOfPolygons()</member>
+        XLinePolyPolygon2D::getNumberOfPolygons()
         as the polygon index. If nPolygonIndex is -1, the given
         sequence of points <em>replaces</em> the poly-polygon content,
         such that after this method completes, it contains exactly the

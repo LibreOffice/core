@@ -23,7 +23,7 @@
 
 module com { module sun { module star { module ucb {
 
-/** These are the possible values for <member>ContentInfo::Attributes</member>.
+/** These are the possible values for ContentInfo::Attributes.
 */
 published constants ContentInfoAttribute
 {

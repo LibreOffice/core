@@ -126,8 +126,8 @@ published interface XModel: com::sun::star::lang::XComponent
         for display updates.
 
         <p>
-        The calls to <member>XModel::lockControllers()</member> and
-        <member>XModel::unlockControllers()</member> may be
+        The calls to XModel::lockControllers() and
+        XModel::unlockControllers() may be
         nested and even overlapping, but they must be in pairs. While
         there is at least one lock remaining, some notifications
         for display updates are not broadcasted.
@@ -136,11 +136,11 @@ published interface XModel: com::sun::star::lang::XComponent
     void lockControllers();
 
     /** resumes the notifications which were suspended by
-        <member>XModel::lockControllers()</member>.
+        XModel::lockControllers().
 
         <p>
-        The calls to <member>XModel::lockControllers()</member> and
-        <member>XModel::unlockControllers()</member> may be
+        The calls to XModel::lockControllers() and
+        XModel::unlockControllers() may be
         nested and even overlapping, but they must be in pairs. While
         there is at least one lock remaining, some notifications for
         display updates are not broadcasted.

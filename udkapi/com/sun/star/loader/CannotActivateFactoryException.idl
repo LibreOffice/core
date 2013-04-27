@@ -28,7 +28,7 @@
 /** indicates an error during component activation
     <p> This exception is thrown when an application tries to
     activate a component factory using the
-    <member>XImplementationLoader::activate()</member>
+    XImplementationLoader::activate()
     method, but the component factory can not be activated.
     <p>
     Possible reasons for this error is a missing shared library or .jar file,

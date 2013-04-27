@@ -34,7 +34,7 @@ module com {  module sun {  module star {  module frame {
     <p>
     Each state change is to be broadcasted to all registered
     status listeners. The first notification should be performed
-    synchronously from <member>XDispatch::addStatusListener()</member>;
+    synchronously from XDispatch::addStatusListener();
         if not, controls may flicker. State listener must be aware of this
     synchronous notification.
     </p>

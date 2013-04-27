@@ -34,8 +34,8 @@ interface XBroadcaster: com::sun::star::uno::XInterface
     /** suspends broadcasts to the registered listeners.
 
         <p>
-        The calls to <member>XBroadcaster::lockBroadcast()</member> and
-        <member>XBroadcaster::unlockBroadcasts()</member> may be
+        The calls to XBroadcaster::lockBroadcast() and
+        XBroadcaster::unlockBroadcasts() may be
         nested and even overlapping, but they must be in pairs. While
         there is at least one lock remaining, no broadcasts are
         sent to registered listeners.
@@ -44,19 +44,19 @@ interface XBroadcaster: com::sun::star::uno::XInterface
     void lockBroadcasts();
 
     /** resumes the broadcasts which were suspended by
-        <member>XBroadcaster::lockBroadcasts()</member>.
+        XBroadcaster::lockBroadcasts().
 
         <p>
-        The calls to <member>XBroadcaster::lockBroadcast()</member> and
-        <member>XBroadcaster::unlockBroadcasts()</member> may be
+        The calls to XBroadcaster::lockBroadcast() and
+        XBroadcaster::unlockBroadcasts() may be
         nested and even overlapping, but they must be in pairs. While
         there is at least one lock remaining, no broadcasts are
         sent to registered listeners.
         </p>
 
         <p> Pending broadcasts will be sent immediately after the last
-        call to <member>XBroadcaster::lockBroadcast()</member> is matched
-        by a call to <member>XBroadcaster::unlockBroadcasts()</member>.
+        call to XBroadcaster::lockBroadcast() is matched
+        by a call to XBroadcaster::unlockBroadcasts().
         An implementation can decide to broadcast all pending notification in
         order or batch them in single broadcasts.
         </p>

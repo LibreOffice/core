@@ -49,8 +49,8 @@ published interface XActiveDataControl: com::sun::star::uno::XInterface
 
     /** starts I/O.
 
-        <p>Either <member>XActiveDataControl::setInputStream()</member> or
-        <member>XActiveDataControl::setOutputStream()</member> must be called beforehand.
+        <p>Either XActiveDataControl::setInputStream() or
+        XActiveDataControl::setOutputStream() must be called beforehand.
         </p>
 
         <p>This method does not block the thread, so reading is

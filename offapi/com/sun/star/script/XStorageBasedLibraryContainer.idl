@@ -44,7 +44,7 @@ interface XStorageBasedLibraryContainer
     /** denotes the root storage associated with the container.
 
         <p>Effectively, this attribute is a typed version of
-        <member>XPersistentLibraryContainer::RootLocation</member>, it's guaranteed
+        XPersistentLibraryContainer::RootLocation, it's guaranteed
         that at every time, <code>XPersistentLibraryContainer::RootLocation</code> and
         <code>RootStorage</code> have the same value.</p>
 

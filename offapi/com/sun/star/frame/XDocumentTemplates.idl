@@ -30,9 +30,9 @@ module com {  module sun {  module star {  module frame {
     <p>
     Template information are saved as links to the original content
     and organized in groups. This data should be persistent and can be
-    updated by calling special method <member>XDocumentTemplates::update()</member>.
+    updated by calling special method XDocumentTemplates::update().
     A real implementation of this interface can do that on top of
-    an ucb content provider. Method <member>XDocumentTemplates::getContent()</member>
+    an ucb content provider. Method XDocumentTemplates::getContent()
     force that.
     </p>
  */

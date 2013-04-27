@@ -25,8 +25,8 @@ module com {  module sun {  module star {  module i18n {
 
 /**
     Parser results returned by
-    <member>XCharacterClassification::parseAnyToken()</member> and
-    <member>XCharacterClassification::parsePredefinedToken()</member>.
+    XCharacterClassification::parseAnyToken() and
+    XCharacterClassification::parsePredefinedToken().
  */
 
 published struct ParseResult

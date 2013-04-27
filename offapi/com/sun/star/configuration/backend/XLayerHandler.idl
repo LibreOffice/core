@@ -41,7 +41,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
         for a component.
 
         <p> Subsequent calls describe the contents of the layer
-            until a matching call to <member>XLayerHandler::endLayer()</member>
+            until a matching call to XLayerHandler::endLayer()
             is encountered.
         </p>
 
@@ -57,7 +57,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
 
     /** receives notification that a layer description is complete.
 
-        <p> Must match a previous call to <member>XLayerHandler::startLayer()</member>.
+        <p> Must match a previous call to XLayerHandler::startLayer().
         </p>
 
         @throws com::sun::star::configuration::backend::MalformedDataException
@@ -80,7 +80,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
 
         <p> Subsequent calls describe overrides to properties and members
             or items of the node until a matching call to
-            <member>XLayerHandler::endNode()</member>is encountered.
+            XLayerHandler::endNode()is encountered.
         </p>
 
         @param aName
@@ -133,7 +133,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
         </p>
         <p> Subsequent calls describe the difference from the template
             of properties and members or items of the node until
-            a matching call to <member>XLayerHandler::endNode()</member>
+            a matching call to XLayerHandler::endNode()
             is encountered.
         </p>
 
@@ -145,7 +145,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
 
             <p> The value is a combination of
                 NodeAttribute flags.  Note that
-                <member>NodeAttribute::FUSE</member> has an impact on the
+                NodeAttribute::FUSE has an impact on the
                 semantics of this method.
             </p>
 
@@ -178,7 +178,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
         </p>
         <p> Subsequent calls describe the difference from the template
             of properties and members or items of the node until
-            a matching call to <member>XLayerHandler::endNode()</member>
+            a matching call to XLayerHandler::endNode()
             is encountered.
         </p>
 
@@ -193,7 +193,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
 
             <p> The value is a combination of
                 NodeAttribute flags.  Note that
-                <member>NodeAttribute::FUSE</member> has an impact on the
+                NodeAttribute::FUSE has an impact on the
                 semantics of this method.
             </p>
 
@@ -223,9 +223,9 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
     /** receives notification that a node description is complete.
 
         <p> Must match the last open call to
-            <member>XLayerHandler::overrideNode()</member>,
-            <member>XLayerHandler::addOrReplaceNode()</member> or
-            <member>XLayerHandler::addOrReplaceNodeFromTemplate()</member>.
+            XLayerHandler::overrideNode(),
+            XLayerHandler::addOrReplaceNode() or
+            XLayerHandler::addOrReplaceNodeFromTemplate().
         </p>
 
         @throws com::sun::star::configuration::backend::MalformedDataException
@@ -271,7 +271,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
     /** receives notification that an existing property is modified.
 
         <p> Subsequent calls describe new value(s) for the property until a
-            matching call to <member>XLayerHandler::endProperty()</member>
+            matching call to XLayerHandler::endProperty()
             is encountered.
         </p>
 
@@ -410,7 +410,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
     /** receives notification that a property description is complete.
 
         <p> Must match an open call to
-            <member>XLayerHandler::overrideProperty()</member>,
+            XLayerHandler::overrideProperty(),
         </p>
 
         @throws com::sun::star::configuration::backend::MalformedDataException

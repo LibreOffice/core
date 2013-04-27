@@ -35,7 +35,7 @@ published interface XFetchProviderForContentAccess: com::sun::star::uno::XInterf
         rows
 
         @returns
-        <member>FetchResult::Rows</member> contains a sequence of anys. Each
+        FetchResult::Rows contains a sequence of anys. Each
         of these anys contains a string.
 
         @param nRowStartPosition
@@ -58,7 +58,7 @@ published interface XFetchProviderForContentAccess: com::sun::star::uno::XInterf
         indicated rows
 
         @returns
-        <member>FetchResult::Rows</member> contains a sequence of anys. Each
+        FetchResult::Rows contains a sequence of anys. Each
         of these anys contains an XContentIdentifier.
 
         @param nRowStartPosition
@@ -80,7 +80,7 @@ published interface XFetchProviderForContentAccess: com::sun::star::uno::XInterf
     /** returns the <type>XContent</types>s of the columns of the indicated rows
 
         @returns
-        <member>FetchResult::Rows</member> contains a sequence of anys. Each
+        FetchResult::Rows contains a sequence of anys. Each
         of these anys contains an XContent.
 
         @param nRowStartPosition

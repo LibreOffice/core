@@ -106,7 +106,7 @@ interface XTextLayout;
     each render call. It is therefore recommended to create such
     objects via the XGraphicDevice factory (to be
     retrieved from every canvas object via the
-    <member>getDevice()</member> call) - they will then internally
+    getDevice() call) - they will then internally
     optimize to the underlying graphics subsystem.<p>
 
     @since OOo 2.0
@@ -601,7 +601,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         specified by the combined view and render transformations. For
         fast render speed, the bitmap should be created by the
         corresponding XGraphicDevice's
-        <member>XGraphicDevice::createCompatibleBitmap()</member>
+        XGraphicDevice::createCompatibleBitmap()
         method.<p>
 
         @param xBitmap
@@ -633,7 +633,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         specified by the combined view and render transformations. For
         fast render speed, the bitmap should be created by the
         corresponding XGraphicDevice's
-        <member>XGraphicDevice::createCompatibleBitmap()</member>
+        XGraphicDevice::createCompatibleBitmap()
         method. The bitmap's color channel values are multiplied with
         the device color values as specified in the render state.<p>
 

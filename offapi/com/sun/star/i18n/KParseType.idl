@@ -27,9 +27,9 @@ module com {  module sun {  module star {  module i18n {
     Constants to specify the type of a parsed token.
 
     <p> Set by
-    <member>XCharacterClassification::parseAnyToken()</member> and
-    <member>XCharacterClassification::parsePredefinedToken()</member> in
-    <member>ParseResult::TokenType</member>. </p>
+    XCharacterClassification::parseAnyToken() and
+    XCharacterClassification::parsePredefinedToken() in
+    ParseResult::TokenType. </p>
  */
 
 published constants KParseType
@@ -49,20 +49,20 @@ published constants KParseType
     // quotation marks, they are needed for the unoidl compiler which otherwise
     // gets confused about the single quotation marks.
     /** "A single-quoted name matching the conditions passed ( 'na\'me' )."
-        "Dequoted name in <member>ParseResult::DequotedNameOrString</member> ( na'me )." */
+        "Dequoted name in ParseResult::DequotedNameOrString ( na'me )." */
     const long SINGLE_QUOTE_NAME    = 0x00000008;
 
     /** A double-quoted string ( "str\"i""ng" ). Dequoted string in
-        <member>ParseResult::DequotedNameOrString</member> ( str"i"ng ). */
+        ParseResult::DequotedNameOrString ( str"i"ng ). */
     const long DOUBLE_QUOTE_STRING  = 0x00000010;
 
     /** A number where all digits are ASCII characters.
-        Numerical value in <member>ParseResult::Value</member>. */
+        Numerical value in ParseResult::Value. */
     const long ASC_NUMBER           = 0x00000020;
 
     /** A number where at least some digits are Unicode (and maybe
         ASCII) characters. Numerical value inKParseType
-        <member>ParseResult::Value</member>. */
+        ParseResult::Value. */
     const long UNI_NUMBER           = 0x00000040;
 
     /** Set (ored) if SINGLE_QUOTE_NAME or DOUBLE_QUOTE_STRING has no

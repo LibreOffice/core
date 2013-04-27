@@ -71,7 +71,7 @@ interface XFormulaOpCodeMapper
             <p>Each string element in parameter Names according to the formula
             language in parameter Language is mapped to a <type>FormulaToken
             </type> containing the internal OpCode used by the spreadsheet
-            application in <member>FormulaToken::OpCode</member> and by
+            application in FormulaToken::OpCode and by
             contract maybe additional information in <member>
             FormulaToken::Data</member>.</p>
 
@@ -81,7 +81,7 @@ interface XFormulaOpCodeMapper
             <p>An unknown Name string gets the OpCode value of <member>
             OpCodeUnknown</member> assigned.</p>
 
-            <p>Additional information in <member>FormulaToken::Data</member>
+            <p>Additional information in FormulaToken::Data
             is returned for:
             <ul>
             <li>Add-in names: the programmatic name. The OpCode value used
@@ -115,7 +115,7 @@ interface XFormulaOpCodeMapper
             mapped to a FormulaToken containing the internal
             OpCode used by the spreadsheet application in <member>
             FormulaToken::OpCode</member> and by contract maybe additional
-            information in <member>FormulaToken::Data</member>. See <member>
+            information in FormulaToken::Data. See <member>
             getMappings</member> for more details.</p>
      */
     sequence< FormulaOpCodeMapEntry > getAvailableMappings(

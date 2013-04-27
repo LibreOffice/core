@@ -34,7 +34,7 @@ published constants BestRowType
              com::sun::star::sdbc::XResultSet
              object
              returned by the method
-             <member>XDatabaseMetaData::getBestRowIdentifier()</member>
+             XDatabaseMetaData::getBestRowIdentifier()
              .
      */
     const long UNKNOWN  = 0;
@@ -46,7 +46,7 @@ published constants BestRowType
              com::sun::star::sdbc::XResultSet
              object
              returned by the method
-             <member>XDatabaseMetaData::getBestRowIdentifier()</member>
+             XDatabaseMetaData::getBestRowIdentifier()
              .
      */
     const long NOT_PSEUDO   = 1;
@@ -58,7 +58,7 @@ published constants BestRowType
              com::sun::star::sdbc::XResultSet
              object
              returned by the method
-             <member>XDatabaseMetaData::getBestRowIdentifier()</member>
+             XDatabaseMetaData::getBestRowIdentifier()
              .
      */
     const long PSEUDO   = 2;

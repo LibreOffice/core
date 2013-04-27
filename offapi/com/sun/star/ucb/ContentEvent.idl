@@ -45,19 +45,19 @@ published struct ContentEvent: com::sun::star::lang::EventObject
 
         <table border=1>
         <tr align=left>
-            <td><member>ContentAction::INSERTED</member></td>
+            <td>ContentAction::INSERTED</td>
             <td>The content inserted into a folder</td>
         </tr>
         <tr align=left>
-            <td><member>ContentAction::REMOVED</member></td>
+            <td>ContentAction::REMOVED</td>
             <td>The content removed from a folder</td>
         </tr>
         <tr align=left>
-            <td><member>ContentAction::DELETED</member></td>
+            <td>ContentAction::DELETED</td>
             <td>The deleted content</td>
         </tr>
         <tr align=left>
-            <td><member>ContentAction::EXCHANGED</member></td>
+            <td>ContentAction::EXCHANGED</td>
             <td>The exchanged content (that already has the new content id)</td>
         </tr>
         </table>
@@ -72,19 +72,19 @@ published struct ContentEvent: com::sun::star::lang::EventObject
 
         <table border=1>
         <tr align=left>
-            <td><member>ContentAction::INSERTED</member></td>
+            <td>ContentAction::INSERTED</td>
             <td>Id of the folder the content was inserted into</td>
         </tr>
         <tr align=left>
-            <td><member>ContentAction::REMOVED</member></td>
+            <td>ContentAction::REMOVED</td>
             <td>Id of the folder the content was removed from</td>
         </tr>
         <tr align=left>
-            <td><member>ContentAction::DELETED</member></td>
+            <td>ContentAction::DELETED</td>
             <td>Id of the deleted content</td>
         </tr>
         <tr align=left>
-            <td><member>ContentAction::EXCHANGED</member></td>
+            <td>ContentAction::EXCHANGED</td>
             <td>Previous(!) id of the exchanged content</td>
         </tr>
         </table>

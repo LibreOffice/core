@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module table {
     BorderLine.
 
     <p>In a queried structure, the flags in
-    <member>TableBorder2::Is...LineValid</member> indicate that not all
+    TableBorder2::Is...LineValid indicate that not all
     lines of the boxes have the same values.</p>
 
     <p>In a structure which is used for setting, these flags determine
@@ -42,7 +42,7 @@ published struct TableBorder2
 
 
     /** specifies whether the value of
-        <member>TableBorder2::TopLine</member> is used.
+        TableBorder2::TopLine is used.
      */
     boolean IsTopLineValid;
 
@@ -53,7 +53,7 @@ published struct TableBorder2
 
 
     /** specifies whether the value of
-        <member>TableBorder2::BottomLine</member> is used.
+        TableBorder2::BottomLine is used.
      */
     boolean IsBottomLineValid;
 
@@ -64,7 +64,7 @@ published struct TableBorder2
 
 
     /** specifies whether the value of
-        <member>TableBorder2::LeftLine</member> is used.
+        TableBorder2::LeftLine is used.
      */
     boolean IsLeftLineValid;
 
@@ -75,7 +75,7 @@ published struct TableBorder2
 
 
     /** specifies whether the value of
-        <member>TableBorder2::RightLine</member> is used.
+        TableBorder2::RightLine is used.
      */
     boolean IsRightLineValid;
 
@@ -87,7 +87,7 @@ published struct TableBorder2
 
 
     /** specifies whether the value of
-        <member>TableBorder2::HorizontalLine</member> is used.
+        TableBorder2::HorizontalLine is used.
      */
     boolean IsHorizontalLineValid;
 
@@ -99,7 +99,7 @@ published struct TableBorder2
 
 
     /** specifies whether the value of
-        <member>TableBorder2::VerticalLine</member> is used.
+        TableBorder2::VerticalLine is used.
      */
     boolean IsVerticalLineValid;
 
@@ -110,7 +110,7 @@ published struct TableBorder2
 
 
     /** specifies whether the value of
-        <member>TableBorder2::Distance</member> is used.
+        TableBorder2::Distance is used.
      */
     boolean IsDistanceValid;
 

@@ -61,7 +61,7 @@ interface XCopyTableWizard : ::com::sun::star::ui::dialogs::XExecutableDialog
         @throws IllegalArgumentException
             if you attempt to set an invalid operation, or if the given operation is
             not supported by the target database type, e.g. if you specified
-            <member>CopyTableOperation::CreateAsView</member> where the database
+            CopyTableOperation::CreateAsView where the database
             does not support views.
     */
     [attribute] short Operation
@@ -94,7 +94,7 @@ interface XCopyTableWizard : ::com::sun::star::ui::dialogs::XExecutableDialog
         which cannot be represented in this simple attribute anymore.</p>
 
         <p>This attribute is ignored if #Operation is
-        <member>CopyTableOperation::AppendData</member>.</p>
+        CopyTableOperation::AppendData.</p>
 
         <p>Changing this attribute while the dialog is running is not supported, the
         result of such an attempt is undefined.</p>

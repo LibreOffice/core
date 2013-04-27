@@ -26,9 +26,9 @@
 /** these types describe the algorithm to be used to search a frame
 
     <p>
-    Such flags will be used on methods <member>XFrame::findFrame()</member>,
-    <member>XDispatchProvider::queryDispatch()</member> or
-    <member>XComponentLoader::loadComponentFromURL()</member> if no special target
+    Such flags will be used on methods XFrame::findFrame(),
+    XDispatchProvider::queryDispatch() or
+    XComponentLoader::loadComponentFromURL() if no special target
     frame name (e.g. "_blank", "_self") is used.
     </p>
 

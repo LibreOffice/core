@@ -30,7 +30,7 @@
         </p>
         <p>
         Precise information about the specific types can be got from
-        <member>XDatabaseMetaData::getTypeInfo()</member>
+        XDatabaseMetaData::getTypeInfo()
         .</p>
  */
 published constants DataType

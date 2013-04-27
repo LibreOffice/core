@@ -24,7 +24,7 @@
 module com { module sun { module star { module i18n {
 
 
-/** Constants for AM/PM used in calls to <member>XCalendar::getDisplayName()</member>.
+/** Constants for AM/PM used in calls to XCalendar::getDisplayName().
  */
 published constants AmPmValue
 {

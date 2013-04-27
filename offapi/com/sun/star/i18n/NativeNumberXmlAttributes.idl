@@ -31,8 +31,8 @@ module com { module sun { module star { module i18n {
     stored in XML file format.
 
     <p> Used with
-    <member>XNativeNumberSupplier::convertToXmlAttributes()</member> and
-    <member>XNativeNumberSupplier::convertFromXmlAttributes()</member>
+    XNativeNumberSupplier::convertToXmlAttributes() and
+    XNativeNumberSupplier::convertFromXmlAttributes()
     </p>
 
      @since OOo 1.1.2

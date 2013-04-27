@@ -114,7 +114,7 @@ published interface XTransliteration: com::sun::star::uno::XInterface
                         [in] ::com::sun::star::lang::Locale aLocale );
 
     /** Load a sequence of instances of predefined modules - supersedes
-        method <member>XTransliteration::loadModule()</member>.
+        method XTransliteration::loadModule().
      */
     void    loadModuleNew(  [in] sequence <TransliterationModulesNew> aModType,
                             [in] ::com::sun::star::lang::Locale aLocale );

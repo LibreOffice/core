@@ -30,7 +30,7 @@ interface XConfiguration;
 /** A single explicit request for a configuration change.
 
     <p>The requested change is committed to a configuration only when the
-    <member>execute()</member> method is called.  Configuration change
+    execute() method is called.  Configuration change
     requests are executed asynchronously.  This is done to avoid reentrance
     problems with objects that are registered as
     XConfigurationChangeListener and at the same time make

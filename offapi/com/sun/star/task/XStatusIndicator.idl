@@ -39,7 +39,7 @@ published interface XStatusIndicator: com::sun::star::uno::XInterface
 
         <p>
         It activates a new created or reactivate an already used indicator
-        (must be finished by calling <member>XStatusIndicator::end()</member>
+        (must be finished by calling XStatusIndicator::end()
         before!). By the way it's possible to set first progress description
         and the possible range of progress value. That means that a progress
         can runs from 0 to <var>Range</var>.
@@ -47,11 +47,11 @@ published interface XStatusIndicator: com::sun::star::uno::XInterface
 
         @param Text
             initial value for progress description for showing
-            Value can be updated by calling <member>XStatusIndicator::setText()</member>.
+            Value can be updated by calling XStatusIndicator::setText().
 
         @param Range
             means the maximum value of the progress which can be set by
-            calling <member>XStatusIndicator::setValue()</member>.
+            calling XStatusIndicator::setValue().
      */
     void start(
         [in] string Text,
@@ -60,10 +60,10 @@ published interface XStatusIndicator: com::sun::star::uno::XInterface
     /** stop the progress
 
         <p>
-        Further calls of <member>XStatusIndicator::setText()</member>,
-        <member>XStatusIndicator::setValue()</member> or
-        <member>XStatusIndicator::reset()</member> must be ignored.
-        Only <member>XStatusIndicator::start()</member> can reactivate this
+        Further calls of XStatusIndicator::setText(),
+        XStatusIndicator::setValue() or
+        XStatusIndicator::reset() must be ignored.
+        Only XStatusIndicator::start() can reactivate this
         indicator.
         It's not allowed to destruct the indicator inside this method.
         The instance must be gone by using ref count or disposing.
@@ -75,7 +75,7 @@ published interface XStatusIndicator: com::sun::star::uno::XInterface
 
         <p>
         Initial value can be set during starting of the progress by calling
-        <member>XStatusIndicator::start()</member>.
+        XStatusIndicator::start().
         Stopped indicators must ignore this call.
         </p>
 
@@ -94,7 +94,7 @@ published interface XStatusIndicator: com::sun::star::uno::XInterface
         @param Value
             new value for progress which should be shown now
             Must fit the range [0..Range] which was set during
-            <member>XStatusIndicator::start()</member>.
+            XStatusIndicator::start().
      */
     void setValue( [in] long Value );
 

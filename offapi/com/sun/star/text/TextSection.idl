@@ -57,7 +57,7 @@ published service TextSection
     /**  This property contains a conditional expression.
 
     <p>If the result of the conditional expression is <true/> and the property
-    <member>TextSection::IsVisible</member> is <false/>, then the section is hidden.</p>
+    TextSection::IsVisible is <false/>, then the section is hidden.</p>
     */
     [property] string Condition;
 
@@ -77,12 +77,12 @@ published service TextSection
     [property] com::sun::star::text::SectionFileLink FileLink;
 
     /**  specifies the source of a file link in the document that is
-    specified in <member>TextSection::FileLink</member>.
+    specified in TextSection::FileLink.
 
     <p>The source may be a text section or a bookmark.
-    If <member>TextSection::FileLink</member> is empty, then the
+    If TextSection::FileLink is empty, then the
     current document is searched for the source. If this property
-    is empty and <member>TextSection::FileLink</member> is set,
+    is empty and TextSection::FileLink is set,
     then the complete document content is linked into this section.</p>
     */
     [property] string LinkRegion;

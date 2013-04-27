@@ -91,7 +91,7 @@ interface XAnimatedSprite : XSprite
         sprite. Please note that if an animation is not started, the
         associated XSpriteCanvas does not update changed
         sprites automatically, but has to be told to do so via
-        <member>XSpriteCanvas::updateScreen()</member>.<p>
+        XSpriteCanvas::updateScreen().<p>
      */
     void updateAnimation();
 
@@ -100,18 +100,18 @@ interface XAnimatedSprite : XSprite
         animation.<p>
 
         The state given here is used when calling the
-        <member>XAnimation::render()</member> method, or when drawing
+        XAnimation::render() method, or when drawing
         the sprite's bitmaps, respectively. There's no need to call
-        <member>XSpriteCanvas::updateAnimation()</member> after this
+        XSpriteCanvas::updateAnimation() after this
         method, as it automatically rerenders, if necessary. Please
         note that if an animation is not started, the associated
         XSpriteCanvas does not update changed sprites
         automatically, but has to be told to do so via
-        <member>XSpriteCanvas::updateScreen()</member>.<p>
+        XSpriteCanvas::updateScreen().<p>
 
         @param aViewState
         The state given here is used when calling the
-        <member>XAnimation::render()</member> method, or when drawing
+        XAnimation::render() method, or when drawing
         the sprite's bitmaps, respectively.
 
         @throws com::sun::star::lang::IllegalArgumentException
@@ -130,7 +130,7 @@ interface XAnimatedSprite : XSprite
         Please note that if an animation is not started, the
         associated XSpriteCanvas does not update changed
         sprites automatically, but has to be told to do so via
-        <member>XSpriteCanvas::updateScreen()</member>.<p>
+        XSpriteCanvas::updateScreen().<p>
 
         @param aNewPos
         New left,top output position of the sprite. This position gets

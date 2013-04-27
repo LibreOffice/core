@@ -48,8 +48,8 @@ interface XConfigurationControllerRequestQueue
         <p>This method should not be called from outside the drawing
         framework.  Other sub controllers of the drawing framework are typical
         callers.  They can add change requests that can not be made with the
-        <member>requestResourceActivation()</member> and
-        <member>requestResourceDeactivation()</member> methods.</p>
+        requestResourceActivation() and
+        requestResourceDeactivation() methods.</p>
         @param xRequest
             The configuration change represented by this request object must only
             be commited to the configuration when the

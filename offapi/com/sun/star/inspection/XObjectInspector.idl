@@ -92,7 +92,7 @@ interface XObjectInspector
 
         <p>If the sequence contains more than one object, the XObjectInspector
         will create a complete set of property handlers (as indicated by
-        <member>XObjectInspectorModel::HandlerFactories</member>) for <em>every</em> of
+        XObjectInspectorModel::HandlerFactories) for <em>every</em> of
         the objects, and compose their output.</p>
 
         @throws com::sun::star::util::VetoException

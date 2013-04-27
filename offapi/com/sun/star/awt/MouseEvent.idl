@@ -66,7 +66,7 @@ published struct MouseEvent: com::sun::star::awt::InputEvent
         <p>If this member is <TRUE/>, the event describes a request for a pop-up menu,
         also known as context menu, on an object.</p>
 
-        <p>In this case, <member>X</member> and <member>Y</member> describe the position
+        <p>In this case, X and Y describe the position
         where the request was issued. If those members are <code>-1</code>, then the
         request was issued using the keyboard, by pressing the operating-system dependent
         key combination for this purpose.</p>

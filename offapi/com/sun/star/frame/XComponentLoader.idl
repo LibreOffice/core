@@ -127,9 +127,9 @@ published interface XComponentLoader: com::sun::star::uno::XInterface
                     Should be used for real editable components which doesn't need a model.
                     It is not allowed to dispose it after use directly, because the frame
                     containing the component is its owner. Here the object can be disposed
-                    by disposing the frame, that the <member>XController::getFrame()</member>
+                    by disposing the frame, that the XController::getFrame()
                     method of the controller returns. But for visible components the controller
-                    should be asked for permission by calling <member>XController::suspend()</member> before.
+                    should be asked for permission by calling XController::suspend() before.
                 </li>
                 <li>
                     XModel for full featured components<br/>

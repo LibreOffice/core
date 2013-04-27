@@ -27,9 +27,9 @@ module com { module sun { module star { module i18n {
 
 /** Constants for days of a week.
 
-    <p> used with <member>XCalendar::getFirstDayOfWeek()</member>,
-    <member>XCalendar::setFirstDayOfWeek()</member> and
-    <member>XCalendar::getDisplayName()</member> </p>
+    <p> used with XCalendar::getFirstDayOfWeek(),
+    XCalendar::setFirstDayOfWeek() and
+    XCalendar::getDisplayName() </p>
  */
 published constants Weekdays
 {

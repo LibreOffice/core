@@ -80,7 +80,7 @@
     </p>
     <p>Any implementation can supply its own bridges to other object
     models by implementing this interface and returning the bridge
-    when the method <member>XBridgeSupplier2::createBridge()</member>
+    when the method XBridgeSupplier2::createBridge()
     is called with itself as the first parameter.  </p>
 
     @see com::sun::star::bridge::OleBridgeSupplier2

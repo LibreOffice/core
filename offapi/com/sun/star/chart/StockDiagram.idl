@@ -39,12 +39,12 @@
     <p>Note that the data must have a specific structure for stock
     diagrams.  Let us assume that data is interpreted, such that
     series are taken from columns (see property
-    <member>Diagram::DataRowSource</member>).  Then you need tables of
+    Diagram::DataRowSource).  Then you need tables of
     the following structures for different types:</p>
 
     <p><strong>
-     <member>StockDiagram::Volume</member> is <FALSE/><br>
-     <member>StockDiagram::UpDown</member> is <FALSE/>
+     StockDiagram::Volume is <FALSE/><br>
+     StockDiagram::UpDown is <FALSE/>
     </strong>
     <table border>
      <tr><td>Low</td><td>High</td><td>Close</td></tr>
@@ -52,8 +52,8 @@
     </table></p>
 
     <p><strong>
-     <member>StockDiagram::Volume</member> is <TRUE/><br>
-     <member>StockDiagram::UpDown</member> is <FALSE/>
+     StockDiagram::Volume is <TRUE/><br>
+     StockDiagram::UpDown is <FALSE/>
     </strong>
     <table border>
      <tr><td><strong>Volume</strong></td><td>Low</td><td>High</td><td>Close</td></tr>
@@ -61,8 +61,8 @@
     </table></p>
 
     <p><strong>
-     <member>StockDiagram::Volume</member> is <FALSE/><br>
-     <member>StockDiagram::UpDown</member> is <TRUE/>
+     StockDiagram::Volume is <FALSE/><br>
+     StockDiagram::UpDown is <TRUE/>
     </strong>
     <table border>
      <tr><td><strong>Open</strong></td><td>Low</td><td>High</td><td>Close</td></tr>
@@ -70,8 +70,8 @@
     </table></p>
 
     <p><strong>
-     <member>StockDiagram::Volume</member> is <TRUE/><br>
-     <member>StockDiagram::UpDown</member> is <TRUE/>
+     StockDiagram::Volume is <TRUE/><br>
+     StockDiagram::UpDown is <TRUE/>
     </strong>
     <table border>
      <tr><td><strong>Volume</strong></td><td><strong>Open</strong></td><td>Low</td><td>High</td><td>Close</td></tr>
@@ -107,7 +107,7 @@ published service StockDiagram
         differences between open and closed data.</p>
 
         <p>If this property is <FALSE/>, the values of the first
-        series (or second if <member>StockDiagram::Volume</member> is
+        series (or second if StockDiagram::Volume is
         <TRUE/>) of the chart data are interpreted as the day's lowest
         value.  The next series is interpreted as the day's highest
         value, and the last series is interpreted as the closing

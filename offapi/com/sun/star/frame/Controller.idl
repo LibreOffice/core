@@ -69,7 +69,7 @@ published service Controller
 
         <p>
         Don't mix it with XDispatchProviderInterception which
-        intercept calls of <member>XDispatch::dispatch()</member>.
+        intercept calls of XDispatch::dispatch().
         </p>
      */
     [optional] interface com::sun::star::ui::XContextMenuInterception;

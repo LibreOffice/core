@@ -36,7 +36,7 @@ interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
     /** is called when an undo action is added to the undo stack.
 
         <p>Note that the action must not necessarily be the new top element of the stack: In case there's an
-        open Undo context, <member>UndoManagerEvent::UndoContextDepth</member> will be greater <code>0</code>,
+        open Undo context, UndoManagerEvent::UndoContextDepth will be greater <code>0</code>,
         and the newly added action will be subordinate of the context action.</p>
 
         @see XUndoManager::addUndoAction
@@ -73,8 +73,8 @@ interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
 
     /** is called when a new Undo context has been entered.
 
-        <p><member>UndoManagerEvent::UndoActionTitle</member> carries the title of the Undo context, and
-        <member>UndoManagerEvent::UndoContextDepth</member> the number of open Undo contexts, including the
+        <p>UndoManagerEvent::UndoActionTitle carries the title of the Undo context, and
+        UndoManagerEvent::UndoContextDepth the number of open Undo contexts, including the
         one just entered.</p>
 
         @see XUndoManager::enterUndoContext
@@ -83,8 +83,8 @@ interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
 
     /** is called when a new hidden Undo context has been entered.
 
-        <p><member>UndoManagerEvent::UndoActionTitle</member> carries the title of the Undo context, and
-        <member>UndoManagerEvent::UndoContextDepth</member> the number of open Undo contexts, including the
+        <p>UndoManagerEvent::UndoActionTitle carries the title of the Undo context, and
+        UndoManagerEvent::UndoContextDepth the number of open Undo contexts, including the
         one just entered.</p>
 
         @see XUndoManager::enterUndoContext
@@ -93,8 +93,8 @@ interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
 
     /** is called when an Undo context has been left.
 
-        <p><member>UndoManagerEvent::UndoActionTitle</member> carries the title of the Undo context, and
-        <member>UndoManagerEvent::UndoContextDepth</member> the number of open Undo contexts, exluding the
+        <p>UndoManagerEvent::UndoActionTitle carries the title of the Undo context, and
+        UndoManagerEvent::UndoContextDepth the number of open Undo contexts, exluding the
         one just left.</p>
 
         @see XUndoManager::leaveUndoContext
@@ -105,7 +105,7 @@ interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
 
     /** is calledn when a hidden Undo context has been left.
 
-        <p><member>UndoManagerEvent::UndoActionTitle</member> is empty, as hidden Undo contexts don't have
+        <p>UndoManagerEvent::UndoActionTitle is empty, as hidden Undo contexts don't have
         a title.</p>
 
         @see XUndoManager::leaveHiddenUndoContext
@@ -117,7 +117,7 @@ interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
     /** is called when an Undo context has been left, but no actions have been added within this context.
 
         <p>In such a case, the context which has just been left will not contribute to the undo stack, but instead
-        be silently removed. Consequently, the <member>UndoManagerEvent::UndoActionTitle</member> is empty.</p>
+        be silently removed. Consequently, the UndoManagerEvent::UndoActionTitle is empty.</p>
 
         @see XUndoManager::leaveUndoContext
         @see leftContext

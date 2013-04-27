@@ -69,18 +69,18 @@ published service PrinterDescriptor
     [readonly, property] boolean IsBusy;
 
     /** indicates, whether the printer allows changes to
-        <member>PrinterDescriptor::PaperOrientation</member>.
+        PrinterDescriptor::PaperOrientation.
      */
     [readonly, property] boolean CanSetPaperOrientation;
 
     /** indicates, whether the printer allows changes to
-        <member>PrinterDescriptor::PaperFormat</member>.
+        PrinterDescriptor::PaperFormat.
      */
     [readonly, property] boolean CanSetPaperFormat;
 
 
     /** indicates if the printer allows changes to
-        <member>PrinterDescriptor::PaperSize</member>.
+        PrinterDescriptor::PaperSize.
      */
     [readonly, property] boolean CanSetPaperSize;
 

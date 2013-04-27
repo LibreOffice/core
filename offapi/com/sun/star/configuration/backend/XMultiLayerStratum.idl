@@ -92,7 +92,7 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
       to update data of a component on behalf of an entity.
 
       <p> The layer id returned is one of the layer ids obtained from
-         <member>XMultiLayerStratum::listLayerIds()</member> for the same
+         XMultiLayerStratum::listLayerIds() for the same
          component and entity.
       </p>
 
@@ -137,8 +137,8 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
       @param aLayerId
                 identifier of the layers to be accessed.
                 <p>Layer ids can be obtained from
-                <member>XMultiLayerStratum::listLayerIds()</member> or
-                <member>XMultiLayerStratum::getUpdateLayerId()</member>.
+                XMultiLayerStratum::listLayerIds() or
+                XMultiLayerStratum::getUpdateLayerId().
                 </p>
 
       @param aTimestamp
@@ -182,7 +182,7 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
       @param aLayerIds
                 identifiers of the layers to be accessed.
                 <p>Layer ids can be obtained from
-                <member>XMultiLayerStratum::listLayerIds()</member>.
+                XMultiLayerStratum::listLayerIds().
                 </p>
 
       @param aTimestamp
@@ -232,7 +232,7 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
       @param aLayerIds
                 identifiers of the layers to be accessed.
                 <p>Layer ids can be obtained from
-                <member>XMultiLayerStratum::listLayerIds()</member>.
+                XMultiLayerStratum::listLayerIds().
                 </p>
 
       @param aTimestamps
@@ -283,7 +283,7 @@ published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
       @param aLayerId
                 identifier of the layer to be accessed for writing.
                 <p>A layer id for writing can be obtained from
-                <member>XMultiLayerStratum::getUpdateLayerId()</member>.
+                XMultiLayerStratum::getUpdateLayerId().
                 </p>
 
       @return

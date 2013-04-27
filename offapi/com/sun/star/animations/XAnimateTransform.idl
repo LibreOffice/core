@@ -28,12 +28,12 @@
 /** animates a transformation attribute on a target element, thereby allowing
     animations to control translation, scaling, rotation and/or skewing.
 
-    The member <member>XAnimate::Attributes</member> contains a short from
+    The member XAnimate::Attributes contains a short from
     <const>AnimationTransformType</const>.
 
-    Depending on the value in <member>XAnimate::Attributes</member>, the
-    members <member>XAnimate::From</member>, <member>XAnimate::To</member>,
-    <member>XAnimate::By</member> or <member>XAnimate::Values</member>
+    Depending on the value in XAnimate::Attributes, the
+    members XAnimate::From, XAnimate::To,
+    XAnimate::By or XAnimate::Values
     contain the following
 
     <ul>

@@ -40,14 +40,14 @@
     number of text columns at the table's position, alignment, and left and
     right margins).  For that reason, the table column separator does not
     contain metric values for the column widths. The values are relative
-    to the value of the property <member>TextTable::TableColumnRelativeSum</member>.
+    to the value of the property TextTable::TableColumnRelativeSum.
 
     </p>
     <p>A table provides this property only if all rows have the same structure.
     If the table does not provide the property, then it cannot be set using.
     </p>
 
-    <p>The state of <member>TableColumnSeparator::IsVisible</member> and the
+    <p>The state of TableColumnSeparator::IsVisible and the
     count of the sequence must be the same in as it was in.
     Hidden separators cannot be moved and they cannot be overtaken by visible
     separators.</p>

@@ -108,7 +108,7 @@ service DataSeries
     /** establishes a broadcaster-listener mechanism for the
         com::sun::star::container::XIndexContainer
         to keep changes and the property
-        <member>DataSeries::AttributedDataPoints</member> in sync.
+        DataSeries::AttributedDataPoints in sync.
      */
 //     interface ::com::sun::star::container::XContainer;
 
@@ -123,7 +123,7 @@ service DataSeries
         are of the same type.</p>
 
         <p>The result of the
-        <member>DataSeries::DataSequenceRoles</member> depends on the
+        DataSeries::DataSequenceRoles depends on the
         renderer service set here.</p>
      */
     // stored at the DataSeriesGroup now

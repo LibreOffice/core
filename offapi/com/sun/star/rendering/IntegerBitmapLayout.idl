@@ -87,7 +87,7 @@ struct IntegerBitmapLayout
         palette, one of the pixel components as returned by the color
         space referenced from the #ColorSpace is
         required to be of type
-        <member>ColorComponentTag::INDEX</member>. That component is
+        ColorComponentTag::INDEX. That component is
         then used to index the palette.<p>
      */
     XBitmapPalette           Palette;

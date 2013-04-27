@@ -46,7 +46,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
         @throws com::sun::star::lang::IllegalAccessException
             if the target layer is read-only
             <p><em>Some implementations can only detect this when executing
-                <member>XUpdateHandler::endUpdate()</member></em>
+                XUpdateHandler::endUpdate()</em>
             </p>
 
         @throws com::sun::star::lang::WrappedTargetException
@@ -59,7 +59,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
 
     /** receives notification that the current update description is complete.
 
-        <p> Must match a previous call to <member>XUpdateHandler::startUpdate()</member>.
+        <p> Must match a previous call to XUpdateHandler::startUpdate().
         </p>
 
         @throws com::sun::star::configuration::backend::MalformedDataException
@@ -86,7 +86,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
 
         <p> Subsequent calls describe changes to properties and items or
             members of the node until a matching call to
-            <member>XUpdateHandler::endNode()</member> is encountered.
+            XUpdateHandler::endNode() is encountered.
         </p>
 
         @param aName
@@ -149,7 +149,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
         </p>
         <p> Subsequent calls describe the difference from the template
             of properties, items or members of the node until a matching call
-            to <member>XUpdateHandler::endNode()</member> is encountered.
+            to XUpdateHandler::endNode() is encountered.
         </p>
 
         @param aName
@@ -160,7 +160,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
 
             <p> The value is a combination of
                 NodeAttribute flags.  Note that
-                <member>NodeAttribute::FUSE</member> has an impact on the
+                NodeAttribute::FUSE has an impact on the
                 semantics of this method.
             </p>
 
@@ -193,7 +193,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
         </p>
         <p> Subsequent calls describe the difference from the template
             of properties or members of the node until a matching call
-            to <member>XUpdateHandler::endNode()</member> is encountered.
+            to XUpdateHandler::endNode() is encountered.
         </p>
 
         @param aName
@@ -207,7 +207,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
 
             <p> The value is a combination of
                 NodeAttribute flags.  Note that
-                <member>NodeAttribute::FUSE</member> has an impact on the
+                NodeAttribute::FUSE has an impact on the
                 semantics of this method.
             </p>
 
@@ -237,9 +237,9 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
     /** receives notification that a node modification is complete.
 
         <p> Must match the last open call to
-            <member>XUpdateHandler::modifyNode()</member>,
-            <member>XUpdateHandler::addOrReplaceNode()</member> or
-            <member>XUpdateHandler::addOrReplaceNodeFromTemplate()</member>.
+            XUpdateHandler::modifyNode(),
+            XUpdateHandler::addOrReplaceNode() or
+            XUpdateHandler::addOrReplaceNodeFromTemplate().
         </p>
 
         @throws com::sun::star::configuration::backend::MalformedDataException
@@ -286,7 +286,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
 
         <p> Subsequent calls describe changes to the value(s)
             of the property until a matching call to
-            <member>XUpdateHandler::endProperty()</member> is encountered.
+            XUpdateHandler::endProperty() is encountered.
         </p>
 
         @param aName
@@ -453,7 +453,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
     /** receives notification that a property modification is complete.
 
         <p> Must match the last open call to
-            <member>XUpdateHandler::modifyProperty()</member>.
+            XUpdateHandler::modifyProperty().
         </p>
 
         @throws com::sun::star::configuration::backend::MalformedDataException

@@ -49,8 +49,8 @@ published struct TableFilterField
     FilterOperator Operator;
 
 
-    /** selects whether the <member>TableFilterField::NumericValue</member>
-        or the <member>TableFilterField::StringValue</member> is used.
+    /** selects whether the TableFilterField::NumericValue
+        or the TableFilterField::StringValue is used.
      */
     boolean IsNumeric;
 

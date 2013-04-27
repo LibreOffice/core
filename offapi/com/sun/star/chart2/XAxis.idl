@@ -52,7 +52,7 @@ interface XAxis : ::com::sun::star::uno::XInterface
 
         <p>If you do not want to render certain a sub-grid, in the
         corresponding XPropertySet the property
-        <member>GridProperties::Show</member> must be <FALSE/>.</p>
+        GridProperties::Show must be <FALSE/>.</p>
      */
     sequence< com::sun::star::beans::XPropertySet > getSubGridProperties();
 

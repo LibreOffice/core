@@ -61,7 +61,7 @@ published interface XDispatchProvider: com::sun::star::uno::XInterface
         [in] string TargetFrameName,
         [in] long SearchFlags );
 
-    /** actually this method is redundant to <member>XDispatchProvider::queryDispatch()</member>
+    /** actually this method is redundant to XDispatchProvider::queryDispatch()
         to avoid multiple remote calls.
 
         @param Requests

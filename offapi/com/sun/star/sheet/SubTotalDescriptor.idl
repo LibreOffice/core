@@ -78,7 +78,7 @@ published service SubTotalDescriptor
     /** specifies which user defined sorting list is used.
 
         <p>This property is only used if
-        <member>SubTotalDescriptor::EnableUserSortList</member>
+        SubTotalDescriptor::EnableUserSortList
         is <TRUE/>.</p>
      */
     [property] long UserSortListIndex;
@@ -96,7 +96,7 @@ published service SubTotalDescriptor
 
 
     /** specifies the sorting order if
-        <member>SubTotalDescriptor::EnableSort</member> is set to <TRUE/>.
+        SubTotalDescriptor::EnableSort is set to <TRUE/>.
      */
     [property] boolean SortAscending;
 

@@ -26,7 +26,7 @@ module com { module sun { module star { module i18n {
 
 
 /**
-    Constants to use with <member>XExtendedCalendar::getDisplayString()</member>.
+    Constants to use with XExtendedCalendar::getDisplayString().
 
     <p> The examples given are for an English Gregorian calendar, note
     that other calendars or locales may return completely different

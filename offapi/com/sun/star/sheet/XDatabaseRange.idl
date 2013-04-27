@@ -58,7 +58,7 @@ published interface XDatabaseRange: com::sun::star::uno::XInterface
     /** returns the filter descriptor stored with the database range.
 
         <p>If the filter descriptor is modified, the new filtering is
-        carried out when <member>XDatabaseRange::refresh()</member> is
+        carried out when XDatabaseRange::refresh() is
         called.</p>
 
         @see SheetFilterDescriptor
@@ -69,7 +69,7 @@ published interface XDatabaseRange: com::sun::star::uno::XInterface
     /** returns the subtotal descriptor stored with the database range.
 
         <p>If the subtotal descriptor is modified, the new subtotals are
-        inserted when <member>XDatabaseRange::refresh()</member> is
+        inserted when XDatabaseRange::refresh() is
         called.</p>
 
         @see SubTotalDescriptor

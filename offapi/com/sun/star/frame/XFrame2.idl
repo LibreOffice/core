@@ -42,11 +42,11 @@ published interface XFrame2
     /** provides access to dispatchers for the frame.
 
         <p>
-        What kind of URLs a frame accepts in the calls to <member>XDispatchProvider::queryDispatch()</member>,
+        What kind of URLs a frame accepts in the calls to XDispatchProvider::queryDispatch(),
         and how the returned dispatcher handles dispatches is completely implementation dependent
         (though of course the restrictions of XDispatchProvider must be met).
         Frame implementations may (optionally) support special targets in the call to
-        <member>XDispatchProvider::queryDispatch()</member>.
+        XDispatchProvider::queryDispatch().
         Such special targets are passed as target frame name. They may, in addition,
         require special frame search flags (see FrameSearchFlag), or,
         in opposite, limit the set of allowed flags.<br>
@@ -115,9 +115,9 @@ published interface XFrame2
         That means: if someone wishes to enable recoding on a frame he must set
         a supplier with a recorder object inside of it. Every user of dispatches
         has to check then if such supplier is available at this frame property.
-        If value of this property is <NULL/> he must call <member>XDispatch::dispatch()</member>
+        If value of this property is <NULL/> he must call XDispatch::dispatch()
         on the original dispatch object. If it's a valid value he must use the supplier
-        by calling his method <member>XDispatchRecorderSupplier::dispatchAndRecord()</member>
+        by calling his method XDispatchRecorderSupplier::dispatchAndRecord()
         with the original dispatch object as argument.
         </p>
 

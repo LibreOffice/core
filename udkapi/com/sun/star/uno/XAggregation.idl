@@ -29,7 +29,7 @@ module com { module sun { module star { module uno {
 
     <p>That means if an object "A" aggregates "B", "A" can provide all
     or some of the interfaces of "B". Whenever the method
-    <member>XInterface::queryInterface()</member>
+    XInterface::queryInterface()
     is called on either of the objects, the call will be forwarded
     to object "A". Object "A" now can determine whether to use the
     interfaces of "A" or "B" or neither. Actually, any number of
@@ -38,24 +38,24 @@ module com { module sun { module star { module uno {
 
     <p>The following rules are to be observed:
     <ol>
-    <li>All calls to <member>XInterface::acquire()</member>
+    <li>All calls to XInterface::acquire()
     which are made before the delegator was set (using the method
-    <member>XAggregation::setDelegator()</member>) must not be taken back
-    (using the method <member>XInterface::release()</member>)
+    XAggregation::setDelegator()) must not be taken back
+    (using the method XInterface::release())
     before the delegation is removed by calling
     <code>xAggregation-&gt;setDelegator(NULL)</code>.
 
     <li>The constructor of a delegator has to increment its
     own reference count by calling its method
-    <member>XInterface::acquire()</member>
+    XInterface::acquire()
     before it sets itself to any aggregate using the method
-    <member>XAggregation::setDelegator()</member>. After that
+    XAggregation::setDelegator(). After that
     call it has to reset its own reference count without the
     destructor getting called.
 
     <li>The destructor of a delegator has to reset the delegator in
     its aggregated objects by calling their method
-    <member>XAggregation::setDelegator()</member> with
+    XAggregation::setDelegator() with
     <const>NULL</const> before it releases its reference to
     its aggregated objects.
     </ol>
@@ -69,33 +69,33 @@ module com { module sun { module star { module uno {
 published interface XAggregation: com::sun::star::uno::XInterface
 {
     /** sets the object to which all calls to the method
-        <member>XInterface::queryInterface()</member>
+        XInterface::queryInterface()
         have to be forwarded. @
 
         @param xDelegator
         specifies the object which handles the calls to
-        <member>XInterface::queryInterface()</member>.
+        XInterface::queryInterface().
         If <var>xDelegator</var> is <const>NULL</const>, the delegator is
         removed and thus the object becomes its own delegator and has
         to handle calls to the method
-        <member>XInterface::queryInterface()</member>
+        XInterface::queryInterface()
         itself.
 
         @see XAggregation::queryAggregation
     */
     void setDelegator( [in] com::sun::star::uno::XInterface pDelegator );
 
-    /** is similar to <member>XInterface::queryInterface()</member>,
+    /** is similar to XInterface::queryInterface(),
         but it is to be processed directly without being forwarded to the
         delegator. @
 
         <p>This method is only called from within an implementation of
-        <member>XInterface::queryInterface()</member>
-        or <member>XAggregation::queryAggregation()</member>. This method
+        XInterface::queryInterface()
+        or XAggregation::queryAggregation(). This method
         is to be called by the delegator if it does not implement the
         interface itself. An object which got aggregated cannot depend
         on getting its own interface when it calls the method
-        <member>XInterface::queryInterface()</member>.
+        XInterface::queryInterface().
 
         @see XAggregation::setDelegator
     */

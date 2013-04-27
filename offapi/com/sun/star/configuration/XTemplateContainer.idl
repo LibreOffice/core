@@ -35,7 +35,7 @@
     <p> If multiple templates are supported, the supported factory interface may be
         com::sun::star::lang::XMultiServiceFactory, in which case
         the <atom>string</atom> returned from
-        <member>XTemplateContainer::getElementTemplateName()</member> can be used as
+        XTemplateContainer::getElementTemplateName() can be used as
         the service name argument.
     </p>
 

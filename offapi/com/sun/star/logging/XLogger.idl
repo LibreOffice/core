@@ -60,7 +60,7 @@ interface XLogger
         might or might not log those records at their own discretion, and depending on
         additional restrictions such as filters specified at handler level.</p>
 
-        <p>Note: The log level of the given handler (<member>XLogHandler::Level</member>) will
+        <p>Note: The log level of the given handler (XLogHandler::Level) will
         not be touched. In particular, it will not be set to the logger's log level. It's
         the responsibility of the component which knits a logger with one or more
         log handlers to ensure that all loggers have appropriate levels set.</p>

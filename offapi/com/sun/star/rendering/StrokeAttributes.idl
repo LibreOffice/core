@@ -43,13 +43,13 @@ struct StrokeAttributes
         corners.<p>
 
         This attribute is only used when
-        <member>StrokeAttributes::JoinType</member> is set to
-        <member>PathJoinType::MITER</member>. Should the length of a
+        StrokeAttributes::JoinType is set to
+        PathJoinType::MITER. Should the length of a
         corner's diagonal exceed this limit, a beveled join is used
         instead. This value must be positive (or 0.0, which is
         equivalent to setting
-        <member>StrokeAttributes::JoinType</member> to
-        <member>PathJoinType::BEVEL</member>.<p>
+        StrokeAttributes::JoinType to
+        PathJoinType::BEVEL.<p>
 
         Before performing the actual comparison, implementations will
         multiply the MiterLimit with the current StrokeWidth, such
@@ -77,10 +77,10 @@ struct StrokeAttributes
         strokes.<p>
 
         The entries here are relative to the
-        <member>StrokeAttributes::StrokeWidth</member> attribute
+        StrokeAttributes::StrokeWidth attribute
         above, i.e. the total width of all lines and spacings will
         always equal
-        <member>StrokeAttributes::StrokeWidth</member>. The first
+        StrokeAttributes::StrokeWidth. The first
         element specifies the width of the rightmost line, when
         traveling from the start point of the path to the end
         point. The second element specifies the space between the

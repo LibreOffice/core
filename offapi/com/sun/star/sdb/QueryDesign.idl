@@ -85,7 +85,7 @@ module com {  module sun {  module star {  module sdb {
 
         <li><a name="command"></a><b>Command</b><br/>
         specifies the name of the query or view to design, or, in case of the <a href="#command_type">CommandType</a>
-        being <member>CommandType::COMMAND</member>, the initial SQL command.<br/>
+        being CommandType::COMMAND, the initial SQL command.<br/>
         If this parameter is not present, a new query/view will be designed, respectively the initial
         command will be empty.
         </li>
@@ -93,7 +93,7 @@ module com {  module sun {  module star {  module sdb {
         <li><a name="command_type"></a><b>CommandType</b><br/>
         specifies the type of object which should be designed. The following options are
         supported:
-        <ul><li><member>CommandType::QUERY</member> specifies the designer should operate in
+        <ul><li>CommandType::QUERY specifies the designer should operate in
             <a href="#query_mode">query mode</a>, that is, an existing client-side query should be
             designed, or a new query should be created, depending on the presence of the
             <a href="#command">Command</a> parameter.<br/>
@@ -102,13 +102,13 @@ module com {  module sun {  module star {  module sdb {
             the data source which the <a href="#active_connection">ActiveConnection</a> belongs
             to, and looks up the query there.</li>
 
-            <li><member>CommandType::COMMAND</member> specifies the designer should operate in
+            <li>CommandType::COMMAND specifies the designer should operate in
             <a href="#command_mode">command mode</a>, that is, a standalone SQL command
             should be designed. When the user attempts to save the designed SQL statement,
             the #ActiveCommand and #EscapeProcessing properties
             of the designer are updated.</li>
 
-            <li><member>CommandType::TABLE</member> specifies the designer should operate in
+            <li>CommandType::TABLE specifies the designer should operate in
             <a href="#view_mode">view mode</a>, that is, an existing or a new
             server-side view should be designed, depending on the presence of the
             <a href="#command">Command</a> parameter.<br/>
@@ -116,7 +116,7 @@ module com {  module sun {  module star {  module sdb {
             looked up in a newly created connection for the specified data source. Otherwise,
             it is looked up in the connection given as <a href="#active_connection">ActiveConnection</a>.</li>
         </ul>
-        If not present, this parameter defaults to <member>CommandType::QUERY</member>.
+        If not present, this parameter defaults to CommandType::QUERY.
         </li>
 
         <li><b>EscapeProcessing</b><br/>
@@ -138,17 +138,17 @@ module com {  module sun {  module star {  module sdb {
     <ul>
         <li><b>CurrentQuery</b><br/>
         is the same as Command, and implies a <a href="#command_type">CommandType</a> of
-        <member>CommandType::QUERY</member></li>
+        CommandType::QUERY</li>
 
         <li><b>QueryDesignView</b><br/>
         is the same as <a href="#graphical_design">GraphicalDesign</a>.</li>
 
         <li><b>IndependentSQLCommand</b><br/>
         is the same as Command, and implies a <a href="#command_type">CommandType</a> of
-        <member>CommandType::COMMAND</member></li>
+        CommandType::COMMAND</li>
 
         <li><b>CreateView</b><br/>
-        implies a <a href="#command_type">CommandType</a> of <member>CommandType::TABLE</member></li>
+        implies a <a href="#command_type">CommandType</a> of CommandType::TABLE</li>
     </ul>
 
     @see com::sun::star::sdb::ContentLoader

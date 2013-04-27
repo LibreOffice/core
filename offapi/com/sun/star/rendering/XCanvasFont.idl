@@ -88,7 +88,7 @@ interface XCanvasFont : ::com::sun::star::uno::XInterface
         meaning that every size is possible. Fonts that <em>do</em>
         restrict the device size to certain discrete values, setting
         an overall transformation that scales the
-        <member>FontRequest::CellSize</member> to something not
+        FontRequest::CellSize to something not
         contained in the list returned by this method can lead to
         visible disturbances.<p>
      */

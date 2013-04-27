@@ -80,7 +80,7 @@ interface XAccessibleStateSet : ::com::sun::star::uno::XInterface
 
         <p>The purpose of this function is to reduce the communication
         between accessibility objects and AT.  Without this function an
-        AT-Tool had to call <member>contains()</member> for every state
+        AT-Tool had to call contains() for every state
         type.  Now a single call is sufficient.</p>
 
         @return

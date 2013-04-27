@@ -51,7 +51,7 @@ published service DesktopTask
             Frame service */
     interface com::sun::star::frame::XFramesSupplier;
 
-        /** use property <member>Frame::Title</member> instead of that */
+        /** use property Frame::Title instead of that */
     [readonly, property] string Title;
 
         /** - */

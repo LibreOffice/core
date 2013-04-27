@@ -30,11 +30,11 @@ module com {  module sun {  module star {  module util {
     If the structure represents a valid URL or not depends on prior usage of
     the functions of XURLTransformer. Only after one of the functions
     returned <TRUE/> this can be assumed.</br>
-    It is not necessary to set all of the fields; either <member>URL::Complete</member>
+    It is not necessary to set all of the fields; either URL::Complete
     or (some of) the others are set. Additionally, most of the other
-    fields, like <member>URL::Host</member>, <member>URL::Port</member>,
-    <member>URL::User</member>, <member>URL::Password</member>,
-    or <member>URL::Mark</member>, are optional.
+    fields, like URL::Host, URL::Port,
+    URL::User, URL::Password,
+    or URL::Mark, are optional.
 
     @see XURLTransformer
 
@@ -49,7 +49,7 @@ published struct URL
         It is used as a central input/output or input parameter for the interfaces of
         XURLTransformer. The usage of one of the XURLTransformer
         function is mandatory to validate the URL. It cannot be assumed that
-        <member>URL::Complete</member> represents always a valid URL!
+        URL::Complete represents always a valid URL!
         </p>
      */
     string Complete;

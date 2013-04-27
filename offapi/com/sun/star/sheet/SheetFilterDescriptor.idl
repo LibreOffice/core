@@ -72,17 +72,17 @@ published service SheetFilterDescriptor
     [property] boolean SkipDuplicates;
 
 
-    /** specifies if the <member>TableFilterField::StringValue</member>
+    /** specifies if the TableFilterField::StringValue
         strings are interpreted as regular expressions.
      */
     [property] boolean UseRegularExpressions;
 
 
-    /** specifies if the <member>SheetFilterDescriptor::OutputPosition</member>
+    /** specifies if the SheetFilterDescriptor::OutputPosition
         position is saved for future calls.
 
         <p>This is only used if
-        <member>SheetFilterDescriptor::CopyOutputData</member> is <TRUE/>.</p>
+        SheetFilterDescriptor::CopyOutputData is <TRUE/>.</p>
      */
     [property] boolean SaveOutputPosition;
 
@@ -107,7 +107,7 @@ published service SheetFilterDescriptor
     /** specifies the position where filtered data are to be copied.
 
         <p>This is only used if
-        <member>SheetFilterDescriptor::CopyOutputData</member> is <TRUE/>.</p>
+        SheetFilterDescriptor::CopyOutputData is <TRUE/>.</p>
      */
     [property] com::sun::star::table::CellAddress OutputPosition;
 

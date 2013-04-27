@@ -183,7 +183,7 @@ published service TableAutoFormatField
 
     /** is <TRUE/> if the cell background is transparent.
 
-        <p>In this case the <member>TableAutoFormatField::CellBackColor</member>
+        <p>In this case the TableAutoFormatField::CellBackColor
         value is not used.</p>
      */
     [property] boolean IsCellBackgroundTransparent;

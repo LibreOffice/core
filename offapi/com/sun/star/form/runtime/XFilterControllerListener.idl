@@ -36,32 +36,32 @@ interface XFilterControllerListener : ::com::sun::star::lang::XEventListener
     /** is fired when a single <em>predicate expression</em> of the filter represented by the filter
         controller changed.
 
-        <p><member>FilterEvent::DisjunctiveTerm</member> is the index of the <em>disjunctive term</em> in which the
-        expression changed. This usually equals <member>XFilterController::ActiveTerm</member>.</p>
+        <p>FilterEvent::DisjunctiveTerm is the index of the <em>disjunctive term</em> in which the
+        expression changed. This usually equals XFilterController::ActiveTerm.</p>
 
-        <p><member>FilterEvent::FilterComponent</member> denotes the index of the filter component whose
+        <p>FilterEvent::FilterComponent denotes the index of the filter component whose
         <em>predicate expression</em> changed.</p>
 
-        <p><member>FilterEvent::PredicateExpression</member> is the new <em>predicate expressions</em>.</p>
+        <p>FilterEvent::PredicateExpression is the new <em>predicate expressions</em>.</p>
     */
     void    predicateExpressionChanged( [in] FilterEvent _Event );
 
     /** is fired when a <em>disjunctive term</em> was removed from the filter of the filter controller.
 
-        <p><member>FilterEvent::DisjunctiveTerm</member> is the index of the <em>disjunctive term</em> which was
+        <p>FilterEvent::DisjunctiveTerm is the index of the <em>disjunctive term</em> which was
         removed.</p>
 
-        <p><member>FilterEvent::FilterComponent</member> and <member>FilterEvent::PredicateExpression</member> are not
+        <p>FilterEvent::FilterComponent and FilterEvent::PredicateExpression are not
         used for this event type.</p>
     */
     void    disjunctiveTermRemoved( [in] FilterEvent _Event );
 
     /** is fired when a <em>disjunctive term</em> was added to the filter of the filter controller.
 
-        <p><member>FilterEvent::DisjunctiveTerm</member> is the index of the <em>disjunctive term</em> which was
+        <p>FilterEvent::DisjunctiveTerm is the index of the <em>disjunctive term</em> which was
         added.</p>
 
-        <p><member>FilterEvent::FilterComponent</member> and <member>FilterEvent::PredicateExpression</member> are not
+        <p>FilterEvent::FilterComponent and FilterEvent::PredicateExpression are not
         used for this event type.</p>
     */
     void    disjunctiveTermAdded( [in] FilterEvent _Event );

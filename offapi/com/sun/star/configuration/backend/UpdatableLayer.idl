@@ -47,7 +47,7 @@ published service UpdatableLayer
 
         <p> If the implementation supports
          com::sun::star::util::XTimeStamped,
-         then after executing <member>XUpdatableLayer::replaceWith()</member>
+         then after executing XUpdatableLayer::replaceWith()
          the timestamp will be the one for the replaced contents and
          if reading after updates is supported the next read will reproduce the
          replaced data.
@@ -62,7 +62,7 @@ published service UpdatableLayer
        <p> Depending of the actual type (simple, i.e pure XLayer or
        composite, i.e XCompositeLayer) of the current layer and
        the provided replacement layer, the operation performed
-       by <member>XUpdatableLayer::replaceWith()</member>, will vary.
+       by XUpdatableLayer::replaceWith(), will vary.
        </p>
        <p> For the different current/replacement layer combinations, we have:
        <dl>

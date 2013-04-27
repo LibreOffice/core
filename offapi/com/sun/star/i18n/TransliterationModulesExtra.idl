@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module i18n {
 
 
 /** Extra transliteration module enumeration to use with
-    <member>XTransliteration::loadModule()</member>
+    XTransliteration::loadModule()
 
     The values used in this group need to be different from the ones in
     TransliterationModules and TransliterationModulesNew!

@@ -38,7 +38,7 @@ published interface XModeChangeApproveListener : com::sun::star::lang::XEventLis
 {
     /** indicates that the mode of the broadcasting component is about to change.
 
-        <p>The <member>ModeChangeEvent::NewMode</member> indicates the new mode which
+        <p>The ModeChangeEvent::NewMode indicates the new mode which
         is to be set on the component</p>
 
         @throws VetoException

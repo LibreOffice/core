@@ -57,9 +57,9 @@ service FileHandler : XLogHandler
             contains the initial settings for the log handler
 
             <p>The following settings are recognized and supported:
-            <ul><li><code>Encoding</code> - denotes the initial value of the <member>XLogHandler::Encoding</member></li>
-                <li><code>Formatter</code> - denotes the initial value of the <member>XLogHandler::Formatter</member></li>
-                <li><code>Level</code> - denotes the initial value of the <member>XLogHandler::Level</member></li>
+            <ul><li><code>Encoding</code> - denotes the initial value of the XLogHandler::Encoding</li>
+                <li><code>Formatter</code> - denotes the initial value of the XLogHandler::Formatter</li>
+                <li><code>Level</code> - denotes the initial value of the XLogHandler::Level</li>
             </ul></p>
 
             <p>Additionally, a setting name <code>FileURL</code> is recognized. It must be of type

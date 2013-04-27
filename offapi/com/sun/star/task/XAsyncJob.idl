@@ -52,7 +52,7 @@ published interface XAsyncJob : com::sun::star::uno::XInterface
             a concrete implementation of a job specifies in its service descriptions which parameters are allowed
             (or expected). This values are persistent by the configuration of the JobExecutor
             which use this asynchronous job. It's possible to write it back by called listener
-            function <member>XJobListener::jobFinished()</member>.
+            function XJobListener::jobFinished().
 
         @param Listener
             specifies a listener which should be notified on events. May be <NULL/>.

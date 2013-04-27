@@ -66,7 +66,7 @@ interface XChartType : com::sun::star::uno::XInterface
 
     /** Returns a sequence of roles that are understood in addition to
         the mandatory roles (see
-        <member>XChartType::getSupportedMandatoryRoles()</member>).
+        XChartType::getSupportedMandatoryRoles()).
 
         <p>An example for an optional role are error-bars.</p>
      */

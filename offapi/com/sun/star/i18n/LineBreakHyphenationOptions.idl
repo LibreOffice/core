@@ -25,7 +25,7 @@
 module com {  module sun {  module star {  module i18n {
 
 
-/** Hyphenation options passed in calls to <member>XBreakIterator::getLineBreak()</member>.
+/** Hyphenation options passed in calls to XBreakIterator::getLineBreak().
  */
 published struct LineBreakHyphenationOptions
 {

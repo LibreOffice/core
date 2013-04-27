@@ -38,21 +38,21 @@ published struct FetchResult
     sequence< any > Rows;
 
     /** indicates the index of the first row contained in
-        <member>FetchResult::Rows</member> in the original result set. So if
-        <member>FetchResult::StartIndex</member> equals <code>3</code>, the
-        first element in the sequence <member>FetchResult::Rows</member>
+        FetchResult::Rows in the original result set. So if
+        FetchResult::StartIndex equals <code>3</code>, the
+        first element in the sequence FetchResult::Rows
         contains the data of the index <code>3</code> in the original result set.
 
         <p>The following rows are one after the other, but the direction
-        depends on the value of <member>FetchResult::Direction</member>
+        depends on the value of FetchResult::Direction
     */
     long StartIndex;
 
     /** indicates the orientation in which the rows are fetched and set into
-        the sequence <member>FetchResult::Rows</member>.
+        the sequence FetchResult::Rows.
 
-        <p>When <member>FetchResult::Orientation</member> equals <TRUE/>, the
-        rows in <member>FetchResult::Rows</member> are ordered in the same way
+        <p>When FetchResult::Orientation equals <TRUE/>, the
+        rows in FetchResult::Rows are ordered in the same way
         as in the original result set.
     */
     boolean Orientation;

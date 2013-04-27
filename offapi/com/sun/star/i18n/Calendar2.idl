@@ -18,7 +18,7 @@ module com { module sun { module star { module i18n {
 
 /**
     Calendar items as returned in a sequence by
-    <member>XLocaleData3::getAllCalendars2()</member>.
+    XLocaleData3::getAllCalendars2().
 
     <p> Similar to
     ::com::sun::star::i18n::Calendar this provides
@@ -26,7 +26,7 @@ module com { module sun { module star { module i18n {
     partitive case month names for locales that use them, for example 
     Slavic locales. If a locale does not provide the possessive form in 
     #GenitiveMonths, the names are identical to the
-    nominative case nouns in <member>Calendar::Months</member>. If a 
+    nominative case nouns in Calendar::Months. If a
     locale does not provide the partitive case in 
     #PartitiveMonths, the names are identical to
     #GenititiveMonths. </p>

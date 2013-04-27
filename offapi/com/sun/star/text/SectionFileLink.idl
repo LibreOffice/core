@@ -36,9 +36,9 @@
     into the given text section.
     </p>
     <p>
-    <member>SectionFileLink::FilterName</member> is the internal name of
+    SectionFileLink::FilterName is the internal name of
     the document filter.  To use this struct, it is not necessary to set
-    <member>SectionFileLink::FilterName</member>. It will be automatically
+    SectionFileLink::FilterName. It will be automatically
     assigned.</p>
  */
 published struct SectionFileLink

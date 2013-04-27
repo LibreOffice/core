@@ -35,7 +35,7 @@ published constants BestRowScope
              com::sun::star::sdbc::XResultSet
              object
              returned by the method
-             <member>XDatabaseMetaData::getBestRowIdentifier()</member>
+             XDatabaseMetaData::getBestRowIdentifier()
              .
      */
     const long TEMPORARY   = 0;
@@ -48,7 +48,7 @@ published constants BestRowScope
              com::sun::star::sdbc::XResultSet
              object
              returned by the method
-             <member>XDatabaseMetaData::getBestRowIdentifier()</member>
+             XDatabaseMetaData::getBestRowIdentifier()
              .
      */
     const long TRANSACTION = 1;
@@ -61,7 +61,7 @@ published constants BestRowScope
              com::sun::star::sdbc::XResultSet
              object
              returned by the method
-             <member>XDatabaseMetaData::getBestRowIdentifier()</member>
+             XDatabaseMetaData::getBestRowIdentifier()
              .
      */
     const long SESSION     = 2;

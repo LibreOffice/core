@@ -36,7 +36,7 @@ published enum PropertyValueState
 
     /** The value was obtained.
 
-        <p>The value is stored in <member>PropertyValueInfo::Value</member>.
+        <p>The value is stored in PropertyValueInfo::Value.
     */
     PROCESSED,
 

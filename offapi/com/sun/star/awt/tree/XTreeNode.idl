@@ -73,12 +73,12 @@ interface XTreeNode
     string getNodeGraphicURL();
 
     /** The URL for a graphic that is rendered to visualize expanded non leaf nodes.
-        <p>If <var>URL</var> is empty, <member>XTreeControl::DefaultExpandedGraphicURL</member> is used.
+        <p>If <var>URL</var> is empty, XTreeControl::DefaultExpandedGraphicURL is used.
     */
     string getExpandedGraphicURL();
 
     /** The URL for a graphic that is rendered to visualize collapsed non leaf nodes.
-        <p>If <var>URL</var> is empty, <member>XTreeControl::DefaultCollapsedGraphicURL</member> is used.
+        <p>If <var>URL</var> is empty, XTreeControl::DefaultCollapsedGraphicURL is used.
     */
     string getCollapsedGraphicURL();
 };

@@ -72,7 +72,7 @@ interface XExternalSheetCache
         usage in formula tokens.
 
         <p>This index to the external sheet cache is expected in the
-        <member>SingleReference::Sheet</member> member if it is part of an
+        SingleReference::Sheet member if it is part of an
         external reference token.
 
         <p>Each external sheet cache has a unique index value inside the

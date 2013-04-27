@@ -28,10 +28,10 @@ module com {  module sun {  module star {  module i18n {
     be parsed can have.
 
     <p> They are passed to
-    <member>XCharacterClassification::parseAnyToken()</member> and
-    <member>XCharacterClassification::parsePredefinedToken()</member>.
-    They are also set in the <member>ParseResult::StartFlags</member>
-    and <member>ParseResult::ContFlags</member>. </p>
+    XCharacterClassification::parseAnyToken() and
+    XCharacterClassification::parsePredefinedToken().
+    They are also set in the ParseResult::StartFlags
+    and ParseResult::ContFlags. </p>
  */
 
 published constants KParseTokens
@@ -65,8 +65,8 @@ published constants KParseTokens
         ParseResult. */
     const long ASC_ANY_BUT_CONTROL  = 0x00000400;
 
-    /** Additional flag set in <member>ParseResult::StartFlags</member>
-        or <member>ParseResult::ContFlags</member>. Set if none of the
+    /** Additional flag set in ParseResult::StartFlags
+        or ParseResult::ContFlags. Set if none of the
         above ASC_... (except ASC_ANY_...) single values match an ASCII
         character parsed. */
     const long ASC_OTHER            = 0x00000800;
@@ -108,8 +108,8 @@ published constants KParseTokens
       */
     const long TWO_DOUBLE_QUOTES_BREAK_STRING   = 0x10000000;
 
-    /** Additional flag set in <member>ParseResult::StartFlags</member>
-        or <member>ParseResult::ContFlags</member>. Set if none of the
+    /** Additional flag set in ParseResult::StartFlags
+        or ParseResult::ContFlags. Set if none of the
         above UNI_... single values match a Unicode character parsed. */
     const long UNI_OTHER            = 0x20000000;
 

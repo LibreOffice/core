@@ -40,7 +40,7 @@ published interface XTerminateListener: com::sun::star::lang::XEventListener
 
         <p>
         Termination can be intercepted by throwing TerminationVetoException.
-        Interceptor will be the new owner of desktop and should call <member>XDesktop::terminate()</member>
+        Interceptor will be the new owner of desktop and should call XDesktop::terminate()
         after finishing his own operations.
         </p>
 

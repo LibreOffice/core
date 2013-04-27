@@ -45,9 +45,9 @@ published interface XDataPilotFieldGrouping: com::sun::star::uno::XInterface
         groups.</p>
 
         <p>The collection of groups can be accessed via the
-        <member>DataPilotField::GroupInfo</member> property. The returned
+        DataPilotField::GroupInfo property. The returned
         struct contains the sequence of groups in its member
-        <member>DataPilotFieldGroupInfo::Groups</member>.</p>
+        DataPilotFieldGroupInfo::Groups.</p>
 
         @param aItems
             a sequence containing the names of the items (members) which will
@@ -84,7 +84,7 @@ published interface XDataPilotFieldGrouping: com::sun::star::uno::XInterface
             DataPilotFieldGroupInfo::Start</member> must be a floating-point
             value representing a valid date/time value (if <member>
             DataPilotFieldGroupInfo::HasAutoStart</member> is set to <TRUE/>,
-            the value of <member>DataPilotFieldGroupInfo::Start</member> will
+            the value of DataPilotFieldGroupInfo::Start will
             be ignored).</li>
 
             <li>If the member <member>DataPilotFieldGroupInfo::HasAutoEnd
@@ -92,29 +92,29 @@ published interface XDataPilotFieldGrouping: com::sun::star::uno::XInterface
             DataPilotFieldGroupInfo::End</member> must be a floating-point
             value representing a valid date/time value( if <member>
             DataPilotFieldGroupInfo::HasAutoEnd</member> is set to <TRUE/>,
-            the value of <member>DataPilotFieldGroupInfo::End</member> will be
+            the value of DataPilotFieldGroupInfo::End will be
             ignored).</li>
 
             <li>If the members <member>DataPilotFieldGroupInfo::HasAutoStart
-            </member> and <member>DataPilotFieldGroupInfo::HasAutoEnd</member>
+            </member> and DataPilotFieldGroupInfo::HasAutoEnd
             are set to <FALSE/> both, then the value of <member>
             DataPilotFieldGroupInfo::Start</member> must be less than or equal
-            to the value of <member>DataPilotFieldGroupInfo::End</member>.</li>
+            to the value of DataPilotFieldGroupInfo::End.</li>
 
-            <li>The member <member>DataPilotFieldGroupInfo::HasDateValues</member>
+            <li>The member DataPilotFieldGroupInfo::HasDateValues
             must be set to <TRUE/>.</li>
 
-            <li>The member <member>DataPilotFieldGroupInfo::Step</member> must
+            <li>The member DataPilotFieldGroupInfo::Step must
             be zero, unless ranges of days have to be grouped (see the
             description of the member GroupBy below), in that case the value
             must be greater than or equal to 1 and less than or equal to 32767.
             The fractional part of the value will be ignored.</li>
 
-            <li>The member <member>DataPilotFieldGroupInfo::GroupBy</member>
+            <li>The member DataPilotFieldGroupInfo::GroupBy
             must contain exactly one of the flags from DataPilotFieldGroupBy.
             A combination of several flags will not be accepted. If
             <const>DataPilotFieldGroupBy::DAYS</const> is specified, the
-            value of the member <member>DataPilotFieldGroupInfo::Step</member>
+            value of the member DataPilotFieldGroupInfo::Step
             will specify the type of day grouping (see above). If that value
             is zero, grouping is performed on all days of the year (e.g. the
             members containing the 1st of January of any year are grouped

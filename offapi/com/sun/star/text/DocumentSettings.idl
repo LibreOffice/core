@@ -154,7 +154,7 @@ published service DocumentSettings
         fly frames and drawing objects) are positioned.
         If <TRUE/>, the object positioning algorithm will consider
         the text wrap style, set at the floating screen object.
-        The attribute <member>BaseFrameProperties::WrapInfluenceOnPosition</member>
+        The attribute BaseFrameProperties::WrapInfluenceOnPosition
         specifies how the text wrap is considered.
         If <FALSE/> (default value), the former object positioning
         algorithm (known from OpenOffice.org 1.1) is applied.</p>

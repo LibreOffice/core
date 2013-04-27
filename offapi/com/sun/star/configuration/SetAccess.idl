@@ -42,9 +42,9 @@ module com { module sun { module star { module configuration {
  @see com::sun::star::configuration::SetElement
     Child objects of this service generally implement SetElement.
     The template name returned by the child from
-    <member>XTemplateInstance::getTemplateName()</member>
+    XTemplateInstance::getTemplateName()
     corresponds to the name returned by the set from
-    <member>XTemplateContainer::getElementTemplateName()</member>.
+    XTemplateContainer::getElementTemplateName().
 
  @see com::sun::star::configuration::GroupAccess
     A complementary service that provides for static heterogeneous groups of

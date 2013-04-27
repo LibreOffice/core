@@ -48,7 +48,7 @@ published service DatabaseImportDescriptor
     /** specifies the table, query, or statement from which data is imported.
 
         <p>The meaning of this is determined by the
-        <member>DatabaseImportDescriptor::SourceType</member> attribute.</p>
+        DatabaseImportDescriptor::SourceType attribute.</p>
      */
     [property] string SourceObject;
 

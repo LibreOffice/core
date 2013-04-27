@@ -49,7 +49,7 @@ interface XMutableTreeNode : XTreeNode
             if <var>ChildNode</var> is not a valid node of the corresponding XTreeDataModel.
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
-            if <var>Index</var> is less than 0 or greater then <member>XTreeNode::getChildCount()</member>.
+            if <var>Index</var> is less than 0 or greater then XTreeNode::getChildCount().
     */
     void insertChildByIndex( [in] long Index, [in] XMutableTreeNode ChildNode )
         raises( com::sun::star::lang::IllegalArgumentException,
@@ -61,7 +61,7 @@ interface XMutableTreeNode : XTreeNode
             the index of the node to be removed from this instance.
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
-            if <var>Index</var> is less than 0 or greater then <member>XTreeNode::getChildCount()</member>.
+            if <var>Index</var> is less than 0 or greater then XTreeNode::getChildCount().
      */
     void removeChildByIndex( [in] long Index )
             raises( com::sun::star::lang::IndexOutOfBoundsException );
@@ -88,12 +88,12 @@ interface XMutableTreeNode : XTreeNode
     void setNodeGraphicURL( [in] string URL );
 
     /** The URL for a graphic that is rendered to visualize expanded non leaf nodes.
-        <p>If <var>URL</var> is empty, <member>XTreeControl::DefaultExpandedGraphicURL</member> is used.
+        <p>If <var>URL</var> is empty, XTreeControl::DefaultExpandedGraphicURL is used.
     */
     void setExpandedGraphicURL( [in] string URL );
 
     /** The URL for a graphic that is rendered to visualize collapsed non leaf nodes.
-        <p>If <var>URL</var> is empty, <member>XTreeControl::DefaultCollapsedGraphicURL</member> is used.
+        <p>If <var>URL</var> is empty, XTreeControl::DefaultCollapsedGraphicURL is used.
     */
     void setCollapsedGraphicURL( [in] string URL );
 };

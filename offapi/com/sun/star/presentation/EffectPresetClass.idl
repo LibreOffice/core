@@ -26,7 +26,7 @@
 /** This constants defines a the class for a preset animation effect.
     <br>
     This is stored with the name <i>preset-class</i> inside the
-    <member>::com::sun::star::animations::XAnimationNode::UserData</member> sequence.
+    ::com::sun::star::animations::XAnimationNode::UserData sequence.
     <br>
     This does not manipulate the timing or synchronization.
     It can be used to quickly identify preset animations inside an animation hierarchy.

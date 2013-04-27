@@ -39,7 +39,7 @@ service DocumentScriptLibraryContainer : XStorageBasedLibraryContainer
     /** creates an instance of the <code>DocumentScriptLibraryContainer</code>, belonging to a document
 
         <p>The current storage of the document will be set as initial root storage
-        (see <member>XPersistentLibraryContainer::RootStorage</member>) of the container.</p>
+        (see XPersistentLibraryContainer::RootStorage) of the container.</p>
 
         <p>Usually, you will only create a <code>DocumentScriptLibraryContainer</code> within
         the implementation of the document to which the container should belong.</p>

@@ -46,7 +46,7 @@ interface XPane
         com::sun::star::rendering::XCanvas object is expected to
         be associated with the <type
         scope="com::sun::star::awt">XWindow</type> object returned by
-        <member>getWindow()</member>.
+        getWindow().
         @return
             When the com::sun::star::rendering::XCanvas
             interface is not supported then an empty reference is returned.

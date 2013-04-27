@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module table {
     range.
 
     <p>In a queried structure, the flags in
-        <member>TableBorderDistances::Is...DistanceValid</member> indicate that not all
+        TableBorderDistances::Is...DistanceValid indicate that not all
     lines of the boxes have the same values.</p>
 
     <p>In a structure which is used for setting, these flags determine
@@ -45,7 +45,7 @@ published struct TableBorderDistances
         short TopDistance;
 
 
-        /** specifies whether the value of <member>TableBorder::TopDistance</member>
+        /** specifies whether the value of TableBorder::TopDistance
         is used.
      */
         boolean IsTopDistanceValid;
@@ -55,7 +55,7 @@ published struct TableBorderDistances
         short BottomDistance;
 
 
-        /** specifies whether the value of <member>TableBorder::BottomDistance</member>
+        /** specifies whether the value of TableBorder::BottomDistance
                 is used.
          */
         boolean IsBottomDistanceValid;
@@ -65,7 +65,7 @@ published struct TableBorderDistances
         short LeftDistance;
 
 
-        /** specifies whether the value of <member>TableBorder::LeftDistance</member>
+        /** specifies whether the value of TableBorder::LeftDistance
                 is used.
          */
         boolean IsLeftDistanceValid;
@@ -75,7 +75,7 @@ published struct TableBorderDistances
         short RightDistance;
 
 
-        /** specifies whether the value of <member>TableBorder::RightDistance</member>
+        /** specifies whether the value of TableBorder::RightDistance
                 is used.
          */
         boolean IsRightDistanceValid;

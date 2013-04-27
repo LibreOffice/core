@@ -132,7 +132,7 @@ published interface XCharacterClassification : com::sun::star::uno::XInterface
         @returns
             A filled ParseResult structure. If no
             unambiguous token could be parsed,
-            <member>ParseResult::TokenType</member> will be set to
+            ParseResult::TokenType will be set to
             <b>0</b> (zero), other fields will contain the values parsed
             so far.
 
@@ -141,7 +141,7 @@ published interface XCharacterClassification : com::sun::star::uno::XInterface
             <const>KParseType::ASC_NUM</const> (or
             <const>KParseType::UNI_NUM</const>) and
             <const>KParseType::IDENTNAME</const> are set in
-            <member>ParseResult::TokenType</member>.
+            ParseResult::TokenType.
 
         @param  aText
             Text to be parsed.
@@ -214,7 +214,7 @@ published interface XCharacterClassification : com::sun::star::uno::XInterface
         <p> Other parameters are the same as in
         parseAnyToken(). If the actual token does not
         match the passed <em>nTokenType</em> a
-        <member>ParseResult::TokenType</member> set to <b>0</b> (zero)
+        ParseResult::TokenType set to <b>0</b> (zero)
         is returned. </p>
 
         @param  nTokenType

@@ -25,7 +25,7 @@ module com {  module sun {  module star {  module i18n {
 
 /**
     Offsets into the sequence of strings returned by
-    <member>XLocaleData::getReservedWord()</member>.
+    XLocaleData::getReservedWord().
 
     @see XLocaleData
         for links to DTD of XML locale data files.

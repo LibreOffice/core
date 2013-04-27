@@ -39,8 +39,8 @@ published constants PropertyConcept
     /** This value is used to query for all properties.
 
         See
-        <member>XIntrospectionAccess::getProperty()</member> and
-        <member>XIntrospectionAccess::getProperties()</member>
+        XIntrospectionAccess::getProperty() and
+        XIntrospectionAccess::getProperties()
      */
     const long ALL = -1;
 

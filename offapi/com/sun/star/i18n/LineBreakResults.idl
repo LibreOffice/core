@@ -25,7 +25,7 @@
 module com {  module sun {  module star {  module i18n {
 
 
-/** Results of method <member>XBreakIterator::getLineBreak()</member>.
+/** Results of method XBreakIterator::getLineBreak().
  */
 published struct LineBreakResults
 {

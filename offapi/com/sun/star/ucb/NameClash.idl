@@ -23,7 +23,7 @@
 
 module com { module sun { module star { module ucb {
 
-/** These are the possible values for <member>TransferInfo::NameClash</member>.
+/** These are the possible values for TransferInfo::NameClash.
 */
 published constants NameClash
 {

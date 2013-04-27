@@ -106,10 +106,10 @@ published service ContentResultSet
         <p>There are two possible travel modes:
 
         <p><table border=1>
-        <tr><td><member>CursorTravelMode::BLOCKING</member></td>
+        <tr><td>CursorTravelMode::BLOCKING</td>
             <td>Each travel method of the result set will not return until the
                 data for the new position were retrieved.</td></tr>
-        <tr><td><member>CursorTravelMode::NONBLOCKING</member></td>
+        <tr><td>CursorTravelMode::NONBLOCKING</td>
             <td>The implementation will throw a
                 <code>CursorWouldBlockException</code>, if the data for the new
                 position are not retrieved yet.</td></tr>
@@ -157,7 +157,7 @@ published service ContentResultSet
 
         <p>
         The implementation initially needs to set the value of this property
-        to <member>CursorTravelMode::BLOCKING</member>.
+        to CursorTravelMode::BLOCKING.
         </p>
 
         @see CursorTravelMode

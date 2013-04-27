@@ -75,7 +75,7 @@ published service Shape
 
     /** contains the vertical position of the object (1/100 mm).
 
-        It is only valid if <member>TextEmbeddedObject::VertOrient</member> is
+        It is only valid if TextEmbeddedObject::VertOrient is
         <const>VertOrientation::NONE</const>.
      */
     [property] long VertOrientPosition;

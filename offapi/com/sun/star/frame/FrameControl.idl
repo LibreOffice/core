@@ -29,7 +29,7 @@
 
     <p>
     If the control is visible and has a valid (loadable) component URL,
-    then the <member>FrameControl::Frame</member> property is set.
+    then the FrameControl::Frame property is set.
     Normally this control can be used for preview functionality inside
     any UI.
     </p>

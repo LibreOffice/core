@@ -27,17 +27,17 @@ module com { module sun { module star { module accessibility {
     XAccessibleText interface to describe a text portion that
     was inserted into or deleted from an accessible text.
 
-    <p>The indices <member>TextSegment::SegmentStart</member> and
-    <member>TextSegment::SegmentEnd</member> refer to the enclosing text.
-    The <member>TextSegment::SegmentText</member> member contains the text
+    <p>The indices TextSegment::SegmentStart and
+    TextSegment::SegmentEnd refer to the enclosing text.
+    The TextSegment::SegmentText member contains the text
     between these two indices including the start index but not the end
     index.  With it you can use this structure without having to
     access the XAccessibleText interface that represents the
     enclosing text.</p>
 
     <p>An empty text segment is expressed by
-    <member>TextSegment::SegmentStart</member> and
-    <member>TextSegment::SegmentEnd</member> set to the same value.  While a
+    TextSegment::SegmentStart and
+    TextSegment::SegmentEnd set to the same value.  While a
     value of -1 signals an error (like the request for a word after the last
     character of a text) all other values define the empty string at that
     position.</p>
@@ -54,8 +54,8 @@ module com { module sun { module star { module accessibility {
 struct TextSegment
 {
     /** A copy of the text segment of the enclosing text delimited by the
-        text indices <member>TextSegment::SegmentStart</member> and
-        <member>TextSegment::SegmentEnd</member>.  Modifying it does not
+        text indices TextSegment::SegmentStart and
+        TextSegment::SegmentEnd.  Modifying it does not
         alter the enclosing text.
     */
     string SegmentText;

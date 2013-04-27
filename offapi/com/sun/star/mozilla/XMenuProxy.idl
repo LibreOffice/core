@@ -49,7 +49,7 @@ published interface XMenuProxy: com::sun::star::lang::XComponent
     void addMenuProxyListener([in] XMenuProxyListener xListener );
 
     /** Unregisters an event listener which was registered with
-        <member>XMenuProxy::addMenuProxyListener()</member>.
+        XMenuProxy::addMenuProxyListener().
 
         @param xListener    [in]:   the listener to be removed
 

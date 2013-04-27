@@ -72,12 +72,12 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
 
     /** Return a reference to the specified top-level window.  Note that the
         number of top-level windows may change between a call to
-        <member>getTopWindowCount()</member> and successive calls to this
+        getTopWindowCount() and successive calls to this
         function.
         @param nIndex
             The index should be in the interval from 0 up to but not
             including the number of top-level windows as returned by
-            <member>getTopWindowCount()</member>.
+            getTopWindowCount().
         @return
             The returned value is a valid reference to a top-level window.
         @throws IndexOutOfBoundsException

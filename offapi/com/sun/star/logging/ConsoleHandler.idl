@@ -45,10 +45,10 @@ service ConsoleHandler : XConsoleHandler
             contains the initial settings for the log handler
 
             <p>The following settings are recognized and supported:
-            <ul><li><code>Encoding</code> - denotes the initial value of the <member>XLogHandler::Encoding</member></li>
-                <li><code>Formatter</code> - denotes the initial value of the <member>XLogHandler::Formatter</member></li>
-                <li><code>Level</code> - denotes the initial value of the <member>XLogHandler::Level</member></li>
-                <li><code>Threshold</code> - denotes the initial value of the <member>XConsoleHandler::Threshold</member></li>
+            <ul><li><code>Encoding</code> - denotes the initial value of the XLogHandler::Encoding</li>
+                <li><code>Formatter</code> - denotes the initial value of the XLogHandler::Formatter</li>
+                <li><code>Level</code> - denotes the initial value of the XLogHandler::Level</li>
+                <li><code>Threshold</code> - denotes the initial value of the XConsoleHandler::Threshold</li>
             </ul></p>
 
         @throws ::com::sun::star::lang::IllegalArgumentException

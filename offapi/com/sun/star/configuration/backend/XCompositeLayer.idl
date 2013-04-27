@@ -64,7 +64,7 @@ published interface XCompositeLayer : XLayer
       @param aSubLayerId
             Identifier of the sublayer to be read.
             <p> Must be one the identifiers returned by
-                <member>XCompositeLayer::listSubLayerIds()</member>
+                XCompositeLayer::listSubLayerIds()
             </p>
 
       @throws com::sun::star::lang::NullPointerException

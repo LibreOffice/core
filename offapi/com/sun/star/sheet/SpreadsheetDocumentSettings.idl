@@ -54,7 +54,7 @@ published service SpreadsheetDocumentSettings
     /** specifies how many iterations are carried out.
 
         <p>This setting is only used, if iteration is enabled using
-        <member>SpreadsheetDocumentSettings::IsIterationEnabled</member>.</p>
+        SpreadsheetDocumentSettings::IsIterationEnabled.</p>
      */
     [property] long IterationCount;
 
@@ -68,7 +68,7 @@ published service SpreadsheetDocumentSettings
         is stopped.</p>
 
         <p>This setting is only used, if iteration is enabled using
-        <member>SpreadsheetDocumentSettings::IsIterationEnabled</member>.</p>
+        SpreadsheetDocumentSettings::IsIterationEnabled.</p>
      */
     [property] double IterationEpsilon;
 

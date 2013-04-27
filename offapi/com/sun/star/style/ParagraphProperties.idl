@@ -79,7 +79,7 @@ published service ParagraphProperties
 
 
     /** determines the adjustment of the last line.
-        <p>It is only valid if <member>ParagraphProperties::ParaAdjust</member>
+        <p>It is only valid if ParagraphProperties::ParaAdjust
         is set to <const>ParagraphAdjust::BLOCK</const>.</p>
      */
     [property] short ParaLastLineAdjust;
@@ -87,8 +87,8 @@ published service ParagraphProperties
 
     /** determines if single words are stretched.
 
-        <p>It is only valid if <member>ParagraphProperties::ParaAdjust</member> and
-        <member>ParagraphProperties::ParaLastLineAdjust</member> are also valid.</p>
+        <p>It is only valid if ParagraphProperties::ParaAdjust and
+        ParagraphProperties::ParaLastLineAdjust are also valid.</p>
      */
     [optional, property] boolean ParaExpandSingleWord;
 

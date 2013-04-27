@@ -42,7 +42,7 @@ struct Symbol
     com::sun::star::drawing::PolyPolygonBezierCoords    PolygonCoords;
 
     /** Use the nth standard symbol, if #Style is set
-        to <member>SymbolStlye::STANDARD</member>.
+        to SymbolStlye::STANDARD.
 
         <p>If n is the number of standard symbols available in an
         implementation, the symbol number is
@@ -84,18 +84,18 @@ struct Symbol
     /** The color used for drawing the border of symbols.
 
         <p>Only effective if #Style is
-        <member>SymbolStyle::AUTO</member>,
-        <member>SymbolStyle::STANDARD</member> or
-        <member>SymbolStyle::POLYGON</member>.</p>
+        SymbolStyle::AUTO,
+        SymbolStyle::STANDARD or
+        SymbolStyle::POLYGON.</p>
      */
     long                                                BorderColor;
 
     /** The color used for filling symbols that contain closed polygons.
 
         <p>Only effective if #Style is
-        <member>SymbolStyle::AUTO</member>,
-        <member>SymbolStyle::STANDARD</member> or
-        <member>SymbolStyle::POLYGON</member>.</p>
+        SymbolStyle::AUTO,
+        SymbolStyle::STANDARD or
+        SymbolStyle::POLYGON.</p>
      */
     long                                                FillColor;
 };

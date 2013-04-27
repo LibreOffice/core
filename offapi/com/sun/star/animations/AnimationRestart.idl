@@ -25,21 +25,21 @@
 
 /** defines the restart behavior
 
-    @see <member>XTiming::Restart</member>
-    @see <member>XTiming::RestartDefault</member>
+    @see XTiming::Restart
+    @see XTiming::RestartDefault
     @see http://www.w3.org/TR/smil20/smil-timing.html#adef-restart
 */
 constants AnimationRestart
 {
-    /** The restart behavior for the element is determined by the value of the <member>XTiming::RestartDefault</member> attribute.
-        This is the default value for the <member>XTiming::Restart</member> attribute.
+    /** The restart behavior for the element is determined by the value of the XTiming::RestartDefault attribute.
+        This is the default value for the XTiming::Restart attribute.
     */
     const short DEFAULT = 0;
 
     /**  Specifies that the value of this attribute (and of the restart behavior) are
-         inherited from the <member>XTiming::RestartDefault</member> value of the parent element.
+         inherited from the XTiming::RestartDefault value of the parent element.
          If there is no parent element, the value is <const>AnimationRestart::ALWAYS</const>.
-         This is the default value for the <member>XTiming::RestartDefault</member> attribute.
+         This is the default value for the XTiming::RestartDefault attribute.
     */
     const short INHERIT = 0;
 

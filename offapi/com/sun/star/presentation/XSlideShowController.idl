@@ -170,16 +170,16 @@ interface XSlideShowController
 
     /** activates the user interface of this slide show.
 
-        @see <member>deactivate()</member>
-        @see <member>isActive()</member>
+        @see deactivate()
+        @see isActive()
     */
     void activate();
 
     /** can be called to deactivate the user interface of this slide show.
 
         <p>A deactivated
-        @see <member>activate()</member>
-        @see <member>isActive()</member>
+        @see activate()
+        @see isActive()
      */
     void deactivate();
 

@@ -36,7 +36,7 @@ module com {  module sun {  module star {  module frame {
 
         <p>When the save request is processed (with or without
         user interaction) the listener must call
-        <member>XSessionManagerClient::saveDone()</member>
+        XSessionManagerClient::saveDone()
         on the session manager client service object.</p>
 
         @param bShutdown
@@ -50,7 +50,7 @@ module com {  module sun {  module star {  module frame {
         <p>the listener may choose to ignore the saveDone()
         event in case no real shutdown is in progress. He
         still has to call
-        <member>XSessionManagerClient::saveDone()</member>
+        XSessionManagerClient::saveDone()
         in that case.</p>
 
         @see XSessionManagerClient

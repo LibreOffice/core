@@ -39,18 +39,18 @@ enum SymbolStyle
     AUTO,
 
     /** uses one of the standard symbols.  Which standard symbol is
-        given in <member>Symbol::StandardSymbol</member>.
+        given in Symbol::StandardSymbol.
      */
     STANDARD,
 
     /** uses the symbol given in the
         com::sun::star::drawing::PolyPolygonBezierCoords
-        given in <member>Symbol::PolygonCoords</member>.
+        given in Symbol::PolygonCoords.
      */
     POLYGON,
 
     /** uses the graphic given in
-        <member>Symbol::Graphic</member> as symbol.
+        Symbol::Graphic as symbol.
      */
     GRAPHIC
 };

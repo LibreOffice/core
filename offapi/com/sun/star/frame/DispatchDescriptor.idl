@@ -30,7 +30,7 @@
 
     <p>
     For a normal dispatch calls all needed parameters are separated.
-    For optimized remote functionality <member>XDispatch::queryDispatches()</member>
+    For optimized remote functionality XDispatch::queryDispatches()
     it's necessary to pack these parameters in a flat structure which can be used
     in a simple manner.
     </p>

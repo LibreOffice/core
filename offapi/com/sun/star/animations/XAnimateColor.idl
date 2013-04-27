@@ -29,10 +29,10 @@
     <br>
     Only color value will be legal values for the following members
     <ul>
-    <li><member>XAnimate::Values</member></li>
-    <li><member>XAnimate::From</member></li>
-    <li><member>XAnimate::To</member></li>
-    <li><member>XAnimate::By</member></li>
+    <li>XAnimate::Values</li>
+    <li>XAnimate::From</li>
+    <li>XAnimate::To</li>
+    <li>XAnimate::By</li>
     </ul>
     @see http://www.w3.org/TR/smil20/animation.html#edef-animateColor
 */

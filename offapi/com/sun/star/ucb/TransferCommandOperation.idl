@@ -24,7 +24,7 @@
 module com { module sun { module star { module ucb {
 
 /** These are the possible values for
-    <member>GlobalTransferCommandArgument::Operation</member>.
+    GlobalTransferCommandArgument::Operation.
 */
 published enum TransferCommandOperation
 {

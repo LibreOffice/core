@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module table {
     range.
 
     <p>In a queried structure, the flags in
-    <member>TableBorder::Is...LineValid</member> indicate that not all
+    TableBorder::Is...LineValid indicate that not all
     lines of the boxes have the same values.</p>
 
     <p>In a structure which is used for setting, these flags determine
@@ -45,7 +45,7 @@ published struct TableBorder
     com::sun::star::table::BorderLine TopLine;
 
 
-    /** specifies whether the value of <member>TableBorder::TopLine</member>
+    /** specifies whether the value of TableBorder::TopLine
         is used.
      */
     boolean IsTopLineValid;
@@ -57,7 +57,7 @@ published struct TableBorder
 
 
     /** specifies whether the value of
-        <member>TableBorder::BottomLine</member> is used.
+        TableBorder::BottomLine is used.
      */
     boolean IsBottomLineValid;
 
@@ -67,7 +67,7 @@ published struct TableBorder
     com::sun::star::table::BorderLine LeftLine;
 
 
-    /** specifies whether the value of <member>TableBorder::LeftLine</member>
+    /** specifies whether the value of TableBorder::LeftLine
         is used.
      */
     boolean IsLeftLineValid;
@@ -78,7 +78,7 @@ published struct TableBorder
     com::sun::star::table::BorderLine RightLine;
 
 
-    /** specifies whether the value of <member>TableBorder::RightLine</member>
+    /** specifies whether the value of TableBorder::RightLine
         is used.
      */
     boolean IsRightLineValid;
@@ -91,7 +91,7 @@ published struct TableBorder
 
 
     /** specifies whether the value of
-        <member>TableBorder::HorizontalLine</member> is used.
+        TableBorder::HorizontalLine is used.
      */
     boolean IsHorizontalLineValid;
 
@@ -103,7 +103,7 @@ published struct TableBorder
 
 
     /** specifies whether the value of
-        <member>TableBorder::VerticalLine</member> is used.
+        TableBorder::VerticalLine is used.
      */
     boolean IsVerticalLineValid;
 
@@ -113,7 +113,7 @@ published struct TableBorder
     short Distance;
 
 
-    /** specifies whether the value of <member>TableBorder::Distance</member>
+    /** specifies whether the value of TableBorder::Distance
         is used.
      */
     boolean IsDistanceValid;

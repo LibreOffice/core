@@ -83,7 +83,7 @@ published interface XFrame: com::sun::star::lang::XComponent
         But creator doesn't mean the implementation which creates this instance ...
         it means the parent frame of the frame hierarchy.
         Because; normally a frame should be created by using the API
-        and is necessary for searches inside the tree (e.g. <member>XFrame::findFrame()</member>)
+        and is necessary for searches inside the tree (e.g. XFrame::findFrame())
         </p>
 
         @param Creator
@@ -118,9 +118,9 @@ published interface XFrame: com::sun::star::lang::XComponent
         The name of a frame will be used for identifying it if a frame search was started.
         These searches can be forced by:
         <ul>
-            <li><member>XFrame::findFrame()</member>
-            <li><member>XDispatchProvider::queryDispatch()</member>
-            <li><member>XComponentLoader::loadComponentFromURL()</member>
+            <li>XFrame::findFrame()
+            <li>XDispatchProvider::queryDispatch()
+            <li>XComponentLoader::loadComponentFromURL()
         </ul>
         Note: Special targets like "_blank", "_self" etc. are not allowed.
         That's why frame names shouldn't start with a sign "_".
@@ -202,7 +202,7 @@ published interface XFrame: com::sun::star::lang::XComponent
 
         <p>
         At first the frame sets itself as the active frame of its
-        creator by calling <member>XFramesSupplier::setActiveFrame()</member>,
+        creator by calling XFramesSupplier::setActiveFrame(),
         then it broadcasts an FrameActionEvent with
         <const>FrameAction::FRAME_ACTIVATED</const>. The component within
         this frame may listen to this event to grab the focus on activation;
@@ -265,7 +265,7 @@ published interface XFrame: com::sun::star::lang::XComponent
             <TRUE/>if setting of new component or release of an existing one was successfully
             <br>
             <FALSE/> otherwise (especially, if an existing controller disagree within his
-            <member>XController::suspend()</member> call)
+            XController::suspend() call)
 
         @see XFrame::getComponentWindow()
         @see XFrame::getContainerWindow()
@@ -294,9 +294,9 @@ published interface XFrame: com::sun::star::lang::XComponent
 
         <p>
         Note: Don't dispose it - the frame is the owner of it.
-        Use <member>XController::getFrame()</member> to dispose
+        Use XController::getFrame() to dispose
         the frame after you the controller agreed with a
-        <member>XController::suspend()</member> call.
+        XController::suspend() call.
         </p>
 
         @returns

@@ -23,7 +23,7 @@
 
 module com { module sun { module star { module ucb {
 
-/** These are the possible values for <member>RecipientInfo::State</member>.
+/** These are the possible values for RecipientInfo::State.
 */
 published enum OutgoingMessageState
 {

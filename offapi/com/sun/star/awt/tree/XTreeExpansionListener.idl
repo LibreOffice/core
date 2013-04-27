@@ -47,7 +47,7 @@ interface XTreeExpansionListener: com::sun::star::lang::XEventListener
 
         @throws ExpandVetoException
             to notify the calling XTreeControl that expanding
-            <member>TreeExpansionEvent::Node</member> should fail.
+            TreeExpansionEvent::Node should fail.
     */
     void treeExpanding( [in] TreeExpansionEvent Event )
         raises ( ExpandVetoException );
@@ -56,7 +56,7 @@ interface XTreeExpansionListener: com::sun::star::lang::XEventListener
 
         @throws ExpandVetoException
             to notify the calling XTreeControl that collapsing
-            <member>TreeExpansionEvent::Node</member> should fail.
+            TreeExpansionEvent::Node should fail.
     */
     void treeCollapsing( [in] TreeExpansionEvent Event )
         raises ( ExpandVetoException );

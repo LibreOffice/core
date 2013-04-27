@@ -123,7 +123,7 @@ published struct DataPilotFieldGroupInfo
         </type>. The collection of groups can be modified by inserting,
         removing, replacing, or renaming single groups or item names in the
         groups. When writing back this struct containing such a changed
-        collection of groups to the <member>DataPilotField::GroupInfo</member>
+        collection of groups to the DataPilotField::GroupInfo
         property, the modified grouping settings are applied at the DataPilot
         field.</p>
 

@@ -57,7 +57,7 @@ interface XAccessibleSelection : ::com::sun::star::uno::XInterface
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the given index does not lie in the valid range of 0 up to
             the result of
-            <member>XAccessibleContext::getAccessibleChildCount()</member>-1.
+            XAccessibleContext::getAccessibleChildCount()-1.
     */
     void selectAccessibleChild ([in] long nChildIndex)
         raises (::com::sun::star::lang::IndexOutOfBoundsException);
@@ -74,7 +74,7 @@ interface XAccessibleSelection : ::com::sun::star::uno::XInterface
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the given index does not lie in the valid range of 0 up to
             the result of
-            <member>XAccessibleContext::getAccessibleChildCount()</member>-1.
+            XAccessibleContext::getAccessibleChildCount()-1.
     */
     boolean isAccessibleChildSelected ([in] long nChildIndex)
         raises (::com::sun::star::lang::IndexOutOfBoundsException);
@@ -124,7 +124,7 @@ interface XAccessibleSelection : ::com::sun::star::uno::XInterface
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the given index does not lie in the valid range of 0 up to
             the result of
-            <member>XAccessibleRelationSet::getAccessibleChildCount()</member>-1.
+            XAccessibleRelationSet::getAccessibleChildCount()-1.
     */
     XAccessible getSelectedAccessibleChild ([in] long nSelectedChildIndex)
         raises (::com::sun::star::lang::IndexOutOfBoundsException);

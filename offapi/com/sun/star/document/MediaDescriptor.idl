@@ -142,7 +142,7 @@ service MediaDescriptor
      */
     [optional,property] sequence< ::com::sun::star::beans::NamedValue > EncryptionData;
 
-    /** same as <member>MediaDescriptor::URL</member>
+    /** same as MediaDescriptor::URL
 
         <p>
         It will be supported for compatibility reasons only.
@@ -164,7 +164,7 @@ service MediaDescriptor
      */
     [optional,property] string FilterName;
 
-    /** same as <member>MediaDescriptor::FilterOptions</member>
+    /** same as MediaDescriptor::FilterOptions
 
         <p>
         It will be supported for compatibility reasons only.
@@ -178,9 +178,9 @@ service MediaDescriptor
 
         <p>
         Some filters need additional parameters; use only together with property
-        <member>MediaDescriptor::FilterName</member>. Details must be documented
+        MediaDescriptor::FilterName. Details must be documented
         by the filter. This is an old format for some filters. If a string is not
-        enough, filters can use the property <member>MediaDescriptor::FilterData</member>.
+        enough, filters can use the property MediaDescriptor::FilterData.
         </p>
      */
     [optional,property] string FilterOptions;
@@ -190,7 +190,7 @@ service MediaDescriptor
         <p>
         This is a parameter that can be used for any properties specific
         for a special filter type. It should be used if
-        <member>MediaDescriptor::FilterOptions</member> isn't enough.
+        MediaDescriptor::FilterOptions isn't enough.
         </p>
      */
     [optional,property] any FilterData;
@@ -280,22 +280,22 @@ service MediaDescriptor
             <tr>
                 <td><em>ReadOnly</em></td>
                 <td>R</td>
-                <td><member>MediaDescriptor::ReadOnly</member></td>
+                <td>MediaDescriptor::ReadOnly</td>
             </tr>
             <tr>
                 <td><em>Preview</em></td>
                 <td>B</td>
-                <td><member>MediaDescriptor::Preview</member></td>
+                <td>MediaDescriptor::Preview</td>
             </tr>
             <tr>
                 <td><em>AsTemplate</em></td>
                 <td>T</td>
-                <td><member>MediaDescriptor::AsTemplate</member></td>
+                <td>MediaDescriptor::AsTemplate</td>
             </tr>
             <tr>
                 <td><em>Hidden</em></td>
                 <td>H</td>
-                <td><member>MediaDescriptor::Hidden</member></td>
+                <td>MediaDescriptor::Hidden</td>
             </tr>
         </table>
         </p>
@@ -347,7 +347,7 @@ service MediaDescriptor
      */
     [optional,property] sequence< byte > PostData;
 
-    /** use <member>MediaDescriptor::PostData</member> instead of this
+    /** use MediaDescriptor::PostData instead of this
 
         <p>
         Same as PostData, but the data is transferred as a string
@@ -451,9 +451,9 @@ service MediaDescriptor
     /** name of the template instead of the URL
 
         <p>
-        The logical name of a template to load. Together with the <member>MediaDescriptor::TemplateRegion</member>
+        The logical name of a template to load. Together with the MediaDescriptor::TemplateRegion
         property it can be used instead of the URL of the template. Use always in conjunction with
-        <member>MediaDescriptor::TemplateRegionName</member>.
+        MediaDescriptor::TemplateRegionName.
         </p>
      */
     [optional,property] string TemplateName;
@@ -461,9 +461,9 @@ service MediaDescriptor
     /** name of the template instead of the URL
 
         <p>
-        The logical name of a template to load. Together with the <member>MediaDescriptor::TemplateRegion</member>
+        The logical name of a template to load. Together with the MediaDescriptor::TemplateRegion
         property it can be used instead of the URL of the template. Use always in conjunction with
-        <member>MediaDescriptor::TemplateRegionName</member>.
+        MediaDescriptor::TemplateRegionName.
         </p>
      */
     [optional,property] string TemplateRegionName;

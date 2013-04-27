@@ -41,7 +41,7 @@ interface XConsoleHandler : XLogHandler
         <p>Events with a level greater or equal to <code>Threshold</code> will be
         logged to <code>stderr</code>, all others to <code>stdout</code>.</p>
 
-        <p>The default value for this attribute is <member>LogLevel::SEVERE</member>.</p>
+        <p>The default value for this attribute is LogLevel::SEVERE.</p>
     */
     [attribute] long    Threshold;
 };

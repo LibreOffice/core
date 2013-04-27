@@ -69,7 +69,7 @@ published interface XFrameLoader: com::sun::star::uno::XInterface
 
         <p>
         After returning from this call, neither the frame nor the
-        load-event-listener specified in <member>XFrameLoader::load()</member> may be called back.
+        load-event-listener specified in XFrameLoader::load() may be called back.
         Because only the owner of this process who called load method
         before can cancel this process. And he doesn't need any notification about that.
         On the other hand - nobody then this owner himself can be registered as an

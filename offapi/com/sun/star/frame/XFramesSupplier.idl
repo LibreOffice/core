@@ -62,20 +62,20 @@ published interface XFramesSupplier: XFrame
 
         <p>
         This method is only allowed to be called by a sub-frame according to
-        <member>XFrame::activate()</member> or <member>XFramesSupplier::setActiveFrame()</member>.
-        After this call <member>XFramesSupplier::getActiveFrame()</member> will return the
+        XFrame::activate() or XFramesSupplier::setActiveFrame().
+        After this call XFramesSupplier::getActiveFrame() will return the
         frame specified by <var>Frame</var>.
         </p>
 
         <p>
-        In general this method first calls the method <member>XFramesSupplier::setActiveFrame()</member>
+        In general this method first calls the method XFramesSupplier::setActiveFrame()
         at the creator frame with <var>this</var> as the current argument. Then it broadcasts
         the FrameActionEvent <const>FrameAction::FRAME_ACTIVATED</const>.
         </p>
 
         <p>
         Note: Given parameter <var>Frame</var> must already exist inside the container
-        (e.g., inserted by using <member>XFrames::append()</member>)
+        (e.g., inserted by using XFrames::append())
         </p>
 
         @param Frame

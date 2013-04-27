@@ -191,7 +191,7 @@ published service PackageFolderContent
         title of the new stream ) and to obtain a Content object for that URL
         from the UCB. Then let the content execute the command "insert". The
         command will fail, if you set the command's parameter
-        <member>InsertCommandArgument::ReplaceExisting"</member>
+        InsertCommandArgument::ReplaceExisting"
         to false and there is already a stream with the title given by the
         content's URL.
 

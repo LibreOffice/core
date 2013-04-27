@@ -26,7 +26,7 @@
 /** This constants defines a type for an animation effect node.
     <br>
     This is stored with the name <i>node-type</i> inside the
-    <member>::com::sun::star::animations::XAnimationNode::UserData</member> sequence.
+    ::com::sun::star::animations::XAnimationNode::UserData sequence.
     <br>
     This does not manipulate the timing or synchronization.
     It can be used to quickly identify semantic blocks inside an animation hierarchy.

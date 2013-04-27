@@ -29,7 +29,7 @@ module com {  module sun {  module star {  module io {
 /** provides functionality to read text data from a
     com::sun::star::io::XInputStream
     that initially has to be passed to the method
-    <member>XActiveDataSink::setInputStream()</member>.
+    XActiveDataSink::setInputStream().
 
     <p>For details about the text functionality see
     com::sun::star::io::XTextInputStream.

@@ -72,12 +72,12 @@ published interface XController: com::sun::star::lang::XComponent
 
         @returns
             set of data that can be used to restore the current view status
-            at later time by using <member>XController::restoreViewData()</member>
+            at later time by using XController::restoreViewData()
      */
     any getViewData();
 
     /** restores the view status using the data gotten from a previous call to
-        <member>XController::getViewData()</member>.
+        XController::getViewData().
 
         @param Data
             set of data to restore it

@@ -36,8 +36,8 @@
 published constants MethodConcept
 {
     /** This value is used to query for all methods, see
-        <member>XIntrospectionAccess::getMethod()</member> and
-        <member>XIntrospectionAccess::getMethods()</member>
+        XIntrospectionAccess::getMethod() and
+        XIntrospectionAccess::getMethods()
      */
     const long ALL = -1;
 

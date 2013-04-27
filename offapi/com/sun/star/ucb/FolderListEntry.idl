@@ -50,7 +50,7 @@ published struct FolderListEntry
     boolean Removed;
 
     /** The folder shall be purged (only used in conjunction with the
-        <member>FolderListCommand::SET</member>).
+        FolderListCommand::SET).
     */
     boolean Purge;
 };

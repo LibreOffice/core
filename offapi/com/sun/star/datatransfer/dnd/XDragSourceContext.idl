@@ -34,7 +34,7 @@ module com { module sun { module star { module datatransfer { module dnd {
     DragSourceListener and providing the Transferable state to enable the data
     transfer. </p>
 
-    <p>An instance of this class is created as a result of the method <member>XDragSource::startDrag()</member>
+    <p>An instance of this class is created as a result of the method XDragSource::startDrag()
     being successfully invoked. This instance is responsible
     for tracking the state of the operation on behalf of the drag source and
     dispatching state changes to the drag source listener. </p>

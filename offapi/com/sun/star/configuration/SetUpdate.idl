@@ -68,7 +68,7 @@ published service SetUpdate
  <p>Implementations that support insertion of objects that weren't obtained
  from within the hierarchy must reject elements that don't have the correct
  structure as described by the template, even if the object returns the
- correct template name from <member>XTemplateInstance::getTemplateName()</member>.
+ correct template name from XTemplateInstance::getTemplateName().
  </p>
 
  <p>Other ways in which an element may be moved among or within compatible sets

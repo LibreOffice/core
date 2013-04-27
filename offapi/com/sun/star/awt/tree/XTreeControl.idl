@@ -156,14 +156,14 @@ interface XTreeControl
     /** If the given URL points to a loadable graphic, the graphic is rendered
         before expanded non leaf nodes.
 
-        <p>This can be overridden for individual nodes by <member>XTreeNode::getExpandedGraphicURL()</member></p>
+        <p>This can be overridden for individual nodes by XTreeNode::getExpandedGraphicURL()</p>
     */
     [attribute] string DefaultExpandedGraphicURL;
 
     /** If the given URL points to a loadable graphic, the graphic is rendered
         before collapsed non leaf nodes.
 
-        <p>This can be overridden for individual nodes by <member>XTreeNode::getCollapsedGraphicURL()</member></p>
+        <p>This can be overridden for individual nodes by XTreeNode::getCollapsedGraphicURL()</p>
     */
     [attribute] string DefaultCollapsedGraphicURL;
 
@@ -183,7 +183,7 @@ interface XTreeControl
     /** Returns the node that is closest to x,y.
         <p>If no nodes are currently viewable, or there is no model, returns null,
         otherwise it always returns a valid node. To test if the node is exactly
-        at x, y, use <member>getNodeForLocation()</member>.
+        at x, y, use getNodeForLocation().
 
         @param x
             an integer giving the number of pixels horizontally from the left edge of the controls display area
@@ -231,7 +231,7 @@ interface XTreeControl
 
     /** Selects <var>Node</var> and initiates editing.
 
-        <p>If <member>TreeControlModel::Editable</member> is <FALSE/> or if there are no
+        <p>If TreeControlModel::Editable is <FALSE/> or if there are no
         registered XTreeEditListener, this call has no effect.</p>
 
         <p>Calling this method also ensures that <var>Node</var> will become visible.</p>

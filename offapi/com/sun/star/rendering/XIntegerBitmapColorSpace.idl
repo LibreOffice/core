@@ -38,9 +38,9 @@ interface XIntegerBitmapColorSpace : XColorSpace
 
         This method yields the total number of bits used for a color
         value. At the associated XIntegerBitmap, the
-        <member>XIntegerBitmap::setPixel()</member> method will expect
+        XIntegerBitmap::setPixel() method will expect
         a sequence of ceil(BitsPerPixel/8) bytes, and the
-        <member>XIntegerReadOnlyBitmap::getPixel()</member> will
+        XIntegerReadOnlyBitmap::getPixel() will
         return that number of bytes. Similarly, the color conversion
         expect input data in multiples of ceil(BitsPerPixel/8), and
         also return converted data in chunks of this.<p>
@@ -52,7 +52,7 @@ interface XIntegerBitmapColorSpace : XColorSpace
         This method returns a sequence of integers, each denoting the
         number of bits occupied by the respective component. The sum
         of all component bits must be less or equal than the value
-        returned from <member>getBitsPerPixel()</member>. If the sum is
+        returned from getBitsPerPixel(). If the sum is
         less, excess bits are always kept in the most significant bits
         of a pixel. Color components will appear in the byte sequences
         returned from the XIntegerBitmap methods in the

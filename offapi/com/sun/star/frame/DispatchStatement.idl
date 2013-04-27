@@ -33,7 +33,7 @@ published struct DispatchStatement
         /** specifies the dispatch command
 
             <p>
-            That means the <var>URL</var> parameter of a corresponding <member>XDispatchProvider::queryDispatch()</member> request.
+            That means the <var>URL</var> parameter of a corresponding XDispatchProvider::queryDispatch() request.
             </p>
          */
     string aCommand;
@@ -42,7 +42,7 @@ published struct DispatchStatement
         /** specifies the frame target
 
             <p>
-            That means the <var>TargetFrameName</var> parameter of a corresponding <member>XDispatchProvider::queryDispatch()</member> request.
+            That means the <var>TargetFrameName</var> parameter of a corresponding XDispatchProvider::queryDispatch() request.
             </p>
          */
         string aTarget;
@@ -50,14 +50,14 @@ published struct DispatchStatement
         /** specifies the dispatch command arguments
 
             <p>
-            That means the <var>Arguments</var> parameter of a corresponding <member>XDispatch::dispatch()</member> request.
+            That means the <var>Arguments</var> parameter of a corresponding XDispatch::dispatch() request.
             </p>
          */
         sequence < com::sun::star::beans::PropertyValue > aArgs;
 
         /** specifies the optional search flags
             <p>
-            That means the <var>SearchFlags</var> parameter of a corresponding <member>XDispatchProvider::queryDispatch()</member> request.
+            That means the <var>SearchFlags</var> parameter of a corresponding XDispatchProvider::queryDispatch() request.
             </p>
          */
         long nFlags;

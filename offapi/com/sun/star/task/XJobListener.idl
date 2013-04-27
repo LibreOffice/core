@@ -38,7 +38,7 @@ published interface XJobListener : com::sun::star::lang::XEventListener
             can differ between more then ones.
 
         @param Result
-            should be the same like for the synchronous mode on <member>XJob::execute()</member>.
+            should be the same like for the synchronous mode on XJob::execute().
             It provides information about success or failure of job execution. It's possible too,
             to use special protocol (which depends from real implementation) between
             JobExecutor and a real job. So it can be possible to:

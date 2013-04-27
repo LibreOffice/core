@@ -47,7 +47,7 @@ published service BaseFrame
                 (e.g., due to a revised layout of the surrounding text).
 
                 <p>The position is relative to the position of the anchor
-                [see <member>XTextFrame::getAnchor()</member>]. Size and position are
+                [see XTextFrame::getAnchor()]. Size and position are
                 both measured in 100th mm. The size is not valid if the
                 size is relative and no layout exists or if the layout is invalid.
 

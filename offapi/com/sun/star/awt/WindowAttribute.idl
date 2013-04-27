@@ -97,7 +97,7 @@ published constants WindowAttribute
         @see com::sun::star::lang::SystemDependent
 
         @deprecated
-            conflicts with <member>VclWindowPeerAttribute::HSCROLL</member>
+            conflicts with VclWindowPeerAttribute::HSCROLL
      */
     const long SYSTEMDEPENDENT = 256;
 

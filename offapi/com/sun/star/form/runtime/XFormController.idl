@@ -91,7 +91,7 @@ interface XFormControllerContext;
     (also named <code>FormsCheckRequiredFields</code>) to <FALSE/>.</p>
 
     <p>Alternatively, you can prevent the check on a per-control basis, using the
-    <member>DataAwareControlModel::InputRequired</member> property of a single control model.</p>
+    DataAwareControlModel::InputRequired property of a single control model.</p>
 
     <p>If a control which the controller is responsible for supports the com::sun::star::frame::XDispatchProviderInterception
     interface, the controller registers a dispatch interceptor. Then, the control can try to delegate part of its

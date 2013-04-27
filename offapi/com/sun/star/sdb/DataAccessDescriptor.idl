@@ -91,7 +91,7 @@ published service DataAccessDescriptor
         <p>This object is guaranteed to be a com::sun::star::sdbc::Connection, but usually
         it will be a Connection from the module com::sun::star::sdb.<br/>
         Especially in the case where no #DataSourceName is given, but
-        #CommandType is <member>CommandType::QUERY</member>, the ActiveConnection needs
+        #CommandType is CommandType::QUERY, the ActiveConnection needs
         to fully support the Connection service, to actually retrieve the query specified by
         #Command</p>
 
@@ -168,7 +168,7 @@ published service DataAccessDescriptor
 
         <p>This property is usually present together with the #Command and
         #CommandType properties, and is evaluated if and only if #CommandType
-        equals <member>CommandType::COMMAND</member>.</p>
+        equals CommandType::COMMAND.</p>
     */
     [optional, property] boolean EscapeProcessing;
 

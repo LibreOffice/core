@@ -55,8 +55,8 @@ published struct TableFilterField2
     long Operator;
 
 
-    /** selects whether the <member>TableFilterField2::NumericValue</member>
-        or the <member>TableFilterField2::StringValue</member> is used.
+    /** selects whether the TableFilterField2::NumericValue
+        or the TableFilterField2::StringValue is used.
      */
     boolean IsNumeric;
 

@@ -94,7 +94,7 @@ interface XWizard
 
         @param WizardButton
             denotes the button to enable or disable, as one of the WizardButton constants. Must not be
-            <member>WizardButton::NONE</member>.
+            WizardButton::NONE.
         @param Enable
             specifies whether the button should be enabled (<TRUE/>) or disabled (<FALSE/>)
     */

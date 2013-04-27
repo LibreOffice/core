@@ -60,7 +60,7 @@ published struct DataPilotFieldReference
 
 
     /** contains the name of the reference item, when the
-        <member>DataPilotFieldReference::ReferenceItemType</member> is NAMED
+        DataPilotFieldReference::ReferenceItemType is NAMED
         otherwise is empty
         */
 

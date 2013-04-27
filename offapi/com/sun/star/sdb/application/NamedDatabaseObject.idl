@@ -46,8 +46,8 @@ struct NamedDatabaseObject
 
         <p>In case of queries, this is the name of the query.</p>
 
-        <p>In case of virtual folders denoted by <member>DatabaseObjectContainer::CATALOG</member> and
-        <member>DatabaseObjectContainer::SCHEMA</member>, it is
+        <p>In case of virtual folders denoted by DatabaseObjectContainer::CATALOG and
+        DatabaseObjectContainer::SCHEMA, it is
         <ul><li><code>&lt;schema&gt;</code>, if the database supports schemas only</li>
             <li><code>&lt;catalog&gt;</code>, if the database supports catalogs only</li>
             <li><code>&lt;catalog&gt;.&lt;schema&gt;</code>, if the database supports both
@@ -57,9 +57,9 @@ struct NamedDatabaseObject
         </ul>
         </p>
 
-        <p>In case of the virtual folders denoted by <member>DatabaseObjectContainer::TABLES</member>,
-        <member>DatabaseObjectContainer::QUERIES</member>, <member>DatabaseObjectContainer::DATA_SOURCE</member>,
-        <member>DatabaseObjectContainer::FORMS</member> or <member>DatabaseObjectContainer::REPORTS</member>,
+        <p>In case of the virtual folders denoted by DatabaseObjectContainer::TABLES,
+        DatabaseObjectContainer::QUERIES, DatabaseObjectContainer::DATA_SOURCE,
+        DatabaseObjectContainer::FORMS or DatabaseObjectContainer::REPORTS,
         this denotes the name of the data source (as denoted by
         <member scope="com::sun::star::sdb">DataSource::Name</member>)</p>
 

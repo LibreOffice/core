@@ -91,7 +91,7 @@ interface XAccessibleTable : ::com::sun::star::uno::XInterface
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the specified row index is not valid, i.e. lies not inside
             the valid range of 0 up to
-            <member>XAccessibleTable::getAccessibleRowCount()</member> - 1.
+            XAccessibleTable::getAccessibleRowCount() - 1.
 
     */
     string getAccessibleRowDescription ([in] long nRow)
@@ -110,7 +110,7 @@ interface XAccessibleTable : ::com::sun::star::uno::XInterface
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the specified column index is not valid, i.e. lies not inside
             the valid range of 0 up to
-            <member>XAccessibleTable::getAccessibleColumnCount()</member> - 1.
+            XAccessibleTable::getAccessibleColumnCount() - 1.
     */
     string getAccessibleColumnDescription ([in] long nColumn)
         raises (::com::sun::star::lang::IndexOutOfBoundsException);
@@ -135,7 +135,7 @@ interface XAccessibleTable : ::com::sun::star::uno::XInterface
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the specified row index is not valid, i.e. lies not inside
             the valid range of 0 up to
-            <member>XAccessibleTable::getAccessibleRowCount()</member> - 1.
+            XAccessibleTable::getAccessibleRowCount() - 1.
     */
     long getAccessibleRowExtentAt ([in] long nRow, [in] long nColumn)
         raises (::com::sun::star::lang::IndexOutOfBoundsException);
@@ -160,7 +160,7 @@ interface XAccessibleTable : ::com::sun::star::uno::XInterface
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the specified column index is not valid, i.e. lies not inside
             the valid range of 0 up to
-            <member>XAccessibleTable::getAccessibleColumnCount()</member> - 1.
+            XAccessibleTable::getAccessibleColumnCount() - 1.
     */
     long getAccessibleColumnExtentAt ([in] long nRow, [in] long nColumn)
         raises (::com::sun::star::lang::IndexOutOfBoundsException);
@@ -222,7 +222,7 @@ interface XAccessibleTable : ::com::sun::star::uno::XInterface
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the specified row index is not valid, i.e. lies not inside
             the valid range of 0 up to
-            <member>XAccessibleTable::getAccessibleRowCount()</member> - 1.
+            XAccessibleTable::getAccessibleRowCount() - 1.
     */
     boolean isAccessibleRowSelected ([in] long nRow)
         raises (::com::sun::star::lang::IndexOutOfBoundsException);
@@ -241,7 +241,7 @@ interface XAccessibleTable : ::com::sun::star::uno::XInterface
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the specified column index is not valid, i.e. lies not inside
             the valid range of 0 up to
-            <member>XAccessibleTable::getAccessibleColumnCount()</member> - 1.
+            XAccessibleTable::getAccessibleColumnCount() - 1.
     */
     boolean isAccessibleColumnSelected ([in] long nColumn)
         raises (::com::sun::star::lang::IndexOutOfBoundsException);
@@ -271,7 +271,7 @@ interface XAccessibleTable : ::com::sun::star::uno::XInterface
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the specified column and/or row index is not valid, i.e. lies not inside
             the valid range of 0 up to
-            <member>XAccessibleTable::getAccessibleColumnCount()</member> - 1.
+            XAccessibleTable::getAccessibleColumnCount() - 1.
     */
     XAccessible getAccessibleCellAt ([in] long nRow, [in] long nColumn)
         raises (::com::sun::star::lang::IndexOutOfBoundsException);

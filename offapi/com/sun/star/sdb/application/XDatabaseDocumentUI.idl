@@ -270,8 +270,8 @@ interface XDatabaseDocumentUI
             constants.
 
         @param DocumentDefinition
-            Upon successful return, and if and only if <arg>ObjectType</arg> equals <member>DatabaseObject::FORM</member>
-            or <member>DatabaseObject::REPORT</member>, this will contain the com::sun::star::sdb::DocumentDefinition
+            Upon successful return, and if and only if <arg>ObjectType</arg> equals DatabaseObject::FORM
+            or DatabaseObject::REPORT, this will contain the com::sun::star::sdb::DocumentDefinition
             object which controls the sub component.
     */
     ::com::sun::star::lang::XComponent createComponent(
@@ -294,8 +294,8 @@ interface XDatabaseDocumentUI
             constants.
 
         @param DocumentDefinition
-            Upon successful return, and if and only if <arg>ObjectType</arg> equals <member>DatabaseObject::FORM</member>
-            or <member>DatabaseObject::REPORT</member>, this will contain the com::sun::star::sdb::DocumentDefinition
+            Upon successful return, and if and only if <arg>ObjectType</arg> equals DatabaseObject::FORM
+            or DatabaseObject::REPORT, this will contain the com::sun::star::sdb::DocumentDefinition
             object which controls the sub component.<br/>
             You can use this object to control various aspects of the sub component. For instance, you could decide
             to create the component hidden, by passing a <code>Hidden</code> flag (set to <TRUE/>) in <arg>Arguments</arg>,

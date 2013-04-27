@@ -28,7 +28,7 @@
     This does not change how colors are interpreted but how to
     interpolate from one color to another.
 
-    @see <member>XAnimateColor::ColorSpace</member>
+    @see XAnimateColor::ColorSpace
 */
 constants AnimationColorSpace
 {

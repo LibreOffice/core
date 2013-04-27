@@ -44,15 +44,15 @@ interface XTreeDataModelListener: com::sun::star::lang::XEventListener
 
         Example: the name of a file has changed, but it is in the same location in the file system.
 
-        To indicate the root has changed, <member>TreeDataModelEvent::Nodes</member> will contain
-        the root node and <member>TreeDataModelEvent::ParentNode</member> will be empty.
+        To indicate the root has changed, TreeDataModelEvent::Nodes will contain
+        the root node and TreeDataModelEvent::ParentNode will be empty.
     */
     void treeNodesChanged( [in] TreeDataModelEvent Event );
 
     /** Invoked after nodes have been inserted into the tree.
 
-        Use <member>TreeDataModelEvent::ParentNode</member> to get the parent of the new node(s).
-        <member>TreeDataModelEvent::Nodes</member> contains the new node(s).
+        Use TreeDataModelEvent::ParentNode to get the parent of the new node(s).
+        TreeDataModelEvent::Nodes contains the new node(s).
     */
     void treeNodesInserted( [in] TreeDataModelEvent Event );
 
@@ -61,15 +61,15 @@ interface XTreeDataModelListener: com::sun::star::lang::XEventListener
         this method may only be invoked once for the root of the removed subtree,
         not once for each individual set of siblings removed.
 
-        Use <member>TreeDataModelEvent::ParentNode</member> to get the former parent of the deleted node(s).
-        <member>TreeDataModelEvent::Nodes</member> contains the removed node(s).
+        Use TreeDataModelEvent::ParentNode to get the former parent of the deleted node(s).
+        TreeDataModelEvent::Nodes contains the removed node(s).
     */
     void treeNodesRemoved( [in] TreeDataModelEvent Event );
 
     /** Invoked after the tree has drastically changed structure from a given node down.
 
-        Use <member>TreeDataModelEvent::ParentNode</member> to get the node which
-        structure has changed. <member>TreeDataModelEvent::Nodes</member> is empty.
+        Use TreeDataModelEvent::ParentNode to get the node which
+        structure has changed. TreeDataModelEvent::Nodes is empty.
     */
     void treeStructureChanged( [in] TreeDataModelEvent Event );
 };

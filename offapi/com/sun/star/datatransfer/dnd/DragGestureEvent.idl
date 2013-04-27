@@ -27,7 +27,7 @@ module com { module sun { module star { module datatransfer { module dnd {
 
  published interface XDragSource;
 
-/** A DragGestureEvent is passed to the method <member>XDragGestureListener::dragGestureRecognized()</member>
+/** A DragGestureEvent is passed to the method XDragGestureListener::dragGestureRecognized()
      when a particular XDragGestureRecognizer detects that a platform
      dependent drag initiating gesture has occurred on the component that it is
      tracking.

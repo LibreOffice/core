@@ -68,7 +68,7 @@ published interface XCell: com::sun::star::uno::XInterface
     /** sets a floating point value into the cell.
 
         <p>After a call to this method the type of the cell is
-        <member>CellContentType::VALUE</member>.</p>
+        CellContentType::VALUE.</p>
      */
     void setValue( [in] double nValue );
 

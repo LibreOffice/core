@@ -37,7 +37,7 @@ constants FormulaMapGroupSpecialOffset
         describe a formula operand token that will be pushed onto the formula
         stack while the formula is interpreted.
 
-        <p>The <member>FormulaToken::Data</member> member shall contain one of
+        <p>The FormulaToken::Data member shall contain one of
         the following values:</p>
 
         <ul>
@@ -65,7 +65,7 @@ constants FormulaMapGroupSpecialOffset
         instruct the formula interpreter to immediately stop interpreting the
         formula.
 
-        <p>The <member>FormulaToken::Data</member> member is not used
+        <p>The FormulaToken::Data member is not used
         and should be empty.</p>
      */
     const long STOP = 2;
@@ -75,7 +75,7 @@ constants FormulaMapGroupSpecialOffset
         describe the reference to an external function (e.g. add-in function)
         used in formulas.
 
-        <p>The <member>FormulaToken::Data</member> member shall contain a
+        <p>The FormulaToken::Data member shall contain a
         <atom>string</atom> with the programmatic name of the function, e.g.
         "com.sun.star.sheet.addin.Analysis.getEomonth" for the EOMONTH
         function from the Analysis add-in.</p>
@@ -87,10 +87,10 @@ constants FormulaMapGroupSpecialOffset
         describe the reference to a defined name (also known as named range)
         used in formulas.
 
-        <p>The <member>FormulaToken::Data</member> member shall contain an
+        <p>The FormulaToken::Data member shall contain an
         integer value of type <atom>long</atom> specifying the index of the
         defined name. This index can be obtained from the defined name using
-        its <member>NamedRange::TokenIndex</member> property.</p>
+        its NamedRange::TokenIndex property.</p>
 
         @see  NamedRange
      */
@@ -100,7 +100,7 @@ constants FormulaMapGroupSpecialOffset
     /** Formula tokens containing the op-code obtained from this offset
         describe an invalid name that resolves to the #NAME? error in formulas.
 
-        <p>The <member>FormulaToken::Data</member> member is not used
+        <p>The FormulaToken::Data member is not used
         and should be empty.</p>
      */
     const long NO_NAME = 5;
@@ -113,7 +113,7 @@ constants FormulaMapGroupSpecialOffset
         parameter is empty and represented by a formula token containing the
         "missing" op-code.</p>
 
-        <p>The <member>FormulaToken::Data</member> member is not used
+        <p>The FormulaToken::Data member is not used
         and should be empty.</p>
      */
     const long MISSING = 6;
@@ -123,7 +123,7 @@ constants FormulaMapGroupSpecialOffset
         describe "bad" data in a formula, e.g. data the formula parser was not
         able to parse.
 
-        <p>The <member>FormulaToken::Data</member> member shall contain a
+        <p>The FormulaToken::Data member shall contain a
         <atom>string</atom> with the bad data. This string will be displayed
         literally in the formula.</p>
      */
@@ -137,7 +137,7 @@ constants FormulaMapGroupSpecialOffset
         <p>Whitespace characters in formulas are used for readability and do
         not affect the result of the formula.</p>
 
-        <p>The <member>FormulaToken::Data</member> member shall contain a
+        <p>The FormulaToken::Data member shall contain a
         positive integer value of type <atom>long</atom> specifying the number
         of space characters.</p>
 
@@ -154,10 +154,10 @@ constants FormulaMapGroupSpecialOffset
     /** Formula tokens containing the op-code obtained from this offset
         describe the reference to a database range used in formulas.
 
-        <p>The <member>FormulaToken::Data</member> member shall contain an
+        <p>The FormulaToken::Data member shall contain an
         integer value of type <atom>long</atom> specifying the index of the
         database range. This index can be obtained from the database range
-        using its <member>DatabaseRange::TokenIndex</member> property.</p>
+        using its DatabaseRange::TokenIndex property.</p>
 
         @see  DatabaseRange
      */
@@ -167,7 +167,7 @@ constants FormulaMapGroupSpecialOffset
     /** Formula tokens containing the op-code obtained from this offset
         describe the reference to a macro function called in a formula.
 
-        <p>The <member>FormulaToken::Data</member> member shall contain a
+        <p>The FormulaToken::Data member shall contain a
         <atom>string</atom> specifying the name of the macro function.</p>
      */
     const long MACRO              = 11;

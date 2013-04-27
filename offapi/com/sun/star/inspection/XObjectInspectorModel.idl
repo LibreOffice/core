@@ -65,7 +65,7 @@ interface XObjectInspectorModel
 
     /** describes the property categories used by the property handlers.
 
-        <p>Properties can be sorted into different categories, described by the <member>LineDescriptor::Category</member>
+        <p>Properties can be sorted into different categories, described by the LineDescriptor::Category
         attribute, which is filled in XPropertyHandler::describePropertyLine()
         method of your property handler.<br/>
         Those names provided by the handlers are programmatic names. All other information

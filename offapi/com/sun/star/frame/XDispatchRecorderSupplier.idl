@@ -30,7 +30,7 @@
 
     <p>
     With a XDispatchRecorder it's possible to record calls
-    of <member>XDispatch::dispatch()</member>. The recorded data (may a script)
+    of XDispatch::dispatch(). The recorded data (may a script)
     can be used to automate recorded dispatch and start it at later time again.
     This supplier provides access to the recorder and supports some functionality
     to work with the macro recording mechanism in an easy manner.
@@ -61,7 +61,7 @@ published interface XDispatchRecorderSupplier: com::sun::star::uno::XInterface
         <p>
         Returned recorder can be used to record dispatches manually or to get
         recorded data for further using e.g. saving. He is internally used too
-        due to the method <member>XDispatchRecorderSupplier::dispatchAndRecord()</member>.
+        due to the method XDispatchRecorderSupplier::dispatchAndRecord().
         </p>
 
         @returns
@@ -75,7 +75,7 @@ published interface XDispatchRecorderSupplier: com::sun::star::uno::XInterface
 
         <p>
         Parameter <var>Dispatcher</var> is used internally to make the dispatch.
-        If recording isn't enabled it will be a normal <member>XDispatch::dispatch()</member>
+        If recording isn't enabled it will be a normal XDispatch::dispatch()
         call. Otherwise follow algorithm is used:
         <ul>
             <li>If <var>Dispatcher</var> doesn't support the interface

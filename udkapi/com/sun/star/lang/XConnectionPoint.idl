@@ -64,7 +64,7 @@ module com {  module sun {  module star {  module lang {
     <p>Each connection point is a separate sub-object to avoid circular
     reference counting problems.  A connection point controls how many
     connections (one or more) it will allow in its implementation of
-    <member>XConnectionPoint::advise()</member>.  </p>
+    XConnectionPoint::advise().  </p>
 
     <h4>When to use?</h4>
 

@@ -53,7 +53,7 @@ published service ImportFilter
         <p>
         It's used to filter a document at loading time.
         The target document should be already set by using another interface
-        <member>ImportFilter::XImporter</member> which is supported by this service too.
+        ImportFilter::XImporter which is supported by this service too.
         </p>
 
         <p>
@@ -80,7 +80,7 @@ published service ImportFilter
                     of service FilterFactory.
                 </li>
             </ul>
-        See description of service <member>FilterFactory::XNameContainer</member> for a description of
+        See description of service FilterFactory::XNameContainer for a description of
         possible configuration data.
         </p>
      */

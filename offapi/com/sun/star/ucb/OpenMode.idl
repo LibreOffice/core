@@ -23,7 +23,7 @@
 
 module com { module sun { module star { module ucb {
 
-/** These are the possible values for <member>OpenCommandArgument::Mode</member>.
+/** These are the possible values for OpenCommandArgument::Mode.
 */
 published constants OpenMode
 {

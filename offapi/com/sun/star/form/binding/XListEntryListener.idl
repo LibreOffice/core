@@ -34,18 +34,18 @@ interface XListEntryListener : com::sun::star::lang::XEventListener
     /** notifies the listener that a single entry in the list has change
 
         @param Source
-            is the event describing the change. The <member>ListEntryEvent::Position</member>
+            is the event describing the change. The ListEntryEvent::Position
             member denotes the position of the changed entry, the first (and only) element
-            of the <member>ListEntryEvent::Entries</member> member denotes the new string
+            of the ListEntryEvent::Entries member denotes the new string
     */
     void    entryChanged( [in] ListEntryEvent Source );
 
     /** notifies the listener that a range of entries has been inserted into the list
 
         @param Source
-            is the event describing the change. The <member>ListEntryEvent::Position</member>
+            is the event describing the change. The ListEntryEvent::Position
             member denotes the position of the first inserted entry, the
-            <member>ListEntryEvent::Entries</member> member contains the strings which have
+            ListEntryEvent::Entries member contains the strings which have
             been inserted.
     */
     void    entryRangeInserted( [in] ListEntryEvent Source );
@@ -53,9 +53,9 @@ interface XListEntryListener : com::sun::star::lang::XEventListener
     /** notifies the listener that a range of entries has been removed from the list
 
         @param Source
-            is the event describing the change. The <member>ListEntryEvent::Position</member>
+            is the event describing the change. The ListEntryEvent::Position
             member denotes the position of the first removed entry, the
-            <member>ListEntryEvent::Count</member> member the number of removed entries.
+            ListEntryEvent::Count member the number of removed entries.
     */
     void    entryRangeRemoved( [in] ListEntryEvent Source );
 

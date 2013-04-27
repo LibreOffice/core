@@ -76,8 +76,8 @@ published service ExtendedTypeDetection
             <li>or <NULL/> if format is unknown nor supported.</li>
         </ul>
         May be that given descriptor already includes the opened document stream as parameter
-        <member>MediaDescriptor::InputStream</member>. Then this one should be used every time.
-        If it's not included in descriptor the value of <member>MediaDescriptor::URL</member>
+        MediaDescriptor::InputStream. Then this one should be used every time.
+        If it's not included in descriptor the value of MediaDescriptor::URL
         must be used to open requested resource by this service.
         <br>
         Note: The stream should be added to the descriptor if it wasn't a part of them before.

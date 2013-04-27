@@ -54,12 +54,12 @@ published service LineDiagram
     /** determines which type of symbols are displayed.
 
         <p>In this interface, only the two values
-        <member>ChartSymbolType::NONE</member> and
-        <member>ChartSymbolType::AUTO</member> are supported. Later
+        ChartSymbolType::NONE and
+        ChartSymbolType::AUTO are supported. Later
         versions may support the selection of the symbols shape.</p>
 
         <p>If you set this property to
-        <member>ChartSymbolType::AUTO</member>, you can change the
+        ChartSymbolType::AUTO, you can change the
         symbol shape for objects supporting the service
         ChartDataPointProperties or
         ChartDataRowProperties.</p>

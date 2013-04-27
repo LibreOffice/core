@@ -31,14 +31,14 @@
 
     When using XAnimateSet, the following members are ignored
     <ul>
-    <li><member>XAnimate::Values</member></li>
-    <li><member>XAnimate::KeyTimes</member></li>
-    <li><member>XAnimate::CalcMode</member></li>
-    <li><member>XAnimate::Accumulate</member></li>
-    <li><member>XAnimate::Additive</member></li>
-    <li><member>XAnimate::From</member></li>
-    <li><member>XAnimate::By</member></li>
-    <li><member>XAnimate::TimeFilter</member></li>
+    <li>XAnimate::Values</li>
+    <li>XAnimate::KeyTimes</li>
+    <li>XAnimate::CalcMode</li>
+    <li>XAnimate::Accumulate</li>
+    <li>XAnimate::Additive</li>
+    <li>XAnimate::From</li>
+    <li>XAnimate::By</li>
+    <li>XAnimate::TimeFilter</li>
     </ul>
 
     @see http://www.w3.org/TR/smil20/animation.html#edef-set

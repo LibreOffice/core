@@ -34,7 +34,7 @@ published interface XFetchProvider: com::sun::star::uno::XInterface
     /** returns the contents of the columns of the indicated rows
 
         @returns
-        <member>FetchResult::Rows</member> contains a sequence of anys. Each
+        FetchResult::Rows contains a sequence of anys. Each
         of these anys contains a sequence of anys.
 
         @param nRowStartPosition

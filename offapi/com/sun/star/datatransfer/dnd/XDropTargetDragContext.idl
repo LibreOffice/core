@@ -43,9 +43,9 @@ published interface XDropTargetDragContext: com::sun::star::uno::XInterface
 
         <p>This method should be called from the methods of XDropTargetListener
         <ul>
-            <li><member>XDropTargetListener::dragEnter()</member></li>
-            <li><member>XDropTargetListener::dragOver()</member></li>
-            <li><member>XDropTargetListener::dragActionChanged()</member></li>
+            <li>XDropTargetListener::dragEnter()</li>
+            <li>XDropTargetListener::dragOver()</li>
+            <li>XDropTargetListener::dragActionChanged()</li>
         </ul>
         if the implementation wishes to accept the drag operation with the specified
         action.</p>

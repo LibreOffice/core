@@ -61,7 +61,7 @@ interface XAccessibleKeyBinding : ::com::sun::star::uno::XInterface
         @param nIndex
             The index selects one of alternative key bindings.  It has to
             non-negative and smaller then the number of key bindings as
-            returned by the <member>getAccessibleKeyBindingCount()</member>
+            returned by the getAccessibleKeyBindingCount()
             method.
         @return
            The returned sequence of key strokes specifies one way to invoke

@@ -57,7 +57,7 @@ published interface XDispatchRecorder: com::sun::star::uno::XInterface
     /** stops the recording process
 
         <p>
-        Must be called in pairs with <member>XDispatchRecorder::startRecording()</member>.
+        Must be called in pairs with XDispatchRecorder::startRecording().
         </p>
 
         @attention  The recorder uses this method to control the lifetime of its internal
@@ -106,7 +106,7 @@ published interface XDispatchRecorder: com::sun::star::uno::XInterface
     /** returns the recorded source code
 
         <p>
-        This method must be used before <member>endRecording()</member> is called!
+        This method must be used before endRecording() is called!
         Otherwise the macro will be released.
         </p>
 

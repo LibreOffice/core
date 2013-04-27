@@ -46,9 +46,9 @@ interface XPropertyControlFactory
             <p>If this argument is <TRUE/>, this does not necessarily mean that the property cannot be
             changed at all in the ObjectInspector. Instead, an XPropertyHandler
             can still decide that there is a dedicated UI for entering the property value,
-            which is usually triggered by a <member>LineDescriptor::PrimaryButton</member>.</p>
+            which is usually triggered by a LineDescriptor::PrimaryButton.</p>
 
-            <p>Note that this parameter might be ignored if the <member>XObjectInspectorModel::IsReadOnly</member>
+            <p>Note that this parameter might be ignored if the XObjectInspectorModel::IsReadOnly
             attribute is <TRUE/>, in which case all created property controls must be readonly.</p>
 
         @returns

@@ -67,7 +67,7 @@ published service FormControlModel
         determined automatically.</p>
 
         <p>Each component which supports a tabstop must provide a
-        <member>FormControlModel::TabIndex</member> property.</p>
+        FormControlModel::TabIndex property.</p>
 
         <p>Normally, a FormController instance is evaluating this property.</p>
      */

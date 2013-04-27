@@ -140,9 +140,9 @@ published service TextProperties
 
     /** This is the distance from the left edge of the Shape
         to the left edge of the text.
-        <p>This is only useful if <member>Text::TextHorizontalAdjust</member> is
+        <p>This is only useful if Text::TextHorizontalAdjust is
         <const>BLOCK</const> or <const>STRETCH</const> or if
-        <member>Text::TextFitSize</member> is <TRUE/>.</p>
+        Text::TextFitSize is <TRUE/>.</p>
      */
     [property] long TextLeftDistance;
 
@@ -150,9 +150,9 @@ published service TextProperties
     /** This is the distance from the right edge of the Shape
         to the right edge of the text.
 
-        <p>This is only useful if <member>Text::TextHorizontalAdjust</member> is
+        <p>This is only useful if Text::TextHorizontalAdjust is
         <const>BLOCK</const> or <const>STRETCH</const>
-        or if <member>Text::TextFitSize</member> is <TRUE/>.</p>
+        or if Text::TextFitSize is <TRUE/>.</p>
      */
     [property] long TextRightDistance;
 
@@ -160,8 +160,8 @@ published service TextProperties
     /** This is the distance from the upper edge of the Shape to
         the upper edge of the text.
 
-        <p>This is only useful if <member>Text::TextVerticalAdjust</member> is
-        <const>BLOCK</const> or if <member>Text::TextFitSize</member> is
+        <p>This is only useful if Text::TextVerticalAdjust is
+        <const>BLOCK</const> or if Text::TextFitSize is
         <TRUE/>.</p>
      */
     [property] long TextUpperDistance;
@@ -172,8 +172,8 @@ published service TextProperties
 
 
 
-        <p>This is only useful if <member>Text::TextVerticalAdjust</member> is
-        <const>BLOCK</const> or if <member>Text::TextFitSize</member> is
+        <p>This is only useful if Text::TextVerticalAdjust is
+        <const>BLOCK</const> or if Text::TextFitSize is
         <TRUE/>.</p>
      */
     [property] long TextLowerDistance;

@@ -130,7 +130,7 @@ published interface XCollator: com::sun::star::uno::XInterface
 
         @param aCollatorOptions
             A sequence of end user collator options like those returned
-            by <member>XCollator::listCollatorOptions()</member>.
+            by XCollator::listCollatorOptions().
     */
     void loadCollatorAlgorithmWithEndUserOption(
                                 [in] string aAlgorithmName,

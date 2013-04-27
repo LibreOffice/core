@@ -63,7 +63,7 @@ published service CellProperties
 
     /** is <TRUE/>, if the cell background is transparent.
 
-        <p>In this case the <member>CellProperties::CellBackColor</member>
+        <p>In this case the CellProperties::CellBackColor
         value is not used.</p>
      */
     [property] boolean IsCellBackgroundTransparent;
@@ -96,7 +96,7 @@ published service CellProperties
 
     /** contains the orientation of the cell contents.
 
-        <p>If the <member>CellProperties::RotateAngle</member> property
+        <p>If the CellProperties::RotateAngle property
         is non-zero, this value is not used.</p>
      */
     [property] com::sun::star::table::CellOrientation Orientation;
@@ -118,11 +118,11 @@ published service CellProperties
 
     /** selects Asian character orientation in vertical orientation.
 
-        <p>If the <member>CellProperties::Orientation</member> property is
+        <p>If the CellProperties::Orientation property is
         <const>CellOrientation::STACKED</const>, in Asian mode only Asian
         characters are printed in horizontal orientation instead of all
         characters.
-        For other values of <member>CellProperties::Orientation</member>,
+        For other values of CellProperties::Orientation,
         this value is not used.</p>
      */
     [optional, property] boolean AsianVerticalMode;

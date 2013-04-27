@@ -34,18 +34,18 @@ module com {  module sun {  module star {  module util {
  */
 published interface XURLTransformer: com::sun::star::uno::XInterface
 {
-    /** parses the string in <member>URL::Complete</member> which should contain
+    /** parses the string in URL::Complete which should contain
         a syntactically complete URL.
 
         <p>
-        The implementation is allowed to correct minor failures in <member>URL::Complete</member>
+        The implementation is allowed to correct minor failures in URL::Complete
         if the meaning of the URL remain unchanged. Parts of the URL are stored in the other
         fields of <var>aURL</var>.
         </p>
 
         @param aURL
                 the URL which include the complete string notation and will contain
-                all parsed parts of it after finishing this call. <member>URL::Complete</member>
+                all parsed parts of it after finishing this call. URL::Complete
                 can be overwritten if the implementation corrected minor failures.
 
         @returns
@@ -54,27 +54,27 @@ published interface XURLTransformer: com::sun::star::uno::XInterface
      */
     boolean parseStrict( [inout] com::sun::star::util::URL aURL );
 
-    /** parses the string in <member>URL::Complete</member>, which may contain
+    /** parses the string in URL::Complete, which may contain
         a syntactically complete URL or is specified by the provided protocol
 
         <p>
         The implementation can use smart functions to correct or interpret
-        <member>URL::Complete</member> if it is not a syntactically complete URL.
+        URL::Complete if it is not a syntactically complete URL.
         The parts of the URL are stored in the other fields of <var>aURL</var>.
         </p>
 
         @param aURL
                 the URL which include the string notation and will contain
                 all parsed parts of it after finishing this call. This includes
-                <member>URL::Complete</member>.
+                URL::Complete.
 
         @param sSmartProtocol
                 optional information which protocol specification should be used to parse
-                member<member>URL::Complete</member>. If empty the implementation can use a
+                memberURL::Complete. If empty the implementation can use a
                 protocol which fit best.
 
         @returns
-                <TRUE/> if parsing was successful (means if <member>URL::Complete</member> could
+                <TRUE/> if parsing was successful (means if URL::Complete could
                 be syntactically correct) or <FALSE/> otherwise.
      */
     boolean parseSmart(
@@ -82,11 +82,11 @@ published interface XURLTransformer: com::sun::star::uno::XInterface
         [in] string sSmartProtocol );
 
     /** assembles the parts of the URL specified by <var>aURL</var> and
-        stores it into <member>URL::Complete</member>
+        stores it into URL::Complete
 
         @param aURL
                 the URL which contains alls necessary information in a structured form. The
-                member <member>URL::Complete</member> contains the URL in string notation after
+                member URL::Complete contains the URL in string notation after
                 the operation finished successfully. Otherwise the content of URL::complete()
                 is not defined.
 

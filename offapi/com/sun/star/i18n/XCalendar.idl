@@ -89,7 +89,7 @@ published interface XCalendar : com::sun::star::uno::XInterface
 
     /**
         Verify if the date fields set by a combination of
-        <member>XCalendar::setValue()</member> calls is valid. It has a
+        XCalendar::setValue() calls is valid. It has a
         side-effect because it will internally calculate the final value
         for the date fields
      */
@@ -156,25 +156,25 @@ published interface XCalendar : com::sun::star::uno::XInterface
                 <dt><const>CalendarDisplayIndex::DAY</const></dt>
                     <dd>one of Weekdays or a number used as
                     an offset into the corresponding
-                    <member>Calendar::Days</member> sequence</dd>
+                    Calendar::Days sequence</dd>
                 <dt><const>CalendarDisplayIndex::MONTH</const></dt>
                     <dd>one of Months or a number used as
                     an offset into the corresponding
-                    <member>Calendar::Months</member> sequence</dd>
+                    Calendar::Months sequence</dd>
                 <dt><const>CalendarDisplayIndex::YEAR</const></dt>
                     <dd>not used, empty string returned</dd>
                 <dt><const>CalendarDisplayIndex::ERA</const></dt>
                     <dd>a number used as an offset into the
-                    corresponding <member>Calendar:Eras</member>
+                    corresponding Calendar:Eras
                     sequence</dd>
                 <dt><const>CalendarDisplayIndex::GENITIVE_MONTH</const></dt>
                     <dd>a number used as an offset into the
-                    corresponding <member>Calendar2:GenitiveMonth</member>
+                    corresponding Calendar2:GenitiveMonth
                     sequence</dd>
             </dl>
 
             <p> The value should be obtained by a previous call to
-            <member>XCalendar::getValue()</member> with an appropriate
+            XCalendar::getValue() with an appropriate
             CalendarFieldIndex argument. </p>
 
         @param nNameType

@@ -24,8 +24,8 @@ module com { module sun { module star { module accessibility {
 /** These constants identify the type of AccessibleEventObject
     objects.
 
-    <p>The <member>AccessibleEventObject::OldValue</member> and
-    <member>AccessibleEventObject::NewValue</member> fields contain, where
+    <p>The AccessibleEventObject::OldValue and
+    AccessibleEventObject::NewValue fields contain, where
     applicable and not otherwise stated, the old and new value of the
     property in question.</p>
 
@@ -38,46 +38,46 @@ constants AccessibleEventId
 {
     /** Use this event type to indicate a change of the name string
         of an accessible object.  The
-        <member>AccessibleEventObject::OldValue</member> and
-        <member>AccessibleEventObject::NewValue</member> fields contain the
+        AccessibleEventObject::OldValue and
+        AccessibleEventObject::NewValue fields contain the
         name before and after the change.
     */
     const short NAME_CHANGED = 1;
 
     /** Use this event type to indicate a change of the description string
         of an accessible object.  The
-        <member>AccessibleEventObject::OldValue</member> and
-        <member>AccessibleEventObject::NewValue</member> fields contain the
+        AccessibleEventObject::OldValue and
+        AccessibleEventObject::NewValue fields contain the
         description before and after the change.
     */
     const short DESCRIPTION_CHANGED = 2;
 
     /** The change of the number or attributes of actions of an accessible
         object is signaled by events of this type.
-        <p>The <member>AccessibleEventObject::OldValue</member> and
-        <member>AccessibleEventObject::NewValue</member> fields contain the
+        <p>The AccessibleEventObject::OldValue and
+        AccessibleEventObject::NewValue fields contain the
         old and new number of actions.
     */
     const short ACTION_CHANGED = 3;
 
     /** State changes are signaled with this event type.  Use one event for
         every state that is set or reset.  The
-        <member>AccessibleEventObject::OldValue</member> and
-        <member>AccessibleEventObject::NewValue</member> fields contain the
+        AccessibleEventObject::OldValue and
+        AccessibleEventObject::NewValue fields contain the
         old and new value respectively.  To set a state put the state id
-        into the <member>AccessibleEventObject::NewValue</member> field and
-        leave <member>AccessibleEventObject::OldValue</member> empty.  To
+        into the AccessibleEventObject::NewValue field and
+        leave AccessibleEventObject::OldValue empty.  To
         reset a state put the state id into the
-        <member>AccessibleEventObject::OldValue</member> field and leave
-        <member>AccessibleEventObject::NewValue</member> empty.
+        AccessibleEventObject::OldValue field and leave
+        AccessibleEventObject::NewValue empty.
     */
     const short STATE_CHANGED = 4;
 
     /** Constant used to determine when the active descendant of a component
         has changed.  The active descendant is used in objects with
-        transient children.  The <member>AccessibleEventObject::NewValue</member>
+        transient children.  The AccessibleEventObject::NewValue
         contains the now active object.  The
-        <member>AccessibleEventObject::OldValue</member> contains the
+        AccessibleEventObject::OldValue contains the
         previously active child.  Empty references indicate that no child
         has been respectively is currently active.
     */
@@ -94,28 +94,28 @@ constants AccessibleEventId
         much more specific than the later one and reduces the number of
         calls an AT-Tool has to make to retrieve all affected data.</p>
 
-        <p>The <member>AccessibleEventObject::OldValue</member> and
-        <member>AccessibleEventObject::NewValue</member> remain empty.  Use
-        a call to the <member>XAccessibleComponent::getBounds()</member>
+        <p>The AccessibleEventObject::OldValue and
+        AccessibleEventObject::NewValue remain empty.  Use
+        a call to the XAccessibleComponent::getBounds()
         method to determine the new bounding box.</p>
     */
     const short BOUNDRECT_CHANGED = 6;
 
     /** A child event indicates the addition of a new or the removal of an
         existing child.  The contents of the
-        <member>AccessibleEventObject::OldValue</member> and
-        <member>AccessibleEventObject::NewValue</member> fields determines
+        AccessibleEventObject::OldValue and
+        AccessibleEventObject::NewValue fields determines
         which of both has taken place.
 
         <p>If a new child has been added then
-        the <member>AccessibleEventObject::NewValue</member> contains a
+        the AccessibleEventObject::NewValue contains a
         reference to this new object and
-        <member>AccessibleEventObject::OldValue</member> remains empty.</p>
+        AccessibleEventObject::OldValue remains empty.</p>
 
         <p>If a child has been removed then the
-        <member>AccessibleEventObject::OldValue</member> contains a
+        AccessibleEventObject::OldValue contains a
         reference to this object and
-        <member>AccessibleEventObject::NewValue</member> remains empty.</p>
+        AccessibleEventObject::NewValue remains empty.</p>
 
         <p>If a child has been added and a another one has been removed
         don't set both fields at the same.  Send separate events
@@ -141,8 +141,8 @@ constants AccessibleEventId
     const short INVALIDATE_ALL_CHILDREN = 8;
 
     /** Events of this type indicate changes of the selection. The
-        <member>AccessibleEventObject::OldValue</member> and
-        <member>AccessibleEventObject::NewValue</member> fields remain empty.
+        AccessibleEventObject::OldValue and
+        AccessibleEventObject::NewValue fields remain empty.
     */
     const short SELECTION_CHANGED = 9;
 
@@ -150,15 +150,15 @@ constants AccessibleEventId
         of an accessible object.  This includes for example most of the
         attributes available over the XAccessibleComponent and
         XAccessibleExtendedComponent interfaces.  The
-        <member>AccessibleEventObject::OldValue</member> and
-        <member>AccessibleEventObject::NewValue</member> fields are left empty.
+        AccessibleEventObject::OldValue and
+        AccessibleEventObject::NewValue fields are left empty.
     */
     const short VISIBLE_DATA_CHANGED = 10;
 
     /** This constant indicates changes of the value of an
         XAccessibleValue interface.  The
-        <member>AccessibleEventObject::OldValue</member> and
-        <member>AccessibleEventObject::NewValue</member> field contain the
+        AccessibleEventObject::OldValue and
+        AccessibleEventObject::NewValue field contain the
         old and new value as a number.  Its exact type is implementation
         dependent but has to be the same as is returned by the
         XAccessibleValue::getCurrentValue() function.
@@ -169,8 +169,8 @@ constants AccessibleEventId
     /** Identifies the change of a relation set: The content flow has
         changed.
 
-        <p>Not used: The <member>AccessibleEventObject::OldValue</member> and
-        <member>AccessibleEventObject::NewValue</member> fields contain
+        <p>Not used: The AccessibleEventObject::OldValue and
+        AccessibleEventObject::NewValue fields contain
         references to the old and new predecessor.  Note that both references
         my be <NULL/> to indicate that a flow to the sending object has not
         existed or does not exist anymore.</p>
@@ -180,8 +180,8 @@ constants AccessibleEventId
     /** Identifies the change of a relation set: The content flow has
         changed.
 
-        <p>Not used: The <member>AccessibleEventObject::OldValue</member> and
-        <member>AccessibleEventObject::NewValue</member> fields contain
+        <p>Not used: The AccessibleEventObject::OldValue and
+        AccessibleEventObject::NewValue fields contain
         references to the old and new successor.  Note that both references
         my be <NULL/> to indicate that a flow from the sending object has not
         existed or does not exist anymore.</p>
@@ -190,56 +190,56 @@ constants AccessibleEventId
 
     /** Identifies the change of a relation set: The target object that is
         doing the controlling has changed.  The
-        <member>AccessibleEventObject::OldValue</member> and
-        <member>AccessibleEventObject::NewValue</member> fields contain the
+        AccessibleEventObject::OldValue and
+        AccessibleEventObject::NewValue fields contain the
         old and new controlling objects.
     */
     const short CONTROLLED_BY_RELATION_CHANGED = 14;
 
     /** Identifies the change of a relation set: The controller for the
         target object has changed.  The
-        <member>AccessibleEventObject::OldValue</member> and
-        <member>AccessibleEventObject::NewValue</member> fields contain the
+        AccessibleEventObject::OldValue and
+        AccessibleEventObject::NewValue fields contain the
         old and new number of controlled objects.
     */
     const short CONTROLLER_FOR_RELATION_CHANGED = 15;
 
     /** Identifies the change of a relation set: The target group for a
         label has changed.  The
-        <member>AccessibleEventObject::OldValue</member> and
-        <member>AccessibleEventObject::NewValue</member> fields contain the
+        AccessibleEventObject::OldValue and
+        AccessibleEventObject::NewValue fields contain the
         old and new number labeled objects.
     */
     const short LABEL_FOR_RELATION_CHANGED = 16;
 
     /** Identifies the change of a relation set: The objects that are doing
         the labeling have changed.  The
-        <member>AccessibleEventObject::OldValue</member> and
-        <member>AccessibleEventObject::NewValue</member> fields contain the
+        AccessibleEventObject::OldValue and
+        AccessibleEventObject::NewValue fields contain the
         old and new accessible label.
     */
     const short LABELED_BY_RELATION_CHANGED = 17;
 
     /** Identifies the change of a relation set: The group membership has
         changed.  The
-        <member>AccessibleEventObject::OldValue</member> and
-        <member>AccessibleEventObject::NewValue</member> fields contain the
+        AccessibleEventObject::OldValue and
+        AccessibleEventObject::NewValue fields contain the
         old and new number of members.
     */
     const short MEMBER_OF_RELATION_CHANGED = 18;
 
     /** Identifies the change of a relation set: The sub-window-of relation
         has changed.  The
-        <member>AccessibleEventObject::OldValue</member> and
-        <member>AccessibleEventObject::NewValue</member> fields contain the
+        AccessibleEventObject::OldValue and
+        AccessibleEventObject::NewValue fields contain the
         old and new accessible parent window objects.
     */
     const short SUB_WINDOW_OF_RELATION_CHANGED = 19;
 
     /** Events of this type are sent when the caret has moved to a new
         position.  The old and new position can be found in the
-        <member>AccessibleEventObject::OldValue</member> and
-        <member>AccessibleEventObject::NewValue</member> fields.
+        AccessibleEventObject::OldValue and
+        AccessibleEventObject::NewValue fields.
     */
     const short CARET_CHANGED = 20;
 
@@ -247,8 +247,8 @@ constants AccessibleEventId
         selection is <em>not</em> available through the event object.  You
         have to query the XAccessibleText interface of the
         event source for this information.  The type of content of  the
-        <member>AccessibleEventObject::OldValue</member> and
-        <member>AccessibleEventObject::NewValue</member> fields is not
+        AccessibleEventObject::OldValue and
+        AccessibleEventObject::NewValue fields is not
         specified at the moment.  This may change in the future.
     */
     const short TEXT_SELECTION_CHANGED = 21;
@@ -260,19 +260,19 @@ constants AccessibleEventId
         <p>The affected text ranges are represented by <type
         scope="com::sun::star::accessibility">TextSegment</type> structures.<p>
 
-        <p>The content of the <member>AccessibleEventObject::OldValue</member> and
-        <member>AccessibleEventObject::NewValue</member> expresses the type
+        <p>The content of the AccessibleEventObject::OldValue and
+        AccessibleEventObject::NewValue expresses the type
         of text change: <ul> <li>Insertion: the
-        <member>AccessibleEventObject::NewValue</member> field specifies the
+        AccessibleEventObject::NewValue field specifies the
         inserted text after the insertion, the
-        <member>AccessibleEventObject::OldValue</member> field remains
+        AccessibleEventObject::OldValue field remains
         empty.</li> <li>Deletion: the
-        <member>AccessibleEventObject::OldValue</member> field specifies the
+        AccessibleEventObject::OldValue field specifies the
         deleted text before the deletion, the
-        <member>AccessibleEventObject::NewValue</member> field remains
+        AccessibleEventObject::NewValue field remains
         empty.</li> <li>Update/Replace/Modification: the
-        <member>AccessibleEventObject::OldValue</member> and
-        <member>AccessibleEventObject::NewValue</member> fields specify the
+        AccessibleEventObject::OldValue and
+        AccessibleEventObject::NewValue fields specify the
         modified text before respectively after the modification.</li>
         <li>Unknown: when the type of text change or the place where it took
         place can not be determined by the event broadcaster then both
@@ -297,77 +297,77 @@ constants AccessibleEventId
     const short TEXT_ATTRIBUTE_CHANGED = 23;
 
     /** Constant used to indicate that a hypertext element has received
-        focus. The <member>AccessibleEventObject::OldValue</member> field
+        focus. The AccessibleEventObject::OldValue field
         contains the start index of previously focused element.  The
-        <member>AccessibleEventObject::NewValue</member> field holds the
+        AccessibleEventObject::NewValue field holds the
         start index in the document of the current element that has focus. A
         value of -1 indicates that an element does not or did not have
         focus.
     */
     const short HYPERTEXT_CHANGED = 24;
     /** Constant used to indicate that the table caption has changed.  The
-        <member>AccessibleEventObject::OldValue</member> and
-        <member>AccessibleEventObject::NewValue</member> fields contain the
+        AccessibleEventObject::OldValue and
+        AccessibleEventObject::NewValue fields contain the
         old and new accessible objects representing the table caption.
     */
     const short TABLE_CAPTION_CHANGED = 25;
 
     /** Constant used to indicate that the column description has changed.
-        The <member>AccessibleEventObject::NewValue</member> field contains
+        The AccessibleEventObject::NewValue field contains
         the column index. The
-        <member>AccessibleEventObject::OldValue</member> is left empty.
+        AccessibleEventObject::OldValue is left empty.
     */
     const short TABLE_COLUMN_DESCRIPTION_CHANGED = 26;
 
     /** Constant used to indicate that the column header has changed.  The
-        <member>AccessibleEventObject::OldValue</member> is empty, the
-        <member>AccessibleEventObject::NewValue</member> field contains an
+        AccessibleEventObject::OldValue is empty, the
+        AccessibleEventObject::NewValue field contains an
         AccessibleTableModelChange representing the header
         change.
     */
     const short TABLE_COLUMN_HEADER_CHANGED = 27;
 
     /** Constant used to indicate that the table data has changed.  The
-        <member>AccessibleEventObject::OldValue</member> is empty, the
-        <member>AccessibleEventObject::NewValue</member> field contains an
+        AccessibleEventObject::OldValue is empty, the
+        AccessibleEventObject::NewValue field contains an
         AccessibleTableModelChange representing the data
         change.
     */
     const short TABLE_MODEL_CHANGED = 28;
 
     /** Constant used to indicate that the row description has changed.  The
-        <member>AccessibleEventObject::NewValue</member> field contains the
-        row index. The <member>AccessibleEventObject::OldValue</member> is
+        AccessibleEventObject::NewValue field contains the
+        row index. The AccessibleEventObject::OldValue is
         left empty.
     */
     const short TABLE_ROW_DESCRIPTION_CHANGED = 29;
 
     /** Constant used to indicate that the row header has changed.  The
-        <member>AccessibleEventObject::OldValue</member> is empty, the
-        <member>AccessibleEventObject::NewValue</member> field contains an
+        AccessibleEventObject::OldValue is empty, the
+        AccessibleEventObject::NewValue field contains an
         AccessibleTableModelChange representing the header
         change.
     */
     const short TABLE_ROW_HEADER_CHANGED = 30;
 
     /** Constant used to indicate that the table summary has changed.  The
-        <member>AccessibleEventObject::OldValue</member> and
-        <member>AccessibleEventObject::NewValue</member> fields contain the
+        AccessibleEventObject::OldValue and
+        AccessibleEventObject::NewValue fields contain the
         old and new accessible objects representing the table summary.
     */
     const short TABLE_SUMMARY_CHANGED = 31;
 
     /** Constant used to indicate that a list box entry has been expanded.
-        <member>AccessibleEventObject::OldValue</member> is empty.
-        <member>AccessibleEventObject::NewValue</member> contains the expanded list box entry.
+        AccessibleEventObject::OldValue is empty.
+        AccessibleEventObject::NewValue contains the expanded list box entry.
 
         @since OOo 3.2
     */
     const short LISTBOX_ENTRY_EXPANDED = 32;
 
     /** Constant used to indicate that a list box entry has been collapsed.
-        <member>AccessibleEventObject::OldValue</member> is empty.
-        <member>AccessibleEventObject::NewValue</member> contains the collapsed list box entry.
+        AccessibleEventObject::OldValue is empty.
+        AccessibleEventObject::NewValue contains the collapsed list box entry.
 
         @since OOo 3.2
     */

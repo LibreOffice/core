@@ -26,7 +26,7 @@
  module com {  module sun {  module star {  module registry {
 
 /** is thrown when an application tries to register a new component (implementation) using the
-    <member>XImplementationRegistration::registerImplementation()</member>
+    XImplementationRegistration::registerImplementation()
     method, but the component cannot be registered. The reason for this exception could be:<br>
     <br><ul>
     <li>the component cannot be found or cannot be loaded (missing path or classpath)

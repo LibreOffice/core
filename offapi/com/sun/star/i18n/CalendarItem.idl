@@ -30,8 +30,8 @@ module com { module sun { module star { module i18n {
     era.
 
     <p> A sequence of CalendarItems is contained in
-    <member>Calendar::Days</member>, <member>Calendar::Months</member>,
-    <member>Calendar::Eras</member> </p>
+    Calendar::Days, Calendar::Months,
+    Calendar::Eras </p>
  */
 
 published struct CalendarItem

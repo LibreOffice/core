@@ -25,7 +25,7 @@ module com {  module sun {  module star {  module i18n {
 
 /**
     One number format code and its attributes, returned in a sequence by
-    <member>XLocaleData::getAllFormats()</member>.
+    XLocaleData::getAllFormats().
 
     <p> Contains raw data defined in the XML locale data files. </p>
 

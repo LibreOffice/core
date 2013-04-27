@@ -28,7 +28,7 @@
  module com {  module sun {  module star {  module script {
 
 /** event contains the reasons and the data for the
-    <member>XEngineListener::finished()</member> method.
+    XEngineListener::finished() method.
     @deprecated
  */
 published struct FinishEngineEvent: com::sun::star::lang::EventObject
@@ -45,7 +45,7 @@ published struct FinishEngineEvent: com::sun::star::lang::EventObject
 
     /** contains the return value.
 
-        <p>This field is only valid if <member>FinishEngineEvent::Finish</member> is
+        <p>This field is only valid if FinishEngineEvent::Finish is
         <const>FinishReason::OK</const>.</p>
      */
     any Return;

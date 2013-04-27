@@ -104,7 +104,7 @@ interface XDatabaseDataProvider
 
     /** is the command which should be executed, the type of command depends
     on the CommandType.
-    <p>In case of a #CommandType of <member>CommandType::COMMAND</member>,
+    <p>In case of a #CommandType of CommandType::COMMAND,
     means in case the #Command specifies an SQL statement, the inherited
     <member scope="com::sun::star::sdbc">RowSet::EscapeProcessing</member>
     becomes relevant:<br/>
@@ -177,7 +177,7 @@ interface XDatabaseDataProvider
 
         <p>This property is usually present together with the #Command and
         #CommandType properties, and is evaluated if and only if #CommandType
-        equals <member>CommandType::COMMAND</member>.</p>
+        equals CommandType::COMMAND.</p>
     */
     [attribute,bound] boolean EscapeProcessing;
 

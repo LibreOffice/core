@@ -121,16 +121,16 @@ module com {  module sun {  module star {  module sdb {
     <p>For all kinds of URLs, the parameters supplied during dispatching build up a DataAccessDescriptor,
     where the following properties are present:
     <ul>
-        <li><member>DataAccessDescriptor::DataSourceName</member></li>
-        <li><member>DataAccessDescriptor::Command</member></li>
-        <li><member>DataAccessDescriptor::CommandType</member></li>
-        <li><em>optional</em> <member>DataAccessDescriptor::Selection</member></li>
-        <li><em>optional</em> <member>DataAccessDescriptor::BookmarkSelection</member></li>
-        <li><em>optional</em> <member>DataAccessDescriptor::ResultSet</member></li>
+        <li>DataAccessDescriptor::DataSourceName</li>
+        <li>DataAccessDescriptor::Command</li>
+        <li>DataAccessDescriptor::CommandType</li>
+        <li><em>optional</em> DataAccessDescriptor::Selection</li>
+        <li><em>optional</em> DataAccessDescriptor::BookmarkSelection</li>
+        <li><em>optional</em> DataAccessDescriptor::ResultSet</li>
     </ul>
     </p>
-    <p>The default for <member>DataAccessDescriptor::Selection</member> is to contain bookmarks, if not specified
-    otherwise by <member>DataAccessDescriptor::BookmarkSelection</member>.</pr>
+    <p>The default for DataAccessDescriptor::Selection is to contain bookmarks, if not specified
+    otherwise by DataAccessDescriptor::BookmarkSelection.</pr>
     </p>
 
     @see com::sun::star::sdb::ContentLoader

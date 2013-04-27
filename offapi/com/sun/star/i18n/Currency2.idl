@@ -28,7 +28,7 @@ module com { module sun { module star { module i18n {
 
 /**
     Symbols, names, and attributes of a specific currency, returned in a
-    sequence by <member>XLocaleData2::getAllCurrencies2()</member>.
+    sequence by XLocaleData2::getAllCurrencies2().
 
     <p> It is derived from
     ::com::sun::star::i18n::Currency and provides an

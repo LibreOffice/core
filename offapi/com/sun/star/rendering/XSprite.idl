@@ -43,7 +43,7 @@ interface XSprite : ::com::sun::star::uno::XInterface
         Please note that if this sprite is not animated, the
         associated XSpriteCanvas does not update changed
         sprites automatically, but has to be told to do so via
-        <member>XSpriteCanvas::updateScreen()</member>.<p>
+        XSpriteCanvas::updateScreen().<p>
 
         @param nAlpha
         New global alpha value to composite this sprite with the
@@ -66,7 +66,7 @@ interface XSprite : ::com::sun::star::uno::XInterface
         Please note that if this sprite is not animated, the
         associated XSpriteCanva does not update changed sprites
         automatically, but has to be told to do so via
-        <member>XSpriteCanvas::updateScreen()</member>.<p>
+        XSpriteCanvas::updateScreen().<p>
 
         @param aNewPos
         The new position, in user coordinate space, to move the sprite to.
@@ -104,7 +104,7 @@ interface XSprite : ::com::sun::star::uno::XInterface
         Please note that if this sprite is not animated, the
         associated XSpriteCanvas does not update changed
         sprites automatically, but has to be told to do so via
-        <member>XSpriteCanvas::updateScreen()</member>.<p>
+        XSpriteCanvas::updateScreen().<p>
 
         @param aTransformation
         The transformation to apply to the sprite shape.
@@ -135,7 +135,7 @@ interface XSprite : ::com::sun::star::uno::XInterface
         Please note that if this sprite is not animated, the
         associated XSpriteCanvas does not update changed
         sprites automatically, but has to be told to do so via
-        <member>XSpriteCanvas::updateScreen()</member>.<p>
+        XSpriteCanvas::updateScreen().<p>
 
         Specifying an empty interface denotes no clipping,
         i.e. everything contained in the sprite will be visible

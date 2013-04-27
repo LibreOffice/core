@@ -45,7 +45,7 @@ published interface XDropTargetListener: com::sun::star::lang::XEventListener
         should occur before returning from drop in a normal flow of operation.
         Also, the implementor of XDropTargetListener should not assume
         the DropTargetDropEvent to be meaningful after returning
-        from the <member>XDropTargetListener::drop()</member> method.</p>
+        from the XDropTargetListener::drop() method.</p>
 
         @param dtde
         The DropTargetDropEvent.
