@@ -28,22 +28,35 @@
  pkgconfig_DATA = xmlsec1.pc @XMLSEC_CRYPTO_PC_FILES_LIST@
 --- misc/xmlsec1-1.2.14/configure.in	2009-06-25 22:53:18.000000000 +0200
 +++ misc/build/xmlsec1-1.2.14/configure.in	2009-10-01 10:28:50.990755126 +0200
-@@ -190,8 +190,14 @@
+@@ -192,8 +192,8 @@
  dnl ==========================================================================
- dnl find libxml
- dnl ==========================================================================
--LIBXML_MIN_VERSION="2.7.4"
+ LIBXML_MIN_VERSION="2.7.4"
  LIBXML_CONFIG="xml2-config"
-+if test -f "$SOLARVERSION/$INPATH/bin$UPDMINOREXT/xml2-config" ; then 
-+  LIBXML_CONFIG="$SOLARVERSION/$INPATH/bin$UPDMINOREXT/xml2-config"
-+elif test -n "$MINGW_SYSROOT" -a -x "$MINGW_SYSROOT/bin/xml2-config" ; then
-+  LIBXML_CONFIG="$MINGW_SYSROOT/bin/xml2-config"
-+else
-+  LIBXML_CONFIG="xml2-config"
-+fi
- LIBXML_CFLAGS=""
- LIBXML_LIBS=""
+-LIBXML_CFLAGS=""
+-LIBXML_LIBS=""
++LIBXML_CFLAGS="$LIBXML_CFLAGS"
++LIBXML_LIBS="$LIBXML_LIBS"
  LIBXML_FOUND="no"
+ AC_ARG_WITH(libxml, 
+     [  --with-libxml=[PFX]       libxml2 location]
+@@ -202,6 +202,8 @@
+     [  --with-libxml-src=[PFX]   not installed yet libxml2 location]
+ )
+ 
++if test "z$LIBXML_CFLAGS" = "z" -o "z$LIBXML_LIBS" = "z"; then
++
+ if test "z$with_libxml" = "zno" -o "z$with_libxml_src" = "zno"; then 
+     AC_MSG_CHECKING(for libxml2 libraries >= $LIBXML_MIN_VERSION) 
+     AC_MSG_ERROR(libxml2 >= $LIBXML_MIN_VERSION is required for $XMLSEC_PACKAGE)
+@@ -245,6 +247,8 @@
+     fi
+ fi
+ 
++fi
++
+ AC_SUBST(LIBXML_CFLAGS)
+ AC_SUBST(LIBXML_LIBS)
+ AC_SUBST(LIBXML_CONFIG)
 @@ -555,12 +559,26 @@
      
  XMLSEC_NO_NSS="1"
@@ -90,7 +103,7 @@
          PKG_CHECK_MODULES(NSS, mozilla-nspr >= $MOZILLA_MIN_VERSION mozilla-nss >= $MOZILLA_MIN_VERSION,
      	    [NSS_FOUND=yes NSPR_PACKAGE=mozilla-nspr NSS_PACKAGE=mozilla-nss],
  	    [NSS_FOUND=no])
-@@ -612,8 +635,8 @@
+@@ -612,8 +640,8 @@
          ac_mozilla_name=mozilla-$MOZILLA_MIN_VERSION
      fi
  
@@ -101,7 +114,7 @@
  
      AC_MSG_CHECKING(for nspr libraries >= $NSPR_MIN_VERSION)
      NSPR_INCLUDES_FOUND="no"
-@@ -637,15 +660,15 @@
+@@ -634,21 +662,21 @@
  	NSPR_PRINIT_H="$with_nspr/include/prinit.h"
      else
  	for dir in $ac_nss_inc_dir ; do
@@ -120,8 +133,6 @@
      		break
      	    fi
  	done
-@@ -648,7 +671,7 @@
- 	done
  	
  	for dir in $ac_nss_lib_dir ; do
 -    	    if test -f $dir/libnspr4$shrext ; then
@@ -129,7 +140,7 @@
  		dnl do not add -L/usr/lib because compiler does it anyway
          	if test "z$dir" = "z/usr/lib" ; then
              	    NSPR_LIBS="$NSPR_LIBS_LIST"
-@@ -719,7 +742,7 @@
+@@ -719,7 +747,7 @@
          done
         
          for dir in $ac_nss_lib_dir ; do
@@ -138,7 +149,7 @@
          	dnl do not add -L/usr/lib because compiler does it anyway
      		if test "z$dir" = "z/usr/lib" ; then
          	    NSS_LIBS="$NSS_LIBS_LIST"
-@@ -738,7 +761,7 @@
+@@ -738,7 +766,7 @@
  
      if test "z$NSS_INCLUDES_FOUND" = "zyes" -a "z$NSS_LIBS_FOUND" = "zyes" ; then
         OLD_CPPFLAGS=$CPPFLAGS
