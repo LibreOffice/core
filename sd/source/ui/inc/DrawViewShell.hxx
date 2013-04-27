@@ -251,10 +251,6 @@ public:
     void            SetZoomOnPage( sal_Bool bZoom = sal_True ) { mbZoomOnPage = bZoom; }
     sal_Bool            IsZoomOnPage() { return mbZoomOnPage; }
     void            CheckLineTo (SfxRequest& rReq);
-    void            FuTemp01(SfxRequest& rReq);
-    void            FuTemp02(SfxRequest& rReq);
-    void            FuTemp03(SfxRequest& rReq);
-    void            FuTemp04(SfxRequest& rReq);
     void            SetChildWindowState( SfxItemSet& rSet );
 
     void            UpdateIMapDlg( SdrObject* pObj );

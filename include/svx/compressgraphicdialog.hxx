@@ -22,6 +22,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/field.hxx>
 #include <sfx2/bindings.hxx>

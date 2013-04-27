@@ -240,7 +240,7 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
     }
 }
 
-sal_uInt16 ScGetFontWorkId();       // wegen CLOOKs - in drtxtob2
+sal_uInt16 ScGetFontWorkId();
 
 //------------------------------------------------------------------
 
