@@ -1,0 +1,24 @@
+# Fix for fdo#59850
+# Patch was also submitted with https://ssl.icu-project.org/trac/ticket/10129
+# of which the outcome should be monitored.
+
+--- misc/icu/source/common/wintz.c
++++ misc/build/icu/source/common/wintz.c
+@@ -254,7 +254,6 @@
+     char apiStdName[MAX_LENGTH_ID];
+     char regStdName[MAX_LENGTH_ID];
+     char tmpid[MAX_LENGTH_ID];
+-    int32_t apiStdLength = 0;
+     int32_t len;
+     int id;
+     int errorCode;
+@@ -280,8 +279,8 @@
+
+     /* Convert the wchar_t* standard name to char* */
+     uprv_memset(apiStdName, 0, sizeof(apiStdName));
+-    u_strFromWCS(apiStd, MAX_LENGTH_ID, &apiStdLength, apiTZI.StandardName, -1, &status);
+-    u_austrncpy(apiStdName, apiStd, apiStdLength);
++    u_strFromWCS(apiStd, MAX_LENGTH_ID, NULL, apiTZI.StandardName, -1, &status);
++    u_austrncpy(apiStdName, apiStd, sizeof(apiStdName) - 1);
+
+     tmpid[0] = 0;
