@@ -322,6 +322,7 @@ public:
                     ServerFontLayout( ServerFont& );
     virtual bool    LayoutText( ImplLayoutArgs& );
     virtual void    AdjustLayout( ImplLayoutArgs& );
+    virtual void    ApplyDXArray( ImplLayoutArgs& );
     virtual void    DrawText( SalGraphics& ) const;
     ServerFont&     GetServerFont() const   { return mrServerFont; }
 };

@@ -67,7 +67,6 @@ bool ServerFontLayout::LayoutText( ImplLayoutArgs& rArgs )
 }
 
 // -----------------------------------------------------------------------
-
 void ServerFontLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
     GenericSalLayout::AdjustLayout( rArgs );
@@ -89,6 +88,18 @@ void ServerFontLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             // TODO: kashida-GSUB/GPOS
         }
     }
+}
+
+void ServerFontLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
+{
+#if ENABLE_HARFBUZZ
+    // No idea what issue ApplyDXArray() was supposed to fix, but whatever
+    // GenericSalLayout::ApplyDXArray() does it just breaks our perfectly
+    // positioned text.
+    const char* pUseHarfBuzz = getenv("SAL_USE_HARFBUZZ");
+    if (!pUseHarfBuzz)
+#endif
+    GenericSalLayout::ApplyDXArray(rArgs);
 }
 
 // =======================================================================
@@ -423,13 +434,7 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             aNewPos = Point(aNewPos.X() + aHbPositions[i].x_offset, aNewPos.Y() - aHbPositions[i].y_offset);
 
             GlyphItem aGI(nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth);
-
-            // This is a hack to compensate for assumptions made elsewhere in
-            // the codebase, the right way is to use aHbPositions[i].x_advance
-            // instead of nGlyphWidth above, and leave mnNewWidth alone
-            // (whatever it is meant for)
-            if (i + 1 < nRunGlyphCount)
-                aGI.mnNewWidth = nGlyphWidth + (aHbPositions[i + 1].x_offset >> 6);
+            aGI.mnNewWidth = aHbPositions[i].x_advance;
 
             rLayout.AppendGlyph(aGI);
 
