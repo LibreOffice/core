@@ -263,14 +263,6 @@
                 </prop>
             </node>
 
-            <!--
-            <node oor:name=".uno:EditSectionMenu" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Section</value>
-                </prop>
-            </node>
--->
-
             <node oor:name=".uno:AlignmentMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Alignment</value>
