@@ -29,10 +29,10 @@ published interface XUriSchemeParser;
    URLs.
 
    <p>The argument <code>scheme</code> of method
-   <member scope="com::sun::star::uri">XUriSchemeParser::parse</member> must
+   com::sun::star::uri::XUriSchemeParser::parse() must
    always be equal to the <atom>string</atom>
    <code>"vnd.sun.star.script"</code>, ignoring case.  The objects returned by
-   <member scope="com::sun::star::uri">XUriSchemeParser::parse</member>
+   com::sun::star::uri::XUriSchemeParser::parse()
    implement
    com::sun::star::uri::XVndSunStarScriptUrlReference.</p>
 

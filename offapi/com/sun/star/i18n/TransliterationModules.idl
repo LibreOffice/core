@@ -26,7 +26,7 @@ module com {  module sun {  module star {  module i18n {
 /** Old transliteration module enumeration.
 
     <p> Use with <member>XTransliteration::loadModule()</member> and
-    <member scope="com::sun::star::util">SearchOptions::transliterateFlags</member> </p>
+    com::sun::star::util::SearchOptions::transliterateFlags() </p>
 
     <p> Note that values &gt;=0x100 are logically or'ed with other values! </p>
  */

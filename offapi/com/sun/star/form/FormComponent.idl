@@ -80,7 +80,7 @@ published service FormComponent
         <p>Note that dynamic properties added to a form component are, by definition,
         removable. That is, the <member scope="com::sun::star::beans">PropertyAttribute::REMOVABLE</member>
         will always be set, even if you do not specify it in the
-        <member scope="com::sun::star::beans">XPropertyContainer::addProperty</member> call.</p>
+        com::sun::star::beans::XPropertyContainer::addProperty() call.</p>
 
         @since OOo 2.3
     */

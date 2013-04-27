@@ -51,7 +51,7 @@ interface XPropertyHandler
 {
     /** used for controlling resources acquired by the handler
 
-        <p><member scope="com::sun::star::lang">XComponent::dispose</member> is invoked when the property handler is not
+        <p>com::sun::star::lang::XComponent::dispose() is invoked when the property handler is not
         needed by the object inspector anymore. Handler implementations should clean up any
         resources here.</p>
     */
@@ -391,7 +391,7 @@ interface XPropertyHandler
             If <TRUE/>, the method is called for the first-time update of the respective property, that
             is, when the property browser is just initializing with the properties of the introspected
             object.<br/>
-            If <FALSE/>, there was a real <member scope="com::sun::star::beans">XPropertyChangeListener::propertyChange</member>
+            If <FALSE/>, there was a real com::sun::star::beans::XPropertyChangeListener::propertyChange()
             event which triggered the call.<br/>
             <br/>
             In some cases it may be necessary to differentiate between both situations. For instance,
@@ -414,7 +414,7 @@ interface XPropertyHandler
 
         <p>A XPropertyHandler is used by a XObjectInspector instance,
         which implements the XController interface. By definition, a XObjectInspector always forwards
-        all suspend requests (<member scope="com::sun::star::frame">XController::suspend</member>) to
+        all suspend requests (com::sun::star::frame::XController::suspend()) to
         all it's handlers.</p>
 
         <p>The usual use case for this method are non-modal user interface components used

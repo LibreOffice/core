@@ -34,7 +34,7 @@ constants FormFeature
     /** moves the form to a record given by absolute position.
 
         <p>This operation cannot be executed without arguments. When executing it (i.e.
-        when calling <member scope="com::sun::star::form::runtime">XFormOperations::executeWithArguments</member>),
+        when calling com::sun::star::form::runtime::XFormOperations::executeWithArguments()),
         you need to specify a parameter named <em>Position</em> of type <code>long</code>, which
         denotes the position to move the form to.</p>
     */

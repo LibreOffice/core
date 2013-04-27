@@ -77,7 +77,7 @@ published service GridControl
 
     /** allows to create column models to be inserted into the control model.
 
-        <p>Note that the object returned by the <member scope="com::sun::star::form">XGridColumnFactory::createColumn</member>
+        <p>Note that the object returned by the com::sun::star::form::XGridColumnFactory::createColumn()
         method is not part of the grid control, yet. It needs to be inserted using any of the
         container interfaces.</p>
 

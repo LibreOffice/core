@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module java {
     A UNO interface seems to be at the wrong abstraction level for this
     functionality (also, the C++ classes <code>jvmaccess::VirtualMachine</code>
     and <code>jvmaccess::UnoVirtualMachine</code> used by
-    <member scope="com::sun::star::java">XJavaVM::getJavaVM</member> are not
+    com::sun::star::java::XJavaVM::getJavaVM() are not
     part of the public C++ UNO runtime API).  This should probably be replaced
     by an appropriate C/C++ API.
  */

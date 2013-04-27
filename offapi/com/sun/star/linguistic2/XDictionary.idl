@@ -195,17 +195,17 @@ published interface XDictionary : com::sun::star::container::XNamed
 
         <P>On dictionary events, each entry in the listener list will
          be notified via a call to
-        <member scope="com::sun::star::linguistic2">XDictionaryEventListener::processDictionaryEvent</member>.</P>
+        com::sun::star::linguistic2::XDictionaryEventListener::processDictionaryEvent().</P>
 
         @param  xListener
             the entry to be made, that is, the object that wants notifications.
 
         @returns
             <TRUE/> if the entry was successfully made, <FALSE/> otherwise.
-            If <member scope="com::sun::star::lang">XEventListener::disposing</member> was called before,
+            If com::sun::star::lang::XEventListener::disposing() was called before,
             it will always fail.
 
-        @see    <member scope="com::sun::star::linguistic2">XDictionary::removeDictionaryEventListener</member>
+        @see    com::sun::star::linguistic2::XDictionary::removeDictionaryEventListener()
         @see    com::sun::star::linguistic2::XDictionaryEventListener
     */
     boolean addDictionaryEventListener(
@@ -220,7 +220,7 @@ published interface XDictionary : com::sun::star::container::XNamed
             <TRUE/> if the object to be removed was found and removed,
             <FALSE/> if the object was not found in the list.
 
-        @see    <member scope="com::sun::star::linguistic2">XDictionary::addDictionaryEventListener</member>
+        @see    com::sun::star::linguistic2::XDictionary::addDictionaryEventListener()
         @see    com::sun::star::linguistic2::XDictionaryEventListener
     */
     boolean removeDictionaryEventListener(

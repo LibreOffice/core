@@ -71,7 +71,7 @@
     The parameters are optional, that means that sequence can be empty or
     contain only first parameter, or first and second one. In case
     no parameters are provided the call works the same way as
-    <member scope="com::sun::star::lang">XSingleServiceFactory::createInstance</member>.
+    com::sun::star::lang::XSingleServiceFactory::createInstance().
     In case only first parameter is provided, the storage is opened in
     readonly mode.
     </p>

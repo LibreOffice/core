@@ -536,7 +536,7 @@ service MediaDescriptor
 
         <p>If this property is used when loading a document into a frame, then it
         specifies the name of the view controller to create. That is, the property
-        is passed to the document's <member scope="com::sun::star::frame">XModel2::createViewController</member>
+        is passed to the document's com::sun::star::frame::XModel2::createViewController()
         method.<br/>
         If the loaded document does not support the <code>XModel2</code> interface,
         the property is ignored.</p>

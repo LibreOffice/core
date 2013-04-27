@@ -40,7 +40,7 @@ module com { module sun { module star { module document {
     <p>If the interface is implemented by a controller, then <member>ScriptContainer</member>
     refers to the document which supports embedding scripts, and which is unambiguously
     associated with the controller. This must not necessarily be the model returned by
-    <member scope="com::sun::star::frame">XController::getModel</member>.</p>
+    com::sun::star::frame::XController::getModel().</p>
 
     @since OOo 2.4
  */

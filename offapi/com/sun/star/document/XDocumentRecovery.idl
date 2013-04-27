@@ -44,7 +44,7 @@ interface XDocumentRecovery
 
         <p>It's allowed to implement this method sloppy, by returning <TRUE/> in cases where it is not sure whether
         the document actually has been modified. So, the most simple implementation could simply delegate this call
-        to <member scope="com::sun::star::util">XModifiable::isModified</member>. (Well, actually that's the
+        to com::sun::star::util::XModifiable::isModified(). (Well, actually that's the
         second simple implementation, the <em>most</em> simple one would, still legitimately, always return <TRUE/>.)</p>
 
         <p>However, in such a case, the document might be saved more often than needed. In particular during the
@@ -56,7 +56,7 @@ interface XDocumentRecovery
     /** does an emergency save of the document
 
         <p>A default implementation of this method could simply delegate this call to
-        <member scope="com::sun::star::frame">XStorable::storeToURL</member>.</p>
+        com::sun::star::frame::XStorable::storeToURL().</p>
 
         @param TargetLocation
             specifies the URL of the location to which the document should be emergency-saved.
@@ -77,16 +77,16 @@ interface XDocumentRecovery
     /** recovers the document after a previous emergency or session save.
 
         <p>The document itself has previously been created, but <em>not</em> loaded
-        (via <member scope="com::sun::star::frame">XLoadable::load</member>) or initialized (via
-        <member scope="com::sun::star::frame">XLoadable::initNew</member>).</p>
+        (via com::sun::star::frame::XLoadable::load()) or initialized (via
+        com::sun::star::frame::XLoadable::initNew()).</p>
 
         <p>Upon successful return, the document must be fully initialized. In particular, the
-        caller is not responsible for calling <member scope="com::sun::star::frame">XModel::attachResource</member>.
+        caller is not responsible for calling com::sun::star::frame::XModel::attachResource().
         Instead, the implementation is responsible to do so, if required.</p>
 
         <p>A default implementation of this method could simply delegate this call to
-        <member scope="::com::sun::star::frame:">XLodable::load</member>, followed by
-        <member scope="com::sun::star::frame">XModel::attachResource</member>.</p>
+        ::com::sun::star::frame:::XLodable::load(), followed by
+        com::sun::star::frame::XModel::attachResource().</p>
 
         @param SourceLocation
             specifies the URL of the location to which the document was previously emergency-saved.

@@ -28,42 +28,42 @@ module com { module sun { module star { module io {
 /**
    An optional companion interface to
    com::sun::star::io::XOutputStream that supports scenarios
-   where <member scope="com::sun::star::io">XOutputStream::writeBytes</member>
+   where com::sun::star::io::XOutputStream::writeBytes()
    operates asynchronously and does not necessarily report any errors.
 
    <p>A typical scenario where this interface is useful is when an
    com::sun::star::io::XOutputStream is used to write to a
    file via NFS.  Normally, any calls to
-   <member scope="com::sun::star::io">XOutputStream::writeBytes</member> will
+   com::sun::star::io::XOutputStream::writeBytes() will
    execute asynchronously then, in that any potential errors might only be
    reported by later calls to
-   <member scope="com::sun::star::io">XOutputStream::writeBytes</member> or
-   <member scope="com::sun::star::io">XOutputStream::closeOutput</member>.  If
+   com::sun::star::io::XOutputStream::writeBytes() or
+   com::sun::star::io::XOutputStream::closeOutput().  If
    such an output stream shall not be closed immediately after one or more calls
-   to <member scope="com::sun::star::io">XOutputStream::writeBytes</member>, but
+   to com::sun::star::io::XOutputStream::writeBytes(), but
    the client wants to know as soon as possible whether writing was successful,
    then <member
    scope="com::sun::star::io">XAsyncOutputMonitor::waitForCompletion</member>
    should be called after the series of calls to
-   <member scope="com::sun::star::io">XOutputStream::writeBytes</member>.</p>
+   com::sun::star::io::XOutputStream::writeBytes().</p>
 
    @since OOo 2.0
 */
 interface XAsyncOutputMonitor {
     /**
        waits for the completion of any previous calls to
-       <member scope="com::sun::star::io">XOutputStream::writeBytes</member>,
+       com::sun::star::io::XOutputStream::writeBytes(),
        and reports potentially pending errors.
 
        <p>Calling this method is potentially expensive (even if the associated
        com::sun::star::io::XOutputStream represents a local
        file not accessed via NFS, for example).  This method has a similar
        description to
-       <member scope="com::sun::star::io">XOutputStream::flush</member>.
+       com::sun::star::io::XOutputStream::flush().
        However, where the semantics of <code>flush</code> are rather vague,
        <code>waitForCompletion</code> has very specific semantics&mdash;it just
        blocks long enough so that any errors encountered during previous calls
-       to <member scope="com::sun::star::io">XOutputStream::writeBytes</member>
+       to com::sun::star::io::XOutputStream::writeBytes()
        can reliably be reported.  It specificially does not guarantee that any
        data have savely been stored on a stable physical medium, like a hard
        disk (and it is completely unspecified whether <code>flush</code> should

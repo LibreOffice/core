@@ -68,7 +68,7 @@ interface XDatabaseDocumentUI
         of the application. Clients should not misuse it, in particular, closing
         the connection can yield unexpected results and should definitely be
         avoided. If you need a separate connection to the data source, use
-        <member scope="com::sun::star::sdbc">XDataSource::getConnection</member>.</p>
+        com::sun::star::sdbc::XDataSource::getConnection().</p>
     */
     [attribute, readonly] com::sun::star::sdbc::XConnection ActiveConnection;
 
@@ -80,7 +80,7 @@ interface XDatabaseDocumentUI
 
         <p>If the application is already connected, nothing happens. If it is not
         connected, the application will try to establish a connection by using
-        <member scope="com::sun::star::sdbc">XDataSource::getConnection</member>
+        com::sun::star::sdbc::XDataSource::getConnection()
         with the current settings, as specified in the
         <member scope="com::sun::star::sdb">DataSource::Settings</member> member.</p>
 
@@ -138,7 +138,7 @@ interface XDatabaseDocumentUI
         <code>closeSubComponents</code>, which will gracefully do this.</p>
 
         <p>In a first step, the sub components will be suspended
-        (<member scope="com::sun::star::frame">XController::suspend</member>). There
+        (com::sun::star::frame::XController::suspend()). There
         are basically two reasons why suspending a single sub component can fail: The
         user might veto it (she's asked if the document is currently modified), and
         the component might be uncloseable currently, e.g. due to an open modal

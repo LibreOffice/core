@@ -28,7 +28,7 @@ module com { module sun { module star { module bridge { module oleautomation {
 /** maps UNO types to oleautomation types and vice versa.
     <p>
     The function
-    <member scope="com::sun::star::bridge">XBridgeSupplier2::createBridge</member>
+    com::sun::star::bridge::XBridgeSupplier2::createBridge()
     maps a value of a UNO or Automation type to the desired target type. If a UNO
     interface was mapped  to <code>IDispatch</code>, then all objects
     (interfaces, structs) and other types which are obtained from that Automation
@@ -36,7 +36,7 @@ module com { module sun { module star { module bridge { module oleautomation {
     if one provides an initial object which forms the root of all other objects,
     such as a service manager, then only that object needs to be explicitly
     mapped by a call to
-    <member scope="com::sun::star::bridge">XBridgeSupplier2::createBridge</member>.
+    com::sun::star::bridge::XBridgeSupplier2::createBridge().
     The same holds true if an automation  object is mapped to an UNO interface.
     </p>
     <p>

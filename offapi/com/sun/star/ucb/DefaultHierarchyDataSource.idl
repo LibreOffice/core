@@ -36,7 +36,7 @@ published service DefaultHierarchyDataSource
         com::sun::star::configuration::ConfigurationProvider
         for reading and writing hierarchy data.
 
-        <p><member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments</member>
+        <p>com::sun::star::lang::XMultiServiceFactory::createInstanceWithArguments()
         supports the service specifiers
         <code>"com.sun.star.ucb.HierarchyDataReadAccess"</code> and
         <code>"com.sun.star.ucb.HierarchyDataReadWriteAccess"</code>.

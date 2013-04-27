@@ -118,7 +118,7 @@ published interface XConnectionPoint: com::sun::star::uno::XInterface
 
         <p>A few <code>add...Listener</code> methods need additional parameters
         to add listeners or throw exceptions. One of these methods is
-        <member scope="com::sun::star::beans">XPropertySet::addPropertyChangeListener</member>.
+        com::sun::star::beans::XPropertySet::addPropertyChangeListener().
         We ignore the problem in this interface. A solution must be provided
         in an additional XConnectionPoint interface.  </p>
 
@@ -143,7 +143,7 @@ published interface XConnectionPoint: com::sun::star::uno::XInterface
 
         <p>A few <code>remove...Listener</code> methods need additional
         parameters to add listeners or throw exceptions. One of these methods
-        is <member scope="com::sun::star::beans">XPropertySet::removePropertyChangeListener</member>.
+        is com::sun::star::beans::XPropertySet::removePropertyChangeListener().
         We ignore the problem in this interface. A solution must be
         provided in an additional XConnectionPoint interface.  </p>
 

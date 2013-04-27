@@ -39,15 +39,15 @@ interface XObjectInspector
 {
     /** allows to plug the inspector into an com::sun::star::frame::XFrame
 
-        <p>The <member scope="com::sun::star::frame">XController::setModel</member> method
+        <p>The com::sun::star::frame::XController::setModel() method
         accepts only XObjectInspectorModels, and will return <FALSE/> if the
         to-be-attached model is not <NULL/>, but does not support this interface.</p>
 
         <p>If you do not want to support a full-blown com::sun::star::frame::XModel,
         use the <member>InspectorModel</member> attribute instead.</p>
 
-        <p>The <member scope="com::sun::star::frame">XController::getViewData</member> and
-        <member scope="com::sun::star::frame">XController::restoreViewData</member> exchange
+        <p>The com::sun::star::frame::XController::getViewData() and
+        com::sun::star::frame::XController::restoreViewData() exchange
         string values, which describes as much of the current view state as possible.</p>
     */
     interface com::sun::star::frame::XController;
@@ -65,7 +65,7 @@ interface XObjectInspector
         it can provide user interface names and help URLs for property categories.</p>
 
         <p>Note that there are two ways of setting or retrieving the current model: You can either
-        use <member scope="com::sun::star::frame">XModel::setModel</member>, or, if you do not want
+        use com::sun::star::frame::XModel::setModel(), or, if you do not want
         or need to implement the full-blown com::sun::star::frame::XModel interface,
         you can use this property directly. Both approaches are semantically equivalent.</p>
 

@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module sheet {
     A service implementing this interface can internally set an arbitrary
     number of formula token sequences. The number of allowed formula token
     sequences must be returned by the
-    <member scope="com::sun::star::sheet">XMultiFormulaTokens::getCount</member>
+    com::sun::star::sheet::XMultiFormulaTokens::getCount()
     method. When the client code tries to access formula tokens at index that
     is outside the allowed index range, the implementation shall return an
     <type scope="com::sun::star::lang">IndexOutOfBoundsException</member>.

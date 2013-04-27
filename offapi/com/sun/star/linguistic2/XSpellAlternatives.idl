@@ -29,7 +29,7 @@ module com { module sun { module star { module linguistic2 {
     spell checking attempts and may provide spelling alternatives.
 
     <P>This is used by the
-    <member scope="com::sun::star::linguistic2">XSpellChecker::spell</member>
+    com::sun::star::linguistic2::XSpellChecker::spell()
     function when the word was not found to be correct.
     Suggestions for other words to be used may be provided along with
     a failure-type that may specify why the word was not correct.

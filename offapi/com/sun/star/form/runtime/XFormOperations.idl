@@ -42,11 +42,11 @@ interface XFeatureInvalidation;
 
     <p>As an example, imagine you have a database form, displayed in some user
     interface, which you want to move to the next record.<br/>
-    It is as easy as calling <member scope="com:::sun::star::sdbc">XResultSet::next</member>
+    It is as easy as calling com:::sun::star::sdbc::XResultSet::next()
     on this form, right? Wrong. First, you need to care for saving the current
     record, so the user doesn't lose her input. So you need to call
-    <member scope="com::sun::star::sdbc">XResultSetUpdate::updateRow</member> or
-    <member scope="com::sun::star::sdbc">XResultSetUpdate::insertRow</member>, depending
+    com::sun::star::sdbc::XResultSetUpdate::updateRow() or
+    com::sun::star::sdbc::XResultSetUpdate::insertRow(), depending
     on the form's <member scope="com::sun::star::sdb">RowSet::IsNew</member> property.<br/>
     But then you're done, right? Wrong, again.<br/>
     When the user just entered some data into one of the form fields, but did not yet

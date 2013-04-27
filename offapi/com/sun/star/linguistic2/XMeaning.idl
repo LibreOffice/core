@@ -28,7 +28,7 @@ module com { module sun { module star { module linguistic2 {
 /** one of the possible meanings for a word.
 
     <P> Represents one of the possible meanings that may be returned from a
-     <member scope="com::sun::star::linguistic2">XThesaurus::queryMeanings</member>
+     com::sun::star::linguistic2::XThesaurus::queryMeanings()
     call and allows for retrieval of its synonyms.
     </P>
 

@@ -40,7 +40,7 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
     /** Set a new "realm" value to hand back.
 
         <p>This method should be called before
-        <member scope="com::sun::star::task">XInteractionContinuation::select</member>,
+        com::sun::star::task::XInteractionContinuation::select(),
         and should only be called if
         XInteractionSupplyAuthentication::canSetRealm() returned
         <true/>.</p>
@@ -54,7 +54,7 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
     /** Set a new "user name" value to hand back.
 
         <p>This method should be called before
-        <member scope="com::sun::star::task">XInteractionContinuation::select</member>,
+        com::sun::star::task::XInteractionContinuation::select(),
         and should only be called if
         XInteractionSupplyAuthentication::canSetUserName()
         returned <true/>.</p>
@@ -68,7 +68,7 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
     /** Set a new "password" value to hand back.
 
         <p>This method should be called before
-        <member scope="com::sun::star::task">XInteractionContinuation::select</member>,
+        com::sun::star::task::XInteractionContinuation::select(),
         and should only be called if
         XInteractionSupplyAuthentication::canSetPassword()
         returned <true/>.</p>
@@ -90,7 +90,7 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
     /** Set a new mode of how long to remember the password.
 
         <p>This method should be called before
-        <member scope="com::sun::star::task">XInteractionContinuation::select</member>,
+        com::sun::star::task::XInteractionContinuation::select(),
         and should only be called if
         XInteractionSupplyAuthentication::setPassword()
         is also called.</p>
@@ -108,7 +108,7 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
     /** Set a new "account" value to hand back.
 
         <p>This method should be called before
-        <member scope="com::sun::star::task">XInteractionContinuation::select</member>,
+        com::sun::star::task::XInteractionContinuation::select(),
         and should only be called if
         XInteractionSupplyAuthentication::canSetAccount()
         returned <true/>.</p>
@@ -130,7 +130,7 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
     /** Set a new mode of how long to remember the account.
 
         <p>This method should be called before
-        <member scope="com::sun::star::task">XInteractionContinuation::select</member>,
+        com::sun::star::task::XInteractionContinuation::select(),
         and should only be called if
         XInteractionSupplyAuthentication::setAccount()
         is also called.</p>

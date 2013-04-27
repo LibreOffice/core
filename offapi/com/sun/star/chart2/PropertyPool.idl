@@ -45,7 +45,7 @@ service PropertyPool
         implementation of
         com::sun::star::beans::XPropertySet, the
         method
-        <member scope="com::sun::star::style">XDefaultsSupplier::getDefaults</member>
+        com::sun::star::style::XDefaultsSupplier::getDefaults()
         should return itself.
      */
     interface  ::com::sun::star::style::XDefaultsSupplier;

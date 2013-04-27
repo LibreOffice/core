@@ -39,7 +39,7 @@ service DocumentDefinition
     /** provides functionality for treating the object as part of a hierarchy
         of a database document's sub documents.
 
-        <p>The <member scope="com::sun::star::ucb">XCommandProcessor::execute</member> method
+        <p>The com::sun::star::ucb::XCommandProcessor::execute() method
         of a <code>DocumentDefinition</code> supports at least the following commands, additionally to
         the ones already supported by the DefinitionContent:
         <ul>

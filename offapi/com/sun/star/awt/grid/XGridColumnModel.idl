@@ -117,8 +117,8 @@ published interface XGridColumnModel
     /** Fills the model with the given number of default columns
 
         <p>Existing columns will be removed before adding new columns. Listeners at the column model will
-        be notified one <member scope="com::sun::star::container">XContainerListener::elementRemoved</member> event
-        for each removed column, and one <member scope="com::sun::star::container">XContainerListener::elementInserted</member>
+        be notified one com::sun::star::container::XContainerListener::elementRemoved() event
+        for each removed column, and one com::sun::star::container::XContainerListener::elementInserted()
         event for each insertion.</p>
 
         @param elements

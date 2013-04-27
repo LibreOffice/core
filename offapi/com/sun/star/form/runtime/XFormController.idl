@@ -85,7 +85,7 @@ interface XFormControllerContext;
     a per-form and a per-database basis.<br/>
     For the former, you need to add a boolean property <code>FormsCheckRequiredFields</code> to the form
     (aka the <code>FormController</code>'s model), using its
-    <member scope="com::sun::star::beans">XPropertyContainer::addProperty</member> method, with a value
+    com::sun::star::beans::XPropertyContainer::addProperty() method, with a value
     of <FALSE/>.<br/>
     For the latter, you need to set the respective property of the data source's <code>Settings</code>
     (also named <code>FormsCheckRequiredFields</code>) to <FALSE/>.</p>
@@ -107,7 +107,7 @@ interface XFormControllerContext;
     requesting a dispatcher for this functionality is <em>.uno:FormController/deleteRecord</em>.</p>
 
     <p>Some URLs may require parameters. For this, the sequence of com::sun::star::beans::PropertyValues
-    passed to the <member scope="com::sun::star::frame">XDispatch::dispatch</member> call is used - every property value is
+    passed to the com::sun::star::frame::XDispatch::dispatch() call is used - every property value is
     used as one named parameter.</p>
 
     <p>For all URLs, interested parties can register as status listeners (com::sun::star::frame::XStatusListener)
@@ -245,7 +245,7 @@ interface XFormController
 {
     /** is used for tab controlling and grouping of the controls.
 
-        <p>The model obtained via <member scope="com::sun::star::awt">XTabController::getModel</member> is the form for which the
+        <p>The model obtained via com::sun::star::awt::XTabController::getModel() is the form for which the
         controller is responsible.</p>
      */
     interface ::com::sun::star::awt::XTabController;

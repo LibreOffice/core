@@ -42,7 +42,7 @@ interface XDocumentDataSource
         each of the two can exist without its counterpart, but create this counterpart on request
         only. As a consequence, the document obtained via this attribute might be newly created,
         which implies that the caller is now responsible for it. In particular, the caller is
-        responsible for calling <member scope="com::sun::star::util">XCloseable::close</member>
+        responsible for calling com::sun::star::util::XCloseable::close()
         on the document as soon as it's not needed anymore.</p>
 
         <p>Additionally, if the caller does long-lasting processing on the document, it's advised

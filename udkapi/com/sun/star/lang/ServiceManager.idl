@@ -60,7 +60,7 @@ module com {  module sun {  module star {  module lang {
 
     <dt>XComponent (optional)</dt>
     <dd>The service manager calls the method
-    <member scope="com::sun::star::lang">XComponent::dispose</member>
+    com::sun::star::lang::XComponent::dispose()
     on the factory when going down (i.e. it is commonly disposed by the component context).</dd>
     </dl>
 
@@ -103,7 +103,7 @@ published service ServiceManager
         <p>
         It is possible to enumerate all implementations that support the
         service specified with the argument of the
-        <member scope="com::sun::star::container">XContentEnumerationAccess::createContentEnumeration</member> method.
+        com::sun::star::container::XContentEnumerationAccess::createContentEnumeration() method.
         The enumerator commonly returns XSingleComponentFactory
         interfaces.
         </p>

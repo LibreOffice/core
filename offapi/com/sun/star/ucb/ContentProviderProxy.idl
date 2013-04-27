@@ -39,7 +39,7 @@ module com { module sun { module star { module ucb {
 published service ContentProviderProxy
 {
     /** The implementation of
-        <member scope="com::sun::star::uno">XInterface::queryInterface</member>
+        com::sun::star::uno::XInterface::queryInterface()
         must instantiate the real provider and return the return value
         of a queryInterface call at the real provider, except for queries
         for the interfaces implemented by the proxy itself. So the caller of

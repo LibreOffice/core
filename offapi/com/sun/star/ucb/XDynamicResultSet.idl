@@ -112,9 +112,9 @@ published interface XDynamicResultSet: com::sun::star::lang::XComponent
     /** Call this, if you want to get notifications about changes.
 
         <p>The implementor has to call
-        <member scope="com::sun::star::lang">XComponent::addEventListener</member>
+        com::sun::star::lang::XComponent::addEventListener()
         in this method, so that we can call
-        <member scope="com::sun::star::lang">XEventListener::disposing</member>
+        com::sun::star::lang::XEventListener::disposing()
         at the listener
 
         @param Listener

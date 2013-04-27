@@ -68,7 +68,7 @@ published service FormComponents
 
         <p>For instance, at any time you can obtain the events associated with the <code>n</code><super>th</super>
         element in the form components by calling
-        <member scope="com::sun::star::script">XEventAttacherManager::getScriptEvents</member>
+        com::sun::star::script::XEventAttacherManager::getScriptEvents()
         with parameter <code>n</code>. In particular, this invariant is always met, even after you
         inserted/removed elements into/from the container.</p>
      */

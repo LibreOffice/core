@@ -44,7 +44,7 @@ interface XSubmission
 
     /** allows the submission to be associated with certain form controls
 
-        <p>Calling the <member scope="com::sun::star::form::submission">XSubmission::submit</member>
+        <p>Calling the com::sun::star::form::submission::XSubmission::submit()
         yields exactly the same result as calling XModel::submit() of the model which
         the submission belongs to, passing the ID of the submission.</p>
     */

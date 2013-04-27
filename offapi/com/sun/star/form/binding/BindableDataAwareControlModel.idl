@@ -46,7 +46,7 @@ module com {  module sun {  module star {  module form { module binding {
     it's column in this particular row.<br/>
     On the other hand, when any change in the control model (e.g. resulting from a user entering
     data in a control associated with the control model) is committed
-    (<member scope="com::sun::star::form">XBoundComponent::commit</member>), then the actual
+    (com::sun::star::form::XBoundComponent::commit()), then the actual
     data of the control model is written into the associated
     com::sun::star::form::component::DataForm column.</p>
 
@@ -76,7 +76,7 @@ module com {  module sun {  module star {  module form { module binding {
                 in the external binding. This is a difference to SQL bindings of most
                 com::sun::star::form::DataAwareControlModel's, where changes
                 in the control model's value are only propagated to the bound column upon explicit
-                request via <member scope="com::sun::star::form">XBoundComponent::commit</member>.<br/>
+                request via com::sun::star::form::XBoundComponent::commit().<br/>
                 Note that this restriction is inherited from the BindableControlModel.
             </li>
             <li><b>Cloning</b><br/>

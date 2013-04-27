@@ -54,9 +54,9 @@ published service Content
         registered at the content ( the content holds the listeners ) and
         the implementation of the listener interface holds a reference on
         the content. If the content shall be released,
-        <member scope="com::sun::star::lang">XComponent::dispose</member> must
+        com::sun::star::lang::XComponent::dispose() must
         be called at the content. The implementation of this method must call
-        <member scope="com::sun::star::lang">XEventListener::disposing</member>
+        com::sun::star::lang::XEventListener::disposing()
         on the registered listeners and release the appropriate object
         references. At the other hand, the implementation of
         XEventListener::disposing must release its appropriate references.

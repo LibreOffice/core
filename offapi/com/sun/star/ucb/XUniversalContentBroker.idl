@@ -40,10 +40,10 @@ published interface XUniversalContentBroker
         <p>Those references i.e. may occur if content provider  implementations
         hold references to the Broker. The Broker itself always holds its
         providers. If the Broker shall be released,
-        <member scope="com::sun::star::lang">XComponent::dispose</member>
+        com::sun::star::lang::XComponent::dispose()
         must be called at the Broker. The implementation of this method must
         call
-        <member scope="com::sun::star::lang">XEventListener::disposing</member>
+        com::sun::star::lang::XEventListener::disposing()
         on the registered listeners (the providers holding the Broker must be
         those listeners) and release the appropriate object references. At
         the other hand, the implementation of XEventListener::disposing must

@@ -44,7 +44,7 @@ module com {  module sun {  module star {  module sdb { module tools {
     service.</p>
 
     <p>The component itself does not have life-time control mechanisms, i.e. you
-    cannot explicitly dispose it (<member scope="com::sun::star::lang">XComponent::dispose</member>),
+    cannot explicitly dispose it (com::sun::star::lang::XComponent::dispose()),
     and you cannot be notified when it dies.<br/>
     However, if your try to access any of its methods or attributes, after the
     connection which was used to create it was closed, a com::sun::star::lang::DisposedException

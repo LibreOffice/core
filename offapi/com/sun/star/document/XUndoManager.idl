@@ -75,7 +75,7 @@ interface XUndoManager
 
     /** allows accessing the component, usually a document, which the undo manager works for.
 
-        <p><member scope="com::sun::star::container">XChild::setParent</member> is not supported, and will throw
+        <p>com::sun::star::container::XChild::setParent() is not supported, and will throw
         an com::sun::star::lang::NoSupportException.</p>
     */
     interface ::com::sun::star::container::XChild;

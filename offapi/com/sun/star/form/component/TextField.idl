@@ -42,7 +42,7 @@ published service TextField
 
         <p>If the <member>RichTextControl::RichText</member> property is set to <TRUE/>,
         then the TextField component will disable it's reset capabilities. This means
-        that all calls to <member scope="com::sun::star::form">XReset::reset</member> will be ignored.</p>
+        that all calls to com::sun::star::form::XReset::reset() will be ignored.</p>
     */
     [optional] service RichTextControl;
 

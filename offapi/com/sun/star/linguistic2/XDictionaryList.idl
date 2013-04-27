@@ -106,11 +106,11 @@ published interface XDictionaryList : com::sun::star::uno::XInterface
 
         <P>On dictionary-list events, each entry in the listener list will
          be notified via a call to
-        <member scope="com::sun::star::linguistic2">XDictionaryListEventListener::processDictionaryListEvent</member>.</P>
+        com::sun::star::linguistic2::XDictionaryListEventListener::processDictionaryListEvent().</P>
 
         @returns
             <TRUE/> if the entry was made, <FALSE/> otherwise.
-            If <member scope="com::sun::star::lang">XEventListener::disposing</member>
+            If com::sun::star::lang::XEventListener::disposing()
             was called before, it will always fail.
 
         @param  xListener
@@ -154,8 +154,8 @@ published interface XDictionaryList : com::sun::star::uno::XInterface
 
         @see    com::sun::star::linguistic2::XDictionaryListEvent
         @see    com::sun::star::linguistic2::XDictionaryListEventListener
-        @see    <member scope="com::sun::star::linguistic2">XDictionaryList::endCollectEvents</member>
-        @see    <member scope="com::sun::star::linguistic2">XDictionaryList::flushEvents</member>
+        @see    com::sun::star::linguistic2::XDictionaryList::endCollectEvents()
+        @see    com::sun::star::linguistic2::XDictionaryList::flushEvents()
     */
     short beginCollectEvents();
 
@@ -172,8 +172,8 @@ published interface XDictionaryList : com::sun::star::uno::XInterface
 
         @see    com::sun::star::linguistic2::XDictionaryListEvent
         @see    com::sun::star::linguistic2::XDictionaryListEventListener
-        @see    <member scope="com::sun::star::linguistic2">XDictionaryList::beginCollectEvents</member>
-        @see    <member scope="com::sun::star::linguistic2">XDictionaryList::flushEvents</member>
+        @see    com::sun::star::linguistic2::XDictionaryList::beginCollectEvents()
+        @see    com::sun::star::linguistic2::XDictionaryList::flushEvents()
     */
     short endCollectEvents();
 
@@ -185,8 +185,8 @@ published interface XDictionaryList : com::sun::star::uno::XInterface
 
         @see    com::sun::star::linguistic2::XDictionaryListEvent
         @see    com::sun::star::linguistic2::XDictionaryListEventListener
-        @see    <member scope="com::sun::star::linguistic2">XDictionaryList::beginCollectEvents</member>
-        @see    <member scope="com::sun::star::linguistic2">XDictionaryList::endCollectEvents</member>
+        @see    com::sun::star::linguistic2::XDictionaryList::beginCollectEvents()
+        @see    com::sun::star::linguistic2::XDictionaryList::endCollectEvents()
     */
     short flushEvents();
 

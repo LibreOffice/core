@@ -78,9 +78,9 @@ published service DataAccessDescriptor
     /** specifies additional info to use when creating a connection from a <code>ConnectionResource</code>
 
         <p>This member is evaluated only when <code>ConnectionResource</code> is used: In this case,
-        <member scope="com::sun::star::sdbc">XDriverManager::getConnectionWithInfo</member> is used
+        com::sun::star::sdbc::XDriverManager::getConnectionWithInfo() is used
         to create a connection for the given connection resource, instead of
-        <member scope="com::sun::star::sdbc">XDriverManager::getConnection</member>.</p>
+        com::sun::star::sdbc::XDriverManager::getConnection().</p>
 
         <p>If the sequence is empty, it is ignored.</p>
     */
@@ -185,7 +185,7 @@ published service DataAccessDescriptor
         <p>Note that any superservices of com::sun::star::sdbc::ResultSet
         are also allowed. Especially, this member can denote an instance of the
         com::sun::star::sdb::RowSet, or an instance obtained
-        by calling <member scope="com::sun::star::sdb">XResultSetAccess::createResultSet</member>
+        by calling com::sun::star::sdb::XResultSetAccess::createResultSet()
         on such a com::sun::star::sdb::RowSet. This becomes important in
         conjunction with the <member>Selection</member> property.</p>
 
@@ -200,8 +200,8 @@ published service DataAccessDescriptor
         additionally refined with this property.</p>
 
         <p>The single elements of the <member>Selection</member> are either record numbers (see
-        <member scope="com::sun::star::sdbc">XResultSet::getRow</member>), or bookmarks (see
-        <member scope="com::sun::star::sdbcx">XRowLocate::getBookmark</member>).<br/>
+        com::sun::star::sdbc::XResultSet::getRow()), or bookmarks (see
+        com::sun::star::sdbcx::XRowLocate::getBookmark()).<br/>
         It is up to the component which provides or requires a DataAccessDescriptor to specify which of the
         two alternatives it expects. If it does <em>not</em> specify this, then the property
         <member>BookmarkSelection</member> becomes mandatory.</p>

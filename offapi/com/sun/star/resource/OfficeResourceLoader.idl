@@ -43,7 +43,7 @@ module com { module sun { module star { module resource {
     except that <code>Locale.getDefault()</code> is not used.</p>
 
     <p>Resource keys, as passed to the XResourceBundle::getDirectElement() or
-    <member scope="com::sun::star::container">XNameAccess::getByName</member>, have the following format:
+    com::sun::star::container::XNameAccess::getByName(), have the following format:
     <code>&lt;resource_type&gt;:&lt;numeric_identifier&gt;</code>, where <code>&lt;resource_type&gt; specifies
     the type of the requested resource (see below) and <code>&lt;numeric_identifier&gt;</code> is the numeric
     identifier of the resource.</p>

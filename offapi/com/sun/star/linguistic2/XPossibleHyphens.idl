@@ -70,7 +70,7 @@ published interface XPossibleHyphens : com::sun::star::uno::XInterface
              within the original word which denotes a hyphenation
              position corresponding to one of the hyphens in the
             string returned by
-            <member scope="com::sun::star::linguistic2">XPossibleHyphens::getPossibleHyphens</member>.
+            com::sun::star::linguistic2::XPossibleHyphens::getPossibleHyphens().
     */
     sequence<short> getHyphenationPositions();
 

@@ -52,25 +52,25 @@ published service HierarchyDataReadWriteAccess
 
     /** gives access to all contents provided by this provider.
 
-        <p><member scope="com::sun::star::lang">XSingleServiceFactory::createInstance</member>
+        <p>com::sun::star::lang::XSingleServiceFactory::createInstance()
         will create a new empty hierarchy data node. After it was created
         it's data members can be filled. Last, the node can be inserted as child
         of another node using
-        <member scope="com::sun::star::container">XNameContainer::insertByName</member>.
+        com::sun::star::container::XNameContainer::insertByName().
 
         <p>There are no special arguments that must be supported by
-        <member scope="com::sun::star::lang">XSingleServiceFactory::createInstanceWithArguments</member>
+        com::sun::star::lang::XSingleServiceFactory::createInstanceWithArguments()
      */
     interface com::sun::star::lang::XSingleServiceFactory;
 
     /** allows managing changes within the hierarchy.
 
-        <p><member scope="com::sun::star::util">XChangesBatch::getPendingChanges</member>
+        <p>com::sun::star::util::XChangesBatch::getPendingChanges()
         reports all changes within the hierarchy that are done through (direct
         or indirect) descendants of this element. The same set of changes is
         committed to persistent storage and/or made visible to other objects
         accessing the same data set, when
-        <member scope="com::sun::star::util">XChangesBatch::commitChanges</member>
+        com::sun::star::util::XChangesBatch::commitChanges()
         is invoked.
      */
     interface com::sun::star::util::XChangesBatch;

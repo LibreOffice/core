@@ -85,7 +85,7 @@ published interface XComponent: com::sun::star::uno::XInterface
         XComponent::addEventListener</member> is called, the call will not fail
         with a com::sun::star::lang::DisposedException, but
         the caller will be notified via the
-        <member scope="com::sun::star::lang">XEventListener::disposing</member>
+        com::sun::star::lang::XEventListener::disposing()
         callback.  This callback can occur synchronously within the
         <member scope="com::sun::star::lang">XComponent::addEventListener
         </member> call.</p>

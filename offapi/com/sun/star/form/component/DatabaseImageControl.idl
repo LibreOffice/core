@@ -36,7 +36,7 @@
     can be bound to a database field. This means that for instance with every record change, the content
     of the database field is taken, interpreted as image, and displayed in the control.<br/>
     Unlike other more text-based controls, it does not interpret the content of the field as text or double,
-    but as binary stream (see <member scope="com::sun::star::sdb">XColumn::getBinaryStream</member>).</p>
+    but as binary stream (see com::sun::star::sdb::XColumn::getBinaryStream()).</p>
 
     <p>Usually, an image control model can be bound to binary columns only, namely
     <member scope="com::sun::star::sdbc">DataType::BINARY</member>,

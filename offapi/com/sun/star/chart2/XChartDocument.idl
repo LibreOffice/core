@@ -85,7 +85,7 @@ interface XChartDocument : ::com::sun::star::frame::XModel
         createInternalDataProvider() has been called,
         but this is not necessary.  The chart can also create an
         internal data provider by other means, e.g. a call to
-        <member scope="com::sun::star::frame">XModel::initNew</member>.
+        com::sun::star::frame::XModel::initNew().
         </p>
      */
     boolean hasInternalDataProvider();

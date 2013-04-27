@@ -63,7 +63,7 @@ published struct DictionaryListEvent : com::sun::star::lang::EventObject
          <p>It will be empty if all
         com::sun::star::linguistic2::XDictionaryListEventListener
          are satisfied with the condensed representation of the
-        <member scope="com::sun::star::linguistic2">DictionaryListEvent::nCondensedEvent</member>.</p>
+        com::sun::star::linguistic2::DictionaryListEvent::nCondensedEvent().</p>
 
         @see    com::sun::star::linguistic2::DictionaryEvent
     */

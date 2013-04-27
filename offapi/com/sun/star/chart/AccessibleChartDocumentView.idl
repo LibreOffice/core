@@ -77,7 +77,7 @@ service AccessibleChartDocumentView
              ways.</dd>
          <dt>Relations</dt>
              <dd>At the moment relations are not supported.  The method
-             <member scope="com::sun::star::accessibility">XAccessibleContext::getAccessibleRelationSet</member>
+             com::sun::star::accessibility::XAccessibleContext::getAccessibleRelationSet()
              will always return an empty set.</dd>
          <dt>States</dt>
              <dd>The following states are supported:

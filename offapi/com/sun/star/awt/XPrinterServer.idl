@@ -43,7 +43,7 @@ published interface XPrinterServer: com::sun::star::uno::XInterface
     /** creates a new virtual printer.
 
         <p>You must call
-        <member scope="com::sun::star::awt">XPrinter::start</member>
+        com::sun::star::awt::XPrinter::start()
         to put the job into the printer spooler.</p>
      */
     com::sun::star::awt::XPrinter createPrinter( [in] string printerName );

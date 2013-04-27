@@ -47,7 +47,7 @@ service ValidatableBindableControlModel
     /** specifies support for binding the control value to an external component
 
         <p>If a value binding is established at the control model (by using
-        <member scope="com::sun::star::form::binding">XBindableValue::setValueBinding</member> with a non-<NULL/>
+        com::sun::star::form::binding::XBindableValue::setValueBinding() with a non-<NULL/>
         binding), this binding is analyzed for validation support. If it is present (read: if the
         binding also supports the XValidator interface), the binding is also
         established as validator, as if it has been passed to XValidatable::setValidator().<br/>

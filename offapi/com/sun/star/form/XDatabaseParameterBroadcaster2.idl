@@ -29,7 +29,7 @@ module com {  module sun {  module star {  module form {
 
     <p>Note that this interface provides exactly the same functionality as the
     XDatabaseParameterBroadcaster interface. It exists purely for compatibility
-    with the <member scope="com::sun::star::script">XEventAttacher::attachSingleEventListener</member>:
+    with the com::sun::star::script::XEventAttacher::attachSingleEventListener():
     It expects the methods for adding and removing listeners to follow a certain naming scheme,
     respective to the name of the listener which is being added/removed.</p>
 

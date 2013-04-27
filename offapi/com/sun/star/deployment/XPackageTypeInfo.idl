@@ -59,7 +59,7 @@ interface XPackageTypeInfo
     /** returns a file filter string for the file picker user interface.
         Both, the short description string and file filter string
         will be passed to
-        <member scope="com::sun::star::ui::dialogs">XFilterManager::appendFilter</member>.
+        com::sun::star::ui::dialogs::XFilterManager::appendFilter().
 
         @return
                 file filter string

@@ -36,7 +36,7 @@ module com {   module sun {   module star {   module rdf {
         each being a list of bindings for the above variables</li>
     </ol>
     Note that each query result retrieved via
-    <member scope="com::sun::star::container">XEnumeration::nextElement</member>
+    com::sun::star::container::XEnumeration::nextElement()
     has the type <type dim="[]">XNode</type>,
     the length of the sequence being the same as the number of query variables.
     </p>

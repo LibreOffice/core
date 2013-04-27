@@ -2360,7 +2360,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** indicates whether or not a visible row insert can be detected
         by calling
-        <member scope="com::sun::star::sdbc">XResultSet::rowInserted().</member>
+        com::sun::star::sdbc::XResultSet::rowInserted().()
         @param setType
             defined in
             com::sun::star::sdbc::ResultSetType

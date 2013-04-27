@@ -31,13 +31,13 @@ module com {  module sun {  module star {  module bridge {  module oleautomation
     then it is accessed through the
     com::sun::star::script::XInvocation interface.
     The methods
-    <member scope="com::sun::star::script">XInvocation::setValue</member>
+    com::sun::star::script::XInvocation::setValue()
     and
-    <member scope="com::sun::star::script">XInvocation::getValue</member>
+    com::sun::star::script::XInvocation::getValue()
     are used to access properties which do not have additional
     arguments. To access a property with additional arguments, the
     method
-    <member scope="com::sun::star::script">XInvocation::invoke</member>
+    com::sun::star::script::XInvocation::invoke()
     has to be used. The method implementation must decide, if the
     property is to be written or read so it can perform the proper
     operation on the Automation object. To make this decision, the

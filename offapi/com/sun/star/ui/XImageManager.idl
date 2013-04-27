@@ -177,7 +177,7 @@ interface XImageManager
         is placed into  the
         <member scope="com::sun::star::ui">ConfigurationEvent::Element</member>.
         The image set which has been changed is put into the
-        <member scope="com::sun::star::ui">ConfigurationEvent::aInfo</member>.
+        com::sun::star::ui::ConfigurationEvent::aInfo().
         </p>
     */
     interface com::sun::star::ui::XUIConfiguration;

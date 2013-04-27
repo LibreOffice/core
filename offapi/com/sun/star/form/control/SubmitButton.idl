@@ -38,14 +38,14 @@ module com {  module sun {  module star {  module form {  module control {
             at the component are given the chance to veto the submission.
         </li>
         <li>The model of the control is examined for an external submission object. That is,
-            <member scope="com::sun::star::form::submission">XSubmissionSupplier::getSubmission</member>
+            com::sun::star::form::submission::XSubmissionSupplier::getSubmission()
             is called at the model.<br/>
             If there is such a submission object, its
-            <member scope="com::sun::star::form::submission">XSubmission::submit</member> method is invoked.
+            com::sun::star::form::submission::XSubmission::submit() method is invoked.
         </li>
         <li>If there is no external submission, the parent object of the model is examined
             for the presence of the com::sun::star::form::XSubmit interface. If it
-            is present, it's <member scope="com::sun::star::form">XSubmit::submit</member> method is
+            is present, it's com::sun::star::form::XSubmit::submit() method is
             invoked.<br/>
             Since the parent object of a submit button can only be a com::sun::star::form::component::Form,
             this means that SubmitButtons are also able to submit com::sun::star::form::component::HTMLForms.

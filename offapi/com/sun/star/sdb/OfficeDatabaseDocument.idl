@@ -210,7 +210,7 @@ service OfficeDatabaseDocument
         life time issues, since a document needs to be closed when nobody needs it anymore.</p>
 
         <p>This implies that clients of a document need to ensure that as soon as they don't
-        need, they invoke <member scope="com::sun::star::util">XCloseable::close</member>.</p>
+        need, they invoke com::sun::star::util::XCloseable::close().</p>
 
         <p>Since this can be done by multiple clients, every client is additionally required
         to register itself as com::sun::star::util::XCloseListener at

@@ -90,7 +90,7 @@ published service CommandButton
 
         <p>This property is meaningful only when <member scope="com::sun::star::awt">UnoControlButtonModel::Toggle</member>
         is <TRUE/>. In this case, the <code>DefaultState</code> controls to which <code>State</code> the button will
-        be reset, when <member scope="com::sun::star::form">XReset::reset</member> is invoked.</p>
+        be reset, when com::sun::star::form::XReset::reset() is invoked.</p>
 
         <p>For a given implementation of the interface, if this (optional) interface is present, then also the optional
         property <member>DefaultState</member> must be present.</p>

@@ -36,8 +36,8 @@
 
     <p>All properties are vetoable properties.
     If you change the properties between a call to
-    <member scope="com::sun::star::awt">XPrinter::startPage</member> and a call
-    to <member scope="com::sun::star::awt">XPrinter::endPage</member>,
+    com::sun::star::awt::XPrinter::startPage() and a call
+    to com::sun::star::awt::XPrinter::endPage(),
     a com::sun::star::beans::PropertyVetoException is
     thrown.</p>
  */
@@ -68,12 +68,12 @@ published interface XPrinter: com::sun::star::awt::XPrinterPropertySet
     /** stops the current print job.
 
         <p>If the method
-        <member scope="com::sun::star::awt">XPrinter::end</member>
+        com::sun::star::awt::XPrinter::end()
         is called beforehand, then this call does nothing. If you call
-        <member scope="com::sun::star::awt">XPrinter::terminate</member>
+        com::sun::star::awt::XPrinter::terminate()
         in or before the call to
-        <member scope="com::sun::star::awt">XPrinter::start</member>,
-        <member scope="com::sun::star::awt">XPrinter::terminate</member>
+        com::sun::star::awt::XPrinter::start(),
+        com::sun::star::awt::XPrinter::terminate()
         returns <FALSE/>. This call must not block the thread.</p>
 
         @see end

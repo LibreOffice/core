@@ -49,7 +49,7 @@
     usual com::sun::star::document::OfficeDocuments.<br/>
     The only thing worth mentioning here is that they support the
     com::sun::star::container::XChild interface, whose
-    <member scope="com::sun::star::container">XChild::getParent</member> method can be used to
+    com::sun::star::container::XChild::getParent() method can be used to
     obtain the database document which the embedded document belongs to.
     </p>
 
@@ -63,7 +63,7 @@ service DocumentContainer
     /** provides functionality for treating the container as part of a hierarchy
         of a database document's sub documents.
 
-        <p>The <member scope="com::sun::star::ucb">XCommandProcessor::execute</member> method
+        <p>The com::sun::star::ucb::XCommandProcessor::execute() method
         of a <code>DocumentDefinition</code> supports at least the following commands, additionally to
         the ones already supported by the DefinitionContent:
         <ul>

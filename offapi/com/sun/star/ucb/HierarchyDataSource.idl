@@ -41,7 +41,7 @@ published service HierarchyDataSource
         fragments of the hierarchy data.
 
         <p>The parameter <var>aServiceSpecifier</var> passed to
-        <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments</member>
+        com::sun::star::lang::XMultiServiceFactory::createInstanceWithArguments()
         supports at least the service specifier
         <code>"com.sun.star.ucb.HierarchyDataReadAccess"</code>, which will
         create a <b>read-only view</b> to the data. The object that is created
@@ -50,12 +50,12 @@ published service HierarchyDataSource
         <p><b>Optionally</b> the factory may support <b>writable views</b>. A
         writable view is requested by passing the service specifier
         <code>"com.sun.star.ucb.HierarchyDataReadWriteAccess"</code> to
-        <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments</member>
+        com::sun::star::lang::XMultiServiceFactory::createInstanceWithArguments()
         The object that is created implements the service
         HierarchyDataReadWriteAccess.
 
         <p>The arguments passed to
-        <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments</member>
+        com::sun::star::lang::XMultiServiceFactory::createInstanceWithArguments()
         in parameter <var>aArguments</var> specify the view of the data that
         should be created. That is, they determine the subset of elements that
         can be accessed starting from the returned object. Each element of the
@@ -81,9 +81,9 @@ published service HierarchyDataSource
         <p>An implementation must ignore unknown arguments.
 
         <p>The implementation of
-        <member scope="com::sun::star::lang">XMultiServiceFactory::createInstance</member>
+        com::sun::star::lang::XMultiServiceFactory::createInstance()
         must behave exactly as if
-        <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments</member>
+        com::sun::star::lang::XMultiServiceFactory::createInstanceWithArguments()
         were called passing one single property named <code>nodepath</code>
         where the property value is an empty string. Thus it always creates a
         view to the root of the hierarchy data.

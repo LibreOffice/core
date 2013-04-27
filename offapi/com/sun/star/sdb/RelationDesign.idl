@@ -49,7 +49,7 @@ published service RelationDesign
     /** is used to initialize the RelationDesign.
 
         <p>Parameters (passed to the method
-        <member scope="com::sun::star::lang">XInitialization::initialize</member>)
+        com::sun::star::lang::XInitialization::initialize())
         have to be instances of com::sun::star::beans::PropertyValue, where the
         <member scope="com::sun::star::beans">PropertyValue::Name</member> member specifies what the parameter controls,
         with the <member scope="com::sun::star::beans">PropertyValue::Value</member> member containing the value

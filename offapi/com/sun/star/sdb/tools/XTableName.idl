@@ -41,7 +41,7 @@ module com {  module sun {  module star {  module sdb { module tools {
     names.</p>
 
     <p>The component itself does not have life-time control mechanisms, i.e. you
-    cannot explicitly dispose it (<member scope="com::sun::star::lang">XComponent::dispose</member>),
+    cannot explicitly dispose it (com::sun::star::lang::XComponent::dispose()),
     and you cannot be notified when it dies.<br/>
     However, if your try to access any of its methods or attributes, after the
     connection which was used to create it was closed, a com::sun::star::lang::DisposedException
@@ -110,7 +110,7 @@ interface XTableName
 
         <p>Retrieving this attribute is equivalent to obtaining the tables
         container from the connection (via com::sun::star::sdbcx::XTablesSupplier),
-        and calling its <member scope="com::sun::star::container">XNameAccess::getByName</member>
+        and calling its com::sun::star::container::XNameAccess::getByName()
         method with the ComposedName.</p>
 
         @throws com::sun::star::container::NoSuchElementException

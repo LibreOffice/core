@@ -39,7 +39,7 @@ published service MailMerge
 {
     /** interface to execute the mail merge action.
 
-        <p>The <member scope="com::sun::star::task">XJob::execute</member>
+        <p>The com::sun::star::task::XJob::execute()
         method of the interface accepts exactly the same properties
         as provided by this service in its argument sequence.</p>
 
@@ -103,7 +103,7 @@ published service MailMerge
         <p>Note that any superservices of com::sun::star::sdbc::ResultSet
         are also allowed. Especially, this member can denote an instance of the
         com::sun::star::sdb::RowSet, or an instance obtained
-        by calling <member scope="com::sun::star::sdb">XResultSetAccess::createResultSet</member>
+        by calling com::sun::star::sdb::XResultSetAccess::createResultSet()
         on such a com::sun::star::sdb::RowSet. This becomes important in
         conjunction with the <member>Selection</member> property.</p>
 

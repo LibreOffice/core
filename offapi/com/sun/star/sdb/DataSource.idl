@@ -151,7 +151,7 @@ published service DataSource
 
         <p>Additionally, the property bag supports default values of properties, and thus the
         com::sun::star::beans::XPropertyState interface. If you add an own property to
-        the bag using <member scope="com::sun::star::beans">XPropertyContainer::addProperty</member>, you need
+        the bag using com::sun::star::beans::XPropertyContainer::addProperty(), you need
         to specify an initial value, which is also used as default value (exceptions see below).</p>
 
         <p>Effectively, the property bag represented by <code>Settings</code> contains two classes of properties:

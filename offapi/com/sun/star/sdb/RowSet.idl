@@ -81,8 +81,8 @@ published interface XParametersSupplier;
         </tr>
         <tr><td valign="top"><em>operation done</em></td>
             <td valign="top">When the operation is done, you get a notification about this. It may be a
-            <member scope="com::sun::star::sdbc">XRowSetListener::cursorMoved</member> or a
-            <member scope="com::sun::star::sdbc">XRowSetListener::rowChanged</member> call or a
+            com::sun::star::sdbc::XRowSetListener::cursorMoved() or a
+            com::sun::star::sdbc::XRowSetListener::rowChanged() call or a
             XRowsChangeListener::rowsChanged() call.
             </td>
         </tr>
@@ -147,13 +147,13 @@ published interface XParametersSupplier;
     </p>
 
     <h3>Deletions</h3>
-    <p>Via <member scope="com::sun::star::sdbc">XResultSetUpdate::deleteRow</member>, you can delete the current row of a
+    <p>Via com::sun::star::sdbc::XResultSetUpdate::deleteRow(), you can delete the current row of a
     RowSet. This deleted row then doesn't vanish immediately, but is still present, and subsequent calls to
-    <member scope="com::sun::star::sdbc">XResultSet::rowDeleted</member> will return <TRUE/>. The deleted row "vanishes" from
+    com::sun::star::sdbc::XResultSet::rowDeleted() will return <TRUE/>. The deleted row "vanishes" from
     the RowSet as soon as the cursor is moved away from it.<br/>
     As a consequence, the behavior of several other methods is affected:<br/>
     <dl>
-        <dt><member scope="com::sun::star::sdbc">XResultSet::getRow</member></dt>
+        <dt>com::sun::star::sdbc::XResultSet::getRow()</dt>
         <dd>returns the position of the cursor, which has not been changed by the deletion.</dd>
 
         <dt>com::sun::star::sdbc::XResultSet: <code>next</code>, <code>first</code>, <code>last</code>, <code>absolute</code>,
@@ -164,25 +164,25 @@ published interface XParametersSupplier;
             <code>15</code>, followed by <code>next</code>, then your RowSet afterwards
             still is on row 15, since the deleted row vanished with the move operation.</dd>
 
-        <dt><member scope="com::sun::star::sdbc">XResultSet::refreshRow</member></dt>
+        <dt>com::sun::star::sdbc::XResultSet::refreshRow()</dt>
         <dd>will throw an exception when the cursor is on a deleted row.</dd>
 
         <dt>com::sun::star::sdbc::XRow: <code>getFoo</code></dt>
         <dd>will return an empty value when the cursor is on a deleted row.</dd>
 
-        <dt><member scope="com::sun::star::sdbcx">XRowLocate::getBookmark</member></dt>
+        <dt>com::sun::star::sdbcx::XRowLocate::getBookmark()</dt>
         <dd>will throw an exception when the cursor is on a deleted row.</dd>
 
         <dt>com::sun::star::sdbc::XRowUpdate: <code>updateFoo</code></dt>
         <dd>will throw an exception when the cursor is on a deleted row.</dd>
 
-        <dt><member scope="com::sun::star::sdbc">XResultSetUpdate::deleteRow</member></dt>
+        <dt>com::sun::star::sdbc::XResultSetUpdate::deleteRow()</dt>
         <dd>will throw an exception when the cursor is on a deleted row.</dd>
 
-        <dt><member scope="com::sun::star::sdbc">XResultSetUpdate::moveToInsertRow</member></dt>
+        <dt>com::sun::star::sdbc::XResultSetUpdate::moveToInsertRow()</dt>
         <dd>will let the deleted row vanish from the result set. As a consequence, the <member>RowCount</member>
             will decrease. Also, subsequent calls to
-            <member scope="com::sun::star::sdbc">XResultSetUpdate::moveToCurrentRow</member> will not
+            com::sun::star::sdbc::XResultSetUpdate::moveToCurrentRow() will not
             be able to move back to the deleted row (since it vanished), but only to the
             row after the deleted row.</dd>
     </dl>
@@ -221,8 +221,8 @@ published service RowSet
         <p>The optional support of this interface is already implied with the support of the com::sun::star::sdbc::ResultSet service.</p>
 
         <p>However, note that the additional support of the XRowSetApproveBroadcaster interface results
-        in a semantical extension: the methods <member scope="com::sun::star::sdbc">XResultSetUpdate::insertRow</member>,
-        <member scope="com::sun::star::sdbc">XResultSetUpdate::updateRow</member> and <member scope="com::sun::star::sdbc">XResultSetUpdate::deleteRow</member>
+        in a semantical extension: the methods com::sun::star::sdbc::XResultSetUpdate::insertRow(),
+        com::sun::star::sdbc::XResultSetUpdate::updateRow() and com::sun::star::sdbc::XResultSetUpdate::deleteRow()
         will now throw the RowSetVetoException if the action which is to be performed was vetoed
         by one of the XRowSetApproveListener's.</p>
      */
@@ -233,7 +233,7 @@ published service RowSet
         <p>The optional support of this interface is already implied with the support of the com::sun::star::sdbcx::ResultSet service.</p>
 
         <p>However, note that the additional support of the XRowSetApproveBroadcaster interface results
-        in a semantical extension: the method <member scope="com::sun::star::sdbcx">XDeleteRows::deleteRows</member>
+        in a semantical extension: the method com::sun::star::sdbcx::XDeleteRows::deleteRows()
         will now throw the RowSetVetoException if the deletion was vetoed
         by one of the XRowSetApproveListener's.</p>
      */

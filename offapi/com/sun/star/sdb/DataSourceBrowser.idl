@@ -210,7 +210,7 @@ published service DataSourceBrowser
 
     <p>
     You may use the
-    <member scope="com::sun::star::frame">XDispatchProvider::queryDispatch</member>
+    com::sun::star::frame::XDispatchProvider::queryDispatch()
     method
     to query for objects which implement the
     com::sun::star::frame::XDispatch

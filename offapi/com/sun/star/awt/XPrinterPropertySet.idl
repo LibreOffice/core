@@ -33,8 +33,8 @@
 /** represents an extended property set for printer properties.
 
     <p>All properties are vetoable properties. If you change the properties
-    between <member scope="com::sun::star::awt">XPrinter::startPage</member>
-    and <member scope="com::sun::star::awt">XPrinter::endPage</member>, a
+    between com::sun::star::awt::XPrinter::startPage()
+    and com::sun::star::awt::XPrinter::endPage(), a
     com::sun::star::beans::PropertyVetoException
     is thrown.</p>
 
