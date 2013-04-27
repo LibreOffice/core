@@ -47,7 +47,7 @@ published service LayerFilter
     /**
       provides read access to the filtered contents.
 
-      <p> Method <member>XLayer::readData</member> will render a filtered version
+      <p> Method XLayer::readData() will render a filtered version
          of the data produced by the same method of the source object.
      </p>
       */

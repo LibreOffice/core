@@ -61,9 +61,9 @@ published interface XActiveDataControl: com::sun::star::uno::XInterface
     /** does a weak abort.
 
         <p>It closes all connected resources and calls
-        <member>XInputStream::close</member> or
-        <member>XOutputStream::close</member> and fires the
-        <member>XStreamListener::terminated</member>-event.</p>
+        XInputStream::close() or
+        XOutputStream::close() and fires the
+        XStreamListener::terminated()-event.</p>
      */
     void terminate();
 

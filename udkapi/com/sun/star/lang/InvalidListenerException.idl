@@ -25,7 +25,7 @@
 
 module com {  module sun {  module star {  module lang {
 
-/** is thrown by the <member>XConnectionPoint::advice</member> method
+/** is thrown by the XConnectionPoint::advice() method
     to indicate that the listener has not supplied the necessary
     interface.
 

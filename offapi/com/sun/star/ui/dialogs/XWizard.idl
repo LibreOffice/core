@@ -62,7 +62,7 @@ interface XWizardPage;
     Disabled pages are skipped during sequential traveling, and not selectable in the roadmap.</p>
 
     <p>The state of the <em>Next</em> button in the dialog will be automatically maintained in most situations,
-    depending on the results of calls to the <member>XWizardController::canAdvance</member> and <member>XWizardPage::canAdvance</member>
+    depending on the results of calls to the XWizardController::canAdvance() and XWizardPage::canAdvance()
     methods. More sophisticated wizard logic, however, will need manual calls to the enableButton() method.
     Also, the <em>Finish</em> button needs to be maintained by the wizard's controller, too, as it cannot be decided
     generically in which situations it should be enabled or disabled.</p>
@@ -145,7 +145,7 @@ interface XWizard
 
     /** updates the wizard elements which are related to traveling.
 
-        <p>For instance, the <em>Next</em> button is disabled if the current page's <member>XWizardPage::canAdvance</member>
+        <p>For instance, the <em>Next</em> button is disabled if the current page's XWizardPage::canAdvance()
         method returns <FALSE/>.</p>
 
         <p>You usually call this method from within a wizard page whose state changed in a way that it affects the
@@ -185,7 +185,7 @@ interface XWizard
         However, if your current state is <code>2</code>, then you can not switch to the second path anymore.</p>
 
         @param PathIndex
-            the index of the path, as used in the <member>Wizard::createMultiplePathsWizard</member> constructor.
+            the index of the path, as used in the Wizard::createMultiplePathsWizard() constructor.
         @param Final
             <p>If <TRUE/>, the path will be completely activated, even if it is a conflicting path (i.e. there is another
             path which shares the first <code>k</code> states with the to-be-activated path.)</p>

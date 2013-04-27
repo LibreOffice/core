@@ -28,7 +28,7 @@ interface XLogFormatter;
 
 /** specifies a service which formats log records as single line plain text
 
-    <p>Every log record, as passed to <member>XLogFormatter::format</member>, will
+    <p>Every log record, as passed to XLogFormatter::format(), will
     be formatted into a single text line, assembling the sequence number, the thread ID,
     the time of the logged event, the source class/method name (if applicable), and the
     log message.</p>

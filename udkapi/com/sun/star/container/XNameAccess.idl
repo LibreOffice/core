@@ -70,7 +70,7 @@ published interface XNameAccess: com::sun::star::container::XElementAccess
             <TRUE/> if an element with this name is in
             the container, <FALSE/> otherwise.
 
-        <p>In many cases the next call is <member>XNameAccess::getByName</member>.
+        <p>In many cases the next call is XNameAccess::getByName().
         You should optimize this case.  </p>
 
         @param aName

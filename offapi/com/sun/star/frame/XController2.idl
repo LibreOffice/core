@@ -46,14 +46,14 @@ interface XController2 : XController
     /** specifies the view name of the controller.
 
         <p>A view name is a logical name, which can be used to create views of the same
-        type. The name is meaningful only in conjunction with <member>XModel2::createViewController</member>
+        type. The name is meaningful only in conjunction with XModel2::createViewController()
         - if it's passed there, a view/controller pair of the same type will be created.</p>
     */
     [readonly, attribute] string                            ViewControllerName;
 
     /** denotes the arguments used to create the instance.
 
-        <p>Usually, controllers are created via <member>XModel2::createViewController</member>, where the
+        <p>Usually, controllers are created via XModel2::createViewController(), where the
         caller can pass not only a controller name, but also arguments parameterizing the to-be-created instance.
         Those arguments used at creation time can subsequently be retrieved using the <code>CreationArguments</code>
         member.</p>

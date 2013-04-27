@@ -87,7 +87,7 @@ published interface XURLTransformer: com::sun::star::uno::XInterface
         @param aURL
                 the URL which contains alls necessary information in a structured form. The
                 member <member>URL::Complete</member> contains the URL in string notation after
-                the operation finished successfully. Otherwise the content of <member>URL::complete</member>
+                the operation finished successfully. Otherwise the content of URL::complete()
                 is not defined.
 
         @returns

@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module accessibility {
 
     <p>This exception is thrown to indicate the an accessibility component
     has been queried for state information that it can not provide.  Used by
-    <member>XAccessibleContext::getLocale</member>.</p>
+    XAccessibleContext::getLocale().</p>
 
     @see XAccessibleContext::getLocale()
 

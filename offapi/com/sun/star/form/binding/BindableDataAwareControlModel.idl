@@ -91,9 +91,9 @@ module com {  module sun {  module star {  module form { module binding {
     </p>
 
     <p>When a BindableDataAwareControlModel is being bound to an external value,
-    using <member>XBindableValue::setValueBinding</member>,
+    using XBindableValue::setValueBinding(),
     then the control model (it's value property, respectively) and the external value are
-    initially synchronized by setting the external value (<member>XValueBinding::getValue</member>)
+    initially synchronized by setting the external value (XValueBinding::getValue())
     at the control model.</p>
 
 */

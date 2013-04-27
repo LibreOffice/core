@@ -34,7 +34,7 @@ exception LicenseException : com::sun::star::uno::Exception
     /** name of the extension.
 
         The display name of the extension.
-        See <member>XPackage::getDisplayName</member>
+        See XPackage::getDisplayName()
      */
     string ExtensionName;
     /** contains the text of the license.

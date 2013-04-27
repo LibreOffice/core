@@ -36,7 +36,7 @@ published interface XEventListener: com::sun::star::uno::XInterface
         <p>All listeners and all other objects, which reference the
         broadcaster should release the reference to the source.
         No method should be invoked anymore on this object (
-        including <member>XComponent::removeEventListener</member> ).
+        including XComponent::removeEventListener() ).
         </p>
 
         <p>This method is called for every listener registration

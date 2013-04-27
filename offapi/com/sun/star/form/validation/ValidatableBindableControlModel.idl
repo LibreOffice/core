@@ -50,10 +50,10 @@ service ValidatableBindableControlModel
         <member scope="com::sun::star::form::binding">XBindableValue::setValueBinding</member> with a non-<NULL/>
         binding), this binding is analyzed for validation support. If it is present (read: if the
         binding also supports the XValidator interface), the binding is also
-        established as validator, as if it has been passed to <member>XValidatable::setValidator</member>.<br/>
+        established as validator, as if it has been passed to XValidatable::setValidator().<br/>
         If, while this binding is active (in both its roles as value binding and validator),
         an attempt is made to establish another validator, this is blocked with raising a
-        com::sun::star::util::VetoException upon calling <member>XValidatable::setValidator</member>.</p>
+        com::sun::star::util::VetoException upon calling XValidatable::setValidator().</p>
     */
     service com::sun::star::form::binding::BindableControlModel;
 };

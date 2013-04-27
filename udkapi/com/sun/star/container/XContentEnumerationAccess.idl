@@ -51,7 +51,7 @@ published interface XContentEnumerationAccess: com::sun::star::uno::XInterface
     /** @returns
                 all names of services of which instances exist in this object.
 
-        <p><member>XContentEnumerationAccess::createContentEnumeration</member>
+        <p>XContentEnumerationAccess::createContentEnumeration()
         creates an enumeration for all the service names which are
         listed here. For all others it creates no enumeration. </p>
      */

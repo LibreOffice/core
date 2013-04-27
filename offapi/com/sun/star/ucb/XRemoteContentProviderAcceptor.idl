@@ -51,7 +51,7 @@ published interface XRemoteContentProviderAcceptor: com::sun::star::uno::XInterf
         can---through this callback---tell the calling side that the
         implementation no longer needs the remote content provider.  (And the
         calling side should call
-        <member>XRemoteContentProviderAcceptor::removeRemoteContentProvider</member>
+        XRemoteContentProviderAcceptor::removeRemoteContentProvider()
         then.)
 
         To enable connection control, it is recommended that this argument

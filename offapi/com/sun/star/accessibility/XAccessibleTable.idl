@@ -39,16 +39,16 @@ module com { module sun { module star { module accessibility {
    cell-clusters of a table have to be at the same time children of the
    table.  This is necessary to be able to convert row and column indices
    into child indices and vice versa with the methods
-   <member>XAccessibleTable::getAccessibleIndex</member>,
-   <member>XAccessibleTable::getAccessibleRow</member>, and
-   <member>XAccessibleTable::getAccessibleColumn</member>.</p>
+   XAccessibleTable::getAccessibleIndex(),
+   XAccessibleTable::getAccessibleRow(), and
+   XAccessibleTable::getAccessibleColumn().</p>
 
    <p>The range of valid coordinates for this interface are implementation
    dependent.  However, that range includes at least the intervals from the
    from the first row or column with the index 0 up to the last (but not
    including) used row or column as returned by
-   <member>XAccessibleTable::getAccessibleRowCount</member> and
-   <member>XAccessibleTable::getAccessibleColumnCount</member>.  In case of
+   XAccessibleTable::getAccessibleRowCount() and
+   XAccessibleTable::getAccessibleColumnCount().  In case of
    the Calc the current range of valid indices for retrieving data include
    the maximal table size--256 columns and 32000 rows--minus one.</p>
 
@@ -251,9 +251,9 @@ interface XAccessibleTable : ::com::sun::star::uno::XInterface
 
         <p>This method has been renamed from the Java name
         <code>getAccessibleAt</code> to
-        <member>XAccessibleTable::getAccessibleCellAt</member> to avoid
+        XAccessibleTable::getAccessibleCellAt() to avoid
         ambiguities with the
-        <member>XAccessibleComponent::getAccessibleAt</member> method when
+        XAccessibleComponent::getAccessibleAt() method when
         accessed, for instance, from StarBasic.</p>
 
         @param nRow
@@ -316,7 +316,7 @@ interface XAccessibleTable : ::com::sun::star::uno::XInterface
         specified cell.
 
         <p>This is the same index that would be returned by calling
-        <member>XAccessibleContext::getAccessibleIndexInParent</member> for
+        XAccessibleContext::getAccessibleIndexInParent() for
         that accessible object.</p>
 
         @param nRow

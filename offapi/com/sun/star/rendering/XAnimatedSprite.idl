@@ -42,7 +42,7 @@ interface XAnimatedSprite : XSprite
 
         The speed of the animation is given in cycles per second
         (where a cycle is defined as one full animation run, i.e. the
-        full [0,1] range of the <member>XAnimation::render</member>'s
+        full [0,1] range of the XAnimation::render()'s
         t parameter, or a full sequence of sprite bitmaps drawn). Once
         an animation is running, the associated
         XSpriteCanvas handles screen updates
@@ -56,7 +56,7 @@ interface XAnimatedSprite : XSprite
         @param nSpeed
         The speed of the animation in cycles per second (where a cycle
         is defined as one full animation run, i.e. the full [0,1]
-        range of the <member>XAnimation::render</member>'s t
+        range of the XAnimation::render()'s t
         parameter, or a full sequence of sprite bitmaps drawn).
      */
     void startAnimation( [in] double nSpeed );
@@ -64,7 +64,7 @@ interface XAnimatedSprite : XSprite
 
     /** Stop the animation sequence.<p>
 
-        A subsequent <member>XAnimatedSprite::startAnimation</member>
+        A subsequent XAnimatedSprite::startAnimation()
         will commence the sequence at the point where it was stopped
         with here. Once an animation is stopped, the associated
         XSpriteCanvas does not update changed sprites
@@ -152,7 +152,7 @@ interface XAnimatedSprite : XSprite
 
         @param bUpdateAnimation
         Whether this method should implicitly call
-        <member>XSpriteCanvas::updateAnimation</member> or not.
+        XSpriteCanvas::updateAnimation() or not.
 
         @throws com::sun::star::lang::IllegalArgumentException
         if one of the passed parameters does not lie in the specified,

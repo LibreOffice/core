@@ -44,7 +44,7 @@ service ValueBinding
 
         <p>As long as this property is <TRUE/>, the value binding should throw
         a InvalidBindingStateException when its
-        <member>XValueBinding::setValue</member> method is invoked.</p>
+        XValueBinding::setValue() method is invoked.</p>
     */
     [optional, property, bound, readonly]  boolean  ReadOnly;
 

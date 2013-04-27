@@ -41,7 +41,7 @@ service TabularDataProviderArguments
         <p>The range address string must be interpretable by the
         component that implements XDataProvider and gets
         this property as argument to
-        <member>XDataProvider::detectArguments</member>.</p>
+        XDataProvider::detectArguments().</p>
 
         <p>The representation string is of a form that may be used in the
         user interface.  Example for OOo Calc: "$Sheet1.$A$1:$D$7",
@@ -52,7 +52,7 @@ service TabularDataProviderArguments
         <member>DataRowSource</member>.</p>
 
         <p>When used as output of
-        <member>XDataProvider::detectArguments</member> this is the
+        XDataProvider::detectArguments() this is the
         range that spans the ranges of all given
         XDataSequences.  If the result is ambiguous,
         i.e., a splitting of this range would not yield the same

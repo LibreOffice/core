@@ -65,7 +65,7 @@ interface XAccessibleMultiLineText
         number.</p>
 
         <p>The number of lines can be obtained by calling
-        <member>XAccessibleMultiLineText::getLineNumberAtIndex</member>
+        XAccessibleMultiLineText::getLineNumberAtIndex()
         with the index of the last character. In a loop, the last line
         has been reached when <member>TextSegment::SegmentEnd</member>
         of the returned value is equal to the index of the last
@@ -89,15 +89,15 @@ interface XAccessibleMultiLineText
     /** Returns the text of the line in which the caret is located.
 
         <p>The substring returned will most of the time be identical to
-        calling <member>XAccessibleText::getTextAtIndex</member> with
-        the index returned by <member>XAccessibleText::getCaretPosition</member>
+        calling XAccessibleText::getTextAtIndex() with
+        the index returned by XAccessibleText::getCaretPosition()
         and type  <const scope="AccessibleTextType">LINE</type> beside the
         following special case:</p>
 
         <p>Some text implementations place the caret at the end of the current
         line when the <b>End</b> key gets pressed. Since the index of this position
         is identical to the one of the first character of the following line,
-        <member>XAccessibleMultiLineText::getLineNumberAtIndex</member> will
+        XAccessibleMultiLineText::getLineNumberAtIndex() will
         return the line following the current one in this case.</p>
 
         @return
@@ -111,14 +111,14 @@ interface XAccessibleMultiLineText
     /** Returns the number of the line in which the caret is located.
 
         <p>The line number returned will most of the time be identical to
-        calling <member>XAccessibleMultiLineText::getLineNumberAtIndex</member>
-        with the index returned by <member>XAccessibleText::getCaretPosition</member>
+        calling XAccessibleMultiLineText::getLineNumberAtIndex()
+        with the index returned by XAccessibleText::getCaretPosition()
         beside the following special case:</p>
 
         <p>Some text implementations place the caret at the end of the current
         line when the <b>End</b> key gets pressed. Since the index of this position
         is identical to the one of the first character of the following line,
-        <member>XAccessibleMultiLineText::getLineNumberAtIndex</member> will
+        XAccessibleMultiLineText::getLineNumberAtIndex() will
         return the line following the current one in this case.</p>
 
         @return

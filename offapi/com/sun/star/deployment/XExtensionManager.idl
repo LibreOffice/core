@@ -278,7 +278,7 @@ interface XExtensionManager
        Added extensions will be added to the database and removed extensions
        will be removed from the database.
        The active extensions are determined. That is, shared or bundled extensions
-       are not necessaryly registered (<member>XPackage::registerPackage</member>).
+       are not necessaryly registered (XPackage::registerPackage()).
 
        @return
               If true - then at least one extension was removed or added. Otherwise
@@ -305,10 +305,10 @@ interface XExtensionManager
         are also not returned.
 
         Extensions returned by this functions are not returned by
-        <member>XExtensionManger::getDeployedExtension</member>
-        <member>XExtensionManger::getDeployedExtensions</member>
-        <member>XExtensionManger::getAllExtensions</member>
-        <member>XExtensionManger::getExtensionsWithSameIdentifier</member>
+        XExtensionManger::getDeployedExtension()
+        XExtensionManger::getDeployedExtensions()
+        XExtensionManger::getAllExtensions()
+        XExtensionManger::getExtensionsWithSameIdentifier()
     */
     sequence<XPackage> getExtensionsWithUnacceptedLicenses(
         [in] string repository,

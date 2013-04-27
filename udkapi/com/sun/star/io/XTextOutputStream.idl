@@ -40,8 +40,8 @@ published interface XTextOutputStream: com::sun::star::io::XOutputStream
         defined by setEncoding().
 
         <p>Line breaks or delimiters that may be neccessary
-        to support <member>XTextInputStream::readLine</member>
-        and <member>XTextInputStream::readString</member>
+        to support XTextInputStream::readLine()
+        and XTextInputStream::readString()
         have to be added manually to the parameter string.</p>
 
         @see setEncoding

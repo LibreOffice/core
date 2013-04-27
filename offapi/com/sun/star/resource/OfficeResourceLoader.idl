@@ -34,7 +34,7 @@ module com { module sun { module star { module resource {
     types of resources within those files.</p>
 
     <p>Clients have to specify the resource file base name in the call to
-    <member>XResourceBundleLoader::loadBundle</member> resp. <member>XResourceBundleLoader::loadBundle_Default</member>
+    XResourceBundleLoader::loadBundle() resp. XResourceBundleLoader::loadBundle_Default()
     method. The loader will extent this base name so that the resulting name conforms to the OpenOffice.org
     resource file naming conventions, and look up the respective resource file, for the requested locale,
     in OpenOffice.org's installation.</p>
@@ -42,7 +42,7 @@ module com { module sun { module star { module resource {
     <p>The lookup process uses the fallback mechanism as described at the XResourceBundle interface,
     except that <code>Locale.getDefault()</code> is not used.</p>
 
-    <p>Resource keys, as passed to the <member>XResourceBundle::getDirectElement</member> or
+    <p>Resource keys, as passed to the XResourceBundle::getDirectElement() or
     <member scope="com::sun::star::container">XNameAccess::getByName</member>, have the following format:
     <code>&lt;resource_type&gt;:&lt;numeric_identifier&gt;</code>, where <code>&lt;resource_type&gt; specifies
     the type of the requested resource (see below) and <code>&lt;numeric_identifier&gt;</code> is the numeric

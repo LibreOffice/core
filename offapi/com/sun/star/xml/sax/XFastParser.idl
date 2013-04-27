@@ -52,7 +52,7 @@ module com {  module sun {  module star {  module xml {  module sax {
 
     <p>Parsing starts with calling parseStream(). If the parser
     finds a valid XML file with the given InputSource, it calls
-    <member>XFastDocumentHandler::startDocument</member> first.
+    XFastDocumentHandler::startDocument() first.
 
     <p>This parser generates either "fast" events that use integer token
     values for namespaces, elements and attributes or "unknown" events for
@@ -73,8 +73,8 @@ module com {  module sun {  module star {  module xml {  module sax {
 
     <p>For each element the parser sends a create child element event to the
     elements parent context by calling
-    <member>XFastContextHandler::createFastChildContext</member> for known
-    elements or <member>XFastContextHandler::createUnknownChildContext</member>
+    XFastContextHandler::createFastChildContext() for known
+    elements or XFastContextHandler::createUnknownChildContext()
     for unknown elements.
     <br>The parent context for the root element is the XFastDocumentHandler
     itself.
@@ -83,12 +83,12 @@ module com {  module sun {  module star {  module xml {  module sax {
     the element and all of its children are created.
 
     <p>If a valid context is returned this context gets a start event by a call to
-    <member>XFastContextHandler::startFastElement</member> for known elements or
-    <member>XFastContextHandler::startUnknownElement</member> for unknown elements.
+    XFastContextHandler::startFastElement() for known elements or
+    XFastContextHandler::startUnknownElement() for unknown elements.
 
     <p>After processing all its child elements the context gets an end event by a call to
-    <member>XFastContextHandler::endFastElement</member> for known elements or
-    <member>XFastContextHandler::endUnknownElement</member> for unknown elements.
+    XFastContextHandler::endFastElement() for known elements or
+    XFastContextHandler::endUnknownElement() for unknown elements.
 
     <p>It is valid to return one instance of XFastContextHandler more
     than once. It is even possible to only use the XFastDocumentHandler
@@ -96,7 +96,7 @@ module com {  module sun {  module star {  module xml {  module sax {
 
     <p>After the last element is processed the parser generates an end document
     event at the XFastDocumentHandler by calling
-    <member>XFastDocumentHandler::endDocument</member>.
+    XFastDocumentHandler::endDocument().
 
     @see http://wiki.services.openoffice.org/wiki/FastParser
 */

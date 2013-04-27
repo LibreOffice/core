@@ -76,7 +76,7 @@ published interface XChartData: com::sun::star::uno::XInterface
 
         <p>Always use this method to check, if a value is <em>not a
         number</em>.  If you compare the value returned by
-        <member>XChartData::getNotANumber</member> to another double
+        XChartData::getNotANumber() to another double
         value using the = operator, you may not get the desired
         result!</p>
 

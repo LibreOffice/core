@@ -51,9 +51,9 @@ published interface XComponent: com::sun::star::uno::XInterface
         </p>
         <p>
         The object must notify all registered listeners using the method
-        <member>XEventListener::disposing</member>. All notfied objects
+        XEventListener::disposing(). All notfied objects
         should release there references to this object without
-        calling <member>XComponent::removeEventListener</member>
+        calling XComponent::removeEventListener()
         (the disposed object will release the listeners eitherway).
         </p>
 
@@ -75,7 +75,7 @@ published interface XComponent: com::sun::star::uno::XInterface
     /** adds an event listener to the object.
 
         <p>The broadcaster fires the disposing method of this listener
-        if the <member>XComponent::dispose</member> method is called.</p>
+        if the XComponent::dispose() method is called.</p>
 
         <p>It is suggested to allow multiple registration of the same listener,
         thus for each time a listener is added, it has to be removed.</p>

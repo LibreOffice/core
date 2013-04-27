@@ -28,7 +28,7 @@
 module com { module sun { module star { module ucb {
 
 /** This service contains the interfaces to implement by objects
-    returned by <member>XPropertySetRegistry::openPropertySet</member>.
+    returned by XPropertySetRegistry::openPropertySet().
   */
 published service PersistentPropertySet
 {

@@ -36,9 +36,9 @@ published constants DeviceCapability
     const long RASTEROPERATIONS = 1;
 
 
-    /** supports the <member>XDevice::createBitmap</member>,
-        the <member>XDevice::createDevice</member> and the
-        <member>XGraphics::copy</member> methods.
+    /** supports the XDevice::createBitmap(),
+        the XDevice::createDevice() and the
+        XGraphics::copy() methods.
 
         @see XGraphics::setRasterOp
      */

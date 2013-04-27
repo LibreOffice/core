@@ -25,7 +25,7 @@
 
  module com {  module sun {  module star {  module lang {
 
-/** is thrown by the <member>XConnectionPoint::advise</member> method
+/** is thrown by the XConnectionPoint::advise() method
     to indicate that there is only one listener allowed.
 
     @see     XConnectionPoint

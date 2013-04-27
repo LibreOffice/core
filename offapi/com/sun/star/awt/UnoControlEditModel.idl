@@ -118,7 +118,7 @@ published service UnoControlEditModel
 
 
     /** specifies if hard line breaks will be returned in the
-        <member>XTextComponent::getText</member> method.
+        XTextComponent::getText() method.
      */
     [property] boolean HardLineBreaks;
 

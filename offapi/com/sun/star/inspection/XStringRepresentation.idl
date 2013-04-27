@@ -34,7 +34,7 @@ interface XStringRepresentation
             The to-be-converted property value.
         @return
             The converted string representation of the property value.
-        @see <member>XPropertyHandler::convertToControlValue</member>
+        @see XPropertyHandler::convertToControlValue()
     */
     string  convertToControlValue([in]any PropertyValue) raises( com::sun::star::uno::Exception );
 
@@ -43,7 +43,7 @@ interface XStringRepresentation
             The to-be-converted control value.
         @param ControlValueType
             The target type of the conversion.
-        @see <member>XPropertyHandler::convertToPropertyValue</member>
+        @see XPropertyHandler::convertToPropertyValue()
     */
     any     convertToPropertyValue(
                             [in]string ControlValue,

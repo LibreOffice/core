@@ -65,7 +65,7 @@ interface XAccessibleContext : ::com::sun::star::uno::XInterface
         @param i
             The index may have any value.  If it is outside the range from 0
             to n-1, with n being the number of children as returned by
-            <member>XAccessibleContext::getAccessibleChild</member> an empty
+            XAccessibleContext::getAccessibleChild() an empty
             reference is returned.
         @return
             If the object has an i-th child the returned value is a
@@ -130,7 +130,7 @@ interface XAccessibleContext : ::com::sun::star::uno::XInterface
 
     /** Return the object's localized name.
 
-        <p>See <member>XAccessibleContext::getAccessibleRole</member>'s
+        <p>See XAccessibleContext::getAccessibleRole()'s
         documentation for the relation between an object's name and role.
         Names should be unique, at least between children of the same
         parent, although the uniqueness is neither enforced nor used inside

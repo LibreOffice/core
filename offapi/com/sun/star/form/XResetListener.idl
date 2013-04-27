@@ -34,9 +34,9 @@
     XReset interface performs a reset.</br>
     Order of events:
     <ul><li>a reset is triggered on a component</li>
-        <li>the component calls <member>XReset::approveReset</member> on all its listeners</li>
+        <li>the component calls XReset::approveReset() on all its listeners</li>
         <li>if all listeners approve the reset operation, the data is reset</li>
-        <li>the component calls <member>XReset::resetted</member> on all its listeners</li>
+        <li>the component calls XReset::resetted() on all its listeners</li>
     </ul>
     </p>
 

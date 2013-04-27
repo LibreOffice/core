@@ -92,7 +92,7 @@ interface XSprite : ::com::sun::star::uno::XInterface
         components, be aware that sprite content moved beyond the
         sprite area (a box from (0,0) to (spriteWidth,spriteHeight))
         might (but need not) be clipped. Use
-        <member>XSprite::move</member> to change the sprite location
+        XSprite::move() to change the sprite location
         on screen. The canvas implementations are free, if they have a
         cached representation of the sprite at hand, to transform only
         this cached representation (e.g. a bitmap), instead of

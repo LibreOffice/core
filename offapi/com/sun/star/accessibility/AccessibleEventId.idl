@@ -161,7 +161,7 @@ constants AccessibleEventId
         <member>AccessibleEventObject::NewValue</member> field contain the
         old and new value as a number.  Its exact type is implementation
         dependent but has to be the same as is returned by the
-        <member>XAccessibleValue::getCurrentValue</member> function.
+        XAccessibleValue::getCurrentValue() function.
     */
 
     const short VALUE_CHANGED = 11;

@@ -44,7 +44,7 @@ published interface XDataPilotTables: com::sun::star::container::XNameAccess
     /** creates a data pilot descriptor.
 
         <p>This descriptor can be used with
-        <member>XDataPilotTables::addTable</member>.</p>
+        XDataPilotTables::addTable().</p>
 
         @see com::sun::star::sheet::DataPilotDescriptor
      */

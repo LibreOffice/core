@@ -65,7 +65,7 @@ module com {  module sun {  module star {  module frame {
         If <FALSE/> the listener must not interact with the user.
         If <TRUE/> the listener can interact with the user now.
         After interaction the listener must call
-        <member>XSessionManagerClient::interactionDone</member>
+        XSessionManagerClient::interactionDone()
         on the session manager client service object.
 
         @see XSessionManagerClient

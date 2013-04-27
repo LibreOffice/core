@@ -59,10 +59,10 @@ published constants NodeAttribute
 
     /** indicates that contents shall be fused.
 
-        <p>Used in <member>XLayerHandler::addOrReplaceNode</member>,
-        <member>XLayerHandler::addOrReplaceNodeFromTemplate</member>,
-        <member>XUpdateHandler::addOrReplaceNode</member>, and
-        <member>XUpdateHandler::addOrReplaceNodeFromTemplate</member>.</p>
+        <p>Used in XLayerHandler::addOrReplaceNode(),
+        XLayerHandler::addOrReplaceNodeFromTemplate(),
+        XUpdateHandler::addOrReplaceNode(), and
+        XUpdateHandler::addOrReplaceNodeFromTemplate().</p>
 
         @since OOo 2.0.3
      */

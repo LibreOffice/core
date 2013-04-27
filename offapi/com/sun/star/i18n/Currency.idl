@@ -55,7 +55,7 @@ published struct Currency
     boolean Default;
 
     /** If this currency is the one used in compatible number format codes with
-        <member>FormatElement::formatIndex</member> values in the range 12..17.
+        FormatElement::formatIndex() values in the range 12..17.
         Those format codes are used to generate some old style currency format
         codes for compatibility with StarOffice5 and StarOffice4.
 

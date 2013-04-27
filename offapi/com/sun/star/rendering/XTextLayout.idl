@@ -156,7 +156,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
     /** Query the overall bounding box of the text.<p>
 
         This method is similar to
-        <member>XTextLayout::queryTextMeasures</member>, only that the
+        XTextLayout::queryTextMeasures(), only that the
         overall bounds are returned by this method.<p>
 
         @return the overall bounding box for the given layout, in font

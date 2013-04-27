@@ -31,7 +31,7 @@ module chart2
 {
 
 /** parameters that may be passed to
-    <member>XChartTypeTemplate::createDiagramByDataSource</member>.
+    XChartTypeTemplate::createDiagramByDataSource().
  */
 service StandardDiagramCreationParameters
 {

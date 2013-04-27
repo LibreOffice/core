@@ -28,7 +28,7 @@ module com {   module sun {   module star {   module rdf {
 /** Constants to specify some well-known URIs.
 
     <p>
-    These constants are for use with <member>URI::createKnown</member>.
+    These constants are for use with URI::createKnown().
     </p>
 
     @since OOo 3.2

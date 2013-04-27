@@ -49,7 +49,7 @@ published interface XRemoteContentProviderChangeNotifier:
 
         @param Listener.
         Some listener previously added via
-        <member>XRemoteContentProviderChangeNotifier::addRemoteContentProviderChangeListener</member>.
+        XRemoteContentProviderChangeNotifier::addRemoteContentProviderChangeListener().
      */
     void
     removeRemoteContentProviderChangeListener(

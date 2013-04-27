@@ -36,8 +36,8 @@ published interface XLibraryContainer3: com::sun::star::script::XLibraryContaine
         returns the location of the library link target.
 
         The returned URL is literally the same as the one provided in
-        <member>XLibraryContainer::createLibraryLink</member>. Otherwise the behavior
-        is the same as <member>XLibraryContainer2::getLibraryLinkURL</member>
+        XLibraryContainer::createLibraryLink(). Otherwise the behavior
+        is the same as XLibraryContainer2::getLibraryLinkURL()
      */
     string getOriginalLibraryLinkURL( [in] string Name )
             raises( com::sun::star::lang::IllegalArgumentException,

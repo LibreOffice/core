@@ -42,7 +42,7 @@ struct ItemListEvent : ::com::sun::star::lang::EventObject
     /** the text of the item.
 
         <p>If the event being notified did not touch the text of an item, this member is empty. For instance, upon
-        invocation of <member>XItemList::setItemImage</member>, only <code>ItemImageURL</code> will be set, and
+        invocation of XItemList::setItemImage(), only <code>ItemImageURL</code> will be set, and
         <code>ItemText</code> will be empty.</p>
     */
     ::com::sun::star::beans::Optional< string >
@@ -51,7 +51,7 @@ struct ItemListEvent : ::com::sun::star::lang::EventObject
     /** the URL of the image of the item
 
         <p>If the event being notified did not touch the image of an item, this member is empty. For instance, upon
-        invocation of <member>XItemList::setItemText</member>, only <code>ItemText</code> will be set, and
+        invocation of XItemList::setItemText(), only <code>ItemText</code> will be set, and
         <code>ItemImageURL</code> will be empty.</p>
     */
     ::com::sun::star::beans::Optional< string >

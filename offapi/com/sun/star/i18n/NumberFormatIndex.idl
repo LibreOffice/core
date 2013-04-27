@@ -44,7 +44,7 @@ module com { module sun { module star { module i18n {
 
     <code>&lt;FormatElement formatindex="0"&gt;</code> <br/>
 
-    (see also <member>FormatElement::formatIndex</member>).
+    (see also FormatElement::formatIndex()).
 
     The index values are also used to define the <code>enum
     NfIndexTableOffset</code> in file svtools/inc/zforlist.hxx </p>

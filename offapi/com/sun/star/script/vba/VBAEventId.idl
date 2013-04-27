@@ -30,7 +30,7 @@ module com {  module sun {  module star { module script { module vba {
     document code module will be executed.</p>
 
     <p>Each event expects some specific arguments to be passed to
-    <member>XVBAEventProcessor::processVbaEvent</member>.</p>
+    XVBAEventProcessor::processVbaEvent().</p>
 
     @see XVBAEventProcessor
  */

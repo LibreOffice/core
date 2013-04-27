@@ -136,7 +136,7 @@ interface XPackage
         @param startup
                indicates that registration is adapted to the particular
                startup scenario. That is, it is set to <TRUE/>, when called
-               from <member>XExtensionManager::synchronize</member>
+               from XExtensionManager::synchronize()
         @param xAbortChannel
                abort channel to asynchronously abort the registration process,
                or <NULL/>
@@ -160,7 +160,7 @@ interface XPackage
         @param startup
                indicates that registration is adapted to the particular
                startup scenario. That is, it is set to <TRUE/>, when called
-               from <member>XExtensionManager::synchronize</member>
+               from XExtensionManager::synchronize()
         @param xAbortChannel
                abort channel to asynchronously abort the registration process,
                or <NULL/>
@@ -335,13 +335,13 @@ interface XPackage
     /** return a URL to a directory which contains the registration data.
 
         This data may be created when calling
-        <member>XPackage::registerPackage</member>.  If this is the case is
+        XPackage::registerPackage().  If this is the case is
         indicated by <member
         scope="com::sun::star::beans">Optional::IsPresent</member> of the return
         value.
         If registration data are created during registration, but the package is
         currently not registered, for example after calling
-        <member>XPackage::revokePackage</member>, then <member
+        XPackage::revokePackage(), then <member
         scope="com::sun::star::beans">Optional::IsPresent</member> is <TRUE/> and
         the <member scope="com::sun::star::beans">Optional::Value</member> may
         be an empty string.
@@ -352,7 +352,7 @@ interface XPackage
     /** indicates if this object represents a removed extension or extension
         item. This is the case when it was created by providing
         <TRUE/> for the <code>removed</code> parameter in the function
-        <member>XPackageRegistry::bindPackage</member>.
+        XPackageRegistry::bindPackage().
      */
     boolean isRemoved();
 

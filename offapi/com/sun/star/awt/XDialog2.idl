@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module awt {
  */
 published interface XDialog2: com::sun::star::awt::XDialog
 {
-    /** hides the dialog and then causes <member>XDialog::execute</member>
+    /** hides the dialog and then causes XDialog::execute()
         to return with the given result value.
      */
     void endDialog ( [in] long Result );

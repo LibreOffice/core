@@ -50,7 +50,7 @@ interface XItemListListener : ::com::sun::star::lang::XEventListener
                 [in] ItemListEvent Event
             );
     /** is called when the list has been completely cleared, i.e. after an invocation of
-        <member>XItemList::removeAllItems</member>
+        XItemList::removeAllItems()
     */
     void    allItemsRemoved(
                 [in] ::com::sun::star::lang::EventObject Event

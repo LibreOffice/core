@@ -44,7 +44,7 @@ published interface XContentProviderManager: com::sun::star::uno::XInterface
         the content provider to register.
 
         <p>This may be <NULL/>, in which case a later
-        <member>XContentProvider::queryContent</member> with an
+        XContentProvider::queryContent() with an
         XContentIdentifier that matches the <var>Scheme</var>
         will simply return <NULL/>. These "dummy" content providers are useful
         in combination with other content providers that are registered on a

@@ -41,7 +41,7 @@
     <p>Implementations of this interface are abstract windows.
     The main reason to instantiate this implementation is to show the window
     on the screen. Before the window appears on the screen, the
-    <member>XControl::createPeer</member> method must be called.</p>
+    XControl::createPeer() method must be called.</p>
 
     <p>If the implementation of the control does not distinguish
     between model, view and controller, it must allow to set

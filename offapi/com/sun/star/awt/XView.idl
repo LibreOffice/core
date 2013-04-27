@@ -43,7 +43,7 @@ published interface XView: com::sun::star::uno::XInterface
 
 
     /** returns the output device which was set using the method
-        <member>XView::setGraphics</member>.
+        XView::setGraphics().
      */
     com::sun::star::awt::XGraphics getGraphics();
 

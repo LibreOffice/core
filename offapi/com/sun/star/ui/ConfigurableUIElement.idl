@@ -85,7 +85,7 @@ service ConfigurableUIElement
         <p>
         If the property <member>Persistent</member> is <TRUE/> changes on the structure of
         the user interface element are written back to configuration source. When this property is
-        changed, afterwards <member>XUIElementSettings::updateSettings</member>  must be called so
+        changed, afterwards XUIElementSettings::updateSettings()  must be called so
         the user interface element tries to retrieve its settings from the new user interface
         configuration manager.
         </p>

@@ -67,8 +67,8 @@ published interface XParametersSupplier;
         <tr><td valign="top"><em>approving</em></td>
             <td valign="top">Before anything really happens, any veto listeners are called to approve the operation
                 which is just being done. This may be either a
-                <member>XRowSetApproveListener::approveCursorMove</member> or
-                <member>XRowSetApproveListener::approveRowChange</member> call.
+                XRowSetApproveListener::approveCursorMove() or
+                XRowSetApproveListener::approveRowChange() call.
                 @see XRowSetApproveListener
             </td>
         </tr>
@@ -83,7 +83,7 @@ published interface XParametersSupplier;
             <td valign="top">When the operation is done, you get a notification about this. It may be a
             <member scope="com::sun::star::sdbc">XRowSetListener::cursorMoved</member> or a
             <member scope="com::sun::star::sdbc">XRowSetListener::rowChanged</member> call or a
-            <member>XRowsChangeListener::rowsChanged</member> call.
+            XRowsChangeListener::rowsChanged() call.
             </td>
         </tr>
         <tr><td valign="top"><em>row state</em></td>

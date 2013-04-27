@@ -38,7 +38,7 @@ module com { module sun { module star { module ucb {
     does not necessarily mandate what type of data/content may be contained
     within Documents. The type of data/content is defined by the MediaType
     property which is different from the content type returned from the
-    <member>XContent::getContentType</member> method. The MediaType property
+    XContent::getContentType() method. The MediaType property
     is mapped to the equivalent WebDAV property and the WebDAV server calculates
     the value.
 
@@ -124,9 +124,9 @@ published service WebDAVDocumentContent
 
     /** is an enhanced version of XCommandProcessor that has an
         additional method for releasing command identifiers obtained via
-        <member>XCommandProcessor::createCommandIdentifier</member> to avoid
+        XCommandProcessor::createCommandIdentifier() to avoid
         resource leaks. For a detailed description of the problem refer to
-        <member>XCommandProcessor2::releaseCommandIdentifier</member>.
+        XCommandProcessor2::releaseCommandIdentifier().
 
         <p>Where many existing Content implementations do not
         (yet), every new implementation should support this interface.

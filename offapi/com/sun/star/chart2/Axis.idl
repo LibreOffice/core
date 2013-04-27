@@ -100,7 +100,7 @@ service Axis
 
         <p>To determine a source format, the axis can query the
         XDataSequences used by the data series attached
-        to it (see <member>XDataSequence::getNumberFormatKeyByIndex</member>).
+        to it (see XDataSequence::getNumberFormatKeyByIndex()).
         </p>
      */
     [property, maybevoid]      long      NumberFormat;

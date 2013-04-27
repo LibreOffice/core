@@ -41,7 +41,7 @@ service ValidatableControlModel
         <p>Via this service, validatable control models inherit the
         com::sun::star::util::XCloneable interface.<br/>
         If an validatable control model, at which a validator has been set (via
-        <member>XValidatable::setValidator</member>), is being cloned, then the
+        XValidatable::setValidator()), is being cloned, then the
         validator is also set at the clone. Effectively, this means that
         both control model instances share the same validator instance.</p>
     */
@@ -54,17 +54,17 @@ service ValidatableControlModel
         XValidatableFormComponent is derived from).</p>
 
         <p>Easy access to the current value of the control, as well as it's validity
-        (relative to the active validator), is provided by the methods <member>XValidatableFormComponent::isValid</member>
-        and <member>XValidatableFormComponent::getCurrentValue</member>.</p>
+        (relative to the active validator), is provided by the methods XValidatableFormComponent::isValid()
+        and XValidatableFormComponent::getCurrentValue().</p>
 
-        <p>Note that the type of the value provided by <member>XValidatableFormComponent::getCurrentValue</member>
+        <p>Note that the type of the value provided by XValidatableFormComponent::getCurrentValue()
         is not specified here, but depends on the concrete control type.</p>
     */
     interface XValidatableFormComponent;
 
     /** enables support for validators with dynamic validity constraints.
 
-        <p>As soon as a validator is set via <member>XValidatable::setValidator</member>, the validatable
+        <p>As soon as a validator is set via XValidatable::setValidator(), the validatable
         control model registers itself as listener. If the validity constraint of the validator
         changes, the ValidatableControlModel re-validates it's current valid, and
         broadcasts any resuling changes to all its XFormComponentValidityListener, if

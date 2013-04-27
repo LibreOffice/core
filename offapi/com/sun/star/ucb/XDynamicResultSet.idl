@@ -59,7 +59,7 @@ module com { module sun { module star { module ucb {
     </p>
 
     <p>
-    The calling of <member>XDynamicResultSetListener::notify</member> has
+    The calling of XDynamicResultSetListener::notify() has
     to happen in an own thread, because it could take a longer time and any
     actions ??? until the listener returns the call. So don't block the notify-causing
     action.
@@ -102,9 +102,9 @@ published interface XDynamicResultSet: com::sun::star::lang::XComponent
 
         @trows ListenerAlreadySetException
         if someone already has registered as listener via
-        <member>XDynamicResultSet::setListener</member> or if someone has
+        XDynamicResultSet::setListener() or if someone has
         established a connection to a CachedDynamicResultSet
-        via <member>XDynamicResultSet::connectToCache</member>.
+        via XDynamicResultSet::connectToCache().
     */
     com::sun::star::sdbc::XResultSet getStaticResultSet()
         raises( com::sun::star::ucb::ListenerAlreadySetException );
@@ -124,7 +124,7 @@ published interface XDynamicResultSet: com::sun::star::lang::XComponent
         if this method is called more than once during the life of the
         implementation object or if this method is called if someone already
         has fetched the ContentResultSet via
-        <member>XDynamicResultSet::getStaticResultSet</member>.
+        XDynamicResultSet::getStaticResultSet().
 
     */
     void setListener( [in] XDynamicResultSetListener Listener )
@@ -146,7 +146,7 @@ published interface XDynamicResultSet: com::sun::star::lang::XComponent
 
         @throws ListenerAlreadySetException
         if if someone already has fetched the ContentResultSet via
-        <member>XDynamicResultSet::getStaticResultSet</member>.
+        XDynamicResultSet::getStaticResultSet().
 
         @throws AlreadyInitializedException
         if <var>Cache</var> was already initialized with another source.

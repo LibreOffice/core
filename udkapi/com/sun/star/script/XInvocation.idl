@@ -98,8 +98,8 @@ published interface XInvocation: com::sun::star::uno::XInterface
     /** returns <TRUE/> if the method with the specified name exists, else <FALSE/>.
 
         <p>This optimizes the calling sequence
-        ( <member>XInvocation::hasMethod</member>,
-        <member>XInvocation::invoke</member> )!</p>
+        ( XInvocation::hasMethod(),
+        XInvocation::invoke() )!</p>
 
                 @param aName
                     specifies the name of the method.
@@ -109,11 +109,11 @@ published interface XInvocation: com::sun::star::uno::XInterface
     /** returns <TRUE/> if the property with the specified name exists, else <FALSE/>.
 
                 <p>This optimizes the calling sequence
-                ( <member>XInvocation::hasProperty</member>,
-                <member>XInvocation::getValue</member> ) or
+                ( XInvocation::hasProperty(),
+                XInvocation::getValue() ) or
 
-                ( <member>XInvocation::hasProperty</member>,
-                <member>XInvocation::setValue</member> )!
+                ( XInvocation::hasProperty(),
+                XInvocation::setValue() )!
 
                     @param aName
                 specifies the name of the property.

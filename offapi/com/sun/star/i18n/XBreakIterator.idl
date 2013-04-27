@@ -92,9 +92,9 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
             if the first non-space character is an Asian character,
             then, since Asian word break needs language specific
             wordbreak dictionaries, the method will return -1 in
-            <member>Boundary::endPos</member> and the position after the
+            Boundary::endPos() and the position after the
             Asian character (i.e. the space character) in
-            <member>Boundary::startPos</member>. The caller then has to
+            Boundary::startPos(). The caller then has to
             call this method again with a correct <em>aLocale</em>
             referring to the Asian character, which is then the previous
             character of the space character where <em>nStartPos</em>

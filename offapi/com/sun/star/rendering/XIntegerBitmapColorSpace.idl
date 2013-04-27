@@ -141,7 +141,7 @@ interface XIntegerBitmapColorSpace : XColorSpace
 
         @return the corresponding sequence of sRGB colors.
 
-        @see <member>XIntegerBitmapColorSpace::convertIntegerToARGB</member>
+        @see XIntegerBitmapColorSpace::convertIntegerToARGB()
 
         @throws a
         com::sun::star::lang::IllegalArgumentException,

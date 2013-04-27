@@ -40,7 +40,7 @@ interface XDatabaseParameterBroadcaster2: XDatabaseParameterBroadcaster
 {
     /** registers an XDatabaseParameterListener
 
-        <p>This method behaves exactly as the <member>XDatabaseParameterBroadcaster::addParameterListener</member>
+        <p>This method behaves exactly as the XDatabaseParameterBroadcaster::addParameterListener()
         method inherited from the base interface.</p>
     */
     void addDatabaseParameterListener( [in] com::sun::star::form::XDatabaseParameterListener aListener );
@@ -48,7 +48,7 @@ interface XDatabaseParameterBroadcaster2: XDatabaseParameterBroadcaster
 
     /** revokes an XDatabaseParameterListener
 
-        <p>This method behaves exactly as the <member>XDatabaseParameterBroadcaster::removeParameterListener</member>
+        <p>This method behaves exactly as the XDatabaseParameterBroadcaster::removeParameterListener()
         method inherited from the base interface.</p>
     */
     void removeDatabaseParameterListener( [in] com::sun::star::form::XDatabaseParameterListener aListener );

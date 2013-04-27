@@ -25,7 +25,7 @@ module com {  module sun {  module star {  module sheet {
 
 
 /** Constants of bit masks used with
-    <member>XFormurmulaOpCodeMapper::getAvailableMappings</member> to
+    XFormurmulaOpCodeMapper::getAvailableMappings() to
     specify for which group of symbols the mappings are to be obtained.
 
     If no bit is set, a sequence of special mappings is returned in the

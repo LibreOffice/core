@@ -68,7 +68,7 @@ published interface XPrintAreas: com::sun::star::uno::XInterface
 
         <p>Title columns can be automatically repeated on all subsequent
         print pages to the right, using
-        <member>XPrintAreas::setPrintTitleColumns</member>.</p>
+        XPrintAreas::setPrintTitleColumns().</p>
 
         @returns
             the range of columns that is specified as title columns range.
@@ -82,7 +82,7 @@ published interface XPrintAreas: com::sun::star::uno::XInterface
 
         <p>Title columns can be automatically repeated on all subsequent
         print pages to the right, using
-        <member>XPrintAreas::setPrintTitleColumns</member>.</p>
+        XPrintAreas::setPrintTitleColumns().</p>
 
         @param aTitleColumns
             the title columns range.
@@ -109,7 +109,7 @@ published interface XPrintAreas: com::sun::star::uno::XInterface
 
         <p>Title rows can be automatically repeated on all subsequent
         print pages to the bottom, using
-        <member>XPrintAreas::setPrintTitleRows</member>.</p>
+        XPrintAreas::setPrintTitleRows().</p>
 
         @returns
             the range of rows that is specified as title rows range.
@@ -123,7 +123,7 @@ published interface XPrintAreas: com::sun::star::uno::XInterface
 
         <p>Title rows can be automatically repeated on all subsequent
         print pages to the bottom, using
-        <member>XPrintAreas::setPrintTitleRows</member>.</p>
+        XPrintAreas::setPrintTitleRows().</p>
 
         @param aTitleRows
             the title rows range.

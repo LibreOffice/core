@@ -36,7 +36,7 @@ published struct ContentInfo
         <p>This is an implementation specific string characterizing the
         kind of a content (e.g. "application/vnd.sun.star.hierarchy-link").
         The value of this member should match the value returned by
-        <member>XContent::getContentType</member> of an appropriate content.
+        XContent::getContentType() of an appropriate content.
     */
     string Type;
 
@@ -56,7 +56,7 @@ published struct ContentInfo
 
     /** This field contains a list with the properties which must be set at
         a content that was just created using
-        <member>XContentCreator::createNewContent</member> before it can be
+        XContentCreator::createNewContent() before it can be
         committed (by executing the command "insert" at the new content).
 
         <p>If one of the properties is missing, the insert command will fail.

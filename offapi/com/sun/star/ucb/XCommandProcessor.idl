@@ -53,15 +53,15 @@ published interface XCommandProcessor : com::sun::star::uno::XInterface
         only should get one identifier per thread and assign it to every
         command executed by that thread.</p>
 
-        <p>Also, after a call to <member>XCommandProcessor::abort</member>, an
+        <p>Also, after a call to XCommandProcessor::abort(), an
         identifier should not be used any longer (and instead be released by a
-        call to <member>XCommandProcessor2::releaseCommandIdentifier</member>),
+        call to XCommandProcessor2::releaseCommandIdentifier()),
         because it may well abort <em>all</em> further calls to
-        <member>XCommandProcessor::execute</member>.</p>
+        XCommandProcessor::execute().</p>
 
         <p>To avoid ever-increasing resource consumption, the identifier
         should be released via
-        <member>XCommandProcessor2::releaseCommandIdentifier</member>
+        XCommandProcessor2::releaseCommandIdentifier()
         when it is no longer used.</p>
 
         @returns
@@ -79,14 +79,14 @@ published interface XCommandProcessor : com::sun::star::uno::XInterface
 
         @param CommandId
         is a unique id for the command. This identifier was obtained by calling
-        <member>XCommandProcessor::createCommandIdentifier</member>. A value of
+        XCommandProcessor::createCommandIdentifier(). A value of
         zero can be used, if the command never shall be aborted. Different
         threads MUST NOT share one command identifier (except <code>0</code>).
         This can easily achieved, if every thread that wants to use an
         XCommandProcessor, obtains exactly one identifier
-        using <member>XCommandProcessor::createCommandIdentifier</member>.
+        using XCommandProcessor::createCommandIdentifier().
         This identifier can be used for every call to
-        <member>XCommandProcessor::execute</member> done by that thread.
+        XCommandProcessor::execute() done by that thread.
 
         @param Environment
         is the execution environment.
@@ -116,7 +116,7 @@ published interface XCommandProcessor : com::sun::star::uno::XInterface
 
         @param CommandId
         is a unique id for the command to abort. This must be the identifier
-        passed to <member>XCommandProcessor::execute</member> for the command
+        passed to XCommandProcessor::execute() for the command
         to abort.
     */
     void abort( [in] long CommandId );

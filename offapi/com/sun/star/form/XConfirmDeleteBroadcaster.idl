@@ -38,7 +38,7 @@ published interface XConfirmDeleteBroadcaster: com::sun::star::uno::XInterface
 
     /** remembers the specified listener to receive an event for confirming deletions
 
-        <p><member>XConfirmDeleteListener::confirmDelete</member> is called before a
+        <p>XConfirmDeleteListener::confirmDelete() is called before a
         deletion is performed. You may use the event to write your own confirmation messages.</p>
 
         @param aListener

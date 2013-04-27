@@ -66,7 +66,7 @@ interface XObjectInspectorModel
     /** describes the property categories used by the property handlers.
 
         <p>Properties can be sorted into different categories, described by the <member>LineDescriptor::Category</member>
-        attribute, which is filled in <member>XPropertyHandler::describePropertyLine</member>
+        attribute, which is filled in XPropertyHandler::describePropertyLine()
         method of your property handler.<br/>
         Those names provided by the handlers are programmatic names. All other information
         about categories is part of the PropertyCategoryDescriptor, and
@@ -103,7 +103,7 @@ interface XObjectInspectorModel
         <p>If for two different properties the same order index is returned, the
         ObjectInspector will assume the order in which those properties
         were provided by the respective property handler
-        (<member>XPropertyHandler::getSupportedProperties</member>).<br/>
+        (XPropertyHandler::getSupportedProperties()).<br/>
         If two such properties originate from different handlers, they will be ordered according
         to the order of the handlers, as provided in the <member>HandlerFactories</member> attribute.</p>
 

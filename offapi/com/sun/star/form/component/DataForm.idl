@@ -77,7 +77,7 @@ published service DataForm
         functionality of this interface could be simulated by using setting some properties manually,
         <member scope="com::sun::star::sdbc">XRowSet::execute</member>, moving the row set cursor and so on.</p>
 
-        <p>One main difference between <member>XLoadable::load</member> and <member scope="com::sun::star::sdbc">XRowSet::execute</member>
+        <p>One main difference between XLoadable::load() and <member scope="com::sun::star::sdbc">XRowSet::execute</member>
         is that if you use the former, the row set is positioned on the first record, while in the latter case
         it is position <em>before</em> the it.</p>
     */

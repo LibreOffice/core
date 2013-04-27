@@ -29,7 +29,7 @@ module com { module sun { module star { module ucb {
 /** This interface should be implemented together with
     XRemoteContentProviderAcceptor and allows for a lazy
     implementation of
-    <member>XRemoteContentProviderAcceptor::addRemoteContentProvider</member>.
+    XRemoteContentProviderAcceptor::addRemoteContentProvider().
 
     The way this works might change, therefore this interface is marked as
     deprecated.
@@ -40,11 +40,11 @@ published interface XRemoteContentProviderActivator: com::sun::star::uno::XInter
 {
     /** Activate (i.e., register at the broker) the remote content providers
         that until now have only been remembered by
-        <member>XRemoteContentProviderAcceptor::addRemoteContentProvider</member>,
+        XRemoteContentProviderAcceptor::addRemoteContentProvider(),
         but not registered.
 
         <p>This allows for
-        <member>XRemoteContentProviderAcceptor::addRemoteContentProvider</member>
+        XRemoteContentProviderAcceptor::addRemoteContentProvider()
         to be implemented in a lazy fashion (remember the remote content
         providers, but do not register them right away), which can increase
         performance in certain situations.  But it is not required that an

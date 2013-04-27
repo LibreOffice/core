@@ -40,7 +40,7 @@ published service RemoteAccessContentProvider
         to specify that certain XContentIdentifiers map to
         XContents from a certain remote UCB.  The Arguments
         string in the
-        <member>XParameterizedContentProvider::registerInstance</member>
+        XParameterizedContentProvider::registerInstance()
         call must contain the UNO URL of the remote UCB.
 
         @descr

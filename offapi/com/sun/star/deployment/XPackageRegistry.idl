@@ -49,11 +49,11 @@ interface XPackageRegistry
         actual extension files do not exist anymore. The registration data must
         then be cleaned of all the remains of that extension. To to that one
         creates an XPackage object on behalf of that extension and
-        calls <member>XPackage::revokePakage</member>. The parameter
+        calls XPackage::revokePakage(). The parameter
         <code>removed</code> indicates this case. The returned object may not
         rely on the file or folder to which refers <code>url</url>. Instead it
         must use previously saved data to successfully carry out the revocation
-        of this object (<member>XPackage::revokePackage</member>).
+        of this object (XPackage::revokePackage()).
 
         The implementation must ensure that there is only one instance of
         XPackage for the same <code>url</code> at any
@@ -80,7 +80,7 @@ interface XPackageRegistry
 
         @param unfulfilledPrerequisites
               has a value other null if the extension could not be installed previously
-              because <member>XPackage::checkPrerequisites</member> failed.
+              because XPackage::checkPrerequisites() failed.
 
         @param identifier
                the identifier of the extension

@@ -24,7 +24,7 @@ module com { module sun { module star { module ucb {
 
 /** contains data of several rows of a ContentResultSet.
 
-    <p>This struct is returned from <member>XFetchProvider::fetch</member>,
+    <p>This struct is returned from XFetchProvider::fetch(),
     for example.
 */
 

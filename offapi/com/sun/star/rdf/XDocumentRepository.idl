@@ -77,7 +77,7 @@ interface XDocumentRepository : XRepository
         RDFa statements are handled specially because they are not logically
         part of any named graph in the repository.
         Also, they have rather unusual semantics;
-        just using <member>XNamedGraph::addStatement</member> would be
+        just using XNamedGraph::addStatement() would be
         ambiguous:
         if the object is a XMetadatable, do we insert
         the object itself (URI) or its literal content (RDFa)?
@@ -176,7 +176,7 @@ interface XDocumentRepository : XRepository
         <p>
         This method exists because RDFa statements are not part of any named
         graph, and thus they cannot be enumerated with
-        <member>XNamedGraph::getStatements</member>.
+        XNamedGraph::getStatements().
         </p>
 
         <p>

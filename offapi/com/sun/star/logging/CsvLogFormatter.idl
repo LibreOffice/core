@@ -28,7 +28,7 @@ interface XCsvLogFormatter;
 
 /** specifies a service which formats log records for RFC4180-style CSV-Files
 
-    <p>Every log record, as passed to <member>XCsvLogFormatter::format</member>,
+    <p>Every log record, as passed to XCsvLogFormatter::format(),
     will be formatted into a single row for a CSV file.
     The sequence number, the thread ID, the time of the logged event,
     the source class/method name will get logged alongside the message, if this

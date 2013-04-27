@@ -52,7 +52,7 @@ published service CachedDynamicResultSetStub
         with a source object.
 
         <p>The <var>Source</var> in
-        <member>XSourceInitialization::setSource</member> has to be an
+        XSourceInitialization::setSource() has to be an
         implementation of service DynamicResultSet
 
         <p>This interface is required.

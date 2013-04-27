@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module sheet {
 /** enables a sheet to refer to another sheet in a different document.
 
     <p>To insert a sheet link, the sheet used as linked sheet has to exist
-    already. The method <member>XSheetLinkable::link</member> creates a
+    already. The method XSheetLinkable::link() creates a
     SheetLink object in the document's SheetLinks
     collection and links the sheet to the specified external sheet.</p>
 

@@ -102,9 +102,9 @@ interface XModel2 : com::sun::star::frame::XModel
     /** creates a new view instance classified by the specified name and arguments.
 
         <p>The newly created controller must not be connected with the document and the
-        frame. That is, you should neither call <member>XFrame::setComponent</member>, nor
-        <member>XController::attachFrame</member>, nor <member>XController::attachModel</member>,
-        nor <member>XModel::connectController</member>, not <member>XModel::setCurrentController</member>.
+        frame. That is, you should neither call XFrame::setComponent(), nor
+        XController::attachFrame(), nor XController::attachModel(),
+        nor XModel::connectController(), not XModel::setCurrentController().
         All of this is the responsibility of the caller, which will do it in the proper order.</p>
 
         @param ViewName

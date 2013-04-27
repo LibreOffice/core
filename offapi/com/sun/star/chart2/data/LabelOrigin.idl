@@ -26,7 +26,7 @@ module com {  module sun {  module star {  module chart2 { module data {
 
 /** is used to specify how the labels have to be created.
 
-    @see <member>XDataSequence::generateLabel</member>.
+    @see XDataSequence::generateLabel().
  */
 enum LabelOrigin
 {
@@ -43,7 +43,7 @@ enum LabelOrigin
         <p>In case of a rectangular range, or a range that is composed
         of more than one contiguous sub-regions, the short side cannot
         be determined, thus
-        <member>XDataSequence::generateLabel</member> will return an
+        XDataSequence::generateLabel() will return an
         empty sequence.</p>
      */
     SHORT_SIDE,

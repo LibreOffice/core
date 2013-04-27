@@ -36,7 +36,7 @@ published interface XContextMenuInterception : ::com::sun::star::uno::XInterface
 
     void registerContextMenuInterceptor( [in]XContextMenuInterceptor Interceptor);
     /** removes an XContextMenuInterceptor which was previously registered
-        using <member>XContextMenuInterception::registerContextMenuInterceptor</member>.
+        using XContextMenuInterception::registerContextMenuInterceptor().
 
         <p>The order of removals is arbitrary. It is not necessary to remove the last
         registered interceptor first.</p>

@@ -43,12 +43,12 @@ interface XAccessibleEditableText
         <p>The specified text between and including the two given indices is
         copied into the system clipboard and is deleted afterwards from the
         text represented by this object.  This is equivalent to calling
-        first <member>XAccessibleText::copyText</member> and then
-        <member>XAccessibleEditableText::deleteText</member> with the given
+        first XAccessibleText::copyText() and then
+        XAccessibleEditableText::deleteText() with the given
         start and end indices.</p>
 
         <p>The text indices are interpreted like those in the
-        <member>XAccessibleText::getTextRange</member> method. </p>
+        XAccessibleText::getTextRange() method. </p>
 
         @param nStartIndex
             Start index of the text to moved into the clipboard.
@@ -72,7 +72,7 @@ interface XAccessibleEditableText
 
         <p>The text in the system clipboard is pasted into the text
         represented by this object at the given index.  This method is
-        similar to the <member>XAccessibleEditableText::insertText</member>
+        similar to the XAccessibleEditableText::insertText()
         method.  If the index is not valid then the system clipboard text is
         not inserted.</p>
 
@@ -97,7 +97,7 @@ interface XAccessibleEditableText
         from the text represented by this object.</p>
 
         <p>The text indices are interpreted like those in the
-        <member>XAccessibleText::getTextRange</member> method. </p>
+        XAccessibleText::getTextRange() method. </p>
 
         @param nStartIndex
             Start index of the text to be deleted.
@@ -144,13 +144,13 @@ interface XAccessibleEditableText
         <p>The text between the two given indices is replaced
         by the specified replacement string. This method is
         equivalent to calling first
-        <member>XAccessibleEditableText::deleteText</member> with the two
+        XAccessibleEditableText::deleteText() with the two
         indices and afterwards calling
-        <member>XAccessibleEditableText::insertText</member> with the
+        XAccessibleEditableText::insertText() with the
         replacement text and the start index.</p>
 
         <p>The text indices are interpreted like those in the
-        <member>XAccessibleText::getTextRange</member> method. </p>
+        XAccessibleText::getTextRange() method. </p>
 
         @param nStartIndex
             Start index of the text to be replaced.
@@ -182,7 +182,7 @@ interface XAccessibleEditableText
         portion are replaced by the new list of attributes.</p>
 
         <p>The text indices are interpreted like those in the
-        <member>XAccessibleText::getTextRange</member> method. </p>
+        XAccessibleText::getTextRange() method. </p>
 
         @param nStartIndex
             Start index of the text whose attributes are modified.

@@ -106,9 +106,9 @@ published service HierarchyFolderContent
 
     /** is an enhanced version of XCommandProcessor that has an
         additional method for releasing command identifiers obtained via
-        <member>XCommandProcessor::createCommandIdentifier</member> to avoid
+        XCommandProcessor::createCommandIdentifier() to avoid
         resource leaks. For a detailed description of the problem refer to
-        <member>XCommandProcessor2::releaseCommandIdentifier</member>.
+        XCommandProcessor2::releaseCommandIdentifier().
 
         <p>Where many existing Content implementations do not
         (yet), every new implementation should support this interface.
@@ -151,7 +151,7 @@ published service HierarchyFolderContent
         <ol>
         <li>
         Let the parent folder create a new content by calling
-        <member>XContentCreator::createNewContent</member> on it. The content
+        XContentCreator::createNewContent() on it. The content
         type to use for new folders is "application/vnd.sun.star.hier-folder".
         To create a new link, use the type "application/vnd.sun.star.hier-link".
         </li>

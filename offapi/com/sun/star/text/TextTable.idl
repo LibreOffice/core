@@ -45,12 +45,12 @@
 
     <p>Note: The anchor of the actual implementation for text tables
     does not have a position in the text. Thus that anchor can not be
-    used for some operation like <member>XTextContent::attach</member> or
-    <member>XText::insertTextContent</member>
+    used for some operation like XTextContent::attach() or
+    XText::insertTextContent()
     or other function that require the object to have a position in the text.</p>
 
     <p>The reason why a text table still needs an anchor is that for example
-    tables should be insertable via <member>XText::insertTextContent</member>
+    tables should be insertable via XText::insertTextContent()
     and that interface uses a parameter of that type.</p>
 
     @example

@@ -43,7 +43,7 @@ published interface XSeekable: com::sun::star::uno::XInterface
         location in the stream object. It is an error to seek before the beginning of the stream or after the
         end of the stream. </p>
 
-        @throws com::sun::star::lang::IllegalArgumentException in case location is negative or greater than <member>XSeekable::getLength</member>.
+        @throws com::sun::star::lang::IllegalArgumentException in case location is negative or greater than XSeekable::getLength().
      */
     void seek( [in] hyper location )
         raises( com::sun::star::lang::IllegalArgumentException, com::sun::star::io::IOException );

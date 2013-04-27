@@ -33,7 +33,7 @@ module com { module sun { module star { module ucb {
 
     <p>This interface should be supported by the <var>DoneListener</var>
     parameter of
-    <member>XRemoteContentProviderAcceptor::addRemoteContentProvider</member>.
+    XRemoteContentProviderAcceptor::addRemoteContentProvider().
 
     @version 1.0
     @author Stephan Bergmann

@@ -35,12 +35,12 @@ published interface XProgressHandler: com::sun::star::uno::XInterface
 
         @param Status  An object representing the new activity.  There has to
         be an agreement between caller and callee of methods
-        <member>XProgressHandler::push</member> and
-        <member>XProgressHandler::update</member> as to which Status
+        XProgressHandler::push() and
+        XProgressHandler::update() as to which Status
         arguments are meaningful.  For example, a <atom>string</atom> argument
-        to <member>XProgressHandler::push</member> should be used to transport
+        to XProgressHandler::push() should be used to transport
         some status text that describes the progress being made (possibly
-        followed by one or more <member>XProgressHandler::update</member>s with
+        followed by one or more XProgressHandler::update()s with
         <atom>string</atom> arguments, if the appropriate status text changes
         as progress is being made).
     */
@@ -50,7 +50,7 @@ published interface XProgressHandler: com::sun::star::uno::XInterface
         progress.
 
         @param Status  An object representing the progress made.  See the
-        documentation of <member>XProgressHandler::push</member> for more
+        documentation of XProgressHandler::push() for more
         information.
     */
     void update([in] any Status);

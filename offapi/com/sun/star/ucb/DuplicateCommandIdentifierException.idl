@@ -25,7 +25,7 @@
 
 module com { module sun { module star { module ucb {
 
-/** is thrown by <member>XCommandProcessor::execute</member> to indicate that
+/** is thrown by XCommandProcessor::execute() to indicate that
     the same command identifier was used for two threads.
 
     <p>Each thread must use it's own command identifier, which must be obtained

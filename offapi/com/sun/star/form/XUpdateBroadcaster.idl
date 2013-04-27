@@ -31,9 +31,9 @@
 /** is the broadcaster interface for sending "approveUpdate" and "updated" events.
 
     <p>The component supporting this interface must do approval calls
-    (<member>XUpdateListener::approveUpdate</member>) immediately
+    (XUpdateListener::approveUpdate()) immediately
     before the data is updated, and notification calls
-    (<member>XUpdateListener::updated</member>) immediately afterwards.</p>
+    (XUpdateListener::updated()) immediately afterwards.</p>
 
     @see XUpdateListener
  */

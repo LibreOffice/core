@@ -40,8 +40,8 @@ module com {  module sun {  module star {  module awt {
 
     <p>The first event broadcaster lets you keep track of the open top-level
     windows (frames).  To get the set of currently open top-level window use
-    the <member>XExtendedToolkit::getTopWindowCount</member> and
-    <member>XExtendedToolkit::getTopWindow</member> methods.</p>
+    the XExtendedToolkit::getTopWindowCount() and
+    XExtendedToolkit::getTopWindow() methods.</p>
 
     <p>The second event broadcaster informs its listeners of key events.
     Its listeners can, unlike with most other broadcasters/listeners,

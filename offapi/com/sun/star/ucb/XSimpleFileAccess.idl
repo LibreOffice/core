@@ -193,7 +193,7 @@ published interface XSimpleFileAccess: com::sun::star::uno::XInterface
         UnsupportedDataSinkException, if the file cannot be
         opened for random write access. Some resources do not allow random
         write access. To write data for those resources
-        <member>XSimpleFileAccess2::writeFile</member> may be used.
+        XSimpleFileAccess2::writeFile() may be used.
     */
     com::sun::star::io::XOutputStream openFileWrite( [in] string FileURL )
         raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
@@ -210,7 +210,7 @@ published interface XSimpleFileAccess: com::sun::star::uno::XInterface
         UnsupportedDataSinkException, if the file cannot be
         opened for random write access. Some resources do not allow random
         write access. To write data for those resources
-        <member>XSimpleFileAccess2::writeFile</member> may be used.
+        XSimpleFileAccess2::writeFile() may be used.
     */
     com::sun::star::io::XStream openFileReadWrite( [in] string FileURL )
         raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );

@@ -37,7 +37,7 @@
 published interface XApproveActionBroadcaster: com::sun::star::uno::XInterface
 {
 
-    /** adds the specified listener to receive the <member>XApproveActionListener::approveAction</member>
+    /** adds the specified listener to receive the XApproveActionListener::approveAction()
         event.
 
         @param aListener

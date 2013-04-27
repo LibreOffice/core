@@ -42,11 +42,11 @@ module com { module sun { module star { module accessibility {
     interface.</p>
 
     <p>The text length, i.e. the number of characters in the text, is
-    returned by <member>XAccessibleText::getCharacterCount</member>.
+    returned by XAccessibleText::getCharacterCount().
     All methods that operate on particular characters (e.g.
-    <member>XAccessibleText::getCharacterAt</member>) use character
+    XAccessibleText::getCharacterAt()) use character
     indices from 0 to length-1. All methods that operate on character
-    positions (e.g. <member>XAccessibleText::getTextRange</member>)
+    positions (e.g. XAccessibleText::getTextRange())
     use indices from 0 to length.</p>
 
     <p>Please note that accessible text does not necessarily support
@@ -225,8 +225,8 @@ interface XAccessibleText : ::com::sun::star::uno::XInterface
         coordinate system of the object, return the zero-based index of
         the character under that point.  The same functionality could be
         achieved by using the bounding boxes for each character as returned
-        by <member>XAccessibleText::getCharacterBounds</member>. The method
-        <member>XAccessibleText::getIndexAtPoint</member>, however, can be
+        by XAccessibleText::getCharacterBounds(). The method
+        XAccessibleText::getIndexAtPoint(), however, can be
         implemented in a more efficient way.</p>
 
         @param aPoint
@@ -278,7 +278,7 @@ interface XAccessibleText : ::com::sun::star::uno::XInterface
         The old selection is replaced by the new selection.</p>
 
         <p>The selection encompasses the same string of text that
-        <member>XAccessibleText::getTextRange</member> would have
+        XAccessibleText::getTextRange() would have
         selected. See there for details.</p>
 
         <p>Setting the selection may or may not change the caret position.
@@ -308,7 +308,7 @@ interface XAccessibleText : ::com::sun::star::uno::XInterface
     /** Return the whole text.
 
         <p>Returns the complete text.  This is equivalent to a call to
-        <member>XAccessibleText::getTextRange</member> with the arguments
+        XAccessibleText::getTextRange() with the arguments
         zero and <code>getCharacterCount()-1</code>.</p>
 
         @return
@@ -385,7 +385,7 @@ interface XAccessibleText : ::com::sun::star::uno::XInterface
         <p>Returns the substring of the specified text type that is
         located before the given character and does not include
         it. The result of this method should be same as a result for
-        <member>XAccessibleText::getTextAtIndex</member> with a
+        XAccessibleText::getTextAtIndex() with a
         suitably decreased index value.</p>
 
         <p>For example, if text type is <const
@@ -424,7 +424,7 @@ interface XAccessibleText : ::com::sun::star::uno::XInterface
         <p>Returns the substring of the specified text type that is
         located after the given character and does not include
         it. The result of this method should be same as a result for
-        <member>XAccessibleText::getTextAtIndex</member> with a
+        XAccessibleText::getTextAtIndex() with a
         suitably increased index value.</p>
 
         <p>For example, if text type is <const
@@ -461,11 +461,11 @@ interface XAccessibleText : ::com::sun::star::uno::XInterface
 
         <p>Copy the specified text into the clipboard.  The text that is
         copied is the same text that would have been selected by the
-        <member>XAccessibleText::getTextRange</member> method. </p>
+        XAccessibleText::getTextRange() method. </p>
 
         <p>The other clipboard related methods
-        <member>XAccessibleEditableText::cutText</member> and
-        <member>XAccessibleEditableText::deleteText</member> can be found in
+        XAccessibleEditableText::cutText() and
+        XAccessibleEditableText::deleteText() can be found in
         the XAccessibleEditableText because of their
         destructive nature.</p>
 

@@ -28,8 +28,8 @@ module com {   module sun {   module star {   module rdf {
 
     <p>
     These constants are mainly for use with
-    <member>XRepository::importGraph</member>
-    and <member>XRepository::exportGraph</member>.
+    XRepository::importGraph()
+    and XRepository::exportGraph().
     </p>
 
     <p>

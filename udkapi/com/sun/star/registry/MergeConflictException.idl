@@ -26,7 +26,7 @@
  module com {  module sun {  module star {  module registry {
 
 /** is thrown if entries of two registries are contradictory in the context of
-    <member>XSimpleRegistry::mergeKey()e</member> method.
+    XSimpleRegistry::mergeKey()e() method.
  */
 published exception MergeConflictException: com::sun::star::uno::Exception
 {

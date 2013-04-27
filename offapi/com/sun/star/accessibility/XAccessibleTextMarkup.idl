@@ -36,7 +36,7 @@ module com { module sun { module star { module accessibility {
     <p>The XAccessibleTextMarkup interface is the main interface
     to expose text markups in a text, typically of a text document, that are
     used to reference other (parts of) documents. For supporting the
-    <member>XAccessibleTextMarkup::getTextMarkupIndex</member> method of this
+    XAccessibleTextMarkup::getTextMarkupIndex() method of this
     interface and other character related methods of the
     XAccessibleTextMarkup interface, it is necessary to also
     support the XAccessibleText interface.</p>

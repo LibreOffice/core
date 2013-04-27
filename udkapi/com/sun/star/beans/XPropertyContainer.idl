@@ -40,7 +40,7 @@ module com {  module sun {  module star {  module beans {
 /** makes it possible to add and remove properties to or from an object.
 
     <p>Some scripting engines cannot access properties directly when the
-    property set is changed.  Please use <member>XPropertySet::getPropertyValue</member>
+    property set is changed.  Please use XPropertySet::getPropertyValue()
     etc. in this case. </p>
  */
 published interface XPropertyContainer: com::sun::star::uno::XInterface

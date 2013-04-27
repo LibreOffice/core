@@ -28,8 +28,8 @@
 
 
 /** allows to add listeners to a connection.
-    <p> Maybe supported by connections returned from <member>XAcceptor::accept</member>
-    or <member>XConnector::connect</member>.
+    <p> Maybe supported by connections returned from XAcceptor::accept()
+    or XConnector::connect().
  */
 published interface XConnectionBroadcaster: com::sun::star::uno::XInterface
 {

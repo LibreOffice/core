@@ -39,7 +39,7 @@ published interface XPluginInstance: com::sun::star::uno::XInterface
 
 
     /** Stops plugin operation. This is called when the user goes to another web
-        page. The <member>XPluginInstance::destroy</member> method is directly called
+        page. The XPluginInstance::destroy() method is directly called
         afterwards.
      */
     void stop();

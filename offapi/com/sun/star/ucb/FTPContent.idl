@@ -65,7 +65,7 @@ published service FTPContent
         <ol>
         <li>
         Let the parent folder create a new content by calling
-        <member>XContentCreator::createNewContent</member> on it. The content
+        XContentCreator::createNewContent() on it. The content
         type to use for new directories is
         "application/vnd.sun.staroffice.ftp-folder". To create a new file
         use the type "application/vnd.sun.staroffice.ftp-file".

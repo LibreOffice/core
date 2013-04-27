@@ -37,7 +37,7 @@ published struct AllEventObject: com::sun::star::lang::EventObject
     /** A helper value for the implementation that can be used arbitrarily.
 
         <p>This field reflects the third parameter of the method
-        <member>XAllListenerAdapterService::createAllListerAdapter</member>.
+        XAllListenerAdapterService::createAllListerAdapter().
         </p>
      */
     any Helper;

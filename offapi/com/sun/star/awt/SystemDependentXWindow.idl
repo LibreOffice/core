@@ -27,7 +27,7 @@
 /** specifies a system dependent XWindow.
 
     <p>This is the structure returned in the
-    <member>XSystemDependentWindowPeer::getWindowHandle</member> call,
+    XSystemDependentWindowPeer::getWindowHandle() call,
     if the system type is
     <const scope="com::sun::star::lang">SystemDependent::XWINDOW</const>.</p>
 

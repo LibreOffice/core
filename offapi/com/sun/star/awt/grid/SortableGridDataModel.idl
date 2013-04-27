@@ -49,7 +49,7 @@ interface XMutableGridDataModel;
 
     <p>Note that changing the data might result in the sort order being destroyed. If you want to ensure
     that the data represented by the model is still sorted after your modifications, you should call
-    <member>XSortableGridData::sortByColumn</member>, again.</p>
+    XSortableGridData::sortByColumn(), again.</p>
  */
 service SortableGridDataModel : XSortableMutableGridDataModel
 {

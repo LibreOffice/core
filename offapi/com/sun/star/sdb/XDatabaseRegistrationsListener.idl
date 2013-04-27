@@ -48,7 +48,7 @@ published interface XDatabaseRegistrationsListener : ::com::sun::star::lang::XEv
 
         <p>Note that this talks about registration data only. That is, if the actual file denoted by the database
         registration is moved, this is in no way monitored or reported. Only (successful) calls to
-        <member>XDatabaseRegistrations::changeDatabaseLocation</member> are reported here.</p>
+        XDatabaseRegistrations::changeDatabaseLocation() are reported here.</p>
     */
     void    changedDatabaseLocation( [in] DatabaseRegistrationEvent Event );
 };

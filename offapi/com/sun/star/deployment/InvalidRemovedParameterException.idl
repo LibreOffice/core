@@ -27,7 +27,7 @@ module com { module sun { module star { module deployment {
 interface XPackage;
 
 /**
-   indicates that <member>XPackageRegistry::bindPackage</member> was previously
+   indicates that XPackageRegistry::bindPackage() was previously
    called with a different value for the <code>removed</code> parameter and that
    the XPackage object created by that call still exist.
 
@@ -35,14 +35,14 @@ interface XPackage;
 */
 exception InvalidRemovedParameterException: com::sun::star::uno::Exception {
     /** the value of the <code>removed</code> parameter which was used in
-        <member>XPackageRegistry::bindPackage</member> to create the currently
+        XPackageRegistry::bindPackage() to create the currently
         existing XPackage object.
     */
     boolean PreviousValue;
     /**
        the XPackage that was already bound to the provided
        <code>url</code> parameter during
-       <member>XPackageRegistry::bindPackage</member>.
+       XPackageRegistry::bindPackage().
 
        <p>Must not be <NULL/>.</p>
     */

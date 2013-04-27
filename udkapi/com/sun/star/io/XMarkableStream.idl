@@ -39,7 +39,7 @@ published interface XMarkableStream: com::sun::star::uno::XInterface
             raises( com::sun::star::io::IOException );
 
     /** deletes the mark that you previously created with
-        <member>XMarkableStream::createMark</member>.
+        XMarkableStream::createMark().
 
         <p>It is an error to delete a mark if other marks after this
         exist.  In this case, for reasons of robustness, the

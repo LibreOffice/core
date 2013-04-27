@@ -33,7 +33,7 @@
     inspected completely if it supports the <type scope=
     "com::sun::star::lang">XTypeProvider</type> interface.</p>
 
-    <p>For details see method <member>XIntrospection::inspect</member>. </p>
+    <p>For details see method XIntrospection::inspect(). </p>
 
     @see XIntrospectionAccess
  */

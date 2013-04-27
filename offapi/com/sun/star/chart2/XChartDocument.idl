@@ -93,7 +93,7 @@ interface XChartDocument : ::com::sun::star::frame::XModel
     /** Returns the currently set data provider.  This may be an
         internal one, if createInternalDataProvider()
         has been called before, or an external one if
-        <member>XDataReceiver::attachDataProvider</member> has been
+        XDataReceiver::attachDataProvider() has been
         called.
      */
     com::sun::star::chart2::data::XDataProvider getDataProvider();
@@ -120,7 +120,7 @@ interface XChartDocument : ::com::sun::star::frame::XModel
         want to access properties of the background area of a single
         diagram (the part where data points are actually plotted in),
         you have to get its wall.  You can get the wall by calling
-        <member>XDiagram::getWall</member>.</p>
+        XDiagram::getWall().</p>
      */
     com::sun::star::beans::XPropertySet getPageBackground();
 };

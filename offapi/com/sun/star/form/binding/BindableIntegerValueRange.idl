@@ -36,7 +36,7 @@ service BindableIntegerValueRange
 {
     /** specifies that the control can be bound to external values
 
-        <p>Any binding used with the control model (see <member>XBindableValue::setValueBinding</member>)
+        <p>Any binding used with the control model (see XBindableValue::setValueBinding())
         must support exchanging double values.</p>
 
         <p>When the (integer) value reflected by the control model is changed, it's converted

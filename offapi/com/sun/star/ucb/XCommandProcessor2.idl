@@ -31,22 +31,22 @@ module com { module sun { module star { module ucb {
 published interface XCommandProcessor2: com::sun::star::ucb::XCommandProcessor
 {
     /** releases a command identifier obtained through
-        <member>XCommandProcessor::createCommandIdentifier</member> when it is
+        XCommandProcessor::createCommandIdentifier() when it is
         no longer used.
 
         <p>After this call the command identifier cannot be used any longer in
-        calls to <member>XCommandProcessor::execute</member> and
-        <member>XCommandProcessor::abort</member>.  (But it can happen that a
-        call to <member>XCommandProcessor::createCommandIdentifier</member>
+        calls to XCommandProcessor::execute() and
+        XCommandProcessor::abort().  (But it can happen that a
+        call to XCommandProcessor::createCommandIdentifier()
         reuses this identifier.)</p>
 
         @param CommandId
         A command identifier obtained through
-        <member>XCommandProcessor::createCommandIdentifier</member>.  If the
+        XCommandProcessor::createCommandIdentifier().  If the
         identifier is zero, the request is silently ignored; but if the
         identifier is invalid (not obtained via
-        <member>XCommandProcessor::createCommandIdentifier</member> or already
-        handed to <member>XCommandProcessor2::releaseCommandIdentifier</member>
+        XCommandProcessor::createCommandIdentifier() or already
+        handed to XCommandProcessor2::releaseCommandIdentifier()
         before), the behavior is undefined.
      */
     void releaseCommandIdentifier([in] long CommandId);

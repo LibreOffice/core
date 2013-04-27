@@ -40,7 +40,7 @@ published interface XImplementationLoader: com::sun::star::uno::XInterface
     /** activates a concrete implementation within a component.
         @param implementationName The name of the implementation,
                which shall be instantiated. The method
-               <member>XImplementationLoader::writeRegistryInfo</member>
+               XImplementationLoader::writeRegistryInfo()
                writes a list of implementation names hosted by this component.
         @param implementationLoaderUrl specification bug, ignore this parameter, please
                pass an empty string.

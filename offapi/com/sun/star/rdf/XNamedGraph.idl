@@ -40,7 +40,7 @@ module com {   module sun {   module star {   module rdf {
 
     <p>
     Note that instances may be destroyed via
-    <member>XRepository::destroyGraph</member>.
+    XRepository::destroyGraph().
     If a graph is destroyed, subsequent calls to addStatement(),
     removeStatements() will fail with an
     com::sun::star::container::NoSuchElementException.

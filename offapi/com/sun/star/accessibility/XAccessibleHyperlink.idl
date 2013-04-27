@@ -32,17 +32,17 @@ module com { module sun { module star { module accessibility {
     of hyperlinks are contained in client side image maps.  Linked objects
     and anchors are implementation dependent.  This interface inherits the
     XAccessibleAction interface.  Especially that interface's
-    <member>XAccessibleAction::getActionCount</member> method is needed to
+    XAccessibleAction::getActionCount() method is needed to
     obtain a maximum value for the indices passed to the
-    <member>XAccessibleHyperlink::getAccessibleActionAnchor</member> and
-    <member>XAccessibleHyperlink::getAccessibleActionObject</member>
+    XAccessibleHyperlink::getAccessibleActionAnchor() and
+    XAccessibleHyperlink::getAccessibleActionObject()
     methods.</p>
 
     <p>Furthermore, the object that implements this interface has to be
     connected implicitly or explicitly with an object that implements the
     the XAccessibleText interface.  The
-    <member>XAccessibleHyperlink::getStartIndex</member> and
-    <member>XAccessibleHyperlink::getEndIndex</member> methods return
+    XAccessibleHyperlink::getStartIndex() and
+    XAccessibleHyperlink::getEndIndex() methods return
     indices with respect to the text exposed by that interface.</p>
 
     @since OOo 1.1.2
@@ -60,7 +60,7 @@ interface XAccessibleHyperlink :
             This index identifies the anchor when, as in the case of an
             image map, there is more than one link represented by this
             object.  The valid maximal index can be determined by calling
-            the <member>XAccessibleAction::getActionCount</member> method.
+            the XAccessibleAction::getActionCount() method.
 
         @return
             If the index is not valid then an exception is thrown.
@@ -79,7 +79,7 @@ interface XAccessibleHyperlink :
             This index identifies the action object when, as in the case of
             an image map, there is more than one link represented by this
             object.  The valid maximal index can be determined by calling
-            the <member>XAccessibleAction::getActionCount</member> method.
+            the XAccessibleAction::getActionCount() method.
 
         @return
             If the index is not valid then an exception is thrown.

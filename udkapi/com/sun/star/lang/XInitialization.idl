@@ -34,9 +34,9 @@ module com {  module sun {  module star {  module lang {
     support this interface and you may support other interfaces
     which offer type-safe initialization methods.  </p>
 
-    <p>Instead of calling <member>XSingleComponentFactory::createInstanceWithContext</member>
+    <p>Instead of calling XSingleComponentFactory::createInstanceWithContext()
     and later initialize(), you should call
-    <member>XSingleComponentFactory::createInstanceWithArgumentsAndContext</member>
+    XSingleComponentFactory::createInstanceWithArgumentsAndContext()
     to pass the arguments to the instance. The reason is, that a component may want to
     return the same instance for the same set of parameters, and it can do so by implementing
     the factory itself.

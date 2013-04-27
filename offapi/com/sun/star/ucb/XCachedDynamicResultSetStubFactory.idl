@@ -35,7 +35,7 @@ module com { module sun { module star { module ucb {
     DynamicResultSet was instantiated.
 
     <p>Method
-    <member>XCachedDynamicResultSetStubFactory::createCachedDynamicResultSetStub</member>
+    XCachedDynamicResultSetStubFactory::createCachedDynamicResultSetStub()
     can be used to create a stub on server side.
 
     <p>If you have instantiated a CachedDynamicResultSet on client

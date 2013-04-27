@@ -63,8 +63,8 @@ interface XUndoManagerListener;
 
     <a name="locking"></a>
     <h3>Locking</h3>
-    <p>An Undo manager can be locked and unlocked, using the <member>XLockable::lock</member> and
-    <member>XLockable::unlock</member> methods. When it is locked, then every attempt to add an undo action, or to
+    <p>An Undo manager can be locked and unlocked, using the XLockable::lock() and
+    XLockable::unlock() methods. When it is locked, then every attempt to add an undo action, or to
     enter or leave an Undo context, will be silently ignored.</p>
  */
 interface XUndoManager
@@ -136,11 +136,11 @@ interface XUndoManager
 
         <p>If no undo action has been added since the context has been opened, the context is not only left,
         but silently removed, and does not contribute to the undo stack at all. In this case, possible
-        listeners will be notified via <member>XUndoManagerListener::cancelledContext</member>.</p>
+        listeners will be notified via XUndoManagerListener::cancelledContext().</p>
 
         <p>Otherwise, the undo context will be closed, and added to the Undo stack; the redo stack will be cleared,
-        and listeners will be notified via <member>XUndoManagerListener::leftContext</member> resp.
-        <member>XUndoManagerListener::leftHiddenContext</member></p>
+        and listeners will be notified via XUndoManagerListener::leftContext() resp.
+        XUndoManagerListener::leftHiddenContext()</p>
 
         @throws ::com::sun::star::util::InvalidStateException
             if no undo context is currently open.
@@ -174,7 +174,7 @@ interface XUndoManager
     /** reverts the most recent action on the document.
 
         <p>Effectively, invoking this method will
-        <ul><li>invoke <member>XUndoAction::undo</member> on the top-most action of the undo stack</li>
+        <ul><li>invoke XUndoAction::undo() on the top-most action of the undo stack</li>
             <li>move this undo action from the undo stack to the redo stack</li>
         </ul></p>
 
@@ -185,7 +185,7 @@ interface XUndoManager
             if there currently is an open undo context
 
         @throws UndoFailedException
-            if the invocation of <member>XUndoAction::undo</member> raised this exception. In this case, the undo stack
+            if the invocation of XUndoAction::undo() raised this exception. In this case, the undo stack
             of the undo manager will have been cleared.
 
         @see redo
@@ -199,7 +199,7 @@ interface XUndoManager
     /** replays the action on the document which has most recently been undone
 
         <p>Effectively, invoking this method will
-        <ul><li>invoke <member>XUndoAction::redo</member> on the top-most action of the redo stack</li>
+        <ul><li>invoke XUndoAction::redo() on the top-most action of the redo stack</li>
             <li>move this action from the redo stack to the undo stack</li>
         </ul></p>
 
@@ -210,7 +210,7 @@ interface XUndoManager
             if there currently is an open undo context
 
         @throws UndoFailedException
-            if the invocation of <member>XUndoAction::redo</member> raised this exception. In this case, the redo stack
+            if the invocation of XUndoAction::redo() raised this exception. In this case, the redo stack
             of the undo manager will have been cleared.
 
         @see undo
@@ -300,9 +300,9 @@ interface XUndoManager
             </ul></p>
 
         <p>Note that possible listeners will not get notifications for the single parts of the reset, i.e. there
-        will be no single <member>XUndoManagerListener::allActionsCleared</member>,
-        <member>XUndoManagerListener::leftContext</member>, etc., notifications. Instead, listeners will be
-        notified of the reset by calling their <member>XUndoManagerListener::resetAll</member> method.</p>
+        will be no single XUndoManagerListener::allActionsCleared(),
+        XUndoManagerListener::leftContext(), etc., notifications. Instead, listeners will be
+        notified of the reset by calling their XUndoManagerListener::resetAll() method.</p>
     */
     void    reset();
 

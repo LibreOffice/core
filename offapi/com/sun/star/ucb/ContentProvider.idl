@@ -49,7 +49,7 @@ published service ContentProvider
 
         <p>Whenever a ContentProvider that supports this interface is
         registered at a XContentProviderManager, the method
-        <member>XParameterizedContentProvider::registerInstance</member>
+        XParameterizedContentProvider::registerInstance()
         should first be called, using the returned XContentProvider
         to register at the XContentProviderManager.
      */

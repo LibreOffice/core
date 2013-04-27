@@ -38,7 +38,7 @@ interface XSortableMutableGridDataModel
     /** provides means to sort the data represented by the model.
 
         <p>If you set a new column sort order, the implementation will notify the registered XGridDataListeners
-        via a call to its <member>XGridDataListener::dataChanged</member> method.</p>
+        via a call to its XGridDataListener::dataChanged() method.</p>
     */
     interface XSortableGridData;
 };

@@ -92,13 +92,13 @@ published interface XConnectionPoint: com::sun::star::uno::XInterface
                 the type of the outgoing interface managed by this
                 connection point.
 
-        <p>Using the <member>XConnectionPointContainer::getConnectionPoints</member>
+        <p>Using the XConnectionPointContainer::getConnectionPoints()
         method, a client can obtain an XConnectionPoint
         interface.  Using that interface and this method, the client
         can determine the type of each connection point enumerated. The
         type returned from this method must enable the caller to access
         this same connection point through
-        <member>XConnectionPointContainer::findConnectionPoint</member>.
+        XConnectionPointContainer::findConnectionPoint().
 
         @see XConnectionPointContainer::findConnectionPoint
      */

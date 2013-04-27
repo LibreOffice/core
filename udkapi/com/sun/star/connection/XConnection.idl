@@ -76,8 +76,8 @@ published interface XConnection: com::sun::star::uno::XInterface
 
     /** A unique string describing the connection.
 
-        <p>This string is different from the arguments to <member>XConnection::accept</member>
-        and <member>XConnector::connect</member>. In general, the string contains an additional
+        <p>This string is different from the arguments to XConnection::accept()
+        and XConnector::connect(). In general, the string contains an additional
         handle value.  For example, "socket,host=localhost,port=2002,uniqueValue=2324". </p>
      */
     string getDescription();

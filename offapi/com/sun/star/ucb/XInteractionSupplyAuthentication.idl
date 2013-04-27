@@ -42,7 +42,7 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
         <p>This method should be called before
         <member scope="com::sun::star::task">XInteractionContinuation::select</member>,
         and should only be called if
-        <member>XInteractionSupplyAuthentication::canSetRealm</member> returned
+        XInteractionSupplyAuthentication::canSetRealm() returned
         <true/>.</p>
     */
     void setRealm( [in] string Realm );
@@ -56,7 +56,7 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
         <p>This method should be called before
         <member scope="com::sun::star::task">XInteractionContinuation::select</member>,
         and should only be called if
-        <member>XInteractionSupplyAuthentication::canSetUserName</member>
+        XInteractionSupplyAuthentication::canSetUserName()
         returned <true/>.</p>
     */
     void setUserName( [in] string UserName );
@@ -70,7 +70,7 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
         <p>This method should be called before
         <member scope="com::sun::star::task">XInteractionContinuation::select</member>,
         and should only be called if
-        <member>XInteractionSupplyAuthentication::canSetPassword</member>
+        XInteractionSupplyAuthentication::canSetPassword()
         returned <true/>.</p>
     */
     void setPassword( [in] string Password );
@@ -92,12 +92,12 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
         <p>This method should be called before
         <member scope="com::sun::star::task">XInteractionContinuation::select</member>,
         and should only be called if
-        <member>XInteractionSupplyAuthentication::setPassword</member>
+        XInteractionSupplyAuthentication::setPassword()
         is also called.</p>
 
         @param Remember
         The mode to hand back, should be contained in the sequence returned by
-        <member>XInteractionSupplyAuthentication::getRememberPasswordModes</member>.
+        XInteractionSupplyAuthentication::getRememberPasswordModes().
     */
     void setRememberPassword( [in] com::sun::star::ucb::RememberAuthentication Remember );
 
@@ -110,7 +110,7 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
         <p>This method should be called before
         <member scope="com::sun::star::task">XInteractionContinuation::select</member>,
         and should only be called if
-        <member>XInteractionSupplyAuthentication::canSetAccount</member>
+        XInteractionSupplyAuthentication::canSetAccount()
         returned <true/>.</p>
 
     */
@@ -132,12 +132,12 @@ published interface XInteractionSupplyAuthentication: com::sun::star::task::XInt
         <p>This method should be called before
         <member scope="com::sun::star::task">XInteractionContinuation::select</member>,
         and should only be called if
-        <member>XInteractionSupplyAuthentication::setAccount</member>
+        XInteractionSupplyAuthentication::setAccount()
         is also called.</p>
 
         @param Remember  The mode to hand back, should be contained in the
         sequence returned by
-        <member>XInteractionSupplyAuthentication::getRememberAccountModes</member>.
+        XInteractionSupplyAuthentication::getRememberAccountModes().
     */
     void setRememberAccount( [in] com::sun::star::ucb::RememberAuthentication Remember );
 

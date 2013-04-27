@@ -90,7 +90,7 @@ interface XObjectInspectorUI
         <p>Note that the property whose UI should be rebuilt must not necessarily be (though usually <em>is</em>)
         in the responsibility of the handler which calls this method. The object inspector will look up the
         handler with the responsibility for <arg>PropertyName</arg> and call its
-        <member>XPropertyHandler::describePropertyLine</member></p>
+        XPropertyHandler::describePropertyLine()</p>
 
         @param PropertyName
             the name of the property whose UI is to be completely rebuilt.

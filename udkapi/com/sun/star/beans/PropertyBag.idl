@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module beans {
 
     <p>Scripting engines might not be able to use such objects as normal
     property sets, giving direct access to the properties.  In this case,
-    use the methods like <member>XPropertySet::getPropertyValue</member>.
+    use the methods like XPropertySet::getPropertyValue().
  */
 published service PropertyBag : XPropertyBag
 {

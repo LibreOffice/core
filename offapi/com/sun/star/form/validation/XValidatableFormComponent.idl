@@ -58,11 +58,11 @@ interface XValidatableFormComponent : XValidatable
     /** determines whether the current value of the component passed the validity test
         at the validator.
 
-        <p>Calling this is equal to calling <member>XValidator::isValid</member> with
+        <p>Calling this is equal to calling XValidator::isValid() with
         the current value (see getCurrentValue()) of the component, where
-        the validator is obtained via <member>XValidatable::getValidator</member>.</p>
+        the validator is obtained via XValidatable::getValidator().</p>
 
-        <p>If no validator has been set (<member>XValidatable::setValidator</member>), this method
+        <p>If no validator has been set (XValidatable::setValidator()), this method
         returns true.</p>
     */
     boolean isValid();
@@ -76,7 +76,7 @@ interface XValidatableFormComponent : XValidatable
         calling this method is equivalent to retrieving the
         <member scope="com::sun::star::awt">UnoControlFormattedFieldModel::EffectiveValue</member>.</p>
 
-        <p>If no validator has been set (<member>XValidatable::setValidator</member>), the value returned
+        <p>If no validator has been set (XValidatable::setValidator()), the value returned
         here is defined by the service implementing this interface.</p>
     */
     any getCurrentValue();

@@ -189,13 +189,13 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
         <p>An elementary query or statement is a (single select) statement whose parts are
         not covered by the various set and get methods of the composer. That is, if the
         elementary statement contains a filter clause, a call to
-        <member>XSingleSelectQueryAnalyzer::getFilter</member> will not return you this
+        XSingleSelectQueryAnalyzer::getFilter() will not return you this
         filter. Instead, only filters which have been set using for instance setFilter()
         are covered by the get methods.</p>
 
         <p>The only methods which take all parts of the elementary statement into account are
-        <member>XSingleSelectQueryAnalyzer::getQuery</member> and
-        <member>XSingleSelectQueryAnalyzer::getQueryWithSubstitution</member>, which always returns
+        XSingleSelectQueryAnalyzer::getQuery() and
+        XSingleSelectQueryAnalyzer::getQueryWithSubstitution(), which always returns
         the complete composed query.</p>
 
         <p>As a result, you can use the composer to build cumulative filter expressions. That
@@ -214,14 +214,14 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
 
         <p>If, in such a scenario, you would be interested in the filter part of the
         <member>QueryDefinition::Command</member>, you would set it via
-        <member>XSingleSelectQueryAnalyzer::setQuery</member>, and retrieve the filter
-        part via <member>XSingleSelectQueryAnalyzer::getFilter</member>.</p>
+        XSingleSelectQueryAnalyzer::setQuery(), and retrieve the filter
+        part via XSingleSelectQueryAnalyzer::getFilter().</p>
 
         <p>If you'd be interested in the composed filter, you would set the
         <member>QueryDefinition::Command</member> as <member>ElementaryQuery</member>, add your
-        filter, and propagate the resulting query (<member>XSingleSelectQueryAnalyzer::getQuery</member>)
+        filter, and propagate the resulting query (XSingleSelectQueryAnalyzer::getQuery())
         to an SingleSelectQueryAnalyzer instance via
-        <member>XSingleSelectQueryAnalyzer::setQuery</member>.</p>
+        XSingleSelectQueryAnalyzer::setQuery().</p>
     */
     [attribute] string ElementaryQuery
     {

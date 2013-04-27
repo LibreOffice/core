@@ -25,7 +25,7 @@ module com {  module sun {  module star {  module i18n {
 
 /**
     Constants to specify the type of a line break, used with
-    <member>LineBreakResults::breakType</member>.
+    LineBreakResults::breakType().
  */
 
 published constants BreakType

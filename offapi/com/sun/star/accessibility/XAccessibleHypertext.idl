@@ -34,7 +34,7 @@ module com { module sun { module star { module accessibility {
     <p>The XAccessibleHypertext interface is the main interface
     to expose hyperlinks in a document, typically a text document, that are
     used to reference other (parts of) documents.  For supporting the
-    <member>XAccessibleHypertext::getLinkIndex</member> method of this
+    XAccessibleHypertext::getLinkIndex() method of this
     interface and other character related methods of the
     XAccessibleHyperlink interface, it is necessary to also
     support the XAccessibleText interface.</p>

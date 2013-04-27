@@ -71,7 +71,7 @@ published service DataAwareControlModel
         (see XReset) is as follows:<br/>
         If (and only if) the control is valid bound to a column of it's com::sun::star::form::component::DataForm, and the form
         is not positioned on a new record (see <member scope="com::sun::star::sdb">RowSet::IsNew</member>), then
-        <member>XReset::reset</member> does not reset the model's value to it's default value, but uses the
+        XReset::reset() does not reset the model's value to it's default value, but uses the
         underlying column value.<br/>
         In all other cases, the model is reset to the default value as specified by the respective property.</p>
 

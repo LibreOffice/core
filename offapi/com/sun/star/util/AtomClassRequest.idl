@@ -35,11 +35,11 @@ module util
 published struct AtomClassRequest
 {
     /** the class of the atoms described in member
-        <member>AtomClassRequest::atoms</member>.
+        AtomClassRequest::atoms().
      */
     long                atomClass;
 
-    /** the atoms requested from class <member>AtomClassRequest::atomClass</member>.
+    /** the atoms requested from class AtomClassRequest::atomClass().
     */
     sequence< long >    atoms;
 };
