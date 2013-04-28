@@ -25,6 +25,13 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
+using namespace ::osl;
+using namespace css::bridge;
+using namespace css::connection;
+using namespace css::container;
+using namespace css::lang;
+using namespace css::uno;
+
 namespace desktop
 {
 

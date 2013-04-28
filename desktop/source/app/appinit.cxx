@@ -30,8 +30,6 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/XCurrentContext.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
-
-
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
@@ -55,14 +53,12 @@
 #include <vcl/svapp.hxx>
 #include <unotools/pathoptions.hxx>
 
-
 using namespace desktop;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::ucb;
-
 
 namespace desktop
 {

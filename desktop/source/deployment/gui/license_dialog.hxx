@@ -27,17 +27,13 @@
 
 #include "boost/bind.hpp"
 
-using namespace ::dp_misc;
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-
 namespace dp_gui {
 
 class LicenseDialog
-    : public ::cppu::WeakImplHelper1<ui::dialogs::XExecutableDialog>
+    : public ::cppu::WeakImplHelper1<css::ui::dialogs::XExecutableDialog>
 {
-    Reference<XComponentContext> const m_xComponentContext;
-    Reference<awt::XWindow> /* const */ m_parent;
+    css::uno::Reference<css::uno::XComponentContext> const m_xComponentContext;
+    css::uno::Reference<css::awt::XWindow> /* const */ m_parent;
     OUString m_sExtensionName;
     OUString /* const */ m_sLicenseText;
     OUString m_initialTitle;
@@ -45,13 +41,13 @@ class LicenseDialog
     sal_Int16 solar_execute();
 
 public:
-    LicenseDialog( Sequence<Any> const & args,
-                 Reference<XComponentContext> const & xComponentContext );
+    LicenseDialog( css::uno::Sequence<css::uno::Any> const & args,
+                 css::uno::Reference<css::uno::XComponentContext> const & xComponentContext );
 
     // XExecutableDialog
     virtual void SAL_CALL setTitle( OUString const & title )
-        throw (RuntimeException);
-    virtual sal_Int16 SAL_CALL execute() throw (RuntimeException);
+        throw (css::uno::RuntimeException);
+    virtual sal_Int16 SAL_CALL execute() throw (css::uno::RuntimeException);
 };
 }
 #endif

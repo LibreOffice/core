@@ -27,8 +27,6 @@
 
 #include <ostream>
 
-using std::ostream;
-
 namespace editeng { class SvxBorderLine; }
 
 class SvxFontItem;
@@ -103,7 +101,7 @@ class Ww1Fib
     SvStream& rStream;
 public:
     Ww1Fib(SvStream&);
-    friend ostream& operator <<(ostream&, Ww1Fib&);
+    friend std::ostream& operator <<(std::ostream&, Ww1Fib&);
     W1_FIB& GetFIB()        { return aFib; }
     sal_Bool GetError()         { return !bOK; }
     SvStream& GetStream()   { return rStream; }
@@ -124,7 +122,7 @@ public:
         return !bOK; }
     W1_DOP& GetDOP() {
         return aDop; }
-    friend ostream& operator <<(ostream&, Ww1Dop&);
+    friend std::ostream& operator <<(std::ostream&, Ww1Dop&);
     void Out(Ww1Shell&);
 };
 
@@ -168,7 +166,7 @@ public:
     sal_Unicode Out( Ww1Shell&, sal_uLong& );
     sal_Unicode Out( String&, sal_uLong=0xffffffff);
     sal_Unicode Out( sal_Unicode& );
-    friend ostream& operator <<(ostream&, Ww1PlainText&);
+    friend std::ostream& operator <<(std::ostream&, Ww1PlainText&);
     String& Fill( String&, sal_uLong=0, sal_uLong=0xffffffff );
     sal_Unicode operator []( sal_uLong );
     String GetText( sal_uLong ulOffset, sal_uLong nLen ) const;
@@ -265,7 +263,7 @@ public:
     sal_uInt16 ReadChpx(sal_uInt8*&, sal_uInt16&);
     sal_uInt16 ReadPapx(sal_uInt8*&, sal_uInt16&);
     sal_uInt16 ReadEstcp(sal_uInt8*&, sal_uInt16&);
-    friend ostream& operator <<(ostream&, Ww1Style&);
+    friend std::ostream& operator <<(std::ostream&, Ww1Style&);
     void Out(Ww1Shell&, Ww1Manager&);
 };
 
@@ -294,7 +292,7 @@ public:
         return aStyles[stc]; }
     sal_uInt16 Count() {
         return 256; }
-    friend ostream& operator <<(ostream&, Ww1StyleSheet&);
+    friend std::ostream& operator <<(std::ostream&, Ww1StyleSheet&);
     void Out(Ww1Shell&, Ww1Manager&);
     friend class Ww1Style;
     sal_Bool GetError() {
@@ -324,7 +322,7 @@ public:
     W1_FFN* GetFFN(sal_uInt16 nNum);
     sal_uInt16 Count() {
         return nMax; }
-    friend ostream& operator <<(ostream&, Ww1Fonts&);
+    friend std::ostream& operator <<(std::ostream&, Ww1Fonts&);
     sal_Bool GetError() {
         return !bOK; }
     SvxFontItem GetFont(sal_uInt16);
@@ -359,12 +357,12 @@ public:
 //
     void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
     void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
-    virtual ostream& Dump(ostream&, sal_uInt8*, sal_uInt16);
+    virtual std::ostream& Dump(std::ostream&, sal_uInt8*, sal_uInt16);
     const sal_Char* sName;
 #else
     virtual void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
     virtual void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
-    ostream& Dump(ostream&, sal_uInt8*, sal_uInt16);
+    std::ostream& Dump(std::ostream&, sal_uInt8*, sal_uInt16);
 #endif
     virtual sal_uInt16 Size(sal_uInt8*);
     sal_uInt16 nCountBytes;
@@ -397,7 +395,7 @@ public:
 
 class Ww1SingleSprmByte : public Ww1SingleSprm {
 public:
-    ostream& Dump(ostream&, sal_uInt8*, sal_uInt16);
+    std::ostream& Dump(std::ostream&, sal_uInt8*, sal_uInt16);
     Ww1SingleSprmByte(sal_Char* sName = 0) :
         Ww1SingleSprm(1, sName) {
         }
@@ -405,7 +403,7 @@ public:
 
 class Ww1SingleSprmBool : public Ww1SingleSprmByte {
 public:
-    ostream& Dump(ostream&, sal_uInt8*, sal_uInt16);
+    std::ostream& Dump(std::ostream&, sal_uInt8*, sal_uInt16);
     Ww1SingleSprmBool(sal_Char* sName = 0) :
         Ww1SingleSprmByte(sName) {
         }
@@ -413,7 +411,7 @@ public:
 
 class Ww1SingleSprm4State : public Ww1SingleSprmByte {
 public:
-    ostream& Dump(ostream&, sal_uInt8*, sal_uInt16);
+    std::ostream& Dump(std::ostream&, sal_uInt8*, sal_uInt16);
     Ww1SingleSprm4State(sal_Char* sName = 0) :
         Ww1SingleSprmByte(sName) {
         }
@@ -421,14 +419,14 @@ public:
 
 class Ww1SingleSprmWord : public Ww1SingleSprm {
 public:
-    ostream& Dump(ostream&, sal_uInt8*, sal_uInt16);
+    std::ostream& Dump(std::ostream&, sal_uInt8*, sal_uInt16);
     Ww1SingleSprmWord(sal_Char* sName = 0)
     : Ww1SingleSprm(2, sName) {}
 };
 
 class Ww1SingleSprmLong : public Ww1SingleSprm {
 public:
-    ostream& Dump(ostream&, sal_uInt8*, sal_uInt16);
+    std::ostream& Dump(std::ostream&, sal_uInt8*, sal_uInt16);
     Ww1SingleSprmLong(sal_Char* sName = 0) :
         Ww1SingleSprm(4, sName) {
         }
@@ -436,7 +434,7 @@ public:
 
 class Ww1SingleSprmTab : public Ww1SingleSprm {
 public:
-    ostream& Dump(ostream&, sal_uInt8*, sal_uInt16);
+    std::ostream& Dump(std::ostream&, sal_uInt8*, sal_uInt16);
     sal_uInt16 Size(sal_uInt8*);
     Ww1SingleSprmTab(sal_uInt16 nBytes, sal_Char* sName = 0) :
         Ww1SingleSprm(nBytes, sName) {
@@ -741,7 +739,7 @@ public:
     Ww1Sprm(sal_uInt8*, sal_uInt16);
     Ww1Sprm(SvStream&, sal_uLong);
     ~Ww1Sprm();
-    friend ostream& operator <<(ostream&, Ww1Sprm&);
+    friend std::ostream& operator <<(std::ostream&, Ww1Sprm&);
     void Start(Ww1Shell&, Ww1Manager&);
     void Start(Ww1Shell&, Ww1Manager&, sal_uInt16);
     void Stop(Ww1Shell&, Ww1Manager&);
@@ -769,7 +767,7 @@ public:
         }
     sal_Bool GetError() {
         return !bOK; }
-    friend ostream& operator <<(ostream&, Ww1Picture&);
+    friend std::ostream& operator <<(std::ostream&, Ww1Picture&);
     void Out(Ww1Shell&, Ww1Manager&);
     void WriteBmp(SvStream&);
 };
@@ -793,7 +791,7 @@ protected:
 public:
     Ww1Plc(Ww1Fib&, sal_uLong, sal_uInt16, sal_uInt16);
     ~Ww1Plc();
-    friend ostream& operator <<(ostream&, Ww1Plc&);
+    friend std::ostream& operator <<(std::ostream&, Ww1Plc&);
     sal_uLong Where(sal_uInt16); // wie im jeweiligen plc
     void Seek(sal_uLong, sal_uInt16&);
     void Fill(sal_uInt16 nIndex, sal_uLong& begin, sal_uLong& end) {
@@ -849,7 +847,7 @@ public:
         aRef(rFib),
         aTxt(rFib) {
         }
-    friend ostream& operator <<(ostream&, Ww1Annotation&);
+    friend std::ostream& operator <<(std::ostream&, Ww1Annotation&);
 };
 
 //////////////////////////////////////////////////////////////// PlcSep
@@ -860,7 +858,7 @@ public:
         Ww1Plc(rFibL, rFibL.GetFIB().fcPlcfsedGet(),
          rFibL.GetFIB().cbPlcfsedGet(), 6) {
         }
-    friend ostream& operator <<(ostream&, Ww1PlcSep&);
+    friend std::ostream& operator <<(std::ostream&, Ww1PlcSep&);
 };
 
 //////////////////////////////////////////////////////////////// PlcChp
@@ -871,7 +869,7 @@ public:
         Ww1Plc(rFibL, rFibL.GetFIB().fcPlcfbteChpxGet(),
          rFibL.GetFIB().cbPlcfbteChpxGet(), 2) {
         }
-    friend ostream& operator <<(ostream&, Ww1PlcChp&);
+    friend std::ostream& operator <<(std::ostream&, Ww1PlcChp&);
 };
 
 //////////////////////////////////////////////////////////////// PlcPap
@@ -882,7 +880,7 @@ public:
         Ww1Plc(rFibL, rFibL.GetFIB().fcPlcfbtePapxGet(),
          rFibL.GetFIB().cbPlcfbtePapxGet(), 2) {
         }
-    friend ostream& operator <<(ostream&, Ww1PlcPap&);
+    friend std::ostream& operator <<(std::ostream&, Ww1PlcPap&);
 };
 
 //////////////////////////////////////////////////////// PlcFootnoteRef
@@ -893,7 +891,7 @@ public:
         Ww1Plc(rFibL, rFibL.GetFIB().fcPlcffndRefGet(),
          rFibL.GetFIB().cbPlcffndRefGet(), 2) {
         }
-    friend ostream& operator <<(ostream&, Ww1PlcFootnoteRef&);
+    friend std::ostream& operator <<(std::ostream&, Ww1PlcFootnoteRef&);
 };
 
 //////////////////////////////////////////////////////// PlcFootnoteTxt
@@ -904,7 +902,7 @@ public:
         Ww1Plc(rFibL, rFibL.GetFIB().fcPlcffndTxtGet(),
          rFibL.GetFIB().cbPlcffndTxtGet(), 0) {
         }
-    friend ostream& operator <<(ostream&, Ww1PlcFootnoteTxt&);
+    friend std::ostream& operator <<(std::ostream&, Ww1PlcFootnoteTxt&);
 };
 
 ///////////////////////////////////////////////////////////// PlcFields
@@ -918,7 +916,7 @@ public:
         { return (W1_FLD*)Ww1Plc::GetData(nIndex); }
     sal_uLong Where(sal_uInt16 nIndex)  // absolut im file
         { return Ww1Plc::Where(nIndex) + rFib.GetFIB().fcMinGet(); }
-    friend ostream& operator <<(ostream&, Ww1PlcFields&);
+    friend std::ostream& operator <<(std::ostream&, Ww1PlcFields&);
 };
 
 ///////////////////////////////////////////////////////////// PlcBookmarks
@@ -987,7 +985,7 @@ protected:
     sal_uInt8* GetData(sal_uInt16);
 public:
     Ww1Fkp(SvStream&, sal_uLong, sal_uInt16);
-    friend ostream& operator <<(ostream&, Ww1Fkp&);
+    friend std::ostream& operator <<(std::ostream&, Ww1Fkp&);
     sal_uInt16 Count() const            { return SVBT8ToByte(aFkp+511); }
     sal_uLong Where(sal_uInt16); // wie im entsprechenden fkp
 };
@@ -999,7 +997,7 @@ public:
     Ww1FkpPap(SvStream& rStream, sal_uLong ulFilePos)
         : Ww1Fkp(rStream, ulFilePos, 1)
     {}
-    friend ostream& operator <<(ostream&, Ww1FkpPap&);
+    friend std::ostream& operator <<(std::ostream&, Ww1FkpPap&);
     sal_Bool Fill(sal_uInt16,  sal_uInt8*&, sal_uInt16&);
 };
 
@@ -1018,7 +1016,7 @@ public:
 #endif
     {}
 
-    friend ostream& operator <<(ostream&, Ww1FkpChp&);
+    friend std::ostream& operator <<(std::ostream&, Ww1FkpChp&);
     sal_Bool Fill(sal_uInt16, W1_CHP&);
 };
 
@@ -1030,7 +1028,7 @@ class Ww1SprmPapx : public Ww1Sprm
     sal_uInt16 SprmSize(sal_uInt8* p, sal_uInt16 nSize);
 public:
     Ww1SprmPapx(sal_uInt8* p, sal_uInt16 nSize);
-    friend ostream& operator <<(ostream&, Ww1SprmPapx&);
+    friend std::ostream& operator <<(std::ostream&, Ww1SprmPapx&);
     void Start(Ww1Shell&, Ww1Manager&);
     void Stop(Ww1Shell&, Ww1Manager&);
 };
@@ -1042,7 +1040,7 @@ public:
     Ww1SprmSep(Ww1Fib& rFib, sal_uLong ulFilePos)
         : Ww1Sprm(rFib.GetStream(), ulFilePos)
     {}
-    friend ostream& operator <<(ostream&, Ww1SprmSep&);
+    friend std::ostream& operator <<(std::ostream&, Ww1SprmSep&);
 };
 
 ///////////////////////////////////////////////////////////////// Assoc
@@ -1063,7 +1061,7 @@ public:
     Ww1Assoc(Ww1Fib&);
     ~Ww1Assoc()             { delete pBuffer; }
     sal_Bool GetError() const   { return !bOK; }
-    friend ostream& operator <<(ostream&, Ww1Assoc&);
+    friend std::ostream& operator <<(std::ostream&, Ww1Assoc&);
     void Out(Ww1Shell&);
 };
 
@@ -1234,7 +1232,7 @@ public:
         return Ww1PlcFields::GetData(nPlcIndex);
     }
     sal_uLong GetLength();
-    friend ostream& operator <<(ostream&, Ww1Manager&);
+    friend std::ostream& operator <<(std::ostream&, Ww1Manager&);
     void Start(Ww1Shell&, Ww1Manager&);
     void Stop(Ww1Shell&, Ww1Manager&, sal_Unicode&);
     void Out(Ww1Shell&, Ww1Manager&, sal_uInt16=0);
@@ -1300,7 +1298,7 @@ public:
     sal_Bool GetIsEnd() const   { return ( nIsEnd ) ? sal_True : sal_False; }
     const String GetName() const;
     long Len() const;
-    friend ostream& operator <<(ostream&, Ww1Bookmarks&);
+    friend std::ostream& operator <<(std::ostream&, Ww1Bookmarks&);
     void Start(Ww1Shell&, Ww1Manager&);
     void Stop(Ww1Shell&, Ww1Manager&, sal_Unicode&);
     void Out(Ww1Shell&, Ww1Manager&, sal_uInt16=0);
@@ -1554,7 +1552,7 @@ public:
     }
     SvxFontItem GetFont(sal_uInt16 nFCode);
     friend Ww1Shell& operator <<(Ww1Shell&, Ww1Manager&);
-    friend ostream& operator <<(ostream&, Ww1Manager&);
+    friend std::ostream& operator <<(std::ostream&, Ww1Manager&);
     sal_Bool Pushed()                       { return pDoc != &aDoc; }
     void Pop();
     void Push0(Ww1PlainText* pDoc, sal_uLong, Ww1Fields* = 0);

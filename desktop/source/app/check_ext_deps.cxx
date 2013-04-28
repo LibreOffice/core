@@ -57,6 +57,9 @@
 
 using namespace desktop;
 using namespace com::sun::star;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::task;
+using namespace com::sun::star::uno;
 
 namespace
 {

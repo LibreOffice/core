@@ -40,14 +40,9 @@
 #include <osl/mutex.hxx>
 #include <rtl/bootstrap.hxx>
 
-using namespace ::rtl;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::task;
-
 namespace desktop {
 
-class  UnxSplashScreen : public ::cppu::WeakImplHelper2< XStatusIndicator, XInitialization >
+class  UnxSplashScreen : public ::cppu::WeakImplHelper2< css::task::XStatusIndicator, css::lang::XInitialization >
 {
 private:
     // don't allow anybody but ourselves to create instances of this class
@@ -60,22 +55,22 @@ private:
     static  UnxSplashScreen *m_pINSTANCE;
 
     static osl::Mutex m_aMutex;
-    Reference< XComponentContext > m_xCtx;
+    css::uno::Reference< css::uno::XComponentContext > m_xCtx;
 
     FILE *m_pOutFd;
 
 public:
-    UnxSplashScreen( const Reference< XComponentContext >& xCtx );
+    UnxSplashScreen( const css::uno::Reference< css::uno::XComponentContext >& xCtx );
 
     // XStatusIndicator
-    virtual void SAL_CALL start( const OUString& aText, sal_Int32 nRange ) throw ( RuntimeException );
-    virtual void SAL_CALL end() throw ( RuntimeException );
-    virtual void SAL_CALL reset() throw ( RuntimeException );
-    virtual void SAL_CALL setText( const OUString& aText ) throw ( RuntimeException );
-    virtual void SAL_CALL setValue( sal_Int32 nValue ) throw ( RuntimeException );
+    virtual void SAL_CALL start( const OUString& aText, sal_Int32 nRange ) throw ( css::uno::RuntimeException );
+    virtual void SAL_CALL end() throw ( css::uno::RuntimeException );
+    virtual void SAL_CALL reset() throw ( css::uno::RuntimeException );
+    virtual void SAL_CALL setText( const OUString& aText ) throw ( css::uno::RuntimeException );
+    virtual void SAL_CALL setValue( sal_Int32 nValue ) throw ( css::uno::RuntimeException );
 
     // XInitialize
-    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& aArguments ) throw ( RuntimeException );
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any>& aArguments ) throw ( css::uno::RuntimeException );
 };
 
 }

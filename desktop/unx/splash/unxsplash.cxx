@@ -31,6 +31,7 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::registry;
+using namespace ::com::sun::star::uno;
 
 namespace desktop
 {

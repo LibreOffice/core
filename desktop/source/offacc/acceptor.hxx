@@ -37,38 +37,27 @@
 #include <osl/conditn.hxx>
 #include <osl/thread.hxx>
 
-
-using namespace ::rtl;
-using namespace ::osl;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::bridge;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::connection;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::registry;
-
 namespace desktop {
 
 class  Acceptor
-    : public ::cppu::WeakImplHelper2<XServiceInfo, XInitialization>
+    : public ::cppu::WeakImplHelper2<css::lang::XServiceInfo, css::lang::XInitialization>
 {
 private:
     static const sal_Char *serviceName;
     static const sal_Char *implementationName;
     static const sal_Char *supportedServiceNames[];
 
-    static Mutex m_aMutex;
+    static ::osl::Mutex m_aMutex;
 
     oslThread m_thread;
     comphelper::WeakBag< com::sun::star::bridge::XBridge > m_bridges;
 
-    Condition m_cEnable;
+    ::osl::Condition m_cEnable;
 
-    Reference< XMultiServiceFactory > m_rSMgr;
-    Reference< XComponentContext >    m_rContext;
-    Reference< XAcceptor >            m_rAcceptor;
-    Reference< XBridgeFactory2 >      m_rBridgeFactory;
+    css::uno::Reference< css::lang::XMultiServiceFactory > m_rSMgr;
+    css::uno::Reference< css::uno::XComponentContext >     m_rContext;
+    css::uno::Reference< css::connection::XAcceptor >      m_rAcceptor;
+    css::uno::Reference< css::bridge::XBridgeFactory2 >    m_rBridgeFactory;
 
     OUString m_aAcceptString;
     OUString m_aConnectString;
@@ -78,42 +67,42 @@ private:
     bool m_bDying;
 
 public:
-    Acceptor( const Reference< XMultiServiceFactory >& aFactory );
+    Acceptor( const css::uno::Reference< css::lang::XMultiServiceFactory >& aFactory );
     virtual ~Acceptor();
 
     void SAL_CALL run();
 
     // XService info
-    static  OUString                    impl_getImplementationName();
-    virtual OUString           SAL_CALL getImplementationName()
-        throw (RuntimeException);
-    static  Sequence<OUString>          impl_getSupportedServiceNames();
-    virtual Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (RuntimeException);
-    virtual sal_Bool           SAL_CALL supportsService( const OUString& aName )
-        throw (RuntimeException);
+    static OUString impl_getImplementationName();
+    virtual OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException);
+    static css::uno::Sequence<OUString> impl_getSupportedServiceNames();
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& aName )
+        throw (css::uno::RuntimeException);
 
     // XInitialize
-    virtual void SAL_CALL initialize( const Sequence<Any>& aArguments )
-        throw ( Exception );
+    virtual void SAL_CALL initialize( const css::uno::Sequence<css::uno::Any>& aArguments )
+        throw ( css::uno::Exception );
 
-    static  Reference<XInterface> impl_getInstance( const Reference< XMultiServiceFactory >& aFactory );
+    static css::uno::Reference<css::uno::XInterface> impl_getInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& aFactory );
 };
 
-class AccInstanceProvider : public ::cppu::WeakImplHelper1<XInstanceProvider>
+class AccInstanceProvider : public ::cppu::WeakImplHelper1<css::bridge::XInstanceProvider>
 {
 private:
-    Reference<XMultiServiceFactory> m_rSMgr;
-    Reference<XConnection> m_rConnection;
+    css::uno::Reference<css::lang::XMultiServiceFactory> m_rSMgr;
+    css::uno::Reference<css::connection::XConnection> m_rConnection;
 
 public:
-    AccInstanceProvider(const Reference< XMultiServiceFactory >& aFactory,
-                        const Reference< XConnection >& rConnection);
+    AccInstanceProvider(const css::uno::Reference< css::lang::XMultiServiceFactory >& aFactory,
+                        const css::uno::Reference< css::connection::XConnection >& rConnection);
     virtual ~AccInstanceProvider();
 
     // XInstanceProvider
-    virtual Reference<XInterface> SAL_CALL getInstance (const OUString& aName )
-        throw ( NoSuchElementException );
+    virtual css::uno::Reference<css::uno::XInterface> SAL_CALL getInstance (const OUString& aName )
+        throw ( css::container::NoSuchElementException );
 };
 
 

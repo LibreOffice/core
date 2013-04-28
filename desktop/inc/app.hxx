@@ -37,10 +37,6 @@ namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 } } } }
 
-using namespace com::sun::star::task;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-
 namespace desktop
 {
 
@@ -49,7 +45,7 @@ namespace desktop
  --------------------------------------------------------------------*/
 class CommandLineArgs;
 class Lockfile;
-class AcceptorMap : public std::map< OUString, Reference<XInitialization> > {};
+class AcceptorMap : public std::map< OUString, css::uno::Reference<css::lang::XInitialization> > {};
 struct ConvertData;
 class Desktop : public Application
 {
@@ -137,8 +133,8 @@ class Desktop : public Application
 
     private:
         void RegisterServices(
-            com::sun::star::uno::Reference<
-                com::sun::star::uno::XComponentContext > const & context);
+            css::uno::Reference<
+                css::uno::XComponentContext > const & context);
         void                    DeregisterServices();
 
         void                    CreateTemporaryDirectory();
@@ -148,7 +144,7 @@ class Desktop : public Application
         bool                    InitializeConfiguration();
         void                    FlushConfiguration();
         static sal_Bool         shouldLaunchQuickstart();
-        sal_Bool                InitializeQuickstartMode( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
+        sal_Bool                InitializeQuickstartMode( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
         void                    HandleBootstrapPathErrors( ::utl::Bootstrap::Status, const OUString& aMsg );
         void                    StartSetup( const OUString& aParameters );
@@ -160,7 +156,7 @@ class Desktop : public Application
         static void             PreloadModuleData( const CommandLineArgs& );
         static void             PreloadConfigurationData();
 
-        Reference<XStatusIndicator> m_rSplashScreen;
+        css::uno::Reference<css::task::XStatusIndicator> m_rSplashScreen;
         void                    OpenSplashScreen();
         void                    CloseSplashScreen();
 

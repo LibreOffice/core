@@ -33,6 +33,8 @@
 using namespace ::desktop;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
 
 static const char aAccessSrvc[] = "com.sun.star.configuration.ConfigurationUpdateAccess";
 
