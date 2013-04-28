@@ -65,7 +65,6 @@ const SfxItemPropertySet* GetErrorBarPropertySet()
         {MAP_CHAR_LEN("ErrorBarRangeNegative"),7,&getCppuType((OUString*)0),0,0}, // read-only for export
         {MAP_CHAR_LEN("Weight"),8,&getCppuType((const double*)0),0,0},
         {MAP_CHAR_LEN("LineStyle"),9,&getCppuType((com::sun::star::drawing::LineStyle*)0),0,0},
-        {MAP_CHAR_LEN("LineDashName"),10,&getCppuType((OUString*)0),0,0},
         {MAP_CHAR_LEN("LineDash"),10,&getCppuType((drawing::LineDash*)0),0,0},
         {MAP_CHAR_LEN("LineWidth"),11,&getCppuType((sal_Int32*)0),0,0},
         {MAP_CHAR_LEN("LineColor"),12,&getCppuType((com::sun::star::util::Color*)0),0,0},
