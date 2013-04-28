@@ -32,7 +32,7 @@ module com {  module sun {  module star {  module xml {  module sax {
 
     <p>If a SAX application needs to implement customized error handling,
     it must implement this interface and then register an instance with the
-    SAX parser using the parser's <method>XParser::setErrorhandler</method>
+    SAX parser using the parser's XParser::setErrorhandler()
     method. The parser will then report all errors and warnings through this
     interface.  </p>
 

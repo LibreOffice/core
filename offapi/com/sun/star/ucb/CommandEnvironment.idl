@@ -40,11 +40,11 @@ module com { module sun { module star { module ucb {
 
         @param InteractionHandler the interaction handler instance that will be
                                   returned by this service's implementation of
-                                  <method>XCommandEnvironemt::getInteractionHandler</method>
+                                  XCommandEnvironemt::getInteractionHandler()
 
         @param ProgressHandler    the progress handler instance that will be
                                   returned by this service's implementation of
-                                  <method>XCommandEnvironemt::getProgressHandler</method>
+                                  XCommandEnvironemt::getProgressHandler()
     */
      create( [in] com::sun::star::task::XInteractionHandler InteractionHandler,
              [in] com::sun::star::ucb::XProgressHandler ProgressHandler );

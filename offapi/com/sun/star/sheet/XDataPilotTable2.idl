@@ -44,7 +44,7 @@ module com {  module sun {  module star {  module sheet {
 interface XDataPilotTable2: com::sun::star::sheet::XDataPilotTable
 {
     /** When the address of a cell within the result area is given,
-        <method>XDataPilotTable2::getDrillDownData</method> returns its drill-down
+        XDataPilotTable2::getDrillDownData() returns its drill-down
         output table that includes only those rows that contribute to the value of
         that cell.
 
@@ -52,7 +52,7 @@ interface XDataPilotTable2: com::sun::star::sheet::XDataPilotTable
 
         @returns drill-down output as 2-dimensional sequence, including the header row.
 
-        @see <method>XDataPilotTable2::insertDrillDownSheet</method>
+        @see XDataPilotTable2::insertDrillDownSheet()
      */
     sequence< sequence< any > > getDrillDownData( [in] com::sun::star::table::CellAddress aAddr );
 

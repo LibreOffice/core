@@ -40,7 +40,7 @@ published interface XDropTargetListener: com::sun::star::lang::XEventListener
     /** The drag operation has terminated with a drop on this drop target.
 
         <p><strong>NOTE:</strong> The implementation
-        has to wait until the method <method>XDropTargetDropContext::dropComplete</method>
+        has to wait until the method XDropTargetDropContext::dropComplete()
         is called before releasing the data for the drop operation. This
         should occur before returning from drop in a normal flow of operation.
         Also, the implementor of XDropTargetListener should not assume

@@ -29,7 +29,7 @@ module com { module sun { module star { module document {
 
 /** Filter for importing Basic macros from the OpenOffice.org file format.
 
-    <p>The <method>XImporter::setTargetDocument</method> method must be
+    <p>The XImporter::setTargetDocument() method must be
     called in order to provide the import component with the target document
     to which the data should be imported.
     The com::sun::star::xml::sax::XDocumentHandler

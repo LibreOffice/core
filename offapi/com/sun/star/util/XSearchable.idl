@@ -75,8 +75,8 @@ published interface XSearchable: com::sun::star::uno::XInterface
 
         @param xStartAt
             represents a position within the component at which the search continues.
-            This position is returned by <method>XSearchable::findFirst</method> or
-            the previous <method>XSearchable::findNext</method>.
+            This position is returned by XSearchable::findFirst() or
+            the previous XSearchable::findNext().
 
         @see SearchDescriptor
      */

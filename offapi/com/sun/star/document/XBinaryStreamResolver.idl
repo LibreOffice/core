@@ -51,7 +51,7 @@ published interface XBinaryStreamResolver: com::sun::star::uno::XInterface
 
     /** creates an output stream, to which binary data can be written.
         After writing, an URL can be retrieved by a call to
-        <method>XBinaryStreamResolver::resolveOutputStream</method>.
+        XBinaryStreamResolver::resolveOutputStream().
     */
     com::sun::star::io::XOutputStream createOutputStream();
 

@@ -24,7 +24,7 @@ module com {  module sun {  module star {  module sdb {
 
 /** These constants are used to specify the filter operator
     which should be applied when creating a filter
-    with the method <method>XSingleSelectQueryComposer::setStructuredFilter</method>.
+    with the method XSingleSelectQueryComposer::setStructuredFilter().
 
     @see com::sun::star::sdb::SingleSelectQueryComposer
     @see com::sun::star::sdb::XSingleSelectQueryComposer

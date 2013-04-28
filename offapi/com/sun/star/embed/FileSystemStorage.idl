@@ -57,27 +57,27 @@ published service FileSystemStorage
             <dt>interface XStorage</dt>
             <dd>
                 <dl>
-                    <dt><method>XStorage::openStorageElement</method></dt>
+                    <dt>XStorage::openStorageElement()</dt>
                     <dd>
                         This method returns FileSystemStorage
                         service implementation.
                     </dd>
 
-                    <dt><method>XStorage::copyLastCommitTo</method></dt>
+                    <dt>XStorage::copyLastCommitTo()</dt>
                     <dd>
                         Since this service implementation supports no transaction
                         this method just creates a copy of the storage in it's
                         current state.
                     </dd>
 
-                    <dt><method>XStorage::copyStorageElementLastCommitTo</method></dt>
+                    <dt>XStorage::copyStorageElementLastCommitTo()</dt>
                     <dd>
                         Since this service implementation supports no transaction
                         this method just creates a copy of the storage in it's
                         current state.
                     </dd>
 
-                    <dt><method>XStorage::removeStorageElement</method></dt>
+                    <dt>XStorage::removeStorageElement()</dt>
                     <dd>
                         If the element is opened and it is a stream element
                         the removing will fail. If the element is opened and

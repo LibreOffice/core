@@ -88,7 +88,7 @@ published service Storage
             <dt>interface XStorage</dt>
             <dd>
                 <dl>
-                    <dt><method>XStorage::openStreamElement</method></dt>
+                    <dt>XStorage::openStreamElement()</dt>
                     <dd>
                         <p>
                         This method returns StorageStream
@@ -105,7 +105,7 @@ published service Storage
                         </p>
                     </dd>
 
-                    <dt><method>XStorage::openEncryptedStreamElement</method></dt>
+                    <dt>XStorage::openEncryptedStreamElement()</dt>
                     <dd>
                         This method allows to specify reading password for the
                         stream explicitly. The password will be used to read
@@ -116,13 +116,13 @@ published service Storage
                         be used for storing.
                     </dd>
 
-                    <dt><method>XStorage::openStorageElement</method></dt>
+                    <dt>XStorage::openStorageElement()</dt>
                     <dd>
                         This method returns Storage service
                         implementation.
                     </dd>
 
-                    <dt><method>XStorage::cloneStreamElement</method></dt>
+                    <dt>XStorage::cloneStreamElement()</dt>
                     <dd>
                         <p>
                         This method returns StorageStream service
@@ -156,7 +156,7 @@ published service Storage
                         </p>
                     </dd>
 
-                    <dt><method>XStorage::cloneEncryptedStreamElement</method></dt>
+                    <dt>XStorage::cloneEncryptedStreamElement()</dt>
                     <dd>
                         <p>
                         This method returns StorageStream service
@@ -181,7 +181,7 @@ published service Storage
                         </p>
                     </dd>
 
-                    <dt><method>XStorage::copyLastCommitTo</method></dt>
+                    <dt>XStorage::copyLastCommitTo()</dt>
                     <dd>
                         This method gets Storage service
                         implementation and fills it in with the latest
@@ -190,7 +190,7 @@ published service Storage
                         changes will not appear in the new created storage.
                     </dd>
 
-                    <dt><method>XStorage::copyStorageElementLastCommitTo</method></dt>
+                    <dt>XStorage::copyStorageElementLastCommitTo()</dt>
                     <dd>
                         <p>
                         This method gets Storage service
@@ -207,7 +207,7 @@ published service Storage
                         </p>
                     </dd>
 
-                    <dt><method>XStorage::removeStorageElement</method></dt>
+                    <dt>XStorage::removeStorageElement()</dt>
                     <dd>
                         If the element is opened the removing will fail.
                     </dd>

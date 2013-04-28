@@ -39,7 +39,7 @@ published interface XDataEditor: com::sun::star::uno::XInterface
     void setModel( [in] com::sun::star::uno::XInterface model );
 
     /** @returns
-            the data model which was set by <method>XDataEditor::setModel</method>.
+            the data model which was set by XDataEditor::setModel().
      */
     com::sun::star::uno::XInterface getModel();
 

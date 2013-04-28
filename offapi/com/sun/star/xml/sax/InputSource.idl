@@ -32,8 +32,8 @@ module com {  module sun {  module star {  module xml {  module sax {
     source to the parser:
     </p>
     <ul>
-        <li>as the argument of <method>XParser::parseStream</method></li>
-        <li>as the return value of <method>XEntityReslover::resolveEntity</method>.
+        <li>as the argument of XParser::parseStream()</li>
+        <li>as the return value of XEntityReslover::resolveEntity().
     </li>
     </ul>
  */

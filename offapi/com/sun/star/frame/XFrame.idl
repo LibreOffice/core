@@ -313,7 +313,7 @@ published interface XFrame: com::sun::star::lang::XComponent
 
         <p>
         According to a call to this interface, the frame calls
-        <method>XFrameEventListener::frameAction</method> with
+        XFrameEventListener::frameAction() with
         FrameAction::CONTEXT_CHANGED to all listeners which
         are registered using XFrame::addFrameActionListener().
         For external controllers this event can be used to requery dispatches.

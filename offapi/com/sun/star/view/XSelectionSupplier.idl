@@ -56,7 +56,7 @@ published interface XSelectionSupplier: com::sun::star::uno::XInterface
     void addSelectionChangeListener( [in] com::sun::star::view::XSelectionChangeListener xListener );
 
     /** unregisters an event listener which was registered with
-        <method>XSelectionSupplier::addSelectionChangeListener</method>.
+        XSelectionSupplier::addSelectionChangeListener().
      */
     void removeSelectionChangeListener( [in] com::sun::star::view::XSelectionChangeListener xListener );
 

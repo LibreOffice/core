@@ -49,7 +49,7 @@ interface XRangeHighlighter : ::com::sun::star::uno::XInterface
     void addSelectionChangeListener( [in] com::sun::star::view::XSelectionChangeListener xListener );
 
     /** unregisters an event listener which was registered with
-        <method>XRangeHighlighter::addSelectionChangeListener</method>
+        XRangeHighlighter::addSelectionChangeListener()
         before.
      */
     void removeSelectionChangeListener( [in] com::sun::star::view::XSelectionChangeListener xListener );

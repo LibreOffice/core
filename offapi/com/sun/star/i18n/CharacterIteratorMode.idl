@@ -26,7 +26,7 @@ module com {  module sun {  module star {  module i18n {
 /** Constants to specify the type of character iteration.
 
     <p> Used with XBreakIterator::nextCharacters() and
-    <method>XBreakIterator::previousCharacters</method> </p>
+    XBreakIterator::previousCharacters() </p>
  */
 published constants CharacterIteratorMode
 {

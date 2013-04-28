@@ -89,7 +89,7 @@ published interface XDebugging: com::sun::star::uno::XInterface
 
     /** stops the execution of the interpreter.
 
-        <p>To continue with the execution, call <method>XDebugging::doContinue</method>.
+        <p>To continue with the execution, call XDebugging::doContinue().
      */
     void stop();
 

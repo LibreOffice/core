@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module i18n {
     start or end of a line.
 
     <p> Returned by
-    <method>XLocaleData::getForbiddenCharacters</method> and used with
+    XLocaleData::getForbiddenCharacters() and used with
     XForbiddenCharacters methods.
  */
 

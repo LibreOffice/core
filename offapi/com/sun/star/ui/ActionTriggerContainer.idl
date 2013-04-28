@@ -59,7 +59,7 @@ published service ActionTriggerContainer
     interface ::com::sun::star::container::XIndexContainer;
 
     /** creates elements to be inserted into the container.
-        <p>Usually, the <method>XMultiServiceFactory::getSupportedServiceNames</method>
+        <p>Usually, the XMultiServiceFactory::getSupportedServiceNames()
         gives you a ActionTrigger and
         optionally ActionTriggerContainer and
         ActionTriggerSeparator

@@ -148,10 +148,10 @@ published interface XEmbedPersist: XCommonEmbedPersist
         <p>
         The object should be stored to the new entry, after that the entry
         should be remembered by the object. After the storing process is
-        finished the <method>XEmbedPersist::saveCompleted</method> method
+        finished the XEmbedPersist::saveCompleted() method
         can be used to specify whether the object should use the new entry or
         the old one. The object persistence can not be used until
-        <method>XEmbedPersist::saveCompleted</method> is called.
+        XEmbedPersist::saveCompleted() is called.
         So this state can be treated as "HandsOff" state.
         <p>
 

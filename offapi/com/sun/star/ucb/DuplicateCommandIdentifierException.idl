@@ -29,7 +29,7 @@ module com { module sun { module star { module ucb {
     the same command identifier was used for two threads.
 
     <p>Each thread must use it's own command identifier, which must be obtained
-    using <method>XCommandProcessor::createCommandIdentifier</method>. Command
+    using XCommandProcessor::createCommandIdentifier(). Command
     identifier <code>0</code>, which indicates that the command shall never
     be aborted by a client, can be used by any thread.
 

@@ -32,8 +32,8 @@ module com {  module sun {  module star {  module sheet {
 
     A service that acts as a DataPilot data source can optionally implement this
     interface to allow drill-down of result data.  The method this interface provides
-    is used internally when calling <method>XDataPilotTable2::getDrillDownData</method>
-    or <method>XDataPilotTable2::insertDrillDownSheet</method>.  If the data source
+    is used internally when calling XDataPilotTable2::getDrillDownData()
+    or XDataPilotTable2::insertDrillDownSheet().  If the data source
     service does not implement this interface, then the aforementioned two methods
     will have no effect.
 

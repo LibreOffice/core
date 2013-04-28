@@ -24,7 +24,7 @@
  module com {  module sun {  module star {  module text {
 
 /** These constants are the codes for inserting control characters
-        using <method>XSimpleText::insertControlCharacter</method> interface.
+        using XSimpleText::insertControlCharacter() interface.
  */
 published constants ControlCharacter
 {
