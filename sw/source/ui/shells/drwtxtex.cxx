@@ -80,7 +80,7 @@
 #include <edtwin.hxx>
 #include <globals.hrc>
 #include <hintids.hxx>
-#include <initui.hxx>               // fuer SpellPointer
+#include <initui.hxx>               // for SpellPointer
 #include <langhelper.hxx>
 #include <pardlg.hxx>
 #include <shells.hrc>
@@ -275,7 +275,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
                 SfxItemSet aDlgAttr(GetPool(), EE_ITEMS_START, EE_ITEMS_END);
 
-                // util::Language gibts an der EditEngine nicht! Daher nicht im Set.
+                // util::Language does not exists in the EditEngine! That is why not in set.
 
                 aDlgAttr.Put( aEditAttr );
                 aDlgAttr.Put( SvxKerningItem(0, RES_CHRATR_KERNING) );
@@ -429,7 +429,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
                 if (pFieldItem && pFieldItem->GetField()->ISA(SvxURLField))
                 {
-                    // Feld selektieren, so dass es beim Insert geloescht wird
+                    // Select field so that it will be deleted during insert
                     ESelection aSel = pOLV->GetSelection();
                     aSel.nEndPos++;
                     pOLV->SetSelection(aSel);
@@ -441,7 +441,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
         case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
-            // Shellwechsel!
+            // Shell switch!
             {
                 SdrObject* pTmpObj = pSdrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
                 SdrPageView* pTmpPV = pSdrView->GetSdrPageView();
@@ -529,7 +529,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
 void SwDrawTextShell::GetState(SfxItemSet& rSet)
 {
-    if (!IsTextEdit())  // Sonst manchmal Absturz!
+    if (!IsTextEdit())  // Otherwise sometimes crash!
         return;
 
     OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
@@ -750,7 +750,7 @@ ASK_ESCAPE:
 
 void SwDrawTextShell::GetDrawTxtCtrlState(SfxItemSet& rSet)
 {
-    if (!IsTextEdit())  // Sonst Absturz!
+    if (!IsTextEdit())  // Otherwise crash!
         return;
 
     OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
@@ -814,7 +814,7 @@ void SwDrawTextShell::GetDrawTxtCtrlState(SfxItemSet& rSet)
 
 void SwDrawTextShell::ExecClpbrd(SfxRequest &rReq)
 {
-    if (!IsTextEdit())  // Sonst Absturz!
+    if (!IsTextEdit())  // Otherwise crash!
         return;
 
     OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
@@ -844,12 +844,9 @@ void SwDrawTextShell::ExecClpbrd(SfxRequest &rReq)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   ClipBoard-Status
- --------------------------------------------------------------------*/
 void SwDrawTextShell::StateClpbrd(SfxItemSet &rSet)
 {
-    if (!IsTextEdit())  // Sonst Absturz!
+    if (!IsTextEdit())  // Otherwise crash!
         return;
 
     OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
@@ -895,12 +892,11 @@ void SwDrawTextShell::StateClpbrd(SfxItemSet &rSet)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Hyperlink-Status
- --------------------------------------------------------------------*/
+// Hyperlink status
+
 void SwDrawTextShell::StateInsert(SfxItemSet &rSet)
 {
-    if (!IsTextEdit())  // Sonst Absturz!
+    if (!IsTextEdit())  // Otherwise crash!
         return;
 
     OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();

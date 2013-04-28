@@ -89,7 +89,7 @@ void SwBezierShell::Execute(SfxRequest &rReq)
                         pSh->LeaveSelFrmMode();
                         pSh->NoEdit();
                     }
-                    GetView().AttrChangedNotify(pSh); // ggf Shellwechsel...
+                    GetView().AttrChangedNotify(pSh); // Shell change if applicable...
                 }
             }
             break;
@@ -102,13 +102,13 @@ void SwBezierShell::Execute(SfxRequest &rReq)
                 if ( pSh->IsDrawCreate() )
                 {
                     GetView().GetDrawFuncPtr()->BreakCreate();
-                    GetView().AttrChangedNotify(pSh); // ggf Shellwechsel...
+                    GetView().AttrChangedNotify(pSh); // Shell change if applicable...
                 }
                 else if ( pSh->HasSelection() || GetView().IsDrawMode() )
                 {
                     GetView().LeaveDrawCreate();
                     pSh->EnterStdMode();
-                    GetView().AttrChangedNotify(pSh); // ggf Shellwechsel...
+                    GetView().AttrChangedNotify(pSh); // Shell change if applicable...
                 }
             }
             break;
@@ -261,7 +261,7 @@ void SwBezierShell::GetState(SfxItemSet &rSet)
                     switch (eSegm)
                     {
                         case SDRPATHSEGMENT_DONTCARE: rSet.InvalidateItem(SID_BEZIER_CONVERT); break;
-                        case SDRPATHSEGMENT_LINE    : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,sal_False)); break; // Button reingedrueckt = Kurve
+                        case SDRPATHSEGMENT_LINE    : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,sal_False)); break; // Button pressed = curve
                         case SDRPATHSEGMENT_CURVE   : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,sal_True));  break;
                         default:; //prevent warning
                     }

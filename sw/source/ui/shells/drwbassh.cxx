@@ -107,7 +107,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
     if(pArgs)
         pArgs->GetItemState(nSlotId, sal_False, &pItem);
 
-    //Sonderfall Align per Menue
+    //Special case align by menu
     if(pItem && nSlotId == SID_OBJECT_ALIGN)
     {
         OSL_ENSURE(PTR_CAST(SfxEnumItem, pItem),"SfxEnumItem expected");
@@ -187,7 +187,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         SfxAbstractTabDialog *pDlg=NULL;
                         bool bCaption = false;
 
-                        // Erlaubte Verankerungen:
+                        // Allowed anchorages:
                         short nAnchor = pSh->GetAnchorId();
                         sal_uInt16 nAllowedAnchors = SVX_OBJ_AT_CNTNT | SVX_OBJ_IN_CNTNT | SVX_OBJ_PAGE;
                         sal_uInt16 nHtmlMode = ::GetHtmlMode(pSh->GetView().GetDocShell());
@@ -379,14 +379,14 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                 if (rReq.IsAPI() ||
                     GetView().GetEditWin().IsObjectSelect() )
                 {
-                    // Wenn Basic-Aufruf, dann zurueck in die Textshell, da das
-                    // Basic sonst keine Rueckkehrmoeglichkeit hat.
+                    // If basic call, then back to the text shell, because the
+                    // Basic otherwise has no possibility to return.
                     if (GetView().GetDrawFuncPtr())
                     {
                         GetView().GetDrawFuncPtr()->Deactivate();
                         GetView().SetDrawFuncPtr(NULL);
                     }
-                    GetView().LeaveDrawCreate();    // In Selektionsmode wechseln
+                    GetView().LeaveDrawCreate();    // Switch to selection mode
                 }
 
                 if (pSh->IsSelFrmMode())
@@ -401,7 +401,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
         case SID_GROUP:
             if (pSh->IsObjSelected() > 1 && pSh->IsGroupAllowed())
             {
-                pSh->GroupSelection();  // Objekt gruppieren
+                pSh->GroupSelection();
                 rBind.Invalidate(SID_UNGROUP);
             }
             break;
@@ -409,7 +409,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
         case SID_UNGROUP:
             if (pSh->IsGroupSelected())
             {
-                pSh->UnGroupSelection();    // Objektgruppierung aufheben
+                pSh->UnGroupSelection();
                 rBind.Invalidate(SID_GROUP);
             }
             break;
@@ -442,8 +442,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
             {
                 const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                 if( rMarkList.GetMarkCount() == 1 && bAlignPossible )
-                {   // Objekte nicht aneinander ausrichten
-
+                {   // Do not align objects to each other
                     sal_uInt16 nAnchor = pSh->GetAnchorId();
                     if (nAnchor == FLY_AS_CHAR)
                     {
@@ -476,7 +475,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         break;
                     }
                     if (nAnchor == FLY_AT_PARA)
-                        break;  // Absatzverankerte Rahmen nicht ausrichten
+                        break;  // Do not align frames of an anchored paragraph
                 }
 
                 pSh->StartAction();
@@ -597,15 +596,14 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
             pSh->SetModified();
         else if (bChanged)
             pSdrView->GetModel()->SetChanged(sal_True);
-        // 40220: Nach dem Loeschen von DrawObjekten ueber die API GPF durch Selbstzerstoerung
+        // 40220: After Delete from DrawObjecs over the API GPF through self-destruction
         if(bNotify)
-            GetView().AttrChangedNotify(pSh); // ggf Shellwechsel...
+            GetView().AttrChangedNotify(pSh); // Shell switch if applicable...
     }
 }
 
-/* ---------------------------------------------------------------------------
-    Checks whether a given name is allowed for a group shape
- ---------------------------------------------------------------------------*/
+// Checks whether a given name is allowed for a group shape
+
 IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxNameDialog*, pNameDialog )
 {
     SwWrtShell          &rSh = GetShell();
@@ -645,7 +643,7 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
     sal_uInt16 nWhich = aIter.FirstWhich();
     sal_Bool bProtected = rSh.IsSelObjProtected(FLYPROTECT_CONTENT);
 
-    if (!bProtected)    // Im Parent nachsehen
+    if (!bProtected)    // Look in the parent
         bProtected |= rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
 
     while( nWhich )
@@ -752,9 +750,8 @@ sal_Bool SwDrawBaseShell::Disable(SfxItemSet& rSet, sal_uInt16 nWhich)
     return bDisable;
 }
 
-/*-------------------------------------------------------------------------
-    Validate of drawing positions
-  -----------------------------------------------------------------------*/
+// Validate of drawing positions
+
 IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation )
 {
     SwWrtShell *pSh = &GetShell();
@@ -904,7 +901,7 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
             pValidation->nMaxVPos  = aBoundRect.Height() - pValidation->nHeight;
         }
 
-        // Maximale Breite Hoehe
+        // Maximum width height
         const SwTwips nH = ( pValidation->nHoriOrient != text::HoriOrientation::NONE )
                            ? aBoundRect.Left()
                            : pValidation->nHPos;

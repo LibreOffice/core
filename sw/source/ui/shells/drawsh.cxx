@@ -112,7 +112,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             }
             GetView().FlipDrawSelMode();
             pSdrView->SetFrameDragSingles(GetView().IsDrawSelMode());
-            GetView().AttrChangedNotify(&rSh); // Shellwechsel...
+            GetView().AttrChangedNotify(&rSh); // Shell switch
             break;
 
         case SID_OBJECT_HELL:
@@ -283,7 +283,7 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
     sal_uInt16 nWhich = aIter.FirstWhich();
     sal_Bool bProtected = rSh.IsSelObjProtected(FLYPROTECT_CONTENT);
 
-    if (!bProtected)    // Im Parent nachsehen
+    if (!bProtected)    // Check the parent
         bProtected |= rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
 
     while( nWhich )
@@ -355,11 +355,8 @@ SwDrawShell::SwDrawShell(SwView &_rView) :
     SetName(OUString("Draw"));
 }
 
-/*************************************************************************
-|*
-|* SfxRequests fuer FontWork bearbeiten
-|*
-\************************************************************************/
+// Edit SfxRequests for FontWork
+
 void SwDrawShell::ExecFormText(SfxRequest& rReq)
 {
     SwWrtShell &rSh = GetShell();
@@ -406,11 +403,8 @@ void SwDrawShell::ExecFormText(SfxRequest& rReq)
             pDrView->GetModel()->SetChanged(sal_True);
 }
 
-/*************************************************************************
-|*
-|* Statuswerte fuer FontWork zurueckgeben
-|*
-\************************************************************************/
+//Return status values for FontWork
+
 void SwDrawShell::GetFormTextState(SfxItemSet& rSet)
 {
     SwWrtShell &rSh = GetShell();
