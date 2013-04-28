@@ -129,9 +129,6 @@ namespace editeng
             HangulHanjaConversion* _pAntiImpl );
 
     public:
-
-        static void         SetUseSavedConversionDirectionState( bool bVal );
-
                 void        DoDocumentConversion( );
 
         inline  bool        IsByCharacter( ) const { return m_bByCharacter; }
