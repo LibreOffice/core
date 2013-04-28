@@ -350,9 +350,10 @@ End
 STD_RES_FILE( gid_File_Res_Eps, eps )
 
 File gid_File_Help_Help_Zip
-    Dir = gid_Dir_Help;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "helpxsl.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "xmlhelp_helpxsl.filelist";
 End
 
 #if defined WITH_HELP
