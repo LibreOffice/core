@@ -774,7 +774,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                     const MetaBmpAction* pA = (const MetaBmpAction*) pAction;
                     BitmapEx aBitmapEx( pA->GetBitmap() );
                     Size aSize( OutputDevice::LogicToLogic( aBitmapEx.GetPrefSize(),
-                            aBitmapEx.GetPrefMapMode(), pDummyVDev->GetMapMode() ) );
+                                                            aBitmapEx.GetPrefMapMode(), pDummyVDev->GetMapMode() ) );
                     if( ! ( aSize.Width() && aSize.Height() ) )
                         aSize = pDummyVDev->PixelToLogic( aBitmapEx.GetSizePixel() );
                     implWriteBitmapEx( pA->GetPoint(), aSize, aBitmapEx, pDummyVDev, i_rContext );
