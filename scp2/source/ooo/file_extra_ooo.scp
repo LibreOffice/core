@@ -208,10 +208,10 @@ End
 
 #ifndef WITHOUT_AFMS
 File gid_File_Extra_Fontunxafm
-    Dir = gid_Dir_Psprint_Fontmetric;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE);
-    Name = "fontunxafm.zip";
+    Styles = (FILELIST);
+    Name = "afms_fontunxafm.filelist";
 End
 #endif
 

@@ -11,7 +11,7 @@ $(eval $(call gb_Module_Module,afms))
 
 $(eval $(call gb_Module_add_targets,afms,\
 	UnpackedTarball_afms \
-	Zip_fontunxafm \
+	ExternalPackage_fontunxafm \
 ))
 
 # vim: set noet sw=4 ts=4:
