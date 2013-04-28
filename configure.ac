@@ -1416,9 +1416,8 @@ AC_ARG_WITH(system-apache-commons,
 
 AC_ARG_WITH(system-mariadb,
     AS_HELP_STRING([--with-system-mariadb],
-        [Use MariaDB libraries already on system, for building the MariaDB Connector/LibreOffice
-         extension. If the mariadb_config executable is not in PATH, use MARIADBCONFIG to
-         point to it.]),,
+        [Use MariaDB/MySQL libraries already on system, for building the MariaDB Connector/LibreOffice
+         extension.]),,
     [with_system_mariadb="$with_system_libs"])
 
 AC_ARG_WITH(system-mysql-cppconn,
@@ -7702,15 +7701,20 @@ if test "$ENABLE_MARIADBC" = "YES"; then
     if test "$with_system_mariadb" = "yes"; then
         AC_MSG_RESULT([external])
         SYSTEM_MARIADB=YES
-        AC_ARG_VAR(MARIADBCONFIG, [Setting this variable will override the mariadb_config script detection])
-        AC_PATH_PROG( MARIADBCONFIG, mariadb_config)
+        AC_PATH_PROG(MARIADBCONFIG, [mariadb_config])
+        if test -z "$MARIADBCONFIG"; then
+            AC_PATH_PROG(MARIADBCONFIG, [mysql_config])
+            if test -z "$MARIADBCONFIG"; then
+                AC_MSG_ERROR([mariadb_config and mysql_config are missing. Install MariaDB or MySQL package.])
+            fi
+        fi
         AC_MSG_CHECKING([MariaDB version])
         MARIADB_VERSION=`$MARIADBCONFIG --version`
         MARIADB_MAJOR=`$MARIADBCONFIG --version | cut -d"." -f1`
         if test "$MARIADB_MAJOR" -ge "5"; then
             AC_MSG_RESULT([OK])
         else
-            AC_MSG_ERROR([too old, use 5.0.x or 5.1.x])
+            AC_MSG_ERROR([too old, use 5.0.x or later])
         fi
         AC_MSG_CHECKING([for MariaDB Client library])
         MARIADB_CFLAGS=`$MARIADBCONFIG --cflags`
