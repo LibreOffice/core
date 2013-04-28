@@ -23,15 +23,8 @@
 #include <vcl/svapp.hxx>
 #include "impimagetree.hxx"
 
-//........................................................................
 namespace vcl
 {
-//........................................................................
-
-    //====================================================================
-    //= ImageRepository
-    //====================================================================
-    //--------------------------------------------------------------------
     bool ImageRepository::loadImage( const OUString& _rName, BitmapEx& _out_rImage, bool _bSearchLanguageDependent, bool loadMissing )
     {
         OUString sCurrentSymbolsStyle = Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
@@ -47,8 +40,6 @@ namespace vcl
         return aImplImageTree->loadDefaultImage( sCurrentSymbolsStyle,_out_rImage);
     }
 
-//........................................................................
 } // namespace vcl
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

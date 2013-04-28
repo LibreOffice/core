@@ -39,8 +39,6 @@
 using namespace basegfx;
 using namespace basebmp;
 
-// ===========================================================================
-
 class SvpGlyphPeer
 :   public GlyphCachePeer
 {
@@ -61,8 +59,6 @@ protected:
         BitmapDeviceSharedPtr   maBitmapDev;
     };
 };
-
-// ===========================================================================
 
 class SvpGlyphCache : public GlyphCache
 {
@@ -112,7 +108,6 @@ SvpGlyphCache& SvpGlyphCache::GetInstance()
     return theGlyphCacheHolder::get().getGlyphCache();
 }
 
-// ===========================================================================
 
 BitmapDeviceSharedPtr SvpGlyphPeer::GetGlyphBmp( ServerFont& rServerFont,
     int nGlyphIndex, sal_uInt32 nBmpFormat, B2IPoint& rTargetPos )
@@ -168,14 +163,12 @@ BitmapDeviceSharedPtr SvpGlyphPeer::GetGlyphBmp( ServerFont& rServerFont,
     return pGcpHelper->maBitmapDev;
 }
 
-//--------------------------------------------------------------------------
 
 void SvpGlyphPeer::RemovingFont( ServerFont& )
 {
     // nothing to do: no font resources held in SvpGlyphPeer
 }
 
-//--------------------------------------------------------------------------
 
 void SvpGlyphPeer::RemovingGlyph( ServerFont&, GlyphData& rGlyphData, int /*nGlyphIndex*/ )
 {
@@ -189,7 +182,6 @@ void SvpGlyphPeer::RemovingGlyph( ServerFont&, GlyphData& rGlyphData, int /*nGly
     }
 }
 
-// ===========================================================================
 
 // PspKernInfo allows on-demand-querying of psprint provided kerning info (#i29881#)
 class PspKernInfo : public ExtraKernInfo
@@ -200,7 +192,6 @@ protected:
     virtual void Initialize() const;
 };
 
-//--------------------------------------------------------------------------
 
 void PspKernInfo::Initialize() const
 {
@@ -221,7 +212,6 @@ void PspKernInfo::Initialize() const
     }
 }
 
-// ===========================================================================
 
 sal_uInt16 SvpSalGraphics::SetFont( FontSelectPattern* pIFSD, int nFallbackLevel )
 {
@@ -257,7 +247,6 @@ sal_uInt16 SvpSalGraphics::SetFont( FontSelectPattern* pIFSD, int nFallbackLevel
     return SAL_SETFONT_USEDRAWTEXTARRAY;
 }
 
-// ---------------------------------------------------------------------------
 
 void SvpSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLevel )
 {
@@ -271,7 +260,6 @@ void SvpSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLe
     }
 }
 
-// ---------------------------------------------------------------------------
 
 sal_uLong SvpSalGraphics::GetKernPairs( sal_uLong nPairs, ImplKernPairData* pKernPairs )
 {
@@ -289,7 +277,6 @@ sal_uLong SvpSalGraphics::GetKernPairs( sal_uLong nPairs, ImplKernPairData* pKer
     return nGotPairs;
 }
 
-// ---------------------------------------------------------------------------
 
 const ImplFontCharMap* SvpSalGraphics::GetImplFontCharMap() const
 {
@@ -308,7 +295,6 @@ bool SvpSalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabil
     return m_pServerFont[0]->GetFontCapabilities(rFontCapabilities);
 }
 
-// ---------------------------------------------------------------------------
 
 void SvpSalGraphics::GetDevFontList( ImplDevFontList* pDevFontList )
 {
@@ -360,12 +346,10 @@ void SvpSalGraphics::ClearDevFontCache()
     rGC.ClearFontCache();
 }
 
-// ---------------------------------------------------------------------------
 
 void SvpSalGraphics::GetDevFontSubstList( OutputDevice* )
 {}
 
-// ---------------------------------------------------------------------------
 
 bool SvpSalGraphics::AddTempDevFont( ImplDevFontList*,
     const OUString&, const OUString& )
@@ -373,7 +357,6 @@ bool SvpSalGraphics::AddTempDevFont( ImplDevFontList*,
     return false;
 }
 
-// ---------------------------------------------------------------------------
 
 sal_Bool SvpSalGraphics::CreateFontSubset(
     const OUString& rToFile,
@@ -403,7 +386,6 @@ sal_Bool SvpSalGraphics::CreateFontSubset(
     return bSuccess;
 }
 
-// ---------------------------------------------------------------------------
 
 const Ucs2SIntMap* SvpSalGraphics::GetFontEncodingVector( const PhysicalFontFace* pFont, const Ucs2OStrMap** pNonEncoded )
 {
@@ -416,7 +398,6 @@ const Ucs2SIntMap* SvpSalGraphics::GetFontEncodingVector( const PhysicalFontFace
     return GenPspGraphics::DoGetFontEncodingVector( aFont, pNonEncoded );
 }
 
-// ---------------------------------------------------------------------------
 
 const void* SvpSalGraphics::GetEmbedFontData(
     const PhysicalFontFace* pFont,
@@ -435,7 +416,6 @@ const void* SvpSalGraphics::GetEmbedFontData(
     return GenPspGraphics::DoGetEmbedFontData( aFont, pUnicodes, pWidths, rInfo, pDataLen );
 }
 
-// ---------------------------------------------------------------------------
 
 void SvpSalGraphics::FreeEmbedFontData( const void* pData, long nLen )
 {
@@ -456,7 +436,6 @@ void SvpSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
     GenPspGraphics::DoGetGlyphWidths( aFont, bVertical, rWidths, rUnicodeEnc );
 }
 
-// ---------------------------------------------------------------------------
 
 sal_Bool SvpSalGraphics::GetGlyphBoundRect( sal_GlyphId nGlyphIndex, Rectangle& rRect )
 {
@@ -474,7 +453,6 @@ sal_Bool SvpSalGraphics::GetGlyphBoundRect( sal_GlyphId nGlyphIndex, Rectangle& 
     return sal_True;
 }
 
-// ---------------------------------------------------------------------------
 
 sal_Bool SvpSalGraphics::GetGlyphOutline( sal_GlyphId nGlyphIndex, B2DPolyPolygon& rPolyPoly )
 {
@@ -493,7 +471,6 @@ sal_Bool SvpSalGraphics::GetGlyphOutline( sal_GlyphId nGlyphIndex, B2DPolyPolygo
     return sal_False;
 }
 
-// ---------------------------------------------------------------------------
 
 SalLayout* SvpSalGraphics::GetTextLayout( ImplLayoutArgs&, int nFallbackLevel )
 {
@@ -505,7 +482,6 @@ SalLayout* SvpSalGraphics::GetTextLayout( ImplLayoutArgs&, int nFallbackLevel )
     return pLayout;
 }
 
-// ---------------------------------------------------------------------------
 
 void SvpSalGraphics::DrawServerFontLayout( const ServerFontLayout& rSalLayout )
 {
