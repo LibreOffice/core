@@ -489,8 +489,8 @@ sal_Bool SwTxtCursor::GetEndCharRect( SwRect* pOrig, const xub_StrLen nOfst,
 void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
     SwCrsrMoveState* pCMS )
 {
-    const XubString &rText = GetInfo().GetTxt();
-    SwTxtSizeInfo aInf( GetInfo(), rText, nStart );
+    const OUString aText = GetInfo().GetTxt();
+    SwTxtSizeInfo aInf( GetInfo(), aText, nStart );
     if( GetPropFont() )
         aInf.GetFont()->SetProportion( GetPropFont() );
     KSHORT nTmpAscent, nTmpHeight;  // Zeilenhoehe
@@ -1593,8 +1593,8 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
             else
                 nOldProp = 0;
             {
-                OUString rTextStr = rText;
-                SwTxtSizeInfo aSizeInf( GetInfo(), rTextStr, nCurrStart );
+                OUString aText = rText;
+                SwTxtSizeInfo aSizeInf( GetInfo(), aText, nCurrStart );
                 ((SwTxtCursor*)this)->SeekAndChg( aSizeInf );
                 SwTxtSlot aDiffTxt( &aSizeInf, ((SwTxtPortion*)pPor), false, false );
                 SwFontSave aSave( aSizeInf, pPor->IsDropPortion() ?
