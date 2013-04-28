@@ -1593,7 +1593,8 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
             else
                 nOldProp = 0;
             {
-                SwTxtSizeInfo aSizeInf( GetInfo(), rText, nCurrStart );
+                OUString rTextStr = rText;
+                SwTxtSizeInfo aSizeInf( GetInfo(), rTextStr, nCurrStart );
                 ((SwTxtCursor*)this)->SeekAndChg( aSizeInf );
                 SwTxtSlot aDiffTxt( &aSizeInf, ((SwTxtPortion*)pPor), false, false );
                 SwFontSave aSave( aSizeInf, pPor->IsDropPortion() ?
