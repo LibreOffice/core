@@ -7,9 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Zip_Zip,helpxsl,$(SRCDIR)/xmlhelp/util))
+$(eval $(call gb_Package_Package,xmlhelp_helpxsl,$(SRCDIR)/xmlhelp/util))
 
-$(eval $(call gb_Zip_add_files,helpxsl,\
+$(eval $(call gb_Package_set_outdir,xmlhelp_helpxsl,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,xmlhelp_helpxsl,help,\
 	idxcaption.xsl \
 	idxcontent.xsl \
 	main_transform.xsl \

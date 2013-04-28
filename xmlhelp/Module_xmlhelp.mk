@@ -13,7 +13,7 @@ $(eval $(call gb_Module_add_targets,xmlhelp,\
 	Library_tvhlp1 \
 	Library_ucpchelp1 \
 	Package_xsl \
-	Zip_helpxsl \
+	Package_helpxsl \
 ))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
