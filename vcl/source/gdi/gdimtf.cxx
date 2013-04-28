@@ -399,7 +399,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
 
         OSL_TRACE("GDIMetaFile::Play on device of size: %d x %d", pOut->GetOutputSizePixel().Width(), pOut->GetOutputSizePixel().Height());
 
-        if( !ImplPlayWithRenderer( pOut, Point(0,0), pOut->GetOutputSizePixel() ) ) {
+        if( !ImplPlayWithRenderer( pOut, Point(0,0), pOut->GetOutputSize() ) ) {
             size_t  i  = 0;
             for( size_t nCurPos = nCurrentActionElement; nCurPos < nPos; nCurPos++ )
             {
@@ -428,12 +428,12 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
     }
 }
 
-// ------------------------------------------------------------------------
-
-bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, Size rDestSize )
+bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, Size rLogicDestSize )
 {
     if (!bUseCanvas)
         return false;
+
+    Size rDestSize( pOut->LogicToPixel( rLogicDestSize ) );
 
     const Window* win = dynamic_cast <Window*> ( pOut );
 
@@ -500,7 +500,10 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
                         Bitmap aMask( pSalMask );
                         AlphaMask aAlphaMask( aMask );
                         BitmapEx aBitmapEx( aBitmap, aAlphaMask );
-                        pOut->DrawBitmapEx( rPos, aBitmapEx );
+                        if ( pOut->GetMapMode() == MAP_PIXEL )
+                            pOut->DrawBitmapEx( rPos, aBitmapEx );
+                        else
+                            pOut->DrawBitmapEx( rPos, rLogicDestSize, aBitmapEx );
                         return true;
                     }
 
@@ -606,7 +609,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
     {
         GDIMetaFile*    pMtf = pOut->GetConnectMetaFile();
 
-        if( ImplPlayWithRenderer( pOut, rPos, aDestSize ) )
+        if( ImplPlayWithRenderer( pOut, rPos, rSize ) )
             return;
 
         Size aTmpPrefSize( pOut->LogicToPixel( GetPrefSize(), aDrawMap ) );
