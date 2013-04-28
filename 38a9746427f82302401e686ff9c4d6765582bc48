@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//9yE\u003d",
+        "filename": "vcl/Package_osxres.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-04-28T16:17:48Z",
+      "side": 1,
+      "message": "The dest. dir should be Resources, not Contents (scp2/source/ooo/directory_ooo.scp, line 31).",
+      "revId": "38a9746427f82302401e686ff9c4d6765582bc48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//9yI\u003d",
+        "filename": "vcl/Package_osxres.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-04-28T16:17:48Z",
+      "side": 1,
+      "message": "You have to use gb_Package_add_files_with_dir here.",
+      "revId": "38a9746427f82302401e686ff9c4d6765582bc48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
