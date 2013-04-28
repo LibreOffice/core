@@ -5060,21 +5060,15 @@ void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aChar
     if ( nExtParaPos )
     {
         sal_uInt32 nExtBuInd = nMask & 0x3c00;
-        sal_uInt32  nExtParaNibble = 0;
         if ( nExtBuInd )
             nExtBuInd = ( aSet.mnFlags & 0x3c00 ) >> 10;
         if ( nExtBuInd < aStyleTextProp9.size() )
         {
-            if ( nExtParaNibble && ( ( nExtBuInd + nExtParaNibble ) < aStyleTextProp9.size() ) )
-                nExtBuInd += nExtParaNibble;
-
             nExtParaFlags = aStyleTextProp9[ nExtBuInd ].mnExtParagraphMask;
             nBuBlip = aStyleTextProp9[ nExtBuInd ].mnBuBlip;
             nHasAnm = aStyleTextProp9[ nExtBuInd ].mnHasAnm;
             nAnmScheme = aStyleTextProp9[ nExtBuInd ].mnAnmScheme;
         }
-        if ( ( nExtBuInd & 0xf ) == 0xf )
-            nExtParaNibble += 16;
     }
 }
 
