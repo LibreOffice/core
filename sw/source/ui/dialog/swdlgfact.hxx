@@ -454,8 +454,9 @@ public:
         const SwDBData& rData,  int nResId);
     virtual SfxAbstractTabDialog * CreateSwFootNoteOptionDlg( Window *pParent, SwWrtShell &rSh,int nResId);//add for  SwFootNoteOptionDlg
 
-    virtual AbstractDropDownFieldDialog * CreateDropDownFieldDialog ( Window *pParent, SwWrtShell &rSh, //add for DropDownFieldDialog
-                                SwField* pField,int nResId, sal_Bool bNextButton = sal_False );
+    //add for DropDownFieldDialog
+    virtual AbstractDropDownFieldDialog * CreateDropDownFieldDialog (Window *pParent, SwWrtShell &rSh,
+        SwField* pField, sal_Bool bNextButton = sal_False);
     virtual SfxAbstractTabDialog* CreateSwEnvDlg ( Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, sal_Bool bInsert,int nResId ); //add for SwEnvDlg
     virtual AbstractSwLabDlg* CreateSwLabDlg ( Window* pParent, const SfxItemSet& rSet, //add for SwLabDlg
                                                      SwNewDBMgr* pNewDBMgr, sal_Bool bLabel,int nResId  );

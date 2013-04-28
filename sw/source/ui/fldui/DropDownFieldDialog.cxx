@@ -24,7 +24,6 @@
 #include <DropDownFieldDialog.hxx>
 #include <flddropdown.hxx>
 #include <fldui.hrc>
-#include <DropDownFieldDialog.hrc>
 
 using namespace ::com::sun::star;
 
@@ -32,36 +31,26 @@ using namespace ::com::sun::star;
 /*--------------------------------------------------------------------
     Description: edit insert-field
  --------------------------------------------------------------------*/
-sw::DropDownFieldDialog::DropDownFieldDialog( Window *pParent, SwWrtShell &rS,
-                              SwField* pField, sal_Bool bNextButton ) :
-
-    SvxStandardDialog(pParent,  SW_RES(DLG_FLD_DROPDOWN)),
-    aItemsFL(       this, SW_RES( FL_ITEMS       )),
-    aListItemsLB(   this, SW_RES( LB_LISTITEMS   )),
-
-    aOKPB(          this, SW_RES( PB_OK          )),
-    aCancelPB(      this, SW_RES( PB_CANCEL      )),
-    aNextPB(        this, SW_RES( PB_NEXT        )),
-    aHelpPB(        this, SW_RES( PB_HELP        )),
-
-    aEditPB(        this, SW_RES( PB_EDIT        )),
-
-    rSh( rS ),
-    pDropField(0)
+sw::DropDownFieldDialog::DropDownFieldDialog(Window *pParent, SwWrtShell &rS,
+                              SwField* pField, sal_Bool bNextButton)
+    : SvxStandardDialog(pParent, "DropdownFieldDialog",
+        "modules/swriter/ui/dropdownfielddialog.ui")
+    , rSh( rS )
+    , pDropField(0)
 {
+    get(m_pListItemsLB, "list");
+    m_pListItemsLB->SetDropDownLineCount(12);
+    m_pListItemsLB->set_width_request(m_pListItemsLB->approximate_char_width()*32);
+    get(m_pOKPB, "ok");
+    get(m_pNextPB, "next");
+    get(m_pEditPB, "edit");
+
     Link aButtonLk = LINK(this, DropDownFieldDialog, ButtonHdl);
-    aEditPB.SetClickHdl(aButtonLk);
+    m_pEditPB->SetClickHdl(aButtonLk);
     if( bNextButton )
     {
-        aNextPB.Show();
-        aNextPB.SetClickHdl(aButtonLk);
-    }
-    else
-    {
-        long nDiff = aCancelPB.GetPosPixel().Y() - aOKPB.GetPosPixel().Y();
-        Point aPos = aHelpPB.GetPosPixel();
-        aPos.Y() -= nDiff;
-        aHelpPB.SetPosPixel(aPos);
+        m_pNextPB->Show();
+        m_pNextPB->SetClickHdl(aButtonLk);
     }
     if( RES_DROPDOWN == pField->GetTyp()->Which() )
     {
@@ -73,26 +62,21 @@ sw::DropDownFieldDialog::DropDownFieldDialog( Window *pParent, SwWrtShell &rS,
         uno::Sequence< OUString > aItems = pDropField->GetItemSequence();
         const OUString* pArray = aItems.getConstArray();
         for(sal_Int32 i = 0; i < aItems.getLength(); i++)
-            aListItemsLB.InsertEntry(pArray[i]);
-        aListItemsLB.SelectEntry(pDropField->GetSelectedItem());
+            m_pListItemsLB->InsertEntry(pArray[i]);
+        m_pListItemsLB->SelectEntry(pDropField->GetSelectedItem());
     }
 
     sal_Bool bEnable = !rSh.IsCrsrReadonly();
-    aOKPB.Enable( bEnable );
+    m_pOKPB->Enable( bEnable );
 
-    aListItemsLB.GrabFocus();
-    FreeResource();
-}
-
-sw::DropDownFieldDialog::~DropDownFieldDialog()
-{
+    m_pListItemsLB->GrabFocus();
 }
 
 void sw::DropDownFieldDialog::Apply()
 {
     if(pDropField)
     {
-        OUString sSelect = aListItemsLB.GetSelectEntry();
+        OUString sSelect = m_pListItemsLB->GetSelectEntry();
         if(pDropField->GetPar1() != sSelect)
         {
             rSh.StartAllAction();
@@ -111,7 +95,7 @@ void sw::DropDownFieldDialog::Apply()
 
 IMPL_LINK(sw::DropDownFieldDialog, ButtonHdl, PushButton*, pButton)
 {
-    EndDialog(&aNextPB == pButton ? RET_OK : RET_YES );
+    EndDialog(m_pNextPB == pButton ? RET_OK : RET_YES );
     return 0;
 }
 

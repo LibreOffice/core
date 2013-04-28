@@ -35,15 +35,12 @@ namespace sw
 {
 class DropDownFieldDialog : public SvxStandardDialog
 {
-    FixedLine           aItemsFL;
-    ListBox             aListItemsLB;
+    ListBox*            m_pListItemsLB;
 
-    OKButton            aOKPB;
-    CancelButton        aCancelPB;
-    PushButton          aNextPB;
-    HelpButton          aHelpPB;
+    OKButton*           m_pOKPB;
+    PushButton*         m_pNextPB;
 
-    PushButton          aEditPB;
+    PushButton*         m_pEditPB;
 
     SwWrtShell          &rSh;
     SwDropDownField*    pDropField;
@@ -53,7 +50,6 @@ class DropDownFieldDialog : public SvxStandardDialog
 public:
     DropDownFieldDialog(   Window *pParent, SwWrtShell &rSh,
                                 SwField* pField, sal_Bool bNextButton = sal_False );
-    ~DropDownFieldDialog();
 };
 } //namespace sw
 

@@ -421,7 +421,6 @@
 #define HID_MODULE_TOOLBOX                                      "SW_HID_MODULE_TOOLBOX"
 #define HID_SECTION_INDENTS_PAGE                                "SW_HID_SECTION_INDENTS_PAGE"
 
-#define HID_FLD_DROPDOWN                                        "SW_HID_FLD_DROPDOWN"
 #define HID_MM_DOCSELECTPAGE                                    "SW_HID_MM_DOCSELECTPAGE"
 #define HID_MM_OUTPUTTYPEPAGE                                   "SW_HID_MM_OUTPUTTYPEPAGE"
 #define HID_MM_ADDRESSBLOCKPAGE                                 "SW_HID_MM_ADDRESSBLOCKPAGE"

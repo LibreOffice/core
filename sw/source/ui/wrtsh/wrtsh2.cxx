@@ -160,7 +160,7 @@ sal_Bool SwWrtShell::StartDropDownFldDlg(SwField* pFld, sal_Bool bNextButton, OS
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    AbstractDropDownFieldDialog* pDlg = pFact->CreateDropDownFieldDialog( NULL, *this, pFld, DLG_FLD_DROPDOWN ,bNextButton );
+    AbstractDropDownFieldDialog* pDlg = pFact->CreateDropDownFieldDialog(NULL, *this, pFld, bNextButton);
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if(pWindowState && !pWindowState->isEmpty())
         pDlg->SetWindowState(*pWindowState);

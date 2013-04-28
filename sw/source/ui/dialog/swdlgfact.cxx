@@ -777,23 +777,12 @@ SfxAbstractTabDialog *  SwAbstractDialogFactory_Impl::CreateSwFootNoteOptionDlg(
     return 0;
 }
 
-AbstractDropDownFieldDialog *  SwAbstractDialogFactory_Impl::CreateDropDownFieldDialog ( Window *pParent, SwWrtShell &rSh, //add for DropDownFieldDialog
-                                SwField* pField,int nResId, sal_Bool bNextButton )
+//add for DropDownFieldDialog
+AbstractDropDownFieldDialog *  SwAbstractDialogFactory_Impl::CreateDropDownFieldDialog(Window *pParent,
+    SwWrtShell &rSh, SwField* pField, sal_Bool bNextButton)
 {
-    sw::DropDownFieldDialog* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_FLD_DROPDOWN :
-            pDlg = new sw::DropDownFieldDialog( pParent, rSh, pField, bNextButton );
-            break;
-
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractDropDownFieldDialog_Impl( pDlg );
-    return 0;
+    sw::DropDownFieldDialog* pDlg = new sw::DropDownFieldDialog(pParent, rSh, pField, bNextButton);
+    return new AbstractDropDownFieldDialog_Impl( pDlg );
 }
 
 SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateSwEnvDlg ( Window* pParent, const SfxItemSet& rSet,
