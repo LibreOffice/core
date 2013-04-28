@@ -1274,7 +1274,7 @@ void GenericSalLayout::KashidaJustify( long nKashidaIndex, int nKashidaWidth )
         // calculate gap, ignore if too small
         int nGapWidth = pG->mnNewWidth - pG->mnOrigWidth;
         // worst case is one kashida even for mini-gaps
-        if( 3 * nGapWidth < nKashidaWidth )
+        if( nGapWidth < nKashidaWidth )
             continue;
 
         nKashidaCount = 0;
