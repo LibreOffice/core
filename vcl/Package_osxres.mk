@@ -7,9 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Zip_Zip,osxres,$(SRCDIR)/vcl/aqua/source/res))
+$(eval $(call gb_Package_Package,vcl_osxres,$(SRCDIR)/vcl/aqua/source/res))
 
-$(eval $(call gb_Zip_add_files,osxres,\
+$(eval $(call gb_Package_set_outdir,vcl_osxres,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,vcl_osxres,Contents,\
     MainMenu.nib/classes.nib \
     MainMenu.nib/info.nib \
     MainMenu.nib/keyedobjects.nib \
