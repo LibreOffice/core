@@ -2368,7 +2368,9 @@ void ChartExport::exportDataLabels(
                    if (GetProperty( xPropSet, "LabelSeparator"))
                    {
                        mAny >>= aSep;
-                       pFS->singleElement( FSNS( XML_c, XML_separator), XML_val, USS(aSep), FSEND);
+                       pFS->startElement( FSNS( XML_c, XML_separator), FSEND);
+                       pFS->writeEscaped(aSep);
+                       pFS->endElement( FSNS( XML_c, XML_separator) );
                    }
                    pFS->endElement( FSNS( XML_c, XML_dLbl ));
                }
