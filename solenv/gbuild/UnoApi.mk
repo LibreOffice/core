@@ -47,10 +47,6 @@ $(call gb_UnoApi_get_target,$(1)) : $(call gb_UnoApiHeadersTarget_get_target,$(1
 $(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_UnoApiTarget_get_clean_target,$(1))
 $(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_UnoApiHeadersTarget_get_clean_target,$(1))
 
-ifneq ($(gb_UnoApi_ENABLE_IDL),)
-$(call gb_UnoApiTarget_get_headers_target,$(1)) : $(call gb_Package_get_target,$(1)_idl)
-endif
-
 $(call gb_UnoApi__make_outdir_headers_rule,$(1))
 
 $(call gb_Deliver_add_deliverable,$(call gb_UnoApi_get_target,$(1)),$(call gb_UnoApiTarget_get_target,$(1)),$(1))
@@ -206,7 +202,6 @@ define gb_UnoApi__use_api
 $(call gb_UnoApiTarget_use_api,$(1),$(2))
 $(call gb_UnoApiHeadersTarget_use_api,$(1),$(2))
 $(call gb_UnoApi_get_target,$(1)) :| $(call gb_UnoApi_get_target,$(2))
-$(call gb_UnoApiTarget_get_external_headers_target,$(1)) : $(call gb_UnoApiTarget_get_headers_target,$(2))
 
 endef
 

@@ -119,12 +119,6 @@ $(if $(UNOAPI_FILES),,$(error No IDL files have been set for the rdb file))
 $(if $(UNOAPI_ROOT),,$(error No root has been set for the rdb file))
 endef
 
-$(call gb_UnoApiTarget_get_external_headers_target,%) :
-	mkdir -p $(dir $@) && touch $@
-
-$(call gb_UnoApiTarget_get_headers_target,%) : $(call gb_UnoApiTarget_get_external_headers_target,%)
-	mkdir -p $(dir $@) && touch $@
-
 $(call gb_UnoApiTarget_get_target,%) :
 	$(call gb_UnoApiTarget__check_mode)
 	$(call gb_UnoApiTarget__command,$@,$*)
@@ -134,9 +128,7 @@ $(call gb_UnoApiTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),UNO,4)
 	-$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_UnoApiTarget_get_target,$*) \
-			$(call gb_UnoApiTarget_get_target,$*).oldformat \
-			$(call gb_UnoApiTarget_get_external_headers_target,$*) \
-			$(call gb_UnoApiTarget_get_headers_target,$*))
+			$(call gb_UnoApiTarget_get_target,$*).oldformat
 		-rm -rf $(call gb_UnoApiTarget_get_dep_target,$*) \
 			$(basename $(call gb_UnoApiPartTarget_get_dep_target,$*)) \
 			$(call gb_UnoApiPartTarget_get_target,$*)
@@ -201,7 +193,6 @@ $(call gb_UnoApiTarget_get_target,$(1)) : \
 	$(call gb_UnoApiPartTarget_get_target,$(2)/idl.done)
 $(call gb_UnoApiPartTarget_get_target,$(2)/idl.done) : \
 	$(foreach idl,$(3),$(SRCDIR)/$(2)/$(idl).idl)
-$(call gb_UnoApiPartTarget_get_target,$(2)/idl.done) :| $(call gb_UnoApiTarget_get_external_headers_target,$(1))
 
 endef
 
