@@ -147,10 +147,10 @@ End
 
 #if defined( ENABLE_LIBLANGTAG ) && !defined( SYSTEM_LIBLANGTAG )
 File gid_File_Extra_Liblangtag
-    Dir = gid_Dir_Share_Liblangtag;
+    Dir = FILELIST_DIR;
     USER_FILE_BODY;
-    Styles = (ARCHIVE);
-    Name = "liblangtag_data.zip";
+    Styles = (FILELIST);
+    Name = "liblangtag_data.filelist";
 End
 #endif
 
