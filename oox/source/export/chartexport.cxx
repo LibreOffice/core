@@ -43,6 +43,7 @@
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
 #include <com/sun/star/chart/ChartSolidType.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
+#include <com/sun/star/chart/ErrorBarStyle.hpp>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
@@ -102,6 +103,8 @@ using ::com::sun::star::sheet::XFormulaParser;
 using ::com::sun::star::sheet::XFormulaTokens;
 using ::oox::core::XmlFilterBase;
 using ::sax_fastparser::FSHelperPtr;
+
+namespace cssc = com::sun::star::chart;
 
 DBG(extern void dump_pset(Reference< XPropertySet > rXPropSet));
 
@@ -1542,6 +1545,17 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
                     // export data points
                     exportDataPoints( uno::Reference< beans::XPropertySet >( aSeriesSeq[nSeriesIdx], uno::UNO_QUERY ), nSeriesLength );
 
+                    //export error bars here
+                    Reference< XPropertySet > xSeriesPropSet( xSource, uno::UNO_QUERY );
+                    Reference< XPropertySet > xErrorBarYProps;
+                    xSeriesPropSet->getPropertyValue("ErrorBarY") >>= xErrorBarYProps;
+                    if(xErrorBarYProps.is())
+                        exportErrorBar(xErrorBarYProps, true);
+                    Reference< XPropertySet > xErrorBarXProps;
+                    xSeriesPropSet->getPropertyValue("ErrorBarX") >>= xErrorBarXProps;
+                    if(xErrorBarXProps.is())
+                        exportErrorBar(xErrorBarXProps, false);
+
                     // export categories
                     if( mxCategoriesValues.is() )
                         exportSeriesCategory( mxCategoriesValues );
@@ -2534,6 +2548,146 @@ void ChartExport::exportFirstSliceAng( )
     pFS->singleElement( FSNS( XML_c, XML_firstSliceAng ),
             XML_val, I32S( nStartingAngle ),
             FSEND );
+}
+
+namespace {
+
+const char* getErrorBarStyle(sal_Int32 nErrorBarStyle)
+{
+    switch(nErrorBarStyle)
+    {
+        case cssc::ErrorBarStyle::NONE:
+            // I have no idea how to map it to OOXML
+            // this approach is as good as any else
+            return "fixedVal";
+        case cssc::ErrorBarStyle::VARIANCE:
+            break;
+        case cssc::ErrorBarStyle::STANDARD_DEVIATION:
+            return "stdDev";
+        case cssc::ErrorBarStyle::ABSOLUTE:
+            return "fixedVal";
+        case cssc::ErrorBarStyle::RELATIVE:
+            return "percentage";
+        case cssc::ErrorBarStyle::ERROR_MARGIN:
+            break;
+        case cssc::ErrorBarStyle::STANDARD_ERROR:
+            return "stdErr";
+        case cssc::ErrorBarStyle::FROM_DATA:
+            return "cust";
+        default:
+            assert(false); // can't happen
+    }
+    return "";
+}
+
+Reference< chart2::data::XDataSequence>  getLabeledSequence(
+        uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences,
+        bool bPositive )
+{
+    const OUString aRolePrefix( "error-bars" );
+    OUString aDirection;
+    if(bPositive)
+        aDirection = "positive";
+    else
+        aDirection = "negative";
+
+    for( sal_Int32 nI=0; nI< aSequences.getLength(); ++nI )
+    {
+        if( aSequences[nI].is())
+        {
+            uno::Reference< chart2::data::XDataSequence > xSequence( aSequences[nI]->getValues());
+            uno::Reference< beans::XPropertySet > xSeqProp( xSequence, uno::UNO_QUERY_THROW );
+            OUString aRole;
+            if( ( xSeqProp->getPropertyValue(
+                            OUString( "Role" )) >>= aRole ) &&
+                    aRole.match( aRolePrefix ) && aRole.indexOf(aDirection) >= 0 )
+            {
+                return xSequence;
+            }
+        }
+    }
+
+    return Reference< chart2::data::XDataSequence > ();
+}
+
+}
+
+void ChartExport::exportErrorBar(Reference< XPropertySet> xErrorBarProps, bool bYError)
+{
+    FSHelperPtr pFS = GetFS();
+    pFS->startElement( FSNS( XML_c, XML_errBars ),
+            FSEND );
+    pFS->singleElement( FSNS( XML_c, XML_errDir ),
+            XML_val, bYError ? "y" : "x",
+            FSEND );
+    bool bPositive, bNegative;
+    xErrorBarProps->getPropertyValue("ShowPositiveError") >>= bPositive;
+    xErrorBarProps->getPropertyValue("ShowNegativeError") >>= bNegative;
+    const char* pErrBarType;
+    if(bPositive && bNegative)
+        pErrBarType = "both";
+    else if(bPositive)
+        pErrBarType = "plus";
+    else if(bNegative)
+        pErrBarType = "minus";
+    else
+    {
+        // what the hell should we do now?
+        // at least this makes the file valid
+        pErrBarType = "both";
+    }
+    pFS->singleElement( FSNS( XML_c, XML_errBarType ),
+            XML_val, pErrBarType,
+            FSEND );
+
+    sal_Int32 nErrorBarStyle;
+    xErrorBarProps->getPropertyValue("ErrorBarStyle") >>= nErrorBarStyle;
+    const char* pErrorBarStyle = getErrorBarStyle(nErrorBarStyle);
+    pFS->singleElement( FSNS( XML_c, XML_errValType ),
+            XML_val, pErrorBarStyle,
+            FSEND );
+    pFS->singleElement( FSNS( XML_c, XML_noEndCap ),
+            XML_val, "0",
+            FSEND );
+    if(nErrorBarStyle == cssc::ErrorBarStyle::FROM_DATA)
+    {
+        uno::Reference< chart2::data::XDataSource > xDataSource(xErrorBarProps, uno::UNO_QUERY);
+        Sequence< Reference < chart2::data::XLabeledDataSequence > > aSequences =
+            xDataSource->getDataSequences();
+
+        if(bPositive)
+        {
+            exportSeriesValues(getLabeledSequence(aSequences, true), XML_plus);
+        }
+
+        if(bNegative)
+        {
+            exportSeriesValues(getLabeledSequence(aSequences, false), XML_minus);
+        }
+    }
+    else
+    {
+        double nVal;
+        if(nErrorBarStyle == cssc::ErrorBarStyle::STANDARD_DEVIATION)
+        {
+            xErrorBarProps->getPropertyValue("Weight") >>= nVal;
+        }
+        else
+        {
+            if(bPositive)
+                xErrorBarProps->getPropertyValue("PositiveError") >>= nVal;
+            else
+                xErrorBarProps->getPropertyValue("NegativeError") >>= nVal;
+        }
+
+        OString aVal = OString::number(nVal);
+
+        pFS->singleElement( FSNS( XML_c, XML_val ),
+                XML_val, aVal.getStr(),
+                FSEND );
+    }
+
+    pFS->endElement( FSNS( XML_c, XML_errBars) );
 }
 
 void ChartExport::exportView3D()

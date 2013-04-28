@@ -167,6 +167,9 @@ private:
     void exportSmooth();
     void exportFirstSliceAng();
 
+    void exportErrorBar(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xErrorBarProps,
+            bool bYError);
+
     void exportAxes( );
     void exportAxis( AxisIdPair aAxisIdPair );
     void _exportAxis(
