@@ -2352,24 +2352,24 @@ void ChartExport::exportDataLabels(
                    pFS->singleElement( FSNS( XML_c, XML_idx), XML_val, I32S(nElem), FSEND);
                    pFS->singleElement( FSNS( XML_c, XML_dLblPos), XML_val, aPlacement, FSEND);
 
-                   if (GetProperty( xPropSet, "LabelSeparator"))
-                   {
-                       mAny >>= aSep;
-                       pFS->singleElement( FSNS( XML_c, XML_separator), XML_val, USS(aSep), FSEND);
-                   }
-
                    pFS->singleElement( FSNS( XML_c, XML_showLegendKey), XML_val,
                                        aLabel.ShowLegendSymbol ? "1" : "0", FSEND);
                    pFS->singleElement( FSNS( XML_c, XML_showVal), XML_val,
                                        aLabel.ShowNumber ? "1" : "0", FSEND);
                    pFS->singleElement( FSNS( XML_c, XML_showCatName), XML_val,
                                        aLabel.ShowCategoryName ? "1" : "0", FSEND);
-                   pFS->singleElement( FSNS( XML_c, XML_showPercent), XML_val,
-                                       aLabel.ShowNumberInPercent ? "1" : "0", FSEND);
                    // MSO somehow assumes series name to be on (=displayed) by default.
                    // Let's put false here and switch it off then, since we have no UI means
                    // in LibO to toggle it on anyway
                    pFS->singleElement( FSNS( XML_c, XML_showSerName), XML_val, "0", FSEND);
+                   pFS->singleElement( FSNS( XML_c, XML_showPercent), XML_val,
+                                       aLabel.ShowNumberInPercent ? "1" : "0", FSEND);
+
+                   if (GetProperty( xPropSet, "LabelSeparator"))
+                   {
+                       mAny >>= aSep;
+                       pFS->singleElement( FSNS( XML_c, XML_separator), XML_val, USS(aSep), FSEND);
+                   }
                    pFS->endElement( FSNS( XML_c, XML_dLbl ));
                }
             }
