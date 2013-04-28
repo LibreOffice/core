@@ -350,8 +350,10 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             ((uint64_t) aFtFace->size->metrics.y_scale * (uint64_t) fUnitsPerEM) >> 16);
     hb_font_set_ppem(pHbFont, aFtFace->size->metrics.x_ppem, aFtFace->size->metrics.y_ppem);
 
+    int nTextLen = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
+
     // allocate temporary arrays, note: round to even
-    int nGlyphCapacity = (3 * (rArgs.mnEndCharPos - rArgs.mnMinCharPos) | 15) + 1;
+    int nGlyphCapacity = (3 * nTextLen | 15) + 1;
 
     rLayout.Reserve(nGlyphCapacity);
 
@@ -393,7 +395,7 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
         hb_buffer_set_direction(pHbBuffer, bRightToLeft ? HB_DIRECTION_RTL: HB_DIRECTION_LTR);
         hb_buffer_set_script(pHbBuffer, hb_icu_script_to_script(eScriptCode));
         hb_buffer_set_language(pHbBuffer, hb_language_from_string(sLanguage.getStr(), -1));
-        hb_buffer_add_utf16(pHbBuffer, rArgs.mpStr, nRunLen, nMinRunPos, nRunLen);
+        hb_buffer_add_utf16(pHbBuffer, rArgs.mpStr, nTextLen, nMinRunPos, nRunLen);
         hb_shape(pHbFont, pHbBuffer, NULL, 0);
 
         int nRunGlyphCount = hb_buffer_get_length(pHbBuffer);
@@ -412,12 +414,14 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
                 if (nCharPos >= 0)
                 {
                     rArgs.NeedFallback(nCharPos, bRightToLeft);
+#if 0
                     // XXX: do we need this? HarfBuzz can take context into
                     // account when shaping
                     if  ((nCharPos > 0) && needPreviousCode(rArgs.mpStr[nCharPos-1]))
                         rArgs.NeedFallback(nCharPos-1, bRightToLeft);
                     else if  ((nCharPos + 1 < nEndRunPos) && needNextCode(rArgs.mpStr[nCharPos+1]))
                         rArgs.NeedFallback(nCharPos+1, bRightToLeft);
+#endif
                 }
 
                 if (SAL_LAYOUT_FOR_FALLBACK & rArgs.mnFlags)
