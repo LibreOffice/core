@@ -7,13 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Zip_Zip,fontunxafm,$(call gb_UnpackedTarball_get_dir,afms)))
+$(eval $(call gb_ExternalPackage_ExternalPackage,afms_fontunxafm,afms))
 
-$(eval $(call gb_Zip_add_dependencies,fontunxafm,\
-	$(call gb_UnpackedTarball_get_target,afms) \
-))
+$(eval $(call gb_ExternalPackage_set_outdir,afms_fontunxafm,$(INSTDIR)))
 
-$(eval $(call gb_Zip_add_files,fontunxafm,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,afms_fontunxafm,share/psprint/fontmetric,\
 	Courier-Bold.afm \
 	Courier-BoldOblique.afm \
 	Courier-Oblique.afm \
