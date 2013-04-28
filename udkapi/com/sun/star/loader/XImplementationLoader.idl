@@ -55,7 +55,7 @@ published interface XImplementationLoader: com::sun::star::uno::XInterface
                more than only one file url).
 
         @param xKey A registry which may be used to read static data previously
-               written via <method>XImplementationLoader::writeRegistryInfo()</method>.
+               written via XImplementationLoader::writeRegistryInfo().
                The use of this parameter is deprecated.
 
         @return returns a factory interface, which allows to create an instance of

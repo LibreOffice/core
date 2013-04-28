@@ -25,7 +25,7 @@
 
 
 /** specifies the which type of text is passed to
-    <method>XSmartTagRecognizer::recognize()</method></p>
+    XSmartTagRecognizer::recognize()</p>
 
     @since OOo 2.3
  */

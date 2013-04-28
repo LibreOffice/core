@@ -75,7 +75,7 @@ published interface XExtendedTransliteration : ::com::sun::star::i18n::XTranslit
         Greek Beta) to upper case "SS", MultipleCharsOutputException
         will be thrown, the caller must catch the exception and then
         call
-        <method>XTransliteration::transliterateChar2String()</method> to
+        XTransliteration::transliterateChar2String() to
         obtain the correct result. </p>
 
         @param cChar

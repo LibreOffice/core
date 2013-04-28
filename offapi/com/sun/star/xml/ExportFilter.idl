@@ -44,7 +44,7 @@ published service ExportFilter
         com::sun::star::xml::sax::XDocumentHandler calls. */
     interface com::sun::star::xml::sax::XDocumentHandler;
 
-    /** The <method>XExportFilter:exporter()</method> call will provide the
+    /** The XExportFilter:exporter() call will provide the
         com::sun::star::document::TypeDetection user data
         required to perform the filtering correctly.
     */

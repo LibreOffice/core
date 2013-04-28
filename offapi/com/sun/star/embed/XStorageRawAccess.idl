@@ -135,7 +135,7 @@ published interface XStorageRawAccess
 
         <p>
         This method allows to insert a stream retrieved by
-        <method>XStorageRawAccess::getRawEncrStreamElement()</method> into a
+        XStorageRawAccess::getRawEncrStreamElement() into a
         storage.
         </p>
 

@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module text {
 /** Constants to specify the type of text markup.
 
     <p>These constants are used with
-    <method>XTextMarkup::commitTextMarkup()</method></p>
+    XTextMarkup::commitTextMarkup()</p>
 
     @since OOo 2.3
  */

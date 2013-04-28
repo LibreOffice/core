@@ -63,7 +63,7 @@ published interface XFrames: com::sun::star::container::XIndexAccess
         <p>
         Note:
         <ul>
-            <li>The method <method>XComponent::dispose()</method> is not called implicitly
+            <li>The method XComponent::dispose() is not called implicitly
                 by this method.</li>
             <li>The creator attribute of the frame must be reset by the caller of
                 this method.</li>
