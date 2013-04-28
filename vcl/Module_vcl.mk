@@ -71,7 +71,7 @@ endif
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,vcl,\
-    Zip_osxres \
+    Package_osxres \
 ))
 endif
 
