@@ -34,7 +34,6 @@ ifneq ($(gb_UnoApi_ENABLE_IDL),)
 $(call gb_Package_Package_internal,$(1)_idl,$(SRCDIR))
 $(call gb_Package_set_outdir,$(1)_idl,$(INSTDIR))
 endif
-$(call gb_Package_Package_internal,$(1)_inc,$(call gb_UnoApiHeadersTarget_get_dir,$(1)))
 ifneq ($(gb_UnoApi_ENABLE_DOC),)
 $(call gb_Package_Package_internal,$(1)_doc,$(gb_UnoApi_SRCDOCDIR))
 $(call gb_Package_set_outdir,$(1)_doc,$(INSTDIR))
