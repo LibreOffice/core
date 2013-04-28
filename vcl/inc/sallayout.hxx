@@ -367,8 +367,9 @@ protected:
 
     bool            GetCharWidths( sal_Int32* pCharWidths ) const;
 
-private:
     GlyphVector     m_GlyphItems;
+
+private:
     mutable Point   maBasePoint;
 
     // enforce proper copy semantic

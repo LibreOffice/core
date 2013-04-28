@@ -106,13 +106,85 @@ void ServerFontLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     }
 }
 
+// apply adjustments to glyph advances, e.g. as a result of justification.
 void ServerFontLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
 {
-    // No idea what issue ApplyDXArray() was supposed to fix, but whatever
-    // GenericSalLayout::ApplyDXArray() does it just breaks our perfectly
-    // positioned text.
-    if (!bUseHarfBuzz)
+    if (bUseHarfBuzz)
+    {
+        if (m_GlyphItems.empty())
+            return;
+
+        // determine cluster boundaries and x base offset
+        const int nCharCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
+        int* pLogCluster = (int*)alloca(nCharCount * sizeof(int));
+        size_t i;
+        int n,p;
+        long nBasePointX = -1;
+        if (mnLayoutFlags & SAL_LAYOUT_FOR_FALLBACK)
+            nBasePointX = 0;
+        for (p = 0; p < nCharCount; ++p)
+            pLogCluster[p] = -1;
+
+        for (i = 0; i < m_GlyphItems.size(); ++i)
+        {
+            n = m_GlyphItems[i].mnCharPos - rArgs.mnMinCharPos;
+            if ((n < 0) || (nCharCount <= n))
+                continue;
+            if (pLogCluster[n] < 0)
+                pLogCluster[n] = i;
+            if (nBasePointX < 0)
+                nBasePointX = m_GlyphItems[i].maLinearPos.X();
+        }
+        // retarget unresolved pLogCluster[n] to a glyph inside the cluster
+        // TODO: better do it while the deleted-glyph markers are still there
+        for (n = 0; n < nCharCount; ++n)
+            if ((p = pLogCluster[0]) >= 0)
+                break;
+        if (n >= nCharCount)
+            return;
+        for (n = 0; n < nCharCount; ++n)
+        {
+            if (pLogCluster[n] < 0)
+                pLogCluster[n] = p;
+            else
+                p = pLogCluster[n];
+        }
+
+        // calculate adjusted cluster widths
+        sal_Int32* pNewGlyphWidths = (sal_Int32*)alloca(m_GlyphItems.size() * sizeof(sal_Int32));
+        for (i = 0; i < m_GlyphItems.size(); ++i)
+            pNewGlyphWidths[i] = 0;
+
+        bool bRTL;
+        for (int nCharPos = p = -1; rArgs.GetNextPos(&nCharPos, &bRTL); )
+        {
+            n = nCharPos - rArgs.mnMinCharPos;
+            if ((n < 0) || (nCharCount <= n))  continue;
+
+            if (pLogCluster[n] >= 0)
+                p = pLogCluster[n];
+            if (p >= 0)
+            {
+                long nDelta = rArgs.mpDXArray[n];
+                if(n > 0)
+                    nDelta -= rArgs.mpDXArray[n - 1];
+                pNewGlyphWidths[p] += nDelta * mnUnitsPerPixel;
+            }
+        }
+
+        // move cluster positions using the adjusted widths
+        long nDelta = 0;
+        for (i = 0; i < m_GlyphItems.size(); ++i)
+        {
+            nDelta += pNewGlyphWidths[i] - m_GlyphItems[i].mnNewWidth;
+            m_GlyphItems[i].mnNewWidth = pNewGlyphWidths[i];
+            m_GlyphItems[i].maLinearPos.X() += nDelta;
+        }
+    }
+    else
+    {
         GenericSalLayout::ApplyDXArray(rArgs);
+    }
 }
 
 // =======================================================================
