@@ -367,8 +367,6 @@ protected:
 
     bool            GetCharWidths( sal_Int32* pCharWidths ) const;
 
-    GlyphVector     GetGlyphItems() const { return m_GlyphItems; }
-
 private:
     GlyphVector     m_GlyphItems;
     mutable Point   maBasePoint;

@@ -76,33 +76,9 @@ long ServerFontLayout::GetTextWidth() const
 {
     long nWidth;
     if (bUseHarfBuzz)
-    {
-        GlyphVector aGlyphItems = GenericSalLayout::GetGlyphItems();
-
-        if( aGlyphItems.empty() )
-            return 0;
-
-        // initialize the extent
-        long nMinPos = 0;
-        long nMaxPos = 0;
-
-        for( GlyphVector::const_iterator pG = aGlyphItems.begin(), end = aGlyphItems.end(); pG != end ; ++pG )
-        {
-            // update the text extent with the glyph extent
-            long nXPos = pG->maLinearPos.X();
-            if( nMinPos > nXPos )
-                nMinPos = nXPos;
-            nXPos += pG->mnOrigWidth;
-            if( nMaxPos < nXPos )
-                nMaxPos = nXPos;
-        }
-
-        nWidth = nMaxPos - nMinPos;
-    }
+        nWidth = GetWidth();
     else
-    {
         nWidth = GenericSalLayout::GetTextWidth();
-    }
 
     return nWidth;
 }
@@ -448,9 +424,6 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
                     continue;
             }
 
-            const GlyphMetric& rGM = rFont.GetGlyphMetric(nGlyphIndex);
-            int nGlyphWidth = rGM.GetCharWidth();
-
             long nGlyphFlags = 0;
             if (bRightToLeft)
                 nGlyphFlags |= GlyphItem::IS_RTL_GLYPH;
@@ -473,10 +446,7 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             int32_t nYAdvance = pHbPositions[i].y_advance >> 6;
 
             Point aNewPos = Point(aCurrPos.X() + nXOffset, -(aCurrPos.Y() + nYOffset));
-
-            GlyphItem aGI(nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth);
-            aGI.mnNewWidth = nXAdvance;
-
+            const GlyphItem aGI(nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nXAdvance);
             rLayout.AppendGlyph(aGI);
 
             aCurrPos.X() += nXAdvance;
@@ -485,6 +455,7 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 
         hb_buffer_destroy(pHbBuffer);
     }
+    rLayout.SetWidth(aCurrPos.X());
 
     hb_font_destroy(pHbFont);
 
