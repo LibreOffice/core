@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//900\u003d",
+        "filename": "canvas/Library_nullcanvas.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-04-28T00:26:41Z",
+      "side": 0,
+      "message": "so if removing those in the build system, the files should also be removed (that is canvas/source/null",
+      "revId": "fa535cf1755edcba630369b7ee1ae1605474d29c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
