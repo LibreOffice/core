@@ -2076,19 +2076,11 @@ void SfxObjectShell::StoreLog()
 
     if ( pImp->m_xLogRing.is() )
     {
-#ifdef WNT
-        OUString aFileURL = OUString( "${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}"  );
-#else
-        OUString aFileURL = OUString( "${$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}"  );
-#endif
+        OUString aFileURL = OUString( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}"  );
 
         ::rtl::Bootstrap::expandMacros( aFileURL );
 
-#ifdef WNT
-        OUString aBuildID = OUString( "${$BRAND_BASE_DIR/program/setup.ini:buildid}"  );
-#else
-        OUString aBuildID = OUString( "${$BRAND_BASE_DIR/program/setuprc:buildid}"  );
-#endif
+        OUString aBuildID = OUString( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("setup") ":buildid}"  );
 
         ::rtl::Bootstrap::expandMacros( aBuildID );
 
