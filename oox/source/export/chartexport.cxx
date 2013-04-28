@@ -2188,6 +2188,9 @@ void ChartExport::_exportAxis(
             XML_val, sTickLblPos,
             FSEND );
 
+    // shape properties
+    exportShapeProps( xAxisProp );
+
     pFS->singleElement( FSNS( XML_c, XML_crossAx ),
             XML_val, I32S( aAxisIdPair.nCrossAx ),
             FSEND );
@@ -2282,8 +2285,6 @@ void ChartExport::_exportAxis(
             FSEND );
     }
 
-    // shape properties
-    exportShapeProps( xAxisProp );
     // TODO: text properties
 
     pFS->endElement( FSNS( XML_c, nAxisType ) );
