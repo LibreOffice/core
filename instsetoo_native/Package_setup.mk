@@ -11,7 +11,11 @@ $(eval $(call gb_Package_Package,instsetoo_native_setup,$(call gb_CustomTarget_g
 
 $(eval $(call gb_Package_set_outdir,instsetoo_native_setup,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_file,instsetoo_native_setup,program/ooenv,ooenv))
+$(eval $(call gb_Package_add_files,instsetoo_native_setup,program,\
+	ooenv \
+	versionrc \
+))
+
 $(eval $(call gb_Package_add_file,instsetoo_native_setup,ure-link,ure-link))
 
 # vim: set noet sw=4 ts=4:

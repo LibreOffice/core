@@ -12,6 +12,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,instsetoo_native/setup))
 $(eval $(call gb_CustomTarget_register_targets,instsetoo_native/setup,\
 	ooenv \
 	ure-link \
+	versionrc \
 ))
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/ooenv :
@@ -36,5 +37,15 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/ure-link :
 	mkdir -p $(dir $@)/ure && \
 	cd $(dir $@) && \
 	ln -s ure ure-link
+
+$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/versionrc :
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
+	( \
+		echo '[Version]' && \
+		echo 'AllLanguages=en-US' && \
+		echo 'buildid=$(shell git log -1 --format=%H)' && \
+		echo 'ProductMajor=$(LIBO_VERSION_MAJOR)$(LIBO_VERSION_MINOR)$(LIBO_VERSION_MICRO)' && \
+		echo 'ProductMinor=$(LIBO_VERSION_PATCH)' \
+	) > $@
 
 # vim: set noet sw=4 ts=4:
