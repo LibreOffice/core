@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//90c\u003d",
+        "filename": "svx/source/svdraw/svdobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-04-28T06:57:53Z",
+      "side": 1,
+      "message": "I think we can avoid some unneeded invalidations by only resetting the SvxUnoShape if the SdrModel changes (or if pNewPage is NULL).",
+      "revId": "d72f228c3f8764a48334cbb4203ce586d92e1273",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
