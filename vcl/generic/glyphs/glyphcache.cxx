@@ -36,10 +36,6 @@
 #include <osl/file.hxx>
 #include <tools/debug.hxx>
 
-// =======================================================================
-// GlyphCache
-// =======================================================================
-
 static GlyphCache* pInstance = NULL;
 
 GlyphCache::GlyphCache( GlyphCachePeer& rPeer )
@@ -55,7 +51,6 @@ GlyphCache::GlyphCache( GlyphCachePeer& rPeer )
     mpFtManager = new FreetypeManager;
 }
 
-// -----------------------------------------------------------------------
 
 GlyphCache::~GlyphCache()
 {
@@ -63,7 +58,6 @@ GlyphCache::~GlyphCache()
     delete mpFtManager;
 }
 
-// -----------------------------------------------------------------------
 
 void GlyphCache::InvalidateAllGlyphs()
 {
@@ -78,7 +72,6 @@ void GlyphCache::InvalidateAllGlyphs()
     mpCurrentGCFont = NULL;
 }
 
-// -----------------------------------------------------------------------
 
 inline
 size_t GlyphCache::IFSD_Hash::operator()( const FontSelectPattern& rFontSelData ) const
@@ -105,7 +98,6 @@ size_t GlyphCache::IFSD_Hash::operator()( const FontSelectPattern& rFontSelData 
     return nHash;
 }
 
-// -----------------------------------------------------------------------
 
 bool GlyphCache::IFSD_Equal::operator()( const FontSelectPattern& rA, const FontSelectPattern& rB) const
 {
@@ -154,14 +146,12 @@ bool GlyphCache::IFSD_Equal::operator()( const FontSelectPattern& rA, const Font
     return true;
 }
 
-// -----------------------------------------------------------------------
 
 GlyphCache& GlyphCache::GetInstance()
 {
     return *pInstance;
 }
 
-// -----------------------------------------------------------------------
 
 void GlyphCache::AddFontFile( const OString& rNormalizedName, int nFaceNum,
     sal_IntPtr nFontId, const ImplDevFontAttributes& rDFA, const ExtraKernInfo* pExtraKern )
@@ -170,7 +160,6 @@ void GlyphCache::AddFontFile( const OString& rNormalizedName, int nFaceNum,
         mpFtManager->AddFontFile( rNormalizedName, nFaceNum, nFontId, rDFA, pExtraKern );
 }
 
-// -----------------------------------------------------------------------
 
 void GlyphCache::AnnounceFonts( ImplDevFontList* pList ) const
 {
@@ -185,7 +174,6 @@ void GlyphCache::ClearFontCache()
         mpFtManager->ClearFontList();
 }
 
-// -----------------------------------------------------------------------
 
 ServerFont* GlyphCache::CacheFont( const FontSelectPattern& rFontSelData )
 {
@@ -238,7 +226,6 @@ ServerFont* GlyphCache::CacheFont( const FontSelectPattern& rFontSelData )
     return pNew;
 }
 
-// -----------------------------------------------------------------------
 
 void GlyphCache::UncacheFont( ServerFont& rServerFont )
 {
@@ -254,7 +241,6 @@ void GlyphCache::UncacheFont( ServerFont& rServerFont )
     }
 }
 
-// -----------------------------------------------------------------------
 
 void GlyphCache::GarbageCollect()
 {
@@ -306,14 +292,12 @@ void GlyphCache::GarbageCollect()
     }
 }
 
-// -----------------------------------------------------------------------
 
 inline void GlyphCache::UsingGlyph( ServerFont&, GlyphData& rGlyphData )
 {
     rGlyphData.SetLruValue( mnLruIndex++ );
 }
 
-// -----------------------------------------------------------------------
 
 inline void GlyphCache::AddedGlyph( ServerFont& rServerFont, GlyphData& rGlyphData )
 {
@@ -323,7 +307,6 @@ inline void GlyphCache::AddedGlyph( ServerFont& rServerFont, GlyphData& rGlyphDa
     GrowNotify();
 }
 
-// -----------------------------------------------------------------------
 
 void GlyphCache::GrowNotify()
 {
@@ -331,7 +314,6 @@ void GlyphCache::GrowNotify()
         GarbageCollect();
 }
 
-// -----------------------------------------------------------------------
 
 inline void GlyphCache::RemovingGlyph( ServerFont& rSF, GlyphData& rGD, int nGlyphIndex )
 {
@@ -340,11 +322,10 @@ inline void GlyphCache::RemovingGlyph( ServerFont& rSF, GlyphData& rGD, int nGly
     --mnGlyphCount;
 }
 
-// -----------------------------------------------------------------------
 
 void ServerFont::ReleaseFromGarbageCollect()
 {
-   // remove from GC list
+    // remove from GC list
     ServerFont* pPrev = mpPrevGCFont;
     ServerFont* pNext = mpNextGCFont;
     if( pPrev ) pPrev->mpNextGCFont = pNext;
@@ -353,7 +334,6 @@ void ServerFont::ReleaseFromGarbageCollect()
     mpNextGCFont = NULL;
 }
 
-// -----------------------------------------------------------------------
 
 long ServerFont::Release() const
 {
@@ -361,7 +341,6 @@ long ServerFont::Release() const
     return --mnRefCount;
 }
 
-// -----------------------------------------------------------------------
 
 GlyphData& ServerFont::GetGlyphData( int nGlyphIndex )
 {
@@ -381,7 +360,6 @@ GlyphData& ServerFont::GetGlyphData( int nGlyphIndex )
     return rGlyphData;
 }
 
-// -----------------------------------------------------------------------
 
 void ServerFont::GarbageCollect( long nMinLruIndex )
 {
@@ -401,7 +379,6 @@ void ServerFont::GarbageCollect( long nMinLruIndex )
     }
 }
 
-// =======================================================================
 
 ImplServerFontEntry::ImplServerFontEntry( FontSelectPattern& rFSD )
 :   ImplFontEntry( rFSD )
@@ -409,7 +386,6 @@ ImplServerFontEntry::ImplServerFontEntry( FontSelectPattern& rFSD )
 ,   mbGotFontOptions( false )
 {}
 
-// -----------------------------------------------------------------------
 
 void ImplServerFontEntry::SetServerFont(ServerFont* p)
 {
@@ -429,7 +405,6 @@ ImplServerFontEntry::~ImplServerFontEntry()
         mpServerFont->Release();
 }
 
-// =======================================================================
 
 ExtraKernInfo::ExtraKernInfo( sal_IntPtr nFontId )
 :   mbInitialized( false ),
@@ -437,7 +412,6 @@ ExtraKernInfo::ExtraKernInfo( sal_IntPtr nFontId )
     maUnicodeKernPairs( 0 )
 {}
 
-//--------------------------------------------------------------------------
 
 int ExtraKernInfo::GetUnscaledKernPairs( ImplKernPairData** ppKernPairs ) const
 {
@@ -460,7 +434,5 @@ int ExtraKernInfo::GetUnscaledKernPairs( ImplKernPairData** ppKernPairs ) const
 
     return nKernCount;
 }
-
-// =======================================================================
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

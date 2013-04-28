@@ -26,14 +26,9 @@
 
 #include <boost/optional.hpp>
 
-//........................................................................
 namespace vcl
 {
-//........................................................................
 
-    //====================================================================
-    //= QuickSelectionEngine_Data
-    //====================================================================
     struct QuickSelectionEngine_Data
     {
         ISearchableStringList&              rEntryList;
@@ -59,7 +54,6 @@ namespace vcl
         DECL_LINK( SearchStringTimeout, Timer* );
     };
 
-    //--------------------------------------------------------------------
     namespace
     {
         static void lcl_reset( QuickSelectionEngine_Data& _data )
@@ -70,18 +64,16 @@ namespace vcl
         }
     }
 
-    //--------------------------------------------------------------------
     IMPL_LINK( QuickSelectionEngine_Data, SearchStringTimeout, Timer*, /*EMPTYARG*/ )
     {
         lcl_reset( *this );
         return 1;
     }
 
-    //--------------------------------------------------------------------
     static StringEntryIdentifier findMatchingEntry( const OUString& _searchString, QuickSelectionEngine_Data& _engineData )
     {
         const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetLocaleI18nHelper();
-            // TODO: do we really need the Window's settings here? The original code used it ...
+        // TODO: do we really need the Window's settings here? The original code used it ...
 
         String sEntryText;
         // get the "current + 1" entry
@@ -103,21 +95,15 @@ namespace vcl
         return pSearchEntry;
     }
 
-    //====================================================================
-    //= QuickSelectionEngine
-    //====================================================================
-    //--------------------------------------------------------------------
     QuickSelectionEngine::QuickSelectionEngine( ISearchableStringList& _entryList )
         :m_pData( new QuickSelectionEngine_Data( _entryList ) )
     {
     }
 
-    //--------------------------------------------------------------------
     QuickSelectionEngine::~QuickSelectionEngine()
     {
     }
 
-    //--------------------------------------------------------------------
     bool QuickSelectionEngine::HandleKeyEvent( const KeyEvent& _keyEvent )
     {
         sal_Unicode c = _keyEvent.GetCharCode();
@@ -164,14 +150,11 @@ namespace vcl
         return false;
     }
 
-    //--------------------------------------------------------------------
     void QuickSelectionEngine::Reset()
     {
         lcl_reset( *m_pData );
     }
 
-//........................................................................
 } // namespace vcl
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

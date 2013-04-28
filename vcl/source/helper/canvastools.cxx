@@ -218,13 +218,11 @@ namespace vcl
                 return ::BitmapEx();
 
             // tunnel directly for known implementation
-            // ----------------------------------------------------------------
             VclCanvasBitmap* pImplBitmap = dynamic_cast<VclCanvasBitmap*>(xInputBitmap.get());
             if( pImplBitmap )
                 return pImplBitmap->getBitmapEx();
 
             // retrieve data via UNO interface
-            // ----------------------------------------------------------------
 
             // volatile bitmaps are a bit more complicated to read
             // from..
@@ -358,7 +356,6 @@ namespace vcl
             return ::BitmapEx();
         }
 
-        //---------------------------------------------------------------------------------------
 
         geometry::RealSize2D size2DFromSize( const Size& rSize )
         {
@@ -603,7 +600,6 @@ namespace vcl
             return new StandardColorSpace();
         }
 
-        //---------------------------------------------------------------------------------------
 
         Color stdColorSpaceSequenceToColor( const uno::Sequence< double >& rColor        )
         {
@@ -648,7 +644,6 @@ namespace vcl
                           toByteColor(aARGBColor.Blue) );
         }
 
-        //---------------------------------------------------------------------------------------
 
     } // namespace vcltools
 
