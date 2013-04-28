@@ -39,12 +39,12 @@ private:
 
     const SfxItemSet&   rOutAttrs;
 
-    XColorList*        pColorTab;
-    XColorList*        mpNewColorTab;
-    XDashList*          pDashList;
-    XDashList*          pNewDashList;
-    XLineEndList*       pLineEndList;
-    XLineEndList*       pNewLineEndList;
+    XColorListSharedPtr     maColorTab;
+    XColorListSharedPtr     maNewColorTab;
+    XDashListSharedPtr      maDashList;
+    XDashListSharedPtr      maNewDashList;
+    XLineEndListSharedPtr   maLineEndList;
+    XLineEndListSharedPtr   maNewLineEndList;
     sal_Bool                bObjSelected;
 
     ChangeType          nLineEndListState;
@@ -57,7 +57,6 @@ private:
     sal_uInt16              nPosLineEndLb;
     sal_uInt16              mnPos;
     sal_Bool                mbAreaTP;
-    sal_Bool                mbDeleteColorTable;
 
     virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 
@@ -74,19 +73,17 @@ public:
                       sal_Bool bHasObj = sal_True );
     ~SvxLineTabDialog();
 
-    void             SetNewDashList( XDashList* pInLst)
-                        { pNewDashList = pInLst; }
-    XDashList*       GetNewDashList() const { return pNewDashList; }
-    const XDashList* GetDashList() const { return pDashList; }
+    void SetNewDashList( XDashListSharedPtr aInLst) { maNewDashList = aInLst; }
+    XDashListSharedPtr GetNewDashList() const { return maNewDashList; }
+    const XDashListSharedPtr GetDashList() const { return maDashList; }
 
-    void                SetNewLineEndList( XLineEndList* pInLst)
-                            { pNewLineEndList = pInLst; }
-    XLineEndList*       GetNewLineEndList() const { return pNewLineEndList; }
-    const XLineEndList* GetLineEndList() const { return pLineEndList; }
+    void SetNewLineEndList( XLineEndListSharedPtr aInLst) { maNewLineEndList = aInLst; }
+    XLineEndListSharedPtr GetNewLineEndList() const { return maNewLineEndList; }
+    const XLineEndListSharedPtr GetLineEndList() const { return maLineEndList; }
 
-    void                SetNewColorTable( XColorList* pColTab ) { mpNewColorTab = pColTab; }
-    XColorList*        GetNewColorTable() const { return mpNewColorTab; }
-    const XColorList*  GetColorTable() const { return pColorTab; }
+    void SetNewColorTable( XColorListSharedPtr aColTab ) { maNewColorTab = aColTab; }
+    XColorListSharedPtr GetNewColorTable() const { return maNewColorTab; }
+    const XColorListSharedPtr GetColorTable() const { return maColorTab; }
 };
 
 /*************************************************************************
@@ -166,9 +163,9 @@ private:
     XLineAttrSetItem    aXLineAttr;
     SfxItemSet&         rXLSet;
 
-    XColorList*        pColorTab;
-    XDashList*          pDashList;
-    XLineEndList*       pLineEndList;
+    XColorListSharedPtr     maColorTab;
+    XDashListSharedPtr      maDashList;
+    XLineEndListSharedPtr   maLineEndList;
 
     ChangeType*         pnLineEndListState;
     ChangeType*         pnDashListState;
@@ -231,9 +228,9 @@ public:
 
     virtual void FillUserData();
 
-    void    SetColorTable( XColorList* pColTab ) { pColorTab = pColTab; }
-    void    SetDashList( XDashList* pDshLst ) { pDashList = pDshLst; }
-    void    SetLineEndList( XLineEndList* pLneEndLst) { pLineEndList = pLneEndLst; }
+    void    SetColorTable( XColorListSharedPtr aColTab ) { maColorTab = aColTab; }
+    void    SetDashList( XDashListSharedPtr aDshLst ) { maDashList = aDshLst; }
+    void    SetLineEndList( XLineEndListSharedPtr aLneEndLst) { maLineEndList = aLneEndLst; }
     void    SetObjSelected( sal_Bool bHasObj ) { bObjSelected = bHasObj; }
 
     void    SetPageType( sal_uInt16 nInType ) { nPageType = nInType; }//CHINA001 void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
@@ -294,7 +291,7 @@ private:
     XLineAttrSetItem    aXLineAttr;
     SfxItemSet&         rXLSet;
 
-    XDashList*          pDashList;
+    XDashListSharedPtr  maDashList;
 
     ChangeType*         pnDashListState;
     sal_uInt16*             pPageType;
@@ -335,7 +332,7 @@ public:
     virtual void ActivatePage( const SfxItemSet& rSet );
     virtual int  DeactivatePage( SfxItemSet* pSet );
 
-    void    SetDashList( XDashList* pDshLst ) { pDashList = pDshLst; }
+    void    SetDashList( XDashListSharedPtr aDshLst ) { maDashList = aDshLst; }
     void    SetObjSelected( sal_Bool bHasObj ) { bObjSelected = bHasObj; }
 
     void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
@@ -383,7 +380,7 @@ private:
     XLineAttrSetItem    aXLineAttr;
     SfxItemSet&         rXLSet;
 
-    XLineEndList*       pLineEndList;
+    XLineEndListSharedPtr   maLineEndList;
 
     ChangeType*         pnLineEndListState;
     sal_uInt16*             pPageType;
@@ -415,7 +412,7 @@ public:
     virtual void ActivatePage( const SfxItemSet& rSet );
     virtual int  DeactivatePage( SfxItemSet* pSet );
 
-    void    SetLineEndList( XLineEndList* pInList ) { pLineEndList = pInList; }
+    void    SetLineEndList( XLineEndListSharedPtr aInList ) { maLineEndList = aInList; }
     void    SetPolyObj( const SdrObject* pObj ) { pPolyObj = pObj; }
     void    SetObjSelected( sal_Bool bHasObj ) { bObjSelected = bHasObj; }
 

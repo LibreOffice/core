@@ -87,9 +87,9 @@ namespace {
         return bFound ? n : -1;
     }
 
-    void FillLineEndListBox(ListBox& rListBoxStart, ListBox& rListBoxEnd, const XLineEndList& rList)
+    void FillLineEndListBox(ListBox& rListBoxStart, ListBox& rListBoxEnd, const XLineEndListSharedPtr aList)
     {
-        const sal_uInt32 nCount(rList.Count());
+        const sal_uInt32 nCount(aList.get() ? aList->Count() : 0);
         const String sNone(SVX_RES(RID_SVXSTR_NONE));
 
         rListBoxStart.SetUpdateMode(false);
@@ -104,8 +104,8 @@ namespace {
 
         for(sal_uInt32 i(0); i < nCount; i++)
         {
-            XLineEndEntry* pEntry = rList.GetLineEnd(i);
-            const Bitmap aBitmap = const_cast< XLineEndList& >(rList).GetUiBitmap(i);
+            XLineEndEntry* pEntry = aList->GetLineEnd(i);
+            const Bitmap aBitmap = aList->GetUiBitmap(i);
 
             if(!aBitmap.IsEmpty())
             {
@@ -137,23 +137,23 @@ namespace {
         rListBoxEnd.SetUpdateMode(true);
     }
 
-    void FillLineStyleListBox(ListBox& rListBox, const XDashList& rList)
+    void FillLineStyleListBox(ListBox& rListBox, const XDashListSharedPtr aList)
     {
-        const sal_uInt32 nCount(rList.Count());
+        const sal_uInt32 nCount(aList.get() ? aList->Count() : 0);
         rListBox.SetUpdateMode(false);
 
         rListBox.Clear();
 
         // entry for 'none'
-        rListBox.InsertEntry(rList.GetStringForUiNoLine());
+        rListBox.InsertEntry(aList->GetStringForUiNoLine());
 
         // entry for solid line
-        rListBox.InsertEntry(rList.GetStringForUiSolidLine(), rList.GetBitmapForUISolidLine());
+        rListBox.InsertEntry(aList->GetStringForUiSolidLine(), aList->GetBitmapForUISolidLine());
 
         for(sal_uInt32 i(0); i < nCount; i++)
         {
-            XDashEntry* pEntry = rList.GetDash(i);
-            const Bitmap aBitmap = const_cast< XDashList& >(rList).GetUiBitmap(i);
+            XDashEntry* pEntry = aList->GetDash(i);
+            const Bitmap aBitmap = aList->GetUiBitmap(i);
 
             if(!aBitmap.IsEmpty())
             {
@@ -218,8 +218,8 @@ LinePropertyPanel::LinePropertyPanel(
     mnTrans(0),
     meMapUnit(SFX_MAPUNIT_MM),
     mnWidthCoreValue(0),
-    mpLineEndList(0),
-    mpLineStyleList(0),
+    maLineEndList(),
+    maLineStyleList(),
     mpStartItem(0),
     mpEndItem(0),
     maColorPopup(this, ::boost::bind(&LinePropertyPanel::CreateColorPopupControl, this, _1)),
@@ -778,11 +778,11 @@ IMPL_LINK(LinePropertyPanel, ChangeLineStyleHdl, ToolBox*, /* pToolBox */)
 
             GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_STYLE, SFX_CALLMODE_RECORD, &aItem, 0L);
         }
-        else if(mpLineStyleList && mpLineStyleList->Count() > (long)(nPos - 2))
+        else if(maLineStyleList.get() && maLineStyleList->Count() > (long)(nPos - 2))
         {
             // XLINE_DASH
             const XLineStyleItem aItemA(XLINE_DASH);
-            const XDashEntry* pDashEntry = mpLineStyleList->GetDash(nPos - 2);
+            const XDashEntry* pDashEntry = maLineStyleList->GetDash(nPos - 2);
             OSL_ENSURE(pDashEntry, "OOps, got empty XDash from XDashList (!)");
             const XLineDashItem aItemB(
                 pDashEntry ? pDashEntry->GetName() : String(),
@@ -806,8 +806,8 @@ IMPL_LINK(LinePropertyPanel, ChangeStartHdl, void*, EMPTYARG)
         XLineStartItem* pItem = NULL;
         if( nPos == 0 )
             pItem = new XLineStartItem();
-        else if( mpLineEndList && mpLineEndList->Count() > (long) ( nPos - 1 ) )
-            pItem = new XLineStartItem( mpLBStart->GetSelectEntry(),mpLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() );
+        else if( maLineEndList.get() && maLineEndList->Count() > (long) ( nPos - 1 ) )
+            pItem = new XLineStartItem( mpLBStart->GetSelectEntry(),maLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() );
         GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINEEND_STYLE, SFX_CALLMODE_RECORD, pItem,  0L);
         delete pItem;
     }
@@ -825,8 +825,8 @@ IMPL_LINK(LinePropertyPanel, ChangeEndHdl, void*, EMPTYARG)
         XLineEndItem* pItem = NULL;
         if( nPos == 0 )
             pItem = new XLineEndItem();
-        else if( mpLineEndList && mpLineEndList->Count() > (long) ( nPos - 1 ) )
-            pItem = new XLineEndItem( mpLBEnd->GetSelectEntry(), mpLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() );
+        else if( maLineEndList.get() && maLineEndList->Count() > (long) ( nPos - 1 ) )
+            pItem = new XLineEndItem( mpLBEnd->GetSelectEntry(), maLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() );
         GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINEEND_STYLE, SFX_CALLMODE_RECORD, pItem,  0L);
         delete pItem;
     }
@@ -1045,11 +1045,11 @@ void  LinePropertyPanel::FillLineEndList()
     {
         mpLBStart->Enable();
         SvxLineEndListItem aItem( *(const SvxLineEndListItem*)(pSh->GetItem( SID_LINEEND_LIST ) ) );
-        mpLineEndList = aItem.GetLineEndList();
+        maLineEndList = aItem.GetLineEndList();
 
-        if(mpLineEndList)
+        if(maLineEndList.get())
         {
-            FillLineEndListBox(*mpLBStart, *mpLBEnd, *mpLineEndList);
+            FillLineEndListBox(*mpLBStart, *mpLBEnd, maLineEndList);
         }
 
         mpLBStart->SelectEntryPos(0);
@@ -1071,11 +1071,11 @@ void  LinePropertyPanel::FillLineStyleList()
     {
         mpLBStyle->Enable();
         SvxDashListItem aItem( *(const SvxDashListItem*)(pSh->GetItem( SID_DASH_LIST ) ) );
-        mpLineStyleList = aItem.GetDashList();
+        maLineStyleList = aItem.GetDashList();
 
-        if(mpLineStyleList)
+        if(maLineStyleList.get())
         {
-            FillLineStyleListBox(*mpLBStyle, *mpLineStyleList);
+            FillLineStyleListBox(*mpLBStyle, maLineStyleList);
         }
 
         mpLBStyle->SelectEntryPos(0);
@@ -1108,12 +1108,12 @@ void LinePropertyPanel::SelectLineStyle()
             bSelected = true;
             break;
         default:
-            if(mpDashItem && mpLineStyleList)
+            if(mpDashItem && maLineStyleList.get())
             {
                 const XDash& rDash = mpDashItem->GetDashValue();
-                for(sal_Int32 a(0);!bSelected &&  a < mpLineStyleList->Count(); a++)
+                for(sal_Int32 a(0);!bSelected &&  a < maLineStyleList->Count(); a++)
                 {
-                    XDashEntry* pEntry = mpLineStyleList->GetDash(a);
+                    XDashEntry* pEntry = maLineStyleList->GetDash(a);
                     const XDash& rEntry = pEntry->GetDash();
                     if(rDash == rEntry)
                     {
@@ -1141,12 +1141,12 @@ void LinePropertyPanel::SelectEndStyle(bool bStart)
             return;
         }
 
-        if(mpStartItem && mpLineEndList)
+        if(mpStartItem && maLineEndList.get())
         {
             const basegfx::B2DPolyPolygon& rItemPolygon = mpStartItem->GetLineStartValue();
-            for(sal_Int32 a(0);!bSelected &&  a < mpLineEndList->Count(); a++)
+            for(sal_Int32 a(0);!bSelected &&  a < maLineEndList->Count(); a++)
             {
-                XLineEndEntry* pEntry = mpLineEndList->GetLineEnd(a);
+                XLineEndEntry* pEntry = maLineEndList->GetLineEnd(a);
                 const basegfx::B2DPolyPolygon& rEntryPolygon = pEntry->GetLineEnd();
                 if(rItemPolygon == rEntryPolygon)
                 {
@@ -1169,12 +1169,12 @@ void LinePropertyPanel::SelectEndStyle(bool bStart)
             return;
         }
 
-        if(mpEndItem && mpLineEndList)
+        if(mpEndItem && maLineEndList.get())
         {
             const basegfx::B2DPolyPolygon& rItemPolygon = mpEndItem->GetLineEndValue();
-            for(sal_Int32 a(0);!bSelected &&  a < mpLineEndList->Count(); a++)
+            for(sal_Int32 a(0);!bSelected &&  a < maLineEndList->Count(); a++)
             {
-                XLineEndEntry* pEntry = mpLineEndList->GetLineEnd(a);
+                XLineEndEntry* pEntry = maLineEndList->GetLineEnd(a);
                 const basegfx::B2DPolyPolygon& rEntryPolygon = pEntry->GetLineEnd();
                 if(rItemPolygon == rEntryPolygon)
                 {

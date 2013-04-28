@@ -107,8 +107,8 @@ SvxBitmapTabPage::SvxBitmapTabPage
     aBitmapCtl          ( this, aCtlPreview.GetSizePixel() ),
     rOutAttrs           ( rInAttrs ),
 
-    pColorTab( NULL ),
-    pBitmapList( NULL ),
+    maColorTab(),
+    maBitmapList(),
 
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXFStyleItem        ( XFILL_BITMAP ),
@@ -162,11 +162,11 @@ SvxBitmapTabPage::SvxBitmapTabPage
 void SvxBitmapTabPage::Construct()
 {
     // Farbtabellen
-    aLbColor.Fill( pColorTab );
+    aLbColor.Fill( maColorTab );
     aLbBackgroundColor.CopyEntries( aLbColor );
 
     // Bitmaptabelle
-    aLbBitmaps.Fill( pBitmapList );
+    aLbBitmaps.Fill( maBitmapList );
 }
 
 // -----------------------------------------------------------------------
@@ -180,19 +180,19 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet&  )
     {
         *pbAreaTP = sal_False;
 
-        if( pColorTab )
+        if( maColorTab.get() )
         {
             // ColorTable
             if( *pnColorTableState & CT_CHANGED ||
                 *pnColorTableState & CT_MODIFIED )
             {
                 if( *pnColorTableState & CT_CHANGED )
-                    pColorTab = ( (SvxAreaTabDialog*) DLGWIN )->GetNewColorTable();
+                    maColorTab = ( (SvxAreaTabDialog*) DLGWIN )->GetNewColorTable();
 
                 // LbColor
                 nPos = aLbColor.GetSelectEntryPos();
                 aLbColor.Clear();
-                aLbColor.Fill( pColorTab );
+                aLbColor.Fill( maColorTab );
                 nCount = aLbColor.GetEntryCount();
                 if( nCount == 0 )
                     ; // Dieser Fall sollte nicht auftreten
@@ -220,9 +220,9 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet&  )
             // Ermitteln (evtl. abschneiden) des Namens und in
             // der GroupBox darstellen
             String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-            INetURLObject   aURL( pBitmapList->GetPath() );
+            INetURLObject   aURL( maBitmapList->GetPath() );
 
-            aURL.Append( pBitmapList->GetName() );
+            aURL.Append( maBitmapList->GetName() );
             DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
             if( aURL.getBase().getLength() > 18 )
@@ -273,7 +273,7 @@ sal_Bool SvxBitmapTabPage::FillItemSet( SfxItemSet& _rOutAttrs )
 
             if(LISTBOX_ENTRY_NOTFOUND != nPos)
             {
-                const XBitmapEntry* pXBitmapEntry = pBitmapList->GetBitmap(nPos);
+                const XBitmapEntry* pXBitmapEntry = maBitmapList->GetBitmap(nPos);
                 const String aString(aLbBitmaps.GetSelectEntry());
 
                 _rOutAttrs.Put(XFillBitmapItem(aString, pXBitmapEntry->GetGraphicObject()));
@@ -310,7 +310,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet&  )
     ChangeBitmapHdl_Impl( this );
 
     // Status der Buttons ermitteln
-    if( pBitmapList->Count() )
+    if( maBitmapList.get() && maBitmapList->Count() )
     {
         aBtnAdd.Enable();
         aBtnModify.Enable();
@@ -342,7 +342,7 @@ IMPL_LINK( SvxBitmapTabPage, ChangeBitmapHdl_Impl, void *, EMPTYARG )
 
     if(LISTBOX_ENTRY_NOTFOUND != nPos)
     {
-        pGraphicObject = new GraphicObject(pBitmapList->GetBitmap(nPos)->GetGraphicObject());
+        pGraphicObject = new GraphicObject(maBitmapList->GetBitmap(nPos)->GetGraphicObject());
     }
     else
     {
@@ -365,7 +365,7 @@ IMPL_LINK( SvxBitmapTabPage, ChangeBitmapHdl_Impl, void *, EMPTYARG )
 
             if(LISTBOX_ENTRY_NOTFOUND != nPos)
             {
-                pGraphicObject = new GraphicObject(pBitmapList->GetBitmap(nPos)->GetGraphicObject());
+                pGraphicObject = new GraphicObject(maBitmapList->GetBitmap(nPos)->GetGraphicObject());
             }
         }
     }
@@ -516,7 +516,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
     String aDesc( CUI_RES( RID_SVXSTR_DESC_NEW_BITMAP ) );
     String aName;
 
-    long nCount = pBitmapList->Count();
+    long nCount = maBitmapList.get() ? maBitmapList->Count() : 0;
     long j = 1;
     sal_Bool bDifferent = sal_False;
 
@@ -528,7 +528,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         bDifferent = sal_True;
 
         for( long i = 0; i < nCount && bDifferent; i++ )
-            if( aName == pBitmapList->GetBitmap( i )->GetName() )
+            if( aName == maBitmapList->GetBitmap( i )->GetName() )
                 bDifferent = sal_False;
     }
 
@@ -546,7 +546,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         bDifferent = sal_True;
 
         for( long i = 0; i < nCount && bDifferent; i++ )
-            if( aName == pBitmapList->GetBitmap( i )->GetName() )
+            if( aName == maBitmapList->GetBitmap( i )->GetName() )
                 bDifferent = sal_False;
 
         if( bDifferent ) {
@@ -592,7 +592,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
         if( pEntry )
         {
-            pBitmapList->Insert( pEntry );
+            maBitmapList->Insert( pEntry );
             const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
             aLbBitmaps.Append(rStyleSettings.GetListBoxPreviewDefaultPixelSize(), *pEntry );
             aLbBitmaps.SelectEntryPos( aLbBitmaps.GetEntryCount() - 1 );
@@ -615,7 +615,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
     }
 
     // Status der Buttons ermitteln
-    if( pBitmapList->Count() )
+    if( maBitmapList.get() && maBitmapList->Count() )
     {
         aBtnModify.Enable();
         aBtnDelete.Enable();
@@ -669,10 +669,10 @@ IMPL_LINK( SvxBitmapTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
                 pDlg->GetName( aName );
 
                 sal_Bool bDifferent = sal_True;
-                long nCount     = pBitmapList->Count();
+                long nCount     = maBitmapList->Count();
 
                 for( long i = 0; i < nCount && bDifferent; i++ )
-                    if( aName == pBitmapList->GetBitmap( i )->GetName() )
+                    if( aName == maBitmapList->GetBitmap( i )->GetName() )
                         bDifferent = sal_False;
 
                 if( bDifferent ) {
@@ -699,7 +699,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
             if( !nError )
             {
                 XBitmapEntry* pEntry = new XBitmapEntry( aGraphic, aName );
-                pBitmapList->Insert( pEntry );
+                maBitmapList->Insert( pEntry );
 
                 const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
                 aLbBitmaps.Append(rStyleSettings.GetListBoxPreviewDefaultPixelSize(), *pEntry );
@@ -746,7 +746,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
         ResMgr& rMgr = CUI_MGR();
         String aNewName( SVX_RES( RID_SVXSTR_BITMAP ) );
         String aDesc( ResId( RID_SVXSTR_DESC_NEW_BITMAP, rMgr ) );
-        String aName( pBitmapList->GetBitmap( nPos )->GetName() );
+        String aName( maBitmapList->GetBitmap( nPos )->GetName() );
         String aOldName = aName;
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -754,7 +754,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
         AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
-        long nCount = pBitmapList->Count();
+        long nCount = maBitmapList.get() ? maBitmapList->Count() : 0;
         sal_Bool bDifferent = sal_False;
         sal_Bool bLoop = sal_True;
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
@@ -766,7 +766,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
             for( long i = 0; i < nCount && bDifferent; i++ )
             {
-                if( aName == pBitmapList->GetBitmap( i )->GetName() &&
+                if( aName == maBitmapList->GetBitmap( i )->GetName() &&
                     aName != aOldName )
                     bDifferent = sal_False;
             }
@@ -774,7 +774,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
             if( bDifferent )
             {
                 bLoop = sal_False;
-                XBitmapEntry* pEntry = pBitmapList->GetBitmap( nPos );
+                XBitmapEntry* pEntry = maBitmapList->GetBitmap( nPos );
 
                 pEntry->SetName( aName );
 
@@ -815,7 +815,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 
         if( aQueryBox.Execute() == RET_YES )
         {
-            delete pBitmapList->Remove( nPos );
+            delete maBitmapList->Remove( nPos );
             aLbBitmaps.RemoveEntry( nPos );
             aLbBitmaps.SelectEntryPos( 0 );
 
@@ -829,7 +829,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
         }
     }
     // Status der Buttons ermitteln
-    if( !pBitmapList->Count() )
+    if( !maBitmapList.get() || !maBitmapList->Count() )
     {
         aBtnModify.Disable();
         aBtnDelete.Disable();
@@ -851,7 +851,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             String( ResId( RID_SVXSTR_WARN_TABLE_OVERWRITE, rMgr ) ) ).Execute();
 
         if ( nReturn == RET_YES )
-            pBitmapList->Save();
+            maBitmapList->Save();
     }
 
     if ( nReturn != RET_CANCEL )
@@ -874,24 +874,20 @@ IMPL_LINK( SvxBitmapTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             aPathURL.removeFinalSlash();
 
             // Tabelle speichern
-            XBitmapList* pBmpList = new XBitmapList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), pXPool );
-            pBmpList->SetName( aURL.getName() );
-            if( pBmpList->Load() )
+            XBitmapListSharedPtr aBmpList(XPropertyListFactory::CreateSharedXBitmapList(aPathURL.GetMainURL(INetURLObject::NO_DECODE)));
+            aBmpList->SetName( aURL.getName() );
+            if( aBmpList->Load() )
             {
-                if( pBmpList )
+                if( aBmpList.get() )
                 {
-                    // Pruefen, ob Tabelle geloescht werden darf:
-                    if( pBitmapList != ( (SvxAreaTabDialog*) DLGWIN )->GetBitmapList() )
-                        delete pBitmapList;
-
-                    pBitmapList = pBmpList;
-                    ( (SvxAreaTabDialog*) DLGWIN )->SetNewBitmapList( pBitmapList );
+                    maBitmapList = aBmpList;
+                    ( (SvxAreaTabDialog*) DLGWIN )->SetNewBitmapList( maBitmapList );
 
                     aLbBitmaps.Clear();
-                    aLbBitmaps.Fill( pBitmapList );
+                    aLbBitmaps.Fill( maBitmapList );
                     Reset( rOutAttrs );
 
-                    pBitmapList->SetName( aURL.getName() );
+                    maBitmapList->SetName( aURL.getName() );
 
                     // Ermitteln (evtl. abschneiden) des Namens und in
                     // der GroupBox darstellen
@@ -923,7 +919,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
     }
 
     // Status der Buttons ermitteln
-    if( pBitmapList->Count() )
+    if( maBitmapList.get() && maBitmapList->Count() )
     {
         aBtnModify.Enable();
         aBtnDelete.Enable();
@@ -950,9 +946,9 @@ IMPL_LINK( SvxBitmapTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );
     DBG_ASSERT( aFile.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-    if( pBitmapList->GetName().Len() )
+    if( maBitmapList->GetName().Len() )
     {
-        aFile.Append( pBitmapList->GetName() );
+        aFile.Append( maBitmapList->GetName() );
 
         if( !aFile.getExtension().getLength() )
             aFile.SetExtension( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "sob" ) ) );
@@ -967,10 +963,10 @@ IMPL_LINK( SvxBitmapTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
         aPathURL.removeSegment();
         aPathURL.removeFinalSlash();
 
-        pBitmapList->SetName( aURL.getName() );
-        pBitmapList->SetPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
+        maBitmapList->SetName( aURL.getName() );
+        maBitmapList->SetPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
-        if( pBitmapList->Save() )
+        if( maBitmapList->Save() )
         {
             // Ermitteln (evtl. abschneiden) des Namens und in
             // der GroupBox darstellen

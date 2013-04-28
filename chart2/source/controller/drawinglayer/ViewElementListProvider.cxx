@@ -89,41 +89,41 @@ ViewElementListProvider::~ViewElementListProvider()
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-XColorList*   ViewElementListProvider::GetColorTable() const
+XColorListSharedPtr ViewElementListProvider::GetColorTable() const
 {
     if(m_pDrawModelWrapper)
-        return m_pDrawModelWrapper->GetColorTable();
-    return NULL;
+        return m_pDrawModelWrapper->GetColorTableFromSdrModel();
+    return XColorListSharedPtr();
 }
-XDashList*     ViewElementListProvider::GetDashList() const
+XDashListSharedPtr ViewElementListProvider::GetDashList() const
 {
     if(m_pDrawModelWrapper)
-        return m_pDrawModelWrapper->GetDashList();
-    return NULL;
+        return m_pDrawModelWrapper->GetDashListFromSdrModel();
+    return XDashListSharedPtr();
 }
-XLineEndList*  ViewElementListProvider::GetLineEndList() const
+XLineEndListSharedPtr ViewElementListProvider::GetLineEndList() const
 {
     if(m_pDrawModelWrapper)
-        return m_pDrawModelWrapper->GetLineEndList();
-    return NULL;
+        return m_pDrawModelWrapper->GetLineEndListFromSdrModel();
+    return XLineEndListSharedPtr();
 }
-XGradientList* ViewElementListProvider::GetGradientList() const
+XGradientListSharedPtr ViewElementListProvider::GetGradientList() const
 {
     if(m_pDrawModelWrapper)
-        return m_pDrawModelWrapper->GetGradientList();
-    return NULL;
+        return m_pDrawModelWrapper->GetGradientListFromSdrModel();
+    return XGradientListSharedPtr();
 }
-XHatchList*    ViewElementListProvider::GetHatchList() const
+XHatchListSharedPtr ViewElementListProvider::GetHatchList() const
 {
     if(m_pDrawModelWrapper)
-        return m_pDrawModelWrapper->GetHatchList();
-    return NULL;
+        return m_pDrawModelWrapper->GetHatchListFromSdrModel();
+    return XHatchListSharedPtr();
 }
-XBitmapList*   ViewElementListProvider::GetBitmapList() const
+XBitmapListSharedPtr ViewElementListProvider::GetBitmapList() const
 {
     if(m_pDrawModelWrapper)
-        return m_pDrawModelWrapper->GetBitmapList();
-    return NULL;
+        return m_pDrawModelWrapper->GetBitmapListFromSdrModel();
+    return XBitmapListSharedPtr();
 }
 
 //-----------------------------------------------------------------------------

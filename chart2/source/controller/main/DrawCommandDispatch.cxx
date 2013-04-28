@@ -114,14 +114,14 @@ bool DrawCommandDispatch::isFeatureSupported( const ::rtl::OUString& rCommandURL
 ::basegfx::B2DPolyPolygon getPolygon( sal_uInt16 nResId, SdrModel& rModel )
 {
     ::basegfx::B2DPolyPolygon aReturn;
-    XLineEndList* pLineEndList = rModel.GetLineEndList();
-    if ( pLineEndList )
+    XLineEndListSharedPtr aLineEndList = rModel.GetLineEndListFromSdrModel();
+    if ( aLineEndList.get() )
     {
         String aName( SVX_RES( nResId ) );
-        long nCount = pLineEndList->Count();
+        long nCount = aLineEndList->Count();
         for ( long nIndex = 0; nIndex < nCount; ++nIndex )
         {
-            XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nIndex );
+            XLineEndEntry* pEntry = aLineEndList->GetLineEnd( nIndex );
             if ( pEntry->GetName() == aName )
             {
                 aReturn = pEntry->GetLineEnd();

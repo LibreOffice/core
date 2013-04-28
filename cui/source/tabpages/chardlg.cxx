@@ -715,21 +715,19 @@ void SvxCharNamePage::Initialize()
     // fill the color box
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     //DBG_ASSERT( pDocSh, "DocShell not found!" );
-    XColorList* pColorTable = NULL;
-    FASTBOOL bKillTable = sal_False;
+    XColorListSharedPtr aColorTable;
     const SfxPoolItem* pItem = NULL;
 
     if ( pDocSh )
     {
         pItem = pDocSh->GetItem( SID_COLOR_TABLE );
         if ( pItem != NULL )
-            pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
+            aColorTable = static_cast< const SvxColorTableItem* >(pItem)->GetColorTable();
     }
 
-    if ( !pColorTable )
+    if ( !aColorTable.get() )
     {
-        pColorTable = new XColorList( SvtPathOptions().GetPalettePath() );
-        bKillTable = sal_True;
+        aColorTable = XPropertyListFactory::CreateSharedXColorList(SvtPathOptions().GetPalettePath());
     }
 
     m_pColorLB->SetUpdateMode( sal_False );
@@ -742,17 +740,14 @@ void SvxCharNamePage::Initialize()
             m_pColorLB->InsertEntry( Color( COL_AUTO ),
                                      SVX_RESSTR( RID_SVXSTR_AUTOMATIC ));
     }
-    for ( long i = 0; i < pColorTable->Count(); i++ )
+
+    for ( long i = 0; i < aColorTable->Count(); i++ )
     {
-        XColorEntry* pEntry = pColorTable->GetColor(i);
+        XColorEntry* pEntry = aColorTable->GetColor(i);
         m_pColorLB->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
     }
 
     m_pColorLB->SetUpdateMode( sal_True );
-
-    if ( bKillTable )
-        delete pColorTable;
-
     m_pColorLB->SetSelectHdl( LINK( this, SvxCharNamePage, ColorBoxSelectHdl_Impl ) );
 
     Link aLink = LINK( this, SvxCharNamePage, FontModifyHdl_Impl );
@@ -1787,20 +1782,18 @@ void SvxCharEffectsPage::Initialize()
     // fill the color box
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     DBG_ASSERT( pDocSh, "DocShell not found!" );
-    XColorList* pColorTable = NULL;
-    FASTBOOL bKillTable = sal_False;
+    XColorListSharedPtr aColorTable;
 
     if ( pDocSh )
     {
         pItem = pDocSh->GetItem( SID_COLOR_TABLE );
         if ( pItem != NULL )
-            pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
+            aColorTable = static_cast< const SvxColorTableItem* >(pItem)->GetColorTable();
     }
 
-    if ( !pColorTable )
+    if ( !aColorTable.get() )
     {
-        pColorTable = new XColorList( SvtPathOptions().GetPalettePath() );
-        bKillTable = sal_True;
+        aColorTable = XPropertyListFactory::CreateSharedXColorList(SvtPathOptions().GetPalettePath());
     }
 
     m_aUnderlineColorLB.SetUpdateMode( sal_False );
@@ -1818,9 +1811,9 @@ void SvxCharEffectsPage::Initialize()
             m_aFontColorLB.InsertAutomaticEntry();
         }
     }
-    for ( long i = 0; i < pColorTable->Count(); i++ )
+    for ( long i = 0; i < aColorTable->Count(); i++ )
     {
-        XColorEntry* pEntry = pColorTable->GetColor(i);
+        XColorEntry* pEntry = aColorTable->GetColor(i);
         m_aUnderlineColorLB.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         m_aOverlineColorLB.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         m_aFontColorLB.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
@@ -1830,9 +1823,6 @@ void SvxCharEffectsPage::Initialize()
     m_aOverlineColorLB.SetUpdateMode( sal_True );
     m_aFontColorLB.SetUpdateMode( sal_True );
     m_aFontColorLB.SetSelectHdl( LINK( this, SvxCharEffectsPage, ColorBoxSelectHdl_Impl ) );
-
-    if ( bKillTable )
-        delete pColorTable;
 
     // handler
     Link aLink = LINK( this, SvxCharEffectsPage, SelectHdl_Impl );

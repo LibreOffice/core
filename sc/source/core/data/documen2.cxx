@@ -130,7 +130,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pPrinter( NULL ),
         pVirtualDevice_100th_mm( NULL ),
         pDrawLayer( NULL ),
-        pColorTable( NULL ),
+        maColorTable(),
         pCondFormList( NULL ),
         pValidationList( NULL ),
         pFormatExchangeList( NULL ),
@@ -457,7 +457,6 @@ ScDocument::~ScDocument()
         xPoolHelper->SourceDocumentGone();
     xPoolHelper.unbind();
 
-    DeleteColorTable();
     delete pScriptTypeData;
     delete pOtherObjects;
     delete pRecursionHelper;

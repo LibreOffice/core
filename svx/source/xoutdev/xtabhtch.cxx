@@ -61,108 +61,25 @@ using namespace ::com::sun::star;
 using namespace ::rtl;
 
 sal_Unicode const pszExtHatch[]  = {'s','o','h'};
-
-char const aChckHatch[]  = { 0x04, 0x00, 'S','O','H','L'};  // < 5.2
-char const aChckHatch0[] = { 0x04, 0x00, 'S','O','H','0'};  // = 5.2
-char const aChckXML[]    = { '<', '?', 'x', 'm', 'l' };     // = 6.0
+//char const aChckHatch[]  = { 0x04, 0x00, 'S','O','H','L'};    // < 5.2
+//char const aChckHatch0[] = { 0x04, 0x00, 'S','O','H','0'};    // = 5.2
+//char const aChckXML[]    = { '<', '?', 'x', 'm', 'l' };       // = 6.0
 
 // -----------------
 // class XHatchList
 // -----------------
 
-class impXHatchList
-{
-private:
-    VirtualDevice*          mpVirtualDevice;
-    SdrModel*               mpSdrModel;
-    SdrObject*              mpBackgroundObject;
-    SdrObject*              mpHatchObject;
-
-public:
-    impXHatchList(VirtualDevice* pV, SdrModel* pM, SdrObject* pB, SdrObject* pH)
-    :   mpVirtualDevice(pV),
-        mpSdrModel(pM),
-        mpBackgroundObject(pB),
-        mpHatchObject(pH)
-    {}
-
-    ~impXHatchList()
-    {
-        delete mpVirtualDevice;
-        SdrObject::Free(mpBackgroundObject);
-        SdrObject::Free(mpHatchObject);
-        delete mpSdrModel;
-    }
-
-    VirtualDevice* getVirtualDevice() const { return mpVirtualDevice; }
-    SdrObject* getBackgroundObject() const { return mpBackgroundObject; }
-    SdrObject* getHatchObject() const { return mpHatchObject; }
-};
-
-void XHatchList::impCreate()
-{
-    if(!mpData)
-    {
-        const Point aZero(0, 0);
-        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-
-        VirtualDevice* pVirDev = new VirtualDevice;
-        OSL_ENSURE(0 != pVirDev, "XDashList: no VirtualDevice created!" );
-        pVirDev->SetMapMode(MAP_100TH_MM);
-        const Size aSize(pVirDev->PixelToLogic(rStyleSettings.GetListBoxPreviewDefaultPixelSize()));
-        pVirDev->SetOutputSize(aSize);
-        pVirDev->SetDrawMode(rStyleSettings.GetHighContrastMode()
-            ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
-            : DRAWMODE_DEFAULT);
-        pVirDev->SetBackground(rStyleSettings.GetFieldColor());
-
-        SdrModel* pSdrModel = new SdrModel();
-        OSL_ENSURE(0 != pSdrModel, "XDashList: no SdrModel created!" );
-        pSdrModel->GetItemPool().FreezeIdRanges();
-
-        const Size aSinglePixel(pVirDev->PixelToLogic(Size(1, 1)));
-        const Rectangle aBackgroundSize(aZero, Size(aSize.getWidth() - aSinglePixel.getWidth(), aSize.getHeight() - aSinglePixel.getHeight()));
-        SdrObject* pBackgroundObject = new SdrRectObj(aBackgroundSize);
-        OSL_ENSURE(0 != pBackgroundObject, "XDashList: no BackgroundObject created!" );
-        pBackgroundObject->SetModel(pSdrModel);
-        pBackgroundObject->SetMergedItem(XFillStyleItem(XFILL_SOLID));
-        pBackgroundObject->SetMergedItem(XFillColorItem(String(), rStyleSettings.GetFieldColor()));
-        pBackgroundObject->SetMergedItem(XLineStyleItem(XLINE_SOLID));
-        pBackgroundObject->SetMergedItem(XLineColorItem(String(), Color(COL_BLACK)));
-
-        SdrObject* pHatchObject = new SdrRectObj(aBackgroundSize);
-        OSL_ENSURE(0 != pHatchObject, "XDashList: no HatchObject created!" );
-        pHatchObject->SetModel(pSdrModel);
-        pHatchObject->SetMergedItem(XFillStyleItem(XFILL_HATCH));
-        pHatchObject->SetMergedItem(XLineStyleItem(XLINE_NONE));
-
-        mpData = new impXHatchList(pVirDev, pSdrModel, pBackgroundObject, pHatchObject);
-        OSL_ENSURE(0 != mpData, "XDashList: data creation went wrong!" );
-    }
-}
-
-void XHatchList::impDestroy()
-{
-    if(mpData)
-    {
-        delete mpData;
-        mpData = 0;
-    }
-}
-
-XHatchList::XHatchList(const String& rPath, XOutdevItemPool* pInPool)
-:   XPropertyList(rPath, pInPool),
-    mpData(0)
+XHatchList::XHatchList(const String& rPath )
+:   XPropertyList(rPath),
+    mpBackgroundObject(0),
+    mpHatchObject(0)
 {
 }
 
 XHatchList::~XHatchList()
 {
-    if(mpData)
-    {
-        delete mpData;
-        mpData = 0;
-    }
+    SdrObject::Free(mpBackgroundObject);
+    SdrObject::Free(mpHatchObject);
 }
 
 XHatchEntry* XHatchList::Replace(XHatchEntry* pEntry, long nIndex )
@@ -172,12 +89,12 @@ XHatchEntry* XHatchList::Replace(XHatchEntry* pEntry, long nIndex )
 
 XHatchEntry* XHatchList::Remove(long nIndex)
 {
-    return (XHatchEntry*) XPropertyList::Remove(nIndex, 0);
+    return (XHatchEntry*) XPropertyList::Remove(nIndex);
 }
 
 XHatchEntry* XHatchList::GetHatch(long nIndex) const
 {
-    return (XHatchEntry*) XPropertyList::Get(nIndex, 0);
+    return (XHatchEntry*) XPropertyList::Get(nIndex);
 }
 
 sal_Bool XHatchList::Load()
@@ -242,24 +159,65 @@ sal_Bool XHatchList::Create()
 
 Bitmap XHatchList::CreateBitmapForUI( long nIndex )
 {
-    impCreate();
-    VirtualDevice* pVD = mpData->getVirtualDevice();
-    SdrObject* pHatchObject = mpData->getHatchObject();
+    Bitmap aRetval;
+    OSL_ENSURE(pGlobalsharedModelAndVDev, "OOps, global values missing (!)");
+    OSL_ENSURE(nIndex < Count(), "OOps, global values missing (!)");
 
-    pHatchObject->SetMergedItem(XFillStyleItem(XFILL_HATCH));
-    pHatchObject->SetMergedItem(XFillHatchItem(String(), GetHatch(nIndex)->GetHatch()));
+    if(pGlobalsharedModelAndVDev && nIndex < Count())
+    {
+        SdrModel& rModel = pGlobalsharedModelAndVDev->getSharedSdrModel();
+        VirtualDevice& rVirDev = pGlobalsharedModelAndVDev->getSharedVirtualDevice();
+        const Point aZero(0, 0);
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+        const Size aSize(rVirDev.PixelToLogic(rStyleSettings.GetListBoxPreviewDefaultPixelSize()));
 
-    sdr::contact::SdrObjectVector aObjectVector;
-    aObjectVector.push_back(mpData->getBackgroundObject());
-    aObjectVector.push_back(pHatchObject);
-    sdr::contact::ObjectContactOfObjListPainter aPainter(*pVD, aObjectVector, 0);
-    sdr::contact::DisplayInfo aDisplayInfo;
+        rVirDev.SetOutputSize(aSize);
+        rVirDev.SetDrawMode(rStyleSettings.GetHighContrastMode()
+            ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
+            : DRAWMODE_DEFAULT);
+        rVirDev.SetBackground(rStyleSettings.GetFieldColor());
 
-    pVD->Erase();
-    aPainter.ProcessDisplay(aDisplayInfo);
+        const Size aSinglePixel(rVirDev.PixelToLogic(Size(1, 1)));
+        const Rectangle aBackgroundSize(aZero, Size(aSize.getWidth() - aSinglePixel.getWidth(), aSize.getHeight() - aSinglePixel.getHeight()));
 
-    const Point aZero(0, 0);
-    return pVD->GetBitmap(aZero, pVD->GetOutputSize());
+        if(!mpBackgroundObject)
+        {
+            mpBackgroundObject = new SdrRectObj(aBackgroundSize);
+            OSL_ENSURE(0 != mpBackgroundObject, "XDashList: no BackgroundObject created!" );
+            mpBackgroundObject->SetModel(&rModel);
+            mpBackgroundObject->SetMergedItem(XFillStyleItem(XFILL_SOLID));
+            mpBackgroundObject->SetMergedItem(XFillColorItem(String(), rStyleSettings.GetFieldColor()));
+            mpBackgroundObject->SetMergedItem(XLineStyleItem(XLINE_SOLID));
+            mpBackgroundObject->SetMergedItem(XLineColorItem(String(), Color(COL_BLACK)));
+        }
+
+        if(!mpHatchObject)
+        {
+            mpHatchObject = new SdrRectObj(aBackgroundSize);
+            OSL_ENSURE(0 != mpHatchObject, "XDashList: no HatchObject created!" );
+            mpHatchObject->SetModel(&rModel);
+            mpHatchObject->SetMergedItem(XFillStyleItem(XFILL_HATCH));
+            mpHatchObject->SetMergedItem(XLineStyleItem(XLINE_NONE));
+        }
+
+        mpHatchObject->SetMergedItem(XFillStyleItem(XFILL_HATCH));
+        mpHatchObject->SetMergedItem(XFillHatchItem(String(), GetHatch(nIndex)->GetHatch()));
+
+        sdr::contact::SdrObjectVector aObjectVector;
+
+        aObjectVector.push_back(mpBackgroundObject);
+        aObjectVector.push_back(mpHatchObject);
+
+        sdr::contact::ObjectContactOfObjListPainter aPainter(rVirDev, aObjectVector, 0);
+        sdr::contact::DisplayInfo aDisplayInfo;
+
+        rVirDev.Erase();
+        aPainter.ProcessDisplay(aDisplayInfo);
+
+        aRetval = rVirDev.GetBitmap(aZero, rVirDev.GetOutputSize());
+    }
+
+    return aRetval;
 }
 
 //////////////////////////////////////////////////////////////////////////////

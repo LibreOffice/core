@@ -89,19 +89,19 @@ void ScDocument::EndDrawUndo()
         delete pDrawLayer->GetCalcUndo();
 }
 
-XColorList* ScDocument::GetColorTable()
+XColorListSharedPtr ScDocument::GetColorTable()
 {
     if (pDrawLayer)
-        return pDrawLayer->GetColorTable();
+        return pDrawLayer->GetColorTableFromSdrModel();
     else
     {
-        if (!pColorTable)
+        if (!maColorTable.get())
         {
             SvtPathOptions aPathOpt;
-            pColorTable = new XColorList( aPathOpt.GetPalettePath() );
+            maColorTable = XPropertyListFactory::CreateSharedXColorList(aPathOpt.GetPalettePath());
         }
 
-        return pColorTable;
+        return maColorTable;
     }
 }
 
@@ -255,11 +255,6 @@ IMPL_LINK_INLINE_END( ScDocument, GetUserDefinedColor, sal_uInt16 *, pColorIndex
 void ScDocument::DeleteDrawLayer()
 {
     delete pDrawLayer;
-}
-
-void ScDocument::DeleteColorTable()
-{
-    delete pColorTable;
 }
 
 sal_Bool ScDocument::DrawGetPrintArea( ScRange& rRange, sal_Bool bSetHor, sal_Bool bSetVer ) const

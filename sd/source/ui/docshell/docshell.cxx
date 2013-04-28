@@ -473,12 +473,12 @@ void DrawDocShell::Deactivate( sal_Bool )
 
 void DrawDocShell::UpdateTablePointers()
 {
-    PutItem( SvxColorTableItem( mpDoc->GetColorTable(), SID_COLOR_TABLE ) );
-    PutItem( SvxGradientListItem( mpDoc->GetGradientList(), SID_GRADIENT_LIST ) );
-    PutItem( SvxHatchListItem( mpDoc->GetHatchList(), SID_HATCH_LIST ) );
-    PutItem( SvxBitmapListItem( mpDoc->GetBitmapList(), SID_BITMAP_LIST ) );
-    PutItem( SvxDashListItem( mpDoc->GetDashList(), SID_DASH_LIST ) );
-    PutItem( SvxLineEndListItem( mpDoc->GetLineEndList(), SID_LINEEND_LIST ) );
+    PutItem( SvxColorTableItem( mpDoc->GetColorTableFromSdrModel(), SID_COLOR_TABLE ) );
+    PutItem( SvxGradientListItem( mpDoc->GetGradientListFromSdrModel(), SID_GRADIENT_LIST ) );
+    PutItem( SvxHatchListItem( mpDoc->GetHatchListFromSdrModel(), SID_HATCH_LIST ) );
+    PutItem( SvxBitmapListItem( mpDoc->GetBitmapListFromSdrModel(), SID_BITMAP_LIST ) );
+    PutItem( SvxDashListItem( mpDoc->GetDashListFromSdrModel(), SID_DASH_LIST ) );
+    PutItem( SvxLineEndListItem( mpDoc->GetLineEndListFromSdrModel(), SID_LINEEND_LIST ) );
 
     UpdateFontList();
 }

@@ -1567,16 +1567,16 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const ::rtl::OUStr
         {
         case XATTR_FILLBITMAP:
         {
-            XBitmapList* pBitmapList = pModel->GetBitmapList();
+            XBitmapListSharedPtr aBitmapList = pModel->GetBitmapListFromSdrModel();
 
-            if( !pBitmapList )
+            if( !aBitmapList.get() )
                 return sal_False;
 
-            long nPos = ((XPropertyList*)pBitmapList)->Get(aStrName);
+            long nPos = aBitmapList->GetIndex(aStrName);
             if( nPos == -1 )
                 return sal_False;
 
-            XBitmapEntry* pEntry = pBitmapList->GetBitmap( nPos );
+            XBitmapEntry* pEntry = aBitmapList->GetBitmap( nPos );
             XFillBitmapItem aBmpItem;
             aBmpItem.SetWhich( XATTR_FILLBITMAP );
             aBmpItem.SetName( rName );
@@ -1586,16 +1586,16 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const ::rtl::OUStr
         }
         case XATTR_FILLGRADIENT:
         {
-            XGradientList* pGradientList = pModel->GetGradientList();
+            XGradientListSharedPtr aGradientList = pModel->GetGradientListFromSdrModel();
 
-            if( !pGradientList )
+            if( !aGradientList.get() )
                 return sal_False;
 
-            long nPos = ((XPropertyList*)pGradientList)->Get(aStrName);
+            long nPos = aGradientList->GetIndex(aStrName);
             if( nPos == -1 )
                 return sal_False;
 
-            XGradientEntry* pEntry = pGradientList->GetGradient( nPos );
+            XGradientEntry* pEntry = aGradientList->GetGradient( nPos );
             XFillGradientItem aGrdItem;
             aGrdItem.SetWhich( XATTR_FILLGRADIENT );
             aGrdItem.SetName( rName );
@@ -1605,16 +1605,16 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const ::rtl::OUStr
         }
         case XATTR_FILLHATCH:
         {
-            XHatchList* pHatchList = pModel->GetHatchList();
+            XHatchListSharedPtr aHatchList = pModel->GetHatchListFromSdrModel();
 
-            if( !pHatchList )
+            if( !aHatchList.get() )
                 return sal_False;
 
-            long nPos = ((XPropertyList*)pHatchList)->Get(aStrName);
+            long nPos = aHatchList->GetIndex(aStrName);
             if( nPos == -1 )
                 return sal_False;
 
-            XHatchEntry* pEntry = pHatchList->GetHatch( nPos );
+            XHatchEntry* pEntry = aHatchList->GetHatch( nPos );
             XFillHatchItem aHatchItem;
             aHatchItem.SetWhich( XATTR_FILLHATCH );
             aHatchItem.SetName( rName );
@@ -1625,16 +1625,16 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const ::rtl::OUStr
         case XATTR_LINEEND:
         case XATTR_LINESTART:
         {
-            XLineEndList* pLineEndList = pModel->GetLineEndList();
+            XLineEndListSharedPtr aLineEndList = pModel->GetLineEndListFromSdrModel();
 
-            if( !pLineEndList )
+            if( !aLineEndList.get() )
                 return sal_False;
 
-            long nPos = ((XPropertyList*)pLineEndList)->Get(aStrName);
+            long nPos = aLineEndList->GetIndex(aStrName);
             if( nPos == -1 )
                 return sal_False;
 
-            XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nPos );
+            XLineEndEntry* pEntry = aLineEndList->GetLineEnd( nPos );
             if( XATTR_LINEEND == nWID )
             {
                 XLineEndItem aLEItem;
@@ -1656,16 +1656,16 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const ::rtl::OUStr
         }
         case XATTR_LINEDASH:
         {
-            XDashList* pDashList = pModel->GetDashList();
+            XDashListSharedPtr aDashList = pModel->GetDashListFromSdrModel();
 
-            if( !pDashList )
+            if( !aDashList.get() )
                 return sal_False;
 
-            long nPos = ((XPropertyList*)pDashList)->Get(aStrName);
+            long nPos = aDashList->GetIndex(aStrName);
             if( nPos == -1 )
                 return sal_False;
 
-            XDashEntry* pEntry = pDashList->GetDash( nPos );
+            XDashEntry* pEntry = aDashList->GetDash( nPos );
             XLineDashItem aDashItem;
             aDashItem.SetWhich( XATTR_LINEDASH );
             aDashItem.SetName( rName );

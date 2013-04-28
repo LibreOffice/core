@@ -62,99 +62,23 @@ using namespace com::sun::star;
 using namespace rtl;
 
 sal_Unicode const pszExtGradient[]  = {'s','o','g'};
-
-char const aChckGradient[]  = { 0x04, 0x00, 'S','O','G','L'};   // < 5.2
-char const aChckGradient0[] = { 0x04, 0x00, 'S','O','G','0'};   // = 5.2
-char const aChckXML[]       = { '<', '?', 'x', 'm', 'l' };      // = 6.0
+//char const aChckGradient[]  = { 0x04, 0x00, 'S','O','G','L'}; // < 5.2
+//char const aChckGradient0[] = { 0x04, 0x00, 'S','O','G','0'}; // = 5.2
+//char const aChckXML[]       = { '<', '?', 'x', 'm', 'l' };        // = 6.0
 
 // --------------------
 // class XGradientList
 // --------------------
 
-class impXGradientList
-{
-private:
-    VirtualDevice*          mpVirtualDevice;
-    SdrModel*               mpSdrModel;
-    SdrObject*              mpBackgroundObject;
-
-public:
-    impXGradientList(VirtualDevice* pV, SdrModel* pM, SdrObject* pB)
-    :   mpVirtualDevice(pV),
-        mpSdrModel(pM),
-        mpBackgroundObject(pB)
-    {}
-
-    ~impXGradientList()
-    {
-        delete mpVirtualDevice;
-        SdrObject::Free(mpBackgroundObject);
-        delete mpSdrModel;
-    }
-
-    VirtualDevice* getVirtualDevice() const { return mpVirtualDevice; }
-    SdrObject* getBackgroundObject() const { return mpBackgroundObject; }
-};
-
-void XGradientList::impCreate()
-{
-    if(!mpData)
-    {
-        const Point aZero(0, 0);
-        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-
-        VirtualDevice* pVirDev = new VirtualDevice;
-        OSL_ENSURE(0 != pVirDev, "XGradientList: no VirtualDevice created!" );
-        pVirDev->SetMapMode(MAP_100TH_MM);
-        const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
-        const Size aSize(pVirDev->PixelToLogic(rSize));
-        pVirDev->SetOutputSize(aSize);
-        pVirDev->SetDrawMode(rStyleSettings.GetHighContrastMode()
-            ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
-            : DRAWMODE_DEFAULT);
-        pVirDev->SetBackground(rStyleSettings.GetFieldColor());
-
-        SdrModel* pSdrModel = new SdrModel();
-        OSL_ENSURE(0 != pSdrModel, "XGradientList: no SdrModel created!" );
-        pSdrModel->GetItemPool().FreezeIdRanges();
-
-        const Size aSinglePixel(pVirDev->PixelToLogic(Size(1, 1)));
-        const Rectangle aBackgroundSize(aZero, Size(aSize.getWidth() - aSinglePixel.getWidth(), aSize.getHeight() - aSinglePixel.getHeight()));
-        SdrObject* pBackgroundObject = new SdrRectObj(aBackgroundSize);
-        OSL_ENSURE(0 != pBackgroundObject, "XGradientList: no BackgroundObject created!" );
-        pBackgroundObject->SetModel(pSdrModel);
-        pBackgroundObject->SetMergedItem(XFillStyleItem(XFILL_GRADIENT));
-        pBackgroundObject->SetMergedItem(XLineStyleItem(XLINE_SOLID));
-        pBackgroundObject->SetMergedItem(XLineColorItem(String(), Color(COL_BLACK)));
-        pBackgroundObject->SetMergedItem(XGradientStepCountItem(sal_uInt16((rSize.Width() + rSize.Height()) / 3)));
-
-        mpData = new impXGradientList(pVirDev, pSdrModel, pBackgroundObject);
-        OSL_ENSURE(0 != mpData, "XGradientList: data creation went wrong!" );
-    }
-}
-
-void XGradientList::impDestroy()
-{
-    if(mpData)
-    {
-        delete mpData;
-        mpData = 0;
-    }
-}
-
-XGradientList::XGradientList( const String& rPath, XOutdevItemPool* pInPool )
-:   XPropertyList(rPath, pInPool ),
-    mpData(0)
+XGradientList::XGradientList( const String& rPath )
+:   XPropertyList(rPath ),
+    mpBackgroundObject(0)
 {
 }
 
 XGradientList::~XGradientList()
 {
-    if(mpData)
-    {
-        delete mpData;
-        mpData = 0;
-    }
+    SdrObject::Free(mpBackgroundObject);
 }
 
 XGradientEntry* XGradientList::Replace(XGradientEntry* pEntry, long nIndex )
@@ -164,12 +88,12 @@ XGradientEntry* XGradientList::Replace(XGradientEntry* pEntry, long nIndex )
 
 XGradientEntry* XGradientList::Remove(long nIndex)
 {
-    return( (XGradientEntry*) XPropertyList::Remove( nIndex, 0 ) );
+    return( (XGradientEntry*) XPropertyList::Remove( nIndex ) );
 }
 
 XGradientEntry* XGradientList::GetGradient(long nIndex) const
 {
-    return( (XGradientEntry*) XPropertyList::Get( nIndex, 0 ) );
+    return( (XGradientEntry*) XPropertyList::Get( nIndex ) );
 }
 
 sal_Bool XGradientList::Load()
@@ -241,24 +165,58 @@ sal_Bool XGradientList::Create()
 
 Bitmap XGradientList::CreateBitmapForUI( long nIndex )
 {
-    impCreate();
-    VirtualDevice* pVD = mpData->getVirtualDevice();
-    SdrObject* pBackgroundObject = mpData->getBackgroundObject();
+    Bitmap aRetval;
+    OSL_ENSURE(pGlobalsharedModelAndVDev, "OOps, global values missing (!)");
+    OSL_ENSURE(nIndex < Count(), "OOps, global values missing (!)");
 
-    const SfxItemSet& rItemSet = pBackgroundObject->GetMergedItemSet();
-    pBackgroundObject->SetMergedItem(XFillStyleItem(XFILL_GRADIENT));
-    pBackgroundObject->SetMergedItem(XFillGradientItem(rItemSet.GetPool(), GetGradient(nIndex)->GetGradient()));
+    if(pGlobalsharedModelAndVDev && nIndex < Count())
+    {
+        SdrModel& rModel = pGlobalsharedModelAndVDev->getSharedSdrModel();
+        VirtualDevice& rVirDev = pGlobalsharedModelAndVDev->getSharedVirtualDevice();
+        const Point aZero(0, 0);
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+        const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
+        const Size aSize(rVirDev.PixelToLogic(rSize));
 
-    sdr::contact::SdrObjectVector aObjectVector;
-    aObjectVector.push_back(pBackgroundObject);
-    sdr::contact::ObjectContactOfObjListPainter aPainter(*pVD, aObjectVector, 0);
-    sdr::contact::DisplayInfo aDisplayInfo;
+        rVirDev.SetOutputSize(aSize);
+        rVirDev.SetDrawMode(rStyleSettings.GetHighContrastMode()
+            ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
+            : DRAWMODE_DEFAULT);
+        rVirDev.SetBackground(rStyleSettings.GetFieldColor());
 
-    pVD->Erase();
-    aPainter.ProcessDisplay(aDisplayInfo);
+        if(!mpBackgroundObject)
+        {
+            const Size aSinglePixel(rVirDev.PixelToLogic(Size(1, 1)));
+            const Rectangle aBackgroundSize(aZero, Size(aSize.getWidth() - aSinglePixel.getWidth(), aSize.getHeight() - aSinglePixel.getHeight()));
+            mpBackgroundObject = new SdrRectObj(aBackgroundSize);
+            OSL_ENSURE(0 != mpBackgroundObject, "XGradientList: no BackgroundObject created!" );
+            mpBackgroundObject->SetModel(&rModel);
+            mpBackgroundObject->SetMergedItem(XFillStyleItem(XFILL_GRADIENT));
+            mpBackgroundObject->SetMergedItem(XLineStyleItem(XLINE_SOLID));
+            mpBackgroundObject->SetMergedItem(XLineColorItem(String(), Color(COL_BLACK)));
+            mpBackgroundObject->SetMergedItem(XGradientStepCountItem(sal_uInt16((rSize.Width() + rSize.Height()) / 3)));
+        }
 
-    const Point aZero(0, 0);
-    return pVD->GetBitmap(aZero, pVD->GetOutputSize());
+        const SfxItemSet& rItemSet = mpBackgroundObject->GetMergedItemSet();
+
+        mpBackgroundObject->SetMergedItem(XFillStyleItem(XFILL_GRADIENT));
+        mpBackgroundObject->SetMergedItem(XFillGradientItem(rItemSet.GetPool(), GetGradient(nIndex)->GetGradient()));
+
+        sdr::contact::SdrObjectVector aObjectVector;
+
+        aObjectVector.push_back(mpBackgroundObject);
+
+        sdr::contact::ObjectContactOfObjListPainter aPainter(rVirDev, aObjectVector, 0);
+        sdr::contact::DisplayInfo aDisplayInfo;
+
+        rVirDev.Erase();
+        aPainter.ProcessDisplay(aDisplayInfo);
+
+        return rVirDev.GetBitmap(aZero, rVirDev.GetOutputSize());
+
+    }
+
+    return aRetval;
 }
 
 //////////////////////////////////////////////////////////////////////////////

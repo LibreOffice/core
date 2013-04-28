@@ -108,14 +108,12 @@ void FuLineEnd::DoExecute( SfxRequest& )
         // Loeschen des angelegten PolyObjektes
         SdrObject::Free( pConvPolyObj );
 
-        XLineEndList* pLineEndList = mpDoc->GetLineEndList();
-        XLineEndEntry* pEntry;
-
         String aNewName( SdResId( STR_LINEEND ) );
         String aDesc( SdResId( STR_DESC_LINEEND ) );
         String aName;
 
-        long nCount = pLineEndList->Count();
+        XLineEndListSharedPtr aLineEndList = mpDoc->GetLineEndListFromSdrModel();
+        long nCount = aLineEndList.get() ? aLineEndList->Count() : 0;
         long j = 1;
         sal_Bool bDifferent = sal_False;
 
@@ -127,7 +125,7 @@ void FuLineEnd::DoExecute( SfxRequest& )
             bDifferent = sal_True;
             for( long i = 0; i < nCount && bDifferent; i++ )
             {
-                if( aName == pLineEndList->GetLineEnd( i )->GetName() )
+                if( aName == aLineEndList->GetLineEnd( i )->GetName() )
                     bDifferent = sal_False;
             }
         }
@@ -146,14 +144,14 @@ void FuLineEnd::DoExecute( SfxRequest& )
 
                 for( long i = 0; i < nCount && bDifferent; i++ )
                 {
-                    if( aName == pLineEndList->GetLineEnd( i )->GetName() )
+                    if( aName == aLineEndList->GetLineEnd( i )->GetName() )
                         bDifferent = sal_False;
                 }
 
                 if( bDifferent )
                 {
-                    pEntry = new XLineEndEntry( aPolyPolygon, aName );
-                    pLineEndList->Insert( pEntry, LIST_APPEND);
+                    XLineEndEntry* pEntry = new XLineEndEntry( aPolyPolygon, aName );
+                    aLineEndList->Insert( pEntry, LIST_APPEND);
                 }
                 else
                 {

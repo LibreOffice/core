@@ -1197,31 +1197,24 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SfxPoolItem* pItem = NULL;
-    XColorList* pColorTable = NULL;
-    bool bOwn(false);
+    XColorListSharedPtr aColorTable;
     long nColorCount(0);
 
     if ( pDocSh && ( 0 != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) ) )
     {
-        pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
+        aColorTable = dynamic_cast< const SvxColorTableItem* >(pItem)->GetColorTable();
     }
 
-    if ( !pColorTable )
+    if ( !aColorTable.get() )
     {
-        bOwn = true;
-        pColorTable = new XColorList( SvtPathOptions().GetPalettePath() );
+        aColorTable = XPropertyListFactory::CreateSharedXColorList(SvtPathOptions().GetPalettePath());
     }
 
-    if ( pColorTable )
+    if ( aColorTable.get() )
     {
-        nColorCount = pColorTable->Count();
+        nColorCount = aColorTable->Count();
         aBackgroundColorSet.Clear();
-        aBackgroundColorSet.addEntriesForXColorList(*pColorTable);
-
-        if(bOwn)
-        {
-            delete pColorTable;
-        }
+        aBackgroundColorSet.addEntriesForXColorList(aColorTable);
     }
 
     const WinBits nBits(aBackgroundColorSet.GetStyle() | WB_ITEMBORDER | WB_NAMEFIELD | WB_NONEFIELD);

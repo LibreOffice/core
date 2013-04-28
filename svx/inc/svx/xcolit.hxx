@@ -26,14 +26,16 @@
 
 #include <tools/color.hxx>
 #include "svx/svxdllapi.h"
-
 #include <svx/xit.hxx>
-
-class XColorList;
+#include <boost/shared_ptr.hpp>
 
 //-----------------
 // class XColorItem
 //-----------------
+
+class XColorList;
+typedef ::boost::shared_ptr< XColorList > XColorListSharedPtr;
+
 class SVX_DLLPUBLIC XColorItem : public NameOrIndex
 {
     Color   aColor;
@@ -55,7 +57,8 @@ public:
     virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const;
     virtual SvStream&       Store(SvStream& rOut, sal_uInt16 nItemVersion ) const;
 
-    const Color&    GetColorValue(const XColorList* pTable = 0) const;
+    const Color&    GetColorValue() const;
+    const Color&    GetColorValue(const XColorListSharedPtr aTable) const;
     void            SetColorValue(const Color& rNew) { aColor = rNew; Detach(); }
 };
 

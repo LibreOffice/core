@@ -257,7 +257,7 @@ SvxColorDockingWindow::SvxColorDockingWindow
 
     SfxDockingWindow( _pBindings, pCW, _pParent, rResId ),
 
-    pColorTable     ( NULL ),
+    maColorTable(),
     aColorSet       ( this, ResId( 1, *rResId.GetResMgr() ) ),
     nLeftSlot       ( SID_ATTR_FILL_COLOR ),
     nRightSlot      ( SID_ATTR_LINE_COLOR ),
@@ -293,7 +293,7 @@ SvxColorDockingWindow::SvxColorDockingWindow
         const SfxPoolItem*  pItem = pDocSh->GetItem( SID_COLOR_TABLE );
         if( pItem )
         {
-            pColorTable = ( (SvxColorTableItem*) pItem )->GetColorTable();
+            maColorTable = static_cast< const SvxColorTableItem* >(pItem)->GetColorTable();
             FillValueSet();
         }
     }
@@ -334,7 +334,7 @@ void SvxColorDockingWindow::Notify( SfxBroadcaster& , const SfxHint& rHint )
          && ( pPoolItemHint->GetObject()->ISA( SvxColorTableItem ) ) )
     {
         // Die Liste der Farben hat sich geaendert
-        pColorTable = ( (SvxColorTableItem*) pPoolItemHint->GetObject() )->GetColorTable();
+        maColorTable = static_cast< SvxColorTableItem* >(pPoolItemHint->GetObject())->GetColorTable();
         FillValueSet();
     }
 }
@@ -347,9 +347,9 @@ void SvxColorDockingWindow::Notify( SfxBroadcaster& , const SfxHint& rHint )
 
 void SvxColorDockingWindow::FillValueSet()
 {
-    if( pColorTable )
+    if( maColorTable.get() )
     {
-        nCount = pColorTable->Count();
+        nCount = maColorTable->Count();
         aColorSet.Clear();
 
         // create the first entry for 'invisible/none'
@@ -367,7 +367,7 @@ void SvxColorDockingWindow::FillValueSet()
         Bitmap aBmp( aVD.GetBitmap( Point(), aColorSize ) );
 
         aColorSet.InsertItem( (sal_uInt16)1, Image(aBmp), SVX_RESSTR( RID_SVXSTR_INVISIBLE ) );
-        aColorSet.addEntriesForXColorList(*pColorTable, 2);
+        aColorSet.addEntriesForXColorList(maColorTable, 2);
     }
 }
 

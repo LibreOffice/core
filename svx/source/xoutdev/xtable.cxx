@@ -28,6 +28,8 @@
 #include <svx/xpool.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpool.hxx>
+#include <vcl/virdev.hxx>
+#include <svx/svdmodel.hxx>
 
 #define GLOBALOVERFLOW
 
@@ -43,21 +45,76 @@ Color RGB_Color( ColorData nColorName )
     return aRGBColor;
 }
 
+sharedModelAndVDev::sharedModelAndVDev()
+:   mnUseCount(0),
+    mpVirtualDevice(0),
+    mpSdrModel(0)
+{
+}
+
+sharedModelAndVDev::~sharedModelAndVDev()
+{
+    delete mpVirtualDevice;
+    delete mpSdrModel;
+}
+
+void sharedModelAndVDev::increaseUseCount()
+{
+    mnUseCount++;
+}
+
+bool sharedModelAndVDev::decreaseUseCount()
+{
+    if(mnUseCount)
+    {
+        mnUseCount--;
+    }
+
+    return 0 == mnUseCount;
+}
+
+SdrModel& sharedModelAndVDev::getSharedSdrModel()
+{
+    if(!mpSdrModel)
+    {
+        mpSdrModel = new SdrModel();
+        OSL_ENSURE(0 != mpSdrModel, "XPropertyList sharedModelAndVDev: no SdrModel created!" );
+        mpSdrModel->GetItemPool().FreezeIdRanges();
+    }
+
+    return *mpSdrModel;
+}
+
+VirtualDevice& sharedModelAndVDev::getSharedVirtualDevice()
+{
+    if(!mpVirtualDevice)
+    {
+        mpVirtualDevice = new VirtualDevice;
+        OSL_ENSURE(0 != mpVirtualDevice, "XPropertyList sharedModelAndVDev: no VirtualDevice created!" );
+        mpVirtualDevice->SetMapMode(MAP_100TH_MM);
+    }
+
+    return *mpVirtualDevice;
+}
+
+sharedModelAndVDev* XPropertyList::pGlobalsharedModelAndVDev = 0;
+
 // --------------------
 // class XPropertyList
 // --------------------
 
-XPropertyList::XPropertyList( const String& rPath, XOutdevItemPool* pInPool ) :
+XPropertyList::XPropertyList( const String& rPath ) :
             maName          ( pszStandard, 8 ),
             maPath          ( rPath ),
-            mpXPool         ( pInPool ),
-            maList          ( 16, 16 ),
+            maContent(),
             mbListDirty     (true)
 {
-    if( !mpXPool )
+    if(!pGlobalsharedModelAndVDev)
     {
-        mpXPool = static_cast< XOutdevItemPool* >(&SdrObject::GetGlobalDrawObjectItemPool());
+        pGlobalsharedModelAndVDev = new sharedModelAndVDev();
     }
+
+    pGlobalsharedModelAndVDev->increaseUseCount();
 }
 
 /*************************************************************************
@@ -68,11 +125,16 @@ XPropertyList::XPropertyList( const String& rPath, XOutdevItemPool* pInPool ) :
 
 XPropertyList::~XPropertyList()
 {
-    XPropertyEntry* pEntry = (XPropertyEntry*)maList.First();
-    for( sal_uIntPtr nIndex = 0; nIndex < maList.Count(); nIndex++ )
+    while(!maContent.empty())
     {
-        delete pEntry;
-        pEntry = (XPropertyEntry*)maList.Next();
+        delete maContent.back();
+        maContent.pop_back();
+    }
+
+    if(pGlobalsharedModelAndVDev && pGlobalsharedModelAndVDev->decreaseUseCount())
+    {
+        delete pGlobalsharedModelAndVDev;
+        pGlobalsharedModelAndVDev = 0;
     }
 }
 
@@ -84,7 +146,11 @@ XPropertyList::~XPropertyList()
 
 void XPropertyList::Clear()
 {
-    maList.Clear();
+    while(!maContent.empty())
+    {
+        delete maContent.back();
+        maContent.pop_back();
+    }
 }
 
 /************************************************************************/
@@ -97,7 +163,8 @@ long XPropertyList::Count() const
         if( !( (XPropertyList*) this )->Load() )
             ( (XPropertyList*) this )->Create();
     }
-    return( maList.Count() );
+
+    return maContent.size();
 }
 
 /*************************************************************************
@@ -106,15 +173,20 @@ long XPropertyList::Count() const
 |*
 *************************************************************************/
 
-XPropertyEntry* XPropertyList::Get( long nIndex, sal_uInt16 /*nDummy*/) const
+XPropertyEntry* XPropertyList::Get( long nIndex ) const
 {
     if( mbListDirty )
     {
-        // ( (XPropertyList*) this )->bListDirty = sal_False; <- im Load()
         if( !( (XPropertyList*) this )->Load() )
             ( (XPropertyList*) this )->Create();
     }
-    return (XPropertyEntry*) maList.GetObject( (sal_uIntPtr) nIndex );
+
+    if(nIndex >= maContent.size())
+    {
+        return 0;
+    }
+
+    return maContent[nIndex];
 }
 
 /*************************************************************************
@@ -123,23 +195,28 @@ XPropertyEntry* XPropertyList::Get( long nIndex, sal_uInt16 /*nDummy*/) const
 |*
 *************************************************************************/
 
-long XPropertyList::Get(const XubString& rName)
+long XPropertyList::GetIndex(const XubString& rName) const
 {
     if( mbListDirty )
     {
-        //bListDirty = sal_False;
-        if( !Load() )
-            Create();
+        if( !( (XPropertyList*) this )->Load() )
+            ( (XPropertyList*) this )->Create();
     }
-    long nPos = 0;
-    XPropertyEntry* pEntry = (XPropertyEntry*)maList.First();
-    while (pEntry && pEntry->GetName() != rName)
+
+    ::std::vector< XPropertyEntry* >::const_iterator aStart(maContent.begin());
+    const ::std::vector< XPropertyEntry* >::const_iterator aEnd(maContent.end());
+
+    for(long a(0); aStart != aEnd; a++, aStart++)
     {
-        nPos++;
-        pEntry = (XPropertyEntry*)maList.Next();
+        const XPropertyEntry* pEntry = *aStart;
+
+        if(pEntry && pEntry->GetName() == rName)
+        {
+            return a;
+        }
     }
-    if (!pEntry) nPos = -1;
-    return nPos;
+
+    return -1;
 }
 
 /*************************************************************************
@@ -151,7 +228,7 @@ long XPropertyList::Get(const XubString& rName)
 Bitmap XPropertyList::GetUiBitmap( long nIndex ) const
 {
     Bitmap aRetval;
-    XPropertyEntry* pEntry = (XPropertyEntry*)maList.GetObject((sal_uIntPtr)nIndex);
+    XPropertyEntry* pEntry = Get(nIndex);
 
     if(pEntry)
     {
@@ -175,7 +252,17 @@ Bitmap XPropertyList::GetUiBitmap( long nIndex ) const
 
 void XPropertyList::Insert( XPropertyEntry* pEntry, long nIndex )
 {
-    maList.Insert( pEntry, (sal_uIntPtr) nIndex );
+    if(pEntry)
+    {
+        if(nIndex >= maContent.size())
+        {
+            maContent.push_back(pEntry);
+        }
+        else
+        {
+            maContent.insert(maContent.begin() + nIndex, pEntry);
+        }
+    }
 }
 
 /*************************************************************************
@@ -186,7 +273,18 @@ void XPropertyList::Insert( XPropertyEntry* pEntry, long nIndex )
 
 XPropertyEntry* XPropertyList::Replace( XPropertyEntry* pEntry, long nIndex )
 {
-    return  (XPropertyEntry*) maList.Replace( pEntry, (sal_uIntPtr) nIndex );
+    XPropertyEntry* pRetval = 0;
+
+    if(pEntry)
+    {
+        if(nIndex < maContent.size())
+        {
+            pRetval = maContent[nIndex];
+            maContent[nIndex] = pEntry;
+        }
+    }
+
+    return pRetval;
 }
 
 /*************************************************************************
@@ -195,9 +293,25 @@ XPropertyEntry* XPropertyList::Replace( XPropertyEntry* pEntry, long nIndex )
 |*
 *************************************************************************/
 
-XPropertyEntry* XPropertyList::Remove( long nIndex, sal_uInt16 /*nDummy*/)
+XPropertyEntry* XPropertyList::Remove( long nIndex )
 {
-    return (XPropertyEntry*) maList.Remove( (sal_uIntPtr) nIndex );
+    XPropertyEntry* pRetval = 0;
+
+    if(nIndex < maContent.size())
+    {
+        if(nIndex + 1 == maContent.size())
+        {
+            pRetval = maContent.back();
+            maContent.pop_back();
+        }
+        else
+        {
+            pRetval = maContent[nIndex];
+            maContent.erase(maContent.begin() + nIndex);
+        }
+    }
+
+    return pRetval;
 }
 
 /************************************************************************/
@@ -210,4 +324,37 @@ void XPropertyList::SetName( const String& rString )
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////
+
+XColorListSharedPtr XPropertyListFactory::CreateSharedXColorList( const String& rPath )
+{
+    return XColorListSharedPtr(new XColorList(rPath));
+}
+
+XLineEndListSharedPtr XPropertyListFactory::CreateSharedXLineEndList( const String& rPath )
+{
+    return XLineEndListSharedPtr(new XLineEndList(rPath));
+}
+
+XDashListSharedPtr XPropertyListFactory::CreateSharedXDashList( const String& rPath )
+{
+    return XDashListSharedPtr(new XDashList(rPath));
+}
+
+XHatchListSharedPtr XPropertyListFactory::CreateSharedXHatchList( const String& rPath )
+{
+    return XHatchListSharedPtr(new XHatchList(rPath));
+}
+
+XGradientListSharedPtr XPropertyListFactory::CreateSharedXGradientList( const String& rPath )
+{
+    return XGradientListSharedPtr(new XGradientList(rPath));
+}
+
+XBitmapListSharedPtr XPropertyListFactory::CreateSharedXBitmapList( const String& rPath )
+{
+    return XBitmapListSharedPtr(new XBitmapList(rPath));
+}
+
+//////////////////////////////////////////////////////////////////////////////
 // eof

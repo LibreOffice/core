@@ -62,7 +62,7 @@ namespace sd {
 CopyDlg::CopyDlg(
     ::Window* pWindow,
     const SfxItemSet& rInAttrs,
-    XColorList* pColTab,
+    XColorListSharedPtr aColTab,
     ::sd::View* pInView )
     : SfxModalDialog     ( pWindow, SdResId( DLG_COPY ) ),
       maFtCopies           ( this, SdResId( FT_COPIES ) ),
@@ -90,7 +90,7 @@ CopyDlg::CopyDlg(
       maBtnHelp            ( this, SdResId( BTN_HELP ) ),
       maBtnSetDefault      ( this, SdResId( BTN_SET_DEFAULT ) ),
       mrOutAttrs            ( rInAttrs ),
-      mpColorTab            ( pColTab ),
+      maColorTab            ( aColTab ),
       maUIScale(pInView->GetDoc()->GetUIScale()),
       mpView                ( pInView )
 {
@@ -101,8 +101,8 @@ CopyDlg::CopyDlg(
     maBtnSetViewData.SetAccessibleName (maBtnSetViewData.GetQuickHelpText());
 
     // Farbtabellen
-    DBG_ASSERT( mpColorTab, "Keine gueltige ColorTable uebergeben!" );
-    maLbStartColor.Fill( mpColorTab );
+    DBG_ASSERT( maColorTab.get(), "Keine gueltige ColorTable uebergeben!" );
+    maLbStartColor.Fill( maColorTab );
     maLbEndColor.CopyEntries( maLbStartColor );
 
     maLbStartColor.SetSelectHdl( LINK( this, CopyDlg, SelectColorHdl ) );

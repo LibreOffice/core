@@ -145,12 +145,12 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
     SvxLineEndListItem aLineEndListItem(*( (const SvxLineEndListItem*)
         ( mpDocShell->GetItem( SID_LINEEND_LIST ) ) ) );
 
-    pColorTab = aColorTableItem.GetColorTable();
-    pDashList = aDashListItem.GetDashList();
-    pLineEndList = aLineEndListItem.GetLineEndList();
-    pGradientList = aGradientListItem.GetGradientList();
-    pHatchingList = aHatchListItem.GetHatchList();
-    pBitmapList = aBitmapListItem.GetBitmapList();
+    maColorTab = aColorTableItem.GetColorTable();
+    maDashList = aDashListItem.GetDashList();
+    maLineEndList = aLineEndListItem.GetLineEndList();
+    maGradientList = aGradientListItem.GetGradientList();
+    maHatchingList = aHatchListItem.GetHatchList();
+    maBitmapList = aBitmapListItem.GetBitmapList();
 
     switch( DlgId.GetId() )
     {
@@ -257,9 +257,9 @@ void SdPresLayoutTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     {
         case RID_SVXPAGE_LINE:
         {
-            aSet.Put (SvxColorTableItem(pColorTab,SID_COLOR_TABLE));
-            aSet.Put (SvxDashListItem(pDashList,SID_DASH_LIST));
-            aSet.Put (SvxLineEndListItem(pLineEndList,SID_LINEEND_LIST));
+            aSet.Put (SvxColorTableItem(maColorTab,SID_COLOR_TABLE));
+            aSet.Put (SvxDashListItem(maDashList,SID_DASH_LIST));
+            aSet.Put (SvxLineEndListItem(maLineEndList,SID_LINEEND_LIST));
             aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
 
             rPage.PageCreated(aSet);
@@ -268,10 +268,10 @@ void SdPresLayoutTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 
         case RID_SVXPAGE_AREA:
         {
-            aSet.Put (SvxColorTableItem(pColorTab,SID_COLOR_TABLE));
-            aSet.Put (SvxGradientListItem(pGradientList,SID_GRADIENT_LIST));
-            aSet.Put (SvxHatchListItem(pHatchingList,SID_HATCH_LIST));
-            aSet.Put (SvxBitmapListItem(pBitmapList,SID_BITMAP_LIST));
+            aSet.Put (SvxColorTableItem(maColorTab,SID_COLOR_TABLE));
+            aSet.Put (SvxGradientListItem(maGradientList,SID_GRADIENT_LIST));
+            aSet.Put (SvxHatchListItem(maHatchingList,SID_HATCH_LIST));
+            aSet.Put (SvxBitmapListItem(maBitmapList,SID_BITMAP_LIST));
             aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,nPageType));
             aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
             aSet.Put (SfxUInt16Item(SID_TABPAGE_POS,nPos));
@@ -281,7 +281,7 @@ void SdPresLayoutTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         break;
 
         case RID_SVXPAGE_SHADOW:
-                aSet.Put (SvxColorTableItem(pColorTab,SID_COLOR_TABLE)); //add CHINA001
+                aSet.Put (SvxColorTableItem(maColorTab,SID_COLOR_TABLE)); //add CHINA001
                 aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,nPageType));
                 aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
                 rPage.PageCreated(aSet);

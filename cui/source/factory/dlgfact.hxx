@@ -511,7 +511,6 @@ class AbstractSvxAreaTabDialog_Impl :public AbstractSvxAreaTabDialog
         //From class Window.
     virtual void        SetText( const XubString& rStr );
     virtual String      GetText() const;
-    virtual void     DontDeleteColorTable() ;
 };
 //add for SvxAreaTabDialog end
 

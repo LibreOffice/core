@@ -35,19 +35,15 @@
 #include <tools/string.hxx>
 #include <tools/datetime.hxx>
 #include <svl/hint.hxx>
-
 #include <svl/style.hxx>
 #include <svx/pageitem.hxx>
 #include <vcl/field.hxx>
-
 #include <boost/shared_ptr.hpp>
-
-class OutputDevice;
 #include <svx/svdtypes.hxx> // fuer enum RepeatFuncts
 #include <vcl/field.hxx>
 #include "svx/svxdllapi.h"
-
 #include <vos/ref.hxx>
+#include <svx/xtable.hxx>
 
 #if defined(UNX) || defined(WNT)
 #define DEGREE_CHAR ((sal_Unicode)176)   /* 0xB0 = Ansi */
@@ -61,6 +57,7 @@ class OutputDevice;
 #error unbekannte Plattrorm
 #endif
 
+class OutputDevice;
 class SdrOutliner;
 class SdrLayerAdmin;
 class SdrObjList;
@@ -77,24 +74,15 @@ class SfxRepeatTarget;
 class SfxStyleSheet;
 class SfxUndoAction;
 class SfxUndoManager;
-class XBitmapList;
-class XColorList;
-class XDashList;
-class XGradientList;
-class XHatchList;
-class XLineEndList;
 class SvxForbiddenCharactersTable;
 class SvNumberFormatter;
 class SotStorage;
 class SdrOutlinerCache;
 class SotStorageRef;
 class SdrUndoFactory;
-namespace comphelper{
-    class IEmbeddedHelper;
-}
-namespace sfx2{
-    class LinkManager;
-}
+namespace comphelper { class IEmbeddedHelper; }
+namespace sfx2 { class LinkManager; }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define SDR_SWAPGRAPHICSMODE_NONE       0x00000000
@@ -212,7 +200,6 @@ protected:
     bool            mbUndoEnabled;  // If false no undo is recorded or we are during the execution of an undo action
     sal_uInt16          nProgressPercent; // fuer den ProgressBar-Handler
     sal_uInt16          nLoadVersion;   // Versionsnummer der geladenen Datei
-    FASTBOOL        bExtColorTable; // Keinen eigenen ColorTable
     sal_Bool        mbChanged;
     FASTBOOL        bInfoChanged;
     FASTBOOL        bPagNumsDirty;
@@ -276,13 +263,13 @@ public:
     FASTBOOL        mbAddExtLeading;
     FASTBOOL        mbInDestruction;
 
-    // Zeiger auf Paletten, Listen und Tabellen
-    XColorList*    pColorTable;
-    XDashList*      pDashList;
-    XLineEndList*   pLineEndList;
-    XHatchList*     pHatchList;
-    XGradientList*  pGradientList;
-    XBitmapList*    pBitmapList;
+    // lists for colors, dashes, lineends, hatches, gradients and bitmaps for this model
+    XColorListSharedPtr     maColorTable;
+    XDashListSharedPtr      maDashList;
+    XLineEndListSharedPtr   maLineEndList;
+    XHatchListSharedPtr     maHatchList;
+    XGradientListSharedPtr  maGradientList;
+    XBitmapListSharedPtr    maBitmapList;
 
     // New src638: NumberFormatter for drawing layer and
     // method for getting it. It is constructed on demand
@@ -310,8 +297,7 @@ private:
     SVX_DLLPRIVATE void ImpReformatAllTextObjects();
     SVX_DLLPRIVATE void ImpReformatAllEdgeObjects();    // #103122#
     SVX_DLLPRIVATE void ImpCreateTables();
-    SVX_DLLPRIVATE void ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable,
-        bool bLoadRefCounts = true);
+    SVX_DLLPRIVATE void ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bLoadRefCounts = true);
 
 //#endif // __PRIVATE
 
@@ -337,8 +323,6 @@ public:
     // Wahl des Pools.
     SdrModel(SfxItemPool* pPool=NULL, ::comphelper::IEmbeddedHelper* pPers=NULL, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
     SdrModel(const String& rPath, SfxItemPool* pPool=NULL, ::comphelper::IEmbeddedHelper* pPers=NULL, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
-    SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, FASTBOOL bUseExtColorTable, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
-    SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, FASTBOOL bUseExtColorTable, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
     virtual ~SdrModel();
     void ClearModel(sal_Bool bCalledFromDestructor);
 
@@ -653,18 +637,23 @@ public:
     const Link& GetIOProgressHdl() const                     { return aIOProgressLink; }
 
     // Zugriffsmethoden fuer Paletten, Listen und Tabellen
-    void            SetColorTable(XColorList* pTable)       ;
-    XColorList*    GetColorTable() const                    { return pColorTable; }
-    void            SetDashList(XDashList* pList)            ;
-    XDashList*      GetDashList() const                      { return pDashList; }
-    void            SetLineEndList(XLineEndList* pList)      ;
-    XLineEndList*   GetLineEndList() const                   { return pLineEndList; }
-    void            SetHatchList(XHatchList* pList)          ;
-    XHatchList*     GetHatchList() const                     { return pHatchList; }
-    void            SetGradientList(XGradientList* pList)    ;
-    XGradientList*  GetGradientList() const                  { return pGradientList; }
-    void            SetBitmapList(XBitmapList* pList)        ;
-    XBitmapList*    GetBitmapList() const                    { return pBitmapList; }
+    void SetColorTableAtSdrModel(XColorListSharedPtr aTable);
+    XColorListSharedPtr GetColorTableFromSdrModel() const;
+
+    void SetDashListAtSdrModel(XDashListSharedPtr aList);
+    XDashListSharedPtr GetDashListFromSdrModel() const;
+
+    void SetLineEndListAtSdrModel(XLineEndListSharedPtr aList);
+    XLineEndListSharedPtr GetLineEndListFromSdrModel() const;
+
+    void SetHatchListAtSdrModel(XHatchListSharedPtr aList);
+    XHatchListSharedPtr GetHatchListFromSdrModel() const;
+
+    void SetGradientListAtSdrModel(XGradientListSharedPtr aList);
+    XGradientListSharedPtr GetGradientListFromSdrModel() const;
+
+    void SetBitmapListAtSdrModel(XBitmapListSharedPtr aList);
+    XBitmapListSharedPtr GetBitmapListFromSdrModel() const;
 
     // Der StyleSheetPool wird der DrawingEngine nur bekanntgemacht.
     // Zu loeschen hat ihn schliesslich der, der ihn auch konstruiert hat.

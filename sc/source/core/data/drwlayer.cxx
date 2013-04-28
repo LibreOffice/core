@@ -206,8 +206,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
                  NULL,                          // SfxItemPool* Pool
                  pGlobalDrawPersist ?
                      pGlobalDrawPersist :
-                     ( pDocument ? pDocument->GetDocumentShell() : NULL ),
-                 sal_True ),        // bUseExtColorTable (is set below)
+                     ( pDocument ? pDocument->GetDocumentShell() : NULL )),
     aName( rName ),
     pDoc( pDocument ),
     pUndoGroup( NULL ),
@@ -224,12 +223,12 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
         SetObjectShell( pObjSh );
 
         // set color table
-        SvxColorTableItem* pColItem = (SvxColorTableItem*) pObjSh->GetItem( SID_COLOR_TABLE );
-        XColorList* pXCol = pColItem ? pColItem->GetColorTable() : XColorList::GetStdColorList();
-        SetColorTable( pXCol );
+        const SvxColorTableItem* pColItem = static_cast< const SvxColorTableItem* >(pObjSh->GetItem( SID_COLOR_TABLE ));
+        XColorListSharedPtr aXCol = pColItem ? pColItem->GetColorTable() : XColorList::GetStdColorList();
+        SetColorTableAtSdrModel( aXCol );
     }
     else
-        SetColorTable( XColorList::GetStdColorList() );
+        SetColorTableAtSdrModel( XColorList::GetStdColorList() );
 
     SetSwapGraphics(sal_True);
 //  SetSwapAsynchron(sal_True);     // an der View

@@ -114,7 +114,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
             if( pFact )
             {
-                AbstractCopyDlg* pDlg = pFact->CreateCopyDlg(NULL, aSet, mpDoc->GetColorTable(), mpView );
+                AbstractCopyDlg* pDlg = pFact->CreateCopyDlg(NULL, aSet, mpDoc->GetColorTableFromSdrModel(), mpView );
                 if( pDlg )
                 {
                     sal_uInt16 nResult = pDlg->Execute();

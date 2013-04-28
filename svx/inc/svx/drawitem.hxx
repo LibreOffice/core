@@ -29,22 +29,23 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include "svx/svxdllapi.h"
+#include <boost/shared_ptr.hpp>
 
 //==================================================================
 //  SvxColorTableItem
 //==================================================================
 
 class XColorList;
+typedef ::boost::shared_ptr< XColorList > XColorListSharedPtr;
 
-class SVX_DLLPUBLIC SvxColorTableItem: public SfxPoolItem
+class SVX_DLLPUBLIC SvxColorTableItem : public SfxPoolItem
 {
-    XColorList*         pColorTable;
+    XColorListSharedPtr     maColorTable;
 
 public:
                             TYPEINFO();
                             SvxColorTableItem();
-                            SvxColorTableItem( XColorList* pTable,
-                                    sal_uInt16 nWhich  );
+                            SvxColorTableItem( XColorListSharedPtr aTable, sal_uInt16 nWhich );
                             SvxColorTableItem( const SvxColorTableItem& );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -57,9 +58,8 @@ public:
     virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId );
 
-    XColorList*         GetColorTable() const { return pColorTable; }
-    void                    SetColorTable( XColorList* pTable ) {
-                                    pColorTable = pTable; }
+    XColorListSharedPtr GetColorTable() const { return maColorTable; }
+    void SetColorTable( XColorListSharedPtr aTable ) { maColorTable = aTable; }
 };
 
 
@@ -69,16 +69,16 @@ public:
 
 
 class XGradientList;
+typedef ::boost::shared_ptr< XGradientList > XGradientListSharedPtr;
 
-class SVX_DLLPUBLIC SvxGradientListItem: public SfxPoolItem
+class SVX_DLLPUBLIC SvxGradientListItem : public SfxPoolItem
 {
-    XGradientList*              pGradientList;
+    XGradientListSharedPtr  maGradientList;
 
 public:
                             TYPEINFO();
                             SvxGradientListItem();
-                            SvxGradientListItem( XGradientList* pList,
-                                    sal_uInt16 nWhich  );
+                            SvxGradientListItem( XGradientListSharedPtr aList, sal_uInt16 nWhich  );
                             SvxGradientListItem( const SvxGradientListItem& );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -91,9 +91,8 @@ public:
     virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId );
 
-    XGradientList*          GetGradientList() const { return pGradientList; }
-    void                    SetGradientList( XGradientList* pList ) {
-                                    pGradientList = pList; }
+    XGradientListSharedPtr GetGradientList() const { return maGradientList; }
+    void SetGradientList(XGradientListSharedPtr aList ) { maGradientList = aList; }
 };
 
 
@@ -104,16 +103,16 @@ public:
 
 
 class XHatchList;
+typedef ::boost::shared_ptr< XHatchList > XHatchListSharedPtr;
 
-class SVX_DLLPUBLIC SvxHatchListItem: public SfxPoolItem
+class SVX_DLLPUBLIC SvxHatchListItem : public SfxPoolItem
 {
-    XHatchList*             pHatchList;
+    XHatchListSharedPtr     maHatchList;
 
 public:
                             TYPEINFO();
                             SvxHatchListItem();
-                            SvxHatchListItem( XHatchList* pList,
-                                    sal_uInt16 nWhich  );
+                            SvxHatchListItem( XHatchListSharedPtr aList, sal_uInt16 nWhich  );
                             SvxHatchListItem( const SvxHatchListItem& );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -126,9 +125,8 @@ public:
     virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId );
 
-    XHatchList*             GetHatchList() const { return pHatchList; }
-    void                    SetHatchList( XHatchList* pList ) {
-                                    pHatchList = pList; }
+    XHatchListSharedPtr GetHatchList() const { return maHatchList; }
+    void SetHatchList(XHatchListSharedPtr aList ) { maHatchList = aList; }
 };
 
 
@@ -139,16 +137,16 @@ public:
 
 
 class XBitmapList;
+typedef ::boost::shared_ptr< XBitmapList > XBitmapListSharedPtr;
 
-class SVX_DLLPUBLIC SvxBitmapListItem: public SfxPoolItem
+class SVX_DLLPUBLIC SvxBitmapListItem : public SfxPoolItem
 {
-    XBitmapList*                pBitmapList;
+    XBitmapListSharedPtr    maBitmapList;
 
 public:
                             TYPEINFO();
                             SvxBitmapListItem();
-                            SvxBitmapListItem( XBitmapList* pBL,
-                                    sal_uInt16 nWhich  );
+                            SvxBitmapListItem( XBitmapListSharedPtr aBL, sal_uInt16 nWhich  );
                             SvxBitmapListItem( const SvxBitmapListItem& );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -161,9 +159,8 @@ public:
     virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId );
 
-    XBitmapList*            GetBitmapList() const { return pBitmapList; }
-    void                    SetBitmapList( XBitmapList* pList ) {
-                                    pBitmapList = pList; }
+    XBitmapListSharedPtr GetBitmapList() const { return maBitmapList; }
+    void SetBitmapList(XBitmapListSharedPtr aList ) { maBitmapList = aList; }
 };
 
 
@@ -174,16 +171,16 @@ public:
 
 
 class XDashList;
+typedef ::boost::shared_ptr< XDashList > XDashListSharedPtr;
 
-class SVX_DLLPUBLIC SvxDashListItem: public SfxPoolItem
+class SVX_DLLPUBLIC SvxDashListItem : public SfxPoolItem
 {
-    XDashList*              pDashList;
+    XDashListSharedPtr      maDashList;
 
 public:
                             TYPEINFO();
                             SvxDashListItem();
-                            SvxDashListItem( XDashList* pList,
-                                    sal_uInt16 nWhich  );
+                            SvxDashListItem( XDashListSharedPtr aList, sal_uInt16 nWhich  );
                             SvxDashListItem( const SvxDashListItem& );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -196,8 +193,8 @@ public:
     virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId );
 
-    XDashList*              GetDashList() const { return pDashList; }
-    void                    SetDashList( XDashList* pList );
+    XDashListSharedPtr GetDashList() const { return maDashList; }
+    void SetDashList(XDashListSharedPtr aList) { maDashList = aList; }
 };
 
 
@@ -208,16 +205,16 @@ public:
 
 
 class XLineEndList;
+typedef ::boost::shared_ptr< XLineEndList > XLineEndListSharedPtr;
 
-class SVX_DLLPUBLIC SvxLineEndListItem: public SfxPoolItem
+class SVX_DLLPUBLIC SvxLineEndListItem : public SfxPoolItem
 {
-    XLineEndList*           pLineEndList;
+    XLineEndListSharedPtr   maLineEndList;
 
 public:
                             TYPEINFO();
                             SvxLineEndListItem();
-                            SvxLineEndListItem( XLineEndList* pList,
-                                    sal_uInt16 nWhich  );
+                            SvxLineEndListItem( XLineEndListSharedPtr aList, sal_uInt16 nWhich  );
                             SvxLineEndListItem( const SvxLineEndListItem& );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -230,9 +227,8 @@ public:
     virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId );
 
-    XLineEndList*           GetLineEndList() const { return pLineEndList; }
-    void                    SetLineEndList( XLineEndList* pList ) {
-                                    pLineEndList = pList; }
+    XLineEndListSharedPtr GetLineEndList() const { return maLineEndList; }
+    void SetLineEndList(XLineEndListSharedPtr aList ) { maLineEndList = aList; }
 };
 
 

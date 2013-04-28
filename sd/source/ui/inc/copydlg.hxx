@@ -33,8 +33,6 @@
 #include <vcl/fixed.hxx>
 #include <sfx2/basedlgs.hxx>
 
-class XColorList;
-
 namespace sd {
 
 class View;
@@ -48,8 +46,7 @@ class CopyDlg
     : public SfxModalDialog
 {
 public:
-    CopyDlg( ::Window* pWindow, const SfxItemSet& rInAttrs,
-        XColorList* pColTab, ::sd::View* pView );
+    CopyDlg( ::Window* pWindow, const SfxItemSet& rInAttrs, XColorListSharedPtr aColTab, ::sd::View* pView );
     ~CopyDlg();
 
     void    GetAttr( SfxItemSet& rOutAttrs );
@@ -86,7 +83,7 @@ private:
     PushButton          maBtnSetDefault;
 
     const SfxItemSet&   mrOutAttrs;
-    XColorList*     mpColorTab;
+    XColorListSharedPtr maColorTab;
     Fraction            maUIScale;
     ::sd::View*         mpView;
 

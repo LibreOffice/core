@@ -42,7 +42,6 @@ SLOFILES =  \
     $(SLO)$/delcodlg.obj		\
     $(SLO)$/inscodlg.obj		\
     $(SLO)$/strindlg.obj		\
-    $(SLO)$/tabbgcolordlg.obj   \
     $(SLO)$/mtrindlg.obj		\
     $(SLO)$/lbseldlg.obj		\
     $(SLO)$/filldlg.obj			\
@@ -72,6 +71,7 @@ SLOFILES =  \
     $(SLO)$/conflictsdlg.obj    \
     $(SLO)$/sharedocdlg.obj \
     $(SLO)$/protectiondlg.obj \
+    $(SLO)$/tabbgcolordlg.obj   \
     $(SLO)$/retypepassdlg.obj
 
 EXCEPTIONSFILES = \
@@ -83,6 +83,7 @@ EXCEPTIONSFILES = \
     $(SLO)$/crnrdlg.obj         \
     $(SLO)$/solverutil.obj \
     $(SLO)$/protectiondlg.obj \
+    $(SLO)$/tabbgcolordlg.obj   \
     $(SLO)$/retypepassdlg.obj
 
 SRS1NAME=$(TARGET)

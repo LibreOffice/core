@@ -229,10 +229,6 @@ SvxLineTabPage::SvxLineTabPage
     aTsbCenterStart.SetClickHdl( aStart );
     aTsbCenterEnd.SetClickHdl( aEnd );
 
-    pColorTab = NULL;
-    pDashList = NULL;
-    pLineEndList = NULL;
-
     // #116827#
     Link aEdgeStyle = LINK( this, SvxLineTabPage, ChangeEdgeStyleHdl_Impl );
     maLBEdgeStyle.SetSelectHdl( aEdgeStyle );
@@ -293,7 +289,7 @@ SvxLineTabPage::~SvxLineTabPage()
 void SvxLineTabPage::Construct()
 {
     // Farbtabelle
-    aLbColor.Fill( pColorTab );
+    aLbColor.Fill( maColorTab );
     FillListboxes();
 }
 
@@ -302,7 +298,7 @@ void SvxLineTabPage::FillListboxes()
     // Linienstile
     sal_uInt16 nOldSelect = aLbLineStyle.GetSelectEntryPos();
     // aLbLineStyle.FillStyles();
-    aLbLineStyle.Fill( pDashList );
+    aLbLineStyle.Fill( maDashList );
     aLbLineStyle.SelectEntryPos( nOldSelect );
 
     // LinienEndenStile
@@ -310,12 +306,12 @@ void SvxLineTabPage::FillListboxes()
     nOldSelect = aLbStartStyle.GetSelectEntryPos();
     aLbStartStyle.Clear();
     aLbStartStyle.InsertEntry( sNone );
-    aLbStartStyle.Fill( pLineEndList );
+    aLbStartStyle.Fill( maLineEndList );
     aLbStartStyle.SelectEntryPos( nOldSelect );
     nOldSelect = aLbEndStyle.GetSelectEntryPos();
     aLbEndStyle.Clear();
     aLbEndStyle.InsertEntry( sNone );
-    aLbEndStyle.Fill( pLineEndList, sal_False );
+    aLbEndStyle.Fill( maLineEndList, sal_False );
     aLbEndStyle.SelectEntryPos( nOldSelect );
 }
 
@@ -326,7 +322,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
     SFX_ITEMSET_ARG (&rSet,pPageTypeItem,CntUInt16Item,SID_PAGE_TYPE,sal_False); //add CHINA001 begin
     if (pPageTypeItem)
         SetPageType(pPageTypeItem->GetValue()); //add CHINA001 end
-    if( nDlgType == 0 && pDashList )  //CHINA001 if( *pDlgType == 0 && pDashList ) // Linien-Dialog
+    if( nDlgType == 0 && maDashList.get() )  //CHINA001 if( *pDlgType == 0 && pDashList ) // Linien-Dialog
     {
         sal_uInt16 nPos;
         sal_uInt16 nCount;
@@ -336,8 +332,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             ( *pnDashListState & CT_CHANGED ) )
         {
             if( *pnDashListState & CT_CHANGED )
-                pDashList = ( (SvxLineTabDialog*) DLGWIN )->
-                                        GetNewDashList();
+                maDashList = ( (SvxLineTabDialog*) DLGWIN )->GetNewDashList();
             *pnDashListState = CT_NONE;
 
             // Styleliste
@@ -348,7 +343,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
                 SVX_RESSTR( RID_SVXSTR_INVISIBLE ) );
             aLbLineStyle.InsertEntry(
                 SVX_RESSTR( RID_SVXSTR_SOLID ) );
-            aLbLineStyle.Fill( pDashList );
+            aLbLineStyle.Fill( maDashList );
             nCount = aLbLineStyle.GetEntryCount();
 
             if ( nCount == 0 )
@@ -360,9 +355,9 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             // SelectStyleHdl_Impl( this );
         }
 
-        INetURLObject   aDashURL( pDashList->GetPath() );
+        INetURLObject   aDashURL( maDashList->GetPath() );
 
-        aDashURL.Append( pDashList->GetName() );
+        aDashURL.Append( maDashList->GetName() );
         DBG_ASSERT( aDashURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 /*      // Ermitteln (evtl. abschneiden) des Namens und in
         // der GroupBox darstellen
@@ -383,8 +378,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             ( *pnLineEndListState & CT_CHANGED ) )
         {
             if( *pnLineEndListState & CT_CHANGED )
-                pLineEndList = ( (SvxLineTabDialog*) DLGWIN )->
-                                        GetNewLineEndList();
+                maLineEndList = ( (SvxLineTabDialog*) DLGWIN )->GetNewLineEndList();
             *pnLineEndListState = CT_NONE;
 
             nPos = aLbLineStyle.GetSelectEntryPos();
@@ -392,7 +386,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             aLbStartStyle.Clear();
             aLbStartStyle.InsertEntry( sNone );
 
-            aLbStartStyle.Fill( pLineEndList );
+            aLbStartStyle.Fill( maLineEndList );
             nCount = aLbStartStyle.GetEntryCount();
             if( nCount == 0 )
                 ; // Dieser Fall sollte nicht auftreten
@@ -404,7 +398,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             aLbEndStyle.Clear();
             aLbEndStyle.InsertEntry( sNone );
 
-            aLbEndStyle.Fill( pLineEndList, sal_False );
+            aLbEndStyle.Fill( maLineEndList, sal_False );
             nCount = aLbEndStyle.GetEntryCount();
 
             if( nCount == 0 )
@@ -414,9 +408,9 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             else
                 aLbEndStyle.SelectEntryPos( nPos );
         }
-        INetURLObject aLineURL( pLineEndList->GetPath() );
+        INetURLObject aLineURL( maLineEndList->GetPath() );
 
-        aLineURL.Append( pLineEndList->GetName() );
+        aLineURL.Append( maLineEndList->GetName() );
         DBG_ASSERT( aLineURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 /*      // Ermitteln (evtl. abschneiden) des Namens und in
         // der GroupBox darstellen
@@ -452,12 +446,11 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             if( *pnColorTableState )
             {
                 if( *pnColorTableState & CT_CHANGED )
-                    pColorTab = ( (SvxLineTabDialog*) DLGWIN )->
-                                            GetNewColorTable();
+                    maColorTab = ( (SvxLineTabDialog*) DLGWIN )->GetNewColorTable();
                 // aLbColor
                 sal_uInt16 nColorPos = aLbColor.GetSelectEntryPos();
                 aLbColor.Clear();
-                aLbColor.Fill( pColorTab );
+                aLbColor.Fill( maColorTab );
                 nCount = aLbColor.GetEntryCount();
                 if( nCount == 0 )
                     ; // This case should never occur
@@ -545,10 +538,9 @@ sal_Bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
                 pStyleItem = new XLineStyleItem( XLINE_DASH );
 
                 // Zusaetzliche Sicherheit
-                if( pDashList->Count() > (long) ( nPos - 2 ) )
+                if( maDashList->Count() > (long) ( nPos - 2 ) )
                 {
-                    XLineDashItem aDashItem( aLbLineStyle.GetSelectEntry(),
-                                        pDashList->GetDash( nPos - 2 )->GetDash() );
+                    XLineDashItem aDashItem( aLbLineStyle.GetSelectEntry(), maDashList->GetDash( nPos - 2 )->GetDash() );
                     pOld = GetOldItem( rAttrs, XATTR_LINEDASH );
                     if ( !pOld || !( *(const XLineDashItem*)pOld == aDashItem ) )
                     {
@@ -624,9 +616,9 @@ sal_Bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
             XLineStartItem* pItem = NULL;
             if( nPos == 0 )
                 pItem = new XLineStartItem();
-            else if( pLineEndList->Count() > (long) ( nPos - 1 ) )
+            else if( maLineEndList->Count() > (long) ( nPos - 1 ) )
                 pItem = new XLineStartItem( aLbStartStyle.GetSelectEntry(),
-                            pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() );
+                            maLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() );
             pOld = GetOldItem( rAttrs, XATTR_LINESTART );
             if( pItem &&
                 ( !pOld || !( *(const XLineEndItem*)pOld == *pItem ) ) )
@@ -644,9 +636,9 @@ sal_Bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
             XLineEndItem* pItem = NULL;
             if( nPos == 0 )
                 pItem = new XLineEndItem();
-            else if( pLineEndList->Count() > (long) ( nPos - 1 ) )
+            else if( maLineEndList->Count() > (long) ( nPos - 1 ) )
                 pItem = new XLineEndItem( aLbEndStyle.GetSelectEntry(),
-                            pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() );
+                            maLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() );
             pOld = GetOldItem( rAttrs, XATTR_LINEEND );
             if( pItem &&
                 ( !pOld || !( *(const XLineEndItem*)pOld == *pItem ) ) )
@@ -863,8 +855,7 @@ sal_Bool SvxLineTabPage::FillXLSet_Impl()
         nPos = aLbLineStyle.GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            rXLSet.Put( XLineDashItem( aLbLineStyle.GetSelectEntry(),
-                            pDashList->GetDash( nPos - 2 )->GetDash() ) );
+            rXLSet.Put( XLineDashItem( aLbLineStyle.GetSelectEntry(), maDashList->GetDash( nPos - 2 )->GetDash() ) );
         }
     }
 
@@ -875,7 +866,7 @@ sal_Bool SvxLineTabPage::FillXLSet_Impl()
             rXLSet.Put( XLineStartItem() );
         else
             rXLSet.Put( XLineStartItem( aLbStartStyle.GetSelectEntry(),
-                        pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ) );
+                        maLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ) );
     }
     nPos = aLbEndStyle.GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -884,7 +875,7 @@ sal_Bool SvxLineTabPage::FillXLSet_Impl()
             rXLSet.Put( XLineEndItem() );
         else
             rXLSet.Put( XLineEndItem( aLbEndStyle.GetSelectEntry(),
-                        pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ) );
+                        maLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ) );
     }
 
     // #116827#
@@ -1185,9 +1176,9 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
         sal_Bool bSelected(sal_False);
         const basegfx::B2DPolyPolygon& rItemPolygon = ((const XLineStartItem&)rAttrs.Get(XATTR_LINESTART)).GetLineStartValue();
 
-        for(sal_Int32 a(0);!bSelected &&  a < pLineEndList->Count(); a++)
+        for(sal_Int32 a(0);!bSelected &&  a < maLineEndList->Count(); a++)
         {
-            XLineEndEntry* pEntry = pLineEndList->GetLineEnd(a);
+            XLineEndEntry* pEntry = maLineEndList->GetLineEnd(a);
             const basegfx::B2DPolyPolygon& rEntryPolygon = pEntry->GetLineEnd();
 
             if(rItemPolygon == rEntryPolygon)
@@ -1218,9 +1209,9 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
         sal_Bool bSelected(sal_False);
         const basegfx::B2DPolyPolygon& rItemPolygon = ((const XLineEndItem&)rAttrs.Get(XATTR_LINEEND)).GetLineEndValue();
 
-        for(sal_Int32 a(0);!bSelected &&  a < pLineEndList->Count(); a++)
+        for(sal_Int32 a(0);!bSelected &&  a < maLineEndList->Count(); a++)
         {
-            XLineEndEntry* pEntry = pLineEndList->GetLineEnd(a);
+            XLineEndEntry* pEntry = maLineEndList->GetLineEnd(a);
             const basegfx::B2DPolyPolygon& rEntryPolygon = pEntry->GetLineEnd();
 
             if(rItemPolygon == rEntryPolygon)

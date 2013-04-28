@@ -284,7 +284,7 @@ namespace
 ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage( Window* pWindow
                 , const uno::Reference< beans::XPropertySet > & xSceneProperties
                 , const uno::Reference< frame::XModel >& xChartModel
-                , XColorList* pColorTable )
+                , XColorListSharedPtr aColorTable )
                 : TabPage           ( pWindow, SchResId( TP_3D_SCENEILLUMINATION ) )
                 , m_aFT_LightSource( this, SchResId( FT_LIGHTSOURCE ) )
                 , m_aBtn_Light1( this, SchResId( BTN_LIGHT_1 ), 1 )
@@ -310,10 +310,10 @@ ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage( Window* pWin
 {
     FreeResource();
 
-    if(pColorTable)
+    if(aColorTable.get())
     {
-        m_aLB_AmbientLight.Fill( pColorTable );
-        m_aLB_LightSource.Fill( pColorTable );
+        m_aLB_AmbientLight.Fill( aColorTable );
+        m_aLB_LightSource.Fill( aColorTable );
     }
     m_aLB_AmbientLight.SetDropDownLineCount(10);
     m_aLB_LightSource.SetDropDownLineCount(10);

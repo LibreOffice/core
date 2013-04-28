@@ -24,7 +24,6 @@
 #define _XATTR_HXX
 
 // include ---------------------------------------------------------------
-class XColorList;
 class XDashList;
 class XLineEndList;
 class XHatchList;

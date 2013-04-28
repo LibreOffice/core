@@ -89,7 +89,7 @@ private:
     const SfxItemSet&       rOutAttrs;
     const ::sd::View*       mpView;
     SdDrawDocument*         mpDoc;
-    XColorList*         pColTab;
+    XColorListSharedPtr     maColTab;
 
     sal_Bool                    bTreeUpdated;
     List*                   pCurrentActions;

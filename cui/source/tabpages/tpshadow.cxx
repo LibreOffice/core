@@ -81,7 +81,7 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
     aMtrTransparent      ( this, CUI_RES( MTR_SHADOW_TRANSPARENT ) ),
     aCtlXRectPreview    ( this, CUI_RES( CTL_COLOR_PREVIEW ) ),
     rOutAttrs           ( rInAttrs ),
-    pColorTab( NULL ),
+    maColorTab(),
     bDisable            ( sal_False ),
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXFillAttr          ( pXPool ),
@@ -193,7 +193,7 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
 void SvxShadowTabPage::Construct()
 {
     // Farbtabelle fuellen
-    aLbShadowColor.Fill( pColorTab );
+    aLbShadowColor.Fill( maColorTab );
 
     if( bDisable )
     {
@@ -222,7 +222,7 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
     //add CHINA001 end
     if( nDlgType == 0 ) //CHINA001 // Flaechen-Dialogif( *pDlgType == 0 ) // Flaechen-Dialog
     {
-        if( pColorTab )
+        if( maColorTab.get() )
         {
             // ColorTable
             if( *pnColorTableState & CT_CHANGED ||
@@ -233,20 +233,20 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
                     SvxAreaTabDialog* pArea = dynamic_cast< SvxAreaTabDialog* >( DLGWIN );
                     if( pArea )
                     {
-                        pColorTab = pArea->GetNewColorTable();
+                        maColorTab = pArea->GetNewColorTable();
                     }
                     else
                     {
                         SvxLineTabDialog* pLine = dynamic_cast< SvxLineTabDialog* >( DLGWIN );
                         if( pLine )
-                            pColorTab = pLine->GetNewColorTable();
+                            maColorTab = pLine->GetNewColorTable();
                     }
                 }
 
                 // aLbShadowColor
                 nPos = aLbShadowColor.GetSelectEntryPos();
                 aLbShadowColor.Clear();
-                aLbShadowColor.Fill( pColorTab );
+                aLbShadowColor.Fill( maColorTab );
                 nCount = aLbShadowColor.GetEntryCount();
                 if( nCount == 0 )
                     ; // Dieser Fall sollte nicht auftreten

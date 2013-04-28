@@ -63,10 +63,8 @@ namespace {
         }
         return bFound ? n : -1;
     }
-    class JustReleaseDeleter {public:
-            void operator() (XColorList*) const {/* release but don't delete pointer */}
-    };
-    ::boost::shared_ptr<XColorList> GetColorTable (void)
+
+    const XColorListSharedPtr GetColorTable (void)
     {
         SfxObjectShell* pDocSh = SfxObjectShell::Current();
         DBG_ASSERT(pDocSh!=NULL, "DocShell not found!");
@@ -75,13 +73,11 @@ namespace {
             const SfxPoolItem* pItem = pDocSh->GetItem(SID_COLOR_TABLE);
             if (pItem != NULL)
             {
-                XColorList* pTable = ((SvxColorTableItem*)pItem)->GetColorTable();
-                if (pTable != NULL)
-                    return ::boost::shared_ptr<XColorList>(pTable, JustReleaseDeleter());
+                return static_cast< const SvxColorTableItem* >(pItem)->GetColorTable();
             }
         }
 
-        return ::boost::shared_ptr<XColorList>(new XColorList(SvtPathOptions().GetPalettePath()));
+        return XPropertyListFactory::CreateSharedXColorList(SvtPathOptions().GetPalettePath());
     }
 } // end of anonymous namespace
 
@@ -123,42 +119,39 @@ ColorControl::~ColorControl (void)
 
 void ColorControl::FillColors (void)
 {
-    ::boost::shared_ptr<XColorList> pColorTable (GetColorTable());
+    const XColorListSharedPtr aColorTable(GetColorTable());
 
-    if (pColorTable)
+    const long nColorCount(aColorTable->Count());
+    if (nColorCount <= 0)
+        return;
+
+    const WinBits aWinBits(maVSColor.GetStyle() | WB_TABSTOP | WB_ITEMBORDER | WB_NAMEFIELD |
+        WB_NO_DIRECTSELECT | WB_MENUSTYLEVALUESET | WB_NO_DIRECTSELECT);
+
+    maVSColor.SetStyle(aWinBits);
+
+    // neds to be done *before* layouting
+    if(msNoColorString.Len() > 0)
     {
-        const long nColorCount(pColorTable->Count());
-        if (nColorCount <= 0)
-            return;
-
-        const WinBits aWinBits(maVSColor.GetStyle() | WB_TABSTOP | WB_ITEMBORDER | WB_NAMEFIELD |
-            WB_NO_DIRECTSELECT | WB_MENUSTYLEVALUESET | WB_NO_DIRECTSELECT);
-
-        maVSColor.SetStyle(aWinBits);
-
-        // neds to be done *before* layouting
-        if(msNoColorString.Len() > 0)
-        {
-            maVSColor.SetStyle(maVSColor.GetStyle() | WB_NONEFIELD);
-            maVSColor.SetText(msNoColorString);
-        }
-
-        const Size aNewSize(maVSColor.layoutAllVisible(nColorCount));
-        maVSColor.SetOutputSizePixel(aNewSize);
-        static sal_Int32 nAdd = 4;
-
-        SetOutputSizePixel(Size(aNewSize.Width() + nAdd, aNewSize.Height() + nAdd));
-        Link aLink = LINK(this, ColorControl, VSSelectHdl);
-        maVSColor.SetSelectHdl(aLink);
-
-        // Now, after all calls to SetStyle, we can change the
-        // background color.
-        maVSColor.SetBackground(Theme::GetWallpaper(Theme::Paint_DropDownBackground));
-
-        // add entrties
-        maVSColor.Clear();
-        maVSColor.addEntriesForXColorList(*pColorTable);
+        maVSColor.SetStyle(maVSColor.GetStyle() | WB_NONEFIELD);
+        maVSColor.SetText(msNoColorString);
     }
+
+    const Size aNewSize(maVSColor.layoutAllVisible(nColorCount));
+    maVSColor.SetOutputSizePixel(aNewSize);
+    static sal_Int32 nAdd = 4;
+
+    SetOutputSizePixel(Size(aNewSize.Width() + nAdd, aNewSize.Height() + nAdd));
+    Link aLink = LINK(this, ColorControl, VSSelectHdl);
+    maVSColor.SetSelectHdl(aLink);
+
+    // Now, after all calls to SetStyle, we can change the
+    // background color.
+    maVSColor.SetBackground(Theme::GetWallpaper(Theme::Paint_DropDownBackground));
+
+    // add entrties
+    maVSColor.Clear();
+    maVSColor.addEntriesForXColorList(aColorTable);
 
     maVSColor.Show();
 }

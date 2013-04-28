@@ -13290,7 +13290,7 @@ SfxBoolItem FontworkKernCharacterPairs SID_FONTWORK_KERN_CHARACTER_PAIRS
 ]
 
 //--------------------------------------------------------------------------
-OfaPtrItem GetColorTable SID_GET_COLORTABLE
+SvxColorTableItem GetColorTable SID_GET_COLORTABLE
 ()
 [
     /* flags: */

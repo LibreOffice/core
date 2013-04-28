@@ -58,7 +58,7 @@
 #include <svx/fmshell.hxx>
 
 #include <svtools/htmlcfg.hxx>
-#include <svx/ofaitem.hxx>
+//#include <svx/paletteitem.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <sfx2/app.hxx>
 #include <basic/sbstar.hxx>
@@ -1018,9 +1018,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
             break;
             case SID_GET_COLORTABLE:
             {
-                SvxColorTableItem* pColItem = (SvxColorTableItem*)GetItem(SID_COLOR_TABLE);
-                XColorList* pTable = pColItem->GetColorTable();
-                rReq.SetReturnValue(OfaPtrItem(SID_GET_COLORTABLE, pTable));
+                const SvxColorTableItem* pColItem = static_cast< const SvxColorTableItem* >(GetItem(SID_COLOR_TABLE));
+                XColorListSharedPtr aTable = pColItem->GetColorTable();
+
+                rReq.SetReturnValue(SvxColorTableItem(aTable, SID_GET_COLORTABLE));
             }
             break;
         case FN_ABSTRACT_STARIMPRESS:

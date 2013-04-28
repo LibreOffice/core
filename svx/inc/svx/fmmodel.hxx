@@ -54,12 +54,7 @@ public:
     TYPEINFO();
 
     FmFormModel(SfxItemPool* pPool=NULL, SfxObjectShell* pPers=NULL );
-    FmFormModel(const XubString& rPath, SfxItemPool* pPool=NULL,
-                SfxObjectShell* pPers=NULL );
-    FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers, FASTBOOL bUseExtColorTable);
-    FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers,
-                FASTBOOL bUseExtColorTable);
-
+    FmFormModel(const XubString& rPath, SfxItemPool* pPool=NULL, SfxObjectShell* pPers=NULL );
     virtual ~FmFormModel();
 
     virtual SdrPage* AllocPage(FASTBOOL bMasterPage);

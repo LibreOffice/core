@@ -109,8 +109,7 @@ struct SdrModelImpl
 
 DBG_NAME(SdrModel)
 TYPEINIT1(SdrModel,SfxBroadcaster);
-void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbeddedHelper,
-    bool bUseExtColorTable, bool bLoadRefCounts)
+void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbeddedHelper,bool bLoadRefCounts)
 {
     mpImpl = new SdrModelImpl;
     mpImpl->mpUndoManager=0;
@@ -144,7 +143,6 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     mbUndoEnabled=true;
     nProgressPercent=0;
     nLoadVersion=0;
-    bExtColorTable=sal_False;
     mbChanged = sal_False;
     bInfoChanged=sal_False;
     bPagNumsDirty=sal_False;
@@ -162,12 +160,6 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     nStreamCompressMode=COMPRESSMODE_NONE;
     nStreamNumberFormat=NUMBERFORMAT_INT_BIGENDIAN;
     nDefaultTabulator=0;
-    pColorTable=NULL;
-    pDashList=NULL;
-    pLineEndList=NULL;
-    pHatchList=NULL;
-    pGradientList=NULL;
-    pBitmapList=NULL;
     mpNumberFormatter = NULL;
     bTransparentTextFrames=sal_False;
     bStarDrawPreviewMode = sal_False;
@@ -186,8 +178,6 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
 #ifdef OSL_LITENDIAN
     nStreamNumberFormat=NUMBERFORMAT_INT_LITTLEENDIAN;
 #endif
-    bExtColorTable=bUseExtColorTable;
-
     if ( pPool == NULL )
     {
         pItemPool=new SdrItemPool(0L, bLoadRefCounts);
@@ -235,7 +225,7 @@ SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, sal
 #endif
 
     DBG_CTOR(SdrModel,NULL);
-    ImpCtor(pPool,pPers,sal_False, (FASTBOOL)bLoadRefCounts);
+    ImpCtor(pPool,pPers,(FASTBOOL)bLoadRefCounts);
 }
 
 SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, sal_Bool bLoadRefCounts):
@@ -248,32 +238,7 @@ SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbed
 #endif
 
     DBG_CTOR(SdrModel,NULL);
-    ImpCtor(pPool,pPers,sal_False, (FASTBOOL)bLoadRefCounts);
-}
-
-SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, FASTBOOL bUseExtColorTable, sal_Bool bLoadRefCounts):
-    maMaPag(1024,32,32),
-    maPages(1024,32,32)
-{
-#ifdef TIMELOG
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "svx", "aw93748", "SdrModel::SdrModel(...)" );
-#endif
-
-    DBG_CTOR(SdrModel,NULL);
-    ImpCtor(pPool,pPers,bUseExtColorTable, (FASTBOOL)bLoadRefCounts);
-}
-
-SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, FASTBOOL bUseExtColorTable, sal_Bool bLoadRefCounts):
-    maMaPag(1024,32,32),
-    maPages(1024,32,32),
-    aTablePath(rPath)
-{
-#ifdef TIMELOG
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "svx", "aw93748", "SdrModel::SdrModel(...)" );
-#endif
-
-    DBG_CTOR(SdrModel,NULL);
-    ImpCtor(pPool,pPers,bUseExtColorTable, (FASTBOOL)bLoadRefCounts);
+    ImpCtor(pPool,pPers,(FASTBOOL)bLoadRefCounts);
 }
 
 SdrModel::SdrModel(const SdrModel& /*rSrcModel*/):
@@ -360,20 +325,18 @@ SdrModel::~SdrModel()
     if( mpForbiddenCharactersTable )
         mpForbiddenCharactersTable->release();
 
-    // Tabellen, Listen und Paletten loeschen
-    if (!bExtColorTable)
-        delete pColorTable;
-    delete pDashList;
-    delete pLineEndList;
-    delete pHatchList;
-    delete pGradientList;
-    delete pBitmapList;
-
     if(mpNumberFormatter)
         delete mpNumberFormatter;
 
     delete mpImpl->mpUndoFactory;
     delete mpImpl;
+
+    maColorTable.reset();
+    maDashList.reset();
+    maLineEndList.reset();
+    maHatchList.reset();
+    maGradientList.reset();
+    maBitmapList.reset();
 }
 
 bool SdrModel::IsInDestruction() const
@@ -761,13 +724,12 @@ bool SdrModel::IsUndoEnabled() const
 
 void SdrModel::ImpCreateTables()
 {
-    // der Writer hat seinen eigenen ColorTable
-    if (!bExtColorTable) pColorTable=new XColorList(aTablePath,(XOutdevItemPool*)pItemPool);
-    pDashList    =new XDashList    (aTablePath,(XOutdevItemPool*)pItemPool);
-    pLineEndList =new XLineEndList (aTablePath,(XOutdevItemPool*)pItemPool);
-    pHatchList   =new XHatchList   (aTablePath,(XOutdevItemPool*)pItemPool);
-    pGradientList=new XGradientList(aTablePath,(XOutdevItemPool*)pItemPool);
-    pBitmapList  =new XBitmapList  (aTablePath,(XOutdevItemPool*)pItemPool);
+    maColorTable = XPropertyListFactory::CreateSharedXColorList(aTablePath);
+    maDashList = XPropertyListFactory::CreateSharedXDashList(aTablePath);
+    maLineEndList = XPropertyListFactory::CreateSharedXLineEndList(aTablePath);
+    maHatchList = XPropertyListFactory::CreateSharedXHatchList(aTablePath);
+    maGradientList = XPropertyListFactory::CreateSharedXGradientList(aTablePath);
+    maBitmapList = XPropertyListFactory::CreateSharedXBitmapList(aTablePath);
 }
 
 // #116168#
@@ -2170,15 +2132,67 @@ const ::com::sun::star::uno::Sequence< sal_Int8 >& SdrModel::getUnoTunnelImpleme
     return *pSeq;
 }
 
-//
-// i120668, move from the header files, add delete action
-//
-void            SdrModel::SetColorTable(XColorList* pTable)       { delete pColorTable; pColorTable=pTable; }
-void            SdrModel::SetDashList(XDashList* pList)            { delete pDashList; pDashList=pList; }
-void            SdrModel::SetLineEndList(XLineEndList* pList)      { delete pLineEndList; pLineEndList=pList; }
-void            SdrModel::SetHatchList(XHatchList* pList)          { delete pHatchList; pHatchList=pList; }
-void            SdrModel::SetGradientList(XGradientList* pList)    { delete pGradientList; pGradientList=pList; }
-void            SdrModel::SetBitmapList(XBitmapList* pList)        { delete pBitmapList; pBitmapList=pList; }
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void SdrModel::SetColorTableAtSdrModel(XColorListSharedPtr aTable)
+{
+    maColorTable = aTable;
+}
+
+XColorListSharedPtr SdrModel::GetColorTableFromSdrModel() const
+{
+    return maColorTable;
+}
+
+void SdrModel::SetDashListAtSdrModel(XDashListSharedPtr aList)
+{
+    maDashList = aList;
+}
+
+XDashListSharedPtr SdrModel::GetDashListFromSdrModel() const
+{
+    return maDashList;
+}
+
+void SdrModel::SetLineEndListAtSdrModel(XLineEndListSharedPtr aList)
+{
+    maLineEndList = aList;
+}
+
+XLineEndListSharedPtr SdrModel::GetLineEndListFromSdrModel() const
+{
+    return maLineEndList;
+}
+
+void SdrModel::SetHatchListAtSdrModel(XHatchListSharedPtr aList)
+{
+    maHatchList = aList;
+}
+
+XHatchListSharedPtr SdrModel::GetHatchListFromSdrModel() const
+{
+    return maHatchList;
+}
+
+void SdrModel::SetGradientListAtSdrModel(XGradientListSharedPtr aList)
+{
+    maGradientList = aList;
+}
+
+XGradientListSharedPtr SdrModel::GetGradientListFromSdrModel() const
+{
+    return maGradientList;
+}
+
+void SdrModel::SetBitmapListAtSdrModel(XBitmapListSharedPtr aList)
+{
+    maBitmapList = aList;
+}
+
+XBitmapListSharedPtr SdrModel::GetBitmapListFromSdrModel() const
+{
+    return maBitmapList;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

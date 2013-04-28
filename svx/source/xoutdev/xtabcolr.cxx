@@ -61,10 +61,10 @@ static char const aChckXML[]    = { '<', '?', 'x', 'm', 'l' };      // = 6.0
 |*
 *************************************************************************/
 
-static XColorList* pStaticGlobalColorList = 0;
+static XColorListSharedPtr aStaticGlobalColorList;
 
-XColorList::XColorList( const String& rPath, XOutdevItemPool* pInPool ) :
-                XPropertyList( rPath, pInPool )
+XColorList::XColorList( const String& rPath ) :
+                XPropertyList( rPath )
 {
 }
 
@@ -85,14 +85,14 @@ XColorEntry* XColorList::Replace(XColorEntry* pEntry, long nIndex )
 
 XColorEntry* XColorList::Remove(long nIndex)
 {
-    return (XColorEntry*) XPropertyList::Remove(nIndex, 0);
+    return (XColorEntry*) XPropertyList::Remove(nIndex);
 }
 
 /************************************************************************/
 
 XColorEntry* XColorList::GetColor(long nIndex) const
 {
-    return (XColorEntry*) XPropertyList::Get(nIndex, 0);
+    return (XColorEntry*) XPropertyList::Get(nIndex);
 }
 
 /************************************************************************/
@@ -440,11 +440,14 @@ Bitmap XColorList::CreateBitmapForUI( long /*nIndex*/ )
 
 /************************************************************************/
 
-XColorList* XColorList::GetStdColorList()
+XColorListSharedPtr XColorList::GetStdColorList()
 {
-    if ( !pStaticGlobalColorList )
-        pStaticGlobalColorList = new XColorList( SvtPathOptions().GetPalettePath() );
-    return pStaticGlobalColorList;
+    if ( !aStaticGlobalColorList.get() )
+    {
+        aStaticGlobalColorList = XPropertyListFactory::CreateSharedXColorList(SvtPathOptions().GetPalettePath());
+    }
+
+    return aStaticGlobalColorList;
 }
 
 // eof

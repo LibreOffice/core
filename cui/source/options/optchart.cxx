@@ -73,7 +73,7 @@ SvxDefaultColorOptPage::SvxDefaultColorOptPage( Window* pParent, const SfxItemSe
     aValSetColorBox.Show();
 
     pChartOptions = new SvxChartOptions;
-    pColorTab = new XColorList( SvtPathOptions().GetPalettePath() );
+    maColorTab = XPropertyListFactory::CreateSharedXColorList(SvtPathOptions().GetPalettePath());
 
     const SfxPoolItem* pItem = NULL;
     if ( rInAttrs.GetItemState( SID_SCH_EDITOPTIONS, sal_False, &pItem ) == SFX_ITEM_SET )
@@ -98,7 +98,6 @@ SvxDefaultColorOptPage::~SvxDefaultColorOptPage()
     pChartOptions->Commit();
 
     delete pColorConfig;
-    delete pColorTab;
     delete pChartOptions;
 }
 
@@ -135,14 +134,14 @@ void __EXPORT SvxDefaultColorOptPage::Reset( const SfxItemSet& )
 
 void SvxDefaultColorOptPage::FillColorBox()
 {
-    if( !pColorTab ) return;
+    if( !maColorTab.get() ) return;
 
-    long nCount = pColorTab->Count();
+    long nCount = maColorTab->Count();
     XColorEntry* pColorEntry;
 
     for( long i = 0; i < nCount; i++ )
     {
-        pColorEntry = pColorTab->GetColor( i );
+        pColorEntry = maColorTab->GetColor( i );
         aValSetColorBox.InsertItem( (sal_uInt16) i + 1, pColorEntry->GetColor(), pColorEntry->GetName() );
     }
 }
@@ -150,16 +149,16 @@ void SvxDefaultColorOptPage::FillColorBox()
 
 long SvxDefaultColorOptPage::GetColorIndex( const Color& rCol )
 {
-    if( pColorTab )
+    if( maColorTab.get() )
     {
-        long nCount = pColorTab->Count();
+        long nCount = maColorTab->Count();
         XColorEntry* pColorEntry;
 
         for( long i = nCount - 1; i >= 0; i-- )         // default chart colors are at the end of the table
         {
-            pColorEntry = pColorTab->GetColor( i );
+            pColorEntry = maColorTab->GetColor( i );
             if( pColorEntry && pColorEntry->GetColor() == rCol )
-                return SAL_STATIC_CAST( XPropertyList*, pColorTab )->Get( pColorEntry->GetName() );
+                return maColorTab->GetIndex( pColorEntry->GetName() );
         }
     }
     return -1L;

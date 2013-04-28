@@ -830,17 +830,15 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SfxPoolItem* pItem = NULL;
-    XColorList* pColorTable = NULL;
-    sal_Bool bKillTable = sal_False;
+    XColorListSharedPtr aColorTable;
 
     if ( pDocSh )
         if ( 0 != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) )
-            pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
+            aColorTable = static_cast< const SvxColorTableItem* >(pItem)->GetColorTable();
 
-    if ( !pColorTable )
+    if ( !aColorTable )
     {
-        pColorTable = new XColorList( SvtPathOptions().GetPalettePath() );
-        bKillTable = sal_True;
+        aColorTable = XPropertyListFactory::CreateSharedXColorList(SvtPathOptions().GetPalettePath());
     }
 
     if ( SID_ATTR_CHAR_COLOR_BACKGROUND == theSlotId || SID_BACKGROUND_COLOR == theSlotId )
@@ -870,16 +868,16 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
         aColorSet.SetAccessibleName( SVX_RESSTR( RID_SVXSTR_FRAME_COLOR ) );
     }
 
-    if ( pColorTable )
+    if ( aColorTable )
     {
-        const long nColorCount(pColorTable->Count());
+        const long nColorCount(aColorTable->Count());
         const Size aNewSize(aColorSet.layoutAllVisible(nColorCount));
         aColorSet.SetOutputSizePixel(aNewSize);
         static sal_Int32 nAdd = 4;
 
         SetOutputSizePixel(Size(aNewSize.Width() + nAdd, aNewSize.Height() + nAdd));
         aColorSet.Clear();
-        aColorSet.addEntriesForXColorList(*pColorTable);
+        aColorSet.addEntriesForXColorList(aColorTable);
     }
 
     aColorSet.SetSelectHdl( LINK( this, SvxColorWindow_Impl, SelectHdl ) );
@@ -888,9 +886,6 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     SetText( rWndTitle );
     aColorSet.Show();
     AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ColorTableState" )));
-
-    if ( bKillTable )
-        delete pColorTable;
 }
 
 SvxColorWindow_Impl::~SvxColorWindow_Impl()
@@ -989,19 +984,24 @@ void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
     {
         if (( nSID == SID_COLOR_TABLE ) && ( pState->ISA( SvxColorTableItem )))
         {
-            XColorList* pColorTable = pState ? ((SvxColorTableItem *)pState)->GetColorTable() : NULL;
+            XColorListSharedPtr aColorTable;
 
-            if ( pColorTable )
+            if(pState)
+            {
+                aColorTable = static_cast< const SvxColorTableItem* >(pState)->GetColorTable();
+            }
+
+            if ( aColorTable )
             {
                 // Die Liste der Farben (ColorTable) hat sich ge"andert:
-                const long nColorCount(pColorTable->Count());
+                const long nColorCount(aColorTable->Count());
                 const Size aNewSize(aColorSet.layoutAllVisible(nColorCount));
                 aColorSet.SetOutputSizePixel(aNewSize);
                 static sal_Int32 nAdd = 4;
 
                 SetOutputSizePixel(Size(aNewSize.Width() + nAdd, aNewSize.Height() + nAdd));
                 aColorSet.Clear();
-                aColorSet.addEntriesForXColorList(*pColorTable);
+                aColorSet.addEntriesForXColorList(aColorTable);
             }
         }
     }

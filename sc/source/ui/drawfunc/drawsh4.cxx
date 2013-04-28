@@ -93,15 +93,15 @@ void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
             if ( pDocSh )
             {
                 const SfxPoolItem*  pItem = pDocSh->GetItem( SID_COLOR_TABLE );
-                XColorList*     pColorTable = NULL;
+                XColorListSharedPtr aColorTable;
 
                 if ( pItem )
-                    pColorTable = ((SvxColorTableItem*)pItem)->GetColorTable();
+                    aColorTable = static_cast< const SvxColorTableItem* >(pItem)->GetColorTable();
 
                 pDlg->SetActive();
 
-                if ( pColorTable )
-                    pDlg->SetColorTable( pColorTable );
+                if ( aColorTable.get() )
+                    pDlg->SetColorTable( aColorTable );
                 else
                     { DBG_ERROR( "ColorList not found :-/" ); }
             }

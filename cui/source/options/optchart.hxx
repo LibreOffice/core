@@ -61,7 +61,7 @@ private:
 
     SvxChartOptions*        pChartOptions;
     SvxChartColorTableItem* pColorConfig;
-    XColorList*         pColorTab;
+    XColorListSharedPtr     maColorTab;
 
     DECL_LINK( ResetToDefaults, void * );
     DECL_LINK( ListClickedHdl, ChartColorLB * );

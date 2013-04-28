@@ -334,29 +334,29 @@ const SfxItemPool& DrawModelWrapper::GetItemPool() const
 {
     return this->SdrModel::GetItemPool();
 }
-XColorList* DrawModelWrapper::GetColorTable() const
+XColorListSharedPtr  DrawModelWrapper::GetColorTableFromSdrModel() const
 {
-    return this->SdrModel::GetColorTable();
+    return this->SdrModel::GetColorTableFromSdrModel();
 }
-XDashList* DrawModelWrapper::GetDashList() const
+XDashListSharedPtr DrawModelWrapper::GetDashListFromSdrModel() const
 {
-    return this->SdrModel::GetDashList();
+    return this->SdrModel::GetDashListFromSdrModel();
 }
-XLineEndList* DrawModelWrapper::GetLineEndList() const
+XLineEndListSharedPtr DrawModelWrapper::GetLineEndListFromSdrModel() const
 {
-    return this->SdrModel::GetLineEndList();
+    return this->SdrModel::GetLineEndListFromSdrModel();
 }
-XGradientList* DrawModelWrapper::GetGradientList() const
+XGradientListSharedPtr DrawModelWrapper::GetGradientListFromSdrModel() const
 {
-    return this->SdrModel::GetGradientList();
+    return this->SdrModel::GetGradientListFromSdrModel();
 }
-XHatchList* DrawModelWrapper::GetHatchList() const
+XHatchListSharedPtr DrawModelWrapper::GetHatchListFromSdrModel() const
 {
-    return this->SdrModel::GetHatchList();
+    return this->SdrModel::GetHatchListFromSdrModel();
 }
-XBitmapList* DrawModelWrapper::GetBitmapList() const
+XBitmapListSharedPtr DrawModelWrapper::GetBitmapListFromSdrModel() const
 {
-    return this->SdrModel::GetBitmapList();
+    return this->SdrModel::GetBitmapListFromSdrModel();
 }
 
 SdrObject* DrawModelWrapper::getNamedSdrObject( const rtl::OUString& rName )

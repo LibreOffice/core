@@ -30,7 +30,6 @@
 #include <svl/lstner.hxx>
 #include "svx/svxdllapi.h"
 
-class XColorList;
 class SvData;
 
 /*************************************************************************
@@ -79,7 +78,7 @@ class SvxColorDockingWindow : public SfxDockingWindow, public SfxListener
  friend class SvxColorChildWindow;
 
 private:
-    XColorList*     pColorTable;
+    XColorListSharedPtr         maColorTable;
     SvxColorValueSet_docking    aColorSet;
     sal_uInt16              nLeftSlot;
     sal_uInt16              nRightSlot;

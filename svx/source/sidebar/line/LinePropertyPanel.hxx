@@ -33,7 +33,6 @@
 #include <svx/sidebar/ColorPopup.hxx>
 #include "LineWidthPopup.hxx"
 
-
 namespace svx { class ToolboxButtonColorUpdater; }
 class SvxLineColorPage;
 class SvxLineStylePage;
@@ -47,6 +46,9 @@ class XDashList;
 class ListBox;
 class ToolBox;
 class FloatingWindow;
+
+typedef ::boost::shared_ptr< XLineEndList > XLineEndListSharedPtr;
+typedef ::boost::shared_ptr< XDashList > XDashListSharedPtr;
 
 namespace {
     #define SIDEBAR_LINE_WIDTH_GLOBAL_VALUE String("PopupPanel_LineWidth", 20, RTL_TEXTENCODING_ASCII_US)
@@ -130,8 +132,8 @@ private:
     sal_uInt16                                              mnTrans;
     SfxMapUnit                                              meMapUnit;
     sal_Int32                                               mnWidthCoreValue;
-    XLineEndList*                                           mpLineEndList;
-    XDashList*                                              mpLineStyleList;
+    XLineEndListSharedPtr                                   maLineEndList;
+    XDashListSharedPtr                                      maLineStyleList;
     ::boost::scoped_ptr< XLineStartItem >                   mpStartItem;
     ::boost::scoped_ptr< XLineEndItem >                     mpEndItem;
 

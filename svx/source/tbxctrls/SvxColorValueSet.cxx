@@ -61,13 +61,13 @@ sal_uInt32 SvxColorValueSet::getColumnCount() const
     return rStyleSettings.GetColorValueSetColumnCount();
 }
 
-void SvxColorValueSet::addEntriesForXColorList(const XColorList& rXColorList, sal_uInt32 nStartIndex)
+void SvxColorValueSet::addEntriesForXColorList(const XColorListSharedPtr aXColorList, sal_uInt32 nStartIndex)
 {
-    const sal_uInt32 nColorCount(rXColorList.Count());
+    const sal_uInt32 nColorCount(aXColorList ? aXColorList->Count() : 0);
 
     for(sal_uInt32 nIndex(0); nIndex < nColorCount; nIndex++, nStartIndex++)
     {
-        const XColorEntry* pEntry = rXColorList.GetColor(nIndex);
+        const XColorEntry* pEntry = aXColorList->GetColor(nIndex);
 
         if(pEntry)
         {

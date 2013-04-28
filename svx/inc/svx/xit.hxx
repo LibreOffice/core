@@ -30,7 +30,6 @@
 
 /************************************************************************/
 
-class XColorList;
 class XDashList;
 class XLineEndList;
 class XHatchList;

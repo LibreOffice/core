@@ -37,10 +37,10 @@
 SvxFormatCellsDialog::SvxFormatCellsDialog( Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel )
 : SfxTabDialog        ( pParent, CUI_RES( RID_SVX_FORMAT_CELLS_DLG ), pAttr )
 , mrOutAttrs            ( *pAttr )
-, mpColorTab           ( pModel->GetColorTable() )
-, mpGradientList       ( pModel->GetGradientList() )
-, mpHatchingList       ( pModel->GetHatchList() )
-, mpBitmapList         ( pModel->GetBitmapList() )
+, maColorTab           ( pModel->GetColorTableFromSdrModel() )
+, maGradientList       ( pModel->GetGradientListFromSdrModel() )
+, maHatchingList       ( pModel->GetHatchListFromSdrModel() )
+, maBitmapList         ( pModel->GetBitmapListFromSdrModel() )
 
 {
     FreeResource();
@@ -68,10 +68,10 @@ void SvxFormatCellsDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     switch( nId )
     {
         case RID_SVXPAGE_AREA:
-            ( (SvxAreaTabPage&) rPage ).SetColorTable( mpColorTab );
-            ( (SvxAreaTabPage&) rPage ).SetGradientList( mpGradientList );
-            ( (SvxAreaTabPage&) rPage ).SetHatchingList( mpHatchingList );
-            ( (SvxAreaTabPage&) rPage ).SetBitmapList( mpBitmapList );
+            ( (SvxAreaTabPage&) rPage ).SetColorTable( maColorTab );
+            ( (SvxAreaTabPage&) rPage ).SetGradientList( maGradientList );
+            ( (SvxAreaTabPage&) rPage ).SetHatchingList( maHatchingList );
+            ( (SvxAreaTabPage&) rPage ).SetBitmapList( maBitmapList );
             ( (SvxAreaTabPage&) rPage ).SetPageType( PT_AREA );
             ( (SvxAreaTabPage&) rPage ).SetDlgType( 1 );
             ( (SvxAreaTabPage&) rPage ).SetPos( 0 );

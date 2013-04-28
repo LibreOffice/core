@@ -561,7 +561,7 @@ sal_Bool OfaOptionsTreeListBox::Collapse( SvLBoxEntry* pParent )
     sNotLoadedError     (       CUI_RES( ST_LOAD_ERROR ) ),\
     pCurrentPageEntry   ( NULL ),\
     pColorPageItemSet   ( NULL ),\
-    pColorTab           ( NULL ),\
+    maColorTab           (),\
     nChangeType         ( CT_NONE ),\
     nUnknownType        ( COLORPAGE_UNKNOWN ),\
     nUnknownPos         ( COLORPAGE_UNKNOWN ),\
@@ -1201,13 +1201,13 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
                 pPageInfo->m_pPage = ::CreateGeneralTabPage(
                     pPageInfo->m_nPageId, this, *pColorPageItemSet );
                 SvxColorTabPage& rColPage = *(SvxColorTabPage*)pPageInfo->m_pPage;
-                const OfaPtrItem* pPtr = NULL;
+                const SvxColorTableItem* pPtr = NULL;
                 if ( SfxViewFrame::Current() && SfxViewFrame::Current()->GetDispatcher() )
-                    pPtr = (const OfaPtrItem*)SfxViewFrame::Current()->
-                        GetDispatcher()->Execute( SID_GET_COLORTABLE, SFX_CALLMODE_SYNCHRON );
-                pColorTab = pPtr ? (XColorList*)pPtr->GetValue() : XColorList::GetStdColorList();
+                    pPtr = dynamic_cast< const SvxColorTableItem* >(SfxViewFrame::Current()->
+                        GetDispatcher()->Execute(SID_GET_COLORTABLE, SFX_CALLMODE_SYNCHRON));
+                maColorTab = pPtr ? pPtr->GetColorTable() : XColorList::GetStdColorList();
 
-                rColPage.SetColorTable( pColorTab );
+                rColPage.SetColorTable( maColorTab );
                 rColPage.SetPageType( &nUnknownType );
                 rColPage.SetDlgType( &nUnknownType );
                 rColPage.SetPos( &nUnknownPos );
@@ -2637,14 +2637,15 @@ short OfaTreeOptionsDialog::Execute()
             // notify current viewframe it it uses the same color table
             if ( SfxViewFrame::Current() && SfxViewFrame::Current()->GetDispatcher() )
             {
-                const OfaPtrItem* pPtr = (const OfaPtrItem*)SfxViewFrame::Current()->GetDispatcher()->Execute( SID_GET_COLORTABLE, SFX_CALLMODE_SYNCHRON );
+                const SvxColorTableItem* pPtr = dynamic_cast< const SvxColorTableItem* >(
+                    SfxViewFrame::Current()->GetDispatcher()->Execute(SID_GET_COLORTABLE, SFX_CALLMODE_SYNCHRON));
                 if( pPtr )
                 {
-                    XColorList* _pColorTab = (XColorList*)pPtr->GetValue();
+                    XColorListSharedPtr aColorTab = pPtr->GetColorTable();
 
-                    if( _pColorTab &&
-                        _pColorTab->GetPath() == GetColorTable()->GetPath() &&
-                        _pColorTab->GetName() == GetColorTable()->GetName() )
+                    if( aColorTab &&
+                        aColorTab->GetPath() == GetColorTable()->GetPath() &&
+                        aColorTab->GetName() == GetColorTable()->GetName() )
                         SfxObjectShell::Current()->PutItem( SvxColorTableItem( GetColorTable(), SID_COLOR_TABLE ) );
                 }
             }

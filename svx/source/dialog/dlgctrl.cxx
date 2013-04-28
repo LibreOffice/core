@@ -1094,15 +1094,15 @@ BitmapEx SvxBitmapCtl::GetBitmapEx()
 |*
 \************************************************************************/
 
-void ColorLB::Fill( const XColorList* pColorTab )
+void ColorLB::Fill( const XColorListSharedPtr aColorTab )
 {
-    long nCount = pColorTab->Count();
+    long nCount = aColorTab->Count();
     XColorEntry* pEntry;
     SetUpdateMode( sal_False );
 
     for( long i = 0; i < nCount; i++ )
     {
-        pEntry = pColorTab->GetColor( i );
+        pEntry = aColorTab->GetColor( i );
         InsertEntry( pEntry->GetColor(), pEntry->GetName() );
     }
 
@@ -1132,15 +1132,15 @@ void ColorLB::Modify( XColorEntry* pEntry, sal_uInt16 nPos, Bitmap*  )
 |*
 \************************************************************************/
 
-void FillAttrLB::Fill( const XColorList* pColorTab )
+void FillAttrLB::Fill( const XColorListSharedPtr aColorTab )
 {
-    long nCount = pColorTab->Count();
+    long nCount = aColorTab->Count();
     XColorEntry* pEntry;
     SetUpdateMode( sal_False );
 
     for( long i = 0; i < nCount; i++ )
     {
-        pEntry = pColorTab->GetColor( i );
+        pEntry = aColorTab->GetColor( i );
         InsertEntry( pEntry->GetColor(), pEntry->GetName() );
     }
 
@@ -1155,31 +1155,28 @@ void FillAttrLB::Fill( const XColorList* pColorTab )
 \************************************************************************/
 
 HatchingLB::HatchingLB( Window* pParent, ResId Id)
-: ListBox( pParent, Id ),
-  mpList ( NULL )
+: ListBox( pParent, Id )
 {
     SetEdgeBlending(true);
 }
 
 HatchingLB::HatchingLB( Window* pParent, WinBits aWB)
-: ListBox( pParent, aWB ),
-  mpList ( NULL )
+: ListBox( pParent, aWB )
 {
     SetEdgeBlending(true);
 }
 
-void HatchingLB::Fill( const XHatchList* pList )
+void HatchingLB::Fill( const XHatchListSharedPtr aList )
 {
-    mpList = (XHatchList*)pList;
     XHatchEntry* pEntry;
-    long nCount = pList->Count();
+    long nCount = aList.get() ? aList->Count() : 0;
 
     SetUpdateMode( sal_False );
 
     for( long i = 0; i < nCount; i++ )
     {
-        pEntry = pList->GetHatch( i );
-        const Bitmap aBitmap = pList->GetUiBitmap( i );
+        pEntry = aList->GetHatch( i );
+        const Bitmap aBitmap = aList->GetUiBitmap( i );
         if( !aBitmap.IsEmpty() )
             InsertEntry( pEntry->GetName(), aBitmap );
         else
@@ -1215,10 +1212,9 @@ void HatchingLB::Modify( XHatchEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp )
 
 /************************************************************************/
 
-void HatchingLB::SelectEntryByList( const XHatchList* pList, const String& rStr,
-                                    const XHatch& rHatch, sal_uInt16 nDist )
+void HatchingLB::SelectEntryByList( const XHatchListSharedPtr aList, const String& rStr, const XHatch& rHatch, sal_uInt16 nDist )
 {
-    long nCount = pList->Count();
+    long nCount = aList.get() ? aList->Count() : 0;
     XHatchEntry* pEntry;
     sal_Bool bFound = sal_False;
     String aStr;
@@ -1226,7 +1222,7 @@ void HatchingLB::SelectEntryByList( const XHatchList* pList, const String& rStr,
     long i;
     for( i = 0; i < nCount && !bFound; i++ )
     {
-        pEntry = pList->GetHatch( i );
+        pEntry = aList->GetHatch( i );
 
         aStr = pEntry->GetName();
 
@@ -1243,16 +1239,16 @@ void HatchingLB::SelectEntryByList( const XHatchList* pList, const String& rStr,
 |*
 \************************************************************************/
 
-void FillAttrLB::Fill( const XHatchList* pList )
+void FillAttrLB::Fill( const XHatchListSharedPtr aList )
 {
-    long nCount = pList->Count();
+    long nCount = aList.get() ? aList->Count() : 0;
     XHatchEntry* pEntry;
     ListBox::SetUpdateMode( sal_False );
 
     for( long i = 0; i < nCount; i++ )
     {
-        pEntry = pList->GetHatch( i );
-        const Bitmap aBitmap = pList->GetUiBitmap( i );
+        pEntry = aList->GetHatch( i );
+        const Bitmap aBitmap = aList->GetUiBitmap( i );
         if( !aBitmap.IsEmpty() )
             ListBox::InsertEntry( pEntry->GetName(), aBitmap );
         else
@@ -1270,31 +1266,28 @@ void FillAttrLB::Fill( const XHatchList* pList )
 \************************************************************************/
 
 GradientLB::GradientLB( Window* pParent, ResId Id)
-: ListBox( pParent, Id ),
-  mpList(NULL)
+: ListBox( pParent, Id )
 {
     SetEdgeBlending(true);
 }
 
 GradientLB::GradientLB( Window* pParent, WinBits aWB)
-: ListBox( pParent, aWB ),
-  mpList(NULL)
+: ListBox( pParent, aWB )
 {
     SetEdgeBlending(true);
 }
 
-void GradientLB::Fill( const XGradientList* pList )
+void GradientLB::Fill( const XGradientListSharedPtr aList )
 {
-    mpList = (XGradientList*)pList;
     XGradientEntry* pEntry;
-    long nCount = pList->Count();
+    long nCount = aList.get() ? aList->Count() : 0;
 
     SetUpdateMode( sal_False );
 
     for( long i = 0; i < nCount; i++ )
     {
-        pEntry = pList->GetGradient( i );
-        const Bitmap aBitmap = pList->GetUiBitmap( i );
+        pEntry = aList->GetGradient( i );
+        const Bitmap aBitmap = aList->GetUiBitmap( i );
         if( !aBitmap.IsEmpty() )
             InsertEntry( pEntry->GetName(), aBitmap );
         else
@@ -1330,10 +1323,9 @@ void GradientLB::Modify( XGradientEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp )
 
 /************************************************************************/
 
-void GradientLB::SelectEntryByList( const XGradientList* pList, const String& rStr,
-                                const XGradient& rGradient, sal_uInt16 nDist )
+void GradientLB::SelectEntryByList( const XGradientListSharedPtr aList, const String& rStr, const XGradient& rGradient, sal_uInt16 nDist )
 {
-    long nCount = pList->Count();
+    long nCount = aList.get() ? aList->Count() : 0;
     XGradientEntry* pEntry;
     sal_Bool bFound = sal_False;
     String aStr;
@@ -1341,7 +1333,7 @@ void GradientLB::SelectEntryByList( const XGradientList* pList, const String& rS
     long i;
     for( i = 0; i < nCount && !bFound; i++ )
     {
-        pEntry = pList->GetGradient( i );
+        pEntry = aList->GetGradient( i );
 
         aStr = pEntry->GetName();
 
@@ -1358,16 +1350,16 @@ void GradientLB::SelectEntryByList( const XGradientList* pList, const String& rS
 |*
 \************************************************************************/
 
-void FillAttrLB::Fill( const XGradientList* pList )
+void FillAttrLB::Fill( const XGradientListSharedPtr aList )
 {
-    long nCount = pList->Count();
+    long nCount = aList.get() ? aList->Count() : 0;
     XGradientEntry* pEntry;
     ListBox::SetUpdateMode( sal_False );
 
     for( long i = 0; i < nCount; i++ )
     {
-        pEntry = pList->GetGradient( i );
-        const Bitmap aBitmap = pList->GetUiBitmap( i );
+        pEntry = aList->GetGradient( i );
+        const Bitmap aBitmap = aList->GetUiBitmap( i );
         if( !aBitmap.IsEmpty() )
             ListBox::InsertEntry( pEntry->GetName(), aBitmap );
         else
@@ -1386,8 +1378,7 @@ void FillAttrLB::Fill( const XGradientList* pList )
 
 BitmapLB::BitmapLB(Window* pParent, ResId Id)
 :   ListBox(pParent, Id),
-    maBitmapEx(),
-    mpList(NULL)
+    maBitmapEx()
 {
     SetEdgeBlending(true);
 }
@@ -1442,11 +1433,10 @@ namespace
 
 /************************************************************************/
 
-void BitmapLB::Fill(const XBitmapList* pList)
+void BitmapLB::Fill(const XBitmapListSharedPtr aList)
 {
-    mpList = (XBitmapList*)pList;
     XBitmapEntry* pEntry;
-    const long nCount(pList->Count());
+    const long nCount(aList.get() ? aList->Count() : 0);
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     const Size aSize(rStyleSettings.GetListBoxPreviewDefaultPixelSize());
 
@@ -1454,7 +1444,7 @@ void BitmapLB::Fill(const XBitmapList* pList)
 
     for(long i(0); i < nCount; i++)
     {
-        pEntry = pList->GetBitmap(i);
+        pEntry = aList->GetBitmap(i);
         maBitmapEx = pEntry->GetGraphicObject().GetGraphic().GetBitmapEx();
         formatBitmapExToSize(maBitmapEx, aSize);
         InsertEntry(pEntry->GetName(), maBitmapEx);
@@ -1502,16 +1492,16 @@ void BitmapLB::Modify(const Size& rSize, const XBitmapEntry& rEntry, sal_uInt16 
 
 /************************************************************************/
 
-void BitmapLB::SelectEntryByList(const XBitmapList* pList, const String& rStr)
+void BitmapLB::SelectEntryByList(const XBitmapListSharedPtr aList, const String& rStr)
 {
-    const long nCount(pList->Count());
+    const long nCount(aList.get() ? aList->Count() : 0);
     XBitmapEntry* pEntry;
     bool bFound(false);
     long i(0);
 
     for(i = 0; i < nCount && !bFound; i++)
     {
-        pEntry = pList->GetBitmap(i);
+        pEntry = aList->GetBitmap(i);
         const String aStr(pEntry->GetName());
 
         if(rStr == aStr)
@@ -1547,9 +1537,9 @@ FillAttrLB::FillAttrLB(Window* pParent, WinBits aWB)
 
 /************************************************************************/
 
-void FillAttrLB::Fill(const XBitmapList* pList)
+void FillAttrLB::Fill(const XBitmapListSharedPtr aList)
 {
-    const long nCount(pList->Count());
+    const long nCount(aList.get() ? aList->Count() : 0);
     XBitmapEntry* pEntry;
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     const Size aSize(rStyleSettings.GetListBoxPreviewDefaultPixelSize());
@@ -1558,7 +1548,7 @@ void FillAttrLB::Fill(const XBitmapList* pList)
 
     for(long i(0); i < nCount; i++)
     {
-        pEntry = pList->GetBitmap( i );
+        pEntry = aList->GetBitmap( i );
         maBitmapEx = pEntry->GetGraphicObject().GetGraphic().GetBitmapEx();
         formatBitmapExToSize(maBitmapEx, aSize);
         ListBox::InsertEntry(pEntry->GetName(), maBitmapEx);
@@ -1570,16 +1560,16 @@ void FillAttrLB::Fill(const XBitmapList* pList)
 
 /************************************************************************/
 
-void FillAttrLB::SelectEntryByList( const XBitmapList* pList, const String& rStr)
+void FillAttrLB::SelectEntryByList( const XBitmapListSharedPtr aList, const String& rStr)
 {
-    const long nCount(pList->Count());
+    const long nCount(aList.get() ? aList->Count() : 0);
     XBitmapEntry* pEntry;
     bool bFound(false);
     long i(0);
 
     for(i = 0; i < nCount && !bFound; i++)
     {
-        pEntry = pList->GetBitmap(i);
+        pEntry = aList->GetBitmap(i);
         const String aStr(pEntry->GetName());
 
         if(rStr == aStr)
@@ -1645,28 +1635,28 @@ void LineLB::setAddStandardFields(bool bNew)
     }
 }
 
-void LineLB::Fill( const XDashList* pList )
+void LineLB::Fill( const XDashListSharedPtr aList )
 {
     Clear();
 
-    if(getAddStandardFields())
+    if(getAddStandardFields() && aList.get())
     {
         // entry for 'none'
-        InsertEntry(pList->GetStringForUiNoLine());
+        InsertEntry(aList->GetStringForUiNoLine());
 
         // entry for solid line
-        InsertEntry(pList->GetStringForUiSolidLine(), pList->GetBitmapForUISolidLine());
+        InsertEntry(aList->GetStringForUiSolidLine(), aList->GetBitmapForUISolidLine());
     }
 
     // entries for dashed lines
-    long nCount = pList->Count();
+    long nCount = aList.get() ? aList->Count() : 0;
     XDashEntry* pEntry;
     SetUpdateMode( sal_False );
 
     for( long i = 0; i < nCount; i++ )
     {
-        pEntry = pList->GetDash( i );
-        const Bitmap aBitmap = const_cast< XDashList* >(pList)->GetUiBitmap( i );
+        pEntry = aList->GetDash( i );
+        const Bitmap aBitmap = aList->GetUiBitmap( i );
         if( !aBitmap.IsEmpty() )
         {
             InsertEntry( pEntry->GetName(), aBitmap );
@@ -1705,10 +1695,9 @@ void LineLB::Modify( XDashEntry* pEntry, sal_uInt16 nPos, const Bitmap* pBmp )
 
 /************************************************************************/
 
-void LineLB::SelectEntryByList( const XDashList* pList, const String& rStr,
-                                const XDash& rDash, sal_uInt16 nDist )
+void LineLB::SelectEntryByList( const XDashListSharedPtr aList, const String& rStr, const XDash& rDash, sal_uInt16 nDist )
 {
-    long nCount = pList->Count();
+    long nCount = aList.get() ? aList->Count() : 0;
     XDashEntry* pEntry;
     sal_Bool bFound = sal_False;
     String aStr;
@@ -1717,7 +1706,7 @@ void LineLB::SelectEntryByList( const XDashList* pList, const String& rStr,
     long i;
     for( i = 0; i < nCount && !bFound; i++ )
     {
-        pEntry = pList->GetDash( i );
+        pEntry = aList->GetDash( i );
 
         aStr = pEntry->GetName();
         aDash = pEntry->GetDash();
@@ -1751,17 +1740,17 @@ LineEndLB::~LineEndLB(void)
 }
 
 
-void LineEndLB::Fill( const XLineEndList* pList, sal_Bool bStart )
+void LineEndLB::Fill( const XLineEndListSharedPtr aList, sal_Bool bStart )
 {
-    long nCount = pList->Count();
+    long nCount = aList.get() ? aList->Count() : 0;
     XLineEndEntry* pEntry;
     VirtualDevice aVD;
     SetUpdateMode( sal_False );
 
     for( long i = 0; i < nCount; i++ )
     {
-        pEntry = pList->GetLineEnd( i );
-        const Bitmap aBitmap = const_cast< XLineEndList* >(pList)->GetUiBitmap( i );
+        pEntry = aList->GetLineEnd( i );
+        const Bitmap aBitmap = aList->GetUiBitmap( i );
         if( !aBitmap.IsEmpty() )
         {
             Size aBmpSize( aBitmap.GetSizePixel() );

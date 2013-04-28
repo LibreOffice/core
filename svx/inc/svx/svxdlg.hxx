@@ -264,8 +264,6 @@ public:
 
 class AbstractSvxAreaTabDialog :public SfxAbstractTabDialog  //add for SvxAreaTabDialog
 {
-public:
-    virtual void     DontDeleteColorTable() = 0;
 };
 
 class AbstractSvxTransformTabDialog : public SfxAbstractTabDialog

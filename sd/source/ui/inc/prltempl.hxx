@@ -34,12 +34,6 @@
 #include "prlayout.hxx" // fuer enum PresentationObjects
 
 
-class XColorList;
-class XGradientList;
-class XHatchList;
-class XBitmapList;
-class XDashList;
-class XLineEndList;
 class SfxObjectShell;
 class SfxStyleSheetBase;
 class SfxStyleSheetBasePool;
@@ -54,12 +48,12 @@ class SdPresLayoutTemplateDlg : public SfxTabDialog
 private:
     const SfxObjectShell*   mpDocShell;
 
-    XColorList*     pColorTab;
-    XGradientList*      pGradientList;
-    XHatchList*         pHatchingList;
-    XBitmapList*        pBitmapList;
-    XDashList*          pDashList;
-    XLineEndList*       pLineEndList;
+    XColorListSharedPtr     maColorTab;
+    XGradientListSharedPtr  maGradientList;
+    XHatchListSharedPtr     maHatchingList;
+    XBitmapListSharedPtr    maBitmapList;
+    XDashListSharedPtr      maDashList;
+    XLineEndListSharedPtr   maLineEndList;
 
     sal_uInt16              nPageType;
     sal_uInt16              nDlgType;

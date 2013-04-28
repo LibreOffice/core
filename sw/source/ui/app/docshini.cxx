@@ -435,15 +435,6 @@ SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
     // wir als BroadCaster werden auch unser eigener Listener
     // (fuer DocInfo/FileNamen/....)
     EndListening( *this );
-    SvxColorTableItem* pColItem = (SvxColorTableItem*)GetItem(SID_COLOR_TABLE);
-    // wird nur die DocInfo fuer den Explorer gelesen, ist das Item nicht da
-    if(pColItem)
-    {
-        XColorList* pTable = pColItem->GetColorTable();
-        // wurde eine neue Table angelegt, muss sie auch geloescht werden.
-        if((void*)pTable  != (void*)(XColorList::GetStdColorList()) )
-            delete pTable;
-    }
 
     delete pOLEChildList;
 }

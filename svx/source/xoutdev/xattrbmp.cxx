@@ -459,7 +459,7 @@ XFillBitmapItem* XFillBitmapItem::checkForUniqueItem( SdrModel* pModel ) const
                                                                 pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
                                                                 XFillBitmapItem::CompareValueFunc,
                                                                 RID_SVXSTR_BMP21,
-                                                                pModel->GetBitmapList() );
+                                                                pModel->GetBitmapListFromSdrModel().get() );
 
         // if the given name is not valid, replace it!
         if( aUniqueName != GetName() )

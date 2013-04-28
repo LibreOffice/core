@@ -171,7 +171,7 @@ sal_Bool __EXPORT ScRedlineOptionsTabPage::FillItemSet( SfxItemSet& /* rSet */ )
 void __EXPORT ScRedlineOptionsTabPage::Reset( const SfxItemSet& /* rSet */ )
 {
 
-    XColorList* pColorTbl = XColorList::GetStdColorList();
+    XColorListSharedPtr aColorTbl = XColorList::GetStdColorList();
     aContentColorLB.InsertEntry(aAuthorStr);
     aMoveColorLB.InsertEntry(aAuthorStr);
     aInsertColorLB.InsertEntry(aAuthorStr);
@@ -182,9 +182,9 @@ void __EXPORT ScRedlineOptionsTabPage::Reset( const SfxItemSet& /* rSet */ )
     aInsertColorLB.SetUpdateMode( sal_False);
     aRemoveColorLB.SetUpdateMode( sal_False);
 
-    for( sal_uInt16 i = 0; i < pColorTbl->Count(); ++i )
+    for( sal_uInt16 i = 0; i < aColorTbl->Count(); ++i )
     {
-        XColorEntry* pEntry = pColorTbl->GetColor( i );
+        XColorEntry* pEntry = aColorTbl->GetColor( i );
         Color aColor = pEntry->GetColor();
         String sName = pEntry->GetName();
 

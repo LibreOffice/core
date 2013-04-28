@@ -83,103 +83,17 @@ sal_Unicode const pszExtLineEnd[]   = {'s','o','e'};
 // class XLineEndList
 // --------------------
 
-class impXLineEndList
-{
-private:
-    VirtualDevice*          mpVirtualDevice;
-    SdrModel*               mpSdrModel;
-    SdrObject*              mpBackgroundObject;
-    SdrObject*              mpLineObject;
-
-public:
-    impXLineEndList(VirtualDevice* pV, SdrModel* pM, SdrObject* pB, SdrObject* pL)
-    :   mpVirtualDevice(pV),
-        mpSdrModel(pM),
-        mpBackgroundObject(pB),
-        mpLineObject(pL)
-    {}
-
-    ~impXLineEndList()
-    {
-        delete mpVirtualDevice;
-        SdrObject::Free(mpBackgroundObject);
-        SdrObject::Free(mpLineObject);
-        delete mpSdrModel;
-    }
-
-    VirtualDevice* getVirtualDevice() const { return mpVirtualDevice; }
-    SdrObject* getBackgroundObject() const { return mpBackgroundObject; }
-    SdrObject* getLineObject() const { return mpLineObject; }
-};
-
-void XLineEndList::impCreate()
-{
-    if(!mpData)
-    {
-        const Point aZero(0, 0);
-        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-
-        VirtualDevice* pVirDev = new VirtualDevice;
-        OSL_ENSURE(0 != pVirDev, "XLineEndList: no VirtualDevice created!" );
-        pVirDev->SetMapMode(MAP_100TH_MM);
-        const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
-        const Size aSize(pVirDev->PixelToLogic(Size(rSize.Width() * 2, rSize.Height())));
-        pVirDev->SetOutputSize(aSize);
-        pVirDev->SetDrawMode(rStyleSettings.GetHighContrastMode()
-            ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
-            : DRAWMODE_DEFAULT);
-        pVirDev->SetBackground(rStyleSettings.GetFieldColor());
-
-        SdrModel* pSdrModel = new SdrModel();
-        OSL_ENSURE(0 != pSdrModel, "XLineEndList: no SdrModel created!" );
-        pSdrModel->GetItemPool().FreezeIdRanges();
-
-        const Rectangle aBackgroundSize(aZero, aSize);
-        SdrObject* pBackgroundObject = new SdrRectObj(aBackgroundSize);
-        OSL_ENSURE(0 != pBackgroundObject, "XLineEndList: no BackgroundObject created!" );
-        pBackgroundObject->SetModel(pSdrModel);
-        pBackgroundObject->SetMergedItem(XFillStyleItem(XFILL_SOLID));
-        pBackgroundObject->SetMergedItem(XLineStyleItem(XLINE_NONE));
-        pBackgroundObject->SetMergedItem(XFillColorItem(String(), rStyleSettings.GetFieldColor()));
-
-        const basegfx::B2DPoint aStart(0, aSize.Height() / 2);
-        const basegfx::B2DPoint aEnd(aSize.Width(), aSize.Height() / 2);
-        basegfx::B2DPolygon aPolygon;
-        aPolygon.append(aStart);
-        aPolygon.append(aEnd);
-        SdrObject* pLineObject = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aPolygon));
-        OSL_ENSURE(0 != pLineObject, "XLineEndList: no LineObject created!" );
-        pLineObject->SetModel(pSdrModel);
-        const Size aLineWidth(pVirDev->PixelToLogic(Size(rStyleSettings.GetListBoxPreviewDefaultLineWidth(), 0)));
-        pLineObject->SetMergedItem(XLineWidthItem(aLineWidth.getWidth()));
-        const sal_uInt32 nArrowHeight((aSize.Height() * 8) / 10);
-        pLineObject->SetMergedItem(XLineStartWidthItem(nArrowHeight));
-        pLineObject->SetMergedItem(XLineEndWidthItem(nArrowHeight));
-        pLineObject->SetMergedItem(XLineColorItem(String(), rStyleSettings.GetFieldTextColor()));
-
-        mpData = new impXLineEndList(pVirDev, pSdrModel, pBackgroundObject, pLineObject);
-        OSL_ENSURE(0 != mpData, "XLineEndList: data creation went wrong!" );
-    }
-}
-
-void XLineEndList::impDestroy()
-{
-    if(mpData)
-    {
-        delete mpData;
-        mpData = 0;
-    }
-}
-
-XLineEndList::XLineEndList(const String& rPath, XOutdevItemPool* _pXPool)
-:   XPropertyList(rPath, _pXPool),
-    mpData(0)
+XLineEndList::XLineEndList(const String& rPath)
+:   XPropertyList(rPath),
+    mpBackgroundObject(0),
+    mpLineObject(0)
 {
 }
 
 XLineEndList::~XLineEndList()
 {
-    impDestroy();
+    SdrObject::Free(mpBackgroundObject);
+    SdrObject::Free(mpLineObject);
 }
 
 XLineEndEntry* XLineEndList::Replace(XLineEndEntry* pEntry, long nIndex )
@@ -189,12 +103,12 @@ XLineEndEntry* XLineEndList::Replace(XLineEndEntry* pEntry, long nIndex )
 
 XLineEndEntry* XLineEndList::Remove(long nIndex)
 {
-    return (XLineEndEntry*) XPropertyList::Remove(nIndex, 0);
+    return (XLineEndEntry*) XPropertyList::Remove(nIndex);
 }
 
 XLineEndEntry* XLineEndList::GetLineEnd(long nIndex) const
 {
-    return (XLineEndEntry*) XPropertyList::Get(nIndex, 0);
+    return (XLineEndEntry*) XPropertyList::Get(nIndex);
 }
 
 sal_Bool XLineEndList::Load()
@@ -266,25 +180,73 @@ sal_Bool XLineEndList::Create()
 
 Bitmap XLineEndList::CreateBitmapForUI( long nIndex )
 {
-    impCreate();
-    VirtualDevice* pVD = mpData->getVirtualDevice();
-    SdrObject* pLine = mpData->getLineObject();
+    Bitmap aRetval;
+    OSL_ENSURE(pGlobalsharedModelAndVDev, "OOps, global values missing (!)");
+    OSL_ENSURE(nIndex < Count(), "OOps, global values missing (!)");
 
-    pLine->SetMergedItem(XLineStyleItem(XLINE_SOLID));
-    pLine->SetMergedItem(XLineStartItem(String(), GetLineEnd(nIndex)->GetLineEnd()));
-    pLine->SetMergedItem(XLineEndItem(String(), GetLineEnd(nIndex)->GetLineEnd()));
+    if(pGlobalsharedModelAndVDev && nIndex < Count())
+    {
+        SdrModel& rModel = pGlobalsharedModelAndVDev->getSharedSdrModel();
+        VirtualDevice& rVirDev = pGlobalsharedModelAndVDev->getSharedVirtualDevice();
+        const Point aZero(0, 0);
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+        const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
+        const Size aSize(rVirDev.PixelToLogic(Size(rSize.Width() * 2, rSize.Height())));
 
-    sdr::contact::SdrObjectVector aObjectVector;
-    aObjectVector.push_back(mpData->getBackgroundObject());
-    aObjectVector.push_back(pLine);
-    sdr::contact::ObjectContactOfObjListPainter aPainter(*pVD, aObjectVector, 0);
-    sdr::contact::DisplayInfo aDisplayInfo;
+        rVirDev.SetOutputSize(aSize);
+        rVirDev.SetDrawMode(rStyleSettings.GetHighContrastMode()
+            ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
+            : DRAWMODE_DEFAULT);
+        rVirDev.SetBackground(rStyleSettings.GetFieldColor());
 
-    pVD->Erase();
-    aPainter.ProcessDisplay(aDisplayInfo);
+        if(!mpBackgroundObject)
+        {
+            const Rectangle aBackgroundSize(aZero, aSize);
+            mpBackgroundObject = new SdrRectObj(aBackgroundSize);
+            OSL_ENSURE(0 != mpBackgroundObject, "XLineEndList: no BackgroundObject created!" );
+            mpBackgroundObject->SetModel(&rModel);
+            mpBackgroundObject->SetMergedItem(XFillStyleItem(XFILL_SOLID));
+            mpBackgroundObject->SetMergedItem(XLineStyleItem(XLINE_NONE));
+            mpBackgroundObject->SetMergedItem(XFillColorItem(String(), rStyleSettings.GetFieldColor()));
+        }
 
-    const Point aZero(0, 0);
-    return pVD->GetBitmap(aZero, pVD->GetOutputSize());
+        if(!mpLineObject)
+        {
+            const basegfx::B2DPoint aStart(0, aSize.Height() / 2);
+            const basegfx::B2DPoint aEnd(aSize.Width(), aSize.Height() / 2);
+            basegfx::B2DPolygon aPolygon;
+            aPolygon.append(aStart);
+            aPolygon.append(aEnd);
+            mpLineObject = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aPolygon));
+            OSL_ENSURE(0 != mpLineObject, "XLineEndList: no LineObject created!" );
+            mpLineObject->SetModel(&rModel);
+            const Size aLineWidth(rVirDev.PixelToLogic(Size(rStyleSettings.GetListBoxPreviewDefaultLineWidth(), 0)));
+            mpLineObject->SetMergedItem(XLineWidthItem(aLineWidth.getWidth()));
+            const sal_uInt32 nArrowHeight((aSize.Height() * 8) / 10);
+            mpLineObject->SetMergedItem(XLineStartWidthItem(nArrowHeight));
+            mpLineObject->SetMergedItem(XLineEndWidthItem(nArrowHeight));
+            mpLineObject->SetMergedItem(XLineColorItem(String(), rStyleSettings.GetFieldTextColor()));
+        }
+
+        mpLineObject->SetMergedItem(XLineStyleItem(XLINE_SOLID));
+        mpLineObject->SetMergedItem(XLineStartItem(String(), GetLineEnd(nIndex)->GetLineEnd()));
+        mpLineObject->SetMergedItem(XLineEndItem(String(), GetLineEnd(nIndex)->GetLineEnd()));
+
+        sdr::contact::SdrObjectVector aObjectVector;
+
+        aObjectVector.push_back(mpBackgroundObject);
+        aObjectVector.push_back(mpLineObject);
+
+        sdr::contact::ObjectContactOfObjListPainter aPainter(rVirDev, aObjectVector, 0);
+        sdr::contact::DisplayInfo aDisplayInfo;
+
+        rVirDev.Erase();
+        aPainter.ProcessDisplay(aDisplayInfo);
+
+        aRetval = rVirDev.GetBitmap(aZero, rVirDev.GetOutputSize());
+    }
+
+    return aRetval;
 }
 
 //////////////////////////////////////////////////////////////////////////////

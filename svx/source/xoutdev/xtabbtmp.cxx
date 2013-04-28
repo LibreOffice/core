@@ -55,8 +55,8 @@ static char const aChckXML[]     = { 'P', 'K', 0x03, 0x04 };        // = 6.0
 // class XBitmapList
 // ------------------
 
-XBitmapList::XBitmapList( const String& rPath, XOutdevItemPool* pInPool ) :
-                XPropertyList( rPath, pInPool )
+XBitmapList::XBitmapList( const String& rPath ) :
+                XPropertyList( rPath )
 {
 }
 
@@ -77,14 +77,14 @@ XBitmapEntry* XBitmapList::Replace(XBitmapEntry* pEntry, long nIndex )
 
 XBitmapEntry* XBitmapList::Remove(long nIndex)
 {
-    return (XBitmapEntry*) XPropertyList::Remove(nIndex, 0);
+    return (XBitmapEntry*) XPropertyList::Remove(nIndex);
 }
 
 /************************************************************************/
 
 XBitmapEntry* XBitmapList::GetBitmap(long nIndex) const
 {
-    return (XBitmapEntry*) XPropertyList::Get(nIndex, 0);
+    return (XBitmapEntry*) XPropertyList::Get(nIndex);
 }
 
 /************************************************************************/

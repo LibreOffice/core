@@ -591,16 +591,16 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
 ::basegfx::B2DPolyPolygon getPolygon( sal_uInt16 nResId, SdrModel* pDoc )
 {
     ::basegfx::B2DPolyPolygon aRetval;
-    XLineEndList* pLineEndList = pDoc->GetLineEndList();
+    XLineEndListSharedPtr aLineEndList = pDoc->GetLineEndListFromSdrModel();
 
-    if( pLineEndList )
+    if( aLineEndList.get() )
     {
         String aArrowName( SVX_RES(nResId) );
-        long nCount = pLineEndList->Count();
+        long nCount = aLineEndList->Count();
         long nIndex;
         for( nIndex = 0L; nIndex < nCount; nIndex++ )
         {
-            XLineEndEntry* pEntry = pLineEndList->GetLineEnd(nIndex);
+            XLineEndEntry* pEntry = aLineEndList->GetLineEnd(nIndex);
             if( pEntry->GetName() == aArrowName )
             {
                 aRetval = pEntry->GetLineEnd();

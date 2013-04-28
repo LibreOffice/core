@@ -24,12 +24,12 @@
 
 #include <svtools/valueset.hxx>
 #include "svx/svxdllapi.h"
+#include <boost/shared_ptr.hpp>
 
 //////////////////////////////////////////////////////////////////////////////
 
 class XColorList;
-
-//////////////////////////////////////////////////////////////////////////////
+typedef ::boost::shared_ptr< XColorList > XColorListSharedPtr;
 
 class SVX_DLLPUBLIC SvxColorValueSet : public ValueSet
 {
@@ -43,7 +43,7 @@ public:
     sal_uInt32 getEntryEdgeLength() const;
     sal_uInt32 getColumnCount() const;
 
-    void addEntriesForXColorList(const XColorList& rXColorList, sal_uInt32 nStartIndex = 1);
+    void addEntriesForXColorList(const XColorListSharedPtr aXColorList, sal_uInt32 nStartIndex = 1);
     Size layoutAllVisible(sal_uInt32 nEntryCount);
     Size layoutToGivenHeight(sal_uInt32 nHeight, sal_uInt32 nEntryCount);
 };

@@ -370,8 +370,8 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     SFX_REQUEST_ARG (rReq, pGreen, SfxUInt32Item, ID_VAL_GREEN, sal_False);
                     SFX_REQUEST_ARG (rReq, pBlue, SfxUInt32Item, ID_VAL_BLUE, sal_False);
 
-                    XGradientList *pGradientList = GetDoc()->GetGradientList ();
-                    long          nCounts        = pGradientList->Count ();
+                    XGradientListSharedPtr aGradientList = GetDoc()->GetGradientListFromSdrModel();
+                    long          nCounts        = aGradientList->Count ();
                     Color         aColor ((sal_uInt8) pRed->GetValue (),
                                           (sal_uInt8) pGreen->GetValue (),
                                           (sal_uInt8) pBlue->GetValue ());
@@ -382,7 +382,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                     for ( i = 0; i < nCounts; i ++)
                     {
-                        XGradientEntry *pEntry = pGradientList->GetGradient (i);
+                        XGradientEntry *pEntry = aGradientList->GetGradient (i);
 
                         if (pEntry->GetName () == pName->GetValue ())
                         {
@@ -407,7 +407,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                                                  ? aColor
                                                  : aBlack);
 
-                        GetDoc()->GetGradientList ()->Insert (new XGradientEntry (aGradient, pName->GetValue ()));
+                        GetDoc()->GetGradientListFromSdrModel()->Insert (new XGradientEntry (aGradient, pName->GetValue ()));
 
                         pAttr->Put (XFillStyleItem (XFILL_GRADIENT), XATTR_FILLSTYLE);
                         pAttr->Put (XFillGradientItem (pName->GetValue (), aGradient), XATTR_FILLGRADIENT);
@@ -430,8 +430,8 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     SFX_REQUEST_ARG (rReq, pGreen, SfxUInt32Item, ID_VAL_GREEN, sal_False);
                     SFX_REQUEST_ARG (rReq, pBlue, SfxUInt32Item, ID_VAL_BLUE, sal_False);
 
-                    XHatchList *pHatchList = GetDoc()->GetHatchList ();
-                    long       nCounts     = pHatchList->Count ();
+                    XHatchListSharedPtr aHatchList = GetDoc()->GetHatchListFromSdrModel();
+                    long       nCounts     = aHatchList.get() ? aHatchList->Count() : 0;
                     Color      aColor ((sal_uInt8) pRed->GetValue (),
                                        (sal_uInt8) pGreen->GetValue (),
                                        (sal_uInt8) pBlue->GetValue ());
@@ -442,7 +442,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                     for ( i = 0; i < nCounts; i ++)
                     {
-                        XHatchEntry *pEntry = pHatchList->GetHatch (i);
+                        XHatchEntry *pEntry = aHatchList->GetHatch (i);
 
                         if (pEntry->GetName () == pName->GetValue ())
                         {
@@ -460,7 +460,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     {
                         XHatch aHatch (aColor);
 
-                        GetDoc()->GetHatchList ()->Insert (new XHatchEntry (aHatch, pName->GetValue ()));
+                        GetDoc()->GetHatchListFromSdrModel()->Insert (new XHatchEntry (aHatch, pName->GetValue ()));
 
                         pAttr->Put (XFillStyleItem (XFILL_HATCH), XATTR_FILLSTYLE);
                         pAttr->Put (XFillHatchItem (pName->GetValue (), aHatch), XATTR_FILLHATCH);
@@ -495,19 +495,19 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         pAttr->ClearItem (XATTR_LINEDASH);
                         pAttr->ClearItem (XATTR_LINESTYLE);
 
-                        XDashList  *pDashList = GetDoc()->GetDashList ();
-                        long       nCounts    = pDashList->Count ();
+                        XDashListSharedPtr aDashList = GetDoc()->GetDashListFromSdrModel();
+                        long       nCounts    = aDashList.get() ? aDashList->Count() : 0;
                         XDashEntry *pEntry    = new XDashEntry (aNewDash, pName->GetValue ());
                         long i;
 
                         for ( i = 0; i < nCounts; i++ )
-                            if (pDashList->GetDash (i)->GetName () == pName->GetValue ())
+                            if (aDashList->GetDash (i)->GetName () == pName->GetValue ())
                                 break;
 
                         if (i < nCounts)
-                            pDashList->Replace (pEntry, i);
+                            aDashList->Replace (pEntry, i);
                         else
-                            pDashList->Insert (pEntry);
+                            aDashList->Insert (pEntry);
 
                         pAttr->Put (XLineDashItem (pName->GetValue (), aNewDash), XATTR_LINEDASH);
                         pAttr->Put (XLineStyleItem (XLINE_DASH), XATTR_LINESTYLE);
@@ -547,13 +547,13 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         pAttr->ClearItem (XATTR_FILLGRADIENT);
                         pAttr->ClearItem (XATTR_FILLSTYLE);
 
-                        XGradientList  *pGradientList = GetDoc()->GetGradientList ();
-                        long           nCounts        = pGradientList->Count ();
+                        XGradientListSharedPtr aGradientList = GetDoc()->GetGradientListFromSdrModel();
+                        long           nCounts        = aGradientList->Count ();
                         long i;
 
                         for ( i = 0; i < nCounts; i++ )
                         {
-                            XGradientEntry *pEntry = pGradientList->GetGradient (i);
+                            XGradientEntry *pEntry = aGradientList->GetGradient (i);
 
                             if (pEntry->GetName () == pName->GetValue ())
                             {
@@ -581,7 +581,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                                                  (short) pCenterY->GetValue (), (short) pBorder->GetValue (),
                                                  (short) pStart->GetValue (), (short) pEnd->GetValue ());
 
-                            pGradientList->Insert (new XGradientEntry (aGradient, pName->GetValue ()));
+                            aGradientList->Insert (new XGradientEntry (aGradient, pName->GetValue ()));
                             pAttr->Put (XFillStyleItem (XFILL_GRADIENT), XATTR_FILLSTYLE);
                             pAttr->Put (XFillGradientItem (pName->GetValue (), aGradient), XATTR_FILLGRADIENT);
                         }
@@ -613,13 +613,13 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         pAttr->ClearItem (XATTR_FILLHATCH);
                         pAttr->ClearItem (XATTR_FILLSTYLE);
 
-                        XHatchList *pHatchList = GetDoc()->GetHatchList ();
-                        long       nCounts     = pHatchList->Count ();
+                        XHatchListSharedPtr aHatchList = GetDoc()->GetHatchListFromSdrModel();
+                        long       nCounts     = aHatchList.get() ? aHatchList->Count() : 0;
                         long i;
 
                         for ( i = 0; i < nCounts; i++ )
                         {
-                            XHatchEntry *pEntry = pHatchList->GetHatch (i);
+                            XHatchEntry *pEntry = aHatchList->GetHatch (i);
 
                             if (pEntry->GetName () == pName->GetValue ())
                             {
@@ -641,7 +641,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                             XHatch aHatch (aBlack, (XHatchStyle) pStyle->GetValue (), pDistance->GetValue (),
                                            pAngle->GetValue () * 10);
 
-                            pHatchList->Insert (new XHatchEntry (aHatch, pName->GetValue ()));
+                            aHatchList->Insert (new XHatchEntry (aHatch, pName->GetValue ()));
                             pAttr->Put (XFillStyleItem (XFILL_HATCH), XATTR_FILLSTYLE);
                             pAttr->Put (XFillHatchItem (pName->GetValue (), aHatch), XATTR_FILLHATCH);
                         }
@@ -663,14 +663,14 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 {
                     SFX_REQUEST_ARG (rReq, pName, SfxStringItem, ID_VAL_INDEX, sal_False);
 
-                    XGradientList  *pGradientList = GetDoc()->GetGradientList ();
-                    long           nCounts        = pGradientList->Count ();
+                    XGradientListSharedPtr aGradientList = GetDoc()->GetGradientListFromSdrModel();
+                    long           nCounts        = aGradientList->Count ();
 
                     for (long i = 0;
                               i < nCounts;
                               i ++)
                     {
-                        XGradientEntry *pEntry = pGradientList->GetGradient (i);
+                        XGradientEntry *pEntry = aGradientList->GetGradient (i);
 
                         if (pEntry->GetName () == pName->GetValue ())
                         {
@@ -697,14 +697,14 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 {
                     SFX_REQUEST_ARG (rReq, pName, SfxStringItem, ID_VAL_INDEX, sal_False);
 
-                    XHatchList *pHatchList = GetDoc()->GetHatchList ();
-                    long       nCounts     = pHatchList->Count ();
+                    XHatchListSharedPtr aHatchList = GetDoc()->GetHatchListFromSdrModel();
+                    long       nCounts     = aHatchList.get() ? aHatchList->Count() : 0;
 
                     for (long i = 0;
                               i < nCounts;
                               i ++)
                     {
-                        XHatchEntry *pEntry = pHatchList->GetHatch (i);
+                        XHatchEntry *pEntry = aHatchList->GetHatch (i);
 
                         if (pEntry->GetName () == pName->GetValue ())
                         {

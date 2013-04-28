@@ -338,7 +338,7 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
     // ColorBox aus der XColorList fuellen.
     SfxObjectShell*     pDocSh      = SfxObjectShell::Current();
     const SfxPoolItem*  pItem       = NULL;
-    XColorList*     pColorTable = NULL;
+    XColorListSharedPtr aColorTable;
 
     DBG_ASSERT( pDocSh, "DocShell not found!" );
 
@@ -346,19 +346,19 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
     {
         pItem = pDocSh->GetItem( SID_COLOR_TABLE );
         if ( pItem != NULL )
-            pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
+            aColorTable = static_cast< const SvxColorTableItem* >(pItem)->GetColorTable();
     }
 
-    DBG_ASSERT( pColorTable, "ColorTable not found!" );
+    DBG_ASSERT( aColorTable.get(), "ColorTable not found!" );
 
-    if ( pColorTable )
+    if ( aColorTable.get() )
     {
         // fuellen der Linienfarben-Box
         aLbLineColor.SetUpdateMode( sal_False );
 
-        for ( long i = 0; i < pColorTable->Count(); ++i )
+        for ( long i = 0; i < aColorTable->Count(); ++i )
         {
-            XColorEntry* pEntry = pColorTable->GetColor(i);
+            XColorEntry* pEntry = aColorTable->GetColor(i);
             aLbLineColor.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         }
         aLbLineColor.SetUpdateMode( sal_True );

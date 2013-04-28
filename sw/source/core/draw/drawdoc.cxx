@@ -63,8 +63,7 @@ const String GetPalettePath()
 }
 
 SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
-    FmFormModel( ::GetPalettePath(), &pD->GetAttrPool(),
-                 pD->GetDocShell(), sal_True ),
+    FmFormModel( ::GetPalettePath(), &pD->GetAttrPool(), pD->GetDocShell() ),
     pDoc( pD )
 {
     SetScaleUnit( MAP_TWIP );
@@ -76,23 +75,24 @@ SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
         SetObjectShell( pDocSh );
         SvxColorTableItem* pColItem = ( SvxColorTableItem* )
                                 ( pDocSh->GetItem( SID_COLOR_TABLE ) );
-        XColorList *pXCol = pColItem ? pColItem->GetColorTable() :
-                                        XColorList::GetStdColorList();
-        SetColorTable( pXCol );
+        XColorListSharedPtr aXCol = pColItem ?
+            pColItem->GetColorTable() :
+            XColorList::GetStdColorList();
+        SetColorTableAtSdrModel( aXCol );
 
         if ( !pColItem )
-            pDocSh->PutItem( SvxColorTableItem( pXCol, SID_COLOR_TABLE ) );
+            pDocSh->PutItem( SvxColorTableItem( aXCol, SID_COLOR_TABLE ) );
 
-        pDocSh->PutItem( SvxGradientListItem( GetGradientList(), SID_GRADIENT_LIST ));
-        pDocSh->PutItem( SvxHatchListItem( GetHatchList(), SID_HATCH_LIST ) );
-        pDocSh->PutItem( SvxBitmapListItem( GetBitmapList(), SID_BITMAP_LIST ) );
-        pDocSh->PutItem( SvxDashListItem( GetDashList(), SID_DASH_LIST ) );
-        pDocSh->PutItem( SvxLineEndListItem( GetLineEndList(), SID_LINEEND_LIST ) );
+        pDocSh->PutItem( SvxGradientListItem( GetGradientListFromSdrModel(), SID_GRADIENT_LIST ));
+        pDocSh->PutItem( SvxHatchListItem( GetHatchListFromSdrModel(), SID_HATCH_LIST ) );
+        pDocSh->PutItem( SvxBitmapListItem( GetBitmapListFromSdrModel(), SID_BITMAP_LIST ) );
+        pDocSh->PutItem( SvxDashListItem( GetDashListFromSdrModel(), SID_DASH_LIST ) );
+        pDocSh->PutItem( SvxLineEndListItem( GetLineEndListFromSdrModel(), SID_LINEEND_LIST ) );
         pDocSh->PutItem( SfxUInt16Item(SID_ATTR_LINEEND_WIDTH_DEFAULT, 111) );
         SetObjectShell( pDocSh );
     }
     else
-        SetColorTable( XColorList::GetStdColorList() );
+        SetColorTableAtSdrModel( XColorList::GetStdColorList() );
 
     // copy all the default values to the SdrModel
     SfxItemPool* pSdrPool = pD->GetAttrPool().GetSecondaryPool();

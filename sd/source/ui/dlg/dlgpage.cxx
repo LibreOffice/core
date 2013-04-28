@@ -65,10 +65,10 @@ SdPageDlg::SdPageDlg( SfxObjectShell* pDocSh, Window* pParent, const SfxItemSet*
     SvxHatchListItem aHatchListItem(*( (const SvxHatchListItem*)
         ( mpDocShell->GetItem( SID_HATCH_LIST ) ) ) );
 
-    mpColorTab = aColorTableItem.GetColorTable();
-    mpGradientList = aGradientListItem.GetGradientList();
-    mpHatchingList = aHatchListItem.GetHatchList();
-    mpBitmapList = aBitmapListItem.GetBitmapList();
+    maColorTab = aColorTableItem.GetColorTable();
+    maGradientList = aGradientListItem.GetGradientList();
+    maHatchingList = aHatchListItem.GetHatchList();
+    maBitmapList = aBitmapListItem.GetBitmapList();
 
     FreeResource();
 
@@ -98,10 +98,10 @@ void SdPageDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
         rPage.PageCreated(aSet);
         break;
     case RID_SVXPAGE_AREA:
-            aSet.Put (SvxColorTableItem(mpColorTab,SID_COLOR_TABLE));
-            aSet.Put (SvxGradientListItem(mpGradientList,SID_GRADIENT_LIST));
-            aSet.Put (SvxHatchListItem(mpHatchingList,SID_HATCH_LIST));
-            aSet.Put (SvxBitmapListItem(mpBitmapList,SID_BITMAP_LIST));
+            aSet.Put (SvxColorTableItem(maColorTab,SID_COLOR_TABLE));
+            aSet.Put (SvxGradientListItem(maGradientList,SID_GRADIENT_LIST));
+            aSet.Put (SvxHatchListItem(maHatchingList,SID_HATCH_LIST));
+            aSet.Put (SvxBitmapListItem(maBitmapList,SID_BITMAP_LIST));
             aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,0));
             aSet.Put (SfxUInt16Item(SID_DLG_TYPE,1));
             aSet.Put (SfxUInt16Item(SID_TABPAGE_POS,0));

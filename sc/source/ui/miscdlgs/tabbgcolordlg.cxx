@@ -89,9 +89,7 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SfxPoolItem* pItem = NULL;
-    XColorList* pColorTable = NULL;
-    ::boost::scoped_ptr< XColorList > pOwnColorTable; // locally instantiated in case the doc shell doesn't have one.
-
+    XColorListSharedPtr aColorTable;
     const Size aSize15x15 = Size( 15, 15 );
     const Size aSize10x10 = Size( 10, 10 );
     const Size aSize5x5 = Size( 5, 5 );
@@ -101,24 +99,23 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
 
     if ( pDocSh && ( 0 != ( pItem = pDocSh->GetItem(SID_COLOR_TABLE) ) ) )
     {
-        pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
+        aColorTable = static_cast< const SvxColorTableItem* >(pItem)->GetColorTable();
     }
 
-    if ( !pColorTable )
+    if ( !aColorTable.get() )
     {
-        pOwnColorTable.reset(new XColorList(SvtPathOptions().GetPalettePath()));
-        pColorTable = pOwnColorTable.get();
+        aColorTable = XPropertyListFactory::CreateSharedXColorList(SvtPathOptions().GetPalettePath());
     }
 
     long nColorCount(0);
 
-    if ( pColorTable )
+    if ( aColorTable.get() )
     {
-        nColorCount = pColorTable->Count();
+        nColorCount = aColorTable->Count();
         Color aColWhite( COL_WHITE );
         String aStrWhite( EditResId( RID_SVXITEMS_COLOR_WHITE ) );
 
-        aTabBgColorSet.addEntriesForXColorList(*pColorTable);
+        aTabBgColorSet.addEntriesForXColorList(aColorTable);
     }
 
     if(nColorCount)

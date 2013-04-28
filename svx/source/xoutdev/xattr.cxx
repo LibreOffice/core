@@ -283,7 +283,7 @@ String NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uIn
             int nIndex;
             for( nIndex = 0; nIndex < nCount; nIndex++ )
             {
-                XPropertyEntry* pEntry = pDefaults->Get( nIndex, 0 );
+                XPropertyEntry* pEntry = pDefaults->Get( nIndex );
                 if( pEntry )
                 {
                     bool bFound = false;
@@ -475,13 +475,26 @@ SvStream& XColorItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 |*
 \************************************************************************/
 
-const Color& XColorItem::GetColorValue(const XColorList* pTable) const
+const Color& XColorItem::GetColorValue() const
 {
-    if (!IsIndex())
+    if(!IsIndex())
+    {
         return aColor;
-    else
-        return pTable->GetColor(GetIndex())->GetColor();
+    }
 
+    OSL_ENSURE(false, "Acces to Indexed XColorItem needs to use the call which hands over a XColorListSharedPtr (!)");
+
+    return aColor;
+}
+
+const Color& XColorItem::GetColorValue(const XColorListSharedPtr aTable) const
+{
+    if(!IsIndex())
+    {
+        return aColor;
+    }
+
+    return aTable->GetColor(GetIndex())->GetColor();
 }
 
 sal_Bool XColorItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
@@ -1369,7 +1382,7 @@ XLineDashItem* XLineDashItem::checkForUniqueItem( SdrModel* pModel ) const
                                                                 pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
                                                                 XLineDashItem::CompareValueFunc,
                                                                 RID_SVXSTR_DASH11,
-                                                                pModel->GetDashList() );
+                                                                pModel->GetDashListFromSdrModel().get() );
 
         // if the given name is not valid, replace it!
         if( aUniqueName != GetName() )
@@ -4013,7 +4026,7 @@ XFillGradientItem* XFillGradientItem::checkForUniqueItem( SdrModel* pModel ) con
                                                                 pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
                                                                 XFillGradientItem::CompareValueFunc,
                                                                 RID_SVXSTR_GRADIENT,
-                                                                pModel->GetGradientList() );
+                                                                pModel->GetGradientListFromSdrModel().get() );
 
         // if the given name is not valid, replace it!
         if( aUniqueName != GetName() )
@@ -4654,7 +4667,7 @@ XFillHatchItem* XFillHatchItem::checkForUniqueItem( SdrModel* pModel ) const
                                                                 pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
                                                                 XFillHatchItem::CompareValueFunc,
                                                                 RID_SVXSTR_HATCH10,
-                                                                pModel->GetHatchList() );
+                                                                pModel->GetHatchListFromSdrModel().get() );
 
         // if the given name is not valid, replace it!
         if( aUniqueName != GetName() )

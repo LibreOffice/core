@@ -278,11 +278,11 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         aPathURL.removeSegment();
                         aPathURL.removeFinalSlash();
 
-                        XColorList* pColTab = new XColorList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetPool() );
-                        pColTab->SetName( aURL.getName() );
-                        if( pColTab->Load() )
+                        XColorListSharedPtr aColTab(XPropertyListFactory::CreateSharedXColorList(aPathURL.GetMainURL(INetURLObject::NO_DECODE)));
+                        aColTab->SetName( aURL.getName() );
+                        if( aColTab->Load() )
                         {
-                            pDoc->SetColorTable( pColTab );
+                            pDoc->SetColorTableAtSdrModel( aColTab );
                             bOk = sal_True;
                             bChanged = sal_True;
                         }
@@ -300,11 +300,11 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         aPathURL.removeSegment();
                         aPathURL.removeFinalSlash();
 
-                        XDashList* pDashTab = new XDashList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetPool() );
-                        pDashTab->SetName( aURL.getName() );
-                        if( pDashTab->Load() )
+                        XDashListSharedPtr aDashTab(XPropertyListFactory::CreateSharedXDashList(aPathURL.GetMainURL(INetURLObject::NO_DECODE)));
+                        aDashTab->SetName( aURL.getName() );
+                        if( aDashTab->Load() )
                         {
-                            pDoc->SetDashList( pDashTab );
+                            pDoc->SetDashListAtSdrModel( aDashTab );
                             bOk = sal_True;
                             bChanged = sal_True;
                         }
@@ -322,11 +322,11 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         aPathURL.removeSegment();
                         aPathURL.removeFinalSlash();
 
-                        XLineEndList* pTab = new XLineEndList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetPool() );
-                        pTab->SetName( aURL.getName() );
-                        if( pTab->Load() )
+                        XLineEndListSharedPtr aTab(XPropertyListFactory::CreateSharedXLineEndList(aPathURL.GetMainURL(INetURLObject::NO_DECODE)));
+                        aTab->SetName( aURL.getName() );
+                        if( aTab->Load() )
                         {
-                            pDoc->SetLineEndList( pTab );
+                            pDoc->SetLineEndListAtSdrModel( aTab );
                             bOk = sal_True;
                             bChanged = sal_True;
                         }
@@ -344,11 +344,11 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         aPathURL.removeSegment();
                         aPathURL.removeFinalSlash();
 
-                        XHatchList* pTab = new XHatchList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetPool() );
-                        pTab->SetName( aURL.getName() );
-                        if( pTab->Load() )
+                        XHatchListSharedPtr aTab(XPropertyListFactory::CreateSharedXHatchList(aPathURL.GetMainURL(INetURLObject::NO_DECODE)));
+                        aTab->SetName( aURL.getName() );
+                        if( aTab->Load() )
                         {
-                            pDoc->SetHatchList( pTab );
+                            pDoc->SetHatchListAtSdrModel( aTab );
                             bOk = sal_True;
                             bChanged = sal_True;
                         }
@@ -366,11 +366,11 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         aPathURL.removeSegment();
                         aPathURL.removeFinalSlash();
 
-                        XGradientList* pTab = new XGradientList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetPool() );
-                        pTab->SetName( aURL.getName() );
-                        if( pTab->Load() )
+                        XGradientListSharedPtr aTab(XPropertyListFactory::CreateSharedXGradientList(aPathURL.GetMainURL(INetURLObject::NO_DECODE)));
+                        aTab->SetName( aURL.getName() );
+                        if( aTab->Load() )
                         {
-                            pDoc->SetGradientList( pTab );
+                            pDoc->SetGradientListAtSdrModel( aTab );
                             bOk = sal_True;
                             bChanged = sal_True;
                         }
@@ -388,11 +388,11 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         aPathURL.removeSegment();
                         aPathURL.removeFinalSlash();
 
-                        XBitmapList* pTab = new XBitmapList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetPool() );
-                        pTab->SetName( aURL.getName() );
-                        if( pTab->Load() )
+                        XBitmapListSharedPtr aTab(XPropertyListFactory::CreateSharedXBitmapList(aPathURL.GetMainURL(INetURLObject::NO_DECODE )));
+                        aTab->SetName( aURL.getName() );
+                        if( aTab->Load() )
                         {
-                            pDoc->SetBitmapList( pTab );
+                            pDoc->SetBitmapListAtSdrModel( aTab );
                             bOk = sal_True;
                             bChanged = sal_True;
                         }
@@ -910,8 +910,8 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
         {
             case HANDLE_COLORTABLEURL:
                 {
-                    INetURLObject aPathURL( pDoc->GetColorTable()->GetPath() );
-                    aPathURL.insertName( pDoc->GetColorTable()->GetName() );
+                    INetURLObject aPathURL( pDoc->GetColorTableFromSdrModel()->GetPath() );
+                    aPathURL.insertName( pDoc->GetColorTableFromSdrModel()->GetName() );
                     String aExt( RTL_CONSTASCII_USTRINGPARAM("soc") );
                     aPathURL.setExtension( aExt );
                     OUString aPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -920,8 +920,8 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
                 break;
             case HANDLE_DASHTABLEURL:
                 {
-                    INetURLObject aPathURL( pDoc->GetDashList()->GetPath() );
-                    aPathURL.insertName( pDoc->GetDashList()->GetName() );
+                    INetURLObject aPathURL( pDoc->GetDashListFromSdrModel()->GetPath() );
+                    aPathURL.insertName( pDoc->GetDashListFromSdrModel()->GetName() );
                     String aExt( RTL_CONSTASCII_USTRINGPARAM("sod") );
                     aPathURL.setExtension( aExt );
                     OUString aPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -930,8 +930,8 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
                 break;
             case HANDLE_LINEENDTABLEURL:
                 {
-                    INetURLObject aPathURL( pDoc->GetLineEndList()->GetPath() );
-                    aPathURL.insertName( pDoc->GetLineEndList()->GetName() );
+                    INetURLObject aPathURL( pDoc->GetLineEndListFromSdrModel()->GetPath() );
+                    aPathURL.insertName( pDoc->GetLineEndListFromSdrModel()->GetName() );
                     String aExt( RTL_CONSTASCII_USTRINGPARAM("soe") );
                     aPathURL.setExtension( aExt );
                     OUString aPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -940,8 +940,8 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
                 break;
             case HANDLE_HATCHTABLEURL:
                 {
-                    INetURLObject aPathURL( pDoc->GetHatchList()->GetPath() );
-                    aPathURL.insertName( pDoc->GetHatchList()->GetName() );
+                    INetURLObject aPathURL( pDoc->GetHatchListFromSdrModel()->GetPath() );
+                    aPathURL.insertName( pDoc->GetHatchListFromSdrModel()->GetName() );
                     String aExt( RTL_CONSTASCII_USTRINGPARAM("soh") );
                     aPathURL.setExtension( aExt );
                     OUString aPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -950,8 +950,8 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
                 break;
             case HANDLE_GRADIENTTABLEURL:
                 {
-                    INetURLObject aPathURL( pDoc->GetGradientList()->GetPath() );
-                    aPathURL.insertName( pDoc->GetGradientList()->GetName() );
+                    INetURLObject aPathURL( pDoc->GetGradientListFromSdrModel()->GetPath() );
+                    aPathURL.insertName( pDoc->GetGradientListFromSdrModel()->GetName() );
                     String aExt( RTL_CONSTASCII_USTRINGPARAM("sog") );
                     aPathURL.setExtension( aExt );
                     OUString aPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -960,8 +960,8 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
                 break;
             case HANDLE_BITMAPTABLEURL:
                 {
-                    INetURLObject aPathURL( pDoc->GetBitmapList()->GetPath() );
-                    aPathURL.insertName( pDoc->GetBitmapList()->GetName() );
+                    INetURLObject aPathURL( pDoc->GetBitmapListFromSdrModel()->GetPath() );
+                    aPathURL.insertName( pDoc->GetBitmapListFromSdrModel()->GetName() );
                     String aExt( RTL_CONSTASCII_USTRINGPARAM("sob") );
                     aPathURL.setExtension( aExt );
                     OUString aPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );

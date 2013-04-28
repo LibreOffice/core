@@ -1296,7 +1296,7 @@ sal_Bool ScDocument::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
     return sal_False;
 }
 
-sal_Bool ScDocument::HasAutoFilter( SCCOL nCurCol, SCROW nCurRow, SCTAB nCurTab )
+sal_Bool ScDocument::HasAutoFilter( SCCOL /*nCurCol*/, SCROW /*nCurRow*/, SCTAB nCurTab )
 {
     //ScDBData*     pDBData         = GetDBAtCursor( nCurCol, nCurRow, nCurTab );
     ScDBData*       pDBData         = GetDBAtTable(nCurTab, SC_DB_OLD_FILTER);

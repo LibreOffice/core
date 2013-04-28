@@ -62,11 +62,11 @@ void  SwDocShell::InitDraw()
     if( pDrDoc )
     {
         // Listen, bzw. Tables im ItemSet der DocShell anlegen
-        PutItem( SvxGradientListItem( pDrDoc->GetGradientList(), SID_GRADIENT_LIST ) );
-        PutItem( SvxHatchListItem( pDrDoc->GetHatchList(), SID_HATCH_LIST ) );
-        PutItem( SvxBitmapListItem( pDrDoc->GetBitmapList(), SID_BITMAP_LIST ) );
-        PutItem( SvxDashListItem( pDrDoc->GetDashList(), SID_DASH_LIST ) );
-        PutItem( SvxLineEndListItem( pDrDoc->GetLineEndList(), SID_LINEEND_LIST ) );
+        PutItem( SvxGradientListItem( pDrDoc->GetGradientListFromSdrModel(), SID_GRADIENT_LIST ) );
+        PutItem( SvxHatchListItem( pDrDoc->GetHatchListFromSdrModel(), SID_HATCH_LIST ) );
+        PutItem( SvxBitmapListItem( pDrDoc->GetBitmapListFromSdrModel(), SID_BITMAP_LIST ) );
+        PutItem( SvxDashListItem( pDrDoc->GetDashListFromSdrModel(), SID_DASH_LIST ) );
+        PutItem( SvxLineEndListItem( pDrDoc->GetLineEndListFromSdrModel(), SID_LINEEND_LIST ) );
 
         Outliner& rOutliner = pDrDoc->GetDrawOutliner();
         uno::Reference<linguistic2::XHyphenator> xHyphenator( ::GetHyphenator() );

@@ -97,8 +97,8 @@ SvxGradientTabPage::SvxGradientTabPage
 
     rOutAttrs           ( rInAttrs ),
 
-    pColorTab( NULL ),
-    pGradientList( NULL ),
+    maColorTab(),
+    maGradientList(),
 
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXFStyleItem        ( XFILL_GRADIENT ),
@@ -169,11 +169,11 @@ SvxGradientTabPage::SvxGradientTabPage
 void SvxGradientTabPage::Construct()
 {
     // Farbtabelle
-    aLbColorFrom.Fill( pColorTab );
+    aLbColorFrom.Fill( maColorTab );
     aLbColorTo.CopyEntries( aLbColorFrom );
 
     // Farbverlauftabelle
-    aLbGradients.Fill( pGradientList );
+    aLbGradients.Fill( maGradientList );
 }
 
 // -----------------------------------------------------------------------
@@ -187,19 +187,19 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
     {
         *pbAreaTP = sal_False;
 
-        if( pColorTab )
+        if( maColorTab.get() )
         {
             // ColorTable
             if( *pnColorTableState & CT_CHANGED ||
                 *pnColorTableState & CT_MODIFIED )
             {
                 if( *pnColorTableState & CT_CHANGED )
-                    pColorTab = ( (SvxAreaTabDialog*) DLGWIN )->GetNewColorTable();
+                    maColorTab = ( (SvxAreaTabDialog*) DLGWIN )->GetNewColorTable();
 
                 // LbColorFrom
                 nPos = aLbColorFrom.GetSelectEntryPos();
                 aLbColorFrom.Clear();
-                aLbColorFrom.Fill( pColorTab );
+                aLbColorFrom.Fill( maColorTab );
                 nCount = aLbColorFrom.GetEntryCount();
                 if( nCount == 0 )
                     ; // Dieser Fall sollte nicht auftreten
@@ -226,9 +226,9 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
             // Ermitteln (evtl. abschneiden) des Namens und in
             // der GroupBox darstellen
             String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-            INetURLObject   aURL( pGradientList->GetPath() );
+            INetURLObject   aURL( maGradientList->GetPath() );
 
-            aURL.Append( pGradientList->GetName() );
+            aURL.Append( maGradientList->GetName() );
             DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
             if ( aURL.getBase().getLength() > 18 )
@@ -283,7 +283,7 @@ long SvxGradientTabPage::CheckChanges_Impl()
     sal_uInt16 nPos = aLbGradients.GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        XGradient aGradient = pGradientList->GetGradient( nPos )->GetGradient();
+        XGradient aGradient = maGradientList->GetGradient( nPos )->GetGradient();
         String aString = aLbGradients.GetSelectEntry();
 
         if( !( aTmpGradient == aGradient ) )
@@ -309,7 +309,7 @@ long SvxGradientTabPage::CheckChanges_Impl()
                 case RET_BTN_1: // Aendern
                 {
                     ClickModifyHdl_Impl( this );
-                    aGradient = pGradientList->GetGradient( nPos )->GetGradient();
+                    aGradient = maGradientList->GetGradient( nPos )->GetGradient();
                 }
                 break;
 
@@ -317,7 +317,7 @@ long SvxGradientTabPage::CheckChanges_Impl()
                 {
                     ClickAddHdl_Impl( this );
                     nPos = aLbGradients.GetSelectEntryPos();
-                    aGradient = pGradientList->GetGradient( nPos )->GetGradient();
+                    aGradient = maGradientList->GetGradient( nPos )->GetGradient();
                 }
                 break;
 
@@ -350,7 +350,7 @@ sal_Bool SvxGradientTabPage::FillItemSet( SfxItemSet& rSet )
         sal_uInt16      nPos = aLbGradients.GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            pXGradient = new XGradient( pGradientList->GetGradient( nPos )->GetGradient() );
+            pXGradient = new XGradient( maGradientList->GetGradient( nPos )->GetGradient() );
             aString = aLbGradients.GetSelectEntry();
 
         }
@@ -384,7 +384,7 @@ void SvxGradientTabPage::Reset( const SfxItemSet& )
     ChangeGradientHdl_Impl( this );
 
     // Status der Buttons ermitteln
-    if( pGradientList->Count() )
+    if( maGradientList->Count() )
     {
         aBtnModify.Enable();
         aBtnDelete.Enable();
@@ -444,7 +444,7 @@ IMPL_LINK( SvxGradientTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
     String aDesc( CUI_RES( RID_SVXSTR_DESC_GRADIENT ) );
     String aName;
 
-    long nCount = pGradientList->Count();
+    long nCount = maGradientList.get() ? maGradientList->Count() : 0;
     long j = 1;
     sal_Bool bDifferent = sal_False;
 
@@ -456,7 +456,7 @@ IMPL_LINK( SvxGradientTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         bDifferent = sal_True;
 
         for( long i = 0; i < nCount && bDifferent; i++ )
-            if( aName == pGradientList->GetGradient( i )->GetName() )
+            if( aName == maGradientList->GetGradient( i )->GetName() )
                 bDifferent = sal_False;
     }
 
@@ -474,7 +474,7 @@ IMPL_LINK( SvxGradientTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         bDifferent = sal_True;
 
         for( long i = 0; i < nCount && bDifferent; i++ )
-            if( aName == pGradientList->GetGradient( i )->GetName() )
+            if( aName == maGradientList->GetGradient( i )->GetName() )
                 bDifferent = sal_False;
 
         if( bDifferent )
@@ -511,7 +511,7 @@ IMPL_LINK( SvxGradientTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
                               (sal_uInt16) aMtrColorTo.GetValue() );
         XGradientEntry* pEntry = new XGradientEntry( aXGradient, aName );
 
-        pGradientList->Insert( pEntry, nCount );
+        maGradientList->Insert( pEntry, nCount );
 
         aLbGradients.Append( pEntry );
 
@@ -534,7 +534,7 @@ IMPL_LINK( SvxGradientTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
     }
 
     // Status der Buttons ermitteln
-    if( pGradientList->Count() )
+    if( maGradientList.get() && maGradientList->Count() )
     {
         aBtnModify.Enable();
         aBtnDelete.Enable();
@@ -554,7 +554,7 @@ IMPL_LINK( SvxGradientTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
         ResMgr& rMgr = CUI_MGR();
         String aNewName( SVX_RES( RID_SVXSTR_GRADIENT ) );
         String aDesc( CUI_RES( RID_SVXSTR_DESC_GRADIENT ) );
-        String aName( pGradientList->GetGradient( nPos )->GetName() );
+        String aName( maGradientList->GetGradient( nPos )->GetName() );
         String aOldName = aName;
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -562,7 +562,7 @@ IMPL_LINK( SvxGradientTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
         AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
-        long nCount = pGradientList->Count();
+        long nCount = maGradientList.get() ? maGradientList->Count() : 0;
         sal_Bool bDifferent = sal_False;
         sal_Bool bLoop = sal_True;
 
@@ -573,7 +573,7 @@ IMPL_LINK( SvxGradientTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
             for( long i = 0; i < nCount && bDifferent; i++ )
             {
-                if( aName == pGradientList->GetGradient( i )->GetName() &&
+                if( aName == maGradientList->GetGradient( i )->GetName() &&
                     aName != aOldName )
                     bDifferent = sal_False;
             }
@@ -593,7 +593,7 @@ IMPL_LINK( SvxGradientTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
                 XGradientEntry* pEntry = new XGradientEntry( aXGradient, aName );
 
-                delete pGradientList->Replace( pEntry, nPos );
+                delete maGradientList->Replace( pEntry, nPos );
 
                 aLbGradients.Modify( pEntry, nPos );
 
@@ -628,7 +628,7 @@ IMPL_LINK( SvxGradientTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 
         if ( aQueryBox.Execute() == RET_YES )
         {
-            delete pGradientList->Remove( nPos );
+            delete maGradientList->Remove( nPos );
             aLbGradients.RemoveEntry( nPos );
             aLbGradients.SelectEntryPos( 0 );
 
@@ -641,7 +641,7 @@ IMPL_LINK( SvxGradientTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
         }
     }
     // Status der Buttons ermitteln
-    if( !pGradientList->Count() )
+    if( !maGradientList.get() || !maGradientList->Count() )
     {
         aBtnModify.Disable();
         aBtnDelete.Disable();
@@ -663,7 +663,7 @@ IMPL_LINK( SvxGradientTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             String( ResId( RID_SVXSTR_WARN_TABLE_OVERWRITE, rMgr ) ) ).Execute();
 
         if ( nReturn == RET_YES )
-            pGradientList->Save();
+            maGradientList->Save();
     }
 
     if ( nReturn != RET_CANCEL )
@@ -687,27 +687,21 @@ IMPL_LINK( SvxGradientTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             aPathURL.removeFinalSlash();
 
             // Liste speichern
-            XGradientList* pGrdList = new XGradientList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), pXPool );
-            pGrdList->SetName( aURL.getName() );
+            XGradientListSharedPtr aGrdList(XPropertyListFactory::CreateSharedXGradientList(aPathURL.GetMainURL(INetURLObject::NO_DECODE)));
+            aGrdList->SetName( aURL.getName() );
 
-            if ( pGrdList->Load() )
+            if ( aGrdList->Load() )
             {
-                if ( pGrdList )
+                if ( aGrdList )
                 {
-                    // Pruefen, ob Tabelle geloescht werden darf:
-                    if ( pGradientList !=
-                         ( (SvxAreaTabDialog*) DLGWIN )->GetGradientList() )
-                        delete pGradientList;
-
-                    pGradientList = pGrdList;
-                    ( (SvxAreaTabDialog*) DLGWIN )->
-                        SetNewGradientList( pGradientList );
+                    maGradientList = aGrdList;
+                    ( (SvxAreaTabDialog*) DLGWIN )->SetNewGradientList( maGradientList );
 
                     aLbGradients.Clear();
-                    aLbGradients.Fill( pGradientList );
+                    aLbGradients.Fill( maGradientList );
                     Reset( rOutAttrs );
 
-                    pGradientList->SetName( aURL.getName() );
+                    maGradientList->SetName( aURL.getName() );
 
                     // Ermitteln (evtl. abschneiden) des Namens und in
                     // der GroupBox darstellen
@@ -740,7 +734,7 @@ IMPL_LINK( SvxGradientTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
     }
 
     // Status der Buttons ermitteln
-    if( pGradientList->Count() )
+    if( maGradientList.get() && maGradientList->Count() )
     {
         aBtnModify.Enable();
         aBtnDelete.Enable();
@@ -767,9 +761,9 @@ IMPL_LINK( SvxGradientTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );
     DBG_ASSERT( aFile.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-    if( pGradientList->GetName().Len() )
+    if( maGradientList->GetName().Len() )
     {
-        aFile.Append( pGradientList->GetName() );
+        aFile.Append( maGradientList->GetName() );
 
         if( !aFile.getExtension().getLength() )
             aFile.SetExtension( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "sog" ) ) );
@@ -784,10 +778,10 @@ IMPL_LINK( SvxGradientTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
         aPathURL.removeSegment();
         aPathURL.removeFinalSlash();
 
-        pGradientList->SetName( aURL.getName() );
-        pGradientList->SetPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
+        maGradientList->SetName( aURL.getName() );
+        maGradientList->SetPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
-        if( pGradientList->Save() )
+        if( maGradientList->Save() )
         {
             // Ermitteln (evtl. abschneiden) des Namens und in
             // der GroupBox darstellen
@@ -825,7 +819,7 @@ IMPL_LINK( SvxGradientTabPage, ChangeGradientHdl_Impl, void *, EMPTYARG )
     int nPos = aLbGradients.GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
-        pGradient = new XGradient( ( (XGradientEntry*) pGradientList->GetGradient( nPos ) )->GetGradient() );
+        pGradient = new XGradient( ( (XGradientEntry*) maGradientList->GetGradient( nPos ) )->GetGradient() );
     else
     {
         const SfxPoolItem* pPoolItem = NULL;
@@ -842,7 +836,7 @@ IMPL_LINK( SvxGradientTabPage, ChangeGradientHdl_Impl, void *, EMPTYARG )
             aLbGradients.SelectEntryPos( 0 );
             nPos = aLbGradients.GetSelectEntryPos();
             if( nPos != LISTBOX_ENTRY_NOTFOUND )
-                pGradient = new XGradient( ( (XGradientEntry*) pGradientList->GetGradient( nPos ) )->GetGradient() );
+                pGradient = new XGradient( ( (XGradientEntry*) maGradientList->GetGradient( nPos ) )->GetGradient() );
         }
     }
 

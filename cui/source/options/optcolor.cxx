@@ -945,11 +945,11 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
         }
     }
 
-    XColorList aColorTable( SvtPathOptions().GetPalettePath() );
+    XColorListSharedPtr aColorTable(XPropertyListFactory::CreateSharedXColorList(SvtPathOptions().GetPalettePath()));
     aColorBoxes[0]->InsertAutomaticEntry();
-    for( sal_Int32 i = 0; i < aColorTable.Count(); i++ )
+    for( sal_Int32 i = 0; i < aColorTable->Count(); i++ )
     {
-        XColorEntry* pEntry = aColorTable.GetColor(i);
+        XColorEntry* pEntry = aColorTable->GetColor(i);
         aColorBoxes[0]->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
     }
 

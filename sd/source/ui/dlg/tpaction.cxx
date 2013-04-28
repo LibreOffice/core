@@ -186,8 +186,8 @@ void SdTPAction::SetView( const ::sd::View* pSdView )
         aLbTreeDocument.SetViewFrame( pFrame );
 
         SvxColorTableItem aItem( *(const SvxColorTableItem*)( pDocSh->GetItem( SID_COLOR_TABLE ) ) );
-        pColTab = aItem.GetColorTable();
-        DBG_ASSERT( pColTab, "Keine Farbtabelle vorhanden!" );
+        maColTab = aItem.GetColorTable();
+        DBG_ASSERT( maColTab.get(), "Keine Farbtabelle vorhanden!" );
     }
     else
     {

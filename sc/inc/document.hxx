@@ -76,6 +76,7 @@ class SvxSearchItem;
 class SvxShadowItem;
 class Window;
 class XColorList;
+typedef ::boost::shared_ptr< XColorList > XColorListSharedPtr;
 class List;
 
 class ScAutoFormatData;
@@ -261,7 +262,7 @@ private:
     SfxPrinter*         pPrinter;
     VirtualDevice*      pVirtualDevice_100th_mm;
     ScDrawLayer*        pDrawLayer;                     // SdrModel
-    XColorList*     pColorTable;
+    XColorListSharedPtr maColorTable;
     ScConditionalFormatList* pCondFormList;             // bedingte Formate
     ScValidationDataList* pValidationList;              // Gueltigkeit
     SvNumberFormatterIndexTable*    pFormatExchangeList;            // zum Umsetzen von Zahlenformaten
@@ -460,7 +461,7 @@ public:
     void            GetDocStat( ScDocStat& rDocStat );
 
     SC_DLLPUBLIC void           InitDrawLayer( SfxObjectShell* pDocShell = NULL );
-    XColorList* GetColorTable();
+    XColorListSharedPtr GetColorTable();
 
     SC_DLLPUBLIC sfx2::LinkManager*     GetLinkManager() const;
 
@@ -1858,7 +1859,6 @@ private: // CLOOK-Impl-Methoden
     void    ImplDeleteOptions();
 
     void    DeleteDrawLayer();
-    void    DeleteColorTable();
     SC_DLLPUBLIC sal_Bool   DrawGetPrintArea( ScRange& rRange, sal_Bool bSetHor, sal_Bool bSetVer ) const;
     void    DrawMovePage( sal_uInt16 nOldPos, sal_uInt16 nNewPos );
     void    DrawCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos );

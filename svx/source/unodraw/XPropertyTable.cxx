@@ -94,7 +94,7 @@ SvxUnoXPropertyTable::~SvxUnoXPropertyTable() throw()
 XPropertyEntry* SvxUnoXPropertyTable::get( long index ) const
 {
     if( mpList )
-        return mpList->Get( index, 0 );
+        return mpList->Get( index );
     else
         return NULL;
 }
@@ -156,7 +156,7 @@ void SAL_CALL SvxUnoXPropertyTable::removeByName( const  OUString& Name )
         if( pEntry && pEntry->GetName() == aInternalName )
         {
             if( mpList )
-                delete mpList->Remove( i, 0 );
+                delete mpList->Remove( i );
             return;
         }
     }
