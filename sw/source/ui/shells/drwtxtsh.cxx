@@ -50,7 +50,7 @@
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
-#include <initui.hxx>               // fuer SpellPointer
+#include <initui.hxx>               // for SpellPointer
 #include <drwtxtsh.hxx>
 #include <swundo.hxx>
 #include <breakit.hxx>
@@ -105,7 +105,7 @@ void SwDrawTextShell::Init()
 
     SetUndoManager(&pOutliner->GetUndoManager());
 
-    // jetzt versuchen wir mal ein AutoSpell
+    // Now let's try an AutoSpell.
 
     const SwViewOption* pVOpt = rSh.GetViewOptions();
     if(pVOpt->IsOnlineSpell())
@@ -144,9 +144,8 @@ SwWrtShell& SwDrawTextShell::GetShell()
     return rView.GetWrtShell();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Slots mit dieser Statusmethode disablen
- --------------------------------------------------------------------*/
+// Disable slots with this status method
+
 void SwDrawTextShell::StateDisableItems( SfxItemSet &rSet )
 {
     SfxWhichIter aIter(rSet);
@@ -159,11 +158,6 @@ void SwDrawTextShell::StateDisableItems( SfxItemSet &rSet )
     }
 }
 
-/*************************************************************************
-|*
-|* Attribute setzen
-|*
-\************************************************************************/
 void SwDrawTextShell::SetAttrToMarked(const SfxItemSet& rAttr)
 {
     Rectangle aNullRect;
@@ -206,11 +200,8 @@ void SwDrawTextShell::StateFontWork(SfxItemSet& rSet)
     rSet.Put(SfxBoolItem(SID_FONTWORK, GetView().GetViewFrame()->HasChildWindow(nId)));
 }
 
-/*************************************************************************
-|*
-|* SfxRequests fuer FontWork bearbeiten
-|*
-\************************************************************************/
+// Edit SfxRequests for FontWork
+
 void SwDrawTextShell::ExecFormText(SfxRequest& rReq)
 {
     SwWrtShell &rSh = GetShell();
@@ -255,11 +246,8 @@ void SwDrawTextShell::ExecFormText(SfxRequest& rReq)
 
 }
 
-/*************************************************************************
-|*
-|* Statuswerte fuer FontWork zurueckgeben
-|*
-\************************************************************************/
+// Return Status values back to FontWork
+
 void SwDrawTextShell::GetFormTextState(SfxItemSet& rSet)
 {
     SwWrtShell &rSh = GetShell();
@@ -424,7 +412,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
         }
         break;
         case SID_CHARMAP:
-    {  // Sonderzeichen einfuegen
+    {  // Insert special character
             InsertSymbol(rReq);
             break;
     }
@@ -464,7 +452,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
         case FN_ESCAPE:
             if (pSdrView->IsTextEdit())
             {
-                // Shellwechsel!
+                // Shell switch!
                 rSh.EndTextEdit();
                 SwView& rTempView = rSh.GetView();
                 rTempView.ExitDraw();
@@ -510,9 +498,8 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
         rSh.SetModified();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Undo ausfuehren
- --------------------------------------------------------------------*/
+// Execute undo
+
 void SwDrawTextShell::ExecUndo(SfxRequest &rReq)
 {
     if( IsTextEdit() )
@@ -555,9 +542,8 @@ void SwDrawTextShell::ExecUndo(SfxRequest &rReq)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Zustand Undo
- --------------------------------------------------------------------*/
+// State of undo
+
 void SwDrawTextShell::StateUndo(SfxItemSet &rSet)
 {
     if ( !IsTextEdit() )
@@ -687,9 +673,8 @@ void SwDrawTextShell::ExecRotateTransliteration( SfxRequest & rReq )
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Sonderzeichen einfuegen (siehe SDraw: FUBULLET.CXX)
- --------------------------------------------------------------------*/
+// Insert special character (see SDraw: FUBULLET.CXX)
+
 void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
 {
     OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
@@ -742,7 +727,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
         else
             aAllSet.Put( SfxStringItem( SID_FONT_NAME, aSetDlgFont.GetFamilyName() ) );
 
-        // Wenn Zeichen selektiert ist kann es angezeigt werden
+        // If character is selected, it can be shown
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( rView.GetWindow(), aAllSet,
             rView.GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP );
@@ -772,7 +757,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
 
     if( sSym.Len() )
     {
-        // nicht flackern
+        // do not flicker
         pOLV->HideCursor();
         SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
         pOutliner->SetUpdateMode(sal_False);
@@ -785,10 +770,10 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
                             0 );
         aFontSet.Set( aOldSet );
 
-        // String einfuegen
+        // Insert string
         pOLV->InsertText( sSym );
 
-        // attributieren (Font setzen)
+        // assign attributes (Set font)
         SfxItemSet aFontAttribSet( *aFontSet.GetPool(), aFontSet.GetRanges() );
         SvxFontItem aFontItem (aFont.GetFamily(),    aFont.GetName(),
                                 aFont.GetStyleName(), aFont.GetPitch(),
@@ -803,16 +788,16 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
             aFontAttribSet.Put( aFontItem, EE_CHAR_FONTINFO_CTL );
         pOLV->SetAttribs(aFontAttribSet);
 
-        // Selektion loeschen
+        // Remove selection
         ESelection aSel(pOLV->GetSelection());
         aSel.nStartPara = aSel.nEndPara;
         aSel.nStartPos = aSel.nEndPos;
         pOLV->SetSelection(aSel);
 
-        // Alten Font restaurieren
+        // Restore old font
         pOLV->SetAttribs( aFontSet );
 
-        // ab jetzt wieder anzeigen
+        // From now on show again
         pOutliner->SetUpdateMode(sal_True);
         pOLV->ShowCursor();
 

@@ -111,7 +111,7 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
 
                         uno::Reference< beans::XPropertySet >  xPropSet(xControlModel, uno::UNO_QUERY);
 
-                        // Darf man eine URL an dem Objekt setzen?
+                        // Can we set an URL to the object?
                         OUString sTargetURL( "TargetURL" );
                         uno::Reference< beans::XPropertySetInfo >  xPropInfoSet = xPropSet->getPropertySetInfo();
                         if( xPropInfoSet->hasPropertyByName( sTargetURL ))
@@ -120,7 +120,7 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
                             if( !aProp.Name.isEmpty() )
                             {
                                 uno::Any aTmp;
-                                // Ja!
+                                // Yes!
                                 OUString sLabel("Label");
                                 if( xPropInfoSet->hasPropertyByName(sLabel) )
                                 {
@@ -245,7 +245,6 @@ void SwDrawFormShell::GetState(SfxItemSet& rSet)
     }
 }
 
-
 SwDrawFormShell::SwDrawFormShell(SwView &_rView) :
     SwDrawBaseShell(_rView)
 {
@@ -257,7 +256,5 @@ SwDrawFormShell::SwDrawFormShell(SwView &_rView) :
 SwDrawFormShell::~SwDrawFormShell()
 {
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
