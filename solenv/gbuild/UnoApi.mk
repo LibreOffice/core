@@ -11,6 +11,7 @@ gb_UnoApi_DOCDIR := $(gb_Package_SDKDIRNAME)/docs/common/ref
 # NOTE: this is the output dir used in odk/CustomTarget_autodoc.mk
 gb_UnoApi_SRCDOCDIR := $(call gb_CustomTarget_get_workdir,odk/docs/common/ref)
 gb_UnoApi_ENABLE_DOC := $(filter ODK,$(BUILD_TYPE))
+gb_UnoApi_ENABLE_IDL := $(filter ODK,$(BUILD_TYPE))
 
 # NOTE: This is needed temporarily to force rebuild with API files from
 # $(WORKDIR), thus fixing generated deps. Otherwise, a change of an .idl
@@ -29,8 +30,10 @@ $(call gb_UnoApi_get_clean_target,%) :
 define gb_UnoApi_UnoApi
 $(call gb_UnoApiTarget_UnoApiTarget,$(1))
 $(call gb_UnoApiHeadersTarget_UnoApiHeadersTarget,$(1))
+ifneq ($(gb_UnoApi_ENABLE_IDL),)
 $(call gb_Package_Package_internal,$(1)_idl,$(SRCDIR))
 $(call gb_Package_set_outdir,$(1)_idl,$(INSTDIR))
+endif
 $(call gb_Package_Package_internal,$(1)_inc,$(call gb_UnoApiHeadersTarget_get_dir,$(1)))
 ifneq ($(gb_UnoApi_ENABLE_DOC),)
 $(call gb_Package_Package_internal,$(1)_doc,$(gb_UnoApi_SRCDOCDIR))
@@ -45,7 +48,9 @@ $(call gb_UnoApi_get_target,$(1)) : $(call gb_UnoApiHeadersTarget_get_target,$(1
 $(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_UnoApiTarget_get_clean_target,$(1))
 $(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_UnoApiHeadersTarget_get_clean_target,$(1))
 
+ifneq ($(gb_UnoApi_ENABLE_IDL),)
 $(call gb_UnoApiTarget_get_headers_target,$(1)) : $(call gb_Package_get_target,$(1)_idl)
+endif
 
 $(call gb_UnoApi__make_outdir_headers_rule,$(1))
 
@@ -55,6 +60,8 @@ $$(eval $$(call gb_Module_register_target,$(call gb_UnoApi_get_target,$(1)),$(ca
 $(call gb_Helper_make_userfriendly_targets,$(1),UnoApi)
 
 endef
+
+ifneq ($(gb_UnoApi_ENABLE_IDL),)
 
 # Create a package of IDL files for putting into SDK.
 #
@@ -69,6 +76,13 @@ define gb_UnoApi__add_idlfile
 $(call gb_Package_add_file,$(1)_idl,$(patsubst $(1)/%,$(gb_Package_SDKDIRNAME)/idl/%,$(2)),$(2))
 
 endef
+
+else # !gb_UnoApi_ENABLE_IDL
+
+gb_UnoApi_package_idlfiles :=
+gb_UnoApi__add_idlfile :=
+
+endif
 
 define gb_UnoApi__add_headerfile_impl
 $(call gb_UnoApiHeadersTarget_add_headerfile,$(1),$(2),$(3))
