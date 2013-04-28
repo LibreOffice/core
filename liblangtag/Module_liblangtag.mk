@@ -17,7 +17,7 @@ $(eval $(call gb_Module_add_targets,liblangtag,\
 	ExternalPackage_langtag_data \
 	ExternalPackage_langtag \
 	ExternalProject_langtag \
-	Zip_liblangtag_data \
+	ExternalPackage_liblangtag_data \
 ))
 endif
 endif
