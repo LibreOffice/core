@@ -23,14 +23,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 
-//........................................................................
 namespace vcl
 {
-//........................................................................
-
-    //====================================================================
-    //= MnemonicEngine_Data
-    //====================================================================
     struct MnemonicEngine_Data
     {
         IMnemonicEntryList& rEntryList;
@@ -41,7 +35,6 @@ namespace vcl
         }
     };
 
-    //--------------------------------------------------------------------
     namespace
     {
         const void* lcl_getEntryForMnemonic( IMnemonicEntryList& _rEntryList, sal_Unicode _cMnemonic, bool& _rbAmbiguous )
@@ -80,16 +73,11 @@ namespace vcl
         }
     }
 
-    //====================================================================
-    //= MnemonicEngine
-    //====================================================================
-    //--------------------------------------------------------------------
     MnemonicEngine::MnemonicEngine( IMnemonicEntryList& _rEntryList )
         :m_pData( new MnemonicEngine_Data( _rEntryList ) )
     {
     }
 
-    //--------------------------------------------------------------------
     bool MnemonicEngine::HandleKeyEvent( const KeyEvent& _rKEvt )
     {
         sal_Bool bAccelKey = _rKEvt.GetKeyCode().IsMod2();
@@ -110,13 +98,10 @@ namespace vcl
         return true;
     }
 
-    //--------------------------------------------------------------------
     MnemonicEngine::~MnemonicEngine()
     {
     }
 
-//........................................................................
 } // namespace vcl
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

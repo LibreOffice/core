@@ -21,13 +21,11 @@
 #include "generic/glyphcache.hxx"
 #include <string.h>
 
-//------------------------------------------------------------------------
 
 RawBitmap::RawBitmap()
 : mpBits(0), mnAllocated(0)
 {}
 
-//------------------------------------------------------------------------
 
 RawBitmap::~RawBitmap()
 {
@@ -36,7 +34,6 @@ RawBitmap::~RawBitmap()
     mnAllocated = 0;
 }
 
-//------------------------------------------------------------------------
 
 // used by 90 and 270 degree rotations on 8 bit deep bitmaps
 static void ImplRotate8_90( unsigned char* p1, const unsigned char* p2,
@@ -51,7 +48,6 @@ static void ImplRotate8_90( unsigned char* p1, const unsigned char* p2,
     }
 }
 
-//------------------------------------------------------------------------
 
 // used by inplace 180 degree rotation on 8 bit deep bitmaps
 static void ImplRotate8_180( unsigned char* p1, int xmax, int ymax, int nPad )
@@ -79,7 +75,6 @@ static void ImplRotate8_180( unsigned char* p1, int xmax, int ymax, int nPad )
     }
 }
 
-//------------------------------------------------------------------------
 
 // used by 90 or 270 degree rotations on 1 bit deep bitmaps
 static void ImplRotate1_90( unsigned char* p1, const unsigned char* p2,
@@ -119,7 +114,6 @@ static void ImplRotate1_90( unsigned char* p1, const unsigned char* p2,
     }
 }
 
-//------------------------------------------------------------------------
 
 // used by 180 degrees rotations on 1 bit deep bitmaps
 static void ImplRotate1_180( unsigned char* p1, const unsigned char* p2,
@@ -157,7 +151,6 @@ static void ImplRotate1_180( unsigned char* p1, const unsigned char* p2,
     }
 }
 
-//------------------------------------------------------------------------
 
 bool RawBitmap::Rotate( int nAngle )
 {
@@ -260,7 +253,5 @@ bool RawBitmap::Rotate( int nAngle )
 
     return true;
 }
-
-//------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

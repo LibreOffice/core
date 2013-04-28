@@ -179,25 +179,21 @@ void Throbber::initImages()
     }
 }
 
-//----------------------------------------------------------------------------------------------------------------------
 void Throbber::start()
 {
     maWaitTimer.Start();
 }
 
-//----------------------------------------------------------------------------------------------------------------------
 void Throbber::stop()
 {
     maWaitTimer.Stop();
 }
 
-//----------------------------------------------------------------------------------------------------------------------
 bool Throbber::isRunning() const
 {
     return maWaitTimer.IsActive();
 }
 
-//----------------------------------------------------------------------------------------------------------------------
 void Throbber::setImageList( ::std::vector< Image > const& i_images )
 {
     maImageList = i_images;
@@ -207,7 +203,6 @@ void Throbber::setImageList( ::std::vector< Image > const& i_images )
     SetImage( aInitialImage );
 }
 
-//----------------------------------------------------------------------------------------------------------------------
 void Throbber::setImageList( const Sequence< Reference< XGraphic > >& rImageList )
 {
     ::std::vector< Image > aImages( rImageList.getLength() );
@@ -219,7 +214,6 @@ void Throbber::setImageList( const Sequence< Reference< XGraphic > >& rImageList
     setImageList( aImages );
 }
 
-//----------------------------------------------------------------------------------------------------------------------
 ::std::vector< OUString > Throbber::getDefaultImageURLs( const ImageSet i_imageSet )
 {
     ::std::vector< OUString > aImageURLs;
@@ -257,7 +251,6 @@ void Throbber::setImageList( const Sequence< Reference< XGraphic > >& rImageList
     return aImageURLs;
 }
 
-//----------------------------------------------------------------------------------------------------------------------
 IMPL_LINK_NOARG(Throbber, TimeOutHdl)
 {
     SolarMutexGuard aGuard;

@@ -32,58 +32,44 @@
 #include <rtl/strbuf.hxx>
 #endif
 
-//........................................................................
 namespace vcl
 {
-//........................................................................
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::Exception;
     namespace ScriptDirection = ::com::sun::star::i18n::ScriptDirection;
 
-    //====================================================================
-    //= DefaultTextLayout
-    //====================================================================
-    //--------------------------------------------------------------------
     DefaultTextLayout::~DefaultTextLayout()
     {
     }
 
-    //--------------------------------------------------------------------
     long DefaultTextLayout::GetTextWidth( const OUString& _rText, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const
     {
         return m_rTargetDevice.GetTextWidth( _rText, _nStartIndex, _nLength );
     }
 
-    //--------------------------------------------------------------------
     void DefaultTextLayout::DrawText( const Point& _rStartPoint, const OUString& _rText, sal_Int32 _nStartIndex,
         sal_Int32 _nLength, MetricVector* _pVector, OUString* _pDisplayText )
     {
         m_rTargetDevice.DrawText( _rStartPoint, _rText, _nStartIndex, _nLength, _pVector, _pDisplayText );
     }
 
-    //--------------------------------------------------------------------
     bool DefaultTextLayout::GetCaretPositions( const OUString& _rText, sal_Int32* _pCaretXArray,
         sal_Int32 _nStartIndex, sal_Int32 _nLength ) const
     {
         return m_rTargetDevice.GetCaretPositions( _rText, _pCaretXArray, _nStartIndex, _nLength );
     }
 
-    //--------------------------------------------------------------------
     xub_StrLen DefaultTextLayout::GetTextBreak( const OUString& _rText, long _nMaxTextWidth, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const
     {
         return m_rTargetDevice.GetTextBreak( _rText, _nMaxTextWidth, _nStartIndex, _nLength );
     }
 
-    //--------------------------------------------------------------------
     bool DefaultTextLayout::DecomposeTextRectAction() const
     {
         return false;
     }
 
-    //====================================================================
-    //= ReferenceDeviceTextLayout
-    //====================================================================
     class ReferenceDeviceTextLayout : public ITextLayout
     {
     public:
@@ -122,9 +108,6 @@ namespace vcl
         Rectangle       m_aCompleteTextRect;
     };
 
-    //====================================================================
-    //= ControlTextRenderer
-    //====================================================================
     ReferenceDeviceTextLayout::ReferenceDeviceTextLayout( const Control& _rControl, OutputDevice& _rTargetDevice,
         OutputDevice& _rReferenceDevice )
         :m_rTargetDevice( _rTargetDevice )
@@ -170,17 +153,14 @@ namespace vcl
         m_rReferenceDevice.SetFont( aRefFont );
     }
 
-    //--------------------------------------------------------------------
     ReferenceDeviceTextLayout::~ReferenceDeviceTextLayout()
     {
         m_rReferenceDevice.Pop();
         m_rTargetDevice.Pop();
     }
 
-    //--------------------------------------------------------------------
     namespace
     {
-        //................................................................
         bool lcl_normalizeLength( const OUString& _rText, const sal_Int32 _nStartIndex, sal_Int32& _io_nLength )
         {
             sal_Int32 nTextLength = _rText.getLength();
@@ -192,7 +172,6 @@ namespace vcl
         }
     }
 
-    //--------------------------------------------------------------------
     long ReferenceDeviceTextLayout::GetTextArray( const OUString& _rText, sal_Int32* _pDXAry, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const
     {
         if ( !lcl_normalizeLength( _rText, _nStartIndex, _nLength ) )
@@ -222,13 +201,11 @@ namespace vcl
         return nTextWidth;
     }
 
-    //--------------------------------------------------------------------
     long ReferenceDeviceTextLayout::GetTextWidth( const OUString& _rText, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const
     {
         return GetTextArray( _rText, NULL, _nStartIndex, _nLength );
     }
 
-    //--------------------------------------------------------------------
     void ReferenceDeviceTextLayout::DrawText( const Point& _rStartPoint, const OUString& _rText, sal_Int32 _nStartIndex, sal_Int32 _nLength, MetricVector* _pVector, OUString* _pDisplayText )
     {
         if ( !lcl_normalizeLength( _rText, _nStartIndex, _nLength ) )
@@ -253,7 +230,6 @@ namespace vcl
         m_aCompleteTextRect.Union( Rectangle( _rStartPoint, Size( nTextWidth, m_rTargetDevice.GetTextHeight() ) ) );
     }
 
-    //--------------------------------------------------------------------
     bool ReferenceDeviceTextLayout::GetCaretPositions( const OUString& _rText, sal_Int32* _pCaretXArray,
         sal_Int32 _nStartIndex, sal_Int32 _nLength ) const
     {
@@ -267,7 +243,6 @@ namespace vcl
         return true;
     }
 
-    //--------------------------------------------------------------------
     xub_StrLen ReferenceDeviceTextLayout::GetTextBreak( const OUString& _rText, long _nMaxTextWidth, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const
     {
         if ( !lcl_normalizeLength( _rText, _nStartIndex, _nLength ) )
@@ -276,13 +251,11 @@ namespace vcl
         return m_rReferenceDevice.GetTextBreak( _rText, _nMaxTextWidth, _nStartIndex, _nLength );
     }
 
-    //--------------------------------------------------------------------
     bool ReferenceDeviceTextLayout::DecomposeTextRectAction() const
     {
         return true;
     }
 
-    //--------------------------------------------------------------------
     Rectangle ReferenceDeviceTextLayout::DrawText( const Rectangle& _rRect, const OUString& _rText, sal_uInt16 _nStyle, MetricVector* _pVector, OUString* _pDisplayText )
     {
         if ( _rText.isEmpty() )
@@ -292,11 +265,10 @@ namespace vcl
         sal_uLong nTextLayoutMode = m_bRTLEnabled ? TEXT_LAYOUT_BIDI_RTL : TEXT_LAYOUT_BIDI_LTR;
         m_rReferenceDevice.SetLayoutMode( nTextLayoutMode );
         m_rTargetDevice.SetLayoutMode( nTextLayoutMode | TEXT_LAYOUT_TEXTORIGIN_LEFT );
-            // TEXT_LAYOUT_TEXTORIGIN_LEFT is because when we do actually draw the text (in DrawText( Point, ... )), then
-            // our caller gives us the left border of the draw position, regardless of script type, text layout,
-            // and the like
 
-        // in our ctor, we set the map mode of the target device from pixel to twip, but our caller doesn't know this,
+        // TEXT_LAYOUT_TEXTORIGIN_LEFT is because when we do actually draw the text (in DrawText( Point, ... )), then
+        // our caller gives us the left border of the draw position, regardless of script type, text layout,
+        // and the like in our ctor, we set the map mode of the target device from pixel to twip, but our caller doesn't know this,
         // but passed pixel coordinates. So, adjust the rect.
         Rectangle aRect( m_rTargetDevice.PixelToLogic( _rRect ) );
 
@@ -334,29 +306,21 @@ namespace vcl
         return aTextRect;
     }
 
-    //====================================================================
-    //= ControlTextRenderer
-    //====================================================================
-    //--------------------------------------------------------------------
     ControlTextRenderer::ControlTextRenderer( const Control& _rControl, OutputDevice& _rTargetDevice, OutputDevice& _rReferenceDevice )
         :m_pImpl( new ReferenceDeviceTextLayout( _rControl, _rTargetDevice, _rReferenceDevice ) )
     {
     }
 
-    //--------------------------------------------------------------------
     ControlTextRenderer::~ControlTextRenderer()
     {
     }
 
-    //--------------------------------------------------------------------
     Rectangle ControlTextRenderer::DrawText( const Rectangle& _rRect, const XubString& _rText, sal_uInt16 _nStyle,
         MetricVector* _pVector, OUString* _pDisplayText )
     {
         return m_pImpl->DrawText( _rRect, _rText, _nStyle, _pVector, _pDisplayText );
     }
 
-//........................................................................
 } // namespace vcl
-//........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

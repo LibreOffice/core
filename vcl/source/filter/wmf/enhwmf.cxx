@@ -23,7 +23,8 @@
 #include <boost/bind.hpp>
 
 using namespace std;
-//=========================== GDI-Array ===================================
+
+// GDI-Array
 
 #define EMR_HEADER                      1
 #define EMR_POLYBEZIER                  2
@@ -156,7 +157,6 @@ using namespace std;
 #define EMFP_DEBUG(x)
 #endif
 
-//-----------------------------------------------------------------------------------
 
 #ifdef OSL_BIGENDIAN
 // currently unused
@@ -264,8 +264,8 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, sal_Bool& bHaveDC)
     bHaveDC = false;
 
     OSL_ASSERT(length >= 4);
-    //reduce by 32bit length itself, skip in SeekRel if
-    //impossibly unavailble
+    // reduce by 32bit length itself, skip in SeekRel if
+    // impossibly unavailble
     sal_uInt32 nRemainder = length >= 4 ? length-4 : length;
 
     const size_t nRequiredHeaderSize = 12;
@@ -285,11 +285,11 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, sal_Bool& bHaveDC)
             EMFP_DEBUG(printf ("\t\tEMF+ lock DC (device context)\n"));
         }
 
-        //Get the length of the remaining data of this record based
-        //on the alleged size
+        // Get the length of the remaining data of this record based
+        // on the alleged size
         sal_uInt32 nRemainingRecordData = size >= nRequiredHeaderSize ?
             size-nRequiredHeaderSize : 0;
-        //clip to available size
+        // clip to available size
         nRemainingRecordData = std::min(nRemainingRecordData, nRemainder);
         pWMF->SeekRel(nRemainingRecordData);
         nRemainder -= nRemainingRecordData;
@@ -394,13 +394,13 @@ void EnhWMFReader::ReadAndDrawPolyPolygon()
         ( nPoly < SAL_MAX_UINT32 / sizeof(sal_uInt16) ) &&
         ( (  nPoly * sizeof( sal_uInt16 ) ) <= ( nEndPos - pWMF->Tell() ) ))
     {
-        //Get number of points in each polygon
+        // Get number of points in each polygon
         sal_uInt16 * pnPoints = new sal_uInt16[ nPoly ];
         for ( i = 0; i < nPoly && pWMF->good(); i++ )
         {
             *pWMF >> nPoints;
             pnPoints[ i ] = (sal_uInt16)nPoints;
-        } //end for
+        }
         if ( pWMF->good() && ( nGesPoints * (sizeof(T)+sizeof(T)) ) <= ( nEndPos - pWMF->Tell() ) )
         {
             // Get polygon points
@@ -410,14 +410,14 @@ void EnhWMFReader::ReadAndDrawPolyPolygon()
                 T nX, nY;
                 *pWMF >> nX >> nY;
                 pPtAry[ i ] = Point( nX, nY );
-            } //end for
+            }
             // Create PolyPolygon Actions
             PolyPolygon aPolyPoly( (sal_uInt16)nPoly, pnPoints, pPtAry );
             pOut->DrawPolyPolygon( aPolyPoly, bRecordPath );
             delete[] pPtAry;
-        } //end if
+        }
         delete[] pnPoints;
-    } //end if
+    }
 }
 
 sal_Bool EnhWMFReader::ReadEnhWMF()
@@ -475,12 +475,12 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
 
                 EMFP_DEBUG(printf ("\t\tbegin %c%c%c%c id: 0x%x\n", (char)(id & 0xff), (char)((id & 0xff00) >> 8), (char)((id & 0xff0000) >> 16), (char)((id & 0xff000000) >> 24), (unsigned int)id));
 
-                // EMF+ comment (fixme: BE?)
+                // EMF+ comment (FIXME: BE?)
                 if( id == 0x2B464D45 && nRecSize >= 12 )
                     ReadEMFPlusComment( length, bHaveDC );
                 // GDIC comment, doesn't do anything useful yet
                 else if( id == 0x43494447 && nRecSize >= 12 ) {
-                    //ToDo: ReadGDIComment()
+                    // TODO: ReadGDIComment()
                 } else {
                     EMFP_DEBUG(printf ("\t\tunknown id: 0x%x\n",(unsigned int) id));
                 }
@@ -685,7 +685,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                         LineInfo    aLineInfo;
                         sal_uInt32      nStyle;
                         Size        aSize;
-                        //#fdo39428 Remove SvStream operator>>(long&)
+                        // #fdo39428 Remove SvStream operator>>(long&)
                         sal_Int32 nTmpW(0), nTmpH(0);
 
                         *pWMF >> nStyle >> nTmpW >> nTmpH;
@@ -1338,7 +1338,6 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
     return bStatus;
 };
 
-//-----------------------------------------------------------------------------------
 
 sal_Bool EnhWMFReader::ReadHeader()
 {
@@ -1367,12 +1366,12 @@ sal_Bool EnhWMFReader::ReadHeader()
     rclFrame.Right() = nRight;
     rclFrame.Bottom() = nBottom;
 
-    *pWMF >> nsal_uInt32;                                   // signature
+    *pWMF >> nsal_uInt32;                               // signature
 
     if ( nsal_uInt32 != 0x464d4520 )
         return sal_False;
 
-    *pWMF >> nsal_uInt32;                                   // nVersion
+    *pWMF >> nsal_uInt32;                               // nVersion
     *pWMF >> nEndPos;                                   // size of metafile
     nEndPos += nStartPos;
 
@@ -1401,7 +1400,6 @@ sal_Bool EnhWMFReader::ReadHeader()
     return sal_True;
 }
 
-//-----------------------------------------------------------------------------------
 
 Rectangle  EnhWMFReader::ReadRectangle( sal_Int32 x1, sal_Int32 y1, sal_Int32 x2, sal_Int32 y2 )
 {

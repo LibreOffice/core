@@ -88,16 +88,20 @@ class ImpFilterOutputStream : public ::cppu::WeakImplHelper1< ::com::sun::star::
 {
 protected:
 
-    SvStream&                           mrStm;
+    SvStream&               mrStm;
 
-    virtual void SAL_CALL               writeBytes( const ::com::sun::star::uno::Sequence< sal_Int8 >& rData ) throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException) { mrStm.Write( rData.getConstArray(), rData.getLength() ); }
-    virtual void SAL_CALL               flush() throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException) { mrStm.Flush(); }
-    virtual void SAL_CALL               closeOutput() throw() {}
+    virtual void SAL_CALL   writeBytes( const ::com::sun::star::uno::Sequence< sal_Int8 >& rData )
+        throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
+        { mrStm.Write( rData.getConstArray(), rData.getLength() ); }
+    virtual void SAL_CALL   flush()
+        throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
+        { mrStm.Flush(); }
+    virtual void SAL_CALL   closeOutput() throw() {}
 
 public:
 
-                                        ImpFilterOutputStream( SvStream& rStm ) : mrStm( rStm ) {}
-                                        ~ImpFilterOutputStream() {}
+    ImpFilterOutputStream( SvStream& rStm ) : mrStm( rStm ) {}
+    ~ImpFilterOutputStream() {}
 };
 
 #ifndef DISABLE_EXPORT
@@ -108,9 +112,9 @@ static sal_Bool DirEntryExists( const INetURLObject& rObj )
 
     try
     {
-        ::ucbhelper::Content    aCnt( rObj.GetMainURL( INetURLObject::NO_DECODE ),
-                              ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
-                              comphelper::getProcessComponentContext() );
+        ::ucbhelper::Content aCnt( rObj.GetMainURL( INetURLObject::NO_DECODE ),
+                             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                             comphelper::getProcessComponentContext() );
 
         bExists = aCnt.isDocument();
     }
@@ -171,7 +175,6 @@ sal_uInt8* ImplSearchEntry( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong nCom
     return NULL;
 }
 
-//--------------------------------------------------------------------------
 
 inline String ImpGetExtension( const String &rPath )
 {
@@ -186,7 +189,7 @@ bool isPCT(SvStream& rStream, sal_uLong nStreamPos, sal_uLong nStreamLen)
     sal_uInt8 sBuf[3];
     // store number format
     sal_uInt16 oldNumberFormat = rStream.GetNumberFormatInt();
-    sal_uInt32 nOffset; // in ms documents the pict format is used without the first 512 bytes
+    sal_uInt32 nOffset; // in MS documents the pict format is used without the first 512 bytes
     for ( nOffset = 0; ( nOffset <= 512 ) && ( ( nStreamPos + nOffset + 14 ) <= nStreamLen ); nOffset += 512 )
     {
         short y1,x1,y2,x2;
@@ -220,34 +223,31 @@ bool isPCT(SvStream& rStream, sal_uLong nStreamPos, sal_uLong nStreamLen)
 
 
 /*************************************************************************
-|*
-|*    ImpPeekGraphicFormat()
-|*
-|*    Beschreibung:
-|*        Diese Funktion kann zweierlei:
-|*        1.) Datei anlesen, Dateiformat ermitteln
-|*            Eingabe-prarameter:
-|*              rPath            - Dateipfad
-|*              rFormatExtension - Inhalt egal
-|*              bTest            - setze sal_False
-|*            Ausgabe-parameter:
-|*              Funkionswert     - sal_True wenn Erfolg
-|*              rFormatExtension - Bei Erfolg: uebliche Dateiendung
-|*                                 des Formats (Grossbuchstaben)
-|*        2.) Datei anlesen, Dateiformat ueberpruefen
-|*            Eingabe-prarameter:
-|*              rPath            - Dateipfad
-|*              rFormatExtension - uebliche Dateiendung des Formats
-|*                                 (Grossbuchstaben)
-|*              bTest            - setze sal_True
-|*            Ausgabe-parameter:
-|*              Funkionswert     - sal_False, wenn die Datei bestimmt nicht
-|*                                 vom uebgebenen Format ist.
-|*                                 sal_True, wenn die Datei WAHRSCHEINLICH von
-|*                                 dem Format ist, ODER WENN DAS FORMAT
-|*                                 DIESER FUNKTION NICHT BEKANNT IST!
-|*
-*************************************************************************/
+ *
+ *    ImpPeekGraphicFormat()
+ *
+ *    Description:
+ *        This function is two-fold:
+ *        1.) Start reading file, determine the file format:
+ *            Input parameters:
+ *              rPath            - file path
+ *              rFormatExtension - content matter
+ *              bTest            - set sal_False
+ *            Output parameters:
+ *              Return value     - sal_True if success
+ *              rFormatExtension - on success: normal file extension in capitals
+ *        2.) Start reading file, check file format
+ *            Input parameters:
+ *              rPath            - file path
+ *              rFormatExtension - normal file extension in capitals
+ *              bTest            - set sal_True
+ *            Output parameters:
+ *              Return value    - sal_False, if cannot verify the file type
+ *                                  passed to the function
+ *                                 sal_True, when the format is PROBABLY verified or
+ *                                 WHEN THE FORMAT IS NOT KNOWN!
+ *
+ *************************************************************************/
 
 static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtension, sal_Bool bTest )
 {
@@ -289,7 +289,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
     if( rStream.GetError() )
         return sal_False;
 
-    // Die ersten 8 Bytes in nFirstLong, nSecondLong unterbringen,
+    // Accommodate the first 8 bytes in nFirstLong, nSecondLong
     // Big-Endian:
     for( i = 0, nFirstLong = 0L, nSecondLong = 0L; i < 4; i++ )
     {
@@ -297,23 +297,17 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
         nSecondLong=(nSecondLong<<8)|(sal_uLong)sFirstBytes[i+4];
     }
 
-    // Folgende Variable ist nur bei bTest==sal_True interessant. Sie
-    // bleibt sal_False, wenn das Format (rFormatExtension) hier noch nicht
-    // einprogrammiert wurde.
+    // The following variable is used when bTest == sal_True. It remains sal_False
+    // if the format (rFormatExtension) has not yet been set.
     sal_Bool bSomethingTested = sal_False;
 
-    // Nun werden die verschieden Formate ueberprueft. Dabei ist die
-    // Reihenfolge nicht egal. Z.b. koennte eine MET-Datei auch durch
-    // den BMP-Test gehen, umgekehrt kann eine BMP-Datei kaum durch den
-    // MET-Test gehen. Also sollte MET vor BMP getestet werden.
-    // Theoretisch waere aber vielleicht auch eine BMP-Datei denkbar,
-    // die durch den MET-Test geht.
-    // Diese Probleme gibt es natuerlich nicht nur bei MET und BMP.
-    // Deshalb wird im Falle der Uberpruefung eines Formats (bTest==sal_True)
-    // nur genau dieses eine Format getestet. Alles andere koennte fatale
-    // Folgen haben, z.B. wenn der Benutzer sagt, es sei BMP-Datei (und es
-    // ist BMP-Datei), und hier wuerde die Datei durch den MET-Test gehen...
-
+    // Now the different formats are checked. The order does not matter. e.g. a MET file
+    // could also go through the BMP test, howeve a BMP file can hardly go through the MET test.
+    // So MET should be tested prior to BMP. However, theoretically a BMP file could conceivably
+    // go through the MET test. These problems are of course not only in MET and BMP.
+    // Therefore, in the case of a format check (bTest == sal_True)  we only test this format.
+    // Everything else could have fatal consequences, for example if the user says it is a BMP file
+    // (and it is a BMP) file, and the file would go through the MET test ...
     //--------------------------- MET ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "MET", 3 ) == COMPARE_EQUAL ) )
     {
@@ -348,20 +342,20 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
 
         bSomethingTested=sal_True;
 
-        // OS/2-Bitmaparray ('BA') koennen wir evtl. auch lesen,
-        // dementspr. muessen wir den Offset anpassen,
-        // um auf die erste Bitmap im Array zu stossen
+        // We could be reading an OS/2 bitmap array ('BA'), therefore we must adjust
+        // the offset to discover the first bitmap in the array
         if ( sFirstBytes[0] == 0x42 && sFirstBytes[1] == 0x41 )
             nOffs = 14;
         else
             nOffs = 0;
 
-        // Jetzt testen wir zunaechst auf 'BM'
+        // Now we initially test on 'BM'
         if ( sFirstBytes[0+nOffs]==0x42 && sFirstBytes[1+nOffs]==0x4d )
         {
-            // unter OS/2 koennen die Reserved-Flags != 0 sein
-            // (was sie eigentlich nicht duerften);
-            // in diesem Fall testen wir die Groesse des BmpInfoHeaders
+
+            // OS/2 can set the Reserved flags to a value other than 0
+            // (which they really should not do...);
+            // In this case we test the size of the BmpInfoHeaders
             if ( ( sFirstBytes[6+nOffs]==0x00 &&
                    sFirstBytes[7+nOffs]==0x00 &&
                    sFirstBytes[8+nOffs]==0x00 &&
@@ -518,14 +512,14 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
     //--------------------------- DXF ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "DXF", 3 ) == COMPARE_EQUAL ) )
     {
-        //Binary DXF File Format
+        // Binary DXF File Format
         if( strncmp( (const char*) sFirstBytes, "AutoCAD Binary DXF", 18 ) == 0 )
         {
             rFormatExtension = OUString("DXF");
             return sal_True;
         }
 
-        //ASCII DXF File Format
+        // ASCII DXF File Format
         i=0;
         while (i<256 && sFirstBytes[i]<=32)
             ++i;
@@ -534,8 +528,8 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
         {
             ++i;
 
-            //only now do we have sufficient data to make a judgement
-            //based on a '0' + 'SECTION' == DXF argument
+            // only now do we have sufficient data to make a judgement
+            // based on a '0' + 'SECTION' == DXF argument
             bSomethingTested=sal_True;
 
             while( i<256 && sFirstBytes[i]<=32 )
@@ -694,7 +688,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
         }
         else
         {
-            // #119176# Svg files which have no xml header at all have shown up,
+            // #119176# SVG files which have no xml header at all have shown up,
             // detect those, too
             bool bIsSvg(false);
 
@@ -708,7 +702,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
             {
                 // look for '<svg' in full file. Should not happen too
                 // often since the tests above will handle most cases, but can happen
-                // with Svg files containing big comment headers or Svg as the host
+                // with SVG files containing big comment headers or SVG as the host
                 // language
                 const sal_uLong nSize((nStreamLen > 2048) ? 2048 : nStreamLen);
                 sal_uInt8* pBuf = new sal_uInt8[nSize];
@@ -856,7 +850,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
         if( rGraphic.GetType() == GRAPHIC_BITMAP )
         {
 
-            // Aufloesung wird eingestellt
+            // Resolution is set
             if( nMode == 1 )
             {
                 Bitmap      aBitmap( rGraphic.GetBitmap() );
@@ -874,7 +868,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
                aGraphic.SetPrefSize( Size( aOldSize.Width() * 100,
                                            aOldSize.Height() * 100 ) );
             }
-            // Groesse wird eingestellt
+            // Size is set
             else if( nMode == 2 )
             {
                aGraphic = rGraphic;
@@ -1398,8 +1392,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
 
         bAbort = sal_False;
         nStatus = ImpTestOrFindFormat( rPath, rIStream, nFormat );
-        // Falls Pending, geben wir GRFILTER_OK zurueck,
-        // um mehr Bytes anzufordern
+        // if pending, return GRFILTER_OK in order to request more bytes
         if( rIStream.GetError() == ERRCODE_IO_PENDING )
         {
             rGraphic.SetContext( (GraphicReader*) 1 );
@@ -1563,7 +1556,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
         else if( aFilterName.EqualsIgnoreCaseAscii( IMP_BMP ) ||
                     aFilterName.EqualsIgnoreCaseAscii( IMP_SVMETAFILE ) )
         {
-            // SV interne Importfilter fuer Bitmaps und MetaFiles
+            // SV internal filters for import bitmaps and MetaFiles
             rIStream >> rGraphic;
             if( rIStream.GetError() )
                 nStatus = GRFILTER_FORMATERROR;
@@ -1838,18 +1831,13 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
             sal_uLong nColorCount,nBitsPerPixel,nNeededMem,nMaxMem;
             VirtualDevice aVirDev;
 
-            // Maximalen Speicherbedarf fuer das Bildes holen:
-//          if( GetOptionsConfig() )
-//              nMaxMem = (UINT32)GetOptionsConfig()->ReadKey( "VEC-TO-PIX-MAX-KB", "1024" ).ToInt32();
-//          else
-                nMaxMem = 1024;
-
+            nMaxMem = 1024;
             nMaxMem *= 1024; // In Bytes
 
-            // Berechnen, wie gross das Bild normalerweise werden wuerde:
+            // Calculate how big the image would normally be:
             aSizePixel=aVirDev.LogicToPixel(aGraphic.GetPrefSize(),aGraphic.GetPrefMapMode());
 
-            // Berechnen, wieviel Speicher das Bild benoetigen wuerde:
+            // Calculate how much memory the image will take up
             nColorCount=aVirDev.GetColorCount();
             if      (nColorCount<=2)     nBitsPerPixel=1;
             else if (nColorCount<=4)     nBitsPerPixel=2;
@@ -1859,7 +1847,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
             else                         nBitsPerPixel=24;
             nNeededMem=((sal_uLong)aSizePixel.Width()*(sal_uLong)aSizePixel.Height()*nBitsPerPixel+7)/8;
 
-            // ggf. Groesse des Bildes einschraenken:
+            // is the image larger than available memory?
             if (nMaxMem<nNeededMem)
             {
                 double fFak=sqrt(((double)nMaxMem)/((double)nNeededMem));
@@ -1870,7 +1858,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
             aVirDev.SetMapMode(MapMode(MAP_PIXEL));
             aVirDev.SetOutputSizePixel(aSizePixel);
             Graphic aGraphic2=aGraphic;
-            aGraphic2.Draw(&aVirDev,Point(0,0),aSizePixel); // Gemein: dies aendert den MapMode
+            aGraphic2.Draw(&aVirDev,Point(0,0),aSizePixel); // this changes the MapMode
             aVirDev.SetMapMode(MapMode(MAP_PIXEL));
             aGraphic=Graphic(aVirDev.GetBitmap(Point(0,0),aSizePixel));
         }
@@ -2071,7 +2059,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
                 osl::Module aLibrary( aPhysicalName );
 
                 PFilterCall pFunc = (PFilterCall) aLibrary.getFunctionSymbol(OUString(aFilterName+EXPORT_FUNCTION_NAME));
-                // Dialog in DLL ausfuehren
+                // Execute dialog in DLL
 #else
                 PFilterCall pFunc = NULL;
                 if( aFilterName.EqualsAscii( "egi" ) )
