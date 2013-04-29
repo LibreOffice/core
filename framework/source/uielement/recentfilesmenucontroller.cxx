@@ -117,8 +117,6 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                         a >>= aRecentFile.aURL;
                     else if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_TITLE )
                         a >>= aRecentFile.aTitle;
-                    else if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_PASSWORD )
-                        a >>= aRecentFile.aPassword;
                 }
 
                 m_aRecentFilesItems.push_back( aRecentFile );

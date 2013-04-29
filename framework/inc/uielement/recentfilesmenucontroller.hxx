@@ -68,7 +68,6 @@ namespace framework
             {
                 OUString aURL;
                 OUString aTitle;
-                OUString aPassword;
             };
 
             void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
