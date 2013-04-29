@@ -15,6 +15,7 @@ FileCost		400
 FindRelatedProducts	NOT ISSETUPDRIVEN	100
 InstallFiles		1950
 InstallFinalize		3150
+PatchInstall	PATCH	699
 InstallInitialize		700
 InstallODBC		2600
 InstallServices	VersionNT	2750
