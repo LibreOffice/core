@@ -19,7 +19,6 @@
 #define PB_OK       22
 #define PB_CANCEL   23
 #define PB_HELP     24
-#define FL_ENTRIES  25
 #define FL_NAME     37
 #define FT_NAME     38
 #define ED_NAME     39

@@ -85,39 +85,6 @@ String STR_IDXMRK_INSERT
     Text [ en-US ] = "Insert Index Entry" ;
 };
 
-ModalDialog DLG_CREATE_AUTH_ENTRY
-{
-    HelpId = HID_DLG_CREATE_AUTH_ENTRY;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 365 , 203 ) ;
-    Moveable = TRUE ;
-    OKButton PB_OK
-    {
-        Pos = MAP_APPFONT ( 312 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-    CancelButton PB_CANCEL
-    {
-        Pos = MAP_APPFONT ( 312 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    HelpButton PB_HELP
-    {
-        Pos = MAP_APPFONT ( 312 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    FixedLine FL_ENTRIES
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 300 , 8 ) ;
-        Text [ en-US ] = "Entry data";
-    };
-    Text [ en-US ] = "Define Bibliography Entry";
-};
-
 QueryBox DLG_CHANGE_AUTH_ENTRY
 {
     BUTTONS = WB_YES_NO ;

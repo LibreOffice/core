@@ -186,7 +186,6 @@
 #define HID_DLG_ADD_IDX_STYLES                                  "SW_HID_DLG_ADD_IDX_STYLES"
 #define HID_ADD_STYLES_TLB                                      "SW_HID_ADD_STYLES_TLB"
 #define HID_OLE_CHECKLB                                         "SW_HID_OLE_CHECKLB"
-#define HID_DLG_CREATE_AUTH_ENTRY                               "SW_HID_DLG_CREATE_AUTH_ENTRY"
 #define HID_TP_PRIVATE_DATA                                     "SW_HID_TP_PRIVATE_DATA"
 
 #define HID_TP_BUSINESS_DATA                                    "SW_HID_TP_BUSINESS_DATA"

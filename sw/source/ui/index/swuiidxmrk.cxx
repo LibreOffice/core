@@ -30,6 +30,7 @@
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <svl/stritem.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/eitem.hxx>
@@ -1032,16 +1033,12 @@ void SwIndexMarkModalDlg::Apply()
 
 class SwCreateAuthEntryDlg_Impl : public ModalDialog
 {
-    FixedLine       aEntriesFL;
-
     FixedText*      pFixedTexts[AUTH_FIELD_END];
     ListBox*        pTypeListBox;
     ComboBox*       pIdentifierBox;
     Edit*           pEdits[AUTH_FIELD_END];
 
-    OKButton        aOKBT;
-    CancelButton    aCancelBT;
-    HelpButton      aHelpBT;
+    OKButton*       m_pOKBT;
 
     Link            aShortNameCheckLink;
 
@@ -1475,77 +1472,48 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
         const String pFields[],
         SwWrtShell& rSh,
         sal_Bool bNewEntry,
-        bool bCreate) :
-    ModalDialog(pParent, SW_RES(DLG_CREATE_AUTH_ENTRY)),
-    aEntriesFL(this,    SW_RES(FL_ENTRIES    )),
+        bool bCreate)
+    : ModalDialog(pParent, "CreateAuthorEntryDialog", "modules/swriter/ui/createauthorentry.ui")
+
+    ,
+
     pTypeListBox(0),
     pIdentifierBox(0),
-    aOKBT(this,         SW_RES(PB_OK         )),
-    aCancelBT(this,     SW_RES(PB_CANCEL        )),
-    aHelpBT(this,       SW_RES(PB_HELP      )),
     rWrtSh(rSh),
     m_bNewEntryMode(bNewEntry),
     m_bNameAllowed(sal_True)
 {
-    FreeResource();
-    Point aFLPos(aEntriesFL.GetPosPixel());
-    Point aTL1(aFLPos);
-    Size aFLSz(aEntriesFL.GetSizePixel().Width(), GetSizePixel().Height());
-    long nControlSpace = aFLSz.Width() / 4;
-    long nControlWidth = nControlSpace - 2 * aTL1.X();
-    aTL1.X() *= 2;
-    aTL1.Y() *= 5;
-    Point aTR1(aTL1);
-    aTR1.X() += nControlSpace;
-    Point aTL2(aTR1);
-    aTL2.X() += nControlSpace;
-    Point aTR2(aTL2);
-    aTR2.X() += nControlSpace;
-    Size aFixedTextSize(aFLSz);
-    Size aTmpSz(8,10);
-    aTmpSz = LogicToPixel(aTmpSz, MAP_APPFONT);
-    aFixedTextSize.Height() = aTmpSz.Width();
-    Size aEditSize(aFixedTextSize);
-    aFixedTextSize.Width() = nControlWidth + aFLPos.X();
-    aEditSize.Height() = aTmpSz.Height();
-    aEditSize.Width() = nControlWidth;
+    get(m_pOKBT, "ok");
 
-    sal_uInt16 nOffset = static_cast< sal_uInt16 >(aTmpSz.Width() * 3 / 2);
+    VclGrid *pLeft = get<VclGrid>("leftgrid");
+    VclGrid *pRight = get<VclGrid>("rightgrid");
+
     bool bLeft = true;
-    Window* pRefWindow = 0;
+    sal_Int32 nLeftRow(0), nRightRow(0);
     for(sal_uInt16 nIndex = 0; nIndex < AUTH_FIELD_END; nIndex++)
     {
         const TextInfo aCurInfo = aTextInfoArr[nIndex];
 
-        pFixedTexts[nIndex] = new FixedText(this);
-        if(nIndex)
-            pFixedTexts[nIndex]->SetZOrder( pRefWindow, WINDOW_ZORDER_BEHIND );
-        else
-            pFixedTexts[nIndex]->SetZOrder( 0, WINDOW_ZORDER_FIRST );
+        pFixedTexts[nIndex] = new FixedText(bLeft ? pLeft : pRight, WB_VCENTER);
 
-        pRefWindow = pFixedTexts[nIndex];
-
-        pFixedTexts[nIndex]->SetSizePixel(aFixedTextSize);
-        pFixedTexts[nIndex]->SetPosPixel(bLeft ? aTL1 : aTL2);
+        pFixedTexts[nIndex]->set_grid_left_attach(0);
+        pFixedTexts[nIndex]->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
         pFixedTexts[nIndex]->SetText(SW_RES(STR_AUTH_FIELD_START + aCurInfo.nToxField));
         pFixedTexts[nIndex]->Show();
         pEdits[nIndex] = 0;
         if( AUTH_FIELD_AUTHORITY_TYPE == aCurInfo.nToxField )
         {
-            pTypeListBox = new ListBox(this, WB_DROPDOWN|WB_BORDER);
-            pTypeListBox->SetZOrder( pRefWindow, WINDOW_ZORDER_BEHIND );
-            pRefWindow = pTypeListBox;
+            pTypeListBox = new ListBox(bLeft ? pLeft : pRight, WB_DROPDOWN|WB_BORDER|WB_VCENTER);
             for(sal_uInt16 j = 0; j < AUTH_TYPE_END; j++)
-                pTypeListBox->InsertEntry(String(SW_RES(STR_AUTH_TYPE_START + j)));
+                pTypeListBox->InsertEntry(SW_RESSTR(STR_AUTH_TYPE_START + j));
             if(pFields[aCurInfo.nToxField].Len())
             {
                 sal_uInt16 nIndexPos = static_cast< sal_uInt16 >(pFields[aCurInfo.nToxField].ToInt32());
                 pTypeListBox->SelectEntryPos(nIndexPos);
             }
-            Size aTmp(aEditSize);
-            aTmp.Height() *= 4;
-            pTypeListBox->SetSizePixel(aTmp);
-            pTypeListBox->SetPosPixel(bLeft ? aTR1 : aTR2);
+            pTypeListBox->set_grid_left_attach(1);
+            pTypeListBox->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
+            pTypeListBox->set_hexpand(true);
             pTypeListBox->Show();
             pTypeListBox->SetSelectHdl(LINK(this, SwCreateAuthEntryDlg_Impl, EnableHdl));
             pTypeListBox->SetHelpId(aCurInfo.pHelpId);
@@ -1553,9 +1521,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
         }
         else if(AUTH_FIELD_IDENTIFIER == aCurInfo.nToxField && !m_bNewEntryMode)
         {
-            pIdentifierBox = new ComboBox(this, WB_BORDER|WB_DROPDOWN);
-            pIdentifierBox->SetZOrder( pRefWindow, WINDOW_ZORDER_BEHIND );
-            pRefWindow = pIdentifierBox;
+            pIdentifierBox = new ComboBox(bLeft ? pLeft : pRight, WB_BORDER|WB_DROPDOWN|WB_VCENTER);
 
             pIdentifierBox->SetSelectHdl(LINK(this,
                                     SwCreateAuthEntryDlg_Impl, IdentifierHdl));
@@ -1571,20 +1537,19 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
                     pIdentifierBox->InsertEntry(aIds[n]);
             }
             pIdentifierBox->SetText(pFields[aCurInfo.nToxField]);
-            Size aTmp(aEditSize);
-            aTmp.Height() *= 4;
-            pIdentifierBox->SetSizePixel(aTmp);
-            pIdentifierBox->SetPosPixel(bLeft ? aTR1 : aTR2);
+            pIdentifierBox->set_grid_left_attach(1);
+            pIdentifierBox->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
+            pIdentifierBox->set_hexpand(true);
             pIdentifierBox->Show();
             pIdentifierBox->SetHelpId(aCurInfo.pHelpId);
         }
         else
         {
-            pEdits[nIndex] = new Edit(this, WB_BORDER);
-            pEdits[nIndex]->SetZOrder( pRefWindow, WINDOW_ZORDER_BEHIND );
-            pRefWindow = pEdits[nIndex];
-            pEdits[nIndex]->SetSizePixel(aEditSize);
-            pEdits[nIndex]->SetPosPixel(bLeft ? aTR1 : aTR2);
+            pEdits[nIndex] = new Edit(bLeft ? pLeft : pRight, WB_BORDER|WB_VCENTER);
+            pEdits[nIndex]->SetWidthInChars(14);
+            pEdits[nIndex]->set_grid_left_attach(1);
+            pEdits[nIndex]->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
+            pEdits[nIndex]->set_hexpand(true);
             pEdits[nIndex]->SetText(pFields[aCurInfo.nToxField]);
             pEdits[nIndex]->Show();
             pEdits[nIndex]->SetHelpId(aCurInfo.pHelpId);
@@ -1600,26 +1565,12 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
             }
         }
         if(bLeft)
-        {
-            aTL1.Y() += nOffset;
-            aTR1.Y() += nOffset;
-        }
+            ++nLeftRow;
         else
-        {
-            aTL2.Y() += nOffset;
-            aTR2.Y() += nOffset;
-        }
+            ++nRightRow;
         bLeft = !bLeft;
     }
     EnableHdl(pTypeListBox);
-
-    long nHeightDiff = - aFLSz.Height();
-    aFLSz.Height() = aTL1.Y();
-    nHeightDiff += aFLSz.Height();
-    Size aDlgSize(GetSizePixel());
-    aDlgSize.Height() += nHeightDiff;
-    SetSizePixel(aDlgSize);
-
 }
 
 SwCreateAuthEntryDlg_Impl::~SwCreateAuthEntryDlg_Impl()
@@ -1694,14 +1645,14 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, ShortNameHdl, Edit*, pEdit)
     {
         sal_Bool bEnable = 0 != aShortNameCheckLink.Call(pEdit);
         m_bNameAllowed |= bEnable;
-        aOKBT.Enable(pTypeListBox->GetSelectEntryCount() && bEnable);
+        m_pOKBT->Enable(pTypeListBox->GetSelectEntryCount() && bEnable);
     }
     return 0;
 }
 
 IMPL_LINK(SwCreateAuthEntryDlg_Impl, EnableHdl, ListBox*, pBox)
 {
-    aOKBT.Enable(m_bNameAllowed && pBox->GetSelectEntryCount());
+    m_pOKBT->Enable(m_bNameAllowed && pBox->GetSelectEntryCount());
     return 0;
 };
 
