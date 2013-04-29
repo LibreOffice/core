@@ -32,10 +32,10 @@ $(unoil_CLIDIR)/cli_oootypes.dll : $(SRCDIR)/unoil/climaker/version.txt \
 		--assembly-version $(CLI_OOOTYPES_NEW_VERSION) \
 		--assembly-company "LibreOffice" \
 		--assembly-description "This assembly contains metadata for the LibreOffice API." \
-		-X $(call gb_UnoApiTarget_get_target,udkapi).oldformat \
+		-X $(call gb_UnoApiTarget_get_target,udkapi) \
 		-r $(OUTDIR)/bin/cli_uretypes.dll \
 		--keyfile $(OUTDIR)/bin/cliuno.snk \
-		$(call gb_UnoApiTarget_get_target,offapi).oldformat) > /dev/null)
+		$(call gb_UnoApiTarget_get_target,offapi)) > /dev/null)
 
 $(unoil_CLIDIR)/cli_oootypes.config : \
 		$(SRCDIR)/unoil/climaker/cli_oootypes_config \

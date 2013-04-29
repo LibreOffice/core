@@ -68,13 +68,13 @@ $(call gb_CliUnoApiTarget_get_target,$(1)) : CLI_UNOAPI_VERSION := $(2)
 endef
 
 define gb_CliUnoApiTarget_wrap_api
-$(call gb_CliUnoApiTarget_get_target,$(1)) : CLI_UNOAPI_API := $(call gb_UnoApiTarget_get_target,$(2)).oldformat
+$(call gb_CliUnoApiTarget_get_target,$(1)) : CLI_UNOAPI_API := $(call gb_UnoApiTarget_get_target,$(2))
 $(call gb_CliUnoApiTarget_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(2))
 
 endef
 
 define gb_CliUnoApiTarget__use_api
-$(call gb_CliUnoApiTarget_get_target,$(1)) : CLI_UNOAPI_DEPS += $(2).oldformat
+$(call gb_CliUnoApiTarget_get_target,$(1)) : CLI_UNOAPI_DEPS += $(2)
 $(call gb_CliUnoApiTarget_get_target,$(1)) : $(2)
 
 endef
