@@ -66,7 +66,7 @@ published service LocalDataImporter
             are all supported by implementations. Additionally the following
             argument is required to select the data source:
         <dl>
-            <dt><code>LayerDataUrl</code> : <atom >string</atom></dt>
+            <dt><code>LayerDataUrl</code> : `string`</dt>
             <dd>A file URL that specifies the location of the source data.
                 <p> If no <code>Component</code> is provided, this must be the
                     location of an OOR Update XML file, which will be imported

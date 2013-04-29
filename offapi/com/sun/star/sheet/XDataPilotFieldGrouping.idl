@@ -79,26 +79,26 @@ published interface XDataPilotFieldGrouping: com::sun::star::uno::XInterface
             members of this struct have to fulfill the following requirements:
 
             <ul>
-            <li>If the member <member>DataPilotFieldGroupInfo::HasAutoStart
-            </member> is set to `FALSE`, then the value of <member>
-            DataPilotFieldGroupInfo::Start</member> must be a floating-point
-            value representing a valid date/time value (if <member>
-            DataPilotFieldGroupInfo::HasAutoStart</member> is set to `TRUE`,
+            <li>If the member DataPilotFieldGroupInfo::HasAutoStart
+            is set to `FALSE`, then the value of
+            DataPilotFieldGroupInfo::Start must be a floating-point
+            value representing a valid date/time value (if
+            DataPilotFieldGroupInfo::HasAutoStart is set to `TRUE`,
             the value of DataPilotFieldGroupInfo::Start will
             be ignored).</li>
 
-            <li>If the member <member>DataPilotFieldGroupInfo::HasAutoEnd
-            </member> is set to `FALSE`, then the value of <member>
-            DataPilotFieldGroupInfo::End</member> must be a floating-point
-            value representing a valid date/time value( if <member>
-            DataPilotFieldGroupInfo::HasAutoEnd</member> is set to `TRUE`,
+            <li>If the member DataPilotFieldGroupInfo::HasAutoEnd
+            is set to `FALSE`, then the value of
+            DataPilotFieldGroupInfo::End must be a floating-point
+            value representing a valid date/time value( if
+            DataPilotFieldGroupInfo::HasAutoEnd is set to `TRUE`,
             the value of DataPilotFieldGroupInfo::End will be
             ignored).</li>
 
-            <li>If the members <member>DataPilotFieldGroupInfo::HasAutoStart
-            </member> and DataPilotFieldGroupInfo::HasAutoEnd
-            are set to `FALSE` both, then the value of <member>
-            DataPilotFieldGroupInfo::Start</member> must be less than or equal
+            <li>If the members DataPilotFieldGroupInfo::HasAutoStart
+            and DataPilotFieldGroupInfo::HasAutoEnd
+            are set to `FALSE` both, then the value of
+            DataPilotFieldGroupInfo::Start must be less than or equal
             to the value of DataPilotFieldGroupInfo::End.</li>
 
             <li>The member DataPilotFieldGroupInfo::HasDateValues
@@ -123,11 +123,11 @@ published interface XDataPilotFieldGrouping: com::sun::star::uno::XInterface
             into one range (e.g. a value of 7 groups the members of a week
             into a range).</li>
 
-            <li>The contents of the member <member>
-            DataPilotFieldGroupInfo::SourceField</member> will be ignored.</li>
+            <li>The contents of the member
+            DataPilotFieldGroupInfo::SourceField will be ignored.</li>
 
-            <li>The contents of the member <member>
-            DataPilotFieldGroupInfo::Groups</member> will be ignored.</li>
+            <li>The contents of the member
+            DataPilotFieldGroupInfo::Groups will be ignored.</li>
             </ul>
 
         @returns

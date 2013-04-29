@@ -32,7 +32,8 @@ module com {  module sun {  module star {  module view {
 
 /** describes a printer by specifying the queue name and some settings.
 
-    <p>This service may be represented by a <type scope="com::sun::star::beans" dim="[]">PropertyValue</type>.
+    <p>This service may be represented by a
+    com::sun::star::beans::PropertyValue[].
 
     @see com::sun::star::beans::PropertyValue
  */
@@ -53,14 +54,14 @@ published service PrinterDescriptor
         is a user-defined size.
 
         <p>Setting this property may change the value of
-        #PrinterDescriptorPaperSize</member.</p>
+        #PrinterDescriptorPaperSize.</p>
      */
     [property] com::sun::star::view::PaperFormat PaperFormat;
 
     /** specifies the size of the paper in 100th mm.
 
         <p>Setting this property may change the value of
-        #PrinterDescriptorPaperFormat</member.</p>
+        #PrinterDescriptorPaperFormat.</p>
      */
     [property] com::sun::star::awt::Size PaperSize;
 

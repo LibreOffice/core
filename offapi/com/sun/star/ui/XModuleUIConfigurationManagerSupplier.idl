@@ -38,7 +38,7 @@ interface XModuleUIConfigurationManagerSupplier : ::com::sun::star::uno::XInterf
         @param ModuleIdentifier
             a module identifier which identifies an OpenOffice.org module. The
             module identifier can be retrieved from the
-            <type scope=com::sun::star::frame>ModuleManager</type> service.
+            com::sun::star::frame::ModuleManager service.
 
         @returns
             an object implementing

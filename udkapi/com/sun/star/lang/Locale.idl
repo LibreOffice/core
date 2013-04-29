@@ -47,7 +47,7 @@ module com {  module sun {  module star {  module lang {
 
     <p> Each implementation that performs locale-sensitive operations
     allows you to get all the available objects of that type. Use the
-    <typed scope="com::sun::star::resource">XLocale</type> interface to set the locale. </p>
+    com::sun::star::resource::XLocale interface to set the locale. </p>
  */
 published struct Locale
 {

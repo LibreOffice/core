@@ -69,8 +69,8 @@ module com { module sun { module star { module accessibility {
     This distinction becomes important when there are more than one action.
     To get access to the key bindings you have to get the
     XAccessibleAction interface of a component, provided that
-    it is supported, and use the <method
-    scope="XAccessibleAction">getAccessibleKeyBinding()</method>.</p>
+    it is supported, and use the XAccessibleAction::getAccessibleKeyBinding().
+    </p>
 
     @see XAccessibleExtendedComponent
 
@@ -126,7 +126,7 @@ interface XAccessibleComponent : ::com::sun::star::uno::XInterface
 
         <p>The returned bounding box has the form of a rectangle.  Its
         coordinates are relative to the object's parent coordinate system.
-        Note that the two methods <method>getLocation</methodmber> and
+        Note that the two methods getLocation() and
         getSize() return the same information.  With method
         getLocationOnScreen() you can get the bound box
         position in screen coordinates.</p>

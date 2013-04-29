@@ -37,7 +37,7 @@ module com {   module sun {   module star {   module rdf {
     </ol>
     Note that each query result retrieved via
     com::sun::star::container::XEnumeration::nextElement()
-    has the type <type dim="[]">XNode</type>,
+    has the type XNode[],
     the length of the sequence being the same as the number of query variables.
     </p>
 

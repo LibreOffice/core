@@ -52,7 +52,7 @@ service UIElement
     /** interface to initialize a user interface element instance.
 
         A user interface element must be initialized using
-        <member scope=com::sun::star::lang>XInitialization::initialize</member> before
+        com::sun::star::lang::XInitialization::initialize() before
         it can be used. The following property must be provided:
         <ul>
             <li><b>ResourceURL</b>specifies a string property which is the unique identifier of

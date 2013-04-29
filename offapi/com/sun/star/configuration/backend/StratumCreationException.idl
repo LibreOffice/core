@@ -25,7 +25,7 @@
 module com { module sun { module star { module configuration { module backend {
 
 
-/** is passed to an <type>InteractionHandler<type> when creating a stratum backend fails.
+/** is passed to an InteractionHandler when creating a stratum backend fails.
 
     @since OOo 2.0
  */

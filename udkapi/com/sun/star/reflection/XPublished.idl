@@ -43,47 +43,43 @@ module com {  module sun {  module star {  module reflection {
        (com::sun::star::reflection::XStructTypeDescription),
        polymorphic struct type templates
        (com::sun::star::reflection::XStructTypeDescription),
-       exception types (<type
-       scope="com::sun::star::reflection">XCompoundTypeDescription</type>),
-       interface types (<type
-       scope="com::sun::star::reflection">XInterfaceTypeDescription2</type>),
-       typedefs (<type
-       scope="com::sun::star::reflection">XIndirectTypeDescription</type>),
-       individual constants (<type
-       scope="com::sun::star::reflection">XConstantTypeDescription</type>),
-       constant groups (<type
-       scope="com::sun::star::reflection">XConstantsTypeDescription</type>),
-       single-interface&ndash;based services (<type
-       scope="com::sun::star::reflection">XServiceTypeDescription2</type>),
-       accumulation-based services (<type
-       scope="com::sun::star::reflection">XServiceTypeDescription2</type>),
-       interface-based singletons (<type
-       scope="com::sun::star::reflection">XSingletonTypeDescription2</type>),
-       and service-based singletons (<type
-       scope="com::sun::star::reflection">XSingletonTypeDescription2</type>)
+       exception types (com::sun::star::reflection::XCompoundTypeDescription),
+       interface types (com::sun::star::reflection::XInterfaceTypeDescription2),
+       typedefs (com::sun::star::reflection::XIndirectTypeDescription),
+       individual constants
+       (com::sun::star::reflection::XConstantTypeDescription),
+       constant groups (com::sun::star::reflection::XConstantsTypeDescription),
+       single-interface&ndash;based services
+       (com::sun::star::reflection::XServiceTypeDescription2),
+       accumulation-based services
+       (com::sun::star::reflection::XServiceTypeDescription2),
+       interface-based singletons
+       (com::sun::star::reflection::XSingletonTypeDescription2),
+       and service-based singletons
+       (com::sun::star::reflection::XSingletonTypeDescription2)
        support the notion of being published.  Therefore, for an object that
        represents any such entity,
        com::sun::star::reflection::XPublished should be
        supported.</li>
 
-       <li>Sequence types (<type
-       scope="com::sun::star::reflection">XIndirectTypeDescription</type>),
+       <li>Sequence types
+       (com::sun::star::reflection::XIndirectTypeDescription),
        type parameters of polymorphic struct type templates
        (com::sun::star::reflection::XTypeDescription),
        instantiated polymorphic struct types
        (com::sun::star::reflection::XStructTypeDescription),
-       attributes of interface types (<type scope="com::sun::star::reflection">
-       XInterfaceAttributeTypeDescription2</type>), methods of interface types
-       (<type scope="com::sun::star::reflection">
-       XInterfaceMethodTypeDescription</type>), properties of
-       accumulation-based services (<type
-       scope="com::sun::star::reflection">XPropertyTypeDescription</type>),
+       attributes of interface types
+       (com::sun::star::reflection::XInterfaceAttributeTypeDescription2),
+       methods of interface types
+       (com::sun::star::reflection::XInterfaceMethodTypeDescription),
+       properties of accumulation-based services
+       (com::sun::star::reflection::XPropertyTypeDescription),
        deprecated
        com::sun::star::reflection::XArrayTypeDescriptions,
        and deprecated
        com::sun::star::reflection::XUnionTypeDescriptions do
-       not support the notion of being published.  Therefore, for an object that
-       represents any such entity,
+       not support the notion of being published.
+       Therefore, for an object that represents any such entity,
        com::sun::star::reflection::XPublished should not be
        supported.</li>
    </ul>

@@ -46,8 +46,8 @@ published interface XOutputStream: com::sun::star::uno::XInterface
     /** flushes out of the stream any data that may exist in buffers.
 
         <p>The semantics of this method are rather vague.  See
-        <member scope="com::sun::star::io">
-        XAsyncOutputMonitor::waitForCompletion</member> for a similar method
+        com::sun::star::io::XAsyncOutputMonitor::waitForCompletion()
+        for a similar method
         with very specific semantics, that is useful in certain scenarios.</p>
      */
     void flush()

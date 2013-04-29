@@ -39,38 +39,33 @@ service AccessibleTextDocumentPageView
           page preview of a text document.
         <ul>
             <li>The children returned by
-                <method scope="::com::sun::star::accessibility"
-                >XAccessibleContext::getAccessibleChild</type> all support
+                ::com::sun::star::accessibility::XAccessibleContext::getAccessibleChild()
+                all support
                 the interface XAccessible. Calling
-                <method scope="::com::sun::star::accessibility"
-                >XAccessible::getAccessibleContext</type> for these children
+                ::com::sun::star::accessibility::XAccessible::getAccessibleContext()
+                for these children
                 returns an object that supports one of the service
-                <type scope="::com::sun::star::text"
-                >AccessiblePageView</type>.
-            <li>The role is <const scope="::com::sun::star::accessibility"
-                >AccessibleRole::DOCUMENT</const>.
+                ::com::sun::star::text::AccessiblePageView.
+            <li>The role is
+                ::com::sun::star::accessibility::AccessibleRole::DOCUMENT.
             <li>The name is "document view" (or the equivalent term
                 in application's language).
             <li>The description also is "document view" (or the equivalent term
                 in application's language).
             <li>There are no relation sets.
             <li>The following states might be contained in the state set
-                returned by <method scope="::com::sun::star::accessibility"
-                >XAccessibleContext::getAccessibleStateSet</method>:
+                returned by
+                ::com::sun::star::accessibility::XAccessibleContext::getAccessibleStateSet():
                 <ul>
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::DEFUNC</const> (indicates that
+                    <li>::com::sun::star::accessibility::AccessibleStateType::DEFUNC
+                        (indicates that
                         the document window has been closed)
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::ENABLED</const> (always
-                        contained)
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::OPAQUE</const> (always
-                        contained)
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::SHOWING</const>
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::VISIBLE</const>
+                    <li>::com::sun::star::accessibility::AccessibleStateType::ENABLED
+                        (always contained)
+                    <li>::com::sun::star::accessibility::AccessibleStateType::OPAQUE
+                        (always contained)
+                    <li>::com::sun::star::accessibility::AccessibleStateType::SHOWING
+                    <li>::com::sun::star::accessibility::AccessibleStateType::VISIBLE
                 </ul>
             <li>The locale is the application's locale.
         </ul>

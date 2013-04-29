@@ -81,14 +81,14 @@ published interface XComponent: com::sun::star::uno::XInterface
         thus for each time a listener is added, it has to be removed.</p>
 
         <p>If this com::sun::star::lang::XComponent is
-        already disposed when <member scope="com::sun::star::lang">
-        XComponent::addEventListener</member> is called, the call will not fail
+        already disposed when
+        com::sun::star::lang::XComponent::addEventListener()
+        is called, the call will not fail
         with a com::sun::star::lang::DisposedException, but
         the caller will be notified via the
         com::sun::star::lang::XEventListener::disposing()
         callback.  This callback can occur synchronously within the
-        <member scope="com::sun::star::lang">XComponent::addEventListener
-        </member> call.</p>
+        com::sun::star::lang::XComponent::addEventListener() call.</p>
 
         @see XComponent::removeEventListener
      */
@@ -102,8 +102,9 @@ published interface XComponent: com::sun::star::uno::XInterface
         thus for each time a listener is added, it has to be removed.
 
         <p>If this com::sun::star::lang::XComponent is
-        already disposed when <member scope="com::sun::star::lang">
-        XComponent::removeEventListener</member> is called, the call will not
+        already disposed when
+        com::sun::star::lang::XComponent::removeEventListener()
+        is called, the call will not
         fail with a com::sun::star::lang::DisposedException,
         but will rather be ignored silently.</p>
 

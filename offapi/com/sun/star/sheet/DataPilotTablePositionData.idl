@@ -61,8 +61,8 @@ struct DataPilotTablePositionData
         whereas when the value of DataPilotTablePositionData::PositionType
         is either DataPilotTablePositionType::ROW_HEADER
         or DataPilotTablePositionType::COLUMN_HEADER, then the
-        #PositionData member contains an instance of type <type>
-        DataPilotTableHeaderData</type>.</p>
+        #PositionData member contains an instance of type
+        DataPilotTableHeaderData.</p>
 
         @see com::sun::star::sheet::DataPiotTableResultData
         @see com::sun::star::sheet::DataPiotTableHeaderData

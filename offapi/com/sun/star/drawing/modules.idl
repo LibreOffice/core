@@ -24,16 +24,15 @@ module com { module sun { module star { module drawing {
 
 /** The drawing framework is responsible for managing the resources used by
     the UI of the drawing applications.
-    The set of active resources is represented by the <type
-    scope="com::sun::star::drawing::framework">XConfiguration</type>.</p>
-    <p>The <type
-    scope="com::sun::star::drawing::framework">XControllerManager</type>
+    The set of active resources is represented by the
+    com::sun::star::drawing::framework::XConfiguration.</p>
+    <p>The com::sun::star::drawing::framework::XControllerManager
     interface provides access to the sub controllers.  It typically is
-    implemented by the same class that implements the <type
-    scope="com::sun::star::frame">XController</type> interface.</p>
+    implemented by the same class that implements the
+    com::sun::star::frame::XController interface.</p>
     <p>The
-    configuration is managed by the <type
-    scope="com::sun::star::drawing::framework">XConfigurationController</type>.
+    configuration is managed by the
+    com::sun::star::drawing::framework::XConfigurationController.
     It coordinates changes to the configuration made by the other sub
     controllers so that
     <ul><li>unnecessary ui updates (flickering) is avoided and</li>

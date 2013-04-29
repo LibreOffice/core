@@ -52,7 +52,7 @@ service ConsoleHandler : XConsoleHandler
             </ul></p>
 
         @throws ::com::sun::star::lang::IllegalArgumentException
-            if <arg>Settings</args> contains arguments with names other than in the list above, or
+            if `Settings` contains arguments with names other than in the list above, or
             settings whose value is of the wrong type.
     */
     createWithSettings( [in] sequence< ::com::sun::star::beans::NamedValue > Settings )

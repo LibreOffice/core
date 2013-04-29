@@ -32,7 +32,7 @@ module com { module sun { module star { module drawing { module framework {
     service may be removed in the future.</p>
 
     <p>The ModuleController object for an application can be
-    obtained via the XControllerManager interface.</type>
+    obtained via the XControllerManager interface.
 */
 service ModuleController : XModuleController
 {

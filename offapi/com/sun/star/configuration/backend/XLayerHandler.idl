@@ -300,7 +300,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
                 in this layer.
                 In this case any subsequent value may be of a generic type
                 (e.g. `string` or - for list values -
-                <atom dim="[]">string</atom>.) Such values may be
+                `string[]`.) Such values may be
                 converted to the type defined in the schema by
                 the implementation.
             </p>

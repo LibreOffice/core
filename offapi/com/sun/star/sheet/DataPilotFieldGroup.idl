@@ -76,27 +76,26 @@ published service DataPilotFieldGroup
         interfaces can be used to manage the members that this group contains.
         It is possible to insert, remove, and replace members.</p>
 
-        <p>The method <member scope="com::sun::star::container">
-        XNameReplace::replaceByName</member> can be used to rename the
+        <p>The method com::sun::star::container::XNameReplace::replaceByName
+        can be used to rename the
         specified member. To do so, the new name has to be passed as second
         argument. An implementation should support the following data types:
 
         <ul>
         <li>a non-empty `string` specifying the new name of the
         group member.</li>
-        <li>an object supporting the <type scope="com::sun::star::container">
-        XNamed</type> interface, for example an instance of
+        <li>an object supporting the com::sun::star::container::XNamed
+        interface, for example an instance of
         DataPilotFieldGroupItem received from another group.</li>
         </ul></p>
 
-        <p>The method <member scope="com::sun::star::container">
-        XNameContainer::insertByName</member> can be used to insert a new
+        <p>The method com::sun::star::container::XNameContainer::insertByName()
+        can be used to insert a new
         member into this field group. An implementation should ignore the
         second argument and insert the specified member name.</p>
 
-        <p>The method <member scope="com::sun::star::container">
-        XNameContainer::removeByName</member> can be used to remove an
-        existing member name.</p>
+        <p>The method com::sun::star::container::XNameContainer::removeByName()
+        can be used to remove an existing member name.</p>
      */
     [optional] interface com::sun::star::container::XNameContainer;
 

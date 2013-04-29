@@ -26,8 +26,7 @@ module com { module sun { module star { module drawing { module framework {
 
 /** This service provides the means for constructing new configurations.
 
-    <p>Most likely use is the <member
-    scope="XConfigurationController">restoreConfiguration()</member>
+    <p>Most likely use is the XConfigurationController::restoreConfiguration()
     method.</p>
 
     @see XConfiguration

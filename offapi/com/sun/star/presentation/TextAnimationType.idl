@@ -23,11 +23,11 @@
  module com {  module sun {  module star {  module presentation {
 
 
-/** Defines how a target <type scope=::com::sun::star::text>XTextRange</type>
-    is animated inside an <type scope=::com::sun::star::animations>IterateContainer</type>.
+/** Defines how a target ::com::sun::star::text::XTextRange
+    is animated inside an ::com::sun::star::animations::IterateContainer.
     <br>
     This is stored inside the attribute
-    <member scope=::com::sun::star::animations>IterateContainer::IterateType</member>.
+    ::com::sun::star::animations::IterateContainer::IterateType.
     <br>
     @see ::com::sun::star::animations::IterateContainer
 */

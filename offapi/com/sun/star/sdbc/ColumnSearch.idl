@@ -30,7 +30,7 @@ published constants ColumnSearch
     /** A possible value for column <code>SEARCHABLE</code> in the
              com::sun::star::sdbc::XResultSet
              object returned by the method
-             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getTypeInfo()</member>
+             com::sun::star::sdbc::XDatabaseMetaData::getTypeInfo()
              .
              <p>
              Indicates that
@@ -43,7 +43,7 @@ published constants ColumnSearch
     /** A possible value for column <code>SEARCHABLE</code> in the
              com::sun::star::sdbc::XResultSet
              object returned by the method
-             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getTypeInfo()</member>
+             com::sun::star::sdbc::XDatabaseMetaData::getTypeInfo()
              .
              <p>
              Indicates that the only
@@ -58,7 +58,7 @@ published constants ColumnSearch
     /** A possible value for column <code>SEARCHABLE</code> in the
              com::sun::star::sdbc::XResultSet
              object returned by the method
-             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getTypeInfo()</member>
+             com::sun::star::sdbc">XDatabaseMetaData::getTypeInfo()
              .
              <p>
              Indicates that one can base all
@@ -75,7 +75,7 @@ published constants ColumnSearch
             in the
             com::sun::star::sdbc::XResultSet
             object returned by the method
-            <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getTypeInfo()</member>
+            com::sun::star::sdbc">XDatabaseMetaData::getTypeInfo()
             .
             <p>
             Indicates that all

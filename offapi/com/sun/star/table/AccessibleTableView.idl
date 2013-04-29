@@ -44,22 +44,19 @@ service AccessibleTableView
 
     <ul>
         <li>The parent returned by
-            <method scope="::com::sun::star::accessibility"
-            >XAccessibleContext::getAccessibleParent</method>
+            ::com::sun::star::accessibility::XAccessibleContext::getAccessibleParent()
             is the accessible text document view, a page of the accessible
             text document page preview, or the accessible spreadsheet
             page preview.</li>
         <li>The children returned by
-            <method scope="::com::sun::star::accessibility"
-            >XAccessibleContext::getAccessibleChild</method> all
-            support the interface XAccessible. Calling
-            <method scope="::com::sun::star::accessibility"
-            >XAccessible::getAccessibleContext</method> for these children
+            ::com::sun::star::accessibility::XAccessibleContext::getAccessibleChild()
+            all support the interface XAccessible. Calling
+            ::com::sun::star::accessibility::XAccessible::getAccessibleContext()
+            for these children
             returns an object that supports the service.
             ::com::sun::star::table::AccessibleCellView:
             A child where calling
-            <method scope="::com::sun::star::accessibility"
-            >XAccessibleContext::getAccessibleChild</method>
+            ::com::sun::star::accessibility::XAccessibleContext::getAccessibleChild()
             an object that supports this service is returned for
             every partially visible cell in this table.
         <p>The following rules apply to the children order.</p>
@@ -72,38 +69,38 @@ service AccessibleTableView
         </ul>
         <li>The description is ???.</li>
         <li>The name is the given table name and a number to make it non-ambiguous.</li>
-        <li>The role is <const scope="::com::sun::star::accessibility"
-            >AccessibleRole::TABLE</const></li>
+        <li>The role is
+            ::com::sun::star::accessibility::AccessibleRole::TABLE</li>
         <li>In a spreadsheet page preview there are relations between the
             table and the shapes with an anchor
             on this table (not with an anchor on a cell in this table).</li>
         <li>The following states are supported:
             <ul>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::DEFUNC</const> is always false if the
+                <li>::com::sun::star::accessibility::AccessibleStateType::DEFUNC
+                    is always false if the
                     table is not deleted, the document is open. Also it is
                     false if the table was showed in a page preview and the
                     page preview is already opened, otherwise it is true.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::EDITABLE</const> is false if the
+                <li>::com::sun::star::accessibility::AccessibleStateType::EDITABLE
+                    is false if the
                     table is showed in a page preview or the table is
                     protected, otherwise it is true.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::ENABLED</const> is always true.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::MULTI_SELECTABLE</const> is false
+                <li>::com::sun::star::accessibility::AccessibleStateType::ENABLED
+                    is always true.</li>
+                <li>::com::sun::star::accessibility::AccessibleStateType::MULTI_SELECTABLE
+                    is false
                     if the table is showed in a page preview, otherwise it is
                     true.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::OPAQUE</const> is false, if the table
+                <li>::com::sun::star::accessibility::AccessibleStateType::OPAQUE
+                    is false, if the table
                     has no background color or graphic, otherwise it is
                     false.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::SHOWING</const>Is true if the
+                <li>::com::sun::star::accessibility::AccessibleStateType::SHOWING
+                    is true if the
                     Bounding Box lies in the Bounding Box of the parent.
                     Otherwise it is false.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::VISIBLE</const>Is always true.</li>
+                <li>::com::sun::star::accessibility::AccessibleStateType::VISIBLE
+                    is always true.</li>
             </ul>
         </li>
     </ul>

@@ -205,7 +205,7 @@ published service CellProperties
     //=== BorderLine2 / TableBorder2 optional properties, preferred ===========
 
     /** contains a description of the cell or cell range border.
-        Preferred over <type>TableBorder>/type> #TableBorder.
+        Preferred over TableBorder #TableBorder.
 
         <p>If used with a cell range, the top, left, right, and bottom
         lines are at the edges of the entire range, not at the edges of

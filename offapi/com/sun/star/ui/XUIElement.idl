@@ -37,7 +37,7 @@ module com { module sun { module star { module ui {
     com::sun::star::awt::XSystemDependentMenuBarPeer
     which supports to retrieve the system dependent menu handle.
     A floating window or a toolbar user interface element return a
-    <type scope=com::sun::star::awt>XWindow</type>
+    com::sun::star::awt::XWindow
     interface.
     </p>
 */

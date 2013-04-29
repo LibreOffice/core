@@ -29,7 +29,8 @@
 module com {  module sun {  module star {  module awt {  module grid {
 
 
-/** The <type>XGridColumn</types> defines the properties and behavior of a column in a grid control
+/** The XGridColumn defines the properties and behavior of a column
+    in a grid control.
     @since OOo 3.3
  */
 published interface XGridColumn

@@ -33,9 +33,7 @@ module com {  module sun {  module star {  module sdb {
 
     <p>
     This service implements a user interface for browsing data sources registered on the
-    <type scope="com::sun::star::sdb">
-    DatabaseContext
-    </type>
+    com::sun::star::sdb::DatabaseContext
     instance of the system.
     </p>
 
@@ -49,9 +47,7 @@ module com {  module sun {  module star {  module sdb {
     Usually, you won't instantiate this service directly, instead you use the dispatch mechanisms
     of the application framework to load the URL <b>.component:DB/DataSourceBrowser</b> into an arbitrary
     frame. This should involve a
-    <type scope="com::sun::star::sdb">
-    ContentLoader
-    </type>
+    com::sun::star::sdb::ContentLoader
     service, which creates and initializes
     the browser.
     </p>

@@ -40,15 +40,15 @@ published service FillProperties
     */
     [property] FillStyle FillStyle;
 
-    /** If the property #FillStyle is set to <const>
-        FillStyle::SOLID</const>, this is the color used.
+    /** If the property #FillStyle is set to
+        FillStyle::SOLID, this is the color used.
     */
     [property] com::sun::star::util::Color FillColor;
 
     /** This is the transparence of the filled area.
 
-        <p>This property is only valid if the property <member>FillStyle
-        </member> is set to FillStyle::SOLID.
+        <p>This property is only valid if the property #FillStyle
+        is set to FillStyle::SOLID.
     */
     [property] short FillTransparence;
 
@@ -64,25 +64,25 @@ published service FillProperties
     */
     [optional, property] com::sun::star::awt::Gradient FillTransparenceGradient;
 
-    /** If the property #FillStyle is set to <const>
-        FillStyle::GRADIENT</const>, this is the name of the used fill
+    /** If the property #FillStyle is set to
+        FillStyle::GRADIENT, this is the name of the used fill
         gradient style.
     */
     [property] string FillGradientName;
 
-    /** If the property #FillStyle is set to <const>
-        FillStyle::GRADIENT</const>, this describes the gradient used.
+    /** If the property #FillStyle is set to
+        FillStyle::GRADIENT, this describes the gradient used.
     */
     [optional, property] com::sun::star::awt::Gradient FillGradient;
 
-    /** If the property #FillStyle is set to <const>
-        FillStyle::HATCH</const>, this is the name of the used fill hatch
+    /** If the property #FillStyle is set to
+        FillStyle::HATCH, this is the name of the used fill hatch
         style.
     */
     [property] string FillHatchName;
 
-    /** If the property #FillStyle is set to <const>
-        FillStyle::HATCH</const>, this describes the hatch used.
+    /** If the property #FillStyle is set to
+        FillStyle::HATCH, this describes the hatch used.
     */
     [optional, property] Hatch FillHatch;
 
@@ -91,19 +91,19 @@ published service FillProperties
     */
     [property] boolean FillBackground;
 
-    /** If the property #FillStyle is set to <const>
-        FillStyle::BITMAP</const>, this is the name of the used fill bitmap
+    /** If the property #FillStyle is set to
+        FillStyle::BITMAP, this is the name of the used fill bitmap
         style.
     */
     [property] string FillBitmapName;
 
-    /** If the property #FillStyle is set to <const>
-        FillStyle::BITMAP</const>, this is the bitmap used.
+    /** If the property #FillStyle is set to
+        FillStyle::BITMAP, this is the bitmap used.
     */
     [optional, property] com::sun::star::awt::XBitmap FillBitmap;
 
-    /** If the property #FillStyle is set to <const>
-        FillStyle::BITMAP</const>, this is a URL to the bitmap used.
+    /** If the property #FillStyle is set to
+        FillStyle::BITMAP, this is a URL to the bitmap used.
     */
     [optional, property] string FillBitmapURL;
 
@@ -159,8 +159,8 @@ published service FillProperties
 
     /** this enum selects how a area is filled with a single bitmap.
 
-        <p>This property corresponds to the properties <member>
-        FillBitmapStretch</member> and #FillBitmapTile.</p>
+        <p>This property corresponds to the properties
+        #FillBitmapStretch and #FillBitmapTile.</p>
 
         <p>If set to BitmapMode::REPEAT, the property
         FillBitmapStretch is set to `FALSE`, and the property FillBitmapTile
@@ -186,8 +186,8 @@ published service FillProperties
         the property #FillBitmapTile is `TRUE` too.</p>
 
         <p>If set to `FALSE`, the value of the FillBitmapMode property
-        changes to BitmapMode::REPEAT or <const>
-        BitmapMode::NO_REPEAT</const>, depending on the current value of the
+        changes to BitmapMode::REPEAT or BitmapMode::NO_REPEAT,
+        depending on the current value of the
         #FillBitmapTile property.</p>
      */
     [optional, property] boolean FillBitmapStretch;
@@ -203,8 +203,8 @@ published service FillProperties
         the property #FillBitmapStretch is `TRUE` too.</p>
 
         <p>If set to `FALSE`, the value of the FillBitmapMode property
-        changes to BitmapMode::STRETCH or <const>
-        BitmapMode::NO_REPEAT</const>, depending on the current value of the
+        changes to BitmapMode::STRETCH or BitmapMode::NO_REPEAT,
+        depending on the current value of the
         #FillBitmapStretch property.</p>
      */
     [optional, property] boolean FillBitmapTile;

@@ -115,16 +115,15 @@ interface XResource;
     set.</p></li>
     <li>ConfigurationUpdateStart is sent before the update of
     the current configuration starts.</p>
-    <p>The requested configuration is available in the <member
-    scope="ConfigurationChangeEvent">Configuration</member> member.  The
+    <p>The requested configuration is available in the
+    ConfigurationChangeEvent::Configuration member.  The
     #ResourceId and #ResourceObject members
     are not set.</p></li>
     <li>ConfigurationUpdateEnd is sent after the update of
     the current configuration ends.</p>
     <p>The requested configuration is
-    available in the <member scope="ConfigurationChangeEvent"
-    >Configuration</member> member.  The #ResourceId and
-    #ResourceObject members are not set.</p></li>
+    available in the ConfigurationChangeEvent::Configuration member.
+    The #ResourceId and #ResourceObject members are not set.</p></li>
     <li>ResourceActivation is sent when a resource is
     activated, i.e. when a new object of a resource is created (or taken
     from a cash).</p>

@@ -330,8 +330,8 @@ of the current page is used as limit.
      the text and the footnote area.
  */
 [optional,property] long FootnoteLineDistance;
-/** contains the writing direction, as represented by the <type
- scope="com::sun::star::text">WritingMode2</type> constants */
+/** contains the writing direction, as represented by the
+    com::sun::star::text::WritingMode2 constants */
 [optional,property] short WritingMode;
 /** contains the mode of the text grid (none, lines, ...), as
     represented by com::sun::star::text::TextGridMode

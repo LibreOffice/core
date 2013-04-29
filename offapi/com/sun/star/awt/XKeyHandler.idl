@@ -27,8 +27,8 @@
 
 module com {  module sun {  module star {  module awt {
 
-/** This key handler is similar to <type
-    scope="::com::sun::star::awt">XKeyListener</type> but allows the
+/** This key handler is similar to
+    ::com::sun::star::awt::XKeyListener but allows the
     consumption of key events.  If a key event is consumed by one
     handler both the following handlers, with respect to the list of key
     handlers of the broadcaster, and a following handling by the
@@ -38,8 +38,8 @@ module com {  module sun {  module star {  module awt {
 */
 published interface XKeyHandler : ::com::sun::star::lang::XEventListener
 {
-    /** This function is called by the broadcaster, an <type
-        scope="::com::sun::star::awt">XExtendedToolkit</type> for
+    /** This function is called by the broadcaster, an
+        ::com::sun::star::awt::XExtendedToolkit for
         instance, after a key has been pressed but before it is released.
         The return value decides about whether other handlers will be
         called and a handling by the broadcaster will take place.
@@ -62,8 +62,8 @@ published interface XKeyHandler : ::com::sun::star::lang::XEventListener
     */
     boolean keyPressed ([in] com::sun::star::awt::KeyEvent aEvent);
 
-    /** This function is called by the broadcaster, an <type
-        scope="::com::sun::star::awt">XExtendedToolkit</type> for
+    /** This function is called by the broadcaster, an
+        ::com::sun::star::awt::XExtendedToolkit for
         instance, after a key has been pressed and released.  The return
         value decides about whether other handlers will be called and a
         handling by the broadcaster will take place.

@@ -42,7 +42,7 @@ interface XParagraphAppend : com::sun::star::uno::XInterface
 
         @param
             CharacterAndParagraphProperties can contain all the properties defined by the service
-                      <type scope="com::sun::star::text">Paragraph.
+                      Paragraph.
 
          */
          com::sun::star::text::XTextRange finishParagraph(  [in] com::sun::star::beans::PropertyValues CharacterAndParagraphProperties )
@@ -56,7 +56,7 @@ interface XParagraphAppend : com::sun::star::uno::XInterface
 
         @param
             CharacterAndParagraphProperties can contain all the properties defined by the service
-                      <type scope="com::sun::star::text">Paragraph.
+                      Paragraph.
 
         @param
             TextRange specifies the position of the insertion.

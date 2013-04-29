@@ -45,7 +45,7 @@ enum InteractiveSelectionResult
         component.
 
         <p>In this case, the obtained value is passed to the caller of
-        <member>XPropertyHandler::onInteractivePropertySelection<member>, which is
+        XPropertyHandler::onInteractivePropertySelection(), which is
         responsible for forwarding this value to the inspected component.</p>
     */
     ObtainedValue,

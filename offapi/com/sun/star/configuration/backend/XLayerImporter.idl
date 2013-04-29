@@ -42,7 +42,7 @@ published interface XLayerImporter : ::com::sun::star::uno::XInterface
 
         @returns
             the Backend into which layers are
-            imported by <member>XLayerImporter::importLayer()<member/>.
+            imported by XLayerImporter::importLayer().
 
     */
     XBackend getTargetBackend();
@@ -52,7 +52,7 @@ published interface XLayerImporter : ::com::sun::star::uno::XInterface
 
         @param aBackend
             a Backend into which layers should be
-            imported by <method>XLayerImporter::importLayer()<method/>.
+            imported by XLayerImporter::importLayer().
 
         @throws com::sun::star::lang::NullPointerException
             if the backend passed is `NULL`.

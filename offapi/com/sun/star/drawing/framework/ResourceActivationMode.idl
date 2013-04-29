@@ -22,9 +22,8 @@
 
 module com { module sun { module star { module drawing { module framework {
 
-/** The ResourceActivationMode specifies, for example for the <member
-    scope="com::sun::star::drawing::framework"
-    >XConfigurationController::requestResourceActivation()</member>,
+/** The ResourceActivationMode specifies, for example for the
+    com::sun::star::drawing::framework::XConfigurationController::requestResourceActivation(),
     whether a requested resource is to replace an existing resource of the
     same class or is to be activated additionally.
 */

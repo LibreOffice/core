@@ -257,8 +257,8 @@ constants AccessibleEventId
         that is exposed through the XAccessibleText and
         XAccessibleEditableText interfaces.
 
-        <p>The affected text ranges are represented by <type
-        scope="com::sun::star::accessibility">TextSegment</type> structures.<p>
+        <p>The affected text ranges are represented by
+        com::sun::star::accessibility::TextSegment structures.<p>
 
         <p>The content of the AccessibleEventObject::OldValue and
         AccessibleEventObject::NewValue expresses the type

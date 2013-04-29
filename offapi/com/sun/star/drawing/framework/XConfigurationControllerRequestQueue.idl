@@ -53,9 +53,7 @@ interface XConfigurationControllerRequestQueue
         @param xRequest
             The configuration change represented by this request object must only
             be commited to the configuration when the
-            <member
-            scope="com::sun::star::drawing::framework::XConfigurationChangeRequest"
-            >execute()</member>
+            com::sun::star::drawing::framework::XConfigurationChangeRequest::execute()
             method of the xRequest object is called.
     */
     void postChangeRequest (

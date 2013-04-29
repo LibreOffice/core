@@ -53,8 +53,6 @@ published struct DictionaryListEvent : com::sun::star::lang::EventObject
 
     @see    com::sun::star::linguistic2::DictionaryListEventFlags
 
-    <!-- Dennis: Does the <type> tag change the display of its contents -->
-    <!-- Thomas: AFAIK it should translate into a hyperlink or so. -->
     */
     short nCondensedEvent;
 

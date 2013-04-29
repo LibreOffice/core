@@ -38,14 +38,14 @@ interface XTextContentAppend : com::sun::star::uno::XInterface
         /** appends a text content at the end of the text.
 
                 <p> The sequence can contain all the properties defined by the service
-                <type scope="com::sun::star::text">.
+                Paragraph.
         </p>
 
         @param TextContent
             contains the object to be inserted.
         @param CharacterAndParagraphProperties
             can contain all the properties defined by the service
-                      <type scope="com::sun::star::text">Paragraph.
+                      Paragraph.
         @return
             the anchor text range of the inserted text content.
      */
@@ -61,7 +61,7 @@ interface XTextContentAppend : com::sun::star::uno::XInterface
             contains the object to be inserted.
         @param CharacterAndParagraphProperties
             can contain all the properties defined by the service
-                      <type scope="com::sun::star::text">Paragraph.
+                      Paragraph.
         @param TextRange
             insert position
         @return

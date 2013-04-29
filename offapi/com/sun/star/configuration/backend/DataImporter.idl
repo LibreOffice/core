@@ -58,20 +58,20 @@ published service DataImporter
             should be supported by implementations. Implementations must document
             a failure to support any of these arguments:
         <dl>
-            <dt><code>ImporterService</code> : <atom >string</atom></dt>
+            <dt><code>ImporterService</code> : `string`</dt>
             <dd>A service or implementation name used to instantiate the
                 Importer to use for importing. If this parameter
                 is missing, the implementation selects an appropriate importer.
                 By default, a MergeImporter should be used.
             </dd>
-            <dt><code>OverwriteExisting</code> : <atom >boolean</atom></dt>
+            <dt><code>OverwriteExisting</code> : `boolean`</dt>
             <dd>If `TRUE`, specifies that no existing data should be
                 overwritten by the import. If the Importer used
                 does not support such protection, an error may be raised.
                 If some data is not imported, because there is existing
                 data, this is indicated by returning an appropriate exception.
             </dd>
-            <dt><code>TruncateExisting</code> : <atom >boolean</atom></dt>
+            <dt><code>TruncateExisting</code> : `boolean`</dt>
             <dd>If `TRUE`, specifies that existing data should be
                 discarded and replaced by the imported data.
                 If the Importer used does not support this
@@ -79,19 +79,19 @@ published service DataImporter
                 By default, a CopyImporter is used to perform
                 truncating import.
             </dd>
-            <dt><code>Entity</code> : <atom >string</atom></dt>
+            <dt><code>Entity</code> : `string`</dt>
             <dd>An identifier for the entity in the destination backend for
                 which the imported data should apply. The value will be passed
                 to XLayerImporter::importLayerForEntity().
                 If this parameter is missing, the implementation uses
                 XLayerImporter::importLayer() instead.
             </dd>
-            <dt><code>Component</code> : <atom >string</atom></dt>
+            <dt><code>Component</code> : `string`</dt>
             <dd>Names the component for which to import data. If this
                 parameter is missing, the selection of data to import depends
                 on implementation-specific parameters.
             </dd>
-            <dt><code>LayerFilter</code> : <type >LayerFilter</type></dt>
+            <dt><code>LayerFilter</code> : LayerFilter</dt>
             <dd>A filter to transform data during import. This parameter is
                 optional. If this parameter is missing, data will be imported
                 unaltered. <em>Support for this parameter is optional.</em>

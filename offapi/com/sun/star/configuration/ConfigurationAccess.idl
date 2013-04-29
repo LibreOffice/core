@@ -91,34 +91,34 @@ module com { module sun { module star { module configuration {
  <ul>
     <li><strong>string</strong> can hold a human-readable text.
         <p>Values are represented as `string`.</p>
-        <p>Sequences are represented as <atom dim="[]">string</atom>.</p>
+        <p>Sequences are represented as `string[]`.</p>
         <p>"<em>human-readable</em>" here excludes non-printing characters
         except for CR, LF and TAB [Unicode code points 9,10,13].
         For binary data, use type <strong>binary</strong> instead.</p>
     </li>
     <li><strong>boolean</strong> can hold the values `TRUE` or `FALSE`.
         <p>Values are represented as `boolean`.
-        <p>Sequences are represented as <atom dim="[]">boolean</atom>.</p>
+        <p>Sequences are represented as `boolean[]`.</p>
     </li>
     <li><strong>short</strong> can hold a 16-bit signed integer.
         <p>Values are represented as `short`.</p>
-        <p>Sequences are represented as <atom dim="[]">short</atom>.</p>
+        <p>Sequences are represented as `short[]`.</p>
     </li>
     <li><strong>int</strong> can hold a 32-bit signed integer.
         <p>Values are represented as `long`.</p>
-        <p>Sequences are represented as <atom dim="[]">long</atom>.</p>
+        <p>Sequences are represented as `long[]`.</p>
     </li>
     <li><strong>long</strong> can hold a 64-bit signed integer.
         <p>Values are represented as `hyper`.</p>
-        <p>Sequences are represented as <atom dim="[]">hyper</atom>.</p>
+        <p>Sequences are represented as `hyper[]`.</p>
     </li>
     <li><strong>double</strong> can hold a floating point number.
         <p>Values are represented as `double`.</p>
-        <p>Sequences are represented as <atom dim="[]">double</atom>.</p>
+        <p>Sequences are represented as `double[]`.</p>
     </li>
     <li><strong>binary</strong> can hold a sequence of octets.
-        <p>Values are represented as <atom dim="[]">byte</atom>.</p>
-        <p>Sequences are represented as <atom dim="[][]">byte</atom>.</p>
+        <p>Values are represented as `byte[]`.</p>
+        <p>Sequences are represented as `byte[][]`.</p>
     </li>
  </ul>
 

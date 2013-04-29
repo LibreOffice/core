@@ -88,8 +88,7 @@ interface XTextLayout;
     that such caching is a lot more complicated, should the actual
     rendering a method yields depend on internal state (which is the
     case e.g. for the
-    <type
-    scope="::com::sun::star::drawing">::com::sun::star::drawing::XGraphics</type>
+    ::com::sun::star::drawing::::com::sun::star::drawing::XGraphics
     interface).  Please note, though, that deciding whether to return
     an XCachedPrimitive is completely up to the
     implementation - don't rely on the methods returning something
@@ -482,8 +481,8 @@ interface XCanvas : ::com::sun::star::uno::XInterface
             this property is zero. Use negative values for condensed output,
             and positive values for expanded output.</il>
 
-            <il>OptionalLayoutFeatures: a sequence of <type
-            scope=::com::sun::star::beans>PropertyValue</type> listing
+            <il>OptionalLayoutFeatures: a sequence of
+            ::com::sun::star::beans::PropertyValue listing
             font-specific optional layout features, like glyph
             variants.</il>
 

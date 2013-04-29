@@ -79,7 +79,7 @@ published interface XSimpleText: com::sun::star::text::XTextRange
 
         @param xRange
             specifies the position of insertion. For example,
-            <method>XSimpleText::createTextCursor</member> can be used to
+            XSimpleText::createTextCursor() can be used to
             get an XTextRange for this argument.
 
             <p>If the parameter bAbsorb() was `TRUE`

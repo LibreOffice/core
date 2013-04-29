@@ -26,9 +26,9 @@
 module com {  module sun {  module star { module script { module vba {
 
 
-/** Describes a VBA script event fired via <member>XVBACompatibility::
-    broadcastVBAScriptEvent</member>, and received by <member>
-    XVBAScriptListener::notifyVBAScriptEvent</member>.
+/** Describes a VBA script event fired via
+    XVBACompatibility::broadcastVBAScriptEvent(), and received by
+    XVBAScriptListener::notifyVBAScriptEvent().
 
     @see XVBACompatibility
     @see XVBAScriptListener

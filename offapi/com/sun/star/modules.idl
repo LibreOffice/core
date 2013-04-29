@@ -34,23 +34,22 @@ module awt {};
     implemented can be found in other modules.  The services in this module
     describe only what every accessible object has to support.</p>
 
-    <p>Making a class accessible starts by supporting the <type
-    scope="::com::sun::star::accessibility">XAccessible</type> interface.
+    <p>Making a class accessible starts by supporting the
+    ::com::sun::star::accessibility::XAccessible interface.
     This interface's only method returns the actual accessibility object, an
-    instance of <type
-    scope="::com::sun::star::accessibility">XAccessibleContext</type>.
+    instance of ::com::sun::star::accessibility::XAccessibleContext.
     These two interfaces may be implemented by the same class in which case
-    a call to <method scope="::com::sun::star::accessibility"
-    >XAccessible::getAccessible</method> returns the same object that is
-    called.  Alternatively the implementation of the <type
-    scope="::com::sun::star::accessibility">XAccessibleContext</type>
+    a call to ::com::sun::star::accessibility::XAccessible::getAccessible()
+    returns the same object that is
+    called.  Alternatively the implementation of the
+    ::com::sun::star::accessibility::XAccessibleContext
     interface can be done by another class.  This makes it possible to put
     all accessibility implementations into their own library which has only
     to be loaded when necessary.</p>
 
     <p>Note that all other interfaces have to be implemented by the same
-    class that implements the <type
-    scope="::com::sun::star::accessibility">XAccessibleContext</type>
+    class that implements the
+    ::com::sun::star::accessibility::XAccessibleContext
     interface.  Note also that there is no way back from an accessibility
     object to the object from which it has been obtained by means of the
     UAA.  If you need such a back-link you have to provide one on your

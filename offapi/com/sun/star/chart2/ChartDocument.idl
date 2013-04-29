@@ -38,7 +38,7 @@ module chart2
 service ChartDocument
 {
     /** this interface is derived from
-        <type-scope="com::sun::star::frame">XModel</type>.  Thus model
+        com::sun::star::frame::XModel.  Thus model
         functionality is available via this interface.
      */
     interface  XChartDocument;

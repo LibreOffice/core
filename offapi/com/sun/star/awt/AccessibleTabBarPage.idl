@@ -37,9 +37,8 @@ service AccessibleTabBarPage
         tabbar page:
 
         <ul>
-        <li>Role: The role of a tabbar page is <const
-            scope="com::sun::star::accessibility"
-            >AccessibleRole::PAGE_TAB</const>.</li>
+        <li>Role: The role of a tabbar page is
+        com::sun::star::accessibility::AccessibleRole::PAGE_TAB.</li>
         <li>Name: The name of a tabbar page is the localized
             tabbar page text.</li>
         <li>Description: The description of a tabbar page is its localized
@@ -51,25 +50,21 @@ service AccessibleTabBarPage
         <li>Relations: There are no relations.</li>
         <li>States: The states supported by this service are
             <ul>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::DEFUNC</const>
+            <li>com::sun::star::accessibility::AccessibleStateType::DEFUNC
                 is set if the object has already been disposed
                 and subsequent calls to this object result in
                 com::sun::star::lang::DisposedException
                 exceptions.</li>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::ENABLED</const> is set
-                if the object is enabled.</li>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::SELECTABLE</const> is always set.</li>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::SELECTED</const> is set
-                if the object is selected.</li>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::SHOWING</const> is set
-                if the object is displayed on the screen.</li>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::VISIBLE</const> is always set.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::ENABLED
+                is set if the object is enabled.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::SELECTABLE
+                is always set.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::SELECTED
+                is set if the object is selected.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::SHOWING
+                is set if the object is displayed on the screen.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::VISIBLE
+                is always set.</li>
             </ul>
             </li>
         </ul>

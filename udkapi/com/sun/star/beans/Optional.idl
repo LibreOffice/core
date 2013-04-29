@@ -25,9 +25,8 @@ module com {  module sun {  module star {  module beans {
    An optional value of a given type.
 
    <p>This structure is used as the type of interface attributes corresponding
-   to instances of <type scopye="com::sun::star::beans">Property</type> that
-   have the <const
-   scope="com::sun::star::beans">PropertyAttribute::MAYBEVOID</const>.  It might
+   to instances of com::sun::star::beans::Property that
+   have the com::sun::star::beans::PropertyAttribute::MAYBEVOID.  It might
    also be useful in other situations, for example as the return type of an
    interface method.</p>
  */

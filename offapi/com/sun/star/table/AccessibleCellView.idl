@@ -42,18 +42,15 @@ service AccessibleCellView
     /** This interface gives access to the visible content of a cell in a
         accessible spreadsheet page preview or accessible text document view.
     <ul>
-        <li>The parent returned by <method scope="::com::sun::star::accessibility"
-            >XAccessibleContext::getAccessibleParent</method>
+        <li>The parent returned by
+            ::com::sun::star::accessibility::XAccessibleContext::getAccessibleParent()
             is the accessible table view.</li>
         <li>The children returned by
-            <method scope="::com::sun::star::accessibility"
-            >XAccessibleContext::getAccessibleChild</method> all
-            support the interface XAccessible. Calling
-            <method scope="::com::sun::star::accessibility"
-            >XAccessibleContext::getAccessibleContext</method> for these
-            children returns an object that supports the service
-            <type scope="::com::sun::star::text"
-            >AccessibleParagraphView</type>:
+            ::com::sun::star::accessibility::XAccessibleContext::getAccessibleChild()
+            all support the interface XAccessible. Calling
+            ::com::sun::star::accessibility::XAccessibleContext::getAccessibleContext()
+            for these children returns an object that supports the service
+            ::com::sun::star::text::AccessibleParagraphView:
             A child of this kind is returned for every paragraph
             fragment that is contained in the cell and
             is at least partially visible. A paragraph fragment is
@@ -61,44 +58,43 @@ service AccessibleCellView
             certain page.
         <li>The name is something like A10 or B23 or so on.</li>
         <li>The description is the name or the content of the given note.</li>
-        <li>The role is <const scope="::com::sun::star::accessibility"
-            >AccessibleRole::TABLE_CELL</const></li>
+        <li>The role is
+            ::com::sun::star::accessibility::AccessibleRole::TABLE_CELL</li>
         <li>For spreadsheets, there are relations between the cell and the
             shapes with an anchor on this cell.</li>
         <li>The following states are supported:
             <ul>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::DEFUNC</const> is always false if the
-                    cell is showed, otherwise it is true.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::EDITABLE</const> is false if the cell
+                <li>::com::sun::star::accessibility::AccessibleStateType::DEFUNC
+                    is always false if the
+                    cell is shown, otherwise it is true.</li>
+                <li>::com::sun::star::accessibility::AccessibleStateType::EDITABLE
+                    is false if the cell
                     is showed in a page preview or the cell or the table is
                     protected, otherwise it is true.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::ENABLED</const> is always true.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::MULTI_LINE</const> is always true in
-                    spreadsheets and false otherwise.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::OPAQUE</const> is false if the cell
+                <li>::com::sun::star::accessibility::AccessibleStateType::ENABLED
+                    is always true.</li>
+                <li>::com::sun::star::accessibility::AccessibleStateType::MULTI_LINE
+                    is always true in spreadsheets and false otherwise.</li>
+                <li>::com::sun::star::accessibility::AccessibleStateType::OPAQUE
+                    is false if the cell
                     has no background color or graphic, otherwise it is true.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::SELECTABLE</const> is true if the
+                <li>::com::sun::star::accessibility::AccessibleStateType::SELECTABLE
+                    is true if the
                     cell is not showed in a page preview, otherwise is it
                     false.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::SELECTED</const> is true, if the cell
+                <li>::com::sun::star::accessibility::AccessibleStateType::SELECTED
+                    is true, if the cell
                     is selected. This is not possible in the page preview.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::SHOWING</const>Is true if the
+                <li>::com::sun::star::accessibility::AccessibleStateType::SHOWING
+                    is true if the
                     Bounding Box lies in the Bounding Box of the parent.
                     Otherwise it is false.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::TRANSIENT</const>Is true if the cell
+                <li>::com::sun::star::accessibility::AccessibleStateType::TRANSIENT
+                    is true if the cell
                     is showed in a spreadsheet page preview. Otherwise it is
                     false.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::VISIBLE</const>Is always true.</li>
+                <li>::com::sun::star::accessibility::AccessibleStateType::VISIBLE
+                    is always true.</li>
             </ul>
         </li>
     </ul>

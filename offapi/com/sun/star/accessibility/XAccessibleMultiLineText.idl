@@ -91,7 +91,7 @@ interface XAccessibleMultiLineText
         <p>The substring returned will most of the time be identical to
         calling XAccessibleText::getTextAtIndex() with
         the index returned by XAccessibleText::getCaretPosition()
-        and type  <const scope="AccessibleTextType">LINE</type> beside the
+        and type AccessibleTextType::LINE beside the
         following special case:</p>
 
         <p>Some text implementations place the caret at the end of the current

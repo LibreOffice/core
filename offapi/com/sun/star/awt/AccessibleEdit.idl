@@ -38,16 +38,14 @@ service AccessibleEdit
     /** This interface gives access to the structural information of an edit:
 
         <ul>
-        <li>Role: The role of an edit is <const
-            scope="com::sun::star::accessibility"
-            >AccessibleRole::TEXT</const>.
+        <li>Role: The role of an edit is
+            com::sun::star::accessibility::AccessibleRole::TEXT.
             If the text content of the edit is password protected
-            the role is <const scope="com::sun::star::accessibility"
-            >AccessibleRole::PASSWORD_TEXT</const>.</li>
-        <li>Name: If the relation of type <const
-            scope="com::sun::star::accessibility"
-            >AccessibleRelationType::LABELED_BY</const> is set,
-            the name of the edit is the localized label of the target
+            the role is
+            com::sun::star::accessibility::AccessibleRole::PASSWORD_TEXT.</li>
+        <li>Name: If the relation of type
+            com::sun::star::accessibility::AccessibleRelationType::LABELED_BY
+            is set, the name of the edit is the localized label of the target
             object, otherwise there is no name.</li>
         <li>Description: The description of an edit is its localized
             help text.</li>
@@ -55,36 +53,31 @@ service AccessibleEdit
         <li>Parent: The parent is the window that contains the edit.</li>
         <li>Relations: The relations supported by this service are
             <ul>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleRelationType::LABELED_BY</const> is set
-                if the object is labeled by one or more target
+            <li>com::sun::star::accessibility::AccessibleRelationType::LABELED_BY
+                is set if the object is labeled by one or more target
                 objects.</li>
             </ul>
             </li>
         <li>States: The states supported by this service are
             <ul>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::DEFUNC</const>
+            <li>com::sun::star::accessibility::AccessibleStateType::DEFUNC
                 is set if the object has already been disposed
                 and subsequent calls to this object result in
                 com::sun::star::lang::DisposedException
                 exceptions.</li>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::EDITABLE</const> is set
+            <li>com::sun::star::accessibility::AccessibleStateType::EDITABLE
+                is set
                 if the content of the object can be changed by the user.</li>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::ENABLED</const> is set
-                if the object is enabled.</li>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::FOCUSABLE</const> is always set.</li>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::FOCUSED</const> is set
-                if the object currently has the keyboard focus.</li>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::SHOWING</const> is set
-                if the object is displayed on the screen.</li>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::VISIBLE</const> is always set.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::ENABLED
+                is set if the object is enabled.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::FOCUSABLE
+                is always set.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::FOCUSED
+                is set if the object currently has the keyboard focus.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::SHOWING
+                is set if the object is displayed on the screen.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::VISIBLE
+                is always set.</li>
             </ul>
             </li>
         </ul>

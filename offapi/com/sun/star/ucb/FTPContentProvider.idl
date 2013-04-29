@@ -26,7 +26,7 @@
 module com { module sun { module star { module ucb {
 
 /** The FTP Content Provider (FCP) implements a ContentProvider
-    for the <Type>UniversalContentBroker</type> (UCB).
+    for the UniversalContentBroker (UCB).
 
     <p>The served contents enable access to directories and files on a
     ftp-server.

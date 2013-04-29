@@ -40,8 +40,9 @@ published interface XDatabaseContext
     interface com::sun::star::container::XEnumerationAccess;
 
     /** NameAccess on all registered data sources.
-        <p>One exception is the <method "com.sun.star.container.XNameAccess">getByName</method>, this method also allows to ask
-        for a <member "DataAccessDescriptor">DatabaseLocation</member>.
+        <p>One exception is the com.sun.star.container.XNameAccess::getByName().
+        This method also allows to ask
+        for a DataAccessDescriptor::DatabaseLocation.
         </p>
      */
     interface com::sun::star::container::XNameAccess;

@@ -34,12 +34,12 @@ published constants KeyRule
             in the
             com::sun::star::sdbc::XResultSet
              objects returned by the methods
-             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getImportedKeys()</member>
+             com::sun::star::sdbc::XDatabaseMetaData::getImportedKeys()
              ,
-             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getExportedKeys()</member>
+             com::sun::star::sdbc::XDatabaseMetaData::getExportedKeys()
              ,
              and
-             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getCrossReference()</member>
+             com::sun::star::sdbc::XDatabaseMetaData::getCrossReference()
              .
              <P>
              For the column
@@ -67,12 +67,12 @@ published constants KeyRule
             in the
              com::sun::star::sdbc::XResultSet
              objects returned by the methods
-             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getImportedKeys()</member>
+             com::sun::star::sdbc::XDatabaseMetaData::getImportedKeys()
              ,
-             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getExportedKeys()</member>
+             com::sun::star::sdbc::XDatabaseMetaData::getExportedKeys()
              ,
              and
-             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getCrossReference()</member>
+             com::sun::star::sdbc::XDatabaseMetaData::getCrossReference()
              .
              <P>
              For the column
@@ -98,12 +98,12 @@ published constants KeyRule
             in the
              com::sun::star::sdbc::XResultSet
               objects returned by the methods
-            <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getImportedKeys()</member>
+            com::sun::star::sdbc::XDatabaseMetaData::getImportedKeys()
              ,
-             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getExportedKeys()</member>
+             com::sun::star::sdbc::XDatabaseMetaData::getExportedKeys()
              ,
              and
-             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getCrossReference()</member>
+             com::sun::star::sdbc::XDatabaseMetaData::getCrossReference()
              .
              <P>
              For the columns
@@ -125,12 +125,12 @@ published constants KeyRule
              in the
              com::sun::star::sdbc::XResultSet
              objects returned by the methods
-             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getImportedKeys()</member>
+             com::sun::star::sdbc::XDatabaseMetaData::getImportedKeys()
              ,
-             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getExportedKeys()</member>
+             com::sun::star::sdbc::XDatabaseMetaData::getExportedKeys()
              ,
              and
-             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getCrossReference()</member>
+             com::sun::star::sdbc::XDatabaseMetaData::getCrossReference()
              .
              <P>
              For the columns
@@ -150,12 +150,12 @@ published constants KeyRule
             in the
              com::sun::star::sdbc::XResultSet
              objects returned by the methods
-             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getImportedKeys()</member>
+             com::sun::star::sdbc::XDatabaseMetaData::getImportedKeys()
              ,
-             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getExportedKeys()</member>
+             com::sun::star::sdbc::XDatabaseMetaData::getExportedKeys()
              ,
              and
-             <member  scope="com::sun::star::sdbc">XDatabaseMetaData::getCrossReference()</member>
+             com::sun::star::sdbc::XDatabaseMetaData::getCrossReference()
              .
              <P>
              For the columns

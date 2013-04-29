@@ -25,8 +25,7 @@
 module com { module sun { module star { module task {
 
 /** Use this interface to abort a command asynchronously.
-    For example, have a look at <type scope="com::sun::star::deployment">
-    XPackageManager</type>.
+    For example, have a look at com::sun::star::deployment::XPackageManager.
 */
 interface XAbortChannel
 {

@@ -40,9 +40,8 @@ service AccessibleMenu
     /** This interface gives access to the structural information of a menu:
 
         <ul>
-        <li>Role: The role of a menu is <const
-            scope="com::sun::star::accessibility"
-            >AccessibleRole::MENU</const>.</li>
+        <li>Role: The role of a menu is
+            com::sun::star::accessibility::AccessibleRole::MENU.</li>
         <li>Name: The name of a menu is the localized item text.</li>
         <li>Description: The description of a menu is its localized
             help text.</li>
@@ -57,33 +56,27 @@ service AccessibleMenu
         <li>Relations: There are no relations.</li>
         <li>States: The states supported by this service are
             <ul>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::ARMED</const> is set
-                if the object is highlighted.</li>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::CHECKED</const> is set
-                if the object is currently checked.</li>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::DEFUNC</const>
+            <li>com::sun::star::accessibility::AccessibleStateType::ARMED
+                is set if the object is highlighted.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::CHECKED
+                is set if the object is currently checked.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::DEFUNC
                 is set if the object has already been disposed
                 and subsequent calls to this object result in
                 com::sun::star::lang::DisposedException
                 exceptions.</li>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::ENABLED</const> is set
-                if the object is enabled.</li>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::OPAQUE</const> is always set.</li>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::SELECTABLE</const> is always set.</li>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::SELECTED</const> is set
-                if the object is selected.</li>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::SHOWING</const> is set
-                if the object is displayed on the screen.</li>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::VISIBLE</const> is always set.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::ENABLED
+                is set if the object is enabled.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::OPAQUE
+                is always set.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::SELECTABLE
+                is always set.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::SELECTED
+                is set if the object is selected.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::SHOWING
+                is set if the object is displayed on the screen.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::VISIBLE
+                is always set.</li>
             </ul>
             </li>
         </ul>
@@ -111,8 +104,7 @@ service AccessibleMenu
 
     /** This interface gives access to the numerical value of a
         menu, which is related to the menu's
-        <const scope="com::sun::star::accessibility"
-        >AccessibleStateType::SELECTED</const> state.
+        com::sun::star::accessibility::AccessibleStateType::SELECTED state.
      */
     interface ::com::sun::star::accessibility::XAccessibleValue;
 

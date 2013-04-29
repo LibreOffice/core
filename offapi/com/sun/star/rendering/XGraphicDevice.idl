@@ -190,8 +190,8 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
         getAvailableServiceNames() on the returned interface):
 
         - Gradients - all gradients need to support two construction
-          parameters, "Colors" being a <type>sequence<Color></type>
-          and "Stops" being a <type>sequence<double></type>. Both must
+          parameters, "Colors" being a `sequence<Color>`
+          and "Stops" being a `sequence<double>`. Both must
           have the same length, and at least two elements. See
           http://www.w3.org/TR/SVG11/pservers.html#GradientStops for
           the semantics of gradient stops and colors.

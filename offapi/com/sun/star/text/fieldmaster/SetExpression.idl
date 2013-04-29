@@ -41,7 +41,9 @@ published service SetExpression
      is set as number sequence.
      */
     [property]  string NumberingSeparator;
-    /** determines the type of the field as <type scope="com::sun::star::text"SetVariableType</type>
+
+    /** determines the type of the field as
+        com::sun::star::text::SetVariableType
      */
     [property]  short SubType;
 };

@@ -44,7 +44,7 @@ constants FormulaMapGroupSpecialOffset
         <li>A value of type `double` for literal floating-point
         constants.</li>
         <li>A `string` for literal text.</li>
-        <li>A <atom dim="[][]">any</atom> for a literal array. The contained
+        <li>A `any[][]` for a literal array. The contained
         values shall be of type `double` or `string`.
         Floating-point values and strings may occur together in an array.</li>
         <li>A struct of type SingleReference for a reference to a

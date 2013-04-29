@@ -30,8 +30,8 @@ interface XModuleController;
 /** The XControllerManager gives access to the controllers of the drawing
     framework.
     <p>The XControllerManager interface is typically
-    implemented by the same object that implements <type
-    scope="com::sun::star::frame">XController</type>.</p>
+    implemented by the same object that implements
+    com::sun::star::frame::XController.</p>
 */
 interface XControllerManager
 {

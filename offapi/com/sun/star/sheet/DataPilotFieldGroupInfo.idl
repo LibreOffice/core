@@ -69,24 +69,24 @@ published struct DataPilotFieldGroupInfo
         more flags from DataPilotFieldGroupBy, grouping is
         performed on date or time.</li>
         <li>If `TRUE` is set, #Step contains a value greater
-        than or equal to 1, and #GroupBy set to <const>
-        DataPilotFieldGroupBy::DAYS</const>, grouping is performed on ranges
-        of days (see descriptions for <member>
-        XDataPilotFieldGrouping::createDateGroup</member> for more details
+        than or equal to 1, and #GroupBy set to
+        DataPilotFieldGroupBy::DAYS, grouping is performed on ranges
+        of days (see descriptions for
+        XDataPilotFieldGrouping::createDateGroup() for more details
         about day grouping).</li>
         </ul></p>
      */
     boolean HasDateValues;
 
 
-    /** specifies the start value for the grouping if <member>HasAutoStart
-        </member> is set to `FALSE`.
+    /** specifies the start value for the grouping if #HasAutoStart
+        is set to `FALSE`.
      */
     double Start;
 
 
-    /** specifies the end value for the grouping if <member>HasAutoEnd
-        </member> is set to `FALSE`.
+    /** specifies the end value for the grouping if #HasAutoEnd
+        is set to `FALSE`.
      */
     double End;
 
@@ -119,8 +119,8 @@ published struct DataPilotFieldGroupInfo
 
     /** specifies the named groups in this field if there are some.
 
-        <p>The returned object is an instance of <type>DataPilotFieldGroups
-        </type>. The collection of groups can be modified by inserting,
+        <p>The returned object is an instance of DataPilotFieldGroups
+        . The collection of groups can be modified by inserting,
         removing, replacing, or renaming single groups or item names in the
         groups. When writing back this struct containing such a changed
         collection of groups to the DataPilotField::GroupInfo

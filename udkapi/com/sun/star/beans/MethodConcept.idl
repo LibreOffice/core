@@ -67,8 +67,8 @@ published constants MethodConcept
 
         <p>These methods have the signature
         <code>create...Enumeration</code> and return an interface
-        that is derived from <type scope="com::sun::star::container">
-        XEnumeration</type> Additionally, the method
+        that is derived from com::sun::star::container::XEnumeration.
+        Additionally, the method
         com::sun::star::container::XEnumerationAccess::getElementType()
         belongs to this concept.</p>
      */
@@ -95,8 +95,7 @@ published constants MethodConcept
         <code>insert...ByIndex()</code>,
         <code>replace...ByIndex()</code>, or
         <code>remove...ByIndex()</code>.
-        The method <member scope="com::sun::star::container">
-        XIndexAccess::getCount()</member>
+        The method com::sun::star::container::XIndexAccess::getCount()
         also belongs to this concept. </p>
      */
     const long INDEXCONTAINER = 32;

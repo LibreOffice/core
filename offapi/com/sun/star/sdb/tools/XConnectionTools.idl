@@ -80,7 +80,7 @@ interface XConnectionTools
         <ul><li>a SDB-level connection (com.sun.star.sdb::Connection</li>
             <li>a string specifying the name of an object relative to the connection</li>
             <li>a com.sun.star.sdb::CommandType value specifying the type
-                of the object</type></li>
+                of the object</li>
         </ul>
         </p>
 

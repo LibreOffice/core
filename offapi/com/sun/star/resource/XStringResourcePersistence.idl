@@ -60,7 +60,7 @@ interface XStringResourcePersistence: com::sun::star::resource::XStringResourceM
 
         This method can throw all exceptions thrown by the methods of
         com::sun::star::embed::XStorage respectively
-        a <type scope="com::sun::star::ucb">CommandAbortedException in
+        a com::sun::star::ucb::CommandAbortedException in
         case of a StringResourceWithLocation for all exceptions that are
         not handled by a previously specified
         com::sun::star::task::XInteractionHandler.

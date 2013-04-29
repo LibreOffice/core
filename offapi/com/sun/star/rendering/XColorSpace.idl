@@ -99,8 +99,8 @@ interface XColorSpace
         possible.
 
         @return the corresponding sequence of device colors in the
-        target color space (e.g. <type>sequence<double></type> or
-        <type>sequence<byte></type>).
+        target color space (e.g. `sequence<double>` or
+        `sequence<byte>`).
 
         @throws a
         com::sun::star::lang::IllegalArgumentException,

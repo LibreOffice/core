@@ -27,11 +27,7 @@ module com { module sun { module star { module sdb {
 
     <p>
     These documents typically process information from a connected
-    data source. A
-    <type>
-    Document
-    </type>
-    could be a form or a report.
+    data source. A Document could be a form or a report.
 
 @deprecated
 */

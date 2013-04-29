@@ -45,7 +45,7 @@ published service HierarchyBrowser
             com::sun::star::task::XJob::execute()
             must be supported by all implementations:
         <dl>
-            <dt><code>ExcludeComponents</code> : <atom dim="[]">string</atom> or <atom >string</atom></dt>
+            <dt><code>ExcludeComponents</code> : `string[]` or `string`</dt>
             <dd>A component or list of components that should be skipped
                 and excluded from the result. If this argument appears multiple
                 times it is handled cumulatively.

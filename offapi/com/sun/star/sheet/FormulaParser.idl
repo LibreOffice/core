@@ -40,8 +40,8 @@ service FormulaParser
 
     /** specifies whether to use English parser and formatter.
 
-        <p>Note: When changing this, an already existing <member>OpCodeMap
-        </member> needs to be recreated internally, so for performance reasons
+        <p>Note: When changing this, an already existing #OpCodeMap
+        needs to be recreated internally, so for performance reasons
         set this <em>before</em> setting the #OpCodeMap.
      */
     [property] boolean CompileEnglish;
@@ -70,9 +70,9 @@ service FormulaParser
 
     /** contains a list of external links referenced in formulas.
 
-        <p>Use of this property depends on the <member>FormulaConvention
-        </member> in use. It is relevant only for <const>
-        AddressConvention::XL_OOX</const> to map indices to external
+        <p>Use of this property depends on the FormulaConvention
+        in use. It is relevant only for
+        AddressConvention::XL_OOX to map indices to external
         documents. The sequence must be in the order of indices used. Note
         that indices are 1-based, the sequence must start with an empty
         element.</p>

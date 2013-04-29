@@ -353,7 +353,7 @@ interface XAccessibleText : ::com::sun::star::uno::XInterface
 
         <p>Returns the substring of the specified text type that contains
         the character at the given index, if any.  For example, given the
-        text type <const scope="AccessibleTextType">WORD</type>, the word
+        text type AccessibleTextType::WORD, the word
         which contains the character at position nIndex is returned, or an
         empty string if no word is found at the that position.</p>
 
@@ -388,8 +388,8 @@ interface XAccessibleText : ::com::sun::star::uno::XInterface
         XAccessibleText::getTextAtIndex() with a
         suitably decreased index value.</p>
 
-        <p>For example, if text type is <const
-        scope="AccessibleTextType">WORD</type>, then the complete word
+        <p>For example, if text type is
+        AccessibleTextType::WORD, then the complete word
         that is closest to and located before nIndex is returned.</p>
 
         <p>If the index is valid, but no suitable word (or other text
@@ -427,8 +427,8 @@ interface XAccessibleText : ::com::sun::star::uno::XInterface
         XAccessibleText::getTextAtIndex() with a
         suitably increased index value.</p>
 
-        <p>For example, if text type is <const
-        scope="AccessibleTextType">WORD</type>, then the complete word
+        <p>For example, if text type is
+        AccessibleTextType::WORD, then the complete word
         that is closest to and located behind nIndex is returned.</p>
 
         <p>If the index is valid, but no suitable word (or other text

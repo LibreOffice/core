@@ -70,8 +70,8 @@ published service GridControl
         this is what are the container elements for a GridControl.</p>
 
         <p>As the com::sun::star::form::FormComponents service also specifies
-        the <type scope"com::sun::star::script">XEventAttacherManager</type> service, grid control models
-        also provide a scripting environment for their columns.</p>
+        the com::sun::star::script::XEventAttacherManager service, grid control
+        models also provide a scripting environment for their columns.</p>
     */
     service com::sun::star::form::FormComponents;
 

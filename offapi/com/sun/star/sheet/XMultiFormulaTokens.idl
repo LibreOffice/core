@@ -36,7 +36,7 @@ module com {  module sun {  module star {  module sheet {
     com::sun::star::sheet::XMultiFormulaTokens::getCount()
     method. When the client code tries to access formula tokens at index that
     is outside the allowed index range, the implementation shall return an
-    <type scope="com::sun::star::lang">IndexOutOfBoundsException</member>.
+    com::sun::star::lang::IndexOutOfBoundsException.
  */
 interface XMultiFormulaTokens
 {

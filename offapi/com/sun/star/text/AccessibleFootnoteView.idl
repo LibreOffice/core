@@ -40,27 +40,25 @@ service AccessibleFootnoteView
         partially visible on the screen.
 
         <ul>
-            <li>The parent returned by <method scope="::com::sun::star::accessibility"
-                >XAccessibleContext::getAccessibleParent</method>
+            <li>The parent returned by
+                ::com::sun::star::accessibility::XAccessibleContext::getAccessibleParent()
                 is either the accessible view of a text document,
                 a page of the accessible page preview of a text document,
                 or the accessible page preview of a spreadsheet document.
-            <li>The children returned by <method scope="::com::sun::star::accessibility"
-                >XAccessibleContext::getAccessibleChild</method> all
-                support the interface XAccessible. Calling
-                <method scope="::com::sun::star::accessibility"
-                >XAccessible::getAccessibleContext</method> for these children returns
+            <li>The children returned by
+                ::com::sun::star::accessibility::XAccessibleContext::getAccessibleChild()
+                all support the interface XAccessible. Calling
+                ::com::sun::star::accessibility::XAccessible::getAccessibleContext()
+                for these children returns
                 an object that supports one of the following services.
                 <ul>
-                    <li><type scope="::com::sun::star::text"
-                        >AccessibleParagraphView</type>:
+                    <li>::com::sun::star::text::AccessibleParagraphView:
                         A child of this kind is returned for every paragraph
                         fragment that is contained in the document body and
                         is at least partially visible. A paragraph fragment is
                         the part of a paragraph that is displayed on a
                         certain page.
-                    <li><type scope="::com::sun::star::table"
-                        >AccessibleTableView</type>:
+                    <li>::com::sun::star::table::AccessibleTableView:
                         A child of this kind is returned for every table
                         fragment that is contained in the document body
                         and is at least partially visible. A table fragment is
@@ -68,8 +66,8 @@ service AccessibleFootnoteView
                 </ul>
                 <p>The logical order of paragraph and table fragments is never
                    changed.
-            <li>The role is <const scope="::com::sun::star::accessibility"
-                >AccessibleRole::FOOTNOTE</const>
+            <li>The role is
+                ::com::sun::star::accessibility::AccessibleRole::FOOTNOTE
             <li>The name is "footnote" (or the equivalent term
                 in application's language) with a number appended.
             <li>The description is footnote" (or the equivalent term
@@ -79,23 +77,19 @@ service AccessibleFootnoteView
             <li>There are no relations. <em>TODO: One might specify a relation
                 to the footnote anchor's paragraph.</em>
             <li>The following states might be contained in the state set
-                returned by <method scope="::com::sun::star::accessibility"
-                >XAccessible::getAccessibleStateSet</type>:
+                returned by
+                ::com::sun::star::accessibility::XAccessible::getAccessibleStateSet():
                 <ul>
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::DEFUNC</const> (indicates that
+                    <li>::com::sun::star::accessibility::AccessibleStateType::DEFUNC
+                        (indicates that
                         the document window has been closed or the footnote is
                         not existing any longer)
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::EDITABLE</const>
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::ENABLED</const> (always contained)
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::OPAQUE</const>
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::SHOWING</const>
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::VISIBLE</const>
+                    <li>::com::sun::star::accessibility::AccessibleStateType::EDITABLE
+                    <li>::com::sun::star::accessibility::AccessibleStateType::ENABLED
+                        (always contained)
+                    <li>::com::sun::star::accessibility::AccessibleStateType::OPAQUE
+                    <li>::com::sun::star::accessibility::AccessibleStateType::SHOWING
+                    <li>::com::sun::star::accessibility::AccessibleStateType::VISIBLE
                 </ul>
             <li>Depending of the application's region setting, the locale is
                 the western, Asian or complex default language of the document.

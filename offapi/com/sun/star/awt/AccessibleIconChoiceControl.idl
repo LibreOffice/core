@@ -44,9 +44,8 @@ service AccessibleIconChoiceControl
     /** This interface gives access to the structural information of an icon choice control:
 
        <ul>
-       <li>Role: The role of an icon choice control is <const
-           scope="com::sun::star::accessibility"
-           >AccessibleRole::TREE</const>.</li>
+       <li>Role: The role of an icon choice control is
+       com::sun::star::accessibility::AccessibleRole::TREE.</li>
        <li>Name: The name of an icon choice control is IconChoiceControl.</li>
        <li>Description: The description of an icon choice control is its localized
            help text.</li>
@@ -56,35 +55,29 @@ service AccessibleIconChoiceControl
        <li>Relations: There are no relations.</li>
        <li>States: The states supported by this service are
            <ul>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::DEFUNC</const>
+           <li>com::sun::star::accessibility::AccessibleStateType::DEFUNC
                is set if the object has already been disposed
                and subsequent calls to this object result in
                com::sun::star::lang::DisposedException
                exceptions.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::ENABLED</const> is set
-               if the object is enabled.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::FOCUSABLE</const> is always set.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::FOCUSED</const> is set
-               if the object currently has the keyboard focus.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::ACTIVE</const> is set
-               if a child has currently the focus.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::RESIZABLE</const> is set
-               if the object can be resized.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::SHOWING</const> is set
-               if the object is displayed on the screen.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::VISIBLE</const> is always set.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::MANAGES_DESCENDANTS</const> is always set. Children are transient.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::MULTI_SELECTABLE</const> is set when multi selection is enabled.</li>
+           <li><com::sun::star::accessibility::AccessibleStateType::ENABLED
+               is set if the object is enabled.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::FOCUSABLE
+               is always set.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::FOCUSED
+               is set if the object currently has the keyboard focus.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::ACTIVE
+               is set if a child has currently the focus.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::RESIZABLE
+               is set if the object can be resized.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::SHOWING
+               is set if the object is displayed on the screen.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::VISIBLE
+               is always set.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::MANAGES_DESCENDANTS
+               is always set. Children are transient.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::MULTI_SELECTABLE
+               is set when multi selection is enabled.</li>
            </ul>
            </li>
        </ul>

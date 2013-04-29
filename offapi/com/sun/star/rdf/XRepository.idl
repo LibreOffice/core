@@ -85,8 +85,7 @@ interface XRepository
         Implementations must support RDF/XML format.
         Support for other RDF formats is optional.
         If the format is not supported by the implementation, an
-        <type scope="com::sun::star::datatransfer">UnsupportedFlavorException
-        </type> is raised.
+        com::sun::star::datatransfer::UnsupportedFlavorException is raised.
         If the format requires use of a BaseURI, but none is given, an
         com::sun::star::lang::IllegalArgumentException
         is raised.
@@ -145,8 +144,7 @@ interface XRepository
         Implementations must support RDF/XML format.
         Support for other RDF formats is optional.
         If the format is not supported by the implementation, an
-        <type scope="com::sun::star::datatransfer">UnsupportedFlavorException
-        </type> is raised.
+        com::sun::star::datatransfer::UnsupportedFlavorException is raised.
         </p>
 
         @param Format

@@ -24,9 +24,9 @@
 module com {  module sun {  module star { module script { module vba {
 
 
-/** Identifies a VBA script event fired via <member>XVBACompatibility::
-    broadcastVBAScriptEvent</member>, and received by <member>
-    XVBAScriptListener::notifyVBAScriptEvent</member>.
+/** Identifies a VBA script event fired via
+    XVBACompatibility::broadcastVBAScriptEvent(), and received by
+    XVBAScriptListener::notifyVBAScriptEvent().
 
     @see VBAScriptEvent
     @see XVBACompatibility
@@ -40,8 +40,8 @@ constants VBAScriptEventId
         <p>Several scripts may run simultaneously, e.g. when a running script
         triggers a document event that starts another script.</p>
 
-        <p>The number of running scripts can be obtained via <member>
-        XVBACompatibility::RunningVBAScripts</member>. The number returned
+        <p>The number of running scripts can be obtained via
+        XVBACompatibility::RunningVBAScripts. The number returned
         there will already contain the new script notified with this event.</p>
 
         <p>The member VBAScriptEvent::ModuleName of the event
@@ -56,8 +56,8 @@ constants VBAScriptEventId
         <p>Several scripts may run simultaneously, e.g. when a running script
         triggers a document event that starts another script.</p>
 
-        <p>The number of scripts still running can be obtained via <member>
-        XVBACompatibility::RunningVBAScripts</member>. The number returned
+        <p>The number of scripts still running can be obtained via
+        XVBACompatibility::RunningVBAScripts. The number returned
         there will not contain the stopped script notified with this event
         anymore.</p>
 

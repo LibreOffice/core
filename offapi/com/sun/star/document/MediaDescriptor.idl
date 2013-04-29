@@ -36,8 +36,7 @@ module com { module sun { module star { module document {
     loaded from / stored to.
 
     <p>
-    This service may be represented by a
-    <type scope="com::sun::star::beans" dim="[]">PropertyValue</type>.
+    This service may be represented by a com::sun::star::beans::PropertyValue[].
     Such descriptors will be passed to different functions, included into possible
     load/save processes. Every member of such process can use this descriptor
     and may change it if to actualize the information about the document.

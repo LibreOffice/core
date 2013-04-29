@@ -47,10 +47,10 @@ interface XSingletonTypeDescription2: XSingletonTypeDescription {
        Returns the interface type associated with the singleton.
 
        @return the reflection of the interface type associated with the
-           singleton (of type <type
-           scope="com::sun::star::reflection">XInterfaceTypeDescription</type>
-           or, in case of a typedef, <type
-           scope="com::sun::star::reflection">XIndirectTypeDescription</type>),
+           singleton (of type
+           com::sun::star::reflection::XInterfaceTypeDescription
+           or, in case of a typedef,
+           com::sun::star::reflection::XIndirectTypeDescription),
            for an interface-based singleton; for an obsolete, service-based
            singleton, `NULL` is returned
      */

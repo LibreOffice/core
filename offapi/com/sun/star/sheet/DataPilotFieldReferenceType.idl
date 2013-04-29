@@ -62,8 +62,10 @@ constants DataPilotFieldReferenceType
 
     <p>Empty results are handled as for named items (see above).<p>
 
-    <p>The difference for the first (for <TYPE>com::sun::star::sheet::DataPilotFieldReferenceItemType::PREVIOUS</TYPE>)
-       or last (for <TYPE>com::sun::star::sheet::DataPilotFieldReferenceItemType::NEXT</TYPE>) item of the base field is
+    <p>The difference for the first (for
+       com::sun::star::sheet::DataPilotFieldReferenceItemType::PREVIOUS)
+       or last (for com::sun::star::sheet::DataPilotFieldReferenceItemType::NEXT
+       ) item of the base field is
        shown as empty result.</p>
     */
 
@@ -75,8 +77,11 @@ constants DataPilotFieldReferenceType
         Totals outside of the base field are shown as empty results.
 
         <p>Division by zero results in an error. Otherwise, empty results are shown as 0. Results for
-           the base item, first (for <TYPE>com::sun::star::sheet::DataPilotFieldReferenceItemType::PREVIOUS</TYPE>)
-           or last (for <TYPE>com::sun::star::sheet::DataPilotFieldReferenceItemType::NEXT</TYPE>) item of the base field are shown
+           the base item, first (for
+           com::sun::star::sheet::DataPilotFieldReferenceItemType::PREVIOUS)
+           or last (for
+           com::sun::star::sheet::DataPilotFieldReferenceItemType::NEXT)
+           item of the base field are shown
            as 1 if not empty.</p>
     */
 

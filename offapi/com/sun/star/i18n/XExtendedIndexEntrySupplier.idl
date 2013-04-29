@@ -74,8 +74,7 @@ published interface XExtendedIndexEntrySupplier : ::com::sun::star::i18n::XIndex
             Index algorithm to be loaded.
 
         @param nCollatorOptions
-            Sorting option of <type
-            scope="::com::sun::star::i18n">CollatorOptions</type> for
+            Sorting option of ::com::sun::star::i18n::CollatorOptions for
             comparing index entries
 
         @return

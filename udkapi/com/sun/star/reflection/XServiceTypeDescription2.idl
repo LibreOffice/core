@@ -50,10 +50,9 @@ interface XServiceTypeDescription2: XServiceTypeDescription {
        Returns the interface type associated with the service.
 
        @return the reflection of the interface type associated with the service
-           (of type <type
-           scope="com::sun::star::reflection">XInterfaceTypeDescription</type>
-           or, in case of a typedef, <type
-           scope="com::sun::star::reflection">XIndirectTypeDescription</type>),
+           (of type com::sun::star::reflection::XInterfaceTypeDescription
+           or, in case of a typedef,
+           com::sun::star::reflection::XIndirectTypeDescription),
            for a single-interface&ndash;based service; for an obsolete,
            accumulation-based service, `NULL` is returned
      */

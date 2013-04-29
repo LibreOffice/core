@@ -67,33 +67,31 @@ published service DataPilotFieldGroups
         interfaces can be used to manage the item groups. It is possible to
         insert, remove, and replace item groups.</p>
 
-        <p>The method <member scope="com::sun::star::container">
-        XNameReplace::replaceByName</member> can be used to replace the item
+        <p>The method com::sun::star::container::XNameReplace::replaceByName()
+        can be used to replace the item
         names in an existing group with a new collection of item names. An
         implementation should support the following data types:
 
         <ul>
         <li>an empty `any` to remove all items and leave the
         group empty. The group can be filled later with new item names.</li>
-        <li>a <atom dim="[]">string</atom> containing all item names that will
+        <li>a `string[]` containing all item names that will
         be part of the group.</li>
-        <li>an object supporting <type scope="com::sun::star::container">
-        XIndexAccess</type> containing elements that provide an item name per
-        element via the interface <type scope="com::sun::star::container">
-        XNamed</type>, for example an instance of <type>DataPilotFieldGroup
-        </type>.</li>
+        <li>an object supporting com::sun::star::container::XIndexAccess
+        containing elements that provide an item name per element via the
+        interface com::sun::star::container::XNamed,
+        for example an instance of DataPilotFieldGroup.</li>
         </ul></p>
 
-        <p>The method <member scope="com::sun::star::container">
-        XNameContainer::insertByName</member> can be used to insert a new
+        <p>The method com::sun::star::container::XNameContainer::insertByName()
+        can be used to insert a new
         field group with the passed collection of item names. An
         implementation should support the same data types as described above
-        for the method <member scope="com::sun::star::container">
-        XNameReplace::replaceByName</member>.</p>
+        for the method
+        com::sun::star::container::XNameReplace::replaceByName().</p>
 
-        <p>The method <member scope="com::sun::star::container">
-        XNameContainer::removeByName</member> can be used to remove an
-        existing field group.</p>
+        <p>The method com::sun::star::container::XNameContainer::removeByName()
+        can be used to remove an existing field group.</p>
      */
     [optional] interface com::sun::star::container::XNameContainer;
 

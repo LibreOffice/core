@@ -39,35 +39,30 @@ service AccessibleSpreadsheetPageView
 
     <ul>
         <li>The parent returned by
-            <method scope="::com::sun::star::accessibility"
-            >XAccessibleContext::getAccessibleParent</method>
+            ::com::sun::star::accessibility::XAccessibleContext::getAccessibleParent()
             is the window which contains the view of these page preview.</li>
         <li>The children returned by
-            <method scope="::com::sun::star::accessibility"
-            >XAccessibleContext::getAccessibleChild</method> all
-            support the interface XAccessible. Calling
-            <method scope="::com::sun::star::accessibility"
-            >XAccessibleContext::getAccessibleContext</method> for these children returns
+            ::com::sun::star::accessibility::XAccessibleContext::getAccessibleChild()
+            all support the interface XAccessible. Calling
+            ::com::sun::star::accessibility::XAccessibleContext::getAccessibleContext()
+            for these children returns
             an object that supports one of the following services.</li>
         <ul>
-            <li><type scope="::com::sun::star::sheet"
-                >AccessiblePageHeaderFooterAreasView</type>: A child where calling
-                <method scope="::com::sun::star::accessibility"
-                >XAccessibleContext::getAccessibleChild</method>
+            <li>::com::sun::star::sheet::AccessiblePageHeaderFooterAreasView:
+                A child where calling
+                ::com::sun::star::accessibility::XAccessibleContext::getAccessibleChild()
                 an object that supports this service is returned for
                 every header and footer that is at least partially visible.</li>
             <li>::com::sun::star::table::AccessibleTableView:
                 A child where calling
-                <method scope="::com::sun::star::accessibility"
-                >XAccessibleChild::getAccessibleChild</method>
+                ::com::sun::star::accessibility::XAccessibleChild::getAccessibleChild()
                 an object that supports this service is returned for
                 every table fragment that is contained in the document body
                 and is at least partially visible. A table fragment is the
                 part of a table that is displayed on a certain page.</li>
             <li>::com::sun::star::drawing::AccessibleShape:
                 A child where calling
-                <method scope="::com::sun::star::accessibility"
-                >XAccessibleContext::getAccessibleChild</method>
+                ::com::sun::star::accessibility::XAccessibleContext::getAccessibleChild()
                 an object that supports this service is returned
                 for every shape that is at least partially visible. These
                 objects are children of the
@@ -75,8 +70,7 @@ service AccessibleSpreadsheetPageView
                 whether they are bound to a table or a cell.</li>
             <li>::com::sun::star::text::AccessibleParagraphView:
                 A child where calling
-                <method scope="::com::sun::star::accessibility"
-                >XAccessibleContext::getAccessibleChild</method>
+                ::com::sun::star::accessibility::XAccessibleContext::getAccessibleChild()
                 an object that supports this service is returned for
                 every note (its paragraphs) and its location (which is
                 represented as a paragraph with the cell name as content).</li>
@@ -101,48 +95,46 @@ service AccessibleSpreadsheetPageView
         </ul>
         <li>The description is ???.</li>
         <li>The name is Spreadsheet Document Page Preview.</li>
-        <li>The role is <const scope="::com::sun::star::accessibility"
-            >AccessibleRole::DOCUMENT</const></li>
+        <li>The role is
+            ::com::sun::star::accessibility::AccessibleRole::DOCUMENT</li>
         <li>There are no relations.</li>
         <li>The following states are supported:
             <ul>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::DEFUNC</const> is always false until
-                    the preview is closed.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::EDITABLE</const> is always false,
+                <li>::com::sun::star::accessibility::AccessibleStateType::DEFUNC
+                    is always false until the preview is closed.</li>
+                <li>::com::sun::star::accessibility::AccessibleStateType::EDITABLE
+                    is always false,
                     because the document is not editable in the page preview.
                     So it is left out of the list.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::ENABLED</const> is always true.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::MULTILINE</const> makes no sense on a
+                <li>::com::sun::star::accessibility::AccessibleStateType::ENABLED
+                    is always true.</li>
+                <li>::com::sun::star::accessibility::AccessibleStateType::MULTILINE
+                    makes no sense on a
                     document and so it is left out of the list.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::MULTI_SELECTABLE</const> is always
-                    false, because in a page preview a selection is not
-                    possible. So it is left out of the list.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::OPAQUE</const> is always true.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::RESIZEABLE</const> is always false,
+                <li>::com::sun::star::accessibility::AccessibleStateType::MULTI_SELECTABLE
+                    is always false, because in a page preview a selection is
+                    not possible. So it is left out of the list.</li>
+                <li>::com::sun::star::accessibility::AccessibleStateType::OPAQUE
+                    is always true.</li>
+                <li>::com::sun::star::accessibility::AccessibleStateType::RESIZEABLE
+                    is always false,
                     because you can resize the window of the page preview, but
                     not the page preview itself. So it is left out of the
                     list.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::SELECTABLE</const> is always false,
+                <li>::com::sun::star::accessibility::AccessibleStateType::SELECTABLE
+                    is always false,
                     because in the page preview is no selection possible. So
                     it is left out of the list.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::SELECTED</const> is always false,
+                <li>::com::sun::star::accessibility::AccessibleStateType::SELECTED
+                    is always false,
                     because in the page preview is no selection possible. So
                     it is left out of the list.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::SHOWING</const>Is true if the
+                <li>::com::sun::star::accessibility::AccessibleStateType::SHOWING
+                    is true if the
                     Bounding Box lies in the Bounding Box of the parent.
                     Otherwise it is false.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::VISIBLE</const>Is always true.</li>
+                <li>::com::sun::star::accessibility::AccessibleStateType::VISIBLE
+                    is always true.</li>
             </ul>
         </li>
     </ul>

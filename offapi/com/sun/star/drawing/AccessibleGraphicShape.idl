@@ -31,8 +31,7 @@ module com {  module sun {  module star {  module drawing {
 
     <p>It differs from the included AccessibleShape "base"
     service by the additional support of the
-    <type
-    scope="::com::sun::star::accessibility">XAccessibleImage</type>
+    ::com::sun::star::accessibility::XAccessibleImage
     interface.</p>
 
      @since OOo 1.1.2
@@ -54,27 +53,22 @@ service AccessibleGraphicShape
 
     /**  Give access to image specific information.
 
-        <p>The support of the <type
-        scope="::com::sun::star::accessibility"
-        >XAccessibleImage</type> interface
+        <p>The support of the
+        ::com::sun::star::accessibility::AccessibleImage interface
         requires the shape to provide a description of the displayed image
         and the image's size in the screen coordinate system (pixel).  At
         the time being this interface does not provide information that is
         not available through the AccessibleShape service:
         the size returned by the
-        <member scope="::com::sun::star::accessibility"
-        >XAccessibleImage::getWidth</member> and <member
-        scope="::com::sun::star::accessibility"
-        >XAccessibleImage::getHeight</member> functions is the same as that
-        returned by the <member
-        scope="::com::sun::star::accessibility"
-        >XAccessibleComponent::getSize</member> function; the description
-        returned by <member
-        scope="::com::sun::star::accessibility"
-        >XAccessibleImage::getAccessibleImageDescription</member> function
-        is the same as the one returned by the <member
-        scope="::com::sun::star::accessibility"
-        >XAccessibleContext::getAccessibleDescription</member> function.
+        ::com::sun::star::accessibility::XAccessibleImage::getWidth() and
+        ::com::sun::star::accessibility::XAccessibleImage::getHeight()
+        functions is the same as that returned by the
+        ::com::sun::star::accessibility::XAccessibleComponent::getSize()
+        function; the description returned by
+        ::com::sun::star::accessibility::XAccessibleImage::getAccessibleImageDescription()
+        function is the same as the one returned by the
+        ::com::sun::star::accessibility::XAccessibleContext::getAccessibleDescription()
+        function.
         This makes the additional interface for
         the time being basically an indicator of graphic shapes.  This may
         change in the future.</p>

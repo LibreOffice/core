@@ -38,21 +38,19 @@
 
 
 /** represents the result of an introspection operation done by
-    the inspect method of <type scope="com::sun::star::beans">
-    XIntrospection</type>.
+    the inspect method of XIntrospection.
 
     <p>This interface gives information about an object's
     properties and methods as detected in the introspection
     process. It's not possible to access properties or call
     methods directly using this interface but it provides
     access to other interfaces to do so.
-    See <member scope="com::sun::star::beans">
-    XIntrospectionAccess::queryAdapter()</member></p>
+    See com::sun::star::beans::XIntrospectionAccess::queryAdapter()</p>
 
     <p>The XExactName interface has to be supported
     in order to implement inaccurate name access for all objects
-    which implement the <type scope="com::sun::star::container">
-    XNameAccess</type> interface or XPropertySet.</p>
+    which implement the com::sun::star::container::XNameAccess interface
+    or XPropertySet.</p>
 
     <p>The XMaterialHolder interface has to be
     supported to give access to the inspected object.</p>
@@ -114,22 +112,20 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
             the name of the property.
 
         @param nPropertyConcepts
-            zero or more constants of the <type>PropertyConcept
-            </type> constants group combined by an arithmetical
+            zero or more constants of the PropertyConcept
+            constants group combined by an arithmetical
             or-operation.
 
         @throws NoSuchElementException
             when a property with the demanded name doesn't exist
-            or if it accords to a wrong <type>PropertyConcept
-            </type>.
+            or if it accords to a wrong PropertyConcept.
      */
     com::sun::star::beans::Property getProperty( [in] string aName,
              [in] long nPropertyConcepts )
             raises( com::sun::star::container::NoSuchElementException );
 
     /** allows to ask if a property with the demanded name exists
-        and if it accords to one of the demanded <type>
-        PropertyConcept</type>s.
+        and if it accords to one of the demanded PropertyConcept.
 
         @returns
             `TRUE` if the property exists and accords to one of
@@ -140,8 +136,8 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
             the name of the property.
 
         @param nPropertyConcepts
-            zero or more constants of the <type>PropertyConcept
-            </type> constants group combined by an arithmetical
+            zero or more constants of the PropertyConcept
+            constants group combined by an arithmetical
             or-operation.
      */
     boolean hasProperty( [in] string aName,
@@ -154,8 +150,8 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
             to the demanded PropertyConcepts.
 
         @param nPropertyConcepts
-            zero or more constants of the <type>PropertyConcept
-            </type> constants group combined by an arithmetical
+            zero or more constants of the PropertyConcept
+            constants group combined by an arithmetical
             or-operation.
      */
     sequence<com::sun::star::beans::Property> getProperties(
@@ -164,12 +160,11 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
     /** returns information about a method if a method with
         the demanded name exists and if it accords to one of
         the demanded MethodConcepts. The information is
-        provided as <type scope="com::sun::star::reflection">
-        XIdlMethod</type>.
+        provided as com::sun::star::reflection::XIdlMethod.
 
         @returns
-            A <type scope="com::sun::star::reflection">
-            XIdlMethod</type> providing information about and
+            A com::sun::star::reflection::XIdlMethod providing
+            information about and
             access to the demanded method if a corresponding
             method exists.
 
@@ -177,8 +172,8 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
             the name of the method.
 
         @param nMethodConcepts
-            zero or more constants of the <type>MethodConcept
-            </type> constants group combined by an arithmetical
+            zero or more constants of the MethodConcept
+            constants group combined by an arithmetical
             or-operation.
 
         @throws NoSuchElementException
@@ -190,8 +185,7 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
             raises( com::sun::star::lang::NoSuchMethodException );
 
     /** allows to ask if a method with the demanded name exists
-        and if it accords to one of the demanded <type>MethodConcept
-        </type>s.
+        and if it accords to one of the demanded MethodConcept.
 
         @returns
             `TRUE` if the method exists and accords to one of
@@ -202,8 +196,8 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
             the name of the method.
 
         @param nMethodConcepts
-            zero or more constants of the <type>MethodConcept
-            </type> constants group combined by an arithmetical
+            zero or more constants of the MethodConcept
+            constants group combined by an arithmetical
             or-operation.
      */
     boolean hasMethod( [in] string aName,
@@ -216,8 +210,8 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
             to the demanded MethodConcepts.
 
         @param nMethodConcepts
-            zero or more constants of the <type>MethodConcept
-            </type> constants group combined by an arithmetical
+            zero or more constants of the MethodConcept
+            constants group combined by an arithmetical
             or-operation.
      */
     sequence<com::sun::star::reflection::XIdlMethod> getMethods(
@@ -241,36 +235,32 @@ published interface XIntrospectionAccess: com::sun::star::uno::XInterface
     /** creates an adapter that implements an interface with the
         specified type.
 
-        <p>To access properties, query for the <type>XPropertySet
-        </type> interface. If the XPropertySet can
+        <p>To access properties, query for the XPropertySet
+        interface. If the XPropertySet can
         be queried, the XFastPropertySet interface
         must be supported too.  </p>
 
         <p>If the introspected object implements a name container,
-        the introspection should return the <type scope=
-        "com::sun::star::container">XNameAccess</type> and <type
-        scope="com::sun::star::container">XNameContainer</type>
-        interfaces.</p>
+        the introspection should return the
+        com::sun::star::container::XNameAccess and
+        com::sun::star::container::XNameContainer interfaces.</p>
 
         <p>If the introspected object implements an index container,
-        the introspection should return the <type scope=
-        "com::sun::star::container">XIndexAccess</type> and <type
-        scope="com::sun::star::container">XIndexContainer</type>
-        interfaces.</p>
+        the introspection should return the
+        com::sun::star::container::XIndexAccess and
+        com::sun::star::container::XIndexContainer interfaces.</p>
 
         <p>If the introspected object implements an enumeration
-        container, the introspection should return the <type scope=
-        "com::sun::star::container">XEnumerationAccess</type>
-        interface.</p>
+        container, the introspection should return the
+        com::sun::star::container::XEnumerationAccess interface.</p>
 
-        <p>If the introspected object implements the <type scope=
-        "com::sun::star::reflection">XIdlArray</type> interface,
+        <p>If the introspected object implements the
+        com::sun::star::reflection::XIdlArray interface,
         the introspection should return this.</p>
 
         <p>To implement inaccurate name access, at all objects,
-        which implement the <type scope="com::sun::star::container">
-        XNameAccess</type> or XPropertySet interface,
-        the XExactName interface has to be supported.
+        which implement the com::sun::star::container::XNameAccess or
+        XPropertySet interface, the XExactName interface has to be supported.
         </p>
 
         @see com::sun::star::beans::XExactName

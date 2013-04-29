@@ -20,11 +20,9 @@ module com { module sun { module star { module i18n {
 /**
     Access locale specific data.
 
-    <p> Derived from <type
-    scope="::com::sun::star::i18n">XLocaleData2</type> this provides an
-    additional method to return a sequence of all <type
-    scope="::com::sun::star::i18n">Calendar2</type> elements available
-    for that locale.
+    <p> Derived from ::com::sun::star::i18n::XLocaleData2 this provides an
+    additional method to return a sequence of all
+    ::com::sun::star::i18n::Calendar2 elements available for that locale.
 
     @since LibreOffice 3.5
  */

@@ -28,11 +28,10 @@
 /** provides functionality to get information about an object's
     properties and methods.
     <p><strong>Important note:</strong>An object can only be
-    inspected completely if it supports the <type scope=
-    "com::sun::star::lang">XTypeProvider</type> interface.</p>
+    inspected completely if it supports the
+    com::sun::star::lang::XTypeProvider interface.</p>
 
-    <p>For details see method <member>XIntrospection::inspect
-    </member>.</p>
+    <p>For details see method XIntrospection::inspect() .</p>
  */
 published service Introspection : com::sun::star::beans::XIntrospection;
 

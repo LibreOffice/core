@@ -30,8 +30,8 @@ module com {  module sun {  module star {  module drawing {
 
     <p>This includes generic OLE shapes, frames, plug-ins, and applets.</p>
 
-    <p>This service supports the additional <type
-    scope="::com::sun::star::accessibility">XAccessibleAction</type>
+    <p>This service supports the additional
+    ::com::sun::star::accessibility::XAccessibleAction
     interface.</p>
 
     <p>OLE objects are handled as place holders.  While not activated the
@@ -51,11 +51,8 @@ service AccessibleOLEShape
     /** Give access to information of generic shapes.
 
         <p>See AccessibleShape for basic documentation and
-        support of the <type
-        scope="::com::sun::star::accessibility"
-        >XAccessibleContext</type>, and
-        <type scope="::com::sun::star::accessibility"
-        >XAccessibleComponent</type> interfaces.
+        support of the ::com::sun::star::accessibility::XAccessibleContext, and
+        ::com::sun::star::accessibility::XAccessibleComponent interfaces.
 
         @see AccessibleShape
     */

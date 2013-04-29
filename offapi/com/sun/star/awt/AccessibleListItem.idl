@@ -45,9 +45,8 @@ service AccessibleListItem
     /** This interface gives access to the structural information of a list item:
 
        <ul>
-       <li>Role: The role of a list item is <const
-           scope="com::sun::star::accessibility"
-           >AccessibleRole::LIST_ITEM</const>.</li>
+       <li>Role: The role of a list item is
+       com::sun::star::accessibility::AccessibleRole::LIST_ITEM.</li>
        <li>Name: The name of a list item is the text of the item.</li>
        <li>Description: The description of a list item is empty.</li>
        <li>Children: There exists no children.</li>
@@ -55,26 +54,23 @@ service AccessibleListItem
        <li>Relations: There are no relations.</li>
        <li>States: The states supported by this service are
            <ul>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::DEFUNC</const>
+           <li>com::sun::star::accessibility::AccessibleStateType::DEFUNC
                is set if the object has already been disposed
                and subsequent calls to this object result in
                com::sun::star::lang::DisposedException
                exceptions.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::ENABLED</const> is always set.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::SHOWING</const> is set
-               if the object is displayed on the screen.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::VISIBLE</const> is always set.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::TRANSIENT</const> is always set.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::SELECTABLE</const> is always set.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::SELECTED</const> is set
-               when the item is selected.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::ENABLED
+               is always set.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::SHOWING
+               is set if the object is displayed on the screen.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::VISIBLE
+               is always set.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::TRANSIENT
+               is always set.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::SELECTABLE
+               is always set.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::SELECTED
+               is set when the item is selected.</li>
            </ul>
            </li>
        </ul>

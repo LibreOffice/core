@@ -73,8 +73,7 @@ published service ErrorMessageDialog : com::sun::star::ui::dialogs::XExecutableD
         you want to affect, and the <em>Value</em> field containing a value.
         <br/>
         Imagine the initialization values, as if you use
-        <method scope="com::sun::star::beans">XPropertySet::setPropertyValue()
-        </method>
+        com::sun::star::beans">XPropertySet::setPropertyValue()
          of the
         com::sun::star::beans::XPropertySet
         interface ...

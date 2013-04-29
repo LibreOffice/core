@@ -33,7 +33,7 @@ interface XPane2
 {
     /** Return whether all windows that are used to implement the pane are
         visible.
-        @Returns <TRUE> when all windows of the pane are visible.
+        @Returns `TRUE` when all windows of the pane are visible.
     */
     boolean isVisible ();
 
@@ -42,7 +42,7 @@ interface XPane2
         some, or all windows are hidden or shown as long as the pane becomes
         hidden or visible.
         @param bIsVisible
-            When <TRUE> then show the pane.  Hide it otherwise.
+            When `TRUE` then show the pane.  Hide it otherwise.
     */
     void setVisible ([in] boolean bIsVisible);
 

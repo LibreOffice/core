@@ -56,8 +56,7 @@ published interface XVndSunStarExpandUrl {
        the expanded content of this URL.
 
        @throws com::sun::star::lang::IllegalArgumentException
-       if calling <member
-       scope="com::sun::star::util">XMacroExpander::expandMacros</member> on
+       if calling com::sun::star::util::XMacroExpander::expandMacros() on
        <code>expander</code> raises any such exception.
      */
     string expand([in] com::sun::star::util::XMacroExpander expander)

@@ -32,7 +32,7 @@ published interface XAvailableLocales : com::sun::star::uno::XInterface
 {
     /** retrieve the list of supported languages (Locales).
 
-        @see    <type scope"com::sun::star::linguistic2">XSupportedLocales</type>
+        @see    com::sun::star::linguistic2::XSupportedLocales
 
         @param aServiceName
             the name of the service to get the list of available Locales for.

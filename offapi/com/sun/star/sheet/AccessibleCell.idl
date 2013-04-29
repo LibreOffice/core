@@ -40,52 +40,48 @@ service AccessibleCell
 
     <ul>
         <li>The parent returned by
-            <method scope="::com::sun::star::accessibility"
-            >XAccessibleContext::getAccessibleParent</method>
+            ::com::sun::star::accessibility::XAccessibleContext::getAccessibleParent()
             is the accessible spreadsheet.</li>
         <li>This object has no children.</li>
         <li>The description is ???.</li>
         <li>The name is something like A10 or B23 or so on.</li>
-        <li>The role is <const scope="::com::sun::star::accessibility"
-            >AccessibleRole::TABLE_CELL</const></li>
+        <li>The role is
+            ::com::sun::star::accessibility::AccessibleRole::TABLE_CELL</li>
         <li>There are relations between the cell and the shapes with an anchor
             on this cell.</li>
         <li>The following states are supported:
             <ul>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::DEFUNC</const> is always false if the
+                <li>::com::sun::star::accessibility::AccessibleStateType::DEFUNC
+                    is always false if the
                     parent table is showed, otherwise it is true.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::EDITABLE</const> is false if the cell
+                <li>::com::sun::star::accessibility::AccessibleStateType::EDITABLE
+                    is false if the cell
                     or the table is protected, otherwise it is true.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::ENABLED</const> is always true.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::MULTILINE</const> is always true.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::MULTISELECTABLE</const> is always
-                    true.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::OPAQUE</const> is false if the cell
+                <li>::com::sun::star::accessibility::AccessibleStateType::ENABLED
+                    is always true.</li>
+                <li>::com::sun::star::accessibility::AccessibleStateType::MULTILINE
+                    is always true.</li>
+                <li>::com::sun::star::accessibility::AccessibleStateType::MULTISELECTABLE
+                    is always true.</li>
+                <li>::com::sun::star::accessibility::AccessibleStateType::OPAQUE
+                    is false if the cell
                     has no background color or graphic, otherwise it is
                     true.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::RESIZEABLE</const> is false if the
+                <li>::com::sun::star::accessibility::AccessibleStateType::RESIZEABLE
+                    is false if the
                     table is protected, otherwise is it true.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::SELECTABLE</const> is always
-                    true.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::SELECTED</const> is true, if the
-                    cell is selected.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::TRANSIENT</const> is always true.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::SHOWING</const>Is true if the
+                <li>::com::sun::star::accessibility::AccessibleStateType::SELECTABLE
+                    is always true.</li>
+                <li>::com::sun::star::accessibility::AccessibleStateType::SELECTED
+                    is true, if the cell is selected.</li>
+                <li>::com::sun::star::accessibility::AccessibleStateType::TRANSIENT
+                    is always true.</li>
+                <li>::com::sun::star::accessibility::AccessibleStateType::SHOWING
+                    is true if the
                     Bounding Box lies in Bounding Box of the parent. Otherwise
                     it is false.</li>
-                <li><const scope="::com::sun::star::accessibility"
-                    >AccessibleStateType::VISIBLE</const>Is false if the
+                <li>::com::sun::star::accessibility::AccessibleStateType::VISIBLE
+                    is false if the
                     column/row with this cell is filtered or hidden.
                     Otherwise is true.</li>
             </ul>

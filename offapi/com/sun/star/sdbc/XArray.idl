@@ -33,7 +33,7 @@
 
 
 /** is used for mapping the SQL type
-    <member scope= "com::sun::star::sdbc">DataType::ARRAY</member>
+    com::sun::star::sdbc::DataType::ARRAY
     .
     By default, an
     <code>Array</code>

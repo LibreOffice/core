@@ -28,7 +28,7 @@
 module com { module sun { module star { module ucb {
 
 /** The File Content Provider (FCP) implements a ContentProvider
-    for the <Type>UniversalContentBroker</type> (UCB).
+    for the UniversalContentBroker (UCB).
 
     <p>The served contents enable access to the local file system.
 

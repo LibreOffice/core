@@ -46,9 +46,8 @@ service AccessibleIconChoiceControlEntry
     /** This interface gives access to the structural information of an icon choice control entry:
 
        <ul>
-       <li>Role: The role of an icon choice control entry is <const
-           scope="com::sun::star::accessibility"
-           >AccessibleRole::LABEL</const>.</li>
+       <li>Role: The role of an icon choice control entry is
+       com::sun::star::accessibility::AccessibleRole::LABEL.</li>
        <li>Name: The name of an icon choice control entry is it's text.</li>
        <li>Description: The description of an icon choice control entry is empty.</li>
        <li>Children: There exist no children.
@@ -57,26 +56,23 @@ service AccessibleIconChoiceControlEntry
        <li>Relations: There are no relations.</li>
        <li>States: The states supported by this service are
            <ul>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::DEFUNC</const>
+           <li>com::sun::star::accessibility::AccessibleStateType::DEFUNC
                is set if the object has already been disposed
                and subsequent calls to this object result in
                com::sun::star::lang::DisposedException
                exceptions.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::ENABLED</const> is set
-               if the object is enabled.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::SHOWING</const> is set
-               if the object is displayed on the screen.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::VISIBLE</const> is always set.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::TRANSIENT</const> is always set.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::SELECTABLE</const> is always set.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::SELECTED</const> is set when it is selected.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::ENABLED
+               is set if the object is enabled.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::SHOWING
+               is set if the object is displayed on the screen.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::VISIBLE
+               is always set.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::TRANSIENT
+               is always set.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::SELECTABLE
+               is always set.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::SELECTED
+               is set when it is selected.</li>
            </ul>
            </li>
        </ul>

@@ -36,26 +36,23 @@ interface XTypeDescription;
    <ul>
        <li>Polymorphic struct type templates, like
        <code>Struct&lt;T, U&gt;</code>.  For these,
-       <member scope="com::sun::star::reflection"><!--
-       -->XStructTypeDescription::getTypeParameters</member> returns a non-empty
-       sequence, while <member scope="com::sun::star::reflection"><!--
-       -->XStructTypeDescription::getTypeArguments</member> returns an empty
-       sequence.</li>
+       com::sun::star::reflection::XStructTypeDescription::getTypeParameters()
+       returns a non-empty sequence, while
+       com::sun::star::reflection::XStructTypeDescription::getTypeArguments()
+       returns an empty sequence.</li>
 
        <li>Instantiated polymorphic struct types, like <code>Struct&lt;long,
        hyper&gt;</code>.  For these,
-       <member scope="com::sun::star::reflection"><!--
-       -->XStructTypeDescription::getTypeParameters</member> returns an empty
-       sequence, while <member scope="com::sun::star::reflection"><!--
-       -->XStructTypeDescription::getTypeArguments</member> returns a non-empty
-       sequence.</li>
+       com::sun::star::reflection::XStructTypeDescription::getTypeParameters()
+       returns an empty sequence, while
+       com::sun::star::reflection::XStructTypeDescription::getTypeArguments()
+       returns a non-empty sequence.</li>
 
        <li>Plain struct types.  For these, both
-       <member scope="com::sun::star::reflection"><!--
-       -->XStructTypeDescription::getTypeParameters</member> and
-       <member scope="com::sun::star::reflection"><!--
-       -->XStructTypeDescription::getTypeArguments</member> return an empty
-       sequence.</li>
+       com::sun::star::reflection::XStructTypeDescription::getTypeParameters()
+       and
+       com::sun::star::reflection::XStructTypeDescription::getTypeArguments()
+       return an empty sequence.</li>
    </ul>
 
    @since OOo 2.0

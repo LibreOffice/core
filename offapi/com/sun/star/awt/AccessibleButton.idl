@@ -39,9 +39,8 @@ service AccessibleButton
     /** This interface gives access to the structural information of a button:
 
         <ul>
-        <li>Role: The role of a button is <const
-            scope="com::sun::star::accessibility"
-            >AccessibleRole::PUSH_BUTTON</const>.</li>
+        <li>Role: The role of a button is
+            com::sun::star::accessibility::AccessibleRole::PUSH_BUTTON.</li>
         <li>Name: The name of a button is its localized label.</li>
         <li>Description: The description of a button is its localized
             help text.</li>
@@ -50,31 +49,25 @@ service AccessibleButton
         <li>Relations: There are no relations.</li>
         <li>States: The states supported by this service are
             <ul>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::CHECKED</const> is set
-                if the object is currently checked.</li>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::DEFUNC</const>
+            <li>com::sun::star::accessibility::AccessibleStateType::CHECKED
+                is set if the object is currently checked.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::DEFUNC
                 is set if the object has already been disposed
                 and subsequent calls to this object result in
                 com::sun::star::lang::DisposedException
                 exceptions.</li>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::ENABLED</const> is set
-                if the object is enabled.</li>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::FOCUSABLE</const> is always set.</li>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::FOCUSED</const> is set
-                if the object currently has the keyboard focus.</li>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::PRESSED</const> is set
-                if the object is currently pressed.</li>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::SHOWING</const> is set
-                if the object is displayed on the screen.</li>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::VISIBLE</const> is always set.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::ENABLED
+                is set if the object is enabled.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::FOCUSABLE
+                is always set.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::FOCUSED
+                is set if the object currently has the keyboard focus.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::PRESSED
+                is set if the object is currently pressed.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::SHOWING
+                is set if the object is displayed on the screen.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::VISIBLE
+                is always set.</li>
             </ul>
             </li>
         </ul>
@@ -102,8 +95,7 @@ service AccessibleButton
 
     /** This interface gives access to the numerical value of a button,
         which is related to the button's
-        <const scope="com::sun::star::accessibility"
-        >AccessibleStateType::PRESSED</const> state.
+        com::sun::star::accessibility::AccessibleStateType::PRESSED state.
      */
     interface ::com::sun::star::accessibility::XAccessibleValue;
 

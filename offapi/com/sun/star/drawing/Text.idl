@@ -32,8 +32,7 @@
  */
 published service Text
 {
-    /** With this interface you can modify the text of this
-                <type>Shape<type>.
+    /** With this interface you can modify the text of this Shape.
      */
     interface com::sun::star::text::XText;
 

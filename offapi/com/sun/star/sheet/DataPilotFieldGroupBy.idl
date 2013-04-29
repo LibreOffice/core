@@ -76,8 +76,8 @@ published constants DataPilotFieldGroupBy
         2002-Jan-03 00:00:00 through 2002-Jan-09 23:59:59.</li>
         </ul></p>
 
-        <p>See descriptions for <member>XDataPilotFieldGrouping::createDateGroup
-        </member> for more details about day grouping.</p>
+        <p>See descriptions for XDataPilotFieldGrouping::createDateGroup()
+        for more details about day grouping.</p>
      */
     const long DAYS = 8;
 

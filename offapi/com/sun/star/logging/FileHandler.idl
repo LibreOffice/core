@@ -68,7 +68,7 @@ service FileHandler : XLogHandler
             <p>At least the URL argument must be present in the settings.</p>
 
         @throws ::com::sun::star::lang::IllegalArgumentException
-            if <arg>Settings</args> contains settings whose value is of the wrong type.
+            if `Settings` contains settings whose value is of the wrong type.
     */
     createWithSettings( [in] sequence< ::com::sun::star::beans::NamedValue > Settings )
         raises ( ::com::sun::star::lang::IllegalArgumentException );

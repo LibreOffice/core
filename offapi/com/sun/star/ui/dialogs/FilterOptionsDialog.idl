@@ -35,7 +35,7 @@ module com { module sun { module star { module ui { module dialogs {
 
     <p>The application will set the com::sun::star::document::MediaDescriptor
     using the interface com::sun::star::beans::XPropertyAccess and then
-    call <method>XExecutableDialog::execute<method>.</p>
+    call XExecutableDialog::execute().</p>
 
     <p>If that method returns <code>ExecutableDialogResults::OK</code>,
     the application will retrieve the changed com::sun::star::document::MediaDescriptor
@@ -58,9 +58,10 @@ published service FilterOptionsDialog
 
     /** this interface executes a dialog that displays the options
         for a filter.
-        If <method>XExecutableDialog::execute<method>
+        If XExecutableDialog::execute()
         returns <code>ExecutableDialogResults::OK</code>,
-        the options can be retrieved by calling <method scope="com::sun::star::beans">XPropertyAccess::getPropertyValues<method>.
+        the options can be retrieved by calling
+        com::sun::star::beans::XPropertyAccess::getPropertyValues.
      */
     interface ::com::sun::star::ui::dialogs::XExecutableDialog;
 };

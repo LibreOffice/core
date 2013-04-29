@@ -32,8 +32,8 @@
 module com {  module sun {  module star {  module awt {
 
 
-/** The XExtendedToolkit is an extension of the <type
-    scope="::com::sun::star::awt">XToolkit</type> interface.  It basically
+/** The XExtendedToolkit is an extension of the
+    ::com::sun::star::awt::XToolkit interface.  It basically
     provides access to three event broadcasters which are used for instance
     in the context of accessibility.  It is, however, not restricted to
     accessibility.
@@ -95,8 +95,8 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
     */
     ::com::sun::star::awt::XTopWindow getActiveTopWindow ();
 
-    /** Add a new listener that is called for events that involve <type
-        scope="::com::sun::star::awt">XTopWindow</type>s.  After having
+    /** Add a new listener that is called for events that involve
+        ::com::sun::star::awt::XTopWindow.  After having
         obtained the current list of existing top-level windows you can
         keep this list up-to-date by listening to opened or closed top-level
         windows.  Wait for activations or deactivations of top-level windows
@@ -121,8 +121,8 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
         [in] ::com::sun::star::awt::XTopWindowListener xListener);
 
 
-    /** Add a new listener that is called on <type
-        scope="::com::sun::star::awt">KeyEvent</type>s.  Every listener is
+    /** Add a new listener that is called on
+        ::com::sun::star::awt::KeyEvent.  Every listener is
         given the opportunity to consume the event, i.e. prevent the not yet
         called listeners from being called.
         @param xHandler
@@ -145,8 +145,8 @@ published interface XExtendedToolkit : ::com::sun::star::uno::XInterface
         [in] ::com::sun::star::awt::XKeyHandler xHandler);
 
 
-    /** Add a new listener that is called on <type
-        scope="::com::sun::star::awt">FocusEvent</type>s.  Use this focus
+    /** Add a new listener that is called on
+        ::com::sun::star::awt::FocusEvent.  Use this focus
         broadcaster to keep track of the object that currently has the input
         focus.
         @param xListener

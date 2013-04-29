@@ -125,9 +125,9 @@ published service DataSource
         <ul><li>Upon creating a connection, for every value in this sequence it's checked
                 whether the com::sun::star::sdbc::XDriver which is to provide
                 the connection supports a setting with the respective name, using its
-                <member scope="com::sun::star::sdbc">XDriver::getPropertyInfo<member> method.br/>
+                com::sun::star::sdbc::XDriver::getPropertyInfo() method.br/>
                 If so, the settings is passed to the driver's
-                <member scope="com::sun::star::sdbc">XDriver::connect<member> method. If not,
+                com::sun::star::sdbc::XDriver::connect() method. If not,
                 the setting is ignored.</li>
             <li>External components may use the settings to carry arbitrary information with
                 the data source. Usually, this is used to control the behavior of components

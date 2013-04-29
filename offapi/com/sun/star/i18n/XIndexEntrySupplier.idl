@@ -34,9 +34,8 @@ published interface XIndexEntrySupplier : com::sun::star::uno::XInterface
 {
     /**
         returns the capital index key for sorting a table of indexes, to
-        a given index entry, to a given <type
-        scope="com::sun::star::lang">Locale</type> and to a given sort
-        algorithm.
+        a given index entry, to a given com::sun::star::lang::Locale and to a
+        given sort algorithm.
 
         <p> For example, in English locale it returns <b>"K"</b> for
         "keyboard"

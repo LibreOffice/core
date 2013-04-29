@@ -50,9 +50,8 @@ service AccessibleTreeListBoxEntry
     /** This interface gives access to the structural information of a tree list box entry:
 
        <ul>
-       <li>Role: The role of a tree list box entry is <const
-           scope="com::sun::star::accessibility"
-           >AccessibleRole::LABEL</const>.</li>
+       <li>Role: The role of a tree list box entry is
+       com::sun::star::accessibility::AccessibleRole::LABEL.</li>
        <li>Name: The name of a tree list box entry is it's text.</li>
        <li>Description: The description of a tree list box entry is empty.</li>
        <li>Children: There can exist children of type com::sun::star::awt::AccessibleTreeListBoxEntry.
@@ -62,34 +61,31 @@ service AccessibleTreeListBoxEntry
        <li>Relations: There are no relations.</li>
        <li>States: The states supported by this service are
            <ul>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::DEFUNC</const>
+           <li>com::sun::star::accessibility::AccessibleStateType::DEFUNC
                is set if the object has already been disposed
                and subsequent calls to this object result in
                com::sun::star::lang::DisposedException
                exceptions.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::ENABLED</const> is set
-               if the object is enabled.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::SHOWING</const> is set
-               if the object is displayed on the screen.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::VISIBLE</const> is always set.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::EDITABLE</const> is set when a tree list box entry can be edited.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::EXPANDABLE</const> is always set.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::EXPANDED</const> is set when it is expanded.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::COLLAPSED</const> is set when it is collapsed.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::CHECKED</const> is set when it is checked.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::SELECTABLE</const> is always set.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::SELECTED</const> is set when it is selected.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::ENABLED
+               is set if the object is enabled.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::SHOWING
+               is set if the object is displayed on the screen.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::VISIBLE
+               is always set.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::EDITABLE
+               is set when a tree list box entry can be edited.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::EXPANDABLE
+               is always set.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::EXPANDED
+               is set when it is expanded.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::COLLAPSED
+               is set when it is collapsed.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::CHECKED
+               is set when it is checked.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::SELECTABLE
+               is always set.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::SELECTED
+               is set when it is selected.</li>
            </ul>
            </li>
        </ul>

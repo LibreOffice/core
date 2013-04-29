@@ -25,7 +25,7 @@
 module com { module sun { module star { module configuration { module backend {
 
 
-/** is passed to an <type>InteractionHandler<type> when merging fails due to
+/** is passed to an InteractionHandler when merging fails due to
     invalid layer data or access problems.
 
     @since OOo 2.0

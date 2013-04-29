@@ -68,8 +68,7 @@ published service TextPortion
         <dt>Text</dt><dd>string content</dd>
         <dt>TextField</dt><dd>a text field</dd>
         <dt>TextContent</dt><dd>text content - supplied via the
-            interface <type scope="com::sun::star::container">
-            XContentEnumerationAccess</type></dd>
+            interface com::sun::star::container::XContentEnumerationAccess</dd>
         <dt>ControlCharacter</dt><dd>a control character</dd>
         <dt>Footnote</dt><dd>a footnote or an endnote</dd>
         <dt>ReferenceMark</dt><dd>a reference mark</dd>

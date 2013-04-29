@@ -79,7 +79,7 @@ published service Statement
              A driver implementing batch execution must return
              `TRUE`
              for
-             <member scope= "com::sun::star::sdbc"> XDatabaseMetaData::supportsBatchUpdates()</member>
+             com::sun::star::sdbc:: XDatabaseMetaData::supportsBatchUpdates()
              </p>
      */
     [optional] interface XBatchExecution;
@@ -110,18 +110,18 @@ published service Statement
         <p>
         This limit is the maximum number of bytes that can be returned
         for any column value. The limit applies only to
-        <member scope= "com::sun::star::sdbc">DataType::BINARY</member>
+        com::sun::star::sdbc::DataType::BINARY
               ,
-              <member scope= "com::sun::star::sdbc">DataType::VARBINARY</member>
+              com::sun::star::sdbc::DataType::VARBINARY
               ,
-              <member scope= "com::sun::star::sdbc">DataType::LONGVARBINARY</member>
+              com::sun::star::sdbc::DataType::LONGVARBINARY
               ,
-              <member scope= "com::sun::star::sdbc">DataType::CHAR</member>
+              com::sun::star::sdbc::DataType::CHAR
               ,
-              <member scope= "com::sun::star::sdbc">DataType::VARCHAR</member>
+              com::sun::star::sdbc::DataType::VARCHAR
               ,
               and
-              <member scope= "com::sun::star::sdbc">DataType::LONGVARCHAR</member>
+              com::sun::star::sdbc::DataType::LONGVARCHAR
               columns.
         If the limit is exceeded, the excess data is silently discarded.
         <br/>

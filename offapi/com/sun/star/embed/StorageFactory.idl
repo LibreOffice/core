@@ -65,9 +65,7 @@
 
         <dt>parameter 3</dt>
         <dd>
-                  this parameter represents
-                  com::sun::star::uno::Any
-                  containing a sequence of
+                  this parameter represents `any` containing a sequence of
                   com::sun::star::beans::PropertyValue.<br>
                   The parameter can contain entries from
                   com::sun::star::document::MediaDescryptor

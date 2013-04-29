@@ -194,7 +194,7 @@ interface XImageManager
     /** initializes an image manager instance.
 
         An image manager instance must be initialized using
-        <member scope=com::sun::star::lang>XInitialization::initialize</member>
+        com::sun::star::lang::XInitialization::initialize()
         before it can be used.<br>
         The following property must be provided if the image manager is
         related to a module:

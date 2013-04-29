@@ -336,13 +336,13 @@ interface XPackage
 
         This data may be created when calling
         XPackage::registerPackage().  If this is the case is
-        indicated by <member
-        scope="com::sun::star::beans">Optional::IsPresent</member> of the return
+        indicated by
+        com::sun::star::beans::Optional::IsPresent of the return
         value.
         If registration data are created during registration, but the package is
         currently not registered, for example after calling
-        XPackage::revokePackage(), then <member
-        scope="com::sun::star::beans">Optional::IsPresent</member> is `TRUE` and
+        XPackage::revokePackage(), then
+        com::sun::star::beans::Optional::IsPresent is `TRUE` and
         the com::sun::star::beans::Optional::Value may
         be an empty string.
     */

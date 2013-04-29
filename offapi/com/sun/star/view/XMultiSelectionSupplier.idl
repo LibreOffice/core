@@ -29,7 +29,7 @@ module com {  module sun {  module star {  module view {
 /** makes it possible to append and remove objects from a selection.
 
     <p>The method XSelectionSupplier::setSelection() for an
-    instance that also supports <type>XMultiSelectionSupplier</method> should
+    instance that also supports XMultiSelectionSupplier should
     be implemented that it also takes either a selectable object or a sequence
     of selectable objects.</p>
 

@@ -53,8 +53,8 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
 
     /** registers several events for an object identified by its index.
 
-        <p>The result is the same as if the method <member>registerScriptEvent
-        </member> was called once for each ScriptEventDescriptor
+        <p>The result is the same as if the method registerScriptEvent()
+        was called once for each ScriptEventDescriptor
         in the sequence.</p>
 
         <p>If any object is attached under this index, then this

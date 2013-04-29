@@ -33,9 +33,7 @@ module com {  module sun {  module star {  module sdb {
     <p>
     Here, <em>system wide registered</em> means registered on the (one and only) instance
     of the
-    <type scope="com::sun::star::sdb">
-    DatabaseContext
-    </type>
+    com::sun::star::sdb::DatabaseContext
     service.
     </p>
 */
@@ -91,9 +89,7 @@ published service DatasourceAdministrationDialog
             <li><b>InitialSelection</b><br/>
                 String or XDataSource describing which data source should be selected initially.
                 This String name must be known to the
-                <type scope="com::sun::star::sdb">
-                DatabaseContext
-                </type>
+                com::sun::star::sdb::DatabaseContext
                 .
             </li>
         </ul>

@@ -69,17 +69,17 @@ interface XFormulaOpCodeMapper
             sequence in order.
 
             <p>Each string element in parameter Names according to the formula
-            language in parameter Language is mapped to a <type>FormulaToken
-            </type> containing the internal OpCode used by the spreadsheet
+            language in parameter Language is mapped to a FormulaToken
+            containing the internal OpCode used by the spreadsheet
             application in FormulaToken::OpCode and by
-            contract maybe additional information in <member>
-            FormulaToken::Data</member>.</p>
+            contract maybe additional information in
+            FormulaToken::Data.</p>
 
             <p>The order of the FormulaToken sequence returned matches the
             input order of the string sequence.</p>
 
-            <p>An unknown Name string gets the OpCode value of <member>
-            OpCodeUnknown</member> assigned.</p>
+            <p>An unknown Name string gets the OpCode value of
+            #OpCodeUnknown assigned.</p>
 
             <p>Additional information in FormulaToken::Data
             is returned for:
@@ -105,18 +105,18 @@ interface XFormulaOpCodeMapper
             is thrown.
 
         @param Groups
-            Group of mappings to be returned, a bit mask of <type>
-            FormulaMapGroup</type> constants.
+            Group of mappings to be returned, a bit mask of
+            FormulaMapGroup constants.
 
         @returns
             Sequence of FormulaOpCodeMapEntry.
 
             <p>Each element of the formula language in parameter Language is
             mapped to a FormulaToken containing the internal
-            OpCode used by the spreadsheet application in <member>
-            FormulaToken::OpCode</member> and by contract maybe additional
-            information in FormulaToken::Data. See <member>
-            getMappings</member> for more details.</p>
+            OpCode used by the spreadsheet application in
+            FormulaToken::OpCode and by contract maybe additional
+            information in FormulaToken::Data. See
+            getMappings() for more details.</p>
      */
     sequence< FormulaOpCodeMapEntry > getAvailableMappings(
             [in] long Language, [in] long Groups )

@@ -55,8 +55,8 @@ interface XSlideShow : ::com::sun::star::uno::XInterface
         current slide, a possible slide transition effect is issued
         and the next slide is displayed.<p>
 
-        @return <TRUE>, if the next effect was successfully
-        triggered. This method returns <FALSE>, if there is no show
+        @return `TRUE`, if the next effect was successfully
+        triggered. This method returns `FALSE`, if there is no show
         running, the last effect on the last slide was already
         triggered, or the implementation failed to trigger the next
         effect.
@@ -169,10 +169,10 @@ interface XSlideShow : ::com::sun::star::uno::XInterface
         show again (all paused effects start again).<p>
 
         @param bPauseShow
-        When <TRUE>, the show is paused. When <FALSE>, and the show
+        When `TRUE`, the show is paused. When `FALSE`, and the show
         was paused, it starts running at the paused position again.
 
-        @return <TRUE>, if the requested action was successfully
+        @return `TRUE`, if the requested action was successfully
         performed.
      */
     boolean pause( [in] boolean bPauseShow );
@@ -224,8 +224,8 @@ interface XSlideShow : ::com::sun::star::uno::XInterface
         @param xView
         The view to add
 
-        @return <TRUE>, if the view has been successfully
-        added. Otherwise, <FALSE> is returned (e.g. if the view is
+        @return `TRUE`, if the view has been successfully
+        added. Otherwise, `FALSE` is returned (e.g. if the view is
         already added).
      */
     boolean addView( [in] XSlideShowView xView );
@@ -239,7 +239,7 @@ interface XSlideShow : ::com::sun::star::uno::XInterface
         @param xView
         View to remove
 
-        @return <TRUE>, if the view was successfully removed, <FALSE>
+        @return `TRUE`, if the view was successfully removed, `FALSE`
         otherwise (e.g. if the view was not added in the first place).
      */
     boolean removeView( [in] XSlideShowView xView );
@@ -260,8 +260,8 @@ interface XSlideShow : ::com::sun::star::uno::XInterface
         the return of this method to the next update call. Otherwise,
         the animations might show visible jerks.
 
-        @return <TRUE>, if further update calls are required. If
-        <FALSE> is returned, no further update calls are necessary,
+        @return `TRUE`, if further update calls are required. If
+        `FALSE` is returned, no further update calls are necessary,
         until anyone of the other interface methods is called (most
         notably, the next/previousSlide(), nextEffect() and show()
         methods will nearly always make further update() calls

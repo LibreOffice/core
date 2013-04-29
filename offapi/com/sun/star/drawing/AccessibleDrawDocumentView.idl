@@ -69,9 +69,8 @@ service AccessibleDrawDocumentView
 
         <p>You can access the following information:
         <ul>
-        <li>Role: The object's role is <const
-            scope="com::sun::star::accessibility"
-                >AccessibleRole::DOCUMENT</const>.</li>
+        <li>Role: The object's role is
+            com::sun::star::accessibility::AccessibleRole::DOCUMENT.</li>
         <li>Name: Its name is "AccessibleDrawDocumentView",
         "AccessibleOutlineView", or "slide window".</li>
         <li>Description: The description is "Draw Document", "Accessible
@@ -89,20 +88,16 @@ service AccessibleDrawDocumentView
             draw document view.  It has to be set via implementation dependent
             ways.</li>
         <li>Relations: Relations are set and modified from the outside.</li>
-        <li>States: <const scope="com::sun::star::accessibility"
-                >AccessibleStateType::DEFUNC</const> is set if a document view
+        <li>States: com::sun::star::accessibility::AccessibleStateType::DEFUNC
+            is set if a document view
                 becomes obsolete like when the window, which displays the view,
                 is closed.  Otherwise the states
-                <const scope="com::sun::star::accessibility"
-                    >AccessibleStateType::ENABLED</const>,
-                <const scope="com::sun::star::accessibility"
-                    >AccessibleStateType::SHOWING</const>,
-                <const scope="com::sun::star::accessibility"
-                    >AccessibleStateType::VISIBLE</const>,
-                <const scope="com::sun::star::accessibility"
-                    >AccessibleStateType::FOCUSABLE</const>, and
-                <const scope="com::sun::star::accessibility"
-                   >AccessibleStateType::SELECTABLE</const>
+                com::sun::star::accessibility::AccessibleStateType::ENABLED,
+                com::sun::star::accessibility::AccessibleStateType::SHOWING,
+                com::sun::star::accessibility::AccessibleStateType::VISIBLE,
+                com::sun::star::accessibility::AccessibleStateType::FOCUSABLE,
+                and
+                com::sun::star::accessibility::AccessibleStateType::SELECTABLE
             are always set.</li>
         <li>Locale: Is obtained from the parent and returned unchanged.</li>
         </ul></p>

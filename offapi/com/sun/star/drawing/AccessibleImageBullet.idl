@@ -40,14 +40,12 @@ service AccessibleImageBullet
 
         <ul>
             <li>The parent returned by
-                <method scope="::com::sun::star::accessibility"
-                >XAccessibleContext::getAccessibleParent</method>
+                ::com::sun::star::accessibility::XAccessibleContext::getAccessibleParent()
                 is the accessible object of a text paragraph.
             <li>There are no children returned by
-                <method scope="::com::sun::star::accessibility"
-                >XAccessibleContext::getAccessibleChild</method>.
-            <li>The role is <const scope="::com::sun::star::accessibility"
-                >AccessibleRole::GRAPHIC</const>.
+                ::com::sun::star::accessibility::XAccessibleContext::getAccessibleChild().
+            <li>The role is
+                ::com::sun::star::accessibility::AccessibleRole::GRAPHIC.
             <li>The name is "image bullet" (or the equivalent term
                 in application's language).
             <li>The description contains the term "image bullet" (or the equivalent
@@ -55,24 +53,18 @@ service AccessibleImageBullet
                 within this bullet appears.
             <li>There are no relations.
             <li>The following states are supported by the
-                <type scope="::com::sun::star::accessibility"
-                >XAccessibleStateSet</type> returned by
-                <method scope="::com::sun::star::accessibility"
-                >XAccessibleContext::getAccessibleStateSet</method>.
+                ::com::sun::star::accessibility::XAccessibleStateSet returned by
+                ::com::sun::star::accessibility::XAccessibleContext::getAccessibleStateSet().
                 <ul>
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::DEFUNC</const> (indicates that
+                    <li>::com::sun::star::accessibility::AccessibleStateType::DEFUNC
+                        (indicates that
                         the document window has been closed or the image bullet
                         is not existing any longer).
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::ENABLED</const> (always
-                        contained)
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::SHOWING</const>
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::VISIBLE</const>
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::INVALID</const>
+                    <li>::com::sun::star::accessibility::AccessibleStateType::ENABLED
+                        (always contained)
+                    <li>::com::sun::star::accessibility::AccessibleStateType::SHOWING
+                    <li>::com::sun::star::accessibility::AccessibleStateType::VISIBLE
+                    <li>::com::sun::star::accessibility::AccessibleStateType::INVALID
                 </ul>
         </ul>
 

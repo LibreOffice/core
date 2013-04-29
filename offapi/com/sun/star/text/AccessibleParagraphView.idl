@@ -43,26 +43,23 @@ service AccessibleParagraphView
 
         <ul>
             <li>The parent returned by
-                <method scope="::com::sun::star::accessibility"
-                >XAccessibleContext::getAccessibleParent</method> is the
-                accessible view of a text document (in this case the
+                ::com::sun::star::accessibility::XAccessibleContext::getAccessibleParent()
+                is the accessible view of a text document (in this case the
                 paragraph is contained in a page body) or the accessible
                 view of a header, footer, footnote, endnote, table cell,
                 text frame, page or shape.</li>
             <li>The children returned by
-                <method scope="::com::sun::star::accessibility"
-                >XAccessibleContext::getAccessibleChild</method> are the
-                graphics, text boxes and OLE objects that are bound
+                ::com::sun::star::accessibility::XAccessibleContext::getAccessibleChild()
+                are the graphics, text boxes and OLE objects that are bound
                 <em>as</em> character within the paragraph. Graphics, text
                 boxes and OLE objects that are bound to the paragraph or
                 <em>to</em> a character within the paragraph are not
                 children of the paragraph fragment but of the document view
                 itself.</li>
             <li>The role is either
-                <const scope="::com::sun::star::accessibility"
-                >AccessibleRole::PARAGRAPH</const> or
-                <const scope="::com::sun::star::accessibility"
-                >AccessibleRole::HEADING</const>. The later one is returned
+                ::com::sun::star::accessibility::AccessibleRole::PARAGRAPH or
+                ::com::sun::star::accessibility::AccessibleRole::HEADING.
+                The later one is returned
                 if the paragraph's style is contained in the chapter
                 numbering of a text document.
             <li>The name is "paragraph" or "heading" (or the equivalent term
@@ -72,34 +69,24 @@ service AccessibleParagraphView
                 the paragraph.
             <li>There are no relations.
             <li>The following states are supported by the
-                <type scope="::com::sun::star::accessibility"
-                >XAccessibleStateSet</type> returned by
-                <method scope="::com::sun::star::accessibility"
-                >XAccessibleContext::getAccessibleStateSet</method>.
+                ::com::sun::star::accessibility::AccessibleStateSet returned by
+                ::com::sun::star::accessibility::XAccessibleContext::getAccessibleStateSet().
                 <ul>
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::DEFUNC</const> (indicates that
+                    <li>::com::sun::star::accessibility::AccessibleStateType::DEFUNC
+                        (indicates that
                         the document window has been closed or the paragraph
                         fragment is not existing any longer).
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::EDITABLE</const>
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::ENABLED</const> (always
-                        contained)
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::MULTILINE</const> (always
-                        contained)
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::MULTISELECTABLE</const>
+                    <li>::com::sun::star::accessibility::AccessibleStateType::EDITABLE
+                    <li>::com::sun::star::accessibility::AccessibleStateType::ENABLED
                         (always contained)
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::OPAQUE</const>
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::SHOWING</const>
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::VISIBLE</const>
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::FOCUSED</const>
+                    <li>::com::sun::star::accessibility::AccessibleStateType::MULTILINE
+                        (always contained)
+                    <li>::com::sun::star::accessibility::AccessibleStateType::MULTISELECTABLE
+                        (always contained)
+                    <li>::com::sun::star::accessibility::AccessibleStateType::OPAQUE
+                    <li>::com::sun::star::accessibility::AccessibleStateType::SHOWING
+                    <li>::com::sun::star::accessibility::AccessibleStateType::VISIBLE
+                    <li>::com::sun::star::accessibility::AccessibleStateType::FOCUSED
                 </ul>
             <li>Depending of the application's region setting, the locale is
                 the western, Asian or complex language of the paragraph.
@@ -121,16 +108,14 @@ service AccessibleParagraphView
         <p>For text frames, graphics, etc. that are bound as character some
         text is generated that contains the objects description.
         <p>The attributes (or properties) returned by
-        <method scope="::com::sun::star::accessibility"
-        >XAccessibleText::getCharacterAttributes</method>
+        ::com::sun::star::accessibility::XAccessibleText::getCharacterAttributes()
         are a sub set of the properties described by the service
         ::com::sun::star::style::CharacterProperties. For
         properties that have Asian and complex counterparts, the value that
         is visible is returned. This can be in fact the western, Asian or
         complex value.  Its not possible to change the value of any property
         by using
-        <method scope="::com::sun::star::accessibility"
-        >XAccessibleEditableText::setAttributes</method>.
+        ::com::sun::star::accessibility::XAccessibleEditableText::setAttributes().
         <p><em>TODO: If there is a demand, some attributes might be added that
         tells whether the character at a certain index is editable or generated.
         </em>
@@ -139,8 +124,8 @@ service AccessibleParagraphView
     [optional] interface ::com::sun::star::accessibility::XAccessibleEditableText;
 
     /** This interface is a subset of
-        <type scope="::com::sun::star::accessibility"
-        >XAccessibleEditableText</type> and gives access to a paragraph
+        ::com::sun::star::accessibility::XAccessibleEditableText
+        and gives access to a paragraph
         fragment's text in a read-only mode.  The text contains the
         paragraph's text (changeable as well as generated text, like chapter
         numbers, hyphens or fields). Characters of generated text contribute
@@ -148,9 +133,8 @@ service AccessibleParagraphView
         <p>For text frames, graphics, etc. that are bound as character
         some text is generated that contains the objects description.
         <p>The attributes (or properties) returned by
-        <method scope="::com::sun::star::accessibility"
-        >XAccessibleText::getCharacterAttributes</method> are a sub set of the properties
-        described by the service
+        ::com::sun::star::accessibility::XAccessibleText::getCharacterAttributes()
+        are a sub set of the properties described by the service
         ::com::sun::star::style::CharacterProperties. For
         properties that have Asian and complex counterparts, the value that
         is visible is returned. This can be in fact the western, Asian or

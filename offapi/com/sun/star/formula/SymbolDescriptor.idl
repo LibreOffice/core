@@ -93,7 +93,7 @@ published struct SymbolDescriptor
         @see   com::sun::star::awt::FontSlant
 
         The values
-        <member cope"com::sun::star::awt">FontSlant::REVERSE_OBLIQUE</member> and
+        com::sun::star::awt::FontSlant::REVERSE_OBLIQUE and
         com::sun::star::awt::FontSlant::REVERSE_ITALIC
         may not be used.
     */

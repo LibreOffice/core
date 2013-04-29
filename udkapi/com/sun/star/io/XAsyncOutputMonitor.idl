@@ -42,8 +42,8 @@ module com { module sun { module star { module io {
    such an output stream shall not be closed immediately after one or more calls
    to com::sun::star::io::XOutputStream::writeBytes(), but
    the client wants to know as soon as possible whether writing was successful,
-   then <member
-   scope="com::sun::star::io">XAsyncOutputMonitor::waitForCompletion</member>
+   then
+   com::sun::star::io::XAsyncOutputMonitor::waitForCompletion()
    should be called after the series of calls to
    com::sun::star::io::XOutputStream::writeBytes().</p>
 
@@ -70,9 +70,8 @@ interface XAsyncOutputMonitor {
        give this guarantee).</p>
 
        @throws com::sun::star::io::IOException
-       if any previous call to <member
-       scope="com::sun::star::io">XOutputStream::writeBytes</member> encountered
-       such an error, but has not yet reported it (in cases where
+       if any previous call to com::sun::star::io::XOutputStream::writeBytes()
+       encountered such an error, but has not yet reported it (in cases where
        <code>writeBytes</code> operates asynchronously).
     */
     void waitForCompletion() raises (IOException);

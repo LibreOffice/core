@@ -41,29 +41,25 @@ service AccessibleHeaderFooterView
 
         <ul>
             <li>The parent returned by
-                <method scope="::com::sun::star::accessibility"
-                >XAccessibleContext::getAccessibleParent</method>
+                ::com::sun::star::accessibility::XAccessibleContext::getAccessibleParent()
                 is either the accessible view of a text document,
                 a page of the accessible page preview of a text document,
                 or the accessible page preview of a spreadsheet document.
             <li>The children returned by
-                <method scope="::com::sun::star::accessibility"
-                >XAccessibleContext::getAccessibleChild</method> all
-                support the interface XAccessible. Calling
-                <method scope="::com::sun::star::accessibility"
-                >XAccessible::getAccessibleContext</method> for these children returns
+                ::com::sun::star::accessibility::XAccessibleContext::getAccessibleChild()
+                all support the interface XAccessible. Calling
+                ::com::sun::star::accessibility::XAccessible::getAccessibleContext()
+                for these children returns
                 an object that supports one of the following services.
                 <ul>
-                    <li><type scope="::com::sun::star::text"
-                        >AccessibleParagraphView</type>:
+                    <li>::com::sun::star::text::AccessibleParagraphView:
                         A child of this kind is returned for every paragraph
                         that is contained in the document body and
                         is at least partially visible. The child always
                         represents a whole paragraph (and not a fragment only),
                         because there are no page breaks within headers and
                         footers.
-                    <li><type scope="::com::sun::star::table"
-                        >AccessibleTableView</type>:
+                    <li>::com::sun::star::table::AccessibleTableView:
                         A child of this kind is returned for every table
                         that is contained in the document body
                         and is at least partially visible. The child always
@@ -73,10 +69,8 @@ service AccessibleHeaderFooterView
                 </ul>
             <p>The logical order of paragraphs and tables is never changed.
             <li>The role is either
-                <const scope="::com::sun::star::accessibility"
-                >AccessibleRole::HEADER</const> or
-                <const scope="::com::sun::star::accessibility"
-                >AccessibleRole::FOOTER</const>.
+                ::com::sun::star::accessibility::AccessibleRole::HEADER or
+                ::com::sun::star::accessibility::AccessibleRole::FOOTER.
             <li>The name is "header" or "footer" (or the equivalent term
                 in application's language) with a number appended.
             <li>The description is "header" or "footer" (or the equivalent term
@@ -84,23 +78,19 @@ service AccessibleHeaderFooterView
                 the format that is specified in the page's style.
             <li>There are no relations.
             <li>The following states might be contained in the state set
-                returned by <method scope="::com::sun::star::accessibility"
-                >XAccessible::getAccessibleStateSet</type>:
+                returned by
+                ::com::sun::star::accessibility::XAccessible::getAccessibleStateSet():
                 <ul>
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::DEFUNC</const> (indicates that
+                    <li>::com::sun::star::accessibility::AccessibleStateType::DEFUNC
+                        (indicates that
                         the document window has been closed or the header or
                         footer is not existing any longer)
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::EDITABLE</const>
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::ENABLED</const> (always contained)
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::OPAQUE</const>
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::SHOWING</const>
-                    <li><const scope="::com::sun::star::accessibility"
-                        >AccessibleStateType::VISIBLE</const>
+                    <li>::com::sun::star::accessibility::AccessibleStateType::EDITABLE
+                    <li>::com::sun::star::accessibility::AccessibleStateType::ENABLED
+                        (always contained)
+                    <li>::com::sun::star::accessibility::AccessibleStateType::OPAQUE
+                    <li>::com::sun::star::accessibility::AccessibleStateType::SHOWING
+                    <li>::com::sun::star::accessibility::AccessibleStateType::VISIBLE
                 </ul>
             <li>Depending of the application's region setting, the locale is
                 the western, Asian or complex default language of the document.

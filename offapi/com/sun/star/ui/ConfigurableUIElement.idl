@@ -54,7 +54,7 @@ service ConfigurableUIElement
 
         <p>
         A configurable user interface element must be initialized using
-        <member scope=com::sun::star::lang>XInitialization::initialize</member> before
+        com::sun::star::lang::XInitialization::initialize() before
         it can be used. The following properties must be provided:
         <ul>
             <li><b>ResourceURL</b><br>specifies the user interface name.</li>

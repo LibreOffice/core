@@ -51,13 +51,15 @@ service CellRangeListSource
 
         <p>This interface is used to initialize the component after creation. It has
         to be used exactly once in the life time of the component, every second call
-        to <member scope"com::sun::star::lang">XInitialization::initialize</member>
+        to com::sun::star::lang::XInitialization::initialize()
         will throw an exception.</p>
 
-        <p>The arguments passed to the <member scope"com::sun::star::lang">XInitialization::initialize</member>
+        <p>The arguments passed to the
+        com::sun::star::lang::XInitialization::initialize()
         method must be instances of com::sun::star::beans::NamedValue, where
-        the <member scope"com::sun::star::beans">NamedValue::Name</member> denotes the type of information
-        to initialize, and the <member scope"com::sun::star::beans">NamedValue::Value</member>
+        the com::sun::star::beans::NamedValue::Name denotes the type of
+        information to initialize, and the
+        com::sun::star::beans::NamedValue::Value
         the initial value.</p>
 
         <p>The following aspects of the components can be initialized:<br/>

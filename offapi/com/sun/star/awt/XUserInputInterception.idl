@@ -33,8 +33,8 @@ module com {  module sun {  module star {  module awt {
  */
 published interface XUserInputInterception : ::com::sun::star::uno::XInterface
 {
-    /** Add a new listener that is called on <type
-        scope="::com::sun::star::awt">KeyEvent</type>s.  Every listener is
+    /** Add a new listener that is called on ::com::sun::star::awt::KeyEvent.
+        Every listener is
         given the opportunity to consume the event, i.e. prevent the not yet
         called listeners from being called.
         @param xHandler
@@ -56,8 +56,8 @@ published interface XUserInputInterception : ::com::sun::star::uno::XInterface
     void removeKeyHandler (
         [in] ::com::sun::star::awt::XKeyHandler xHandler);
 
-    /** Add a new listener that is called on <type
-        scope="::com::sun::star::awt">MouseEvent</type>s.  Every listener is
+    /** Add a new listener that is called on ::com::sun::star::awt::MouseEvent.
+        Every listener is
         given the opportunity to consume the event, i.e. prevent the not yet
         called listeners from being called.
         @param xHandler

@@ -40,10 +40,9 @@ interface XInterfaceTypeDescription2: XInterfaceTypeDescription {
         @returns
         a sequence of all directly inherited (mandatory) base interface types,
         in the correct order; each element of the returned sequence will be the
-        reflection of either an interface type (of type <type
-        scope="com::sun::star::reflection">XInterfaceTypeDescription</type>) or
-        a typedef (of type <type
-        scope="com::sun::star::reflection">XIndirectTypeDescription</type>)
+        reflection of either an interface type (of
+        type com::sun::star::reflection::XInterfaceTypeDescription) or
+        a typedef (of type com::sun::star::reflection::XIndirectTypeDescription)
         that&mdash;directly or indirectly&mdash;denotes an interface type
      */
     sequence<XTypeDescription> getBaseTypes();
@@ -54,10 +53,9 @@ interface XInterfaceTypeDescription2: XInterfaceTypeDescription {
         @returns
         a sequence of all directly inherited optional base interface types, in
         the correct order; each element of the returned sequence will be the
-        reflection of either an interface type (of type <type
-        scope="com::sun::star::reflection">XInterfaceTypeDescription</type>) or
-        a typedef (of type <type
-        scope="com::sun::star::reflection">XIndirectTypeDescription</type>)
+        reflection of either an interface type (of type
+        com::sun::star::reflection::XInterfaceTypeDescription) or
+        a typedef (of type com::sun::star::reflection::XIndirectTypeDescription)
         that&mdash;directly or indirectly&mdash;denotes an interface type
      */
     sequence<XTypeDescription> getOptionalBaseTypes();

@@ -25,9 +25,8 @@ module com {  module sun {  module star {  module beans {
    A value of a given type that can be defaulted.
 
    <p>This structure is used as the type of interface attributes corresponding
-   to instances of <type scopye="com::sun::star::beans">Property</type> that
-   have the <const
-   scope="com::sun::star::beans">PropertyAttribute::MAYBEDEFAULT</const>.</p>
+   to instances of com::sun::star::beans::Property that
+   have the com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT.</p>
  */
 struct Defaulted<T> {
     /**

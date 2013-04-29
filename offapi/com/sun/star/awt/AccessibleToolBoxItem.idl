@@ -68,28 +68,23 @@ service AccessibleToolBoxItem
        <li>Relations: There are no relations.</li>
        <li>States: The states supported by this service are
            <ul>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::DEFUNC</const>
+           <li>com::sun::star::accessibility::AccessibleStateType::DEFUNC
                is set if the object has already been disposed
                and subsequent calls to this object result in
                com::sun::star::lang::DisposedException
                exceptions.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::ENABLED</const> is set
-               if the object is enabled.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::FOCUSABLE</const> is always set.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::FOCUSED</const> is set
-               if the object currently has the keyboard focus.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::SHOWING</const> is set
-               if the object is displayed on the screen.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::VISIBLE</const> is always set.</li>
-           <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::CHECKED</const> is set
-               if the tool box item is checked.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::ENABLED
+               is set if the object is enabled.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::FOCUSABLE
+               is always set.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::FOCUSED
+               is set if the object currently has the keyboard focus.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::SHOWING
+               is set if the object is displayed on the screen.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::VISIBLE
+               is always set.</li>
+           <li>com::sun::star::accessibility::AccessibleStateType::CHECKED
+               is set if the tool box item is checked.</li>
            </ul>
            </li>
        </ul>
@@ -113,8 +108,7 @@ service AccessibleToolBoxItem
     interface com::sun::star::accessibility::XAccessibleText;
     /** This interface gives access to the numerical value of a
         tool box item, which is related to the tool box item's
-        <const scope="com::sun::star::accessibility"
-        >AccessibleStateType::CHECKED</const> state.
+        com::sun::star::accessibility::AccessibleStateType::CHECKED state.
      */
     interface com::sun::star::accessibility::XAccessibleValue;
 };

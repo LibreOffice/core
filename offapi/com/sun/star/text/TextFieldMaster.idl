@@ -44,8 +44,8 @@ published service TextFieldMaster
     /** contains a sequence of all fields that depend on this master.
      */
     [readonly, property]  sequence< XDependentTextField> DependentTextFields;
-    /** contains the instance name as it is used in the <type scope="::com::sun::star::text">
-        XTextFieldsSupplier</type>.
+    /** contains the instance name as it is used in the
+        ::com::sun::star::text::XTextFieldsSupplier.
      */
     [readonly, property]  string InstanceName;
 };

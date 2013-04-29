@@ -48,9 +48,8 @@ service JDBCConnectionProperties
     */
     [optional, property] string JavaDriverClass;
 
-    /** an optional class path to locate the <member
-        scope="com::sun::star::sdbc">JDBCConnectionProperties::JavaDriverClass
-        </member>.
+    /** an optional class path to locate the
+        com::sun::star::sdbc::JDBCConnectionProperties::JavaDriverClass
 
         <p>The class path is a list of zero or more internal (see the
         com::sun::star::uri::ExternalUriReferenceTranslator

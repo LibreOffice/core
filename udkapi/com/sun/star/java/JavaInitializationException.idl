@@ -33,10 +33,10 @@ module com { module sun { module star { module java {
     other exceptions in this namespace which inherit JavaInitializationException.
     These are:
     <p>
-    <type scope:"com::sun::star::java">JavaDisabledException</type> <br>
-    <type scope:"com::sun::star::java">JavaNotConfiguredException</type> <br>
-    <type scope:"com::sun::star::java">MissingJavaRuntimeException</type> <br>
-    <type scope:"com::sun::star::java">JavaVMCreationFailureException</type> <br>
+    com::sun::star::java::JavaDisabledException <br>
+    com::sun::star::java::JavaNotConfiguredException <br>
+    com::sun::star::java::MissingJavaRuntimeException <br>
+    com::sun::star::java::JavaVMCreationFailureException <br>
 
     @since OOo 1.1.2
  */

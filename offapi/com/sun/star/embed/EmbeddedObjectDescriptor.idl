@@ -34,7 +34,7 @@ module com { module sun { module star { module embed {
 
     <p>
     This service may be represented by a
-    <type scope="com::sun::star::beans" dim="[]">PropertyValue</type>.
+    com::sun::star::beansPropertyValue[].
     Such descriptors will be passed to different functions, included into
     possible load/save processes. Every member of such process can use
     this descriptor and may change it to actualize the information about

@@ -36,8 +36,7 @@ published interface XAuthorizable: com::sun::star::uno::XInterface
         @param objName
             the name of the object
         @param objType
-            a value of
-            <type scope="com::sun::star::sdbcx">PrivilegeObject</Type>
+            a value of com::sun::star::sdbcx::PrivilegeObject
         @returns
             the privileges
         @throws com::sun::star::sdbc::SQLException
@@ -51,8 +50,7 @@ published interface XAuthorizable: com::sun::star::uno::XInterface
         @param objName
             the name of the object
         @param objType
-            a value of
-            <type scope="com::sun::star::sdbcx">PrivilegeObject</Type>
+            a value of com::sun::star::sdbcx::PrivilegeObject
         @returns
             the grant privileges
         @throws com::sun::star::sdbc::SQLException

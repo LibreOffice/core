@@ -38,9 +38,8 @@ service AccessibleFixedText
         fixed text:
 
         <ul>
-        <li>Role: The role of a fixed text is <const
-            scope="com::sun::star::accessibility"
-            >AccessibleRole::LABEL</const>.</li>
+        <li>Role: The role of a fixed text is
+        com::sun::star::accessibility::AccessibleRole::LABEL.</li>
         <li>Name: The name of a fixed text is its localized label.</li>
         <li>Description: The description of a fixed text is its localized
             help text.</li>
@@ -48,31 +47,26 @@ service AccessibleFixedText
         <li>Parent: The parent is the window that contains the fixed text.</li>
         <li>Relations: The relations supported by this service are
             <ul>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleRelationType::LABEL_FOR</const> is set
-                if the object is a label for one or more target
+            <li>com::sun::star::accessibility::AccessibleRelationType::LABEL_FOR
+                is set if the object is a label for one or more target
                 objects.</li>
             </ul>
             </li>
         <li>States: The states supported by this service are
             <ul>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::DEFUNC</const>
+            <li>com::sun::star::accessibility::AccessibleStateType::DEFUNC
                 is set if the object has already been disposed
                 and subsequent calls to this object result in
                 com::sun::star::lang::DisposedException
                 exceptions.</li>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::ENABLED</const> is set
-                if the object is enabled.</li>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::MULTI_LINE</const> is set
-                if the object contains multiple lines of text.</li>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::SHOWING</const> is set
-                if the object is displayed on the screen.</li>
-            <li><const scope="com::sun::star::accessibility"
-                >AccessibleStateType::VISIBLE</const> is always set.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::ENABLED
+                is set if the object is enabled.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::MULTI_LINE
+                is set if the object contains multiple lines of text.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::SHOWING
+                is set if the object is displayed on the screen.</li>
+            <li>com::sun::star::accessibility::AccessibleStateType::VISIBLE
+                is always set.</li>
             </ul>
             </li>
         </ul>

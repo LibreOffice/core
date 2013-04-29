@@ -72,8 +72,8 @@ published interface XTextInputStream: com::sun::star::io::XInputStream
         of the stream is reached.</p>
         <p><strong>Important:</strong>
         This cannot be detected by asking for an empty string
-        because that can be a valid return value of <member>
-        readLine()</member> (if the line is empty) and
+        because that can be a valid return value of readLine()
+        (if the line is empty) and
         readString() (if a delimiter is directly followed
         by the next one).</p>
 

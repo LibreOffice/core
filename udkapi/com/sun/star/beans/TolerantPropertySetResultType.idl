@@ -42,7 +42,7 @@ constants TolerantPropertySetResultType
     /** the property is not available.
 
         <p>For example if a
-        <type scope="com::sun::star::beans" >UnknownPropertyException</type>
+        com::sun::star::beans::UnknownPropertyException
         was catched.</p>
     */
     const short UNKNOWN_PROPERTY    = 1;
@@ -50,7 +50,7 @@ constants TolerantPropertySetResultType
     /** the value used with the property is not valid.
 
         <p>For example if a
-        <type scope="com::sun::star::lang" >IllegalArgumentException</type>
+        com::sun::star::lang::IllegalArgumentException
         was catched.</p>
     */
     const short ILLEGAL_ARGUMENT    = 2;
@@ -58,7 +58,7 @@ constants TolerantPropertySetResultType
     /** the property could not be changed at that time.
 
         <p>For example if a
-        <type scope="com::sun::star::beans" >PropertyVetoException</type>
+        com::sun::star::beans::PropertyVetoException
         was catched.</p>
     */
     const short PROPERTY_VETO       = 3;

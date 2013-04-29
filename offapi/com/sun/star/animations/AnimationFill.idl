@@ -77,7 +77,7 @@ constants AnimationFill
         the element, then the element will have a fill behavior identical to that if it were specified
         as AnimationFill::FREEZE.</li>
         <li>Otherwise, the element will have a fill behavior identical to that if it were specified as
-        <const>AnimationFill::REMOVE</const.</li>
+        AnimationFill::REMOVE.</li>
         </ul>
     */
     const short AUTO = 5;

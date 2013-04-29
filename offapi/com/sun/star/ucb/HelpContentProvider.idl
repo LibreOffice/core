@@ -26,7 +26,7 @@
 module com { module sun { module star { module ucb {
 
 /** The Help Content Provider (HCP) implements a ContentProvider
-    for the <Type>UniversalContentBroker</type> (UCB).
+    for the UniversalContentBroker (UCB).
 
     <p>The served contents enable access to the help contents and to the
     search engine.

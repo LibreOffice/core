@@ -41,7 +41,7 @@ published interface XShapeCombiner: com::sun::star::uno::XInterface
             the Shapes inside this container are converted
             to PolyPolygonBezierShapes and are than combined
             into one PolyPolygonBezierShape.
-            The <type>Shape</types>s in xShape will be removed from the
+            The Shapes in xShape will be removed from the
             GenericDrawPage and disposed.
 
         @returns
@@ -59,7 +59,7 @@ published interface XShapeCombiner: com::sun::star::uno::XInterface
             the Shape is converted to a
             PolyPolygonBezierShapes and then split into
             several PolyPolygonBezierShapes
-            The <type>Shape</types>s in xShape will be removed from the
+            The Shapes in xShape will be removed from the
             GenericDrawPage and disposed.
      */
     void split( [in] com::sun::star::drawing::XShape xGroup );

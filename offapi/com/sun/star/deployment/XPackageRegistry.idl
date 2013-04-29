@@ -61,16 +61,14 @@ interface XPackageRegistry
         <code>url</code> but different <code>mediaType<code> (the exception is,
         if previously an empty string was provided to cause the determination
         of the media type) or <code>removed</code> parameters will cause an
-        exception. An <type
-        scope="com::sun::star::lang">IllegalArgumentException</type> will be
+        exception. An com::sun::star::lang::IllegalArgumentException will be
         thrown in case of a different <code>mediaType</code> parameter and a
         InvalidRemovedParameterException is thrown if the
         <code>removed</code> parameter is different.
 
         The <code>identifier</code> parameter must be provided when
-        <code>removed</code> = true. If not, then an <type
-        scope="com::sun::star::lang">IllegalArgumentException</type> will be
-        thrown.
+        <code>removed</code> = true. If not, then an
+        com::sun::star::lang::IllegalArgumentException will be thrown.
 
         @param url
                package URL, must be UCB conform
