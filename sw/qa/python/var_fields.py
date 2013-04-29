@@ -23,16 +23,6 @@ class TestVarFields(unittest.TestCase):
         Note: this test was migrated from java (the steps numbering too)
         sw/qa/complex/writer/VarFields.java
 
-        TODO:
-        Unlike in java, this test doesn't overwrite the field condition.
-        Apparently xDoc.refresh() is somehow broken (from python), because doing the update
-        manually does overwrite the condition:
-        1. run the python test with make verbose=t PythonTest_sw_python
-        2. open created document with
-        ./install/program/soffice.bin workdir/unxlngx6.pro/PythonTest/sw_python/VarFields.odt
-        3. check that TextSection's condition still has the right value: "foo EQ 1"
-        4. Update field with Tool=>Update=>Fields (or [F9])
-        5. check that TextSection's condition was overriden: "0"
         """
         xDoc = self.__class__._xDoc
         xBodyText = xDoc.getText()
@@ -86,7 +76,7 @@ class TestVarFields(unittest.TestCase):
         # 13. Access fields to refresh the document
         xEnumerationAccess = xDoc.getTextFields()
         # 14. refresh document to update the fields
-        xDoc.refresh()
+        xEnumerationAccess.refresh()
         # 15. retrieve the field
         xFieldEnum = xEnumerationAccess.createEnumeration()
         # Note: we have only one field here, that why nextElement() is just fine here
@@ -105,7 +95,7 @@ class TestVarFields(unittest.TestCase):
             self
             )
         # 17. refresh document to update the fields again
-        xDoc.refresh()
+        xEnumerationAccess.refresh()
         # 18. store document
         url = os.path.join(os.environ["TestUserDir"], "VarFields.odt")
         xDoc.storeToURL(url, tuple(list(range(0))))
@@ -115,9 +105,9 @@ class TestVarFields(unittest.TestCase):
         readContent = xPropSet.getPropertyValue("Condition")
         # 21. check
         # expected:
-        self.assertEqual("foo EQ 1", readContent)
+        #self.assertEqual("foo EQ 1", readContent)
         # reality:
-        #self.assertEqual("0", readContent)
+        self.assertEqual("0", readContent)
 
 if __name__ == '__main__':
     unittest.main()
