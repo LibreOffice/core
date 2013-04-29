@@ -225,6 +225,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     chartcore \
     chartcontroller \
     cppcanvas \
+    configmgr \
     ctl \
     cui \
     dba \
@@ -232,8 +233,9 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     dbmm \
     $(if $(DISABLE_DBCONNECTIVITY),,dbtools) \
     dbaxml \
-	deploymentmisc \
-	$(if $(filter unx,$(GUIBASE)),desktop_detector) \
+    deploymentmisc \
+    $(if $(filter-out MACOSX WNT,$(OS)),desktopbe1) \
+    $(if $(filter unx,$(GUIBASE)),desktop_detector) \
     drawinglayer \
     editeng \
     egi \
@@ -252,12 +254,14 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     for \
     forui \
     frm \
+    fsstorage \
     fwe \
 	fwi \
     fwk \
     fwl \
 	fwm \
     $(if $(filter DESKTOP,$(BUILD_TYPE)),helplinker) \
+    i18npool \
     icd \
     icg \
     idx \
@@ -270,6 +274,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     ira \
     itg \
     iti \
+    localebe1 \
     lng \
     $(if $(MERGELIBS),merged) \
     msfilter \
@@ -289,6 +294,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     tk \
     tl \
 	$(if $(ENABLE_TELEPATHY),tubes) \
+    ucpexpand1 \
     unordf \
     unoxml \
     utl \
@@ -632,15 +638,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
         smplmail \
         wininetbe1 \
     ) \
-))
-
-$(eval $(call gb_Helper_register_libraries_for_install,UNOLIBS_OOO,OOO, \
-	configmgr \
-	$(if $(filter-out MACOSX WNT,$(OS)),desktopbe1) \
-	fsstorage \
-	i18npool \
-	localebe1 \
-	ucpexpand1 \
 ))
 
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_URE, \
