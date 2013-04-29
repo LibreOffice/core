@@ -43,6 +43,7 @@ $(eval $(call gb_Library_add_exception_objects,for,\
     formula/source/core/api/FormulaOpCodeMapperObj \
     formula/source/core/api/services \
     formula/source/core/api/token \
+    formula/source/core/api/vectortoken \
     formula/source/core/resource/core_resource \
 ))
 
