@@ -114,7 +114,6 @@ ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocum
         maEntries.begin()->SetActive();
 
     RecalcAll();
-    FreeResource();
 }
 
 ScConditionalFormat* ScCondFormatList::GetConditionalFormat() const
@@ -329,6 +328,9 @@ IMPL_LINK( ScCondFormatList, EntrySelectHdl, ScCondFrmtEntry*, pEntry )
     if(pEntry->IsSelected())
         return 0;
 
+    //A child has focus, but we will hide that, so regrab to whatever new thing gets
+    //shown instead of leaving it stuck in the inaccessible hidden element
+    bool bReGrabFocus = HasChildPathFocus();
     for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
         itr->SetInactive();
@@ -336,6 +338,8 @@ IMPL_LINK( ScCondFormatList, EntrySelectHdl, ScCondFrmtEntry*, pEntry )
     static_cast<ScCondFormatDlg*>(GetParent())->InvalidateRefData();
     pEntry->SetActive();
     RecalcAll();
+    if (bReGrabFocus)
+        GrabFocus();
     return 0;
 }
 
@@ -354,11 +358,11 @@ ScCondFormatDlg::ScCondFormatDlg(Window* pParent, ScDocument* pDoc, const ScCond
     ScAnyRefModalDlg(pParent, ScResId(RID_SCDLG_CONDFORMAT) ),
     maBtnAdd( this, ScResId( BTN_ADD ) ),
     maBtnRemove( this, ScResId( BTN_REMOVE ) ),
-    maBtnOk( this, ScResId( BTN_OK ) ),
-    maBtnCancel( this, ScResId( BTN_CANCEL ) ),
     maFtRange( this, ScResId( FT_RANGE ) ),
     maEdRange( this, this, &maFtRange, ScResId( ED_RANGE ) ),
     maRbRange( this, ScResId( RB_RANGE ), &maEdRange, this ),
+    maBtnOk( this, ScResId( BTN_OK ) ),
+    maBtnCancel( this, ScResId( BTN_CANCEL ) ),
     maCondFormList( this, ScResId( CTRL_LIST ), pDoc, pFormat, rRange, rPos, eType ),
     maPos(rPos),
     mpDoc(pDoc),

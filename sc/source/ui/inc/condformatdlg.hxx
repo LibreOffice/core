@@ -84,11 +84,11 @@ class ScCondFormatDlg : public ScAnyRefModalDlg
 private:
     PushButton maBtnAdd;
     PushButton maBtnRemove;
-    OKButton maBtnOk;
-    CancelButton maBtnCancel;
     FixedText maFtRange;
     formula::RefEdit maEdRange;
     formula::RefButton maRbRange;
+    OKButton maBtnOk;
+    CancelButton maBtnCancel;
 
     ScCondFormatList maCondFormList;
 
