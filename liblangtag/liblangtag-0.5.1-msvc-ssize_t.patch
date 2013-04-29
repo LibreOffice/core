@@ -1,0 +1,18 @@
+diff -ru langtag.orig/liblangtag/lt-macros.h langtag/liblangtag/lt-macros.h
+--- UnpackedTarball/langtag.orig/liblangtag/lt-macros.h	2013-04-22 10:06:57.000000000 +0200
++++ UnpackedTarball/langtag/liblangtag/lt-macros.h	2013-04-29 21:24:49.410250843 +0200
+@@ -261,14 +261,6 @@
+ 
+ LT_BEGIN_DECLS
+ 
+-#ifdef _MSC_VER
+-#  ifdef _M_AMD64
+-typedef signed long long	ssize_t;
+-#  else
+-typedef signed int		ssize_t;
+-#  endif
+-#endif
+-
+ typedef void *		lt_pointer_t;
+ typedef int		lt_bool_t;
+ typedef lt_pointer_t (* lt_copy_func_t)	(lt_pointer_t data);

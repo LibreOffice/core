@@ -62,14 +62,3 @@
  
  ACLOCAL_AMFLAGS =			\
  	-I m4macros			\
---- misc/liblangtag-0.4.0/extensions/lt-ext-ldml-u.c	2012-11-07 14:26:53.000000000 +0100
-+++ misc/build/liblangtag-0.4.0/extensions/lt-ext-ldml-u.c	2012-11-07 14:27:39.000000000 +0100
-@@ -14,7 +14,7 @@
- #include "config.h"
- #endif
- 
--#ifndef _WIN32
-+#if !defined( _WIN32 ) || defined( __MINGW32__ )
- #include <stdint.h>
- #else
- typedef unsigned __int64 uint64_t;

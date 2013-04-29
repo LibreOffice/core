@@ -1,0 +1,12 @@
+diff -ru langtag.orig/liblangtag/lt-utils.c langtag/liblangtag/lt-utils.c
+--- UnpackedTarball/langtag.orig/liblangtag/lt-utils.c	2013-04-22 10:06:57.000000000 +0200
++++ UnpackedTarball/langtag/liblangtag/lt-utils.c	2013-04-26 17:58:39.817351779 +0200
+@@ -168,6 +168,8 @@
+ 		va_copy(ap, args);
+ 
+ 		size = vsnprintf(&c, 1, format, ap) + 1;
++		if (size == 0)  // -1 + 1
++			abort();
+ 
+ 		va_end(ap);
+ 
