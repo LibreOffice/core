@@ -1,0 +1,13 @@
+diff -ru langtag.orig/tests/variant-db.c langtag/tests/variant-db.c
+--- UnpackedTarball/langtag.orig/tests/variant-db.c	2013-04-22 10:06:57.000000000 +0200
++++ UnpackedTarball/langtag/tests/variant-db.c	2013-04-30 14:12:18.399306545 +0200
+@@ -53,8 +53,8 @@
+ 		}
+ 		lt_iter_finish(iter);
+ 	} else if (lt_strcmp0(argv[1], "lookup") == 0) {
+-		variant = lt_variant_db_lookup(variantdb, argv[2]);
+ 		const lt_list_t *prefix, *l;
++		variant = lt_variant_db_lookup(variantdb, argv[2]);
+ 
+ 		if (variant) {
+ 			printf("desc: %s\n", lt_variant_get_name(variant));

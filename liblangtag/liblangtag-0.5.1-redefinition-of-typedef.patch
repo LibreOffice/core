@@ -1,0 +1,31 @@
+diff -ru langtag.orig/liblangtag/lt-trie.c langtag/liblangtag/lt-trie.c
+--- UnpackedTarball/langtag.orig/liblangtag/lt-trie.c	2013-04-30 04:37:30.000000000 +0200
++++ UnpackedTarball/langtag/liblangtag/lt-trie.c	2013-04-30 14:57:50.777932196 +0200
+@@ -33,11 +33,6 @@
+ 	lt_iter_tmpl_t  parent;
+ 	lt_trie_node_t *root;
+ };
+-typedef struct _lt_trie_iter_t {
+-	lt_iter_t    parent;
+-	lt_list_t   *stack;
+-	lt_string_t *pos_str;
+-} lt_trie_iter_t;
+ 
+ /*< private >*/
+ static lt_trie_node_t *
+diff -ru langtag.orig/liblangtag/lt-trie.h langtag/liblangtag/lt-trie.h
+--- UnpackedTarball/langtag.orig/liblangtag/lt-trie.h	2013-04-30 04:44:36.000000000 +0200
++++ UnpackedTarball/langtag/liblangtag/lt-trie.h	2013-04-30 14:57:57.746969291 +0200
+@@ -21,7 +21,11 @@
+ LT_BEGIN_DECLS
+ 
+ typedef struct _lt_trie_t	lt_trie_t;
+-typedef struct _lt_trie_iter_t  lt_trie_iter_t;
++typedef struct _lt_trie_iter_t {
++	lt_iter_t    parent;
++	lt_list_t   *stack;
++	lt_string_t *pos_str;
++} lt_trie_iter_t;
+ 
+ lt_trie_t      *lt_trie_new        (void);
+ lt_trie_t      *lt_trie_ref        (lt_trie_t         *trie);

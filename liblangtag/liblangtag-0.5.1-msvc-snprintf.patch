@@ -1,0 +1,25 @@
+diff -ru langtag.orig/liblangtag/lt-messages.c langtag/liblangtag/lt-messages.c
+--- UnpackedTarball/langtag.orig/liblangtag/lt-messages.c	2013-04-22 10:06:57.000000000 +0200
++++ UnpackedTarball/langtag/liblangtag/lt-messages.c	2013-04-30 11:38:04.116532065 +0200
+@@ -85,13 +85,21 @@
+ 	clen = strlen(cs);
+ 	if (clen > 0) {
+ 		catstring = malloc(sizeof (char) * (clen + 6));
++#ifdef _WIN32
++		_snprintf(catstring, clen + 6, "[%s]: ", cs);
++#else
+ 		snprintf(catstring, clen + 6, "[%s]: ", cs);
++#endif
+ 		clen = strlen(catstring);
+ 	}
+ 	len = tlen + clen + 1;
+ 	retval = malloc(sizeof (char) * len);
+ 	if (retval) {
++#ifdef _WIN32
++		_snprintf(retval, len, "%s%s ", ts, catstring ? catstring : "");
++#else
+ 		snprintf(retval, len, "%s%s ", ts, catstring ? catstring : "");
++#endif
+ 	}
+ 	if (catstring)
+ 		free(catstring);
