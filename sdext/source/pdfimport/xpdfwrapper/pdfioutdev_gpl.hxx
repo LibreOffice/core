@@ -46,6 +46,12 @@
 #pragma warning(pop)
 #endif
 
+#if HAVE_CXX11_OVERRIDE
+#define SAL_OVERRIDE override
+#else
+#define SAL_OVERRIDE
+#endif
+
 #include <boost/unordered_map.hpp>
 #include <vector>
 
@@ -158,125 +164,116 @@ namespace pdfi
 
         // Does this device use upside-down coordinates?
         // (Upside-down means (0,0) is the top left corner of the page.)
-        virtual GBool upsideDown() { return gTrue; }
+        virtual GBool upsideDown() SAL_OVERRIDE { return gTrue; }
 
         // Does this device use drawChar() or drawString()?
-        virtual GBool useDrawChar() { return gTrue; }
+        virtual GBool useDrawChar() SAL_OVERRIDE { return gTrue; }
 
         // Does this device use beginType3Char/endType3Char?  Otherwise,
         // text in Type 3 fonts will be drawn with drawChar/drawString.
-        virtual GBool interpretType3Chars() { return gFalse; }
+        virtual GBool interpretType3Chars() SAL_OVERRIDE { return gFalse; }
 
         // Does this device need non-text content?
-        virtual GBool needNonText() { return gTrue; }
+        virtual GBool needNonText() SAL_OVERRIDE { return gTrue; }
 
         //----- initialization and control
 
         // Set default transform matrix.
-        virtual void setDefaultCTM(double *ctm);
+        virtual void setDefaultCTM(double *ctm) SAL_OVERRIDE;
 
         // Start a page.
-        virtual void startPage(int pageNum, GfxState *state);
+        virtual void startPage(int pageNum, GfxState *state) SAL_OVERRIDE;
 
         // End a page.
-        virtual void endPage();
-
-        // Dump page contents to display.
-        // virtual void dump() {}
-
-        //----- coordinate conversion
-
-        // Convert between device and user coordinates.
-        // virtual void cvtDevToUser(double dx, double dy, double *ux, double *uy);
-        // virtual void cvtUserToDev(double ux, double uy, int *dx, int *dy);
+        virtual void endPage() SAL_OVERRIDE;
 
         //----- link borders
 	#if POPPLER_CHECK_VERSION(0, 19, 0)
-        virtual void processLink(AnnotLink *link);
-        #elif POPPLER_CHECK_VERSION(0, 17, 0)
-	virtual void processLink(AnnotLink *link, Catalog *catalog);
-        #else
-        virtual void processLink(Link *link, Catalog *catalog);
-        #endif
+        virtual void processLink(AnnotLink *link) SAL_OVERRIDE;
+    #elif POPPLER_CHECK_VERSION(0, 17, 0)
+        virtual void processLink(AnnotLink *link, Catalog *catalog) SAL_OVERRIDE;
+    #else
+        virtual void processLink(Link *link, Catalog *catalog) SAL_OVERRIDE;
+    #endif
 
         //----- save/restore graphics state
-        virtual void saveState(GfxState *state);
-        virtual void restoreState(GfxState *state);
+        virtual void saveState(GfxState *state) SAL_OVERRIDE;
+        virtual void restoreState(GfxState *state) SAL_OVERRIDE;
 
         //----- update graphics state
-        // virtual void updateAll(GfxState *state);
         virtual void updateCTM(GfxState *state, double m11, double m12,
-                               double m21, double m22, double m31, double m32);
-        virtual void updateLineDash(GfxState *state);
-        virtual void updateFlatness(GfxState *state);
-        virtual void updateLineJoin(GfxState *state);
-        virtual void updateLineCap(GfxState *state);
-        virtual void updateMiterLimit(GfxState *state);
-        virtual void updateLineWidth(GfxState *state);
-        virtual void updateFillColor(GfxState *state);
-        virtual void updateStrokeColor(GfxState *state);
-        virtual void updateFillOpacity(GfxState *state);
-        virtual void updateStrokeOpacity(GfxState *state);
-        virtual void updateBlendMode(GfxState *state);
+                               double m21, double m22, double m31, double m32) SAL_OVERRIDE;
+        virtual void updateLineDash(GfxState *state) SAL_OVERRIDE;
+        virtual void updateFlatness(GfxState *state) SAL_OVERRIDE;
+        virtual void updateLineJoin(GfxState *state) SAL_OVERRIDE;
+        virtual void updateLineCap(GfxState *state) SAL_OVERRIDE;
+        virtual void updateMiterLimit(GfxState *state) SAL_OVERRIDE;
+        virtual void updateLineWidth(GfxState *state) SAL_OVERRIDE;
+        virtual void updateFillColor(GfxState *state) SAL_OVERRIDE;
+        virtual void updateStrokeColor(GfxState *state) SAL_OVERRIDE;
+        virtual void updateFillOpacity(GfxState *state) SAL_OVERRIDE;
+        virtual void updateStrokeOpacity(GfxState *state) SAL_OVERRIDE;
+        virtual void updateBlendMode(GfxState *state) SAL_OVERRIDE;
 
         //----- update text state
-        virtual void updateFont(GfxState *state);
-        // virtual void updateTextMat(GfxState *state);
-        // virtual void updateCharSpace(GfxState *state) {}
-        virtual void updateRender(GfxState *state);
-        // virtual void updateRise(GfxState *state) {}
-        // virtual void updateWordSpace(GfxState *state) {}
-        // virtual void updateHorizScaling(GfxState *state) {}
-        // virtual void updateTextPos(GfxState *state) {}
-        // virtual void updateTextShift(GfxState *state, double shift) {}
+        virtual void updateFont(GfxState *state) SAL_OVERRIDE;
+        virtual void updateRender(GfxState *state) SAL_OVERRIDE;
 
         //----- path painting
-        virtual void stroke(GfxState *state);
-        virtual void fill(GfxState *state);
-        virtual void eoFill(GfxState *state);
+        virtual void stroke(GfxState *state) SAL_OVERRIDE;
+        virtual void fill(GfxState *state) SAL_OVERRIDE;
+        virtual void eoFill(GfxState *state) SAL_OVERRIDE;
 
         //----- path clipping
-        virtual void clip(GfxState *state);
-        virtual void eoClip(GfxState *state);
+        virtual void clip(GfxState *state) SAL_OVERRIDE;
+        virtual void eoClip(GfxState *state) SAL_OVERRIDE;
 
         //----- text drawing
         virtual void drawChar(GfxState *state, double x, double y,
                               double dx, double dy,
                               double originX, double originY,
-                              CharCode code, int nBytes, Unicode *u, int uLen);
-        virtual void drawString(GfxState *state, GooString *s);
-        virtual void endTextObject(GfxState *state);
+                              CharCode code, int nBytes, Unicode *u, int uLen) SAL_OVERRIDE;
+        virtual void drawString(GfxState *state, GooString *s) SAL_OVERRIDE;
+        virtual void endTextObject(GfxState *state) SAL_OVERRIDE;
 
         //----- image drawing
         virtual void drawImageMask(GfxState *state, Object *ref, Stream *str,
                                    int width, int height, GBool invert,
-                                   GBool inlineImg);
+#if POPPLER_CHECK_VERSION(0, 12, 0)
+                                   GBool interpolate,
+#endif
+                                   GBool inlineImg) SAL_OVERRIDE;
         virtual void drawImage(GfxState *state, Object *ref, Stream *str,
                                int width, int height, GfxImageColorMap *colorMap,
-                               int *maskColors, GBool inlineImg);
+#if POPPLER_CHECK_VERSION(0, 12, 0)
+                               GBool interpolate,
+#endif
+                               int *maskColors, GBool inlineImg) SAL_OVERRIDE;
         virtual void drawMaskedImage(GfxState *state, Object *ref, Stream *str,
                                      int width, int height,
                                      GfxImageColorMap *colorMap,
+#if POPPLER_CHECK_VERSION(0, 12, 0)
+                                     GBool interpolate,
+#endif
                                      Stream *maskStr, int maskWidth, int maskHeight,
-                                     GBool maskInvert);
+                                     GBool maskInvert
+#if POPPLER_CHECK_VERSION(0, 12, 0)
+                                     , GBool maskInterpolate
+#endif
+                                    ) SAL_OVERRIDE;
         virtual void drawSoftMaskedImage(GfxState *state, Object *ref, Stream *str,
                                          int width, int height,
                                          GfxImageColorMap *colorMap,
+#if POPPLER_CHECK_VERSION(0, 12, 0)
+                                         GBool interpolate,
+#endif
                                          Stream *maskStr,
                                          int maskWidth, int maskHeight,
-                                         GfxImageColorMap *maskColorMap);
-
-        //----- OPI functions
-        // virtual void opiBegin(GfxState *state, Dict *opiDict);
-        // virtual void opiEnd(GfxState *state, Dict *opiDict);
-
-        //----- Type 3 font operators
-        // virtual void type3D0(GfxState *state, double wx, double wy) {}
-        // virtual void type3D1(GfxState *state, double wx, double wy,
-        //                      double llx, double lly, double urx, double ury) {}
-
-        //----- PostScript XObjects
-        // virtual void psXObject(Stream *psStream, Stream *level1Stream) {}
+                                         GfxImageColorMap *maskColorMap
+#if POPPLER_CHECK_VERSION(0, 12, 0)
+                                         , GBool maskInterpolate
+#endif
+                                        ) SAL_OVERRIDE;
 
         void setPageNum( int nNumPages );
     };

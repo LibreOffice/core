@@ -846,6 +846,9 @@ void PDFOutDev::endTextObject(GfxState*)
 
 void PDFOutDev::drawImageMask(GfxState* pState, Object*, Stream* str,
                               int width, int height, GBool invert,
+#if POPPLER_CHECK_VERSION(0, 12, 0)
+                              GBool /*interpolate*/,
+#endif
                               GBool /*inlineImg*/ )
 {
     OutputBuffer aBuf; initBuf(aBuf);
@@ -872,6 +875,9 @@ void PDFOutDev::drawImageMask(GfxState* pState, Object*, Stream* str,
 
 void PDFOutDev::drawImage(GfxState*, Object*, Stream* str,
                           int width, int height, GfxImageColorMap* colorMap,
+#if POPPLER_CHECK_VERSION(0, 12, 0)
+                          GBool /*interpolate*/,
+#endif
                           int* maskColors, GBool /*inlineImg*/ )
 {
     OutputBuffer aBuf; initBuf(aBuf);
@@ -918,9 +924,16 @@ void PDFOutDev::drawImage(GfxState*, Object*, Stream* str,
 void PDFOutDev::drawMaskedImage(GfxState*, Object*, Stream* str,
                                 int width, int height,
                                 GfxImageColorMap* colorMap,
+#if POPPLER_CHECK_VERSION(0, 12, 0)
+                                GBool /*interpolate*/,
+#endif
                                 Stream* maskStr,
                                 int maskWidth, int maskHeight,
-                                GBool maskInvert)
+                                GBool maskInvert
+#if POPPLER_CHECK_VERSION(0, 12, 0)
+                                , GBool /*maskInterpolate*/
+#endif
+                               )
 {
     OutputBuffer aBuf;     initBuf(aBuf);
     printf( "drawImage %d %d 0", width, height );
@@ -931,9 +944,16 @@ void PDFOutDev::drawMaskedImage(GfxState*, Object*, Stream* str,
 void PDFOutDev::drawSoftMaskedImage(GfxState*, Object*, Stream* str,
                                     int width, int height,
                                     GfxImageColorMap* colorMap,
+#if POPPLER_CHECK_VERSION(0, 12, 0)
+                                    GBool /*interpolate*/,
+#endif
                                     Stream* maskStr,
                                     int maskWidth, int maskHeight,
-                                    GfxImageColorMap* maskColorMap )
+                                    GfxImageColorMap* maskColorMap
+#if POPPLER_CHECK_VERSION(0, 12, 0)
+                                    , GBool /*maskInterpolate*/
+#endif
+                                   )
 {
     OutputBuffer aBuf;     initBuf(aBuf);
     printf( "drawImage %d %d 0", width, height );
