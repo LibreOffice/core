@@ -438,14 +438,8 @@ ChartExport::ChartExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, Reference< f
     , mnXmlNamespace( nXmlNamespace )
     , maFraction( 1, 576 )
     , mxChartModel( xModel )
-    , mbHasSeriesLabels( sal_False )
     , mbHasCategoryLabels( sal_False )
-    , mbRowSourceColumns( sal_True )
-    , mbHasXAxis( sal_False )
-    , mbHasYAxis( sal_False )
     , mbHasZAxis( sal_False )
-    , mbHasSecondaryXAxis( sal_False )
-    , mbHasSecondaryYAxis( sal_False )
     , mbIs3DChart( sal_False )
 {
 }
@@ -631,18 +625,8 @@ void ChartExport::InitRangeSegmentationProperties( const Reference< chart2::XCha
                         if( aArgs[i].Value >>= sBrokenRange )
                             bBrokenRangeAvailable = true;
                     }
-                    else if ( aArgs[i].Name == "DataRowSource" )
-                    {
-                        ::com::sun::star::chart::ChartDataRowSource eRowSource;
-                        aArgs[i].Value >>= eRowSource;
-                        mbRowSourceColumns = ( eRowSource == ::com::sun::star::chart::ChartDataRowSource_COLUMNS );
-                    }
-                    else if ( aArgs[i].Name == "FirstCellAsLabel" )
-                        aArgs[i].Value >>= mbHasSeriesLabels;
                     else if ( aArgs[i].Name == "SequenceMapping" )
                         aArgs[i].Value >>= maSequenceMapping;
-                    else if ( aArgs[i].Name == "TableNumberList" )
-                        aArgs[i].Value >>= msTableNumberList;
                 }
 
                 // #i79009# For Writer we have to export a broken version of the
@@ -720,10 +704,6 @@ void ChartExport::_ExportContent()
                             aAny >>= msChartAddress;
                             //maExportHelper.SetChartRangeAddress( sChartAddress );
 
-                            // OUString sTableNumberList;
-                            aAny = xProp->getPropertyValue(
-                                OUString("TableNumberList"));
-                            aAny >>= msTableNumberList;
                             //maExportHelper.SetTableNumberList( sTableNumberList );
 
                             // do not include own table if there are external addresses
@@ -1821,34 +1801,10 @@ void ChartExport::InitPlotArea( )
     if (xServiceInfo.is())
     {
         if (xServiceInfo->supportsService(
-            OUString("com.sun.star.chart.ChartAxisXSupplier")))
-        {
-            xDiagramProperties->getPropertyValue(
-                OUString("HasXAxis")) >>= mbHasXAxis;
-        }
-        if (xServiceInfo->supportsService(
-            OUString("com.sun.star.chart.ChartAxisYSupplier")))
-        {
-            xDiagramProperties->getPropertyValue(
-                OUString("HasYAxis")) >>= mbHasYAxis;
-        }
-        if (xServiceInfo->supportsService(
             OUString("com.sun.star.chart.ChartAxisZSupplier")))
         {
             xDiagramProperties->getPropertyValue(
                 OUString("HasZAxis")) >>= mbHasZAxis;
-        }
-        if (xServiceInfo->supportsService(
-            OUString("com.sun.star.chart.ChartTwoAxisXSupplier")))
-        {
-            xDiagramProperties->getPropertyValue(
-                OUString("HasSecondaryXAxis")) >>= mbHasSecondaryXAxis;
-        }
-        if (xServiceInfo->supportsService(
-            OUString("com.sun.star.chart.ChartTwoAxisYSupplier")))
-        {
-            xDiagramProperties->getPropertyValue(
-                OUString("HasSecondaryYAxis")) >>= mbHasSecondaryYAxis;
         }
     }
 

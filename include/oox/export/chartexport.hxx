@@ -89,11 +89,8 @@ private:
     com::sun::star::uno::Reference< com::sun::star::chart2::XDiagram > mxNewDiagram;
 
     // members filled by InitRangeSegmentationProperties (retrieved from DataProvider)
-    sal_Bool mbHasSeriesLabels;
     sal_Bool mbHasCategoryLabels; //if the categories are only automatically generated this will be false
-    sal_Bool mbRowSourceColumns;
     OUString msChartAddress;
-    OUString msTableNumberList;
     ::com::sun::star::uno::Sequence< sal_Int32 > maSequenceMapping;
 
     //::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > mxAdditionalShapes;
