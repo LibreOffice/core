@@ -573,36 +573,28 @@ void SwIndexMarkPane::UpdateKeyBoxes()
 
 class SwNewUserIdxDlg : public ModalDialog
 {
-    OKButton        aOKPB;
-    CancelButton    aCancelPB;
-    HelpButton      aHelpPB;
-    FixedLine       aNameFL;
-    FixedText       aNameFT;
-    Edit            aNameED;
+    OKButton*        m_pOKPB;
+    Edit*            m_pNameED;
 
-    SwIndexMarkPane* pDlg;
+    SwIndexMarkPane* m_pDlg;
 
     DECL_LINK( ModifyHdl, Edit*);
 
     public:
-        SwNewUserIdxDlg(SwIndexMarkPane* pPane) :
-            ModalDialog(&(pPane->GetDialog()), SW_RES(DLG_NEW_USER_IDX)),
-            aOKPB(this, SW_RES(     PB_OK       )),
-            aCancelPB(this, SW_RES( PB_CANCEL   )),
-            aHelpPB(this, SW_RES(   PB_HELP     )),
-            aNameFL(this, SW_RES(    FL_NAME     )),
-            aNameFT(this, SW_RES(   FT_NAME     )),
-            aNameED(this, SW_RES(    ED_NAME     )),
-            pDlg(pPane)
+        SwNewUserIdxDlg(SwIndexMarkPane* pPane)
+            : ModalDialog(&(pPane->GetDialog()), "NewUserIndexDialog",
+                "modules/swriter/ui/newuserindexdialog.ui")
+            , m_pDlg(pPane)
             {
-                FreeResource();
-                aNameED.SetModifyHdl(LINK(this, SwNewUserIdxDlg, ModifyHdl));
-                aOKPB.Enable(sal_False);
-                aNameED.GrabFocus();
+                get(m_pOKPB, "ok");
+                get(m_pNameED, "entry");
+                m_pNameED->SetModifyHdl(LINK(this, SwNewUserIdxDlg, ModifyHdl));
+                m_pOKPB->Enable(sal_False);
+                m_pNameED->GrabFocus();
             }
 
     virtual void    Apply();
-    String  GetName(){return aNameED.GetText();}
+    String  GetName(){return m_pNameED->GetText();}
 };
 void SwNewUserIdxDlg::Apply()
 {
@@ -610,7 +602,7 @@ void SwNewUserIdxDlg::Apply()
 
 IMPL_LINK( SwNewUserIdxDlg, ModifyHdl, Edit*, pEdit)
 {
-    aOKPB.Enable(!pEdit->GetText().isEmpty() && !pDlg->IsTOXType(pEdit->GetText()));
+    m_pOKPB->Enable(!pEdit->GetText().isEmpty() && !m_pDlg->IsTOXType(pEdit->GetText()));
     return 0;
 }
 

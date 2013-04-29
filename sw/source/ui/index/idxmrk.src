@@ -23,58 +23,6 @@
 #include "helpid.h"
 #include "cmdid.h"
 
-ModalDialog DLG_NEW_USER_IDX
-{
-    OutputSize = TRUE ;
-    Moveable = TRUE ;
-    Closeable = TRUE;
-    Sizeable = FALSE ;
-    HelpID = HID_DLG_NEW_USER_IDX;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 194 , 60 ) ;
-    OKButton PB_OK
-    {
-        Pos = MAP_APPFONT ( 141 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-    CancelButton PB_CANCEL
-    {
-        Pos = MAP_APPFONT ( 141 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    HelpButton PB_HELP
-    {
-        Pos = MAP_APPFONT ( 141 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    FixedLine FL_NAME
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 130 , 8 ) ;
-
-        Text [ en-US ] = "New user index";
-    };
-    FixedText FT_NAME
-    {
-        Pos = MAP_APPFONT ( 12 , 17 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
-
-        Text [ en-US ] = "~Name";
-    };
-    Edit ED_NAME
-    {
-        HelpID = "sw:Edit:DLG_NEW_USER_IDX:ED_NAME";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 55 , 15 ) ;
-        Size = MAP_APPFONT ( 78 , 12 ) ;
-        TabStop = TRUE ;
-        Left = TRUE ;
-    };
-    Text [ en-US ] = "Create New User-defined Index";
-};
-
 String STR_IDXMRK_EDIT
 {
     Text [ en-US ] = "Edit Index Entry" ;

@@ -26,7 +26,6 @@
 
 #include "rcid.hrc"
 
-#define  DLG_INSIDXMARK         (RC_INDEX_BEGIN + 3)
 #define  DLG_MULTMRK            (RC_INDEX_BEGIN + 5)
 
 #define  STR_TITLE              (RC_INDEX_BEGIN + 6)
@@ -39,14 +38,10 @@
 #define  STR_IDXMRK_INSERT      (RC_INDEX_BEGIN + 13)
 #define  STR_IDXMRK_EDIT        (RC_INDEX_BEGIN + 14)
 
-#define  DLG_NEW_USER_IDX       (RC_INDEX_BEGIN + 17)
-
 #define  STR_FILE_NOT_FOUND     (RC_INDEX_BEGIN + 18)
 #define  DLG_CHANGE_AUTH_ENTRY  (RC_INDEX_BEGIN + 19)
 #define  DLG_CREATE_AUTOMARK    (RC_INDEX_BEGIN + 20)
 
-#define  DLG_EDIT_IDXMARK_CJK   (RC_INDEX_BEGIN + 21)
-#define  DLG_INSIDXMARK_CJK     (RC_INDEX_BEGIN + 22)
 #endif  // _INDEX_HRC
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -348,7 +348,6 @@
 #define HID_TOX_ENTRY_BUTTON                                    "SW_HID_TOX_ENTRY_BUTTON"
 #define HID_TOX_ENTRY_EDIT                                      "SW_HID_TOX_ENTRY_EDIT"
 
-#define HID_DLG_NEW_USER_IDX                                    "SW_HID_DLG_NEW_USER_IDX"
 #define HID_TOKEN_WINDOW                                        "SW_HID_TOKEN_WINDOW"
 
 #define HID_AUTH_FIELD_IDENTIFIER                               "SW_HID_AUTH_FIELD_IDENTIFIER"
