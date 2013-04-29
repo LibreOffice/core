@@ -1517,7 +1517,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
             pTypeListBox->Show();
             pTypeListBox->SetSelectHdl(LINK(this, SwCreateAuthEntryDlg_Impl, EnableHdl));
             pTypeListBox->SetHelpId(aCurInfo.pHelpId);
-
+            pFixedTexts[nIndex]->set_mnemonic_widget(pTypeListBox);
         }
         else if(AUTH_FIELD_IDENTIFIER == aCurInfo.nToxField && !m_bNewEntryMode)
         {
@@ -1542,6 +1542,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
             pIdentifierBox->set_hexpand(true);
             pIdentifierBox->Show();
             pIdentifierBox->SetHelpId(aCurInfo.pHelpId);
+            pFixedTexts[nIndex]->set_mnemonic_widget(pIdentifierBox);
         }
         else
         {
@@ -1563,6 +1564,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
                     pEdits[nIndex]->Enable(sal_False);
                 }
             }
+            pFixedTexts[nIndex]->set_mnemonic_widget(pEdits[nIndex]);
         }
         if(bLeft)
             ++nLeftRow;
