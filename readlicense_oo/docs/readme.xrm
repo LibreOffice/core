@@ -133,12 +133,11 @@
 			<p id="debianinstall2" xml:lang="en-US">When you unpack the downloaded archive, you will see that the contents have been decompressed into a sub-directory. Open a file manager window, and change directory to the one starting with "LibreOffice_", followed by the version number and some platform information.</p>
 			<p id="debianinstall3" xml:lang="en-US">This directory contains a subdirectory called "DEBS". Change directory to the "DEBS" directory.</p>
 			<p id="debianinstall4" xml:lang="en-US">Right-click within the directory and choose "Open in Terminal". A terminal window will open. From the command line of the terminal window, enter the following command (you will be prompted to enter your root user's password before the command will execute):</p>
-			<p id="debianinstall5" xml:lang="en-US">sudo dpkg -i *.deb</p>
-			<p id="debianinstall6" xml:lang="en-US">The above dpkg command does the first part of the installation process. To complete the process, you also need to install the desktop integration packages. To do this, change directory to the "desktop-integration" directory that is within the "DEBS" directory, using the following command:</p>
+			<p id="debianinstall5" xml:lang="en-US">The following commands will install LibreOffice and the desktop integration packages (you may just copy and paste them into the terminal screen rather than trying to type them):</p>
+			<p id="debianinstall6" xml:lang="en-US">sudo dpkg -i *.deb</p>
 			<p id="debianinstall7" xml:lang="en-US">cd desktop-integration</p>
-			<p id="debianinstall8" xml:lang="en-US">Now run the dpkg command again:</p>
-			<p id="debianinstall9" xml:lang="en-US">sudo dpkg -i *.deb</p>
-			<p id="debianinstallA" xml:lang="en-US">The installation process is now completed, and you should have icons for all the ${PRODUCTNAME} applications in your desktop's Applications/Office menu.</p>
+			<p id="debianinstall8" xml:lang="en-US">sudo dpkg -i *.deb</p>
+			<p id="debianinstall9" xml:lang="en-US">The installation process is now completed, and you should have icons for all the ${PRODUCTNAME} applications in your desktop's Applications/Office menu.</p>
 			<h3 id="sdfsdfgf42t" xml:lang="en-US">Installation of ${PRODUCTNAME} on Fedora, openSUSE, Mandriva and other Linux systems using RPM packages</h3>
 			<p id="rpminstall1" xml:lang="en-US">If you have a previous version of ${PRODUCTNAME} already installed, then you will need to de-install it before proceeding further. For instructions on how to install a language pack (after having installed the US English version of ${PRODUCTNAME}), please read the section below entitled Installing a Language Pack.</p>
 			<p id="rpminstall2" xml:lang="en-US">When you unpack the downloaded archive, you will see that the contents have been decompressed into a sub-directory. Open a file manager window, and change directory to the one starting with "LibreOffice_", followed by the version number and some platform information.</p>
