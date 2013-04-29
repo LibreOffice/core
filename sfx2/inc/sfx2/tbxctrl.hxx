@@ -362,25 +362,8 @@ private:
     String                  aLastURL;
     sal_Bool                    bBigImages;
     PopupMenu*              pMenu;
-    sal_uIntPtr                   m_nSymbolsStyle;
-    sal_Bool                    m_bShowMenuImages;
-};
-
-class SfxHistoryToolBoxControl_Impl : public SfxToolBoxControl
-{
-    Timer                   aTimer;
-
-private:
-                            DECL_LINK( Timeout, Timer * );
-
-protected:
-    virtual void            Click( );
-    using SfxToolBoxControl::Select;
-    virtual void            Select( sal_Bool );
-
-public:
-                            SFX_DECL_TOOLBOX_CONTROL();
-                            SfxHistoryToolBoxControl_Impl( sal_uInt16 nId, ToolBox& rBox );
+    sal_uIntPtr             m_nSymbolsStyle;
+    sal_Bool                m_bShowMenuImages;
 };
 
 class SfxReloadToolBoxControl_Impl : public SfxToolBoxControl
