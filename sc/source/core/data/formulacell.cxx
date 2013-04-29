@@ -3132,8 +3132,6 @@ bool ScFormulaCell::InterpretFormulaGroup()
 
         ScCompiler aComp(pDocument, aPos, aCode2);
         aComp.SetGrammar(pDocument->GetGrammar());
-        OUStringBuffer aBuf;
-        aComp.CreateStringFromTokenArray(aBuf);
         aComp.CompileTokenArray(); // Create RPN token array.
         ScInterpreter aInterpreter(pDest, pDocument, aTmpPos, aCode2);
         aInterpreter.Interpret();
