@@ -39,6 +39,7 @@
 
 #include <boost/shared_ptr.hpp>
 
+extern int pdfview;
 static ResMgr& getPDFFilterResMgr()
 {
     static ResMgr *pRes = ResMgr::CreateResMgr( "pdffilter", Application::GetSettings().GetUILanguageTag());
@@ -80,6 +81,7 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     mnMaxImageResolution( 300 ),
     mbUseTaggedPDF( sal_False ),
     mbExportNotes( sal_True ),
+    mbVIEWPDF( sal_False ),
     mbExportNotesPages( sal_False ),
     mbUseTransitionEffects( sal_False ),
     mbIsSkipEmptyPages( sal_True ),
@@ -511,6 +513,7 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage( Window* pParent,
     maCbExportBookmarks( this, PDFFilterResId( CB_EXPORTBOOKMARKS ) ),
     maCbExportHiddenSlides( this, PDFFilterResId( CB_EXPORTHIDDENSLIDES ) ),
     maCbExportNotes( this, PDFFilterResId( CB_EXPORTNOTES ) ),
+    maCbVIEWPDF( this, PDFFilterResId( CB_VIEWPDF ) ),
     maCbExportNotesPages( this, PDFFilterResId( CB_EXPORTNOTESPAGES ) ),
     maCbExportEmptyPages( this, PDFFilterResId( CB_EXPORTEMPTYPAGES ) ),
     maCbAddStream( this, PDFFilterResId( CB_ADDSTREAM ) ),
@@ -702,6 +705,12 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
         paParent->mbExportFormFields = maCbExportFormFields.IsChecked();
         paParent->mbEmbedStandardFonts = maCbEmbedStandardFonts.IsChecked();
     }
+    
+    if( maCbVIEWPDF.IsChecked() )
+        pdfview=1;
+    else
+        pdfview=0;
+
     paParent->maWatermarkText = maEdWatermark.GetText();
 
     /*
