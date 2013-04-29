@@ -82,7 +82,8 @@ namespace
             m_bPageEnded(false),
             m_bRedCircleSeen(false),
             m_bGreenStrokeSeen(false),
-            m_bDashedLineSeen(false)
+            m_bDashedLineSeen(false),
+            m_bImageSeen(false)
         {}
 
         ~TestSink()
@@ -111,6 +112,7 @@ namespace
             CPPUNIT_ASSERT_MESSAGE( "red circle seen in input", m_bRedCircleSeen );
             CPPUNIT_ASSERT_MESSAGE( "green stroke seen in input", m_bGreenStrokeSeen );
             CPPUNIT_ASSERT_MESSAGE( "dashed line seen in input", m_bDashedLineSeen );
+            CPPUNIT_ASSERT_MESSAGE( "image seen in input", m_bImageSeen );
         }
 
     private:
@@ -377,6 +379,7 @@ namespace
                                     xBitmap[0].Name.compareToAscii( "URL" ) == 0 );
             CPPUNIT_ASSERT_MESSAGE( "drawImage got InputStream param",
                                     xBitmap[1].Name.compareToAscii( "InputStream" ) == 0 );
+            m_bImageSeen = true;
         }
 
         virtual void drawColorMaskedImage(const uno::Sequence<beans::PropertyValue>& xBitmap,
@@ -450,6 +453,7 @@ namespace
         bool                      m_bRedCircleSeen;
         bool                      m_bGreenStrokeSeen;
         bool                      m_bDashedLineSeen;
+        bool                      m_bImageSeen;
     };
 
     class PDFITest : public test::BootstrapFixture
