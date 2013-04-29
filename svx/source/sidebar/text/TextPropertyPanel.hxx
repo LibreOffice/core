@@ -55,8 +55,7 @@ public:
     static TextPropertyPanel* Create (
         Window* pParent,
         const cssu::Reference<css::frame::XFrame>& rxFrame,
-        SfxBindings* pBindings,
-        const cssu::Reference<css::ui::XSidebar>& rxSidebar);
+        SfxBindings* pBindings);
 
     virtual void DataChanged (const DataChangedEvent& rEvent);
     ::sfx2::sidebar::ControllerItem& GetSpaceController();
@@ -159,13 +158,11 @@ private:
     cssu::Reference<css::frame::XFrame> mxFrame;
     ::sfx2::sidebar::EnumContext maContext;
     SfxBindings* mpBindings;
-    cssu::Reference<css::ui::XSidebar> mxSidebar;
 
     TextPropertyPanel (
         Window* pParent,
         const cssu::Reference<css::frame::XFrame>& rxFrame,
-        SfxBindings* pBindings,
-        const cssu::Reference<css::ui::XSidebar>& rxSidebar);
+        SfxBindings* pBindings);
     virtual ~TextPropertyPanel (void);
 
 

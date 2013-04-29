@@ -134,7 +134,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
 #define DoesResourceEndWith(s) rsResourceURL.endsWithAsciiL(s,strlen(s))
     if (DoesResourceEndWith("/TextPropertyPanel"))
     {
-        pControl = TextPropertyPanel::Create(pParentWindow, xFrame, pBindings, xSidebar);
+        pControl = TextPropertyPanel::Create(pParentWindow, xFrame, pBindings);
     }
     else if (DoesResourceEndWith("/ParaPropertyPanel"))
     {
