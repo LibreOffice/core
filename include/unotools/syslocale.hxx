@@ -34,7 +34,7 @@ namespace osl { class Mutex; }
 
 /**
     SvtSysLocale provides a refcounted single instance of an application wide
-    <type>LocaleDataWrapper</type> and <type>CharClass</type> which always
+    LocaleDataWrapper and <type>CharClass</type> which always
     follow the locale as it is currently configured by the user. You may use
     it anywhere to access the locale data elements like decimal separator and
     simple date formatting and so on. Contructing and destructing a

@@ -119,8 +119,8 @@ public:
     //========================================================================
     //= MeasurementUnitConversion
     //========================================================================
-    /** small helper to convert between <type>MeasurementUnit</type> and
-        <type>FieldUnit</type>
+    /** small helper to convert between MeasurementUnit and
+        FieldUnit
     */
     static sal_Int16                                ConvertToMeasurementUnit( FieldUnit _nFieldUnit, sal_Int16 _rFieldToUNOValueFactor );
     static FieldUnit                                ConvertToFieldUnit( sal_Int16 _nMeasurementUnit, sal_Int16& _rFieldToUNOValueFactor );

@@ -224,7 +224,7 @@ namespace connectivity
         //================================================================
         //= IDataAccessCharSet
         //================================================================
-        /** simple wrapper for the <type>OCharsetMap</type>
+        /** simple wrapper for the OCharsetMap
         */
         class OOO_DLLPUBLIC_DBTOOLS IDataAccessCharSet :
             public ::rtl::IReference
@@ -336,7 +336,7 @@ namespace connectivity
                 const IParseContext* _pContext
                 ) const = 0;
 
-            /// creates a helper for charset related functionality (<type>OCharsetMap</type>)
+            /// creates a helper for charset related functionality (OCharsetMap)
             virtual ::rtl::Reference< IDataAccessCharSet > createCharsetHelper( ) const = 0;
 
             /// creates a simple version of the DBTypeConversion helper

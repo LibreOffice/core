@@ -48,7 +48,7 @@ namespace comphelper
             <li>call <member>disposing</member> upon the disposal of your broadcaster.</li>
         </ul>
 
-        See <type>OListenerContainerBase</type> for an implementation which even saves
+        See OListenerContainerBase for an implementation which even saves
         you some more work, by doing the casts for you.
 
         @see http://www.openoffice.org/servlets/ReadMsg?list=interface-announce&msgId=494345

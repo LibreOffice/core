@@ -123,7 +123,7 @@ namespace comphelper
             ::cppu::ComponentFactoryFunc _pCreateFunction,
             FactoryInstantiation _pFactoryFunction = ::cppu::createSingleComponentFactory );
 
-        /** registers a component given by <type>ComponentDescription</type>
+        /** registers a component given by ComponentDescription
         */
         void registerImplementation( const ComponentDescription& _rComp );
 

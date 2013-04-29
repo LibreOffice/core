@@ -306,7 +306,7 @@ namespace utl
             const OUString& _rPath, sal_Int32 _nDepth = -1, CREATION_MODE _eMode = CM_UPDATABLE, sal_Bool _bLazyWrite = sal_True );
 
         /** commit all changes made on the subtree the object is the root for<p/>
-            All changes made on any <type>OConfigurationNode</type> object retrieved (maybe indirect) from this root
+            All changes made on any OConfigurationNode object retrieved (maybe indirect) from this root
             object are committed when calling this method.
             @return     sal_True if and only if the commit was successful
         */

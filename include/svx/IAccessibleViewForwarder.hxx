@@ -35,7 +35,7 @@ namespace accessibility {
     <method>GetVisibleArea</method> returns the visible rectangle that
     corresponds to this window.</p>
 
-    <p>This interface is similar to the <type>SvxViewForwarder</type> but
+    <p>This interface is similar to the SvxViewForwarder but
     differs in two important points: Firstly the <member>GetVisArea</member>
     method returns a rectangle in internal coordinates and secondly the
     transformation methods do not require explicit mapmodes.  These have to

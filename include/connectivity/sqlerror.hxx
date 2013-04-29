@@ -190,8 +190,8 @@ namespace connectivity
             The thrown SQLException will contain the OOo-specific error code which derives
             from the given error condition, and the error message associated with that condition.
 
-            Note: You should prefer the version of <type>raiseException</type> which takes
-            an additional <type>Context</type> parameter, since this allows clients of your
+            Note: You should prefer the version of raiseException which takes
+            an additional Context parameter, since this allows clients of your
             exception to examine where the error occurred.
 
             @param  _eCondition

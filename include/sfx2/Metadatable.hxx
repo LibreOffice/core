@@ -55,7 +55,7 @@ createXmlIdRegistry(const bool i_DocIsClipboard);
 /** base class for core objects that may have xml:id.
 
     <p>The interface of this class consists of 3 parts:
-    <ul><li>implementations that are used by the <type>MetadatableMixin</type>
+    <ul><li>implementations that are used by the MetadatableMixin
             below</li>
         <li>hooks to be called by the sw core whenever actions that are
             relevant to the uniqueness of xml:ids are taken (copying,
@@ -130,10 +130,10 @@ private:
 };
 
 
-/** base class for UNO objects that implement <type>XMetadatable</type>.
+/** base class for UNO objects that implement XMetadatable.
 
     <p>An instance of this base class is associated with an instance of
-       <type>Metadatable</type>.</p>
+       Metadatable.</p>
  */
 class SFX2_DLLPUBLIC MetadatableMixin :
     public ::cppu::WeakImplHelper1<
@@ -168,7 +168,7 @@ public:
 protected:
     /// get the core object corresponding to this UNO object.
     virtual Metadatable * GetCoreObject() = 0;
-    /// get the <type>XModel</type> for the document
+    /// get the XModel for the document
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
         GetModel() = 0;
 

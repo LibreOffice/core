@@ -46,9 +46,9 @@ class IAccessibleParent;
 /** This base class provides a base implementation for all shapes.  For more
     detailed documentation about the methods refer to the descriptions of
     the implemented interfaces.  These are, among others,
-    <type>XAccessible</type>, <type>XAccessibleContext</type>,
-    <type>XAccessibleComponent</type> and
-    <type>XAccessibleExtendedComponent</type>.
+    XAccessible, <type>XAccessibleContext</type>,
+    XAccessibleComponent and
+    XAccessibleExtendedComponent.
 
     <p>The children of a shape can stem from two sources which, in case of
     SVX and SD shapes, are mutually exclusive.  This implementation,
@@ -56,9 +56,9 @@ class IAccessibleParent;
     shapes from other projects.
     <ul>
         <li>If this shape is a group shape, i.e. a
-        <type>SvxShapeGroup</type> or a <type>Svx3DSceneObject</type>, it
+        SvxShapeGroup or a <type>Svx3DSceneObject</type>, it
         can have nested shapes.</li>
-        <li>If this shape is a descendant from <type>SvxShapeText</type>
+        <li>If this shape is a descendant from SvxShapeText
         then the text paragraphs are its children.</li>
     </ul>
     </p>
@@ -116,7 +116,7 @@ public:
 
     /** Set the specified state.  If the state is <const>FOCUSED</const>
         then, additionally to the inherited functionality, the focus
-        listeners registered with the <type>XAccessibleComponent</type>
+        listeners registered with the XAccessibleComponent
         interface are called (if that state really changes).
 
         @param aState
@@ -130,7 +130,7 @@ public:
 
     /** Reset the specified state.  If the state is <const>FOCUSED</const>
         then, additionally to the inherited functionality, the focus
-        listeners registered with the <type>XAccessibleComponent</type>
+        listeners registered with the XAccessibleComponent
         interface are called (if that state really changes).
 
         @param aState

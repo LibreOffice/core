@@ -660,35 +660,35 @@ public:
     /// Return the decimal separator matching the locale of the given format
     OUString GetFormatDecimalSep( sal_uInt32 nFormat ) const;
 
-    /// Return a <type>NfCurrencyTable</type> with pointers to <type>NfCurrencyEntry</type> entries
+    /// Return a NfCurrencyTable with pointers to <type>NfCurrencyEntry</type> entries
     static const NfCurrencyTable& GetTheCurrencyTable();
 
     /** Searches, according to the default locale currency, an entry of the
         CurrencyTable which is <bold>not</bold> the first (LANGUAGE_SYSTEM) entry.
         @return
             <NULL/> if not found
-            else pointer to <type>NfCurrencyEntry</type>
+            else pointer to NfCurrencyEntry
      */
     static const NfCurrencyEntry*  MatchSystemCurrency();
 
-    /** Return a <type>NfCurrencyEntry</type> matching a language/country.
+    /** Return a NfCurrencyEntry matching a language/country.
         If language/country is LANGUAGE_SYSTEM a <method>MatchSystemCurrency</method>
         call is tried to get an entry. If that fails or the corresponding
         language/country is not present the entry for LANGUAGE_SYSTEM is returned.
      */
     static const NfCurrencyEntry&  GetCurrencyEntry( LanguageType );
 
-    /** Return a <type>NfCurrencyEntry</type> pointer matching a language/country
+    /** Return a NfCurrencyEntry pointer matching a language/country
         and currency abbreviation (AKA banking symbol).
         This method is meant for the configuration of the default currency.
         @return
             <NULL/> if not found
-            else pointer to <type>NfCurrencyEntry</type>
+            else pointer to NfCurrencyEntry
      */
     static const NfCurrencyEntry*  GetCurrencyEntry( const OUString& rAbbrev,
                                                      LanguageType eLang );
 
-    /** Return a <type>NfCurrencyEntry</type> pointer matching the symbol
+    /** Return a NfCurrencyEntry pointer matching the symbol
         combination of a LegacyOnly currency. Note that this means only that
         the currency matching both symbols was once used in the Office, but is
         not offered in dialogs anymore. It doesn't even mean that the currency
@@ -707,7 +707,7 @@ public:
     static void SetDefaultSystemCurrency( const OUString& rAbbrev, LanguageType eLang );
 
     /** Get all standard formats for a specific currency, formats are
-        appended to the <type>NfWSStringsDtor</type> list.
+        appended to the NfWSStringsDtor list.
         @param bBank
             <TRUE/>: generate only format strings with currency abbreviation
             <FALSE/>: mixed format strings
@@ -726,7 +726,7 @@ public:
                                         const NfCurrencyEntry** ppEntry = NULL,
                                         bool* pBank = NULL ) const;
 
-    /** Look up the corresponding <type>NfCurrencyEntry</type> matching
+    /** Look up the corresponding NfCurrencyEntry matching
         rSymbol (may be CurrencySymbol or CurrencyAbbreviation) and possibly
         a rExtension (being yyy of [$xxx-yyy]) or a given language/country
         value. Tries to match a rSymbol with rExtension first, then with
@@ -774,10 +774,10 @@ public:
     /// Fill rList with the language/country codes that have been allocated
     void    GetUsedLanguages( std::vector<sal_uInt16>& rList );
 
-    /// Fill a <type>NfKeywordIndex</type> table with keywords of a language/country
+    /// Fill a NfKeywordIndex table with keywords of a language/country
     void    FillKeywordTable( NfKeywordTable& rKeywords, LanguageType eLang );
 
-    /** Return a keyword for a language/country and <type>NfKeywordIndex</type>
+    /** Return a keyword for a language/country and NfKeywordIndex
         for XML import, to generate number format strings. */
     OUString GetKeyword( LanguageType eLnge, sal_uInt16 nIndex );
 
@@ -867,7 +867,7 @@ private:
     // Build positive currency format, old compatibility style
     SVL_DLLPRIVATE void ImpGetPosCurrFormat(OUStringBuffer& sPosStr, const OUString& rCurrSymbol);
 
-    // Create <type>theCurrencyTable</type> with all <type>NfCurrencyEntry</type>
+    // Create theCurrencyTable with all <type>NfCurrencyEntry</type>
     SVL_DLLPRIVATE static void ImpInitCurrencyTable();
 
     // Return the format index of the currency format of the system locale.

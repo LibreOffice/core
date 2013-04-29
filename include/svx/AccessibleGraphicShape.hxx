@@ -28,8 +28,8 @@ namespace accessibility {
 
 /** @descr
         This class makes graphic shapes accessible.  With respect to its
-        base class <type>AccessibleShape</type> it supports the additional
-        <type>XAccessibleImage</type> interface.
+        base class AccessibleShape it supports the additional
+        XAccessibleImage interface.
 */
 class SVX_DLLPUBLIC AccessibleGraphicShape
     :   public AccessibleShape,

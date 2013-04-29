@@ -29,8 +29,8 @@ namespace accessibility {
 
 /** @descr
         This class makes OLE objects accessible.  With respect to its
-        base class <type>AccessibleShape</type> it supports the additional
-        <type>XAccessibleAction</type> interface.
+        base class AccessibleShape it supports the additional
+        XAccessibleAction interface.
 */
 class SVX_DLLPUBLIC AccessibleOLEShape
     :   public AccessibleShape,

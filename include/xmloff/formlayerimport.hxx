@@ -70,7 +70,7 @@ namespace xmloff
             sal_uInt16 _nPrefix,
             const OUString& _rLocalName);
 
-        /** create an <type>SvXMLImportContext</type> instance which is able to import the &lt;form:form&gt;
+        /** create an SvXMLImportContext instance which is able to import the &lt;form:form&gt;
             element.
 
             <p>You must have called <method>startPage</method> before you can create such an import context.</p>

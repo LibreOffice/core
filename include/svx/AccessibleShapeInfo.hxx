@@ -32,10 +32,10 @@ namespace accessibility {
         shape that is passed to the constructor of that shape.  It allows to
         separate the class definitions of the shapes from the information
         needed on construction.  Only the shapes' implementation has to be
-        adapted to a modified <type>AccessibleShapeInfo</type> definition.
+        adapted to a modified AccessibleShapeInfo definition.
 
         <p>Note that this class complements the
-        <type>AccessibleShapeTreeInfo</type> interface which contains
+        AccessibleShapeTreeInfo interface which contains
         information that is passed to all shapes in a subtree not just to a
         single shape. </p>
 */

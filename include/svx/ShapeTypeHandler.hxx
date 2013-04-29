@@ -84,7 +84,7 @@ public:
     /** This function returns a reference to the only instance of this class.
         Use this instance to retrieve a shape's type and service name.
         @return
-            Returns a reference to a <type>ShapeTypeHandler</type> object.
+            Returns a reference to a ShapeTypeHandler object.
      */
     static ShapeTypeHandler& Instance (void);
 
@@ -104,7 +104,7 @@ public:
              Returns the type id of the specified shape or
              -1 when the given reference is either not
              set or the referenced object does not support the
-             <type>XShapeDescriptor</type> interface.
+             XShapeDescriptor interface.
      */
     ShapeTypeId GetTypeId (const ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XShape>& rxShape) const;
@@ -140,7 +140,7 @@ public:
 
     /**  Add new shape types to the internal tables.  Each new shape type is
          described by one shape type descriptor.  See
-         <type>ShapeTypeDescriptor</type> for more details.
+         ShapeTypeDescriptor for more details.
 
          @param nDescriptorCount
              Number of new shape types.

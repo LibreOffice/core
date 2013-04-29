@@ -33,7 +33,7 @@ class AccessibleContextBase;
 class AccessibleShape;
 class ChildrenManagerImpl;
 
-/** The <type>AccessibleChildrenManager</type> class acts as a cache of the
+/** The AccessibleChildrenManager class acts as a cache of the
     accessible objects of the currently visible shapes of a draw page and as
     a factory to create the corresponding accessible object for a given
     shape.
@@ -42,7 +42,7 @@ class ChildrenManagerImpl;
     It is passes to the constructor and can be re-set with a call to
     <member>SetShapeList</member>.  Accessibility objects which represent
     these shapes are constructed usually on demand.  The second source is a
-    set of single <type>AccessibleShape</type> objects added by calls to
+    set of single AccessibleShape objects added by calls to
     <member>AddAccessibleShape</member>.  These are not modified by this
     class.  They are only copied into the list of visible shapes depending
     on their visibility.  The later list can be cleared by calling
@@ -55,7 +55,7 @@ class ChildrenManagerImpl;
     <p>A children manager registers itself at the broadcaster passed to its
     constructor and transforms/forwards the received events to the listeners
     of the also given context base.  The transformation process includes
-    interpreting a <type>document::XEventListener</type>, the change from
+    interpreting a document::XEventListener, the change from
     XShape references to the associated XAccessible reference, and the
     creation of an XAccessibleEventObject.  The event object is then passed
     to the <method>fireEvent</method> method of the context and from there

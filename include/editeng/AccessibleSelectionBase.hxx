@@ -27,7 +27,7 @@ namespace accessibility
 {
 /** @descr
         This base class provides a base implementation of the
-        <type>XAccessibleSelection</type> interface.
+        XAccessibleSelection interface.
         The following methods have to be implemented if this
         class is used:
 

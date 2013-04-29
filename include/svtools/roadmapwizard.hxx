@@ -98,7 +98,7 @@ protected:
             The very first path which is declared is automatically activated.
 
             Note that all paths which are declared must have the very first state in
-            common. Also note that due to a restriction of the very base class (<type>WizardDialog</type>),
+            common. Also note that due to a restriction of the very base class (WizardDialog),
             this common first state must be 0.
 
             You cannot declare new paths once the wizard started, so it's recommended that
@@ -160,7 +160,7 @@ protected:
 
         /** determine the next state to travel from the given one
 
-            This method (which is declared in <type>OWizardMachine</type> and overwritten here)
+            This method (which is declared in OWizardMachine and overwritten here)
             ensures that traveling happens along the active path.
 
             @see activatePath

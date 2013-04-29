@@ -37,7 +37,7 @@
 
 class SvXMLExport;
 
-/** export meta data from an <type>XDocumentProperties</type> instance.
+/** export meta data from an XDocumentProperties instance.
 
     <p>
     This class will start the export at the office:meta element,

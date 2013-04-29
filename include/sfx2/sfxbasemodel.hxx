@@ -1070,7 +1070,7 @@ public:
 
         @param      -
 
-        @return     -   an <type>Events</type> object.
+        @return     -   an Events object.
 
         @onerror    -
     */
@@ -1098,7 +1098,7 @@ public:
 
     /**___________________________________________________________________________________________________
         @short      -
-        @descr      -   registers the given <type>XEventListener</type>.
+        @descr      -   registers the given XEventListener.
 
         @seealso    -
 
@@ -1113,7 +1113,7 @@ public:
 
     /**___________________________________________________________________________________________________
         @short      -
-        @descr      -   unregisters the given <type>XEventListener</type>.
+        @descr      -   unregisters the given XEventListener.
 
         @seealso    -
 

@@ -31,12 +31,12 @@ namespace accessibility {
 
 /** @descr
         This base class provides (will provice) a base implementation of the
-        <type>XAccessibleComponent</type> and the
-        <type>XAccessibleExtendedComponent</type> for all shapes.  For
+        XAccessibleComponent and the
+        XAccessibleExtendedComponent for all shapes.  For
         more detailed documentation about the methods refer to the interface
-        descriptions of <type>XAccessible</type>,
-        <type>XAccessibleContext</type>, <type>XInterface</type>,
-        <type>XServiceInfo</type>, and <type>XTypeProvider</type>.
+        descriptions of XAccessible,
+        XAccessibleContext, <type>XInterface</type>,
+        XServiceInfo, and <type>XTypeProvider</type>.
 */
 class EDITENG_DLLPUBLIC AccessibleComponentBase
     :   public ::com::sun::star::accessibility::XAccessibleExtendedComponent
@@ -77,7 +77,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     /** The default implementation returns an empty position, i.e. the
-    * result of the default constructor of <type>com::sun::star::awt::Point</type>.
+    * result of the default constructor of com::sun::star::awt::Point.
     */
     virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen (void)
         throw (::com::sun::star::uno::RuntimeException);

@@ -37,7 +37,7 @@ namespace comphelper
     /** a non-UNO container listener
         <p>Useful if you have a non-refcountable class which should act as container listener.<br/>
         In this case, derive this class from OContainerListener, and create an adapter
-        <type>OContainerListenerAdapter</type> which multiplexes the changes.</p>
+        OContainerListenerAdapter which multiplexes the changes.</p>
     */
     class COMPHELPER_DLLPUBLIC OContainerListener
     {

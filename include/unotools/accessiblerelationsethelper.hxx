@@ -94,7 +94,7 @@ public:
         @param aRelationType
             The type of relation to look for in this set of relations.  This
             has to be one of the constants of
-            <type>AccessibleRelationType</type>.
+            AccessibleRelationType.
 
         @return
             Returns <TRUE/> if there is a (at least one) relation of the
@@ -107,7 +107,7 @@ public:
 
         @param aRelationType
             The type of the relation to return.  This has to be one of the
-            constants of <type>AccessibleRelationType</type>.
+            constants of AccessibleRelationType.
 
         @return
             If a relation with the given type could be found than (a copy

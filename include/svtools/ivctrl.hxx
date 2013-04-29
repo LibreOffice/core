@@ -296,7 +296,7 @@ public:
     /** creates automatic mnemonics for all icon texts in the control
 
     @param _rUsedMnemonics
-        a <type>MnemonicGenerator</type> at which some other mnemonics are already registered.
+        a MnemonicGenerator at which some other mnemonics are already registered.
         This can be used if the control needs to share the "mnemonic space" with other elements,
         such as a menu bar.
     */

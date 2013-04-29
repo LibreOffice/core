@@ -30,7 +30,7 @@ class AccessibleShape;
 class AccessibleShapeTreeInfo;
 
 /** This interface contains methods missing from the
-    <type>XAccessibleContext</type> interface that allow the modification of
+    XAccessibleContext interface that allow the modification of
     parent/child relationship.
 */
 class IAccessibleParent

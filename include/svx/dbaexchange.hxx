@@ -137,7 +137,7 @@ namespace svx
             <p>This method helps you treating this class as simple container class:<br/>
             At the moment, it is a data container and a transferable.
             Using <method>addDataToContainer</method>, you can treat the class as dumb data container,
-            doing the Drag'n'Drop with a <type>TransferDataContainer</type> instance (which may contain
+            doing the Drag'n'Drop with a TransferDataContainer instance (which may contain
             additional formats)</p>
             @TODO
                 split this class into a two separate classes: one for the data container aspect, one for

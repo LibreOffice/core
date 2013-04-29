@@ -87,7 +87,7 @@ public:
 
         @param aState
             The state for which to check membership.  This has to be one of
-            the constants of <type>AccessibleStateType</type>.
+            the constants of AccessibleStateType.
 
         @return
             Returns <TRUE/> if the given state is a member of this object's
@@ -103,7 +103,7 @@ public:
             This sequence of states is interpreted as set and every of its
             members, duplicates are ignored, is checked for membership in
             this object's state set.  Each state has to be one of the
-            constants of <type>AccessibleStateType</type>.
+            constants of AccessibleStateType.
 
         @return
             Returns <TRUE/> if all states of the given state set are members

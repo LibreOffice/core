@@ -46,7 +46,7 @@ namespace comphelper
         of an AccessibleContext.
 
         <p>For instance, when you want to implement a context which can be re-parented, you:
-            <ul><li>derive your class from <type>OAccessibleImplementationAccess</type></li>
+            <ul><li>derive your class from OAccessibleImplementationAccess</li>
                 <li>use <code>setAccessibleParent( <em>component</em>, <em>new_parent</em> )</code>
             </ul>
         </p>
@@ -103,7 +103,7 @@ namespace comphelper
         @return
             the pointer to the implementation, if successful. The only known error condition so far
             is an invalid context (which means it is <NULL/>, or the implementation is not derived
-            from <type>OAccessibleImplementationAccess</type>, or retrieving the implementation failed).
+            from OAccessibleImplementationAccess, or retrieving the implementation failed).
         */
         static OAccessibleImplementationAccess* getImplementation(
             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >& _rxComponent
