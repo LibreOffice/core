@@ -23,7 +23,7 @@ class TestVarFields(unittest.TestCase):
         Note: this test was migrated from java (the steps numbering too)
         sw/qa/complex/writer/VarFields.java
 
-        TODO 1:
+        TODO:
         Unlike in java, this test doesn't overwrite the field condition.
         Apparently xDoc.refresh() is somehow broken (from python), because doing the update
         manually does overwrite the condition:
@@ -33,11 +33,6 @@ class TestVarFields(unittest.TestCase):
         3. check that TextSection's condition still has the right value: "foo EQ 1"
         4. Update field with Tool=>Update=>Fields (or [F9])
         5. check that TextSection's condition was overriden: "0"
-
-        TODO 2: CRASH calling xDoc.storeToURL(...) with debug build:
-        http://pastebin.com/76KeCT77
-        so commented storeToURL out for now.
-        (In any event: why storeToURL(..) is working with release build?)
         """
         xDoc = self.__class__._xDoc
         xBodyText = xDoc.getText()
