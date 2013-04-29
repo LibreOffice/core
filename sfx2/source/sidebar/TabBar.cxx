@@ -101,7 +101,7 @@ sal_Int32 TabBar::GetDefaultWidth (void)
 
 
 void TabBar::SetDecks (
-    const ResourceManager::IdContainer& rDeckIds)
+    const ResourceManager::DeckContextDescriptorContainer& rDecks)
 {
     // Remove the current buttons.
     {
@@ -115,15 +115,15 @@ void TabBar::SetDecks (
         maItems.clear();
     }
 
-    maItems.resize(rDeckIds.size());
+    maItems.resize(rDecks.size());
     sal_Int32 nIndex (0);
-    for (ResourceManager::IdContainer::const_iterator
-             iDeckId(rDeckIds.begin()),
-             iEnd(rDeckIds.end());
-         iDeckId!=iEnd;
-         ++iDeckId)
+    for (ResourceManager::DeckContextDescriptorContainer::const_iterator
+             iDeck(rDecks.begin()),
+             iEnd(rDecks.end());
+         iDeck!=iEnd;
+         ++iDeck)
     {
-        const DeckDescriptor* pDescriptor = ResourceManager::Instance().GetDeckDescriptor(*iDeckId);
+        const DeckDescriptor* pDescriptor = ResourceManager::Instance().GetDeckDescriptor(iDeck->msId);
         if (pDescriptor == NULL)
         {
             OSL_ASSERT(pDescriptor!=NULL);
@@ -137,6 +137,8 @@ void TabBar::SetDecks (
         rItem.maDeckActivationFunctor = maDeckActivationFunctor;
         rItem.mbIsHiddenByDefault = false;
         rItem.mbIsHidden = ! pDescriptor->mbIsEnabled;
+
+        rItem.mpButton->Enable(iDeck->mbIsEnabled);
     }
 
     UpdateButtonIcons();
@@ -218,16 +220,24 @@ void TabBar::Layout (void)
 
 void TabBar::HighlightDeck (const ::rtl::OUString& rsDeckId)
 {
-    for (ItemContainer::const_iterator iItem(maItems.begin()),iEnd(maItems.end());
+    Item* pItem = GetItemForId(rsDeckId);
+    if (pItem != NULL)
+        pItem->mpButton->Check();
+}
+
+
+
+
+TabBar::Item* TabBar::GetItemForId (const ::rtl::OUString& rsDeckId)
+{
+    for (ItemContainer::iterator iItem(maItems.begin()),iEnd(maItems.end());
          iItem!=iEnd;
          ++iItem)
     {
         if (iItem->msDeckId.equals(rsDeckId))
-        {
-            iItem->mpButton->Check();
-            break;
-        }
+            return &*iItem;
     }
+    return NULL;
 }
 
 

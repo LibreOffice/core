@@ -362,6 +362,12 @@ void Theme::UpdateTheme (void)
             maPropertyIdToNameMap[Image_Closer],
             Any(A2S("private:graphicrepository/sfx2/res/closedoc.png")));
         setPropertyValue(
+            maPropertyIdToNameMap[Image_CloseIndicator],
+            Any(
+                mbIsHighContrastMode
+                    ? A2S("private:graphicrepository/res/commandimagelist/lch_decrementlevel.png")
+                    : A2S("private:graphicrepository/res/commandimagelist/lc_decrementlevel.png")));
+        setPropertyValue(
             maPropertyIdToNameMap[Image_ToolBoxItemSeparator],
             Any(
                 A2S("private:graphicrepository/sfx2/res/separator.png")));
@@ -778,6 +784,7 @@ void Theme::SetupPropertyMaps (void)
     AddEntry(Image_PanelMenu);
     AddEntry(Image_ToolBoxItemSeparator);
     AddEntry(Image_Closer);
+    AddEntry(Image_CloseIndicator);
 
     AddEntry(Color_DeckTitleFont);
     AddEntry(Color_PanelTitleFont);
@@ -847,6 +854,7 @@ Theme::PropertyType Theme::GetPropertyType (const ThemeItem eItem)
         case Image_PanelMenu:
         case Image_ToolBoxItemSeparator:
         case Image_Closer:
+        case Image_CloseIndicator:
             return PT_Image;
 
         case Color_DeckTitleFont:

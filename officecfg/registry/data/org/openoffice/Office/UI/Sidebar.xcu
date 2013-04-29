@@ -831,6 +831,9 @@
         <prop oor:name="TitleBarIsOptional" oor:type="xs:boolean">
           <value>true</value>
         </prop>
+        <prop oor:name="ShowForReadOnlyDocument" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
         <prop oor:name="Id" oor:type="xs:string">
           <value>SwNavigatorPanel</value>
         </prop>
@@ -857,6 +860,9 @@
         <prop oor:name="TitleBarIsOptional" oor:type="xs:boolean">
           <value>true</value>
         </prop>
+        <prop oor:name="ShowForReadOnlyDocument" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
         <prop oor:name="Id" oor:type="xs:string">
           <value>ScNavigatorPanel</value>
         </prop>
@@ -881,6 +887,9 @@
           <value xml:lang="en-US">Navigator</value>
         </prop>
         <prop oor:name="TitleBarIsOptional" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="ShowForReadOnlyDocument" oor:type="xs:boolean">
           <value>true</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">

@@ -201,6 +201,12 @@
         </info>
         <value>10000</value>
       </prop>
+      <prop oor:name="ShowForReadOnlyDocument" oor:type="xs:boolean">
+        <info>
+          <desc>This flag controls whether the panel is shown when the document in the edit view is read only.</desc>
+        </info>
+        <value>false</value>
+      </prop>
       <prop oor:name="WantsCanvas" oor:type="xs:boolean">
         <info>
           <desc>Experimental: Set to true when panel wants to paint its content via a XCanvas.</desc>

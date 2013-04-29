@@ -77,6 +77,7 @@ public:
         Image_PanelMenu,
         Image_ToolBoxItemSeparator,
         Image_Closer,
+        Image_CloseIndicator,
 
         __Image_Color,
 

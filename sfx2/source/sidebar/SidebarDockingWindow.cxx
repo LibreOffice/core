@@ -33,9 +33,9 @@ namespace sfx2 { namespace sidebar {
 SidebarDockingWindow::SidebarDockingWindow(
     SfxBindings* pSfxBindings,
     SidebarChildWindow& rChildWindow,
-    Window* pParent,
+    Window* pParentWindow,
     WinBits nBits)
-    : SfxDockingWindow(pSfxBindings, &rChildWindow, pParent, nBits),
+    : SfxDockingWindow(pSfxBindings, &rChildWindow, pParentWindow, nBits),
       mpSidebarController()
 {
     // Get the XFrame from the bindings.
@@ -117,7 +117,7 @@ sal_Bool SidebarDockingWindow::Close (void)
     {
         // Do not close the floating window.
         // Dock it and close just the deck instead.
-        mpSidebarController->CloseDeck();
+        mpSidebarController->RequestCloseDeck();
         SetFloatingMode(sal_False);
         mpSidebarController->NotifyResize();
         return sal_False;

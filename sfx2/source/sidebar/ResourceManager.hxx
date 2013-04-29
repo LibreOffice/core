@@ -44,10 +44,6 @@ class ResourceManager
 public:
     static ResourceManager& Instance (void);
 
-    const DeckDescriptor* GetBestMatchingDeck (
-        const Context& rContext,
-        const cssu::Reference<css::frame::XFrame>& rxFrame);
-
     const DeckDescriptor* GetDeckDescriptor (
         const ::rtl::OUString& rsDeckId) const;
     const PanelDescriptor* GetPanelDescriptor (
@@ -64,19 +60,28 @@ public:
         const ::rtl::OUString& rsDeckId,
         const bool bIsEnabled);
 
-    typedef ::std::vector<rtl::OUString> IdContainer;
+    class DeckContextDescriptor
+    {
+    public:
+        ::rtl::OUString msId;
+        bool mbIsEnabled;
+    };
+    typedef ::std::vector<DeckContextDescriptor> DeckContextDescriptorContainer;
+
     class PanelContextDescriptor
     {
     public:
         ::rtl::OUString msId;
         ::rtl::OUString msMenuCommand;
         bool mbIsInitiallyVisible;
+        bool mbShowForReadOnlyDocuments;
     };
     typedef ::std::vector<PanelContextDescriptor> PanelContextDescriptorContainer;
 
-    const IdContainer& GetMatchingDecks (
-        IdContainer& rDeckDescriptors,
+    const DeckContextDescriptorContainer& GetMatchingDecks (
+        DeckContextDescriptorContainer& rDeckDescriptors,
         const Context& rContext,
+        const bool bIsDocumentReadOnly,
         const cssu::Reference<css::frame::XFrame>& rxFrame);
 
     const PanelContextDescriptorContainer& GetMatchingPanels (
@@ -113,6 +118,10 @@ private:
     void GetToolPanelNodeNames (
         ::std::vector<rtl::OUString>& rMatchingNames,
         const ::utl::OConfigurationTreeRoot aRoot) const;
+    bool IsDeckEnabled (
+        const ::rtl::OUString& rsDeckId,
+        const Context& rContext,
+        const cssu::Reference<css::frame::XFrame>& rxFrame) const;
 };
 
 

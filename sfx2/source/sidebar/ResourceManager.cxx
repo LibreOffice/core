@@ -81,25 +81,6 @@ ResourceManager::~ResourceManager (void)
 
 
 
-const DeckDescriptor* ResourceManager::GetBestMatchingDeck (
-    const Context& rContext,
-    const Reference<frame::XFrame>& rxFrame)
-{
-    ReadLegacyAddons(rxFrame);
-
-    for (DeckContainer::const_iterator iDeck(maDecks.begin()), iEnd(maDecks.end());
-         iDeck!=iEnd;
-         ++iDeck)
-    {
-        if (iDeck->maContextList.GetMatch(rContext) != NULL)
-            return &*iDeck;
-    }
-    return NULL;
-}
-
-
-
-
 const DeckDescriptor* ResourceManager::GetDeckDescriptor (
     const ::rtl::OUString& rsDeckId) const
 {
@@ -157,14 +138,15 @@ void ResourceManager::SetIsDeckEnabled (
 
 
 
-const ResourceManager::IdContainer& ResourceManager::GetMatchingDecks (
-    IdContainer& rDeckIds,
+const ResourceManager::DeckContextDescriptorContainer& ResourceManager::GetMatchingDecks (
+    DeckContextDescriptorContainer& rDecks,
     const Context& rContext,
+    const bool bIsDocumentReadOnly,
     const Reference<frame::XFrame>& rxFrame)
 {
     ReadLegacyAddons(rxFrame);
 
-    ::std::multimap<sal_Int32,OUString> aOrderedIds;
+    ::std::multimap<sal_Int32,DeckContextDescriptor> aOrderedIds;
     for (DeckContainer::const_iterator
              iDeck(maDecks.begin()),
              iEnd (maDecks.end());
@@ -172,22 +154,28 @@ const ResourceManager::IdContainer& ResourceManager::GetMatchingDecks (
          ++iDeck)
     {
         const DeckDescriptor& rDeckDescriptor (*iDeck);
-        if (rDeckDescriptor.maContextList.GetMatch(rContext) != NULL)
-            aOrderedIds.insert(::std::multimap<sal_Int32,OUString>::value_type(
-                    rDeckDescriptor.mnOrderIndex,
-                    rDeckDescriptor.msId));
+        if (rDeckDescriptor.maContextList.GetMatch(rContext) == NULL)
+            continue;
+        DeckContextDescriptor aDeckContextDescriptor;
+        aDeckContextDescriptor.msId = rDeckDescriptor.msId;
+        aDeckContextDescriptor.mbIsEnabled =
+            ! bIsDocumentReadOnly
+            || IsDeckEnabled(rDeckDescriptor.msId, rContext, rxFrame);
+        aOrderedIds.insert(::std::multimap<sal_Int32,DeckContextDescriptor>::value_type(
+                rDeckDescriptor.mnOrderIndex,
+                aDeckContextDescriptor));
     }
 
-    for (::std::multimap<sal_Int32,OUString>::const_iterator
+    for (::std::multimap<sal_Int32,DeckContextDescriptor>::const_iterator
              iId(aOrderedIds.begin()),
              iEnd(aOrderedIds.end());
          iId!=iEnd;
          ++iId)
     {
-        rDeckIds.push_back(iId->second);
+        rDecks.push_back(iId->second);
     }
 
-    return rDeckIds;
+    return rDecks;
 }
 
 
@@ -209,20 +197,21 @@ const ResourceManager::PanelContextDescriptorContainer& ResourceManager::GetMatc
          ++iPanel)
     {
         const PanelDescriptor& rPanelDescriptor (*iPanel);
-        if (rPanelDescriptor.msDeckId.equals(rsDeckId))
-        {
-            const ContextList::Entry* pEntry = rPanelDescriptor.maContextList.GetMatch(rContext);
-            if (pEntry != NULL)
-            {
-                PanelContextDescriptor aPanelContextDescriptor;
-                aPanelContextDescriptor.msId = rPanelDescriptor.msId;
-                aPanelContextDescriptor.msMenuCommand = pEntry->msMenuCommand;
-                aPanelContextDescriptor.mbIsInitiallyVisible = pEntry->mbIsInitiallyVisible;
-                aOrderedIds.insert(::std::multimap<sal_Int32,PanelContextDescriptor>::value_type(
-                        rPanelDescriptor.mnOrderIndex,
-                        aPanelContextDescriptor));
-            }
-        }
+        if ( ! rPanelDescriptor.msDeckId.equals(rsDeckId))
+            continue;
+
+        const ContextList::Entry* pEntry = rPanelDescriptor.maContextList.GetMatch(rContext);
+        if (pEntry == NULL)
+            continue;
+
+        PanelContextDescriptor aPanelContextDescriptor;
+        aPanelContextDescriptor.msId = rPanelDescriptor.msId;
+        aPanelContextDescriptor.msMenuCommand = pEntry->msMenuCommand;
+        aPanelContextDescriptor.mbIsInitiallyVisible = pEntry->mbIsInitiallyVisible;
+        aPanelContextDescriptor.mbShowForReadOnlyDocuments = rPanelDescriptor.mbShowForReadOnlyDocuments;
+        aOrderedIds.insert(::std::multimap<sal_Int32,PanelContextDescriptor>::value_type(
+                rPanelDescriptor.mnOrderIndex,
+                aPanelContextDescriptor));
     }
 
     for (::std::multimap<sal_Int32,PanelContextDescriptor>::const_iterator
@@ -334,6 +323,8 @@ void ResourceManager::ReadPanelList (void)
             aPanelNode.getNodeValue("ImplementationURL"));
         rPanelDescriptor.mnOrderIndex = ::comphelper::getINT32(
             aPanelNode.getNodeValue("OrderIndex"));
+        rPanelDescriptor.mbShowForReadOnlyDocuments = ::comphelper::getBOOL(
+            aPanelNode.getNodeValue("ShowForReadOnlyDocument"));
         rPanelDescriptor.mbWantsCanvas = ::comphelper::getBOOL(
             aPanelNode.getNodeValue("WantsCanvas"));
         const OUString sDefaultMenuCommand (::comphelper::getString(
@@ -555,6 +546,7 @@ void ResourceManager::ReadLegacyAddons (const Reference<frame::XFrame>& rxFrame)
         rPanelDescriptor.msHelpURL = ::comphelper::getString(aChildNode.getNodeValue("HelpURL"));
         rPanelDescriptor.maContextList.AddContextDescription(Context(sModuleName, A2S("any")), true, OUString());
         rPanelDescriptor.msImplementationURL = rsNodeName;
+        rPanelDescriptor.mbShowForReadOnlyDocuments = false;
     }
 
     // When there where invalid nodes then we have to adapt the size
@@ -639,6 +631,35 @@ void ResourceManager::GetToolPanelNodeNames (
     }
 }
 
+
+
+
+bool ResourceManager::IsDeckEnabled (
+    const OUString& rsDeckId,
+    const Context& rContext,
+    const Reference<frame::XFrame>& rxFrame) const
+{
+    // Check if any panel that matches the current context can be
+    // displayed.
+    ResourceManager::PanelContextDescriptorContainer aPanelContextDescriptors;
+    ResourceManager::Instance().GetMatchingPanels(
+        aPanelContextDescriptors,
+        rContext,
+        rsDeckId,
+        rxFrame);
+
+    for (ResourceManager::PanelContextDescriptorContainer::const_iterator
+             iPanel(aPanelContextDescriptors.begin()),
+             iEnd(aPanelContextDescriptors.end());
+         iPanel!=iEnd;
+         ++iPanel)
+    {
+        if (iPanel->mbShowForReadOnlyDocuments)
+            return true;
+    }
+
+    return false;
+}
 
 
 } } // end of namespace sfx2::sidebar

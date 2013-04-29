@@ -70,7 +70,7 @@ public:
     static sal_Int32 GetDefaultWidth (void);
 
     void SetDecks (
-        const ResourceManager::IdContainer& rDeckIds);
+        const ResourceManager::DeckContextDescriptorContainer& rDecks);
     void HighlightDeck (const ::rtl::OUString& rsDeckId);
     void AddPopupMenuEntries (
         PopupMenu& rMenu,
@@ -104,6 +104,7 @@ private:
     PopupMenuProvider maPopupMenuProvider;
 
     RadioButton* CreateTabItem (const DeckDescriptor& rDeckDescriptor);
+    Item* GetItemForId (const ::rtl::OUString& rsId);
     Image GetItemImage (const DeckDescriptor& rDeskDescriptor) const;
     void Layout (void);
     void UpdateButtonIcons (void);
