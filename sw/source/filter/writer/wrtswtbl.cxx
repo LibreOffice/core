@@ -396,6 +396,10 @@ sal_Bool SwWriteTable::ShouldExpandSub(const SwTableBox *pBox, sal_Bool /*bExpan
     return !pBox->GetSttNd() && nDepth > 0;
 }
 
+// FIXME: the degree of coupling between this method and
+// FillTableRowsCols which is called immediately afterwards
+// is -extremely- unpleasant and potentially problematic.
+
 void SwWriteTable::CollectTableRowsCols( long nStartRPos,
                                            sal_uInt32 nStartCPos,
                                            long nParentLineHeight,
@@ -740,8 +744,14 @@ SwWriteTable::SwWriteTable(const SwTableLines& rLines, long nWidth,
     // case the end of a column
     SwWriteTableCol *pCol = new SwWriteTableCol( nParentWidth );
     aCols.insert( pCol );
+    bUseLayoutHeights = true;
     CollectTableRowsCols( 0, 0, 0, nParentWidth, rLines, nMaxDepth - 1 );
 
+    // FIXME: awfully GetLineHeight writes to this in its first call
+    // and proceeds to return a rather odd number fdo#62336, we have to
+    // behave identically since the code in FillTableRowsCols duplicates
+    // and is highly coupled to CollectTableRowsCols - sadly.
+    bUseLayoutHeights = true;
     // And now fill with life
     FillTableRowsCols( 0, 0, 0, 0, 0, nParentWidth, rLines, 0, nMaxDepth - 1, static_cast< sal_uInt16 >(nNumOfRowsToRepeat) );
 
