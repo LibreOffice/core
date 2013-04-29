@@ -99,7 +99,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
             @param  aSource
                     contains the new items for this map.
 
-            @throw  An <type scope="com::sun::star::beans">IllegalTypeException</type>
+            @throw  An com::sun::star::beans::IllegalTypeException
                     is thrown, if the given any does not contain a suitable sequence ...
                     but not if its a VOID Any!
          */
@@ -114,7 +114,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
             @param  lSource
                     contains the new items for this map.
 
-            @throw  An <type scope="com::sun::star::beans">IllegalTypeException</type>
+            @throw  An com::sun::star::beans::IllegalTypeException
                     is thrown, if the given any sequence
                     uses wrong types for its items. VOID Any will be ignored!
          */

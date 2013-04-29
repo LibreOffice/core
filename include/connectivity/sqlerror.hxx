@@ -41,7 +41,7 @@ namespace connectivity
     */
     typedef ::sal_Int32 ErrorCode;
 
-    /** error condition values as defined in <type scope="com::sun::star::sdb">ErrorCondition</type>
+    /** error condition values as defined in com::sun::star::sdb::ErrorCondition
     */
     typedef ::sal_Int32 ErrorCondition;
 
@@ -96,7 +96,7 @@ namespace connectivity
             In a non-product build, assertions will fire if the number of placeholders in the
             message's resource string does not match the number of passed parameter values.
 
-            As specified in the <type scope="com::sun::star::sdb">ErrorCondition</type> type,
+            As specified in the com::sun::star::sdb::ErrorCondition type,
             error messages thrown by core components of OpenOffice.org Base will contain
             a standardized prefix &quot;[OOoBase]&quot; in every message.
 
@@ -136,7 +136,7 @@ namespace connectivity
 
         /** returns the prefix which is used for OpenOffice.org Base's error messages
 
-            As specified in the <type scope="com::sun::star::sdb">ErrorCondition</type> type,
+            As specified in the com::sun::star::sdb::ErrorCondition type,
             error messages thrown by core components of OpenOffice.org Base will
             contain a standardized prefix in every message. <code>getBaseErrorMessagePrefix</code>
             returns this prefix, so clients of such error messages might decide to strip this
@@ -223,7 +223,7 @@ namespace connectivity
                         ) const;
 
         /** raises a typed exception, that is, a UNO exception which is derived from
-            <type scope="com::sun::star::sdbc">SQLException</type>
+            com::sun::star::sdbc::SQLException
 
             @param  _eCondition
                 the ErrorCondition which hit you
@@ -234,7 +234,7 @@ namespace connectivity
 
             @param _rExceptionType
                 the type of the exception to throw. This type <em>must</em> specify
-                an exception class derived from <type scope="com::sun::star::sdbc">SQLException</type>.
+                an exception class derived from com::sun::star::sdbc::SQLException.
 
             @param _rParamValue1
                 a runtime-dependent value which should be filled into the error message
@@ -253,7 +253,7 @@ namespace connectivity
 
             @throws ::std::bad_cast
                 if <arg>_rExceptionType</arg> does not specify an exception class derived from
-                <type scope="com::sun::star::sdbc">SQLException</type>.
+                com::sun::star::sdbc::SQLException.
 
             @see getErrorMessage
             @see getErrorCode

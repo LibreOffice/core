@@ -62,7 +62,7 @@ namespace svt
                                     ,   com::sun::star::lang::XInitialization
                                     >   OGenericUnoDialogBase;
 
-    /** abstract base class for implementing UNO objects representing dialogs (<type scope="com.sun.star.awt">XDialog</type>)
+    /** abstract base class for implementing UNO objects representing dialogs (com.sun.star.awt::XDialog)
     */
     class SVT_DLLPUBLIC OGenericUnoDialog
             :public OGenericUnoDialogBase
@@ -135,10 +135,10 @@ namespace svt
         virtual void executedDialog(sal_Int16 /*_nExecutionResult*/) { }
 
         /** smaller form of <method>initialize</method>.<p/>
-            The <method>initialize</method> method is called with a sequence of <type scope="com.sun.star.uno">Any</type>'s,
+            The <method>initialize</method> method is called with a sequence of com.sun.star.uno::Any's,
             which is split up into the single elements, which are passed to implInitialize. The default implementation
-            tries to exract an <type scope="com.sun.star.beans">PropertyValue</type> from the value an pass it to the
-            <type scope="com.sun.star.beans">XPropertySet</type> interface of the object.
+            tries to exract an com.sun.star.beans::PropertyValue from the value an pass it to the
+            com.sun.star.beans::XPropertySet interface of the object.
         */
         virtual void implInitialize(const com::sun::star::uno::Any& _rValue);
 

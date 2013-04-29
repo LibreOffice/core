@@ -131,7 +131,7 @@ namespace comphelper
     //=========================================================================
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::task::XInteractionRequest
                                     >   OInteractionRequest_Base;
-    /** implements an interaction request (<type scope="com.sun.star.task">XInteractionRequest</type>)<p/>
+    /** implements an interaction request (com.sun.star.task::XInteractionRequest)<p/>
         at run time, you can freely add any interaction continuation objects
     */
     class COMPHELPER_DLLPUBLIC OInteractionRequest : public OInteractionRequest_Base

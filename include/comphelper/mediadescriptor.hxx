@@ -30,7 +30,7 @@ namespace com { namespace sun { namespace star { namespace io {
 
 namespace comphelper{
 
-/** @short  can be used to work with a <type scope="::com::sun::star::document">MediaDescriptor</type>
+/** @short  can be used to work with a ::com::sun::star::document::MediaDescriptor
             struct.
 
     @descr  It wraps a ::boost::unordered_map around the Sequence< css::beans::PropertyValue >, which

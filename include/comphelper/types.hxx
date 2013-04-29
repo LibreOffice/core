@@ -135,7 +135,7 @@ namespace comphelper
     */
     COMPHELPER_DLLPUBLIC starawt::FontDescriptor    getDefaultFont();
 
-    /** examine a sequence for the <type scope="com.sun.star.uno">Type</type> of it's elements.
+    /** examine a sequence for the com.sun.star.uno::Type of it's elements.
     */
     COMPHELPER_DLLPUBLIC staruno::Type getSequenceElementType(const staruno::Type& _rSequenceType);
 

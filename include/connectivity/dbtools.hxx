@@ -222,9 +222,9 @@ namespace dbtools
     /** get fields for a result set given by a "command descriptor"
 
         <p>A command descriptor here means:
-        <ul><li>a SDB-level connection (<type scope="com.sun.star.sdb">Connection</type></li>
+        <ul><li>a SDB-level connection (com.sun.star.sdb::Connection</li>
             <li>a string specifying the name of an object relative to the connection</li>
-            <li>a <type scope="com.sun.star.sdb">CommandType</type> value specifying the type
+            <li>a com.sun.star.sdb::CommandType value specifying the type
                 of the object</type></li>
         </ul>
         </p>
@@ -272,9 +272,9 @@ namespace dbtools
     /** get fields for a result set given by a "command descriptor"
 
         <p>A command descriptor here means:
-        <ul><li>a SDB-level connection (<type scope="com.sun.star.sdb">Connection</type></li>
+        <ul><li>a SDB-level connection (com.sun.star.sdb::Connection</li>
             <li>a string specifying the name of an object relative to the connection</li>
-            <li>a <type scope="com.sun.star.sdb">CommandType</type> value specifying the type
+            <li>a com.sun.star.sdb::CommandType value specifying the type
                 of the object</type></li>
         </ul>
         </p>
@@ -409,10 +409,10 @@ namespace dbtools
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>()
     );
 
-    /** create an <type scope="com::sun::star::sdb">XSingleSelectQueryComposer</type> which represents
+    /** create an com::sun::star::sdb::XSingleSelectQueryComposer which represents
         the current settings (Command/CommandType/Filter/Order) of the given rowset.
 
-        As such an instance can be obtained from a <type scope="com::sun::star::sdb">Connection</type>
+        As such an instance can be obtained from a com::sun::star::sdb::Connection
         only the function searches for the connection the RowSet is using via connectRowset.
         This implies that a connection will be set on the RowSet if needed.
         (need to changes this sometimes ...)
@@ -564,7 +564,7 @@ namespace dbtools
 
 
     /** ask the user for parameters if the prepared statement needs some and sets them in the prepared statement
-        @param _xConnection     the connection must be able to create <type scope="com::sun::star::sdb">SingleSelectQueryComposer</type>s
+        @param _xConnection     the connection must be able to create com::sun::star::sdb::SingleSelectQueryComposers
         @param _xPreparedStmt   the prepared statement where the parameters could be set when needed
         @param _aParametersSet  contains which parameters have to asked for and which already have set.
     */

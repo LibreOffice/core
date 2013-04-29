@@ -52,7 +52,7 @@ namespace svt
             an SvStream for this image.
 
             This method works for arbitrary URLs denoting an image, since the
-            <type scope="com::sun::star::graphics">GraphicsProvider</type> service is used
+            com::sun::star::graphics::GraphicsProvider service is used
             to resolve the URL. However, obtaining the stream is expensive (since
             the image must be copied), so you are strongly encouraged to only use it
             when you know that the image is small enough.
@@ -63,7 +63,7 @@ namespace svt
                 );
 
         /** for a given URL of an image within a resource ( or an image specified by a vnd.sun.star.GraphicObject scheme URL ), this method retrieves
-            an <type scope="com::sun::star::io">XInputStream</type> for this image.
+            an com::sun::star::io::XInputStream for this image.
         */
         SVT_DLLPUBLIC static  ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
                 getImageXStream(

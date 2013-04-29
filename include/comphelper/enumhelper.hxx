@@ -51,8 +51,8 @@ struct OEnumerationLock
 //==================================================================
 //= OEnumerationByName
 //==================================================================
-/** provides an <type scope="com.sun.star.container">XEnumeration</type> access based
-    on an object implementing the <type scope="com.sun.star.container">XNameAccess</type> interface
+/** provides an com.sun.star.container::XEnumeration access based
+    on an object implementing the com.sun.star.container::XNameAccess interface
 */
 class COMPHELPER_DLLPUBLIC OEnumerationByName : private OEnumerationLock
                          , public ::cppu::WeakImplHelper2< starcontainer::XEnumeration ,
@@ -83,8 +83,8 @@ private:
 //==================================================================
 //= OEnumerationByIndex
 //==================================================================
-/** provides an <type scope="com.sun.star.container">XEnumeration</type> access based
-    on an object implementing the <type scope="com.sun.star.container">XNameAccess</type> interface
+/** provides an com.sun.star.container::XEnumeration access based
+    on an object implementing the com.sun.star.container::XNameAccess interface
 */
 class COMPHELPER_DLLPUBLIC OEnumerationByIndex : private OEnumerationLock
                           , public ::cppu::WeakImplHelper2< starcontainer::XEnumeration ,
@@ -112,7 +112,7 @@ private:
 //==================================================================
 //= OAnyEnumeration
 //==================================================================
-/** provides an <type scope="com.sun.star.container">XEnumeration</type>
+/** provides an com.sun.star.container::XEnumeration
     for an outside set vector of Any's.
 
 */

@@ -108,7 +108,7 @@ class SequenceAsVector : public ::std::vector< TElementType >
             @param      aSource
                         this any must contain a suitable sequence. :-)
 
-            @throw      A <type scope="com::sun::star::beans">IllegalTypeException</type>
+            @throw      A com::sun::star::beans::IllegalTypeException
                         if an unsupported element inside this Any
                         is given. An empty Any reset this instance!
          */
@@ -147,7 +147,7 @@ class SequenceAsVector : public ::std::vector< TElementType >
             @param      aSource
                         this any must contain a suitable sequence. :-)
 
-            @throw      A <type scope="com::sun::star::beans">IllegalTypeException</type>
+            @throw      A com::sun::star::beans::IllegalTypeException
                         if an unsupported element inside this Any
                         is given. An empty Any reset this instance!
          */

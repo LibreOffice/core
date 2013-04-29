@@ -29,7 +29,7 @@ namespace utl
     //====================================================================
     //= ITerminationListener
     //====================================================================
-    /** non-UNO version of the <type scope="com.sun.star.frame">XTerminateListener</type>
+    /** non-UNO version of the com.sun.star.frame::XTerminateListener
     */
     class ITerminationListener
     {

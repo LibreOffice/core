@@ -59,7 +59,7 @@ namespace svx
     //====================================================================
     //= ODataAccessDescriptor
     //====================================================================
-    /** class encapsulating the <type scope="com::sun::star::sdb">DataAccessDescriptor</type> service.
+    /** class encapsulating the com::sun::star::sdb::DataAccessDescriptor service.
     */
     class SVX_DLLPUBLIC ODataAccessDescriptor
     {

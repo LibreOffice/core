@@ -67,7 +67,7 @@ namespace comphelper
     class EventLogger_Impl;
     typedef ::boost::optional< OUString >    OptionalString;
 
-    /** encapsulates an <type scope="com::sun::star::logging">XLogger</type>
+    /** encapsulates an com::sun::star::logging::XLogger
 
         The class silences several (unlikely) errors which could potentially happen
         when working with a logger. Additionally, it provides some convenience methods

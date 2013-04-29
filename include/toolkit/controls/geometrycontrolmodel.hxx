@@ -209,7 +209,7 @@ namespace com { namespace sun { namespace star {
     //====================================================================
     //= OCommonGeometryControlModel
     //====================================================================
-    /** allows to extend an arbitrary <type scope="com.sun.star.awt">UnoControlModel</type> with geometry
+    /** allows to extend an arbitrary com.sun.star.awt::UnoControlModel with geometry
         information.
     */
     class OCommonGeometryControlModel
@@ -224,7 +224,7 @@ namespace com { namespace sun { namespace star {
         /** instantiate the model
 
             @param _rxAgg
-                the instance to aggregate. Must support the <type scope="com.sun.star.awt">UnoControlModel</type>
+                the instance to aggregate. Must support the com.sun.star.awt::UnoControlModel
                 (this is not checked here)
         */
         OCommonGeometryControlModel(

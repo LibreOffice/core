@@ -36,7 +36,7 @@ namespace comphelper
     //= OfficeResourceBundle
     //====================================================================
     class ResourceBundle_Impl;
-    /** wraps the <type scope="com::sun::star::resource">OfficeResourceAccess</type> service
+    /** wraps the com::sun::star::resource::OfficeResourceAccess service
     */
     class COMPHELPER_DLLPUBLIC OfficeResourceBundle
     {

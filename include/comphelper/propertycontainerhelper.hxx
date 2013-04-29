@@ -38,7 +38,7 @@ struct COMPHELPER_DLLPUBLIC PropertyDescription
     enum LocationType
     {
         ltDerivedClassRealType,     // within the derived class, it's a "real" (non-Any) type
-        ltDerivedClassAnyType,      // within the derived class, it's a <type scope="com.sun.star.uno">Any</type>
+        ltDerivedClassAnyType,      // within the derived class, it's a com.sun.star.uno::Any
         ltHoldMyself                // within m_aHoldProperties
     };
     // the location of an object holding a property value :

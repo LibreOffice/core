@@ -110,7 +110,7 @@ namespace xmloff
             <p>This method will collect all form layer related data of the given draw page</p>
 
             @param _rxDrawPage
-                the draw page to examine. The object will be queried for a <type scope="com.sun.star.form">XFormsSupplier</type>
+                the draw page to examine. The object will be queried for a com.sun.star.form::XFormsSupplier
                 interface to obtain the forms container.
         */
         void examineForms(const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage);
@@ -131,7 +131,7 @@ namespace xmloff
             you have to start the Forms element yourself.</p>
 
             @param  _rxDrawPage
-                the draw page to examine. The object will be queried for a <type scope="com.sun.star.form">XFormsSupplier</type>
+                the draw page to examine. The object will be queried for a com.sun.star.form::XFormsSupplier
                 interface to obtain the forms container.
         */
         void exportForms(const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage);

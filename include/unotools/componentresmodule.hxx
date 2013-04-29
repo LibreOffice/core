@@ -38,7 +38,7 @@ namespace utl
     //====================================================================
     //= OComponentResourceModule
     //====================================================================
-    /** extends the <type scope="comphelper">OModule</type> implementation with
+    /** extends the comphelper::OModule implementation with
         simply resource access
     */
     class UNOTOOLS_DLLPUBLIC OComponentResourceModule : public ::comphelper::OModule

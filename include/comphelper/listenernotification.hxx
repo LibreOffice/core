@@ -160,9 +160,9 @@ namespace comphelper
         This class is not threadsafe!
 
         @param LISTENER
-            the listener class to call, e.g. <type scope="com::sun::star::lang">XEventListener</type>
+            the listener class to call, e.g. com::sun::star::lang::XEventListener
         @param EVENT
-            the event type to notify, e.g. <type scope="com::sun::star::lang">EventObject</type>
+            the event type to notify, e.g. com::sun::star::lang::EventObject
     */
     template< class LISTENER, class EVENT >
     class OSimpleListenerContainer : protected OListenerContainer

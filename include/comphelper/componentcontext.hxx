@@ -52,7 +52,7 @@ namespace comphelper
 
         /** constructs an instance
             @param _rxLegacyFactory
-                the legacy service factor to obtain the <type scope="com::sun::star::uno">XComponentContext</type> from
+                the legacy service factor to obtain the com::sun::star::uno::XComponentContext from
             @throws ::com::sun::star::uno::RuntimeException
                 if the given factory or does not have a DefaultContext property to obtain
                 a component context

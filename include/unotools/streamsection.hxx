@@ -50,13 +50,13 @@ class OStreamSection
 public:
     /** starts reading of a "skippable" section of data within the given input stream<BR>
         @param      _rxInput    the stream to read from. Must support the
-                                <type scope="com::sun::star::io">XMarkableStream</type> interface
+                                com::sun::star::io::XMarkableStream interface
     */
     OStreamSection(const staruno::Reference< stario::XDataInputStream >& _rxInput);
 
     /** starts writing of a "skippable" section of data into the given output stream
         @param      _rxOutput           the stream the stream to write to. Must support the
-                                        <type scope="com::sun::star::io">XMarkableStream</type> interface
+                                        com::sun::star::io::XMarkableStream interface
         @param      _nPresumedLength    estimation for the length of the upcoming section. If greater 0, this
                                         value will be written as section length and corrected (in the dtor) only if
                                         needed. If you know how much bytes you are about to write, you may

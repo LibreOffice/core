@@ -37,7 +37,7 @@ namespace comphelper
         /** creates a ComponentBase instance
 
             The instance is not initialized. As a consequence, every ComponentMethodGuard instantiated for
-            this component will throw a <type scope="com::sun::star::lang">NotInitializedException</type>,
+            this component will throw a com::sun::star::lang::NotInitializedException,
             until ->setInitialized() is called.
         */
         ComponentBase( ::cppu::OBroadcastHelper& _rBHelper )
