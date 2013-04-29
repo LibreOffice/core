@@ -3063,8 +3063,8 @@ bool ScFormulaCell::InterpretFormulaGroup()
                 case svSingleVectorRef:
                 {
                     const formula::SingleVectorRefToken* p2 = static_cast<const formula::SingleVectorRefToken*>(p);
-                    const formula::VectorArray& rArray = p2->GetArray();
-                    aCode2.AddDouble(rArray.mpArray[i]);
+                    const double* pArray = p2->GetArray();
+                    aCode2.AddDouble(pArray[i]);
                 }
                 break;
                 case svDoubleVectorRef:

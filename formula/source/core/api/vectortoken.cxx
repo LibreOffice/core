@@ -11,24 +11,26 @@
 
 namespace formula {
 
-VectorArray::VectorArray( const double* pArray, size_t nLength ) :
-    mpArray(pArray), mnLength(nLength) {}
-
 SingleVectorRefToken::SingleVectorRefToken( const double* pArray, size_t nLength ) :
-    FormulaToken(svSingleVectorRef, ocPush), maArray(pArray, nLength) {}
+    FormulaToken(svSingleVectorRef, ocPush), mpArray(pArray), mnLength(nLength) {}
 
 FormulaToken* SingleVectorRefToken::Clone() const
 {
-    return new SingleVectorRefToken(maArray.mpArray, maArray.mnLength);
+    return new SingleVectorRefToken(mpArray, mnLength);
 }
 
-const VectorArray& SingleVectorRefToken::GetArray() const
+const double* SingleVectorRefToken::GetArray() const
 {
-    return maArray;
+    return mpArray;
+}
+
+size_t SingleVectorRefToken::GetLength() const
+{
+    return mnLength;
 }
 
 DoubleVectorRefToken::DoubleVectorRefToken(
-    const std::vector<VectorArray>& rArrays, size_t nRowSize, bool bAbsStart, bool bAbsEnd ) :
+    const std::vector<const double*>& rArrays, size_t nRowSize, bool bAbsStart, bool bAbsEnd ) :
     FormulaToken(svDoubleVectorRef, ocPush),
     maArrays(rArrays), mnRowSize(nRowSize), mbAbsStart(bAbsStart), mbAbsEnd(bAbsEnd) {}
 
@@ -37,7 +39,7 @@ FormulaToken* DoubleVectorRefToken::Clone() const
     return new DoubleVectorRefToken(maArrays, mnRowSize, mbAbsStart, mbAbsEnd);
 }
 
-const std::vector<VectorArray>& DoubleVectorRefToken::GetArrays() const
+const std::vector<const double*>& DoubleVectorRefToken::GetArrays() const
 {
     return maArrays;
 }

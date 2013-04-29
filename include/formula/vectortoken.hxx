@@ -14,23 +14,18 @@
 
 namespace formula {
 
-struct VectorArray
+class FORMULA_DLLPUBLIC SingleVectorRefToken : public FormulaToken
 {
     const double* mpArray;
     size_t mnLength;
 
-    VectorArray( const double* pArray, size_t nLength );
-};
-
-class FORMULA_DLLPUBLIC SingleVectorRefToken : public FormulaToken
-{
-    const VectorArray maArray;
 public:
     SingleVectorRefToken( const double* pArray, size_t nLength );
 
     virtual FormulaToken* Clone() const;
 
-    const VectorArray& GetArray() const;
+    const double* GetArray() const;
+    size_t GetLength() const;
 };
 
 /**
@@ -39,7 +34,7 @@ public:
  */
 class FORMULA_DLLPUBLIC DoubleVectorRefToken : public FormulaToken
 {
-    std::vector<VectorArray> maArrays;
+    std::vector<const double*> maArrays;
 
     size_t mnRowSize;
 
@@ -48,11 +43,11 @@ class FORMULA_DLLPUBLIC DoubleVectorRefToken : public FormulaToken
 
 public:
     DoubleVectorRefToken(
-        const std::vector<VectorArray>& rArrays, size_t nRowSize, bool bAbsStart, bool bAbsEnd );
+        const std::vector<const double*>& rArrays, size_t nRowSize, bool bAbsStart, bool bAbsEnd );
 
     virtual FormulaToken* Clone() const;
 
-    const std::vector<VectorArray>& GetArrays() const;
+    const std::vector<const double*>& GetArrays() const;
 };
 
 }
