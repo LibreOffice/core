@@ -80,6 +80,7 @@ SdrModel& sharedModelAndVDev::getSharedSdrModel()
         mpSdrModel = new SdrModel();
         OSL_ENSURE(0 != mpSdrModel, "XPropertyList sharedModelAndVDev: no SdrModel created!" );
         mpSdrModel->GetItemPool().FreezeIdRanges();
+        mpSdrModel->SetAutomaticXPropertyListCreation(false);
     }
 
     return *mpSdrModel;

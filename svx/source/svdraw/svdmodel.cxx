@@ -150,7 +150,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     bPageNotValid=sal_False;
     bSavePortable=sal_False;
     bSaveCompressed=sal_False;
-    bSaveNative=sal_False;
+    mbAutomaticXPropertyListCreation=true;
     bSwapGraphics=sal_False;
     nSwapGraphicsMode=SDR_SWAPGRAPHICSMODE_DEFAULT;
     bSaveOLEPreview=sal_False;
@@ -212,8 +212,6 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
 
     pHitTestOutliner = SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, this );
     ImpSetOutlinerDefaults(pHitTestOutliner, sal_True);
-
-    ImpCreateTables();
 }
 
 SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, sal_Bool bLoadRefCounts):
@@ -330,13 +328,6 @@ SdrModel::~SdrModel()
 
     delete mpImpl->mpUndoFactory;
     delete mpImpl;
-
-    maColorTable.reset();
-    maDashList.reset();
-    maLineEndList.reset();
-    maHatchList.reset();
-    maGradientList.reset();
-    maBitmapList.reset();
 }
 
 bool SdrModel::IsInDestruction() const
@@ -721,16 +712,6 @@ bool SdrModel::IsUndoEnabled() const
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void SdrModel::ImpCreateTables()
-{
-    maColorTable = XPropertyListFactory::CreateSharedXColorList(aTablePath);
-    maDashList = XPropertyListFactory::CreateSharedXDashList(aTablePath);
-    maLineEndList = XPropertyListFactory::CreateSharedXLineEndList(aTablePath);
-    maHatchList = XPropertyListFactory::CreateSharedXHatchList(aTablePath);
-    maGradientList = XPropertyListFactory::CreateSharedXGradientList(aTablePath);
-    maBitmapList = XPropertyListFactory::CreateSharedXBitmapList(aTablePath);
-}
 
 // #116168#
 void SdrModel::ClearModel(sal_Bool bCalledFromDestructor)
@@ -2141,6 +2122,11 @@ void SdrModel::SetColorTableAtSdrModel(XColorListSharedPtr aTable)
 
 XColorListSharedPtr SdrModel::GetColorTableFromSdrModel() const
 {
+    if(IsAutomaticXPropertyListCreation() && !maColorTable.get())
+    {
+        const_cast< SdrModel* >(this)->maColorTable = XPropertyListFactory::CreateSharedXColorList(aTablePath);
+    }
+
     return maColorTable;
 }
 
@@ -2151,6 +2137,11 @@ void SdrModel::SetDashListAtSdrModel(XDashListSharedPtr aList)
 
 XDashListSharedPtr SdrModel::GetDashListFromSdrModel() const
 {
+    if(IsAutomaticXPropertyListCreation() && !maDashList.get())
+    {
+        const_cast< SdrModel* >(this)->maDashList = XPropertyListFactory::CreateSharedXDashList(aTablePath);
+    }
+
     return maDashList;
 }
 
@@ -2161,6 +2152,11 @@ void SdrModel::SetLineEndListAtSdrModel(XLineEndListSharedPtr aList)
 
 XLineEndListSharedPtr SdrModel::GetLineEndListFromSdrModel() const
 {
+    if(IsAutomaticXPropertyListCreation() && !maLineEndList.get())
+    {
+        const_cast< SdrModel* >(this)->maLineEndList = XPropertyListFactory::CreateSharedXLineEndList(aTablePath);
+    }
+
     return maLineEndList;
 }
 
@@ -2171,6 +2167,11 @@ void SdrModel::SetHatchListAtSdrModel(XHatchListSharedPtr aList)
 
 XHatchListSharedPtr SdrModel::GetHatchListFromSdrModel() const
 {
+    if(IsAutomaticXPropertyListCreation() && !maHatchList.get())
+    {
+        const_cast< SdrModel* >(this)->maHatchList = XPropertyListFactory::CreateSharedXHatchList(aTablePath);
+    }
+
     return maHatchList;
 }
 
@@ -2181,6 +2182,11 @@ void SdrModel::SetGradientListAtSdrModel(XGradientListSharedPtr aList)
 
 XGradientListSharedPtr SdrModel::GetGradientListFromSdrModel() const
 {
+    if(IsAutomaticXPropertyListCreation() && !maGradientList.get())
+    {
+        const_cast< SdrModel* >(this)->maGradientList = XPropertyListFactory::CreateSharedXGradientList(aTablePath);
+    }
+
     return maGradientList;
 }
 
@@ -2191,6 +2197,11 @@ void SdrModel::SetBitmapListAtSdrModel(XBitmapListSharedPtr aList)
 
 XBitmapListSharedPtr SdrModel::GetBitmapListFromSdrModel() const
 {
+    if(IsAutomaticXPropertyListCreation() && !maBitmapList.get())
+    {
+        const_cast< SdrModel* >(this)->maBitmapList = XPropertyListFactory::CreateSharedXBitmapList(aTablePath);
+    }
+
     return maBitmapList;
 }
 
