@@ -615,7 +615,14 @@ void SAL_CALL ScVbaControl::setTabIndex( sal_Int32 /*nTabIndex*/ ) throw (uno::R
         case form::FormComponentType::COMBOBOX:
             return new ScVbaComboBox( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
         case form::FormComponentType::COMMANDBUTTON:
-            return new ScVbaButton( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
+        {
+            sal_Bool bToggle = sal_False;
+            xProps->getPropertyValue( "Toggle" ) >>= bToggle;
+            if ( bToggle )
+                return new ScVbaToggleButton( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
+            else
+                return new ScVbaButton( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
+        }
         case form::FormComponentType::FIXEDTEXT:
             return new ScVbaLabel( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
         case form::FormComponentType::TEXTFIELD:
