@@ -65,6 +65,8 @@ class Window;
 class SdPage;
 class TabPage;
 class ViewShell;
+class XColorList;
+typedef ::boost::shared_ptr< XColorList > XColorListSharedPtr;
 
 class AbstractCopyDlg : public VclAbstractDialog  //add for CopyDlg
 {

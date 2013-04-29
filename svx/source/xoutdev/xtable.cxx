@@ -159,9 +159,10 @@ long XPropertyList::Count() const
 {
     if( mbListDirty )
     {
-        // ( (XPropertyList*) this )->bListDirty = sal_False; <- im Load()
-        if( !( (XPropertyList*) this )->Load() )
-            ( (XPropertyList*) this )->Create();
+        if(!const_cast< XPropertyList* >(this)->Load())
+        {
+            const_cast< XPropertyList* >(this)->Create();
+        }
     }
 
     return maContent.size();
@@ -177,11 +178,15 @@ XPropertyEntry* XPropertyList::Get( long nIndex ) const
 {
     if( mbListDirty )
     {
-        if( !( (XPropertyList*) this )->Load() )
-            ( (XPropertyList*) this )->Create();
+        if(!const_cast< XPropertyList* >(this)->Load())
+        {
+            const_cast< XPropertyList* >(this)->Create();
+        }
     }
 
-    if(nIndex >= maContent.size())
+    const long nObjectCount(maContent.size());
+
+    if(nIndex >= nObjectCount)
     {
         return 0;
     }
@@ -199,8 +204,10 @@ long XPropertyList::GetIndex(const XubString& rName) const
 {
     if( mbListDirty )
     {
-        if( !( (XPropertyList*) this )->Load() )
-            ( (XPropertyList*) this )->Create();
+        if(!const_cast< XPropertyList* >(this)->Load())
+        {
+            const_cast< XPropertyList* >(this)->Create();
+        }
     }
 
     ::std::vector< XPropertyEntry* >::const_iterator aStart(maContent.begin());
@@ -254,7 +261,9 @@ void XPropertyList::Insert( XPropertyEntry* pEntry, long nIndex )
 {
     if(pEntry)
     {
-        if(nIndex >= maContent.size())
+        const long nObjectCount(maContent.size());
+
+        if(nIndex >= nObjectCount)
         {
             maContent.push_back(pEntry);
         }
@@ -277,7 +286,9 @@ XPropertyEntry* XPropertyList::Replace( XPropertyEntry* pEntry, long nIndex )
 
     if(pEntry)
     {
-        if(nIndex < maContent.size())
+        const long nObjectCount(maContent.size());
+
+        if(nIndex < nObjectCount)
         {
             pRetval = maContent[nIndex];
             maContent[nIndex] = pEntry;
@@ -296,10 +307,11 @@ XPropertyEntry* XPropertyList::Replace( XPropertyEntry* pEntry, long nIndex )
 XPropertyEntry* XPropertyList::Remove( long nIndex )
 {
     XPropertyEntry* pRetval = 0;
+    const long nObjectCount(maContent.size());
 
-    if(nIndex < maContent.size())
+    if(nIndex < nObjectCount)
     {
-        if(nIndex + 1 == maContent.size())
+        if(nIndex + 1 == nObjectCount)
         {
             pRetval = maContent.back();
             maContent.pop_back();
