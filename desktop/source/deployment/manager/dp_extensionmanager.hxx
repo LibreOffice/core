@@ -277,7 +277,7 @@ private:
 
     css::uno::Reference<css::deployment::XPackageManager>
     getPackageManager(OUString const & repository)
-        throw (css::lang::IllegalArgumentException);
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
 
     bool doChecksForAddExtension(
         css::uno::Reference<css::deployment::XPackageManager> const & xPackageMgr,

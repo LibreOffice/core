@@ -212,7 +212,7 @@ Reference<task::XAbortChannel> ExtensionManager::createAbortChannel()
 
 css::uno::Reference<css::deployment::XPackageManager>
 ExtensionManager::getPackageManager(OUString const & repository)
-    throw (css::lang::IllegalArgumentException)
+    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
 {
     Reference<deploy::XPackageManager> xPackageManager;
     if (repository == "user")

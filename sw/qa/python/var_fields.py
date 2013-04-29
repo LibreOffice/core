@@ -113,7 +113,7 @@ class TestVarFields(unittest.TestCase):
         xDoc.refresh()
         # 18. store document
         url = os.path.join(os.environ["TestUserDir"], "VarFields.odt")
-        #xDoc.storeToURL(url, tuple(list(range(0))))
+        xDoc.storeToURL(url, tuple(list(range(0))))
         # 19. retrieve the section
         xPropSet = xDoc.getTextSections().getByIndex(0)
         # 20. retrieve the condition property of that section
