@@ -395,16 +395,69 @@ extern "C" typelib_TypeClass cpp_vtable_call(
 }
 
 //==================================================================================================
-extern "C" void privateSnippetExecutor( ... );
 
-const int codeSnippetSize = 24;
+// privateSnippetExecutor() is only called by the trampolines created by codeSnippet()
+//
+// it saves all the registers used for parameter passing in the x86_64 ABI.
+// Then it uses them to provide the parameters to its cpp_vtable_call() and
+// to handle the return value.
+//
+// This method makes assumptions about the stack layout of the stack frame above!
+
+extern "C" void privateSnippetExecutor( void )
+{
+    asm volatile (
+    "subq   $160, %%rsp\n\t"
+    "movq   %%r10, -152(%%rbp)\n\t"     // Save (nVtableOffset << 32) + nFunctionIndex
+
+    "movq   %%rdi, -112(%%rbp)\n\t"     // Save GP registers
+    "movq   %%rsi, -104(%%rbp)\n\t"
+    "movq   %%rdx, -96(%%rbp)\n\t"
+    "movq   %%rcx, -88(%%rbp)\n\t"
+    "movq   %%r8 , -80(%%rbp)\n\t"
+    "movq   %%r9 , -72(%%rbp)\n\t"
+
+    "movsd  %%xmm0, -64(%%rbp)\n\t"     // Save FP registers
+    "movsd  %%xmm1, -56(%%rbp)\n\t"
+    "movsd  %%xmm2, -48(%%rbp)\n\t"
+    "movsd  %%xmm3, -40(%%rbp)\n\t"
+    "movsd  %%xmm4, -32(%%rbp)\n\t"
+    "movsd  %%xmm5, -24(%%rbp)\n\t"
+    "movsd  %%xmm6, -16(%%rbp)\n\t"
+    "movsd  %%xmm7, -8(%%rbp)\n\t"
+
+    "leaq   -144(%%rbp), %%r9\n\t"      // 6th param: sal_uInt64* pRegisterReturn
+    "leaq   16(%%rbp), %%r8\n\t"        // 5rd param: void** ovrflw
+    "leaq   -64(%%rbp), %%rcx\n\t"      // 4th param: void** fpreg
+    "leaq   -112(%%rbp), %%rdx\n\t"     // 3rd param: void** gpreg
+    "movl   -148(%%rbp), %%esi\n\t"     // 2nd param: sal_int32 nVtableOffset
+    "movl   -152(%%rbp), %%edi\n\t"     // 1st param: sal_int32 nFunctionIndex
+
+    "call   _cpp_vtable_call\n\t"
+
+    "cmp    $10, %%rax\n\t"             // typelib_TypeClass_FLOAT
+    "je .Lfloat\n\t"
+    "cmp    $11, %%rax\n\t"             // typelib_TypeClass_DOUBLE
+    "je .Lfloat\n\t"
+
+    "movq   -144(%%rbp), %%rax\n\t"     // Return value (int case)
+    "movq   -136(%%rbp), %%rdx\n\t"     // Return value (int case)
+    "movq   -144(%%rbp), %%xmm0\n\t"    // Return value (int case)
+    "movq   -136(%%rbp), %%xmm1\n\t"    // Return value (int case)
+    "jmp    .Lfinish\n"
+".Lfloat:\n\t"
+    "movlpd -144(%%rbp), %%xmm0\n"      // Return value (float/double case)
+".Lfinish:\n\t"
+    "addq   $160, %%rsp\n"
+    :
+    :
+    : "rax", "xmm0" );
+}
+
+static const int codeSnippetSize = 24;
 
 // Generate a trampoline that redirects method calls to
 // privateSnippetExecutor().
-//
-// privateSnippetExecutor() saves all the registers that are used for
-// parameter passing on x86_64, and calls the cpp_vtable_call().
-// When it returns, privateSnippetExecutor() sets the return value.
 //
 // Note: The code snippet we build here must not create a stack frame,
 // otherwise the UNO exceptions stop working thanks to non-existing
@@ -462,10 +515,11 @@ bridges::cpp_uno::shared::VtableFactory::initializeBlock(
 //==================================================================================================
 
 unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
-    Slot ** slots, unsigned char * code, sal_PtrDiff writetoexecdiff,
+    Slot ** slots, unsigned char * code, /*sal_PtrDiff writetoexecdiff,*/
     typelib_InterfaceTypeDescription const * type, sal_Int32 nFunctionOffset,
     sal_Int32 functionCount, sal_Int32 nVtableOffset )
 {
+    static const sal_PtrDiff writetoexecdiff = 0;
     (*slots) -= functionCount;
     Slot * s = *slots;
     for ( sal_Int32 nPos = 0; nPos < type->nMembers; ++nPos )
