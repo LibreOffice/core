@@ -169,15 +169,14 @@ published interface XCharacterClassification : com::sun::star::uno::XInterface
             A set of additionally allowed characters a name or
             identifier may continue with.
 
-        @example:C++
-        <listing>
+        @code{.cpp}
             using namespace ::com::sun::star::i18n;
             // First character of an identifier may be any alphabetic or underscore.
             sal_Int32 nStartFlags = KParseTokens::ANY_ALPHA | KParseTokens::ASC_UNDERSCORE;
             // Continuing characters may be any alphanumeric or underscore or dot.
             sal_Int32 nContFlags = KParseTokens::ANY_ALNUM | KParseTokens::ASC_UNDERSCORE | KParseTokens::ASC_DOT;
             // No further characters assumed to be contained in an identifier
-            String aEmptyString;
+            OUString aEmptyString;
             // Parse any token.
             ParseResult rRes = xCC->parseAnyToken( aText, nPos, aLocale,
                 nStartFlags, aEmptyString, nContFlags, aEmptyString );
@@ -185,16 +184,16 @@ published interface XCharacterClassification : com::sun::star::uno::XInterface
             if ( rRes.TokenType & (KParseType::ASC_NUMBER | KParseType::UNI_NUMBER) )
                 fValue = rRes.Value;
             if ( rRes.TokenType & KParseType::IDENTNAME )
-                aName = aText.Copy( nPos, rRes.EndPos - nPos );
+                aName = aText.copy( nPos, rRes.EndPos - nPos );
             else if ( rRes.TokenType & KParseType::SINGLE_QUOTE_NAME )
                 aName = rRes.DequotedNameOrString;
             else if ( rRes.TokenType & KParseType::DOUBLE_QUOTE_STRING )
                 aString = rRes.DequotedNameOrString;
             else if ( rRes.TokenType & KParseType::BOOLEAN )
-                aSymbol = aText.Copy( nPos, rRes.EndPos - nPos );
+                aSymbol = aText.copy( nPos, rRes.EndPos - nPos );
             else if ( rRes.TokenType & KParseType::ONE_SINGLE_CHAR )
-                aSymbol = aText.Copy( nPos, rRes.EndPos - nPos );
-        </listing>
+                aSymbol = aText.copy( nPos, rRes.EndPos - nPos );
+        @endcode
      */
 
     ParseResult parseAnyToken(
@@ -220,26 +219,25 @@ published interface XCharacterClassification : com::sun::star::uno::XInterface
         @param  nTokenType
             One or more of the KParseType constants.
 
-        @example:C++
-        <listing>
+        @code{.cpp}
             // Determine if a given name is a valid name (not quoted) and contains
             // only allowed characters.
             using namespace ::com::sun::star::i18n;
             // First character of an identifier may be any alphanumeric or underscore.
             sal_Int32 nStartFlags = KParseTokens::ANY_ALNUM | KParseTokens::ASC_UNDERSCORE;
             // No further characters assumed to be contained in an identifier start.
-            String aEmptyString;
+            OUString aEmptyString;
             // Continuing characters may be any alphanumeric or underscore.
             sal_Int32 nContFlags = nStartFlags;
             // Additionally, continuing characters may contain a blank.
-            String aContChars( RTL_CONSTASCII_USTRINGPARAM(" ") );
+            OUString aContChars( RTL_CONSTASCII_USTRINGPARAM(" ") );
             // Parse predefined (must be an IDENTNAME) token.
             ParseResult rRes = xCC->parsePredefinedToken( KParseType::IDENTNAME, rName, 0, aLocale,
                 nStartFlags, aEmptyString, nContFlags, aContChars );
             // Test if it is an identifier name and if it only is one
             // and no more else is following it.
             bValid = (rRes.TokenType & KParseType::IDENTNAME) && rRes.EndPos == rName.Len();
-        </listing>
+        @endcode
      */
 
     ParseResult parsePredefinedToken(

@@ -67,27 +67,29 @@ published interface XDispatch: com::sun::star::uno::XInterface
             optional arguments for this request.
             They depend on the real implementation of the dispatch object.
 
-        @example
-            <listing>
-            <i><font COLOR="#949494">// some code for a click-handler (Java)</font></i>
-            void <strong>myOnClick</strong>(<em>String</em> sURL,<em>String</em> sTargetFrame,<em>com.sun.star.beans.PropertyValue[]</em> lArguments)
+            <i>some code for a click-handler (Java)</i>
+            @code{.java}
+            void myOnClick(String sURL,String sTargetFrame,
+                           com.sun.star.beans.PropertyValue[] lArguments)
             {
-            &nbsp;&nbsp;com.sun.star.util.URL[] aURL = new com.sun.star.util.URL[1];
-            &nbsp;&nbsp;aURL[0] = new com.sun.star.util.URL();
-            &nbsp;&nbsp;aURL[0].Complete = sURL;
+                com.sun.star.util.URL[] aURL = new com.sun.star.util.URL[1];
+                aURL[0] = new com.sun.star.util.URL();
+                aURL[0].Complete = sURL;
 
-            &nbsp;&nbsp;com.sun.star.util.XURLTransformer xParser = (com.sun.star.util.XURLTransformer)UnoRuntime.queryInterface(
-            &nbsp;&nbsp;&nbsp;&nbsp;com.sun.star.util.XURLTransformer.class,
-            &nbsp;&nbsp;&nbsp;&nbsp;mxServiceManager.createInstance("com.sun.star.util.URLTransformer"));
+                com.sun.star.util.XURLTransformer xParser =
+                    (com.sun.star.util.XURLTransformer)UnoRuntime.queryInterface(
+                        com.sun.star.util.XURLTransformer.class,
+                        mxServiceManager.createInstance("com.sun.star.util.URLTransformer"));
 
-            &nbsp;&nbsp;xParser.parseStrict(aURL);
+                xParser.parseStrict(aURL);
 
-            &nbsp;&nbsp;com.sun.star.frame.XDispatch xDispatcher = mxFrame.queryDispatch(aURL[0], sTargetFrame, com.sun.star.frame.FrameSearchFlag.GLOBAL);
+                com.sun.star.frame.XDispatch xDispatcher =
+                    mxFrame.queryDispatch(aURL[0], sTargetFrame, com.sun.star.frame.FrameSearchFlag.GLOBAL);
 
-            &nbsp;&nbsp;if(xDispatcher!=null)
-            &nbsp;&nbsp;&nbsp;&nbsp;xDispatcher.dispatch(aURL[0], lArguments);
+                if(xDispatcher!=null)
+                    xDispatcher.dispatch(aURL[0], lArguments);
             }
-            </listing>
+            @endcode
      */
     void dispatch(
         [in] com::sun::star::util::URL URL,

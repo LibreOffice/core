@@ -51,10 +51,10 @@ interface XScript : ::com::sun::star::uno::XInterface {
             <br> the call would look like<br>
             <code>bar.invoke( {"foo", "foo2", "this-is-ignored" }, aOutParamIndex, aOutParam);</code>
             <br> and after the call the out sequences would contain<br>
-            <listing>
+            @code{.py}
             aOutParamIndex={0,2};
             aOutParam={"string from a", "string from c"};
-            </listing>
+            @endcode
 
         @returns
             the value returned from the function being invoked

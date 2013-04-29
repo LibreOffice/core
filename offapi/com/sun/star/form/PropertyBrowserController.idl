@@ -43,8 +43,7 @@
     </ul>
     </p>
 
-    @example Java
-    <listing>
+    @code{.java}
         XFrame xFrame = getNewEmptyFrame();
         XMultiServiceFactory xORB = getORB();
         XPropertySet xControlModel = getMyControlModel();
@@ -62,7 +61,7 @@
             XPropertySet.class, xController );
 
         xControllerProps.setPropertyValue( "IntrospectedObject", xControlModel );
-    </listing>
+    @endcode
 
     @see com::sun::star::frame::XController
 

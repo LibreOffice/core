@@ -33,11 +33,11 @@ module com {  module sun {  module star {  module util {
 /** enables the object to look for specified contents of the object
     (in particular, for a text range which contains a specific string pattern).
 
-    @example
+    Example:
         in a com::sun::star::text::TextDocument:
         set all "search for" to bold using findFirst()/findNext():
 
-    <listing>
+    @code{.bas}
     xSearchDescr = xDocument.createSearchDescriptor()
     xSearchDescr.SearchString = "search for"
     xSearchDescr.SearchCaseSensitive = `TRUE`
@@ -47,7 +47,7 @@ module com {  module sun {  module star {  module util {
     xFound.CharWeight = com.sun.star.awt.FontWeight.BOLD
     xFound = xDocument.findNext( xFound.End, xSearchDescr )
     loop
-    </listing>
+    @endcode
 
  */
 published interface XSearchable: com::sun::star::uno::XInterface

@@ -46,15 +46,14 @@ module com { module sun { module star { module sdb {
     <p>The list of defined error conditions, by nature, is expected to permanently grow,
     so never assume it being finalized.</p>
 
-    @example Java
-    <listing>
+    @code{.java}
     catch ( SQLException e )
     {
-    &nbsp;&nbsp;if ( e.Message.startsWith( "[OOoBase]" ) )
-    &nbsp;&nbsp;&nbsp;&nbsp;if ( e.ErrorCode + ErrorCondition.SOME_ERROR_CONDITION == 0 )
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;handleSomeErrorCondition();
+        if (e.Message.startsWith( "[OOoBase]" ))
+            if (e.ErrorCode + ErrorCondition.SOME_ERROR_CONDITION == 0)
+                handleSomeErrorCondition();
     }
-    </listing>
+    @endcode
  */
 constants ErrorCondition
 {

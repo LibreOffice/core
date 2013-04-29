@@ -33,14 +33,14 @@ module com {  module sun {  module star {  module util {
 /** makes it possible to replace strings in a text described by a
     SearchDescriptor.
 
-    @example
-    <listing>
-    replace all bold words "search for" by "look for"
+    Example: replace all bold words "search for" by "look for"
+
+    @code{.py}
     xReplaceDescr = xDocument.createReplaceDescriptor()
     xReplaceDescr.SearchString = "search for"
     xReplaceDescr.ReplaceString = "look for"
     xFound = xDocument.replaceAll( xReplaceDescr )
-    </listing>
+    @endcode
  */
 published interface XReplaceable: com::sun::star::util::XSearchable
 {

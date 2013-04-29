@@ -123,9 +123,6 @@ published interface XLocale: com::sun::star::uno::XInterface
 
                 @param inLocale
                     specifies the desired user language.
-
-                @example
-                    "English (UK)", "Deutch", "Germany"
      */
     string getDisplayLanguage( [in] com::sun::star::lang::Locale locale,
              [in] com::sun::star::lang::Locale inLocale );

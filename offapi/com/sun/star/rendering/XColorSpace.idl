@@ -66,7 +66,7 @@ interface XColorSpace
         corresponds to the number of color channels for this color
         space.<p>
 
-        @example For the standard RGB color space, ComponentTags
+        @remark For the standard RGB color space, ComponentTags
         consists of three elements, containing RGB_RED, RGB_GREEN and
         RGB_BLUE tags, respectively
      */

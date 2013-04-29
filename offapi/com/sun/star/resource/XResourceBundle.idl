@@ -82,9 +82,9 @@ module com { module sun { module star { module resource {
     the <code>XResourceBundle</code> implementation using the
     XResourceBundleLoader service:
 
-    <listing>
+    @code{.java}
     XResourceBundle myResources = xLoader.getBundle("MyResources", currentLocale);
-    </listing>
+    @endcode
 
     <p>The first argument specifies the family name of the resource
     bundle that contains the object in question. The second argument
@@ -129,7 +129,7 @@ module com { module sun { module star { module resource {
     example of a <code>XResourceBundle</code> implementation that contains
     two key/value pairs:
 
-    <listing>
+    @code{.java}
     class MyResource extends com.sun.star.resource.XResourceBundle
     {
         // some queryInterface stuff
@@ -141,7 +141,7 @@ module com { module sun { module star { module resource {
             return null;
         }
     }
-    </listing>
+    @endcode
 
     <p>Keys are always <code>String</code>s. In this example, the keys
     are <code>OkKey</code> and <code>CancelKey</code>. In the above
@@ -153,10 +153,10 @@ module com { module sun { module star { module resource {
     get method. Because <code>OkKey</code> and <code>CancelKey</code>
     are both strings, you use <code>getByName</code> to retrieve them:
 
-    <listing>
+    @code{.java}
     button1 = new Button(myResourceBundle.getByName("OkKey").getString());
     button2 = new Button(myResourceBundle.getByName("CancelKey").getString());
-    </listing>
+    @endcode
 
     <p>The get methods all require the key as an argument and return
     the object if found. If the object is not found, the get methods

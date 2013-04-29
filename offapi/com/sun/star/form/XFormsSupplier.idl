@@ -35,8 +35,7 @@ published interface XFormsSupplier: com::sun::star::uno::XInterface
 
     /** accesses the forms.
 
-        @example StarBASIC
-        <listing>
+        @code{.bas}
         REM  *****  BASIC  *****
 
         Sub createColorSelectionBox
@@ -71,7 +70,7 @@ published interface XFormsSupplier: com::sun::star::uno::XInterface
             thisComponent.DrawPage.Forms.getByIndex(0).insertByIndex( 0, xControlModel )
             thisComponent.DrawPage.add( xShape )
         End Sub
-        </listing>
+        @endcode
 
         @returns
             the container of all the top-level forms belonging to the component.

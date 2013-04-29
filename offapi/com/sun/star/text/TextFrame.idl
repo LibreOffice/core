@@ -31,20 +31,18 @@
 
     @see Text
 
-    @example StarBasic
-
     <p>This example shows how to create a TextFrame and insert
     it at the very beginning of Text component. The macro
     is ready to run, if it is a script within a text document. </p>
 
-    <listing>
+    @code{.bas}
     Sub Main
     oFrame = ThisComponent.createInstance( "com.sun.star.text.TextFrame" )
     oFrame.Width = 6000
     ThisComponent.Text.insertTextContent( ThisComponent.Text.Start, oFrame, false )
     oFrame.Text.String = "Hello, this text is within the frame."
     End Sub
-    </listing>
+    @endcode
  */
 published service TextFrame
 {

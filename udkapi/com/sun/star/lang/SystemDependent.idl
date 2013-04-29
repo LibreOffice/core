@@ -27,16 +27,14 @@ module com {  module sun {  module star {  module lang {
 
     <p> You should avoid system-dependent methods if possible.
 
-    @example:C++
-
-    <listing>
-    #ifdef __WINDOW // Microsoft Windows
+    @code{.cpp}
+    #ifdef _WIN32 // Microsoft Windows
     HWND    hWin = (HWND)xInterface->getWindowHandle(SystemDependentWIN32);
     if( hWin ) ...
     #elif( ... ) // other systems
     ...
     #endif
-    </listing>
+    @endcode
 
     <p>The Symbols are now prepended with SYSTEM_ thus we avoid collisions
     with system headers.  </p>

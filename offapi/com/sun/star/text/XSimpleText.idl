@@ -95,15 +95,14 @@ published interface XSimpleText: com::sun::star::text::XTextRange
             be replaced by <var>aString</var>, otherwise <var>aString</var>
             will be inserted at the beginning of <var>xRange</var>.
 
-        @example
-            <listing>
-            xText.insertString( xTextCursor, "Hello " + aName$ + ",", false )
+        @code{.java}
+            xText.insertString( xTextCursor, "Hello " + aName + ",", false )
 
             xText.insertControlCharacter( xTextCursor,
-            ControlCharacter_PARAGRAPH_BREAK, false );
+                ControlCharacter.PARAGRAPH_BREAK, false );
 
             xText.insertString( xTextCursor, "more text ...", false )
-            </listing>
+        @endcode
      */
     void insertString( [in] com::sun::star::text::XTextRange xRange,
              [in] string aString,

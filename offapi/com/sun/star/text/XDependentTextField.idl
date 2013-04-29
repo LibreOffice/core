@@ -41,10 +41,9 @@ published interface XDependentTextField: com::sun::star::text::XTextField
         <p>A TextFieldMaster can only be assigned once.
         </p>
 
-        @example Create and insert a user field (with a
-                <code>UserField</code>):
+        Example: Create and insert a user field (with a <code>UserField</code>):
 
-        <listing>
+        @code{.java}
                 // Create a fieldmaster for our newly created User Text field, and access it's
                 // XPropertySet interface
                 XPropertySet xMasterPropSet = (XPropertySet) UnoRuntime.queryInterface(
@@ -62,7 +61,7 @@ published interface XDependentTextField: com::sun::star::text::XTextField
                                 mxDocCursor, ControlCharacter.PARAGRAPH_BREAK, false);
                 // Insert the user field at the end of the document
                 mxDocText.insertTextContent(mxDocText.getEnd(), xUserField, false);
-                </listing>
+        @endcode
      */
     void attachTextFieldMaster( [in] com::sun::star::beans::XPropertySet xFieldMaster )
             raises( com::sun::star::lang::IllegalArgumentException );

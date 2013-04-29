@@ -55,7 +55,7 @@ published service FilterFactory
         reached by using createInstanceWithArguments() with an optional property "FilterName" only.
         See the following example:
 
-        <listing>
+        @code{.java}
         private com.sun.star.uno.XInterface createFilterDirect( com.sun.star.lang.XMultiServiceFactory xFilterFactory      ,
                                                                 java.lang.String                       sInternalFilterName )
         {
@@ -69,7 +69,7 @@ published service FilterFactory
             java.lang.Object aFilter = xFilterFactory.createInstanceWithArguments("", lProps);
             return (com.sun.star.uno.XInterface)UnoRuntime.queryInterface(com.sun.star.uno.XInterface.class, aFilter);
         }
-        </listing>
+        @endcode
         </p>
 
         <p>

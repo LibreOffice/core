@@ -40,13 +40,12 @@ module com {  module sun {  module star {  module container {
     <p>For example (Java), to print all elements of a vector <var>aVect</var>:
     </p>
 
-    <listing>
-    for ( XEnumeration xEnum = aVect.elements() ;
-    xEnum.hasMoreElements() ; )
+    @code{.java}
+    for (XEnumeration xEnum = aVect.elements() ; xEnum.hasMoreElements() ; )
     {
-    System.out.println( xEnum.nextElement() );
+        System.out.println( xEnum.nextElement() );
     }
-    </listing>
+    @endcode
 
 
     <p> If the object changed, the behavior of the enumeration is

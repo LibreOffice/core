@@ -53,18 +53,16 @@
     tables should be insertable via XText::insertTextContent()
     and that interface uses a parameter of that type.</p>
 
-    @example
+    <p>Example: Create and insert a TextTable:</p>
 
-    <p>Create and insert a TextTable:</p>
-
-    <listing>
+    @code{.bas}
     xTable = xTextDoc.createInstance( "com.sun.star.text.TextTable" )
     xTable.initialize(5, 8)
     xTable.HoriOrient = 0 'com::sun::star::text::HoriOrientation::NONE
     xTable.LeftMargin = 2000
     xTable.RightMargin = 1500
     xTextDoc.getText.insertTextContent( xTextRange, xTable, false )
-    </listing>
+    @endcode
 
     @see    com::sun::star::text::Cell
     @see    com::sun::star::text::CellRange

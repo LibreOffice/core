@@ -45,22 +45,22 @@
     is used transparently there.
     </p>
 
-    @example
-    <listing>
-        <i>XDispatch</i> xDispatcher = xFrame.queryDispatch(aURL,"",0);
-        <i>XRecordableDispatch</i> xRecordable = (<i>XRecordableDispatch</i>)UnoRuntime.queryInterface(
-        &nbsp;&nbsp;XRecordableDispatch.class,
-        &nbsp;&nbsp;xDispatcher);
+    @code{.java}
+        XDispatch xDispatcher = xFrame.queryDispatch(aURL,"",0);
+        XRecordableDispatch xRecordable =
+            (XRecordableDispatch)UnoRuntime.queryInterface(
+                XRecordableDispatch.class,
+                xDispatcher);
 
         xDispatcher.addStatusListener(this,aURL);
 
-        <b>if</b> (xRecordable!=<b>null</b>)
-        &nbsp;&nbsp;xRecordable.dispatchAndRecord(aURL,lArguments,xRecorder);
+        if (xRecordable != null)
+            xRecordable.dispatchAndRecord(aURL,lArguments,xRecorder);
         else
-        &nbsp;&nbsp;xDispatcher.dispatch(aURL,lArguments);
+            xDispatcher.dispatch(aURL,lArguments);
         ...
         xDispatcher.removeStatusListener(this,aURL);
-    </listing>
+    @endcode
 
     @see XDispatchRecorderSupplier
     @see XDispatch

@@ -30,15 +30,14 @@ module com {  module sun {  module star {  module container {
 
 /** allows access to the collections of all content types within the object.
 
-    @example
-        <p>This example prints the names of all tables: </p>
+    <p>This example prints the names of all tables: </p>
 
-    <listing>
+    @code{.bas}
         xTextTableEnum = xTextDoc.createContentEnumeration( "com::sun::star::text::TextTable" )
         while xTextTableEnum.hasMoreElements() do
             print xTextTableEnum.nextElement().Name
         wend
-    </listing>
+    @endcode
  */
 published interface XContentEnumerationAccess: com::sun::star::uno::XInterface
 {

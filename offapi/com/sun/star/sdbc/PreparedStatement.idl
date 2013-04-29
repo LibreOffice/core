@@ -62,12 +62,11 @@
      </p>
      <p>
      Example of setting a parameter; <code>con</code> is an active connection.
-     @example:StarBASIC
-     <listing>
+     @code{.bas}
      pstmt = con.prepareStatement("UPDATE EMPLOYEES SET SALARY = ? WHERE ID = ?")
      pstmt.setDouble(1, 153833.00)
      pstmt.setLong(2, 110592)
-     </listing>
+     @endcode
      </p>
      <P>
      Only one

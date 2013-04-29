@@ -41,11 +41,9 @@
 /** This abstract service is implemented by every page of a
     DrawingDocument.
 
+    Example to create and insert a couple of LineShapes:
 
-
-    @example create and insert a couple of LineShapes:
-
-    <listing>
+    @code{.bas}
     xPage = xDoc.DrawPages(0)
     for x% = 0 to 200
     xShape = xProv.createInstance( "com::sun::star::drawing::LineShape" )
@@ -55,7 +53,7 @@
     xShape.Size = Size( 300-x%, 20 )
     xPage.add( xShape )
     next x%
-    </listing>
+    @endcode
  */
 published service GenericDrawPage
 {

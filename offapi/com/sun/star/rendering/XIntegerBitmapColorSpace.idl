@@ -59,7 +59,7 @@ interface XIntegerBitmapColorSpace : XColorSpace
         order defined here, with the first element starting from the
         least significant bits of the pixel, etc.<p>
 
-        @example For the typical 32 bit RGBA color data, the four
+        @remark For the typical 32 bit RGBA color data, the four
         values would all contain the value eight. For a 16 bit 1555
         ARGB format, with mask values 0x8000 for alpha, 0x7C for red,
         0x3E for green and 0x1F for blue, the values would be 5, 5, 5,
@@ -77,7 +77,7 @@ interface XIntegerBitmapColorSpace : XColorSpace
         actual color data bytes might need to get swapped, for the
         bits to align properly.<p>
 
-        @example with a 16 bit 565 RGB format, written on a big endian
+        @remark with a 16 bit 565 RGB format, written on a big endian
         architecture, a destination machine using little endian CPU
         will need to swap the bytes, in order to keep the green
         channel bits together.

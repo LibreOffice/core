@@ -65,10 +65,13 @@
     is an active connection.
     </p>
 
-    @example <listing>pstmt = con.prepareStatement("UPDATE EMPLOYEES SET SALARY = ? WHERE ID = ?")
+    @code{.bas}
+    pstmt = con.prepareStatement("UPDATE EMPLOYEES SET SALARY = ? WHERE ID = ?")
     pstmt.setDouble(1, 153833.00)
     pstmt.setLong(2, 110592)
-    </listing>@see com::sun::star::sdbc::XPreparedStatement
+    @endcode
+
+    @see com::sun::star::sdbc::XPreparedStatement
  */
 published interface XParameters: com::sun::star::uno::XInterface
 {

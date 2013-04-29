@@ -118,7 +118,7 @@ published service ContentResultSet
         <p>The following pseudo-code illustrates the usage of a non-blocking
         cursor:
 
-        <p><pre>
+        @code{.java}
         bProcessedAllRows = false
         while ( !bProcessedAllRows )
         {
@@ -148,7 +148,7 @@ published service ContentResultSet
 
             bProcessedAllRows = ...
         }
-        </pre>
+        @endcode
 
         <p>
          If this property is not supported, the implementation needs to provide

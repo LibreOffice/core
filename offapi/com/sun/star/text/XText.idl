@@ -68,8 +68,8 @@ published interface XText: com::sun::star::text::XSimpleText
 
 
     /** removes the specified content from the text object.
-
-        @example xDoc.removeTextContent( xDoc.TextTables.MyOwnTableName )
+        @param xContent
+            the content that is to be removed.
      */
     void removeTextContent( [in] com::sun::star::text::XTextContent xContent )
             raises( com::sun::star::container::NoSuchElementException );
