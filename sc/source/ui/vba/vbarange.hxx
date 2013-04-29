@@ -183,6 +183,7 @@ public:
     virtual css::uno::Any SAL_CALL getTop() throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getLeft() throw (css::uno::RuntimeException);
 
+    virtual css::uno::Reference< ov::excel::XName > SAL_CALL getName() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XWorksheet > SAL_CALL getWorksheet() throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getPageBreak() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setPageBreak( const css::uno::Any& _pagebreak ) throw (css::uno::RuntimeException);
