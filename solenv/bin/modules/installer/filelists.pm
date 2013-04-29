@@ -8,6 +8,8 @@
 
 package installer::filelists;
 
+use File::stat;
+
 use installer::files;
 use installer::globals;
 use installer::logger;
@@ -21,11 +23,16 @@ sub resolve_filelist_flag
     foreach my $file (@{$files})
     {
         my $is_filelist = 0;
+        my $use_internal_rights = 0;
         if ($file->{'Styles'})
         {
             if ($file->{'Styles'} =~ /\bFILELIST\b/)
             {
                 $is_filelist = 1;
+            }
+            if ($file->{'Styles'} =~ /\bUSE_INTERNAL_RIGHTS\b/ && !$installer::globals::iswin)
+            {
+                $use_internal_rights = 1;
             }
         }
 
@@ -58,6 +65,12 @@ sub resolve_filelist_flag
                     $newfile{'destination'} = $destination . $subpath;
                     $newfile{'filelistname'} = $file->{'Name'};
                     $newfile{'filelistpath'} = $file->{'sourcepath'};
+
+                    if ($use_internal_rights)
+                    {
+                        my $st = stat($path);
+                        $newfile{'UnixRights'} = sprintf("%o", $st->mode & 0777);
+                    }
 
                     push @newfiles, \%newfile;
                 }
