@@ -111,49 +111,12 @@ TYPEINIT2(SwFmtFooter,  SfxPoolItem, SwClient );
 TYPEINIT2(SwFmtPageDesc,  SfxPoolItem, SwClient );
 TYPEINIT1_AUTOFACTORY(SwFmtLineNumber, SfxPoolItem);
 
-/* --------------------------------------------------
- *  Conversation for QueryValue
- * --------------------------------------------------*/
-static sal_Int16 lcl_RelToINT(sal_Int16 eRelation)
-{
-    sal_Int16 nRet = text::RelOrientation::FRAME;
-    switch(eRelation)
-    {
-    case  text::RelOrientation::PRINT_AREA:           nRet = text::RelOrientation::PRINT_AREA; break;
-    case  text::RelOrientation::CHAR:         nRet = text::RelOrientation::CHAR; break;
-    case  text::RelOrientation::PAGE_LEFT:        nRet = text::RelOrientation::PAGE_LEFT; break;
-    case  text::RelOrientation::PAGE_RIGHT:       nRet = text::RelOrientation::PAGE_RIGHT; break;
-    case  text::RelOrientation::FRAME_LEFT:       nRet = text::RelOrientation::FRAME_LEFT; break;
-    case  text::RelOrientation::FRAME_RIGHT:  nRet = text::RelOrientation::FRAME_RIGHT; break;
-    case  text::RelOrientation::PAGE_FRAME:       nRet = text::RelOrientation::PAGE_FRAME; break;
-    case  text::RelOrientation::PAGE_PRINT_AREA:  nRet = text::RelOrientation::PAGE_PRINT_AREA; break;
-    // OD 13.11.2003 #i22341#
-    case  text::RelOrientation::TEXT_LINE:    nRet = text::RelOrientation::TEXT_LINE; break;
-    default: break;
-    }
-    return nRet;
-}
-
 static sal_Int16 lcl_IntToRelation(const uno::Any& rVal)
 {
-    sal_Int16 eRet = text::RelOrientation::FRAME;
-    sal_Int16 nVal = 0;
+    sal_Int16 nVal = text::RelOrientation::FRAME;
     if (!(rVal >>= nVal))
         SAL_WARN("sw.core", "lcl_IntToRelation: read from Any failed!");
-    switch(nVal)
-    {
-        case  text::RelOrientation::PRINT_AREA:         eRet =   text::RelOrientation::PRINT_AREA           ; break;
-        case  text::RelOrientation::CHAR:               eRet =   text::RelOrientation::CHAR          ; break;
-        case  text::RelOrientation::PAGE_LEFT:          eRet =   text::RelOrientation::PAGE_LEFT       ; break;
-        case  text::RelOrientation::PAGE_RIGHT:         eRet =   text::RelOrientation::PAGE_RIGHT      ; break;
-        case  text::RelOrientation::FRAME_LEFT:         eRet =   text::RelOrientation::FRAME_LEFT      ; break;
-        case  text::RelOrientation::FRAME_RIGHT:        eRet =   text::RelOrientation::FRAME_RIGHT     ; break;
-        case  text::RelOrientation::PAGE_FRAME:         eRet =   text::RelOrientation::PAGE_FRAME      ; break;
-        case  text::RelOrientation::PAGE_PRINT_AREA:    eRet =   text::RelOrientation::PAGE_PRINT_AREA    ; break;
-        // OD 13.11.2003 #i22341#
-        case  text::RelOrientation::TEXT_LINE: eRet = text::RelOrientation::TEXT_LINE; break;
-    }
-    return eRet;
+    return nVal;
 }
 
 void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
@@ -1280,25 +1243,11 @@ bool SwFmtVertOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     {
         case MID_VERTORIENT_ORIENT:
         {
-            sal_Int16 nRet = text::VertOrientation::NONE;
-            switch( eOrient )
-            {
-                case text::VertOrientation::TOP        :  nRet = text::VertOrientation::TOP        ;break;
-                case text::VertOrientation::CENTER     :  nRet = text::VertOrientation::CENTER     ;break;
-                case text::VertOrientation::BOTTOM     :  nRet = text::VertOrientation::BOTTOM     ;break;
-                case text::VertOrientation::CHAR_TOP   :  nRet = text::VertOrientation::CHAR_TOP   ;break;
-                case text::VertOrientation::CHAR_CENTER:  nRet = text::VertOrientation::CHAR_CENTER;break;
-                case text::VertOrientation::CHAR_BOTTOM:  nRet = text::VertOrientation::CHAR_BOTTOM;break;
-                case text::VertOrientation::LINE_TOP   :  nRet = text::VertOrientation::LINE_TOP   ;break;
-                case text::VertOrientation::LINE_CENTER:  nRet = text::VertOrientation::LINE_CENTER;break;
-                case text::VertOrientation::LINE_BOTTOM:  nRet = text::VertOrientation::LINE_BOTTOM;break;
-                default: break;
-            }
-            rVal <<= nRet;
+            rVal <<= (sal_Int16)eOrient;
         }
         break;
         case MID_VERTORIENT_RELATION:
-                rVal <<= lcl_RelToINT(eRelation);
+                rVal <<= (sal_Int16)eRelation;
         break;
         case MID_VERTORIENT_POSITION:
                 rVal <<= (sal_Int32)TWIP_TO_MM100(GetPos());
@@ -1319,21 +1268,9 @@ bool SwFmtVertOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     {
         case MID_VERTORIENT_ORIENT:
         {
-            sal_uInt16 nVal = 0;
+            sal_uInt16 nVal = text::VertOrientation::NONE;
             rVal >>= nVal;
-            switch( nVal )
-            {
-                case text::VertOrientation::NONE:           eOrient = text::VertOrientation::NONE;    break;
-                case text::VertOrientation::TOP        :    eOrient = text::VertOrientation::TOP;     break;
-                case text::VertOrientation::CENTER     :    eOrient = text::VertOrientation::CENTER;     break;
-                case text::VertOrientation::BOTTOM     :    eOrient = text::VertOrientation::BOTTOM;     break;
-                case text::VertOrientation::CHAR_TOP   :    eOrient = text::VertOrientation::CHAR_TOP;   break;
-                case text::VertOrientation::CHAR_CENTER:    eOrient = text::VertOrientation::CHAR_CENTER;break;
-                case text::VertOrientation::CHAR_BOTTOM:    eOrient = text::VertOrientation::CHAR_BOTTOM;break;
-                case text::VertOrientation::LINE_TOP   :    eOrient = text::VertOrientation::LINE_TOP;    break;
-                case text::VertOrientation::LINE_CENTER:    eOrient = text::VertOrientation::LINE_CENTER;break;
-                case text::VertOrientation::LINE_BOTTOM:    eOrient = text::VertOrientation::LINE_BOTTOM;break;
-            }
+            eOrient = nVal;
         }
         break;
         case MID_VERTORIENT_RELATION:
@@ -1394,27 +1331,11 @@ bool SwFmtHoriOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     {
         case MID_HORIORIENT_ORIENT:
         {
-            sal_Int16 nRet = text::HoriOrientation::NONE;
-            switch( eOrient )
-            {
-                case text::HoriOrientation::RIGHT:    nRet = text::HoriOrientation::RIGHT; break;
-                case text::HoriOrientation::CENTER :  nRet = text::HoriOrientation::CENTER; break;
-                case text::HoriOrientation::LEFT   :  nRet = text::HoriOrientation::LEFT; break;
-                case text::HoriOrientation::INSIDE :  nRet = text::HoriOrientation::INSIDE; break;
-                case text::HoriOrientation::OUTSIDE:  nRet = text::HoriOrientation::OUTSIDE; break;
-                case text::HoriOrientation::FULL:     nRet = text::HoriOrientation::FULL; break;
-                case text::HoriOrientation::LEFT_AND_WIDTH :
-                    nRet = text::HoriOrientation::LEFT_AND_WIDTH;
-                    break;
-                default:
-                    break;
-
-            }
-            rVal <<= nRet;
+            rVal <<= (sal_Int16)eOrient;
         }
         break;
         case MID_HORIORIENT_RELATION:
-            rVal <<= lcl_RelToINT(eRelation);
+            rVal <<= (sal_Int16)eRelation;
         break;
         case MID_HORIORIENT_POSITION:
                 rVal <<= (sal_Int32)TWIP_TO_MM100(GetPos());
@@ -1441,21 +1362,9 @@ bool SwFmtHoriOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     {
         case MID_HORIORIENT_ORIENT:
         {
-            sal_Int16 nVal = 0;
+            sal_Int16 nVal = text::HoriOrientation::NONE;
             rVal >>= nVal;
-            switch( nVal )
-            {
-                case text::HoriOrientation::NONE:       eOrient = text::HoriOrientation::NONE ;   break;
-                case text::HoriOrientation::RIGHT:  eOrient = text::HoriOrientation::RIGHT;   break;
-                case text::HoriOrientation::CENTER :    eOrient = text::HoriOrientation::CENTER;  break;
-                case text::HoriOrientation::LEFT   :    eOrient = text::HoriOrientation::LEFT;    break;
-                case text::HoriOrientation::INSIDE :    eOrient = text::HoriOrientation::INSIDE;  break;
-                case text::HoriOrientation::OUTSIDE:    eOrient = text::HoriOrientation::OUTSIDE; break;
-                case text::HoriOrientation::FULL:      eOrient = text::HoriOrientation::FULL;     break;
-                case text::HoriOrientation::LEFT_AND_WIDTH:
-                    eOrient = text::HoriOrientation::LEFT_AND_WIDTH;
-                break;
-            }
+            eOrient = nVal;
         }
         break;
         case MID_HORIORIENT_RELATION:
