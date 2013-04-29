@@ -106,7 +106,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
                                                                             pDoc,
                                                                             pView);
             DBG_ASSERT(pDlg, "Dialogdiet fail!");
-            const SvxColorTableItem* pColorItem = (const SvxColorTableItem*)
+            // const SvxColorTableItem* pColorItem = (const SvxColorTableItem*)
                                     GetView().GetDocShell()->GetItem(SID_COLOR_TABLE);
 
             if (pDlg->Execute() == RET_OK)
