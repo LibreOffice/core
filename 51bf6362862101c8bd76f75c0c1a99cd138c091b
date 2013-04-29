@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//9to\u003d",
+        "filename": "dbaccess/source/ui/app/AppControllerDnD.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-04-29T12:58:22Z",
+      "side": 1,
+      "message": "Nitpick: you can write this like\n\ntry\n{\n    Reference\u003c XComponent \u003e comp (conn, UNO_QUERY_THROW);\n    comp-\u003edispose();\n}\ncatch( const Exception\u0026 )\n// ...\n\nand save a few lines.",
+      "revId": "51bf6362862101c8bd76f75c0c1a99cd138c091b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
