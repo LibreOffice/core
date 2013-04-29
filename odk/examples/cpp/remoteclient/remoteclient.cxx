@@ -39,8 +39,6 @@
 
 #include <com/sun/star/uno/XNamingService.hpp>
 
-#include <com/sun/star/registry/XImplementationRegistration.hpp>
-
 #include <com/sun/star/connection/XConnector.hpp>
 
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
@@ -58,7 +56,6 @@ using namespace ::cppu;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::connection;
 using namespace ::com::sun::star::bridge;
 using namespace ::com::sun::star::io;

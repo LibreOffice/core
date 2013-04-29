@@ -56,7 +56,6 @@
 // generated c++ interfaces
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/registry/XImplementationRegistration.hpp>
 #include <foo/XCountable.hpp>
 
 
@@ -64,7 +63,6 @@ using namespace foo;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::registry;
 
 using namespace ::rtl;
 
