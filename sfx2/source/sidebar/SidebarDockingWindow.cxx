@@ -37,22 +37,22 @@ namespace sfx2 { namespace sidebar {
 
 
 SidebarDockingWindow::SidebarDockingWindow(
-    SfxBindings* pBindings,
+    SfxBindings* pSfxBindings,
     SidebarChildWindow& rChildWindow,
-    Window* pParent,
+    Window* pParentWindow,
     WinBits nBits)
-    : SfxDockingWindow(pBindings, &rChildWindow, pParent, nBits),
+    : SfxDockingWindow(pSfxBindings, &rChildWindow, pParentWindow, nBits),
       mpSidebarController()
 {
     // Get the XFrame from the bindings.
-    if (pBindings==NULL || pBindings->GetDispatcher()==NULL)
+    if (pSfxBindings==NULL || pSfxBindings->GetDispatcher()==NULL)
     {
-        OSL_ASSERT(pBindings!=NULL);
-        OSL_ASSERT(pBindings->GetDispatcher()!=NULL);
+        OSL_ASSERT(pSfxBindings!=NULL);
+        OSL_ASSERT(pSfxBindings->GetDispatcher()!=NULL);
     }
     else
     {
-        const SfxViewFrame* pViewFrame = pBindings->GetDispatcher()->GetFrame();
+        const SfxViewFrame* pViewFrame = pSfxBindings->GetDispatcher()->GetFrame();
         const SfxFrame& rFrame = pViewFrame->GetFrame();
         mpSidebarController.set(new sfx2::sidebar::SidebarController(this, rFrame.GetFrameInterface()));
     }
@@ -123,7 +123,7 @@ sal_Bool SidebarDockingWindow::Close (void)
     {
         // Do not close the floating window.
         // Dock it and close just the deck instead.
-        mpSidebarController->CloseDeck();
+        mpSidebarController->RequestCloseDeck();
         SetFloatingMode(sal_False);
         mpSidebarController->NotifyResize();
         return sal_False;

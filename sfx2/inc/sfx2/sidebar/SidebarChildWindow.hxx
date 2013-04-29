@@ -44,6 +44,8 @@ public:
         SfxChildWinInfo* pInfo);
 
     SFX_DECL_CHILDWINDOW(SidebarChildWindow);
+
+    static sal_Int32 GetDefaultWidth (Window* pWindow);
 };
 
 

@@ -42,6 +42,7 @@ public:
     ContextList maContextList;
     ::rtl::OUString msImplementationURL;
     sal_Int32 mnOrderIndex;
+    bool mbShowForReadOnlyDocuments;
     bool mbWantsCanvas;
 
     PanelDescriptor (void);

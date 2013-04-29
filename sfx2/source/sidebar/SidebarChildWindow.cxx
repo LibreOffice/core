@@ -21,11 +21,13 @@
 
 #include "precompiled_sfx2.hxx"
 
+#include "TabBar.hxx"
 #include "sfx2/sidebar/SidebarChildWindow.hxx"
 #include "SidebarDockingWindow.hxx"
 #include "sfx2/sfxsids.hrc"
 #include "helpid.hrc"
 #include "sfx2/dockwin.hxx"
+#include <sfx2/sidebar/propertypanel.hrc>
 
 
 namespace sfx2 { namespace sidebar {
@@ -49,14 +51,31 @@ SidebarChildWindow::SidebarChildWindow (
     eChildAlignment = SFX_ALIGN_RIGHT;
 
     this->pWindow->SetHelpId(HID_SIDEBAR_WINDOW);
-    this->pWindow->SetOutputSizePixel(Size(300, 450));
+    this->pWindow->SetOutputSizePixel(Size(GetDefaultWidth(this->pWindow), 450));
 
-    SfxDockingWindow* pDockingParent = dynamic_cast<SfxDockingWindow*>(pParentWindow);
+    SfxDockingWindow* pDockingParent = dynamic_cast<SfxDockingWindow*>(this->pWindow);
     if (pDockingParent != NULL)
         pDockingParent->Initialize(pInfo);
     SetHideNotDelete(sal_True);
 
     this->pWindow->Show();
+}
+
+
+
+
+sal_Int32 SidebarChildWindow::GetDefaultWidth (Window* pWindow)
+{
+    if (pWindow != NULL)
+    {
+        // Width of the paragraph panel.
+        const static sal_Int32 nMaxPropertyPageWidth (115);
+
+        return pWindow->LogicToPixel(Point(nMaxPropertyPageWidth,1), MAP_APPFONT).X()
+            + TabBar::GetDefaultWidth();
+    }
+    else
+        return 0;
 }
 
 
