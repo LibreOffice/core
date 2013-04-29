@@ -31,7 +31,10 @@
                         generic-name="ReplaceEdit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
     <glade-widget-class title="Color ListBox" name="svtlo-ColorListBox"
-                        generic-name="LookUpComboBox" parent="GtkComboBox"
+                        generic-name="Color ListBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox"/>
+    <glade-widget-class title="Other Color ListBox" name="svxlo-ColorLB"
+                        generic-name="Other Color ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
     <glade-widget-class title="Font Name ListBox" name="svtlo-FontNameBox"
                         generic-name="Font name ListBox" parent="GtkComboBox"

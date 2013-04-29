@@ -38,7 +38,6 @@
 #include <svx/xfillit0.hxx>
 #include <sfx2/request.hxx>
 #include "sdabstdlg.hxx"
-#include "copydlg.hrc"
 namespace sd {
 
 TYPEINIT1( FuCopy, FuPoor );

@@ -46,34 +46,21 @@ public:
     void Reset();
 
 private:
-    FixedText           maFtCopies;
-    NumericField        maNumFldCopies;
-    ImageButton         maBtnSetViewData;
+    NumericField*       m_pNumFldCopies;
+    Button*             m_pBtnSetViewData;
 
-    FixedLine           maGrpMovement;
-    FixedText           maFtMoveX;
-    MetricField         maMtrFldMoveX;
-    FixedText           maFtMoveY;
-    MetricField         maMtrFldMoveY;
-    FixedText           maFtAngle;
-    MetricField         maMtrFldAngle;
-    FixedLine           maGrpEnlargement;
+    MetricField*        m_pMtrFldMoveX;
+    MetricField*        m_pMtrFldMoveY;
+    MetricField*        m_pMtrFldAngle;
 
-    FixedText           maFtWidth;
-    MetricField         maMtrFldWidth;
-    FixedText           maFtHeight;
-    MetricField         maMtrFldHeight;
+    MetricField*        m_pMtrFldWidth;
+    MetricField*        m_pMtrFldHeight;
 
-    FixedLine           maGrpColor;
-    FixedText           maFtStartColor;
-    ColorLB             maLbStartColor;
-    FixedText           maFtEndColor;
-    ColorLB             maLbEndColor;
+    ColorLB*            m_pLbStartColor;
+    FixedText*          m_pFtEndColor;
+    ColorLB*            m_pLbEndColor;
 
-    OKButton            maBtnOK;
-    CancelButton        maBtnCancel;
-    HelpButton          maBtnHelp;
-    PushButton          maBtnSetDefault;
+    PushButton*         m_pBtnSetDefault;
 
     const SfxItemSet&   mrOutAttrs;
     XColorListRef       mpColorList;

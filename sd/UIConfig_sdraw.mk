@@ -67,6 +67,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/sdraw,\
 
 $(eval $(call gb_UIConfig_add_uifiles,modules/sdraw,\
 	sd/uiconfig/sdraw/ui/dlgsnap \
+	sd/uiconfig/sdraw/ui/copydlg \
 	sd/uiconfig/sdraw/ui/insertlayer \
 	sd/uiconfig/sdraw/ui/printeroptions \
 ))
