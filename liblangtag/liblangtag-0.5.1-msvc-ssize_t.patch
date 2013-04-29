@@ -1,0 +1,12 @@
+diff -ru UnpackedTarball/langtag.orig/liblangtag/lt-macros.h UnpackedTarball/langtag/liblangtag/lt-macros.h
+--- UnpackedTarball/langtag.orig/liblangtag/lt-macros.h	2013-04-22 10:06:57.000000000 +0200
++++ UnpackedTarball/langtag/liblangtag/lt-macros.h	2013-04-30 16:07:00.619638050 +0200
+@@ -261,7 +261,7 @@
+ 
+ LT_BEGIN_DECLS
+ 
+-#ifdef _MSC_VER
++#if defined(_MSC_VER) && !defined(ssize_t)
+ #  ifdef _M_AMD64
+ typedef signed long long	ssize_t;
+ #  else

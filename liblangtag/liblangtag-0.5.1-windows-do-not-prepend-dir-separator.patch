@@ -1,0 +1,16 @@
+diff -ru UnpackedTarball/langtag.orig/liblangtag/lt-string.c UnpackedTarball/langtag/liblangtag/lt-string.c
+--- UnpackedTarball/langtag.orig/liblangtag/lt-string.c	2013-04-22 10:35:07.000000000 +0200
++++ UnpackedTarball/langtag/liblangtag/lt-string.c	2013-04-30 18:34:14.422037274 +0200
+@@ -308,8 +308,12 @@
+ 	lt_return_val_if_fail (string != NULL, NULL);
+ 	lt_return_val_if_fail (path != NULL, string);
+ 
++#ifdef _WIN32
++    /* This simply does not work on Windows with "D:\..." */
++#else
+ 	if (lt_string_length(string) == 0 && path[0] != LT_DIR_SEPARATOR)
+ 		lt_string_append(string, LT_DIR_SEPARATOR_S);
++#endif
+ 
+ 	va_start(ap, path);
+ 	p = path;
