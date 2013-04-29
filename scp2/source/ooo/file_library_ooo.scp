@@ -344,10 +344,6 @@ STD_LIB_FILE( gid_File_Lib_Evoab , evoab)
 
 #endif  // #ifdef UNX
 
-STD_LIB_FILE(gid_File_Lib_Evtatt, evtatt)
-
-STD_LIB_FILE( gid_File_Lib_Flat, flat)
-
 #ifdef WNT
 
 File gid_File_Lib_Fps
@@ -645,12 +641,7 @@ SPECIAL_LIB_FILE(gid_File_Lib_Mozbootstrap,mozbootstrap)
 
 #endif
 
-STD_LIB_FILE(gid_File_Lib_Mysql,mysql)
-STD_LIB_FILE(gid_File_Lib_Odbc,odbc)
-
 // STD_LIB_FILE( gid_File_Lib_Ofa , ofa)
-
-STD_LIB_FILE( gid_File_Lib_Offacc, offacc)
 
 #ifdef SOLAR_JAVA
 #ifndef MACOSX
@@ -675,11 +666,7 @@ STD_LIB_FILE( gid_File_Lib_Ole, oleautobridge )
 
 STD_LIB_FILE( gid_File_Lib_Passwordcontainer, passwordcontainer )
 
-STD_LIB_FILE( gid_File_Lib_Pcr, pcr)
-
 STD_LIB_FILE( gid_File_Lib_Log, log)
-
-STD_LIB_FILE( gid_File_Lib_Pdffilter, pdffilter)
 
 SPECIAL_LIB_FILE(gid_File_Lib_DeploymentGui,deploymentgui)
 
@@ -820,11 +807,6 @@ STD_LIB_FILE( gid_File_Lib_Fastsax_Uno, fastsax )
 
 STD_LIB_FILE( gid_File_Lib_Oox , oox)
 
-STD_LIB_FILE( gid_File_Lib_Scn, scn)
-
-STD_LIB_FILE( gid_File_Lib_Sd , sd)
-STD_LIB_FILE( gid_File_Lib_Sdui, sdui)
-
 STD_LIB_FILE( gid_File_Lib_Slideshow, slideshow )
 
 File gid_File_Lib_Sdbc_2
@@ -837,8 +819,6 @@ File gid_File_Lib_Sdbc_2
     Name = "sdbc2.dll";
   #endif
 End
-
-STD_LIB_FILE( gid_File_Lib_Sdd , sdd)
 
 #if defined(WNT) && defined(HAVE_WINDOWS_SDK)
 
@@ -880,8 +860,6 @@ STD_LIB_FILE( gid_File_Lib_Spl_Unx, spl_unx)
 SPECIAL_LIB_FILE(gid_File_Lib_Srtrs1,srtrs1)
 
 STD_LIB_FILE( gid_File_Lib_TextConversionDlgs, textconversiondlgs)
-
-STD_LIB_FILE( gid_File_Lib_Sw , sw)
 
 #if ! defined UNX
 File gid_File_Lib_Sysdtrans
@@ -977,28 +955,7 @@ STD_LIB_FILE(gid_File_Ucpext, ucpext)
 
 STD_LIB_FILE(gid_File_Ucpcmis, ucpcmis1)
 
-File gid_File_Lib_Lnth
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Name = LIBNAME(lnth);
-    Dir = SCP2_OOO_BIN_DIR;
-End
-
-File gid_File_Lib_Hyph
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Name = LIBNAME(hyphen);
-    Dir = SCP2_OOO_BIN_DIR;
-End
-
-STD_LIB_FILE( gid_File_Lib_BaseGfx, basegfx )
-STD_LIB_FILE( gid_File_Lib_Xof, xof)
-STD_LIB_FILE( gid_File_Lib_Xsltdlg, xsltdlg )
-STD_LIB_FILE( gid_File_Lib_Xsltfilter, xsltfilter )
-STD_LIB_FILE( gid_File_Lib_Xmlfa, xmlfa )
-STD_LIB_FILE( gid_File_Lib_Xmlfd, xmlfd )
 STD_LIB_FILE( gid_File_Lib_Textfd, textfd )
-STD_LIB_FILE( gid_File_Lib_Odfflatxml, odfflatxml )
 
 #ifndef SYSTEM_LIBXSLT
 File gid_File_Lib_Xslt
