@@ -220,7 +220,7 @@ static hb_blob_t *getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
 
     hb_blob_t* pBlob = NULL;
     if (pBuffer != NULL)
-        pBlob = hb_blob_create((const char*) pBuffer, nLength, HB_MEMORY_MODE_WRITABLE, (void*) pBuffer, free);
+        pBlob = hb_blob_create((const char*) pBuffer, nLength, HB_MEMORY_MODE_READONLY, (void*) pBuffer, NULL);
 
     return pBlob;
 }
