@@ -263,7 +263,7 @@ void XPropertyList::Insert( XPropertyEntry* pEntry, long nIndex )
     {
         const long nObjectCount(maContent.size());
 
-        if(nIndex >= nObjectCount)
+        if(LIST_APPEND == nIndex || nIndex >= nObjectCount)
         {
             maContent.push_back(pEntry);
         }
