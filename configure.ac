@@ -4808,6 +4808,10 @@ find_msms()
             fi
         fi
     done
+    if test -z "$msmdir"; then
+        AC_MSG_NOTICE([no registry entry for Merge Module directory - trying "$COMMONPROGRAMFILES\Merge Modules"])
+        msmdir="$COMMONPROGRAMFILES\Merge Modules"
+    fi
     msmdir=`cygpath -d "$msmdir"`
     msmdir=`cygpath -u "$msmdir"`
     if test -z "$msmdir"; then
