@@ -357,8 +357,8 @@ bool ImplImageTree::find(
     if (!m_cacheIcons) {
         for (Paths::iterator i(m_paths.begin()); i != m_paths.end(); ++i) {
             for (std::vector< OUString >::const_reverse_iterator j(
-                paths.rbegin());
-            j != paths.rend(); ++j)
+                     paths.rbegin());
+                 j != paths.rend(); ++j)
             {
                 osl::File file(i->first + "/" + *j);
                 if (file.open(osl_File_OpenFlag_Read) == ::osl::FileBase::E_None) {
@@ -389,8 +389,7 @@ bool ImplImageTree::find(
                 continue;
             }
         }
-        for (std::vector< OUString >::const_reverse_iterator j(
-                 paths.rbegin());
+        for (std::vector< OUString >::const_reverse_iterator j(paths.rbegin());
              j != paths.rend(); ++j)
         {
             if (i->second->hasByName(*j)) {
