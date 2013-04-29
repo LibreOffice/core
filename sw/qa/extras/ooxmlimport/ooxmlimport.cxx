@@ -107,6 +107,8 @@ public:
     void testTableWidth();
     void testConditionalstylesTbllook();
     void testFdo63685();
+    void testN592908_Frame();
+    void testN592908_Picture();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -184,6 +186,8 @@ void Test::run()
         {"table_width.docx", &Test::testTableWidth},
         {"conditionalstyles-tbllook.docx", &Test::testConditionalstylesTbllook},
         {"fdo63685.docx", &Test::testFdo63685},
+        {"n592908-frame.docx", &Test::testN592908_Frame},
+        {"n592908-picture.docx", &Test::testN592908_Picture},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1313,6 +1317,26 @@ void Test::testFdo63685()
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     // Was 85697, i.e. original 114120 was converted to mm100 from twips, not from EMUs.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xDraws->getByIndex(0), "TopMargin"));
+}
+
+void Test::testN592908_Frame()
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
+    text::WrapTextMode eValue;
+    xPropertySet->getPropertyValue("Surround") >>= eValue;
+    CPPUNIT_ASSERT_EQUAL(eValue, text::WrapTextMode_PARALLEL);
+}
+
+void Test::testN592908_Picture()
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
+    text::WrapTextMode eValue;
+    xPropertySet->getPropertyValue("Surround") >>= eValue;
+    CPPUNIT_ASSERT_EQUAL(eValue, text::WrapTextMode_PARALLEL);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

@@ -36,6 +36,7 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
+#include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
@@ -405,6 +406,24 @@ SimpleShape::SimpleShape( Drawing& rDrawing, const OUString& rService ) :
 {
 }
 
+void lcl_setSurround(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel)
+{
+    sal_Int32 nSurround = com::sun::star::text::WrapTextMode_THROUGHT;
+    if ( rTypeModel.moWrapType.get() == "square" || rTypeModel.moWrapType .get()== "tight" ||
+         rTypeModel.moWrapType.get() == "through" )
+    {
+        nSurround = com::sun::star::text::WrapTextMode_PARALLEL;
+        if ( rTypeModel.moWrapSide.get() == "left" )
+            nSurround = com::sun::star::text::WrapTextMode_LEFT;
+        else if ( rTypeModel.moWrapSide.get() == "right" )
+            nSurround = com::sun::star::text::WrapTextMode_RIGHT;
+    }
+    else if ( rTypeModel.moWrapType.get() == "topAndBottom" )
+        nSurround = com::sun::star::text::WrapTextMode_NONE;
+
+    rPropSet.setProperty(PROP_Surround, nSurround);
+}
+
 void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel)
 {
     if ( rTypeModel.maPositionHorizontal == "center" )
@@ -449,6 +468,7 @@ void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel)
     {
         rPropSet.setProperty(PROP_AnchorType, text::TextContentAnchorType_AS_CHARACTER);
     }
+    lcl_setSurround( rPropSet, rTypeModel );
 }
 
 Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const awt::Rectangle& rShapeRect ) const

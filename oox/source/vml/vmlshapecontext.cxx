@@ -360,6 +360,8 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
         case NMSP_vmlWord | XML_wrap:
             mrTypeModel.moWrapAnchorX = rAttribs.getString(XML_anchorx);
             mrTypeModel.moWrapAnchorY = rAttribs.getString(XML_anchory);
+            mrTypeModel.moWrapType = rAttribs.getString(XML_type);
+            mrTypeModel.moWrapSide = rAttribs.getString(XML_side);
         break;
         case VML_TOKEN( shadow ):
         {

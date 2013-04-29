@@ -93,6 +93,8 @@ struct OOX_DLLPUBLIC ShapeTypeModel
     OptValue< OUString > moGraphicTitle; ///< Title of the graphic.
     OptValue< OUString > moWrapAnchorX;  ///< The base object from which our horizontal positioning should be calculated.
     OptValue< OUString > moWrapAnchorY;  ///< The base object from which our vertical positioning should be calculated.
+    OptValue< ::rtl::OUString > moWrapType;     ///< How to wrap the text around the object
+    OptValue< ::rtl::OUString > moWrapSide;     ///< On which side to wrap the text around the object
 
     explicit            ShapeTypeModel();
 
