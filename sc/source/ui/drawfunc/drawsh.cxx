@@ -464,8 +464,7 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
 
     // #i74099# by default, the dialog deletes the current color table if a different one is loaded
     // (see SwDrawShell::ExecDrawDlg)
-    const SvxColorTableItem* pColorItem =
-        static_cast<const SvxColorTableItem*>( pViewData->GetSfxDocShell()->GetItem(SID_COLOR_TABLE) );
+    // const SvxColorTableItem* pColorItem = static_cast<const SvxColorTableItem*>( pViewData->GetSfxDocShell()->GetItem(SID_COLOR_TABLE) );
 
     if ( nTabPage != 0xffff )
         pDlg->SetCurPageId( nTabPage );
