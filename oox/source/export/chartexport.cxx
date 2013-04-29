@@ -2311,9 +2311,7 @@ void ChartExport::exportDataLabels(
             }
             catch( const uno::Exception & rEx )
             {
-                (void)rEx; // avoid warning for pro build
-                OSL_TRACE( "Exception caught during Export of data label: %s",
-                                OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+                SAL_WARN("oox", "Exception caught during Export of data label: " << rEx.Message );
             }
 
             if( xPropSet.is() )
