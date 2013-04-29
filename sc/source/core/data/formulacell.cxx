@@ -3030,24 +3030,25 @@ bool ScFormulaCell::InterpretFormulaGroup()
                     size_t nCols = aRef.Ref2.nCol - aRef.Ref1.nCol + 1;
                     std::vector<const double*> aArrays;
                     aArrays.reserve(nCols);
-                    SCROW nLength = xGroup->mnLength;
+                    SCROW nArrayLength = xGroup->mnLength;
+                    SCROW nRefRowSize = aRef.Ref2.nRow - aRef.Ref1.nRow + 1;
                     if (!bAbsLast)
                     {
-                        // range end position is relative. Extend it.
-                        nLength += aRef.Ref2.nRow - aRef.Ref1.nRow;
+                        // range end position is relative. Extend the array length.
+                        nArrayLength += nRefRowSize - 1;
                     }
 
                     for (SCCOL i = aRef.Ref1.nCol; i <= aRef.Ref2.nCol; ++i)
                     {
                         aRefPos.SetCol(i);
-                        const double* pArray = pDocument->FetchDoubleArray(aCxt, aRefPos, nLength);
+                        const double* pArray = pDocument->FetchDoubleArray(aCxt, aRefPos, nArrayLength);
                         if (!pArray)
                             return false;
 
                         aArrays.push_back(pArray);
                     }
 
-                    formula::DoubleVectorRefToken aTok(aArrays, nLength, bAbsFirst, bAbsLast);
+                    formula::DoubleVectorRefToken aTok(aArrays, nArrayLength, nRefRowSize, bAbsFirst, bAbsLast);
                     aCode.AddToken(aTok);
                 }
                 else
@@ -3088,11 +3089,37 @@ bool ScFormulaCell::InterpretFormulaGroup()
                 {
                     const formula::SingleVectorRefToken* p2 = static_cast<const formula::SingleVectorRefToken*>(p);
                     const double* pArray = p2->GetArray();
-                    aCode2.AddDouble(pArray[i]);
+                    aCode2.AddDouble(i < p2->GetArrayLength() ? pArray[i] : 0.0);
                 }
                 break;
                 case svDoubleVectorRef:
-                    return false;
+                {
+                    const formula::DoubleVectorRefToken* p2 = static_cast<const formula::DoubleVectorRefToken*>(p);
+                    const std::vector<const double*>& rArrays = p2->GetArrays();
+                    size_t nColSize = rArrays.size();
+                    size_t nRowStart = p2->IsStartFixed() ? 0 : i;
+                    size_t nRowEnd = p2->GetRefRowSize() - 1;
+                    if (!p2->IsEndFixed())
+                        nRowEnd += i;
+
+                    size_t nRowSize = nRowEnd - nRowStart + 1;
+                    ScMatrixRef pMat(new ScMatrix(nColSize, nRowSize, 0.0));
+                    for (size_t nCol = 0; nCol < nColSize; ++nCol)
+                    {
+                        const double* pArray = rArrays[nCol];
+                        for (size_t nRow = 0; nRow < nRowSize; ++nRow)
+                        {
+                            if (nRowStart + nRow < p2->GetArrayLength())
+                            {
+                                double fVal = pArray[nRowStart+nRow];
+                                pMat->PutDouble(fVal, nCol, nRow);
+                            }
+                        }
+                    }
+
+                    ScMatrixToken aTok(pMat);
+                    aCode2.AddToken(aTok);
+                }
                 break;
                 default:
                     aCode2.AddToken(*p);

@@ -12,11 +12,11 @@
 namespace formula {
 
 SingleVectorRefToken::SingleVectorRefToken( const double* pArray, size_t nLength ) :
-    FormulaToken(svSingleVectorRef, ocPush), mpArray(pArray), mnLength(nLength) {}
+    FormulaToken(svSingleVectorRef, ocPush), mpArray(pArray), mnArrayLength(nLength) {}
 
 FormulaToken* SingleVectorRefToken::Clone() const
 {
-    return new SingleVectorRefToken(mpArray, mnLength);
+    return new SingleVectorRefToken(mpArray, mnArrayLength);
 }
 
 const double* SingleVectorRefToken::GetArray() const
@@ -24,24 +24,44 @@ const double* SingleVectorRefToken::GetArray() const
     return mpArray;
 }
 
-size_t SingleVectorRefToken::GetLength() const
+size_t SingleVectorRefToken::GetArrayLength() const
 {
-    return mnLength;
+    return mnArrayLength;
 }
 
 DoubleVectorRefToken::DoubleVectorRefToken(
-    const std::vector<const double*>& rArrays, size_t nRowSize, bool bAbsStart, bool bAbsEnd ) :
+    const std::vector<const double*>& rArrays, size_t nArrayLength, size_t nRefRowSize, bool bStartFixed, bool bEndFixed ) :
     FormulaToken(svDoubleVectorRef, ocPush),
-    maArrays(rArrays), mnRowSize(nRowSize), mbAbsStart(bAbsStart), mbAbsEnd(bAbsEnd) {}
+    maArrays(rArrays), mnArrayLength(nArrayLength), mnRefRowSize(nRefRowSize), mbStartFixed(bStartFixed), mbEndFixed(bEndFixed) {}
 
 FormulaToken* DoubleVectorRefToken::Clone() const
 {
-    return new DoubleVectorRefToken(maArrays, mnRowSize, mbAbsStart, mbAbsEnd);
+    return new DoubleVectorRefToken(maArrays, mnArrayLength, mnRefRowSize, mbStartFixed, mbEndFixed);
 }
 
 const std::vector<const double*>& DoubleVectorRefToken::GetArrays() const
 {
     return maArrays;
+}
+
+size_t DoubleVectorRefToken::GetArrayLength() const
+{
+    return mnArrayLength;
+}
+
+size_t DoubleVectorRefToken::GetRefRowSize() const
+{
+    return mnRefRowSize;
+}
+
+bool DoubleVectorRefToken::IsStartFixed() const
+{
+    return mbStartFixed;
+}
+
+bool DoubleVectorRefToken::IsEndFixed() const
+{
+    return mbEndFixed;
 }
 
 }

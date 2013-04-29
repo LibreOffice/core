@@ -17,7 +17,7 @@ namespace formula {
 class FORMULA_DLLPUBLIC SingleVectorRefToken : public FormulaToken
 {
     const double* mpArray;
-    size_t mnLength;
+    size_t mnArrayLength;
 
 public:
     SingleVectorRefToken( const double* pArray, size_t nLength );
@@ -25,7 +25,7 @@ public:
     virtual FormulaToken* Clone() const;
 
     const double* GetArray() const;
-    size_t GetLength() const;
+    size_t GetArrayLength() const;
 };
 
 /**
@@ -36,18 +36,23 @@ class FORMULA_DLLPUBLIC DoubleVectorRefToken : public FormulaToken
 {
     std::vector<const double*> maArrays;
 
-    size_t mnRowSize;
+    size_t mnArrayLength;
+    size_t mnRefRowSize;
 
-    bool mbAbsStart:1; /// whether or not the start row position is absolute.
-    bool mbAbsEnd:1; /// whether or not the end row position is absolute.
+    bool mbStartFixed:1; /// whether or not the start row position is absolute.
+    bool mbEndFixed:1; /// whether or not the end row position is absolute.
 
 public:
     DoubleVectorRefToken(
-        const std::vector<const double*>& rArrays, size_t nRowSize, bool bAbsStart, bool bAbsEnd );
+        const std::vector<const double*>& rArrays, size_t nArrayLength, size_t nRefRowSize, bool bStartFixed, bool bEndFixed );
 
     virtual FormulaToken* Clone() const;
 
     const std::vector<const double*>& GetArrays() const;
+    size_t GetArrayLength() const;
+    size_t GetRefRowSize() const;
+    bool IsStartFixed() const;
+    bool IsEndFixed() const;
 };
 
 }
