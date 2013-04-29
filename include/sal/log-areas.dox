@@ -247,7 +247,6 @@ certain functionality.
 @section stoc
 
 @li @c stoc.corerefl - CoreReflection
-@li @c stoc.tdmanager - TypeDescriptionManager
 
 @section svl
 
