@@ -312,7 +312,7 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
     SetLen( GetMinLen( *this ) );
 }
 
-SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const OUString &rTxt,
+SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const OUString* pTxt_,
                               const sal_Int32 nIndex, const xub_StrLen nLength )
     : SwTxtInfo( rNew ),
       pKanaComp(((SwTxtSizeInfo&)rNew).GetpKanaComp()),
@@ -323,7 +323,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const OUString &rTxt,
       pUnderFnt(((SwTxtSizeInfo&)rNew).GetUnderFnt()),
       pFrm( rNew.pFrm ),
       pOpt(&rNew.GetOpt()),
-      pTxt(&rTxt),
+      pTxt(pTxt_),
       nIdx(nIndex),
       nLen(nLength),
       nKanaIdx( rNew.GetKanaIdx() ),
@@ -474,8 +474,8 @@ void SwTxtPaintInfo::CtorInitTxtPaintInfo( SwTxtFrm *pFrame, const SwRect &rPain
 #endif
 }
 
-SwTxtPaintInfo::SwTxtPaintInfo( const SwTxtPaintInfo &rInf, const XubString &rTxt )
-    : SwTxtSizeInfo( rInf, rTxt ),
+SwTxtPaintInfo::SwTxtPaintInfo( const SwTxtPaintInfo &rInf, const OUString* pTxt_ )
+    : SwTxtSizeInfo( rInf, pTxt_ ),
       pWrongList( rInf.GetpWrongList() ),
       pGrammarCheckList( rInf.GetGrammarCheckList() ),
       pSmartTags( rInf.GetSmartTags() ),    // SMARTTAGS

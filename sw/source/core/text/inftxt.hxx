@@ -201,7 +201,7 @@ protected:
     SwTxtSizeInfo() : pKanaComp(0), pVsh(0), pOut(0), pRef(0), pFnt(0), pUnderFnt(0), pFrm(0), pOpt(0), pTxt(0) {}
 public:
     SwTxtSizeInfo( const SwTxtSizeInfo &rInf );
-    SwTxtSizeInfo( const SwTxtSizeInfo &rInf, const OUString &rTxt,
+    SwTxtSizeInfo( const SwTxtSizeInfo &rInf, const OUString* pTxt_,
                    const sal_Int32 nIdx = 0,
                    const xub_StrLen nLen = STRING_LEN );
 
@@ -400,7 +400,7 @@ protected:
 #endif
 public:
     SwTxtPaintInfo( const SwTxtPaintInfo &rInf );
-    SwTxtPaintInfo( const SwTxtPaintInfo &rInf, const XubString &rTxt );
+    SwTxtPaintInfo( const SwTxtPaintInfo &rInf, const OUString* pTxt );
 
     void CtorInitTxtPaintInfo( SwTxtFrm *pFrame, const SwRect &rPaint );
 

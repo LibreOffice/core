@@ -395,7 +395,7 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
             pSave.reset( new SwFontSave( rInf, const_cast<SwFont*>(pNumberPortionFont) ) );
         }
         OUString aTmp( ' ' );
-        SwTxtSizeInfo aInf( rInf, aTmp );
+        SwTxtSizeInfo aInf( rInf, &aTmp );
         nMinimumTabWidth = aInf.GetTxtSize().Width();
     }
     PrtWidth( nMinimumTabWidth );

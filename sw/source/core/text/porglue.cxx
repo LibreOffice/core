@@ -92,9 +92,9 @@ void SwGluePortion::Paint( const SwTxtPaintInfo &rInf ) const
     {
         OUStringBuffer aBuf;
         comphelper::string::padToLength(aBuf, GetFixWidth() / GetLen(), ' ');
-        String aTxt(aBuf.makeStringAndClear());
-        SwTxtPaintInfo aInf( rInf, aTxt );
-        aInf.DrawText( *this, aTxt.Len(), sal_True );
+        OUString aTxt(aBuf.makeStringAndClear());
+        SwTxtPaintInfo aInf( rInf, &aTxt );
+        aInf.DrawText( *this, aTxt.getLength(), sal_True );
     }
 
     if( rInf.OnWin() && rInf.GetOpt().IsBlank() && rInf.IsNoSymbol() )
@@ -110,7 +110,7 @@ void SwGluePortion::Paint( const SwTxtPaintInfo &rInf ) const
             SwPosSize aBulletSize( rInf.GetTxtSize( aBullet ) );
             Point aPos( rInf.GetPos() );
             aPos.X() += (Width()/2) - (aBulletSize.Width()/2);
-            SwTxtPaintInfo aInf( rInf, aBullet );
+            SwTxtPaintInfo aInf( rInf, &aBullet );
             aInf.SetPos( aPos );
             SwTxtPortion aBulletPor;
             aBulletPor.Width( aBulletSize.Width() );

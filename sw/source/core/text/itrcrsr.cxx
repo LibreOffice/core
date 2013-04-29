@@ -490,7 +490,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
     SwCrsrMoveState* pCMS )
 {
     const OUString aText = GetInfo().GetTxt();
-    SwTxtSizeInfo aInf( GetInfo(), aText, nStart );
+    SwTxtSizeInfo aInf( GetInfo(), &aText, nStart );
     if( GetPropFont() )
         aInf.GetFont()->SetProportion( GetPropFont() );
     KSHORT nTmpAscent, nTmpHeight;  // Zeilenhoehe
@@ -1594,7 +1594,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                 nOldProp = 0;
             {
                 OUString aText = rText;
-                SwTxtSizeInfo aSizeInf( GetInfo(), aText, nCurrStart );
+                SwTxtSizeInfo aSizeInf( GetInfo(), &aText, nCurrStart );
                 ((SwTxtCursor*)this)->SeekAndChg( aSizeInf );
                 SwTxtSlot aDiffTxt( &aSizeInf, ((SwTxtPortion*)pPor), false, false );
                 SwFontSave aSave( aSizeInf, pPor->IsDropPortion() ?
