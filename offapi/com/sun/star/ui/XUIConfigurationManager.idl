@@ -61,8 +61,7 @@ interface XUIConfigurationManager : ::com::sun::star::uno::XInterface
         @param ElementType
             makes it possible to narrow the result set to only one type
             of user interface elements. If all user interface element
-            types should be returned
-            <value scope=com::sun::star::ui>UIElementType::UNKNOWN</value>
+            types should be returned com::sun::star::ui::UIElementType::UNKNOWN
             must be provided.
 
         @return

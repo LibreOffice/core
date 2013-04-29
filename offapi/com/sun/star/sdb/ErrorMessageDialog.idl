@@ -29,18 +29,7 @@ module com {  module sun {  module star {  module sdb {
 /** provides a dialog for displaying database related exceptions.
     <p>
     If applications use any of the functionality provided in the modules
-    <module scope="com.sun.star">
-    sdbc
-    </module>
-    ,
-    <module scope="com.sun.star">
-    sdbcx
-    </module>
-     and
-     <module scope="com.sun.star">
-     sdb
-     </module>
-     ,
+    com.sun.star::sdbc, com.sun.star::sdbcx and com.sun.star::sdb,
     they will - sooner or later - encounter
     com::sun::star::sdbc::SQLException
     's.
