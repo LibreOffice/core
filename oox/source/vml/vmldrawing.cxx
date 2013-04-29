@@ -34,6 +34,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <rtl/oustringostreaminserter.hxx>
 #include "oox/core/xmlfilterbase.hxx"
@@ -236,6 +237,8 @@ Reference< XShape > Drawing::createAndInsertXShape( const OUString& rService,
             xPropSet->setPropertyValue( OUString::createFromAscii( "VertOrient" ), makeAny( VertOrientation::NONE ) );
             xPropSet->setPropertyValue( OUString::createFromAscii( "HoriOrientPosition" ), makeAny( rShapeRect.X ) );
             xPropSet->setPropertyValue( OUString::createFromAscii( "VertOrientPosition" ), makeAny( rShapeRect.Y ) );
+            xPropSet->setPropertyValue( OUString::createFromAscii( "HoriOrientRelation" ), makeAny( RelOrientation::FRAME ) );
+            xPropSet->setPropertyValue( OUString::createFromAscii( "VertOrientRelation" ), makeAny( RelOrientation::FRAME ) );
         }
         xShape->setSize( Size( rShapeRect.Width, rShapeRect.Height ) );
     }
