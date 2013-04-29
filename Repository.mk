@@ -220,6 +220,7 @@ endif
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
 	avmedia \
 	$(if $(DISABLE_SCRIPTING),,basctl) \
+    basegfx \
     bib \
     canvastools \
     chartcore \
@@ -246,7 +247,9 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     ept \
     era \
     eti \
+    evtatt \
     exp \
+    flat \
 	file \
 	filterconfig \
     for \
@@ -258,6 +261,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     fwl \
 	fwm \
     $(if $(filter DESKTOP,$(BUILD_TYPE)),helplinker) \
+    hyphen \
     icd \
     icg \
     idx \
@@ -271,13 +275,28 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     itg \
     iti \
     lng \
+    lnth \
     $(if $(MERGELIBS),merged) \
     msfilter \
+    mysql \
+    odbc \
     odbcbase \
+    odfflatxml \
+    offacc \
+    oox \
+    pcr \
+    pdffilter \
     sax \
     sb \
     sdbt \
+    scd \
+    scfilt \
+    scui \
+    scn \
+    sd \
+    sdd \
     sdfilt \
+    sdui \
     sfx \
     sot \
     $(if $(ENABLE_HEADLESS),,spl) \
@@ -286,6 +305,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     svt \
     svx \
     svxcore \
+    sw \
     tk \
     tl \
 	$(if $(ENABLE_TELEPATHY),tubes) \
@@ -295,7 +315,12 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     uui \
     vcl \
     xmlscript \
+    xmlfa \
+    xmlfd \
     xo \
+    xof \
+    xsltdlg \
+    xsltfilter \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,WRITER, \
@@ -323,38 +348,26 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     ) \
     communi \
     date \
-    evtatt \
-    odbc \
-    oox \
 	ooxml \
     sdbc \
     AppleRemote \
     avmediaQuickTime \
-    basegfx \
     calc \
     dbp \
     dbu \
     evoab \
 	filtertracer \
 	flash \
-	flat \
     graphicfilter \
     guesslang \
-    hyphen \
 	jdbc \
 	kab1 \
 	kabdrv1 \
-    lnth \
     log \
 	MacOSXSpell \
     mork \
     mozab2 \
     mozabdrv \
-	mysql \
-    odfflatxml \
-    offacc \
-    pcr \
-    pdffilter \
     placeware \
     pricing \
     protocolhandler \
@@ -364,13 +377,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     rptui \
     rptxml \
     sc \
-    scd \
-    scfilt \
-    scn \
-    scui \
-    sd \
-    sdd \
-    sdui \
     simplecm \
     sm \
     smd \
@@ -379,7 +385,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     spell \
     sts \
     svgfilter \
-    sw \
 	tdeab1 \
 	tdeabdrv1 \
     textconversiondlgs \
@@ -394,11 +399,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     vclplug_kde4 \
     vclplug_svp \
     wpftdraw \
-    xmlfa \
-    xmlfd \
-    xof \
-    xsltdlg \
-    xsltfilter \
 ))
 
 ifneq (,$(filter ANDROID IOS,$(OS)))
