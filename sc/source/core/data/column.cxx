@@ -50,6 +50,11 @@ bool ColEntry::Less::operator() (const ColEntry& r1, const ColEntry& r2) const
     return r1.nRow < r2.nRow;
 }
 
+bool ColDoubleEntry::LessByPtr::operator() (const ColDoubleEntry* p1, const ColDoubleEntry* p2) const
+{
+    return p1->mnStart < p2->mnStart;
+}
+
 namespace {
 
 inline bool IsAmbiguousScriptNonZero( sal_uInt8 nScript )
@@ -87,6 +92,22 @@ void ScColumn::SwapScriptTypes( ScriptType& rSrc, SCROW nSrcRow, ScriptType& rDe
         rDest.set(nDestRow, nSrcVal);
     else
         rDest.set_empty(nDestRow, nDestRow);
+}
+
+std::vector<ColEntry>::iterator ScColumn::Search( SCROW nRow )
+{
+    // Find first cell whose position is equal or greater than nRow.
+    ColEntry aBound;
+    aBound.nRow = nRow;
+    return std::lower_bound(maItems.begin(), maItems.end(), aBound, ColEntry::Less());
+}
+
+std::vector<ColEntry>::const_iterator ScColumn::Search( SCROW nRow ) const
+{
+    // Find first cell whose position is equal or greater than nRow.
+    ColEntry aBound;
+    aBound.nRow = nRow;
+    return std::lower_bound(maItems.begin(), maItems.end(), aBound, ColEntry::Less());
 }
 
 ScColumn::ScColumn() :

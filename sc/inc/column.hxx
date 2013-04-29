@@ -106,6 +106,11 @@ struct ColDoubleEntry
 {
     SCROW               mnStart;
     std::vector<double> maData;
+
+    struct LessByPtr : std::binary_function<ColDoubleEntry*, ColDoubleEntry*, bool>
+    {
+        bool operator() (const ColDoubleEntry* p1, const ColDoubleEntry* p2) const;
+    };
 };
 
 class ScColumn
@@ -154,6 +159,9 @@ friend class ScDocumentImport;
     ScColumn& operator= (const ScColumn&); // disabled
 
     static void SwapScriptTypes( ScriptType& rSrc, SCROW nSrcRow, ScriptType& rDest, SCROW nDestRow );
+
+    std::vector<ColEntry>::iterator Search( SCROW nRow );
+    std::vector<ColEntry>::const_iterator Search( SCROW nRow ) const;
 
 public:
                 ScColumn();
@@ -452,6 +460,7 @@ public:
     ScFormulaVectorState GetFormulaVectorState( SCROW nRow ) const;
     formula::FormulaTokenRef ResolveStaticReference( SCROW nRow );
     bool ResolveStaticReference( ScMatrix& rMat, SCCOL nMatCol, SCROW nRow1, SCROW nRow2 );
+    const double* FetchDoubleArray( SCROW nRow1, SCROW nRow2 ) const;
 
     ScRefCellValue GetRefCellValue( SCROW );
 

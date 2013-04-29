@@ -40,6 +40,7 @@
 #include "tokenarray.hxx"
 
 #include "formula/errorcodes.hxx"
+#include "formula/vectortoken.hxx"
 #include "svl/intitem.hxx"
 #include "rtl/strbuf.hxx"
 
@@ -2912,7 +2913,7 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell *p
                 if (rRef != pOtherTok->GetSingleRef())
                     return NotEqual;
 
-                if (rRef.IsColRel() || rRef.IsRowRel())
+                if (rRef.IsRowRel())
                     bInvariant = false;
             }
             break;
@@ -2927,10 +2928,10 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell *p
                 if (rRef2 != pOtherTok->GetSingleRef2())
                     return NotEqual;
 
-                if (rRef1.IsColRel() || rRef1.IsRowRel())
+                if (rRef1.IsRowRel())
                     bInvariant = false;
 
-                if (rRef2.IsColRel() || rRef2.IsRowRel())
+                if (rRef2.IsRowRel())
                     bInvariant = false;
             }
             break;
@@ -2967,6 +2968,75 @@ bool ScFormulaCell::InterpretFormulaGroup()
     if (xGroup->mbInvariant)
         return InterpretInvariantFormulaGroup();
 
+    ScTokenArray aCode;
+    pCode->Reset();
+    for (const formula::FormulaToken* p = pCode->First(); p; p = pCode->Next())
+    {
+        // A reference can be either absolute or relative.  If it's absolute,
+        // convert it to a static value token.  If relative, convert it to a
+        // vector reference token.  Note: we only care about relative vs
+        // absolute reference state for row directions.
+
+        const ScToken* pToken = static_cast<const ScToken*>(p);
+        switch (pToken->GetType())
+        {
+            case svSingleRef:
+            {
+                ScSingleRefData aRef = pToken->GetSingleRef();
+                aRef.CalcAbsIfRel(aPos);
+                ScAddress aRefPos(aRef.nCol, aRef.nRow, aRef.nTab);
+                if (aRef.IsRowRel())
+                {
+                    // Fetch double array guarantees that the length of the
+                    // returned array equals or greater than the requested
+                    // length.
+                    const double* pArray = pDocument->FetchDoubleArray(aRefPos, xGroup->mnLength);
+                    if (!pArray)
+                        return false;
+
+                    formula::SingleVectorRefToken aTok(pArray, xGroup->mnLength);
+                    aCode.AddToken(aTok);
+                }
+                else
+                {
+                    // Absolute row reference.
+                    formula::FormulaTokenRef pNewToken = pDocument->ResolveStaticReference(aRefPos);
+                    if (!pNewToken)
+                        return false;
+
+                    aCode.AddToken(*pNewToken);
+                }
+            }
+            break;
+            case svDoubleRef:
+            {
+                ScComplexRefData aRef = pToken->GetDoubleRef();
+                aRef.CalcAbsIfRel(aPos);
+                if (aRef.Ref1.IsRowRel() || aRef.Ref2.IsRowRel())
+                {
+                    // TODO: Implement this.
+                    return false;
+                }
+                else
+                {
+                    // Absolute row reference.
+                    ScRange aRefRange(
+                        aRef.Ref1.nCol, aRef.Ref1.nRow, aRef.Ref1.nTab,
+                        aRef.Ref2.nCol, aRef.Ref2.nRow, aRef.Ref2.nTab);
+
+                    formula::FormulaTokenRef pNewToken = pDocument->ResolveStaticReference(aRefRange);
+                    if (!pNewToken)
+                        return false;
+
+                    aCode.AddToken(*pNewToken);
+                }
+            }
+            break;
+            default:
+                aCode.AddToken(*pToken);
+        }
+    }
+
     // scan the formula ...
     // have a document method: "Get2DRangeAsDoublesArray" that does the
     // column-based heavy lifting call it for each absolute range from the
@@ -3001,7 +3071,7 @@ bool ScFormulaCell::InterpretInvariantFormulaGroup()
 {
     if (pCode->GetVectorState() == FormulaVectorCheckReference)
     {
-        // An invariant group should only have absolute references, and no
+        // An invariant group should only have absolute row references, and no
         // external references are allowed.
 
         ScTokenArray aCode;
@@ -3013,8 +3083,9 @@ bool ScFormulaCell::InterpretInvariantFormulaGroup()
             {
                 case svSingleRef:
                 {
-                    const ScSingleRefData& rRef = pToken->GetSingleRef();
-                    ScAddress aRefPos(rRef.nCol, rRef.nRow, rRef.nTab);
+                    ScSingleRefData aRef = pToken->GetSingleRef();
+                    aRef.CalcAbsIfRel(aPos); // column may be relative.
+                    ScAddress aRefPos(aRef.nCol, aRef.nRow, aRef.nTab);
                     formula::FormulaTokenRef pNewToken = pDocument->ResolveStaticReference(aRefPos);
                     if (!pNewToken)
                         return false;
@@ -3024,10 +3095,11 @@ bool ScFormulaCell::InterpretInvariantFormulaGroup()
                 break;
                 case svDoubleRef:
                 {
-                    const ScComplexRefData& rRef = pToken->GetDoubleRef();
+                    ScComplexRefData aRef = pToken->GetDoubleRef();
+                    aRef.CalcAbsIfRel(aPos); // column may be relative.
                     ScRange aRefRange(
-                        rRef.Ref1.nCol, rRef.Ref1.nRow, rRef.Ref1.nTab,
-                        rRef.Ref2.nCol, rRef.Ref2.nRow, rRef.Ref2.nTab);
+                        aRef.Ref1.nCol, aRef.Ref1.nRow, aRef.Ref1.nTab,
+                        aRef.Ref2.nCol, aRef.Ref2.nRow, aRef.Ref2.nTab);
 
                     formula::FormulaTokenRef pNewToken = pDocument->ResolveStaticReference(aRefRange);
                     if (!pNewToken)

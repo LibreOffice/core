@@ -39,7 +39,6 @@ class FORMULA_DLLPUBLIC DoubleVectorRefToken : public FormulaToken
 {
     std::vector<VectorArray> maArrays;
 
-    size_t mnColSize;
     size_t mnRowSize;
 
     bool mbAbsStart:1; /// whether or not the start row position is absolute.
@@ -47,8 +46,7 @@ class FORMULA_DLLPUBLIC DoubleVectorRefToken : public FormulaToken
 
 public:
     DoubleVectorRefToken(
-        const std::vector<VectorArray>& rArrays, size_t nColSize, size_t nRowSize,
-        bool bAbsStart, bool bAbsEnd );
+        const std::vector<VectorArray>& rArrays, size_t nRowSize, bool bAbsStart, bool bAbsEnd );
 
     const std::vector<VectorArray>& GetArrays() const;
 };

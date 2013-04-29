@@ -1944,6 +1944,8 @@ public:
     formula::FormulaTokenRef ResolveStaticReference( const ScAddress& rPos );
     formula::FormulaTokenRef ResolveStaticReference( const ScRange& rRange );
 
+    const double* FetchDoubleArray( const ScAddress& rPos, SCROW nLength ) const;
+
 private: // CLOOK-Impl-methods
 
     /**

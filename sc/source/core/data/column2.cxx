@@ -1591,12 +1591,8 @@ ScFormulaVectorState ScColumn::GetFormulaVectorState( SCROW nRow ) const
 
 formula::FormulaTokenRef ScColumn::ResolveStaticReference( SCROW nRow )
 {
+    std::vector<ColEntry>::iterator it = Search(nRow);
     std::vector<ColEntry>::iterator itEnd = maItems.end();
-    // Find first cell whose position is equal or greater than nRow1.
-    ColEntry aBound;
-    aBound.nRow = nRow;
-    std::vector<ColEntry>::iterator it =
-        std::lower_bound(maItems.begin(), itEnd, aBound, ColEntry::Less());
 
     if (it == itEnd || it->nRow != nRow)
     {
@@ -1633,12 +1629,8 @@ bool ScColumn::ResolveStaticReference( ScMatrix& rMat, SCCOL nMatCol, SCROW nRow
     if (nRow1 > nRow2)
         return false;
 
+    std::vector<ColEntry>::iterator it = Search(nRow1);
     std::vector<ColEntry>::iterator itEnd = maItems.end();
-    // Find first cell whose position is equal or greater than nRow1.
-    ColEntry aBound;
-    aBound.nRow = nRow1;
-    std::vector<ColEntry>::iterator it =
-        std::lower_bound(maItems.begin(), itEnd, aBound, ColEntry::Less());
 
     for (; it != itEnd && it->nRow <= nRow2; ++it)
     {
@@ -1666,6 +1658,50 @@ bool ScColumn::ResolveStaticReference( ScMatrix& rMat, SCCOL nMatCol, SCROW nRow
     }
 
     return true;
+}
+
+const double* ScColumn::FetchDoubleArray( SCROW nRow1, SCROW nRow2 ) const
+{
+    if (nRow1 > nRow2)
+        return NULL;
+
+    ColDoubleEntry aBound;
+    aBound.mnStart = nRow1;
+    std::vector<ColDoubleEntry*>::const_iterator it =
+        std::lower_bound(maDoubles.begin(), maDoubles.end(), &aBound, ColDoubleEntry::LessByPtr());
+
+    if (it == maDoubles.end())
+        return NULL;
+
+    // There should never be an entry with empty double array. So we don't
+    // even bother checking for emptiness here.
+
+    const ColDoubleEntry& rEntry = **it;
+
+    if (rEntry.mnStart == nRow1)
+    {
+        SCROW nLastRow = rEntry.mnStart + rEntry.maData.size() - 1;
+        if (nLastRow < nRow2)
+            // Array is shorter than requested length.
+            return NULL;
+
+        return &rEntry.maData[0];
+    }
+
+    OSL_ASSERT(nRow1 < rEntry.mnStart);
+
+    if (it == maDoubles.begin())
+        // This is the very first array entry.
+        return NULL;
+
+    --it; // Go to previous array so that rEntry.mnStart < nRow1.
+    OSL_ASSERT((**it).mnStart < nRow1);
+    SCROW nLastRow = rEntry.mnStart + rEntry.maData.size() - 1;
+    if (nLastRow < nRow2)
+        // Array is shorter than requested length.
+        return NULL;
+
+    return &rEntry.maData[nRow1 - rEntry.mnStart];
 }
 
 ScRefCellValue ScColumn::GetRefCellValue( SCROW nRow )

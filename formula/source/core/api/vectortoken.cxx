@@ -23,9 +23,9 @@ const VectorArray& SingleVectorRefToken::GetArray() const
 }
 
 DoubleVectorRefToken::DoubleVectorRefToken(
-    const std::vector<VectorArray>& rArrays, size_t nColSize, size_t nRowSize, bool bAbsStart, bool bAbsEnd ) :
+    const std::vector<VectorArray>& rArrays, size_t nRowSize, bool bAbsStart, bool bAbsEnd ) :
     FormulaToken(svDoubleVectorRef, ocPush),
-    maArrays(rArrays), mnColSize(nColSize), mnRowSize(nRowSize), mbAbsStart(bAbsStart), mbAbsEnd(bAbsEnd) {}
+    maArrays(rArrays), mnRowSize(nRowSize), mbAbsStart(bAbsStart), mbAbsEnd(bAbsEnd) {}
 
 const std::vector<VectorArray>& DoubleVectorRefToken::GetArrays() const
 {

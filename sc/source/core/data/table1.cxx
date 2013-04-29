@@ -2140,6 +2140,17 @@ formula::FormulaTokenRef ScTable::ResolveStaticReference( SCCOL nCol1, SCROW nRo
     return formula::FormulaTokenRef(new ScMatrixToken(pMat));
 }
 
+const double* ScTable::FetchDoubleArray( SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const
+{
+    if (nRow2 < nRow1)
+        return NULL;
+
+    if (!ValidCol(nCol) || !ValidRow(nRow1) || !ValidRow(nRow2))
+        return NULL;
+
+    return aCol[nCol].FetchDoubleArray(nRow1, nRow1);
+}
+
 ScRefCellValue ScTable::GetRefCellValue( SCCOL nCol, SCROW nRow )
 {
     if (!ValidColRow(nCol, nRow))
