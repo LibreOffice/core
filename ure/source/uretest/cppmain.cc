@@ -23,13 +23,35 @@
 #include <memory>
 #include <new>
 
+#include "com/sun/star/beans/Introspection.hpp"
+#include "com/sun/star/bridge/BridgeFactory.hpp"
+#include "com/sun/star/bridge/UnoUrlResolver.hpp"
+#include "com/sun/star/connection/Acceptor.hpp"
+#include "com/sun/star/connection/Connector.hpp"
+#include "com/sun/star/io/Pipe.hpp"
+#include "com/sun/star/io/TextInputStream.hpp"
+#include "com/sun/star/io/TextOutputStream.hpp"
+#include "com/sun/star/java/JavaVirtualMachine.hpp"
 #include "com/sun/star/lang/XMain.hpp"
+#include "com/sun/star/loader/Java.hpp"
+#include "com/sun/star/loader/SharedLibrary.hpp"
+#include "com/sun/star/reflection/ProxyFactory.hpp"
+#include "com/sun/star/registry/ImplementationRegistration.hpp"
+#include "com/sun/star/registry/SimpleRegistry.hpp"
+#include "com/sun/star/script/Converter.hpp"
+#include "com/sun/star/script/Invocation.hpp"
+#include "com/sun/star/security/AccessController.hpp"
+#include "com/sun/star/security/Policy.hpp"
 #include "com/sun/star/uno/Exception.hpp"
+#include "com/sun/star/uno/NamingService.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
+#include "com/sun/star/uri/ExternalUriReferenceTranslator.hpp"
+#include "com/sun/star/uri/UriReferenceFactory.hpp"
+#include "com/sun/star/uri/VndSunStarPkgUrlReferenceFactory.hpp"
 #include "com/sun/star/util/theMacroExpander.hpp"
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implbase1.hxx"
@@ -88,42 +110,19 @@ private:
         std::auto_ptr< cppu::UnoUrl > dummy(new cppu::UnoUrl(rtl::OUString()));
     } catch (rtl::MalformedUriException &) {}
     static char const * const services[] = {
-        "com.sun.star.beans.Introspection",
-        "com.sun.star.bridge.BridgeFactory",
-        "com.sun.star.bridge.UnoUrlResolver",
-        "com.sun.star.connection.Acceptor",
-        "com.sun.star.connection.Connector",
         "com.sun.star.io.DataInputStream",
         "com.sun.star.io.DataOutputStream",
         "com.sun.star.io.MarkableInputStream",
         "com.sun.star.io.MarkableOutputStream",
         "com.sun.star.io.ObjectInputStream",
         "com.sun.star.io.ObjectOutputStream",
-        "com.sun.star.io.Pipe",
         "com.sun.star.io.Pump",
-        "com.sun.star.io.TextInputStream",
-        "com.sun.star.io.TextOutputStream",
-        "com.sun.star.java.JavaVirtualMachine",
         "com.sun.star.lang.RegistryServiceManager",
         "com.sun.star.lang.ServiceManager",
-        "com.sun.star.loader.Java",
-        "com.sun.star.loader.Java2",
-        "com.sun.star.loader.SharedLibrary",
         "com.sun.star.reflection.CoreReflection",
-        "com.sun.star.reflection.ProxyFactory",
-        "com.sun.star.registry.ImplementationRegistration",
         "com.sun.star.registry.NestedRegistry",
-        "com.sun.star.registry.SimpleRegistry",
-        "com.sun.star.script.Converter",
-        "com.sun.star.script.Invocation",
         "com.sun.star.script.InvocationAdapterFactory",
-        "com.sun.star.security.AccessController",
-        "com.sun.star.security.Policy",
-        "com.sun.star.uno.NamingService",
-        "com.sun.star.uri.ExternalUriReferenceTranslator",
-        "com.sun.star.uri.UriReferenceFactory",
-        "com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript",
-        "com.sun.star.uri.VndSunStarPkgUrlReferenceFactory"
+        "com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript"
     };
     for (::std::size_t i = 0; i < SAL_N_ELEMENTS(services); ++i) {
         ::rtl::OUString name(::rtl::OUString::createFromAscii(services[i]));
@@ -144,6 +143,28 @@ private:
                 static_cast< ::cppu::OWeakObject * >(this));
         }
     }
+    css::beans::Introspection::create(context_);
+    css::bridge::BridgeFactory::create(context_);
+    css::bridge::UnoUrlResolver::create(context_);
+    css::connection::Acceptor::create(context_);
+    css::connection::Connector::create(context_);
+    css::io::Pipe::create(context_);
+    css::io::TextInputStream::create(context_);
+    css::io::TextOutputStream::create(context_);
+    css::java::JavaVirtualMachine::create(context_);
+    css::loader::Java::create(context_);
+    css::loader::SharedLibrary::create(context_);
+    css::reflection::ProxyFactory::create(context_);
+    css::registry::ImplementationRegistration::create(context_);
+    css::registry::SimpleRegistry::create(context_);
+    css::script::Converter::create(context_);
+    css::script::Invocation::create(context_);
+    css::security::AccessController::create(context_);
+    css::security::Policy::create(context_);
+    css::uno::NamingService::create(context_);
+    css::uri::ExternalUriReferenceTranslator::create(context_);
+    css::uri::UriReferenceFactory::create(context_);
+    css::uri::VndSunStarPkgUrlReferenceFactory::create(context_);
     static char const * const singletons[] = {
         "com.sun.star.reflection.theTypeDescriptionManager"
     };
