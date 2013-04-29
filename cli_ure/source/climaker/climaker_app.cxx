@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
+#include <cstdlib>
+#include <iostream>
 #include <stdio.h>
 #include <vector>
 #include <memory>
@@ -30,13 +34,12 @@
 #include "rtl/ustrbuf.hxx"
 #include "cppuhelper/shlib.hxx"
 #include "cppuhelper/bootstrap.hxx"
-#include "com/sun/star/lang/XInitialization.hpp"
-#include "com/sun/star/lang/XSingleComponentFactory.hpp"
 #include "com/sun/star/lang/XComponent.hpp"
 #include "com/sun/star/container/XHierarchicalNameAccess.hpp"
 #include "com/sun/star/container/XSet.hpp"
 #include "com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp"
-#include "com/sun/star/registry/XSimpleRegistry.hpp"
+#include "com/sun/star/uno/XComponentContext.hpp"
+#include "unoidl/unoidl.hxx"
 
 using namespace ::std;
 using namespace ::System::Reflection;
@@ -239,65 +242,15 @@ static OUString path_make_absolute_file_url( OUString const & path )
         {
             throw RuntimeException(
                 "cannot make absolute: " + file_url,
-                Reference< XInterface >() );
+                css::uno::Reference< XInterface >() );
         }
     }
     else
     {
         throw RuntimeException(
             "cannot get file url from system path: " + path,
-            Reference< XInterface >() );
+            css::uno::Reference< XInterface >() );
     }
-}
-
-//==============================================================================
-Reference< registry::XSimpleRegistry > open_registries(
-    vector< OUString > const & registries,
-    Reference< XComponentContext > xContext )
-{
-    if (registries.empty())
-    {
-        throw RuntimeException(
-            "no registries given!",
-            Reference< XInterface >() );
-    }
-
-    Reference< registry::XSimpleRegistry > xSimReg;
-    for ( size_t nPos = registries.size(); nPos--; )
-    {
-        Reference< registry::XSimpleRegistry > xReg(
-            xContext->getServiceManager()->createInstanceWithContext(
-                "com.sun.star.registry.SimpleRegistry", xContext ),
-            UNO_QUERY_THROW );
-        xReg->open( registries[ nPos ], sal_True, sal_False );
-        if (! xReg->isValid())
-        {
-            throw RuntimeException(
-                "invalid registry: " + registries[ nPos ],
-                Reference< XInterface >() );
-        }
-
-        if (xSimReg.is()) // nest?
-        {
-            Reference< registry::XSimpleRegistry > xNested(
-                xContext->getServiceManager()->createInstanceWithContext(
-                    "com.sun.star.registry.NestedRegistry", xContext ),
-                UNO_QUERY_THROW );
-            Reference< lang::XInitialization > xInit(
-                xNested, UNO_QUERY_THROW );
-            Sequence< Any > args( 2 );
-            args[ 0 ] <<= xReg;
-            args[ 1 ] <<= xSimReg;
-            xInit->initialize( args );
-            xSimReg = xNested;
-        }
-        else
-        {
-            xSimReg = xReg;
-        }
-    }
-
-    return xSimReg;
 }
 
 }
@@ -315,7 +268,7 @@ SAL_IMPLEMENT_MAIN()
     }
 
     int ret = 0;
-    Reference< XComponentContext > xContext;
+    css::uno::Reference< XComponentContext > xContext;
 
     try
     {
@@ -433,7 +386,7 @@ SAL_IMPLEMENT_MAIN()
                                                  "to print all options.") );
                             throw RuntimeException(
                                 buf.makeStringAndClear(),
-                                Reference< XInterface >() );
+                                css::uno::Reference< XInterface >() );
                         }
                         else
                         {
@@ -453,45 +406,37 @@ SAL_IMPLEMENT_MAIN()
 
         // bootstrap uno
         xContext = ::cppu::defaultBootstrap_InitialComponentContext();
-        Reference< container::XHierarchicalNameAccess > xTDmgr(
+        css::uno::Reference< container::XHierarchicalNameAccess > xTDmgr(
             xContext->getValueByName(
                 "/singletons/com.sun.star.reflection."
                 "theTypeDescriptionManager" ),
             UNO_QUERY_THROW );
 
-        // get rdb tdprovider factory
-        Reference< lang::XSingleComponentFactory > xTDprov_factory(
-            ::cppu::loadSharedLibComponentFactory(
-                "bootstrap.uno" SAL_DLLEXTENSION, OUString(),
-                "com.sun.star.comp.stoc.RegistryTypeDescriptionProvider",
-                Reference< lang::XMultiServiceFactory >(
-                    xContext->getServiceManager(), UNO_QUERY ),
-                Reference< registry::XRegistryKey >(), "bootstrap_" ),
-            UNO_QUERY );
-        if (! xTDprov_factory.is())
-        {
-            throw RuntimeException(
-                "cannot get registry typedescription provider: "
-                "bootstrap.uno" SAL_DLLEXTENSION "!",
-                Reference< XInterface >() );
-        }
-
-        // create registry td provider for mandatory registry files
-        Any arg( makeAny( open_registries( mandatory_registries, xContext ) ) );
-        Reference< XInterface > xTD_provider(
-            xTDprov_factory->createInstanceWithArgumentsAndContext(
-                Sequence< Any >( &arg, 1 ), xContext ) );
-        // insert provider to tdmgr
-        Reference< container::XSet > xSet( xTDmgr, UNO_QUERY_THROW );
+        // The registries are consumed twice, once to insert them into the
+        // TypeDescriptionManager so that TypeEmitter can work on
+        // css.star.reflection.XTypeDescription representation, and once
+        // directly as unoidl::Provider instances to keep track which types are
+        // coming from the mandatory registries for the "no explicit types
+        // given" case (which iterates over the full TypeDescriptionManager
+        // now); a welcome clean-up would be to make TypeEmitter work on
+        // unoidl::Entity directly like the other codemakers:
+        css::uno::Reference< container::XSet > xSet( xTDmgr, UNO_QUERY_THROW );
+        rtl::Reference< unoidl::Manager > unoidlMgr(new unoidl::Manager);
+        std::vector< rtl::Reference< unoidl::Provider > > unoidlMandatoryProvs;
         for (vector< OUString >::iterator i(extra_registries.begin());
              i != extra_registries.end(); ++i)
         {
             xSet->insert(makeAny(*i));
+            unoidlMgr->addProvider(unoidl::loadProvider(unoidlMgr, *i));
         }
         for (vector< OUString >::iterator i(mandatory_registries.begin());
              i != mandatory_registries.end(); ++i)
         {
             xSet->insert(makeAny(*i));
+            rtl::Reference< unoidl::Provider > prov(
+                unoidl::loadProvider(unoidlMgr, *i));
+            unoidlMgr->addProvider(prov);
+            unoidlMandatoryProvs.push_back(prov);
         }
 
         if (0 == output.getLength()) // no output file specified
@@ -519,7 +464,7 @@ SAL_IMPLEMENT_MAIN()
             throw RuntimeException(
                 "cannot get system path from file url " +
                 output.copy( 0, slash ),
-                Reference< XInterface >() );
+                css::uno::Reference< XInterface >() );
         }
         OUString filename( output.copy( slash +1 ) );
         sal_Int32 dot = filename.lastIndexOf( '.' );
@@ -660,27 +605,40 @@ SAL_IMPLEMENT_MAIN()
         // and emit types to it
         if (explicit_types.empty())
         {
-            Reference< reflection::XTypeDescriptionEnumeration > xTD_enum(
-                Reference< reflection::XTypeDescriptionEnumerationAccess >(
-                    xTD_provider, UNO_QUERY_THROW )
+            css::uno::Reference< reflection::XTypeDescriptionEnumeration > xTD_enum(
+                css::uno::Reference< reflection::XTypeDescriptionEnumerationAccess >(
+                    xTDmgr, UNO_QUERY_THROW )
                   ->createTypeDescriptionEnumeration(
                       OUString() /* all IDL modules */,
                       Sequence< TypeClass >() /* all classes of types */,
                       reflection::TypeDescriptionSearchDepth_INFINITE ) );
             while (xTD_enum->hasMoreElements())
             {
-                type_emitter->get_type( xTD_enum->nextTypeDescription() );
+                css::uno::Reference< reflection::XTypeDescription > td(
+                    xTD_enum->nextTypeDescription());
+                OUString name(td->getName());
+                bool emit = false;
+                for (std::vector< rtl::Reference< unoidl::Provider > >::iterator
+                         i(unoidlMandatoryProvs.begin());
+                     i != unoidlMandatoryProvs.end(); ++i)
+                {
+                    if ((*i)->findEntity(name).is()) {
+                        emit = true;
+                        break;
+                    }
+                }
+                if (emit) {
+                    type_emitter->get_type(td);
+                }
             }
         }
         else
         {
-            Reference< container::XHierarchicalNameAccess > xHNA(
-                xTD_provider, UNO_QUERY_THROW );
             for ( size_t nPos = explicit_types.size(); nPos--; )
             {
                 type_emitter->get_type(
-                    Reference< reflection::XTypeDescription >(
-                        xHNA->getByHierarchicalName( explicit_types[ nPos ] ),
+                    css::uno::Reference< reflection::XTypeDescription >(
+                        xTDmgr->getByHierarchicalName( explicit_types[ nPos ] ),
                         UNO_QUERY_THROW ) );
             }
         }
@@ -710,6 +668,18 @@ SAL_IMPLEMENT_MAIN()
         }
         current_appdomain->TypeResolve -= type_resolver;
     }
+    catch (unoidl::NoSuchFileException & e)
+    {
+        std::cerr << "ERROR: No such file <" << e.getUri() << ">\n";
+        return EXIT_FAILURE;
+    }
+    catch (unoidl::FileFormatException & e)
+    {
+        std::cerr
+            << "ERROR: Bad format of <" << e.getUri() << ">, \""
+            << e.getDetail() << "\"\n";
+        return EXIT_FAILURE;
+    }
     catch (Exception & exc)
     {
         OString msg(
@@ -732,7 +702,7 @@ SAL_IMPLEMENT_MAIN()
 
     try
     {
-        Reference< lang::XComponent > xComp( xContext, UNO_QUERY );
+        css::uno::Reference< lang::XComponent > xComp( xContext, UNO_QUERY );
         if (xComp.is())
             xComp->dispose();
     }

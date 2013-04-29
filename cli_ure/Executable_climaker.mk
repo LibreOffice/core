@@ -29,6 +29,8 @@ $(eval $(call gb_Executable_use_libraries,climaker,\
 	cppu \
 	cppuhelper \
 	sal \
+	salhelper \
+	unoidl \
 	$(gb_UWINAPI) \
 ))
 
