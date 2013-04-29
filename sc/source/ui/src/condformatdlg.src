@@ -66,6 +66,7 @@ ModalDialog RID_SCDLG_CONDFORMAT
     {
         Pos = MAP_APPFONT( 5, 20 );
         Size = MAP_APPFONT( 290, 220 );
+        DialogControl = TRUE;
         Border = TRUE;
     };
     FixedText FT_RANGE
@@ -79,12 +80,14 @@ ModalDialog RID_SCDLG_CONDFORMAT
         Pos = MAP_APPFONT( 60, 262 );
         Size = MAP_APPFONT( 182, 14 );
         Border = TRUE;
+        TabStop = TRUE;
     };
     ImageButton RB_RANGE
     {
         Pos = MAP_APPFONT( 245, 262 );
         Size = MAP_APPFONT( 14, 14 );
         Border = TRUE;
+        TabStop = TRUE;
     };
 };
 
@@ -93,6 +96,7 @@ Control RID_COND_ENTRY
     Pos = MAP_APPFONT( 0, 0 );
     Size = MAP_APPFONT( 290, 40 );
     Border = TRUE;
+    DialogControl = TRUE;
 
     FixedText FT_COND_NR
     {
