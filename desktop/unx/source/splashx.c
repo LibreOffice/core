@@ -610,16 +610,6 @@ static void splash_load_image( struct splash* splash, rtl_uString* pUAppPath )
     pSuffix = pBuffer + pAppPath->length;
     rtl_string_release( pAppPath );
 
-    strcpy (pSuffix, "edition/intro");
-    strcat (pSuffix, pLocale);
-    strcat (pSuffix, IMG_SUFFIX);
-    if ( splash_load_bmp( splash, pBuffer ) )
-        goto cleanup;
-
-    strcpy (pSuffix, "edition/intro" IMG_SUFFIX);
-    if ( splash_load_bmp( splash, pBuffer ) )
-        goto cleanup;
-
     strcpy (pSuffix, "intro");
     strcat (pSuffix, pLocale);
     strcat (pSuffix, IMG_SUFFIX);

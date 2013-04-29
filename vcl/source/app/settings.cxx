@@ -750,17 +750,13 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
 
     if ( !aName.isEmpty() )
     {
-        // try the gallery first, then edition, and the program path if
-        // everything else fails
+        // try the gallery first, then the program path:
         OUString gallery = "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
         rtl::Bootstrap::expandMacros( gallery );
         gallery += "/user/gallery/personas/";
 
         if ( aPersona == "own" )
             rHeaderFooterBitmap = readBitmapEx( gallery + aName );
-
-        if ( rHeaderFooterBitmap.IsEmpty() )
-            rHeaderFooterBitmap = readBitmapEx( "$BRAND_BASE_DIR/program/edition/" + aName );
 
         if ( rHeaderFooterBitmap.IsEmpty() )
             rHeaderFooterBitmap = readBitmapEx( "$BRAND_BASE_DIR/program/" + aName );

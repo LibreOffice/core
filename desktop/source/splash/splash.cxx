@@ -331,11 +331,11 @@ IMPL_LINK( SplashScreen, AppEventListenerHdl, VclWindowEvent *, inEvent )
     return 0;
 }
 
-// Read keys from edition/edition.ini or soffice{.ini|rc}:
+// Read keys from soffice{.ini|rc}:
 OUString implReadBootstrapKey( const OUString& _rKey )
 {
-    OUString sValue("${.override:${BRAND_BASE_DIR}/program/edition/edition.ini:" + _rKey + "}");
-    rtl::Bootstrap::expandMacros(sValue);
+    OUString sValue;
+    rtl::Bootstrap::get(_rKey, sValue);
     return sValue;
 }
 

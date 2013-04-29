@@ -41,9 +41,7 @@ namespace {
     }
     static bool tryLoadPng( const OUString& rBaseDir, const OUString& rName, BitmapEx& rBitmap )
     {
-        return
-            loadPng( rBaseDir + "/program/edition" + rName, rBitmap) ||
-            loadPng( rBaseDir + "/program" + rName, rBitmap);
+        return loadPng( rBaseDir + "/program" + rName, rBitmap);
     }
 }
 

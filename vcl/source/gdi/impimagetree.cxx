@@ -279,17 +279,6 @@ void ImplImageTree::resetPaths() {
     m_paths.clear();
     {
         OUString url(
-            "$BRAND_BASE_DIR/program/edition/images");
-        rtl::Bootstrap::expandMacros(url);
-        INetURLObject u(url);
-        OSL_ASSERT(!u.HasError());
-        m_paths.push_back(
-            std::make_pair(
-                u.GetMainURL(INetURLObject::NO_DECODE),
-                css::uno::Reference< css::container::XNameAccess >()));
-    }
-    {
-        OUString url(
             "$BRAND_BASE_DIR/share/config");
         rtl::Bootstrap::expandMacros(url);
         INetURLObject u(url);

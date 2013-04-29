@@ -342,14 +342,6 @@ UpdateInformationProvider::UpdateInformationProvider(
         "org.openoffice.Setup/Product",
         "ooSetupVersion") >>= version;
     buf.append(version);
-    OUString edition(
-            "${${BRAND_BASE_DIR}/program/edition/edition.ini:"
-            "EDITIONNAME}");
-    rtl::Bootstrap::expandMacros(edition);
-    if (!edition.isEmpty()) {
-        buf.append(sal_Unicode(' '));
-        buf.append(edition);
-    }
     OUString extension;
     getConfigurationItem(
         xConfigurationProvider,
