@@ -695,8 +695,6 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
             // Since IsMarkHdlWhenTextEdit() is ignored, it is necessary
             // to call AdjustMarkHdl() always.
             AdjustMarkHdl();
-            // Call <MarkListHasChanged()> as it also handles context changes for sidebar
-            MarkListHasChanged();
 
             pTextEditOutlinerView=ImpMakeOutlinerView(pWin,!bEmpty,pGivenOutlinerView);
 
@@ -1033,8 +1031,6 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(sal_Bool bDontDeleteReally)
             // Since IsMarkHdlWhenTextEdit() is ignored, it is necessary
             // to call AdjustMarkHdl() always.
             AdjustMarkHdl();
-            // Call <MarkListHasChanged()> as it also handles context changes for sidebar
-            MarkListHasChanged();
         }
         // alle OutlinerViews loeschen
         for (sal_uIntPtr i=pTEOutliner->GetViewCount(); i>0;)
