@@ -1,0 +1,14 @@
+# liblangtag/lt-macros.h:17:5: error: "HAVE_SYS_PARAM_H" is not defined [-Werror=undef]
+
+diff -ru UnpackedTarball/langtag.orig/liblangtag/lt-macros.h UnpackedTarball/langtag/liblangtag/lt-macros.h
+--- UnpackedTarball/langtag.orig/liblangtag/lt-macros.h	2013-04-30 16:09:19.362392416 +0200
++++ UnpackedTarball/langtag/liblangtag/lt-macros.h	2013-04-30 18:01:13.275188759 +0200
+@@ -14,7 +14,7 @@
+ #error "Only <liblangtag/langtag.h> can be included directly."
+ #endif
+ 
+-#if HAVE_SYS_PARAM_H
++#if defined(HAVE_SYS_PARAM_H) && HAVE_SYS_PARAM_H
+ #include <sys/param.h>
+ #endif
+ 

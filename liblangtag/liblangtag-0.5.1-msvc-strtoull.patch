@@ -1,0 +1,15 @@
+diff -ru langtag.orig/extensions/lt-ext-ldml-u.c langtag/extensions/lt-ext-ldml-u.c
+--- UnpackedTarball/langtag.orig/extensions/lt-ext-ldml-u.c	2013-04-22 10:06:56.000000000 +0200
++++ UnpackedTarball/langtag/extensions/lt-ext-ldml-u.c	2013-04-30 12:56:19.557490167 +0200
+@@ -137,7 +137,11 @@
+ 							if (!strchr(hexdigit, subtag[j]))
+ 								goto bail2;
+ 						}
++#ifdef _WIN32
++						x = _strtoui64(subtag, &p, 16);
++#else
+ 						x = strtoull(subtag, &p, 16);
++#endif
+ 						if (p && p[0] == 0 && x <= 0x10ffff) {
+ 							retval = TRUE;
+ 							xmlFree(name);
