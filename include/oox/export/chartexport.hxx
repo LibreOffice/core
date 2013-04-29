@@ -88,10 +88,6 @@ private:
     com::sun::star::uno::Reference< com::sun::star::chart::XDiagram > mxDiagram;
     com::sun::star::uno::Reference< com::sun::star::chart2::XDiagram > mxNewDiagram;
 
-    OUString msTableName;
-    OUStringBuffer msStringBuffer;
-    OUString msString;
-
     // members filled by InitRangeSegmentationProperties (retrieved from DataProvider)
     sal_Bool mbHasSeriesLabels;
     sal_Bool mbHasCategoryLabels; //if the categories are only automatically generated this will be false
@@ -104,17 +100,12 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > mxCategoriesValues;
 
     AxisVector          maAxes;
-    sal_Bool            mbHasXAxis;
-    sal_Bool            mbHasYAxis;
     sal_Bool            mbHasZAxis;
-    sal_Bool            mbHasSecondaryXAxis;
-    sal_Bool            mbHasSecondaryYAxis;
     sal_Bool            mbIs3DChart;
 
 
 private:
-    sal_Int32 getChartType(
-         );
+    sal_Int32 getChartType();
 
     OUString parseFormula( const OUString& rRange );
     void InitPlotArea();
