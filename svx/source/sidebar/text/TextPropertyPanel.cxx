@@ -146,8 +146,7 @@ long TextPropertyPanel::GetSelFontSize()
 TextPropertyPanel* TextPropertyPanel::Create (
     Window* pParent,
     const cssu::Reference<css::frame::XFrame>& rxFrame,
-    SfxBindings* pBindings,
-    const cssu::Reference<css::ui::XSidebar>& rxSidebar)
+    SfxBindings* pBindings)
 {
     if (pParent == NULL)
         throw lang::IllegalArgumentException(A2S("no parent Window given to TextPropertyPanel::Create"), NULL, 0);
@@ -159,8 +158,7 @@ TextPropertyPanel* TextPropertyPanel::Create (
     return new TextPropertyPanel(
         pParent,
         rxFrame,
-        pBindings,
-        rxSidebar);
+        pBindings);
 }
 
 
@@ -172,8 +170,7 @@ TextPropertyPanel* TextPropertyPanel::Create (
 TextPropertyPanel::TextPropertyPanel (
     Window* pParent,
     const cssu::Reference<css::frame::XFrame>& rxFrame,
-    SfxBindings* pBindings,
-    const cssu::Reference<css::ui::XSidebar>& rxSidebar)
+    SfxBindings* pBindings)
     :   Control(pParent, SVX_RES(RID_SIDEBAR_TEXT_PANEL)),
         mpFontNameBox (new SvxSBFontNameBox(this, SVX_RES(CB_SBFONT_FONT))),
         maFontSizeBox       (this, SVX_RES(MB_SBFONT_FONTSIZE)),
@@ -233,8 +230,7 @@ TextPropertyPanel::TextPropertyPanel (
         maBrushColorPopup(this, ::boost::bind(&TextPropertyPanel::CreateBrushColorPopupControl, this, _1)),
         mxFrame(rxFrame),
         maContext(),
-        mpBindings(pBindings),
-        mxSidebar(rxSidebar)
+        mpBindings(pBindings)
 {
     Initialize();
     FreeResource();
@@ -290,57 +286,36 @@ void TextPropertyPanel::HandleContextChange (
     {
         case CombinedEnumContext(Application_Calc, Context_Cell):
         case CombinedEnumContext(Application_Calc, Context_Pivot):
-        {
-            mpToolBoxScript->Hide();
             mpToolBoxScriptSw->Hide();
-            mpToolBoxSpacing->Hide();
             mpToolBoxHighlight->Hide();
-
-            Size aSize(PROPERTYPAGE_WIDTH,TEXT_SECTIONPAGE_HEIGHT_S);
-            aSize = LogicToPixel( aSize, MapMode(MAP_APPFONT) );
-            aSize.setWidth(GetOutputSizePixel().Width());
-            SetSizePixel(aSize);
-            if (mxSidebar.is())
-                mxSidebar->requestLayout();
+            mpToolBoxScript->Disable();
+            mpToolBoxSpacing->Disable();
             break;
-        }
+
+        case CombinedEnumContext(Application_Calc, Context_EditCell):
+        case CombinedEnumContext(Application_Calc, Context_DrawText):
+            mpToolBoxScriptSw->Hide();
+            mpToolBoxHighlight->Hide();
+            mpToolBoxScript->Enable();
+            mpToolBoxSpacing->Enable();
+            break;
 
         case CombinedEnumContext(Application_WriterVariants, Context_Text):
         case CombinedEnumContext(Application_WriterVariants, Context_Table):
-        {
             mpToolBoxScriptSw->Show();
             mpToolBoxScript->Hide();
             mpToolBoxHighlight->Show();
             mpToolBoxSpacing->Show();
-
-            Size aSize(PROPERTYPAGE_WIDTH, TEXT_SECTIONPAGE_HEIGHT);
-            aSize = LogicToPixel( aSize, MapMode(MAP_APPFONT) );
-            aSize.setWidth(GetOutputSizePixel().Width());
-            SetSizePixel(aSize);
-            if (mxSidebar.is())
-                mxSidebar->requestLayout();
             break;
-        }
 
         case CombinedEnumContext(Application_WriterVariants, Context_DrawText):
         case CombinedEnumContext(Application_WriterVariants, Context_Annotation):
-        {
             mpToolBoxScriptSw->Show();
             mpToolBoxScript->Hide();
             mpToolBoxSpacing->Show();
             mpToolBoxHighlight->Hide();
-
-            Size aSize(PROPERTYPAGE_WIDTH,TEXT_SECTIONPAGE_HEIGHT);
-            aSize = LogicToPixel( aSize, MapMode(MAP_APPFONT) );
-            aSize.setWidth(GetOutputSizePixel().Width());
-            SetSizePixel(aSize);
-            if (mxSidebar.is())
-                mxSidebar->requestLayout();
             break;
-        }
 
-        case CombinedEnumContext(Application_Calc, Context_EditCell):
-        case CombinedEnumContext(Application_Calc, Context_DrawText):
         case CombinedEnumContext(Application_DrawImpress, Context_DrawText):
         case CombinedEnumContext(Application_DrawImpress, Context_Text):
         case CombinedEnumContext(Application_DrawImpress, Context_Table):
@@ -348,20 +323,11 @@ void TextPropertyPanel::HandleContextChange (
         case CombinedEnumContext(Application_DrawImpress, Context_Draw):
         case CombinedEnumContext(Application_DrawImpress, Context_TextObject):
         case CombinedEnumContext(Application_DrawImpress, Context_Graphic):
-        {
             mpToolBoxScriptSw->Hide();
             mpToolBoxScript->Show();
             mpToolBoxSpacing->Show();
             mpToolBoxHighlight->Hide();
-
-            Size aSize(PROPERTYPAGE_WIDTH,TEXT_SECTIONPAGE_HEIGHT);
-            aSize = LogicToPixel( aSize,MapMode(MAP_APPFONT) );
-            aSize.setWidth(GetOutputSizePixel().Width());
-            SetSizePixel(aSize);
-            if (mxSidebar.is())
-                mxSidebar->requestLayout();
             break;
-        }
 
         default:
             break;
@@ -472,15 +438,10 @@ void TextPropertyPanel::Initialize (void)
     aLink = LINK(this, TextPropertyPanel, FontSizeLoseFocus);
     maFontSizeBox.SetLoseFocusHdl(aLink);
 
-    // add
-    long aSizeBoxHeight = maFontSizeBox.GetSizePixel().getHeight();;
-    Point aPosFontSize = maFontSizeBox.GetPosPixel();
-    long aPosY = aPosFontSize.getY();
-    Point pTBIncDec = mpToolBoxIncDec->GetPosPixel();
-    long aIncDecHeight = mpToolBoxIncDec->GetSizePixel().getHeight();
-    pTBIncDec.setY(aPosY+aSizeBoxHeight/2-aIncDecHeight/2);
-    mpToolBoxIncDec->SetPosPixel(pTBIncDec);
-    //end
+    Size aSize(PROPERTYPAGE_WIDTH, TEXT_SECTIONPAGE_HEIGHT);
+    aSize = LogicToPixel( aSize, MapMode(MAP_APPFONT) );
+    aSize.setWidth(GetOutputSizePixel().Width());
+    SetSizePixel(aSize);
 }
 
 void TextPropertyPanel::EndSpacingPopupMode (void)
