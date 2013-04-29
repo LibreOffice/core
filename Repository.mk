@@ -218,8 +218,11 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 endif
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
+    abp \
+    analysis \
 	avmedia \
 	$(if $(DISABLE_SCRIPTING),,basctl) \
+    basegfx \
     bib \
     canvastools \
     chartcore \
@@ -232,6 +235,8 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     dbmm \
     $(if $(DISABLE_DBCONNECTIVITY),,dbtools) \
     dbaxml \
+    dbp \
+    dbu \
 	deploymentmisc \
 	$(if $(filter unx,$(GUIBASE)),desktop_detector) \
     drawinglayer \
@@ -246,7 +251,9 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     ept \
     era \
     eti \
+    evtatt \
     exp \
+    flat \
 	file \
 	filterconfig \
     for \
@@ -258,6 +265,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     fwl \
 	fwm \
     $(if $(filter DESKTOP,$(BUILD_TYPE)),helplinker) \
+    hyphen \
     icd \
     icg \
     idx \
@@ -271,14 +279,38 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     itg \
     iti \
     lng \
+    lnth \
+    log \
     $(if $(MERGELIBS),merged) \
     msfilter \
+    mysql \
+    odbc \
     odbcbase \
+    odfflatxml \
+    offacc \
+    oox \
+    pcr \
+    pdffilter \
+    pricing \
+    rpt \
+    rptui \
+    rptxml \
     sax \
     sb \
     sdbt \
+    sc \
+    scd \
+    scfilt \
+    scui \
+    scn \
+    sd \
+    sdd \
     sdfilt \
+    sdui \
     sfx \
+    sm \
+    smd \
+    solver \
     sot \
     $(if $(ENABLE_HEADLESS),,spl) \
     svgio \
@@ -286,6 +318,9 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     svt \
     svx \
     svxcore \
+    sw \
+    textconversiondlgs \
+    textfd \
     tk \
     tl \
 	$(if $(ENABLE_TELEPATHY),tubes) \
@@ -295,7 +330,12 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     uui \
     vcl \
     xmlscript \
+    xmlfa \
+    xmlfd \
     xo \
+    xof \
+    xsltdlg \
+    xsltfilter \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,WRITER, \
@@ -310,80 +350,45 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,WRITER, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
-    abp \
     acc \
 	adabas \
 	adabasui \
 	ado \
     agg \
-    analysis \
     animcore \
     $(if $(filter $(OS),ANDROID),, \
 		basebmp \
     ) \
     communi \
     date \
-    evtatt \
-    odbc \
-    oox \
 	ooxml \
     sdbc \
     AppleRemote \
     avmediaQuickTime \
-    basegfx \
     calc \
-    dbp \
-    dbu \
     evoab \
 	filtertracer \
 	flash \
-	flat \
     graphicfilter \
     guesslang \
-    hyphen \
 	jdbc \
 	kab1 \
 	kabdrv1 \
-    lnth \
-    log \
 	MacOSXSpell \
     mork \
     mozab2 \
     mozabdrv \
-	mysql \
-    odfflatxml \
-    offacc \
-    pcr \
-    pdffilter \
     placeware \
-    pricing \
     protocolhandler \
     qstart_gtk \
     res \
-    rpt \
-    rptui \
-    rptxml \
-    sc \
-    scd \
-    scfilt \
-    scn \
-    scui \
-    sd \
-    sdd \
-    sdui \
     simplecm \
-    sm \
-    smd \
-    solver \
     spa \
     spell \
     sts \
     svgfilter \
-    sw \
 	tdeab1 \
 	tdeabdrv1 \
-    textconversiondlgs \
-    textfd \
     updatecheckui \
     $(if $(DISABLE_SCRIPTING),,vbahelper) \
     vclplug_gen \
@@ -394,11 +399,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     vclplug_kde4 \
     vclplug_svp \
     wpftdraw \
-    xmlfa \
-    xmlfd \
-    xof \
-    xsltdlg \
-    xsltfilter \
 ))
 
 ifneq (,$(filter ANDROID IOS,$(OS)))
