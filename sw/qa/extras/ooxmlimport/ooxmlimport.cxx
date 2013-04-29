@@ -114,6 +114,8 @@ public:
     void testFdo53985();
     void testFdo59638();
     void testFdo61343();
+    void testN592908_Frame();
+    void testN592908_Picture();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -180,6 +182,8 @@ void Test::run()
         {"fdo53985.docx", &Test::testFdo53985},
         {"fdo59638.docx", &Test::testFdo59638},
         {"fdo61343.docx", &Test::testFdo61343},
+        {"n592908-frame.docx", &Test::testN592908_Frame},
+        {"n592908-picture.docx", &Test::testN592908_Picture},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -1130,6 +1134,26 @@ void Test::testFdo61343()
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
+}
+
+void Test::testN592908_Frame()
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
+    text::WrapTextMode eValue;
+    xPropertySet->getPropertyValue("Surround") >>= eValue;
+    CPPUNIT_ASSERT_EQUAL(eValue, text::WrapTextMode_PARALLEL);
+}
+
+void Test::testN592908_Picture()
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
+    text::WrapTextMode eValue;
+    xPropertySet->getPropertyValue("Surround") >>= eValue;
+    CPPUNIT_ASSERT_EQUAL(eValue, text::WrapTextMode_PARALLEL);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

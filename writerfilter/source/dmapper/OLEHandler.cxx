@@ -113,17 +113,7 @@ void OLEHandler::lcl_attribute(Id rName, Value & rVal)
                 {
                     SAL_WARN("writerfilter", "Exception in OLE Handler: " << e.Message);
                 }
-
-                try
-                {
-                    xShapeProps->setPropertyValue(
-                        rNameSupplier.GetName( PROP_SURROUND ),
-                        uno::makeAny( m_nWrapMode ) );
-                }
-                catch( const uno::Exception& e )
-                {
-                    SAL_WARN("writerfilter", "Exception while setting wrap mode: " << e.Message);
-                }
+                // No need to set the wrapping here as it's either set in oox or will be set later
             }
         }
         break;

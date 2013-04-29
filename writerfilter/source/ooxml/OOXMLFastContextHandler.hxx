@@ -531,6 +531,7 @@ public:
     virtual ResourceEnum_t getResource() const { return SHAPE; }
 
     void sendShape( Token_t Element );
+    bool isShapeSent( ) { return m_bShapeSent; }
 
 protected:
     typedef uno::Reference<XFastShapeContextHandler> ShapeContextRef;
@@ -633,6 +634,7 @@ private:
     set<Id> mMyNamespaces;
     set<Token_t> mMyTokens;
     OOXMLPropertySet::Pointer_t mpPropertySet;
+    bool mbShapeSent;
 
     OOXMLFastContextHandler * getFastContextHandler() const;
 };
