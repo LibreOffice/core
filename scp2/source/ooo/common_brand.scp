@@ -61,7 +61,6 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Bin_Libxml2,
              gid_Brand_File_Bmp_IntroAboutShell,
              gid_Brand_File_Html_Thirdpartylicensereadme,
-             gid_Brand_File_Images_Brand_Zip,
              gid_Brand_File_Lib_Dbghelp,
              gid_Brand_File_Lib_Mingw_GccS,
              gid_Brand_File_Lib_Mingw_Stdcpp,
@@ -617,13 +616,6 @@ File gid_Brand_File_Bmp_IntroAboutShell
     Dir = gid_Brand_Dir_Program;
     Name = "intro.zip";
     Styles = (ARCHIVE);
-End
-
-File gid_Brand_File_Images_Brand_Zip
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Config;
-    Name = "images_brand.zip";
-    Styles = (PACKED);
 End
 
 File gid_Brand_File_Txt_Package

@@ -163,26 +163,22 @@ bool ImplImageTree::checkStyle(OUString const & style)
     setStyle(style);
 
     exists = false;
-    const OUString sBrandURLSuffix("_brand");
     for (Paths::iterator i(m_paths.begin()); i != m_paths.end() && !exists; ++i) {
         OUString aURL = i->first;
-        sal_Int32 nFromIndex = aURL.getLength() - sBrandURLSuffix.getLength();
-        // skip brand-specific icon themes; they are incomplete and thus not useful for this check
-        if (nFromIndex < 0 || !aURL.match(sBrandURLSuffix, nFromIndex)) {
-            osl::File aZip(aURL + ".zip");
-            if (aZip.open(osl_File_OpenFlag_Read) == ::osl::FileBase::E_None) {
-                aZip.close();
-                exists = true;
-            }
 
-            osl::Directory aLookaside(aURL);
-            if (aLookaside.open() == ::osl::FileBase::E_None) {
-                aLookaside.close();
-                exists = true;
-                m_cacheIcons = false;
-            } else {
-                m_cacheIcons = true;
-            }
+        osl::File aZip(aURL + ".zip");
+        if (aZip.open(osl_File_OpenFlag_Read) == ::osl::FileBase::E_None) {
+            aZip.close();
+            exists = true;
+        }
+
+        osl::Directory aLookaside(aURL);
+        if (aLookaside.open() == ::osl::FileBase::E_None) {
+            aLookaside.close();
+            exists = true;
+            m_cacheIcons = false;
+        } else {
+            m_cacheIcons = true;
         }
     }
     m_checkStyleCache[style] = exists;
@@ -277,30 +273,6 @@ void ImplImageTree::setStyle(OUString const & style) {
 
 void ImplImageTree::resetPaths() {
     m_paths.clear();
-    {
-        OUString url(
-            "$BRAND_BASE_DIR/share/config");
-        rtl::Bootstrap::expandMacros(url);
-        INetURLObject u(url);
-        OSL_ASSERT(!u.HasError());
-        OUStringBuffer b;
-        b.appendAscii("images_");
-        b.append(m_style);
-        b.appendAscii("_brand");
-        bool ok = u.Append(b.makeStringAndClear(), INetURLObject::ENCODE_ALL);
-        OSL_ASSERT(ok); (void) ok;
-        m_paths.push_back(
-            std::make_pair(
-                u.GetMainURL(INetURLObject::NO_DECODE),
-                css::uno::Reference< css::container::XNameAccess >()));
-    }
-    {
-        OUString url( "$BRAND_BASE_DIR/share/config/images_brand");
-        rtl::Bootstrap::expandMacros(url);
-        m_paths.push_back(
-            std::make_pair(
-                url, css::uno::Reference< css::container::XNameAccess >()));
-    }
     {
         OUString url(
             "$BRAND_BASE_DIR/share/config");

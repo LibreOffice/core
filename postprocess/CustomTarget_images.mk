@@ -35,7 +35,6 @@ helpimages_DIR := $(call gb_CustomTarget_get_workdir,helpcontent2/source/auxilia
 packimages_CUSTOM_FALLBACKS := -c $(SRCDIR)/icon-themes/tango -c $(SRCDIR)/icon-themes/industrial
 
 $(eval $(call gb_CustomTarget_register_targets,postprocess/images,\
-	images_brand.zip \
 	$(if $(filter default,$(WITH_THEMES)),images.zip) \
 	$(foreach theme,$(filter-out default,$(WITH_THEMES)),images_$(theme).zip) \
 	commandimagelist.ilst \
@@ -67,11 +66,6 @@ $(packimages_DIR)/%.zip : \
 			-l $(dir $(call gb_UIConfig_get_imagelist_target,modules/)) \
 			-s $< -o $@ \
 			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
-
-# make sure to have one to keep packing happy
-$(packimages_DIR)/images_brand.zip :
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),TCH,2)
-	touch $@
 
 # commandimagelist.ilst and sorted.lst are phony to rebuild everything each time
 .PHONY : $(packimages_DIR)/commandimagelist.ilst $(packimages_DIR)/sorted.lst

@@ -12,7 +12,6 @@ $(eval $(call gb_Package_Package,postprocess_images_install,$(call gb_CustomTarg
 $(eval $(call gb_Package_set_outdir,postprocess_images_install,$(INSTDIR)))
 
 $(eval $(call gb_Package_add_files,postprocess_images_install,share/config,\
-	images_brand.zip \
 	$(if $(filter default,$(WITH_THEMES)),images.zip) \
 	$(foreach theme,$(filter-out default,$(WITH_THEMES)),images_$(theme).zip) \
 ))

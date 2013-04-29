@@ -27,8 +27,6 @@
 
 $(eval $(call gb_Package_Package,postprocess_images,$(call gb_CustomTarget_get_workdir,postprocess/images)))
 
-$(eval $(call gb_Package_add_file,postprocess_images,bin/images_brand.zip,images_brand.zip))
-
 $(if $(filter default,$(WITH_THEMES)),\
 $(eval $(call gb_Package_add_file,postprocess_images,bin/images.zip,images.zip)))
 
