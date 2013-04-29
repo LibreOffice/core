@@ -1330,6 +1330,10 @@ void ChartExport::exportScatterChart( Reference< chart2::XChartType > xChartType
             XML_val, scatterStyle,
             FSEND );
 
+    pFS->singleElement( FSNS( XML_c, XML_varyColors ),
+            XML_val, "0",
+            FSEND );
+
     // FIXME: should export xVal and yVal
     sal_Int32 nAttachedAxis = AXIS_PRIMARY_Y;
     exportSeries( xChartType, nAttachedAxis );
