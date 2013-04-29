@@ -26,6 +26,8 @@ $(eval $(call gb_Executable_use_libraries,pdf2xml,\
     vcl \
     comphelper \
     cppu \
+    unotest \
+    test \
     cppuhelper \
     sal \
 ))

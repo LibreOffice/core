@@ -27,17 +27,16 @@
 
 #include <sal/main.h>
 #include <osl/process.h>
-#include <rtl/bootstrap.hxx>
-
-#include <cppuhelper/bootstrap.hxx>
+#include <unotest/bootstrapfixturebase.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/bootstrap.hxx>
 
 using namespace ::pdfi;
 using namespace ::com::sun::star;
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
-    if( argc != 5 )
+    if( argc < 4 )
         return 1;
 
     OUString aBaseURL, aTmpURL, aSrcURL, aDstURL, aIniUrl;
@@ -61,32 +60,17 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                                   &aTmpURL.pData );
     osl_getAbsoluteFileURL(aBaseURL.pData,aTmpURL.pData,&aDstURL.pData);
 
-    osl_getFileURLFromSystemPath( OUString::createFromAscii(argv[4]).pData,
-                                &aTmpURL.pData );
-    osl_getAbsoluteFileURL(aBaseURL.pData,aTmpURL.pData,&aIniUrl.pData);
-
     // bootstrap UNO
-    uno::Reference< lang::XMultiServiceFactory > xFactory;
-    uno::Reference< uno::XComponentContext > xCtx;
-    try
-    {
-        xCtx = ::cppu::defaultBootstrap_InitialComponentContext(aIniUrl);
-        xFactory = uno::Reference< lang::XMultiServiceFactory >(  xCtx->getServiceManager(),
-                                                                  uno::UNO_QUERY );
-        if( xFactory.is() )
-            ::comphelper::setProcessServiceFactory( xFactory );
-    }
-    catch( uno::Exception& )
-    {
-    }
+    uno::Reference< uno::XComponentContext > xContext(
+        cppu::defaultBootstrap_InitialComponentContext() );
+    uno::Reference<lang::XMultiComponentFactory> xFactory(xContext->getServiceManager());
+    uno::Reference<lang::XMultiServiceFactory> xSM(xFactory, uno::UNO_QUERY_THROW);
+    comphelper::setProcessServiceFactory(xSM);
 
-    if( !xFactory.is() )
-    {
-        OSL_TRACE( "Could not bootstrap UNO, installation must be in disorder. Exiting." );
-        return 1;
-    }
+    test::BootstrapFixtureBase aEnv;
+    aEnv.setUp();
 
-    pdfi::PDFIRawAdaptor aAdaptor( xCtx );
+    pdfi::PDFIRawAdaptor aAdaptor( aEnv.getComponentContext() );
     aAdaptor.setTreeVisitorFactory(pTreeFactory);
     aAdaptor.odfConvert( aSrcURL, new OutputWrap(aDstURL), NULL );
 
