@@ -3037,34 +3037,52 @@ bool ScFormulaCell::InterpretFormulaGroup()
         }
     }
 
-    // scan the formula ...
-    // have a document method: "Get2DRangeAsDoublesArray" that does the
-    // column-based heavy lifting call it for each absolute range from the
-    // first cell pos in the formula group.
-    //
-    // Project single references to ranges by adding their vector * xGroup->mnLength
-    //
-    // TODO:
-    //    elide multiple dimensional movement in vectors eg. =SUM(A1<1,1>)
-    //    produces a diagonal 'column' that serves no useful purpose for us.
-    //    these should be very rare. Should elide in GetDeltas anyway and
-    //    assert here.
-    //
-    // Having built our input data ...
-    // Throw it, and the formula over to some 'OpenCLCalculage' hook
-    //
-    // on return - release references on these double buffers
-    //
-    // transfer the result to the formula cells (as above)
-    // store the doubles in the columns' maDoubles array for
-    // dependent formulae
-    //
-    // TODO:
-    //    need to abort/fail when we get errors returned and fallback to
-    //    stock interpreting [ I guess ], unless we can use NaN etc. to
-    //    signal errors.
+#if 0
+    // TODO: Calculate the formula group via vectorization.
+#else
+    // Until we implement group calculation for real, decompose the group into
+    // individual formula token arrays for individual calculation.
+    ScAddress aTmpPos = aPos;
+    for (sal_Int32 i = 0; i < xGroup->mnLength; ++i)
+    {
+        aTmpPos.SetRow(xGroup->mnStart + i);
+        ScTokenArray aCode2;
+        for (const formula::FormulaToken* p = aCode.First(); p; p = aCode.Next())
+        {
+            switch (p->GetType())
+            {
+                case svSingleVectorRef:
+                {
+                    const formula::SingleVectorRefToken* p2 = static_cast<const formula::SingleVectorRefToken*>(p);
+                    const formula::VectorArray& rArray = p2->GetArray();
+                    aCode2.AddDouble(rArray.mpArray[i]);
+                }
+                break;
+                case svDoubleVectorRef:
+                    return false;
+                break;
+                default:
+                    aCode2.AddToken(*p);
+            }
+        }
 
-    return false;
+        ScFormulaCell* pDest = pDocument->GetFormulaCell(aTmpPos);
+        if (!pDest)
+            return false;
+
+        ScCompiler aComp(pDocument, aPos, aCode2);
+        aComp.SetGrammar(pDocument->GetGrammar());
+        OUStringBuffer aBuf;
+        aComp.CreateStringFromTokenArray(aBuf);
+        aComp.CompileTokenArray(); // Create RPN token array.
+        ScInterpreter aInterpreter(pDest, pDocument, aTmpPos, aCode2);
+        aInterpreter.Interpret();
+
+        pDest->aResult.SetToken(aInterpreter.GetResultToken().get());
+    }
+
+    return true;
+#endif
 }
 
 bool ScFormulaCell::InterpretInvariantFormulaGroup()
