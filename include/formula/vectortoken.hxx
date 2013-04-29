@@ -28,6 +28,8 @@ class FORMULA_DLLPUBLIC SingleVectorRefToken : public FormulaToken
 public:
     SingleVectorRefToken( const double* pArray, size_t nLength );
 
+    virtual FormulaToken* Clone() const;
+
     const VectorArray& GetArray() const;
 };
 
@@ -47,6 +49,8 @@ class FORMULA_DLLPUBLIC DoubleVectorRefToken : public FormulaToken
 public:
     DoubleVectorRefToken(
         const std::vector<VectorArray>& rArrays, size_t nRowSize, bool bAbsStart, bool bAbsEnd );
+
+    virtual FormulaToken* Clone() const;
 
     const std::vector<VectorArray>& GetArrays() const;
 };
