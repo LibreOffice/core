@@ -94,12 +94,6 @@ public:
     virtual ~WrappedSymbolBitmapURLProperty();
 };
 
-// this operator is not defined by default
-bool operator!=( const awt::Size & rSize1, const awt::Size & rSize2 )
-{
-    return (rSize1.Width != rSize2.Width) || (rSize1.Height != rSize2.Height);
-}
-
 class WrappedSymbolSizeProperty : public WrappedSeriesOrDiagramProperty< awt::Size >
 {
 public:
