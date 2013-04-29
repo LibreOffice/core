@@ -43,6 +43,7 @@ interface XCharacters;
 interface XBorders;
 interface XValidation;
 interface XWorksheet;
+interface XName;
 
 interface XRange
 {
@@ -68,6 +69,7 @@ interface XRange
     [attribute] any ColumnWidth;
     [attribute, readonly ] any Width;
     [attribute, readonly] XWorksheet Worksheet;
+    [attribute, readonly] XName Name;
     [attribute] any RowHeight;
     [attribute, readonly ] any Height;
     [attribute, readonly ] any Top;
