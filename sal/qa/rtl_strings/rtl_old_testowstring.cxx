@@ -89,7 +89,7 @@ void oldtests::test_OUString()
     s1 = s4.copy(0, 39);
     OUString s5;
     s5 = s1 + OUString(" aus der RTL Library\n");
-    TEST_ENSURE( s5.compareTo(s4) == 0 , "test_OWString error 12");
+    TEST_ENSURE( s5==s4 , "test_OWString error 12");
     TEST_ENSURE( s5.indexOf(OUString("RTL")) == 12, "test_OWString error 13");
     TEST_ENSURE( s5.lastIndexOf(OUString("RTL")) == 48, "test_OWString error 13");
 
@@ -97,10 +97,10 @@ void oldtests::test_OUString()
     OUString s6 = s5.valueOf(b);
 //  TEST_ENSURE( s6.compareTo(OUString("False")) == 0, "test_OWString error 14");
     s6 = s5.valueOf((sal_Unicode)'H');
-    TEST_ENSURE( s6.compareTo(OUString("H")) == 0, "test_OWString error 15");
+    TEST_ENSURE( s6 == OUString("H"), "test_OWString error 15");
     sal_Int32 n = 123456789L;
     s6 = s5.valueOf(n);
-    TEST_ENSURE( s6.compareTo(OUString("123456789")) == 0, "test_OWString error 16");
+    TEST_ENSURE( s6 == OUString("123456789"), "test_OWString error 16");
 
 #ifdef SAL_UNX
     sal_Int64 m = -3223372036854775807LL;
@@ -108,7 +108,7 @@ void oldtests::test_OUString()
     sal_Int64 m = -3223372036854775807;
 #endif
     s6 = s5.valueOf(m);
-    TEST_ENSURE( s6.compareTo( OUString("-3223372036854775807") ) == 0, "test_OWString error 17");
+    TEST_ENSURE( s6 ==  OUString("-3223372036854775807"), "test_OWString error 17");
 
      OUString s7;
     OUString s8(OUString("HALLO ICH BIN EIN SS"));
@@ -141,14 +141,14 @@ void oldtests::test_OUString()
     //index   0    5    10   15   20   25   30   35   40   45   50   55
     s8 = OUString("Ich bin ein String mit einem A und C und vielen m, m, m, m");
 
-    TEST_ENSURE( OUString("aaa").compareTo( OUString("bbb") ) < 0, "test_OWString error 46" );
-    TEST_ENSURE( OUString("aaa").compareTo( OUString("aaa") ) == 0, "test_OWString error 46" );
-    TEST_ENSURE( OUString("bbb").compareTo( OUString("aaa") ) > 0, "test_OWString error 47" );
-    TEST_ENSURE( OUString("aaaa").compareTo( OUString("bbb") ) < 0, "test_OWString error 48" );
-    TEST_ENSURE( OUString("aaa").compareTo( OUString("bbbb") ) < 0, "test_OWString error 49" );
-    TEST_ENSURE( OUString("aaa").compareTo( OUString("aaaa") ) < 0, "test_OWString error 50" );
-    TEST_ENSURE( OUString("aaaa").compareTo( OUString("aaa") ) > 0, "test_OWString error 51" );
-    TEST_ENSURE( OUString("bbbb").compareTo( OUString("bbb") ) > 0, "test_OWString error 52" );
+    TEST_ENSURE( OUString("aaa") < OUString("bbb") , "test_OWString error 46" );
+    TEST_ENSURE( OUString("aaa") == OUString("aaa") , "test_OWString error 46" );
+    TEST_ENSURE( OUString("bbb") > OUString("aaa") , "test_OWString error 47" );
+    TEST_ENSURE( OUString("aaaa") < OUString("bbb") , "test_OWString error 48" );
+    TEST_ENSURE( OUString("aaa") < OUString("bbbb")  , "test_OWString error 49" );
+    TEST_ENSURE( OUString("aaa") < ( OUString("aaaa") , "test_OWString error 50" );
+    TEST_ENSURE( OUString("aaaa") > ( OUString("aaa") , "test_OWString error 51" );
+    TEST_ENSURE( OUString("bbbb") > ( OUString("bbb") ) , "test_OWString error 52" );
     TEST_ENSURE( OUString("bbb") == OUString("bbb"), "test_OWString error 53" );
     TEST_ENSURE( OUString("bbb") == OUString("bbb"), "test_OWString error 54" );
 
@@ -168,7 +168,7 @@ void oldtests::test_OUString()
     s7 = OUString("Hallo jetzt komm ich");
     s8 = s7.copy(0, s7.indexOf((sal_Unicode)':'));
     TEST_ENSURE( s8.isEmpty(), "test_OWString error 55");
-    TEST_ENSURE( s8.compareTo(OUString()) == 0, "test_OWString error 56");
+    TEST_ENSURE( s8 == OUString(), "test_OWString error 56");
 #endif
 
     // ASCII-Schnittstellen, AB 15.10.1999
