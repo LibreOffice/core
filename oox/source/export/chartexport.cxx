@@ -2085,13 +2085,9 @@ void ChartExport::_exportAxis(
             OUString ("Visible")) >>=  bVisible;
     }
 
-    if( !bVisible )
-    {
-        // other value?
-        pFS->singleElement( FSNS( XML_c, XML_delete ),
-            XML_val, "1",
+    pFS->singleElement( FSNS( XML_c, XML_delete ),
+            XML_val, bVisible ? "0" : "1",
             FSEND );
-    }
 
     // FIXME: axPos, need to check the property "ReverseDirection"
     pFS->singleElement( FSNS( XML_c, XML_axPos ),
