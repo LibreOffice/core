@@ -22,8 +22,9 @@
 #include <svtools/stdctrl.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/edit.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
+#include <vcl/layout.hxx>
+#include <vcl/lstbox.hxx>
 #include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/dialog.hxx>
@@ -133,64 +134,59 @@ public:
     inline sal_Bool     HasSearchAttributes() const;
     inline sal_Bool     HasReplaceAttributes() const;
 
-    PushButton&     GetReplaceBtn() { return aReplaceBtn; }
+    PushButton&     GetReplaceBtn() { return *m_pReplaceBtn; }
 
-    sal_Int32           GetTransliterationFlags() const;
+    sal_Int32       GetTransliterationFlags() const;
 
     void            SetSaveToModule(bool b);
 
 private:
-    FixedText       aSearchText;
-    ComboBox        aSearchLB;
-    ListBox         aSearchTmplLB;
-    FixedInfo       aSearchAttrText;
+    VclFrame*       m_pSearchFrame;
+    ComboBox*       m_pSearchLB;
+    ListBox*        m_pSearchTmplLB;
+    FixedText*      m_pSearchAttrText;
 
-    FixedText       aReplaceText;
-    ComboBox        aReplaceLB;
-    ListBox         aReplaceTmplLB;
-    FixedInfo       aReplaceAttrText;
+    VclFrame*       m_pReplaceFrame;
+    ComboBox*       m_pReplaceLB;
+    ListBox*        m_pReplaceTmplLB;
+    FixedText*      m_pReplaceAttrText;
 
-    PushButton      aSearchBtn;
-    PushButton      aSearchAllBtn;
-    FixedLine       aSearchCmdLine;
-    PushButton      aReplaceBtn;
-    PushButton      aReplaceAllBtn;
+    PushButton*     m_pSearchBtn;
+    PushButton*     m_pSearchAllBtn;
+    PushButton*     m_pReplaceBtn;
+    PushButton*     m_pReplaceAllBtn;
 
-    FixedLine       aSearchComponentFL;
-    PushButton      aSearchComponent1PB;
-    PushButton      aSearchComponent2PB;
+    VclFrame*       m_pComponentFrame;
+    PushButton*     m_pSearchComponent1PB;
+    PushButton*     m_pSearchComponent2PB;
 
-    CheckBox        aMatchCaseCB;
-    CheckBox        aWordBtn;
+    CheckBox*       m_pMatchCaseCB;
+    CheckBox*       m_pWordBtn;
 
-    FixedLine       aButtonsFL;
-    MoreButton*     pMoreBtn;
-    HelpButton      aHelpBtn;
-    CancelButton    aCloseBtn;
+    PushButton*     m_pCloseBtn;
 
-    FixedLine       aOptionsFL;
-    CheckBox        aSelectionBtn;
-    CheckBox        aBackwardsBtn;
-    CheckBox        aRegExpBtn;
-    CheckBox        aSimilarityBox;
-    PushButton      aSimilarityBtn;
-    CheckBox        aLayoutBtn;
-    CheckBox        aNotesBtn;
-    CheckBox        aJapMatchFullHalfWidthCB;
-    CheckBox        aJapOptionsCB;
-    PushButton      aJapOptionsBtn;
+    CheckBox*       m_pSelectionBtn;
+    CheckBox*       m_pBackwardsBtn;
+    CheckBox*       m_pRegExpBtn;
+    CheckBox*       m_pSimilarityBox;
+    PushButton*     m_pSimilarityBtn;
+    CheckBox*       m_pLayoutBtn;
+    CheckBox*       m_pNotesBtn;
+    CheckBox*       m_pJapMatchFullHalfWidthCB;
+    CheckBox*       m_pJapOptionsCB;
+    PushButton*     m_pJapOptionsBtn;
 
-    PushButton      aAttributeBtn;
-    PushButton      aFormatBtn;
-    PushButton      aNoFormatBtn;
+    PushButton*     m_pAttributeBtn;
+    PushButton*     m_pFormatBtn;
+    PushButton*     m_pNoFormatBtn;
 
-    FixedLine       aCalcFL;
-    FixedText       aCalcSearchInFT;
-    ListBox         aCalcSearchInLB;
-    FixedText       aCalcSearchDirFT;
-    RadioButton     aRowsBtn;
-    RadioButton     aColumnsBtn;
-    CheckBox        aAllSheetsCB;
+    VclContainer*   m_pCalcGrid;
+    FixedText*      m_pCalcSearchInFT;
+    ListBox*        m_pCalcSearchInLB;
+    FixedText*      m_pCalcSearchDirFT;
+    RadioButton*    m_pRowsBtn;
+    RadioButton*    m_pColumnsBtn;
+    CheckBox*       m_pAllSheetsCB;
 
     SfxBindings&    rBindings;
     sal_Bool            bWriter;
@@ -236,7 +232,7 @@ private:
 
     void            Construct_Impl();
     void            InitControls_Impl();
-    void            CalculateDelta_Impl();
+    void            ShowOptionalControls_Impl();
     void            Init_Impl( int bHasItemSet );
     void            InitAttrList_Impl( const SfxItemSet* pSSet,
                                        const SfxItemSet* pRSet );
@@ -257,14 +253,14 @@ private:
 
 inline sal_Bool SvxSearchDialog::HasSearchAttributes() const
 {
-    sal_Bool bLen = !aSearchAttrText.GetText().isEmpty();
-    return ( aSearchAttrText.IsEnabled() && bLen );
+    sal_Bool bLen = !m_pSearchAttrText->GetText().isEmpty();
+    return ( m_pSearchAttrText->IsEnabled() && bLen );
 }
 
 inline sal_Bool SvxSearchDialog::HasReplaceAttributes() const
 {
-    sal_Bool bLen = !aReplaceAttrText.GetText().isEmpty();
-    return ( aReplaceAttrText.IsEnabled() && bLen );
+    sal_Bool bLen = !m_pReplaceAttrText->GetText().isEmpty();
+    return ( m_pReplaceAttrText->IsEnabled() && bLen );
 }
 
 

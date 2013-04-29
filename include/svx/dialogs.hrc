@@ -155,9 +155,6 @@
 
 //---------------------------------------------------------------------
 
-// ResId fuer den Suchen/Ersetzen-Dialog
-#define RID_SVXDLG_SEARCH                   (RID_SVX_START +  20)
-
 // ResId fuer die PageDialog
 #define RID_SVXQBX_DELETE_HEADFOOT          (RID_SVX_START +  28)
 
