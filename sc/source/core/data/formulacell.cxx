@@ -2993,6 +2993,12 @@ bool ScFormulaCell::InterpretFormulaGroup()
                     // Fetch double array guarantees that the length of the
                     // returned array equals or greater than the requested
                     // length.
+
+                    // TODO: For now, it returns an array pointer only when
+                    // the entire array is in contiguous memory space.  Once
+                    // we finish cell storage rework, we'll support temporary
+                    // generation of a double array which is a combination of
+                    // multiple cell array segments.
                     const double* pArray = pDocument->FetchDoubleArray(aCxt, aRefPos, xGroup->mnLength);
                     if (!pArray)
                         return false;
