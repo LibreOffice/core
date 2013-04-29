@@ -128,10 +128,10 @@ $(call gb_UnoApiTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),UNO,4)
 	-$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_UnoApiTarget_get_target,$*) \
-			$(call gb_UnoApiTarget_get_target,$*).oldformat
+			$(call gb_UnoApiTarget_get_target,$*).oldformat \
 		-rm -rf $(call gb_UnoApiTarget_get_dep_target,$*) \
 			$(basename $(call gb_UnoApiPartTarget_get_dep_target,$*)) \
-			$(call gb_UnoApiPartTarget_get_target,$*)
+			$(call gb_UnoApiPartTarget_get_target,$*))
 
 # cat the deps of all IDLs in one file, then we need only open that one file
 define gb_UnoApiTarget__command_dep
