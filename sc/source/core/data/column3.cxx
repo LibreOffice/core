@@ -87,7 +87,6 @@ void ScColumn::Insert( SCROW nRow, ScBaseCell* pNewCell )
                     ScAddress( nCol, nRow, nTab ), pNewCell->GetBroadcaster()) );
         }
     }
-    bDirtyGroups = true;
 }
 
 
@@ -95,7 +94,6 @@ void ScColumn::Insert( SCROW nRow, sal_uInt32 nNumberFormat, ScBaseCell* pCell )
 {
     Insert(nRow, pCell);
     SetNumberFormat(nRow, nNumberFormat);
-    bDirtyGroups = true;
 }
 
 
@@ -105,7 +103,6 @@ void ScColumn::Append( SCROW nRow, ScBaseCell* pCell )
     maItems.back().pCell = pCell;
     maItems.back().nRow  = nRow;
 
-    bDirtyGroups = true;
     maTextWidths.set<unsigned short>(nRow, TEXTWIDTH_DIRTY);
     maScriptTypes.set<unsigned short>(nRow, SC_SCRIPTTYPE_UNKNOWN);
     CellStorageModified();
@@ -138,7 +135,6 @@ void ScColumn::Delete( SCROW nRow )
         if (pCell->GetCellType() == CELLTYPE_FORMULA)
             static_cast<ScFormulaCell*>(pCell)->EndListeningTo(pDocument);
         pCell->Delete();
-        bDirtyGroups = true;
 
         CellStorageModified();
     }
@@ -159,7 +155,6 @@ void ScColumn::DeleteAtIndex( SCSIZE nIndex )
         static_cast<ScFormulaCell*>(pCell)->EndListeningTo(pDocument);
     pCell->Delete();
 
-    bDirtyGroups = true;
     maTextWidths.set_empty(nRow, nRow);
     maScriptTypes.set_empty(nRow, nRow);
     CellStorageModified();
@@ -195,8 +190,6 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
 
     sal_Bool bOldAutoCalc = pDocument->GetAutoCalc();
     pDocument->SetAutoCalc( false ); // Avoid calculating it multiple times
-
-    bDirtyGroups = true;
 
     sal_Bool bFound=false;
     SCROW nEndRow = nStartRow + nSize - 1;
@@ -526,8 +519,6 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
             (*aIt)->Delete();
         }
     }
-
-    bDirtyGroups = true;
 }
 
 
@@ -575,8 +566,6 @@ void ScColumn::DeleteArea(SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag)
     // Delete attributes just now
     if ((nDelFlag & IDF_ATTRIB) == IDF_ATTRIB) pAttrArray->DeleteArea( nStartRow, nEndRow );
     else if ((nDelFlag & IDF_ATTRIB) != 0) pAttrArray->DeleteHardAttr( nStartRow, nEndRow );
-
-    bDirtyGroups = true;
 }
 
 
@@ -2072,7 +2061,7 @@ public:
 // of similar formulae into a formulagroup
 void ScColumn::RebuildFormulaGroups()
 {
-    if ( maItems.empty() || !bDirtyGroups )
+    if ( maItems.empty() || !mbDirtyGroups )
         return;
 
     // clear double groups
@@ -2180,7 +2169,7 @@ void ScColumn::RebuildFormulaGroups()
     }
 #endif
 
-    bDirtyGroups = false;
+    mbDirtyGroups = false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

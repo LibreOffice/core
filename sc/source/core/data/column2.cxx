@@ -1398,6 +1398,7 @@ SCROW ScColumn::FindNextVisibleRowWithContent(SCROW nRow, bool bForward) const
 
 void ScColumn::CellStorageModified()
 {
+    mbDirtyGroups = true;
 #if DEBUG_COLUMN_STORAGE
     if (maItems.empty())
     {

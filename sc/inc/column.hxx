@@ -139,7 +139,7 @@ class ScColumn
 
     ScAttrArray*          pAttrArray;
     ScDocument*           pDocument;
-    bool                  bDirtyGroups;     /// formula groups are dirty.
+    bool mbDirtyGroups;     /// formula groups are dirty.
 
 friend class ScDocument;                    // for FillInfo
 friend class ScDocumentIterator;
