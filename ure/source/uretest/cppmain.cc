@@ -111,7 +111,6 @@ private:
         "com.sun.star.loader.SharedLibrary",
         "com.sun.star.reflection.CoreReflection",
         "com.sun.star.reflection.ProxyFactory",
-        "com.sun.star.reflection.TypeDescriptionManager",
         "com.sun.star.registry.ImplementationRegistration",
         "com.sun.star.registry.NestedRegistry",
         "com.sun.star.registry.SimpleRegistry",
@@ -144,6 +143,15 @@ private:
                 "no instance: " + name,
                 static_cast< ::cppu::OWeakObject * >(this));
         }
+    }
+    static char const * const singletons[] = {
+        "com.sun.star.reflection.theTypeDescriptionManager"
+    };
+    for (std::size_t i = 0; i != SAL_N_ELEMENTS(singletons); ++i) {
+        css::uno::Reference< css::uno::XInterface > instance(
+            context_->getValueByName(
+                "/singletons/" + rtl::OUString::createFromAscii(singletons[i])),
+            css::uno::UNO_QUERY_THROW);
     }
     css::util::theMacroExpander::get(context_);
     test(
