@@ -3023,8 +3023,32 @@ bool ScFormulaCell::InterpretFormulaGroup()
                 aRef.CalcAbsIfRel(aPos);
                 if (aRef.Ref1.IsRowRel() || aRef.Ref2.IsRowRel())
                 {
-                    // TODO: Implement this.
-                    return false;
+                    // Row reference is relative.
+                    bool bAbsFirst = !aRef.Ref1.IsRowRel();
+                    bool bAbsLast = !aRef.Ref2.IsRowRel();
+                    ScAddress aRefPos(aRef.Ref1.nCol, aRef.Ref1.nRow, aRef.Ref1.nTab);
+                    size_t nCols = aRef.Ref2.nCol - aRef.Ref1.nCol + 1;
+                    std::vector<const double*> aArrays;
+                    aArrays.reserve(nCols);
+                    SCROW nLength = xGroup->mnLength;
+                    if (!bAbsLast)
+                    {
+                        // range end position is relative. Extend it.
+                        nLength += aRef.Ref2.nRow - aRef.Ref1.nRow;
+                    }
+
+                    for (SCCOL i = aRef.Ref1.nCol; i <= aRef.Ref2.nCol; ++i)
+                    {
+                        aRefPos.SetCol(i);
+                        const double* pArray = pDocument->FetchDoubleArray(aCxt, aRefPos, nLength);
+                        if (!pArray)
+                            return false;
+
+                        aArrays.push_back(pArray);
+                    }
+
+                    formula::DoubleVectorRefToken aTok(aArrays, nLength, bAbsFirst, bAbsLast);
+                    aCode.AddToken(aTok);
                 }
                 else
                 {
