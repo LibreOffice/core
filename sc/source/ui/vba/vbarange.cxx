@@ -161,6 +161,7 @@
 
 #include "vbaglobals.hxx"
 #include "vbastyle.hxx"
+#include "vbaname.hxx"
 #include <vector>
 #include <vbahelper/vbacollectionimpl.hxx>
 // begin test includes
@@ -4093,6 +4094,57 @@ ScVbaRange::getTop() throw (uno::RuntimeException)
         return getArea( 0 )->getTop();
     awt::Point aPoint= getPosition();
     return uno::makeAny( lcl_hmmToPoints( aPoint.Y ) );
+}
+
+
+uno::Reference< sheet::XCellRangeReferrer > getNamedRange( const uno::Reference< uno::XInterface >& xIf, const uno::Reference< table::XCellRange >& thisRange )
+{
+    uno::Reference< beans::XPropertySet > xProps( xIf, uno::UNO_QUERY_THROW );
+    uno::Reference< container::XNameAccess > xNameAccess( xProps->getPropertyValue( "NamedRanges" ), uno::UNO_QUERY_THROW );
+
+    uno::Sequence< OUString > sNames = xNameAccess->getElementNames();
+//    uno::Reference< table::XCellRange > thisRange( getCellRange(), uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XCellRangeReferrer > xNamedRange;
+    for ( sal_Int32 i=0; i < sNames.getLength(); ++i )
+    {
+        uno::Reference< sheet::XCellRangeReferrer > xName( xNameAccess->getByName( sNames[ i ] ), uno::UNO_QUERY );
+        if ( xName.is() )
+        {
+            if ( thisRange == xName->getReferredCells() )
+            {
+                xNamedRange = xName;
+                break;
+            }
+        }
+    }
+    return xNamedRange;
+}
+
+uno::Reference< excel::XName >
+ScVbaRange::getName() throw (uno::RuntimeException)
+{
+    uno::Reference< beans::XPropertySet > xProps( getUnoModel(), uno::UNO_QUERY );
+    uno::Reference< table::XCellRange > thisRange( getCellRange(), uno::UNO_QUERY_THROW );
+    // Application range
+    uno::Reference< sheet::XCellRangeReferrer > xNamedRange = getNamedRange( xProps, thisRange );
+
+    if ( !xNamedRange.is() )
+    {
+        // not in application range then assume it might be in
+        // sheet namedranges
+        RangeHelper aRange( thisRange );
+        uno::Reference< sheet::XSpreadsheet > xSheet = aRange.getSpreadSheet();
+        xProps.set( xSheet, uno::UNO_QUERY );
+        // impl here
+        xNamedRange = getNamedRange( xProps, thisRange );
+    }
+    if ( xProps.is() && xNamedRange.is() )
+    {
+        uno::Reference< sheet::XNamedRanges > xNamedRanges( xProps, uno::UNO_QUERY_THROW );
+        uno::Reference< sheet::XNamedRange > xName( xNamedRange, uno::UNO_QUERY_THROW );
+        return new ScVbaName( mxParent, mxContext, xName, xNamedRanges, getUnoModel() );
+    }
+    return uno::Reference< excel::XName >();
 }
 
 uno::Reference< excel::XWorksheet >
