@@ -1334,7 +1334,7 @@ File gid_File_Extension_Dictionary_Af
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-af.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1343,7 +1343,7 @@ File gid_File_Extension_Dictionary_An
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-an.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1352,7 +1352,7 @@ File gid_File_Extension_Dictionary_Ar
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-ar.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1361,7 +1361,7 @@ File gid_File_Extension_Dictionary_Be
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-be.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1370,7 +1370,7 @@ File gid_File_Extension_Dictionary_Bg
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-bg.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1379,7 +1379,7 @@ File gid_File_Extension_Dictionary_Bn
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-bn.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1388,7 +1388,7 @@ File gid_File_Extension_Dictionary_Br
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-br.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1397,7 +1397,7 @@ File gid_File_Extension_Dictionary_Bs
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-bs.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1406,7 +1406,7 @@ File gid_File_Extension_Dictionary_Ca
     Dir = FILELIST_DIR;
     Name = "Dictionary/dict-ca.filelist";
     Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-    UnixRights = 444;
+    TXT_FILE_BODY;
 End
 #endif
 
@@ -1415,7 +1415,7 @@ File gid_File_Extension_Dictionary_Cs
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-cs.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1424,7 +1424,7 @@ File gid_File_Extension_Dictionary_Da
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-da.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1433,7 +1433,7 @@ File gid_File_Extension_Dictionary_De
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-de.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1442,7 +1442,7 @@ File gid_File_Extension_Dictionary_En
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-en.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1451,7 +1451,7 @@ File gid_File_Extension_Dictionary_El
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-el.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1460,7 +1460,7 @@ File gid_File_Extension_Dictionary_Es
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-es.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1469,7 +1469,7 @@ File gid_File_Extension_Dictionary_Et
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-et.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1478,7 +1478,7 @@ File gid_File_Extension_Dictionary_Fr
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-fr.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1487,7 +1487,7 @@ File gid_File_Extension_Dictionary_Gd
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-gd.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1496,7 +1496,7 @@ File gid_File_Extension_Dictionary_Gl
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-gl.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1505,7 +1505,7 @@ File gid_File_Extension_Dictionary_Gu
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-gu.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1514,7 +1514,7 @@ File gid_File_Extension_Dictionary_He
     Dir = FILELIST_DIR;
     Name = "Dictionary/dict-he.filelist";
     Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-    UnixRights = 444;
+    TXT_FILE_BODY;
 End
 #endif
 
@@ -1523,7 +1523,7 @@ File gid_File_Extension_Dictionary_Hi
     Dir = FILELIST_DIR;
     Name = "Dictionary/dict-hi.filelist";
     Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-    UnixRights = 444;
+    TXT_FILE_BODY;
 End
 #endif
 
@@ -1532,7 +1532,7 @@ File gid_File_Extension_Dictionary_Hu
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-hu.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1541,7 +1541,7 @@ File gid_File_Extension_Dictionary_Hr
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-hr.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1550,7 +1550,7 @@ File gid_File_Extension_Dictionary_It
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-it.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1559,7 +1559,7 @@ File gid_File_Extension_Dictionary_Ku_Tr
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-ku-TR.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1568,7 +1568,7 @@ File gid_File_Extension_Dictionary_Lt
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-lt.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1577,7 +1577,7 @@ File gid_File_Extension_Dictionary_Lv
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-lv.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1586,7 +1586,7 @@ File gid_File_Extension_Dictionary_Ne
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-ne.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1595,7 +1595,7 @@ File gid_File_Extension_Dictionary_Nl
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-nl.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1604,7 +1604,7 @@ File gid_File_Extension_Dictionary_No
     Dir = FILELIST_DIR;
     Name = "Dictionary/dict-no.filelist";
     Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-    UnixRights = 444;
+    TXT_FILE_BODY;
 End
 #endif
 
@@ -1613,7 +1613,7 @@ File gid_File_Extension_Dictionary_Oc
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-oc.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1622,7 +1622,7 @@ File gid_File_Extension_Dictionary_Pl
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-pl.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1631,7 +1631,7 @@ File gid_File_Extension_Dictionary_Pt_Br
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-pt-BR.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1640,7 +1640,7 @@ File gid_File_Extension_Dictionary_Pt_Pt
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-pt-PT.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1649,7 +1649,7 @@ File gid_File_Extension_Dictionary_Ro
     Dir = FILELIST_DIR;
     Name = "Dictionary/dict-ro.filelist";
     Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-    UnixRights = 444;
+    TXT_FILE_BODY;
 End
 #endif
 
@@ -1658,7 +1658,7 @@ File gid_File_Extension_Dictionary_Ru
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-ru.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1667,7 +1667,7 @@ File gid_File_Extension_Dictionary_Si
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-si.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1676,7 +1676,7 @@ File gid_File_Extension_Dictionary_Sk
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-sk.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1685,7 +1685,7 @@ File gid_File_Extension_Dictionary_Sl
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-sl.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1694,7 +1694,7 @@ File gid_File_Extension_Dictionary_Sr
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-sr.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1703,7 +1703,7 @@ File gid_File_Extension_Dictionary_Sv
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-sv.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1712,7 +1712,7 @@ File gid_File_Extension_Dictionary_Sw
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-sw.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1721,7 +1721,7 @@ File gid_File_Extension_Dictionary_Te
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-te.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1730,7 +1730,7 @@ File gid_File_Extension_Dictionary_Th
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-th.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1739,7 +1739,7 @@ File gid_File_Extension_Dictionary_Uk
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-uk.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1748,7 +1748,7 @@ File gid_File_Extension_Dictionary_Vi
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-vi.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
 
@@ -1757,6 +1757,6 @@ File gid_File_Extension_Dictionary_Zu
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-zu.filelist";
 	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
-	UnixRights = 444;
+	TXT_FILE_BODY;
 End
 #endif
