@@ -535,6 +535,60 @@ void ScDrawView::MarkListHasChanged()
 
 }
 
+sal_Bool ScDrawView::SdrBeginTextEdit(
+    SdrObject* pObj,
+    SdrPageView* pPV,
+    ::Window* pWinL,
+    sal_Bool bIsNewObj,
+    SdrOutliner* pGivenOutliner,
+    OutlinerView* pGivenOutlinerView,
+    sal_Bool bDontDeleteOutliner,
+    sal_Bool bOnlyOneView,
+    sal_Bool bGrabFocus )
+{
+    const sal_Bool bRet = FmFormView::SdrBeginTextEdit(
+        pObj, pPV, pWinL, bIsNewObj,
+        pGivenOutliner, pGivenOutlinerView, bDontDeleteOutliner,
+        bOnlyOneView, bGrabFocus );
+
+    ScTabViewShell* pViewSh = pViewData->GetViewShell();
+    if ( pViewSh->GetViewFrame() )
+    {
+        SfxFrame& rFrame = pViewSh->GetViewFrame()->GetFrame();
+        uno::Reference< frame::XController > xController = rFrame.GetController();
+        if (xController.is())
+        {
+            ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
+            if (pImp)
+                pImp->SelectionChanged();
+        }
+    }
+
+    return bRet;
+}
+
+
+SdrEndTextEditKind ScDrawView::SdrEndTextEdit( sal_Bool bDontDeleteReally )
+{
+    const SdrEndTextEditKind eRet = FmFormView::SdrEndTextEdit( bDontDeleteReally );
+
+    ScTabViewShell* pViewSh = pViewData->GetViewShell();
+    if ( pViewSh->GetViewFrame() )
+    {
+        SfxFrame& rFrame = pViewSh->GetViewFrame()->GetFrame();
+        uno::Reference< frame::XController > xController = rFrame.GetController();
+        if (xController.is())
+        {
+            ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
+            if (pImp)
+                pImp->SelectionChanged();
+        }
+    }
+
+    return eRet;
+}
+
+
 void ScDrawView::ModelHasChanged()
 {
     SdrObject* pEditObj = GetTextEditObject();

@@ -88,6 +88,7 @@
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <svx/unoapi.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include "DrawController.hxx"
 
 #include <numeric>
 
@@ -695,6 +696,11 @@ sal_Bool View::SdrBeginTextEdit(
         pGivenOutlinerView, bDontDeleteOutliner,
         bOnlyOneView, bGrabFocus);
 
+    if ( mpViewSh )
+    {
+        mpViewSh->GetViewShellBase().GetDrawController().FireSelectionChangeListener();
+    }
+
     if (bReturn)
     {
         ::Outliner* pOL = GetTextEditOutliner();
@@ -761,6 +767,11 @@ SdrEndTextEditKind View::SdrEndTextEdit(sal_Bool bDontDeleteReally )
 
     if( xObj.is() )
     {
+        if ( mpViewSh )
+        {
+            mpViewSh->GetViewShellBase().GetDrawController().FireSelectionChangeListener();
+        }
+
         SdPage* pPage = dynamic_cast< SdPage* >( xObj->GetPage() );
         if( pPage )
             pPage->onEndTextEdit( xObj.get() );

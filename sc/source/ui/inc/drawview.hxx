@@ -66,6 +66,19 @@ public:
 
     virtual void    DeleteMarked();
 
+    virtual sal_Bool SdrBeginTextEdit(
+        SdrObject* pObj,
+        SdrPageView* pPV = 0L,
+        ::Window* pWin = 0L,
+        sal_Bool bIsNewObj = sal_False,
+        SdrOutliner* pGivenOutliner = 0L,
+        OutlinerView* pGivenOutlinerView = 0L,
+        sal_Bool bDontDeleteOutliner = sal_False,
+        sal_Bool bOnlyOneView = sal_False,
+        sal_Bool bGrabFocus = sal_True);
+
+    virtual SdrEndTextEditKind SdrEndTextEdit( sal_Bool bDontDeleteReally = sal_False );
+
     void            MarkDropObj( SdrObject* pObj );
 
     void            SetMarkedToLayer( sal_uInt8 nLayerNo );
