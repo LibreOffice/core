@@ -22,7 +22,6 @@
 #include <svl/itempool.hxx>
 #include <svl/aeitem.hxx>
 
-#include "dlgsnap.hrc"
 #include "sdattr.hxx"
 #include "View.hxx"
 #include "sdresid.hxx"
@@ -37,33 +36,28 @@ SdSnapLineDlg::SdSnapLineDlg(
     ::Window* pWindow,
     const SfxItemSet& rInAttrs,
     ::sd::View* pView)
-    : ModalDialog (pWindow, SdResId(DLG_SNAPLINE)),
-      aFlPos      (this, SdResId(FL_POSITION)),
-      aFtX        (this, SdResId(FT_X)),
-      aMtrFldX    (this, SdResId(MTR_FLD_X)),
-      aFtY        (this, SdResId(FT_Y)),
-      aMtrFldY    (this, SdResId(MTR_FLD_Y)),
-      aFlDir      (this, SdResId(FL_DIRECTION)),
-      aRbPoint    (this, SdResId(RB_POINT)),
-      aRbVert     (this, SdResId(RB_VERTICAL)),
-      aRbHorz     (this, SdResId(RB_HORIZONTAL)),
-      aBtnOK      (this, SdResId(BTN_OK)),
-      aBtnCancel  (this, SdResId(BTN_CANCEL)),
-      aBtnHelp    (this, SdResId(BTN_HELP)),
-      aBtnDelete  (this, SdResId(BTN_DELETE)),
-      eUIUnit(pView->GetDoc().GetUIUnit()),
-      aUIScale(pView->GetDoc().GetUIScale())
+    : ModalDialog(pWindow, "SnapObjectDialog", "modules/sdraw/ui/dlgsnap.ui")
+    , eUIUnit(pView->GetDoc().GetUIUnit())
+    , aUIScale(pView->GetDoc().GetUIScale())
 {
-    FreeResource();
+    get(m_pFtX, "xlabel");
+    get(m_pMtrFldX, "x");
+    get(m_pFtY, "ylabel");
+    get(m_pMtrFldY, "y");
+    get(m_pRadioGroup, "radiogroup");
+    get(m_pRbPoint, "point");
+    get(m_pRbVert, "vert");
+    get(m_pRbHorz, "horz");
+    get(m_pBtnDelete, "delete");
 
-    aRbHorz.SetClickHdl(LINK(this, SdSnapLineDlg, ClickHdl));
-    aRbVert.SetClickHdl(LINK(this, SdSnapLineDlg, ClickHdl));
-    aRbPoint.SetClickHdl(LINK(this, SdSnapLineDlg, ClickHdl));
+    m_pRbHorz->SetClickHdl(LINK(this, SdSnapLineDlg, ClickHdl));
+    m_pRbVert->SetClickHdl(LINK(this, SdSnapLineDlg, ClickHdl));
+    m_pRbPoint->SetClickHdl(LINK(this, SdSnapLineDlg, ClickHdl));
 
-    aBtnDelete.SetClickHdl(LINK(this, SdSnapLineDlg, ClickHdl));
+    m_pBtnDelete->SetClickHdl(LINK(this, SdSnapLineDlg, ClickHdl));
 
-    SetFieldUnit( aMtrFldX, eUIUnit, sal_True );
-    SetFieldUnit( aMtrFldY, eUIUnit, sal_True );
+    SetFieldUnit( *m_pMtrFldX, eUIUnit, sal_True );
+    SetFieldUnit( *m_pMtrFldY, eUIUnit, sal_True );
 
     // get WorkArea
     Rectangle aWorkArea = pView->GetWorkArea();
@@ -82,40 +76,40 @@ SdSnapLineDlg::SdSnapLineDlg(
 
     // determine max and min values depending on
     // WorkArea, PoolUnit and FieldUnit:
-    SetMetricValue( aMtrFldX, aLeftTop.X(), ePoolUnit );
+    SetMetricValue( *m_pMtrFldX, aLeftTop.X(), ePoolUnit );
 
-    long nValue = static_cast<long>(aMtrFldX.GetValue());
+    long nValue = static_cast<long>(m_pMtrFldX->GetValue());
     nValue = Fraction( nValue ) / aUIScale;
-    aMtrFldX.SetMin( nValue );
-    aMtrFldX.SetFirst( nValue );
+    m_pMtrFldX->SetMin( nValue );
+    m_pMtrFldX->SetFirst( nValue );
 
-    SetMetricValue( aMtrFldX, aRightBottom.X(), ePoolUnit );
-    nValue = static_cast<long>(aMtrFldX.GetValue());
+    SetMetricValue( *m_pMtrFldX, aRightBottom.X(), ePoolUnit );
+    nValue = static_cast<long>(m_pMtrFldX->GetValue());
     nValue = Fraction( nValue ) / aUIScale;
-    aMtrFldX.SetMax( nValue );
-    aMtrFldX.SetLast( nValue );
+    m_pMtrFldX->SetMax( nValue );
+    m_pMtrFldX->SetLast( nValue );
 
-    SetMetricValue( aMtrFldY, aLeftTop.Y(), ePoolUnit );
-    nValue = static_cast<long>(aMtrFldY.GetValue());
+    SetMetricValue( *m_pMtrFldY, aLeftTop.Y(), ePoolUnit );
+    nValue = static_cast<long>(m_pMtrFldY->GetValue());
     nValue = Fraction( nValue ) / aUIScale;
-    aMtrFldY.SetMin( nValue );
-    aMtrFldY.SetFirst( nValue );
+    m_pMtrFldY->SetMin( nValue );
+    m_pMtrFldY->SetFirst( nValue );
 
-    SetMetricValue( aMtrFldY, aRightBottom.Y(), ePoolUnit );
-    nValue = static_cast<long>(aMtrFldY.GetValue());
+    SetMetricValue( *m_pMtrFldY, aRightBottom.Y(), ePoolUnit );
+    nValue = static_cast<long>(m_pMtrFldY->GetValue());
     nValue = Fraction( nValue ) / aUIScale;
-    aMtrFldY.SetMax( nValue );
-    aMtrFldY.SetLast( nValue );
+    m_pMtrFldY->SetMax( nValue );
+    m_pMtrFldY->SetLast( nValue );
 
     // set values
     nXValue = ((const SfxUInt32Item&) rInAttrs.Get(ATTR_SNAPLINE_X)).GetValue();
     nYValue = ((const SfxUInt32Item&) rInAttrs.Get(ATTR_SNAPLINE_Y)).GetValue();
     nXValue = Fraction(nXValue) / aUIScale;
     nYValue = Fraction(nYValue) / aUIScale;
-    SetMetricValue( aMtrFldX, nXValue, SFX_MAPUNIT_100TH_MM);
-    SetMetricValue( aMtrFldY, nYValue, SFX_MAPUNIT_100TH_MM);
+    SetMetricValue( *m_pMtrFldX, nXValue, SFX_MAPUNIT_100TH_MM);
+    SetMetricValue( *m_pMtrFldY, nYValue, SFX_MAPUNIT_100TH_MM);
 
-    aRbPoint.Check();
+    m_pRbPoint->Check();
 }
 
 /**
@@ -123,10 +117,10 @@ SdSnapLineDlg::SdSnapLineDlg(
  */
 IMPL_LINK( SdSnapLineDlg, ClickHdl, Button *, pBtn )
 {
-    if ( pBtn == &aRbPoint )        SetInputFields(sal_True, sal_True);
-    else if ( pBtn == &aRbHorz )    SetInputFields(sal_False, sal_True);
-    else if ( pBtn == &aRbVert )    SetInputFields(sal_True, sal_False);
-    else if ( pBtn == &aBtnDelete ) EndDialog(RET_SNAP_DELETE);
+    if ( pBtn == m_pRbPoint )        SetInputFields(sal_True, sal_True);
+    else if ( pBtn == m_pRbHorz )    SetInputFields(sal_False, sal_True);
+    else if ( pBtn == m_pRbVert )    SetInputFields(sal_True, sal_False);
+    else if ( pBtn == m_pBtnDelete ) EndDialog(RET_SNAP_DELETE);
 
     return 0;
 }
@@ -138,12 +132,12 @@ void SdSnapLineDlg::GetAttr(SfxItemSet& rOutAttrs)
 {
     SnapKind eKind;
 
-    if ( aRbHorz.IsChecked() )      eKind = SK_HORIZONTAL;
-    else if ( aRbVert.IsChecked() ) eKind = SK_VERTICAL;
+    if ( m_pRbHorz->IsChecked() )      eKind = SK_HORIZONTAL;
+    else if ( m_pRbVert->IsChecked() ) eKind = SK_VERTICAL;
     else                            eKind = SK_POINT;
 
-    nXValue = Fraction( GetCoreValue( aMtrFldX, SFX_MAPUNIT_100TH_MM) ) * aUIScale;
-    nYValue = Fraction( GetCoreValue( aMtrFldY, SFX_MAPUNIT_100TH_MM) ) * aUIScale;
+    nXValue = Fraction( GetCoreValue( *m_pMtrFldX, SFX_MAPUNIT_100TH_MM) ) * aUIScale;
+    nYValue = Fraction( GetCoreValue( *m_pMtrFldY, SFX_MAPUNIT_100TH_MM) ) * aUIScale;
 
     rOutAttrs.Put(SfxAllEnumItem(ATTR_SNAPLINE_KIND, (sal_uInt16)eKind));
     rOutAttrs.Put(SfxUInt32Item(ATTR_SNAPLINE_X, nXValue));
@@ -152,10 +146,7 @@ void SdSnapLineDlg::GetAttr(SfxItemSet& rOutAttrs)
 
 void SdSnapLineDlg::HideRadioGroup()
 {
-    aFlDir.Hide();
-    aRbHorz.Hide();
-    aRbVert.Hide();
-    aRbPoint.Hide();
+    m_pRadioGroup->Hide();
 }
 
 /**
@@ -165,31 +156,31 @@ void SdSnapLineDlg::SetInputFields(sal_Bool bEnableX, sal_Bool bEnableY)
 {
     if ( bEnableX )
     {
-        if ( !aMtrFldX.IsEnabled() )
-            aMtrFldX.SetValue(nXValue);
-        aMtrFldX.Enable();
-        aFtX.Enable();
+        if ( !m_pMtrFldX->IsEnabled() )
+            m_pMtrFldX->SetValue(nXValue);
+        m_pMtrFldX->Enable();
+        m_pFtX->Enable();
     }
-    else if ( aMtrFldX.IsEnabled() )
+    else if ( m_pMtrFldX->IsEnabled() )
     {
-        nXValue = static_cast<long>(aMtrFldX.GetValue());
-        aMtrFldX.SetText(String());
-        aMtrFldX.Disable();
-        aFtX.Disable();
+        nXValue = static_cast<long>(m_pMtrFldX->GetValue());
+        m_pMtrFldX->SetText(String());
+        m_pMtrFldX->Disable();
+        m_pFtX->Disable();
     }
     if ( bEnableY )
     {
-        if ( !aMtrFldY.IsEnabled() )
-            aMtrFldY.SetValue(nYValue);
-        aMtrFldY.Enable();
-        aFtY.Enable();
+        if ( !m_pMtrFldY->IsEnabled() )
+            m_pMtrFldY->SetValue(nYValue);
+        m_pMtrFldY->Enable();
+        m_pFtY->Enable();
     }
-    else if ( aMtrFldY.IsEnabled() )
+    else if ( m_pMtrFldY->IsEnabled() )
     {
-        nYValue = static_cast<long>(aMtrFldY.GetValue());
-        aMtrFldY.SetText(String());
-        aMtrFldY.Disable();
-        aFtY.Disable();
+        nYValue = static_cast<long>(m_pMtrFldY->GetValue());
+        m_pMtrFldY->SetText(String());
+        m_pMtrFldY->Disable();
+        m_pFtY->Disable();
     }
 }
 

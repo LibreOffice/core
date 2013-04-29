@@ -26,6 +26,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 #include <vcl/group.hxx>
+#include <vcl/layout.hxx>
 #include <tools/fract.hxx>
 #include <vcl/dialog.hxx>
 #include "sdenumdef.hxx"
@@ -42,19 +43,15 @@ namespace sd {
 class SdSnapLineDlg : public ModalDialog
 {
 private:
-    FixedLine           aFlPos;
-    FixedText           aFtX;
-    MetricField         aMtrFldX;
-    FixedText           aFtY;
-    MetricField         aMtrFldY;
-    FixedLine           aFlDir;
-    ImageRadioButton    aRbPoint;
-    ImageRadioButton    aRbVert;
-    ImageRadioButton    aRbHorz;
-    OKButton            aBtnOK;
-    CancelButton        aBtnCancel;
-    HelpButton          aBtnHelp;
-    PushButton          aBtnDelete;
+    FixedText*          m_pFtX;
+    MetricField*        m_pMtrFldX;
+    FixedText*          m_pFtY;
+    MetricField*        m_pMtrFldY;
+    VclContainer*       m_pRadioGroup;
+    RadioButton*        m_pRbPoint;
+    RadioButton*        m_pRbVert;
+    RadioButton*        m_pRbHorz;
+    PushButton*         m_pBtnDelete;
     long                nXValue;
     long                nYValue;
     FieldUnit           eUIUnit;
@@ -68,7 +65,7 @@ public:
     void GetAttr(SfxItemSet& rOutAttrs);
 
     void HideRadioGroup();
-    void HideDeleteBtn() { aBtnDelete.Hide(); }
+    void HideDeleteBtn() { m_pBtnDelete->Hide(); }
     void SetInputFields(sal_Bool bEnableX, sal_Bool bEnableY);
 };
 
