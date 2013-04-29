@@ -45,6 +45,10 @@
 
 namespace editeng { class SvxBorderLine; }
 
+namespace sc {
+    struct FormulaGroupContext;
+}
+
 class Fraction;
 class OutputDevice;
 class SfxItemPoolCache;
@@ -460,7 +464,7 @@ public:
     ScFormulaVectorState GetFormulaVectorState( SCROW nRow ) const;
     formula::FormulaTokenRef ResolveStaticReference( SCROW nRow );
     bool ResolveStaticReference( ScMatrix& rMat, SCCOL nMatCol, SCROW nRow1, SCROW nRow2 );
-    const double* FetchDoubleArray( SCROW nRow1, SCROW nRow2 ) const;
+    const double* FetchDoubleArray( sc::FormulaGroupContext& rCxt, SCROW nRow1, SCROW nRow2 ) const;
 
     ScRefCellValue GetRefCellValue( SCROW );
 

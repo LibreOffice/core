@@ -47,6 +47,9 @@
 #include <boost/scoped_ptr.hpp>
 
 namespace editeng { class SvxBorderLine; }
+namespace sc {
+    struct FormulaGroupContext;
+}
 class SvxFontItem;
 
 class KeyEvent;
@@ -1944,7 +1947,8 @@ public:
     formula::FormulaTokenRef ResolveStaticReference( const ScAddress& rPos );
     formula::FormulaTokenRef ResolveStaticReference( const ScRange& rRange );
 
-    const double* FetchDoubleArray( const ScAddress& rPos, SCROW nLength ) const;
+    const double* FetchDoubleArray(
+        sc::FormulaGroupContext& rCxt, const ScAddress& rPos, SCROW nLength ) const;
 
 private: // CLOOK-Impl-methods
 

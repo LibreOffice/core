@@ -57,6 +57,7 @@
 #include "cellvalue.hxx"
 #include "tokenarray.hxx"
 #include "globalnames.hxx"
+#include "formulagroup.hxx"
 
 #include <math.h>
 
@@ -1661,8 +1662,10 @@ bool ScColumn::ResolveStaticReference( ScMatrix& rMat, SCCOL nMatCol, SCROW nRow
     return true;
 }
 
-const double* ScColumn::FetchDoubleArray( SCROW nRow1, SCROW nRow2 ) const
+const double* ScColumn::FetchDoubleArray( sc::FormulaGroupContext& /*rCxt*/, SCROW nRow1, SCROW nRow2 ) const
 {
+    // TODO: I'll use the context object later.
+
     if (nRow1 > nRow2)
         return NULL;
 

@@ -1593,13 +1593,14 @@ formula::FormulaTokenRef ScDocument::ResolveStaticReference( const ScRange& rRan
         rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row());
 }
 
-const double* ScDocument::FetchDoubleArray( const ScAddress& rPos, SCROW nLength ) const
+const double* ScDocument::FetchDoubleArray(
+    sc::FormulaGroupContext& rCxt, const ScAddress& rPos, SCROW nLength ) const
 {
     SCTAB nTab = rPos.Tab();
     if (!TableExists(nTab))
         return NULL;
 
-    return maTabs[nTab]->FetchDoubleArray(rPos.Col(), rPos.Row(), rPos.Row()+nLength-1);
+    return maTabs[nTab]->FetchDoubleArray(rCxt, rPos.Col(), rPos.Row(), rPos.Row()+nLength-1);
 }
 
 bool ScDocument::CanFitBlock( const ScRange& rOld, const ScRange& rNew )

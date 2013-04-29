@@ -43,6 +43,7 @@
 #include "formula/vectortoken.hxx"
 #include "svl/intitem.hxx"
 #include "rtl/strbuf.hxx"
+#include "formulagroup.hxx"
 
 #include <boost/bind.hpp>
 
@@ -2968,6 +2969,8 @@ bool ScFormulaCell::InterpretFormulaGroup()
     if (xGroup->mbInvariant)
         return InterpretInvariantFormulaGroup();
 
+    sc::FormulaGroupContext aCxt;
+
     ScTokenArray aCode;
     pCode->Reset();
     for (const formula::FormulaToken* p = pCode->First(); p; p = pCode->Next())
@@ -2990,7 +2993,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
                     // Fetch double array guarantees that the length of the
                     // returned array equals or greater than the requested
                     // length.
-                    const double* pArray = pDocument->FetchDoubleArray(aRefPos, xGroup->mnLength);
+                    const double* pArray = pDocument->FetchDoubleArray(aCxt, aRefPos, xGroup->mnLength);
                     if (!pArray)
                         return false;
 
