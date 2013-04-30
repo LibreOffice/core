@@ -46,7 +46,7 @@ $(call gb_PythonTest_get_target,%) :
 			$(MODULES) \
 		$(if $(gb_CppunitTest__interactive),, \
 			> $@.log 2>&1 \
-			|| (cat $@.log && $(call gb_UNIT_FAILED_MSG,$*) \
+			|| (cat $@.log && $(call gb_UNIT_FAILED_MSG,Python,$*) \
 				$(if $(value gb_CppunitTest_postprocess), \
 					&& $(call gb_CppunitTest_postprocess,$(gb_PythonTest_EXECUTABLE_GDB),$@.core,139)) \
 				&& false))))

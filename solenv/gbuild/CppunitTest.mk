@@ -29,10 +29,10 @@
 
 # CppunitTest class
 
-
-# 1st parameter gives the name of the unit test that failed
+# $(1): "Cppunit" or "Python"
+# $(2): the name of the unit test that failed
 define gb_UNIT_FAILED_MSG
-echo; echo "Error: a unit test failed, please do one of:"; echo; echo "export DEBUGCPPUNIT=TRUE            \# for exception catching"; echo "export GDBCPPUNITTRACE=\"gdb --args\" \# for interactive debugging"; echo "export VALGRIND=memcheck            \# for memory checking" ; echo ; echo "and retry using: make CppunitTest_$(1)"
+printf '\nError: a unit test failed, please do one of:\n\nexport DEBUGCPPUNIT=TRUE            # for exception catching\nexport GDBCPPUNITTRACE="gdb --args" # for interactive debugging\nexport VALGRIND=memcheck            # for memory checking\n\nand retry using: make %sTest_%s' $(1) $(2)
 endef
 
 ifeq ($(strip $(DEBUGCPPUNIT)),TRUE)
@@ -100,7 +100,7 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_CPPTESTDEPS)
 		$(call gb_CppunitTest__make_args) \
 		$(if $(gb_CppunitTest__interactive),, \
 			> $@.log 2>&1 \
-			|| (RET=$$? && cat $@.log && $(call gb_UNIT_FAILED_MSG,$*) \
+			|| (RET=$$? && cat $@.log && $(call gb_UNIT_FAILED_MSG,Cppunit,$*) \
 				$(if $(value gb_CppunitTest_postprocess), \
 					&& $(call gb_CppunitTest_postprocess,$(gb_CppunitTest_CPPTESTCOMMAND),$@.core,$$RET)) \
 				&& false))))
