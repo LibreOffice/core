@@ -26,14 +26,6 @@
 #define LB_COLOR_MODE       11
 #define MBOX_WIDTH          50
 
-#define IMG_NORMAL          13
-#define IMG_BW              14
-#define IMG_GRAY            15
-#define IMG_WATER           16
-#define STR_NORMAL          17
-#define STR_BW              18
-#define STR_GRAY            19
-#define STR_WATER           20
 #define MF_RED              21
 #define MF_GREEN            22
 #define MF_BLUE             23
@@ -43,36 +35,3 @@
 #define IMG_BLUE            27
 #define IMG_GAMMA           28
 
-//===========================location================================
-
-#define FT_BRIGHTNESS_X         SECTIONPAGE_MARGIN_HORIZONTAL
-#define FT_BRIGHTNESS_Y         SECTIONPAGE_MARGIN_VERTICAL_TOP
-#define MTR_BRIGHTNESS_X        FT_BRIGHTNESS_X
-#define MTR_BRIGHTNESS_Y        FT_BRIGHTNESS_Y + TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL
-#define FT_CONTRAST_X           FT_BRIGHTNESS_X + MBOX_WIDTH + CONTROL_SPACING_HORIZONTAL
-#define FT_CONTRAST_Y           FT_BRIGHTNESS_Y
-#define MTR_CONTRAST_X          FT_CONTRAST_X
-#define MTR_CONTRAST_Y          MTR_BRIGHTNESS_Y
-
-#define FT_COLOR_MODE_X         FT_BRIGHTNESS_X
-#define FT_COLOR_MODE_Y         MTR_BRIGHTNESS_Y + MBOX_HEIGHT + CONTROL_SPACING_VERTICAL
-#define LBX_COLOR_MODE_X        FT_COLOR_MODE_X
-#define LBX_COLOR_MODE_Y        FT_COLOR_MODE_Y + TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL
-
-#define FT_TRANSPARENT_X        FT_CONTRAST_X
-#define FT_TRANSPARENT_Y        MTR_CONTRAST_Y + MBOX_HEIGHT + CONTROL_SPACING_VERTICAL
-#define MTR_TRANS_X             FT_TRANSPARENT_X
-#define MTR_TRANS_Y             FT_TRANSPARENT_Y + TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL
-
-#define MF_RED_X                SECTIONPAGE_MARGIN_HORIZONTAL
-#define MF_RED_Y                MTR_TRANS_Y + MBOX_HEIGHT + CONTROL_SPACING_VERTICAL
-#define MF_GREEN_X              MF_RED_X + MBOX_WIDTH + CONTROL_SPACING_HORIZONTAL
-#define MF_GREEN_Y              MF_RED_Y
-#define MF_BLUE_X               MF_RED_X
-#define MF_BLUE_Y               MF_RED_Y + MBOX_HEIGHT + CONTROL_SPACING_VERTICAL
-#define MF_GAMMA_X              MF_GREEN_X
-#define MF_GAMMA_Y              MF_BLUE_Y
-
-#define PAGE_HEIGHT             MF_GAMMA_Y + MBOX_HEIGHT + SECTIONPAGE_MARGIN_VERTICAL_BOT
-
-// eof

@@ -909,6 +909,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                             break;
                         case 315000:
                             mpMtrAngle->SelectEntryPos(7);
+                            break;
                     }
 
                     break;

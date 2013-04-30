@@ -27,6 +27,7 @@
 #include <svl/intitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include "svx/dialogs.hrc"
 
 using namespace css;
 using namespace cssu;
@@ -68,18 +69,10 @@ GraphicPropertyPanel::GraphicPropertyPanel(
     maBlueControl(SID_ATTR_GRAF_BLUE, *pBindings, *this),
     maGammaControl(SID_ATTR_GRAF_GAMMA, *pBindings, *this),
     maModeControl(SID_ATTR_GRAF_MODE, *pBindings, *this),
-    maImgNormal(SVX_RES(IMG_NORMAL)),
-    maImgBW(SVX_RES(IMG_BW)),
-    maImgGray(SVX_RES(IMG_GRAY)),
-    maImgWater(SVX_RES(IMG_WATER)),
     maImgRed(this, SVX_RES(IMG_RED)),
     maImgGreen(this, SVX_RES(IMG_GREEN)),
     maImgBlue(this, SVX_RES(IMG_BLUE)),
     maImgGamma(this, SVX_RES(IMG_GAMMA)),
-    msNormal(SVX_RES(STR_NORMAL)),
-    msBW(SVX_RES(STR_BW)),
-    msGray(SVX_RES(STR_GRAY)),
-    msWater(SVX_RES(STR_WATER)),
     mxFrame(rxFrame),
     mpBindings(pBindings)
 {
@@ -103,37 +96,57 @@ void GraphicPropertyPanel::Initialize()
     mpFtTrans->SetBackground(Wallpaper());
 
     mpMtrBrightness->SetModifyHdl( LINK( this, GraphicPropertyPanel, ModifyBrightnessHdl ) );
-    mpMtrBrightness->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Brightness")));    //wj acc
+    mpMtrBrightness->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Brightness")));
     mpMtrContrast->SetModifyHdl( LINK( this, GraphicPropertyPanel, ModifyContrastHdl ) );
-    mpMtrContrast->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Contrast")));    //wj acc
+    mpMtrContrast->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Contrast")));
     mpMtrTrans->SetModifyHdl( LINK( this, GraphicPropertyPanel, ModifyTransHdl ) );
-    mpMtrTrans->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Transparency")));   //wj acc
+    mpMtrTrans->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Transparency")));
 
-    mpLBColorMode->InsertEntry( msNormal, maImgNormal );
-    mpLBColorMode->InsertEntry( msGray, maImgGray );
-    mpLBColorMode->InsertEntry( msBW, maImgBW );
-    mpLBColorMode->InsertEntry( msWater, maImgWater );
+    mpLBColorMode->InsertEntry(String(SVX_RES(RID_SVXSTR_GRAFMODE_STANDARD)));
+    mpLBColorMode->InsertEntry(String(SVX_RES(RID_SVXSTR_GRAFMODE_GREYS)));
+    mpLBColorMode->InsertEntry(String(SVX_RES(RID_SVXSTR_GRAFMODE_MONO)));
+    mpLBColorMode->InsertEntry(String(SVX_RES(RID_SVXSTR_GRAFMODE_WATERMARK)));
     mpLBColorMode->SetSelectHdl( LINK( this, GraphicPropertyPanel, ClickColorModeHdl ));
-    mpLBColorMode->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Color mode")));  //wj acc
+    mpLBColorMode->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Color mode")));
 
     mpMtrRed->SetModifyHdl( LINK( this, GraphicPropertyPanel, RedHdl ) );
     mpMtrGreen->SetModifyHdl( LINK( this, GraphicPropertyPanel, GreenHdl ) );
     mpMtrBlue->SetModifyHdl( LINK( this, GraphicPropertyPanel, BlueHdl ) );
     mpMtrGamma->SetModifyHdl( LINK( this, GraphicPropertyPanel, GammaHdl ) );
-    mpMtrRed->SetAccessibleName(mpMtrRed->GetQuickHelpText());  //wj acc
-    mpMtrGreen->SetAccessibleName(mpMtrGreen->GetQuickHelpText());  //wj acc
-    mpMtrBlue->SetAccessibleName(mpMtrBlue->GetQuickHelpText());        //wj acc
-    mpMtrGamma->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Gamma value")));    //wj acc
+    mpMtrRed->SetAccessibleName(mpMtrRed->GetQuickHelpText());
+    mpMtrGreen->SetAccessibleName(mpMtrGreen->GetQuickHelpText());
+    mpMtrBlue->SetAccessibleName(mpMtrBlue->GetQuickHelpText());
+    mpMtrGamma->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Gamma value")));
 
     mpMtrRed->SetAccessibleRelationLabeledBy(mpMtrRed.get());
     mpMtrGreen->SetAccessibleRelationLabeledBy(mpMtrGreen.get());
     mpMtrBlue->SetAccessibleRelationLabeledBy(mpMtrBlue.get());
     mpMtrGamma->SetAccessibleRelationLabeledBy(mpMtrGamma.get());
-    mpMtrBrightness->SetAccessibleRelationLabeledBy(mpFtBrightness.get());  //7874
-    mpMtrContrast->SetAccessibleRelationLabeledBy(mpFtContrast.get());  //7874
-    mpMtrTrans->SetAccessibleRelationLabeledBy(mpFtTrans.get());    //7874
-    mpLBColorMode->SetAccessibleRelationLabeledBy(mpFtColorMode.get()); //7874
+    mpMtrBrightness->SetAccessibleRelationLabeledBy(mpFtBrightness.get());
+    mpMtrContrast->SetAccessibleRelationLabeledBy(mpFtContrast.get());
+    mpMtrTrans->SetAccessibleRelationLabeledBy(mpFtTrans.get());
+    mpLBColorMode->SetAccessibleRelationLabeledBy(mpFtColorMode.get());
+
+    // Fix left position of some controls that may be wrong due to
+    // rounding errors.
+    const sal_Int32 nRight0 (mpLBColorMode->GetPosPixel().X() + mpLBColorMode->GetSizePixel().Width());
+    const sal_Int32 nRight1 (mpMtrTrans->GetPosPixel().X() + mpMtrTrans->GetSizePixel().Width());
+    mpMtrRed->SetPosPixel(Point(
+            nRight0 - mpMtrRed->GetSizePixel().Width(),
+            mpMtrRed->GetPosPixel().Y()));
+    mpMtrBlue->SetPosPixel(Point(
+            nRight0 - mpMtrBlue->GetSizePixel().Width(),
+            mpMtrBlue->GetPosPixel().Y()));
+    mpMtrGreen->SetPosPixel(Point(
+            nRight1 - mpMtrGreen->GetSizePixel().Width(),
+            mpMtrGreen->GetPosPixel().Y()));
+    mpMtrGamma->SetPosPixel(Point(
+            nRight1 - mpMtrGamma->GetSizePixel().Width(),
+            mpMtrGamma->GetPosPixel().Y()));
 }
+
+
+
 
 //////////////////////////////////////////////////////////////////////////////
 
