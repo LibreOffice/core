@@ -8333,6 +8333,9 @@ SfxVoidItem OpenFromCalc SID_OPEN_CALC
     RecordPerSet;
     Synchron;
 
+    /* status: */
+    SlotType = SfxStringItem
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,

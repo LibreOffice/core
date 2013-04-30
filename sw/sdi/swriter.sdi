@@ -10401,6 +10401,9 @@ SfxVoidItem OpenFromWriter FN_OPEN_FILE
     RecordPerSet;
     Synchron;
 
+    /* status: */
+    SlotType = SfxStringItem
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,

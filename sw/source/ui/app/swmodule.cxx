@@ -292,6 +292,8 @@ void SwDLL::RegisterInterfaces()
 void SwDLL::RegisterControls()
 {
     SwModule* pMod = SW_MOD();
+
+    SfxRecentFilesToolBoxControl::RegisterControl( FN_OPEN_FILE, pMod );
     SvxTbxCtlDraw::RegisterControl(SID_INSERT_DRAW, pMod );
     SvxTbxCtlAlign::RegisterControl(SID_OBJECT_ALIGN, pMod );
     SwTbxAnchor::RegisterControl(FN_TOOL_ANCHOR, pMod );

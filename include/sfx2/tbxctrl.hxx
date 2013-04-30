@@ -162,7 +162,7 @@ public:
 
 #define SFX_DECL_TOOLBOX_CONTROL() \
         static SfxToolBoxControl* CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx ); \
-        static void RegisterControl(sal_uInt16 nSlotId = 0, SfxModule *pMod=NULL)
+        static void SFX2_DLLPUBLIC RegisterControl(sal_uInt16 nSlotId = 0, SfxModule *pMod=NULL)
 
 /*  For special ToolBox controls, such as a font selection box or toolbox
     tear-off floating windows, an appropriate Item-Subclass of SfxTooBoxControl
@@ -349,6 +349,23 @@ private:
     PopupMenu*              pMenu;
     sal_uIntPtr             m_nSymbolsStyle;
     sal_Bool                m_bShowMenuImages;
+};
+
+/** Toolbox that implements recent files menu for the Open file toolbar button.
+
+To use that, the appropriate Sfx*Item (like Open, OpenFromCalc, or
+OpenFromWriter) has to have SlotType = SfxStringItem, and the appropriate
+module initialization has to call RegisterControl().
+*/
+class SfxRecentFilesToolBoxControl : public SfxToolBoxControl
+{
+public:
+    SFX_DECL_TOOLBOX_CONTROL();
+    SfxRecentFilesToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
+    virtual ~SfxRecentFilesToolBoxControl();
+
+protected:
+    virtual SfxPopupWindow* CreatePopupWindow();
 };
 
 class SfxReloadToolBoxControl_Impl : public SfxToolBoxControl

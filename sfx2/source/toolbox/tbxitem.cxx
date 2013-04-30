@@ -25,7 +25,9 @@
 #include <string>           // prevent conflict with STL includes
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/awt/XPopupMenu.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -38,6 +40,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
+#include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/frame/status/ItemStatus.hpp>
 #include <com/sun/star/frame/status/ItemState.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
@@ -92,6 +95,7 @@
 #include "virtmenu.hxx"
 #include "sfx2/imagemgr.hxx"
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::frame::status;
@@ -105,6 +109,7 @@ using namespace ::com::sun::star::ui;
 
 SFX_IMPL_TOOLBOX_CONTROL_ARG(SfxToolBoxControl, SfxStringItem, sal_True);
 SFX_IMPL_TOOLBOX_CONTROL(SfxAppToolBoxControl_Impl, SfxStringItem);
+SFX_IMPL_TOOLBOX_CONTROL(SfxRecentFilesToolBoxControl, SfxStringItem);
 
 static Window* GetTopMostParentSystemWindow( Window* pWindow )
 {
@@ -1739,6 +1744,57 @@ IMPL_STATIC_LINK_NOINSTANCE( SfxAppToolBoxControl_Impl, ExecuteHdl_Impl, Execute
 
 void SfxAppToolBoxControl_Impl::Click( )
 {
+}
+
+//--------------------------------------------------------------------
+
+SfxRecentFilesToolBoxControl::SfxRecentFilesToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox )
+    : SfxToolBoxControl( nSlotId, nId, rBox )
+{
+    rBox.SetItemBits( nId, rBox.GetItemBits( nId ) | TIB_DROPDOWN);
+}
+
+SfxRecentFilesToolBoxControl::~SfxRecentFilesToolBoxControl()
+{
+}
+
+SfxPopupWindow* SfxRecentFilesToolBoxControl::CreatePopupWindow()
+{
+    ToolBox& rBox = GetToolBox();
+    sal_uInt16 nItemId = GetId();
+    ::Rectangle aRect( rBox.GetItemRect( nItemId ) );
+
+    Sequence< Any > aArgs( 2 );
+    PropertyValue aPropValue;
+
+    aPropValue.Name = "CommandURL";
+    aPropValue.Value <<= OUString( ".uno:RecentFileList" );
+    aArgs[0] <<= aPropValue;
+
+    aPropValue.Name = "Frame";
+    aPropValue.Value <<= m_xFrame;
+    aArgs[1] <<= aPropValue;
+
+    uno::Reference< frame::XPopupMenuController > xPopupController( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                "com.sun.star.comp.framework.RecentFilesMenuController", aArgs, m_xContext ), UNO_QUERY );
+
+    uno::Reference< awt::XPopupMenu > xPopupMenu( m_xContext->getServiceManager()->createInstanceWithContext(
+                "com.sun.star.awt.PopupMenu", m_xContext ), uno::UNO_QUERY );
+
+    if ( xPopupController.is() && xPopupMenu.is() )
+    {
+        xPopupController->setPopupMenu( xPopupMenu );
+
+        rBox.SetItemDown( nItemId, sal_True );
+        Reference< awt::XWindowPeer > xPeer( getParent(), uno::UNO_QUERY );
+
+        if ( xPeer.is() )
+            xPopupMenu->execute( xPeer, VCLUnoHelper::ConvertToAWTRect( aRect ), 0 );
+
+        rBox.SetItemDown( nItemId, sal_False );
+    }
+
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

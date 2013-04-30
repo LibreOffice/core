@@ -172,6 +172,8 @@ void ScDLL::Init()
     ScMediaShell        ::RegisterInterface(pMod);
     ScPageBreakShell    ::RegisterInterface(pMod);
 
+    SfxRecentFilesToolBoxControl::RegisterControl(SID_OPEN_CALC, pMod);
+
     //  eigene Controller
     ScTbxInsertCtrl     ::RegisterControl(SID_TBXCTL_INSERT, pMod);
     ScTbxInsertCtrl     ::RegisterControl(SID_TBXCTL_INSCELLS, pMod);
