@@ -459,7 +459,6 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
                 SwView& rTempView = rSh.GetView();
                 rTempView.ExitDraw();
                 rSh.Edit();
-                rTempView.AttrChangedNotify(&rSh);
                 return;
             }
             break;

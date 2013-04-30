@@ -666,7 +666,6 @@ ASK_ADJUST:
                 }
                 else
                     rSet.InvalidateItem(nSlotId);
-                Invalidate(SID_ATTR_PARA_ULSPACE);
                 nSlotId = 0;
             }
             break;
