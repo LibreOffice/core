@@ -1203,20 +1203,27 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         if (nDelim != -1)
         {
 #ifndef DISABLE_DYNLOADING
-            OUStringBuffer sModule;
+            OUStringBuffer sModuleBuf;
 #ifdef SAL_DLLPREFIX
-            sModule.append(SAL_DLLPREFIX);
+            sModuleBuf.append(SAL_DLLPREFIX);
 #endif
-            sModule.append(OStringToOUString(name.copy(0, nDelim), RTL_TEXTENCODING_UTF8));
+            sModuleBuf.append(OStringToOUString(name.copy(0, nDelim), RTL_TEXTENCODING_UTF8));
 #ifdef SAL_DLLEXTENSION
-            sModule.append(SAL_DLLEXTENSION);
+            sModuleBuf.append(SAL_DLLEXTENSION);
 #endif
 #endif
             OUString sFunction(OStringToOUString(OString("make") + name.copy(nDelim+1), RTL_TEXTENCODING_UTF8));
 #ifndef DISABLE_DYNLOADING
-            osl::Module aModule;
-            aModule.loadRelative(&thisModule, sModule.makeStringAndClear());
-            customMakeWidget pFunction = (customMakeWidget)aModule.getFunctionSymbol(sFunction);
+            OUString sModule = sModuleBuf.makeStringAndClear();
+            ModuleMap::iterator aI = m_aModuleMap.find(sModule);
+            osl::Module* pModule = NULL;
+            if (aI == m_aModuleMap.end())
+            {
+                pModule = new osl::Module;
+                pModule->loadRelative(&thisModule, sModule);
+                aI = m_aModuleMap.insert(sModule, pModule).first;
+            }
+            customMakeWidget pFunction = (customMakeWidget)aI->second->getFunctionSymbol(sFunction);
 #else
             customMakeWidget pFunction = (customMakeWidget)osl_getFunctionSymbol((oslModule) RTLD_DEFAULT, sFunction.pData);
 #endif

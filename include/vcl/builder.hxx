@@ -11,6 +11,7 @@
 #define _VCLBUILDER_HXX
 
 #include <typeinfo>
+#include <osl/module.hxx>
 #include <tools/resmgr.hxx> //for poxy ResHookProc typedef
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
@@ -19,6 +20,7 @@
 #include <set>
 #include <stack>
 #include <vector>
+#include <boost/ptr_container/ptr_map.hpp>
 
 class ListBox;
 class NumericFormatter;
@@ -34,6 +36,11 @@ public:
     typedef std::map<OString, OString> stringmap;
     typedef Window* (*customMakeWidget)(Window *pParent, stringmap &rVec);
 private:
+    typedef boost::ptr_map<OUString, osl::Module> ModuleMap;
+    //We store these until the builder is deleted, that way we can use the
+    //ui-previewer on custom widgets and guarantee the modules they are from
+    //exist for the duration of the dialog
+    ModuleMap m_aModuleMap;
 
     struct PackingData
     {
