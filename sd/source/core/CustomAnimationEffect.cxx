@@ -1022,7 +1022,7 @@ Reference< XAnimationNode > CustomAnimationEffect::createAfterEffectNode() const
     xAnimate->setFill( AnimationFill::HOLD );
     xAnimate->setTarget( maTarget );
 
-    return Reference< XAnimationNode >( xAnimate, UNO_QUERY_THROW );
+    return xAnimate;
 }
 
 // --------------------------------------------------------------------
