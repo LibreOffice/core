@@ -25,9 +25,9 @@
 using namespace com::sun::star;
 
 namespace cui {
-extern rtl::OUString SAL_CALL ColorPicker_getImplementationName();
+extern OUString SAL_CALL ColorPicker_getImplementationName();
 extern uno::Reference< uno::XInterface > SAL_CALL ColorPicker_createInstance( uno::Reference< uno::XComponentContext > const & ) SAL_THROW( (uno::Exception) );
-extern uno::Sequence< rtl::OUString > SAL_CALL ColorPicker_getSupportedServiceNames() throw( uno::RuntimeException );
+extern uno::Sequence< OUString > SAL_CALL ColorPicker_getSupportedServiceNames() throw( uno::RuntimeException );
 }
 
 namespace
