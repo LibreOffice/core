@@ -2464,9 +2464,11 @@ void ChartExport::exportMarker()
     pFS->startElement( FSNS( XML_c, XML_marker ),
             FSEND );
     Reference< XPropertySet > xPropSet( mxDiagram , uno::UNO_QUERY );
+    awt::Size aSymbolSize;
     sal_Int32 nSymbolType = ::com::sun::star::chart::ChartSymbolType::NONE;
     if( GetProperty( xPropSet, "SymbolType" ) )
         mAny >>= nSymbolType;
+
     // TODO: more properties support for marker
     const char* pSymbolType = NULL;
     switch( nSymbolType )
@@ -2500,11 +2502,24 @@ void ChartExport::exportMarker()
         default:
             SAL_WARN("oox", "unknown data series symbol");
     }
+
     if( pSymbolType )
     {
         pFS->singleElement( FSNS( XML_c, XML_symbol ),
             XML_val, pSymbolType,
             FSEND );
+    }
+    if( nSymbolType != cssc::ChartSymbolType::NONE )
+    {
+        if( GetProperty( xPropSet, "SymbolSize" ) )
+            mAny >>= aSymbolSize;;
+        sal_Int32 nSize = std::max( aSymbolSize.Width, aSymbolSize.Height );
+
+        nSize = nSize/250.0*7.0; // just guessed based on some test cases
+        nSize = std::min<sal_Int32>( 72, std::max<sal_Int32>( 2, nSize ) );
+        pFS->singleElement( FSNS( XML_c, XML_size),
+                XML_val, I32S(nSize),
+                FSEND );
     }
     pFS->endElement( FSNS( XML_c, XML_marker ) );
 }
