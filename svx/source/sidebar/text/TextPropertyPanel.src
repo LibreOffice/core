@@ -20,7 +20,7 @@
  *************************************************************/
 
 #include "TextPropertyPanel.hrc"
-#include <sfx2/sidebar/propertypanel.hrc>
+#include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include "helpid.hrc"
 
 #define CONTROL_HEIGHT_FONT_NAME        250

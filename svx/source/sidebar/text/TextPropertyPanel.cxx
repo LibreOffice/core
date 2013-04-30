@@ -42,7 +42,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfx2/sidebar/propertypanel.hrc>
+#include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include "sfx2/imagemgr.hxx"

@@ -20,7 +20,7 @@
  *************************************************************/
 
 #include "CellAppearancePropertyPanel.hrc"
-#include <sfx2/sidebar/propertypanel.hrc>
+#include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include "sc.hrc"
 #include "helpids.h"
 

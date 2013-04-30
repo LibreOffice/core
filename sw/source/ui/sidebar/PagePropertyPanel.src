@@ -19,7 +19,7 @@
 *
 *************************************************************/
 
-#include <sfx2/sidebar/propertypanel.hrc>
+#include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include "PropertyPanel.hrc"
 #include "PagePropertyPanel.hrc"
 #include "helpid.h"

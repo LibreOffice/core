@@ -20,7 +20,7 @@
  *************************************************************/
 
 #include "LinePropertyPanel.hrc"
-#include <sfx2/sidebar/propertypanel.hrc>
+#include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <svx/dialogs.hrc>
 #include "helpid.hrc"
 

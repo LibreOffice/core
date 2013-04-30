@@ -22,7 +22,7 @@
 #include "svx/sidebar/PopupContainer.hxx"
 #include "AreaTransparencyGradientControl.hxx"
 
-#include <sfx2/sidebar/propertypanel.hrc>
+#include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <AreaPropertyPanel.hxx>

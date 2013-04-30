@@ -25,7 +25,7 @@
 
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
-#include <sfx2/sidebar/propertypanel.hrc>
+#include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/viewoptions.hxx>

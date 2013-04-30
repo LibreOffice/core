@@ -22,7 +22,7 @@
 #include "precompiled_svx.hxx"
 #include "TextUnderlineControl.hxx"
 #include "TextPropertyPanel.hrc"
-#include <sfx2/sidebar/propertypanel.hrc>
+#include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 #include <unotools/viewoptions.hxx>
