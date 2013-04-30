@@ -48,7 +48,7 @@
     </strong>
     <table border>
      <tr><td>Low</td><td>High</td><td>Close</td></tr>
-     <tr><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td></tr>
+     <tr><td>...</td><td>...</td><td>...</td></tr>
     </table></p>
 
     <p><strong>
@@ -57,7 +57,7 @@
     </strong>
     <table border>
      <tr><td><strong>Volume</strong></td><td>Low</td><td>High</td><td>Close</td></tr>
-     <tr><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td></tr>
+     <tr><td>...</td><td>...</td><td>...</td><td>...</td></tr>
     </table></p>
 
     <p><strong>
@@ -66,7 +66,7 @@
     </strong>
     <table border>
      <tr><td><strong>Open</strong></td><td>Low</td><td>High</td><td>Close</td></tr>
-     <tr><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td></tr>
+     <tr><td>...</td><td>...</td><td>...</td><td>...</td></tr>
     </table></p>
 
     <p><strong>
@@ -75,7 +75,7 @@
     </strong>
     <table border>
      <tr><td><strong>Volume</strong></td><td><strong>Open</strong></td><td>Low</td><td>High</td><td>Close</td></tr>
-     <tr><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td></tr>
+     <tr><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr>
     </table></p>
 */
 published service StockDiagram

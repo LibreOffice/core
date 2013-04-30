@@ -48,7 +48,7 @@ published service ODMAContentProvider
         <li><p>The Root Folder exists at any time and is used to show all
             documents available at that time. All other OCP contents are children
             of this folder. The OCP Root Folder can only contain OCP Documents.
-            It has the URL &bdquo;<b>vnd.sun.star.odma:/</b>&ldquo;.</p>
+            It has the URL <code><b>vnd.sun.star.odma:/</b></code>.</p>
         </ol>
 
 

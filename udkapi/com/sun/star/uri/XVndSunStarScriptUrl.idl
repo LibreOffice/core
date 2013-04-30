@@ -29,15 +29,15 @@ module com { module sun { module star { module uri {
    represents absolute &ldquo;vnd.sun.star.script&rdquo; URLs.
 
    <p>These URLs are of the form<br/>
-   &emsp;<var>vnd-sun-star-script-url</var> =
+   &nbsp;&nbsp;&nbsp;<var>vnd-sun-star-script-url</var> =
    <code>"VND.SUN.STAR.SCRIPT:"</code> <var>name</var> [<code>"?"</code>
    <var>parameter</var> *(<code>"&"</code> <var>parameter</var>)]<br/>
-   &emsp;<var>name</var> = 1*<var>schar</var><br/>
-   &emsp;<var>parameter</var> = <var>key</var> <code>"="</code>
+   &nbsp;&nbsp;&nbsp;<var>name</var> = 1*<var>schar</var><br/>
+   &nbsp;&nbsp;&nbsp;<var>parameter</var> = <var>key</var> <code>"="</code>
    <var>value</var><br/>
-   &emsp;<var>key</var> = 1*<var>schar</var><br/>
-   &emsp;<var>value</var> = *<var>schar</var><br/>
-   &emsp;<var>schar</var> = <var>unreserved</var> / <var>escaped</var> /
+   &nbsp;&nbsp;&nbsp;<var>key</var> = 1*<var>schar</var><br/>
+   &nbsp;&nbsp;&nbsp;<var>value</var> = *<var>schar</var><br/>
+   &nbsp;&nbsp;&nbsp;<var>schar</var> = <var>unreserved</var> / <var>escaped</var> /
    <code>"$"</code> / <code>"+"</code> / <code>","</code> / <code>":"</code> /
    <code>";"</code> / <code>"@"</code> / <code>"["</code> /
    <code>"]"</code><br/>

@@ -33,11 +33,11 @@ module com { module sun { module star { module uri {
    represents absolute &ldquo;vnd.sun.star.expand&rdquo; URLs.
 
    <p>These URLs are of the form<br/>
-   &emsp;<var>vnd-sun-star-expand-url</var> =
+   &nbsp;&nbsp;&nbsp;<var>vnd-sun-star-expand-url</var> =
    <code>"VND.SUN.STAR.EXPAND:"</code> <var>opaque_part</var><br/>
    where the <var>opaque_part</var> is an UTF-8 string as described in
    <a href="http://udk.openoffice.org/common/man/concept/micro_deployment.html">
-   <cite>Bootstrap Arguments and Micro Deployment</cite></a>.  See
+   Bootstrap Arguments and Micro Deployment</a>.  See
    <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC&nbsp;2396</a>,
    <a href="http://www.ietf.org/rfc/rfc2732.txt">RFC&nbsp;2732</a>, and
    <a href="http://www.ietf.org/rfc/rfc2234.txt">RFC&nbsp;2234</a> for

@@ -25,7 +25,7 @@
 module com {  module sun {  module star {  module chart2 {
 
 
-/** Scaling that scales a value <em>x</em> by calculating <em>m &middot;
+/** Scaling that scales a value <em>x</em> by calculating <em>m &sdot;
     x + t</em>.
 
     <p>If not mentioned explicitly, the parameter <em>m</em> is 1.0

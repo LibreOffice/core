@@ -37,7 +37,7 @@ published enum ChartRegressionCurveType
     /** displays a linear regression curve.
 
         <p>The values of the series are approximated using the model
-        <i>y</i> = <i>A</i>&middot;<i>x</i> + <i>B</i>.</p>
+        <i>y</i> = <i>A</i>&sdot;<i>x</i> + <i>B</i>.</p>
      */
     LINEAR,
 
@@ -45,7 +45,7 @@ published enum ChartRegressionCurveType
     /** displays a linear logarithmic regression curve.
 
         <p>The values of the series are approximated using the model
-        <i>y</i> = <i>A</i>&middot;log(<i>x</i>) + <i>B</i>.</p>
+        <i>y</i> = <i>A</i>&sdot;log(<i>x</i>) + <i>B</i>.</p>
      */
     LOGARITHM,
 
@@ -53,7 +53,7 @@ published enum ChartRegressionCurveType
     /** displays an exponential regression curve.
 
         <p>The values of the series are approximated using the model
-        <i>y</i> = <i>A</i>&middot;e<sup><i>B</i>&middot;<i>x</i></sup>.</p>
+        <i>y</i> = <i>A</i>&sdot;e<sup><i>B</i>&sdot;<i>x</i></sup>.</p>
 
     */
     EXPONENTIAL,
@@ -69,7 +69,7 @@ published enum ChartRegressionCurveType
     /** displays a regression curve using a power function.
 
         <p>The values of the series are approximated using the model
-        <i>y</i> = <i>A&middot;<i>x</i><sup>B</sup></i>.</p>
+        <i>y</i> = <i>A&sdot;<i>x</i><sup>B</sup></i>.</p>
      */
     POWER
 
