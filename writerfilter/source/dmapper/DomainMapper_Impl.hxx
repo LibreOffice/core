@@ -671,6 +671,11 @@ public:
 
     /// If we're importing into a new document, or just pasting to an existing one.
     bool IsNewDoc();
+
+    std::vector<OUString> m_aDropDownItems;
+    OUStringBuffer m_aSdtTexts;
+    /// Create drop-down control from w:sdt's w:dropDownList.
+    void createDropDownControl();
 };
 } //namespace dmapper
 } //namespace writerfilter
