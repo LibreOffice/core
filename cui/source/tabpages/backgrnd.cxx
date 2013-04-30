@@ -378,6 +378,7 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(Window* pParent, const SfxItemSet& rC
     m_pCtlPreview->set_width_request(aSize.Width());
     m_pCtlPreview->set_height_request(aSize.Height());
 
+    get(m_pBitmapContainer, "graphicgrid");
     get(m_pFileFrame, "fileframe");
     get(m_pBtnBrowse, "browse");
     get(m_pBtnLink, "link");
@@ -1262,7 +1263,8 @@ void SvxBackgroundTabPage::ShowBitmapUI_Impl()
         HideColorUI_Impl();
         HideGradientUI_Impl();
 
-        m_pBtnPreview->Show();
+
+        m_pBitmapContainer->Show();
 
         m_pFileFrame->Show();
         m_pBtnLink->Show(!bLinkOnly && ! nHtmlMode & HTMLMODE_ON);
@@ -1270,6 +1272,7 @@ void SvxBackgroundTabPage::ShowBitmapUI_Impl()
         m_pTypeFrame->Show();
 
         m_pPreviewWin2->Show();
+        m_pBtnPreview->Show();
 
         m_pGraphTransFrame->Show(bGraphTransparency);
         m_pColTransFT->Show(sal_False);
@@ -1279,15 +1282,12 @@ void SvxBackgroundTabPage::ShowBitmapUI_Impl()
 
 void SvxBackgroundTabPage::HideBitmapUI_Impl()
 {
-        m_pBtnPreview->Hide();
-
-        m_pFileFrame->Hide();
-
-        m_pTypeFrame->Hide();
-
-        m_pPreviewWin2->Hide();
-
-        m_pGraphTransFrame->Hide();
+    m_pBitmapContainer->Hide();
+    m_pFileFrame->Hide();
+    m_pTypeFrame->Hide();
+    m_pPreviewWin2->Hide();
+    m_pBtnPreview->Hide();
+    m_pGraphTransFrame->Hide();
 }
 
 void SvxBackgroundTabPage::ShowGradientUI_Impl()

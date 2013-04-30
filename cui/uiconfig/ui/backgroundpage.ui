@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">100</property>
     <property name="step_increment">5</property>
@@ -135,39 +136,28 @@
             <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
-              <object class="GtkGrid" id="grid3">
+              <object class="GtkGrid" id="grid2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="row_spacing">4</property>
-                <property name="column_spacing">42</property>
-                <child>
-                  <object class="svtlo-ValueSet" id="backgroundcolorset">
-                    <property name="width_request">150</property>
-                    <property name="height_request">250</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="border">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">2</property>
-                  </packing>
-                </child>
+                <property name="column_spacing">24</property>
+                <property name="column_homogeneous">True</property>
                 <child>
                   <object class="GtkGrid" id="grid4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="column_spacing">12</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="row_spacing">6</property>
                     <child>
-                      <object class="GtkLabel" id="transparencyft">
-                        <property name="can_focus">False</property>
-                        <property name="no_show_all">True</property>
-                        <property name="label" translatable="yes">_Transparency</property>
-                        <property name="use_underline">True</property>
+                      <object class="cuilo-BackgroundPreview" id="preview1">
+                        <property name="width_request">150</property>
+                        <property name="height_request">150</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -177,15 +167,43 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="transparencymf:0%">
-                        <property name="can_focus">True</property>
-                        <property name="no_show_all">True</property>
-                        <property name="invisible_char">●</property>
-                        <property name="adjustment">adjustment1</property>
+                      <object class="GtkGrid" id="grid12">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="column_spacing">12</property>
+                        <child>
+                          <object class="GtkLabel" id="transparencyft">
+                            <property name="can_focus">False</property>
+                            <property name="no_show_all">True</property>
+                            <property name="label" translatable="yes">_Transparency</property>
+                            <property name="use_underline">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSpinButton" id="transparencymf:0%">
+                            <property name="can_focus">True</property>
+                            <property name="no_show_all">True</property>
+                            <property name="invisible_char">●</property>
+                            <property name="invisible_char_set">True</property>
+                            <property name="adjustment">adjustment1</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">0</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
                         <property name="width">1</property>
                         <property name="height">1</property>
                       </packing>
@@ -193,22 +211,22 @@
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
+                    <property name="top_attach">0</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="cuilo-BackgroundPreview" id="preview1">
+                  <object class="svtlo-ValueSet" id="backgroundcolorset">
                     <property name="width_request">150</property>
-                    <property name="height_request">10</property>
+                    <property name="height_request">150</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
-                    <property name="margin_right">30</property>
+                    <property name="vexpand">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
+                    <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
@@ -237,13 +255,13 @@
       </packing>
     </child>
     <child>
-      <object class="GtkGrid" id="grid5">
-        <property name="visible">True</property>
+      <object class="GtkGrid" id="graphicgrid">
         <property name="can_focus">False</property>
-        <property name="margin_top">6</property>
+        <property name="no_show_all">True</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <property name="column_spacing">24</property>
+        <property name="column_homogeneous">True</property>
         <child>
           <object class="GtkGrid" id="grid6">
             <property name="visible">True</property>
@@ -572,16 +590,17 @@
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
+            <property name="row_spacing">6</property>
             <child>
               <object class="cuilo-BackgroundPreview" id="preview2">
-                <property name="no_show_all">True</property>
                 <property name="can_focus">True</property>
+                <property name="no_show_all">True</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="top_attach">1</property>
                 <property name="width">1</property>
                 <property name="height">1</property>
               </packing>
@@ -598,7 +617,19 @@
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
+                <property name="top_attach">2</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="blank">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
                 <property name="width">1</property>
                 <property name="height">1</property>
               </packing>
@@ -620,69 +651,69 @@
       </packing>
     </child>
     <child>
-      <object class="GtkGrid" id="backgroundgradient">
-        <property name="visible">True</property>
+      <object class="GtkFrame" id="backgroundgradientframe">
         <property name="can_focus">False</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
+        <property name="label_xalign">0</property>
+        <property name="shadow_type">none</property>
         <child>
-          <object class="GtkFrame" id="backgroundgradientframe">
+          <object class="GtkAlignment" id="alignment5">
+            <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label_xalign">0</property>
-            <property name="shadow_type">none</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="top_padding">6</property>
+            <property name="left_padding">12</property>
             <child>
-              <object class="GtkAlignment" id="alignment5">
+              <object class="GtkGrid" id="grid11">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="top_padding">6</property>
-                <property name="left_padding">12</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="column_spacing">24</property>
+                <property name="column_homogeneous">True</property>
                 <child>
-                  <object class="GtkGrid" id="grid11">
+                  <object class="svxlo-GradientLB" id="gradientslb:border">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <child>
-                      <object class="svxlo-GradientLB" id="gradientslb">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="svxlo-SvxXRectPreview" id="previewctl">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
                   </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="svxlo-SvxXRectPreview" id="previewctl">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
                 </child>
               </object>
             </child>
-            <child type="label">
-              <object class="GtkLabel" id="label1">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Background gradient</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
-              </object>
-            </child>
           </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
-          </packing>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="label1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Background gradient</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
         </child>
       </object>
       <packing>

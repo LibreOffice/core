@@ -1102,9 +1102,13 @@ GradientLB::GradientLB( Window* pParent, WinBits nWinStyle, sal_Bool bUserDraw /
     EnableUserDraw( mbUserDraw);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeGradientLB(Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeGradientLB(Window *pParent, VclBuilder::stringmap &rMap)
 {
-    GradientLB *pListBox = new GradientLB(pParent, WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE);
+    WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
+    GradientLB *pListBox = new GradientLB(pParent, nWinStyle);
     pListBox->EnableAutoSize(true);
     return pListBox;
 }

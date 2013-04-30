@@ -101,6 +101,7 @@ private:
     SfxItemSet&             m_rXFillSet;
 
     // Background Bitmap ----------------------------------
+    VclContainer*           m_pBitmapContainer;
     VclContainer*           m_pFileFrame;
     PushButton*             m_pBtnBrowse;
     CheckBox*               m_pBtnLink;
