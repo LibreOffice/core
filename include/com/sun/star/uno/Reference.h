@@ -19,6 +19,8 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #define _COM_SUN_STAR_UNO_REFERENCE_H_
 
+#include <boost/config.hpp> // for BOOST_NO_MEMBER_TEMPLATE_FRIENDS macro
+
 #include <rtl/alloc.h>
 
 
@@ -54,10 +56,6 @@ enum UnoReference_NoAcquire
 class BaseReference
 {
 protected:
-    /** the interface pointer
-    */
-    XInterface * _pInterface;
-
     /** Queries given interface for type rType.
 
         @param pInterface interface pointer
@@ -77,6 +75,19 @@ protected:
     inline static XInterface * SAL_CALL iquery_throw( XInterface * pInterface, const Type & rType )
         SAL_THROW( (RuntimeException) );
 #endif
+
+// if member template friends don't work, make protected _pInterface
+// public, to allow template copy constructor from Reference to access
+// them.
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+    template<typename T> friend class Reference;
+#else
+public:
+#endif
+
+    /** the interface pointer
+    */
+    XInterface * _pInterface;
 
 public:
     /** Gets interface pointer. This call does not acquire the interface.
@@ -332,6 +343,15 @@ public:
     inline Reference( interface_type * pInterface, UnoReference_SetThrow dummy ) SAL_THROW( (RuntimeException) );
 #endif
 
+    /* Constructor: copy-construct from derived interface
+
+       @param rRef
+       Interface reference that must be convertible to interface_type
+       (typically, this implies that interface_type is a basetype of
+       the passed type)
+     */
+    template< class Ifc > inline Reference( const Reference<Ifc>& rRef );
+
     /** Cast operator to Reference< XInterface >: Reference objects are binary compatible and
         any interface must be derived from com.sun.star.uno.XInterface.
         This a useful direct cast possibility.
@@ -484,6 +504,18 @@ public:
         @return this reference
     */
     inline Reference< interface_type > & SAL_CALL operator = ( const Reference< interface_type > & rRef ) SAL_THROW(());
+
+    /** Assignment operator for derived interfaces: Acquires given
+        interface reference and sets reference.  An interface already
+        set will be released.
+
+        @param rRef
+        Interface reference that must be convertible to interface_type
+        (typically, this implies that interface_type is a basetype of
+        the passed type)
+     */
+    template< class Ifc >
+    inline Reference< interface_type > & SAL_CALL operator = ( const Reference<Ifc>& rRef );
 
     /** Queries given interface reference for type interface_type.
 

@@ -193,7 +193,16 @@ inline Reference< interface_type >::Reference( interface_type * pInterface, UnoR
     _pInterface = castToXInterface( iset_throw( pInterface ) );
 }
 #endif
-
+//__________________________________________________________________________________________________
+template< class interface_type >
+template< class Ifc >
+inline Reference< interface_type >::Reference( const Reference<Ifc>& rRef )
+{
+    interface_type* pTmp = reinterpret_cast< Ifc* >(rRef._pInterface);
+    _pInterface = pTmp;
+    if (_pInterface)
+        _pInterface->acquire();
+}
 //__________________________________________________________________________________________________
 template< class interface_type >
 inline void Reference< interface_type >::clear() SAL_THROW(())
@@ -330,6 +339,16 @@ inline Reference< interface_type > & Reference< interface_type >::operator = (
     const Reference< interface_type > & rRef ) SAL_THROW(())
 {
     set( castFromXInterface( rRef._pInterface ) );
+    return *this;
+}
+//__________________________________________________________________________________________________
+template< class interface_type >
+template< class Ifc >
+inline Reference< interface_type > & Reference< interface_type >::operator = (
+    const Reference<Ifc>& rRef )
+{
+    interface_type* pTmp = reinterpret_cast< Ifc* >(rRef._pInterface);
+    set( pTmp );
     return *this;
 }
 
