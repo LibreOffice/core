@@ -132,7 +132,7 @@ Fraction::Fraction( double dVal )
         return;
     }
 
-    while ( abs( (long)dVal ) < nMAX && nDen < nMAX )
+    while ( labs( (long)dVal ) < nMAX && nDen < nMAX )
     {
         dVal *= 10;
         nDen *= 10;
