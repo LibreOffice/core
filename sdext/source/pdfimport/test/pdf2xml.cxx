@@ -39,7 +39,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     if( argc < 4 )
         return 1;
 
-    OUString aBaseURL, aTmpURL, aSrcURL, aDstURL, aIniUrl;
+    OUString aBaseURL, aTmpURL, aSrcURL, aDstURL;
 
     TreeVisitorFactorySharedPtr pTreeFactory;
     if( rtl_str_compare(argv[1], "-writer") == 0 )
