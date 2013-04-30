@@ -890,6 +890,9 @@ void ChartExport::exportLegend( Reference< ::com::sun::star::chart::XChartDocume
             pFS->singleElement( FSNS( XML_c, XML_legendPos ),
                 XML_val, strPos,
                 FSEND );
+            pFS->singleElement( FSNS( XML_c, XML_overlay ),
+                    XML_val, "0",
+                    FSEND );
         }
 
         // shape properties
