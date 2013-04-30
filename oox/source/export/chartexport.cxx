@@ -2464,7 +2464,6 @@ void ChartExport::exportMarker()
     pFS->startElement( FSNS( XML_c, XML_marker ),
             FSEND );
     Reference< XPropertySet > xPropSet( mxDiagram , uno::UNO_QUERY );
-    awt::Size aSymbolSize;
     sal_Int32 nSymbolType = ::com::sun::star::chart::ChartSymbolType::NONE;
     if( GetProperty( xPropSet, "SymbolType" ) )
         mAny >>= nSymbolType;
@@ -2511,15 +2510,18 @@ void ChartExport::exportMarker()
     }
     if( nSymbolType != cssc::ChartSymbolType::NONE )
     {
+        awt::Size aSymbolSize;
         if( GetProperty( xPropSet, "SymbolSize" ) )
+        {
             mAny >>= aSymbolSize;;
-        sal_Int32 nSize = std::max( aSymbolSize.Width, aSymbolSize.Height );
+            sal_Int32 nSize = std::max( aSymbolSize.Width, aSymbolSize.Height );
 
-        nSize = nSize/250.0*7.0; // just guessed based on some test cases
-        nSize = std::min<sal_Int32>( 72, std::max<sal_Int32>( 2, nSize ) );
-        pFS->singleElement( FSNS( XML_c, XML_size),
-                XML_val, I32S(nSize),
-                FSEND );
+            nSize = nSize/250.0*7.0; // just guessed based on some test cases
+            nSize = std::min<sal_Int32>( 72, std::max<sal_Int32>( 2, nSize ) );
+            pFS->singleElement( FSNS( XML_c, XML_size),
+                    XML_val, I32S(nSize),
+                    FSEND );
+        }
     }
     pFS->endElement( FSNS( XML_c, XML_marker ) );
 }
