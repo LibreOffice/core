@@ -264,9 +264,9 @@ End
 #if defined(SOLAR_JAVA)
 File gid_File_Zip_uno_loader_classes
     TXT_FILE_BODY;
-    Dir = gid_Dir_Basis_Sdk;
-    Name = "uno_loader_classes.zip";
-    Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
+    Dir = FILELIST_SDK_DIR;
+    Name = "odk_uno_loader_classes.filelist";
+    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
 End
 #endif
 

@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_CustomTarget_CustomTarget,odk/odkcommon/classes))
+$(eval $(call gb_CustomTarget_CustomTarget,odk/classes))
 
-$(eval $(call gb_CustomTarget_register_targets,odk/odkcommon/classes,\
+$(eval $(call gb_CustomTarget_register_targets,odk/classes,\
 	java.done \
 ))
 
@@ -22,7 +22,10 @@ $(eval $(call gb_JavaClassSet_add_sourcefiles,loader,\
 	odk/source/com/sun/star/lib/loader/WinRegKeyException \
 ))
 
-$(call gb_CustomTarget_get_workdir,odk/odkcommon/classes)/java.done: $(call gb_JavaClassSet_get_target,loader)
+$(call gb_CustomTarget_get_workdir,odk/classes)/%.class : $(call gb_CustomTarget_get_workdir,odk/classes)/java.done
+	touch $@
+
+$(call gb_CustomTarget_get_workdir,odk/classes)/java.done: $(call gb_JavaClassSet_get_target,loader)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,CPY,1)
 	cp -a $(call gb_JavaClassSet_get_classdir,loader)/com $(dir $@) && \
 	touch $@
