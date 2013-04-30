@@ -60,10 +60,6 @@ interface XTransitionFactory : ::com::sun::star::uno::XInterface
 
         @param enteringBitmap
         Bitmap of the slide that's going to enter the screen
-
-        @param slideOffset
-        Offset in pixel from the top, left edge of the view, such that the
-        slide displays similar to normal slide show
      */
     XTransition createTransition( [in] short                                 transitionType,
                                   [in] short                                 transitionSubType,

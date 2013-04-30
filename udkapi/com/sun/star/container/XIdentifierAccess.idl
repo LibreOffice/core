@@ -47,7 +47,7 @@ published interface XIdentifierAccess: com::sun::star::container::XElementAccess
             then wrap these in a com::sun::star::lang::WrappedTargetException
             exception.
      */
-    any getByIdentifier( [in] long Identifierr )
+    any getByIdentifier( [in] long Identifier )
             raises( com::sun::star::container::NoSuchElementException,
                     com::sun::star::lang::WrappedTargetException );
 

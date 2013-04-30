@@ -76,7 +76,7 @@ interface XRoot : com::sun::star::uno::XInterface
                 namespace uid of element
          @param localName
                 local name of element
-         @param xAattributes
+         @param xAttributes
                 attributes of element
      */
     XElement startRootElement(

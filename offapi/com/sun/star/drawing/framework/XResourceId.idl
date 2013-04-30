@@ -101,7 +101,7 @@ interface XResourceId
         <p>Note that not only the anchor of the given object is taken into
         account. The whole object, including the resource URL, is
         interpreted as anchor resource.</p>
-        @param xAnchor
+        @param xAnchorId
             The resource id of the anchor.
         @param eMode
             This mode specifies how the called resource has to be bound to
@@ -112,7 +112,7 @@ interface XResourceId
             of the anchor of the called resource.
     */
     boolean isBoundTo (
-        [in] XResourceId xId,
+        [in] XResourceId xAnchorId,
         [in] AnchorBindingMode eMode);
 
     /** Return whether the anchor of the called resource id object
@@ -120,7 +120,7 @@ interface XResourceId
         convenience variant of the isBoundTo() function
         that can also be seen as an optimization for the case that the
         anchor consists of exactly one URL.
-        @param xAnchor
+        @param AnchorURL
             The resource URL of the anchor.
         @param eMode
             This mode specifies how the called resource has to be bound to
@@ -129,7 +129,7 @@ interface XResourceId
             information.
     */
     boolean isBoundToURL (
-        [in] string sAnchorURL,
+        [in] string AnchorURL,
         [in] AnchorBindingMode eMode);
 
     /** Return a copy of the called resource id.  The caller becomes the

@@ -254,11 +254,11 @@ interface XPackageManager
        Added extensions will be added to the database and removed extensions
        will be removed from the database.
 
-       @param xAddedExtension
-            new extensions which may need to be registered.
+       @param  xAbortChannel
+               abort channel to asynchronously abort the adding process
+       @param  xCmdEnv
+               command environment for error and progress handling
 
-       @param
-            removed extensions which must be revoked
        @return
             If true - then at least one extension was removed or added. Otherwise
             nothing was changed.

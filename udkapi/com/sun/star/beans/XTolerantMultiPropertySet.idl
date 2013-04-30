@@ -57,7 +57,7 @@ published interface XTolerantMultiPropertySet : com::sun::star::uno::XInterface
             <p>If the names are not sorted the behaviour of the method
             is undefined!</p>
 
-        @param aPropertyValues
+        @param aValues
             specifies the values of the properties.
             The order of the values has to be the same as in the
             <var>aPropertyNames</var> parameter int order to match

@@ -122,7 +122,7 @@ interface XFlatParagraph: com::sun::star::text::XTextMarkup
         @param  nLen
                 the length of the text.
 
-        @param  nNewText
+        @param  NewText
                 new text.
 
         @param aAttributes
@@ -131,7 +131,7 @@ interface XFlatParagraph: com::sun::star::text::XTextMarkup
         @throws IllegalArgumentException
                 when any argument is wrong.
     */
-    void changeText( [in] long nPos, [in] long nLen, [in] string aNewText,
+    void changeText( [in] long nPos, [in] long nLen, [in] string NewText,
                      [in] sequence<::com::sun::star::beans::PropertyValue> aAttributes )
             raises( com::sun::star::lang::IllegalArgumentException );
 

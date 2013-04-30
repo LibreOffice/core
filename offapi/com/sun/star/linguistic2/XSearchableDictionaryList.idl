@@ -51,7 +51,7 @@ published interface XSearchableDictionaryList : com::sun::star::linguistic2::XDi
         @param aLocale
             the language of the word to be looked for.
 
-        @param bSearchPosDic
+        @param bSearchPosDics
             `TRUE` if only positive dictionaries should be searched.
             `FALSE` if only negative dictionaries should be searched.
 

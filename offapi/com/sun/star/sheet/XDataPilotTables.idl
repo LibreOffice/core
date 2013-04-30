@@ -56,7 +56,7 @@ published interface XDataPilotTables: com::sun::star::container::XNameAccess
         @param aName
             the name of the data pilot table used in the collection.
 
-        @param aAoutputAddress
+        @param OutputAddress
             the top left cell of the location of the data pilot table in
             the spreadsheet document.
 
@@ -67,7 +67,7 @@ published interface XDataPilotTables: com::sun::star::container::XNameAccess
      */
     void insertNewByName(
             [in] string aName,
-            [in] com::sun::star::table::CellAddress aOutputAddress,
+            [in] com::sun::star::table::CellAddress OutputAddress,
             [in] com::sun::star::sheet::XDataPilotDescriptor xDescriptor );
 
 

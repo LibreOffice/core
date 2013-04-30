@@ -318,7 +318,7 @@ published interface XStorage
         transaction in the storage.
         </p>
 
-        @param xStorage
+        @param xTargetStorage
             the target storage that will be filled in with copy.
 
         @throws ::com::sun::star::embed::InvalidStorageException
@@ -350,7 +350,7 @@ published interface XStorage
         @param sStorName
             the name of the storage that should be copied
 
-        @param xStorage
+        @param xTargetStorage
             the target storage that will be filled in with copy
 
         @throws ::com::sun::star::embed::InvalidStorageException

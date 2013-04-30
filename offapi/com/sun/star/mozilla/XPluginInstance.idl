@@ -67,7 +67,7 @@ published interface XPluginInstance: com::sun::star::uno::XInterface
         @param theURL       [in]:   the URL that denotes the stream
         @param filter       [in]:   a filter string to suggest a component that should handle the document
         @param stream       [in]:   the data stream
-        @param sessiondata  [in]:   the data specifying the current session
+        @param sessionData  [in]:   the data specifying the current session
 
      */
     void newStream(
@@ -84,7 +84,7 @@ published interface XPluginInstance: com::sun::star::uno::XInterface
         @param MIMEDesc     [in]:   the MIMEtype of the data stream
         @param theURL       [in]:   the URL to be opened
         @param filter       [in]:   a filter string to suggest a component that should handle the document
-        @param sessiondata  [in]:   the data specifying the current session
+        @param sessionData  [in]:   the data specifying the current session
 
      */
     void newURL( [in] string MIMEDesc, [in] string theURL, [in] string filter, [in] any sessionData );
@@ -92,7 +92,7 @@ published interface XPluginInstance: com::sun::star::uno::XInterface
 
     /** Retrieves the URL of the HTTP Load balancing Slave.
 
-        @param aURL     [out]:  the full qualified host name of the LBS
+        @param aHost    [out]:  the full qualified host name of the LBS
         @param aPort    [out]:  the port number
         @param aPrefix  [out]:  the url prefix to the portal
 

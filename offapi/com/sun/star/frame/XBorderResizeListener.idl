@@ -33,13 +33,14 @@ interface XBorderResizeListener: com::sun::star::lang::XEventListener
     /** notifies the listener that the controller's border widths have been
         changed.
 
-        @param aObject
+        @param Object
             reference to the object representing the controller
 
         @param NewSize
             the new widths of the controller's border
      */
-    void borderWidthsChanged( [in] ::com::sun::star::uno::XInterface aObject, [in] BorderWidths aNewSize );
+    void borderWidthsChanged( [in] ::com::sun::star::uno::XInterface Object,
+                              [in] BorderWidths NewSize );
 };
 
 

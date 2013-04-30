@@ -45,7 +45,7 @@ published interface XWindow2: com::sun::star::awt::XWindow
         the inner width and height of the window.
 
     */
-    void setOutputSize( [in] com::sun::star::awt::Size aSize );
+    void setOutputSize( [in] com::sun::star::awt::Size Size );
 
 
     /** returns the inner bounds of the window, also known as the client size.

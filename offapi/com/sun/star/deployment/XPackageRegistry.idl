@@ -76,10 +76,6 @@ interface XPackageRegistry
                media type of package, empty string if to be detected
         @param removed
 
-        @param unfulfilledPrerequisites
-              has a value other null if the extension could not be installed previously
-              because XPackage::checkPrerequisites() failed.
-
         @param identifier
                the identifier of the extension
 

@@ -50,7 +50,7 @@ published interface XNumberFormats: com::sun::star::uno::XInterface
                         the type of number formats to return. Must be one of the
                         NumberFormat constants.
 
-                @param  nLanguage
+                @param  nLocale
                         the language of number formats to return.
 
                 @param  bCreate

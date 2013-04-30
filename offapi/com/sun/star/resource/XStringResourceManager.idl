@@ -56,7 +56,7 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
 
     /** Sets the locale to be used
 
-        @param aLocale
+        @param Locale
             Specifies the current locale to be used.
 
         @param FindClosestMatch
@@ -75,7 +75,7 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
     */
     void setCurrentLocale
     (
-        [in] com::sun::star::lang::Locale locale,
+        [in] com::sun::star::lang::Locale Locale,
         [in] boolean FindClosestMatch
     )
     raises( com::sun::star::lang::IllegalArgumentException );
@@ -83,7 +83,7 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
 
     /** Sets the default locale to be used
 
-        @param aLocale
+        @param Locale
             Specifies the default locale to be used.
             If this locale is not available a
             com::sun::star::lang::IllegalArgumentException
@@ -92,7 +92,7 @@ interface XStringResourceManager: com::sun::star::resource::XStringResourceResol
         @throws com::sun::star::lang::NoSupportException
             if the resource is read only, see isReadOnly()
     */
-    void setDefaultLocale( [in] com::sun::star::lang::Locale locale )
+    void setDefaultLocale( [in] com::sun::star::lang::Locale Locale )
         raises( com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::lang::NoSupportException );
 

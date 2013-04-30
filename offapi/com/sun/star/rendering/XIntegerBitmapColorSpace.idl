@@ -204,7 +204,7 @@ interface XIntegerBitmapColorSpace : XColorSpace
         are properly rounded and clipped, to be valid in the target
         color space.<p>
 
-        @param deviceColor Sequence of sRGB color components. Is
+        @param rgbColor Sequence of sRGB color components. Is
         permitted to contain more than one color element, therefore,
         batch conversion of multiple color values is possible.
 
@@ -224,7 +224,7 @@ interface XIntegerBitmapColorSpace : XColorSpace
         properly rounded and clipped, to be valid in the target color
         space.<p>
 
-        @param deviceColor Sequence of sRGB color components. Is
+        @param rgbColor Sequence of sRGB color components. Is
         permitted to contain more than one color element, therefore,
         batch conversion of multiple color values is possible.
 
@@ -245,7 +245,7 @@ interface XIntegerBitmapColorSpace : XColorSpace
         properly rounded and clipped, to be valid in the target color
         space.<p>
 
-        @param deviceColor Sequence of sRGB color components. Is
+        @param rgbColor Sequence of sRGB color components. Is
         permitted to contain more than one color element, therefore,
         batch conversion of multiple color values is possible. The
         individual RGB color values are assumed to be premultiplied by

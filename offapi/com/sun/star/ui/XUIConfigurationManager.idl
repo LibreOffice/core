@@ -174,7 +174,7 @@ interface XUIConfigurationManager : ::com::sun::star::uno::XInterface
 
     /** inserts the settings of a new user interface element.
 
-        @param ResourceURL
+        @param NewResourceURL
             a resource URL which identifies the new user interface element.
 
         @param aNewData

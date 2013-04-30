@@ -51,10 +51,10 @@ interface XMenuExtended: com::sun::star::uno::XInterface
         @param nItemId
             specifies the menu item ID for which the help command URL be set.
 
-        @param aCommand
+        @param HelpCommand
             specifies the help command for the menu item.
     */
-    void setHelpCommand( [in] short nItemId, [in] string aHelp );
+    void setHelpCommand( [in] short nItemId, [in] string HelpCommand );
 
     /** retrieves the help command string for the menu item.
 

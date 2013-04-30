@@ -50,7 +50,7 @@ interface XConfiguration
             This anchor typically is either a pane or an empty
             XResourceId object.  An
             empty reference is treated like an XResourceId object.
-        @param sURLPrefix
+        @param sTargetURLPrefix
             When a non-empty string is given then resource ids are returned
             only when their resource URL matches this prefix, i.e. when it
             begins with this prefix or is equal to it.  Characters with
@@ -116,7 +116,7 @@ interface XConfiguration
             When an empty resource id is given then an
             IllegalArgumentException is thrown.
     */
-    void removeResource ([in] XResourceId xResource);
+    void removeResource ([in] XResourceId xResourceId);
 };
 
 }; }; }; }; }; // ::com::sun::star::drawing::framework

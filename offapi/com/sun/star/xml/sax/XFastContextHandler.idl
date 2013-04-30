@@ -47,7 +47,7 @@ interface XFastContextHandler: com::sun::star::uno::XInterface
             registered at the XFastParser.<br>
 
             If the element has a namespace that was registered with the
-            XFastParser, <param>Element</param> contains the integer
+            XFastParser, <code>Element</code> contains the integer
             token of the elements local name from the XFastTokenHandler
             and the integer token of the namespace combined with an arithmetic
             <b>or</b> operation.
@@ -96,7 +96,7 @@ interface XFastContextHandler: com::sun::star::uno::XInterface
             registered at the XFastParser.
 
             <br>If the element has a namespace that was registered with the
-            XFastParser, <param>Element</param> contains the
+            XFastParser, <code>Element</code> contains the
             integer token of the elements local name from the
             XFastTokenHandler and the integer token of the
             namespace combined with an arithmetic <b>or</b> operation.

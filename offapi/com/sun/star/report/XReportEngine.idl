@@ -67,7 +67,7 @@ interface XReportEngine
                 ::com::sun::star::uno::Exception );
 
     /** creates a report document.
-        @param  _frame
+        @param  frame
             The frame must have a controller set. This controller will be set at the model.
         @throws com::sun::star::lang::DisposedException
             If the report engine is already disposed.

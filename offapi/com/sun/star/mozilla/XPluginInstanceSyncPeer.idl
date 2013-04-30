@@ -34,7 +34,7 @@ published interface XPluginInstanceSyncPeer : com::sun::star::uno::XInterface
     /** Opens a new browser window with a plugin instance synchronously.
 
         @param aInstance            [out]:  new plugin instance in case of success
-        @param Any                  [out]:  linkage to the window data
+        @param aLinkage             [out]:  linkage to the window data
         @param embedded             [out]:  selects embedded or full page plugin mode
 
 
@@ -42,7 +42,7 @@ published interface XPluginInstanceSyncPeer : com::sun::star::uno::XInterface
     void openNewBrowserWindow(
                                         [out] XPluginInstance aInstance,
                                         [out] any aLinkage,
-                                        [out] boolean embeded);
+                                        [out] boolean embedded);
 
 };
 

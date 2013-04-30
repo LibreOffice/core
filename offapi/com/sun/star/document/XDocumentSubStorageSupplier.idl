@@ -36,7 +36,7 @@ interface XDocumentSubStorageSupplier: com::sun::star::uno::XInterface
 {
     /** provides the access to a substorage with specified name
 
-        @param sStorageName
+        @param StorageName
             the name of requested substorage
 
         @param nMode
@@ -46,7 +46,7 @@ interface XDocumentSubStorageSupplier: com::sun::star::uno::XInterface
             XStorage implementation that refers to specified substorage
      */
     com::sun::star::embed::XStorage getDocumentSubStorage(
-                                        [in] string aStorageName,
+                                        [in] string StorageName,
                                         [in] long nMode );
 
     /** provides the list of substorages

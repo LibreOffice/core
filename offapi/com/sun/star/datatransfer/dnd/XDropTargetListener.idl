@@ -55,7 +55,7 @@ published interface XDropTargetListener: com::sun::star::lang::XEventListener
 
     /** Called when a drag operation has encountered the drop target.
 
-        @param dtde
+        @param dtdee
         The DropTargetDragEvent.
     */
 

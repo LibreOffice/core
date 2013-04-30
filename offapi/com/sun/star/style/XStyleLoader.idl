@@ -36,9 +36,9 @@ published interface XStyleLoader: com::sun::star::uno::XInterface
         If <var>OverwriteStyles</var> is `TRUE`, then all styles
         will be loaded.  Otherwise, only styles which are not already
         defined in this document are loaded.</p>
-         @param string URL:
+         @param URL
              The directory and the filename from document with the styles
-         @param aOptions :
+         @param aOptions
              Specifies which of the Style families the method should load.
          The <code>sequence<PropertyValue></code> has the following, optional items:
          <ul>

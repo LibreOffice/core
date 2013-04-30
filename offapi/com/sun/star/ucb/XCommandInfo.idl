@@ -86,7 +86,7 @@ published interface XCommandInfo: com::sun::star::uno::XInterface
         `TRUE` if a command with the specified handle is supported;
         otherwise `FALSE` is returned.
 
-        @param Name
+        @param Handle
         specifies the handle of the requested command.
     */
     boolean hasCommandByHandle( [in] long Handle );

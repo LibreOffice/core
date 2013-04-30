@@ -67,7 +67,7 @@ published interface XDragSourceContext: com::sun::star::uno::XInterface
 
     /** This method sets the current drag image.
 
-        @param dragImage
+        @param imageId
         The identifier the drag source returned when registering the image (0 = none).
         Invalid identifier will be ignored.
     */

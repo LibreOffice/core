@@ -50,7 +50,7 @@ published interface XUriSchemeParser: com::sun::star::uno::XInterface {
        the textual representation of the scheme part (without the delimiting
        &ldquo;<code>:</code>&rdquo;).
 
-       @param uriReference
+       @param schemeSpecificPart
        the textual representation of the scheme-specific part.
 
        @returns

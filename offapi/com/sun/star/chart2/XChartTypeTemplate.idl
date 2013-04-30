@@ -160,18 +160,6 @@ interface XChartTypeTemplate : ::com::sun::star::uno::XInterface
      */
     XDataInterpreter getDataInterpreter();
 
-    /** Applies default styles to the given XDataSeries.
-
-        The default implementation assigns the system-wide chart-color defaults
-        as "Color" property to all series.
-
-        @param nIndex
-            The index of the series.  This is used to obtain a default style
-            (e.g. color) for the nth series.
-     */
-//     void applyDefaultStyle( [in] XDataSeries xSeries,
-//                             [in] long nSeriesIndex );
-
     /** Applies a chart-type specific style (e.g. symbols) to all series in the
         sequence aSeries.
 

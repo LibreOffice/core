@@ -96,7 +96,7 @@ interface XFastAttributeList: com::sun::star::uno::XInterface
         @returns
             If the attribute is available it returns the integer token of the value
             from the attribute or FastToken::Invalid.
-            If not the value of <param>Default</param> is returned.
+            If not the value of <code>Default</code> is returned.
 
     */
     long getOptionalValueToken( [in] long Token, [in] long Default );

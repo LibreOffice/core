@@ -66,7 +66,7 @@ published interface XLibraryAccess: com::sun::star::uno::XInterface
         @return         an empty sequence, if this module is not found or the
                             code is not compiled.
      */
-    sequence<byte> getModuleCode( [in] string aModuleName );
+    sequence<byte> getModuleCode( [in] string ModuleName );
 
     /** get the source code of a function.
      */

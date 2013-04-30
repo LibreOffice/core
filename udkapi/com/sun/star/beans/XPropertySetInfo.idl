@@ -55,13 +55,13 @@ published interface XPropertySetInfo: com::sun::star::uno::XInterface
     /** @returns
             the property with the specified name from the object.
 
-        @param aName
+        @param Name
             specifies the name of the property.
 
         @throws UnknownPropertyException
             if the property does not exist.
      */
-    com::sun::star::beans::Property getPropertyByName( [in] string aName )
+    com::sun::star::beans::Property getPropertyByName( [in] string Name )
             raises( com::sun::star::beans::UnknownPropertyException );
 
 
@@ -69,7 +69,7 @@ published interface XPropertySetInfo: com::sun::star::uno::XInterface
             `TRUE` if a property with the specified name exist;
             otherwise `FALSE` is returned.
 
-        @param aName
+        @param Name
             specifies the name of the property.
      */
     boolean hasPropertyByName( [in] string Name );

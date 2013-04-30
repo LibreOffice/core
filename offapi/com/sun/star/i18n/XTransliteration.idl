@@ -168,11 +168,11 @@ published interface XTransliteration: com::sun::star::uno::XInterface
         object doesn't have TransliterationType IGNORE
         attribute.
 
-        @param aStr
+        @param aInStr
             The input string.
 
         @param nStartPos
-            Start position within aStr from where transliteration starts.
+            Start position within aInStr from where transliteration starts.
 
         @param nCount
             Number of code points to be transliterated.

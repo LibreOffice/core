@@ -57,13 +57,13 @@ interface XUnitConversion: com::sun::star::uno::XInterface
         @return
             Return a new Point in Pixel type format.
      */
-    com::sun::star::awt::Point convertPointToPixel( [in] com::sun::star::awt::Point aPoint, [in] short SourceUnit )
+    com::sun::star::awt::Point convertPointToPixel( [in] com::sun::star::awt::Point Point, [in] short SourceUnit )
             raises ( com::sun::star::lang::IllegalArgumentException );
 
 
     /** converts the given Size, which is specified in pixels, into the given logical unit
 
-        @param aSize
+        @param Size
             A given Size in a well known type
         @param TargetUnit
             A type from com::sun::star::util::MeasureUnit in which the Size will convert to.
@@ -71,20 +71,20 @@ interface XUnitConversion: com::sun::star::uno::XInterface
         @return
             Returns a new Size in the TargetUnit type format.
      */
-    com::sun::star::awt::Size convertSizeToLogic( [in] com::sun::star::awt::Size aSize, [in] short TargetUnit )
+    com::sun::star::awt::Size convertSizeToLogic( [in] com::sun::star::awt::Size Size, [in] short TargetUnit )
             raises ( com::sun::star::lang::IllegalArgumentException );
 
     /** converts the given Size, which is specified in the given logical unit, into pixels
 
         @param Size
             A given Size in a well known type
-        @param TargetUnit
+        @param SourceUnit
             The type from com::sun::star::util::MeasureUnit of the Size.
 
         @return
             Returns a new Size in the TargetUnit type format.
      */
-    com::sun::star::awt::Size convertSizeToPixel( [in] com::sun::star::awt::Size aSize, [in] short SourceUnit )
+    com::sun::star::awt::Size convertSizeToPixel( [in] com::sun::star::awt::Size Size, [in] short SourceUnit )
             raises ( com::sun::star::lang::IllegalArgumentException );
 
 

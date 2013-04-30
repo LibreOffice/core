@@ -178,7 +178,7 @@ interface XStatusbarController
             a reference to a com::sun::star::awt::XGraphics
             which has to be used to update the visual representation.
 
-        @param nCommand
+        @param OutputRectangle
             a com::sun::star::awt::Rectangle which
             determine the output rectangle for all drawing operations
 
@@ -186,7 +186,7 @@ interface XStatusbarController
             reserved for future use.
     */
     void paint( [in] ::com::sun::star::awt::XGraphics xGraphics,
-                [in] ::com::sun::star::awt::Rectangle rOutputRectangle,
+                [in] ::com::sun::star::awt::Rectangle OutputRectangle,
                 [in] long nStyle );
 
     /** is called by a status bar if the user clicked with mouse into the

@@ -296,7 +296,7 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
         necessarily cause writes to be prohibited.
         </p>
 
-        @param readONly
+        @param readOnly
             `TRUE` enables read-only mode; `FALSE` disables read-only mode.
         @throws SQLException
             if a database access error occurs.

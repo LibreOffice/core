@@ -57,7 +57,7 @@ published interface XFilePickerControlAccess: com::sun::star::ui::dialogs::XFile
     @see com::sun::star::ui::dialogs::ExtendedFilePickerElementIds
     @see com::sun::star::ui::dialogs::ControlActions
 */
-void setValue( [in] short aControlId, [in] short aControlAction, [in] any aValue );
+void setValue( [in] short ControlId, [in] short aControlAction, [in] any aValue );
 
 /** Get the value of an additional element within a FilePicker
 
@@ -124,7 +124,7 @@ string getLabel( [in] short aControlId );
     @see com::sun::star::ui::dialogs::CommonFilePickerElementIds
     @see com::sun::star::ui::dialogs::ExtendedFilePickerElementIds
 */
-void enableControl( [in] short aControlId, [in] boolean bEnable );
+void enableControl( [in] short ControlId, [in] boolean bEnable );
 };
 
 

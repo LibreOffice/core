@@ -70,9 +70,9 @@ published interface XAggregation: com::sun::star::uno::XInterface
 {
     /** sets the object to which all calls to the method
         XInterface::queryInterface()
-        have to be forwarded. @
+        have to be forwarded.
 
-        @param xDelegator
+        @param Delegator
         specifies the object which handles the calls to
         XInterface::queryInterface().
         If <var>xDelegator</var> is NULL, the delegator is
@@ -83,11 +83,11 @@ published interface XAggregation: com::sun::star::uno::XInterface
 
         @see XAggregation::queryAggregation
     */
-    void setDelegator( [in] com::sun::star::uno::XInterface pDelegator );
+    void setDelegator( [in] com::sun::star::uno::XInterface Delegator );
 
     /** is similar to XInterface::queryInterface(),
         but it is to be processed directly without being forwarded to the
-        delegator. @
+        delegator.
 
         <p>This method is only called from within an implementation of
         XInterface::queryInterface()

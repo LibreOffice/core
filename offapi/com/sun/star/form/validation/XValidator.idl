@@ -44,7 +44,7 @@ interface XValidator : com::sun::star::uno::XInterface
 {
     /** determines whether the given value is valid
 
-    @param aValue
+    @param Value
         the value to check for validity
     @return
         `TRUE` if and only if the value is considered valid.
@@ -53,7 +53,7 @@ interface XValidator : com::sun::star::uno::XInterface
 
     /** retrieves a justification for the invalidity of the given value
 
-    @param aValue
+    @param Value
         the value which has been recognized as being invalid
     @return
         a human-readable string, which explains why the given value is considered invalid.

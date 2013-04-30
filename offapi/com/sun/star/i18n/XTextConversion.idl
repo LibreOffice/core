@@ -45,7 +45,7 @@ published interface XTextConversion : ::com::sun::star::uno::XInterface
             The start position in aText for the conversion
         @param nLength
             The length of the portion in aText for the conversion
-        @param aLocal
+        @param Locale
             Locale the conversion is referring to.
         @param nTextConversionType
             One of TextConversionType values.
@@ -62,7 +62,7 @@ published interface XTextConversion : ::com::sun::star::uno::XInterface
             [in] string aText,
             [in] long nStartPos,
             [in] long nLength,
-            [in] ::com::sun::star::lang::Locale aLocale,
+            [in] ::com::sun::star::lang::Locale Locale,
             [in] short nTextConversionType,
             [in] long nTextConversionOptions )
         raises( com::sun::star::lang::IllegalArgumentException,
@@ -78,7 +78,7 @@ published interface XTextConversion : ::com::sun::star::uno::XInterface
             The start position in aText for the conversion
         @param nLength
             The length of the portion in aText for the conversion
-        @param aLocal
+        @param Locale
             Locale the conversion is referring to.
         @param nTextConversionType
             One of TextConversionType values.
@@ -95,7 +95,7 @@ published interface XTextConversion : ::com::sun::star::uno::XInterface
             [in] string aText,
             [in] long nStartPos,
             [in] long nLength,
-            [in] ::com::sun::star::lang::Locale aLocale,
+            [in] ::com::sun::star::lang::Locale Locale,
             [in] short nTextConversionType,
             [in] long nTextConversionOptions )
         raises( com::sun::star::lang::IllegalArgumentException,
@@ -104,7 +104,7 @@ published interface XTextConversion : ::com::sun::star::uno::XInterface
     /** Method to query if the conversion type should be interactive or
         non-interactive mode.
 
-        @param aLocal
+        @param Locale
             Locale the conversion is referring to.
         @param nTextConversionType
             One of TextConversionType values.
@@ -119,7 +119,7 @@ published interface XTextConversion : ::com::sun::star::uno::XInterface
             or when the locale is not supported.
     */
     boolean interactiveConversion(
-            [in] ::com::sun::star::lang::Locale aLocale,
+            [in] ::com::sun::star::lang::Locale Locale,
             [in] short nTextConversionType,
             [in] long nTextConversionOptions )
         raises( com::sun::star::lang::IllegalArgumentException,

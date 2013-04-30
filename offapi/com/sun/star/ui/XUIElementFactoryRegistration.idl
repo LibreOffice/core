@@ -89,7 +89,7 @@ interface XUIElementFactoryRegistration : com::sun::star::uno::XInterface
             following syntax: "private:resource/$type/$name". It is only allowed to use ASCII
             characters for type and name.
 
-        @param ModuleName
+        @param ModuleIdentifier
             an optional module identifier. This value can remain empty, if a generic factory is requested.
             The module identifier can be retrieved from the com::sun::star::frame::ModuleManager service.
     */
@@ -137,7 +137,7 @@ interface XUIElementFactoryRegistration : com::sun::star::uno::XInterface
             interface element type class. This value can remain empty if no special factory for a single
             user interface element should be deregistered.
 
-        @param aModuleName
+        @param ModuleIdentifier
             an optional module name that can be used to deregister a factory only for a single module. This value
             can remain empty if not a module based factory should be deregistered. The module identifier can be retrieved
             from the com::sun::star::frame::ModuleManager service.
@@ -148,7 +148,7 @@ interface XUIElementFactoryRegistration : com::sun::star::uno::XInterface
         </b>
         </p>
     */
-    void deregisterFactory( [in] string aType, [in] string aName, [in] string aModuleIdentifier ) raises (com::sun::star::container::NoSuchElementException);
+    void deregisterFactory( [in] string aType, [in] string aName, [in] string ModuleIdentifier ) raises (com::sun::star::container::NoSuchElementException);
 };
 
 }; }; }; };

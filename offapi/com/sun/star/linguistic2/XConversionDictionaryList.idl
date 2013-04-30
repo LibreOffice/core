@@ -124,7 +124,7 @@ published interface XConversionDictionaryList : com::sun::star::uno::XInterface
             can be used for. It is one of
             com::sun::star::linguistic2::ConversionDictionaryType.
 
-        @param eConversionDirection
+        @param eDirection
             specifies the direction of the conversion to look for.
             It is one of
             com::sun::star::linguistic2::ConversionDirection.

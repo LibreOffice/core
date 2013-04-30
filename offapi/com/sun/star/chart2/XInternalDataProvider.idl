@@ -40,7 +40,7 @@ interface XInternalDataProvider  : com::sun::star::chart2::data::XDataProvider
     sequence< any > getDataByRangeRepresentation( [in] string aRange );
     void            setDataByRangeRepresentation( [in] string aRange, [in] sequence< any > aNewData );
 
-    /** @param Note that -1 is allowed as the sequence is inserted
+    /** @note  Note that -1 is allowed as the sequence is inserted
                after the given index. So to insert a sequence as the
                new first sequence (index 0), you would pass -1 here.
      */

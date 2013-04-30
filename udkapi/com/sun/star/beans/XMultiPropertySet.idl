@@ -123,25 +123,26 @@ published interface XMultiPropertySet: com::sun::star::uno::XInterface
         <p>It is suggested to allow multiple registration of the same listener,
         thus for each time a listener is added, it has to be removed.
 
-        @param
+        @param Listener
             contains the listener to be removed.
 
         @see addPropertiesChangeListener
      */
-    void removePropertiesChangeListener( [in] com::sun::star::beans::XPropertiesChangeListener xListener );
+    void removePropertiesChangeListener(
+            [in] com::sun::star::beans::XPropertiesChangeListener Listener );
 
 
     /** fires a sequence of PropertyChangeEvents to the specified
         listener.
 
-        @param aPropertynames
+        @param PropertyNames
             specifies the sorted names of the properties.
 
-        @param xListener
+        @param Listener
             contains the listener for the property change events.
      */
-    void firePropertiesChangeEvent( [in] sequence<string> aPropertyNames,
-             [in] com::sun::star::beans::XPropertiesChangeListener xListener );
+    void firePropertiesChangeEvent( [in] sequence<string> PropertyNames,
+             [in] com::sun::star::beans::XPropertiesChangeListener Listener );
 
 };
 

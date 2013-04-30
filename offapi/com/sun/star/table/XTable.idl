@@ -73,7 +73,7 @@ interface XTable
 
     /** creates a cell cursor to travel in the given range context.
 
-        @param aRange
+        @param Range
             the cell range for the cursor.
 
         @throws com::sun::star::lang::IllegalArgumentException

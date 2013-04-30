@@ -44,7 +44,7 @@ interface XToolbarController : com::sun::star::uno::XInterface
 {
     /** provides a function to execute the command which is bound to the toolbar controller.
 
-        @param
+        @param KeyModifier
             a combination of com::sun::star::awt::KeyModifier value that represent
             the current state of the modifier keys.
 

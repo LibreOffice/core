@@ -44,7 +44,7 @@ published interface XLinkFactory: com::sun::star::uno::XInterface
         @param aClassID
             the class id of the new object
 
-        @param aClassName
+        @param ClassName
             the class name of the new object
 
         @param xStorage
@@ -73,7 +73,7 @@ published interface XLinkFactory: com::sun::star::uno::XInterface
      */
     ::com::sun::star::uno::XInterface createInstanceLinkUserInit(
             [in] sequence< byte > aClassID,
-            [in] string sClassName,
+            [in] string ClassName,
             [in] ::com::sun::star::embed::XStorage xStorage,
             [in] string sEntryName,
             [in] sequence< ::com::sun::star::beans::PropertyValue > aArgs,

@@ -51,13 +51,14 @@ published interface XPropertyState: com::sun::star::uno::XInterface
     /** @returns
                 the state of the property.
 
-        @param  aPropertyName
+        @param  PropertyName
             specifies the name of the property.
 
         @throws UnknownPropertyException
             if the property does not exist.
      */
-    com::sun::star::beans::PropertyState getPropertyState( [in] string PropertyName )
+    com::sun::star::beans::PropertyState getPropertyState(
+                [in] string PropertyName )
             raises( com::sun::star::beans::UnknownPropertyException );
 
 
@@ -68,14 +69,14 @@ published interface XPropertyState: com::sun::star::uno::XInterface
         <p>The order of the states is correlating to the order of the
         given property names. </p>
 
-        @param aPropertyNames
+        @param PropertyNames
             contains the sequence of property names.
 
         @throws UnknownPropertyException
             if one property does not exist.
      */
     sequence<com::sun::star::beans::PropertyState> getPropertyStates(
-            [in] sequence<string> aPropertyName )
+            [in] sequence<string> PropertyNames )
         raises( com::sun::star::beans::UnknownPropertyException );
 
 
@@ -87,7 +88,7 @@ published interface XPropertyState: com::sun::star::uno::XInterface
         must fire the vetoable event before you change the property value.
         </p>
 
-        @param aPropertyname
+        @param PropertyName
             specifies the name of the property.
 
         @throws UnknownPropertyException

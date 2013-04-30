@@ -48,7 +48,7 @@ published interface XPropertyContainer: com::sun::star::uno::XInterface
 
     /** adds a property to the object.
 
-        @param aName
+        @param Name
             specifies the name of the new property.
 
         @param Attributes
@@ -74,7 +74,7 @@ published interface XPropertyContainer: com::sun::star::uno::XInterface
 
     /** removes a property from the object.
 
-        @param aName
+        @param Name
             specified the name of the property.
 
         @throws UnknownPropertyException

@@ -247,7 +247,7 @@ interface XTreeControl
 
     /** Adds a XTreeEditListener.
 
-        @param xListener
+        @param Listener
             a XTreeEditListener that will be notified
             before and after a tree node is edited.
     */
@@ -255,7 +255,7 @@ interface XTreeControl
 
     /** Removes a XTreeEditListener.
 
-        @param xListener
+        @param Listener
             the XTreeEditListener to remove
     */
     void removeTreeEditListener( [in] XTreeEditListener Listener );

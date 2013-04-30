@@ -75,7 +75,7 @@ published interface XConversionDictionary : com::sun::star::uno::XInterface
 
     /** specifies whether the dictionary should be used or not .
 
-        @param  bAcvtivate
+        @param  bActivate
             `TRUE` if the dictionary should be used, `FALSE` otherwise.
 
     */
@@ -110,7 +110,7 @@ published interface XConversionDictionary : com::sun::star::uno::XInterface
         @param  nLength
             the length of the substring to be looked for.
 
-        @param eConversionDirection
+        @param eDirection
             specifies the direction of the conversion to look for.
             It is one of
             com::sun::star::linguistic2::ConversionDirection.

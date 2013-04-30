@@ -104,13 +104,13 @@ interface XGraphicRasterizer : ::com::sun::star::uno::XInterface
             values into account. The rotation is applied after scaling
             and shearing the original image.
 
-        @param ShearXAngle
+        @param ShearAngle_X
             The horizontal shear angle of the graphic to be rasterized.
             This parameter is used without taking other transformation
             values into account. The shearing is applied after scaling
             and before rotation of the image.
 
-        @param ShearYAngle
+        @param ShearAngle_Y
             The vertical shear angle of the graphic to be rasterized.
             This parameter is used without taking other transformation
             values into account. The shearing is applied after scaling
@@ -118,10 +118,6 @@ interface XGraphicRasterizer : ::com::sun::star::uno::XInterface
 
         @param RasterizeProperties
             Additional properties for special needs (undefined by now)
-
-        @param Graphic
-            An interface to a graphic container into which the given data
-            should be rasterized.
 
         @returns com::sun::star::graphic::XGraphic
             An interface to a graphic container that holds the rasterized pixel data

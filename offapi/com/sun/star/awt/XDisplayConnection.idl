@@ -74,7 +74,7 @@ published interface XDisplayConnection: com::sun::star::uno::XInterface
         @param errorHandler
         the handler to remove.
     */
-    void removeErrorHandler( [in] XEventHandler errorhandler );
+    void removeErrorHandler( [in] XEventHandler errorHandler );
 
 
     /** returns a identifier.

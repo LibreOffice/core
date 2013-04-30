@@ -190,7 +190,7 @@ interface XExtensionManager
 
     /** gets an installed extensions.
 
-        @param repositroy
+        @param repository
                the name of the repository
         @param identifier
                extension identifier
@@ -254,7 +254,7 @@ interface XExtensionManager
         @param force
                set to true when called during soffice bootstrap after cleaning
                old extension cache
-        @param repositroy
+        @param repository
                the name of the repository
         @param xAbortChannel
                abort channel to asynchronously abort the adding process

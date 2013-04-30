@@ -399,7 +399,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         @param aRenderState
         The render state to be used when filling this polygon.
 
-        @param aTextures
+        @param xTextures
         A sequence of texture definitions, with which to fill the
         polygonal area.
 
@@ -434,7 +434,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         @param aRenderState
         The render state to be used when filling this polygon.
 
-        @param aTextures
+        @param xTextures
         A sequence of texture definitions, with which to fill the
         polygonal area.
 
@@ -507,7 +507,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         or the "don't care" value restricts the list of returned fonts
         to contain only those that have the specified attribute.
 
-        @param xFontProperties
+        @param aFontProperties
         This interface can provide additional font properties to
         filter the list of available fonts against.
 

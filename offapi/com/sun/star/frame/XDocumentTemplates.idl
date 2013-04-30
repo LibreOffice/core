@@ -119,8 +119,11 @@ published interface XDocumentTemplates:  com::sun::star::uno::XInterface
         @param GroupName
             specifies the group which include the template
 
-        @param TemplateName
+        @param OldTemplateName
             specifies the template for renaming
+
+        @param NewTemplateName
+            specifies the new name for the template
 
         @return
             `TRUE` if operation was successful

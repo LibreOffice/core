@@ -182,7 +182,7 @@ interface XColorSpace
         If this color space conveys alpha information, it is assumed
         be fully opaque for the given RGB color value.
 
-        @param deviceColor Sequence of sRGB color components. Is
+        @param rgbColor Sequence of sRGB color components. Is
         permitted to contain more than one color element, therefore,
         batch conversion of multiple color values is possible.
 

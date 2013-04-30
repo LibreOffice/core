@@ -134,7 +134,7 @@ interface XXPathAPI : com::sun::star::uno::XInterface
      */
     com::sun::star::xml::dom::XNodeList selectNodeListNS(
             [in] com::sun::star::xml::dom::XNode contextNode,
-            [in] string str,
+            [in] string expr,
             [in] com::sun::star::xml::dom::XNode namespaceNode)
         raises( com::sun::star::xml::xpath::XPathException );
 
@@ -176,7 +176,7 @@ interface XXPathAPI : com::sun::star::uno::XInterface
     */
     com::sun::star::xml::dom::XNode selectSingleNodeNS(
             [in] com::sun::star::xml::dom::XNode contextNode,
-            [in] string str,
+            [in] string expr,
             [in] com::sun::star::xml::dom::XNode namespaceNode)
         raises( com::sun::star::xml::xpath::XPathException );
 

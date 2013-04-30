@@ -92,7 +92,7 @@ published interface XGridDataModel
         <p>This method is provided for performance and convenience reasons, it delivers the same result
         as subsequent calls to getCellData() would.</p>
 
-        @param Row
+        @param RowIndex
             the index of the row whose data should is to be retrieved.
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             of the given row index does not denote a valid row.

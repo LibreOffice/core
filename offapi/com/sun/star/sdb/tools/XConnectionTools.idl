@@ -91,7 +91,7 @@ interface XConnectionTools
             the object. This may be a table name, a query name, or an SQL statement, depending on the value
             of _nCommandType
 
-        @param _rxCollectionOner
+        @param keepFieldsAlive
             If (and only if) CommandType is CommandType.COMMAND, the fields collection which is returned
             by this function here is a temporary object. It is kept alive by another object, which is to be
             created temporarily, too. To ensure that the fields you get are valid as long as you need them,

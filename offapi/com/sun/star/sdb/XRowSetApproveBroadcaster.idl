@@ -34,13 +34,11 @@ published interface XRowSetApproveBroadcaster: com::sun::star::uno::XInterface
 
     /** adds the specified listener to receive the events "approveCursorMove",
         "approveRowChange", and "appproveRowSetChange".
-        @param com::sun::star::sdb::XRowSetApproveListener
      */
     void addRowSetApproveListener(
             [in]XRowSetApproveListener listener );
 
     /** removes the specified listener.
-        @param com::sun::star::sdb::XRowSetApproveListener
      */
     void removeRowSetApproveListener(
             [in]XRowSetApproveListener listener );

@@ -35,13 +35,11 @@ published interface XSQLErrorBroadcaster: com::sun::star::uno::XInterface
 {
 
     /** adds the specified listener to receive the event "errorOccurred"
-        @param com::sun::star::sdb::XSQLErrorListener
      */
     void addSQLErrorListener(
             [in]XSQLErrorListener Listener );
 
     /** removes the specified listener.
-        @param com::sun::star::sdb::XSQLErrorListener
      */
     void removeSQLErrorListener(
             [in]XSQLErrorListener Listener );

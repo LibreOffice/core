@@ -82,7 +82,7 @@ published service InstanceLocker : com::sun::star::lang::XComponent
                 values in this case: "PreventClose", "PreventTermination" ).
      */
     InstanceLockerCtor2( [in] com::sun::star::uno::XInterface xInstance,
-                         [in] long aActions,
+                         [in] long nActions,
                          [in] XActionsApproval xApprove )
         raises( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::frame::DoubleInitializationException,

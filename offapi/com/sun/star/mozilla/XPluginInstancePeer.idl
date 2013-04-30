@@ -47,7 +47,7 @@ published interface XPluginInstancePeer: com::sun::star::uno::XInterface
 
         @return <CODE>TRUE</CODE> on success
      */
-    boolean setWindowSize( [in] long width, [in] long heigth );
+    boolean setWindowSize( [in] long width, [in] long height );
 
 
     /** Show status / hint message in browser's message area.

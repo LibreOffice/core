@@ -67,13 +67,13 @@ interface XImageManager
         @param nImageType
             specifies the image type for this operation.
 
-        @param ResourceURL
+        @param CommandURL
             a command URL that should be checked for an associated image.
 
         @return
             `TRUE` if an image is associated, otherwise `FALSE`.
     */
-    boolean hasImage( [in] short nImageType, [in] string aCommandURL ) raises ( com::sun::star::lang::IllegalArgumentException );
+    boolean hasImage( [in] short nImageType, [in] string CommandURL ) raises ( com::sun::star::lang::IllegalArgumentException );
 
     /** retrieves the associated images of command URLs.
 
@@ -122,7 +122,7 @@ interface XImageManager
         @param nImageType
             specifies the image type for this association operation.
 
-        @param aCommandURLSequence
+        @param CommandURLs
             a sequence of command URLs for which the images should be removed.
 
         <p>
@@ -133,7 +133,7 @@ interface XImageManager
         is thrown.
         </p>
     */
-    void removeImages( [in] short nImageType, [in] sequence< string > aResourceURLSequence ) raises ( com::sun::star::lang::IllegalArgumentException, com::sun::star::lang::IllegalAccessException );
+    void removeImages( [in] short nImageType, [in] sequence< string > CommandURLs ) raises ( com::sun::star::lang::IllegalArgumentException, com::sun::star::lang::IllegalAccessException );
 
     /** inserts new image/command associations to a image manager.
 

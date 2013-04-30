@@ -100,9 +100,6 @@ published interface XStorageRawAccess
         @param sStreamName
             the name of the substream that should be open
 
-        @param xInputStream
-            a raw stream representing encrypted stream
-
         @throws ::com::sun::star::embed::InvalidStorageException
             this storage is in invalid state for any reason
 
@@ -150,7 +147,7 @@ published interface XStorageRawAccess
         @param sStreamName
             the name of the substream that should be open
 
-        @param xInputStream
+        @param xInStream
             a raw stream representing encrypted stream
 
         @throws ::com::sun::star::embed::InvalidStorageException

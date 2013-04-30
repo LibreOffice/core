@@ -44,13 +44,13 @@ published interface XSubmitListener: com::sun::star::lang::XEventListener
 
     /** is invoked when a component is about to submit it's data.
 
-        @param aEvent
+        @param Event
             the event happened
 
         @returns
             `TRUE` when submitting was approved, otherwise `FALSE`.
      */
-    boolean approveSubmit( [in] com::sun::star::lang::EventObject rEvent );
+    boolean approveSubmit( [in] com::sun::star::lang::EventObject Event );
 
 };
 

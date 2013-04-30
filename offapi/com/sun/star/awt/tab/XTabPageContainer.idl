@@ -41,7 +41,7 @@ published interface XTabPageContainer
 
 
     /** Checks whether a tab page is activated.
-        @param
+        @param tabPageIndex
             the tab page to be checked.
         @returns
             `TRUE` if tab page is activated, else `FALSE`.

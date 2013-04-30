@@ -303,7 +303,7 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
 
     /** deletes a key from the registry.
 
-        @param aKeyName
+        @param KeyName
         specifies the relative path from the current key to
         the key which will be deleted.
 
@@ -311,7 +311,7 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
         if the registry is not open, the registry is readonly,
         the key does not exists or if the key is of type LINK.
     */
-    void deleteKey( [in] string rKeyName )
+    void deleteKey( [in] string KeyName )
             raises( com::sun::star::registry::InvalidRegistryException );
 
     // DOCUMENTATION CHANGED FOR XRegistryKey::openKeys
@@ -364,7 +364,7 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
 
     /** deletes a link from the registry.
 
-        @param aLinkName
+        @param LinkName
         specifies the relative path from the current key to
         the link which will be deleted.
 
@@ -372,21 +372,21 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
         if the registry is not open, the registry is readonly,
         or if the link does not exist.
     */
-    void deleteLink( [in] string rLinkName )
+    void deleteLink( [in] string LinkName )
             raises( com::sun::star::registry::InvalidRegistryException );
 
     // DOCUMENTATION CHANGED FOR XRegistryKey::getLinkTarget
     /** @returns
         the target (complete path of a key) of the link specified by rLinkName.
 
-         @param rLinKName
+         @param LinkName
         specifies the relative path from the current key to
         the link which target will be returned.
 
          @throws InvalidRegistryException
          if the registry is not open or the link does not exists.
     */
-    string getLinkTarget( [in] string rLinkName )
+    string getLinkTarget( [in] string LinkName )
             raises( com::sun::star::registry::InvalidRegistryException );
 
     // DOCUMENTATION CHANGED FOR XRegistryKey::getResolvedName
@@ -395,13 +395,13 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
         If a link could not be resolved, the linktarget concatenated with the unresolved rest
         of the name, will be returned.
 
-         @param rKeyName
+         @param KeyName
          specifies a relative path from the current key which will be resolved from all links.
 
          @throws InvalidRegistryException
          if the registry is not open or a recursion was detected.
     */
-    string getResolvedName( [in] string aKeyName )
+    string getResolvedName( [in] string KeyName )
             raises( com::sun::star::registry::InvalidRegistryException );
 
 };

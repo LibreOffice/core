@@ -42,16 +42,17 @@ interface XUriBinding : com::sun::star::uno::XInterface
      * Sets the XInputStream interface for a uri.
      *
      * @param uri       the uri to bind
-     * @param aStream   the XInputStream to be binded
+     * @param InputStream   the XInputStream to be bound
      */
-    void setUriBinding([in] string uri, [in] com::sun::star::io::XInputStream aInputStream)
+    void setUriBinding([in] string uri,
+            [in] com::sun::star::io::XInputStream InputStream)
         raises( com::sun::star::uno::Exception );
 
     /**
      * Gets the XInputStream interface for a uri.
      *
      * @param uri   the uri whose binding is to get
-     * @return      the XInputStream binded with the uri
+     * @return      the XInputStream bound with the uri
      */
     com::sun::star::io::XInputStream getUriBinding([in] string uri)
         raises( com::sun::star::uno::Exception );

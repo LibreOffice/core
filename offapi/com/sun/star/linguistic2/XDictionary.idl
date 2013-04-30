@@ -59,7 +59,7 @@ published interface XDictionary : com::sun::star::container::XNamed
 
     /** specifies whether the dictionary should be used or not .
 
-        @param  bAcvtivate
+        @param  bActivate
             `TRUE` if the dictionary should be used, `FALSE` otherwise.
 
     */

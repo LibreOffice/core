@@ -144,7 +144,7 @@ published interface XConnectionPoint: com::sun::star::uno::XInterface
         We ignore the problem in this interface. A solution must be
         provided in an additional XConnectionPoint interface.  </p>
 
-        @param listener
+        @param xListener
             specifies the listener interface on the client's advise sink.
 
         @see com::sun::star::beans::XPropertySet::removePropertyChangeListener

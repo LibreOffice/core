@@ -116,13 +116,13 @@ interface XSlideShow : ::com::sun::star::uno::XInterface
         method does nothing (this especially means, that any currently
         active effects will remain running).<p>
 
-        @param xPage
+        @param xSlide
         The slide to display.
 
         @param xDrawPages
         For future use.
 
-        @param xAnimationNode
+        @param AnimationNode
         The animation node determine the animations to display.
 
         @param aProperties
@@ -159,7 +159,7 @@ interface XSlideShow : ::com::sun::star::uno::XInterface
     void displaySlide(
         [in] ::com::sun::star::drawing::XDrawPage xSlide,
         [in] ::com::sun::star::drawing::XDrawPagesSupplier xDrawPages,
-        [in] ::com::sun::star::animations::XAnimationNode aAnimationNode,
+        [in] ::com::sun::star::animations::XAnimationNode AnimationNode,
         [in] sequence< ::com::sun::star::beans::PropertyValue > aProperties );
 
     /** Change the pause state of the slide show.<p>

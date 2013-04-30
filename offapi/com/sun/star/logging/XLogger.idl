@@ -124,7 +124,7 @@ interface XLogger
         @param Message
             the message to log
     */
-    void    logp( [in] long Level, [in] string SourceClassName, [in] string SourceMethodName, [in] string Message );
+    void    logp( [in] long Level, [in] string SourceClass, [in] string SourceMethod, [in] string Message );
 };
 
 

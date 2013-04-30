@@ -46,7 +46,7 @@ published interface XSimpleRegistry: com::sun::star::uno::XInterface
         <p>If a local registry is already open, this function
         will close the currently open registry.
 
-        @param aURL
+        @param URL
         specifies the complete URL to access the data source.
 
         @param bReadOnly
@@ -60,7 +60,7 @@ published interface XSimpleRegistry: com::sun::star::uno::XInterface
         @throws InvalidRegistryException
         if the registry does not exist.
     */
-    void open( [in] string rURL,
+    void open( [in] string URL,
              [in] boolean bReadOnly,
              [in] boolean bCreate )
             raises( com::sun::star::registry::InvalidRegistryException );

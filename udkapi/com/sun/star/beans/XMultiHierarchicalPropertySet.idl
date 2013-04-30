@@ -66,10 +66,10 @@ published interface XMultiHierarchicalPropertySet: com::sun::star::uno::XInterfa
 
         <p> Unknown properties are ignored.  </p>
 
-        @param  aHierarchicalPropertyNames
+        @param  HierarchicalPropertyNames
                 This parameter specifies the names of the properties.
 
-        @param  aValues
+        @param  Values
                 This parameter specifies the new values for the properties.
 
         @throws PropertyVetoException
@@ -93,7 +93,7 @@ published interface XMultiHierarchicalPropertySet: com::sun::star::uno::XInterfa
      */
 
 
-    void setHierarchicalPropertyValues( [in] sequence<string> aHierarchicalPropertyNames,
+    void setHierarchicalPropertyValues( [in] sequence<string> HierarchicalPropertyNames,
              [in] sequence<any> Values )
             raises( com::sun::star::beans::PropertyVetoException,
                     com::sun::star::lang::IllegalArgumentException,

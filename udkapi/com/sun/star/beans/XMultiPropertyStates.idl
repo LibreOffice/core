@@ -70,14 +70,14 @@ published interface XMultiPropertyStates: com::sun::star::uno::XInterface
         the change events are fired.  If it is a constrained property, you
         must fire the vetoable event before you change the property value. </p>
 
-        @param aPropertyName
+        @param PropertyNames
             specifies the names of the properties. All names must be unique.
             This sequence must be alphabetically sorted.
 
         @throws UnknownPropertyException
             if one of the properties does not exist.
     */
-    void setPropertiesToDefault( [in] sequence<string> aPropertyNames )
+    void setPropertiesToDefault( [in] sequence<string> PropertyNames )
             raises( com::sun::star::beans::UnknownPropertyException );
 
     /** @returns
@@ -87,7 +87,7 @@ published interface XMultiPropertyStates: com::sun::star::uno::XInterface
         then the return type at the corresponding position in the
         sequence returned is `void`. </p>
 
-        @param aPropertyName
+        @param PropertyNames
             specifies the names of the properties. All names must be unique.
             This sequence must be alphabetically sorted.
 
@@ -100,7 +100,7 @@ published interface XMultiPropertyStates: com::sun::star::uno::XInterface
             com::sun::star::lang::WrappedTargetException.
     */
     sequence<any> getPropertyDefaults(
-                [in] sequence<string> aPropertyNames )
+                [in] sequence<string> PropertyNames )
             raises( com::sun::star::beans::UnknownPropertyException,
                     com::sun::star::lang::WrappedTargetException );
 };

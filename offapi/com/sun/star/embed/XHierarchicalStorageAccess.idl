@@ -107,7 +107,7 @@ published interface XHierarchicalStorageAccess
         method will return an empty reference.
         </p>
 
-        @param sStreamPath
+        @param sStreamName
             the path to the substream that should be open
 
         @param nOpenMode

@@ -85,7 +85,7 @@ interface XAccessibleComponent : ::com::sun::star::uno::XInterface
         an opaque rectangle then both the points (0,0) and (with-1,height-1)
         would yield a `TRUE` value.</p>
 
-        @param point
+        @param Point
             Coordinates of the point to test.  The origin of the coordinate
             system is the upper left corner of the object's bounding box as
             returned by the getBounds().  The scale of the
@@ -96,7 +96,7 @@ interface XAccessibleComponent : ::com::sun::star::uno::XInterface
             Returns `TRUE` if the point lies within or on the object's bounding
             box and `FALSE` otherwise.
     */
-    boolean containsPoint ([in] ::com::sun::star::awt::Point aPoint);
+    boolean containsPoint ([in] ::com::sun::star::awt::Point Point);
 
     /** Returns the Accessible child that is rendered under the given point.
 
@@ -105,7 +105,7 @@ interface XAccessibleComponent : ::com::sun::star::uno::XInterface
         an opaque rectangle then both the points (0,0) and (with-1,height-1)
         would yield a `TRUE` value.</p>
 
-        @param aPoint
+        @param Point
             Coordinates of the test point for which to find the Accessible
             child.  The origin of the coordinate system is the upper left
             corner of the object's bounding box as returned by the
@@ -120,7 +120,7 @@ interface XAccessibleComponent : ::com::sun::star::uno::XInterface
             painted on top of the others.  If no there is no child which is
             rendered at the test point an empty reference is returned.
     */
-    XAccessible  getAccessibleAtPoint ([in] ::com::sun::star::awt::Point aPoint);
+    XAccessible  getAccessibleAtPoint ([in] ::com::sun::star::awt::Point Point);
 
     /** Returns the bounding box of this object.
 

@@ -47,7 +47,7 @@ published interface XRemoteContentProviderChangeNotifier:
 
     /** Remove a listener.
 
-        @param Listener.
+        @param Listener
         Some listener previously added via
         XRemoteContentProviderChangeNotifier::addRemoteContentProviderChangeListener().
      */

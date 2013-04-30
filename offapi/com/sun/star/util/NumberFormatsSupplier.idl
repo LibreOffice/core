@@ -40,9 +40,9 @@ published service NumberFormatsSupplier : XNumberFormatsSupplier
     /**
         Create using specific locale.
 
-        @param aLocale the locale of the number formats supplier
+        @param Locale the locale of the number formats supplier
     */
-    createWithLocale([in] com::sun::star::lang::Locale locale);
+    createWithLocale([in] com::sun::star::lang::Locale Locale);
 
     /**
         Create using default locale.

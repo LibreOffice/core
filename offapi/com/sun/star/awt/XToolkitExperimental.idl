@@ -23,7 +23,7 @@ interface XToolkitExperimental : XToolkit2
    *
    *  @returns the device
    *
-   *  @param addressOfMemoryBufferForSharedArrayWrapper is the address of a
+   *  @param AddressOfMemoryBufferForSharedArrayWrapper is the address of a
    *  (C++) object the exact type of which is to be determined, but the point
    *  is that it will then be rewrapped into a boost::shared_array of bytes to
    *  be passed to the basebmp code. shared_array has its own style of

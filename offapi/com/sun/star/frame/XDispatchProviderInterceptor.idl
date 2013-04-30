@@ -48,7 +48,7 @@ published interface XDispatchProviderInterceptor: XDispatchProvider
         XDispatchProvider::queryDispatch() can be forwarded
         under control of this dispatch provider.
 
-        @param xNewDispatchProvider
+        @param NewDispatchProvider
             the new slave of this interceptor
 
         @see XDispatchProviderInterceptor::getSlaveDispatchProvider()
