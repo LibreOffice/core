@@ -40,13 +40,12 @@ using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 
-#define MAX_STR_WIDTH   46
 #define MAX_MENU_ITEMS  99
 
 static const char SFX_REFERER_USER[] = "private:user";
 static const char CMD_CLEAR_LIST[]   = ".uno:ClearRecentFileList";
 static const char CMD_PREFIX[]       = "vnd.sun.star.popup:RecentFileList?entry=";
-static const char MENU_SHOTCUT[]     = "~N: ";
+static const char MENU_SHORTCUT[]     = "~N. ";
 
 namespace framework
 {
@@ -133,17 +132,17 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                 if ( i <= 9 )
                 {
                     if ( i == 9 )
-                        aMenuShortCut.append( "1~0: " );
+                        aMenuShortCut.append( "1~0. " );
                     else
                     {
-                        aMenuShortCut.append( MENU_SHOTCUT );
+                        aMenuShortCut.append( MENU_SHORTCUT );
                         aMenuShortCut[ 1 ] = sal_Unicode( i + '1' );
                     }
                 }
                 else
                 {
                     aMenuShortCut.append( sal_Int32( i + 1 ) );
-                    aMenuShortCut.append( ": " );
+                    aMenuShortCut.append( ". " );
                 }
 
                 OUStringBuffer aStrBuffer;
@@ -152,28 +151,19 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                 OUString  aURLString( aStrBuffer.makeStringAndClear() );
 
                 // Abbreviate URL
-                OUString   aTipHelpText;
                 OUString   aMenuTitle;
                 INetURLObject   aURL( m_aRecentFilesItems[i].aURL );
+                OUString aTipHelpText( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
 
                 if ( aURL.GetProtocol() == INET_PROT_FILE )
                 {
-                    // Do handle file URL differently => convert it to a system
-                    // path and abbreviate it with a special function:
-                    OUString aSystemPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
-                    aTipHelpText = aSystemPath;
-
-                    OUString aCompactedSystemPath;
-                    if ( osl_abbreviateSystemPath( aSystemPath.pData, &aCompactedSystemPath.pData, MAX_STR_WIDTH, NULL ) == osl_File_E_None )
-                        aMenuTitle = aCompactedSystemPath;
-                    else
-                        aMenuTitle = aSystemPath;
+                    // Do handle file URL differently: don't show the protocol, just the file name
+                    aMenuTitle = aURL.GetLastName(INetURLObject::DECODE_WITH_CHARSET, RTL_TEXTENCODING_UTF8);
                 }
                 else
                 {
-                    // Use INetURLObject to abbreviate all other URLs
-                    aMenuTitle   = aURL.getAbbreviated( xStringLength, MAX_STR_WIDTH, INetURLObject::DECODE_UNAMBIGUOUS );
-                    aTipHelpText = aURLString;
+                    // In all other URLs show the protocol name before the file name
+                    aMenuTitle   = aURL.GetSchemeName(aURL.GetProtocol()) + ": " + aURL.getName();
                 }
 
                 aMenuShortCut.append( aMenuTitle );
