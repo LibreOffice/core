@@ -628,13 +628,6 @@ File gid_Brand_File_Bmp_IntroAboutShell_custom
 End
 #endif
 
-File gid_Brand_File_Images_Brand_Zip
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Config;
-    Name = "images_brand.zip";
-    Styles = (PACKED);
-End
-
 File gid_Brand_File_Txt_Package
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Share_Extensions;
