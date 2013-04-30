@@ -20,6 +20,8 @@
 #ifndef INCLUDED_PDFI_OUTDEV_HXX
 #define INCLUDED_PDFI_OUTDEV_HXX
 
+#include <sal/types.h>
+
 #if defined __GNUC__
 #pragma GCC system_header
 #elif defined __SUNPRO_CC
@@ -44,12 +46,6 @@
 #pragma enable_warn
 #elif defined _MSC_VER
 #pragma warning(pop)
-#endif
-
-#if HAVE_CXX11_OVERRIDE
-#define SAL_OVERRIDE override
-#else
-#define SAL_OVERRIDE
 #endif
 
 #include <boost/unordered_map.hpp>
