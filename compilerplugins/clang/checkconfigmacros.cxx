@@ -34,7 +34,9 @@ class CheckConfigMacros
         virtual void run();
         virtual void MacroDefined( const Token& macroToken, const MacroInfo* info );
         virtual void MacroUndefined( const Token& macroToken , const MacroInfo* info );
+        virtual void Ifdef( const Token& /* macroToken */ ) { };
         virtual void Ifdef( SourceLocation location, const Token& macroToken );
+        virtual void Ifndef( const Token& /* macroToken */ ) { };
         virtual void Ifndef( SourceLocation location, const Token& macroToken );
         virtual void Defined( const Token& macroToken );
     private:

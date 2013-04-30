@@ -66,7 +66,7 @@ bool SalLogAreas::VisitCallExpr( CallExpr* call )
                 if( const StringLiteral* area = dyn_cast< StringLiteral >( call->getArg( 1 )->IgnoreParenImpCasts()))
                     {
                     if( area->getKind() == StringLiteral::Ascii )
-                        checkArea( area->getBytes(), area->getExprLoc());
+                        checkArea( area->getString(), area->getExprLoc());
                     else
                         report( DiagnosticsEngine::Warning, "unsupported string literal kind (plugin needs fixing?)",
                             area->getLocStart());

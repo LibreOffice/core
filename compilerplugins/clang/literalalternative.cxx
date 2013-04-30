@@ -70,7 +70,7 @@ bool LiteralAlternative::VisitCallExpr(CallExpr * expr) {
             StringLiteral const * lit = dyn_cast<StringLiteral>(arg0);
             bool match = false;
             if (lit != nullptr) {
-                match = res == lit->getLength();
+                match = res == lit->getByteLength();
             } else {
                 UnaryOperator const * op = dyn_cast<UnaryOperator>(arg0);
                 if (op != nullptr && op->getOpcode() == UO_AddrOf) {
