@@ -70,6 +70,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_subsequent_ooxmlimport,\
     embeddedobj/util/embobj \
     fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
+    forms/util/frm \
     framework/util/fwk \
     i18npool/util/i18npool \
     linguistic/source/lng \
@@ -83,6 +84,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_subsequent_ooxmlimport,\
     sw/util/msword \
     sfx2/util/sfx \
     svl/source/fsstor/fsstorage \
+    svl/util/svl \
     svtools/util/svt \
     toolkit/util/tk \
     ucb/source/core/ucb1 \
