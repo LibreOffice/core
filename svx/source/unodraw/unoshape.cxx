@@ -2767,7 +2767,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
             case OWN_ATTR_GLUEID_HEAD:
             case OWN_ATTR_GLUEID_TAIL:
                 {
-                    rValue <<= pEdgeObj->getGluePointIndex( pProperty->nWID == OWN_ATTR_GLUEID_HEAD );
+                    rValue <<= (sal_Int32)pEdgeObj->getGluePointIndex( pProperty->nWID == OWN_ATTR_GLUEID_HEAD );
                     break;
                 }
             case OWN_ATTR_EDGE_POLYPOLYGONBEZIER:
@@ -2847,11 +2847,11 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
     }
 
     case SDRATTR_ROTATEANGLE:
-        rValue <<= mpObj->GetRotateAngle();
+        rValue <<= (sal_Int32)mpObj->GetRotateAngle();
         break;
 
     case SDRATTR_SHEARANGLE:
-        rValue <<= mpObj->GetShearAngle();
+        rValue <<= (sal_Int32)mpObj->GetShearAngle();
         break;
 
     case SDRATTR_OBJMOVEPROTECT:
