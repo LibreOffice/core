@@ -1715,6 +1715,15 @@ private:
             constantGroupIndex(constantGroup->getMembers().begin())
         { assert(theConstantGroup.is()); }
 
+        Position(Position const & other):
+            prefix(other.prefix), cursor(other.cursor),
+            constantGroup(other.constantGroup)
+        {
+            if (constantGroup.is()) {
+                constantGroupIndex = other.constantGroupIndex;
+            }
+        }
+
         rtl::OUString prefix;
         rtl::Reference< unoidl::MapCursor > cursor;
         rtl::Reference< unoidl::ConstantGroupEntity > constantGroup;
