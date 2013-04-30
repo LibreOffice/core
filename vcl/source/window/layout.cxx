@@ -10,6 +10,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/msgbox.hxx>
 #include "window.h"
 
 VclContainer::VclContainer(Window *pParent, WinBits nStyle)
@@ -1563,6 +1564,181 @@ bool VclSizeGroup::set_property(const OString &rKey, const OString &rValue)
         return false;
     }
     return true;
+}
+
+MessageDialog::MessageDialog(Window* pParent, WinBits nStyle)
+    : Dialog(pParent, nStyle)
+    , m_pGrid(NULL)
+    , m_pImage(NULL)
+    , m_pPrimaryMessage(NULL)
+    , m_pSecondaryMessage(NULL)
+{
+    SetType(WINDOW_MESSBOX);
+}
+
+MessageDialog::MessageDialog(Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
+    : Dialog(pParent, rID, rUIXMLDescription, WINDOW_MESSBOX)
+    , m_pGrid(NULL)
+    , m_pImage(NULL)
+    , m_pPrimaryMessage(NULL)
+    , m_pSecondaryMessage(NULL)
+{
+}
+
+MessageDialog::~MessageDialog()
+{
+    delete m_pSecondaryMessage;
+    delete m_pPrimaryMessage;
+    delete m_pImage;
+    delete m_pGrid;
+}
+
+IMPL_LINK(MessageDialog, ButtonHdl, Button *, pButton)
+{
+    //for now insist that we have a builder, we can relax that in
+    //the future if we need it
+    assert(m_pUIBuilder);
+    EndDialog(m_pUIBuilder->get_response(pButton));
+    return 0;
+}
+
+void MessageDialog::setButtonHandlers()
+{
+    SAL_WARN_IF(!m_pUIBuilder, "vcl.layout", "MessageDialog non-ui load button responses not implemented yet");
+    if (!m_pUIBuilder)
+        return;
+    VclButtonBox *pButtonBox = get_action_area();
+    assert(pButtonBox);
+    for (Window* pChild = pButtonBox->GetWindow(WINDOW_FIRSTCHILD); pChild;
+        pChild = pChild->GetWindow(WINDOW_NEXT))
+    {
+        switch (pChild->GetType())
+        {
+            case WINDOW_PUSHBUTTON:
+            {
+                PushButton* pButton = (PushButton*)pChild;
+                pButton->SetClickHdl(LINK(this, MessageDialog, ButtonHdl));
+                break;
+            }
+            //for now at least, insist that the response ids match
+            //the default actions for those widgets, and leave
+            //their default handlers in place
+            case WINDOW_OKBUTTON:
+                assert(m_pUIBuilder->get_response(pChild) == RET_OK);
+                break;
+            case WINDOW_CANCELBUTTON:
+                assert(m_pUIBuilder->get_response(pChild) == RET_CANCEL);
+                break;
+            case WINDOW_HELPBUTTON:
+                assert(m_pUIBuilder->get_response(pChild) == RET_HELP);
+                break;
+            default:
+                SAL_WARN("vcl.layout", "The type of widget " <<
+                    pChild->GetHelpId() << " is currently not handled");
+                break;
+        }
+        //The default is to stick the focus into the first widget
+        //that accepts it, and if that happens and its a button
+        //then that becomes the new default button, so explicitly
+        //put the focus into the default button
+        if (pChild->GetStyle() & WB_DEFBUTTON)
+            pChild->GrabFocus();
+    }
+}
+
+short MessageDialog::Execute()
+{
+    setDeferredProperties();
+
+    if (!m_pGrid)
+    {
+        VclContainer *pContainer = get_content_area();
+        assert(pContainer);
+
+        m_pGrid = new VclGrid(pContainer);
+        m_pGrid->set_column_spacing(12);
+
+        m_pImage = new FixedImage(m_pGrid, WB_CENTER | WB_VCENTER | WB_3DLOOK);
+        m_pImage->SetImage(WarningBox::GetStandardImage());
+        m_pImage->set_grid_left_attach(0);
+        m_pImage->set_grid_top_attach(0);
+        m_pImage->set_valign(VCL_ALIGN_START);
+        m_pImage->Show();
+
+        WinBits nWinStyle = WB_LEFT | WB_VCENTER | WB_WORDBREAK | WB_NOLABEL | WB_NOTABSTOP;
+
+        m_pPrimaryMessage = new VclMultiLineEdit(m_pGrid, nWinStyle);
+        m_pPrimaryMessage->SetPaintTransparent(true);
+        m_pPrimaryMessage->EnableCursor(false);
+        Font aFont = GetSettings().GetStyleSettings().GetLabelFont();
+        aFont.SetSize( Size( 0, aFont.GetSize().Height() * 1.2 ) );
+        aFont.SetWeight(WEIGHT_BOLD);
+        m_pPrimaryMessage->SetControlFont(aFont);
+        m_pPrimaryMessage->set_grid_left_attach(1);
+        m_pPrimaryMessage->set_grid_top_attach(0);
+        m_pPrimaryMessage->set_hexpand(true);
+        m_pPrimaryMessage->SetText(m_sPrimaryString);
+        m_pPrimaryMessage->Show(!m_sPrimaryString.isEmpty());
+
+        m_pSecondaryMessage = new VclMultiLineEdit(m_pGrid, nWinStyle);
+        m_pSecondaryMessage->SetPaintTransparent(true);
+        m_pSecondaryMessage->EnableCursor(false);
+        m_pSecondaryMessage->set_grid_left_attach(1);
+        m_pSecondaryMessage->set_grid_top_attach(1);
+        m_pSecondaryMessage->set_hexpand(true);
+        m_pSecondaryMessage->SetText(m_sSecondaryString);
+        m_pSecondaryMessage->Show(!m_sSecondaryString.isEmpty());
+
+        m_pGrid->Show();
+
+        setButtonHandlers();
+    }
+    return Dialog::Execute();
+}
+
+OUString MessageDialog::get_primary_text() const
+{
+    const_cast<MessageDialog*>(this)->setDeferredProperties();
+
+    return m_sPrimaryString;
+}
+
+OUString MessageDialog::get_secondary_text() const
+{
+    const_cast<MessageDialog*>(this)->setDeferredProperties();
+
+    return m_sSecondaryString;
+}
+
+bool MessageDialog::set_property(const OString &rKey, const OString &rValue)
+{
+    if (rKey == "text")
+        set_primary_text(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+    else if (rKey == "secondary-text")
+        set_secondary_text(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+    else
+        return Dialog::set_property(rKey, rValue);
+    return true;
+}
+
+void MessageDialog::set_primary_text(const OUString &rPrimaryString)
+{
+    m_sPrimaryString = rPrimaryString;
+    if (m_pPrimaryMessage)
+    {
+        m_pPrimaryMessage->SetText(m_sPrimaryString);
+        m_pPrimaryMessage->Show(!m_sPrimaryString.isEmpty());
+    }
+}
+
+void MessageDialog::set_secondary_text(const OUString &rSecondaryString)
+{
+    m_sSecondaryString = rSecondaryString;
+    if (m_pSecondaryMessage)
+    {
+        m_pSecondaryMessage->SetText(OUString("\n") + m_sSecondaryString);
+        m_pSecondaryMessage->Show(!m_sSecondaryString.isEmpty());
+    }
 }
 
 Size getLegacyBestSizeForChildren(const Window &rWindow)

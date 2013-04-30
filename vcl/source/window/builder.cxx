@@ -144,6 +144,7 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
     , m_pParserState(new ParserState)
 {
     m_bToplevelHasDeferredInit = (pParent && pParent->IsDialog()) ? ((Dialog*)pParent)->isDeferredInit() : false;
+    m_bToplevelHasDeferredProperties = m_bToplevelHasDeferredInit;
 
     sal_Int32 nIdx = m_sHelpRoot.lastIndexOf('.');
     if (nIdx != -1)
@@ -944,6 +945,13 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
             nBits |= WB_SIZEABLE;
         pWindow = new Dialog(pParent, nBits);
     }
+    else if (name == "GtkMessageDialog")
+    {
+        WinBits nBits = WB_MOVEABLE|WB_3DLOOK|WB_CLOSEABLE;
+        if (extractResizable(rMap))
+            nBits |= WB_SIZEABLE;
+        pWindow = new MessageDialog(pParent, nBits);
+    }
     else if (name == "GtkBox")
     {
         bVertical = extractOrientation(rMap);
@@ -1256,6 +1264,27 @@ namespace
     }
 }
 
+//Any properties from .ui load we couldn't set because of potential virtual methods
+//during ctor are applied here
+void VclBuilder::setDeferredProperties()
+{
+    if (!m_bToplevelHasDeferredProperties)
+        return;
+    set_properties(m_pParent, m_aDeferredProperties);
+    m_aDeferredProperties.clear();
+    m_bToplevelHasDeferredProperties = false;
+}
+
+void VclBuilder::set_properties(Window *pWindow, const stringmap &rProps)
+{
+    for (stringmap::const_iterator aI = rProps.begin(), aEnd = rProps.end(); aI != aEnd; ++aI)
+    {
+        const OString &rKey = aI->first;
+        const OString &rValue = aI->second;
+        pWindow->set_property(rKey, rValue);
+    }
+}
+
 Window *VclBuilder::insertObject(Window *pParent, const OString &rClass,
     const OString &rID, stringmap &rProps, stringmap &rPango,
     stringmap &rAtk,
@@ -1294,12 +1323,10 @@ Window *VclBuilder::insertObject(Window *pParent, const OString &rClass,
 
     if (pCurrentChild)
     {
-        for (stringmap::iterator aI = rProps.begin(), aEnd = rProps.end(); aI != aEnd; ++aI)
-        {
-            const OString &rKey = aI->first;
-            const OString &rValue = aI->second;
-            pCurrentChild->set_property(rKey, rValue);
-        }
+        if (pCurrentChild == m_pParent && m_bToplevelHasDeferredProperties)
+            m_aDeferredProperties = rProps;
+        else
+            set_properties(pCurrentChild, rProps);
 
         for (stringmap::iterator aI = rPango.begin(), aEnd = rPango.end(); aI != aEnd; ++aI)
         {
@@ -1529,15 +1556,19 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
                             if (VclFrame *pFrameParent = dynamic_cast<VclFrame*>(pParent))
                                 pFrameParent->designate_label(pCurrentChild);
                         }
-                        if (sInternalChild.equals("vbox"))
+                        if (sInternalChild.equals("vbox") || sInternalChild.equals("messagedialog-vbox"))
                         {
                             if (Dialog *pBoxParent = dynamic_cast<Dialog*>(pParent))
                                 pBoxParent->set_content_area(static_cast<VclBox*>(pCurrentChild));
                         }
-                        else if (sInternalChild.equals("action_area"))
+                        else if (sInternalChild.equals("action_area") || sInternalChild.equals("messagedialog-action_area"))
                         {
-                            if (Dialog *pBoxParent = dynamic_cast<Dialog*>(pParent))
+                            Window *pContentArea = pCurrentChild->GetParent();
+                            assert(pContentArea && pContentArea->GetType() == WINDOW_CONTAINER);
+                            if (Dialog *pBoxParent = dynamic_cast<Dialog*>(pContentArea ? pContentArea->GetParent() : NULL))
+                            {
                                 pBoxParent->set_action_area(static_cast<VclButtonBox*>(pCurrentChild));
+                            }
                         }
 
                         //To-Do make reorder a virtual in Window, move this foo
@@ -2222,6 +2253,8 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
                     collectPangoAttribute(reader, aPangoAttributes);
                 else if (name.equals("relation"))
                     collectAtkAttribute(reader, aAtkAttributes);
+                else if (name.equals("action-widget"))
+                    handleActionWidget(reader);
             }
         }
 
@@ -2424,6 +2457,28 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, const OString &rI
     }
 }
 
+void VclBuilder::handleActionWidget(xmlreader::XmlReader &reader)
+{
+    xmlreader::Span name;
+    int nsId;
+
+    OString sResponse;
+
+    while (reader.nextAttribute(&nsId, &name))
+    {
+        if (name.equals("response"))
+        {
+            name = reader.getAttributeValue(false);
+            sResponse = OString(name.begin, name.length);
+        }
+    }
+
+    reader.nextItem(xmlreader::XmlReader::TEXT_RAW, &name, &nsId);
+    OString sID = OString(name.begin, name.length);
+    set_response(sID, sResponse.toInt32());
+}
+
+
 void VclBuilder::collectAccelerator(xmlreader::XmlReader &reader, stringmap &rMap)
 {
     xmlreader::Span name;
@@ -2480,6 +2535,38 @@ PopupMenu *VclBuilder::get_menu(OString sID)
     }
 
     return NULL;
+}
+
+short VclBuilder::get_response(const Window *pWindow) const
+{
+    for (std::vector<WinAndId>::const_iterator aI = m_aChildren.begin(),
+         aEnd = m_aChildren.end(); aI != aEnd; ++aI)
+    {
+        if (aI->m_pWindow == pWindow)
+        {
+            return aI->m_nResponseId;
+        }
+    }
+
+    //how did we not find sID ?
+    assert(false);
+    return RET_CANCEL;
+}
+
+void VclBuilder::set_response(OString sID, short nResponse)
+{
+    for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
+         aEnd = m_aChildren.end(); aI != aEnd; ++aI)
+    {
+        if (aI->m_sID.equals(sID))
+        {
+            aI->m_nResponseId = nResponse;
+            return;
+        }
+    }
+
+    //how did we not find sID ?
+    assert(false);
 }
 
 void VclBuilder::delete_by_name(OString sID)

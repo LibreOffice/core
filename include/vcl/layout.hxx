@@ -12,7 +12,10 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/button.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/fixed.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/vclmedit.hxx>
 #include <vcl/window.hxx>
 #include <boost/multi_array.hpp>
 #include <set>
@@ -636,6 +639,29 @@ public:
         return m_eMode;
     }
     bool set_property(const OString &rKey, const OString &rValue);
+};
+
+class VCL_DLLPUBLIC MessageDialog : public Dialog
+{
+private:
+    VclGrid* m_pGrid;
+    FixedImage* m_pImage;
+    VclMultiLineEdit* m_pPrimaryMessage;
+    VclMultiLineEdit* m_pSecondaryMessage;
+    OUString m_sPrimaryString;
+    OUString m_sSecondaryString;
+    DECL_DLLPRIVATE_LINK(ButtonHdl, Button *);
+    void setButtonHandlers();
+public:
+    MessageDialog(Window* pParent, WinBits nStyle);
+    MessageDialog(Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
+    virtual bool set_property(const OString &rKey, const OString &rValue);
+    virtual short Execute();
+    OUString get_primary_text() const;
+    OUString get_secondary_text() const;
+    void set_primary_text(const OUString &rPrimaryString);
+    void set_secondary_text(const OUString &rSecondaryString);
+    ~MessageDialog();
 };
 
 VCL_DLLPUBLIC Size bestmaxFrameSizeForScreenSize(const Size &rScreenSize);

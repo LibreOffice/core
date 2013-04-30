@@ -50,6 +50,13 @@ private:
     //exist for the duration of the dialog
     vcl::detail::ModuleMap m_aModuleMap;
 
+    //If the toplevel window has any properties which need to be set on it,
+    //but the toplevel is the owner of the builder, then its ctor
+    //has not been completed during the building, so properties for it
+    //are collected here and need to be set afterwards, e.g. during
+    //Show or Execute
+    stringmap m_aDeferredProperties;
+
     struct PackingData
     {
         bool m_bVerticalOrient;
@@ -65,10 +72,12 @@ private:
     {
         OString m_sID;
         Window *m_pWindow;
+        short m_nResponseId;
         PackingData m_aPackingData;
         WinAndId(const OString &rId, Window *pWindow, bool bVertical)
             : m_sID(rId)
             , m_pWindow(pWindow)
+            , m_nResponseId(RET_CANCEL)
             , m_aPackingData(bVertical)
         {
         }
@@ -215,6 +224,7 @@ private:
     ResHookProc m_pStringReplace;
     Window *m_pParent;
     bool m_bToplevelHasDeferredInit;
+    bool m_bToplevelHasDeferredProperties;
     bool m_bToplevelParentFound;
     ParserState *m_pParserState;
 
@@ -266,13 +276,22 @@ public:
     //sID may not exist
     PopupMenu* get_menu(OString sID);
 
+    //given an sID return the response value for that widget
+    short get_response(const Window *pWindow) const;
+
     OString get_by_window(const Window *pWindow) const;
     void delete_by_window(const Window *pWindow);
+
+    //apply the properties of rProps to pWindow
+    static void set_properties(Window *pWindow, const stringmap &rProps);
 
     //Convert _ gtk markup to ~ vcl markup
     static OString convertMnemonicMarkup(const OString &rIn);
 
     static OString extractCustomProperty(stringmap &rMap);
+
+    //see m_aDeferredProperties
+    void setDeferredProperties();
 
 private:
     Window *insertObject(Window *pParent, const OString &rClass, const OString &rID,
@@ -322,11 +341,15 @@ private:
 
     void handleAtkObject(xmlreader::XmlReader &reader, const OString &rID, Window *pWindow);
 
+    void handleActionWidget(xmlreader::XmlReader &reader);
+
     PackingData get_window_packing_data(const Window *pWindow) const;
     void set_window_packing_position(const Window *pWindow, sal_Int32 nPosition);
 
     Window* prepareWidgetOwnScrolling(Window *pParent, WinBits &rWinStyle);
     void cleanupWidgetOwnScrolling(Window *pScrollParent, Window *pWindow, stringmap &rMap);
+
+    void set_response(OString sID, short nResponse);
 
     //Helpers to retrofit all the existing code to the builder
     static void reorderWithinParent(Window &rWindow, sal_uInt16 nNewPosition);
@@ -367,6 +390,12 @@ public:
     PopupMenu* get_menu(OString sID)
     {
         return m_pUIBuilder->get_menu(sID);
+    }
+    void setDeferredProperties()
+    {
+        if (!m_pUIBuilder)
+            return;
+        m_pUIBuilder->setDeferredProperties();
     }
 };
 

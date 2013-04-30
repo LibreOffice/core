@@ -711,6 +711,7 @@ void Dialog::StateChanged( StateChangedType nType )
         if (isLayoutEnabled())
         {
             mbIsCalculatingInitialLayoutSize = true;
+            setDeferredProperties();
             setOptimalLayoutSize();
             mbIsCalculatingInitialLayoutSize = false;
         }
@@ -900,6 +901,8 @@ void Dialog::ImplEndExecuteModal()
 
 short Dialog::Execute()
 {
+    setDeferredProperties();
+
     if ( !ImplStartExecuteModal() )
         return 0;
 
