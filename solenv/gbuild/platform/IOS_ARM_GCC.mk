@@ -95,8 +95,7 @@ gb_LinkTarget_OBJCFLAGS += $(gb_DEBUG_CFLAGS)
 endif
 
 define gb_LinkTarget__get_liblinkflags
-$(patsubst lib%.a,-l%,$(foreach lib,$(filter-out $(gb_Library_UNOLIBS_OOO),$(1)),$(call gb_Library_get_filename,$(lib)))) \
-$(foreach lib,$(filter $(gb_Library_UNOLIBS_OOO),$(1)),$(SOLARVER)/$(INPATH)/lib/$(lib)$(gb_Library_UNOEXT))
+$(patsubst lib%.a,-l%,$(foreach lib,$(1),$(call gb_Library_get_filename,$(lib)))) \
 endef
 
 define gb_LinkTarget__get_layer
@@ -178,7 +177,6 @@ gb_Library_FILENAMES := \
 	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
 	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_RTEXT)) \
 	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):$(lib)$(gb_Library_UNOEXT)) \
-	$(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):$(lib)$(gb_Library_UNOEXT)) \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(gb_Library_UNOVERPRE)$(lib)$(gb_Library_PLAINEXT)) \
 	$(foreach lib,$(gb_Library_EXTENSIONLIBS),$(lib):$(lib)$(gb_Library_UNOEXT)) \
 
@@ -189,7 +187,6 @@ gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):OOO) \
-	$(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_EXTENSIONLIBS),$(lib):OXT) \
 
