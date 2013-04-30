@@ -98,11 +98,12 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
     pMethod = *((sal_uInt64 *)pMethod);
 
     // Load parameters to stack, if necessary
+    sal_uInt64* pCallStack = NULL;
     if ( nStack )
     {
         // 16-bytes aligned
         sal_uInt32 nStackBytes = ( ( nStack + 1 ) >> 1 ) * 16;
-        sal_uInt64 *pCallStack = (sal_uInt64 *) __builtin_alloca( nStackBytes );
+        pCallStack = (sal_uInt64*) __builtin_alloca( nStackBytes );
         memcpy( pCallStack, pStack, nStackBytes );
     }
 
@@ -113,7 +114,6 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
     double xmm1;
 
     asm volatile (
-
         // Fill the xmm registers
         "movq %2, %%rax\n\t"
 
@@ -148,7 +148,8 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
         "movsd %%xmm1, %7\n\t"
         :
         : "m" ( pMethod ), "m" ( pGPR ), "m" ( pFPR ), "m" ( nFPR ),
-          "m" ( rax ), "m" ( rdx ), "m" ( xmm0 ), "m" ( xmm1 )
+          "m" ( rax ), "m" ( rdx ), "m" ( xmm0 ), "m" ( xmm1 ),
+          "m" (pCallStack) // dummy input to prevent the compiler from optimizing the alloca out
         : "rax", "rdi", "rsi", "rdx", "rcx", "r8", "r9", "r11",
           "xmm0", "xmm1", "xmm2", "xmm3", "xmm4", "xmm5", "xmm6", "xmm7"
     );
