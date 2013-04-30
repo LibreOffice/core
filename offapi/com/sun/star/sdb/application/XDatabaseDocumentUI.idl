@@ -185,7 +185,7 @@ interface XDatabaseDocumentUI
 
             <p>For the different object types, this means the following
             <a name="component_types"></a>
-            <table style="width:100%;" border="1 solid black" cellpadding="2" cellspacing="2"><tbody>
+            <table style="width:100%;" border="1 solid black" cellpadding="2" cellspacing="2">
               <tr style="vertical-align: top;">
                 <td></td>
                 <td><code>ForEditing</code> = `TRUE`</td>
@@ -221,7 +221,7 @@ interface XDatabaseDocumentUI
                 <td>The report is executed, and the results will be displayed.</td>
               </tr>
 
-            </tbody></table>
+            </table>
             </p>
 
         @return

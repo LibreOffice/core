@@ -32,7 +32,7 @@ module com { module sun { module star { module drawing {
 */
 interface XSlidePreviewCacheListener
 {
-    /** Called by a <interface>XSlidePreviewCache</interface> object when a
+    /** Called by a XSlidePreviewCache object when a
         preview has been created for the slide with the given index.
         @param nSlideIndex
             The index of the slide for which a new preview has been created.

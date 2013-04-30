@@ -467,24 +467,24 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         the following properties are recognized:
         <ul>
 
-            <il>Kerning: a double between 0 and 1, where
+            <li>Kerning: a double between 0 and 1, where
             0 completely disables kerning. Whether kerning is on or
-            off by default is font-dependent.</il>
+            off by default is font-dependent.</li>
 
-            <il>IsEmphasisMarks: a boolean, where `TRUE`
+            <li>IsEmphasisMarks: a boolean, where `TRUE`
             enables automatic placements of emphasis marks, e.g. for
             Hebrew. The default value, if this property is not
-            specified, is `FALSE`.</il>
+            specified, is `FALSE`.</li>
 
-            <il>ExpandedSpacing: a double value which is added
+            <li>ExpandedSpacing: a double value which is added
             between all cell distances for this font. The default value for
             this property is zero. Use negative values for condensed output,
-            and positive values for expanded output.</il>
+            and positive values for expanded output.</li>
 
-            <il>OptionalLayoutFeatures: a sequence of
+            <li>OptionalLayoutFeatures: a sequence of
             ::com::sun::star::beans::PropertyValue listing
             font-specific optional layout features, like glyph
-            variants.</il>
+            variants.</li>
 
         </ul>
 

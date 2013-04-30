@@ -51,7 +51,7 @@ interface XPackageRegistry
         creates an XPackage object on behalf of that extension and
         calls XPackage::revokePakage(). The parameter
         <code>removed</code> indicates this case. The returned object may not
-        rely on the file or folder to which refers <code>url</url>. Instead it
+        rely on the file or folder to which refers <code>url</code>. Instead it
         must use previously saved data to successfully carry out the revocation
         of this object (XPackage::revokePackage()).
 

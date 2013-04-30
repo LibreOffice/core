@@ -35,7 +35,7 @@ interface XFilterControllerListener;
     which allows entering a search expression. This so-called <em>predicate expression</em> is basically a part of an
     SQL <code>WHERE</code> clause, but without the part denoting the database column. For instance, if you
     have a form control bound to a table column named <code>Name</code>, then entering the string
-    <q>LIKE '%Smith%'</q> effectively constitutes a SQL <code>WHERE</code> clause <code>"Name" LIKE '%Smith%'</code>.</p>
+    <code>LIKE '%Smith%'</code> effectively constitutes a SQL <code>WHERE</code> clause <code>"Name" LIKE '%Smith%'</code>.</p>
 
     <p>In the actual document view, there are usually some relaxations to this. For instance, keywords such as
     <code>LIKE</code> might be localized, according to OpenOffice.org's UI locale. Also, for an equality criterion,

@@ -40,7 +40,7 @@ published interface XStyleLoader: com::sun::star::uno::XInterface
              The directory and the filename from document with the styles
          @param aOptions :
              Specifies which of the Style families the method should load.
-         The sequence <PropertyValue/> has the following, optional items:
+         The <code>sequence<PropertyValue></code> has the following, optional items:
          <ul>
         <li> boolean LoadCellStyles </li>
         <li> boolean LoadTextStyles </li>

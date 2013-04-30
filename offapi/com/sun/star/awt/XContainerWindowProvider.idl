@@ -73,7 +73,8 @@ interface XContainerWindowProvider : ::com::sun::star::uno::XInterface {
             based access will be used.
 
             The Introspection based access tries to call a method named according to the
-            HandlerMethodName specified by a vnd.sun.star.UNO:<HandlerMethodName> URL.
+            HandlerMethodName specified by a
+            <code>vnd.sun.star.UNO:<i>HandlerMethodName</i></code> URL.
             First a method
 
             void HandlerMethodName( [in] com::sun::star::awt::XWindow xWindow, [in] any aEvent )

@@ -34,7 +34,8 @@
     </p>
 
     <p>
-    Supported URLs must match follow format: <protocol scheme>:<protocol specific part>
+    Supported URLs must match follow format:
+    <code><i>protocol scheme</i>:<i>protocol specific part</i></code>
     If a handler provides optional arguments ("?") or jump marks ("#") depends from his
     definition and implementation. The generic dispatch provider will use registered
     URL pattern to detect right handler.

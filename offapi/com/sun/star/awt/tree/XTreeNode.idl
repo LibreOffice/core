@@ -48,9 +48,10 @@ interface XTreeNode
     /** Returns the parent node of this node. */
     XTreeNode getParent();
 
-    /** Returns the index of <var>Node</Node> in this instances children.
+    /** Returns the index of <var>Node</var> in this instances children.
         @returns
-            The child index of <var>Node</Node> , or -1 if <var>Node</Node>  is no child of this instance.
+            The child index of <var>Node</var>,
+            or -1 if <var>Node</var>  is no child of this instance.
     */
     long getIndex( [in] XTreeNode Node);
 

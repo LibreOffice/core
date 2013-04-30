@@ -116,7 +116,7 @@ interface XFormControllerContext;
     For instance, the URL with the suffix <em>moveToFirst</em> is associated with moving the form to the first
     record, and it will be disabled in case the form is already positioned on the first record.</p>
 
-    <table style="width:100%;" border="0" cellpadding="2" cellspacing="2"><tbody>
+    <table style="width:100%;" border="0" cellpadding="2" cellspacing="2">
 
       <tr style="vertical-align: top;">
         <td><b>URL suffix</b></td>
@@ -232,8 +232,7 @@ interface XFormControllerContext;
         <td><em>removeFilterOrder</em></td>
         <td>completely removes any filter and sorting order from the form, and reloads it.</td>
       </tr>
-
-    </tbody></table>
+    </table>
 
     @see ::com::sun::star::form::component:Form
     @see ::com::sun::star::form::binding::BindableControlModel

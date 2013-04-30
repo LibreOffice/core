@@ -90,13 +90,10 @@ service OfficeDatabaseDocument
 
         <p>The following events are broadcasted by a database document
         <table border="1" frame="all">
-            <thead>
                 <tr><td><strong>Event Name</strong></td>
                     <td><strong>broadcasted when</strong></td>
                     <td align="center"><strong>broadcasted synchronously</strong></td>
                 </tr>
-            </thead>
-            <tbody>
                 <tr><td valign="top"><em>OnCreate</em></td>
                     <td>the document has been newly created. This does not imply that the document has
                         been loaded into a frame, it just means the initialization has been finished.</td>
@@ -169,7 +166,7 @@ service OfficeDatabaseDocument
                     <td align="center">no</td>
                 </tr>
                 <tr><td valign="top"><em>OnModifyChanged</em></td>
-                    <td>the <quot>modified</quot> state of the document changed.</td>
+                    <td>the <em>modified</em> state of the document changed.</td>
                     <td align="center">no</td>
                 </tr>
                 <tr><td valign="top"><em>OnViewCreated</em></td>
@@ -196,7 +193,6 @@ service OfficeDatabaseDocument
                     <td>From with a view to the document, a view to a sub component (e.g. a table or a report) has been closed.</td>
                     <td align="center">no</td>
                 </tr>
-            </tbody>
         </table>
         </p>
 

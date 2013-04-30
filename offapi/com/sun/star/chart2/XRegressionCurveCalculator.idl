@@ -37,7 +37,7 @@ module chart2
 interface XRegressionCurveCalculator : com::sun::star::uno::XInterface
 {
     /** recalculates the parameters of the internal regression curve according to
-        the <it>x</it>- and <it>y</it>-values given.
+        the <i>x</i>- and <i>y</i>-values given.
 
         @param aXValues
             All x-values that represent the measurement points on
@@ -51,7 +51,7 @@ interface XRegressionCurveCalculator : com::sun::star::uno::XInterface
                                 [in] sequence< double > aYValues );
 
 
-    /** calculates the value of the regression curve for <it>x</it>.
+    /** calculates the value of the regression curve for <i>x</i>.
 
         @param x
             The abscissa value for which the value of the regression
@@ -59,11 +59,11 @@ interface XRegressionCurveCalculator : com::sun::star::uno::XInterface
             the domain of the regression function are valid.
 
         @return
-            If <it>x</it> is element of the domain of the regression
+            If <i>x</i> is element of the domain of the regression
             curve function, the result is its value.
 
         @throws com::sun::star::lang::IllegalArgumentException
-            If <it>x</it> is not part of the domain of the regression
+            If <i>x</i> is not part of the domain of the regression
             function.
      */
     double getCurveValue( [in] double x )
@@ -102,11 +102,11 @@ interface XRegressionCurveCalculator : com::sun::star::uno::XInterface
         raises( com::sun::star::lang::IllegalArgumentException );
 
     /** Returns the value of the correlation coefficient for the given
-        regression.  This value is often denoted as <it>r</it> or
-        <it>R</it>.
+        regression.  This value is often denoted as <i>r</i> or
+        <i>R</i>.
 
-        <p>The value of <it>r</it> is signed.  Often
-        <it>r</it><sup>2</sup> is used instead of <it>r</it> to denote
+        <p>The value of <i>r</i> is signed.  Often
+        <i>r</i><sup>2</sup> is used instead of <i>r</i> to denote
         a regression curve's accuracy.</p>
 
         @return

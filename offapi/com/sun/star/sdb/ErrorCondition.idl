@@ -131,7 +131,7 @@ constants ErrorCondition
         not be accessed.
 
         <p>For instance, this error code is used when you try to access the address book
-        in a Thunderbird profile named <q>MyProfile</q>,  but there does not exist a profile
+        in a Thunderbird profile named <i>MyProfile</i>,  but there does not exist a profile
         with this name.</p>
     */
     const long AB_ADDRESSBOOK_NOT_FOUND = 500;
@@ -143,7 +143,7 @@ constants ErrorCondition
 
         <p>Some database drivers are not able to <code>SELECT</code> from a table if the
         statement does not contain a <code>WHERE</code> clause. In this case, a statement
-        like <code>SELECT * FROM "table"</cdeo> with fail with the error code
+        like <code>SELECT * FROM "table"</code> with fail with the error code
         <code>DATA_CANNOT_SELECT_UNFILTERED</code>.</p>
 
         <p>It is also legitimate for the driver to report this error condition as warning, and provide

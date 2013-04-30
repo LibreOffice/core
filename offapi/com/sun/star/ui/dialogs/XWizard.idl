@@ -52,7 +52,7 @@ interface XWizardPage;
     paths are those whose first <em>k</em> steps are the same as in the current path. Obviously, there's at least one
     potential path in every situation: the current one. If there is more than one, then the future steps in the dialog
     are not finally decided. In such a case, the roadmap will display future steps up to the point where the potential
-    paths diverge, and then an item <quot><code>...</code></quot> indicating that the order of steps is undecided.</p>
+    paths diverge, and then an item <em><code>...</code></em> indicating that the order of steps is undecided.</p>
 
     <p>An XWizardController can declare a certain path as active path by calling the activatePath()
     method. Usually, this is done depending on user input. For instance, your wizard could have radio buttons on the

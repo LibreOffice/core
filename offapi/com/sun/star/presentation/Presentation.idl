@@ -106,7 +106,7 @@ published service Presentation
     /** is the duration of the black screen after the
         presentation has finished.
 
-        <p>If this is set to <literal>0</literal>, no black screen is shown.</p>
+        <p>If this is set to <code>0</code>, no black screen is shown.</p>
      */
     [property] long Pause;
 

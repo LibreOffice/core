@@ -148,8 +148,8 @@ published service DataAwareControlModel
                     <li>com::sun::star::beans::XPropertySet</li>
                     <li>com::sun::star::container::XChild</li>
                 </ul>
-            </il>
-            <li>It has to be a part of the same document as the model who's property is to be modified.</il>
+            </li>
+            <li>It has to be a part of the same document as the model who's property is to be modified.</li>
             <li>Additionally, the support of a special service, indicating that the model is of the right type,
                 is required. Which kind of service is in the request depends on the type of the control model.<br/>
 

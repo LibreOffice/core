@@ -88,8 +88,7 @@ published interface XTypeDescriptionEnumerationAccess : com::sun::star::uno::XIn
             XTypeDescription can be returned by the enumerator:
 
             <table border="1">
-                <thead><tr><th>IDL</th><th>interface</th></tr></thead>
-                <tbody>
+                <tr><th>IDL</th><th>interface</th></tr>
                     <tr>
                         <td>enum</td>
                         <td>XEnumTypeDescription</td>
@@ -138,7 +137,6 @@ published interface XTypeDescriptionEnumerationAccess : com::sun::star::uno::XIn
                         <td>constants</td>
                         <td>XConstantsTypeDescription</td>
                     </tr>
-                </tbody>
             </table>
 
         @throws NoSuchTypeNameException

@@ -63,7 +63,8 @@ published interface XForms
         you put into it with the scripting information obtained at the
         com::sun::star::script::XEventAttacherManager interface.</p>
 
-        <p>For instance, at any time you can obtain the events associated with the <code>n</code><super>th</super>
+        <p>For instance, at any time you can obtain the events associated with
+        the <code>n</code><sup>th</sup>
         element in the form components by calling
         com::sun::star::script::XEventAttacherManager::getScriptEvents()
         with parameter <code>n</code>. In particular, this invariant is always met, even after you

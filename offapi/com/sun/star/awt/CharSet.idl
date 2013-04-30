@@ -49,7 +49,7 @@ published constants CharSet
     const short ANSI = 1;
 
 
-    /** specifies the <regtm>Apple Macintosh</regtm> character set.
+    /** specifies the Apple Macintosh character set.
      */
     const short MAC = 2;
 

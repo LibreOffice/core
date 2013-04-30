@@ -49,7 +49,7 @@ interface XPresentation2
 
 
     /** start the slide show with the given arguments.
-        All arguments override the values from <service>Presentation</service>
+        All arguments override the values from Presentation.
     */
     void startWithArguments( [in] sequence< ::com::sun::star::beans::PropertyValue > Arguments );
 

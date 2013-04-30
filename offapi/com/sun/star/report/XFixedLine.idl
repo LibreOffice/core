@@ -36,7 +36,7 @@ interface XFixedLine
 
         <pre>
         0: horizontal
-        1: vertical </default>
+        1: vertical (default)
         </pre>
      */
     [attribute,bound] long Orientation

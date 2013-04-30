@@ -51,11 +51,8 @@ struct Symbol
         <p>The default implementation for example currently uses 8 different
         standard symbols that are matched to the numbers 0 to 7.
 
-        <table border=1 rules="groups">
-        <thead>
+        <table border=1>
         <tr><th>&nbsp;value StandardSymbol&nbsp;</th><th>&nbsp;visible Symbol&nbsp;</th></tr>
-        </thead>
-        <tbody>
         <tr><td><code>0</code></td><td>square</td></tr>
         <tr><td><code>1</code></td><td>diamond</td></tr>
         <tr><td><code>2</code></td><td>down arrow</td></tr>
@@ -64,7 +61,6 @@ struct Symbol
         <tr><td><code>5</code></td><td>left arrow</td></tr>
         <tr><td><code>6</code></td><td>bowtie</td></tr>
         <tr><td><code>7</code></td><td>sandglass</td></tr>
-        </tbody>
         </table>
 
         </p>

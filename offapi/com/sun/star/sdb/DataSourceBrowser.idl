@@ -126,7 +126,7 @@ module com {  module sun {  module star {  module sdb {
     </ul>
     </p>
     <p>The default for DataAccessDescriptor::Selection is to contain bookmarks, if not specified
-    otherwise by DataAccessDescriptor::BookmarkSelection.</pr>
+    otherwise by DataAccessDescriptor::BookmarkSelection.
     </p>
 
     @see com::sun::star::sdb::ContentLoader
