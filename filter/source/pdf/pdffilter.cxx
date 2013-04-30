@@ -18,13 +18,17 @@
  */
 
 
+#include "impdialog.hxx"
 #include "pdffilter.hxx"
 #include "pdfexport.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <svl/outstrm.hxx>
 #include <vcl/FilterConfigItem.hxx>
+#include <com/sun/star/system/SystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 
+using namespace css::system;
 // -------------
 // - PDFFilter -
 // -------------
@@ -51,6 +55,8 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     sal_Bool                    bRet = sal_False;
     Reference< task::XStatusIndicator > xStatusIndicator;
     Reference< task::XInteractionHandler > xIH;
+    OUString aUrl; 
+    int pdfview_ = ImpPDFTabGeneralPage::pdfview;
 
     for ( sal_Int32 i = 0 ; ( i < nLength ) && !xOStm.is(); ++i)
     {
@@ -62,6 +68,8 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
             pValue[ i ].Value >>= xStatusIndicator;
         else if ( pValue[i].Name == "InteractionHandler" )
             pValue[i].Value >>= xIH;
+        else if ( pValue[ i ].Name == "URL" )
+            pValue[ i ].Value >>= aUrl;
     }
 
     /* we don't get FilterData if we are exporting directly
@@ -133,6 +141,9 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
         }
     }
 
+if(pdfview_==1) {
+    Reference<XSystemShellExecute> xSystemShellExecute(SystemShellExecute::create( ::comphelper::getProcessComponentContext() ) ); //Open the newly exported pdf
+    xSystemShellExecute->execute(aUrl, "", SystemShellExecuteFlags::URIS_ONLY ); }
     return bRet;
 }
 
