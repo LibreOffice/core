@@ -11455,53 +11455,37 @@ dnl branding
 dnl ===================================================================
 AC_MSG_CHECKING([for alternative branding images directory])
 # initialize mapped arrays
-brand_vars="INTRO_BITMAP ABOUT_BACKGROUND_SVG FLAT_LOGO_SVG \
-    STARTCENTER_LEFT_BITMAP STARTCENTER_RIGHT_BITMAP \
-    STARTCENTER_RTL_LEFT_BITMAP STARTCENTER_RTL_RIGHT_BITMAP \
-    STARTCENTER_SPACE_BITMAP"
-brand_files="intro.png about.svg flat_logo.svg \
+BRAND_INTRO_IMAGES="flat_logo.svg intro.png"
+brand_files="$BRAND_INTRO_IMAGES about.svg \
     backing_left.png backing_right.png \
     backing_rtl_left.png backing_rtl_right.png \
     backing_space.png"
-brandmaxidx=0
-
-for i in $brand_vars
-do
-    declare $i=
-    let "brandmaxidx=$brandmaxidx + 1"
-done
 
 if test -z "$with_branding" -o "$with_branding" = "no"; then
     AC_MSG_RESULT([none])
+    DEFAULT_BRAND_IMAGES="$brand_files"
 else
     if ! test -d $with_branding ; then
         AC_MSG_ERROR([No directory $with_branding, falling back to default branding])
     else
         AC_MSG_RESULT([$with_branding])
-        idx=1
-        while test $idx -le $brandmaxidx
+        CUSTOM_BRAND_DIR="$with_branding"
+        for lfile in $brand_files
         do
-            lvar=$(echo $brand_vars | cut -f$idx -d" ")
-            lfile=$(echo $brand_files | cut -f$idx -d" ")
-
             if ! test -f $with_branding/$lfile ; then
                 AC_MSG_WARN([Branded file $lfile does not exist, using the default one])
+                DEFAULT_BRAND_IMAGES="$DEFAULT_BRAND_IMAGES $lfile"
             else
-                declare lvar="$with_branding/$lfile"
+                CUSTOM_BRAND_IMAGES="$CUSTOM_BRAND_IMAGES $lfile"
             fi
-            let "idx=$idx + 1"
         done
         check_for_progress="yes"
     fi
 fi
-AC_SUBST(INTRO_BITMAP)
-AC_SUBST(ABOUT_BACKGROUND_SVG)
-AC_SUBST(FLAT_LOGO_SVG)
-AC_SUBST(STARTCENTER_LEFT_BITMAP)
-AC_SUBST(STARTCENTER_RIGHT_BITMAP)
-AC_SUBST(STARTCENTER_RTL_LEFT_BITMAP)
-AC_SUBST(STARTCENTER_RTL_RIGHT_BITMAP)
-AC_SUBST(STARTCENTER_SPACE_BITMAP)
+AC_SUBST([BRAND_INTRO_IMAGES])
+AC_SUBST([CUSTOM_BRAND_DIR])
+AC_SUBST([CUSTOM_BRAND_IMAGES])
+AC_SUBST([DEFAULT_BRAND_IMAGES])
 
 
 AC_MSG_CHECKING([for 'intro' progress settings])

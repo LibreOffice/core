@@ -19,10 +19,9 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Library_offacc \
     Library_sofficeapp \
     $(if $(ENABLE_HEADLESS),,Library_spl) \
-    Package_intro \
+    Package_branding \
+    $(if $(CUSTOM_BRAND_DIR),Package_branding_custom) \
     UIConfig_deployment \
-    Zip_brand \
-    Zip_brand_dev \
 ))
 
 ifeq ($(OS),LINUX)

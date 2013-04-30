@@ -79,6 +79,7 @@ $(eval $(call gb_InstallModule_define_value_if_set,scp2/ooo,\
 ))
 
 $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
+	$(if $(CUSTOM_BRAND_DIR),-DCUSTOM_BRANDING) \
 	$(if $(WINDOWS_SDK_HOME),\
 		-DHAVE_WINDOWS_SDK \
 	) \
