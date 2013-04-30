@@ -291,7 +291,7 @@ void ScRefFinder::ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos )
     OUString aTotal = maFormula.copy(0, nStartPos);
     aTotal += aResult;
     if (nEndPos < maFormula.getLength()-1)
-        aTotal += maFormula.copy(nEndPos);
+        aTotal += maFormula.copy(nEndPos+1);
 
     maFormula = aTotal;
 }
