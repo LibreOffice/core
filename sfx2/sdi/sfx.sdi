@@ -4255,6 +4255,9 @@ SfxObjectItem Open SID_OPENDOC
     RecordPerSet;
     Asynchron;
 
+    /* status: */
+    SlotType = SfxStringItem
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
