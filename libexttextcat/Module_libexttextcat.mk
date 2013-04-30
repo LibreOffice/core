@@ -11,8 +11,8 @@ $(eval $(call gb_Module_Module,libexttextcat))
 
 ifeq ($(SYSTEM_LIBEXTTEXTCAT),NO)
 $(eval $(call gb_Module_add_targets,libexttextcat,\
+	ExternalPackage_fingerprint \
 	UnpackedTarball_exttextcat \
-	Zip_fingerprint \
 ))
 ifeq ($(COM),MSC)
 $(eval $(call gb_Module_add_targets,libexttextcat,\

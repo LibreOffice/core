@@ -483,10 +483,10 @@ End
 // fingerprint files (lm)
 
 File gid_File_Share_Fingerprint
-    Dir = gid_Dir_Share_Fingerprint;
+    Dir = FILELIST_DIR;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    Name = "fingerprint.zip";
+    Styles = (FILELIST, DONT_OVERWRITE);
+    Name = "libexttextcat_fingerprint.filelist";
 End
 
 #endif
