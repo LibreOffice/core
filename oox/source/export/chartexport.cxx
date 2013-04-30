@@ -2468,10 +2468,42 @@ void ChartExport::exportMarker()
     if( GetProperty( xPropSet, "SymbolType" ) )
         mAny >>= nSymbolType;
     // TODO: more properties support for marker
-    if( nSymbolType == ::com::sun::star::chart::ChartSymbolType::NONE )
+    const char* pSymbolType = NULL;
+    switch( nSymbolType )
+    {
+        case cssc::ChartSymbolType::NONE:
+            pSymbolType = "none";
+            break;
+        case cssc::ChartSymbolType::SYMBOL0:
+            pSymbolType = "square";
+            break;
+        case cssc::ChartSymbolType::SYMBOL1:
+            pSymbolType = "diamond";
+            break;
+        // map all triangle variants to the OOXML version
+        case cssc::ChartSymbolType::SYMBOL2:
+        case cssc::ChartSymbolType::SYMBOL3:
+        case cssc::ChartSymbolType::SYMBOL4:
+        case cssc::ChartSymbolType::SYMBOL5:
+            pSymbolType = "triangle";
+            break;
+        case cssc::ChartSymbolType::SYMBOL6:
+            pSymbolType = "plus";
+            break;
+        case cssc::ChartSymbolType::SYMBOL7:
+            pSymbolType = "plus";
+            break;
+        case cssc::ChartSymbolType::AUTO:
+            break;
+        case cssc::ChartSymbolType::BITMAPURL:
+            break;
+        default:
+            SAL_WARN("oox", "unknown data series symbol");
+    }
+    if( pSymbolType )
     {
         pFS->singleElement( FSNS( XML_c, XML_symbol ),
-            XML_val, "none",
+            XML_val, pSymbolType,
             FSEND );
     }
     pFS->endElement( FSNS( XML_c, XML_marker ) );
