@@ -20,6 +20,7 @@
 #include <set>
 #include <stack>
 #include <vector>
+#include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
 
 class ListBox;
@@ -38,7 +39,7 @@ class SAL_DLLPUBLIC_TEMPLATE ModuleMap:
 
 } }
 
-class VCL_DLLPUBLIC VclBuilder
+class VCL_DLLPUBLIC VclBuilder: private boost::noncopyable
 {
 public:
     typedef std::map<OString, OString> stringmap;
