@@ -236,7 +236,7 @@ bool isPCT(SvStream& rStream, sal_uLong nStreamPos, sal_uLong nStreamLen)
  *            Output parameters:
  *              Return value     - sal_True if success
  *              rFormatExtension - on success: normal file extension in capitals
- *        2.) Start reading file, check file format
+ *        2.) Start reading file, verify file format
  *            Input parameters:
  *              rPath            - file path
  *              rFormatExtension - normal file extension in capitals
@@ -301,13 +301,13 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
     // if the format (rFormatExtension) has not yet been set.
     sal_Bool bSomethingTested = sal_False;
 
-    // Now the different formats are checked. The order does not matter. e.g. a MET file
+    // Now the different formats are checked. The order *does* matter. e.g. a MET file
     // could also go through the BMP test, howeve a BMP file can hardly go through the MET test.
     // So MET should be tested prior to BMP. However, theoretically a BMP file could conceivably
     // go through the MET test. These problems are of course not only in MET and BMP.
-    // Therefore, in the case of a format check (bTest == sal_True)  we only test this format.
-    // Everything else could have fatal consequences, for example if the user says it is a BMP file
-    // (and it is a BMP) file, and the file would go through the MET test ...
+    // Therefore, in the case of a format check (bTest == sal_True)  we only test *exactly* this
+    // format. Everything else could have fatal consequences, for example if the user says it is
+    // a BMP file (and it is a BMP) file, and the file would go through the MET test ...
     //--------------------------- MET ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "MET", 3 ) == COMPARE_EQUAL ) )
     {
@@ -342,8 +342,9 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
 
         bSomethingTested=sal_True;
 
-        // We could be reading an OS/2 bitmap array ('BA'), therefore we must adjust
-        // the offset to discover the first bitmap in the array
+        // We're possibly also able to read an OS/2 bitmap array
+        // ('BA'), therefore we must adjust the offset to discover the
+        // first bitmap in the array
         if ( sFirstBytes[0] == 0x42 && sFirstBytes[1] == 0x41 )
             nOffs = 14;
         else
