@@ -2730,9 +2730,9 @@ bool ScFormulaCell::IsChanged() const
     return bChanged;
 }
 
-void ScFormulaCell::ResetChanged()
+void ScFormulaCell::SetChanged(bool b)
 {
-    bChanged = false;
+    bChanged = b;
 }
 
 void ScFormulaCell::CompileDBFormula()
@@ -3153,8 +3153,7 @@ bool ScFormulaCell::InterpretInvariantFormulaGroup()
         // Ensure the cell truly has a result:
         pCell->aResult = aResult;
         pCell->ResetDirty();
-
-        // FIXME: there is a view / refresh missing here it appears.
+        pCell->SetChanged(true);
     }
 
     return true;

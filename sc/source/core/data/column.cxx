@@ -2382,7 +2382,7 @@ void ScColumn::ResetChanged( SCROW nStartRow, SCROW nEndRow )
         {
             ScBaseCell* pCell = maItems[nIndex].pCell;
             if (pCell->GetCellType() == CELLTYPE_FORMULA)
-                ((ScFormulaCell*)pCell)->ResetChanged();
+                ((ScFormulaCell*)pCell)->SetChanged(false);
             ++nIndex;
         }
     }

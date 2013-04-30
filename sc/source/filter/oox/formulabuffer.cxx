@@ -151,7 +151,7 @@ void FormulaBuffer::applyCellFormulaValues( const std::vector< ValueAddressPair 
         {
             pCell->SetHybridDouble( it->second );
             pCell->ResetDirty();
-            pCell->ResetChanged();
+            pCell->SetChanged(false);
         }
     }
 }

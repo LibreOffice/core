@@ -88,7 +88,10 @@ bool FormulaGroupInterpreter::interpret()
 
         pDest->SetResultToken(aInterpreter.GetResultToken().get());
         pDest->ResetDirty();
+        pDest->SetChanged(true);
     }
+
+    return true;
 }
 
 }

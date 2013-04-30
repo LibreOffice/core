@@ -6609,7 +6609,7 @@ void SAL_CALL ScCellObj::setFormulaResult( double nValue ) throw(uno::RuntimeExc
         ScFormulaCell* pCell = pDocSh->GetDocument()->GetFormulaCell(aCellPos);
         pCell->SetHybridDouble( nValue );
         pCell->ResetDirty();
-        pCell->ResetChanged();
+        pCell->SetChanged(false);
     }
 }
 
