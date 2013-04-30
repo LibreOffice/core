@@ -39,7 +39,7 @@ bool FormulaGroupInterpreter::interpret()
                 {
                     const formula::SingleVectorRefToken* p2 = static_cast<const formula::SingleVectorRefToken*>(p);
                     const double* pArray = p2->GetArray();
-                    aCode2.AddDouble(i < p2->GetArrayLength() ? pArray[i] : 0.0);
+                    aCode2.AddDouble(static_cast<size_t>(i) < p2->GetArrayLength() ? pArray[i] : 0.0);
                 }
                 break;
                 case formula::svDoubleVectorRef:
