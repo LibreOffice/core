@@ -120,7 +120,8 @@ endif # ENABLE_NPAPI_INTO_BROWSER=YES
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,extensions,\
 	Library_OOoSpotlightImporter \
-	Zip_mdibundle \
+	Package_mdibundle \
+	Package_OOoSpotlightImporter \
 ))
 endif # OS=MACOSX
 

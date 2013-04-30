@@ -1258,10 +1258,17 @@ End
 
 #ifdef MACOSX
 File gid_File_Spotlight_Bundle
-    ARCHIVE_TXT_FILE_BODY;
-    Dir = gid_Dir_Bundle_Contents_Library_Spotlight_Bundle_Contents;
-    Name = "mdibundle.zip";
-    Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
+    TXT_FILE_BODY;
+    Dir = FILELIST_DIR;
+    Name = "extensions_mdibundle.filelist";
+    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
+End
+
+File gid_File_Spotlight_Bundle_lib
+    TXT_FILE_BODY;
+    Dir = FILELIST_DIR;
+    Name = "extensions_OOoSpotlightImporter.filelist";
+    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
 End
 #endif
 
