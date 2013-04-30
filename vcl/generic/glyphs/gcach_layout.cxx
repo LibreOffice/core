@@ -474,11 +474,9 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
         hb_glyph_info_t *pHbGlyphInfos = hb_buffer_get_glyph_infos(pHbBuffer, NULL);
         hb_glyph_position_t *pHbPositions = hb_buffer_get_glyph_positions(pHbBuffer, NULL);
 
-        int32_t nLastCluster = -1;
         for (int i = 0; i < nRunGlyphCount; ++i) {
             int32_t nGlyphIndex = pHbGlyphInfos[i].codepoint;
-            int32_t nCluster = pHbGlyphInfos[i].cluster;
-            int32_t nCharPos = nCluster;
+            int32_t nCharPos = pHbGlyphInfos[i].cluster;
 
             // if needed request glyph fallback by updating LayoutArgs
             if (!nGlyphIndex)
@@ -500,16 +498,14 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
                     continue;
             }
 
+            bool bInCluster = false;
+            if (i > 0 && pHbGlyphInfos[i].cluster == pHbGlyphInfos[i - 1].cluster)
+                bInCluster = true;
+
             long nGlyphFlags = 0;
             if (bRightToLeft)
                 nGlyphFlags |= GlyphItem::IS_RTL_GLYPH;
 
-            // what is this for?
-            // XXX: rtl clusters
-            bool bInCluster = false;
-            if (nCluster == nLastCluster)
-                bInCluster = true;
-            nLastCluster = nCluster;
             if (bInCluster)
                 nGlyphFlags |= GlyphItem::IS_IN_CLUSTER;
 
