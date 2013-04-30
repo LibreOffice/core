@@ -484,6 +484,14 @@ public:
      */
     static OUString GetScheme(INetProtocol eTheScheme);
 
+    /** Return the a human-readable name for a given scheme.
+
+        @param eTheScheme  One of the supported URL schemes.
+
+        @return  The protocol name of URLs of the given scheme.
+     */
+    static OUString GetSchemeName(INetProtocol eTheScheme);
+
     static inline INetProtocol CompareProtocolScheme(const OString&
                                                          rTheAbsURIRef)
     { return CompareProtocolScheme(extend(rTheAbsURIRef)); }
