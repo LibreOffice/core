@@ -90,6 +90,8 @@ $(eval $(call gb_CppunitTest_use_components,sc_macros_test,\
 	    sc/util/vbaobj) \
     scripting/source/basprov/basprov \
     scripting/util/scriptframe \
+    scripting/source/vbaevents/vbaevents \
+    scripting/source/dlgprov/dlgprov \
     sfx2/util/sfx \
     sot/util/sot \
     svl/source/fsstor/fsstorage \
@@ -105,6 +107,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_macros_test,\
     xmloff/util/xo \
     eventattacher/source/evtatt \
     i18npool/source/search/i18nsearch \
+    vbahelper/util/msforms \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_macros_test))
