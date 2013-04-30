@@ -35,7 +35,6 @@ extern "C"
     extern void * hyphen_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * lng_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * lnth_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * lotuswordpro_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * protocolhandler_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * oox_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * sb_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -106,7 +105,6 @@ lo_get_libmap(void)
         { "libhyphenlo.a", hyphen_component_getFactory },
         { "liblnglo.a", lng_component_getFactory },
         { "liblnthlo.a", lnth_component_getFactory },
-        { "liblwpftlo.a", lotuswordpro_component_getFactory },
         { "libooxlo.a", oox_component_getFactory },
         { "libprotocolhandlerlo.a", protocolhandler_component_getFactory },
         { "libscdlo.a", scd_component_getFactory },
