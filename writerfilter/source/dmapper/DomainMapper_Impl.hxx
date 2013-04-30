@@ -37,6 +37,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <vector>
 #include <stack>
+#include <boost/optional.hpp>
 
 #ifndef INCLUDED_RESOURCESIDS
 #include <doctok/resourceids.hxx>
@@ -78,6 +79,8 @@ namespace writerfilter {
 namespace dmapper {
 
 using namespace com::sun::star;
+
+class SdtHelper;
 
 struct _PageMar
 {
@@ -656,10 +659,7 @@ public:
     /// If we're importing into a new document, or just pasting to an existing one.
     bool IsNewDoc();
 
-    std::vector<rtl::OUString> m_aDropDownItems;
-    rtl::OUStringBuffer m_aSdtTexts;
-    /// Create drop-down control from w:sdt's w:dropDownList.
-    void createDropDownControl();
+    SdtHelper* m_pSdtHelper;
 };
 } //namespace dmapper
 } //namespace writerfilter
