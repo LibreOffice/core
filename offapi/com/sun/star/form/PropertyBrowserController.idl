@@ -94,7 +94,7 @@ published service PropertyBrowserController
         <ul><li>Generic</li>
             <li>Data</li>
             <li>Events</li>
-        <ul></p>
+        </ul></p>
     */
     [property] string CurrentPage;
 

@@ -60,13 +60,11 @@ service AccessibleList
             Each child is of type com::sun::star::awt::AccessibleListItem. </li>
        <li>Parent: The parent can be of type
             <ul>
-            <li>
-                com::sun::star::awt::AccessibleComboBox
-                com::sun::star::awt::AccessibleListBox
-                com::sun::star::awt::AccessibleDropDownListBox
-                com::sun::star::awt::AccessibleDropDownComboBox
-            </li>
-            .
+            <li>com::sun::star::awt::AccessibleComboBox</li>
+            <li>com::sun::star::awt::AccessibleListBox</li>
+            <li>com::sun::star::awt::AccessibleDropDownListBox</li>
+            <li>com::sun::star::awt::AccessibleDropDownComboBox</li>
+            </ul>
        </li>
        <li>Relations: There are no relations.</li>
        <li>States: The states supported by this service are

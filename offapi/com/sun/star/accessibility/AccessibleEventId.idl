@@ -277,7 +277,7 @@ constants AccessibleEventId
         <li>Unknown: when the type of text change or the place where it took
         place can not be determined by the event broadcaster then both
         fields remain empty.  In this case the whole text may have changed
-        and the listener should refetch the text completely.</li> </ol>
+        and the listener should refetch the text completely.</li> </ul>
 
         <p>When broadcasting an event always prefer the first three cases
         to the last one.  Use it only as a last resort.</p>

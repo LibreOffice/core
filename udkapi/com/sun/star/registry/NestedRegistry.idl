@@ -32,8 +32,8 @@
     In the context of this service, the functions <code>open</code>, <code>close</code>,
     and <code>destroy</code> from XSimpleRegistry are not supported and
     throw an exception if they are used.
-    <dl>
-    <dt>Functions of XSimpleRegistry:
+
+    Functions of XSimpleRegistry:
     <dl>
     <dt>    <b>getURL</b>
     </dt>
@@ -61,10 +61,7 @@
     </dd>
     </dl>
 
-    <br>
-
-    </dt>
-    <dt>Functions of XRegistryKey:
+    Functions of XRegistryKey:
     <dl>
     <dt> <b>openKey</b>
     </dt>
@@ -99,13 +96,10 @@
 
     </dd>
     <dt>
-    <br>
     <b>Note: all write functions only work on registry1.</b>
     </dt>
     </dl>
-    </dt>
-    </dl>
-    <br>
+
     How to initialize the registries:<br>
     Use a sequence of XSimpleRegistry with two elements. The first element must be
     the registry which is opened with read/write rights and the second element must be

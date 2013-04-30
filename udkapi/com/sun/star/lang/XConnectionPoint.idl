@@ -43,7 +43,7 @@ module com {  module sun {  module star {  module lang {
             particular outgoing interface.  </li>
     </ul>
 
-    <h4>When to Implement?<h4>
+    <h4>When to Implement?</h4>
 
     <p>To create a connectable object, you need to implement objects
     that provide two related interfaces: </p>
@@ -70,19 +70,16 @@ module com {  module sun {  module star {  module lang {
 
     <p>A client can use the XConnectionPointContainer interface: </p>
 
-    <UL>
+    -       to get a sequence of connection points for each outgoing type.
 
-        <LI>to get a sequence of connection points for each outgoing type. </LI>
-
-        <LI>to obtain access to connection point sub-objects with the
+    -       to obtain access to connection point sub-objects with the
             XConnectionPoint interface for each
             outgoing type. Through the XConnectionPoint interface,
             a client starts or terminates an advisory loop with the
             connectable object and the client's own sink.  The
             client can also use the XConnectionPoint
             interface to get a sequence of the connections that it
-            knows about. </LI>
-    </UL>
+            knows about.
 
     @see        XConnectionPointContainer
  */

@@ -146,12 +146,14 @@ interface XDocumentMetadataAccess
 
         <p>
         This convenience method does the following:
+        <ol>
         <li>import the given file into a graph with the given name
             in the repository</li>
         <li>insert statements declaring the new graph to be a
             metadata file into the manifest graph</li>
         <li>insert statements declaring <code>rdf:type</code> properties
             for the new graph into the manifest graph</li>
+        </ol>
         </p>
 
         @param FileName
@@ -201,9 +203,11 @@ interface XDocumentMetadataAccess
 
         <p>
         This convenience method does the following:
+        <ol>
         <li>delete the graph with the given GraphName in the repository</li>
         <li>remove the statements declaring the graph to be a
             metadata file from the manifest graph</li>
+        </ol>
         </p>
 
         @param GraphName

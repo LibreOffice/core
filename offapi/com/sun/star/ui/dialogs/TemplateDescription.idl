@@ -94,7 +94,7 @@ published constants TemplateDescription
         <ul>
             <li>A checkbox "Read only"</li>
             <li>A listbox "Version" for selecting a document version</li>
-        <ul>
+        </ul>
     */
     const short FILEOPEN_READONLY_VERSION                      = 8;
 

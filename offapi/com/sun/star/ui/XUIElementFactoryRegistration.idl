@@ -38,7 +38,7 @@ module com { module sun { module star { module ui {
         <li><b>Type</b>a string that identifies a type of a user interface element.</li>
         <li><b>Name</b>a string that identifies a single user interface element within a type class.</li>
         <li><b>Module</b>a string that identifies a single module of OpenOffice.</li>
-    <ul>
+    </ul>
     A combination of these three property values can uniquely identify every user interface
     element within OpenOffice.
 

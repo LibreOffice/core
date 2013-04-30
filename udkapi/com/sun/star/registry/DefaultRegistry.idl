@@ -31,8 +31,8 @@
     the functions <code>open</code>, <code>close</code>, and <code>destroy</code>
     from XSimpleRegistry are not supported and throw an exception
     if they are used.
-    <dl>
-    <dt>Functions of XSimpleRegistry:
+
+    Functions of XSimpleRegistry:
     <dl>
     <dt>    <b>getURL</b>
     </dt>
@@ -56,10 +56,7 @@
     </dd>
     </dl>
 
-    <br>
-
-    </dt>
-    <dt>Functions of XRegistryKey:
+    Functions of XRegistryKey:
     <dl>
     <dt> <b>openKey</b>
     </dt>
@@ -89,15 +86,11 @@
     <dd> returns a sequence with the names of all subkeys in both registries.
     </dd>
     <dt>
-    <br>
     <b>Note: all write functions only work on the local registry.</b>
     </dt>
     </dl>
 
-    <br>
-
-    </dt>
-    <dt>How to find the registries:
+    How to find the registries:
     <dl>
     <dt> search for the system registry:
     </dt>
@@ -109,22 +102,20 @@
     <dt>    Search for the user registry using the following rules:
     </dt>
     <dd>
-    <dl>
-    <dt> 1. (for further use) search in sversion.ini (.sversionrc) for an entry
+    <ol>
+    <li> 1. (for further use) search in sversion.ini (.sversionrc) for an entry
     REGISTRY_VERSION_STRING (example: UserRegistry 5.0/505=test.rdb) in the section
     [Registry]. If found, then take this value instead of "user.rdb" as "REGISTRY NAME".
-    </dt>
-    <dt> 2. Search in the config directory of the user for a file "REGISTRY NAME". If
+    </li>
+    <li> 2. Search in the config directory of the user for a file "REGISTRY NAME". If
     found, return the full path and name of the file. If not found, retry this
     step with a dot before "REGISTRY NAME".
-    </dt>
-    <dt> 3. If not found, a new user registry with name user.rdb will be created in the user
+    </li>
+    <li> 3. If not found, a new user registry with name user.rdb will be created in the user
     config directory.
-    </dt>
-    </dl>
+    </li>
+    </ol>
     </dd>
-    </dl>
-    </dt>
     </dl>
     <h4>Guarantees:</h4>
 

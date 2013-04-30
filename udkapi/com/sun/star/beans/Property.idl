@@ -28,12 +28,11 @@ module com {  module sun {  module star {  module beans {
 
 /** This structure describes a property.
 
+    There are three types of properties:
+    - bound properties
+    - constrained properties
+    - free properties
 
-    <dl>There are three types of properties:
-        <dt>- bound properties</dt>
-        <dt>- constrained properties</dt>
-        <dt>- free properties</dt>
-    </dl>
  */
 published struct Property
 {

@@ -81,13 +81,14 @@ service JDBCConnectionProperties
 
     /** specifies how the type info returned by com::sun::star::sdbc::XDatabaseMetaData::getTypeInfo() will be modified.
         <p>The sequence contains an even amount of string values. Each pair describes
-        <li>what should be searched for and </li>
-        <li>what should be replaced if found.</li>
+        what should be searched for and what should be replaced if found.
         <br>
         The syntax is:
         <p>
+            <ul>
             <li>COLUMN(2) = -5</li>
             <li>COLUMN(6) = PRECISION</li>
+            </ul>
         </p>
         COLUMN(X) defines the column which will be compared and the column which will be replaced. In the example above column 2 will be compared
         with the value -5. If this is true than column 6 will now return the value PRECISION.

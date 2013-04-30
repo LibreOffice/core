@@ -170,7 +170,7 @@ published interface XFrame: com::sun::star::lang::XComponent
         @param aTargetFrameName
             identify
             <ul><li>(a) a special target ("_blank","_self" ...) or</li>
-                <li>(b) any well known frame</li><ul>
+                <li>(b) any well known frame</li></ul>
             to search it inside the current hierarchy
 
         @param nSearchFlags

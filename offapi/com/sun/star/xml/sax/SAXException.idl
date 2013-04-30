@@ -36,6 +36,7 @@ module com {  module sun {  module star {  module xml {  module sax {
         <li>SAX = Simple API for XML </li>
         <li>URI = Uniform Resource Identifier </li>
         <li>DTD = document type definition </li>
+    </ul>
  */
 published exception SAXException: com::sun::star::uno::Exception
 {

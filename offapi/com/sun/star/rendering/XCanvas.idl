@@ -465,28 +465,25 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         Additional font properties to be applied when selecting this
         font. Normally, you should not need this parameter. Currently,
         the following properties are recognized:
-        <ul>
 
-            <li>Kerning: a double between 0 and 1, where
+        -   Kerning: a double between 0 and 1, where
             0 completely disables kerning. Whether kerning is on or
-            off by default is font-dependent.</li>
+            off by default is font-dependent.
 
-            <li>IsEmphasisMarks: a boolean, where `TRUE`
+        -   IsEmphasisMarks: a boolean, where `TRUE`
             enables automatic placements of emphasis marks, e.g. for
             Hebrew. The default value, if this property is not
-            specified, is `FALSE`.</li>
+            specified, is `FALSE`.
 
-            <li>ExpandedSpacing: a double value which is added
+        -   ExpandedSpacing: a double value which is added
             between all cell distances for this font. The default value for
             this property is zero. Use negative values for condensed output,
-            and positive values for expanded output.</li>
+            and positive values for expanded output.
 
-            <li>OptionalLayoutFeatures: a sequence of
+        -   OptionalLayoutFeatures: a sequence of
             ::com::sun::star::beans::PropertyValue listing
             font-specific optional layout features, like glyph
-            variants.</li>
-
-        </ul>
+            variants.
 
         @param aFontMatrix
         Font-specific transformation matrix, which affects both the

@@ -55,6 +55,7 @@
      <li>After all applications have exited or a reasonable timeout the
      session manager kills all remaining applications and finally lets the
      desktop shut down.</li>
+     </ol>
 */
 service SessionManager
 {

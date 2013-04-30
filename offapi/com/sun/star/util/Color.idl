@@ -26,7 +26,8 @@ module com { module sun { module star { module util {
 /** describes an RGB color value with an optional alpha channel.
 
     <p>The byte order is from high to low:
-    <ol>alpha channel
+    <ol>
+    <li>alpha channel</li>
     <li>red</li>
     <li>green</li>
     <li>blue</li>
