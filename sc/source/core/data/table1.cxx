@@ -2149,7 +2149,7 @@ const double* ScTable::FetchDoubleArray(
     if (!ValidCol(nCol) || !ValidRow(nRow1) || !ValidRow(nRow2))
         return NULL;
 
-    return aCol[nCol].FetchDoubleArray(rCxt, nRow1, nRow1);
+    return aCol[nCol].FetchDoubleArray(rCxt, nRow1, nRow2);
 }
 
 ScRefCellValue ScTable::GetRefCellValue( SCCOL nCol, SCROW nRow )
