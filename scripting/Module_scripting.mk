@@ -26,7 +26,8 @@ $(eval $(call gb_Module_add_targets,scripting,\
 			Jar_ScriptProviderForJavaScript \
 			Rdb_scriptproviderforjavascript \
 		) \
-		Zip_ScriptsJava \
+		Package_java \
+		Package_java_jars \
 	) \
 	Package_scriptbindinglib \
 	Package_scriptproviderforpython \

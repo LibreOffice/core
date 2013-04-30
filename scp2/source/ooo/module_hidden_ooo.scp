@@ -372,6 +372,7 @@ Module gid_Module_Root_Files_6
 	gid_File_Extra_Tplwizletter,
 	gid_File_Scripts_Beanshell,
 	gid_File_Scripts_Java,
+	gid_File_Scripts_Java_jars,
 	gid_File_Scripts_Javascript,
 	gid_File_Basic_Depot,
 	gid_File_Basic_Euro,

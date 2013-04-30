@@ -713,9 +713,17 @@ End
 
 #ifdef SOLAR_JAVA
 File gid_File_Scripts_Java
-    Dir = gid_Dir_Share_Scripts;
-    ARCHIVE_TXT_FILE_BODY;
-    Name = "ScriptsJava.zip";
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "scripting_java.filelist";
+End
+
+File gid_File_Scripts_Java_jars
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "scripting_java_jars.filelist";
 End
 
 #ifndef WITHOUT_SCRIPTING_BEANSHELL
