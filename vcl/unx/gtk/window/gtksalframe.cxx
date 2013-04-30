@@ -2038,7 +2038,15 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSiz
         return;
 
     gint nMonitor;
+    bool bSameMonitor = false;
     GdkScreen *pScreen = getDisplay()->getSystem()->getScreenMonitorFromIdx( nNewScreen, nMonitor );
+    if (!pScreen)
+    {
+        g_warning ("Attempt to move GtkSalFrame to invalid screen %d => "
+                   "fallback to current\n", nNewScreen);
+        pScreen = gtk_widget_get_screen( m_pWindow );
+        bSameMonitor = true;
+    }
 
     // Heavy lifting, need to move screen ...
     if( pScreen != gtk_widget_get_screen( m_pWindow ))
@@ -2046,6 +2054,9 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSiz
 
     gint nOldMonitor = gdk_screen_get_monitor_at_window(
                             pScreen, widget_get_window( m_pWindow ) );
+    if (bSameMonitor)
+        nMonitor = nOldMonitor;
+
 #if OSL_DEBUG_LEVEL > 1
     if( nMonitor == nOldMonitor )
         g_warning( "An apparently pointless SetScreen - should we elide it ?" );
