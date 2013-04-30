@@ -456,7 +456,7 @@ def __initialize__():
         _.doc.CurrentController.select(shape)
         shape.FillColor, transparence = __splitcolor__(_.areacolor)
         shape.LineColor, shape.LineTransparence = __splitcolor__(_.pencolor)
-    else:
+    elif shape.Visible:
         _.areacolor = shape.FillColor + (int(255.0 * shape.FillTransparence/100) << 24)
         _.pencolor = shape.LineColor + (int(255.0 * shape.LineTransparence/100) << 24)
         if shape.LineWidth != round((1 + _.pen * 2) * __PT_TO_TWIP__ / __MM10_TO_TWIP__) and shape.LineWidth != round(__LINEWIDTH__ / __MM10_TO_TWIP__):
@@ -513,7 +513,7 @@ def __visible__(shape, visible = -1): # for OOo 3.2 compatibility
 
 def hideturtle():
     turtle = __getshape__(__TURTLE__)
-    if turtle:
+    if turtle and turtle.Visible:
         z = turtle.getPosition()
         z = __Point__(z.X + turtle.BoundRect.Width / 2.0, z.Y + turtle.BoundRect.Height / 2.0)
         turtle.PolyPolygon = __TURTLESHAPE__[1]
@@ -524,7 +524,7 @@ def hideturtle():
 
 def showturtle():
     turtle = __getshape__(__TURTLE__)
-    if turtle:
+    if turtle and not turtle.Visible:
         if not turtle.Parent:
             _.drawpage.add(turtle)
         z = turtle.getPosition()
@@ -532,12 +532,12 @@ def showturtle():
         turtle.PolyPolygon, turtle.RotateAngle = __TURTLESHAPE__[0], r
         z = __Point__(z.X - turtle.BoundRect.Width / 2.0, z.Y - turtle.BoundRect.Height / 2.0) 
         turtle.setPosition(z)
+        __visible__(turtle, True)
         pencolor(_.pencolor)
         fillcolor(_.areacolor)
         pensize(_.pensize/__PT_TO_TWIP__)
-        __visible__(turtle, True)
         _.doc.CurrentController.select(__getshape__(__TURTLE__))
-    else:
+    elif not turtle:
         __initialize__()
 
 def left(arg=None):
