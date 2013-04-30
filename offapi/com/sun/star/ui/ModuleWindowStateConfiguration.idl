@@ -67,7 +67,7 @@ service ModuleWindowStateConfiguration
             floating size in pixel of the window.</li>
             <li><b>Style</b><br>a long which specifies the style of the window. A toolbar support the
             following values: 0 = icons, 1 = text, 2 = text+icons.</li>
-            <li><b>UIName</br><br>a localized string which specifies the default window title.</li>
+            <li><b>UIName</b><br>a localized string which specifies the default window title.</li>
         </ul>
         The key to a user interface element is the resource URL which has
         the following syntax "private:resource/$type/$name". For example "private:resource/toolbar/standardbar"

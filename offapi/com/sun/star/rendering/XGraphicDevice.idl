@@ -184,27 +184,26 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
         internally generate optimized parametric polygons, which can
         be used more directly for e.g. texturing operations.
 
-        <pre>
         Available services (all canvas implementations should provide
         this minimal set, though are free to add more; just check the
         getAvailableServiceNames() on the returned interface):
 
         - Gradients - all gradients need to support two construction
-          parameters, "Colors" being a `sequence<Color>`
-          and "Stops" being a `sequence<double>`. Both must
+          parameters, "Colors" being a `sequence&lt; Color &gt;`
+          and "Stops" being a `sequence&lt; double &gt;`. Both must
           have the same length, and at least two elements. See
           http://www.w3.org/TR/SVG11/pservers.html#GradientStops for
           the semantics of gradient stops and colors.
           Required gradient services:
 
-          * "LinearGradient" - the gradient varies linearly between
+          - "LinearGradient" - the gradient varies linearly between
             the given colors. without coordinate system
             transformation, the color interpolation happens in
             increasing x direction, and is constant in y
             direction. Equivalent to svg linear gradient
             http://www.w3.org/TR/SVG11/pservers.html#LinearGradients
 
-          * "EllipticalGradient" - this gradient has zeroth color
+          - "EllipticalGradient" - this gradient has zeroth color
             index in the middle, and varies linearly between center
             and final color. The services takes an additional
             parameter named "AspectRatio" of double
@@ -218,7 +217,7 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
             gradient
             http://www.w3.org/TR/SVG11/pservers.html#RadialGradients
 
-          * "RectangularGradient" - this gradient has zeroth color
+          - "RectangularGradient" - this gradient has zeroth color
             index in the middle, and varies linearly between center
             and final color via rectangular boxes
             around the center point. The services takes an additional
@@ -232,16 +231,15 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
 
         - Hatch patterns - Required hatch services:
 
-          * "VerticalLineHatch" - this hatching consists of vertical lines
-          * "OrthogonalLinesHatch" - this hatching consists of
+          - "VerticalLineHatch" - this hatching consists of vertical lines
+          - "OrthogonalLinesHatch" - this hatching consists of
             crossing vertical and horizontal lines
-          * "ThreeCrossingLinesHatch" - this hatching consists of
+          - "ThreeCrossingLinesHatch" - this hatching consists of
             vertical and horizontal lines plus diagonal lines from
             left, top to bottom, right.
-          * "FourCrossingLinesHatch" - this hatching consists of
+          - "FourCrossingLinesHatch" - this hatching consists of
             vertical and horizontal lines plus diagonal lines in both
             directions.
-        </pre>
      */
     com::sun::star::lang::XMultiServiceFactory getParametricPolyPolygonFactory();
 

@@ -71,9 +71,9 @@ interface XUIConfigurationManager : ::com::sun::star::uno::XInterface
             com::sun::star::beans::PropertyValue entries
             are defined inside the sequence for every user interface element.
             <ul>
-                <li><b>ResourceURL<b/>specifies the unique resource URL for
+                <li><b>ResourceURL</b>specifies the unique resource URL for
                 the user interface element.</li>
-                <li><b>UIName<b/>specifies the user interface name for the
+                <li><b>UIName</b>specifies the user interface name for the
                 user interface element. Not all user interface elements have
                 set UIName. At least menubars do not.</li>
             </ul>

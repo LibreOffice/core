@@ -77,7 +77,8 @@ constants PropertyControlType
 
     /** denotes a control which allows the user to enter a list of single-line strings
 
-        <p>Controls of type #StringListField exchange their values as <code>sequence&lt; string &gt;<code>.</p>
+        <p>Controls of type #StringListField exchange their values as
+        <code>sequence&lt; string &gt;</code>.</p>
     */
     const short StringListField = 6;
 

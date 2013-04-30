@@ -51,7 +51,7 @@ interface XPrimitive3D : ::com::sun::star::uno::XInterface
     /** Retrieve bound rect of primitive
 
         This method calculates the actual bound rect of the area in
-        <em>world coordinates<em>. Note that for view-dependent primitives,
+        <em>world coordinates</em>. Note that for view-dependent primitives,
         the necessary pixel adjustments are taken into account. For that reason
         the ViewParameters need to be given.
 

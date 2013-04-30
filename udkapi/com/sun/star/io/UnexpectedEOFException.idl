@@ -25,7 +25,7 @@
 
 module com {  module sun {  module star {  module io {
 
-/** is thrown when the <code>EOF/code> is reached during reading a datatype
+/** is thrown when the <code>EOF</code> is reached during reading a datatype
     (<code>long</code>, <code>string</code>, etc.).
  */
 published exception UnexpectedEOFException: com::sun::star::io::IOException

@@ -41,6 +41,7 @@
         RepeatTiming
         <b>
         The deprecated <code>repeat</code> is not supported.
+        </b>
     </li>
     <li>RestartDefault</li>
     <li>RestartTiming</li>

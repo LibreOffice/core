@@ -160,7 +160,7 @@ published interface XParametersSupplier;
             <code>relative</code>, <code>previous</code>, <code>beforeFirst</code>, <code>afterLast</code></dt>
         <dd>will let the deleted row vanish from the result set. As a consequence, the #RowCount
             will decrease when you do such a move operation after deleting a row.<br/>
-            A special case to note is the <code>next<code> call: When you delete row, say,
+            A special case to note is the <code>next</code> call: When you delete row, say,
             <code>15</code>, followed by <code>next</code>, then your RowSet afterwards
             still is on row 15, since the deleted row vanished with the move operation.</dd>
 
