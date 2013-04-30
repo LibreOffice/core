@@ -319,19 +319,20 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
 
     GET( aLineStyle, LineStyle );
 
-    if( aLineStyle == drawing::LineStyle_NONE )
-        return;
-
     sal_uInt32 nLineWidth = 0;
     sal_uInt32 nColor = 0;
     sal_Bool bColorSet = sal_False;
     const char* cap = NULL;
     drawing::LineDash aLineDash;
     sal_Bool bDashSet = sal_False;
+    bool bNoFill = false;
 
     GET( nLineWidth, LineWidth );
 
     switch( aLineStyle ) {
+        case drawing::LineStyle_NONE:
+            bNoFill = true;
+            break;
         case drawing::LineStyle_DASH:
             if( GETA( LineDash ) ) {
                 aLineDash = *(drawing::LineDash*) mAny.getValue();
@@ -375,7 +376,7 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
         mpFS->endElementNS( XML_a, XML_custDash );
     }
 
-    if( nLineWidth > 1 && GETA( LineJoint ) ) {
+    if( !bNoFill && nLineWidth > 1 && GETA( LineJoint ) ) {
         LineJoint eLineJoint;
 
         mAny >>= eLineJoint;
@@ -395,8 +396,15 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
         }
     }
 
-    WriteLineArrow( rXPropSet, sal_True );
-    WriteLineArrow( rXPropSet, sal_False );
+    if( !bNoFill )
+    {
+        WriteLineArrow( rXPropSet, sal_True );
+        WriteLineArrow( rXPropSet, sal_False );
+    }
+    else
+    {
+        mpFS->singleElementNS( XML_a, XML_noFill, FSEND );
+    }
 
     mpFS->endElementNS( XML_a, XML_ln );
 }
