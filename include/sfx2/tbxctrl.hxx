@@ -162,7 +162,7 @@ public:
 
 #define SFX_DECL_TOOLBOX_CONTROL() \
         static SfxToolBoxControl* CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx ); \
-        static void SFX2_DLLPUBLIC RegisterControl(sal_uInt16 nSlotId = 0, SfxModule *pMod=NULL)
+        static void RegisterControl(sal_uInt16 nSlotId = 0, SfxModule *pMod=NULL)
 
 /*  For special ToolBox controls, such as a font selection box or toolbox
     tear-off floating windows, an appropriate Item-Subclass of SfxTooBoxControl
@@ -360,7 +360,11 @@ module initialization has to call RegisterControl().
 class SfxRecentFilesToolBoxControl : public SfxToolBoxControl
 {
 public:
-    SFX_DECL_TOOLBOX_CONTROL();
+    // We don't use SFX_DECL_TOOLBOX_CONTROL() here as we need to have this
+    // RegisterControl() marked as SFX2_DLLPUBLIC
+    static SfxToolBoxControl* CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx );
+    static void SFX2_DLLPUBLIC RegisterControl(sal_uInt16 nSlotId = 0, SfxModule *pMod=NULL);
+
     SfxRecentFilesToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
     virtual ~SfxRecentFilesToolBoxControl();
 
