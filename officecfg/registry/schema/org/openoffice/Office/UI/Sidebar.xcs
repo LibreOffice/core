@@ -82,6 +82,7 @@
                  com.sun.star.text.GlobalDocument
                  com.sun.star.text.WebDocument
                  com.sun.star.xforms.XMLFormDocument
+                 com.sun.star.sdb.FormDesign
                  com.sun.star.sheet.SpreadsheetDocument
                  com.sun.star.presentation.PresentationDocument
                  com.sun.star.drawing.DrawingDocument

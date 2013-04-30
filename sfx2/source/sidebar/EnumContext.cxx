@@ -157,6 +157,7 @@ void EnumContext::ProvideApplicationContainers (void)
         AddEntry(A2S("com.sun.star.text.GlobalDocument"), EnumContext::Application_WriterGlobal);
         AddEntry(A2S("com.sun.star.text.WebDocument"), EnumContext::Application_WriterWeb);
         AddEntry(A2S("com.sun.star.xforms.XMLFormDocument"), EnumContext::Application_WriterXML);
+        AddEntry(A2S("com.sun.star.sdb.FormDesign"), EnumContext::Application_WriterForm);
         AddEntry(A2S("com.sun.star.sheet.SpreadsheetDocument"), EnumContext::Application_Calc);
         AddEntry(A2S("com.sun.star.drawing.DrawingDocument"), EnumContext::Application_Draw);
         AddEntry(A2S("com.sun.star.presentation.PresentationDocument"), EnumContext::Application_Impress);

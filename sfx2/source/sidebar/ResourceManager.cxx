@@ -435,6 +435,7 @@ void ResourceManager::ReadContextList (
                 aApplications.push_back(EnumContext::Application_WriterGlobal);
                 aApplications.push_back(EnumContext::Application_WriterWeb);
                 aApplications.push_back(EnumContext::Application_WriterXML);
+                aApplications.push_back(EnumContext::Application_WriterForm);
             }
             else
             {
