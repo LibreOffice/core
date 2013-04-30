@@ -255,30 +255,6 @@ void SdrUnoObj::SetContextWritingMode( const sal_Int16 _nContextWritingMode )
     }
 }
 
-// ----------------------------------------------------------------------------
-namespace
-{
-    /** helper class to restore graphics at <awt::XView> object after <SdrUnoObj::Paint>
-        Restoration of graphics necessary to assure that paint on a window  */
-    class RestoreXViewGraphics
-    {
-        private:
-            uno::Reference< awt::XView >        m_rXView;
-            uno::Reference< awt::XGraphics >    m_rXGraphics;
-
-        public:
-            RestoreXViewGraphics( const uno::Reference< awt::XView >& _rXView )
-            {
-                m_rXView = _rXView;
-                m_rXGraphics = m_rXView->getGraphics();
-            }
-            ~RestoreXViewGraphics()
-            {
-                m_rXView->setGraphics( m_rXGraphics );
-            }
-    };
-}
-
 void SdrUnoObj::TakeObjNameSingul(XubString& rName) const
 {
     rName = ImpGetResStr(STR_ObjNameSingulUno);
