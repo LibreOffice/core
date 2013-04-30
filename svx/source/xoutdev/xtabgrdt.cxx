@@ -19,42 +19,26 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
 // include ---------------------------------------------------------------
-
-#ifndef SVX_LIGHT
-
 #include <com/sun/star/container/XNameContainer.hpp>
 #include "svx/XPropertyTable.hxx"
 #include <unotools/ucbstreamhelper.hxx>
-
 #include "xmlxtexp.hxx"
 #include "xmlxtimp.hxx"
-
-#endif
-
 #include <tools/urlobj.hxx>
 #include <vcl/virdev.hxx>
-#include <svl/itemset.hxx>
-#include <sfx2/docfile.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/xtable.hxx>
-#include <svx/xpool.hxx>
-#include <svx/xfillit0.hxx>
-#include <svx/xflgrit.hxx>
-
-#include <svx/svdorect.hxx>
-#include <svx/svdmodel.hxx>
-#include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
-#include <svx/sdr/contact/displayinfo.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/xlnclit.hxx>
-#include <svx/xgrscit.hxx>
+#include <drawinglayer/attribute/fillgradientattribute.hxx>
+#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 
 #define GLOBALOVERFLOW
 
@@ -71,14 +55,12 @@ sal_Unicode const pszExtGradient[]  = {'s','o','g'};
 // --------------------
 
 XGradientList::XGradientList( const String& rPath )
-:   XPropertyList(rPath ),
-    mpBackgroundObject(0)
+:   XPropertyList(rPath )
 {
 }
 
 XGradientList::~XGradientList()
 {
-    SdrObject::Free(mpBackgroundObject);
 }
 
 XGradientEntry* XGradientList::Replace(XGradientEntry* pEntry, long nIndex )
@@ -163,57 +145,125 @@ sal_Bool XGradientList::Create()
     return( sal_True );
 }
 
-Bitmap XGradientList::CreateBitmapForUI( long nIndex )
+Bitmap XGradientList::CreateBitmapForUI(long nIndex)
 {
     Bitmap aRetval;
-    OSL_ENSURE(pGlobalsharedModelAndVDev, "OOps, global values missing (!)");
-    OSL_ENSURE(nIndex < Count(), "OOps, global values missing (!)");
+    OSL_ENSURE(nIndex < Count(), "OOps, access out of range (!)");
 
-    if(pGlobalsharedModelAndVDev && nIndex < Count())
+    if(nIndex < Count())
     {
-        SdrModel& rModel = pGlobalsharedModelAndVDev->getSharedSdrModel();
-        VirtualDevice& rVirDev = pGlobalsharedModelAndVDev->getSharedVirtualDevice();
-        const Point aZero(0, 0);
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
         const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
-        const Size aSize(rVirDev.PixelToLogic(rSize));
 
-        rVirDev.SetOutputSize(aSize);
-        rVirDev.SetDrawMode(rStyleSettings.GetHighContrastMode()
-            ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
-            : DRAWMODE_DEFAULT);
-        rVirDev.SetBackground(rStyleSettings.GetFieldColor());
+        // prepare polygon geometry for rectangle
+        const basegfx::B2DPolygon aRectangle(
+            basegfx::tools::createPolygonFromRect(
+                basegfx::B2DRange(0.0, 0.0, rSize.Width(), rSize.Height())));
 
-        if(!mpBackgroundObject)
+        const XGradient& rGradient = GetGradient(nIndex)->GetGradient();
+        const sal_uInt16 nStartIntens(rGradient.GetStartIntens());
+        basegfx::BColor aStart(rGradient.GetStartColor().getBColor());
+
+        if(nStartIntens != 100)
         {
-            const Size aSinglePixel(rVirDev.PixelToLogic(Size(1, 1)));
-            const Rectangle aBackgroundSize(aZero, Size(aSize.getWidth() - aSinglePixel.getWidth(), aSize.getHeight() - aSinglePixel.getHeight()));
-            mpBackgroundObject = new SdrRectObj(aBackgroundSize);
-            OSL_ENSURE(0 != mpBackgroundObject, "XGradientList: no BackgroundObject created!" );
-            mpBackgroundObject->SetModel(&rModel);
-            mpBackgroundObject->SetMergedItem(XFillStyleItem(XFILL_GRADIENT));
-            mpBackgroundObject->SetMergedItem(XLineStyleItem(XLINE_SOLID));
-            mpBackgroundObject->SetMergedItem(XLineColorItem(String(), Color(COL_BLACK)));
-            mpBackgroundObject->SetMergedItem(XGradientStepCountItem(sal_uInt16((rSize.Width() + rSize.Height()) / 3)));
+            const basegfx::BColor aBlack;
+            aStart = interpolate(aBlack, aStart, (double)nStartIntens * 0.01);
         }
 
-        const SfxItemSet& rItemSet = mpBackgroundObject->GetMergedItemSet();
+        const sal_uInt16 nEndIntens(rGradient.GetEndIntens());
+        basegfx::BColor aEnd(rGradient.GetEndColor().getBColor());
 
-        mpBackgroundObject->SetMergedItem(XFillStyleItem(XFILL_GRADIENT));
-        mpBackgroundObject->SetMergedItem(XFillGradientItem(rItemSet.GetPool(), GetGradient(nIndex)->GetGradient()));
+        if(nEndIntens != 100)
+        {
+            const basegfx::BColor aBlack;
+            aEnd = interpolate(aBlack, aEnd, (double)nEndIntens * 0.01);
+        }
 
-        sdr::contact::SdrObjectVector aObjectVector;
+        drawinglayer::attribute::GradientStyle aGradientStyle(drawinglayer::attribute::GRADIENTSTYLE_RECT);
 
-        aObjectVector.push_back(mpBackgroundObject);
+        switch(rGradient.GetGradientStyle())
+        {
+            case XGRAD_LINEAR :
+            {
+                aGradientStyle = drawinglayer::attribute::GRADIENTSTYLE_LINEAR;
+                break;
+            }
+            case XGRAD_AXIAL :
+            {
+                aGradientStyle = drawinglayer::attribute::GRADIENTSTYLE_AXIAL;
+                break;
+            }
+            case XGRAD_RADIAL :
+            {
+                aGradientStyle = drawinglayer::attribute::GRADIENTSTYLE_RADIAL;
+                break;
+            }
+            case XGRAD_ELLIPTICAL :
+            {
+                aGradientStyle = drawinglayer::attribute::GRADIENTSTYLE_ELLIPTICAL;
+                break;
+            }
+            case XGRAD_SQUARE :
+            {
+                aGradientStyle = drawinglayer::attribute::GRADIENTSTYLE_SQUARE;
+                break;
+            }
+            default :
+            {
+                aGradientStyle = drawinglayer::attribute::GRADIENTSTYLE_RECT; // XGRAD_RECT
+                break;
+            }
+        }
 
-        sdr::contact::ObjectContactOfObjListPainter aPainter(rVirDev, aObjectVector, 0);
-        sdr::contact::DisplayInfo aDisplayInfo;
+        const sal_uInt16 nSteps((rSize.Width() + rSize.Height()) / 3);
+        const drawinglayer::attribute::FillGradientAttribute aFillGradient(
+            aGradientStyle,
+            (double)rGradient.GetBorder() * 0.01,
+            (double)rGradient.GetXOffset() * 0.01,
+            (double)rGradient.GetYOffset() * 0.01,
+            (double)rGradient.GetAngle() * F_PI1800,
+            aStart,
+            aEnd,
+            nSteps);
 
-        rVirDev.Erase();
-        aPainter.ProcessDisplay(aDisplayInfo);
+        const drawinglayer::primitive2d::Primitive2DReference aGradientPrimitive(
+            new drawinglayer::primitive2d::PolyPolygonGradientPrimitive2D(
+                basegfx::B2DPolyPolygon(aRectangle),
+                aFillGradient));
 
-        return rVirDev.GetBitmap(aZero, rVirDev.GetOutputSize());
+        const basegfx::BColor aBlack(0.0, 0.0, 0.0);
+        const drawinglayer::primitive2d::Primitive2DReference aBlackRectanglePrimitive(
+            new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+                aRectangle,
+                aBlack));
 
+        // prepare VirtualDevice
+        VirtualDevice aVirtualDevice;
+        const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D;
+
+        aVirtualDevice.SetOutputSizePixel(rSize);
+        aVirtualDevice.SetDrawMode(rStyleSettings.GetHighContrastMode()
+            ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
+            : DRAWMODE_DEFAULT);
+
+        // create processor and draw primitives
+        drawinglayer::processor2d::BaseProcessor2D* pProcessor2D = drawinglayer::processor2d::createPixelProcessor2DFromOutputDevice(
+            aVirtualDevice,
+            aNewViewInformation2D);
+
+        if(pProcessor2D)
+        {
+            drawinglayer::primitive2d::Primitive2DSequence aSequence(2);
+
+            aSequence[0] = aGradientPrimitive;
+            aSequence[1] = aBlackRectanglePrimitive;
+
+            pProcessor2D->process(aSequence);
+            delete pProcessor2D;
+        }
+
+        // get result bitmap and scale
+        aRetval = aVirtualDevice.GetBitmap(Point(0, 0), aVirtualDevice.GetOutputSizePixel());
     }
 
     return aRetval;

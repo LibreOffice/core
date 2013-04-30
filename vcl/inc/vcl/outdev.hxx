@@ -905,7 +905,7 @@ public:
     void                SetOutDevViewType( OutDevViewType eOutDevViewType ) { meOutDevViewType=eOutDevViewType; }
     OutDevViewType      GetOutDevViewType() const { return meOutDevViewType; }
 
-    void                SetLineColor();
+    void                Fdrawrect;
     void                SetLineColor( const Color& rColor );
     const Color&        GetLineColor() const { return maLineColor; }
     sal_Bool                IsLineColor() const { return mbLineColor; }
@@ -1085,6 +1085,10 @@ public:
     static basegfx::B2DPolyPolygon LogicToLogic( const basegfx::B2DPolyPolygon& rPolyPoly,
                                                  const MapMode&    rMapModeSource,
                                                  const MapMode&    rMapModeDest );
+
+    // create a mapping transformation from rMapModeSource to rMapModeDest (the above methods
+    // for B2DPoly/Polygons use this internally anyways to transform the B2DPolygon)
+    static basegfx::B2DHomMatrix LogicToLogic(const MapMode& rMapModeSource, const MapMode& rMapModeDest);
 
     Size                GetOutputSizePixel() const
                             { return Size( mnOutWidth, mnOutHeight ); }

@@ -19,17 +19,12 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
 #include <svx/xtable.hxx>
 #include <svx/xpool.hxx>
-#include <svx/svdobj.hxx>
 #include <svx/svdpool.hxx>
-#include <vcl/virdev.hxx>
-#include <svx/svdmodel.hxx>
 
 #define GLOBALOVERFLOW
 
@@ -45,61 +40,6 @@ Color RGB_Color( ColorData nColorName )
     return aRGBColor;
 }
 
-sharedModelAndVDev::sharedModelAndVDev()
-:   mnUseCount(0),
-    mpVirtualDevice(0),
-    mpSdrModel(0)
-{
-}
-
-sharedModelAndVDev::~sharedModelAndVDev()
-{
-    delete mpVirtualDevice;
-    delete mpSdrModel;
-}
-
-void sharedModelAndVDev::increaseUseCount()
-{
-    mnUseCount++;
-}
-
-bool sharedModelAndVDev::decreaseUseCount()
-{
-    if(mnUseCount)
-    {
-        mnUseCount--;
-    }
-
-    return 0 == mnUseCount;
-}
-
-SdrModel& sharedModelAndVDev::getSharedSdrModel()
-{
-    if(!mpSdrModel)
-    {
-        mpSdrModel = new SdrModel();
-        OSL_ENSURE(0 != mpSdrModel, "XPropertyList sharedModelAndVDev: no SdrModel created!" );
-        mpSdrModel->GetItemPool().FreezeIdRanges();
-        mpSdrModel->SetAutomaticXPropertyListCreation(false);
-    }
-
-    return *mpSdrModel;
-}
-
-VirtualDevice& sharedModelAndVDev::getSharedVirtualDevice()
-{
-    if(!mpVirtualDevice)
-    {
-        mpVirtualDevice = new VirtualDevice;
-        OSL_ENSURE(0 != mpVirtualDevice, "XPropertyList sharedModelAndVDev: no VirtualDevice created!" );
-        mpVirtualDevice->SetMapMode(MAP_100TH_MM);
-    }
-
-    return *mpVirtualDevice;
-}
-
-sharedModelAndVDev* XPropertyList::pGlobalsharedModelAndVDev = 0;
-
 // --------------------
 // class XPropertyList
 // --------------------
@@ -110,12 +50,6 @@ XPropertyList::XPropertyList( const String& rPath ) :
             maContent(),
             mbListDirty     (true)
 {
-    if(!pGlobalsharedModelAndVDev)
-    {
-        pGlobalsharedModelAndVDev = new sharedModelAndVDev();
-    }
-
-    pGlobalsharedModelAndVDev->increaseUseCount();
 }
 
 /*************************************************************************
@@ -130,12 +64,6 @@ XPropertyList::~XPropertyList()
     {
         delete maContent.back();
         maContent.pop_back();
-    }
-
-    if(pGlobalsharedModelAndVDev && pGlobalsharedModelAndVDev->decreaseUseCount())
-    {
-        delete pGlobalsharedModelAndVDev;
-        pGlobalsharedModelAndVDev = 0;
     }
 }
 
@@ -264,7 +192,7 @@ void XPropertyList::Insert( XPropertyEntry* pEntry, long nIndex )
     {
         const long nObjectCount(maContent.size());
 
-        if(static_cast<long>(LIST_APPEND) == nIndex || nIndex >= nObjectCount)
+        if(static_cast< long >(LIST_APPEND) == nIndex || nIndex >= nObjectCount)
         {
             maContent.push_back(pEntry);
         }

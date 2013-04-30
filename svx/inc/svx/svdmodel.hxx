@@ -217,7 +217,7 @@ protected:
     sal_uInt16          nStreamNumberFormat;
     sal_uInt16          nDefaultTabulator;
     sal_uInt32          nMaxUndoCount;
-    FASTBOOL         mbAutomaticXPropertyListCreation;
+    FASTBOOL        bSaveNative;
     sal_Bool            bStarDrawPreviewMode;
 
 
@@ -488,6 +488,13 @@ public:
     FASTBOOL        IsSaveCompressed() const                   { return bSaveCompressed; }
     void            SetSaveCompressed(FASTBOOL bJa=sal_True)       { bSaveCompressed=bJa; }
 
+    // Schaltet man dieses Flag auf sal_True, so werden
+    // Grafikobjekte mit gesetztem Native-Link
+    // native gespeichert.
+    // Default=FALSE. Flag ist nicht persistent.
+    FASTBOOL        IsSaveNative() const                       { return bSaveNative; }
+    void            SetSaveNative(FASTBOOL bJa=sal_True)           { bSaveNative=bJa; }
+
     // Schaltet man dieses Flag auf sal_True, so werden die Grafiken
     // von Grafikobjekten:
     // - beim Laden eines Dokuments nicht sofort mitgeladen,
@@ -718,9 +725,6 @@ public:
         This returns false if undo was disabled using EnableUndo( false ) and
         also during the runtime of the Undo() and Redo() methods. */
     bool IsUndoEnabled() const;
-
-    void SetAutomaticXPropertyListCreation(bool bNew) { mbAutomaticXPropertyListCreation = bNew; }
-    bool IsAutomaticXPropertyListCreation() const { return mbAutomaticXPropertyListCreation; }
 };
 
 typedef tools::WeakReference< SdrModel > SdrModelWeakRef;

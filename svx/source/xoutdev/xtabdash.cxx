@@ -19,46 +19,25 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
 // include ---------------------------------------------------------------
-
-#ifndef SVX_LIGHT
-
 #include <com/sun/star/container/XNameContainer.hpp>
 #include "svx/XPropertyTable.hxx"
 #include <unotools/ucbstreamhelper.hxx>
-
 #include "xmlxtexp.hxx"
 #include "xmlxtimp.hxx"
-
-#endif
 #include <vcl/svapp.hxx>
-
 #include <tools/urlobj.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/window.hxx>
-#include <svl/itemset.hxx>
-#include <sfx2/docfile.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/xtable.hxx>
-#include <svx/xpool.hxx>
-#include <svx/xlineit0.hxx>
-#include <svx/xlnclit.hxx>
-#include <svx/xlnwtit.hxx>
-#include <svx/xlndsit.hxx>
-#include <svx/xflclit.hxx>
-
-#include <svx/svdorect.hxx>
-#include <svx/svdopath.hxx>
-#include <svx/svdmodel.hxx>
-#include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
-#include <svx/sdr/contact/displayinfo.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
+#include <drawinglayer/attribute/lineattribute.hxx>
+#include <drawinglayer/attribute/strokeattribute.hxx>
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
 
 using namespace com::sun::star;
 using namespace rtl;
@@ -75,9 +54,7 @@ sal_Unicode const pszExtDash[]  = {'s','o','d'};
 // ----------------
 
 XDashList::XDashList(const String& rPath )
-:   XPropertyList(rPath ),
-    mpBackgroundObject(0),
-    mpLineObject(0),
+:   XPropertyList(rPath),
     maBitmapSolidLine(),
     maStringSolidLine(),
     maStringNoLine()
@@ -86,8 +63,6 @@ XDashList::XDashList(const String& rPath )
 
 XDashList::~XDashList()
 {
-    SdrObject::Free(mpBackgroundObject);
-    SdrObject::Free(mpLineObject);
 }
 
 XDashEntry* XDashList::Replace(XDashEntry* pEntry, long nIndex )
@@ -115,7 +90,7 @@ sal_Bool XDashList::Load()
 
         if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
         {
-            DBG_ASSERT( !maPath.Len(), "invalid URL" );
+            OSL_ENSURE( !maPath.Len(), "invalid URL" );
             return sal_False;
         }
 
@@ -136,7 +111,7 @@ sal_Bool XDashList::Save()
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
     {
-        DBG_ASSERT( !maPath.Len(), "invalid URL" );
+        OSL_ENSURE( !maPath.Len(), "invalid URL" );
         return sal_False;
     }
 
@@ -167,87 +142,102 @@ sal_Bool XDashList::Create()
 
 Bitmap XDashList::ImpCreateBitmapForXDash(const XDash* pDash)
 {
-    // to avoid rendering trouble (e.g. vcl renderer) and to get better AAed quality,
-    // use double prerender size
-    static bool bUseDoubleSize = true;
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
+    const sal_uInt32 nFactor(2);
+    const Size aSize((rSize.Width() * 5 * 2) / 2, rSize.Height() * nFactor);
 
-    Bitmap aRetval;
-    OSL_ENSURE(pGlobalsharedModelAndVDev, "OOps, global values missing (!)");
+    // prepare polygon geometry for line
+    basegfx::B2DPolygon aLine;
 
-    if(pGlobalsharedModelAndVDev)
+    aLine.append(basegfx::B2DPoint(0.0, aSize.Height() / 2.0));
+    aLine.append(basegfx::B2DPoint(aSize.Width(), aSize.Height() / 2.0));
+
+    // prepare LineAttribute
+    const basegfx::BColor aLineColor(rStyleSettings.GetFieldTextColor().getBColor());
+    const double fLineWidth(rStyleSettings.GetListBoxPreviewDefaultLineWidth() * (nFactor * 1.1));
+    const drawinglayer::attribute::LineAttribute aLineAttribute(
+        aLineColor,
+        fLineWidth);
+
+    // prepare StrokeAttribute
+    ::std::vector< double > aDotDashArray;
+    double fFullDotDashLen(0.0);
+
+    if(pDash && (pDash->GetDots() || pDash->GetDashes()))
     {
-        SdrModel& rModel = pGlobalsharedModelAndVDev->getSharedSdrModel();
-        VirtualDevice& rVirDev = pGlobalsharedModelAndVDev->getSharedVirtualDevice();
-        const Point aZero(0, 0);
-        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-        const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
-        const Size aSize(rVirDev.PixelToLogic(Size(
-            bUseDoubleSize ? rSize.Width() * 5 : rSize.Width() * 5 / 2,
-            bUseDoubleSize ? rSize.Height() * 2 : rSize.Height())));
+        const basegfx::B2DHomMatrix aScaleMatrix(OutputDevice::LogicToLogic(MAP_100TH_MM, MAP_PIXEL));
+        const basegfx::B2DVector aScaleVector(aScaleMatrix * basegfx::B2DVector(1.0, 0.0));
+        const double fScaleValue(aScaleVector.getLength() * (nFactor * (1.4 / 2.0)));
+        const double fLineWidthInUnits(fLineWidth / fScaleValue);
 
-        rVirDev.SetOutputSize(aSize);
-        rVirDev.SetDrawMode(rStyleSettings.GetHighContrastMode()
-            ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
-            : DRAWMODE_DEFAULT);
-        rVirDev.SetBackground(rStyleSettings.GetFieldColor());
+        fFullDotDashLen = pDash->CreateDotDashArray(aDotDashArray, fLineWidthInUnits);
 
-        if(!mpBackgroundObject)
+        if(!aDotDashArray.empty())
         {
-            const Rectangle aBackgroundSize(aZero, aSize);
-            mpBackgroundObject = new SdrRectObj(aBackgroundSize);
-            OSL_ENSURE(0 != mpBackgroundObject, "XDashList: no BackgroundObject created!" );
-            mpBackgroundObject->SetModel(&rModel);
-            mpBackgroundObject->SetMergedItem(XFillStyleItem(XFILL_SOLID));
-            mpBackgroundObject->SetMergedItem(XLineStyleItem(XLINE_NONE));
-            mpBackgroundObject->SetMergedItem(XFillColorItem(String(), rStyleSettings.GetFieldColor()));
+            for(sal_uInt32 a(0); a < aDotDashArray.size(); a++)
+            {
+                aDotDashArray[a] *= fScaleValue;
+            }
+
+            fFullDotDashLen *= fScaleValue;
         }
+    }
 
-        if(!mpLineObject)
-        {
-            const sal_uInt32 nHalfHeight(aSize.Height() / 2);
-            const basegfx::B2DPoint aStart(0, nHalfHeight);
-            const basegfx::B2DPoint aEnd(aSize.Width(), nHalfHeight);
-            basegfx::B2DPolygon aPolygon;
-            aPolygon.append(aStart);
-            aPolygon.append(aEnd);
-            mpLineObject = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aPolygon));
-            OSL_ENSURE(0 != mpLineObject, "XDashList: no LineObject created!" );
-            mpLineObject->SetModel(&rModel);
-            mpLineObject->SetMergedItem(XLineStyleItem(XLINE_DASH));
-            mpLineObject->SetMergedItem(XLineColorItem(String(), rStyleSettings.GetFieldTextColor()));
-            const Size aLineWidth(rVirDev.PixelToLogic(Size(rStyleSettings.GetListBoxPreviewDefaultLineWidth(), 0)));
-            mpLineObject->SetMergedItem(XLineWidthItem(bUseDoubleSize ? aLineWidth.getWidth() * 2 : aLineWidth.getWidth()));
-        }
+    const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(
+        aDotDashArray,
+        fFullDotDashLen);
 
-        if(pDash)
-        {
-            mpLineObject->SetMergedItem(XLineStyleItem(XLINE_DASH));
-            mpLineObject->SetMergedItem(XLineDashItem(String(), *pDash));
-        }
-        else
-        {
-            mpLineObject->SetMergedItem(XLineStyleItem(XLINE_SOLID));
-        }
+    // cerate LinePrimitive
+    const drawinglayer::primitive2d::Primitive2DReference aLinePrimitive(
+        new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
+            aLine,
+            aLineAttribute,
+            aStrokeAttribute));
 
-        sdr::contact::SdrObjectVector aObjectVector;
+    // prepare VirtualDevice
+    VirtualDevice aVirtualDevice;
+    const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D;
 
-        aObjectVector.push_back(mpBackgroundObject);
-        aObjectVector.push_back(mpLineObject);
+    aVirtualDevice.SetOutputSizePixel(aSize);
+    aVirtualDevice.SetDrawMode(rStyleSettings.GetHighContrastMode()
+        ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
+        : DRAWMODE_DEFAULT);
 
-        sdr::contact::ObjectContactOfObjListPainter aPainter(rVirDev, aObjectVector, 0);
-        sdr::contact::DisplayInfo aDisplayInfo;
+    if(rStyleSettings.GetUIPreviewUsesCheckeredBackground())
+    {
+        const Point aNull(0, 0);
+        static const sal_uInt32 nLen(8 * nFactor);
+        static const Color aW(COL_WHITE);
+        static const Color aG(0xef, 0xef, 0xef);
 
-        rVirDev.Erase();
-        aPainter.ProcessDisplay(aDisplayInfo);
+        aVirtualDevice.DrawCheckered(aNull, aSize, nLen, aW, aG);
+    }
+    else
+    {
+        aVirtualDevice.SetBackground(rStyleSettings.GetFieldColor());
+        aVirtualDevice.Erase();
+    }
 
-        aRetval = rVirDev.GetBitmap(aZero, rVirDev.GetOutputSize());
+    // create processor and draw primitives
+    drawinglayer::processor2d::BaseProcessor2D* pProcessor2D = drawinglayer::processor2d::createPixelProcessor2DFromOutputDevice(
+        aVirtualDevice,
+        aNewViewInformation2D);
 
-        if(bUseDoubleSize)
-        {
-            const Size aCurrentSize(aRetval.GetSizePixel());
+    if(pProcessor2D)
+    {
+        const drawinglayer::primitive2d::Primitive2DSequence aSequence(&aLinePrimitive, 1);
 
-            aRetval.Scale(Size(aCurrentSize.Width() / 2, aCurrentSize.Height() / 2), BMP_SCALE_FASTESTINTERPOLATE);
-        }
+        pProcessor2D->process(aSequence);
+        delete pProcessor2D;
+    }
+
+    // get result bitmap and scale
+    Bitmap aRetval(aVirtualDevice.GetBitmap(Point(0, 0), aVirtualDevice.GetOutputSizePixel()));
+
+    if(1 != nFactor)
+    {
+        aRetval.Scale(Size((rSize.Width() * 5) / 2, rSize.Height()), BMP_SCALE_FASTESTINTERPOLATE);
     }
 
     return aRetval;

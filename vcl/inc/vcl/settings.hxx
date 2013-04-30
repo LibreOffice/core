@@ -440,6 +440,7 @@ private:
     Size                            maListBoxPreviewDefaultLogicSize;
     Size                            maListBoxPreviewDefaultPixelSize;
     sal_uInt16                      mnListBoxPreviewDefaultLineWidth;
+    sal_Bool                        mbUIPreviewUsesCheckeredBackground;
 };
 
 #define DEFAULT_WORKSPACE_GRADIENT_START_COLOR Color( 0xa3, 0xae, 0xb8 )
@@ -968,6 +969,11 @@ public:
     // the default LineWidth for ListBox UI previews (LineStyle, LineDash, LineStartEnd). Default is 1.
     void SetListBoxPreviewDefaultLineWidth(sal_uInt16 nWidth) { CopyData(); mpData->mnListBoxPreviewDefaultLineWidth = nWidth; }
     sal_uInt16 GetListBoxPreviewDefaultLineWidth() const { return mpData->mnListBoxPreviewDefaultLineWidth; }
+
+    // defines if previews which containn potentially transparent objects (e.g. the dash/line/LineStartEnd previews and others)
+    // use the default transparent visualization background (checkered background) as it has got standard in graphic programs nowadays
+    void SetUIPreviewUsesCheckeredBackground(bool bNew) { CopyData(); mpData->mbUIPreviewUsesCheckeredBackground = bNew; }
+    bool GetUIPreviewUsesCheckeredBackground() const { return mpData->mbUIPreviewUsesCheckeredBackground; }
 
     void                            SetStandardStyles();
 

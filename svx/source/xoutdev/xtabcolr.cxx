@@ -19,24 +19,15 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-
-#ifndef SVX_LIGHT
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include "svx/XPropertyTable.hxx"
 #include <unotools/ucbstreamhelper.hxx>
-
 #include <unotools/pathoptions.hxx>
-
 #include "xmlxtexp.hxx"
 #include "xmlxtimp.hxx"
-
-#endif
-
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
 #include <svx/dialogs.hrc>
@@ -107,7 +98,7 @@ sal_Bool XColorList::Load()
 
         if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
         {
-            DBG_ASSERT( !maPath.Len(), "invalid URL" );
+            OSL_ENSURE( !maPath.Len(), "invalid URL" );
             return sal_False;
         }
 
@@ -130,7 +121,7 @@ sal_Bool XColorList::Save()
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
     {
-        DBG_ASSERT( !maPath.Len(), "invalid URL" );
+        OSL_ENSURE( !maPath.Len(), "invalid URL" );
         return sal_False;
     }
 

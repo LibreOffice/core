@@ -441,6 +441,7 @@ ImplStyleData::ImplStyleData()
     maListBoxPreviewDefaultLogicSize = Size(15, 7);
     maListBoxPreviewDefaultPixelSize = Size(0, 0); // on-demand calculated in GetListBoxPreviewDefaultPixelSize()
     mnListBoxPreviewDefaultLineWidth = 1;
+    mbUIPreviewUsesCheckeredBackground = true;
 
     SetStandardStyles();
 }
@@ -553,6 +554,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maListBoxPreviewDefaultLogicSize = rData.maListBoxPreviewDefaultLogicSize;
     maListBoxPreviewDefaultPixelSize = rData.maListBoxPreviewDefaultPixelSize;
     mnListBoxPreviewDefaultLineWidth = rData.mnListBoxPreviewDefaultLineWidth;
+    mbUIPreviewUsesCheckeredBackground = rData.mbUIPreviewUsesCheckeredBackground;
 }
 
 // -----------------------------------------------------------------------
@@ -1072,7 +1074,8 @@ sal_Bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->mnColorValueSetMaximumRowCount    == rSet.mpData->mnColorValueSetMaximumRowCount)     &&
          (mpData->maListBoxPreviewDefaultLogicSize  == rSet.mpData->maListBoxPreviewDefaultLogicSize)   &&
          (mpData->maListBoxPreviewDefaultPixelSize  == rSet.mpData->maListBoxPreviewDefaultPixelSize)   &&
-         (mpData->mnListBoxPreviewDefaultLineWidth  == rSet.mpData->mnListBoxPreviewDefaultLineWidth))
+         (mpData->mnListBoxPreviewDefaultLineWidth  == rSet.mpData->mnListBoxPreviewDefaultLineWidth)   &&
+         (mpData->mbUIPreviewUsesCheckeredBackground == rSet.mpData->mbUIPreviewUsesCheckeredBackground))
         return sal_True;
     else
         return sal_False;

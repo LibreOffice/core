@@ -150,7 +150,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     bPageNotValid=sal_False;
     bSavePortable=sal_False;
     bSaveCompressed=sal_False;
-    mbAutomaticXPropertyListCreation=true;
+    bSaveNative=sal_False;
     bSwapGraphics=sal_False;
     nSwapGraphicsMode=SDR_SWAPGRAPHICSMODE_DEFAULT;
     bSaveOLEPreview=sal_False;
@@ -2122,7 +2122,7 @@ void SdrModel::SetColorTableAtSdrModel(XColorListSharedPtr aTable)
 
 XColorListSharedPtr SdrModel::GetColorTableFromSdrModel() const
 {
-    if(IsAutomaticXPropertyListCreation() && !maColorTable.get())
+    if(!maColorTable.get())
     {
         const_cast< SdrModel* >(this)->maColorTable = XPropertyListFactory::CreateSharedXColorList(aTablePath);
     }
@@ -2137,7 +2137,7 @@ void SdrModel::SetDashListAtSdrModel(XDashListSharedPtr aList)
 
 XDashListSharedPtr SdrModel::GetDashListFromSdrModel() const
 {
-    if(IsAutomaticXPropertyListCreation() && !maDashList.get())
+    if(!maDashList.get())
     {
         const_cast< SdrModel* >(this)->maDashList = XPropertyListFactory::CreateSharedXDashList(aTablePath);
     }
@@ -2152,7 +2152,7 @@ void SdrModel::SetLineEndListAtSdrModel(XLineEndListSharedPtr aList)
 
 XLineEndListSharedPtr SdrModel::GetLineEndListFromSdrModel() const
 {
-    if(IsAutomaticXPropertyListCreation() && !maLineEndList.get())
+    if(!maLineEndList.get())
     {
         const_cast< SdrModel* >(this)->maLineEndList = XPropertyListFactory::CreateSharedXLineEndList(aTablePath);
     }
@@ -2167,7 +2167,7 @@ void SdrModel::SetHatchListAtSdrModel(XHatchListSharedPtr aList)
 
 XHatchListSharedPtr SdrModel::GetHatchListFromSdrModel() const
 {
-    if(IsAutomaticXPropertyListCreation() && !maHatchList.get())
+    if(!maHatchList.get())
     {
         const_cast< SdrModel* >(this)->maHatchList = XPropertyListFactory::CreateSharedXHatchList(aTablePath);
     }
@@ -2182,7 +2182,7 @@ void SdrModel::SetGradientListAtSdrModel(XGradientListSharedPtr aList)
 
 XGradientListSharedPtr SdrModel::GetGradientListFromSdrModel() const
 {
-    if(IsAutomaticXPropertyListCreation() && !maGradientList.get())
+    if(!maGradientList.get())
     {
         const_cast< SdrModel* >(this)->maGradientList = XPropertyListFactory::CreateSharedXGradientList(aTablePath);
     }
@@ -2197,7 +2197,7 @@ void SdrModel::SetBitmapListAtSdrModel(XBitmapListSharedPtr aList)
 
 XBitmapListSharedPtr SdrModel::GetBitmapListFromSdrModel() const
 {
-    if(IsAutomaticXPropertyListCreation() && !maBitmapList.get())
+    if(!maBitmapList.get())
     {
         const_cast< SdrModel* >(this)->maBitmapList = XPropertyListFactory::CreateSharedXBitmapList(aTablePath);
     }

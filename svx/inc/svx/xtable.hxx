@@ -23,25 +23,13 @@
 #define _XTABLE_HXX
 
 // include ---------------------------------------------------------------
-
 #include <svx/xpoly.hxx>
 #include <svx/xdash.hxx>
 #include <svx/xhatch.hxx>
 #include <svx/xgrad.hxx>
-#include <svx/xflasit.hxx>
-#include <svx/xlnasit.hxx>
-#include <tools/color.hxx>
-#include <tools/string.hxx>
-#include <svx/svxdllapi.h>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <svtools/grfmgr.hxx>
 #include <svx/XPropertyEntry.hxx>
-
-class Color;
-class Bitmap;
-class VirtualDevice;
-class SdrModel;
-class SdrObject;
+#include <vcl/bitmap.hxx>
 
 // Standard-Vergleichsstring
 extern sal_Unicode __FAR_DATA pszStandard[]; // "standard"
@@ -180,34 +168,11 @@ public:
 };
 
 //////////////////////////////////////////////////////////////////////////////
-// helper class for UI visualization previews
-
-class sharedModelAndVDev
-{
-private:
-    sal_uInt32              mnUseCount;
-    VirtualDevice*          mpVirtualDevice;
-    SdrModel*               mpSdrModel;
-
-public:
-    sharedModelAndVDev();
-    ~sharedModelAndVDev();
-
-    void increaseUseCount();
-    bool decreaseUseCount();
-
-    SdrModel& getSharedSdrModel();
-    VirtualDevice& getSharedVirtualDevice();
-};
-
-//////////////////////////////////////////////////////////////////////////////
 // class XPropertyList
 
 class SVX_DLLPUBLIC XPropertyList
 {
 protected:
-    static sharedModelAndVDev* pGlobalsharedModelAndVDev;
-
     String              maName; // nicht persistent !
     String              maPath;
 
@@ -316,9 +281,6 @@ private:
     friend class XPropertyListFactory;
     XLineEndList(const String& rPath );
 
-    SdrObject*                  mpBackgroundObject;
-    SdrObject*                  mpLineObject;
-
 protected:
     virtual Bitmap CreateBitmapForUI(long nIndex);
 
@@ -345,8 +307,6 @@ private:
     friend class XPropertyListFactory;
     XDashList(const String& rPath );
 
-    SdrObject*          mpBackgroundObject;
-    SdrObject*          mpLineObject;
     Bitmap              maBitmapSolidLine;
     String              maStringSolidLine;
     String              maStringNoLine;
@@ -388,9 +348,6 @@ private:
     friend class XPropertyListFactory;
     XHatchList(const String& rPath );
 
-    SdrObject*                  mpBackgroundObject;
-    SdrObject*                  mpHatchObject;
-
 protected:
     virtual Bitmap CreateBitmapForUI(long nIndex);
 
@@ -416,8 +373,6 @@ class SVX_DLLPUBLIC XGradientList : public XPropertyList
 private:
     friend class XPropertyListFactory;
     XGradientList(const String& rPath );
-
-    SdrObject*                  mpBackgroundObject;
 
 protected:
     virtual Bitmap CreateBitmapForUI(long nIndex);

@@ -19,55 +19,25 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
 // include ---------------------------------------------------------------
-
-#ifndef SVX_LIGHT
-
 #include <com/sun/star/container/XNameContainer.hpp>
 #include "svx/XPropertyTable.hxx"
 #include <unotools/ucbstreamhelper.hxx>
-
 #include "xmlxtexp.hxx"
 #include "xmlxtimp.hxx"
-
-#endif
 #include <tools/urlobj.hxx>
 #include <vcl/virdev.hxx>
-
-#ifndef _SV_APP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#include <svl/itemset.hxx>
-#include <sfx2/docfile.hxx>
-
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
-
 #include <svx/xtable.hxx>
-#include <svx/xpool.hxx>
-#include <svx/xfillit0.hxx>
-#include <svx/xflclit.hxx>
-#include <svx/xlnstwit.hxx>
-#include <svx/xlnedwit.hxx>
-#include <svx/xlnclit.hxx>
-#include <svx/xlineit0.hxx>
-#include <svx/xlnstit.hxx>
-#include <svx/xlnedit.hxx>
-#include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
+#include <drawinglayer/attribute/linestartendattribute.hxx>
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-
-#include <svx/svdorect.hxx>
-#include <svx/svdopath.hxx>
-#include <svx/svdmodel.hxx>
-#include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
-#include <svx/sdr/contact/displayinfo.hxx>
-#include <svx/xlnwtit.hxx>
 
 #define GLOBALOVERFLOW
 
@@ -84,16 +54,12 @@ sal_Unicode const pszExtLineEnd[]   = {'s','o','e'};
 // --------------------
 
 XLineEndList::XLineEndList(const String& rPath)
-:   XPropertyList(rPath),
-    mpBackgroundObject(0),
-    mpLineObject(0)
+:   XPropertyList(rPath)
 {
 }
 
 XLineEndList::~XLineEndList()
 {
-    SdrObject::Free(mpBackgroundObject);
-    SdrObject::Free(mpLineObject);
 }
 
 XLineEndEntry* XLineEndList::Replace(XLineEndEntry* pEntry, long nIndex )
@@ -121,7 +87,7 @@ sal_Bool XLineEndList::Load()
 
         if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
         {
-            DBG_ASSERT( !maPath.Len(), "invalid URL" );
+            OSL_ENSURE( !maPath.Len(), "invalid URL" );
             return sal_False;
         }
 
@@ -142,7 +108,7 @@ sal_Bool XLineEndList::Save()
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
     {
-        DBG_ASSERT( !maPath.Len(), "invalid URL" );
+        OSL_ENSURE( !maPath.Len(), "invalid URL" );
         return sal_False;
     }
 
@@ -181,69 +147,82 @@ sal_Bool XLineEndList::Create()
 Bitmap XLineEndList::CreateBitmapForUI( long nIndex )
 {
     Bitmap aRetval;
-    OSL_ENSURE(pGlobalsharedModelAndVDev, "OOps, global values missing (!)");
-    OSL_ENSURE(nIndex < Count(), "OOps, global values missing (!)");
+    OSL_ENSURE(nIndex < Count(), "OOps, access out of range (!)");
 
-    if(pGlobalsharedModelAndVDev && nIndex < Count())
+    if(nIndex < Count())
     {
-        SdrModel& rModel = pGlobalsharedModelAndVDev->getSharedSdrModel();
-        VirtualDevice& rVirDev = pGlobalsharedModelAndVDev->getSharedVirtualDevice();
-        const Point aZero(0, 0);
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
         const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
-        const Size aSize(rVirDev.PixelToLogic(Size(rSize.Width() * 2, rSize.Height())));
+        const Size aSize(rSize.Width() * 2, rSize.Height());
 
-        rVirDev.SetOutputSize(aSize);
-        rVirDev.SetDrawMode(rStyleSettings.GetHighContrastMode()
+        // prepare line geometry
+        basegfx::B2DPolygon aLine;
+        const double fBorderDistance(aSize.Height() * 0.1);
+
+        aLine.append(basegfx::B2DPoint(fBorderDistance, aSize.Height() / 2));
+        aLine.append(basegfx::B2DPoint(aSize.Width() - fBorderDistance, aSize.Height() / 2));
+
+        // prepare LineAttribute
+        const basegfx::BColor aLineColor(rStyleSettings.GetFieldTextColor().getBColor());
+        const double fLineWidth(rStyleSettings.GetListBoxPreviewDefaultLineWidth() * 1.1);
+        const drawinglayer::attribute::LineAttribute aLineAttribute(
+            aLineColor,
+            fLineWidth);
+
+        const basegfx::B2DPolyPolygon aLineEnd(GetLineEnd(nIndex)->GetLineEnd());
+        const double fArrowHeight(aSize.Height() - (2.0 * fBorderDistance));
+        const drawinglayer::attribute::LineStartEndAttribute aLineStartEndAttribute(
+            fArrowHeight,
+            aLineEnd,
+            false);
+
+        // prepare line primitive
+        const drawinglayer::primitive2d::Primitive2DReference aLineStartEndPrimitive(
+            new drawinglayer::primitive2d::PolygonStrokeArrowPrimitive2D(
+                aLine,
+                aLineAttribute,
+                aLineStartEndAttribute,
+                aLineStartEndAttribute));
+
+        // prepare VirtualDevice
+        VirtualDevice aVirtualDevice;
+        const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D;
+
+        aVirtualDevice.SetOutputSizePixel(aSize);
+        aVirtualDevice.SetDrawMode(rStyleSettings.GetHighContrastMode()
             ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
             : DRAWMODE_DEFAULT);
-        rVirDev.SetBackground(rStyleSettings.GetFieldColor());
 
-        if(!mpBackgroundObject)
+        if(rStyleSettings.GetUIPreviewUsesCheckeredBackground())
         {
-            const Rectangle aBackgroundSize(aZero, aSize);
-            mpBackgroundObject = new SdrRectObj(aBackgroundSize);
-            OSL_ENSURE(0 != mpBackgroundObject, "XLineEndList: no BackgroundObject created!" );
-            mpBackgroundObject->SetModel(&rModel);
-            mpBackgroundObject->SetMergedItem(XFillStyleItem(XFILL_SOLID));
-            mpBackgroundObject->SetMergedItem(XLineStyleItem(XLINE_NONE));
-            mpBackgroundObject->SetMergedItem(XFillColorItem(String(), rStyleSettings.GetFieldColor()));
+            const Point aNull(0, 0);
+            static const sal_uInt32 nLen(8);
+            static const Color aW(COL_WHITE);
+            static const Color aG(0xef, 0xef, 0xef);
+
+            aVirtualDevice.DrawCheckered(aNull, aSize, nLen, aW, aG);
+        }
+        else
+        {
+            aVirtualDevice.SetBackground(rStyleSettings.GetFieldColor());
+            aVirtualDevice.Erase();
         }
 
-        if(!mpLineObject)
+        // create processor and draw primitives
+        drawinglayer::processor2d::BaseProcessor2D* pProcessor2D = drawinglayer::processor2d::createPixelProcessor2DFromOutputDevice(
+            aVirtualDevice,
+            aNewViewInformation2D);
+
+        if(pProcessor2D)
         {
-            const basegfx::B2DPoint aStart(0, aSize.Height() / 2);
-            const basegfx::B2DPoint aEnd(aSize.Width(), aSize.Height() / 2);
-            basegfx::B2DPolygon aPolygon;
-            aPolygon.append(aStart);
-            aPolygon.append(aEnd);
-            mpLineObject = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aPolygon));
-            OSL_ENSURE(0 != mpLineObject, "XLineEndList: no LineObject created!" );
-            mpLineObject->SetModel(&rModel);
-            const Size aLineWidth(rVirDev.PixelToLogic(Size(rStyleSettings.GetListBoxPreviewDefaultLineWidth(), 0)));
-            mpLineObject->SetMergedItem(XLineWidthItem(aLineWidth.getWidth()));
-            const sal_uInt32 nArrowHeight((aSize.Height() * 8) / 10);
-            mpLineObject->SetMergedItem(XLineStartWidthItem(nArrowHeight));
-            mpLineObject->SetMergedItem(XLineEndWidthItem(nArrowHeight));
-            mpLineObject->SetMergedItem(XLineColorItem(String(), rStyleSettings.GetFieldTextColor()));
+            const drawinglayer::primitive2d::Primitive2DSequence aSequence(&aLineStartEndPrimitive, 1);
+
+            pProcessor2D->process(aSequence);
+            delete pProcessor2D;
         }
 
-        mpLineObject->SetMergedItem(XLineStyleItem(XLINE_SOLID));
-        mpLineObject->SetMergedItem(XLineStartItem(String(), GetLineEnd(nIndex)->GetLineEnd()));
-        mpLineObject->SetMergedItem(XLineEndItem(String(), GetLineEnd(nIndex)->GetLineEnd()));
-
-        sdr::contact::SdrObjectVector aObjectVector;
-
-        aObjectVector.push_back(mpBackgroundObject);
-        aObjectVector.push_back(mpLineObject);
-
-        sdr::contact::ObjectContactOfObjListPainter aPainter(rVirDev, aObjectVector, 0);
-        sdr::contact::DisplayInfo aDisplayInfo;
-
-        rVirDev.Erase();
-        aPainter.ProcessDisplay(aDisplayInfo);
-
-        aRetval = rVirDev.GetBitmap(aZero, rVirDev.GetOutputSize());
+        // get result bitmap and scale
+        aRetval = aVirtualDevice.GetBitmap(Point(0, 0), aVirtualDevice.GetOutputSizePixel());
     }
 
     return aRetval;
