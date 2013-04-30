@@ -33,12 +33,8 @@ if ($ENV{OS} eq 'WNT') {
 
 if (defined($ENV{TMPDIR})) {
     $tmp_dir = $ENV{TMPDIR};
-} elsif (defined($ENV{TMP})) {
-    $tmp_dir = $ENV{TMP};
-} else {
-    $tmp_dir = '/tmp';
 }
-if (!-d $tmp_dir) {die "Set TMP or TMPDIR!\n";}
+if (!-d $tmp_dir) {die "Set TMPDIR!\n";}
 
 # Workaround for system Mozilla
 if ($ENV{'SYSTEM_MOZILLA'} eq 'YES') {
