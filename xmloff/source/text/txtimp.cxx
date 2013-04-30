@@ -1801,7 +1801,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                  style, if it has no direct list style property and (if exists) the
                  automatic paragraph style has also no direct list style set.
             */
-            if (m_pImpl->m_xParaStyles->hasByName(sStyleName))
+            if (m_pImpl->m_xParaStyles.is() && m_pImpl->m_xParaStyles->hasByName(sStyleName))
             {
                 bool bOutlineStyleCandidate( false );
 
