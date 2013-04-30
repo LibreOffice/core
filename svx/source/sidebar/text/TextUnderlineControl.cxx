@@ -68,14 +68,6 @@ TextUnderlineControl::TextUnderlineControl (
 
 void TextUnderlineControl::initial()
 {
-    /*maPBOptions.SetDefBkColor(GetSettings().GetStyleSettings().GetHighContrastMode()?
-        GetSettings().GetStyleSettings().GetMenuColor():
-        sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_DropDownBackground ));//Color(244,245,249)//for high contrast
-    maPBOptions.SetHoverBkColor(GetSettings().GetStyleSettings().GetHighContrastMode()?
-        GetSettings().GetStyleSettings().GetMenuColor():
-        sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ) );//Color( 93, 120, 163 )
-    maPBOptions.SetHoverTxtColor( sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Color_PanelTitleFont ) );//Color( 255, 255, 255 )
-    maPBOptions.SetIcoPosX( 2);*/
     maVSUnderline.SetColor(GetSettings().GetStyleSettings().GetHighContrastMode()?
         GetSettings().GetStyleSettings().GetMenuColor():
         sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
@@ -132,7 +124,6 @@ void TextUnderlineControl::GetFocus()
 }
 void TextUnderlineControl::Rearrange(FontUnderline eLine)
 {
-    // high contrast
     maVSUnderline.SetItemImage(1, maIMGSingle);
     maVSUnderline.SetItemImage(2, maIMGDouble );
     maVSUnderline.SetItemImage(3, maIMGBold);
@@ -143,74 +134,66 @@ void TextUnderlineControl::Rearrange(FontUnderline eLine)
     maVSUnderline.SetItemImage(8, maIMGDashDot);
     maVSUnderline.SetItemImage(9, maIMGDashDotDot);
     maVSUnderline.SetItemImage(10, maIMGWave);
-//  maVSUnderline.SelectItem(0);        //delete
-//  maVSUnderline.SetNoSelection();
 
     switch(eLine)
     {
     case UNDERLINE_SINGLE:
         maVSUnderline.SetItemImage(1, maIMGSingleSel);
-        maVSUnderline.SelectItem(1);    //add
+        maVSUnderline.SelectItem(1);
         maVSUnderline.GrabFocus();
         break;
     case UNDERLINE_DOUBLE:
         maVSUnderline.SetItemImage(2, maIMGDoubleSel);
-        maVSUnderline.SelectItem(2);    //add
+        maVSUnderline.SelectItem(2);
         maVSUnderline.GrabFocus();
         break;
     case UNDERLINE_BOLD:
         maVSUnderline.SetItemImage(3, maIMGBoldSel);
-        maVSUnderline.SelectItem(3);    //add
+        maVSUnderline.SelectItem(3);
         maVSUnderline.GrabFocus();
         break;
     case UNDERLINE_DOTTED:
         maVSUnderline.SetItemImage(4, maIMGDotSel);
-        maVSUnderline.SelectItem(4);    //add
+        maVSUnderline.SelectItem(4);
         maVSUnderline.GrabFocus();
         break;
     case UNDERLINE_BOLDDOTTED:
         maVSUnderline.SetItemImage(5, maIMGDotBoldSel);
-        maVSUnderline.SelectItem(5);    //add
+        maVSUnderline.SelectItem(5);
         maVSUnderline.GrabFocus();
         break;
     case UNDERLINE_DASH:
         maVSUnderline.SetItemImage(6, maIMGDashSel);
-        maVSUnderline.SelectItem(6);    //add
+        maVSUnderline.SelectItem(6);
         maVSUnderline.GrabFocus();
         break;
     case UNDERLINE_LONGDASH:
         maVSUnderline.SetItemImage(7, maIMGDashLongSel);
-        maVSUnderline.SelectItem(7);    //add
+        maVSUnderline.SelectItem(7);
         maVSUnderline.GrabFocus();
         break;
     case UNDERLINE_DASHDOT:
         maVSUnderline.SetItemImage(8, maIMGDashDotSel);
-        maVSUnderline.SelectItem(8);    //add
+        maVSUnderline.SelectItem(8);
         maVSUnderline.GrabFocus();
         break;
     case UNDERLINE_DASHDOTDOT:
         maVSUnderline.SetItemImage(9, maIMGDashDotDotSel);
-        maVSUnderline.SelectItem(9);    //add
+        maVSUnderline.SelectItem(9);
         maVSUnderline.GrabFocus();
         break;
     case UNDERLINE_WAVE:
         maVSUnderline.SetItemImage(10, maIMGWaveSel);
-        maVSUnderline.SelectItem(10);   //add
+        maVSUnderline.SelectItem(10);
         maVSUnderline.GrabFocus();
         break;
     case UNDERLINE_NONE:
     default:
         maVSUnderline.SelectItem(1);
-        maVSUnderline.SetNoSelection();//add
+        maVSUnderline.SetNoSelection();
         maPBOptions.GrabFocus();
     }
     maVSUnderline.StartSelection();
-    //removed
-    //if(mpPage->meContextType == PROPERTY_CONTEXT_SC_CELL)
-    //  maPBOptions.Disable();
-    //else
-    //  maPBOptions.Enable();
-    //removed end
 }
 ValueSet& TextUnderlineControl::GetValueSet()
 {
@@ -227,20 +210,12 @@ IMPL_LINK(TextUnderlineControl, VSSelectHdl, void *, pControl)
         sal_uInt16 iPos = maVSUnderline.GetSelectItemId();
         FontUnderline eUnderline = (FontUnderline)(sal_uInt64)maVSUnderline.GetItemData( iPos );
 
-        //<<modified
-        //SvxTextLineItem aLineItem(eUnderline, SID_ATTR_CHAR_UNDERLINE);
         SvxUnderlineItem aLineItem(eUnderline, SID_ATTR_CHAR_UNDERLINE);
-        //modify end>>
 
-        //<<add , this line of code will keep the new underline use pre-color
         aLineItem.SetColor(mrTextPropertyPanel.GetUnderlineColor());
-        //add end>>
         mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_UNDERLINE, SFX_CALLMODE_RECORD, &aLineItem, 0L);
 
-        //add , for the popup page not update immediately
         mrTextPropertyPanel.SetUnderline(eUnderline);
-        //add end
-        //mrTextPropertyPanel.SetDefaultUnderline(eUnderline);
 
         mrTextPropertyPanel.EndUnderlinePopupMode();
     }
@@ -256,9 +231,7 @@ IMPL_LINK(TextUnderlineControl, PBClickHdl, PushButton *, pPBtn)
             SfxDispatcher* pDisp = mpBindings->GetDispatcher();
             pDisp->Execute( SID_CHAR_DLG_EFFECT, SFX_CALLMODE_ASYNCHRON );
         }
-        //add
         mrTextPropertyPanel.EndUnderlinePopupMode();
-        //add end
     }
     return 0;
 }
