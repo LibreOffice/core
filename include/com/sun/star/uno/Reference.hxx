@@ -122,6 +122,18 @@ inline Reference< interface_type >::Reference( const Reference< interface_type >
         _pInterface->acquire();
 }
 //__________________________________________________________________________________________________
+template< class interface_type > template< class derived_type >
+inline Reference< interface_type >::Reference(
+    const Reference< derived_type > & rRef,
+    typename detail::UpCast< interface_type, derived_type >::t )
+    SAL_THROW(())
+{
+    interface_type * p = rRef.get();
+    _pInterface = p;
+    if (_pInterface)
+        _pInterface->acquire();
+}
+//__________________________________________________________________________________________________
 template< class interface_type >
 inline Reference< interface_type >::Reference( interface_type * pInterface ) SAL_THROW(())
 {

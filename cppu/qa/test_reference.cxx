@@ -149,4 +149,47 @@ CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
+// Check that the up-casting Reference conversion constructor catches the
+// intended cases:
+
+namespace {
+
+struct Base1: public css::uno::XInterface { virtual ~Base1() {} };
+struct Base2: public Base1 { virtual ~Base2() {} };
+struct Base3: public Base1 { virtual ~Base3() {} };
+struct Derived: public Base2, public Base3 { virtual ~Derived() {} };
+
+}
+
+// The special case using the conversion operator instead:
+css::uno::Reference< css::uno::XInterface > testUpcast1(
+    css::uno::Reference< Derived > const & ref)
+{ return ref; }
+
+// The normal up-cast case:
+css::uno::Reference< Base1 > testUpcast2(
+    css::uno::Reference< Base2 > const & ref)
+{ return ref; }
+
+// Commenting this in should cause a compiler error due to an ambiguous up-cast:
+/*
+css::uno::Reference< Base1 > testFailingUpcast3(
+    css::uno::Reference< Derived > const & ref)
+{ return ref; }
+*/
+
+// Commenting this in should cause a compiler error due to a down-cast:
+/*
+css::uno::Reference< Base2 > testFailingUpcast4(
+    css::uno::Reference< Base1 > const & ref)
+{ return ref; }
+*/
+
+// Commenting this in should cause a compiler error due to a down-cast:
+/*
+css::uno::Reference< Base1 > testFailingUpcast5(
+    css::uno::Reference< css::uno::XInterface > const & ref)
+{ return ref; }
+*/
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
