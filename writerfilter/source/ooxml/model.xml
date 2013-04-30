@@ -22769,6 +22769,13 @@
       <element name="sdtEndPr" tokenid="ooxml:CT_SdtRow_sdtEndPr"/>
       <element name="sdtContent" tokenid="ooxml:CT_SdtRow_sdtContent"/>
     </resource>
+    <resource name="CT_SdtDropDownList" resource="Properties" tag="field">
+      <element name="listItem" tokenid="ooxml:CT_SdtDropDownList_listItem"/>
+    </resource>
+    <resource name="CT_SdtListItem" resource="Properties" tag="field">
+      <attribute name="displayText" tokenid="ooxml:CT_SdtListItem_displayText"/>
+      <attribute name="value" tokenid="ooxml:CT_SdtListItem_value"/>
+    </resource>
     <resource name="CT_Attr" resource="Properties" tag="content">
       <attribute name="uri" tokenid="ooxml:CT_Attr_uri"/>
       <attribute name="name" tokenid="ooxml:CT_Attr_name"/>
