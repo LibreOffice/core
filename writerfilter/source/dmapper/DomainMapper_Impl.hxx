@@ -678,6 +678,11 @@ public:
 
     /// If we're inside <w:rPr>, inside <w:style w:type="table">
     bool m_bInTableStyleRunProps;
+
+    std::vector<OUString> m_aDropDownItems;
+    OUStringBuffer m_aSdtTexts;
+    /// Create drop-down control from w:sdt's w:dropDownList.
+    void createDropDownControl();
 };
 } //namespace dmapper
 } //namespace writerfilter

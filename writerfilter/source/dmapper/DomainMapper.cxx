@@ -1435,6 +1435,14 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         break;
         case NS_ooxml::LN_CT_SdtBlock_sdtEndContent:
             m_pImpl->SetSdt(false);
+            if (!m_pImpl->m_aDropDownItems.empty())
+                m_pImpl->createDropDownControl();
+        break;
+        case NS_ooxml::LN_CT_SdtListItem_displayText:
+            // TODO handle when this is != value
+        break;
+        case NS_ooxml::LN_CT_SdtListItem_value:
+            m_pImpl->m_aDropDownItems.push_back(sStringValue);
         break;
         default:
             {
@@ -3289,6 +3297,20 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         }
     }
     break;
+    case NS_ooxml::LN_CT_SdtPr_dropDownList:
+    {
+        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+        if (pProperties.get() != NULL)
+            pProperties->resolve(*this);
+    }
+    break;
+    case NS_ooxml::LN_CT_SdtDropDownList_listItem:
+    {
+        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+        if (pProperties.get() != NULL)
+            pProperties->resolve(*this);
+    }
+    break;
     default:
         {
 #ifdef DEBUG_DOMAINMAPPER
@@ -3579,6 +3601,12 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
     OUStringBuffer aBuffer = OUStringBuffer(len);
     aBuffer.append( (const sal_Unicode *) data_, len);
     sText = aBuffer.makeStringAndClear();
+
+    if (!m_pImpl->m_aDropDownItems.empty())
+    {
+        m_pImpl->m_aSdtTexts.append(sText);
+        return;
+    }
 
     try
     {
