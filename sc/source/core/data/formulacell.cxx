@@ -3137,6 +3137,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
         aInterpreter.Interpret();
 
         pDest->aResult.SetToken(aInterpreter.GetResultToken().get());
+        pDest->ResetDirty();
     }
 
     return true;
