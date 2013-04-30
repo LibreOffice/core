@@ -1,14 +1,25 @@
-Pre-canned distribution / platform configurations
+Pre-canned distribution configurations
 
-When the software is configured for a platform, since we run on so
-many platforms, detecting the best sequence of configure options to
-get it building is hard.
+These files are supposed to correspond to the options used when
+creating the Document Foundation (or other "canonical") builds of
+LibreOffice for various platforms. They are *not* supposed to
+represent the "most useful" options for developers in general. On the
+contrary, the intent is that just running ./autogen.sh without any
+options at all should produce a buildable configuration for developers
+with interest in working on the most commonly used parts of the code.
 
-Instead we have a text file containing the recommended (often the
-distributed) version of these parameters, one per distribution or
-significant platform. These are interpreted by autogen.sh and
-eventually end up passed to configure. Thus:
+(Possibly the above is a misunderstanding, or maybe there never even
+has been any clear consensus what situations these files actually are
+intended for.)
 
-./autogen.sh --with-distro=LibreOfficeAndroid
+The files contain sets of configuration parameters, and can be passed
+on the autogen.sh command line thus:
 
-might build a version tweaked for Android.
+./autogen.sh --with-distro=LibreOfficeFoo
+
+Contrary to the above, in the Android and iOS cases the amount of
+parameters you just must use is so large, that for convenience it is
+always easiest to use the corresponding distro-configs file. This is a
+bug and needs to be fixed; also configuring for those platforms needs
+to use sane (or only possible) defaults and work fine wihout any
+parameters at all.
