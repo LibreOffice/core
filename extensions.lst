@@ -96,7 +96,7 @@
 
 # Scottish Gaelic.
 [ language=gd ]
-    d645b36c5d4fc52c18ac180453b48b5c http://sourceforge.net/projects/aoo-extensions/files/4587/7/hunspell-gd-2.5.oxt/download "hunspell-gd-2.5.oxt"
+    867d5509958a867fec1096b445fe4cec http://sourceforge.net/projects/aoo-extensions/files/4587/8/hunspell-gd-2.6.oxt/download "hunspell-gd-2.6.oxt"
 
 # Basque.
 [ language=eu ]
