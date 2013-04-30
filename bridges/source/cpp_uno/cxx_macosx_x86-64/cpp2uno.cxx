@@ -451,7 +451,7 @@ extern "C" void privateSnippetExecutor( void )
     "addq   $160, %%rsp\n"
     :
     :
-    : "rax", "xmm0" );
+    : "rax", "r10", "xmm0" );
 }
 
 static const int codeSnippetSize = 24;
