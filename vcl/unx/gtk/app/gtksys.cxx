@@ -70,6 +70,13 @@ struct GdkRectangleEqual
 
 }
 
+/**
+ * GtkSalSystem::countScreenMonitors()
+ *
+ * This method builds the vector which allows us to map from VCL's
+ * idea of linear integer ScreenNumber to to gtk+'s rather more
+ * complicated screen + monitor concept.
+ */
 void
 GtkSalSystem::countScreenMonitors()
 {
@@ -134,6 +141,11 @@ GtkSalSystem::getScreenMonitorFromIdx (int nIdx, gint &nMonitor)
             break;
     }
     nMonitor = nIdx;
+
+    // handle invalid monitor indexes as non-existent screens
+    if (nMonitor < 0 || (pScreen && nMonitor >= gdk_screen_get_n_monitors (pScreen)))
+        pScreen = NULL;
+
     return pScreen;
 }
 
