@@ -905,7 +905,7 @@ public:
     void                SetOutDevViewType( OutDevViewType eOutDevViewType ) { meOutDevViewType=eOutDevViewType; }
     OutDevViewType      GetOutDevViewType() const { return meOutDevViewType; }
 
-    void                Fdrawrect;
+    void                SetLineColor();
     void                SetLineColor( const Color& rColor );
     const Color&        GetLineColor() const { return maLineColor; }
     sal_Bool                IsLineColor() const { return mbLineColor; }
