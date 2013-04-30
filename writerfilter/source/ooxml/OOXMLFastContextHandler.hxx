@@ -634,7 +634,6 @@ private:
     set<Id> mMyNamespaces;
     set<Token_t> mMyTokens;
     OOXMLPropertySet::Pointer_t mpPropertySet;
-    bool mbShapeSent;
 
     OOXMLFastContextHandler * getFastContextHandler() const;
 };
