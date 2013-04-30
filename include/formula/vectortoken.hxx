@@ -14,6 +14,10 @@
 
 namespace formula {
 
+/**
+ * This token represents a single cell reference in a vectorized formula
+ * calculation context.
+ */
 class FORMULA_DLLPUBLIC SingleVectorRefToken : public FormulaToken
 {
     const double* mpArray;
@@ -29,15 +33,17 @@ public:
 };
 
 /**
- * This token describes a range reference in a vectorized formula
+ * This token represents a range reference in a vectorized formula
  * calculation context.
  */
 class FORMULA_DLLPUBLIC DoubleVectorRefToken : public FormulaToken
 {
     std::vector<const double*> maArrays;
 
-    size_t mnArrayLength;
-    size_t mnRefRowSize;
+    size_t mnArrayLength; /// length of all arrays.
+    size_t mnRefRowSize; /// original reference row size. The row size may
+                         /// change as it goes down the array if either the
+                         /// stard or end position is fixed.
 
     bool mbStartFixed:1; /// whether or not the start row position is absolute.
     bool mbEndFixed:1; /// whether or not the end row position is absolute.
