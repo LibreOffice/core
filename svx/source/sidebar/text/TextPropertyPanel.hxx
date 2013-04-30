@@ -32,7 +32,6 @@
 #include <editeng/svxenum.hxx>
 #include <editeng/fhgtitem.hxx>
 
-//#include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/ui/XSidebar.hpp>
 
 #include <boost/scoped_ptr.hpp>
@@ -74,17 +73,9 @@ public:
     void SetDefaultUnderline(FontUnderline eUnderline);
 
 
-    enum ColorType
-    {
-        FONT_COLOR = 1,
-        BACK_COLOR = 2
-    };
-
     virtual void HandleContextChange (
         const ::sfx2::sidebar::EnumContext aContext);
 
-
-    // ControllerItem::ItemUpdateReceiverInterface
 
     virtual void NotifyItemUpdate(
         const sal_uInt16 nSId,
@@ -133,7 +124,7 @@ private:
     FontWeight                  meWeight;
     FontItalic                  meItalic;
     FontUnderline               meUnderline;
-    Color                       meUnderlineColor;  //
+    Color                       meUnderlineColor;
     bool                        mbShadow;
     FontStrikeout               meStrike;
     bool mbWeightAvailable;
@@ -142,7 +133,6 @@ private:
     bool mbColorAvailable;
     Color                       maBackColor;
     bool mbBackColorAvailable;
-    ColorType meColorType;
     SvxEscapement               meEscape;  //for sw
     bool                        mbSuper;
     bool                        mbSub;
@@ -194,7 +184,6 @@ private:
     DECL_LINK(FontSizeLoseFocus, FontSizeBox *);
     DECL_LINK(ToolboxFontSelectHandler, ToolBox *);
     DECL_LINK(ToolboxIncDecSelectHdl, ToolBox *);
-    DECL_LINK(ImplPopupModeEndHdl, FloatingWindow* );
     DECL_LINK(ToolBoxSwScriptSelectHdl, ToolBox *);
     DECL_LINK(ToolBoxScriptSelectHdl, ToolBox *);
 

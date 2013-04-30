@@ -82,10 +82,8 @@ namespace svx { namespace sidebar {
 #define TEXT_SECTIONPAGE_HEIGHT_S   SECTIONPAGE_MARGIN_VERTICAL_TOP + CBOX_HEIGHT  + ( TOOLBOX_ITEM_HEIGHT + 2 ) + CONTROL_SPACING_VERTICAL * 1 + SECTIONPAGE_MARGIN_VERTICAL_BOT
 #define TEXT_SECTIONPAGE_HEIGHT     SECTIONPAGE_MARGIN_VERTICAL_TOP + CBOX_HEIGHT  + ( TOOLBOX_ITEM_HEIGHT + 2 ) * 2 + CONTROL_SPACING_VERTICAL * 2 + SECTIONPAGE_MARGIN_VERTICAL_BOT
 
-//
 
-//end
-PopupControl* TextPropertyPanel::CreateCharacterSpacingControl (PopupContainer* pParent)
+    PopupControl* TextPropertyPanel::CreateCharacterSpacingControl (PopupContainer* pParent)
 {
     return new TextCharacterSpacingControl(pParent, *this, mpBindings);
 }
@@ -404,7 +402,6 @@ void TextPropertyPanel::Initialize (void)
     mbColorAvailable = true;
     maBackColor = COL_AUTO;
     mbBackColorAvailable = true;
-    meColorType = FONT_COLOR;
     meEscape = SVX_ESCAPEMENT_OFF;
     mbSuper = false;
     mbSub = false;
@@ -424,17 +421,12 @@ void TextPropertyPanel::Initialize (void)
 
     //set handler
     mpFontNameBox->SetBindings(mpBindings);
-    //add
     Link aLink = LINK(this, TextPropertyPanel, FontSelHdl);
     mpFontNameBox->SetSelectHdl(aLink);
-    //add end
-
     aLink = LINK(this, TextPropertyPanel, FontSizeModifyHdl);
     maFontSizeBox.SetModifyHdl(aLink);
-    //add
     aLink = LINK(this, TextPropertyPanel, FontSizeSelHdl);
     maFontSizeBox.SetSelectHdl(aLink);
-    //add end
     aLink = LINK(this, TextPropertyPanel, FontSizeLoseFocus);
     maFontSizeBox.SetLoseFocusHdl(aLink);
 
@@ -572,7 +564,7 @@ IMPL_LINK( TextPropertyPanel, FontSelHdl, FontNameBox*, pBox )
     }
     return 0;
 }
-//add end
+
 IMPL_LINK( TextPropertyPanel, FontSizeModifyHdl, FontSizeBox*, pSizeBox )
 {
     if (pSizeBox == &maFontSizeBox)
@@ -589,7 +581,7 @@ IMPL_LINK( TextPropertyPanel, FontSizeModifyHdl, FontSizeBox*, pSizeBox )
     }
     return 0;
 }
-//add
+
 IMPL_LINK( TextPropertyPanel, FontSizeSelHdl, FontSizeBox*, pSizeBox )
 {
     if ( !pSizeBox->IsTravelSelect() )
@@ -605,7 +597,7 @@ IMPL_LINK( TextPropertyPanel, FontSizeSelHdl, FontSizeBox*, pSizeBox )
 
     return 0;
 }
-//add end
+
 IMPL_LINK(TextPropertyPanel, FontSizeLoseFocus, FontSizeBox*, pSizeBox)
 {
     if(pSizeBox == &maFontSizeBox)
@@ -662,6 +654,7 @@ IMPL_LINK(TextPropertyPanel, ToolboxFontSelectHandler, ToolBox*, pToolBox)
                 mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_UNDERLINE, SFX_CALLMODE_RECORD, &aLineItem, 0L);
             }
             UpdateItem(SID_ATTR_CHAR_UNDERLINE);
+            break;
         }
         case TBI_STRIKEOUT:
         {
@@ -820,8 +813,6 @@ IMPL_LINK(TextPropertyPanel, ToolBoxFontColorDropHdl,ToolBox*, pToolBox)
     const sal_uInt16 nId = pToolBox->GetCurItemId();
     if(nId == TBI_FONTCOLOR)
     {
-        meColorType = FONT_COLOR;
-
         pToolBox->SetItemDown( nId, true );
 
         maFontColorPopup.Show(*pToolBox);
@@ -903,8 +894,6 @@ IMPL_LINK(TextPropertyPanel, ToolBoxHighlightDropHdl, ToolBox*, pToolBox)
     const sal_uInt16 nId = pToolBox->GetCurItemId();
     if(nId == TBI_HIGHLIGHT)
     {
-        meColorType = BACK_COLOR;
-
         pToolBox->SetItemDown( nId, true );
         maBrushColorPopup.Show(*pToolBox);
         maBrushColorPopup.SetCurrentColor(maBackColor, mbBackColorAvailable);
@@ -927,14 +916,6 @@ IMPL_LINK(TextPropertyPanel, SpacingClickHdl, ToolBox*, pToolBox)
 
     }
     return 0L;
-}
-
-
-
-
-IMPL_LINK( TextPropertyPanel, ImplPopupModeEndHdl, FloatingWindow*, EMPTYARG )
-{
-    return 0;
 }
 
 
