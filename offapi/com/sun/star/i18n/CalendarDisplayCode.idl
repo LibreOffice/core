@@ -31,7 +31,7 @@ module com { module sun { module star { module i18n {
     <p> The examples given are for an English Gregorian calendar, note
     that other calendars or locales may return completely different
     strings, for example not a four digit year but a CJK name instead.
-    <p/>
+    </p>
 
      @since OOo 1.1.2
  */

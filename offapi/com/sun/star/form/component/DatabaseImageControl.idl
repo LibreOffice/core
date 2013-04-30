@@ -34,7 +34,7 @@
 
     <p>As every com::sun::star::form::DataAwareControlModel, an image control
     can be bound to a database field. This means that for instance with every record change, the content
-    of the database field is taken, interpreted as image, and displayed in the control.<br/>
+    of the database field is taken, interpreted as image, and displayed in the control.<br>
     Unlike other more text-based controls, it does not interpret the content of the field as text or double,
     but as binary stream (see com::sun::star::sdb::XColumn::getBinaryStream()).</p>
 
@@ -45,7 +45,7 @@
     com::sun::star::sdbc::DataType::OTHER,
     com::sun::star::sdbc::DataType::LONGVARCHAR</p>
 
-    <p/>
+    </p>
 
     <p>Note that besides taking the image to be displayed from the bound field, there is another option. The
     com::sun::star::awt::UnoControlImageControlModel::ImageURL property specifies
@@ -68,9 +68,9 @@
                 exchanged by URL. For example, implementations of the control service may allow the user
                 to browse for image. After this, the URL of the image is set as
                 com::sun::star::awt::UnoControlImageControlModel::ImageURL
-                property at the model.<br/>
+                property at the model.<br>
                 Now the control loads the image determined by the property value, and starts producing
-                a new data stream, which is displayed by the control (which is a consumer for this stream).<br/>
+                a new data stream, which is displayed by the control (which is a consumer for this stream).<br>
                 From now on, the control and thus the database record counts as modified. If the cursor of the
                 form is moved further, the modified record is saved, means the content of the image pointed to
                 by com::sun::star::awt::UnoControlImageControlModel::ImageURL

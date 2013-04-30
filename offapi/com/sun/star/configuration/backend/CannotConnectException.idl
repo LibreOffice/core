@@ -35,7 +35,7 @@ module backend {
             <li>Communications link failure.</li>
             <li>Backend is unavailable temporarily or permanently.</li>
             <li>Internal failure of the backend access layer.</li>
-        <ul/>
+        </ul>
     </p>
 
     @since OOo 1.1.2

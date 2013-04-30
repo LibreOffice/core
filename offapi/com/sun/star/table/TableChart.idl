@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module table {
 /** represents a chart based on data in a table or spreadsheet.
 
     <p>This service does not represent the chart document model itself,
-    but the object in the table that contains this chart document.<p/>
+    but the object in the table that contains this chart document.</p>
  */
 published service TableChart
 {

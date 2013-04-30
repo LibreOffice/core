@@ -35,11 +35,11 @@ module com { module sun { module star { module i18n {
     not always a one to one mapping between characters. Transliteration
     modules are primarily used by collation, and search and replace
     modules to perform approximate search. It can also be used to format
-    the numbers in different numbering systems. <p/>
+    the numbers in different numbering systems. </p>
 
     <p> In order to select transliteration modules for different
     purposes, they are classified with attributes of
-    TransliterationType. <p/>
+    TransliterationType. </p>
 
     <p> For Western languages there would be three transliteration
     modules available to compare two mixed case strings: upper to lower,
@@ -201,11 +201,11 @@ published interface XTransliteration: com::sun::star::uno::XInterface
         TransliterationType IGNORE attribute. </p>
 
         <p> Returns the number of matched code points in any case, even if
-        strings are not equal, for example: <br/>
-        equals( "a", 0, 1, nMatch1, "aaa", 0, 3, nMatch2 ) <br/>
-        returns `FALSE` and nMatch:=1 and nMatch2:=1 <br/>
-        equals( "aab", 0, 3, nMatch1, "aaa", 0, 3, nMatch2 ) <br/>
-        returns `FALSE` and nMatch:=2 and nMatch2:=2 <br/> </p>
+        strings are not equal, for example: <br>
+        equals( "a", 0, 1, nMatch1, "aaa", 0, 3, nMatch2 ) <br>
+        returns `FALSE` and nMatch:=1 and nMatch2:=1 <br>
+        equals( "aab", 0, 3, nMatch1, "aaa", 0, 3, nMatch2 ) <br>
+        returns `FALSE` and nMatch:=2 and nMatch2:=2 <br> </p>
 
         @param aStr1
             First string to match.
@@ -233,7 +233,7 @@ published interface XTransliteration: com::sun::star::uno::XInterface
 
         @returns
             `TRUE` if the substrings are equal per this
-            transliteration <br/>
+            transliteration <br>
             `FALSE` else.
      */
 
@@ -283,8 +283,8 @@ published interface XTransliteration: com::sun::star::uno::XInterface
             Length (from offset) of the second substring.
 
         @returns
-            1 if the first substring is greater than the second substring <br/>
-            0 if the first substring is equal to the second substring <br/>
+            1 if the first substring is greater than the second substring <br>
+            0 if the first substring is equal to the second substring <br>
             -1 if the first substring is less than the second substring
     */
     long    compareSubstring(   [in] string aStr1, [in] long nOff1, [in] long nLen1,
@@ -294,8 +294,8 @@ published interface XTransliteration: com::sun::star::uno::XInterface
         strings before comparing them.
 
         @returns
-            1 if the first string is greater than the second string <br/>
-            0 if the first string is equal to the second string <br/>
+            1 if the first string is greater than the second string <br>
+            0 if the first string is equal to the second string <br>
             -1 if the first string is less than the second string
     */
     long    compareString( [in] string aStr1, [in] string aStr2 );

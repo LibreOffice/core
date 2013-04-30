@@ -55,7 +55,7 @@ published service TextField
             <li>the control loses the focus</li>
             <li>the content of the control has changed, compared to the moment where it got the focus.</li>
         </ul>
-        <p/>
+        </p>
     */
     interface com::sun::star::form::XChangeBroadcaster;
 };

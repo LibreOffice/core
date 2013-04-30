@@ -84,7 +84,7 @@ published service PropertyBrowserController
 
         <p>The aspects of a DataAwareControlModel which can be browsed and modified
         using this controller can be separated into 3 groups: common aspects, data-awareness
-        related aspects, and bound events.</br>
+        related aspects, and bound events.<br>
         The appearance of the visual component created by the controller is that 3 tab pages, one for
         each group, are displayed (of course if the control does not support any aspects of a given group,
         the group is omitted).<br/>

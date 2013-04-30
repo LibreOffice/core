@@ -27,7 +27,8 @@
 
 
 /** registers UNO objects as COM objects.
-    <p />
+
+    <p>
     That is, COM class factories are registered with COM at runtime. The required
     EXE server is the application which deploys this service. In order to access the
     factories by COM API functions, there need to be proper registry entries. This service
@@ -35,10 +36,11 @@
     The instantiation of the registered objects can be carried out by any ordinary mechanism
     which is used in a certain language to create COM components. For example, CreateObject
     in Visual Basic, CoCreateInstance in C++.
-    <p />
+    </p><p>
     Currently only a factory for the service com.sun.star.long.MultiServiceFactory is registered
     by this service. The CLSID is {82154420-0FBF-11d4-8313-005004526AB4} and the ProgId is
     com.sun.star.ServiceManager.
+    </p>
 
     <p>OleApplicationRegistration does not provide any particular interface because the UNO objects
     are registered while instantiating this service and deregistered

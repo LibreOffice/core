@@ -29,7 +29,7 @@ module com {  module sun {  module star {  module util {
     <p>
     If the structure represents a valid URL or not depends on prior usage of
     the functions of XURLTransformer. Only after one of the functions
-    returned `TRUE` this can be assumed.</br>
+    returned `TRUE` this can be assumed.<br>
     It is not necessary to set all of the fields; either URL::Complete
     or (some of) the others are set. Additionally, most of the other
     fields, like URL::Host, URL::Port,

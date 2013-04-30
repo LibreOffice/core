@@ -31,7 +31,7 @@
 /** is the interface for receiving notifications about reset events.
 
     <p>The listener is called if a component implementing the
-    XReset interface performs a reset.</br>
+    XReset interface performs a reset.<br>
     Order of events:
     <ul><li>a reset is triggered on a component</li>
         <li>the component calls XReset::approveReset() on all its listeners</li>

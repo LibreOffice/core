@@ -60,7 +60,7 @@ published interface XParametersSupplier;
     <h3>Notifications</h3>
     <p>A row set is able to be operated in various ways, and additionally it notifies various changes in it's
     state. Clients of this service can rely on a fixed order of notifications, depending on how they operate
-    on the component.</br>
+    on the component.<br>
     The following describes the general order of all possible notifications which you can encounter when
     working with a row set:
     <table>
@@ -100,11 +100,11 @@ published interface XParametersSupplier;
     </table>
     </p>
 
-    <br/>
+    <br>
 
     <p>The following matrix shows the notifications which apply to the different operations:
     <table border="1" frame="all">
-        <tr><td/><td><strong>approveCursorMove</strong></td><td><strong>approveRowChange</strong></td>
+        <tr><td></td><td><strong>approveCursorMove</strong></td><td><strong>approveRowChange</strong></td>
                 <td><strong>column values</strong></td>
                 <td><strong>cursorMoved</strong></td><td><strong>rowChanged</strong></td>
                 <td><strong>rowsChanged</strong></td>
@@ -112,35 +112,35 @@ published interface XParametersSupplier;
                 <td><strong>RowCount</strong></td><td><strong>IsRowCountFinal</strong></td>
         </tr>
 
-        <tr><td>com::sun::star::sdbc::XResultSet</td><td/><td/><td/><td/><td/><td/><td/><td/></tr>
+        <tr><td>com::sun::star::sdbc::XResultSet</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 
-        <tr><td align="right"><em>next</em></td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td>
-        <tr><td align="right"><em>beforeFirst</em></td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td/><td/></tr>
-        <tr><td align="right"><em>afterLast</em></td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
-        <tr><td align="right"><em>first</em></td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
-        <tr><td align="right"><em>last</em></td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
-        <tr><td align="right"><em>absolute</em></td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
-        <tr><td align="right"><em>relative</em></td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
-        <tr><td align="right"><em>previous</em></td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
-        <tr><td align="right"><em>refreshRow</em></td><td/><td/><td align="center">X</td><td/><td/><td/><td align="center">X</td><td align="center">X</td><td/><td/></tr>
-        <tr><td align="right"><em>cancelRowUpdates</em></td><td/><td/><td align="center">X</td><td/><td/><td/><td align="center">X</td><td/><td/><td/></tr>
+        <tr><td align="right"><em>next</em></td><td align="center">X</td><td></td><td align="center">X</td><td align="center">X</td><td></td><td></td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td>
+        <tr><td align="right"><em>beforeFirst</em></td><td align="center">X</td><td></td><td align="center">X</td><td align="center">X</td><td></td><td></td><td align="center">X</td><td align="center">X</td><td></td><td></td></tr>
+        <tr><td align="right"><em>afterLast</em></td><td align="center">X</td><td></td><td align="center">X</td><td align="center">X</td><td></td><td></td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
+        <tr><td align="right"><em>first</em></td><td align="center">X</td><td></td><td align="center">X</td><td align="center">X</td><td></td><td></td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
+        <tr><td align="right"><em>last</em></td><td align="center">X</td><td></td><td align="center">X</td><td align="center">X</td><td></td><td></td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
+        <tr><td align="right"><em>absolute</em></td><td align="center">X</td><td></td><td align="center">X</td><td align="center">X</td><td></td><td></td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
+        <tr><td align="right"><em>relative</em></td><td align="center">X</td><td></td><td align="center">X</td><td align="center">X</td><td></td><td></td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
+        <tr><td align="right"><em>previous</em></td><td align="center">X</td><td></td><td align="center">X</td><td align="center">X</td><td></td><td></td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
+        <tr><td align="right"><em>refreshRow</em></td><td></td><td></td><td align="center">X</td><td></td><td></td><td></td><td align="center">X</td><td align="center">X</td><td></td><td></td></tr>
+        <tr><td align="right"><em>cancelRowUpdates</em></td><td></td><td></td><td align="center">X</td><td></td><td></td><td></td><td align="center">X</td><td></td><td></td><td></td></tr>
 
-        <tr><td>com::sun::star::sdbc::XResultSetUpdate</td><td/><td/><td/><td/><td/><td/><td/><td/></tr>
+        <tr><td>com::sun::star::sdbc::XResultSetUpdate</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 
-        <tr><td align="right"><em>insertRow</em></td><td/><td align="center">X</td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
-        <tr><td align="right"><em>updateRow</em></td><td/><td align="center">X</td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td align="center">X</td><td/><td/><td/></tr>
-        <tr><td align="right"><em>deleteRow</em></td><td/><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
-        <tr><td align="right"><em>moveToInsertRow</em></td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td/><td/><td/><td align="center">X</td><td align="center">X</td></tr>
-        <tr><td align="right"><em>moveToCurrentRow</em></td><td align="center">X</td><td/><td/><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td/><td/></tr>
+        <tr><td align="right"><em>insertRow</em></td><td></td><td align="center">X</td><td align="center">X</td><td></td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
+        <tr><td align="right"><em>updateRow</em></td><td></td><td align="center">X</td><td align="center">X</td><td></td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td></td><td></td><td></td></tr>
+        <tr><td align="right"><em>deleteRow</em></td><td></td><td align="center">X</td><td></td><td></td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
+        <tr><td align="right"><em>moveToInsertRow</em></td><td align="center">X</td><td></td><td align="center">X</td><td align="center">X</td><td></td><td></td><td></td><td align="center">X</td><td align="center">X</td></tr>
+        <tr><td align="right"><em>moveToCurrentRow</em></td><td align="center">X</td><td></td><td></td><td align="center">X</td><td></td><td></td><td align="center">X</td><td align="center">X</td><td></td><td></td></tr>
 
-        <tr><td>com::sun::star::sdbcx::XDeleteRows</td><td/><td/><td/><td/><td/><td/><td/><td/></tr>
+        <tr><td>com::sun::star::sdbcx::XDeleteRows</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 
-        <tr><td align="right"><em>deleteRows</em></td><td/><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
+        <tr><td align="right"><em>deleteRows</em></td><td></td><td align="center">X</td><td></td><td></td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
 
-        <tr><td>com::sun::star::sdbcx::XRowLocate</td><td/><td/><td/><td/><td/><td/><td/><td/></tr>
+        <tr><td>com::sun::star::sdbcx::XRowLocate</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 
-        <tr><td align="right"><em>moveToBookmark</em></td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td/><td/></tr>
-        <tr><td align="right"><em>moveRelativeToBookmark</em></td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
+        <tr><td align="right"><em>moveToBookmark</em></td><td align="center">X</td><td></td><td align="center">X</td><td align="center">X</td><td></td><td></td><td align="center">X</td><td align="center">X</td><td></td><td></td></tr>
+        <tr><td align="right"><em>moveRelativeToBookmark</em></td><td align="center">X</td><td></td><td align="center">X</td><td align="center">X</td><td></td><td></td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
 
         </tr>
     </table>
@@ -150,8 +150,8 @@ published interface XParametersSupplier;
     <p>Via com::sun::star::sdbc::XResultSetUpdate::deleteRow(), you can delete the current row of a
     RowSet. This deleted row then doesn't vanish immediately, but is still present, and subsequent calls to
     com::sun::star::sdbc::XResultSet::rowDeleted() will return `TRUE`. The deleted row "vanishes" from
-    the RowSet as soon as the cursor is moved away from it.<br/>
-    As a consequence, the behavior of several other methods is affected:<br/>
+    the RowSet as soon as the cursor is moved away from it.<br>
+    As a consequence, the behavior of several other methods is affected:<br>
     <dl>
         <dt>com::sun::star::sdbc::XResultSet::getRow()</dt>
         <dd>returns the position of the cursor, which has not been changed by the deletion.</dd>
@@ -159,7 +159,7 @@ published interface XParametersSupplier;
         <dt>com::sun::star::sdbc::XResultSet: <code>next</code>, <code>first</code>, <code>last</code>, <code>absolute</code>,
             <code>relative</code>, <code>previous</code>, <code>beforeFirst</code>, <code>afterLast</code></dt>
         <dd>will let the deleted row vanish from the result set. As a consequence, the #RowCount
-            will decrease when you do such a move operation after deleting a row.<br/>
+            will decrease when you do such a move operation after deleting a row.<br>
             A special case to note is the <code>next</code> call: When you delete row, say,
             <code>15</code>, followed by <code>next</code>, then your RowSet afterwards
             still is on row 15, since the deleted row vanished with the move operation.</dd>
@@ -197,7 +197,7 @@ published service RowSet
     /** can be used to allow an interaction handler to supply missing data during a execute process.
 
         <p>If you want a row set to be based on a parametrized query, you will usually use
-        the com::sun::star::sdbc::XParameters interface.<br/>
+        the com::sun::star::sdbc::XParameters interface.<br>
         However, you can also choose to let an interaction handler supply such data. For this, you may
         for instance instantiate an InteractionHandler, which asks the user for the
         data, or you may write your own one, which supplies the data from somewhere else.
@@ -283,9 +283,9 @@ published service RowSet
         <p>In case of a #CommandType of CommandType::COMMAND,
         means in case the #Command specifies an SQL statement, the inherited
         com::sun::star::sdbc::RowSet::EscapeProcessing
-        becomes relevant:<br/>
+        becomes relevant:<br>
         It then can be to used to specify whether the SQL statement should be analyzed on the
-        client side before sending it to the database server.<br/>
+        client side before sending it to the database server.<br>
         The default value for com::sun::star::sdbc::RowSet::EscapeProcessing
         is `TRUE`. By switching it to `FALSE`, you can pass backend-specific SQL statements,
         which are not standard SQL, to your database.</p>

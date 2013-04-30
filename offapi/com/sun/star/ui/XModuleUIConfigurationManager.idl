@@ -34,17 +34,17 @@ module com { module sun { module star { module ui {
     <p>
     A module user interface configuration manager supports, unlike a
     document based ui configuration manager, two layers of configuration
-    settings data:<br/>
+    settings data:<br>
     1. Layer: A module default user interface configuration which
               describe all user interface elements settings that are
               used by OpenOffice. It is not possible to insert, remove
               or change elements settings in this layer through the
-              interfaces.</br>
+              interfaces.<br>
     2. Layer: A module user interface configuration which only contains
               customized user interface elements and user-defined ones.
               All changes on user interface element settings are done on
               this layer. This layer is the same as the document ui
-              configuration manager uses.</br>
+              configuration manager uses.
     </p>
 
     @since OOo 2.0

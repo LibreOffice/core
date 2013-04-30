@@ -50,13 +50,13 @@ published interface XExtendedCalendar : ::com::sun::star::i18n::XCalendar
         how many digits that will have. For example, a short year
         display string will normally be two digits with a Gregorian
         calendar, but with a Jewish calendar it will have three
-        digits. <p/>
+        digits. </p>
 
         @param nCalendarDisplayCode
             One of CalendarDisplayCode
 
         @param nNativeNumberMode
-            One of NativeNumberMode. <br/>
+            One of NativeNumberMode. <br>
             This argument designates the basic transliteration mode as
             if specified for the year representation. However, depending
             on the locale, different conversions for year and month, for

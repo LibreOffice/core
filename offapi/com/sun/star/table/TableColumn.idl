@@ -49,7 +49,7 @@ published service TableColumn
 
     /** provides methods to access the name of the column.
 
-        <p>In spreadsheets, the name of a column cannot be changed.<p/>
+        <p>In spreadsheets, the name of a column cannot be changed.</p>
      */
     interface com::sun::star::container::XNamed;
 

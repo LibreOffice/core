@@ -40,11 +40,11 @@ interface XObjectInspectorModel
         <p>Every element of the sequence must contain information to create a
         XPropertyHandler instance. Two ways are currently supported:
         <ul>
-            <li>A service name:</br>
+            <li>A service name:<br>
                 If a sequence element contains a string, this string is interpreted
                 as service name, and an com::sun::star::lang::XMultiComponentFactory
                 is asked to create an instance of this service.</li>
-            <li>A factory:<br/>
+            <li>A factory:<br>
                 If a sequence element contains an instance implementing the
                 com::sun::star::lang::XSingleComponentFactory interface, this factory
                 is used to create a property handler.</li>
@@ -67,7 +67,7 @@ interface XObjectInspectorModel
 
         <p>Properties can be sorted into different categories, described by the LineDescriptor::Category
         attribute, which is filled in XPropertyHandler::describePropertyLine()
-        method of your property handler.<br/>
+        method of your property handler.<br>
         Those names provided by the handlers are programmatic names. All other information
         about categories is part of the PropertyCategoryDescriptor, and
         describeCategories() assembles information about all categories which
@@ -76,9 +76,9 @@ interface XObjectInspectorModel
         @return
             a sequence of category descriptors. Their relative ordering also describes
             the relative ordering of the categories in the ObjectInspector's
-            user interface.<br/>
-            The sequence must not contain two entries with the same programmatic name.<br/>
-            <br/>
+            user interface.<br>
+            The sequence must not contain two entries with the same programmatic name.<br>
+            <br>
             The model implementation might return an empty sequence here, in this case, the ObjectInspector
             automatically builds its category information from the categories provided by the
             property handlers.
@@ -103,7 +103,7 @@ interface XObjectInspectorModel
         <p>If for two different properties the same order index is returned, the
         ObjectInspector will assume the order in which those properties
         were provided by the respective property handler
-        (XPropertyHandler::getSupportedProperties()).<br/>
+        (XPropertyHandler::getSupportedProperties()).<br>
         If two such properties originate from different handlers, they will be ordered according
         to the order of the handlers, as provided in the #HandlerFactories attribute.</p>
 
@@ -117,7 +117,7 @@ interface XObjectInspectorModel
     /** indicates that the object inspector should have a help section.
 
         <p>The object inspector displays lines of property/values, optionally grouped
-        into categories, as described by the property handlers.<br/>
+        into categories, as described by the property handlers.<br>
         Additionally, the inspector can optionally display a section dedicated to help
         texts. Clients could use this section to display context-sensitive help, for
         instance short texts explaining the currently selected property.</p>

@@ -82,7 +82,7 @@ module com {  module sun {  module star {  module form { module binding {
             <li><b>Cloning</b><br/>
                 com::sun::star::form::FormControlModels support cloning themselves
                 via the com::sun::star::util::XCloneable interface which they
-                inherit from the com::sun::star::awt::UnoControlModel service.</br>
+                inherit from the com::sun::star::awt::UnoControlModel service.<br>
                 When a BindableDataAwareControlModel is cloned while it has an active
                 external value binding, then the clone is also bound to the same binding instance.<br/>
                 Note that this restriction is inherited from the BindableControlModel.

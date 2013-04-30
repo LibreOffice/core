@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module inspection {
     browse and modify properties of components.
 
     <p>The controller can be plugged into an com::sun::star::frame::XFrame, and will
-    provide a visual component for inspecting and modifying component properties.<br/>
+    provide a visual component for inspecting and modifying component properties.<br>
     Note that "property" here is a generic term - any aspect of a component can be considered a property,
     as long as some property handler is able to describe this aspect in a property-like way.</p>
 
@@ -48,11 +48,11 @@ module com {  module sun {  module star {  module inspection {
 
     <p>The property handlers, as well as more information about the layout of the inspector,
     are provided by a inspector model, which has to be implemented by the user of the inspector.</p>
-    <p/>
+    </p>
 
     <p>Since property handlers might have the need to raise UI, they will be created with a context
     value named "DialogParentWindow", which contains an XWindow which should be used as parent of
-    any windows to raise.<br/>
+    any windows to raise.<br>
     If the com::sun::star::uno::XComponentContext in which the ObjectInspector
     was created already contains such a value, it is not overwritten. Only if it doesn't, the inspector
     will add an own value - which contains the inspector's main window - to the context when creating
