@@ -4192,6 +4192,12 @@ OUString INetURLObject::GetScheme(INetProtocol eTheScheme)
 }
 
 // static
+OUString INetURLObject::GetSchemeName(INetProtocol eTheScheme)
+{
+    return OUString::createFromAscii(getSchemeInfo(eTheScheme).m_pScheme);
+}
+
+// static
 INetProtocol INetURLObject::CompareProtocolScheme(OUString const &
                                                       rTheAbsURIRef)
 {
