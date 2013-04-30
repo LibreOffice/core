@@ -7769,7 +7769,7 @@ fi
 dnl ===================================================================
 dnl Check for PostgreSQL stuff
 dnl ===================================================================
-if test "$enable_postgresql_sdbc" = yes; then
+if test "x$enable_postgresql_sdbc" != "xno"; then
     SCPDEFS="$SCPDEFS -DWITH_POSTGRESQL_SDBC"
 
     if test "$with_krb5" = "yes" -a "$enable_openssl" = "no"; then
