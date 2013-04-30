@@ -95,7 +95,7 @@ gb_LinkTarget_OBJCFLAGS += $(gb_DEBUG_CFLAGS)
 endif
 
 define gb_LinkTarget__get_liblinkflags
-$(patsubst lib%.a,-l%,$(foreach lib,$(1),$(call gb_Library_get_filename,$(lib)))) \
+$(patsubst lib%.a,-l%,$(foreach lib,$(1),$(call gb_Library_get_filename,$(lib))))
 endef
 
 define gb_LinkTarget__get_layer
