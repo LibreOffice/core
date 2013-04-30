@@ -5116,6 +5116,33 @@ void Test::testToggleRefFlag()
         CPPUNIT_ASSERT_EQUAL(OUString("=R1C1"), aFormula);
     }
 
+    {
+        // Calc A1:
+        OUString aFormula("=A1+4");
+        ScAddress aPos(1, 1, 0);
+        ScRefFinder aFinder(aFormula, aPos, m_pDoc, formula::FormulaGrammar::CONV_OOO);
+
+        // Original
+        CPPUNIT_ASSERT_EQUAL(aFormula, aFinder.GetText());
+
+        // Set the cursor over the 'A1' part and toggle.
+        aFinder.ToggleRel(2, 2);
+        aFormula = aFinder.GetText();
+        CPPUNIT_ASSERT_EQUAL(OUString("=$A$1+4"), aFormula);
+
+        aFinder.ToggleRel(2, 2);
+        aFormula = aFinder.GetText();
+        CPPUNIT_ASSERT_EQUAL(OUString("=A$1+4"), aFormula);
+
+        aFinder.ToggleRel(2, 2);
+        aFormula = aFinder.GetText();
+        CPPUNIT_ASSERT_EQUAL(OUString("=$A1+4"), aFormula);
+
+        aFinder.ToggleRel(2, 2);
+        aFormula = aFinder.GetText();
+        CPPUNIT_ASSERT_EQUAL(OUString("=A1+4"), aFormula);
+    }
+
     // TODO: Add more test cases esp. for 3D references, Excel A1 syntax, and
     // partial selection within formula string.
 
