@@ -19,6 +19,7 @@
 
 #include <DomainMapper_Impl.hxx>
 #include <ConversionHelper.hxx>
+#include <SdtHelper.hxx>
 #include <DomainMapperTableHandler.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -186,7 +187,8 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bSdt(false),
         m_xInsertTextRange(xInsertTextRange),
         m_bIsNewDoc(bIsNewDoc),
-        m_bInTableStyleRunProps(false)
+        m_bInTableStyleRunProps(false),
+        m_pSdtHelper(0)
 {
     appendTableManager( );
     GetBodyText();
@@ -203,6 +205,7 @@ DomainMapper_Impl::DomainMapper_Impl(
     getTableManager( ).startLevel();
     m_bUsingEnhancedFields = lcl_IsUsingEnhancedFields( m_xComponentContext );
 
+    m_pSdtHelper = new SdtHelper(*this);
 }
 
 
@@ -211,6 +214,7 @@ DomainMapper_Impl::~DomainMapper_Impl()
     RemoveLastParagraph( );
     getTableManager( ).endLevel();
     popTableManager( );
+    delete m_pSdtHelper;
 }
 
 
@@ -3935,63 +3939,6 @@ sal_Int32 DomainMapper_Impl::getCurrentNumberingProperty(OUString aProp)
 bool DomainMapper_Impl::IsNewDoc()
 {
     return m_bIsNewDoc;
-}
-
-/// w:sdt's w:dropDownList doesn't have width, so guess the size based on the longest string.
-awt::Size lcl_getOptimalWidth(StyleSheetTablePtr pStyleSheet, OUString& rDefault, std::vector<OUString>& rItems)
-{
-    OUString aLongest = rDefault;
-    sal_Int32 nHeight = 0;
-    for (size_t i = 0; i < rItems.size(); ++i)
-        if (rItems[i].getLength() > aLongest.getLength())
-            aLongest = rItems[i];
-
-    MapMode aMap(MAP_100TH_MM);
-    OutputDevice* pOut = Application::GetDefaultDevice();
-    pOut->Push(PUSH_FONT | PUSH_MAPMODE);
-
-    PropertyMapPtr pDefaultCharProps = pStyleSheet->GetDefaultCharProps();
-    Font aFont(pOut->GetFont());
-    PropertyMap::iterator aFontName = pDefaultCharProps->find(PropertyDefinition(PROP_CHAR_FONT_NAME, false));
-    if (aFontName != pDefaultCharProps->end())
-        aFont.SetName(aFontName->second.get<OUString>());
-    PropertyMap::iterator aHeight = pDefaultCharProps->find(PropertyDefinition(PROP_CHAR_HEIGHT, false));
-    if (aHeight != pDefaultCharProps->end())
-    {
-        nHeight = aHeight->second.get<double>() * 35; // points -> mm100
-        aFont.SetSize(Size(0, nHeight));
-    }
-    pOut->SetFont(aFont);
-    pOut->SetMapMode(aMap);
-    sal_Int32 nWidth = pOut->GetTextWidth(aLongest);
-
-    pOut->Pop();
-    // Width: space for the text + the square having the dropdown arrow.
-    return awt::Size(nWidth + nHeight, nHeight);
-}
-
-void DomainMapper_Impl::createDropDownControl()
-{
-    OUString aDefaultText = m_aSdtTexts.makeStringAndClear();
-    uno::Reference<awt::XControlModel> xControlModel(m_xTextFactory->createInstance("com.sun.star.form.component.ComboBox"), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue("DefaultText", uno::makeAny(aDefaultText));
-    xPropertySet->setPropertyValue("Dropdown", uno::makeAny(sal_True));
-    uno::Sequence<OUString> aItems(m_aDropDownItems.size());
-    for (size_t i = 0; i < m_aDropDownItems.size(); ++i)
-        aItems[i] = m_aDropDownItems[i];
-    xPropertySet->setPropertyValue("StringItemList", uno::makeAny(aItems));
-
-    uno::Reference<drawing::XControlShape> xControlShape(m_xTextFactory->createInstance("com.sun.star.drawing.ControlShape"), uno::UNO_QUERY);
-    xControlShape->setSize(lcl_getOptimalWidth(GetStyleSheetTable(), aDefaultText, m_aDropDownItems));
-    m_aDropDownItems.clear();
-    xControlShape->setControl(xControlModel);
-
-    xPropertySet.set(xControlShape, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue("VertOrient", uno::makeAny(text::VertOrientation::CENTER));
-
-    uno::Reference<text::XTextContent> xTextContent(xControlShape, uno::UNO_QUERY);
-    appendTextContent(xTextContent, uno::Sequence< beans::PropertyValue >());
 }
 
 }}

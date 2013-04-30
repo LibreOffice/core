@@ -106,6 +106,7 @@ $(eval $(call gb_Library_add_exception_objects,writerfilter,\
     writerfilter/source/dmapper/PropertyIds \
     writerfilter/source/dmapper/PropertyMap \
     writerfilter/source/dmapper/PropertyMapHelper \
+    writerfilter/source/dmapper/SdtHelper \
     writerfilter/source/dmapper/SectionColumnHandler \
     writerfilter/source/dmapper/SettingsTable \
     writerfilter/source/dmapper/StyleSheetTable \

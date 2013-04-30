@@ -19,6 +19,7 @@
 #include "PageBordersHandler.hxx"
 
 #include <resourcemodel/ResourceModelHelper.hxx>
+#include <SdtHelper.hxx>
 #include <DomainMapper_Impl.hxx>
 #include <ConversionHelper.hxx>
 #include <ModelEventListener.hxx>
@@ -1435,14 +1436,14 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         break;
         case NS_ooxml::LN_CT_SdtBlock_sdtEndContent:
             m_pImpl->SetSdt(false);
-            if (!m_pImpl->m_aDropDownItems.empty())
-                m_pImpl->createDropDownControl();
+            if (!m_pImpl->m_pSdtHelper->getDropDownItems().empty())
+                m_pImpl->m_pSdtHelper->createDropDownControl();
         break;
         case NS_ooxml::LN_CT_SdtListItem_displayText:
             // TODO handle when this is != value
         break;
         case NS_ooxml::LN_CT_SdtListItem_value:
-            m_pImpl->m_aDropDownItems.push_back(sStringValue);
+            m_pImpl->m_pSdtHelper->getDropDownItems().push_back(sStringValue);
         break;
         default:
             {
@@ -3311,6 +3312,26 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             pProperties->resolve(*this);
     }
     break;
+    case NS_ooxml::LN_CT_SdtPr_date:
+    {
+        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+        if (pProperties.get() != NULL)
+            pProperties->resolve(*this);
+    }
+    break;
+    case NS_ooxml::LN_CT_SdtDate_dateFormat:
+    {
+        if (sStringValue == "M/d/yyyy")
+            // See com/sun/star/awt/UnoControlDateFieldModel.idl, DateFormat; sadly there are no constants for this.
+            m_pImpl->m_pSdtHelper->getDateFormat().reset(8);
+        else
+        {
+            // Set default format, so at least the date picker is created.
+            m_pImpl->m_pSdtHelper->getDateFormat().reset(0);
+            SAL_WARN("writerfilter", "unhandled w:dateFormat value");
+        }
+    }
+    break;
     default:
         {
 #ifdef DEBUG_DOMAINMAPPER
@@ -3602,9 +3623,19 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
     aBuffer.append( (const sal_Unicode *) data_, len);
     sText = aBuffer.makeStringAndClear();
 
-    if (!m_pImpl->m_aDropDownItems.empty())
+    if (!m_pImpl->m_pSdtHelper->getDropDownItems().empty())
     {
-        m_pImpl->m_aSdtTexts.append(sText);
+        m_pImpl->m_pSdtHelper->getSdtTexts().append(sText);
+        return;
+    }
+    else if (m_pImpl->m_pSdtHelper->getDateFormat())
+    {
+        /*
+         * Here we assume w:sdt only contains a single text token. We need to
+         * create the control early, as in Writer, it's part of the cell, but
+         * in OOXML, the sdt contains the cell.
+         */
+        m_pImpl->m_pSdtHelper->createDateControl(sText);
         return;
     }
 

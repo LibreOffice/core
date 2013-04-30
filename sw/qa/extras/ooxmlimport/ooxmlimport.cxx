@@ -901,7 +901,10 @@ void Test::testN779627()
      */
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xShapeProperties( xDraws->getByIndex(2), uno::UNO_QUERY );
+    uno::Reference<beans::XPropertySet> xShapeProperties( xDraws->getByIndex(3), uno::UNO_QUERY );
+    uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xShapeProperties, uno::UNO_QUERY);
+    // If this goes wrong, probably the index of the shape is changed and the test should be adjusted.
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.RectangleShape"), xShapeDescriptor->getShapeType());
     sal_Int16 nValue;
     xShapeProperties->getPropertyValue("HoriOrient") >>= nValue;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Not centered horizontally", text::HoriOrientation::CENTER, nValue);
