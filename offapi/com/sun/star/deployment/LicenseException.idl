@@ -42,7 +42,7 @@ exception LicenseException : com::sun::star::uno::Exception
     string Text;
 
     /** contains the value of the attribute
-    /description/registration/simple-license/@accept-by
+    `/description/registration/simple-license/@accept-by`
     from the description.xml
     */
     string AcceptBy;

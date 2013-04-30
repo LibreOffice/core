@@ -187,7 +187,7 @@ interface XTreeControl
 
         @param x
             an integer giving the number of pixels horizontally from the left edge of the controls display area
-        @para y
+        @param y
             an integer giving the number of pixels vertically from the top edge of the controls display area
         @returns
             the XTreeNode for the node closest to that location, null if nothing is viewable or there is no model

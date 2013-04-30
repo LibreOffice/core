@@ -35,7 +35,6 @@ published service ContentIndex
 
     /** determines the depth of outline levels that are included into the content index.*/
 
-    /// @missing
     [optional, property] short Level;
 
     /** determines if the document index is created from outlines.

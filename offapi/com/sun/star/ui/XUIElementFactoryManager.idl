@@ -40,7 +40,7 @@ interface XUIElementFactoryManager
         retrieves the responsible user interface element factory from the provided arguments and passes
         the arguments to it.
 
-        see @XUIElementFactory
+        @see XUIElementFactory
         </p>
      */
     interface XUIElementFactory;

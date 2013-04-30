@@ -44,7 +44,7 @@ published interface XIdlArray: com::sun::star::uno::XInterface
 
         @param array
                sequence instance
-        @length
+        @param length
                 new length of sequence
      */
     void realloc(

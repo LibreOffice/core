@@ -84,7 +84,7 @@ published interface XCommonEmbedPersist: com::sun::star::uno::XInterface
             the object is in wrong state
 
         @throws com::sun::star::io::IOException
-            in case of io problems during opening\creation
+            in case of io problems during opening or creation
 
         @throws com::sun::star::uno::Exception
             in case of other problems

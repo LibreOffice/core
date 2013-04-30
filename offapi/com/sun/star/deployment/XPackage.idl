@@ -71,7 +71,7 @@ interface XPackage
 
         @param xCmdEnv
                command environment for error handling and other interaction.
-        @alreadyInstalled
+        @param alreadyInstalled
             indicates that an extension with the same identifier is already installed.
 
         @return

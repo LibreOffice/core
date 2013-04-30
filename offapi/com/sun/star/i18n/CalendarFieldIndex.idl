@@ -90,7 +90,7 @@ published constants CalendarFieldIndex
         interpret historical timezone data that consists of fractions of
         minutes, e.g. seconds. 1 minute == 60000 milliseconds.
 
-        @ATTENTION! Though the field's type is signed 16-bit, the field
+        @attention  Though the field's type is signed 16-bit, the field
         value is treated as unsigned 16-bit to allow for values up to
         60000 and expresses an absolute value that inherits its sign
         from the parent ZONE_OFFSET field.
@@ -104,7 +104,7 @@ published constants CalendarFieldIndex
         interpret historical timezone data that consists of fractions of
         minutes, e.g. seconds. 1 minute == 60000 milliseconds.
 
-        @ATTENTION! Though the field's type is signed 16-bit, the field
+        @attention  Though the field's type is signed 16-bit, the field
         value is treated as unsigned 16-bit to allow for values up to
         60000 and expresses an absolute value that inherits its sign
         from the parent DST_OFFSET field.

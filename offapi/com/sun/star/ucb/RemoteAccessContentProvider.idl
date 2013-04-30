@@ -43,7 +43,6 @@ published service RemoteAccessContentProvider
         XParameterizedContentProvider::registerInstance()
         call must contain the UNO URL of the remote UCB.
 
-        @descr
         The XContentProviders obtained through this interface
         implement the service ContentProvider and, if
         appropriate, also the interface XFileIdentifierConverter.

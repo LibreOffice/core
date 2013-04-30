@@ -36,7 +36,7 @@ interface XModuleManager : com::sun::star::uno::XInterface
     /**
        @short  identifies the given module.
 
-       @descr  This identifier can then be used at the service ModuleManager
+       @details This identifier can then be used at the service ModuleManager
                to get more information about this module.
 
                For identification the interface com::sun::star::lang::XServiceInfo

@@ -46,7 +46,7 @@ module com {  module sun {  module star {  module io {
     Object  ObjectData      // the data of the object
     </pre>
 
-    @garantees
+    @note
     <ul>
         <li>-thread safe </li>
         <li>-allow buffer size is 2 ^ 31 -1 </li>

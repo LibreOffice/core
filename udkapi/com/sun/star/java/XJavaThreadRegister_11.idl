@@ -27,7 +27,7 @@ module com {  module sun {  module star {  module java {
 
 /** must be implemented by the user of the XJavaThreadRegister_11.
 
-    @incomplete
+    @note incomplete
     @deprecated
  */
 published interface XJavaThreadRegister_11: com::sun::star::uno::XInterface

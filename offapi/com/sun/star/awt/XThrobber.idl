@@ -27,7 +27,7 @@
 
 
 /**
-    @deprecatd
+    @deprecated
         You should use XAnimation, AnimatedImagesControl, and AnimatedImagesControlModel.
  */
 published interface XThrobber: com::sun::star::uno::XInterface

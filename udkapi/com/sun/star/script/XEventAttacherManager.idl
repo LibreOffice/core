@@ -127,7 +127,7 @@ published interface XEventAttacherManager: com::sun::star::uno::XInterface
     void removeEntry( [in] long nIndex )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-    /** @eturns
+    /** @return
             all events registered for the given object index.
 
         @param Index

@@ -26,8 +26,6 @@ module com { module sun { module star { module rendering {
     Path stroking is the process of drawing a polygon with a thick
     pen. The various attributes contained in this structure can be
     used to customize that process.<p>
-
-    @single #110496#
  */
 struct StrokeAttributes
 {

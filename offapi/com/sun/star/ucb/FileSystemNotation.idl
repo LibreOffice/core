@@ -38,8 +38,8 @@ published constants FileSystemNotation
     const long UNIX_NOTATION = 1;
 
     /** The conventions of DOS like file systems (e.g.,
-        <code>a:\dir1\dir2\file</code> or UNC notation like
-        <code>\\host\dir1\dir2\file</code>).
+        <code>a:\\dir1\\dir2\\file</code> or UNC notation like
+        <code>\\\\host\\dir1\\dir2\\file</code>).
     */
     const long DOS_NOTATION = 2;
 

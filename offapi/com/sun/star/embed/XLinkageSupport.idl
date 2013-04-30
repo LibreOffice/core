@@ -50,13 +50,13 @@ published interface XLinkageSupport: XCommonEmbedPersist
         </p>
 
         <p>
-        An entry with the specified name should be created\opened inside
+        An entry with the specified name should be created or opened inside
         provided storage. This entry will be used for the object persistence.
         If the entry exists already all it's contents will be ignored.
         </p>
 
         @param xStorage
-            a parent storage the entry should be created\opened in
+            a parent storage the entry should be created or opened in
 
         @param sEntryName
             a name for the entry

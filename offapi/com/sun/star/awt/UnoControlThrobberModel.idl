@@ -28,7 +28,7 @@
 
 /**
     @since OOo 2.2
-    @deprecatd
+    @deprecated
         You should use SpinningAnimationControlModel.
  */
 

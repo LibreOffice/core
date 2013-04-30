@@ -55,7 +55,7 @@ interface XSimpleTabController : com::sun::star::uno::XInterface
 
     /** change some properties of the specified tab.
 
-        @descr  Such properties can be:
+        Such properties can be:
                 <table>
                     <tr>
                         <td><b>Property</b></td>
@@ -101,7 +101,7 @@ interface XSimpleTabController : com::sun::star::uno::XInterface
 
     /** activate the specified tab.
 
-        @descr  The new tab will be activated and all listener will get an event describing this.
+        The new tab will be activated and all listener will get an event describing this.
                 Of course there will be an event too, which notifies listener about the deactivation
                 of the last active tab.
 

@@ -47,7 +47,7 @@ published interface XLinkCreator: com::sun::star::uno::XInterface
         </p>
 
         @param xStorage
-            a parent storage the entry should be created/opened in
+            a parent storage the entry should be created or opened in
 
         @param sEntryName
             a name for the entry
@@ -65,7 +65,7 @@ published interface XLinkCreator: com::sun::star::uno::XInterface
             the argument is illegal
 
         @throws com::sun::star::io::IOException
-            in case of io problems during opening\creation
+            in case of io problems during opening or creation
 
         @throws com::sun::star::uno::Exception
             in case of other problems

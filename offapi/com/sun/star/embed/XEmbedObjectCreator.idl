@@ -65,7 +65,7 @@ published interface XEmbedObjectCreator: com::sun::star::uno::XInterface
             one of arguments is illegal
 
         @throws com::sun::star::io::IOException
-            in case of io problems during opening\creation
+            in case of io problems during opening or creation
 
         @throws com::sun::star::uno::Exception
             in case of other problems
@@ -153,7 +153,7 @@ published interface XEmbedObjectCreator: com::sun::star::uno::XInterface
             one of arguments is illegal
 
         @throws com::sun::star::io::IOException
-            in case of io problems during opening\creation
+            in case of io problems during opening or creation
 
         @throws com::sun::star::uno::Exception
             in case of other problems

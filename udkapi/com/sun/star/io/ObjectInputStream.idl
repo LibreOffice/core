@@ -51,7 +51,7 @@
     ...                      // skipping additional data
     </pre>
 
-    @guarantees
+    @note
     <ul>
         <li>-thread safe</li>
         <li>-allow buffer size is 2 ^ 31 -1</li>
