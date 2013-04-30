@@ -368,10 +368,8 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
 #define BINTEST_VERIFYOFFSET( s, m, n ) \
     if (OFFSET_OF(s, m) != n) { fprintf( stderr, "### OFFSET_OF(" #s ", "  #m ") = %" SAL_PRI_SIZET "u instead of expected %d!!!\n", OFFSET_OF(s, m), static_cast<int>(n) ); abort(); }
 
-#if OSL_DEBUG_LEVEL > 1
 #define BINTEST_VERIFYSIZE( s, n ) \
     if (sizeof(s) != n) { fprintf( stderr, "### sizeof(" #s ") = %d instead of expected %d!!!\n", (int)sizeof(s), n ); abort(); }
-#endif
 
 struct C1
 {
