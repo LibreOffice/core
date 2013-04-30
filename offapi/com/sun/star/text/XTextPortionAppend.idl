@@ -30,7 +30,7 @@
  module com {  module sun {  module star {  module text {
 
 
-/** .
+/** allows inserting and appending formatted text portions.
  */
 interface XTextPortionAppend : com::sun::star::uno::XInterface
 {

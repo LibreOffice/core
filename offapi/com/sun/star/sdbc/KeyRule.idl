@@ -34,13 +34,9 @@ published constants KeyRule
             in the
             com::sun::star::sdbc::XResultSet
              objects returned by the methods
-             com::sun::star::sdbc::XDatabaseMetaData::getImportedKeys()
-             ,
-             com::sun::star::sdbc::XDatabaseMetaData::getExportedKeys()
-             ,
-             and
-             com::sun::star::sdbc::XDatabaseMetaData::getCrossReference()
-             .
+             com::sun::star::sdbc::XDatabaseMetaData::getImportedKeys(),
+             com::sun::star::sdbc::XDatabaseMetaData::getExportedKeys(),
+             and com::sun::star::sdbc::XDatabaseMetaData::getCrossReference().
              <P>
              For the column
              <code>UPDATE_RULE</code>
@@ -67,13 +63,9 @@ published constants KeyRule
             in the
              com::sun::star::sdbc::XResultSet
              objects returned by the methods
-             com::sun::star::sdbc::XDatabaseMetaData::getImportedKeys()
-             ,
-             com::sun::star::sdbc::XDatabaseMetaData::getExportedKeys()
-             ,
-             and
-             com::sun::star::sdbc::XDatabaseMetaData::getCrossReference()
-             .
+             com::sun::star::sdbc::XDatabaseMetaData::getImportedKeys(),
+             com::sun::star::sdbc::XDatabaseMetaData::getExportedKeys(),
+             and com::sun::star::sdbc::XDatabaseMetaData::getCrossReference().
              <P>
              For the column
              <code>UPDATE_RULE</code>
@@ -98,13 +90,9 @@ published constants KeyRule
             in the
              com::sun::star::sdbc::XResultSet
               objects returned by the methods
-            com::sun::star::sdbc::XDatabaseMetaData::getImportedKeys()
-             ,
-             com::sun::star::sdbc::XDatabaseMetaData::getExportedKeys()
-             ,
-             and
-             com::sun::star::sdbc::XDatabaseMetaData::getCrossReference()
-             .
+            com::sun::star::sdbc::XDatabaseMetaData::getImportedKeys(),
+             com::sun::star::sdbc::XDatabaseMetaData::getExportedKeys(),
+             and com::sun::star::sdbc::XDatabaseMetaData::getCrossReference().
              <P>
              For the columns
              <code>UPDATE_RULE</code>
@@ -125,13 +113,9 @@ published constants KeyRule
              in the
              com::sun::star::sdbc::XResultSet
              objects returned by the methods
-             com::sun::star::sdbc::XDatabaseMetaData::getImportedKeys()
-             ,
-             com::sun::star::sdbc::XDatabaseMetaData::getExportedKeys()
-             ,
-             and
-             com::sun::star::sdbc::XDatabaseMetaData::getCrossReference()
-             .
+             com::sun::star::sdbc::XDatabaseMetaData::getImportedKeys(),
+             com::sun::star::sdbc::XDatabaseMetaData::getExportedKeys(),
+             and com::sun::star::sdbc::XDatabaseMetaData::getCrossReference().
              <P>
              For the columns
              <code>UPDATE_RULE</code>
@@ -150,13 +134,9 @@ published constants KeyRule
             in the
              com::sun::star::sdbc::XResultSet
              objects returned by the methods
-             com::sun::star::sdbc::XDatabaseMetaData::getImportedKeys()
-             ,
-             com::sun::star::sdbc::XDatabaseMetaData::getExportedKeys()
-             ,
-             and
-             com::sun::star::sdbc::XDatabaseMetaData::getCrossReference()
-             .
+             com::sun::star::sdbc::XDatabaseMetaData::getImportedKeys(),
+             com::sun::star::sdbc::XDatabaseMetaData::getExportedKeys(),
+             and com::sun::star::sdbc::XDatabaseMetaData::getCrossReference().
              <P>
              For the columns
              <code>UPDATE_RULE</code>

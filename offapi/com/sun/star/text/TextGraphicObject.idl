@@ -112,8 +112,8 @@ published service TextGraphicObject
          It contains percentage values between -100 and +100.
      */
     [property] boolean GraphicIsInverted;
-    /** .
-         It contains percentage values between -100 and +100.
+
+    /** contains percentage values between -100 and +100.
      */
     [property] short Transparency;
     /** contains the ColorMode as com::sun::star::drawing::ColorMode.

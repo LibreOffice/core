@@ -31,11 +31,8 @@ published constants BestRowType
              A possible value for the column
              <code>PSEUDO_COLUMN</code>
              in the
-             com::sun::star::sdbc::XResultSet
-             object
-             returned by the method
-             XDatabaseMetaData::getBestRowIdentifier()
-             .
+             com::sun::star::sdbc::XResultSet object returned by the method
+             XDatabaseMetaData::getBestRowIdentifier().
      */
     const long UNKNOWN  = 0;
 
@@ -43,11 +40,8 @@ published constants BestRowType
              A possible value for the column
              <code>PSEUDO_COLUMN</code>
              in the
-             com::sun::star::sdbc::XResultSet
-             object
-             returned by the method
-             XDatabaseMetaData::getBestRowIdentifier()
-             .
+             com::sun::star::sdbc::XResultSet object returned by the method
+             XDatabaseMetaData::getBestRowIdentifier().
      */
     const long NOT_PSEUDO   = 1;
 
@@ -55,11 +49,8 @@ published constants BestRowType
              A possible value for the column
              <code>PSEUDO_COLUMN</code>
              in the
-             com::sun::star::sdbc::XResultSet
-             object
-             returned by the method
-             XDatabaseMetaData::getBestRowIdentifier()
-             .
+             com::sun::star::sdbc::XResultSet object returned by the method
+             XDatabaseMetaData::getBestRowIdentifier().
      */
     const long PSEUDO   = 2;
 };

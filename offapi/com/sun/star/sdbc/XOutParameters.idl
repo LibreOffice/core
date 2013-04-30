@@ -48,7 +48,6 @@ published interface XOutParameters: com::sun::star::uno::XInterface
         of user-named types include: STRUCT, DISTINCT, OBJECT, and named array
         types.
 
-
         <p>
         Before executing a stored procedure call, you must explicitly
         call
@@ -91,9 +90,7 @@ published interface XOutParameters: com::sun::star::uno::XInterface
 
     /** registers the OUT parameter in ordinal position
         <code>parameterIndex</code>
-        to the SDBC type
-        <code>sqlType</code>
-        . All
+        to the SDBC type <code>sqlType</code>. All
         OUT parameters must be registered before a stored procedure is executed.
 
 
@@ -108,9 +105,7 @@ published interface XOutParameters: com::sun::star::uno::XInterface
         should be
         used when the parameter is of SDBC type
         com::sun::star::sdbc::DataType::NUMERIC
-        or
-        com::sun::star::sdbc::DataType::DECIMAL
-        .
+        or com::sun::star::sdbc::DataType::DECIMAL.
         @param parameterIndex
             the first parameter is 1, the second is 2, ...
         @param sqlType

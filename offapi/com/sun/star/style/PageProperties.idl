@@ -312,7 +312,7 @@ of the current page is used as limit.
         for the possible values.
  */
 [optional,property] short FootnoteLineStyle;
-/** contains the color of the separator line between the text and the footnote area..
+/** contains the color of the separator line between the text and the footnote area.
  */
 [optional,property] com::sun::star::util::Color FootnoteLineColor;
 /** contains the relative width of the separator line between the text and the footnote area.

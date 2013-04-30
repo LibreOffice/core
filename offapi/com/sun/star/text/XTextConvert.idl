@@ -34,21 +34,22 @@
  module com {  module sun {  module star {  module text {
 
 
-/** .
+/** allows converting selections of text to frames or tables.
  */
 interface XTextConvert : com::sun::star::uno::XInterface
 {
 
         /** moves the paragraphs from Start to End into a text frame.
 
-                <p>FrameProperties contains the properties of the to-be-created text frame.</p>
 
-        @param
-            .
+        @param Start    start position of frame content
 
-        @param
-            .
-        @return
+        @param End      end position of frame content
+
+        @param FrameProperties
+            contains the properties of the to-be-created text frame
+
+        @return         the newly created text frame
 
      */
     ::com::sun::star::text::XTextContent convertToTextFrame(
@@ -58,7 +59,7 @@ interface XTextConvert : com::sun::star::uno::XInterface
                         raises( com::sun::star::lang::IllegalArgumentException,
                                        com::sun::star::beans::UnknownPropertyException );
 
-        /** .
+        /** converts the paragraphs marked in TableRanges into a table.
 
 
         @param TableRanges contains the TextRange interfaces of the paragraphs, cells and rows of the table.

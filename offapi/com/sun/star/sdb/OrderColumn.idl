@@ -31,7 +31,7 @@ service OrderColumn
 {
     service com::sun::star::sdbcx::Column;
 
-    /** describes which sort order this column has..
+    /** describes which sort order this column has.
         The default is `TRUE`.
     */
     [property] boolean IsAscending;

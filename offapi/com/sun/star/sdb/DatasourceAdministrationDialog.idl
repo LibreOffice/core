@@ -61,9 +61,7 @@ published service DatasourceAdministrationDialog
     /** allows initializing the dialog
         <p>
         You do not need to call the initialize method directly, instead you may use the createInstanceWithArguments
-        method of your
-        com::sun::star::lang::XMultiServiceFactory
-        .
+        method of your com::sun::star::lang::XMultiServiceFactory.
         </p>
 
         <p>
@@ -89,8 +87,7 @@ published service DatasourceAdministrationDialog
             <li><b>InitialSelection</b><br/>
                 String or XDataSource describing which data source should be selected initially.
                 This String name must be known to the
-                com::sun::star::sdb::DatabaseContext
-                .
+                com::sun::star::sdb::DatabaseContext.
             </li>
         </ul>
         </p>

@@ -38,8 +38,7 @@ published interface XWarningsSupplier: com::sun::star::uno::XInterface
 
         <p>
         <b>Note:</b> Subsequent warnings will be chained to this
-        com::sun::star::sdbc::SQLWarning
-        .
+        com::sun::star::sdbc::SQLWarning.
         </p>
         @returns
             the warnings

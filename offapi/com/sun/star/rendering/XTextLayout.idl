@@ -364,7 +364,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
     byte getMainTextDirection();
 
 
-    /** Request the associated font for this layout..
+    /** Request the associated font for this layout.
 
         @returns the associated font for this layout.
      */

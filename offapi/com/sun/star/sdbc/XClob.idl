@@ -82,10 +82,7 @@
     <code>getClob</code>
     and
     <code>setClob</code>
-    allow a programmer to
-    access the SQL
-    <code>CLOB</code>
-    .
+    allow a programmer to access the SQL <code>CLOB</code>.
     </p>
  */
 published interface XClob: com::sun::star::uno::XInterface
@@ -145,10 +142,9 @@ published interface XClob: com::sun::star::uno::XInterface
     /** determines the character position at which the specified substring
         <code>searchstr</code>
         appears in the
-        <code>Clob</code>
-        . The search begins at position
-        <code>start</code>
-        .
+        <code>Clob</code>.
+        The search begins at position <code>start</code>.
+
         @param searchstr
             the string to search
         @param start
@@ -168,9 +164,8 @@ published interface XClob: com::sun::star::uno::XInterface
         <code>pattern</code>
         appears in this
         <code>Clob</code>
-        object. The search begins at position
-        <code>start</code>
-        .
+        object.
+        The search begins at position <code>start</code>.
         @param pattern
             the CLOB to search
         @param start

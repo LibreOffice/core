@@ -38,9 +38,7 @@
     Objects for data definition are supplied as well, for instance, Tables, Views, etc.
 
     <p>
-    Implements the service
-    com::sun::star::sdbc::Connection
-    .
+    Implements the service com::sun::star::sdbc::Connection.
     It is possible to open more than one connection at the same time, but the method
     com::sun::star::sdb::DatabaseAccessConnection::dispose()
     will close only one of these connections. You have to close all connections in order

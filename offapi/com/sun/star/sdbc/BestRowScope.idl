@@ -32,11 +32,8 @@ published constants BestRowScope
              A possible value for the column
              <code>SCOPE</code>
              in the
-             com::sun::star::sdbc::XResultSet
-             object
-             returned by the method
-             XDatabaseMetaData::getBestRowIdentifier()
-             .
+             com::sun::star::sdbc::XResultSet object returned by the method
+             XDatabaseMetaData::getBestRowIdentifier().
      */
     const long TEMPORARY   = 0;
 
@@ -45,11 +42,8 @@ published constants BestRowScope
              A possible value for the column
              <code>SCOPE</code>
              in the
-             com::sun::star::sdbc::XResultSet
-             object
-             returned by the method
-             XDatabaseMetaData::getBestRowIdentifier()
-             .
+             com::sun::star::sdbc::XResultSet object returned by the method
+             XDatabaseMetaData::getBestRowIdentifier().
      */
     const long TRANSACTION = 1;
 
@@ -58,11 +52,8 @@ published constants BestRowScope
              A possible value for the column
              <code>SCOPE</code>
              in the
-             com::sun::star::sdbc::XResultSet
-             object
-             returned by the method
-             XDatabaseMetaData::getBestRowIdentifier()
-             .
+             com::sun::star::sdbc::XResultSet object returned by the method
+             XDatabaseMetaData::getBestRowIdentifier().
      */
     const long SESSION     = 2;
 };

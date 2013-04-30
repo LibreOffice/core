@@ -32,16 +32,10 @@
  published interface XResultSet;
 
 
-/** is used for mapping the SQL type
-    com::sun::star::sdbc::DataType::ARRAY
-    .
-    By default, an
-    <code>Array</code>
-    is a transaction duration
-    reference to an SQL array. By default, an
+/** is used for mapping the SQL type com::sun::star::sdbc::DataType::ARRAY.
 
-    <code>Array</code>
-
+    By default, an <code>Array</code> is a transaction duration
+    reference to an SQL array. By default, an <code>Array</code>
     is implemented using a SQL LOCATOR(array) internally.
  */
 published interface XArray: com::sun::star::uno::XInterface
@@ -134,10 +128,8 @@ published interface XArray: com::sun::star::uno::XInterface
              @returns
                 an array containing up to
                 <code>count</code>
-                consecutive elements
-                   of the SQL array, beginning with element
-                <code>index</code>
-                .
+                consecutive elements of the SQL array, beginning with element
+                <code>index</code>.
                 @throws SQLException
                 if an error occurs while attempting to access the array.
      */

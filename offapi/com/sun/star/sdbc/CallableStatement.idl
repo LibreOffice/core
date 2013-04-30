@@ -48,11 +48,7 @@
     . The type of all
     OUT parameters must be registered prior to executing the stored procedure;
     their values are retrieved after execution via the
-    <code>get</code>
-    methods
-    provided by the
-    com::sun::star::sdbc::XRow
-    .
+    <code>get</code> methods provided by the com::sun::star::sdbc::XRow.
     </p>
     <p>
     A
@@ -63,10 +59,8 @@
     com::sun::star::sdbc::ResultSet
     objects. Multiple
     <code>ResultSet</code>
-    objects are
-    handled using operations inherited from
-    com::sun::star::sdbc::XPreparedStatement
-    .
+    objects are handled using operations inherited from
+    com::sun::star::sdbc::XPreparedStatement.
     </p>
     <p>
     For maximum portability, a call's

@@ -32,8 +32,7 @@ published constants IndexType
             in the
             com::sun::star::sdbc::XResultSet
             object returned by the method
-            com::sun::star::sdbc::XDatabaseMetaData::getIndexInfo()
-            .
+            com::sun::star::sdbc::XDatabaseMetaData::getIndexInfo().
             <P>
             Identifies table statistics that are returned in conjunction
             with a table's index description.
@@ -46,8 +45,7 @@ published constants IndexType
             in the
             com::sun::star::sdbc::XResultSet
             object returned by the method
-            com::sun::star::sdbc::XDatabaseMetaData::getIndexInfo()
-            .
+            com::sun::star::sdbc::XDatabaseMetaData::getIndexInfo().
             <P>
             Indicates that this table index is a clustered index.
             </P>
@@ -59,8 +57,7 @@ published constants IndexType
             in the
             com::sun::star::sdbc::XResultSet
             object returned by the method
-            com::sun::star::sdbc::XDatabaseMetaData::getIndexInfo()
-            .
+            com::sun::star::sdbc::XDatabaseMetaData::getIndexInfo().
              <P>
              Indicates that this table index is a hashed index.
              </P>
@@ -72,8 +69,7 @@ published constants IndexType
             in the
             com::sun::star::sdbc::XResultSet
             object returned by the method
-            com::sun::star::sdbc::XDatabaseMetaData::getIndexInfo()
-            .
+            com::sun::star::sdbc::XDatabaseMetaData::getIndexInfo().
              <P>
              Indicates that this table index is not a clustered
              index, a hashed index, or table statistics;

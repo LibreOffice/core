@@ -93,24 +93,18 @@ published service ColumnSettings
 
 
     /** indicates a control model which defines the settings for layouting.
-        The default is
-        `NULL`
-        .
+        The default is `NULL`.
      */
     [optional, property] com::sun::star::beans::XPropertySet ControlModel;
 
     /** describes an optional help text which can be used by UI components
         when representing this column.
-        The default is
-        `NULL`
-        .
+        The default is `NULL`.
     */
     [optional, property] string HelpText;
 
     /** describes the default value which should be displayed by a control when moving to a new row.
-        The default is
-        `NULL`
-        .
+        The default is `NULL`.
     */
     [optional, property] string ControlDefault;
 };

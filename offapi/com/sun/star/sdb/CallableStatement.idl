@@ -28,8 +28,7 @@
 
 /** represents a procedure call. The service differs only in the access
     of the columns and parameters to the service
-    com::sun::star::sdbc::CallableStatement
-    .
+    com::sun::star::sdbc::CallableStatement.
 */
 published service CallableStatement
 {

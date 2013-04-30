@@ -24,9 +24,7 @@
  module com {  module sun {  module star {  module sdb {
 
 
-/** is a factory for instances of service
-    com::sun::star::sdb::SQLQueryComposer
-    .
+/** is a factory for instances of service com::sun::star::sdb::SQLQueryComposer.
  */
 published interface XSQLQueryComposerFactory: com::sun::star::uno::XInterface
 {

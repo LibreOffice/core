@@ -44,8 +44,7 @@
     com::sun::star::sdbc::XRow::getInt()
     to retrieve the data from these XResultSets. If a given form of
     metadata is not available, these methods should throw a
-    com::sun::star::sdbc::SQLException
-    .
+    com::sun::star::sdbc::SQLException.
     After calling one of the getXXX() methods,
     one can check whether that value is `NULL`
     with the method com::sun::star::sdbc::XRow::wasNull().
@@ -75,9 +74,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
         @return
         `TRUE`
         if the user is allowed to call all procedures returned by getProcedures
-        otherwise
-        `FALSE`
-        .
+        otherwise `FALSE`.
         @throws SQLException
             if a database access error occurs.
      */
@@ -375,9 +372,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /** `TRUE`
             , if the Database supports the CONVERT function between SQL types,
-            otherwise
-            `FALSE`
-            .
+            otherwise `FALSE`.
         @returns
             `TRUE` if so
         @throws SQLException
@@ -387,9 +382,7 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
 
     /**     `TRUE`
             , if the Database supports the CONVERT between the given SQL types
-            otherwise
-            `FALSE`
-            .
+            otherwise `FALSE`.
         @returns
             `TRUE` if so
         @throws SQLException
@@ -2344,9 +2337,8 @@ published interface XDatabaseMetaData: com::sun::star::uno::XInterface
     boolean updatesAreDetected([in]long setType) raises (SQLException);
 
     /** indicates whether or not a visible row delete can be detected by
-        calling
-        com::sun::star::sdbc::XResultSet::rowDeleted()
-        . If deletesAreDetected()
+        calling com::sun::star::sdbc::XResultSet::rowDeleted().
+        If deletesAreDetected()
         returns `FALSE`, then deleted rows are removed from the result set.
         @param setType
             defined in

@@ -30,9 +30,7 @@
     <p>
     The SQL state for a
     <code>DataTruncation</code>
-    is
-    <code>01004</code>
-    .
+    is <code>01004</code>.
     </p>
  */
 published exception DataTruncation: SQLWarning

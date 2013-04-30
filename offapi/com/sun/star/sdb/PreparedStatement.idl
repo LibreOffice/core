@@ -30,8 +30,7 @@
 
 /** represents a precompiled SQL statement. The service differs only in the access
     of the columns and parameters to the service
-    com::sun::star::sdbc::PreparedStatement
-    .
+    com::sun::star::sdbc::PreparedStatement.
  */
 published service PreparedStatement
 {

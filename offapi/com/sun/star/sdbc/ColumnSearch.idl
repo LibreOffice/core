@@ -30,8 +30,7 @@ published constants ColumnSearch
     /** A possible value for column <code>SEARCHABLE</code> in the
              com::sun::star::sdbc::XResultSet
              object returned by the method
-             com::sun::star::sdbc::XDatabaseMetaData::getTypeInfo()
-             .
+             com::sun::star::sdbc::XDatabaseMetaData::getTypeInfo().
              <p>
              Indicates that
              <code>WHERE</code>
@@ -43,23 +42,20 @@ published constants ColumnSearch
     /** A possible value for column <code>SEARCHABLE</code> in the
              com::sun::star::sdbc::XResultSet
              object returned by the method
-             com::sun::star::sdbc::XDatabaseMetaData::getTypeInfo()
-             .
+             com::sun::star::sdbc::XDatabaseMetaData::getTypeInfo().
              <p>
              Indicates that the only
              <code>WHERE</code>
              search clause that can
              be based on this type is
-             <code>WHERE...LIKE</code>
-             .
+             <code>WHERE...LIKE</code>.
      */
     const long CHAR = 1;
 
     /** A possible value for column <code>SEARCHABLE</code> in the
              com::sun::star::sdbc::XResultSet
              object returned by the method
-             com::sun::star::sdbc">XDatabaseMetaData::getTypeInfo()
-             .
+             com::sun::star::sdbc">XDatabaseMetaData::getTypeInfo().
              <p>
              Indicates that one can base all
              <code>WHERE</code>
@@ -75,8 +71,7 @@ published constants ColumnSearch
             in the
             com::sun::star::sdbc::XResultSet
             object returned by the method
-            com::sun::star::sdbc">XDatabaseMetaData::getTypeInfo()
-            .
+            com::sun::star::sdbc">XDatabaseMetaData::getTypeInfo().
             <p>
             Indicates that all
             <code>WHERE</code>

@@ -53,7 +53,7 @@ published service ResultColumn
     [readonly, property] boolean IsCaseSensitive;
 
 
-    /** indicates the column's normal max width in chars..
+    /** indicates the column's normal max width in chars.
      */
     [readonly, property] long DisplaySize;
 

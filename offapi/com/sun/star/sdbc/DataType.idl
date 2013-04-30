@@ -30,8 +30,8 @@
         </p>
         <p>
         Precise information about the specific types can be got from
-        XDatabaseMetaData::getTypeInfo()
-        .</p>
+        XDatabaseMetaData::getTypeInfo().
+        </p>
  */
 published constants DataType
 {
@@ -78,9 +78,7 @@ published constants DataType
 
     /** indicates that the SQL type is database-specific and
              gets mapped to an object that can be accessed via
-             the method
-             com::sun::star::sdbc::XRow::getObject()
-             .
+             the method com::sun::star::sdbc::XRow::getObject().
      */
     const long OTHER        = 1111;
 

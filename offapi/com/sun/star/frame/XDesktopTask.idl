@@ -31,7 +31,8 @@
  */
 published interface XDesktopTask: com::sun::star::lang::XComponent
 {
-    /** use com::sun::star::lang::XInitialization instead..
+    /** use com::sun::star::lang::XInitialization instead.
+
         @deprecated
      */
     void initialize( [in] com::sun::star::awt::XWindow TaskWindow );

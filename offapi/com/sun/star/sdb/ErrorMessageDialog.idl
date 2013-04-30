@@ -51,9 +51,7 @@ published service ErrorMessageDialog : com::sun::star::ui::dialogs::XExecutableD
     /** allows initializing the dialog
         <p>
         You do not need to call the initialize method directly, instead you may use the createInstanceWithArguments
-        method of your
-        com::sun::star::lang::XMultiServiceFactory
-        .
+        method of your com::sun::star::lang::XMultiServiceFactory.
         </p>
         <p>
         You specify a parameter by passing one (or more)
@@ -80,8 +78,7 @@ published service ErrorMessageDialog : com::sun::star::ui::dialogs::XExecutableD
                 com::sun::star::sdbc::SQLException
                 describing the error which is being displayed.<br/>
                 When initializing this value, you may use any derivative of
-                com::sun::star::sdbc::SQLException
-                .
+                com::sun::star::sdbc::SQLException.
             </li>
         </ul>
         </p>

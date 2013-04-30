@@ -33,8 +33,7 @@ published constants ProcedureColumn
              in the
              com::sun::star::sdbc::XResultSet
              returned by the method
-             com::sun::star::sdbc::XDatabaseMetaData::getProcedureColumns()
-             .
+             com::sun::star::sdbc::XDatabaseMetaData::getProcedureColumns().
      */
     const long UNKNOWN          = 0;
 
@@ -44,8 +43,7 @@ published constants ProcedureColumn
              in the
              com::sun::star::sdbc::XResultSet
              returned by the method
-             com::sun::star::sdbc::XDatabaseMetaData::getProcedureColumns()
-             .
+             com::sun::star::sdbc::XDatabaseMetaData::getProcedureColumns().
      */
     const long IN               = 1;
 
@@ -55,8 +53,7 @@ published constants ProcedureColumn
              in the
              com::sun::star::sdbc::XResultSet
              returned by the method
-             com::sun::star::sdbc::XDatabaseMetaData::getProcedureColumns()
-             .
+             com::sun::star::sdbc::XDatabaseMetaData::getProcedureColumns().
      */
     const long INOUT            = 2;
 
@@ -66,8 +63,7 @@ published constants ProcedureColumn
              in the
              com::sun::star::sdbc::XResultSet
              returned by the method
-             com::sun::star::sdbc::XDatabaseMetaData::getProcedureColumns()
-             .
+             com::sun::star::sdbc::XDatabaseMetaData::getProcedureColumns().
      */
     const long RESULT           = 3;
 
@@ -77,8 +73,7 @@ published constants ProcedureColumn
              in the
              com::sun::star::sdbc::XResultSet
              returned by the method
-             com::sun::star::sdbc::XDatabaseMetaData::getProcedureColumns()
-             .
+             com::sun::star::sdbc::XDatabaseMetaData::getProcedureColumns().
      */
     const long OUT              = 4;
 
@@ -88,8 +83,7 @@ published constants ProcedureColumn
              in the
              com::sun::star::sdbc::XResultSet
              returned by the method
-             com::sun::star::sdbc::XDatabaseMetaData::getProcedureColumns()
-             .
+             com::sun::star::sdbc::XDatabaseMetaData::getProcedureColumns().
      */
     const long RETURN           = 5;
 };

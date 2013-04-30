@@ -36,18 +36,11 @@ published interface XTextContent: com::sun::star::lang::XComponent
 
     /** is called when this object gets embedded in a text.
 
-
-
         <p>This acts like a multi-phase construction, thus the object may be
-        invalid until it is attached to a text position. In general, this method
-        is called from within
-
-
-
-
-        .
-
+        invalid until it is attached to a text position.  Usually this method
+        is called from within XText::insertTextContent().
         </p>
+
         <p>Both text objects and text content objects may only be connected
         to each other if they are created by the same component. When
         implementing new components, this behavior is deprecated.</p>

@@ -31,7 +31,7 @@
  module com {  module sun {  module star {  module text {
 
 
-/** .
+/** allows inserting and appending paragraphs.
  */
 interface XParagraphAppend : com::sun::star::uno::XInterface
 {

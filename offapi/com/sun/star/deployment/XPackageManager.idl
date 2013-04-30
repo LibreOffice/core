@@ -75,7 +75,7 @@ interface XPackageManager
     interface com::sun::star::util::XModifyBroadcaster;
 
     /** returns the underlying deployment context, that is,
-        the name of the repository..
+        the name of the repository.
 
         @return
                 underlying deployment context

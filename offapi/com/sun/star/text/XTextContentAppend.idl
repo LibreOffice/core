@@ -30,7 +30,7 @@
  module com {  module sun {  module star {  module text {
 
 
-/** .
+/** allows inserting and appending text content.
  */
 interface XTextContentAppend : com::sun::star::uno::XInterface
 {

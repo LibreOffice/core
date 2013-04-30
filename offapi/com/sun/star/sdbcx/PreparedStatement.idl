@@ -35,9 +35,7 @@ published service PreparedStatement
     service com::sun::star::sdbc::PreparedStatement;
     /**
      returns if a result set should allow the navigation with bookmarks
-     or not. The default is
-     `FALSE`
-     .
+     or not. The default is `FALSE`.
      */
     [property] boolean UseBookmarks;
 };

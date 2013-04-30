@@ -28,7 +28,7 @@
  module com {  module sun {  module star {  module text {
 
 
-/** .
+/** is a meta-interface for manipulating and inserting text.
  */
      interface XTextAppend
 {

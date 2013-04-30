@@ -30,11 +30,7 @@
  module com {  module sun {  module star {  module sdbc {
 
 
-/** is the representation (mapping) of an SQL
-    <i>
-    BLOB
-    </i>
-    .
+/** is the representation (mapping) of an SQL <i>BLOB</i>.
 
     <p>
     A SQL
@@ -74,10 +70,7 @@
     and
     <code>setBlob</code>
     allow a programmer to access the SQL
-    <i>
-    BLOB
-    </i>
-    .
+    <i>BLOB</i>.
     <br/>
     The
     <code>Blob</code>
@@ -147,14 +140,9 @@ published interface XBlob: com::sun::star::uno::XInterface
                  by this
                 <code>Blob</code>
                 object, starting with the byte at position
-                <code>pos</code>
-                .
+                <code>pos</code>.
              @throws SQLException
-                if there is an error accessing the
-                <i>
-                BLOB
-                </i>
-                .
+                if there is an error accessing the <i>BLOB</i>.
      */
     sequence<byte> getBytes([in]hyper pos, [in]long length)
         raises (SQLException);
@@ -186,9 +174,7 @@ published interface XBlob: com::sun::star::uno::XInterface
         object represents.  The
         search for
         <code>pattern</code>
-        begins at position
-        <code>start</code>
-        .
+        begins at position <code>start</code>.
         @param pattern
             the pattern to search
         @returns
@@ -209,9 +195,7 @@ published interface XBlob: com::sun::star::uno::XInterface
         <code>Blob</code>
         object at which
         <code>pattern</code>
-        begins. The search begins at position
-        <code>start</code>
-        .
+        begins. The search begins at position <code>start</code>.
         @param pattern
             the pattern to search
         @param start

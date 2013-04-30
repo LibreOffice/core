@@ -66,8 +66,7 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
         SQL statements without parameters are normally
         executed using Statement objects. If the same SQL statement
         is executed many times, it is more efficient to use a
-        com::sun::star::sdbc::PreparedStatement
-        .
+        com::sun::star::sdbc::PreparedStatement.
         </p>
         <p>
         Result sets created using the returned Statement will have
@@ -191,8 +190,7 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
         the method
         com::sun::star::sdbc::XConnection::commit()
         or the method
-        com::sun::star::sdbc::XConnection::rollback()
-        .
+        com::sun::star::sdbc::XConnection::rollback().
         By default, new connections are in auto-commit mode.
         </p>
         <p>

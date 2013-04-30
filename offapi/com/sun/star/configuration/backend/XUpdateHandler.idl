@@ -282,7 +282,8 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             raises( MalformedDataException,
                     com::sun::star::lang::WrappedTargetException );
 
-    /** receives notification that modification of an existing property is started. .
+    /** receives notification that modification of an existing property is
+        started.
 
         <p> Subsequent calls describe changes to the value(s)
             of the property until a matching call to

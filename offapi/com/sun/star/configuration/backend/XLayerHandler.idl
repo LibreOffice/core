@@ -337,7 +337,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
 
 
     /** receives notification that the value of the current property
-        is overridden. .
+        is overridden.
 
         @param aValue
             specifies the new value of the property.
