@@ -684,7 +684,6 @@ sub create_transforms
         $infoline = "ERROR: We cannot create transformations yet (we cannot use cscript.exe when cross-compiling)\n";
         push( @installer::globals::logfileinfo, $infoline);
     }
-    my $tmpdir = $ENV{TMPDIR};    # Variable %TEMP% will be set to it for WiLangId.vbs to work
     my $wilangid = $ENV{WINDOWS_SDK_HOME} . "/Samples/SysMgmt/Msi/scripts/WiLangId.vbs";
 
     my $from = cwd();
@@ -837,7 +836,7 @@ sub create_transforms
         }
     }
 
-    $systemcall = "TEMP=" . $tmpdir . " " . $cscript . " " . $wilangid . " " . $basedbname . " Package " . $templatevalue;
+    $systemcall = "TEMP=$ENV{'TMPDIR'} $cscript $wilangid $basedbname Package $templatevalue";
 
     $returnvalue = system($systemcall);
 
@@ -1225,11 +1224,6 @@ sub execute_packaging
     $infoline = "chdir: $to \n";
     push( @installer::globals::logfileinfo, $infoline);
 
-    # changing the tmp directory, because makecab.exe generates temporary cab files
-    my $origtemppath = "";
-    if ( $ENV{'TMP'} ) { $origtemppath = $ENV{'TMP'}; }
-    $ENV{'TMP'} = $installer::globals::temppath;    # setting TMP to the new unique directory!
-
     my $maxmakecabcalls = 3;
     my $allmakecabcalls = $#{$localpackjobref} + 1;
 
@@ -1292,9 +1286,6 @@ sub execute_packaging
     }
 
     installer::logger::include_timestamp_into_logfile("Performance Info: Execute packaging end");
-
-    # setting back to the original tmp directory
-    $ENV{'TMP'} = $origtemppath;
 
     chdir($from);
     $infoline = "chdir: $from \n";

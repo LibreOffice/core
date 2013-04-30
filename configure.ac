@@ -11839,22 +11839,15 @@ PathFormat "$PERL"
 PERL="$formatted_path"
 AC_SUBST(PERL)
 
-if test "$build_os" = "cygwin"; then
-    TEMP_DIRECTORY=`cygpath -m "/tmp"`
-    if test -n "$TMP"; then
-        TMP_DIRECTORY="$TMP"
-    else
-        TMP_DIRECTORY="$TEMP_DIRECTORY"
-    fi
+if test -n "$TMPDIR"; then
+    TEMP_DIRECTORY="$TMPDIR"
 else
-    if test -n "$TMPDIR"; then
-        TEMP_DIRECTORY="$TMPDIR"
-    else
-        TEMP_DIRECTORY="/tmp"
-    fi
+    TEMP_DIRECTORY="/tmp"
+fi
+if test "$build_os" = "cygwin"; then
+    TEMP_DIRECTORY=`cygpath -m "$TEMP_DIRECTORY"`
 fi
 AC_SUBST(TEMP_DIRECTORY)
-AC_SUBST(TMP_DIRECTORY)
 
 # setup the PATH for the environment
 if test -n "$LO_PATH_FOR_BUILD"; then
