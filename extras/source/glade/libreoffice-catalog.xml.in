@@ -63,6 +63,12 @@
     <glade-widget-class title="Number Preview" name="cuilo-SvxNumberPreview"
                         generic-name="Number Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Background Preview" name="cuilo-BackgroundPreview"
+                        generic-name="Background Preview Window" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Rectangle Preview" name="svxlo-SvxXRectPreview"
+                        generic-name="Rectangle Preview Window" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Frame Selector" name="svxlo-SvxFrameSelector"
                         generic-name="Frame Border Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
@@ -108,8 +114,14 @@
     <glade-widget-class title="Print Preview" name="vcllo-PrintPreviewWindow"
                         generic-name="Print Preview" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Rectangle Control" name="svxlo-SvxRectCtl"
+                        generic-name="Rectangle Control" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Text Direction ListBox" name="svxlo-FrameDirectionListBox"
                         generic-name="FrameDirectionListBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox"/>
+    <glade-widget-class title="Gradiant ListBox" name="svxlo-GradientLB"
+                        generic-name="GradiantListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
     <glade-widget-class title="Category ComboBox" name="swuilo-CategoryBox"
                         generic-name="CategoryComboBox" parent="GtkComboBox"
