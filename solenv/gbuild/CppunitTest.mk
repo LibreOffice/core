@@ -30,7 +30,10 @@
 # CppunitTest class
 
 
-UNIT_FAILED_MSG := echo; echo "Error: a unit test failed, please do one of:"; echo; echo "export DEBUGCPPUNIT=TRUE            \# for exception catching"; echo "export GDBCPPUNITTRACE=\"gdb --args\" \# for interactive debugging"; echo "export VALGRIND=memcheck            \# for memory checking" ; echo "and retry."
+# 1st parameter gives the name of the unit test that failed
+define gb_UNIT_FAILED_MSG
+echo; echo "Error: a unit test failed, please do one of:"; echo; echo "export DEBUGCPPUNIT=TRUE            \# for exception catching"; echo "export GDBCPPUNITTRACE=\"gdb --args\" \# for interactive debugging"; echo "export VALGRIND=memcheck            \# for memory checking" ; echo ; echo "and retry using: make CppunitTest_$(1)"
+endef
 
 ifeq ($(strip $(DEBUGCPPUNIT)),TRUE)
 gb_CppunitTest_GDBTRACE := gdb -nx -ex "add-auto-load-safe-path $(OUTDIR)/lib" --command=$(SOLARENV)/bin/gdbtrycatchtrace-stdout -return-child-result --args
@@ -97,7 +100,7 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_CPPTESTDEPS)
 		$(call gb_CppunitTest__make_args) \
 		$(if $(gb_CppunitTest__interactive),, \
 			> $@.log 2>&1 \
-			|| (RET=$$? && cat $@.log && $(UNIT_FAILED_MSG) \
+			|| (RET=$$? && cat $@.log && $(call gb_UNIT_FAILED_MSG,$*) \
 				$(if $(value gb_CppunitTest_postprocess), \
 					&& $(call gb_CppunitTest_postprocess,$(gb_CppunitTest_CPPTESTCOMMAND),$@.core,$$RET)) \
 				&& false))))
