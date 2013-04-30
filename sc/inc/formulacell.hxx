@@ -51,8 +51,6 @@ inline void intrusive_ptr_release(ScFormulaCellGroup *p)
         delete p;
 }
 
-typedef ::boost::intrusive_ptr<ScFormulaCellGroup> ScFormulaCellGroupRef;
-
 enum ScMatrixMode {
     MM_NONE      = 0,                   // No matrix formula
     MM_FORMULA   = 1,                   // Upper left matrix formula cell
@@ -281,6 +279,8 @@ public:
         is the case for binary Excel import.
      */
     void            SetResultDouble( double n )     { aResult.SetDouble( n); }
+
+    void SetResultToken( const formula::FormulaToken* pToken );
 
     double GetResultDouble() const { return aResult.GetDouble(); }
 

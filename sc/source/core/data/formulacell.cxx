@@ -1611,6 +1611,10 @@ bool ScFormulaCell::IsDirtyOrInTableOpDirty() const
     return bDirty || (bTableOpDirty && pDocument->IsInInterpreterTableOp());
 }
 
+void ScFormulaCell::SetResultToken( const formula::FormulaToken* pToken )
+{
+    aResult.SetToken(pToken);
+}
 
 void ScFormulaCell::SetErrCode( sal_uInt16 n )
 {
@@ -3071,77 +3075,8 @@ bool ScFormulaCell::InterpretFormulaGroup()
         }
     }
 
-#if 0
-    // TODO: Calculate the formula group via vectorization.
-#else
-    // Until we implement group calculation for real, decompose the group into
-    // individual formula token arrays for individual calculation.
-    ScAddress aTmpPos = aPos;
-    for (sal_Int32 i = 0; i < xGroup->mnLength; ++i)
-    {
-        aTmpPos.SetRow(xGroup->mnStart + i);
-        ScTokenArray aCode2;
-        for (const formula::FormulaToken* p = aCode.First(); p; p = aCode.Next())
-        {
-            switch (p->GetType())
-            {
-                case svSingleVectorRef:
-                {
-                    const formula::SingleVectorRefToken* p2 = static_cast<const formula::SingleVectorRefToken*>(p);
-                    const double* pArray = p2->GetArray();
-                    aCode2.AddDouble(i < p2->GetArrayLength() ? pArray[i] : 0.0);
-                }
-                break;
-                case svDoubleVectorRef:
-                {
-                    const formula::DoubleVectorRefToken* p2 = static_cast<const formula::DoubleVectorRefToken*>(p);
-                    const std::vector<const double*>& rArrays = p2->GetArrays();
-                    size_t nColSize = rArrays.size();
-                    size_t nRowStart = p2->IsStartFixed() ? 0 : i;
-                    size_t nRowEnd = p2->GetRefRowSize() - 1;
-                    if (!p2->IsEndFixed())
-                        nRowEnd += i;
-
-                    size_t nRowSize = nRowEnd - nRowStart + 1;
-                    ScMatrixRef pMat(new ScMatrix(nColSize, nRowSize, 0.0));
-                    for (size_t nCol = 0; nCol < nColSize; ++nCol)
-                    {
-                        const double* pArray = rArrays[nCol];
-                        for (size_t nRow = 0; nRow < nRowSize; ++nRow)
-                        {
-                            if (nRowStart + nRow < p2->GetArrayLength())
-                            {
-                                double fVal = pArray[nRowStart+nRow];
-                                pMat->PutDouble(fVal, nCol, nRow);
-                            }
-                        }
-                    }
-
-                    ScMatrixToken aTok(pMat);
-                    aCode2.AddToken(aTok);
-                }
-                break;
-                default:
-                    aCode2.AddToken(*p);
-            }
-        }
-
-        ScFormulaCell* pDest = pDocument->GetFormulaCell(aTmpPos);
-        if (!pDest)
-            return false;
-
-        ScCompiler aComp(pDocument, aPos, aCode2);
-        aComp.SetGrammar(pDocument->GetGrammar());
-        aComp.CompileTokenArray(); // Create RPN token array.
-        ScInterpreter aInterpreter(pDest, pDocument, aTmpPos, aCode2);
-        aInterpreter.Interpret();
-
-        pDest->aResult.SetToken(aInterpreter.GetResultToken().get());
-        pDest->ResetDirty();
-    }
-
-    return true;
-#endif
+    sc::FormulaGroupInterpreter aInterpreter(*pDocument, aPos, xGroup, aCode);
+    return aInterpreter.interpret();
 }
 
 bool ScFormulaCell::InterpretInvariantFormulaGroup()

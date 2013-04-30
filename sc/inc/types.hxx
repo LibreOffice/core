@@ -20,6 +20,9 @@ typedef ::boost::intrusive_ptr<const ScMatrix>  ScConstMatrixRef;
 class ScToken;
 typedef ::boost::intrusive_ptr<ScToken> ScTokenRef;
 
+struct ScFormulaCellGroup;
+typedef ::boost::intrusive_ptr<ScFormulaCellGroup> ScFormulaCellGroupRef;
+
 /**
  * When vectorization is enabled, we could potentially mass-calculate a
  * series of formula token arrays in adjacent formula cells in one step,

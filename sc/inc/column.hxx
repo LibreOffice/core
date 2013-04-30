@@ -82,8 +82,6 @@ struct ScFormulaCellGroup;
 struct ScRefCellValue;
 class ScDocumentImport;
 
-typedef ::boost::intrusive_ptr<ScFormulaCellGroup> ScFormulaCellGroupRef;
-
 struct ScNeededSizeOptions
 {
     const ScPatternAttr*    pPattern;

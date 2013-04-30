@@ -10,8 +10,14 @@
 #ifndef SC_FORMULAGROUP_HXX
 #define SC_FORMULAGROUP_HXX
 
+#include "address.hxx"
+#include "types.hxx"
+
 #include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
+
+class ScDocument;
+class ScTokenArray;
 
 namespace sc {
 
@@ -21,6 +27,22 @@ struct FormulaGroupContext : boost::noncopyable
     typedef boost::ptr_vector<DoubleArrayType> ArrayStoreType;
 
     ArrayStoreType maArrays;
+};
+
+/**
+ * All the vectorized formula calculation code should be collectd here.
+ */
+class FormulaGroupInterpreter
+{
+    ScDocument& mrDoc;
+    ScAddress maTopPos;
+    ScFormulaCellGroupRef mxGroup;
+    ScTokenArray& mrCode;
+public:
+    FormulaGroupInterpreter(
+        ScDocument& rDoc, const ScAddress& rTopPos, const ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode);
+
+    bool interpret();
 };
 
 }

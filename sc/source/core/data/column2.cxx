@@ -1665,7 +1665,6 @@ bool ScColumn::ResolveStaticReference( ScMatrix& rMat, SCCOL nMatCol, SCROW nRow
 const double* ScColumn::FetchDoubleArray( sc::FormulaGroupContext& /*rCxt*/, SCROW nRow1, SCROW nRow2 ) const
 {
     // TODO: I'll use the context object later.
-
     if (nRow1 > nRow2)
         return NULL;
 
