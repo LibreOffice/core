@@ -4811,27 +4811,28 @@ if test "$build_os" = "cygwin"; then
     AL=al.exe
 
     dnl Check csc.exe
-    AC_PATH_PROG(CSC_PATH, csc.exe)
+    CSC=csc.exe
+    AC_PATH_PROG(CSC_PATH, $CSC)
     if test -n "$CSC_PATH"; then
         CSC_PATH=`dirname "$CSC_PATH"`
     fi
     if test -n "$with_csc_path"; then
         with_csc_path=`cygpath -u "$with_csc_path"`
     else
-        AC_MSG_CHECKING([for csc.exe more thoroughly])
+        AC_MSG_CHECKING([for $CSC more thoroughly])
     fi
-    if test -x "$with_csc_path/csc.exe"; then
+    if test -x "$with_csc_path/$CSC"; then
         CSC_PATH="$with_csc_path"
     else
        csctest=`./oowintool --csc-compilerdir`
-       if test -x "$csctest/csc.exe"; then
+       if test -x "$csctest/$CSC"; then
            CSC_PATH="$csctest"
        fi
     fi
-    if test ! -x "$CSC_PATH/csc.exe"; then
-        AC_MSG_ERROR([csc.exe not found. Make sure it's in the path or use --with-csc-path])
+    if test ! -x "$CSC_PATH/$CSC"; then
+        AC_MSG_ERROR([$CSC not found. Make sure it's in the path or use --with-csc-path])
     else
-        AC_MSG_RESULT([$CSC_PATH/csc.exe])
+        AC_MSG_RESULT([$CSC_PATH/$CSC])
     fi
     # Convert to posix path with 8.3 filename restrictions ( No spaces )
     CSC_PATH=`cygpath -d "$CSC_PATH"`
