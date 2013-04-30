@@ -2388,12 +2388,10 @@ sal_uInt16 GetPoolParent( sal_uInt16 nId )
         case COLL_EXTRA_BITS:
             switch( nId )
             {
-            case RES_POOLCOLL_FRAME:
-                    nRet = RES_POOLCOLL_TEXT;                   break;
-
             case RES_POOLCOLL_TABLE_HDLN:
                     nRet = RES_POOLCOLL_TABLE;                  break;
 
+            case RES_POOLCOLL_FRAME:
             case RES_POOLCOLL_TABLE:
             case RES_POOLCOLL_FOOTNOTE:
             case RES_POOLCOLL_ENDNOTE:
