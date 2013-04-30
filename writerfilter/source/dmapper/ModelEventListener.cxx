@@ -36,6 +36,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/ReferenceFieldPart.hpp>
 #include <com/sun/star/text/ReferenceFieldSource.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/view/XFormLayerAccess.hpp>
 
 namespace writerfilter {
 namespace dmapper {
@@ -108,6 +110,11 @@ void ModelEventListener::notifyEvent( const document::EventObject& rEvent ) thro
         {
             SAL_WARN("writerfilter", "exception while updating indexes: " << rEx.Message);
         }
+
+        // Form design mode is enabled by default in Writer, not in Word.
+        uno::Reference<frame::XModel> xModel(rEvent.Source, uno::UNO_QUERY);
+        uno::Reference<view::XFormLayerAccess> xFormLayerAccess(xModel->getCurrentController(), uno::UNO_QUERY);
+        xFormLayerAccess->setFormDesignMode(false);
     }
 }
 
