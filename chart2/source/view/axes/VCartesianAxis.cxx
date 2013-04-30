@@ -43,6 +43,11 @@
 
 #include <algorithm>
 #include <boost/scoped_ptr.hpp>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolygonclipper.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 //.............................................................................
 namespace chart
@@ -53,6 +58,8 @@ using namespace ::com::sun::star::chart2;
 using namespace ::rtl::math;
 using ::basegfx::B2DVector;
 using ::com::sun::star::uno::Reference;
+using ::basegfx::B2DPolygon;
+using ::basegfx::B2DPolyPolygon;
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -138,14 +145,22 @@ bool doesOverlap( const Reference< drawing::XShape >& xShape1
     if( !xShape1.is() || !xShape2.is() )
         return false;
 
-    sal_Int32 nAngle = abs(fRotationAngleDegree);
+    ::basegfx::B2DRectangle aRect1( BaseGFXHelper::makeRectangle( xShape1->getPosition(), ShapeFactory::getSizeAfterRotation( xShape1, 0 ) ));
+    ::basegfx::B2DRectangle aRect2( BaseGFXHelper::makeRectangle( xShape2->getPosition(), ShapeFactory::getSizeAfterRotation( xShape2, 0 ) ));
 
-    if( ( nAngle >= 45 && nAngle <= 135 ) || ( nAngle >= 225 && nAngle <= 315 ) )
-        return false;
+    B2DPolygon aPoly1 = basegfx::tools::createPolygonFromRect( aRect1 );
+    B2DPolygon aPoly2 = basegfx::tools::createPolygonFromRect( aRect2 );
+    ::basegfx::B2DHomMatrix aMatrix;
+    aMatrix.rotate( fRotationAngleDegree );
+    aPoly1.transform( aMatrix );
+    aPoly2.transform( aMatrix );
 
-    ::basegfx::B2IRectangle aRect1( BaseGFXHelper::makeRectangle(xShape1->getPosition(),ShapeFactory::getSizeAfterRotation( xShape1, fRotationAngleDegree )));
-    ::basegfx::B2IRectangle aRect2( BaseGFXHelper::makeRectangle(xShape2->getPosition(),ShapeFactory::getSizeAfterRotation( xShape2, fRotationAngleDegree )));
-    return aRect1.overlaps(aRect2);
+    B2DPolyPolygon aPolyPoly1, aPolyPoly2;
+    aPolyPoly1.append( aPoly1 );
+    aPolyPoly2.append( aPoly2 );
+    B2DPolyPolygon overlapPoly = ::basegfx::tools::clipPolyPolygonOnPolyPolygon( aPolyPoly1, aPolyPoly2, true, false );
+
+    return (overlapPoly.count() > 0);
 }
 
 void removeShapesAtWrongRhythm( TickIter& rIter
@@ -787,6 +802,7 @@ bool VCartesianAxis::createTextShapes(
                     {
                         rAxisLabelProperties.fRotationAngleDegree = 45;
                         rAxisLabelProperties.bLineBreakAllowed = false;
+                        rAxisLabelProperties.eStaggering = SIDE_BY_SIDE;
                         m_aAxisLabelProperties.fRotationAngleDegree = rAxisLabelProperties.fRotationAngleDegree;
                         removeTextShapesFromTicks();
                         return false;
