@@ -129,6 +129,11 @@ public:
                                 ((CONV_XL_R1C1       +
                                   kConventionOffset) << kConventionShift)            |
                                 kEnglishBit,
+        /// English with Excel OOXML reference style.
+        GRAM_ENGLISH_XL_OOX  = ::com::sun::star::sheet::FormulaLanguage::XL_ENGLISH  |
+                                ((CONV_XL_OOX        +
+                                  kConventionOffset) << kConventionShift)            |
+                                kEnglishBit,
         /// Central definition of the default grammar to be used.
         GRAM_DEFAULT        = GRAM_NATIVE_UI,
 
