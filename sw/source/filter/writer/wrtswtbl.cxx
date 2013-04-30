@@ -568,7 +568,9 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
         sal_uInt16 nOldRow = nRow;
         SwWriteTableRow aSrchRow( nRPos,bUseLayoutHeights );
         SwWriteTableRows::const_iterator it2 = aRows.find( &aSrchRow );
-        OSL_ENSURE( it2 != aRows.end(), "missing row" );
+
+        // coupled methods out of sync ...
+        assert( it2 != aRows.end() );
         nRow = it2 - aRows.begin();
 
         OSL_ENSURE( nOldRow <= nRow, "Don't look back!" );

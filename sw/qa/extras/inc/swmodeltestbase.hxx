@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -259,13 +260,14 @@ protected:
         fprintf(stderr, "File tested,Execution Time (ms)\n");
     }
 
-    void load(const char* pDir, const char* pName)
+    void load(const char* pDir, const char* pName, bool bCalcLayout = true)
     {
         // Output name early, so in the case of a hang, the name of the hanging input file is visible.
         fprintf(stderr, "%s,", pName);
         m_nStartTime = osl_getGlobalTimer();
         mxComponent = loadFromDesktop(getURLFromSrc(pDir) + OUString::createFromAscii(pName), "com.sun.star.text.TextDocument");
-        calcLayout();
+        if (bCalcLayout)
+            calcLayout();
     }
 
     void reload(OUString aFilter)
