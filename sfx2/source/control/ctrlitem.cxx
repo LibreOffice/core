@@ -384,6 +384,11 @@ SfxMapUnit SfxControllerItem::GetCoreMetric() const
             SfxShell *pSh = pDispat->GetShell( pServer->GetShellLevel() );
             SfxItemPool &rPool = pSh->GetPool();
             sal_uInt16 nWhich = rPool.GetWhich( nId );
+
+            // invalidate slot and its message|slot server as 'global' information
+            // about the validated message|slot server is not made available
+            pCache->Invalidate( sal_True );
+
             return rPool.GetMetric( nWhich );
         }
     }
