@@ -1181,7 +1181,7 @@ void TextView::Paste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
                     bool bWasTruncated = false;
                     if( mpImpl->mpTextEngine->GetMaxTextLen() != 0 )
                         bWasTruncated = ImplTruncateNewText( aText );
-                    InsertNewText( aText, sal_False );
+                    InsertText( aText, sal_False );
                     mpImpl->mpTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
 
                     if( bWasTruncated )
@@ -1337,12 +1337,7 @@ TextSelection TextView::ImpMoveCursor( const KeyEvent& rKeyEvent )
     return mpImpl->maSelection;
 }
 
-void TextView::InsertText( const XubString& rStr, sal_Bool bSelect )
-{
-    InsertNewText( rStr, bSelect );
-}
-
-void TextView::InsertNewText( const OUString& rStr, sal_Bool bSelect )
+void TextView::InsertText( const OUString& rStr, sal_Bool bSelect )
 {
 //  HideSelection();
     mpImpl->mpTextEngine->UndoActionStart();

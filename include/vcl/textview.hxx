@@ -125,9 +125,7 @@ public:
     String              GetSelected( LineEnd aSeparator );
     void                DeleteSelected();
 
-    void                InsertNewText( const OUString& rNew, sal_Bool bSelect = sal_False );
-    // deprecated: use InsertNewText instead
-    void                InsertText( const String& rNew, sal_Bool bSelect = sal_False );
+    void                InsertText( const OUString& rNew, sal_Bool bSelect = sal_False );
 
     sal_Bool                KeyInput( const KeyEvent& rKeyEvent );
     void                Paint( const Rectangle& rRect );
