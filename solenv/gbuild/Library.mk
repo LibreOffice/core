@@ -55,7 +55,7 @@ $(WORKDIR)/Clean/OutDir/lib/%$(gb_Library_PLAINEXT) :
 gb_Library_get_packagename = Library/$(1)
 
 gb_Library__get_dir_for_layer = $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_LAYER_DIRS)))
-gb_Library__get_instdir = $(call gb_Library__get_dir_for_layer,$(call gb_Library_get_layer,$(1)))
+gb_Library_get_instdir = $(call gb_Library__get_dir_for_layer,$(call gb_Library_get_layer,$(1)))
 
 define gb_Library_Library
 $(call gb_Postprocess_get_target,AllLibraries) : $(call gb_Library_get_target,$(1))
@@ -98,7 +98,7 @@ endef
 define gb_Library__Library_package
 $(call gb_Package_Package_internal,$(2),$(gb_Helper_OUTDIRLIBDIR))
 $(call gb_Package_set_outdir,$(2),$(INSTDIR))
-$(call gb_Package_add_file,$(2),$(call gb_Library__get_instdir,$(1))/$(3),$(3))
+$(call gb_Package_add_file,$(2),$(call gb_Library_get_instdir,$(1))/$(3),$(3))
 
 $(call gb_Library__get_final_target,$(1)) : $(call gb_Package_get_target,$(2))
 $(call gb_Package_get_target,$(2)) : $(call gb_Library_get_target,$(1))
@@ -127,7 +127,7 @@ endef
 define gb_Library__add_soversion_link
 $(call gb_Library_add_auxtarget,$(1),$(3))
 ifneq ($(gb_RUNNABLE_INSTDIR),)
-$(call gb_Package_add_file,$(2),$(call gb_Library__get_instdir,$(1))/$(notdir $(3)),$(notdir $(3)))
+$(call gb_Package_add_file,$(2),$(call gb_Library_get_instdir,$(1))/$(notdir $(3)),$(notdir $(3)))
 endif
 
 endef

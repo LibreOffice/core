@@ -36,6 +36,9 @@ $(call gb_ExternalPackage_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),EPK,2)
 	rm -f $(call gb_ExternalPackage_get_target,$*)
 
+# Get name of the Package used for delivering files for install to $(INSTDIR).
+gb_ExternalPackage_get_packagename = ExternalPackage/$(1)
+
 # Create and register a new ExternalPackage
 #
 # The base directory of the package is the directory of the unpacked
@@ -60,11 +63,23 @@ define gb_ExternalPackage_ExternalPackage_internal
 $(call gb_Package_Package_internal,$(1),$(call gb_UnpackedTarball_get_dir,$(2)))
 $(call gb_Package_use_unpacked,$(1),$(2))
 
+ifneq ($(gb_RUNNABLE_INSTDIR),)
+$(call gb_ExternalPackage__ExternalPackage_package,$(1),$(call gb_ExternalPackage_get_packagename,$(1)),$(2))
+endif
+
 $(call gb_ExternalPackage_get_target,$(1)) : $(call gb_Package_get_target,$(1))
 $(call gb_ExternalPackage_get_target,$(1)) :| $(dir $(call gb_ExternalPackage_get_target,$(1))).dir
 $(call gb_ExternalPackage_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(1))
 
 gb_ExternalPackage_UNPACKED_$(1) := $(2)
+
+endef
+
+# gb_ExternalPackage__ExternalPackage_package package inst-package unpacked
+define gb_ExternalPackage__ExternalPackage_package
+$(call gb_Package_Package_internal,$(2),$(call gb_UnpackedTarball_get_dir,$(3)))
+$(call gb_Package_set_outdir,$(2),$(INSTDIR))
+$(call gb_Package_use_unpacked,$(2),$(3))
 
 endef
 
@@ -183,8 +198,42 @@ endef
 # gb_ExternalPackage_use_external_project package external
 define gb_ExternalPackage_use_external_project
 $(call gb_Package_use_external_project,$(1),$(2))
+
+ifneq ($(gb_RUNNABLE_INSTDIR),)
+$(call gb_Package_use_external_project,$(call gb_ExternalPackage_get_packagename,$(1)),$(2))
+endif
+
 $(if $(gb_ExternalPackage_PROJECT_$(1)),$(call gb_Output_error,gb_ExternalPackage_use_external_project: only one project allowed))
 gb_ExternalPackage_PROJECT_$(1) := $(2)
+
+endef
+
+# Add a (dynamic) library that is a part of the installation.
+#
+# This function is very similar to gb_ExternalPackage_add_file, except
+# that it also allows to deliver the library to its proper place in
+# $(INSTDIR).
+#
+# The last argument is the name under which the library was registered.
+# It is used to determine layer, if the library is not in layer OOO.
+#
+# gb_ExternalPackage_add_library_for_install package dest src library?
+define gb_ExternalPackage_add_library_for_install
+$(call gb_ExternalPackage_add_file,$(1),$(2),$(3))
+
+ifneq ($(gb_RUNNABLE_INSTDIR),)
+$(call gb_ExternalPackage_add_file,$(call gb_ExternalPackage_get_packagename,$(1)),$(if $(4),$(call gb_Library_get_instdir,$(4)),program)/$(notdir $(2)),$(3))
+$(call gb_ExternalPackage_get_target,$(1)) : $(call gb_Package_get_target,$(call gb_ExternalPackage_get_packagename,$(1)))
+$(call gb_ExternalPackage_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(call gb_ExternalPackage_get_packagename,$(1)))
+endif
+
+endef
+
+# Add several libraries for install at once.
+#
+# gb_ExternalPackage_add_libraries_for_install package destdir file(s)
+define gb_ExternalPackage_add_libraries_for_install
+$(foreach file,$(3),$(call gb_ExternalPackage_add_library_for_install,$(1),$(2)/$(notdir $(file)),$(file)))
 
 endef
 
