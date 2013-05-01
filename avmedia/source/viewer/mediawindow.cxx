@@ -225,6 +225,8 @@ void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
                                       "MPEG Video", "mpg;mpeg;mpv;mp4",
                                       "Ogg Audio", "ogg;oga;",
                                       "Ogg Video", "ogv;ogx;",
+                                      "RMI MIDI Audio", "rmi",
+                                      "SND (SouND) Audio", "snd",
                                       "Quicktime Video", "mov",
                                       "Vivo Video", "viv",
                                       "WAVE Audio", "wav",
