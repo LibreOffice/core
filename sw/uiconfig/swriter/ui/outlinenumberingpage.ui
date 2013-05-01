@@ -32,7 +32,7 @@
             <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
-              <object class="GtkTreeView" id="level">
+              <object class="GtkTreeView" id="level:border">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="headers_visible">False</property>
