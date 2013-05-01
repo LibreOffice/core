@@ -74,7 +74,7 @@ lo_get_libmap(void)
         { "libevtattlo.a", evtatt_component_getFactory },
         { "libfileacc.a", fileacc_component_getFactory },
         { "libfrmlo.a", frm_component_getFactory },
-        { "fsstorage.uno.a", fsstorage_component_getFactory },
+        { "libfsstoragelo.a", fsstorage_component_getFactory },
         { "libfwklo.a", fwk_component_getFactory },
         { "libfwllo.a", fwl_component_getFactory },
         { "libfwmlo.a", fwm_component_getFactory },
@@ -133,13 +133,13 @@ lo_initialize(void)
     NSString *uno_types = @"-env:UNO_TYPES=";
 
     uno_types = [uno_types stringByAppendingString: @"file://"];
-    uno_types = [uno_types stringByAppendingString: [app_root_escaped stringByAppendingPathComponent: @"ure/types.rdb"]];
-
-    uno_types = [uno_types stringByAppendingString: @" file://"];
-    uno_types = [uno_types stringByAppendingString: [app_root_escaped stringByAppendingPathComponent: @"types.rdb"]];
-
-    uno_types = [uno_types stringByAppendingString: @" file://"];
     uno_types = [uno_types stringByAppendingString: [app_root_escaped stringByAppendingPathComponent: @"offapi.rdb"]];
+
+    uno_types = [uno_types stringByAppendingString: @" file://"];
+    uno_types = [uno_types stringByAppendingString: [app_root_escaped stringByAppendingPathComponent: @"oovbaapi.rdb"]];
+
+    uno_types = [uno_types stringByAppendingString: @" file://"];
+    uno_types = [uno_types stringByAppendingString: [app_root_escaped stringByAppendingPathComponent: @"udkapi.rdb"]];
 
     assert(strcmp(argv[2], "placeholder-uno-types") == 0);
     argv[2] = [uno_types UTF8String];
