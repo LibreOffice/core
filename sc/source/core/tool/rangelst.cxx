@@ -183,11 +183,12 @@ ScRangeList::~ScRangeList()
 
 sal_uInt16 ScRangeList::Parse( const String& rStr, ScDocument* pDoc, sal_uInt16 nMask,
                            formula::FormulaGrammar::AddressConvention eConv,
-                           SCTAB nDefaultTab )
+                           SCTAB nDefaultTab, sal_Unicode cDelimiter )
 {
     if ( rStr.Len() )
     {
-        sal_Unicode cDelimiter = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+        if (!cDelimiter)
+            cDelimiter = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
 
         nMask |= SCA_VALID;             // falls das jemand vergessen sollte
         sal_uInt16 nResult = (sal_uInt16)~0;    // alle Bits setzen
