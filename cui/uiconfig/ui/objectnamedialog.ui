@@ -114,7 +114,7 @@
     </child>
     <action-widgets>
       <action-widget response="0">help</action-widget>
-      <action-widget response="-3">ok</action-widget>
+      <action-widget response="0">ok</action-widget>
       <action-widget response="0">cancel</action-widget>
     </action-widgets>
   </object>
