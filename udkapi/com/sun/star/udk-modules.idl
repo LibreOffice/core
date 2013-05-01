@@ -19,13 +19,26 @@
 #ifndef __com_sun_star_modules_idl__
 #define __com_sun_star_modules_idl__
 
-module com { module sun { module star {
+/* note: this file contains documentation of the modules.
+         sub-modules of modules are documented here too so there aren't
+         lots of tiny documentation only files everywhere.
+*/
+
+module com { module sun {
+
+/// the module com::sun::star is the root module of the UNO API.
+module star {
 
 /// Java beans-like property access and introspection.
-module beans{};
+module beans {};
 
 /// Interfaces for building bridges to other component models.
-module bridge {};
+module bridge {
+
+    /// interfaces for UNO bridge to OLE automation.
+    module oleautomation {};
+
+};
 
 /// Data exchange interfaces for inter-process communication.
 module connection {};

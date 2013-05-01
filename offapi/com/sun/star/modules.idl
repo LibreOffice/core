@@ -19,13 +19,12 @@
 #ifndef __com_sun_star_modules_idl__
 #define __com_sun_star_modules_idl__
 
+/* note: this file contains documentation of the modules.
+         sub-modules of modules are documented here too so there aren't
+         lots of tiny documentation only files everywhere.
+*/
+
 module com { module sun { module star {
-
-/// security and authenticates interfaces
-module auth {};
-
-/// Java AWT-like user interface toolkit interface specifications for UNO.
-module awt {};
 
 /** UNO Accessibility API
 
@@ -57,6 +56,26 @@ module awt {};
 */
 module accessibility {};
 
+/// interfaces for SMIL animations.
+module animations {};
+
+/// security and authenticates interfaces
+module auth {};
+
+/// Java AWT-like user interface toolkit interface specifications for UNO.
+module awt {
+
+    /// grid control.
+    module grid {};
+
+    /// tab pages.
+    module tab {};
+
+    /// hierarchical (tree) control.
+    module tree {};
+
+};
+
 /// Charting diagram interfaces.
 module chart {};
 
@@ -64,31 +83,104 @@ module chart {};
     contains only a rather small public API.  In addition there is a
     private API in the chart2 project.
  */
-module chart2 {};
+module chart2 {
+
+    /// Chart data provider interfaces.
+    module data {};
+};
 
 /// Access to the tree of configuration data.
-module configuration {};
+module configuration {
+
+    /// interfaces for configuration backends.
+    module backend {
+        /// XML files backend.
+        module xml {};
+    };
+
+    /// deprecated bootstrapping mechanism.
+    module bootstrap {};
+
+};
+
+/// TODO: what is this?
+module cui {};
 
 /// Clipboard and Drag&amp;Drop interfaces.
-module datatransfer {};
+module datatransfer {
+
+    /// Clipboard specific interfaces.
+    module clipboard {};
+
+    /// Drag&amp;Drop specific interfaces.
+    module dnd {};
+
+};
+
+/// interfaces for extension management.
+module deployment {
+
+    // this looks like it should not be documented
+    module test {};
+
+    /// interfaces for extension management dialogs.
+    module ui {};
+
+};
 
 /// Office document related interfaces.
 module document {};
 
-/// Office document content related interfaces.
-module office {};
-
 /// Drawing and shape specific interfaces.
-module drawing {};
+module drawing {
+
+    /// Draw/Impress user interface framework.
+    module framework {};
+
+};
+
+/// interfaces related to embedded objects, both native UNO and OLE.
+module embed {};
 
 /// Interfaces for managing forms and controls.
-module form {};
+module form {
+
+    /// form bindings.
+    module binding {};
+
+    /// form components (model part of the controls).
+    module component {};
+
+    /// form components (view part of the controls).
+    module control {};
+
+    /// various property handlers for forms.
+    module inspection {};
+
+    /// core components of forms.
+    module runtime {};
+
+    /// for submission of data from forms.
+    module submission {};
+
+    /// for validation of form data.
+    module validation {};
+
+};
 
 /// Interfaces for mathematical formulas.
 module formula {};
 
 /// Desktop environment framework interfaces.
-module frame {};
+module frame {
+
+    /// various status properties.
+    module status {};
+
+};
+
+/// interfaces for galleries of images and media objects.
+module gallery {};
 
 /// Interfaces and data types to deal with basic geometric entities
 module geometry {};
@@ -100,11 +192,20 @@ module graphic {};
     subject to change. */
 module i18n {};
 
+/// interfaces for HTML image maps.
+module image {};
+
+/// interfaces for inspecting UNO objects via property handlers.
+module inspection {};
+
 /// lightweight directory access protocol (LDAP)
 module ldap {};
 
 /// Spell checker, hyphenation and thesaurus interfaces.
 module linguistic2 {};
+
+/// logging of events.
+module logging {};
 
 /// Interfaces for Email connectivity
 module mail {};
@@ -115,80 +216,33 @@ module media {};
 /// Interfaces for Mozilla integration.
 module mozilla {};
 
+/// Office document content related interfaces.
+module office {};
+
+/// Package file format interfaces.
+module packages {
+
+    /// interfaces for reading and writing manifest.xml files in ODF packages.
+    module manifest {};
+
+    /// for direct access to ZIP packages.
+    module zip {};
+
+};
+
 /// Netscape-like plugin interfaces.
 module plugin {};
 
 /// Presentation specific interfaces.
-module presentation {};
+module presentation {
 
-/// Interfaces and data structures for rendering
-module rendering {};
+    /// for text fields in presentation documents.
+    module textfield {};
 
-/// Interfaces to access (UI) resource files.
-module resource {};
+};
 
 /// Interfaces for QA and automated tests
 module qa {};
-
-/// Interfaces for scanner control.
-module scanner {};
-
-/// Basic interfaces for database access.
-module sdb {};
-
-/// Database component interfaces.
-module sdbc {};
-
-/// High-level database component interfaces.
-module sdbcx {};
-
-/// Spreadsheet specific interfaces.
-module sheet {};
-
-/// Formatting and layout style and style sheet interfaces.
-module style {};
-
-/// Interfaces for import/export of Scaleable Vector Format.
-module svg {};
-
-/// Table specific interfaces (for text and spreadsheet).
-module table {};
-
-/// Task management interfaces.
-module task {};
-
-/// Text specific interfaces.
-module text {};
-
-/// Universal Content Broker interfaces.
-module ucb {};
-
-/// Dialogs and other UI elements.
-module ui {};
-
-/// Miscellaneous interfaces for sorting, connecting objects etc.
-module util {};
-
-/// Document view specific interfaces (e.g. selection access and printing).
-module view {};
-
-/// XML related interfaces.
-module xml {};
-
-/// Host operating system integration interfaces.
-module system {};
-
-/// Package file format interfaces.
-module packages {};
-
-/// image manipulation interfaces.
-module image {};
-
-/// interfaces for XForms (XML-based forms) implementation
-module xforms {};
-
-/// interfaces for report interfaces
-module report {};
 
 /** RDF (Resource Description Framework) and metadata interfaces.
 
@@ -229,6 +283,165 @@ module report {};
 
  */
 module rdf {};
+
+/// Interfaces and data structures for rendering
+module rendering {};
+
+/// interfaces for reports generated from data sources.
+module report {
+
+    /// property handlers for reports.
+    module inspection {};
+
+    /// report meta data.
+    module meta {};
+
+};
+
+/// Interfaces to access (UI) resource files.
+module resource {};
+
+/// Interfaces for scanner control.
+module scanner {};
+
+/// Scripting language bindings.
+module script {
+
+    /// manage available scripts in some sort of hierarchy.
+    module browse {};
+
+    /// interfaces for scripting providers.
+    module provider {};
+
+    /// VBA scripting.
+    module vba {};
+
+};
+
+/// Basic interfaces for database access.
+module sdb {
+
+    /// application UI.
+    module application {};
+
+    /// misc stuff.
+    module tools {};
+
+};
+
+/// Database component interfaces.
+module sdbc {};
+
+/// High-level database component interfaces.
+module sdbcx {};
+
+/// cryptographic interfaces.
+module security {};
+
+/// TODO: what is this?
+module setup {};
+
+/// Spreadsheet specific interfaces.
+module sheet {};
+
+/// allows to put smart tags in document content.
+module smarttags {};
+
+/// Formatting and layout style and style sheet interfaces.
+module style {};
+
+/// Interfaces for import/export of Scaleable Vector Format.
+module svg {};
+
+/// Host operating system integration interfaces.
+module system {};
+
+/// Table specific interfaces (for text and spreadsheet).
+module table {};
+
+/// Task management interfaces.
+module task {};
+
+/// Text specific interfaces.
+module text {
+
+    /// text field masters.
+    module fieldmaster {};
+
+    /// text fields.
+    module textfield {
+
+        /// Document Properties text fields.
+        module docinfo {};
+
+    };
+
+};
+
+/// Universal Content Broker interfaces.
+module ucb {};
+
+/// Dialogs and other UI elements.
+module ui {
+
+    /// dialogs.
+    module dialogs {};
+
+};
+
+/// Miscellaneous interfaces for sorting, connecting objects etc.
+module util {};
+
+/// Document view specific interfaces (e.g. selection access and printing).
+module view {};
+
+/// interfaces for XForms (XML-based forms) implementation
+module xforms {};
+
+/// XML related interfaces.
+module xml {
+
+    /// XML encryption interfaces.
+    module crypto {
+
+        /// XML encryption SAX interfaces.
+        module sax {};
+
+    };
+
+    /// Compressed SAX interfaces.
+    module csax {};
+
+    /// XML Document Object Model.
+    module dom {
+
+        /// XML Document Object Model events.
+        module events {};
+
+        /// XML Document Object Model views.
+        module views {};
+
+    };
+
+    /// no idea what this does but it's all marked "internal".
+    module input {};
+
+    /// SAX interfaces.
+    module sax {};
+
+    /// something related to creating DOMs from SAX interfaces?
+    module wrapper {};
+
+    /// XPath interfaces.
+    module xpath {};
+
+    /// XSLT interfaces.
+    module xslt {};
+
+};
+
+/// W3C XML Schema-2 data type related interfaces.
+module xsd {};
 
 }; }; };
 
