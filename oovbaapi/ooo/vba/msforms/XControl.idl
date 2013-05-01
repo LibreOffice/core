@@ -19,6 +19,7 @@
 #define __ooo_vba_msforms_XControl_idl__
 
 #include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/script/ScriptEvent.idl>
 #include <ooo/vba/XHelperInterface.idl>
 
 module ooo {  module vba {  module msforms {
@@ -29,7 +30,9 @@ interface XControl
     interface ::ooo::vba::XHelperInterface;
     void SetFocus();
     void Move( [in] double Left, [in] double Top, [in] any Width, [in] any Height );
-
+    // support for unit test harness ( and possibly internal clients )
+    // to generate events that will call appropriate event handlers
+    void fireEvent( [in] com::sun::star::script::ScriptEvent evt );
     [attribute, readonly ] com::sun::star::uno::XInterface Object;
     [attribute] string ControlSource;
     [attribute] string RowSource;
