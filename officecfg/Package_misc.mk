@@ -1,3 +1,4 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #
 # This file is part of the LibreOffice project.
 #
@@ -20,3 +21,5 @@ $(eval $(call gb_Package_Package,officecfg_misc,$(SRCDIR)/officecfg))
 
 $(eval $(call gb_Package_add_file,officecfg_misc,xml/oo-ldap.xcd.sample,registry/schema/oo-ldap.xcd.sample))
 $(eval $(call gb_Package_add_file,officecfg_misc,xml/oo-ad-ldap.xcd.sample,registry/schema/oo-ad-ldap.xcd.sample))
+
+# vim: set noet sw=4 ts=4:
