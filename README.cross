@@ -31,10 +31,9 @@ below.
 
 Note that in the case of LibreOffice, it is uncommon to run the
 configure script directly. Normally one uses the autogen.sh script.
-The autogen.sh script saves its last command-line options used in a
-file called autogen.lastrun. The typical way of working is to edit
-this file, i.e. use it as an input file to autogen.sh and not as a
-saved backup copy of command-line parameters.
+The autogen.sh script reads command-line options from file called
+autogen.lastrun if it exists. The typical way of working is to keep
+the configure parameters in that file and edit it as needed.
 
 
 What is so hard, then?
@@ -124,7 +123,7 @@ are. It often seems a bit randomish, with copy-pasting having been
 preferred to factoring out differences.
 
 Most of the configuration settings are maintained in the
-distro-configs/LibreOfficeMinGW.conf file, so in your autogen.lastrun,
+distro-configs/LibreOfficeMinGW.conf file, so in your autogen.input,
 you can use:
 
 CC=ccache i686-w64-mingw32-gcc
@@ -287,25 +286,22 @@ X. In order to be able to run and debug an app on an actual device
 (and not just the iOS Simulator) you need to be registered in the iOS
 Developer Program.
 
-Here is an autogen.lastrun for iOS (device) using Xcode 4.6, on OS X 10.8:
+Here is an autogen.input for iOS (device) using Xcode 4.6, on OS X 10.8:
 
-CXX=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -arch armv7 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk -miphoneos-version-min=5.0
-CC=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -arch armv7 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk -miphoneos-version-min=5.0
+--build=i386-apple-darwin10.7.0
+--host=arm-apple-darwin10
 --enable-dbgutil
 --enable-debug
 --enable-werror
---with-build-platform-configure-options=--with-macosx-sdk=10.7
---with-distro=LibreOfficeiOS
 
 For the iOS Simulator:
 
-CXX=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -arch i386 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator6.1.sdk -mmacosx-version-min=10.7
-CC=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -arch i386 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator6.1.sdk -mmacosx-version-min=10.7
+--build=i386-apple-darwin10.7.0
+--host=arm-apple-darwin10
+--enable-ios-simulator
 --enable-dbgutil
 --enable-debug
 --enable-werror
---with-build-platform-configure-options=--with-macosx-sdk=10.7
---with-distro=LibreOfficeiOS
 
 Note that you will have to install autoconf and automake yourself
 before running autogen.sh. They are no longer included in Xcode 4.3
@@ -349,7 +345,7 @@ Platform Tools, the API 14 SDK Platform and the Android Support
 Library. If you want to run the Android apps in the emulator, you of
 course need an appropriate system image for that.
 
-Here is an autogen.lastrun for Android on ARM when cross-compiling
+Here is an autogen.input for Android on ARM when cross-compiling
 from Linux:
 
 --build=x86_64-unknown-linux-gnu
@@ -361,7 +357,7 @@ from Linux:
 --with-android-sdk=/home/tml/adt-bundle-linux/sdk
 --with-distro=LibreOfficeAndroid
 
-And here is an autogen.lastrun for Android on X86:
+And here is an autogen.input for Android on X86:
 
 --with-android-ndk=/opt/libreoffice/android-ndk-r8b
 --with-android-ndk-toolchain-version=4.6
@@ -419,7 +415,7 @@ _EOF
 $ chmod +x pkg-config-wrapper-host
 This does not work with pkg-config 0.23. 0.26 is known to work.
 
-And you are ready to build with autogen.lastrun similar to:
+And you are ready to build with autogen.input similar to:
 
 PKG_CONFIG=<path-to-pkg-config-wrapper-host>
 CC=<path-to-arm-linux-gnueabihf-gcc> --sysroot=<path-to-raspbian_rootfs>
