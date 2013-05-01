@@ -164,12 +164,10 @@ void ScMacrosTest::testVba()
             OUString("Shapes."),
             OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
-#if defined VBA_TEST_WORKING
         {
             OUString("Ranges."),
             OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
-#endif
         {
             OUString("CheckOptionToggleValue."),
             OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
