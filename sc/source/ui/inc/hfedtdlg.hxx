@@ -37,7 +37,7 @@ public:
                          Window*            pParent,
                          const SfxItemSet&  rCoreSet,
                          const String&      rPageStyle,
-                         sal_uInt16             nResId = RID_SCDLG_HFEDIT );
+                         sal_uInt16         nResId = RID_SCDLG_HFEDIT );
 
             ~ScHFEditDlg();
 

@@ -56,6 +56,7 @@ class SC_DLLPUBLIC ScEditWindow : public Control
 {
 public:
             ScEditWindow( Window* pParent, const ResId& rResId, ScEditWindowLocation eLoc );
+            ScEditWindow( Window* pParent,  WinBits nBits , ScEditWindowLocation eLoc );
             ~ScEditWindow();
 
     using Control::SetFont;
@@ -100,7 +101,7 @@ private:
     Timer           aTimer;
     ScPopupMenu*    pPopupMenu;
     Link            aMLink;
-    sal_uInt16          nSelected;
+    sal_uInt16      nSelected;
 
     SC_DLLPRIVATE  DECL_LINK( TimerHdl, void*);
 
@@ -115,10 +116,11 @@ protected:
 public:
 
     ScExtIButton(Window* pParent, const ResId& rResId );
+    ScExtIButton(Window* pParent, WinBits nBits );
 
     void            SetPopupMenu(ScPopupMenu* pPopUp);
 
-    sal_uInt16          GetSelected();
+    sal_uInt16      GetSelected();
 
     void            SetMenuHdl( const Link& rLink ) { aMLink = rLink; }
     const Link&     GetMenuHdl() const { return aMLink; }
