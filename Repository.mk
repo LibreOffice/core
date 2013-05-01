@@ -725,7 +725,6 @@ $(eval $(call gb_Helper_register_jars,URE, \
 	jurt \
 	ridl \
 	testComponent \
-	unoil \
 	unoloader \
 ))
 
@@ -755,6 +754,7 @@ $(eval $(call gb_Helper_register_jars,OOO, \
 	reportbuilderwizard \
 	sdbc_hsqldb \
 	table \
+	unoil \
 	web \
 	xmerge \
 ))
