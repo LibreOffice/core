@@ -20,9 +20,3 @@ $(eval $(call gb_Package_Package,officecfg_misc,$(SRCDIR)/officecfg))
 
 $(eval $(call gb_Package_add_file,officecfg_misc,xml/oo-ldap.xcd.sample,registry/schema/oo-ldap.xcd.sample))
 $(eval $(call gb_Package_add_file,officecfg_misc,xml/oo-ad-ldap.xcd.sample,registry/schema/oo-ad-ldap.xcd.sample))
-$(eval $(call gb_Package_add_file,officecfg_misc,pck/oo-ldap-attr-map.properties,registry/schema/oo-ldap-attr-map.properties))
-$(eval $(call gb_Package_add_file,officecfg_misc,pck/oo-org-map.properties,registry/schema/oo-org-map.properties))
-$(eval $(call gb_Package_add_file,officecfg_misc,pck/oo-common.ldif,registry/schema/oo-common.ldif))
-$(eval $(call gb_Package_add_file,officecfg_misc,pck/oo-common-ad.ldf,registry/schema/oo-common-ad.ldf))
-$(eval $(call gb_Package_add_file,officecfg_misc,pck/oo-common.conf,registry/schema/oo-common.conf))
-
