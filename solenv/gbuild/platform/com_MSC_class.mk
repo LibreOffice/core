@@ -453,11 +453,6 @@ $(call gb_JunitTest_get_target,$(1)) : DEFS := \
 
 endef
 
-# PythonTest class
-
-#TODO:
-gb_PythonTest_PRECOMMAND :=
-
 # SrsPartTarget class
 
 ifeq ($(gb_FULLDEPS),$(true))
@@ -598,6 +593,9 @@ gb_Pyuno_PROGRAMDIRNAME := program
 
 # Python
 gb_Python_PRECOMMAND := PATH="$(shell cygpath -w $(INSTDIR)/program);$(shell cygpath -w $(OUTDIR)/bin)" PYTHONHOME="$(INSTDIR)/program/python-core-$(PYTHON_VERSION)" PYTHONPATH="$(INSTDIR)/program/python-core-$(PYTHON_VERSION)/lib;$(INSTDIR)/program/python-core-$(PYTHON_VERSION)/lib/lib-dynload:$(INSTDIR)/program"
-gb_Python_INSTALLED_EXECUTABLE := $(gb_DEVINSTALLROOT)/program/python.exe
+
+gb_Python_INSTALLED_EXECUTABLE := "$(INSTDIR)/program/python-core-$(PYTHON_VERSION)/bin/python.exe"
+
+gb_PythonTest_PRECOMMAND := $(gb_Python_PRECOMMAND)
 
 # vim: set noet sw=4:
