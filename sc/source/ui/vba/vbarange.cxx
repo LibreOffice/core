@@ -1154,7 +1154,7 @@ ScVbaRange::getCellRangesForAddress( sal_uInt16& rResFlags, const OUString& sAdd
     {
         pDoc = pDocSh->GetDocument();
         sal_uInt16 nMask = SCA_VALID;
-        rResFlags = rCellRanges.Parse( sAddress, pDoc, nMask, eConv, cDelimiter );
+        rResFlags = rCellRanges.Parse( sAddress, pDoc, nMask, eConv, 0, cDelimiter );
         if ( rResFlags & SCA_VALID )
         {
             return true;
