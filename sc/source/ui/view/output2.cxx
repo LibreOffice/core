@@ -1673,7 +1673,14 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                         eOutHorJust = aVars.GetHorJust();
 
                     if ( eOutHorJust == SVX_HOR_JUSTIFY_BLOCK || eOutHorJust == SVX_HOR_JUSTIFY_REPEAT )
-                        eOutHorJust = SVX_HOR_JUSTIFY_LEFT;     // repeat is not yet implemented
+                    {
+                        const SfxPoolItem* pItem =  mpDoc->GetAttr( nCellX, nCellY, nTab, ATTR_WRITINGDIR );
+                        const SvxFrameDirectionItem* pCurrentWritingMode = (const SvxFrameDirectionItem*) pItem;
+                        if (pCurrentWritingMode->GetValue() == FRMDIR_HORI_LEFT_TOP)
+                            eOutHorJust = SVX_HOR_JUSTIFY_LEFT;
+                        else
+                            eOutHorJust = SVX_HOR_JUSTIFY_RIGHT;
+                    }
 
                     bool bBreak = ( aVars.GetLineBreak() || aVars.GetHorJust() == SVX_HOR_JUSTIFY_BLOCK );
                     // #i111387# #o11817313# disable automatic line breaks only for "General" number format
