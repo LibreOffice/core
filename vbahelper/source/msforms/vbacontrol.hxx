@@ -57,7 +57,6 @@ protected:
     virtual css::uno::Reference< css::awt::XWindowPeer > getWindowPeer() throw (css::uno::RuntimeException);
     void fireChangeEvent();
     void fireClickEvent();
-    void fireEvent( css::script::ScriptEvent& evt );
 public:
     ScVbaControl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
                     const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, ov::AbstractGeometryAttributes* pHelper );
@@ -84,6 +83,7 @@ public:
     virtual void SAL_CALL setTop( double _top ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL SetFocus(  ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Move( double Left, double Top, const ::com::sun::star::uno::Any& Width, const ::com::sun::star::uno::Any& Height ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL fireEvent( const css::script::ScriptEvent& evt ) throw (::com::sun::star::uno::RuntimeException);
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getObject() throw (css::uno::RuntimeException);
     virtual OUString SAL_CALL getControlSource() throw (css::uno::RuntimeException);

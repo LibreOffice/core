@@ -519,8 +519,9 @@ ScVbaControl::setMousePointer( ::sal_Int32 _mousepointer ) throw (::com::sun::st
     }
 }
 
-void ScVbaControl::fireEvent( script::ScriptEvent& evt )
+void SAL_CALL ScVbaControl::fireEvent( const script::ScriptEvent& rEvt ) throw (uno::RuntimeException)
 {
+    script::ScriptEvent evt( rEvt );
     uno::Reference<lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
     uno::Reference< script::XScriptListener > xScriptListener( xServiceManager->createInstanceWithContext( "ooo.vba.EventListener" , mxContext ), uno::UNO_QUERY_THROW );
 
@@ -546,7 +547,9 @@ void ScVbaControl::fireEvent( script::ScriptEvent& evt )
             uno::Reference< document::XCodeNameQuery > xNameQuery(  xDocFac->createInstance( "ooo.vba.VBACodeNameProvider" ), uno::UNO_QUERY_THROW );
             uno::Reference< uno::XInterface > xIf( xControlShape->getControl(), uno::UNO_QUERY_THROW );
             evt.ScriptCode = xNameQuery->getCodeNameForObject( xIf );
-            evt.Arguments[ 0 ] = uno::makeAny( aEvt );
+            // handle if we passed in our own arguments
+            if ( !rEvt.Arguments.getLength() )
+                evt.Arguments[ 0 ] = uno::makeAny( aEvt );
             xScriptListener->firing( evt );
         }
         else
