@@ -22,6 +22,10 @@
 #include <com/sun/star/table/XTableChart.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+
+#include <unotools/tempfile.hxx>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
@@ -30,6 +34,8 @@
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 
+#include <iostream>
+
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
@@ -37,6 +43,7 @@ class ChartTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
 public:
     void load( const char* pDir, const char* pName );
+    void reload( const OUString& rFilterName );
 
     virtual void setUp();
     virtual void tearDown();
@@ -47,6 +54,22 @@ protected:
 void ChartTest::load( const char* pDir, const char* pName )
 {
     mxComponent = loadFromDesktop(getURLFromSrc(pDir) + OUString::createFromAscii(pName), "com.sun.star.sheet.SpreadsheetDocument");
+    CPPUNIT_ASSERT(mxComponent.is());
+}
+
+void ChartTest::reload(const OUString& rFilterName)
+{
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aArgs(1);
+    aArgs[0].Name = "FilterName";
+    aArgs[0].Value <<= rFilterName;
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    xStorable->storeToURL(aTempFile.GetURL(), aArgs);
+    uno::Reference<lang::XComponent> xComponent(xStorable, uno::UNO_QUERY);
+    xComponent->dispose();
+    mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.sheet.SpreadsheetDocument");
+    std::cout << aTempFile.GetURL();
     CPPUNIT_ASSERT(mxComponent.is());
 }
 
