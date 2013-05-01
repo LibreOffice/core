@@ -63,6 +63,9 @@
     <glade-widget-class title="Number Preview" name="cuilo-SvxNumberPreview"
                         generic-name="Number Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Writer Number Preview" name="swuilo-NumberingPreview"
+                        generic-name="Writer Number Preview Window" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Background Preview" name="cuilo-BackgroundPreview"
                         generic-name="Background Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
@@ -119,6 +122,9 @@
                         icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Text Direction ListBox" name="svxlo-FrameDirectionListBox"
                         generic-name="FrameDirectionListBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox"/>
+    <glade-widget-class title="Numbering Type ListBox" name="swlo-SwNumberingTypeListBox"
+                        generic-name="NumberingTypeListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
     <glade-widget-class title="Gradiant ListBox" name="svxlo-GradientLB"
                         generic-name="GradiantListBox" parent="GtkComboBox"
