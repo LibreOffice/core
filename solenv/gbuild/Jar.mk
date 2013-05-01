@@ -31,6 +31,10 @@
 gb_Jar_JAVACOMMAND := $(JAVAINTERPRETER)
 gb_Jar_JARCOMMAND := jar
 
+gb_Jar_LAYER_DIRS := \
+	OOO:program/classes \
+	URE:ure/share/java
+
 # location of files going to be packed into .jar file
 define gb_Jar_get_workdir
 $(call gb_JavaClassSet_get_classdir,$(call gb_Jar_get_classsetname,$(1)))
@@ -40,6 +44,12 @@ endef
 define gb_Jar_get_manifest_target 
 $(call gb_Jar_get_workdir,$(1))/META-INF/MANIFEST.MF
 endef
+
+gb_Jar_get_packagename = Jar/$(1)
+
+gb_Jar__get_layer = $(strip $(foreach group,$(gb_Jar_VALIDGROUPS),$(if $(filter $(1),$(gb_Jar_$(group))),$(group))))
+gb_Jar__get_dir_for_layer = $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Jar_LAYER_DIRS)))
+gb_Jar__get_instdir = $(call gb_Jar__get_dir_for_layer,$(call gb_Jar__get_layer,$(1)))
 
 # creates classset and META-INF folders if they don't exist
 # adds manifest version, class path, solarversion and content from sources to manifest file 
@@ -101,6 +111,24 @@ $(call gb_Helper_make_userfriendly_targets,$(1),Jar,$(call gb_Jar_get_outdir_tar
 $(call gb_Deliver_add_deliverable,$(call gb_Jar_get_outdir_target,$(1)),$(call gb_Jar_get_target,$(1)),$(1))
 $(call gb_Jar_get_outdir_target,$(1)) : $(call gb_Jar_get_target,$(1))
 $(call gb_Jar_get_outdir_target,$(1)) :| $(dir $(call gb_Jar_get_outdir_target,$(1))).dir
+
+ifneq ($(gb_RUNNABLE_INSTDIR),)
+$(if $(filter-out OXT,$(call gb_Jar__get_layer,$(1))),\
+	$(call gb_Jar__Jar_package,$(1),$(call gb_Jar_get_packagename,$(1)),$(notdir $(call gb_Jar_get_target,$(1)))) \
+)
+endif
+
+endef
+
+# gb_Jar__Jar_package jar package filename
+define gb_Jar__Jar_package
+$(call gb_Package_Package_internal,$(2),$(WORKDIR)/Jar)
+$(call gb_Package_set_outdir,$(2),$(INSTDIR))
+$(call gb_Package_add_file,$(2),$(call gb_Jar__get_instdir,$(1))/$(3),$(3))
+
+$(call gb_Package_get_target,$(2)) : $(call gb_Jar_get_target,$(1))
+$(call gb_Jar_get_outdir_target,$(1)) : $(call gb_Package_get_target,$(2))
+$(call gb_Jar_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(2))
 
 endef
 
