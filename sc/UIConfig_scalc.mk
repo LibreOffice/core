@@ -68,11 +68,12 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/externaldata \
 	sc/uiconfig/scalc/ui/formatcellsdialog \
 	sc/uiconfig/scalc/ui/goalseekdlg \
+	sc/uiconfig/scalc/ui/headerfootercontent \
 	sc/uiconfig/scalc/ui/insertname \
 	sc/uiconfig/scalc/ui/insertsheet \
 	sc/uiconfig/scalc/ui/managenamesdialog \
 	sc/uiconfig/scalc/ui/printeroptions \
-	sc/uiconfig/scalc/ui/protectsheetdlg \
+        sc/uiconfig/scalc/ui/protectsheetdlg \
 	sc/uiconfig/scalc/ui/sheetprintpage \
 	sc/uiconfig/scalc/ui/selectrange \
 	sc/uiconfig/scalc/ui/selectsource \

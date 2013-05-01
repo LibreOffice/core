@@ -1619,40 +1619,40 @@ Resource RID_GLOBSTR
         Text[ en-US ] = "WARNING: This action may have resulted in references to the deleted area not being restored.";
     };
 
-    String STR_HF_NONE_IN_BRACKETS
-    {
-        Text [ en-US ] = "(none)";
-    };
+//     String STR_HF_NONE_IN_BRACKETS
+//     {
+//         Text [ en-US ] = "(none)";
+//     };
+//
+//     String STR_HF_OF
+//     {
+//         Text [ en-US ] = "of";
+//     };
+//
+//     String STR_HF_OF_QUESTION
+//     {
+//         Text [ en-US ] = "of ?";
+//     };
+//
+//     String STR_HF_CREATED_BY
+//     {
+//         Text [ en-US ] = "Created by";
+//     };
+//
+//     String STR_HF_CONFIDENTIAL
+//     {
+//         Text [ en-US ] = "Confidential";
+//     };
+//
+//     String STR_HF_CUSTOMIZED
+//     {
+//         Text [ en-US ] = "Customized";
+//     };
 
-    String STR_HF_OF
-    {
-        Text [ en-US ] = "of";
-    };
-
-    String STR_HF_OF_QUESTION
-    {
-        Text [ en-US ] = "of ?";
-    };
-
-    String STR_HF_CREATED_BY
-    {
-        Text [ en-US ] = "Created by";
-    };
-
-    String STR_HF_CONFIDENTIAL
-    {
-        Text [ en-US ] = "Confidential";
-    };
-
-    String STR_HF_CUSTOMIZED
-    {
-        Text [ en-US ] = "Customized";
-    };
-
-    String STR_HF_CUSTOM_FOOTER
-    {
-        Text [ en-US ] = "Custom footer";
-    };
+//     String STR_HF_CUSTOM_FOOTER
+//     {
+//         Text [ en-US ] = "Custom footer";
+//     };
 
     String STR_UNDO_CHINESE_TRANSLATION
     {

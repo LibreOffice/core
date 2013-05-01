@@ -21,6 +21,7 @@
 #define SCUI_TPHFEDIT_HXX
 
 #include "tphfedit.hxx"
+//#include <boost/graph/graph_concepts.hpp>
 
 //===================================================================
 enum ScHFEntryId
@@ -47,41 +48,46 @@ class ScHFEditPage : public SfxTabPage
 {
 public:
     virtual sal_Bool    FillItemSet ( SfxItemSet& rCoreSet );
-    virtual void    Reset       ( const SfxItemSet& rCoreSet );
+    virtual void        Reset       ( const SfxItemSet& rCoreSet );
 
     void            SetNumType(SvxNumType eNumType);
     void            ClearTextAreas();
 
 protected:
                 ScHFEditPage( Window*           pParent,
-                              sal_uInt16            nResId,
                               const SfxItemSet& rCoreSet,
-                              sal_uInt16            nWhich, bool bHeader );
+                              sal_uInt16        nWhich,
+                              bool              bHeader );
     virtual     ~ScHFEditPage();
 
 private:
-    FixedText       aFtLeft;
-    ScEditWindow    aWndLeft;
-    FixedText       aFtCenter;
-    ScEditWindow    aWndCenter;
-    FixedText       aFtRight;
-    ScEditWindow    aWndRight;
-    FixedText       maFtDefinedHF;
-        ListBox                 maLbDefined;
-    FixedText       maFtCustomHF;
-    ImageButton     aBtnText;
-    ScExtIButton    aBtnFile;
-    ImageButton     aBtnTable;
-    ImageButton     aBtnPage;
-    ImageButton     aBtnLastPage;
-    ImageButton     aBtnDate;
-    ImageButton     aBtnTime;
-    FixedLine       aFlInfo;
-    FixedInfo       aFtInfo;
-    ScPopupMenu     aPopUpFile;
+    //FixedText       aFtLeft;
+    ScEditWindow*    m_pWndLeft;
+    //FixedText       aFtCenter;
+    ScEditWindow*    m_pWndCenter;
+    //FixedText       aFtRight;
+    ScEditWindow*    m_pWndRight;
+    FixedText*       m_pFtDefinedHF;
+    ListBox*         m_pLbDefined;
+    FixedText*       m_pFtCustomHF;
+    PushButton*      m_pBtnText;
+    ScExtIButton*    m_pBtnFile;
+    PushButton*      m_pBtnTable;
+    PushButton*      m_pBtnPage;
+    PushButton*      m_pBtnLastPage;
+    PushButton*      m_pBtnDate;
+    PushButton*      m_pBtnTime;
 
-    sal_uInt16          nWhich;
-    String          aCmdArr[6];
+    FixedText*       m_pFtConfidential;
+    FixedText*       m_pFtPage;
+    FixedText*       m_pFtOfQuestion;
+    FixedText*       m_pFtOf;
+    FixedText*       m_pFtNone;
+    FixedText*       m_pFtCreatedBy;
+    FixedText*       m_pFtCustomized;
+
+    sal_uInt16       nWhich;
+    OUString         aCmdArr[6];
 
 private:
 #ifdef _TPHFEDIT_CXX
@@ -95,7 +101,7 @@ private:
     bool IsDateEntry(EditTextObject* pTextObj);
     bool IsExtFileNameEntry(EditTextObject* pTextObj);
     DECL_LINK( ListHdl_Impl, ListBox* );
-    DECL_LINK( ClickHdl, ImageButton* );
+    DECL_LINK( ClickHdl,  PushButton* );
     DECL_LINK( MenuHdl, ScExtIButton* );
 #endif
 };
