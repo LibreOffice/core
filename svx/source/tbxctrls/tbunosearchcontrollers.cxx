@@ -855,6 +855,7 @@ void SAL_CALL FindbarDispatcher::dispatch( const css::util::URL& aURL, const css
                         FindTextFieldControl* pFindTextFieldControl = dynamic_cast<FindTextFieldControl*>(pItemWin);
                         if ( pFindTextFieldControl )
                             pFindTextFieldControl->SetTextToSelected_Impl();
+                        SolarMutexGuard aSolarMutexGuard;
                         pItemWin->GrabFocus();
                         return;
                     }
