@@ -19,11 +19,11 @@
 #ifndef SFX_QUERYSAVEDOCUMENT_HXX
 #define SFX_QUERYSAVEDOCUMENT_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
+#include <rtl/ustring.hxx>
+#include <sfx2/dllapi.h>
 
 class Window;
-class String;
+
 /** Opens the general query save document dialog.
     @param  _pParent
         The parent window.
@@ -31,7 +31,7 @@ class String;
         The title of the document.
 */
 SFX2_DLLPUBLIC short ExecuteQuerySaveDocument(
-    Window* _pParent,const String& _rTitle);
+    Window* _pParent, const OUString& _rTitle);
 
 #endif //SFX_QUERYSAVEDOCUMENT_HXX
 

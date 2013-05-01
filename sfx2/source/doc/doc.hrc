@@ -114,7 +114,7 @@
 #define STR_DOCTYPENAME_MESSAGE             (RID_SFX_DOC_START+ 75)
 #define RID_STR_NEW_TASK                    (RID_SFX_DOC_START+ 76)
 
-#define STR_NOSAVEANDCLOSE                  (RID_SFX_DOC_START+ 78)
+
 #define STR_PACKNGO_NOACCESS                (RID_SFX_DOC_START+ 79)
 #define STR_PACKNGO_NEWMEDIUM               (RID_SFX_DOC_START+ 80)
 

@@ -17,29 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sfx2/QuerySaveDocument.hxx"
-
-#include <sfx2/sfx.hrc>
-#include "sfx2/sfxresid.hxx"
-#include <sfx2/sfxuno.hxx>
-#include "doc.hrc"
-#include <vcl/msgbox.hxx>
+#include <sfx2/QuerySaveDocument.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
-// -----------------------------------------------------------------------------
-short ExecuteQuerySaveDocument(Window* _pParent,const String& _rTitle)
+
+short ExecuteQuerySaveDocument(Window* _pParent, const OUString& _rTitle)
 {
     if (Application::IsHeadlessModeEnabled())
-    {   // don't block Desktop::terminate() if there's no user to ask
+    {
+        // don't block Desktop::terminate() if there's no user to ask
         return RET_NO;
     }
-    OUString aText( SfxResId(STR_QUERY_SAVE_DOCUMENT).toString() );
-    aText = aText.replaceFirst( "$(DOC)", _rTitle );
-    QueryBox aQBox( _pParent, WB_YES_NO_CANCEL | WB_DEF_YES, aText );
-    aQBox.SetText(SfxResId(STR_QUERY_SAVE_DOCUMENT_TITLE).toString()); // Window title
-    aQBox.SetButtonText( BUTTONID_NO, SfxResId(STR_NOSAVEANDCLOSE).toString() );
-    aQBox.SetButtonText( BUTTONID_YES, SfxResId(STR_SAVEDOC).toString() );
+
+    MessageDialog aQBox(_pParent, "QuerySaveDialog", "sfx/ui/querysavedialog.ui");
+    aQBox.set_primary_text(aQBox.get_primary_text().replaceFirst("$(DOC)", _rTitle));
     return aQBox.Execute();
 }
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
