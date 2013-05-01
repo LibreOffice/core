@@ -333,38 +333,38 @@ Sub	SetupMSConfiguration()
 &apos; See definition of Filtername-Array about meaning of fields
 	MSFilterName(0,0) = &quot;doc|docx|docm&quot;
 	MSFilterName(0,1) = &quot;writer8|writer8|writer8&quot;
-	MSFilterName(0,2) = &quot;odt&quot;
+	MSFilterName(0,2) = &quot;odt|odt|odt&quot;
 	MSFilterName(0,3) = sMSDocumentCheckBox(0)
 	MSFilterName(0,4) = &quot;Word&quot;
 	
 
 	MSFilterName(1,0) = &quot;xls|xlsx|xlsm&quot;
 	MSFilterName(1,1) = &quot;calc8|calc8|calc8&quot;
-	MSFilterName(1,2) = &quot;ods&quot;
+	MSFilterName(1,2) = &quot;ods|ods|ods&quot;
 	MSFilterName(1,3) = sMSDocumentCheckBox(1)
 	MSFilterName(1,4) = &quot;Excel&quot;
 
-	MSFilterName(2,0) = &quot;ppt|pptm|pptx&quot;
-	MSFilterName(2,1) = &quot;impress8|impress8|impress8&quot;
-	MSFilterName(2,2) = &quot;odp&quot;
+	MSFilterName(2,0) = &quot;ppt|pps|pptx|pptm|ppsx|ppsm&quot;
+	MSFilterName(2,1) = &quot;impress8|impress8|impress8|impress8|impress8|impress8&quot;
+	MSFilterName(2,2) = &quot;odp|odp|odp|odp|odp|odp&quot;
 	MSFilterName(2,3) = sMSDocumentCheckBox(2)
 	MSFilterName(2,4) = &quot;PowerPoint&quot;
 
 	MSFilterName(3,0) = &quot;dot|dotx|dotm&quot;
 	MSFilterName(3,1) = &quot;writer8_template|writer8_template|writer8_template&quot;
-	MSFilterName(3,2) = &quot;ott&quot;
+	MSFilterName(3,2) = &quot;ott|ott|ott&quot;
 	MSFilterName(3,3) = sMSTemplateCheckBox(0)
 	MSFilterName(3,4) = &quot;Word&quot;	
 	
 	MSFilterName(4,0) = &quot;xlt|xltx|xltm&quot;
 	MSFilterName(4,1) = &quot;calc8_template|calc8_template|calc8_template&quot;
-	MSFilterName(4,2) = &quot;ots&quot;
+	MSFilterName(4,2) = &quot;ots|ots|ots&quot;
 	MSFilterName(4,3) = sMSTemplateCheckBox(1)
 	MSFilterName(4,4) = &quot;Excel&quot;	
 
 	MSFilterName(5,0) = &quot;pot|potx|potm&quot;
 	MSFilterName(5,1) = &quot;impress8_template|impress8_template|impress8_template&quot;
-	MSFilterName(5,2) = &quot;otp&quot;
+	MSFilterName(5,2) = &quot;otp|otp|otp&quot;
 	MSFilterName(5,3) = sMSTemplateCheckBox(2)
 	MSFilterName(5,4) = &quot;PowerPoint&quot;	
 End Sub
