@@ -96,7 +96,7 @@ endef
 
 # gb_Library__Library_package library package filename
 define gb_Library__Library_package
-$(call gb_Package_Package,$(2),$(gb_Helper_OUTDIRLIBDIR))
+$(call gb_Package_Package_internal,$(2),$(gb_Helper_OUTDIRLIBDIR))
 $(call gb_Package_set_outdir,$(2),$(INSTDIR))
 $(call gb_Package_add_file,$(2),$(call gb_Library__get_instdir,$(1))/$(3),$(3))
 

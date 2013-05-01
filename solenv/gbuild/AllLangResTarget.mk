@@ -459,7 +459,7 @@ $(foreach lang,$(gb_AllLangResTarget_LANGS),\
 	$(call gb_ResTarget_ResTarget,$(1)$(lang),$(1),$(lang)))
 
 ifneq ($(gb_RUNNABLE_INSTDIR),)
-$(call gb_Package_Package,$(call gb_AllLangResTarget_get_packagename,$(1)),$(WORKDIR))
+$(call gb_Package_Package_internal,$(call gb_AllLangResTarget_get_packagename,$(1)),$(WORKDIR))
 $(call gb_Package_set_outdir,$(call gb_AllLangResTarget_get_packagename,$(1)),$(INSTDIR))
 $(call gb_AllLangResTarget_get_target,$(1)) : $(call gb_Package_get_target,$(call gb_AllLangResTarget_get_packagename,$(1)))
 $(call gb_AllLangResTarget_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(call gb_AllLangResTarget_get_packagename,$(1)))

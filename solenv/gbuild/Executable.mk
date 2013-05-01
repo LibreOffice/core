@@ -92,7 +92,7 @@ endef
 
 # gb_Executable__Executable_package executable package linktarget filename
 define gb_Executable__Executable_package
-$(call gb_Package_Package,$(2),$(WORKDIR))
+$(call gb_Package_Package_internal,$(2),$(WORKDIR))
 $(call gb_Package_set_outdir,$(2),$(INSTDIR))
 $(call gb_Package_add_file,$(2),$(call gb_Executable__get_instdir,$(1))/$(4),$(subst $(WORKDIR)/,,$(call gb_LinkTarget_get_target,$(3))))
 
