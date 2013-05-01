@@ -174,6 +174,10 @@ void ScMacrosTest::testVba()
             OUString("CheckOptionToggleValue."),
             OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
+        {
+            OUString("GeneratedEventTest."),
+            OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
+        },
     };
 
     for ( sal_uInt32  i=0; i<SAL_N_ELEMENTS( testInfo ); ++i )
