@@ -81,12 +81,6 @@
 #include "outdevstate.hxx"
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
-#define EMFP_DEBUG(x) x
-#else
-#define EMFP_DEBUG(x)
-#endif
-
 using namespace ::com::sun::star;
 
 
@@ -1326,7 +1320,7 @@ namespace cppcanvas
                 // - SetFont to process font metric specific actions
                 pCurrAct->Execute( &rVDev );
 
-                EMFP_DEBUG(printf("MTF\trecord type: 0x%x (%d)\n", pCurrAct->GetType(), pCurrAct->GetType()));
+                SAL_INFO("cppcanvas.emf", "MTF\trecord type: 0x" << pCurrAct->GetType() << " (" << pCurrAct->GetType() << ")");
 
                 switch( pCurrAct->GetType() )
                 {
@@ -1834,22 +1828,22 @@ namespace cppcanvas
                                 count = 0;
                                 if (char *env = getenv ("EMF_PLUS_LIMIT")) {
                                     limit = atoi (env);
-                                    EMFP_DEBUG (printf ("EMF+ records limit: %d\n", limit));
+                                    SAL_INFO ("cppcanvas.emf", "EMF+ records limit: " << limit);
                                 }
                             }
-                            EMFP_DEBUG (printf ("EMF+ passed to canvas mtf renderer, size: %u\n", (unsigned int)pAct->GetDataSize ()));
+                            SAL_INFO ("cppcanvas.emf", "EMF+ passed to canvas mtf renderer, size: " << pAct->GetDataSize ());
                             if (count < limit)
                                 processEMFPlus( pAct, rFactoryParms, rStates.getState(), rCanvas );
                             count ++;
                         } else if( pAct->GetComment().equalsL(RTL_CONSTASCII_STRINGPARAM("EMF_PLUS_HEADER_INFO")) ) {
-                            EMFP_DEBUG (printf ("EMF+ passed to canvas mtf renderer - header info, size: %u\n", (unsigned int)pAct->GetDataSize ()));
+                            SAL_INFO ("cppcanvas.emf", "EMF+ passed to canvas mtf renderer - header info, size: " << pAct->GetDataSize ());
 
                             SvMemoryStream rMF ((void*) pAct->GetData (), pAct->GetDataSize (), STREAM_READ);
 
                             rMF >> nFrameLeft >> nFrameTop >> nFrameRight >> nFrameBottom;
-                            EMFP_DEBUG (printf ("EMF+ picture frame: %d,%d - %d,%d\n", (int)nFrameLeft, (int)nFrameTop, (int)nFrameRight, (int)nFrameBottom));
+                            SAL_INFO ("cppcanvas.emf", "EMF+ picture frame: " << nFrameLeft << "," << nFrameTop << " - " << nFrameRight << "," << nFrameBottom);
                             rMF >> nPixX >> nPixY >> nMmX >> nMmY;
-                            EMFP_DEBUG (printf ("EMF+ ref device pixel size: %dx%d mm size: %dx%d\n", (int)nPixX, (int)nPixY, (int)nMmX, (int)nMmY));
+                            SAL_INFO ("cppcanvas.emf", "EMF+ ref device pixel size: " << nPixX << "x" << nPixY << " mm size: " << nMmX << "x" << nMmY);
 
                             rMF >> aBaseTransform;
                             //aWorldTransform.Set (aBaseTransform);

@@ -330,6 +330,7 @@ certain functionality.
 @li @c comphelper
 @li @c configmgr
 @li @c cppcanvas
+@li @c cppcanvas.emf
 @li @c cppuhelper
 @li @c cppu
 @li @c forms
