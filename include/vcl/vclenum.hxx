@@ -132,6 +132,20 @@ enum VclPackType
     VCL_PACK_END = 1
 };
 
+// Return Values from Dialog::Execute
+//!!! bei Aenderungen \basic\source\runtime\methods.cxx msgbox anpassen
+
+enum VclResponseType
+{
+    RET_CANCEL  = 0,
+    RET_OK      = 1,
+    RET_YES     = 2,
+    RET_NO      = 3,
+    RET_RETRY   = 4,
+    RET_IGNORE  = 5,
+    RET_HELP    = 10
+};
+
 #endif  // _VCL_VCLENUM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -450,7 +450,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
         SfxAbstractDialog* pDlg = pFact ? pFact->CreatSdActionDialog( NULL, &aSet, mpView ) : 0;
 
-        sal_uInt16 nResult = pDlg ? pDlg->Execute() : RET_CANCEL;
+        short nResult = pDlg ? pDlg->Execute() : static_cast<short>(RET_CANCEL);
 
         if( nResult == RET_OK )
         {

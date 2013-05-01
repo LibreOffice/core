@@ -248,7 +248,7 @@ IMPL_LINK_NOARG(SwFldEditDlg, OKHdl)
 short SwFldEditDlg::Execute()
 {
     // without TabPage no dialog
-    return GetTabPage() ? Dialog::Execute() : RET_CANCEL;
+    return GetTabPage() ? Dialog::Execute() : static_cast<short>(RET_CANCEL);
 }
 
 /*--------------------------------------------------------------------

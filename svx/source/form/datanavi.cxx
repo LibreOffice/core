@@ -3689,8 +3689,8 @@ namespace svxform
     {
         SetText( Application::GetDisplayName() );
         SetImage( QueryBox::GetStandardImage() );
-        AddButton( SVX_RESSTR( RID_STR_DATANAV_LINKWARN_BUTTON ), BUTTONID_OK, BUTTONDIALOG_DEFBUTTON );
-        AddButton( BUTTON_CANCEL, BUTTONID_CANCEL, BUTTONDIALOG_CANCELBUTTON );
+        AddButton( SVX_RESSTR( RID_STR_DATANAV_LINKWARN_BUTTON ), RET_OK, BUTTONDIALOG_DEFBUTTON );
+        AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
     }
 
 //............................................................................

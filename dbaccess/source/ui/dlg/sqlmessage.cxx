@@ -39,7 +39,7 @@
 
 #include <tools/urlobj.hxx>
 
-#define BUTTONID_MORE   BUTTONID_RETRY + 1
+#define RET_MORE   RET_RETRY + 1
 
 #define DIALOG_WIDTH    220
 #define OUTER_MARGIN    6
@@ -458,12 +458,12 @@ namespace
         sal_uInt16 nButtonID = 0;
         switch ( _eType )
         {
-        case BUTTON_YES:    nButtonID = BUTTONID_YES; break;
-        case BUTTON_NO:     nButtonID = BUTTONID_NO; break;
-        case BUTTON_OK:     nButtonID = BUTTONID_OK; break;
-        case BUTTON_CANCEL: nButtonID = BUTTONID_CANCEL; break;
-        case BUTTON_RETRY:  nButtonID = BUTTONID_RETRY; break;
-        case BUTTON_HELP:   nButtonID = BUTTONID_HELP; break;
+        case BUTTON_YES:    nButtonID = RET_YES; break;
+        case BUTTON_NO:     nButtonID = RET_NO; break;
+        case BUTTON_OK:     nButtonID = RET_OK; break;
+        case BUTTON_CANCEL: nButtonID = RET_CANCEL; break;
+        case BUTTON_RETRY:  nButtonID = RET_RETRY; break;
+        case BUTTON_HELP:   nButtonID = RET_HELP; break;
         default:
             OSL_FAIL( "lcl_addButton: invalid button id!" );
             break;
@@ -623,7 +623,7 @@ void OSQLMessageBox::impl_createStandardButtons( WinBits _nStyle )
     else
     {
         OSL_ENSURE( WB_OK & _nStyle, "OSQLMessageBox::impl_createStandardButtons: unsupported dialog style requested!" );
-        AddButton( BUTTON_OK, BUTTONID_OK, BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON );
+        AddButton( BUTTON_OK, RET_OK, BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON );
     }
 
     if ( !m_sHelpURL.isEmpty() )
@@ -666,8 +666,8 @@ void OSQLMessageBox::impl_addDetailsButton()
 
     if ( bMoreDetailsAvailable )
     {
-        AddButton( BUTTON_MORE, BUTTONID_MORE, 0 );
-        PushButton* pButton = GetPushButton( BUTTONID_MORE );
+        AddButton( BUTTON_MORE, RET_MORE, 0 );
+        PushButton* pButton = GetPushButton( RET_MORE );
         OSL_ENSURE( pButton, "OSQLMessageBox::impl_addDetailsButton: just added this button, why isn't it there?" );
         pButton->SetClickHdl( LINK( this, OSQLMessageBox, ButtonClickHdl ) );
         pButton->SetUniqueId( UID_SQLERROR_BUTTONMORE );

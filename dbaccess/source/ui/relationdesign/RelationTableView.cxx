@@ -365,9 +365,9 @@ void ORelationTableView::lookForUiActivities()
         OSQLMessageBox aDlg(this,ModuleRes(STR_QUERY_REL_EDIT_RELATION),String(),0);
         aDlg.SetText(sTitle);
         aDlg.RemoveButton(aDlg.GetButtonId(0));
-        aDlg.AddButton( ModuleRes(STR_QUERY_REL_EDIT), BUTTONID_OK, BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON);
-        aDlg.AddButton( ModuleRes(STR_QUERY_REL_CREATE), BUTTONID_YES, 0);
-        aDlg.AddButton(BUTTON_CANCEL,BUTTONID_CANCEL,0);
+        aDlg.AddButton( ModuleRes(STR_QUERY_REL_EDIT), RET_OK, BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON);
+        aDlg.AddButton( ModuleRes(STR_QUERY_REL_CREATE), RET_YES, 0);
+        aDlg.AddButton(BUTTON_CANCEL,RET_CANCEL,0);
         sal_uInt16 nRet = aDlg.Execute();
         if( nRet == RET_CANCEL)
         {

@@ -29,28 +29,6 @@ class VclMultiLineEdit;
 class FixedImage;
 class CheckBox;
 
-// -----------------
-// - MessBox-Types -
-// -----------------
-
-// Return-Werte von Execute
-//!!! bei Aenderungen \basic\source\runtime\methods.cxx msgbox anpassen
-
-#define RET_CANCEL           0
-#define RET_OK               1
-#define RET_YES              2
-#define RET_NO               3
-#define RET_RETRY            4
-#define RET_IGNORE           5
-
-#define BUTTONID_OK          RET_OK
-#define BUTTONID_CANCEL      RET_CANCEL
-#define BUTTONID_YES         RET_YES
-#define BUTTONID_NO          RET_NO
-#define BUTTONID_RETRY       RET_RETRY
-#define BUTTONID_IGNORE      RET_IGNORE
-#define BUTTONID_HELP        10
-
 // -----------
 // - MessBox -
 // -----------

@@ -729,8 +729,8 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
         // The dialog is made modal with respect to the whole application.
         QueryBox aQuestionBox ( NULL, (WB_YES_NO | WB_DEF_YES), String(SdResId(nStringId)));
         aQuestionBox.SetImage (QueryBox::GetStandardImage());
-        sal_uInt16 nBoxResult = aQuestionBox.Execute();
-        if(nBoxResult != BUTTONID_YES)
+        short nBoxResult = aQuestionBox.Execute();
+        if (nBoxResult != RET_YES)
             break;
     }
     while( true );

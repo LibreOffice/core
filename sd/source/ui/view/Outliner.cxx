@@ -1151,7 +1151,7 @@ bool Outliner::ShowWrapArroundDialog (void)
             String(SdResId(nStringId)));
         aQuestionBox.SetImage (QueryBox::GetStandardImage());
         sal_uInt16 nBoxResult = ShowModalMessageBox(aQuestionBox);
-        bDoWrapArround = (nBoxResult == BUTTONID_YES);
+        bDoWrapArround = (nBoxResult == RET_YES);
     }
 
     return bDoWrapArround;

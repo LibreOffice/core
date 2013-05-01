@@ -83,8 +83,8 @@ void MessBox::ImplInitButtons()
         else // WB_DEF_OK
             nOKFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
 
-        AddButton( BUTTON_OK, BUTTONID_OK, nOKFlags );
-        AddButton( BUTTON_CANCEL, BUTTONID_CANCEL, nCancelFlags );
+        AddButton( BUTTON_OK, RET_OK, nOKFlags );
+        AddButton( BUTTON_CANCEL, RET_CANCEL, nCancelFlags );
     }
     else if ( nStyle & WB_YES_NO )
     {
@@ -94,8 +94,8 @@ void MessBox::ImplInitButtons()
             nNoFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
         nNoFlags |= BUTTONDIALOG_CANCELBUTTON;
 
-        AddButton( BUTTON_YES, BUTTONID_YES, nYesFlags );
-        AddButton( BUTTON_NO, BUTTONID_NO, nNoFlags );
+        AddButton( BUTTON_YES, RET_YES, nYesFlags );
+        AddButton( BUTTON_NO, RET_NO, nNoFlags );
     }
     else if ( nStyle & WB_YES_NO_CANCEL )
     {
@@ -106,9 +106,9 @@ void MessBox::ImplInitButtons()
         else
             nCancelFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
 
-        AddButton( BUTTON_YES, BUTTONID_YES, nYesFlags );
-        AddButton( BUTTON_NO, BUTTONID_NO, nNoFlags );
-        AddButton( BUTTON_CANCEL, BUTTONID_CANCEL, nCancelFlags );
+        AddButton( BUTTON_YES, RET_YES, nYesFlags );
+        AddButton( BUTTON_NO, RET_NO, nNoFlags );
+        AddButton( BUTTON_CANCEL, RET_CANCEL, nCancelFlags );
     }
     else if ( nStyle & WB_RETRY_CANCEL )
     {
@@ -117,8 +117,8 @@ void MessBox::ImplInitButtons()
         else // WB_DEF_RETRY
             nRetryFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
 
-        AddButton( BUTTON_RETRY, BUTTONID_RETRY, nRetryFlags );
-        AddButton( BUTTON_CANCEL, BUTTONID_CANCEL, nCancelFlags );
+        AddButton( BUTTON_RETRY, RET_RETRY, nRetryFlags );
+        AddButton( BUTTON_CANCEL, RET_CANCEL, nCancelFlags );
     }
     else if ( nStyle & WB_ABORT_RETRY_IGNORE )
     {
@@ -132,15 +132,15 @@ void MessBox::ImplInitButtons()
         else if ( nStyle & WB_DEF_IGNORE )
             nIgnoreFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
 
-        AddButton( BUTTON_ABORT, BUTTONID_CANCEL, nAbortFlags );
-        AddButton( BUTTON_RETRY, BUTTONID_RETRY, nRetryFlags );
-        AddButton( BUTTON_IGNORE, BUTTONID_IGNORE, nIgnoreFlags );
+        AddButton( BUTTON_ABORT, RET_CANCEL, nAbortFlags );
+        AddButton( BUTTON_RETRY, RET_RETRY, nRetryFlags );
+        AddButton( BUTTON_IGNORE, RET_IGNORE, nIgnoreFlags );
     }
     else if ( nStyle & WB_OK )
     {
         nOKFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
 
-        AddButton( BUTTON_OK, BUTTONID_OK, nOKFlags );
+        AddButton( BUTTON_OK, RET_OK, nOKFlags );
     }
 }
 
@@ -208,7 +208,7 @@ void MessBox::ImplPosControls()
     {
         if ( !mbHelpBtn )
         {
-            AddButton( BUTTON_HELP, BUTTONID_HELP, BUTTONDIALOG_HELPBUTTON, 3 );
+            AddButton( BUTTON_HELP, RET_HELP, BUTTONDIALOG_HELPBUTTON, 3 );
             mbHelpBtn = sal_True;
         }
     }
@@ -216,7 +216,7 @@ void MessBox::ImplPosControls()
     {
         if ( mbHelpBtn )
         {
-            RemoveButton( BUTTONID_HELP );
+            RemoveButton( RET_HELP );
             mbHelpBtn = sal_False;
         }
     }

@@ -1080,19 +1080,19 @@ executeMessageBox(
     sal_uInt16 aResult = xBox.Execute();
     switch( aResult )
     {
-    case BUTTONID_OK:
+    case RET_OK:
         aResult = ERRCODE_BUTTON_OK;
         break;
-    case BUTTONID_CANCEL:
+    case RET_CANCEL:
         aResult = ERRCODE_BUTTON_CANCEL;
         break;
-    case BUTTONID_YES:
+    case RET_YES:
         aResult = ERRCODE_BUTTON_YES;
         break;
-    case BUTTONID_NO:
+    case RET_NO:
         aResult = ERRCODE_BUTTON_NO;
         break;
-    case BUTTONID_RETRY:
+    case RET_RETRY:
         aResult = ERRCODE_BUTTON_RETRY;
         break;
     }

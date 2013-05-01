@@ -817,7 +817,7 @@ ScDPShowDetailDlg::ScDPShowDetailDlg( Window* pParent, ScDPObject& rDPObj, sal_u
 
 short ScDPShowDetailDlg::Execute()
 {
-    return maLbDims.GetEntryCount() ? ModalDialog::Execute() : RET_CANCEL;
+    return maLbDims.GetEntryCount() ? ModalDialog::Execute() : static_cast<short>(RET_CANCEL);
 }
 
 OUString ScDPShowDetailDlg::GetDimensionName() const
