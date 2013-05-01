@@ -654,7 +654,7 @@ bool executePostgresCommand( const rtl::OString & cmd, struct CommandData *data 
             }
 
         }
-        else if( sourceTable.getLength() && -1 != sourceTable.indexOf( '.' ) )
+        else if( sourceTable.getLength() > 0)
         {
             splitConcatenatedIdentifier( sourceTable, &schema, &table );
         }

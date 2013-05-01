@@ -617,16 +617,16 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                             if ( pDflt )
                             {
                                 pDflt->Broadcast( SBX_HINT_DATAWANTED );
-                                SbxBaseRef pObj = (SbxBase*)pDflt->GetObject();
-                                if( pObj )
+                                SbxBaseRef pDfltObj = (SbxBase*)pDflt->GetObject();
+                                if( pDfltObj )
                                 {
-                                    if( pObj->ISA(SbUnoObject) )
+                                    if( pDfltObj->ISA(SbUnoObject) )
                                     {
-                                        pUnoObj = (SbUnoObject*)(SbxBase*)pObj;
-                                        Any aAny = pUnoObj->getUnoAny();
+                                        pUnoObj = (SbUnoObject*)(SbxBase*)pDfltObj;
+                                        Any aUnoAny = pUnoObj->getUnoAny();
 
-                                        if( aAny.getValueType().getTypeClass() == TypeClass_INTERFACE )
-                                            x = *(Reference< XInterface >*)aAny.getValue();
+                                        if( aUnoAny.getValueType().getTypeClass() == TypeClass_INTERFACE )
+                                            x = *(Reference< XInterface >*)aUnoAny.getValue();
                                         pElem = pDflt;
                                     }
                                 }

@@ -259,7 +259,7 @@ void ScAccessibleDataPilotControl::RemoveField(sal_Int32 nOldIndex)
         AccessibleEventObject aEvent;
         aEvent.EventId = AccessibleEventId::CHILD;
         aEvent.Source = uno::Reference< XAccessibleContext >(this);
-        aEvent.NewValue <<= xTempAcc;
+        aEvent.OldValue <<= xTempAcc;
 
         CommitChange(aEvent); // gone child - event
 
@@ -270,25 +270,41 @@ void ScAccessibleDataPilotControl::RemoveField(sal_Int32 nOldIndex)
 
 void ScAccessibleDataPilotControl::FieldFocusChange(sal_Int32 nOldIndex, sal_Int32 nNewIndex)
 {
-    OSL_ENSURE(static_cast<size_t>(nOldIndex) < maChildren.size() &&
-                static_cast<size_t>(nNewIndex) < maChildren.size(), "did not recognize a child count change");
+    if (0 <= nOldIndex && static_cast<size_t>(nOldIndex) < maChildren.size())
+    {
+        uno::Reference < XAccessible > xTempAcc = maChildren[nOldIndex].xWeakAcc;
+        if (xTempAcc.is() && maChildren[nOldIndex].pAcc)
+            maChildren[nOldIndex].pAcc->ResetFocused();
+    }
+    else
+    {
+        SAL_WARN( "sc", "ScAccessibleDataPilotControl::FieldFocusChange() old index out of bounds: " << nOldIndex);
+    }
 
-    uno::Reference < XAccessible > xTempAcc = maChildren[nOldIndex].xWeakAcc;
-    if (xTempAcc.is() && maChildren[nOldIndex].pAcc)
-        maChildren[nOldIndex].pAcc->ResetFocused();
-
-    xTempAcc = maChildren[nNewIndex].xWeakAcc;
-    if (xTempAcc.is() && maChildren[nNewIndex].pAcc)
-        maChildren[nNewIndex].pAcc->SetFocused();
+    if (0 <= nNewIndex && static_cast<size_t>(nNewIndex) < maChildren.size())
+    {
+        uno::Reference < XAccessible > xTempAcc = maChildren[nNewIndex].xWeakAcc;
+        if (xTempAcc.is() && maChildren[nNewIndex].pAcc)
+            maChildren[nNewIndex].pAcc->SetFocused();
+    }
+    else
+    {
+        SAL_WARN( "sc", "ScAccessibleDataPilotControl::FieldFocusChange() new index out of bounds: " << nNewIndex);
+    }
 }
 
 void ScAccessibleDataPilotControl::FieldNameChange(sal_Int32 nIndex)
 {
-    OSL_ENSURE(static_cast<size_t>(nIndex) < maChildren.size(), "did not recognize a child count change");
-
-    uno::Reference < XAccessible > xTempAcc = maChildren[nIndex].xWeakAcc;
-    if (xTempAcc.is() && maChildren[nIndex].pAcc)
-        maChildren[nIndex].pAcc->ChangeName();
+    if (0 <= nIndex && static_cast<size_t>(nIndex) < maChildren.size())
+    {
+        uno::Reference < XAccessible > xTempAcc = maChildren[nIndex].xWeakAcc;
+        if (xTempAcc.is() && maChildren[nIndex].pAcc)
+            maChildren[nIndex].pAcc->ChangeName();
+    }
+    else
+    {
+        SAL_WARN( "sc", "ScAccessibleDataPilotControl::FieldNameChange() index out of bounds: " << nIndex);
+    }
 }
 
 void ScAccessibleDataPilotControl::GotFocus()
@@ -298,9 +314,16 @@ void ScAccessibleDataPilotControl::GotFocus()
         OSL_ENSURE(mpFieldWindow->GetFieldCount() == maChildren.size(), "did not recognize a child count change");
 
         sal_Int32 nIndex(mpFieldWindow->GetSelectedField());
-        uno::Reference < XAccessible > xTempAcc = maChildren[nIndex].xWeakAcc;
-        if (xTempAcc.is() && maChildren[nIndex].pAcc)
-            maChildren[nIndex].pAcc->SetFocused();
+        if (0 <= nIndex && static_cast<size_t>(nIndex) < maChildren.size())
+        {
+            uno::Reference < XAccessible > xTempAcc = maChildren[nIndex].xWeakAcc;
+            if (xTempAcc.is() && maChildren[nIndex].pAcc)
+                maChildren[nIndex].pAcc->SetFocused();
+        }
+        else
+        {
+            SAL_WARN( "sc", "ScAccessibleDataPilotControl::GotFocus() field index out of bounds: " << nIndex);
+        }
     }
 }
 
@@ -311,9 +334,21 @@ void ScAccessibleDataPilotControl::LostFocus()
         OSL_ENSURE(mpFieldWindow->GetFieldCount() == maChildren.size(), "did not recognize a child count change");
 
         sal_Int32 nIndex(mpFieldWindow->GetSelectedField());
-        uno::Reference < XAccessible > xTempAcc = maChildren[nIndex].xWeakAcc;
-        if (xTempAcc.is() && maChildren[nIndex].pAcc)
-            maChildren[nIndex].pAcc->ResetFocused();
+        if (0 <= nIndex && static_cast<size_t>(nIndex) < maChildren.size())
+        {
+            uno::Reference < XAccessible > xTempAcc = maChildren[nIndex].xWeakAcc;
+            if (xTempAcc.is() && maChildren[nIndex].pAcc)
+                maChildren[nIndex].pAcc->ResetFocused();
+        }
+        else
+        {
+            // This may actually happen if the last field is dropped somewhere
+            // and was already removed from the pane by dragging it away. This
+            // is odd.. looks like all LostFocus() are called for the previous
+            // field of the same original pane in the remove case?
+            SAL_WARN_IF( nIndex != -1 || !maChildren.empty(), "sc",
+                    "ScAccessibleDataPilotControl::LostFocus() field index out of bounds: " << nIndex);
+        }
     }
 }
 
@@ -390,10 +425,7 @@ sal_Int32 SAL_CALL ScAccessibleDataPilotControl::getAccessibleChildCount(void)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    if (mpFieldWindow)
-        return mpFieldWindow->GetFieldCount();
-    else
-        return 0;
+    return static_cast<sal_Int32>(maChildren.size());
 }
 
 uno::Reference< XAccessible> SAL_CALL ScAccessibleDataPilotControl::getAccessibleChild(sal_Int32 nIndex)
@@ -404,14 +436,19 @@ uno::Reference< XAccessible> SAL_CALL ScAccessibleDataPilotControl::getAccessibl
     uno::Reference<XAccessible> xAcc;
     if (mpFieldWindow)
     {
-        if (nIndex < 0 || static_cast< size_t >( nIndex ) >= mpFieldWindow->GetFieldCount())
+        if (nIndex < 0 || static_cast< size_t >( nIndex ) >= maChildren.size())
             throw lang::IndexOutOfBoundsException();
 
-        OSL_ENSURE(mpFieldWindow->GetFieldCount() == maChildren.size(), "did not recognize a child count change");
+        OSL_ENSURE( mpFieldWindow->GetFieldCount() == maChildren.size()         // all except ...
+                ||  mpFieldWindow->GetFieldCount() == maChildren.size() + 1,    // in CommitChange during RemoveField
+                "did not recognize a child count change");
 
         uno::Reference < XAccessible > xTempAcc = maChildren[nIndex].xWeakAcc;
         if (!xTempAcc.is())
         {
+            if (static_cast< size_t >( nIndex ) >= mpFieldWindow->GetFieldCount())
+                throw lang::IndexOutOfBoundsException();
+
             maChildren[nIndex].pAcc = new ScAccessibleDataPilotButton(this, mpFieldWindow, nIndex);
             xTempAcc = maChildren[nIndex].pAcc;
             maChildren[nIndex].xWeakAcc = xTempAcc;

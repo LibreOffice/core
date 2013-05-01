@@ -71,7 +71,7 @@ $(eval $(call gb_Library_use_libraries,sfx,\
     ucbhelper \
     utl \
     vcl \
-	$(gb_UWINAPI) \
+    $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_use_external,sfx,libxml2))
@@ -138,7 +138,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/control/sorgitm \
     sfx2/source/control/statcach \
     sfx2/source/control/templateabstractview \
-    sfx2/source/control/templateview \
     sfx2/source/control/templateviewitem \
     sfx2/source/control/templatelocalview \
     sfx2/source/control/templatecontaineritem \
@@ -150,7 +149,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/control/unoctitm \
     sfx2/source/dialog/alienwarn \
     sfx2/source/dialog/basedlgs \
-	sfx2/source/dialog/checkin \
+    sfx2/source/dialog/checkin \
     sfx2/source/dialog/dinfdlg \
     sfx2/source/dialog/dinfedt \
     sfx2/source/dialog/dockwin \
@@ -295,11 +294,11 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,sfx,\
-	advapi32 \
-	gdi32 \
-	ole32 \
-	shell32 \
-	uuid \
+    advapi32 \
+    gdi32 \
+    ole32 \
+    shell32 \
+    uuid \
 ))
 
 endif

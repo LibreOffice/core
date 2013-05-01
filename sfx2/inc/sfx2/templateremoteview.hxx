@@ -25,9 +25,15 @@ public:
 
     virtual ~TemplateRemoteView ();
 
-    virtual void showOverlay (bool bVisible);
+    virtual void showRootRegion ();
+
+    virtual void showRegion (ThumbnailViewItem *pItem);
 
     bool loadRepository (TemplateRepository* pRepository, bool bRefresh);
+
+    virtual bool isNestedRegionAllowed () const;
+
+    virtual bool isImportAllowed () const;
 
 private:
 

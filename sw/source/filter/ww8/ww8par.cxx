@@ -34,6 +34,7 @@
 #include <comphelper/docpasswordrequest.hxx>
 #include <comphelper/string.hxx>
 
+#include <editeng/brshitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/langitem.hxx>
@@ -85,6 +86,11 @@
 
 #include "writerwordglue.hxx"
 
+#include "ndgrf.hxx"
+#include <editeng/editids.hrc>
+#include <txtflcnt.hxx>
+#include <fmtflcnt.hxx>
+#include <txatbase.hxx>
 
 #include "ww8par2.hxx"          // class WW8RStyle, class WW8AnchorPara
 
@@ -1013,6 +1019,30 @@ const SwNumFmt* SwWW8FltControlStack::GetNumFmtFromStack(const SwPosition &rPos,
         }
     }
     return pRet;
+}
+
+sal_Int32 SwWW8FltControlStack::GetCurrAttrCP() const
+{
+    return rReader.GetCurrAttrCP();
+}
+
+bool SwWW8FltControlStack::IsParaEndInCPs(sal_Int32 nStart,sal_Int32 nEnd,bool bSdOD) const
+{
+    return rReader.IsParaEndInCPs(nStart,nEnd,bSdOD);
+}
+
+//Clear the para end position recorded in reader intermittently for the least impact on loading performance
+void SwWW8FltControlStack::ClearParaEndPosition()
+{
+    if ( !empty() )
+        return;
+
+    rReader.ClearParaEndPosition();
+}
+
+bool SwWW8FltControlStack::CheckSdOD(sal_Int32 nStart,sal_Int32 nEnd)
+{
+    return rReader.IsParaEndInCPs(nStart,nEnd);
 }
 
 void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
@@ -3344,6 +3374,34 @@ long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTxtPos, bool& rbStartLine)
     return nNext;
 }
 
+//Revised 2012.8.16 for the complex attribute presentation of 0x0D in MS
+bool SwWW8ImplReader::IsParaEndInCPs(sal_Int32 nStart, sal_Int32 nEnd,bool bSdOD) const
+{
+    //Revised for performance consideration
+    if (nStart == -1 || nEnd == -1 || nEnd < nStart )
+        return false;
+
+    for (cp_vector::const_reverse_iterator aItr = maEndParaPos.rbegin(); aItr!= maEndParaPos.rend(); aItr++)
+    {
+        //Revised 2012.8.16,to the 0x0D,the attribute will have two situations
+        //*********within***********exact******//
+        //*********but also sample with only left and the position of 0x0d is the edge of the right side***********//
+        if ( bSdOD && ( (nStart < *aItr && nEnd > *aItr) || ( nStart == nEnd && *aItr == nStart)) )
+            return true;
+        else if ( !bSdOD &&  (nStart < *aItr && nEnd >= *aItr) )
+            return true;
+    }
+
+    return false;
+}
+
+//Clear the para end position recorded in reader intermittently for the least impact on loading performance
+void SwWW8ImplReader::ClearParaEndPosition()
+{
+    if ( maEndParaPos.size() > 0 )
+        maEndParaPos.clear();
+}
+
 void SwWW8ImplReader::ReadAttrs(WW8_CP& rNext, WW8_CP& rTxtPos, bool& rbStartLine)
 {
     if( rTxtPos >= rNext )
@@ -3351,6 +3409,7 @@ void SwWW8ImplReader::ReadAttrs(WW8_CP& rNext, WW8_CP& rTxtPos, bool& rbStartLin
 
         do
         {
+            maCurrAttrCP = rTxtPos;
             rNext = ReadTextAttr( rTxtPos, rbStartLine );
         }
         while( rTxtPos >= rNext );
@@ -3434,7 +3493,12 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
         // create a new txtnode and join the two paragraphs together
 
         if (bStartLine && !pPreviousNode) // Zeilenende
+        {
+            //We will record the CP of a paragraph end ('0x0D'), if current loading contents is from main stream;
+            if (mbOnLoadingMain)
+                maEndParaPos.push_back(l-1);
             AppendTxtNode(*pPaM->GetPoint());
+        }
 
         if (pPreviousNode && bStartLine)
         {
@@ -3593,7 +3657,9 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SvStorage* pStorage,
     nDropCap(0),
     nIdctHint(0),
     bBidi(false),
-    bReadTable(false)
+    bReadTable(false),
+    maCurrAttrCP(-1),
+    mbOnLoadingMain(false)
 {
     pStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     nWantedVersion = nVersionPara;
@@ -4599,7 +4665,9 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
 
             StoreMacroCmds();
         }
+        mbOnLoadingMain = true;
         ReadText(0, pWwFib->ccpText, MAN_MAINTEXT);
+        mbOnLoadingMain = false;
 
     }
 
@@ -4688,7 +4756,6 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
     GrafikDtor();
     DELETEZ( pMSDffManager );
     DELETEZ( pHdFt );
-    DELETEZ( pLstManager );
     DELETEZ( pSBase );
     delete pWDop;
     DELETEZ( pFonts );
@@ -4704,6 +4771,84 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
     delete mpRedlineStack;
     DeleteAnchorStk();
     DeleteRefStks();
+    //For i120928,achieve the graphics from the special bookmark with is for graphic bullet
+    {
+        std::vector<const SwGrfNode*> vecBulletGrf;
+        std::vector<SwFrmFmt*> vecFrmFmt;
+
+        IDocumentMarkAccess* const pMarkAccess =
+                                                rDoc.getIDocumentMarkAccess();
+        if ( pMarkAccess )
+        {
+            IDocumentMarkAccess::const_iterator_t ppBkmk =
+                                pMarkAccess->findBookmark( "_PictureBullets" );
+            if ( ppBkmk != pMarkAccess->getBookmarksEnd() &&
+                     IDocumentMarkAccess::GetType( *(ppBkmk->get()) )
+                        == IDocumentMarkAccess::BOOKMARK )
+            {
+                SwTxtNode* pTxtNode = ppBkmk->get()->GetMarkStart().nNode.GetNode().GetTxtNode();
+                if ( pTxtNode )
+                {
+                    const SwpHints *pHints = pTxtNode->GetpSwpHints();
+                    for(int nHintPos = 0; pHints && nHintPos < pHints->Count(); ++nHintPos)
+                    {
+                        const SwTxtAttr *pHt = (*pHints)[nHintPos];
+                        xub_StrLen st = *(pHt->GetStart());
+                        if(pHt && pHt->Which() == RES_TXTATR_FLYCNT && (st >= ppBkmk->get()->GetMarkStart().nContent.GetIndex()))
+                        {
+                            SwFrmFmt *pFrmFmt = pHt->GetFlyCnt().GetFrmFmt();
+                            const SwNodeIndex *pNdIdx = pFrmFmt->GetCntnt().GetCntntIdx();
+                            const SwNodes &nos = pNdIdx->GetNodes();
+                            const SwGrfNode *pGrf = dynamic_cast<const SwGrfNode*>(nos[pNdIdx->GetIndex() + 1]);
+                            if (pGrf)
+                            {
+                                vecBulletGrf.push_back(pGrf);
+                                vecFrmFmt.push_back(pFrmFmt);
+                            }
+                        }
+                    }
+                    // update graphic bullet information
+                    size_t nCount = pLstManager->GetWW8LSTInfoNum();
+                    for (size_t i = 0; i < nCount; ++i)
+                    {
+                        SwNumRule* pRule = pLstManager->GetNumRule(i);
+                        for (int j = 0; j < MAXLEVEL; ++j)
+                        {
+                            SwNumFmt aNumFmt(pRule->Get(j));
+                            sal_Int16 nType = aNumFmt.GetNumberingType();
+                            sal_uInt16 nGrfBulletCP = aNumFmt.GetGrfBulletCP();
+                            if (nType == SVX_NUM_BITMAP && vecBulletGrf.size() > nGrfBulletCP)
+                            {
+                                Graphic aGraphic = vecBulletGrf[nGrfBulletCP]->GetGrf();
+                                SvxBrushItem aBrush(aGraphic, GPOS_AREA, SID_ATTR_BRUSH);
+                                Font aFont = numfunc::GetDefBulletFont();
+                                int nHeight = aFont.GetHeight() * 12;//20;
+                                Size aPrefSize( aGraphic.GetPrefSize());
+                                if (aPrefSize.Height() * aPrefSize.Width() != 0 )
+                                {
+                                    int nWidth = (nHeight * aPrefSize.Width()) / aPrefSize.Height();
+                                    Size aSize(nWidth, nHeight);
+                                    aNumFmt.SetGraphicBrush(&aBrush, &aSize);
+                                }
+                                else
+                                {
+                                    aNumFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
+                                    aNumFmt.SetBulletChar(0x2190);
+                                }
+                                pRule->Set( j, aNumFmt );
+                            }
+                        }
+                    }
+                    // Remove additional pictures
+                    for (sal_uInt16 i = 0; i < vecFrmFmt.size(); ++i)
+                    {
+                        rDoc.DelLayoutFmt(vecFrmFmt[i]);
+                    }
+                }
+            }
+        }
+        DELETEZ( pLstManager );
+    }
 
     //remove extra paragraphs after attribute ctrl
     //stacks etc. are destroyed, and before fields

@@ -369,6 +369,9 @@ ScVbaValidation::getType() throw (uno::RuntimeException)
             case sheet::ValidationType_TEXT_LEN:
                 nExcelType = excel::XlDVType::xlValidateTextLength;
                 break;
+            case sheet::ValidationType_MAKE_FIXED_SIZE:
+            default:
+                break;
         };
     }
     return nExcelType;

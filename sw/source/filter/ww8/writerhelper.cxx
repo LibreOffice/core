@@ -49,6 +49,7 @@
 #include <fchrfmt.hxx>           //SwFmtCharFmt
 #include <unotools/streamwrap.hxx>
 #include <numrule.hxx>
+#include <vcl/svapp.hxx>//For i120928
 
 using namespace com::sun::star;
 using namespace nsSwGetPoolIdFromName;
@@ -149,15 +150,44 @@ namespace
 
 namespace sw
 {
+    //For i120928,size conversion before exporting graphic of bullet
+    Frame::Frame(const Graphic &rGrf, const SwPosition &rPos)
+        : mpFlyFrm(NULL)
+        , maPos(rPos)
+        , maSize()
+        , maLayoutSize()
+        , meWriterType(eBulletGrf)
+        , mpStartFrameContent(0)
+        , mbIsInline(true)
+        , mbForBullet(true)
+        , maGrf(rGrf)
+    {
+        const MapMode aMap100mm( MAP_100TH_MM );
+        Size    aSize( rGrf.GetPrefSize() );
+        if ( MAP_PIXEL == rGrf.GetPrefMapMode().GetMapUnit() )
+        {
+            aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, aMap100mm );
+        }
+        else
+        {
+            aSize = OutputDevice::LogicToLogic( aSize,rGrf.GetPrefMapMode(), aMap100mm );
+        }
+        maSize = aSize;
+        maLayoutSize = maSize;
+    }
+
     Frame::Frame(const SwFrmFmt &rFmt, const SwPosition &rPos)
-        : mpFlyFrm(&rFmt),
-          maPos(rPos),
-          maSize(),
-          maLayoutSize(), // #i43447#
-          meWriterType(eTxtBox),
-          mpStartFrameContent(0),
-          // #i43447# - move to initialization list
-          mbIsInline( (rFmt.GetAnchor().GetAnchorId() == FLY_AS_CHAR) )
+        : mpFlyFrm(&rFmt)
+        , maPos(rPos)
+        , maSize()
+        , maLayoutSize() // #i43447#
+        , meWriterType(eTxtBox)
+        , mpStartFrameContent(0)
+        // #i43447# - move to initialization list
+        , mbIsInline( (rFmt.GetAnchor().GetAnchorId() == FLY_AS_CHAR) )
+        // #i120928# - handle graphic of bullet within existing implementation
+        , mbForBullet(false)
+        , maGrf()
     {
         switch (rFmt.Which())
         {

@@ -11,7 +11,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <sfx2/templaterepository.hxx>
-#include <sfx2/templateview.hxx>
 #include <sfx2/templateviewitem.hxx>
 #include <svtools/imagemgr.hxx>
 #include <tools/urlobj.hxx>
@@ -47,8 +46,6 @@ enum
 TemplateRemoteView::TemplateRemoteView (Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
     : TemplateAbstractView(pParent,nWinStyle,bDisableTransientChildren)
 {
-    mpItemView->SetColor(Color(COL_WHITE));
-
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
     Reference< XInteractionHandler > xGlobalInteractionHandler(
         InteractionHandler::createWithParent(xContext, 0), UNO_QUERY_THROW );
@@ -60,15 +57,14 @@ TemplateRemoteView::~TemplateRemoteView ()
 {
 }
 
-void TemplateRemoteView::showOverlay (bool bVisible)
+void TemplateRemoteView::showRootRegion()
 {
-    mpItemView->Show(bVisible);
+    //TODO:
+}
 
-    // Clear items is the overlay is closed.
-    if (!bVisible)
-    {
-        mpItemView->Clear();
-    }
+void TemplateRemoteView::showRegion(ThumbnailViewItem */*pItem*/)
+{
+    //TODO:
 }
 
 bool TemplateRemoteView::loadRepository (TemplateRepository* pItem, bool bRefresh)
@@ -78,13 +74,13 @@ bool TemplateRemoteView::loadRepository (TemplateRepository* pItem, bool bRefres
 
     if (!pItem->getTemplates().empty() && !bRefresh)
     {
-        mpItemView->InsertItems(pItem->getTemplates());
+        insertItems(pItem->getTemplates());
         return true;
     }
 
-    mpItemView->Clear();
-    mpItemView->setId(pItem->mnId);
-    mpItemView->setName(pItem->maTitle);
+    mnCurRegionId = pItem->mnId;
+    maCurRegionName = pItem->maTitle;
+    maFTName.SetText(maCurRegionName);
 
     OUString aURL = pItem->getURL();
 
@@ -178,7 +174,7 @@ bool TemplateRemoteView::loadRepository (TemplateRepository* pItem, bool bRefres
                 }
             }
 
-            mpItemView->InsertItems(aItems);
+            insertItems(aItems);
         }
     }
     catch( ucb::CommandAbortedException& )
@@ -191,6 +187,16 @@ bool TemplateRemoteView::loadRepository (TemplateRepository* pItem, bool bRefres
     {
     }
 
+    return true;
+}
+
+bool TemplateRemoteView::isNestedRegionAllowed() const
+{
+    return true;
+}
+
+bool TemplateRemoteView::isImportAllowed() const
+{
     return true;
 }
 

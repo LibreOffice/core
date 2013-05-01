@@ -54,6 +54,8 @@ class DomainMapperTableManager : public DomainMapperTableManager_Base_t
     bool            m_bPushCurrentWidth;
     /// Individual table cell width values, used only in case the number of cells doesn't match the table grid.
     ::std::vector< IntVectorPtr >  m_aCellWidths;
+    /// Table layout algorithm, IOW if we should consider fixed column width or not.
+    sal_uInt32 m_nLayoutType;
 
     TablePropertiesHandler   *m_pTablePropsHandler;
     PropertyMapPtr            m_pStyleProps;
@@ -118,6 +120,11 @@ public:
         else
            DomainMapperTableManager_Base_t::insertTableProps( pProps );
     };
+
+    void SetLayoutType(sal_uInt32 nLayoutType)
+    {
+        m_nLayoutType = nLayoutType;
+    }
 
 };
 

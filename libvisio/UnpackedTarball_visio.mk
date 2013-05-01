@@ -11,7 +11,7 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,visio))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,visio,$(VISIO_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,visio,1))
+
 
 $(eval $(call gb_UnpackedTarball_add_patches,visio,\
        libvisio/libvisio-0.0.25.patch \

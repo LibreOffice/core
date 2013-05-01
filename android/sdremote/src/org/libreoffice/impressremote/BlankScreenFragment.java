@@ -75,7 +75,6 @@ public class BlankScreenFragment extends SherlockFragment {
                         aListener);
         v.findViewById(R.id.blankscreen_return).setOnClickListener(aListener);
         mCommunicationService.getTransmitter().blankScreen();
-        // TODO Auto-generated method stub
         return v;
     }
 

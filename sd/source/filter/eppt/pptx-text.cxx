@@ -878,7 +878,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                 PortionObj* pPortion = front();
                 CalculateGraphicBulletSize( ( pPortion ) ? pPortion->mnCharHeight : 24 );
 
-                switch( (SvxExtNumType)nNumberingType )
+                switch( nNumberingType )
                 {
                     case SVX_NUM_NUMBER_NONE : nParaFlags |= 0xf; break;
 
@@ -896,15 +896,20 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                             nParaFlags |= 0x90; // wir geben den Font und den Charset vor
                         }
                     }
-                    case SVX_NUM_CHARS_UPPER_LETTER :       // zaehlt von a-z, aa - az, ba - bz, ...
+                    case SVX_NUM_CHARS_UPPER_LETTER :       // count from a-z, aa - az, ba - bz, ...
                     case SVX_NUM_CHARS_LOWER_LETTER :
                     case SVX_NUM_ROMAN_UPPER :
                     case SVX_NUM_ROMAN_LOWER :
                     case SVX_NUM_ARABIC :
-                    case SVX_NUM_PAGEDESC :                 // Numerierung aus der Seitenvorlage
+                    case SVX_NUM_PAGEDESC :                 // numbering from the page template
                     case SVX_NUM_BITMAP :
-                    case SVX_NUM_CHARS_UPPER_LETTER_N :     // zaehlt von  a-z, aa-zz, aaa-zzz
+                    case SVX_NUM_CHARS_UPPER_LETTER_N :     // count from a-z, aa-zz, aaa-zzz
                     case SVX_NUM_CHARS_LOWER_LETTER_N :
+                    case SVX_NUM_NUMBER_UPPER_ZH:
+                    case SVX_NUM_CIRCLE_NUMBER:
+                    case SVX_NUM_NUMBER_UPPER_ZH_TW:
+                    case SVX_NUM_NUMBER_LOWER_ZH:
+                    case SVX_NUM_FULL_WIDTH_ARABIC:
                     {
                         if ( nNumberingType != SVX_NUM_CHAR_SPECIAL )
                         {
@@ -988,6 +993,45 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                         else
                                             nMappedNumType = 0x30001;   // 1.
                                     }
+                                }
+                                break;
+                                case SVX_NUM_NUMBER_UPPER_ZH :
+                                {
+                                    if ( sSuffix.Len() )
+                                        nMappedNumType = 0x110001;   // Simplified Chinese with single-byte period.
+                                    else
+                                        nMappedNumType = 0x100001;   // Simplified Chinese.
+                                }
+                                break;
+                                case SVX_NUM_CIRCLE_NUMBER :
+                                {
+                                    nMappedNumType = 0x120001;   // Double byte circle numbers.
+                                }
+                                break;
+                                case SVX_NUM_NUMBER_UPPER_ZH_TW :
+                                {
+                                    if ( sSuffix.Len() )
+                                        nMappedNumType = 0x160001;   // Traditional Chinese with single-byte period.
+                                    else
+                                        nMappedNumType = 0x150001;   // Traditional Chinese.
+                                }
+                                break;
+                                case SVX_NUM_NUMBER_LOWER_ZH :
+                                {
+                                    if ( sSuffix == String( sal_Unicode(0xff0e)) )
+                                        nMappedNumType = 0x260001;   // Japanese with double-byte period.
+                                    else if ( sSuffix.Len() )
+                                        nMappedNumType = 0x1B0001;   // Japanese/Korean with single-byte period.
+                                    else
+                                        nMappedNumType = 0x1A0001;   // Japanese/Korean.
+                                }
+                                break;
+                                case SVX_NUM_FULL_WIDTH_ARABIC :
+                                {
+                                    if ( sSuffix.Len() )
+                                        nMappedNumType = 0x1D0001;   // Double-byte Arabic numbers with double-byte period.
+                                    else
+                                        nMappedNumType = 0x1C0001;   // Double-byte Arabic numbers.
                                 }
                                 break;
                                 default:

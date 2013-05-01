@@ -472,6 +472,43 @@ void GetDoubleSequence( std::vector< com::sun::star::beans::PropertyValue >& rDe
     }
 }
 
+void GetSizeSequence( std::vector< com::sun::star::beans::PropertyValue >& rDest,
+                      const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
+{
+    std::vector< sal_Int32 > vNum;
+    sal_Int32 nIndex = 0;
+    do
+    {
+        sal_Int32 n;
+        rtl::OUString aToken( rValue.getToken( 0, ' ', nIndex ) );
+        if (!::sax::Converter::convertNumber( n, aToken ))
+            break;
+        else
+            vNum.push_back( n );
+    }
+    while ( nIndex >= 0 );
+
+    if ( !vNum.empty() )
+    {
+        uno::Sequence< awt::Size > aSizeSeq( vNum.size() / 2 );
+        std::vector< sal_Int32 >::const_iterator aIter = vNum.begin();
+        std::vector< sal_Int32 >::const_iterator aEnd = vNum.end();
+        awt::Size* pValues = aSizeSeq.getArray();
+
+        while ( aIter != aEnd ) {
+            pValues->Width = *aIter++;
+            if ( aIter != aEnd )
+                pValues->Height = *aIter++;
+            pValues ++;
+        }
+
+        beans::PropertyValue aProp;
+        aProp.Name = EASGet( eDestProp );
+        aProp.Value <<= aSizeSeq;
+        rDest.push_back( aProp );
+    }
+}
+
 void GetEnhancedParameter( std::vector< com::sun::star::beans::PropertyValue >& rDest,              // e.g. draw:handle-position
                         const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
@@ -662,6 +699,34 @@ void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest
             {
                 nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ARCANGLETO;
                 nParametersNeeded = 2;
+                nIndex++;
+            }
+            break;
+            case 'H' :
+            {
+                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::DARKEN;
+                nParametersNeeded = 0;
+                nIndex++;
+            }
+            break;
+            case 'I' :
+            {
+                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::DARKENLESS;
+                nParametersNeeded = 0;
+                nIndex++;
+            }
+            break;
+            case 'J' :
+            {
+                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::LIGHTEN;
+                nParametersNeeded = 0;
+                nIndex++;
+            }
+            break;
+            case 'K' :
+            {
+                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::LIGHTENLESS;
+                nParametersNeeded = 0;
                 nIndex++;
             }
             break;
@@ -859,6 +924,9 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
                     aProp.Value <<= aRect;
                     mrCustomShapeGeometry.push_back( aProp );
                 }
+                break;
+                case EAS_sub_view_size:
+                    GetSizeSequence( maPath, rValue, EAS_SubViewSize );
                 break;
                 case EAS_text_rotate_angle :
                     GetDouble( mrCustomShapeGeometry, rValue, EAS_TextRotateAngle );

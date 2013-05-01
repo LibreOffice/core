@@ -407,16 +407,7 @@ sal_Int32 ResultSetMetaData::getScale( sal_Int32 column )
 {
     (void) column;
 // LEM TODO This is very fishy.. Should probably return the table to which that column belongs!
-    rtl::OUString ret;
-    if( m_tableName.getLength() )
-    {
-        OUStringBuffer buf( 128 );
-        buf.append( m_schemaName );
-        buf.appendAscii( "." );
-        buf.append( m_tableName );
-        ret = buf.makeStringAndClear();
-    }
-    return ret;
+    return m_tableName;
 }
 
 ::rtl::OUString ResultSetMetaData::getCatalogName( sal_Int32 column )

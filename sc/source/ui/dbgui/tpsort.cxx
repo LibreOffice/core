@@ -168,9 +168,19 @@ void ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
     // ListBox selection:
     if ( aSortData.maKeyState[0].bDoSort )
     {
+        // Make sure that the all sort keys are reset
+        for ( sal_uInt16 i=nSortKeyCount; i<aSortData.maKeyState.size(); i++ )
+        {
+            maSortKeyCtrl.AddSortKey(i+1);
+            maSortKeyItems[i].m_pLbSort->SetSelectHdl( LINK( this,
+                                 ScTabPageSortFields, SelectHdl ) );
+        }
+        nSortKeyCount = aSortData.maKeyState.size();
+        FillFieldLists(0);
+
         for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
         {
-            if ( i < aSortData.maKeyState.size() && aSortData.maKeyState[i].bDoSort )
+            if (aSortData.maKeyState[i].bDoSort )
             {
                 maSortKeyItems[i].m_pLbSort->SelectEntryPos( GetFieldSelPos(
                                     aSortData.maKeyState[i].nField ) );
@@ -193,7 +203,6 @@ void ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
                 maSortKeyItems[i].DisableField();
             else
                 maSortKeyItems[i].EnableField();
-
     }
     else
     {

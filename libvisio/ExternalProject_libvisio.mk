@@ -31,6 +31,7 @@ $(call gb_ExternalProject_get_state_target,libvisio,build) :
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBXML_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
+	&& export ICU_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& $(COMPATH)/vcpackages/vcbuild.exe libvisio.vcproj "Release|Win32" \
 	&& touch $@
 else ifeq ($(VCVER),100)
@@ -41,6 +42,7 @@ $(call gb_ExternalProject_get_state_target,libvisio,build) :
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBXML_INCLUDE_DIR=$(OUTDIR)/inc/extrenal \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
+	&& export ICU_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& msbuild.exe libvisio.vcxproj /p:Configuration=Release \
 	&& touch $@
 else
@@ -51,6 +53,7 @@ $(call gb_ExternalProject_get_state_target,libvisio,build) :
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBXML_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
+	&& export ICU_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& msbuild.exe libvisio.vcxproj /p:PlatformToolset=v110 /p:Configuration=Release \
 	&& touch $@
 endif
@@ -59,8 +62,11 @@ else
 
 $(call gb_ExternalProject_get_state_target,libvisio,build) :
 	cd $(EXTERNAL_WORKDIR) \
-	&& PKG_CONFIG="" \
-	./configure \
+	&& export PKG_CONFIG="" \
+	&& export ICU_LIBS=" " \
+	$(if $(filter NO,$(SYSTEM_ICU)),&& export ICU_CFLAGS="-I$(OUTDIR)/inc/external") \
+	$(if $(filter YES,$(SYSTEM_ICU)),&& export ICU_CFLAGS=" ") \
+	&& ./configure \
 		--with-pic \
 		--enable-static \
 		--disable-shared \

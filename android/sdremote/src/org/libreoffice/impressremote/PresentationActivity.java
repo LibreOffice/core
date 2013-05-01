@@ -529,12 +529,6 @@ public class PresentationActivity extends SherlockFragmentActivity {
             mActionBarManager.hidePopups();
             return super.onInterceptTouchEvent(aEvent);
         }
-
-        @Override
-        public boolean onTouchEvent(MotionEvent aEvent) {
-            return super.onTouchEvent(aEvent);
-        }
-
     }
 
     private BroadcastReceiver mListener = new BroadcastReceiver() {

@@ -21,10 +21,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
@@ -38,7 +35,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.actionbarsherlock.app.SherlockFragment;
 
 public class PresentationFragment extends SherlockFragment {
@@ -100,7 +96,7 @@ public class PresentationFragment extends SherlockFragment {
         mNotes = (WebView) v.findViewById(R.id.presentation_notes);
 
         String summary = "<html><body>This is just a test<br/><ul><li>And item</li><li>And again</li></ul>More text<br/>Blabla<br/>Blabla<br/>blabla<br/>Blabla</body></html>";
-        mNotes.loadData(summary, "text/html", null);
+        mNotes.loadDataWithBaseURL(null, summary, "text/html", "UTF-8", null);
         mNotes.setBackgroundColor(Color.TRANSPARENT);
 
         mTopView = (CoverFlow) v.findViewById(R.id.presentation_coverflow);
@@ -156,8 +152,8 @@ public class PresentationFragment extends SherlockFragment {
         //        int aSlide = mCommunicationService.getSlideShow().getCurrentSlide();
         mNumberText.setText((aPosition + 1) + "/"
                         + mCommunicationService.getSlideShow().getSize());
-        mNotes.loadData(mCommunicationService.getSlideShow()
-                        .getNotes(aPosition), "text/html", null);
+        mNotes.loadDataWithBaseURL(null, mCommunicationService.getSlideShow()
+                        .getNotes(aPosition), "text/html", "UTF-8", null);
     }
 
     // -------------------------------------------------- RESIZING LISTENER ----
@@ -281,8 +277,8 @@ public class PresentationFragment extends SherlockFragment {
                             CommunicationService.MSG_SLIDE_NOTES)) {
                 int aPosition = aIntent.getExtras().getInt("slide_number");
                 if ( aPosition == mTopView.getSelectedItemPosition() ) {
-                    mNotes.loadData(mCommunicationService.getSlideShow()
-                                    .getNotes(aPosition), "text/html", null);
+                    mNotes.loadDataWithBaseURL(null, mCommunicationService.getSlideShow()
+                                    .getNotes(aPosition), "text/html", "UTF-8", null);
                 }
             }
 
@@ -306,24 +302,7 @@ public class PresentationFragment extends SherlockFragment {
 
         @Override
         protected Bitmap createBitmap(int position) {
-            Bitmap aBitmap = mSlideShow.getImage(position);
-            final int borderWidth = 8;
-
-            Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
-            p.setShadowLayer(borderWidth, 0, 0, Color.BLACK);
-
-            RectF aRect = new RectF(borderWidth, borderWidth, borderWidth
-                            + aBitmap.getWidth(), borderWidth
-                            + aBitmap.getHeight());
-            Bitmap aOut = Bitmap.createBitmap(aBitmap.getWidth() + 2
-                            * borderWidth, aBitmap.getHeight() + 2
-                            * borderWidth, aBitmap.getConfig());
-            Canvas canvas = new Canvas(aOut);
-            canvas.drawColor(getResources().getColor(R.color.light_grey));
-            canvas.drawRect(aRect, p);
-            canvas.drawBitmap(aBitmap, null, aRect, null);
-
-            return aOut;
+            return mSlideShow.getImage(position);
         }
     }
 }

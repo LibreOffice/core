@@ -15,6 +15,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/tabctrl.hxx>
+#include <vcl/tabpage.hxx>
 
 class Edit;
 class PopupMenu;
@@ -37,6 +38,8 @@ namespace com {
 
 class SfxTemplateManagerDlg : public ModelessDialog
 {
+    typedef bool (*selection_cmp_fn)(const ThumbnailViewItem*,const ThumbnailViewItem*);
+
 public:
 
     SfxTemplateManagerDlg (Window *parent = DIALOG_NO_PARENT);
@@ -49,29 +52,27 @@ public:
 
     DECL_LINK(ActivatePageHdl, void*);
 
-    static BitmapEx getDefaultThumbnail( const rtl::OUString& rPath );
-
 private:
 
-    virtual void MouseButtonDown( const MouseEvent& rMEvt );
+    void readSettings ();
+
+    void writeSettings ();
 
     virtual void Resize ();
-
-    DECL_LINK(CloseOverlayHdl, void*);
 
     DECL_LINK(TBXViewHdl, void*);
     DECL_LINK(TBXActionHdl, void*);
     DECL_LINK(TBXTemplateHdl, void*);
     DECL_LINK(TBXDropdownHdl, ToolBox*);
 
-    DECL_LINK(TVFolderStateHdl, const ThumbnailViewItem*);
-    DECL_LINK(TVTemplateStateHdl, const ThumbnailViewItem*);
+    DECL_LINK(TVItemStateHdl, const ThumbnailViewItem*);
 
     DECL_LINK(MenuSelectHdl, Menu*);
     DECL_LINK(MoveMenuSelectHdl, Menu*);
     DECL_LINK(RepositoryMenuSelectHdl, Menu*);
     DECL_LINK(DefaultTemplateMenuSelectHdl, Menu*);
 
+    DECL_LINK(OpenRegionHdl, void*);
     DECL_LINK(OpenTemplateHdl, ThumbnailViewItem*);
 
     DECL_LINK(SearchUpdateHdl, void*);
@@ -83,7 +84,13 @@ private:
     void OnTemplateDelete ();
     void OnTemplateAsDefault ();
     void OnTemplateExport ();
+
+    void OnTemplateState (const ThumbnailViewItem *pItem);
+
     void OnFolderDelete ();
+
+    void OnRegionState (const ThumbnailViewItem *pItem);
+
     void OnRepositoryDelete ();
     void OnTemplateSaveAs ();
 
@@ -126,7 +133,7 @@ private:
 private:
 
     TabControl maTabControl;
-    Control *mpToolbars;
+    TabPage maTabPage;
 
     Edit *mpSearchEdit;
     ToolBox *mpViewBar;
@@ -140,8 +147,8 @@ private:
     PopupMenu *mpRepositoryMenu;
     PopupMenu *mpTemplateDefaultMenu;
 
-    std::set<const ThumbnailViewItem*> maSelTemplates;
-    std::set<const ThumbnailViewItem*> maSelFolders;
+    std::set<const ThumbnailViewItem*,selection_cmp_fn> maSelTemplates;
+    std::set<const ThumbnailViewItem*,selection_cmp_fn> maSelFolders;
 
     bool mbIsSaveMode;  ///< Flag that indicates if we are in save mode or not.
     com::sun::star::uno::Reference< com::sun::star::frame::XModel > m_xModel;

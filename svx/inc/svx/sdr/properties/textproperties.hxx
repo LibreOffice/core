@@ -20,6 +20,7 @@
 #ifndef _SDR_PROPERTIES_TEXTPROPERTIES_HXX
 #define _SDR_PROPERTIES_TEXTPROPERTIES_HXX
 
+#include <svx/itextprovider.hxx>
 #include <svx/sdr/properties/attributeproperties.hxx>
 #include "svx/svxdllapi.h"
 
@@ -44,6 +45,9 @@ namespace sdr
 
             // react on ItemSet changes
             virtual void ItemSetChanged(const SfxItemSet& rSet);
+
+            /// Get the TextProvider related to our SdrObject
+            virtual const svx::ITextProvider& getTextProvider() const;
 
         public:
             // basic constructor

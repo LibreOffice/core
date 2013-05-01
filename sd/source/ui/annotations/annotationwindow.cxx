@@ -327,14 +327,11 @@ void AnnotationWindow::InitControls()
         mpOutliner->SetRefDevice( pDev );
     }
 
+    mpTextWindow->EnableRTL( sal_False );
     mpOutlinerView = new OutlinerView ( mpOutliner, mpTextWindow );
     mpOutliner->InsertView(mpOutlinerView );
     mpTextWindow->SetOutlinerView(mpOutlinerView);
     mpOutlinerView->SetOutputArea( PixelToLogic( Rectangle(0,0,1,1) ) );
-
-    // TODO: ??
-    EEHorizontalTextDirection aDefHoriTextDir = Application::GetSettings().GetLayoutRTL() ? EE_HTEXTDIR_R2L : EE_HTEXTDIR_L2R;
-    mpOutliner->SetDefaultHorizontalTextDirection( aDefHoriTextDir );
 
     //create Scrollbars
     mpVScrollbar = new ScrollBar(this, WB_3DLOOK |WB_VSCROLL|WB_DRAG);

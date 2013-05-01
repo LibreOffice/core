@@ -112,6 +112,7 @@ static const TokenTable pTokenTableArray[] =
     { "handle-polar",                       EAS_handle_polar },
     { "handle-radius-range-minimum",        EAS_handle_radius_range_minimum },
     { "handle-radius-range-maximum",        EAS_handle_radius_range_maximum },
+    { "sub-view-size",                      EAS_sub_view_size },
 
     { "CustomShapeEngine",                  EAS_CustomShapeEngine },
     { "CustomShapeData",                    EAS_CustomShapeData },
@@ -173,6 +174,7 @@ static const TokenTable pTokenTableArray[] =
     { "SameLetterHeights",                  EAS_SameLetterHeights },
     { "Position",                           EAS_Position },
     { "AdjustmentValues",                   EAS_AdjustmentValues },
+    { "SubViewSize",                        EAS_SubViewSize },
 
     { "Last",                               EAS_Last },
     { "NotFound",                           EAS_NotFound }

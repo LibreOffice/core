@@ -1325,7 +1325,8 @@ void RtfAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
         sal_Int16 nIndentAt,
         sal_Int16 nFirstLineIndex,
         sal_Int16 /*nListTabPos*/,
-        const String &rNumberingString )
+        const String &rNumberingString,
+        const SvxBrushItem* /*pBrush*/)
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
@@ -2769,7 +2770,15 @@ void RtfAttributeOutput::FormatVertOrientation( const SwFmtVertOrient& rFlyVert 
 
     if ( m_rExport.bOutFlyFrmAttrs && m_rExport.bRTFFlySyntax )
     {
-        m_aRunText->append(OOO_STRING_SVTOOLS_RTF_PVPARA);
+        switch (rFlyVert.GetRelationOrient())
+        {
+            case text::RelOrientation::PAGE_FRAME:
+                m_aRunText->append(OOO_STRING_SVTOOLS_RTF_PVPG);
+            break;
+            default:
+                m_aRunText->append(OOO_STRING_SVTOOLS_RTF_PVPARA);
+            break;
+        }
 
         switch (rFlyVert.GetVertOrient())
         {
@@ -2807,7 +2816,15 @@ void RtfAttributeOutput::FormatHorizOrientation( const SwFmtHoriOrient& rFlyHori
 
     if ( m_rExport.bOutFlyFrmAttrs && m_rExport.bRTFFlySyntax )
     {
-        m_aRunText->append(OOO_STRING_SVTOOLS_RTF_PHCOL);
+        switch (rFlyHori.GetRelationOrient())
+        {
+            case text::RelOrientation::PAGE_FRAME:
+                m_aRunText->append(OOO_STRING_SVTOOLS_RTF_PHPG);
+            break;
+            default:
+                m_aRunText->append(OOO_STRING_SVTOOLS_RTF_PHCOL);
+            break;
+        }
 
         const char* pS = 0;
         switch(rFlyHori.GetHoriOrient())

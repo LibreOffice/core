@@ -1292,6 +1292,23 @@ void lcl_GetTableVars( sal_Int32& rGrandTotalCols, sal_Int32& rGrandTotalRows, s
                     rtl::OUString aSourceName;
                     rtl::OUString aGivenName;
                     ScDPOutput::GetDataDimensionNames( aSourceName, aGivenName, xDim );
+                    try
+                    {
+                        uno::Any aValue = xDimProp->getPropertyValue(
+                                rtl::OUString::createFromAscii(SC_UNO_DP_LAYOUTNAME) );
+
+                        if( aValue.hasValue() )
+                        {
+                            OUString strLayoutName;
+
+                            if( aValue >>= strLayoutName )
+                                if ( strLayoutName.getLength() > 0 )
+                                    aGivenName = strLayoutName;
+                        }
+                    }
+                    catch(uno::Exception&)
+                    {
+                    }
                     rDataNames.push_back( aSourceName );
                     rGivenNames.push_back( aGivenName );
 
@@ -1690,11 +1707,19 @@ void lcl_FilterInclude( std::vector<bool>& rResult, std::vector< sal_Int32 >& rS
                 {
                     // grand total is always automatic
                     sal_Int32 nDataPos = j - ( nSize - nGrandTotals );
-                    OSL_ENSURE( nDataPos < (sal_Int32)rDataNames.size(), "wrong data count" );
-                    rtl::OUString aSourceName( rDataNames[nDataPos] );     // vector contains source names
-                    rtl::OUString aGivenName( rGivenNames[nDataPos] );
+                    if (nDataPos >= 0 && nDataPos < (sal_Int32)rDataNames.size() &&
+                            nDataPos < (sal_Int32)rGivenNames.size())
+                    {
+                        OUString aSourceName( rDataNames[nDataPos] );     // vector contains source names
+                        OUString aGivenName( rGivenNames[nDataPos] );
 
-                    rResult[j] = lcl_IsNamedDataField( rTarget, aSourceName, aGivenName );
+                        rResult[j] = lcl_IsNamedDataField( rTarget, aSourceName, aGivenName );
+                    }
+                    else
+                    {
+                        OSL_FAIL( "wrong data count for grand total" );
+                        rResult[j] = false;
+                    }
                 }
             }
 
@@ -1730,27 +1755,49 @@ void lcl_FilterInclude( std::vector<bool>& rResult, std::vector< sal_Int32 >& rS
                         rtl::OUString aSourceName( rDataNames[nDataPos] );             // vector contains source names
                         rtl::OUString aGivenName( rGivenNames[nDataPos] );
 
-                        OSL_ENSURE( nFuncPos < aSubTotals.getLength(), "wrong subtotal count" );
-                        rResult[j] = lcl_IsNamedDataField( rTarget, aSourceName, aGivenName ) &&
+                        if (nFuncPos < aSubTotals.getLength())
+                        {
+                            rResult[j] = lcl_IsNamedDataField( rTarget, aSourceName, aGivenName ) &&
                                      aSubTotals[nFuncPos] == aFilter.meFunction;
+                        }
+                        else
+                        {
+                            OSL_FAIL( "wrong subtotal count for manual subtotals and several data fields" );
+                            rResult[j] = false;
+                        }
                     }
                     else
                     {
                         // manual subtotals for a single data field
 
-                        OSL_ENSURE( nSubTotalCount < aSubTotals.getLength(), "wrong subtotal count" );
-                        rResult[j] = ( aSubTotals[nSubTotalCount] == aFilter.meFunction );
+                        if (nSubTotalCount < aSubTotals.getLength())
+                        {
+                            rResult[j] = ( aSubTotals[nSubTotalCount] == aFilter.meFunction );
+                        }
+                        else
+                        {
+                            OSL_FAIL( "wrong subtotal count for manual subtotals for a single data field" );
+                            rResult[j] = false;
+                        }
                     }
                 }
                 else    // automatic subtotals
                 {
                     if ( rBeforeDataLayout )
                     {
-                        OSL_ENSURE( nSubTotalCount < (sal_Int32)rDataNames.size(), "wrong data count" );
-                        rtl::OUString aSourceName( rDataNames[nSubTotalCount] );       // vector contains source names
-                        rtl::OUString aGivenName( rGivenNames[nSubTotalCount] );
+                        if (nSubTotalCount < (sal_Int32)rDataNames.size() &&
+                                nSubTotalCount < (sal_Int32)rGivenNames.size())
+                        {
+                            OUString aSourceName( rDataNames[nSubTotalCount] );       // vector contains source names
+                            OUString aGivenName( rGivenNames[nSubTotalCount] );
 
-                        rResult[j] = lcl_IsNamedDataField( rTarget, aSourceName, aGivenName );
+                            rResult[j] = lcl_IsNamedDataField( rTarget, aSourceName, aGivenName );
+                        }
+                        else
+                        {
+                            OSL_FAIL( "wrong data count for automatic subtotals" );
+                            rResult[j] = false;
+                        }
                     }
 
                     // if a function was specified, automatic subtotals never match
@@ -1805,6 +1852,8 @@ void lcl_StripSubTotals( std::vector<bool>& rResult, const std::vector<sal_Int32
             // if a subtotal is included, clear the result flag for the columns/rows that the subtotal includes
             sal_Int32 nStart = nPos - rSubtotal[nPos];
             OSL_ENSURE( nStart >= 0, "invalid subtotal count" );
+            if (nStart < 0)
+                nStart = 0;
 
             for (sal_Int32 nPrev = nStart; nPrev < nPos; nPrev++)
                 rResult[nPrev] = false;

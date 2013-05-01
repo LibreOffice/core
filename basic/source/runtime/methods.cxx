@@ -22,6 +22,7 @@
 #include <osl/process.h>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/sound.hxx>
 #include <tools/wintypes.hxx>
 #include <vcl/msgbox.hxx>
 #include <basic/sbx.hxx>
@@ -1282,8 +1283,12 @@ RTLFUNC(Mid)
                 else
                 {
                     aResultStr = aArgStr;
-                    aResultStr.remove( nStartPos, nLen );
-                    aResultStr.insert( nStartPos, rPar.Get(4)->GetOUString().getStr(), nLen);
+                    sal_Int32 nTmpStartPos = nStartPos;
+                    if ( nTmpStartPos > aArgStr.getLength() )
+                        nTmpStartPos =  aArgStr.getLength();
+                    else
+                        aResultStr.remove( nTmpStartPos, nLen );
+                    aResultStr.insert( nTmpStartPos, rPar.Get(4)->GetOUString().getStr(), std::min(nLen, rPar.Get(4)->GetOUString().getLength()));
                 }
 
                 rPar.Get(1)->PutString( aResultStr.makeStringAndClear() );
@@ -4237,6 +4242,7 @@ RTLFUNC(Beep)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
+    Sound::Beep();
 }
 
 RTLFUNC(Load)

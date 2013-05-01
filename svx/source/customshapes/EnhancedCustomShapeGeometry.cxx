@@ -227,7 +227,7 @@ static const SvxMSDffTextRectangles mso_sptRightTriangleTextRect[] =
 };
 static const SvxMSDffVertPair mso_sptRightTriangleGluePoints[] =
 {
-    { 10800, 0 }, { 5400, 10800 }, { 0, 21600 }, { 10800, 21600 }, { 21600, 21600 }, { 16200, 10800 }
+    { 0, 0 }, { 0, 10800 }, { 0, 21600 }, { 10800, 21600 }, { 21600, 21600 }, { 10800, 10800 }
 };
 static const mso_CustomShape msoRightTriangle =
 {
@@ -460,7 +460,7 @@ static const SvxMSDffTextRectangles mso_sptIsocelesTriangleTextRect[] =
 };
 static const SvxMSDffVertPair mso_sptIsocelesTriangleGluePoints[] =
 {
-    { 10800, 0 }, { 1 MSO_I, 10800 }, { 0, 21600 }, { 10800, 21600 }, { 21600, 21600 }, { 7 MSO_I, 10800 }
+    { 0 MSO_I, 0 }, { 1 MSO_I, 10800 }, { 0, 21600 }, { 10800, 21600 }, { 21600, 21600 }, { 7 MSO_I, 10800 }
 };
 static const SvxMSDffHandle mso_sptIsocelesTriangleHandle[] =
 {

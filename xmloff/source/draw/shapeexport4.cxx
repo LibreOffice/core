@@ -413,6 +413,30 @@ void ImpExportEnhancedPath( SvXMLExport& rExport,
                     i += 2;
                 }
                 break;
+            case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::DARKEN :
+                if ( bExtended )
+                    aStrBuffer.append( (sal_Unicode)'H' );
+                else
+                    bNeedExtended = true;
+                break;
+            case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::DARKENLESS :
+                if ( bExtended )
+                    aStrBuffer.append( (sal_Unicode)'I' );
+                else
+                    bNeedExtended = true;
+                break;
+            case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::LIGHTEN :
+                if ( bExtended )
+                    aStrBuffer.append( (sal_Unicode)'J' );
+                else
+                    bNeedExtended = true;
+                break;
+            case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::LIGHTENLESS :
+                if ( bExtended )
+                    aStrBuffer.append( (sal_Unicode)'K' );
+                else
+                    bNeedExtended = true;
+                break;
             default : // ups, seems to be something wrong
             {
                 aSegment.Count = 1;
@@ -908,8 +932,26 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                             for ( i = 0; i < nCount; i++ )
                             {
                                 const beans::PropertyValue& rProp = aPathPropSeq[ i ];
+
                                 switch( EASGet( rProp.Name ) )
                                 {
+                                    case EAS_SubViewSize:
+                                    {
+                                        uno::Sequence< awt::Size > aSubViewSizes;
+                                        rProp.Value >>= aSubViewSizes;
+
+                                        for ( int nIdx = 0; nIdx < aSubViewSizes.getLength(); nIdx++ )
+                                        {
+                                            if ( nIdx )
+                                                aStrBuffer.append(' ');
+                                            ::sax::Converter::convertNumber( aStrBuffer, aSubViewSizes[nIdx].Width );
+                                            aStrBuffer.append(' ');
+                                            ::sax::Converter::convertNumber( aStrBuffer, aSubViewSizes[nIdx].Height );
+                                        }
+                                        aStr = aStrBuffer.makeStringAndClear();
+                                        rExport.AddAttribute( XML_NAMESPACE_DRAW_EXT, XML_SUB_VIEW_SIZE, aStr );
+                                    }
+                                    break;
                                     case EAS_ExtrusionAllowed :
                                     {
                                         sal_Bool bExtrusionAllowed = sal_Bool();

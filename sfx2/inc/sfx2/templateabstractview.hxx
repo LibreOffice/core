@@ -10,20 +10,25 @@
 #ifndef __SFX2_TEMPLATEABSTRACTVIEW_HXX__
 #define __SFX2_TEMPLATEABSTRACTVIEW_HXX__
 
+#include <sfx2/templateproperties.hxx>
 #include <sfx2/thumbnailview.hxx>
+#include <vcl/button.hxx>
+#include <vcl/fixed.hxx>
 
 //template thumbnail item defines
 #define TEMPLATE_ITEM_MAX_WIDTH 160
-#define TEMPLATE_ITEM_MAX_HEIGHT 160
+#define TEMPLATE_ITEM_MAX_HEIGHT 140
 #define TEMPLATE_ITEM_PADDING 5
 #define TEMPLATE_ITEM_MAX_TEXT_LENGTH 20
 #define TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT 88
+
+//template thumbnail height with a subtitle
+#define TEMPLATE_ITEM_MAX_HEIGHT_SUB 160
 
 //template thumbnail image defines
 #define TEMPLATE_THUMBNAIL_MAX_HEIGHT TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT - 2*TEMPLATE_ITEM_PADDING
 #define TEMPLATE_THUMBNAIL_MAX_WIDTH TEMPLATE_ITEM_MAX_WIDTH - 2*TEMPLATE_ITEM_PADDING
 
-class TemplateView;
 class SfxDocumentTemplates;
 
 enum FILTER_APPLICATION
@@ -80,60 +85,59 @@ public:
 
     virtual ~TemplateAbstractView ();
 
+    void insertItem (const TemplateItemProperties &rTemplate);
+
+    // Fill view with new item list
+    void insertItems (const std::vector<TemplateItemProperties> &rTemplates);
+
     // Fill view with template folders thumbnails
-    virtual void Populate () { };
+    virtual void Populate () { }
 
-    virtual void reload () { };
+    virtual void reload () { }
 
-    virtual void filterTemplatesByApp (const FILTER_APPLICATION &eApp);
+    virtual void showRootRegion () = 0;
 
-    virtual void showOverlay (bool bVisible) = 0;
+    virtual void showRegion (ThumbnailViewItem *pItem) = 0;
 
-    void setItemDimensions (long ItemWidth, long ThumbnailHeight, long DisplayHeight, int itemPadding);
+    // Return if we can have regions inside the current region
+    virtual bool isNestedRegionAllowed () const = 0;
 
-    sal_uInt16 getOverlayRegionId () const;
+    // Return if we can import templates to the current region
+    virtual bool isImportAllowed () const = 0;
 
-    const OUString& getOverlayName () const;
+    sal_uInt16 getCurRegionId () const;
 
-    // Check if the overlay is visible or not.
-    bool isOverlayVisible () const;
+    const OUString& getCurRegionName () const;
 
-    void deselectOverlayItems ();
+    // Check if the root region is visible or not.
+    bool isNonRootRegionVisible () const;
 
-    void deselectOverlayItem (const sal_uInt16 nItemId);
+    void setOpenRegionHdl(const Link &rLink);
 
-    void sortOverlayItems (const boost::function<bool (const ThumbnailViewItem*,
-                                                       const ThumbnailViewItem*) > &func);
-
-    virtual void filterTemplatesByKeyword (const OUString &rKeyword);
-
-    void setOverlayItemStateHdl (const Link &aLink) { maOverlayItemStateHdl = aLink; }
-
-    void setOverlayDblClickHdl (const Link &rLink);
-
-    void setOverlayCloseHdl (const Link &rLink);
+    void setOpenTemplateHdl (const Link &rLink);
 
     static BitmapEx scaleImg (const BitmapEx &rImg, long width, long height);
 
+    static BitmapEx getDefaultThumbnail( const rtl::OUString& rPath );
+
     static BitmapEx fetchThumbnail (const OUString &msURL, long width, long height);
 
-    virtual void Resize();
+protected:
+
+    DECL_LINK(ShowRootRegionHdl, void*);
+
+    virtual void OnItemDblClicked(ThumbnailViewItem *pItem);
 
 protected:
 
-    virtual void Paint( const Rectangle& rRect );
+    sal_uInt16 mnCurRegionId;
+    OUString maCurRegionName;
 
-    virtual void DrawItem (ThumbnailViewItem *pItem);
+    PushButton maAllButton;
+    FixedText  maFTName;
 
-    DECL_LINK(OverlayItemStateHdl, const ThumbnailViewItem*);
-
-protected:
-
-    TemplateView *mpItemView;
-    Link maOverlayItemStateHdl;
-
-    bool mbFilteredResults;     // Flag keep track if overlay has been filtered so folders can get filtered too afterwards
-    FILTER_APPLICATION meFilterOption;
+    Link maOpenRegionHdl;
+    Link maOpenTemplateHdl;
 };
 
 #endif // __SFX2_TEMPLATEABSTRACTVIEW_HXX__

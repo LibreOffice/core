@@ -22,7 +22,7 @@ namespace
         VBATest() : BootstrapFixture(true, false) {}
         ~VBATest(){}
         void testMiscVBAFunctions();
-        void testObjAssignWithDefaultMember();
+        void testMiscOLEStuff();
         // Adds code needed to register the test suite
         CPPUNIT_TEST_SUITE(VBATest);
 
@@ -30,7 +30,7 @@ namespace
         CPPUNIT_TEST(testMiscVBAFunctions);
 // not much point even trying to run except on windows
 #if defined(WNT)
-        CPPUNIT_TEST(testObjAssignWithDefaultMember);
+        CPPUNIT_TEST(testMiscOLEStuff);
 #endif
 
         // End of test suite definition
@@ -105,7 +105,7 @@ void VBATest::testMiscVBAFunctions()
     }
 }
 
-void VBATest::testObjAssignWithDefaultMember()
+void VBATest::testMiscOLEStuff()
 {
     bool bCanRunOleTests = hasOLEEnv();
     if ( !bCanRunOleTests )
@@ -114,6 +114,7 @@ void VBATest::testObjAssignWithDefaultMember()
     const char* macroSource[] = {
         "ole_ObjAssignNoDflt.vb",
         "ole_ObjAssignToNothing.vb",
+        "ole_dfltObjDflMethod.vb",
     };
 
     OUString sMacroPathURL = getURLFromSrc("/basic/qa/vba_tests/");

@@ -1339,6 +1339,13 @@ const SystemEnvData* AquaSalFrame::GetSystemData() const
 
 // -----------------------------------------------------------------------
 
+void AquaSalFrame::Beep()
+{
+    NSBeep();
+}
+
+// -----------------------------------------------------------------------
+
 void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags)
 {
     if ( !mpWindow )

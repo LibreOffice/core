@@ -58,7 +58,7 @@ public abstract class Client {
         Thread t = new Thread() {
             public void run() {
                 listen();
-            };
+            }
 
         };
         t.start();

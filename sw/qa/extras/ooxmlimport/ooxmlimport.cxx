@@ -114,6 +114,8 @@ public:
     void testFdo53985();
     void testFdo59638();
     void testFdo61343();
+    void testFdo60922();
+    void testFdo59273();
     void testN592908_Frame();
     void testN592908_Picture();
 
@@ -182,6 +184,8 @@ void Test::run()
         {"fdo53985.docx", &Test::testFdo53985},
         {"fdo59638.docx", &Test::testFdo59638},
         {"fdo61343.docx", &Test::testFdo61343},
+        {"fdo60922.docx", &Test::testFdo60922},
+        {"fdo59273.docx", &Test::testFdo59273},
         {"n592908-frame.docx", &Test::testN592908_Frame},
         {"n592908-picture.docx", &Test::testN592908_Picture},
     };
@@ -1134,6 +1138,22 @@ void Test::testFdo61343()
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
+}
+
+void Test::testFdo60922()
+{
+    // This was 0, not 100, due to wrong import of w:position w:val="0"
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(100), getProperty<sal_Int32>(getRun(getParagraph(1), 1), "CharEscapementHeight"));
+}
+
+void Test::testFdo59273()
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows(xTextTable->getRows(), uno::UNO_QUERY);
+    // Was 9997, so the 4th column had ~zero width
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(7498), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators")[2].Position);
 }
 
 void Test::testN592908_Frame()

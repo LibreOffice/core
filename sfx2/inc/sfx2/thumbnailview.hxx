@@ -179,15 +179,22 @@ public:
 
     virtual ~ThumbnailView ();
 
+    void AppendItem (ThumbnailViewItem *pItem);
+
     void RemoveItem( sal_uInt16 nItemId );
 
     void Clear();
+
+    // Change current thumbnail item list with new one (invalidates all pointers to a thumbnail item)
+    void updateItems(const std::vector<ThumbnailViewItem *> &items);
 
     size_t GetItemPos( sal_uInt16 nItemId ) const;
 
     sal_uInt16 GetItemId( size_t nPos ) const;
 
     sal_uInt16 GetItemId( const Point& rPos ) const;
+
+    sal_uInt16 getNextItemId () const;
 
     long GetItemWidth() const { return mnItemWidth; }
 
@@ -202,10 +209,9 @@ public:
 
     void SelectItem( sal_uInt16 nItemId );
 
-    sal_uInt16 GetSelectItemId() const { return mnSelItemId; }
+    void DeselectItem( sal_uInt16 nItemId );
 
-    bool IsItemSelected( sal_uInt16 nItemId ) const
-        { return nItemId == mnSelItemId; }
+    bool IsItemSelected( sal_uInt16 nItemId ) const;
 
     void deselectItem (const sal_uInt16 nItemId);
 
@@ -242,6 +248,8 @@ public:
 
 protected:
 
+    virtual void KeyInput( const KeyEvent& rKEvt );
+
     virtual void MouseButtonDown( const MouseEvent& rMEvt );
 
     virtual void MouseButtonUp( const MouseEvent& rMEvt );
@@ -257,8 +265,6 @@ protected:
     virtual void StateChanged( StateChangedType nStateChange );
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
-
-    virtual bool StartDrag( const CommandEvent& rCEvt, Region& rRegion );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
@@ -277,9 +283,8 @@ protected:
     using Control::ImplInitSettings;
     using Window::ImplInit;
 
-    void calculateColumnsRows ();
-
     void CalculateItemPositions ();
+    void MakeItemVisible( sal_uInt16 nId );
 
     SFX2_DLLPRIVATE void         ImplInit();
     SFX2_DLLPRIVATE void         ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
@@ -299,6 +304,8 @@ protected:
 protected:
 
     ValueItemList mItemList;
+    ValueItemList mFilteredItemList; ///< Cache to store the filtered items
+    ValueItemList::iterator mpStartSelRange;
     ScrollBar* mpScrBar;
     Rectangle maItemListRect;
     long mnHeaderHeight;
@@ -310,7 +317,6 @@ protected:
     long mnVisLines;
     long mnLines;
     sal_uInt16 mnScrBarOffset;
-    sal_uInt16 mnSelItemId;
     sal_uInt16 mnHighItemId;
     sal_uInt16 mnCols;
     sal_uInt16 mnFirstLine;

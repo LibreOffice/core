@@ -21,8 +21,7 @@ struct TemplateSearchViewItem : public TemplateViewItem
     virtual ~TemplateSearchViewItem ()
     {}
 
-    sal_uInt16 mnIdx;       // Template associated Index
-    sal_uInt16 mnRegionId;  // Template associated Region id
+    sal_uInt16 mnAssocId;    //Associated item id to the TemplateViews
 };
 
 #endif // __SFX2_TEMPLATESEARCHVIEWITEM_HXX__

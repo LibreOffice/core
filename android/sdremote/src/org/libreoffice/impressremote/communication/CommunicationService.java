@@ -33,7 +33,7 @@ public class CommunicationService extends Service implements Runnable {
 
     public enum State {
         DISCONNECTED, SEARCHING, CONNECTING, CONNECTED
-    };
+    }
 
     /**
      * Get the publicly visible device name -- generally the bluetooth name,

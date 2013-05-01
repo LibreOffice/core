@@ -419,6 +419,10 @@ void SvpSalFrame::UpdateSettings( AllSettings& )
 {
 }
 
+void SvpSalFrame::Beep()
+{
+}
+
 const SystemEnvData* SvpSalFrame::GetSystemData() const
 {
     return &m_aSystemChildData;

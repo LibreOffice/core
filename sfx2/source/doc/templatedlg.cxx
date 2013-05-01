@@ -35,6 +35,7 @@
 #include <tools/urlobj.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/pathoptions.hxx>
+#include <unotools/viewoptions.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/toolbox.hxx>
@@ -56,6 +57,10 @@
 #include "templatedlg.hrc"
 
 #define PADDING_DLG_BORDER      10
+
+#define TM_SETTING_MANAGER "TemplateManager"
+#define TM_SETTING_LASTFOLDER "LastFolder"
+#define TM_SETTING_FILTER "SelectedFilter"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -85,36 +90,88 @@ class SearchView_Keyword
 {
 public:
 
-    SearchView_Keyword (const OUString &rKeyword)
-        : maKeyword(rKeyword)
+    SearchView_Keyword (const OUString &rKeyword, FILTER_APPLICATION App)
+        : maKeyword(rKeyword), meApp(App)
     {}
 
     bool operator() (const TemplateItemProperties &rItem)
     {
-        return rItem.aName.matchIgnoreAsciiCase(maKeyword);
+        bool bRet = true;
+
+        INetURLObject aUrl(rItem.aPath);
+        OUString aExt = aUrl.getExtension();
+
+        if (meApp == FILTER_APP_WRITER)
+        {
+            bRet = aExt == "ott" || aExt == "stw" || aExt == "oth" || aExt == "dot" || aExt == "dotx";
+        }
+        else if (meApp == FILTER_APP_CALC)
+        {
+            bRet = aExt == "ots" || aExt == "stc" || aExt == "xlt" || aExt == "xltm" || aExt == "xltx";
+        }
+        else if (meApp == FILTER_APP_IMPRESS)
+        {
+            bRet = aExt == "otp" || aExt == "sti" || aExt == "pot" || aExt == "potm" || aExt == "potx";
+        }
+        else if (meApp == FILTER_APP_DRAW)
+        {
+            bRet = aExt == "otg" || aExt == "std";
+        }
+
+        return bRet && rItem.aName.matchIgnoreAsciiCase(maKeyword);
     }
 
 private:
 
     OUString maKeyword;
+    FILTER_APPLICATION meApp;
+};
+
+/***
+ *
+ * Order items in ascending order (useful for the selection sets and move/copy operations since the associated ids
+ * change when processed by the SfxDocumentTemplates class so we want to process to ones with higher id first)
+ *
+ ***/
+
+static bool cmpSelectionItems (const ThumbnailViewItem *pItem1, const ThumbnailViewItem *pItem2)
+{
+    return pItem1->mnId > pItem2->mnId;
+}
+
+class TemplateManagerPage : public TabPage
+{
+    private:
+        FixedText maFixedText;
+
+    public:
+        TemplateManagerPage( Window* pParent );
+        ~TemplateManagerPage( ) { };
 };
 
 SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     : ModelessDialog(parent, SfxResId(DLG_TEMPLATE_MANAGER)),
       maTabControl(this,SfxResId(TAB_CONTROL)),
-      mpToolbars( new Control(&maTabControl,SfxResId(TOOLBARS))),
-      mpSearchEdit(new Edit(this,WB_HIDE | WB_BORDER)),
-      mpViewBar( new ToolBox(mpToolbars, SfxResId(TBX_ACTION_VIEW))),
-      mpActionBar( new ToolBox(mpToolbars, SfxResId(TBX_ACTION_ACTION))),
-      mpTemplateBar( new ToolBox(mpToolbars, SfxResId(TBX_ACTION_TEMPLATES))),
-      mpSearchView(new TemplateSearchView(this)),
-      maView(new TemplateLocalView(this,SfxResId(TEMPLATE_VIEW))),
-      mpOnlineView(new TemplateRemoteView(this, WB_VSCROLL,false)),
+      maTabPage(&maTabControl, SfxResId(TAB_TEMPLATE_MANAGER)),
+      mpSearchEdit(new Edit(&maTabPage,WB_HIDE | WB_BORDER)),
+      mpViewBar( new ToolBox(&maTabPage, SfxResId(TBX_ACTION_VIEW))),
+      mpActionBar( new ToolBox(&maTabPage, SfxResId(TBX_ACTION_ACTION))),
+      mpTemplateBar( new ToolBox(&maTabPage, SfxResId(TBX_ACTION_TEMPLATES))),
+      mpSearchView(new TemplateSearchView(&maTabPage)),
+      maView(new TemplateLocalView(&maTabPage,SfxResId(TEMPLATE_VIEW))),
+      mpOnlineView(new TemplateRemoteView(&maTabPage, WB_VSCROLL,false)),
+      maSelTemplates(cmpSelectionItems),
+      maSelFolders(cmpSelectionItems),
       mbIsSaveMode(false),
       mxDesktop(comphelper::getProcessServiceFactory()->createInstance( "com.sun.star.frame.Desktop" ),uno::UNO_QUERY ),
       mbIsSynced(false),
       maRepositories()
 {
+    maTabControl.SetTabPage( FILTER_DOCS, &maTabPage );
+    maTabControl.SetTabPage( FILTER_SHEETS, &maTabPage );
+    maTabControl.SetTabPage( FILTER_PRESENTATIONS, &maTabPage );
+    maTabControl.SetTabPage( FILTER_DRAWS, &maTabPage );
+
     // Create popup menus
     mpActionMenu = new PopupMenu;
     mpActionMenu->InsertItem(MNI_ACTION_SORT_NAME,SfxResId(STR_ACTION_SORT_NAME).toString(),SfxResId(IMG_ACTION_SORT));
@@ -148,17 +205,16 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     mpSearchEdit->SetUpdateDataHdl(LINK(this,SfxTemplateManagerDlg,SearchUpdateHdl));
     mpSearchEdit->EnableUpdateData();
 
-    maView->SetStyle(WB_VSCROLL);
+    maView->SetStyle(maView->GetStyle() | WB_VSCROLL);
     maView->setItemMaxTextLength(TEMPLATE_ITEM_MAX_TEXT_LENGTH);
 
     maView->setItemDimensions(TEMPLATE_ITEM_MAX_WIDTH,TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT,
                               TEMPLATE_ITEM_MAX_HEIGHT-TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT,
                               TEMPLATE_ITEM_PADDING);
 
-    maView->setItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVFolderStateHdl));
-    maView->setOverlayItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));
-    maView->setOverlayDblClickHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
-    maView->setOverlayCloseHdl(LINK(this,SfxTemplateManagerDlg,CloseOverlayHdl));
+    maView->setItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVItemStateHdl));
+    maView->setOpenRegionHdl(LINK(this,SfxTemplateManagerDlg,OpenRegionHdl));
+    maView->setOpenTemplateHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
 
     // Set online view position and dimensions
     mpOnlineView->setItemMaxTextLength(TEMPLATE_ITEM_MAX_TEXT_LENGTH);
@@ -167,17 +223,17 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
                                     TEMPLATE_ITEM_MAX_HEIGHT-TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT,
                                     TEMPLATE_ITEM_PADDING);
 
-    mpOnlineView->setOverlayItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));
-    mpOnlineView->setOverlayDblClickHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
-    mpOnlineView->setOverlayCloseHdl(LINK(this,SfxTemplateManagerDlg,CloseOverlayHdl));
+    mpOnlineView->setItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVItemStateHdl));
+    mpOnlineView->setOpenRegionHdl(LINK(this,SfxTemplateManagerDlg,OpenRegionHdl));
+    mpOnlineView->setOpenTemplateHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
 
     mpSearchView->setItemMaxTextLength(TEMPLATE_ITEM_MAX_TEXT_LENGTH);
 
     mpSearchView->setItemDimensions(TEMPLATE_ITEM_MAX_WIDTH,TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT,
-                                    TEMPLATE_ITEM_MAX_HEIGHT-TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT,
+                                    TEMPLATE_ITEM_MAX_HEIGHT_SUB-TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT,
                                     TEMPLATE_ITEM_PADDING);
 
-    mpSearchView->setItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));
+    mpSearchView->setItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVItemStateHdl));
 
     maTabControl.SetActivatePageHdl(LINK(this,SfxTemplateManagerDlg,ActivatePageHdl));
 
@@ -187,6 +243,8 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
         sal_uInt16 nPos = mpViewBar->GetItemId(TBI_TEMPLATE_REPOSITORY);
         mpViewBar->RemoveItem(nPos);
     }
+
+    SetMinOutputSizePixel(GetOutputSizePixel());
 
     mpViewBar->Show();
     mpActionBar->Show();
@@ -199,19 +257,34 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     createDefaultTemplateMenu();
 
     maView->Populate();
-    maView->Show();
+    mpCurView->filterItems(ViewFilter_Application(FILTER_APP_WRITER));
 
-    mpCurView->filterTemplatesByApp(FILTER_APP_WRITER);
+    readSettings();
+
+    maView->Show();
 
     FreeResource();
 }
 
 SfxTemplateManagerDlg::~SfxTemplateManagerDlg ()
 {
+    writeSettings();
+
     // Synchronize the config before deleting it
     syncRepositories();
     for (size_t i = 0, n = maRepositories.size(); i < n; ++i)
         delete maRepositories[i];
+
+    // Ignore view events since we are cleaning the object
+    maView->setItemStateHdl(Link());
+    maView->setOpenRegionHdl(Link());
+    maView->setOpenTemplateHdl(Link());
+
+    mpOnlineView->setItemStateHdl(Link());
+    mpOnlineView->setOpenRegionHdl(Link());
+    mpOnlineView->setOpenTemplateHdl(Link());
+
+    mpSearchView->setItemStateHdl(Link());
 
     delete mpSearchEdit;
     delete mpViewBar;
@@ -223,20 +296,27 @@ SfxTemplateManagerDlg::~SfxTemplateManagerDlg ()
     delete mpTemplateDefaultMenu;
     delete mpActionMenu;
     delete mpRepositoryMenu;
-    delete mpToolbars;
 }
 
 void SfxTemplateManagerDlg::setSaveMode(bool bMode)
 {
     mbIsSaveMode = bMode;
     maTabControl.Clear();
-    mpCurView->filterTemplatesByApp(FILTER_APP_NONE);
+    mpCurView->filterItems(ViewFilter_Application(FILTER_APP_NONE));
 
     if (bMode)
     {
         mpViewBar->ShowItem(TBI_TEMPLATE_SAVE);
         mpViewBar->HideItem(TBI_TEMPLATE_IMPORT);
         mpViewBar->HideItem(TBI_TEMPLATE_REPOSITORY);
+
+        mpTemplateBar->ShowItem(TBI_TEMPLATE_SAVE);
+        mpTemplateBar->ShowItem(TBI_TEMPLATE_PROPERTIES);
+        mpTemplateBar->ShowItem(TBI_TEMPLATE_DEFAULT);
+        mpTemplateBar->HideItem(TBI_TEMPLATE_EDIT);
+        mpTemplateBar->HideItem(TBI_TEMPLATE_MOVE);
+        mpTemplateBar->HideItem(TBI_TEMPLATE_EXPORT);
+        mpTemplateBar->HideItem(TBI_TEMPLATE_DELETE);
     }
     else
     {
@@ -269,46 +349,103 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg,ActivatePageHdl)
             eFilter = FILTER_APP_DRAW;
             break;
     }
-    mpCurView->filterTemplatesByApp(eFilter);
+    mpCurView->filterItems(ViewFilter_Application(eFilter));
+
+    if (mpSearchView->IsVisible())
+        SearchUpdateHdl(NULL);
+
     return 0;
 }
 
-void SfxTemplateManagerDlg::MouseButtonDown( const MouseEvent& rMEvt )
+void SfxTemplateManagerDlg::readSettings ()
 {
-    if (!maView->GetActiveClipRegion().IsInside(rMEvt.GetPosPixel()) && maView->isOverlayVisible())
-    {
-        maSelTemplates.clear();
-        mpTemplateBar->Hide();
-        mpViewBar->Show();
+    OUString aLastFolder;
+    sal_uInt16 nPageId = FILTER_DOCS;
+    SvtViewOptions aViewSettings( E_DIALOG, TM_SETTING_MANAGER );
 
-        maView->showOverlay(false);
+    if ( aViewSettings.Exists() )
+    {
+        sal_uInt16 nFilter = 0;
+        aViewSettings.GetUserItem(TM_SETTING_LASTFOLDER) >>= aLastFolder;
+        aViewSettings.GetUserItem(TM_SETTING_FILTER) >>= nFilter;
+
+        switch (nFilter)
+        {
+            case FILTER_APP_WRITER:
+                nPageId = FILTER_DOCS;
+                break;
+            case FILTER_APP_IMPRESS:
+                nPageId = FILTER_PRESENTATIONS;
+                break;
+            case FILTER_APP_CALC:
+                nPageId = FILTER_SHEETS;
+                break;
+            case FILTER_APP_DRAW:
+                nPageId = FILTER_DRAWS;
+                break;
+        }
     }
+
+    if (!aLastFolder.getLength())
+        maView->showRootRegion();
+    else
+        maView->showRegion(aLastFolder);
+
+    maTabControl.SelectTabPage(nPageId);
+}
+
+void SfxTemplateManagerDlg::writeSettings ()
+{
+    Sequence< NamedValue > aSettings(2);
+
+    OUString aLastFolder;
+
+    if (mpCurView == maView && maView->getCurRegionId())
+        aLastFolder = maView->getRegionName(maView->getCurRegionId()-1);
+
+    // last folder
+    aSettings[0].Name = TM_SETTING_LASTFOLDER;
+    aSettings[0].Value  <<= aLastFolder;
+
+    sal_uInt16 nFilter = FILTER_APP_WRITER;
+    switch (maTabControl.GetCurPageId())
+    {
+        case FILTER_DOCS:
+            nFilter = FILTER_APP_WRITER;
+            break;
+        case FILTER_PRESENTATIONS:
+            nFilter = FILTER_APP_IMPRESS;
+            break;
+        case FILTER_SHEETS:
+            nFilter = FILTER_APP_CALC;
+            break;
+        case FILTER_DRAWS:
+            nFilter = FILTER_APP_DRAW;
+            break;
+    }
+
+    aSettings[1].Name = TM_SETTING_FILTER;
+    aSettings[1].Value <<= nFilter;
+
+    // write
+    SvtViewOptions aViewSettings( E_DIALOG, TM_SETTING_MANAGER );
+    aViewSettings.SetUserData( aSettings );
 }
 
 void SfxTemplateManagerDlg::Resize()
 {
-    Size aWinSize = GetSizePixel();
-
     // Fit the tab page control and the toolbars
-    Size aTabSize = maTabControl.GetSizePixel();
-    aTabSize.setWidth(aWinSize.getWidth());
-    maTabControl.SetSizePixel(aTabSize);
-    Size aTabPageSize = maTabControl.GetTabPageSizePixel();
-    Point aToolbarsPos(0, aTabSize.getHeight() - aTabPageSize.getHeight());
-    mpToolbars->SetPosPixel(aToolbarsPos);
-    aTabPageSize.setHeight(mpToolbars->GetSizePixel().getHeight() + 3);
-    maTabControl.SetTabPageSizePixel(aTabPageSize);
-
-    Size aToolbarsSize = mpToolbars->GetSizePixel();
-    aToolbarsSize.setWidth(aWinSize.getWidth());
-    mpToolbars->SetSizePixel(aToolbarsSize);
+    maTabControl.SetSizePixel(GetSizePixel());
+    const Size aWinSize = maTabControl.GetTabPageSizePixel();
 
     // Calculate toolboxes size and positions
     Size aViewSize = mpViewBar->CalcMinimumWindowSizePixel();
     Size aActionSize = mpActionBar->CalcMinimumWindowSizePixel();
     Size aTemplateSize = mpTemplateBar->CalcMinimumWindowSizePixel();
 
-    aActionSize.setWidth(3*aActionSize.getWidth());
+    long nToolbarsHeight = std::max(std::max(aViewSize.getHeight(), aActionSize.getHeight()), aTemplateSize.getHeight());
+
+    aActionSize.setWidth(2.5*aActionSize.getWidth());
     aViewSize.setWidth(aWinSize.getWidth()-aActionSize.getWidth()-mpViewBar->GetPosPixel().X());
     aTemplateSize.setWidth(aWinSize.getWidth());
 
@@ -319,15 +456,9 @@ void SfxTemplateManagerDlg::Resize()
     mpActionBar->SetPosSizePixel(aActionPos,aActionSize);
     mpTemplateBar->SetSizePixel(aTemplateSize);
 
-    // Set view position below toolbox
     Point aViewPos = maView->GetPosPixel();
-    aViewPos.setY(maTabControl.GetPosPixel().Y() + maTabControl.GetSizePixel().getHeight());
+    aViewPos.setY(nToolbarsHeight);
     aViewPos.setX(0);
-    Size aThumbSize(aWinSize.getWidth(), aWinSize.getHeight() - aViewPos.getY());
-    maView->SetPosSizePixel(aViewPos, aThumbSize);
-
-    if (aWinSize.getHeight() < aViewPos.getY() + aThumbSize.getHeight() + PADDING_DLG_BORDER)
-        aWinSize.setHeight(aViewPos.getY() + aThumbSize.getHeight() + PADDING_DLG_BORDER);
 
     // Set search box position and size
     Size aSearchSize = mpSearchEdit->CalcMinimumSize();
@@ -336,28 +467,17 @@ void SfxTemplateManagerDlg::Resize()
     mpSearchEdit->SetSizePixel(aSearchSize);
     mpSearchEdit->SetPosPixel(Point(PADDING_DLG_BORDER,aViewPos.Y()));
 
-    maView->SetSizePixel(aThumbSize);
-    mpOnlineView->SetPosSizePixel(aViewPos,aThumbSize);
-    mpSearchView->SetSizePixel(aThumbSize);
+    if (mpSearchEdit->IsVisible())
+        aViewPos.setY(aViewPos.getY() + mpSearchEdit->GetSizePixel().getHeight() );
 
-    mpCurView->Resize();
+    // Set view position below toolbox and search box
+    Size aThumbSize(aWinSize.getWidth(), aWinSize.getHeight() - aViewPos.getY());
+
+    maView->SetPosSizePixel(aViewPos,aThumbSize);
+    mpOnlineView->SetPosSizePixel(aViewPos,aThumbSize);
+    mpSearchView->SetPosSizePixel(aViewPos,aThumbSize);
 
     ModelessDialog::Resize();
-}
-
-IMPL_LINK_NOARG(SfxTemplateManagerDlg, CloseOverlayHdl)
-{
-    maSelTemplates.clear();
-    mpTemplateBar->Hide();
-    mpViewBar->Show();
-    mpActionBar->Show();
-
-    if (mpCurView == maView)
-        mpCurView->showOverlay(false);
-    else
-        switchMainView(true);
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg,TBXViewHdl)
@@ -485,79 +605,14 @@ IMPL_LINK(SfxTemplateManagerDlg, TBXDropdownHdl, ToolBox*, pBox)
     return 0;
 }
 
-IMPL_LINK(SfxTemplateManagerDlg, TVFolderStateHdl, const ThumbnailViewItem*, pItem)
+IMPL_LINK(SfxTemplateManagerDlg, TVItemStateHdl, const ThumbnailViewItem*, pItem)
 {
-    if (pItem->isSelected())
-    {
-        if (maSelFolders.empty() && !mbIsSaveMode)
-        {
-            mpViewBar->ShowItem(TBI_TEMPLATE_IMPORT);
-            mpViewBar->ShowItem(TBI_TEMPLATE_FOLDER_DEL);
-        }
+    const TemplateContainerItem *pCntItem = dynamic_cast<const TemplateContainerItem*>(pItem);
 
-        maSelFolders.insert(pItem);
-    }
+    if (pCntItem)
+        OnRegionState(pItem);
     else
-    {
-        maSelFolders.erase(pItem);
-
-        if (maSelFolders.empty() && !mbIsSaveMode)
-        {
-            mpViewBar->HideItem(TBI_TEMPLATE_IMPORT);
-            mpViewBar->HideItem(TBI_TEMPLATE_FOLDER_DEL);
-        }
-    }
-
-    return 0;
-}
-
-IMPL_LINK(SfxTemplateManagerDlg, TVTemplateStateHdl, const ThumbnailViewItem*, pItem)
-{
-    bool bInSelection = maSelTemplates.find(pItem) != maSelTemplates.end();
-    if (pItem->isSelected())
-    {
-        if (!mbIsSaveMode)
-        {
-            if (maSelTemplates.empty())
-            {
-                mpViewBar->Show(false);
-                mpActionBar->Show(false);
-                mpTemplateBar->Show();
-            }
-            else if (maSelTemplates.size() != 1 || !bInSelection)
-            {
-                mpTemplateBar->HideItem(TBI_TEMPLATE_EDIT);
-                mpTemplateBar->HideItem(TBI_TEMPLATE_PROPERTIES);
-                mpTemplateBar->HideItem(TBI_TEMPLATE_DEFAULT);
-            }
-        }
-
-        if (!bInSelection)
-            maSelTemplates.insert(pItem);
-    }
-    else
-    {
-        if (bInSelection)
-        {
-            maSelTemplates.erase(pItem);
-
-            if (!mbIsSaveMode)
-            {
-                if (maSelTemplates.empty())
-                {
-                    mpTemplateBar->Show(false);
-                    mpViewBar->Show();
-                    mpActionBar->Show();
-                }
-                else if (maSelTemplates.size() == 1)
-                {
-                    mpTemplateBar->ShowItem(TBI_TEMPLATE_EDIT);
-                    mpTemplateBar->ShowItem(TBI_TEMPLATE_PROPERTIES);
-                    mpTemplateBar->ShowItem(TBI_TEMPLATE_DEFAULT);
-                }
-            }
-        }
-    }
+        OnTemplateState(pItem);
 
     return 0;
 }
@@ -569,10 +624,7 @@ IMPL_LINK(SfxTemplateManagerDlg, MenuSelectHdl, Menu*, pMenu)
     switch(nMenuId)
     {
     case MNI_ACTION_SORT_NAME:
-        if (maView->isOverlayVisible())
-            maView->sortOverlayItems(SortView_Name());
-        else
-            maView->sortItems(SortView_Name());
+        maView->sortItems(SortView_Name());
         break;
     case MNI_ACTION_REFRESH:
         mpCurView->reload();
@@ -651,10 +703,7 @@ IMPL_LINK(SfxTemplateManagerDlg, RepositoryMenuSelectHdl, Menu*, pMenu)
         }
 
         if (mpOnlineView->loadRepository(pRepository,false))
-        {
             switchMainView(false);
-            mpOnlineView->showOverlay(true);
-        }
     }
 
     return 0;
@@ -668,6 +717,21 @@ IMPL_LINK(SfxTemplateManagerDlg, DefaultTemplateMenuSelectHdl, Menu*, pMenu)
     SfxObjectFactory::SetStandardTemplate( aServiceName, OUString() );
 
     createDefaultTemplateMenu();
+
+    return 0;
+}
+
+IMPL_LINK_NOARG(SfxTemplateManagerDlg, OpenRegionHdl)
+{
+    maSelFolders.clear();
+    maSelTemplates.clear();
+
+    if (!mbIsSaveMode)
+        mpViewBar->ShowItem(TBI_TEMPLATE_IMPORT,mpCurView->isImportAllowed());
+
+    mpTemplateBar->Hide();
+    mpViewBar->Show();
+    mpActionBar->Show();
 
     return 0;
 }
@@ -702,59 +766,152 @@ IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem)
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg, SearchUpdateHdl)
 {
-    // if the search view is hidden, hide the folder view and display search one
-    if (!mpCurView->isOverlayVisible() && !mpSearchView->IsVisible())
-    {
-        mpSearchView->Clear();
-        mpSearchView->Show();
-        mpCurView->Hide();
-    }
-
     OUString aKeyword = mpSearchEdit->GetText();
 
     if (!aKeyword.isEmpty())
     {
-        if (mpCurView->isOverlayVisible())
+        mpSearchView->Clear();
+
+        // if the search view is hidden, hide the folder view and display search one
+        if (!mpSearchView->IsVisible())
         {
-            mpCurView->filterTemplatesByKeyword(aKeyword);
+            mpCurView->deselectItems();
+            mpSearchView->Show();
+            mpCurView->Hide();
         }
-        else
+
+        bool bDisplayFolder = !mpCurView->isNonRootRegionVisible();
+
+        FILTER_APPLICATION eFilter = FILTER_APP_NONE;
+        switch (maTabControl.GetCurPageId())
         {
-            mpSearchView->Clear();
-
-            std::vector<TemplateItemProperties> aItems =
-                    maView->getFilteredItems(SearchView_Keyword(aKeyword));
-
-            size_t nCounter = 0;
-            for (size_t i = 0; i < aItems.size(); ++i)
-            {
-                TemplateItemProperties *pItem = &aItems[i];
-
-                mpSearchView->AppendItem(++nCounter,pItem->nRegionId,
-                                         pItem->nId-1,
-                                         pItem->aName,
-                                         maView->GetItemText(pItem->nRegionId+1),
-                                         pItem->aPath,
-                                         pItem->aThumbnail);
-            }
-
-            mpSearchView->Invalidate();
+            case FILTER_DOCS:
+                eFilter = FILTER_APP_WRITER;
+                break;
+            case FILTER_PRESENTATIONS:
+                eFilter = FILTER_APP_IMPRESS;
+                break;
+            case FILTER_SHEETS:
+                eFilter = FILTER_APP_CALC;
+                break;
+            case FILTER_DRAWS:
+                eFilter = FILTER_APP_DRAW;
+                break;
         }
+
+        std::vector<TemplateItemProperties> aItems =
+                maView->getFilteredItems(SearchView_Keyword(aKeyword,eFilter));
+
+        for (size_t i = 0; i < aItems.size(); ++i)
+        {
+            TemplateItemProperties *pItem = &aItems[i];
+
+            OUString aFolderName;
+
+            if (bDisplayFolder)
+                aFolderName = maView->getRegionName(pItem->nRegionId);
+
+            mpSearchView->AppendItem(pItem->nId,maView->getRegionId(pItem->nRegionId),
+                                     pItem->nDocId,
+                                     pItem->aName,
+                                     aFolderName,
+                                     pItem->aPath,
+                                     pItem->aThumbnail);
+        }
+
+        mpSearchView->Invalidate();
     }
     else
     {
-        if (mpCurView->isOverlayVisible())
-        {
-            mpCurView->filterTemplatesByApp(FILTER_APP_NONE);
-        }
-        else
-        {
-            mpSearchView->Hide();
-            mpCurView->Show();
-        }
+        mpSearchView->Hide();
+        mpCurView->Show();
     }
 
     return 0;
+}
+
+void SfxTemplateManagerDlg::OnRegionState (const ThumbnailViewItem *pItem)
+{
+    if (pItem->isSelected())
+    {
+        if (maSelFolders.empty() && !mbIsSaveMode)
+        {
+            mpViewBar->ShowItem(TBI_TEMPLATE_IMPORT);
+            mpViewBar->ShowItem(TBI_TEMPLATE_FOLDER_DEL);
+        }
+
+        maSelFolders.insert(pItem);
+    }
+    else
+    {
+        maSelFolders.erase(pItem);
+
+        if (maSelFolders.empty() && !mbIsSaveMode)
+        {
+            mpViewBar->HideItem(TBI_TEMPLATE_IMPORT);
+            mpViewBar->HideItem(TBI_TEMPLATE_FOLDER_DEL);
+        }
+    }
+}
+
+void SfxTemplateManagerDlg::OnTemplateState (const ThumbnailViewItem *pItem)
+{
+    bool bInSelection = maSelTemplates.find(pItem) != maSelTemplates.end();
+
+    if (pItem->isSelected())
+    {
+        if (maSelTemplates.empty())
+        {
+            mpViewBar->Show(false);
+            mpTemplateBar->Show();
+        }
+        else if (maSelTemplates.size() != 1 || !bInSelection)
+        {
+            if (!mbIsSaveMode)
+            {
+                mpTemplateBar->HideItem(TBI_TEMPLATE_EDIT);
+                mpTemplateBar->HideItem(TBI_TEMPLATE_PROPERTIES);
+                mpTemplateBar->HideItem(TBI_TEMPLATE_DEFAULT);
+            }
+            else
+            {
+                mpTemplateBar->HideItem(TBI_TEMPLATE_SAVE);
+                mpTemplateBar->HideItem(TBI_TEMPLATE_PROPERTIES);
+                mpTemplateBar->HideItem(TBI_TEMPLATE_DEFAULT);
+            }
+        }
+
+        if (!bInSelection)
+            maSelTemplates.insert(pItem);
+    }
+    else
+    {
+        if (bInSelection)
+        {
+            maSelTemplates.erase(pItem);
+
+            if (maSelTemplates.empty())
+            {
+                mpTemplateBar->Show(false);
+                mpViewBar->Show();
+            }
+            else if (maSelTemplates.size() == 1)
+            {
+                if (!mbIsSaveMode)
+                {
+                    mpTemplateBar->ShowItem(TBI_TEMPLATE_EDIT);
+                    mpTemplateBar->ShowItem(TBI_TEMPLATE_PROPERTIES);
+                    mpTemplateBar->ShowItem(TBI_TEMPLATE_DEFAULT);
+                }
+                else
+                {
+                    mpTemplateBar->ShowItem(TBI_TEMPLATE_SAVE);
+                    mpTemplateBar->ShowItem(TBI_TEMPLATE_PROPERTIES);
+                    mpTemplateBar->ShowItem(TBI_TEMPLATE_DEFAULT);
+                }
+            }
+        }
+    }
 }
 
 void SfxTemplateManagerDlg::OnTemplateImport ()
@@ -821,15 +978,41 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
 
         if (aFiles.hasElements())
         {
-            std::set<const ThumbnailViewItem*>::const_iterator pIter;
-            for (pIter = maSelFolders.begin(); pIter != maSelFolders.end(); ++pIter)
+            if (!maSelFolders.empty())
             {
-                OUString aTemplateList;
-                TemplateContainerItem *pFolder = (TemplateContainerItem*)(*pIter);
+                //Import to the selected regions
+                std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
+                for (pIter = maSelFolders.begin(); pIter != maSelFolders.end(); ++pIter)
+                {
+                    OUString aTemplateList;
+                    TemplateContainerItem *pFolder = (TemplateContainerItem*)(*pIter);
 
+                    for (size_t i = 0, n = aFiles.getLength(); i < n; ++i)
+                    {
+                        if(!maView->copyFrom(pFolder,aFiles[i]))
+                        {
+                            if (aTemplateList.isEmpty())
+                                aTemplateList = aFiles[i];
+                            else
+                                aTemplateList = aTemplateList + "\n" + aFiles[i];
+                        }
+                    }
+
+                    if (!aTemplateList.isEmpty())
+                    {
+                        OUString aMsg(SfxResId(STR_MSG_ERROR_IMPORT).toString());
+                        aMsg = aMsg.replaceFirst("$1",pFolder->maTitle);
+                        ErrorBox(this,WB_OK,aMsg.replaceFirst("$2",aTemplateList));
+                    }
+                }
+            }
+            else
+            {
+                //Import to current region
+                OUString aTemplateList;
                 for (size_t i = 0, n = aFiles.getLength(); i < n; ++i)
                 {
-                    if(!maView->copyFrom(pFolder,aFiles[i]))
+                    if(!maView->copyFrom(aFiles[i]))
                     {
                         if (aTemplateList.isEmpty())
                             aTemplateList = aFiles[i];
@@ -841,7 +1024,7 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
                 if (!aTemplateList.isEmpty())
                 {
                     OUString aMsg(SfxResId(STR_MSG_ERROR_IMPORT).toString());
-                    aMsg = aMsg.replaceFirst("$1",pFolder->maTitle);
+                    aMsg = aMsg.replaceFirst("$1",maView->getCurRegionName());
                     ErrorBox(this,WB_OK,aMsg.replaceFirst("$2",aTemplateList));
                 }
             }
@@ -870,7 +1053,7 @@ void SfxTemplateManagerDlg::OnTemplateExport()
         {
             sal_uInt16 i = 1;
 
-            std::set<const ThumbnailViewItem*>::const_iterator pIter = maSelTemplates.begin();
+            std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter = maSelTemplates.begin();
             for (pIter = maSelTemplates.begin(); pIter != maSelTemplates.end(); ++pIter, ++i)
             {
                 const TemplateSearchViewItem *pItem = static_cast<const TemplateSearchViewItem*>(*pIter);
@@ -884,7 +1067,7 @@ void SfxTemplateManagerDlg::OnTemplateExport()
 
                 OUString aPath = aPathObj.GetMainURL( INetURLObject::NO_DECODE );
 
-                if (!maView->exportTo(pItem->mnIdx+1,pItem->mnRegionId+1,aPath))
+                if (!maView->exportTo(pItem->mnAssocId,pItem->mnRegionId,aPath))
                 {
                     if (aTemplateList.isEmpty())
                         aTemplateList = pItem->maTitle;
@@ -897,12 +1080,12 @@ void SfxTemplateManagerDlg::OnTemplateExport()
         }
         else
         {
-            // export templates from the current open overlay
+            // export templates from the current view
 
             sal_uInt16 i = 1;
-            sal_uInt16 nRegionItemId = maView->getOverlayRegionId() + 1;
+            sal_uInt16 nRegionItemId = maView->getCurRegionItemId();
 
-            std::set<const ThumbnailViewItem*>::const_iterator pIter = maSelTemplates.begin();
+            std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter = maSelTemplates.begin();
             for (pIter = maSelTemplates.begin(); pIter != maSelTemplates.end(); ++pIter, ++i)
             {
                 const TemplateViewItem *pItem = static_cast<const TemplateViewItem*>(*pIter);
@@ -925,7 +1108,7 @@ void SfxTemplateManagerDlg::OnTemplateExport()
                 }
             }
 
-            maView->deselectOverlayItems();
+            maView->deselectItems();
         }
 
         if (!aTemplateList.isEmpty())
@@ -964,6 +1147,7 @@ void SfxTemplateManagerDlg::OnTemplateSearch ()
     // Hide search view
     if (bVisible)
     {
+        mpSearchView->deselectItems();
         mpSearchView->Hide();
         mpCurView->Show();
     }
@@ -974,8 +1158,8 @@ void SfxTemplateManagerDlg::OnTemplateSearch ()
         mpSearchEdit->GrabFocus();
 
     // display all templates if we hide the search bar
-    if (bVisible && mpCurView->isOverlayVisible())
-        mpCurView->filterTemplatesByApp(FILTER_APP_NONE);
+    if (bVisible && mpCurView->isNonRootRegionVisible())
+        mpCurView->filterItems(ViewFilter_Application(FILTER_APP_NONE));
 }
 
 void SfxTemplateManagerDlg::OnTemplateEdit ()
@@ -989,7 +1173,7 @@ void SfxTemplateManagerDlg::OnTemplateEdit ()
     aArgs[2].Value <<= UpdateDocMode::ACCORDING_TO_CONFIG;
 
     uno::Reference< XStorable > xStorable;
-    std::set<const ThumbnailViewItem*>::const_iterator pIter;
+    std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
     for (pIter = maSelTemplates.begin(); pIter != maSelTemplates.end(); ++pIter)
     {
         const TemplateViewItem *pItem = static_cast<const TemplateViewItem*>(*pIter);
@@ -1023,62 +1207,40 @@ void SfxTemplateManagerDlg::OnTemplateDelete ()
 
     if (mpSearchView->IsVisible())
     {
-        std::set<const ThumbnailViewItem*>::const_iterator pIter;
-        for (pIter = maSelTemplates.begin(); pIter != maSelTemplates.end();)
+        std::set<const ThumbnailViewItem*,selection_cmp_fn> aSelTemplates = maSelTemplates; //Avoids invalid iterators
+
+        std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
+        for (pIter = aSelTemplates.begin(); pIter != aSelTemplates.end(); ++pIter)
         {
             const TemplateSearchViewItem *pItem =
                     static_cast<const TemplateSearchViewItem*>(*pIter);
 
-            sal_uInt16 nItemId = pItem->mnIdx + 1;
-            sal_uInt16 nItemRegionId = pItem->mnRegionId + 1;
-
-            if (maView->removeTemplate(nItemId,nItemRegionId))
-                maSelTemplates.erase(pIter++);
-            else
+            if (!maView->removeTemplate(pItem->mnAssocId,pItem->mnRegionId))
             {
                 if (aTemplateList.isEmpty())
                     aTemplateList = pItem->maTitle;
                 else
                     aTemplateList = aTemplateList + "\n" + pItem->maTitle;
-
-                ++pIter;
             }
+            else
+                mpSearchView->RemoveItem(pItem->mnId);
         }
-
-        // Update search results
-        if (maSelTemplates.empty())
-        {
-            mpTemplateBar->Show(false);
-            mpViewBar->Show();
-            mpActionBar->Show();
-        }
-
-        SearchUpdateHdl(mpSearchEdit);
     }
     else
     {
-        std::set<const ThumbnailViewItem*>::const_iterator pIter;
-        for (pIter = maSelTemplates.begin(); pIter != maSelTemplates.end();)
+        sal_uInt16 nRegionItemId = maView->getCurRegionItemId();
+        std::set<const ThumbnailViewItem*,selection_cmp_fn> aSelTemplates = maSelTemplates;  //Avoid invalid iterators
+
+        std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
+        for (pIter = aSelTemplates.begin(); pIter != aSelTemplates.end(); ++pIter)
         {
-            if (maView->removeTemplate((*pIter)->mnId,maView->getOverlayRegionId()+1))
-                maSelTemplates.erase(pIter++);
-            else
+            if (!maView->removeTemplate((*pIter)->mnId,nRegionItemId))
             {
                 if (aTemplateList.isEmpty())
                     aTemplateList = (*pIter)->maTitle;
                 else
                     aTemplateList = aTemplateList + "\n" + (*pIter)->maTitle;
-
-                ++pIter;
             }
-        }
-
-        if (maSelTemplates.empty())
-        {
-            mpTemplateBar->SetItemDown(TBI_TEMPLATE_DELETE,false);
-            mpTemplateBar->Show(false);
-            mpViewBar->Show();
-            mpActionBar->Show();
         }
     }
 
@@ -1114,12 +1276,12 @@ void SfxTemplateManagerDlg::OnFolderDelete()
 
     OUString aFolderList;
 
-    std::set<const ThumbnailViewItem*>::const_iterator pIter;
-    for (pIter = maSelFolders.begin(); pIter != maSelFolders.end();)
+    std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
+    std::set<const ThumbnailViewItem*,selection_cmp_fn> aSelFolders = maSelFolders; //Copy to avoid invalidating an iterator
+
+    for (pIter = aSelFolders.begin(); pIter != aSelFolders.end(); ++pIter)
     {
-        if (maView->removeRegion((*pIter)->mnId))
-            maSelFolders.erase(pIter++);
-        else
+        if (!maView->removeRegion((*pIter)->mnId))
         {
             if (aFolderList.isEmpty())
                 aFolderList = (*pIter)->maTitle;
@@ -1128,12 +1290,6 @@ void SfxTemplateManagerDlg::OnFolderDelete()
 
             ++pIter;
         }
-    }
-
-    if (maSelFolders.empty())
-    {
-        mpViewBar->HideItem(TBI_TEMPLATE_IMPORT);
-        mpViewBar->HideItem(TBI_TEMPLATE_FOLDER_DEL);
     }
 
     if (!aFolderList.isEmpty())
@@ -1145,9 +1301,9 @@ void SfxTemplateManagerDlg::OnFolderDelete()
 
 void SfxTemplateManagerDlg::OnRepositoryDelete()
 {
-    if(deleteRepository(mpOnlineView->getOverlayRegionId()))
+    if(deleteRepository(mpOnlineView->getCurRegionId()))
     {
-        // close overlay and switch to local view
+        // switch to local view
         switchMainView(true);
 
         createRepositoryMenu();
@@ -1158,7 +1314,7 @@ void SfxTemplateManagerDlg::OnTemplateSaveAs()
 {
     assert(m_xModel.is());
 
-    if (!maView->isOverlayVisible() && maSelFolders.empty())
+    if (!maView->isNonRootRegionVisible() && maSelFolders.empty())
     {
         ErrorBox(this, WB_OK,SfxResId(STR_MSG_ERROR_SELECT_FOLDER).toString()).Execute();
         return;
@@ -1176,25 +1332,25 @@ void SfxTemplateManagerDlg::OnTemplateSaveAs()
             OUString aQMsg(SfxResId(STR_QMSG_TEMPLATE_OVERWRITE).toString());
             QueryBox aQueryDlg(this,WB_YES_NO | WB_DEF_YES, OUString());
 
-            if (maView->isOverlayVisible())
+            if (maView->isNonRootRegionVisible())
             {
-                sal_uInt16 nRegionItemId = maView->getOverlayRegionId()+1;
+                sal_uInt16 nRegionItemId = maView->getRegionId(maView->getCurRegionId()-1);
 
                 if (!maView->isTemplateNameUnique(nRegionItemId,aName))
                 {
                     aQMsg = aQMsg.replaceFirst("$1",aName);
-                    aQueryDlg.SetMessText(aQMsg.replaceFirst("$2",maView->getOverlayName()));
+                    aQueryDlg.SetMessText(aQMsg.replaceFirst("$2",maView->getCurRegionName()));
 
                     if (aQueryDlg.Execute() == RET_NO)
                         return;
                 }
 
                 if (!maView->saveTemplateAs(nRegionItemId,m_xModel,aName))
-                    aFolderList = maView->getOverlayName();
+                    aFolderList = maView->getCurRegionName();
             }
             else
             {
-                std::set<const ThumbnailViewItem*>::const_iterator pIter;
+                std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
                 for (pIter = maSelFolders.begin(); pIter != maSelFolders.end(); ++pIter)
                 {
                     TemplateContainerItem *pItem = (TemplateContainerItem*)(*pIter);
@@ -1217,8 +1373,6 @@ void SfxTemplateManagerDlg::OnTemplateSaveAs()
                     }
                 }
             }
-
-            maView->reload();
 
             if (!aFolderList.isEmpty())
             {
@@ -1315,20 +1469,19 @@ void SfxTemplateManagerDlg::localMoveTo(sal_uInt16 nMenuId)
     }
     else
     {
-        nItemId = maView->GetItemId(nMenuId-MNI_MOVE_FOLDER_BASE);
+        nItemId = maView->getRegionId(nMenuId-MNI_MOVE_FOLDER_BASE);
     }
 
     if (nItemId)
     {
         // Move templates to desired folder if for some reason move fails
         // try copying them.
-        if (!maView->moveTemplates(maSelTemplates,nItemId,false) &&
-                !maView->moveTemplates(maSelTemplates,nItemId,true))
+        if (!maView->moveTemplates(maSelTemplates,nItemId))
         {
             OUString aTemplateList;
 
-            std::set<const ThumbnailViewItem*>::const_iterator pIter;
-            for (pIter = maSelFolders.begin(); pIter != maSelFolders.end(); ++pIter)
+            std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
+            for (pIter = maSelTemplates.begin(); pIter != maSelTemplates.end(); ++pIter)
             {
                 if (aTemplateList.isEmpty())
                     aTemplateList = (*pIter)->maTitle;
@@ -1336,7 +1489,7 @@ void SfxTemplateManagerDlg::localMoveTo(sal_uInt16 nMenuId)
                     aTemplateList = aTemplateList + "\n" + (*pIter)->maTitle;
             }
 
-            OUString aDst = maView->GetItemText(nItemId);
+            OUString aDst = maView->getRegionItemName(nItemId);
             OUString aMsg(SfxResId(STR_MSG_ERROR_LOCAL_MOVE).toString());
             aMsg = aMsg.replaceFirst("$1",aDst);
             ErrorBox(this, WB_OK,aMsg.replaceFirst( "$2",aTemplateList)).Execute();
@@ -1364,14 +1517,14 @@ void SfxTemplateManagerDlg::remoteMoveTo(const sal_uInt16 nMenuId)
     }
     else
     {
-        nItemId = maView->GetItemId(nMenuId-MNI_MOVE_FOLDER_BASE);
+        nItemId = maView->getRegionId(nMenuId-MNI_MOVE_FOLDER_BASE);
     }
 
     if (nItemId)
     {
         OUString aTemplateList;
 
-        std::set<const ThumbnailViewItem*>::const_iterator aIter;
+        std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator aIter;
         for (aIter = maSelTemplates.begin(); aIter != maSelTemplates.end(); ++aIter)
         {
             const TemplateSearchViewItem *pItem =
@@ -1391,8 +1544,8 @@ void SfxTemplateManagerDlg::remoteMoveTo(const sal_uInt16 nMenuId)
         if (!aTemplateList.isEmpty())
         {
             OUString aMsg(SfxResId(STR_MSG_ERROR_REMOTE_MOVE).toString());
-            aMsg = aMsg.replaceFirst("$1",mpOnlineView->getOverlayName());
-            aMsg = aMsg.replaceFirst("$2",maView->GetItemText(nItemId));
+            aMsg = aMsg.replaceFirst("$1",mpOnlineView->getCurRegionName());
+            aMsg = aMsg.replaceFirst("$2",maView->getRegionItemName(nItemId));
             ErrorBox(this,WB_OK,aMsg.replaceFirst("$1",aTemplateList)).Execute();
         }
     }
@@ -1418,7 +1571,7 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nMenuId)
     }
     else
     {
-        nItemId = maView->GetItemId(nMenuId-MNI_MOVE_FOLDER_BASE);
+        nItemId = maView->getRegionId(nMenuId-MNI_MOVE_FOLDER_BASE);
     }
 
     if (nItemId)
@@ -1427,14 +1580,15 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nMenuId)
 
         // Move templates to desired folder if for some reason move fails
         // try copying them.
-        std::set<const ThumbnailViewItem*>::const_iterator aIter;
-        for (aIter = maSelTemplates.begin(); aIter != maSelTemplates.end(); ++aIter)
+        std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator aIter;
+        std::set<const ThumbnailViewItem*,selection_cmp_fn> aSelTemplates = maSelTemplates; //Copy to avoid invalidating an iterator
+
+        for (aIter = aSelTemplates.begin(); aIter != aSelTemplates.end(); ++aIter)
         {
             const TemplateSearchViewItem *pItem =
                     static_cast<const TemplateSearchViewItem*>(*aIter);
 
-            if(!maView->moveTemplate(pItem,pItem->mnRegionId+1,nItemId,false)
-                    && !maView->moveTemplate(pItem,pItem->mnRegionId+1,nItemId,true))
+            if(!maView->moveTemplate(pItem,pItem->mnRegionId,nItemId))
             {
                 if (aTemplateList.isEmpty())
                     aTemplateList = (*aIter)->maTitle;
@@ -1445,7 +1599,7 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nMenuId)
 
         if (!aTemplateList.isEmpty())
         {
-            OUString aDst = maView->GetItemText(nItemId);
+            OUString aDst = maView->getRegionItemName(nItemId);
             OUString aMsg(SfxResId(STR_MSG_ERROR_LOCAL_MOVE).toString());
             aMsg = aMsg.replaceFirst("$1",aDst);
             ErrorBox(this, WB_OK,aMsg.replaceFirst( "$2",aTemplateList)).Execute();
@@ -1542,31 +1696,6 @@ void SfxTemplateManagerDlg::syncRepositories() const
         officecfg::Office::Common::Misc::TemplateRepositoryNames::set(aNames, batch, pContext);
         batch->commit();
     }
-}
-
-BitmapEx SfxTemplateManagerDlg::getDefaultThumbnail( const OUString& rPath )
-{
-    INetURLObject aUrl(rPath);
-    OUString aExt = aUrl.getExtension();
-
-    BitmapEx aImg;
-    if ( aExt == "ott" || aExt == "stw" || aExt == "oth" || aExt == "dot" || aExt == "dotx" )
-    {
-        aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_TEXT ) );
-    }
-    else if ( aExt == "ots" || aExt == "stc" || aExt == "xlt" || aExt == "xltm" || aExt == "xltx" )
-    {
-        aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_SHEET ) );
-    }
-    else if ( aExt == "otp" || aExt == "sti" || aExt == "pot" || aExt == "potm" || aExt == "potx" )
-    {
-        aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_PRESENTATION ) );
-    }
-    else if ( aExt == "otg" || aExt == "std" )
-    {
-        aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_DRAWING ) );
-    }
-    return aImg;
 }
 
 static bool lcl_getServiceName ( const OUString &rFileURL, OUString &rName )

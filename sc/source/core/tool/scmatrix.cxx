@@ -1128,17 +1128,26 @@ size_t ScMatrixImpl::Count(bool bCountStrings) const
 void ScMatrixImpl::CalcPosition(SCSIZE nIndex, SCSIZE& rC, SCSIZE& rR) const
 {
     SCSIZE nRowSize = maMat.size().row;
-    rC = nIndex / nRowSize;
+    SAL_WARN_IF( !nRowSize, "sc", "ScMatrixImpl::CalcPosition: 0 rows!");
+    rC = nRowSize > 1 ? nIndex / nRowSize : nIndex;
     rR = nIndex - rC*nRowSize;
 }
 
 // ============================================================================
 
 ScMatrix::ScMatrix( SCSIZE nC, SCSIZE nR) :
-    pImpl(new ScMatrixImpl(nC, nR)), nRefCnt(0) {}
+    pImpl(new ScMatrixImpl(nC, nR)), nRefCnt(0)
+{
+    SAL_WARN_IF( !nC, "sc", "ScMatrix with 0 columns!");
+    SAL_WARN_IF( !nR, "sc", "ScMatrix with 0 rows!");
+}
 
 ScMatrix::ScMatrix(SCSIZE nC, SCSIZE nR, double fInitVal) :
-    pImpl(new ScMatrixImpl(nC, nR, fInitVal)), nRefCnt(0) {}
+    pImpl(new ScMatrixImpl(nC, nR, fInitVal)), nRefCnt(0)
+{
+    SAL_WARN_IF( !nC, "sc", "ScMatrix with 0 columns!");
+    SAL_WARN_IF( !nR, "sc", "ScMatrix with 0 rows!");
+}
 
 ScMatrix::~ScMatrix()
 {

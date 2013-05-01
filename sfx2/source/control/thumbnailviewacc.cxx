@@ -350,7 +350,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getAcces
 
         if( THUMBNAILVIEW_ITEM_NONEITEM != nItemPos )
         {
-            ThumbnailViewItem *const pItem = mpParent->mItemList[nItemPos];
+            ThumbnailViewItem *const pItem = mpParent->mFilteredItemList[nItemPos];
             xRet = pItem->GetAccessible( mbIsTransientChildrenDisabled );
         }
     }
@@ -788,7 +788,7 @@ uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ThumbnailViewItemA
         //      pStateSet->AddState( accessibility::AccessibleStateType::FOCUSABLE );
 
         // SELECTED
-        if( mpParent->mrParent.GetSelectItemId() == mpParent->mnId )
+        if( mpParent->isSelected() )
         {
             pStateSet->AddState( accessibility::AccessibleStateType::SELECTED );
             //              pStateSet->AddState( accessibility::AccessibleStateType::FOCUSED );

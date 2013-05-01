@@ -308,6 +308,7 @@ namespace writerfilter {
                 sal_Int32 nHoriPadding, nVertPadding;
                 sal_Int32 nHoriAlign, nHoriAnchor, nVertAlign, nVertAnchor;
                 Id nHRule;
+                boost::optional<Id> oWrap;
             public:
                 RTFFrame(RTFParserState* pParserState);
                 sal_Int16 nAnchorType;
@@ -407,6 +408,12 @@ namespace writerfilter {
 
                 /// Same as the int value of NS_rtf::LN_ISTD in aParagraphAttributes, for performance reasons.
                 int nCurrentStyleIndex;
+
+                /// Points to the active buffer, if there is one.
+                RTFBuffer_t* pCurrentBuffer;
+
+                /// If a table style was requested to be used.
+                bool bHasTableStyle;
         };
 
         class RTFTokenizer;
@@ -540,8 +547,6 @@ namespace writerfilter {
                 RTFBuffer_t m_aSuperBuffer;
                 /// Buffered shape text.
                 RTFBuffer_t m_aShapetextBuffer;
-                /// Points to the active buffer, if there is one.
-                RTFBuffer_t* m_pCurrentBuffer;
 
                 bool m_bHasFootnote;
                 /// Superstream of this substream.

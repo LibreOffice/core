@@ -141,6 +141,11 @@ public:
     void testFdo59953();
     void testFdo59638();
     void testFdo60722();
+    void testFdo61909();
+    void testFdo62288();
+    void testFdo37716();
+    void testFdo51916();
+    void testFdo61193();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -152,6 +157,26 @@ private:
     void run();
     /// Get page count.
     int getPages();
+    /// Copy&paste helper.
+    void paste(OUString aFilename, uno::Reference<text::XTextRange> xTextRange = uno::Reference<text::XTextRange>())
+    {
+        uno::Reference<document::XFilter> xFilter(m_xSFactory->createInstance("com.sun.star.comp.Writer.RtfFilter"), uno::UNO_QUERY_THROW);
+        uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY_THROW);
+        xImporter->setTargetDocument(mxComponent);
+        uno::Sequence<beans::PropertyValue> aDescriptor(xTextRange.is() ? 3 : 2);
+        aDescriptor[0].Name = "InputStream";
+        SvStream* pStream = utl::UcbStreamHelper::CreateStream(getURLFromSrc("/sw/qa/extras/rtfimport/data/") + aFilename, STREAM_WRITE);
+        uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
+        aDescriptor[0].Value <<= xStream;
+        aDescriptor[1].Name = "IsNewDoc";
+        aDescriptor[1].Value <<= sal_False;
+        if (xTextRange.is())
+        {
+            aDescriptor[2].Name = "TextInsertModeRange";
+            aDescriptor[2].Value <<= xTextRange;
+        }
+        xFilter->filter(aDescriptor);
+    }
 };
 
 void Test::run()
@@ -232,6 +257,11 @@ void Test::run()
         {"fdo59953.rtf", &Test::testFdo59953},
         {"fdo59638.rtf", &Test::testFdo59638},
         {"fdo60722.rtf", &Test::testFdo60722},
+        {"fdo61909.rtf", &Test::testFdo61909},
+        {"fdo62288.rtf", &Test::testFdo62288},
+        {"fdo37716.rtf", &Test::testFdo37716},
+        {"fdo51916.rtf", &Test::testFdo51916},
+        {"hello.rtf", &Test::testFdo61193},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -898,6 +928,15 @@ void Test::testCopyPasteFootnote()
     CPPUNIT_ASSERT_EQUAL(OUString("bbb"), xTextRange->getString());
 }
 
+void Test::testFdo61193()
+{
+    // Pasting content that contained a footnote caused a crash.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xEnd = xText->getEnd();
+    paste("fdo61193.rtf", xEnd);
+}
+
 void Test::testShptxtPard()
 {
     // The problem was that \pard inside \shptxt caused loss of shape text
@@ -1129,6 +1168,41 @@ void Test::testFdo60722()
     xShape.set(xDraws->getByIndex(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(26), getProperty<sal_uInt32>(xShape, "LineWidth"));
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), getProperty<sal_uInt32>(xShape, "LineColor"));
+}
+
+void Test::testFdo61909()
+{
+    uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
+    // Was the Writer default font.
+    CPPUNIT_ASSERT_EQUAL(OUString("Courier New"), getProperty<OUString>(xTextRange, "CharFontName"));
+    // Was 0x008000.
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<sal_uInt32>(xTextRange, "CharBackColor"));
+}
+
+void Test::testFdo62288()
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("B1"), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xCell->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    // Margins were inherited from the previous cell, even there was a \pard there.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, "ParaLeftMargin"));
+}
+
+void Test::testFdo37716()
+{
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFrames(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    // \nowrap got ignored, so Surround was text::WrapTextMode_PARALLEL
+    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_NONE, getProperty<text::WrapTextMode>(xFrames->getByIndex(0), "Surround"));
+}
+
+void Test::testFdo51916()
+{
+    // Complex nested table caused a crash.
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

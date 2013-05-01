@@ -82,14 +82,15 @@ namespace sdr
         void TextProperties::ItemSetChanged(const SfxItemSet& rSet)
         {
             SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
-            sal_Int32 nText = rObj.getTextCount();
+            const svx::ITextProvider& rTextProvider(getTextProvider());
+            sal_Int32 nText = rTextProvider.getTextCount();
 
             // #i101556# ItemSet has changed -> new version
             maVersion++;
 
             while( --nText >= 0 )
             {
-                SdrText* pText = rObj.getText( nText );
+                SdrText* pText = rTextProvider.getText( nText );
 
                 OutlinerParaObject* pParaObj = pText ? pText->GetOutlinerParaObject() : 0;
 
@@ -170,10 +171,11 @@ namespace sdr
             {
                 SdrOutliner& rOutliner = rObj.ImpGetDrawOutliner();
 
-                sal_Int32 nCount = rObj.getTextCount();
+                const svx::ITextProvider& rTextProvider(getTextProvider());
+                sal_Int32 nCount = rTextProvider.getTextCount();
                 while( nCount-- )
                 {
-                    SdrText* pText = rObj.getText( nCount );
+                    SdrText* pText = rTextProvider.getText( nCount );
                     OutlinerParaObject* pParaObj = pText->GetOutlinerParaObject();
                     if( pParaObj )
                     {
@@ -223,6 +225,11 @@ namespace sdr
             }
         }
 
+        const svx::ITextProvider& TextProperties::getTextProvider() const
+        {
+            return static_cast<const SdrTextObj&>(GetSdrObject());
+        }
+
         void TextProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
         {
             SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
@@ -237,11 +244,12 @@ namespace sdr
             {
                 SdrOutliner& rOutliner = rObj.ImpGetDrawOutliner();
 
-                sal_Int32 nText = rObj.getTextCount();
+                const svx::ITextProvider& rTextProvider(getTextProvider());
+                sal_Int32 nText = rTextProvider.getTextCount();
 
                 while( --nText >= 0 )
                 {
-                    SdrText* pText = rObj.getText( nText );
+                    SdrText* pText = rTextProvider.getText( nText );
 
                     OutlinerParaObject* pParaObj = pText ? pText->GetOutlinerParaObject() : 0;
                     if( !pParaObj )
@@ -396,11 +404,12 @@ namespace sdr
                 && !rObj.IsLinkedText())
             {
                 Outliner* pOutliner = SdrMakeOutliner(OUTLINERMODE_OUTLINEOBJECT, rObj.GetModel());
-                sal_Int32 nText = rObj.getTextCount();
+                const svx::ITextProvider& rTextProvider(getTextProvider());
+                sal_Int32 nText = rTextProvider.getTextCount();
 
                 while( --nText >= 0 )
                 {
-                    SdrText* pText = rObj.getText( nText );
+                    SdrText* pText = rTextProvider.getText( nText );
 
                     OutlinerParaObject* pParaObj = pText ? pText->GetOutlinerParaObject() : 0;
                     if( !pParaObj )
@@ -542,6 +551,7 @@ namespace sdr
             SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
             if(rObj.HasText())
             {
+                const svx::ITextProvider& rTextProvider(getTextProvider());
                 if(HAS_BASE(SfxStyleSheet, &rBC))
                 {
                     SfxSimpleHint* pSimple = PTR_CAST(SfxSimpleHint, &rHint);
@@ -551,10 +561,10 @@ namespace sdr
                     {
                         rObj.SetPortionInfoChecked(sal_False);
 
-                        sal_Int32 nText = rObj.getTextCount();
+                        sal_Int32 nText = rTextProvider.getTextCount();
                         while( --nText > 0 )
                         {
-                            OutlinerParaObject* pParaObj = rObj.getText(nText )->GetOutlinerParaObject();
+                            OutlinerParaObject* pParaObj = rTextProvider.getText( nText )->GetOutlinerParaObject();
                             if( pParaObj )
                                 pParaObj->ClearPortionInfo();
                         }
@@ -574,10 +584,10 @@ namespace sdr
                     if(SFX_HINT_DYING == nId)
                     {
                         rObj.SetPortionInfoChecked(sal_False);
-                        sal_Int32 nText = rObj.getTextCount();
+                        sal_Int32 nText = rTextProvider.getTextCount();
                         while( --nText > 0 )
                         {
-                            OutlinerParaObject* pParaObj = rObj.getText(nText )->GetOutlinerParaObject();
+                            OutlinerParaObject* pParaObj = rTextProvider.getText( nText )->GetOutlinerParaObject();
                             if( pParaObj )
                                 pParaObj->ClearPortionInfo();
                         }
@@ -596,10 +606,10 @@ namespace sdr
 
                         if(!aOldName.Equals(aNewName))
                         {
-                            sal_Int32 nText = rObj.getTextCount();
+                            sal_Int32 nText = rTextProvider.getTextCount();
                             while( --nText > 0 )
                             {
-                                OutlinerParaObject* pParaObj = rObj.getText(nText )->GetOutlinerParaObject();
+                                OutlinerParaObject* pParaObj = rTextProvider.getText( nText )->GetOutlinerParaObject();
                                 if( pParaObj )
                                     pParaObj->ChangeStyleSheetName(eFamily, aOldName, aNewName);
                             }

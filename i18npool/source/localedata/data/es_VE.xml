@@ -31,8 +31,8 @@
       <PlatformID>generic</PlatformID>
     </Platform>
   </LC_INFO>
-  <LC_CTYPE ref="es_PY"/>
-  <LC_FORMAT ref="es_PE" replaceTo="[$Bs-200A]"/>
+  <LC_CTYPE ref="es_AR"/>
+  <LC_FORMAT ref="es_AR" replaceTo="[$Bs-200A]"/>
   <LC_COLLATION ref="en_US"/>
   <LC_SEARCH ref="en_US"/>
   <LC_INDEX ref="es_ES"/>
