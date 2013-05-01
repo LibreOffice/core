@@ -178,6 +178,10 @@ void ScMacrosTest::testVba()
             OUString("GeneratedEventTest."),
             OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
+        {
+            OUString("MiscControlTests."),
+            OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
+        },
     };
 
     for ( sal_uInt32  i=0; i<SAL_N_ELEMENTS( testInfo ); ++i )
