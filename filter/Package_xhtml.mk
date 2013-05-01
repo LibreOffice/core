@@ -16,14 +16,13 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-$(eval $(call gb_Package_Package,filter_docbook,$(SRCDIR)/filter/source/docbook))
+$(eval $(call gb_Package_Package,filter_xhtml,$(SRCDIR)/filter/source/xslt))
 
-$(eval $(call gb_Package_set_outdir,filter_docbook,$(INSTDIR)))
+$(eval $(call gb_Package_set_outdir,filter_xhtml,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,filter_docbook,share/xslt/docbook,\
-	DocBookTemplate.stw \
-	docbooktosoffheadings.xsl \
-	sofftodocbookheadings.xsl \
-))
+$(eval $(call gb_Package_add_file,filter_xhtml,share/xslt/export/xhtml/body.xsl,odf2xhtml/export/xhtml/body.xsl))
+$(eval $(call gb_Package_add_file,filter_xhtml,share/xslt/export/xhtml/header.xsl,odf2xhtml/export/xhtml/header.xsl))
+$(eval $(call gb_Package_add_file,filter_xhtml,share/xslt/export/xhtml/opendoc2xhtml.xsl,odf2xhtml/export/xhtml/opendoc2xhtml.xsl))
+$(eval $(call gb_Package_add_file,filter_xhtml,share/xslt/export/xhtml/table.xsl,odf2xhtml/export/xhtml/table.xsl))
 
 # vim: set noet sw=4 ts=4:

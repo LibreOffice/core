@@ -64,6 +64,7 @@ $(eval $(call gb_Module_add_targets,filter,\
 	Library_xsltdlg \
 	Library_xsltfilter \
 	Package_docbook \
+	Package_xhtml \
 	Package_xslt \
 	UIConfig_xsltdlg \
 ))

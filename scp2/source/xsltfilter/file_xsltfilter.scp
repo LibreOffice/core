@@ -34,51 +34,16 @@ File gid_File_Share_Registry_Xsltfilter_Xcd
     Name = "xsltfilter.xcd";
 End
 
-File gid_File_Stw_Docbooktemplate
+File gid_File_filter_docbook
     TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Xslt_Docbook;
-    Name = "DocBookTemplate.stw";
+    Styles = (FILELIST, PACKED);
+    Dir = FILELIST_DIR;
+    Name = "filter_docbook.filelist";
 End
 
-File gid_File_Xsl_Docbooktosoffheadings
+File gid_File_filter_xhtml
     TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Xslt_Docbook;
-    Name = "docbooktosoffheadings.xsl";
-End
-
-File gid_File_Xsl_Sofftodocbookheadings
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Xslt_Docbook;
-    Name = "sofftodocbookheadings.xsl";
-End
-
-File gid_File_Xsl_Export_Xhtml_Body
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Xslt_Export_Xhtml;
-    Name = "/xslt/export/xhtml/body.xsl";
-End
-
-File gid_File_Xsl_Export_Xhtml_Header
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Xslt_Export_Xhtml;
-    Name = "/xslt/export/xhtml/header.xsl";
-End
-
-File gid_File_Xsl_Export_Xhtml_Ooo2xhtml
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Xslt_Export_Xhtml;
-    Name = "/xslt/export/xhtml/opendoc2xhtml.xsl";
-End
-
-File gid_File_Xsl_Export_Xhtml_Table
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Xslt_Export_Xhtml;
-    Name = "/xslt/export/xhtml/table.xsl";
+    Styles = (FILELIST, PACKED);
+    Dir = FILELIST_DIR;
+    Name = "filter_xhtml.filelist";
 End

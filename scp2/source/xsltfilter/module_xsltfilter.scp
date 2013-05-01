@@ -33,16 +33,8 @@ Module gid_Module_Optional_Xsltfiltersamples
     MOD_NAME_DESC(MODULE_OPTIONAL_XSLTFILTERSAMPLES);
     Sortkey = "700";
     ParentID = gid_Module_Optional;
-    Files = ( gid_File_Xsl_Sofftodocbookheadings,gid_File_Xsl_Docbooktosoffheadings,
-    gid_File_Stw_Docbooktemplate,
-    gid_File_Xsl_Export_Xhtml_Body,
-    gid_File_Xsl_Export_Xhtml_Header,
-    gid_File_Xsl_Export_Xhtml_Master_Chapter_Numbering,
-    gid_File_Xsl_Export_Xhtml_Master_Document,
-    gid_File_Xsl_Export_Xhtml_Master_Refs_Workaround,
-    gid_File_Xsl_Export_Xhtml_Master_Usability_Links,
-    gid_File_Xsl_Export_Xhtml_Ooo2xhtml,
-    gid_File_Xsl_Export_Xhtml_Table,
+    Files = ( gid_File_filter_docbook,
+    gid_File_filter_xhtml,
     gid_File_Share_Registry_Xsltfilter_Xcd );
     Minimal = NO;
     Default = YES;
