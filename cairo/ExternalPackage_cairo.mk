@@ -12,6 +12,6 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,cairo,cairo))
 $(eval $(call gb_ExternalPackage_use_external_project,cairo,cairo))
 
 $(eval $(call gb_ExternalPackage_add_file,cairo,lib/libcairo.so,src/.libs/libcairo.so.2.11000.2))
-$(eval $(call gb_ExternalPackage_add_file,cairo,lib/libcairo.so.2,src/.libs/libcairo.so.2.11000.2))
+$(eval $(call gb_ExternalPackage_add_library_for_install,cairo,lib/libcairo.so.2,src/.libs/libcairo.so.2.11000.2))
 
 # vim: set noet sw=4 ts=4:

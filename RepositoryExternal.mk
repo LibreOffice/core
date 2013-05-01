@@ -927,6 +927,8 @@ endef
 ifneq ($(OS),ANDROID)
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+	raptor2 \
+	rasqal \
 	rdf \
 ))
 

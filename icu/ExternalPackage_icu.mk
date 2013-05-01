@@ -20,12 +20,14 @@ $(eval $(call gb_ExternalPackage_add_file,icu,lib/libicuuc.dll.a,source/lib/icuu
 $(eval $(call gb_ExternalPackage_add_file,icu,lib/libicui18n.dll.a,source/lib/icuin.lib))
 $(eval $(call gb_ExternalPackage_add_file,icu,lib/libicule.dll.a,source/lib/icule.lib))
 $(eval $(call gb_ExternalPackage_add_file,icu,lib/libicutu.dll.a,source/lib/icutu.lib))
-$(eval $(call gb_ExternalPackage_add_files,icu,bin,\
+$(eval $(call gb_ExternalPackage_add_libraries_for_install,icu,bin,\
 	source/lib/icudt$(ICU_MAJOR).dll \
 	source/lib/icuuc$(ICU_MAJOR).dll \
 	source/lib/icuin$(ICU_MAJOR).dll \
 	source/lib/icule$(ICU_MAJOR).dll \
 	source/lib/icutu$(ICU_MAJOR).dll \
+))
+$(eval $(call gb_ExternalPackage_add_files,icu,bin,\
 	source/bin/genccode.exe \
 	source/bin/genbrk.exe \
 	source/bin/gencmn.exe \
@@ -39,12 +41,14 @@ $(eval $(call gb_ExternalPackage_add_files,icu,lib,\
 	source/lib/icule$(if $(MSVC_USE_DEBUG_RUNTIME),d).lib \
 	source/lib/icutu$(if $(MSVC_USE_DEBUG_RUNTIME),d).lib\
 ))
-$(eval $(call gb_ExternalPackage_add_files,icu,bin,\
+$(eval $(call gb_ExternalPackage_add_libraries_for_install,icu,bin,\
 	source/lib/icudt$(if $(MSVC_USE_DEBUG_RUNTIME),d)$(ICU_MAJOR).dll \
 	source/lib/icuuc$(if $(MSVC_USE_DEBUG_RUNTIME),d)$(ICU_MAJOR).dll \
 	source/lib/icuin$(if $(MSVC_USE_DEBUG_RUNTIME),d)$(ICU_MAJOR).dll \
 	source/lib/icule$(if $(MSVC_USE_DEBUG_RUNTIME),d)$(ICU_MAJOR).dll \
 	source/lib/icutu$(if $(MSVC_USE_DEBUG_RUNTIME),d)$(ICU_MAJOR).dll \
+))
+$(eval $(call gb_ExternalPackage_add_files,icu,bin,\
 	source/bin/genccode.exe \
 	source/bin/genbrk.exe \
 	source/bin/gencmn.exe \
@@ -60,7 +64,7 @@ $(eval $(call gb_ExternalPackage_add_files,icu,lib,\
 	source/lib/libicutu.a \
 ))
 else ifeq ($(OS),ANDROID)
-$(eval $(call gb_ExternalPackage_add_files,icu,lib,\
+$(eval $(call gb_ExternalPackage_add_libraries_for_install,icu,lib,\
 	source/lib/libicudatalo.so \
 	source/lib/libicuuclo.so \
 	source/lib/libicui18nlo.so \
@@ -68,17 +72,17 @@ $(eval $(call gb_ExternalPackage_add_files,icu,lib,\
 	source/lib/libicutulo.so \
 ))
 else
-$(eval $(call gb_ExternalPackage_add_file,icu,lib/libicudata$(gb_Library_DLLEXT).$(icu_VERSION),source/lib/libicudata$(gb_Library_DLLEXT).$(icu_VERSION)))
-$(eval $(call gb_ExternalPackage_add_file,icu,lib/libicudata$(gb_Library_DLLEXT).$(ICU_MAJOR),source/lib/libicudata$(gb_Library_DLLEXT).$(icu_VERSION)))
+$(eval $(call gb_ExternalPackage_add_library_for_install,icu,lib/libicudata$(gb_Library_DLLEXT).$(icu_VERSION),source/lib/libicudata$(gb_Library_DLLEXT).$(icu_VERSION)))
+$(eval $(call gb_ExternalPackage_add_library_for_install,icu,lib/libicudata$(gb_Library_DLLEXT).$(ICU_MAJOR),source/lib/libicudata$(gb_Library_DLLEXT).$(icu_VERSION)))
 $(eval $(call gb_ExternalPackage_add_file,icu,lib/libicudata$(gb_Library_DLLEXT),source/lib/libicudata$(gb_Library_DLLEXT).$(icu_VERSION)))
-$(eval $(call gb_ExternalPackage_add_file,icu,lib/libicuuc$(gb_Library_DLLEXT).$(icu_VERSION),source/lib/libicuuc$(gb_Library_DLLEXT).$(icu_VERSION)))
-$(eval $(call gb_ExternalPackage_add_file,icu,lib/libicuuc$(gb_Library_DLLEXT).$(ICU_MAJOR),source/lib/libicuuc$(gb_Library_DLLEXT).$(icu_VERSION)))
+$(eval $(call gb_ExternalPackage_add_library_for_install,icu,lib/libicuuc$(gb_Library_DLLEXT).$(icu_VERSION),source/lib/libicuuc$(gb_Library_DLLEXT).$(icu_VERSION)))
+$(eval $(call gb_ExternalPackage_add_library_for_install,icu,lib/libicuuc$(gb_Library_DLLEXT).$(ICU_MAJOR),source/lib/libicuuc$(gb_Library_DLLEXT).$(icu_VERSION)))
 $(eval $(call gb_ExternalPackage_add_file,icu,lib/libicuuc$(gb_Library_DLLEXT),source/lib/libicuuc$(gb_Library_DLLEXT).$(icu_VERSION)))
-$(eval $(call gb_ExternalPackage_add_file,icu,lib/libicui18n$(gb_Library_DLLEXT).$(icu_VERSION),source/lib/libicui18n$(gb_Library_DLLEXT).$(icu_VERSION)))
-$(eval $(call gb_ExternalPackage_add_file,icu,lib/libicui18n$(gb_Library_DLLEXT).$(ICU_MAJOR),source/lib/libicui18n$(gb_Library_DLLEXT).$(icu_VERSION)))
+$(eval $(call gb_ExternalPackage_add_library_for_install,icu,lib/libicui18n$(gb_Library_DLLEXT).$(icu_VERSION),source/lib/libicui18n$(gb_Library_DLLEXT).$(icu_VERSION)))
+$(eval $(call gb_ExternalPackage_add_library_for_install,icu,lib/libicui18n$(gb_Library_DLLEXT).$(ICU_MAJOR),source/lib/libicui18n$(gb_Library_DLLEXT).$(icu_VERSION)))
 $(eval $(call gb_ExternalPackage_add_file,icu,lib/libicui18n$(gb_Library_DLLEXT),source/lib/libicui18n$(gb_Library_DLLEXT).$(icu_VERSION)))
-$(eval $(call gb_ExternalPackage_add_file,icu,lib/libicule$(gb_Library_DLLEXT).$(icu_VERSION),source/lib/libicule$(gb_Library_DLLEXT).$(icu_VERSION)))
-$(eval $(call gb_ExternalPackage_add_file,icu,lib/libicule$(gb_Library_DLLEXT).$(ICU_MAJOR),source/lib/libicule$(gb_Library_DLLEXT).$(icu_VERSION)))
+$(eval $(call gb_ExternalPackage_add_library_for_install,icu,lib/libicule$(gb_Library_DLLEXT).$(icu_VERSION),source/lib/libicule$(gb_Library_DLLEXT).$(icu_VERSION)))
+$(eval $(call gb_ExternalPackage_add_library_for_install,icu,lib/libicule$(gb_Library_DLLEXT).$(ICU_MAJOR),source/lib/libicule$(gb_Library_DLLEXT).$(icu_VERSION)))
 $(eval $(call gb_ExternalPackage_add_file,icu,lib/libicule$(gb_Library_DLLEXT),source/lib/libicule$(gb_Library_DLLEXT).$(icu_VERSION)))
 $(eval $(call gb_ExternalPackage_add_file,icu,lib/libicutu$(gb_Library_DLLEXT).$(icu_VERSION),source/lib/libicutu$(gb_Library_DLLEXT).$(icu_VERSION)))
 $(eval $(call gb_ExternalPackage_add_file,icu,lib/libicutu$(gb_Library_DLLEXT).$(ICU_MAJOR),source/lib/libicutu$(gb_Library_DLLEXT).$(icu_VERSION)))

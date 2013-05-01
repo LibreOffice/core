@@ -22,21 +22,23 @@ $(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.a,lib/.libs/libcurl.a
 else ifeq ($(OS),ANDROID)
 $(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.so,lib/.libs/libcurl.so))
 else ifeq ($(OS),AIX)
-$(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.so,lib/.libs/libcurl.so.4))
+$(eval $(call gb_ExternalPackage_add_library_for_install,curl,lib/libcurl.so,lib/.libs/libcurl.so.4))
 else
-$(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.so,lib/.libs/libcurl.so.4.2.0))
+# TODO: Do we really want the unversioned library in the installation?
+# And if that's true, why do we need to deliver the versioned one at all?
+$(eval $(call gb_ExternalPackage_add_library_for_install,curl,lib/libcurl.so,lib/.libs/libcurl.so.4.2.0))
 $(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.so.4,lib/.libs/libcurl.so.4.2.0))
 endif
 
 else ifeq ($(OS)$(COM),WNTGCC)
 
 $(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.a,lib/.libs/libcurl.a))
-$(eval $(call gb_ExternalPackage_add_file,curl,bin/libcurl.dll,lib/.libs/libcurl.dll))
+$(eval $(call gb_ExternalPackage_add_library_for_install,curl,bin/libcurl.dll,lib/.libs/libcurl.dll))
 
 else ifeq ($(COM),MSC)
 
 $(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.lib,lib/libcurl.lib))
-$(eval $(call gb_ExternalPackage_add_file,curl,bin/libcurl.dll,lib/libcurl.dll))
+$(eval $(call gb_ExternalPackage_add_library_for_install,curl,bin/libcurl.dll,lib/libcurl.dll))
 
 endif
 

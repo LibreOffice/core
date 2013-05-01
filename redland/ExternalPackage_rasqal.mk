@@ -12,18 +12,18 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,rasqal,rasqal))
 $(eval $(call gb_ExternalPackage_use_external_project,rasqal,rasqal))
 
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_ExternalPackage_add_file,rasqal,lib/librasqal-lo.$(RASQAL_MAJOR).dylib,src/.libs/librasqal-lo.$(RASQAL_MAJOR).dylib))
+$(eval $(call gb_ExternalPackage_add_library_for_install,rasqal,lib/librasqal-lo.$(RASQAL_MAJOR).dylib,src/.libs/librasqal-lo.$(RASQAL_MAJOR).dylib))
 $(eval $(call gb_ExternalPackage_add_file,rasqal,lib/librasqal.dylib,src/.libs/librasqal-lo.$(RASQAL_MAJOR).dylib))
 else ifneq ($(filter IOS ANDROID,$(OS)),)
 $(eval $(call gb_ExternalPackage_add_file,rasqal,lib/librasqal.a,src/.libs/librasqal.a))
 else ifneq ($(filter WNTGCC,$(OS)$(COM)),)
 $(eval $(call gb_ExternalPackage_add_file,rasqal,lib/librasqal.dll.a,src/.libs/librasqal.dll.a))
-$(eval $(call gb_ExternalPackage_add_file,rasqal,bin/librasqal-$(RASQAL_MAJOR).dll,src/.libs/librasqal-$(RASQAL_MAJOR).dll))
+$(eval $(call gb_ExternalPackage_add_library_for_install,rasqal,bin/librasqal-$(RASQAL_MAJOR).dll,src/.libs/librasqal-$(RASQAL_MAJOR).dll))
 else ifneq ($(filter WNT,$(OS)),)
 $(eval $(call gb_ExternalPackage_add_file,rasqal,lib/librasqal.a,src/.libs/librasqal.a))
-$(eval $(call gb_ExternalPackage_add_file,rasqal,bin/librasqal.dll,src/.libs/librasqal.dll))
+$(eval $(call gb_ExternalPackage_add_library_for_install,rasqal,bin/librasqal.dll,src/.libs/librasqal.dll))
 else
-$(eval $(call gb_ExternalPackage_add_file,rasqal,lib/librasqal-lo.so.$(RASQAL_MAJOR),src/.libs/librasqal-lo.so.$(RASQAL_MAJOR).0.0))
+$(eval $(call gb_ExternalPackage_add_library_for_install,rasqal,lib/librasqal-lo.so.$(RASQAL_MAJOR),src/.libs/librasqal-lo.so.$(RASQAL_MAJOR).0.0))
 $(eval $(call gb_ExternalPackage_add_file,rasqal,lib/librasqal.so,src/.libs/librasqal-lo.so.$(RASQAL_MAJOR).0.0))
 endif
 

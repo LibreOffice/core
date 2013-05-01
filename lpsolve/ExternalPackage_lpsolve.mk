@@ -18,16 +18,16 @@ endif # $(OS_FOR_BUILD)
 else # $(COM)
 $(eval $(call gb_ExternalPackage_add_files,lpsolve,lib,lpsolve55/lpsolve55.lib))
 endif # $(COM)
-$(eval $(call gb_ExternalPackage_add_files,lpsolve,bin,lpsolve55/lpsolve55.dll))
+$(eval $(call gb_ExternalPackage_add_library_for_install,lpsolve,bin/lpsolve55.dll,lpsolve55/lpsolve55.dll))
 else # $(OS)
 
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_ExternalPackage_add_files,lpsolve,lib,lpsolve55/liblpsolve55.dylib))
+$(eval $(call gb_ExternalPackage_add_library_for_install,lpsolve,lib/liblpsolve55.dylib,lpsolve55/liblpsolve55.dylib))
 else
 ifeq ($(DISABLE_DYNLOADING),TRUE)
 $(eval $(call gb_ExternalPackage_add_files,lpsolve,lib,lpsolve55/liblpsolve55.a))
 else
-$(eval $(call gb_ExternalPackage_add_files,lpsolve,lib,lpsolve55/liblpsolve55.so))
+$(eval $(call gb_ExternalPackage_add_library_for_install,lpsolve,lib/liblpsolve55.so,lpsolve55/liblpsolve55.so))
 endif # $(DISABLE_DYNLOADING)
 
 endif # $(OS)

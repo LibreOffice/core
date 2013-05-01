@@ -17,7 +17,7 @@ $(eval $(call gb_ExternalPackage_add_files,nss,bin,\
 ))
 
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_ExternalPackage_add_files,nss,lib,\
+$(eval $(call gb_ExternalPackage_add_libraries_for_install,nss,lib,\
 		mozilla/dist/out/lib/libcrmf.a \
 		mozilla/dist/out/lib/libfreebl3.dylib \
 		mozilla/dist/out/lib/libnspr4.dylib \
@@ -62,7 +62,7 @@ $(eval $(call gb_ExternalPackage_add_files,nss,lib,\
 		mozilla/dist/out/lib/libssl3.dll.a \
 ))
 endif
-$(eval $(call gb_ExternalPackage_add_files,nss,bin,\
+$(eval $(call gb_ExternalPackage_add_libraries_for_install,nss,bin,\
 		mozilla/dist/out/lib/freebl3.dll \
 		mozilla/dist/out/lib/nspr4.dll \
 		mozilla/dist/out/lib/nss3.dll \
@@ -79,6 +79,8 @@ $(eval $(call gb_ExternalPackage_add_files,nss,bin,\
 else # OS!=WNT/MACOSX
 $(eval $(call gb_ExternalPackage_add_files,nss,lib,\
 		mozilla/dist/out/lib/libcrmf.a \
+))
+$(eval $(call gb_ExternalPackage_add_libraries_for_install,nss,lib,\
 		mozilla/dist/out/lib/libfreebl3.so \
 		mozilla/dist/out/lib/libnspr4.so \
 		mozilla/dist/out/lib/libnss3.so \

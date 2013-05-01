@@ -12,6 +12,6 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,pixman,pixman))
 $(eval $(call gb_ExternalPackage_use_external_project,pixman,pixman))
 
 $(eval $(call gb_ExternalPackage_add_file,pixman,lib/libpixman-1.so,pixman/.libs/libpixman-1.so.0.24.4))
-$(eval $(call gb_ExternalPackage_add_file,pixman,lib/libpixman-1.so.0,pixman/.libs/libpixman-1.so.0.24.4))
+$(eval $(call gb_ExternalPackage_add_library_for_install,pixman,lib/libpixman-1.so.0,pixman/.libs/libpixman-1.so.0.24.4))
 
 # vim: set noet sw=4 ts=4:
