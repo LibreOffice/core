@@ -275,7 +275,9 @@ gb_GLOBALDEFS += \
 
 gb_GLOBALDEFS := $(sort $(gb_GLOBALDEFS))
 
+ifeq ($(origin gb_RUNNABLE_INSTDIR),undefined)
 gb_RUNNABLE_INSTDIR :=
+endif
 
 include $(GBUILDDIR)/Deliver.mk
 
