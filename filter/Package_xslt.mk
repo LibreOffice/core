@@ -67,9 +67,5 @@ $(eval $(call gb_Package_add_file,filter_xslt,share/xslt/export/common/table/tab
 $(eval $(call gb_Package_add_file,filter_xslt,share/xslt/export/common/table/table_columns.xsl,odf2xhtml/export/common/table/table_columns.xsl))
 $(eval $(call gb_Package_add_file,filter_xslt,share/xslt/export/common/table/table_rows.xsl,odf2xhtml/export/common/table/table_rows.xsl))
 $(eval $(call gb_Package_add_file,filter_xslt,share/xslt/export/common/table_of_content.xsl,odf2xhtml/export/common/table_of_content.xsl))
-$(eval $(call gb_Package_add_file,filter_xslt,share/xslt/export/xhtml/body.xsl,odf2xhtml/export/xhtml/body.xsl))
-$(eval $(call gb_Package_add_file,filter_xslt,share/xslt/export/xhtml/header.xsl,odf2xhtml/export/xhtml/header.xsl))
-$(eval $(call gb_Package_add_file,filter_xslt,share/xslt/export/xhtml/opendoc2xhtml.xsl,odf2xhtml/export/xhtml/opendoc2xhtml.xsl))
-$(eval $(call gb_Package_add_file,filter_xslt,share/xslt/export/xhtml/table.xsl,odf2xhtml/export/xhtml/table.xsl))
 
 # vim: set noet sw=4 ts=4:
