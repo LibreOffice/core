@@ -466,6 +466,8 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
 
     if (bSubTotal)
         pDocument->AddSubTotalCell(this);
+
+    pCode->GenHash();
 }
 
 ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, const ScAddress& rPos, int nCloneFlags ) :
