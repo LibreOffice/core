@@ -54,7 +54,7 @@ ScHFEditDlg::ScHFEditDlg( SfxViewFrame*     pFrameP,
                           Window*           pParent,
                           const SfxItemSet& rCoreSet,
                           const String&     rPageStyle,
-                          sal_uInt16            nResIdP )
+                          sal_uInt16        nResIdP )
     :   SfxTabDialog( pFrameP, pParent, ScResId( nResIdP ), &rCoreSet )
 {
     eNumType = ((const SvxPageItem&)rCoreSet.Get(ATTR_PAGE)).GetNumType();

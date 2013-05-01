@@ -32,7 +32,9 @@ protected:
     virtual void Select();
 public:
     ScPopupMenu() : nSel(0),bHit(false) {}
+
     ScPopupMenu(const ResId& rRes) : PopupMenu(rRes),nSel(0),bHit(false) {}
+
     sal_uInt16  GetSelected() const { return nSel; }
     sal_Bool    WasHit() const      { return bHit; }
 };
