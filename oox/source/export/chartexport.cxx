@@ -1527,7 +1527,10 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
                     }
 
                     // export data labels
-                    exportDataLabels( uno::Reference< beans::XPropertySet >( aSeriesSeq[nSeriesIdx], uno::UNO_QUERY ), nSeriesLength );
+                    // Excel does not like our current data label export
+                    // for scatter charts
+                    if( eChartType != chart::TYPEID_SCATTER )
+                        exportDataLabels( uno::Reference< beans::XPropertySet >( aSeriesSeq[nSeriesIdx], uno::UNO_QUERY ), nSeriesLength );
 
                     // export data points
                     exportDataPoints( uno::Reference< beans::XPropertySet >( aSeriesSeq[nSeriesIdx], uno::UNO_QUERY ), nSeriesLength );
