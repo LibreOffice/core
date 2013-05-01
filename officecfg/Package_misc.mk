@@ -19,7 +19,9 @@
 
 $(eval $(call gb_Package_Package,officecfg_misc,$(SRCDIR)/officecfg))
 
-$(eval $(call gb_Package_add_file,officecfg_misc,xml/oo-ldap.xcd.sample,registry/schema/oo-ldap.xcd.sample))
-$(eval $(call gb_Package_add_file,officecfg_misc,xml/oo-ad-ldap.xcd.sample,registry/schema/oo-ad-ldap.xcd.sample))
+$(eval $(call gb_Package_set_outdir,officecfg_misc,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_file,officecfg_misc,share/registry/oo-ldap.xcd.sample,registry/schema/oo-ldap.xcd.sample))
+$(eval $(call gb_Package_add_file,officecfg_misc,share/registry/oo-ad-ldap.xcd.sample,registry/schema/oo-ad-ldap.xcd.sample))
 
 # vim: set noet sw=4 ts=4:

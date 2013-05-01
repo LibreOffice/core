@@ -634,18 +634,11 @@ End
 
 #endif
 
-File gid_File_Oo_Ldap_Xcd_Sample
+File gid_File_officecfg_misc
     TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Brand_Dir_Share_Registry;
-    Name = "oo-ldap.xcd.sample";
-End
-
-File gid_File_Oo_Ad_Ldap_Xcd_Sample
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Brand_Dir_Share_Registry;
-    Name = "oo-ad-ldap.xcd.sample";
+    Styles = (FILELIST, PACKED);
+    Dir = FILELIST_DIR;
+    Name = "officecfg_misc.filelist";
 End
 
 File gid_File_Rdb_Offapi
