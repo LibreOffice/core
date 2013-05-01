@@ -208,6 +208,18 @@ gb_ExternalPackage_PROJECT_$(1) := $(2)
 
 endef
 
+# gb_ExternalPackage__add_file_for_install package package-inst dest dest-inst src
+define gb_ExternalPackage__add_file_for_install
+$(call gb_ExternalPackage_add_file,$(1),$(3),$(5))
+
+ifneq ($(gb_RUNNABLE_INSTDIR),)
+$(call gb_ExternalPackage_add_file,$(2),$(4),$(5))
+$(call gb_ExternalPackage_get_target,$(1)) : $(call gb_Package_get_target,$(2))
+$(call gb_ExternalPackage_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(2))
+endif
+
+endef
+
 # Add a (dynamic) library that is a part of the installation.
 #
 # This function is very similar to gb_ExternalPackage_add_file, except
@@ -219,13 +231,7 @@ endef
 #
 # gb_ExternalPackage_add_library_for_install package dest src library?
 define gb_ExternalPackage_add_library_for_install
-$(call gb_ExternalPackage_add_file,$(1),$(2),$(3))
-
-ifneq ($(gb_RUNNABLE_INSTDIR),)
-$(call gb_ExternalPackage_add_file,$(call gb_ExternalPackage_get_packagename,$(1)),$(if $(4),$(call gb_Library_get_instdir,$(4)),program)/$(notdir $(2)),$(3))
-$(call gb_ExternalPackage_get_target,$(1)) : $(call gb_Package_get_target,$(call gb_ExternalPackage_get_packagename,$(1)))
-$(call gb_ExternalPackage_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(call gb_ExternalPackage_get_packagename,$(1)))
-endif
+$(call gb_ExternalPackage__add_file_for_install,$(1),$(call gb_ExternalPackage_get_packagename,$(1)),$(2),$(if $(4),$(call gb_Library_get_instdir,$(4)),program)/$(notdir $(2)),$(3))
 
 endef
 
@@ -234,6 +240,26 @@ endef
 # gb_ExternalPackage_add_libraries_for_install package destdir file(s)
 define gb_ExternalPackage_add_libraries_for_install
 $(foreach file,$(3),$(call gb_ExternalPackage_add_library_for_install,$(1),$(2)/$(notdir $(file)),$(file)))
+
+endef
+
+# Add a jar that is a part of the installation.
+#
+# This function works just like to gb_ExternalPackage_add_file, except
+# that it also allows to deliver the jar to its proper place in
+# $(INSTDIR).
+#
+# gb_ExternalPackage_add_jar_for_install package dest src
+define gb_ExternalPackage_add_jar_for_install
+$(call gb_ExternalPackage__add_file_for_install,$(1),$(call gb_ExternalPackage_get_packagename,$(1)),$(2),program/classes/$(notdir $(2)),$(3))
+
+endef
+
+# Add several jars for install at once.
+#
+# gb_ExternalPackage_add_jars_for_install package destdir file(s)
+define gb_ExternalPackage_add_jars_for_install
+$(foreach file,$(3),$(call gb_ExternalPackage_add_jar_for_install,$(1),$(2)/$(notdir $(file)),$(file)))
 
 endef
 
