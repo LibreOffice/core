@@ -113,7 +113,7 @@ $(call gb_Jar_get_outdir_target,$(1)) : $(call gb_Jar_get_target,$(1))
 $(call gb_Jar_get_outdir_target,$(1)) :| $(dir $(call gb_Jar_get_outdir_target,$(1))).dir
 
 ifneq ($(gb_RUNNABLE_INSTDIR),)
-$(if $(filter-out OXT,$(call gb_Jar__get_layer,$(1))),\
+$(if $(filter OOO URE,$(call gb_Jar__get_layer,$(1))),\
 	$(call gb_Jar__Jar_package,$(1),$(call gb_Jar_get_packagename,$(1)),$(notdir $(call gb_Jar_get_target,$(1)))) \
 )
 endif

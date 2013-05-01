@@ -731,16 +731,10 @@ $(eval $(call gb_Helper_register_jars,URE, \
 
 $(eval $(call gb_Helper_register_jars,OOO, \
 	ConnectivityTools \
-	HelloWorld \
-	Highlight \
-	MemoryUsage \
-	OOoRunner \
 	ScriptFramework \
 	ScriptProviderForBeanShell \
 	ScriptProviderForJava \
 	ScriptProviderForJavaScript \
-	TestExtension \
-	OOoRunnerLight \
 	XMergeBridge \
 	XSLTFilter \
 	XSLTValidate \
@@ -761,8 +755,6 @@ $(eval $(call gb_Helper_register_jars,OOO, \
 	reportbuilderwizard \
 	sdbc_hsqldb \
 	table \
-	test \
-	test-tools \
 	web \
 	xmerge \
 ))
@@ -772,6 +764,17 @@ $(eval $(call gb_Helper_register_jars,OXT, \
 	mediawiki \
 	nlpsolver \
 	passive_java \
+))
+
+$(eval $(call gb_Helper_register_jars,NONE,\
+	HelloWorld \
+	Highlight \
+	MemoryUsage \
+	OOoRunner \
+	OOoRunnerLight \
+	TestExtension \
+	test \
+	test-tools \
 ))
 
 # External executables

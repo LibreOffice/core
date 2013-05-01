@@ -120,7 +120,7 @@ gb_Executable_VALIDGROUPS := UREBIN SDK OOO NONE
 gb_Library_VALIDGROUPS := OOOLIBS PLAINLIBS_NONE PLAINLIBS_URE PLAINLIBS_OOO RTVERLIBS UNOLIBS_URE UNOVERLIBS EXTENSIONLIBS
 gb_Library_VALIDINSTALLMODULES := OOO URE WRITER
 gb_StaticLibrary_VALIDGROUPS := PLAINLIBS
-gb_Jar_VALIDGROUPS := URE OOO OXT
+gb_Jar_VALIDGROUPS := URE OOO OXT NONE
 
 $$(foreach group,$$(gb_Executable_VALIDGROUPS),$$(eval gb_Executable_$$(group) :=))
 $$(foreach group,$$(gb_Library_VALIDGROUPS),$$(eval gb_Library_$$(group) :=))
