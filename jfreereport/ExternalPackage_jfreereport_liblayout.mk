@@ -10,10 +10,10 @@
 # for VERSION
 include $(SRCDIR)/jfreereport/version.mk
 
-$(eval $(call gb_Package_Package,jfreereport_flow_engine,$(call gb_UnpackedTarball_get_dir,jfreereport_flow_engine)))
+$(eval $(call gb_ExternalPackage_ExternalPackage,jfreereport_liblayout,jfreereport_liblayout))
 
-$(eval $(call gb_Package_use_external_project,jfreereport_flow_engine,jfreereport_flow_engine))
+$(eval $(call gb_ExternalPackage_use_external_project,jfreereport_liblayout,jfreereport_liblayout))
 
-$(eval $(call gb_Package_add_file,jfreereport_flow_engine,bin/flow-engine-$(FLOW_ENGINE_VERSION).jar,build/lib/flow-engine.jar))
+$(eval $(call gb_ExternalPackage_add_jar_for_install,jfreereport_liblayout,bin/liblayout-$(LIBLAYOUT_VERSION).jar,build/lib/liblayout.jar))
 
 # vim: set noet sw=4 ts=4:

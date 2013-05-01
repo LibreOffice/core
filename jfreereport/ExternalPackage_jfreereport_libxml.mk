@@ -10,10 +10,10 @@
 # for VERSION
 include $(SRCDIR)/jfreereport/version.mk
 
-$(eval $(call gb_Package_Package,jfreereport_libfonts,$(call gb_UnpackedTarball_get_dir,jfreereport_libfonts)))
+$(eval $(call gb_ExternalPackage_ExternalPackage,jfreereport_libxml,jfreereport_libxml))
 
-$(eval $(call gb_Package_use_external_project,jfreereport_libfonts,jfreereport_libfonts))
+$(eval $(call gb_ExternalPackage_use_external_project,jfreereport_libxml,jfreereport_libxml))
 
-$(eval $(call gb_Package_add_file,jfreereport_libfonts,bin/libfonts-$(LIBFONTS_VERSION).jar,dist/libfonts-$(LIBFONTS_VERSION).jar))
+$(eval $(call gb_ExternalPackage_add_jar_for_install,jfreereport_libxml,bin/libxml-$(LIBXML_VERSION).jar,dist/libxml-$(LIBXML_VERSION).jar))
 
 # vim: set noet sw=4 ts=4:

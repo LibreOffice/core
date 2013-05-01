@@ -10,10 +10,10 @@
 # for VERSION
 include $(SRCDIR)/jfreereport/version.mk
 
-$(eval $(call gb_Package_Package,jfreereport_flute,$(call gb_UnpackedTarball_get_dir,jfreereport_flute)))
+$(eval $(call gb_ExternalPackage_ExternalPackage,jfreereport_libfonts,jfreereport_libfonts))
 
-$(eval $(call gb_Package_use_external_project,jfreereport_flute,jfreereport_flute))
+$(eval $(call gb_ExternalPackage_use_external_project,jfreereport_libfonts,jfreereport_libfonts))
 
-$(eval $(call gb_Package_add_file,jfreereport_flute,bin/flute-$(FLUTE_VERSION).jar,dist/flute-$(FLUTE_VERSION).jar))
+$(eval $(call gb_ExternalPackage_add_jar_for_install,jfreereport_libfonts,bin/libfonts-$(LIBFONTS_VERSION).jar,dist/libfonts-$(LIBFONTS_VERSION).jar))
 
 # vim: set noet sw=4 ts=4:

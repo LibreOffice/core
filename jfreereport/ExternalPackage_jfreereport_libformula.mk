@@ -10,10 +10,10 @@
 # for VERSION
 include $(SRCDIR)/jfreereport/version.mk
 
-$(eval $(call gb_Package_Package,jfreereport_libloader,$(call gb_UnpackedTarball_get_dir,jfreereport_libloader)))
+$(eval $(call gb_ExternalPackage_ExternalPackage,jfreereport_libformula,jfreereport_libformula))
 
-$(eval $(call gb_Package_use_external_project,jfreereport_libloader,jfreereport_libloader))
+$(eval $(call gb_ExternalPackage_use_external_project,jfreereport_libformula,jfreereport_libformula))
 
-$(eval $(call gb_Package_add_file,jfreereport_libloader,bin/libloader-$(LIBLOADER_VERSION).jar,dist/libloader-$(LIBLOADER_VERSION).jar))
+$(eval $(call gb_ExternalPackage_add_jar_for_install,jfreereport_libformula,bin/libformula-$(LIBFORMULA_VERSION).jar,dist/libformula-$(LIBFORMULA_VERSION).jar))
 
 # vim: set noet sw=4 ts=4:

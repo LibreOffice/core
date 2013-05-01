@@ -7,10 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,jfreereport_sac,$(call gb_UnpackedTarball_get_dir,jfreereport_sac)))
+$(eval $(call gb_ExternalPackage_ExternalPackage,hsqldb_project,hsqldb))
 
-$(eval $(call gb_Package_use_external_project,jfreereport_sac,jfreereport_sac))
+$(eval $(call gb_ExternalPackage_use_external_project,hsqldb_project,hsqldb))
 
-$(eval $(call gb_Package_add_file,jfreereport_sac,bin/sac.jar,build/lib/sac.jar))
+$(eval $(call gb_ExternalPackage_add_jar_for_install,hsqldb_project,bin/hsqldb.jar,lib/hsqldb.jar))
 
 # vim: set noet sw=4 ts=4:

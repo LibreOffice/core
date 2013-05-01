@@ -12,8 +12,8 @@ $(eval $(call gb_Module_Module,rhino))
 ifneq ($(SOLAR_JAVA),)
 ifneq ($(filter RHINO,$(BUILD_TYPE)),)
 $(eval $(call gb_Module_add_targets,rhino,\
+	ExternalPackage_rhino \
 	ExternalProject_rhino \
-	Package_rhino \
 	UnpackedTarball_rhino \
 ))
 endif

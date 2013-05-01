@@ -11,8 +11,8 @@ $(eval $(call gb_Module_Module,hsqldb))
 
 ifneq ($(SOLAR_JAVA),)
 $(eval $(call gb_Module_add_targets,hsqldb,\
+	ExternalPackage_hsqldb \
 	ExternalProject_hsqldb \
-	Package_hsqldb \
 	UnpackedTarball_hsqldb \
 ))
 endif

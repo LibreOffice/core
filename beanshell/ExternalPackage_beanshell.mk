@@ -7,10 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,rhino,$(call gb_UnpackedTarball_get_dir,rhino)))
+$(eval $(call gb_ExternalPackage_ExternalPackage,beanshell,beanshell))
 
-$(eval $(call gb_Package_use_external_project,rhino,rhino))
+$(eval $(call gb_ExternalPackage_use_external_project,beanshell,beanshell))
 
-$(eval $(call gb_Package_add_file,rhino,bin/js.jar,build/rhino1_5R5/js.jar))
+$(eval $(call gb_ExternalPackage_add_jar_for_install,beanshell,bin/bsh.jar,dist/bsh-2.0b1.jar))
 
 # vim: set noet sw=4 ts=4:

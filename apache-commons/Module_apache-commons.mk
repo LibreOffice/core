@@ -12,6 +12,7 @@ $(eval $(call gb_Module_Module,apache_commons))
 ifneq ($(SOLAR_JAVA),)
 ifneq ($(filter APACHE_COMMONS,$(BUILD_TYPE)),)
 $(eval $(call gb_Module_add_targets,apache_commons,\
+	ExternalPackage_apache_commons_logging \
 	ExternalProject_apache_commons_codec \
 	ExternalProject_apache_commons_httpclient \
 	ExternalProject_apache_commons_lang \
@@ -19,7 +20,6 @@ $(eval $(call gb_Module_add_targets,apache_commons,\
 	Package_apache_commons_codec \
 	Package_apache_commons_httpclient \
 	Package_apache_commons_lang \
-	Package_apache_commons_logging \
 	UnpackedTarball_apache_commons_codec \
 	UnpackedTarball_apache_commons_httpclient \
 	UnpackedTarball_apache_commons_lang \
