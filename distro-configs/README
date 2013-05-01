@@ -17,9 +17,9 @@ on the autogen.sh command line thus:
 
 ./autogen.sh --with-distro=LibreOfficeFoo
 
-Contrary to the above, in the Android and iOS cases the amount of
-parameters you just must use is so large, that for convenience it is
-always easiest to use the corresponding distro-configs file. This is a
-bug and needs to be fixed; also configuring for those platforms needs
-to use sane (or only possible) defaults and work fine wihout any
+Contrary to the above, in the Android case the amount of parameters
+you just must use is so large, that for convenience it is always
+easiest to use the corresponding distro-configs file. This is a bug
+and needs to be fixed; also configuring for Android should ideally use
+sane (or the only possible) defaults and work fine wihout any
 parameters at all.

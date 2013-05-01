@@ -1145,6 +1145,11 @@ AC_ARG_WITH(macosx-bundle-identifier,
          org.libreoffice.script ("script", huh?).]),
 ,with_macosx_bundle_identifier=org.libreoffice.script)
 
+AC_ARG_ENABLE(ios-simulator,
+    AS_HELP_STRING([--enable-ios-simulator],
+        [Build for the iOS Simulator, not iOS device.]),
+,)
+
 AC_ARG_ENABLE(readonly-installset,
     AS_HELP_STRING([--enable-readonly-installset],
         [Prevents any attempts by LibreOffice to write into its installation. That means
@@ -2639,6 +2644,42 @@ AC_SUBST(XCRUN)
 AC_SUBST(MACOSX_CODESIGNING_IDENTITY)
 AC_SUBST(ENABLE_MACOSX_SANDBOX)
 AC_SUBST(MACOSX_BUNDLE_IDENTIFIER)
+
+dnl ===================================================================
+dnl Check / find iOS SDK and compiler, version checks
+dnl ===================================================================
+if test $_os = iOS; then
+
+    AC_MSG_CHECKING([what iOS SDK to use])
+
+    if test "$enable_ios_simulator" = yes; then
+        platform=iPhoneSimulator
+        versionmin=-mmacosx-version-min=10.7
+        arch=i386
+    else
+        platform=iPhoneOS
+        versionmin=-miphoneos-version-min=5.0
+        arch=armv7
+    fi
+
+    pref_sdk_ver=6.1
+    for I in 6.1 6.0; do
+        t=/Applications/Xcode.app/Contents/Developer/Platforms/$platform.platform/Developer/SDKs/$platform$I.sdk
+        if test -d $t; then
+            sysroot=$t
+            break
+        fi
+    done
+
+    if test -z "$sysroot"; then
+        AC_MSG_ERROR([Could not find iOS SDK, expected something like /Applications/Xcode.app/Contents/Developer/Platforms/$platform.platform/Developer/SDKs/${platform}${pref_sdk_ver}])
+    fi
+
+    AC_MSG_RESULT($sysroot)
+
+    CXX="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -arch $arch -isysroot $sysroot $versionmin"
+    CC="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -arch $arch -isysroot $sysroot $versionmin"
+fi
 
 AC_MSG_CHECKING([whether to treat the installation as read-only])
 
@@ -6937,6 +6978,15 @@ printf ("hello world\n");
 fi
 AC_SUBST(WINEGCC)
 
+if test $_os = iOS; then
+    enable_mpl_subset=yes
+    enable_postgresql_sdbc=no
+    enable_lotuswordpro=no
+    enable_neon=no
+    enable_extension_integration=no
+    with_ppds=no
+fi
+
 ENABLE_LWP=
 if test "$enable_lotuswordpro" = "yes"; then
    ENABLE_LWP="TRUE"
@@ -6946,6 +6996,7 @@ AC_SUBST(ENABLE_LWP)
 
 AC_MSG_CHECKING([MPL subset])
 MPL_SUBSET=
+
 if test "$enable_mpl_subset" = "yes"; then
    if test "x$enable_postgresql_sdbc" != "xno"; then
         AC_MSG_ERROR([need to --disable-postgresql-sdbc - the postgress database backend.])
@@ -9274,7 +9325,7 @@ dnl ===================================================================
 
 ENABLE_GCONF=""
 AC_MSG_CHECKING([whether to enable GConf support])
-if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_gconf" = "yes"; then
+if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$_os" != "iOS" -a "$enable_gconf" = "yes"; then
     ENABLE_GCONF="TRUE"
     AC_MSG_RESULT([yes])
     PKG_CHECK_MODULES( GCONF, gconf-2.0 gobject-2.0 )
@@ -9502,7 +9553,7 @@ if test "$enable_split_opt_features" = "yes"; then
 fi
 AC_SUBST(SPLIT_OPT_FEATURES)
 
-if test $_os = Darwin -o $_os = WINNT; then
+if test $_os = Darwin -o $_os = WINNT -o $_os = iOS; then
     if test "$enable_cairo_canvas" = yes; then
         AC_MSG_ERROR([The cairo canvas should not be used for this platform])
     fi
@@ -9571,6 +9622,10 @@ if test -z "$enable_opengl"; then
         # By default disable the OpenGL transitions for Windows (the code compiles but works very
         # badly and crashes). In other words, use --enable-opengl only if you plan to hack on that
         # code for Windows.
+        enable_opengl=no
+    elif test $_os = iOS; then
+        # As such with some suitable minor tweaks the Mac OpenGL transitions code would presumably
+        # build fine for iOS, too, but let's leave that for later
         enable_opengl=no
     else
         enable_opengl=yes
