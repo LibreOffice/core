@@ -111,6 +111,54 @@ ScEditWindow::ScEditWindow( Window* pParent, const ResId& rResId, ScEditWindowLo
     pEdEngine->InsertView( pEdView );
 }
 
+ScEditWindow::ScEditWindow( Window* pParent, WinBits nBits, ScEditWindowLocation eLoc )
+    :   Control( pParent, nBits ),
+    eLocation(eLoc),
+    pAcc(NULL)
+{
+    EnableRTL(false);
+
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    Color aBgColor = rStyleSettings.GetWindowColor();
+
+    SetMapMode( MAP_TWIP );
+    SetPointer( POINTER_TEXT );
+    SetBackground( aBgColor );
+
+    Size aSize( GetOutputSize() );
+    aSize.Height() *= 4;
+
+    pEdEngine = new ScHeaderEditEngine( EditEngine::CreatePool(), sal_True );
+    pEdEngine->SetPaperSize( aSize );
+    pEdEngine->SetRefDevice( this );
+
+    ScHeaderFieldData aData;
+    lcl_GetFieldData( aData );
+
+        //  Feldbefehle:
+    pEdEngine->SetData( aData );
+    pEdEngine->SetControlWord( pEdEngine->GetControlWord() | EE_CNTRL_MARKFIELDS );
+    mbRTL = ScGlobal::IsSystemRTL();
+    if (mbRTL)
+        pEdEngine->SetDefaultHorizontalTextDirection(EE_HTEXTDIR_R2L);
+
+    pEdView = new EditView( pEdEngine, this );
+    pEdView->SetOutputArea( Rectangle( Point(0,0), GetOutputSize() ) );
+
+    pEdView->SetBackgroundColor( aBgColor );
+    pEdEngine->InsertView( pEdView );
+}
+
+void ScEditWindow::Resize()
+{
+    Size aOutputSize(GetOutputSize());
+    Size aSize(aOutputSize);
+    aSize.Height() *= 4;
+    pEdEngine->SetPaperSize(aSize);
+    pEdView->SetOutputArea(Rectangle(Point(0,0), aOutputSize));
+    Control::Resize();
+}
+
 // -----------------------------------------------------------------------
 
 ScEditWindow::~ScEditWindow()
@@ -124,6 +172,11 @@ ScEditWindow::~ScEditWindow()
     }
     delete pEdEngine;
     delete pEdView;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScEditWindow(Window *pParent, VclBuilder::stringmap &)
+{
+    return new ScEditWindow (pParent, WB_BORDER|WB_TABSTOP, Left);
 }
 
 // -----------------------------------------------------------------------
@@ -340,12 +393,23 @@ void ScEditWindow::LoseFocus()
 }
 
 ScExtIButton::ScExtIButton(Window* pParent, const ResId& rResId )
-:   ImageButton(pParent,rResId),
-    pPopupMenu(NULL)
+    : ImageButton(pParent,rResId), pPopupMenu(NULL)
 {
     nSelected=0;
     aTimer.SetTimeout(600);
     SetDropDown( true);
+}
+ScExtIButton::ScExtIButton(Window* pParent, WinBits nBits )
+    : ImageButton(pParent,nBits), pPopupMenu(NULL)
+{
+    nSelected=0;
+    aTimer.SetTimeout(600);
+    SetDropDown( true);
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScExtIButton(Window *pParent, VclBuilder::stringmap &)
+{
+    return new ScExtIButton (pParent, 0);// WB_BORDER|WB_TABSTOP);
 }
 
 void ScExtIButton::SetPopupMenu(PopupMenu* pPopUp)

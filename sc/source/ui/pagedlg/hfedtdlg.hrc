@@ -19,25 +19,9 @@
 
 #include "sc.hrc"
 
-#define FT_LEFT 1
-#define FT_CENTER 2
-#define FT_RIGHT 3
-#define FT_INFO 4
 #define WND_LEFT 1
 #define WND_CENTER 2
 #define WND_RIGHT 3
-#define BTN_TEXT 1
-#define BTN_PAGE 2
-#define BTN_PAGES 3
-#define BTN_DATE 4
-#define BTN_TIME 5
-#define BTN_FILE 6
-#define BTN_TABLE 7
-
-#define RID_POPUP_FCOMMAND      10
-#define FILE_COMMAND_TITEL      11
-#define FILE_COMMAND_FILENAME   12
-#define FILE_COMMAND_PATH       13
 
 #define FL_INFO                 14
 

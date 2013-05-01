@@ -142,12 +142,6 @@
 #define HID_SCPAGE_OPREDLINE                                    "SC_HID_SCPAGE_OPREDLINE"
 #define HID_SC_REDLIN_CTR                                       "SC_HID_SC_REDLIN_CTR"
 
-//Kopf/FusszeilenDlg: Contextmenue fuer Dateiname
-#define HID_FCOMMAND_TITEL                                      "SC_HID_FCOMMAND_TITEL"
-#define HID_FCOMMAND_FILENAME                                   "SC_HID_FCOMMAND_FILENAME"
-#define HID_FCOMMAND_PATH                                       "SC_HID_FCOMMAND_PATH"
-
-
 // Hilfe IDs fuer Objekt- und Werkzeugleisten (max.10) -----------------------
 
 #define HID_SC_TOOLBOX_TOOLS                                    "SC_HID_SC_TOOLBOX_TOOLS"

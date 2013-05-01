@@ -429,190 +429,8 @@ TabDialog RID_SCDLG_HFEDIT_LEFTFOOTER
     };
 };
 
- //------------------------------------------------------------------------
- //  ScTpHFEdit
- //------------------------------------------------------------------------
-TabPage RID_HFBASE
-{
-    Hide = TRUE ;
-    HelpId = HID_SCPAGE_HFEDIT ;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
-    FixedText FT_LEFT
-    {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 75 , 10 ) ;
-        Text [ en-US ] = "~Left area" ;
-    };
-    FixedText FT_CENTER
-    {
-        Pos = MAP_APPFONT ( 90 , 6 ) ;
-        Size = MAP_APPFONT ( 75 , 10 ) ;
-        Text [ en-US ] = "~Center area" ;
-    };
-    FixedText FT_RIGHT
-    {
-        Pos = MAP_APPFONT ( 174 , 6 ) ;
-        Size = MAP_APPFONT ( 75 , 10 ) ;
-        Text [ en-US ] = "R~ight area" ;
-    };
-    FixedText FT_HF_DEFINED
-    {
-        Pos = MAP_APPFONT ( 12 , 102 ) ;
-        Size = MAP_APPFONT ( 76 , 10 ) ;
-        Text [ en-US ] = "Hea~der" ;
-    };
-
-    FixedText FT_HF_CUSTOM
-    {
-        Pos = MAP_APPFONT ( 12 , 124 ) ;
-        Size = MAP_APPFONT ( 76 , 10 ) ;
-        Text [ en-US ] = "Custom header" ;
-    };
-
-    ImageButton BTN_TEXT
-    {
-        HelpId = HID_SC_HF_TEXT ;
-        Pos = MAP_APPFONT ( 90 , 122 ) ;
-        Size = MAP_APPFONT ( 15 , 15 ) ;
-        TabStop = TRUE ;
-        QuickHelpText [ en-US ] = "Text Attributes" ;
-        ButtonImage = Image
-        {
-            ImageBitmap = Bitmap { File = "text.png" ; };
-            MaskColor = STD_MASKCOLOR ;
-        };
-    };
-
-    ImageButton BTN_FILE
-    {
-        HelpId = HID_SC_HF_FILE ;
-        Pos = MAP_APPFONT ( 113 , 122 ) ;
-        Size = MAP_APPFONT ( 15 , 15 ) ;
-        TabStop = TRUE ;
-        QuickHelpText [ en-US ] = "Title" ;
-        ButtonImage = Image
-        {
-            ImageBitmap = Bitmap { File = "file.png" ; };
-            MaskColor = STD_MASKCOLOR ;
-        };
-    };
-
-    Menu RID_POPUP_FCOMMAND
-    {
-        ItemList =
-        {
-            MenuItem
-            {
-                Identifier = FILE_COMMAND_TITEL ;
-                HelpID = HID_FCOMMAND_TITEL ;
-                Text [ en-US ] = "Title";
-            };
-            MenuItem
-            {
-                Identifier = FILE_COMMAND_FILENAME;
-                HelpID = HID_FCOMMAND_FILENAME;
-                RadioCheck = TRUE ;
-                Text [ en-US ] = "File Name";
-            };
-            MenuItem
-            {
-                Identifier = FILE_COMMAND_PATH;
-                HelpID = HID_FCOMMAND_PATH;
-                RadioCheck = TRUE ;
-                Text [ en-US ] = "Path/File Name";
-            };
-        };
-    };
-
-    ImageButton BTN_TABLE
-    {
-        HelpId = HID_SC_HF_TABLE ;
-        Pos = MAP_APPFONT ( 130 , 122 ) ;
-        Size = MAP_APPFONT ( 15 , 15 ) ;
-        TabStop = TRUE ;
-        QuickHelpText [ en-US ] = "Sheet Name" ;
-        ButtonImage = Image
-        {
-            ImageBitmap = Bitmap { File = "table.png" ; };
-            MaskColor = STD_MASKCOLOR;
-        };
-    };
-
-    ImageButton BTN_PAGE
-    {
-        HelpId = HID_SC_HF_PAGE ;
-        Pos = MAP_APPFONT ( 150 , 122 ) ;
-        Size = MAP_APPFONT ( 15 , 15 ) ;
-        TabStop = TRUE ;
-        QuickHelpText [ en-US ] = "Page" ;
-        ButtonImage = Image
-        {
-            ImageBitmap = Bitmap { File = "page.png" ; };
-            MaskColor = STD_MASKCOLOR ;
-        };
-    };
-
-    ImageButton BTN_PAGES
-    {
-        HelpId = HID_SC_HF_PAGES ;
-        Pos = MAP_APPFONT ( 167 , 122 ) ;
-        Size = MAP_APPFONT ( 15 , 15 ) ;
-        TabStop = TRUE ;
-        QuickHelpText [ en-US ] = "Pages" ;
-        ButtonImage = Image
-        {
-            ImageBitmap = Bitmap { File = "pages.png" ; };
-            MaskColor = STD_MASKCOLOR ;
-        };
-    };
-
-    ImageButton BTN_DATE
-    {
-        HelpId = HID_SC_HF_DATE ;
-        Pos = MAP_APPFONT ( 187 , 122 ) ;
-        Size = MAP_APPFONT ( 15 , 15 ) ;
-        TabStop = TRUE ;
-        QuickHelpText [ en-US ] = "Date" ;
-        ButtonImage = Image
-        {
-            ImageBitmap = Bitmap { File = "date.png" ; };
-            MaskColor = STD_MASKCOLOR ;
-        };
-    };
-
-    ImageButton BTN_TIME
-    {
-        HelpId = HID_SC_HF_TIME ;
-        Pos = MAP_APPFONT ( 204 , 122 ) ;
-        Size = MAP_APPFONT ( 15 , 15 ) ;
-        TabStop = TRUE ;
-        QuickHelpText [ en-US ] = "Time" ;
-        ButtonImage = Image
-        {
-            ImageBitmap = Bitmap { File = "time.png" ; };
-            MaskColor = STD_MASKCOLOR ;
-        };
-    };
-
-    FixedText FT_INFO
-    {
-        Pos = MAP_APPFONT ( 12 , 155 ) ;
-        Size = MAP_APPFONT ( 240 , 24 ) ;
-        WordBreak = TRUE ;
-        Text [ en-US ] = "Use the buttons to change the font or insert field commands such as date, time, etc." ;
-    };
-    FixedLine FL_INFO
-    {
-        Pos = MAP_APPFONT ( 6 , 144 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Note" ;
-    };
-};
-
  // Kombinationen: Header/Footer links/rechts
- // die Eingabefenster jeweils mit eigener ID, sonst aus RID_HFBASE kopiert
-TabPage RID_SCPAGE_HFED_HL < RID_HFBASE
+TabPage RID_SCPAGE_HFED_HL
 {
     Hide = TRUE ;
     HelpId = HID_SCPAGE_HFED_HL ;
@@ -651,7 +469,7 @@ TabPage RID_SCPAGE_HFED_HL < RID_HFBASE
     };
 };
 
-TabPage RID_SCPAGE_HFED_HR < RID_HFBASE
+TabPage RID_SCPAGE_HFED_HR
 {
     Hide = TRUE ;
     HelpId = HID_SCPAGE_HFED_HR ;
@@ -690,7 +508,7 @@ TabPage RID_SCPAGE_HFED_HR < RID_HFBASE
     };
 };
 
-TabPage RID_SCPAGE_HFED_FL < RID_HFBASE
+TabPage RID_SCPAGE_HFED_FL
 {
     Hide = TRUE ;
     HelpId = HID_SCPAGE_HFED_FL ;
@@ -729,7 +547,7 @@ TabPage RID_SCPAGE_HFED_FL < RID_HFBASE
     };
 };
 
-TabPage RID_SCPAGE_HFED_FR < RID_HFBASE
+TabPage RID_SCPAGE_HFED_FR
 {
     Hide = TRUE ;
     HelpId = HID_SCPAGE_HFED_FR ;

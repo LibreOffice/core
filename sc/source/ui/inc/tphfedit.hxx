@@ -56,6 +56,7 @@ class SC_DLLPUBLIC ScEditWindow : public Control
 {
 public:
             ScEditWindow( Window* pParent, const ResId& rResId, ScEditWindowLocation eLoc );
+            ScEditWindow( Window* pParent,  WinBits nBits , ScEditWindowLocation eLoc );
             ~ScEditWindow();
 
     using Control::SetFont;
@@ -72,6 +73,8 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
     inline ScHeaderEditEngine*  GetEditEngine() const {return pEdEngine;}
+
+    void SetLocation(ScEditWindowLocation eLoc) { eLocation = eLoc; }
 protected:
     virtual void    Paint( const Rectangle& rRect );
     virtual void    MouseMove( const MouseEvent& rMEvt );
@@ -81,6 +84,7 @@ protected:
     virtual void    Command( const CommandEvent& rCEvt );
     virtual void    GetFocus();
     virtual void    LoseFocus();
+    virtual void    Resize();
 
 private:
     ScHeaderEditEngine* pEdEngine;
@@ -116,6 +120,7 @@ protected:
 public:
 
     ScExtIButton(Window* pParent, const ResId& rResId );
+    ScExtIButton(Window* pParent, WinBits nBits );
 
     void            SetPopupMenu(PopupMenu* pPopUp);
 
