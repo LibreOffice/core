@@ -186,16 +186,6 @@ Directory gid_Dir_Share_Config_Wizard
     DosName = "wizard";
 End
 
-Directory gid_Dir_Share_Config_Wizard_Web
-    ParentID = gid_Dir_Share_Config_Wizard;
-    DosName = "web";
-End
-
-Directory gid_Dir_Share_Config_Wizard_Web_Buttons
-    ParentID = gid_Dir_Share_Config_Wizard_Web;
-    DosName = "buttons";
-End
-
 Directory gid_Dir_Share_Config_Sofficecfg
     ParentID = gid_Brand_Dir_Share_Config;
     DosName = "soffice.cfg";
@@ -277,11 +267,6 @@ End
 Directory gid_Dir_Share_Scripts
     ParentID = gid_Brand_Dir_Share;
     DosName = "Scripts";
-End
-
-Directory gid_Dir_Config_Webcast
-    ParentID = gid_Brand_Dir_Share_Config;
-    DosName = "webcast";
 End
 
 Directory gid_Dir_Gallery

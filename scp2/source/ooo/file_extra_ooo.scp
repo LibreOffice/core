@@ -74,16 +74,11 @@ File gid_File_Extra_Cfgsrv
     Patchfiles = ();
 End
 
-File gid_File_Extra_Common_Inc
-    Dir = gid_Dir_Config_Webcast;
-    PACKED_TXT_FILE_BODY;
-    Name = "common.inc";
-End
-
-File gid_File_Extra_Common_Pl
-    Dir = gid_Dir_Config_Webcast;
-    PACKED_TXT_FILE_BODY;
-    Name = "common.pl";
+File gid_File_sd_web
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST, PACKED);
+    Name = "sd_web.filelist";
 End
 
 File gid_File_Extra_Database
@@ -100,51 +95,6 @@ File gid_File_Extra_Databasebiblio
     Name = "extras_databasebiblio.filelist";
 End
 
-File gid_File_Extra_Edit_Asp
-    Dir = gid_Dir_Config_Webcast;
-    PACKED_TXT_FILE_BODY;
-    Name = "edit.asp";
-End
-
-File gid_File_Extra_Edit_Pl
-    Dir = gid_Dir_Config_Webcast;
-    PACKED_TXT_FILE_BODY;
-    Name = "edit.pl";
-End
-
-File gid_File_Extra_Editpic_Asp
-    Dir = gid_Dir_Config_Webcast;
-    PACKED_TXT_FILE_BODY;
-    Name = "editpic.asp";
-End
-
-File gid_File_Extra_Editpic_Pl
-    Dir = gid_Dir_Config_Webcast;
-    PACKED_TXT_FILE_BODY;
-    Name = "editpic.pl";
-End
-
-File gid_File_Extra_Glas_Blue_Zip
-    Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
-    USER_FILE_BODY;
-	Styles = ();
-    Name = "glas-blue.zip";
-End
-
-File gid_File_Extra_Glas_Green_Zip
-    Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
-    USER_FILE_BODY;
-	Styles = ();
-    Name = "glas-green.zip";
-End
-
-File gid_File_Extra_Glas_Red_Zip
-    Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
-    USER_FILE_BODY;
-	Styles = ();
-    Name = "glas-red.zip";
-End
-
 #if defined( ENABLE_LIBLANGTAG ) && !defined( SYSTEM_LIBLANGTAG )
 File gid_File_Extra_Liblangtag
     Dir = FILELIST_DIR;
@@ -153,56 +103,6 @@ File gid_File_Extra_Liblangtag
     Name = "liblangtag_data.filelist";
 End
 #endif
-
-File gid_File_Extra_Round_Gorilla_Zip
-    Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
-    USER_FILE_BODY;
-	Styles = ();
-    Name = "round-gorilla.zip";
-End
-
-File gid_File_Extra_Round_White_Zip
-    Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
-    USER_FILE_BODY;
-	Styles = ();
-    Name = "round-white.zip";
-End
-File gid_File_Extra_Simple_Zip
-    Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
-    USER_FILE_BODY;
-	Styles = ();
-    Name = "simple.zip";
-End
-File gid_File_Extra_Square_Blue_Zip
-    Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
-    USER_FILE_BODY;
-	Styles = ();
-    Name = "square-blue.zip";
-End
-File gid_File_Extra_Square_Gray_Zip
-    Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
-    USER_FILE_BODY;
-	Styles = ();
-    Name = "square-gray.zip";
-End
-File gid_File_Extra_Square_Green_Zip
-    Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
-    USER_FILE_BODY;
-	Styles = ();
-    Name = "square-green.zip";
-End
-File gid_File_Extra_Square_Red_Zip
-    Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
-    USER_FILE_BODY;
-	Styles = ();
-    Name = "square-red.zip";
-End
-File gid_File_Extra_Square_Yellow_Zip
-    Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
-    USER_FILE_BODY;
-	Styles = ();
-    Name = "square-yellow.zip";
-End
 
 #ifdef UNX
 
@@ -298,54 +198,12 @@ File gid_File_Extra_Gallwwwgraf
     Name = "extras_gallwwwgraf.filelist";
 End
 
-File gid_File_Extra_Index_Pl
-    Dir = gid_Dir_Config_Webcast;
-    PACKED_TXT_FILE_BODY;
-    Name = "index.pl";
-End
-
 File gid_File_Extra_Palettes
     Dir = FILELIST_DIR;
     USER_FILE_BODY;
     Styles = (FILELIST, WORKSTATION, DONT_OVERWRITE);
     Name = "extras_palettes.filelist";
     Patchfiles = ();
-End
-
-File gid_File_Extra_Poll_Asp
-    Dir = gid_Dir_Config_Webcast;
-    PACKED_TXT_FILE_BODY;
-    Name = "poll.asp";
-End
-
-File gid_File_Extra_Poll_Pl
-    Dir = gid_Dir_Config_Webcast;
-    PACKED_TXT_FILE_BODY;
-    Name = "poll.pl";
-End
-
-File gid_File_Extra_Savepic_Asp
-    Dir = gid_Dir_Config_Webcast;
-    PACKED_TXT_FILE_BODY;
-    Name = "savepic.asp";
-End
-
-File gid_File_Extra_Savepic_Pl
-    Dir = gid_Dir_Config_Webcast;
-    PACKED_TXT_FILE_BODY;
-    Name = "savepic.pl";
-End
-
-File gid_File_Extra_Show_Asp
-    Dir = gid_Dir_Config_Webcast;
-    PACKED_TXT_FILE_BODY;
-    Name = "show.asp";
-End
-
-File gid_File_Extra_Show_Pl
-    Dir = gid_Dir_Config_Webcast;
-    PACKED_TXT_FILE_BODY;
-    Name = "show.pl";
 End
 
 File gid_File_Extra_Tpllayoutimpr
@@ -402,18 +260,6 @@ File gid_File_Extra_Tplwizstyles
     TXT_FILE_BODY;
     Styles = (FILELIST);
     Name = "extras_tplwizstyles.filelist";
-End
-
-File gid_File_Extra_Webcast_Asp
-    Dir = gid_Dir_Config_Webcast;
-    PACKED_TXT_FILE_BODY;
-    Name = "webcast.asp";
-End
-
-File gid_File_Extra_Webcast_Pl
-    Dir = gid_Dir_Config_Webcast;
-    PACKED_TXT_FILE_BODY;
-    Name = "webcast.pl";
 End
 
 File gid_File_Extra_Wordbook

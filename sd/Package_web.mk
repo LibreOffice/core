@@ -9,32 +9,38 @@
 
 $(eval $(call gb_Package_Package,sd_web,$(SRCDIR)/sd/res))
 
-$(eval $(call gb_Package_add_file,sd_web,pck/glas-blue.zip,buttons/glas-blue.zip))
-$(eval $(call gb_Package_add_file,sd_web,pck/glas-green.zip,buttons/glas-green.zip))
-$(eval $(call gb_Package_add_file,sd_web,pck/glas-red.zip,buttons/glas-red.zip))
-$(eval $(call gb_Package_add_file,sd_web,pck/round-gorilla.zip,buttons/round-gorilla.zip))
-$(eval $(call gb_Package_add_file,sd_web,pck/round-white.zip,buttons/round-white.zip))
-$(eval $(call gb_Package_add_file,sd_web,pck/simple.zip,buttons/simple.zip))
-$(eval $(call gb_Package_add_file,sd_web,pck/square-blue.zip,buttons/square-blue.zip))
-$(eval $(call gb_Package_add_file,sd_web,pck/square-gray.zip,buttons/square-gray.zip))
-$(eval $(call gb_Package_add_file,sd_web,pck/square-green.zip,buttons/square-green.zip))
-$(eval $(call gb_Package_add_file,sd_web,pck/square-red.zip,buttons/square-red.zip))
-$(eval $(call gb_Package_add_file,sd_web,pck/square-yellow.zip,buttons/square-yellow.zip))
-$(eval $(call gb_Package_add_file,sd_web,pck/common.inc,webview/common.inc))
-$(eval $(call gb_Package_add_file,sd_web,pck/common.pl,webview/common.pl))
-$(eval $(call gb_Package_add_file,sd_web,pck/edit.asp,webview/edit.asp))
-$(eval $(call gb_Package_add_file,sd_web,pck/editpic.asp,webview/editpic.asp))
-$(eval $(call gb_Package_add_file,sd_web,pck/editpic.pl,webview/editpic.pl))
-$(eval $(call gb_Package_add_file,sd_web,pck/edit.pl,webview/edit.pl))
-$(eval $(call gb_Package_add_file,sd_web,pck/index.pl,webview/index.pl))
-$(eval $(call gb_Package_add_file,sd_web,pck/poll.asp,webview/poll.asp))
-$(eval $(call gb_Package_add_file,sd_web,pck/poll.pl,webview/poll.pl))
-$(eval $(call gb_Package_add_file,sd_web,pck/savepic.asp,webview/savepic.asp))
-$(eval $(call gb_Package_add_file,sd_web,pck/savepic.pl,webview/savepic.pl))
-$(eval $(call gb_Package_add_file,sd_web,pck/show.asp,webview/show.asp))
-$(eval $(call gb_Package_add_file,sd_web,pck/show.pl,webview/show.pl))
-# the following two files are really renamed
-$(eval $(call gb_Package_add_file,sd_web,pck/webcast.asp,webview/webview.asp))
-$(eval $(call gb_Package_add_file,sd_web,pck/webcast.pl,webview/webview.pl))
+$(eval $(call gb_Package_set_outdir,sd_web,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,sd_web,share/config/webcast,\
+	webview/common.inc \
+	webview/common.pl \
+	webview/edit.asp \
+	webview/editpic.asp \
+	webview/editpic.pl \
+	webview/edit.pl \
+	webview/index.pl \
+	webview/poll.asp \
+	webview/poll.pl \
+	webview/savepic.asp \
+	webview/savepic.pl \
+	webview/show.asp \
+	webview/show.pl \
+	webview/webcast.asp \
+	webview/webcast.pl \
+))
+
+$(eval $(call gb_Package_add_files,sd_web,share/config/wizard/web/buttons,\
+	buttons/glas-blue.zip \
+	buttons/glas-green.zip \
+	buttons/glas-red.zip \
+	buttons/round-gorilla.zip \
+	buttons/round-white.zip \
+	buttons/simple.zip \
+	buttons/square-blue.zip \
+	buttons/square-gray.zip \
+	buttons/square-green.zip \
+	buttons/square-red.zip \
+	buttons/square-yellow.zip \
+))
 
 # vim: set noet sw=4 ts=4:
