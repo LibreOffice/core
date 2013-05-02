@@ -19,9 +19,9 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libodfgen,inc/external/libod
 $(eval $(call gb_ExternalPackage_use_external_project,libodfgen,libodfgen))
 
 ifeq ($(COM),MSC)
-$(eval $(call gb_ExternalPackage_add_file,libodfgen,lib/odfgen-0.0.lib,src/lib/.libs/libodfgen-0.0.lib))
+$(eval $(call gb_ExternalPackage_add_file,libodfgen,lib/odfgen-0.0.lib,src/.libs/libodfgen-0.0.lib))
 else
-$(eval $(call gb_ExternalPackage_add_file,libodfgen,lib/libodfgen-0.0.a,src/lib/.libs/libodfgen-0.0.a))
+$(eval $(call gb_ExternalPackage_add_file,libodfgen,lib/libodfgen-0.0.a,src/.libs/libodfgen-0.0.a))
 endif
 
 
