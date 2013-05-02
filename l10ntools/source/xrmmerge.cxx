@@ -481,8 +481,6 @@ void XRMResMerge::WorkOnText(
     const OString &rOpenTag,
     OString & )
 {
-    OString sLang( GetAttribute( rOpenTag, sLangAttribute ));
-
     if ( pMergeDataFile ) {
         if ( !pResData ) {
             pResData = new ResData( GetGID(), sFilename );
