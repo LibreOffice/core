@@ -49,7 +49,7 @@ public:
     sal_Int32 getAPIEndIndexofRange( const uno::Reference< excel::XRange >& xRange, sal_Int32 nUsedStart ) throw (uno::RuntimeException)
     {
         if( m_bColumn )
-            return nUsedStart + xRange->Columns( uno::Any() )->getCount();
+            return nUsedStart + xRange->Columns( uno::Any() )->getCount() - 1;
         return nUsedStart + xRange->Rows( uno::Any() )->getCount();
     }
 
@@ -107,7 +107,7 @@ sal_Int32 SAL_CALL RangePageBreaks::getCount(  ) throw (uno::RuntimeException)
     for( sal_Int32 i=0; i<nLength; i++ )
     {
         sal_Int32 nPos = aTablePageBreakData[i].Position;
-        if( nPos > nUsedEnd + 1 )
+        if( nPos > nUsedEnd + 1)
             return nCount;
         nCount++;
     }
