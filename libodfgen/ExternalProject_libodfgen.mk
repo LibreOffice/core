@@ -32,6 +32,7 @@ $(call gb_ExternalProject_get_state_target,libodfgen,build) :
 			--disable-shared \
 			--disable-debug \
 			--disable-werror \
+			--disable-weffc \
 			CXXFLAGS="$(if $(filter NO,$(SYSTEM_BOOST)),-I$(call gb_UnpackedTarball_get_dir,boost),$(BOOST_CPPFLAGS))" \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& (cd $(EXTERNAL_WORKDIR)/src && $(MAKE)) \
