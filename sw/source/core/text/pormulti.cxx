@@ -911,14 +911,14 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
 
     const SvxCharRotateItem* pRotate = NULL;
     const SfxPoolItem* pRotItem;
-    if( SFX_ITEM_SET == pFrm->GetTxtNode()->GetSwAttrSet().
+    if( SFX_ITEM_SET == m_pFrm->GetTxtNode()->GetSwAttrSet().
         GetItemState( RES_CHRATR_ROTATE, sal_True, &pRotItem ) &&
         ((SvxCharRotateItem*)pRotItem)->GetValue() )
         pRotate = (SvxCharRotateItem*)pRotItem;
     else
         pRotItem = NULL;
     const SvxTwoLinesItem* p2Lines = NULL;
-    const SwTxtNode *pLclTxtNode = pFrm->GetTxtNode();
+    const SwTxtNode *pLclTxtNode = m_pFrm->GetTxtNode();
     if( !pLclTxtNode )
         return NULL;
     const SfxPoolItem* pItem;

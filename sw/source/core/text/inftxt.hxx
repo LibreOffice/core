@@ -157,51 +157,51 @@ class SwTxtSizeInfo : public SwTxtInfo
 protected:
     // during formatting, a small database is built, mapping portion pointers
     // to their maximum size (used for kana compression)
-    SwTxtPortionMap aMaxWidth;
+    SwTxtPortionMap m_aMaxWidth;
     // for each line, an array of compression values is calculated
     // this array is passed over to the info structure
-    std::deque<sal_uInt16>* pKanaComp;
+    std::deque<sal_uInt16>* m_pKanaComp;
 
-    ViewShell    *pVsh;
+    ViewShell    *m_pVsh;
 
-    // pOut is the output device, pRef is the device used for formatting
-    OutputDevice* pOut;
-    OutputDevice* pRef;
+    // m_pOut is the output device, m_pRef is the device used for formatting
+    OutputDevice* m_pOut;
+    OutputDevice* m_pRef;
 
-    SwFont *pFnt;
-    SwUnderlineFont *pUnderFnt; // Font for underlining
-    SwTxtFrm *pFrm;
-    const SwViewOption *pOpt;
-    const OUString *pTxt;
-    sal_Int32 nIdx, nLen;
-    sal_uInt16 nKanaIdx;
-    bool bOnWin     : 1;
-    bool bNotEOL    : 1;
-    bool bURLNotify : 1;
-    bool bStopUnderFlow : 1; // Underflow was stopped e.g. by a FlyPortion
-    bool bFtnInside : 1;     // the current line contains a footnote
-    bool bOtherThanFtnInside : 1; // the current line contains another portion than a footnote portion.
+    SwFont *m_pFnt;
+    SwUnderlineFont *m_pUnderFnt; // Font for underlining
+    SwTxtFrm *m_pFrm;
+    const SwViewOption *m_pOpt;
+    const OUString *m_pTxt;
+    sal_Int32 m_nIdx, m_nLen;
+    sal_uInt16 m_nKanaIdx;
+    bool m_bOnWin     : 1;
+    bool m_bNotEOL    : 1;
+    bool m_bURLNotify : 1;
+    bool m_bStopUnderFlow : 1; // Underflow was stopped e.g. by a FlyPortion
+    bool m_bFtnInside : 1;     // the current line contains a footnote
+    bool m_bOtherThanFtnInside : 1; // the current line contains another portion than a footnote portion.
                                       // needed for checking keep together of footnote portion with previous portion
-    bool bMulti : 1;        // inside a multiportion
-    bool bFirstMulti : 1;   // this flag is used for two purposes:
+    bool m_bMulti : 1;        // inside a multiportion
+    bool m_bFirstMulti : 1;   // this flag is used for two purposes:
                                 // - the multiportion is the first lineportion
                                 // - indicates, if we are currently in second
                                 //   line of multi portion
-    bool bRuby : 1;         // during the formatting of a phonetic line
-    bool bHanging : 1;      // formatting of hanging punctuation allowed
-    bool bScriptSpace : 1;  // space between different scripts (Asian/Latin)
-    bool bForbiddenChars : 1; // Forbidden start/endline characters
-    bool bSnapToGrid : 1;   // paragraph snaps to grid
-    sal_uInt8 nDirection : 2;       // writing direction: 0/90/180/270 degree
+    bool m_bRuby : 1;         // during the formatting of a phonetic line
+    bool m_bHanging : 1;      // formatting of hanging punctuation allowed
+    bool m_bScriptSpace : 1;  // space between different scripts (Asian/Latin)
+    bool m_bForbiddenChars : 1; // Forbidden start/endline characters
+    bool m_bSnapToGrid : 1;   // paragraph snaps to grid
+    sal_uInt8 m_nDirection : 2;       // writing direction: 0/90/180/270 degree
 
 protected:
     void CtorInitTxtSizeInfo( SwTxtFrm *pFrm, SwFont *pFnt = 0,
                    const xub_StrLen nIdx = 0,
                    const xub_StrLen nLen = STRING_LEN );
-    SwTxtSizeInfo() : pKanaComp(0), pVsh(0), pOut(0), pRef(0), pFnt(0), pUnderFnt(0), pFrm(0), pOpt(0), pTxt(0) {}
+    SwTxtSizeInfo() : m_pKanaComp(0), m_pVsh(0), m_pOut(0), m_pRef(0), m_pFnt(0), m_pUnderFnt(0), m_pFrm(0), m_pOpt(0), m_pTxt(0) {}
 public:
     SwTxtSizeInfo( const SwTxtSizeInfo &rInf );
-    SwTxtSizeInfo( const SwTxtSizeInfo &rInf, const OUString* pTxt_,
+    SwTxtSizeInfo( const SwTxtSizeInfo &rInf, const OUString* pTxt,
                    const sal_Int32 nIdx = 0,
                    const xub_StrLen nLen = STRING_LEN );
 
@@ -215,57 +215,57 @@ public:
     // rPos will set to the end of the multi-line part.
     SwMultiCreator* GetMultiCreator( xub_StrLen &rPos, SwMultiPortion* pM ) const;
 
-    inline bool OnWin() const { return bOnWin; }
-    inline void SetOnWin( const bool bNew ) { bOnWin = bNew; }
-    inline bool NotEOL() const { return bNotEOL; }
-    inline void SetNotEOL( const bool bNew ) { bNotEOL = bNew; }
-    inline bool URLNotify() const { return bURLNotify; }
-    inline void SetURLNotify( const bool bNew ) { bURLNotify = bNew; }
-    inline bool StopUnderFlow() const { return bStopUnderFlow; }
-    inline void SetStopUnderFlow( const bool bNew ) { bStopUnderFlow = bNew; }
-    inline bool IsFtnInside() const { return bFtnInside; }
-    inline void SetFtnInside( const bool bNew ) { bFtnInside = bNew; }
-    inline bool IsOtherThanFtnInside() const { return bOtherThanFtnInside; }
-    inline void SetOtherThanFtnInside( const bool bNew ) { bOtherThanFtnInside = bNew; }
-    inline bool IsMulti() const { return bMulti; }
-    inline void SetMulti( const bool bNew ) { bMulti = bNew; }
-    inline bool IsFirstMulti() const { return bFirstMulti; }
-    inline void SetFirstMulti( const bool bNew ) { bFirstMulti = bNew; }
-    inline bool IsRuby() const { return bRuby; }
-    inline void SetRuby( const bool bNew ) { bRuby = bNew; }
-    inline bool IsHanging() const { return bHanging; }
-    inline void SetHanging( const bool bNew ) { bHanging = bNew; }
-    inline bool HasScriptSpace() const { return bScriptSpace; }
-    inline void SetScriptSpace( const bool bNew ) { bScriptSpace = bNew; }
-    inline bool HasForbiddenChars() const { return bForbiddenChars; }
-    inline void SetForbiddenChars( const bool bN ) { bForbiddenChars = bN; }
-    inline bool SnapToGrid() const { return bSnapToGrid; }
-    inline void SetSnapToGrid( const bool bN ) { bSnapToGrid = bN; }
-    inline sal_uInt8 GetDirection() const { return nDirection; }
-    inline void SetDirection( const sal_uInt8 nNew ) { nDirection = nNew; }
-    inline sal_Bool IsRotated() const { return 0 != ( 1 & nDirection ); }
+    inline bool OnWin() const { return m_bOnWin; }
+    inline void SetOnWin( const bool bNew ) { m_bOnWin = bNew; }
+    inline bool NotEOL() const { return m_bNotEOL; }
+    inline void SetNotEOL( const bool bNew ) { m_bNotEOL = bNew; }
+    inline bool URLNotify() const { return m_bURLNotify; }
+    inline void SetURLNotify( const bool bNew ) { m_bURLNotify = bNew; }
+    inline bool StopUnderFlow() const { return m_bStopUnderFlow; }
+    inline void SetStopUnderFlow( const bool bNew ) { m_bStopUnderFlow = bNew; }
+    inline bool IsFtnInside() const { return m_bFtnInside; }
+    inline void SetFtnInside( const bool bNew ) { m_bFtnInside = bNew; }
+    inline bool IsOtherThanFtnInside() const { return m_bOtherThanFtnInside; }
+    inline void SetOtherThanFtnInside( const bool bNew ) { m_bOtherThanFtnInside = bNew; }
+    inline bool IsMulti() const { return m_bMulti; }
+    inline void SetMulti( const bool bNew ) { m_bMulti = bNew; }
+    inline bool IsFirstMulti() const { return m_bFirstMulti; }
+    inline void SetFirstMulti( const bool bNew ) { m_bFirstMulti = bNew; }
+    inline bool IsRuby() const { return m_bRuby; }
+    inline void SetRuby( const bool bNew ) { m_bRuby = bNew; }
+    inline bool IsHanging() const { return m_bHanging; }
+    inline void SetHanging( const bool bNew ) { m_bHanging = bNew; }
+    inline bool HasScriptSpace() const { return m_bScriptSpace; }
+    inline void SetScriptSpace( const bool bNew ) { m_bScriptSpace = bNew; }
+    inline bool HasForbiddenChars() const { return m_bForbiddenChars; }
+    inline void SetForbiddenChars( const bool bN ) { m_bForbiddenChars = bN; }
+    inline bool SnapToGrid() const { return m_bSnapToGrid; }
+    inline void SetSnapToGrid( const bool bN ) { m_bSnapToGrid = bN; }
+    inline sal_uInt8 GetDirection() const { return m_nDirection; }
+    inline void SetDirection( const sal_uInt8 nNew ) { m_nDirection = nNew; }
+    inline sal_Bool IsRotated() const { return 0 != ( 1 & m_nDirection ); }
 
-    inline ViewShell *GetVsh() { return pVsh; }
-    inline const ViewShell *GetVsh() const { return pVsh; }
+    inline ViewShell *GetVsh() { return m_pVsh; }
+    inline const ViewShell *GetVsh() const { return m_pVsh; }
 
-    inline OutputDevice *GetOut() { return pOut; }
-    inline const OutputDevice *GetOut() const { return pOut; }
-    inline void SetOut( OutputDevice* pNewOut ) { pOut = pNewOut; }
+    inline OutputDevice *GetOut() { return m_pOut; }
+    inline const OutputDevice *GetOut() const { return m_pOut; }
+    inline void SetOut( OutputDevice* pNewOut ) { m_pOut = pNewOut; }
 
-    inline OutputDevice *GetRefDev() { return pRef; }
-    inline const OutputDevice *GetRefDev() const { return pRef; }
+    inline OutputDevice *GetRefDev() { return m_pRef; }
+    inline const OutputDevice *GetRefDev() const { return m_pRef; }
 
-    inline SwFont *GetFont() { return pFnt; }
-    inline const SwFont *GetFont() const { return pFnt; }
-    inline void SetFont( SwFont *pNew ) { pFnt = pNew; }
+    inline SwFont *GetFont() { return m_pFnt; }
+    inline const SwFont *GetFont() const { return m_pFnt; }
+    inline void SetFont( SwFont *pNew ) { m_pFnt = pNew; }
     void SelectFont();
-    inline void SetUnderFnt( SwUnderlineFont* pNew ) { pUnderFnt = pNew; }
-    inline SwUnderlineFont* GetUnderFnt() const { return pUnderFnt; }
+    inline void SetUnderFnt( SwUnderlineFont* pNew ) { m_pUnderFnt = pNew; }
+    inline SwUnderlineFont* GetUnderFnt() const { return m_pUnderFnt; }
 
-    inline const  SwViewOption &GetOpt() const { return *pOpt; }
-    inline const OUString &GetTxt() const { return *pTxt; }
+    inline const  SwViewOption &GetOpt() const { return *m_pOpt; }
+    inline const OUString &GetTxt() const { return *m_pTxt; }
     inline sal_Unicode GetChar( const sal_Int32 nPos ) const
-    { if (pTxt && !pTxt->isEmpty()) return (*pTxt)[ nPos ]; return 0; }
+    { if (m_pTxt && !m_pTxt->isEmpty()) return (*m_pTxt)[ nPos ]; return 0; }
 
     inline KSHORT      GetTxtHeight() const;
 
@@ -296,67 +296,67 @@ public:
 
     inline KSHORT GetAscent() const;
 
-    inline sal_Int32 GetIdx() const { return nIdx; }
-    inline void SetIdx( const sal_Int32 nNew ) { nIdx = nNew; }
-    inline sal_Int32 GetLen() const { return nLen; }
-    inline void SetLen( const sal_Int32 nNew ) { nLen = nNew; }
-    inline void SetTxt( const OUString &rNew ){ pTxt = &rNew; }
+    inline sal_Int32 GetIdx() const { return m_nIdx; }
+    inline void SetIdx( const sal_Int32 nNew ) { m_nIdx = nNew; }
+    inline sal_Int32 GetLen() const { return m_nLen; }
+    inline void SetLen( const sal_Int32 nNew ) { m_nLen = nNew; }
+    inline void SetTxt( const OUString &rNew ){ m_pTxt = &rNew; }
 
     friend SvStream &operator<<( SvStream &rOS, const SwTxtSizeInfo &rInf );
 
     // No Bullets for the symbol font!
     inline sal_Bool IsNoSymbol() const
-    { return RTL_TEXTENCODING_SYMBOL != pFnt->GetCharSet( pFnt->GetActual() ); }
+    { return RTL_TEXTENCODING_SYMBOL != m_pFnt->GetCharSet( m_pFnt->GetActual() ); }
 
     void NoteAnimation() const;
 
     // Home is where Your heart is...
-    inline SwTxtFrm *GetTxtFrm() { return pFrm; }
-    inline const SwTxtFrm *GetTxtFrm() const { return pFrm; }
+    inline SwTxtFrm *GetTxtFrm() { return m_pFrm; }
+    inline const SwTxtFrm *GetTxtFrm() const { return m_pFrm; }
 
     inline sal_Bool HasHint( xub_StrLen nPos ) const
-        { return _HasHint( pFrm->GetTxtNode(), nPos ); }
+        { return _HasHint( m_pFrm->GetTxtNode(), nPos ); }
     static sal_Bool _HasHint( const SwTxtNode* pTxtNode, xub_StrLen nPos );
 
     // If Kana Compression is enabled, a minimum and maximum portion width
     // is calculated. We format lines with minimal size and share remaining
     // space among compressed kanas.
     // During formatting, the maximum values of compressable portions are
-    // stored in aMaxWidth and discarded after a line has been formatted.
+    // stored in m_aMaxWidth and discarded after a line has been formatted.
     inline void SetMaxWidthDiff( sal_uLong nKey, sal_uInt16 nVal )
     {
-        aMaxWidth.insert( ::std::make_pair( nKey, nVal ) );
+        m_aMaxWidth.insert( ::std::make_pair( nKey, nVal ) );
     };
     inline sal_uInt16 GetMaxWidthDiff( sal_uLong nKey )
     {
-        SwTxtPortionMap::iterator it = aMaxWidth.find( nKey );
+        SwTxtPortionMap::iterator it = m_aMaxWidth.find( nKey );
 
-        if( it != aMaxWidth.end() )
+        if( it != m_aMaxWidth.end() )
             return it->second;
         else
             return 0;
     };
     inline void ResetMaxWidthDiff()
     {
-        aMaxWidth.clear();
+        m_aMaxWidth.clear();
     };
     inline sal_Bool CompressLine()
     {
-        return (sal_Bool)!aMaxWidth.empty();
+        return (sal_Bool)!m_aMaxWidth.empty();
     };
 
     //
     // Feature: Kana Compression
     //
-    inline MSHORT GetKanaIdx() const { return nKanaIdx; }
-    inline void ResetKanaIdx(){ nKanaIdx = 0; }
-    inline void SetKanaIdx( MSHORT nNew ) { nKanaIdx = nNew; }
-    inline void IncKanaIdx() { ++nKanaIdx; }
-    inline void SetKanaComp( std::deque<sal_uInt16> *pNew ){ pKanaComp = pNew; }
-    inline std::deque<sal_uInt16>* GetpKanaComp() const { return pKanaComp; }
+    inline MSHORT GetKanaIdx() const { return m_nKanaIdx; }
+    inline void ResetKanaIdx(){ m_nKanaIdx = 0; }
+    inline void SetKanaIdx( MSHORT nNew ) { m_nKanaIdx = nNew; }
+    inline void IncKanaIdx() { ++m_nKanaIdx; }
+    inline void SetKanaComp( std::deque<sal_uInt16> *pNew ){ m_pKanaComp = pNew; }
+    inline std::deque<sal_uInt16>* GetpKanaComp() const { return m_pKanaComp; }
     inline sal_uInt16 GetKanaComp() const
-        { return ( pKanaComp && nKanaIdx < pKanaComp->size() )
-                   ? (*pKanaComp)[nKanaIdx] : 0; }
+        { return ( m_pKanaComp && m_nKanaIdx < m_pKanaComp->size() )
+                   ? (*m_pKanaComp)[m_nKanaIdx] : 0; }
 
 #ifdef DBG_UTIL
     sal_Bool IsOptDbg() const;
@@ -392,10 +392,10 @@ class SwTxtPaintInfo : public SwTxtSizeInfo
 
 protected:
 #ifdef DBG_UTIL
-    SwTxtPaintInfo() { pFrm = 0; pWrongList = 0; pGrammarCheckList = 0; pSmartTags = 0; pSpaceAdd = 0;
+    SwTxtPaintInfo() { m_pFrm = 0; pWrongList = 0; pGrammarCheckList = 0; pSmartTags = 0; pSpaceAdd = 0;
                        pBrushItem = ((SvxBrushItem*)-1);}
 #else
-    SwTxtPaintInfo() { pFrm = 0; pWrongList = 0; pGrammarCheckList = 0; pSmartTags = 0; pSpaceAdd = 0;
+    SwTxtPaintInfo() { m_pFrm = 0; pWrongList = 0; pGrammarCheckList = 0; pSmartTags = 0; pSpaceAdd = 0;
                        pBrushItem = 0;}
 #endif
 public:
@@ -781,19 +781,19 @@ public:
 
 inline KSHORT SwTxtSizeInfo::GetAscent() const
 {
-    OSL_ENSURE( GetOut(), "SwTxtSizeInfo::GetAscent() without pOut" );
-    return ((SwFont*)GetFont())->GetAscent( pVsh, *GetOut() );
+    OSL_ENSURE( GetOut(), "SwTxtSizeInfo::GetAscent() without m_pOut" );
+    return ((SwFont*)GetFont())->GetAscent( m_pVsh, *GetOut() );
 }
 
 inline KSHORT SwTxtSizeInfo::GetTxtHeight() const
 {
-    OSL_ENSURE( GetOut(), "SwTxtSizeInfo::GetTxtHeight() without pOut" );
-    return ((SwFont*)GetFont())->GetHeight( pVsh, *GetOut() );
+    OSL_ENSURE( GetOut(), "SwTxtSizeInfo::GetTxtHeight() without m_pOut" );
+    return ((SwFont*)GetFont())->GetHeight( m_pVsh, *GetOut() );
 }
 
 inline SwPosSize SwTxtSizeInfo::GetTxtSize( const XubString &rTxt ) const
 {
-    return GetTxtSize( pOut, 0, rTxt, 0, rTxt.Len(), 0 );
+    return GetTxtSize( m_pOut, 0, rTxt, 0, rTxt.Len(), 0 );
 }
 
 inline SwPosSize SwTxtSizeInfo::GetTxtSize( const SwScriptInfo* pSI,
@@ -801,7 +801,7 @@ inline SwPosSize SwTxtSizeInfo::GetTxtSize( const SwScriptInfo* pSI,
                                             const xub_StrLen nNewLen,
                                             const sal_uInt16 nCompress ) const
 {
-    return GetTxtSize( pOut, pSI, *pTxt, nNewIdx, nNewLen, nCompress );
+    return GetTxtSize( m_pOut, pSI, *m_pTxt, nNewIdx, nNewLen, nCompress );
 }
 
 /*************************************************************************
@@ -830,7 +830,7 @@ inline void SwTxtPaintInfo::DrawText( const XubString &rText,
 inline void SwTxtPaintInfo::DrawText( const SwLinePortion &rPor,
         const xub_StrLen nLength, const sal_Bool bKern ) const
 {
-    ((SwTxtPaintInfo*)this)->_DrawText( *pTxt, rPor, nIdx, nLength, bKern );
+    ((SwTxtPaintInfo*)this)->_DrawText( *m_pTxt, rPor, m_nIdx, nLength, bKern );
 }
 
 inline void SwTxtPaintInfo::DrawMarkedText( const SwLinePortion &rPor,
@@ -840,7 +840,7 @@ inline void SwTxtPaintInfo::DrawMarkedText( const SwLinePortion &rPor,
                                             const sal_Bool bSmartTags,
                                             const sal_Bool bGrammarCheck ) const
 {
-    ((SwTxtPaintInfo*)this)->_DrawText( *pTxt, rPor, nIdx, nLength, bKern, bWrong, bSmartTags, bGrammarCheck );
+    ((SwTxtPaintInfo*)this)->_DrawText( *m_pTxt, rPor, m_nIdx, nLength, bKern, bWrong, bSmartTags, bGrammarCheck );
 }
 
 /*************************************************************************

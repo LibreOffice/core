@@ -43,14 +43,14 @@ using namespace ::com::sun::star::i18n;
 Reference< XHyphenatedWord >  SwTxtFormatInfo::HyphWord(
                                 const XubString &rTxt, const MSHORT nMinTrail )
 {
-    if( rTxt.Len() < 4 || pFnt->IsSymbol(pVsh) )
+    if( rTxt.Len() < 4 || m_pFnt->IsSymbol(m_pVsh) )
         return 0;
     Reference< XHyphenator >  xHyph = ::GetHyphenator();
     Reference< XHyphenatedWord > xHyphWord;
 
     if( xHyph.is() )
         xHyphWord = xHyph->hyphenate( OUString(rTxt),
-                            g_pBreakIt->GetLocale( pFnt->GetLanguage() ),
+                            g_pBreakIt->GetLocale( m_pFnt->GetLanguage() ),
                             rTxt.Len() - nMinTrail, GetHyphValues() );
     return xHyphWord;
 
