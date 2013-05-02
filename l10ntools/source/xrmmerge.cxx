@@ -478,7 +478,7 @@ void XRMResMerge::WorkOnDesc(
 }
 
 void XRMResMerge::WorkOnText(
-    const OString &rOpenTag,
+    const OString &,
     OString & )
 {
     if ( pMergeDataFile ) {
