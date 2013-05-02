@@ -94,6 +94,8 @@ $(eval $(call gb_Library_add_defs,npsoplugin,\
 ifeq ($(COM),MSC)
 $(eval $(call gb_Library_add_ldflags,npsoplugin,\
 	/EXPORT:NPP_GetMIMEDescription \
+	/EXPORT:NPP_Initialize \
+	/EXPORT:NPP_Shutdown \
 	/EXPORT:NPP_New \
 	/EXPORT:NPP_Destroy \
 	/EXPORT:NPP_SetWindow \
@@ -104,7 +106,6 @@ $(eval $(call gb_Library_add_ldflags,npsoplugin,\
 	/EXPORT:NPP_StreamAsFile \
 	/EXPORT:NPP_URLNotify \
 	/EXPORT:NPP_Print \
-	/EXPORT:NPP_Shutdown \
 	/EXPORT:NP_GetEntryPoints \
 	/EXPORT:NP_Initialize \
 	/EXPORT:NP_Shutdown \
@@ -112,11 +113,7 @@ $(eval $(call gb_Library_add_ldflags,npsoplugin,\
 ))
 endif
 
-# Trick to get rid of the default.res to avoid duplicate VERSION
-# resource: Set NATIVERES for npsoplugin to be *only* npsoplugin_res
-
-$(eval $(call gb_LinkTarget_get_target,npsoplugin) : $(call gb_WinResTarget_get_target,npsoplugin_res))
-$(eval $(call gb_LinkTarget_get_target,npsoplugin) : NATIVERES := $(call gb_WinResTarget_get_target,npsoplugin_res))
+$(eval $(call gb_Library_set_nativeres,npsoplugin,npsoplugin/npsoplugin))
 
 endif # GUI=WNT
 
