@@ -18,6 +18,13 @@
 
 using namespace ::com::sun::star;
 
+/**
+ * Unit test invoking the Writer RTF import filter.
+ *
+ * This does only minimal testing, checking if the filter crashes and returns
+ * the expected bool value for given inputs. More fine-grained tests can be
+ * found under sw/qa/extras/rtfimport/.
+ */
 class RtfTest
     : public test::FiltersTest
     , public test::BootstrapFixture

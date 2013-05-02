@@ -18,6 +18,8 @@ namespace writerfilter {
     namespace rtftok {
 
         typedef std::vector< std::pair<Id, RTFValue::Pointer_t> > RTFSprmsImplBase;
+
+        /// The payload of RTFSprms which is only copied on write.
         class RTFSprmsImpl : public RTFSprmsImplBase
         {
         public:
