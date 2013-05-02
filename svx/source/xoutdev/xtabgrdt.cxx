@@ -78,7 +78,7 @@ XGradientEntry* XGradientList::GetGradient(long nIndex) const
     return( (XGradientEntry*) XPropertyList::Get( nIndex ) );
 }
 
-sal_Bool XGradientList::Load()
+bool XGradientList::Load()
 {
     if( mbListDirty )
     {
@@ -89,7 +89,7 @@ sal_Bool XGradientList::Load()
         if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
         {
             DBG_ASSERT( !maPath.Len(), "invalid URL" );
-            return sal_False;
+            return false;
         }
 
         aURL.Append( maName );
@@ -101,17 +101,18 @@ sal_Bool XGradientList::Load()
         return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
 
     }
-    return( sal_False );
+
+    return false;
 }
 
-sal_Bool XGradientList::Save()
+bool XGradientList::Save()
 {
     INetURLObject aURL( maPath );
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
     {
         DBG_ASSERT( !maPath.Len(), "invalid URL" );
-        return sal_False;
+        return false;
     }
 
     aURL.Append( maName );
@@ -123,7 +124,7 @@ sal_Bool XGradientList::Save()
     return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
 }
 
-sal_Bool XGradientList::Create()
+bool XGradientList::Create()
 {
     XubString aStr( SVX_RES( RID_SVXSTR_GRADIENT ) );
     xub_StrLen nLen;
@@ -142,7 +143,7 @@ sal_Bool XGradientList::Create()
     aStr.SetChar(nLen, sal_Unicode('6'));
     Insert(new XGradientEntry(XGradient(RGB_Color(COL_MAGENTA),RGB_Color(COL_YELLOW ),XGRAD_RECT      , 1900,60,60,50,100,100),aStr));
 
-    return( sal_True );
+    return true;
 }
 
 Bitmap XGradientList::CreateBitmapForUI(long nIndex)

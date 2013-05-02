@@ -548,9 +548,8 @@ IMPL_LINK( SvxColorTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
         maColorTab->Insert( pEntry, maColorTab->Count() );
 
-        aLbColor.Append( pEntry );
-        aValSetColorTable.InsertItem( aValSetColorTable.GetItemCount() + 1,
-                pEntry->GetColor(), pEntry->GetName() );
+        aLbColor.Append( *pEntry );
+        aValSetColorTable.InsertItem( aValSetColorTable.GetItemCount() + 1, pEntry->GetColor(), pEntry->GetName() );
         ImpColorCountChanged();
 
         aLbColor.SelectEntryPos( aLbColor.GetEntryCount() - 1 );
@@ -627,20 +626,18 @@ IMPL_LINK( SvxColorTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
         // Wenn nicht vorhanden, wird Eintrag aufgenommen
         if( bDifferent )
         {
-            XColorEntry* pEntry = maColorTab->GetColor( nPos );
-
             Color aTmpColor (aAktuellColor);
+
             if (eCM != CM_RGB)
                 ConvertColorValues (aTmpColor, CM_RGB);
 
-            pEntry->SetColor( aTmpColor );
-            pEntry->SetName( aName );
+            const XColorEntry aEntry(aTmpColor, aName);
 
-            aLbColor.Modify( pEntry, nPos );
+            aLbColor.Modify( aEntry, nPos );
             aLbColor.SelectEntryPos( nPos );
-            /////
-            aValSetColorTable.SetItemColor( nPos + 1, pEntry->GetColor() );
-            aValSetColorTable.SetItemText( nPos + 1, pEntry->GetName() );
+
+            aValSetColorTable.SetItemColor( nPos + 1, aEntry.GetColor() );
+            aValSetColorTable.SetItemText( nPos + 1, aEntry.GetName() );
             aEdtName.SetText( aName );
 
             aCtlPreviewOld.Invalidate();

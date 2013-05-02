@@ -87,7 +87,7 @@ XBitmapEntry* XBitmapList::GetBitmap(long nIndex) const
 
 /************************************************************************/
 
-sal_Bool XBitmapList::Load()
+bool XBitmapList::Load()
 {
     if( mbListDirty )
     {
@@ -98,7 +98,7 @@ sal_Bool XBitmapList::Load()
         if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
         {
             DBG_ASSERT( !maPath.Len(), "invalid URL" );
-            return sal_False;
+            return false;
         }
 
         aURL.Append( maName );
@@ -109,19 +109,20 @@ sal_Bool XBitmapList::Load()
         uno::Reference< container::XNameContainer > xTable( SvxUnoXBitmapTable_createInstance( this ), uno::UNO_QUERY );
         return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
     }
-    return( sal_False );
+
+    return false;
 }
 
 /************************************************************************/
 
-sal_Bool XBitmapList::Save()
+bool XBitmapList::Save()
 {
     INetURLObject aURL( maPath );
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
     {
         DBG_ASSERT( !maPath.Len(), "invalid URL" );
-        return sal_False;
+        return false;
     }
 
     aURL.Append( maName );
@@ -136,17 +137,8 @@ sal_Bool XBitmapList::Save()
 /************************************************************************/
 // Umgestellt am 27.07.95 auf XBitmap
 
-sal_Bool XBitmapList::Create()
+bool XBitmapList::Create()
 {
-    //-----------------------
-    // 00 01 02 03 04 05 06 07
-    // 08 09 10 11 12 13 14 15
-    // 16 17 18 19 20 21 22 23
-    // 24 25 26 27 28 29 30 31
-    // 32 33 34 35 36 37 38 39
-    // 40 41 42 43 44 45 46 47
-    // 48 49 50 51 52 53 54 55
-    // 56 57 58 59 60 61 62 63
     String aStr(SVX_RES(RID_SVXSTR_BITMAP));
     sal_uInt16 aArray[64];
     Bitmap aBitmap;
@@ -180,7 +172,7 @@ sal_Bool XBitmapList::Create()
     aBitmap = createHistorical8x8FromArray(aArray, RGB_Color(COL_LIGHTBLUE), RGB_Color(COL_WHITE));
     Insert(new XBitmapEntry(Graphic(aBitmap), aStr));
 
-    return( sal_True );
+    return true;
 }
 
 /************************************************************************/

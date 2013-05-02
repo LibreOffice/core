@@ -41,42 +41,32 @@ SVX_DLLPUBLIC Color RGB_Color( ColorData nColorName );
 //////////////////////////////////////////////////////////////////////////////
 // class XColorEntry
 
-class XColorEntry : public XPropertyEntry
+class SVX_DLLPUBLIC XColorEntry : public XPropertyEntry
 {
+private:
     Color   aColor;
 
 public:
-            XColorEntry(const Color& rColor, const String& rName) :
-                XPropertyEntry(rName), aColor(rColor) {}
-            XColorEntry(const XColorEntry& rOther) :
-                XPropertyEntry(rOther), aColor(rOther.aColor) {}
+    XColorEntry(const Color& rColor, const String& rName);
+    XColorEntry(const XColorEntry& rOther);
 
-    void SetColor(const Color& rColor) { aColor = rColor; }
-    const Color& GetColor() const { return aColor; }
+    const Color& GetColor() const
+    {
+        return aColor;
+    }
 };
 
 //////////////////////////////////////////////////////////////////////////////
 // class XLineEndEntry
 
-class XLineEndEntry : public XPropertyEntry
+class SVX_DLLPUBLIC XLineEndEntry : public XPropertyEntry
 {
+private:
     basegfx::B2DPolyPolygon aB2DPolyPolygon;
 
 public:
-    XLineEndEntry(const basegfx::B2DPolyPolygon& rB2DPolyPolygon, const String& rName)
-    :   XPropertyEntry(rName),
-        aB2DPolyPolygon(rB2DPolyPolygon)
-    {}
-
-    XLineEndEntry(const XLineEndEntry& rOther)
-    :   XPropertyEntry(rOther),
-        aB2DPolyPolygon(rOther.aB2DPolyPolygon)
-    {}
-
-    void SetLineEnd(const basegfx::B2DPolyPolygon& rB2DPolyPolygon)
-    {
-        aB2DPolyPolygon = rB2DPolyPolygon;
-    }
+    XLineEndEntry(const basegfx::B2DPolyPolygon& rB2DPolyPolygon, const String& rName);
+    XLineEndEntry(const XLineEndEntry& rOther);
 
     const basegfx::B2DPolyPolygon& GetLineEnd() const
     {
@@ -87,83 +77,72 @@ public:
 //////////////////////////////////////////////////////////////////////////////
 // class XDashEntry
 
-class XDashEntry : public XPropertyEntry
+class SVX_DLLPUBLIC XDashEntry : public XPropertyEntry
 {
+private:
     XDash   aDash;
 
 public:
-            XDashEntry(const XDash& rDash, const String& rName) :
-                XPropertyEntry(rName), aDash(rDash) {}
-            XDashEntry(const XDashEntry& rOther) :
-                XPropertyEntry(rOther), aDash(rOther.aDash) {}
+    XDashEntry(const XDash& rDash, const String& rName);
+    XDashEntry(const XDashEntry& rOther);
 
-    void SetDash(const XDash& rDash) { aDash = rDash; }
-    const XDash& GetDash() const { return aDash; }
+    const XDash& GetDash() const
+    {
+        return aDash;
+    }
 };
 
 //////////////////////////////////////////////////////////////////////////////
 // class XHatchEntry
 
-class XHatchEntry : public XPropertyEntry
+class SVX_DLLPUBLIC XHatchEntry : public XPropertyEntry
 {
+private:
     XHatch  aHatch;
 
 public:
-            XHatchEntry(const XHatch& rHatch, const String& rName) :
-                XPropertyEntry(rName), aHatch(rHatch) {}
-            XHatchEntry(const XHatchEntry& rOther) :
-                XPropertyEntry(rOther), aHatch(rOther.aHatch) {}
+    XHatchEntry(const XHatch& rHatch, const String& rName);
+    XHatchEntry(const XHatchEntry& rOther);
 
-    void SetHatch(const XHatch& rHatch) { aHatch = rHatch; }
-    const XHatch& GetHatch() const { return aHatch; }
+    const XHatch& GetHatch() const
+    {
+        return aHatch;
+    }
 };
 
 //////////////////////////////////////////////////////////////////////////////
 // class XGradientEntry
 
-class XGradientEntry : public XPropertyEntry
+class SVX_DLLPUBLIC XGradientEntry : public XPropertyEntry
 {
+private:
     XGradient  aGradient;
 
 public:
-                XGradientEntry(const XGradient& rGradient, const String& rName):
-                    XPropertyEntry(rName), aGradient(rGradient) {}
-                XGradientEntry(const XGradientEntry& rOther) :
-                    XPropertyEntry(rOther), aGradient(rOther.aGradient) {}
+    XGradientEntry(const XGradient& rGradient, const String& rName);
+    XGradientEntry(const XGradientEntry& rOther);
 
-    void SetGradient(const XGradient& rGrad) { aGradient = rGrad; }
-    const XGradient& GetGradient() const { return aGradient; }
+    const XGradient& GetGradient() const
+    {
+        return aGradient;
+    }
 };
 
 //////////////////////////////////////////////////////////////////////////////
 // class XBitmapEntry
 
-class XBitmapEntry : public XPropertyEntry
+class SVX_DLLPUBLIC XBitmapEntry : public XPropertyEntry
 {
 private:
     GraphicObject   maGraphicObject;
 
 public:
-    XBitmapEntry(const GraphicObject& rGraphicObject, const String& rName)
-    :   XPropertyEntry(rName),
-        maGraphicObject(rGraphicObject)
-    {
-    }
-
-    XBitmapEntry(const XBitmapEntry& rOther)
-    :   XPropertyEntry(rOther),
-        maGraphicObject(rOther.maGraphicObject)
-    {
-    }
+    XBitmapEntry(const GraphicObject& rGraphicObject, const String& rName);
+    XBitmapEntry(const XBitmapEntry& rOther);
 
     const GraphicObject& GetGraphicObject() const
     {
         return maGraphicObject;
-    }
-
-    void SetGraphicObject(const GraphicObject& rGraphicObject)
-    {
-        maGraphicObject = rGraphicObject;
     }
 };
 
@@ -181,33 +160,35 @@ protected:
     /// bitfield
     bool                mbListDirty : 1;
 
-    XPropertyList( const String& rPath );
-    void                Clear();
-    virtual Bitmap      CreateBitmapForUI( long nIndex ) = 0;
+    XPropertyList(const String& rPath);
+    void Clear();
+    virtual Bitmap CreateBitmapForUI(long nIndex) = 0;
 
 public:
-    virtual             ~XPropertyList();
+    virtual ~XPropertyList();
 
-    long                Count() const;
+    long Count() const;
 
-    void                Insert( XPropertyEntry* pEntry, long nIndex = LIST_APPEND );
-    XPropertyEntry*     Replace( XPropertyEntry* pEntry, long nIndex );
-    XPropertyEntry*     Remove( long nIndex );
-    XPropertyEntry*     Get( long nIndex ) const;
+    void Insert(XPropertyEntry* pEntry, long nIndex = LIST_APPEND);
+    XPropertyEntry* Replace(XPropertyEntry* pEntry, long nIndex);
+    XPropertyEntry* Remove(long nIndex);
+    XPropertyEntry* Get(long nIndex) const;
 
-    long                GetIndex(const String& rName) const;
-    Bitmap              GetUiBitmap( long nIndex ) const;
+    long GetIndex(const String& rName) const;
+    Bitmap GetUiBitmap(long nIndex) const;
 
-    const String&       GetName() const { return maName; }
-    void                SetName( const String& rString );
-    const String&       GetPath() const { return maPath; }
-    void                SetPath( const String& rString ) { maPath = rString; }
-    bool                IsDirty() const { return mbListDirty; }
-    void                SetDirty( bool bDirty = true ) { mbListDirty = bDirty; }
+    const String& GetName() const { return maName; }
+    void SetName( const String& rString );
 
-    virtual sal_Bool        Load() = 0;
-    virtual sal_Bool        Save() = 0;
-    virtual sal_Bool        Create() = 0;
+    const String& GetPath() const { return maPath; }
+    void SetPath( const String& rString ) { maPath = rString; }
+
+    bool IsDirty() const { return mbListDirty; }
+    void SetDirty( bool bDirty = true ) { mbListDirty = bDirty; }
+
+    virtual bool Load() = 0;
+    virtual bool Save() = 0;
+    virtual bool Create() = 0;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -251,23 +232,23 @@ class SVX_DLLPUBLIC XColorList : public XPropertyList
 {
 private:
     friend class XPropertyListFactory;
-    XColorList( const String& rPath );
+    XColorList(const String& rPath);
 
 protected:
-    virtual Bitmap  CreateBitmapForUI( long nIndex );
+    virtual Bitmap  CreateBitmapForUI(long nIndex);
 
 public:
-    virtual         ~XColorList();
+    virtual ~XColorList();
 
     using XPropertyList::Replace;
-    XColorEntry*    Replace(XColorEntry* pEntry, long nIndex );
+    XColorEntry* Replace(XColorEntry* pEntry, long nIndex );
     using XPropertyList::Remove;
-    XColorEntry*    Remove(long nIndex);
-    XColorEntry*    GetColor(long nIndex) const;
+    XColorEntry* Remove(long nIndex);
+    XColorEntry* GetColor(long nIndex) const;
 
-    virtual sal_Bool    Load();
-    virtual sal_Bool    Save();
-    virtual sal_Bool    Create();
+    virtual bool Load();
+    virtual bool Save();
+    virtual bool Create();
 
     static XColorListSharedPtr GetStdColorList();
 };
@@ -279,7 +260,7 @@ class SVX_DLLPUBLIC XLineEndList : public XPropertyList
 {
 private:
     friend class XPropertyListFactory;
-    XLineEndList(const String& rPath );
+    XLineEndList(const String& rPath);
 
 protected:
     virtual Bitmap CreateBitmapForUI(long nIndex);
@@ -293,9 +274,9 @@ public:
     XLineEndEntry* Remove(long nIndex);
     XLineEndEntry* GetLineEnd(long nIndex) const;
 
-    virtual sal_Bool Load();
-    virtual sal_Bool Save();
-    virtual sal_Bool Create();
+    virtual bool Load();
+    virtual bool Save();
+    virtual bool Create();
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -305,7 +286,7 @@ class SVX_DLLPUBLIC XDashList : public XPropertyList
 {
 private:
     friend class XPropertyListFactory;
-    XDashList(const String& rPath );
+    XDashList(const String& rPath);
 
     Bitmap              maBitmapSolidLine;
     String              maStringSolidLine;
@@ -324,9 +305,9 @@ public:
     XDashEntry* Remove(long nIndex);
     XDashEntry* GetDash(long nIndex) const;
 
-    virtual sal_Bool Load();
-    virtual sal_Bool Save();
-    virtual sal_Bool Create();
+    virtual bool Load();
+    virtual bool Save();
+    virtual bool Create();
 
     // Special call to get a bitmap for the solid line representation. It
     // creates a bitmap fitting in size and style to the ones you get by
@@ -346,7 +327,7 @@ class SVX_DLLPUBLIC XHatchList : public XPropertyList
 {
 private:
     friend class XPropertyListFactory;
-    XHatchList(const String& rPath );
+    XHatchList(const String& rPath);
 
 protected:
     virtual Bitmap CreateBitmapForUI(long nIndex);
@@ -360,9 +341,9 @@ public:
     XHatchEntry* Remove(long nIndex);
     XHatchEntry* GetHatch(long nIndex) const;
 
-    virtual sal_Bool Load();
-    virtual sal_Bool Save();
-    virtual sal_Bool Create();
+    virtual bool Load();
+    virtual bool Save();
+    virtual bool Create();
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -372,7 +353,7 @@ class SVX_DLLPUBLIC XGradientList : public XPropertyList
 {
 private:
     friend class XPropertyListFactory;
-    XGradientList(const String& rPath );
+    XGradientList(const String& rPath);
 
 protected:
     virtual Bitmap CreateBitmapForUI(long nIndex);
@@ -386,9 +367,9 @@ public:
     XGradientEntry* Remove(long nIndex);
     XGradientEntry* GetGradient(long nIndex) const;
 
-    virtual sal_Bool Load();
-    virtual sal_Bool Save();
-    virtual sal_Bool Create();
+    virtual bool Load();
+    virtual bool Save();
+    virtual bool Create();
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -398,23 +379,23 @@ class SVX_DLLPUBLIC XBitmapList : public XPropertyList
 {
 private:
     friend class XPropertyListFactory;
-    XBitmapList( const String& rPath );
+    XBitmapList(const String& rPath);
 
 protected:
     virtual Bitmap CreateBitmapForUI( long nIndex );
 
 public:
-    virtual         ~XBitmapList();
+    virtual ~XBitmapList();
 
     using XPropertyList::Replace;
-    XBitmapEntry*   Replace(XBitmapEntry* pEntry, long nIndex );
+    XBitmapEntry* Replace(XBitmapEntry* pEntry, long nIndex );
     using XPropertyList::Remove;
-    XBitmapEntry*   Remove(long nIndex);
-    XBitmapEntry*   GetBitmap(long nIndex) const;
+    XBitmapEntry* Remove(long nIndex);
+    XBitmapEntry* GetBitmap(long nIndex) const;
 
-    virtual sal_Bool    Load();
-    virtual sal_Bool    Save();
-    virtual sal_Bool    Create();
+    virtual bool Load();
+    virtual bool Save();
+    virtual bool Create();
 };
 
 //////////////////////////////////////////////////////////////////////////////

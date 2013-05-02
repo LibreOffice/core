@@ -565,7 +565,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         if( pWarnBox->Execute() != RET_OK )
             break;
     }
-    //Rectangle aDlgRect( pDlg->GetPosPixel(), pDlg->GetSizePixel() );
+
     delete pDlg;
     delete pWarnBox;
 
@@ -596,16 +596,6 @@ IMPL_LINK( SvxBitmapTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
             const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
             aLbBitmaps.Append(rStyleSettings.GetListBoxPreviewDefaultPixelSize(), *pEntry );
             aLbBitmaps.SelectEntryPos( aLbBitmaps.GetEntryCount() - 1 );
-
-#ifdef WNT
-            // hack: #31355# W.P.
-            Rectangle aRect( aLbBitmaps.GetPosPixel(), aLbBitmaps.GetSizePixel() );
-            if( sal_True ) {                // ??? overlapped with pDlg
-                                        // and srolling
-                Invalidate( aRect );
-                //aLbBitmaps.Invalidate();
-            }
-#endif
 
             // Flag fuer modifiziert setzen
             *pnBitmapListState |= CT_MODIFIED;
@@ -692,7 +682,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
                 if( pWarnBox->Execute() != RET_OK )
                     break;
             }
-            //Rectangle aDlgRect( pDlg->GetPosPixel(), pDlg->GetSizePixel() );
+
             delete pDlg;
             delete pWarnBox;
 
@@ -704,16 +694,6 @@ IMPL_LINK( SvxBitmapTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
                 const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
                 aLbBitmaps.Append(rStyleSettings.GetListBoxPreviewDefaultPixelSize(), *pEntry );
                 aLbBitmaps.SelectEntryPos( aLbBitmaps.GetEntryCount() - 1 );
-
-#ifdef WNT
-                // hack: #31355# W.P.
-                Rectangle aRect( aLbBitmaps.GetPosPixel(), aLbBitmaps.GetSizePixel() );
-                if( sal_True ) {                // ??? overlapped with pDlg
-                                            // and srolling
-                    Invalidate( aRect );
-                    //aLbBitmaps.Invalidate();
-                }
-#endif
 
                 // Flag fuer modifiziert setzen
                 *pnBitmapListState |= CT_MODIFIED;
@@ -774,15 +754,11 @@ IMPL_LINK( SvxBitmapTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
             if( bDifferent )
             {
                 bLoop = sal_False;
-                XBitmapEntry* pEntry = maBitmapList->GetBitmap( nPos );
-
-                pEntry->SetName( aName );
 
                 const BitmapEx aBitmapEx(aBitmapCtl.GetBitmapEx());
+                const XBitmapEntry aEntry(Graphic(aBitmapEx), aName);
 
-                pEntry->SetGraphicObject(Graphic(aBitmapEx));
-
-                aLbBitmaps.Modify( rStyleSettings.GetListBoxPreviewDefaultPixelSize(), *pEntry, nPos );
+                aLbBitmaps.Modify( rStyleSettings.GetListBoxPreviewDefaultPixelSize(), aEntry, nPos );
                 aLbBitmaps.SelectEntryPos( nPos );
 
                 // Flag fuer modifiziert setzen

@@ -572,7 +572,7 @@ IMPL_LINK( SvxHatchTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
         maHatchingList->Insert( pEntry, nCount );
 
-        aLbHatchings.Append( pEntry );
+        aLbHatchings.Append( *pEntry, maHatchingList->GetUiBitmap( nCount ) );
 
         aLbHatchings.SelectEntryPos( aLbHatchings.GetEntryCount() - 1 );
 
@@ -648,7 +648,7 @@ IMPL_LINK( SvxHatchTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
                 delete maHatchingList->Replace( pEntry, nPos );
 
-                aLbHatchings.Modify( pEntry, nPos );
+                aLbHatchings.Modify( *pEntry, nPos, maHatchingList->GetUiBitmap( nPos ) );
 
                 aLbHatchings.SelectEntryPos( nPos );
 

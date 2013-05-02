@@ -513,7 +513,7 @@ IMPL_LINK( SvxGradientTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
         maGradientList->Insert( pEntry, nCount );
 
-        aLbGradients.Append( pEntry );
+        aLbGradients.Append( *pEntry, maGradientList->GetUiBitmap( nCount ) );
 
         aLbGradients.SelectEntryPos( aLbGradients.GetEntryCount() - 1 );
 
@@ -595,7 +595,7 @@ IMPL_LINK( SvxGradientTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
                 delete maGradientList->Replace( pEntry, nPos );
 
-                aLbGradients.Modify( pEntry, nPos );
+                aLbGradients.Modify( *pEntry, nPos, maGradientList->GetUiBitmap( nPos ) );
 
                 aLbGradients.SelectEntryPos( nPos );
 

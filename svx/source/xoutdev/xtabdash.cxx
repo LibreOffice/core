@@ -80,7 +80,7 @@ XDashEntry* XDashList::GetDash(long nIndex) const
     return (XDashEntry*) XPropertyList::Get(nIndex);
 }
 
-sal_Bool XDashList::Load()
+bool XDashList::Load()
 {
     if( mbListDirty )
     {
@@ -91,7 +91,7 @@ sal_Bool XDashList::Load()
         if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
         {
             OSL_ENSURE( !maPath.Len(), "invalid URL" );
-            return sal_False;
+            return false;
         }
 
         aURL.Append( maName );
@@ -102,17 +102,18 @@ sal_Bool XDashList::Load()
         uno::Reference< container::XNameContainer > xTable( SvxUnoXDashTable_createInstance( this ), uno::UNO_QUERY );
         return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
     }
-    return( sal_False );
+
+    return false;
 }
 
-sal_Bool XDashList::Save()
+bool XDashList::Save()
 {
     INetURLObject aURL( maPath );
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
     {
         OSL_ENSURE( !maPath.Len(), "invalid URL" );
-        return sal_False;
+        return false;
     }
 
     aURL.Append( maName );
@@ -124,7 +125,7 @@ sal_Bool XDashList::Save()
     return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
 }
 
-sal_Bool XDashList::Create()
+bool XDashList::Create()
 {
     XubString aStr( SVX_RES( RID_SVXSTR_LINESTYLE ) );
     xub_StrLen nLen;
@@ -137,7 +138,7 @@ sal_Bool XDashList::Create()
     aStr.SetChar(nLen, sal_Unicode('3'));
     Insert(new XDashEntry(XDash(XDASH_RECT,2, 50,3,250,120),aStr));
 
-    return( sal_True );
+    return true;
 }
 
 Bitmap XDashList::ImpCreateBitmapForXDash(const XDash* pDash)

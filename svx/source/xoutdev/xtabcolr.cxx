@@ -88,7 +88,7 @@ XColorEntry* XColorList::GetColor(long nIndex) const
 
 /************************************************************************/
 
-sal_Bool XColorList::Load()
+bool XColorList::Load()
 {
     if( mbListDirty )
     {
@@ -99,7 +99,7 @@ sal_Bool XColorList::Load()
         if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
         {
             OSL_ENSURE( !maPath.Len(), "invalid URL" );
-            return sal_False;
+            return false;
         }
 
         aURL.Append( maName );
@@ -110,19 +110,20 @@ sal_Bool XColorList::Load()
         uno::Reference< container::XNameContainer > xTable( SvxUnoXColorTable_createInstance( this ), uno::UNO_QUERY );
         return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
     }
-    return( sal_False );
+
+    return false;
 }
 
 /************************************************************************/
 
-sal_Bool XColorList::Save()
+bool XColorList::Save()
 {
     INetURLObject aURL( maPath );
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
     {
         OSL_ENSURE( !maPath.Len(), "invalid URL" );
-        return sal_False;
+        return false;
     }
 
     aURL.Append( maName );
@@ -136,7 +137,7 @@ sal_Bool XColorList::Save()
 
 /************************************************************************/
 
-sal_Bool XColorList::Create()
+bool XColorList::Create()
 {
     XubString aStr;
     xub_StrLen nLen;

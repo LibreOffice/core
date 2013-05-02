@@ -260,8 +260,8 @@ public:
 
     virtual void Fill( const XColorListSharedPtr aTab );
 
-    void Append( XColorEntry* pEntry, Bitmap* pBmp = NULL );
-    void Modify( XColorEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp = NULL );
+    void Append( const XColorEntry& rEntry );
+    void Modify( const XColorEntry& rEntry, sal_uInt16 nPos );
 };
 
 /*************************************************************************
@@ -281,8 +281,8 @@ public:
 
     virtual void Fill( const XHatchListSharedPtr aList );
 
-    void    Append( XHatchEntry* pEntry, Bitmap* pBmp = NULL );
-    void    Modify( XHatchEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp = NULL );
+    void    Append( const XHatchEntry& rEntry, const Bitmap& rBitmap );
+    void    Modify( const XHatchEntry& rEntry, sal_uInt16 nPos, const Bitmap& rBitmap );
     void    SelectEntryByList( const XHatchListSharedPtr aList, const String& rStr, const XHatch& rXHatch, sal_uInt16 nDist = 0 );
 };
 
@@ -303,8 +303,8 @@ public:
 
     virtual void Fill( const XGradientListSharedPtr aList );
 
-    void    Append( XGradientEntry* pEntry, Bitmap* pBmp = NULL );
-    void    Modify( XGradientEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp = NULL );
+    void    Append( const XGradientEntry& rEntry, const Bitmap& rBitmap );
+    void    Modify( const XGradientEntry& rEntry, sal_uInt16 nPos, const Bitmap& rBitmap );
     void    SelectEntryByList( const XGradientListSharedPtr aList, const String& rStr, const XGradient& rXGradient, sal_uInt16 nDist = 0 );
 
 private:
@@ -327,8 +327,8 @@ public:
 
     virtual void Fill(const XBitmapListSharedPtr aList);
 
-    void Append(const Size& rSize, const XBitmapEntry& rEntry, BitmapEx* pBmpEx = 0);
-    void Modify(const Size& rSize, const XBitmapEntry& rEntry, sal_uInt16 nPos, BitmapEx* pBmpEx = 0);
+    void Append(const Size& rSize, const XBitmapEntry& rEntry);
+    void Modify(const Size& rSize, const XBitmapEntry& rEntry, sal_uInt16 nPos);
     void SelectEntryByList(const XBitmapListSharedPtr aList, const String& rStr);
 
 private:
@@ -398,8 +398,8 @@ public:
     bool getAddStandardFields() const { return mbAddStandardFields; }
     void setAddStandardFields(bool bNew);
 
-    void Append(XDashEntry* pEntry, const Bitmap* pBmp = 0);
-    void Modify(XDashEntry* pEntry, sal_uInt16 nPos, const Bitmap* pBmp = 0);
+    void Append(const XDashEntry& rEntry, const Bitmap& rBitmap );
+    void Modify(const XDashEntry& rEntry, sal_uInt16 nPos, const Bitmap& rBitmap );
     void SelectEntryByList(const XDashListSharedPtr aList, const String& rStr, const XDash& rDash, sal_uInt16 nDist = 0);
 };
 
@@ -420,12 +420,10 @@ public:
                           LineEndLB( Window* pParent, WinBits aWB );
                  virtual ~LineEndLB (void);
 
-    virtual void Fill( const XLineEndListSharedPtr aList, sal_Bool bStart = sal_True );
+    virtual void Fill( const XLineEndListSharedPtr aList, bool bStart = true );
 
-    void    Append( XLineEndEntry* pEntry, const Bitmap* pBmp = NULL,
-                    sal_Bool bStart = sal_True );
-    void    Modify( XLineEndEntry* pEntry, sal_uInt16 nPos, const Bitmap* pBmp = NULL,
-                    sal_Bool bStart = sal_True );
+    void    Append( const XLineEndEntry& rEntry, const Bitmap& rBitmap, bool bStart = true );
+    void    Modify( const XLineEndEntry& rEntry, sal_uInt16 nPos, const Bitmap& rBitmap, bool bStart = true );
 };
 
 //////////////////////////////////////////////////////////////////////////////

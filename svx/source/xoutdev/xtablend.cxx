@@ -77,7 +77,7 @@ XLineEndEntry* XLineEndList::GetLineEnd(long nIndex) const
     return (XLineEndEntry*) XPropertyList::Get(nIndex);
 }
 
-sal_Bool XLineEndList::Load()
+bool XLineEndList::Load()
 {
     if( mbListDirty )
     {
@@ -88,7 +88,7 @@ sal_Bool XLineEndList::Load()
         if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
         {
             OSL_ENSURE( !maPath.Len(), "invalid URL" );
-            return sal_False;
+            return false;
         }
 
         aURL.Append( maName );
@@ -99,17 +99,18 @@ sal_Bool XLineEndList::Load()
         uno::Reference< container::XNameContainer > xTable( SvxUnoXLineEndTable_createInstance( this ), uno::UNO_QUERY );
         return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
     }
-    return( sal_False );
+
+    return false;
 }
 
-sal_Bool XLineEndList::Save()
+bool XLineEndList::Save()
 {
     INetURLObject aURL( maPath );
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
     {
         OSL_ENSURE( !maPath.Len(), "invalid URL" );
-        return sal_False;
+        return false;
     }
 
     aURL.Append( maName );
@@ -121,7 +122,7 @@ sal_Bool XLineEndList::Save()
     return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
 }
 
-sal_Bool XLineEndList::Create()
+bool XLineEndList::Create()
 {
     basegfx::B2DPolygon aTriangle;
     aTriangle.append(basegfx::B2DPoint(10.0, 0.0));
@@ -141,7 +142,7 @@ sal_Bool XLineEndList::Create()
     basegfx::B2DPolygon aCircle(basegfx::tools::createPolygonFromCircle(basegfx::B2DPoint(0.0, 0.0), 100.0));
     Insert( new XLineEndEntry( basegfx::B2DPolyPolygon(aCircle), SVX_RESSTR( RID_SVXSTR_CIRCLE ) ) );
 
-    return( sal_True );
+    return true;
 }
 
 Bitmap XLineEndList::CreateBitmapForUI( long nIndex )

@@ -40,9 +40,98 @@ Color RGB_Color( ColorData nColorName )
     return aRGBColor;
 }
 
-// --------------------
+//////////////////////////////////////////////////////////////////////////////
+// class XColorEntry
+
+XColorEntry::XColorEntry(const Color& rColor, const String& rName)
+:   XPropertyEntry(rName),
+    aColor(rColor)
+{
+}
+
+XColorEntry::XColorEntry(const XColorEntry& rOther)
+:   XPropertyEntry(rOther),
+aColor(rOther.aColor)
+{
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// class XLineEndEntry
+
+XLineEndEntry::XLineEndEntry(const basegfx::B2DPolyPolygon& rB2DPolyPolygon, const String& rName)
+:   XPropertyEntry(rName),
+    aB2DPolyPolygon(rB2DPolyPolygon)
+{
+}
+
+XLineEndEntry::XLineEndEntry(const XLineEndEntry& rOther)
+:   XPropertyEntry(rOther),
+    aB2DPolyPolygon(rOther.aB2DPolyPolygon)
+{
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// class XDashEntry
+
+XDashEntry::XDashEntry(const XDash& rDash, const String& rName)
+:   XPropertyEntry(rName),
+    aDash(rDash)
+{
+}
+
+XDashEntry::XDashEntry(const XDashEntry& rOther)
+:   XPropertyEntry(rOther),
+aDash(rOther.aDash)
+{
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// class XHatchEntry
+
+XHatchEntry::XHatchEntry(const XHatch& rHatch, const String& rName)
+:   XPropertyEntry(rName),
+    aHatch(rHatch)
+{
+}
+
+XHatchEntry::XHatchEntry(const XHatchEntry& rOther)
+:   XPropertyEntry(rOther),
+    aHatch(rOther.aHatch)
+{
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// class XGradientEntry
+
+XGradientEntry::XGradientEntry(const XGradient& rGradient, const String& rName)
+:   XPropertyEntry(rName),
+    aGradient(rGradient)
+{
+}
+
+XGradientEntry::XGradientEntry(const XGradientEntry& rOther)
+:   XPropertyEntry(rOther),
+    aGradient(rOther.aGradient)
+{
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// class XBitmapEntry
+
+XBitmapEntry::XBitmapEntry(const GraphicObject& rGraphicObject, const String& rName)
+:   XPropertyEntry(rName),
+    maGraphicObject(rGraphicObject)
+{
+}
+
+XBitmapEntry::XBitmapEntry(const XBitmapEntry& rOther)
+:   XPropertyEntry(rOther),
+    maGraphicObject(rOther.maGraphicObject)
+{
+}
+
+//////////////////////////////////////////////////////////////////////////////
 // class XPropertyList
-// --------------------
 
 XPropertyList::XPropertyList( const String& rPath ) :
             maName          ( pszStandard, 8 ),
@@ -51,12 +140,6 @@ XPropertyList::XPropertyList( const String& rPath ) :
             mbListDirty     (true)
 {
 }
-
-/*************************************************************************
-|*
-|* XPropertyList::~XPropertyList()
-|*
-*************************************************************************/
 
 XPropertyList::~XPropertyList()
 {
@@ -67,12 +150,6 @@ XPropertyList::~XPropertyList()
     }
 }
 
-/*************************************************************************
-|*
-|* XPropertyList::Clear()
-|*
-*************************************************************************/
-
 void XPropertyList::Clear()
 {
     while(!maContent.empty())
@@ -81,8 +158,6 @@ void XPropertyList::Clear()
         maContent.pop_back();
     }
 }
-
-/************************************************************************/
 
 long XPropertyList::Count() const
 {
@@ -96,12 +171,6 @@ long XPropertyList::Count() const
 
     return maContent.size();
 }
-
-/*************************************************************************
-|*
-|* XPropertyEntry* XPropertyList::Get()
-|*
-*************************************************************************/
 
 XPropertyEntry* XPropertyList::Get( long nIndex ) const
 {
@@ -122,12 +191,6 @@ XPropertyEntry* XPropertyList::Get( long nIndex ) const
 
     return maContent[nIndex];
 }
-
-/*************************************************************************
-|*
-|* XPropertyList::Get()
-|*
-*************************************************************************/
 
 long XPropertyList::GetIndex(const XubString& rName) const
 {
@@ -155,12 +218,6 @@ long XPropertyList::GetIndex(const XubString& rName) const
     return -1;
 }
 
-/*************************************************************************
-|*
-|* Bitmap* XPropertyList::GetBitmap()
-|*
-*************************************************************************/
-
 Bitmap XPropertyList::GetUiBitmap( long nIndex ) const
 {
     Bitmap aRetval;
@@ -180,12 +237,6 @@ Bitmap XPropertyList::GetUiBitmap( long nIndex ) const
     return aRetval;
 }
 
-/*************************************************************************
-|*
-|* void XPropertyList::Insert()
-|*
-*************************************************************************/
-
 void XPropertyList::Insert( XPropertyEntry* pEntry, long nIndex )
 {
     if(pEntry)
@@ -202,12 +253,6 @@ void XPropertyList::Insert( XPropertyEntry* pEntry, long nIndex )
         }
     }
 }
-
-/*************************************************************************
-|*
-|* void XPropertyList::Replace()
-|*
-*************************************************************************/
 
 XPropertyEntry* XPropertyList::Replace( XPropertyEntry* pEntry, long nIndex )
 {
@@ -226,12 +271,6 @@ XPropertyEntry* XPropertyList::Replace( XPropertyEntry* pEntry, long nIndex )
 
     return pRetval;
 }
-
-/*************************************************************************
-|*
-|* void XPropertyList::Remove()
-|*
-*************************************************************************/
 
 XPropertyEntry* XPropertyList::Remove( long nIndex )
 {
@@ -254,8 +293,6 @@ XPropertyEntry* XPropertyList::Remove( long nIndex )
 
     return pRetval;
 }
-
-/************************************************************************/
 
 void XPropertyList::SetName( const String& rString )
 {

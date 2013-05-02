@@ -76,7 +76,7 @@ XHatchEntry* XHatchList::GetHatch(long nIndex) const
     return (XHatchEntry*) XPropertyList::Get(nIndex);
 }
 
-sal_Bool XHatchList::Load()
+bool XHatchList::Load()
 {
     if( mbListDirty )
     {
@@ -87,7 +87,7 @@ sal_Bool XHatchList::Load()
         if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
         {
             OSL_ENSURE( !maPath.Len(), "invalid URL" );
-            return sal_False;
+            return false;
         }
 
         aURL.Append( maName );
@@ -98,17 +98,18 @@ sal_Bool XHatchList::Load()
         uno::Reference< container::XNameContainer > xTable( SvxUnoXHatchTable_createInstance( this ), uno::UNO_QUERY );
         return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
     }
-    return( sal_False );
+
+    return false;
 }
 
-sal_Bool XHatchList::Save()
+bool XHatchList::Save()
 {
     INetURLObject aURL( maPath );
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
     {
         OSL_ENSURE( !maPath.Len(), "invalid URL" );
-        return sal_False;
+        return false;
     }
 
     aURL.Append( maName );
@@ -120,7 +121,7 @@ sal_Bool XHatchList::Save()
     return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
 }
 
-sal_Bool XHatchList::Create()
+bool XHatchList::Create()
 {
     XubString aStr( SVX_RES( RID_SVXSTR_HATCH ) );
     xub_StrLen nLen;
@@ -133,7 +134,7 @@ sal_Bool XHatchList::Create()
     aStr.SetChar(nLen, sal_Unicode('3'));
     Insert(new XHatchEntry(XHatch(RGB_Color(COL_BLUE ),XHATCH_TRIPLE,120,  0),aStr));
 
-    return( sal_True );
+    return true;
 }
 
 Bitmap XHatchList::CreateBitmapForUI( long nIndex )

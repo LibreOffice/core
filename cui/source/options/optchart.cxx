@@ -40,7 +40,7 @@ void ChartColorLB::FillBox( const SvxChartColorTable & rTab )
 
     for( long i = 0; i < nCount; i++ )
     {
-        Append( const_cast< XColorEntry * >( & rTab[ i ] ));
+        Append( rTab[ i ] );
     }
     SetUpdateMode( sal_True );
 }
@@ -217,10 +217,9 @@ IMPL_LINK( SvxDefaultColorOptPage, BoxClickedHdl, ValueSet*, EMPTYARG )
     sal_uInt16 nIdx = aLbChartColors.GetSelectEntryPos();
     if( nIdx != LISTBOX_ENTRY_NOTFOUND )
     {
-        XColorEntry aEntry( aValSetColorBox.GetItemColor( aValSetColorBox.GetSelectItemId() ),
-                            aLbChartColors.GetSelectEntry() );
+        const XColorEntry aEntry( aValSetColorBox.GetItemColor( aValSetColorBox.GetSelectItemId() ), aLbChartColors.GetSelectEntry() );
 
-        aLbChartColors.Modify( & aEntry, nIdx );
+        aLbChartColors.Modify( aEntry, nIdx );
         pColorConfig->ReplaceColorByIndex( nIdx, aEntry );
 
         aLbChartColors.SelectEntryPos( nIdx );  // reselect entry

@@ -402,13 +402,13 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
         // Wenn nicht vorhanden, wird Eintrag aufgenommen
         if( bDifferent )
         {
-            XLineEndEntry* pEntry = maLineEndList->GetLineEnd( nPos );
+            const XLineEndEntry* pEntry = maLineEndList->GetLineEnd( nPos );
 
-            pEntry->SetName( aName );
             aEdtName.SetText( aName );
 
-            const Bitmap aUiBitmap( maLineEndList->GetUiBitmap( nPos ) );
-            aLbLineEnds.Modify( pEntry, nPos, &aUiBitmap );
+            const XLineEndEntry aEntry(pEntry->GetLineEnd(), aName);
+
+            aLbLineEnds.Modify( aEntry, nPos, maLineEndList->GetUiBitmap( nPos ) );
             aLbLineEnds.SelectEntryPos( nPos );
 
             // Flag fuer modifiziert setzen
@@ -506,10 +506,9 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
                 long nLineEndCount = maLineEndList.get() ? maLineEndList->Count() : 0;
                 maLineEndList->Insert( pEntry, nLineEndCount );
-                const Bitmap aBitmap = maLineEndList->GetUiBitmap( nLineEndCount );
 
                 // Zur ListBox hinzufuegen
-                aLbLineEnds.Append( pEntry, &aBitmap );
+                aLbLineEnds.Append( *pEntry, maLineEndList->GetUiBitmap( nLineEndCount ) );
                 aLbLineEnds.SelectEntryPos( aLbLineEnds.GetEntryCount() - 1 );
 
                 // Flag fuer modifiziert setzen
