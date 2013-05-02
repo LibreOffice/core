@@ -65,7 +65,7 @@ lo_get_libmap(void)
         { "libevtattlo.a", evtatt_component_getFactory },
         { "libfileacc.a", fileacc_component_getFactory },
         { "libfrmlo.a", frm_component_getFactory },
-        { "libfsstorage.uno.a", fsstorage_component_getFactory },
+        { "libfsstoragelo.a", fsstorage_component_getFactory },
         { "libfwklo.a", fwk_component_getFactory },
         { "libfwllo.a", fwl_component_getFactory },
         { "libfwmlo.a", fwm_component_getFactory },
