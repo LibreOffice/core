@@ -465,7 +465,7 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
         hb_buffer_set_direction(pHbBuffer, bRightToLeft ? HB_DIRECTION_RTL: HB_DIRECTION_LTR);
         hb_buffer_set_script(pHbBuffer, hb_icu_script_to_script(eScriptCode));
         hb_buffer_set_language(pHbBuffer, hb_language_from_string(sLanguage.getStr(), -1));
-        hb_buffer_add_utf16(pHbBuffer, rArgs.mpStr, nRunLen, nMinRunPos, nRunLen);
+        hb_buffer_add_utf16(pHbBuffer, rArgs.mpStr, rArgs.mnLength, nMinRunPos, nRunLen);
         hb_shape(pHbFont, pHbBuffer, NULL, 0);
 
         int nRunGlyphCount = hb_buffer_get_length(pHbBuffer);
@@ -480,15 +480,7 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             if (!nGlyphIndex)
             {
                 if (nCharPos >= 0)
-                {
                     rArgs.NeedFallback(nCharPos, bRightToLeft);
-                    // XXX: do we need this? HarfBuzz can take context into
-                    // account when shaping
-                    if  ((nCharPos > 0) && needPreviousCode(rArgs.mpStr[nCharPos-1]))
-                        rArgs.NeedFallback(nCharPos-1, bRightToLeft);
-                    else if  ((nCharPos + 1 < nEndRunPos) && needNextCode(rArgs.mpStr[nCharPos+1]))
-                        rArgs.NeedFallback(nCharPos+1, bRightToLeft);
-                }
 
                 if (SAL_LAYOUT_FOR_FALLBACK & rArgs.mnFlags)
                     continue;
