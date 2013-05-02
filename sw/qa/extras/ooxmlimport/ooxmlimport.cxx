@@ -10,6 +10,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
@@ -109,6 +110,7 @@ public:
     void testFdo63685();
     void testN592908_Frame();
     void testN592908_Picture();
+    void testN779630();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -188,6 +190,7 @@ void Test::run()
         {"fdo63685.docx", &Test::testFdo63685},
         {"n592908-frame.docx", &Test::testN592908_Frame},
         {"n592908-picture.docx", &Test::testN592908_Picture},
+        {"n779630.docx", &Test::testN779630},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1340,6 +1343,30 @@ void Test::testN592908_Picture()
     text::WrapTextMode eValue;
     xPropertySet->getPropertyValue("Surround") >>= eValue;
     CPPUNIT_ASSERT_EQUAL(eValue, text::WrapTextMode_PARALLEL);
+}
+
+void Test::testN779630()
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+
+    // First shape: date picker
+    uno::Reference<drawing::XControlShape> xControlShape(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
+    uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService("com.sun.star.form.component.DateField")));
+    CPPUNIT_ASSERT_EQUAL(OUString("date default text"), getProperty<OUString>(xPropertySet, "HelpText"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(8), getProperty<sal_Int16>(xPropertySet, "DateFormat"));
+    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(xPropertySet, "Dropdown")));
+
+    // Second shape: combo box
+    xControlShape.set(xDraws->getByIndex(1), uno::UNO_QUERY);
+    xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
+    xServiceInfo.set(xPropertySet, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService("com.sun.star.form.component.ComboBox")));
+    CPPUNIT_ASSERT_EQUAL(OUString("dropdown default text"), getProperty<OUString>(xPropertySet, "DefaultText"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty< uno::Sequence<OUString> >(xPropertySet, "StringItemList").getLength());
+    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(xPropertySet, "Dropdown")));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
