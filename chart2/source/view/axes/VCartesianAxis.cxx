@@ -138,6 +138,19 @@ bool lcl_doesShapeOverlapWithTickmark( const Reference< drawing::XShape >& xShap
     return aShapeRect.isInside(aPosition);
 }
 
+void lcl_getRotatedPolygon( B2DPolygon &aPoly, const ::basegfx::B2DRectangle &aRect, const awt::Point &aPos, const double fRotationAngleDegree )
+{
+    ::basegfx::B2DHomMatrix aMatrix;
+
+    aPoly = basegfx::tools::createPolygonFromRect( aRect );
+    aMatrix.translate( -aRect.getWidth()/2, -aRect.getHeight()/2);
+    aMatrix.rotate( fRotationAngleDegree*M_PI/180.0 );
+    aPoly.transform( aMatrix );
+    aMatrix = ::basegfx::B2DHomMatrix();
+    aMatrix.translate( aRect.getWidth()/2+aPos.X, aRect.getHeight()/2+aPos.Y);
+    aPoly.transform( aMatrix );
+}
+
 bool doesOverlap( const Reference< drawing::XShape >& xShape1
                 , const Reference< drawing::XShape >& xShape2
                 , double fRotationAngleDegree )
@@ -145,15 +158,13 @@ bool doesOverlap( const Reference< drawing::XShape >& xShape1
     if( !xShape1.is() || !xShape2.is() )
         return false;
 
-    ::basegfx::B2DRectangle aRect1( BaseGFXHelper::makeRectangle( xShape1->getPosition(), ShapeFactory::getSizeAfterRotation( xShape1, 0 ) ));
-    ::basegfx::B2DRectangle aRect2( BaseGFXHelper::makeRectangle( xShape2->getPosition(), ShapeFactory::getSizeAfterRotation( xShape2, 0 ) ));
+    ::basegfx::B2DRectangle aRect1( BaseGFXHelper::makeRectangle( awt::Point(0,0), xShape1->getSize()));
+    ::basegfx::B2DRectangle aRect2( BaseGFXHelper::makeRectangle( awt::Point(0,0), xShape2->getSize()));
 
-    B2DPolygon aPoly1 = basegfx::tools::createPolygonFromRect( aRect1 );
-    B2DPolygon aPoly2 = basegfx::tools::createPolygonFromRect( aRect2 );
-    ::basegfx::B2DHomMatrix aMatrix;
-    aMatrix.rotate( fRotationAngleDegree );
-    aPoly1.transform( aMatrix );
-    aPoly2.transform( aMatrix );
+    B2DPolygon aPoly1;
+    B2DPolygon aPoly2;
+    lcl_getRotatedPolygon( aPoly1, aRect1, xShape1->getPosition(), fRotationAngleDegree );
+    lcl_getRotatedPolygon( aPoly2, aRect2, xShape2->getPosition(), fRotationAngleDegree );
 
     B2DPolyPolygon aPolyPoly1, aPolyPoly2;
     aPolyPoly1.append( aPoly1 );
