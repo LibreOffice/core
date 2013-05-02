@@ -135,15 +135,10 @@ void ScMacrosTest::testVba()
             OUString("TestCalc_Rangetest2."),
             OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
-#if defined FIXRANGEADDRESSING
-//ScVbaRange::getRangeForName()/getScRangeListForAddress() seems to get confused
-//about the addressing mode of the document vs the addressing mode of a named
-//range ( need to fix that )
         {
             OUString("Ranges-2."),
             OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
-#endif
         {
             OUString("pagesetup."),
             OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
