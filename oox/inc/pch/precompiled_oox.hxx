@@ -283,6 +283,7 @@
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
+#include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/XNumberingRulesSupplier.hpp>
 #include <com/sun/star/text/XSimpleText.hpp>
