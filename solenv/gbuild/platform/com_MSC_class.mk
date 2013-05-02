@@ -357,6 +357,12 @@ $(call gb_LinkTarget_get_target,$(1)) : NATIVERES += $(call gb_WinResTarget_get_
 
 endef
 
+define gb_LinkTarget_set_nativeres
+$(call gb_LinkTarget_get_target,$(1)) : $(call gb_WinResTarget_get_target,$(2))
+$(call gb_LinkTarget_get_target,$(1)) : NATIVERES := $(call gb_WinResTarget_get_target,$(2))
+
+endef
+
 define gb_Library_get_dllname
 $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_DLLFILENAMES)))
 endef

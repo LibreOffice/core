@@ -9,8 +9,8 @@
 #
 #
 
-$(eval $(call gb_WinResTarget_WinResTarget,nsplugin_oo))
+$(eval $(call gb_WinResTarget_WinResTarget,npsoplugin/npsoplugin))
 
-$(eval $(call gb_WinResTarget_set_rcfile,nsplugin_oo,extensions/source/nsplugin/source/nsplugin_oo))
+$(eval $(call gb_WinResTarget_set_rcfile,npsoplugin/npsoplugin,extensions/source/nsplugin/source/nsplugin_oo))
 
 # vim:set noet sw=4 ts=4:

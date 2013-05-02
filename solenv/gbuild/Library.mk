@@ -265,6 +265,7 @@ $(eval $(foreach method,\
 	add_precompiled_header \
 	export_objects_list \
 	add_nativeres \
+	set_nativeres \
 	set_visibility_default \
 	set_warnings_not_errors \
 	set_generated_cxx_suffix \
