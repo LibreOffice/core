@@ -25,6 +25,16 @@
 
 #define HAVE_FEATURE_DESKTOP 0
 
+/* DESKTOP_GUI_ELEMENTS
+ *
+ * In the non-DESKTOP case, whether to still display (and enable
+ * interactive use of) traditional desktop-style GUI elements like
+ * toolbars and scrollbars, drawn and handled using mostly the normal
+ * LO code.
+ */
+
+#define HAVE_FEATURE_DESKTOP_GUI_ELEMENTS 0
+
 /* EXTENSIONS - Whether we have any extension mechanism at all
  *
  * Primarily intended for non-desktop platforms where supporting

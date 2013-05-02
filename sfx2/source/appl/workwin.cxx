@@ -595,7 +595,7 @@ SfxWorkWindow::SfxWorkWindow( Window *pWin, SfxBindings& rB, SfxWorkWindow* pPar
     bDockingAllowed(sal_True),
     bInternalDockingAllowed(sal_True),
     bAllChildrenVisible(sal_True),
-#if HAVE_FEATURE_DESKTOP
+#if HAVE_FEATURE_DESKTOP_GUI_ELEMENTS
     bIsFullScreen( sal_False ),
     bShowStatusBar( sal_True ),
 #else

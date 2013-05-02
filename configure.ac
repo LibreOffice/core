@@ -1123,6 +1123,12 @@ AC_ARG_ENABLE(silent-msi,
         [Enable MSI with LIMITUI=1 (silent install).]),
 ,)
 
+AC_ARG_ENABLE(desktop-gui-elements,
+    AS_HELP_STRING([--enable-desktop-gui-elements],
+        [Enable display and use of desktop style GUI elements
+         even on a non-desktop platform.]),
+,)
+
 AC_ARG_ENABLE(macosx-code-signing,
     AS_HELP_STRING([--enable-macosx-code-signing<=identity>],
         [Sign executables, dylibs, frameworks and the app bundle. The
@@ -2141,7 +2147,10 @@ dnl cross-compiling would imply a non-desktop OS.
 if test $_os != iOS -a $_os != Android; then
     BUILD_TYPE="$BUILD_TYPE DESKTOP"
     AC_DEFINE(HAVE_FEATURE_DESKTOP)
+    AC_DEFINE(HAVE_FEATURE_DESKTOP_GUI_ELEMENTS)
     AC_DEFINE(HAVE_FEATURE_MULTIUSER_ENVIRONMENT)
+elif test "$enable_desktop_gui_elements" = yes; then
+    AC_DEFINE(HAVE_FEATURE_DESKTOP_GUI_ELEMENTS)
 fi
 
 DISABLE_EXPORT=''
