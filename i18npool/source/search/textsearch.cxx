@@ -50,7 +50,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;
 
-static sal_Int32 COMPLEX_TRANS_MASK_TMP =
+static const sal_Int32 COMPLEX_TRANS_MASK_TMP =
     TransliterationModules_ignoreBaFa_ja_JP |
     TransliterationModules_ignoreIterationMark_ja_JP |
     TransliterationModules_ignoreTiJi_ja_JP |
@@ -59,10 +59,23 @@ static sal_Int32 COMPLEX_TRANS_MASK_TMP =
     TransliterationModules_ignoreIandEfollowedByYa_ja_JP |
     TransliterationModules_ignoreKiKuFollowedBySa_ja_JP |
     TransliterationModules_ignoreProlongedSoundMark_ja_JP;
-static const sal_Int32 COMPLEX_TRANS_MASK = COMPLEX_TRANS_MASK_TMP | TransliterationModules_IGNORE_KANA | TransliterationModules_FULLWIDTH_HALFWIDTH;
-static const sal_Int32 SIMPLE_TRANS_MASK = ~(COMPLEX_TRANS_MASK | TransliterationModules_IGNORE_CASE | TransliterationModules_UPPERCASE_LOWERCASE | TransliterationModules_LOWERCASE_UPPERCASE);
-    // Above 2 transliteration is simple but need to take effect in
-    // complex transliteration
+
+// These 2 transliterations are simple but need to take effect in
+// complex transliteration.
+static const sal_Int32 COMPLEX_TRANS_MASK =
+    COMPLEX_TRANS_MASK_TMP |
+    TransliterationModules_IGNORE_KANA |
+    TransliterationModules_FULLWIDTH_HALFWIDTH;
+
+static const sal_Int32 SIMPLE_TRANS_MASK = ~COMPLEX_TRANS_MASK;
+
+// Regex patterns are case sensitive.
+static const sal_Int32 SIMPLE_TRANS_MASK_REPATTERN =
+    ~(COMPLEX_TRANS_MASK |
+            TransliterationModules_IGNORE_CASE |
+            TransliterationModules_UPPERCASE_LOWERCASE |
+            TransliterationModules_LOWERCASE_UPPERCASE);
+
 
 TextSearch::TextSearch(const Reference < XComponentContext > & rxContext)
         : m_xContext( rxContext )
@@ -123,14 +136,46 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
 
     sSrchStr = aSrchPara.searchString;
 
-    // use transliteration here
-    if ( xTranslit.is() && aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK )
-        sSrchStr = xTranslit->transliterateString2String(
-            aSrchPara.searchString, 0, aSrchPara.searchString.getLength());
+    // Transliterate search string.
+    if (aSrchPara.algorithmType == SearchAlgorithms_REGEXP)
+    {
+        if (aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK_REPATTERN)
+        {
+            if ((aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK_REPATTERN) !=
+                    (aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK))
+            {
+                com::sun::star::uno::Reference< XExtendedTransliteration > xTranslitPattern(
+                         Transliteration::create( m_xContext ));
+                if (xTranslitPattern.is())
+                {
+                    xTranslitPattern->loadModule(
+                            (TransliterationModules)( aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK_REPATTERN ),
+                            aSrchPara.Locale);
+                    sSrchStr = xTranslitPattern->transliterateString2String(
+                            aSrchPara.searchString, 0, aSrchPara.searchString.getLength());
+                }
+            }
+            else
+            {
+                if (xTranslit.is())
+                    sSrchStr = xTranslit->transliterateString2String(
+                            aSrchPara.searchString, 0, aSrchPara.searchString.getLength());
+            }
+            // xTranslit2 complex transliterated sSrchStr2 is not used in
+            // regex, see TextSearch::searchForward() and
+            // TextSearch::searchBackward()
+        }
+    }
+    else
+    {
+        if ( xTranslit.is() && aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK )
+            sSrchStr = xTranslit->transliterateString2String(
+                    aSrchPara.searchString, 0, aSrchPara.searchString.getLength());
 
-    if ( xTranslit2.is() && aSrchPara.transliterateFlags & COMPLEX_TRANS_MASK )
-        sSrchStr2 = xTranslit2->transliterateString2String(
-            aSrchPara.searchString, 0, aSrchPara.searchString.getLength());
+        if ( xTranslit2.is() && aSrchPara.transliterateFlags & COMPLEX_TRANS_MASK )
+            sSrchStr2 = xTranslit2->transliterateString2String(
+                    aSrchPara.searchString, 0, aSrchPara.searchString.getLength());
+    }
 
     // When start or end of search string is a complex script type, we need to
     // make sure the result boundary is not located in the middle of cell.
