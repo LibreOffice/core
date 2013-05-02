@@ -241,6 +241,12 @@ private:
 
     ScFieldEditEngine* CreateOutputEditEngine();
 
+    void ShowClipMarks( DrawEditParam& rParam, long nEngineHeight, const Size& aCellSize,
+                        bool bMerged, OutputAreaParam& aAreaParam );
+
+    bool Clip( DrawEditParam& rParam, const Size& aCellSize, OutputAreaParam& aAreaParam,
+               long nEngineHeight, bool bWrapFields);
+
 public:
                     ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
                                     ScTableInfo& rTabInfo, ScDocument* pNewDoc,

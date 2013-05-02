@@ -3079,13 +3079,125 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
     rParam.adjustForHyperlinkInPDF(aURLStart, mpDev);
 }
 
+void ScOutputData::ShowClipMarks( DrawEditParam& rParam, long nEngineHeight, const Size& aCellSize,
+                                  bool bMerged, OutputAreaParam& aAreaParam)
+{
+    //  Show clip marks if height is at least 5pt too small and
+    //  there are several lines of text.
+    //  Not for asian vertical text, because that would interfere
+    //  with the default right position of the text.
+    //  Only with automatic line breaks, to avoid having to find
+    //  the cells with the horizontal end of the text again.
+    if ( nEngineHeight - aCellSize.Height() > 100 &&
+            rParam.mbBreak && bMarkClipped &&
+            ( rParam.mpEngine->GetParagraphCount() > 1 || rParam.mpEngine->GetLineCount(0) > 1 ) )
+    {
+        CellInfo* pClipMarkCell = NULL;
+        if ( bMerged )
+        {
+            //  anywhere in the merged area...
+            SCCOL nClipX = ( rParam.mnX < nX1 ) ? nX1 : rParam.mnX;
+            pClipMarkCell = &pRowInfo[(rParam.mnArrY != 0) ? rParam.mnArrY : 1].pCellInfo[nClipX+1];
+        }
+        else
+            pClipMarkCell = &rParam.mpThisRowInfo->pCellInfo[rParam.mnX+1];
+
+        pClipMarkCell->nClipMark |= SC_CLIPMARK_RIGHT;      //! also allow left?
+        bAnyClipped = true;
+
+        const long nMarkPixel = static_cast<long>( SC_CLIPMARK_SIZE * mnPPTX );
+        if ( aAreaParam.maClipRect.Right() - nMarkPixel > aAreaParam.maClipRect.Left() )
+            aAreaParam.maClipRect.Right() -= nMarkPixel;
+    }
+}
+
+bool ScOutputData::Clip( DrawEditParam& rParam, const Size& aCellSize,
+                         OutputAreaParam& aAreaParam, long nEngineHeight,
+                         bool bWrapFields)
+{
+    if ( aAreaParam.maClipRect.Left() < nScrX )
+    {
+        aAreaParam.maClipRect.Left() = nScrX;
+        aAreaParam.mbLeftClip = true;
+    }
+    if ( aAreaParam.maClipRect.Right() > nScrX + nScrW )
+    {
+        aAreaParam.maClipRect.Right() = nScrX + nScrW;          //! minus one?
+        aAreaParam.mbRightClip = true;
+    }
+
+    bool bClip = aAreaParam.mbLeftClip || aAreaParam.mbRightClip;
+    bool bSimClip = false;
+
+    if ( bWrapFields )
+    {
+        //  Fields in a cell with automatic breaks: clip to cell width
+        bClip = true;
+    }
+
+    if ( aAreaParam.maClipRect.Top() < nScrY )
+    {
+        aAreaParam.maClipRect.Top() = nScrY;
+        bClip = true;
+    }
+    if ( aAreaParam.maClipRect.Bottom() > nScrY + nScrH )
+    {
+        aAreaParam.maClipRect.Bottom() = nScrY + nScrH;     //! minus one?
+        bClip = true;
+    }
+
+    const Size& aRefOne = mpRefDevice->PixelToLogic(Size(1,1));
+    if ( nEngineHeight >= aCellSize.Height() + aRefOne.Height() )
+    {
+        const ScMergeAttr* pMerge =
+                (ScMergeAttr*)&rParam.mpPattern->GetItem(ATTR_MERGE);
+        const bool bMerged = pMerge->GetColMerge() > 1 || pMerge->GetRowMerge() > 1;
+
+        //  Don't clip for text height when printing rows with optimal height,
+        //  except when font size is from conditional formatting.
+        //! Allow clipping when vertically merged?
+        if ( eType != OUTTYPE_PRINTER ||
+            ( mpDoc->GetRowFlags( rParam.mnCellY, nTab ) & CR_MANUALSIZE ) ||
+            ( rParam.mpCondSet && SFX_ITEM_SET ==
+                rParam.mpCondSet->GetItemState(ATTR_FONT_HEIGHT, true) ) )
+            bClip = true;
+        else
+            bSimClip = true;
+
+        ShowClipMarks( rParam, nEngineHeight, aCellSize, bMerged, aAreaParam);
+    }
+
+    Rectangle aLogicClip;
+    if (bClip || bSimClip)
+    {
+        // Clip marks are already handled in GetOutputArea
+
+        if (rParam.mbPixelToLogic)
+            aLogicClip = mpRefDevice->PixelToLogic( aAreaParam.maClipRect );
+        else
+            aLogicClip = aAreaParam.maClipRect;
+
+        if (bClip)  // bei bSimClip nur aClipRect initialisieren
+        {
+            if (bMetaFile)
+            {
+                mpDev->Push();
+                mpDev->IntersectClipRegion( aLogicClip );
+            }
+            else
+                mpDev->SetClipRegion( Region( aLogicClip ) );
+        }
+    }
+
+    return bClip;
+}
+
 void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
 {
     OSL_ASSERT(rParam.meHorJust != SVX_HOR_JUSTIFY_REPEAT);
-    Size aRefOne = mpRefDevice->PixelToLogic(Size(1,1));
 
-    bool bRepeat = (rParam.meHorJust == SVX_HOR_JUSTIFY_REPEAT && !rParam.mbBreak);
-    bool bShrink = !rParam.mbBreak && !bRepeat && lcl_GetBoolValue(*rParam.mpPattern, ATTR_SHRINKTOFIT, rParam.mpCondSet);
+    const bool bRepeat = (rParam.meHorJust == SVX_HOR_JUSTIFY_REPEAT && !rParam.mbBreak);
+    const bool bShrink = !rParam.mbBreak && !bRepeat && lcl_GetBoolValue(*rParam.mpPattern, ATTR_SHRINKTOFIT, rParam.mpCondSet);
 
     SvxCellHorJustify eOutHorJust =
         ( rParam.meHorJust != SVX_HOR_JUSTIFY_STANDARD ) ? rParam.meHorJust :
@@ -3192,22 +3304,22 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
             // First check if twice the space for the formatted text is available
             // (otherwise just keep it unchanged).
 
-            long nFormatted = nNeededPixel - nLeftM - nRightM;      // without margin
-            long nAvailable = aAreaParam.maAlignRect.GetWidth() - nLeftM - nRightM;
+            const long nFormatted = nNeededPixel - nLeftM - nRightM;      // without margin
+            const long nAvailable = aAreaParam.maAlignRect.GetWidth() - nLeftM - nRightM;
             if ( nAvailable >= 2 * nFormatted )
             {
                 // "repeat" is handled with unformatted text (for performance reasons)
                 String aCellStr = rParam.mpEngine->GetText();
                 rParam.mpEngine->SetText( aCellStr );
 
-                long nRepeatSize = (long) rParam.mpEngine->CalcTextWidth();
+                long nRepeatSize = static_cast<long>( rParam.mpEngine->CalcTextWidth() );
                 if (rParam.mbPixelToLogic)
                     nRepeatSize = mpRefDevice->LogicToPixel(Size(nRepeatSize,0)).Width();
                 if ( pFmtDevice != mpRefDevice )
                     ++nRepeatSize;
                 if ( nRepeatSize > 0 )
                 {
-                    long nRepeatCount = nAvailable / nRepeatSize;
+                    const long nRepeatCount = nAvailable / nRepeatSize;
                     if ( nRepeatCount > 1 )
                     {
                         String aRepeated = aCellStr;
@@ -3216,7 +3328,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
                         rParam.mpEngine->SetText( aRepeated );
 
                         nEngineHeight = rParam.mpEngine->GetTextHeight();
-                        nEngineWidth = (long) rParam.mpEngine->CalcTextWidth();
+                        nEngineWidth = static_cast<long>( rParam.mpEngine->CalcTextWidth() );
                         if (rParam.mbPixelToLogic)
                             nNeededPixel = mpRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();
                         else
@@ -3242,10 +3354,10 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
     }
 
     long nStartX = aAreaParam.maAlignRect.Left();
-    long nStartY = aAreaParam.maAlignRect.Top();
-    long nCellWidth = aAreaParam.maAlignRect.GetWidth();
-    long nOutWidth = nCellWidth - 1 - nLeftM - nRightM;
-    long nOutHeight = aAreaParam.maAlignRect.GetHeight() - nTopM - nBottomM;
+    const long nStartY = aAreaParam.maAlignRect.Top();
+    const long nCellWidth = aAreaParam.maAlignRect.GetWidth();
+    const long nOutWidth = nCellWidth - 1 - nLeftM - nRightM;
+    const long nOutHeight = aAreaParam.maAlignRect.GetHeight() - nTopM - nBottomM;
 
     if (rParam.mbBreak)
     {
@@ -3265,114 +3377,16 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
             nStartX += nLeftM;
     }
 
-    bool bOutside = (aAreaParam.maClipRect.Right() < nScrX || aAreaParam.maClipRect.Left() >= nScrX + nScrW);
+    const bool bOutside = (aAreaParam.maClipRect.Right() < nScrX || aAreaParam.maClipRect.Left() >= nScrX + nScrW);
     if (bOutside)
         return;
 
-    if ( aAreaParam.maClipRect.Left() < nScrX )
-    {
-        aAreaParam.maClipRect.Left() = nScrX;
-        aAreaParam.mbLeftClip = true;
-    }
-    if ( aAreaParam.maClipRect.Right() > nScrX + nScrW )
-    {
-        aAreaParam.maClipRect.Right() = nScrX + nScrW;          //! minus one?
-        aAreaParam.mbRightClip = true;
-    }
+    // output area, excluding margins, in logical units
+    const Size& aCellSize = rParam.mbPixelToLogic
+        ? mpRefDevice->PixelToLogic( Size( nOutWidth, nOutHeight ) )
+        : Size( nOutWidth, nOutHeight );
 
-    bool bClip = aAreaParam.mbLeftClip || aAreaParam.mbRightClip;
-    bool bSimClip = false;
-
-    if ( bWrapFields )
-    {
-        //  Fields in a cell with automatic breaks: clip to cell width
-        bClip = true;
-    }
-
-    if ( aAreaParam.maClipRect.Top() < nScrY )
-    {
-        aAreaParam.maClipRect.Top() = nScrY;
-        bClip = true;
-    }
-    if ( aAreaParam.maClipRect.Bottom() > nScrY + nScrH )
-    {
-        aAreaParam.maClipRect.Bottom() = nScrY + nScrH;     //! minus one?
-        bClip = true;
-    }
-
-    Size aCellSize;         // output area, excluding margins, in logical units
-    if (rParam.mbPixelToLogic)
-        aCellSize = mpRefDevice->PixelToLogic( Size( nOutWidth, nOutHeight ) );
-    else
-        aCellSize = Size( nOutWidth, nOutHeight );
-
-    if ( nEngineHeight >= aCellSize.Height() + aRefOne.Height() )
-    {
-        const ScMergeAttr* pMerge =
-                (ScMergeAttr*)&rParam.mpPattern->GetItem(ATTR_MERGE);
-        bool bMerged = pMerge->GetColMerge() > 1 || pMerge->GetRowMerge() > 1;
-
-        //  Don't clip for text height when printing rows with optimal height,
-        //  except when font size is from conditional formatting.
-        //! Allow clipping when vertically merged?
-        if ( eType != OUTTYPE_PRINTER ||
-            ( mpDoc->GetRowFlags( rParam.mnCellY, nTab ) & CR_MANUALSIZE ) ||
-            ( rParam.mpCondSet && SFX_ITEM_SET ==
-                rParam.mpCondSet->GetItemState(ATTR_FONT_HEIGHT, true) ) )
-            bClip = true;
-        else
-            bSimClip = true;
-
-        //  Show clip marks if height is at least 5pt too small and
-        //  there are several lines of text.
-        //  Not for asian vertical text, because that would interfere
-        //  with the default right position of the text.
-        //  Only with automatic line breaks, to avoid having to find
-        //  the cells with the horizontal end of the text again.
-        if ( nEngineHeight - aCellSize.Height() > 100 &&
-             rParam.mbBreak && bMarkClipped &&
-             ( rParam.mpEngine->GetParagraphCount() > 1 || rParam.mpEngine->GetLineCount(0) > 1 ) )
-        {
-            CellInfo* pClipMarkCell = NULL;
-            if ( bMerged )
-            {
-                //  anywhere in the merged area...
-                SCCOL nClipX = ( rParam.mnX < nX1 ) ? nX1 : rParam.mnX;
-                pClipMarkCell = &pRowInfo[(rParam.mnArrY != 0) ? rParam.mnArrY : 1].pCellInfo[nClipX+1];
-            }
-            else
-                pClipMarkCell = &rParam.mpThisRowInfo->pCellInfo[rParam.mnX+1];
-
-            pClipMarkCell->nClipMark |= SC_CLIPMARK_RIGHT;      //! also allow left?
-            bAnyClipped = true;
-
-            long nMarkPixel = (long)( SC_CLIPMARK_SIZE * mnPPTX );
-            if ( aAreaParam.maClipRect.Right() - nMarkPixel > aAreaParam.maClipRect.Left() )
-                aAreaParam.maClipRect.Right() -= nMarkPixel;
-        }
-    }
-
-    Rectangle aLogicClip;
-    if (bClip || bSimClip)
-    {
-        // Clip marks are already handled in GetOutputArea
-
-        if (rParam.mbPixelToLogic)
-            aLogicClip = mpRefDevice->PixelToLogic( aAreaParam.maClipRect );
-        else
-            aLogicClip = aAreaParam.maClipRect;
-
-        if (bClip)  // bei bSimClip nur aClipRect initialisieren
-        {
-            if (bMetaFile)
-            {
-                mpDev->Push();
-                mpDev->IntersectClipRegion( aLogicClip );
-            }
-            else
-                mpDev->SetClipRegion( Region( aLogicClip ) );
-        }
-    }
+    const bool bClip = Clip( rParam, aCellSize, aAreaParam, nEngineHeight, bWrapFields );
 
     Point aLogicStart(nStartX, nStartY);
     rParam.calcStartPosForVertical(aLogicStart, aCellSize.Width(), nEngineWidth, nTopM, mpRefDevice);
@@ -3452,10 +3466,9 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
 void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
 {
     OSL_ASSERT(rParam.meHorJust != SVX_HOR_JUSTIFY_REPEAT);
-    Size aRefOne = mpRefDevice->PixelToLogic(Size(1,1));
 
-    bool bRepeat = (rParam.meHorJust == SVX_HOR_JUSTIFY_REPEAT && !rParam.mbBreak);
-    bool bShrink = !rParam.mbBreak && !bRepeat && lcl_GetBoolValue(*rParam.mpPattern, ATTR_SHRINKTOFIT, rParam.mpCondSet);
+    const bool bRepeat = (rParam.meHorJust == SVX_HOR_JUSTIFY_REPEAT && !rParam.mbBreak);
+    const bool bShrink = !rParam.mbBreak && !bRepeat && lcl_GetBoolValue(*rParam.mpPattern, ATTR_SHRINKTOFIT, rParam.mpCondSet);
 
     SvxCellHorJustify eOutHorJust =
         ( rParam.meHorJust != SVX_HOR_JUSTIFY_STANDARD ) ? rParam.meHorJust :
@@ -3562,22 +3575,22 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
             // First check if twice the space for the formatted text is available
             // (otherwise just keep it unchanged).
 
-            long nFormatted = nNeededPixel - nLeftM - nRightM;      // without margin
-            long nAvailable = aAreaParam.maAlignRect.GetWidth() - nLeftM - nRightM;
+            const long nFormatted = nNeededPixel - nLeftM - nRightM;      // without margin
+            const long nAvailable = aAreaParam.maAlignRect.GetWidth() - nLeftM - nRightM;
             if ( nAvailable >= 2 * nFormatted )
             {
                 // "repeat" is handled with unformatted text (for performance reasons)
                 String aCellStr = rParam.mpEngine->GetText();
                 rParam.mpEngine->SetText( aCellStr );
 
-                long nRepeatSize = (long) rParam.mpEngine->CalcTextWidth();
+                long nRepeatSize = static_cast<long>( rParam.mpEngine->CalcTextWidth() );
                 if (rParam.mbPixelToLogic)
                     nRepeatSize = mpRefDevice->LogicToPixel(Size(nRepeatSize,0)).Width();
                 if ( pFmtDevice != mpRefDevice )
                     ++nRepeatSize;
                 if ( nRepeatSize > 0 )
                 {
-                    long nRepeatCount = nAvailable / nRepeatSize;
+                    const long nRepeatCount = nAvailable / nRepeatSize;
                     if ( nRepeatCount > 1 )
                     {
                         String aRepeated = aCellStr;
@@ -3586,7 +3599,7 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
                         rParam.mpEngine->SetText( aRepeated );
 
                         nEngineHeight = rParam.mpEngine->GetTextHeight();
-                        nEngineWidth = (long) rParam.mpEngine->CalcTextWidth();
+                        nEngineWidth = static_cast<long>( rParam.mpEngine->CalcTextWidth() );
                         if (rParam.mbPixelToLogic)
                             nNeededPixel = mpRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();
                         else
@@ -3600,7 +3613,7 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
         if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
         {
             rParam.mpEngine->SetText(OUString("###"));
-            nEngineWidth = (long) rParam.mpEngine->CalcTextWidth();
+            nEngineWidth = static_cast<long>( rParam.mpEngine->CalcTextWidth() );
             if (rParam.mbPixelToLogic)
                 nNeededPixel = mpRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();
             else
@@ -3612,10 +3625,10 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
     }
 
     long nStartX = aAreaParam.maAlignRect.Left();
-    long nStartY = aAreaParam.maAlignRect.Top();
-    long nCellWidth = aAreaParam.maAlignRect.GetWidth();
-    long nOutWidth = nCellWidth - 1 - nLeftM - nRightM;
-    long nOutHeight = aAreaParam.maAlignRect.GetHeight() - nTopM - nBottomM;
+    const long nStartY = aAreaParam.maAlignRect.Top();
+    const long nCellWidth = aAreaParam.maAlignRect.GetWidth();
+    const long nOutWidth = nCellWidth - 1 - nLeftM - nRightM;
+    const long nOutHeight = aAreaParam.maAlignRect.GetHeight() - nTopM - nBottomM;
 
     if (rParam.mbBreak)
     {
@@ -3637,114 +3650,16 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
             nStartX += nLeftM;
     }
 
-    bool bOutside = (aAreaParam.maClipRect.Right() < nScrX || aAreaParam.maClipRect.Left() >= nScrX + nScrW);
+    const bool bOutside = (aAreaParam.maClipRect.Right() < nScrX || aAreaParam.maClipRect.Left() >= nScrX + nScrW);
     if (bOutside)
         return;
 
-    if ( aAreaParam.maClipRect.Left() < nScrX )
-    {
-        aAreaParam.maClipRect.Left() = nScrX;
-        aAreaParam.mbLeftClip = true;
-    }
-    if ( aAreaParam.maClipRect.Right() > nScrX + nScrW )
-    {
-        aAreaParam.maClipRect.Right() = nScrX + nScrW;          //! minus one?
-        aAreaParam.mbRightClip = true;
-    }
+    // output area, excluding margins, in logical units
+    const Size& aCellSize = rParam.mbPixelToLogic
+        ? mpRefDevice->PixelToLogic( Size( nOutWidth, nOutHeight ) )
+        : Size( nOutWidth, nOutHeight );
 
-    bool bClip = aAreaParam.mbLeftClip || aAreaParam.mbRightClip;
-    bool bSimClip = false;
-
-    if ( bWrapFields )
-    {
-        //  Fields in a cell with automatic breaks: clip to cell width
-        bClip = true;
-    }
-
-    if ( aAreaParam.maClipRect.Top() < nScrY )
-    {
-        aAreaParam.maClipRect.Top() = nScrY;
-        bClip = true;
-    }
-    if ( aAreaParam.maClipRect.Bottom() > nScrY + nScrH )
-    {
-        aAreaParam.maClipRect.Bottom() = nScrY + nScrH;     //! minus one?
-        bClip = true;
-    }
-
-    Size aCellSize;         // output area, excluding margins, in logical units
-    if (rParam.mbPixelToLogic)
-        aCellSize = mpRefDevice->PixelToLogic( Size( nOutWidth, nOutHeight ) );
-    else
-        aCellSize = Size( nOutWidth, nOutHeight );
-
-    if ( nEngineHeight >= aCellSize.Height() + aRefOne.Height() )
-    {
-        const ScMergeAttr* pMerge =
-                (ScMergeAttr*)&rParam.mpPattern->GetItem(ATTR_MERGE);
-        bool bMerged = pMerge->GetColMerge() > 1 || pMerge->GetRowMerge() > 1;
-
-        //  Don't clip for text height when printing rows with optimal height,
-        //  except when font size is from conditional formatting.
-        //! Allow clipping when vertically merged?
-        if ( eType != OUTTYPE_PRINTER ||
-            ( mpDoc->GetRowFlags( rParam.mnCellY, nTab ) & CR_MANUALSIZE ) ||
-            ( rParam.mpCondSet && SFX_ITEM_SET ==
-                rParam.mpCondSet->GetItemState(ATTR_FONT_HEIGHT, true) ) )
-            bClip = true;
-        else
-            bSimClip = true;
-
-        //  Show clip marks if height is at least 5pt too small and
-        //  there are several lines of text.
-        //  Not for asian vertical text, because that would interfere
-        //  with the default right position of the text.
-        //  Only with automatic line breaks, to avoid having to find
-        //  the cells with the horizontal end of the text again.
-        if ( nEngineHeight - aCellSize.Height() > 100 &&
-             rParam.mbBreak && bMarkClipped &&
-             ( rParam.mpEngine->GetParagraphCount() > 1 || rParam.mpEngine->GetLineCount(0) > 1 ) )
-        {
-            CellInfo* pClipMarkCell = NULL;
-            if ( bMerged )
-            {
-                //  anywhere in the merged area...
-                SCCOL nClipX = ( rParam.mnX < nX1 ) ? nX1 : rParam.mnX;
-                pClipMarkCell = &pRowInfo[(rParam.mnArrY != 0) ? rParam.mnArrY : 1].pCellInfo[nClipX+1];
-            }
-            else
-                pClipMarkCell = &rParam.mpThisRowInfo->pCellInfo[rParam.mnX+1];
-
-            pClipMarkCell->nClipMark |= SC_CLIPMARK_RIGHT;      //! also allow left?
-            bAnyClipped = true;
-
-            long nMarkPixel = (long)( SC_CLIPMARK_SIZE * mnPPTX );
-            if ( aAreaParam.maClipRect.Right() - nMarkPixel > aAreaParam.maClipRect.Left() )
-                aAreaParam.maClipRect.Right() -= nMarkPixel;
-        }
-    }
-
-    Rectangle aLogicClip;
-    if (bClip || bSimClip)
-    {
-        // Clip marks are already handled in GetOutputArea
-
-        if (rParam.mbPixelToLogic)
-            aLogicClip = mpRefDevice->PixelToLogic( aAreaParam.maClipRect );
-        else
-            aLogicClip = aAreaParam.maClipRect;
-
-        if (bClip)  // bei bSimClip nur aClipRect initialisieren
-        {
-            if (bMetaFile)
-            {
-                mpDev->Push();
-                mpDev->IntersectClipRegion( aLogicClip );
-            }
-            else
-                mpDev->SetClipRegion( Region( aLogicClip ) );
-        }
-    }
+    const bool bClip = Clip( rParam, aCellSize, aAreaParam, nEngineHeight, bWrapFields );
 
     Point aLogicStart(nStartX, nStartY);
     rParam.calcStartPosForVertical(aLogicStart, aCellSize.Width(), nEngineWidth, nTopM, mpRefDevice);
