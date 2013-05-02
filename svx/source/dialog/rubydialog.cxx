@@ -337,10 +337,9 @@ void SvxRubyDialog::Activate()
                                     aName >>= sName;
                                 }
                             }
-                            Reference<XNamed> xNamed(xStyle, UNO_QUERY);
-                            if(xNamed.is())
+                            if(xStyle.is())
                             {
-                                sCoreName = xNamed->getName();
+                                sCoreName = xStyle->getName();
                                 if(sName.isEmpty())
                                     sName = sCoreName;
                             }

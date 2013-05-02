@@ -694,7 +694,7 @@ Reference< XInterface > SAL_CALL OConnection::createInstance( const OUString& _s
             return aFind->second;
         }
     }
-    return Reference< XInterface >(xRet,UNO_QUERY);
+    return xRet;
 }
 
 Reference< XInterface > SAL_CALL OConnection::createInstanceWithArguments( const OUString& _sServiceSpecifier, const Sequence< Any >& /*Arguments*/ ) throw (Exception, RuntimeException)

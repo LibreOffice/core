@@ -1715,25 +1715,24 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                         makeAny(rCursor->getString()));
 
                     // insert the field over it's original text
-                    Reference<XTextRange> xRange(rCursor, UNO_QUERY);
                     Reference<XTextContent> xTextContent(xTmp, UNO_QUERY);
-                    if (m_pImpl->m_xText.is() && xRange.is())
+                    if (m_pImpl->m_xText.is() && rCursor.is())
                     {
                         // #i107225# the combined characters need to be inserted first
                         // the selected text has to be removed afterwards
-                        m_pImpl->m_xText->insertTextContent( xRange->getStart(), xTextContent, sal_True );
+                        m_pImpl->m_xText->insertTextContent( rCursor->getStart(), xTextContent, sal_True );
 
-                        if( !xRange->getString().isEmpty() )
+                        if( !rCursor->getString().isEmpty() )
                         {
                             try
                             {
-                                uno::Reference< text::XTextCursor > xCrsr = xRange->getText()->createTextCursorByRange( xRange->getStart() );
+                                uno::Reference< text::XTextCursor > xCrsr = rCursor->getText()->createTextCursorByRange( rCursor->getStart() );
                                 xCrsr->goLeft( 1, true );
                                 uno::Reference< beans::XPropertySet> xCrsrProperties( xCrsr, uno::UNO_QUERY_THROW );
                                 //the hard properties of the removed text need to be applied to the combined characters field
                                 pStyle->FillPropertySet( xCrsrProperties );
                                 xCrsr->collapseToEnd();
-                                xCrsr->gotoRange( xRange->getEnd(), true );
+                                xCrsr->gotoRange( rCursor->getEnd(), true );
                                 xCrsr->setString( OUString() );
                             }
                             catch(const uno::Exception&)

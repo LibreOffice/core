@@ -2414,8 +2414,7 @@ void CustomAnimationPane::preview( const Reference< XAnimationNode >& xAnimation
     xRoot->setUserData( aUserData );
     xRoot->appendChild( xAnimationNode );
 
-    Reference< XAnimationNode > xNode( xRoot, UNO_QUERY );
-    SlideShow::StartPreview( mrBase, mxCurrentPage, xNode );
+    SlideShow::StartPreview( mrBase, mxCurrentPage, xRoot );
 }
 
 

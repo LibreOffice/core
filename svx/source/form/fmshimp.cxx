@@ -2542,7 +2542,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
                         m_arrRelativeGridColumn.push_back(-1);
 
                         // and for the formatted search...
-                        pfmscContextInfo->arrFields.push_back(Reference< XInterface>(xControl, UNO_QUERY));
+                        pfmscContextInfo->arrFields.push_back(xControl);
                     }
                 }
             }
@@ -2731,7 +2731,7 @@ void FmXFormShell::selectionChanged(const EventObject& rEvent) throw(::com::sun:
     Reference< XForm > xNewForm( GetForm( rEvent.Source ) );
 
     InterfaceBag aNewSelection;
-    aNewSelection.insert( Reference< XInterface >( xSelObj, UNO_QUERY ) );
+    aNewSelection.insert( xSelObj );
 
     if ( setCurrentSelection( aNewSelection ) && IsPropBrwOpen() )
         ShowSelectionProperties( sal_True );
@@ -3571,7 +3571,7 @@ void FmXFormShell::CreateExternalView()
             Reference< XResultSet> xForm(xCurrentNavController->getModel(), UNO_QUERY);
             aArg.Value <<= xForm;
 
-            m_xExternalDisplayedForm = Reference< XResultSet>(xForm, UNO_QUERY);
+            m_xExternalDisplayedForm = xForm;
                 // do this before dispatching the "attach" command, as the atach may result in a call to our queryDispatch (for the FormSlots)
                 // whichs needs the m_xExternalDisplayedForm
 

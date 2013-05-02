@@ -150,9 +150,8 @@ namespace dbaccess
             OUString sContentType;
             try
             {
-                Reference< XStorage > xContainerStorage( _rxContainerStorage, UNO_QUERY_THROW );
                 ::utl::SharedUNOComponent< XPropertySet > xStorageProps(
-                    xContainerStorage->openStorageElement( _rEntityName, ElementModes::READ ), UNO_QUERY_THROW );
+                    _rxContainerStorage->openStorageElement( _rEntityName, ElementModes::READ ), UNO_QUERY_THROW );
                 OSL_VERIFY( xStorageProps->getPropertyValue( INFO_MEDIATYPE ) >>= sContentType );
             }
             catch( const Exception& )
@@ -1170,8 +1169,7 @@ namespace
     {
         try
         {
-            Reference< XComponentSupplier > xCompProv( _rxEmbeddedObject, UNO_QUERY_THROW );
-            Reference< XDrawPageSupplier > xSuppPage( xCompProv->getComponent(), UNO_QUERY_THROW );
+            Reference< XDrawPageSupplier > xSuppPage( _rxEmbeddedObject->getComponent(), UNO_QUERY_THROW );
                 // if this interface does not exist, then either getComponent returned NULL,
                 // or the document is a multi-page document. The latter is allowed, but currently
                 // simply not handled by this code, as it would not normally happen.
@@ -1390,8 +1388,7 @@ sal_Bool ODocumentDefinition::saveAs()
                             Reference< XStorage> xStorage = getContainerStorage();
                             const static OUString sBaseName("Obj");
 
-                            Reference<XNameAccess> xElements(xStorage,UNO_QUERY_THROW);
-                            OUString sPersistentName = ::dbtools::createUniqueName(xElements,sBaseName);
+                            OUString sPersistentName = ::dbtools::createUniqueName(xStorage,sBaseName);
                             xStorage->copyElementTo(m_pImpl->m_aProps.sPersistentName,xStorage,sPersistentName);
 
                             OUString sOldName = m_pImpl->m_aProps.aTitle;

@@ -523,8 +523,8 @@ namespace dbmm
                 const Reference< XEventAttacherManager >& _rxManager,
                 const sal_Int32 _nIndex
             )
-            :m_xComponent( _rxComponent, UNO_SET_THROW )
-            ,m_xManager( _rxManager, UNO_SET_THROW )
+            :m_xComponent( _rxComponent )
+            ,m_xManager( _rxManager )
             ,m_nIndex( _nIndex )
         {
         }
@@ -557,7 +557,7 @@ namespace dbmm
     {
     public:
         FormComponentIterator( const Reference< XIndexAccess >& _rxContainer )
-            :m_xContainer( _rxContainer, UNO_SET_THROW )
+            :m_xContainer( _rxContainer )
             ,m_xEventManager( _rxContainer, UNO_QUERY_THROW )
             ,m_nElementCount( _rxContainer->getCount() )
             ,m_nCurrentElement( 0 )

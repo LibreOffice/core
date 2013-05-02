@@ -614,9 +614,8 @@ void ViewSettings::finalizeImport()
         aPropMap[ PROP_IsOutlineSymbolsSet ]           <<= rxActiveSheetView->mbShowOutline;
 
         xContainer->insertByIndex( 0, Any( aPropMap.makePropertyValueSequence() ) );
-        Reference< XIndexAccess > xIAccess( xContainer, UNO_QUERY_THROW );
         Reference< XViewDataSupplier > xViewDataSuppl( getDocument(), UNO_QUERY_THROW );
-        xViewDataSuppl->setViewData( xIAccess );
+        xViewDataSuppl->setViewData( xContainer );
     }
     catch( Exception& )
     {

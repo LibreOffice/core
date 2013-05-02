@@ -838,10 +838,8 @@ bool DialogWindow::SaveDialog()
                     xStringResourceWithLocation->newLocale( rLocale );
                 }
 
-                Reference< XStringResourceManager > xTargetStringResourceManager( xStringResourceWithLocation, uno::UNO_QUERY );
-
                 LocalizationMgr::copyResourceForDialog( xDialogModel,
-                    xStringResourceResolver, xTargetStringResourceManager );
+                    xStringResourceResolver, xStringResourceWithLocation );
 
                 xStringResourceWithLocation->store();
             }

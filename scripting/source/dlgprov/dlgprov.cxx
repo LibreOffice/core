@@ -523,11 +523,11 @@ namespace dlgprov
                 Reference< XInterface >* pObjects = aObjects.getArray();
                 for ( sal_Int32 i = 0; i < nControlCount; ++i )
                 {
-                    pObjects[i] = Reference< XInterface >( pControls[i], UNO_QUERY );
+                    pObjects[i] = pControls[i];
                 }
 
                 // also add the dialog control itself to the sequence
-                pObjects[nControlCount] = Reference< XInterface >( rxControl, UNO_QUERY );
+                pObjects[nControlCount] = rxControl;
 
                 Reference< XScriptEventsAttacher > xScriptEventsAttacher = new DialogEventsAttacherImpl
                     ( m_xContext, m_xModel, rxControl, rxHandler, rxIntrospectionAccess,

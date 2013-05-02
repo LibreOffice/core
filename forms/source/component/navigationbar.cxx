@@ -225,14 +225,13 @@ namespace frm
     {
         // open a section for compatibility - if we later on write additional members,
         // then older versions can skip them
-        Reference< XDataOutputStream > xDataOut( _rxOutStream, UNO_QUERY );
-        OStreamSection aEnsureBlockCompat( xDataOut );
+        OStreamSection aEnsureBlockCompat( _rxOutStream );
 
         // base class
         OControlModel::write( _rxOutStream );
 
         {
-            OStreamSection aEnsureCompat( xDataOut );
+            OStreamSection aEnsureCompat( _rxOutStream );
             // determine which properties are not void and need to be written
             sal_Int32 nNonVoids = 0;
             if ( m_aTabStop.hasValue() )
@@ -270,7 +269,7 @@ namespace frm
         }
 
         {
-            OStreamSection aEnsureCompat( xDataOut );
+            OStreamSection aEnsureCompat( _rxOutStream );
             ::comphelper::operator<<( _rxOutStream, getFont() );
         }
 
@@ -297,14 +296,13 @@ namespace frm
     //------------------------------------------------------------------
     void SAL_CALL ONavigationBarModel::read( const Reference< XObjectInputStream >& _rxInStream ) throw ( IOException, RuntimeException )
     {
-        Reference< XDataInputStream > xDataIn( _rxInStream, UNO_QUERY );
-        OStreamSection aEnsureBlockCompat( xDataIn );
+        OStreamSection aEnsureBlockCompat( _rxInStream );
 
         // base class
         OControlModel::read( _rxInStream );
 
         {
-            OStreamSection aEnsureCompat( xDataIn );
+            OStreamSection aEnsureCompat( _rxInStream );
             // determine which properties were non-void
             sal_Int32 nNonVoids = _rxInStream->readLong( );
 
@@ -331,7 +329,7 @@ namespace frm
         }
 
         {
-            OStreamSection aEnsureCompat( xDataIn );
+            OStreamSection aEnsureCompat( _rxInStream );
             FontDescriptor aFont;
             ::comphelper::operator>>( _rxInStream, aFont );
             setFont( aFont );

@@ -1178,9 +1178,8 @@ void ShapeExport::WriteTable( Reference< XShape > rXShape  )
         mpFS->startElementNS( XML_a, XML_tbl, FSEND );
         mpFS->singleElementNS( XML_a, XML_tblPr, FSEND );
 
-        Reference< XColumnRowRange > xColumnRowRange( xTable, UNO_QUERY_THROW );
-        Reference< container::XIndexAccess > xColumns( xColumnRowRange->getColumns(), UNO_QUERY_THROW );
-        Reference< container::XIndexAccess > xRows( xColumnRowRange->getRows(), UNO_QUERY_THROW );
+        Reference< container::XIndexAccess > xColumns( xTable->getColumns(), UNO_QUERY_THROW );
+        Reference< container::XIndexAccess > xRows( xTable->getRows(), UNO_QUERY_THROW );
         sal_uInt16 nRowCount = static_cast< sal_uInt16 >( xRows->getCount() );
         sal_uInt16 nColumnCount = static_cast< sal_uInt16 >( xColumns->getCount() );
 
@@ -1197,7 +1196,6 @@ void ShapeExport::WriteTable( Reference< XShape > rXShape  )
 
         mpFS->endElementNS( XML_a, XML_tblGrid );
 
-        Reference< XCellRange > xCellRange( xTable, UNO_QUERY_THROW );
         for( sal_Int32 nRow = 0; nRow < nRowCount; nRow++ )
         {
             Reference< XPropertySet > xRowPropSet( xRows->getByIndex( nRow ), UNO_QUERY_THROW );
@@ -1209,7 +1207,7 @@ void ShapeExport::WriteTable( Reference< XShape > rXShape  )
 
             for( sal_Int32 nColumn = 0; nColumn < nColumnCount; nColumn++ )
             {
-                Reference< XMergeableCell > xCell( xCellRange->getCellByPosition( nColumn, nRow ), UNO_QUERY_THROW );
+                Reference< XMergeableCell > xCell( xTable->getCellByPosition( nColumn, nRow ), UNO_QUERY_THROW );
                 if ( !xCell->isMerged() )
                 {
                     mpFS->startElementNS( XML_a, XML_tc, FSEND );

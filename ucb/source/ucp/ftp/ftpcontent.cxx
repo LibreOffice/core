@@ -673,8 +673,7 @@ FTPContent::getParent(  )
 {
     Reference<XContentIdentifier>
         xIdent(new FTPContentIdentifier(m_aFTPURL.parent(false)));
-    Reference<XContent> xContent(m_xProvider->queryContent(xIdent));
-    return Reference<XInterface>(xContent,UNO_QUERY);
+    return m_xProvider->queryContent(xIdent);
 }
 
 

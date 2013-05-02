@@ -396,14 +396,13 @@ void XMLStyleExport::exportStyleFamily(
     if( !xStyleCont.is() )
         return;
 
-    Reference< XNameAccess > xStyles( xStyleCont, UNO_QUERY );
        // If next styles are supported and used styles should be exported only,
     // the next style may be unused but has to be exported, too. In this case
     // the names of all exported styles are remembered.
     boost::scoped_ptr<std::set<OUString> > pExportedStyles(0);
     sal_Bool bFirstStyle = sal_True;
 
-    const uno::Sequence< OUString> aSeq = xStyles->getElementNames();
+    const uno::Sequence< OUString> aSeq = xStyleCont->getElementNames();
     const OUString* pIter = aSeq.getConstArray();
     const OUString* pEnd   = pIter + aSeq.getLength();
     for(;pIter != pEnd;++pIter)
@@ -411,7 +410,7 @@ void XMLStyleExport::exportStyleFamily(
         Reference< XStyle > xStyle;
         try
         {
-            xStyles->getByName( *pIter ) >>= xStyle;
+            xStyleCont->getByName( *pIter ) >>= xStyle;
         }
         catch(const lang::IndexOutOfBoundsException&)
         {
@@ -428,7 +427,7 @@ void XMLStyleExport::exportStyleFamily(
             if( !bUsed || xStyle->isInUse() )
             {
                 sal_Bool bExported = exportStyle( xStyle, rXMLFamily, rPropMapper,
-                                              xStyles,pPrefix );
+                                              xStyleCont,pPrefix );
                 if( bUsed && bFirstStyle && bExported  )
                 {
                     // If this is the first style, find out whether next styles
@@ -464,7 +463,7 @@ void XMLStyleExport::exportStyleFamily(
         for(;pIter != pEnd;++pIter)
         {
             Reference< XStyle > xStyle;
-            xStyles->getByName( *pIter ) >>= xStyle;
+            xStyleCont->getByName( *pIter ) >>= xStyle;
 
             DBG_ASSERT( xStyle.is(), "Style not found for export!" );
             if( xStyle.is() )
@@ -500,7 +499,7 @@ void XMLStyleExport::exportStyleFamily(
                     xStyleCont->getByName( sNextName ) >>= xStyle;
                     DBG_ASSERT( xStyle.is(), "Style not found for export!" );
 
-                    if( xStyle.is() && exportStyle( xStyle, rXMLFamily, rPropMapper, xStyles,pPrefix ) )
+                    if( xStyle.is() && exportStyle( xStyle, rXMLFamily, rPropMapper, xStyleCont, pPrefix ) )
                         pExportedStyles->insert( sTmp );
                 }
             }

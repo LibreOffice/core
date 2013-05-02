@@ -290,12 +290,11 @@ namespace dbaui
             bool bSuccess = false;
             try
             {
-                Reference< XCommandProcessor > xCommandProcessor( _rxCommandProcessor, UNO_SET_THROW );
-                sal_Int32 nCommandIdentifier = xCommandProcessor->createCommandIdentifier();
+                sal_Int32 nCommandIdentifier = _rxCommandProcessor->createCommandIdentifier();
 
                 Command aCommand;
                 aCommand.Name = OUString( "close" );
-                xCommandProcessor->execute( aCommand, nCommandIdentifier, NULL );
+                _rxCommandProcessor->execute( aCommand, nCommandIdentifier, NULL );
                 bSuccess = true;
             }
             catch( const Exception& )

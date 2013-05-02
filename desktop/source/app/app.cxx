@@ -2438,8 +2438,7 @@ void Desktop::OpenClients()
             // session management
             try
             {
-                Reference< XSessionManagerListener > r(xSessionListener, UNO_QUERY_THROW);
-                r->doRestore();
+                xSessionListener->doRestore();
             }
             catch(const com::sun::star::uno::Exception& e)
             {

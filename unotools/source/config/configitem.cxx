@@ -439,7 +439,7 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const com::sun::star::uno::Se
             }
             else
             {
-                xNode = Reference< XInterface >(xHierarchyAccess, UNO_QUERY);
+                xNode = xHierarchyAccess;
             }
 
         xSet = Reference< XPropertySet >(xNode, UNO_QUERY);

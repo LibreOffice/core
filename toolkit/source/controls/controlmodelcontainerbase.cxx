@@ -1405,8 +1405,7 @@ void ControlContainerBase::ImplRemoveControl( Reference< XControlModel >& rxMode
         removeControl( xCtrl );
         try
         {
-            Reference< XComponent > const xControlComp( xCtrl, UNO_QUERY_THROW );
-            xControlComp->dispose();
+            xCtrl->dispose();
         }
         catch (const Exception&)
         {

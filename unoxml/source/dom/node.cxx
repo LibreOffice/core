@@ -378,7 +378,7 @@ namespace DOM
         // and call event listeners, so release mutex to prevent deadlocks.
         guard.clear();
 
-        dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
+        dispatchEvent(event);
         // dispatch subtree modified for this node
         dispatchSubtreeModified();
 
@@ -819,7 +819,7 @@ namespace DOM
         // and call event listeners, so release mutex to prevent deadlocks.
         guard.clear();
 
-        dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
+        dispatchEvent(event);
         // subtree modified for this node
         dispatchSubtreeModified();
 
@@ -943,7 +943,7 @@ namespace DOM
             "DOMSubtreeModified", sal_True,
             sal_False, Reference< XNode >(),
             OUString(), OUString(), OUString(), (AttrChangeType)0 );
-        dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
+        dispatchEvent(event);
     }
 
     /**

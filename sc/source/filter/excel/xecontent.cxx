@@ -1905,12 +1905,11 @@ XclExpWebQueryBuffer::XclExpWebQueryBuffer( const XclExpRoot& rRoot )
 
     Reference< XAreaLinks > xAreaLinks;
     aModelProp.GetProperty( xAreaLinks, SC_UNO_AREALINKS );
-    Reference< XIndexAccess > xLinksIA( xAreaLinks, UNO_QUERY );
-    if( !xLinksIA.is() ) return;
+    if( !xAreaLinks.is() ) return;
 
-    for( sal_Int32 nIndex = 0, nCount = xLinksIA->getCount(); nIndex < nCount; ++nIndex )
+    for( sal_Int32 nIndex = 0, nCount = xAreaLinks->getCount(); nIndex < nCount; ++nIndex )
     {
-        Reference< XAreaLink > xAreaLink( xLinksIA->getByIndex( nIndex ), UNO_QUERY );
+        Reference< XAreaLink > xAreaLink( xAreaLinks->getByIndex( nIndex ), UNO_QUERY );
         if( xAreaLink.is() )
         {
             CellRangeAddress aDestRange( xAreaLink->getDestArea() );

@@ -895,12 +895,10 @@ namespace
         try
         {
             // obtain all properties currently known at the bag
-            Reference< XPropertySet > xPropertySet( _rxPropertyBag, UNO_QUERY_THROW );
-            Reference< XPropertySetInfo > xPSI( xPropertySet->getPropertySetInfo(), UNO_QUERY_THROW );
+            Reference< XPropertySetInfo > xPSI( _rxPropertyBag->getPropertySetInfo(), UNO_QUERY_THROW );
             Sequence< Property > aAllExistentProperties( xPSI->getProperties() );
 
             Reference< XPropertyState > xPropertyState( _rxPropertyBag, UNO_QUERY_THROW );
-            Reference< XPropertyContainer > xPropertyContainer( _rxPropertyBag, UNO_QUERY_THROW );
 
             // loop through them, and reset resp. default properties which are not to be set
             const Property* pExistentProperty( aAllExistentProperties.getConstArray() );
@@ -913,7 +911,7 @@ namespace
                 // this property is not to be set, but currently exists in the bag.
                 // -> Remove it, or reset it to the default.
                 if ( ( pExistentProperty->Attributes & PropertyAttribute::REMOVABLE ) != 0 )
-                    xPropertyContainer->removeProperty( pExistentProperty->Name );
+                    _rxPropertyBag->removeProperty( pExistentProperty->Name );
                 else
                     xPropertyState->setPropertyToDefault( pExistentProperty->Name );
             }

@@ -63,7 +63,7 @@ namespace DOM
             maNamespaces( 1, std::vector<Namespace>() ),
             maNamespaceMap(101),
             mxAttribList(new FastAttributeList(i_xTokenHandler)),
-            mxCurrentHandler(i_xHandler, UNO_QUERY_THROW),
+            mxCurrentHandler(i_xHandler),
             mxDocHandler(i_xHandler),
             mxTokenHandler(i_xTokenHandler)
         {}

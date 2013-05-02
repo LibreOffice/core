@@ -2837,9 +2837,8 @@ void CellStyleBuffer::finalizeImport()
             Reference< XStyle > xStyle( xStyleFamilyIA->getByIndex( nIndex ), UNO_QUERY_THROW );
             if( bReserveAll || !xStyle->isUserDefined() )
             {
-                Reference< XNamed > xStyleName( xStyle, UNO_QUERY_THROW );
                 // create an empty entry by using ::std::map<>::operator[]
-                aCellStyles[ xStyleName->getName() ];
+                aCellStyles[ xStyle->getName() ];
             }
         }
     }

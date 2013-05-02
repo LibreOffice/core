@@ -250,7 +250,7 @@ namespace frm
         OBoundControlModel::write( _rxOutStream );
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        OStreamSection aSection( Reference< XDataOutputStream >( _rxOutStream, UNO_QUERY ) );
+        OStreamSection aSection( _rxOutStream );
 
         // version
         _rxOutStream->writeShort( 0x0001 );
@@ -268,7 +268,7 @@ namespace frm
 
         // version
         {
-            OStreamSection aSection( Reference< XDataInputStream >( _rxInStream, UNO_QUERY ) );
+            OStreamSection aSection( _rxInStream );
 
             sal_uInt16 nVersion = _rxInStream->readShort();
             if ( nVersion == 0x0001 )

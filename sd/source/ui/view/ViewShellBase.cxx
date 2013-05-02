@@ -1125,9 +1125,8 @@ OUString ImplRetrieveLabelFromCommand( const Reference< XFrame >& xFrame, const 
         Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext(), UNO_QUERY_THROW );
 
         Reference< XModuleManager2 > xModuleManager( ModuleManager::create(xContext) );
-        Reference< XInterface > xIfac( xFrame, UNO_QUERY_THROW );
 
-        OUString aModuleIdentifier( xModuleManager->identify( xIfac ) );
+        OUString aModuleIdentifier( xModuleManager->identify( xFrame ) );
 
         if( !aModuleIdentifier.isEmpty() )
         {

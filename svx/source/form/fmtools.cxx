@@ -177,9 +177,8 @@ sal_Int32 getElementPos(const Reference< ::com::sun::star::container::XIndexAcce
         return nIndex;
 
 
-    Reference< XInterface > xNormalized( xElement, UNO_QUERY );
-    DBG_ASSERT( xNormalized.is(), "getElementPos: invalid element!" );
-    if ( xNormalized.is() )
+    DBG_ASSERT( xElement.is(), "getElementPos: invalid element!" );
+    if ( xElement.is() )
     {
         // Feststellen an welcher Position sich das Kind befindet
         nIndex = xCont->getCount();
@@ -190,7 +189,7 @@ sal_Int32 getElementPos(const Reference< ::com::sun::star::container::XIndexAcce
                 Reference< XInterface > xCurrent(xCont->getByIndex( nIndex ),UNO_QUERY);
                 DBG_ASSERT( xCurrent.get() == Reference< XInterface >( xCurrent, UNO_QUERY ).get(),
                     "getElementPos: container element not normalized!" );
-                if ( xNormalized.get() == xCurrent.get() )
+                if ( xElement.get() == xCurrent.get() )
                     break;
             }
             catch(Exception&)

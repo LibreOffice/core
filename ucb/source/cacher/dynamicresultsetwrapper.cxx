@@ -353,8 +353,7 @@ Reference< XResultSet > SAL_CALL DynamicResultSetWrapper
 
     if( xSource.is() )
     {
-        Reference< XComponent > xSourceComponent( xSource, UNO_QUERY );
-        xSourceComponent->addEventListener( xMyListenerImpl );
+        xSource->addEventListener( xMyListenerImpl );
     }
     if( !xSource.is() )
         m_aSourceSet.wait();

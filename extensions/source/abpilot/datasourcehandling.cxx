@@ -89,17 +89,15 @@ namespace abp
 
         //.............................................................
         // create a new data source
-        Reference< XSingleServiceFactory > xFactory( xContext, UNO_QUERY );
         Reference< XPropertySet > xNewDataSource;
-        if (xFactory.is())
-            xNewDataSource = Reference< XPropertySet >( xFactory->createInstance(), UNO_QUERY );
+        if (xContext.is())
+            xNewDataSource = Reference< XPropertySet >( xContext->createInstance(), UNO_QUERY );
         DBG_ASSERT( xNewDataSource.is(), "lcl_implCreateAndInsert: could not create a new data source!" );
 
         //.............................................................
         // insert the data source into the context
-        Reference< XNamingService > xDynamicContext( xContext, UNO_QUERY );
-        DBG_ASSERT( xDynamicContext.is(), "lcl_implCreateAndInsert: missing an interface on the context (XNamingService)!" );
-        if (xDynamicContext.is())
+        DBG_ASSERT( xContext.is(), "lcl_implCreateAndInsert: missing an interface on the context (XNamingService)!" );
+        if (xContext.is())
         {
             //  xDynamicContext->registerObject( _rName, xNewDataSource );
             _rxNewDataSource = xNewDataSource;

@@ -613,8 +613,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
                 // if remove has failed the following add should fail too
                 // and thus a warning message should be triggered...
 
-                Reference<XDictionary> aXDictionary(xDic, UNO_QUERY);
-                nAddRes = linguistic::AddEntryToDic( aXDictionary,
+                nAddRes = linguistic::AddEntryToDic( xDic,
                             aNewWord, bIsNegEntry,
                             aRplcText, LanguageTag( xDic->getLocale() ).getLanguageType(), sal_False );
              }

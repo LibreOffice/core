@@ -238,9 +238,8 @@ static Reference<XNode> lcl_createElement( SvXMLImport& rImport,
     DBG_ASSERT( xElement.is(), "can't create element" );
 
     // add new element to parent and return
-    Reference<XNode> xNode( xElement, UNO_QUERY_THROW );
-    xParent->appendChild( xNode );
-    return xNode;
+    xParent->appendChild( xElement );
+    return xElement;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

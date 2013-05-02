@@ -567,7 +567,7 @@ void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool& rSourcePool)
                     }
                 }
 
-                OUString sName( Reference< XNamed >( xSourceTableStyle, UNO_QUERY_THROW )->getName() );
+                OUString sName( xSourceTableStyle->getName() );
                 if( xTarget->hasByName( sName ) )
                     xTarget->replaceByName( sName, Any( xNewTableStyle ) );
                 else

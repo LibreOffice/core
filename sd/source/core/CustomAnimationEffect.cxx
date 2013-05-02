@@ -1055,26 +1055,24 @@ void CustomAnimationEffect::setIterateType( sal_Int16 nIterateType )
                 xNewContainer->appendChild( xChildNode );
             }
 
-            Reference< XAnimationNode > xNewNode( xNewContainer, UNO_QUERY_THROW );
+            xNewContainer->setBegin( mxNode->getBegin() );
+            xNewContainer->setDuration( mxNode->getDuration() );
+            xNewContainer->setEnd( mxNode->getEnd() );
+            xNewContainer->setEndSync( mxNode->getEndSync() );
+            xNewContainer->setRepeatCount( mxNode->getRepeatCount() );
+            xNewContainer->setFill( mxNode->getFill() );
+            xNewContainer->setFillDefault( mxNode->getFillDefault() );
+            xNewContainer->setRestart( mxNode->getRestart() );
+            xNewContainer->setRestartDefault( mxNode->getRestartDefault() );
+            xNewContainer->setAcceleration( mxNode->getAcceleration() );
+            xNewContainer->setDecelerate( mxNode->getDecelerate() );
+            xNewContainer->setAutoReverse( mxNode->getAutoReverse() );
+            xNewContainer->setRepeatDuration( mxNode->getRepeatDuration() );
+            xNewContainer->setEndSync( mxNode->getEndSync() );
+            xNewContainer->setRepeatCount( mxNode->getRepeatCount() );
+            xNewContainer->setUserData( mxNode->getUserData() );
 
-            xNewNode->setBegin( mxNode->getBegin() );
-            xNewNode->setDuration( mxNode->getDuration() );
-            xNewNode->setEnd( mxNode->getEnd() );
-            xNewNode->setEndSync( mxNode->getEndSync() );
-            xNewNode->setRepeatCount( mxNode->getRepeatCount() );
-            xNewNode->setFill( mxNode->getFill() );
-            xNewNode->setFillDefault( mxNode->getFillDefault() );
-            xNewNode->setRestart( mxNode->getRestart() );
-            xNewNode->setRestartDefault( mxNode->getRestartDefault() );
-            xNewNode->setAcceleration( mxNode->getAcceleration() );
-            xNewNode->setDecelerate( mxNode->getDecelerate() );
-            xNewNode->setAutoReverse( mxNode->getAutoReverse() );
-            xNewNode->setRepeatDuration( mxNode->getRepeatDuration() );
-            xNewNode->setEndSync( mxNode->getEndSync() );
-            xNewNode->setRepeatCount( mxNode->getRepeatCount() );
-            xNewNode->setUserData( mxNode->getUserData() );
-
-            mxNode = xNewNode;
+            mxNode = xNewContainer;
 
             Any aTarget;
             if( nIterateType )
@@ -1659,8 +1657,7 @@ void CustomAnimationEffect::setStopAudio()
         xCommand->setCommand( EffectCommands::STOPAUDIO );
 
         Reference< XTimeContainer > xContainer( mxNode, UNO_QUERY_THROW );
-        Reference< XAnimationNode > xChild( xCommand, UNO_QUERY_THROW );
-        xContainer->appendChild( xChild );
+        xContainer->appendChild( xCommand );
 
         mnCommand = EffectCommands::STOPAUDIO;
     }
@@ -1898,8 +1895,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const SdrPathObj& rPathOb
         if( rTarget.getValueType() == ::getCppuType((const ParagraphTarget*)0) )
             nSubItem = ShapeAnimationSubType::ONLY_TEXT;
 
-        Reference< XAnimationNode > xEffectNode( xEffectContainer, UNO_QUERY_THROW );
-        pEffect.reset( new CustomAnimationEffect( xEffectNode ) );
+        pEffect.reset( new CustomAnimationEffect( xEffectContainer ) );
         pEffect->setEffectSequence( this );
         pEffect->setTarget( rTarget );
         pEffect->setTargetSubItem( nSubItem );
@@ -2039,8 +2035,7 @@ void EffectSequenceHelper::implRebuild()
 
                 xOnClickContainer->setBegin( aBegin );
 
-                Reference< XAnimationNode > xOnClickContainerNode( xOnClickContainer, UNO_QUERY_THROW );
-                mxSequenceRoot->appendChild( xOnClickContainerNode );
+                mxSequenceRoot->appendChild( xOnClickContainer );
 
                 double fBegin = 0.0;
 
@@ -2048,9 +2043,8 @@ void EffectSequenceHelper::implRebuild()
                 {
                     // create a par container for the current click or after effect node and all following with effects
                     Reference< XTimeContainer > xWithContainer( ParallelTimeContainer::create( ::comphelper::getProcessComponentContext() ), UNO_QUERY_THROW );
-                    Reference< XAnimationNode > xWithContainerNode( xWithContainer, UNO_QUERY_THROW );
                     xWithContainer->setBegin( makeAny( fBegin ) );
-                    xOnClickContainer->appendChild( xWithContainerNode );
+                    xOnClickContainer->appendChild( xWithContainer );
 
                     double fDuration = 0.0;
                     do
@@ -2193,9 +2187,8 @@ void stl_process_after_effect_node_func(AfterEffectNode& rNode)
                             // this does not yet have a child container, create one
                             xNextContainer.set( ParallelTimeContainer::create(xContext), UNO_QUERY_THROW );
 
-                            Reference< XAnimationNode > xNode( xNextContainer, UNO_QUERY_THROW );
-                            xNode->setBegin( makeAny( (double)0.0 ) );
-                            xNextClickContainer->appendChild( xNode );
+                            xNextContainer->setBegin( makeAny( (double)0.0 ) );
+                            xNextClickContainer->appendChild( xNextContainer );
                         }
                         DBG_ASSERT( xNextContainer.is(), "ppt::stl_process_after_effect_node_func::operator(), could not find/create container!" );
                     }
@@ -2206,24 +2199,20 @@ void stl_process_after_effect_node_func(AfterEffectNode& rNode)
                 {
                     Reference< XTimeContainer > xNewClickContainer( ParallelTimeContainer::create( xContext ), UNO_QUERY_THROW );
 
-                    Reference< XAnimationNode > xNewClickNode( xNewClickContainer, UNO_QUERY_THROW );
-
                     Event aEvent;
                     aEvent.Trigger = EventTrigger::ON_NEXT;
                     aEvent.Repeat = 0;
-                    xNewClickNode->setBegin( makeAny( aEvent ) );
+                    xNewClickContainer->setBegin( makeAny( aEvent ) );
 
-                    Reference< XAnimationNode > xRefNode( xClickContainer, UNO_QUERY_THROW );
-                    xSequenceContainer->insertAfter( xNewClickNode, xRefNode );
+                    xSequenceContainer->insertAfter( xNewClickContainer, xClickContainer );
 
                     xNextContainer.set( ParallelTimeContainer::create( xContext ), UNO_QUERY_THROW );
 
                     DBG_ASSERT( xNextContainer.is(), "ppt::stl_process_after_effect_node_func::operator(), could not create container!" );
                     if( xNextContainer.is() )
                     {
-                        Reference< XAnimationNode > xNode( xNextContainer, UNO_QUERY_THROW );
-                        xNode->setBegin( makeAny( (double)0.0 ) );
-                        xNewClickContainer->appendChild( xNode );
+                        xNextContainer->setBegin( makeAny( (double)0.0 ) );
+                        xNewClickContainer->appendChild( xNextContainer );
                     }
                 }
 
@@ -3157,9 +3146,7 @@ void EffectSequenceHelper::processAfterEffect( const Reference< XAnimationNode >
                 else
                 {
                     // its a hide
-                    Reference< XChild > xNodeChild( xNode, UNO_QUERY_THROW );
-                    Reference< XChild > xMasterChild( xMaster, UNO_QUERY_THROW );
-                    pMasterEffect->setAfterEffectOnNext( xNodeChild->getParent() != xMasterChild->getParent() );
+                    pMasterEffect->setAfterEffectOnNext( xNode->getParent() != xMaster->getParent() );
                 }
             }
         }
@@ -3371,9 +3358,8 @@ InteractiveSequencePtr MainSequence::createInteractiveSequence( const ::com::sun
     xISRoot->setUserData( aUserData );
 
     Reference< XChild > xChild( mxSequenceRoot, UNO_QUERY_THROW );
-    Reference< XAnimationNode > xISNode( xISRoot, UNO_QUERY_THROW );
     Reference< XTimeContainer > xParent( xChild->getParent(), UNO_QUERY_THROW );
-    xParent->appendChild( xISNode );
+    xParent->appendChild( xISRoot );
 
     pIS.reset( new InteractiveSequence( xISRoot, this) );
     pIS->setTriggerShape( xShape );

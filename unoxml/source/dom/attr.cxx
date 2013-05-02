@@ -207,7 +207,7 @@ namespace DOM
 
         guard.clear(); // release mutex before calling event handlers
 
-        dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
+        dispatchEvent(event);
         dispatchSubtreeModified();
     }
 

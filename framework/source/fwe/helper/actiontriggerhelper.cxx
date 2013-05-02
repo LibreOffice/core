@@ -100,18 +100,17 @@ void GetMenuItemAttributes( Reference< XPropertySet > xActionTriggerPropertySet,
 
 void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, Reference< XIndexContainer > xActionTriggerContainer )
 {
-    Reference< XIndexAccess > xIndexAccess( xActionTriggerContainer, UNO_QUERY );
-    if ( xIndexAccess.is() )
+    if ( xActionTriggerContainer.is() )
     {
         AddonsOptions aAddonOptions;
         OUString aSlotURL( "slot:" );
 
-        for ( sal_Int32 i = 0; i < xIndexAccess->getCount(); i++ )
+        for ( sal_Int32 i = 0; i < xActionTriggerContainer->getCount(); i++ )
         {
             try
             {
                 Reference< XPropertySet > xPropSet;
-                if (( xIndexAccess->getByIndex( i ) >>= xPropSet ) && ( xPropSet.is() ))
+                if (( xActionTriggerContainer->getByIndex( i ) >>= xPropSet ) && ( xPropSet.is() ))
                 {
                     if ( IsSeparator( xPropSet ))
                     {

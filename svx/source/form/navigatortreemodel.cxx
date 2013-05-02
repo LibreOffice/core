@@ -960,7 +960,7 @@ namespace svxform
         {
             FmFormData* pFormData = (FmFormData*)pEntryData;
             Reference< XForm >  xForm( pFormData->GetFormIface());
-            xFormComponent = Reference< XFormComponent > (xForm, UNO_QUERY);
+            xFormComponent = xForm;
         }
 
         if( pEntryData->ISA(FmControlData) )

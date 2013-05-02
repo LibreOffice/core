@@ -1605,8 +1605,7 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( sal_Bool bIsProgres
             {
                 Any aAny = xTables->getByIndex( i );
                 Reference< XTextTable > xTable = *(Reference<XTextTable>*)aAny.getValue();
-                Reference < XTextContent > xTextContent( xTable, uno::UNO_QUERY );
-                exportTable( xTextContent, sal_True, sal_True );
+                exportTable( xTable, sal_True, sal_True );
             }
         }
     }
@@ -1966,17 +1965,16 @@ void XMLTextParagraphExport::exportParagraph(
                                                     xPropSet ) >>= sStyle;
             }
 
-            Reference< XInterface > xRef( rTextContent, UNO_QUERY );
-            if( xRef.is() )
+            if( rTextContent.is() )
             {
-                const OUString& rIdentifier = GetExport().getInterfaceToIdentifierMapper().getIdentifier( xRef );
+                const OUString& rIdentifier = GetExport().getInterfaceToIdentifierMapper().getIdentifier( rTextContent );
                 if( !rIdentifier.isEmpty() )
                 {
                     // FIXME: this is just temporary until EditEngine
                     // paragraphs implement XMetadatable.
                     // then that must be used and not the mapper, because
                     // when both can be used we get two xml:id!
-                    uno::Reference<rdf::XMetadatable> const xMeta(xRef,
+                    uno::Reference<rdf::XMetadatable> const xMeta(rTextContent,
                         uno::UNO_QUERY);
                     OSL_ENSURE(!xMeta.is(), "paragraph that implements "
                         "XMetadatable used in interfaceToIdentifierMapper?");

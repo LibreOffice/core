@@ -867,8 +867,7 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream) 
 
     // and to be a little bit more compatible we make the following section skippable
     {
-        Reference< XDataOutputStream > xOut(_rxOutStream, UNO_QUERY);
-        OStreamSection aDownCompat(xOut);
+        OStreamSection aDownCompat(_rxOutStream);
 
         // a sub version within the skippable block
         _rxOutStream->writeShort(0x0000);
@@ -881,7 +880,7 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream) 
         }
 
         {
-            OStreamSection aDownCompat2(xOut);
+            OStreamSection aDownCompat2(_rxOutStream);
             switch (aEffectiveValue.getValueType().getTypeClass())
             {
                 case TypeClass_STRING:
@@ -943,8 +942,7 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream) thr
 
             if (nVersion == 0x0003)
             {   // since version 3 there is a "skippable" block at this position
-                Reference< XDataInputStream > xIn(_rxInStream, UNO_QUERY);
-                OStreamSection aDownCompat(xIn);
+                OStreamSection aDownCompat(_rxInStream);
 
                 sal_Int16 nSubVersion = _rxInStream->readShort();
                 (void)nSubVersion;
@@ -952,7 +950,7 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream) thr
                 // version 0 and higher : the "effective value" property
                 Any aEffectiveValue;
                 {
-                    OStreamSection aDownCompat2(xIn);
+                    OStreamSection aDownCompat2(_rxInStream);
                     switch (_rxInStream->readShort())
                     {
                         case 0: // String

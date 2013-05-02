@@ -7226,8 +7226,7 @@ void CreateTableRows( Reference< XTableRows > xTableRows, const std::set< sal_In
 
     std::set< sal_Int32 >::const_iterator aIter( rRows.begin() );
     sal_Int32 nLastPosition( *aIter );
-    Reference< XIndexAccess > xIndexAccess( xTableRows, UNO_QUERY_THROW );
-    for ( sal_Int32 n = 0; n < xIndexAccess->getCount(); n++ )
+    for ( sal_Int32 n = 0; n < xTableRows->getCount(); n++ )
     {
         sal_Int32 nHeight;
         if ( ++aIter != rRows.end() )
@@ -7239,7 +7238,7 @@ void CreateTableRows( Reference< XTableRows > xTableRows, const std::set< sal_In
             nHeight = nTableBottom - nLastPosition;
 
         static const OUString  sWidth( "Height" );
-        Reference< XPropertySet > xPropSet( xIndexAccess->getByIndex( n ), UNO_QUERY_THROW );
+        Reference< XPropertySet > xPropSet( xTableRows->getByIndex( n ), UNO_QUERY_THROW );
         xPropSet->setPropertyValue( sWidth, Any( nHeight ) );
     }
 }
@@ -7251,8 +7250,7 @@ void CreateTableColumns( Reference< XTableColumns > xTableColumns, const std::se
 
     std::set< sal_Int32 >::const_iterator aIter( rColumns.begin() );
     sal_Int32 nLastPosition( *aIter );
-    Reference< XIndexAccess > xIndexAccess( xTableColumns, UNO_QUERY_THROW );
-    for ( sal_Int32 n = 0; n < xIndexAccess->getCount(); n++ )
+    for ( sal_Int32 n = 0; n < xTableColumns->getCount(); n++ )
     {
         sal_Int32 nWidth;
         if ( ++aIter != rColumns.end() )
@@ -7264,7 +7262,7 @@ void CreateTableColumns( Reference< XTableColumns > xTableColumns, const std::se
             nWidth = nTableRight - nLastPosition;
 
         static const OUString  sWidth( "Width" );
-        Reference< XPropertySet > xPropSet( xIndexAccess->getByIndex( n ), UNO_QUERY_THROW );
+        Reference< XPropertySet > xPropSet( xTableColumns->getByIndex( n ), UNO_QUERY_THROW );
         xPropSet->setPropertyValue( sWidth, Any( nWidth ) );
     }
 }
@@ -7432,7 +7430,6 @@ void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTabl
                 }
             break;
         }
-        Reference< XCellRange > xCellRange( xTable, UNO_QUERY_THROW );
         std::vector< sal_Int32 >::const_iterator aIter( vPositions.begin() );
         while( aIter != vPositions.end() )
         {
@@ -7447,7 +7444,7 @@ void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTabl
             sal_Int32 nFlags = *aIter &~0xffffff;
             sal_Int32 nRow = nPosition / nColumns;
             sal_Int32 nColumn = nPosition - ( nRow * nColumns );
-            Reference< XCell > xCell( xCellRange->getCellByPosition( nColumn, nRow ) );
+            Reference< XCell > xCell( xTable->getCellByPosition( nColumn, nRow ) );
             Reference< XPropertySet > xPropSet( xCell, UNO_QUERY_THROW );
 
             if ( nFlags & LinePositionLeft )
@@ -7498,10 +7495,8 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
             Reference< XTable > xTable( pTable->getTable() );
             try
             {
-                Reference< XColumnRowRange > xColumnRowRange( xTable, UNO_QUERY_THROW );
-
-                CreateTableRows( xColumnRowRange->getRows(), aRows, pGroup->GetSnapRect().Bottom() );
-                CreateTableColumns( xColumnRowRange->getColumns(), aColumns, pGroup->GetSnapRect().Right() );
+                CreateTableRows( xTable->getRows(), aRows, pGroup->GetSnapRect().Bottom() );
+                CreateTableColumns( xTable->getColumns(), aColumns, pGroup->GetSnapRect().Right() );
 
                 sal_Int32 nCellCount = aRows.size() * aColumns.size();
                 sal_Int32 *pMergedCellIndexTable = new sal_Int32[ nCellCount ];
@@ -7521,8 +7516,7 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
                         sal_Int32 nColumnCount = 0;
                         if ( GetCellPosition( pObj, aRows, aColumns, nTableIndex, nRow, nRowCount, nColumn, nColumnCount ) )
                         {
-                            Reference< XCellRange > xCellRange( xTable, UNO_QUERY_THROW );
-                            Reference< XCell > xCell( xCellRange->getCellByPosition( nColumn, nRow ) );
+                            Reference< XCell > xCell( xTable->getCellByPosition( nColumn, nRow ) );
 
                             ApplyCellAttributes( pObj, xCell );
 

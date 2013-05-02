@@ -347,7 +347,6 @@ void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
     sal_Bool bWasInsertRow = sal_False;
     sal_Bool bBeforeFirst   = sal_True;
     sal_Bool bAfterLast     = sal_True;
-    Reference< XResultSet > xResultSet(xMaster, UNO_QUERY);
     Reference< XRowLocate > xCursor(xMaster, UNO_QUERY);
     Reference< XPropertySet > xMasterProps(xMaster, UNO_QUERY);
 
@@ -359,10 +358,10 @@ void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
 
         // the grid will move the form's cursor to the first record, but we want the form to remain unchanged
         // restore the old position
-        if (xCursor.is() && xResultSet.is())
+        if (xCursor.is() && xMaster.is())
         {
-            bBeforeFirst = xResultSet->isBeforeFirst();
-            bAfterLast   = xResultSet->isAfterLast();
+            bBeforeFirst = xMaster->isBeforeFirst();
+            bAfterLast   = xMaster->isAfterLast();
             if(!bBeforeFirst && !bAfterLast)
                 aOldPos = xCursor->getBookmark();
         }
@@ -402,10 +401,10 @@ void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
                 xUpdate->moveToInsertRow();
             else if (xCursor.is() && aOldPos.hasValue())
                 xCursor->moveToBookmark(aOldPos);
-            else if(bBeforeFirst && xResultSet.is())
-                xResultSet->beforeFirst();
-            else if(bAfterLast && xResultSet.is())
-                xResultSet->afterLast();
+            else if(bBeforeFirst && xMaster.is())
+                xMaster->beforeFirst();
+            else if(bAfterLast && xMaster.is())
+                xMaster->afterLast();
         }
         catch(Exception&)
         {

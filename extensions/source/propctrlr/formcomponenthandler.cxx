@@ -2053,10 +2053,7 @@ namespace pcr
             Reference< XForm > xAsForm( m_xComponent, UNO_QUERY );
             if ( xAsForm.is() )
             {
-                Reference< XChild > xFormAsChild( xAsForm, UNO_QUERY );
-                Reference< XForm > xFormsParent;
-                if ( xFormAsChild.is() )
-                    xFormsParent = xFormsParent.query( xFormAsChild->getParent() );
+                Reference< XForm > xFormsParent = xFormsParent.query( xAsForm->getParent() );
                 m_bComponentIsSubForm = xFormsParent.is();
             }
 

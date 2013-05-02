@@ -216,7 +216,7 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
 
     // get dispatch provider
     Reference<XDesktop2> xDesktop = Desktop::create( comphelper::getProcessComponentContext() );
-    mxDesktopDispatchProvider = Reference< XDispatchProvider >( xDesktop, UNO_QUERY );
+    mxDesktopDispatchProvider = xDesktop;
 
     maWriterButton.SetHelpId( ".HelpId:StartCenter:WriterButton" );
     maCalcButton.SetHelpId( ".HelpId:StartCenter:CalcButton" );

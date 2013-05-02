@@ -274,7 +274,7 @@ namespace sfx2
         }
 
         CustomPanelUIElement( const Reference< XUIElement >& i_rUIElement )
-            :m_xUIElement( i_rUIElement, UNO_SET_THROW )
+            :m_xUIElement( i_rUIElement )
             ,m_xToolPanel( i_rUIElement->getRealInterface(), UNO_QUERY_THROW )
             ,m_xPanelWindow( m_xToolPanel->getWindow(), UNO_SET_THROW )
         {

@@ -221,8 +221,7 @@ void FormViewPageWindowAdapter::dispose()
             }
 
             // dispose the formcontroller
-            Reference< XComponent > xComp( xController, UNO_QUERY_THROW );
-            xComp->dispose();
+            xController->dispose();
         }
         catch (const Exception&)
         {
@@ -301,7 +300,7 @@ Reference< XFormController >  getControllerSearchChildren( const Reference< XInd
                 return xController;
             else
             {
-                xController = getControllerSearchChildren(Reference< XIndexAccess > (xController, UNO_QUERY), xModel);
+                xController = getControllerSearchChildren(xController, xModel);
                 if ( xController.is() )
                     return xController;
             }
@@ -370,8 +369,7 @@ void FormViewPageWindowAdapter::setController(const Reference< XForm > & xForm, 
 
         // attaching the events
         Reference< XEventAttacherManager > xEventManager( xForm->getParent(), UNO_QUERY );
-        Reference< XInterface >  xIfc(xController, UNO_QUERY);
-        xEventManager->attach(m_aControllerList.size() - 1, xIfc, makeAny(xController) );
+        xEventManager->attach(m_aControllerList.size() - 1, xController, makeAny(xController) );
     }
 
     // jetzt die Subforms durchgehen

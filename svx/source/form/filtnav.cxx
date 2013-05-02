@@ -393,8 +393,7 @@ namespace
         OUString sLabelName;
         try
         {
-            Reference< XControl > xControl( _rxControl, UNO_SET_THROW );
-            Reference< XPropertySet > xModel( xControl->getModel(), UNO_QUERY_THROW );
+            Reference< XPropertySet > xModel( _rxControl->getModel(), UNO_QUERY_THROW );
             sLabelName = getLabelName( xModel );
         }
         catch( const Exception& )
@@ -409,8 +408,7 @@ namespace
         Reference< XPropertySet > xField;
         try
         {
-            Reference< XControl > xControl( _rxControl, UNO_SET_THROW );
-            Reference< XPropertySet > xModelProps( xControl->getModel(), UNO_QUERY_THROW );
+            Reference< XPropertySet > xModelProps( _rxControl->getModel(), UNO_QUERY_THROW );
             xField.set( xModelProps->getPropertyValue( FM_PROP_BOUNDFIELD ), UNO_QUERY_THROW );
         }
         catch( const Exception& )
@@ -672,8 +670,7 @@ void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, FmPar
             }
 
             // now add dependent controllers
-            Reference< XIndexAccess > xControllerAsIndex( xController, UNO_QUERY );
-            Update( xControllerAsIndex, pFormItem );
+            Update( xController, pFormItem );
         }
     }
     catch( const Exception& )

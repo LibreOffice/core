@@ -381,10 +381,9 @@ namespace basic
     //--------------------------------------------------------------------
     BasicManagerPointer& ImplRepository::impl_getLocationForModel( const Reference< XModel >& _rxDocumentModel )
     {
-        Reference< XInterface > xNormalized( _rxDocumentModel, UNO_QUERY );
-        DBG_ASSERT( xNormalized.is(), "ImplRepository::impl_getLocationForModel: invalid model!" );
+        DBG_ASSERT( _rxDocumentModel.is(), "ImplRepository::impl_getLocationForModel: invalid model!" );
 
-        BasicManagerPointer& location = m_aStore[ xNormalized ];
+        BasicManagerPointer& location = m_aStore[ _rxDocumentModel ];
         return location;
     }
 
@@ -489,9 +488,8 @@ namespace basic
         impl_notifyCreationListeners( _rxDocumentModel, *_out_rpBasicManager );
 
         // register as listener for this model being disposed/closed
-        Reference< XComponent > xDocumentComponent( _rxDocumentModel, UNO_QUERY );
-        OSL_ENSURE( xDocumentComponent.is(), "ImplRepository::impl_createManagerForModel: the document must be an XComponent!" );
-        startComponentListening( xDocumentComponent );
+        OSL_ENSURE( _rxDocumentModel.is(), "ImplRepository::impl_createManagerForModel: the document must be an XComponent!" );
+        startComponentListening( _rxDocumentModel );
 
         // register as listener for the BasicManager being destroyed
         StartListening( *_out_rpBasicManager );

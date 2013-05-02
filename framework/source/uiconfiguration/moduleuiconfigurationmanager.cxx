@@ -243,8 +243,7 @@ void ModuleUIConfigurationManager::impl_preloadUIElementTypeList( Layer eLayer, 
             OUString aResURLPrefix( aBuf.makeStringAndClear() );
 
             UIElementDataHashMap& rHashMap = rElementTypeData.aElementsHashMap;
-            Reference< XNameAccess > xNameAccess( xElementTypeStorage, UNO_QUERY );
-            Sequence< OUString > aUIElementNames = xNameAccess->getElementNames();
+            Sequence< OUString > aUIElementNames = xElementTypeStorage->getElementNames();
             for ( sal_Int32 n = 0; n < aUIElementNames.getLength(); n++ )
             {
                 UIElementData aUIElementData;
@@ -513,7 +512,6 @@ void ModuleUIConfigurationManager::impl_resetElementTypeData(
     UIElementDataHashMap::iterator pIter    = rHashMap.begin();
 
     Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
-    Reference< XInterface > xIfac( xThis, UNO_QUERY );
     Reference< XNameAccess > xDefaultNameAccess( rDefaultElementType.xStorage, UNO_QUERY );
     sal_Int16 nType = rUserElementType.nElementType;
 
@@ -533,7 +531,7 @@ void ModuleUIConfigurationManager::impl_resetElementTypeData(
                 ConfigurationEvent aReplaceEvent;
                 aReplaceEvent.ResourceURL = rElement.aResourceURL;
                 aReplaceEvent.Accessor <<= xThis;
-                aReplaceEvent.Source = xIfac;
+                aReplaceEvent.Source = xThis;
                 aReplaceEvent.ReplacedElement <<= xOldSettings;
                 aReplaceEvent.Element <<= rElement.xSettings;
 
@@ -550,7 +548,7 @@ void ModuleUIConfigurationManager::impl_resetElementTypeData(
                 ConfigurationEvent aEvent;
                 aEvent.ResourceURL = rElement.aResourceURL;
                 aEvent.Accessor <<= xThis;
-                aEvent.Source = xIfac;
+                aEvent.Source = xThis;
                 aEvent.Element <<= rElement.xSettings;
 
                 rRemoveNotifyContainer.push_back( aEvent );
@@ -583,7 +581,6 @@ void ModuleUIConfigurationManager::impl_reloadElementTypeData(
     Reference< XNameAccess > xDefaultNameAccess( rDefaultElementType.xStorage, UNO_QUERY );
 
     Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
-    Reference< XInterface > xIfac( xThis, UNO_QUERY );
     sal_Int16 nType = rUserElementType.nElementType;
 
     while ( pIter != rHashMap.end() )
@@ -602,7 +599,7 @@ void ModuleUIConfigurationManager::impl_reloadElementTypeData(
 
                 aReplaceEvent.ResourceURL = rElement.aResourceURL;
                 aReplaceEvent.Accessor <<= xThis;
-                aReplaceEvent.Source = xIfac;
+                aReplaceEvent.Source = xThis;
                 aReplaceEvent.ReplacedElement <<= xOldSettings;
                 aReplaceEvent.Element <<= rElement.xSettings;
                 rReplaceNotifyContainer.push_back( aReplaceEvent );
@@ -620,7 +617,7 @@ void ModuleUIConfigurationManager::impl_reloadElementTypeData(
 
                 aReplaceEvent.ResourceURL = rElement.aResourceURL;
                 aReplaceEvent.Accessor <<= xThis;
-                aReplaceEvent.Source = xIfac;
+                aReplaceEvent.Source = xThis;
                 aReplaceEvent.ReplacedElement <<= xOldSettings;
                 aReplaceEvent.Element <<= rElement.xSettings;
                 rReplaceNotifyContainer.push_back( aReplaceEvent );
@@ -637,7 +634,7 @@ void ModuleUIConfigurationManager::impl_reloadElementTypeData(
 
                 aRemoveEvent.ResourceURL = rElement.aResourceURL;
                 aRemoveEvent.Accessor <<= xThis;
-                aRemoveEvent.Source = xIfac;
+                aRemoveEvent.Source = xThis;
                 aRemoveEvent.Element <<= rElement.xSettings;
 
                 rRemoveNotifyContainer.push_back( aRemoveEvent );
@@ -905,8 +902,7 @@ void SAL_CALL ModuleUIConfigurationManager::reset() throw (::com::sun::star::uno
                 if ( xSubStorage.is() )
                 {
                     bool bCommitSubStorage( false );
-                    Reference< XNameAccess > xSubStorageNameAccess( xSubStorage, UNO_QUERY );
-                    Sequence< OUString > aUIElementStreamNames = xSubStorageNameAccess->getElementNames();
+                    Sequence< OUString > aUIElementStreamNames = xSubStorage->getElementNames();
                     for ( sal_Int32 j = 0; j < aUIElementStreamNames.getLength(); j++ )
                     {
                         xSubStorage->removeElement( aUIElementStreamNames[j] );
@@ -1115,11 +1111,9 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
 
                 // Create event to notify listener about replaced element settings
                 ConfigurationEvent aEvent;
-                Reference< XInterface > xIfac( xThis, UNO_QUERY );
-
                 aEvent.ResourceURL = ResourceURL;
                 aEvent.Accessor <<= xThis;
-                aEvent.Source = xIfac;
+                aEvent.Source = xThis;
                 aEvent.ReplacedElement <<= xOldSettings;
                 aEvent.Element <<= pDataSettings->xSettings;
 
@@ -1161,14 +1155,13 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
                     rElements.insert( UIElementDataHashMap::value_type( ResourceURL, aUIElementData ));
 
                 Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
-                Reference< XInterface > xIfac( xThis, UNO_QUERY );
 
                 // Create event to notify listener about replaced element settings
                 ConfigurationEvent aEvent;
 
                 aEvent.ResourceURL = ResourceURL;
                 aEvent.Accessor <<= xThis;
-                aEvent.Source = xIfac;
+                aEvent.Source = xThis;
                 aEvent.ReplacedElement <<= pDataSettings->xSettings;
                 aEvent.Element <<= aUIElementData.xSettings;
 
@@ -1221,7 +1214,6 @@ throw ( NoSuchElementException, IllegalArgumentException, IllegalAccessException
                 rElementType.bModified = true;
 
                 Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
-                Reference< XInterface > xIfac( xThis, UNO_QUERY );
 
                 // Check if we have settings in the default layer which replaces the user-defined one!
                 UIElementData* pDefaultDataSettings = impl_findUIElementData( ResourceURL, nElementType );
@@ -1232,7 +1224,7 @@ throw ( NoSuchElementException, IllegalArgumentException, IllegalAccessException
 
                     aEvent.ResourceURL = ResourceURL;
                     aEvent.Accessor <<= xThis;
-                    aEvent.Source = xIfac;
+                    aEvent.Source = xThis;
                     aEvent.Element <<= xRemovedSettings;
                     aEvent.ReplacedElement <<= pDefaultDataSettings->xSettings;
 
@@ -1247,7 +1239,7 @@ throw ( NoSuchElementException, IllegalArgumentException, IllegalAccessException
 
                     aEvent.ResourceURL = ResourceURL;
                     aEvent.Accessor <<= xThis;
-                    aEvent.Source = xIfac;
+                    aEvent.Source = xThis;
                     aEvent.Element <<= xRemovedSettings;
 
                     aGuard.unlock();
@@ -1305,14 +1297,13 @@ throw ( ElementExistException, IllegalArgumentException, IllegalAccessException,
 
             Reference< XIndexAccess > xInsertSettings( aUIElementData.xSettings );
             Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
-            Reference< XInterface > xIfac( xThis, UNO_QUERY );
 
             // Create event to notify listener about removed element settings
             ConfigurationEvent aEvent;
 
             aEvent.ResourceURL = NewResourceURL;
             aEvent.Accessor <<= xThis;
-            aEvent.Source = xIfac;
+            aEvent.Source = xThis;
             aEvent.Element <<= xInsertSettings;
 
             aGuard.unlock();
@@ -1378,7 +1369,7 @@ Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getShortCutManage
         lArgs[0] <<= aProp;
 
         xInit->initialize(lArgs);
-        m_xModuleAcceleratorManager = Reference< XInterface >( xManager, UNO_QUERY );
+        m_xModuleAcceleratorManager = xManager;
     }
 
     return m_xModuleAcceleratorManager;

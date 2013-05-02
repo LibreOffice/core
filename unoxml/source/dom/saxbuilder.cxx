@@ -135,7 +135,7 @@ namespace DOM
 
         m_aDocument = ownerDoc;
         Reference< XDocumentFragment > aFragment = m_aDocument->createDocumentFragment();
-        m_aNodeStack.push(Reference< XNode >(aFragment, UNO_QUERY));
+        m_aNodeStack.push(aFragment);
         m_aFragment = aFragment;
         m_aState = SAXDocumentBuilderState_BUILDING_FRAGMENT;
     }
@@ -169,7 +169,7 @@ namespace DOM
 
         Reference< XDocumentBuilder > aBuilder(DocumentBuilder::create(comphelper::getComponentContext(m_aServiceManager)));
         Reference< XDocument > aDocument = aBuilder->newDocument();
-        m_aNodeStack.push(Reference< XNode >(aDocument, UNO_QUERY));
+        m_aNodeStack.push(aDocument);
         m_aDocument = aDocument;
         m_aState = SAXDocumentBuilderState_BUILDING_DOCUMENT;
     }
@@ -258,9 +258,9 @@ namespace DOM
             aElement = m_aDocument->createElement(aName);
         }
         aElement = Reference< XElement > (
-            m_aNodeStack.top()->appendChild(Reference< XNode >(aElement, UNO_QUERY)),
+            m_aNodeStack.top()->appendChild(aElement),
             UNO_QUERY);
-        m_aNodeStack.push(Reference< XNode >(aElement, UNO_QUERY));
+        m_aNodeStack.push(aElement);
 
         // set non xmlns attributes
         aPrefix = OUString();
@@ -332,7 +332,7 @@ namespace DOM
             throw SAXException();
 
          Reference< XText > aText = m_aDocument->createTextNode(aChars);
-         m_aNodeStack.top()->appendChild(Reference< XNode >(aText, UNO_QUERY));
+         m_aNodeStack.top()->appendChild(aText);
     }
 
     void SAL_CALL CSAXDocumentBuilder::ignorableWhitespace(const OUString& )
@@ -358,7 +358,7 @@ namespace DOM
 
         Reference< XProcessingInstruction > aInstruction = m_aDocument->createProcessingInstruction(
                 aTarget, aData);
-        m_aNodeStack.top()->appendChild(Reference< XNode >(aInstruction, UNO_QUERY));
+        m_aNodeStack.top()->appendChild(aInstruction);
     }
 
     void SAL_CALL CSAXDocumentBuilder::setDocumentLocator(const Reference< XLocator >& aLocator)

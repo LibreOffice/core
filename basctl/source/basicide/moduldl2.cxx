@@ -802,8 +802,7 @@ void LibPage::InsertLib()
     aFilter += ";*.sdd;*.sxi;*.odp" ;       // presentation
     aFilter += ";*.sti;*.otp" ;             // presentation template
     aFilter += ";*.sxm;*.odf" ;             // formula
-    Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
-    xFltMgr->appendFilter( aTitle, aFilter );
+    xFP->appendFilter( aTitle, aFilter );
 
     // set display directory and filter
     OUString aPath(GetExtraData()->GetAddLibPath());
@@ -817,14 +816,14 @@ void LibPage::InsertLib()
 
     OUString aLastFilter(GetExtraData()->GetAddLibFilter());
     if ( !aLastFilter.isEmpty() )
-        xFltMgr->setCurrentFilter( aLastFilter );
+        xFP->setCurrentFilter( aLastFilter );
     else
-        xFltMgr->setCurrentFilter( IDE_RESSTR(RID_STR_BASIC) );
+        xFP->setCurrentFilter( IDE_RESSTR(RID_STR_BASIC) );
 
     if ( xFP->execute() == RET_OK )
     {
         GetExtraData()->SetAddLibPath( xFP->getDisplayDirectory() );
-        GetExtraData()->SetAddLibFilter( xFltMgr->getCurrentFilter() );
+        GetExtraData()->SetAddLibFilter( xFP->getCurrentFilter() );
 
         // library containers for import
         Reference< script::XLibraryContainer2 > xModLibContImport;
@@ -1252,8 +1251,7 @@ void LibPage::ExportAsPackage( const String& aLibName )
     OUString aTitle = String( IDEResId( RID_STR_PACKAGE_BUNDLE ) );
     OUString aFilter;
     aFilter = "*.oxt" ;       // library files
-    Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
-    xFltMgr->appendFilter( aTitle, aFilter );
+    xFP->appendFilter( aTitle, aFilter );
 
     // set display directory and filter
     String aPath = GetExtraData()->GetAddLibPath();
@@ -1266,7 +1264,7 @@ void LibPage::ExportAsPackage( const String& aLibName )
         // macro path from configuration management
         xFP->setDisplayDirectory( SvtPathOptions().GetWorkPath() );
     }
-    xFltMgr->setCurrentFilter( aTitle );
+    xFP->setCurrentFilter( aTitle );
 
     if ( xFP->execute() == RET_OK )
     {

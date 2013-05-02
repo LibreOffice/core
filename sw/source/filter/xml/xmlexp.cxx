@@ -361,7 +361,7 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
 
     Reference < XIndexContainer > xBox = IndexedPropertyValues::create( comphelper::getProcessComponentContext() );
     pValue[nIndex].Name = OUString( "Views");
-    pValue[nIndex++].Value <<= Reference < XIndexAccess > ( xBox, UNO_QUERY );
+    pValue[nIndex++].Value <<= xBox;
 
     SwDoc *pDoc = getDoc();
     const Rectangle rRect =
@@ -464,9 +464,8 @@ void SwXMLExport::_ExportContent()
         if (xPage.is())
         {
             // prevent export of form controls which are embedded in mute sections
-            Reference<XIndexAccess> xIAPage( xPage, UNO_QUERY );
             GetTextParagraphExport()->PreventExportOfControlsInMuteSections(
-                xIAPage, GetFormExport() );
+                xPage, GetFormExport() );
 
             // #i36597#
             if ( GetFormExport()->pageContainsForms( xPage ) || GetFormExport()->documentContainsXForms() )
