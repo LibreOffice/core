@@ -30,6 +30,11 @@
 
 $(eval $(call gb_WinResTarget_WinResTarget,npsoplugin/npsoplugin))
 
+$(eval $(call gb_WinResTarget_add_defs,npsoplugin/npsoplugin,\
+    -DVERVARIANT=$(BUILD) \
+    -DRES_APP_VENDOR="$(OOO_VENDOR)" \
+))
+
 $(eval $(call gb_WinResTarget_set_rcfile,npsoplugin/npsoplugin,extensions/source/nsplugin/source/nsplugin_oo))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
