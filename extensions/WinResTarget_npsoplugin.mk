@@ -28,8 +28,8 @@
 # instead of those above.
 #
 
-$(eval $(call gb_WinResTarget_WinResTarget,npsoplugin_res))
+$(eval $(call gb_WinResTarget_WinResTarget,npsoplugin/npsoplugin))
 
-$(eval $(call gb_WinResTarget_set_rcfile,npsoplugin_res,extensions/source/nsplugin/source/nsplugin_oo))
+$(eval $(call gb_WinResTarget_set_rcfile,npsoplugin/npsoplugin,extensions/source/nsplugin/source/nsplugin_oo))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
