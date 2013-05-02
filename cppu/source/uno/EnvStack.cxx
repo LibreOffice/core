@@ -74,10 +74,15 @@ static void s_setCurrent(uno_Environment * pEnv)
     osl::MutexGuard guard(s_threadMap_mutex::get());
     ThreadMap &rThreadMap = s_threadMap::get();
     if (pEnv)
+    {
         rThreadMap[threadId] = pEnv;
-
+    }
     else
-        rThreadMap.erase(threadId);
+    {
+        ThreadMap::iterator iEnv = rThreadMap.find(threadId);
+        if( iEnv != rThreadMap.end())
+            rThreadMap.erase(iEnv);
+    }
 }
 
 static uno_Environment * s_getCurrent(void)
