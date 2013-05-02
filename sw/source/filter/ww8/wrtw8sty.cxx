@@ -527,8 +527,32 @@ void MSWordStyles::OutputStyle( SwFmt* pFmt, sal_uInt16 nPos )
         GetStyleData( pFmt, bFmtColl, nBase, nWwNext );
 
         String aName = pFmt->GetName();
-        if ( aName.EqualsAscii( "Default" ) )
+        // We want to map LO's default style to Word's "Normal" style.
+        // Word looks for this specific style name when reading docx files.
+        // (It must be the English word regardless of language settings)
+        if ( nPos == 0 ) {
+            assert( pFmt->GetPoolFmtId() == RES_POOLCOLL_STANDARD );
             aName = OUString("Normal");
+        } else if (aName.EqualsIgnoreCaseAscii("Normal")) {
+            // If LO has a style named "Normal"(!) rename it to something unique
+            aName.InsertAscii("LO-" , 0);
+            String aBaseName = aName;
+            // Check if we still have a clash, in which case we add a suffix
+            for ( int nSuffix = 0; ; ++nSuffix ) {
+                bool clash=false;
+                for ( int n = 1; n < nUsedSlots; ++n )
+                    if ( pFmtA[n] &&
+                         pFmtA[n]->GetName().EqualsIgnoreCaseAscii(aName) )
+                    {
+                        clash = true;
+                        break;
+                    }
+                if (!clash)
+                    break;
+                aName = aBaseName;
+                aName += OUString::number(++nSuffix);
+            }
+        }
 
         m_rExport.AttrOutput().StartStyle( aName, bFmtColl,
                 nBase, nWwNext, GetWWId( *pFmt ), nPos,

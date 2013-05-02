@@ -300,11 +300,13 @@ namespace myImplHelpers
                 aName.InsertAscii("WW-" , 0);
 
             sal_Int32 nI = 1;
+            String aBaseName = aName;
             while (
                     0 != (pColl = maHelper.GetStyle(aName)) &&
                     (nI < SAL_MAX_INT32)
                   )
             {
+                aName = aBaseName;
                 aName += OUString::number(nI++);
             }
         }
