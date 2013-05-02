@@ -937,6 +937,8 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     if (bIsPlaceHolder || name == "GtkTreeSelection")
         return NULL;
 
+    extractButtonImage(id, rMap, name == "GtkRadioButton");
+
     Window *pWindow = NULL;
     if (name == "GtkDialog")
     {
@@ -986,7 +988,6 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         pWindow = new VclAlignment(pParent);
     else if (name == "GtkButton")
     {
-        extractButtonImage(id, rMap, false);
         OString sMenu = extractCustomProperty(rMap);
         if (sMenu.isEmpty())
             pWindow = extractStockAndBuildPushButton(pParent, rMap);
@@ -999,7 +1000,6 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     else if (name == "GtkRadioButton")
     {
         extractGroup(id, rMap);
-        extractButtonImage(id, rMap, true);
         WinBits nBits = WB_CENTER|WB_VCENTER|WB_3DLOOK;
         OString sWrap = extractCustomProperty(rMap);
         if (!sWrap.isEmpty())
