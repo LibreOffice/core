@@ -103,6 +103,7 @@ public:
                             : mrServerFont( rFont )
                             {}
 
+    virtual const void*     getFontTable(LETag tableTag, size_t &length) const;
     virtual const void*     getFontTable(LETag tableTag) const;
     virtual le_int32        getUnitsPerEM() const;
     virtual float           getXPixelsPerEm() const;
@@ -124,7 +125,7 @@ public:
 
 // -----------------------------------------------------------------------
 
-const void* IcuFontFromServerFont::getFontTable( LETag nICUTableTag ) const
+const void* IcuFontFromServerFont::getFontTable( LETag nICUTableTag, size_t & rLength ) const
 {
     char pTagName[5];
     pTagName[0] = (char)(nICUTableTag >> 24);
@@ -133,14 +134,21 @@ const void* IcuFontFromServerFont::getFontTable( LETag nICUTableTag ) const
     pTagName[3] = (char)(nICUTableTag);
     pTagName[4] = 0;
 
-    sal_uLong nLength;
+    sal_uLong nLength = 0;
     const unsigned char* pBuffer = mrServerFont.GetTable( pTagName, &nLength );
-    SAL_INFO("vcl", "IcuGetTable(\"" << pTagName << "\") => " << pBuffer);
+    rLength = static_cast<size_t>(nLength);
+    SAL_INFO("vcl", "IcuGetTable(\"" << pTagName << "\") => " << pBuffer << ", len=" << rLength);
     SAL_INFO(
         "vcl",
         "font( h=" << mrServerFont.GetFontSelData().mnHeight << ", \""
         << mrServerFont.GetFontFileName()->getStr() << "\" )");
     return pBuffer;
+}
+
+const void* IcuFontFromServerFont::getFontTable( LETag nICUTableTag ) const
+{
+    size_t nLength = 0;
+    return getFontTable( nICUTableTag, nLength);
 }
 
 // -----------------------------------------------------------------------
@@ -412,7 +420,6 @@ bool IcuLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
         mpIcuLE->getGlyphs( pIcuGlyphs, rcIcu );
         mpIcuLE->getCharIndices( pCharIndices, rcIcu );
         mpIcuLE->getGlyphPositions( &pGlyphPositions->fX, rcIcu );
-        mpIcuLE->reset(); // TODO: get rid of this, PROBLEM: crash at exit when removed
         if( LE_FAILURE(rcIcu) )
             return false;
 
