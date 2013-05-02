@@ -12,7 +12,7 @@
 $(eval $(call gb_WinResTarget_WinResTarget,npsoplugin/npsoplugin))
 
 $(eval $(call gb_WinResTarget_add_defs,npsoplugin/npsoplugin,\
-    -DVERVARIANT=$(BUILD) \
+    -DVERVARIANT=$(LIBO_VERSION_PATCH) \
     -DRES_APP_VENDOR="$(OOO_VENDOR)" \
 ))
 
