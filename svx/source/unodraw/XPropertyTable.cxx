@@ -87,7 +87,7 @@ SvxUnoXPropertyTable::~SvxUnoXPropertyTable() throw()
 XPropertyEntry* SvxUnoXPropertyTable::get( long index ) const
 {
     if( mpList )
-        return mpList->Get( index, 0 );
+        return mpList->Get(index);
     else
         return NULL;
 }

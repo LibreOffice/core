@@ -528,6 +528,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
         if( pWarnBox->Execute() != RET_OK )
             break;
     }
+
     delete pDlg;
     delete pWarnBox;
 
@@ -558,16 +559,6 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
             const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
             aLbBitmaps.Append(rStyleSettings.GetListBoxPreviewDefaultPixelSize(), *pEntry );
             aLbBitmaps.SelectEntryPos( aLbBitmaps.GetEntryCount() - 1 );
-
-#ifdef WNT
-            // hack: #31355# W.P.
-            Rectangle aRect( aLbBitmaps.GetPosPixel(), aLbBitmaps.GetSizePixel() );
-            if( sal_True ) {                // ??? overlapped with pDlg
-                                        // and srolling
-                Invalidate( aRect );
-                //aLbBitmaps.Invalidate();
-            }
-#endif
 
             *pnBitmapListState |= CT_MODIFIED;
 
@@ -649,6 +640,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
                 if( pWarnBox->Execute() != RET_OK )
                     break;
             }
+
             delete pDlg;
             delete pWarnBox;
 
@@ -660,15 +652,6 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
                 const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
                 aLbBitmaps.Append(rStyleSettings.GetListBoxPreviewDefaultPixelSize(), *pEntry );
                 aLbBitmaps.SelectEntryPos( aLbBitmaps.GetEntryCount() - 1 );
-
-#ifdef WNT
-                // hack: #31355# W.P.
-                Rectangle aRect( aLbBitmaps.GetPosPixel(), aLbBitmaps.GetSizePixel() );
-                if( sal_True ) {                // ??? overlapped with pDlg
-                                            // and srolling
-                    Invalidate( aRect );
-                }
-#endif
 
                 *pnBitmapListState |= CT_MODIFIED;
 
@@ -723,15 +706,11 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
             if( bDifferent )
             {
                 bLoop = sal_False;
-                XBitmapEntry* pEntry = pBitmapList->GetBitmap( nPos );
-
-                pEntry->SetName( aName );
 
                 const BitmapEx aBitmapEx(aBitmapCtl.GetBitmapEx());
+                const XBitmapEntry aEntry(Graphic(aBitmapEx), aName);
 
-                pEntry->SetGraphicObject(Graphic(aBitmapEx));
-
-                aLbBitmaps.Modify( rStyleSettings.GetListBoxPreviewDefaultPixelSize(), *pEntry, nPos );
+                aLbBitmaps.Modify( rStyleSettings.GetListBoxPreviewDefaultPixelSize(), aEntry, nPos );
                 aLbBitmaps.SelectEntryPos( nPos );
 
                 *pnBitmapListState |= CT_MODIFIED;

@@ -1497,9 +1497,9 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
             if( !pBitmapList.is() )
                 return sal_False;
 
-            long nPos = pBitmapList->Get(aStrName);
+            long nPos = pBitmapList->GetIndex(aStrName);
             if( nPos == -1 )
-                return sal_False;
+                return false;
 
             XBitmapEntry* pEntry = pBitmapList->GetBitmap( nPos );
             XFillBitmapItem aBmpItem;
@@ -1516,9 +1516,9 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
             if( !pGradientList.is() )
                 return sal_False;
 
-            long nPos = pGradientList->Get(aStrName);
+            long nPos = pGradientList->GetIndex(aStrName);
             if( nPos == -1 )
-                return sal_False;
+                return false;
 
             XGradientEntry* pEntry = pGradientList->GetGradient( nPos );
             XFillGradientItem aGrdItem;
@@ -1535,9 +1535,9 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
             if( !pHatchList.is() )
                 return sal_False;
 
-            long nPos = pHatchList->Get(aStrName);
+            long nPos = pHatchList->GetIndex(aStrName);
             if( nPos == -1 )
-                return sal_False;
+                return false;
 
             XHatchEntry* pEntry = pHatchList->GetHatch( nPos );
             XFillHatchItem aHatchItem;
@@ -1555,9 +1555,9 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
             if( !pLineEndList.is() )
                 return sal_False;
 
-            long nPos = pLineEndList->Get(aStrName);
+            long nPos = pLineEndList->GetIndex(aStrName);
             if( nPos == -1 )
-                return sal_False;
+                return false;
 
             XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nPos );
             if( XATTR_LINEEND == nWID )
@@ -1584,11 +1584,11 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
             XDashListRef pDashList = pModel->GetDashList();
 
             if( !pDashList.is() )
-                return sal_False;
+                return false;
 
-            long nPos = pDashList->Get(aStrName);
+            long nPos = pDashList->GetIndex(aStrName);
             if( nPos == -1 )
-                return sal_False;
+                return false;
 
             XDashEntry* pEntry = pDashList->GetDash( nPos );
             XLineDashItem aDashItem;

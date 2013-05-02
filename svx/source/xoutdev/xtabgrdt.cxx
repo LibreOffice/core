@@ -55,7 +55,7 @@ XGradientEntry* XGradientList::Remove(long nIndex)
 
 XGradientEntry* XGradientList::GetGradient(long nIndex) const
 {
-    return( (XGradientEntry*) XPropertyList::Get( nIndex, 0 ) );
+    return( (XGradientEntry*) XPropertyList::Get( nIndex ) );
 }
 
 uno::Reference< container::XNameContainer > XGradientList::createInstance()
@@ -65,7 +65,7 @@ uno::Reference< container::XNameContainer > XGradientList::createInstance()
         uno::UNO_QUERY );
 }
 
-sal_Bool XGradientList::Create()
+bool XGradientList::Create()
 {
     XubString aStr( SVX_RES( RID_SVXSTR_GRADIENT ) );
     xub_StrLen nLen;
@@ -84,7 +84,7 @@ sal_Bool XGradientList::Create()
     aStr.SetChar(nLen, sal_Unicode('6'));
     Insert(new XGradientEntry(XGradient(RGB_Color(COL_MAGENTA),RGB_Color(COL_YELLOW ),XGRAD_RECT      , 1900,60,60,50,100,100),aStr));
 
-    return( sal_True );
+    return true;
 }
 
 Bitmap XGradientList::CreateBitmapForUI( long nIndex )

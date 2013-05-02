@@ -55,38 +55,33 @@ SVX_DLLPUBLIC Color RGB_Color( ColorData nColorName );
 // class XColorEntry
 // ------------------
 
-class XColorEntry : public XPropertyEntry
+class SVX_DLLPUBLIC XColorEntry : public XPropertyEntry
 {
+private:
     Color   aColor;
 
 public:
-            XColorEntry(const Color& rColor, const String& rName)
-                : XPropertyEntry(rName)
-                , aColor(rColor)
-                {}
+    XColorEntry(const Color& rColor, const String& rName);
+    XColorEntry(const XColorEntry& rOther);
 
-    void SetColor(const Color& rColor) { aColor = rColor; }
-    const Color& GetColor() const { return aColor; }
+    const Color& GetColor() const
+    {
+        return aColor;
+    }
 };
 
 // --------------------
 // class XLineEndEntry
 // --------------------
 
-class XLineEndEntry : public XPropertyEntry
+class SVX_DLLPUBLIC XLineEndEntry : public XPropertyEntry
 {
+private:
     basegfx::B2DPolyPolygon aB2DPolyPolygon;
 
 public:
-    XLineEndEntry(const basegfx::B2DPolyPolygon& rB2DPolyPolygon, const String& rName)
-    :   XPropertyEntry(rName),
-        aB2DPolyPolygon(rB2DPolyPolygon)
-    {}
-
-    void SetLineEnd(const basegfx::B2DPolyPolygon& rB2DPolyPolygon)
-    {
-        aB2DPolyPolygon = rB2DPolyPolygon;
-    }
+    XLineEndEntry(const basegfx::B2DPolyPolygon& rB2DPolyPolygon, const String& rName);
+    XLineEndEntry(const XLineEndEntry& rOther);
 
     const basegfx::B2DPolyPolygon& GetLineEnd() const
     {
@@ -98,80 +93,75 @@ public:
 // class XDashEntry
 // ------------------
 
-class XDashEntry : public XPropertyEntry
+class SVX_DLLPUBLIC XDashEntry : public XPropertyEntry
 {
+private:
     XDash   aDash;
 
 public:
-            XDashEntry(const XDash& rDash, const String& rName) :
-                XPropertyEntry(rName), aDash(rDash) {}
+    XDashEntry(const XDash& rDash, const String& rName);
+    XDashEntry(const XDashEntry& rOther);
 
-    void SetDash(const XDash& rDash) { aDash = rDash; }
-    const XDash& GetDash() const { return aDash; }
+    const XDash& GetDash() const
+    {
+        return aDash;
+    }
 };
 
 // ------------------
 // class XHatchEntry
 // ------------------
 
-class XHatchEntry : public XPropertyEntry
+class SVX_DLLPUBLIC XHatchEntry : public XPropertyEntry
 {
+private:
     XHatch  aHatch;
 
 public:
-            XHatchEntry(const XHatch& rHatch, const String& rName) :
-                XPropertyEntry(rName), aHatch(rHatch) {}
+    XHatchEntry(const XHatch& rHatch, const String& rName);
+    XHatchEntry(const XHatchEntry& rOther);
 
-    void SetHatch(const XHatch& rHatch) { aHatch = rHatch; }
-    const XHatch& GetHatch() const { return aHatch; }
+    const XHatch& GetHatch() const
+    {
+        return aHatch;
+    }
 };
 
 // ---------------------
 // class XGradientEntry
 // ---------------------
 
-class XGradientEntry : public XPropertyEntry
+class SVX_DLLPUBLIC XGradientEntry : public XPropertyEntry
 {
+private:
     XGradient  aGradient;
 
 public:
-                XGradientEntry(const XGradient& rGradient, const String& rName):
-                    XPropertyEntry(rName), aGradient(rGradient) {}
+    XGradientEntry(const XGradient& rGradient, const String& rName);
+    XGradientEntry(const XGradientEntry& rOther);
 
-    void SetGradient(const XGradient& rGrad) { aGradient = rGrad; }
-    const XGradient& GetGradient() const { return aGradient; }
+    const XGradient& GetGradient() const
+    {
+        return aGradient;
+    }
 };
 
 // ---------------------
 // class XBitmapEntry
 // ---------------------
 
-class XBitmapEntry : public XPropertyEntry
+class SVX_DLLPUBLIC XBitmapEntry : public XPropertyEntry
 {
 private:
     GraphicObject   maGraphicObject;
 
 public:
-    XBitmapEntry(const GraphicObject& rGraphicObject, const String& rName)
-    :   XPropertyEntry(rName),
-        maGraphicObject(rGraphicObject)
-    {
-    }
-
-    XBitmapEntry(const XBitmapEntry& rOther)
-    :   XPropertyEntry(rOther),
-        maGraphicObject(rOther.maGraphicObject)
-    {
-    }
+    XBitmapEntry(const GraphicObject& rGraphicObject, const String& rName);
+    XBitmapEntry(const XBitmapEntry& rOther);
 
     const GraphicObject& GetGraphicObject() const
     {
         return maGraphicObject;
-    }
-
-    void SetGraphicObject(const GraphicObject& rGraphicObject)
-    {
-        maGraphicObject = rGraphicObject;
     }
 };
 
@@ -217,58 +207,59 @@ protected:
     bool                mbListDirty;
     bool                mbEmbedInDocument;
 
-                        XPropertyList( XPropertyListType t, const String& rPath );
+    XPropertyList(XPropertyListType t, const String& rPath);
 
-    virtual Bitmap      CreateBitmapForUI( long nIndex ) = 0;
+    virtual Bitmap CreateBitmapForUI(long nIndex) = 0;
 
 public:
-    virtual             ~XPropertyList();
+    virtual ~XPropertyList();
 
-    XPropertyListType   Type() const { return meType; }
-    long                Count() const;
+    XPropertyListType Type() const { return meType; }
+    long Count() const;
 
-    void                Insert( XPropertyEntry* pEntry, long nIndex = CONTAINER_APPEND );
-    XPropertyEntry*     Replace( XPropertyEntry* pEntry, long nIndex );
-    XPropertyEntry*     Remove( long nIndex );
+    void Insert(XPropertyEntry* pEntry, long nIndex = CONTAINER_APPEND);
+    XPropertyEntry* Replace(XPropertyEntry* pEntry, long nIndex);
+    XPropertyEntry* Remove(long nIndex);
 
-                        // Note: Get(long) & Get( String& ) are ambiguous
-    XPropertyEntry*     Get( long nIndex, sal_uInt16 nDummy ) const;
-    long                Get(const String& rName);
-    Bitmap              GetUiBitmap( long nIndex ) const;
+    XPropertyEntry* Get(long nIndex) const;
+    long GetIndex(const String& rName) const;
+    Bitmap GetUiBitmap(long nIndex) const;
 
-    const String&       GetName() const { return maName; }
-    void                SetName( const String& rString );
-    const String&       GetPath() const { return maPath; }
-    void                SetPath( const String& rString ) { maPath = rString; }
-    bool                IsDirty() const { return mbListDirty; }
-    void                SetDirty( bool bDirty = sal_True )
-                            { mbListDirty = bDirty; }
-    bool                IsEmbedInDocument() const { return mbEmbedInDocument; }
-    void                SetEmbedInDocument(bool b) { mbEmbedInDocument = b; }
+    const String& GetName() const { return maName; }
+    void SetName(const String& rString);
+
+    const String& GetPath() const { return maPath; }
+    void SetPath(const String& rString) { maPath = rString; }
+
+    bool IsDirty() const { return mbListDirty; }
+    void SetDirty(bool bDirty = true) { mbListDirty = bDirty; }
+
+    bool IsEmbedInDocument() const { return mbEmbedInDocument; }
+    void SetEmbedInDocument(bool b) { mbEmbedInDocument = b; }
 
     static OUString GetDefaultExt(XPropertyListType t);
     static OUString GetDefaultExtFilter(XPropertyListType t);
-    OUString        GetDefaultExt() const { return GetDefaultExt( meType ); }
+    OUString GetDefaultExt() const { return GetDefaultExt(meType); }
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
         createInstance() = 0;
-    bool                Load();
-    bool                LoadFrom( const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::embed::XStorage > &xStorage,
-                                  const OUString &rURL );
-    bool                Save();
-    bool                SaveTo  ( const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::embed::XStorage > &xStorage,
-                                  const OUString &rURL,
-                                  OUString *pOptName );
-    virtual sal_Bool    Create() = 0;
+    bool Load();
+    bool LoadFrom(const ::com::sun::star::uno::Reference<
+                       ::com::sun::star::embed::XStorage > &xStorage,
+                   const OUString &rURL);
+    bool Save();
+    bool SaveTo  (const ::com::sun::star::uno::Reference<
+                       ::com::sun::star::embed::XStorage > &xStorage,
+                   const OUString &rURL,
+                                  OUString *pOptName);
+    virtual bool Create() = 0;
 
     // Factory method for sub-classes
-    static XPropertyListRef CreatePropertyList( XPropertyListType t,
-                                                const String& rPath );
+    static XPropertyListRef CreatePropertyList(XPropertyListType t,
+                                                const String& rPath);
     // as above but initializes name as expected
-    static XPropertyListRef CreatePropertyListFromURL( XPropertyListType t,
-                                                       const OUString & rUrl );
+    static XPropertyListRef CreatePropertyListFromURL(XPropertyListType t,
+                                                       const OUString & rUrl);
 
     // helper accessors
     inline XDashListRef  AsDashList();
@@ -286,21 +277,20 @@ public:
 class SVX_DLLPUBLIC XColorList : public XPropertyList
 {
 protected:
-    virtual Bitmap  CreateBitmapForUI( long nIndex );
+    virtual Bitmap  CreateBitmapForUI(long nIndex);
 
 public:
-    explicit XColorList( const String& rPath )
-        : XPropertyList( XCOLOR_LIST, rPath ) {}
+    explicit XColorList(const String& rPath)
+        : XPropertyList(XCOLOR_LIST, rPath) {}
 
     using XPropertyList::Replace;
     using XPropertyList::Remove;
-    using XPropertyList::Get;
 
-    XColorEntry*         Replace(long nIndex, XColorEntry* pEntry );
-    XColorEntry*         Remove(long nIndex);
-    XColorEntry*         GetColor(long nIndex) const;
+    XColorEntry* Replace(long nIndex, XColorEntry* pEntry);
+    XColorEntry* Remove(long nIndex);
+    XColorEntry* GetColor(long nIndex) const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance();
-    virtual sal_Bool     Create();
+    virtual bool Create();
 
     static XColorListRef CreateStdColorList();
     static XColorListRef GetStdColorList(); // returns a singleton
@@ -309,7 +299,6 @@ public:
 // -------------------
 // class XLineEndList
 // -------------------
-class impXLineEndList;
 
 class SVX_DLLPUBLIC XLineEndList : public XPropertyList
 {
@@ -317,22 +306,20 @@ protected:
     virtual Bitmap CreateBitmapForUI(long nIndex);
 
 public:
-    explicit        XLineEndList( const String& rPath );
-    virtual         ~XLineEndList();
+    explicit XLineEndList(const String& rPath);
+    virtual ~XLineEndList();
 
     using XPropertyList::Remove;
     XLineEndEntry* Remove(long nIndex);
-    using XPropertyList::Get;
     XLineEndEntry* GetLineEnd(long nIndex) const;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance();
-    virtual sal_Bool Create();
+    virtual bool Create();
 };
 
 // -------------------
 // class XDashList
 // -------------------
-class impXDashList;
 
 class SVX_DLLPUBLIC XDashList : public XPropertyList
 {
@@ -346,18 +333,17 @@ protected:
     virtual Bitmap CreateBitmapForUI(long nIndex);
 
 public:
-    explicit            XDashList(const String& rPath);
-    virtual             ~XDashList();
+    explicit XDashList(const String& rPath);
+    virtual ~XDashList();
 
     using XPropertyList::Replace;
-    XDashEntry*         Replace(XDashEntry* pEntry, long nIndex);
+    XDashEntry* Replace(XDashEntry* pEntry, long nIndex);
     using XPropertyList::Remove;
-    XDashEntry*         Remove(long nIndex);
-    using XPropertyList::Get;
-    XDashEntry*         GetDash(long nIndex) const;
+    XDashEntry* Remove(long nIndex);
+    XDashEntry* GetDash(long nIndex) const;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance();
-    virtual sal_Bool    Create();
+    virtual bool Create();
 
     // Special call to get a bitmap for the solid line representation. It
     // creates a bitmap fitting in size and style to the ones you get by
@@ -373,7 +359,6 @@ public:
 // -------------------
 // class XHatchList
 // -------------------
-class impXHatchList;
 
 class SVX_DLLPUBLIC XHatchList : public XPropertyList
 {
@@ -381,43 +366,39 @@ protected:
     virtual Bitmap CreateBitmapForUI(long nIndex);
 
 public:
-    explicit XHatchList( const String& rPath );
+    explicit XHatchList(const String& rPath);
     virtual ~XHatchList();
 
     using XPropertyList::Replace;
     XHatchEntry* Replace(XHatchEntry* pEntry, long nIndex);
     using XPropertyList::Remove;
     XHatchEntry* Remove(long nIndex);
-    using XPropertyList::Get;
     XHatchEntry* GetHatch(long nIndex) const;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance();
-    virtual sal_Bool Create();
+    virtual bool Create();
 };
 
 // -------------------
 // class XGradientList
 // -------------------
-class impXGradientList;
-
 class SVX_DLLPUBLIC XGradientList : public XPropertyList
 {
 protected:
     virtual Bitmap CreateBitmapForUI(long nIndex);
 
 public:
-    explicit    XGradientList( const String& rPath );
-    virtual     ~XGradientList();
+    explicit XGradientList(const String& rPath);
+    virtual ~XGradientList();
 
     using XPropertyList::Replace;
-    XGradientEntry*     Replace(XGradientEntry* pEntry, long nIndex);
+    XGradientEntry* Replace(XGradientEntry* pEntry, long nIndex);
     using XPropertyList::Remove;
-    XGradientEntry*     Remove(long nIndex);
-    using XPropertyList::Get;
-    XGradientEntry*     GetGradient(long nIndex) const;
+    XGradientEntry* Remove(long nIndex);
+    XGradientEntry* GetGradient(long nIndex) const;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance();
-    virtual sal_Bool    Create();
+    virtual bool Create();
 };
 
 // -------------------
@@ -427,20 +408,19 @@ public:
 class SVX_DLLPUBLIC XBitmapList : public XPropertyList
 {
 protected:
-    virtual Bitmap CreateBitmapForUI( long nIndex );
+    virtual Bitmap CreateBitmapForUI(long nIndex);
 
 public:
-    explicit XBitmapList( const String& rPath )
-        : XPropertyList( XBITMAP_LIST, rPath ) {}
+    explicit XBitmapList(const String& rPath)
+        : XPropertyList(XBITMAP_LIST, rPath) {}
 
     using XPropertyList::Replace;
     using XPropertyList::Remove;
-    XBitmapEntry*   Remove(long nIndex);
-    using XPropertyList::Get;
-    XBitmapEntry*   GetBitmap(long nIndex) const;
+    XBitmapEntry* Remove(long nIndex);
+    XBitmapEntry* GetBitmap(long nIndex) const;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance();
-    virtual sal_Bool    Create();
+    virtual bool Create();
 };
 
 

@@ -729,9 +729,8 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
 
         pColorList->Insert( pEntry, pColorList->Count() );
 
-        m_pLbColor->Append( pEntry );
-        m_pValSetColorList->InsertItem( m_pValSetColorList->GetItemCount() + 1,
-                pEntry->GetColor(), pEntry->GetName() );
+        m_pLbColor->Append( *pEntry );
+        m_pValSetColorList->InsertItem( m_pValSetColorList->GetItemCount() + 1, pEntry->GetColor(), pEntry->GetName() );
         ImpColorCountChanged();
 
         m_pLbColor->SelectEntryPos( m_pLbColor->GetEntryCount() - 1 );
@@ -796,20 +795,18 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickModifyHdl_Impl)
         // if not existing the entry is entered
         if( bDifferent )
         {
-            XColorEntry* pEntry = pColorList->GetColor( nPos );
-
             Color aTmpColor (aAktuellColor);
+
             if (eCM != CM_RGB)
                 ConvertColorValues (aTmpColor, CM_RGB);
 
-            pEntry->SetColor( aTmpColor );
-            pEntry->SetName( aName );
+            const XColorEntry aEntry(aTmpColor, aName);
 
-            m_pLbColor->Modify( pEntry, nPos );
+            m_pLbColor->Modify( aEntry, nPos );
             m_pLbColor->SelectEntryPos( nPos );
-            /////
-            m_pValSetColorList->SetItemColor( nPos + 1, pEntry->GetColor() );
-            m_pValSetColorList->SetItemText( nPos + 1, pEntry->GetName() );
+
+            m_pValSetColorList->SetItemColor( nPos + 1, aEntry.GetColor() );
+            m_pValSetColorList->SetItemText( nPos + 1, aEntry.GetName() );
             m_pEdtName->SetText( aName );
 
             m_pCtlPreviewOld->Invalidate();

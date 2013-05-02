@@ -37,6 +37,96 @@ Color RGB_Color( ColorData nColorName )
     return aRGBColor;
 }
 
+//////////////////////////////////////////////////////////////////////////////
+// class XColorEntry
+
+XColorEntry::XColorEntry(const Color& rColor, const String& rName)
+:   XPropertyEntry(rName),
+    aColor(rColor)
+{
+}
+
+XColorEntry::XColorEntry(const XColorEntry& rOther)
+:   XPropertyEntry(rOther),
+aColor(rOther.aColor)
+{
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// class XLineEndEntry
+
+XLineEndEntry::XLineEndEntry(const basegfx::B2DPolyPolygon& rB2DPolyPolygon, const String& rName)
+:   XPropertyEntry(rName),
+    aB2DPolyPolygon(rB2DPolyPolygon)
+{
+}
+
+XLineEndEntry::XLineEndEntry(const XLineEndEntry& rOther)
+:   XPropertyEntry(rOther),
+    aB2DPolyPolygon(rOther.aB2DPolyPolygon)
+{
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// class XDashEntry
+
+XDashEntry::XDashEntry(const XDash& rDash, const String& rName)
+:   XPropertyEntry(rName),
+    aDash(rDash)
+{
+}
+
+XDashEntry::XDashEntry(const XDashEntry& rOther)
+:   XPropertyEntry(rOther),
+aDash(rOther.aDash)
+{
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// class XHatchEntry
+
+XHatchEntry::XHatchEntry(const XHatch& rHatch, const String& rName)
+:   XPropertyEntry(rName),
+    aHatch(rHatch)
+{
+}
+
+XHatchEntry::XHatchEntry(const XHatchEntry& rOther)
+:   XPropertyEntry(rOther),
+    aHatch(rOther.aHatch)
+{
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// class XGradientEntry
+
+XGradientEntry::XGradientEntry(const XGradient& rGradient, const String& rName)
+:   XPropertyEntry(rName),
+    aGradient(rGradient)
+{
+}
+
+XGradientEntry::XGradientEntry(const XGradientEntry& rOther)
+:   XPropertyEntry(rOther),
+    aGradient(rOther.aGradient)
+{
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// class XBitmapEntry
+
+XBitmapEntry::XBitmapEntry(const GraphicObject& rGraphicObject, const String& rName)
+:   XPropertyEntry(rName),
+    maGraphicObject(rGraphicObject)
+{
+}
+
+XBitmapEntry::XBitmapEntry(const XBitmapEntry& rOther)
+:   XPropertyEntry(rOther),
+    maGraphicObject(rOther.maGraphicObject)
+{
+}
+
 // static int count = 0;
 
 XPropertyList::XPropertyList(
@@ -70,7 +160,7 @@ long XPropertyList::Count() const
     return maList.size();
 }
 
-XPropertyEntry* XPropertyList::Get( long nIndex, sal_uInt16 /*nDummy*/) const
+XPropertyEntry* XPropertyList::Get( long nIndex ) const
 {
     if( mbListDirty )
     {
@@ -80,12 +170,12 @@ XPropertyEntry* XPropertyList::Get( long nIndex, sal_uInt16 /*nDummy*/) const
     return ( (size_t)nIndex < maList.size() ) ? maList[ nIndex ] : NULL;
 }
 
-long XPropertyList::Get(const XubString& rName)
+long XPropertyList::GetIndex(const XubString& rName) const
 {
     if( mbListDirty )
     {
-        if( !Load() )
-            Create();
+        if( !( (XPropertyList*) this )->Load() )
+            ( (XPropertyList*) this )->Create();
     }
 
     for( long i = 0, n = maList.size(); i < n; ++i ) {

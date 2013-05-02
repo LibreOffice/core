@@ -49,7 +49,7 @@ XLineEndEntry* XLineEndList::Remove(long nIndex)
 
 XLineEndEntry* XLineEndList::GetLineEnd(long nIndex) const
 {
-    return (XLineEndEntry*) XPropertyList::Get(nIndex, 0);
+    return (XLineEndEntry*) XPropertyList::Get(nIndex);
 }
 
 uno::Reference< container::XNameContainer > XLineEndList::createInstance()
@@ -58,7 +58,7 @@ uno::Reference< container::XNameContainer > XLineEndList::createInstance()
         SvxUnoXLineEndTable_createInstance( this ), uno::UNO_QUERY );
 }
 
-sal_Bool XLineEndList::Create()
+bool XLineEndList::Create()
 {
     basegfx::B2DPolygon aTriangle;
     aTriangle.append(basegfx::B2DPoint(10.0, 0.0));
@@ -78,7 +78,7 @@ sal_Bool XLineEndList::Create()
     basegfx::B2DPolygon aCircle(basegfx::tools::createPolygonFromCircle(basegfx::B2DPoint(0.0, 0.0), 100.0));
     Insert( new XLineEndEntry( basegfx::B2DPolyPolygon(aCircle), SVX_RESSTR( RID_SVXSTR_CIRCLE ) ) );
 
-    return sal_True;
+    return true;
 }
 
 Bitmap XLineEndList::CreateBitmapForUI( long nIndex )

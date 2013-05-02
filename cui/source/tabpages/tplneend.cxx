@@ -365,13 +365,13 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl)
         // if not existing, enter the entry
         if( bDifferent )
         {
-            XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nPos );
+            const XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nPos );
 
-            pEntry->SetName( aName );
             aEdtName.SetText( aName );
 
-            const Bitmap aUiBitmap( pLineEndList->GetUiBitmap( nPos ) );
-            aLbLineEnds.Modify( pEntry, nPos, &aUiBitmap );
+            const XLineEndEntry aEntry(pEntry->GetLineEnd(), aName);
+
+            aLbLineEnds.Modify( aEntry, nPos, pLineEndList->GetUiBitmap( nPos ) );
             aLbLineEnds.SelectEntryPos( nPos );
 
             *pnLineEndListState |= CT_MODIFIED;
@@ -467,10 +467,9 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
 
                 long nLineEndCount = pLineEndList->Count();
                 pLineEndList->Insert( pEntry, nLineEndCount );
-                const Bitmap aBitmap = pLineEndList->GetUiBitmap( nLineEndCount );
 
                 // add to the ListBox
-                aLbLineEnds.Append( pEntry, &aBitmap );
+                aLbLineEnds.Append( *pEntry, pLineEndList->GetUiBitmap( nLineEndCount ) );
                 aLbLineEnds.SelectEntryPos( aLbLineEnds.GetEntryCount() - 1 );
 
                 *pnLineEndListState |= CT_MODIFIED;

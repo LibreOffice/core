@@ -57,7 +57,7 @@ XDashEntry* XDashList::Remove(long nIndex)
 
 XDashEntry* XDashList::GetDash(long nIndex) const
 {
-    return (XDashEntry*) XPropertyList::Get(nIndex, 0);
+    return (XDashEntry*) XPropertyList::Get(nIndex);
 }
 
 uno::Reference< container::XNameContainer > XDashList::createInstance()
@@ -66,7 +66,7 @@ uno::Reference< container::XNameContainer > XDashList::createInstance()
         SvxUnoXDashTable_createInstance( this ), uno::UNO_QUERY );
 }
 
-sal_Bool XDashList::Create()
+bool XDashList::Create()
 {
     XubString aStr( SVX_RES( RID_SVXSTR_LINESTYLE ) );
     xub_StrLen nLen;
@@ -79,7 +79,7 @@ sal_Bool XDashList::Create()
     aStr.SetChar(nLen, sal_Unicode('3'));
     Insert(new XDashEntry(XDash(XDASH_RECT,2, 50,3,250,120),aStr));
 
-    return sal_True;
+    return true;
 }
 
 Bitmap XDashList::ImpCreateBitmapForXDash(const XDash* pDash)

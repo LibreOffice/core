@@ -481,7 +481,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
 
         pGradientList->Insert( pEntry, nCount );
 
-        m_pLbGradients->Append( pEntry );
+        m_pLbGradients->Append( *pEntry, pGradientList->GetUiBitmap( nCount ) );
 
         m_pLbGradients->SelectEntryPos( m_pLbGradients->GetEntryCount() - 1 );
 
@@ -560,7 +560,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl)
 
                 delete pGradientList->Replace( pEntry, nPos );
 
-                m_pLbGradients->Modify( pEntry, nPos );
+                m_pLbGradients->Modify( *pEntry, nPos, pGradientList->GetUiBitmap( nPos ) );
 
                 m_pLbGradients->SelectEntryPos( nPos );
 

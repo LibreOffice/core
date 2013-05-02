@@ -55,7 +55,7 @@ XHatchEntry* XHatchList::Remove(long nIndex)
 
 XHatchEntry* XHatchList::GetHatch(long nIndex) const
 {
-    return (XHatchEntry*) XPropertyList::Get(nIndex, 0);
+    return (XHatchEntry*) XPropertyList::Get(nIndex);
 }
 
 uno::Reference< container::XNameContainer > XHatchList::createInstance()
@@ -64,7 +64,7 @@ uno::Reference< container::XNameContainer > XHatchList::createInstance()
         SvxUnoXHatchTable_createInstance( this ), uno::UNO_QUERY );
 }
 
-sal_Bool XHatchList::Create()
+bool XHatchList::Create()
 {
     XubString aStr( SVX_RES( RID_SVXSTR_HATCH ) );
     xub_StrLen nLen;
@@ -77,7 +77,7 @@ sal_Bool XHatchList::Create()
     aStr.SetChar(nLen, sal_Unicode('3'));
     Insert(new XHatchEntry(XHatch(RGB_Color(COL_BLUE ),XHATCH_TRIPLE,120,  0),aStr));
 
-    return( sal_True );
+    return true;
 }
 
 Bitmap XHatchList::CreateBitmapForUI( long nIndex )

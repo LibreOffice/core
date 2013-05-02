@@ -934,18 +934,18 @@ void ColorLB::Fill( const XColorListRef &pColorTab )
 
 /************************************************************************/
 
-void ColorLB::Append( XColorEntry* pEntry, Bitmap* )
+void ColorLB::Append( const XColorEntry& rEntry )
 {
-    InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+    InsertEntry( rEntry.GetColor(), rEntry.GetName() );
     AdaptDropDownLineCountToMaximum();
 }
 
 /************************************************************************/
 
-void ColorLB::Modify( XColorEntry* pEntry, sal_uInt16 nPos, Bitmap*  )
+void ColorLB::Modify( const XColorEntry& rEntry, sal_uInt16 nPos )
 {
     RemoveEntry( nPos );
-    InsertEntry( pEntry->GetColor(), pEntry->GetName(), nPos );
+    InsertEntry( rEntry.GetColor(), rEntry.GetName(), nPos );
 }
 
 // Fills the Listbox with color and strings
@@ -1002,25 +1002,34 @@ void HatchingLB::Fill( const XHatchListRef &pList )
 
 /************************************************************************/
 
-void HatchingLB::Append( XHatchEntry* pEntry, Bitmap* pBmp )
+void HatchingLB::Append( const XHatchEntry& rEntry, const Bitmap& rBitmap )
 {
-    if( pBmp )
-        InsertEntry( pEntry->GetName(), *pBmp );
+    if(!rBitmap.IsEmpty())
+    {
+        InsertEntry( rEntry.GetName(), rBitmap );
+    }
     else
-        InsertEntry( pEntry->GetName() );
+    {
+        InsertEntry( rEntry.GetName() );
+    }
+
     AdaptDropDownLineCountToMaximum();
 }
 
 /************************************************************************/
 
-void HatchingLB::Modify( XHatchEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp )
+void HatchingLB::Modify( const XHatchEntry& rEntry, sal_uInt16 nPos, const Bitmap& rBitmap )
 {
     RemoveEntry( nPos );
 
-    if( pBmp )
-        InsertEntry( pEntry->GetName(), *pBmp, nPos );
+    if( !rBitmap.IsEmpty() )
+    {
+        InsertEntry( rEntry.GetName(), rBitmap, nPos );
+    }
     else
-        InsertEntry( pEntry->GetName(), nPos );
+    {
+        InsertEntry( rEntry.GetName(), nPos );
+    }
 }
 
 // Fills the listbox (provisional) with strings
@@ -1099,25 +1108,34 @@ void GradientLB::Fill( const XGradientListRef &pList )
 
 /************************************************************************/
 
-void GradientLB::Append( XGradientEntry* pEntry, Bitmap* pBmp )
+void GradientLB::Append( const XGradientEntry& rEntry, const Bitmap& rBitmap )
 {
-    if( pBmp )
-        InsertEntry( pEntry->GetName(), *pBmp );
+    if(!rBitmap.IsEmpty())
+    {
+        InsertEntry( rEntry.GetName(), rBitmap );
+    }
     else
-        InsertEntry( pEntry->GetName() );
+    {
+        InsertEntry( rEntry.GetName() );
+    }
+
     AdaptDropDownLineCountToMaximum();
 }
 
 /************************************************************************/
 
-void GradientLB::Modify( XGradientEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp )
+void GradientLB::Modify( const XGradientEntry& rEntry, sal_uInt16 nPos, const Bitmap& rBitmap )
 {
     RemoveEntry( nPos );
 
-    if( pBmp )
-        InsertEntry( pEntry->GetName(), *pBmp, nPos );
+    if(!rBitmap.IsEmpty())
+    {
+        InsertEntry( rEntry.GetName(), rBitmap, nPos );
+    }
     else
-        InsertEntry( pEntry->GetName(), nPos );
+    {
+        InsertEntry( rEntry.GetName(), nPos );
+    }
 }
 
 /************************************************************************/
@@ -1261,11 +1279,12 @@ void BitmapLB::Fill( const XBitmapListRef &pList )
 
 /************************************************************************/
 
-void BitmapLB::Append(const Size& rSize, const XBitmapEntry& rEntry, BitmapEx* pBmpEx)
+void BitmapLB::Append(const Size& rSize, const XBitmapEntry& rEntry)
 {
-    if(pBmpEx)
+    maBitmapEx = rEntry.GetGraphicObject().GetGraphic().GetBitmapEx();
+
+    if(!maBitmapEx.IsEmpty())
     {
-        maBitmapEx = rEntry.GetGraphicObject().GetGraphic().GetBitmapEx();
         formatBitmapExToSize(maBitmapEx, rSize);
         InsertEntry(rEntry.GetName(), maBitmapEx);
     }
@@ -1279,13 +1298,13 @@ void BitmapLB::Append(const Size& rSize, const XBitmapEntry& rEntry, BitmapEx* p
 
 /************************************************************************/
 
-void BitmapLB::Modify(const Size& rSize, const XBitmapEntry& rEntry, sal_uInt16 nPos, BitmapEx* pBmpEx)
+void BitmapLB::Modify(const Size& rSize, const XBitmapEntry& rEntry, sal_uInt16 nPos)
 {
     RemoveEntry(nPos);
+    maBitmapEx = rEntry.GetGraphicObject().GetGraphic().GetBitmapEx();
 
-    if(pBmpEx)
+    if(!maBitmapEx.IsEmpty())
     {
-        maBitmapEx = rEntry.GetGraphicObject().GetGraphic().GetBitmapEx();
         formatBitmapExToSize(maBitmapEx, rSize);
         InsertEntry(rEntry.GetName(), maBitmapEx, nPos);
     }
@@ -1405,25 +1424,34 @@ void LineLB::Fill( const XDashListRef &pList )
 
 /************************************************************************/
 
-void LineLB::Append( XDashEntry* pEntry, const Bitmap* pBmp )
+void LineLB::Append( const XDashEntry& rEntry, const Bitmap& rBitmap )
 {
-    if( pBmp )
-        InsertEntry( pEntry->GetName(), *pBmp );
+    if(!rBitmap.IsEmpty())
+    {
+        InsertEntry( rEntry.GetName(), rBitmap );
+    }
     else
-        InsertEntry( pEntry->GetName() );
+    {
+        InsertEntry( rEntry.GetName() );
+    }
+
     AdaptDropDownLineCountToMaximum();
 }
 
 /************************************************************************/
 
-void LineLB::Modify( XDashEntry* pEntry, sal_uInt16 nPos, const Bitmap* pBmp )
+void LineLB::Modify( const XDashEntry& rEntry, sal_uInt16 nPos, const Bitmap& rBitmap )
 {
     RemoveEntry( nPos );
 
-    if( pBmp )
-        InsertEntry( pEntry->GetName(), *pBmp, nPos );
+    if(!rBitmap.IsEmpty())
+    {
+        InsertEntry( rEntry.GetName(), rBitmap, nPos );
+    }
     else
-        InsertEntry( pEntry->GetName(), nPos );
+    {
+        InsertEntry( rEntry.GetName(), nPos );
+    }
 }
 
 // Fills the listbox (provisional) with strings
@@ -1444,7 +1472,7 @@ LineEndLB::~LineEndLB(void)
 {
 }
 
-void LineEndLB::Fill( const XLineEndListRef &pList, sal_Bool bStart )
+void LineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
 {
     if( !pList.is() )
         return;
@@ -1478,43 +1506,49 @@ void LineEndLB::Fill( const XLineEndListRef &pList, sal_Bool bStart )
 
 /************************************************************************/
 
-void LineEndLB::Append( XLineEndEntry* pEntry, const Bitmap* pBmp, sal_Bool bStart )
+void LineEndLB::Append( const XLineEndEntry& rEntry, const Bitmap& rBitmap, bool bStart )
 {
-    if( pBmp )
+    if(!rBitmap.IsEmpty())
     {
         VirtualDevice aVD;
-        Size aBmpSize( pBmp->GetSizePixel() );
+        const Size aBmpSize(rBitmap.GetSizePixel());
 
-        aVD.SetOutputSizePixel( aBmpSize, sal_False );
-        aVD.DrawBitmap( Point(), *pBmp );
-        InsertEntry( pEntry->GetName(),
-            aVD.GetBitmap( bStart ? Point() : Point( aBmpSize.Width() / 2, 0 ),
-                Size( aBmpSize.Width() / 2, aBmpSize.Height() ) ) );
+        aVD.SetOutputSizePixel(aBmpSize, false);
+        aVD.DrawBitmap(Point(), rBitmap);
+        InsertEntry(
+            rEntry.GetName(),
+            aVD.GetBitmap(bStart ? Point() : Point(aBmpSize.Width() / 2, 0 ), Size(aBmpSize.Width() / 2, aBmpSize.Height())));
     }
     else
-        InsertEntry( pEntry->GetName() );
+    {
+        InsertEntry(rEntry.GetName());
+    }
+
     AdaptDropDownLineCountToMaximum();
 }
 
 /************************************************************************/
 
-void LineEndLB::Modify( XLineEndEntry* pEntry, sal_uInt16 nPos, const Bitmap* pBmp, sal_Bool bStart )
+void LineEndLB::Modify( const XLineEndEntry& rEntry, sal_uInt16 nPos, const Bitmap& rBitmap, bool bStart )
 {
     RemoveEntry( nPos );
 
-    if( pBmp )
+    if(!rBitmap.IsEmpty())
     {
         VirtualDevice aVD;
-        Size aBmpSize( pBmp->GetSizePixel() );
+        const Size aBmpSize(rBitmap.GetSizePixel());
 
-        aVD.SetOutputSizePixel( aBmpSize, sal_False );
-        aVD.DrawBitmap( Point(), *pBmp );
-        InsertEntry( pEntry->GetName(),
-            aVD.GetBitmap( bStart ? Point() : Point( aBmpSize.Width() / 2, 0 ),
-                Size( aBmpSize.Width() / 2, aBmpSize.Height() ) ), nPos );
+        aVD.SetOutputSizePixel(aBmpSize, false);
+        aVD.DrawBitmap(Point(), rBitmap);
+        InsertEntry(
+            rEntry.GetName(),
+            aVD.GetBitmap(bStart ? Point() : Point( aBmpSize.Width() / 2, 0 ), Size( aBmpSize.Width() / 2, aBmpSize.Height())),
+            nPos);
     }
     else
-        InsertEntry( pEntry->GetName(), nPos );
+    {
+        InsertEntry(rEntry.GetName(), nPos);
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////

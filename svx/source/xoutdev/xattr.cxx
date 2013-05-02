@@ -233,7 +233,7 @@ String NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uIn
             int nIndex;
             for( nIndex = 0; nIndex < nCount; nIndex++ )
             {
-                XPropertyEntry* pEntry = pDefaults->Get( nIndex, 0 );
+                XPropertyEntry* pEntry = pDefaults->Get(nIndex);
                 if( pEntry )
                 {
                     bool bFound = false;

@@ -53,7 +53,7 @@ XColorEntry* XColorList::Remove(long nIndex)
 
 XColorEntry* XColorList::GetColor(long nIndex) const
 {
-    return (XColorEntry*) XPropertyList::Get(nIndex, 0);
+    return (XColorEntry*) XPropertyList::Get(nIndex);
 }
 
 uno::Reference< container::XNameContainer > XColorList::createInstance()
@@ -63,7 +63,7 @@ uno::Reference< container::XNameContainer > XColorList::createInstance()
         uno::UNO_QUERY );
 }
 
-sal_Bool XColorList::Create()
+bool XColorList::Create()
 {
     XubString aStr;
     xub_StrLen nLen;

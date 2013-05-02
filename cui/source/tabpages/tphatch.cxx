@@ -530,7 +530,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl)
 
         pHatchingList->Insert( pEntry, nCount );
 
-        aLbHatchings.Append( pEntry );
+        aLbHatchings.Append( *pEntry, pHatchingList->GetUiBitmap( nCount ) );
 
         aLbHatchings.SelectEntryPos( aLbHatchings.GetEntryCount() - 1 );
 
@@ -603,7 +603,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl)
 
                 delete pHatchingList->Replace( pEntry, nPos );
 
-                aLbHatchings.Modify( pEntry, nPos );
+                aLbHatchings.Modify( *pEntry, nPos, pHatchingList->GetUiBitmap( nPos ) );
 
                 aLbHatchings.SelectEntryPos( nPos );
 
