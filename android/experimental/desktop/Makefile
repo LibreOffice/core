@@ -114,7 +114,7 @@ copy-stuff:
 # ------------ Pieces not from DocumentLoader ------------
 # tango artwork / icons
 	mkdir -p assets/share/config
-	cp -R $(OUTDIR)/bin/images_tango.zip assets/share/config/images.zip
+	cp -R $(OUTDIR)/bin/images_tango.zip assets/share/config
 # shell / splash images
 	mkdir -p assets/program
 	cp -r $(SRC_ROOT)/icon-themes/galaxy/brand/* assets/program
