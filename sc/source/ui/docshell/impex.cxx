@@ -528,13 +528,13 @@ void ScImportExport::WriteUnicodeOrByteEndl( SvStream& rStrm )
         switch ( rStrm.GetLineDelimiter() )
         {
             case LINEEND_CR :
-                rStrm << sal_Unicode(_CR);
+                rStrm << sal_Unicode('\r');
             break;
             case LINEEND_LF :
-                rStrm << sal_Unicode(_LF);
+                rStrm << sal_Unicode('\n');
             break;
             default:
-                rStrm << sal_Unicode(_CR) << sal_Unicode(_LF);
+                rStrm << sal_Unicode('\r') << sal_Unicode('\n');
         }
     }
     else
@@ -727,7 +727,7 @@ static void lcl_UnescapeSylk( String & rString, SylkVersion eVersion )
     else
         rString.SearchAndReplaceAll( OUString(DOUBLE_DOUBLEQUOTE), OUString('"') );
 
-    rString.SearchAndReplaceAll( OUString(SYLK_LF), OUString(_LF) );
+    rString.SearchAndReplaceAll( OUString(SYLK_LF), OUString('\n') );
 }
 
 static const sal_Unicode* lcl_ScanSylkString( const sal_Unicode* p,
@@ -1196,7 +1196,7 @@ static bool lcl_PutString(
     }
 
     // Standard or date not determined -> SetString / EditCell
-    if( rStr.Search( _LF ) == STRING_NOTFOUND )
+    if( rStr.Search( '\n' ) == STRING_NOTFOUND )
     {
         ScSetStringParam aParam;
         aParam.mpNumFormatter = pFormatter;
@@ -1571,8 +1571,8 @@ bool hasLineBreaksOrSeps( const String& rStr, sal_Unicode cSep )
 
         switch (c)
         {
-            case _LF:
-            case _CR:
+            case '\n':
+            case '\r':
                 // line break found.
                 return true;
             default:
@@ -1626,11 +1626,11 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                         {
                             aCell = pDoc->GetString(nCol, nRow, nStartTab);
 
-                            bool bMultiLineText = ( aCell.Search( _LF ) != STRING_NOTFOUND );
+                            bool bMultiLineText = ( aCell.Search( '\n' ) != STRING_NOTFOUND );
                             if( bMultiLineText )
                             {
                                 if( mExportTextOptions.meNewlineConversion == ScExportTextOptions::ToSpace )
-                                    aCell.SearchAndReplaceAll( _LF, ' ' );
+                                    aCell.SearchAndReplaceAll( '\n', ' ' );
                                 else if ( mExportTextOptions.meNewlineConversion == ScExportTextOptions::ToSystem && bConvertLF )
                                     aCell = convertLineEnd(aCell, GetSystemLineEnd());
                             }
@@ -1658,11 +1658,11 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                     {
                         aCell = pDoc->GetString(nCol, nRow, nStartTab);
 
-                        bool bMultiLineText = ( aCell.Search( _LF ) != STRING_NOTFOUND );
+                        bool bMultiLineText = ( aCell.Search( '\n' ) != STRING_NOTFOUND );
                         if( bMultiLineText )
                         {
                             if( mExportTextOptions.meNewlineConversion == ScExportTextOptions::ToSpace )
-                                aCell.SearchAndReplaceAll( _LF, ' ' );
+                                aCell.SearchAndReplaceAll( '\n', ' ' );
                             else if ( mExportTextOptions.meNewlineConversion == ScExportTextOptions::ToSystem && bConvertLF )
                                 aCell = convertLineEnd(aCell, GetSystemLineEnd());
                         }
@@ -2003,7 +2003,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                 case CELLTYPE_EDIT:
                 hasstring:
                     aCellStr = pDoc->GetString(nCol, nRow, aRange.aStart.Tab());
-                    aCellStr.SearchAndReplaceAll( OUString(_LF), OUString(SYLK_LF) );
+                    aCellStr.SearchAndReplaceAll( OUString('\n'), OUString(SYLK_LF) );
 
                     aBufStr.AssignAscii(RTL_CONSTASCII_STRINGPARAM( "C;X" ));
                     aBufStr += OUString::number( c );
@@ -2397,7 +2397,7 @@ OUString ReadCsvLine( SvStream &rStream, bool bEmbeddedLineBreak,
                 nLastOffset = aStr.getLength();
                 OUString aNext;
                 rStream.ReadUniOrByteStringLine(aNext, rStream.GetStreamCharSet(), nArbitraryLineLengthLimit);
-                aStr += OUString( sal_Unicode(_LF));
+                aStr += OUString( sal_Unicode('\n'));
                 aStr += aNext;
             }
         }

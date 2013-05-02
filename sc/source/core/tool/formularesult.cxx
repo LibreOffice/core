@@ -261,7 +261,7 @@ bool ScFormulaResult::IsMultiline() const
     if (meMultiline == MULTILINE_UNKNOWN)
     {
         const String& rStr = GetString();
-        if (rStr.Len() && rStr.Search( _LF ) != STRING_NOTFOUND)
+        if (rStr.Len() && rStr.Search( '\n' ) != STRING_NOTFOUND)
             const_cast<ScFormulaResult*>(this)->meMultiline = MULTILINE_TRUE;
         else
             const_cast<ScFormulaResult*>(this)->meMultiline = MULTILINE_FALSE;
