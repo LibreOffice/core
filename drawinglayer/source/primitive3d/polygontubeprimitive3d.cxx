@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <boost/noncopyable.hpp>
 #include <drawinglayer/primitive3d/polygontubeprimitive3d.hxx>
 #include <drawinglayer/attribute/materialattribute3d.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
@@ -25,6 +26,7 @@
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #include <drawinglayer/primitive3d/transformprimitive3d.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
+#include <rtl/instance.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -34,190 +36,254 @@ namespace drawinglayer
     {
         namespace // anonymous namespace
         {
+            class TubeBuffer : boost::noncopyable
+            {
+            private:
+                // data for buffered tube primitives
+                Primitive3DSequence m_aLineTubeList;
+                sal_uInt32 m_nLineTubeSegments;
+                attribute::MaterialAttribute3D m_aLineMaterial;
+                ::osl::Mutex m_aMutex;
+            public:
+                TubeBuffer()
+                    : m_nLineTubeSegments(0L)
+                {
+                }
+
+                Primitive3DSequence getLineTubeSegments(
+                    sal_uInt32 nSegments,
+                    const attribute::MaterialAttribute3D& rMaterial)
+                {
+                    // may exclusively change cached data, use mutex
+                    ::osl::MutexGuard aGuard(m_aMutex);
+
+                    if (nSegments != m_nLineTubeSegments || !(rMaterial == m_aLineMaterial))
+                    {
+                        m_nLineTubeSegments = nSegments;
+                        m_aLineMaterial = rMaterial;
+                        m_aLineTubeList = Primitive3DSequence();
+                    }
+
+                    if (!m_aLineTubeList.hasElements() && m_nLineTubeSegments != 0)
+                    {
+                        const basegfx::B3DPoint aLeft(0.0, 0.0, 0.0);
+                        const basegfx::B3DPoint aRight(1.0, 0.0, 0.0);
+                        basegfx::B3DPoint aLastLeft(0.0, 1.0, 0.0);
+                        basegfx::B3DPoint aLastRight(1.0, 1.0, 0.0);
+                        basegfx::B3DHomMatrix aRot;
+                        aRot.rotate(F_2PI / (double)m_nLineTubeSegments, 0.0, 0.0);
+                        m_aLineTubeList.realloc(m_nLineTubeSegments);
+
+                        for(sal_uInt32 a = 0; a < m_nLineTubeSegments; ++a)
+                        {
+                            const basegfx::B3DPoint aNextLeft(aRot * aLastLeft);
+                            const basegfx::B3DPoint aNextRight(aRot * aLastRight);
+                            basegfx::B3DPolygon aNewPolygon;
+
+                            aNewPolygon.append(aNextLeft);
+                            aNewPolygon.setNormal(0L, basegfx::B3DVector(aNextLeft - aLeft));
+
+                            aNewPolygon.append(aLastLeft);
+                            aNewPolygon.setNormal(1L, basegfx::B3DVector(aLastLeft - aLeft));
+
+                            aNewPolygon.append(aLastRight);
+                            aNewPolygon.setNormal(2L, basegfx::B3DVector(aLastRight - aRight));
+
+                            aNewPolygon.append(aNextRight);
+                            aNewPolygon.setNormal(3L, basegfx::B3DVector(aNextRight - aRight));
+
+                            aNewPolygon.setClosed(true);
+
+                            const basegfx::B3DPolyPolygon aNewPolyPolygon(aNewPolygon);
+                            const Primitive3DReference xRef(new PolyPolygonMaterialPrimitive3D(aNewPolyPolygon, m_aLineMaterial, false));
+                            m_aLineTubeList[a] = xRef;
+
+                            aLastLeft = aNextLeft;
+                            aLastRight = aNextRight;
+                        }
+                    }
+                    return m_aLineTubeList;
+                }
+            };
+
+            struct theTubeBuffer :
+                public rtl::Static< TubeBuffer, theTubeBuffer > {};
+
             Primitive3DSequence getLineTubeSegments(
                 sal_uInt32 nSegments,
                 const attribute::MaterialAttribute3D& rMaterial)
             {
                 // static data for buffered tube primitives
-                static Primitive3DSequence aLineTubeList;
-                static sal_uInt32 nLineTubeSegments(0L);
-                static attribute::MaterialAttribute3D aLineMaterial;
-                static ::osl::Mutex aMutex;
-
-                // may exclusively change static data, use mutex
-                ::osl::MutexGuard aGuard(aMutex);
-
-                if(nSegments != nLineTubeSegments || !(rMaterial == aLineMaterial))
-                {
-                    nLineTubeSegments = nSegments;
-                    aLineMaterial = rMaterial;
-                    aLineTubeList = Primitive3DSequence();
-                }
-
-                if(!aLineTubeList.hasElements() && 0L != nLineTubeSegments)
-                {
-                    const basegfx::B3DPoint aLeft(0.0, 0.0, 0.0);
-                    const basegfx::B3DPoint aRight(1.0, 0.0, 0.0);
-                    basegfx::B3DPoint aLastLeft(0.0, 1.0, 0.0);
-                    basegfx::B3DPoint aLastRight(1.0, 1.0, 0.0);
-                    basegfx::B3DHomMatrix aRot;
-                    aRot.rotate(F_2PI / (double)nLineTubeSegments, 0.0, 0.0);
-                    aLineTubeList.realloc(nLineTubeSegments);
-
-                    for(sal_uInt32 a(0L); a < nLineTubeSegments; a++)
-                    {
-                        const basegfx::B3DPoint aNextLeft(aRot * aLastLeft);
-                        const basegfx::B3DPoint aNextRight(aRot * aLastRight);
-                        basegfx::B3DPolygon aNewPolygon;
-
-                        aNewPolygon.append(aNextLeft);
-                        aNewPolygon.setNormal(0L, basegfx::B3DVector(aNextLeft - aLeft));
-
-                        aNewPolygon.append(aLastLeft);
-                        aNewPolygon.setNormal(1L, basegfx::B3DVector(aLastLeft - aLeft));
-
-                        aNewPolygon.append(aLastRight);
-                        aNewPolygon.setNormal(2L, basegfx::B3DVector(aLastRight - aRight));
-
-                        aNewPolygon.append(aNextRight);
-                        aNewPolygon.setNormal(3L, basegfx::B3DVector(aNextRight - aRight));
-
-                        aNewPolygon.setClosed(true);
-
-                        const basegfx::B3DPolyPolygon aNewPolyPolygon(aNewPolygon);
-                        const Primitive3DReference xRef(new PolyPolygonMaterialPrimitive3D(aNewPolyPolygon, aLineMaterial, false));
-                        aLineTubeList[a] = xRef;
-
-                        aLastLeft = aNextLeft;
-                        aLastRight = aNextRight;
-                    }
-                }
-
-                return aLineTubeList;
+                TubeBuffer &rTheBuffer = theTubeBuffer::get();
+                return rTheBuffer.getLineTubeSegments(nSegments, rMaterial);
             }
+
+            class CapBuffer : boost::noncopyable
+            {
+            private:
+                // data for buffered cap primitives
+                Primitive3DSequence m_aLineCapList;
+                sal_uInt32 m_nLineCapSegments;
+                attribute::MaterialAttribute3D m_aLineMaterial;
+                ::osl::Mutex m_aMutex;
+            public:
+                CapBuffer()
+                    : m_nLineCapSegments(0)
+                {
+                }
+                Primitive3DSequence getLineCapSegments(
+                    sal_uInt32 nSegments,
+                    const attribute::MaterialAttribute3D& rMaterial)
+                {
+                    // may exclusively change cached data, use mutex
+                    ::osl::MutexGuard aGuard(m_aMutex);
+
+                    if (nSegments != m_nLineCapSegments || !(rMaterial == m_aLineMaterial))
+                    {
+                        m_nLineCapSegments = nSegments;
+                        m_aLineMaterial = rMaterial;
+                        m_aLineCapList = Primitive3DSequence();
+                    }
+
+                    if (!m_aLineCapList.hasElements() && m_nLineCapSegments != 0)
+                    {
+                        const basegfx::B3DPoint aNull(0.0, 0.0, 0.0);
+                        basegfx::B3DPoint aLast(0.0, 1.0, 0.0);
+                        basegfx::B3DHomMatrix aRot;
+                        aRot.rotate(F_2PI / (double)m_nLineCapSegments, 0.0, 0.0);
+                        m_aLineCapList.realloc(m_nLineCapSegments);
+
+                        for(sal_uInt32 a = 0; a < m_nLineCapSegments; ++a)
+                        {
+                            const basegfx::B3DPoint aNext(aRot * aLast);
+                            basegfx::B3DPolygon aNewPolygon;
+
+                            aNewPolygon.append(aLast);
+                            aNewPolygon.setNormal(0L, basegfx::B3DVector(aLast - aNull));
+
+                            aNewPolygon.append(aNext);
+                            aNewPolygon.setNormal(1L, basegfx::B3DVector(aNext - aNull));
+
+                            aNewPolygon.append(aNull);
+                            aNewPolygon.setNormal(2L, basegfx::B3DVector(-1.0, 0.0, 0.0));
+
+                            aNewPolygon.setClosed(true);
+
+                            const basegfx::B3DPolyPolygon aNewPolyPolygon(aNewPolygon);
+                            const Primitive3DReference xRef(new PolyPolygonMaterialPrimitive3D(aNewPolyPolygon, m_aLineMaterial, false));
+                            m_aLineCapList[a] = xRef;
+
+                            aLast = aNext;
+                        }
+                    }
+
+                    return m_aLineCapList;
+                }
+            };
+
+            struct theCapBuffer :
+                public rtl::Static< CapBuffer, theCapBuffer > {};
 
             Primitive3DSequence getLineCapSegments(
                 sal_uInt32 nSegments,
                 const attribute::MaterialAttribute3D& rMaterial)
             {
-                // static data for buffered tube primitives
-                static Primitive3DSequence aLineCapList;
-                static sal_uInt32 nLineCapSegments(0L);
-                static attribute::MaterialAttribute3D aLineMaterial;
-
-                // may exclusively change static data, use mutex
-                ::osl::Mutex m_mutex;
-
-                if(nSegments != nLineCapSegments || !(rMaterial == aLineMaterial))
-                {
-                    nLineCapSegments = nSegments;
-                    aLineMaterial = rMaterial;
-                    aLineCapList = Primitive3DSequence();
-                }
-
-                if(!aLineCapList.hasElements() && 0L != nLineCapSegments)
-                {
-                    const basegfx::B3DPoint aNull(0.0, 0.0, 0.0);
-                    basegfx::B3DPoint aLast(0.0, 1.0, 0.0);
-                    basegfx::B3DHomMatrix aRot;
-                    aRot.rotate(F_2PI / (double)nLineCapSegments, 0.0, 0.0);
-                    aLineCapList.realloc(nLineCapSegments);
-
-                    for(sal_uInt32 a(0L); a < nLineCapSegments; a++)
-                    {
-                        const basegfx::B3DPoint aNext(aRot * aLast);
-                        basegfx::B3DPolygon aNewPolygon;
-
-                        aNewPolygon.append(aLast);
-                        aNewPolygon.setNormal(0L, basegfx::B3DVector(aLast - aNull));
-
-                        aNewPolygon.append(aNext);
-                        aNewPolygon.setNormal(1L, basegfx::B3DVector(aNext - aNull));
-
-                        aNewPolygon.append(aNull);
-                        aNewPolygon.setNormal(2L, basegfx::B3DVector(-1.0, 0.0, 0.0));
-
-                        aNewPolygon.setClosed(true);
-
-                        const basegfx::B3DPolyPolygon aNewPolyPolygon(aNewPolygon);
-                        const Primitive3DReference xRef(new PolyPolygonMaterialPrimitive3D(aNewPolyPolygon, aLineMaterial, false));
-                        aLineCapList[a] = xRef;
-
-                        aLast = aNext;
-                    }
-                }
-
-                return aLineCapList;
+                // static data for buffered cap primitives
+                CapBuffer &rTheBuffer = theCapBuffer::get();
+                return rTheBuffer.getLineCapSegments(nSegments, rMaterial);
             }
+
+            class CapRoundBuffer : boost::noncopyable
+            {
+            private:
+                // data for buffered capround primitives
+                Primitive3DSequence m_aLineCapRoundList;
+                sal_uInt32 m_nLineCapRoundSegments;
+                attribute::MaterialAttribute3D m_aLineMaterial;
+                ::osl::Mutex m_aMutex;
+            public:
+                CapRoundBuffer()
+                    : m_nLineCapRoundSegments(0)
+                {
+                }
+                Primitive3DSequence getLineCapRoundSegments(
+                    sal_uInt32 nSegments,
+                    const attribute::MaterialAttribute3D& rMaterial)
+                {
+                    // may exclusively change cached data, use mutex
+                    ::osl::MutexGuard aGuard(m_aMutex);
+
+                    if (nSegments != m_nLineCapRoundSegments || !(rMaterial == m_aLineMaterial))
+                    {
+                        m_nLineCapRoundSegments = nSegments;
+                        m_aLineMaterial = rMaterial;
+                        m_aLineCapRoundList = Primitive3DSequence();
+                    }
+
+                    if (!m_aLineCapRoundList.hasElements() && m_nLineCapRoundSegments)
+                    {
+                        // calculate new horizontal segments
+                        sal_uInt32 nVerSeg(nSegments / 2);
+
+                        if (nVerSeg < 1)
+                        {
+                            nVerSeg = 1;
+                        }
+
+                        // create half-sphere; upper half of unit sphere
+                        basegfx::B3DPolyPolygon aSphere(
+                            basegfx::tools::createUnitSphereFillPolyPolygon(
+                                nSegments,
+                                nVerSeg,
+                                true,
+                                F_PI2, 0.0,
+                                0.0, F_2PI));
+                        const sal_uInt32 nCount(aSphere.count());
+
+                        if (nCount)
+                        {
+                            // rotate to have sphere cap orientned to negative X-Axis; do not
+                            // forget to transform normals, too
+                            basegfx::B3DHomMatrix aSphereTrans;
+
+                            aSphereTrans.rotate(0.0, 0.0, F_PI2);
+                            aSphere.transform(aSphereTrans);
+                            aSphere.transformNormals(aSphereTrans);
+
+                            // realloc for primitives and create based on polygon snippets
+                            m_aLineCapRoundList.realloc(nCount);
+
+                            for (sal_uInt32 a = 0; a < nCount; ++a)
+                            {
+                                const basegfx::B3DPolygon aPartPolygon(aSphere.getB3DPolygon(a));
+                                const basegfx::B3DPolyPolygon aPartPolyPolygon(aPartPolygon);
+
+                                // need to create one primitive per Polygon since the primitive
+                                // is for planar PolyPolygons which is definitely not the case here
+                                m_aLineCapRoundList[a] = new PolyPolygonMaterialPrimitive3D(
+                                    aPartPolyPolygon,
+                                    rMaterial,
+                                    false);
+                            }
+                        }
+                    }
+
+                    return m_aLineCapRoundList;
+                }
+
+            };
+
+            struct theCapRoundBuffer :
+                public rtl::Static< CapRoundBuffer, theCapRoundBuffer > {};
+
 
             Primitive3DSequence getLineCapRoundSegments(
                 sal_uInt32 nSegments,
                 const attribute::MaterialAttribute3D& rMaterial)
             {
-                // static data for buffered tube primitives
-                static Primitive3DSequence aLineCapRoundList;
-                static sal_uInt32 nLineCapRoundSegments(0);
-                static attribute::MaterialAttribute3D aLineMaterial;
-
-                // may exclusively change static data, use mutex
-                ::osl::Mutex m_mutex;
-
-                if(nSegments != nLineCapRoundSegments || !(rMaterial == aLineMaterial))
-                {
-                    nLineCapRoundSegments = nSegments;
-                    aLineMaterial = rMaterial;
-                    aLineCapRoundList = Primitive3DSequence();
-                }
-
-                if(!aLineCapRoundList.hasElements() && nLineCapRoundSegments)
-                {
-                    // calculate new horizontal segments
-                    sal_uInt32 nVerSeg(nSegments / 2);
-
-                    if(nVerSeg < 1)
-                    {
-                        nVerSeg = 1;
-                    }
-
-                    // create half-sphere; upper half of unit sphere
-                    basegfx::B3DPolyPolygon aSphere(
-                        basegfx::tools::createUnitSphereFillPolyPolygon(
-                            nSegments,
-                            nVerSeg,
-                            true,
-                            F_PI2, 0.0,
-                            0.0, F_2PI));
-                    const sal_uInt32 nCount(aSphere.count());
-
-                    if(nCount)
-                    {
-                        // rotate to have sphere cap orientned to negative X-Axis; do not
-                        // forget to transform normals, too
-                        basegfx::B3DHomMatrix aSphereTrans;
-
-                        aSphereTrans.rotate(0.0, 0.0, F_PI2);
-                        aSphere.transform(aSphereTrans);
-                        aSphere.transformNormals(aSphereTrans);
-
-                        // realloc for primitives and create based on polygon snippets
-                        aLineCapRoundList.realloc(nCount);
-
-                        for(sal_uInt32 a(0); a < nCount; a++)
-                        {
-                            const basegfx::B3DPolygon aPartPolygon(aSphere.getB3DPolygon(a));
-                            const basegfx::B3DPolyPolygon aPartPolyPolygon(aPartPolygon);
-
-                            // need to create one primitive per Polygon since the primitive
-                            // is for planar PolyPolygons which is definitely not the case here
-                            aLineCapRoundList[a] = new PolyPolygonMaterialPrimitive3D(
-                                aPartPolyPolygon,
-                                rMaterial,
-                                false);
-                        }
-                    }
-                }
-
-                return aLineCapRoundList;
+                // static data for buffered cap primitives
+                CapRoundBuffer &rTheBuffer = theCapRoundBuffer::get();
+                return rTheBuffer.getLineCapRoundSegments(nSegments, rMaterial);
             }
 
             Primitive3DSequence getLineJoinSegments(
