@@ -2107,8 +2107,8 @@ bool HTMLParser::ParseMetaOptionsImpl(
     if ( bHTTPEquiv || HTML_META_DESCRIPTION != nAction )
     {
         // if it is not a Description, remove CRs and LFs from CONTENT
-        aContent = comphelper::string::remove(aContent, _CR);
-        aContent = comphelper::string::remove(aContent, _LF);
+        aContent = comphelper::string::remove(aContent, '\r');
+        aContent = comphelper::string::remove(aContent, '\n');
     }
     else
     {

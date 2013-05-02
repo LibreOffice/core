@@ -107,9 +107,6 @@ inline void     DoubleToSVBT64( double n, SVBT64 p ) { p[0] = ((sal_uInt8*)&n)[7
 #endif
 #endif
 
-#define _LF     ((char)0x0A)
-#define _CR     ((char)0x0D)
-
 // pragmas
 
 #if defined _MSC_VER

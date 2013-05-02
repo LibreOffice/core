@@ -8134,7 +8134,7 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, sa
                     pLineInfo = aMultiLineInfo.GetLine( nFormatLines );
                     aLastLine = convertLineEnd(aStr.Copy(pLineInfo->GetIndex()), LINEEND_LF);
                     // replace line feed by space
-                    aLastLine = aLastLine.replace(_LF, ' ');
+                    aLastLine = aLastLine.replace('\n', ' ');
                     aLastLine = m_pReferenceDevice->GetEllipsisString( aLastLine, nWidth, nStyle );
                     nStyle &= ~(TEXT_DRAW_VCENTER | TEXT_DRAW_BOTTOM);
                     nStyle |= TEXT_DRAW_TOP;

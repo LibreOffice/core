@@ -1159,7 +1159,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         else
         {
             String aStr = aStrOut;
-            xub_StrLen nPos = aStr.Search( _LF );
+            xub_StrLen nPos = aStr.Search( '\n' );
             if ( nPos == STRING_NOTFOUND )
             {
                 OUT_STR( aStrOut );
@@ -1174,7 +1174,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
                     TAG_ON( OOO_STRING_SVTOOLS_HTML_linebreak );
                     nStartPos = nPos + 1;
                 }
-                while( ( nPos = aStr.Search( _LF, nStartPos ) ) != STRING_NOTFOUND );
+                while( ( nPos = aStr.Search( '\n', nStartPos ) ) != STRING_NOTFOUND );
                 String aSingleLine( aStr, nStartPos, aStr.Len() - nStartPos );
                 OUT_STR( aSingleLine );
             }

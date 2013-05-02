@@ -227,7 +227,7 @@ void SfxStringListItem::SetString( const XubString& rStr )
     XubString aStr(convertLineEnd(rStr, LINEEND_CR));
     do
     {
-        nDelimPos = aStr.Search( _CR, nStart );
+        nDelimPos = aStr.Search( '\r', nStart );
         xub_StrLen nLen;
         if ( nDelimPos == STRING_NOTFOUND )
             nLen = 0xffff;
