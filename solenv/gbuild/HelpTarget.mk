@@ -38,7 +38,7 @@ gb_HelpTranslatePartTarget_COMMAND := $(call gb_Executable_get_command,helpex)
 
 define gb_HelpTranslatePartTarget__command
 $(call gb_Output_announce,$(2),$(true),HPX,1)
-HELPFILES=$(call var2file,$(shell $(gb_MKTEMP)),100,$(filter %.xhp,$(3))) && \
+HELPFILES=$(call var2file,$(shell $(gb_MKTEMP)),100,$(sort $(filter %.xhp,$(3)))) && \
 $(call gb_Helper_abbreviate_dirs, \
 	$(if $(filter-out qtz,$(HELP_LANG)), \
 		POFILES=$(call var2file,$(shell $(gb_MKTEMP)),100,$(sort $(POFILES))) && \

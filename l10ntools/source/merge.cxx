@@ -188,6 +188,60 @@ OString MergeEntrys::GetQTZText(const ResData& rResData, const OString& rOrigTex
 }
 
 //
+// class MergeDataHashMap
+//
+
+std::pair<MergeDataHashMap::iterator,bool> MergeDataHashMap::insert(const OString& rKey, MergeData* pMergeData)
+{
+    std::pair<iterator,bool> aTemp = m_aHashMap.insert(HashMap_t::value_type( rKey, pMergeData ));
+    if( m_aHashMap.size() == 1 )
+    {
+        ///When first insert, set an iterator to the first element
+        aFirstInOrder = aTemp.first;
+    }
+    else
+    {
+        ///Define insertion order by setting an iterator to the next element.
+        aLastInsertion->second->m_aNextData = aTemp.first;
+    }
+    aLastInsertion = aTemp.first;
+    return aTemp;
+}
+
+MergeDataHashMap::iterator MergeDataHashMap::find(const OString& rKey)
+{
+    iterator aHint = m_aHashMap.end();
+
+    ///Add a hint
+    if( bFirstSearch && !m_aHashMap.empty() )
+    {
+        aHint = aFirstInOrder;
+    }
+    else if( aLastFound == aLastInsertion )
+    {
+        /// Next to the last element is the first element
+        aHint = aFirstInOrder;
+    }
+    else if( aLastFound != m_aHashMap.end() && aLastFound != aLastInsertion )
+    {
+        aHint = aLastFound->second->m_aNextData;
+    }
+
+    ///If hint works than no need for search
+    if( aHint != m_aHashMap.end() && aHint->first == rKey )
+    {
+        aLastFound = aHint;
+    }
+    else
+    {
+        aLastFound = m_aHashMap.find(rKey);
+    }
+
+    bFirstSearch = false;
+    return aLastFound;
+}
+
+//
 // class MergeData
 //
 
@@ -310,7 +364,8 @@ MergeDataFile::MergeDataFile(
             InsertEntry(
                 aActPo.getResourceType(), aActPo.getGroupId(),
                 aActPo.getLocalId(), sLang, sText,
-                sQHText, sTitle, aActPo.getSourceFile(), bCaseSensitive );
+                sQHText, sTitle, aActPo.getSourceFile(),
+                bFirstLang, bCaseSensitive );
 
             if( bFirstLang && bWithQtz &&
                 ( strcmp(getenv("ENABLE_RELEASE_BUILD"),"TRUE") ) )
@@ -321,7 +376,7 @@ MergeDataFile::MergeDataFile(
                     aActPo.getLocalId(), "qtz",
                     sExText, sExQHText,
                     sExTitle, aActPo.getSourceFile(),
-                    bCaseSensitive );
+                    false, bCaseSensitive );
             }
         }
         aPoInput.close();
@@ -357,11 +412,12 @@ MergeData *MergeDataFile::GetMergeData( ResData *pResData , bool bCaseSensitive 
 
     OString sKey = CreateKey( pResData->sResTyp , pResData->sGId , pResData->sId , pResData->sFilename , bCaseSensitive );
 
-    if(aMap.find( sKey ) != aMap.end())
+    MergeDataHashMap::const_iterator mit = aMap.find( sKey );
+    if(mit != aMap.end())
     {
         pResData->sGId = sOldG;
         pResData->sId = sOldL;
-        return aMap[ sKey ];
+        return mit->second;
     }
     pResData->sGId = sOldG;
     pResData->sId = sOldL;
@@ -391,23 +447,27 @@ void MergeDataFile::InsertEntry(
     const OString &rLID, const OString &nLANG,
     const OString &rTEXT, const OString &rQHTEXT,
     const OString &rTITLE, const OString &rInFilename,
-    bool bCaseSensitive )
+    bool bFirstLang, bool bCaseSensitive )
 {
-    MergeData *pData;
+    MergeData *pData = 0;
 
     // search for MergeData
     OString sKey = CreateKey(rTYP , rGID , rLID , rInFilename , bCaseSensitive);
-    MergeDataHashMap::const_iterator mit;
-    mit = aMap.find( sKey );
-    if( mit != aMap.end() )
+
+    if( !bFirstLang )
     {
-        pData = mit->second;
+        MergeDataHashMap::const_iterator mit = aMap.find( sKey );
+        if(mit != aMap.end())
+            pData = mit->second;
+
     }
-    else
+
+    if( !pData )
     {
         pData = new MergeData( rTYP, rGID, rLID, rInFilename );
-        aMap.insert( MergeDataHashMap::value_type( sKey, pData ) );
+        aMap.insert( sKey, pData );
     }
+
 
     // insert the cur string
     MergeEntrys *pMergeEntrys = pData->GetMergeEntries();

@@ -52,9 +52,6 @@ typedef boost::unordered_map<OString, OString, OStringHash>
 typedef boost::unordered_map<OString, bool, OStringHash>
     OStringBoolHashMap;
 
-typedef boost::unordered_map<OString, MergeData*, OStringHash>
-    MergeDataHashMap;
-
 #define SOURCE_LANGUAGE "en-US"
 #define X_COMMENT "x-comment"
 #define LIST_REFID  "LIST_REFID"
@@ -193,7 +190,6 @@ private:
     bool bSkipFile;
     sal_Bool bMergeMode;
     OString sMergeSrc;
-    OString sLastListLine;
     sal_Bool bError;                        // any errors while export?
     sal_Bool bReadOver;
     sal_Bool bDontWriteOutput;
@@ -219,8 +215,12 @@ private:
     void CleanValue( OString &rValue );
     OString GetText(const OString &rSource, int nToken);
 
-    sal_Bool PrepareTextToMerge(OString &rText, sal_uInt16 nTyp,
-        OString &rLangIndex, ResData *pResData);
+    /**
+      Get all MergeEntrys for the ExportList identified by pResData
+      Check whether list can merge and load all needed MergeEntry from DataBase.
+    */
+    bool GetAllMergeEntrysOfList(ResData *pResData, std::vector<MergeEntrys*>& o_vMergeEntrys, ExportList*& o_pList);
+
     void ResData2Output( MergeEntrys *pEntry, sal_uInt16 nType, const OString& rTextType );
     void MergeRest( ResData *pResData, sal_uInt16 nMode = MERGE_MODE_NORMAL );
     void ConvertMergeContent( OString &rText );
@@ -277,8 +277,54 @@ public:
         bTitleFirst[ rId ] = true;
     }
     sal_Bool GetText( OString &rReturn, sal_uInt16 nTyp, const OString &nLangIndex, sal_Bool bDel = sal_False );
+
+    /**
+      Generate QTZ string with ResData
+      For executable which works one language and without PO files.
+    */
     static OString GetQTZText(const ResData& rResData, const OString& rOrigText);
 
+};
+
+/** Container for MergeData
+
+  This class is an HashMap with a hidden insertion
+  order. The class can used just like a simple
+  HashMap, but good to know that it's use is
+  more effective if the accessing(find) order
+  match with the insertion order.
+
+  In the most case, this match is good.
+  (e.g. reading PO files of different languages,
+  executables merging)
+*/
+class MergeDataHashMap
+{
+    private:
+        typedef boost::unordered_map<OString, MergeData*, OStringHash> HashMap_t;
+
+    public:
+        MergeDataHashMap():bFirstSearch(true){};
+        ~MergeDataHashMap(){};
+
+        typedef HashMap_t::iterator iterator;
+        typedef HashMap_t::const_iterator const_iterator;
+
+        std::pair<iterator,bool> insert(const OString& rKey, MergeData* pMergeData);
+        iterator find(const OString& rKey);
+
+        iterator begin() {return m_aHashMap.begin();}
+        iterator end() {return m_aHashMap.end();}
+
+        const_iterator begin() const {return m_aHashMap.begin();}
+        const_iterator end() const {return m_aHashMap.end();}
+
+    private:
+        bool bFirstSearch;
+        iterator aLastInsertion;
+        iterator aLastFound;
+        iterator aFirstInOrder;
+        HashMap_t m_aHashMap;
 };
 
 //
@@ -293,12 +339,16 @@ class MergeDataFile;
 
 class MergeData
 {
+    friend class MergeDataHashMap;
+
 public:
     OString sTyp;
     OString sGID;
     OString sLID;
     OString sFilename;
     MergeEntrys* pMergeEntrys;
+private:
+    MergeDataHashMap::iterator m_aNextData;
 public:
     MergeData( const OString &rTyp, const OString &rGID, const OString &rLID , const OString &rFilename );
     ~MergeData();
@@ -326,7 +376,7 @@ class MergeDataFile
             const OString &rLID, const OString &nLang,
             const OString &rTEXT, const OString &rQHTEXT,
             const OString &rTITLE, const OString &sFilename,
-            bool bCaseSensitive);
+            bool bFirstLang, bool bCaseSensitive);
     public:
         explicit MergeDataFile(
             const OString &rFileName, const OString& rFile,

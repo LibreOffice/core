@@ -119,7 +119,6 @@ bool HelpParser::CreatePO(
     {
         posm = aXMLStrHM->find( *pos );
         pElem = posm->second;
-        OString sCur;
 
         pXMLElement = (*pElem)[ "en-US" ];
 
@@ -138,7 +137,7 @@ bool HelpParser::CreatePO(
         }
         else
         {
-            fprintf(stdout,"\nDBG: NullPointer in HelpParser::CreatePO, Language %s, File %s\n", sCur.getStr(), sHelpFile.getStr());
+            fprintf(stdout,"\nDBG: NullPointer in HelpParser::CreatePO, File %s\n", sHelpFile.getStr());
         }
     }
     aPoOutput.close();
@@ -174,17 +173,21 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile* pMergeDataFile 
     static  ResData pResData("","");
     pResData.sResTyp   = "help";
 
-    for(XMLHashMap::iterator pos=aXMLStrHM->begin();pos!=aXMLStrHM->end();++pos)    // Merge every l10n related string
-    {
+    std::vector<OString> order = file->getOrder();
+    std::vector<OString>::iterator pos;
+    XMLHashMap::iterator posm;
 
-        aLangHM             = pos->second;
+    for( pos = order.begin(); pos != order.end() ; ++pos ) // Merge every l10n related string in the same order as export
+    {
+        posm = aXMLStrHM->find( *pos );
+        aLangHM = posm->second;
 #if OSL_DEBUG_LEVEL > 2
         printf("*********************DUMPING HASHMAP***************************************");
         Dump(aXMLStrHM);
         printf("DBG: sHelpFile = %s\n",sHelpFile.getStr() );
 #endif
 
-        pResData.sGId      =  pos->first;
+        pResData.sGId      =  posm->first;
         pResData.sFilename  =  sHelpFile;
 
         ProcessHelp( aLangHM , sLanguage, &pResData , pMergeDataFile );

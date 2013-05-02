@@ -523,7 +523,7 @@ void XRMResMerge::WorkOnDesc(
 /*****************************************************************************/
 void XRMResMerge::WorkOnText(
     const OString &rOpenTag,
-    OString &rText
+    OString &
 )
 /*****************************************************************************/
 {
@@ -534,18 +534,6 @@ void XRMResMerge::WorkOnText(
             pResData = new ResData( GetGID(), sFilename );
             pResData->sResTyp = sResourceType;
         }
-
-        MergeEntrys *pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
-            if ( pEntrys ) {
-                OString sContent;
-                if ( !sLang.equalsIgnoreAsciiCase("en-US") &&
-                    ( pEntrys->GetText(
-                        sContent, STRING_TYP_TEXT, sLang )) && !sContent.isEmpty() &&
-                    helper::isWellFormedXML( sContent ))
-                {
-                    rText = sContent;
-                }
-            }
     }
 }
 

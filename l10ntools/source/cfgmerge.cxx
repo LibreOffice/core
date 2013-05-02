@@ -450,7 +450,7 @@ CfgMerge::~CfgMerge()
     delete pResData;
 }
 
-void CfgMerge::WorkOnText(OString &rText, const OString& rLangIndex)
+void CfgMerge::WorkOnText(OString &, const OString& rLangIndex)
 {
 
     if ( pMergeDataFile && bLocalize ) {
@@ -470,19 +470,8 @@ void CfgMerge::WorkOnText(OString &rText, const OString& rLangIndex)
             pResData->sResTyp = pStackData->sResTyp;
         }
 
-        if (rLangIndex.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("en-US")))
+        if (rLangIndex.equalsIgnoreAsciiCase("en-US"))
             bEnglish = sal_True;
-
-        MergeEntrys *pEntrys = pMergeDataFile->GetMergeEntrysCaseSensitive( pResData );
-        if ( pEntrys ) {
-            OString sContent;
-            pEntrys->GetText( sContent, STRING_TYP_TEXT, rLangIndex );
-
-            if ( !rLangIndex.equalsIgnoreAsciiCase("en-US") && !sContent.isEmpty())
-            {
-                rText = helper::QuotHTML( rText );
-            }
-        }
     }
 }
 
