@@ -348,14 +348,19 @@ ScExtIButton::ScExtIButton(Window* pParent, const ResId& rResId )
     SetDropDown( true);
 }
 
-void ScExtIButton::SetPopupMenu(ScPopupMenu* pPopUp)
+void ScExtIButton::SetPopupMenu(PopupMenu* pPopUp)
 {
     pPopupMenu=pPopUp;
 }
 
-sal_uInt16 ScExtIButton::GetSelected()
+sal_uInt16 ScExtIButton::GetSelected() const
 {
     return nSelected;
+}
+
+OString ScExtIButton::GetSelectedIdent() const
+{
+    return aSelectedIdent;
 }
 
 void ScExtIButton::MouseButtonDown( const MouseEvent& rMEvt )
@@ -368,6 +373,7 @@ void ScExtIButton::MouseButtonDown( const MouseEvent& rMEvt )
 
     ImageButton::MouseButtonDown(rMEvt );
 }
+
 void ScExtIButton::MouseButtonUp( const MouseEvent& rMEvt)
 {
     aTimer.Stop();
@@ -385,6 +391,7 @@ void ScExtIButton::Click()
 void ScExtIButton::StartPopup()
 {
     nSelected=0;
+    aSelectedIdent = OString();
 
     if(pPopupMenu!=NULL)
     {
@@ -393,12 +400,14 @@ void ScExtIButton::StartPopup()
         Point aPoint(0,0);
         aPoint.Y()=GetOutputSizePixel().Height();
 
-        nSelected=pPopupMenu->Execute( this, aPoint );
+        nSelected = pPopupMenu->Execute( this, aPoint );
 
         if(nSelected)
         {
+            aSelectedIdent = pPopupMenu->GetItemIdent(nSelected);
             aMLink.Call(this);
         }
+
         SetPressed( false);
     }
 }

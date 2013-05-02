@@ -98,9 +98,10 @@ class SC_DLLPUBLIC ScExtIButton : public ImageButton
 private:
 
     Timer           aTimer;
-    ScPopupMenu*    pPopupMenu;
+    PopupMenu*      pPopupMenu;
     Link            aMLink;
-    sal_uInt16          nSelected;
+    sal_uInt16      nSelected;
+    OString         aSelectedIdent;
 
     SC_DLLPRIVATE  DECL_LINK( TimerHdl, void*);
 
@@ -116,9 +117,10 @@ public:
 
     ScExtIButton(Window* pParent, const ResId& rResId );
 
-    void            SetPopupMenu(ScPopupMenu* pPopUp);
+    void            SetPopupMenu(PopupMenu* pPopUp);
 
-    sal_uInt16          GetSelected();
+    sal_uInt16      GetSelected() const;
+    OString         GetSelectedIdent() const;
 
     void            SetMenuHdl( const Link& rLink ) { aMLink = rLink; }
     const Link&     GetMenuHdl() const { return aMLink; }
