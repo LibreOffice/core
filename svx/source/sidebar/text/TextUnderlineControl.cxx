@@ -95,7 +95,7 @@ void TextUnderlineControl::initial()
     Link aLink = LINK( this, TextUnderlineControl, PBClickHdl ) ;
     maPBOptions.SetClickHdl(aLink);
 
-    maVSUnderline.SetStyle( maVSUnderline.GetStyle()| WB_3DLOOK |  WB_NO_DIRECTSELECT  );// WB_NAMEFIELD | WB_ITEMBORDER |WB_DOUBLEBORDER | WB_NONEFIELD |
+    maVSUnderline.SetStyle( maVSUnderline.GetStyle()| WB_3DLOOK | WB_NO_DIRECTSELECT );
 
     maVSUnderline.InsertItem(1, maIMGSingle ,String(SVX_RES(STR_SINGLE)));
     maVSUnderline.SetItemData(1, (void*)(sal_uInt64)UNDERLINE_SINGLE);
@@ -135,10 +135,7 @@ void TextUnderlineControl::initial()
     maVSUnderline.Show();
 }
 
-void TextUnderlineControl::GetFocus()
-{
-    maVSUnderline.GrabFocus();
-}
+
 void TextUnderlineControl::Rearrange(FontUnderline eLine)
 {
     // high contrast
@@ -213,14 +210,8 @@ void TextUnderlineControl::Rearrange(FontUnderline eLine)
     }
     maVSUnderline.StartSelection();
 }
-ValueSet& TextUnderlineControl::GetValueSet()
-{
-    return maVSUnderline;
-}
-Control& TextUnderlineControl::GetPB()
-{
-    return maPBOptions;
-}
+
+
 IMPL_LINK(TextUnderlineControl, VSSelectHdl, void *, pControl)
 {
     if(pControl == &maVSUnderline)

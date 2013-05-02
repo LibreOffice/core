@@ -42,10 +42,8 @@ public:
         Window* pParent,
         svx::sidebar::TextPropertyPanel& rPanel,
         SfxBindings* pBindings);
-    void GetFocus();
     void Rearrange(FontUnderline eLine);
-    ValueSet& GetValueSet();
-    Control& GetPB();
+
 private:
     svx::sidebar::TextPropertyPanel&     mrTextPropertyPanel;
     SfxBindings*        mpBindings;
