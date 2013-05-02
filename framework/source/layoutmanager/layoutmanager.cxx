@@ -269,7 +269,7 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
             OUString aOldModuleIdentifier( aModuleIdentifier );
             try
             {
-                aModuleIdentifier = m_xModuleManager->identify( Reference< XInterface >( xFrame, UNO_QUERY ) );
+                aModuleIdentifier = m_xModuleManager->identify( xFrame );
             }
             catch( const Exception& ) {}
 

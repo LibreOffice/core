@@ -223,8 +223,7 @@ Reference< XStorage > DocumentStorageAccess::impl_openSubStorage_nothrow( const 
             sal_Int32 nRealMode = m_pModelImplementation->m_bDocumentReadOnly ? ElementModes::READ : _nDesiredMode;
             if ( nRealMode == ElementModes::READ )
             {
-                Reference< XNameAccess > xSubStorageNames( xRootStorage, UNO_QUERY );
-                if ( xSubStorageNames.is() && !xSubStorageNames->hasByName( _rStorageName ) )
+                if ( xRootStorage.is() && !xRootStorage->hasByName( _rStorageName ) )
                     return xStorage;
             }
 
@@ -331,8 +330,7 @@ Sequence< OUString > SAL_CALL DocumentStorageAccess::getDocumentSubStoragesNames
 
     ::std::vector< OUString > aNames;
 
-    Reference< XNameAccess > xNames( xRootStor, UNO_QUERY_THROW );
-    Sequence< OUString > aElementNames( xNames->getElementNames() );
+    Sequence< OUString > aElementNames( xRootStor->getElementNames() );
     for ( sal_Int32 i=0; i<aElementNames.getLength(); ++i )
     {
         if ( xRootStor->isStorageElement( aElementNames[i] ) )

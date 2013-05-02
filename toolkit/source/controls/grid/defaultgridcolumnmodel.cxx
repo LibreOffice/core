@@ -187,8 +187,7 @@ namespace toolkit
         // dispose the removed column
         try
         {
-            Reference< XComponent > const xColComp( xColumn, UNO_QUERY_THROW );
-            xColComp->dispose();
+            xColumn->dispose();
         }
         catch( const Exception& )
         {

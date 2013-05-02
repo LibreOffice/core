@@ -286,9 +286,6 @@ void XMLTextMarkImportContext::EndElement()
                             // create a file with subsequence
                             // start/end elements
 
-                            Reference<XTextRange> xInsertionRange(
-                                xInsertionCursor, UNO_QUERY);
-
                             bool bImportAsField=((lcl_MarkType)nTmp==TypeFieldmarkEnd && m_rHelper.hasCurrentFieldCtx());
 
                             // insert reference
@@ -296,7 +293,7 @@ void XMLTextMarkImportContext::EndElement()
                                 CreateAndInsertMark(GetImport(),
                                                 (bImportAsField?sAPI_fieldmark:sAPI_bookmark),
                                     m_sBookmarkName,
-                                    xInsertionRange,
+                                    xInsertionCursor,
                                     m_sXmlId) );
                             if (pRDFaAttributes)
                             {

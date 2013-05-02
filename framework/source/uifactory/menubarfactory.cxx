@@ -147,7 +147,7 @@ void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
 
         if ( !bHasSettings )
         {
-            OUString aModuleIdentifier = _xModuleManager->identify( Reference< XInterface >( xFrame, UNO_QUERY ));
+            OUString aModuleIdentifier = _xModuleManager->identify( xFrame );
             if ( !aModuleIdentifier.isEmpty() )
             {
                 Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier =

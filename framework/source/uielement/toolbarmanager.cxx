@@ -1969,7 +1969,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
                                         try
                                         {
                                             xItemContainer->replaceByIndex( i, makeAny( aProp ));
-                                            xUIElementSettings->setSettings( Reference< XIndexAccess >( xItemContainer, UNO_QUERY ));
+                                            xUIElementSettings->setSettings( xItemContainer );
                                             Reference< XPropertySet > xPropSet( xUIElementSettings, UNO_QUERY );
                                             if ( xPropSet.is() )
                                             {

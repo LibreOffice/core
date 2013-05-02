@@ -174,7 +174,6 @@ WorksheetBuffer::IndexNamePair WorksheetBuffer::createSheet( const OUString& rPr
     {
         Reference< XSpreadsheets > xSheets( getDocument()->getSheets(), UNO_QUERY_THROW );
         Reference< XIndexAccess > xSheetsIA( xSheets, UNO_QUERY_THROW );
-        Reference< XNameAccess > xSheetsNA( xSheets, UNO_QUERY_THROW );
         sal_Int16 nCalcSheet = -1;
         OUString aSheetName = rPreferredName.isEmpty() ? "Sheet" : rPreferredName;
         PropertySet aPropSet;
@@ -185,7 +184,7 @@ WorksheetBuffer::IndexNamePair WorksheetBuffer::createSheet( const OUString& rPr
             Reference< XNamed > xSheetName( xSheetsIA->getByIndex( nSheetPos ), UNO_QUERY_THROW );
             if( xSheetName->getName() != aSheetName )
             {
-                aSheetName = ContainerHelper::getUnusedName( xSheetsNA, aSheetName, ' ' );
+                aSheetName = ContainerHelper::getUnusedName( xSheets, aSheetName, ' ' );
                 xSheetName->setName( aSheetName );
             }
             aPropSet.set( xSheetName );
@@ -194,7 +193,7 @@ WorksheetBuffer::IndexNamePair WorksheetBuffer::createSheet( const OUString& rPr
         {
             nCalcSheet = static_cast< sal_Int16 >( xSheetsIA->getCount() );
             // new sheet - insert with unused name
-            aSheetName = ContainerHelper::getUnusedName( xSheetsNA, aSheetName, ' ' );
+            aSheetName = ContainerHelper::getUnusedName( xSheets, aSheetName, ' ' );
             xSheets->insertNewByName( aSheetName, nCalcSheet );
             aPropSet.set( xSheetsIA->getByIndex( nCalcSheet ) );
         }

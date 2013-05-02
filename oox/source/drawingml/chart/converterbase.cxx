@@ -24,6 +24,7 @@
 #include <com/sun/star/chart/XAxisZSupplier.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/XSecondAxisTitleSupplier.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
 #include <com/sun/star/chart2/XTitle2.hpp>
@@ -88,7 +89,7 @@ void TitleLayoutInfo::convertTitlePos( ConverterRoot& rRoot, const Reference< cs
     if( mxTitle.is() && mpGetShape ) try
     {
         // try to get the title shape
-        Reference< XShape > xTitleShape( mpGetShape( rxChart1Doc ), UNO_SET_THROW );
+        Reference< XShape > xTitleShape = mpGetShape( rxChart1Doc );
         // get title rotation angle, needed for correction of position of top-left edge
         double fAngle = mxTitle->getTextRotation();
         // convert the position
@@ -181,8 +182,7 @@ ConverterData::ConverterData(
     // lock the model to suppress internal updates during conversion
     try
     {
-        Reference< XModel > xModel( mxDoc, UNO_QUERY_THROW );
-        xModel->lockControllers();
+        mxDoc->lockControllers();
     }
     catch( Exception& )
     {
@@ -202,8 +202,7 @@ ConverterData::~ConverterData()
     // unlock the model
     try
     {
-        Reference< XModel > xModel( mxDoc, UNO_QUERY_THROW );
-        xModel->unlockControllers();
+        mxDoc->unlockControllers();
     }
     catch( Exception& )
     {

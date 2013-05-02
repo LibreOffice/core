@@ -392,7 +392,7 @@ Reference<XResource> PresenterViewFactory::CreateView(
         xView = NULL;
     }
 
-    return Reference<XResource>(xView, UNO_QUERY);
+    return xView;
 }
 
 Reference<XView> PresenterViewFactory::CreateSlideShowView(

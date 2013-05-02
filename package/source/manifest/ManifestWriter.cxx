@@ -55,8 +55,7 @@ void SAL_CALL ManifestWriter::writeManifestSequence( const Reference< XOutputStr
     Reference < XWriter > xSource = Writer::create( m_xContext );
     xSource->setOutputStream ( rStream );
     try {
-        Reference < XDocumentHandler > xHandler ( xSource, UNO_QUERY );
-        ManifestExport( xHandler, rSequence);
+        ManifestExport( xSource, rSequence);
     }
     catch( SAXException& )
     {

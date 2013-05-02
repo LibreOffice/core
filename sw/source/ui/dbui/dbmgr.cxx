@@ -2281,7 +2281,6 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
         {
             Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
             Reference<XDatabaseContext> xDBContext = DatabaseContext::create(xContext);
-            Reference<XSingleServiceFactory> xFact( xDBContext, UNO_QUERY);
 
             String sNewName = INetURLObject::decode( aURL.getName(),
                                                      INET_HEX_ESCAPE,
@@ -2308,7 +2307,7 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
             }
             else
             {
-                xNewInstance = xFact->createInstance();
+                xNewInstance = xDBContext->createInstance();
                 Reference<XPropertySet> xDataProperties(xNewInstance, UNO_QUERY);
 
                 if(aURLAny.hasValue())
@@ -2346,8 +2345,7 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
                 }
                 xStore->storeAsURL(sTmpName, Sequence< PropertyValue >());
             }
-            Reference<XNamingService> xNaming(xDBContext, UNO_QUERY);
-            xNaming->registerObject( sFind, xNewInstance );
+            xDBContext->registerObject( sFind, xNewInstance );
 
         }
         catch(const Exception&)

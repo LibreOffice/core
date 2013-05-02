@@ -1102,7 +1102,7 @@ namespace svxform
                 GetNavModel()->GetRootList()->remove( pCurrentUserData );
 
             // aus dem Container entfernen
-            sal_Int32 nIndex = getElementPos(Reference< XIndexAccess > (xContainer, UNO_QUERY), xCurrentChild);
+            sal_Int32 nIndex = getElementPos(xContainer, xCurrentChild);
             GetNavModel()->m_pPropChangeList->Lock();
             // die Undo-Action fuer das Rausnehmen
             if ( bUndo && GetNavModel()->m_pPropChangeList->CanUndo())
@@ -1400,7 +1400,7 @@ namespace svxform
         if( pFormShell )
         {
             InterfaceBag aSelection;
-            aSelection.insert( Reference< XInterface >( xNewForm, UNO_QUERY ) );
+            aSelection.insert( xNewForm );
             pFormShell->GetImpl()->setCurrentSelection( aSelection );
 
             pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_PROPERTIES,sal_True,sal_True);

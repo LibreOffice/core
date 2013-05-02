@@ -252,8 +252,7 @@ namespace svx
             // to prevent the controller from displaying any error messages which happen while we operate on it,
             // we add ourself as XSQLErrorListener. By contract, a FormController displays errors if and only if
             // no SQLErrorListeners are registered.
-            Reference< XSQLErrorBroadcaster > xErrorBroadcast( _rxController, UNO_QUERY_THROW );
-            xErrorBroadcast->addSQLErrorListener( this );
+            _rxController->addSQLErrorListener( this );
         }
         catch( const Exception& )
         {

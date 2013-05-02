@@ -287,7 +287,7 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
             Reference< XIndexContainer >  xOldParent(xMeAsFormComp->getParent(), UNO_QUERY);
             if (xOldParent.is())
             {
-                sal_Int32 nPos = getElementPos(Reference< XIndexAccess > (xOldParent, UNO_QUERY), xMeAsFormComp);
+                sal_Int32 nPos = getElementPos(xOldParent, xMeAsFormComp);
                 if (nPos > -1)
                     xOldParent->removeByIndex(nPos);
             }
@@ -586,7 +586,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
     }
     while ( nTokIndex >= 0 );
 
-    return Reference< XInterface > (xDestContainer, UNO_QUERY);
+    return xDestContainer;
 }
 
 //------------------------------------------------------------------

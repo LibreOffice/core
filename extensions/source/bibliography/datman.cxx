@@ -90,10 +90,10 @@ Reference< XConnection > getConnection(const OUString& _rURL)
     Reference< XDatabaseContext >  xNamingContext = DatabaseContext::create(xContext);
     if (xNamingContext->hasByName(_rURL))
     {
-        DBG_ASSERT(Reference< XNamingService > (xNamingContext, UNO_QUERY).is(), "::getDataSource : no NamingService interface on the sdb::DatabaseAccessContext !");
+        DBG_ASSERT(xNamingContext.is(), "::getDataSource : no NamingService interface on the sdb::DatabaseAccessContext !");
         try
         {
-            xDataSource = Reference< XDataSource > (Reference< XNamingService > (xNamingContext, UNO_QUERY)->getRegisteredObject(_rURL), UNO_QUERY);
+            xDataSource = Reference< XDataSource > (xNamingContext->getRegisteredObject(_rURL), UNO_QUERY);
         }
         catch (const Exception&)
         {

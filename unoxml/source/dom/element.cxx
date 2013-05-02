@@ -575,13 +575,13 @@ namespace DOM
         Reference< XMutationEvent > event(docevent->createEvent(
             "DOMAttrModified"), UNO_QUERY);
         event->initMutationEvent("DOMAttrModified",
-            sal_True, sal_False, Reference< XNode >(xAttr, UNO_QUERY),
+            sal_True, sal_False, xAttr,
             OUString(), xAttr->getValue(), xAttr->getName(),
             AttrChangeType_ADDITION);
 
         guard.clear(); // release mutex before calling event handlers
 
-        dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
+        dispatchEvent(event);
         dispatchSubtreeModified();
 
         return xAttr;
@@ -645,7 +645,7 @@ namespace DOM
             oldValue, value, name, aChangeType);
 
         guard.clear(); // release mutex before calling event handlers
-        dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
+        dispatchEvent(event);
         dispatchSubtreeModified();
     }
 
@@ -727,7 +727,7 @@ namespace DOM
             oldValue, value, qualifiedName, aChangeType);
 
         guard.clear(); // release mutex before calling event handlers
-        dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
+        dispatchEvent(event);
         dispatchSubtreeModified();
     }
 

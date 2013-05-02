@@ -159,7 +159,7 @@ EvaluationContext Model::getEvaluationContext()
         xElement = Reference<XNode>(
                        xInstance->createElement( "instanceData" ),
                        UNO_QUERY_THROW );
-        Reference<XNode>( xInstance, UNO_QUERY_THROW)->appendChild( xElement );
+        xInstance->appendChild( xElement );
     }
 
     OSL_ENSURE( xElement.is() &&

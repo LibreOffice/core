@@ -295,8 +295,7 @@ void SAL_CALL NameContainer::addContainerListener( const Reference< XContainerLi
         throw RuntimeException("addContainerListener called with null xListener",
                                static_cast< cppu::OWeakObject * >(this));
     }
-    Reference< XInterface > xIface( xListener, UNO_QUERY );
-    maContainerListeners.addInterface( xIface );
+    maContainerListeners.addInterface( xListener );
 }
 
 void SAL_CALL NameContainer::removeContainerListener( const Reference< XContainerListener >& xListener )
@@ -306,8 +305,7 @@ void SAL_CALL NameContainer::removeContainerListener( const Reference< XContaine
     {
         throw RuntimeException();
     }
-    Reference< XInterface > xIface( xListener, UNO_QUERY );
-    maContainerListeners.removeInterface( xIface );
+    maContainerListeners.removeInterface( xListener );
 }
 
 // Methods XChangesNotifier
@@ -318,8 +316,7 @@ void SAL_CALL NameContainer::addChangesListener( const Reference< XChangesListen
     {
         throw RuntimeException();
     }
-    Reference< XInterface > xIface( xListener, UNO_QUERY );
-    maChangesListeners.addInterface( xIface );
+    maChangesListeners.addInterface( xListener );
 }
 
 void SAL_CALL NameContainer::removeChangesListener( const Reference< XChangesListener >& xListener )
@@ -329,8 +326,7 @@ void SAL_CALL NameContainer::removeChangesListener( const Reference< XChangesLis
     {
         throw RuntimeException();
     }
-    Reference< XInterface > xIface( xListener, UNO_QUERY );
-    maChangesListeners.removeInterface( xIface );
+    maChangesListeners.removeInterface( xListener );
 }
 
 //============================================================================
@@ -2969,8 +2965,7 @@ void SAL_CALL SfxLibraryContainer::broadcastVBAScriptEvent( sal_Int32 nIdentifie
     leaveMethod();
 
     Reference< XModel > xModel = mxOwnerDocument;  // weak-ref -> ref
-    Reference< XInterface > xSender( xModel, UNO_QUERY_THROW );
-    vba::VBAScriptEvent aEvent( xSender, nIdentifier, rModuleName );
+    vba::VBAScriptEvent aEvent( xModel, nIdentifier, rModuleName );
     maVBAScriptListeners.notify( aEvent );
 }
 

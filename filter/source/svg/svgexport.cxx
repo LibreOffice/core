@@ -1216,8 +1216,7 @@ void SVGFilter::implExportTextShapeIndex()
         {
             OUString sTextShapeIdList = mTextShapeIdListMap[xDrawPage].trim();
 
-            Reference< XInterface > xRef( xDrawPage, UNO_QUERY );
-            const OUString& rPageId = implGetValidIDFromInterface( xRef );
+            const OUString& rPageId = implGetValidIDFromInterface( xDrawPage );
             if( !rPageId.isEmpty() && !sTextShapeIdList.isEmpty() )
             {
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrSlide, rPageId  );
@@ -1770,8 +1769,7 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
                     }
 
 
-                    Reference< XInterface > xRef( rxShape, UNO_QUERY );
-                    const OUString& rShapeId = implGetValidIDFromInterface( xRef );
+                    const OUString& rShapeId = implGetValidIDFromInterface( rxShape );
                     if( !rShapeId.isEmpty() )
                     {
                         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", rShapeId );
@@ -1836,10 +1834,8 @@ sal_Bool SVGFilter::implCreateObjects()
             mCreateOjectsCurrentMasterPage = xMasterPage;
             implCreateObjectsFromBackground( xMasterPage );
 
-            Reference< XShapes > xShapes( xMasterPage, UNO_QUERY );
-
-            if( xShapes.is() )
-                implCreateObjectsFromShapes( xMasterPage, xShapes );
+            if( xMasterPage.is() )
+                implCreateObjectsFromShapes( xMasterPage, xMasterPage );
         }
     }
 
@@ -1871,10 +1867,9 @@ sal_Bool SVGFilter::implCreateObjects()
                 }
             }
 #endif
-            Reference< XShapes > xShapes( xDrawPage, UNO_QUERY );
 
-            if( xShapes.is() )
-                implCreateObjectsFromShapes( xDrawPage, xShapes );
+            if( xDrawPage.is() )
+                implCreateObjectsFromShapes( xDrawPage, xDrawPage );
         }
     }
     return sal_True;
@@ -1956,8 +1951,7 @@ sal_Bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & r
                                 {
                                     // We create a map of text shape ids.
                                     implRegisterInterface( rxShape );
-                                    Reference< XInterface > xRef( rxShape, UNO_QUERY );
-                                    const OUString& rShapeId = implGetValidIDFromInterface( xRef );
+                                    const OUString& rShapeId = implGetValidIDFromInterface( rxShape );
                                     if( !rShapeId.isEmpty() )
                                     {
                                         mTextShapeIdListMap[rxPage] += rShapeId;

@@ -2332,11 +2332,10 @@ IMPL_LINK_NOARG(SfxHelpTextWindow_Impl, SelectHdl)
             {
                 // create descriptor, set string and find all words
                 Reference < XSearchDescriptor > xSrchDesc = xSearchable->createSearchDescriptor();
-                Reference < XPropertySet > xPropSet( xSrchDesc, UNO_QUERY );
-                xPropSet->setPropertyValue( "SearchRegularExpression",
+                xSrchDesc->setPropertyValue( "SearchRegularExpression",
                                             makeAny( sal_Bool( sal_True ) ) );
                 if ( bIsFullWordSearch )
-                    xPropSet->setPropertyValue( "SearchWords",
+                    xSrchDesc->setPropertyValue( "SearchWords",
                                                 makeAny( sal_Bool( sal_True ) ) );
 
                 String sSearchString = sfx2::PrepareSearchString( aSearchText, GetBreakIterator(), false );
@@ -2394,10 +2393,9 @@ IMPL_LINK( SfxHelpTextWindow_Impl, FindHdl, sfx2::SearchDialog*, pDlg )
             {
                 // create descriptor, set string and find all words
                 Reference < XSearchDescriptor > xSrchDesc = xSearchable->createSearchDescriptor();
-                Reference < XPropertySet > xPropSet( xSrchDesc, UNO_QUERY );
-                xPropSet->setPropertyValue( "SearchWords", makeAny( sal_Bool( pDlg->IsOnlyWholeWords() != false ) ) );
-                xPropSet->setPropertyValue( "SearchCaseSensitive", makeAny( sal_Bool( pDlg->IsMarchCase() != false ) ) );
-                xPropSet->setPropertyValue( "SearchBackwards", makeAny( sal_Bool( pDlg->IsSearchBackwards() != false ) ) );
+                xSrchDesc->setPropertyValue( "SearchWords", makeAny( sal_Bool( pDlg->IsOnlyWholeWords() != false ) ) );
+                xSrchDesc->setPropertyValue( "SearchCaseSensitive", makeAny( sal_Bool( pDlg->IsMarchCase() != false ) ) );
+                xSrchDesc->setPropertyValue( "SearchBackwards", makeAny( sal_Bool( pDlg->IsSearchBackwards() != false ) ) );
                 xSrchDesc->setSearchString( sSearchText );
                 Reference< XInterface > xSelection;
                 Reference< XTextRange > xCursor = getCursor();

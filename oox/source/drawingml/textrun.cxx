@@ -116,7 +116,7 @@ sal_Int32 TextRun::insertAt(
                         if ( nIndex >= getText().getLength() )
                             break;
 
-                        xStart = Reference< XTextRange >( xAt, UNO_QUERY );
+                        xStart = xAt;
                         aPropSet = PropertySet( xStart );
                         aTextCharacterProps.pushToPropSet( aPropSet, rFilterBase );
                     }
@@ -136,8 +136,7 @@ sal_Int32 TextRun::insertAt(
                 PropertySet aFieldProps( xField );
                 aFieldProps.setProperties( maTextCharacterProperties.maHyperlinkPropertyMap );
                 aFieldProps.setProperty( PROP_Representation, getText() );
-                Reference< XTextContent > xContent( xField, UNO_QUERY);
-                xText->insertTextContent( xStart, xContent, sal_False );
+                xText->insertTextContent( xStart, xField, sal_False );
 
                 xTextFieldCursor->gotoEnd( sal_True );
 
@@ -146,8 +145,7 @@ sal_Int32 TextRun::insertAt(
                 if ( !maTextCharacterProperties.moUnderline.has() )
                     aTextCharacterProps.moUnderline.set( XML_sng );
 
-                Reference< XTextRange > xFieldRange( xTextFieldCursor, UNO_QUERY );
-                PropertySet aFieldTextPropSet( xFieldRange );
+                PropertySet aFieldTextPropSet( xTextFieldCursor );
                 aTextCharacterProps.pushToPropSet( aFieldTextPropSet, rFilterBase );
 
                 oox::core::TextField aTextField;

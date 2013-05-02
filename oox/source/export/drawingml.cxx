@@ -843,7 +843,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIs
         Reference< XTextField > rXTextField;
         GET( rXTextField, TextField );
         if( rXTextField.is() )
-            rXPropSet.set( rXTextField, UNO_QUERY );
+            rRun.set( rXTextField, UNO_QUERY );
     }
 
     // field properties starts here

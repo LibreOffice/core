@@ -276,8 +276,7 @@ ColumnInfoCache::ColumnInfoCache( const Reference< XColumnsSupplier >& _rxColSup
     {
         m_aColumns.clear();
 
-        Reference< XColumnsSupplier > xSupplyCols( _rxColSupplier, UNO_SET_THROW );
-        Reference< XIndexAccess > xColumns( xSupplyCols->getColumns(), UNO_QUERY_THROW );
+        Reference< XIndexAccess > xColumns( _rxColSupplier->getColumns(), UNO_QUERY_THROW );
         sal_Int32 nColumnCount = xColumns->getCount();
         m_aColumns.reserve( nColumnCount );
 
@@ -354,8 +353,6 @@ void ColumnInfoCache::initializeControls( const Sequence< Reference< XControl > 
 
             lcl_resetColumnControlInfo( *col );
 
-            Reference< XInterface > xNormColumn( col->xColumn, UNO_QUERY_THROW );
-
             const Reference< XControl >* pControl( _rControls.getConstArray() );
             const Reference< XControl >* pControlEnd( pControl + _rControls.getLength() );
             for ( ; pControl != pControlEnd; ++pControl )
@@ -377,7 +374,7 @@ void ColumnInfoCache::initializeControls( const Sequence< Reference< XControl > 
                     {
                         Reference< XPropertySet > xGridColumnModel( xGridColAccess->getByIndex( gridCol ), UNO_QUERY_THROW );
 
-                        if  (   !lcl_isBoundTo( xGridColumnModel, xNormColumn )
+                        if  (   !lcl_isBoundTo( xGridColumnModel, col->xColumn )
                             ||  !lcl_isInputRequired( xGridColumnModel )
                             )
                             continue;   // with next grid column
@@ -397,7 +394,7 @@ void ColumnInfoCache::initializeControls( const Sequence< Reference< XControl > 
                 }
 
                 if  (   !xModelPSI->hasPropertyByName( FM_PROP_BOUNDFIELD )
-                    ||  !lcl_isBoundTo( xModel, xNormColumn )
+                    ||  !lcl_isBoundTo( xModel, col->xColumn )
                     ||  !lcl_isInputRequired( xModel )
                     )
                     continue;   // with next control
@@ -2019,8 +2016,7 @@ void FormController::addToEventAttacher(const Reference< XControl > & xControl)
             m_xModelAsIndex->getByIndex(--nPos) >>= xTemp;
             if ((XFormComponent*)xComp.get() == (XFormComponent*)xTemp.get())
             {
-                Reference< XInterface >  xIfc(xControl, UNO_QUERY);
-                m_xModelAsManager->attach( nPos, xIfc, makeAny(xControl) );
+                m_xModelAsManager->attach( nPos, xControl, makeAny(xControl) );
                 break;
             }
         }
@@ -2047,8 +2043,7 @@ void FormController::removeFromEventAttacher(const Reference< XControl > & xCont
             m_xModelAsIndex->getByIndex(--nPos) >>= xTemp;
             if ((XFormComponent*)xComp.get() == (XFormComponent*)xTemp.get())
             {
-                Reference< XInterface >  xIfc(xControl, UNO_QUERY);
-                m_xModelAsManager->detach( nPos, xIfc );
+                m_xModelAsManager->detach( nPos, xControl );
                 break;
             }
         }
@@ -3055,8 +3050,7 @@ void SAL_CALL FormController::addChildController( const Reference< XFormControll
         m_xModelAsIndex->getByIndex(--nPos) >>= xTemp;
         if ( xFormOfChild == xTemp )
         {
-            Reference< XInterface >  xIfc( _ChildController, UNO_QUERY );
-            m_xModelAsManager->attach( nPos, xIfc, makeAny( _ChildController) );
+            m_xModelAsManager->attach( nPos, _ChildController, makeAny( _ChildController) );
             break;
         }
     }

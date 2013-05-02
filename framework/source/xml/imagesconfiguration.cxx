@@ -90,8 +90,7 @@ sal_Bool ImagesConfiguration::StoreImages(
 
     try
     {
-        Reference< XDocumentHandler > xHandler( xWriter, UNO_QUERY_THROW );
-        OWriteImagesDocumentHandler aWriteImagesDocumentHandler( rItems, xHandler );
+        OWriteImagesDocumentHandler aWriteImagesDocumentHandler( rItems, xWriter );
         aWriteImagesDocumentHandler.WriteImagesDocument();
         return sal_True;
     }

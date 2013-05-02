@@ -262,9 +262,8 @@ void XclImpChRoot::InitConversion( const Reference<XChartDocument>& xChartDoc, c
     mxChData->InitConversion( GetRoot(), xChartDoc, rChartRect );
 
     // lock the model to suppress any internal updates
-    Reference< XModel > xModel( xChartDoc, UNO_QUERY );
-    if( xModel.is() )
-        xModel->lockControllers();
+    if( xChartDoc.is() )
+        xChartDoc->lockControllers();
 
     SfxObjectShell* pDocShell = GetDocShell();
     Reference< XDataReceiver > xDataRec( xChartDoc, UNO_QUERY );

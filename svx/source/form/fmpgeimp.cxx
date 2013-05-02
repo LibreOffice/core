@@ -440,14 +440,13 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
             OUString sName = String( SVX_RES( RID_STR_STDFORMNAME ) );
             xFormProps->setPropertyValue( FM_PROP_NAME, makeAny( sName ) );
 
-            Reference< XIndexContainer > xContainer( xForms, UNO_QUERY );
             if( pModel->IsUndoEnabled() )
             {
                 pModel->AddUndo(new FmUndoContainerAction(*(FmFormModel*)pModel,
                                                            FmUndoContainerAction::Inserted,
-                                                           xContainer,
+                                                           xForms,
                                                            xForm,
-                                                           xContainer->getCount()));
+                                                           xForms->getCount()));
             }
             xForms->insertByName( sName, makeAny( xForm ) );
             xCurrentForm = xForm;
@@ -649,8 +648,7 @@ OUString FmFormPageImpl::setUniqueName(const Reference< XFormComponent > & xForm
 #if OSL_DEBUG_LEVEL > 0
     try
     {
-        Reference< XChild > xChild( xFormComponent, UNO_QUERY_THROW );
-        OSL_ENSURE( !xChild->getParent().is(), "FmFormPageImpl::setUniqueName: to be called before insertion!" );
+        OSL_ENSURE( !xFormComponent->getParent().is(), "FmFormPageImpl::setUniqueName: to be called before insertion!" );
     }
     catch( const Exception& )
     {

@@ -1603,7 +1603,7 @@ IMPL_LINK_NOARG(SvtDocumentTemplateDialog , OrganizerHdl_Impl)
     Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
     Reference < XFrame > xFrame( xDesktop->getActiveFrame() );
     if ( !xFrame.is() )
-        xFrame = Reference < XFrame >( xDesktop, UNO_QUERY );
+        xFrame = xDesktop;
 
     com::sun::star::util::URL aTargetURL;
     aTargetURL.Complete = "slot:5540";

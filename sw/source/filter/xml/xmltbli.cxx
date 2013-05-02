@@ -1403,7 +1403,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
 
         try
         {
-            xTextContent = Reference< XTextContent >( xTable, UNO_QUERY );
+            xTextContent = xTable;
             GetImport().GetTextImport()->InsertTextContent( xTextContent );
         }
         catch( IllegalArgumentException& )

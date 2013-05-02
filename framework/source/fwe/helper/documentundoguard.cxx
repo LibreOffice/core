@@ -56,7 +56,7 @@ namespace framework
     {
     public:
         UndoManagerContextListener( const Reference< XUndoManager >& i_undoManager )
-            :m_xUndoManager( i_undoManager, UNO_QUERY_THROW )
+            :m_xUndoManager( i_undoManager )
             ,m_nRelativeContextDepth( 0 )
             ,m_documentDisposed( false )
         {

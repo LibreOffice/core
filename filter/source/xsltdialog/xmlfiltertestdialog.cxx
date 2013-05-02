@@ -630,11 +630,10 @@ void XMLFilterTestDialog::import( const OUString& rURL )
                 aOutputFile.open( osl_File_OpenFlag_Write );
 
                 Reference< XOutputStream > xOS( new OSLOutputStreamWrapper( aOutputFile ) );
-                Reference< XActiveDataSource > xDocSrc( xWriter, UNO_QUERY );
-                xDocSrc->setOutputStream( xOS );
+                xWriter->setOutputStream( xOS );
 
                 Sequence< OUString > aFilterUserData( m_pFilterInfo->getFilterUserData() );
-                xImporter->importer( aSourceData, Reference<XDocumentHandler>(xWriter, UNO_QUERY_THROW), aFilterUserData );
+                xImporter->importer( aSourceData, xWriter, aFilterUserData );
             }
 
             displayXMLFile( aTempFileURL );

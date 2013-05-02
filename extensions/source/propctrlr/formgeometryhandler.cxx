@@ -686,8 +686,7 @@ namespace pcr
                 Reference< XTableRows > xRows( xColsRows->getRows(), UNO_SET_THROW );
                 sal_Int32 nNewAnchorRow = lcl_getLowerBoundRowOrColumn( xRows.get(), true, aRelativePosition );
 
-                Reference< XCellRange > xSheetCellRange( xSheet, UNO_QUERY_THROW );
-                Any aNewAnchorCell( xSheetCellRange->getCellByPosition( nNewAnchorCol, nNewAnchorRow ) );
+                Any aNewAnchorCell( xSheet->getCellByPosition( nNewAnchorCol, nNewAnchorRow ) );
                 m_xShapeProperties->setPropertyValue( PROPERTY_ANCHOR, aNewAnchorCell );
             }
             break;

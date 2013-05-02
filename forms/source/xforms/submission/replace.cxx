@@ -85,8 +85,8 @@ CSubmission::SubmissionResult CSubmission::replace(const OUString& aReplace, con
                     Reference< XElement > oldRoot = aDocument->getDocumentElement();
                     Reference< XElement > newRoot = aNewDocument->getDocumentElement();
 
-                    Reference< XNode > aImportedNode = aDocument->importNode(Reference< XNode >(newRoot, UNO_QUERY_THROW), sal_True);
-                    Reference< XNode >(aDocument, UNO_QUERY_THROW)->replaceChild(aImportedNode, Reference< XNode >(oldRoot, UNO_QUERY_THROW));
+                    Reference< XNode > aImportedNode = aDocument->importNode(newRoot, sal_True);
+                    aDocument->replaceChild(aImportedNode, oldRoot);
                     return CSubmission::SUCCESS;
                 } else {
                     return CSubmission::UNKNOWN_ERROR;

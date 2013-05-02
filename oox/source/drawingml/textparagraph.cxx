@@ -51,7 +51,6 @@ void TextParagraph::insertAt(
 {
     try {
         sal_Int32 nParagraphSize = 0;
-        Reference< XTextRange > xStart( xAt, UNO_QUERY );
 
         sal_Int16 nLevel = maProperties.getLevel();
 
@@ -72,14 +71,14 @@ void TextParagraph::insertAt(
 
         if( !bFirst )
         {
-            xText->insertControlCharacter( xStart, ControlCharacter::APPEND_PARAGRAPH, sal_False );
+            xText->insertControlCharacter( xAt, ControlCharacter::APPEND_PARAGRAPH, sal_False );
             xAt->gotoEnd( sal_True );
         }
 
         sal_Int32 nCharHeight = 0;
         if ( maRuns.begin() == maRuns.end() )
         {
-            PropertySet aPropSet( xStart );
+            PropertySet aPropSet( xAt );
 
             TextCharacterProperties aTextCharacterProps( aTextCharacterStyle );
             aTextCharacterProps.assignUsed( maEndProperties );
@@ -103,7 +102,7 @@ void TextParagraph::insertAt(
         xAt->gotoEnd( sal_True );
 
         PropertyMap aioBulletList;
-        Reference< XPropertySet > xProps( xStart, UNO_QUERY);
+        Reference< XPropertySet > xProps( xAt, UNO_QUERY);
         float fCharacterSize = nCharHeight > 0 ? GetFontHeight( nCharHeight ) :  18;
         if ( pTextParagraphStyle.get() )
         {

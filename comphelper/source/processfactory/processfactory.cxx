@@ -80,14 +80,14 @@ Reference< XComponentContext > getComponentContext(
         catch (beans::UnknownPropertyException & e) {
             throw DeploymentException(
                 "unknown service factory DefaultContext property: " + e.Message,
-                Reference< XInterface >( factory, UNO_QUERY ) );
+                factory );
         }
     }
     if ( !xRet.is() )
     {
         throw DeploymentException(
             "no service factory DefaultContext",
-            Reference< XInterface >( factory, UNO_QUERY ) );
+            factory );
     }
     return xRet;
 }

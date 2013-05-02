@@ -101,8 +101,7 @@ namespace
     {
         try
         {
-            Reference< XPropertySet > const xParentDelegator( i_parentModel, UNO_QUERY_THROW );
-            Reference< XPropertySetInfo > const xPSI( xParentDelegator->getPropertySetInfo() );
+            Reference< XPropertySetInfo > const xPSI( i_parentModel->getPropertySetInfo() );
             bool const isGeometryControlModel = xPSI.is() && xPSI->hasPropertyByName( OUString( "PositionX" ) );
 
             Reference< XInterface > xInstance;

@@ -363,8 +363,7 @@ namespace pcr
     String FormLinkDialog::getFormDataSourceType( const Reference< XPropertySet >& _rxForm ) const SAL_THROW(())
     {
         String sReturn;
-        Reference< XPropertySet > xFormProps( _rxForm, UNO_QUERY );
-        if ( !xFormProps.is() )
+        if ( !_rxForm.is() )
             return sReturn;
 
         try
@@ -372,8 +371,8 @@ namespace pcr
             sal_Int32       nCommandType = CommandType::COMMAND;
             OUString sCommand;
 
-            xFormProps->getPropertyValue( PROPERTY_COMMANDTYPE ) >>= nCommandType;
-            xFormProps->getPropertyValue( PROPERTY_COMMAND     ) >>= sCommand;
+            _rxForm->getPropertyValue( PROPERTY_COMMANDTYPE ) >>= nCommandType;
+            _rxForm->getPropertyValue( PROPERTY_COMMAND     ) >>= sCommand;
 
             if  (  ( nCommandType == CommandType::TABLE )
                 || ( nCommandType == CommandType::QUERY )
@@ -398,16 +397,15 @@ namespace pcr
         {
             WaitObject aWaitCursor( const_cast< FormLinkDialog* >( this ) );
 
-            Reference< XPropertySet > xFormProps( _rxForm, UNO_QUERY );
-            OSL_ENSURE( xFormProps.is(), "FormLinkDialog::getFormFields: invalid form!" );
+            OSL_ENSURE( _rxForm.is(), "FormLinkDialog::getFormFields: invalid form!" );
 
             sal_Int32       nCommandType = CommandType::COMMAND;
 
-            xFormProps->getPropertyValue( PROPERTY_COMMANDTYPE ) >>= nCommandType;
-            xFormProps->getPropertyValue( PROPERTY_COMMAND     ) >>= sCommand;
+            _rxForm->getPropertyValue( PROPERTY_COMMANDTYPE ) >>= nCommandType;
+            _rxForm->getPropertyValue( PROPERTY_COMMAND     ) >>= sCommand;
 
             Reference< XConnection > xConnection;
-            ensureFormConnection( xFormProps, xConnection );
+            ensureFormConnection( _rxForm, xConnection );
 
             _rNames = ::dbtools::getFieldNamesByCommandDescriptor(
                 xConnection,

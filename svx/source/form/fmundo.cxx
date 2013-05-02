@@ -805,8 +805,7 @@ void FmXUndoEnvironment::AddForms(const Reference< XNameContainer > & rForms)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::AddForms" );
     Lock();
-    Reference< XInterface >  xInt(rForms, UNO_QUERY);
-    AddElement(xInt);
+    AddElement(rForms);
     UnLock();
 }
 
@@ -815,8 +814,7 @@ void FmXUndoEnvironment::RemoveForms(const Reference< XNameContainer > & rForms)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::RemoveForms" );
     Lock();
-    Reference< XInterface >  xInt(rForms, UNO_QUERY);
-    RemoveElement(xInt);
+    RemoveElement(rForms);
     UnLock();
 }
 

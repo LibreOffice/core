@@ -190,8 +190,7 @@ void UIConfigurationManager::impl_preloadUIElementTypeList( sal_Int16 nElementTy
             OUString aResURLPrefix( aBuf.makeStringAndClear() );
 
             UIElementDataHashMap& rHashMap = rElementTypeData.aElementsHashMap;
-            Reference< XNameAccess > xNameAccess( xElementTypeStorage, UNO_QUERY );
-            Sequence< OUString > aUIElementNames = xNameAccess->getElementNames();
+            Sequence< OUString > aUIElementNames = xElementTypeStorage->getElementNames();
             for ( sal_Int32 n = 0; n < aUIElementNames.getLength(); n++ )
             {
                 UIElementData aUIElementData;
@@ -443,7 +442,6 @@ void UIConfigurationManager::impl_resetElementTypeData(
     UIElementDataHashMap::iterator pIter    = rHashMap.begin();
 
     Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
-    Reference< XInterface > xIfac( xThis, UNO_QUERY );
 
     // Make copies of the event structures to be thread-safe. We have to unlock our mutex before calling
     // our listeners!
@@ -456,7 +454,7 @@ void UIConfigurationManager::impl_resetElementTypeData(
             ConfigurationEvent aEvent;
             aEvent.ResourceURL = rElement.aResourceURL;
             aEvent.Accessor <<= xThis;
-            aEvent.Source = xIfac;
+            aEvent.Source = xThis;
             aEvent.Element <<= rElement.xSettings;
 
             rRemoveNotifyContainer.push_back( aEvent );
@@ -483,10 +481,8 @@ void UIConfigurationManager::impl_reloadElementTypeData(
     UIElementDataHashMap& rHashMap          = rDocElementType.aElementsHashMap;
     UIElementDataHashMap::iterator pIter    = rHashMap.begin();
     Reference< XStorage > xElementStorage( rDocElementType.xStorage );
-    Reference< XNameAccess > xElementNameAccess( xElementStorage, UNO_QUERY );
 
     Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
-    Reference< XInterface > xIfac( xThis, UNO_QUERY );
     sal_Int16 nType = rDocElementType.nElementType;
 
     while ( pIter != rHashMap.end() )
@@ -494,7 +490,7 @@ void UIConfigurationManager::impl_reloadElementTypeData(
         UIElementData& rElement = pIter->second;
         if ( rElement.bModified )
         {
-            if ( xElementNameAccess->hasByName( rElement.aName ))
+            if ( xElementStorage->hasByName( rElement.aName ))
             {
                 // Replace settings with data from user layer
                 Reference< XIndexAccess > xOldSettings( rElement.xSettings );
@@ -505,7 +501,7 @@ void UIConfigurationManager::impl_reloadElementTypeData(
 
                 aReplaceEvent.ResourceURL = rElement.aResourceURL;
                 aReplaceEvent.Accessor <<= xThis;
-                aReplaceEvent.Source = xIfac;
+                aReplaceEvent.Source = xThis;
                 aReplaceEvent.ReplacedElement <<= xOldSettings;
                 aReplaceEvent.Element <<= rElement.xSettings;
                 rReplaceNotifyContainer.push_back( aReplaceEvent );
@@ -519,7 +515,7 @@ void UIConfigurationManager::impl_reloadElementTypeData(
 
                 aRemoveEvent.ResourceURL = rElement.aResourceURL;
                 aRemoveEvent.Accessor <<= xThis;
-                aRemoveEvent.Source = xIfac;
+                aRemoveEvent.Source = xThis;
                 aRemoveEvent.Element <<= rElement.xSettings;
 
                 rRemoveNotifyContainer.push_back( aRemoveEvent );
@@ -694,8 +690,7 @@ void SAL_CALL UIConfigurationManager::reset() throw (::com::sun::star::uno::Runt
                 if ( xSubStorage.is() )
                 {
                     bool bCommitSubStorage( false );
-                    Reference< XNameAccess > xSubStorageNameAccess( xSubStorage, UNO_QUERY );
-                    Sequence< OUString > aUIElementStreamNames = xSubStorageNameAccess->getElementNames();
+                    Sequence< OUString > aUIElementStreamNames = xSubStorage->getElementNames();
                     for ( sal_Int32 j = 0; j < aUIElementStreamNames.getLength(); j++ )
                     {
                         xSubStorage->removeElement( aUIElementStreamNames[j] );
@@ -895,11 +890,10 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
 
             // Create event to notify listener about replaced element settings
             ConfigurationEvent aEvent;
-            Reference< XInterface > xIfac( xThis, UNO_QUERY );
 
             aEvent.ResourceURL = ResourceURL;
             aEvent.Accessor <<= xThis;
-            aEvent.Source = xIfac;
+            aEvent.Source = xThis;
             aEvent.ReplacedElement <<= xOldSettings;
             aEvent.Element <<= pDataSettings->xSettings;
 
@@ -950,14 +944,13 @@ throw ( NoSuchElementException, IllegalArgumentException, IllegalAccessException
                 rElementType.bModified = true;
 
                 Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
-                Reference< XInterface > xIfac( xThis, UNO_QUERY );
 
                 // Create event to notify listener about removed element settings
                 ConfigurationEvent aEvent;
 
                 aEvent.ResourceURL = ResourceURL;
                 aEvent.Accessor <<= xThis;
-                aEvent.Source = xIfac;
+                aEvent.Source = xThis;
                 aEvent.Element <<= xRemovedSettings;
 
                 aGuard.unlock();
@@ -1027,14 +1020,13 @@ throw ( ElementExistException, IllegalArgumentException, IllegalAccessException,
 
             Reference< XIndexAccess > xInsertSettings( aUIElementData.xSettings );
             Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
-            Reference< XInterface > xIfac( xThis, UNO_QUERY );
 
             // Create event to notify listener about removed element settings
             ConfigurationEvent aEvent;
 
             aEvent.ResourceURL = NewResourceURL;
             aEvent.Accessor <<= xThis;
-            aEvent.Source = xIfac;
+            aEvent.Source = xThis;
             aEvent.Element <<= xInsertSettings;
 
             aGuard.unlock();

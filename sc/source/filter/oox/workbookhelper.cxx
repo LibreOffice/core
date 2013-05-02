@@ -449,8 +449,7 @@ Reference< XDatabaseRange > WorkbookGlobals::createDatabaseRangeObject( OUString
         // find an unused name
         PropertySet aDocProps( mxDoc );
         Reference< XDatabaseRanges > xDatabaseRanges( aDocProps.getAnyProperty( PROP_DatabaseRanges ), UNO_QUERY_THROW );
-        Reference< XNameAccess > xNameAccess( xDatabaseRanges, UNO_QUERY_THROW );
-        orName = ContainerHelper::getUnusedName( xNameAccess, orName, '_' );
+        orName = ContainerHelper::getUnusedName( xDatabaseRanges, orName, '_' );
         // create the database range
         xDatabaseRanges->addNewByName( orName, aDestRange );
         xDatabaseRange.set( xDatabaseRanges->getByName( orName ), UNO_QUERY );

@@ -283,14 +283,12 @@ void GraphicCollector::CollectGraphics( const Reference< XComponentContext >& rx
         {
             Reference< XDrawPage > xDrawPage( xDrawPages->getByIndex( i ), UNO_QUERY_THROW );
             ImpCollectBackgroundGraphic( rxMSF, xDrawPage, rGraphicSettings, rGraphicList );
-            Reference< XShapes > xDrawShapes( xDrawPage, UNO_QUERY_THROW );
-            ImpCollectGraphicObjects( rxMSF, xDrawShapes, rGraphicSettings, rGraphicList );
+            ImpCollectGraphicObjects( rxMSF, xDrawPage, rGraphicSettings, rGraphicList );
 
             Reference< XPresentationPage > xPresentationPage( xDrawPage, UNO_QUERY_THROW );
             Reference< XDrawPage > xNotesPage( xPresentationPage->getNotesPage() );
             ImpCollectBackgroundGraphic( rxMSF, xNotesPage, rGraphicSettings, rGraphicList );
-            Reference< XShapes > xNotesShapes( xNotesPage, UNO_QUERY_THROW );
-            ImpCollectGraphicObjects( rxMSF, xNotesShapes, rGraphicSettings, rGraphicList );
+            ImpCollectGraphicObjects( rxMSF, xNotesPage, rGraphicSettings, rGraphicList );
         }
         Reference< XMasterPagesSupplier > xMasterPagesSupplier( rxModel, UNO_QUERY_THROW );
         Reference< XDrawPages > xMasterPages( xMasterPagesSupplier->getMasterPages(), UNO_QUERY_THROW );
@@ -298,8 +296,7 @@ void GraphicCollector::CollectGraphics( const Reference< XComponentContext >& rx
         {
             Reference< XDrawPage > xMasterPage( xMasterPages->getByIndex( i ), UNO_QUERY_THROW );
             ImpCollectBackgroundGraphic( rxMSF, xMasterPage, rGraphicSettings, rGraphicList );
-            Reference< XShapes > xMasterPageShapes( xMasterPage, UNO_QUERY_THROW );
-            ImpCollectGraphicObjects( rxMSF, xMasterPageShapes, rGraphicSettings, rGraphicList );
+            ImpCollectGraphicObjects( rxMSF, xMasterPage, rGraphicSettings, rGraphicList );
         }
 
         std::vector< GraphicCollector::GraphicEntity >::iterator aGraphicIter( rGraphicList.begin() );
@@ -421,14 +418,12 @@ void GraphicCollector::CountGraphics( const Reference< XComponentContext >& rxMS
         {
             Reference< XDrawPage > xDrawPage( xDrawPages->getByIndex( i ), UNO_QUERY_THROW );
             ImpCountBackgroundGraphic( xDrawPage, rnGraphics );
-            Reference< XShapes > xDrawShapes( xDrawPage, UNO_QUERY_THROW );
-            ImpCountGraphicObjects( rxMSF, xDrawShapes, rGraphicSettings, rnGraphics );
+            ImpCountGraphicObjects( rxMSF, xDrawPage, rGraphicSettings, rnGraphics );
 
             Reference< XPresentationPage > xPresentationPage( xDrawPage, UNO_QUERY_THROW );
             Reference< XDrawPage > xNotesPage( xPresentationPage->getNotesPage() );
             ImpCountBackgroundGraphic( xNotesPage, rnGraphics );
-            Reference< XShapes > xNotesShapes( xNotesPage, UNO_QUERY_THROW );
-            ImpCountGraphicObjects( rxMSF, xNotesShapes, rGraphicSettings, rnGraphics );
+            ImpCountGraphicObjects( rxMSF, xNotesPage, rGraphicSettings, rnGraphics );
         }
         Reference< XMasterPagesSupplier > xMasterPagesSupplier( rxModel, UNO_QUERY_THROW );
         Reference< XDrawPages > xMasterPages( xMasterPagesSupplier->getMasterPages(), UNO_QUERY_THROW );
@@ -436,8 +431,7 @@ void GraphicCollector::CountGraphics( const Reference< XComponentContext >& rxMS
         {
             Reference< XDrawPage > xMasterPage( xMasterPages->getByIndex( i ), UNO_QUERY_THROW );
             ImpCountBackgroundGraphic( xMasterPage, rnGraphics );
-            Reference< XShapes > xMasterPageShapes( xMasterPage, UNO_QUERY_THROW );
-            ImpCountGraphicObjects( rxMSF, xMasterPageShapes, rGraphicSettings, rnGraphics );
+            ImpCountGraphicObjects( rxMSF, xMasterPage, rGraphicSettings, rnGraphics );
         }
     }
     catch ( Exception& )

@@ -666,7 +666,7 @@ Reference< XDocumentFragment > Submission::createSubmissionDocument(const Refere
                 aListItem = Reference< XNode >(
                     (Reference< XDocument >(aListItem, UNO_QUERY))->getDocumentElement(), UNO_QUERY);
             // copy relevant nodes from instance into fragment
-            _cloneNodes(*getModelImpl(), Reference< XNode >(aFragment, UNO_QUERY), aListItem, bRemoveWSNodes);
+            _cloneNodes(*getModelImpl(), aFragment, aListItem, bRemoveWSNodes);
         }
     }
     return aFragment;

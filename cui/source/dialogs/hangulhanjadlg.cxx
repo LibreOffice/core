@@ -937,10 +937,9 @@ namespace svx
         m_aDictsLB.Clear();
 
         Reference< XNameContainer > xNameCont = m_xConversionDictionaryList->getDictionaryContainer();
-        Reference< XNameAccess >    xNameAccess = Reference< XNameAccess >( xNameCont, UNO_QUERY );
-        if( xNameAccess.is() )
+        if( xNameCont.is() )
         {
-            Sequence< OUString >     aDictNames( xNameAccess->getElementNames() );
+            Sequence< OUString >     aDictNames( xNameCont->getElementNames() );
 
             const OUString*          pDic = aDictNames.getConstArray();
             sal_Int32                       nCount = aDictNames.getLength();
@@ -948,7 +947,7 @@ namespace svx
             sal_Int32                       i;
             for( i = 0 ; i < nCount ; ++i )
             {
-                Any                                 aAny( xNameAccess->getByName( pDic[ i ] ) );
+                Any                                 aAny( xNameCont->getByName( pDic[ i ] ) );
                 Reference< XConversionDictionary >  xDic;
                 if( ( aAny >>= xDic ) && xDic.is() )
                 {

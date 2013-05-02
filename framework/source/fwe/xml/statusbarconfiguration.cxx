@@ -89,8 +89,7 @@ sal_Bool StatusBarConfiguration::StoreStatusBar(
 
     try
     {
-        Reference< XDocumentHandler > xHandler(xWriter, UNO_QUERY_THROW);
-        OWriteStatusBarDocumentHandler aWriteStatusBarDocumentHandler( rStatusbarConfiguration, xHandler );
+        OWriteStatusBarDocumentHandler aWriteStatusBarDocumentHandler( rStatusbarConfiguration, xWriter );
         aWriteStatusBarDocumentHandler.WriteStatusBarDocument();
         return sal_True;
     }

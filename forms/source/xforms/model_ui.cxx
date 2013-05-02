@@ -669,7 +669,7 @@ Model::XNode_t Model::renameNode( const XNode_t& xNode,
         // replace node
         Reference<XNode> xParent = xNode->getParentNode();
         xParent->removeChild( xNode );
-        xNew = xParent->appendChild( Reference<XNode>( xAttr, UNO_QUERY ) );
+        xNew = xParent->appendChild( xAttr );
     }
     else
     {
@@ -790,9 +790,7 @@ static OUString lcl_serializeForDisplay( const Reference<XNodeList>& xNodes )
     Reference<XDocument> xDocument( getDocumentBuilder()->newDocument() );
     Reference<XDocumentFragment> xFragment(
         xDocument->createDocumentFragment() );
-    Reference<XNode> xNode( xFragment, UNO_QUERY );
     OSL_ENSURE( xFragment.is(), "xFragment" );
-    OSL_ENSURE( xNode.is(), "xNode" );
 
     sal_Int32 nAttributeNodes = 0;
 
@@ -824,7 +822,7 @@ static OUString lcl_serializeForDisplay( const Reference<XNodeList>& xNodes )
         }
 
         // append node
-        xNode->appendChild( xDocument->importNode( xCurrent, sal_True ) );
+        xFragment->appendChild( xDocument->importNode( xCurrent, sal_True ) );
     }
     OSL_ENSURE( ( nAttributeNodes == 0 ) || ( nAttributeNodes == nLength ),
         "lcl_serializeForDisplay: mixed attribute and non-attribute nodes?" );

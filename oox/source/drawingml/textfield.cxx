@@ -138,8 +138,7 @@ sal_Int32 TextField::insertAt(
     try
     {
         PropertyMap aioBulletList;
-        Reference< XTextRange > xStart( xAt, UNO_QUERY );
-        Reference< XPropertySet > xProps( xStart, UNO_QUERY);
+        Reference< XPropertySet > xProps( xAt, UNO_QUERY);
         PropertySet aPropSet( xProps );
 
         maTextParagraphProperties.pushToPropSet( &rFilterBase, xProps, aioBulletList, NULL, sal_True, 18 );
@@ -168,15 +167,15 @@ sal_Int32 TextField::insertAt(
                     }
                     else
                     {
-                        xText->insertString( xStart, " ", sal_False );
+                        xText->insertString( xAt, " ", sal_False );
                     }
-                    xText->insertTextContent( xStart, xContent, sal_False );
+                    xText->insertTextContent( xAt, xContent, sal_False );
                 }
             }
         }
         else
         {
-            xText->insertString( xStart, getText(), sal_False );
+            xText->insertString( xAt, getText(), sal_False );
         }
     }
     catch( const Exception&  )

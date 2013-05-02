@@ -92,8 +92,7 @@ void XMLAutoTextEventExport::initialize(
             rArguments[1] >>= xReplace;
             if (xReplace.is())
             {
-                Reference<XNameAccess> xAccess(xReplace, UNO_QUERY);
-                xEvents = xAccess;
+                xEvents = xReplace;
             }
             else
             {

@@ -124,8 +124,7 @@ OUString ContainerHelper::insertByUnusedName(
     OSL_ENSURE( rxNameContainer.is(), "ContainerHelper::insertByUnusedName - missing XNameContainer interface" );
 
     // find an unused name
-    Reference< XNameAccess > xNameAccess( rxNameContainer, UNO_QUERY );
-    OUString aNewName = getUnusedName( xNameAccess, rSuggestedName, cSeparator );
+    OUString aNewName = getUnusedName( rxNameContainer, rSuggestedName, cSeparator );
 
     // rename existing object
     if( bRenameOldExisting && rxNameContainer->hasByName( rSuggestedName ) )

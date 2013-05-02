@@ -82,7 +82,7 @@ throw ( WrappedTargetException )
     try
     {
         xParser->parseStream( aInputSource );
-        return Reference< XIndexAccess >( xItemContainer, UNO_QUERY );
+        return xItemContainer;
     }
     catch ( const RuntimeException& e )
     {
@@ -126,8 +126,7 @@ throw ( WrappedTargetException )
 
     try
     {
-        Reference< XDocumentHandler > xHandler(xWriter, UNO_QUERY_THROW);
-        OWriteMenuDocumentHandler aWriteMenuDocumentHandler( rMenuBarConfiguration, xHandler );
+        OWriteMenuDocumentHandler aWriteMenuDocumentHandler( rMenuBarConfiguration, xWriter );
         aWriteMenuDocumentHandler.WriteMenuDocument();
     }
     catch ( const RuntimeException& e )

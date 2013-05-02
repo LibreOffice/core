@@ -163,8 +163,7 @@ void StringResourceImpl::addModifyListener( const Reference< XModifyListener >& 
         throw RuntimeException();
 
     ::osl::MutexGuard aGuard( getMutex() );
-    Reference< XInterface > xIface( aListener, UNO_QUERY );
-    m_aListenerContainer.addInterface( xIface );
+    m_aListenerContainer.addInterface( aListener );
 }
 
 void StringResourceImpl::removeModifyListener( const Reference< XModifyListener >& aListener )
@@ -174,8 +173,7 @@ void StringResourceImpl::removeModifyListener( const Reference< XModifyListener 
         throw RuntimeException();
 
     ::osl::MutexGuard aGuard( getMutex() );
-    Reference< XInterface > xIface( aListener, UNO_QUERY );
-    m_aListenerContainer.removeInterface( xIface );
+    m_aListenerContainer.removeInterface( aListener );
 }
 
 

@@ -969,9 +969,7 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
     if( xMaster.is() )
     {
         sal_Int32 nMasterRel = 2;
-        Reference< XChild > xNodeChild( xNode, UNO_QUERY );
-        Reference< XChild > xMasterChild( xMaster, UNO_QUERY );
-        if( xNodeChild.is() && xMasterChild.is() && (xNodeChild->getParent() == xMasterChild->getParent() ) )
+        if( xNode.is() && xMaster.is() && (xNode->getParent() == xMaster->getParent() ) )
             nMasterRel = 0;
 
         aMasterRel <<= nMasterRel;

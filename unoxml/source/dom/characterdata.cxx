@@ -48,7 +48,7 @@ namespace DOM
                 "DOMCharacterDataModified",
                 sal_True, sal_False, Reference< XNode >(),
                 prevValue, newValue, OUString(), (AttrChangeType)0 );
-        dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
+        dispatchEvent(event);
         dispatchSubtreeModified();
     }
 

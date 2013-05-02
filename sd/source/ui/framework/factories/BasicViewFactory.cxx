@@ -578,10 +578,9 @@ bool BasicViewFactory::IsCacheable (const ::boost::shared_ptr<ViewDescriptor>& r
     {
         bool bRelocationSuccessfull (false);
         Reference<XRelocatableResource> xResource (pDescriptor->mxView, UNO_QUERY);
-        Reference<XResource> xNewAnchor (rxPane, UNO_QUERY);
-        if (xResource.is() && xNewAnchor.is())
+        if (xResource.is() && rxPane.is())
         {
-            if (xResource->relocateToAnchor(xNewAnchor))
+            if (xResource->relocateToAnchor(rxPane))
                 bRelocationSuccessfull = true;
         }
 

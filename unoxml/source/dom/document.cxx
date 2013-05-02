@@ -898,7 +898,7 @@ namespace DOM
                 "DOMNodeInsertedIntoDocument", sal_True, sal_False, Reference< XNode >(),
                 OUString(), OUString(), OUString(), (AttrChangeType)0 );
             Reference< XEventTarget > const xDocET(xDocument, UNO_QUERY);
-            xDocET->dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
+            xDocET->dispatchEvent(event);
         }
 
         return xNode;

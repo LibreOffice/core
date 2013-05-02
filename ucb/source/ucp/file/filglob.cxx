@@ -541,12 +541,11 @@ namespace fileaccess {
         }
         else if(errorCode == TASKHANDLING_INPUTSTREAM_FOR_WRITE)
         {
-            Reference<XInterface> xContext(xComProc,UNO_QUERY);
             aAny <<=
                 MissingInputStreamException(
                     OUString( "the inputstream is missing necessary"
                                    "to create a content"),
-                    xContext);
+                    xComProc);
             cancelCommandExecution(aAny,xEnv);
         }
         else if( errorCode == TASKHANDLING_NOREPLACE_FOR_WRITE )
@@ -555,8 +554,7 @@ namespace fileaccess {
             NameClashException excep;
             excep.Name = getTitle(aUncPath);
             excep.Classification = InteractionClassification_ERROR;
-            Reference<XInterface> xContext(xComProc,UNO_QUERY);
-            excep.Context = xContext;
+            excep.Context = xComProc;
             excep.Message = OUString( "file exists and overwrite forbidden");
             aAny <<= excep;
             cancelCommandExecution( aAny,xEnv );
@@ -578,8 +576,7 @@ namespace fileaccess {
             seq[0] <<= prop;
             excep.Arguments = seq;
             excep.Classification = InteractionClassification_ERROR;
-            Reference<XInterface> xContext(xComProc,UNO_QUERY);
-            excep.Context = xContext;
+            excep.Context = xComProc;
             excep.Message = OUString( "the name contained invalid characters");
             if(isHandled)
                 throw excep;
@@ -600,8 +597,7 @@ namespace fileaccess {
             NameClashException excep;
             excep.Name = getTitle(aUncPath);
             excep.Classification = InteractionClassification_ERROR;
-            Reference<XInterface> xContext(xComProc,UNO_QUERY);
-            excep.Context = xContext;
+            excep.Context = xComProc;
             excep.Message = OUString( "folder exists and overwrite forbidden");
             if(isHandled)
                 throw excep;
@@ -793,12 +789,10 @@ namespace fileaccess {
         }
         else if( errorCode == TASKHANDLING_TRANSFER_INVALIDSCHEME )
         {
-            Reference<XInterface> xContext(xComProc,UNO_QUERY);
-
             aAny <<=
                 InteractiveBadTransferURLException(
                     OUString( "bad tranfer url"),
-                    xContext);
+                    xComProc);
             cancelCommandExecution( aAny,xEnv );
         }
         else if( errorCode == TASKHANDLING_OVERWRITE_FOR_MOVE      ||
@@ -859,8 +853,7 @@ namespace fileaccess {
             NameClashException excep;
             excep.Name = getTitle(aUncPath);
             excep.Classification = InteractionClassification_ERROR;
-            Reference<XInterface> xContext(xComProc,UNO_QUERY);
-            excep.Context = xContext;
+            excep.Context = xComProc;
             excep.Message = OUString( "name clash during copy or move");
             aAny <<= excep;
 
@@ -869,11 +862,9 @@ namespace fileaccess {
         else if( errorCode == TASKHANDLING_NAMECLASHSUPPORT_FOR_MOVE   ||
                  errorCode == TASKHANDLING_NAMECLASHSUPPORT_FOR_COPY )
         {
-            Reference<XInterface> xContext(
-                xComProc,UNO_QUERY);
             UnsupportedNameClashException excep;
             excep.NameClash = minorCode;
-            excep.Context = xContext;
+            excep.Context = xComProc;
             excep.Message = OUString( "name clash value not supported during copy or move");
 
             aAny <<= excep;

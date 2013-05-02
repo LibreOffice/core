@@ -96,14 +96,13 @@ class SwDBTreeList_Impl : public cppu::WeakImplHelper1 < XContainerListener >
 
 SwDBTreeList_Impl::~SwDBTreeList_Impl()
 {
-    Reference<XContainer> xContainer(xDBContext, UNO_QUERY);
-    if(xContainer.is())
+    if(xDBContext.is())
     {
         m_refCount++;
         //block necessary due to solaris' compiler behaviour to
         //remove temporaries at the block's end
         {
-            xContainer->removeContainerListener( this );
+            xDBContext->removeContainerListener( this );
         }
         m_refCount--;
     }
@@ -145,9 +144,7 @@ sal_Bool SwDBTreeList_Impl::HasContext()
     {
         Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
         xDBContext = DatabaseContext::create(xContext);
-        Reference<XContainer> xContainer(xDBContext, UNO_QUERY);
-        if(xContainer.is())
-            xContainer->addContainerListener( this );
+        xDBContext->addContainerListener( this );
     }
     return xDBContext.is();
 }

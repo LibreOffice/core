@@ -1888,8 +1888,7 @@ SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell
                 try
                 {
                     // if there is a backing component, use it
-                    Reference< XFramesSupplier > xTaskSupplier( xDesktop , css::uno::UNO_QUERY_THROW );
-                    ::framework::FrameListAnalyzer aAnalyzer( xTaskSupplier, Reference< XFrame >(), ::framework::FrameListAnalyzer::E_BACKINGCOMPONENT );
+                    ::framework::FrameListAnalyzer aAnalyzer( xDesktop, Reference< XFrame >(), ::framework::FrameListAnalyzer::E_BACKINGCOMPONENT );
 
                     if ( aAnalyzer.m_xBackingComponent.is() )
                         xFrame = aAnalyzer.m_xBackingComponent;

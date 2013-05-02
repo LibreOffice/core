@@ -106,8 +106,7 @@ void XMLEventExport::Export( Reference<XEventsSupplier> & rSupplier,
 void XMLEventExport::Export( Reference<XNameReplace> & rReplace,
                              sal_Bool bWhitespace)
 {
-    Reference<XNameAccess> xAccess(rReplace, UNO_QUERY);
-    Export(xAccess, bWhitespace);
+    Export(rReplace, bWhitespace);
 }
 
 void XMLEventExport::Export( Reference<XNameAccess> & rAccess,

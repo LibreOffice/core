@@ -250,7 +250,7 @@ SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, Window& rWindow, sal_uInt16 nV
 
         Reference< awt::XWindow2 > xWin( VCLUnoHelper::GetInterface ( &rWindow ), uno::UNO_QUERY_THROW );
         xFrame->initialize( xWin.get() );
-        xDesktop->getFrames()->append( Reference<XFrame>(xFrame, uno::UNO_QUERY_THROW) );
+        xDesktop->getFrames()->append( xFrame );
 
         if ( xWin->isActive() )
             xFrame->activate();

@@ -786,9 +786,7 @@ void XMLMetaImportContextBase::EndElement()
             xEndRange) );
     xInsertionCursor->gotoRange(m_xStart, sal_True);
 
-    const Reference<XTextRange> xInsertionRange(xInsertionCursor, UNO_QUERY);
-
-    InsertMeta(xInsertionRange);
+    InsertMeta(xInsertionCursor);
 }
 
 SvXMLImportContext * XMLMetaImportContextBase::CreateChildContext(
@@ -2004,9 +2002,8 @@ XMLParaContext::~XMLParaContext()
         if( xIdCursor.is() )
         {
             xIdCursor->gotoRange( xEnd, sal_True );
-            Reference< XInterface > xRef( xIdCursor, UNO_QUERY );
             GetImport().getInterfaceToIdentifierMapper().registerReference(
-                m_sXmlId, xRef);
+                m_sXmlId, xIdCursor);
         }
     }
 
@@ -2147,16 +2144,13 @@ XMLParaContext::~XMLParaContext()
                         if( !pHint->GetEnd().is() )
                             pHint->SetEnd(xEnd);
 
-                        // convert XCursor to XTextRange
-                        Reference<XTextRange> xRange(xAttrCursor, UNO_QUERY);
-
                         // reference name uses rStyleName member
                         // borrow from XMLTextMarkImportContext
                         XMLTextMarkImportContext::CreateAndInsertMark(
                             GetImport(),
                             OUString( "com.sun.star.text.ReferenceMark"),
                             rRefName,
-                            xRange);
+                            xAttrCursor);
                     }
                 }
                 break;
@@ -2179,9 +2173,8 @@ XMLParaContext::~XMLParaContext()
                     Reference<beans::XPropertySet> xMark(
                         ((const XMLIndexMarkHint_Impl *)pHint)->GetMark());
                     Reference<XTextContent> xContent(xMark, UNO_QUERY);
-                    Reference<XTextRange> xRange(xAttrCursor, UNO_QUERY);
                     xTxtImport->GetText()->insertTextContent(
-                        xRange, xContent, sal_True );
+                        xAttrCursor, xContent, sal_True );
                 }
                 break;
             case XML_HINT_TEXT_FRAME:
@@ -2196,10 +2189,9 @@ XMLParaContext::~XMLParaContext()
                         /* Core impl. of the unification of drawing objects and
                            Writer fly frames (#i26791#)
                         */
-                        Reference<XTextRange> xRange(xAttrCursor, UNO_QUERY);
                         if ( pFHint->IsBoundAtChar() )
                         {
-                            xTextContent->attach( xRange );
+                            xTextContent->attach( xAttrCursor );
                         }
                     }
                     /* Consider, that hint can also contain a shape -

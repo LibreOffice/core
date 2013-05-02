@@ -844,8 +844,7 @@ sal_Bool SVGTextWriter::createParagraphEnumeration()
 {
     if( mrTextShape.is() )
     {
-        Reference< XInterface > xRef( mrTextShape, UNO_QUERY );
-        msShapeId = implGetValidIDFromInterface( xRef );
+        msShapeId = implGetValidIDFromInterface( mrTextShape );
 
         Reference< XEnumerationAccess > xEnumerationAccess( mrTextShape, UNO_QUERY_THROW );
         Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
@@ -1009,8 +1008,7 @@ sal_Bool SVGTextWriter::nextParagraph()
                 return sal_False;
             }
 
-            Reference< XInterface > xRef( xTextContent, UNO_QUERY );
-            const OUString& rParagraphId = implGetValidIDFromInterface( xRef );
+            const OUString& rParagraphId = implGetValidIDFromInterface( xTextContent );
             if( !rParagraphId.isEmpty() )
             {
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", rParagraphId );
@@ -1118,8 +1116,7 @@ sal_Bool SVGTextWriter::nextTextPortion()
                                         {
                                             implRegisterInterface( xPortionTextRange );
 
-                                            Reference< XInterface > xRef( xPortionTextRange, UNO_QUERY );
-                                            const OUString& rTextPortionId = implGetValidIDFromInterface( xRef );
+                                            const OUString& rTextPortionId = implGetValidIDFromInterface( xPortionTextRange );
                                             if( !rTextPortionId.isEmpty() )
                                             {
                                                 msHyperlinkIdList += rTextPortionId;
@@ -1575,8 +1572,7 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
             implRegisterInterface( mrCurrentTextParagraph );
 
             // Add the needed info to the BulletListItemMap
-            Reference< XInterface > xRef( mrCurrentTextParagraph, UNO_QUERY );
-            OUString sId = implGetValidIDFromInterface( xRef );
+            OUString sId = implGetValidIDFromInterface( mrCurrentTextParagraph );
             if( !sId.isEmpty() )
             {
                 sId += ".bp";
@@ -1595,8 +1591,7 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
         }
     }
 
-    Reference< XInterface > xRef( mrCurrentTextPortion, UNO_QUERY );
-    const OUString& rTextPortionId = implGetValidIDFromInterface( xRef );
+    const OUString& rTextPortionId = implGetValidIDFromInterface( mrCurrentTextPortion );
     if( !rTextPortionId.isEmpty() )
     {
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", rTextPortionId );

@@ -561,7 +561,7 @@ static void lcl_exportDataType( SvXMLExport& rExport,
 
     // export facets
     lcl_exportDataTypeFacets( rExport,
-                              Reference<XPropertySet>( xType, UNO_QUERY ),
+                              xType,
                               aDataTypeFacetTable );
 }
 
