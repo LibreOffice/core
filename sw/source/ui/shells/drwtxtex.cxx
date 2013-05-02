@@ -106,13 +106,13 @@ using namespace ::com::sun::star;
 void SwDrawTextShell::Execute( SfxRequest &rReq )
 {
     SwWrtShell &rSh = GetShell();
-        OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
-        SfxItemSet aEditAttr(pOLV->GetAttribs());
+    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+    SfxItemSet aEditAttr(pOLV->GetAttribs());
     SfxItemSet aNewAttr(*aEditAttr.GetPool(), aEditAttr.GetRanges());
 
-    sal_uInt16 nSlot = rReq.GetSlot();
+    const sal_uInt16 nSlot = rReq.GetSlot();
 
-    sal_uInt16 nWhich = GetPool().GetWhich(nSlot);
+    const sal_uInt16 nWhich = GetPool().GetWhich(nSlot);
     const SfxItemSet *pNewAttrs = rReq.GetArgs();
 
     bool bRestoreSelection = false;
@@ -172,8 +172,16 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
         case SID_ATTR_CHAR_UNDERLINE:
         {
-             FontUnderline eFU = ((const SvxUnderlineItem&)aEditAttr.Get(EE_CHAR_UNDERLINE)).GetLineStyle();
-            aNewAttr.Put(SvxUnderlineItem(eFU == UNDERLINE_SINGLE ? UNDERLINE_NONE : UNDERLINE_SINGLE, EE_CHAR_UNDERLINE));
+            if ( pNewAttrs )
+            {
+                const SvxTextLineItem& rTextLineItem = static_cast< const SvxTextLineItem& >( pNewAttrs->Get( pNewAttrs->GetPool()->GetWhich(nSlot) ) );
+                aNewAttr.Put( SvxUnderlineItem( rTextLineItem.GetLineStyle(), EE_CHAR_UNDERLINE ) );
+            }
+            else
+            {
+                FontUnderline eFU = ((const SvxUnderlineItem&)aEditAttr.Get(EE_CHAR_UNDERLINE)).GetLineStyle();
+                aNewAttr.Put( SvxUnderlineItem(eFU == UNDERLINE_SINGLE ? UNDERLINE_NONE : UNDERLINE_SINGLE, EE_CHAR_UNDERLINE) );
+            }
         }
         break;
 

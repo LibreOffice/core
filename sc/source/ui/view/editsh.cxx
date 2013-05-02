@@ -920,7 +920,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
             lcl_InvalidateUnder( rBindings );
             break;
 
-        case SID_ATTR_CHAR_UNDERLINE:   // Toggles
+        case SID_ATTR_CHAR_UNDERLINE:
         case SID_ULINE_VAL_SINGLE:
         case SID_ULINE_VAL_DOUBLE:
         case SID_ULINE_VAL_DOTTED:
@@ -931,7 +931,15 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
                 switch (nSlot)
                 {
                     case SID_ATTR_CHAR_UNDERLINE:
-                        eNew = ( eOld != UNDERLINE_NONE ) ? UNDERLINE_NONE : UNDERLINE_SINGLE;
+                        if ( pArgs )
+                        {
+                            const SvxTextLineItem& rTextLineItem = static_cast< const SvxTextLineItem& >( pArgs->Get( pArgs->GetPool()->GetWhich(nSlot) ) );
+                            eNew = rTextLineItem.GetLineStyle();
+                        }
+                        else
+                        {
+                            eNew = ( eOld != UNDERLINE_NONE ) ? UNDERLINE_NONE : UNDERLINE_SINGLE;
+                        }
                         break;
                     case SID_ULINE_VAL_SINGLE:
                         eNew = ( eOld == UNDERLINE_SINGLE ) ? UNDERLINE_NONE : UNDERLINE_SINGLE;
