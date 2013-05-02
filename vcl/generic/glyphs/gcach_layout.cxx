@@ -1019,7 +1019,6 @@ bool IcuLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
         mpIcuLE->getGlyphs( pIcuGlyphs, rcIcu );
         mpIcuLE->getCharIndices( pCharIndices, rcIcu );
         mpIcuLE->getGlyphPositions( &pGlyphPositions->fX, rcIcu );
-        mpIcuLE->reset(); // TODO: get rid of this, PROBLEM: crash at exit when removed
         if( LE_FAILURE(rcIcu) )
             return false;
 
