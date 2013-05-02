@@ -100,6 +100,4 @@
   <draw:color draw:name="Chart 10" draw:color="#ff950e"/>
   <draw:color draw:name="Chart 11" draw:color="#c5000b"/>
   <draw:color draw:name="Chart 12" draw:color="#0084d1"/>
-  <draw:color draw:name="Tango: Sky Blue 1" draw:color="#729fcf" />
-  <draw:color draw:name="Tango: Sky Blue 2" draw:color="#3465a4" />
 </office:color-table>
