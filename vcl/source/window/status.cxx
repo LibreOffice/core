@@ -364,7 +364,7 @@ void StatusBar::ImplDrawText( sal_Bool bOffScreen, long nOldTextWidth )
     {
         // Position ermitteln
         XubString aStr = GetText();
-        sal_uInt16 nPos = aStr.Search( _LF );
+        sal_uInt16 nPos = aStr.Search( '\n' );
         if ( nPos != STRING_NOTFOUND )
             aStr.Erase( nPos );
 

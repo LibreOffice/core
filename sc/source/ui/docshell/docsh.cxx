@@ -1759,7 +1759,7 @@ sal_Int32 getTextSepPos(
     sal_Int32 nPos = rStr.indexOf(rTextSep);
     rNeedQuotes = rAsciiOpt.bQuoteAllText || (nPos >= 0) ||
         (rStr.indexOf(rFieldSep) >= 0) ||
-        (rStr.indexOf(sal_Unicode(_LF)) >= 0);
+        (rStr.indexOf(sal_Unicode('\n')) >= 0);
     return nPos;
 }
 

@@ -809,8 +809,8 @@ void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uI
 OUString Edit::ImplGetValidString( const OUString& rString ) const
 {
     OUString aValidString( rString );
-    aValidString = comphelper::string::remove(aValidString, _LF);
-    aValidString = comphelper::string::remove(aValidString, _CR);
+    aValidString = comphelper::string::remove(aValidString, '\n');
+    aValidString = comphelper::string::remove(aValidString, '\r');
     aValidString = aValidString.replace('\t', ' ');
     return aValidString;
 }
