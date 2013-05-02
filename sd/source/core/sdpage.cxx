@@ -785,7 +785,7 @@ void SdPage::CreateTitleAndLayout(sal_Bool bInit, sal_Bool bCreate )
                 }
                 else
                 {
-                    SdrObject::Free( pObj );  // memory leak i120050
+                    SdrObject::Free( pObj );
                 }
             }
 
