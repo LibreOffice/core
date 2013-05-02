@@ -32,8 +32,9 @@
 #include <utility>
 #include <vector>
 
+#include <rtl/string.hxx>
+
 class FileStream;
-namespace rtl { class OString; }
 
 namespace codemaker { namespace javamaker {
 
