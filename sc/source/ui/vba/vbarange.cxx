@@ -1635,7 +1635,7 @@ void SAL_CALL
 ScVbaRange::ClearContents() throw (uno::RuntimeException)
 {
     using namespace ::com::sun::star::sheet::CellFlags;
-    sal_Int32 nFlags = VALUE | DATETIME | STRING | FORMULA | HARDATTR | EDITATTR | FORMATTED;
+    sal_Int32 nFlags = VALUE | DATETIME | STRING | FORMULA;
     ClearContents( nFlags, true );
 }
 
