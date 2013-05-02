@@ -103,15 +103,15 @@ void SAL_CALL
 ScVbaPictureFormat::IncrementContrast( double increment ) throw (uno::RuntimeException)
 {
     double nContrast = getContrast();
-    if( increment < 0 )
-    {
-        increment = 0.0;
-    }
-    if( increment > 1 )
-    {
-        increment = 1.0;
-    }
     nContrast += increment;
+    if( nContrast < 0 )
+    {
+        nContrast = 0.0;
+    }
+    if( nContrast > 1 )
+    {
+        nContrast = 1.0;
+    }
     setContrast( nContrast );
 }
 
