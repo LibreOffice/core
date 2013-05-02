@@ -41,7 +41,6 @@
 #include <edtwin.hxx>
 
 #include <cmdid.h>
-#include <chartins.hrc>
 #include <anchoredobject.hxx>
 
 #include <comphelper/classids.hxx>

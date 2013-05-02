@@ -26,7 +26,6 @@
 
 
 
-#define DLG_INSERT_CHART        (RC_TABLE_BEGIN + 12)
 #define MSG_WRONG_TABLENAME     (RC_TABLE_BEGIN + 13)
 
 #define TABLE_ACT_END           MSG_WRONG_TABLENAME

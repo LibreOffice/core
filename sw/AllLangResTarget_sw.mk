@@ -136,7 +136,6 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/ribbar/workctrl.src \
     sw/source/ui/shells/shells.src \
     sw/source/ui/smartmenu/stmenu.src \
-    sw/source/ui/table/chartins.src \
     sw/source/ui/table/table.src \
     sw/source/ui/table/tabledlg.src \
     sw/source/ui/uiview/view.src \
