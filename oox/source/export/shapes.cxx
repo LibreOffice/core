@@ -822,11 +822,18 @@ void ShapeExport::WriteGraphicObjectShapePart( Reference< XShape > xShape, const
 
     if( NonEmptyText( xShape ) )
     {
-        WriteTextShape( xShape );
+        // avoid treating all 'IsPresentationObject' objects as having text.
+        Reference< XSimpleText > xText( xShape, UNO_QUERY );
 
-        //DBG(dump_pset(mXPropSet));
+        if( xText.is() && xText->getString().getLength() )
+        {
+            DBG(printf("graphicObject: wrote only text\n"));
 
-        return;
+            WriteTextShape( xShape );
+
+            //DBG(dump_pset(mXPropSet));
+            return;
+        }
     }
 
     DBG(printf("graphicObject without text\n"));
@@ -1124,6 +1131,12 @@ static const NameToConvertMapType& lcl_GetConverters()
     shape_converters[ "com.sun.star.drawing.OLE2Shape" ]                = &ShapeExport::WriteOLE2Shape;
     shape_converters[ "com.sun.star.drawing.TableShape" ]               = &ShapeExport::WriteTableShape;
     shape_converters[ "com.sun.star.drawing.TextShape" ]                = &ShapeExport::WriteTextShape;
+
+    shape_converters[ "com.sun.star.presentation.GraphicObjectShape" ]  = &ShapeExport::WriteGraphicObjectShape;
+    shape_converters[ "com.sun.star.presentation.OLE2Shape" ]           = &ShapeExport::WriteOLE2Shape;
+    shape_converters[ "com.sun.star.presentation.TableShape" ]          = &ShapeExport::WriteTableShape;
+    shape_converters[ "com.sun.star.presentation.TextShape" ]           = &ShapeExport::WriteTextShape;
+
     shape_converters[ "com.sun.star.presentation.DateTimeShape" ]       = &ShapeExport::WriteTextShape;
     shape_converters[ "com.sun.star.presentation.FooterShape" ]         = &ShapeExport::WriteTextShape;
     shape_converters[ "com.sun.star.presentation.HeaderShape" ]         = &ShapeExport::WriteTextShape;
