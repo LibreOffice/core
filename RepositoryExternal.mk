@@ -839,6 +839,10 @@ endef
 
 endif # SYSTEM_LIBLANGTAG
 
+else
+
+gb_LinkTarget__use_liblangtag :=
+
 endif # ENABLE_LIBLANGTAG
 
 
