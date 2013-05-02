@@ -527,7 +527,8 @@ uno::Sequence< uno::Sequence< beans::PropertyValue > > ListDef::GetPropertyValue
 
     // Merge the results of [2] in [1]
     sal_Int32 nThisCount = aThis.getLength( );
-    for ( sal_Int32 i = 0; i < nThisCount; i++ )
+    sal_Int32 nAbstractCount = aAbstract.getLength( );
+    for ( sal_Int32 i = 0; i < nThisCount && i < nAbstractCount; i++ )
     {
         uno::Sequence< beans::PropertyValue > level = aThis[i];
         if ( level.hasElements() )
