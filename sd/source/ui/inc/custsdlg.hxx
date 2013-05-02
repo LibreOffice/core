@@ -71,17 +71,14 @@ public:
 class SdDefineCustomShowDlg : public ModalDialog
 {
 private:
-    FixedText       aFtName;
-    Edit            aEdtName;
-    FixedText       aFtPages;
-    MultiListBox    aLbPages;
-    PushButton      aBtnAdd;
-    PushButton      aBtnRemove;
-    FixedText       aFtCustomPages;
-    SvTreeListBox   aLbCustomPages;
-    OKButton        aBtnOK;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    Edit*            m_pEdtName;
+    ListBox*         m_pLbPages;
+    PushButton*      m_pBtnAdd;
+    PushButton*      m_pBtnRemove;
+    SvTreeListBox*   m_pLbCustomPages;
+    OKButton*        m_pBtnOK;
+    CancelButton*    m_pBtnCancel;
+    HelpButton*      m_pBtnHelp;
 
     SdDrawDocument& rDoc;
     SdCustomShow*&  rpCustomShow;

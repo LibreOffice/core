@@ -280,34 +280,37 @@ sal_Bool SdCustomShowDlg::IsCustomShow() const
 
 SdDefineCustomShowDlg::SdDefineCustomShowDlg( Window* pWindow,
                         SdDrawDocument& rDrawDoc, SdCustomShow*& rpCS ) :
-    ModalDialog     ( pWindow, SdResId( DLG_DEFINE_CUSTOMSHOW ) ),
-
-    aFtName         ( this, SdResId( FT_NAME ) ),
-    aEdtName        ( this, SdResId( EDT_NAME ) ),
-    aFtPages        ( this, SdResId( FT_PAGES ) ),
-    aLbPages        ( this, SdResId( LB_PAGES ) ),
-    aBtnAdd         ( this, SdResId( BTN_ADD ) ),
-    aBtnRemove      ( this, SdResId( BTN_REMOVE ) ),
-    aFtCustomPages  ( this, SdResId( FT_CUSTOM_PAGES ) ),
-    aLbCustomPages  ( this, SdResId( LB_CUSTOM_PAGES ) ),
-    aBtnOK          ( this, SdResId( BTN_OK ) ),
-    aBtnCancel      ( this, SdResId( BTN_CANCEL ) ),
-    aBtnHelp        ( this, SdResId( BTN_HELP ) ),
-
+    ModalDialog     ( pWindow, "DefineCustomSlideShow", "modules/simpress/ui/definecustomslideshow.ui" ),
     rDoc            ( rDrawDoc ),
     rpCustomShow    ( rpCS ),
     bModified       ( sal_False )
 {
-    FreeResource();
+    get( m_pEdtName, "customname" );
+    get( m_pLbPages, "pages" );
+    get( m_pBtnAdd, "add" );
+    get( m_pBtnRemove, "remove" );
+    get( m_pLbCustomPages, "custompages" );
+    get( m_pBtnOK, "ok" );
+    get( m_pBtnCancel, "cancel" );
+    get( m_pBtnHelp, "help" );
 
     Link aLink = LINK( this, SdDefineCustomShowDlg, ClickButtonHdl );
-    aBtnAdd.SetClickHdl( aLink );
-    aBtnRemove.SetClickHdl( aLink );
-    aEdtName.SetModifyHdl( aLink );
-    aLbPages.SetSelectHdl( aLink ); // because of status
-    aLbCustomPages.SetSelectHdl( aLink ); // because of status
+    m_pBtnAdd->SetClickHdl( aLink );
+    m_pBtnRemove->SetClickHdl( aLink );
+    m_pEdtName->SetModifyHdl( aLink );
+    m_pLbPages->SetSelectHdl( aLink ); // because of status
+    m_pLbCustomPages->SetSelectHdl( aLink ); // because of status
 
-    aBtnOK.SetClickHdl( LINK( this, SdDefineCustomShowDlg, OKHdl ) );
+    m_pBtnOK->SetClickHdl( LINK( this, SdDefineCustomShowDlg, OKHdl ) );
+
+    // Hack: m_pLbPages used to be MultiLB. We don't have VCL builder equivalent
+    // of it yet. So enable selecting multiple items here
+    m_pLbPages->EnableMultiSelection( sal_True );
+
+    // shape 'em a bit
+    m_pLbPages->set_width_request(m_pLbPages->approximate_char_width() * 16);
+    m_pLbCustomPages->set_width_request(m_pLbPages->approximate_char_width() * 16);
+    m_pLbPages->SetDropDownLineCount(10);
 
     SdPage* pPage;
     // fill Listbox with page names of Docs
@@ -317,35 +320,35 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg( Window* pWindow,
     {
         pPage = rDoc.GetSdPage( (sal_uInt16) nPage, PK_STANDARD );
         OUString aStr( pPage->GetName() );
-        aLbPages.InsertEntry( aStr );
+        m_pLbPages->InsertEntry( aStr );
     }
     //aLbPages.SelectEntryPos( 0 );
 
     if( rpCustomShow )
     {
         aOldName = rpCustomShow->GetName();
-        aEdtName.SetText( aOldName );
+        m_pEdtName->SetText( aOldName );
 
         // fill ListBox with CustomShow pages
         for( SdCustomShow::PageVec::iterator it = rpCustomShow->PagesVector().begin();
              it != rpCustomShow->PagesVector().end(); ++it )
         {
-            SvTreeListEntry* pEntry = aLbCustomPages.InsertEntry( (*it)->GetName() );
+            SvTreeListEntry* pEntry = m_pLbCustomPages->InsertEntry( (*it)->GetName() );
             pEntry->SetUserData( (SdPage*) (*it) );
         }
     }
     else
     {
         rpCustomShow = new SdCustomShow( &rDoc );
-        aEdtName.SetText( OUString( SdResId( STR_NEW_CUSTOMSHOW ) ) );
-        aEdtName.SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
-        rpCustomShow->SetName( aEdtName.GetText() );
+        m_pEdtName->SetText( OUString( SdResId( STR_NEW_CUSTOMSHOW ) ) );
+        m_pEdtName->SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
+        rpCustomShow->SetName( m_pEdtName->GetText() );
     }
 
-    aLbCustomPages.SetDragDropMode( SV_DRAGDROP_CTRL_MOVE );
-    aLbCustomPages.SetHighlightRange();
+    m_pLbCustomPages->SetDragDropMode( SV_DRAGDROP_CTRL_MOVE );
+    m_pLbCustomPages->SetHighlightRange();
 
-    aBtnOK.Enable( sal_False );
+    m_pBtnOK->Enable( sal_False );
     CheckState();
 }
 
@@ -358,14 +361,14 @@ SdDefineCustomShowDlg::~SdDefineCustomShowDlg()
  */
 void SdDefineCustomShowDlg::CheckState()
 {
-    sal_Bool bPages = aLbPages.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND;
+    sal_Bool bPages = m_pLbPages->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND;
     //sal_Bool bCSPages = aLbCustomPages.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND;
-    sal_Bool bCSPages = aLbCustomPages.FirstSelected() != NULL;
-    sal_Bool bCount = aLbCustomPages.GetEntryCount() > 0;
+    sal_Bool bCSPages = m_pLbCustomPages->FirstSelected() != NULL;
+    sal_Bool bCount = m_pLbCustomPages->GetEntryCount() > 0;
 
-    aBtnOK.Enable( bCount );
-    aBtnAdd.Enable( bPages );
-    aBtnRemove.Enable( bCSPages );
+    m_pBtnOK->Enable( bCount );
+    m_pBtnAdd->Enable( bPages );
+    m_pBtnRemove->Enable( bCSPages );
 }
 
 /**
@@ -373,24 +376,24 @@ void SdDefineCustomShowDlg::CheckState()
  */
 IMPL_LINK( SdDefineCustomShowDlg, ClickButtonHdl, void *, p )
 {
-    if( p == &aBtnAdd )
+    if( p == m_pBtnAdd )
     {
-        sal_uInt16 nCount = aLbPages.GetSelectEntryCount();
+        sal_uInt16 nCount = m_pLbPages->GetSelectEntryCount();
         if( nCount > 0 )
         {
             sal_uLong nPosCP = LIST_APPEND;
-            SvTreeListEntry* pEntry = aLbCustomPages.FirstSelected();
+            SvTreeListEntry* pEntry = m_pLbCustomPages->FirstSelected();
             if( pEntry )
-                nPosCP = aLbCustomPages.GetModel()->GetAbsPos( pEntry ) + 1L;
+                nPosCP = m_pLbCustomPages->GetModel()->GetAbsPos( pEntry ) + 1L;
 
             for( sal_uInt16 i = 0; i < nCount; i++ )
             {
-                OUString aStr = aLbPages.GetSelectEntry( i );
-                pEntry = aLbCustomPages.InsertEntry( aStr,
+                OUString aStr = m_pLbPages->GetSelectEntry( i );
+                pEntry = m_pLbCustomPages->InsertEntry( aStr,
                                             0, sal_False, nPosCP );
 
-                aLbCustomPages.Select( pEntry );
-                SdPage* pPage = rDoc.GetSdPage( (sal_uInt16) aLbPages.
+                m_pLbCustomPages->Select( pEntry );
+                SdPage* pPage = rDoc.GetSdPage( (sal_uInt16) m_pLbPages->
                                     GetSelectEntryPos( i ), PK_STANDARD );
                 pEntry->SetUserData( pPage );
 
@@ -400,21 +403,21 @@ IMPL_LINK( SdDefineCustomShowDlg, ClickButtonHdl, void *, p )
             bModified = sal_True;
         }
     }
-    else if( p == &aBtnRemove )
+    else if( p == m_pBtnRemove )
     {
         //sal_uInt16 nPos = aLbCustomPages.GetSelectEntryPos();
-        SvTreeListEntry* pEntry = aLbCustomPages.FirstSelected();
+        SvTreeListEntry* pEntry = m_pLbCustomPages->FirstSelected();
         if( pEntry )
         {
-            sal_uLong nPos = aLbCustomPages.GetModel()->GetAbsPos( pEntry );
+            sal_uLong nPos = m_pLbCustomPages->GetModel()->GetAbsPos( pEntry );
             //rpCustomShow->Remove( nPos );
             //aLbCustomPages.RemoveEntry( nPos );
-            aLbCustomPages.GetModel()->Remove( aLbCustomPages.GetModel()->GetEntryAtAbsPos( nPos ) );
+            m_pLbCustomPages->GetModel()->Remove( m_pLbCustomPages->GetModel()->GetEntryAtAbsPos( nPos ) );
 
             bModified = sal_True;
         }
     }
-    else if( p == &aEdtName )
+    else if( p == m_pEdtName )
     {
         //rpCustomShow->SetName( aEdtName.GetText() );
 
@@ -436,7 +439,7 @@ void SdDefineCustomShowDlg::CheckCustomShow()
     SvTreeListEntry* pEntry = NULL;
 
     // compare count
-    if( rpCustomShow->PagesVector().size() != aLbCustomPages.GetEntryCount() )
+    if( rpCustomShow->PagesVector().size() != m_pLbCustomPages->GetEntryCount() )
     {
         rpCustomShow->PagesVector().clear();
         bDifferent = sal_True;
@@ -446,9 +449,9 @@ void SdDefineCustomShowDlg::CheckCustomShow()
     if( !bDifferent )
     {
         SdCustomShow::PageVec::iterator it1 = rpCustomShow->PagesVector().begin();
-        pEntry = aLbCustomPages.First();
+        pEntry = m_pLbCustomPages->First();
         for( ; it1 != rpCustomShow->PagesVector().end() && pEntry != NULL && !bDifferent;
-             ++it1, pEntry = aLbCustomPages.Next( pEntry ) )
+             ++it1, pEntry = m_pLbCustomPages->Next( pEntry ) )
         {
             if( *it1 != pEntry->GetUserData() )
             {
@@ -462,9 +465,9 @@ void SdDefineCustomShowDlg::CheckCustomShow()
     if( bDifferent )
     {
         SdPage* pPage = NULL;
-        for( pEntry = aLbCustomPages.First();
+        for( pEntry = m_pLbCustomPages->First();
              pEntry != NULL;
-             pEntry = aLbCustomPages.Next( pEntry ) )
+             pEntry = m_pLbCustomPages->Next( pEntry ) )
         {
             pPage = (SdPage*) pEntry->GetUserData();
             rpCustomShow->PagesVector().push_back( pPage );
@@ -473,7 +476,7 @@ void SdDefineCustomShowDlg::CheckCustomShow()
     }
 
     // compare name and set name if necessary
-    String aStr( aEdtName.GetText() );
+    String aStr( m_pEdtName->GetText() );
     if( rpCustomShow->GetName() != aStr )
     {
         rpCustomShow->SetName( aStr );
@@ -491,7 +494,7 @@ IMPL_LINK_NOARG(SdDefineCustomShowDlg, OKHdl)
     SdCustomShowList* pCustomShowList = rDoc.GetCustomShowList();
     if( pCustomShowList )
     {
-        String aName( aEdtName.GetText() );
+        String aName( m_pEdtName->GetText() );
         SdCustomShow* pCustomShow;
 
         long nPosToSelect = pCustomShowList->GetCurPos();
@@ -516,7 +519,7 @@ IMPL_LINK_NOARG(SdDefineCustomShowDlg, OKHdl)
         WarningBox( this, WinBits( WB_OK ),
                     String( SdResId( STR_WARN_NAME_DUPLICATE ) ) ).Execute();
 
-        aEdtName.GrabFocus();
+        m_pEdtName->GrabFocus();
     }
 
     return 0;
