@@ -33,7 +33,7 @@ void Tutorial2::run()
     }
 
 // This function is called for every if statement.
-bool Tutorial2::VisitIfStmt( IfStmt* ifstmt )
+bool Tutorial2::VisitIfStmt( const IfStmt* ifstmt )
     {
     if( ignoreLocation( ifstmt ))
         return true;
@@ -49,7 +49,7 @@ bool Tutorial2::VisitIfStmt( IfStmt* ifstmt )
             if( isReturnFalse( ifstmt->getThen()))
                 warn = ifstmt->getThen();
             // Check if the sub-statement is '{ return false; }'
-            else if( CompoundStmt* compound = dyn_cast< CompoundStmt >( ifstmt->getThen()))
+            else if( const CompoundStmt* compound = dyn_cast< CompoundStmt >( ifstmt->getThen()))
                 {
                 if( compound->size() == 1 ) // one statement
                     if( isReturnFalse( *compound->body_begin())) // check the one sub-statement

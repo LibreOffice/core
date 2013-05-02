@@ -31,7 +31,7 @@ void Tutorial3::run()
     TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
     }
 
-bool Tutorial3::VisitIfStmt( IfStmt* ifstmt )
+bool Tutorial3::VisitIfStmt( const IfStmt* ifstmt )
     {
     if( ignoreLocation( ifstmt ))
         return true;
@@ -42,7 +42,7 @@ bool Tutorial3::VisitIfStmt( IfStmt* ifstmt )
             // Modify the sub-statement if it is 'return false'.
             modifyReturnFalse( ifstmt->getThen());
             // Modify the sub-statement if it is '{ return false; }'.
-            if( CompoundStmt* compound = dyn_cast< CompoundStmt >( ifstmt->getThen()))
+            if( const CompoundStmt* compound = dyn_cast< CompoundStmt >( ifstmt->getThen()))
                 {
                 if( compound->size() == 1 ) // one statement
                     modifyReturnFalse( *compound->body_begin());

@@ -25,8 +25,8 @@ class SalLogAreas
     public:
         explicit SalLogAreas( CompilerInstance& compiler );
         virtual void run();
-        bool VisitFunctionDecl( FunctionDecl* function );
-        bool VisitCallExpr( CallExpr* call );
+        bool VisitFunctionDecl( const FunctionDecl* function );
+        bool VisitCallExpr( const CallExpr* call );
     private:
         void checkArea( StringRef area, SourceLocation location );
         void readLogAreas();

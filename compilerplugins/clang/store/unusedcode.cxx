@@ -30,7 +30,7 @@ class UnusedCode
     public:
         explicit UnusedCode( CompilerInstance& compiler, Rewriter& rewriter );
         virtual void run();
-        bool VisitFunctionDecl( FunctionDecl* declaration );
+        bool VisitFunctionDecl( const FunctionDecl* declaration );
     };
 
 UnusedCode::UnusedCode( CompilerInstance& compiler, Rewriter& rewriter )
@@ -43,12 +43,12 @@ void UnusedCode::run()
     TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
     }
 
-bool UnusedCode::VisitFunctionDecl( FunctionDecl* declaration )
+bool UnusedCode::VisitFunctionDecl( const FunctionDecl* declaration )
     {
     if( ignoreLocation( declaration ))
         return true;
     bool isUsed = declaration->isUsed();
-    if( CXXMethodDecl* cxxmethod = dyn_cast< CXXMethodDecl >( declaration ))
+    if( const CXXMethodDecl* cxxmethod = dyn_cast< CXXMethodDecl >( declaration ))
         {
         if( !isUsed && cxxmethod->isVirtual())
             { // Virtual methods are used also if a method they override is used.

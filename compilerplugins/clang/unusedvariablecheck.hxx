@@ -23,7 +23,7 @@ class UnusedVariableCheck
     public:
         explicit UnusedVariableCheck( CompilerInstance& compiler );
         virtual void run();
-        bool VisitVarDecl( VarDecl* var );
+        bool VisitVarDecl( const VarDecl* var );
     };
 
 } // namespace

@@ -38,7 +38,7 @@ void BodyNotInBlock::run()
     TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
     }
 
-bool BodyNotInBlock::VisitFunctionDecl( FunctionDecl* declaration )
+bool BodyNotInBlock::VisitFunctionDecl( const FunctionDecl* declaration )
     {
     if( ignoreLocation( declaration ))
         return true;

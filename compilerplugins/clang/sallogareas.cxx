@@ -37,17 +37,17 @@ void SalLogAreas::run()
     TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
     }
 
-bool SalLogAreas::VisitFunctionDecl( FunctionDecl* function )
+bool SalLogAreas::VisitFunctionDecl( const FunctionDecl* function )
     {
     inFunction = function;
     return true;
     }
 
-bool SalLogAreas::VisitCallExpr( CallExpr* call )
+bool SalLogAreas::VisitCallExpr( const CallExpr* call )
     {
     if( ignoreLocation( call ))
         return true;
-    if( FunctionDecl* func = call->getDirectCallee())
+    if( const FunctionDecl* func = call->getDirectCallee())
         {
         // Optimize, getQualifiedNameAsString() is reportedly expensive.
         if( func->getNumParams() == 4 && func->getIdentifier() != NULL

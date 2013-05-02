@@ -29,7 +29,7 @@ void RemoveForwardStringDecl::run()
     TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
     }
 
-bool RemoveForwardStringDecl::VisitNamespaceDecl( NamespaceDecl* declaration )
+bool RemoveForwardStringDecl::VisitNamespaceDecl( const NamespaceDecl* declaration )
     {
     if( ignoreLocation( declaration ))
         return true;

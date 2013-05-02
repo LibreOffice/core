@@ -23,7 +23,7 @@ class RemoveForwardStringDecl
     public:
         explicit RemoveForwardStringDecl( CompilerInstance& compiler, Rewriter& rewriter );
         virtual void run();
-        bool VisitNamespaceDecl( NamespaceDecl* declaration );
+        bool VisitNamespaceDecl( const NamespaceDecl* declaration );
     private:
         bool tryRemoveStringForwardDecl( const Decl* decl );
     };

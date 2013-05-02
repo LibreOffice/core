@@ -35,7 +35,7 @@ void Tutorial1::run()
 
 // This function is called for every return statement.
 // Returning true means to continue with examining the AST, false means to stop (just always return true).
-bool Tutorial1::VisitReturnStmt( ReturnStmt* returnstmt )
+bool Tutorial1::VisitReturnStmt( const ReturnStmt* returnstmt )
     {
     // Helper function from the LO base plugin class, call at the very beginning to ignore sources
     // that should not be processed (e.g. system headers).

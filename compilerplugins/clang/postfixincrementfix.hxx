@@ -23,7 +23,7 @@ class PostfixIncrementFix
     public:
         explicit PostfixIncrementFix( CompilerInstance& compiler, Rewriter& rewriter );
         virtual void run();
-        bool VisitFunctionDecl( FunctionDecl* declaration );
+        bool VisitFunctionDecl( const FunctionDecl* declaration );
     private:
         typedef std::vector< const Stmt* > StmtParents;
         void fixPostfixOperator( const CXXOperatorCallExpr* op, StmtParents& parents );

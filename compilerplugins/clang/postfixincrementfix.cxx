@@ -29,7 +29,7 @@ void PostfixIncrementFix::run()
     TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
     }
 
-bool PostfixIncrementFix::VisitFunctionDecl( FunctionDecl* declaration )
+bool PostfixIncrementFix::VisitFunctionDecl( const FunctionDecl* declaration )
     {
     if( ignoreLocation( declaration ))
         return true;

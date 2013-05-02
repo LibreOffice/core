@@ -40,7 +40,7 @@ void UnusedVariableCheck::run()
     TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
     }
 
-bool UnusedVariableCheck::VisitVarDecl( VarDecl* var )
+bool UnusedVariableCheck::VisitVarDecl( const VarDecl* var )
     {
     if( ignoreLocation( var ))
         return true;

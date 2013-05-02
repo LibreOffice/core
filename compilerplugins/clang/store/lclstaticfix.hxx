@@ -23,7 +23,7 @@ class LclStaticFix
     public:
         explicit LclStaticFix( CompilerInstance& compiler, Rewriter& rewriter );
         virtual void run();
-        bool VisitFunctionDecl( FunctionDecl* declaration );
+        bool VisitFunctionDecl( const FunctionDecl* declaration );
     };
 
 } // namespace

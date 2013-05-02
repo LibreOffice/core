@@ -29,7 +29,7 @@ class Tutorial1
         // The function that will be called to perform the actual action.
         virtual void run();
         // Function from Clang, it will be called for every return statement in the source.
-        bool VisitReturnStmt( ReturnStmt* returnstmt );
+        bool VisitReturnStmt( const ReturnStmt* returnstmt );
     };
 
 } // namespace

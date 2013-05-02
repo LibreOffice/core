@@ -29,7 +29,7 @@ void LclStaticFix::run()
     TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
     }
 
-bool LclStaticFix::VisitFunctionDecl( FunctionDecl* declaration )
+bool LclStaticFix::VisitFunctionDecl( const FunctionDecl* declaration )
     {
     if( ignoreLocation( declaration ))
         return true;

@@ -25,10 +25,10 @@ public:
 
     virtual void run() { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
-    bool VisitCallExpr(CallExpr * expr);
+    bool VisitCallExpr(const CallExpr * expr);
 };
 
-bool LiteralAlternative::VisitCallExpr(CallExpr * expr) {
+bool LiteralAlternative::VisitCallExpr(const CallExpr * expr) {
     if (ignoreLocation(expr)) {
         return true;
     }

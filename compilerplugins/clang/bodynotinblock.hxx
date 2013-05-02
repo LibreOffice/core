@@ -23,7 +23,7 @@ class BodyNotInBlock
     public:
         explicit BodyNotInBlock( CompilerInstance& compiler );
         virtual void run();
-        bool VisitFunctionDecl( FunctionDecl* declaration );
+        bool VisitFunctionDecl( const FunctionDecl* declaration );
     private:
         typedef vector< const Stmt* > StmtParents;
         void traverseStatement( const Stmt* stmt, StmtParents& parents );

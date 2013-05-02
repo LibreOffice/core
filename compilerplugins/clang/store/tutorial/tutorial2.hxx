@@ -25,7 +25,7 @@ class Tutorial2
         Tutorial2( CompilerInstance& compiler );
         virtual void run();
         // Will be called for every if statement.
-        bool VisitIfStmt( IfStmt* ifstmt );
+        bool VisitIfStmt( const IfStmt* ifstmt );
     private:
         // Helper function to check if the statement is 'return false;'.
         bool isReturnFalse( const Stmt* stmt );
