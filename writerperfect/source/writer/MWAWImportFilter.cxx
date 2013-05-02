@@ -25,12 +25,12 @@
 #include <ucbhelper/content.hxx>
 
 #include <libmwaw/libmwaw.hxx>
+#include <libodfgen/libodfgen.hxx>
 
-#include "common/FilterInternal.hxx"
 #include "common/DocumentHandler.hxx"
-#include "common/OdtGenerator.hxx"
-#include "MWAWImportFilter.hxx"
 #include "common/WPXSvStream.hxx"
+#include "common/WriterPerfectDebug.hxx"
+#include "MWAWImportFilter.hxx"
 
 #include <iostream>
 

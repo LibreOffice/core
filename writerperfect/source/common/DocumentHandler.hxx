@@ -24,7 +24,7 @@
 
 #include <libwpd/libwpd.h>
 
-#include "OdfDocumentHandler.hxx"
+#include <libodfgen/libodfgen.hxx>
 
 using com::sun::star::uno::Reference;
 using com::sun::star::xml::sax::XDocumentHandler;

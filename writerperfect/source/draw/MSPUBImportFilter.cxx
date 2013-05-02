@@ -22,10 +22,11 @@
 #include <xmloff/attrlist.hxx>
 
 #include <libmspub/libmspub.h>
+#include <libodfgen/libodfgen.hxx>
+
 #include "common/DocumentHandler.hxx"
-#include "common/OdgGenerator.hxx"
-#include "MSPUBImportFilter.hxx"
 #include "common/WPXSvStream.hxx"
+#include "MSPUBImportFilter.hxx"
 
 #include <iostream>
 

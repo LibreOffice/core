@@ -26,12 +26,11 @@
 #include <ucbhelper/content.hxx>
 
 #include <libwpd/libwpd.h>
+#include <libodfgen/libodfgen.hxx>
 
-#include "common/FilterInternal.hxx"
 #include "common/DocumentHandler.hxx"
-#include "common/OdgGenerator.hxx"
-#include "common/OdtGenerator.hxx"
 #include "common/WPXSvStream.hxx"
+#include "common/WriterPerfectDebug.hxx"
 #include "WordPerfectImportFilter.hxx"
 
 using ::ucbhelper::Content;

@@ -45,17 +45,18 @@ $(eval $(call gb_Library_use_static_libraries,wpftdraw,\
 ))
 
 $(eval $(call gb_Library_use_externals,wpftdraw,\
-	wpd \
-	wpg \
-	visio \
 	cdr \
-    mspub \
-	lcms2 \
-	libxml2 \
-	zlib \
 	icui18n \
 	icuuc \
 	icudata \
+	lcms2 \
+	libxml2 \
+    mspub \
+	odfgen \
+	visio \
+	wpd \
+	wpg \
+	zlib \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,wpftdraw,\

@@ -7246,6 +7246,11 @@ fi
 AC_SUBST(SYSTEM_EXPAT)
 
 dnl ===================================================================
+dnl Check for system libodfgen
+dnl ===================================================================
+libo_CHECK_SYSTEM_MODULE([libodfgen],[ODFGEN],[libodfgen-0.0])
+
+dnl ===================================================================
 dnl Check for system libcdr
 dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([libcdr],[CDR],[libcdr-0.0 >= 0.0.5])

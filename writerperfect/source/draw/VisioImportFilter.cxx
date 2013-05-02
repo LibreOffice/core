@@ -22,10 +22,11 @@
 #include <xmloff/attrlist.hxx>
 
 #include <libvisio/libvisio.h>
+#include <libodfgen/libodfgen.hxx>
+
 #include "common/DocumentHandler.hxx"
-#include "common/OdgGenerator.hxx"
-#include "VisioImportFilter.hxx"
 #include "common/WPXSvStream.hxx"
+#include "VisioImportFilter.hxx"
 
 #include <iostream>
 

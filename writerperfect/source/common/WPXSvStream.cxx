@@ -8,7 +8,7 @@
  */
 
 #include "WPXSvStream.hxx"
-#include "FilterInternal.hxx"
+#include "WriterPerfectDebug.hxx"
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>

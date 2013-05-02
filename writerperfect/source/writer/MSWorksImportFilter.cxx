@@ -26,11 +26,12 @@
 
 #include <libwps/libwps.h>
 
-#include "common/FilterInternal.hxx"
+#include <libodfgen/libodfgen.hxx>
+
 #include "common/DocumentHandler.hxx"
-#include "common/OdtGenerator.hxx"
-#include "MSWorksImportFilter.hxx"
 #include "common/WPXSvStream.hxx"
+#include "common/WriterPerfectDebug.hxx"
+#include "MSWorksImportFilter.hxx"
 
 #include <iostream>
 

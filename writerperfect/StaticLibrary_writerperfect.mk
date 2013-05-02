@@ -26,6 +26,7 @@ $(eval $(call gb_StaticLibrary_set_include,writerperfect,\
 
 $(eval $(call gb_StaticLibrary_use_externals,writerperfect,\
 	boost_headers \
+	odfgen \
 	wpd \
 	wpg \
 ))
@@ -36,18 +37,7 @@ $(eval $(call gb_StaticLibrary_use_api,writerperfect,\
 ))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,writerperfect,\
-	writerperfect/source/common/DocumentElement \
 	writerperfect/source/common/DocumentHandler \
-	writerperfect/source/common/FilterInternal \
-	writerperfect/source/common/FontStyle \
-	writerperfect/source/common/InternalHandler \
-	writerperfect/source/common/ListStyle \
-	writerperfect/source/common/OdgGenerator \
-	writerperfect/source/common/OdtGenerator \
-	writerperfect/source/common/PageSpan \
-	writerperfect/source/common/SectionStyle \
-	writerperfect/source/common/TableStyle \
-	writerperfect/source/common/TextRunStyle \
 	writerperfect/source/common/WPXSvStream \
 ))
 

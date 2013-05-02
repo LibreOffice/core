@@ -1365,6 +1365,36 @@ endef
 endif # SYSTEM_CDR
 
 
+ifeq ($(SYSTEM_ODFGEN),YES)
+
+define gb_LinkTarget__use_odfgen
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+    $(ODFGEN_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(ODFGEN_LIBS))
+
+endef
+
+else # !SYSTEM_ODFGEN
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	odfgen-0.0 \
+))
+
+define gb_LinkTarget__use_odfgen
+$(call gb_LinkTarget_use_package,$(1),\
+	libodfgen \
+)
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	odfgen-0.0 \
+)
+
+endef
+
+endif # SYSTEM_ODFGEN
+
+
 ifeq ($(SYSTEM_MSPUB),YES)
 
 define gb_LinkTarget__use_mspub

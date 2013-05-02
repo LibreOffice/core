@@ -21,9 +21,11 @@ $(eval $(call gb_Module_Module,writerperfect))
 
 ifneq (,$(SYSTEM_WPD))
 ifneq (,$(SYSTEM_WPS))
+ifneq (,$(SYSTEM_ODFGEN))
 $(eval $(call gb_Module_add_targets,writerperfect,\
 	Library_wpftwriter \
 ))
+endif
 endif
 endif
 
@@ -32,6 +34,7 @@ ifneq (,$(SYSTEM_WPG))
 ifneq (,$(SYSTEM_VISIO))
 ifneq (,$(SYSTEM_CDR))
 ifneq (,$(SYSTEM_MSPUB))
+ifneq (,$(SYSTEM_ODFGEN))
 $(eval $(call gb_Module_add_targets,writerperfect,\
 	Library_wpftdraw \
 ))
@@ -40,12 +43,15 @@ endif
 endif
 endif
 endif
+endif
 
 ifneq (,$(SYSTEM_WPD))
 ifneq (,$(SYSTEM_WPG))
+ifneq (,$(SYSTEM_ODFGEN))
 $(eval $(call gb_Module_add_targets,writerperfect,\
 	StaticLibrary_writerperfect \
 ))
+endif
 endif
 endif
 

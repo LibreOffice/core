@@ -7,7 +7,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 #include "DocumentHandler.hxx"
-#include "FilterInternal.hxx"
+#include "WriterPerfectDebug.hxx"
 
 #include <string.h>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
