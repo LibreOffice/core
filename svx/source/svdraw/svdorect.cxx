@@ -330,6 +330,7 @@ SdrHdl* SdrRectObj::GetHdl(sal_uInt32 nHdlNum) const
     {
         case 0:
         {
+            OSL_ENSURE(!IsTextEditActive(), "Do not use a ImpTextframeHdl for hilighting text in active text edit, this will collide with EditEngine paints (!)");
             pH = new ImpTextframeHdl(aRect);
             pH->SetObj((SdrObject*)this);
             pH->SetDrehWink(aGeo.nDrehWink);
