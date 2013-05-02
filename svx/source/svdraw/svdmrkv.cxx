@@ -47,6 +47,7 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrhittesthelper.hxx>
+#include <svx/svdocapt.hxx>
 
 #include <editeng/editdata.hxx>
 
@@ -621,6 +622,13 @@ void SdrMarkView::SetMarkHandles()
         // ( necessary for handles to be displayed in
         // correct position )
         Point aGridOff = GetGridOffset();
+
+        // #i122142# for captions in TextEdit, force to FrameHdls to get the special text selection
+        if(!bFrmHdl && pMarkedObj && bSingleTextObjMark && dynamic_cast< SdrCaptionObj* >(pMarkedObj))
+        {
+            bFrmHdl = true;
+        }
+
         if (bFrmHdl)
         {
             Rectangle aRect(GetMarkedObjRect());
