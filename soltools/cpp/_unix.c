@@ -221,7 +221,7 @@ void
 /* memmove is defined here because some vendors don't provide it at
    all and others do a terrible job (like calling malloc) */
 
-#if !defined(__IBMC__) && !defined(_WIN32) && !defined(__GLIBC__)
+#if !defined(__IBMC__) && !defined(_WIN32) && !defined(__GLIBC__) && !defined(__clang__)
 
 void *
     memmove(void *dp, const void *sp, size_t n)
