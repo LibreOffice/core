@@ -1,0 +1,13 @@
+diff --git a/src/OdgGenerator.cxx b/src/OdgGenerator.cxx
+index 39d571b..5ebf60d 100644
+--- a/src/OdgGenerator.cxx
++++ b/src/OdgGenerator.cxx
+@@ -282,7 +282,7 @@ static WPXString doubleToString(const double value)
+ {
+ 	WPXString tempString;
+ 	tempString.sprintf("%.4f", value);
+-#ifndef ANDROID
++#ifndef __ANDROID__
+ 	std::string decimalPoint(localeconv()->decimal_point);
+ #else
+ 	std::string decimalPoint(".");

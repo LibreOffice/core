@@ -11,4 +11,10 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,odfgen))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,odfgen,$(ODFGEN_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,odfgen,1))
+
+$(eval $(call gb_UnpackedTarball_add_patches,odfgen,\
+       libodfgen/libodfgen-0.0.0-android.patch \
+))
+
 # vim: set noet sw=4 ts=4:
