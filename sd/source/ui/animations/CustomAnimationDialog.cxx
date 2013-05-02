@@ -2323,8 +2323,8 @@ void CustomAnimationTextAnimTabPage::update( STLPropertySet* pSet )
                 pSet->setPropertyValue( nHandleTextGroupingAuto, makeAny( fTextGroupingAuto ) );
         }
     }
-    //bug 120049
-    //[crash] Aoo crash when modify the "Random effects" animation effect's trigger condition to "Start effect on click of" .
+    //#i120049# impress crashes when modifying the "Random effects" animation
+    //effect's trigger condition to "Start effect on click of".
     //If this control is disabled, we should ignore its value
     if (maCBXAnimateForm.IsEnabled())
     {
