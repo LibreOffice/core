@@ -36,19 +36,19 @@ $(eval $(call gb_StaticLibrary_use_api,writerperfect,\
 ))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,writerperfect,\
-	writerperfect/source/filter/DocumentElement \
-	writerperfect/source/filter/DocumentHandler \
-	writerperfect/source/filter/FilterInternal \
-	writerperfect/source/filter/FontStyle \
-	writerperfect/source/filter/InternalHandler \
-	writerperfect/source/filter/ListStyle \
-	writerperfect/source/filter/OdgGenerator \
-	writerperfect/source/filter/OdtGenerator \
-	writerperfect/source/filter/PageSpan \
-	writerperfect/source/filter/SectionStyle \
-	writerperfect/source/filter/TableStyle \
-	writerperfect/source/filter/TextRunStyle \
-	writerperfect/source/stream/WPXSvStream \
+	writerperfect/source/common/DocumentElement \
+	writerperfect/source/common/DocumentHandler \
+	writerperfect/source/common/FilterInternal \
+	writerperfect/source/common/FontStyle \
+	writerperfect/source/common/InternalHandler \
+	writerperfect/source/common/ListStyle \
+	writerperfect/source/common/OdgGenerator \
+	writerperfect/source/common/OdtGenerator \
+	writerperfect/source/common/PageSpan \
+	writerperfect/source/common/SectionStyle \
+	writerperfect/source/common/TableStyle \
+	writerperfect/source/common/TextRunStyle \
+	writerperfect/source/common/WPXSvStream \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -26,11 +26,11 @@
 
 #include <libwps/libwps.h>
 
-#include "filter/FilterInternal.hxx"
-#include "filter/DocumentHandler.hxx"
-#include "filter/OdtGenerator.hxx"
+#include "common/FilterInternal.hxx"
+#include "common/DocumentHandler.hxx"
+#include "common/OdtGenerator.hxx"
 #include "MSWorksImportFilter.hxx"
-#include "stream/WPXSvStream.h"
+#include "common/WPXSvStream.hxx"
 
 #include <iostream>
 

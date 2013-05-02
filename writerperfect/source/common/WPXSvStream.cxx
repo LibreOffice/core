@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "WPXSvStream.h"
-#include "filter/FilterInternal.hxx"
+#include "WPXSvStream.hxx"
+#include "FilterInternal.hxx"
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>

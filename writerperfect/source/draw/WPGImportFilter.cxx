@@ -27,10 +27,10 @@
 #include <comphelper/componentcontext.hxx>
 #include <xmloff/attrlist.hxx>
 
-#include "filter/DocumentHandler.hxx"
-#include "filter/OdgGenerator.hxx"
+#include "common/DocumentHandler.hxx"
+#include "common/OdgGenerator.hxx"
 #include "WPGImportFilter.hxx"
-#include "stream/WPXSvStream.h"
+#include "common/WPXSvStream.hxx"
 
 #include <iostream>
 

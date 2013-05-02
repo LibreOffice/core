@@ -26,10 +26,10 @@
 #include <xmloff/attrlist.hxx>
 
 #include <libcdr/libcdr.h>
-#include "filter/DocumentHandler.hxx"
-#include "filter/OdgGenerator.hxx"
+#include "common/DocumentHandler.hxx"
+#include "common/OdgGenerator.hxx"
 #include "CMXImportFilter.hxx"
-#include "stream/WPXSvStream.h"
+#include "common/WPXSvStream.hxx"
 
 #include <iostream>
 

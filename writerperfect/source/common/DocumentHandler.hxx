@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OODOCUMENTHANDLER_HXX_
-#define _OODOCUMENTHANDLER_HXX_
+#ifndef _DOCUMENTHANDLER_HXX_
+#define _DOCUMENTHANDLER_HXX_
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
@@ -43,6 +43,6 @@ private:
     Reference < XDocumentHandler > mxHandler;
 };
 
-#endif // _OODOCUMENTHANDLER_HXX_
+#endif // _DOCUMENTHANDLER_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

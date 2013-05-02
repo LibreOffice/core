@@ -27,11 +27,11 @@
 
 #include <libwpd/libwpd.h>
 
-#include "filter/FilterInternal.hxx"
-#include "filter/DocumentHandler.hxx"
-#include "filter/OdgGenerator.hxx"
-#include "filter/OdtGenerator.hxx"
-#include "stream/WPXSvStream.h"
+#include "common/FilterInternal.hxx"
+#include "common/DocumentHandler.hxx"
+#include "common/OdgGenerator.hxx"
+#include "common/OdtGenerator.hxx"
+#include "common/WPXSvStream.hxx"
 #include "WordPerfectImportFilter.hxx"
 
 using ::ucbhelper::Content;
