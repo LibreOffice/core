@@ -53,6 +53,7 @@
 #include "formula/grammar.hxx"
 #include "formula/opcode.hxx"
 #include "formula/token.hxx"
+#include "formula/vectortoken.hxx"
 #include "i18nlangtag/lang.h"
 #include "i18nlangtag/mslangid.hxx"
 #include "rtl/math.hxx"
