@@ -5422,8 +5422,8 @@ void SwHTMLParser::ParseMoreMetaOptions()
         aName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_META_content_script_type ) )
         return;
 
-    aContent = comphelper::string::remove(aContent, _CR);
-    aContent = comphelper::string::remove(aContent, _LF);
+    aContent = comphelper::string::remove(aContent, RTL_CHAR_CR);
+    aContent = comphelper::string::remove(aContent, RTL_CHAR_LF);
 
     if( aName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_META_sdendnote ) )
     {

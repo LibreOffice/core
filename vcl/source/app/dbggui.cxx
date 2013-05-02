@@ -618,7 +618,7 @@ long DbgWindow::PreNotify( NotifyEvent& rNEvt )
 void DbgWindow::InsertLine( const OUString& rLine )
 {
     OUString   aStr = convertLineEnd(rLine, LINEEND_LF);
-    sal_Int32  nPos = aStr.indexOf( _LF );
+    sal_Int32  nPos = aStr.indexOf( RTL_CHAR_LF );
     sal_Bool   bFirstEntry = sal_True;
     while ( nPos != -1 )
     {
@@ -631,7 +631,7 @@ void DbgWindow::InsertLine( const OUString& rLine )
         bFirstEntry = sal_False;
 
         aStr = aStr.replaceAt( 0, nPos+1, "" );
-        nPos = aStr.indexOf( _LF );
+        nPos = aStr.indexOf( RTL_CHAR_LF );
     }
     if ( maLstBox.GetEntryCount() >= DBGWIN_MAXLINES )
         maLstBox.RemoveEntry( 0 );
@@ -1144,7 +1144,7 @@ void DbgInfoDialog::SetInfoText( const OUString& rStr )
     sal_Int32 nFoundIndex;
     do
     {
-        nFoundIndex = aStr.indexOf( _LF, nStrIndex );
+        nFoundIndex = aStr.indexOf( RTL_CHAR_LF, nStrIndex );
         OUString aTextParagraph = aStr.copy( nStrIndex, nFoundIndex-nStrIndex );
         if ( mbHelpText )
         {

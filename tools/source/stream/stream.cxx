@@ -28,7 +28,6 @@
 
 #include "boost/static_assert.hpp"
 
-#include <tools/solar.h>
 #include <osl/endian.h>
 
 #include <comphelper/string.hxx>
@@ -1641,11 +1640,11 @@ SvStream& endl( SvStream& rStr )
 {
     LineEnd eDelim = rStr.GetLineDelimiter();
     if ( eDelim == LINEEND_CR )
-        rStr << _CR;
+        rStr << RTL_CHAR_CR;
     else if( eDelim == LINEEND_LF )
-        rStr << _LF;
+        rStr << RTL_CHAR_LF;
     else
-        rStr << _CR << _LF;
+        rStr << RTL_CHAR_CR << RTL_CHAR_LF;
     return rStr;
 }
 
@@ -1654,13 +1653,13 @@ SvStream& endlu( SvStream& rStrm )
     switch ( rStrm.GetLineDelimiter() )
     {
         case LINEEND_CR :
-            rStrm << sal_Unicode(_CR);
+            rStrm << sal_Unicode(RTL_CHAR_CR);
         break;
         case LINEEND_LF :
-            rStrm << sal_Unicode(_LF);
+            rStrm << sal_Unicode(RTL_CHAR_LF);
         break;
         default:
-            rStrm << sal_Unicode(_CR) << sal_Unicode(_LF);
+            rStrm << sal_Unicode(RTL_CHAR_CR) << sal_Unicode(RTL_CHAR_LF);
     }
     return rStrm;
 }
@@ -2035,7 +2034,7 @@ namespace
         while (i < nStrLen)
         {
             // \r or \n causes linebreak
-            if ( (rIn[i] == _CR) || (rIn[i] == _LF) )
+            if ( (rIn[i] == RTL_CHAR_CR) || (rIn[i] == RTL_CHAR_LF) )
             {
                 nLen = nLen + nLineEndLen;
 
@@ -2043,17 +2042,17 @@ namespace
                 if ( !bConvert )
                 {
                     // Muessen wir Konvertieren
-                    if ( ((eLineEnd != LINEEND_LF) && (rIn[i] == _LF)) ||
-                         ((eLineEnd == LINEEND_CRLF) && (rIn[i+1] != _LF)) ||
+                    if ( ((eLineEnd != LINEEND_LF) && (rIn[i] == RTL_CHAR_LF)) ||
+                         ((eLineEnd == LINEEND_CRLF) && (rIn[i+1] != RTL_CHAR_LF)) ||
                          ((eLineEnd == LINEEND_LF) &&
-                          ((rIn[i] == _CR) || (rIn[i+1] == _CR))) ||
+                          ((rIn[i] == RTL_CHAR_CR) || (rIn[i+1] == RTL_CHAR_CR))) ||
                          ((eLineEnd == LINEEND_CR) &&
-                          ((rIn[i] == _LF) || (rIn[i+1] == _LF))) )
+                          ((rIn[i] == RTL_CHAR_LF) || (rIn[i+1] == RTL_CHAR_LF))) )
                         bConvert = true;
                 }
 
                 // skip char if \r\n oder \n\r
-                if ( ((rIn[i+1] == _CR) || (rIn[i+1] == _LF)) &&
+                if ( ((rIn[i+1] == RTL_CHAR_CR) || (rIn[i+1] == RTL_CHAR_LF)) &&
                      (rIn[i] != rIn[i+1]) )
                     ++i;
             }
@@ -2071,22 +2070,22 @@ namespace
         while (i < nStrLen)
         {
             // \r or \n causes linebreak
-            if ( (rIn[i] == _CR) || (rIn[i] == _LF) )
+            if ( (rIn[i] == RTL_CHAR_CR) || (rIn[i] == RTL_CHAR_LF) )
             {
                 if ( eLineEnd == LINEEND_CRLF )
                 {
-                    aNewData.append(_CR);
-                    aNewData.append(_LF);
+                    aNewData.append(RTL_CHAR_CR);
+                    aNewData.append(RTL_CHAR_LF);
                 }
                 else
                 {
                     if ( eLineEnd == LINEEND_CR )
-                        aNewData.append(_CR);
+                        aNewData.append(RTL_CHAR_CR);
                     else
-                        aNewData.append(_LF);
+                        aNewData.append(RTL_CHAR_LF);
                 }
 
-                if ( ((rIn[i+1] == _CR) || (rIn[i+1] == _LF)) &&
+                if ( ((rIn[i+1] == RTL_CHAR_CR) || (rIn[i+1] == RTL_CHAR_LF)) &&
                      (rIn[i] != rIn[i+1]) )
                     ++i;
             }

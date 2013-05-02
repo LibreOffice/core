@@ -31,6 +31,9 @@
 extern "C" {
 #endif
 
+#define RTL_CHAR_CR ('\x0D')
+#define RTL_CHAR_LF ('\x0A')
+
 /* ======================================================================= */
 
 /** Return the length of a string.

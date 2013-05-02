@@ -1680,8 +1680,8 @@ void SwHTMLParser::InsertInput()
     // geloescht werden.
     if( !bKeepCRLFInValue )
     {
-        sText = comphelper::string::remove(sText, _CR);
-        sText = comphelper::string::remove(sText, _LF);
+        sText = comphelper::string::remove(sText, RTL_CHAR_CR);
+        sText = comphelper::string::remove(sText, RTL_CHAR_LF);
     }
 
     const uno::Reference< XMultiServiceFactory > & rServiceFactory =
