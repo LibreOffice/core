@@ -346,16 +346,7 @@ bool sendMsg( PLUGIN_MSG* pMsg, size_t len, int iEnsure)
 
 extern "C"
 {
-char* pMimeTypes = const_cast< char* >( "application/vnd.stardivision.calc:sdc:StarCalc 3.0 - 5.0;"
-"application/vnd.stardivision.chart:sds:StarChart 3.0 - 5.0;"
-"application/vnd.stardivision.draw:sda:StarDraw 3.0 - 5.0;"
-"application/vnd.stardivision.impress:sdd:StarImpress 3.0 - 5.0;"
-"application/vnd.stardivision.impress-packed:sdp:StarImpress-packed 3.0 - 5.0;"
-"application/vnd.stardivision.math:smf:StarMath 3.0 - 5.0;"
-"application/vnd.stardivision.writer:vor:StarWriter Template 3.0 - 5.0;"
-"application/vnd.stardivision.writer-global:sgl:StarWriter Global 3.0 - 5.0;"
-"application/vnd.staroffice.writer:sdw:StarWriter 3.0 - 5.0;"
-"application/msword:doc:MS Word document;"
+char* pMimeTypes = const_cast< char* >( "application/msword:doc:MS Word document;"
 "application/msword:dot:MS Word document template;"
 "application/vnd.ms-excel:xls:MS Excel spreadsheet;"
 "application/vnd.ms-excel:xlt:MS Excel spreadsheet template;"
