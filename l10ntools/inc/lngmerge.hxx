@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef LNGMERGE_INCLUDED
+#define LNGMERGE_INCLUDED
+
 #include "sal/config.h"
 
 #include <iosfwd>
@@ -30,10 +33,13 @@ typedef std::vector< OString* > LngLineList;
 #define LNG_OK              0x0000
 #define LNG_COULD_NOT_OPEN  0x0001
 
-//
-// class LngParser
-//
 
+/**
+  Class for localization of *.ulf files
+
+  Parse *.ulf files, extract translatable strings
+  and merge translated strings.
+*/
 class LngParser
 {
 private:
@@ -57,5 +63,7 @@ public:
     sal_Bool Merge(const OString &rPOFile, const OString &rDestinationFile,
          const OString &rLanguage );
 };
+
+#endif // LNGMERGE_INCLUDED
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

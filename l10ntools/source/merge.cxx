@@ -196,12 +196,12 @@ std::pair<MergeDataHashMap::iterator,bool> MergeDataHashMap::insert(const OStrin
     std::pair<iterator,bool> aTemp = m_aHashMap.insert(HashMap_t::value_type( rKey, pMergeData ));
     if( m_aHashMap.size() == 1 )
     {
-        ///When first insert, set an iterator to the first element
+        // When first insert, set an iterator to the first element
         aFirstInOrder = aTemp.first;
     }
     else
     {
-        ///Define insertion order by setting an iterator to the next element.
+        // Define insertion order by setting an iterator to the next element.
         aLastInsertion->second->m_aNextData = aTemp.first;
     }
     aLastInsertion = aTemp.first;
@@ -212,14 +212,14 @@ MergeDataHashMap::iterator MergeDataHashMap::find(const OString& rKey)
 {
     iterator aHint = m_aHashMap.end();
 
-    ///Add a hint
+    // Add a hint
     if( bFirstSearch && !m_aHashMap.empty() )
     {
         aHint = aFirstInOrder;
     }
     else if( aLastFound == aLastInsertion )
     {
-        /// Next to the last element is the first element
+        // Next to the last element is the first element
         aHint = aFirstInOrder;
     }
     else if( aLastFound != m_aHashMap.end() && aLastFound != aLastInsertion )
@@ -227,7 +227,7 @@ MergeDataHashMap::iterator MergeDataHashMap::find(const OString& rKey)
         aHint = aLastFound->second->m_aNextData;
     }
 
-    ///If hint works than no need for search
+    // If hint works than no need for search
     if( aHint != m_aHashMap.end() && aHint->first == rKey )
     {
         aLastFound = aHint;

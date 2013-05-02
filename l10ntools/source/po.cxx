@@ -42,7 +42,7 @@ public:
 
                         GenPoEntry();
     virtual             ~GenPoEntry();
-                        //Default copy constructor and copy operator work well
+                        // Default copy constructor and copy operator work well
 
     virtual OString     getExtractCom() const   { return m_sExtractCom; }
     virtual OString     getReference() const    { return m_sReference; }
@@ -83,7 +83,7 @@ public:
 
 namespace
 {
-    //Convert a normal string to msg/po output string
+    // Convert a normal string to msg/po output string
     static OString lcl_GenMsgString(const OString& rString)
     {
         if ( rString.isEmpty() )
@@ -110,7 +110,7 @@ namespace
         return sResult;
     }
 
-    //Convert msg string to normal form
+    // Convert msg string to normal form
     static OString lcl_GenNormString(const OString& rString)
     {
         return
@@ -121,7 +121,6 @@ namespace
     }
 }
 
-//Default constructor
 GenPoEntry::GenPoEntry()
     : m_sExtractCom( OString() )
     , m_sReference( OString() )
@@ -133,12 +132,10 @@ GenPoEntry::GenPoEntry()
 {
 }
 
-//Destructor
 GenPoEntry::~GenPoEntry()
 {
 }
 
-//Write to file
 void GenPoEntry::writeToFile(std::ofstream& rOFStream) const
 {
     if ( rOFStream.tellp() != std::ofstream::pos_type( 0 ))
@@ -161,7 +158,6 @@ void GenPoEntry::writeToFile(std::ofstream& rOFStream) const
               << lcl_GenMsgString(m_sMsgStr).getStr() << std::endl;
 }
 
-//Read from file
 void GenPoEntry::readFromFile(std::ifstream& rIFStream)
 {
     *this = GenPoEntry();
@@ -220,9 +216,10 @@ void GenPoEntry::readFromFile(std::ifstream& rIFStream)
     }
  }
 
-//Class PoEntry
+//
+// Class PoEntry
+//
 
-//Default constructor
 PoEntry::PoEntry()
     : m_pGenPo( 0 )
     , m_bIsInitialized( false )
@@ -261,8 +258,7 @@ PoEntry::PoEntry(
         sMsgCtxt += ".quickhelptext"; break;
     case TTITLE:
         sMsgCtxt += ".title"; break;
-    /*Default case is unneeded because the type of eType has
-      only three element*/
+    // Default case is unneeded because the type of eType has only three element
     }
     m_pGenPo->setMsgCtxt(sMsgCtxt);
     m_pGenPo->setMsgId(rText);
@@ -272,20 +268,17 @@ PoEntry::PoEntry(
     m_bIsInitialized = true;
 }
 
-//Destructor
 PoEntry::~PoEntry()
 {
     delete m_pGenPo;
 }
 
-//Copy constructor
 PoEntry::PoEntry( const PoEntry& rPo )
     : m_pGenPo( rPo.m_pGenPo ? new GenPoEntry( *(rPo.m_pGenPo) ) : 0 )
     , m_bIsInitialized( rPo.m_bIsInitialized )
 {
 }
 
-//Copy operator
 PoEntry& PoEntry::operator=(const PoEntry& rPo)
 {
     if( this == &rPo )
@@ -312,21 +305,18 @@ PoEntry& PoEntry::operator=(const PoEntry& rPo)
     return *this;
 }
 
-//Get name of file from which entry is extracted
 OString PoEntry::getSourceFile() const
 {
     assert( m_bIsInitialized );
     return m_pGenPo->getReference();
 }
 
-//Get groupid
 OString PoEntry::getGroupId() const
 {
     assert( m_bIsInitialized );
     return m_pGenPo->getMsgCtxt().getToken(0,'\n');
 }
 
-//Get localid
 OString PoEntry::getLocalId() const
 {
     assert( m_bIsInitialized );
@@ -337,7 +327,6 @@ OString PoEntry::getLocalId() const
         return sMsgCtxt.getToken(1,'\n');
 }
 
-//Get the type of component from which entry is extracted
 OString PoEntry::getResourceType() const
 {
     assert( m_bIsInitialized );
@@ -348,7 +337,6 @@ OString PoEntry::getResourceType() const
         return sMsgCtxt.getToken(2,'\n').getToken(0,'.');
 }
 
-//Get the type of entry
 PoEntry::TYPE PoEntry::getType() const
 {
     assert( m_bIsInitialized );
@@ -364,37 +352,20 @@ PoEntry::TYPE PoEntry::getType() const
         return TTITLE;
 }
 
-//Check wheather entry is fuzzy
 bool PoEntry::isFuzzy() const
 {
     assert( m_bIsInitialized );
     return m_pGenPo->isFuzzy();
 }
 
-//Get keyid
-OString PoEntry::getKeyId() const
-{
-    assert( m_bIsInitialized );
-    const OString sExtractCom = m_pGenPo->getExtractCom();
-    if( sExtractCom.indexOf("\n") == -1 )
-    {
-        return sExtractCom;
-    }
-    else
-    {
-        return sExtractCom.getToken(1,'\n');
-    }
-}
-
-
-//Get translation string in merge format
+// Get translation string in merge format
 OString PoEntry::getMsgId() const
 {
     assert( m_bIsInitialized );
     return m_pGenPo->getMsgId();
 }
 
-//Get translated string in merge format
+// Get translated string in merge format
 OString PoEntry::getMsgStr() const
 {
     assert( m_bIsInitialized );
@@ -402,7 +373,6 @@ OString PoEntry::getMsgStr() const
 
 }
 
-//Check whether po-s belong to the same localization component
 bool PoEntry::IsInSameComp(const PoEntry& rPo1,const PoEntry& rPo2)
 {
     assert( rPo1.m_bIsInitialized && rPo2.m_bIsInitialized );
@@ -417,7 +387,7 @@ OString PoEntry::genKeyId(const OString& rGenerator)
     boost::crc_32_type aCRC32;
     aCRC32.process_bytes(rGenerator.getStr(), rGenerator.getLength());
     sal_uInt32 nCRC = aCRC32.checksum();
-    ///Use simple ASCII characters, exclude I, l, 1 and O, 0 to avoid confusing IDs
+    // Use simple ASCII characters, exclude I, l, 1 and O, 0 to avoid confusing IDs
     static const OString sSymbols =
         "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
     char sKeyId[6];
@@ -430,12 +400,13 @@ OString PoEntry::genKeyId(const OString& rGenerator)
     return OString(sKeyId);
 }
 
-
-//Class PoHeader
+//
+// Class PoHeader
+//
 
 namespace
 {
-    //Get actual time in "YEAR-MO-DA HO:MI+ZONE" form
+    // Get actual time in "YEAR-MO-DA HO:MI+ZONE" form
     static OString lcl_GetTime()
     {
         time_t aNow = time(NULL);
@@ -446,7 +417,6 @@ namespace
     }
 }
 
-//Template Constructor
 PoHeader::PoHeader( const OString& rExtSrc )
     : m_pGenPo( new GenPoEntry() )
     , m_bIsInitialized( false )
@@ -473,7 +443,9 @@ PoHeader::~PoHeader()
     delete m_pGenPo;
 }
 
-//Class PoOfstream
+//
+// Class PoOfstream
+//
 
 PoOfstream::PoOfstream()
     : m_aOutPut()
@@ -532,11 +504,14 @@ void PoOfstream::writeEntry( const PoEntry& rPoEntry )
     rPoEntry.m_pGenPo->writeToFile( m_aOutPut );
 }
 
-//Class PoIfstream
+//
+// Class PoIfstream
+//
 
 namespace
 {
 
+// Check the validity of read entry
 static bool lcl_CheckInputEntry(const GenPoEntry& rEntry)
 {
     const OString sMsgCtxt = rEntry.getMsgCtxt();
@@ -580,7 +555,7 @@ void PoIfstream::open( const OString& rFileName )
     assert( !isOpen() );
     m_aInPut.open( rFileName.getStr(), std::ios_base::in );
 
-    //Skip header
+    // Skip header
     std::string sTemp;
     std::getline(m_aInPut,sTemp);
     while( !sTemp.empty() && !m_aInPut.eof() )

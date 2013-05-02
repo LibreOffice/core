@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-/// Helper methods to work with xml files
+// Helper string methods
 
 #ifndef INCLUDED_L10NTOOLS_SOURCE_HELPER_HXX
 #define INCLUDED_L10NTOOLS_SOURCE_HELPER_HXX
@@ -25,17 +25,22 @@
 
 namespace helper {
 
+/// Escape all given character in the text
 OString escapeAll(
     const OString& rText, const OString& rUnEscaped, const OString& rEscaped );
+/// Unescape all given character in the text
 OString unEscapeAll(
     const OString& rText, const OString& rEscaped, const OString& rUnEscaped  );
 
+/// Convert special characters to XML entity references
 OString QuotHTML( const OString &rString );
+/// Convert XML entity references to single characters
 OString UnQuotHTML( const OString& rString );
 
+/// Check whether text is a valid XML expression
 bool isWellFormedXML( OString const & text );
 
-//Convert xmlChar* to OString
+/// Convert xmlChar* to OString
 OString xmlStrToOString( const xmlChar* pString );
 
 }

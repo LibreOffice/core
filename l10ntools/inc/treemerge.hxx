@@ -14,11 +14,12 @@
 #include <rtl/string.hxx>
 #include <vector>
 
-/** Class for tree localization
+/**
+  Class for localization of *.tree files
 
-    Parse *.tree files, extract translatable strings,
-    merge translated strings and update reference and title
-    of referred help files.
+  Parse *.tree files, extract translatable strings,
+  merge translated strings and update reference and title
+  of referred help files.
 */
 class TreeParser
 {
@@ -28,16 +29,19 @@ private:
     bool m_bIsInitialized;
 
 public:
-    TreeParser(
-        const OString& rInputFile, const OString& rLang );
+    /// Parse tree file
+    TreeParser( const OString& rInputFile, const OString& rLang );
     ~TreeParser();
 
     bool isInitialized() const { return m_bIsInitialized; }
+    /// Export strings
     void Extract( const OString& rPOFile );
+    /// Merge strings to tree file and update reference to help files(xhp)
     void Merge(
         const OString &rMergeSrc, const OString &rDestinationFile,
         const OString &rXhpRoot );
 };
 
-#endif //_TREEMERGE_INCLUDED
+#endif // _TREEMERGE_INCLUDED
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

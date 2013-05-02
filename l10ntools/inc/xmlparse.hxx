@@ -123,9 +123,10 @@ typedef std::vector< XMLChildNode* > XMLChildNodeList;
 
 //-------------------------------------------------------------------------
 
+class XMLData;
+
 /** Virtual base to handle different kinds of parent nodes
  */
-class XMLData;
 
 class XMLParentNode : public XMLChildNode
 {
@@ -140,7 +141,7 @@ protected:
               }
     XMLParentNode(): pChildList(NULL){
     }
-    /// Copyconstructor
+
     XMLParentNode( const XMLParentNode& );
 
     XMLParentNode& operator=(const XMLParentNode& obj);
@@ -178,7 +179,6 @@ typedef boost::unordered_map<OString, sal_Bool, OStringHash> TagMap;
 /** Holds information of a XML file, is root node of tree
  */
 
-
 class XMLFile : public XMLParentNode
 {
 public:
@@ -208,7 +208,7 @@ public:
     const std::vector<OString> getOrder(){ return order; }
 
 protected:
-    // writes a string as UTF8 with dos line ends to a given stream
+    /// writes a string as UTF8 with dos line ends to a given stream
     void        WriteString( ofstream &rStream, const OUString &sString );
 
     void        InsertL10NElement( XMLElement* pElement);
@@ -225,7 +225,6 @@ protected:
 };
 
 /// An Utility class for XML
-/// See RFC 3066 / #i8252# for ISO codes
 class XMLUtil{
 
 public:
@@ -235,7 +234,6 @@ public:
     /// UnQuot the XML characters
     static OUString UnQuotHTML( const OUString &rString );
 };
-
 
 
 //-------------------------------------------------------------------------
@@ -258,7 +256,7 @@ private:
 protected:
     void Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement);
 public:
-    /// create a element node
+    /// create an element node
     XMLElement(){}
     XMLElement(
         const OUString &rName,    // the element name
@@ -293,7 +291,7 @@ public:
 
     void ChangeLanguageTag( const OUString &rValue );
 
-    // Return a Unicode String representation of this object
+    /// Return a Unicode String representation of this object
     OUString ToOUString();
 
     void SetProject         ( OString const & prj        ){ project = prj;        }
@@ -417,17 +415,16 @@ public:
 /** struct for error information, used by class SimpleXMLParser
  */
 struct XMLError {
-    XML_Error eCode;    // the error code
-    std::size_t nLine; // error line number
-    std::size_t nColumn; // error column number
-    OUString sMessage;    // readable error message
+    XML_Error eCode;    ///< the error code
+    std::size_t nLine; ///< error line number
+    std::size_t nColumn; ///< error column number
+    OUString sMessage;    ///< readable error message
 };
 
 //-------------------------------------------------------------------------
 
 /** validating xml parser, creates a document tree with xml nodes
  */
-
 
 class SimpleXMLParser
 {
@@ -468,6 +465,6 @@ public:
     const XMLError &GetError() { return aErrorInformation; }
 };
 
-#endif
+#endif // BOOTSTRP_XMLPARSE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

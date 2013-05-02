@@ -52,16 +52,16 @@ public:
                     PoEntry( const PoEntry& rPo );
     PoEntry&        operator=( const PoEntry& rPo );
 
-    OString         getSourceFile() const;
+    OString         getSourceFile() const;      ///< Get name of file from which entry is extracted
     OString         getGroupId() const;
     OString         getLocalId() const;
-    OString         getResourceType() const;
-    TYPE            getType() const;
+    OString         getResourceType() const;    ///< Get the type of component from which entry is extracted
+    TYPE            getType() const;            ///< Get the type of entry
     OString         getMsgId() const;
     OString         getMsgStr() const;
     bool            isFuzzy() const;
-    OString         getKeyId() const;
 
+    /// Check whether po-s belong to the same localization component
     static bool     IsInSameComp(const PoEntry& rPo1,const PoEntry& rPo2);
     static OString  genKeyId(const OString& rGenerator);
 
@@ -85,7 +85,7 @@ public:
     friend class PoOfstream;
     friend class PoIfstream;
 
-                    PoHeader( const OString& rExtSrc );
+                    PoHeader( const OString& rExtSrc ); ///< Template Constructor
                     ~PoHeader();
 };
 

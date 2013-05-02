@@ -100,9 +100,8 @@ int WorkOnTokenSet( int nTyp, char *pTokenText )
 } // extern
 
 extern "C" {
-/*****************************************************************************/
+
 int SetError()
-/*****************************************************************************/
 {
     // set error at global instance of class Export
     global::exporter->SetError();
@@ -111,9 +110,8 @@ int SetError()
 }
 
 extern "C" {
-/*****************************************************************************/
+
 int GetError()
-/*****************************************************************************/
 {
     // get error at global instance of class Export
     if (global::exporter->GetError())
@@ -126,9 +124,7 @@ int GetError()
 // class ResData
 //
 
-/*****************************************************************************/
 sal_Bool ResData::SetId( const OString& rId, sal_uInt16 nLevel )
-/*****************************************************************************/
 {
     if ( nLevel > nIdLevel )
     {
@@ -224,9 +220,7 @@ Export::Export(
     aOutput.mSimple->open(rOutput.getStr(), std::ios_base::out | std::ios_base::trunc);
 }
 
-/*****************************************************************************/
 void Export::Init()
-/*****************************************************************************/
 {
     // resets the internal status, used before parseing another file
     bDefine = sal_False;
@@ -240,9 +234,7 @@ void Export::Init()
     aResStack.clear();
 }
 
-/*****************************************************************************/
 Export::~Export()
-/*****************************************************************************/
 {
     if( pParseQueue )
         delete pParseQueue;
@@ -268,9 +260,7 @@ Export::~Export()
     }
 }
 
-/*****************************************************************************/
 int Export::Execute( int nToken, const char * pToken )
-/*****************************************************************************/
 {
 
     OString sToken( pToken );
@@ -291,7 +281,7 @@ int Export::Execute( int nToken, const char * pToken )
         (!(( bNextMustBeDefineEOL ) && ( sOrig == "\n" )))) {
         // this tokens are not mandatory for parsing, so ignore them ...
         if ( bMergeMode )
-            WriteToMerged( sOrig , false ); // ... ore whrite them directly to dest.
+            WriteToMerged( sOrig , false ); // ... or write them directly to dest.
         return 0;
     }
 
@@ -588,7 +578,6 @@ int Export::Execute( int nToken, const char * pToken )
                     nListIndex = 0;
                     nListLevel = 0;
                 }
-                // PairedList
                 else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("PAIREDLIST")))
                 {
                     pResData->bList = sal_True;
@@ -794,9 +783,7 @@ int Export::Execute( int nToken, const char * pToken )
     return 1;
 }
 
-/*****************************************************************************/
 void Export::CutComment( OString &rText )
-/*****************************************************************************/
 {
     if (rText.indexOf("//") != -1) {
         OString sWork(rText.replaceAll("\\\"", "XX"));
@@ -812,9 +799,7 @@ void Export::CutComment( OString &rText )
     }
 }
 
-/*****************************************************************************/
 sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
-/*****************************************************************************/
 {
     if ( bMergeMode ) {
         MergeRest( pResData );
@@ -1079,9 +1064,7 @@ void Export::InsertListEntry(const OString &rText, const OString &rLine)
     nListIndex++;
 }
 
-/*****************************************************************************/
 void Export::CleanValue( OString &rValue )
-/*****************************************************************************/
 {
     while ( !rValue.isEmpty()) {
         if (( rValue[0] == ' ' ) || ( rValue[0] == '\t' ))
@@ -1212,16 +1195,14 @@ void Export::WriteToMerged(const OString &rText , bool bSDFContent)
     }
 }
 
-/*****************************************************************************/
 void Export::ConvertMergeContent( OString &rText )
-/*****************************************************************************/
 {
     sal_Bool bNoOpen = ( rText.indexOf( "\\\"" ) != 0 );
     sal_Bool bNoClose = !rText.endsWith("\\\"");
 
 
-    rText = rText.replaceAll("\\\"'","\'"); /// Temporary: until PO files contain escaped single quotes
-                                            /// (Maybe next PO update solve this)
+    rText = rText.replaceAll("\\\"'","\'"); // Temporary: until PO files contain escaped single quotes
+                                            // (Maybe next PO update solve this)
     rText =
         helper::escapeAll(
             rText.replaceAll("","\\0x7F"),
@@ -1248,7 +1229,7 @@ bool Export::GetAllMergeEntrysOfList(ResData *pResData, std::vector<MergeEntrys*
         pResData->sGId = pResData->sGId + OString('.');
     pResData->sGId = pResData->sGId + pResData->sId;
 
-    ///Find out the type of List
+    // Find out the type of List
     MergeEntrys* pEntrysOfFirstItem = 0;
     sal_uInt16 nType = LIST_STRING;
     bool bPairedList = false;
@@ -1298,12 +1279,12 @@ bool Export::GetAllMergeEntrysOfList(ResData *pResData, std::vector<MergeEntrys*
     if( !bPairedList )
     {
         MergeEntrys* pEntrys;
-        ///MergeData contains longer list
+        // MergeData contains longer list
         pResData->sId = OString::number(nMaxIndex+1);
         pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
         if ( pEntrys )
             return false;
-        ///MergeData contains shorter list
+        // MergeData contains shorter list
         pResData->sId = OString::number(nMaxIndex);
         pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
         if ( !pEntrys )
@@ -1388,9 +1369,7 @@ void Export::ResData2Output( MergeEntrys *pEntry, sal_uInt16 nType, const OStrin
     }
 }
 
-/*****************************************************************************/
 void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
-/*****************************************************************************/
 {
     if ( !pMergeDataFile ){
         pMergeDataFile = new MergeDataFile( sMergeSrc, global::inputPathname, false );
@@ -1552,9 +1531,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
     pParseQueue->bMflag = false;
 }
 
-/*****************************************************************************/
 void Export::SetChildWithText()
-/*****************************************************************************/
 {
     if ( aResStack.size() > 1 ) {
         for ( size_t i = 0; i < aResStack.size() - 1; i++ ) {

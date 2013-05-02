@@ -17,14 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef XRMMERGE_INCLUDED
+#define XRMMERGE_INCLUDED
+
 #include "sal/config.h"
 
 #include <fstream>
 
-//
-// XRMResParser
-//
 
+/// Parser for *.xrm and description.xml files
 class XRMResParser
 {
 private:
@@ -68,10 +69,8 @@ public:
     sal_Bool GetError() { return bError; }
 };
 
-//
-// XRMResExport
-//
 
+/// Export strings from *.xrm and description.xml files
 class XRMResExport : public XRMResParser
 {
 private:
@@ -101,10 +100,8 @@ public:
     virtual ~XRMResExport();
 };
 
-//
-// class XRMResMerge
-//
 
+/// Merge strings to *.xrm and description.xml files
 class XRMResMerge : public XRMResParser
 {
 private:
@@ -136,5 +133,7 @@ public:
     );
     virtual ~XRMResMerge();
 };
+
+#endif // XRMMERGE_INCLUDED
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -64,12 +64,10 @@ public:
 // class CfgStack
 //
 
-typedef std::vector< CfgStackData* > CfgStackList;
-
 class CfgStack
 {
 private:
-    CfgStackList maList;
+    std::vector< CfgStackData* > maList;
 
 public:
     CfgStack() {}
@@ -92,10 +90,7 @@ public:
     size_t size() const { return maList.size(); }
 };
 
-//
-// class CfgParser
-//
-
+/// Parser for *.xcu files
 class CfgParser
 {
 protected:
@@ -136,10 +131,7 @@ public:
     int Execute( int nToken, char * pToken );
 };
 
-//
-// class CfgExport
-//
-
+/// Export strings from *.xcu files
 class CfgExport : public CfgParser
 {
 private:
@@ -162,10 +154,7 @@ public:
     ~CfgExport();
 };
 
-//
-// class CfgMerge
-//
-
+/// Merge strings to *.xcu files
 class CfgMerge : public CfgParser
 {
 private:

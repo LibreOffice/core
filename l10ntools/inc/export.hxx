@@ -30,9 +30,9 @@
 #include <osl/file.h>
 
 #include <boost/unordered_map.hpp>
-#include <iterator> /* std::iterator*/
-#include <set>      /* std::set*/
-#include <vector>   /* std::vector*/
+#include <iterator>
+#include <set>
+#include <vector>
 #include <queue>
 #include <string>
 
@@ -44,7 +44,6 @@
 #define NO_TRANSLATE_ISO        "x-no-translate"
 
 class MergeEntrys;
-class MergeData;
 
 typedef boost::unordered_map<OString, OString, OStringHash>
     OStringHashMap;
@@ -56,17 +55,18 @@ typedef boost::unordered_map<OString, bool, OStringHash>
 #define X_COMMENT "x-comment"
 #define LIST_REFID  "LIST_REFID"
 
-typedef OStringHashMap ExportListEntry;
-typedef ::std::vector< ExportListEntry* > ExportListBase;
-
 //
 // class ExportList
 //
 
+typedef OStringHashMap ExportListEntry;
+
+
+/// Container for parse different types of string lists
 class ExportList
 {
 private:
-    ExportListBase maList;
+    std::vector< ExportListEntry* > maList;
     std::size_t nSourceLanguageListEntryCount;
 
 public:
@@ -85,12 +85,8 @@ public:
 #define REFID_NONE 0xFFFF
 
 //
-// struct ResData
+// class ResData
 //
-
-/******************************************************************************
-* Purpose: holds mandatory data to export a single res (used with ResStack)
-******************************************************************************/
 
 #define ID_LEVEL_NULL       0x0000
 #define ID_LEVEL_AUTOID     0x0001
@@ -100,6 +96,8 @@ public:
 #define ID_LEVEL_IDENTIFIER 0x0005
 #define ID_LEVEL_LISTINDEX  0x0006
 
+
+/// Purpose: holds mandatory data to export a single res (used with ResStack)
 class ResData
 {
 public:
@@ -146,10 +144,6 @@ public:
 // class Export
 //
 
-/******************************************************************************
-* Purpose: syntax check and export of *.src, called from lexer
-******************************************************************************/
-
 #define LIST_NON                    0x0000
 #define LIST_STRING                 0x0001
 #define LIST_FILTER                 0x0002
@@ -165,9 +159,9 @@ public:
 #define MERGE_MODE_LIST             0x0001
 
 typedef ::std::vector< ResData* > ResStack;
-// forwards
 class ParserQueue;
 
+/// Purpose: syntax check and export of *.src, called from lexer
 class Export
 {
 private:
@@ -178,12 +172,12 @@ private:
 
     } aOutput;
 
-    ResStack aResStack;                 // stack for parsing recursive
+    ResStack aResStack;                 ///< stack for parsing recursive
 
     sal_Bool bDefine;                       // cur. res. in a define?
-    sal_Bool bNextMustBeDefineEOL;          // define but no \ at lineend
+    sal_Bool bNextMustBeDefineEOL;          ///< define but no \ at lineend
     std::size_t nLevel; // res. recursiv? how deep?
-    sal_uInt16 nList;                       // cur. res. is String- or FilterList
+    sal_uInt16 nList;                       ///< cur. res. is List
     OString m_sListLang;
     std::size_t nListIndex;
     std::size_t nListLevel;
@@ -199,13 +193,13 @@ private:
 
     std::vector<OString> aLanguages;
 
-    sal_Bool WriteData( ResData *pResData, sal_Bool bCreateNew = sal_False );// called befor dest. cur ResData
+    sal_Bool WriteData( ResData *pResData, sal_Bool bCreateNew = sal_False ); ///< called befor dest. cur ResData
     sal_Bool WriteExportList( ResData *pResData, ExportList *pExportList,
                         const OString &rTyp, sal_Bool bCreateNew = sal_False );
 
     OString MergePairedList( OString const & sLine , OString const & sText );
 
-    OString FullId();                    // creates cur. GID
+    OString FullId();                    ///< creates cur. GID
 
     OString GetPairedListID(const OString & rText);
     OString GetPairedListString(const OString& rText);
@@ -237,7 +231,7 @@ public:
     ~Export();
 
     void Init();
-    int Execute( int nToken, const char * pToken ); // called from lexer
+    int Execute( int nToken, const char * pToken ); ///< called from lexer
     void SetError() { bError = sal_True; }
     sal_Bool GetError() { return bError; }
     ParserQueue* pParseQueue; // public!!
@@ -248,10 +242,7 @@ public:
 // class MergeEntrys
 //
 
-/**
- * Purpose: holds information of data to merge
- */
-
+/// Purpose: holds information of data to merge
 class MergeEntrys
 {
 friend class MergeDataFile;
@@ -285,6 +276,12 @@ public:
     static OString GetQTZText(const ResData& rResData, const OString& rOrigText);
 
 };
+
+//
+// class MergeDataHashMap
+//
+
+class MergeData;
 
 /** Container for MergeData
 
@@ -331,12 +328,7 @@ class MergeDataHashMap
 // class MergeData
 //
 
-/******************************************************************************
-* Purpose: holds information of data to merge (one resource)
-******************************************************************************/
-
-class MergeDataFile;
-
+/// Purpose: holds information of data to merge (one resource)
 class MergeData
 {
     friend class MergeDataHashMap;
@@ -361,10 +353,7 @@ public:
 // class MergeDataFile
 //
 
-/******************************************************************************
-* Purpose: holds information of data to merge
-******************************************************************************/
-
+/// Purpose: holds information of data to merge, read from PO file
 class MergeDataFile
 {
     private:
@@ -421,11 +410,8 @@ public:
 
     void Close();
 private:
-    // Future / Next
     std::queue<QueueEntry>* aQueueNext;
-    // Current
     std::queue<QueueEntry>* aQueueCur;
-    // Ref
     std::queue<QueueEntry>* aQref;
 
     Export& aExport;
@@ -434,6 +420,6 @@ private:
     inline void Pop( std::queue<QueueEntry>& aQueue );
 
 };
-#endif
+#endif // _EXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

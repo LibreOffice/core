@@ -99,9 +99,7 @@ CfgStackData* CfgStack::Push(const OString &rTag, const OString &rId)
 // class CfgStack
 //
 
-/*****************************************************************************/
 CfgStack::~CfgStack()
-/*****************************************************************************/
 {
     for ( size_t i = 0, n = maList.size(); i < n; i++ )
         delete maList[ i ];
@@ -121,9 +119,7 @@ OString CfgStack::GetAccessPath( size_t nPos )
     return sReturn.makeStringAndClear();
 }
 
-/*****************************************************************************/
 CfgStackData *CfgStack::GetStackData()
-/*****************************************************************************/
 {
     if (!maList.empty())
         return maList[maList.size() - 1];
@@ -135,9 +131,7 @@ CfgStackData *CfgStack::GetStackData()
 // class CfgParser
 //
 
-/*****************************************************************************/
 CfgParser::CfgParser()
-/*****************************************************************************/
                 : pStackData( NULL ),
                 bLocalize( sal_False )
 {
@@ -152,13 +146,10 @@ sal_Bool CfgParser::IsTokenClosed(const OString &rToken)
     return rToken[rToken.getLength() - 2] == '/';
 }
 
-/*****************************************************************************/
 void CfgParser::AddText(
     OString &rText,
     const OString &rIsoLang,
-    const OString &rResTyp
-)
-/*****************************************************************************/
+    const OString &rResTyp )
 {
     rText = rText.replaceAll(OString('\n'), OString()).
         replaceAll(OString('\r'), OString()).
@@ -168,9 +159,7 @@ void CfgParser::AddText(
     pStackData->sText[ rIsoLang ] = rText;
 }
 
-/*****************************************************************************/
 int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
-/*****************************************************************************/
 {
     OString sToken( pToken );
 
@@ -312,9 +301,7 @@ void CfgExport::Output(const OString&)
 {
 }
 
-/*****************************************************************************/
 int CfgParser::Execute( int nToken, char * pToken )
-/*****************************************************************************/
 {
     OString sToken( pToken );
 
@@ -346,12 +333,10 @@ void CfgParser::Error(const OString& rError)
 // class CfgExport
 //
 
-/*****************************************************************************/
 CfgExport::CfgExport(
         const OString &rOutputFile,
-        const OString &rFilePath
-)
-/*****************************************************************************/
+        const OString &rFilePath )
+
                 : sPath( rFilePath )
 {
     pOutputStream.open( rOutputFile, PoOfstream::APP );
@@ -362,16 +347,13 @@ CfgExport::CfgExport(
     }
 }
 
-/*****************************************************************************/
 CfgExport::~CfgExport()
-/*****************************************************************************/
 {
     pOutputStream.close();
 }
 
-/*****************************************************************************/
+
 void CfgExport::WorkOnResourceEnd()
-/*****************************************************************************/
 {
     if ( bLocalize ) {
     if ( pStackData->sText[OString(RTL_CONSTASCII_STRINGPARAM("en-US"))].getLength() )
@@ -441,9 +423,7 @@ CfgMerge::CfgMerge(
         aLanguages.push_back(rLanguage);
 }
 
-/*****************************************************************************/
 CfgMerge::~CfgMerge()
-/*****************************************************************************/
 {
     pOutputStream.close();
     delete pMergeDataFile;
@@ -480,9 +460,7 @@ void CfgMerge::Output(const OString& rOutput)
     pOutputStream << rOutput.getStr();
 }
 
-/*****************************************************************************/
 void CfgMerge::WorkOnResourceEnd()
-/*****************************************************************************/
 {
 
     if ( pMergeDataFile && pResData && bLocalize && bEnglish ) {

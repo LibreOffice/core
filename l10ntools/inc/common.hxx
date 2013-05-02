@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-/// Methods used by all of executables
+// Methods used by all of executables
 
 #ifndef INCLUDED_L10NTOOLS_SOURCE_COMMON_HXX
 #define INCLUDED_L10NTOOLS_SOURCE_COMMON_HXX
@@ -20,7 +20,7 @@
 
 namespace common {
 
-//result type of handleArguments()
+/// Result type of handleArguments()
 struct HandledArgs
 {
     OString m_sInputFile;
@@ -37,10 +37,13 @@ struct HandledArgs
     {}
 };
 
+/// Handle command line parameters
 bool handleArguments(int argc, char * argv[], HandledArgs& o_aHandledArgs);
 
+/// Write out a help about usage
 void writeUsage(const OString& rName, const OString& rFileType);
 
+/// Write out a PoEntry with attention to excaptions
 void writePoEntry(
     const OString& rExecutable, PoOfstream& rPoStream, const OString& rSourceFile,
     const OString& rResType, const OString& rGroupId, const OString& rLocalId,

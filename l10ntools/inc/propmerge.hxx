@@ -13,11 +13,13 @@
 #include <rtl/string.hxx>
 #include <vector>
 
-/** Class for properties localization
+/**
+  Class for localization of *.properties files
 
-    Parse *.properties files, extract translatable strings
-    and merge translated strings.
+  Parse *.properties files, extract translatable strings
+  and merge translated strings.
 */
+
 class PropParser
 {
 private:
@@ -37,5 +39,5 @@ public:
     void Merge( const OString &rMergeSrc, const OString &rDestinationFile );
 };
 
-#endif //_PROPMERGE_INCLUDED
+#endif // _PROPMERGE_INCLUDED
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

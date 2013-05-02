@@ -53,9 +53,7 @@ XRMResParser *pParser = NULL;
 extern "C" {
 // the whole interface to lexer is in this extern "C" section
 
-/*****************************************************************************/
 extern char *GetOutputFile( int argc, char* argv[])
-/*****************************************************************************/
 {
     bDisplayName = sal_False;
     bExtensionDescription = sal_False;
@@ -63,7 +61,6 @@ extern char *GetOutputFile( int argc, char* argv[])
     common::HandledArgs aArgs;
     if ( common::handleArguments(argc, argv, aArgs) )
     {
-        // command line is valid
         bMergeMode = aArgs.m_bMergeMode;
         sLanguage = aArgs.m_sLanguage;
         sInputFileName = aArgs.m_sInputFile;
@@ -81,9 +78,7 @@ extern char *GetOutputFile( int argc, char* argv[])
     }
 }
 
-/*****************************************************************************/
 int InitXrmExport( char*, char* pFilename)
-/*****************************************************************************/
 {
     // instanciate Export
     OString sFilename( pFilename );
@@ -97,9 +92,7 @@ int InitXrmExport( char*, char* pFilename)
     return 1;
 }
 
-/*****************************************************************************/
 int EndXrmExport()
-/*****************************************************************************/
 {
     delete pParser;
     return 1;
@@ -108,9 +101,8 @@ extern const char* getFilename()
 {
     return sInputFileName.getStr();
 }
-/*****************************************************************************/
+
 extern FILE *GetXrmFile()
-/*****************************************************************************/
 {
     // look for valid filename
     if (!sInputFileName.isEmpty()) {
@@ -128,9 +120,7 @@ extern FILE *GetXrmFile()
     return NULL;
 }
 
-/*****************************************************************************/
 int WorkOnTokenSet( int nTyp, char *pTokenText )
-/*****************************************************************************/
 {
     //printf("Typ = %d , text = '%s'\n",nTyp , pTokenText );
     pParser->Execute( nTyp, pTokenText );
@@ -138,9 +128,7 @@ int WorkOnTokenSet( int nTyp, char *pTokenText )
     return 1;
 }
 
-/*****************************************************************************/
 int SetError()
-/*****************************************************************************/
 {
     pParser->SetError();
     return 1;
@@ -148,9 +136,8 @@ int SetError()
 }
 
 extern "C" {
-/*****************************************************************************/
+
 int GetError()
-/*****************************************************************************/
 {
     return pParser->GetError();
 }
@@ -161,23 +148,17 @@ int GetError()
 //
 
 
-/*****************************************************************************/
 XRMResParser::XRMResParser()
-/*****************************************************************************/
-                : bError( sal_False ),
-                bText( sal_False )
+    : bError( sal_False ),
+    bText( sal_False )
 {
 }
 
-/*****************************************************************************/
 XRMResParser::~XRMResParser()
-/*****************************************************************************/
 {
 }
 
-/*****************************************************************************/
 int XRMResParser::Execute( int nToken, char * pToken )
-/*****************************************************************************/
 {
     OString rToken( pToken );
 
@@ -284,9 +265,7 @@ int XRMResParser::Execute( int nToken, char * pToken )
     return 0;
 }
 
-/*****************************************************************************/
 OString XRMResParser::GetAttribute( const OString &rToken, const OString &rAttribute )
-/*****************************************************************************/
 {
     OString sTmp( rToken );
     sTmp = sTmp.replace('\t', ' ');
@@ -306,9 +285,7 @@ OString XRMResParser::GetAttribute( const OString &rToken, const OString &rAttri
 }
 
 
-/*****************************************************************************/
 void XRMResParser::Error( const OString &rError )
-/*****************************************************************************/
 {
     yyerror(( char * ) rError.getStr());
 }
@@ -317,10 +294,8 @@ void XRMResParser::Error( const OString &rError )
 // class XMLResExport
 //
 
-/*****************************************************************************/
 XRMResExport::XRMResExport(
     const OString &rOutputFile, const OString &rFilePath )
-/*****************************************************************************/
                 : XRMResParser(),
                 pResData( NULL ),
                 sPath( rFilePath )
@@ -334,9 +309,7 @@ XRMResExport::XRMResExport(
     }
 }
 
-/*****************************************************************************/
 XRMResExport::~XRMResExport()
-/*****************************************************************************/
 {
     pOutputStream.close();
     delete pResData;
@@ -344,12 +317,9 @@ XRMResExport::~XRMResExport()
 
 void XRMResExport::Output( const OString& ) {}
 
-/*****************************************************************************/
 void XRMResExport::WorkOnDesc(
     const OString &rOpenTag,
-    OString &rText
-)
-/*****************************************************************************/
+    OString &rText )
 {
     OString sDescFileName(
         sInputFileName.replaceAll("description.xml", OString()));
@@ -369,12 +339,9 @@ void XRMResExport::WorkOnDesc(
     EndOfText( rOpenTag, rOpenTag );
 }
 
-//*****************************************************************************/
 void XRMResExport::WorkOnText(
     const OString &rOpenTag,
-    OString &rText
-)
-/*****************************************************************************/
+    OString &rText )
 {
     OString sLang( GetAttribute( rOpenTag, sLangAttribute ));
 
@@ -385,12 +352,9 @@ void XRMResExport::WorkOnText(
     pResData->sText[sLang] = rText;
 }
 
-/*****************************************************************************/
 void XRMResExport::EndOfText(
     const OString &,
-    const OString &
-)
-/*****************************************************************************/
+    const OString & )
 {
     if ( pResData )
     {
@@ -409,11 +373,9 @@ void XRMResExport::EndOfText(
 // class XRMResMerge
 //
 
-/*****************************************************************************/
 XRMResMerge::XRMResMerge(
     const OString &rMergeSource, const OString &rOutputFile,
     const OString &rFilename )
-/*****************************************************************************/
                 : XRMResParser(),
                 pMergeDataFile( NULL ),
                 sFilename( rFilename ) ,
@@ -437,21 +399,16 @@ XRMResMerge::XRMResMerge(
     }
 }
 
-/*****************************************************************************/
 XRMResMerge::~XRMResMerge()
-/*****************************************************************************/
 {
     pOutputStream.close();
     delete pMergeDataFile;
     delete pResData;
 }
 
-/*****************************************************************************/
 void XRMResMerge::WorkOnDesc(
     const OString &rOpenTag,
-    OString &rText
-)
-/*****************************************************************************/
+    OString &rText )
 {
     WorkOnText( rOpenTag, rText);
     if ( pMergeDataFile && pResData ) {
@@ -520,12 +477,9 @@ void XRMResMerge::WorkOnDesc(
     pResData = NULL;
 }
 
-/*****************************************************************************/
 void XRMResMerge::WorkOnText(
     const OString &rOpenTag,
-    OString &
-)
-/*****************************************************************************/
+    OString & )
 {
     OString sLang( GetAttribute( rOpenTag, sLangAttribute ));
 
@@ -537,20 +491,15 @@ void XRMResMerge::WorkOnText(
     }
 }
 
-/*****************************************************************************/
 void XRMResMerge::Output( const OString& rOutput )
-/*****************************************************************************/
 {
     if (!rOutput.isEmpty())
         pOutputStream << rOutput.getStr();
 }
 
-/*****************************************************************************/
 void XRMResMerge::EndOfText(
     const OString &rOpenTag,
-    const OString &rCloseTag
-)
-/*****************************************************************************/
+    const OString &rCloseTag )
 {
 
     Output( rCloseTag );
