@@ -1080,7 +1080,8 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                         OUString sCLSID;
                         if(xPropSet->getPropertyValue(OUString("CLSID")) >>= sCLSID)
                         {
-                            if (sCLSID.equals(mrExport.GetChartExport()->getChartCLSID()))
+                            if (sCLSID.equals(mrExport.GetChartExport()->getChartCLSID()) ||
+                                sCLSID.equals(OUString( SvGlobalName( SO3_RPTCH_CLASSID ).GetHexName())))
                             {
                                 eShapeType = XmlShapeTypeDrawChartShape;
                             }

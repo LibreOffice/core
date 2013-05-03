@@ -280,6 +280,12 @@
 
 #define SO3_SCH_CLASSID  SO3_SCH_CLASSID_60
 
+// Report chart
+
+#define SO3_RPTCH_CLASSID \
+    0x80243D39, 0x6741, 0x46C5, 0x92, 0x6E, 0x06, \
+    0x91, 0x64, 0xFF, 0x87, 0xBB
+
 /****************************************************
 * StarImage
 ****************************************************/
