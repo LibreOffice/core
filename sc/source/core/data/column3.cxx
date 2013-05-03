@@ -104,7 +104,7 @@ void ScColumn::Append( SCROW nRow, ScBaseCell* pCell )
     maItems.back().nRow  = nRow;
 
     maTextWidths.set<unsigned short>(nRow, TEXTWIDTH_DIRTY);
-    maScriptTypes.set<unsigned short>(nRow, SC_SCRIPTTYPE_UNKNOWN);
+    maScriptTypes.set<unsigned char>(nRow, SC_SCRIPTTYPE_UNKNOWN);
     CellStorageModified();
 }
 
@@ -1415,7 +1415,7 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                 pOldCell->Delete();
                 maItems[i].pCell = pNewCell; // Replace
                 maTextWidths.set<unsigned short>(nRow, TEXTWIDTH_DIRTY);
-                maScriptTypes.set<unsigned short>(nRow, SC_SCRIPTTYPE_UNKNOWN);
+                maScriptTypes.set<unsigned char>(nRow, SC_SCRIPTTYPE_UNKNOWN);
                 CellStorageModified();
 
                 if ( pNewCell->GetCellType() == CELLTYPE_FORMULA )

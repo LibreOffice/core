@@ -1469,7 +1469,7 @@ void ScColumn::CopyScriptTypesToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDe
     nRowPos = static_cast<size_t>(nRow2); // End row position.
 
     // Keep copying until we hit the end row position.
-    mdds::mtv::ushort_element_block::const_iterator itData, itDataEnd;
+    mdds::mtv::uchar_element_block::const_iterator itData, itDataEnd;
     for (; itBlk != itBlkEnd; ++itBlk, nBlockStart = nBlockEnd, nOffsetInBlock = 0)
     {
         nBlockEnd = nBlockStart + itBlk->size;
@@ -1486,15 +1486,15 @@ void ScColumn::CopyScriptTypesToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDe
         }
 
         // Non-empty block.
-        itData = mdds::mtv::ushort_element_block::begin(*itBlk->data);
-        itDataEnd = mdds::mtv::ushort_element_block::end(*itBlk->data);
+        itData = mdds::mtv::uchar_element_block::begin(*itBlk->data);
+        itDataEnd = mdds::mtv::uchar_element_block::end(*itBlk->data);
         std::advance(itData, nOffsetInBlock);
 
         if (nBlockStart <= nRowPos && nRowPos <= nBlockEnd)
         {
             // This block contains the end row. Only copy partially.
             size_t nOffset = nRowPos - nBlockStart + 1;
-            itDataEnd = mdds::mtv::ushort_element_block::begin(*itBlk->data);
+            itDataEnd = mdds::mtv::uchar_element_block::begin(*itBlk->data);
             std::advance(itDataEnd, nOffset);
 
             rDestCol.maScriptTypes.set(nBlockStart + nOffsetInBlock, itData, itDataEnd);
@@ -1545,7 +1545,7 @@ void ScColumn::SetCell(SCROW nRow, ScBaseCell* pNewCell)
         }
 
         maTextWidths.set<unsigned short>(nRow, TEXTWIDTH_DIRTY);
-        maScriptTypes.set<unsigned short>(nRow, SC_SCRIPTTYPE_UNKNOWN);
+        maScriptTypes.set<unsigned char>(nRow, SC_SCRIPTTYPE_UNKNOWN);
         CellStorageModified();
     }
 }
@@ -1565,7 +1565,7 @@ sal_uInt8 ScColumn::GetScriptType( SCROW nRow ) const
     if (!ValidRow(nRow) || maScriptTypes.is_empty(nRow))
         return 0;
 
-    return maScriptTypes.get<unsigned short>(nRow);
+    return maScriptTypes.get<unsigned char>(nRow);
 }
 
 void ScColumn::SetScriptType( SCROW nRow, sal_uInt8 nType )
@@ -1576,7 +1576,7 @@ void ScColumn::SetScriptType( SCROW nRow, sal_uInt8 nType )
     if (!nType)
         maScriptTypes.set_empty(nRow, nRow);
     else
-        maScriptTypes.set<unsigned short>(nRow, nType);
+        maScriptTypes.set<unsigned char>(nRow, nType);
 }
 
 size_t ScColumn::GetFormulaHash( SCROW nRow ) const

@@ -75,13 +75,13 @@ ScNeededSizeOptions::ScNeededSizeOptions() :
 
 void ScColumn::SwapScriptTypes( ScriptType& rSrc, SCROW nSrcRow, ScriptType& rDest, SCROW nDestRow )
 {
-    unsigned short nSrcVal = 0;
-    unsigned short nDestVal = 0;
+    unsigned char nSrcVal = 0;
+    unsigned char nDestVal = 0;
 
     if (!rSrc.is_empty(nSrcRow))
-        nSrcVal = rSrc.get<unsigned short>(nSrcRow);
+        nSrcVal = rSrc.get<unsigned char>(nSrcRow);
     if (!rDest.is_empty(nDestRow))
-        nDestVal = rDest.get<unsigned short>(nDestRow);
+        nDestVal = rDest.get<unsigned char>(nDestRow);
 
     if (nDestVal)
         rSrc.set(nSrcRow, nDestVal);
