@@ -175,8 +175,21 @@ void ScMacrosTest::testVba()
             OUString("MiscControlTests."),
             OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
+        {
+            OUString("Workbooks."),
+            OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
+        },
     };
-
+    OUString sTempDir;
+    OUString sTempDirURL;
+    osl::FileBase:: getTempDirURL( sTempDirURL );
+    osl::FileBase::getSystemPathFromFileURL( sTempDirURL, sTempDir );
+    Sequence< uno::Any > aParams;
+    if ( !sTempDir.isEmpty() )
+    {
+        aParams.realloc(1);
+        aParams[ 0 ] <<= sTempDir;
+    }
     for ( sal_uInt32  i=0; i<SAL_N_ELEMENTS( testInfo ); ++i )
     {
         OUString aFileName;
@@ -189,8 +202,6 @@ void ScMacrosTest::testVba()
         Any aRet;
         Sequence< sal_Int16 > aOutParamIndex;
         Sequence< Any > aOutParam;
-        Sequence< uno::Any > aParams;
-
         SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
 
         CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
