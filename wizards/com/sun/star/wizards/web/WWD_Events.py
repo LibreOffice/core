@@ -808,10 +808,10 @@ class WWD_Events(WWD_Startup):
         '''
         p = self.getPublisher(ZIP_PUBLISHER)
         #replace the '%' with '%25'
-        url1 = p.cp_URL.replace("%25", "%")
+        url1 = p.cp_URL.replace("%", "%25")
         #replace all '/' with '%2F'
-        url1 = url1.replace("%F", "/")
-        p.url = "vnd.sun.star.zip://" + url1 + "/";
+        url1 = url1.replace("/", "%2F")
+        p.url = "vnd.sun.star.zip://" + url1 + "/"
 
         '''
         and now ftp...
