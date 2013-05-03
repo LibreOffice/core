@@ -100,6 +100,7 @@ private:
     void            InterpretTail( ScInterpretTailParameter );
 
     ScFormulaCell( const ScFormulaCell& );
+    sal_uLong GetFormatIndex() const { return nFormatIndex; }
 
 public:
 
@@ -215,7 +216,6 @@ public:
     sal_uInt16      GetErrCode();   // interpret first if necessary
     sal_uInt16      GetRawError();  // don't interpret, just return code or result error
     short           GetFormatType() const                   { return nFormatType; }
-    sal_uLong       GetFormatIndex() const                  { return nFormatIndex; }
     void            GetFormatInfo( short& nType, sal_uLong& nIndex ) const
                         { nType = nFormatType; nIndex = nFormatIndex; }
     sal_uInt8       GetMatrixFlag() const                   { return cMatrixFlag; }
