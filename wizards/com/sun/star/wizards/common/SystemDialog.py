@@ -37,7 +37,8 @@ class SystemDialog(object):
 
             # Add a name textbox to the filepicker
             if self.systemDialog is not None:
-                self.systemDialog.initialize((Type,))
+                if (hasattr(self.systemDialog, "initialize")):
+                    self.systemDialog.initialize((Type,))
 
         except Exception:
             traceback.print_exc()
