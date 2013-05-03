@@ -201,7 +201,7 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
         }
         case XML_TOK_DOC_META:
         {
-            DBG_WARNING("XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
+            SAL_INFO("xmloff.draw", "XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
             break;
         }
         case XML_TOK_DOC_SCRIPT:
@@ -924,7 +924,7 @@ void SdXMLImport::SetConfigurationSettings(const com::sun::star::uno::Sequence<c
         }
         catch(const uno::Exception&)
         {
-            OSL_TRACE( "#SdXMLImport::SetConfigurationSettings: Exception!" );
+            SAL_INFO("xmloff.draw",  "#SdXMLImport::SetConfigurationSettings: Exception!" );
         }
 
         pValues++;
@@ -950,7 +950,7 @@ void SdXMLImport::SetStatistics(
                 if (i_rStats[i].Value >>= val) {
                     nCount = val;
                 } else {
-                    OSL_FAIL("SdXMLImport::SetStatistics: invalid entry");
+                    SAL_WARN("xmloff.draw", "SdXMLImport::SetStatistics: invalid entry");
                 }
             }
         }
