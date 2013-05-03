@@ -176,7 +176,22 @@ void ServerFontLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
         long nDelta = 0;
         for (i = 0; i < m_GlyphItems.size(); ++i)
         {
-            nDelta += pNewGlyphWidths[i] - m_GlyphItems[i].mnNewWidth;
+            if (m_GlyphItems[i].IsClusterStart())
+            {
+                // calculate original and adjusted cluster width
+                int nOldClusterWidth = m_GlyphItems[i].mnNewWidth;
+                int nNewClusterWidth = pNewGlyphWidths[i];
+                size_t j;
+                for (j = i; ++j < m_GlyphItems.size(); )
+                {
+                    if (m_GlyphItems[j].IsClusterStart())
+                        break;
+                    if (!m_GlyphItems[j].IsDiacritic()) // #i99367# ignore diacritics
+                        nOldClusterWidth += m_GlyphItems[j].mnNewWidth;
+                    nNewClusterWidth += pNewGlyphWidths[j];
+                }
+                nDelta += nNewClusterWidth - nOldClusterWidth;
+            }
             m_GlyphItems[i].mnNewWidth = pNewGlyphWidths[i];
             m_GlyphItems[i].maLinearPos.X() += nDelta;
         }
