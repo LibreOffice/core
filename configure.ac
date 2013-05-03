@@ -6841,7 +6841,7 @@ if test "$enable_epm" = "yes"; then
             if $EPM | grep "ESP Package Manager" >/dev/null 2>/dev/null; then
                 AC_MSG_RESULT([yes])
             else
-                AC_MSG_ERROR([no. Install ESP Package Manager (www.easysw.com/epm) and/or specify the path to the right epm])
+                AC_MSG_ERROR([no. Install ESP Package Manager (http://www.msweet.org/projects.php?Z2) and/or specify the path to the right epm])
             fi
             AC_MSG_CHECKING([epm version])
             EPM_VERSION=`$EPM | grep 'ESP Package Manager' | cut -d' ' -f4 | $SED -e s/v//`
