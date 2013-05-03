@@ -21,6 +21,7 @@ from .WebWizardConst import *
 from ..common.UCB import UCB
 from ..common.FileAccess import FileAccess
 from ..ui.event.Task import Task
+from ..ui.event.CommonListener import StreamListenerProcAdapter
 from .ProcessErrors import ProcessErrors
 from .ExtensionVerifier import ExtensionVerifier
 from .ErrorHandler import ErrorHandler
@@ -36,6 +37,8 @@ from .data.CGSettings import CGSettings
 
 from com.sun.star.io import IOException
 from com.sun.star.uno import SecurityException
+from com.sun.star.beans import NamedValue
+from com.sun.star.beans import StringPair
 
 # This class is used to process a CGSession object
 # and generate a site. </br>
@@ -345,30 +348,84 @@ class Process(ProcessErrors):
     @classmethod
     def generate1(self, xmsf, layout, doc, fileAccess, targetPath, task):
         # a map that contains xsl templates. the keys are the xsl file names.
-        #templates = layout.getTemplates(xmsf)
-        templates = {}
+        templates = layout.getTemplates(xmsf)
+        self.node = doc
 
         task.advance1(True, TASK_GENERATE_XSL)
 
         # each template generates a page.
-        for key,temp in templates:
-            transformer = temp.newTransformer()
-
-            doc.normalize()
-            task.advance(True)
+        for key in templates:
+            temp = templates[key]
 
             # The target file name is like the xsl template filename
             # without the .xsl extension.
-            #fn = fileAccess.getPath(targetPath, key[:key.length() - 4])
-            #f = File(fn)
-            #oStream = FileOutputStream(f)
-            # Due to a problem occuring when using Xalan-Java 2.6.0 and
-            # Java 1.5.0, wrap f in a FileOutputStream here (otherwise, the
-            # StreamResult's getSystemId would return a "file:/..." URL while
-            # the Xalan code expects a "file:///..." URL):
-            #transformer.transform(DOMSource(doc), StreamResult(oStream))
-            #oStream.close()
+            fn = fileAccess.getPath(targetPath, key[:len(key) - 4])
+
+            args = list(range(1))
+            nv = NamedValue()
+            nv.Name = "StylesheetURL"
+            nv.Value = temp
+            args[0] = nv
+            arguments = list(range(1))
+            arguments[0] = tuple(args)
+
+            self.tf = Process.createTransformer(xmsf, arguments)
+
+            self.node.normalize()
             task.advance(True)
+
+            # we want to be notfied when the processing is done...
+            self.tf.addListener(StreamListenerProcAdapter(self,
+                                                          self.streamTerminatedHandler,
+                                                          self.streamStartedHandler,
+                                                          self.streamClosedHandler,
+                                                          self.streamErrorHandler))
+
+            # create pipe
+            pipeout = xmsf.createInstance("com.sun.star.io.Pipe")
+            pipein = pipeout
+
+            # connect sax writer to pipe
+            self.xSaxWriter = xmsf.createInstance( "com.sun.star.xml.sax.Writer" )
+            self.xSaxWriter.setOutputStream(pipeout)
+
+            # connect pipe to transformer
+            self.tf.setInputStream(pipein)
+
+            # connect transformer to output
+            xOutputStream = fileAccess.xInterface.openFileWrite(fn)
+            self.tf.setOutputStream(xOutputStream)
+
+            self.tf.start()
+            while (not self.tfCompleted):
+                pass
+            task.advance(True)
+
+
+    @classmethod
+    def createTransformer(self, xmsf, args):
+        tf = xmsf.createInstanceWithArguments("com.sun.star.xml.xslt.XSLT2Transformer",
+                                              tuple(args))
+        if (tf is None):
+            # TODO: put a dialog telling about the need to install
+            # xslt2-transformer extension here
+            tf = xmsf.createInstanceWithArguments("com.sun.star.xml.xslt.XSLTTransformer",
+                                                  tuple(args))
+        return tf
+
+    def streamTerminatedHandler(self):
+        parent.isTerminated = True
+
+    def streamStartedHandler(self, parent):
+        parent.tfCompleted = False
+        parent.node.serialize(parent.xSaxWriter, tuple([StringPair()]))
+
+    def streamErrorHandler(self, aException):
+        print ("DEBUG !!! Stream 'error' event handler")
+
+    def streamClosedHandler(self, parent):
+        parent.tf.terminate()
+        parent.tfCompleted = True
 
     # I broke the export method to two methods
     # in a time where a tree with more than one contents was planned.
