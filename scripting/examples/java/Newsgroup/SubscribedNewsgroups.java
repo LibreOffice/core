@@ -118,7 +118,7 @@ public class SubscribedNewsgroups {
         }
         //System.out.println("mailrc files found");
 
-        ArrayList subscribed = new ArrayList();
+        ArrayList<NewsGroup> subscribed = new ArrayList<NewsGroup>();
         // Get the newsgroups in each mailrc file
         for( int i=0; i < allMailrcs.length; i++ )
         {
@@ -137,7 +137,7 @@ public class SubscribedNewsgroups {
 
         // Copy all unique Newsgroups into the global array
         allSubscribed = new NewsGroup[ subscribed.size() ];
-        subscribed.copyInto( allSubscribed );
+        subscribed.toArray( allSubscribed );
         // Test that at least one subscribed newsgroup has been found
         if( allSubscribed.length < 1 )
         {
@@ -153,11 +153,11 @@ public class SubscribedNewsgroups {
 
 
     // Tests if the NewsGroup object has already been listed by another mailrc file
-    private static boolean listed( NewsGroup newsgroup, Vector uniqueSubscription )
+    private static boolean listed( NewsGroup newsgroup, ArrayList<NewsGroup> uniqueSubscription )
     {
         for(int i=0; i < uniqueSubscription.size(); i++)
         {
-            NewsGroup tempGroup = (NewsGroup) uniqueSubscription.elementAt(i);
+            NewsGroup tempGroup = uniqueSubscription.elementAt(i);
             // Test for duplication
             if(newsgroup.getHostName().equalsIgnoreCase( tempGroup.getHostName()) &&
                newsgroup.getNewsgroupName().equalsIgnoreCase( tempGroup.getNewsgroupName() ) )

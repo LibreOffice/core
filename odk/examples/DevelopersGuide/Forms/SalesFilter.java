@@ -57,13 +57,13 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
     private boolean         m_bSettingDate;
     private boolean         m_bAdjustingFilterList;
     private short               m_nPreviousFilterIndex;
-    private java.util.Vector    m_aFilterDates;
+    private java.util.ArrayList    m_aFilterDates;
 
     /* ------------------------------------------------------------------ */
     public SalesFilter( DocumentHelper aDocument, XPropertySet xSalesForm,
         XPropertySet xFilterListBox, XPropertySet xManualFilterEdit, XPropertySet xStartFilterButton )
     {
-        m_aFilterDates = new java.util.Vector();
+        m_aFilterDates = new java.util.ArrayList();
         m_bSettingsDirty = false;
         m_bSettingDate = false;
         m_bAdjustingFilterList = false;
@@ -311,7 +311,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
                     m_aDocument.getCurrentView().grabControlFocus( m_xManualFilter );
 
                 m_bSettingDate = true;
-                Object aSelectedDateLimit = m_aFilterDates.elementAt( m_nPreviousFilterIndex );
+                Object aSelectedDateLimit = m_aFilterDates.get( m_nPreviousFilterIndex );
                 if ( null != aSelectedDateLimit )
                 {
                     // translate this date into one the AWT Toolkit understands
@@ -374,7 +374,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
         {
             if ( !isManualFilter( (short)i ) )  // do not compare with the manual filter
             {
-                GregorianCalendar aCheckCal = getCalendarObject( (java.util.Date)m_aFilterDates.elementAt( i ) );
+                GregorianCalendar aCheckCal = getCalendarObject( (java.util.Date)m_aFilterDates.get( i ) );
                 if ( equalDate( aDateCal, aCheckCal ) )
                     return (short)i;
             }
@@ -386,7 +386,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
             // the first (and thus oldes) user defined item
             aFilterItems.remove( 6 );
             // keep our date vector synchron
-            m_aFilterDates.removeElementAt( 6 );
+            m_aFilterDates.remove( 6 );
         }
 
         // add the current user defined filter

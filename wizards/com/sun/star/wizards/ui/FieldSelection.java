@@ -604,17 +604,17 @@ public class FieldSelection
         {
             int MaxOriginalCount = AllFieldNames.length;
             String[] SelList = xFieldsListBox.getItems();
-            Vector<String> NewSourceVector = new Vector<String>();
+            ArrayList<String> NewSourceVector = new ArrayList<String>();
             for (int i = 0; i < MaxOriginalCount; i++)
             {
                 SearchString = AllFieldNames[i];
                 if (JavaTools.FieldInList(SelList, SearchString) != -1)
                 {
-                    NewSourceVector.addElement(SearchString);
+                    NewSourceVector.add(SearchString);
                 }
                 else if (JavaTools.FieldInList(OldSelFieldItems, SearchString) != -1)
                 {
-                    NewSourceVector.addElement(SearchString);
+                    NewSourceVector.add(SearchString);
                 }
             }
             xFieldsListBox.removeItems((short) 0, xFieldsListBox.getItemCount());

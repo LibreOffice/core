@@ -53,7 +53,7 @@ public class FileAccess
 {
 
     /**
-     * 
+     *
      * @param xMSF
      * @param sPath
      * @param sAddPath
@@ -497,7 +497,7 @@ public class FileAccess
      * @param xMSF
      * @param FilterName the prefix of the filename. a "-" is added to the prefix !
      * @param FolderName the folder (URL) to look for files...
-     * @return an array with two array members. The first one, with document titles, 
+     * @return an array with two array members. The first one, with document titles,
      * the second with the corresponding URLs.
      * @deprecated please use the getFolderTitles() with ArrayList
      */
@@ -506,8 +506,8 @@ public class FileAccess
         String[][] LocLayoutFiles = new String[2][];
         try
         {
-            java.util.Vector<String> TitleVector = null;
-            java.util.Vector<String> NameVector = null;
+            java.util.ArrayList<String> TitleVector = null;
+            java.util.ArrayList<String> NameVector = null;
 
             XInterface xDocInterface = (XInterface) xMSF.createInstance("com.sun.star.document.DocumentProperties");
             XDocumentProperties xDocProps = UnoRuntime.queryInterface(XDocumentProperties.class, xDocInterface);
@@ -517,8 +517,8 @@ public class FileAccess
 
             String[] nameList = xSimpleFileAccess.getFolderContents(FolderName, false);
 
-            TitleVector = new java.util.Vector<String>(/*nameList.length*/);
-            NameVector = new java.util.Vector<String>(nameList.length);
+            TitleVector = new java.util.ArrayList<String>(/*nameList.length*/);
+            NameVector = new java.util.ArrayList<String>(nameList.length);
 
             FilterName = FilterName == null || FilterName.equals(PropertyNames.EMPTY_STRING) ? null : FilterName + "-";
 
@@ -531,15 +531,15 @@ public class FileAccess
                 if (FilterName == null || fileName.startsWith(FilterName))
                 {
                     xDocProps.loadFromMedium(nameList[i], noArgs);
-                    NameVector.addElement(nameList[i]);
-                    TitleVector.addElement(xDocProps.getTitle());
+                    NameVector.add(nameList[i]);
+                    TitleVector.add(xDocProps.getTitle());
                 }
             }
             String[] LocNameList = new String[NameVector.size()];
             String[] LocTitleList = new String[TitleVector.size()];
 
-            NameVector.copyInto(LocNameList);
-            TitleVector.copyInto(LocTitleList);
+            NameVector.toArray(LocNameList);
+            TitleVector.toArray(LocTitleList);
             LocLayoutFiles[1] = LocNameList;
             LocLayoutFiles[0] = LocTitleList;
 
@@ -598,7 +598,7 @@ public class FileAccess
     }
 
     /**
-     * 
+     *
      * @param xMSF
      * @param _sStartFilterName
      * @param FolderNames
@@ -1050,7 +1050,7 @@ public class FileAccess
     }
 
     /**
-     * shortens a filename to a user displayable representation. 
+     * shortens a filename to a user displayable representation.
      * @param path
      * @param maxLength
      * @return

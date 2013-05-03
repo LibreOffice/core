@@ -17,7 +17,7 @@
  */
 package com.sun.star.wizards.db;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.sdbc.ColumnSearch;
@@ -69,27 +69,27 @@ public class TypeInspector
         try
         {
             xResultSet = _xResultSet;
-            Vector<String> aTypeNameVector = new Vector<String>();
-            Vector<Integer> aTypeVector = new Vector<Integer>();
-            Vector<Integer> aNullableVector = new Vector<Integer>();
-            Vector<Boolean> aAutoIncrementVector = new Vector<Boolean>();
-            Vector<Integer> aPrecisionVector = new Vector<Integer>();
-            Vector<Integer> aMinScaleVector = new Vector<Integer>();
-            Vector<Integer> aMaxScaleVector = new Vector<Integer>();
-            Vector<Integer> aSearchableVector = new Vector<Integer>();
+            ArrayList<String> aTypeNameVector = new ArrayList<String>();
+            ArrayList<Integer> aTypeVector = new ArrayList<Integer>();
+            ArrayList<Integer> aNullableVector = new ArrayList<Integer>();
+            ArrayList<Boolean> aAutoIncrementVector = new ArrayList<Boolean>();
+            ArrayList<Integer> aPrecisionVector = new ArrayList<Integer>();
+            ArrayList<Integer> aMinScaleVector = new ArrayList<Integer>();
+            ArrayList<Integer> aMaxScaleVector = new ArrayList<Integer>();
+            ArrayList<Integer> aSearchableVector = new ArrayList<Integer>();
             // Integer[] aIntegerDataTypes = null;
 //      XResultSet xResultSet = xDBMetaDagetTypeInfo();
             XRow xRow = UnoRuntime.queryInterface(XRow.class, xResultSet);
             while (xResultSet.next())
             {
-                aTypeNameVector.addElement(xRow.getString(1));
-                aTypeVector.addElement(new Integer(xRow.getShort(2)));
-                aPrecisionVector.addElement(new Integer(xRow.getInt(3)));
-                aNullableVector.addElement(new Integer(xRow.getShort(7)));
-                aSearchableVector.addElement(new Integer(xRow.getShort(9)));
-                aAutoIncrementVector.addElement(Boolean.valueOf(xRow.getBoolean(12)));
-                aMinScaleVector.addElement(new Integer(xRow.getShort(14)));
-                aMaxScaleVector.addElement(new Integer(xRow.getShort(15)));
+                aTypeNameVector.add(xRow.getString(1));
+                aTypeVector.add(new Integer(xRow.getShort(2)));
+                aPrecisionVector.add(new Integer(xRow.getInt(3)));
+                aNullableVector.add(new Integer(xRow.getShort(7)));
+                aSearchableVector.add(new Integer(xRow.getShort(9)));
+                aAutoIncrementVector.add(Boolean.valueOf(xRow.getBoolean(12)));
+                aMinScaleVector.add(new Integer(xRow.getShort(14)));
+                aMaxScaleVector.add(new Integer(xRow.getShort(15)));
 
             }
             sDataTypeNames = new String[aTypeNameVector.size()];
@@ -404,21 +404,21 @@ public class TypeInspector
         return (getAutoIncrementIndex(_xColPropertySet) != INVALID);
     }
 
-    /** finds the first available DataType that can be used as a primary key in a table. 
+    /** finds the first available DataType that can be used as a primary key in a table.
      * @return The first datatype that also supports Autoincrmentation is taken according to the following list:
      *1) INTEGER
      *2) FLOAT
      *3) REAL
      *4) DOUBLE
      *5) NUMERIC
-     *6) DECIMAL         * 
+     *6) DECIMAL         *
      * If no appropriate datatype is found ther first available numeric type after DataType.INTEGER
      * according to the 'convertDataType' method is returned
      */
-    /**TODO the fallback order is the same as implemented in the method 'convertDataType'. 
+    /**TODO the fallback order is the same as implemented in the method 'convertDataType'.
      * It's not very elegant to have the same intelligence
      * on several spots in the class!!
-     * 
+     *
      */
     public TypeInfo findAutomaticPrimaryKeyType()
     {

@@ -76,7 +76,7 @@ abstract class NodeHandler
                 aChild = createChild (aParent, nIndex);
                 if (aChild == null)
                     aChild = new StringNode ("could not create child", aParent);
-                maChildList.setElementAt (aChild, nIndex);
+                maChildList.set (nIndex, aChild);
             }
             return aChild;
         }
@@ -99,7 +99,7 @@ abstract class NodeHandler
             synchronized (maChildList)
             {
                 System.out.println ("    removing child at position " + nIndex + ": "
-                    + maChildList.elementAt (nIndex));
+                    + maChildList.get (nIndex));
                 maChildList.remove (nIndex);
             }
         }

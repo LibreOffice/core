@@ -81,7 +81,7 @@ public class Splitter
 
         // generate all type fragments
         m_aDataSet.m_aDebug.setGlobalInfo("generate type fragments ...");
-        java.util.Vector      lNames = m_aDataSet.m_aCache.getItemNames(Cache.E_TYPE);
+        java.util.ArrayList      lNames = m_aDataSet.m_aCache.getItemNames(Cache.E_TYPE);
         java.util.Enumeration it     = lNames.elements();
         while(it.hasMoreElements())
             generateXMLFragment(Cache.E_TYPE, (java.lang.String)it.nextElement(), m_aDataSet.m_aFragmentDirTypes);

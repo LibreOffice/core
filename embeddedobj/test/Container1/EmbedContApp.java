@@ -174,7 +174,7 @@ public class EmbedContApp extends Applet
         } catch( Exception e ) { System.exit( 0 ); }
 
         m_oActionsNumberLock = new Object();
-        m_aActionsList = new Vector();
+        m_aActionsList = new ArrayList();
 
         m_oInHandlerLock = new Object();
         m_oImageLock = new Object();
@@ -484,7 +484,7 @@ public class EmbedContApp extends Applet
     {
         for( int nInd = 0; nInd < m_aActionsList.size(); nInd++ )
         {
-            ActionObject aAction = ( ActionObject ) m_aActionsList.get( nInd );
+            ActionObject aAction = m_aActionsList.get( nInd );
             if ( aAction != null )
             {
                 if ( aAction.m_nID == DESTROY )
@@ -784,7 +784,7 @@ public class EmbedContApp extends Applet
                     m_aActionsList.add( new ActionObject( nActionID, sParam ) );
                 else
                 {
-                    ActionObject aAction = ( ActionObject ) m_aActionsList.get( nSize - 1 );
+                    ActionObject aAction = m_aActionsList.get( nSize - 1 );
                     if ( aAction != null && aAction.m_nID != DESTROY )
                         m_aActionsList.add( new ActionObject( nActionID, sParam ) );
                 }

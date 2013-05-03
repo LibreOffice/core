@@ -92,11 +92,11 @@ public class JavaTools
 
     /**converts a list of Integer values included in an Integer vector to a list of int values
      *
-     * 
+     *
      * @param _aIntegerVector
      * @return
      */
-    public static int[] IntegerTointList(Vector<Integer> _aIntegerVector)
+    public static int[] IntegerTointList(java.util.List<Integer> _aIntegerVector)
     {
         try
         {
@@ -117,12 +117,12 @@ public class JavaTools
     }
 
     /**converts a list of Boolean values included in a Boolean vector to a list of boolean values
-     * 
-     * 
+     *
+     *
      * @param _aBooleanVector
      * @return
      */
-    public static boolean[] BooleanTobooleanList(Vector<Boolean> _aBooleanVector)
+    public static boolean[] BooleanTobooleanList(java.util.List<Boolean> _aBooleanVector)
     {
         try
         {

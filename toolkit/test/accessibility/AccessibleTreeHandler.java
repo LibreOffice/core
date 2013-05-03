@@ -105,7 +105,7 @@ class AccessibleTreeHandler
                     if ((nIndex >= 0) || (nIndex <= maChildList.size()))
                     {
                         aChild = NodeFactory.Instance().createDefaultNode (xChild, aParent);
-                        maChildList.insertElementAt (aChild, nIndex);
+                        maChildList.add (nIndex, aChild);
                     }
                 }
             }
@@ -121,7 +121,7 @@ class AccessibleTreeHandler
     {
         synchronized (maChildList)
         {
-            maChildList.setElementAt (null, 0);
+            maChildList.set (0, null);
         }
     }
 }

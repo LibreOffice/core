@@ -25,9 +25,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 import lib.TestParameters;
 
@@ -156,7 +156,7 @@ public class CheckMemoryUsage /* extends ComplexTestCase */
 
         // get the file extension, export filter connection
         Iterator<String> keys = param.keySet().iterator();
-        Vector<String> v = new Vector<String>();
+        ArrayList<String> v = new ArrayList<String>();
         while (keys.hasNext())
         {
             String key = keys.next();

@@ -166,8 +166,8 @@ public class ParcelFolderSupport implements ParcelFolderCookie
         File contents = FileUtil.toFile(
             primary.getFileObject(ParcelZipper.CONTENTS_DIRNAME));
 
-        Vector classpath = getConfigureClasspath();
-        classpath.addElement(contents.getAbsolutePath());
+        ArrayList<String> classpath = getConfigureClasspath();
+        classpath.add(contents.getAbsolutePath());
 
         try {
             ParcelDescriptor descriptor = getParcelDescriptor();
@@ -210,8 +210,8 @@ public class ParcelFolderSupport implements ParcelFolderCookie
         return true;
     }
 
-    private Vector getConfigureClasspath() {
-        ArrayList result = new ArrayList();
+    private ArrayList<String> getConfigureClasspath() {
+        ArrayList<String> result = new ArrayList<String>();
 
         String classpath = NbClassPath.createRepositoryPath().getClassPath();
         if ( System.getProperty( "os.name" ).startsWith( "Windows" ) )
