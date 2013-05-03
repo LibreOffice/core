@@ -1048,7 +1048,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                 else if(aType.match("Ellipse", 21)) { eShapeType = XmlShapeTypeDrawEllipseShape; }
                 else if(aType.match("Control", 21)) { eShapeType = XmlShapeTypeDrawControlShape; }
                 else if(aType.match("Connector", 21)) { eShapeType = XmlShapeTypeDrawConnectorShape; }
-            else if(aType.match("Measure", 21)) { eShapeType = XmlShapeTypeDrawMeasureShape; }
+                else if(aType.match("Measure", 21)) { eShapeType = XmlShapeTypeDrawMeasureShape; }
                 else if(aType.match("Line", 21)) { eShapeType = XmlShapeTypeDrawLineShape; }
 
                 // #i72177# Note: This covers two types by purpose, PolyPolygonShape and PolyPolygonPathShape
