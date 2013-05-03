@@ -117,7 +117,7 @@ AC_ARG_WITH(afms,
                           are known to be available.
 ],,)
 AC_ARG_ENABLE(epm,
-[  --disable-epm           OO.o includes self-packaging code, that requires
+[  --disable-epm           AOO includes self-packaging code, that requires
                           epm, however epm is useless for large scale
                           package building.
 ],,enable_epm="yes")
@@ -129,9 +129,11 @@ AC_ARG_WITH(epm,
 ],,)
 AC_ARG_WITH(epm-url,
 [  --with-epm-url=<URL>    Specify the location of downloadable epm 3.7 source code. For example:
-                          http://ftp.easysw.com/pub/epm/3.7/epm-3.7-source.tar.gz
-                          Note that epm is under GPL license.],
-[  EPM_URL="$withval"
+                            http://epm.sourcearchive.com/downloads/3.7-1/epm_3.7.orig.tar.gz
+                          or
+                            http://www.msweet.org/files/project2/epm-3.7-source.tar.gz
+                          Note that epm is under GPL license.
+],[  EPM_URL="$withval"
 ])
 AC_ARG_WITH(package-format,
 [  --with-package-format   specify package format(s) for OOo installsets.
@@ -3541,14 +3543,14 @@ if test "$enable_epm" = "yes"; then
          BUILD_TYPE="$BUILD_TYPE EPM"
       else
          if test "$EPM" = "no" ; then
-	    AC_MSG_ERROR([no. Install ESP Package Manager (www.easysw.com/epm) and/or specify the path to the right epm (--with-epm). Or specify an Url to an epm-3.7 source package (--with-epm-url)])
+	    AC_MSG_ERROR([no. Install ESP Package Manager (http://www.msweet.org/projects.php?Z2) and/or specify the path to the right epm (--with-epm). Or specify an Url to an epm-3.7 source package (--with-epm-url)])
 	 else
 	    # Gentoo has some epm which is something different...
             AC_MSG_CHECKING([whether the found epm is the right epm])
             if $EPM | grep "ESP Package Manager" >/dev/null 2>/dev/null; then
                AC_MSG_RESULT([yes])
             else
-	       AC_MSG_ERROR([no. Install ESP Package Manager (www.easysw.com/epm) and/or specify the path to the right epm])
+	       AC_MSG_ERROR([no. Install ESP Package Manager (http://www.msweet.org/projects.php?Z2) and/or specify the path to the right epm])
             fi
             AC_MSG_CHECKING([epm version])
             EPM_VERSION=`$EPM | grep 'ESP Package Manager' | cut -d' ' -f4 | $SED -e s/v//`
