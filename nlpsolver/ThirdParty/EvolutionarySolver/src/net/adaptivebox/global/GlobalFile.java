@@ -184,6 +184,7 @@ public class GlobalFile {
           }
         }
       }
+      inReader.close();
     }catch(Exception e){
       //showMessage();
       return null;//Uncertain data file error.

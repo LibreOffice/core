@@ -42,6 +42,7 @@ public class FileUpdater {
                 s.trim();
                 xmlArray[count] = s;
             }
+            reader.close();
         }
         catch( IOException ioe ) {
             String message = "\nError reading ProtocolHandler.xcu, please view SFrameworkInstall.log.";
@@ -112,6 +113,7 @@ public class FileUpdater {
                 s.trim();
                 xmlArray[count] = s;
             }
+            reader.close();
         }
         catch( IOException ioe ) {
             String message = "Error reading script.xlc, please view SFrameworkInstall.log.";
@@ -184,6 +186,7 @@ public class FileUpdater {
                 s.trim();
                 xmlArray[count] = s;
             }
+             reader.close();
         }
         catch( IOException ioe ) {
 

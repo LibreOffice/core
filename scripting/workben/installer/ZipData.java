@@ -21,13 +21,12 @@ package installer;
 import java.io.*;
 import javax.swing.*;
 
-public class ZipData
-{
+public class ZipData {
     public ZipData(String file) {
     }
 
     public boolean extractEntry(String entry, String destination,
-        JLabel statusLabel) {
+            JLabel statusLabel) {
 
         OutputStream out = null;
         InputStream in = null;
@@ -35,23 +34,22 @@ public class ZipData
         System.out.println("Copying: " + entry);
         System.out.println("To: " + destination);
 
-    if (statusLabel != null) {
-        statusLabel.setText("Copying " + entry);
-    }
+        if (statusLabel != null) {
+            statusLabel.setText("Copying " + entry);
+        }
 
         String entryName;
         if (entry.lastIndexOf("/") != -1) {
             entryName = entry.substring(entry.lastIndexOf("/") + 1);
-        }
-        else {
+        } else {
             entryName = entry;
         }
 
         String destName;
         if (destination.lastIndexOf(File.separator) != -1) {
-            destName = destination.substring(destination.lastIndexOf(File.separator) + 1);
-        }
-        else {
+            destName = destination.substring(destination
+                    .lastIndexOf(File.separator) + 1);
+        } else {
             destName = destination;
         }
 
@@ -59,20 +57,6 @@ public class ZipData
             destination = destination.concat(entryName);
 
         System.out.println("Unzipping " + entry + " to " + destination);
-
-    try {
-            out = new FileOutputStream(destination);
-        }
-        catch (IOException ioe) {
-            System.err.println("Error opening " + destination +
-                ": " + ioe.getMessage());
-
-            if (statusLabel != null)
-                statusLabel.setText("Error opening" + destination +
-                    "see SFramework.log for more information");
-
-            return false;
-        }
 
         if (entry.startsWith("/") == false)
             entry = "/" + entry;
@@ -82,8 +66,21 @@ public class ZipData
             System.err.println("File " + entry + " not found in jar file");
 
             if (statusLabel != null)
-                statusLabel.setText("Failed extracting " + entry +
-                    "see SFramework.log for more information");
+                statusLabel.setText("Failed extracting " + entry
+                        + "see SFramework.log for more information");
+
+            return false;
+        }
+
+        try {
+            out = new FileOutputStream(destination);
+        } catch (IOException ioe) {
+            System.err.println("Error opening " + destination + ": "
+                    + ioe.getMessage());
+
+            if (statusLabel != null)
+                statusLabel.setText("Error opening" + destination
+                        + "see SFramework.log for more information");
 
             return false;
         }
@@ -94,22 +91,19 @@ public class ZipData
 
             while ((len = in.read(bytes)) != -1)
                 out.write(bytes, 0, len);
-        }
-        catch (IOException ioe) {
-            System.err.println("Error writing " + destination + ": " +
-                ioe.getMessage());
+        } catch (IOException ioe) {
+            System.err.println("Error writing " + destination + ": "
+                    + ioe.getMessage());
 
             if (statusLabel != null)
-                statusLabel.setText("Failed writing " + destination +
-                    "see SFramework.log for more information");
+                statusLabel.setText("Failed writing " + destination
+                        + "see SFramework.log for more information");
             return false;
-        }
-        finally {
+        } finally {
             try {
                 in.close();
                 out.close();
-            }
-            catch (IOException ioe) {
+            } catch (IOException ioe) {
             }
         }
         return true;

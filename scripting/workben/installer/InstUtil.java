@@ -237,6 +237,7 @@ public class InstUtil {
             break;
         }
         }
+        reader.close();
         }
         catch( IOException ioe ) {
         System.out.println( "Error reading Netbeans location information" );
@@ -285,6 +286,7 @@ public class InstUtil {
             jeditDetails[1] = version;
         }
         }
+        reader.close();
         }
         catch( IOException ioe ) {
         System.out.println( "Error reading Jedit location information" );
@@ -292,7 +294,6 @@ public class InstUtil {
         //catch( FileNotFoundException fnfe ) {
         //System.out.println( "Jedit activity.log FileNotFoundException" );
         //}
-
         return jeditDetails;
     }
 
@@ -408,7 +409,7 @@ public class InstUtil {
                 }
             }
         }
-
+        reader.close();
         return results;
     }
 

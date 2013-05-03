@@ -113,16 +113,19 @@ public class ActiveSyncDriver {
             dataOut = conv.convert();
         }
         catch (Exception e) {
+            fos.close();
             return false;
         }
 
         if (dataOut == null) {
+            fos.close();
             return false;
         }
 
         // Get the document and write it out.
         Document doc = (Document)dataOut.getDocumentEnumeration().next();
         if (doc == null) {
+            fos.close();
             return false;
         }
 

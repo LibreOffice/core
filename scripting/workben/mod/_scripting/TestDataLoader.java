@@ -44,10 +44,9 @@ public class TestDataLoader {
         if (!f.exists())
             return;
 
-        BufferedReader in;
 
         try {
-            in = new BufferedReader(new FileReader(f));
+            BufferedReader in = new BufferedReader(new FileReader(f));
 
             String s, previous, current;
             ArrayList<Parameters> list = new ArrayList<Parameters>(11);
@@ -59,6 +58,7 @@ public class TestDataLoader {
                 list.add(getParameters(st));
             }
             else {
+                in.close();
                 return;
             }
 
@@ -77,6 +77,7 @@ public class TestDataLoader {
             }
 
             tEnv.addObjRelation(previous, list);
+            in.close();
         }
         catch (IOException ioe) {
         }

@@ -142,6 +142,7 @@ class MyHandler implements HttpHandler {
             byte[] data = new byte[(int) fileRequest.length()];
             FileInputStream fr = new FileInputStream(fileRequest);
             int count = fr.read(data);
+            fr.close();
 
             //set the Content-type header
             Headers h = xchange.getResponseHeaders();

@@ -511,40 +511,39 @@ public class java_fat implements TestBase
                 return entryList;
             }
 
-            while (line != null)
+            try
+            {
+                while (line != null)
+                {
+                    try
+                    {
+                        if (!line.startsWith("#") && (line.length() > 1))
+                        {
+                            entryList.add(line.trim());
+                        }
+
+                        line = exclusion.readLine();
+                    }
+                    catch (java.io.IOException ioe)
+                    {
+                        if (debug)
+                        {
+                            System.out.println("Exception while reading exclusion list");
+                        }
+
+                        return entryList;
+                    }
+                }
+            }
+            finally
             {
                 try
                 {
-                    if (!line.startsWith("#") && (line.length() > 1))
-                    {
-                        entryList.add(line.trim());
-                    }
-
-                    line = exclusion.readLine();
+                    exclusion.close();
                 }
                 catch (java.io.IOException ioe)
                 {
-                    if (debug)
-                    {
-                        System.out.println("Exception while reading exclusion list");
-                    }
-
-                    return entryList;
                 }
-            }
-
-            try
-            {
-                exclusion.close();
-            }
-            catch (java.io.IOException ioe)
-            {
-                if (debug)
-                {
-                    System.out.println("Couldn't close file " + url);
-                }
-
-                return entryList;
             }
 
             return entryList;
