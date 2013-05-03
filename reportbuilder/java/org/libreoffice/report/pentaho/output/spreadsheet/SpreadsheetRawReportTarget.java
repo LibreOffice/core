@@ -124,18 +124,14 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
             {
                 return 0;
             }
-            if (arg0 instanceof ColumnBoundary)
+            if (boundary > arg0.boundary)
             {
-                if (boundary > arg0.boundary)
-                {
-                    return 1;
-                }
-                else
-                {
-                    return -1;
-                }
+                return 1;
             }
-            return 1;
+            else
+            {
+                return -1;
+            }
         }
 
         public boolean equals(final Object obj)

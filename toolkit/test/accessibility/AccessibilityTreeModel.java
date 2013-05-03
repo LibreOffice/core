@@ -34,8 +34,6 @@ public class AccessibilityTreeModel
     public AccessibilityTreeModel (AccessibleTreeNode aRoot)
     {
         // create default node (unless we have a 'proper' node)
-        if( ! (aRoot instanceof AccessibleTreeNode) )
-            aRoot = new StringNode ("Root", null);
         setRoot (aRoot);
 
         maNodeMap = new NodeMap();

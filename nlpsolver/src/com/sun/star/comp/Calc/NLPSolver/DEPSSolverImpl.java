@@ -98,7 +98,7 @@ public final class DEPSSolverImpl extends BaseEvolutionarySolver
     public String[] getSupportedServiceNames() {
         return m_serviceNames;
     }
-    
+
     // com.sun.star.sheet.XSolver:
     private DEPSAgent[] m_agents;
 
@@ -142,8 +142,7 @@ public final class DEPSSolverImpl extends BaseEvolutionarySolver
             m_agents[i].setGTBehavior(psGTBehavior);
 
             m_agents[i].setSpecComparator(m_specCompareEngine);
-            if (m_agents[i] instanceof ILibEngine)
-                ((ILibEngine)m_agents[i]).setLibrary(m_library);
+            m_agents[i].setLibrary(m_library);
         }
 
         //Learn:
@@ -160,7 +159,7 @@ public final class DEPSSolverImpl extends BaseEvolutionarySolver
 
             if (m_solverStatusDialog.getUserState() == IEvolutionarySolverStatusDialog.CONTINUE)
                 lockDocument();
-            
+
             m_toleratedCount = 0;
             m_toleratedMin = -1.0 * m_tolerance.getValue();
             m_toleratedMax = m_tolerance.getValue();
@@ -196,7 +195,7 @@ public final class DEPSSolverImpl extends BaseEvolutionarySolver
                 m_solverStatusDialog.setRuntime(runtime + (System.nanoTime() - startTime));
                 m_xReschedule.reschedule();
             }
-            
+
             applySolution(); //show the current solution
             unlockDocument(); //allow the solution to be displayed
 
