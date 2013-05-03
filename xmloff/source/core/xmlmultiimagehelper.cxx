@@ -129,6 +129,10 @@ const SvXMLImportContext* multiImageImportHelper::solveMultipleImages()
             removeGraphicFromImportContext(**maImplContextVector[a]);
         }
     }
+    else if (maImplContextVector.size() == 1)
+    {
+        pContext = *maImplContextVector.front();
+    }
 
     return pContext;
 }
