@@ -29,7 +29,9 @@
 #include "sfx2/dllapi.h"
 
 #include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/util/URL.hpp>
 
 
 #define A2S(s) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s)))
