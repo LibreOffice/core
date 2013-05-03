@@ -23,6 +23,11 @@ $(eval $(call gb_Pyuno_add_files,commonwizards,wizards,\
     common/PropertyNames.py \
     common/Resource.py \
     common/SystemDialog.py \
+    common/IRenderer.py \
+    common/UCB.py \
+    common/XMLHelper.py \
+    common/XMLProvider.py \
+    common/ListModel.py \
     common/__init__.py \
     document/OfficeDocument.py \
     document/__init__.py \
@@ -46,6 +51,13 @@ $(eval $(call gb_Pyuno_add_files,commonwizards,wizards,\
     ui/event/ListModelBinder.py \
     ui/event/RadioDataAware.py \
     ui/event/UnoDataAware.py \
+    ui/event/SimpleDataAware.py \
+    ui/event/Task.py \
+    ui/event/TaskEvent.py \
+    ui/event/TaskListener.py \
+    ui/event/ListDataEvent.py \
+    ui/event/ListDataListener.py \
+    ui/event/EventListenerList.py \
     ui/event/__init__.py \
 ))
 
