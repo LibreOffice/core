@@ -50,6 +50,7 @@ $(eval $(call gb_CppunitTest_use_ure,sw_ooxmlexport))
 
 $(eval $(call gb_CppunitTest_use_components,sw_ooxmlexport,\
 	basic/util/sb \
+	canvas/source/factory/canvasfactory \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     embeddedobj/util/embobj \

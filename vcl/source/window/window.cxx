@@ -75,23 +75,24 @@
 #include "dndlcon.hxx"
 #include "dndevdis.hxx"
 
+#include "com/sun/star/accessibility/XAccessible.hpp"
+#include "com/sun/star/accessibility/AccessibleRole.hpp"
 #include "com/sun/star/awt/XWindowPeer.hpp"
-#include "com/sun/star/rendering/XCanvas.hpp"
-#include "com/sun/star/rendering/XSpriteCanvas.hpp"
+#include "com/sun/star/awt/XTopWindow.hpp"
 #include "com/sun/star/awt/XWindow.hpp"
-#include "comphelper/processfactory.hxx"
+#include "com/sun/star/awt/XDisplayConnection.hpp"
 #include "com/sun/star/datatransfer/dnd/XDragSource.hpp"
 #include "com/sun/star/datatransfer/dnd/XDropTarget.hpp"
 #include "com/sun/star/datatransfer/clipboard/XClipboard.hpp"
 #include "com/sun/star/datatransfer/clipboard/SystemClipboard.hpp"
 #include "com/sun/star/datatransfer/clipboard/SystemClipboardExt.hpp"
-#include "com/sun/star/awt/XTopWindow.hpp"
-#include "com/sun/star/awt/XDisplayConnection.hpp"
 #include "com/sun/star/lang/XInitialization.hpp"
 #include "com/sun/star/lang/XComponent.hpp"
 #include "com/sun/star/lang/XServiceName.hpp"
-#include "com/sun/star/accessibility/XAccessible.hpp"
-#include "com/sun/star/accessibility/AccessibleRole.hpp"
+#include "com/sun/star/rendering/CanvasFactory.hpp"
+#include "com/sun/star/rendering/XCanvas.hpp"
+#include "com/sun/star/rendering/XSpriteCanvas.hpp"
+#include "comphelper/processfactory.hxx"
 
 #include <sal/macros.h>
 #include <rtl/strbuf.hxx>
@@ -9467,16 +9468,13 @@ uno::Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscr
                              const_cast<Window*>(this)->GetComponentInterface(),
                              uno::UNO_QUERY ));
 
-    uno::Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
+    uno::Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
 
     // Create canvas instance with window handle
     // =========================================
-    static ::vcl::DeleteUnoReferenceOnDeinit<lang::XMultiServiceFactory> xStaticCanvasFactory(
-        uno::Reference<lang::XMultiServiceFactory>(
-            xFactory->createInstance(
-                OUString( "com.sun.star.rendering.CanvasFactory" ) ),
-            UNO_QUERY ));
-    uno::Reference<lang::XMultiServiceFactory> xCanvasFactory(xStaticCanvasFactory.get());
+    static ::vcl::DeleteUnoReferenceOnDeinit<lang::XMultiComponentFactory> xStaticCanvasFactory(
+        rendering::CanvasFactory::create( xContext ) );
+    uno::Reference<lang::XMultiComponentFactory> xCanvasFactory(xStaticCanvasFactory.get());
 
     if(xCanvasFactory.is())
     {
@@ -9489,22 +9487,24 @@ uno::Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscr
         const sal_uInt32 nDisplay = static_cast< WinSalFrame* >( mpWindowImpl->mpFrame )->mnDisplay;
         if( (nDisplay >= Application::GetScreenCount()) )
         {
-            xCanvas.set( xCanvasFactory->createInstanceWithArguments(
+            xCanvas.set( xCanvasFactory->createInstanceWithArgumentsAndContext(
                                  bSpriteCanvas ?
                                  OUString( "com.sun.star.rendering.SpriteCanvas.MultiScreen" ) :
                                  OUString( "com.sun.star.rendering.Canvas.MultiScreen" ),
-                                 aArg ),
+                                 aArg,
+                                 xContext ),
                              UNO_QUERY );
 
         }
         else
         {
 #endif
-            xCanvas.set( xCanvasFactory->createInstanceWithArguments(
+            xCanvas.set( xCanvasFactory->createInstanceWithArgumentsAndContext(
                              bSpriteCanvas ?
                              OUString( "com.sun.star.rendering.SpriteCanvas" ) :
                              OUString( "com.sun.star.rendering.Canvas" ),
-                             aArg ),
+                             aArg,
+                             xContext ),
                          UNO_QUERY );
 
 #ifdef WNT

@@ -51,6 +51,7 @@ $(eval $(call gb_CppunitTest_use_ure,sw_rtfimport))
 
 $(eval $(call gb_CppunitTest_use_components,sw_rtfimport,\
 	basic/util/sb \
+	canvas/source/factory/canvasfactory \
 	comphelper/util/comphelp \
     configmgr/source/configmgr \
     embeddedobj/util/embobj \
