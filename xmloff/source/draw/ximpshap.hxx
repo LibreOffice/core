@@ -78,6 +78,7 @@ protected:
 
     bool                        mbVisible;
     bool                        mbPrintable;
+    bool mbHaveXmlId;
 
     /** if bSupportsStyle is false, auto styles will be set but not a style */
     void SetStyle( bool bSupportsStyle = true );

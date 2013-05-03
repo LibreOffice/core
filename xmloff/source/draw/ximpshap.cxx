@@ -153,6 +153,7 @@ SdXMLShapeContext::SdXMLShapeContext(
 ,   maPosition(0, 0)
 ,   mbVisible(true)
 ,   mbPrintable(true)
+,   mbHaveXmlId(false)
 {
 }
 
@@ -782,7 +783,6 @@ void SdXMLShapeContext::SetThumbnail()
 // this is called from the parent group for each unparsed attribute in the attribute list
 void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
 {
-    bool bHaveXmlId( false );
     if( (XML_NAMESPACE_DRAW == nPrefix) || (XML_NAMESPACE_DRAW_EXT == nPrefix) )
     {
         if( IsXMLToken( rLocalName, XML_ZINDEX ) )
@@ -791,7 +791,7 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rL
         }
         else if( IsXMLToken( rLocalName, XML_ID ) )
         {
-            if (!bHaveXmlId) { maShapeId = rValue; };
+            if (!mbHaveXmlId) { maShapeId = rValue; };
         }
         else if( IsXMLToken( rLocalName, XML_NAME ) )
         {
@@ -893,7 +893,7 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rL
         if( IsXMLToken( rLocalName, XML_ID ) )
         {
             maShapeId = rValue;
-            bHaveXmlId = true;
+            mbHaveXmlId = true;
         }
     }
 }
