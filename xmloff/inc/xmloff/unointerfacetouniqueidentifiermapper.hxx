@@ -24,6 +24,7 @@
 #include "xmloff/dllapi.h"
 #include "sal/types.h"
 
+#include <deque>
 #include <map>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -35,6 +36,8 @@ typedef ::std::map< rtl::OUString, const ::com::sun::star::uno::Reference< ::com
 
 class XMLOFF_DLLPUBLIC UnoInterfaceToUniqueIdentifierMapper
 {
+    typedef std::deque< rtl::OUString > Reserved_t;
+
 public:
     UnoInterfaceToUniqueIdentifierMapper();
 
@@ -50,6 +53,17 @@ public:
     */
     bool registerReference( const rtl::OUString& rIdentifier, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rInterface );
 
+    /** reserves an identifier for later registration.
+
+        @returns
+            false, if the identifier already exists
+      */
+    bool reserveIdentifier( const rtl::OUString& rIdentifier );
+
+    /** registers the given uno object with reserved identifier.
+      */
+    bool registerReservedReference( const rtl::OUString& rIdentifier, const com::sun::star::uno::Reference< com::sun::star::uno::XInterface >& rInterface );
+
     /** @returns
             the identifier for the given uno object. If this uno object is not already
             registered, an empty string is returned
@@ -64,10 +78,13 @@ public:
 
 private:
     bool findReference( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rInterface, IdMap_t::const_iterator& rIter ) const;
-    bool findIdentifier( const rtl::OUString& rIdentifier, IdMap_t::const_iterator& rIter ) const;
+    bool findIdentifier( const OUString& rIdentifier, IdMap_t::const_iterator& rIter ) const;
+    bool findReserved( const OUString& rIdentifier ) const;
+    bool findReserved( const OUString& rIdentifier, Reserved_t::const_iterator& rIter ) const;
 
     IdMap_t	maEntries;
     sal_Int32 mnNextId;
+    Reserved_t maReserved;
 };
 
 }
