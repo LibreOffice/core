@@ -231,11 +231,11 @@ bool ParseURL(
 void XMLEventOASISTransformerContext::StartElement(
     const Reference< XAttributeList >& rAttrList )
 {
-    OSL_TRACE("XMLEventOASISTransformerContext::StartElement");
+    SAL_INFO("xmloff.transform", "XMLEventOASISTransformerContext::StartElement");
 
     XMLTransformerActions *pActions =
         GetTransformer().GetUserDefinedActions( OASIS_EVENT_ACTIONS );
-    OSL_ENSURE( pActions, "go no actions" );
+    SAL_WARN_IF( pActions == NULL, "xmloff.transform", "got no actions" );
 
     Reference< XAttributeList > xAttrList( rAttrList );
     XMLMutableAttributeList *pMutableAttrList = 0;
@@ -388,7 +388,7 @@ void XMLEventOASISTransformerContext::StartElement(
             case XML_ATACTION_COPY:
                 break;
             default:
-                OSL_ENSURE( !this, "unknown action" );
+                SAL_WARN( "xmloff.transform", "unknown action" );
                 break;
             }
         }

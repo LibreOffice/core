@@ -303,9 +303,12 @@ certain functionality.
 @section xmloff
 
 @li @c xmloff.core
+@li @c xmloff.draw
 @li @c xmloff.forms
 @li @c xmloff.chart
 @li @c xmloff.style
+@li @c xmloff.text
+@li @c xmloff.transform
 
 @section xmlsecurity
 
@@ -358,7 +361,6 @@ certain functionality.
 @li @c uui
 @li @c vbahelper
 @li @c xmlhelp
-@li @c xmloff
 @li @c xmlreader
 
 */
