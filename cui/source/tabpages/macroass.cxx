@@ -213,6 +213,16 @@ sal_Bool _SfxMacroTabPage::FillItemSet( SfxItemSet& rSet )
     return sal_False;
 }
 
+void _SfxMacroTabPage::LaunchFillGroup()
+{
+    if (!mpImpl->maFillGroupTimer.GetTimeoutHdl().IsSet())
+    {
+        mpImpl->maFillGroupTimer.SetTimeoutHdl( STATIC_LINK( this, _SfxMacroTabPage, TimeOut_Impl ) );
+        mpImpl->maFillGroupTimer.SetTimeout( 0 );
+        mpImpl->maFillGroupTimer.Start();
+    }
+}
+
 void _SfxMacroTabPage::ActivatePage( const SfxItemSet& )
 {
     // fdo#57553 lazily init script providers, because it is annoying if done
@@ -220,13 +230,9 @@ void _SfxMacroTabPage::ActivatePage( const SfxItemSet& )
     if (!mpImpl->m_bDummyActivated)
     {
         mpImpl->m_bDummyActivated = true;
+        return;
     }
-    else if (!mpImpl->maFillGroupTimer.GetTimeoutHdl().IsSet())
-    {
-        mpImpl->maFillGroupTimer.SetTimeoutHdl( STATIC_LINK( this, _SfxMacroTabPage, TimeOut_Impl ) );
-        mpImpl->maFillGroupTimer.SetTimeout( 0 );
-        mpImpl->maFillGroupTimer.Start();
-    }
+    LaunchFillGroup();
 }
 
 void _SfxMacroTabPage::PageCreated (SfxAllItemSet aSet)
@@ -477,17 +483,26 @@ SfxMacroTabPage::SfxMacroTabPage( Window* pParent, const ResId& rResId, const Re
     ScriptChanged();
 }
 
+namespace
+{
+    SfxMacroTabPage* CreateSfxMacroTabPage( Window* pParent, const SfxItemSet& rAttrSet )
+    {
+        return new SfxMacroTabPage( pParent, CUI_RES( RID_SVXPAGE_EVENTASSIGN ), NULL, rAttrSet );
+    }
+}
+
 SfxTabPage* SfxMacroTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
-    return new SfxMacroTabPage( pParent, CUI_RES( RID_SVXPAGE_EVENTASSIGN ), NULL, rAttrSet );
+    return CreateSfxMacroTabPage(pParent, rAttrSet);
 }
 
 SfxMacroAssignDlg::SfxMacroAssignDlg( Window* pParent, const Reference< XFrame >& rxDocumentFrame, const SfxItemSet& rSet )
     : SfxNoLayoutSingleTabDialog( pParent, rSet, 0 )
 {
-    SfxTabPage* pPage = SfxMacroTabPage::Create( this, rSet );
+    SfxMacroTabPage* pPage = CreateSfxMacroTabPage(this, rSet);
     pPage->SetFrame( rxDocumentFrame );
     SetTabPage( pPage );
+    pPage->LaunchFillGroup();
 }
 
 SfxMacroAssignDlg::~SfxMacroAssignDlg()
