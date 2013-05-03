@@ -2057,23 +2057,13 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
                 rSet.Put( rBrushItem, GetPool().GetWhich(nWhich) );
             }
             break;
-/*          case SID_ATTR_ALIGN_LINEBREAK:
-            {
-                const SfxBoolItem& rBreakItem = (const SfxBoolItem&)rAttrSet.Get( ATTR_LINEBREAK );
-                rSet.Put( rBreakItem, GetPool().GetWhich(nWhich) );
-            }
-            break;
-*/
         }
         nWhich = aIter.NextWhich();
     }
 
-    if(nWhich)
-    {
-        // stuff for sidebar panels
-        Invalidate(SID_ATTR_ALIGN_DEGREES);
-        Invalidate(SID_ATTR_ALIGN_STACKED);
-    }
+    // stuff for sidebar panels
+    Invalidate(SID_ATTR_ALIGN_DEGREES);
+    Invalidate(SID_ATTR_ALIGN_STACKED);
 }
 
 //------------------------------------------------------------------
