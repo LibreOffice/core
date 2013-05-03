@@ -26,6 +26,8 @@
 #include <vcl/gradient.hxx>
 #include <tools/svborder.hxx>
 
+#include "sfx2/dllapi.h"
+
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
@@ -39,7 +41,7 @@ namespace cssu = ::com::sun::star::uno;
 
 namespace sfx2 { namespace sidebar {
 
-class Tools
+class SFX2_DLLPUBLIC Tools
 {
 public:
     static Image GetImage (
@@ -55,6 +57,11 @@ public:
     static Gradient AwtToVclGradient (const css::awt::Gradient aGradient);
 
     static SvBorder RectangleToSvBorder (const Rectangle aBox);
+
+    static css::util::URL GetURL (const ::rtl::OUString& rsCommand);
+    static cssu::Reference<css::frame::XDispatch> GetDispatch (
+        const cssu::Reference<css::frame::XFrame>& rxFrame,
+        const css::util::URL& rURL);
 };
 
 
