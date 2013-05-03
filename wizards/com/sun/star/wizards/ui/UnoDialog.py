@@ -28,6 +28,8 @@ class UnoDialog(object):
 
     createDict = False
     dictProperties = None
+    BisHighContrastModeActivated = None
+    xVclWindowPeer = None
 
     def __init__(self, xMSF, PropertyNames, PropertyValues):
         try:
@@ -125,8 +127,7 @@ class UnoDialog(object):
         except Exception:
             traceback.print_exc()
 
-    def insertControlModel(
-        self, serviceName, componentName, sPropNames, oPropValues):
+    def insertControlModel(self, serviceName, componentName, sPropNames, oPropValues):
         try:
             xControlModel = self.xDialogModel.createInstance(serviceName)
             uno.invoke(xControlModel, "setPropertyValues",
@@ -188,11 +189,14 @@ class UnoDialog(object):
 
         if self.xWindowPeer is None:
             self.createWindowPeer()
+
+        self.xVclWindowPeer = self.xWindowPeer
+        self.BisHighContrastModeActivated = self.isHighContrastModeActivated()
         return self.xUnoDialog.execute()
 
     def setVisible(self, parent):
-        self.calculateDialogPosition(parent.xWindow.getPosSize())
-        if self.xWindowPeer is None:
+        self.calculateDialogPosition(parent.xUnoDialog.getPosSize())
+        if self.xWindowPeer == None:
             self.createWindowPeer()
 
         self.xUnoDialog.setVisible(True)
@@ -258,6 +262,14 @@ class UnoDialog(object):
                 xListBox.selectItemPos((short)(SelPos - 1), True)
 
     @classmethod
+    def setEnabled(self, control, enabled):
+        control.Model.Enabled = enabled
+
+    @classmethod
+    def getModel(self, control):
+        return control.getModel()
+
+    @classmethod
     def getDisplayProperty(self, xServiceInfo):
         if xServiceInfo.supportsService(
                 "com.sun.star.awt.UnoControlFixedTextModel"):
@@ -312,3 +324,61 @@ class UnoDialog(object):
 
     def addResourceHandler(self, _Unit, _Module):
         self.m_oResource = Resource(self.xMSF, _Unit, _Module)
+
+    def isHighContrastModeActivated(self):
+        if (self.xVclWindowPeer is not None):
+            if (self.BisHighContrastModeActivated is None):
+                nUIColor = 0
+                try:
+                    nUIColor = self.xVclWindowPeer.getProperty("DisplayBackgroundColor")
+                except IllegalArgumentException:
+                    traceback.print_exc()
+                    return False
+
+                # TODO: The following methods could be wrapped in an own class implementation
+                nRed = self.getRedColorShare(nUIColor)
+                nGreen = self.getGreenColorShare(nUIColor)
+                nBlue = self.getBlueColorShare(nUIColor)
+                nLuminance = ((nBlue * 28 + nGreen * 151 + nRed * 77) / 256)
+                bisactivated = (nLuminance <= 25)
+                self.BisHighContrastModeActivated = bool(bisactivated)
+                return bisactivated;
+            else:
+                return self.BisHighContrastModeActivated
+        else:
+            return False
+
+
+    def getRedColorShare(self, _nColor):
+        nRed = _nColor / 65536
+        nRedModulo = _nColor % 65536
+        nGreen = nRedModulo / 256
+        nGreenModulo = (nRedModulo % 256)
+        nBlue = nGreenModulo
+        return nRed
+
+    def getGreenColorShare(self, _nColor):
+        nRed = _nColor / 65536
+        nRedModulo = _nColor % 65536
+        nGreen = nRedModulo / 256
+        return nGreen
+
+    def getBlueColorShare(self, _nColor):
+        nRed = _nColor / 65536
+        nRedModulo = _nColor % 65536
+        nGreen = nRedModulo / 256
+        nGreenModulo = (nRedModulo % 256)
+        nBlue = nGreenModulo
+        return nBlue
+
+    def getWizardImageUrl(self, _nResId, _nHCResId):
+        if (self.isHighContrastModeActivated()):
+            return "private:resource/wzi/image/" + str(_nHCResId)
+        else:
+            return "private:resource/wzi/image/" + str(_nResId)
+
+    def getImageUrl(self, _surl, _shcurl):
+        if (self.isHighContrastModeActivated()):
+            return _shcurl
+        else:
+            return _surl
