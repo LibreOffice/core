@@ -146,18 +146,18 @@ public class UnoNode{
             sIDLUrl += "/";
         }
         if (_sClassName.equals("")){
-            sIDLUrl += "com/sun/star/module-ix";
+            sIDLUrl += "index";
             sAnchor = "";
         }
         else{
-            sIDLUrl += _sClassName.replace('.', '/');
+            sIDLUrl += _sClassName.replace(".", "_1_1");
         }
+        sIDLUrl += ".html";
         if (sAnchor != null){
             if (!sAnchor.equals("")){
                 sIDLUrl += "#" + sAnchor;
             }
         }
-        sIDLUrl += ".html";
         URL openHyperlink = getDispatchURL(".uno:OpenHyperlink");
         PropertyValue pv = new PropertyValue();
         pv.Name = "URL";

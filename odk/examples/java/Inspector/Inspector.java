@@ -70,7 +70,7 @@ import com.sun.star.util.XCloseable;
  * registry key (<CODE>__writeRegistryServiceInfo</CODE>).
  */
 public class Inspector{
-     public static final String sIDLDOCUMENTSUBFOLDER = "docs/common/ref/";
+     public static final String sIDLDOCUMENTSUBFOLDER = "docs/idl/ref/";
 
 
     /** This class implements the method of the interface XInstanceInspector.
