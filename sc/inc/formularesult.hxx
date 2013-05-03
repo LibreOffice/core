@@ -23,8 +23,6 @@
 #include "token.hxx"
 #include "scdllapi.h"
 
-#include <sal/log.hxx>
-
 /** Store a variable formula cell result, balancing between runtime performance
     and memory consumption. */
 class ScFormulaResult

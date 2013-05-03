@@ -77,10 +77,9 @@ private:
     ScFormulaCell*  pPreviousTrack;
     ScFormulaCell*  pNextTrack;
     ScFormulaCellGroupRef xGroup;       // re-factoring hack - group of formulae we're part of.
-    sal_uLong       nFormatIndex;       // Number format set by calculation
-    short           nFormatType;        // Number format type set by calculation
     sal_uInt16      nSeenInIteration;   // Iteration cycle in which the cell was last encountered
     sal_uInt8       cMatrixFlag;        // One of ScMatrixMode
+    short           nFormatType;
     bool            bDirty         : 1; // Must be (re)calculated
     bool            bChanged       : 1; // Whether something changed regarding display/representation
     bool            bRunning       : 1; // Already interpreting right now
@@ -90,6 +89,7 @@ private:
     bool            bInChangeTrack : 1; // Cell is in ChangeTrack
     bool            bTableOpDirty  : 1; // Dirty flag for TableOp
     bool            bNeedListening : 1; // Listeners need to be re-established after UpdateReference
+    bool            mbNeedsNumberFormat : 1; // set the calculated number format as hard number format
 
                     enum ScInterpretTailParameter
                     {
@@ -100,7 +100,6 @@ private:
     void            InterpretTail( ScInterpretTailParameter );
 
     ScFormulaCell( const ScFormulaCell& );
-
 public:
 
     enum CompareState { NotEqual = 0, EqualInvariant, EqualRelativeRef };
@@ -153,6 +152,8 @@ public:
     void            ResetDirty() { bDirty = false; }
     bool            NeedsListening() const { return bNeedListening; }
     void            SetNeedsListening( bool bVar ) { bNeedListening = bVar; }
+    void            SetNeedNumberFormat( bool bVal ) { mbNeedsNumberFormat = bVal; }
+    short           GetFormatType() const { return nFormatType; }
     void            Compile(const OUString& rFormula,
                             bool bNoListening = false,
                             const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT );
@@ -214,10 +215,6 @@ public:
     sal_uInt16      GetMatrixEdge( ScAddress& rOrgPos );
     sal_uInt16      GetErrCode();   // interpret first if necessary
     sal_uInt16      GetRawError();  // don't interpret, just return code or result error
-    short           GetFormatType() const                   { return nFormatType; }
-    sal_uLong       GetFormatIndex() const                  { return nFormatIndex; }
-    void            GetFormatInfo( short& nType, sal_uLong& nIndex ) const
-                        { nType = nFormatType; nIndex = nFormatIndex; }
     sal_uInt8       GetMatrixFlag() const                   { return cMatrixFlag; }
     ScTokenArray*   GetCode() const                         { return pCode; }
 
@@ -245,10 +242,6 @@ public:
                     // cell belongs to ChangeTrack and not to the real document
     void            SetInChangeTrack( bool bVal ) { bInChangeTrack = bVal; }
     bool            IsInChangeTrack() const { return bInChangeTrack; }
-
-                    // standard format for type and format
-                    // for format "Standard" possibly the format used in the formula cell
-    sal_uLong       GetStandardFormat( SvNumberFormatter& rFormatter, sal_uLong nFormat ) const;
 
     // For import filters!
     void            AddRecalcMode( formula::ScRecalcMode );

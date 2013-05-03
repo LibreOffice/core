@@ -39,7 +39,7 @@
 #include "scresid.hxx"
 #include "reffact.hxx"
 #include "document.hxx"
-#include "formulacell.hxx"
+#include "simpleformulacalc.hxx"
 #include "scmod.hxx"
 #include "inputhdl.hxx"
 #include "tabvwsh.hxx"
@@ -184,8 +184,6 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
         pData->SetMode( (sal_uInt16) eMode );
         String rStrExp = GetMeText();
 
-        pCell = new ScFormulaCell( pDoc, aCursorPos, rStrExp );
-
         Update(rStrExp);
     }
 
@@ -241,8 +239,6 @@ void ScFormulaDlg::fill()
 
         SetMeText(rStrExp);
 
-        pCell = new ScFormulaCell( pDoc, aCursorPos, rStrExp );
-
         Update();
         // Jetzt nochmals zurueckschalten, da evtl. neues Doc geoeffnet wurde!
         pScMod->SetRefInputHdl(NULL);
@@ -260,8 +256,6 @@ ScFormulaDlg::~ScFormulaDlg()
         pScMod->SetRefInputHdl(NULL);
         StoreFormEditData(pData);
     } // if (pData) // wird nicht ueber Close zerstoert;
-
-    delete pCell;
 }
 
 sal_Bool ScFormulaDlg::IsInputHdl(ScInputHandler* pHdl)
@@ -316,24 +310,24 @@ sal_Bool ScFormulaDlg::Close()
 //  --------------------------------------------------------------------------
 bool ScFormulaDlg::calculateValue( const String& rStrExp, String& rStrResult )
 {
-    boost::scoped_ptr<ScFormulaCell> pFCell( new ScFormulaCell( pDoc, aCursorPos, rStrExp ) );
+    boost::scoped_ptr<ScSimpleFormulaCalculator> pFCell( new ScSimpleFormulaCalculator( pDoc, aCursorPos, rStrExp ) );
 
     // HACK! um bei ColRowNames kein #REF! zu bekommen,
     // wenn ein Name eigentlich als Bereich in die Gesamt-Formel
     // eingefuegt wird, bei der Einzeldarstellung aber als
     // single-Zellbezug interpretiert wird
-    sal_Bool bColRowName = pCell->HasColRowName();
+    sal_Bool bColRowName = pFCell->HasColRowName();
     if ( bColRowName )
     {
         // ColRowName im RPN-Code?
-        if ( pCell->GetCode()->GetCodeLen() <= 1 )
+        if ( pFCell->GetCode()->GetCodeLen() <= 1 )
         {   // ==1: einzelner ist als Parameter immer Bereich
             // ==0: es waere vielleicht einer, wenn..
             OUStringBuffer aBraced;
             aBraced.append('(');
             aBraced.append(rStrExp);
             aBraced.append(')');
-            pFCell.reset( new ScFormulaCell( pDoc, aCursorPos, aBraced.makeStringAndClear() ) );
+            pFCell.reset( new ScSimpleFormulaCalculator( pDoc, aCursorPos, aBraced.makeStringAndClear() ) );
         }
         else
             bColRowName = false;
@@ -370,11 +364,6 @@ bool ScFormulaDlg::calculateValue( const String& rStrExp, String& rStrResult )
     }
     else
         rStrResult += ScGlobal::GetErrorString(nErrCode);
-
-    if(!isUserMatrix() && pFCell->GetMatrixFlag())
-    {
-        CheckMatrix();
-    }
 
     return true;
 }

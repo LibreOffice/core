@@ -170,8 +170,6 @@ sal_uLong ScInterpreter::GetCellNumberFormat( const ScAddress& rPos, ScRefCellVa
         else
             nErr = 0;
         nFormat = pDok->GetNumberFormat( rPos );
-        if (rCell.meType == CELLTYPE_FORMULA && ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0))
-            nFormat = rCell.mpFormula->GetStandardFormat(*pFormatter, nFormat);
     }
 
     SetError(nErr);
@@ -464,7 +462,7 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, ScRefCellValue&
                 {
                     fValue = pFCell->GetValue();
                     pDok->GetNumberFormatInfo( nCurFmtType, nCurFmtIndex,
-                        rPos, pFCell );
+                        rPos );
                 }
                 else
                 {
@@ -980,7 +978,7 @@ void ScInterpreter::PushCellResultToken( bool bDisplayEmptyAsString,
     {
         bool bInherited = (aCell.meType == CELLTYPE_FORMULA);
         if (pRetTypeExpr && pRetIndexExpr)
-            pDok->GetNumberFormatInfo(*pRetTypeExpr, *pRetIndexExpr, rAddress, (bInherited ? aCell.mpFormula : NULL));
+            pDok->GetNumberFormatInfo(*pRetTypeExpr, *pRetIndexExpr, rAddress);
         PushTempToken( new ScEmptyCellToken( bInherited, bDisplayEmptyAsString));
         return;
     }
@@ -2647,8 +2645,8 @@ void ScInterpreter::ScExternal()
                 else
                 {
                     // nach dem Laden Asyncs wieder anwerfen
-                    if ( pMyFormulaCell->GetCode()->IsRecalcModeNormal() )
-                        pMyFormulaCell->GetCode()->SetExclusiveRecalcModeOnLoad();
+                    if ( rArr.IsRecalcModeNormal() )
+                        rArr.SetExclusiveRecalcModeOnLoad();
                     // garantiert identischer Handle bei identischem Aufruf?!?
                     // sonst schei*e ...
                     double nErg = 0.0;
@@ -3019,9 +3017,9 @@ void ScInterpreter::ScExternal()
 
             if ( aCall.HasVarRes() )                        // handle async functions
             {
-                if ( pMyFormulaCell->GetCode()->IsRecalcModeNormal() )
+                if ( rArr.IsRecalcModeNormal() )
                 {
-                    pMyFormulaCell->GetCode()->SetExclusiveRecalcModeOnLoad();
+                    rArr.SetExclusiveRecalcModeOnLoad();
                 }
                 uno::Reference<sheet::XVolatileResult> xRes = aCall.GetVarRes();
                 ScAddInListener* pLis = ScAddInListener::Get( xRes );
@@ -3724,8 +3722,14 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScTTT" );
 
-    sal_uInt8 cMatFlag = pMyFormulaCell->GetMatrixFlag();
-    bMatrixFormula = ( cMatFlag == MM_FORMULA || cMatFlag == MM_FAKE );
+    if(pMyFormulaCell)
+    {
+        sal_uInt8 cMatFlag = pMyFormulaCell->GetMatrixFlag();
+        bMatrixFormula = ( cMatFlag == MM_FORMULA || cMatFlag == MM_FAKE );
+    }
+    else
+        bMatrixFormula = false;
+
     if (!bGlobalStackInUse)
     {
         bGlobalStackInUse = true;

@@ -3293,7 +3293,7 @@ void ScInterpreter::ScMatRef()
             else
             {
                 PushDouble(nMatVal.fVal);  // handles DoubleError
-                pDok->GetNumberFormatInfo(nCurFmtType, nCurFmtIndex, aAdr, aCell.mpFormula);
+                pDok->GetNumberFormatInfo(nCurFmtType, nCurFmtIndex, aAdr);
                 nFuncFmtType = nCurFmtType;
                 nFuncFmtIndex = nCurFmtIndex;
             }
@@ -3312,7 +3312,7 @@ void ScInterpreter::ScMatRef()
             OUString aVal = aCell.mpFormula->GetString();
             PushString( aVal );
         }
-        pDok->GetNumberFormatInfo(nCurFmtType, nCurFmtIndex, aAdr, aCell.mpFormula);
+        pDok->GetNumberFormatInfo(nCurFmtType, nCurFmtIndex, aAdr);
         nFuncFmtType = nCurFmtType;
         nFuncFmtIndex = nCurFmtIndex;
     }
