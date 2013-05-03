@@ -1874,8 +1874,12 @@ void ScColumn::FindUsed( SCROW nStartRow, SCROW nEndRow, bool* pUsed ) const
 
 void ScColumn::StartListening( SvtListener& rLst, SCROW nRow )
 {
-    SvtBroadcaster* pBC = new SvtBroadcaster;
-    maBroadcasters.set(nRow, pBC);
+    SvtBroadcaster* pBC = GetBroadcaster(nRow);
+    if (!pBC)
+    {
+        pBC = new SvtBroadcaster;
+        maBroadcasters.set(nRow, pBC);
+    }
     rLst.StartListening(*pBC);
 }
 
