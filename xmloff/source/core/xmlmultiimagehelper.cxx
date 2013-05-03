@@ -89,8 +89,9 @@ multiImageImportHelper::~multiImageImportHelper()
     }
 }
 
-void multiImageImportHelper::solveMultipleImages()
+const SvXMLImportContext* multiImageImportHelper::solveMultipleImages()
 {
+    const SvXMLImportContext* pContext(0);
     if(maImplContextVector.size() > 1)
     {
         // multiple child contexts were imported, decide which is the most valuable one
@@ -118,6 +119,7 @@ void multiImageImportHelper::solveMultipleImages()
 
         // Take out the most valuable one
         const std::vector< SvXMLImportContextRef* >::iterator aRemove(maImplContextVector.begin() + nIndexOfPreferred);
+        pContext = **aRemove;
         delete *aRemove;
         maImplContextVector.erase(aRemove);
 
@@ -127,6 +129,12 @@ void multiImageImportHelper::solveMultipleImages()
             removeGraphicFromImportContext(**maImplContextVector[a]);
         }
     }
+    else if (maImplContextVector.size() == 1)
+    {
+        pContext = *maImplContextVector.front();
+    }
+
+    return pContext;
 }
 
 void multiImageImportHelper::addContent(const SvXMLImportContext& rSvXMLImportContext)
