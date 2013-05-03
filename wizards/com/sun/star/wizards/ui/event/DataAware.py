@@ -16,6 +16,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
+import uno
 from abc import ABCMeta, abstractmethod
 from ...common.PropertyNames import PropertyNames
 
@@ -74,7 +75,10 @@ class DataAware(object):
     '''
 
     def updateUI(self):
-        data = getattr(self._dataObject, self._field)
+        try:
+            data = getattr(self._dataObject, self._field)
+        except Exception:
+            data = uno.invoke(self._dataObject, "get" + self._field, ())
         ui = self.getFromUI()
         if data is not ui:
             try:
@@ -91,8 +95,8 @@ class DataAware(object):
     '''
 
     def setDataObject(self, obj, updateUI):
-        if obj is not None and not isinstance(obj, type(self._field)):
-            return
+        #if obj is not None and not isinstance(obj, type(self._field)):
+        #    return
 
         self._dataObject = obj
 
@@ -105,14 +109,22 @@ class DataAware(object):
     '''
 
     def updateData(self):
+        useUno = False
         try:
-            data = getattr(self._dataObject, self._field)
+            try:
+                data = getattr(self._dataObject, self._field)
+            except Exception:
+                useUno = True
+                data = uno.invoke(self._dataObject, "get" + self._field, ())
             ui = self.getFromUI()
             if data is not ui:
-                if isinstance(ui,tuple):
+                #if isinstance(ui,tuple):
                     #Selected Element listbox
-                    ui = ui[0]
-                setattr(self._dataObject, self._field, ui)
+                #    ui = ui[0]
+                if useUno:
+                    uno.invoke(self._dataObject, "set" + self._field, (ui,))
+                else:
+                    setattr(self._dataObject, self._field, ui)
             self.enableControls(ui)
         except Exception:
             traceback.print_exc()
