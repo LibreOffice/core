@@ -458,7 +458,10 @@ void SAL_CALL OImageControl::setSize( const awt::Size& aSize ) throw (beans::Pro
 // XShapeDescriptor
 OUString SAL_CALL OImageControl::getShapeType(  ) throw (uno::RuntimeException)
 {
-   return OUString("com.sun.star.drawing.ControlShape");
+    ::osl::MutexGuard aGuard(m_aMutex);
+    if ( m_aProps.aComponent.m_xShape.is() )
+        return m_aProps.aComponent.m_xShape->getShapeType();
+    return OUString("com.sun.star.drawing.ControlShape");
 }
 // -----------------------------------------------------------------------------
 ::sal_Int16 SAL_CALL OImageControl::getScaleMode() throw (uno::RuntimeException)

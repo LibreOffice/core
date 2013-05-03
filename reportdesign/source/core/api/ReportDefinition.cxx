@@ -2415,6 +2415,10 @@ void SAL_CALL OReportDefinition::setSize( const awt::Size& aSize ) throw (beans:
 // XShapeDescriptor
 OUString SAL_CALL OReportDefinition::getShapeType(  ) throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
+    if ( m_aProps->m_xShape.is() )
+        return m_aProps->m_xShape->getShapeType();
    return OUString("com.sun.star.drawing.OLE2Shape");
 }
 // -----------------------------------------------------------------------------

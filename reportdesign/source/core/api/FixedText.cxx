@@ -321,7 +321,10 @@ void SAL_CALL OFixedText::setSize( const awt::Size& aSize ) throw (beans::Proper
 // XShapeDescriptor
 OUString SAL_CALL OFixedText::getShapeType(  ) throw (uno::RuntimeException)
 {
-   return OUString("com.sun.star.drawing.ControlShape");
+    ::osl::MutexGuard aGuard(m_aMutex);
+    if ( m_aProps.aComponent.m_xShape.is() )
+        return m_aProps.aComponent.m_xShape->getShapeType();
+    return OUString("com.sun.star.drawing.ControlShape");
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
