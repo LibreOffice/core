@@ -272,6 +272,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     fwk \
     fwl \
 	fwm \
+    guesslang \
     $(if $(filter DESKTOP,$(BUILD_TYPE)),helplinker) \
     i18npool \
     hyphen \
@@ -287,6 +288,9 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     ira \
     itg \
     iti \
+    $(if $(SOLAR_JAVA),jdbc) \
+    $(if $(ENABLE_KAB),kab1) \
+    $(if $(ENABLE_KAB),kabdrv1) \
     localebe1 \
     lng \
     lnth \
@@ -299,6 +303,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     offacc \
     pcr \
     pdffilter \
+    res \
     sax \
     sb \
     sdbt \
@@ -316,6 +321,9 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     svx \
     svxcore \
     sw \
+    $(if $(ENABLE_TDEAB),tdeab1) \
+    $(if $(ENABLE_TDEAB),tdeabdrv1) \
+    textconversiondlgs \
     tk \
     tl \
 	$(if $(ENABLE_TELEPATHY),tubes) \
@@ -325,6 +333,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     utl \
     uui \
     vcl \
+    $(if $(and $(filter unx,$(GUIBASE)),$(filter-out MACOSX,$(OS))),vclplug_gen) \
     xmlscript \
     xmlfa \
     xmlfd \
@@ -371,10 +380,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	filtertracer \
 	flash \
     graphicfilter \
-    guesslang \
-	jdbc \
-	kab1 \
-	kabdrv1 \
     log \
 	MacOSXSpell \
     mork \
@@ -384,7 +389,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     pricing \
     protocolhandler \
     qstart_gtk \
-    res \
     rpt \
     rptui \
     rptxml \
@@ -400,13 +404,9 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     spell \
     sts \
     svgfilter \
-	tdeab1 \
-	tdeabdrv1 \
-    textconversiondlgs \
     textfd \
     updatecheckui \
     $(if $(DISABLE_SCRIPTING),,vbahelper) \
-    vclplug_gen \
     vclplug_gtk \
     vclplug_gtk3 \
     vclplug_tde \

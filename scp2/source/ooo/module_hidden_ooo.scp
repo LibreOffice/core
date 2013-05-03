@@ -156,22 +156,18 @@ Module gid_Module_Root_Files_4
 	gid_File_Lib_Oox,
 	gid_File_Lib_Pl,
 	gid_File_Lib_Sf_Prothdlr,
-	gid_File_Lib_Res,
 	gid_File_Lib_Spa,
 	gid_File_Lib_AVMediaWin,
 	gid_File_Lib_AVMediaGStreamer,
 	gid_File_Lib_AVMediaGStreamer_0_10,
 	gid_File_Lib_Sysdtrans,
-	gid_File_Lib_TextConversionDlgs,
 	gid_File_Lib_Acc,
 	gid_File_Lib_BaseBmp,
 	gid_File_Lib_Zip,
-	gid_File_Lib_Vclplug_Gen,
 	gid_File_Lib_Vclplug_Tde,
 	gid_File_Lib_Vclplug_Kde,
 	gid_File_Lib_Vclplug_Kde4,
-	gid_File_Lib_Vclplug_Svp,
-	gid_File_Lib_Guesslang);
+	gid_File_Lib_Vclplug_Svp);
 End
 
 Module gid_Module_Root_Files_5
@@ -203,10 +199,6 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Dbpool,
 	gid_File_Lib_Embobj,
 	gid_File_Lib_Emboleobj,
-	gid_File_Lib_Tdeab_1,
-    gid_File_Lib_Tdeab_Drv_1,
-	gid_File_Lib_Kab_1,
-    gid_File_Lib_Kab_Drv_1,
 	gid_File_Lib_Macab_1,
     gid_File_Lib_Macab_Drv_1,
 	gid_File_Lib_I18nsearch,
@@ -219,7 +211,6 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Localedata_Euro,
 	gid_File_Lib_Localedata_Others,
 	gid_File_Lib_Hsqldb_2,
-	gid_File_Lib_Jdbc,
 	gid_File_Lib_Mork,
 	gid_File_Lib_Mozabdrv,
 	gid_File_Lib_Mozbootstrap,
