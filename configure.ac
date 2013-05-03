@@ -1437,7 +1437,7 @@ AC_ARG_WITH(libpq-path,
          the PostgreSQL-SDBC extension.])
     [
                           Usage:     --with-libpq-path=<absolute path to
-                                                  your libq installation>
+                                                  your libpq installation>
     ],
 ,)
 
