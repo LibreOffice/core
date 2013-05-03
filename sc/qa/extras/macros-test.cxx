@@ -173,15 +173,10 @@ void ScMacrosTest::testVba()
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TestCalc_Rangetest2.")),
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
         },
-#if defined FIXRANGEADDRESSING
-//ScVbaRange::getRangeForName()/getScRangeListForAddress() seems to get confused
-//about the addressing mode of the document vs the addressing mode of a named
-//range ( need to fix that )
         {
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Ranges-2.")),
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
         },
-#endif
         {
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pagesetup.")),
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
@@ -202,15 +197,40 @@ void ScMacrosTest::testVba()
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Shapes.")),
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
         },
-#if VBA_TEST_WORKING
         {
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Ranges.")),
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
         },
-#endif
+       {
+            OUString("CheckOptionToggleValue."),
+            OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
+        },
+        {
+            OUString("GeneratedEventTest."),
+            OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
+        },
+        {
+            OUString("MiscControlTests."),
+            OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
+        },
+        {
+            OUString("Workbooks."),
+            OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
+        },
+
     };
 
     rtl::OUString aFileExtension("xls");
+    OUString sTempDir;
+    OUString sTempDirURL;
+    osl::FileBase:: getTempDirURL( sTempDirURL );
+    osl::FileBase::getSystemPathFromFileURL( sTempDirURL, sTempDir );
+    Sequence< uno::Any > aParams;
+    if ( !sTempDir.isEmpty() )
+    {
+        aParams.realloc(1);
+        aParams[ 0 ] <<= sTempDir;
+    }
     for ( sal_uInt32  i=0; i<SAL_N_ELEMENTS( testInfo ); ++i )
     {
         rtl::OUString aFileName;
@@ -224,7 +244,6 @@ void ScMacrosTest::testVba()
         Any aRet;
         Sequence< sal_Int16 > aOutParamIndex;
         Sequence< Any > aOutParam;
-        Sequence< uno::Any > aParams;
 
         SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
 
