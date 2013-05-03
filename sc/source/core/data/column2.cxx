@@ -160,10 +160,7 @@ long ScColumn::GetNeededSize(
         // #i111387# disable automatic line breaks only for "General" number format
         if (bBreak && aCell.hasNumeric() && ( nFormat % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 )
         {
-            // also take formula result type into account for number format
-            if (aCell.meType != CELLTYPE_FORMULA ||
-                (aCell.mpFormula->GetStandardFormat(*pFormatter, nFormat) % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
-                bBreak = false;
+            bBreak = false;
         }
 
         //  get other attributes from pattern and conditional formatting
@@ -1477,6 +1474,15 @@ void ScColumn::CopyCellTextAttrsToDocument(SCROW nRow1, SCROW nRow2, ScColumn& r
 
 void ScColumn::SetCell( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, ScBaseCell* pNewCell )
 {
+    if(pNewCell->GetCellType() == CELLTYPE_FORMULA)
+    {
+        ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pNewCell);
+        sal_uInt32 nCellFormat = GetNumberFormat( nRow );
+        if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
+            pFCell->SetNeedNumberFormat(true);
+
+    }
+
     bool bIsAppended = false;
     if ( !maItems.empty() )
     {
@@ -1513,6 +1519,15 @@ void ScColumn::SetCell( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, ScBaseCe
 
 void ScColumn::SetCell( SCROW nRow, ScBaseCell* pNewCell )
 {
+    if(pNewCell->GetCellType() == CELLTYPE_FORMULA)
+    {
+        ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pNewCell);
+        sal_uInt32 nCellFormat = GetNumberFormat( nRow );
+        if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
+            pFCell->SetNeedNumberFormat(true);
+
+    }
+
     bool bIsAppended = false;
     if ( !maItems.empty() )
     {

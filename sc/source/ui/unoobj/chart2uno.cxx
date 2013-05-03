@@ -3257,17 +3257,7 @@ namespace {
 sal_uLong getDisplayNumberFormat(ScDocument* pDoc, const ScAddress& rPos)
 {
     sal_uLong nFormat = pDoc->GetNumberFormat(rPos); // original format from cell.
-    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-    if (!pFormatter)
-        return nFormat;
-
-    ScRefCellValue aCell;
-    aCell.assign(*pDoc, rPos);
-    if (aCell.isEmpty() || aCell.meType != CELLTYPE_FORMULA || nFormat)
-        return nFormat;
-
-    // With formula cell, the format may be inferred from the formula result.
-    return aCell.mpFormula->GetStandardFormat(*pFormatter, nFormat);
+    return nFormat;
 }
 
 }

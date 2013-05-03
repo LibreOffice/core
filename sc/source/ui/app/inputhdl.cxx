@@ -70,7 +70,7 @@
 #include "userlist.hxx"
 #include "rfindlst.hxx"
 #include "inputopt.hxx"
-#include "formulacell.hxx"             // fuer Formel-Preview
+#include "simpleformulacalc.hxx"
 #include "compiler.hxx"         // fuer Formel-Preview
 #include "editable.hxx"
 #include "funcdesc.hxx"
@@ -1299,79 +1299,69 @@ void ScInputHandler::PasteFunctionData()
 //      Selektion berechnen und als Tip-Hilfe anzeigen
 //
 
-static String lcl_Calculate( const String& rFormula, ScDocument* pDoc, const ScAddress &rPos )
+static OUString lcl_Calculate( const OUString& rFormula, ScDocument* pDoc, const ScAddress &rPos )
 {
     //!     mit ScFormulaDlg::CalcValue zusammenfassen und ans Dokument verschieben !!!!
     //!     (Anfuehrungszeichen bei Strings werden nur hier eingefuegt)
 
-    String aValue;
+    if(rFormula.isEmpty())
+        return String();
 
-    if (rFormula.Len())
+    boost::scoped_ptr<ScSimpleFormulaCalculator> pCalc( new ScSimpleFormulaCalculator( pDoc, rPos, rFormula ) );
+
+    // HACK! um bei ColRowNames kein #REF! zu bekommen,
+    // wenn ein Name eigentlich als Bereich in die Gesamt-Formel
+    // eingefuegt wird, bei der Einzeldarstellung aber als
+    // single-Zellbezug interpretiert wird
+    bool bColRowName = pCalc->HasColRowName();
+    if ( bColRowName )
     {
-        ScFormulaCell* pCell = new ScFormulaCell( pDoc, rPos, rFormula );
-
-        // HACK! um bei ColRowNames kein #REF! zu bekommen,
-        // wenn ein Name eigentlich als Bereich in die Gesamt-Formel
-        // eingefuegt wird, bei der Einzeldarstellung aber als
-        // single-Zellbezug interpretiert wird
-        bool bColRowName = pCell->HasColRowName();
-        if ( bColRowName )
-        {
-            // ColRowName im RPN-Code?
-            if ( pCell->GetCode()->GetCodeLen() <= 1 )
-            {   // ==1: einzelner ist als Parameter immer Bereich
-                // ==0: es waere vielleicht einer, wenn..
-                OUStringBuffer aBraced;
-                aBraced.append('(');
-                aBraced.append(rFormula);
-                aBraced.append(')');
-                delete pCell;
-                pCell = new ScFormulaCell( pDoc, rPos, aBraced.makeStringAndClear() );
-            }
-            else
-                bColRowName = false;
-        }
-
-        sal_uInt16 nErrCode = pCell->GetErrCode();
-        if ( nErrCode == 0 )
-        {
-            SvNumberFormatter& aFormatter = *(pDoc->GetFormatTable());
-            Color* pColor;
-            if ( pCell->IsValue() )
-            {
-                double n = pCell->GetValue();
-                sal_uLong nFormat = aFormatter.GetStandardFormat( n, 0,
-                                pCell->GetFormatType(), ScGlobal::eLnge );
-                aFormatter.GetInputLineString( n, nFormat, aValue );
-                //! display OutputString but insert InputLineString
-            }
-            else
-            {
-                String aStr = pCell->GetString();
-                sal_uLong nFormat = aFormatter.GetStandardFormat(
-                                pCell->GetFormatType(), ScGlobal::eLnge);
-                {
-                OUString sTempIn(aStr);
-                OUString sTempOut(aValue);
-                aFormatter.GetOutputString( sTempIn, nFormat,
-                                            sTempOut, &pColor );
-                aStr = sTempIn;
-                aValue = sTempOut;
-                }
-
-                aValue.Insert('"',0);   // in Anfuehrungszeichen
-                aValue+='"';
-                //! Anfuehrungszeichen im String escapen ????
-            }
-
-            ScRange aTestRange;
-            if ( bColRowName || (aTestRange.Parse(rFormula) & SCA_VALID) )
-                aValue.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " ..." ));       // Bereich
+        // ColRowName im RPN-Code?
+        if ( pCalc->GetCode()->GetCodeLen() <= 1 )
+        {   // ==1: einzelner ist als Parameter immer Bereich
+            // ==0: es waere vielleicht einer, wenn..
+            OUStringBuffer aBraced;
+            aBraced.append('(');
+            aBraced.append(rFormula);
+            aBraced.append(')');
+            pCalc.reset( new ScSimpleFormulaCalculator( pDoc, rPos, aBraced.makeStringAndClear() ) );
         }
         else
-            aValue = ScGlobal::GetErrorString(nErrCode);
-        delete pCell;
+            bColRowName = false;
     }
+
+    sal_uInt16 nErrCode = pCalc->GetErrCode();
+    if ( nErrCode != 0 )
+        return ScGlobal::GetErrorString(nErrCode);
+
+    SvNumberFormatter& aFormatter = *(pDoc->GetFormatTable());
+    OUString aValue;
+    if ( pCalc->IsValue() )
+    {
+        double n = pCalc->GetValue();
+        sal_uLong nFormat = aFormatter.GetStandardFormat( n, 0,
+                pCalc->GetFormatType(), ScGlobal::eLnge );
+        aFormatter.GetInputLineString( n, nFormat, aValue );
+        //! display OutputString but insert InputLineString
+    }
+    else
+    {
+        OUString aStr = pCalc->GetString();
+        sal_uLong nFormat = aFormatter.GetStandardFormat(
+                pCalc->GetFormatType(), ScGlobal::eLnge);
+        {
+            Color* pColor;
+            aFormatter.GetOutputString( aStr, nFormat,
+                    aValue, &pColor );
+        }
+
+        aValue = "\"" + aValue + "\"";
+        //! Anfuehrungszeichen im String escapen ????
+    }
+
+    ScRange aTestRange;
+    if ( bColRowName || (aTestRange.Parse(rFormula) & SCA_VALID) )
+        aValue = aValue + " ...";
 
     return aValue;
 }
@@ -1382,8 +1372,8 @@ void ScInputHandler::FormulaPreview()
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if ( pActiveView && pActiveViewSh )
     {
-        String aPart = pActiveView->GetSelected();
-        if (!aPart.Len())
+        OUString aPart = pActiveView->GetSelected();
+        if (aPart.isEmpty())
             aPart = pEngine->GetText(0);
         ScDocument* pDoc = pActiveViewSh->GetViewData()->GetDocShell()->GetDocument();
         aValue = lcl_Calculate( aPart, pDoc, aCursorPos );

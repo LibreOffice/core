@@ -2183,13 +2183,13 @@ void ScColumn::CalcAll()
             ScBaseCell* pCell = maItems[i].pCell;
             if (pCell->GetCellType() == CELLTYPE_FORMULA)
             {
+                ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
 #if OSL_DEBUG_LEVEL > 1
                 // after F9 ctrl-F9: check the calculation for each FormulaTree
-                ScFormulaCell* pFCell = (ScFormulaCell*)pCell;
                 double nOldVal, nNewVal;
                 nOldVal = pFCell->GetValue();
 #endif
-                ((ScFormulaCell*)pCell)->Interpret();
+                pFCell->Interpret();
 #if OSL_DEBUG_LEVEL > 1
                 if ( pFCell->GetCode()->IsRecalcModeNormal() )
                     nNewVal = pFCell->GetValue();
@@ -2214,9 +2214,10 @@ void ScColumn::CompileAll()
                 SCROW nRow = maItems[i].nRow;
                 // for unconditional compilation
                 // bCompile=true and pCode->nError=0
-                ((ScFormulaCell*)pCell)->GetCode()->SetCodeError( 0 );
-                ((ScFormulaCell*)pCell)->SetCompile( true );
-                ((ScFormulaCell*)pCell)->CompileTokenArray();
+                ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
+                pFCell->GetCode()->SetCodeError( 0 );
+                pFCell->SetCompile( true );
+                pFCell->CompileTokenArray();
                 if ( nRow != maItems[i].nRow )
                     Search( nRow, i );      // Listener deleted/inserted?
             }
@@ -2234,7 +2235,14 @@ void ScColumn::CompileXML( ScProgress& rProgress )
             if ( pCell->GetCellType() == CELLTYPE_FORMULA )
             {
                 SCROW nRow = maItems[i].nRow;
-                ((ScFormulaCell*)pCell)->CompileXML( rProgress );
+                ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
+                sal_uInt32 nCellFormat = GetNumberFormat( nRow );
+                if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
+                    pFCell->SetNeedNumberFormat(false);
+                else
+                    pFCell->SetDirty(true);
+
+                pFCell->CompileXML( rProgress );
                 if ( nRow != maItems[i].nRow )
                     Search( nRow, i );      // Listener deleted/inserted?
             }

@@ -173,30 +173,6 @@ static sal_Bool lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
         pClipDoc->ApplyPatternAreaTab( 0,0, MAXCOL,MAXROW, nSrcTab, aPattern );
     }
 
-    // If the range contains formula cells with default number format,
-    // apply a number format for the formula result
-    ScCellIterator aIter( pClipDoc, rSrcRange );
-    for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
-    {
-        if (aIter.getType() != CELLTYPE_FORMULA)
-            continue;
-
-        ScAddress aCellPos = aIter.GetPos();
-        sal_uInt32 nFormat = pClipDoc->GetNumberFormat(aCellPos);
-        if ( (nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
-        {
-            ScFormulaCell* pFCell = aIter.getFormulaCell();
-            sal_uInt16 nErrCode = pFCell->GetErrCode();
-            if ( nErrCode == 0 && pFCell->IsValue() )
-            {
-                sal_uInt32 nNewFormat = pFCell->GetStandardFormat( *pClipDoc->GetFormatTable(), nFormat );
-                if ( nNewFormat != nFormat )
-                    pClipDoc->ApplyAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(),
-                                         SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ) );
-            }
-        }
-    }
-
     ScMarkData aDestMark;
     aDestMark.SelectOneTable( nDestTab );
     aDestMark.SetMarkArea( aNewRange );

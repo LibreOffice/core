@@ -628,12 +628,6 @@ void lcl_GetColumnTypes(
             {
                 sal_uInt32 nFormat;
                 pDoc->GetNumberFormat( nCol, nFirstDataRow, nTab, nFormat );
-                if (aCell.meType == CELLTYPE_FORMULA && ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0))
-                {
-                    nFormat = ScGlobal::GetStandardFormat(
-                        aCell.mpFormula->GetValue(), *pNumFmt, nFormat,
-                        aCell.mpFormula->GetFormatType());
-                }
                 switch ( pNumFmt->GetType( nFormat ) )
                 {
                     case NUMBERFORMAT_LOGICAL :

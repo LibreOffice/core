@@ -112,13 +112,6 @@ sal_Bool ScTabViewShell::GetFunction( String& rFuncStr, sal_uInt16 nErrCode )
                 {
                     //  Zahlformat aus Attributen oder Formel
                     pDoc->GetNumberFormat( nPosX, nPosY, nTab, nNumFmt );
-                    if ( (nNumFmt % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
-                    {
-                        ScRefCellValue aCell;
-                        aCell.assign(*pDoc, aCursor);
-                        if (aCell.meType == CELLTYPE_FORMULA)
-                            nNumFmt = aCell.mpFormula->GetStandardFormat(*pFormatter, nNumFmt);
-                    }
                 }
 
                 String aValStr;
