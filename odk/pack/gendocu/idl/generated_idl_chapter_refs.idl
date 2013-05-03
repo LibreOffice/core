@@ -1,0 +1,5589 @@
+/* this file was generated from idl_chapter_refs.txt by wikilinks.py */
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Database_Operations">Spreadsheets - Database Operations</a><br>
+service DatabaseRanges {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module script {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/AdvUNO/UNO_Reflection_API">AdvUNO - UNO Reflection API</a><br>
+service InvocationAdapterFactory {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module table {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Columns_and_Rows">Spreadsheets - Columns and Rows</a><br>
+service TableColumns {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdbc {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Update">Database - Update</a><br>
+interface XRowUpdate {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Indexes_and_Index_Marks#Index_marks">Text - Indexes and Index Marks - Index marks</a><br>
+interface XDocumentIndexMark {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Other_Table_Operations#Data_Consolidation">Spreadsheets - Other Table Operations - Data Consolidation</a><br>
+interface XConsolidatable {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module awt {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Forms/Models_and_Views_for_Form_Controls">Forms - Models and Views for Form Controls</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Forms/Control_Models">Forms - Control Models</a><br>
+service UnoControlModel {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module form {
+module binding {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Forms/Value_Bindings">Forms - Value Bindings</a><br>
+interface XBindableValue {}
+};
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module lang {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Event_Model">ProUNO - Event Model</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Bridge/Automation_Objects_with_UNO_Interfaces">ProUNO - Bridge - Automation Objects with UNO Interfaces</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Basic/Listeners">ProUNO - Basic - Listeners</a><br>
+interface XEventListener {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdbc {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Connection_Pooling">Database - Connection Pooling</a><br>
+interface XPooledConnection {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module util {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Protecting_Spreadsheets">Spreadsheets - Protecting Spreadsheets</a><br>
+interface XProtectable {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module form {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Forms/Parameters">Forms - Parameters</a><br>
+interface XDatabaseParameterListener {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Indexes_and_Index_Marks">Text - Indexes and Index Marks</a><br>
+service BaseIndex {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdbc {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Connection_Service">Database - Connection Service</a><br>
+service Connection {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Spreadsheet_Services_-_Overview">Spreadsheets - Spreadsheet Services - Overview</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Cells">Spreadsheets - Cells</a><br>
+service SheetCell {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module document {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Document_Events">OfficeDev - Document Events</a><br>
+struct EventObject {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module ucb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/UCB/Folders#Accessing_the_Children_of_a_Folder">UCB - Folders - Accessing the Children of a Folder</a><br>
+struct OpenCommandArgument2 {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module script {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/AdvUNO/UNO_Reflection_API">AdvUNO - UNO Reflection API</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/AdvUNO/XInvocation_Bridge#Scripting_Existing_UNO_Objects">AdvUNO - XInvocation Bridge - Scripting Existing UNO Objects</a><br>
+service Invocation {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module chart {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Charts/3-D_Charts">Charts - 3-D Charts</a><br>
+service Chart3DBarProperties {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module style {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Page_Layout">Text - Page Layout</a><br>
+service PageProperties {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module container {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Collections_and_Containers">ProUNO - Collections and Containers</a><br>
+interface XNameAccess {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module lang {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Service_Manager_and_Component_Context">ProUNO - Service Manager and Component Context</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/FirstSteps/First_Contact#Getting_Started">FirstSteps - First Contact - Getting Started</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Bridge/The_Service_Manager_Component#Instantiation">ProUNO - Bridge - The Service Manager Component - Instantiation</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Basic/Instantiating_UNO_Services">ProUNO - Basic - Instantiating UNO Services</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Java/Getting_a_Service_Manager">ProUNO - Java - Getting a Service Manager</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/AdvUNO/Implementing_UNO_Language_Bindings#Bootstrapping">AdvUNO - Implementing UNO Language Bindings - Overview of Language Bindings and Bridges - Bootstrapping</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/C++/Establishing_Interprocess_Connections">ProUNO - C++ - Establishing Interprocess Connections</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/UNO_Interprocess_Connections">ProUNO - UNO Interprocess Connections</a><br>
+service ServiceManager {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module document {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Integrating_Import_and_Export_Filters">OfficeDev - Integrating Import and Export Filters</a><br>
+service ImportFilter {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module drawing {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/General_Drawing_Properties">Drawings - General Drawing Properties</a><br>
+service FillProperties {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdbc {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Using_DBMS_Features#Transaction_Handling">Database - Using DBMS Features - Transaction Handling</a><br>
+constants TransactionIsolation {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Reference_Marks">Text - Reference Marks</a><br>
+service ReferenceMark {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Result_Sets">Database - Result Sets</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Clones_of_the_RowSet_Service">Database - Clones of the RowSet Service</a><br>
+service ResultSet {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module uno {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/Core_Interfaces_to_Implement">WritingUNO - Core Interfaces to Implement</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/XAggregation">WritingUNO - XAggregation</a><br>
+interface XAggregation {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Function_Handling#Information_about_Functions">Spreadsheets - Function Handling - Information about Functions</a><br>
+service FunctionDescriptions {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Indexes_and_Index_Marks">Text - Indexes and Index Marks</a><br>
+interface XDocumentIndex {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module util {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Navigating#Search_and_Replace">Text - Navigating - Search and Replace</a><br>
+interface XSearchable {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module container {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/UCB/Services_and_Interfaces">UCB - Services and Interfaces</a><br>
+interface XChild {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module ucb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/UCB/Executing_Content_Commands">UCB - Executing Content Commands</a><br>
+struct Command {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Compatibility_Names">Spreadsheets - Compatibility Names</a><br>
+interface XCompatibilityNames {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module style {
+/// @enum BreakType
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Formatting">Text - Formatting</a><br>
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module chart {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Charts/Data_Access">Charts - Data Access</a><br>
+interface XChartData {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module drawing {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/General_Drawing_Properties">Drawings - General Drawing Properties</a><br>
+service LineProperties {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module i18n {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Overview_and_Using_the_API#XNativeNumberSupplier">OfficeDev - Overview and Using the API - XNativeNumberSupplier</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Implementing_a_New_Locale#XNativeNumberSupplier">OfficeDev - Implementing a New Locale - XNativeNumberSupplier</a><br>
+interface XNativeNumberSupplier {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module reflection {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/AdvUNO/UNO_Reflection_API">AdvUNO - UNO Reflection API</a><br>
+interface XTypeDescription {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module drawing {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Bezier_Shapes">Drawings - Bezier Shapes</a><br>
+service PolyPolygonBezierDescriptor {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module bridge {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Opening_a_Connection">ProUNO - Opening a Connection</a><br>
+interface XBridgeFactory {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module container {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Iterating_over_Text">Text - Iterating over Text</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Service_Manager#XContentEnumerationAccess_Interface">ProUNO - Service Manager - XContentEnumerationAccess Interface</a><br>
+interface XContentEnumerationAccess {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module drawing {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Component/Controllers#Document_Specific_Controller_Services">OfficeDev - Component - Controllers - Document Specific Controller Services</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Zooming">Drawings - Zooming</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Other_Drawing_Specific_View_Settings">Drawings - Other Drawing Specific View Settings</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Setting_the_Current_Page">Drawings - Setting the Current Page</a><br>
+service DrawingDocumentDrawView {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module form {
+module binding {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Forms/External_List_Sources">Forms - External List Sources</a><br>
+interface XListEntrySource {}
+};
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module form {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Forms/Parameters">Forms - Parameters</a><br>
+interface XDatabaseParameterBroadcaster {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module i18n {
+/// @enum TransliterationModules
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Implementing_a_New_Locale#XTransliteration">OfficeDev - Implementing a New Locale - XTransliteration</a><br>
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module form {
+module binding {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Forms/External_List_Sources">Forms - External List Sources</a><br>
+interface XListEntrySink {}
+};
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module style {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Formatting">Text - Formatting</a><br>
+service CharacterPropertiesAsian {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdbc {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/XDatabaseMetaData_Interface">Database - XDatabaseMetaData Interface</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Database_Design#Retrieving_Information_about_a_Database">Database - Database Design - Retrieving Information about a Database</a><br>
+interface XDatabaseMetaData {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module awt {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Component/Window_Interfaces">OfficeDev - Component - Window Interfaces</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Frames#Linking_Components_and_Windows">OfficeDev - Frames - Linking Components and Windows</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Windows">OfficeDev - Windows</a><br>
+interface XTopWindow {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Querying_for_Cells_with_Specific_Properties">Spreadsheets - Querying for Cells with Specific Properties</a><br>
+service SheetRangesQuery {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Fill_Series">Spreadsheets - Fill Series</a><br>
+interface XCellSeries {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module ucb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/AppendixC/The_WebDAV_Content_Provider#Creation_of_New_DCP_Contents">AppendixC - The WebDAV Content Provider - Creation of New DCP Contents</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/UCB/Services_and_Interfaces">UCB - Services and Interfaces</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/AppendixC/The_FTP_Content_Provider#Creation_of_New_FTP_Content">AppendixC - The FTP Content Provider - Creation of New FTP Content</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/AppendixC/The_Hierarchy_Content_Provider#Creation_of_New_HCP_Content">AppendixC - The Hierarchy Content Provider - Creation of New HCP Content</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/UCB/Creating">UCB - Creating</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/AppendixC/The_File_Content_Provider#Creation_of_New_File_Contents">AppendixC - The File Content Provider - Creation of New File Contents</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/AppendixC/The_Package_Content_Provider#Creation_of_New_PCP_Contents">AppendixC - The Package Content Provider - Creation of New PCP Contents</a><br>
+interface XContentCreator {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module container {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Collections_and_Containers">ProUNO - Collections and Containers</a><br>
+interface XNameContainer {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/The_DataSource_Service">Database - The DataSource Service</a><br>
+service DataSource {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Function_Handling#Recently_Used_Functions">Spreadsheets - Function Handling - Recently Used Functions</a><br>
+service RecentFunctions {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Absolute_Address">Spreadsheets - Absolute Address</a><br>
+interface XCellRangeAddressable {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module task {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/Jobs/Implementation">WritingUNO - Jobs - Implementation</a><br>
+interface XAsyncJob {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module form {
+module component {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Forms/HTML_Forms">Forms - HTML Forms</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Forms/Control_Models_Forms">Forms - Control Models Forms</a><br>
+service HTMLForm {}
+};
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Equally_Formatted_Cell_Ranges#Cell_Format_Ranges">Spreadsheets - Equally Formatted Cell Ranges - Cell Format Ranges</a><br>
+service CellFormatRanges {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Tables_and_Columns">Database - Tables and Columns</a><br>
+service Column {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module beans {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Properties">ProUNO - Properties</a><br>
+interface XMultiPropertySet {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Forms_and_Reports">Database - Forms and Reports</a><br>
+interface XFormDocumentsSupplier {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdbcx {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Column_Service">Database - Column Service</a><br>
+service KeyColumn {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Events_and_Other_Notifications">Database - Events and Other Notifications</a><br>
+interface XRowSetApproveListener {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module frame {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Component/Controllers#Document_Specific_Controller_Services">OfficeDev - Component - Controllers - Document Specific Controller Services</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Component/Controllers#XController">OfficeDev - Component - Controllers - XController</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Text_Document_Controller">Text - Text Document Controller</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Controllers">OfficeDev - Controllers</a><br>
+service Controller {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdbc {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Creating_Statements">Database - Creating Statements</a><br>
+service Statement {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Component/Controllers#Document_Specific_Controller_Services">OfficeDev - Component - Controllers - Document Specific Controller Services</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Spreadsheet_Document_Controller#Spreadsheet_View">Spreadsheets - Spreadsheet Document Controller - Spreadsheet View</a><br>
+service SpreadsheetView {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Text_Fields">Text - Text Fields</a><br>
+interface XTextField {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Other_Table_Operations#Data_Consolidation">Spreadsheets - Other Table Operations - Data Consolidation</a><br>
+interface XConsolidationDescriptor {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module reflection {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Bridge/Exceptions_and_Errorcodes">ProUNO - Bridge - Exceptions and Errorcodes</a><br>
+exception InvocationTargetException {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Iterating_over_Text">Text - Iterating over Text</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Formatting">Text - Formatting</a><br>
+service TextPortion {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module i18n {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Overview_and_Using_the_API#XIndexEntrySupplier">OfficeDev - Overview and Using the API - XIndexEntrySupplier</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Implementing_a_New_Locale#XIndexEntrySupplier">OfficeDev - Implementing a New Locale - XIndexEntrySupplier</a><br>
+interface XIndexEntrySupplier {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Ruby">Text - Ruby</a><br>
+interface XRubySelection {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Filtering">Spreadsheets - Filtering</a><br>
+interface XSheetFilterable {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module frame {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Handling_Text_Document_Files#Creating_and_Loading_Text_Documents">Text - Handling Text Document Files - Creating and Loading Text Documents</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Integrating_Import_and_Export_Filters">OfficeDev - Integrating Import and Export Filters</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Handling_Documents#Loading_Documents">OfficeDev - Handling Documents - Loading Documents</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Using_the_Desktop">OfficeDev - Using the Desktop</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Handling_Spreadsheet_Documents_Files#Creating_and_Loading_Spreadsheet_Documents">Spreadsheets - Handling Spreadsheet Documents Files - Creating and Loading Spreadsheet Documents</a><br>
+interface XComponentLoader {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module document {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Document_Events">OfficeDev - Document Events</a><br>
+service Events {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module script {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Bridge/Exceptions_and_Errorcodes">ProUNO - Bridge - Exceptions and Errorcodes</a><br>
+exception CannotConvertException {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module uno {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Service_Manager_and_Component_Context">ProUNO - Service Manager and Component Context</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/FirstSteps/First_Contact#Getting_Started">FirstSteps - First Contact - Getting Started</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Java/Getting_a_Service_Manager">ProUNO - Java - Getting a Service Manager</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/C++/Establishing_Interprocess_Connections">ProUNO - C++ - Establishing Interprocess Connections</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/UNO_Interprocess_Connections">ProUNO - UNO Interprocess Connections</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/C++/Transparent_Use_of_Office_UNO_Components">ProUNO - C++ - Transparent Use of Office UNO Components</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Java/Transparent_Use_of_Office_UNO_Components">ProUNO - Java - Transparent Use of Office UNO Components</a><br>
+interface XComponentContext {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Shape_Objects_in_Text">Text - Shape Objects in Text</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Formatting">Text - Formatting</a><br>
+service Shape {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Filtering">Spreadsheets - Filtering</a><br>
+service SheetFilterDescriptor {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module ucb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/UCB/Services_and_Interfaces">UCB - Services and Interfaces</a><br>
+interface XContent {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module awt {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Java_Window_Integration">OfficeDev - Java Window Integration</a><br>
+interface XToolkit {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module linguistic2 {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Linguistics">OfficeDev - Linguistics</a><br>
+service Thesaurus {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Queries">Database - Queries</a><br>
+service QueryDefinition {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Sheet_Links">Spreadsheets - Sheet Links</a><br>
+service SheetLink {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Editing_Text#Text_Contents_Other_Than_Strings">Text - Editing Text - Text Contents Other Than Strings</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Editing_Text">Text - Editing Text</a><br>
+interface XText {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Component/Controllers#Document_Specific_Controller_Services">OfficeDev - Component - Controllers - Document Specific Controller Services</a><br>
+service TextDocumentView {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Forms/Forms_as_Row_Sets">Forms - Forms as Row Sets</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/The_RowSet_Service">Database - The RowSet Service</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Example:_Querying_the_Bibliography_Database">Database - Example: Querying the Bibliography Database</a><br>
+service RowSet {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Working_with_Text_Documents#Word_Processing">Text - Working with Text Documents - Word Processing</a><br>
+service Text {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module util {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Number_Formats">OfficeDev - Number Formats</a><br>
+service NumberFormats {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module document {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Inserting_Text_Files">Text - Inserting Text Files</a><br>
+interface XDocumentInsertable {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Printing_Spreadsheet_Documents#Print_Areas">Spreadsheets - Printing Spreadsheet Documents - Print Areas</a><br>
+interface XPrintAreas {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module document {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Redline">Text - Redline</a><br>
+interface XRedlinesSupplier {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module bridge {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Opening_a_Connection">ProUNO - Opening a Connection</a><br>
+service BridgeFactory {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/DataPilot_Tables">Spreadsheets - DataPilot Tables</a><br>
+service DataPilotTables {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module frame {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Creating_Frames_Manually#Frame_Creation">OfficeDev - Creating Frames Manually - Frame Creation</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Frames#Linking_Components_and_Windows">OfficeDev - Frames - Linking Components and Windows</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Component/Frames#Frame_Setup">OfficeDev - Component - Frames - XFrame - Frame Setup</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Component/Getting_Frames%2C_Controllers_and_Models_from_Each_Other">OfficeDev - Component - Getting Frames, Controllers and Models from Each Other</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Frame-Controller-Model_Paradigm_in_OpenOffice.org">OfficeDev - Frame-Controller-Model Paradigm in OpenOffice.org</a><br>
+interface XFrame {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Line_Numbering_and_Outline_Numbering#Line_Numbering">Text - Line Numbering and Outline Numbering - Line Numbering</a><br>
+service LineNumberingProperties {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Data_Sources_in_OpenOffice.org_API#DatabaseContext">Database - Data Sources in OpenOffice.org API - DatabaseContext</a><br>
+service DatabaseContext {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module util {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Indentation">Spreadsheets - Indentation</a><br>
+interface XIndent {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module frame {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Component/Frames#XFramesSupplier">OfficeDev - Component - Frames - XFramesSupplier</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Creating_Frames_Manually#Setting_Components_into_Frame_Hierarchies">OfficeDev - Creating Frames Manually - Setting Components into Frame Hierarchies</a><br>
+interface XFramesSupplier {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Iterating_over_Text">Text - Iterating over Text</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Formatting">Text - Formatting</a><br>
+service Paragraph {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Editing_Text#Strings">Text - Editing Text - Strings</a><br>
+interface XSimpleText {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Other_Table_Operations#Scenarios">Spreadsheets - Other Table Operations - Scenarios</a><br>
+interface XScenarios {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module i18n {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Implementing_a_New_Locale#XCalendar">OfficeDev - Implementing a New Locale - XCalendar</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Overview_and_Using_the_API#XCalendar">OfficeDev - Overview and Using the API - XCalendar</a><br>
+interface XCalendar {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module drawing {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/General_Drawing_Properties">Drawings - General Drawing Properties</a><br>
+service TextProperties {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module frame {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/Implementation">WritingUNO - Implementation</a><br>
+service ProtocolHandler {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module view {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Printing_Drawing_Documents#Printer_and_Print_Job_Settings">Drawings - Printing Drawing Documents - Printer and Print Job Settings</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Printing_Text_Documents#Printer_and_Print_Job_Settings">Text - Printing Text Documents - Printer and Print Job Settings</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Storing_Documents#Printing_Documents">OfficeDev - Storing Documents - Printing Documents</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Printing_Spreadsheet_Documents#Printer_and_Print_Job_Settings">Spreadsheets - Printing Spreadsheet Documents - Printer and Print Job Settings</a><br>
+interface XPrintable {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Creating_a_New_DataPilot_Table">Spreadsheets - Creating a New DataPilot Table</a><br>
+service DataPilotDescriptor {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Forms_and_Reports">Database - Forms and Reports</a><br>
+interface XReportDocumentsSupplier {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Indexes_and_Index_Marks#Index_marks">Text - Indexes and Index Marks - Index marks</a><br>
+service BaseIndexMark {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module util {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Navigating#Search_and_Replace">Text - Navigating - Search and Replace</a><br>
+service SearchDescriptor {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module bridge {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Java/Getting_a_Service_Manager">ProUNO - Java - Getting a Service Manager</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/AdvUNO/Implementing_UNO_Language_Bindings#Bootstrapping">AdvUNO - Implementing UNO Language Bindings - Overview of Language Bindings and Bridges - Bootstrapping</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/C++/Establishing_Interprocess_Connections">ProUNO - C++ - Establishing Interprocess Connections</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/UNO_Interprocess_Connections">ProUNO - UNO Interprocess Connections</a><br>
+service UnoUrlResolver {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module form {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Forms/Data_Aware_Controls">Forms - Data Aware Controls</a><br>
+service DataAwareControlModel {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module view {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Component/Controllers#XSelectionSupplier">OfficeDev - Component - Controllers - XSelectionSupplier</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Setting_the_Current_Page">Drawings - Setting the Current Page</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/TextView">Text - TextView</a><br>
+interface XSelectionSupplier {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module util {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Number_Formats">OfficeDev - Number Formats</a><br>
+interface XNumberFormatTypes {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module datatransfer {
+module clipboard {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Common_Application_Features#Clipboard">OfficeDev - Common Application Features - Clipboard</a><br>
+interface XClipboard {}
+};
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module awt {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Forms/Control_Models_Forms">Forms - Control Models Forms</a><br>
+interface XTabControllerModel {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module script {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/AdvUNO/UNO_Reflection_API">AdvUNO - UNO Reflection API</a><br>
+service Converter {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Auto_Text">Text - Auto Text</a><br>
+service AutoTextEntry {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Navigating#Locating_Text_Contents">Text - Navigating - Locating Text Contents</a><br>
+interface XTextContent {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module i18n {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Overview_and_Using_the_API#XExtendedIndexEntrySupplier">OfficeDev - Overview and Using the API - XExtendedIndexEntrySupplier</a><br>
+interface XExtendedIndexEntrySupplier {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Named_Ranges">Spreadsheets - Named Ranges</a><br>
+interface XNamedRanges {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module frame {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Using_the_Desktop">OfficeDev - Using the Desktop</a><br>
+interface XDesktop {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module util {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Command_URL">OfficeDev - Command URL</a><br>
+struct URL {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdbc {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Connecting_Using_the_DriverManager_and_a_Database_URL">Database - Connecting Using the DriverManager and a Database URL</a><br>
+service DriverManager {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module task {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Component/Frames#XStatusIndicatorFactory">OfficeDev - Component - Frames - XStatusIndicatorFactory</a><br>
+interface XStatusIndicatorFactory {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module beans {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/AdvUNO/UNO_Reflection_API">AdvUNO - UNO Reflection API</a><br>
+service Introspection {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module document {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Handling_Documents#MediaDescriptor">OfficeDev - Handling Documents - Loading Documents - MediaDescriptor</a><br>
+service MediaDescriptor {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Members">Spreadsheets - Members</a><br>
+service DataPilotSourceMember {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module util {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Number_Formats">OfficeDev - Number Formats</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Line_Numbering_and_Outline_Numbering#Number_Formats">Text - Line Numbering and Outline Numbering - Number Formats</a><br>
+interface XNumberFormatsSupplier {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module chart {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Charts/Working_With_Charts#Document_Structure">Charts - Working With Charts - Document Structure</a><br>
+service ChartDocument {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module i18n {
+/// @enum TransliterationModulesNew
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Implementing_a_New_Locale#XTransliteration">OfficeDev - Implementing a New Locale - XTransliteration</a><br>
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Detective">Spreadsheets - Detective</a><br>
+interface XSheetAuditing {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module lang {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/XUnoTunnel">WritingUNO - XUnoTunnel</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/Core_Interfaces_to_Implement">WritingUNO - Core Interfaces to Implement</a><br>
+interface XUnoTunnel {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Creating_a_New_DataPilot_Table">Spreadsheets - Creating a New DataPilot Table</a><br>
+service DataPilotField {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module task {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/Jobs/Implementation">WritingUNO - Jobs - Implementation</a><br>
+interface XJob {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Bookmarks">Text - Bookmarks</a><br>
+service Bookmark {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module chart {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Charts/Stock_Charts">Charts - Stock Charts</a><br>
+service StockDiagram {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module drawing {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Page_Formatting">Drawings - Page Formatting</a><br>
+service GenericDrawPage {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Variable_Results">Spreadsheets - Variable Results</a><br>
+interface XVolatileResult {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Text_Fields">Text - Text Fields</a><br>
+service TextField {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module view {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Printing_Drawing_Documents#Printer_and_Print_Job_Settings">Drawings - Printing Drawing Documents - Printer and Print Job Settings</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Printing_Spreadsheet_Documents#Printer_and_Print_Job_Settings">Spreadsheets - Printing Spreadsheet Documents - Printer and Print Job Settings</a><br>
+service PrintOptions {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module linguistic2 {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Linguistics">OfficeDev - Linguistics</a><br>
+service Hyphenator {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module lang {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Service_Manager_and_Component_Context">ProUNO - Service Manager and Component Context</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/FirstSteps/First_Contact#Getting_Started">FirstSteps - First Contact - Getting Started</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Java/Getting_a_Service_Manager">ProUNO - Java - Getting a Service Manager</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/C++/Establishing_Interprocess_Connections">ProUNO - C++ - Establishing Interprocess Connections</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/UNO_Interprocess_Connections">ProUNO - UNO Interprocess Connections</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/C++/Transparent_Use_of_Office_UNO_Components">ProUNO - C++ - Transparent Use of Office UNO Components</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Java/Transparent_Use_of_Office_UNO_Components">ProUNO - Java - Transparent Use of Office UNO Components</a><br>
+interface XMultiComponentFactory {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module ucb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/UCB/Accessing_a_UCB_Content">UCB - Accessing a UCB Content</a><br>
+interface XContentProvider {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Settings#Creating_Default_Settings">Text - Settings - Creating Default Settings</a><br>
+service Defaults {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module drawing {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Grouping%2C_Combining_and_Binding">Drawings - Grouping, Combining and Binding</a><br>
+service GroupShape {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module bridge {
+module oleautomation {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Bridge/The_Bridge_Services">ProUNO - Bridge - The Bridge Services</a><br>
+service BridgeSupplier {}
+};
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module table {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Charts/Working_With_Charts#Document_Structure">Charts - Working With Charts - Document Structure</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Charts/Creating_and_Adding_a_Chart_to_a_Spreadsheet">Charts - Creating and Adding a Chart to a Spreadsheet</a><br>
+interface XTableChartsSupplier {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Spreadsheet_Add-Ins">Spreadsheets - Spreadsheet Add-Ins</a><br>
+service AddIn {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module presentation {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Presentation_Settings">Drawings - Presentation Settings</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Working_with_Presentation_Documents">Drawings - Working with Presentation Documents</a><br>
+interface XPresentation {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module i18n {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Implementing_a_New_Locale#XCollator">OfficeDev - Implementing a New Locale - XCollator</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Overview_and_Using_the_API#XCollator">OfficeDev - Overview and Using the API - XCollator</a><br>
+interface XCollator {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module style {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Overall_Document_Features#Styles">Text - Overall Document Features - Styles</a><br>
+service StyleFamilies {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module util {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Component/Models#XModifiable">OfficeDev - Component - Models - XModifiable</a><br>
+interface XModifiable {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Cell_Area_Links">Spreadsheets - Cell Area Links</a><br>
+interface XAreaLink {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module awt {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Forms/Models_and_Views_for_Form_Controls">Forms - Models and Views for Form Controls</a><br>
+service UnoControl {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/View_Panes">Spreadsheets - View Panes</a><br>
+service SpreadsheetViewPane {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Cell_Area_Links">Spreadsheets - Cell Area Links</a><br>
+interface XAreaLinks {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module linguistic2 {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Linguistics">OfficeDev - Linguistics</a><br>
+service LinguProperties {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdbc {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Driver_Service">Database - Driver Service</a><br>
+service Driver {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module linguistic2 {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Linguistics">OfficeDev - Linguistics</a><br>
+service DictionaryList {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Sorting#Table_Sort_Descriptor">Spreadsheets - Sorting - Table Sort Descriptor</a><br>
+service SheetSortDescriptor2 {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module lang {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Java/Getting_a_Service_Manager">ProUNO - Java - Getting a Service Manager</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/C++/Establishing_Interprocess_Connections">ProUNO - C++ - Establishing Interprocess Connections</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/FirstSteps/First_Contact#Failed_Connections">FirstSteps - First Contact - Getting Started - Failed Connections</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/UNO_Interprocess_Connections">ProUNO - UNO Interprocess Connections</a><br>
+exception DisposedException {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module table {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Spreadsheet_Services_-_Overview">Spreadsheets - Spreadsheet Services - Overview</a><br>
+service TableColumn {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module datatransfer {
+module clipboard {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Common_Application_Features#Clipboard">OfficeDev - Common Application Features - Clipboard</a><br>
+service SystemClipboard {}
+};
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module uno {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/C++/Exception_Handling_in_C++">ProUNO - C++ - Exception Handling in C++</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Basic/Exception_Handling">ProUNO - Basic - Exception Handling</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Java/Mapping_of_Exception_Types">ProUNO - Java - Mapping of Exception Types</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Bridge/Exceptions_and_Errorcodes">ProUNO - Bridge - Exceptions and Errorcodes</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Exception_Handling">ProUNO - Exception Handling</a><br>
+exception Exception {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module lang {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/XInitialization">WritingUNO - XInitialization</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/Core_Interfaces_to_Implement">WritingUNO - Core Interfaces to Implement</a><br>
+interface XInitialization {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @enum ConditionOperator
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Conditional_Formats">Spreadsheets - Conditional Formats</a><br>
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Footnotes_and_Endnotes">Text - Footnotes and Endnotes</a><br>
+service Footnote {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Label_Ranges">Spreadsheets - Label Ranges</a><br>
+service LabelRanges {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module frame {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Storing">Drawings - Storing</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Storing_Documents">OfficeDev - Storing Documents</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Saving_Spreadsheet_Documents#Storing">Spreadsheets - Saving Spreadsheet Documents - Storing</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Saving_Text_Documents#Storing">Text - Saving Text Documents - Storing</a><br>
+interface XStorable {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module ucb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/UCB/Universal_Content_Broker#Capabilities">UCB - Universal Content Broker - Capabilities</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/UCB/Instantiating_the_UCB">UCB - Instantiating the UCB</a><br>
+service UniversalContentBroker {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module chart {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Charts/Setting_the_Chart_Type">Charts - Setting the Chart Type</a><br>
+service Diagram {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module util {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Closing_Documents">OfficeDev - Closing Documents</a><br>
+interface XCloseable {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module lang {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/XServiceInfo">WritingUNO - XServiceInfo</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Service_Names">Spreadsheets - Service Names</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/Core_Interfaces_to_Implement">WritingUNO - Core Interfaces to Implement</a><br>
+interface XServiceInfo {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Table_Auto_Formats">Spreadsheets - Table Auto Formats</a><br>
+service TableAutoFormat {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Spreadsheet_Services_-_Overview">Spreadsheets - Spreadsheet Services - Overview</a><br>
+service Spreadsheet {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module drawing {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Charts/Creating_a_Chart_OLE_Object_in_Draw_and_Impress">Charts - Creating a Chart OLE Object in Draw and Impress</a><br>
+interface XDrawPagesSupplier {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module container {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Navigating">Drawings - Navigating</a><br>
+interface XNamed {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Sheet_Outline">Spreadsheets - Sheet Outline</a><br>
+interface XSheetOutline {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/View_Settings">Spreadsheets - View Settings</a><br>
+service SpreadsheetViewSettings {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Auto_Text">Text - Auto Text</a><br>
+service AutoTextContainer {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module ui {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/Intercepting_Context_Menus">WritingUNO - Intercepting Context Menus</a><br>
+interface XContextMenuInterception {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/TextViewCursor">Text - TextViewCursor</a><br>
+service TextViewCursor {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module bridge {
+module oleautomation {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Bridge/The_Bridge_Services">ProUNO - Bridge - The Bridge Services</a><br>
+service ApplicationRegistration {}
+};
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module i18n {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Overview_and_Using_the_API#XExtendedIndexEntrySupplier">OfficeDev - Overview and Using the API - XExtendedIndexEntrySupplier</a><br>
+interface XInputSequenceChecker {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Function_Handling#Information_about_Functions">Spreadsheets - Function Handling - Information about Functions</a><br>
+service FunctionDescription {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Overall_Document_Features#Page_Styles">Spreadsheets - Overall Document Features - Styles - Page Styles</a><br>
+service TablePageStyle {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Database_Import">Spreadsheets - Database Import</a><br>
+service DatabaseImportDescriptor {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module presentation {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Animations_and_Interactions">Drawings - Animations and Interactions</a><br>
+service Shape {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module drawing {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Layer_Handling">Drawings - Layer Handling</a><br>
+interface XLayerManager {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module i18n {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Overview_and_Using_the_API#XLocaleData">OfficeDev - Overview and Using the API - XLocaleData</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Implementing_a_New_Locale#XLocaleData">OfficeDev - Implementing a New Locale - XLocaleData</a><br>
+interface XLocaleData {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module frame {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Creating_Frames_Manually#Frame_Creation">OfficeDev - Creating Frames Manually - Frame Creation</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Frames#Linking_Components_and_Windows">OfficeDev - Frames - Linking Components and Windows</a><br>
+service Frame {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdbcx {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Creating_a_User">Database - Creating a User</a><br>
+service UserDescriptor {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdbc {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Stored_Procedures">Database - Stored Procedures</a><br>
+interface XOutParameters {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Navigating#Cursors">Text - Navigating - Cursors</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Formatting">Text - Formatting</a><br>
+service TextCursor {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module task {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/Jobs/Implementation">WritingUNO - Jobs - Implementation</a><br>
+service AsyncJob {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module lang {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/The_UNO_Executable">WritingUNO - The UNO Executable</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/XMain">WritingUNO - XMain</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/Core_Interfaces_to_Implement">WritingUNO - Core Interfaces to Implement</a><br>
+interface XMain {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Querying_for_Cells_with_Specific_Properties">Spreadsheets - Querying for Cells with Specific Properties</a><br>
+interface XCellRangesQuery {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module ucb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/UCB/Services_and_Interfaces">UCB - Services and Interfaces</a><br>
+interface XCommandProcessor2 {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Sheet_Links">Spreadsheets - Sheet Links</a><br>
+interface XSheetLinkable {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Text_Fields">Text - Text Fields</a><br>
+module fieldmaster {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module table {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Column_and_Row_Access">Spreadsheets - Column and Row Access</a><br>
+interface XColumnRowRange {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module ucb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/UCB/Services_and_Interfaces">UCB - Services and Interfaces</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/UCB/Executing_Content_Commands">UCB - Executing Content Commands</a><br>
+interface XCommandProcessor {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module document {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Component/Models#XDocumentPropertiesSupplier">OfficeDev - Component - Models - XDocumentPropertiesSupplier</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Settings#General_Document_Information">Text - Settings - General Document Information</a><br>
+interface XDocumentPropertiesSupplier {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module xml {
+module sax {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Writing_the_Filtering_Component">OfficeDev - Writing the Filtering Component</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Writing_the_Filtering_Component#XDocumentHandler">OfficeDev - Writing the Filtering Component - XDocumentHandler</a><br>
+interface XDocumentHandler {}
+};
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module lang {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Service_Manager_and_Component_Context">ProUNO - Service Manager and Component Context</a><br>
+interface XMultiServiceFactory {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module style {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Overall_Document_Features#Styles">Text - Overall Document Features - Styles</a><br>
+service Style {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdbcx {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Key_Service">Database - Key Service</a><br>
+constants KeyType {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Range_Selection">Spreadsheets - Range Selection</a><br>
+service RangeSelectionArguments {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module lang {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Document_Events">OfficeDev - Document Events</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Events_and_Other_Notifications">Database - Events and Other Notifications</a><br>
+struct EventObject {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module awt {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Java_Window_Integration">OfficeDev - Java Window Integration</a><br>
+service Toolkit {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module reflection {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/AdvUNO/UNO_Reflection_API">AdvUNO - UNO Reflection API</a><br>
+service CoreReflection {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Inserting_a_Paragraph_where_no_Cursor_can_go">Text - Inserting a Paragraph where no Cursor can go</a><br>
+interface XRelativeTextContentInsert {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module document {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/XML_Based_Filter_Development#Introduction">OfficeDev - XML Based Filter Development - Introduction</a><br>
+interface XFilter {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdbcx {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Column_Service">Database - Column Service</a><br>
+service Column {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module drawing {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Charts/Working_With_Charts#Document_Structure">Charts - Working With Charts - Document Structure</a><br>
+service OLE2Shape {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Cells_Absolute_Address">Spreadsheets - Cells Absolute Address</a><br>
+interface XCellAddressable {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module i18n {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Implementing_a_New_Locale#XTextConversion">OfficeDev - Implementing a New Locale - XTextConversion</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Overview_and_Using_the_API#XTextConversion">OfficeDev - Overview and Using the API - XTextConversion</a><br>
+interface XTextConversion {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module document {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Link_Targets">Text - Link Targets</a><br>
+interface XLinkTargetSupplier {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module chart {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Charts/Data_Access">Charts - Data Access</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Charts/Working_With_Charts#Document_Structure">Charts - Working With Charts - Document Structure</a><br>
+service ChartDataArray {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Cell_Cursor#Used_Area">Spreadsheets - Cell Cursor - Used Area</a><br>
+interface XUsedAreaCursor {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module configuration {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/Disable_Commands#Disabling_Commands_at_Runtime">WritingUNO - Disable Commands - Disabling Commands at Runtime</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Config/Object_Model">Config - Object Model</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Config/Updating_Configuration_Data">Config - Updating Configuration Data</a><br>
+service ConfigurationUpdateAccess {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module uno {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Lifetime_of_UNO_objects">ProUNO - Lifetime of UNO objects</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/XWeak">WritingUNO - XWeak</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/C++/Using_Weak_References">ProUNO - C++ - Using Weak References</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/Core_Interfaces_to_Implement">WritingUNO - Core Interfaces to Implement</a><br>
+interface XWeak {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Multiple_Operations">Spreadsheets - Multiple Operations</a><br>
+interface XMultipleOperation {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module presentation {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Custom_Slide_Show">Drawings - Custom Slide Show</a><br>
+interface XCustomPresentationSupplier {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module presentation {
+/// @enum FadeEffect
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Slide_Transition">Drawings - Slide Transition</a><br>
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module util {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Navigating#Search_and_Replace">Text - Navigating - Search and Replace</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Search_and_Replace">Spreadsheets - Search and Replace</a><br>
+interface XReplaceable {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module xml {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Writing_the_Filtering_Component">OfficeDev - Writing the Filtering Component</a><br>
+service ExportFilter {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Adding_and_Editing_Predefined_Queries">Database - Adding and Editing Predefined Queries</a><br>
+service DefinitionContainer {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module util {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Handling_Documents#URL_Parameter">OfficeDev - Handling Documents - Loading Documents - URL Parameter</a><br>
+service URLTransformer {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Function_Handling#Calculating_Function_Results">Spreadsheets - Function Handling - Calculating Function Results</a><br>
+service FunctionAccess {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module linguistic2 {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Linguistics">OfficeDev - Linguistics</a><br>
+service SpellChecker {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module frame {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/Implementation">WritingUNO - Implementation</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Dispatch_Framework">OfficeDev - Dispatch Framework</a><br>
+interface XDispatchProvider {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module drawing {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Shape_Types">Drawings - Shape Types</a><br>
+service Shape {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Conditional_Formats">Spreadsheets - Conditional Formats</a><br>
+interface XSheetConditionalEntries {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module presentation {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Custom_Slide_Show">Drawings - Custom Slide Show</a><br>
+service CustomPresentationAccess {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Settings">Spreadsheets - Settings</a><br>
+service GlobalSheetSettings {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module util {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Number_Formats">OfficeDev - Number Formats</a><br>
+service NumberFormatter {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module frame {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Integrating_Import_and_Export_Filters">OfficeDev - Integrating Import and Export Filters</a><br>
+service FrameLoader {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module presentation {
+/// @enum AnimationEffect
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Animations_and_Interactions">Drawings - Animations and Interactions</a><br>
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module form {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Forms/FormComponents_Service">Forms - FormComponents Service</a><br>
+service FormComponents {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module form {
+module binding {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Forms/Value_Bindings">Forms - Value Bindings</a><br>
+interface XValueBinding {}
+};
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module i18n {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Overview_and_Using_the_API#XTransliteration">OfficeDev - Overview and Using the API - XTransliteration</a><br>
+interface XTransliteration {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Cell_Cursor">Spreadsheets - Cell Cursor</a><br>
+interface XSheetCellCursor {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module drawing {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Grouping%2C_Combining_and_Binding">Drawings - Grouping, Combining and Binding</a><br>
+interface XShapeCombiner {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module table {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Spreadsheet_Services_-_Overview">Spreadsheets - Spreadsheet Services - Overview</a><br>
+service TableRow {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module ucb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/UCB/Content_Provider_Proxies">UCB - Content Provider Proxies</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/UCB/Unconfigured_UCBs">UCB - Unconfigured UCBs</a><br>
+interface XContentProviderManager {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module form {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Forms/Loadable_Forms">Forms - Loadable Forms</a><br>
+interface XLoadListener {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module ucb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/UCB/Accessing_a_UCB_Content">UCB - Accessing a UCB Content</a><br>
+interface XContentIdentifierFactory {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module document {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Integrating_Import_and_Export_Filters">OfficeDev - Integrating Import and Export Filters</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/XML_Filter_Detection">OfficeDev - XML Filter Detection</a><br>
+service ExtendedTypeDetection {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Spreadsheet_Services_-_Overview">Spreadsheets - Spreadsheet Services - Overview</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Cell_Ranges_and_Cells_Container">Spreadsheets - Cell Ranges and Cells Container</a><br>
+service SheetCellRanges {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module style {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Overall_Document_Features#Styles">Text - Overall Document Features - Styles</a><br>
+service StyleFamily {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module configuration {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/Disable_Commands#Disabling_Commands_at_Runtime">WritingUNO - Disable Commands - Disabling Commands at Runtime</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Config/Connecting_to_a_Data_Source">Config - Connecting to a Data Source</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Config/Object_Model">Config - Object Model</a><br>
+service ConfigurationProvider {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module document {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Integrating_Import_and_Export_Filters">OfficeDev - Integrating Import and Export Filters</a><br>
+service FilterFactory {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module form {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Forms/Form_Control_Models">Forms - Form Control Models</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Forms/Control_Models">Forms - Control Models</a><br>
+service FormControlModel {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module document {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Component/Models#XEventsSupplier">OfficeDev - Component - Models - XEventsSupplier</a><br>
+interface XEventsSupplier {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module bridge {
+module oleautomation {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Bridge/The_Bridge_Services">ProUNO - Bridge - The Bridge Services</a><br>
+service Factory {}
+};
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module drawing {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Grouping%2C_Combining_and_Binding">Drawings - Grouping, Combining and Binding</a><br>
+interface XShapeGrouper {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module i18n {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Implementing_a_New_Locale#XCharacterClassification">OfficeDev - Implementing a New Locale - XCharacterClassification</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Overview_and_Using_the_API#XCharacterClassification">OfficeDev - Overview and Using the API - XCharacterClassification</a><br>
+interface XCharacterClassification {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/The_SQLQueryComposer">Database - The SQLQueryComposer</a><br>
+service SQLQueryComposer {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module style {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Formatting">Text - Formatting</a><br>
+service ParagraphProperties {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module frame {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Frames#Linking_Components_and_Windows">OfficeDev - Frames - Linking Components and Windows</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Using_the_Desktop">OfficeDev - Using the Desktop</a><br>
+interface XFrames {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Subtotals">Spreadsheets - Subtotals</a><br>
+service SubTotalDescriptor {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/PreparedStatement_From_DataSource_Queries">Database - PreparedStatement From DataSource Queries</a><br>
+constants CommandType {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module loader {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/AdvUNO/Implementation_Loader">AdvUNO - Implementation Loader</a><br>
+interface XImplementationLoader {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Forms/Automatic_Key_Generation">Forms - Automatic Key Generation</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Events_and_Other_Notifications">Database - Events and Other Notifications</a><br>
+interface XRowSetApproveBroadcaster {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module uno {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/C++/Exception_Handling_in_C++">ProUNO - C++ - Exception Handling in C++</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Basic/Exception_Handling">ProUNO - Basic - Exception Handling</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Java/Mapping_of_Exception_Types">ProUNO - Java - Mapping of Exception Types</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Bridge/Exceptions_and_Errorcodes">ProUNO - Bridge - Exceptions and Errorcodes</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Exception_Handling">ProUNO - Exception Handling</a><br>
+exception RuntimeException {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module document {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Document_Events">OfficeDev - Document Events</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Component/Models#XEventBroadcaster">OfficeDev - Component - Models - XEventBroadcaster</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Using_the_Desktop">OfficeDev - Using the Desktop</a><br>
+interface XEventBroadcaster {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module frame {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Component/Models#XModel">OfficeDev - Component - Models - XModel</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Component/Getting_Frames%2C_Controllers_and_Models_from_Each_Other">OfficeDev - Component - Getting Frames, Controllers and Models from Each Other</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Text_Document_Controller">Text - Text Document Controller</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Component/Models">OfficeDev - Component - Models</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Frame-Controller-Model_Paradigm_in_OpenOffice.org">OfficeDev - Frame-Controller-Model Paradigm in OpenOffice.org</a><br>
+interface XModel {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Spreadsheet#Page_Breaks">Spreadsheets - Spreadsheet - Page Breaks</a><br>
+struct TablePageBreakData {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module i18n {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Implementing_a_New_Locale#XBreakIterator">OfficeDev - Implementing a New Locale - XBreakIterator</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Overview_and_Using_the_API#XBreakIterator">OfficeDev - Overview and Using the API - XBreakIterator</a><br>
+interface XBreakIterator {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Dimensions">Spreadsheets - Dimensions</a><br>
+service DataPilotSourceDimensions {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Tables#Table_Architecture">Text - Tables - Table Architecture</a><br>
+service TextTable {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Connections#Understanding_Connections">Database - Connections - Understanding Connections</a><br>
+service Connection {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/The_SingleSelectQueryComposer">Database - The SingleSelectQueryComposer</a><br>
+service SingleSelectQueryComposer {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module i18n {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Overview_and_Using_the_API#XNumberFormatCode">OfficeDev - Overview and Using the API - XNumberFormatCode</a><br>
+interface XNumberFormatCode {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module drawing {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Working_with_Drawing_Documents#Page_Handling">Drawings - Working with Drawing Documents - Page Handling</a><br>
+interface XDrawPageDuplicator {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Auto_Text">Text - Auto Text</a><br>
+service AutoTextGroup {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdbcx {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Driver_Specifics#Driver_Specifics">Database - Driver Specifics - Driver Specifics</a><br>
+service Driver {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdbc {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Connecting_Through_a_DataSource">Database - Connecting Through a DataSource</a><br>
+interface XDataSource {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Levels">Spreadsheets - Levels</a><br>
+service DataPilotSourceLevel {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module awt {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Component/Window_Interfaces">OfficeDev - Component - Window Interfaces</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Frames#Linking_Components_and_Windows">OfficeDev - Frames - Linking Components and Windows</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Windows">OfficeDev - Windows</a><br>
+interface XWindow {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/PreparedStatement_From_DataSource_Queries">Database - PreparedStatement From DataSource Queries</a><br>
+interface XCommandPreparation {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Shape_Objects_in_Text">Text - Shape Objects in Text</a><br>
+service TextGraphicObject {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module frame {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Component/Getting_Frames%2C_Controllers_and_Models_from_Each_Other">OfficeDev - Component - Getting Frames, Controllers and Models from Each Other</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Controllers">OfficeDev - Controllers</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Frame-Controller-Model_Paradigm_in_OpenOffice.org">OfficeDev - Frame-Controller-Model Paradigm in OpenOffice.org</a><br>
+interface XController {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Other_Table_Operations#Data_Validation">Spreadsheets - Other Table Operations - Data Validation</a><br>
+service TableValidation {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module document {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Component/Models#XViewDataSupplier">OfficeDev - Component - Models - XViewDataSupplier</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Other_Drawing_Specific_View_Settings">Drawings - Other Drawing Specific View Settings</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Text_Document_Controller">Text - Text Document Controller</a><br>
+interface XViewDataSupplier {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module form {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Forms/Control_Models_Forms">Forms - Control Models Forms</a><br>
+interface XForm {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Working_With_Spreadsheet_Documents#Spreadsheet_Document">Spreadsheets - Working With Spreadsheet Documents - Document Structure - Spreadsheet Document</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Spreadsheet_Documents">Spreadsheets - Spreadsheet Documents</a><br>
+service SpreadsheetDocument {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module form {
+module component {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Forms/Logical_Forms">Forms - Logical Forms</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Forms/Control_Models_Forms">Forms - Control Models Forms</a><br>
+service Form {}
+};
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Spreadsheet_Services_-_Overview">Spreadsheets - Spreadsheet Services - Overview</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Cell_Ranges">Spreadsheets - Cell Ranges</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Cell_and_Cell_Range_Access">Spreadsheets - Cell and Cell Range Access</a><br>
+service SheetCellRange {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module drawing {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Working_with_Drawing_Documents#Page_Handling">Drawings - Working with Drawing Documents - Page Handling</a><br>
+interface XDrawPages {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module frame {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Desktop_Environment">OfficeDev - Desktop Environment</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Using_the_Desktop">OfficeDev - Using the Desktop</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/UCB/Universal_Content_Broker#Capabilities">UCB - Universal Content Broker - Capabilities</a><br>
+service Desktop {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module table {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Cell_and_Cell_Range_Access">Spreadsheets - Cell and Cell Range Access</a><br>
+interface XCellRange {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Database_Ranges">Spreadsheets - Database Ranges</a><br>
+interface XDatabaseRanges {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdbcx {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/User_Service">Database - User Service</a><br>
+interface XUser {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdbc {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Events_and_Other_Notifications">Database - Events and Other Notifications</a><br>
+interface XRowSetListener {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module linguistic2 {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Linguistics">OfficeDev - Linguistics</a><br>
+service LinguServiceManager {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module loader {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/AdvUNO/Implementation_Loader#Shared_Library_Loader">AdvUNO - Implementation Loader - Shared Library Loader</a><br>
+service SharedLibrary {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Printing_Text_Documents#Printing_Multiple_Pages_on_one_Page">Text - Printing Text Documents - Printing Multiple Pages on one Page</a><br>
+interface XPagePrintable {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module beans {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/UCB/Services_and_Interfaces">UCB - Services and Interfaces</a><br>
+interface XPropertyContainer {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module chart {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Charts/Setting_the_Chart_Type">Charts - Setting the Chart Type</a><br>
+service XYDiagram {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module util {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/Disable_Commands#Disabling_Commands_at_Runtime">WritingUNO - Disable Commands - Disabling Commands at Runtime</a><br>
+interface XChangesBatch {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module chart {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Charts/Pie_Charts">Charts - Pie Charts</a><br>
+service ChartPieSegmentProperties {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module chart {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Charts/3-D_Charts">Charts - 3-D Charts</a><br>
+service Dim3DDiagram {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Table_Auto_Formats">Spreadsheets - Table Auto Formats</a><br>
+service TableAutoFormatField {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module chart {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Charts/Data_Access">Charts - Data Access</a><br>
+interface XChartDataArray {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module drawing {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Exporting">Drawings - Exporting</a><br>
+service GraphicExportFilter {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module util {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Number_Formats">OfficeDev - Number Formats</a><br>
+interface XNumberFormatter {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Filtering">Spreadsheets - Filtering</a><br>
+interface XSheetFilterableEx {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Spreadsheet#Page_Breaks">Spreadsheets - Spreadsheet - Page Breaks</a><br>
+interface XSheetPageBreak {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Handling_Array_Formulas">Spreadsheets - Handling Array Formulas</a><br>
+interface XArrayFormulaRange {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module form {
+module validation {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Forms/Validation">Forms - Validation</a><br>
+interface XValidatable {}
+};
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module frame {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Handling_Documents#Target_Frame">OfficeDev - Handling Documents - Loading Documents - Target Frame</a><br>
+constants FrameSearchFlag {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Working_With_Spreadsheet_Documents#Spreadsheet_Document">Spreadsheets - Working With Spreadsheet Documents - Document Structure - Spreadsheet Document</a><br>
+service Spreadsheets {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module ucb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/UCB/Services_and_Interfaces">UCB - Services and Interfaces</a><br>
+service Content {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdbc {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Result_Sets">Database - Result Sets</a><br>
+service ResultSet {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module document {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Integrating_Import_and_Export_Filters">OfficeDev - Integrating Import and Export Filters</a><br>
+service TypeDetection {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdbcx {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Adding_a_Group">Database - Adding a Group</a><br>
+service GroupDescriptor {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Cell_Ranges_and_Cells_Container#Access_to_Single_Cell_Ranges_in_SheetCellRanges_Container">Spreadsheets - Cell Ranges and Cells Container - Access to Single Cell Ranges in SheetCellRanges Container</a><br>
+service Cells {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module util {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Merging_Cell_Ranges_into_a_Single_Cell">Spreadsheets - Merging Cell Ranges into a Single Cell</a><br>
+interface XMergeable {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module drawing {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Forms/Control_Models_and_Shapes">Forms - Control Models and Shapes</a><br>
+service ControlShape {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module container {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Collections_and_Containers">ProUNO - Collections and Containers</a><br>
+interface XIndexContainer {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Cell_Annotations">Spreadsheets - Cell Annotations</a><br>
+interface XSheetAnnotation {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Text_Sections">Text - Text Sections</a><br>
+service TextSection {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module util {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Number_Formats">OfficeDev - Number Formats</a><br>
+interface XNumberFormats {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module frame {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Integrating_Import_and_Export_Filters">OfficeDev - Integrating Import and Export Filters</a><br>
+service SynchronousFrameLoader {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdbcx {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Column_Service">Database - Column Service</a><br>
+service IndexColumn {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module container {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Iterating_over_Text">Text - Iterating over Text</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Collections_and_Containers">ProUNO - Collections and Containers</a><br>
+interface XEnumerationAccess {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module xml {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Writing_the_Filtering_Component">OfficeDev - Writing the Filtering Component</a><br>
+service XMLImportFilter {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Sheet_Links">Spreadsheets - Sheet Links</a><br>
+service SheetLinks {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Cell_and_Cell_Range_Access">Spreadsheets - Cell and Cell Range Access</a><br>
+interface XSheetCellRange {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module beans {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Settings">Drawings - Settings</a><br>
+service PropertySet {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module chart {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Charts/Data_Access">Charts - Data Access</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Charts/Working_With_Charts#Document_Structure">Charts - Working With Charts - Document Structure</a><br>
+service ChartData {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Operations">Spreadsheets - Operations</a><br>
+interface XSheetOperation {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module lang {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Lifetime_of_UNO_objects">ProUNO - Lifetime of UNO objects</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Closing_Documents">OfficeDev - Closing Documents</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/XComponent">WritingUNO - XComponent</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/Core_Interfaces_to_Implement">WritingUNO - Core Interfaces to Implement</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Using_the_Component_Framework">OfficeDev - Using the Component Framework</a><br>
+interface XComponent {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module xml {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Writing_the_Filtering_Component">OfficeDev - Writing the Filtering Component</a><br>
+service ImportFilter {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module form {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Forms/Committing_Controls">Forms - Committing Controls</a><br>
+interface XBoundComponent {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module connection {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Opening_a_Connection">ProUNO - Opening a Connection</a><br>
+interface XConnector {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module beans {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Properties">ProUNO - Properties</a><br>
+interface XFastPropertySet {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module beans {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/FirstSteps/Using_Services#Using_Properties">FirstSteps - Using Services - Using Properties</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Properties">ProUNO - Properties</a><br>
+interface XPropertySet {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdbc {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/ResultSetMetaData">Database - ResultSetMetaData</a><br>
+interface XResultSetMetaData {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module container {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Collections_and_Containers">ProUNO - Collections and Containers</a><br>
+interface XIndexAccess {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module document {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Integrating_Import_and_Export_Filters">OfficeDev - Integrating Import and Export Filters</a><br>
+service ExportFilter {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module beans {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Properties">ProUNO - Properties</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Forms/Control_Models">Forms - Control Models</a><br>
+interface XPropertyState {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module util {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Path_Settings">OfficeDev - Path Settings</a><br>
+service PathSettings {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module util {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Number_Formats">OfficeDev - Number Formats</a><br>
+interface XNumberFormatPreviewer {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Shape_Objects_in_Text">Text - Shape Objects in Text</a><br>
+service TextFrame {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Component/Controllers#Document_Specific_Controller_Services">OfficeDev - Component - Controllers - Document Specific Controller Services</a><br>
+service DataSourceBrowser {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Conditional_Formats">Spreadsheets - Conditional Formats</a><br>
+service TableConditionalFormat {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdbcx {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Connections#Data_Definition">Database - Connections - Understanding Connections - Data Definition</a><br>
+service DatabaseDefinition {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module connection {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Opening_a_Connection">ProUNO - Opening a Connection</a><br>
+service Acceptor {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module connection {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Opening_a_Connection">ProUNO - Opening a Connection</a><br>
+service Connector {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdbc {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Scrollable_Result_Sets">Database - Scrollable Result Sets</a><br>
+interface XResultSet {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Columns">Text - Columns</a><br>
+service TextColumns {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Equally_Formatted_Cell_Ranges#Unique_Cell_Format_Ranges">Spreadsheets - Equally Formatted Cell Ranges - Unique Cell Format Ranges</a><br>
+service UniqueCellFormatRanges {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module util {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Closing_Documents">OfficeDev - Closing Documents</a><br>
+interface XCloseListener {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Formatting">Text - Formatting</a><br>
+service TextTableCursor {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdbcx {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Result_Sets">Database - Result Sets</a><br>
+service ResultSet {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdbc {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Using_the_getXXX_Methods">Database - Using the getXXX Methods</a><br>
+interface XRow {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Source_Object">Spreadsheets - Source Object</a><br>
+service DataPilotSource {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module table {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Table_Auto_Formats">Spreadsheets - Table Auto Formats</a><br>
+interface XAutoFormattable {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdbc {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Connection_Pooling">Database - Connection Pooling</a><br>
+service ConnectionPool {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module style {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Formatting">Text - Formatting</a><br>
+service CharacterPropertiesComplex {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Editing_Text#Text_Contents_Other_Than_Strings">Text - Editing Text - Text Contents Other Than Strings</a><br>
+service TextContent {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Tables_and_Columns">Database - Tables and Columns</a><br>
+service Table {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Subtotals">Spreadsheets - Subtotals</a><br>
+interface XSubTotalCalculatable {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module beans {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Properties">ProUNO - Properties</a><br>
+interface XPropertySetInfo {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module beans {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/AdvUNO/UNO_Reflection_API">AdvUNO - UNO Reflection API</a><br>
+interface XIntrospection {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module drawing {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Grouping%2C_Combining_and_Binding">Drawings - Grouping, Combining and Binding</a><br>
+service ShapeCollection {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sdb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Database/Clones_of_the_RowSet_Service">Database - Clones of the RowSet Service</a><br>
+interface XResultSetAccess {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module task {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/Jobs/Jobs">WritingUNO - Jobs - Jobs</a><br>
+service JobExecutor {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Cell_Annotations">Spreadsheets - Cell Annotations</a><br>
+service CellAnnotation {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module style {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Formatting">Text - Formatting</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Ruby">Text - Ruby</a><br>
+service CharacterProperties {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module i18n {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Overview_and_Using_the_API#XExtendedCalendar">OfficeDev - Overview and Using the API - XExtendedCalendar</a><br>
+interface XExtendedCalendar {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module awt {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Java_Window_Integration">OfficeDev - Java Window Integration</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Component/Window_Interfaces">OfficeDev - Component - Window Interfaces</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Windows">OfficeDev - Windows</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/JavaBean/OfficeWindow_Interface">JavaBean - OfficeWindow Interface</a><br>
+interface XWindowPeer {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module presentation {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Working_with_Presentation_Documents">Drawings - Working with Presentation Documents</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Slide_Transition">Drawings - Slide Transition</a><br>
+service DrawPage {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Text_Documents">Text - Text Documents</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Settings#Document_Properties">Text - Settings - Document Properties</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Formatting">Text - Formatting</a><br>
+service TextDocument {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Subtotals">Spreadsheets - Subtotals</a><br>
+struct SubTotalColumn {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module view {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Printing_Drawing_Documents#Printer_and_Print_Job_Settings">Drawings - Printing Drawing Documents - Printer and Print Job Settings</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Printing_Spreadsheet_Documents#Printer_and_Print_Job_Settings">Spreadsheets - Printing Spreadsheet Documents - Printer and Print Job Settings</a><br>
+service PrinterDescriptor {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module drawing {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Working_with_Drawing_Documents#Document_Structure">Drawings - Working with Drawing Documents - Document Structure</a><br>
+service DrawPage {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module ucb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/UCB/Creating">UCB - Creating</a><br>
+struct ContentInfo {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module ucb {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/UCB/Folders#Accessing_the_Children_of_a_Folder">UCB - Folders - Accessing the Children of a Folder</a><br>
+service DynamicResultSet {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module frame {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Dispatch_Interception">OfficeDev - Dispatch Interception</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Using_the_Dispatch_Framework">OfficeDev - Using the Dispatch Framework</a><br>
+interface XDispatchProviderInterceptor {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/DDE_Links">Spreadsheets - DDE Links</a><br>
+service DDELink {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module util {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Charts/How_Add-Ins_Work">Charts - How Add-Ins Work</a><br>
+interface XRefreshable {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module document {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Protecting_Spreadsheets">Spreadsheets - Protecting Spreadsheets</a><br>
+interface XActionLockable {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Overall_Document_Features#Cell_Styles">Spreadsheets - Overall Document Features - Styles - Cell Styles</a><br>
+service TableCellStyle {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module task {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/Jobs/Implementation">WritingUNO - Jobs - Implementation</a><br>
+service Job {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Querying_for_Cells_with_Specific_Properties">Spreadsheets - Querying for Cells with Specific Properties</a><br>
+interface XFormulaQuery {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module style {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Overall_Document_Features#Styles">Spreadsheets - Overall Document Features - Styles</a><br>
+interface XStyleFamiliesSupplier {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Cell_Annotations">Spreadsheets - Cell Annotations</a><br>
+interface XSheetAnnotationAnchor {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module form {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Forms/Loadable_Forms">Forms - Loadable Forms</a><br>
+interface XLoadable {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Shape_Objects_in_Text">Text - Shape Objects in Text</a><br>
+service BaseFrame {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module style {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Overall_Document_Features#Styles">Text - Overall Document Features - Styles</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Overall_Document_Features#Graphics_Styles">Drawings - Overall Document Features - Styles - Graphics Styles</a><br>
+interface XStyle {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Editing_Text#Control_Characters">Text - Editing Text - Control Characters</a><br>
+constants ControlCharacter {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Range_Selection">Spreadsheets - Range Selection</a><br>
+interface XRangeSelection {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module util {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Sorting_Text">Text - Sorting Text</a><br>
+interface XSortable {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Range_Selection">Spreadsheets - Range Selection</a><br>
+interface XRangeSelectionChangeListener {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Database_Operations">Spreadsheets - Database Operations</a><br>
+service DatabaseRange {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module configuration {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Config/Reading_Configuration_Data">Config - Reading Configuration Data</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Config/Object_Model">Config - Object Model</a><br>
+service ConfigurationAccess {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Subtotals">Spreadsheets - Subtotals</a><br>
+service SubTotalField {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module uno {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Lifetime_of_UNO_objects">ProUNO - Lifetime of UNO objects</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/FirstSteps/Using_Services#Using_Interfaces">FirstSteps - Using Services - Using Interfaces</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Using_UNO_Interfaces">ProUNO - Using UNO Interfaces</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/XInterface">WritingUNO - XInterface</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/Core_Interfaces_to_Implement">WritingUNO - Core Interfaces to Implement</a><br>
+interface XInterface {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Data_Array">Spreadsheets - Data Array</a><br>
+interface XCellRangeData {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module lang {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/Core_Interfaces_to_Implement">WritingUNO - Core Interfaces to Implement</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/AdvUNO/UNO_Reflection_API">AdvUNO - UNO Reflection API</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/XTypeProvider">WritingUNO - XTypeProvider</a><br>
+interface XTypeProvider {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module table {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Columns_and_Rows">Spreadsheets - Columns and Rows</a><br>
+service TableRows {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module drawing {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Drawings/Rotating_and_Shearing">Drawings - Rotating and Shearing</a><br>
+service RotationDescriptor {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module text {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Text/Shape_Objects_in_Text">Text - Shape Objects in Text</a><br>
+service TextEmbeddedObject {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module connection {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Opening_a_Connection">ProUNO - Opening a Connection</a><br>
+interface XAcceptor {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module bridge {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Java/Getting_a_Service_Manager">ProUNO - Java - Getting a Service Manager</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/C++/Establishing_Interprocess_Connections">ProUNO - C++ - Establishing Interprocess Connections</a><br>
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/UNO_Interprocess_Connections">ProUNO - UNO Interprocess Connections</a><br>
+interface XUnoUrlResolver {}
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module uno {
+/// @enum TypeClass
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Data_Types">ProUNO - Data Types</a><br>
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module sheet {
+/// @enum DataPilotFieldOrientation
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Creating_a_New_DataPilot_Table">Spreadsheets - Creating a New DataPilot Table</a><br>
+};
+};
+};
+};
+
+
+module com {
+module sun {
+module star {
+module form {
+/// @par Developers Guide
+///      <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Forms/Control_Models">Forms - Control Models</a><br>
+service FormComponent {}
+};
+};
+};
+};

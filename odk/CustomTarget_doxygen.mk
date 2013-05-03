@@ -60,8 +60,11 @@ $(eval $(call gb_CustomTarget_register_targets,odk/docs,\
 ))
 
 odk_idl_PREFIX := $(SRCDIR)/udkapi/ $(SRCDIR)/offapi/
+# note: generated_idl_chapter_refs.idl must be the _last_ input file!
+# otherwise spurious references to it will appear in the output
 odk_idl_DOXY_INPUT := $(SRCDIR)/odk/pack/gendocu/idl/main.dox \
 	$(addsuffix com,$(odk_idl_PREFIX)) \
+	$(SRCDIR)/odk/pack/gendocu/idl/generated_idl_chapter_refs.idl
 odk_idl_DOXY_WORKDIR := $(call gb_CustomTarget_get_workdir,odk/docs/idl)/ref
 
 # don't depend on the IDL files directly but instead on the udkapi/offapi
