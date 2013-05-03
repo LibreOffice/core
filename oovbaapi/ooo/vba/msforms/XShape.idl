@@ -28,6 +28,7 @@ interface XShapeRange;
 interface XShape : ooo::vba::XHelperInterface
 {
     [attribute] string Name;
+    [attribute] string AlternativeText;
     [attribute] double Height;
     [attribute] double Width;
     [attribute] double Left;
