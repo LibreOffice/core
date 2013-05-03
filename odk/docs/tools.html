@@ -128,12 +128,6 @@
 			  in a human readable manner. Special support for type library
 			  nodes.</td>
             </tr>
-            <tr valign="top">
-              <td class="content3"><img src="images/arrow-1.gif"></td>
-              <td><a href="#autodoc"  title="link to the autodoc tool description">autodoc</a></td>
-              <td class="content87">Tool to generate javadoc-like documentation
-			  for C/C++ and UNOIDL files.</td>
-            </tr>
             </table>
           </td>
 		</tr>
@@ -923,94 +917,13 @@ types the specified types depend on.</p>
         </tr>
 		<tr>
 		  <td colspan="3">
-		  <p>The 'autodoc' tool is used for creating javadoc-like documentation
-		  from C++ and UNOIDL source code.</p>
-		  <p>There are some conventions to follow when documenting C++- or
-		  UNOIDL-sourcecode. See also the <a href="http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/AppendixB/IDL_Documentation_Guidelines" title="link to the UNOIDL Documentation Guidelines">UNOIDL Documentation Guidelines</a>.<br>
-          If you are not familiar with these, but do know javadoc: For simple C++
-		  sourcecode documentation, using javadoc-style comments will work.</p>
-		  <p class="head2">Usage:</p>
-		  <blockquote>
-		  <b><code>autodoc [ -v &lt;VerboseNr&gt; ] [ -name "&lt;TitleForTheDocu&gt;" ] -html &lt;OutputDirectory&gt; -lg &lt;SourcecodeLanguage&gt;<br>
-          { [ -p &lt;ProjectName&gt; &lt;ProjectRootDirectory&gt; ] &nbsp;-t &lt;SourceTree&gt;* | -d &lt;SourceDirectory&gt;* | -f &lt;SourceFile&gt;* }*</code></b>
-		  </blockquote>
-		  <p class="head2">Options:</p>
-		  <p>
-		  <table width="100%" border="1" cellpadding="4" cellspacing="0">
-		  <tr>
-            <td class="cell15"><code>-v &lt;VerboseNr&gt;</code></td>
-            <td class="cell85">&lt;VerboseNr&gt; == 5 displays the parsed source
-		    code tokens, so you can locate which piece caused an parsing error.<br>
-            &lt;VerboseNr&gt; == 2 displays not only the parsed source code,
-		    but also the comments.<br><br>
-		    This option must be the first one, if it is used.</td>
-          </tr>
-          <tr>
-            <td class="cell15"><code>-name "&lt;Title&gt;"</code></td>
-		    <td class="cell85">&lt;Title&gt; occurs as the title of the start
-		    page of the HTML output. If this option is omitted, a default title is
-		    created.</td>
-          </tr>
-          <tr>
-            <td class="cell15"><code>-html &lt;OutputDirectory&gt;</code></td>
-            <td class="cell85">specifies the root directory where the HTML output
-		    is created.<br>
-            Autodoc does not remove old files there, though it overwrites them.</td>
-          </tr>
-          <tr>
-            <td class="cell15"><code>-lg &lt;SourcecodeLanguage&gt;</code></td>
-		    <td class="cell85">Possible values are: c++ | idl.<br><br>
-            This also specifies which files will be parsed: &quot;c++&quot; parses
-			all files with the endings .hxx and .h, &quot;idl&quot; parses all
-			files with the ending '.idl' .<br>
-            To change this behaviour, see at option <code>-f</code>.</td>
-          </tr>
-		  <tr>
-            <td class="cell15"><code>-p &lt;ProjectName&gt; &lt;ProjectDirectory&gt;</code></td>
-		    <td class="cell85">this option can be used to divide large code
-		    bases into different projects.<br>
-            &lt;ProjectName&gt; gives a user-defined name for the project.<br>
-            &lt;ProjectDirectory&gt; is the root to which all paths, given with the
-		    following options <code>-t,-d</code> and <code>-f</code>, are
-			relative.<br>
-		    This option can be omitted when there are no projects and all paths in
-		    the following options are relative to the working directory.<br><br>
-		    The &quot;{ ... }*&quot; around the options <code>-p,-t,-d,-f</code>
-			indicates, that this whole block of options can be repeated, each block
-			starting with a new <code>-p</code>.</td>
-          </tr>
-          <tr>
-            <td class="cell15"><code>-t &lt;SourceTree&gt;</code></td>
-		    <td class="cell85">specifies that all files in the directory
-		    &lt;SourceTree&gt; and it's subdirectories are parsed, where the file
-		    ending matches the option <code>-lg</code>.<br>
-            There can be given multiple directories after one <code>-t</code>
-			option.<br>
-            All relative paths &nbsp;are relative to the project-rootdirectory,
-		    given with the <code>-p</code> option.<br>
-            </td>
-          </tr>
-          <tr>
-		    <td class="cell15"><code>-d &lt;SourceDirectory&gt;</code></td>
-            <td class="cell85">Specifies that all files in th directory
-		    &lt;SourceDirectory&gt;, but NOT it's subdirectories, are parsed, where
-		    the file ending matches the option <code>-lg</code>.<br>
-            There can be multiple directories given after one <code>-d</code>
-			option.<br>
-            All relative paths &nbsp;are relative to the project-rootdirectory,
-			given with the <code>-p</code> option.</td>
-          </tr>
-          <tr>
-            <td class="cell15"><code>-f &lt;SourceFile&gt;</code></td>
-            <td class="cell85">parses the given file. The ending does not have
-		    to match the <code>-lg</code> option.<br>
-            There can be multiple files given after one <code>-f</code> option.<br>
-            All relative paths &nbsp;are relative to the project-rootdirectory,
-		    given with the <code>-p</code> option.</td>
-          </tr>
-		  </table>
-		  </p><b>Remark:</b> The sequence of options matters! Use them in the order given
-		  in the &quot;Usage&quot;-paragraph.</p>
+		  <p>The legacy 'autodoc' tool was used for creating javadoc-like
+          documentation from C++ and UNO IDL source code in previous versions
+          of the SDK.</p>
+          <p>Because this tool was buggy and unmaintained it has been removed
+          from the SDK.  Users are advised to use
+          <a href="http://www.stack.nl/~dimitri/doxygen/">Doxygen</a> instead,
+          which supports UNO IDL since April 2013.</p>
 		  </td>
 		</tr>
       </table>

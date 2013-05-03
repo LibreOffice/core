@@ -13,7 +13,6 @@ $(eval $(call gb_Package_set_outdir,odk_bin,$(INSTDIR)))
 
 $(eval $(call gb_Package_add_files,odk_bin,$(gb_Package_SDKDIRNAME)/bin,\
     $(addsuffix $(gb_Executable_EXT),\
-	autodoc \
 	$(if $(filter WNT,$(OS)),climaker) \
 	cppumaker \
 	idlc \
