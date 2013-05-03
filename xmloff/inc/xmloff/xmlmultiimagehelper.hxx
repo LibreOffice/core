@@ -33,7 +33,7 @@ private:
 
 protected:
     /// helper to get the created xShape instance, needs to be overloaded
-    virtual rtl::OUString getGraphicURLFromImportContext(const SvXMLImportContext& rContext) const = 0;
+    virtual OUString getGraphicURLFromImportContext(const SvXMLImportContext& rContext) const = 0;
     virtual void removeGraphicFromImportContext(const SvXMLImportContext& rContext) const = 0;
 
 public:
@@ -41,8 +41,10 @@ public:
     virtual ~multiImageImportHelper();
 
     /// solve multiple imported images. The most valuable one is choosen,
-    /// see imlementation for evtl. changing weights and/or adding filetypes
-    void solveMultipleImages();
+    /// see imlementation for evtl. changing weights and/or adding filetypes.
+    ///
+    /// @returns import context of the selected image
+    const SvXMLImportContext* solveMultipleImages();
 
     /// add a content to the remembered image import contexts
     void addContent(const SvXMLImportContext& rSvXMLImportContext);
