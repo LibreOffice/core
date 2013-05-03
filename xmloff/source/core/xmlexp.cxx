@@ -459,7 +459,7 @@ SvXMLExport::SvXMLExport(
     msWS( GetXMLToken(XML_WS) ),
     mbSaveLinkedSections(sal_True)
 {
-    DBG_ASSERT( xContext.is(), "got no service manager" );
+    SAL_WARN_IF( !xContext.is(), "xmloff.core", "got no service manager" );
     _InitCtor();
 }
 
@@ -489,7 +489,7 @@ SvXMLExport::SvXMLExport(
     msWS( GetXMLToken(XML_WS) ),
     mbSaveLinkedSections(sal_True)
 {
-    DBG_ASSERT( xContext.is(), "got no service manager" );
+    SAL_WARN_IF( !xContext.is(), "xmloff.core", "got no service manager" );
     mpImpl->SetSchemeOf( msOrigFileName );
     _InitCtor();
 
@@ -527,7 +527,7 @@ SvXMLExport::SvXMLExport(
     msWS( GetXMLToken(XML_WS) ),
     mbSaveLinkedSections(sal_True)
 {
-    DBG_ASSERT( xContext.is(), "got no service manager" );
+    SAL_WARN_IF(!xContext.is(), "xmloff.core", "got no service manager" );
     mpImpl->SetSchemeOf( msOrigFileName );
     _InitCtor();
 
@@ -1035,8 +1035,7 @@ void SvXMLExport::ClearAttrList()
 #ifdef DBG_UTIL
 void SvXMLExport::CheckAttrList()
 {
-    DBG_ASSERT( !mpAttrList->getLength(),
-                "XMLExport::CheckAttrList: list is not empty" );
+    SAL_WARN_IF( mpAttrList->getLength(), "xmloff.core", "XMLExport::CheckAttrList: list is not empty" );
 }
 #endif
 
@@ -1293,8 +1292,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
             Reference< xml::sax::XDocumentHandler > xTmpDocHandler(
                 m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.comp.Oasis2OOoTransformer", aArgs, m_xContext),
                 UNO_QUERY);
-            OSL_ENSURE( xTmpDocHandler.is(),
-                "can't instantiate OASIS transformer component" );
+            SAL_WARN_IF(!xTmpDocHandler.is(), "xmloff.core", "can't instantiate OASIS transformer component" );
             if( xTmpDocHandler.is() )
             {
                 mxHandler = xTmpDocHandler;
@@ -1340,7 +1338,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
         case SvtSaveOptions::ODFVER_010: break;
 
         default:
-            OSL_FAIL("xmloff::SvXMLExport::exportDoc(), unexpected odf default version!");
+            SAL_WARN("xmloff.core", "xmloff::SvXMLExport::exportDoc(), unexpected odf default version!");
         }
 
         if( pVersion )
@@ -1976,7 +1974,7 @@ ProgressBarHelper*  SvXMLExport::GetProgressBarHelper()
                     if (aAny.getValueType() == getBooleanCppuType())
                         mpProgressBarHelper->SetRepeat(::cppu::any2bool(aAny));
                     else {
-                        SAL_WARN( "xmloff.core", "why is it no boolean?" );
+                        SAL_WARN("xmloff.core", "why is it no boolean?" );
                     }
                 }
             }
@@ -2077,7 +2075,7 @@ sal_Bool SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent >& rComp )
         }
     }
 
-    OSL_ENSURE( sFilterService.getLength(), "no export filter for own object" );
+    SAL_WARN_IF( !sFilterService.getLength(), "xmloff.core", "no export filter for own object" );
 
     if( sFilterService.isEmpty() )
         return sal_False;
@@ -2115,8 +2113,7 @@ sal_Bool SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent >& rComp )
     Reference< document::XExporter > xExporter(
         m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(sFilterService, aArgs, m_xContext),
         UNO_QUERY);
-    OSL_ENSURE( xExporter.is(),
-                "can't instantiate export filter component for own object" );
+    SAL_WARN_IF( !xExporter.is(), "xmloff.core", "can't instantiate export filter component for own object" );
     if( !xExporter.is() )
         return sal_False;
 
@@ -2244,9 +2241,8 @@ void SvXMLExport::EndElement(const OUString& rName,
         mpNamespaceMap = mpImpl->mNamespaceMaps.top().first;
         mpImpl->mNamespaceMaps.pop();
     }
-    OSL_ENSURE(mpImpl->mNamespaceMaps.empty() ||
-        (mpImpl->mNamespaceMaps.top().second < mpImpl->mDepth),
-        "SvXMLExport: NamespaceMaps corrupted");
+    SAL_WARN_IF(!mpImpl->mNamespaceMaps.empty() &&
+        (mpImpl->mNamespaceMaps.top().second >= mpImpl->mDepth), "xmloff.core", "SvXMLExport: NamespaceMaps corrupted");
 
     if ((mnErrorFlags & ERROR_DO_NOTHING) != ERROR_DO_NOTHING)
     {
@@ -2407,8 +2403,7 @@ SvXMLExport::AddAttributeXmlId(uno::Reference<uno::XInterface> const & i_xIfc)
                 }
                 else
                 {
-                    OSL_FAIL("SvXMLExport::AddAttributeXmlId: "
-                         "invalid stream name");
+                    SAL_WARN("xmloff.core","SvXMLExport::AddAttributeXmlId: invalid stream name");
                 }
             }
             else
@@ -2425,8 +2420,7 @@ SvXMLExport::AddAttributeXmlId(uno::Reference<uno::XInterface> const & i_xIfc)
                 }
                 else
                 {
-                    OSL_TRACE("SvXMLExport::AddAttributeXmlId: "
-                        "no stream name given: dropping styles.xml xml:id");
+                    SAL_INFO("xmloff.core", "SvXMLExport::AddAttributeXmlId: no stream name given: dropping styles.xml xml:id");
                 }
             }
         }
