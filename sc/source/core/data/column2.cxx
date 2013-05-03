@@ -1887,14 +1887,12 @@ void ScColumn::MoveListeners( SvtBroadcaster& rSource, SCROW nDestRow )
         return;
 
     // See if the destination position already has a broadcaster, if not, create one.
-    SvtBroadcaster* pBC = NULL;
-    if (maBroadcasters.is_empty(nDestRow))
+    SvtBroadcaster* pBC = GetBroadcaster(nDestRow);
+    if (!pBC)
     {
         pBC = new SvtBroadcaster;
         maBroadcasters.set(nDestRow, pBC);
     }
-    else
-        pBC = maBroadcasters.get<SvtBroadcaster*>(nDestRow);
 
     SvtListenerIter aIter(rSource);
     for (SvtListener* pLst = aIter.GoStart(); pLst; pLst = aIter.GoNext())
@@ -1906,7 +1904,7 @@ void ScColumn::MoveListeners( SvtBroadcaster& rSource, SCROW nDestRow )
 
 void ScColumn::EndListening( SvtListener& rLst, SCROW nRow )
 {
-    SvtBroadcaster* pBC = maBroadcasters.get<SvtBroadcaster*>(nRow);
+    SvtBroadcaster* pBC = GetBroadcaster(nRow);
     if (!pBC)
         return;
 

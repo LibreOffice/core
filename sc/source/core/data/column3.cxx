@@ -125,7 +125,7 @@ void ScColumn::DeleteAtIndex( SCSIZE nIndex )
     ScBaseCell* pCell = maItems[nIndex].pCell;
     SCROW nRow = maItems[nIndex].nRow;
     pDocument->Broadcast(
-        ScHint(SC_HINT_DYING, ScAddress(nCol, nRow, nTab), maBroadcasters.get<SvtBroadcaster*>(nRow)));
+        ScHint(SC_HINT_DYING, ScAddress(nCol, nRow, nTab), GetBroadcaster(nRow)));
     maItems.erase(maItems.begin() + nIndex);
     if (pCell->GetCellType() == CELLTYPE_FORMULA)
         static_cast<ScFormulaCell*>(pCell)->EndListeningTo(pDocument);

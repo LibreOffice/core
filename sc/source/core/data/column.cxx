@@ -2131,7 +2131,7 @@ void ScColumn::SetDirty( const ScRange& rRange )
         else
         {
             aHint.GetAddress().SetRow( nRow );
-            aHint.SetBroadcaster(maBroadcasters.get<SvtBroadcaster*>(nRow));
+            aHint.SetBroadcaster(GetBroadcaster(nRow));
             pDocument->Broadcast( aHint );
         }
         nIndex++;
@@ -2160,7 +2160,7 @@ void ScColumn::SetTableOpDirty( const ScRange& rRange )
         else
         {
             aHint.GetAddress().SetRow( nRow );
-            aHint.SetBroadcaster(maBroadcasters.get<SvtBroadcaster*>(nRow));
+            aHint.SetBroadcaster(GetBroadcaster(nRow));
             pDocument->Broadcast( aHint );
         }
         nIndex++;
