@@ -149,7 +149,8 @@ void OInterfaceContainer::impl_addVbEvents_nolck_nothrow(  const sal_Int32 i_nIn
             xProps->getPropertyValue( OUString("DefaultControl") ) >>= sServiceName;
 
             Reference< ooo::vba::XVBAToOOEventDescGen > xDescSupplier( m_xServiceFactory->createInstance( OUString("ooo.vba.VBAToOOEventDesc") ), UNO_QUERY_THROW );
-            Sequence< ScriptEventDescriptor > vbaEvents = xDescSupplier->getEventDescriptions( m_xServiceFactory->createInstance( sServiceName ), sCodeName );
+            Sequence< ScriptEventDescriptor > vbaEvents = xDescSupplier->getEventDescriptions( sServiceName , sCodeName );
+
             // register the vba script events
             m_xEventAttacher->registerScriptEvents( i_nIndex, vbaEvents );
         }
