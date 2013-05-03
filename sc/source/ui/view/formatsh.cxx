@@ -2076,12 +2076,9 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
         nWhich = aIter.NextWhich();
     }
 
-    if(nWhich)
-    {
-        // stuff for sidebar panels
-        Invalidate(SID_ATTR_ALIGN_DEGREES);
-        Invalidate(SID_ATTR_ALIGN_STACKED);
-    }
+    // stuff for sidebar panels
+    Invalidate(SID_ATTR_ALIGN_DEGREES);
+    Invalidate(SID_ATTR_ALIGN_STACKED);
 }
 
 //------------------------------------------------------------------
