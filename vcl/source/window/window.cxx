@@ -84,6 +84,7 @@
 #include "com/sun/star/datatransfer/dnd/XDropTarget.hpp"
 #include "com/sun/star/datatransfer/clipboard/XClipboard.hpp"
 #include "com/sun/star/datatransfer/clipboard/SystemClipboard.hpp"
+#include "com/sun/star/datatransfer/clipboard/SystemClipboardExt.hpp"
 #include "com/sun/star/awt/XTopWindow.hpp"
 #include "com/sun/star/awt/XDisplayConnection.hpp"
 #include "com/sun/star/lang/XInitialization.hpp"
@@ -8403,10 +8404,9 @@ uno::Reference< XClipboard > Window::GetClipboard()
         {
             try
             {
-                uno::Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
                 uno::Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
-                mpWindowImpl->mpFrameData->mxClipboard = uno::Reference< XClipboard >( xFactory->createInstance( OUString("com.sun.star.datatransfer.clipboard.SystemClipboardExt") ), UNO_QUERY );
+                mpWindowImpl->mpFrameData->mxClipboard = SystemClipboardExt::create( xContext );;
 
                 if( !mpWindowImpl->mpFrameData->mxClipboard.is() )
                 {
