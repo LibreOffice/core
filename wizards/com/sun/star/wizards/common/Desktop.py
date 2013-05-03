@@ -22,6 +22,8 @@ from com.sun.star.frame.FrameSearchFlag import ALL, PARENT
 from com.sun.star.util import URL
 from com.sun.star.i18n.KParseTokens import ANY_LETTER_OR_NUMBER, ASC_UNDERSCORE
 
+from com.sun.star.util import URL
+
 
 class Desktop(object):
 
@@ -35,7 +37,6 @@ class Desktop(object):
                 traceback.print_exc()
         else:
             print ("Can't create a desktop. null pointer !")
-
         return xDesktop
 
     @classmethod
@@ -51,9 +52,7 @@ class Desktop(object):
     @classmethod
     def getDispatcher(self, xMSF, xFrame, _stargetframe, oURL):
         try:
-            oURLArray = list(range(1))
-            oURLArray[0] = oURL
-            xDispatch = xFrame.queryDispatch(oURLArray[0], _stargetframe, ALL)
+            xDispatch = xFrame.queryDispatch(oURL, _stargetframe, ALL)
             return xDispatch
         except Exception:
             traceback.print_exc()
@@ -129,3 +128,17 @@ class Desktop(object):
     def getUniqueName(self, xElementContainer, sElementName):
         sIncSuffix = self.getIncrementSuffix(xElementContainer, sElementName)
         return sElementName + sIncSuffix
+
+    @classmethod
+    def getDispatchURL(self, xMSF, _sURL):
+        try:
+            oTransformer = xMSF.createInstance("com.sun.star.util.URLTransformer")
+            oURL = URL()
+            oURL.Complete = _sURL
+            ok, oURL = oTransformer.parseStrict(oURL)
+            if (not ok):
+                return None
+            return oURL
+        except Exception:
+            traceback.print_exc()
+        return None
