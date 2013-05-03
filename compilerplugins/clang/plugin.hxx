@@ -53,6 +53,7 @@ class Plugin
         bool ignoreLocation( const Decl* decl );
         bool ignoreLocation( const Stmt* stmt );
         CompilerInstance& compiler;
+        set< SourceLocation > alreadySeen;
     private:
         static void registerPlugin( Plugin* (*create)( CompilerInstance&, Rewriter& ), const char* optionName, bool isRewriter );
         template< typename T > static Plugin* createHelper( CompilerInstance& compiler, Rewriter& rewriter );
