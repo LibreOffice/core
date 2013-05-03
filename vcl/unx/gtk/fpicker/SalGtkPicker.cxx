@@ -24,7 +24,7 @@
 #endif
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/uri/XExternalUriReferenceTranslator.hpp>
+#include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
 #include <comphelper/processfactory.hxx>
 #include <rtl/process.h>
 #include <osl/diagnose.h>
@@ -66,7 +66,7 @@ OUString SalGtkPicker::uritounicode(const gchar* pIn)
         }
         else
         {
-            OUString aNewURL = uno::Reference<uri::XExternalUriReferenceTranslator>(uno::Reference<XMultiComponentFactory>(comphelper::getProcessServiceFactory(), UNO_QUERY_THROW)->createInstanceWithContext(OUString("com.sun.star.uri.ExternalUriReferenceTranslator"), m_xContext), UNO_QUERY_THROW)->translateToInternal(sURL);
+            OUString aNewURL = uri::ExternalUriReferenceTranslator::create( m_xContext )->translateToInternal(sURL);
             if( !aNewURL.isEmpty() )
                 sURL = aNewURL;
         }
@@ -82,7 +82,7 @@ OString SalGtkPicker::unicodetouri(const OUString &rURL)
     INetURLObject aURL(rURL);
     if (INET_PROT_FILE == aURL.GetProtocol())
     {
-        OUString aNewURL = uno::Reference<uri::XExternalUriReferenceTranslator>(uno::Reference<XMultiComponentFactory>(comphelper::getProcessServiceFactory(), UNO_QUERY_THROW)->createInstanceWithContext(OUString("com.sun.star.uri.ExternalUriReferenceTranslator"), m_xContext ), UNO_QUERY_THROW)->translateToExternal( rURL );
+        OUString aNewURL = uri::ExternalUriReferenceTranslator::create( m_xContext )->translateToInternal(rURL);
 
         if( !aNewURL.isEmpty() )
         {

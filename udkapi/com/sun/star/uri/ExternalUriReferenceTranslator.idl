@@ -20,9 +20,9 @@
 #ifndef __com_sun_star_uri_ExternalUriReferenceTranslator_idl__
 #define __com_sun_star_uri_ExternalUriReferenceTranslator_idl__
 
-module com { module sun { module star { module uri {
+#include <com/sun/star/uri/XExternalUriReferenceTranslator.idl>
 
-published interface XExternalUriReferenceTranslator;
+module com { module sun { module star { module uri {
 
 /**
    translates between external and internal URI references.
