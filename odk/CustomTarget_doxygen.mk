@@ -52,7 +52,7 @@ $(call gb_CustomTarget_get_workdir,odk/docs)/cpp/doxygen.log : \
 		$(SRCDIR)/odk/pack/gendocu/main.dox \
 		$(call gb_PackageSet_get_target,odk_headers)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),GEN,1)
-	$(DOXYGEN) $< > $@
+	rm -rf $(odk_cpp_DOXY_WORKDIR)/ && $(DOXYGEN) $< > $@
 
 $(eval $(call gb_CustomTarget_register_targets,odk/docs,\
 	idl/Doxyfile \
@@ -84,6 +84,6 @@ $(call gb_CustomTarget_get_workdir,odk/docs)/idl/doxygen.log : \
 		$(call gb_CustomTarget_get_workdir,odk/docs)/idl/Doxyfile \
 		$(SRCDIR)/odk/pack/gendocu/idl/main.dox
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),GEN,1)
-	$(DOXYGEN) $< > $@
+	rm -rf $(odk_idl_DOXY_WORKDIR)/ && $(DOXYGEN) $< > $@
 
 # vim: set noet sw=4 ts=4:
