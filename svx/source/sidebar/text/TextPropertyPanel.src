@@ -346,6 +346,11 @@ Control RID_POPUPPANEL_TEXTPAGE_UNDERLINE
         ImageBitmap = Bitmap{File = "symphony/selected-line10.bmp";};
     };
 
+    String STR_WITHOUT
+    {
+        Text [ en-US ] = "(Without)";
+    };
+
     //tips
     String STR_SINGLE
     {

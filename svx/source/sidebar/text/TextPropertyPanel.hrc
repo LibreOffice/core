@@ -91,6 +91,8 @@
 #define IMG_DASH_DOT_DOT_SEL    48
 #define IMG_WAVE_SEL            49
 
+#define STR_WITHOUT             50
+
 //popup window font color
 #define VS_FONT_COLOR           1
 #define STR_AUTOMATICE          2

@@ -80,6 +80,10 @@ void TextUnderlineControl::initial()
 
     maVSUnderline.SetStyle( maVSUnderline.GetStyle()| WB_3DLOOK | WB_NO_DIRECTSELECT );
 
+    // 'none' item
+    maVSUnderline.SetStyle( maVSUnderline.GetStyle()| WB_NONEFIELD | WB_MENUSTYLEVALUESET );
+    maVSUnderline.SetText( String(SVX_RES(STR_WITHOUT) ) );
+
     maVSUnderline.InsertItem(1, maIMGSingle ,String(SVX_RES(STR_SINGLE)));
     maVSUnderline.SetItemData(1, (void*)(sal_uInt64)UNDERLINE_SINGLE);
 
@@ -185,6 +189,9 @@ void TextUnderlineControl::Rearrange(FontUnderline eLine)
         maVSUnderline.GrabFocus();
         break;
     case UNDERLINE_NONE:
+        maVSUnderline.SelectItem(0);
+        maVSUnderline.GrabFocus();
+        break;
     default:
         maVSUnderline.SelectItem(1);
         maVSUnderline.SetNoSelection();
@@ -196,10 +203,12 @@ void TextUnderlineControl::Rearrange(FontUnderline eLine)
 
 IMPL_LINK(TextUnderlineControl, VSSelectHdl, void *, pControl)
 {
-    if(pControl == &maVSUnderline)
+    if ( pControl == &maVSUnderline )
     {
-        sal_uInt16 iPos = maVSUnderline.GetSelectItemId();
-        FontUnderline eUnderline = (FontUnderline)(sal_uInt64)maVSUnderline.GetItemData( iPos );
+        const sal_uInt16 iPos = maVSUnderline.GetSelectItemId();
+        const FontUnderline eUnderline = ( iPos == 0 )
+                                         ? UNDERLINE_NONE
+                                         : (FontUnderline)(sal_uInt64)maVSUnderline.GetItemData( iPos );
 
         SvxUnderlineItem aLineItem(eUnderline, SID_ATTR_CHAR_UNDERLINE);
 
