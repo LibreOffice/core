@@ -104,7 +104,7 @@ public class TestComponent {
         }
 
         public void setFloat_attr( float _float_attr ) throws com.sun.star.uno.RuntimeException {
-            _float = _float;
+            _float = _float_attr;
         }
 
         public double getDouble_attr() throws com.sun.star.uno.RuntimeException {
