@@ -31,16 +31,16 @@ from ..common.UCB import UCB
 from .data.CGPublish import CGPublish
 from .data.CGSettings import CGSettings
 
-#from com.sun.star.ucb import AuthenticationRequest
-#from com.sun.star.ucb import InteractiveAugmentedIOException
-#from com.sun.star.ucb import InteractiveNetworkConnectException
-#from com.sun.star.ucb import InteractiveNetworkResolveNameException
-#from com.sun.star.ucb import OpenCommandArgument2
-#from com.sun.star.ucb import OpenMode
+from com.sun.star.ucb import AuthenticationRequest
+from com.sun.star.ucb import InteractiveAugmentedIOException
+from com.sun.star.ucb import InteractiveNetworkConnectException
+from com.sun.star.ucb import InteractiveNetworkResolveNameException
+from com.sun.star.ucb import OpenCommandArgument2
+from com.sun.star.ucb.OpenMode import FOLDERS
 
-PushButtonType_OK_value = uno.getConstantByName( "com.sun.star.awt.PushButtonType.OK" )
-PushButtonType_CANCEL_value = uno.getConstantByName( "com.sun.star.awt.PushButtonType.CANCEL" )
-PushButtonType_HELP_value = uno.getConstantByName( "com.sun.star.awt.PushButtonType.HELP" )
+#PushButtonType_OK_value = uno.getConstantByName( "com.sun.star.awt.PushButtonType.OK" )
+#PushButtonType_CANCEL_value = uno.getConstantByName( "com.sun.star.awt.PushButtonType.CANCEL" )
+#PushButtonType_HELP_value = uno.getConstantByName( "com.sun.star.awt.PushButtonType.HELP" )
 
 
 # This is the FTP Dialog. <br/>
@@ -90,44 +90,6 @@ class FTPDialog(UnoDialog2, UIConsts):
     ICON_UNKNOWN = "ftpunknown.gif"
     # The icon url for an icon representing the "connecting" state.
     ICON_CONNECTING = "ftpconnecting.gif"    # GUI Components as Class members.
-    # Fixed Line
-    ln1 = None
-    lblFTPAddress = None
-    txtHost = None
-    lblUsername = None
-    txtUsername = None
-    lblPassword = None
-    txtPassword = None
-    # Fixed Line
-    ln2 = None
-    btnTestConnection = None
-    imgStatus = None
-    lblStatus = None
-    # Fixed Line
-    ln3 = None
-    txtDir = None
-    btnDir = None
-    btnOK = None
-    btnCancel = None
-    btnHelp = None
-    # Font Descriptors as Class members.
-
-    # Resources Object
-    resources = None
-    dataAware = []
-    username = ""
-    password = ""
-
-    #The ftp host name
-    host = ""
-    #The ftp directory.
-    folder = ""
-    #the ftp publish object which contains the
-    #data for this dialog.
-    publish = None
-    ucb = None
-    #used for the status images url.
-    imagesDirectory = ""
 
     # constructor.
     # constructs the UI.
@@ -136,12 +98,17 @@ class FTPDialog(UnoDialog2, UIConsts):
     # for this dialog
     # @throws Exception
     def __init__(self, xmsf, p):
+
         super(FTPDialog, self).__init__(xmsf)
         self.publish = p
 
-        #templateDir = p.root.soTemplateDir
-        templateDir = ""
+        templateDir = p.root.soTemplateDir
         self.imagesDirectory = FileAccess.connectURLs(templateDir, "../wizard/bitmap/")
+
+        self.dataAware = []
+        self.host = ""
+        self.username = ""
+        self.password = ""
 
         # Load Resources
         self.resources = FTPDialogResources(xmsf)
@@ -181,10 +148,10 @@ class FTPDialog(UnoDialog2, UIConsts):
         PROPNAMES_BUTTON = (PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH)
         PROPNAMES_BUTTON2 = (PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "PushButtonType", PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH)
 
-        ln1 = self.insertFixedLine("ln1",
+        self.ln1 = self.insertFixedLine("ln1",
                 PROPNAMES_LABEL,
                 (8, self.resources.resln1_value, "ln1", 6, 6, 0, 210))
-        lblFTPAddress = self.insertLabel("lblFTPAddress",
+        self.lblFTPAddress = self.insertLabel("lblFTPAddress",
                 PROPNAMES_LABEL,
                 (8, self.resources.reslblFTPAddress_value, "lblFTPAddress", 12, 20, 1, 95))
         self.txtHost = self.insertTextField("txtHost", "disconnect",
@@ -258,7 +225,7 @@ class FTPDialog(UnoDialog2, UIConsts):
         result = self.executeDialogFromParent(parent)
         # change the CGPublish properties
         if (result == 1):
-            self.publish.cp_URL = "ftp://" + self.host() + self.getDir()
+            self.publish.cp_URL = "ftp://" + self.getHost() + self.getDir()
             self.publish.cp_Username = self.username
             self.publish.password = self.password
 
@@ -278,12 +245,12 @@ class FTPDialog(UnoDialog2, UIConsts):
     def extractHost(self, ftpUrl):
         if (ftpUrl is None or len(ftpUrl) < 6):
             return ""
-        url = ftpUrl.substring(6)
-        i = url.indexOf("/")
+        url = ftpUrl[6:]
+        i = url.find("/")
         if (i == -1):
             return url
         else:
-            return url.substring(0, i)
+            return url[:i]
 
     # used to get data from the CGPublish object.
     # @param ftpUrl
@@ -291,12 +258,12 @@ class FTPDialog(UnoDialog2, UIConsts):
     def extractDir(self, ftpUrl):
         if (ftpUrl is None or len(ftpUrl) < 6):
             return "/"
-        url = ftpUrl.substring(6)
-        i = url.indexOf("/")
+        url = ftpUrl[6:]
+        i = url.find("/")
         if (i == -1):
             return "/"
         else:
-            return url.substring(i)
+            return url[i:]
 
     # enables/disables the "test" button
     # according to the status of the hostname, username, password text fields.
@@ -311,21 +278,21 @@ class FTPDialog(UnoDialog2, UIConsts):
 
     # @return the ftp url with username and password,
     # but without the directory portion.
-    def getAcountUrl(self):
-        return "ftp://" + self.username + ":" + self.password + "@" + self.host()
+    def getAccountUrl(self):
+        return "ftp://" + self.username + ":" + self.password + "@" + self.getHost()
 
     # return the host name without the "ftp://"
     # @return
-    def host(self):
-        return self.host(self.host)
+    def getHost(self):
+        return self.getHost1(self.host)
 
     @classmethod
-    def host1(self, s):
-        return s.substring(6) if s.startswith("ftp://") else s
+    def getHost1(self, s):
+        return s[6:] if s.startswith("ftp://") else s
 
     # @return the full ftp url including username, password and directory portion.
     def getFullUrl(self):
-        return self.getAcountUrl() + self.folder
+        return self.getAccountUrl() + self.folder
 
     # First I try to connect to the full url, including directory.
     # If an InteractiveAugmentedIOException accures, I try again,
@@ -340,7 +307,7 @@ class FTPDialog(UnoDialog2, UIConsts):
             success = True
         except InteractiveAugmentedIOException as iaioex:
             try:
-                self.connect1(self.getAcountUrl())
+                self.connect1(self.getAccountUrl())
                 self.setDir("/")
                 success = True
             except Exception:
@@ -372,20 +339,20 @@ class FTPDialog(UnoDialog2, UIConsts):
     # @param acountUrl
     # @throws Exception
     def connect1(self, acountUrl):
-        content = self.ucb.getContent(self.acountUrl)
+        content = self.ucb.getContent(self.getAccountUrl())
 
         # list files in the content.
-        l = self.ucb.listFiles(self.acountUrl, None)
+        l = self.ucb.listFiles(self.getAccountUrl(), None)
 
         # open the content
         aArg = OpenCommandArgument2()
-        aArg.Mode = OpenMode.FOLDERS # FOLDER, DOCUMENTS -> simple filter
+        aArg.Mode = FOLDERS # FOLDER, DOCUMENTS -> simple filter
         aArg.Priority = 32768 # Ignored by most implementations
 
         self.ucb.executeCommand(content, "open", aArg)
 
         # get the title property of the content.
-        obj = self.ucb.getContentProperty(content, PropertyNames.PROPERTY_TITLE, str())
+        obj = self.ucb.getContentProperty(content, "Title", str)
 
     # changes the ftp subdirectory, in both
     # the UI and the data.
@@ -459,7 +426,7 @@ class FTPDialog(UnoDialog2, UIConsts):
             # if the user chose a local directory,
             # sI do not accept it.
             if (newUrl.startswith("ftp://")):
-                self.setDir(extractDir(newUrl))
+                self.setDir(self.extractDir(newUrl))
             else:
                 AbstractErrorHandler.showMessage(self.xMSF, self.xUnoDialog.getPeer(), self.resources.resIllegalFolder, ErrorHandler.ERROR_PROCESS_FATAL)
 
@@ -468,5 +435,4 @@ class FTPDialog(UnoDialog2, UIConsts):
     # @return the full ftp url with username password and everything one needs.
     @classmethod
     def getFullURL1(self, p):
-        #return "ftp://" + p.Username + ":" + p.password + "@" + self.host(p.URL)
-        return "ftp://" + p.cp_Username + ":" + "" + "@" + self.host1(p.cp_URL)
+        return "ftp://" + p.cp_Username + ":" + p.password + "@" + self.getHost1(p.cp_URL)

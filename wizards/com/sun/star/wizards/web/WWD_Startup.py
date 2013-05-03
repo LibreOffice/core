@@ -297,7 +297,7 @@ class WWD_Startup(WWD_General):
             #WWD_General.settings.cp_Styles.sort(None)
             self.prepareSessionLists()
             if self.proxies:
-                self.__ftp = self.getPublisher(FTP_PUBLISHER).cp_Publish
+                self.ftp = self.getPublisher(FTP_PUBLISHER).cp_Publish
                 self.getPublisher(FTP_PUBLISHER).cp_Publish = False
 
         except Exception:

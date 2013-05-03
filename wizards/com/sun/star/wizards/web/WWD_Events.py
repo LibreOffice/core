@@ -783,9 +783,7 @@ class WWD_Events(WWD_Startup):
         '''
         p = self.getPublisher(FTP_PUBLISHER)
         # if ftp is checked, and no proxies are set, and password is empty...
-        password = getattr(p, "password", "")
-        print ("FTP checked: ", p.cp_Publish)
-        if p.cp_Publish and not proxies and (password is None or password == ""):
+        if p.cp_Publish and not self.proxies and (p.password is None or p.password == ""):
             if self.showFTPDialog(p):
                 self.updatePublishUI(2)
                 #now continue...
@@ -819,7 +817,7 @@ class WWD_Events(WWD_Startup):
         and now ftp...
         '''
         p = self.getPublisher(FTP_PUBLISHER)
-        p.url = FTPDialog.getFullURL1(p);
+        p.url = FTPDialog.getFullURL1(p)
 
         ''' first we check the publishing targets. If they exist we warn and
         ask what to do. a False here means the user said "cancel"
@@ -832,8 +830,9 @@ class WWD_Events(WWD_Startup):
             I return the value of the ftp publisher cp_Publish
             property to its original value...
             '''
+        if self.proxies:
+            p.cp_Publish = self.ftp
 
-        p.cp_Publish = self.ftp
         #if the "save settings" checkbox is on...
 
         if self.isSaveSession():
