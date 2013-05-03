@@ -32,8 +32,10 @@
  *
  *************************************************************************/
 
-import com.sun.star.task.*;
-import java.util.Vector;
+import java.util.ArrayList;
+
+import com.sun.star.task.XInteractionContinuation;
+import com.sun.star.task.XInteractionRequest;
 
 /**************************************************************************/
 /** helper class for implementing an interaction request.
@@ -41,13 +43,13 @@ import java.util.Vector;
 class InteractionRequest implements XInteractionRequest
 {
     private Object  m_aRequest;
-    private Vector  m_aContinuations;
+    private ArrayList<XInteractionContinuation>  m_aContinuations;
 
     /* ------------------------------------------------------------------ */
     public InteractionRequest( Object aRequest )
     {
         m_aRequest = aRequest;
-        m_aContinuations = new Vector();
+        m_aContinuations = new ArrayList<XInteractionContinuation>();
     }
 
     /* ------------------------------------------------------------------ */
@@ -66,10 +68,7 @@ class InteractionRequest implements XInteractionRequest
     /* ------------------------------------------------------------------ */
     public XInteractionContinuation[] getContinuations(  )
     {
-        XInteractionContinuation[] aContinuations = new XInteractionContinuation[ m_aContinuations.size() ];
-        for ( int i=0; i<m_aContinuations.size(); ++i )
-            aContinuations[ i ] = (XInteractionContinuation)m_aContinuations.elementAt( i );
-        return aContinuations;
+        return m_aContinuations.toArray( new XInteractionContinuation[ m_aContinuations.size() ] );
     }
 };
 
