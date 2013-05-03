@@ -75,6 +75,15 @@ void ScColumn::Insert( SCROW nRow, ScBaseCell* pNewCell )
         CellType eCellType = pNewCell->GetCellType();
         if (eCellType == CELLTYPE_FORMULA)
             static_cast<ScFormulaCell*>(pNewCell)->StartListeningTo(pDocument);
+
+        if (!pDocument->IsCalcingAfterLoad())
+        {
+            if ( eCellType == CELLTYPE_FORMULA )
+                ((ScFormulaCell*)pNewCell)->SetDirty();
+            else
+                pDocument->Broadcast(
+                    ScHint(SC_HINT_DATACHANGED, ScAddress(nCol, nRow, nTab), GetBroadcaster(nRow)));
+        }
     }
 }
 
