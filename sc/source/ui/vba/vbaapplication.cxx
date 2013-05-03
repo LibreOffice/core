@@ -27,6 +27,7 @@
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #include <com/sun/star/sheet/XCalculatable.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <ooo/vba/excel/XlMousePointer.hpp>
@@ -90,6 +91,7 @@
 #include <basic/sbxobj.hxx>
 
 #include "viewutil.hxx"
+#include "docoptio.hxx"
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -815,6 +817,36 @@ ScVbaApplication::setShowWindowsInTaskbar( sal_Bool bSet ) throw (css::uno::Runt
     mrAppSettings.mbShowWindowsInTaskbar = bSet;
 }
 
+sal_Bool SAL_CALL
+ScVbaApplication::getIteration() throw (css::uno::RuntimeException)
+{
+    return SC_MOD()->GetDocOptions().IsIter();
+}
+
+void SAL_CALL
+ScVbaApplication::setIteration( sal_Bool bSet ) throw (css::uno::RuntimeException)
+{
+    uno::Reference< lang::XMultiComponentFactory > xSMgr(
+        mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
+
+    uno::Reference< frame::XDesktop > xDesktop
+        (xSMgr->createInstanceWithContext( "com.sun.star.frame.Desktop" , mxContext), uno::UNO_QUERY_THROW );
+    uno::Reference< container::XEnumeration > xComponents = xDesktop->getComponents()->createEnumeration();
+    while ( xComponents->hasMoreElements() )
+    {
+        uno::Reference< lang::XServiceInfo > xServiceInfo( xComponents->nextElement(), uno::UNO_QUERY );
+        if ( xServiceInfo.is() && xServiceInfo->supportsService( "com.sun.star.sheet.SpreadsheetDocument" ) )
+        {
+            uno::Reference< beans::XPropertySet > xProps( xServiceInfo, uno::UNO_QUERY );
+            if ( xProps.is() )
+                xProps->setPropertyValue(  SC_UNO_ITERENABLED, uno::Any( bSet ) );
+        }
+    }
+    ScDocOptions aOpts( SC_MOD()->GetDocOptions() );
+    aOpts.SetIter( bSet );
+    SC_MOD()->SetDocOptions( aOpts );
+}
+
 void SAL_CALL
 ScVbaApplication::Calculate() throw(  script::BasicErrorException , uno::RuntimeException )
 {
@@ -1172,6 +1204,13 @@ uno::Reference< excel::XRange > SAL_CALL ScVbaApplication::Union(
 
     // create the VBA Range object
     return lclCreateVbaRange( mxContext, getCurrentDocument(), aList );
+}
+
+double
+ScVbaApplication::InchesToPoints( double Inches ) throw (uno::RuntimeException )
+{
+   double result = ( Inches * 72.0 );
+   return result;
 }
 
 void
