@@ -1650,7 +1650,6 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                         lcl_WriteSimpleString( rStrm, aCell );
                     }
                     break;
-                    case CELLTYPE_NOTE:
                     case CELLTYPE_NONE:
                     break;
                     default:

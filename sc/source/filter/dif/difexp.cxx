@@ -163,7 +163,6 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
             switch (aCell.meType)
             {
                 case CELLTYPE_NONE:
-                case CELLTYPE_NOTE:
                     aOS.appendAscii(pEmptyData);
                 break;
                 case CELLTYPE_VALUE:

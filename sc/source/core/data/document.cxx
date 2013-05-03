@@ -2202,6 +2202,14 @@ ScDocument::NumFmtMergeHandler::~NumFmtMergeHandler()
     mpDoc->pFormatExchangeList = NULL;
 }
 
+SvtBroadcaster* ScDocument::GetBroadcaster( const ScAddress& rPos )
+{
+    if (!TableExists(rPos.Tab()))
+        return NULL;
+
+    return maTabs[rPos.Tab()]->GetBroadcaster(rPos.Col(), rPos.Row());
+}
+
 bool ScDocument::TableExists( SCTAB nTab ) const
 {
     return ValidTab(nTab) && static_cast<size_t>(nTab) < maTabs.size() && maTabs[nTab];

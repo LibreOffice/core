@@ -1245,9 +1245,7 @@ ScBaseCell* ScQueryCellIterator::GetThis()
                 (nRow = pCol->maItems[nColRow].nRow) <= mpParam->nRow2 )
         {
             ScBaseCell* pCell = pCol->maItems[nColRow].pCell;
-            if ( pCell->GetCellType() == CELLTYPE_NOTE )
-                ++nRow;
-            else if (bAllStringIgnore && pCell->HasStringData())
+            if (bAllStringIgnore && pCell->HasStringData())
                 ++nRow;
             else
             {
@@ -1559,8 +1557,6 @@ ScBaseCell* ScQueryCellIterator::BinarySearch()
     {
         SCSIZE nMid = (nLo+nHi)/2;
         SCSIZE i = nMid;
-        while (i <= nHi && pCol->maItems[i].pCell->GetCellType() == CELLTYPE_NOTE)
-            ++i;
         if (i > nHi)
         {
             if (nMid > 0)

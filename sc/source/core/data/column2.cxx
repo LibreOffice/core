@@ -61,6 +61,8 @@
 
 #include <math.h>
 
+#include <boost/scoped_ptr.hpp>
+
 #if DEBUG_COLUMN_STORAGE
 #include "columniterator.hxx"
 #include <iostream>
@@ -902,7 +904,7 @@ bool ScColumn::GetNextSpellingCell(SCROW& nRow, bool bInSel, const ScMarkData& r
 
 void ScColumn::RemoveAutoSpellObj()
 {
-    ScTabEditEngine* pEngine = NULL;
+    boost::scoped_ptr<ScTabEditEngine> pEngine;
 
     for (SCSIZE i=0; i<maItems.size(); i++)
         if ( maItems[i].pCell->GetCellType() == CELLTYPE_EDIT )
@@ -918,29 +920,26 @@ void ScColumn::RemoveAutoSpellObj()
 
             //  test for attributes
             if ( !pEngine )
-                pEngine = new ScTabEditEngine(pDocument);
+                pEngine.reset(new ScTabEditEngine(pDocument));
             pEngine->SetText( *pData );
-            ScEditAttrTester aTester( pEngine );
+            ScEditAttrTester aTester(pEngine.get());
             if ( aTester.NeedsObject() )                    // only remove spelling errors
             {
                 pOldCell->SetData(pEngine->CreateTextObject());
             }
             else                                            // create a string
             {
-                String aText = ScEditUtil::GetSpaceDelimitedString( *pEngine );
+                OUString aText = ScEditUtil::GetSpaceDelimitedString(*pEngine);
                 ScBaseCell* pNewCell = new ScStringCell( aText );
-                pNewCell->TakeBroadcaster( pOldCell->ReleaseBroadcaster() );
                 maItems[i].pCell = pNewCell;
                 delete pOldCell;
             }
         }
-
-    delete pEngine;
 }
 
 void ScColumn::RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow )
 {
-    ScFieldEditEngine* pEngine = NULL;
+    boost::scoped_ptr<ScFieldEditEngine> pEngine;
 
     SCSIZE i;
     Search( nStartRow, i );
@@ -958,7 +957,7 @@ void ScColumn::RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow )
             //  test for attributes
             if ( !pEngine )
             {
-                pEngine = new ScFieldEditEngine(pDocument, pDocument->GetEditPool());
+                pEngine.reset(new ScFieldEditEngine(pDocument, pDocument->GetEditPool()));
                 //  EE_CNTRL_ONLINESPELLING if there are errors already
                 pEngine->SetControlWord( pEngine->GetControlWord() | EE_CNTRL_ONLINESPELLING );
                 pDocument->ApplyAsianEditSettings( *pEngine );
@@ -994,13 +993,10 @@ void ScColumn::RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow )
             {
                 String aText = ScEditUtil::GetSpaceDelimitedString( *pEngine );
                 ScBaseCell* pNewCell = new ScStringCell( aText );
-                pNewCell->TakeBroadcaster( pOldCell->ReleaseBroadcaster() );
                 maItems[i].pCell = pNewCell;
                 delete pOldCell;
             }
         }
-
-    delete pEngine;
 }
 
 // =========================================================================================
@@ -1522,18 +1518,8 @@ void ScColumn::SetCell(SCROW nRow, ScBaseCell* pNewCell)
         if (Search(nRow, nIndex))
         {
             ScBaseCell* pOldCell = maItems[nIndex].pCell;
-
-            // move broadcaster and note to new cell, if not existing in new cell
-            if (pOldCell->HasBroadcaster() && !pNewCell->HasBroadcaster())
-                pNewCell->TakeBroadcaster( pOldCell->ReleaseBroadcaster() );
-
             if ( pOldCell->GetCellType() == CELLTYPE_FORMULA && !pDocument->IsClipOrUndo() )
-            {
                 static_cast<ScFormulaCell*>(pOldCell)->EndListeningTo( pDocument );
-                // If in EndListening NoteCell is destroyed in same Col
-                if ( nIndex >= maItems.size() || maItems[nIndex].nRow != nRow )
-                    Search(nRow, nIndex);
-            }
             pOldCell->Delete();
             maItems[nIndex].pCell = pNewCell;
         }
@@ -1548,6 +1534,11 @@ void ScColumn::SetCell(SCROW nRow, ScBaseCell* pNewCell)
         maScriptTypes.set<unsigned char>(nRow, SC_SCRIPTTYPE_UNKNOWN);
         CellStorageModified();
     }
+}
+
+SvtBroadcaster* ScColumn::GetBroadcaster(SCROW nRow)
+{
+    return maBroadcasters.get<SvtBroadcaster*>(nRow);
 }
 
 unsigned short ScColumn::GetTextWidth(SCROW nRow) const
@@ -1883,83 +1874,46 @@ void ScColumn::FindUsed( SCROW nStartRow, SCROW nEndRow, bool* pUsed ) const
 
 void ScColumn::StartListening( SvtListener& rLst, SCROW nRow )
 {
-    SvtBroadcaster* pBC = NULL;
-    ScBaseCell* pCell;
-
-    SCSIZE nIndex;
-    if (Search(nRow,nIndex))
-    {
-        pCell = maItems[nIndex].pCell;
-        pBC = pCell->GetBroadcaster();
-    }
-    else
-    {
-        pCell = new ScNoteCell;
-        Insert(nRow, pCell);
-    }
-
-    if (!pBC)
-    {
-        pBC = new SvtBroadcaster;
-        pCell->TakeBroadcaster(pBC);
-    }
+    SvtBroadcaster* pBC = new SvtBroadcaster;
+    maBroadcasters.set(nRow, pBC);
     rLst.StartListening(*pBC);
 }
 
 void ScColumn::MoveListeners( SvtBroadcaster& rSource, SCROW nDestRow )
 {
+    // Move listeners from the source position to the destination position.
+    if (!rSource.HasListeners())
+        // No listeners to relocate. Bail out.
+        return;
+
+    // See if the destination position already has a broadcaster, if not, create one.
     SvtBroadcaster* pBC = NULL;
-    ScBaseCell* pCell;
-
-    SCSIZE nIndex;
-    if (Search(nDestRow,nIndex))
-    {
-        pCell = maItems[nIndex].pCell;
-        pBC = pCell->GetBroadcaster();
-    }
-    else
-    {
-        pCell = new ScNoteCell;
-        Insert(nDestRow, pCell);
-    }
-
-    if (!pBC)
+    if (maBroadcasters.is_empty(nDestRow))
     {
         pBC = new SvtBroadcaster;
-        pCell->TakeBroadcaster(pBC);
+        maBroadcasters.set(nDestRow, pBC);
     }
+    else
+        pBC = maBroadcasters.get<SvtBroadcaster*>(nDestRow);
 
-    if (rSource.HasListeners())
+    SvtListenerIter aIter(rSource);
+    for (SvtListener* pLst = aIter.GoStart(); pLst; pLst = aIter.GoNext())
     {
-        SvtListenerIter aIter( rSource);
-        for (SvtListener* pLst = aIter.GoStart(); pLst; pLst = aIter.GoNext())
-        {
-            pLst->StartListening( *pBC);
-            pLst->EndListening( rSource);
-        }
+        pLst->StartListening(*pBC);
+        pLst->EndListening(rSource);
     }
 }
 
 void ScColumn::EndListening( SvtListener& rLst, SCROW nRow )
 {
-    SCSIZE nIndex;
-    if (Search(nRow,nIndex))
-    {
-        ScBaseCell* pCell = maItems[nIndex].pCell;
-        SvtBroadcaster* pBC = pCell->GetBroadcaster();
-        if (pBC)
-        {
-            rLst.EndListening(*pBC);
+    SvtBroadcaster* pBC = maBroadcasters.get<SvtBroadcaster*>(nRow);
+    if (!pBC)
+        return;
 
-            if (!pBC->HasListeners())
-            {
-                if (pCell->IsBlank())
-                    DeleteAtIndex(nIndex);
-                else
-                    pCell->DeleteBroadcaster();
-            }
-        }
-    }
+    rLst.EndListening(*pBC);
+    if (!pBC->HasListeners())
+        // There is no more listeners for this cell. Remove the broadcaster.
+        maBroadcasters.set_empty(nRow, nRow);
 }
 
 void ScColumn::CompileDBFormula()
@@ -2036,10 +1990,6 @@ static void lcl_UpdateSubTotal( ScFunctionData& rData, const ScBaseCell* pCell )
                 }
             }
             break;
-        case CELLTYPE_NOTE:
-            bCell = false;
-            break;
-        // nothing for strings
         default:
         {
             // added to avoid warnings

@@ -29,26 +29,22 @@
 #ifdef USE_MEMPOOL
 IMPL_FIXEDMEMPOOL_NEWDEL( ScValueCell )
 IMPL_FIXEDMEMPOOL_NEWDEL( ScStringCell )
-IMPL_FIXEDMEMPOOL_NEWDEL( ScNoteCell )
 #endif
 
 // ============================================================================
 
 ScBaseCell::ScBaseCell( CellType eNewType ) :
-    mpBroadcaster( 0 ),
     eCellType( sal::static_int_cast<sal_uInt8>(eNewType) )
 {
 }
 
 ScBaseCell::ScBaseCell( const ScBaseCell& rCell ) :
-    mpBroadcaster( 0 ),
     eCellType( rCell.eCellType )
 {
 }
 
 ScBaseCell::~ScBaseCell()
 {
-    delete mpBroadcaster;
     OSL_ENSURE( eCellType == CELLTYPE_DESTROYED, "BaseCell Destructor" );
 }
 
@@ -66,8 +62,6 @@ ScBaseCell* lclCloneCell( const ScBaseCell& rSrcCell, ScDocument& rDestDoc, cons
             return new ScEditCell(static_cast<const ScEditCell&>(rSrcCell), rDestDoc, rDestPos);
         case CELLTYPE_FORMULA:
             return new ScFormulaCell( static_cast< const ScFormulaCell& >( rSrcCell ), rDestDoc, rDestPos, nCloneFlags );
-        case CELLTYPE_NOTE:
-            return new ScNoteCell;
         default:;
     }
     OSL_FAIL( "lclCloneCell - unknown cell type" );
@@ -106,9 +100,6 @@ void ScBaseCell::Delete()
         case CELLTYPE_FORMULA:
             delete (ScFormulaCell*) this;
             break;
-        case CELLTYPE_NOTE:
-            delete (ScNoteCell*) this;
-            break;
         default:
             OSL_FAIL("Attempt to Delete() an unknown CELLTYPE");
             break;
@@ -117,36 +108,13 @@ void ScBaseCell::Delete()
 
 bool ScBaseCell::IsBlank() const
 {
-    if(eCellType == CELLTYPE_NOTE)
-        return true;
-
     return false;
-}
-
-void ScBaseCell::TakeBroadcaster( SvtBroadcaster* pBroadcaster )
-{
-    delete mpBroadcaster;
-    mpBroadcaster = pBroadcaster;
-}
-
-SvtBroadcaster* ScBaseCell::ReleaseBroadcaster()
-{
-    SvtBroadcaster* pBroadcaster = mpBroadcaster;
-    mpBroadcaster = 0;
-    return pBroadcaster;
-}
-
-void ScBaseCell::DeleteBroadcaster()
-{
-    DELETEZ( mpBroadcaster );
 }
 
 bool ScBaseCell::HasEmptyData() const
 {
     switch ( eCellType )
     {
-        case CELLTYPE_NOTE :
-            return true;
         case CELLTYPE_FORMULA :
             return ((ScFormulaCell*)this)->IsEmpty();
         default:
@@ -200,21 +168,6 @@ OUString ScBaseCell::GetStringData() const
     }
     return aStr;
 }
-
-ScNoteCell::ScNoteCell( SvtBroadcaster* pBC ) :
-    ScBaseCell( CELLTYPE_NOTE )
-{
-    TakeBroadcaster( pBC );
-}
-
-#if OSL_DEBUG_LEVEL > 0
-ScNoteCell::~ScNoteCell()
-{
-    eCellType = CELLTYPE_DESTROYED;
-}
-#endif
-
-// ============================================================================
 
 ScValueCell::ScValueCell( double fValue ) :
     ScBaseCell( CELLTYPE_VALUE ),

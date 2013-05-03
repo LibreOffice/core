@@ -1137,7 +1137,7 @@ namespace {
 bool isEmptyOrNote( ScDocument* pDoc, const ScAddress& rCurrentPos )
 {
     CellType eType = pDoc->GetCellType(rCurrentPos);
-    return (eType == CELLTYPE_NONE) || (eType == CELLTYPE_NOTE);
+    return (eType == CELLTYPE_NONE);
 }
 
 }
@@ -1255,7 +1255,6 @@ OUString getOutputString( ScDocument* pDoc, const ScAddress& aCellPos )
     switch (eType)
     {
         case CELLTYPE_NONE:
-        case CELLTYPE_NOTE:
             return EMPTY_OUSTRING;
         case CELLTYPE_EDIT:
         {

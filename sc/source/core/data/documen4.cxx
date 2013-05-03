@@ -69,7 +69,7 @@ bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
         // as previously done in ScInterpreter::GetDouble
         double nTargetVal = 0.0;
         sal_uInt32 nFIndex = 0;
-        if (eFType == CELLTYPE_FORMULA && (eVType == CELLTYPE_VALUE || eVType == CELLTYPE_NOTE) &&
+        if (eFType == CELLTYPE_FORMULA && (eVType == CELLTYPE_VALUE) &&
             GetFormatTable()->IsNumberFormat(sValStr, nFIndex, nTargetVal))
         {
             ScSingleRefData aRefData;

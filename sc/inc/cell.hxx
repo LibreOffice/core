@@ -69,17 +69,6 @@ public:
         Returns false for formula cells returning nothing, use HasEmptyData() for that. */
     bool            IsBlank() const;
 
-    /** Returns true, if the cell contains a broadcaster. */
-    inline bool     HasBroadcaster() const { return mpBroadcaster != 0; }
-    /** Returns the pointer to the cell broadcaster. */
-    inline SvtBroadcaster* GetBroadcaster() const { return mpBroadcaster; }
-    /** Takes ownership of the passed cell broadcaster. */
-    void            TakeBroadcaster( SvtBroadcaster* pBroadcaster );
-    /** Returns and forgets the own cell broadcaster. Caller takes ownership! */
-    SvtBroadcaster* ReleaseBroadcaster();
-    /** Deletes the own cell broadcaster. */
-    void            DeleteBroadcaster();
-
     /** ScFormulaCell with formula::svEmptyCell result, or ScNoteCell (may have been
         created due to reference to empty cell). */
     bool            HasEmptyData() const;
@@ -90,31 +79,8 @@ public:
 private:
     ScBaseCell&     operator=( const ScBaseCell& );
 
-private:
-    SvtBroadcaster* mpBroadcaster;  /// Broadcaster for changed values. Cell takes ownership!
-
 protected:
     sal_uInt8            eCellType;      // enum CellType - sal_uInt8 spart Speicher
-};
-
-// ============================================================================
-
-class ScNoteCell : public ScBaseCell
-{
-public:
-#ifdef USE_MEMPOOL
-    DECL_FIXEDMEMPOOL_NEWDEL( ScNoteCell )
-#endif
-
-    /** Cell takes ownership of the passed broadcaster. */
-    explicit        ScNoteCell( SvtBroadcaster* pBC = 0 );
-
-#if OSL_DEBUG_LEVEL > 0
-                    ~ScNoteCell();
-#endif
-
-private:
-                    ScNoteCell( const ScNoteCell& );
 };
 
 class ScValueCell : public ScBaseCell

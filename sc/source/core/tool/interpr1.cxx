@@ -2130,7 +2130,7 @@ void ScInterpreter::ScIsEmpty()
             // ScCountEmptyCells().
             ScRefCellValue aCell;
             aCell.assign(*pDok, aAdr);
-            if ((aCell.meType == CELLTYPE_NONE) || (aCell.meType == CELLTYPE_NOTE))
+            if (aCell.meType == CELLTYPE_NONE)
                 nRes = 1;
         }
         break;
@@ -2298,9 +2298,6 @@ void ScInterpreter::ScType()
                 switch (aCell.meType)
                 {
                     // NOTE: this is Xcl nonsense!
-                    case CELLTYPE_NOTE :
-                        nType = 1;      // empty cell is value (0)
-                        break;
                     case CELLTYPE_STRING :
                     case CELLTYPE_EDIT :
                         nType = 2;
@@ -4129,7 +4126,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                     if( eFunc == ifCOUNT2 )
                     {
                         CellType eCellType = aCell.meType;
-                        if (eCellType != CELLTYPE_NONE && eCellType != CELLTYPE_NOTE)
+                        if (eCellType != CELLTYPE_NONE)
                             nCount++;
                         if ( nGlobalError )
                             nGlobalError = 0;
@@ -5399,7 +5396,7 @@ void ScInterpreter::ScCountEmptyCells()
                 ScAddress aAdr;
                 PopSingleRef( aAdr );
                 eCellType = pDok->GetCellType(aAdr);
-                if (eCellType != CELLTYPE_NONE && eCellType != CELLTYPE_NOTE)
+                if (eCellType != CELLTYPE_NONE)
                     nCount = 1;
             }
             break;
@@ -7314,18 +7311,10 @@ bool ScInterpreter::FillEntry(ScQueryEntry& rEntry)
             }
             else
             {
-                if (aCell.meType == CELLTYPE_NOTE)
-                {
-                    rItem.meType = ScQueryEntry::ByValue;
-                    rItem.mfVal = 0.0;
-                }
-                else
-                {
-                    OUString aStr;
-                    GetCellString(aStr, aCell);
-                    rItem.meType = ScQueryEntry::ByString;
-                    rItem.maString = aStr;
-                }
+                OUString aStr;
+                GetCellString(aStr, aCell);
+                rItem.meType = ScQueryEntry::ByString;
+                rItem.maString = aStr;
             }
         }
         break;

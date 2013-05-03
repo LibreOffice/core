@@ -1650,7 +1650,7 @@ bool ScCondDateFormatEntry::IsValid( const ScAddress& rPos ) const
 {
     CellType eCellType = mpDoc->GetCellType(rPos);
 
-    if (eCellType == CELLTYPE_NONE || eCellType == CELLTYPE_NOTE)
+    if (eCellType == CELLTYPE_NONE)
         // empty cell.
         return false;
 

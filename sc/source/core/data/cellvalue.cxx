@@ -24,8 +24,6 @@ CellType adjustCellType( CellType eOrig )
 {
     switch (eOrig)
     {
-        case CELLTYPE_NOTE:
-            return CELLTYPE_NONE;
         case CELLTYPE_EDIT:
             return CELLTYPE_STRING;
         default:
@@ -354,7 +352,7 @@ bool ScCellValue::hasNumeric() const
 
 bool ScCellValue::isEmpty() const
 {
-    return meType == CELLTYPE_NOTE || meType == CELLTYPE_NONE;
+    return meType == CELLTYPE_NONE;
 }
 
 bool ScCellValue::equalsWithoutFormat( const ScCellValue& r ) const
@@ -498,7 +496,7 @@ OUString ScRefCellValue::getString()
 
 bool ScRefCellValue::isEmpty() const
 {
-    return meType == CELLTYPE_NOTE || meType == CELLTYPE_NONE;
+    return meType == CELLTYPE_NONE;
 }
 
 bool ScRefCellValue::hasEmptyValue()

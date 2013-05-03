@@ -377,18 +377,6 @@ short ScTable::CompareCell( sal_uInt16 nSort,
     short nRes = 0;
 
     CellType eType1 = CELLTYPE_NONE, eType2 = CELLTYPE_NONE;
-    if (pCell1)
-    {
-        eType1 = pCell1->GetCellType();
-        if (eType1 == CELLTYPE_NOTE)
-            pCell1 = NULL;
-    }
-    if (pCell2)
-    {
-        eType2 = pCell2->GetCellType();
-        if (eType2 == CELLTYPE_NOTE)
-            pCell2 = NULL;
-    }
 
     if (pCell1)
     {
@@ -1367,7 +1355,7 @@ public:
                 // Error cell is evaluated as string (for now).
                 aCellStr = ScGlobal::GetErrorString(static_cast<ScFormulaCell*>(pCell)->GetErrCode());
             }
-            else if (pCell->GetCellType() != CELLTYPE_NOTE)
+            else
             {
                 sal_uLong nFormat = mrTab.GetNumberFormat( static_cast<SCCOL>(rEntry.nField), nRow );
                 ScRefCellValue aCell;
@@ -1660,8 +1648,7 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
                 ScSortInfo** ppInfo = pArray->GetFirstArray();
                 SCSIZE nValidCount = nCount;
                 // keine Note-/Leerzellen zaehlen, sind ans Ende sortiert
-                while ( nValidCount > 0 && ( ppInfo[nValidCount-1]->pCell == NULL ||
-                                             ppInfo[nValidCount-1]->pCell->GetCellType() == CELLTYPE_NOTE ) )
+                while ( nValidCount > 0 && (ppInfo[nValidCount-1]->pCell == NULL) )
                     nValidCount--;
                 // keine Strings zaehlen, sind zwischen Value und Leer
                 while ( nValidCount > 0

@@ -1967,6 +1967,8 @@ private: // CLOOK-Impl-methods
         ScDocument* mpDoc;
     };
 
+    SvtBroadcaster* GetBroadcaster( const ScAddress& rPos );
+
     bool TableExists( SCTAB nTab ) const;
 
     void    MergeNumberFormatter(ScDocument* pSrcDoc);

@@ -817,7 +817,7 @@ bool lcl_maybeReplaceCellString(
     ScColumn& rColObj, SCCOL& rCol, SCROW& rRow, OUString& rUndoStr, SCCOL nCol, SCROW nRow, const SvxSearchItem& rSearchItem)
 {
     ScBaseCell* pCell = rColObj.GetCell(nRow);
-    if (!pCell || pCell->GetCellType() == CELLTYPE_NOTE)
+    if (!pCell)
     {
         // empty cell found.
         rCol = nCol;
@@ -1018,27 +1018,6 @@ bool ScTable::SearchRangeForAllEmptyCells(
                         aParam.setTextInput();
                         pUndoDoc->SetString(ScAddress(nCol, nRow, nTab), EMPTY_OUSTRING);
                     }
-                }
-            }
-            else if (pCell->GetCellType() == CELLTYPE_NOTE)
-            {
-                rMatchedRanges.Join(ScRange(nCol, nRow, nTab));
-                bFound = true;
-
-                if (bReplace)
-                {
-                    if (pUndoDoc)
-                    {
-                        ScAddress aCellPos(nCol, nRow, nTab);
-                        pUndoDoc->PutCell(aCellPos, pCell->Clone(*pUndoDoc, aCellPos));
-                        ScNotes* pNotes = pUndoDoc->GetNotes(nTab);
-                        ScPostIt* pPostIt = maNotes.findByAddress(nCol, nRow);
-                        if (pPostIt)
-                        {
-                            pNotes->insert(nCol, nRow, pPostIt->Clone(ScAddress(nCol, nRow, nTab), *pUndoDoc, ScAddress(nCol, nRow, nTab), true));
-                        }
-                    }
-                    aCol[nCol].SetString(nRow, nTab, rSearchItem.GetReplaceString(), pDocument->GetAddressConvention());
                 }
             }
         }

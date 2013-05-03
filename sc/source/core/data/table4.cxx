@@ -1477,7 +1477,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             pProgress->SetStateOnPercent( ++nProgress );
                     }
                 }
-                else if (eCellType != CELLTYPE_NOTE)
+                else
                 {
                     for (rInner = nIMin; rInner <= nIMax; rInner++)
                     {

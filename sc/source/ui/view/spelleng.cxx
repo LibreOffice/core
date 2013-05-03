@@ -107,7 +107,7 @@ bool ScConversionEngineBase::FindNextConversionCell()
             {
                 ScAddress aPos( mnCurrCol, mnCurrRow, nTab );
                 CellType eCellType = mrDoc.GetCellType( aPos );
-                bool bEmptyCell = eCellType == CELLTYPE_NONE || eCellType == CELLTYPE_NOTE;
+                bool bEmptyCell = eCellType == CELLTYPE_NONE;
 
                 if (mpUndoDoc && !bEmptyCell)
                     mrDoc.CopyCellToDocument(aPos, aPos, *mpUndoDoc);

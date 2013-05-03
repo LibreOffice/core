@@ -381,11 +381,8 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
                         CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrX];
                         pInfo->maCell.assign(*pThisCol->maItems[nUIndex].pCell);
-                        if (pInfo->maCell.meType != CELLTYPE_NOTE)
-                        {
-                            pThisRowInfo->bEmptyText = false;                   // Zeile nicht leer
-                            pInfo->bEmptyCellText = false;                      // Zelle nicht leer
-                        }
+                        pThisRowInfo->bEmptyText = false;                   // Zeile nicht leer
+                        pInfo->bEmptyCellText = false;                      // Zelle nicht leer
                         ++nArrY;
                     }
                     ++nUIndex;

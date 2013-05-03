@@ -1138,9 +1138,6 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     Color* pColor;
     switch (aCell.meType)
     {
-        case CELLTYPE_NOTE :
-            // nothing
-        break;
         case CELLTYPE_EDIT :
             bFieldText = WriteFieldText(aCell.mpEditText);
             if ( bFieldText )

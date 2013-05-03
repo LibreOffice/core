@@ -75,17 +75,6 @@ void ScColumn::Insert( SCROW nRow, ScBaseCell* pNewCell )
         CellType eCellType = pNewCell->GetCellType();
         if (eCellType == CELLTYPE_FORMULA)
             static_cast<ScFormulaCell*>(pNewCell)->StartListeningTo(pDocument);
-
-        // A note cell is only created by StartListeningCell when loading,
-        // triggering Formula cells must be dirty anyway.
-        if ( !(pDocument->IsCalcingAfterLoad() && eCellType == CELLTYPE_NOTE) )
-        {
-            if ( eCellType == CELLTYPE_FORMULA )
-                ((ScFormulaCell*)pNewCell)->SetDirty();
-            else
-                pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED,
-                    ScAddress( nCol, nRow, nTab ), pNewCell->GetBroadcaster()) );
-        }
     }
 }
 
@@ -112,32 +101,22 @@ void ScColumn::Append( SCROW nRow, ScBaseCell* pCell )
 void ScColumn::Delete( SCROW nRow )
 {
     SCSIZE  nIndex;
+    if (!Search(nRow, nIndex))
+        return;
 
-    if (Search(nRow, nIndex))
-    {
-        ScBaseCell* pCell = maItems[nIndex].pCell;
-        ScNoteCell* pNoteCell = new ScNoteCell;
-        maItems[nIndex].pCell = pNoteCell; // Dummy for Interpret
-        pDocument->Broadcast( ScHint( SC_HINT_DYING,
-            ScAddress( nCol, nRow, nTab ), pCell->GetBroadcaster()));
-        if ( SvtBroadcaster* pBC = pCell->ReleaseBroadcaster() )
-        {
-            pNoteCell->TakeBroadcaster( pBC );
-        }
-        else
-        {
-            pNoteCell->Delete();
-            maItems.erase( maItems.begin() + nIndex);
-            maTextWidths.set_empty(nRow, nRow);
-            maScriptTypes.set_empty(nRow, nRow);
-            // Should we free memory here (delta)? It'll be slower!
-        }
-        if (pCell->GetCellType() == CELLTYPE_FORMULA)
-            static_cast<ScFormulaCell*>(pCell)->EndListeningTo(pDocument);
-        pCell->Delete();
+    ScBaseCell* pCell = maItems[nIndex].pCell;
+    pDocument->Broadcast(
+        ScHint(SC_HINT_DYING, ScAddress(nCol, nRow, nTab), GetBroadcaster(nRow)));
 
-        CellStorageModified();
-    }
+    maItems.erase(maItems.begin() + nIndex);
+    maTextWidths.set_empty(nRow, nRow);
+    maScriptTypes.set_empty(nRow, nRow);
+    // Should we free memory here (delta)? It'll be slower!
+    if (pCell->GetCellType() == CELLTYPE_FORMULA)
+        static_cast<ScFormulaCell*>(pCell)->EndListeningTo(pDocument);
+    pCell->Delete();
+
+    CellStorageModified();
 }
 
 
@@ -145,11 +124,8 @@ void ScColumn::DeleteAtIndex( SCSIZE nIndex )
 {
     ScBaseCell* pCell = maItems[nIndex].pCell;
     SCROW nRow = maItems[nIndex].nRow;
-    ScNoteCell* pNoteCell = new ScNoteCell;
-    maItems[nIndex].pCell = pNoteCell; // Dummy for Interpret
     pDocument->Broadcast(
-        ScHint(SC_HINT_DYING, ScAddress(nCol, nRow, nTab), pCell->GetBroadcaster()));
-    pNoteCell->Delete();
+        ScHint(SC_HINT_DYING, ScAddress(nCol, nRow, nTab), maBroadcasters.get<SvtBroadcaster*>(nRow)));
     maItems.erase(maItems.begin() + nIndex);
     if (pCell->GetCellType() == CELLTYPE_FORMULA)
         static_cast<ScFormulaCell*>(pCell)->EndListeningTo(pDocument);
@@ -191,30 +167,24 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
     sal_Bool bOldAutoCalc = pDocument->GetAutoCalc();
     pDocument->SetAutoCalc( false ); // Avoid calculating it multiple times
 
-    sal_Bool bFound=false;
+    bool bFound = false;
     SCROW nEndRow = nStartRow + nSize - 1;
     SCSIZE nStartIndex = 0;
     SCSIZE nEndIndex = 0;
     SCSIZE i;
+
+    maBroadcasters.set_empty(nStartRow, nEndRow);
 
     for ( i = nFirstIndex; i < maItems.size() && maItems[i].nRow <= nEndRow; i++ )
     {
         if (!bFound)
         {
             nStartIndex = i;
-            bFound = sal_True;
+            bFound = true;
         }
         nEndIndex = i;
-
-        ScBaseCell* pCell = maItems[i].pCell;
-        SvtBroadcaster* pBC = pCell->GetBroadcaster();
-        if (pBC)
-        {
-            // Now returns invalid reference; direct References are not moved
-            pCell->DeleteBroadcaster();
-            // We delete empty Broadcaster in DeleteRange
-        }
     }
+
     if (bFound)
     {
         DeleteRange( nStartIndex, nEndIndex, IDF_CONTENTS );
@@ -319,10 +289,6 @@ bool checkDeleteCellByFlag(
         case CELLTYPE_FORMULA:
             bDelete = (nDelFlag & IDF_FORMULA) != 0;
         break;
-        case CELLTYPE_NOTE:
-            // do note delete note cell with broadcaster
-            bDelete = !rEntry.pCell->GetBroadcaster();
-        break;
         default:; // added to avoid warnings
     }
 
@@ -349,12 +315,10 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
     RemovedSegments_t aRemovedSegments(nStartIndex, maItems.size(), false);
     SCSIZE nFirst = nStartIndex;
 
-    // dummy replacement for old cells, to prevent that interpreter uses old cell
-    boost::scoped_ptr<ScNoteCell> pDummyCell(new ScNoteCell);
-
     for ( SCSIZE nIdx = nStartIndex; nIdx <= nEndIndex; ++nIdx )
     {
-        if (((nDelFlag & IDF_CONTENTS) == IDF_CONTENTS) && !maItems[ nIdx ].pCell->GetBroadcaster())
+        SCROW nRow = maItems[nIdx].nRow;
+        if (((nDelFlag & IDF_CONTENTS) == IDF_CONTENTS) && maBroadcasters.is_empty(nRow))
         {
             // all content is deleted and cell does not contain broadcaster
 
@@ -365,14 +329,8 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
                 aDelCells.push_back( static_cast< ScFormulaCell* >( pOldCell ) );
             }
             else
-            {
-                // interpret in broadcast must not use the old cell
-                maItems[ nIdx ].pCell = pDummyCell.get();
-                aHint.GetAddress().SetRow( maItems[ nIdx ].nRow );
-                aHint.SetBroadcaster(pOldCell->GetBroadcaster());
-                pDocument->Broadcast( aHint );
                 pOldCell->Delete();
-            }
+
             continue;
         }
 
@@ -392,51 +350,14 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
 
         if (bDelete)
         {
-            // Try to create a replacement "note" cell if broadcaster exists.
-            ScNoteCell* pNoteCell = NULL;
-            SvtBroadcaster* pBC = pOldCell->GetBroadcaster();
-            if (pBC && pBC->HasListeners())
-            {
-                // NOTE: the broadcaster here is transferred and released only
-                // if it has listeners! If it does not, it will simply be
-                // deleted when the cell is deleted and no replacement cell is
-                // created.
-                pNoteCell = new ScNoteCell(pBC);
-                pOldCell->ReleaseBroadcaster();
-            }
-
             // remove cell entry in cell item list
-            SCROW nOldRow = maItems[nIdx].nRow;
-            if (pNoteCell)
-            {
-                // replace old cell with the replacement note cell
-                maItems[nIdx].pCell = pNoteCell;
-                // ... so it's not really deleted
-                bDelete = false;
-            }
-            else
-                maItems[nIdx].pCell = pDummyCell.get();
-
             if (eCellType == CELLTYPE_FORMULA)
             {
                 // Cache formula cells (will be deleted later), delete cell of other type.
                 aDelCells.push_back(static_cast<ScFormulaCell*>(pOldCell));
             }
             else
-            {
-                aHint.GetAddress().SetRow(nOldRow);
-                SvtBroadcaster* pHintBC = NULL;
-                if (pNoteCell)
-                    pHintBC = pNoteCell->GetBroadcaster();
-                else if (pOldCell)
-                    pHintBC = pOldCell->GetBroadcaster();
-                aHint.SetBroadcaster(pHintBC);
-                pDocument->Broadcast(aHint);
-                if (pNoteCell != pOldCell)
-                {
-                    pOldCell->Delete();
-                }
-            }
+                pOldCell->Delete();
         }
 
         if (!bDelete)
@@ -498,27 +419,14 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
         // NOTE: this actually may remove ScNoteCell entries from maItems if
         // the last listener is removed from a broadcaster.
         for ( FormulaCellVector::iterator aIt = aDelCells.begin(), aEnd = aDelCells.end(); aIt != aEnd; ++aIt )
-            (*aIt)->EndListeningTo( pDocument );
-
-        // NOTE: the vector does not contain cells with broadcasters that have
-        // listeners. If it would, broadcasters that were deleted during
-        // EndListeningTo() would have to be released from these cells.
-
-        // broadcast SC_HINT_DYING for all cells and delete them
-        for ( FormulaCellVector::iterator aIt = aDelCells.begin(), aEnd = aDelCells.end(); aIt != aEnd; ++aIt )
         {
-            // A formula cell's broadcaster now is at the replacement cell, use
-            // that. If there is no cell anymore it means all listeners are
-            // gone for this formula cell and the replacement cell was removed
-            // from maItems.
-            SCSIZE nIndex;
-            ScBaseCell* pCell = (Search( (*aIt)->aPos.Row(), nIndex) ? maItems[nIndex].pCell : NULL);
-            aHint.SetBroadcaster(pCell ? pCell->GetBroadcaster() : NULL);
-            aHint.SetAddress( (*aIt)->aPos );
-            pDocument->Broadcast( aHint );
+            (*aIt)->EndListeningTo( pDocument );
             (*aIt)->Delete();
         }
     }
+
+    // TODO: Broadcasting is temporarily removed from this method. Add it back
+    // once the broadcaster refactoring is finished.
 }
 
 
@@ -652,23 +560,19 @@ void ScColumn::CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
             while ( nStartIndex < rColumn.maItems.size() && rColumn.maItems[nStartIndex].nRow <= nRow2-nDy )
             {
                 SCSIZE nEndIndex = nStartIndex;
-                if ( rColumn.maItems[nStartIndex].pCell->GetCellType() != CELLTYPE_NOTE )
+                SCROW nStartRow = rColumn.maItems[nStartIndex].nRow;
+                SCROW nEndRow = nStartRow;
+
+                //  find consecutive non-empty cells
+                while ( nEndRow < nRow2-nDy &&
+                        nEndIndex+1 < rColumn.maItems.size() &&
+                        rColumn.maItems[nEndIndex+1].nRow == nEndRow+1 )
                 {
-                    SCROW nStartRow = rColumn.maItems[nStartIndex].nRow;
-                    SCROW nEndRow = nStartRow;
-
-                    //  find consecutive non-empty cells
-                    while ( nEndRow < nRow2-nDy &&
-                            nEndIndex+1 < rColumn.maItems.size() &&
-                            rColumn.maItems[nEndIndex+1].nRow == nEndRow+1 &&
-                            rColumn.maItems[nEndIndex+1].pCell->GetCellType() != CELLTYPE_NOTE )
-                    {
-                        ++nEndIndex;
-                        ++nEndRow;
-                    }
-
-                    rColumn.pAttrArray->CopyAreaSafe( nStartRow+nDy, nEndRow+nDy, nDy, *pAttrArray );
+                    ++nEndIndex;
+                    ++nEndRow;
                 }
+
+                rColumn.pAttrArray->CopyAreaSafe( nStartRow+nDy, nEndRow+nDy, nDy, *pAttrArray );
                 nStartIndex = nEndIndex + 1;
             }
         }
@@ -780,10 +684,6 @@ ScBaseCell* ScColumn::CloneCell(
     ScBaseCell& rSource = *maItems[nIndex].pCell;
     switch (rSource.GetCellType())
     {
-        case CELLTYPE_NOTE:
-            // note will be cloned below
-        break;
-
         case CELLTYPE_STRING:
         case CELLTYPE_EDIT:
             // note will be cloned below
@@ -960,8 +860,8 @@ void ScColumn::MixData( SCROW nRow1, SCROW nRow2,
         CellType eSrcType  = pSrc  ? pSrc->GetCellType()  : CELLTYPE_NONE;
         CellType eDestType = pDest ? pDest->GetCellType() : CELLTYPE_NONE;
 
-        sal_Bool bSrcEmpty = ( eSrcType == CELLTYPE_NONE || eSrcType == CELLTYPE_NOTE );
-        sal_Bool bDestEmpty = ( eDestType == CELLTYPE_NONE || eDestType == CELLTYPE_NOTE );
+        bool bSrcEmpty = (eSrcType == CELLTYPE_NONE);
+        bool bDestEmpty = (eDestType == CELLTYPE_NONE);
 
         if ( bSkipEmpty && bDestEmpty ) // Restore original row
         {
@@ -1060,10 +960,7 @@ void ScColumn::MixData( SCROW nRow1, SCROW nRow2,
         {
             if (pDest && !pNew) // Old cell present?
             {
-                if ( pDest->GetBroadcaster() )
-                    pNew = new ScNoteCell; // Take over Broadcaster
-                else
-                    Delete(nRow); // -> Delete
+                Delete(nRow); // -> Delete
             }
             if (pNew)
                 Insert(nRow, pNew); // Insert new one
@@ -1139,21 +1036,23 @@ void ScColumn::StartNeededListeners()
 
 void ScColumn::BroadcastInArea( SCROW nRow1, SCROW nRow2 )
 {
-    if ( !maItems.empty() )
+    if (maItems.empty())
+        return;
+
+    SCROW nRow;
+    SCSIZE nIndex;
+    if (!Search(nRow1, nIndex))
+        return;
+
+    while ( nIndex < maItems.size() && (nRow = maItems[nIndex].nRow) <= nRow2 )
     {
-        SCROW nRow;
-        SCSIZE nIndex;
-        Search( nRow1, nIndex );
-        while ( nIndex < maItems.size() && (nRow = maItems[nIndex].nRow) <= nRow2 )
-        {
-            ScBaseCell* pCell = maItems[nIndex].pCell;
-            if ( pCell->GetCellType() == CELLTYPE_FORMULA )
-                ((ScFormulaCell*)pCell)->SetDirty();
-            else
-                pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED,
-                    ScAddress(nCol, nRow, nTab), pCell->GetBroadcaster()));
-            nIndex++;
-        }
+        ScBaseCell* pCell = maItems[nIndex].pCell;
+        if ( pCell->GetCellType() == CELLTYPE_FORMULA )
+            ((ScFormulaCell*)pCell)->SetDirty();
+        else
+            pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED,
+                ScAddress(nCol, nRow, nTab), GetBroadcaster(nRow)));
+        nIndex++;
     }
 }
 
@@ -1271,8 +1170,6 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                                 aStr = ((ScStringCell*)pCell)->GetString();
                                 if ( rString == aStr )
                                     bIsText = true;
-                            break;
-                            case CELLTYPE_NOTE : // Referenced via = Formula
                             break;
                             default:
                                 if ( i == maItems.size() - 1 )
@@ -1392,25 +1289,10 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
         if (Search(nRow, i))
         {
             ScBaseCell* pOldCell = maItems[i].pCell;
-            SvtBroadcaster* pBC = pOldCell->ReleaseBroadcaster();
-            if (pNewCell || pBC)
+            if (pNewCell)
             {
-                if(!pNewCell)
-                    pNewCell = new ScNoteCell();
-
-                if (pBC)
-                {
-                    pNewCell->TakeBroadcaster(pBC);
-                    pLastFormulaTreeTop = 0; // Err527 Workaround
-                }
-
                 if ( pOldCell->GetCellType() == CELLTYPE_FORMULA )
-                {
                     static_cast<ScFormulaCell*>(pOldCell)->EndListeningTo(pDocument);
-                    // If in EndListening NoteCell destroyed in same in gleicher Col
-                    if ( i >= maItems.size() || maItems[i].nRow != nRow )
-                        Search(nRow, i);
-                }
 
                 pOldCell->Delete();
                 maItems[i].pCell = pNewCell; // Replace
@@ -1425,7 +1307,7 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                 }
                 else
                     pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED,
-                        ScAddress(nCol, nRow, nTabP), pNewCell->GetBroadcaster()));
+                        ScAddress(nCol, nRow, nTabP), GetBroadcaster(nRow)));
             }
             else
             {
@@ -1525,11 +1407,6 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, std::vector<ScTy
                     nValue = pFC->GetValue();
             }
             break;
-
-            // skip broadcaster cells
-            case CELLTYPE_NOTE:
-                continue;
-
             default:
                 ;
         }
@@ -1710,13 +1587,8 @@ void ScColumn::GetString( SCROW nRow, OUString& rString ) const
     {
         ScRefCellValue aCell;
         aCell.assign(*maItems[nIndex].pCell);
-        if (aCell.meType != CELLTYPE_NOTE)
-        {
-            sal_uLong nFormat = GetNumberFormat( nRow );
-            ScCellFormat::GetString(aCell, nFormat, rString, &pColor, *(pDocument->GetFormatTable()));
-        }
-        else
-            rString = EMPTY_OUSTRING;
+        sal_uLong nFormat = GetNumberFormat( nRow );
+        ScCellFormat::GetString(aCell, nFormat, rString, &pColor, *(pDocument->GetFormatTable()));
     }
     else
         rString = EMPTY_OUSTRING;
@@ -1755,13 +1627,8 @@ void ScColumn::GetInputString( SCROW nRow, OUString& rString ) const
     {
         ScRefCellValue aCell;
         aCell.assign(*maItems[nIndex].pCell);
-        if (aCell.meType != CELLTYPE_NOTE)
-        {
-            sal_uLong nFormat = GetNumberFormat( nRow );
-            ScCellFormat::GetInputString(aCell, nFormat, rString, *(pDocument->GetFormatTable()));
-        }
-        else
-            rString = OUString();
+        sal_uLong nFormat = GetNumberFormat( nRow );
+        ScCellFormat::GetInputString(aCell, nFormat, rString, *(pDocument->GetFormatTable()));
     }
     else
         rString = OUString();
@@ -1936,31 +1803,28 @@ sal_Int32 ScColumn::GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, CharSet eCh
         {
             ScRefCellValue aCell;
             aCell.assign(*maItems[nIndex].pCell);
-            if (aCell.meType != CELLTYPE_NOTE)
+            Color* pColor;
+            sal_uLong nFormat = (sal_uLong) ((SfxUInt32Item*) GetAttr(
+                nRow, ATTR_VALUE_FORMAT ))->GetValue();
+            ScCellFormat::GetString(aCell, nFormat, aString, &pColor, *pNumFmt);
+            sal_Int32 nLen;
+            if (bIsOctetTextEncoding)
             {
-                Color* pColor;
-                sal_uLong nFormat = (sal_uLong) ((SfxUInt32Item*) GetAttr(
-                    nRow, ATTR_VALUE_FORMAT ))->GetValue();
-                ScCellFormat::GetString(aCell, nFormat, aString, &pColor, *pNumFmt);
-                sal_Int32 nLen;
-                if (bIsOctetTextEncoding)
+                if (!aString.convertToString( &aOString, eCharSet,
+                            RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
+                            RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR))
                 {
-                    if (!aString.convertToString( &aOString, eCharSet,
-                                RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
-                                RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR))
-                    {
-                        // TODO: anything? this is used by the dBase export filter
-                        // that throws an error anyway, but in case of another
-                        // context we might want to indicate a conversion error
-                        // early.
-                    }
-                    nLen = aOString.getLength();
+                    // TODO: anything? this is used by the dBase export filter
+                    // that throws an error anyway, but in case of another
+                    // context we might want to indicate a conversion error
+                    // early.
                 }
-                else
-                    nLen = aString.getLength() * sizeof(sal_Unicode);
-                if ( nStringLen < nLen)
-                    nStringLen = nLen;
+                nLen = aOString.getLength();
             }
+            else
+                nLen = aString.getLength() * sizeof(sal_Unicode);
+            if ( nStringLen < nLen)
+                nStringLen = nLen;
             nIndex++;
         }
     }

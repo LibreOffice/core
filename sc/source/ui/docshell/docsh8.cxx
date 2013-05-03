@@ -1081,14 +1081,11 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, CharSet eCharS
                 {
                     case sdbc::DataType::LONGVARCHAR:
                         {
-                            if (pCell->meType != CELLTYPE_NOTE)
-                            {
-                                if (pCell->meType == CELLTYPE_EDIT)
-                                    lcl_getLongVarCharEditString(aString, *pCell, aEditEngine);
-                                else
-                                    lcl_getLongVarCharString(
-                                        aString, aDocument, nDocCol, nDocRow, nTab, *pNumFmt);
-                            }
+                            if (pCell->meType == CELLTYPE_EDIT)
+                                lcl_getLongVarCharEditString(aString, *pCell, aEditEngine);
+                            else
+                                lcl_getLongVarCharString(
+                                    aString, aDocument, nDocCol, nDocRow, nTab, *pNumFmt);
                         }
                         break;
 

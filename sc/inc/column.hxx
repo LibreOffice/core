@@ -119,8 +119,8 @@ struct ColDoubleEntry
 class ScColumn
 {
     // Broadcaster storage container
-    typedef mdds::mtv::custom_block_func1<sc::element_type_broadcaster, sc::custom_broadcaster_block> BroadcasterBlkFunc;
-    typedef mdds::multi_type_vector<BroadcasterBlkFunc> BroadcasterStoreType;
+    typedef mdds::mtv::custom_block_func1<sc::element_type_broadcaster, sc::custom_broadcaster_block> BCBlkFunc;
+    typedef mdds::multi_type_vector<BCBlkFunc> BCStoreType;
 
     typedef mdds::multi_type_vector<mdds::mtv::element_block_func> TextWidthType;
     typedef mdds::multi_type_vector<mdds::mtv::element_block_func> ScriptType;
@@ -133,7 +133,7 @@ class ScColumn
     // Script types are stored as unsigned char.
     ScriptType maScriptTypes;
 
-    BroadcasterStoreType maBroadcasters;
+    BCStoreType maBroadcasters;
 
     SCCOL           nCol;
     SCTAB           nTab;
@@ -472,6 +472,8 @@ public:
     ScRefCellValue GetRefCellValue( SCROW );
 
     void SetNumberFormat( SCROW nRow, sal_uInt32 nNumberFormat );
+
+    SvtBroadcaster* GetBroadcaster( SCROW nRow );
 
 private:
     const ScFormulaCell* FetchFormulaCell( SCROW nRow ) const;

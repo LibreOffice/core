@@ -444,8 +444,9 @@ void ScDocument::TrackFormulas( sal_uLong nHintId )
         pTrack = pFormulaTrack;
         do
         {
-            ScHint aHint( nHintId, pTrack->aPos, pTrack->GetBroadcaster() );
-            if ( ( pBC = pTrack->GetBroadcaster() ) != NULL )
+            pBC = GetBroadcaster(pTrack->aPos);
+            ScHint aHint(nHintId, pTrack->aPos, pBC);
+            if (pBC)
                 pBC->Broadcast( aHint );
             pBASM->AreaBroadcast( aHint );
             //  Repaint fuer bedingte Formate mit relativen Referenzen:

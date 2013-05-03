@@ -831,6 +831,8 @@ public:
 
     ScRefCellValue GetRefCellValue( SCCOL nCol, SCROW nRow );
 
+    SvtBroadcaster* GetBroadcaster( SCCOL nCol, SCROW nRow );
+
     /** Replace behaves differently to the Search; adjust the rCol and rRow accordingly.
 
         'Replace' replaces at the 'current' position, but in order to achieve

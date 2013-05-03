@@ -3737,32 +3737,29 @@ uno::Reference<sheet::XSheetCellRanges> ScCellRangesBase::QueryDifferences_Impl(
         ScCellIterator aCmpIter( pDoc, aCmpRange );
         for (bool bHasCell = aCmpIter.first(); bHasCell; bHasCell = aCmpIter.next())
         {
-            if (aCmpIter.getType() != CELLTYPE_NOTE)
-            {
-                SCCOLROW nCellPos = bColumnDiff ? static_cast<SCCOLROW>(aCmpIter.GetPos().Col()) : static_cast<SCCOLROW>(aCmpIter.GetPos().Row());
-                if (bColumnDiff)
-                    aCellRange = ScRange( static_cast<SCCOL>(nCellPos),0,nTab,
-                            static_cast<SCCOL>(nCellPos),MAXROW,nTab );
-                else
-                    aCellRange = ScRange( 0,nCellPos,nTab, MAXCOL,nCellPos,nTab );
+            SCCOLROW nCellPos = bColumnDiff ? static_cast<SCCOLROW>(aCmpIter.GetPos().Col()) : static_cast<SCCOLROW>(aCmpIter.GetPos().Row());
+            if (bColumnDiff)
+                aCellRange = ScRange( static_cast<SCCOL>(nCellPos),0,nTab,
+                        static_cast<SCCOL>(nCellPos),MAXROW,nTab );
+            else
+                aCellRange = ScRange( 0,nCellPos,nTab, MAXCOL,nCellPos,nTab );
 
-                for (i=0; i<nRangeCount; i++)
+            for (i=0; i<nRangeCount; i++)
+            {
+                ScRange aRange( *aRanges[ i ] );
+                if ( aRange.Intersects( aCellRange ) )
                 {
-                    ScRange aRange( *aRanges[ i ] );
-                    if ( aRange.Intersects( aCellRange ) )
+                    if (bColumnDiff)
                     {
-                        if (bColumnDiff)
-                        {
-                            aRange.aStart.SetCol(static_cast<SCCOL>(nCellPos));
-                            aRange.aEnd.SetCol(static_cast<SCCOL>(nCellPos));
-                        }
-                        else
-                        {
-                            aRange.aStart.SetRow(nCellPos);
-                            aRange.aEnd.SetRow(nCellPos);
-                        }
-                        aMarkData.SetMultiMarkArea( aRange );
+                        aRange.aStart.SetCol(static_cast<SCCOL>(nCellPos));
+                        aRange.aEnd.SetCol(static_cast<SCCOL>(nCellPos));
                     }
+                    else
+                    {
+                        aRange.aStart.SetRow(nCellPos);
+                        aRange.aEnd.SetRow(nCellPos);
+                    }
+                    aMarkData.SetMultiMarkArea( aRange );
                 }
             }
         }

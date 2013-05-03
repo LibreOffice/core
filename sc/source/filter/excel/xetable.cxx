@@ -2383,7 +2383,6 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
                 OSL_FAIL( "XclExpCellTable::XclExpCellTable - unknown cell type" );
                 // run-through!
             case CELLTYPE_NONE:
-            case CELLTYPE_NOTE:
             {
                 xCell.reset( new XclExpBlankCell(
                     GetRoot(), aXclPos, nLastXclCol, pPattern, nMergeBaseXFId ) );

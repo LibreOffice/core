@@ -1916,7 +1916,6 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
         bool bString;
         switch ( eType )
         {
-            case CELLTYPE_NOTE:
             case CELLTYPE_NONE:
                 aString = OUString();
                 bString = false;

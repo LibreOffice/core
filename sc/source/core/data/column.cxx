@@ -843,23 +843,6 @@ void ScColumn::ReserveSize( SCSIZE nSize )
     maItems.reserve(nSize);
 }
 
-
-namespace {
-
-/** Moves broadcaster from old cell to new cell if exists, otherwise creates a new note cell. */
-void lclTakeBroadcaster( ScBaseCell*& rpCell, SvtBroadcaster* pBC )
-{
-    if( pBC )
-    {
-        if( rpCell )
-            rpCell->TakeBroadcaster( pBC );
-        else
-            rpCell = new ScNoteCell( pBC );
-    }
-}
-
-} // namespace
-
 //  SwapRow for sorting
 void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
 {
@@ -907,19 +890,12 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
     // simple swap if no formula cells present
     if ( !pFmlaCell1 && !pFmlaCell2 )
     {
-        // remember cell broadcasters, must remain at old position
-        SvtBroadcaster* pBC1 = pCell1->ReleaseBroadcaster();
-
         if ( pCell2 )
         {
             /*  Both cells exist, no formula cells involved, a simple swap can
                 be performed (but keep broadcasters and notes at old position). */
             maItems[nIndex1].pCell = pCell2;
             maItems[nIndex2].pCell = pCell1;
-
-            SvtBroadcaster* pBC2 = pCell2->ReleaseBroadcaster();
-            pCell1->TakeBroadcaster( pBC2 );
-            pCell2->TakeBroadcaster( pBC1 );
 
             // Swap text width values.
             unsigned short nVal1 = maTextWidths.get<unsigned short>(nRow1);
@@ -937,19 +913,10 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
             // Only cell 1 exists; cell 2 is empty.  Move cell 1 from to row
             // 2.
 
-            ScNoteCell* pDummyCell = pBC1 ? new ScNoteCell( pBC1 ) : 0;
-            if ( pDummyCell )
-            {
-                // insert dummy note cell (without note) containing old broadcaster
-                maItems[nIndex1].pCell = pDummyCell;
-            }
-            else
-            {
-                // remove ColEntry at old position
-                maItems.erase( maItems.begin() + nIndex1 );
-                maTextWidths.set_empty(nRow1, nRow1);
-                maScriptTypes.set_empty(nRow1, nRow1);
-            }
+            // remove ColEntry at old position
+            maItems.erase( maItems.begin() + nIndex1 );
+            maTextWidths.set_empty(nRow1, nRow1);
+            maScriptTypes.set_empty(nRow1, nRow1);
 
             // Empty text width at the cell 1 position.  For now, we don't
             // transfer the old value to the cell 2 position since Insert() is
@@ -1011,12 +978,6 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
     {
         pNew1 = pCell2->Clone( *pDocument, aPos1, SC_CLONECELL_ADJUST3DREL );
     }
-
-    // move old broadcasters new cells at the same old position
-    SvtBroadcaster* pBC1 = pCell1->ReleaseBroadcaster();
-    lclTakeBroadcaster( pNew1, pBC1 );
-    SvtBroadcaster* pBC2 = pCell2 ? pCell2->ReleaseBroadcaster() : 0;
-    lclTakeBroadcaster( pNew2, pBC2 );
 
     /*  Insert the new cells. Old cell has to be deleted, if there is no new
         cell (call to Insert deletes old cell by itself). */
@@ -1245,14 +1206,13 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
 
         for (i = 0; i < nDelCount; i++)
         {
-            ScBaseCell* pCell = ppDelCells[i];
-            OSL_ENSURE( pCell->IsBlank(), "visible cell moved away" );
-            SvtBroadcaster* pBC = pCell->GetBroadcaster();
+            SCROW nDelRow = pDelRows[i];
+            SvtBroadcaster* pBC = GetBroadcaster(nDelRow);
             if (pBC)
             {
                 MoveListeners( *pBC, pDelRows[i] - nSize );
-                pCell->DeleteBroadcaster();
-                pCell->Delete();
+                maBroadcasters.set_empty(nDelRow, nDelRow);
+                ppDelCells[i]->Delete();
             }
         }
 
@@ -1773,7 +1733,6 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
         ScAddress aAdr( nCol, 0, nTab );
         ScHint aHint( SC_HINT_DYING, aAdr, NULL );  // areas only
         ScAddress& rAddress = aHint.GetAddress();
-        ScNoteCell* pNoteCell = new ScNoteCell;     // Dummy like in DeleteRange
 
         // must iterate backwards, because indexes of following cells become invalid
         bool bErased = false;
@@ -1783,8 +1742,6 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
             nStartPos = (*it).first;
             nStopPos = (*it).second;
             for (i=nStartPos; i<nStopPos; ++i)
-                maItems[i].pCell = pNoteCell; // Assign the dumpy cell instance to all slots.
-            for (i=nStartPos; i<nStopPos; ++i)
             {
                 rAddress.SetRow( maItems[i].nRow );
                 pDocument->AreaBroadcast( aHint );
@@ -1793,7 +1750,6 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
             maItems.erase(maItems.begin() + nStartPos, maItems.begin() + nStopPos);
             bErased = true;
         }
-        pNoteCell->Delete(); // Delete the dummy cell instance.
 
         if (bErased)
         {
@@ -2175,7 +2131,7 @@ void ScColumn::SetDirty( const ScRange& rRange )
         else
         {
             aHint.GetAddress().SetRow( nRow );
-            aHint.SetBroadcaster(pCell->GetBroadcaster());
+            aHint.SetBroadcaster(maBroadcasters.get<SvtBroadcaster*>(nRow));
             pDocument->Broadcast( aHint );
         }
         nIndex++;
@@ -2204,7 +2160,7 @@ void ScColumn::SetTableOpDirty( const ScRange& rRange )
         else
         {
             aHint.GetAddress().SetRow( nRow );
-            aHint.SetBroadcaster(pCell->GetBroadcaster());
+            aHint.SetBroadcaster(maBroadcasters.get<SvtBroadcaster*>(nRow));
             pDocument->Broadcast( aHint );
         }
         nIndex++;

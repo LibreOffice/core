@@ -81,7 +81,6 @@ const ScAutoNameAddresses& ScAutoNameCache::GetNameOccurrences( const String& rN
                 break;
                 case CELLTYPE_NONE:
                 case CELLTYPE_VALUE:
-                case CELLTYPE_NOTE:
 #if OSL_DEBUG_LEVEL > 0
                 case CELLTYPE_DESTROYED:
 #endif

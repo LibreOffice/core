@@ -177,7 +177,6 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
     ScAddress aPos(nCol, nRow, nTab);
     switch (pDoc->GetCellType(aPos))
     {
-        case CELLTYPE_NOTE:
         case CELLTYPE_NONE:
             bValueData = false;
         break;

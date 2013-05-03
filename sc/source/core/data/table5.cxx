@@ -1166,7 +1166,7 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
             switch ( pCell->GetCellType() )
             {
                 case CELLTYPE_VALUE :
-                    pDocument->Broadcast(ScHint(SC_HINT_DATACHANGED, ScAddress(nCol, nRow, nTab), pCell->GetBroadcaster()));
+                    pDocument->Broadcast(ScHint(SC_HINT_DATACHANGED, ScAddress(nCol, nRow, nTab), GetBroadcaster(nCol, nRow)));
                     break;
                 case CELLTYPE_FORMULA :
                     ((ScFormulaCell*)pCell)->SetDirty();
@@ -1209,7 +1209,7 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
                 {
                     case CELLTYPE_VALUE :
                         pDocument->Broadcast(
-                            ScHint(SC_HINT_DATACHANGED, ScAddress(nCol, nRow, nTab), pCell->GetBroadcaster()));
+                            ScHint(SC_HINT_DATACHANGED, ScAddress(nCol, nRow, nTab), GetBroadcaster(nCol, nRow)));
                         break;
                     case CELLTYPE_FORMULA :
                         ((ScFormulaCell*)pCell)->SetDirty();
