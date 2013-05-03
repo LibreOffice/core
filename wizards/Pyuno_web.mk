@@ -57,6 +57,9 @@ $(eval $(call gb_Pyuno_add_files,web,wizards/web,\
 	export/Exporter.py \
 	export/AbstractExporter.py \
 	export/CopyExporter.py \
+	export/FilterExporter.py \
+	export/ConfiguredExporter.py \
+	export/ImpressHTMLExporter.py \
 	export/__init__.py \
 ))
 $(eval $(call gb_Pyuno_set_componentfile_full,web,wizards/com/sun/star/wizards/web/web,vnd.openoffice.pymodule:wizards.web,.CallWizard))
