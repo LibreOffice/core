@@ -155,14 +155,14 @@ static FltError lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
     if( bBiff8 )
     {
         aStrmName = EXC_STREAM_WORKBOOK;
-        aClipName = CREATE_STRING( "Biff8" );
-        aClassName = CREATE_STRING( "Microsoft Excel 97-Tabelle" );
+        aClipName = "Biff8";
+        aClassName = "Microsoft Excel 97-Tabelle";
     }
     else
     {
         aStrmName = EXC_STREAM_BOOK;
-        aClipName = CREATE_STRING( "Biff5" );
-        aClassName = CREATE_STRING( "Microsoft Excel 5.0-Tabelle" );
+        aClipName = "Biff5";
+        aClassName = "Microsoft Excel 5.0-Tabelle";
     }
 
     // open the "Book"/"Workbook" stream

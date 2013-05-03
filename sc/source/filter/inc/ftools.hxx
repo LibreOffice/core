@@ -34,9 +34,6 @@
 
 // Common macros ==============================================================
 
-/** Expands to a temporary String, created from an ASCII character array. */
-#define CREATE_STRING( ascii )      String( RTL_CONSTASCII_USTRINGPARAM( ascii ) )
-
 // items and item sets --------------------------------------------------------
 
 /** Expands to the item (with type 'itemtype') with Which-ID 'which'. */

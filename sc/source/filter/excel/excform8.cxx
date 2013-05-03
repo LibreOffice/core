@@ -164,7 +164,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
 
     if( nFormulaLen == 0 )
     {
-        aPool.Store( CREATE_STRING( "-/-" ) );
+        aPool.Store( String( "-/-" ) );
         aPool >> aStack;
         rpTokArray = aPool[ aStack.Get() ];
         return ConvOK;
@@ -1293,7 +1293,7 @@ ConvErr ExcelToSc8::ConvertExternName( const ScTokenArray*& rpArray, XclImpStrea
 
     if (nFormulaLen == 0)
     {
-        aPool.Store(CREATE_STRING("-/-"));
+        aPool.Store(String("-/-"));
         aPool >> aStack;
         rpArray = aPool[aStack.Get()];
         return ConvOK;

@@ -1111,7 +1111,7 @@ void XclImpChText::ConvertDataLabel( ScfPropertySet& rPropSet, const XclChTypeIn
     rPropSet.SetProperty( EXC_CHPROP_LABEL, aPointLabel );
     String aSep = mxLabelProps ? mxLabelProps->maSeparator : OUString('\n');
     if( aSep.Len() == 0 )
-        aSep = CREATE_STRING( "; " );
+        aSep = "; ";
     rPropSet.SetStringProperty( EXC_CHPROP_LABELSEPARATOR, aSep );
 
     // text properties of attached label
@@ -3547,7 +3547,7 @@ void XclImpChAxesSet::Finalize()
 
         // finalize axis titles
         const XclImpChText* pDefText = GetChartData().GetDefaultText( EXC_CHTEXTTYPE_AXISTITLE );
-        String aAutoTitle = CREATE_STRING( "Axis Title" );
+        String aAutoTitle("Axis Title");
         lclFinalizeTitle( mxXAxisTitle, pDefText, aAutoTitle );
         lclFinalizeTitle( mxYAxisTitle, pDefText, aAutoTitle );
         lclFinalizeTitle( mxZAxisTitle, pDefText, aAutoTitle );
@@ -4146,7 +4146,7 @@ void XclImpChChart::FinalizeTitle()
             if( !mxTitle )
                 mxTitle.reset( new XclImpChText( GetChRoot() ) );
             if( aAutoTitle.Len() == 0 )
-                aAutoTitle = CREATE_STRING( "Chart Title" );
+                aAutoTitle = "Chart Title";
         }
     }
 

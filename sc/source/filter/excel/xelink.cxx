@@ -1058,7 +1058,7 @@ sal_uInt16 XclExpExtNameBuffer::InsertDde(
             // create the leading 'StdDocumentName' EXTERNNAME record
             if( maNameList.IsEmpty() )
                 AppendNew( new XclExpExtNameDde(
-                    GetRoot(), CREATE_STRING( "StdDocumentName" ), EXC_EXTN_EXPDDE_STDDOC ) );
+                    GetRoot(), String("StdDocumentName"), EXC_EXTN_EXPDDE_STDDOC ) );
 
             // try to find DDE result array, but create EXTERNNAME record without them too
             const ScMatrix* pScMatrix = GetDoc().GetDdeLinkResultMatrix( nPos );

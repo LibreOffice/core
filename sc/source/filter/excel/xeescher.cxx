@@ -540,7 +540,7 @@ XclExpOcxControlObj::XclExpOcxControlObj( XclExpObjectManager& rObjMgr, Referenc
     // meta file
     //! TODO - needs check
     Reference< XPropertySet > xShapePS( xShape, UNO_QUERY );
-    if( xShapePS.is() && aPropOpt.CreateGraphicProperties( xShapePS, CREATE_STRING( "MetaFile" ), false ) )
+    if( xShapePS.is() && aPropOpt.CreateGraphicProperties( xShapePS, String( "MetaFile" ), false ) )
     {
         sal_uInt32 nBlipId;
         if( aPropOpt.GetOpt( ESCHER_Prop_pib, nBlipId ) )

@@ -578,7 +578,7 @@ void ScHTMLExport::WriteBody()
                 // Grafik als (JPG-)File speichern
                 aGrfNm = aStreamPath;
                 sal_uInt16 nErr = XOutBitmap::WriteGraphic( *pGrf, aGrfNm,
-                    CREATE_STRING( "JPG" ), XOUTBMP_USE_NATIVE_IF_POSSIBLE );
+                    String("JPG"), XOUTBMP_USE_NATIVE_IF_POSSIBLE );
                 if( !nErr )     // fehlerhaft, da ist nichts auszugeben
                 {
                     aGrfNm = URIHelper::SmartRel2Abs(
@@ -841,7 +841,7 @@ void ScHTMLExport::WriteTables()
         }
 
         if ( bAll )
-            OUT_COMMENT( CREATE_STRING( "**************************************************************************" ) );
+            OUT_COMMENT( String("**************************************************************************") );
     }
 }
 

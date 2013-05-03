@@ -82,7 +82,7 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     mrMedium( rMedium ),
     mxRootStrg( xRootStrg ),
     mrDoc( rDoc ),
-    maDefPassword( CREATE_STRING( "VelvetSweatshop" ) ),
+    maDefPassword( "VelvetSweatshop" ),
     meTextEnc( eTextEnc ),
     meSysLang( Application::GetSettings().GetLanguageTag().getLanguageType() ),
     meDocLang( Application::GetSettings().GetLanguageTag().getLanguageType() ),
@@ -102,7 +102,7 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
 {
  maUserName = SvtUserOptions().GetLastName();
     if( maUserName.Len() == 0 )
-        maUserName = CREATE_STRING( "Calc" );
+        maUserName = "Calc";
 
     switch( ScGlobal::GetDefaultScriptType() )
     {

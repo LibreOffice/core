@@ -41,7 +41,7 @@ class XclExpStream;
 
 // misc -----------------------------------------------------------------------
 
-#define EXC_STORAGE_PTCACHE         CREATE_STRING( "_SX_DB_CUR" )
+#define EXC_STORAGE_PTCACHE         String( "_SX_DB_CUR" )
 
 // strings
 const sal_uInt16 EXC_PT_NOSTRING            = 0xFFFF;
