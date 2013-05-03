@@ -178,13 +178,13 @@ void ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
         nSortKeyCount = aSortData.maKeyState.size();
         FillFieldLists(0);
 
+
         for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
         {
             if (aSortData.maKeyState[i].bDoSort )
             {
                 maSortKeyItems[i].m_pLbSort->SelectEntryPos( GetFieldSelPos(
                                     aSortData.maKeyState[i].nField ) );
-
                 (aSortData.maKeyState[i].bAscending)
                     ? maSortKeyItems[i].m_pBtnUp->Check()
                     : maSortKeyItems[i].m_pBtnDown->Check();
@@ -234,6 +234,10 @@ void ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
         pDlg->SetByRows ( bSortByRows );
         pDlg->SetHeaders( bHasHeader );
     }
+
+    // Make sure that there is always a last undefined sort key
+    if ( maSortKeyItems[nSortKeyCount - 1].m_pLbSort->GetSelectEntryPos() > 0 )
+        SetLastSortKey( nSortKeyCount );
 }
 
 // -----------------------------------------------------------------------
@@ -443,6 +447,25 @@ sal_uInt16 ScTabPageSortFields::GetFieldSelPos( SCCOLROW nField )
     return nFieldPos;
 }
 
+void ScTabPageSortFields::SetLastSortKey( sal_uInt16 nItem )
+{
+    // Extend local SortParam copy
+    const ScSortKeyState atempKeyState = { false, 0, true };
+    aSortData.maKeyState.push_back( atempKeyState );
+
+    // Add Sort Key Item
+    ++nSortKeyCount;
+    maSortKeyCtrl.AddSortKey( nSortKeyCount );
+    maSortKeyItems[nItem].m_pLbSort->SetSelectHdl(
+                     LINK( this, ScTabPageSortFields, SelectHdl ) );
+
+    FillFieldLists( nItem );
+
+    // Set Status
+    maSortKeyItems[nItem].m_pBtnUp->Check();
+    maSortKeyItems[nItem].m_pLbSort->SelectEntryPos( 0 );
+}
+
 // -----------------------------------------------------------------------
 // Handler:
 //---------
@@ -451,26 +474,12 @@ IMPL_LINK( ScTabPageSortFields, SelectHdl, ListBox *, pLb )
 {
     OUString aSelEntry = pLb->GetSelectEntry();
     ScSortKeyItems::iterator pIter;
-    sal_uInt16 nSortKeyIndex = nSortKeyCount;
 
     // If last listbox is enabled add one item
     if ( maSortKeyItems.back().m_pLbSort == pLb )
         if ( aSelEntry != aStrUndefined )
         {
-            // Extend local SortParam copy
-            const ScSortKeyState atempKeyState = { false, 0, true };
-            aSortData.maKeyState.push_back( atempKeyState );
-
-            // Add Sort Key Item
-            ++nSortKeyCount;
-            maSortKeyCtrl.AddSortKey( nSortKeyCount );
-            maSortKeyItems[nSortKeyIndex].m_pLbSort->SetSelectHdl( LINK( this, ScTabPageSortFields, SelectHdl ) );
-
-            FillFieldLists( nSortKeyIndex );
-
-            // Set Status
-            maSortKeyItems[nSortKeyIndex].m_pBtnUp->Check();
-            maSortKeyItems[nSortKeyIndex].m_pLbSort->SelectEntryPos( 0 );
+            SetLastSortKey( nSortKeyCount );
             return 0;
         }
 
