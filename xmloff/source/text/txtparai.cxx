@@ -774,7 +774,7 @@ void XMLMetaImportContextBase::StartElement(
 
 void XMLMetaImportContextBase::EndElement()
 {
-    OSL_ENSURE(m_xStart.is(), "no mxStart?");
+    SAL_WARN_IF(!m_xStart.is(), "xmloff.text", "no mxStart?");
     if (!m_xStart.is()) return;
 
     const Reference<XTextRange> xEndRange(
@@ -894,8 +894,7 @@ void XMLMetaImportContext::ProcessAttribute(sal_uInt16 const i_nPrefix,
 void XMLMetaImportContext::InsertMeta(
     const Reference<XTextRange> & i_xInsertionRange)
 {
-    OSL_ENSURE(!m_bHaveAbout == !m_sProperty.getLength(),
-        "XMLMetaImportContext::InsertMeta: invalid RDFa?");
+    SAL_WARN_IF(m_bHaveAbout == m_sProperty.isEmpty(), "xmloff.text", "XMLMetaImportContext::InsertMeta: invalid RDFa?");
     if (!m_XmlId.isEmpty() || (m_bHaveAbout && !m_sProperty.isEmpty()))
     {
         // insert mark
@@ -907,7 +906,7 @@ void XMLMetaImportContext::InsertMeta(
                 OUString(),
                 i_xInsertionRange, m_XmlId),
             uno::UNO_QUERY);
-        OSL_ENSURE(xMeta.is(), "cannot insert Meta?");
+        SAL_WARN_IF(!xMeta.is(), "xmloff.text", "cannot insert Meta?");
 
         if (xMeta.is() && m_bHaveAbout)
         {
@@ -917,7 +916,7 @@ void XMLMetaImportContext::InsertMeta(
     }
     else
     {
-        OSL_TRACE("invalid <text:meta>: no xml:id, no valid RDFa");
+        SAL_INFO("xmloff.text", "invalid <text:meta>: no xml:id, no valid RDFa");
     }
 }
 
@@ -986,7 +985,7 @@ void XMLMetaFieldImportContext::InsertMeta(
                 OUString(),
                 i_xInsertionRange, m_XmlId),
             UNO_QUERY);
-        OSL_ENSURE(xPropertySet.is(), "cannot insert MetaField?");
+        SAL_WARN_IF(!xPropertySet.is(), "xmloff.text", "cannot insert MetaField?");
         if (!xPropertySet.is()) return;
 
         if (!m_DataStyleName.isEmpty())
@@ -1016,7 +1015,7 @@ void XMLMetaFieldImportContext::InsertMeta(
     }
     else
     {
-        OSL_TRACE("invalid <text:meta-field>: no xml:id");
+        SAL_INFO("xmloff.text", "invalid <text:meta-field>: no xml:id");
     }
 }
 
@@ -1173,7 +1172,7 @@ void XMLIndexMarkImportContext_Impl::StartElement(
         }
 
         default:
-            OSL_FAIL("unknown index mark type!");
+            SAL_WARN("xmloff.text", "unknown index mark type!");
             break;
     }
 }
@@ -1233,7 +1232,7 @@ void XMLIndexMarkImportContext_Impl::ProcessAttribute(
             break;
 
         default:
-            OSL_FAIL("unknown index mark type!");
+            SAL_WARN("xmloff.text", "unknown index mark type!");
             break;
     }
 }
@@ -1284,7 +1283,7 @@ void XMLIndexMarkImportContext_Impl::GetServiceName(
 
         default:
         {
-            OSL_FAIL("unknown index mark type!");
+            SAL_WARN("xmloff.text", "unknown index mark type!");
             OUString sTmp;
             sServiceName = sTmp;
             break;
@@ -1353,7 +1352,7 @@ void XMLTOCMarkImportContext_Impl::ProcessAttribute(
     OUString sValue,
     Reference<beans::XPropertySet>& rPropSet)
 {
-    DBG_ASSERT(rPropSet.is(), "need PropertySet");
+    SAL_WARN_IF(!rPropSet.is(), "xmloff.text", "need PropertySet");
 
     if ((XML_NAMESPACE_TEXT == nNamespace) &&
         IsXMLToken( sLocalName, XML_OUTLINE_LEVEL ) )
@@ -2035,21 +2034,21 @@ XMLParaContext::~XMLParaContext()
                 (xAttrCursor, uno::UNO_QUERY_THROW);
             const uno::Reference<container::XEnumeration> xEnum(
                 xEA->createEnumeration(), uno::UNO_QUERY_THROW);
-            OSL_ENSURE(xEnum->hasMoreElements(), "xml:id: no paragraph?");
+            SAL_WARN_IF(!xEnum->hasMoreElements(), "xmloff.text", "xml:id: no paragraph?");
             if (xEnum->hasMoreElements()) {
                 uno::Reference<rdf::XMetadatable> xMeta;
                 xEnum->nextElement() >>= xMeta;
-                OSL_ENSURE(xMeta.is(), "xml:id: not XMetadatable");
+                SAL_WARN_IF(!xMeta.is(), "xmloff.text", "xml:id: not XMetadatable");
                 GetImport().SetXmlId(xMeta, m_sXmlId);
                 if (m_bHaveAbout)
                 {
                     GetImport().AddRDFa(xMeta,
                         m_sAbout, m_sProperty, m_sContent, m_sDatatype);
                 }
-                OSL_ENSURE(!xEnum->hasMoreElements(), "xml:id: > 1 paragraph?");
+                SAL_WARN_IF(xEnum->hasMoreElements(), "xmloff.text", "xml:id: > 1 paragraph?");
             }
         } catch (const uno::Exception &) {
-            OSL_TRACE("XMLParaContext::~XMLParaContext: exception");
+            SAL_INFO("xmloff.text", "XMLParaContext::~XMLParaContext: exception");
         }
     }
 
@@ -2265,7 +2264,7 @@ XMLParaContext::~XMLParaContext()
                 }
                 break;
             default:
-                DBG_ASSERT( !this, "What's this" );
+                SAL_WARN( "xmloff.text", "What's this" );
                 break;
             }
         }
@@ -2368,10 +2367,10 @@ XMLNumberedParaContext::XMLNumberedParaContext(
         i_rImport.GetTextImport()->GetTextListHelper() );
     if (m_ListId.isEmpty())
       {
-        OSL_ENSURE( i_rImport.GetODFVersion() != "1.2", "invalid numbered-paragraph: no list-id (1.2)" );
+        SAL_WARN_IF( i_rImport.GetODFVersion() == "1.2", "xmloff.text", "invalid numbered-paragraph: no list-id (1.2)" );
         m_ListId = rTextListsHelper.GetNumberedParagraphListId(m_Level,
             StyleName);
-        OSL_ENSURE(!m_ListId.isEmpty(), "numbered-paragraph: no ListId");
+        SAL_WARN_IF(m_ListId.isEmpty(), "xmloff.text", "numbered-paragraph: no ListId");
         if (m_ListId.isEmpty()) {
             return;
         }
@@ -2379,7 +2378,7 @@ XMLNumberedParaContext::XMLNumberedParaContext(
     m_xNumRules = rTextListsHelper.EnsureNumberedParagraph( i_rImport,
         m_ListId, m_Level, StyleName);
 
-    OSL_ENSURE(m_xNumRules.is(), "numbered-paragraph: no NumRules");
+    SAL_WARN_IF(!m_xNumRules.is(), "xmloff.text", "numbered-paragraph: no NumRules");
 
     i_rImport.GetTextImport()->GetTextListHelper().PushListContext( this );
 }
