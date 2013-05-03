@@ -415,27 +415,7 @@ void ScValueIterator::GetCurNumFmtInfo( short& nType, sal_uLong& nIndex )
     {
         const ScColumn* pCol = &(pDoc->maTabs[nTab])->aCol[nCol];
         nNumFmtIndex = pCol->GetNumberFormat( nRow );
-        if ( (nNumFmtIndex % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
-        {
-            const ScBaseCell* pCell;
-            SCSIZE nIdx = nColRow - 1;
-            // Something might have rearranged; be on the safe side
-            if ( nIdx < pCol->maItems.size() && pCol->maItems[nIdx].nRow == nRow )
-                pCell = pCol->maItems[nIdx].pCell;
-            else
-            {
-                if ( pCol->Search( nRow, nIdx ) )
-                    pCell = pCol->maItems[nIdx].pCell;
-                else
-                    pCell = NULL;
-            }
-            if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
-                ((const ScFormulaCell*)pCell)->GetFormatInfo( nNumFmtType, nNumFmtIndex );
-            else
-                nNumFmtType = pDoc->GetFormatTable()->GetType( nNumFmtIndex );
-        }
-        else
-            nNumFmtType = pDoc->GetFormatTable()->GetType( nNumFmtIndex );
+        nNumFmtType = pDoc->GetFormatTable()->GetType( nNumFmtIndex );
         bNumValid = true;
     }
     nType = nNumFmtType;
@@ -612,8 +592,7 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
                                 rValue.mfValue = ((ScFormulaCell*)pCell)->GetValue();
                                 rValue.mbIsNumber = true;
                                 mpDoc->GetNumberFormatInfo( nNumFmtType,
-                                    nNumFmtIndex, ScAddress(nCol, nRow, nTab),
-                                    static_cast<ScFormulaCell*>(pCell));
+                                    nNumFmtIndex, ScAddress(nCol, nRow, nTab));
                                 rValue.mnError = ((ScFormulaCell*)pCell)->GetErrCode();
                                 return true; // Found it!
                             }

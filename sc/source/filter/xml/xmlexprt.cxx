@@ -2929,33 +2929,14 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                         bool bIsStandard;
                         OUString sCurrency;
                         GetNumberFormatAttributesExportHelper()->GetCellType(aCell.nNumberFormat, sCurrency, bIsStandard);
-                        if (bIsStandard)
+                        if (pDoc)
                         {
-                            if (pDoc)
+                            GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
+                                    aCell.nNumberFormat, pDoc->GetValue( aCellPos ));
+                            if( getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
                             {
                                 GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                                    pFormulaCell->GetStandardFormat(*pDoc->GetFormatTable(), 0),
-                                    pDoc->GetValue( aCellPos ));
-                                if( getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
-                                {
-                                    GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                                            pFormulaCell->GetStandardFormat(*pDoc->GetFormatTable(), 0),
-                                            pDoc->GetValue( aCellPos ), false, XML_NAMESPACE_CALC_EXT, false);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (pDoc)
-                            {
-                                GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                                        aCell.nNumberFormat, pDoc->GetValue( aCellPos ));
-                                if( getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
-                                {
-                                    GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                                            aCell.nNumberFormat, pDoc->GetValue( aCellPos ), false, XML_NAMESPACE_CALC_EXT, false );
-
-                                }
+                                        aCell.nNumberFormat, pDoc->GetValue( aCellPos ), false, XML_NAMESPACE_CALC_EXT, false );
                             }
                         }
                     }

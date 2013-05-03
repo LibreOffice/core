@@ -1116,6 +1116,7 @@ void ScXMLTableRowCellContext::PutValueCell( const ScAddress& rCurrentPos )
         {
             ScFormulaCell* pFCell = rXMLImport.GetDocument()->GetFormulaCell(rCurrentPos);
             SetFormulaCell(pFCell);
+            pFCell->SetNeedNumberFormat( true );
         }
     }
     else  //regular value cell
@@ -1347,6 +1348,7 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
             ScFormulaCell* pNewCell = new ScFormulaCell(pDoc, rCellPos, pCode.get(), eGrammar, MM_NONE);
             SetFormulaCell(pNewCell);
             pDoc->SetFormulaCell(rCellPos, pNewCell);
+            pNewCell->SetNeedNumberFormat( true );
         }
         else if ( aText[0] == '\'' && aText.getLength() > 1 )
         {

@@ -155,7 +155,7 @@ public:
     const Size&             GetTextSize() const     { return aTextSize; }
     long                    GetOriginalWidth() const { return nOriginalWidth; }
 
-    sal_uLong GetResultValueFormat( const ScRefCellValue& rCell ) const;
+    sal_uLong GetResultValueFormat() const;
 
     sal_uLong   GetValueFormat() const                  { return nValueFormat; }
     sal_Bool    GetLineBreak() const                    { return bLineBreak; }
@@ -596,18 +596,9 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScRefCellValue& rCell, long nWidth
         // If it's formula, the result must be a value.
         if (!pFCell->IsValue())
             return;
-
-        if (pFCell->GetFormatType() != NUMBERFORMAT_NUMBER)
-        {
-            // Make sure the format type implicitly set by the interpreter is
-            // of pure numeric type.  We don't want to adjust date and time
-            // values here.
-            SetHashText();
-            return;
-        }
     }
 
-    sal_uLong nFormat = GetResultValueFormat(rCell);
+    sal_uLong nFormat = GetResultValueFormat();
     if ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
     {
         // Not 'General' number format.  Set hash text and bail out.
@@ -793,15 +784,12 @@ sal_Bool ScDrawStringsVars::HasEditCharacters() const
     return aString.SearchChar( pChars ) != STRING_NOTFOUND;
 }
 
-sal_uLong ScDrawStringsVars::GetResultValueFormat( const ScRefCellValue& rCell ) const
+sal_uLong ScDrawStringsVars::GetResultValueFormat() const
 {
     // Get the effective number format, including formula result types.
     // This assumes that a formula cell has already been calculated.
 
-    if ((nValueFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 && rCell.meType == CELLTYPE_FORMULA)
-        return rCell.mpFormula->GetStandardFormat(*pOutput->mpDoc->GetFormatTable(), nValueFormat);
-    else
-        return nValueFormat;
+    return nValueFormat;
 }
 
 //==================================================================
@@ -1685,7 +1673,7 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
 
                     bool bBreak = ( aVars.GetLineBreak() || aVars.GetHorJust() == SVX_HOR_JUSTIFY_BLOCK );
                     // #i111387# #o11817313# disable automatic line breaks only for "General" number format
-                    if (bBreak && bCellIsValue && (aVars.GetResultValueFormat(aCell) % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
+                    if (bBreak && bCellIsValue && (aVars.GetResultValueFormat() % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
                         bBreak = false;
 
                     bool bRepeat = aVars.IsRepeat() && !bBreak;

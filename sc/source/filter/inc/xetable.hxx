@@ -451,8 +451,7 @@ class XclExpFormulaCell : public XclExpSingleCellBase
 
 public:
     explicit            XclExpFormulaCell( const XclExpRoot& rRoot, const XclAddress& rXclPos,
-                            const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId,
-                            const ScFormulaCell& rScFmlaCell,
+                            sal_uInt32 nForcedXFId, const ScFormulaCell& rScFmlaCell,
                             XclExpArrayBuffer& rArrayBfr,
                             XclExpShrfmlaBuffer& rShrfmlaBfr,
                             XclExpTableopBuffer& rTableopBfr );
