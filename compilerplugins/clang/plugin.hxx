@@ -101,7 +101,7 @@ class RewritePlugin
         bool insertTextAfterToken( SourceLocation Loc, StringRef Str );
         bool insertTextBefore( SourceLocation Loc, StringRef Str );
         bool removeText( SourceLocation Start, unsigned Length, RewriteOptions opts = RewriteOptions());
-        // CharSourceRange not supported, unless really needed, as it makes RemoveSemicolon more complicated
+        // CharSourceRange not supported, unless really needed, as it needs handling for RemoveWholeStatement.
         //bool removeText( CharSourceRange range, RewriteOptions opts = RewriteOptions());
         bool removeText( SourceRange range, RewriteOptions opts = RewriteOptions());
         bool replaceText( SourceLocation Start, unsigned OrigLength, StringRef NewStr );

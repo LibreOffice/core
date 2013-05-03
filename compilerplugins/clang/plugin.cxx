@@ -105,9 +105,22 @@ bool RewritePlugin::insertTextBefore( SourceLocation Loc, StringRef Str )
     return true;
     }
 
+// These two removeText() overloads should not be merged into one, as the SourceRange
+// one uses a token range (which counts token length for some reason), so exact length
+// given to this overload would not match afterwards.
 bool RewritePlugin::removeText( SourceLocation Start, unsigned Length, RewriteOptions opts )
     {
-    return removeText( SourceRange( Start, Start.getLocWithOffset( Length )), opts );
+    if( opts.RemoveWholeStatement )
+        {
+        SourceRange range( Start, Start.getLocWithOffset( Length - 1 ));
+        if( !adjustForWholeStatement( &range ))
+            return reportEditFailure( Start );
+        Start = range.getBegin();
+        Length = range.getEnd().getRawEncoding() - range.getBegin().getRawEncoding();
+        }
+    if( rewriter.RemoveText( Start, Length, opts ))
+        return reportEditFailure( Start );
+    return true;
     }
 
 bool RewritePlugin::removeText( SourceRange range, RewriteOptions opts )
