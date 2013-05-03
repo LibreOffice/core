@@ -18,7 +18,6 @@
  */
 
 #include "custsdlg.hxx"
-#include "custsdlg.hrc"
 
 #include "strings.hrc"
 #include "sdresid.hxx"

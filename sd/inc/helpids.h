@@ -75,9 +75,6 @@
 
 #define HID_SD_WIN_PRESENTATION                                 "SD_HID_SD_WIN_PRESENTATION"
 
-#define HID_DLG_DEFINE_CUSTOMSHOW                               "SD_HID_DLG_DEFINE_CUSTOMSHOW"
-#define HID_DLG_DEFINE_CUSTOMSHOW_CTL                           "SD_HID_DLG_DEFINE_CUSTOMSHOW_CTL"
-
 #define HID_CTL_ACTION_DLG_1                                    "SD_HID_CTL_ACTION_DLG_1"
 #define HID_CTL_ACTION_DLG_2                                    "SD_HID_CTL_ACTION_DLG_2"
 

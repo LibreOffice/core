@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkDialog" id="DefineCustomSlideShow">
     <property name="can_focus">False</property>
-    <property name="border_width">5</property>
-    <property name="type_hint">dialog</property>
+    <property name="border_width">6</property>
     <property name="title" translatable="yes">Define Custom Slide Show</property>
+    <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -18,13 +19,11 @@
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -36,11 +35,9 @@
             <child>
               <object class="GtkButton" id="cancel">
                 <property name="label">gtk-cancel</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -52,11 +49,9 @@
             <child>
               <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -77,21 +72,23 @@
           <object class="GtkBox" id="box1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="orientation">vertical</property>
-            <property name="spacing">6</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">6</property>
             <child>
               <object class="GtkBox" id="box3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="spacing">6</property>
+                <property name="hexpand">True</property>
+                <property name="spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">_Name:</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">customname</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -103,6 +100,7 @@
                   <object class="GtkEntry" id="customname">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
                     <property name="invisible_char">●</property>
                   </object>
                   <packing>
@@ -122,6 +120,8 @@
               <object class="GtkGrid" id="grid1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
                 <property name="row_spacing">6</property>
                 <property name="column_spacing">6</property>
                 <child>
@@ -131,6 +131,7 @@
                     <property name="halign">start</property>
                     <property name="label" translatable="yes">_Existing slides</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">pages:border</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -146,6 +147,7 @@
                     <property name="halign">start</property>
                     <property name="label" translatable="yes">_Selected slides</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">custompages:border</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -155,10 +157,9 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkTreeView" id="pages">
+                  <object class="GtkTreeView" id="pages:border">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="model">liststore1</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                     <child internal-child="selection">
@@ -175,11 +176,14 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svtlo-SvTreeListBox" id="custompages">
+                  <object class="svtlo-SvTreeListBox" id="custompages:border">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="Tree List-selection1"/>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -198,11 +202,9 @@
                     <child>
                       <object class="GtkButton" id="add">
                         <property name="label" translatable="yes">&gt;&gt;</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="use_action_appearance">False</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -213,11 +215,9 @@
                     <child>
                       <object class="GtkButton" id="remove">
                         <property name="label" translatable="yes">&lt;&lt;</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="use_action_appearance">False</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>

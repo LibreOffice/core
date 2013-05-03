@@ -137,7 +137,7 @@
             <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
-              <object class="GtkTreeView" id="customshowlist">
+              <object class="GtkTreeView" id="customshowlist:border">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
