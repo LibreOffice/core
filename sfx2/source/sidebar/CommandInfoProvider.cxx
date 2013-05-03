@@ -21,7 +21,7 @@
 
 #include "precompiled_sfx2.hxx"
 
-#include "CommandInfoProvider.hxx"
+#include "sfx2/sidebar/CommandInfoProvider.hxx"
 
 #include <comphelper/processfactory.hxx>
 #include <svtools/acceleratorexecute.hxx>

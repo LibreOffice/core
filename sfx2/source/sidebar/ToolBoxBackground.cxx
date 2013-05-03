@@ -24,7 +24,7 @@
 #include "ToolBoxBackground.hxx"
 #include "Paint.hxx"
 #include "DrawHelper.hxx"
-#include "Tools.hxx"
+#include "sfx2/sidebar/Tools.hxx"
 #include "sfx2/sidebar/Theme.hxx"
 
 #include <vcl/toolbox.hxx>

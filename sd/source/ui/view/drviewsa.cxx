@@ -155,6 +155,8 @@ DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBas
     Construct(GetDocSh(), ePageKind);
 
     mpSelectionChangeHandler->Connect();
+
+    SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_DrawPage));
 }
 
 /*************************************************************************

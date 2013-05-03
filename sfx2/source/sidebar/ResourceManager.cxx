@@ -22,7 +22,7 @@
 #include "precompiled_sfx2.hxx"
 
 #include "ResourceManager.hxx"
-#include "Tools.hxx"
+#include "sfx2/sidebar/Tools.hxx"
 
 #include <unotools/confignode.hxx>
 #include <comphelper/componentcontext.hxx>

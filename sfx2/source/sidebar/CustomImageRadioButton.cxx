@@ -25,7 +25,7 @@
 
 #include "DrawHelper.hxx"
 #include "Paint.hxx"
-#include "Tools.hxx"
+#include "sfx2/sidebar/Tools.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

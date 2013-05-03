@@ -22,7 +22,7 @@
 #include "precompiled_sfx2.hxx"
 
 #include "Paint.hxx"
-#include "Tools.hxx"
+#include "sfx2/sidebar/Tools.hxx"
 #include <com/sun/star/awt/Gradient.hpp>
 
 

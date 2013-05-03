@@ -140,4 +140,6 @@ $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/sidebar/ControlFactory.hxx,s
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/sidebar/Theme.hxx,sfx2/sidebar/Theme.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/sidebar/ILayoutableWindow.hxx,sfx2/sidebar/ILayoutableWindow.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/sidebar/IContextChangeReceiver.hxx,sfx2/sidebar/IContextChangeReceiver.hxx))
+$(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/sidebar/Tools.hxx,sfx2/sidebar/Tools.hxx))
+$(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/sidebar/CommandInfoProvider.hxx,sfx2/sidebar/CommandInfoProvider.hxx))
 
