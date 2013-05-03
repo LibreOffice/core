@@ -216,10 +216,10 @@ End
 #endif
 
 #if defined(DOXYGEN)
-File gid_File_Zip_cppdocs
+File gid_File_Zip_doxygen
     TXT_FILE_BODY;
     Dir = FILELIST_SDK_DIR;
-    Name = "odk_cpp_docs.filelist";
+    Name = "odk_doxygen.filelist";
     Styles = (FILELIST,USE_INTERNAL_RIGHTS);
 End
 #endif

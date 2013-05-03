@@ -13,7 +13,7 @@ $(eval $(call gb_Module_add_targets,odk,\
 	$(if $(filter WNT,$(OS)),Package_cli) \
 	$(if $(DOXYGEN),\
 		CustomTarget_doxygen \
-		GeneratedPackage_cpp_docs \
+		GeneratedPackage_odk_doxygen \
 	) \
 	CustomTarget_html \
 	CustomTarget_settings \
