@@ -56,6 +56,7 @@ interface XApplication
     [attribute] any StatusBar;
     [attribute] long Cursor;
     [attribute] boolean EnableEvents;
+    [attribute] boolean EnableCancelKey;
     [attribute] boolean DisplayFullScreen;
     [attribute] boolean DisplayScrollBars;
     [attribute] boolean DisplayExcel4Menus;
@@ -70,7 +71,7 @@ interface XApplication
 
     string getDefaultFilePath() raises(com::sun::star::script::BasicErrorException);
 
-    //any CommandBars( [in] any Index );
+    any International( [in] long Index );
     any Workbooks( [in] any Index );
     any Worksheets( [in] any Index );
     any Windows( [in] any Index );

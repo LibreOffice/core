@@ -117,6 +117,7 @@ struct ScVbaAppSettings
     sal_Bool mbExcel4Menus;
     sal_Bool mbDisplayNoteIndicator;
     sal_Bool mbShowWindowsInTaskbar;
+    sal_Bool mbEnableCancelKey;
     explicit ScVbaAppSettings();
 };
 
@@ -126,7 +127,8 @@ ScVbaAppSettings::ScVbaAppSettings() :
     mbEnableEvents( sal_True ),
     mbExcel4Menus( sal_False ),
     mbDisplayNoteIndicator( sal_True ),
-    mbShowWindowsInTaskbar( sal_True )
+    mbShowWindowsInTaskbar( sal_True ),
+    mbEnableCancelKey( sal_False )
 {
 }
 
@@ -322,6 +324,15 @@ ScVbaApplication::getActiveCell() throw (uno::RuntimeException )
 
     // #i117392# excel::getUnoSheetModuleObj() may return null in documents without global VBA mode enabled
     return new ScVbaRange( excel::getUnoSheetModuleObj( xRange ), mxContext, xRange->getCellRangeByPosition( nCursorX, nCursorY, nCursorX, nCursorY ) );
+}
+
+uno::Any SAL_CALL
+ScVbaApplication::International( sal_Int32 Index ) throw (uno::RuntimeException)
+{
+    // complete stub for now
+    // #TODO flesh out some of the Indices we could handle
+    uno::Any aRet;
+    return aRet;
 }
 
 uno::Any SAL_CALL
@@ -740,6 +751,19 @@ sal_Bool SAL_CALL
 ScVbaApplication::getEnableEvents() throw (uno::RuntimeException)
 {
     return mrAppSettings.mbEnableEvents;
+}
+
+void SAL_CALL
+ScVbaApplication::setEnableCancelKey(sal_Bool bEnable) throw (uno::RuntimeException)
+{
+    // Stub, does nothing
+    mrAppSettings.mbEnableCancelKey = bEnable;
+}
+
+sal_Bool SAL_CALL
+ScVbaApplication::getEnableCancelKey() throw (uno::RuntimeException)
+{
+    return mrAppSettings.mbEnableCancelKey;
 }
 
 sal_Bool SAL_CALL
