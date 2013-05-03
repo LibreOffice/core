@@ -34,63 +34,45 @@ class WebConfigSet(ConfigGroup):
     '''
 
     def __init__(self, childType):
-        print ("DEBUG !!! childType: ", childType)
         self.childClass = childType
         self.childrenMap = {}
         self.childrenList = []
-        self.noNulls = False
+        self.noNulls = True
         self.listenerList = None
 
     def add(self, name, o):
-        print ("DEBUG !!! WebConfigSet.add -- name: ", name)
-        if (o is None):
-            print ("DEBUG !!! WebConfigSet.add -- Received None object as argument.")
         oldO = None
         if (name in self.childrenMap):
             oldO = self.childrenMap[name]
         self.childrenMap[name] = o
         try:
             i = int(name)
-            print ("DEBUG !!! WebConfigSet.add -- name IS an integer.")
             self.childrenList.insert(i, o)
             self.fireListDataListenerIntervalAdded(i, i);
-        except Exception:
-            print ("DEBUG !!! WebConfigSet.add -- name IS NOT an integer.")
-            try:
+        except ValueError:
+            if (hasattr(o, "cp_Index")):
                 i = o.cp_Index
-                print ("DEBUG !!! WebConfigSet.add -- index: ", i)
                 oldSize = self.getSize()
-                print ("DEBUG !!! WebConfigSet.add -- oldSize: ", oldSize)
-                if oldSize < i:
-                    newSize = i - oldSize
-                    self.childrenList += [None] * newSize
-                    self.noNulls |= True
-                else:
-                    self.noNulls |= False
-                print ("DEBUG !!! WebConfigSet.add -- inserting object o: ", o)
-                self.childrenList.insert(i, o)
+                while (self.getSize() <= i):
+                    self.childrenList.append(None)
+                self.childrenList[i] = o
                 if oldSize > i:
                     oldSize = i
                 self.fireListDataListenerIntervalAdded(oldSize, i);
-            except Exception:
+            else:
                 if (oldO is not None):
-                    print ("DEBUG !!! WebConfigSet.add -- No cp_Index attribute, but element already present, so replace it.")
                     i = self.childrenList.index(oldO)
                     self.childrenList[i] = o
                 else:
-                    print ("DEBUG !!! WebConfigSet.add -- No cp_Index attribute, so just append it.")
                     self.childrenList.append(o)
                     self.fireListDataListenerIntervalAdded(self.getSize() - 1, self.getSize() - 1);
 
 
     def writeConfiguration(self, configView, param):
-        print ("DEBUG !!! writeConfiguration --")
         names = self.childrenMap.keys()
         #first I remove all the children from the configuration.
         children = configView.ElementNames
-        print ("DEBUG !!! writeConfiguration -- children length: ", len(children))
         if children:
-            print ("DEBUG !!! writeConfiguration -- removing childrens.")
             for i in children:
                 try:
                     Configuration.removeNode(configView, i)
@@ -110,10 +92,9 @@ class WebConfigSet(ConfigGroup):
         names = configurationView.ElementNames
         if names:
             for i in names:
-                print ("DEBUG !!! readConfiguration -- name: ", i)
                 try:
                     child = self.childClass()
-                    child.root = self.root
+                    child.setRoot(self.root)
                     child.readConfiguration(
                         configurationView.getByName(i), param)
                     self.add(i, child)
@@ -128,16 +109,16 @@ class WebConfigSet(ConfigGroup):
                     i -= 1
                 i += 1
 
-    def remove(self, obj):
-        key = getKey(obj)
-        self.childrenMap.remove(key)
-        i = self.childrenList.indexOf(obj)
+    def remove1(self, obj):
+        key = self.getKey(obj)
+        del self.childrenMap[key]
+        i = self.childrenList.index(obj)
         self.childrenList.remove(obj)
         self.fireListDataListenerIntervalRemoved(i, i)
 
     def remove(self, i):
-        o = getElementAt(i)
-        remove(o)
+        o = self.getElementAt(i)
+        self.remove1(o)
 
     def clear(self):
         self.childrenMap.clear()
@@ -151,9 +132,8 @@ class WebConfigSet(ConfigGroup):
         i = 0
         while i < len(items):
             item = items[i]
-            if isinstance(item, XMLProvider):
+            if hasattr(item, "createDOM"):
                 item.createDOM(parent)
-
             i += 1
         return parent
 
