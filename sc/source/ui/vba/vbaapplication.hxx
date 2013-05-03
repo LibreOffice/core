@@ -85,6 +85,7 @@ public:
 
     virtual css::uno::Reference< ov::XAssistant > SAL_CALL getAssistant() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XWorkbook > SAL_CALL getThisWorkbook() throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL International( sal_Int32 Index ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Workbooks( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Worksheets( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL WorksheetFunction( ) throw (css::uno::RuntimeException);
@@ -99,6 +100,8 @@ public:
     virtual void SAL_CALL OnKey( const OUString& Key, const css::uno::Any& Procedure ) throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getEnableEvents() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setEnableEvents( sal_Bool bEnable ) throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL getEnableCancelKey() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setEnableCancelKey( sal_Bool bEnable ) throw (css::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL getDisplayFullScreen() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setDisplayFullScreen( sal_Bool bSet ) throw (css::uno::RuntimeException);
