@@ -8332,7 +8332,7 @@ uno::Reference< XDragSource > Window::GetDragSource()
         {
             try
             {
-                uno::Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
+                uno::Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
                 const SystemEnvData * pEnvData = GetSystemData();
 
                 if( pEnvData )
@@ -8364,10 +8364,14 @@ uno::Reference< XDragSource > Window::GetDragSource()
                     aDropTargetAL[ 2 ] = makeAny( vcl::createBmpConverter() );
 #endif
                     if( !aDragSourceSN.isEmpty() )
-                        mpWindowImpl->mpFrameData->mxDragSource = uno::Reference< XDragSource > ( xFactory->createInstanceWithArguments( aDragSourceSN, aDragSourceAL ), UNO_QUERY );
+                        mpWindowImpl->mpFrameData->mxDragSource.set(
+                            xContext->getServiceManager()->createInstanceWithArgumentsAndContext( aDragSourceSN, aDragSourceAL, xContext ),
+                            UNO_QUERY );
 
                     if( !aDropTargetSN.isEmpty() )
-                        mpWindowImpl->mpFrameData->mxDropTarget = uno::Reference< XDropTarget > ( xFactory->createInstanceWithArguments( aDropTargetSN, aDropTargetAL ), UNO_QUERY );
+                        mpWindowImpl->mpFrameData->mxDropTarget.set(
+                           xContext->getServiceManager()->createInstanceWithArgumentsAndContext( aDropTargetSN, aDropTargetAL, xContext ),
+                           UNO_QUERY );
                 }
             }
 
@@ -8417,7 +8421,7 @@ uno::Reference< XClipboard > Window::GetClipboard()
 #else
                     xSystemClipboard = SystemClipboard::createDefault(xContext);
 #endif
-                    mpWindowImpl->mpFrameData->mxClipboard = uno::Reference< XClipboard >( xSystemClipboard, UNO_QUERY );
+                    mpWindowImpl->mpFrameData->mxClipboard.set( xSystemClipboard, UNO_QUERY );
                 }
             }
             // createInstance can throw any exception
@@ -8446,7 +8450,6 @@ uno::Reference< XClipboard > Window::GetPrimarySelection()
         {
             try
             {
-                uno::Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
                 uno::Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
 #if defined(UNX) && !defined(MACOSX)
@@ -8456,10 +8459,10 @@ uno::Reference< XClipboard > Window::GetPrimarySelection()
                 static uno::Reference< XClipboard > s_xSelection;
 
                 if ( !s_xSelection.is() )
-                    s_xSelection = uno::Reference< XClipboard >( xFactory->createInstance( OUString("com.sun.star.datatransfer.clipboard.GenericClipboardExt") ), UNO_QUERY );
+                    s_xSelection.set( xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.datatransfer.clipboard.GenericClipboardExt", xContext ), UNO_QUERY );
 
                 if ( !s_xSelection.is() )
-                    s_xSelection = uno::Reference< XClipboard >( xFactory->createInstance( OUString("com.sun.star.datatransfer.clipboard.GenericClipboard") ), UNO_QUERY );
+                    s_xSelection.set( xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.datatransfer.clipboard.GenericClipboard", xContext ), UNO_QUERY );
 
                 mpWindowImpl->mpFrameData->mxSelection = s_xSelection;
 #       endif
