@@ -76,7 +76,6 @@ public class _XMultiPropertySet extends MultiMethodTest {
     /**
     * Initializes some fields.
     */
-    @SuppressWarnings("unchecked")
     public void before() {
         exclProps = (Set<String>) tEnv.getObjRelation("XMultiPropertySet.ExcludeProps");
         if (exclProps == null) exclProps = new HashSet<String>(0);

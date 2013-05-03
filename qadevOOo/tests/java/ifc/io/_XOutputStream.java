@@ -56,7 +56,6 @@ public class _XOutputStream extends MultiMethodTest {
         public void resetStreams();
     }
 
-    @SuppressWarnings("unchecked")
     protected void before() {
         checker = (StreamChecker)
             tEnv.getObjRelation("XOutputStream.StreamChecker");

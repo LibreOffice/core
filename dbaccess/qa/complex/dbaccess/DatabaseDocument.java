@@ -173,7 +173,6 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
                     };
         }
 
-        @SuppressWarnings("unchecked")
         public void dispose()
         {
             final EventObject event = new EventObject(this);

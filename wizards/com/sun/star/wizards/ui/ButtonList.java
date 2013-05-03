@@ -80,7 +80,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     {
         m_aControlName = _sName;
     }
-    
+
     /** Setter for property m_aButtonSize.
      * @param imageSize  New value of property m_aButtonSize.
      */
@@ -413,7 +413,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     /** Notifies all registered listeners about the event.
      *
      */
-    @SuppressWarnings("unchecked")
     private void fireItemSelected()
     {
         java.util.ArrayList<XItemListener> list;

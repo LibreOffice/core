@@ -200,7 +200,6 @@ public final class PropertySetMixin {
        {@link BoundListeners#notifyListeners} has not yet been called); may only
        be null if the attribute that is going to be set is not bound
     */
-    @SuppressWarnings("unchecked")
     public void prepareSet(
         String propertyName, Object oldValue, Object newValue,
         BoundListeners bound)

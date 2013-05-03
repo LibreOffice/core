@@ -1375,7 +1375,6 @@ public class UndoManager
             return new String[] { getCallbackComponentServiceName() };
         }
 
-        @SuppressWarnings("unchecked")
         public void dispose()
         {
             final EventObject event = new EventObject( this );

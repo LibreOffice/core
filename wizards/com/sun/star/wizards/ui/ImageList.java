@@ -470,7 +470,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     }
 
     /**
-     * 
+     *
      * @param i
      * @return the Object in the list model corresponding to the given image index.
      */
@@ -488,7 +488,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     }
 
     /**
-     * 
+     *
      * @param i
      * @return the index in the listModel for the given image index.
      */
@@ -561,7 +561,6 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
 
     /** Notifies all registered listeners about the event.
      */
-    @SuppressWarnings("unchecked")
     private void fireItemSelected()
     {
         java.util.ArrayList<XItemListener> list;

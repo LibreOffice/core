@@ -56,7 +56,6 @@ public class _XDataOutputStream extends MultiMethodTest {
     * If relation or data of some type in stream not found then
     * tests of corresponding methods are skipped.
     */
-    @SuppressWarnings("unchecked")
     public void before() throws RuntimeException {
 
         List<Object> data = (List<Object>) tEnv.getObjRelation("StreamData") ;

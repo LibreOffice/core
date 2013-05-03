@@ -100,7 +100,6 @@ public class _XParameters extends MultiMethodTest {
     /**
     * Gets object relation
     */
-    @SuppressWarnings("unchecked")
     public void before() {
         data = (List<Object>) tEnv.getObjRelation("XParameters.ParamValues") ;
         if (data == null) {

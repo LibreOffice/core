@@ -80,7 +80,6 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
     }
 
     // --------------------------------------------------------------------------------------------------------
-    @SuppressWarnings("unchecked")
     private void checkAttributeAccess(String _attributeName, String _attributeValue)
     {
         System.out.println("setting " + _attributeName + " to " + _attributeValue);

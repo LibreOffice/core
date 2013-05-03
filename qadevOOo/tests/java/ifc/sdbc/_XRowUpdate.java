@@ -99,7 +99,6 @@ public class _XRowUpdate extends MultiMethodTest {
     /**
     * Gets relations.
     */
-    @SuppressWarnings("unchecked")
     public void before() {
         rowData = (List<Object>) tEnv.getObjRelation("CurrentRowData") ;
         if (rowData == null) {

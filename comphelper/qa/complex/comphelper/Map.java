@@ -188,7 +188,6 @@ public class Map /* extends complexlib.ComplexTestCase */
         );
     }
 
-    @SuppressWarnings("unchecked")
     @Test public void testComplexKeyTypes() throws com.sun.star.uno.Exception
     {
         Type intType = new Type( Integer.class );

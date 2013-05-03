@@ -275,7 +275,6 @@ public final class WeakMap<K,V> implements Map {
      * (Specifically, iterating over the collections returned by those
      * methods), as non-modifying methods might modify the underlying map.
      **/
-    @SuppressWarnings("unchecked")
     private void cleanUp() {
         for (;;) {
             Entry<K,V> e = (Entry<K,V>) queue.poll();
