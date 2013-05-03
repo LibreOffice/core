@@ -2274,8 +2274,8 @@ void ScInterpreter::ScDde()
 
             //  Nach dem Laden muss neu interpretiert werden (Verknuepfungen aufbauen)
 
-        if ( pMyFormulaCell->GetCode()->IsRecalcModeNormal() )
-            pMyFormulaCell->GetCode()->SetExclusiveRecalcModeOnLoad();
+        if ( rArr.IsRecalcModeNormal() )
+            rArr.SetExclusiveRecalcModeOnLoad();
 
             //  solange der Link nicht ausgewertet ist, Idle abklemmen
             //  (um zirkulaere Referenzen zu vermeiden)
