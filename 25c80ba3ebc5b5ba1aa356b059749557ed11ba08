@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//9bE\u003d",
+        "filename": "wizards/source/importwizard/DialogModul.xba",
+        "patchSetId": 1
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2013-05-03T12:02:38Z",
+      "side": 1,
+      "message": "There are *four* output filter types here vs three input filter types",
+      "revId": "25c80ba3ebc5b5ba1aa356b059749557ed11ba08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
