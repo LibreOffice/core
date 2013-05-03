@@ -191,7 +191,7 @@ RDFaReader::ReadCURIE(OUString const & i_rCURIE) const
         }
         else
         {
-            OSL_ENSURE(XML_NAMESPACE_NONE != nKey, "no namespace?");
+            SAL_WARN_IF(XML_NAMESPACE_NONE == nKey, "xmloff.core", "no namespace?");
             if ((XML_NAMESPACE_UNKNOWN != nKey) &&
                 (XML_NAMESPACE_XMLNS   != nKey))
             {
@@ -201,12 +201,12 @@ RDFaReader::ReadCURIE(OUString const & i_rCURIE) const
             }
             else
             {
-                OSL_TRACE( "ReadCURIE: invalid CURIE: invalid prefix" );
+                SAL_INFO("xmloff.core", "ReadCURIE: invalid CURIE: invalid prefix" );
                 return OUString();
             }
         }
     }
-    OSL_TRACE( "ReadCURIE: invalid CURIE: no prefix" );
+    SAL_INFO("xmloff.core", "ReadCURIE: invalid CURIE: no prefix" );
     return OUString();
 }
 
@@ -229,7 +229,7 @@ RDFaReader::ReadCURIEs(OUString const & i_rCURIEs) const
     while (!CURIEs.isEmpty());
     if (vec.empty())
     {
-        OSL_TRACE( "ReadCURIEs: invalid CURIEs" );
+        SAL_INFO("xmloff.core", "ReadCURIEs: invalid CURIEs" );
     }
     return vec;
 }
@@ -246,7 +246,7 @@ RDFaReader::ReadURIOrSafeCURIE(OUString const & i_rURIOrSafeCURIE) const
         }
         else
         {
-            OSL_TRACE( "ReadURIOrSafeCURIE: invalid SafeCURIE" );
+            SAL_INFO("xmloff.core", "ReadURIOrSafeCURIE: invalid SafeCURIE" );
             return OUString();
         }
     }
@@ -254,7 +254,7 @@ RDFaReader::ReadURIOrSafeCURIE(OUString const & i_rURIOrSafeCURIE) const
     {
         if (i_rURIOrSafeCURIE.matchAsciiL("_:", 2)) // blank node
         {
-            OSL_TRACE( "ReadURIOrSafeCURIE: invalid URI: scheme is _" );
+            SAL_INFO("xmloff.core", "ReadURIOrSafeCURIE: invalid URI: scheme is _" );
             return OUString();
         }
         else
@@ -282,7 +282,7 @@ RDFaInserter::MakeURI( OUString const & i_rURI) const
 {
     if (i_rURI.matchAsciiL("_:", 2)) // blank node
     {
-        OSL_TRACE("MakeURI: cannot create URI for blank node");
+        SAL_INFO("xmloff.core", "MakeURI: cannot create URI for blank node");
         return 0;
     }
     else
@@ -293,7 +293,7 @@ RDFaInserter::MakeURI( OUString const & i_rURI) const
         }
         catch (uno::Exception &)
         {
-            OSL_FAIL("MakeURI: cannot create URI");
+            SAL_WARN("xmloff.core", "MakeURI: cannot create URI");
             return 0;
         }
     }
@@ -309,7 +309,7 @@ RDFaInserter::MakeResource( OUString const & i_rResource)
         // N.B.: content.xml and styles.xml are distinct graphs
         OUString name( i_rResource.copy(2) );
         const uno::Reference< rdf::XBlankNode > xBNode( LookupBlankNode(name) );
-        OSL_ENSURE(xBNode.is(), "no blank node?");
+        SAL_WARN_IF(!xBNode.is(), "xmloff.core", "no blank node?");
         return uno::Reference<rdf::XResource>( xBNode, uno::UNO_QUERY);
     }
     else
@@ -334,8 +334,7 @@ public:
 void RDFaInserter::InsertRDFaEntry(
     struct RDFaEntry const & i_rEntry)
 {
-    OSL_ENSURE(i_rEntry.m_xObject.is(),
-        "InsertRDFaEntry: invalid arg: null object");
+    SAL_WARN_IF(!i_rEntry.m_xObject.is(), "xmloff.core", "InsertRDFaEntry: invalid arg: null object");
     if (!i_rEntry.m_xObject.is()) return;
 
     const uno::Reference< rdf::XResource > xSubject(
@@ -388,7 +387,7 @@ void RDFaInserter::InsertRDFaEntry(
     }
     catch (uno::Exception &)
     {
-        OSL_FAIL("InsertRDFaEntry: setStatementRDFa failed?");
+        SAL_WARN("xmloff.core", "InsertRDFaEntry: setStatementRDFa failed?");
     }
 }
 
@@ -412,7 +411,7 @@ RDFaImportHelper::ParseRDFa(
 {
     if (i_rProperty.isEmpty())
     {
-        OSL_TRACE("AddRDFa: invalid input: xhtml:property empty");
+        SAL_INFO("xmloff.core", "AddRDFa: invalid input: xhtml:property empty");
         return ::boost::shared_ptr<ParsedRDFaAttributes>();
     }
     // must parse CURIEs here: need namespace declaration context
@@ -440,12 +439,12 @@ RDFaImportHelper::AddRDFa(
 {
     if (!i_xObject.is())
     {
-        OSL_FAIL("AddRDFa: invalid arg: null textcontent");
+        SAL_WARN("xmloff.core", "AddRDFa: invalid arg: null textcontent");
         return;
     }
     if (!i_pRDFaAttributes.get())
     {
-        OSL_FAIL("AddRDFa: invalid arg: null RDFa attributes");
+        SAL_WARN("xmloff.core", "AddRDFa: invalid arg: null RDFa attributes");
         return;
     }
     m_RDFaEntries.push_back(RDFaEntry(i_xObject, i_pRDFaAttributes));
@@ -470,11 +469,11 @@ RDFaImportHelper::ParseAndAddRDFa(
 void RDFaImportHelper::InsertRDFa(
     uno::Reference< rdf::XRepositorySupplier> const & i_xModel)
 {
-    OSL_ENSURE(i_xModel.is(), "InsertRDFa: invalid arg: model null");
+    SAL_WARN_IF(!i_xModel.is(), "xmloff.core", "InsertRDFa: invalid arg: model null");
     if (!i_xModel.is()) return;
     const uno::Reference< rdf::XDocumentRepository > xRepository(
         i_xModel->getRDFRepository(), uno::UNO_QUERY);
-    OSL_ENSURE(xRepository.is(), "InsertRDFa: no DocumentRepository?");
+    SAL_WARN_IF(!xRepository.is(), "xmloff.core", "InsertRDFa: no DocumentRepository?");
     if (!xRepository.is()) return;
     RDFaInserter inserter(GetImport().GetComponentContext(), xRepository);
     ::std::for_each(m_RDFaEntries.begin(), m_RDFaEntries.end(),
