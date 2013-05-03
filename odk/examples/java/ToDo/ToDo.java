@@ -32,37 +32,37 @@
  *
  *************************************************************************/
 
-import com.sun.star.lib.uno.helper.Factory;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XIndexAccess;
 import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
+import com.sun.star.lang.XSingleComponentFactory;
+import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lib.uno.helper.WeakBase;
+import com.sun.star.sheet.XCellRangeMovement;
+import com.sun.star.sheet.XFunctionAccess;
+import com.sun.star.sheet.XSpreadsheet;
+import com.sun.star.sheet.XSpreadsheetDocument;
+import com.sun.star.table.CellAddress;
+import com.sun.star.table.CellRangeAddress;
+import com.sun.star.table.XCell;
+import com.sun.star.table.XCellRange;
+import com.sun.star.table.XColumnRowRange;
+import com.sun.star.table.XTableRows;
+import com.sun.star.text.XSimpleText;
+import com.sun.star.text.XText;
+import com.sun.star.text.XTextCursor;
+import com.sun.star.text.XTextField;
+import com.sun.star.text.XTextRange;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 // addintional interfaces used by the implementation
-import com.sun.star.sheet.XSpreadsheetDocument;
-import com.sun.star.sheet.XSpreadsheet;
-import com.sun.star.sheet.XCellRangeMovement;
-import com.sun.star.sheet.XFunctionAccess;
-import com.sun.star.container.XIndexAccess;
-import com.sun.star.table.XCellRange;
-import com.sun.star.table.XCell;
-import com.sun.star.table.CellAddress;
-import com.sun.star.table.CellRangeAddress;
-import com.sun.star.table.XColumnRowRange;
-import com.sun.star.table.XTableRows;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.text.XTextRange;
-import com.sun.star.text.XSimpleText;
-import com.sun.star.text.XTextCursor;
-import com.sun.star.text.XText;
-import com.sun.star.text.XTextField;
-
-import java.util.GregorianCalendar;
-import java.util.Calendar;
-import java.util.Vector;
-import java.util.Arrays;
 
 /** This class capsulates the class, that implements the minimal component, a
  * factory for creating the service (<CODE>__getServiceFactory</CODE>) and a
@@ -208,7 +208,7 @@ public class ToDo {
                                                   objectFunctionAccess );
 
                 // Creating vector for holidays
-                Vector<Object> vectorHolidays = new Vector<Object>();
+                ArrayList<Object> vectorHolidays = new ArrayList<Object>();
 
                 // Get the Official Holidays
                 this.getOfficialHolidays( vectorHolidays, xcellrange,
@@ -706,7 +706,7 @@ public class ToDo {
          * @param intYear Year to calculate the official holidays.
          */
         public void getOfficialHolidays(
-        Vector<Object> vectorHolidays,
+        ArrayList<Object> vectorHolidays,
         XCellRange xcellrange,
         XFunctionAccess xfunctionaccess,
         int intYear ) {
@@ -729,7 +729,7 @@ public class ToDo {
                         dEasterSunday.doubleValue());
 
                     // New-year
-                    vectorHolidays.addElement( xfunctionaccess.callFunction(
+                    vectorHolidays.add( xfunctionaccess.callFunction(
                                                    "DATE",
                                                    new Object[] {
                                                        new Integer( intYear ),
@@ -737,15 +737,15 @@ public class ToDo {
                                                        new Integer( 1 ) } ));
 
                     // Good Friday
-                    vectorHolidays.addElement(
+                    vectorHolidays.add(
                     new Double( intEasterSunday - 2 ) );
 
                     // Easter monday
-                    vectorHolidays.addElement(
+                    vectorHolidays.add(
                     new Double( intEasterSunday + 1 ) );
 
                     // Labour Day
-                    vectorHolidays.addElement( xfunctionaccess.callFunction(
+                    vectorHolidays.add( xfunctionaccess.callFunction(
                                                    "DATE",
                                                    new Object[] {
                                                        new Integer( intYear ),
@@ -753,13 +753,13 @@ public class ToDo {
                                                        new Integer( 1 ) } ));
 
                     // Ascension Day
-                    vectorHolidays.addElement(new Double(intEasterSunday + 39 ));
+                    vectorHolidays.add(new Double(intEasterSunday + 39 ));
 
                     // Pentecost monday
-                    vectorHolidays.addElement(new Double(intEasterSunday + 50 ));
+                    vectorHolidays.add(new Double(intEasterSunday + 50 ));
 
                     // German Unification
-                    vectorHolidays.addElement( xfunctionaccess.callFunction(
+                    vectorHolidays.add( xfunctionaccess.callFunction(
                                                    "DATE",
                                                    new Object[] {
                                                        new Integer( intYear ),
@@ -767,7 +767,7 @@ public class ToDo {
                                                        new Integer( 3 ) } ));
 
                     // Christmas Day First
-                    vectorHolidays.addElement( xfunctionaccess.callFunction(
+                    vectorHolidays.add( xfunctionaccess.callFunction(
                                                    "DATE",
                                                    new Object[] {
                                                        new Integer( intYear ),
@@ -775,7 +775,7 @@ public class ToDo {
                                                        new Integer( 25 ) } ));
 
                     // Christmas Day Second
-                    vectorHolidays.addElement( xfunctionaccess.callFunction(
+                    vectorHolidays.add( xfunctionaccess.callFunction(
                                                    "DATE",
                                                    new Object[] {
                                                        new Integer( intYear ),
@@ -841,7 +841,7 @@ public class ToDo {
          * @param xcellrange Providing the cells.
          * @param xfunctionaccess Provides the access to functions of the Calc.
          */
-        public void getPrivateHolidays( Vector<Object> vectorHolidays,
+        public void getPrivateHolidays( ArrayList<Object> vectorHolidays,
                                         XCellRange xcellrange,
                                         XFunctionAccess xfunctionaccess ) {
             try {
@@ -856,7 +856,7 @@ public class ToDo {
 
                 while ( dHolidayStart != 0 ) {
                     if ( dHolidayEnd == 0 ) {
-                        vectorHolidays.addElement(
+                        vectorHolidays.add(
                             new Integer( (int) Math.round(
                                              dHolidayStart ) ) );
                     }
@@ -865,7 +865,7 @@ public class ToDo {
                                   dHolidayStart );
                               intHoliday <= (int) Math.round( dHolidayEnd );
                               intHoliday++ ) {
-                            vectorHolidays.addElement( new Double( intHoliday ) );
+                            vectorHolidays.add( new Double( intHoliday ) );
                         }
                     }
 

@@ -35,7 +35,7 @@
 // __________ Imports __________
 
 import java.awt.Component;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -166,7 +166,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
      * @param lParams
      *          the vector with all packed parameters of the original request
      */
-    public void execOneway(/*IN*/  int nRequest,/*IN*/  Vector<Object> lParams )
+    public void execOneway(/*IN*/  int nRequest,/*IN*/  ArrayList<Object> lParams )
     {
         synchronized(this)
         {
@@ -213,7 +213,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
         if (! bHandle)
             return;
 
-        Vector<Object> lOutParams   = new Vector<Object>();
+        ArrayList<Object> lOutParams   = new ArrayList<Object>();
         lOutParams.add(aEvent);
 
         OnewayExecutor aExecutor = new OnewayExecutor( this                  ,

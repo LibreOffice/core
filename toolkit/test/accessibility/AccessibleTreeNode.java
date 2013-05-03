@@ -16,7 +16,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-import java.util.Vector;
+import java.util.ArrayList;
+
 import com.sun.star.lang.IndexOutOfBoundsException;
 
 /**
@@ -82,7 +83,7 @@ class AccessibleTreeNode
     /** Create a path to this node by first asking the parent for its path
         and then appending this object.
     */
-    public void createPath (java.util.Vector<AccessibleTreeNode> aPath)
+    public void createPath (java.util.List<AccessibleTreeNode> aPath)
     {
         if (maParent != null)
             maParent.createPath (aPath);
@@ -91,7 +92,7 @@ class AccessibleTreeNode
 
     public Object[] createPath ()
     {
-        Vector<AccessibleTreeNode> aPath = new Vector<AccessibleTreeNode> (1);
+        ArrayList<AccessibleTreeNode> aPath = new ArrayList<AccessibleTreeNode> (1);
         createPath (aPath);
         return aPath.toArray();
     }

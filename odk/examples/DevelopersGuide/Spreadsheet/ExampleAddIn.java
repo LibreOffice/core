@@ -38,7 +38,7 @@ class ExampleAddInResult implements com.sun.star.sheet.XVolatileResult
 {
     private String aName;
     private int nValue;
-    private java.util.Vector<XResultListener> aListeners = new java.util.Vector<XResultListener>();
+    private java.util.ArrayList<XResultListener> aListeners = new java.util.ArrayList<XResultListener>();
 
     public ExampleAddInResult( String aNewName )
     {
@@ -56,7 +56,7 @@ class ExampleAddInResult implements com.sun.star.sheet.XVolatileResult
 
     public void addResultListener(com.sun.star.sheet.XResultListener aListener)
     {
-        aListeners.addElement( aListener );
+        aListeners.add( aListener );
 
         // immediately notify of initial value
         aListener.modified( getResult() );
@@ -64,7 +64,7 @@ class ExampleAddInResult implements com.sun.star.sheet.XVolatileResult
 
     public void removeResultListener(com.sun.star.sheet.XResultListener aListener)
     {
-        aListeners.removeElement( aListener );
+        aListeners.remove( aListener );
     }
 
     public void incrementValue()
@@ -72,10 +72,8 @@ class ExampleAddInResult implements com.sun.star.sheet.XVolatileResult
         ++nValue;
         com.sun.star.sheet.ResultEvent aEvent = getResult();
 
-        java.util.Enumeration<XResultListener> aEnum = aListeners.elements();
-        while (aEnum.hasMoreElements())
-            aEnum.nextElement().modified(
-                aEvent);
+        for( XResultListener l : aListeners)
+            l.modified(aEvent);
     }
 }
 

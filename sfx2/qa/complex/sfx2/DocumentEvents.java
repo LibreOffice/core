@@ -1,5 +1,17 @@
 package complex.sfx2;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertArrayEquals;
+
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.openoffice.test.tools.OfficeDocument;
+
 import com.sun.star.document.DocumentEvent;
 import com.sun.star.document.XDocumentEventBroadcaster;
 import com.sun.star.document.XDocumentEventListener;
@@ -10,14 +22,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.CloseVetoException;
 import com.sun.star.util.XCloseListener;
 import com.sun.star.util.XCloseable;
-import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
-import org.openoffice.test.tools.OfficeDocument;
 
 public class DocumentEvents extends JUnitBasedTest
 {
@@ -193,5 +197,5 @@ public class DocumentEvents extends JUnitBasedTest
     };
 
     private OfficeDocument m_document = null;
-    final private Vector< CloseEventType > m_observedCloseEvents = new Vector<DocumentEvents.CloseEventType>();
+    final private ArrayList< CloseEventType > m_observedCloseEvents = new ArrayList<DocumentEvents.CloseEventType>();
 }

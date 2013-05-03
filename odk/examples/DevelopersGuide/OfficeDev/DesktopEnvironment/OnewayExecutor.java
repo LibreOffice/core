@@ -32,7 +32,7 @@
  *
  *************************************************************************/
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 // __________ Implementation __________
 
@@ -76,7 +76,7 @@ class OnewayExecutor extends Thread
      */
     private IOnewayLink m_rLink     ;
     private int         m_nRequest  ;
-    private Vector<Object>      m_lParams   ;
+    private ArrayList<Object>      m_lParams   ;
 
     // _______________________________
 
@@ -102,7 +102,7 @@ class OnewayExecutor extends Thread
      */
     public OnewayExecutor( IOnewayLink rLink    ,
                            int         nRequest ,
-                           Vector<Object>      lParams  )
+                           ArrayList<Object>      lParams  )
     {
         m_rLink    = rLink   ;
         m_nRequest = nRequest;
@@ -144,13 +144,13 @@ class OnewayExecutor extends Thread
 
     // _______________________________
 
-    public static Vector<Object> encodeDispatch(
+    public static ArrayList<Object> encodeDispatch(
         com.sun.star.util.URL[] aURL,
         com.sun.star.beans.PropertyValue[][] lArgs)
     {
         int nLength = lArgs.length+1;
         int nPos    = 0;
-        Vector<Object> lParams = new Vector<Object>(nLength);
+        ArrayList<Object> lParams = new ArrayList<Object>(nLength);
 
         lParams.add( aURL[0] );
         --nLength;
@@ -165,7 +165,7 @@ class OnewayExecutor extends Thread
     }
 
     public static void decodeDispatch(
-            Vector<Object> lParams,
+            ArrayList<Object> lParams,
             com.sun.star.util.URL[] aURL,
             com.sun.star.beans.PropertyValue[][] lArgs)
     {
@@ -173,12 +173,12 @@ class OnewayExecutor extends Thread
             int nPos    = 0;
 
             lArgs[0] = new com.sun.star.beans.PropertyValue[nLength];
-            aURL[0]  = (com.sun.star.util.URL) lParams.elementAt(0);
+            aURL[0]  = (com.sun.star.util.URL) lParams.get(0);
 
             while (nPos<nLength)
             {
                 lArgs[0][nPos] = (com.sun.star.beans.PropertyValue)
-                    (lParams.elementAt(nPos+1));
+                    (lParams.get(nPos+1));
                 ++nPos;
             }
     }

@@ -41,7 +41,7 @@ public class BuildParcelAction extends BuildAllAction {
         FrameworkJarChecker.mountDependencies();
 
         for (int i = 0; i < activatedNodes.length; i++) {
-            Vector v = new Vector(1);
+            ArrayList v = new ArrayList(1);
             v.addElement(activatedNodes[i]);
 
             CompilerJob job = createJob(v.elements(), Compiler.DEPTH_INFINITE);

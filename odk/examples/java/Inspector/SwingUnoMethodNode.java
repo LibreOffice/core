@@ -31,11 +31,12 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
-import com.sun.star.reflection.XIdlMethod;
-import com.sun.star.uno.TypeClass;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Vector;
+import java.util.ArrayList;
+
+import com.sun.star.reflection.XIdlMethod;
+import com.sun.star.uno.TypeClass;
 
 
 
@@ -120,7 +121,7 @@ public class SwingUnoMethodNode extends SwingUnoNode implements ActionListener, 
         openIdlDescription(m_xDialogProvider.getIDLPath());
     }
 
-    public Vector<Object> getMethodObjects(){
+    public ArrayList<Object> getMethodObjects(){
         MethodParametersDialog oMethodParametersDialog = new MethodParametersDialog(this);
         oMethodParametersDialog.addActionListener(this);
         return oMethodParametersDialog.getMethodObjects();

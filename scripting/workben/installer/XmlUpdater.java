@@ -33,7 +33,7 @@ public class XmlUpdater extends Thread {
 
     private JLabel statusLabel;
 
-    private Vector<InstallListener> listeners;
+    private ArrayList<InstallListener> listeners;
     private Thread internalThread;
     private boolean threadSuspended;
     private JProgressBar progressBar;
@@ -102,7 +102,7 @@ public class XmlUpdater extends Thread {
         this.statusLabel = statusLabel;
         this.netInstall = netInstall;
         this.bindingsInstall = bindingsInstall;
-        listeners = new Vector<InstallListener>();
+        listeners = new ArrayList<InstallListener>();
         threadSuspended = false;
         progressBar=pBar;
         progressBar.setStringPainted(true);
@@ -421,17 +421,15 @@ public class XmlUpdater extends Thread {
 
     public void addInstallListener(InstallListener listener)
     {
-        listeners.addElement(listener);
+        listeners.add(listener);
     }// addInstallListener
 
 
     private void onInstallComplete()
     {
-        Enumeration<InstallListener> e = listeners.elements();
-        while (e.hasMoreElements())
+        for (InstallListener l : listeners)
         {
-            InstallListener listener = e.nextElement();
-            listener.installationComplete(null);
+            l.installationComplete(null);
         }
     }// onInstallComplete
 

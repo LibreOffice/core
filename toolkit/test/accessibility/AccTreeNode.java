@@ -16,9 +16,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+import java.util.ArrayList;
+
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleComponent;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleEditableText;
+import com.sun.star.accessibility.XAccessibleExtendedComponent;
+import com.sun.star.accessibility.XAccessibleSelection;
+import com.sun.star.accessibility.XAccessibleTable;
+import com.sun.star.accessibility.XAccessibleText;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.accessibility.*;
-import java.util.Vector;
 
 /**
  * The node type for the AccessibleTreeModel.
@@ -40,7 +48,7 @@ class AccTreeNode
         public int mnChildCount;
     }
     /// NodeHandlers for this node
-    private Vector<HandlerDescriptor> maHandlers;
+    private ArrayList<HandlerDescriptor> maHandlers;
 
     // The accessible context of this node.
     private XAccessible mxAccessible;
@@ -58,7 +66,7 @@ class AccTreeNode
     {
         super (aDisplay, aParent);
 
-        maHandlers = new Vector<HandlerDescriptor>(5);
+        maHandlers = new ArrayList<HandlerDescriptor>(5);
         mxContext = xContext;
         mxAccessible = xAccessible;
     }
@@ -276,7 +284,7 @@ class AccTreeNode
 
 
     /** iterate over handlers until the child is found */
-    public void getActions(Vector<String> aActions)
+    public void getActions(java.util.List<String> aActions)
     {
         for(int i = 0; i < maHandlers.size(); i++)
         {
@@ -338,14 +346,14 @@ class AccTreeNode
             The returned array containes the indices of the updated children
             and can be used to create a TreeModelEvent.
     */
-    public Vector<Integer> updateChildren (java.lang.Class class1)
+    public java.util.List<Integer> updateChildren (java.lang.Class class1)
     {
         return updateChildren (class1, null);
     }
 
-    public Vector<Integer> updateChildren (java.lang.Class class1, java.lang.Class<AccessibleExtendedComponentHandler> class2)
+    public java.util.List<Integer> updateChildren (java.lang.Class class1, java.lang.Class<AccessibleExtendedComponentHandler> class2)
     {
-        Vector<Integer> aChildIndices = new Vector<Integer>();
+        ArrayList<Integer> aChildIndices = new ArrayList<Integer>();
         int nOffset = 0;
         for(int i=0; i < maHandlers.size(); i++)
         {

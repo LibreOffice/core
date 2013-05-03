@@ -74,8 +74,8 @@ public class ViewContainer extends Thread
      */
     private ViewContainer()
     {
-        mlViews          = new Vector<Object>();
-        mlListener       = new Vector<IShutdownListener>();
+        mlViews          = new ArrayList<Object>();
+        mlListener       = new ArrayList<IShutdownListener>();
         mbShutdownActive = false       ;
         Runtime.getRuntime().addShutdownHook(this);
     }
@@ -204,9 +204,8 @@ public class ViewContainer extends Thread
             IShutdownListener aListener = null;
             synchronized(mlListener)
             {
-                try{
-                    aListener = mlListener.firstElement();
-                } catch(java.util.NoSuchElementException exEmpty) {}
+                if (!mlListener.isEmpty())
+                    aListener = mlListener.get(0);
             }
             if (aListener==null)
                 break;
@@ -258,7 +257,7 @@ public class ViewContainer extends Thread
      */
     public  static boolean       mbInplace   = false ;
     private static ViewContainer maSingleton = null  ;
-    private        Vector<Object>        mlViews             ;
-    private        Vector<IShutdownListener>        mlListener          ;
+    private        ArrayList<Object>        mlViews             ;
+    private        ArrayList<IShutdownListener>        mlListener          ;
     private        boolean       mbShutdownActive    ;
 }

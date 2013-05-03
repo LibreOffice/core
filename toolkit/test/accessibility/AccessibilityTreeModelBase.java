@@ -16,10 +16,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-import javax.swing.tree.TreeModel;
+import java.util.ArrayList;
+
 import javax.swing.event.TreeModelListener;
+import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
-import java.util.Vector;
 
 public class AccessibilityTreeModelBase
     implements TreeModel
@@ -27,7 +28,7 @@ public class AccessibilityTreeModelBase
     public AccessibilityTreeModelBase ()
     {
         setRoot (null);
-        maTMListeners = new Vector<TreeModelListener>();
+        maTMListeners = new ArrayList<TreeModelListener>();
     }
 
     public synchronized void addTreeModelListener(TreeModelListener l)
@@ -132,7 +133,7 @@ public class AccessibilityTreeModelBase
 
 
     // The list of TreeModelListener objects.
-    protected Vector<TreeModelListener> maTMListeners;
+    protected ArrayList<TreeModelListener> maTMListeners;
 
     // The root node of the tree.  Use setRoot to change it.
     private AccessibleTreeNode maRoot = null;

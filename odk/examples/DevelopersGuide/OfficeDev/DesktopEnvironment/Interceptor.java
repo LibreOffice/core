@@ -34,7 +34,7 @@
 
 // __________ Imports __________
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import com.sun.star.frame.FrameActionEvent;
 import com.sun.star.uno.UnoRuntime;
@@ -160,7 +160,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
      * @param lParams
      *          the vector with all packed parameters of the original request
      */
-    public void execOneway(/*IN*/ int nRequest,/*IN*/ Vector<Object> lParams )
+    public void execOneway(/*IN*/ int nRequest,/*IN*/ ArrayList<Object> lParams )
     {
         synchronized(this)
         {
@@ -234,7 +234,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
             return;
 
         // pack the event and start thread - which call us back later
-        Vector<Object> lOutParams = new Vector<Object>();
+        ArrayList<Object> lOutParams = new ArrayList<Object>();
         lOutParams.add(aEvent);
 
         OnewayExecutor aExecutor = new OnewayExecutor( this                  ,
@@ -272,7 +272,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
                                              lInURL[0]       = aURL      ;
                                              lInArguments[0] = lArguments;
 
-        Vector<Object> lOutParams = OnewayExecutor.encodeDispatch(
+        ArrayList<Object> lOutParams = OnewayExecutor.encodeDispatch(
                                      lInURL                       ,
                                      lInArguments                 );
         OnewayExecutor aExecutor = new OnewayExecutor( this               ,

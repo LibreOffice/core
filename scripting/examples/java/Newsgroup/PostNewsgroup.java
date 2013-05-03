@@ -329,7 +329,7 @@ public class PostNewsgroup extends JFrame
         {
             // Copy all newsgroups into a vector for comparison
             // Alter entries (to include host name) if duplication is found
-            Vector vector = new Vector( subscribedNewsgroups.length );
+            ArrayList vector = new ArrayList( subscribedNewsgroups.length );
             for(int i=0; i < subscribedNewsgroups.length; i++ )
             {
                 vector.add( subscribedNewsgroups[i].getNewsgroupName() );

@@ -32,6 +32,10 @@
  *
  *************************************************************************/
 
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Hashtable;
+
 import com.sun.star.reflection.ParamInfo;
 import com.sun.star.reflection.XIdlClass;
 import com.sun.star.reflection.XIdlMethod;
@@ -40,15 +44,12 @@ import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.TypeClass;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
 
 
 
 public class SourceCodeGenerator {
-    private Vector<String> sExceptions = new Vector<String>();
-    Vector<String> sHeaderStatements = new HeaderStatements();
+    private ArrayList<String> sExceptions = new ArrayList<String>();
+    ArrayList<String> sHeaderStatements = new HeaderStatements();
     private XLanguageSourceCodeGenerator m_xLanguageSourceCodeGenerator;
     private String sHeaderCode = "";
     private String sStatementCode = "";
@@ -61,7 +62,7 @@ public class SourceCodeGenerator {
     private final String SUNOOBJECTNAME = "oUnobject";
     private final String SUNOSTRUCTNAME = "aUnoStruct";
     private Introspector m_oIntrospector;
-    private Vector<XTreePathProvider> aTreepathProviders = new Vector<XTreePathProvider>();
+    private ArrayList<XTreePathProvider> aTreepathProviders = new ArrayList<XTreePathProvider>();
     private XTreePathProvider xTreepathProvider = null;
     private boolean baddExceptionHandling = false;
     private boolean bXPropertySetExceptionsAreAdded = false;
@@ -361,7 +362,7 @@ public class SourceCodeGenerator {
     }
 
 
-    private class HeaderStatements extends Vector<String> {
+    private class HeaderStatements extends ArrayList<String> {
 
         public boolean contains(String _oElement){
            String sCompName = _oElement;

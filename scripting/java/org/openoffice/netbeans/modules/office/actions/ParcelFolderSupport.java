@@ -211,7 +211,7 @@ public class ParcelFolderSupport implements ParcelFolderCookie
     }
 
     private Vector getConfigureClasspath() {
-        Vector result = new Vector();
+        ArrayList result = new ArrayList();
 
         String classpath = NbClassPath.createRepositoryPath().getClassPath();
         if ( System.getProperty( "os.name" ).startsWith( "Windows" ) )

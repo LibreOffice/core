@@ -18,22 +18,21 @@
 
 package org.openoffice.idesupport.ui;
 
-import java.util.Vector;
-import java.util.Enumeration;
-
 import java.awt.BorderLayout;
-import java.awt.event.FocusEvent;
 import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.util.ArrayList;
+import java.util.Iterator;
 
+import javax.swing.DefaultCellEditor;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
 import javax.swing.JTable;
-import javax.swing.DefaultCellEditor;
+import javax.swing.JTextField;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
-import javax.swing.table.AbstractTableModel;
 
 import com.sun.star.script.framework.container.ScriptEntry;
 
@@ -81,7 +80,7 @@ public class ScriptPanel extends JPanel {
         model.removeAll();
     }
 
-    public Enumeration<ScriptEntry> getScriptEntries() {
+    public Iterator<ScriptEntry> getScriptEntries() {
         return model.getScriptEntries();
     }
 
@@ -121,13 +120,13 @@ public class ScriptPanel extends JPanel {
         final String[] columnNames = {"Exported Method",
                                       "Script Name"};
 
-        private Vector<ScriptEntry> scripts;
+        private ArrayList<ScriptEntry> scripts;
         private int nextRow;
 
         public ScriptTableModel(ScriptEntry[] entries) {
-            scripts = new Vector<ScriptEntry>(entries.length + 11);
+            scripts = new ArrayList<ScriptEntry>(entries.length + 11);
             for (int i = 0; i < entries.length; i++) {
-                scripts.addElement(entries[i]);
+                scripts.add(entries[i]);
             }
             nextRow = entries.length;
         }
@@ -145,32 +144,32 @@ public class ScriptPanel extends JPanel {
         }
 
         public void add(ScriptEntry entry) {
-            scripts.addElement(entry);
+            scripts.add(entry);
             fireTableRowsInserted(nextRow, nextRow);
             nextRow++;
         }
 
         public void remove(int row) {
-            scripts.removeElementAt(row);
+            scripts.remove(row);
             fireTableRowsDeleted(row, row);
             nextRow--;
         }
 
         public void removeAll() {
-            scripts.removeAllElements();
+            scripts.clear();
             fireTableRowsDeleted(0, nextRow);
             nextRow = 0;
         }
 
-        public Enumeration<ScriptEntry> getScriptEntries() {
-            return scripts.elements();
+        public Iterator<ScriptEntry> getScriptEntries() {
+            return scripts.iterator();
         }
 
         public Object getValueAt(int row, int col) {
             String result = "";
             ScriptEntry entry;
 
-            entry = scripts.elementAt(row);
+            entry = scripts.get(row);
 
             if (col == 0)
                 result = entry.getLanguageName();
@@ -188,7 +187,7 @@ public class ScriptPanel extends JPanel {
         }
 
         public void setValueAt(Object value, int row, int col) {
-            ScriptEntry entry = scripts.elementAt(row);
+            ScriptEntry entry = scripts.get(row);
             entry.setLogicalName((String)value);
             fireTableCellUpdated(row, col);
         }

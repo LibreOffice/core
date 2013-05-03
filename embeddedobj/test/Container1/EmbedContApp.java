@@ -125,7 +125,6 @@ public class EmbedContApp extends Applet
     private String m_aLinkURI;
 
     private Object m_oActionsNumberLock;
-    private Vector m_aActionsList;
 
     private Timer m_aTimer;
     private boolean m_bDestroyed = false;

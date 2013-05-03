@@ -32,6 +32,8 @@
  *
  *************************************************************************/
 // java base stuff
+import java.util.ArrayList;
+
 import com.sun.star.awt.ActionEvent;
 import com.sun.star.awt.XActionListener;
 import com.sun.star.awt.XButton;
@@ -42,7 +44,6 @@ import com.sun.star.form.runtime.XFormOperations;
 import com.sun.star.lang.EventObject;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
-import java.util.Vector;
 
 
 /**************************************************************************/
@@ -55,7 +56,7 @@ public class ButtonOperator implements XActionListener, XFeatureInvalidation
     private XPropertySet        m_form;
     private XFormOperations     m_formOperations;
 
-    private Vector<XPropertySet>              m_aButtons;
+    private ArrayList<XPropertySet>              m_aButtons;
 
     /* ------------------------------------------------------------------ */
     /** ctor
@@ -65,7 +66,7 @@ public class ButtonOperator implements XActionListener, XFeatureInvalidation
         m_componentContext = xCtx;
         m_aDocument = aDocument;
         m_form = _form;
-        m_aButtons = new Vector<XPropertySet>();
+        m_aButtons = new ArrayList<XPropertySet>();
     }
 
     /* ------------------------------------------------------------------ */
@@ -89,7 +90,7 @@ public class ButtonOperator implements XActionListener, XFeatureInvalidation
     {
         for ( int i=0; i < m_aButtons.size(); ++i )
         {
-            XPropertySet button = m_aButtons.elementAt( i );
+            XPropertySet button = m_aButtons.get( i );
             if ( _formFeature == getAssociatedFormFeature( button ) )
                 return button;
         }
@@ -104,7 +105,7 @@ public class ButtonOperator implements XActionListener, XFeatureInvalidation
         int nPos = -1;
         for ( int i=0; ( i < m_aButtons.size() ) && ( -1 == nPos ); ++i )
         {
-            if ( xButton.equals( m_aButtons.elementAt( i ) ) )
+            if ( xButton.equals( m_aButtons.get( i ) ) )
                 nPos = i;
         }
         return nPos;
@@ -207,9 +208,8 @@ public class ButtonOperator implements XActionListener, XFeatureInvalidation
 
     public void invalidateAllFeatures() throws com.sun.star.uno.RuntimeException
     {
-        for ( int i=0; i < m_aButtons.size(); ++i )
+        for ( XPropertySet buttonModel : m_aButtons )
         {
-            XPropertySet buttonModel = m_aButtons.elementAt( i );
             updateButtonState( buttonModel, getAssociatedFormFeature( buttonModel ) );
         }
     }

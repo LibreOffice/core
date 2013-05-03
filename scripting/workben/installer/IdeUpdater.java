@@ -36,7 +36,7 @@ public class IdeUpdater extends Thread {
 
     private JLabel statusLabel;
 
-    private Vector<InstallListener> listeners;
+    private ArrayList<InstallListener> listeners;
     private Thread internalThread;
     private boolean threadSuspended;
     private JProgressBar progressBar;
@@ -59,7 +59,7 @@ public class IdeUpdater extends Thread {
     System.out.println( "IdeUpdater installPath is " + installPath + " isNetbeansPath is " + isNetbeansPath );
         this.installPath = installPath;
         this.statusLabel = statusLabel;
-    listeners = new Vector<InstallListener>();
+    listeners = new ArrayList<InstallListener>();
     threadSuspended = false;
     progressBar=pBar;
     progressBar.setStringPainted(true);
@@ -150,17 +150,15 @@ public class IdeUpdater extends Thread {
 
     public void addInstallListener(InstallListener listener)
     {
-        listeners.addElement(listener);
+        listeners.add(listener);
     }// addInstallListener
 
 
     private void onInstallComplete()
     {
-        Enumeration<InstallListener> e = listeners.elements();
-        while (e.hasMoreElements())
+        for( InstallListener l : listeners)
         {
-            InstallListener listener = e.nextElement();
-            listener.installationComplete(null);
+            l.installationComplete(null);
         }
     }// onInstallComplete
 

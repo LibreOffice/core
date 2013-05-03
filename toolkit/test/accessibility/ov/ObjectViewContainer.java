@@ -19,22 +19,18 @@
 package ov;
 
 import java.awt.Component;
-import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
-
-import java.util.Vector;
-
-import java.lang.reflect.Method;
-import java.lang.NoSuchMethodException;
-import java.lang.IllegalAccessException;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JTree;
-import javax.swing.BorderFactory;
-import javax.swing.border.Border;
 import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
 
 import com.sun.star.accessibility.XAccessibleContext;
 
@@ -44,7 +40,7 @@ public class ObjectViewContainer
 {
     public ObjectViewContainer ()
     {
-        maViewTemplates = new Vector<Class> ();
+        maViewTemplates = new ArrayList<Class> ();
         maViewBorder = BorderFactory.createBevelBorder (BevelBorder.RAISED);
         setLayout (new GridBagLayout ());
 
@@ -75,7 +71,7 @@ public class ObjectViewContainer
         {
             try
             {
-                Class aViewClass = maViewTemplates.elementAt (i);
+                Class aViewClass = maViewTemplates.get (i);
                 Method aCreateMethod = aViewClass.getDeclaredMethod (
                     "Create", new Class[] {
                         ObjectViewContainer.class,
@@ -112,7 +108,7 @@ public class ObjectViewContainer
     public void RegisterView (Class aObjectViewClass)
     {
         System.out.println ("registering " + aObjectViewClass);
-        maViewTemplates.addElement (aObjectViewClass);
+        maViewTemplates.add(aObjectViewClass);
     }
 
     /** Replace one view class with another.
@@ -121,7 +117,7 @@ public class ObjectViewContainer
     {
         int nIndex = maViewTemplates.indexOf (aObjectViewClass);
         if (nIndex >= 0)
-            maViewTemplates.setElementAt (aSubstitution, nIndex);
+            maViewTemplates.set (nIndex, aSubstitution);
     }
 
     /** Add an object view and place it below all previously added views.
@@ -176,5 +172,5 @@ public class ObjectViewContainer
     private JTree maTree;
     private Border maViewBorder;
     /// List of view templates which are instantiated when new object is set.
-    private Vector<Class> maViewTemplates;
+    private ArrayList<Class> maViewTemplates;
 }

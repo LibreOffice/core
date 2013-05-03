@@ -20,7 +20,7 @@ package org.openoffice.idesupport;
 
 import java.io.File;
 import java.net.ConnectException;
-import java.util.Vector;
+import java.util.ArrayList;
 
 /**
  * LocalOffice represents a connection to the local office.
@@ -43,12 +43,12 @@ public class LocalOffice
     public static final LocalOffice create(
         ClassLoader parent, String officePath, int port)
     {
-        Vector<String>      path    = new Vector<String>();
-        path.addElement(officePath + "/program/classes/ridl.jar");
-        path.addElement(officePath + "/program/classes/jurt.jar");
-        path.addElement(officePath + "/program/classes/unoil.jar");
-        path.addElement(officePath + "/program/classes/juh.jar");
-        path.addElement(System.getProperties().getProperty("netbeans.home") +
+        ArrayList<String>      path    = new ArrayList<String>();
+        path.add(officePath + "/program/classes/ridl.jar");
+        path.add(officePath + "/program/classes/jurt.jar");
+        path.add(officePath + "/program/classes/unoil.jar");
+        path.add(officePath + "/program/classes/juh.jar");
+        path.add(System.getProperties().getProperty("netbeans.home") +
             File.separator + "modules" +
             File.separator + "ext" +
             File.separator + "localoffice.jar");

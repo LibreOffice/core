@@ -16,8 +16,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+import java.util.ArrayList;
+
 import com.sun.star.lang.IndexOutOfBoundsException;
-import java.util.Vector;
 
 /** The VectorNode class is a simple container whose list of children is
     managed entirely by its owner.
@@ -25,13 +26,13 @@ import java.util.Vector;
 class VectorNode
     extends StringNode
 {
-    private Vector<AccessibleTreeNode> maChildren;
+    private ArrayList<AccessibleTreeNode> maChildren;
 
     public VectorNode (String sDisplayObject, AccessibleTreeNode aParent)
     {
         super (sDisplayObject, aParent);
 
-        maChildren = new Vector<AccessibleTreeNode> ();
+        maChildren = new ArrayList<AccessibleTreeNode> ();
     }
 
     public void addChild (AccessibleTreeNode aChild)
@@ -47,7 +48,7 @@ class VectorNode
     public AccessibleTreeNode getChild (int nIndex)
         throws IndexOutOfBoundsException
     {
-        return maChildren.elementAt (nIndex);
+        return maChildren.get(nIndex);
     }
 
     public boolean removeChild (int nIndex)

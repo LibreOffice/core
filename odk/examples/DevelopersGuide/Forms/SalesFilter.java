@@ -362,7 +362,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
         String[] aOldFilterItems = (String[])m_xFilterList.getPropertyValue( "StringItemList" );
 
         // translate this into a vector - much more comfort to work with a vector than with an array ....
-        java.util.Vector aFilterItems = new java.util.Vector();
+        java.util.ArrayList aFilterItems = new java.util.ArrayList();
         for ( int i=0; i<aOldFilterItems.length; ++i )
             aFilterItems.add( aOldFilterItems[i] );
 
@@ -384,7 +384,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
         if ( aFilterItems.size() > 10 ) // (6 standard items + 5 user defined items)
         {
             // the first (and thus oldes) user defined item
-            aFilterItems.removeElementAt( 6 );
+            aFilterItems.remove( 6 );
             // keep our date vector synchron
             m_aFilterDates.removeElementAt( 6 );
         }
@@ -397,7 +397,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
         m_bAdjustingFilterList = true;
         String[] aNewFilterItems = new String[ aFilterItems.size() ];
         for ( int i=0; i<aFilterItems.size(); ++i )
-            aNewFilterItems[i] = (String)aFilterItems.elementAt( i );
+            aNewFilterItems[i] = (String)aFilterItems.get( i );
         m_xFilterList.setPropertyValue( "StringItemList", aNewFilterItems );
         m_bAdjustingFilterList = false;
 

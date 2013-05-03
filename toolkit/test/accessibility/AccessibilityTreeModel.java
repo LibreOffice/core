@@ -16,14 +16,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+import java.util.ArrayList;
+
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreePath;
 
-
-import java.util.Vector;
-import com.sun.star.accessibility.*;
-
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleEventBroadcaster;
+import com.sun.star.accessibility.XAccessibleEventListener;
 import com.sun.star.uno.UnoRuntime;
 
 public class AccessibilityTreeModel
@@ -292,7 +294,7 @@ public class AccessibilityTreeModel
      */
     protected Object[] createPath (AccessibleTreeNode aNode)
     {
-        Vector<AccessibleTreeNode> aPath = new Vector<AccessibleTreeNode>();
+        ArrayList<AccessibleTreeNode> aPath = new ArrayList<AccessibleTreeNode>();
         aNode.createPath (aPath);
         return aPath.toArray();
     }
@@ -391,7 +393,7 @@ public class AccessibilityTreeModel
     /** Create a TreeModelEvent that indicates changes at those children of
         the specified node with the specified indices.
     */
-    protected TreeModelEvent createChangeEvent (AccTreeNode aNode, Vector<Integer> aChildIndices)
+    protected TreeModelEvent createChangeEvent (AccTreeNode aNode, java.util.List<Integer> aChildIndices)
     {
         // Build a list of child objects that are indicated by the given indices.
         int nCount = aChildIndices.size();
@@ -399,7 +401,7 @@ public class AccessibilityTreeModel
         int nChildIndices[] = new int[nCount];
         for (int i=0; i<nCount; i++)
         {
-            int nIndex = aChildIndices.elementAt(i);
+            int nIndex = aChildIndices.get(i);
             aChildObjects[i] = aNode.getChild (nIndex);
             nChildIndices[i] = nIndex;
         }
@@ -493,7 +495,7 @@ public class AccessibilityTreeModel
         {
             aNode = (AccTreeNode) aTreeNode;
             // Get list of affected children.
-            Vector<Integer> aChildIndices = (aNode).updateChildren (
+            java.util.List<Integer> aChildIndices = aNode.updateChildren (
                 class1, class2);
             // Fire events that these children may have changed.
             fireTreeNodesChanged (

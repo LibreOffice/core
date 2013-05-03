@@ -32,7 +32,7 @@
  *
  *************************************************************************/
 
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 import com.sun.star.beans.PropertyValue;
@@ -49,8 +49,8 @@ public class PropertiesComposer {
     private  Helper    m_helper;
     private  XContent  m_content;
     private  String    m_contenturl = "";
-    private  Vector<String>    m_propNames          = new Vector<String>();
-    private  Vector<String>    m_propValues         = new Vector<String>();
+    private  ArrayList<String>    m_propNames          = new ArrayList<String>();
+    private  ArrayList<String>    m_propValues         = new ArrayList<String>();
 
     /**
      * Constructor.
@@ -89,22 +89,22 @@ public class PropertiesComposer {
      */
     public Object[] setProperties()
         throws com.sun.star.ucb.CommandAbortedException, com.sun.star.uno.Exception {
-        Vector<String> properties      = getProperties();
-        Vector<String> propertyValues  = getPropertyValues();
+        ArrayList<String> properties      = getProperties();
+        ArrayList<String> propertyValues  = getPropertyValues();
         return setProperties( properties, propertyValues );
     }
 
     /**
      *  Set values of the properties.
      *
-     *@param  Vector    Properties
-     *@param  Vector    Properties value
+     *@param  properties
+     *@param  propertiesValue
      *@return Object[]  Returns null or instance object of com.sun.star.uno.Any
      *                  if values successfully seted, properties otherwise
      *@exception  com.sun.star.ucb.CommandAbortedException
      *@exception  com.sun.star.uno.Exception
      */
-    public Object[] setProperties( Vector<String> properties, Vector<String> propertiesValues )
+    public Object[] setProperties( ArrayList<String> properties, ArrayList<String> propertiesValues )
         throws com.sun.star.ucb.CommandAbortedException, com.sun.star.uno.Exception {
 
         Object[] result = null;
@@ -161,7 +161,7 @@ public class PropertiesComposer {
      *
      *@return   Vector    That contains the properties names
      */
-    public Vector<String> getProperties() {
+    public ArrayList<String> getProperties() {
         return m_propNames;
     }
 
@@ -170,7 +170,7 @@ public class PropertiesComposer {
      *
      *@return   Vector    That contains the properties values
      */
-    public Vector<String> getPropertyValues() {
+    public ArrayList<String> getPropertyValues() {
         return m_propValues;
     }
 
@@ -263,8 +263,8 @@ public class PropertiesComposer {
         try {
 
             PropertiesComposer setProp = new PropertiesComposer( args );
-            Vector<String> properties       = setProp.getProperties();
-            Vector<String> propertiesValues = setProp.getPropertyValues();
+            ArrayList<String> properties       = setProp.getProperties();
+            ArrayList<String> propertiesValues = setProp.getPropertyValues();
             Object[] result = setProp.setProperties( properties, propertiesValues );
 
             String tempPrint = "\nSetting properties of resource " + setProp.getContentURL();

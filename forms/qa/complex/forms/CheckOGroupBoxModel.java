@@ -17,23 +17,10 @@
  */
 package complex.forms;
 
-import com.sun.star.beans.Property;
-import com.sun.star.beans.PropertyAttribute;
-import com.sun.star.beans.PropertyChangeEvent;
-import com.sun.star.beans.XMultiPropertySet;
-import com.sun.star.beans.XPropertiesChangeListener;
-import com.sun.star.lang.EventObject;
-import com.sun.star.drawing.XControlShape;
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.UnoRuntime;
-// import complexlib.ComplexTestCase;
-import com.sun.star.util.CloseVetoException;
-import com.sun.star.util.XCloseable;
-import java.util.Vector;
-import util.FormTools;
-import util.SOfficeFactory;
-import util.ValueChanger;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.util.ArrayList;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -41,7 +28,24 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
-import static org.junit.Assert.*;
+
+import util.FormTools;
+import util.SOfficeFactory;
+import util.ValueChanger;
+
+import com.sun.star.beans.Property;
+import com.sun.star.beans.PropertyAttribute;
+import com.sun.star.beans.PropertyChangeEvent;
+import com.sun.star.beans.XMultiPropertySet;
+import com.sun.star.beans.XPropertiesChangeListener;
+import com.sun.star.drawing.XControlShape;
+import com.sun.star.lang.EventObject;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.util.CloseVetoException;
+import com.sun.star.util.XCloseable;
+// import complexlib.ComplexTestCase;
 
 /**
  */
@@ -130,7 +134,7 @@ public class CheckOGroupBoxModel
         Property[] properties = m_xPropSet.getPropertySetInfo().getProperties();
         String[] testPropsNames = null;
 
-        Vector<String> tNames = new Vector<String>();
+        ArrayList<String> tNames = new ArrayList<String>();
 
         for (int i = 0; i < properties.length; i++)
         {

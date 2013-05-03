@@ -16,13 +16,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-import com.sun.star.accessibility.*;
-import java.util.Vector;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.tree.*;
-import javax.swing.event.*;
+import java.awt.Cursor;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+
+import javax.swing.AbstractAction;
+import javax.swing.JPopupMenu;
+import javax.swing.JTree;
+import javax.swing.event.TreeExpansionEvent;
+import javax.swing.event.TreeExpansionListener;
+import javax.swing.event.TreeWillExpandListener;
+import javax.swing.tree.TreePath;
+
+import com.sun.star.accessibility.XAccessibleContext;
 
 
 
@@ -252,7 +260,7 @@ public class AccessibilityTree
                     {
                         AccTreeNode aNode = (AccTreeNode)aObject;
 
-                        Vector<String> aActions = new Vector<String>();
+                        ArrayList<String> aActions = new ArrayList<String>();
                         aMenu.add (new AccessibilityTree.ShapeExpandAction(maTree, aNode));
                         aMenu.add (new AccessibilityTree.SubtreeExpandAction(maTree, aNode));
 
@@ -260,7 +268,7 @@ public class AccessibilityTree
                         for( int i = 0; i < aActions.size(); i++ )
                         {
                             aMenu.add( new NodeAction(
-                                           aActions.elementAt(i).toString(),
+                                           aActions.get(i).toString(),
                                            aNode, i ) );
                         }
                     }

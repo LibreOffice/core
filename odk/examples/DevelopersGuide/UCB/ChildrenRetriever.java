@@ -32,19 +32,18 @@
  *
  *************************************************************************/
 
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
+import com.sun.star.beans.Property;
+import com.sun.star.sdbc.XResultSet;
+import com.sun.star.sdbc.XRow;
 import com.sun.star.ucb.OpenCommandArgument2;
 import com.sun.star.ucb.OpenMode;
 import com.sun.star.ucb.XContent;
 import com.sun.star.ucb.XContentAccess;
 import com.sun.star.ucb.XDynamicResultSet;
-import com.sun.star.beans.Property;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.sdbc.XRow;
-import com.sun.star.sdbc.XResultSet;
-
-import java.util.Vector;
-import java.util.Enumeration;
-import java.util.StringTokenizer;
 
 /**
  * Retrieve the Children of a UCB Folder Content
@@ -57,7 +56,7 @@ public class ChildrenRetriever {
     private  Helper   m_helper;
     private  XContent m_content;
     private  String   m_contenturl    = "";
-    private  Vector<String>   m_propnames      = new Vector<String>();
+    private  ArrayList<String>   m_propnames      = new ArrayList<String>();
 
     /**
      * Constructor. Create a new connection with the specific args to a running office
@@ -87,30 +86,30 @@ public class ChildrenRetriever {
      * This method requires the main and the optional arguments to be set in order to work.
      * See Constructor.
      *
-     *@return     Vector   Returns children properties values if values successfully retrieved,
+     *@return     Returns children properties values if values successfully retrieved,
      *                     null otherwise
      *@exception  com.sun.star.ucb.CommandAbortedException
      *@exception  com.sun.star.uno.Exception
      */
-    public Vector<Vector<Object>> getChildren()
+    public ArrayList<ArrayList<Object>> getChildren()
         throws com.sun.star.ucb.CommandAbortedException, com.sun.star.uno.Exception {
-        Vector<String> properties = getProperties();
+        ArrayList<String> properties = getProperties();
         return getChildren ( properties );
     }
 
     /**
      * Open a folder content, get properties values for the properties.
      *
-     *@param  Vector   Properties
-     *@return Vector   Returns children properties values if values successfully retrieved,
+     *@param  properties
+     *@return Returns children properties values if values successfully retrieved,
      *                 null otherwise
      *@exception  com.sun.star.ucb.CommandAbortedException
      *@exception  com.sun.star.uno.Exception
      */
-    public Vector<Vector<Object>> getChildren( Vector<String> properties )
+    public ArrayList<ArrayList<Object>> getChildren( ArrayList<String> properties )
         throws com.sun.star.ucb.CommandAbortedException, com.sun.star.uno.Exception {
 
-        Vector<Vector<Object>> result = null;
+        ArrayList<ArrayList<Object>> result = null;
         if ( m_content != null ) {
             int size = 0;
             if ( properties != null && !properties.isEmpty()) {
@@ -140,7 +139,7 @@ public class ChildrenRetriever {
                 XDynamicResultSet.class, m_helper.executeCommand( m_content, "open", arg ));
             XResultSet resultSet = set.getStaticResultSet();
 
-            result = new Vector<Vector<Object>>();
+            result = new ArrayList<ArrayList<Object>>();
 
             /////////////////////////////////////////////////////////////////////
             // Iterate over children, access children and property values...
@@ -153,7 +152,7 @@ public class ChildrenRetriever {
                 XRow row = UnoRuntime.queryInterface( XRow.class, resultSet );
 
                 do {
-                    Vector<Object> propsValues = new Vector<Object>();
+                    ArrayList<Object> propsValues = new ArrayList<Object>();
 
                     // Obtain URL of child.
                     String id = contentAccess.queryContentIdentifierString();
@@ -187,7 +186,7 @@ public class ChildrenRetriever {
      *
      *@return String    That contains the properties
      */
-    public Vector<String> getProperties() {
+    public ArrayList<String> getProperties() {
         return m_propnames;
     }
 
@@ -240,10 +239,8 @@ public class ChildrenRetriever {
 
     /**
      *  Print all properties out contained in vector .
-     *
-     *@param   Vector
      */
-    public void printLine( Vector<Object> props ) {
+    public void printLine( ArrayList<Object> props ) {
         int limit;
         while ( !props.isEmpty() )   {
             String print = "";
@@ -305,7 +302,7 @@ public class ChildrenRetriever {
             ChildrenRetriever access = new ChildrenRetriever( args );
 
             // Get the properties Title and IsFolder for the children.
-            Vector<Vector<Object>> result = access.getChildren();
+            ArrayList<ArrayList<Object>> result = access.getChildren();
 
             String tempPrint = "\nChildren of resource " + access.getContentURL();
             int size = tempPrint.length();
@@ -318,9 +315,9 @@ public class ChildrenRetriever {
 
             if ( result != null && !result.isEmpty() ) {
 
-                Vector<Object> cont = new Vector<Object>();
+                ArrayList<Object> cont = new ArrayList<Object>();
                 cont.add("URL:");
-                Vector<String> props = access.getProperties();
+                ArrayList<String> props = access.getProperties();
                 size = props.size();
                 for ( int i = 0; i < size; i++ ) {
                     Object obj = props.get( i );
@@ -329,8 +326,7 @@ public class ChildrenRetriever {
                 }
                 access.printLine(cont);
                 System.out.println( "\n" );
-                for ( Enumeration<Vector<Object>> e = result.elements(); e.hasMoreElements(); ) {
-                    Vector<Object> propsV   = e.nextElement();
+                for ( ArrayList<Object> propsV : result ) {
                     access.printLine( propsV );
                 }
             }

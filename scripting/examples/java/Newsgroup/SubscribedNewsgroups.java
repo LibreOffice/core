@@ -118,7 +118,7 @@ public class SubscribedNewsgroups {
         }
         //System.out.println("mailrc files found");
 
-        Vector subscribed = new Vector();
+        ArrayList subscribed = new ArrayList();
         // Get the newsgroups in each mailrc file
         for( int i=0; i < allMailrcs.length; i++ )
         {
@@ -201,7 +201,7 @@ public class SubscribedNewsgroups {
         LineNumberReader in = null;
         try {
             in = new LineNumberReader( new FileReader( mailrcfile ) );
-            Vector groups = new Vector();
+            ArrayList groups = new ArrayList();
             String inString = "";
             int line = 0;
             while( inString != null )
@@ -232,7 +232,7 @@ public class SubscribedNewsgroups {
     // Finds all the mailrc files for all the given News directories
     private static File[] findMailrcFiles(File[] newsDirs)
     {
-        Vector allFiles = new Vector();
+        ArrayList allFiles = new ArrayList();
 
         for( int i=0; i < newsDirs.length; i++ )
         {

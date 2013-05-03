@@ -27,21 +27,22 @@
 
 package com.sun.star.comp.Calc.NLPSolver;
 
-import com.sun.star.comp.Calc.NLPSolver.dialogs.IEvolutionarySolverStatusDialog;
-import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.uno.XComponentContext;
-import com.sun.star.lib.uno.helper.Factory;
-import com.sun.star.lang.XSingleComponentFactory;
-import com.sun.star.registry.XRegistryKey;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import net.adaptivebox.deps.DEPSAgent;
 import net.adaptivebox.deps.behavior.DEGTBehavior;
 import net.adaptivebox.deps.behavior.PSGTBehavior;
 import net.adaptivebox.global.IUpdateCycleEngine;
-import net.adaptivebox.knowledge.ILibEngine;
 import net.adaptivebox.knowledge.Library;
 import net.adaptivebox.knowledge.SearchPoint;
+
+import com.sun.star.comp.Calc.NLPSolver.dialogs.IEvolutionarySolverStatusDialog;
+import com.sun.star.lang.IllegalArgumentException;
+import com.sun.star.lang.XSingleComponentFactory;
+import com.sun.star.lib.uno.helper.Factory;
+import com.sun.star.registry.XRegistryKey;
+import com.sun.star.uno.XComponentContext;
 
 
 public final class DEPSSolverImpl extends BaseEvolutionarySolver

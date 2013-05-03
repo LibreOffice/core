@@ -32,7 +32,7 @@
  *
  *************************************************************************/
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 // __________ Implementation __________
 
@@ -64,5 +64,5 @@ public interface IOnewayLink
      *          Note: Atomic types (e.g. int, long) will be transported as objects
      *          too (Integer, Long)!
      */
-    public abstract void execOneway( int nRequest, Vector<Object> lParams );
+    public abstract void execOneway( int nRequest, ArrayList<Object> lParams );
 }

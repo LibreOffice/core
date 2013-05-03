@@ -18,22 +18,25 @@
 
 package org.openoffice.idesupport.ui;
 
+import java.awt.BorderLayout;
 import java.io.File;
-import java.util.Vector;
+import java.util.ArrayList;
+
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JList;
-import javax.swing.JLabel;
-import java.awt.BorderLayout;
-import com.sun.star.script.framework.container.ScriptEntry;
-import org.openoffice.idesupport.MethodFinder;
+
 import org.openoffice.idesupport.ExtensionFinder;
 import org.openoffice.idesupport.JavaFinder;
+import org.openoffice.idesupport.MethodFinder;
+
+import com.sun.star.script.framework.container.ScriptEntry;
 
 public class MethodPanel extends JPanel {
 
     private File basedir;
-    private Vector<String> classpath;
+    private ArrayList<String> classpath;
     private final static String FIRST_PARAM =
         "drafts.com.sun.star.script.framework.runtime.XScriptContext";
 
@@ -42,7 +45,7 @@ public class MethodPanel extends JPanel {
     private JList list;
     private ScriptEntry[] values;
 
-    public MethodPanel(File basedir, Vector<String> classpath, String language) {
+    public MethodPanel(File basedir, ArrayList<String> classpath, String language) {
         this.basedir = basedir;
         this.classpath = classpath;
 
@@ -50,7 +53,7 @@ public class MethodPanel extends JPanel {
         initUI();
     }
 
-    public void reload(File basedir, Vector<String> classpath, String language) {
+    public void reload(File basedir, ArrayList<String> classpath, String language) {
         this.basedir = basedir;
         this.classpath = classpath;
 
@@ -103,11 +106,11 @@ public class MethodPanel extends JPanel {
         final String[] columnNames = {"Method",
                                       "Language"};
 
-        private Vector methods;
+        private ArrayList methods;
         private int nextRow;
 
         public MethodTableModel() {
-            methods = new Vector(11);
+            methods = new ArrayList(11);
         }
 
         public int getColumnCount() {

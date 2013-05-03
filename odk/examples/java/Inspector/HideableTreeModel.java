@@ -18,15 +18,18 @@
 
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Vector;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.tree.*;
+
+import javax.swing.JTree;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 
 
 public class HideableTreeModel implements TreeModel {
 
-    private Vector<TreeModelListener> modelListeners = new Vector<TreeModelListener>();
+    private ArrayList<TreeModelListener> modelListeners = new ArrayList<TreeModelListener>();
     private Object root = null;
 
 
@@ -72,12 +75,12 @@ public class HideableTreeModel implements TreeModel {
 
 
         public void addTreeModelListener(TreeModelListener l) {
-            modelListeners.addElement(l);
+            modelListeners.add(l);
     }
 
 
         public void removeTreeModelListener(TreeModelListener l) {
-            modelListeners.removeElement(l);
+            modelListeners.remove(l);
     }
 
 
@@ -135,28 +138,28 @@ public class HideableTreeModel implements TreeModel {
 
 
         protected void fireTreeNodesChanged(TreeModelEvent event) {
-            for(int i = 0; i < modelListeners.size(); i++) {
-                modelListeners.elementAt(i).treeNodesChanged(event);
+            for(TreeModelListener l : modelListeners) {
+                l.treeNodesChanged(event);
             }
     }
 
 
         protected void fireTreeNodesInserted(TreeModelEvent event) {
-            for(int i = 0; i < modelListeners.size(); i++) {
-                modelListeners.elementAt(i).treeNodesInserted(event);
+            for(TreeModelListener l : modelListeners) {
+                l.treeNodesInserted(event);
             }
     }
 
 
         protected void fireTreeNodesRemoved(TreeModelEvent event) {
-            for(int i = 0; i < modelListeners.size(); i++) {
-                modelListeners.elementAt(i).treeNodesRemoved(event);
+            for(TreeModelListener l : modelListeners) {
+                l.treeNodesRemoved(event);
             }
     }
 
     protected void fireTreeStructureChanged(TreeModelEvent event) {
-            for(int i = 0; i < modelListeners.size(); i++) {
-                modelListeners.elementAt(i).treeStructureChanged(event);
+            for(TreeModelListener l : modelListeners) {
+                l.treeStructureChanged(event);
             }
     }
 

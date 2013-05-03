@@ -18,14 +18,14 @@
 
 package org.openoffice.idesupport;
 
-import java.io.File;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.FileNotFoundException;
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 
 public class SVersionRCFile {
@@ -61,7 +61,7 @@ public class SVersionRCFile {
 
     private File sversionrc = null;
     private OfficeInstallation defaultversion = null;
-    private Vector<OfficeInstallation> versions = null;
+    private ArrayList<OfficeInstallation> versions = null;
     private long lastModified = 0;
 
     public SVersionRCFile() {
@@ -70,7 +70,7 @@ public class SVersionRCFile {
 
     public SVersionRCFile(String name) {
         sversionrc = new File(name);
-        versions = new Vector<OfficeInstallation>(5);
+        versions = new ArrayList<OfficeInstallation>(5);
     }
 
     public static SVersionRCFile createInstance() {
@@ -99,7 +99,7 @@ public class SVersionRCFile {
         return defaultversion;
     }
 
-    public Enumeration<OfficeInstallation> getVersions() throws IOException {
+    public Iterator<OfficeInstallation> getVersions() throws IOException {
 
         long l = sversionrc.lastModified();
 
@@ -119,7 +119,7 @@ public class SVersionRCFile {
                     br.close();
             }
         }
-        return versions.elements();
+        return versions.iterator();
     }
 
     private void load(BufferedReader br) throws IOException {
@@ -209,8 +209,7 @@ public class SVersionRCFile {
         else
             ov = new SVersionRCFile(args[0]);
 
-        Enumeration<OfficeInstallation> enumer;
-
+        Iterator<OfficeInstallation> enumer;
         try {
             enumer = ov.getVersions();
         }
@@ -219,8 +218,8 @@ public class SVersionRCFile {
             return;
         }
 
-        while (enumer.hasMoreElements()) {
-            OfficeInstallation oi = enumer.nextElement();
+        while (enumer.hasNext()) {
+            OfficeInstallation oi = enumer.next();
             System.out.println("Name: " + oi.getName() + ", Path: " + oi.getPath() +
                 ", URL: " + oi.getURL());
         }

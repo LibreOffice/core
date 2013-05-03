@@ -20,14 +20,15 @@ package org.openoffice.idesupport;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Vector;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.openoffice.idesupport.zip.ParcelZipper;
 
 import com.sun.star.script.framework.container.ScriptEntry;
@@ -41,11 +42,11 @@ public class JavaFinder implements MethodFinder {
     private static final String FIRST_PARAM =
         "drafts.com.sun.star.script.framework.runtime.XScriptContext";
 
-    private Vector<String> classpath = null;
+    private List<String> classpath = null;
 
     private JavaFinder() {}
 
-    private JavaFinder(Vector<String> classpath) {
+    private JavaFinder(List<String> classpath) {
         this.classpath = classpath;
     }
 
@@ -59,7 +60,7 @@ public class JavaFinder implements MethodFinder {
         return finder;
     }
 
-    public static JavaFinder getInstance(Vector<String> classpath) {
+    public static JavaFinder getInstance(List<String> classpath) {
         return new JavaFinder(classpath);
     }
 
@@ -136,7 +137,7 @@ public class JavaFinder implements MethodFinder {
 
         for (int i = 0; i < len; i++) {
             try {
-                String s = classpath.elementAt(i);
+                String s = classpath.get(i);
                 s = SVersionRCFile.toFileURL(s);
 
                 if (s != null)
@@ -154,10 +155,10 @@ public class JavaFinder implements MethodFinder {
         files.add(basedir);
 
         try {
-            Enumeration offices = SVersionRCFile.createInstance().getVersions();
+            Iterator<OfficeInstallation> offices = SVersionRCFile.createInstance().getVersions();
 
-            while (offices.hasMoreElements()) {
-                OfficeInstallation oi = (OfficeInstallation)offices.nextElement();
+            while (offices.hasNext()) {
+                OfficeInstallation oi = offices.next();
                 String unoil = SVersionRCFile.getPathForUnoil(oi.getPath());
 
                 if (unoil != null) {

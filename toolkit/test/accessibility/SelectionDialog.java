@@ -16,16 +16,26 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.ListSelectionModel;
+
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.accessibility.XAccessibleSelection;
 import com.sun.star.lang.IndexOutOfBoundsException;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.Vector;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 /**
  * Display a dialog with a list-box of children and select/deselect buttons

@@ -18,7 +18,7 @@
 
 package ifc.beans;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import lib.MultiMethodTest;
 import util.ValueChanger;
@@ -96,9 +96,9 @@ public class _XPropertySet extends MultiMethodTest {
     * Constrained, Bound and Normal.
     */
     private final class PropsToTest {
-        Vector< String > constrained = new Vector< String >();
-        Vector< String > bound = new Vector< String >();
-        Vector< String > normal = new Vector< String >();
+        ArrayList< String > constrained = new ArrayList< String >();
+        ArrayList< String > bound = new ArrayList< String >();
+        ArrayList< String > normal = new ArrayList< String >();
     }
 
     private final PropsToTest PTT = new PropsToTest();

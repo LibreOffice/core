@@ -18,10 +18,15 @@
 
 package org.openoffice.idesupport;
 
-import java.io.*;
-import java.util.zip.*;
-import java.util.Vector;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
+import java.util.zip.ZipFile;
+
 import org.openoffice.idesupport.zip.ParcelZipper;
 
 public class OfficeDocument
@@ -51,9 +56,9 @@ public class OfficeDocument
         return false;
     }
 
-    public Enumeration<String> getParcels() {
+    public Iterator<String> getParcels() {
 
-        Vector<String> parcels = new Vector<String>();
+        ArrayList<String> parcels = new ArrayList<String>();
         ZipFile zp = null;
 
         try
@@ -90,7 +95,7 @@ public class OfficeDocument
             }
         }
 
-        return parcels.elements();
+        return parcels.iterator();
     }
 
     public boolean removeParcel(String parcelName) {

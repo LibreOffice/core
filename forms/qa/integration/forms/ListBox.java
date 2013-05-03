@@ -17,6 +17,10 @@
  */
 package integration.forms;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.sun.star.awt.XListBox;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XChild;
@@ -32,13 +36,11 @@ import com.sun.star.sdbc.XParameters;
 import com.sun.star.sdbc.XPreparedStatement;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
+
 import connectivity.tools.HsqlColumnDescriptor;
 import connectivity.tools.HsqlDatabase;
 import connectivity.tools.HsqlTableDescriptor;
 import connectivity.tools.sdb.Connection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Vector;
 
 public class ListBox extends TestCase
 {
@@ -175,10 +177,10 @@ public class ListBox extends TestCase
             final String[] keyTypes = fieldDefinitions[0];
             final String[] keyCreationArgs = fieldDefinitions[1];
 
-            Vector< HsqlColumnDescriptor > foreignKeyColumns = new Vector< HsqlColumnDescriptor >();
+            ArrayList< HsqlColumnDescriptor > foreignKeyColumns = new ArrayList< HsqlColumnDescriptor >();
             foreignKeyColumns.add( new HsqlColumnDescriptor( "ID", "integer", HsqlColumnDescriptor.PRIMARY ) );
 
-            Vector< String[] > foreignKeyValues = new Vector< String[] >();
+            ArrayList< String[] > foreignKeyValues = new ArrayList< String[] >();
 
             StringBuffer foreignKeyInsertSQL = new StringBuffer();
             foreignKeyInsertSQL.append( "INSERT INTO \"" + m_foreignKeyTableName + "\" VALUES (?" );

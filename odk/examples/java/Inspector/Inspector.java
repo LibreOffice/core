@@ -32,6 +32,13 @@
  *
  *************************************************************************/
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
+
+import org.openoffice.XInstanceInspector;
+
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.XMessageBox;
 import com.sun.star.awt.XMessageBoxFactory;
@@ -56,11 +63,6 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.CloseVetoException;
 import com.sun.star.util.XChangesBatch;
 import com.sun.star.util.XCloseable;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.Vector;
-import org.openoffice.XInstanceInspector;
 
 
 /** The purpose of this class is to provide a factory for creating the service
@@ -79,7 +81,7 @@ public class Inspector{
         static private final String __serviceName = "org.openoffice.InstanceInspector";
         private HashMap<String, String> aApplicationHashMap = new HashMap<String, String>();
         private String sTitle = "Object Inspector";
-        private Vector<XComponent> aHiddenDocuments = new Vector<XComponent>();
+        private ArrayList<XComponent> aHiddenDocuments = new ArrayList<XComponent>();
 //        private String[] sApplicationDocUrls = new String[]{"private:factory/swriter", "private:factory/scalc", "private:factory/simpress", "private:factory/sdraw", "private:factory/sbase"};
 //        private String[] sApplicationDocNames = new String[]{"Text Document", "Spreadsheet", "Presentation", "Drawing", "Database"};
         private XComponentContext m_xComponentContext;

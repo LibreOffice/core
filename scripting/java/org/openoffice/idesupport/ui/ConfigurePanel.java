@@ -18,34 +18,32 @@
 
 package org.openoffice.idesupport.ui;
 
-import java.io.File;
-import java.io.IOException;
-
-import java.util.Vector;
-import java.util.Enumeration;
-
-import javax.swing.JPanel;
-import javax.swing.JButton;
-import javax.swing.AbstractButton;
-import javax.swing.ImageIcon;
-import javax.swing.border.LineBorder;
-
 import java.awt.BorderLayout;
-import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import javax.swing.AbstractButton;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
+
+import org.openoffice.idesupport.zip.ParcelZipper;
 
 import com.sun.star.script.framework.container.ParcelDescriptor;
 import com.sun.star.script.framework.container.ScriptEntry;
 
-import org.openoffice.idesupport.zip.ParcelZipper;
-
 public class ConfigurePanel extends JPanel {
 
     private File basedir;
-    private Vector<String> classpath;
+    private ArrayList<String> classpath;
     private ParcelDescriptor descriptor;
 
     private MethodPanel methodPanel;
@@ -54,7 +52,7 @@ public class ConfigurePanel extends JPanel {
     public static final String DIALOG_TITLE =
         "Choose What to Export as Scripts";
 
-    public ConfigurePanel(String basedir, Vector<String> classpath,
+    public ConfigurePanel(String basedir, ArrayList<String> classpath,
         ParcelDescriptor descriptor) {
 
         this.basedir = new File(basedir);
@@ -63,7 +61,7 @@ public class ConfigurePanel extends JPanel {
         initUI();
     }
 
-    public ConfigurePanel(String basedir, Vector<String> classpath)
+    public ConfigurePanel(String basedir, ArrayList<String> classpath)
         throws IOException {
 
         this.basedir = new File(basedir);
@@ -73,7 +71,7 @@ public class ConfigurePanel extends JPanel {
         initUI();
     }
 
-    public void reload(String basedir, Vector<String> classpath,
+    public void reload(String basedir, ArrayList<String> classpath,
         ParcelDescriptor descriptor) {
 
         if (basedir != null)
@@ -91,7 +89,7 @@ public class ConfigurePanel extends JPanel {
         scriptPanel.reload(descriptor.getScriptEntries());
     }
 
-    public void reload(String basedir, Vector<String> classpath)
+    public void reload(String basedir, ArrayList<String> classpath)
         throws IOException {
 
         if (basedir != null)
@@ -109,7 +107,7 @@ public class ConfigurePanel extends JPanel {
     }
 
     public ParcelDescriptor getConfiguration() throws Exception {
-        Enumeration<ScriptEntry> scripts = scriptPanel.getScriptEntries();
+        Iterator<ScriptEntry> scripts = scriptPanel.getScriptEntries();
         descriptor.setScriptEntries(scripts);
         return descriptor;
     }

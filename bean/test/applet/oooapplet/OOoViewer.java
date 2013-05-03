@@ -124,7 +124,7 @@ public class OOoViewer extends Applet {
 
 final class CustomURLClassLoader extends URLClassLoader {
 
-    private Vector<URL> resourcePaths;
+    private ArrayList<URL> resourcePaths;
 
     public CustomURLClassLoader( URL[] urls ) {
         super( urls );
@@ -163,7 +163,7 @@ final class CustomURLClassLoader extends URLClassLoader {
     }
 
     public void addResourcePath(URL rurl) {
-        if (resourcePaths == null) resourcePaths = new Vector<URL>();
+        if (resourcePaths == null) resourcePaths = new ArrayList<URL>();
         resourcePaths.add(rurl);
     }
 
@@ -175,10 +175,8 @@ final class CustomURLClassLoader extends URLClassLoader {
             return result;
         }
 
-        URL u = null;
         URI uri = null;
-        for (Enumeration<URL> e = resourcePaths.elements(); e.hasMoreElements();) {
-            u = e.nextElement();
+        for (URL u : resourcePaths) {
             if (u.getProtocol().startsWith("file")){
                 try {
                     File f1 = new File(u.getPath());

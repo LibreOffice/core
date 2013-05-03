@@ -17,27 +17,28 @@
  */
 package com.sun.star.script.framework.container;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.FileNotFoundException;
-import java.io.ByteArrayInputStream;
-
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.Map;
 
+import org.w3c.dom.CharacterData;
+import org.w3c.dom.DOMException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 // import javax.xml.parsers.DocumentBuilderFactory;
 // import javax.xml.parsers.DocumentBuilder;
 // import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.*;
 
 public class ParcelDescriptor {
 
@@ -294,10 +295,10 @@ public class ParcelDescriptor {
             addScriptEntry(scripts[i]);
     }
 
-    public void setScriptEntries(Enumeration<ScriptEntry> scripts) {
+    public void setScriptEntries(Iterator<ScriptEntry> scripts) {
         clearEntries();
-        while (scripts.hasMoreElements())
-            addScriptEntry(scripts.nextElement());
+        while (scripts.hasNext())
+            addScriptEntry(scripts.next());
     }
 
     public String getLanguageProperty(String name) {

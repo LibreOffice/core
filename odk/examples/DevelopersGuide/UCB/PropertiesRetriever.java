@@ -32,13 +32,13 @@
  *
  *************************************************************************/
 
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 import com.sun.star.beans.Property;
+import com.sun.star.sdbc.XRow;
 import com.sun.star.ucb.XContent;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.sdbc.XRow;
 
 
 /**
@@ -52,7 +52,7 @@ public class PropertiesRetriever {
     private  Helper   m_helper;
     private  XContent m_content;
     private  String   m_contenturl    = "";
-    private  Vector<String>   m_propNames     = new Vector<String>();
+    private  ArrayList<String>   m_propNames     = new ArrayList<String>();
 
     /**
      * Constructor.
@@ -87,9 +87,9 @@ public class PropertiesRetriever {
      *@exception  com.sun.star.ucb.CommandAbortedException
      *@exception  com.sun.star.uno.Exception
      */
-    public Vector<Object> getPropertyValues()
+    public ArrayList<Object> getPropertyValues()
         throws com.sun.star.ucb.CommandAbortedException, com.sun.star.uno.Exception {
-        Vector<String> properties = getProperties();
+        ArrayList<String> properties = getProperties();
         return getPropertyValues ( properties );
     }
 
@@ -101,9 +101,9 @@ public class PropertiesRetriever {
      *@exception  com.sun.star.ucb.CommandAbortedException
      *@exception  com.sun.star.uno.Exception
      */
-    public Vector<Object> getPropertyValues( Vector<String> properties )
+    public ArrayList<Object> getPropertyValues( ArrayList<String> properties )
         throws com.sun.star.ucb.CommandAbortedException, com.sun.star.uno.Exception {
-        Vector<Object> m_propValues = null;
+        ArrayList<Object> m_propValues = null;
         if ( m_content != null && properties != null && !properties.isEmpty() ) {
 
             int size = properties.size();
@@ -124,7 +124,7 @@ public class PropertiesRetriever {
                 UnoRuntime.queryInterface(
                 XRow.class, m_helper.executeCommand( m_content,"getPropertyValues", props ));
 
-            m_propValues = new Vector<Object>();
+            m_propValues = new ArrayList<Object>();
 
             /*
               Extract values from row object. Note that the
@@ -155,7 +155,7 @@ public class PropertiesRetriever {
      *
      *@return Vector  That contains the properties
      */
-    public Vector<String> getProperties() {
+    public ArrayList<String> getProperties() {
         return m_propNames;
     }
 
@@ -222,8 +222,8 @@ public class PropertiesRetriever {
             "--------------------------------------------------------------" );
         try {
             PropertiesRetriever obtProperty = new PropertiesRetriever( args );
-            Vector<String> properties  = obtProperty.getProperties();
-            Vector<Object> propertiesValues = obtProperty.getPropertyValues( properties );
+            ArrayList<String> properties  = obtProperty.getProperties();
+            ArrayList<Object> propertiesValues = obtProperty.getPropertyValues( properties );
 
             String tempPrint = "\nProperties of resource " + obtProperty.getContentURL();
             int size = tempPrint.length();

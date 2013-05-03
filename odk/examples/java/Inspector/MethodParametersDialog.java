@@ -32,15 +32,13 @@
  *
  *************************************************************************/
 
-import com.sun.star.reflection.ParamInfo;
-import com.sun.star.reflection.XIdlMethod;
-import com.sun.star.uno.TypeClass;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.Vector;
+import java.util.ArrayList;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -48,6 +46,10 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import com.sun.star.reflection.ParamInfo;
+import com.sun.star.reflection.XIdlMethod;
+import com.sun.star.uno.TypeClass;
 
 public class MethodParametersDialog extends JDialog{
     private javax.swing.JPanel jPnlParamContainer;
@@ -76,7 +78,7 @@ public class MethodParametersDialog extends JDialog{
     }
 
 
-    public Vector<Object> getMethodObjects() {
+    public ArrayList<Object> getMethodObjects() {
         super.setModal(true);
         addBorderPanel(getContentPane(), BorderLayout.NORTH);
         addBorderPanel(getContentPane(), BorderLayout.WEST);
@@ -105,7 +107,7 @@ public class MethodParametersDialog extends JDialog{
         m_aParameterPanels[0].getInputComponent().requestFocusInWindow();
         setVisible(true);
         if (!bisdiposed){
-            Vector<Object> aMethodObjects = new Vector<Object>();
+            ArrayList<Object> aMethodObjects = new ArrayList<Object>();
             for (int i = 0; i < m_aParameterPanels.length; i++){
                 aMethodObjects.add(m_aParameterPanels[i].getValue());
             }

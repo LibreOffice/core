@@ -16,27 +16,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
+import java.awt.Dimension;
+import java.util.ArrayList;
+
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XNameAccess;
+import com.sun.star.embed.VisualRepresentation;
+import com.sun.star.embed.XStorage;
+import com.sun.star.embed.XTransactedObject;
+import com.sun.star.io.XInputStream;
+import com.sun.star.io.XOutputStream;
+import com.sun.star.io.XStream;
+import com.sun.star.io.XTruncate;
+import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.AnyConverter;
 import com.sun.star.lib.uno.helper.WeakBase;
-import com.sun.star.io.XStream;
-import com.sun.star.io.XOutputStream;
-import com.sun.star.io.XInputStream;
-import com.sun.star.io.XTruncate;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.lang.XComponent;
-import com.sun.star.embed.VisualRepresentation;
-import com.sun.star.container.XNameAccess;
-
-
-import com.sun.star.embed.*;
-
-import java.util.Vector;
-import java.awt.Dimension;
-import java.lang.Integer;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
 
 public final class OwnEmbeddedObject extends WeakBase
    implements com.sun.star.embed.XEmbedPersist,
@@ -59,7 +57,7 @@ public final class OwnEmbeddedObject extends WeakBase
 
     protected EditorFrame m_aEditorFrame;
 
-    protected Vector<Object> m_aListeners;
+    protected ArrayList<Object> m_aListeners;
 
     com.sun.star.embed.VerbDescriptor[] m_pOwnVerbs;
 
@@ -68,10 +66,10 @@ public final class OwnEmbeddedObject extends WeakBase
     Dimension m_aObjSize;
 
     // -------------------------------------------------------------
-    protected Vector<Object> GetListeners()
+    protected ArrayList<Object> GetListeners()
     {
         if ( m_aListeners == null )
-            m_aListeners = new Vector<Object>( 10, 10 );
+            m_aListeners = new ArrayList<Object>(10);
 
         return m_aListeners;
     }

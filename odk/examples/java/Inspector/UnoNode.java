@@ -32,6 +32,9 @@
  *
  *************************************************************************/
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.FrameSearchFlag;
 import com.sun.star.frame.XDesktop;
@@ -52,8 +55,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
-import java.util.List;
-import java.util.Vector;
 
 public class UnoNode{
 
@@ -270,7 +271,7 @@ public class UnoNode{
     private static String[] removeMandatoryServiceNames(String[] _sServiceNames){
     try{
         List<String> aList = java.util.Arrays.asList(_sServiceNames);
-        Vector<String> aVector = new Vector<String>(aList);
+        ArrayList<String> aVector = new ArrayList<String>(aList);
         for (int n = 0; n < _sServiceNames.length; n++){
             String[] sDelServiceNames = getMandatoryServiceNames(_sServiceNames[n]);
             for (int m = 0; m < sDelServiceNames.length; m++){

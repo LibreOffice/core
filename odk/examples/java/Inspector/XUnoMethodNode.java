@@ -34,7 +34,6 @@
 
 import com.sun.star.reflection.XIdlMethod;
 import com.sun.star.uno.TypeClass;
-import java.util.Vector;
 
 
 public interface XUnoMethodNode extends XUnoNode {
@@ -59,7 +58,7 @@ public interface XUnoMethodNode extends XUnoNode {
 
     public boolean isPrimitive();
 
-    public Vector<Object> getMethodObjects();
+    public java.util.List<Object> getMethodObjects();
 
     public boolean isFoldable();
 

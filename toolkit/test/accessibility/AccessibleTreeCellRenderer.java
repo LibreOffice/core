@@ -16,12 +16,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.TreePath;
-import javax.swing.JTree;
 import java.awt.Color;
 import java.awt.Component;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JTree;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.TreePath;
 
 
 public class AccessibleTreeCellRenderer
@@ -30,7 +32,7 @@ public class AccessibleTreeCellRenderer
     public Color
         maDefaultColor,
         maChangedColor;
-    protected Vector<Boolean>
+    protected ArrayList<Boolean>
         maChangedLines;
 
 
@@ -39,7 +41,7 @@ public class AccessibleTreeCellRenderer
     {
         maDefaultColor = Color.black;
         maChangedColor = Color.red;
-        maChangedLines = new Vector<Boolean> ();
+        maChangedLines = new ArrayList<Boolean> ();
     }
 
     public Component getTreeCellRendererComponent (
@@ -56,7 +58,7 @@ public class AccessibleTreeCellRenderer
             expanded, leaf, row,
             hasFocus);
 
-        if (maChangedLines.size()<=row || maChangedLines.elementAt (row) == null)
+        if (maChangedLines.size()<=row || maChangedLines.get (row) == null)
             setTextNonSelectionColor (maDefaultColor);
         else
             setTextNonSelectionColor (maChangedColor);
@@ -76,8 +78,8 @@ public class AccessibleTreeCellRenderer
     */
     public void addChangedLine (int nRow)
     {
-        if (maChangedLines.size() <= nRow)
-            maChangedLines.setSize (nRow+1);
+        while (maChangedLines.size() <= nRow)
+            maChangedLines.add(null);
         nRow -= 1; // row index is one to large for some reason.
         maChangedLines.set (nRow, true);
     }
@@ -90,11 +92,11 @@ public class AccessibleTreeCellRenderer
             The JTree that is used to transform the given TreePath objects
             into rows.
     */
-    public void addChangedNodes (Vector<TreePath> aChangedNodes, JTree aTree)
+    public void addChangedNodes (List<TreePath> aChangedNodes, JTree aTree)
     {
         for (int i=0; i<aChangedNodes.size(); i++)
         {
-            TreePath aPath = aChangedNodes.elementAt (i);
+            TreePath aPath = aChangedNodes.get (i);
             int nRow = aTree.getRowForPath (aPath);
             addChangedLine (nRow);
         }

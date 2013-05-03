@@ -32,6 +32,9 @@
  *
  *************************************************************************/
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.sun.star.beans.IllegalTypeException;
 import com.sun.star.beans.MethodConcept;
 import com.sun.star.beans.Property;
@@ -66,8 +69,6 @@ import com.sun.star.uno.TypeClass;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.URL;
-import java.util.List;
-import java.util.Vector;
 
 public class Introspector extends WeakBase{
 
@@ -160,7 +161,7 @@ public class Introspector extends WeakBase{
     public Object[] getUnoObjectsOfContainer(Object _oUnoParentObject) {
     Object[] oRetComponents = null;
     try {
-        Vector<Object> oRetComponentsVector = new Vector<Object>();
+        ArrayList<Object> oRetComponentsVector = new ArrayList<Object>();
         XIntrospectionAccess xIntrospectionAccessObject = getXIntrospectionAccess(_oUnoParentObject);
         if ( xIntrospectionAccessObject != null ) {
             XEnumerationAccess xEnumerationAccess = UnoRuntime.queryInterface(XEnumerationAccess.class, xIntrospectionAccessObject.queryAdapter( new Type( XEnumerationAccess.class ) ) );
@@ -260,7 +261,7 @@ public class Introspector extends WeakBase{
     protected Property[] getProperties(Object _oUnoObject, String _sServiceName){
         Property[] aProperties = getProperties(_oUnoObject);
         List<Property> aListOfProperties = java.util.Arrays.asList(aProperties);
-        Vector<Property> aPropertiesVector = new Vector<Property>(aListOfProperties);
+        ArrayList<Property> aPropertiesVector = new ArrayList<Property>(aListOfProperties);
         if (aProperties != null){
             XPropertyTypeDescription[] xPropertyTypeDescriptions = getPropertyDescriptionsOfService(_sServiceName);
             for (int i = aProperties.length - 1; i >= 0; i--){
@@ -278,7 +279,7 @@ public class Introspector extends WeakBase{
     protected Type[] getInterfaces(Object _oUnoObject, String _sServiceName){
         Type[] aTypes = getInterfaces(_oUnoObject);
         List<Type> aListOfTypes = java.util.Arrays.asList(aTypes);
-        Vector<Type> aTypesVector = new Vector<Type>(aListOfTypes);
+        ArrayList<Type> aTypesVector = new ArrayList<Type>(aListOfTypes);
         if (aTypes != null){
             XInterfaceTypeDescription[] xInterfaceTypeDescriptions = getInterfaceDescriptionsOfService(_sServiceName);
             for (int i = aTypes.length - 1; i >= 0; i--){
