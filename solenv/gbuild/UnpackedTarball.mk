@@ -131,6 +131,9 @@ $(call gb_Output_announce,$(2),$(true),PAT,2)
 $(call gb_Helper_abbreviate_dirs,\
 	( \
 		cd $(3) && \
+		$(if $(UNPACKED_PRE_ACTION),\
+			$(UNPACKED_PRE_ACTION) && \
+		) \
 		$(if $(UNPACKED_FILES),\
 			mkdir -p $(sort $(dir $(UNPACKED_DESTFILES))) && \
 			$(call gb_UnpackedTarball__copy_files,$(UNPACKED_FILES),$(UNPACKED_DESTFILES)) && \
@@ -193,6 +196,7 @@ $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_FIX_EOL :=
 $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_PATCHES :=
 $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_PATCHLEVEL := $(gb_UnpackedTarball_PATCHLEVEL_DEFAULT)
 $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_POST_ACTION :=
+$(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_PRE_ACTION :=
 
 $(call gb_UnpackedTarball_get_preparation_target,$(1)) : $(gb_Module_CURRENTMAKEFILE)
 $(call gb_UnpackedTarball_get_preparation_target,$(1)) :| $(dir $(call gb_UnpackedTarball_get_target,$(1))).dir
@@ -283,6 +287,19 @@ endef
 # gb_UnpackedTarball_add_files unpacked subdir file(s)
 define gb_UnpackedTarball_add_files
 $(foreach file,$(3),$(call gb_UnpackedTarball_add_file,$(1),$(2)/$(notdir $(file)),$(file)))
+
+endef
+
+# Set arbitrary shell command to be run during unpack
+#
+# The command is run at the very beginning, in freshly unpacked tarball.
+# The command is run in the unpacked directory. If more than one command
+# is used, care should be taken that the whole command fails if either
+# of the sub-commands fails.
+#
+# gb_UnpackedTarball_set_pre_action unpacked shell-command
+define gb_UnpackedTarball_set_pre_action
+$(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_PRE_ACTION := $(strip $(2))
 
 endef
 
