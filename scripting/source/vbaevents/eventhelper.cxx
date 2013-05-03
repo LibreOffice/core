@@ -314,11 +314,14 @@ class ScriptEventHelper
 {
 public:
     ScriptEventHelper( const Reference< XInterface >& xControl );
+    ScriptEventHelper( const OUString& sCntrlServiceName );
+    ~ScriptEventHelper();
     Sequence< ScriptEventDescriptor > createEvents( const OUString& sCodeName );
     Sequence< OUString > getEventListeners();
 private:
     Reference< XComponentContext > m_xCtx;
     Reference< XInterface > m_xControl;
+    bool m_bDispose;
 };
 
 bool
@@ -363,10 +366,35 @@ eventMethodToDescriptor( const OUString& rEventMethod, ScriptEventDescriptor& ev
 
 }
 
-ScriptEventHelper::ScriptEventHelper( const Reference< XInterface >& xControl ):
+ScriptEventHelper::ScriptEventHelper( const Reference< XInterface >& xControl ) :
     m_xCtx( comphelper::getProcessComponentContext() ),
-    m_xControl( xControl )
+    m_xControl( xControl ),
+    m_bDispose( false )
 {}
+
+ScriptEventHelper::ScriptEventHelper( const OUString& sCntrlServiceName ) :
+    m_xCtx( comphelper::getProcessComponentContext() ),
+    m_bDispose( true )
+{
+   m_xControl.set( m_xCtx->getServiceManager()->createInstanceWithContext( sCntrlServiceName, m_xCtx ), uno::UNO_QUERY );
+}
+
+ScriptEventHelper::~ScriptEventHelper()
+{
+    // dispose control ( and remove any associated event registrations )
+    if ( m_bDispose )
+    {
+        try
+        {
+            uno::Reference< lang::XComponent > xComp( m_xControl, uno::UNO_QUERY_THROW );
+            xComp->dispose();
+        }
+        // destructor can't throw
+        catch( uno::Exception& )
+        {
+        }
+    }
+}
 
 Sequence< OUString >
 ScriptEventHelper::getEventListeners()
@@ -1002,7 +1030,7 @@ public:
     VBAToOOEventDescGen( const Reference< XComponentContext >& rxContext );
 
     // XVBAToOOEventDescGen
-    virtual Sequence< ScriptEventDescriptor > SAL_CALL getEventDescriptions( const Reference< XInterface >& control, const OUString& sCodeName ) throw (RuntimeException);
+    virtual Sequence< ScriptEventDescriptor > SAL_CALL getEventDescriptions( const OUString& sCtrlServiceName, const OUString& sCodeName ) throw (RuntimeException);
     virtual Reference< XScriptEventsSupplier > SAL_CALL getEventSupplier( const Reference< XInterface >& xControl,  const OUString& sCodeName ) throw (::com::sun::star::uno::RuntimeException);
 private:
     Reference< XComponentContext > m_xContext;
@@ -1012,9 +1040,9 @@ private:
 VBAToOOEventDescGen::VBAToOOEventDescGen( const Reference< XComponentContext >& rxContext ):m_xContext( rxContext ) {}
 
 Sequence< ScriptEventDescriptor > SAL_CALL
-VBAToOOEventDescGen::getEventDescriptions( const Reference< XInterface >& xControl, const OUString& sCodeName ) throw (RuntimeException)
+VBAToOOEventDescGen::getEventDescriptions( const OUString& sCntrlServiceName, const OUString& sCodeName ) throw (RuntimeException)
 {
-    ScriptEventHelper evntHelper( xControl );
+    ScriptEventHelper evntHelper( sCntrlServiceName );
     return evntHelper.createEvents( sCodeName );
 }
 
