@@ -1299,7 +1299,7 @@ void ScInputHandler::PasteFunctionData()
 //      Selektion berechnen und als Tip-Hilfe anzeigen
 //
 
-static String lcl_Calculate( const OUString& rFormula, ScDocument* pDoc, const ScAddress &rPos )
+static OUString lcl_Calculate( const OUString& rFormula, ScDocument* pDoc, const ScAddress &rPos )
 {
     //!     mit ScFormulaDlg::CalcValue zusammenfassen und ans Dokument verschieben !!!!
     //!     (Anfuehrungszeichen bei Strings werden nur hier eingefuegt)
@@ -1331,43 +1331,37 @@ static String lcl_Calculate( const OUString& rFormula, ScDocument* pDoc, const S
     }
 
     sal_uInt16 nErrCode = pCell->GetErrCode();
-    if ( nErrCode == 0 )
+    if ( nErrCode != 0 )
+        return ScGlobal::GetErrorString(nErrCode);
+
+    SvNumberFormatter& aFormatter = *(pDoc->GetFormatTable());
+    OUString aValue;
+    if ( pCell->IsValue() )
     {
-        SvNumberFormatter& aFormatter = *(pDoc->GetFormatTable());
-        Color* pColor;
-        if ( pCell->IsValue() )
-        {
-            double n = pCell->GetValue();
-            sal_uLong nFormat = aFormatter.GetStandardFormat( n, 0,
-                    pCell->GetFormatType(), ScGlobal::eLnge );
-            aFormatter.GetInputLineString( n, nFormat, aValue );
-            //! display OutputString but insert InputLineString
-        }
-        else
-        {
-            String aStr = pCell->GetString();
-            sal_uLong nFormat = aFormatter.GetStandardFormat(
-                    pCell->GetFormatType(), ScGlobal::eLnge);
-            {
-                OUString sTempIn(aStr);
-                OUString sTempOut(aValue);
-                aFormatter.GetOutputString( sTempIn, nFormat,
-                        sTempOut, &pColor );
-                aStr = sTempIn;
-                aValue = sTempOut;
-            }
-
-            aValue.Insert('"',0);   // in Anfuehrungszeichen
-            aValue+='"';
-            //! Anfuehrungszeichen im String escapen ????
-        }
-
-        ScRange aTestRange;
-        if ( bColRowName || (aTestRange.Parse(rFormula) & SCA_VALID) )
-            aValue.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " ..." ));       // Bereich
+        double n = pCell->GetValue();
+        sal_uLong nFormat = aFormatter.GetStandardFormat( n, 0,
+                pCell->GetFormatType(), ScGlobal::eLnge );
+        aFormatter.GetInputLineString( n, nFormat, aValue );
+        //! display OutputString but insert InputLineString
     }
     else
-        aValue = ScGlobal::GetErrorString(nErrCode);
+    {
+        OUString aStr = pCell->GetString();
+        sal_uLong nFormat = aFormatter.GetStandardFormat(
+                pCell->GetFormatType(), ScGlobal::eLnge);
+        {
+            Color* pColor;
+            aFormatter.GetOutputString( aStr, nFormat,
+                    aValue, &pColor );
+        }
+
+        aValue = "\"" + aValue + "\"";
+        //! Anfuehrungszeichen im String escapen ????
+    }
+
+    ScRange aTestRange;
+    if ( bColRowName || (aTestRange.Parse(rFormula) & SCA_VALID) )
+        aValue = aValue + " ...";
 
     return aValue;
 }
