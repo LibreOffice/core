@@ -25,6 +25,7 @@
 #include "address.hxx"
 #include "rangenam.hxx"
 #include "types.hxx"
+#include "mtvblockfunc.hxx"
 #include "formula/types.hxx"
 
 #include <set>
@@ -41,7 +42,7 @@
 #endif
 
 #include <mdds/multi_type_vector.hpp>
-#include <mdds/multi_type_vector_trait.hpp>
+#include <mdds/multi_type_vector_custom_func1.hpp>
 
 namespace editeng { class SvxBorderLine; }
 
@@ -117,6 +118,10 @@ struct ColDoubleEntry
 
 class ScColumn
 {
+    // Broadcaster storage container
+    typedef mdds::mtv::custom_block_func1<sc::element_type_broadcaster, sc::custom_broadcaster_block> BroadcasterBlkFunc;
+    typedef mdds::multi_type_vector<BroadcasterBlkFunc> BroadcasterStoreType;
+
     typedef mdds::multi_type_vector<mdds::mtv::element_block_func> TextWidthType;
     typedef mdds::multi_type_vector<mdds::mtv::element_block_func> ScriptType;
 
@@ -127,6 +132,8 @@ class ScColumn
 
     // Script types are stored as unsigned char.
     ScriptType maScriptTypes;
+
+    BroadcasterStoreType maBroadcasters;
 
     SCCOL           nCol;
     SCTAB           nTab;

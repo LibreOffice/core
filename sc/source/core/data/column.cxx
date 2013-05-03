@@ -113,6 +113,7 @@ std::vector<ColEntry>::const_iterator ScColumn::Search( SCROW nRow ) const
 ScColumn::ScColumn() :
     maTextWidths(MAXROWCOUNT),
     maScriptTypes(MAXROWCOUNT),
+    maBroadcasters(MAXROWCOUNT),
     nCol( 0 ),
     pAttrArray( NULL ),
     pDocument( NULL ),
