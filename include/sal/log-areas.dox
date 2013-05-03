@@ -289,6 +289,10 @@ certain functionality.
 @li @c writerfilter
 @li @c writerfilter.profile - load times of filters
 
+&secion writerperfect
+
+@li @c writerperfect
+
 @section xmloff
 
 @li @c xmloff.core
