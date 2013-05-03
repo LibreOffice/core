@@ -105,9 +105,6 @@ void ScColumn::Delete( SCROW nRow )
         return;
 
     ScBaseCell* pCell = maItems[nIndex].pCell;
-    pDocument->Broadcast(
-        ScHint(SC_HINT_DYING, ScAddress(nCol, nRow, nTab), GetBroadcaster(nRow)));
-
     maItems.erase(maItems.begin() + nIndex);
     maTextWidths.set_empty(nRow, nRow);
     maScriptTypes.set_empty(nRow, nRow);
@@ -115,6 +112,9 @@ void ScColumn::Delete( SCROW nRow )
     if (pCell->GetCellType() == CELLTYPE_FORMULA)
         static_cast<ScFormulaCell*>(pCell)->EndListeningTo(pDocument);
     pCell->Delete();
+
+    pDocument->Broadcast(
+        ScHint(SC_HINT_DATACHANGED, ScAddress(nCol, nRow, nTab), GetBroadcaster(nRow)));
 
     CellStorageModified();
 }
@@ -124,12 +124,13 @@ void ScColumn::DeleteAtIndex( SCSIZE nIndex )
 {
     ScBaseCell* pCell = maItems[nIndex].pCell;
     SCROW nRow = maItems[nIndex].nRow;
-    pDocument->Broadcast(
-        ScHint(SC_HINT_DYING, ScAddress(nCol, nRow, nTab), GetBroadcaster(nRow)));
     maItems.erase(maItems.begin() + nIndex);
     if (pCell->GetCellType() == CELLTYPE_FORMULA)
         static_cast<ScFormulaCell*>(pCell)->EndListeningTo(pDocument);
     pCell->Delete();
+
+    pDocument->Broadcast(
+        ScHint(SC_HINT_DATACHANGED, ScAddress(nCol, nRow, nTab), GetBroadcaster(nRow)));
 
     maTextWidths.set_empty(nRow, nRow);
     maScriptTypes.set_empty(nRow, nRow);
@@ -303,8 +304,6 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
         have to forget the pointers to them. This is used e.g. while undoing a
         "paste cells" operation, which removes the caption objects later in
         drawing undo. */
-
-    ScHint aHint( SC_HINT_DYING, ScAddress( nCol, 0, nTab ), 0 );
 
     // cache all formula cells, they will be deleted at end of this function
     typedef ::std::vector< ScFormulaCell* > FormulaCellVector;

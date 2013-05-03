@@ -1731,7 +1731,7 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
         }
         // Broadcast changes
         ScAddress aAdr( nCol, 0, nTab );
-        ScHint aHint( SC_HINT_DYING, aAdr, NULL );  // areas only
+        ScHint aHint(SC_HINT_DATACHANGED, aAdr, NULL);  // areas only
         ScAddress& rAddress = aHint.GetAddress();
 
         // must iterate backwards, because indexes of following cells become invalid

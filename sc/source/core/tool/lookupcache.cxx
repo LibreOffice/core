@@ -115,7 +115,7 @@ void ScLookupCache::Notify( SvtBroadcaster & /* rBC */ , const SfxHint &  rHint 
     if (!mpDoc->IsInDtorClear())
     {
         const ScHint* p = PTR_CAST( ScHint, &rHint );
-        if (p && (p->GetId() & (SC_HINT_DATACHANGED | SC_HINT_DYING)))
+        if (p && (p->GetId() & SC_HINT_DATACHANGED))
         {
             mpDoc->RemoveLookupCache( *this);
             delete this;

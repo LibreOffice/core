@@ -2937,7 +2937,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
 IMPL_LINK( ScChart2DataSequence, ValueListenerHdl, SfxHint*, pHint )
 {
     if ( m_pDocument && pHint && pHint->ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint*)pHint)->GetId() & (SC_HINT_DATACHANGED | SC_HINT_DYING) )
+            ((const SfxSimpleHint*)pHint)->GetId() & SC_HINT_DATACHANGED)
     {
         //  This may be called several times for a single change, if several formulas
         //  in the range are notified. So only a flag is set that is checked when

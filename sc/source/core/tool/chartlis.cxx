@@ -213,7 +213,7 @@ uno::Reference< chart::XChartData > ScChartListener::GetUnoSource() const
 void ScChartListener::Notify( SvtBroadcaster&, const SfxHint& rHint )
 {
     const ScHint* p = dynamic_cast<const ScHint*>(&rHint);
-    if (p && (p->GetId() & (SC_HINT_DATACHANGED | SC_HINT_DYING)))
+    if (p && (p->GetId() & SC_HINT_DATACHANGED))
         SetUpdateQueue();
 }
 

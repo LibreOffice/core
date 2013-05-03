@@ -1512,7 +1512,7 @@ void ScFormulaCell::Notify( SvtBroadcaster&, const SfxHint& rHint)
     {
         const ScHint* p = PTR_CAST( ScHint, &rHint );
         sal_uLong nHint = (p ? p->GetId() : 0);
-        if (nHint & (SC_HINT_DATACHANGED | SC_HINT_DYING | SC_HINT_TABLEOPDIRTY))
+        if (nHint & (SC_HINT_DATACHANGED | SC_HINT_TABLEOPDIRTY))
         {
             bool bForceTrack = false;
             if ( nHint & SC_HINT_TABLEOPDIRTY )

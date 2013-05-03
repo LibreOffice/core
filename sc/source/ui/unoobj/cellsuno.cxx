@@ -2830,7 +2830,7 @@ void SAL_CALL ScCellRangesBase::firePropertiesChangeEvent( const uno::Sequence< 
 IMPL_LINK( ScCellRangesBase, ValueListenerHdl, SfxHint*, pHint )
 {
     if ( pDocShell && pHint && pHint->ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint*)pHint)->GetId() & (SC_HINT_DATACHANGED | SC_HINT_DYING) )
+            (((const SfxSimpleHint*)pHint)->GetId() & SC_HINT_DATACHANGED))
     {
         //  This may be called several times for a single change, if several formulas
         //  in the range are notified. So only a flag is set that is checked when

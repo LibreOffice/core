@@ -228,7 +228,7 @@ void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         //  must be from Area broadcasters
 
         const ScHint* pScHint = PTR_CAST( ScHint, &rHint );
-        if( pScHint && (pScHint->GetId() & (SC_HINT_DATACHANGED | SC_HINT_DYING)) )
+        if (pScHint && (pScHint->GetId() & SC_HINT_DATACHANGED))
             bDataChanged = sal_True;
         else if (rHint.ISA(ScAreaChangedHint))      // position of broadcaster changed
         {
