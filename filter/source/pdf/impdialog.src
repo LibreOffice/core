@@ -278,6 +278,13 @@ TabPage  RID_PDF_TAB_GENER
         TabStop = TRUE ;
         Text[ en-US ] = "~Export comments";
     };
+    CheckBox CB_VIEWPDF
+    {
+        Pos = MAP_APPFONT ( 188 , 131 ) ;
+        Size = MAP_APPFONT ( 158 , 10 ) ;
+        TabStop = TRUE ;
+        Text[ en-US ] = "~View PDF after Export";
+    };
     CheckBox CB_EXPORTNOTESPAGES
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_EXPORTNOTESPAGES";

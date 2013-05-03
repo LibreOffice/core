@@ -80,6 +80,7 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     mnMaxImageResolution( 300 ),
     mbUseTaggedPDF( sal_False ),
     mbExportNotes( sal_True ),
+    mbViewPDF( sal_False ),
     mbExportNotesPages( sal_False ),
     mbUseTransitionEffects( sal_False ),
     mbIsSkipEmptyPages( sal_True ),
@@ -192,6 +193,7 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     if ( mbIsPresentation )
         mbExportNotesPages = maConfigItem.ReadBool( "ExportNotesPages", sal_False );
     mbExportNotes = maConfigItem.ReadBool( "ExportNotes", sal_False );
+    mbViewPDF = maConfigItem.ReadBool( "ViewPDFAfterExport", sal_False );
 
     mbExportBookmarks = maConfigItem.ReadBool( "ExportBookmarks", sal_True );
     if ( mbIsPresentation )
@@ -360,6 +362,7 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     if ( mbIsPresentation )
         maConfigItem.WriteBool( "ExportNotesPages", mbExportNotesPages );
     maConfigItem.WriteBool( "ExportNotes", mbExportNotes );
+    maConfigItem.WriteBool( "ViewPDFAfterExport", mbViewPDF );
 
     maConfigItem.WriteBool( "ExportBookmarks", mbExportBookmarks );
     if ( mbIsPresentation )
@@ -511,6 +514,7 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage( Window* pParent,
     maCbExportBookmarks( this, PDFFilterResId( CB_EXPORTBOOKMARKS ) ),
     maCbExportHiddenSlides( this, PDFFilterResId( CB_EXPORTHIDDENSLIDES ) ),
     maCbExportNotes( this, PDFFilterResId( CB_EXPORTNOTES ) ),
+    maCbViewPDF( this, PDFFilterResId( CB_VIEWPDF ) ),
     maCbExportNotesPages( this, PDFFilterResId( CB_EXPORTNOTESPAGES ) ),
     maCbExportEmptyPages( this, PDFFilterResId( CB_EXPORTEMPTYPAGES ) ),
     maCbAddStream( this, PDFFilterResId( CB_ADDSTREAM ) ),
@@ -624,6 +628,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
     maCbExportBookmarks.Check( paParent->mbExportBookmarks );
 
     maCbExportNotes.Check( paParent->mbExportNotes );
+    maCbViewPDF.Check( paParent->mbViewPDF);
 
     if ( mbIsPresentation )
     {
@@ -668,6 +673,7 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
     paParent->mbReduceImageResolution = maCbReduceImageResolution.IsChecked();
     paParent->mnMaxImageResolution = maCoReduceImageResolution.GetText().toInt32();
     paParent->mbExportNotes = maCbExportNotes.IsChecked();
+    paParent->mbViewPDF = maCbViewPDF.IsChecked();
     if ( mbIsPresentation )
         paParent->mbExportNotesPages = maCbExportNotesPages.IsChecked();
     paParent->mbExportBookmarks = maCbExportBookmarks.IsChecked();
@@ -702,6 +708,7 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
         paParent->mbExportFormFields = maCbExportFormFields.IsChecked();
         paParent->mbEmbedStandardFonts = maCbEmbedStandardFonts.IsChecked();
     }
+
     paParent->maWatermarkText = maEdWatermark.GetText();
 
     /*

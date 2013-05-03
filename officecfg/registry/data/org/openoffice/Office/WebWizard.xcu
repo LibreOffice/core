@@ -207,6 +207,11 @@
                             <value>false</value>
                         </prop>
                     </node>
+		    <node oor:name="IsViewPDF" oor:op="replace">
+                        <prop oor:name="Value">
+                            <value>false</value>
+                        </prop>
+                    </node>
                     <node oor:name="Format" oor:op="replace">
                         <prop oor:name="Value">
                             <value>%1</value>
