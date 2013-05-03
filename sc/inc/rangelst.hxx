@@ -41,7 +41,7 @@ public:
     sal_uInt16 Parse( const String&, ScDocument* = NULL,
                       sal_uInt16 nMask = SCA_VALID,
                       formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
-                      SCTAB nDefaultTab = 0 );
+                      SCTAB nDefaultTab = 0, sal_Unicode cDelimiter = 0 );
 
     void            Format( String&, sal_uInt16 nFlags = 0, ScDocument* = NULL,
                             formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
