@@ -1308,7 +1308,7 @@ static String lcl_Calculate( const String& rFormula, ScDocument* pDoc, const ScA
 
     if (rFormula.Len())
     {
-        ScFormulaCell* pCell = new ScFormulaCell( pDoc, rPos, rFormula );
+        boost::scoped_ptr<ScFormulaCell> pCell(new ScFormulaCell( pDoc, rPos, rFormula ));
 
         // HACK! um bei ColRowNames kein #REF! zu bekommen,
         // wenn ein Name eigentlich als Bereich in die Gesamt-Formel
@@ -1325,8 +1325,7 @@ static String lcl_Calculate( const String& rFormula, ScDocument* pDoc, const ScA
                 aBraced.append('(');
                 aBraced.append(rFormula);
                 aBraced.append(')');
-                delete pCell;
-                pCell = new ScFormulaCell( pDoc, rPos, aBraced.makeStringAndClear() );
+                pCell.reset(new ScFormulaCell( pDoc, rPos, aBraced.makeStringAndClear() ));
             }
             else
                 bColRowName = false;
@@ -1370,7 +1369,6 @@ static String lcl_Calculate( const String& rFormula, ScDocument* pDoc, const ScA
         }
         else
             aValue = ScGlobal::GetErrorString(nErrCode);
-        delete pCell;
     }
 
     return aValue;
