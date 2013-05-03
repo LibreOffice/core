@@ -33,6 +33,14 @@ UnoInterfaceToUniqueIdentifierMapper::UnoInterfaceToUniqueIdentifierMapper()
 {
 }
 
+UnoInterfaceToUniqueIdentifierMapper::~UnoInterfaceToUniqueIdentifierMapper()
+{
+    SAL_WARN_IF( !maReserved.empty(), "xmloff",
+            "there are " << maReserved.size()
+            << " ids left. This means a data loss: some connection(s) to shape(s) are missing."
+    );
+}
+
 /** returns a unique identifier for the given uno object. IF a uno object is
     registered more than once, the returned identifier is always the same.
 */

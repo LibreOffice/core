@@ -40,6 +40,7 @@ class XMLOFF_DLLPUBLIC UnoInterfaceToUniqueIdentifierMapper
 
 public:
     UnoInterfaceToUniqueIdentifierMapper();
+    ~UnoInterfaceToUniqueIdentifierMapper();
 
     /** returns a unique identifier for the given uno object. IF a uno object is
         registered more than once, the returned identifier is always the same.
