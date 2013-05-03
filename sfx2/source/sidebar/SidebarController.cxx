@@ -24,9 +24,9 @@
 #include "TabBar.hxx"
 #include "sfx2/sidebar/Theme.hxx"
 #include "sfx2/sidebar/SidebarChildWindow.hxx"
+#include "sfx2/sidebar/Tools.hxx"
 #include "SidebarDockingWindow.hxx"
 #include "Context.hxx"
-#include "Tools.hxx"
 
 #include "sfxresid.hxx"
 #include "sfx2/sfxsids.hrc"
@@ -138,8 +138,8 @@ SidebarController::SidebarController (
 
     // Get the dispatch object as preparation to listen for changes of
     // the read-only state.
-    const util::URL aURL (GetURL(gsReadOnlyCommandName));
-    mxReadOnlyModeDispatch = GetDispatch(aURL);
+    const util::URL aURL (Tools::GetURL(gsReadOnlyCommandName));
+    mxReadOnlyModeDispatch = Tools::GetDispatch(mxFrame, aURL);
     if (mxReadOnlyModeDispatch.is())
         mxReadOnlyModeDispatch->addStatusListener(this, aURL);
 
@@ -168,7 +168,7 @@ void SAL_CALL SidebarController::disposing (void)
             static_cast<css::ui::XContextChangeEventListener*>(this));
 
     if (mxReadOnlyModeDispatch.is())
-        mxReadOnlyModeDispatch->removeStatusListener(this, GetURL(gsReadOnlyCommandName));
+        mxReadOnlyModeDispatch->removeStatusListener(this, Tools::GetURL(gsReadOnlyCommandName));
     if (mpSplitWindow != NULL)
     {
         mpSplitWindow->RemoveEventListener(LINK(this, SidebarController, WindowEventHandler));
@@ -803,8 +803,8 @@ void SidebarController::ShowDetailMenu (const ::rtl::OUString& rsMenuCommand) co
 {
     try
     {
-        const util::URL aURL (GetURL(rsMenuCommand));
-        Reference<frame::XDispatch> xDispatch (GetDispatch(aURL));
+        const util::URL aURL (Tools::GetURL(rsMenuCommand));
+        Reference<frame::XDispatch> xDispatch (Tools::GetDispatch(mxFrame, aURL));
         if (xDispatch.is())
             xDispatch->dispatch(aURL, Sequence<beans::PropertyValue>());
     }
@@ -813,33 +813,6 @@ void SidebarController::ShowDetailMenu (const ::rtl::OUString& rsMenuCommand) co
         OSL_TRACE("caught exception: %s",
             OUStringToOString(rException.Message, RTL_TEXTENCODING_ASCII_US).getStr());
     }
-}
-
-
-
-
-util::URL SidebarController::GetURL (const ::rtl::OUString& rsCommand) const
-{
-    util::URL aURL;
-    aURL.Complete = rsCommand;
-
-    const ::comphelper::ComponentContext aComponentContext (::comphelper::getProcessServiceFactory());
-    const Reference<util::XURLTransformer> xParser (
-        aComponentContext.createComponent("com.sun.star.util.URLTransformer"),
-            UNO_QUERY_THROW);
-    xParser->parseStrict(aURL);
-
-    return aURL;
-}
-
-
-
-
-Reference<frame::XDispatch> SidebarController::GetDispatch (const util::URL& rURL) const
-{
-    Reference<frame::XDispatchProvider> xProvider (mxFrame, UNO_QUERY_THROW);
-    Reference<frame::XDispatch> xDispatch (xProvider->queryDispatch(rURL, OUString(), 0));
-    return xDispatch;
 }
 
 

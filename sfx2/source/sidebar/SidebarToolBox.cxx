@@ -18,7 +18,7 @@
 #include "SidebarToolBox.hxx"
 #include "ToolBoxBackground.hxx"
 #include "sfx2/sidebar/Theme.hxx"
-#include "Tools.hxx"
+#include "sfx2/sidebar/Tools.hxx"
 
 #include <vcl/gradient.hxx>
 

@@ -177,8 +177,6 @@ private:
         const ::std::vector<TabBar::DeckMenuData>& rDeckSelectionData,
         const ::std::vector<TabBar::DeckMenuData>& rDeckShowData) const;
     void ShowDetailMenu (const ::rtl::OUString& rsMenuCommand) const;
-    css::util::URL GetURL (const ::rtl::OUString& rsCommand) const;
-    cssu::Reference<css::frame::XDispatch> GetDispatch (const css::util::URL& rURL) const;
     ::boost::shared_ptr<PopupMenu> CreatePopupMenu (
         const ::std::vector<TabBar::DeckMenuData>& rDeckSelectionData,
         const ::std::vector<TabBar::DeckMenuData>& rDeckShowData) const;

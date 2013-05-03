@@ -22,7 +22,7 @@
 #include "sfx2/imagemgr.hxx"
 #include "sfx2/bindings.hxx"
 #include <unotools/cmdoptions.hxx>
-#include "CommandInfoProvider.hxx"
+#include "sfx2/sidebar/CommandInfoProvider.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 

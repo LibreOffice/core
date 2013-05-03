@@ -18,7 +18,7 @@
 #include "sfx2/sidebar/Theme.hxx"
 #include "Paint.hxx"
 #include "SidebarResource.hxx"
-#include "Tools.hxx"
+#include "sfx2/sidebar/Tools.hxx"
 
 #include <tools/svborder.hxx>
 #include <tools/rc.hxx>

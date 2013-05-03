@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "CommandInfoProvider.hxx"
+#include "sfx2/sidebar/CommandInfoProvider.hxx"
 
 #include <comphelper/processfactory.hxx>
 #include <svtools/acceleratorexecute.hxx>

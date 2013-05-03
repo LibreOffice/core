@@ -18,7 +18,7 @@
 
 #include "FocusManager.hxx"
 #include "Panel.hxx"
-#include "Tools.hxx"
+#include "sfx2/sidebar/Tools.hxx"
 #include "TitleBar.hxx"
 #include <vcl/button.hxx>
 #include <vcl/toolbox.hxx>

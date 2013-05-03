@@ -23,7 +23,7 @@
 #include "Paint.hxx"
 
 #ifdef DEBUG
-#include "Tools.hxx"
+#include "sfx2/sidebar/Tools.hxx"
 #include "Deck.hxx"
 #endif
 

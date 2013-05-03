@@ -18,6 +18,8 @@
 #ifndef SIDEBAR_COMMAND_INFO_PROVIDER_HXX
 #define SIDEBAR_COMMAND_INFO_PROVIDER_HXX
 
+#include "sfx2/dllapi.h"
+
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
@@ -31,7 +33,7 @@ namespace sfx2 { namespace sidebar {
 /** Provide information about UNO commands like tooltip text with
     keyboard accelerator.
 */
-class CommandInfoProvider
+class SFX2_DLLPUBLIC CommandInfoProvider
 {
 public:
     /** Return the singleton instance.

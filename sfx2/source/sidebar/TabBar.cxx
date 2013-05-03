@@ -22,7 +22,7 @@
 #include "DeckDescriptor.hxx"
 #include "Paint.hxx"
 #include "sfx2/sidebar/Theme.hxx"
-#include "Tools.hxx"
+#include "sfx2/sidebar/Tools.hxx"
 #include "FocusManager.hxx"
 
 #include <vcl/gradient.hxx>

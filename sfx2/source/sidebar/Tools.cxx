@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Tools.hxx"
+#include "sfx2/sidebar/Tools.hxx"
 
 #include "sfx2/sidebar/Theme.hxx"
 
@@ -26,7 +26,9 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <vcl/gradient.hxx>
 
+#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <cstring>
 
@@ -146,5 +148,35 @@ SvBorder Tools::RectangleToSvBorder (const Rectangle aBox)
         aBox.Right(),
         aBox.Bottom());
 }
+
+
+
+
+util::URL Tools::GetURL (const ::rtl::OUString& rsCommand)
+{
+    util::URL aURL;
+    aURL.Complete = rsCommand;
+
+    const ::comphelper::ComponentContext aComponentContext (::comphelper::getProcessServiceFactory());
+    const Reference<util::XURLTransformer> xParser (
+        aComponentContext.createComponent("com.sun.star.util.URLTransformer"),
+            UNO_QUERY_THROW);
+    xParser->parseStrict(aURL);
+
+    return aURL;
+}
+
+
+
+
+Reference<frame::XDispatch> Tools::GetDispatch (
+    const cssu::Reference<css::frame::XFrame>& rxFrame,
+    const util::URL& rURL)
+{
+    Reference<frame::XDispatchProvider> xProvider (rxFrame, UNO_QUERY_THROW);
+    Reference<frame::XDispatch> xDispatch (xProvider->queryDispatch(rURL, ::rtl::OUString(), 0));
+    return xDispatch;
+}
+
 
 } } // end of namespace sfx2::sidebar

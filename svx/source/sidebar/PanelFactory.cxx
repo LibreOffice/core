@@ -23,6 +23,7 @@
 #include "graphic/GraphicPropertyPanel.hxx"
 #include "line/LinePropertyPanel.hxx"
 #include "possize/PosSizePropertyPanel.hxx"
+#include "insert/InsertPropertyPanel.hxx"
 #include "GalleryControl.hxx"
 #include "debug/ColorPanel.hxx"
 #include "debug/ContextPanel.hxx"
@@ -155,6 +156,10 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     else if (DoesResourceEndWith("/PosSizePropertyPanel"))
     {
         pControl = PosSizePropertyPanel::Create(pParentWindow, xFrame, pBindings, xSidebar);
+    }
+    else if (DoesResourceEndWith("/InsertPropertyPanel"))
+    {
+        pControl = new InsertPropertyPanel(pParentWindow, xFrame);
     }
     else if (DoesResourceEndWith("/GalleryPanel"))
     {

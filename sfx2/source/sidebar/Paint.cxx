@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "Paint.hxx"
-#include "Tools.hxx"
+#include "sfx2/sidebar/Tools.hxx"
 #include <com/sun/star/awt/Gradient.hpp>
 
 
