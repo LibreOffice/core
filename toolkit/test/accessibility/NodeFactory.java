@@ -135,8 +135,6 @@ class NodeFactory
         AccTreeNode aNode = new AccTreeNode (xAccessible, xContext, sDisplay, aParent);
         addDefaultHandlers (aNode, xContext);
 
-        if (aNode == null)
-            System.out.println ("createDefaultNode == null");
         return aNode;
     }
 

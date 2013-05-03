@@ -37,14 +37,10 @@ public class FileUpdater {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(in_file));
             count = -1;
-                for (String s = reader.readLine(); s != null; s = reader.readLine()) { //</oor:node>
+            for (String s = reader.readLine(); s != null; s = reader.readLine()) { //</oor:node>
                 count = count + 1;
-                if(s != null) {
-                    s.trim();
-                    xmlArray[count] = s;
-                }
-                else
-                    break;
+                s.trim();
+                xmlArray[count] = s;
             }
         }
         catch( IOException ioe ) {
@@ -111,14 +107,10 @@ public class FileUpdater {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(in_file));
             count = -1;
-                for (String s = reader.readLine(); s != null; s = reader.readLine()) { //</oor:node>
+            for (String s = reader.readLine(); s != null; s = reader.readLine()) { //</oor:node>
                 count = count + 1;
-                if(s != null) {
-                    s.trim();
-                    xmlArray[count] = s;
-                }
-                else
-                    break;
+                s.trim();
+                xmlArray[count] = s;
             }
         }
         catch( IOException ioe ) {
@@ -187,14 +179,10 @@ public class FileUpdater {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(in_file));
             count = -1;
-                for (String s = reader.readLine(); s != null; s = reader.readLine()) {
+             for (String s = reader.readLine(); s != null; s = reader.readLine()) {
                 count = count + 1;
-                if(s != null) {
-                    s.trim();
-                    xmlArray[count] = s;
-                }
-                else
-                    break;
+                s.trim();
+                xmlArray[count] = s;
             }
         }
         catch( IOException ioe ) {

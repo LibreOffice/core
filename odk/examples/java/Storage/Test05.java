@@ -145,8 +145,6 @@ public class Test05 implements StorageTest {
             XStream xSubStream2clone = m_aTestHelper.OpenStream( xSubSubStorage,
                                                                 "SubStream2",
                                                                 ElementModes.READ | ElementModes.NOCREATE );
-            if ( xSubStream2 == null )
-                return false;
 
 
             // so now the first stream can not be open neither for reading nor for writing

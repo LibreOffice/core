@@ -444,10 +444,6 @@ public class OfficeProvider implements AppProvider
 
         if (debug && exc != null && exc.length() != 0)
         {
-            if (exc == null)
-            {
-                exc = "";
-            }
             dbg("Could not connect an Office. " + exc);
         }
 

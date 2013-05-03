@@ -542,25 +542,17 @@ public abstract class ScriptProvider
     public java.lang.Object getByName( String aName ) throws com.sun.star.container.NoSuchElementException, com.sun.star.lang.WrappedTargetException
     {
         // TODO needs implementing?
-        if ( true )
-        {
-            throw new com.sun.star.uno.RuntimeException(
-                "getByName not implemented" );
-        }
-        return new Object();
+        throw new com.sun.star.uno.RuntimeException(
+            "getByName not implemented" );
     }
 
     public String[] getElementNames()
     {
         // TODO needs implementing?
         String[] result = new String[0];
-        if ( true )
-        {
-            throw new com.sun.star.uno.RuntimeException(
-                "getElementNames not implemented" );
+        throw new com.sun.star.uno.RuntimeException(
+            "getElementNames not implemented" );
 
-        }
-        return result;
     }
 
 
@@ -585,14 +577,8 @@ public abstract class ScriptProvider
     public boolean hasElements()
     {
         // TODO needs implementing?
-        boolean result = false;
-        if ( true )
-        {
-            throw new com.sun.star.uno.RuntimeException(
-                "hasElements not implemented" );
-
-        }
-        return result;
+        throw new com.sun.star.uno.RuntimeException(
+            "hasElements not implemented" );
     }
     public void replaceByName( String aName, java.lang.Object aElement ) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.container.NoSuchElementException, com.sun.star.lang.WrappedTargetException
     {
