@@ -124,6 +124,7 @@ public:
     virtual css::uno::Any SAL_CALL Caller( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL GetOpenFilename( const css::uno::Any& rFileFilter, const css::uno::Any& rFilterIndex, const css::uno::Any& rTitle, const css::uno::Any& rButtonText, const css::uno::Any& rMultiSelect ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL GetSaveAsFilename( const css::uno::Any& rInitialFileName, const css::uno::Any& rFileFilter, const css::uno::Any& rFilterIndex, const css::uno::Any& rTitle, const css::uno::Any& rButtonText ) throw (css::uno::RuntimeException);
+    virtual void Undo() throw (css::uno::RuntimeException);
     // XHelperInterface
     virtual OUString getServiceImplName();
     virtual css::uno::Sequence<OUString> getServiceNames();
