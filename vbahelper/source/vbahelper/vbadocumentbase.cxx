@@ -54,16 +54,21 @@ VbaDocumentBase::VbaDocumentBase( uno::Sequence< uno::Any> const & args,
 OUString
 VbaDocumentBase::getName() throw (uno::RuntimeException)
 {
-    OUString sName = getModel()->getURL();
+    return VbaDocumentBase::getNameFromModel( getModel() );
+}
+
+OUString VbaDocumentBase::getNameFromModel( const uno::Reference< frame::XModel >& xModel )
+{
+    OUString sName = xModel.is() ? xModel->getURL() : OUString();
     if ( !sName.isEmpty() )
     {
 
-        INetURLObject aURL( getModel()->getURL() );
+        INetURLObject aURL( xModel->getURL() );
         ::osl::File::getSystemPathFromFileURL( aURL.GetLastName(), sName );
     }
     else
     {
-        uno::Reference< frame::XTitle > xTitle( getModel(), uno::UNO_QUERY_THROW );
+        uno::Reference< frame::XTitle > xTitle( xModel, uno::UNO_QUERY_THROW );
         sName = xTitle->getTitle();
         sName = sName.trim();
     }

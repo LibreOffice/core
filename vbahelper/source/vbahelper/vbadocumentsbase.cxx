@@ -50,6 +50,7 @@
 
 #include "vbahelper/vbahelper.hxx"
 #include "vbahelper/vbaapplicationbase.hxx"
+#include "vbahelper/vbadocumentbase.hxx"
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -138,8 +139,8 @@ public:
             {
                 uno::Reference< frame::XModel > xModel( xServiceInfo, uno::UNO_QUERY_THROW ); // that the spreadsheetdocument is a xmodel is a given
                 m_documents.push_back( xModel );
-                INetURLObject aURL( xModel->getURL() );
-                namesToIndices[ aURL.GetLastName() ] = nIndex++;
+                OUString sName = VbaDocumentBase::getNameFromModel( xModel );
+                namesToIndices[ sName ] = nIndex++;
             }
         }
 
