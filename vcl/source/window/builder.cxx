@@ -1580,11 +1580,12 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
                             aChilds.push_back(pChild);
                         }
 
+                        bool bIsButtonBox = dynamic_cast<VclButtonBox*>(pCurrentChild) != NULL;
+
                         //sort child order within parent so that tabbing
                         //between controls goes in a visually sensible sequence
                         std::stable_sort(aChilds.begin(), aChilds.end(), sortIntoBestTabTraversalOrder(this));
-                        for (size_t i = 0; i < aChilds.size(); ++i)
-                            reorderWithinParent(*aChilds[i], i);
+                        reorderWithinParent(aChilds, bIsButtonBox);
                     }
                 }
             }
@@ -1604,6 +1605,25 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
 
         if (res == xmlreader::XmlReader::RESULT_DONE)
             break;
+    }
+}
+
+void VclBuilder::reorderWithinParent(std::vector<Window*>& rChilds, bool bIsButtonBox)
+{
+    for (size_t i = 0; i < rChilds.size(); ++i)
+    {
+        reorderWithinParent(*rChilds[i], i);
+
+        if (!bIsButtonBox)
+            break;
+
+        //The first member of the group for legacy code needs WB_GROUP set and the
+        //others not
+        WinBits nBits = rChilds[i]->GetStyle();
+        nBits &= ~WB_GROUP;
+        if (i == 0)
+            nBits |= WB_GROUP;
+        rChilds[i]->SetStyle(nBits);
     }
 }
 

@@ -297,6 +297,7 @@ public:
     void setDeferredProperties();
 
     //Helpers to retrofit all the existing code to the builder
+    static void reorderWithinParent(std::vector<Window*>& rChilds, bool bIsButtonBox);
     static void reorderWithinParent(Window &rWindow, sal_uInt16 nNewPosition);
 private:
     Window *insertObject(Window *pParent, const OString &rClass, const OString &rID,

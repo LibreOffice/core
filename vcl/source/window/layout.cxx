@@ -697,8 +697,7 @@ void VclButtonBox::sort_native_button_order()
     //sort child order within parent so that we match the platform
     //button order
     std::stable_sort(aChilds.begin(), aChilds.end(), sortButtons(m_bVerticalContainer));
-    for (size_t i = 0; i < aChilds.size(); ++i)
-        VclBuilder::reorderWithinParent(*aChilds[i], i);
+    VclBuilder::reorderWithinParent(aChilds, true);
 }
 
 VclGrid::array_type VclGrid::assembleGrid() const
