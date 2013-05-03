@@ -107,13 +107,6 @@ File gid_File_Txt_Readme
     Styles = (PACKED, SCPZIP_REPLACE);
 End
 
-File gid_File_Package_odk_autodoc
-    TXT_FILE_BODY;
-    Dir = FILELIST_SDK_DIR;
-    Name = "odk_autodoc.filelist";
-    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
-End
-
 File gid_File_Package_odk_bin
     TXT_FILE_BODY;
     Dir = FILELIST_SDK_DIR;

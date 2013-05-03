@@ -222,17 +222,17 @@ if (-d "$SdkDir") {
     #check idl docu, it is only a first and simple check
     # improvement required
     print "check idl docu: ";
-    if (check_dir("docs/common/ref")) {
-    if (!check_file("docs/common/ref/module-ix.html")) {
-        print "\nERROR: \"docs/common/ref/module-ix.html\" is missing\n";
+    if (check_dir("docs/idl/ref")) {
+    if (!check_file("docs/idl/ref/index.html")) {
+        print "\nERROR: \"docs/idl/ref/index.html\" is missing\n";
         $return++;
     }
-    if (!check_dir("docs/common/ref/index-files")) {
-        print "\nERROR: \"docs/common/ref/index-files\" is missing\n";
+    if (!check_file("docs/idl/ref/classes.html")) {
+        print "\nERROR: \"docs/idl/ref/classes.html\" is missing\n";
         $return++;
     }
-    if (!check_file("docs/common/ref/index-files/index-10.html")) {
-        print "\nERROR: \"docs/common/ref/index-files/index-10.html\" is missing\n";
+    if (!check_file("docs/idl/ref/namespaces.html")) {
+        print "\nERROR: \"docs/idl/ref/namespaces.html\" is missing\n";
         $return++;
     }
 
@@ -349,9 +349,10 @@ if (-d "$SdkDir") {
     if ($OperatingSystem ne "windows") {
     foreach $i (@idl_dirlist)
     {
-        if (!check_dir("docs/common/ref/com/sun/star/$i")) {
+        $i =~ s/\//_1_1/g;
+        if (!check_file("docs/idl/ref/com_1_1sun_1_1star_1_1$i.html")) {
         $return++;
-        print "\nERROR: \"docs/common/ref/com/sun/star/$i\" is missing\n";
+        print "\nERROR: \"docs/idl/ref/com_1_1sun_1_1star_1_1$i.html\" is missing\n";
         } else {
         print "+";
         }

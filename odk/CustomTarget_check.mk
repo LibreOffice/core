@@ -10,7 +10,6 @@
 $(eval $(call gb_CustomTarget_CustomTarget,odk/check))
 
 $(eval $(call gb_CustomTarget_register_targets,odk/check,\
-	autodoc \
 	checkbin \
 ))
 
@@ -44,30 +43,13 @@ $(call gb_CustomTarget_get_workdir,odk/check)/checkbin : \
 		$(call gb_Package_get_target,odk_settings) \
 		$(call gb_Package_get_target,odk_settings_generated) \
 		$(call gb_Package_get_target,odk_uno_loader_classes) \
-		$(if $(SOLAR_JAVA),$(call gb_Package_get_target,odk_unowinreg)) \
-		$(call gb_PackageSet_get_target,odk_autodoc)
+		$(if $(SOLAR_JAVA),$(call gb_Package_get_target,odk_unowinreg))
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CHK,1)
 	$(call gb_Helper_print_on_error,\
 		$(PERL) $< \
 			$(INSTDIR)/$(gb_Package_SDKDIRNAME) \
 			$(odk_PLATFORM) "$(gb_Executable_EXT)" \
 		,$@.log \
-	)
-
-.PHONY : $(call gb_CustomTarget_get_workdir,odk/check)/autodoc
-$(call gb_CustomTarget_get_workdir,odk/check)/autodoc : $(call gb_PackageSet_get_target,odk_autodoc)
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CHK,1)
-	( \
-		c=0 && \
-		for m in `find $(call gb_CustomTarget_get_workdir,odk/docs/common/ref) -name module-ix.html`; do \
-			m=`echo $$m | sed -e s@$(call gb_CustomTarget_get_workdir,odk/docs/common/ref)/@@` && \
-			mm=$(INSTDIR)/$(gb_Package_SDKDIRNAME)/docs/common/ref/$${m} && \
-			if [ ! -e $${mm} ]; then \
-				c=`expr $$c + 1`; \
-				echo "autodoc check: $${mm} not found. Please update odk/Package_autodoc.mk ."; \
-			fi \
-		done && \
-		if [ $${c} -gt 0 ]; then exit 1; fi \
 	)
 
 # vim: set noet sw=4 ts=4:
