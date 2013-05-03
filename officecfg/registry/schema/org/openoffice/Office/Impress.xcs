@@ -601,6 +601,13 @@
           </info>
           <value>true</value>
         </prop>
+        <prop oor:name="EnablePresenterScreen" oor:type="xs:boolean" oor:nillable="false">
+           <info>
+            <desc>Indicates whether to show Presenter Screen Console which shows next slide, notes etc.</desc>
+            <label>Enable Presenter Screen</label>
+          </info>
+          <value>true</value>
+        </prop>
       </group>
       <group oor:name="Compatibility">
         <info>

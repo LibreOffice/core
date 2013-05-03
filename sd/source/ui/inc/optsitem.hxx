@@ -224,6 +224,7 @@ private:
     sal_Bool    bClickChangeRotation    : 1;    // Misc/RotateClick
     sal_Bool    bStartWithActualPage    : 1;    // Misc/Start/CurrentPage
     sal_Bool    bEnableSdremote         : 1;    // Misc/Start/EnableSdremote
+    sal_Bool    bEnablePresenterScreen : 1;    // Misc/Start/EnablePresenterDisplay
     sal_Bool    bSolidDragging          : 1;    // Misc/ModifyWithAttributes
     sal_Bool    bSummationOfParagraphs  : 1;    // misc/SummationOfParagraphs
     sal_Bool    bShowUndoDeleteWarning  : 1;    // Misc/ShowUndoDeleteWarning
@@ -273,6 +274,7 @@ public:
     sal_Bool    IsClickChangeRotation() const { Init(); return (sal_Bool) bClickChangeRotation; }
     sal_Bool    IsStartWithActualPage() const { Init(); return (sal_Bool) bStartWithActualPage; }
     sal_Bool    IsEnableSdremote() const { Init(); return (sal_Bool) bEnableSdremote; }
+    sal_Bool    IsEnablePresenterScreen() const { Init(); return (sal_Bool) bEnablePresenterScreen; }
     sal_Bool    IsSolidDragging() const { Init(); return (sal_Bool) bSolidDragging; }
     sal_Bool    IsSummationOfParagraphs() const { Init(); return bSummationOfParagraphs != 0; };
 
@@ -312,6 +314,7 @@ public:
     void    SetClickChangeRotation( sal_Bool bOn = sal_True ) { if( bClickChangeRotation != bOn ) { OptionsChanged(); bClickChangeRotation = bOn; } }
     void    SetStartWithActualPage( sal_Bool bOn = sal_True ) { if( bStartWithActualPage != bOn ) { OptionsChanged(); bStartWithActualPage = bOn; } }
     void    SetEnableSdremote( sal_Bool bOn = sal_True ) { if( bEnableSdremote != bOn ) { OptionsChanged(); bEnableSdremote = bOn; } }
+    void    SetEnablePresenterScreen( sal_Bool bOn = sal_True ) { if( bEnablePresenterScreen != bOn ) { OptionsChanged(); bEnablePresenterScreen = bOn; } }
     void    SetSummationOfParagraphs( sal_Bool bOn = sal_True ){ if ( bOn != bSummationOfParagraphs ) { OptionsChanged(); bSummationOfParagraphs = bOn; } }
     /** Set the printer independent layout mode.
         @param nOn

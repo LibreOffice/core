@@ -210,9 +210,17 @@ TabPage TP_OPTIONS_MISC
     {
         HelpID = "sd:CheckBox:TP_OPTIONS_MISC:CBX_ENABLE_SDREMOTE";
         Pos = MAP_APPFONT ( 12 , 158  ) ;
-        Size = MAP_APPFONT ( 242 , 10 ) ;
+        Size = MAP_APPFONT ( 116 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Enable remote control" ;
+    };
+    CheckBox CBX_ENABLE_PRESENTER_SCREEN
+    {
+        HelpID = "sd:CheckBox:TP_OPTIONS_MISC:CBX_ENABLE_PRESENTER_SCREEN";
+        Pos = MAP_APPFONT ( 12 , 171  ) ;
+        Size = MAP_APPFONT ( 116 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Enable Presenter Console" ;
     };
     FixedLine FT_COMPATIBILITY
     {
