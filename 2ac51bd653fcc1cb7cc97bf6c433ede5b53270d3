@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//9YY\u003d",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Impress.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-05-03T15:19:29Z",
+      "side": 1,
+      "message": "is this a whitespace-only change? then best to leave it out here.",
+      "revId": "2ac51bd653fcc1cb7cc97bf6c433ede5b53270d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//9YU\u003d",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Impress.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-05-03T15:19:29Z",
+      "side": 1,
+      "message": "I\u0027d leave the comment out - is is implied ;)",
+      "revId": "2ac51bd653fcc1cb7cc97bf6c433ede5b53270d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//9YQ\u003d",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Impress.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-05-03T15:19:29Z",
+      "side": 1,
+      "message": "Cool, thanks for adding useful documentation!",
+      "revId": "2ac51bd653fcc1cb7cc97bf6c433ede5b53270d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//9YM\u003d",
+        "filename": "sd/source/ui/dlg/tpoption.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-05-03T15:19:29Z",
+      "side": 1,
+      "message": "Just whitespace again?",
+      "revId": "2ac51bd653fcc1cb7cc97bf6c433ede5b53270d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//9YI\u003d",
+        "filename": "sd/source/ui/dlg/tpoption.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-05-03T15:19:29Z",
+      "side": 1,
+      "message": "Is that at the same position as the sdremote checkbox?",
+      "revId": "2ac51bd653fcc1cb7cc97bf6c433ede5b53270d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//9YA\u003d",
+        "filename": "sd/source/ui/dlg/tpoption.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2013-05-03T15:19:29Z",
+      "side": 1,
+      "message": "I think the name is \"Presenter Console\"",
+      "revId": "2ac51bd653fcc1cb7cc97bf6c433ede5b53270d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
