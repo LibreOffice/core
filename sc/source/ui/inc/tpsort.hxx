@@ -95,6 +95,7 @@ private:
     void    Init            ();
     void    FillFieldLists  ( sal_uInt16 nStartField );
     sal_uInt16  GetFieldSelPos  ( SCCOLROW nField );
+    void    SetLastSortKey( sal_uInt16 nItem );
 
     // Handler ------------------------
     DECL_LINK( SelectHdl, ListBox * );
