@@ -19,6 +19,9 @@ $(eval $(call gb_ExternalProject_register_targets,langtag,\
 	build \
 ))
 
+# disable ccache on windows, as it doesn't cope with the quoted defines
+# liblangtag uses (-DBUILDDIR="\"$(abs_top_builddir)\"" and similar).
+# Results in "cl : Command line error D8003 : missing source filename"
 $(call gb_ExternalProject_get_state_target,langtag,build):
 	$(call gb_ExternalProject_run,build,\
 		./configure --disable-modules --disable-test --disable-introspection --disable-shared --enable-static --with-pic \
@@ -32,6 +35,6 @@ $(call gb_ExternalProject_get_state_target,langtag,build):
 		$(if $(filter-out LINUX FREEBSD,$(OS)),,LDFLAGS="-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath,\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib) \
 		$(if $(filter-out SOLARIS,$(OS)),,LDFLAGS="-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-R$(COMMA)\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib) \
 		$(if $(filter-out WNTGCC,$(OS)$(COM)),,LDFLAGS="-Wl$(COMMA)--enable-runtime-pseudo-reloc-v2") \
-		&& $(MAKE) \
+		&& $(if $(filter WNTMSC,$(OS)$(COM)),REAL_CC="$(shell cygpath -w $(lastword $(CC)))") $(MAKE) \
 	)
 # vim: set noet sw=4 ts=4:
