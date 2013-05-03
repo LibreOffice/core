@@ -172,7 +172,7 @@ getBuildIdsProperty(uno::Reference<beans::XPropertySet> const& xImportInfo)
         }
         catch (Exception const& e)
         {
-            SAL_WARN("xmloff", "exception getting BuildId" << e.Message);
+            SAL_WARN("xmloff.core", "exception getting BuildId" << e.Message);
         }
     }
     return OUString();
@@ -203,8 +203,7 @@ getBuildIdsProperty(uno::Reference<beans::XPropertySet> const& xImportInfo)
                             }
                             else
                             {
-                                SAL_INFO_IF('4' != loVersion[0], "xmloff",
-                                        "unknown LO version: " << loVersion);
+                                SAL_INFO_IF('4' != loVersion[0], "xmloff.core", "unknown LO version: " << loVersion);
                                 mnGeneratorVersion = SvXMLImport::LO_4x;
                             }
                             return; // ignore buildIds
@@ -298,7 +297,7 @@ public:
         , mpRDFaHelper() // lazy
         , mpDocumentInfo() // lazy
     {
-        OSL_ENSURE(mxComponentContext.is(), "SvXMLImport: no ComponentContext");
+        SAL_WARN_IF(!mxComponentContext.is(), "xmloff.core", "SvXMLImport: no ComponentContext");
         if (!mxComponentContext.is()) throw uno::RuntimeException();
     }
 
@@ -410,7 +409,7 @@ SvXMLImport::SvXMLImport(
     mbIsTableShapeSupported( false ),
     mbIsGraphicLoadOnDemandSupported( true )
 {
-    DBG_ASSERT( xContext.is(), "got no service manager" );
+    SAL_WARN_IF( !xContext.is(), "xmloff.core", "got no service manager" );
     _InitCtor();
 }
 
@@ -679,7 +678,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
         pContext = (*mpContexts)[nCount - 1]->CreateChildContext( nPrefix,
                                                                  aLocalName,
                                                                  xAttrList );
-        DBG_ASSERT( pContext && pContext->GetPrefix() == nPrefix,
+        SAL_WARN_IF( !pContext || (pContext->GetPrefix() != nPrefix), "xmloff.core",
                 "SvXMLImport::startElement: created context has wrong prefix" );
     }
     else
@@ -707,7 +706,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
         }
     }
 
-    DBG_ASSERT( pContext, "SvXMLImport::startElement: missing context" );
+    SAL_WARN_IF( !pContext, "xmloff.core", "SvXMLImport::startElement: missing context" );
     if( !pContext )
         pContext = new SvXMLImportContext( *this, nPrefix, aLocalName );
 
@@ -732,7 +731,7 @@ rName
     throw(xml::sax::SAXException, uno::RuntimeException)
 {
     sal_uInt16 nCount = mpContexts->size();
-    DBG_ASSERT( nCount, "SvXMLImport::endElement: no context left" );
+    SAL_WARN_IF( nCount == 0, "xmloff.core", "SvXMLImport::endElement: no context left" );
     if( nCount > 0 )
     {
         // Get topmost context and remove it from the stack.
@@ -744,10 +743,8 @@ rName
         OUString aLocalName;
         sal_uInt16 nPrefix =
             mpNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
-        DBG_ASSERT( pContext->GetPrefix() == nPrefix,
-                "SvXMLImport::endElement: popped context has wrong prefix" );
-        DBG_ASSERT( pContext->GetLocalName() == aLocalName,
-                "SvXMLImport::endElement: popped context has wrong lname" );
+        SAL_WARN_IF( pContext->GetPrefix() != nPrefix,  "xmloff.core", "SvXMLImport::endElement: popped context has wrong prefix" );
+        SAL_WARN_IF( pContext->GetLocalName() != aLocalName, "xmloff.core", "SvXMLImport::endElement: popped context has wrong lname" );
 #endif
 
         // Call a EndElement at the current context.
@@ -840,7 +837,7 @@ void SAL_CALL SvXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
         mxModel->addEventListener(mxEventListener);
     }
 
-    DBG_ASSERT( !mpNumImport, "number format import already exists." );
+    SAL_WARN_IF( mpNumImport, "xmloff.core", "number format import already exists." );
     if( mpNumImport )
     {
         delete mpNumImport;
@@ -1344,7 +1341,7 @@ void SvXMLImport::AddStyleDisplayName( sal_uInt16 nFamily,
     StyleMap::value_type aValue( aKey, rDisplayName );
     ::std::pair<StyleMap::iterator,bool> aRes( mpStyleMap->insert( aValue ) );
     SAL_WARN_IF( !aRes.second,
-                 "xmloff",
+                 "xmloff.core",
                  "duplicate style name" );
 
 }
@@ -1439,11 +1436,11 @@ void SvXMLImport::AddNumberStyle(sal_Int32 nKey, const OUString& rName)
         }
         catch ( uno::Exception& )
         {
-            OSL_FAIL("Numberformat could not be inserted");
+            SAL_WARN( "xmloff.core", "Numberformat could not be inserted");
         }
     }
     else {
-        OSL_FAIL("not possible to create NameContainer");
+        SAL_WARN( "xmloff.core", "not possible to create NameContainer");
     }
 }
 
@@ -1628,8 +1625,7 @@ sal_Bool SvXMLImport::IsODFVersionConsistent( const OUString& aODFVersion )
 
 void SvXMLImport::_CreateNumberFormatsSupplier()
 {
-    DBG_ASSERT( !mxNumberFormatsSupplier.is(),
-                "number formats supplier already exists!" );
+    SAL_WARN_IF( mxNumberFormatsSupplier.is(), "xmloff.core", "number formats supplier already exists!" );
     if(mxModel.is())
         mxNumberFormatsSupplier =
             uno::Reference< util::XNumberFormatsSupplier> (mxModel, uno::UNO_QUERY);
@@ -1638,7 +1634,7 @@ void SvXMLImport::_CreateNumberFormatsSupplier()
 
 void SvXMLImport::_CreateDataStylesImport()
 {
-    DBG_ASSERT( mpNumImport == NULL, "data styles import already exists!" );
+    SAL_WARN_IF( mpNumImport != NULL, "xmloff.core", "data styles import already exists!" );
     uno::Reference<util::XNumberFormatsSupplier> xNum =
         GetNumberFormatsSupplier();
     if ( xNum.is() )
@@ -1654,7 +1650,7 @@ sal_Unicode SvXMLImport::ConvStarBatsCharToStarSymbol( sal_Unicode c )
         OUString sStarBats( "StarBats" );
         mpImpl->hBatsFontConv = CreateFontToSubsFontConverter( sStarBats,
                  FONTTOSUBSFONT_IMPORT|FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
-        OSL_ENSURE( mpImpl->hBatsFontConv, "Got no symbol font converter" );
+        SAL_WARN_IF( !mpImpl->hBatsFontConv, "xmloff.core", "Got no symbol font converter" );
     }
     if( mpImpl->hBatsFontConv )
     {
@@ -1672,7 +1668,7 @@ sal_Unicode SvXMLImport::ConvStarMathCharToStarSymbol( sal_Unicode c )
         OUString sStarMath( "StarMath" );
         mpImpl->hMathFontConv = CreateFontToSubsFontConverter( sStarMath,
                  FONTTOSUBSFONT_IMPORT|FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
-        OSL_ENSURE( mpImpl->hMathFontConv, "Got no symbol font converter" );
+        SAL_WARN_IF( !mpImpl->hMathFontConv, "xmloff.core", "Got no symbol font converter" );
     }
     if( mpImpl->hMathFontConv )
     {
@@ -1865,11 +1861,11 @@ void SvXMLImport::SetXmlId(uno::Reference<uno::XInterface> const & i_xIfc,
                     xMeta->setMetadataReference(mdref);
                 } catch (lang::IllegalArgumentException &) {
                     // probably duplicate; ignore
-                    OSL_TRACE("SvXMLImport::SetXmlId: cannot set xml:id");
+                    SAL_INFO("xmloff.core", "SvXMLImport::SetXmlId: cannot set xml:id");
                 }
             }
         } catch (uno::Exception &) {
-            OSL_FAIL("SvXMLImport::SetXmlId: exception?");
+            SAL_WARN("xmloff.core","SvXMLImport::SetXmlId: exception?");
         }
     }
 }
