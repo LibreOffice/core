@@ -472,8 +472,19 @@ void ScColumn::DeleteArea(SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag)
     }
 
     // Delete attributes just now
-    if ((nDelFlag & IDF_ATTRIB) == IDF_ATTRIB) pAttrArray->DeleteArea( nStartRow, nEndRow );
-    else if ((nDelFlag & IDF_ATTRIB) != 0) pAttrArray->DeleteHardAttr( nStartRow, nEndRow );
+    if ((nDelFlag & IDF_ATTRIB) == IDF_ATTRIB)
+        pAttrArray->DeleteArea( nStartRow, nEndRow );
+    else if ((nDelFlag & IDF_ATTRIB) != 0)
+        pAttrArray->DeleteHardAttr( nStartRow, nEndRow );
+
+    // Broadcast the changes.
+    ScHint aHint(SC_HINT_DATACHANGED, ScAddress(nCol, 0, nTab), NULL);
+    for (SCROW i = nStartRow; i <= nEndRow; ++i)
+    {
+        aHint.GetAddress().SetRow(i);
+        aHint.SetBroadcaster(GetBroadcaster(i));
+        pDocument->Broadcast(aHint);
+    }
 }
 
 
