@@ -88,7 +88,6 @@
 #include "olinefun.hxx"
 #include "hints.hxx"
 #include "formulacell.hxx"
-#include "column.hxx"
 #include "undocell.hxx"
 #include "undotab.hxx"
 #include "undoblk.hxx"      // fuer lcl_ApplyBorder - nach docfunc verschieben!

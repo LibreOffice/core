@@ -64,7 +64,6 @@
 #include <sot/formats.hxx>
 
 #include "formulacell.hxx"
-#include "column.hxx"
 #include "postit.hxx"
 #include "global.hxx"
 #include "filter.hxx"

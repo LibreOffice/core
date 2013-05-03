@@ -35,7 +35,6 @@
 #include "filter.hxx"
 #include "asciiopt.hxx"
 #include "formulacell.hxx"
-#include "column.hxx"
 #include "docoptio.hxx"
 #include "progress.hxx"
 #include "scitems.hxx"
