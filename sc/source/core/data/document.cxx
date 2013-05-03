@@ -3321,16 +3321,13 @@ void ScDocument::SetNumberFormat( const ScAddress& rPos, sal_uInt32 nNumberForma
 }
 
 void ScDocument::GetNumberFormatInfo( short& nType, sal_uLong& nIndex,
-            const ScAddress& rPos, const ScFormulaCell* pCell ) const
+            const ScAddress& rPos ) const
 {
     SCTAB nTab = rPos.Tab();
     if ( nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
     {
         nIndex = maTabs[nTab]->GetNumberFormat( rPos );
-        if ( (nIndex % SV_COUNTRY_LANGUAGE_OFFSET) == 0 && pCell)
-            pCell->GetFormatInfo(nType, nIndex);
-        else
-            nType = GetFormatTable()->GetType( nIndex );
+        nType = GetFormatTable()->GetType( nIndex );
     }
     else
     {

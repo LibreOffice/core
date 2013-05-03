@@ -1372,8 +1372,8 @@ void ScInputHandler::FormulaPreview()
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if ( pActiveView && pActiveViewSh )
     {
-        String aPart = pActiveView->GetSelected();
-        if (!aPart.Len())
+        OUString aPart = pActiveView->GetSelected();
+        if (aPart.isEmpty())
             aPart = pEngine->GetText(0);
         ScDocument* pDoc = pActiveViewSh->GetViewData()->GetDocShell()->GetDocument();
         aValue = lcl_Calculate( aPart, pDoc, aCursorPos );

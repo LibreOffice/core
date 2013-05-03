@@ -1065,9 +1065,6 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
                 break;
             case CELLTYPE_FORMULA:
                 fVal = aCell.mpFormula->GetValue();
-                if ( (nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
-                    nFormat = ScGlobal::GetStandardFormat( fVal, *pFormatter,
-                        nFormat, aCell.mpFormula->GetFormatType() );
                 break;
             default:
                 OSL_FAIL( "value data with unsupported cell type" );

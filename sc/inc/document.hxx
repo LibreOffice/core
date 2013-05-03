@@ -849,13 +849,7 @@ public:
     SC_DLLPUBLIC sal_uInt32 GetNumberFormat( const ScAddress& ) const;
     void SetNumberFormat( const ScAddress& rPos, sal_uInt32 nNumberFormat );
 
-    /**
-     * If no number format attribute is set and a formula cell pointer is
-     * passed, the calculated number format of the formula cell is returned.
-     * pCell may be NULL.
-     */
-    SC_DLLPUBLIC void GetNumberFormatInfo( short& nType, sal_uLong& nIndex,
-                        const ScAddress& rPos, const ScFormulaCell* pCell ) const;
+    void GetNumberFormatInfo( short& nType, sal_uLong& nIndex, const ScAddress& rPos ) const;
     void            GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rFormula ) const;
     const ScTokenArray* GetFormulaTokens( const ScAddress& rPos ) const;
     SC_DLLPUBLIC const ScFormulaCell* GetFormulaCell( const ScAddress& rPos ) const;
