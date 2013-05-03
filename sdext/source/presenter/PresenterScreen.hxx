@@ -109,6 +109,8 @@ public:
 
     virtual void SAL_CALL disposing (void);
 
+    bool isPresenterScreenEnabled(
+        const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     /** Make the presenter screen visible.
     */
     void InitializePresenterScreen (void);

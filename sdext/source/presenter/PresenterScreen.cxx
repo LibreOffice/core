@@ -220,7 +220,8 @@ void SAL_CALL PresenterScreenListener::notifyEvent( const css::document::EventOb
     if ( Event.EventName == "OnStartPresentation" )
     {
         mpPresenterScreen = new PresenterScreen(mxComponentContext, mxModel);
-        mpPresenterScreen->InitializePresenterScreen();
+        if(mpPresenterScreen->isPresenterScreenEnabled(mxComponentContext))
+            mpPresenterScreen->InitializePresenterScreen();
     }
     else if ( Event.EventName == "OnEndPresentation" )
     {
@@ -286,6 +287,17 @@ PresenterScreen::~PresenterScreen (void)
 {
 }
 
+bool PresenterScreen::isPresenterScreenEnabled(const css::uno::Reference<css::uno::XComponentContext>& rxContext)
+{
+        bool dEnablePresenterScreen=true;
+        PresenterConfigurationAccess aConfiguration (
+            rxContext,
+            OUString("/org.openoffice.Office.Impress/"),
+            PresenterConfigurationAccess::READ_ONLY);
+        aConfiguration.GetConfigurationNode("Misc/Start/EnablePresenterScreen")
+            >>= dEnablePresenterScreen;
+        return dEnablePresenterScreen;
+}
 void SAL_CALL PresenterScreen::disposing (void)
 {
     Reference<XConfigurationController> xCC (mxConfigurationControllerWeak);
