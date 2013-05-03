@@ -106,9 +106,12 @@ PKGVERSIONSHORT := $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR)
 PRODUCTNAME.libreoffice := LibreOffice
 PRODUCTNAME.libreofficeodev := LibreOfficeDev
 PRODUCTNAME.oxygenoffice := OxygenOffice
-UNIXFILENAME.libreoffice := $(PRODUCTNAME.libreoffice)$(PRODUCTVERSION)
-UNIXFILENAME.libreofficedev := $(PRODUCTNAME.libreofficedev)$(PRODUCTVERSION)
-UNIXFILENAME.oxygenoffice := $(PRODUCTNAME.oxygenoffice)$(PRODUCTVERSION)
+PRODUCTNAMELC.libreoffice := libreoffice
+PRODUCTNAMELC.libreofficeodev := libreofficedev
+PRODUCTNAMELC.oxygenoffice := oxygenoffice
+UNIXFILENAME.libreoffice := $(PRODUCTNAMELC.libreoffice)$(PKGVERSIONSHORT)
+UNIXFILENAME.libreofficedev := $(PRODUCTNAMELC.libreofficedev)$(PKGVERSIONSHORT)
+UNIXFILENAME.oxygenoffice := $(PRODUCTNAMELC.oxygenoffice)$(PKGVERSIONSHORT)
 
 $(eval $(call gb_CustomTarget_CustomTarget,sysui/share))
 
