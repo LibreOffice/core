@@ -11,6 +11,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
 #include "window.h"
 
 VclContainer::VclContainer(Window *pParent, WinBits nStyle)
@@ -594,6 +595,110 @@ void VclButtonBox::setAllocation(const Size &rAllocation)
             setPrimaryCoordinate(aOtherGroupPos, nPrimaryCoordinate + nSubGroupPrimaryDimension + nSpacing);
         }
     }
+}
+
+struct ButtonOrder
+{
+    OString m_aType;
+    int m_nPriority;
+};
+
+int getButtonPriority(const OString &rType)
+{
+    const size_t N_TYPES = 3;
+    static const ButtonOrder aDiscardCancelSave[N_TYPES] =
+    {
+        { "/discard", 0 },
+        { "/cancel", 1 },
+        { "/save", 2 }
+    };
+
+    static const ButtonOrder aSaveDiscardCancel[N_TYPES] =
+    {
+        { "/save", 0 },
+        { "/discard", 1 },
+        { "/cancel", 2 }
+    };
+
+    const ButtonOrder* pOrder = &aDiscardCancelSave[0];
+
+    const OUString &rEnv = Application::GetDesktopEnvironment();
+
+    if (rEnv.equalsIgnoreAsciiCase("windows") ||
+        rEnv.equalsIgnoreAsciiCase("kde4") ||
+        rEnv.equalsIgnoreAsciiCase("tde") ||
+        rEnv.equalsIgnoreAsciiCase("kde"))
+    {
+        pOrder = &aSaveDiscardCancel[0];
+    }
+
+    for (size_t i = 0; i < N_TYPES; ++i, ++pOrder)
+    {
+        if (rType.endsWith(pOrder->m_aType))
+            return pOrder->m_nPriority;
+    }
+
+    return -1;
+}
+
+class sortButtons
+    : public std::binary_function<const Window*, const Window*, bool>
+{
+    bool m_bVerticalContainer;
+public:
+    sortButtons(bool bVerticalContainer)
+        : m_bVerticalContainer(bVerticalContainer)
+    {
+    }
+    bool operator()(const Window *pA, const Window *pB) const;
+};
+
+bool sortButtons::operator()(const Window *pA, const Window *pB) const
+{
+    //sort into two groups of pack start and pack end
+    VclPackType ePackA = pA->get_pack_type();
+    VclPackType ePackB = pB->get_pack_type();
+    if (ePackA < ePackB)
+        return true;
+    if (ePackA > ePackB)
+        return false;
+    bool bPackA = pA->get_secondary();
+    bool bPackB = pB->get_secondary();
+    if (!m_bVerticalContainer)
+    {
+        //for horizontal boxes group secondaries before primaries
+        if (bPackA > bPackB)
+            return true;
+        if (bPackA < bPackB)
+            return false;
+    }
+    else
+    {
+        //for vertical boxes group secondaries after primaries
+        if (bPackA < bPackB)
+            return true;
+        if (bPackA > bPackB)
+            return false;
+    }
+
+    //now order within groups according to platform rules
+    return getButtonPriority(pA->GetHelpId()) < getButtonPriority(pB->GetHelpId());
+}
+
+void VclButtonBox::sort_native_button_order()
+{
+    std::vector<Window*> aChilds;
+    for (Window* pChild = GetWindow(WINDOW_FIRSTCHILD); pChild;
+        pChild = pChild->GetWindow(WINDOW_NEXT))
+    {
+        aChilds.push_back(pChild);
+    }
+
+    //sort child order within parent so that we match the platform
+    //button order
+    std::stable_sort(aChilds.begin(), aChilds.end(), sortButtons(m_bVerticalContainer));
+    for (size_t i = 0; i < aChilds.size(); ++i)
+        VclBuilder::reorderWithinParent(*aChilds[i], i);
 }
 
 VclGrid::array_type VclGrid::assembleGrid() const
@@ -1692,6 +1797,11 @@ short MessageDialog::Execute()
         m_pGrid->Show();
 
         setButtonHandlers();
+
+        VclButtonBox *pButtonBox = get_action_area();
+        assert(pButtonBox);
+        pButtonBox->sort_native_button_order();
+
     }
     return Dialog::Execute();
 }

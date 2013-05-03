@@ -61,6 +61,7 @@ class VCL_DLLPUBLIC VclBox : public VclContainer
 {
 protected:
     bool m_bHomogeneous;
+    bool m_bVerticalContainer;
     int m_nSpacing;
 public:
     VclBox(Window *pParent, bool bHomogeneous, int nSpacing)
@@ -112,6 +113,7 @@ public:
     VclVBox(Window *pParent, bool bHomogeneous = false, int nSpacing = 0)
         : VclBox(pParent, bHomogeneous, nSpacing)
     {
+        m_bVerticalContainer = true;
     }
 protected:
     virtual long getPrimaryDimension(const Size &rSize) const
@@ -158,6 +160,7 @@ public:
     VclHBox(Window *pParent, bool bHomogeneous = false, int nSpacing = 0)
         : VclBox(pParent, bHomogeneous, nSpacing)
     {
+        m_bVerticalContainer = false;
     }
 protected:
     virtual long getPrimaryDimension(const Size &rSize) const
@@ -225,6 +228,7 @@ public:
         return m_eLayoutStyle;
     }
     virtual bool set_property(const OString &rKey, const OString &rValue);
+    void sort_native_button_order();
 protected:
     virtual Size calculateRequisition() const;
     virtual void setAllocation(const Size &rAllocation);
@@ -248,6 +252,7 @@ public:
     VclVButtonBox(Window *pParent, int nSpacing = 0)
         : VclButtonBox(pParent, nSpacing)
     {
+        m_bVerticalContainer = true;
     }
 protected:
     virtual long getPrimaryDimension(const Size &rSize) const
@@ -294,6 +299,7 @@ public:
     VclHButtonBox(Window *pParent, int nSpacing = 0)
         : VclButtonBox(pParent, nSpacing)
     {
+        m_bVerticalContainer = false;
     }
 protected:
     virtual long getPrimaryDimension(const Size &rSize) const

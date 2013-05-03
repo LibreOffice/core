@@ -290,9 +290,14 @@ public:
 
     static OString extractCustomProperty(stringmap &rMap);
 
-    //see m_aDeferredProperties
+    //see m_aDeferredProperties, you need this for toplevel dialogs
+    //which build themselves from their ctor. The properties on
+    //the top level are stored in m_aDeferredProperties and need
+    //to be applied post ctor
     void setDeferredProperties();
 
+    //Helpers to retrofit all the existing code to the builder
+    static void reorderWithinParent(Window &rWindow, sal_uInt16 nNewPosition);
 private:
     Window *insertObject(Window *pParent, const OString &rClass, const OString &rID,
         stringmap &rProps, stringmap &rPangoAttributes,
@@ -350,9 +355,6 @@ private:
     void cleanupWidgetOwnScrolling(Window *pScrollParent, Window *pWindow, stringmap &rMap);
 
     void set_response(OString sID, short nResponse);
-
-    //Helpers to retrofit all the existing code to the builder
-    static void reorderWithinParent(Window &rWindow, sal_uInt16 nNewPosition);
 };
 
 
