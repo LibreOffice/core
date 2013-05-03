@@ -16,20 +16,25 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-class ListModelBinder(object):
+from abc import abstractmethod
+
+from .ListDataListener import ListDataListener
+
+class ListModelBinder(ListDataListener):
 
     def __init__(self, unoListBox, listModel_):
         self.unoList = unoListBox
         self.unoListModel = unoListBox.Model
-        #COMMENTED
-        #self.setListModel(listModel_)
+        self.listModel = None
+        self.setListModel(listModel_)
+        self.renderer = self.Renderer()
 
     def setListModel(self, newListModel):
         if self.listModel is not None:
             self.listModel.removeListDataListener(self)
 
         self.listModel = newListModel
-        self.listModel.addListDataListener(this)
+        self.listModel.addListDataListener(self)
 
     def contentsChanged(self, lde):
         selected = self.getSelectedItems()
@@ -50,9 +55,9 @@ class ListModelBinder(object):
         self.unoList.addItem(self.getItemString(i), i)
 
     def getItemString(self, i):
-        return self.getItemString(self.listModel.getElementAt(i))
+        return self.getItemString1(self.listModel.getElementAt(i))
 
-    def getItemString(self, item):
+    def getItemString1(self, item):
         return self.renderer.render(item)
 
     def getSelectedItems(self):
@@ -62,11 +67,24 @@ class ListModelBinder(object):
         self.unoListModel.SelectedItems = selected;
 
     def intervalAdded(self, lde):
-        for i in xrange(lde.Index0, lde.Index1):
+        i = lde.getIndex0()
+        while (i <= lde.getIndex1()):
             self.insert(i)
+            i += 1
 
     def intervalRemoved(self, lde):
-        self.remove(lde.Index0, lde.Index1)
+        self.remove(lde.getIndex0(), lde.getIndex1())
+
+    class Renderer:
+
+        @abstractmethod
+        def render(self, item):
+            if (item is None):
+                return ""
+            elif (isinstance(item, int)):
+                return str(item)
+            else:
+                return item.toString()
 
     @classmethod
     def fillList(self, xlist, items, renderer):
@@ -76,7 +94,7 @@ class ListModelBinder(object):
                 if renderer is not None:
                     aux = renderer.render(index)
                 else:
-                    aux = item.cp_Name
+                    aux = item.toString()
                 xlist.addItem(aux, index)
 
     @classmethod

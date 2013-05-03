@@ -19,6 +19,9 @@ import traceback
 from ..common.ConfigGroup import ConfigGroup
 from ..common.Configuration import Configuration
 from ..common.XMLProvider import XMLProvider
+from ..ui.event.EventListenerList import EventListenerList
+from ..ui.event.ListDataEvent import ListDataEvent
+from ..ui.event.ListDataListener import ListDataListener
 
 class WebConfigSet(ConfigGroup):
     '''
@@ -36,6 +39,7 @@ class WebConfigSet(ConfigGroup):
         self.childrenMap = {}
         self.childrenList = []
         self.noNulls = False
+        self.listenerList = None
 
     def add(self, name, o):
         print ("DEBUG !!! WebConfigSet.add -- name: ", name)
@@ -49,6 +53,7 @@ class WebConfigSet(ConfigGroup):
             i = int(name)
             print ("DEBUG !!! WebConfigSet.add -- name IS an integer.")
             self.childrenList.insert(i, o)
+            self.fireListDataListenerIntervalAdded(i, i);
         except Exception:
             print ("DEBUG !!! WebConfigSet.add -- name IS NOT an integer.")
             try:
@@ -66,6 +71,7 @@ class WebConfigSet(ConfigGroup):
                 self.childrenList.insert(i, o)
                 if oldSize > i:
                     oldSize = i
+                self.fireListDataListenerIntervalAdded(oldSize, i);
             except Exception:
                 if (oldO is not None):
                     print ("DEBUG !!! WebConfigSet.add -- No cp_Index attribute, but element already present, so replace it.")
@@ -74,6 +80,7 @@ class WebConfigSet(ConfigGroup):
                 else:
                     print ("DEBUG !!! WebConfigSet.add -- No cp_Index attribute, so just append it.")
                     self.childrenList.append(o)
+                    self.fireListDataListenerIntervalAdded(self.getSize() - 1, self.getSize() - 1);
 
 
     def writeConfiguration(self, configView, param):
@@ -126,7 +133,7 @@ class WebConfigSet(ConfigGroup):
         self.childrenMap.remove(key)
         i = self.childrenList.indexOf(obj)
         self.childrenList.remove(obj)
-        #fireListDataListenerIntervalRemoved(i, i)
+        self.fireListDataListenerIntervalRemoved(i, i)
 
     def remove(self, i):
         o = getElementAt(i)
@@ -135,6 +142,9 @@ class WebConfigSet(ConfigGroup):
     def clear(self):
         self.childrenMap.clear()
         del self.childrenList[:]
+
+    def update(i):
+        self.fireListDataListenerContentsChanged(i, i)
 
     def createDOM(self, parent):
         items = self.childrenList
@@ -207,3 +217,49 @@ class WebConfigSet(ConfigGroup):
 
     def sort(self, comparator):
         self.childrenList.sort(comparator)
+
+
+    # Registers ListDataListener to receive events.
+    # @param listener The listener to register.
+    def addListDataListener(self, listener):
+        if (self.listenerList is None):
+            self.listenerList = EventListenerList()
+        self.listenerList.add(listener)
+
+    # Removes ListDataListener from the list of listeners.
+    #  @param listener The listener to remove.
+    def removeListDataListener(self, listener):
+        self.listenerList.remove(listener)
+
+    # Notifies all registered listeners about the event.
+    #
+    # @param event The event to be fired
+    def fireListDataListenerIntervalAdded(self, i0, i1):
+        event = ListDataEvent(self, ListDataEvent.INTERVAL_ADDED, i0, i1)
+        if (self.listenerList is None):
+            return
+        for listener in self.listenerList.getListenerList():
+            if isinstance(listener, ListDataListener):
+                listener.intervalAdded(event)
+
+    # Notifies all registered listeners about the event.
+    #
+    # @param event The event to be fired
+    def fireListDataListenerIntervalRemoved(self, i0, i1):
+        event = ListDataEvent(self, ListDataEvent.INTERVAL_REMOVED, i0, i1)
+        if (self.listenerList is None):
+            return
+        for listener in self.listenerList.getListenerList():
+            if isinstance(listener, ListDataListener):
+                listener.intervalRemoved(event)
+
+    # Notifies all registered listeners about the event.
+    #
+    # @param event The event to be fired
+    def fireListDataListenerContentsChanged(self, i0, i1):
+        event = ListDataEvent(self, ListDataEvent.CONTENTS_CHANGED, i0, i1)
+        if (self.listenerList is None):
+            return
+        for listener in self.listenerList.getListenerList():
+            if isinstance(listener, ListDataListener):
+                listener.contentsChanged(event)

@@ -19,6 +19,8 @@
 from .ImageListDialog import ImageListDialog
 from .WWHID import HID_IS
 from ..common.FileAccess import FileAccess
+from ..common.ListModel import ListModel
+from ..ui.ImageList import ImageList
 
 from com.sun.star.awt import Size
 
@@ -31,7 +33,7 @@ It also implements the ImageList.ImageRenderer interface, to handle
 its own objects.
 '''
 
-class IconsDialog(ImageListDialog):
+class IconsDialog(ImageListDialog, ImageList.IImageRenderer, ListModel):
 
     def __init__(self, xmsf, set_, resources):
         super(IconsDialog, self).__init__(xmsf, HID_IS,
@@ -48,7 +50,7 @@ class IconsDialog(ImageListDialog):
         self.icons = \
             ["firs", "prev", "next", "last", "nav", "text", "up", "down"]
         self.set = set_
-        self.objects = (self.set.getSize() * len(self.icons),)
+        self.objects = range(self.set.getSize() * len(self.icons))
 
         self.il.listModel = self
         self.il.renderer = self
@@ -66,15 +68,23 @@ class IconsDialog(ImageListDialog):
         if self.getSelected() is None:
             return None
         else:
-            return self.set.getKey((self.getSelected()) / len(self.icons))
+            selected = self.getSelected()
+            value = int(selected / len(self.icons))
+            return "iconset" + str(value)
+            #return self.set.getKey(value)
 
     def setIconset(self, iconset):
-        #COMMENTED
-        icon = 0 #self.set.getIndexOf(self.set.getElement(iconset)) * len(self.icons)
+        icon = self.set.getIndexOf(self.set.getElement(iconset)) * len(self.icons)
         aux = None
         if icon >=0:
             aux = self.objects[icon]
         self.setSelected(aux)
+
+    def addListDataListener(self, listener):
+        pass
+
+    def removeListDataListener(self, listener):
+        pass
 
     def getSize(self):
         return self.set.getSize() * len(self.icons)
@@ -83,10 +93,10 @@ class IconsDialog(ImageListDialog):
         return self.objects[arg0]
 
     def getImageUrls(self, listItem):
-        i = (listItem).intValue()
-        iset = getIconsetNum(i)
-        icon = getIconNum(i)
-        sRetUrls = range(2)
+        i = listItem
+        iset = self.getIconsetNum(i)
+        icon = self.getIconNum(i)
+        sRetUrls = list(range(2))
         sRetUrls[0] = self.htmlexpDirectory + "/htmlexpo/" \
             + self.getIconsetPref(iset) + self.icons[icon] + self.getIconsetPostfix(iset)
         sRetUrls[1] = sRetUrls[0]
@@ -95,12 +105,13 @@ class IconsDialog(ImageListDialog):
     def render(self, object):
         if object is None:
             return ""
-        i = (object).intValue()
+
+        i = object
         iset = self.getIconsetNum(i)
         return self.getIconset1(iset).cp_Name
 
     def getIconsetNum(self, i):
-        return i / self.icons.length
+        return int(i / len(self.icons))
 
     def getIconNum(self, i):
         return i % len(self.icons)

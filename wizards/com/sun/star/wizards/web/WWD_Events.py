@@ -51,10 +51,6 @@ session methods.
 
 class WWD_Events(WWD_Startup):
 
-    iconsDialog = None
-    bgDialog = None
-    docPreview = None
-
     '''
     He - my constructor !
     I add a window listener, which, when
@@ -70,6 +66,9 @@ class WWD_Events(WWD_Startup):
         self.exitOnCreate = True
         self.time = 0
         self.count = 0
+        self.bgDialog = None
+        self.iconsDialog = None
+        self.docPreview = None
 
     @classmethod
     def main(self, args):
@@ -341,18 +340,18 @@ class WWD_Events(WWD_Startup):
     def chooseBackground(self):
         try:
             self.setEnabled(self.btnBackgrounds, False)
-            if WWD_Events.bgDialog is None:
-                WWD_Events.bgDialog = BackgroundsDialog(
-                    self.xMSF, WWD_Startup.settings.cp_BackgroundImages,
+            if self.bgDialog is None:
+                self.bgDialog = BackgroundsDialog(
+                    self.xMSF, self.settings.cp_BackgroundImages,
                     self.resources)
-                WWD_Events.bgDialog.createWindowPeer(self.xUnoDialog.Peer)
+                self.bgDialog.createWindowPeer(self.xUnoDialog.Peer)
 
-            WWD_Events.bgDialog.setSelected(
-                WWD_Startup.settings.cp_DefaultSession.cp_Design.cp_BackgroundImage)
-            i = WWD_Events.bgDialog.executeDialogFromParent(self)
+            self.bgDialog.setSelected(
+                self.settings.cp_DefaultSession.cp_Design.cp_BackgroundImage)
+            i = self.bgDialog.executeDialogFromParent(self)
             if i == 1:
                 #ok
-                self.setBackground(WWD_Events.bgDialog.getSelected())
+                self.setBackground(self.bgDialog.getSelected())
         except Exception:
             traceback.print_exc()
         finally:
@@ -366,7 +365,7 @@ class WWD_Events(WWD_Startup):
         if background is None:
             background = ""
 
-        WWD_Startup.settings.cp_DefaultSession.cp_Design.cp_BackgroundImage \
+        self.settings.cp_DefaultSession.cp_Design.cp_BackgroundImage \
             = background
         self.refreshStylePreview()
 
@@ -377,18 +376,18 @@ class WWD_Events(WWD_Startup):
     def chooseIconset(self):
         try:
             self.setEnabled(self.btnIconSets, False)
-            if WWD_Events.iconsDialog is None:
-                WWD_Events.iconsDialog = IconsDialog(
-                    self.xMSF, WWD_Startup.settings.cp_IconSets,
+            if self.iconsDialog is None:
+                self.iconsDialog = IconsDialog(
+                    self.xMSF, self.settings.cp_IconSets,
                     self.resources)
-                WWD_Events.iconsDialog.createWindowPeer(self.xUnoDialog.Peer)
+                self.iconsDialog.createWindowPeer(self.xUnoDialog.Peer)
 
-            WWD_Events.iconsDialog.setIconset(
-                WWD_Startup.settings.cp_DefaultSession.cp_Design.cp_IconSet)
-            i = WWD_Events.iconsDialog.executeDialogFromParent(self)
+            self.iconsDialog.setIconset(
+                self.settings.cp_DefaultSession.cp_Design.cp_IconSet)
+            i = self.iconsDialog.executeDialogFromParent(self)
             if i == 1:
                 #ok
-                self.setIconset(WWD_Events.iconsDialog.getIconset())
+                self.setIconset(self.iconsDialog.getIconset())
         except Exception:
             traceback.print_exc()
         finally:
@@ -399,7 +398,7 @@ class WWD_Events(WWD_Startup):
     '''
 
     def setIconset(self, icon):
-        WWD_Startup.settings.cp_DefaultSession.cp_Design.cp_IconSet = icon
+        self.settings.cp_DefaultSession.cp_Design.cp_IconSet = icon
         self.updateIconsetText()
 
     '''
@@ -892,11 +891,11 @@ class WWD_Events(WWD_Startup):
             self.dpStylePreview.dispose()
             self.stylePreview.cleanup()
 
-            if WWD_Events.bgDialog is not None:
-                WWD_Events.bgDialog.xUnoDialog.dispose()
+            if self.bgDialog is not None:
+                self.bgDialog.xUnoDialog.dispose()
 
-            if WWD_Events.iconsDialog is not None:
-                WWD_Events.iconsDialog.xUnoDialog.dispose()
+            if self.iconsDialog is not None:
+                self.iconsDialog.xUnoDialog.dispose()
 
             if self.ftpDialog is not None:
                 self.ftpDialog.xUnoDialog.dispose()

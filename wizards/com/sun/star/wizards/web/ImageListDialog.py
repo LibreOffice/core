@@ -21,6 +21,7 @@ from ..ui.UnoDialog2 import UnoDialog2
 from ..ui.ImageList import ImageList
 from ..common.HelpIds import HelpIds
 from ..common.PropertyNames import PropertyNames
+from ..common.IRenderer import IRenderer
 
 from com.sun.star.awt import FontDescriptor
 from com.sun.star.awt.PushButtonType import OK, CANCEL, HELP, STANDARD
@@ -93,7 +94,6 @@ class ImageListDialog(UnoDialog2):
     '''
 
     def build(self):
-        print ("DEBUG !!!! ImageListDialog build 1")
         #set dialog properties...
         ilWidth = (self.il.imageSize.Width + self.il.gap.Width) \
             * self.il.cols + self.il.gap.Width
@@ -169,7 +169,6 @@ class ImageListDialog(UnoDialog2):
         self.il.helpURL = self.hid + 5
         self.il.tabIndex = 1
         self.il.create(self)
-        print ("DEBUG !!!! ImageListDialog build 2")
         self.lblTitle = self.insertLabel("lblTitle",
             ("FontDescriptor",
                 PropertyNames.PROPERTY_HEIGHT,
@@ -213,7 +212,7 @@ class ImageListDialog(UnoDialog2):
     "%TOTAL" with the respective values.
     @author rpiterman
     '''
-    class ARenderer(object):
+    class ARenderer(IRenderer):
 
         '''
         @param aTempalte a template for this renderer.

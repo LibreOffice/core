@@ -24,6 +24,8 @@ from .WebWizardConst import *
 from ..common.SystemDialog import SystemDialog
 from ..common.FileAccess import FileAccess
 from ..common.Configuration import Configuration
+from ..common.ListModel import ListModel
+from ..ui.ImageList import ImageList
 
 from com.sun.star.awt import Size
 
@@ -47,8 +49,9 @@ class BackgroundsDialog(ImageListDialog):
         self.fileAccess = FileAccess(xmsf)
         #COMMENTED
         #self.il.setListModel(Model(set_))
+        self.il.listModel = self.Model(set_, self)
         self.il.imageSize = Size (40, 40)
-        #self.il.setRenderer(BGRenderer (0))
+        self.il.renderer = self.BGRenderer(0, self)
         self.build()
 
     '''
@@ -106,26 +109,22 @@ class BackgroundsDialog(ImageListDialog):
     @author rpiterman
     '''
 
-    class BGRenderer(object):
+    class BGRenderer(ImageList.IImageRenderer):
+        cut = 0
 
-        def __init__(self, cut_):
-            ImageListDialog.ImageListDialog_body()
+        def __init__(self, cut_, parent):
             self.cut = cut_
+            self.parent = parent
 
         def getImageUrls(self, listItem):
             sRetUrls = []
             if (listItem is not None):
                 sRetUrls.append(listItem)
                 return sRetUrls
-
             return None
 
-        def render(self, _object):
-            if _object is None:
-                return ""
-            else:
-                return FileAccess.getPathFilename(
-                    self.fileAccess.getPath(_object, None))
+        def render(self, obj):
+            return "" if (obj is None) else FileAccess.getFilename(self.parent.fileAccess.getPath(obj, None))
 
     '''
     This is a list model for the image list of the
@@ -138,7 +137,11 @@ class BackgroundsDialog(ImageListDialog):
     @author rpiterman
     '''
 
-    class Model(object):
+    class Model(ListModel):
+
+        parent = None
+        listModel = []
+
         '''
         constructor. </br>
         see class description for a description of
@@ -146,17 +149,18 @@ class BackgroundsDialog(ImageListDialog):
         @param model the configuration set of the background images.
         '''
 
-        def __init__(self, model):
+        def __init__(self, model, parent):
+            self.parent = parent
             try:
                 i = 0
                 while i < model.getSize():
                     image = model.getElementAt(i)
-                    path = self.sd.xStringSubstitution.substituteVariables(
+                    path = parent.sd.xStringSubstitution.substituteVariables(
                         image.cp_Href, False)
-                    if self.fileAccess.exists(path, False):
-                        addDir(path)
+                    if parent.fileAccess.exists(path, False):
+                        self.addDir(path)
                     else:
-                        remove(model.getKey(image))
+                        self.remove(model.getKey(image))
 
                     i += 1
             except Exception:
@@ -173,7 +177,7 @@ class BackgroundsDialog(ImageListDialog):
         def remove(self, imageName):
             try:
                 conf = Configuration.getConfigurationRoot(
-                    self.xMSF, WebWizardConst.CONFIG_PATH + "/BackgroundImages",
+                    self.parent.xMSF, CONFIG_PATH + "/BackgroundImages",
                     True)
                 Configuration.removeNode(conf, imageName)
             except Exception:
@@ -187,10 +191,10 @@ class BackgroundsDialog(ImageListDialog):
         '''
 
         def addDir(self, url):
-            if self.fileAccess.isDirectory(url):
-                self.add(self.fileAccess.listFiles(url, False))
+            if self.parent.fileAccess.isDirectory(url):
+                self.add(self.parent.fileAccess.listFiles(url, False))
             else:
-                self.add(url)
+                self.add1(url)
 
         '''
         adds the given filenames (urls) to
@@ -212,7 +216,13 @@ class BackgroundsDialog(ImageListDialog):
         '''
 
         def add1(self, filename):
-            lcase = filename.toLowerCase()
-            if lcase.endsWith("jpg") or lcase.endsWith("jpeg") or \
-                    lcase.endsWith("gif"):
-                Model.this.addElement(filename)
+            lcase = filename.lower()
+            if lcase.endswith("jpg") or lcase.endswith("jpeg") or \
+                    lcase.endswith("gif"):
+                self.listModel.append(filename)
+
+        def getSize(self):
+            return len(self.listModel)
+
+        def getElementAt(self, arg0):
+            return self.listModel[arg0]
