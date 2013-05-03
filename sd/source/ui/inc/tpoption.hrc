@@ -74,5 +74,5 @@
 
 #define CB_USE_PRINTER_METRICS 40
 #define CBX_ENABLE_SDREMOTE 41
-
+#define CBX_ENABLE_PRESENTER_SCREEN 42
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

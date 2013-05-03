@@ -570,7 +570,7 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="Layout" oor:type="xs:boolean" oor:nillable="false">
+	<prop oor:name="Layout" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Impress/Other/New_Doc -->
           <!-- OldLocation: Soffice.cfg -->
           <!-- UIHints: Tools - Options - Presentation  Other  [Section] New document -->
@@ -599,6 +599,15 @@
           <info>
             <desc>Indicates whether to enable the Impress remote controller.</desc>
             <label>Enable remote control</label>
+          </info>
+          <value>true</value>
+        </prop>
+	<prop oor:name="EnablePresenterScreen" oor:type="xs:boolean" oor:nillable="false">
+         <!-- OldPath: NA, New Option -->
+          <!-- OldLocation: NA, New Option -->
+           <info>
+            <desc>Indicates whether to show Presenter Screen Console which shows next slide, notes etc.</desc>
+            <label>Presenter Screen</label>
           </info>
           <value>true</value>
         </prop>
