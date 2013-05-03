@@ -34,7 +34,7 @@ import javax.accessibility.*;
 public class WindowsAccessBridgeAdapter {
     private static Method registerVirtualFrame;
     private static Method revokeVirtualFrame;
-    private static java.util.Hashtable<Integer, Accessible> frameMap;
+    private static java.util.HashMap<Integer, Accessible> frameMap;
 
     protected static native byte[] getProcessID();
 
@@ -71,7 +71,7 @@ public class WindowsAccessBridgeAdapter {
 
                         if (AnyConverter.isLong(any)) {
                             createMapping(AnyConverter.toLong(any));
-                            frameMap = new java.util.Hashtable<Integer, Accessible>();
+                            frameMap = new java.util.HashMap<Integer, Accessible>();
                         }
                     }
                 }
@@ -163,7 +163,7 @@ public class WindowsAccessBridgeAdapter {
     public static void registerTopWindow(int handle, XAccessible xAccessible) {
         Integer hwnd = new Integer(handle);
 
-        if (!frameMap.contains(hwnd)) {
+        if (!frameMap.containsKey(hwnd)) {
             if (Build.DEBUG) {
                 System.err.println("Native frame " + hwnd + " of role " +
                     AccessibleRoleAdapter.getAccessibleRole(xAccessible) +

@@ -27,7 +27,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -59,7 +58,7 @@ public class ParcelDescriptor {
     private File file = null;
     private Document document = null;
     private String language = null;
-    private Map<String,String> languagedepprops = new Hashtable<String,String>(3);
+    private Map<String,String> languagedepprops = new HashMap<String,String>(3);
 
     public static synchronized void removeParcelDescriptor(File parent) {
         File path = new File(parent, PARCEL_DESCRIPTOR_NAME);

@@ -38,7 +38,7 @@ import java.awt.Window;
 
 public class AccessBridge {
     //
-    protected static java.util.Hashtable<String, Window> topWindowMap = new java.util.Hashtable<String, Window>();
+    protected static java.util.HashMap<String, Window> topWindowMap = new java.util.HashMap<String, Window>();
 
     private static java.awt.Window getTopWindowImpl(XAccessible xAccessible) {
         // Because it can not be garantied that

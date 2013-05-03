@@ -79,9 +79,9 @@ class ExampleAddInResult implements com.sun.star.sheet.XVolatileResult
 
 class ExampleAddInThread extends Thread
 {
-    private java.util.Hashtable<String, ExampleAddInResult> aCounters;
+    private java.util.HashMap<String, ExampleAddInResult> aCounters;
 
-    public ExampleAddInThread( java.util.Hashtable<String, ExampleAddInResult> aResults )
+    public ExampleAddInThread( java.util.HashMap<String, ExampleAddInResult> aResults )
     {
         aCounters = aResults;
     }
@@ -99,9 +99,8 @@ class ExampleAddInThread extends Thread
             }
 
             // increment all counters
-            java.util.Enumeration<ExampleAddInResult> aEnum = aCounters.elements();
-            while (aEnum.hasMoreElements())
-                aEnum.nextElement().incrementValue();
+            for (ExampleAddInResult r : aCounters.values())
+                r.incrementValue();
         }
     }
 }
@@ -149,7 +148,7 @@ public class ExampleAddIn
         };
 
         private com.sun.star.lang.Locale aFuncLocale;
-        private java.util.Hashtable<String, ExampleAddInResult> aResults;
+        private java.util.HashMap<String, ExampleAddInResult> aResults;
 
         public _ExampleAddIn( com.sun.star.lang.XMultiServiceFactory xFactory )
         {
@@ -176,7 +175,7 @@ public class ExampleAddIn
             {
                 // create the table of results, and start a thread to increment
                 // all counters
-                aResults = new java.util.Hashtable<String, ExampleAddInResult>();
+                aResults = new java.util.HashMap<String, ExampleAddInResult>();
                 ExampleAddInThread aThread = new ExampleAddInThread( aResults );
                 aThread.start();
             }

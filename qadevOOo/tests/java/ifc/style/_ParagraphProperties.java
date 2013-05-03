@@ -17,6 +17,15 @@
  */
 package ifc.style;
 
+import ifc.text._NumberingLevel;
+
+import java.util.HashMap;
+
+import lib.MultiPropertyTest;
+import lib.Status;
+import share.LogWriter;
+import util.utils;
+
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.container.XIndexReplace;
@@ -25,16 +34,6 @@ import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.xml.AttributeData;
-import ifc.text._NumberingLevel;
-import java.util.Enumeration;
-import java.util.Hashtable;
-
-import lib.MultiPropertyTest;
-import lib.Status;
-import share.LogWriter;
-
-
-import util.utils;
 
 
 /**
@@ -446,11 +445,11 @@ public class _ParagraphProperties extends MultiPropertyTest {
     }
 
     private class OwnUserDefinedAttributes implements XNameContainer{
-        Hashtable<String, Object> members = null;
+        HashMap<String, Object> members = null;
 
 
         public OwnUserDefinedAttributes() {
-            members = new Hashtable<String, Object>();
+            members = new HashMap<String, Object>();
         }
 
         public Object getByName(String str) throws com.sun.star.container.NoSuchElementException, com.sun.star.lang.WrappedTargetException {
@@ -458,18 +457,12 @@ public class _ParagraphProperties extends MultiPropertyTest {
         }
 
         public String[] getElementNames() {
-            Enumeration<String> oEnum = members.keys();
-            int count = members.size();
-            String[] res = new String[count];
-            int i=0;
-            while(oEnum.hasMoreElements())
-                res[i] = oEnum.nextElement();
-            return res;
+            java.util.Set<String> keySet = members.keySet();
+            return keySet.toArray(new String[keySet.size()]);
         }
 
         public com.sun.star.uno.Type getElementType() {
-            Enumeration<String> oEnum = members.keys();
-            String key = oEnum.nextElement();
+            String key = members.keySet().iterator().next();
             Object o = members.get(key);
             return new Type(o.getClass());
         }

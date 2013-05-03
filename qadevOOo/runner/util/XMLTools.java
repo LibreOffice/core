@@ -22,7 +22,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Iterator;
 
 import com.sun.star.beans.PropertyValue;
@@ -58,7 +57,7 @@ public class XMLTools {
             public String Type ;
             public String Value ;
         }
-        private Hashtable<String, Attribute> attrByName = new Hashtable<String, Attribute>() ;
+        private HashMap<String, Attribute> attrByName = new HashMap<String, Attribute>() ;
         private ArrayList<Attribute> attributes = new ArrayList<Attribute>() ;
         private PrintWriter log = null ;
 

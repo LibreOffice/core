@@ -33,7 +33,7 @@ import org.mozilla.javascript.Scriptable;
 
 public class OfficeScriptInfo
 {
-    private Hashtable loadedSFScripts = new Hashtable();
+    private HashMap<String, SFScriptInfo> loadedSFScripts = new HashMap<String, SFScriptInfo>();
 
     public void addScript( URL url, Scriptable scope, Runnable closeCallback )
     {
@@ -42,7 +42,7 @@ public class OfficeScriptInfo
 
     public void addScript( String key, URL url, Scriptable scope, Runnable closeCallback )
     {
-        SFScriptInfo si = (SFScriptInfo)loadedSFScripts.get( key );
+        SFScriptInfo si = loadedSFScripts.get( key );
         if ( si == null )
         {
             si = new SFScriptInfo();
@@ -55,7 +55,7 @@ public class OfficeScriptInfo
 
     public void deleteScript( String key )
     {
-        SFScriptInfo info = (SFScriptInfo)loadedSFScripts.remove( key );
+        SFScriptInfo info = loadedSFScripts.remove( key );
         if ( info != null )
         {
             if ( info.closeCallback != null )
@@ -69,7 +69,7 @@ public class OfficeScriptInfo
     public Scriptable getScriptScope( String key )
     {
         Scriptable result = null;
-        SFScriptInfo info = (SFScriptInfo)loadedSFScripts.get( key );
+        SFScriptInfo info = loadedSFScripts.get( key );
         if ( info != null )
         {
             result = info.scope;
@@ -80,7 +80,7 @@ public class OfficeScriptInfo
     public URL getScriptUrl( String key )
     {
         URL result = null;
-        SFScriptInfo info = (SFScriptInfo)loadedSFScripts.get( key );
+        SFScriptInfo info = loadedSFScripts.get( key );
         if ( info != null )
         {
             result = info.url;
@@ -90,7 +90,7 @@ public class OfficeScriptInfo
     public boolean hasScript( String key )
     {
         boolean result = true;
-        SFScriptInfo info = (SFScriptInfo)loadedSFScripts.get( key );
+        SFScriptInfo info = loadedSFScripts.get( key );
         if ( info == null )
         {
             result = false;
@@ -100,7 +100,7 @@ public class OfficeScriptInfo
 
     public void setScriptRunning( String key, boolean running )
     {
-        SFScriptInfo info = (SFScriptInfo)loadedSFScripts.get( key );
+        SFScriptInfo info = loadedSFScripts.get( key );
         if ( info != null )
         {
             info.isExecuting = running;
@@ -110,7 +110,7 @@ public class OfficeScriptInfo
     public boolean isScriptRunning( String key )
     {
         boolean result = false;
-        SFScriptInfo info = (SFScriptInfo)loadedSFScripts.get( key );
+        SFScriptInfo info = loadedSFScripts.get( key );
         if ( info != null )
         {
             result = info.isExecuting;

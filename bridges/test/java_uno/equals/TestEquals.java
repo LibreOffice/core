@@ -18,6 +18,12 @@
 
 package test.java_uno.equals;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.util.HashMap;
+
+import test.lib.TestBed;
+
 import com.sun.star.bridge.XBridge;
 import com.sun.star.bridge.XBridgeFactory;
 import com.sun.star.bridge.XInstanceProvider;
@@ -33,11 +39,6 @@ import com.sun.star.loader.XImplementationLoader;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.XInterface;
-import java.io.File;
-import java.net.MalformedURLException;
-import java.util.HashMap;
-import java.util.Hashtable;
-import test.lib.TestBed;
 
 // In this test scenario, the Java server (see implementation of method
 // notifyAccepting) has a remote bridge to the Java client and a local JNI
@@ -160,7 +161,7 @@ public final class TestEquals {
                                         UnoRuntime.queryInterface(
                                             XDerived.class, test2Aa);
 
-                                    Hashtable<String,String> params = new Hashtable<String,String>();
+                                    HashMap<String,String> params = new HashMap<String,String>();
                                     params.put("UNO_TYPES", unoTypes);
                                     params.put("UNO_SERVICES", unoServices);
                                     XComponentContext context = Bootstrap.

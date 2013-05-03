@@ -31,7 +31,7 @@ public class AccessibleObjectFactory {
     // This type is needed for conversions from/to uno Any
     public static final Type XAccessibleType = new Type(XAccessible.class);
 
-    private static java.util.Hashtable<String, WeakReference<Component>> objectList = new java.util.Hashtable<String, WeakReference<Component>>();
+    private static java.util.HashMap<String, WeakReference<Component>> objectList = new java.util.HashMap<String, WeakReference<Component>>();
     private static java.awt.FocusTraversalPolicy focusTraversalPolicy = new FocusTraversalPolicy();
 
     private static java.awt.EventQueue theEventQueue = java.awt.Toolkit.getDefaultToolkit().

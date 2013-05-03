@@ -181,7 +181,7 @@ public class CommandLineTools {
         private String language = null;
         private MethodFinder finder = null;
         private ArrayList scripts = null;
-        private Hashtable properties = new Hashtable(3);
+        private HashMap properties = new HashMap(3);
 
         public GenerateCommand(String basedir) {
             this.basedir = new File(basedir);

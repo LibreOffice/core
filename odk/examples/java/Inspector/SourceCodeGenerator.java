@@ -33,8 +33,7 @@
  *************************************************************************/
 
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
 
 import com.sun.star.reflection.ParamInfo;
 import com.sun.star.reflection.XIdlClass;
@@ -55,7 +54,7 @@ public class SourceCodeGenerator {
     private String sStatementCode = "";
     private String sMainMethodSignature = "";
 
-    private Hashtable<String, UnoObjectDefinition> aVariables = new Hashtable<String, UnoObjectDefinition>();
+    private HashMap<String, UnoObjectDefinition> aVariables = new HashMap<String, UnoObjectDefinition>();
     private final String SSUFFIXSEPARATOR = "_";
     private final String SVARIABLENAME = "VariableName";
     private final String SARRAYVARIABLENAME = "VariableNameList";
@@ -344,9 +343,7 @@ public class SourceCodeGenerator {
 
 
     private String getHeaderSourceCode(){
-        Enumeration<UnoObjectDefinition> aEnumeration = aVariables.elements();
-        while(aEnumeration.hasMoreElements()){
-            UnoObjectDefinition oUnoObjectDefinition = aEnumeration.nextElement();
+        for(UnoObjectDefinition oUnoObjectDefinition : aVariables.values()){
             String sCurHeaderStatement = m_xLanguageSourceCodeGenerator.getHeaderSourceCode(oUnoObjectDefinition.getUnoObject(), oUnoObjectDefinition.getTypeName(), oUnoObjectDefinition.getTypeClass());
             sHeaderStatements.add(sCurHeaderStatement);
         }

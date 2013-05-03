@@ -17,15 +17,17 @@
  */
 package helper;
 
+import java.util.HashMap;
+
+import lib.TestParameters;
+import util.PropertyName;
+import util.utils;
+
 import com.sun.star.comp.helper.Bootstrap;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
-import java.util.Hashtable;
-import lib.TestParameters;
-import util.PropertyName;
-import util.utils;
 
 /**
  * Bootstrap UNO from a Java environment.
@@ -89,7 +91,7 @@ public class UnoProvider implements AppProvider {
         if (xMSF == null) {
             // bootstrap UNO.
             String unorcName = getUnorcName(param);
-            Hashtable<String,String> env = new Hashtable<String,String>();
+            HashMap<String,String> env = new HashMap<String,String>();
             env.put("SYSBINDIR", getSysBinDir(param));
 
             XComponentContext xContext = null;

@@ -17,25 +17,22 @@
  */
 package com.sun.star.comp.helper;
 
-import com.sun.star.uno.XComponentContext;
+import java.util.HashMap;
+
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
-
-import com.sun.star.comp.helper.ComponentContext;
-import com.sun.star.comp.helper.ComponentContextEntry;
 import com.sun.star.uno.UnoRuntime;
-
-import java.util.Hashtable;
+import com.sun.star.uno.XComponentContext;
 
 
 public class ComponentContext_Test {
     public static void main(String args[]) {
         try {
-            Hashtable<String,Object> table = new Hashtable<String,Object>();
+            HashMap<String,Object> table = new HashMap<String,Object>();
             table.put( "bla1", new ComponentContextEntry( null, new Integer( 1 ) ) );
             XComponentContext xInitialContext = Bootstrap.createInitialComponentContext( table );
 
-            table = new Hashtable<String,Object>();
+            table = new HashMap<String,Object>();
             table.put( "bla2", new ComponentContextEntry( new Integer( 2 ) ) );
             table.put( "bla3", new Integer( 3 ) );
             XComponentContext xContext = new ComponentContext( table, xInitialContext );

@@ -58,13 +58,18 @@ public class ComponentContext implements XComponentContext, XComponent
     private static final String SMGR_NAME = "/singletons/com.sun.star.lang.theServiceManager";
     private static final String TDMGR_NAME = "/singletons/com.sun.star.reflection.theTypeDescriptionManager";
 
-    private Hashtable<String,Object> m_table;
+    private java.util.Map<String,Object> m_table;
     private XComponentContext m_xDelegate;
 
     private XMultiComponentFactory m_xSMgr;
     private boolean m_bDisposeSMgr;
 
     private ArrayList<XEventListener> m_eventListener;
+
+    public ComponentContext( Hashtable<String,Object> table, XComponentContext xDelegate )
+    {
+        this((java.util.Map<String,Object>)table, xDelegate);
+    }
 
     /** Ctor to create a component context passing a hashtable for values and a delegator
         reference. Entries of the passed hashtable are either direct values or
@@ -75,7 +80,7 @@ public class ComponentContext implements XComponentContext, XComponent
         @param xDelegate
                if values are not found, request is delegated to this object
     */
-    public ComponentContext( Hashtable<String,Object> table, XComponentContext xDelegate )
+    public ComponentContext( java.util.Map<String,Object> table, XComponentContext xDelegate )
     {
         m_eventListener = new ArrayList<XEventListener>();
         m_table = table;

@@ -89,13 +89,21 @@ public class Bootstrap {
             "com.sun.star.comp.connections.Acceptor", null, null, null ) );
     }
 
+    /**
+     * backwards compatibility stub.
+     */
+    static public XComponentContext createInitialComponentContext( Hashtable<String, Object> context_entries )
+            throws Exception
+    {
+        return createInitialComponentContext((java.util.Map<String,Object>)context_entries);
+    }
     /** Bootstraps an initial component context with service manager and basic
         jurt components inserted.
         @param context_entries the hash table contains mappings of entry names (type string) to
         context entries (type class ComponentContextEntry).
         @return a new context.
     */
-    static public XComponentContext createInitialComponentContext( Hashtable<String, Object> context_entries )
+    static public XComponentContext createInitialComponentContext( java.util.Map<String, Object> context_entries )
         throws Exception
     {
         ServiceManager xSMgr = new ServiceManager();
@@ -148,6 +156,16 @@ public class Bootstrap {
     {
         return defaultBootstrap_InitialComponentContext( null, null );
     }
+    /**
+     * Backwards compatibility stub.
+     */
+    static public final XComponentContext defaultBootstrap_InitialComponentContext(
+            String ini_file, Hashtable<String,String> bootstrap_parameters )
+            throws Exception
+    {
+        return defaultBootstrap_InitialComponentContext(ini_file, (java.util.Map<String,String>)bootstrap_parameters);
+
+    }
     /** Bootstraps the initial component context from a native UNO installation.
 
         @param ini_file
@@ -158,7 +176,7 @@ public class Bootstrap {
         @see "cppuhelper/defaultBootstrap_InitialComponentContext()"
     */
     static public final XComponentContext defaultBootstrap_InitialComponentContext(
-        String ini_file, Hashtable<String,String> bootstrap_parameters )
+        String ini_file, java.util.Map<String,String> bootstrap_parameters )
         throws Exception
     {
         // jni convenience: easier to iterate over array than calling Hashtable
