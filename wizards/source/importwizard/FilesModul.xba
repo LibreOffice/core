@@ -187,7 +187,7 @@ Dim LocXMLTemplateContent as String
 	iKey = Applications(ApplIndex, SBAPPLKEY)
 	CurListString = PathCollection(CollectIndex, 2)
 	LocExtension = sFilterName(iKey +DistIndex, 0)
-	If Len(LocExtension) &gt; SBMAXEXTENSIONLENGTH Then 			&apos; 7 == Length of two extensions like &apos;sda|sdd
+	If Instr(LocExtension, &quot;vnd.sun.xml.&quot;) = 1 Then
 		LocExtension = SetExtension(LocExtension)
 		LocContentString = sFilterName(iKey +DistIndex, 0)
 		LocContentString = ReplaceString(LocContentString, &quot;|&quot;, &quot;;&quot;)

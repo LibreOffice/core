@@ -74,8 +74,6 @@ Public XMLTemplateList()
 &apos; Applications(X,8) = &quot;File:///...&quot; 	(TargetUrl of the templates)
 &apos; Applications(X,9) = 0				    (Key to the original Index of the Applications)
 
-Public Const SBMAXEXTENSIONLENGTH = 15
-
 
 Sub FillStep_Welcome()
 Dim i as Integer
