@@ -1345,7 +1345,7 @@ void XMLTabStopOASISTContext_Impl::StartElement(
 {
     XMLTransformerActions *pActions =
         GetTransformer().GetUserDefinedActions( OASIS_TAB_STOP_ACTIONS  );
-    OSL_ENSURE( pActions, "go no actions" );
+    SAL_WARN_IF( NULL == pActions, "xmloff.transform", "got no actions" );
 
     sal_Unicode cStyleLeaderChar = 0;
     sal_Int16 nLeaderText = -1;
@@ -1416,7 +1416,7 @@ void XMLTabStopOASISTContext_Impl::StartElement(
                 }
                 break;
             default:
-                OSL_ENSURE( !this, "unknown action" );
+                SAL_WARN( "xmloff.transform", "unknown action" );
                 break;
             }
         }
@@ -1688,7 +1688,7 @@ XMLTransformerContext *Oasis2OOoTransformer::CreateUserDefinedContext(
     case XML_ETACTION_CHART_PLOT_AREA:
         return new XMLChartPlotAreaOASISTContext( *this, rQName );
     default:
-        OSL_ENSURE( !this, "no user defined context found!" );
+        SAL_WARN( "xmloff.transform", "no user defined context found!" );
         break;
     }
 
@@ -2055,7 +2055,7 @@ Reference< XInterface > SAL_CALL Oasis2OOoTransformer_createInstance(
         const Reference< XMultiServiceFactory > &)
     throw( Exception )
 {
-    OSL_TRACE("Creating Oasis2OOoTransformer");
+    SAL_INFO("xmloff.transform", "Creating Oasis2OOoTransformer");
     return (cppu::OWeakObject*)new Oasis2OOoTransformer;
 }
 
