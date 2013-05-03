@@ -1169,7 +1169,7 @@ void SwPostItMgr::Delete(String aAuthor)
     aTmp.reserve( mvPostItFlds.size() );
     for(std::list<SwSidebarItem*>::iterator pPostIt = mvPostItFlds.begin(); pPostIt!= mvPostItFlds.end() ; ++pPostIt)
     {
-        if ((*pPostIt)->GetFmtFld() && ((*pPostIt)->pPostIt->GetAuthor() == aAuthor) )
+        if ((*pPostIt)->GetFmtFld() && (*pPostIt)->pPostIt && ((*pPostIt)->pPostIt->GetAuthor() == aAuthor) )
             aTmp.push_back( (*pPostIt)->GetFmtFld() );
     }
     for(std::vector<SwFmtFld*>::iterator i = aTmp.begin(); i != aTmp.end() ; ++i)
