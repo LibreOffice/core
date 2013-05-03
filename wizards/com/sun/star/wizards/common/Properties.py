@@ -58,3 +58,6 @@ class Properties(dict):
         if handle is not None:
             pv.Handle = handle
         return pv
+
+    def getProperties1(self):
+        return self.getProperties(self)
