@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cassert>
+
 #include <tools/debug.hxx>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
@@ -3453,6 +3455,9 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
 
         if(getSupportsMultipleContents() && dynamic_cast< SdXMLGraphicObjectShapeContext* >(pContext))
         {
+            if ( !maShapeId.isEmpty() )
+                GetImport().getInterfaceToIdentifierMapper().reserveIdentifier( maShapeId );
+
             addContent(*mxImplContext);
         }
     }
@@ -3526,8 +3531,15 @@ void SdXMLFrameShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
 
 void SdXMLFrameShapeContext::EndElement()
 {
-    /// solve if multiple image child contexts were imported
-    solveMultipleImages();
+    // solve if multiple image child contexts were imported
+    const SvXMLImportContext* const pSelectedContext(solveMultipleImages());
+    const SdXMLGraphicObjectShapeContext* pShapeContext( dynamic_cast<const SdXMLGraphicObjectShapeContext*>( pSelectedContext ) );
+    if ( pShapeContext )
+    {
+        assert( mxImplContext.Is() );
+        const uno::Reference< uno::XInterface > xShape( pShapeContext->getShape() );
+        GetImport().getInterfaceToIdentifierMapper().registerReservedReference( maShapeId, xShape );
+    }
 
     if( !mxImplContext.Is() )
     {
@@ -3588,10 +3600,25 @@ void SdXMLFrameShapeContext::EndElement()
     SdXMLShapeContext::EndElement();
 }
 
-void SdXMLFrameShapeContext::processAttribute( sal_uInt16,
-        const OUString&, const OUString& )
+void SdXMLFrameShapeContext::processAttribute( sal_uInt16 nPrefix,
+        const OUString& rLocalName, const OUString& rValue )
 {
-    // ignore
+    bool bId( false );
+
+    switch ( nPrefix )
+    {
+        case XML_NAMESPACE_DRAW :
+        case XML_NAMESPACE_DRAW_EXT :
+            bId = IsXMLToken( rLocalName, XML_ID );
+            break;
+        case XML_NAMESPACE_NONE :
+        case XML_NAMESPACE_XML :
+            bId = IsXMLToken( rLocalName, XML_ID );
+            break;
+    }
+
+    if ( bId )
+        SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
 TYPEINIT1( SdXMLCustomShapeContext, SdXMLShapeContext );

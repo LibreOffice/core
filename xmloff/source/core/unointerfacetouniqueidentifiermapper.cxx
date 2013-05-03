@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
 
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 
@@ -71,7 +72,7 @@ bool UnoInterfaceToUniqueIdentifierMapper::registerReference( const OUString& rI
     {
         return rIdentifier != (*aIter).first;
     }
-    else if( findIdentifier( rIdentifier, aIter ) )
+    else if( findIdentifier( rIdentifier, aIter ) || findReserved( rIdentifier ) )
     {
         return false;
     }
@@ -171,6 +172,44 @@ bool UnoInterfaceToUniqueIdentifierMapper::findIdentifier( const OUString& rIden
 {
     rIter = maEntries.find( rIdentifier );
     return rIter != maEntries.end();
+}
+
+bool UnoInterfaceToUniqueIdentifierMapper::reserveIdentifier( const rtl::OUString& rIdentifier )
+{
+    if ( findReserved( rIdentifier ) )
+        return false;
+
+    maReserved.push_back( rIdentifier );
+    return true;
+}
+
+bool UnoInterfaceToUniqueIdentifierMapper::registerReservedReference(
+        const rtl::OUString& rIdentifier,
+        const com::sun::star::uno::Reference< com::sun::star::uno::XInterface >& rInterface )
+{
+    Reserved_t::const_iterator aIt;
+    if ( !findReserved( rIdentifier, aIt ) )
+        return false;
+
+    Reserved_t::iterator aRemoveIt( maReserved.begin() + ( aIt - maReserved.begin() ) );
+    maReserved.erase( aRemoveIt );
+    registerReference( rIdentifier, rInterface );
+
+    return true;
+}
+
+bool UnoInterfaceToUniqueIdentifierMapper::findReserved( const OUString& rIdentifier ) const
+{
+    Reserved_t::const_iterator aDummy;
+    return findReserved( rIdentifier, aDummy );
+}
+
+bool UnoInterfaceToUniqueIdentifierMapper::findReserved(
+        const OUString& rIdentifier,
+        Reserved_t::const_iterator& rIter ) const
+{
+    rIter = std::find( maReserved.begin(), maReserved.end(), rIdentifier );
+    return rIter != maReserved.end();
 }
 
 }
