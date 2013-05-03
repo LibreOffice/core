@@ -57,6 +57,11 @@ public:
     // is in a ListBox, all will be shown, else a ScrollBar will be used
     sal_Int16   GetListBoxMaximumLineCount() const;
 
+    // option to set the width of ColorValueSets in columns; this allows
+    // adaption to own colr set layouts. The default layout is 12 columns and should
+    // only be changed when the color palette is changed from the default
+    sal_Int16   GetColorValueSetColumnCount() const;
+
     void        SetIsForPagePreviews(sal_Bool bSet);
     void        SetIsHelpTipsDisappear(sal_Bool bSet);
     void        SetIsAllowAnimatedGraphics(sal_Bool bSet);
@@ -69,6 +74,7 @@ public:
 
     void        SetEdgeBlending(sal_Int16 nSet);
     void        SetListBoxMaximumLineCount(sal_Int16 nSet);
+    void        SetColorValueSetColumnCount(sal_Int16 nSet);
 
     sal_Bool                IsModified() const;
     void                    Commit();

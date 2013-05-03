@@ -85,6 +85,7 @@ public:
     sal_Bool    IsSelectionInReadonly() const;
     sal_Int16   GetEdgeBlending() const;
     sal_Int16   GetListBoxMaximumLineCount() const;
+    sal_Int16   GetColorValueSetColumnCount() const;
 
     void        SetAutoDetectSystemHC(sal_Bool bSet);
     void        SetIsForPagePreviews(sal_Bool bSet);
@@ -97,6 +98,7 @@ public:
     void        SetSelectionInReadonly(sal_Bool bSet);
     void        SetEdgeBlending(sal_Int16 nSet);
     void        SetListBoxMaximumLineCount(sal_Int16 nSet);
+    void        SetColorValueSetColumnCount(sal_Int16 nSet);
 
     sal_Bool    IsModified() const { return bIsModified; };
 };
@@ -337,6 +339,24 @@ sal_Int16 SvtAccessibilityOptions_Impl::GetListBoxMaximumLineCount() const
     return nRet;
 }
 
+sal_Int16 SvtAccessibilityOptions_Impl::GetColorValueSetColumnCount() const
+{
+    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
+    sal_Int16 nRet = 12;
+
+    try
+    {
+        if(xNode.is())
+            xNode->getPropertyValue(s_sColorValueSetColumnCount) >>= nRet;
+    }
+    catch(const css::uno::Exception& ex)
+    {
+        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+    }
+
+    return nRet;
+}
+
 void SvtAccessibilityOptions_Impl::SetAutoDetectSystemHC(sal_Bool bSet)
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
@@ -553,6 +573,16 @@ void SvtAccessibilityOptions_Impl::SetVCLSettings()
         StyleSettingsChanged = true;
     }
 
+    const sal_Int16 nMaxColumnCountA(GetColorValueSetColumnCount());
+    OSL_ENSURE(nMaxColumnCountA >= 0, "OOps, negative values for ColorValueSetColumnCount are not allowed (!)");
+    const sal_uInt16 nMaxColumnCountB(static_cast< sal_uInt16 >(nMaxColumnCountA >= 0 ? nMaxColumnCountA : 0));
+
+    if(aStyleSettings.GetColorValueSetColumnCount() != nMaxColumnCountB)
+    {
+        aStyleSettings.SetColorValueSetColumnCount(nMaxColumnCountB);
+        StyleSettingsChanged = true;
+    }
+
     if(StyleSettingsChanged)
     {
         aAllSettings.SetStyleSettings(aStyleSettings);
@@ -591,6 +621,26 @@ void SvtAccessibilityOptions_Impl::SetListBoxMaximumLineCount(sal_Int16 nSet)
         if(xNode.is() && xNode->getPropertyValue(s_sListBoxMaximumLineCount)!=nSet)
         {
             xNode->setPropertyValue(s_sListBoxMaximumLineCount, css::uno::makeAny(nSet));
+            ::comphelper::ConfigurationHelper::flush(m_xCfg);
+
+            bIsModified = sal_True;
+        }
+    }
+    catch(const css::uno::Exception& ex)
+    {
+        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+    }
+}
+
+void SvtAccessibilityOptions_Impl::SetColorValueSetColumnCount(sal_Int16 nSet)
+{
+    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
+
+    try
+    {
+        if(xNode.is() && xNode->getPropertyValue(s_sColorValueSetColumnCount)!=nSet)
+        {
+            xNode->setPropertyValue(s_sColorValueSetColumnCount, css::uno::makeAny(nSet));
             ::comphelper::ConfigurationHelper::flush(m_xCfg);
 
             bIsModified = sal_True;
@@ -702,6 +752,10 @@ sal_Int16 SvtAccessibilityOptions::GetListBoxMaximumLineCount() const
 {
     return sm_pSingleImplConfig->GetListBoxMaximumLineCount();
 }
+sal_Int16 SvtAccessibilityOptions::GetColorValueSetColumnCount() const
+{
+    return sm_pSingleImplConfig->GetColorValueSetColumnCount();
+}
 
 // -----------------------------------------------------------------------
 void SvtAccessibilityOptions::SetAutoDetectSystemHC(sal_Bool bSet)
@@ -752,6 +806,11 @@ void SvtAccessibilityOptions::SetListBoxMaximumLineCount(sal_Int16 nSet)
 {
     sm_pSingleImplConfig->SetListBoxMaximumLineCount(nSet);
 }
+void SvtAccessibilityOptions::SetColorValueSetColumnCount(sal_Int16 nSet)
+{
+    sm_pSingleImplConfig->SetColorValueSetColumnCount(nSet);
+}
+
 // -----------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

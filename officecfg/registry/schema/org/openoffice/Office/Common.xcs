@@ -6238,6 +6238,19 @@
         </info>
         <value>25</value>
       </prop>
+      <prop oor:name="ColorValueSetColumnCount" oor:type="xs:short">
+        <info>
+          <author>ALG</author>
+          <desc>
+            This option controls how many columns the ColorValueSets (the matrix-organized dialogs for color select)
+            will have. The default is 12 and this is aligned with the layout of the standard color palette. thus, when you
+            change this value, you should know what you do. This setting also influences some width-oriented layouts in
+            dialogs where this ColorValueSets are used, e.g. FillStyle dialog.
+          </desc>
+          <label>Defines the number of columns that will be shown in a ColorValueSet.</label>
+        </info>
+        <value>12</value>
+      </prop>
     </group>
     <group oor:name="ExternalApps" oor:extensible="true">
       <info>
