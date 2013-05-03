@@ -27,13 +27,7 @@ module com { module sun { module star { module graphic
 /** Service that describes the necessary interfaces and properties
     for tooling involved with XPrimitive2D interfaces
  */
-
-service Primitive2DTools
-{
-    /** Interface to render B2DPrimitives to a XBitmap
-    */
-    interface ::com::sun::star::graphic::XPrimitive2DRenderer;
-};
+service Primitive2DTools : XPrimitive2DRenderer;
 
 } ; } ; } ; } ;
 

@@ -30,7 +30,7 @@
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/graphic/XPrimitive2DRenderer.hpp>
+#include <com/sun/star/graphic/Primitive2DTools.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/uno/Reference.h>
@@ -218,44 +218,39 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
 
     // UNO dance to render from drawinglayer
     // ---------------------------------------------------------------------
-    uno::Reference< lang::XMultiServiceFactory > xFactory(::comphelper::getProcessServiceFactory());
-    const OUString aServiceName("com.sun.star.graphic.Primitive2DTools");
+    uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
 
     try
     {
-        const uno::Reference< graphic::XPrimitive2DRenderer > xPrimitive2DRenderer(
-            xFactory->createInstance(aServiceName),
-            uno::UNO_QUERY_THROW);
+        const uno::Reference< graphic::XPrimitive2DRenderer > xPrimitive2DRenderer =
+            graphic::Primitive2DTools::create( xContext );
 
-        if(xPrimitive2DRenderer.is())
+        // cancel out rasterize's mm2pixel conversion
+        // see fFactor100th_mmToInch in
+        // drawinglayer/source/drawinglayeruno/xprimitive2drenderer.cxx
+        const double fFakeDPI=2.54 * 1000.0;
+
+        geometry::RealRectangle2D aRealRect(
+            0, 0,
+            nWidth, nWidth / fAspectRatio);
+
+        const uno::Reference< rendering::XBitmap > xBitmap(
+            xPrimitive2DRenderer->rasterize(
+                drawinglayer::primitive2d::Primitive2DSequence(&xTransformRef, 1),
+                uno::Sequence< beans::PropertyValue >(),
+                fFakeDPI,
+                fFakeDPI,
+                aRealRect,
+                500000));
+
+        if(xBitmap.is())
         {
-            // cancel out rasterize's mm2pixel conversion
-            // see fFactor100th_mmToInch in
-            // drawinglayer/source/drawinglayeruno/xprimitive2drenderer.cxx
-            const double fFakeDPI=2.54 * 1000.0;
+            const uno::Reference< rendering::XIntegerReadOnlyBitmap> xIntBmp(xBitmap, uno::UNO_QUERY_THROW);
 
-            geometry::RealRectangle2D aRealRect(
-                0, 0,
-                nWidth, nWidth / fAspectRatio);
-
-            const uno::Reference< rendering::XBitmap > xBitmap(
-                xPrimitive2DRenderer->rasterize(
-                    drawinglayer::primitive2d::Primitive2DSequence(&xTransformRef, 1),
-                    uno::Sequence< beans::PropertyValue >(),
-                    fFakeDPI,
-                    fFakeDPI,
-                    aRealRect,
-                    500000));
-
-            if(xBitmap.is())
+            if(xIntBmp.is())
             {
-                const uno::Reference< rendering::XIntegerReadOnlyBitmap> xIntBmp(xBitmap, uno::UNO_QUERY_THROW);
-
-                if(xIntBmp.is())
-                {
-                    rBitmap = vcl::unotools::bitmapExFromXBitmap(xIntBmp);
-                    return true;
-                }
+                rBitmap = vcl::unotools::bitmapExFromXBitmap(xIntBmp);
+                return true;
             }
         }
     }

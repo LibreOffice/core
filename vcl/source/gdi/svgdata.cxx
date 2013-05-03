@@ -22,7 +22,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/graphic/XSvgParser.hpp>
-#include <com/sun/star/graphic/XPrimitive2DRenderer.hpp>
+#include <com/sun/star/graphic/Primitive2DTools.hpp>
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
 #include <vcl/canvastools.hxx>
 #include <comphelper/seqstream.hxx>
@@ -46,43 +46,39 @@ BitmapEx VCL_DLLPUBLIC convertPrimitive2DSequenceToBitmapEx(
     {
         // create replacement graphic from maSequence
         // create XPrimitive2DRenderer
-        uno::Reference< lang::XMultiServiceFactory > xFactory(::comphelper::getProcessServiceFactory());
-        const OUString aServiceName("com.sun.star.graphic.Primitive2DTools");
+        uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
 
         try
         {
-            const uno::Reference< graphic::XPrimitive2DRenderer > xPrimitive2DRenderer(xFactory->createInstance(aServiceName), uno::UNO_QUERY_THROW);
+            const uno::Reference< graphic::XPrimitive2DRenderer > xPrimitive2DRenderer = graphic::Primitive2DTools::create(xContext);
 
-            if(xPrimitive2DRenderer.is())
+            uno::Sequence< beans::PropertyValue > aViewParameters;
+            geometry::RealRectangle2D aRealRect;
+
+            aRealRect.X1 = rTargetRange.getMinX();
+            aRealRect.Y1 = rTargetRange.getMinY();
+            aRealRect.X2 = rTargetRange.getMaxX();
+            aRealRect.Y2 = rTargetRange.getMaxY();
+
+            // get system DPI
+            const Size aDPI(Application::GetDefaultDevice()->LogicToPixel(Size(1, 1), MAP_INCH));
+
+            const uno::Reference< rendering::XBitmap > xBitmap(
+                xPrimitive2DRenderer->rasterize(
+                    rSequence,
+                    aViewParameters,
+                    aDPI.getWidth(),
+                    aDPI.getHeight(),
+                    aRealRect,
+                    nMaximumQuadraticPixels));
+
+            if(xBitmap.is())
             {
-                uno::Sequence< beans::PropertyValue > aViewParameters;
-                geometry::RealRectangle2D aRealRect;
+                const uno::Reference< rendering::XIntegerReadOnlyBitmap> xIntBmp(xBitmap, uno::UNO_QUERY_THROW);
 
-                aRealRect.X1 = rTargetRange.getMinX();
-                aRealRect.Y1 = rTargetRange.getMinY();
-                aRealRect.X2 = rTargetRange.getMaxX();
-                aRealRect.Y2 = rTargetRange.getMaxY();
-
-                // get system DPI
-                const Size aDPI(Application::GetDefaultDevice()->LogicToPixel(Size(1, 1), MAP_INCH));
-
-                const uno::Reference< rendering::XBitmap > xBitmap(
-                    xPrimitive2DRenderer->rasterize(
-                        rSequence,
-                        aViewParameters,
-                        aDPI.getWidth(),
-                        aDPI.getHeight(),
-                        aRealRect,
-                        nMaximumQuadraticPixels));
-
-                if(xBitmap.is())
+                if(xIntBmp.is())
                 {
-                    const uno::Reference< rendering::XIntegerReadOnlyBitmap> xIntBmp(xBitmap, uno::UNO_QUERY_THROW);
-
-                    if(xIntBmp.is())
-                    {
-                        aRetval = vcl::unotools::bitmapExFromXBitmap(xIntBmp);
-                    }
+                    aRetval = vcl::unotools::bitmapExFromXBitmap(xIntBmp);
                 }
             }
         }
