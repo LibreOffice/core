@@ -20,6 +20,11 @@ from .Configuration import Configuration
 
 class ConfigGroup(object):
 
+    root = None
+
+    def __init__(self):
+        self.root = None
+
     def writeConfiguration(self, configurationView, param):
         for name,data in inspect.getmembers(self):
             if name.startswith(param):
@@ -43,9 +48,13 @@ class ConfigGroup(object):
         propertyName = field[len(prefix):]
         child = getattr(self, field)
         if isinstance(child, ConfigGroup):
+            child.setRoot(self.root);
             child.readConfiguration(configView.getByName(propertyName),
                 prefix)
         else:
             value = configView.getByName(propertyName)
             if value is not None:
                 setattr(self,field, value)
+
+    def setRoot(self, newRoot):
+        self.root = newRoot
