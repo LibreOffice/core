@@ -125,9 +125,7 @@ class ScColumn
     // values; either the reall text widths or TEXTWIDTH_DIRTY.
     TextWidthType maTextWidths;
 
-    // For now, we store script type values as unsigned shorts. Once
-    // multi_type_vector supports char and unsigned char (due in 0.7.2), we
-    // can switch to that to save storage space.
+    // Script types are stored as unsigned char.
     ScriptType maScriptTypes;
 
     SCCOL           nCol;
