@@ -26,6 +26,10 @@ class ActionListenerProcAdapter( unohelper.Base, XActionListener ):
         if callable( self.oProcToCall ):
             self.oProcToCall()
 
+    def disposing(self, Event):
+        # TODO: Implement ?
+        pass
+
 from com.sun.star.awt import XItemListener
 class ItemListenerProcAdapter( unohelper.Base, XItemListener ):
     def __init__(self, oProcToCall):
@@ -38,6 +42,10 @@ class ItemListenerProcAdapter( unohelper.Base, XItemListener ):
             except:
                 self.oProcToCall(oItemEvent)
 
+    def disposing(self, Event):
+        # TODO: Implement ?
+        pass
+
 from com.sun.star.awt import XTextListener
 class TextListenerProcAdapter( unohelper.Base, XTextListener ):
     def __init__(self, oProcToCall):
@@ -46,6 +54,10 @@ class TextListenerProcAdapter( unohelper.Base, XTextListener ):
     def textChanged( self, oTextEvent ):
         if callable( self.oProcToCall ):
             self.oProcToCall()
+
+    def disposing(self, Event):
+        # TODO: Implement ?
+        pass
 
 from com.sun.star.frame import XTerminateListener
 class TerminateListenerProcAdapter( unohelper.Base, XTerminateListener ):
@@ -66,6 +78,22 @@ class WindowListenerProcAdapter( unohelper.Base, XWindowListener ):
     def windowShown(self, TerminateEvent):
         if callable( self.oProcToCall ):
             self.oProcToCall()
+
+    def windowHidden(self, Event):
+        # TODO: Implement ?
+        pass
+
+    def windowResized(self, Event):
+        # TODO: Implement ?
+        pass
+
+    def windowMoved(self, Event):
+        # TODO: Implement ?
+        pass
+
+    def disposing(self, Event):
+        # TODO: Implement ?
+        pass
 
 from com.sun.star.awt import XAdjustmentListener
 class AdjustmentListenerProcAdapter( unohelper.Base, XAdjustmentListener ):
@@ -106,6 +134,18 @@ class OMouseListenerProcAdapter( unohelper.Base, XMouseListener ):
     def mousePressed(self, MouseEvent):
         if callable( self.oProcToCall ):
             self.oProcToCall(MouseEvent)
+
+    def mouseEntered(self, MouseEvent):
+        # TODO: Implement ?
+        pass
+
+    def mouseExited(self, MouseEvent):
+        # TODO: Implement ?
+        pass
+
+    def mouseReleased(self, MouseEvent):
+        # TODO: Implement ?
+        pass
 
     def disposing(self, Event):
         # TODO: Implement ?
