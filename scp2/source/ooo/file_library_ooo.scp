@@ -310,16 +310,6 @@ End
 
 #ifdef UNX
 
-#ifdef ENABLE_KAB
-STD_LIB_FILE(gid_File_Lib_Kab_1, kab1)
-STD_LIB_FILE(gid_File_Lib_Kab_Drv_1, kabdrv1)
-#endif
-
-#ifdef ENABLE_TDEAB
-STD_LIB_FILE(gid_File_Lib_Tdeab_1, tdeab1)
-STD_LIB_FILE(gid_File_Lib_Tdeab_Drv_1, tdeabdrv1)
-#endif
-
 #ifdef MACOSX
 File gid_File_Lib_Macab_1
     LIB_FILE_BODY;
@@ -540,13 +530,6 @@ End
 
 #endif
 
-
-#ifdef SOLAR_JAVA
-
-STD_LIB_FILE( gid_File_Lib_Jdbc, jdbc)
-
-#endif
-
 #ifdef SOLAR_JAVA
 File gid_File_Lib_Hsqldb_2
     LIB_FILE_BODY;
@@ -674,15 +657,6 @@ SPECIAL_LIB_FILE(gid_File_Lib_DeploymentGui,deploymentgui)
 STD_LIB_FILE( gid_File_Lib_Pl , pl)
 #endif
 
-#if defined(UNX) && ! defined(MACOSX) && ! defined(LIBO_HEADLESS)
-File gid_File_Lib_Vclplug_Gen
-    Name = LIBNAME(vclplug_gen);
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-End
-#endif
-
 #if defined(UNX) && ! defined(MACOSX)
 #ifdef ENABLE_GTK
 File gid_File_Lib_Vclplug_Gtk
@@ -794,13 +768,6 @@ End
 
 #endif /* WNT && HAVE_WINDOWS_SDK */
 
-File gid_File_Lib_Res
-    Name = LIBNAME(res);
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-End
-
 STD_LIB_FILE( gid_File_Lib_Expwrap_Uno, expwrap )
 
 STD_LIB_FILE( gid_File_Lib_Fastsax_Uno, fastsax )
@@ -858,8 +825,6 @@ STD_LIB_FILE( gid_File_Lib_Spl_Unx, spl_unx)
 #endif
 
 SPECIAL_LIB_FILE(gid_File_Lib_Srtrs1,srtrs1)
-
-STD_LIB_FILE( gid_File_Lib_TextConversionDlgs, textconversiondlgs)
 
 #if ! defined UNX
 File gid_File_Lib_Sysdtrans
@@ -1070,8 +1035,6 @@ End
 STD_LIB_FILE( gid_File_Lib_Migrationoo2, migrationoo2 )
 
 STD_LIB_FILE( gid_File_Lib_Migrationoo3, migrationoo3 )
-
-STD_LIB_FILE( gid_File_Lib_Guesslang, guesslang )
 
 STD_LIB_FILE( gid_File_Lib_Updatefeed , updatefeed )
 
