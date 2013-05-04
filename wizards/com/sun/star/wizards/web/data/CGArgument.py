@@ -18,4 +18,6 @@
 from ...common.ConfigGroup import ConfigGroup
 
 class CGArgument(ConfigGroup):
-    cp_Value = str()
+
+    def __init__(self):
+        self.cp_Value = str()

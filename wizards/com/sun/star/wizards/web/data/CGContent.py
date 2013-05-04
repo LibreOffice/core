@@ -22,13 +22,13 @@ from .CGDocument import CGDocument
 
 class CGContent(ConfigGroup):
 
-    cp_Index = -1
-    dirName = str()
-    cp_Name = str()
-    cp_Description = str()
-    #COMMENTED
-    #cp_Contents = WebConfigSet(CGContent)
-    cp_Documents = WebConfigSet(CGDocument())
+    def __init__(self):
+        self.cp_Index = -1
+        self.dirName = str()
+        self.cp_Name = str()
+        self.cp_Description = str()
+        self.cp_Documents = WebConfigSet(CGDocument)
+        self.cp_Contents = WebConfigSet(CGContent)
 
     def createDOM(self, parent):
         myElement = XMLHelper.addElement(

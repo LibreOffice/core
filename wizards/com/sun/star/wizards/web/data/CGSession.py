@@ -29,15 +29,16 @@ from xml.dom.minidom import Document
 
 class CGSession(ConfigGroup):
 
-    cp_Index = -1
-    cp_InDirectory = str()
-    cp_OutDirectory = str()
-    cp_Name = str()
-    cp_Content = CGContent()
-    cp_Design = CGDesign()
-    cp_GeneralInfo = CGGeneralInfo()
-    cp_Publishing = WebConfigSet(CGPublish)
-    valid = False
+    def __init__(self):
+        self.cp_Index = -1
+        self.cp_InDirectory = str()
+        self.cp_OutDirectory = str()
+        self.cp_Name = str()
+        self.cp_Content = CGContent()
+        self.cp_Design = CGDesign()
+        self.cp_GeneralInfo = CGGeneralInfo()
+        self.cp_Publishing = WebConfigSet(CGPublish)
+        self.valid = False
 
     def createDOM(self, parent):
         root = XMLHelper.addElement(

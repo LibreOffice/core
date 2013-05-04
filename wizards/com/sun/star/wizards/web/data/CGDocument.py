@@ -45,34 +45,38 @@ The same is valid for *description* and *author*.
 '''
 
 class CGDocument(ConfigGroup):
-    cp_Exporter = None
-    cp_Index = -1
+
     PAGE_TYPE_PAGE = 1
     PAGE_TYPE_SLIDE = 2
-    cp_Title = ""
-    cp_Description = ""
-    cp_URL = ""
-    cp_Author = ""
-    localFilename = ""
-    urlFilename = ""
-    title = ""
-    description = ""
-    author = ""
-    sizeBytes = -1
-    pages = -1
-    valid = False
-    appType = None
 
-    def __init__(self, url = "", xmsf = None, Task = None):
+    def __init__(self, url = "", xmsf = None, task = None):
+        self.cp_URL = ""
+        self.cp_Exporter = None
+        self.cp_Index = -1
+        self.cp_Title = ""
+        self.cp_Description = ""
+        self.cp_Author = ""
+        self.localFilename = ""
+        self.urlFilename = ""
+        self.title = ""
+        self.description = ""
+        self.author = ""
+        self.dirName = ""
+        self.createdDate = None
+        self.updatedDate = None
+        self.sizeBytes = -1
+        self.pages = -1
+        self.valid = False
+        self.appType = ""
         if (xmsf is None):
             return
-        cp_URL = self.getSettings().getFileAccess(xmsf).getURL(url);
+        self.cp_URL = self.getSettings().getFileAccess(xmsf).getURL(url)
         if (task is None):
             task = Task("", "", 5)
-        self.validate(xmsf, task);
+        self.validate(xmsf, task)
 
     def getSettings(self):
-        return ConfigGroup.root
+        return self.root
 
     '''
     the task will advance 5 times during validate.
@@ -82,15 +86,12 @@ class CGDocument(ConfigGroup):
     '''
 
     def validate(self, xmsf, task):
-        print ("WARNING !!! VALIDATING DOCUMENT ....")
-        if not self.root.getFileAccess(xmsf).exists(self.cp_URL, False):
+        if not self.getSettings().getFileAccess(xmsf).exists(self.cp_URL, False):
             raise FileNotFoundException (
-                "The given URL does not point to a file");
+                "The given URL does not point to a file")
 
-        if self.root.getFileAccess(xmsf).isDirectory(self.cp_URL):
-            raise IllegalArgumentException (
-                "The given URL points to a directory");
-            #create a TypeDetection service
+        if self.getSettings().getFileAccess(xmsf).isDirectory(self.cp_URL):
+            raise IllegalArgumentException ("The given URL points to a directory") #create a TypeDetection service
 
         self.mediaDescriptor = OfficeDocument.getFileMediaDecriptor(
             xmsf, self.cp_URL)
@@ -99,7 +100,7 @@ class CGDocument(ConfigGroup):
         self.analyzeFileType(self.mediaDescriptor)
         task.advance(True)
         #2
-        path = self.root.getFileAccess(xmsf).getPath(self.cp_URL, "")
+        path = self.getSettings().getFileAccess(xmsf).getPath(self.cp_URL, "")
         self.localFilename = FileAccess.getFilename(path, separator)
         '''
         if the type is a star office convertible document
@@ -118,7 +119,6 @@ class CGDocument(ConfigGroup):
                 "MacroExecutionMode", NEVER_EXECUTE))
             props.append(Properties.createProperty(
                 "UpdateDocMode", NO_UPDATE))
-            print ("DEBUG !!! validate -- URL: ", self.cp_URL)
             component = desktop.loadComponentFromURL(
                 self.cp_URL, "_default", 0, tuple(props))
             xProps = component.DocumentProperties
@@ -127,41 +127,37 @@ class CGDocument(ConfigGroup):
         #4
         #now use the object to read some document properties.
         if xProps is not None:
-            title = xProps.Title
-            description = xProps.Description
-            author = xProps.Author
-            createDate = xProps.CreationDate
-            updateDate = xProps.ModificationDate
+            self.title = xProps.Title
+            self.description = xProps.Description
+            self.author = xProps.Author
+            self.createdDate = xProps.CreationDate
+            self.updatedDate = xProps.ModificationDate
         else:
 
             #get some information from OS.
-            title = self.localFilename
-            updateDate = \
+            self.title = self.localFilename
+            self.updatedDate = \
                 self.getSettings().getFileAccess(xmsf).getLastModified(self.cp_URL)
 
         task.advance(True)
         #5
         valid = True
         if self.cp_Title == "":
-            cp_Title = self.title
+            self.cp_Title = self.title
 
         if self.cp_Title == "":
-            cp_Title = self.localFilename
+            self.cp_Title = self.localFilename
 
         if self.cp_Description == "":
-            cp_Description = self.description
+            self.cp_Description = self.description
 
         if self.cp_Author == "":
-            cp_Author = self.author
+            self.cp_Author = self.author
 
         if self.cp_Exporter is None or self.cp_Exporter == "":
-            print ("WARNING !!! settign exporter for key:", CGDocument.appType)
-            exp = self.root.getExporters(CGDocument.appType)
-            print ("WARNING !!! got N exporters:", len(exp))
-            print ("WARNING !!! got exporter:", exp[0])
+            exp = self.getSettings().getExporters(self.appType)
             self.cp_Exporter = \
-                self.root.cp_Exporters.getKey(exp[0])
-            print ("WARNING !!! exporter: ", self.cp_Exporter)
+                self.getSettings().cp_Exporters.getKey(exp[0])
 
     '''
     Analyzes a type-detection string, returned from the TypeDetection service,
@@ -169,28 +165,18 @@ class CGDocument(ConfigGroup):
     '''
 
     def analyzeFileType(self, mediaDesc):
-        print ("DEBUG !!! analyzeFileType -- mediaDesc : ", mediaDesc)
         if mediaDesc is None:
             media = ""
         else:
             media = Properties.getPropertyValue(
                 self.mediaDescriptor, PropertyNames.PROPERTY_NAME)
-        CGDocument.appType = self.getDocType(media)
-        print ("DEBUG !!! analyzeFileType --  appType: ", CGDocument.appType)
-        self.isSOOpenable = (CGDocument.appType == WRITER_DOC or CGDocument.appType == CALC_DOC or CGDocument.appType == IMPRESS_DOC or CGDocument.appType == DRAW_DOC) or CGDocument.appType == HTML_DOC
-        if (self.isSOOpenable):
-            print ("DEBUG !!! analyzeFileType -- isSOOpenable .")
-        else:
-            print ("DEBUG !!! analyzeFileType -- NOT isSOOpenable .")
+        self.appType = self.getDocType(media)
+        self.isSOOpenable = (self.appType == WRITER_DOC or self.appType == CALC_DOC or self.appType == IMPRESS_DOC or self.appType == DRAW_DOC) or self.appType == HTML_DOC
         parts = media.split("_")
         if len(parts) < 2:
             self.isSODocument = False
         else:
             self.isSODocument = self.isSOOpenable and (parts[1].startswith("Star"))
-        if (self.isSODocument):
-            print ("DEBUG !!! analyzeFileType -- isSODocument .")
-        else:
-            print ("DEBUG !!! analyzeFileType -- NOT isSODocument .")
 
     '''
     @param media is the media description string returned by an UNO TypeDetection object.
@@ -199,7 +185,6 @@ class CGDocument(ConfigGroup):
     '''
 
     def getDocType(self, media):
-        print ("DEBUG !!! getDocType -- media: ", media)
         if media == "":
             return NO_TYPE
         elif media.startswith("generic_HTML"):
@@ -229,16 +214,16 @@ class CGDocument(ConfigGroup):
         d.cp_DisplayFormatIcon ? getIcon(exp) : "", self.dirName, self.urlFilename])'''
 
     def updateDate(self):
-        if self.updateDate is None:
+        if self.updatedDate is None:
             return ""
 
-        return self.getSettings().formatter.formatCreated(self.updateDate)
+        return self.getSettings().formatter.formatCreated(self.updatedDate)
 
     def createDate(self):
-        if self.createDate is None:
+        if self.createdDate is None:
             return ""
 
-        return self.getSettings().formatter.formatCreated(self.createDate)
+        return self.getSettings().formatter.formatCreated(self.createdDate)
 
     def sizeKB(self):
         if self.sizeBytes == -1:
@@ -246,11 +231,11 @@ class CGDocument(ConfigGroup):
         else:
             return self.getSettings().formatter.formatFileSize(self.sizeBytes)
 
-    def pages(self):
+    def getPages(self):
         if self.pages == -1:
             return ""
         else:
-            return pagesTemplate().replace("%NUMBER", "" + self.pages)
+            return self.pagesTemplate().replace("%NUMBER", "" + self.pages)
 
     def pagesTemplate(self):
         pagesType = \
@@ -272,11 +257,11 @@ class CGDocument(ConfigGroup):
 
     def getIcon(self, exporter):
         if exporter.cp_Icon == "":
-            return getIcon(CGDocument.appType)
+            return self.getIcon1(self.appType)
         else:
             return exporter.cp_Icon
 
-    def getIcon(self, appType):
+    def getIcon1(self, appType):
         return appType + ".gif"
 
     '''
@@ -295,7 +280,7 @@ class CGDocument(ConfigGroup):
     '''
 
     def setExporter(self, exporter_):
-        exp = self.getSettings().getExporters(CGDocument.appType)[exporter_[0]]
+        exp = self.getSettings().getExporters(self.appType)[exporter_[0]]
         self.cp_Exporter = self.getSettings().cp_Exporters.getKey(exp)
 
     '''
@@ -308,7 +293,7 @@ class CGDocument(ConfigGroup):
             return 0
 
         exporter = self.getSettings().cp_Exporters.getElement(self.cp_Exporter)
-        exporters = self.getSettings().getExporters(CGDocument.appType)
+        exporters = self.getSettings().getExporters(self.appType)
         i = 0
         while i < len(exporters):
             if exporters[i] == exporter:
@@ -316,3 +301,6 @@ class CGDocument(ConfigGroup):
 
             i += 1
         return -1
+
+    def toString(self):
+        return self.localFilename

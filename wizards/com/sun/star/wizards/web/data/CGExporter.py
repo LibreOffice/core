@@ -20,21 +20,26 @@ from ...common.ConfigGroup import ConfigGroup
 from .CGArgument import CGArgument
 
 class CGExporter(ConfigGroup):
-    cp_Index = -1
-    cp_Name = str()
-    cp_ExporterClass = str()
-    cp_OwnDirectory = bool()
-    cp_SupportsFilename = bool()
-    cp_DefaultFilename = str()
-    cp_Extension = str()
-    cp_SupportedMimeTypes = str()
-    cp_Icon = str()
-    cp_TargetType = str()
-    cp_Binary = bool()
-    cp_PageType = int()
-    targetTypeName = ""
-    cp_Arguments = WebConfigSet(CGArgument)
+
+    def __init__(self):
+        self.cp_Index = -1
+        self.cp_Name = str()
+        self.cp_ExporterClass = str()
+        self.cp_OwnDirectory = bool()
+        self.cp_SupportsFilename = bool()
+        self.cp_DefaultFilename = str()
+        self.cp_Extension = str()
+        self.cp_SupportedMimeTypes = str()
+        self.cp_Icon = str()
+        self.cp_TargetType = str()
+        self.cp_Binary = bool()
+        self.cp_PageType = int()
+        self.targetTypeName = ""
+        self.cp_Arguments = WebConfigSet(CGArgument)
+
+    def toString(self):
+        return self.cp_Name
 
     def supports(self, mime):
-        return CGExporter.cp_SupportedMimeTypes == "" or \
-            CGExporter.cp_SupportedMimeTypes.find(mime) > -1
+        return self.cp_SupportedMimeTypes == "" or \
+            self.cp_SupportedMimeTypes.find(mime) > -1

@@ -24,6 +24,9 @@ class CGStyle(ConfigGroup):
     cp_BackgroundImage = str()
     cp_IconSet = str()
 
+    def toString(self):
+        return self.cp_Name
+
     def getBackgroundUrl(self):
         if CGStyle.cp_BackgroundImage is None \
                 or CGStyle.cp_BackgroundImage == "":
