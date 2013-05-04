@@ -130,7 +130,7 @@ class WebWizardDialog(WizardDialog):
         self.fontDescriptor6.StyleName = "Bold Italic"
         self.fontDescriptor6.Weight = 150
         self.fontDescriptor6.Slant = ITALIC
-        self.fontDescriptor7.Name = "StarSymbol"
+        self.fontDescriptor7.Name = "OpenSymbol"
         self.fontDescriptor7.Height = 9
         self.fontDescriptor7.StyleName = "Regular"
         self.fontDescriptor7.Weight = 100
