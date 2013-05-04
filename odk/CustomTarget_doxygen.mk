@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_CustomTarget_CustomTarget,odk/odkcommon/docs/cpp))
+$(eval $(call gb_CustomTarget_CustomTarget,odk/docs/cpp))
 
 CPPDOCREFNAME := "$(PRODUCTNAME) $(PRODUCTVERSION) SDK C/C++ API Reference"
 
@@ -29,17 +29,17 @@ DOXY_INPUT := $(SRCDIR)/odk/pack/gendocu/main.dox $(SRCDIR)/include/sal/log-area
 	$(addprefix $(INSTDIR)/$(gb_Package_SDKDIRNAME)/include/,$(odk_INCDIRLIST) $(odk_INCFILELIST))
 DOXY_INPUT := $(if $(filter WNT,$(OS)),$(shell cygpath -u $(DOXY_INPUT)),$(DOXY_INPUT))
 DOXY_WORKDIR := $(if $(filter WNT,$(OS)),\
-	$(shell cygpath -u $(call gb_CustomTarget_get_workdir,odk/odkcommon/docs/cpp)/ref),\
-	$(call gb_CustomTarget_get_workdir,odk/odkcommon/docs/cpp)/ref)
+	$(shell cygpath -u $(call gb_CustomTarget_get_workdir,odk/docs/cpp)/ref),\
+	$(call gb_CustomTarget_get_workdir,odk/docs/cpp)/ref)
 DOXY_STRIP_PATH := $(if $(filter WNT,$(OS)),$(shell cygpath -u $(OUTDIR)/inc),$(OUTDIR)/inc)
 
 
-$(eval $(call gb_CustomTarget_register_targets,odk/odkcommon/docs/cpp,\
+$(eval $(call gb_CustomTarget_register_targets,odk/docs/cpp,\
 	Doxyfile \
 	doxygen.log \
 ))
 
-$(call gb_CustomTarget_get_workdir,odk/odkcommon/docs/cpp)/Doxyfile : $(SRCDIR)/odk/pack/gendocu/Doxyfile
+$(call gb_CustomTarget_get_workdir,odk/docs/cpp)/Doxyfile : $(SRCDIR)/odk/pack/gendocu/Doxyfile
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SED,1)
 	sed -e 's!^INPUT = %$$!INPUT = $(DOXY_INPUT)!' \
 		-e 's!^OUTPUT_DIRECTORY = %$$!OUTPUT_DIRECTORY = $(DOXY_WORKDIR)!' \
@@ -49,8 +49,8 @@ $(call gb_CustomTarget_get_workdir,odk/odkcommon/docs/cpp)/Doxyfile : $(SRCDIR)/
 		-e 's!^STRIP_FROM_PATH = %$$!STRIP_FROM_PATH = $(DOXY_STRIP_PATH)!' \
 		$< > $@
 
-$(call gb_CustomTarget_get_workdir,odk/odkcommon/docs/cpp)/doxygen.log : \
-		$(call gb_CustomTarget_get_workdir,odk/odkcommon/docs/cpp)/Doxyfile \
+$(call gb_CustomTarget_get_workdir,odk/docs/cpp)/doxygen.log : \
+		$(call gb_CustomTarget_get_workdir,odk/docs/cpp)/Doxyfile \
 		$(SRCDIR)/include/sal/log-areas.dox \
 		$(SRCDIR)/odk/pack/gendocu/main.dox \
 		$(call gb_PackageSet_get_target,odk_headers)
