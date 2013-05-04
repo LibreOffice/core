@@ -27,6 +27,8 @@
 
 #include "macros.inc"
 
+#include "AutoInstallLibs/kde"
+
 #if defined( ENABLE_KDE ) || defined( ENABLE_KDE4 )
 Module gid_Module_Optional_Kde
     ParentID = gid_Module_Optional;
@@ -34,7 +36,7 @@ Module gid_Module_Optional_Kde
     PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_KDE);
     Styles = ();
-    Files = (
+    Files = (auto_Kde_Lib_ALL
 #ifdef ENABLE_KDE
     gid_File_Lib_Kdebe
 #ifdef ENABLE_KDE4

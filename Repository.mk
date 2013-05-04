@@ -217,6 +217,9 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 
 endif
 
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,KDE, \
+))
+
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
 	avmedia \
 	$(if $(DISABLE_SCRIPTING),,basctl) \
