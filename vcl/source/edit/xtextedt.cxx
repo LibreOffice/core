@@ -27,10 +27,6 @@
 using namespace ::com::sun::star;
 
 
-
-// -------------------------------------------------------------------------
-// class ExtTextEngine
-// -------------------------------------------------------------------------
 ExtTextEngine::ExtTextEngine() : maGroupChars(OUString("(){}[]"))
 {
 }
@@ -52,7 +48,7 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
         {
             if ( ( nMatchChar % 2 ) == 0 )
             {
-                // Vorwaerts suchen...
+                // search forwards
                 sal_Unicode nSC = maGroupChars.GetChar( nMatchChar );
                 sal_Unicode nEC = maGroupChars.GetChar( nMatchChar+1 );
 
@@ -80,7 +76,7 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
                         nCur = 0;
                     }
                 }
-                if ( nLevel == 0 )  // gefunden
+                if ( nLevel == 0 )  // found
                 {
                     aSel.GetStart() = rCursor;
                     aSel.GetEnd() = TextPaM( nPara, nCur+1 );
@@ -88,7 +84,7 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
             }
             else
             {
-                // Rueckwaerts suchen...
+                // search backwards
                 sal_Unicode nEC = maGroupChars.GetChar( nMatchChar );
                 sal_Unicode nSC = maGroupChars.GetChar( nMatchChar-1 );
 
@@ -119,17 +115,17 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
                         if ( nPara )
                         {
                             nPara--;
-                            nCur = GetTextLen( nPara )-1;   // egal ob negativ, weil if Len()
+                            nCur = GetTextLen( nPara )-1;   // no matter if negativ, as if Len()
                         }
                         else
                             break;
                     }
                 }
 
-                if ( nLevel == 0 )  // gefunden
+                if ( nLevel == 0 )  // found
                 {
                     aSel.GetStart() = rCursor;
-                    aSel.GetStart().GetIndex()++;   // hinter das Zeichen
+                    aSel.GetStart().GetIndex()++;   // behind the char
                     aSel.GetEnd() = TextPaM( nPara, nCur );
                 }
             }
@@ -165,7 +161,7 @@ sal_Bool ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& 
     aOptions.Locale = Application::GetSettings().GetLanguageTag().getLocale();
     utl::TextSearch aSearcher( rSearchOptions );
 
-    // ueber die Absaetze iterieren...
+    // iterate over the paragraphs
     for ( sal_uLong nNode = nStartNode;
             bForward ?  ( nNode <= nEndNode) : ( nNode >= nEndNode );
             bForward ? nNode++ : nNode-- )
@@ -199,7 +195,6 @@ sal_Bool ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& 
             rSel.GetStart().GetIndex() = nStartPos;
             rSel.GetEnd().GetPara() = nNode;
             rSel.GetEnd().GetIndex() = nEndPos;
-            // Ueber den Absatz selektieren?
             // Select over the paragraph?
             // FIXME  This should be max long...
             if( nEndPos == sal::static_int_cast<sal_uInt16>(-1) ) // sal_uInt16 for 0 and -1 !
@@ -219,7 +214,7 @@ sal_Bool ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& 
             break;
         }
 
-        if ( !bForward && !nNode )  // Bei rueckwaertsuche, wenn nEndNode = 0:
+        if ( !bForward && !nNode )  // if searching backwards, if nEndNode == 0:
             break;
     }
 
@@ -263,8 +258,8 @@ sal_Bool ExtTextView::Search( const util::SearchOptions& rSearchOptions, sal_Boo
     if ( ((ExtTextEngine*)GetTextEngine())->Search( aSel, rSearchOptions, bForward ) )
     {
         bFound = sal_True;
-        // Erstmal den Anfang des Wortes als Selektion einstellen,
-        // damit das ganze Wort in den sichtbaren Bereich kommt.
+        // First add the beginning of the word to the selection,
+        // so that the whole word is in the visible region.
         SetSelection( aSel.GetStart() );
         ShowCursor( sal_True, sal_False );
     }
@@ -289,7 +284,7 @@ sal_uInt16 ExtTextView::Replace( const util::SearchOptions& rSearchOptions, sal_
         {
             InsertText( rSearchOptions.replaceString );
             nFound = 1;
-            Search( rSearchOptions, bForward ); // gleich zum naechsten
+            Search( rSearchOptions, bForward ); // right away to the next
         }
         else
         {
@@ -299,7 +294,7 @@ sal_uInt16 ExtTextView::Replace( const util::SearchOptions& rSearchOptions, sal_
     }
     else
     {
-        // Der Writer ersetzt alle, vom Anfang bis Ende...
+        // the writer replaces all, from beginning to end
 
         ExtTextEngine* pTextEngine = (ExtTextEngine*)GetTextEngine();
 
@@ -351,20 +346,20 @@ sal_Bool ExtTextView::ImpIndentBlock( sal_Bool bRight )
     sal_uLong nEndPara = aSel.GetEnd().GetPara();
     if ( aSel.HasRange() && !aSel.GetEnd().GetIndex() )
     {
-        nEndPara--; // den dann nicht einruecken...
+        nEndPara--; // do not indent
     }
 
     for ( sal_uLong nPara = nStartPara; nPara <= nEndPara; nPara++ )
     {
         if ( bRight )
         {
-            // Tabs hinzufuegen
+            // add tabs
             GetTextEngine()->ImpInsertText( TextPaM( nPara, 0 ), '\t' );
             bDone = sal_True;
         }
         else
         {
-            // Tabs/Blanks entfernen
+            // remove Tabs/Blanks
             String aText = GetTextEngine()->GetText( nPara );
             if ( aText.Len() && (
                     ( aText.GetChar( 0 ) == '\t' ) ||
