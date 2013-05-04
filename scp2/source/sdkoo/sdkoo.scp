@@ -227,9 +227,9 @@ End
 #if defined(DOXYGEN)
 File gid_File_Zip_cppdocs
     TXT_FILE_BODY;
-    Dir = gid_Dir_Basis_Sdk;
-    Name = "cppdocs.zip";
-    Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
+    Dir = FILELIST_SDK_DIR;
+    Name = "odk_cpp_docs.filelist";
+    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
 End
 #endif
 

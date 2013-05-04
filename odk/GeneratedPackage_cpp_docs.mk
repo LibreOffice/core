@@ -7,14 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Zip_Zip,cppdocs,$(call gb_CustomTarget_get_workdir,odk/odkcommon)))
+$(eval $(call gb_GeneratedPackage_GeneratedPackage,odk_cpp_docs,$(call gb_CustomTarget_get_workdir,odk/docs/cpp)))
 
-$(eval $(call gb_Zip_add_files,cppdocs,\
-	docs/cpp/ref \
-))
+$(eval $(call gb_GeneratedPackage_use_customtarget,odk_cpp_docs,odk/docs/cpp))
 
-$(eval $(call gb_Zip_add_commandoptions,cppdocs,-r))
-
-$(call gb_Zip_get_target,cppdocs) : $(call gb_CustomTarget_get_target,odk/odkcommon/docs/cpp)
+$(eval $(call gb_GeneratedPackage_add_dir,odk_cpp_docs,$(gb_Package_SDKDIRNAME)/docs/cpp/ref,ref))
 
 # vim: set noet sw=4 ts=4:
