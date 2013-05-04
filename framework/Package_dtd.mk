@@ -18,12 +18,17 @@
 #
 
 $(eval $(call gb_Package_Package,framework_dtd,$(SRCDIR)/framework/dtd))
-$(eval $(call gb_Package_add_file,framework_dtd,bin/accelerator.dtd,accelerator.dtd))
-$(eval $(call gb_Package_add_file,framework_dtd,bin/event.dtd,event.dtd))
-$(eval $(call gb_Package_add_file,framework_dtd,bin/groupuinames.dtd,groupuinames.dtd))
-$(eval $(call gb_Package_add_file,framework_dtd,bin/image.dtd,image.dtd))
-$(eval $(call gb_Package_add_file,framework_dtd,bin/menubar.dtd,menubar.dtd))
-$(eval $(call gb_Package_add_file,framework_dtd,bin/statusbar.dtd,statusbar.dtd))
-$(eval $(call gb_Package_add_file,framework_dtd,bin/toolbar.dtd,toolbar.dtd))
+
+$(eval $(call gb_Package_set_outdir,framework_dtd,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,framework_dtd,share/dtd/officedocument/1_0,\
+	accelerator.dtd \
+	event.dtd \
+	groupuinames.dtd \
+	image.dtd \
+	menubar.dtd \
+	statusbar.dtd \
+	toolbar.dtd \
+))
 
 # vim: set noet sw=4 ts=4:

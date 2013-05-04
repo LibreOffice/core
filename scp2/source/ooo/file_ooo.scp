@@ -256,11 +256,11 @@ End
 
 #endif
 
-File gid_File_Dtd_Accelerator
+File gid_File_framework_dtd
     TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
-    Name = "accelerator.dtd";
+    Styles = (FILELIST, PACKED);
+    Dir = FILELIST_DIR;
+    Name = "framework_dtd.filelist";
 End
 
 File gid_File_Dtd_Dialog
@@ -268,27 +268,6 @@ File gid_File_Dtd_Dialog
     Styles = (PACKED);
     Dir = gid_Dir_Share_Dtd_Ooo_1_0;
     Name = "dialog.dtd";
-End
-
-File gid_File_Dtd_Event
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
-    Name = "event.dtd";
-End
-
-File gid_File_Dtd_Groupuinames
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
-    Name = "groupuinames.dtd";
-End
-
-File gid_File_Dtd_Image
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
-    Name = "image.dtd";
 End
 
 File gid_File_Dtd_Libraries
@@ -312,32 +291,11 @@ File gid_File_Dtd_Manifest
     Name = "Manifest.dtd";
 End
 
-File gid_File_Dtd_Menubar
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
-    Name = "menubar.dtd";
-End
-
 File gid_File_Dtd_Module
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Share_Dtd_Ooo_1_0;
     Name = "module.dtd";
-End
-
-File gid_File_Dtd_Statusbar
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
-    Name = "statusbar.dtd";
-End
-
-File gid_File_Dtd_Toolbar
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
-    Name = "toolbar.dtd";
 End
 
 STD_RES_FILE( gid_File_Res_Eps, eps )
