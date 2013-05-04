@@ -89,12 +89,6 @@
 
 #define EmfPlusRegionInitialStateInfinite 0x10000003
 
-#if OSL_DEBUG_LEVEL > 1
-#define EMFP_DEBUG(x) x
-#else
-#define EMFP_DEBUG(x)
-#endif
-
 using namespace ::com::sun::star;
 using namespace ::basegfx;
 
@@ -103,16 +97,18 @@ namespace cppcanvas
     namespace internal
     {
 
-        EMFP_DEBUG (void dumpWords (SvStream& s, int i)
+#if OSL_DEBUG_LEVEL > 1
+        void dumpWords (SvStream& s, int i)
         {
             sal_uInt32 pos = s.Tell ();
             sal_Int16 data;
             for (; i > 0; i --) {
                 s >> data;
-                printf ("EMF+\tdata: %04hX\n", data);
+                SAL_INFO ("cppcanvas.emf", "EMF+\tdata: " << std::hex << data);
             }
             s.Seek (pos);
-        });
+        }
+#endif
 
         struct EMFPObject
         {
@@ -154,28 +150,32 @@ namespace cppcanvas
                         sal_uInt16 x, y;
 
                         s >> x >> y;
-                        EMFP_DEBUG (printf ("EMF+\tpoint [x,y]: %hd,%hd\n", x, y));
+                        SAL_INFO ("cppcanvas.emf", "EMF+\tpoint [x,y]: " << x << "," << y);
                         pPoints [i*2] = x;
                         pPoints [i*2 + 1] = y;
                     } else {
                         // points are stored in Single (float) format
                         s >> pPoints [i*2] >> pPoints [i*2 + 1];
-                        EMFP_DEBUG (printf ("EMF+\tpoint [x,y]: %f,%f\n", pPoints [i*2], pPoints [i*2 + 1]));
+                        SAL_INFO ("cppcanvas.emf", "EMF+\tpoint [x,y]: " << pPoints [i*2] << "," << pPoints [i*2 + 1]);
                     }
                 }
 
                 if (pPointTypes)
                     for (int i = 0; i < nPoints; i ++) {
                         s >> pPointTypes [i];
-                        EMFP_DEBUG (printf ("EMF+\tpoint type: %x\n", pPointTypes [i]));
+                        SAL_INFO ("cppcanvas.emf", "EMF+\tpoint type: " << pPointTypes [i]);
                     }
 
                 aPolygon.clear ();
 
+#if OSL_DEBUG_LEVEL > 1
+                const ::basegfx::B2DRectangle aBounds (::basegfx::tools::getRange (GetPolygon (rR)));
+
+                SAL_INFO ("cppcanvas.emf",
+                          "EMF+\tpolygon bounding box: " << aBounds.getMinX () << "," << aBounds.getMinY () << aBounds.getWidth () << "x" << aBounds.getHeight () << " (mapped)");
+#else
                 (void) rR; // avoid warnings
-                EMFP_DEBUG (
-                    const ::basegfx::B2DRectangle aBounds (::basegfx::tools::getRange (GetPolygon (rR)));
-                    printf ("EMF+\tpolygon bounding box: %f,%f %fx%f (mapped)\n", aBounds.getMinX (), aBounds.getMinY (), aBounds.getWidth (), aBounds.getHeight ()));
+#endif
             }
 
             ::basegfx::B2DPolyPolygon& GetPolygon (ImplRenderer& rR, bool bMapIt = true)
@@ -199,12 +199,11 @@ namespace cppcanvas
                         mapped = rR.Map (pPoints [i*2], pPoints [i*2 + 1]);
                     else
                         mapped = ::basegfx::B2DPoint (pPoints [i*2], pPoints [i*2 + 1]);
-                    //EMFP_DEBUG (printf ("polygon point: %f,%f mapped: %f,%f\n", pPoints [i*2], pPoints [i*2 + 1], mapped.getX (), mapped.getY ()));
                     if (pPointTypes) {
                         if ((pPointTypes [i] & 0x07) == 3) {
                             if (((i - last_normal )% 3) == 1) {
                                 polygon.setNextControlPoint (p - 1, mapped);
-                                EMFP_DEBUG (printf ("polygon append  next: %d mapped: %f,%f\n", p - 1, mapped.getX (), mapped.getY ()));
+                                SAL_INFO ("cppcanvas.emf", "polygon append  next: " << p - 1 << " mapped: " << mapped.getX () << "," << mapped.getY ());
                                 continue;
                             } else if (((i - last_normal) % 3) == 2) {
                                 prev = mapped;
@@ -215,17 +214,17 @@ namespace cppcanvas
                             last_normal = i;
                     }
                     polygon.append (mapped);
-                    EMFP_DEBUG (printf ("polygon append point: %f,%f mapped: %f,%f\n", pPoints [i*2], pPoints [i*2 + 1], mapped.getX (), mapped.getY ()));
+                    SAL_INFO ("cppcanvas.emf", "polygon append point: " << pPoints [i*2] << "," << pPoints [i*2 + 1] << " mapped: " << mapped.getX () << ":" << mapped.getY ());
                     if (hasPrev) {
                         polygon.setPrevControlPoint (p, prev);
-                        EMFP_DEBUG (printf ("polygon append  prev: %d mapped: %f,%f\n", p, prev.getX (), prev.getY ()));
+                        SAL_INFO ("cppcanvas.emf", "polygon append  prev: " << p << " mapped: " << prev.getX () << "," << prev.getY ());
                         hasPrev = false;
                     }
                     p ++;
                     if (pPointTypes && (pPointTypes [i] & 0x80)) { // closed polygon
                         polygon.setClosed (true);
                         aPolygon.append (polygon);
-                        EMFP_DEBUG (printf ("close polygon\n"));
+                        SAL_INFO ("cppcanvas.emf", "close polygon");
                         last_normal = i + 1;
                         p = 0;
                         polygon.clear ();
@@ -235,24 +234,24 @@ namespace cppcanvas
                 if (polygon.count ())
                     aPolygon.append (polygon);
 
-                EMFP_DEBUG (
+#if OSL_DEBUG_LEVEL > 1
                     for (unsigned int i=0; i<aPolygon.count(); i++) {
                         polygon = aPolygon.getB2DPolygon(i);
-                        printf ("polygon: %d\n", i);
+                        SAL_INFO ("cppcanvas.emf", "polygon: " << i);
                         for (unsigned int j=0; j<polygon.count(); j++) {
                             ::basegfx::B2DPoint point = polygon.getB2DPoint(j);
-                            printf ("point: %f,%f\n", point.getX(), point.getY());
+                            SAL_INFO ("cppcanvas.emf", "point: " << point.getX() << "," << point.getY());
                             if (polygon.isPrevControlPointUsed(j)) {
                                 point = polygon.getPrevControlPoint(j);
-                                printf ("prev: %f,%f\n", point.getX(), point.getY());
+                                SAL_INFO ("cppcanvas.emf", "prev: " << point.getX() "," << point.getY());
                             }
                             if (polygon.isNextControlPointUsed(j)) {
                                 point = polygon.getNextControlPoint(j);
-                                printf ("next: %f,%f\n", point.getX(), point.getY());
+                                SAL_INFO ("cppcanvas.emf", "next: " << point.getX() "," << point.getY());
                             }
                         }
                     }
-                );
+#endif
 
                 return aPolygon;
             }
@@ -290,8 +289,8 @@ namespace cppcanvas
 
                 s >> header >> parts;
 
-                EMFP_DEBUG (printf ("EMF+\tregion\n"));
-                EMFP_DEBUG (printf ("EMF+\theader: 0x%08x parts: %d\n", (unsigned int)header, (int)parts));
+                SAL_INFO ("cppcanvas.emf", "EMF+\tregion");
+                SAL_INFO ("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << header << " parts: " << parts);
 
                 if (parts) {
                     if( parts<0 || sal_uInt32(parts)>SAL_MAX_INT32/sizeof(sal_Int32) )
@@ -301,12 +300,12 @@ namespace cppcanvas
 
                     for (int i = 0; i < parts; i ++) {
                         s >> combineMode [i];
-                        EMFP_DEBUG (printf ("EMF+\tcombine mode [%d]: 0x%08x\n", i,(unsigned int)combineMode [i]));
+                        SAL_INFO ("cppcanvas.emf", "EMF+\tcombine mode [" << i << "]: 0x" << std::hex << combineMode [i]);
                     }
                 }
 
                 s >> initialState;
-                EMFP_DEBUG (printf ("EMF+\tinitial state: 0x%d\n",(int) initialState));
+                SAL_INFO ("cppcanvas.emf", "EMF+\tinitial state: 0x" << std::hex << initialState);
             }
         };
 
@@ -376,7 +375,7 @@ namespace cppcanvas
 
                 s >> header >> type;
 
-                EMFP_DEBUG (printf ("EMF+\tbrush\nEMF+\theader: 0x%08x type: %d\n",(unsigned int) header,(int) type));
+                SAL_INFO ("cppcanvas.emf", "EMF+\tbrush\nEMF+\theader: 0x" << std::hex << header << " type: " << type);
 
                 switch (type) {
                 case 0:
@@ -385,7 +384,7 @@ namespace cppcanvas
 
                         s >> color;
                         solidColor = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
-                        EMFP_DEBUG (printf ("EMF+\tsolid color: 0x%08x\n", (unsigned int)color));
+                        SAL_INFO ("cppcanvas.emf", "EMF+\tsolid color: 0x" << std::hex << color);
 
                         break;
                     }
@@ -394,19 +393,19 @@ namespace cppcanvas
                     {
                         s >> additionalFlags >> wrapMode;
 
-                        EMFP_DEBUG (printf ("EMF+\tpath gradient, additional flags: 0x%02x\n",(unsigned int) additionalFlags));
+                        SAL_INFO ("cppcanvas.emf", "EMF+\tpath gradient, additional flags: 0x" << std::hex << additionalFlags);
 
                         sal_uInt32 color;
 
                         s >> color;
                         solidColor = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
-                        EMFP_DEBUG (printf ("EMF+\tcenter color: 0x%08x\n",(unsigned int) color));
+                        SAL_INFO("cppcanvas.emf", "EMF+\tcenter color: 0x" << std::hex << color);
 
                         s >> areaX >> areaY;
-                        EMFP_DEBUG (printf ("EMF+\tcenter point: %f,%f\n", areaX, areaY));
+                        SAL_INFO("cppcanvas.emf", "EMF+\tcenter point: " << areaX << "," << areaY);
 
                         s >> surroundColorsNumber;
-                        EMFP_DEBUG (printf ("EMF+\tsurround colors: %d\n",(int) surroundColorsNumber));
+                        SAL_INFO("cppcanvas.emf", "EMF+\tsurround colors: " << surroundColorsNumber);
 
                         if( surroundColorsNumber<0 || sal_uInt32(surroundColorsNumber)>SAL_MAX_INT32/sizeof(::Color) )
                             surroundColorsNumber = SAL_MAX_INT32/sizeof(::Color);
@@ -417,24 +416,26 @@ namespace cppcanvas
                             surroundColors[i] = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
                             if (i == 0)
                                 secondColor = surroundColors [0];
-                            EMFP_DEBUG (printf ("EMF+\tsurround color[%d]: 0x%08x\n", i, (unsigned int)color));
+                            SAL_INFO("cppcanvas.emf", "EMF+\tsurround color[" << i << "]: 0x" << std::hex << color);
                         }
 
                         if (additionalFlags & 0x01) {
                             sal_Int32 pathLength;
 
                             s >> pathLength;
-                            EMFP_DEBUG (printf ("EMF+\tpath length: %d\n", (int)pathLength));
+                            SAL_INFO("cppcanvas.emf", "EMF+\tpath length: " << pathLength);
 
                             sal_uInt32 pos = s.Tell ();
-                            EMFP_DEBUG (dumpWords (s, 32));
+#if OSL_DEBUG_LEVEL > 1
+                            dumpWords (s, 32);
+#endif
 
                             sal_uInt32 pathHeader;
                             sal_Int32 pathPoints, pathFlags;
                             s >> pathHeader >> pathPoints >> pathFlags;
 
-                            EMFP_DEBUG (printf ("EMF+\tpath (brush path gradient)\n"));
-                            EMFP_DEBUG (printf ("EMF+\theader: 0x%08x points: %d additional flags: 0x%d\n", (unsigned int)pathHeader, (int)pathPoints, (int)pathFlags));
+                            SAL_INFO("cppcanvas.emf", "EMF+\tpath (brush path gradient)");
+                            SAL_INFO("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << pathHeader << " points: " << pathPoints << " additional flags: 0x" << pathFlags);
 
                             path = new EMFPPath (pathPoints);
                             path->Read (s, pathFlags, rR);
@@ -445,38 +446,39 @@ namespace cppcanvas
                             areaWidth = aBounds.getWidth ();
                             areaHeight = aBounds.getHeight ();
 
-                            EMFP_DEBUG (printf ("EMF+\tpolygon bounding box: %f,%f %fx%f\n", aBounds.getMinX (), aBounds.getMinY (), aBounds.getWidth (), aBounds.getHeight ()));
+                            SAL_INFO("cppcanvas.emf", "EMF+\tpolygon bounding box: " << aBounds.getMinX () << "," << aBounds.getMinY () << " " << aBounds.getWidth () << "x" << aBounds.getHeight ());
 
 
                         if (additionalFlags & 0x02) {
-                            EMFP_DEBUG (printf ("EMF+\tuse transformation\n"));
+                            SAL_INFO("cppcanvas.emf", "EMF+\tuse transformation");
                             s >> transformation;
                             hasTransformation = true;
-                            EMFP_DEBUG (printf ("EMF+\tm11: %f m12: %f\nEMF+\tm21: %f m22: %f\nEMF+\tdx: %f dy: %f\n",
-                                    transformation.eM11, transformation.eM12,
-                                    transformation.eM21, transformation.eM22,
-                                    transformation.eDx, transformation.eDy));
+                            SAL_INFO("cppcanvas.emf",
+                                    "EMF+\tm11: "   << transformation.eM11 << " m12: " << transformation.eM12 <<
+                                    "\nEMF+\tm21: " << transformation.eM21 << " m22: " << transformation.eM22 <<
+                                    "\nEMF+\tdx: "  << transformation.eDx  << " dy: "  << transformation.eDy);
+
                         }
                         if (additionalFlags & 0x08) {
                             s >> blendPoints;
-                            EMFP_DEBUG (printf ("EMF+\tuse blend, points: %d\n", (int)blendPoints));
+                            SAL_INFO("cppcanvas.emf", "EMF+\tuse blend, points: " << blendPoints);
                             if( blendPoints<0 || sal_uInt32(blendPoints)>SAL_MAX_INT32/(2*sizeof(float)) )
                                 blendPoints = SAL_MAX_INT32/(2*sizeof(float));
                             blendPositions = new float [2*blendPoints];
                             blendFactors = blendPositions + blendPoints;
                             for (int i=0; i < blendPoints; i ++) {
                                 s >> blendPositions [i];
-                                EMFP_DEBUG (printf ("EMF+\tposition[%d]: %f\n", i, blendPositions [i]));
+                                SAL_INFO("cppcanvas.emf", "EMF+\tposition[" << i << "]: " << blendPositions [i]);
                             }
                             for (int i=0; i < blendPoints; i ++) {
                                 s >> blendFactors [i];
-                                EMFP_DEBUG (printf ("EMF+\tfactor[%d]: %f\n", i, blendFactors [i]));
+                                SAL_INFO("cppcanvas.emf", "EMF+\tfactor[" << i << "]: " << blendFactors [i]);
                             }
                         }
 
                         if (additionalFlags & 0x04) {
                             s >> colorblendPoints;
-                            EMFP_DEBUG (printf ("EMF+\tuse color blend, points: %d\n", (int)colorblendPoints));
+                            SAL_INFO("cppcanvas.emf", "EMF+\tuse color blend, points: " << colorblendPoints);
                             if( colorblendPoints<0 || sal_uInt32(colorblendPoints)>SAL_MAX_INT32/sizeof(float) )
                                 colorblendPoints = SAL_MAX_INT32/sizeof(float);
                             if( sal_uInt32(colorblendPoints)>SAL_MAX_INT32/sizeof(::Color) )
@@ -485,16 +487,18 @@ namespace cppcanvas
                             colorblendColors = new ::Color [colorblendPoints];
                             for (int i=0; i < colorblendPoints; i ++) {
                                 s >> colorblendPositions [i];
-                                EMFP_DEBUG (printf ("EMF+\tposition[%d]: %f\n", i, colorblendPositions [i]));
+                                SAL_INFO("cppcanvas.emf", "EMF+\tposition[" << i << "]: " << colorblendPositions [i]);
                             }
                             for (int i=0; i < colorblendPoints; i ++) {
                                 s >> color;
                                 colorblendColors [i] = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
-                                EMFP_DEBUG (printf ("EMF+\tcolor[%d]: 0x%08x\n", i,(unsigned int) color));
+                                SAL_INFO("cppcanvas.emf", "EMF+\tcolor[" << i << "]: 0x" << std::hex << color);
                             }
                         }
                         } else {
-                            EMFP_DEBUG (dumpWords (s, 1024));
+#if OSL_DEBUG_LEVEL > 1
+                            dumpWords (s, 1024);
+#endif
                         }
                         break;
                     }
@@ -503,55 +507,55 @@ namespace cppcanvas
                     {
                         s >> additionalFlags >> wrapMode;
 
-                        EMFP_DEBUG (printf ("EMF+\tlinear gradient, additional flags: 0x%02x\n", (unsigned int)additionalFlags));
+                        SAL_INFO("cppcanvas.emf", "EMF+\tlinear gradient, additional flags: 0x" << std::hex << additionalFlags);
 
                         s >> areaX >> areaY >> areaWidth >> areaHeight;
 
-                        EMFP_DEBUG (printf ("EMF+\tarea: %f,%f - %fx%f\n", areaX, areaY, areaWidth, areaHeight));
+                        SAL_INFO("cppcanvas.emf", "EMF+\tarea: " << areaX << "," << areaY << " - " << areaWidth << "x" << areaHeight);
 
                         sal_uInt32 color;
 
                         s >> color;
                         solidColor = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
-                        EMFP_DEBUG (printf ("EMF+\tfirst color: 0x%08x\n", color));
+                        SAL_INFO("cppcanvas.emf", "EMF+\tfirst color: 0x" << std::hex << color);
 
                         s >> color;
                         secondColor = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
-                        EMFP_DEBUG (printf ("EMF+\tsecond color: 0x%08x\n", color));
+                        SAL_INFO("cppcanvas.emf", "EMF+\tsecond color: 0x" << std::hex << color);
 
                         // repeated colors, unknown meaning, see http://www.aces.uiuc.edu/~jhtodd/Metafile/MetafileRecords/ObjectBrush.html
                         s >> color;
                         s >> color;
 
                         if (additionalFlags & 0x02) {
-                            EMFP_DEBUG (printf ("EMF+\tuse transformation\n"));
+                            SAL_INFO("cppcanvas.emf", "EMF+\tuse transformation");
                             s >> transformation;
                             hasTransformation = true;
-                            EMFP_DEBUG (printf ("EMF+\tm11: %f m12: %f\nEMF+\tm21: %f m22: %f\nEMF+\tdx: %f dy: %f\n",
-                                    transformation.eM11, transformation.eM12,
-                                    transformation.eM21, transformation.eM22,
-                                    transformation.eDx, transformation.eDy));
+                            SAL_INFO("cppcanvas.emf",
+                                    "EMF+\tm11: "   << transformation.eM11 << " m12: " << transformation.eM12 <<
+                                    "\nEMF+\tm21: " << transformation.eM21 << " m22: " << transformation.eM22 <<
+                                    "\nEMF+\tdx: "  << transformation.eDx  << " dy: "  << transformation.eDy);
                         }
                         if (additionalFlags & 0x08) {
                             s >> blendPoints;
-                            EMFP_DEBUG (printf ("EMF+\tuse blend, points: %d\n", (int)blendPoints));
+                            SAL_INFO("cppcanvas.emf", "EMF+\tuse blend, points: " << blendPoints);
                             if( blendPoints<0 || sal_uInt32(blendPoints)>SAL_MAX_INT32/(2*sizeof(float)) )
                                 blendPoints = SAL_MAX_INT32/(2*sizeof(float));
                             blendPositions = new float [2*blendPoints];
                             blendFactors = blendPositions + blendPoints;
                             for (int i=0; i < blendPoints; i ++) {
                                 s >> blendPositions [i];
-                                EMFP_DEBUG (printf ("EMF+\tposition[%d]: %f\n", i, blendPositions [i]));
+                                SAL_INFO("cppcanvas.emf", "EMF+\tposition[" << i << "]: " << blendPositions [i]);
                             }
                             for (int i=0; i < blendPoints; i ++) {
                                 s >> blendFactors [i];
-                                EMFP_DEBUG (printf ("EMF+\tfactor[%d]: %f\n", i, blendFactors [i]));
+                                SAL_INFO("cppcanvas.emf", "EMF+\tfactor[" << i << "]: " << blendFactors [i]);
                             }
                         }
 
                         if (additionalFlags & 0x04) {
                             s >> colorblendPoints;
-                            EMFP_DEBUG (printf ("EMF+\tuse color blend, points: %d\n", (int)colorblendPoints));
+                            SAL_INFO("cppcanvas.emf", "EMF+\tuse color blend, points: " << colorblendPoints);
                             if( colorblendPoints<0 || sal_uInt32(colorblendPoints)>SAL_MAX_INT32/sizeof(float) )
                                 colorblendPoints = SAL_MAX_INT32/sizeof(float);
                             if( sal_uInt32(colorblendPoints)>SAL_MAX_INT32/sizeof(::Color) )
@@ -560,19 +564,19 @@ namespace cppcanvas
                             colorblendColors = new ::Color [colorblendPoints];
                             for (int i=0; i < colorblendPoints; i ++) {
                                 s >> colorblendPositions [i];
-                                EMFP_DEBUG (printf ("EMF+\tposition[%d]: %f\n", i, colorblendPositions [i]));
+                                SAL_INFO("cppcanvas.emf", "EMF+\tposition[" << i << "]: " << colorblendPositions [i]);
                             }
                             for (int i=0; i < colorblendPoints; i ++) {
                                 s >> color;
                                 colorblendColors [i] = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
-                                EMFP_DEBUG (printf ("EMF+\tcolor[%d]: 0x%08x\n", i, (unsigned int)color));
+                                SAL_INFO("cppcanvas.emf", "EMF+\tcolor[" << i << "]: 0x" << std::hex << color);
                             }
                         }
 
                         break;
                     }
                 default:
-                    EMFP_DEBUG (printf ("EMF+\tunhandled brush type: %08x\n", (unsigned int)type));
+                    SAL_INFO("cppcanvas.emf", "EMF+\tunhandled brush type: " << std::hex << type);
                 }
             }
         };
@@ -605,7 +609,10 @@ namespace cppcanvas
 
             void SetStrokeAttributes (rendering::StrokeAttributes& rStrokeAttributes, ImplRenderer& rR, const OutDevState& rState)
             {
-                EMFP_DEBUG (if (width == 0.0) printf ("EMF+\tTODO: pen with zero width - using minimal which might not be correct\n"));
+#if OSL_DEBUG_LEVEL > 1
+                if (width == 0.0) {
+                    SAL_INFO ("cppcanvas.emf", "TODO: pen with zero width - using minimal which might not be correct\n");
+#endif
                 rStrokeAttributes.StrokeWidth = (rState.mapModeTransform * rR.MapSize (width == 0.0 ? 0.05 : width, 0)).getX ();
             }
 
@@ -616,7 +623,8 @@ namespace cppcanvas
 
                 s >> header >> unknown >> penFlags >> unknown2 >> width;
 
-                EMFP_DEBUG (printf ("EMF+\tpen\nEMF+\theader: 0x%08x unknown: 0x%08x additional flags: 0x%08x unknown: 0x%08x width: %f\n", (unsigned int)header, (unsigned int)unknown, (unsigned int)penFlags,(unsigned int) unknown2, width));
+                SAL_INFO("cppcanvas.emf", "EMF+\tpen\nEMF+\theader: 0x" << std::hex << header << " unknown: 0x" << std::hex << unknown <<
+                            " additional flags: 0x" << std::hex << penFlags << " unknown: 0x" << std::hex << unknown2 << " width: " << width);
 
                 if (penFlags & 1)
                     s >> transformation;
@@ -721,23 +729,23 @@ namespace cppcanvas
 
                 s >> header >> type;
 
-                EMFP_DEBUG (printf ("EMF+\timage\nEMF+\theader: 0x%08x type: 0x%08x\n", header, type));
+                SAL_INFO("cppcanvas.emf", "EMF+\timage\nEMF+\theader: 0x" << std::hex << header << " type: " << std::hex << type);
 
                 if (type == 1) { // bitmap
                     s >> width >> height >> stride >> pixelFormat >> unknown;
-                    EMFP_DEBUG (printf ("EMF+\tbitmap width: %d height: %d stride: %d pixelFormat: 0x%08x\n", width, height, stride, pixelFormat));
+                    SAL_INFO("cppcanvas.emf", "EMF+\tbitmap width: " << width << " height: " << height << " stride: " << "pixelFormat: 0x" << std::hex << pixelFormat);
                     if (width == 0) { // non native formats
                         GraphicFilter filter;
 
                         filter.ImportGraphic (graphic, String (), s);
-                        EMFP_DEBUG (printf ("EMF+\tbitmap width: %ld height: %ld\n", graphic.GetBitmap ().GetSizePixel ().Width (), graphic.GetBitmap ().GetSizePixel ().Height ()));
+                        SAL_INFO("cppcanvas.emf", "EMF+\tbitmap width: "  << graphic.GetBitmap().GetSizePixel().Width() << " height: " << graphic.GetBitmap().GetSizePixel().Height());
                     }
 
                 } else if (type == 2) {
                     sal_Int32 mfType, mfSize;
 
                     s >> mfType >> mfSize;
-                    EMFP_DEBUG (printf ("EMF+\tmetafile type: %d dataSize: %d real size calculated from record dataSize: %d\n", mfType, mfSize, dataSize - 16));
+                    SAL_INFO("cppcanvas.emf", "EMF+\tmetafile type: " << mfType << " dataSize: " << mfSize << " real size calculated from record dataSize: " << dataSize - 16);
 
                     GraphicFilter filter;
                     // workaround buggy metafiles, which have wrong mfSize set (n#705956 for example)
@@ -746,7 +754,7 @@ namespace cppcanvas
                     filter.ImportGraphic (graphic, String (), mfStream);
 
                     // debug code - write the stream to debug file /tmp/emf-stream.emf
-                    EMFP_DEBUG(
+#if OSL_DEBUG_LEVEL > 1
                         mfStream.Seek(0);
                         static int emfp_debug_stream_number = 0;
                         OUString emfp_debug_filename("/tmp/emf-embedded-stream");
@@ -758,7 +766,7 @@ namespace cppcanvas
                         mfStream >> file;
                         file.Flush();
                         file.Close()
-                    );
+#endif
                 }
             }
         };
@@ -781,8 +789,9 @@ namespace cppcanvas
 
                 OSL_ASSERT( ( header >> 12 ) == 0xdbc01 );
 
-                EMFP_DEBUG (printf ("EMF+\tfont\nEMF+\theader: 0x%08x version: 0x%08x size: %f unit: 0x%08x\n",(unsigned int) header >> 12, (unsigned int)header & 0x1fff, emSize, (unsigned int)sizeUnit));
-                EMFP_DEBUG (printf ("EMF+\tflags: 0x%08x reserved: 0x%08x length: 0x%08x\n", (unsigned int)fontFlags, (unsigned int)reserved, (unsigned int)length));
+                SAL_INFO("cppcanvas.emf", "EMF+\tfont\n"
+                           << "EMF+\theader: 0x" << std::hex << (header >> 12) << " version: 0x" << std::hex << (header & 0x1fff) << " size: " << emSize << " unit: 0x" << std::hex << sizeUnit);
+                SAL_INFO("cppcanvas.emf", "EMF+\tflags: 0x" << std::hex << fontFlags << " reserved: 0x" << std::hex << reserved << " length: 0x" << std::hex << length);
 
                 if( length > 0 && length < 0x4000 ) {
                     sal_Unicode *chars = (sal_Unicode *) alloca( sizeof( sal_Unicode ) * length );
@@ -791,7 +800,7 @@ namespace cppcanvas
                         s >> chars[ i ];
 
                     family = OUString( chars, length );
-                    EMFP_DEBUG (printf ("EMF+\tfamily: %s\n", OUStringToOString( family, RTL_TEXTENCODING_UTF8).getStr()));
+                    SAL_INFO("cppcanvas.emf", "EMF+\tfamily: " << OUStringToOString( family, RTL_TEXTENCODING_UTF8).getStr()); // TODO: can we just use family?
                 }
             }
         };
@@ -876,14 +885,14 @@ namespace cppcanvas
         {
             ::basegfx::B2DPolyPolygon localPolygon (polygon);
 
-            EMFP_DEBUG (printf ("EMF+\tfill polygon\n"));
+            SAL_INFO("cppcanvas.emf", "EMF+\tfill polygon");
 
             localPolygon.transform( rState.mapModeTransform );
 
             ActionSharedPtr pPolyAction;
 
             if (isColor) {
-                EMFP_DEBUG (printf ("EMF+\t\tcolor fill:0x%X\n", brushIndexOrColor));
+                SAL_INFO("cppcanvas.emf", "EMF+\t\tcolor fill:0x" << std::hex << brushIndexOrColor);
                 rState.isFillColorSet = true;
                 rState.isLineColorSet = false;
 
@@ -895,7 +904,7 @@ namespace cppcanvas
                 rState.isFillColorSet = true;
                 // extract UseBrush
                 EMFPBrush* brush = (EMFPBrush*) aObjects [brushIndexOrColor & 0xff];
-                EMFP_DEBUG (printf ("EMF+\tbrush fill slot: %u (type: %u)\n", (unsigned int)brushIndexOrColor, (unsigned int)brush->GetType ()));
+                SAL_INFO("cppcanvas.emf", "EMF+\tbrush fill slot: " << brushIndexOrColor << " (type: " << brush->GetType () << ")");
 
                 // give up in case something wrong happened
                 if( !brush )
@@ -973,7 +982,7 @@ namespace cppcanvas
                     uno::Sequence< double > aStops (2);
 
                     if (brush->blendPositions) {
-                        EMFP_DEBUG (printf ("EMF+\t\tuse blend\n"));
+                        SAL_INFO("cppcanvas.emf", "EMF+\t\tuse blend");
                         aColors.realloc (brush->blendPoints);
                         aStops.realloc (brush->blendPoints);
                         int length = aStartColor.getLength ();
@@ -986,15 +995,7 @@ namespace cppcanvas
 
                             for (int j = 0; j < length; j++) {
                                 if (brush->type == 4) {
-#if 0
-                                    // gamma correction
-                                    if (brush->additionalFlags & 0x80)
-                                        aColor [j] = pow (aStartColor [j]*(1 - brush->blendFactors[i]) + aEndColor [j]*brush->blendFactors[i], 1/2.2);
-                                    else
-                                        aColor [j] = aStartColor [j]*(1 - brush->blendFactors[i]) + aEndColor [j]*brush->blendFactors[i];
-#else
                                     aColor [j] = aStartColor [j]*(1 - brush->blendFactors[i]) + aEndColor [j]*brush->blendFactors[i];
-#endif
                                 } else
                                     aColor [j] = aStartColor [j]*brush->blendFactors[i] + aEndColor [j]*(1 - brush->blendFactors[i]);
                             }
@@ -1002,7 +1003,7 @@ namespace cppcanvas
                             aColors[i] = aColor;
                         }
                     } else if (brush->colorblendPositions) {
-                        EMFP_DEBUG (printf ("EMF+\t\tuse color blend\n"));
+                        SAL_INFO("cppcanvas.emf", "EMF+\t\tuse color blend");
                         aColors.realloc (brush->colorblendPoints);
                         aStops.realloc (brush->colorblendPoints);
 
@@ -1024,7 +1025,7 @@ namespace cppcanvas
                         }
                     }
 
-                    EMFP_DEBUG (printf ("EMF+\t\tset gradient\n"));
+                    SAL_INFO("cppcanvas.emf", "EMF+\t\tset gradient");
                     basegfx::B2DRange aBoundsRectangle (0, 0, 1, 1);
                     if (brush->type == 4) {
                         aGradientService = "LinearGradient";
@@ -1080,7 +1081,7 @@ namespace cppcanvas
 
             if( pPolyAction )
             {
-                EMFP_DEBUG (printf ("EMF+\t\tadd poly action\n"));
+                SAL_INFO("cppcanvas.emf", "EMF+\t\tadd poly action");
 
                 maActions.push_back(
                     MtfAction(
@@ -1096,7 +1097,7 @@ namespace cppcanvas
         {
             EMFPPen* pen = (EMFPPen*) aObjects [penIndex & 0xff];
 
-            SAL_WARN_IF( !pen, "cppcanvas", "emf+ missing pen" );
+            SAL_WARN_IF( !pen, "cppcanvas.emf", "emf+ missing pen" );
 
             if (pen)
             {
@@ -1130,7 +1131,7 @@ namespace cppcanvas
         {
             sal_uInt32 index;
 
-            EMFP_DEBUG (printf ("EMF+ Object slot: %hd flags: %hx\n", flags & 0xff, flags & 0xff00));
+            SAL_INFO("cppcanvas.emf", "EMF+ Object slot: " << (flags & 0xff) << " flags: " << (flags & 0xff00));
 
             index = flags & 0xff;
             if (aObjects [index] != NULL) {
@@ -1161,8 +1162,8 @@ namespace cppcanvas
 
                 rObjectStream >> header >> points >> pathFlags;
 
-                EMFP_DEBUG (printf ("EMF+\tpath\n"));
-                EMFP_DEBUG (printf ("EMF+\theader: 0x%08x points: %d additional flags: 0x%08x\n", (unsigned int)header, (int)points, (unsigned int)pathFlags));
+                SAL_INFO("cppcanvas.emf", "EMF+\tpath");
+                SAL_INFO("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << header << " points: " << points << " additional flags: 0x" << std::hex << pathFlags);
 
                 EMFPPath *path;
                 aObjects [index] = path = new EMFPPath (points);
@@ -1194,7 +1195,7 @@ namespace cppcanvas
                     break;
                 }
             default:
-                EMFP_DEBUG (printf ("EMF+\tObject unhandled flags: 0x%04x\n", flags & 0xff00));
+                SAL_INFO("cppcanvas.emf", "EMF+\tObject unhandled flags: 0x" << std::hex << (flags & 0xff00));
                 break;
             }
         }
@@ -1223,7 +1224,7 @@ namespace cppcanvas
                 EmfPlusGraphicState state = iter->second;
                 map.erase( iter );
 
-                EMFP_DEBUG (printf ("stack index: %d found and erased\n", index));
+                SAL_INFO("cppcanvas.emf", "stack index: " << index << " found and erased");
             }
 
             EmfPlusGraphicState state;
@@ -1240,7 +1241,7 @@ namespace cppcanvas
 
             if ( iter != map.end() )
             {
-                EMFP_DEBUG (printf ("stack index: %d found\n", index));
+                SAL_INFO("cppcanvas.emf", "stack index: " << index << " found");
 
                 EmfPlusGraphicState state = iter->second;
 
@@ -1268,7 +1269,7 @@ namespace cppcanvas
 
                 next = rMF.Tell() + ( size - 12 );
 
-                EMFP_DEBUG (printf ("EMF+ record size: %u type: %04hx flags: %04hx data size: %u\n", (unsigned int)size, type, flags, (unsigned int)dataSize));
+                SAL_INFO("cppcanvas.emf", "EMF+ record size: " << size << " type: " << type << " flags: " << flags << " data size: " << dataSize);
 
                 if (type == EmfPlusRecordTypeObject && ((mbMultipart && (flags & 0x7fff) == (mMFlags & 0x7fff)) || (flags & 0x8000))) {
                     if (!mbMultipart) {
@@ -1279,10 +1280,10 @@ namespace cppcanvas
 
                     // 1st 4 bytes are unknown
                     mMStream.Write (((const char *)rMF.GetData()) + rMF.Tell() + 4, dataSize - 4);
-                    EMFP_DEBUG (printf ("EMF+ read next object part size: %u type: %04hx flags: %04hx data size: %u\n", (unsigned int)size, type, flags, (unsigned int)dataSize));
+                    SAL_INFO("cppcanvas.emf", "EMF+ read next object part size: " << size << " type: " << type << " flags: " << flags << " data size: " << dataSize);
                 } else {
                     if (mbMultipart) {
-                        EMFP_DEBUG (printf ("EMF+ multipart record flags: %04hx\n", mMFlags));
+                        SAL_INFO("cppcanvas.emf", "EMF+ multipart record flags: " << mMFlags);
                         mMStream.Seek (0);
                         processObjectRecord (mMStream, mMFlags, dataSize, sal_True);
                     }
@@ -1297,16 +1298,16 @@ namespace cppcanvas
 
                         rMF >> header >> version >> nHDPI >> nVDPI;
 
-                        EMFP_DEBUG (printf ("EMF+ Header\n"));
-                        EMFP_DEBUG (printf ("EMF+\theader: 0x%08x version: %u horizontal DPI: %d vertical DPI: %d dual: %d\n", (int)header, (unsigned int)version, (int)nHDPI, (int)nVDPI,(int)( flags & 1)));
+                        SAL_INFO("cppcanvas.emf", "EMF+ Header");
+                        SAL_INFO("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << header << " version: " << version << " horizontal DPI: " << nHDPI << " vertical DPI: " << nVDPI << " dual: " << (flags & 1));
 
                         break;
                     case EmfPlusRecordTypeEndOfFile:
-                        EMFP_DEBUG (printf ("EMF+ EndOfFile\n"));
+                        SAL_INFO("cppcanvas.emf", "EMF+ EndOfFile");
                         break;
                     case EmfPlusRecordTypeGetDC:
-                        EMFP_DEBUG (printf ("EMF+ GetDC\n"));
-                        EMFP_DEBUG (printf ("EMF+\talready used in svtools wmf/emf filter parser\n"));
+                        SAL_INFO("cppcanvas.emf", "EMF+ GetDC");
+                        SAL_INFO("cppcanvas.emf", "EMF+\talready used in svtools wmf/emf filter parser");
                         break;
                     case EmfPlusRecordTypeObject:
                         processObjectRecord (rMF, flags, dataSize);
@@ -1318,13 +1319,13 @@ namespace cppcanvas
 
                             rMF >> brushIndexOrColor >> startAngle >> sweepAngle;
 
-                            EMFP_DEBUG (printf ("EMF+ FillPie colorOrIndex: %x startAngle: %f sweepAngle: %f\n", (unsigned int)brushIndexOrColor, startAngle, sweepAngle));
+                            SAL_INFO("cppcanvas.emf", "EMF+ FillPie colorOrIndex: " << brushIndexOrColor << " startAngle: " << startAngle << " sweepAngle: " << sweepAngle);
 
                             float dx, dy, dw, dh;
 
                             ReadRectangle (rMF, dx, dy, dw, dh, flags & 0x4000);
 
-                            EMFP_DEBUG (printf ("EMF+ RectData: %f,%f %fx%f\n", dx, dy, dw, dh));
+                            SAL_INFO("cppcanvas.emf", "EMF+ RectData: " << dx << "," << dy << " " << dw << "x" << dh);
 
                             startAngle = 2*M_PI*startAngle/360;
                             sweepAngle = 2*M_PI*sweepAngle/360;
@@ -1343,7 +1344,7 @@ namespace cppcanvas
                                 endAngle = tmp;
                             }
 
-                            EMFP_DEBUG (printf ("EMF+ angles: %f,%f  ---> %f,%f\n", startAngle, sweepAngle, startAngle, endAngle));
+                            SAL_INFO("cppcanvas.emf", "EMF+ angles: " << startAngle << "," << sweepAngle << "  ---> " << startAngle << "," << endAngle);
 
                             B2DPolygon polygon = tools::createPolygonFromEllipseSegment (mappedCenter, mappedSize.getX (), mappedSize.getY (), startAngle, endAngle);
                             polygon.append (mappedCenter);
@@ -1360,7 +1361,7 @@ namespace cppcanvas
 
                             rMF >> brushIndexOrColor;
 
-                            EMFP_DEBUG (printf ("EMF+ FillPath slot: %u\n", (unsigned int)index));
+                            SAL_INFO("cppcanvas.emf", "EMF+ FillPath slot: " << index);
 
                             EMFPPlusFillPolygon (((EMFPPath*) aObjects [index])->GetPolygon (*this), rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
                         }
@@ -1368,25 +1369,21 @@ namespace cppcanvas
                     case EmfPlusRecordTypeDrawEllipse:
                     case EmfPlusRecordTypeFillEllipse:
                         {
-                            // Intentionally very bogus initial value
-                            // to avoid MSVC complaining about
-                            // potentially uninitialized local
-                            // variable. As long as the code stays as
-                            // intended, this variable will be
-                            // assigned a (real) value in the case
+                            // Intentionally very bogus initial value to avoid MSVC complaining about potentially uninitialized local
+                            // variable. As long as the code stays as intended, this variable will be assigned a (real) value in the case
                             // when it is later used.
                             sal_uInt32 brushIndexOrColor = 1234567;
 
                             if ( type == EmfPlusRecordTypeFillEllipse )
                                 rMF >> brushIndexOrColor;
 
-                            EMFP_DEBUG (printf ("EMF+ %sEllipse slot: %u\n", type == EmfPlusRecordTypeFillEllipse ? "Fill" : "Draw", static_cast<unsigned>(flags & 0xff)));
+                            SAL_INFO("cppcanvas.emf", "EMF+ " << (type == EmfPlusRecordTypeFillEllipse ? "Fill" : "Draw") << "Ellipse slot: " << (flags & 0xff));
 
                             float dx, dy, dw, dh;
 
                             ReadRectangle (rMF, dx, dy, dw, dh, flags & 0x4000);
 
-                            EMFP_DEBUG (printf ("EMF+ RectData: %f,%f %fx%f\n", dx, dy, dw, dh));
+                            SAL_INFO("cppcanvas.emf", "EMF+ RectData: " << dx << "," << dy << " " << dw << "x" << dh);
 
                             B2DPoint mappedCenter (Map (dx + dw/2, dy + dh/2));
                             B2DSize mappedSize( MapSize (dw/2, dh/2));
@@ -1403,7 +1400,7 @@ namespace cppcanvas
                         break;
                     case EmfPlusRecordTypeFillRects:
                         {
-                            EMFP_DEBUG (printf ("EMF+ FillRects\n"));
+                            SAL_INFO("cppcanvas.emf", "EMF+ FillRects");
 
                             sal_uInt32 brushIndexOrColor;
                             sal_Int32 rectangles;
@@ -1412,7 +1409,7 @@ namespace cppcanvas
 
                             rMF >> brushIndexOrColor >> rectangles;
 
-                            EMFP_DEBUG (printf ("EMF+\t%s: 0x%08x\n", (flags & 0x8000) ? "color" : "brush index", (unsigned int)brushIndexOrColor));
+                            SAL_INFO("cppcanvas.emf", "EMF+\t" << ((flags & 0x8000) ? "color" : "brush index") << ": 0x" << std::hex << brushIndexOrColor);
 
                             for (int i=0; i < rectangles; i++) {
                                 if (flags & 0x4000) {
@@ -1426,7 +1423,7 @@ namespace cppcanvas
                                     polygon.append (Map (x + width, y + height));
                                     polygon.append (Map (x, y + height));
 
-                                    EMFP_DEBUG (printf ("EMF+\trectangle: %d,%d %dx%d\n", x, y, width, height));
+                                    SAL_INFO("cppcanvas.emf", "EMF+\trectangle: " << x << "," << " " << width << "x" << height);
                                 } else {
                                     /* Single's */
                                     float x, y, width, height;
@@ -1438,7 +1435,7 @@ namespace cppcanvas
                                     polygon.append (Map (x + width, y + height));
                                     polygon.append (Map (x, y + height));
 
-                                    EMFP_DEBUG (printf ("EMF+\trectangle: %f,%f %fx%f\n", x, y, width, height));
+                                    SAL_INFO("cppcanvas.emf", "EMF+\trectangle: " << x << "," << " " << width << "x" << height);
                                 }
 
                                 ::basegfx::B2DPolyPolygon polyPolygon (polygon);
@@ -1454,15 +1451,17 @@ namespace cppcanvas
                         }
                     case EmfPlusRecordTypeFillPolygon:
                         {
-                            EMFP_DEBUG (sal_uInt8 index = flags & 0xff);
+#if OSL_DEBUG_LEVEL > 1
+                            sal_uInt8 index = flags & 0xff;
+#endif
                             sal_uInt32 brushIndexOrColor;
                             sal_Int32 points;
 
                             rMF >> brushIndexOrColor;
                             rMF >> points;
 
-                            EMFP_DEBUG (printf ("EMF+ FillPolygon in slot: %d points: %d\n", index, points));
-                            EMFP_DEBUG (printf ("EMF+\t%s: 0x%08x\n", (flags & 0x8000) ? "color" : "brush index", brushIndexOrColor));
+                            SAL_INFO("cppcanvas.emf", "EMF+ FillPolygon in slot: " << &index << " points: " << points);
+                            SAL_INFO("cppcanvas.emf", "EMF+\t: " << ((flags & 0x8000) ? "color" : "brush index") << " 0x" << std::hex << brushIndexOrColor);
 
                             EMFPPath path (points, true);
                             path.Read (rMF, flags, *this);
@@ -1479,7 +1478,7 @@ namespace cppcanvas
 
                             rMF >> points;
 
-                            EMFP_DEBUG (printf ("EMF+ DrawLines in slot: %u points: %u\n", (unsigned int)index, (unsigned int)points));
+                            SAL_INFO("cppcanvas.emf", "EMF+ DrawLines in slot: " << index << " points: " << points);
 
                             EMFPPath path (points, true);
                             path.Read (rMF, flags, *this);
@@ -1520,11 +1519,11 @@ namespace cppcanvas
 
                             rMF >> penIndex;
 
-                            EMFP_DEBUG (printf ("EMF+ DrawPath\n"));
-                            EMFP_DEBUG (printf ("EMF+\tpen: %u\n", (unsigned int)penIndex));
+                            SAL_INFO("cppcanvas.emf", "EMF+ DrawPath");
+                            SAL_INFO("cppcanvas.emf", "EMF+\tpen: " << penIndex);
 
                             EMFPPath* path = (EMFPPath*) aObjects [flags & 0xff];
-                            SAL_WARN_IF( !path, "cppcanvas", "EmfPlusRecordTypeDrawPath missing path" );
+                            SAL_WARN_IF( !path, "cppcanvas.emf", "EmfPlusRecordTypeDrawPath missing path" );
 
                             EMFPPlusDrawPolygon (path->GetPolygon (*this), rFactoryParms, rState, rCanvas, penIndex);
 
@@ -1538,8 +1537,8 @@ namespace cppcanvas
 
                             rMF >> attrIndex >> sourceUnit;
 
-                            EMFP_DEBUG (printf ("EMF+ %s attributes index: %d source unit: %d\n", type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage", (int)attrIndex, (int)sourceUnit));
-                            EMFP_DEBUG (printf ("EMF+\tTODO: use image attributes\n"));
+                            SAL_INFO("cppcanvas.emf", "EMF+ " << (type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage") << "attributes index: " << attrIndex << "source unit: " << sourceUnit);
+                            SAL_INFO("cppcanvas.emf", "EMF+\tTODO: use image attributes");
 
                             if (sourceUnit == 2 && aObjects [flags & 0xff]) { // we handle only GraphicsUnit.Pixel now
                                 EMFPImage& image = *(EMFPImage *) aObjects [flags & 0xff];
@@ -1548,7 +1547,7 @@ namespace cppcanvas
 
                                 ReadRectangle (rMF, sx, sy, sw, sh);
 
-                                EMFP_DEBUG (printf ("EMF+ %s source rectangle: %f,%f %fx%f\n", type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage", sx, sy, sw, sh));
+                                SAL_INFO("cppcanvas.emf", "EMF+ " << (type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage") << " source rectangle: " << sx << "," << sy << " " << sw << "x" << sh);
 
                                 ::basegfx::B2DPoint aDstPoint;
                                 ::basegfx::B2DSize aDstSize;
@@ -1564,8 +1563,8 @@ namespace cppcanvas
                                         ReadPoint (rMF, x2, y2, flags);
                                         ReadPoint (rMF, x3, y3, flags);
 
-                                        EMFP_DEBUG (printf ("EMF+ destination points: %f,%f %f,%f %f,%f\n", x1, y1, x2, y2, x3, y3));
-                                        EMFP_DEBUG (printf ("EMF+ destination rectangle: %f,%f %fx%f\n", x1, y1, x2 - x1, y3 - y1));
+                                        SAL_INFO("cppcanvas.emf", "EMF+ destination points: " << x1 << "," << y1 << " " << x2 << "," << y2 << " " << x3 << "," << y3);
+                                        SAL_INFO("cppcanvas.emf", "EMF+ destination rectangle: " << x1 << "," << y1 << " " << x2 - x1 << "x" << y3 - y1);
 
                                         aDstPoint = Map (x1, y1);
                                         aDstSize = MapSize(x2 - x1, y3 - y1);
@@ -1577,7 +1576,7 @@ namespace cppcanvas
 
                                     ReadRectangle (rMF, dx, dy, dw, dh, flags & 0x4000);
 
-                                    EMFP_DEBUG (printf ("EMF+ destination rectangle: %f,%f %fx%f\n", dx, dy, dw, dh));
+                                    SAL_INFO("cppcanvas.emf", "EMF+ destination rectangle: " << dx << "," << dy << " " << dw << "x" << dh);
 
                                     aDstPoint = Map (dx, dy);
                                     aDstSize = MapSize(dw, dh);
@@ -1589,7 +1588,7 @@ namespace cppcanvas
                                     BitmapEx aBmp( image.graphic.GetBitmapEx () );
 
                                     Size aSize( aBmp.GetSizePixel() );
-                                    EMFP_DEBUG (printf ("EMF+ bitmap size: %ldx%ld\n", aSize.Width(), aSize.Height()));
+                                    SAL_INFO("cppcanvas.emf", "EMF+ bitmap size: " << aSize.Width() << "x" << aSize.Height());
                                     if( aSize.Width() > 0 && aSize.Height() > 0 ) {
                                         ActionSharedPtr pBmpAction (
                                             internal::BitmapActionFactory::createBitmapAction (
@@ -1606,33 +1605,33 @@ namespace cppcanvas
                                             rFactoryParms.mrCurrActionIndex += pBmpAction->getActionCount()-1;
                                         }
                                     } else {
-                                        EMFP_DEBUG (printf ("EMF+ warning: empty bitmap\n"));
+                                        SAL_INFO("cppcanvas.emf", "EMF+ warning: empty bitmap");
                                     }
                                 } else {
-                                    EMFP_DEBUG (printf ("EMF+ DrawImage(Points) TODO (fixme)\n"));
+                                    SAL_INFO("cppcanvas.emf", "EMF+ DrawImage(Points) TODO (fixme)");
                                 }
                             } else {
-                                EMFP_DEBUG (printf ("EMF+ DrawImage(Points) TODO (fixme) - possibly unsupported source units for crop rectangle\n"));
+                                SAL_INFO("cppcanvas.emf", "EMF+ DrawImage(Points) TODO (fixme) - possibly unsupported source units for crop rectangle");
                             }
                             break;
                         }
                     case EmfPlusRecordTypeDrawString:
                         {
-                            EMFP_DEBUG (printf ("EMF+ DrawString\n"));
+                            SAL_INFO("cppcanvas.emf", "EMF+ DrawString");
 
                             sal_uInt32 brushId;
                             sal_uInt32 formatId;
                             sal_uInt32 stringLength;
 
                             rMF >> brushId >> formatId >> stringLength;
-                            EMFP_DEBUG (printf ("EMF+ DrawString brushId: %x formatId: %x length: %x\n", brushId, formatId, stringLength));
+                            SAL_INFO("cppcanvas.emf", "EMF+ DrawString brushId: " << brushId << " formatId: " << formatId << " length: " << stringLength);
 
                             if (flags & 0x8000) {
                                 float lx, ly, lw, lh;
 
                                 rMF >> lx >> ly >> lw >> lh;
 
-                                EMFP_DEBUG (printf ("EMF+ DrawString layoutRect: %f,%f - %fx%f\n", lx, ly, lw, lh));
+                                SAL_INFO("cppcanvas.emf", "EMF+ DrawString layoutRect: " << lx << "," << ly << " - " << lw << "x" << lh);
 
                                 OUString text = read_uInt16s_ToOUString(rMF, stringLength);
 
@@ -1659,7 +1658,7 @@ namespace cppcanvas
                                         false ) );
                                 if( pTextAction )
                                 {
-                                    EMFP_DEBUG (printf ("EMF+\t\tadd text action\n"));
+                                    SAL_INFO("cppcanvas.emf", "EMF+\t\tadd text action");
 
                                     maActions.push_back(
                                                         MtfAction(
@@ -1669,41 +1668,41 @@ namespace cppcanvas
                                     rFactoryParms.mrCurrActionIndex += pTextAction->getActionCount()-1;
                                 }
                             } else {
-                                EMFP_DEBUG (printf ("EMF+ DrawString TODO - drawing with brush not yet supported\n"));
+                                SAL_INFO("cppcanvas.emf", "EMF+ DrawString TODO - drawing with brush not yet supported");
                             }
                         }
                         break;
                     case EmfPlusRecordTypeSetPageTransform:
                         rMF >> fPageScale;
 
-                        EMFP_DEBUG (printf ("EMF+ SetPageTransform\n"));
-                        EMFP_DEBUG (printf ("EMF+\tscale: %f unit: %d\n", fPageScale, flags));
-                        EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+                        SAL_INFO("cppcanvas.emf", "EMF+ SetPageTransform");
+                        SAL_INFO("cppcanvas.emf", "EMF+\tscale: " << fPageScale << " unit: " << flags);
+                        SAL_INFO("cppcanvas.emf", "EMF+\tTODO");
                         break;
                     case EmfPlusRecordTypeSetRenderingOrigin:
                         rMF >> nOriginX >> nOriginY;
-                        EMFP_DEBUG (printf ("EMF+ SetRenderingOrigin\n"));
-                        EMFP_DEBUG (printf ("EMF+\torigin [x,y]: %d,%d\n", (int)nOriginX, (int)nOriginY));
+                        SAL_INFO("cppcanvas.emf", "EMF+ SetRenderingOrigin");
+                        SAL_INFO("cppcanvas.emf", "EMF+\torigin [x,y]: " << nOriginX << "," << nOriginY);
                         break;
                     case EmfPlusRecordTypeSetTextRenderingHint:
-                        EMFP_DEBUG (printf ("EMF+ SetTextRenderingHint\n"));
-                        EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+                        SAL_INFO("cppcanvas.emf", "EMF+ SetTextRenderingHint");
+                        SAL_INFO("cppcanvas.emf", "EMF+\tTODO");
                         break;
                     case EmfPlusRecordTypeSetAntiAliasMode:
-                        EMFP_DEBUG (printf ("EMF+ SetAntiAliasMode\n"));
-                        EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+                        SAL_INFO("cppcanvas.emf", "EMF+ SetAntiAliasMode");
+                        SAL_INFO("cppcanvas.emf", "EMF+\tTODO");
                         break;
                     case EmfPlusRecordTypeSetInterpolationMode:
-                        EMFP_DEBUG (printf ("EMF+ InterpolationMode\n"));
-                        EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+                        SAL_INFO("cppcanvas.emf", "EMF+ InterpolationMode");
+                        SAL_INFO("cppcanvas.emf", "EMF+\tTODO");
                         break;
                     case EmfPlusRecordTypeSetPixelOffsetMode:
-                        EMFP_DEBUG (printf ("EMF+ SetPixelOffsetMode\n"));
-                        EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+                        SAL_INFO("cppcanvas.emf", "EMF+ SetPixelOffsetMode");
+                        SAL_INFO("cppcanvas.emf", "EMF+\tTODO");
                         break;
                     case EmfPlusRecordTypeSetCompositingQuality:
-                        EMFP_DEBUG (printf ("EMF+ SetCompositingQuality\n"));
-                        EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+                        SAL_INFO("cppcanvas.emf", "EMF+ SetCompositingQuality");
+                        SAL_INFO("cppcanvas.emf", "EMF+\tTODO");
                         break;
                     case EmfPlusRecordTypeSave:
                     {
@@ -1711,7 +1710,7 @@ namespace cppcanvas
 
                         rMF >> stackIndex;
 
-                        EMFP_DEBUG (printf ("EMF+ Save stack index: %d\n", stackIndex));
+                        SAL_INFO("cppcanvas.emf", "EMF+ Save stack index: " << stackIndex);
 
                         GraphicStatePush( mGSStack, stackIndex, rState );
 
@@ -1723,7 +1722,7 @@ namespace cppcanvas
 
                         rMF >> stackIndex;
 
-                        EMFP_DEBUG (printf ("EMF+ Restore stack index: %d\n", stackIndex));
+                        SAL_INFO("cppcanvas.emf", "EMF+ Restore stack index: " << stackIndex);
 
                         GraphicStatePop( mGSStack, stackIndex, rState );
 
@@ -1735,7 +1734,7 @@ namespace cppcanvas
 
                         rMF >> stackIndex;
 
-                        EMFP_DEBUG (printf ("EMF+ Begin Container No Params stack index: %d\n", stackIndex));
+                        SAL_INFO("cppcanvas.emf", "EMF+ Begin Container No Params stack index: " << stackIndex);
 
                         GraphicStatePush( mGSContainerStack, stackIndex, rState );
                     }
@@ -1746,35 +1745,35 @@ namespace cppcanvas
 
                         rMF >> stackIndex;
 
-                        EMFP_DEBUG (printf ("EMF+ End Container stack index: %d\n", stackIndex));
+                        SAL_INFO("cppcanvas.emf", "EMF+ End Container stack index: " << stackIndex);
 
                         GraphicStatePop( mGSContainerStack, stackIndex, rState );
                     }
                     break;
                     case EmfPlusRecordTypeSetWorldTransform: {
-                        EMFP_DEBUG (printf ("EMF+ SetWorldTransform\n"));
+                        SAL_INFO("cppcanvas.emf", "EMF+ SetWorldTransform");
                         XForm transform;
                         rMF >> transform;
                         aWorldTransform.Set (transform);
-                        EMFP_DEBUG (printf ("EMF+\tm11: %f m12: %f\nEMF+\tm21: %f m22: %f\nEMF+\tdx: %f dy: %f\n",
-                                aWorldTransform.eM11, aWorldTransform.eM12,
-                                aWorldTransform.eM21, aWorldTransform.eM22,
-                                aWorldTransform.eDx, aWorldTransform.eDy));
+                        SAL_INFO("cppcanvas.emf",
+                                "EMF+\tm11: " << aWorldTransform.eM11 << "m12: " << aWorldTransform.eM12 <<
+                                "EMF+\tm21: " << aWorldTransform.eM21 << "m22: " << aWorldTransform.eM22 <<
+                                "EMF+\tdx: "  << aWorldTransform.eDx  << "dy: "  << aWorldTransform.eDy);
                         break;
                     }
                     case EmfPlusRecordTypeResetWorldTransform:
-                        EMFP_DEBUG (printf ("EMF+ ResetWorldTransform\n"));
+                        SAL_INFO("cppcanvas.emf", "EMF+ ResetWorldTransform");
                         aWorldTransform.SetIdentity ();
                         break;
                     case EmfPlusRecordTypeMultiplyWorldTransform: {
-                        EMFP_DEBUG (printf ("EMF+ MultiplyWorldTransform\n"));
+                        SAL_INFO("cppcanvas.emf", "EMF+ MultiplyWorldTransform");
                         XForm transform;
                         rMF >> transform;
 
-                        EMFP_DEBUG (printf ("EMF+\tmatrix m11: %f m12: %f\nEMF+\tm21: %f m22: %f\nEMF+\tdx: %f dy: %f\n",
-                                transform.eM11, transform.eM12,
-                                transform.eM21, transform.eM22,
-                                transform.eDx, transform.eDy));
+                        SAL_INFO("cppcanvas.emf",
+                                "EMF+\tmatrix m11: " << transform.eM11 << "m12: " << transform.eM12 <<
+                                "EMF+\tm21: "        << transform.eM21 << "m22: " << transform.eM22 <<
+                                "EMF+\tdx: "         << transform.eDx  << "dy: "  << transform.eDy);
 
                         if (flags & 0x2000)  // post multiply
                             aWorldTransform.Multiply (transform);
@@ -1782,24 +1781,28 @@ namespace cppcanvas
                             transform.Multiply (aWorldTransform);
                             aWorldTransform.Set (transform);
                         }
-                        EMFP_DEBUG (printf ("EMF+\tresult world matrix m11: %f m12: %f\nEMF+\tm21: %f m22: %f\nEMF+\tdx: %f dy: %f\n",
-                                aWorldTransform.eM11, aWorldTransform.eM12,
-                                aWorldTransform.eM21, aWorldTransform.eM22,
-                                aWorldTransform.eDx, aWorldTransform.eDy));
+                        SAL_INFO("cppcanvas.emf",
+                                "EMF+\tm11: " << aWorldTransform.eM11 << "m12: " << aWorldTransform.eM12 <<
+                                "EMF+\tm21: " << aWorldTransform.eM21 << "m22: " << aWorldTransform.eM22 <<
+                                "EMF+\tdx: "  << aWorldTransform.eDx  << "dy: "  << aWorldTransform.eDy);
                         break;
                     }
                     case EmfPlusRecordTypeSetClipRect:
                         {
                             int combineMode = (flags >> 8) & 0xf;
 
-                            EMFP_DEBUG (printf ("EMF+ SetClipRect combine mode: %d\n", combineMode));
-                            EMFP_DEBUG (if ( combineMode > 1 ) printf ("EMF+ TODO combine mode > 1\n"));
+                            SAL_INFO("cppcanvas.emf", "EMF+ SetClipRect combine mode: " << combineMode);
+#if OSL_DEBUG_LEVEL > 1
+                            if (combineMode > 1) {
+                                SAL_INFO ("cppcanvas.emf", "EMF+ TODO combine mode > 1");
+                            }
+#endif
 
                             float dx, dy, dw, dh;
 
                             ReadRectangle (rMF, dx, dy, dw, dh, false);
 
-                            EMFP_DEBUG (printf ("EMF+ RectData: %f,%f %fx%f\n", dx, dy, dw, dh));
+                            SAL_INFO("cppcanvas.emf", "EMF+ RectData: " << dx << "," << dy << " " << dw << "x" << dh);
 
                             B2DPoint mappedPoint (Map (dx, dy));
                             B2DSize mappedSize( MapSize (dw, dh));
@@ -1816,8 +1819,8 @@ namespace cppcanvas
                         {
                             int combineMode = (flags >> 8) & 0xf;
 
-                            EMFP_DEBUG (printf ("EMF+ SetClipPath combine mode: %d\n", combineMode));
-                            EMFP_DEBUG (printf ("EMF+\tpath in slot: %d\n", flags & 0xff));
+                            SAL_INFO("cppcanvas.emf", "EMF+ SetClipPath combine mode: " << combineMode);
+                            SAL_INFO("cppcanvas.emf", "EMF+\tpath in slot: " << (flags & 0xff));
 
                             EMFPPath& path = *(EMFPPath*) aObjects [flags & 0xff];
                             ::basegfx::B2DPolyPolygon& clipPoly (path.GetPolygon (*this));
@@ -1830,20 +1833,20 @@ namespace cppcanvas
                     case EmfPlusRecordTypeSetClipRegion: {
                         int combineMode = (flags >> 8) & 0xf;
 
-                        EMFP_DEBUG (printf ("EMF+ SetClipRegion\n"));
-                        EMFP_DEBUG (printf ("EMF+\tregion in slot: %d combine mode: %d\n", flags & 0xff, combineMode));
+                        SAL_INFO("cppcanvas.emf", "EMF+ SetClipRegion");
+                        SAL_INFO("cppcanvas.emf", "EMF+\tregion in slot: " << (flags & 0xff) << " combine mode: " << combineMode);
                         EMFPRegion *region = (EMFPRegion*)aObjects [flags & 0xff];
 
                         // reset clip
                         if (region && region->parts == 0 && region->initialState == EmfPlusRegionInitialStateInfinite) {
                             updateClipping (::basegfx::B2DPolyPolygon (), rFactoryParms, combineMode == 1);
                         } else {
-                            EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+                            SAL_INFO("cppcanvas.emf", "EMF+\tTODO");
                         }
                         break;
                     }
                     case EmfPlusRecordTypeDrawDriverString: {
-                        EMFP_DEBUG (printf ("EMF+ DrawDriverString, flags: 0x%04x\n", flags));
+                        SAL_INFO("cppcanvas.emf", "EMF+ DrawDriverString, flags: 0x" << std::hex << flags);
                         sal_uInt32 brushIndexOrColor;
                         sal_uInt32 optionFlags;
                         sal_uInt32 hasMatrix;
@@ -1851,10 +1854,10 @@ namespace cppcanvas
 
                         rMF >> brushIndexOrColor >> optionFlags >> hasMatrix >> glyphsCount;
 
-                        EMFP_DEBUG (printf ("EMF+\t%s: 0x%08x\n", (flags & 0x8000) ? "color" : "brush index", (unsigned int)brushIndexOrColor));
-                        EMFP_DEBUG (printf ("EMF+\toption flags: 0x%08x\n", (unsigned int)optionFlags));
-                        EMFP_DEBUG (printf ("EMF+\thas matrix: %u\n", (unsigned int)hasMatrix));
-                        EMFP_DEBUG (printf ("EMF+\tglyphs: %u\n", (unsigned int)glyphsCount));
+                        SAL_INFO("cppcanvas.emf", "EMF+\t: " << ((flags & 0x8000) ? "color" : "brush index") << " 0x" << std::hex << brushIndexOrColor);
+                        SAL_INFO("cppcanvas.emf", "EMF+\toption flags: 0x" << std::hex << optionFlags);
+                        SAL_INFO("cppcanvas.emf", "EMF+\thas matrix: " << hasMatrix);
+                        SAL_INFO("cppcanvas.emf", "EMF+\tglyphs: " << glyphsCount);
 
                         if( ( optionFlags & 1 ) && glyphsCount > 0 ) {
                             float *charsPosX = new float[glyphsCount];
@@ -1864,13 +1867,13 @@ namespace cppcanvas
 
                             for( sal_uInt32 i=0; i<glyphsCount; i++) {
                                 rMF >> charsPosX[i] >> charsPosY[i];
-                                EMFP_DEBUG (printf ("EMF+\tglyphPosition[%u]: %f, %f\n", (unsigned int)i, charsPosX[i], charsPosY[i]));
+                                SAL_INFO("cppcanvas.emf", "EMF+\tglyphPosition[" << i << "]: " << charsPosX[i] << "," << charsPosY[i]);
                             }
 
                             XForm transform;
                             if( hasMatrix ) {
                                 rMF >> transform;
-                                EMFP_DEBUG (printf ("EMF+\tmatrix:: %f, %f, %f, %f, %f, %f\n", transform.eM11, transform.eM12, transform.eM21, transform.eM22, transform.eDx, transform.eDy));
+                                SAL_INFO("cppcanvas.emf", "EMF+\tmatrix: " << transform.eM11 << ", " << transform.eM12 << ", " << transform.eM21 << ", " << transform.eM22 << ", " << transform.eDx << ", " << transform.eDy);
                             }
 
                             // add the text action
@@ -1898,7 +1901,7 @@ namespace cppcanvas
 
                             if( pTextAction )
                             {
-                                EMFP_DEBUG (printf ("EMF+\t\tadd text action\n"));
+                                SAL_INFO("cppcanvas.emf", "EMF+\t\tadd text action");
 
                                 maActions.push_back(
                                         MtfAction(
@@ -1911,14 +1914,14 @@ namespace cppcanvas
                             delete[] charsPosX;
                             delete[] charsPosY;
                         } else {
-                            EMFP_DEBUG (printf ("EMF+\tTODO: fonts (non-unicode glyphs chars)\n"));
+                            SAL_INFO("cppcanvas.emf", "EMF+\tTODO: fonts (non-unicode glyphs chars)");
                         }
 
                         break;
                                                             }
                     default:
-                        EMFP_DEBUG (printf ("EMF+ unhandled record type: %d\n", type));
-                        EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+                        SAL_INFO("cppcanvas.emf", "EMF+ unhandled record type: " << type);
+                        SAL_INFO("cppcanvas.emf", "EMF+\tTODO\n");
                     }
                 }
 
@@ -1930,7 +1933,7 @@ namespace cppcanvas
                 }
                 else
                 {
-                    SAL_WARN("cppcanvas", "ImplRenderer::processEMFPlus: "
+                    SAL_WARN("cppcanvas.emf", "ImplRenderer::processEMFPlus: "
                             "size " << size << " > length " << length);
                     length = 0;
                 }
