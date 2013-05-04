@@ -41,9 +41,9 @@ STD_LIB_FILE(gid_File_Lib_OpenGLTransitions, OGLTrans)
 
 File gid_File_Share_Config_Sofficecfg_Impress_Transitions_OGL_Xml
     TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Config_Sofficecfg_Simpress;
-    Name = "transitions-ogl.xml";
+    Styles = (FILELIST,PACKED);
+    Dir = FILELIST_DIR;
+    Name = "sd_opengl.filelist";
 End
 
 File gid_File_Share_Registry_Ogltrans_Xcd

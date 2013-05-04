@@ -63,16 +63,9 @@ End
 
 // configuration files for custom animation effects
 
-File gid_File_Share_Config_Sofficecfg_Impress_Effects_Xml
+File gid_File_sd_xml
     TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Config_Sofficecfg_Simpress;
-    Name = "effects.xml";
-End
-
-File gid_File_Share_Config_Sofficecfg_Impress_Transitions_Xml
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Config_Sofficecfg_Simpress;
-    Name = "transitions.xml";
+    Styles = (FILELIST, PACKED);
+    Dir = FILELIST_DIR;
+    Name = "sd_xml.filelist";
 End

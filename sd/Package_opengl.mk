@@ -7,13 +7,12 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,sd_xml,$(SRCDIR)/sd/xml))
+$(eval $(call gb_Package_Package,sd_opengl,$(SRCDIR)/sd/xml))
 
-$(eval $(call gb_Package_set_outdir,sd_xml,$(INSTDIR)))
+$(eval $(call gb_Package_set_outdir,sd_opengl,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,sd_xml,share/config/soffice.cfg/simpress,\
-	effects.xml \
-	transitions.xml \
+$(eval $(call gb_Package_add_files,sd_opengl,share/config/soffice.cfg/simpress,\
+	transitions-ogl.xml \
 ))
 
 # vim: set noet sw=4 ts=4:
