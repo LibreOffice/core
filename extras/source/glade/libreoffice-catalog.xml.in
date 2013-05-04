@@ -78,6 +78,9 @@
     <glade-widget-class title="ValueSet" name="svtlo-ValueSet"
                         generic-name="Set of Value Options" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="ValueSet" name="svxlo-SvxColorValueSet"
+                        generic-name="Set of Value Options" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="ValueSet" name="swuilo-ColumnValueSet"
                         generic-name="Set of Value Options" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>

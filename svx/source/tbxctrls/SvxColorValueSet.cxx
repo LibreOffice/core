@@ -19,12 +19,28 @@
 #include <svx/SvxColorValueSet.hxx>
 #include <svx/xtable.hxx>
 #include <svtools/accessibilityoptions.hxx>
+#include <vcl/builder.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
 SvxColorValueSet::SvxColorValueSet(Window* _pParent, WinBits nWinStyle)
 :   ValueSet(_pParent, nWinStyle)
 {
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxColorValueSet(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nWinBits = WB_TABSTOP;
+
+    VclBuilder::stringmap::iterator aFind = rMap.find(OString("border"));
+    if (aFind != rMap.end())
+    {
+        if (toBool(aFind->second))
+            nWinBits |= WB_BORDER;
+        rMap.erase(aFind);
+    }
+
+    return new SvxColorValueSet(pParent, nWinBits);
 }
 
 SvxColorValueSet::SvxColorValueSet(Window* _pParent, const ResId& rResId)
