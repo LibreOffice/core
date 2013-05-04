@@ -108,6 +108,7 @@ gbuild_TARGETS := AllLangHelp \
 	Extension \
 	ExternalPackage \
 	ExternalProject \
+	GeneratedPackage \
 	InstallModule \
 	InstallScript \
 	InternalUnoApi \
