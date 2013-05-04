@@ -13,7 +13,7 @@ ifeq ($(WITH_MOZAB4WIN),YES)
 
 $(eval $(call gb_Module_add_targets,moz,\
 	ExternalPackage_moz_lib \
-	CustomTarget_runtime \
+	ExternalPackage_runtime \
 	Package_runtime \
 	UnpackedTarball_moz_inc \
 	UnpackedTarball_moz_lib \
