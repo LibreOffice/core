@@ -2495,6 +2495,9 @@ void VclBuilder::handleActionWidget(xmlreader::XmlReader &reader)
 
     reader.nextItem(xmlreader::XmlReader::TEXT_RAW, &name, &nsId);
     OString sID = OString(name.begin, name.length);
+    sal_Int32 nDelim = sID.indexOf(':');
+    if (nDelim != -1)
+        sID = sID.copy(0, nDelim);
     set_response(sID, sResponse.toInt32());
 }
 
