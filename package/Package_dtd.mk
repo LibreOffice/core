@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Package_Package,package_dtd,$(SRCDIR)/package/dtd))
 
-$(eval $(call gb_Package_add_file,package_dtd,bin/Manifest.dtd,Manifest.dtd))
+$(eval $(call gb_Package_set_outdir,package_dtd,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_file,package_dtd,share/dtd/officedocument/1_0/Manifest.dtd,Manifest.dtd))
 
 # vim: set noet sw=4 ts=4:

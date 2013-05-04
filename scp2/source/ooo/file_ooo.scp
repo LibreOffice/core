@@ -286,9 +286,9 @@ End
 
 File gid_File_Dtd_Manifest
     TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
-    Name = "Manifest.dtd";
+    Styles = (FILELIST, PACKED);
+    Dir = FILELIST_DIR;
+    Name = "package_dtd.filelist";
 End
 
 File gid_File_Dtd_Module
