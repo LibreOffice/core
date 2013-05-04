@@ -218,6 +218,8 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 endif
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,KDE, \
+    $(if $(ENABLE_KDE),kdebe1) \
+    $(if $(ENABLE_KDE4),kde4be1) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
@@ -601,8 +603,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     gdipluscanvas \
     hatchwindowfactory \
     i18nsearch \
-    kdebe1 \
-    kde4be1 \
     ldapbe2 \
     losessioninstall \
     macbe1 \
