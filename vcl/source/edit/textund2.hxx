@@ -26,9 +26,9 @@
 class TextUndoDelPara : public TextUndo
 {
 private:
-    sal_Bool            mbDelObject;
-    sal_uLong           mnPara;
-    TextNode*       mpNode; // Zeigt auf das gueltige, nicht zerstoerte Objekt!
+    sal_Bool        mbDelObject;
+    sal_uLong       mnPara;
+    TextNode*       mpNode; // points at the valid not-destroyed object
 
 public:
                     TYPEINFO();

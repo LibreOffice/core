@@ -65,10 +65,6 @@ void Shorten (OUString& rString)
 
 } // namespace
 
-//
-// TextUndoManager
-// ===============
-//
 
 TextUndoManager::TextUndoManager( TextEngine* p )
 {
@@ -115,9 +111,6 @@ sal_Bool TextUndoManager::Redo()
 void TextUndoManager::UndoRedoStart()
 {
     DBG_ASSERT( GetView(), "Undo/Redo: Active View?" );
-
-//  if ( GetView() )
-//      GetView()->HideSelection();
 }
 
 void TextUndoManager::UndoRedoEnd()
@@ -133,12 +126,6 @@ void TextUndoManager::UndoRedoEnd()
 
     mpTextEngine->FormatAndUpdate( GetView() );
 }
-
-
-//
-// TextUndo
-// ========
-//
 
 TextUndo::TextUndo( TextEngine* p )
 {
@@ -160,12 +147,6 @@ void TextUndo::SetSelection( const TextSelection& rSel )
         GetView()->ImpSetSelection( rSel );
 }
 
-
-//
-// TextUndoDelPara
-// ===============
-//
-
 TextUndoDelPara::TextUndoDelPara( TextEngine* pTextEngine, TextNode* pNode, sal_uLong nPara )
                     : TextUndo( pTextEngine )
 {
@@ -183,7 +164,7 @@ TextUndoDelPara::~TextUndoDelPara()
 void TextUndoDelPara::Undo()
 {
     GetTextEngine()->InsertContent( mpNode, mnPara );
-    mbDelObject = sal_False;    // gehoert wieder der Engine
+    mbDelObject = sal_False;    // belongs again to the engine
 
     if ( GetView() )
     {
@@ -194,18 +175,17 @@ void TextUndoDelPara::Undo()
 
 void TextUndoDelPara::Redo()
 {
-    // pNode stimmt nicht mehr, falls zwischendurch Undos, in denen
-    // Absaetze verschmolzen sind.
+    // pNode is not valid anymore in case an Undo joined paragraphs
     mpNode = GetDoc()->GetNodes().GetObject( mnPara );
 
     delete GetTEParaPortions()->GetObject( mnPara );
     GetTEParaPortions()->Remove( mnPara );
 
-    // Node nicht loeschen, haengt im Undo!
+    // do not delete Node because of Undo!
     GetDoc()->GetNodes().Remove( mnPara );
     GetTextEngine()->ImpParagraphRemoved( mnPara );
 
-    mbDelObject = sal_True; // gehoert wieder dem Undo
+    mbDelObject = sal_True; // belongs again to the Undo
 
     sal_uLong nParas = GetDoc()->GetNodes().Count();
     sal_uLong n = mnPara < nParas ? mnPara : (nParas-1);
@@ -218,12 +198,6 @@ OUString TextUndoDelPara::GetComment () const
 {
     return ResId(STR_TEXTUNDO_DELPARA, *ImplGetResMgr());
 }
-
-
-//
-// TextUndoConnectParas
-// ====================
-//
 
 TextUndoConnectParas::TextUndoConnectParas( TextEngine* pTextEngine, sal_uLong nPara, sal_uInt16 nPos )
                     :   TextUndo( pTextEngine )
@@ -253,12 +227,6 @@ OUString TextUndoConnectParas::GetComment () const
     return ResId(STR_TEXTUNDO_CONNECTPARAS, *ImplGetResMgr());
 }
 
-
-//
-// TextUndoSplitPara
-// =================
-//
-
 TextUndoSplitPara::TextUndoSplitPara( TextEngine* pTextEngine, sal_uLong nPara, sal_uInt16 nPos )
                     : TextUndo( pTextEngine )
 {
@@ -286,12 +254,6 @@ OUString TextUndoSplitPara::GetComment () const
 {
     return ResId(STR_TEXTUNDO_SPLITPARA, *ImplGetResMgr());
 }
-
-
-//
-// TextUndoInsertChars
-// ===================
-//
 
 TextUndoInsertChars::TextUndoInsertChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const XubString& rStr )
                     : TextUndo( pTextEngine ),
@@ -341,13 +303,6 @@ OUString TextUndoInsertChars::GetComment () const
     Shorten(sText);
     return OUString(ResId(STR_TEXTUNDO_INSERTCHARS, *ImplGetResMgr())).replaceAll("$1", sText);
 }
-
-
-
-//
-// TextUndoRemoveChars
-// ===================
-//
 
 TextUndoRemoveChars::TextUndoRemoveChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const XubString& rStr )
                     : TextUndo( pTextEngine ),
