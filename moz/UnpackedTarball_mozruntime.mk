@@ -7,8 +7,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,moz/runtime,$(call gb_CustomTarget_get_workdir,moz/runtime)))
+$(eval $(call gb_UnpackedTarball_UnpackedTarball,mozruntime))
 
-$(eval $(call gb_Package_add_file,moz/runtime,bin/mozruntime.zip,mozruntime.zip))
+$(eval $(call gb_UnpackedTarball_set_tarball,mozruntime,$(MOZ_ZIP_RUNTIME)))
 
 # vim: set noet sw=4 ts=4:

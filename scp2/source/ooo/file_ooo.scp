@@ -595,9 +595,9 @@ End
 
 File gid_File_Mozilla_Runtime
     TXT_FILE_BODY;
-    Styles = (ARCHIVE);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = "mozruntime.zip";
+    Styles = (FILELIST);
+    Dir = FILELIST_DIR;
+    Name = "moz_runtime.filelist";
 End
 
 #endif
