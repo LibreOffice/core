@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Package_Package,extras_glade,$(call gb_CustomTarget_get_workdir,extras/source/glade)))
 
-$(eval $(call gb_Package_add_file,extras_glade,pck/libreoffice-catalog.xml,libreoffice-catalog.xml))
+$(eval $(call gb_Package_set_outdir,extras_glade,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_file,extras_glade,share/glade/libreoffice-catalog.xml,libreoffice-catalog.xml))
 
 # vim: set noet sw=4 ts=4:

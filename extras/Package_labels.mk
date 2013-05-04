@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Package_Package,extras_labels,$(SRCDIR)/extras/source/labels))
 
-$(eval $(call gb_Package_add_file,extras_labels,pck/labels.xml,labels.xml))
+$(eval $(call gb_Package_set_outdir,extras_labels,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_file,extras_labels,share/labels/labels.xml,labels.xml))
 
 # vim: set noet sw=4 ts=4:

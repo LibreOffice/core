@@ -161,17 +161,6 @@
 
 #define JARFILENAME(name) STRING(CONCAT2(name,.jar))
 
-#define PACKED_SHELLNEW_FILE_BODY \
-        TXT_FILE_BODY; \
-        Styles = (PACKED,WORKSTATION, OVERWRITE); \
-        Dir    = gid_Dir_Shellnew
-
-#define STD_SHELLNEW_FILE(id,name) \
-    File id \
-        PACKED_SHELLNEW_FILE_BODY; \
-        Name      = STRING(name) ; \
-    End
-
 #define SPECIAL_COMPONENT_LIB_FILE(id,name) \
     File id \
         Name     = SPECIAL_COMPONENT_LIB_NAME(name); \
