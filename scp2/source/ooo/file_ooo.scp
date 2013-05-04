@@ -172,24 +172,13 @@ End
 
 #endif
 
-#ifdef UNX
-
-File gid_File_Bin_Open_Url
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "open-url";
-    Styles = (PACKED);
-End
-
-#endif
-
 #if defined UNX && ! defined MACOSX
 
 File gid_File_Bin_Gnome_Open_Url
     BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "gnome-open-url";
-    Styles = (PACKED);
+    Dir = FILELIST_DIR;
+    Name = "shell_scripts_gnome.filelist";
+    Styles = (FILELIST, PACKED);
 End
 
 File gid_File_Bin_Gnome_Open_Url_Bin
@@ -199,25 +188,18 @@ File gid_File_Bin_Gnome_Open_Url_Bin
     Styles = (PACKED);
 End
 
-File gid_File_Bin_Tde_Open_Url
+File gid_File_shell_scripts
     BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "tde-open-url";
-    Styles = (PACKED);
+    Dir = FILELIST_DIR;
+    Name = "shell_scripts.filelist";
+    Styles = (FILELIST, PACKED);
 End
 
 File gid_File_Bin_Kde_Open_Url
     BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "kde-open-url";
-    Styles = (PACKED);
-End
-
-File gid_File_Bin_Cde_Open_Url
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "cde-open-url";
-    Styles = (PACKED);
+    Dir = FILELIST_DIR;
+    Name = "shell_scripts_kde.filelist";
+    Styles = (FILELIST, PACKED);
 End
 
 #endif
@@ -233,17 +215,21 @@ End
 
 #endif
 
+#ifdef UNX
+File gid_File_Bin_Senddoc
+    BIN_FILE_BODY;
+    Dir = FILELIST_DIR;
+    Name = "shell_senddoc.filelist";
+    Styles = (FILELIST, PACKED);
+End
+#else
 File gid_File_Bin_Senddoc
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
-  #ifdef UNX
-    Name = "senddoc";
-    Styles = (PACKED);
-  #else
     Name = "senddoc.exe";
     Styles = (PACKED);
-  #endif
 End
+#endif
 
 #if defined(UNX) && !defined(MACOSX) && !defined(LIBO_HEADLESS)
 

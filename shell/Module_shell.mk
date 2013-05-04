@@ -107,6 +107,9 @@ $(eval $(call gb_Module_add_targets,shell,\
 	Library_cmdmail \
 	Library_syssh \
 	Package_scripts \
+	Package_scripts_gnome \
+	Package_scripts_kde \
+	Package_senddoc \
 	StaticLibrary_xmlparser \
 ))
 

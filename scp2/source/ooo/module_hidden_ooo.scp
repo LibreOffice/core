@@ -89,10 +89,7 @@ Module gid_Module_Root_Files_2
 	Sortkey = "1200";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
-	Files = (gid_File_Bin_Cde_Open_Url,
-	gid_File_Bin_Tde_Open_Url,
-	gid_File_Bin_Kde_Open_Url,
-	gid_File_Bin_Open_Url,
+	Files = (gid_File_shell_scripts,
 	gid_File_Bin_Pluginapp,
 	gid_File_Bin_Senddoc,
 	gid_File_Bin_Gengal,
