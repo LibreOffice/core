@@ -377,6 +377,10 @@ short ScTable::CompareCell( sal_uInt16 nSort,
     short nRes = 0;
 
     CellType eType1 = CELLTYPE_NONE, eType2 = CELLTYPE_NONE;
+    if (pCell1)
+        eType1 = pCell1->GetCellType();
+    if (pCell2)
+        eType2 = pCell2->GetCellType();
 
     if (pCell1)
     {
