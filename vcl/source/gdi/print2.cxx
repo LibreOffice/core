@@ -641,7 +641,6 @@ static bool ImplIsActionHandlingTransparency( const MetaAction& rAct )
     }
 }
 
-// remove comment to enable highlighting of generated output
 bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutMtf,
                                                      long nMaxBmpDPIX, long nMaxBmpDPIY,
                                                      bool bReduceTransparency, bool bTransparencyAutoMode,
@@ -1341,6 +1340,20 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
 
         rOutMtf.SetPrefMapMode( rInMtf.GetPrefMapMode() );
         rOutMtf.SetPrefSize( rInMtf.GetPrefSize() );
+
+#if OSL_DEBUG_LEVEL > 1
+        // iterate over all aCCList members and generate rectangles for the bounding boxes
+        rOutMtf.AddAction( new MetaFillColorAction( COL_WHITE, false ) );
+        for( aCurr = aCCList.begin(); aCurr != aLast; ++aCurr )
+        {
+            if( aCurr->bIsSpecial )
+                rOutMtf.AddAction( new MetaLineColorAction( COL_RED, true) );
+            else
+                rOutMtf.AddAction( new MetaLineColorAction( COL_BLUE, true) );
+
+            rOutMtf.AddAction( new MetaRectAction( aMapModeVDev.PixelToLogic( aCurr->aBounds ) ) );
+        }
+#endif
     }
     return bTransparent;
 }
