@@ -346,6 +346,7 @@ include $(foreach class, \
 	AutoInstallLibs \
 	Postprocess \
 	PackageSet \
+	GeneratedPackage \
 ,$(GBUILDDIR)/$(class).mk)
 
 $(eval $(call gb_Helper_process_executable_registrations))
