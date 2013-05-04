@@ -27,16 +27,6 @@
 
 #include "macros.inc"
 
-#ifndef WITHOUT_MATHMLDTD
-File gid_File_Html_W3c_Ipr
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Dtd_Math_1_01;
-    Name = "w3c_ipr_software_notice.html";
-End
-
-#endif
-
 STD_LIB_FILE( gid_File_Lib_Sm , sm)
 
 STD_LIB_FILE( gid_File_Lib_Smd , smd)

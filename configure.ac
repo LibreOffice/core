@@ -768,11 +768,6 @@ AC_ARG_ENABLE(mpl-subset,
         [Don't compile any pieces which are not MPL or more liberrally licensed])
 )
 
-AC_ARG_ENABLE(mathmldtd,
-    AS_HELP_STRING([--enable-mathmldtd],
-        [Enable bundling of (modified) MathML 1.01 DTD.])
-)
-
 AC_ARG_ENABLE(evolution2,
     AS_HELP_STRING([--enable-evolution2],
         [Allows the built-in evolution 2 addressbook connectivity build to be
@@ -10651,23 +10646,6 @@ else
     ENABLE_KAB=
 fi
 AC_SUBST(ENABLE_KAB)
-
-dnl ===================================================================
-dnl Test whether to include MathMLDTD
-dnl ===================================================================
-AC_MSG_CHECKING([whether to include MathMLDTD])
-if test -n "$enable_mathmldtd"; then
-    if test "$enable_mathmldtd" = "no"; then
-        AC_MSG_RESULT([no])
-        SCPDEFS="$SCPDEFS -DWITHOUT_MATHMLDTD"
-    else
-        AC_MSG_RESULT([yes])
-        BUILD_TYPE="$BUILD_TYPE MATHMLDTD"
-    fi
-else
-    AC_MSG_RESULT([no])
-    SCPDEFS="$SCPDEFS -DWITHOUT_MATHMLDTD"
-fi
 
 dnl ===================================================================
 dnl Test which themes to include
