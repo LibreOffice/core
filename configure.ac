@@ -8304,7 +8304,7 @@ dnl ===================================================================
 dnl Check for NPAPI interface to plug browser plugins into LibreOffice documents
 dnl ===================================================================
 AC_MSG_CHECKING([whether to plug browser plugins into LibreOffice documents])
-if test "$_os" != Android -a "$_os" != iOS
+if test "$_os" != Android -a "$_os" != iOS -a "$enable_headless" != yes
 then
     AC_MSG_RESULT([yes])
     ENABLE_NPAPI_FROM_BROWSER=YES
