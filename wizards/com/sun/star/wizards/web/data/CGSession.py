@@ -25,7 +25,7 @@ from .CGDesign import CGDesign
 from .CGGeneralInfo import CGGeneralInfo
 from .CGPublish import CGPublish
 
-from xml.dom.minidom import Document
+from com.sun.star.beans import StringPair
 
 class CGSession(ConfigGroup):
 
@@ -40,13 +40,26 @@ class CGSession(ConfigGroup):
         self.cp_Publishing = WebConfigSet(CGPublish)
         self.valid = False
 
-    def createDOM(self, parent):
-        root = XMLHelper.addElement(
-            parent, "session", ["name", "screen-size"],
-            [self.cp_Name, self.getScreenSize()])
+    def createDOM(self, doc):
+        root = XMLHelper.addElement(doc, "session",
+                                    ["name", "screen-size"],
+                                    [self.cp_Name, self.getScreenSize()])
         self.cp_GeneralInfo.createDOM(root)
         self.cp_Content.createDOM(root)
         return root
+
+    def serializeNode(self, node):
+        xBuffer = self.root.xmsf.createInstance("com.sun.star.io.Pipe")
+        xTextInputStream = self.root.xmsf.createInstance("com.sun.star.io.TextInputStream")
+        xSaxWriter = self.root.xmsf.createInstance( "com.sun.star.xml.sax.Writer" )
+        xSaxWriter.setOutputStream(xBuffer)
+        xTextInputStream.setInputStream(xBuffer)
+        node.serialize(xSaxWriter, tuple([StringPair()]))
+        result = ""
+        while (not xTextInputStream.isEOF()):
+            sLine = xTextInputStream.readLine()
+            if (not sLine == "") and (not sLine.startswith("<?xml")):
+                result = result + sLine + "\n"
 
     def getScreenSize(self):
         tmp_switch_var1 = self.cp_Design.cp_OptimizeDisplaySize
@@ -66,6 +79,7 @@ class CGSession(ConfigGroup):
         return self.root.cp_Styles.getElement(self.cp_Design.cp_Style)
 
     def createDOM1(self):
-        doc = Document()
+        factory = self.root.xmsf.createInstance("com.sun.star.xml.dom.DocumentBuilder")
+        doc = factory.newDocument()
         self.createDOM(doc)
         return doc

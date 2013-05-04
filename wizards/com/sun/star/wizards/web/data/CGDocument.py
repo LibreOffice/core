@@ -23,6 +23,7 @@ from ...document.OfficeDocument import OfficeDocument
 from ...common.Properties import Properties
 from ...common.PropertyNames import PropertyNames
 from ...common.FileAccess import FileAccess
+from ...common.XMLHelper import XMLHelper
 from ..TypeDetection import *
 from ...common.Desktop import Desktop
 
@@ -209,9 +210,21 @@ class CGDocument(ConfigGroup):
     def createDOM(self, parent):
         d = self.getSettings().cp_DefaultSession.cp_Design
         exp = self.getSettings().cp_Exporters.getElement(self.cp_Exporter)
-        '''return XMLHelper.addElement(parent, "document", ["title", "description", "author", "format", "filename", "create-date", "update-date", "pages", "size", "icon", "dir", "fn"], [d.cp_DisplayTitle ? self.cp_Title : "", d.cp_DisplayDescription ? self.cp_Description : "", d.cp_DisplayAuthor ? self.cp_Author : "", d.cp_DisplayFileFormat ? getTargetTypeName(exp) : "", d.cp_DisplayFilename ? self.localFilename : "", d.cp_DisplayCreateDate ? self.createDate() : "", d.cp_DisplayUpdateDate ? self.updateDate() : "", d.cp_DisplayPages and (self.pages > -1) ? "" + self.pages() : "", #TODO when do i calculate pages?
-        d.cp_DisplaySize ? sizeKB() : "", #TODO when do i calculate size?
-        d.cp_DisplayFormatIcon ? getIcon(exp) : "", self.dirName, self.urlFilename])'''
+        return XMLHelper.addElement(parent, "document",
+                                    ["title", "description", "author", "format", "filename",
+                                     "create-date", "update-date", "pages", "size", "icon",
+                                     "dir", "fn"],
+                                    [self.cp_Title if (d.cp_DisplayTitle) else "",
+                                     self.cp_Description if (d.cp_DisplayDescription) else "",
+                                     self.cp_Author if (d.cp_DisplayAuthor) else "",
+                                     self.getTargetTypeName(exp) if (d.cp_DisplayFileFormat) else "",
+                                     self.localFilename if (d.cp_DisplayFilename) else "",
+                                     self.createDate() if (d.cp_DisplayCreateDate) else "",
+                                     self.updateDate() if (d.cp_DisplayUpdateDate) else  "",
+                                     "" + self.getPages() if (d.cp_DisplayPages and (self.pages > -1)) else "", #TODO when do i calculate pages?
+                                     self.sizeKB() if (d.cp_DisplaySize) else "", #TODO when do i calculate size?
+                                     self.getIcon(exp) if (d.cp_DisplayFormatIcon) else "",
+                                     self.dirName, self.urlFilename])
 
     def updateDate(self):
         if self.updatedDate is None:
