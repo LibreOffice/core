@@ -29,18 +29,11 @@
 
 #ifndef DISABLE_PYUNO
 
-File gid_File_Py_Pythonscript
+File gid_File_scriptproviderforpython
     TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "pythonscript.py";
-    Styles = (PACKED);
-End
-
-File gid_File_Rdb_Scriptproviderforpython
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Program_Services;
-    Name = "scriptproviderforpython.rdb";
-    Styles = (PACKED);
+    Dir = FILELIST_DIR;
+    Name = "scriptproviderforpython.filelist";
+    Styles = (FILELIST, PACKED);
 End
 
 File gid_File_Lib_Pyuno

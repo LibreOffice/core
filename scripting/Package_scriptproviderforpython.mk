@@ -9,7 +9,9 @@
 
 $(eval $(call gb_Package_Package,scriptproviderforpython,$(SRCDIR)/scripting/source/pyprov))
 
-$(eval $(call gb_Package_add_file,scriptproviderforpython,xml/scriptproviderforpython.rdb,scriptproviderforpython.rdb))
-$(eval $(call gb_Package_add_file,scriptproviderforpython,bin/pythonscript.py,pythonscript.py))
+$(eval $(call gb_Package_set_outdir,scriptproviderforpython,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_file,scriptproviderforpython,program/services/scriptproviderforpython.rdb,scriptproviderforpython.rdb))
+$(eval $(call gb_Package_add_file,scriptproviderforpython,program/pythonscript.py,pythonscript.py))
 
 # vim: set noet sw=4 ts=4:
