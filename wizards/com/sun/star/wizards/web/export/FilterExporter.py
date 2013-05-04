@@ -30,14 +30,12 @@ class FilterExporter(AbstractExporter):
     props = Properties()
 
     def __init__(self, exporter_):
-        print ("DEBUG !!! FilterExporter.init - exporter: ", exporter_)
         super(FilterExporter, self).__init__(exporter_)
         self.filterName = self.getArgument("Filter", exporter_)
 
     # (non-Javadoc)
     # @see com.sun.star.wizards.web.export.Exporter#export(java.lang.Object, java.io.File, com.sun.star.wizards.web.data.CGSettings, com.sun.star.lang.XMultiServiceFactory)
     def export(self, source, target, xmsf, task):
-        print ("DEBUG !!! FilterExporter.export")
         result = True
         document = None
 

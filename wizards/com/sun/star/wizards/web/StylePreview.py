@@ -49,7 +49,6 @@ class StylePreview(object):
             self.tempDir, "images/background.gif")
 
         self.wwRoot = wwRoot_
-        print ("WARNING !!! StylePreview init (review) - source, target: ", self.wwRoot, self.htmlFilename)
         self.fileAccess.copy(FileAccess.connectURLs(
             self.wwRoot, "preview.html"), self.htmlFilename)
 
@@ -71,11 +70,9 @@ class StylePreview(object):
             # a solaris bug workaround
             # TODO
             #copy the background image to the temp directory.
-            print ("WARNING !!! refresh (background) - source, target: ", background, self.backgroundFilename)
             self.fileAccess.copy(background, self.backgroundFilename)
 
         #copy the actual css to the temp directory
-        print ("WARNING !!! refresh (css) - source, target: ", css, self.tempDir)
         self.fileAccess.copy(css, self.cssFilename)
 
     def cleanup(self):

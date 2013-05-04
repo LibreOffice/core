@@ -52,7 +52,7 @@ class ProcessErrorHandler(AbstractErrorHandler, ProcessErrors):
         elif ix == ProcessErrors.ERROR_GENERATE_COPY:
             return self.resources.resErrTOCMedia
         elif ix == ProcessErrors.ERROR_PUBLISH:
-            return self.resources.resErrPublish.replace(self.URL, obj.URL)
+            return self.resources.resErrPublish.replace(self.URL, obj.cp_URL)
         elif (ix == ProcessErrors.ERROR_EXPORT or ix == ProcessErrors.ERROR_PUBLISH_MEDIA):
             return self.resources.resErrPublishMedia
         elif ix == ProcessErrors.ERROR_CLEANUP:

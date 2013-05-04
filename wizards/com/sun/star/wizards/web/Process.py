@@ -31,9 +31,6 @@ from .data.CGExporter import CGExporter
 from .data.CGLayout import CGLayout
 from .data.CGPublish import CGPublish
 from .data.CGSettings import CGSettings
-#from .export.Exporter import Exporter
-#from .export.AbstractExporter import AbstractExporter
-#from .export.CopyExporter import CopyExporter
 
 from com.sun.star.io import IOException
 from com.sun.star.uno import SecurityException
@@ -141,15 +138,12 @@ class Process(ProcessErrors):
                 # methods returns false, the next
                 # will not be called.
                 self.result = self.createTempDir(self.myTask) and self.export(self.myTask) and self.generate(self.tempDir, self.myTask) and self.publish(self.tempDir, self.myTask)
-                print ("runProcess -- result: ", self.result)
             finally:
                 # cleanup must be called.
                 self.result = self.result and self.cleanup(self.myTask)
-                print ("runProcess (cleanup) -- result: ", self.result)
         except Exception:
             traceback.print_exc()
             self.result = False
-            print ("runProcess (Exception) -- result: ", self.result)
 
         if not self.result:
             # this is a bug protection.
@@ -167,8 +161,7 @@ class Process(ProcessErrors):
         except Exception:
             traceback.print_exc()
         if self.tempDir is None:
-            print ("WARNING !!! createTempDir -- error")
-            #self.error(None, None, ProcessErrors.ERROR_MKDIR, ErrorHandler.ERROR_PROCESS_FATAL)
+            self.error(None, None, ProcessErrors.ERROR_MKDIR, ErrorHandler.ERROR_PROCESS_FATAL)
             return False
         else:
             task.advance(True)
@@ -188,11 +181,9 @@ class Process(ProcessErrors):
     # delete the temporary directory
     # @return true should continue
     def cleanup(self, task):
-        print ("WARNING !!! cleanup")
         task.setSubtaskName(TASK_FINISH)
         b = self.fileAccess.delete(self.tempDir)
         if not b:
-            print ("WARNING !!! cleanup -- error")
             self.error(None, None, ProcessErrors.ERROR_CLEANUP, ErrorHandler.ERROR_WARNING)
         task.advance(b)
         return b
@@ -205,7 +196,6 @@ class Process(ProcessErrors):
         # 1. .css
         sourceDir = FileAccess.connectURLs(settings.workPath, "styles")
         filename = settings.cp_DefaultSession.getStyle().cp_CssHref
-        print ("WARNING !!! copyMedia (css) - source, filenamem, target, targetName: ", sourceDir, filename, targetDir, "style.css")
         copy.copy2(sourceDir, filename, targetDir, "style.css")
 
         task.advance(True)
@@ -215,7 +205,6 @@ class Process(ProcessErrors):
         if (background is not None and background is not ""):
             sourceDir = FileAccess.getParentDir(background)
             filename = background[len(sourceDir):]
-            print ("WARNING !!! copyMedia (background) - source, filenamem, target, targetName: ", sourceDir, filename, targetDir + "/images", "background.gif")
             copy.copy2(sourceDir, filename, targetDir + "/images", "background.gif")
 
         task.advance(True)
@@ -232,7 +221,6 @@ class Process(ProcessErrors):
     def copyStaticImages(self, copy, settings, targetDir):
         source = FileAccess.connectURLs(settings.workPath, "images")
         target = targetDir + "/images"
-        print ("WARNING !!! copyStaticImages - source, target: ", source, target)
         copy.copy(source, target)
 
     # publish the given directory.
@@ -249,7 +237,6 @@ class Process(ProcessErrors):
         except Exception as ex:
             # error in copying media
             traceback.print_exc()
-            print ("WARNING !!! publish -- error")
             self.error(ex, "", ProcessErrors.ERROR_PUBLISH_MEDIA, ErrorHandler.ERROR_PROCESS_FATAL)
             return False
         for p in configSet.childrenList:
@@ -273,14 +260,12 @@ class Process(ProcessErrors):
         try:
             task.advance(True)
             url = publish.url
-            print ("WARNING !!! publish1 - source, target: ", folder, url)
             copy.copy(folder, url)
             task.advance(True)
             return True
         except Exception as e:
             task.advance(False)
             traceback.print_exc()
-            print ("WARNING !!! publish1 -- error")
             return self.error(e, publish, ProcessErrors.ERROR_PUBLISH, ErrorHandler.ERROR_NORMAL_IGNORE)
 
     # Generates the TOC pages for the current session.
@@ -297,9 +282,7 @@ class Process(ProcessErrors):
             doc = self.settings.cp_DefaultSession.createDOM1()
             self.generate1(self.xmsf, layout, doc, self.fileAccess, targetDir, task)
         except Exception as ex:
-            print ("WARNING !!! generate (calling generate1  -- error")
             traceback.print_exc()
-            print ("WARNING !!! publish1 -- error")
             self.error(ex, "", ProcessErrors.ERROR_GENERATE_XSLT, ErrorHandler.ERROR_PROCESS_FATAL)
             return False
 
@@ -315,7 +298,6 @@ class Process(ProcessErrors):
             result = True
         except Exception as ex:
             task.advance(False)
-            print ("WARNING !!! generate (copying layouts) -- error")
             traceback.print_exc()
             return self.error(ex, None, ProcessErrors.ERROR_GENERATE_COPY, ErrorHandler.ERROR_NORMAL_ABORT)
         return result
@@ -331,7 +313,6 @@ class Process(ProcessErrors):
     @classmethod
     def copyLayoutFiles(self, ucb, fileAccess, settings, layout, targetDir):
         filesPath = fileAccess.getURL(FileAccess.connectURLs(settings.workPath, "layouts/"), layout.cp_FSName)
-        print ("WARNING !!! copyLayoutFiles - source, target: ", filesPath, targetDir)
         ucb.copy1(filesPath, targetDir, ExtensionVerifier("xsl"))
 
     # generates the TOC page for the given layout.
@@ -454,7 +435,6 @@ class Process(ProcessErrors):
             # each content (at the moment there is only one :-( )
             # is created in its own directory.
             # faileure here is fatal.
-            print ("export1 - folder and cp_Name: ", folder, content.cp_Name)
             contentDir = self.fileAccess.createNewDir(folder, content.cp_Name);
             if (contentDir is None or contentDir is ""):
                 raise IOException("Directory " + folder + " could not be created.")
@@ -482,19 +462,16 @@ class Process(ProcessErrors):
                 except SecurityException as sx:
                     # nonfatal
                     traceback.print_exc()
-                    print ("WARNING !!! export1 (SecurityException -- error")
                     if (not self.error(sx, item, ProcessErrors.ERROR_EXPORT_SECURITY, ErrorHandler.ERROR_NORMAL_IGNORE)):
                         return False
                     self.result = False
         except IOException as iox:
             # nonfatal
             traceback.print_exc()
-            print ("WARNING !!! export1 (IOException -- error")
             return self.error(iox, content, ProcessErrors.ERROR_EXPORT_IO, ErrorHandler.ERROR_NORMAL_IGNORE)
         except SecurityException as se:
             # nonfatal
             traceback.print_exc()
-            print ("WARNING !!! export1 (SecurityException -- error")
             return self.error(se, content, ProcessErrors.ERROR_EXPORT_SECURITY, ErrorHandler.ERROR_NORMAL_IGNORE)
 
         self.failTask(task, toPerform)
@@ -509,17 +486,14 @@ class Process(ProcessErrors):
         # first I check if the document was already validated...
         if (not doc.valid):
             try:
-                print ("WARNING !!! export2 -- new validation: ")
                 doc.validate(self.xmsf, task)
             except Exception as ex:
                 # fatal
                 traceback.print_exc()
-                print ("WARNING !!! export2 (validation) -- error")
                 self.error(ex, doc, ProcessErrors.ERROR_DOC_VALIDATE, ErrorHandler.ERROR_PROCESS_FATAL)
                 return False
         # get the exporter specified for this document
         exp = doc.cp_Exporter
-        print ("WARNING !!! export2 -- exporter: ", exp)
         exporter = self.settings.cp_Exporters.getElement(exp)
 
         try:
@@ -527,24 +501,18 @@ class Process(ProcessErrors):
              # I take the original filename (docFilename), substract the extension, (docExt) -> (fn)
              # and find an available filename which starts with
              # this filename, but with the new extension. (destExt)
-            print ("WARNING !!! export2 - doc.cp_URL: ", doc.cp_URL)
-            print ("WARNING !!! export2 - doc.localFilename: ", doc.localFilename)
             docFilename = FileAccess.getFilename(doc.cp_URL)
-            print ("WARNING !!! export2 - docFilename: ", docFilename)
 
             docExt = FileAccess.getExtension(docFilename)
-            print ("WARNING !!! export2 - docExt: ", docExt)
             # filename without extension
             #fn = doc.localFilename.substring(0, doc.localFilename.length() - docExt.length() - 1)
             fn = doc.localFilename[:len(doc.localFilename) - len(docExt) - 1]
-            print ("WARNING !!! export2 - fn: ", fn)
 
             # the copyExporter does not change
             # the extension of the target...
             destExt = FileAccess.getExtension(docFilename) \
                 if (exporter.cp_Extension is "") \
                 else exporter.cp_Extension
-            print ("WARNING !!! export2 - destExt: ", destExt)
 
             # if this filter needs to export to its own directory...
             # this is the case in, for example, impress html export
@@ -558,14 +526,12 @@ class Process(ProcessErrors):
             # i get a new filename, so I do not
             # overwrite files...
             f = self.fileAccess.getNewFile(folder, fn, destExt)
-            print ("WARNING !!! export2 - f: ", f)
 
 
             # set filename with extension.
             # this will be used by the exporter,
             # and to generate the TOC.
             doc.urlFilename = FileAccess.getFilename(f)
-            print ("WARNING !!! export2 - : doc.urlFilename", doc.urlFilename)
 
             task.advance(True)
 
@@ -579,13 +545,11 @@ class Process(ProcessErrors):
             except Exception as ex:
                 # nonfatal
                 traceback.print_exc()
-                print ("WARNING !!! export2 (getting exporters) -- error")
                 if (not self.error(ex, doc, ProcessErrors.ERROR_EXPORT, ErrorHandler.ERROR_NORMAL_IGNORE)):
                     return False
         except Exception as ex:
             # nonfatal
             traceback.print_exc()
-            print ("WARNING !!! export2 (general) -- error")
             if (not self.error(ex, doc, ProcessErrors.ERROR_EXPORT_MKDIR, ErrorHandler.ERROR_NORMAL_ABORT)):
                 return False
 
@@ -599,7 +563,6 @@ class Process(ProcessErrors):
     # @return the interaction result
     def error(self, ex, arg1, arg2, errType):
         self.result = False
-        print ("error -- result: ", self.result)
         return self.errorHandler.error(ex, arg1, arg2, errType)
 
 
@@ -621,7 +584,6 @@ class Process(ProcessErrors):
     # @throws IllegalAccessException
     # @throws InstantiationException
     def createExporter(self, export):
-        print ("WANRING !!!! Creating exporter -- class: ", export.cp_ExporterClass)
         pkgname = ".".join(export.cp_ExporterClass.split(".")[3:])
         className = export.cp_ExporterClass.split(".")[-1]
         mod = importlib.import_module(pkgname)
@@ -646,6 +608,4 @@ class Process(ProcessErrors):
     # @return tru if everything went smooth, false
     # if error(s) accured.
     def getResult(self):
-        print ("Process -- getFailed: ", self.myTask.getFailed())
-        print ("Process -- result: ", self.result)
         return (self.myTask.getFailed() == 0) and self.result

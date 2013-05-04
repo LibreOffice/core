@@ -34,12 +34,9 @@ class CopyExporter(AbstractExporter):
 
             task.advance(True)
 
-            print ("WARNING !!! CopyExporter (creating newtarget) - source.urlFilename: ", source.urlFilename)
-
             newTarget = FileAccess.connectURLs(
                     FileAccess.getParentDir(target), source.urlFilename)
 
-            print ("WARNING !!! CopyExporter (export) - source, target: ", source.cp_URL, newTarget)
             b = self.getFileAccess(xmsf).copy(source.cp_URL, newTarget)
 
             task.advance(True)

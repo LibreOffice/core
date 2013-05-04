@@ -36,7 +36,6 @@ class AbstractExporter(Exporter):
     fileAccess = None
 
     def __init__(self, exporter_):
-        print ("DEBUG !!! AbstractExporter.init - exporter: ", exporter_)
         self.exporter = exporter_
 
     def storeToURL(self, officeDocument, props, targetUrl, filterName, filterData):
@@ -65,7 +64,6 @@ class AbstractExporter(Exporter):
             props[0] = Properties.createProperty("Hidden", True)
             props[1] = Properties.createProperty("MacroExecutionMode", NEVER_EXECUTE)
             props[2] = Properties.createProperty("UpdateDocMode", NO_UPDATE)
-            print ("DEBUG !!! openDocument -- URL: ", doc.cp_URL)
             document = desktop.loadComponentFromURL(doc.cp_URL, "_blank", 0, tuple(props))
         except IllegalArgumentException:
             traceback.print_exc()

@@ -40,16 +40,16 @@ This class implements general methods, used by different sub-classes
 
 class WWD_General(WebWizardDialog):
 
-    settings = None
-    folderDialog = None
-    ftpDialog = None
-    zipDialog = None
-    docAddDialog = None
-    fileAccess = None
-
     def __init__(self, xmsf):
         super(WWD_General, self).__init__(xmsf)
         self.xStringSubstitution = SystemDialog.createStringSubstitution(xmsf)
+        self.settings = None
+        self.folderDialog = None
+        self.ftpDialog = None
+        self.zipDialog = None
+        self.docAddDialog = None
+        self.fileAccess = None
+        self.proxies = None
 
     def getStatusDialog(self):
         statusDialog = StatusDialog(
@@ -70,8 +70,8 @@ class WWD_General(WebWizardDialog):
 
     def getDocAddDialog(self):
         self.docAddDialog = SystemDialog.createOpenDialog(self.xMSF)
-        for i in range(WWD_General.settings.cp_Filters.getSize()):
-            f = WWD_General.settings.cp_Filters.getElementAt(i)
+        for i in range(self.settings.cp_Filters.getSize()):
+            f = self.settings.cp_Filters.getElementAt(i)
             if f is not None:
                 self.docAddDialog.addFilter(
                     f.cp_Name.replace("%PRODNAME", self.resources.prodName),
@@ -115,13 +115,12 @@ class WWD_General(WebWizardDialog):
     '''
 
     def getDoc(self, s):
-        print ("DEBUG !!! getDoc -- ", s)
         if (len(s) == 0):
             return None
-        elif (WWD_General.settings.cp_DefaultSession.cp_Content.cp_Documents.getSize() <= s[0]):
+        elif (self.settings.cp_DefaultSession.cp_Content.cp_Documents.getSize() <= s[0]):
             return None
         else:
-            return WWD_General.settings.cp_DefaultSession.cp_Content.cp_Documents.getElementAt(s[0])
+            return self.settings.cp_DefaultSession.cp_Content.cp_Documents.getElementAt(s[0])
 
     '''
     how many documents are in the list?
@@ -129,7 +128,7 @@ class WWD_General(WebWizardDialog):
     '''
 
     def getDocsCount(self):
-        return WWD_General.settings.cp_DefaultSession.cp_Content.cp_Documents.getSize()
+        return self.settings.cp_DefaultSession.cp_Content.cp_Documents.getSize()
 
     '''
     fills the export listbox.
@@ -146,7 +145,7 @@ class WWD_General(WebWizardDialog):
     '''
 
     def getPublisher(self, name):
-        return WWD_General.settings.cp_DefaultSession.cp_Publishing.getElement(name)
+        return self.settings.cp_DefaultSession.cp_Publishing.getElement(name)
 
     '''
     @return true if the checkbox "save session" is checked.
@@ -205,7 +204,7 @@ class WWD_General(WebWizardDialog):
     '''
 
     def checkDocList(self):
-        if WWD_General.settings.cp_DefaultSession.cp_Content.cp_Documents.getSize() \
+        if self.settings.cp_DefaultSession.cp_Content.cp_Documents.getSize() \
                 == 0:
             self.enableSteps(False)
             return False
@@ -229,12 +228,9 @@ class WWD_General(WebWizardDialog):
     '''
 
     def checkPublish2(self, s, text, _property):
-        print ("DEBUG !!! checkPublish2")
         p = self.getPublisher(s)
         if p.cp_Publish:
-            print ("DEBUG !!! Property: ", _property)
             url = getattr(text.Model, _property)
-            print ("DEBUG !!! URL: ", url)
             if url is None or url == "":
                 raise IllegalArgumentException ()
             else:
@@ -253,7 +249,6 @@ class WWD_General(WebWizardDialog):
 
     def checkPublish_(self):
         try:
-            print ("DEBUG !!! checkPublish_")
             return \
                 self.checkPublish2(LOCAL_PUBLISHER, self.txtLocalDir, "Text") \
                 or (not self.proxies and self.checkPublish2(
@@ -272,7 +267,6 @@ class WWD_General(WebWizardDialog):
     '''
 
     def checkPublish(self):
-        print ("DEBUG !!! checkPublish")
         self.enableFinishButton(self.checkPublish_())
 
     '''
