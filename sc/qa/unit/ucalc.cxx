@@ -359,6 +359,9 @@ ScRange insertRangeData(ScDocument* pDoc, const ScAddress& rPos, const char* aDa
     {
         for (size_t j = 0; j < nRowCount; ++j)
         {
+            if (!aData[j][i])
+                continue;
+
             SCCOL nCol = i + rPos.Col();
             SCROW nRow = j + rPos.Row();
             pDoc->SetString(nCol, nRow, rPos.Tab(), OUString(aData[j][i], strlen(aData[j][i]), RTL_TEXTENCODING_UTF8));
@@ -5955,21 +5958,25 @@ void Test::testSortWithFormulaRefs()
 
 void Test::testSort()
 {
-    ScDocument* pDoc = m_xDocShRef->GetDocument();
     OUString aTabName1("test1");
-    pDoc->InsertTab(0, aTabName1);
+    m_pDoc->InsertTab(0, aTabName1);
 
-    const char* aData[][2] = {
-        { "2", "4" },
-        { "4", "1" },
-        { "1", "2" }
-    };
-
-    clearRange( pDoc, ScRange(0, 0, 0, 1, SAL_N_ELEMENTS(aData), 0));
+    ScRange aDataRange;
     ScAddress aPos(0,0,0);
-    ScRange aDataRange = insertRangeData( pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
-    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+    {
+        const char* aData[][2] = {
+            { "2", "4" },
+            { "4", "1" },
+            { "1", "2" },
+            { "1", "23" },
+        };
 
+        clearRange(m_pDoc, ScRange(0, 0, 0, 1, SAL_N_ELEMENTS(aData), 0));
+        aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+    }
+
+    // Insert note in cell B2.
     OUString aHello("Hello");
     OUString aJimBob("Jim Bob");
     ScAddress rAddr(1, 1, 0);
@@ -5984,16 +5991,60 @@ void Test::testSort()
     aSortData.nRow2 = 2;
     aSortData.maKeyState[0].bDoSort = true;
     aSortData.maKeyState[0].nField = 1;
+    aSortData.maKeyState[0].bAscending = true;
 
-    pDoc->Sort(0, aSortData, false, NULL);
-    double nVal = pDoc->GetValue(1,0,0);
+    m_pDoc->Sort(0, aSortData, false, NULL);
+    double nVal = m_pDoc->GetValue(1,0,0);
     ASSERT_DOUBLES_EQUAL(nVal, 1.0);
 
     // check that note is also moved
     pNote = m_pDoc->GetNotes(0)->findByAddress( 1, 0 );
     CPPUNIT_ASSERT(pNote);
 
-    pDoc->DeleteTab(0);
+    clearRange(m_pDoc, ScRange(0, 0, 0, 1, 9, 0)); // Clear A1:B10.
+    {
+        // 0 = empty cell
+        const char* aData[][1] = {
+            { "Title" },
+            { 0 },
+            { 0 },
+            { "12" },
+            { "b" },
+            { "1" },
+            { "9" },
+            { "123" }
+        };
+
+        aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+    }
+
+    aSortData.nCol1 = aDataRange.aStart.Col();
+    aSortData.nCol2 = aDataRange.aEnd.Col();
+    aSortData.nRow1 = aDataRange.aStart.Row();
+    aSortData.nRow2 = aDataRange.aEnd.Row();
+    aSortData.bHasHeader = true;
+    aSortData.maKeyState[0].nField = 0;
+    m_pDoc->Sort(0, aSortData, false, NULL);
+
+    // Title should stay at the top, numbers should be sorted numerically,
+    // numbers always come before strings, and empty cells always occur at the
+    // end.
+    CPPUNIT_ASSERT_EQUAL(OUString("Title"), m_pDoc->GetString(aPos));
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), m_pDoc->GetString(aPos));
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL(OUString("9"), m_pDoc->GetString(aPos));
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL(OUString("12"), m_pDoc->GetString(aPos));
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL(OUString("123"), m_pDoc->GetString(aPos));
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL(OUString("b"), m_pDoc->GetString(aPos));
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(aPos));
+
+    m_pDoc->DeleteTab(0);
 }
 
 void Test::testShiftCells()
