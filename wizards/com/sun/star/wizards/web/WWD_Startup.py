@@ -31,6 +31,7 @@ from .data.CGSessionName import CGSessionName
 from ..ui.event.ListModelBinder import ListModelBinder
 from ..ui.event.UnoDataAware import UnoDataAware
 from ..ui.event.RadioDataAware import RadioDataAware
+from ..ui.event.CommonListener import TerminateListenerProcAdapter
 from ..ui.DocumentPreview import DocumentPreview
 from ..ui.event.DataAware import DataAware
 from ..ui.event.Task import Task
@@ -127,7 +128,8 @@ class WWD_Startup(WWD_General):
         self.buildStepX()
         self.xMSF = xmsf
         xDesktop = Desktop.getDesktop(xmsf)
-        self.myFrame = OfficeDocument.createNewFrame(xmsf, self)
+        self.terminateListener = TerminateListenerProcAdapter(self)
+        self.myFrame = OfficeDocument.createNewFrame(xmsf, self.terminateListener)
         doc = OfficeDocument.createNewDocument(
             self.myFrame, "swriter", False, True)
         self.loadSettings(doc)

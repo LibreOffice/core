@@ -123,7 +123,7 @@ class OfficeDocument(object):
             if listener is not None:
                 xFF = xF.getFrames()
                 xFF.remove(xFrame)
-                xF.addTerminateListener(TerminateListenerProcAdapter(listener))
+                xF.addTerminateListener(listener)
 
         return xFrame
 
@@ -174,8 +174,7 @@ class OfficeDocument(object):
         #and not part of the desktop tree.
         #You are alone with him .-)
         if listener is not None:
-            Desktop.getDesktop(xMSF).addTerminateListener(
-                TerminateListenerProcAdapter(listener))
+            Desktop.getDesktop(xMSF).addTerminateListener(listener)
 
         return xFrame
 

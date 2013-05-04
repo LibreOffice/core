@@ -28,6 +28,7 @@ from ..common.Desktop import Desktop
 from ..ui.PathSelection import PathSelection
 from ..ui.event.UnoDataAware import UnoDataAware
 from ..ui.event.RadioDataAware import RadioDataAware
+from ..ui.event.CommonListener import TerminateListenerProcAdapter
 from ..text.TextElement import TextElement
 from ..text.TextFieldHandler import TextFieldHandler
 from ..document.OfficeDocument import OfficeDocument
@@ -89,7 +90,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             self.nMaxStep = 6
 
             #instatiate The Document Frame for the Preview
-            self.myLetterDoc = LetterDocument(xMSF, self)
+            self.terminateListener = TerminateListenerProcAdapter(self)
+            self.myLetterDoc = LetterDocument(xMSF, self.terminateListener)
 
             #create the dialog
             self.drawNaviBar()

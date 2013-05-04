@@ -26,6 +26,7 @@ from .CGAgenda import CGAgenda
 from ..ui.PathSelection import PathSelection
 from ..ui.event.UnoDataAware import UnoDataAware
 from ..ui.event.RadioDataAware import RadioDataAware
+from ..ui.event.CommonListener import TerminateListenerProcAdapter
 from ..common.NoValidPathException import NoValidPathException
 from ..common.SystemDialog import SystemDialog
 from ..common.Desktop import Desktop
@@ -84,9 +85,10 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
 
             self.initializePaths()
             # initialize the agenda template
+            self.terminateListener = TerminateListenerProcAdapter(self)
             self.myAgendaDoc = AgendaDocument(
                 self.xMSF, self.agenda, self.resources,
-                self.templateConsts, self)
+                self.templateConsts, self.terminateListener)
             self.initializeTemplates()                
 
             self.myAgendaDoc.load(

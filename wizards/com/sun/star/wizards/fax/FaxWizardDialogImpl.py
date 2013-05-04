@@ -23,6 +23,7 @@ from .FaxDocument import FaxDocument
 from ..ui.PathSelection import PathSelection
 from ..ui.event.UnoDataAware import UnoDataAware
 from ..ui.event.RadioDataAware import RadioDataAware
+from ..ui.event.CommonListener import TerminateListenerProcAdapter
 from ..text.TextFieldHandler import TextFieldHandler
 from ..text.TextElement import TextElement
 from ..common.Configuration import Configuration
@@ -81,7 +82,8 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             self.nMaxStep = 5
 
             #instatiate The Document Frame for the Preview
-            self.myFaxDoc = FaxDocument(xMSF, self)
+            self.terminateListener = TerminateListenerProcAdapter(self)
+            self.myFaxDoc = FaxDocument(xMSF, self.terminateListener)
 
             #create the dialog:
             self.drawNaviBar()

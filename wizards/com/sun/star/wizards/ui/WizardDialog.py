@@ -65,6 +65,14 @@ class WizardDialog(UnoDialog2):
         self.sMsgEndAutopilot = self.__oWizardResource.getResText(
             UIConsts.RID_DB_COMMON + 33)
         self.oRoadmap = None
+        self.terminateListener = None
+
+    def activate(self):
+        try:
+            self.xUnoDialog.toFront()
+        except Exception:
+            pass
+            # do nothing;
 
     def itemStateChanged(self, itemEvent):
         try:
@@ -445,8 +453,7 @@ class WizardDialog(UnoDialog2):
 
     def removeTerminateListener(self):
         if self.__bTerminateListenermustberemoved:
-            Desktop.getDesktop(self.xMSF).removeTerminateListener( \
-                TerminateListenerProcAdapter(self))
+            Desktop.getDesktop(self.xMSF).removeTerminateListener(self.terminateListener)
             self.__bTerminateListenermustberemoved = False
 
     '''
@@ -463,9 +470,15 @@ class WizardDialog(UnoDialog2):
         except Exception:
             traceback.print_exc()
 
+    def windowHidden():
+        self.cancelWizard_1()
+
     def queryTermination(self):
         self.activate()
         raise TerminationVetoException()
+
+    def disposing(arg0):
+        self.cancelWizard_1()
 
     def optCreateFromTemplateItemChanged(self):
         self.bEditTemplate = False
