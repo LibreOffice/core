@@ -65,10 +65,6 @@ public:
 
     inline CellType GetCellType() const { return (CellType)eCellType; }
 
-    /** Returns true, if the cell is empty (neither value nor formula nor cell note).
-        Returns false for formula cells returning nothing, use HasEmptyData() for that. */
-    bool            IsBlank() const;
-
     /** ScFormulaCell with formula::svEmptyCell result, or ScNoteCell (may have been
         created due to reference to empty cell). */
     bool            HasEmptyData() const;

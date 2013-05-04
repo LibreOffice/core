@@ -1089,8 +1089,7 @@ bool ScColumn::TestInsertCol( SCROW nStartRow, SCROW nEndRow) const
         bool bTest = true;
         if ( !maItems.empty() )
             for (SCSIZE i=0; (i<maItems.size()) && bTest; i++)
-                bTest = (maItems[i].nRow < nStartRow) || (maItems[i].nRow > nEndRow)
-                        || maItems[i].pCell->IsBlank();
+                bTest = (maItems[i].nRow < nStartRow) || (maItems[i].nRow > nEndRow);
 
         //  AttrArray only looks for merged cells
 

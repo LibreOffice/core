@@ -106,11 +106,6 @@ void ScBaseCell::Delete()
     }
 }
 
-bool ScBaseCell::IsBlank() const
-{
-    return false;
-}
-
 bool ScBaseCell::HasEmptyData() const
 {
     switch ( eCellType )

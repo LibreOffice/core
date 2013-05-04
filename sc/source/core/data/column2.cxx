@@ -1113,19 +1113,7 @@ bool ScColumn::IsEmptyData() const
 
 bool ScColumn::IsEmptyVisData() const
 {
-    if ( maItems.empty() )
-        return true;
-    else
-    {
-        bool bVisData = false;
-        SCSIZE i;
-        for (i=0; i<maItems.size() && !bVisData; i++)
-        {
-            if(!maItems[i].pCell->IsBlank())
-                bVisData = true;
-        }
-        return !bVisData;
-    }
+    return maItems.empty();
 }
 
 SCSIZE ScColumn::VisibleCount( SCROW nStartRow, SCROW nEndRow ) const
@@ -1148,22 +1136,10 @@ SCSIZE ScColumn::VisibleCount( SCROW nStartRow, SCROW nEndRow ) const
 
 SCROW ScColumn::GetLastVisDataPos() const
 {
-    SCROW nRet = 0;
-    if ( !maItems.empty() )
-    {
-        SCSIZE i;
-        bool bFound = false;
-        for (i=maItems.size(); i>0 && !bFound; )
-        {
-            --i;
-            if(!maItems[i].pCell->IsBlank())
-            {
-                bFound = true;
-                nRet = maItems[i].nRow;
-            }
-        }
-    }
-    return nRet;
+    if (maItems.empty())
+        return 0;
+
+    return maItems.back().nRow;
 }
 
 SCROW ScColumn::GetFirstVisDataPos() const
@@ -1184,12 +1160,11 @@ SCROW ScColumn::GetFirstVisDataPos() const
 
 bool ScColumn::HasVisibleDataAt(SCROW nRow) const
 {
-    SCSIZE nIndex;
-    if (Search(nRow, nIndex))
-        if (!maItems[nIndex].pCell->IsBlank())
-            return true;
+    std::vector<ColEntry>::const_iterator it = Search(nRow);
+    if (it == maItems.end())
+        return false;
 
-    return false;
+    return it->nRow == nRow;
 }
 
 bool ScColumn::IsEmptyAttr() const
@@ -1210,15 +1185,12 @@ bool ScColumn::IsEmptyBlock(SCROW nStartRow, SCROW nEndRow) const
     if ( maItems.empty() )
         return true;
 
-    SCSIZE nIndex;
-    Search( nStartRow, nIndex );
-    while ( nIndex < maItems.size() && maItems[nIndex].nRow <= nEndRow )
-    {
-        if ( !maItems[nIndex].pCell->IsBlank() )   // found a cell
-            return false;                           // not empty
-        ++nIndex;
-    }
-    return true;                                    // no cell found
+    std::vector<ColEntry>::const_iterator it = Search(nStartRow);
+    if (it == maItems.end())
+        // All non-empty cells are before nStartRow.
+        return true;
+
+    return (it->nRow > nEndRow);
 }
 
 SCSIZE ScColumn::GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirection eDir ) const
@@ -1236,7 +1208,7 @@ SCSIZE ScColumn::GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirecti
                 i--;
                 if ( maItems[i].nRow < nStartRow )
                     break;
-                bFound = maItems[i].nRow <= nEndRow && !maItems[i].pCell->IsBlank();
+                bFound = maItems[i].nRow <= nEndRow;
             }
             if (bFound)
                 nLines = static_cast<SCSIZE>(nEndRow - maItems[i].nRow);
@@ -1250,7 +1222,7 @@ SCSIZE ScColumn::GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirecti
             {
                 if ( maItems[i].nRow > nEndRow )
                     break;
-                bFound = maItems[i].nRow >= nStartRow && !maItems[i].pCell->IsBlank();
+                bFound = maItems[i].nRow >= nStartRow;
                 i++;
             }
             if (bFound)
@@ -1348,7 +1320,7 @@ SCROW ScColumn::FindNextVisibleRowWithContent(SCROW nRow, bool bForward) const
 
             SCSIZE nIndex;
             bool bThere = Search( nRow, nIndex );
-            if( bThere && !maItems[nIndex].pCell->IsBlank())
+            if (bThere)
                 return nRow;
             else if((bThere ? nIndex+1 : nIndex) >= maItems.size())
                 return MAXROW;
@@ -1380,7 +1352,7 @@ SCROW ScColumn::FindNextVisibleRowWithContent(SCROW nRow, bool bForward) const
 
             SCSIZE nIndex;
             bool bThere = Search( nRow, nIndex );
-            if(bThere && !maItems[nIndex].pCell->IsBlank())
+            if (bThere)
                 return nRow;
             else if(nIndex == 0)
                 return 0;
@@ -1761,8 +1733,6 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, bool bDown) const
     // check if we are in a data area
     SCSIZE nIndex;
     bool bThere = Search(rRow, nIndex);
-    if (bThere && maItems[nIndex].pCell->IsBlank())
-        bThere = false;
 
     size_t nLastIndex = maItems.size() - 1;
     if (bThere)
@@ -1770,8 +1740,6 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, bool bDown) const
         SCROW nNextRow = FindNextVisibleRow(rRow, bDown);
         SCSIZE nNewIndex;
         bool bNextThere = Search(nNextRow, nNewIndex);
-        if(bNextThere && maItems[nNewIndex].pCell->IsBlank())
-            bNextThere = false;
 
         if(bNextThere)
         {
@@ -1781,7 +1749,7 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, bool bDown) const
             {
                 nNextRow = FindNextVisibleRow(nLastRow, bDown);
                 bNextThere = Search(nNextRow, nNewIndex);
-                if(!bNextThere || maItems[nNewIndex].pCell->IsBlank())
+                if (!bNextThere)
                     bNextThere = false;
                 else
                     nLastRow = nNextRow;
@@ -1808,8 +1776,7 @@ bool ScColumn::HasDataAt(SCROW nRow) const
 
     SCSIZE nIndex;
     if (Search(nRow, nIndex))
-        if (!maItems[nIndex].pCell->IsBlank())
-            return true;
+        return true;
 
     return false;
 
