@@ -1,3 +1,24 @@
 The core directory for the impress/draw applications.
 
 Think of impress as a hack on top of draw.
+
+
+sd module contains impress/draw specific code, non-shared UI and part
+of ppt and pptx filter, few other filters too.
+
+the slideshow UI lives here as well, the slideshow engine is in
+slideshow module though (including the 3D transitions engine
+slideshow/source/engine/OGLTrans).
+
+the most used filters are ODF's odp, binary ppt and OOXML's
+pptx. their locations are listed bellow:
+
+ * odp import and export filters are in xmloff module (mostly xmloff/source/draw)
+
+ * ppt import is in sd/source/filter/ppt (big shared chunks are also in svx)
+ * ppt export is in sd/source/filter/eppt (big shared chunks are also in svx)
+
+ * pptx import is in oox/source/ppt (and uses a lot of
+   oox/source/drawingml and oox/source/*)
+ * pptx export is in sd/source/filter/eppt (mostly in pptx-* source
+   files) and shared part is in oox/source/export
