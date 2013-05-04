@@ -15,7 +15,7 @@ ifeq ($(SYSTEM_PYTHON),NO)
 $(eval $(call gb_Module_add_targets,python3,\
 	UnpackedTarball_python3 \
 	ExternalProject_python3 \
-	$(if $(filter MACOSX,$(OS)),Zip_PythonFramework,ExternalPackage_python3) \
+	$(if $(filter MACOSX,$(OS)),GeneratedPackage_python3,ExternalPackage_python3) \
 ))
 
 endif
