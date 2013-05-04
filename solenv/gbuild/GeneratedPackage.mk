@@ -97,6 +97,14 @@ $(call gb_GeneratedPackage_get_target,$(1)) : $(call gb_UnpackedTarball_get_targ
 
 endef
 
+# Depend on an external project.
+#
+# gb_GeneratedPackage_use_external_project package project
+define gb_GeneratedPackage_use_external_project
+$(call gb_GeneratedPackage_get_target,$(1)) : $(call gb_ExternalProject_get_target,$(2))
+
+endef
+
 # Add a dir to the package.
 #
 # The srcdir will be copied to $(INSTDIR) as destdir.
