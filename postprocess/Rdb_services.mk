@@ -276,7 +276,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	desktop/source/migration/services/migrationoo2 \
 	desktop/source/migration/services/migrationoo3 \
 	desktop/source/offacc/offacc \
-	desktop/source/splash/spl \
+	$(if $(ENABLE_HEADLESS),,desktop/source/splash/spl) \
 	extensions/source/abpilot/abp \
 	extensions/source/bibliography/bib \
 	extensions/source/config/ldap/ldapbe2 \
