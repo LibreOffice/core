@@ -33,36 +33,17 @@
 extern "C" {
 int lc_isInstalled(const  char* realFilePath)
 {
-    HKEY hKeySoftware;
-    HKEY hMozillaPlugins;
-    HKEY hStarOffice;
+    HKEY hLibreOffice;
     char sSoPath[SO_PATH_SIZE];
     char sPluginPath[SO_PATH_SIZE];
 
     LONG ret;
-    ret = RegOpenKeyEx(HKEY_LOCAL_MACHINE,  "SOFTWARE",  0,  KEY_READ, &hKeySoftware);
+    ret = RegOpenKeyEx(HKEY_LOCAL_MACHINE,  "SOFTWARE\\MozillaPlugins\\@sun.com/npsopluginmi;version=1.0",  0,  KEY_READ, &hLibreOffice);
     if(ret != ERROR_SUCCESS){
-        ret = RegOpenKeyEx(HKEY_CURRENT_USER,  "SOFTWARE",  0,  KEY_READ, &hKeySoftware);
+        ret = RegOpenKeyEx(HKEY_CURRENT_USER,  "SOFTWARE\\MozillaPlugins\\@sun.com/npsopluginmi;version=1.0",  0,  KEY_READ, &hLibreOffice);
         if(ret != ERROR_SUCCESS){
             return -1;
         }
-    }
-    ret = RegOpenKeyEx(hKeySoftware,  "MozillaPlugins",  0,  KEY_READ, &hMozillaPlugins);
-    if(ret != ERROR_SUCCESS){
-        RegCloseKey(hKeySoftware);
-        if( ret == ERROR_FILE_NOT_FOUND)
-            return 1;
-        else
-            return -1;
-    }
-    ret = RegOpenKeyEx(hMozillaPlugins,  "@sun.com/npsopluginmi;version=1.0",  0,  KEY_READ, &hStarOffice);
-    if(ret != ERROR_SUCCESS){
-        RegCloseKey(hKeySoftware);
-        RegCloseKey(hMozillaPlugins);
-        if( ret == ERROR_FILE_NOT_FOUND)
-            return 1;
-        else
-            return -1;
     }
 
     if((realFilePath == NULL) || (strlen(realFilePath) == 0) || (strlen(realFilePath) >= SO_PATH_SIZE))
@@ -76,7 +57,7 @@ int lc_isInstalled(const  char* realFilePath)
     if(ret == 0){
         DWORD  dType = REG_SZ;
         DWORD  dSize = SO_PATH_SIZE;
-        ret = RegQueryValueEx (hStarOffice, "Path", NULL,  &dType , (LPBYTE) sPluginPath, &dSize);
+        ret = RegQueryValueEx (hLibreOffice, "Path", NULL,  &dType , (LPBYTE) sPluginPath, &dSize);
         if(ret == ERROR_SUCCESS){
             if(strcmp(sPluginPath, sSoPath) == 0)
                 ret = 0;
@@ -88,9 +69,7 @@ int lc_isInstalled(const  char* realFilePath)
     }
     else
         ret = -1;
-    RegCloseKey(hStarOffice);
-    RegCloseKey(hMozillaPlugins);
-    RegCloseKey(hKeySoftware);
+    RegCloseKey(hLibreOffice);
     return ret;
 }
 
