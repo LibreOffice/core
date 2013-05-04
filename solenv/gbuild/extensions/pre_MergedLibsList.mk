@@ -77,8 +77,6 @@ gb_EXTRAMERGEDLIBS := \
 	$(call gb_Helper_optional,DBCONNECTIVITY,pcr) \
 	pdffilter \
 	placeware \
-	$(call gb_Helper_optional,PYUNO,pythonloader) \
-	$(call gb_Helper_optional,PYUNO,pyuno) \
 	res \
 	$(call gb_Helper_optional,DBCONNECTIVITY,rpt) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,rptui) \
