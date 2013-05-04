@@ -1395,7 +1395,7 @@
           <value/>
         </prop>
         <prop oor:name="IconSet">
-          <value>0</value>
+          <value>iconset0</value>
         </prop>
         <prop oor:name="OptimizeDisplaySize">
           <value>1</value>
