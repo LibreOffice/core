@@ -249,25 +249,11 @@ File gid_File_framework_dtd
     Name = "framework_dtd.filelist";
 End
 
-File gid_File_Dtd_Dialog
+File gid_File_xmlscript_dtd
     TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
-    Name = "dialog.dtd";
-End
-
-File gid_File_Dtd_Libraries
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
-    Name = "libraries.dtd";
-End
-
-File gid_File_Dtd_Library
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
-    Name = "library.dtd";
+    Styles = (FILELIST, PACKED);
+    Dir = FILELIST_DIR;
+    Name = "xmlscript_dtd.filelist";
 End
 
 File gid_File_Dtd_Manifest
@@ -275,13 +261,6 @@ File gid_File_Dtd_Manifest
     Styles = (FILELIST, PACKED);
     Dir = FILELIST_DIR;
     Name = "package_dtd.filelist";
-End
-
-File gid_File_Dtd_Module
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
-    Name = "module.dtd";
 End
 
 STD_RES_FILE( gid_File_Res_Eps, eps )

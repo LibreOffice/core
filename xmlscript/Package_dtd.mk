@@ -9,9 +9,13 @@
 
 $(eval $(call gb_Package_Package,xmlscript_dtd,$(SRCDIR)/xmlscript))
 
-$(eval $(call gb_Package_add_file,xmlscript_dtd,bin/dialog.dtd,dtd/dialog.dtd))
-$(eval $(call gb_Package_add_file,xmlscript_dtd,bin/libraries.dtd,dtd/libraries.dtd))
-$(eval $(call gb_Package_add_file,xmlscript_dtd,bin/library.dtd,dtd/library.dtd))
-$(eval $(call gb_Package_add_file,xmlscript_dtd,bin/module.dtd,dtd/module.dtd))
+$(eval $(call gb_Package_set_outdir,xmlscript_dtd,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,xmlscript_dtd,share/dtd/officedocument/1_0,\
+	dtd/dialog.dtd \
+	dtd/libraries.dtd \
+	dtd/library.dtd \
+	dtd/module.dtd \
+))
 
 # vim: set noet sw=4 ts=4:
