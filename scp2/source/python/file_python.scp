@@ -102,8 +102,7 @@ End
 #endif
 
 File gid_File_Py_Python_Core
-//FIXME  the binaries and libs in the package need x bit but USE_INTERNAL_RIGHTS does not work so set BIN_FILE_BODY here as a temporary hack which makes everything executable
-    BIN_FILE_BODY;
+    TXT_FILE_BODY;
     Dir = FILELIST_DIR;
     Name = "python3.filelist";
     Styles = (FILELIST,USE_INTERNAL_RIGHTS);
