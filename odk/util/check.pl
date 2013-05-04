@@ -23,26 +23,25 @@
 
 $return = 0;
 
-$PrimaryDir = "$ARGV[0]";
-$SecondaryDir = "$ARGV[1]";
-$OperatingSystem = "$ARGV[2]";
-$ExePrefix = "$ARGV[3]";
+$SdkDir = "$ARGV[0]";
+$OperatingSystem = "$ARGV[1]";
+$ExePrefix = "$ARGV[2]";
 
 sub check_file
 {
     my ($file) = @_;
-    return -e "$PrimaryDir/$file" || -e "$SecondaryDir/$file";
+    return -e "$SdkDir/$file";
 }
 
 sub check_dir
 {
     my ($dir) = @_;
-    return -d "$PrimaryDir/$dir" || -d "$SecondaryDir/$dir";
+    return -d "$SdkDir/$dir";
 }
 
 print "Check for $OperatingSystem\n";
 
-if (-d "$PrimaryDir" || -d "$SecondaryDir") {
+if (-d "$SdkDir") {
     # check binaries
     print "check binaries: ";
     if (check_dir("bin")) {
