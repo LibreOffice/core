@@ -326,13 +326,6 @@ File gid_File_Dtd_Module
     Name = "module.dtd";
 End
 
-File gid_File_Dtd_Office
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
-    Name = "office.dtd";
-End
-
 File gid_File_Dtd_Statusbar
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -493,102 +486,11 @@ End
 
 // mod files
 
-File gid_File_Mod_Chart
+File gid_File_xmloff_dtd
     TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
-    Name = "chart.mod";
-End
-
-File gid_File_Mod_Datastyl
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
-    Name = "datastyl.mod";
-End
-
-File gid_File_Mod_Defs
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
-    Name = "defs.mod";
-End
-
-File gid_File_Mod_Drawing
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
-    Name = "drawing.mod";
-End
-
-File gid_File_Mod_Dtypes
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
-    Name = "dtypes.mod";
-End
-
-File gid_File_Mod_Form
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
-    Name = "form.mod";
-End
-
-File gid_File_Mod_Meta
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
-    Name = "meta.mod";
-End
-
-File gid_File_Mod_Nmspace
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
-    Name = "nmspace.mod";
-End
-
-File gid_File_Mod_Office
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
-    Name = "office.mod";
-End
-
-File gid_File_Mod_Script
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
-    Name = "script.mod";
-End
-
-File gid_File_Mod_Settings
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
-    Name = "settings.mod";
-End
-
-File gid_File_Mod_Style
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
-    Name = "style.mod";
-End
-
-File gid_File_Mod_Table
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
-    Name = "table.mod";
-End
-
-File gid_File_Mod_Text
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
-    Name = "text.mod";
+    Styles = (FILELIST, PACKED);
+    Dir = FILELIST_DIR;
+    Name = "xmloff_dtd.filelist";
 End
 
 #if defined WITH_MOZAB4WIN

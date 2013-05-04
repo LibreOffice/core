@@ -18,22 +18,25 @@
 #
 
 $(eval $(call gb_Package_Package,xmloff_dtd,$(SRCDIR)/xmloff/dtd))
-$(eval $(call gb_Package_add_file,xmloff_dtd,bin/Blocklist.dtd,Blocklist.dtd))
-$(eval $(call gb_Package_add_file,xmloff_dtd,bin/chart.mod,chart.mod))
-$(eval $(call gb_Package_add_file,xmloff_dtd,bin/datastyl.mod,datastyl.mod))
-$(eval $(call gb_Package_add_file,xmloff_dtd,bin/defs.mod,defs.mod))
-$(eval $(call gb_Package_add_file,xmloff_dtd,bin/drawing.mod,drawing.mod))
-$(eval $(call gb_Package_add_file,xmloff_dtd,bin/dtypes.mod,dtypes.mod))
-$(eval $(call gb_Package_add_file,xmloff_dtd,bin/form.mod,form.mod))
-$(eval $(call gb_Package_add_file,xmloff_dtd,bin/meta.mod,meta.mod))
-$(eval $(call gb_Package_add_file,xmloff_dtd,bin/nmspace.mod,nmspace.mod))
-$(eval $(call gb_Package_add_file,xmloff_dtd,bin/office.dtd,office.dtd))
-$(eval $(call gb_Package_add_file,xmloff_dtd,bin/office.mod,office.mod))
-$(eval $(call gb_Package_add_file,xmloff_dtd,bin/openoffice-2.0-schema.rng,openoffice-2.0-schema.rng))
-$(eval $(call gb_Package_add_file,xmloff_dtd,bin/script.mod,script.mod))
-$(eval $(call gb_Package_add_file,xmloff_dtd,bin/settings.mod,settings.mod))
-$(eval $(call gb_Package_add_file,xmloff_dtd,bin/style.mod,style.mod))
-$(eval $(call gb_Package_add_file,xmloff_dtd,bin/table.mod,table.mod))
-$(eval $(call gb_Package_add_file,xmloff_dtd,bin/text.mod,text.mod))
+
+$(eval $(call gb_Package_set_outdir,xmloff_dtd,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,xmloff_dtd,share/dtd/officedocument/1_0,\
+	chart.mod \
+	datastyl.mod \
+	defs.mod \
+	drawing.mod \
+	dtypes.mod \
+	form.mod \
+	meta.mod \
+	nmspace.mod \
+	office.dtd \
+	office.mod \
+	script.mod \
+	settings.mod \
+	style.mod \
+	table.mod \
+	text.mod \
+))
 
 # vim: set noet sw=4 ts=4:
