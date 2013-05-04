@@ -3211,7 +3211,10 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, int eMode)
                 if (aHiddenMulti.IsSelected(nDummyCharPos))
                     continue;
                 std::vector<block>::iterator aFind = std::find_if(aBlocks.begin(), aBlocks.end(), containsPos(nDummyCharPos));
-                aFind->m_aAttrs.push_back(pAttr);
+                if (aFind != aBlocks.end())
+                {
+                    aFind->m_aAttrs.push_back(pAttr);
+                }
             }
         }
     }
