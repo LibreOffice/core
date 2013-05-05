@@ -30,6 +30,13 @@ $(eval $(call gb_Module_add_targets,jvmfwk,\
 endif
 endif
 
+ifneq ($(gb_RUNNABLE_INSTDIR),)
+$(eval $(call gb_Module_add_targets,jvmfwk,\
+	Package_jreproperties_install \
+	Package_rcfiles_install \
+))
+endif
+
 endif
 
 # vim:set noet sw=4 ts=4:

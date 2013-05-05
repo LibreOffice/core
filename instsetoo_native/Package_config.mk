@@ -17,6 +17,4 @@ $(eval $(call gb_Package_add_files,instsetoo_native_config,program,\
 	unorc \
 ))
 
-$(eval $(call gb_Package_add_file,instsetoo_native_config,ure/lib/unorc,unorc.ure))
-
 # vim: set noet sw=4 ts=4:

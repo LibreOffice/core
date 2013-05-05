@@ -7,12 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,ure))
+$(eval $(call gb_Package_Package,jvmfwk_jreproperties_install,$(call gb_CustomTarget_get_workdir,jvmfwk/jreproperties)))
 
-$(eval $(call gb_Module_add_targets,ure,\
-    Package_distribution \
-	$(if $(gb_RUNNABLE_INSTDIR),Package_install) \
-    Rdb_ure \
-))
+$(eval $(call gb_Package_set_outdir,jvmfwk_jreproperties_install,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_file,jvmfwk_jreproperties_install,ure/lib/JREProperties.class,JREProperties.class))
 
 # vim:set noet sw=4 ts=4:
