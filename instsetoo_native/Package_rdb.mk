@@ -11,8 +11,22 @@ $(eval $(call gb_Package_Package,instsetoo_native_rdb,$(OUTDIR)))
 
 $(eval $(call gb_Package_set_outdir,instsetoo_native_rdb,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_file,instsetoo_native_rdb,program/services/services.rdb,xml/services.rdb))
-$(eval $(call gb_Package_add_file,instsetoo_native_rdb,program/types/offapi.rdb,bin/offapi.rdb))
+$(eval $(call gb_Package_add_files,instsetoo_native_rdb,program/services,\
+	xml/services.rdb \
+	$(call gb_Helper_optional,POSTGRESQL,$(if $(filter YES,$(BUILD_POSTGRESQL_SDBC)),xml/postgresql-sdbc.rdb)) \
+	$(if $(filter TRUE,$(DISABLE_SCRIPTING)),,\
+		$(if $(SOLAR_JAVA),\
+			$(if $(filter $(ENABLE_SCRIPTING_BEANSHELL),YES),xml/scriptproviderforbeanshell.rdb) \
+			$(if $(filter $(ENABLE_SCRIPTING_JAVASCRIPT),YES),xml/scriptproviderforjavascript.rdb) \
+		) \
+	) \
+))
+
+$(eval $(call gb_Package_add_files,instsetoo_native_rdb,program/types,\
+	bin/offapi.rdb \
+	bin/oovbaapi.rdb \
+))
+
 $(eval $(call gb_Package_add_file,instsetoo_native_rdb,ure/share/misc/services.rdb,xml/ure/services.rdb))
 $(eval $(call gb_Package_add_file,instsetoo_native_rdb,ure/share/misc/types.rdb,bin/udkapi.rdb))
 
