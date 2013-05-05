@@ -31,6 +31,7 @@ $(packimages_DIR)/%.zip : \
 		$(packimages_DIR)/sorted.lst \
 		$(packimages_DIR)/commandimagelist.ilst \
 		$(call gb_Helper_optional,HELP,$(helpimages_DIR)/helpimg.ilst) \
+		$(call gb_Helper_optional,DBCONNECTIVITY,$(if $(SOLAR_JAVA),$(SRCDIR)/connectivity/source/drivers/hsqldb/hsqlui.ilst)) \
 		$(call gb_Postprocess_get_target,AllResources) \
 		$(call gb_Postprocess_get_target,AllUIConfigs)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
@@ -47,6 +48,7 @@ $(packimages_DIR)/%.zip : \
 			-l $(dir $(call gb_ResTarget_get_imagelist_target)) \
 			-l $(dir $(call gb_UIConfig_get_imagelist_target)) \
 			-l $(dir $(call gb_UIConfig_get_imagelist_target,modules/)) \
+			$(call gb_Helper_optional,DBCONNECTIVITY,$(if $(SOLAR_JAVA),-l $(SRCDIR)/connectivity/source/drivers/hsqldb)) \
 			-s $< -o $@ \
 			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
 
