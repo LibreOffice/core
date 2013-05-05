@@ -62,7 +62,7 @@ void SAL_CALL SimpleToolBoxController::statusChanged (const css::frame::FeatureS
     nItemBits &= ~TIB_CHECKABLE;
     TriState eState = STATE_NOCHECK;
 
-    sal_Bool bValue;
+    sal_Bool bValue = sal_False;
     if (rEvent.State >>= bValue)
     {
         // Boolean, treat it as checked/unchecked
