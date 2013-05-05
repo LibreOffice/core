@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//9Sw\u003d",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Impress.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-05-05T20:46:19Z",
+      "side": 1,
+      "message": "no tabs please",
+      "revId": "9503a9873ac1488d9bfbfe408d955491aff74a9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
