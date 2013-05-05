@@ -15,6 +15,11 @@ $(eval $(call gb_Package_add_files,postprocess_registry_install,share/registry,\
 	$(postprocess_XCDS) \
 	$(foreach lang,$(gb_Configuration_LANGS), \
 		Langpack-$(lang).xcd \
+	) \
+))
+
+$(eval $(call gb_Package_add_files,postprocess_registry_install,share/registry/res,\
+	$(foreach lang,$(gb_Configuration_LANGS), \
 		fcfg_langpack_$(lang).xcd \
 		registry_$(lang).xcd \
 	) \
