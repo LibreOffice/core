@@ -13,6 +13,7 @@ $(eval $(call gb_Package_set_outdir,instsetoo_native_setup,$(INSTDIR)))
 
 $(eval $(call gb_Package_add_files,instsetoo_native_setup,program,\
 	ooenv \
+	$(if $(filter TRUE,$(DISABLE_PYTHON)),,pythonloader.unorc) \
 	versionrc \
 ))
 

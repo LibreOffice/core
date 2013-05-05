@@ -11,6 +11,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,instsetoo_native/setup))
 
 $(eval $(call gb_CustomTarget_register_targets,instsetoo_native/setup,\
 	ooenv \
+	$(if $(filter TRUE,$(DISABLE_PYTHON)),,pythonloader.unorc) \
 	ure-link \
 	versionrc \
 ))
@@ -29,6 +30,17 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/ooenv :
 		echo 'export MALLOC_CHECK_=2' && \
 		echo 'export MALLOC_PERTURB_=153' && \
 		echo 'export OOO_DISABLE_RECOVERY=1' \
+	) > $@
+
+$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/pythonloader.unorc :
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
+	( \
+		echo '[Bootstrap]' && \
+		$(if $(filter YES,$(SYSTEM_PYTHON)),\
+			echo PYUNO_LOADER_PYTHONPATH='$$ORIGIN',\
+			echo PYUNO_LOADER_PYTHONHOME='$$ORIGIN/python-core-$(PYTHON_VERSION)' && \
+			echo PYUNO_LOADER_PYTHONPATH='$(foreach dir,lib lib/lib-dynload lib/lib-tk lib/site-packages,$$ORIGIN/python-core-$(PYTHON_VERSION)/$(dir)) $$ORIGIN' \
+		) \
 	) > $@
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/ure-link :
