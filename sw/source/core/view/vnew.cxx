@@ -52,24 +52,23 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
 
     mbDocSizeChgd = sal_False;
 
-    // Wir gehen auf Nummer sicher:
-    // Wir muessen die alten Fontinformationen wegschmeissen,
-    // wenn die Druckeraufloesung oder der Zoomfaktor sich aendert.
-    // Init() und Reformat() sind die sichersten Stellen.
+    // We play it save: Remove old font information whenever the printer
+    // resolution or the zoom factor changes. For that, Init() and Reformat()
+    // are the most secure places.
      pFntCache->Flush( );
 
-    // ViewOptions werden dynamisch angelegt
+    // ViewOptions are created dynamically
 
     if( !mpOpt )
     {
         mpOpt = new SwViewOption;
 
-        // Ein ApplyViewOptions braucht nicht gerufen zu werden
+        // ApplyViewOptions() does not need to be called
         if( pNewOpt )
         {
             *mpOpt = *pNewOpt;
-            // Der Zoomfaktor muss eingestellt werden, weil in der CTOR-
-            // phase aus Performancegruenden kein ApplyViewOptions gerufen wird.
+            // Zoom factor needs to be set because there is no call to ApplyViewOptions() during
+            // CTOR for performance reasons.
             if( GetWin() && 100 != mpOpt->GetZoom() )
             {
                 MapMode aMode( mpWin->GetMapMode() );
@@ -83,9 +82,8 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
 
     SwDocShell* pDShell = mpDoc->GetDocShell();
     mpDoc->set(IDocumentSettingAccess::HTML_MODE, 0 != ::GetHtmlMode( pDShell ) );
-    // JP 02.02.99: Bug 61335 - Readonly-Flag an den ViewOptions setzen,
-    //              bevor das Layout angelegt wird. Ansonsten muesste man
-    //              nochmals durchformatieren!!
+    // JP 02.02.99: Bug 61335 - set readonly flag at ViewOptions before creating layout. Otherwise,
+    //                          one would have to reformat again.
 
     if( pDShell && pDShell->IsReadOnly() )
         mpOpt->SetReadonly( sal_True );
@@ -166,14 +164,7 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
     // <-- #i31958#
 }
 
-/*************************************************************************
-|*
-|*  ViewShell::ViewShell()  CTor fuer die erste Shell.
-|*
-|*  Letzte Aenderung    MA 29. Aug. 95
-|*
-|*************************************************************************/
-
+/// CTor for the first Shell.
 ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
                         const SwViewOption *pNewOpt, OutputDevice *pOutput,
                         long nFlags )
@@ -231,7 +222,7 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     ((SwHiddenTxtFieldType*)mpDoc->GetSysFldType( RES_HIDDENTXTFLD ))->
         SetHiddenFlag( !mpOpt->IsShowHiddenField() );
 
-    //In Init wird ein Standard-FrmFmt angelegt.
+    // In Init a standard FrmFmt is created.
     // --> OD 2005-02-11 #i38810#
     if (   !mpDoc->GetIDocumentUndoRedo().IsUndoNoResetModified()
         && !bIsDocModified )
@@ -240,7 +231,7 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
         mpDoc->ResetModified();
     }
 
-    //Format-Cache erweitern.
+    // extend format cache.
     if ( SwTxtFrm::GetTxtCache()->GetCurMax() < 2550 )
         SwTxtFrm::GetTxtCache()->IncreaseMax( 100 );
     if( mpOpt->IsGridVisible() || getIDocumentDrawModelAccess()->GetDrawModel() )
@@ -250,14 +241,7 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     mbInConstructor = false;
 }
 
-/*************************************************************************
-|*
-|*  ViewShell::ViewShell()  CTor fuer weitere Shells auf ein Dokument.
-|*
-|*  Letzte Aenderung    MA 29. Aug. 95
-|*
-|*************************************************************************/
-
+/// CTor for further Shells on a document.
 ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
                         OutputDevice *pOutput, long nFlags ) :
     Ring( &rShell ),
@@ -302,7 +286,7 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     sal_Bool bModified = mpDoc->IsModified();
 
     pOutput = mpOut;
-    Init( rShell.GetViewOptions() );    //verstellt ggf. das Outdev (InitPrt())
+    Init( rShell.GetViewOptions() ); // might change Outdev (InitPrt())
     mpOut = pOutput;
 
     // OD 12.12.2002 #103492#
@@ -312,13 +296,13 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     ((SwHiddenTxtFieldType*)mpDoc->GetSysFldType( RES_HIDDENTXTFLD ))->
             SetHiddenFlag( !mpOpt->IsShowHiddenField() );
 
-    // in Init wird ein Standard-FrmFmt angelegt
+    // In Init a standard FrmFmt is created.
     if( !bModified && !mpDoc->GetIDocumentUndoRedo().IsUndoNoResetModified() )
     {
         mpDoc->ResetModified();
     }
 
-    //Format-Cache erweitern.
+    // extend format cache.
     if ( SwTxtFrm::GetTxtCache()->GetCurMax() < 2550 )
         SwTxtFrm::GetTxtCache()->IncreaseMax( 100 );
     if( mpOpt->IsGridVisible() || getIDocumentDrawModelAccess()->GetDrawModel() )
@@ -375,7 +359,7 @@ ViewShell::~ViewShell()
             GetDoc()->StopNumRuleAnimations( mpOut );
         }
 
-        delete mpImp; //Erst loeschen, damit die LayoutViews vernichtet werden.
+        delete mpImp; // Delete first, so that the LayoutViews are destroyed.
         mpImp = 0;   // Set to zero, because ~SwFrm relies on it.
 
         if ( mpDoc )
@@ -388,11 +372,11 @@ ViewShell::~ViewShell()
 
         delete mpOpt;
 
-        //Format-Cache zurueckschrauben.
+        // resize format cache.
         if ( SwTxtFrm::GetTxtCache()->GetCurMax() > 250 )
             SwTxtFrm::GetTxtCache()->DecreaseMax( 100 );
 
-        //Ggf. aus der PaintQueue entfernen lassen
+        // Remove from PaintQueue if necessary
         SwPaintQueue::Remove( this );
 
         OSL_ENSURE( !mnStartAction, "EndAction() pending." );

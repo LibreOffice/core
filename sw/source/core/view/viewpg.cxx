@@ -105,7 +105,7 @@ void ViewShell::PrintProspect(
     OSL_ENSURE( rPagesToPrint.first  == -1 || rPrintData.GetRenderData().GetValidPagesSet().count( rPagesToPrint.first ) == 1, "first Page not valid" );
     OSL_ENSURE( rPagesToPrint.second == -1 || rPrintData.GetRenderData().GetValidPagesSet().count( rPagesToPrint.second ) == 1, "second Page not valid" );
 
-    // eine neue Shell fuer den Printer erzeugen
+    // create a new shell for the printer
     ViewShell aShell( *this, 0, pPrinter );
 
     SET_CURR_SHELL( &aShell );
@@ -179,7 +179,7 @@ void ViewShell::PrintProspect(
         nMaxRowSz = std::max( aNxtPageSize.Height(), aSttPageSize.Height() );
     }
 
-    // den MapMode einstellen
+    // set the MapMode
     aMapMode.SetOrigin( Point() );
     {
         Fraction aScX( aPrtSize.Width(), nMaxColSz );
@@ -188,8 +188,7 @@ void ViewShell::PrintProspect(
             aScY = aScX;
 
         {
-            // fuer Drawing, damit diese ihre Objecte vernuenftig Painten
-            // koennen, auf "glatte" Prozentwerte setzen
+            // Round percentages for Drawings so that these can paint their objects properly
             aScY *= Fraction( 1000, 1 );
             long nTmp = (long)aScY;
             if( 1 < nTmp )
@@ -237,6 +236,5 @@ void ViewShell::PrintProspect(
     // output device is now provided by a call from outside the Writer)
     pPrinter->Pop();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

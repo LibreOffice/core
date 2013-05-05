@@ -156,8 +156,7 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
     }
 }
 
-
-#define WIEDUWILLST 400
+#define FUZZY_EDGE 400
 
 sal_Bool SwViewImp::IsDragPossible( const Point &rPoint )
 {
@@ -181,13 +180,12 @@ sal_Bool SwViewImp::IsDragPossible( const Point &rPoint )
     else
         aRect = GetShell()->GetLayout()->Frm();
 
-    aRect.Top(    aRect.Top()    - WIEDUWILLST );
-    aRect.Bottom( aRect.Bottom() + WIEDUWILLST );
-    aRect.Left(   aRect.Left()   - WIEDUWILLST );
-    aRect.Right(  aRect.Right()  + WIEDUWILLST );
+    aRect.Top(    aRect.Top()    - FUZZY_EDGE );
+    aRect.Bottom( aRect.Bottom() + FUZZY_EDGE );
+    aRect.Left(   aRect.Left()   - FUZZY_EDGE );
+    aRect.Right(  aRect.Right()  + FUZZY_EDGE );
     return aRect.IsInside( rPoint );
 }
-
 
 void SwViewImp::NotifySizeChg( const Size &rNewSz )
 {

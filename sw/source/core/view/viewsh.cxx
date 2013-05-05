@@ -563,7 +563,7 @@ void ViewShell::MakeVisible( const SwRect &rRect )
             else
             {
                 //MA: 04. Nov. 94, no one needs this, does one?
-                OSL_ENSURE( !this, "MakeVisible fuer Drucker wird doch gebraucht?" );
+                OSL_ENSURE( !this, "Is MakeVisible still needed for printers?" );
             }
 
 #endif
@@ -1028,7 +1028,7 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
     if ( mbInEndAction )
     {
         //Is someone rescheduling again?
-        OSL_ENSURE( !this, "Scroll waehrend einer EndAction." );
+        OSL_ENSURE( !this, "Scrolling during EndAction." );
     }
 #endif
 
