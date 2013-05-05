@@ -17,7 +17,7 @@
 -->
     <node oor:name="draw_flash_Export" oor:op="replace">
         <prop oor:name="Flags"><value>EXPORT ALIEN 3RDPARTYFILTER</value></prop>
-        <prop oor:name="UIComponent"/>
+        <prop oor:name="UIComponent"><value>com.sun.star.Impress.FlashExportDialog</value></prop>
         <prop oor:name="FilterService"><value>com.sun.star.comp.Impress.FlashExportFilter</value></prop>
         <prop oor:name="UserData"><value></value></prop>
         <prop oor:name="UIName">

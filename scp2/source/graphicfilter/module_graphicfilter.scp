@@ -38,5 +38,6 @@ Module gid_Module_Optional_Grfflt
         gid_File_Lib_Flash,
         gid_File_Lib_WpftDraw,
         gid_File_Lib_Graphic,
+        gid_File_Res_Flash,
         gid_File_Share_Registry_Graphicfilter_Xcd);
 End
