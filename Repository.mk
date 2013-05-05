@@ -42,6 +42,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     gsicheck \
     helpex \
     idxdict \
+	langsupport \
 	libtest \
     lngconvex \
     localize \
@@ -110,7 +111,6 @@ $(eval $(call gb_Helper_register_executables,OOO,\
 	g++-wrapper \
 	guiloader \
 	guistdio \
-	langsupport \
 	odbcconfig \
 	officeloader \
 	pyuno/python \
@@ -142,7 +142,6 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 else
 
 $(eval $(call gb_Helper_register_executables,OOO,\
-    langsupport \
     soffice.bin \
     unopkg.bin \
     gengal.bin \
