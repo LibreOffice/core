@@ -1156,7 +1156,7 @@ void ChartExport::exportBarChart( Reference< chart2::XChartType > xChartType )
     }
 
     //overlap
-    if( xTypeProp.is() && GetProperty( xTypeProp, "OverlapSequence") )
+    if( !mbIs3DChart && xTypeProp.is() && GetProperty( xTypeProp, "OverlapSequence") )
     {
         uno::Sequence< sal_Int32 > aBarPositionSequence;
         mAny >>= aBarPositionSequence;
@@ -1167,18 +1167,6 @@ void ChartExport::exportBarChart( Reference< chart2::XChartType > xChartType )
                 pFS->singleElement( FSNS( XML_c, XML_overlap ),
                     XML_val, I32S( nOverlap ),
                     FSEND );
-        }
-    }
-    if( xTypeProp.is() && GetProperty( xTypeProp, "GapwidthSequence") )
-    {
-        uno::Sequence< sal_Int32 > aBarPositionSequence;
-        mAny >>= aBarPositionSequence;
-        if( aBarPositionSequence.getLength() )
-        {
-            sal_Int32 nGapWidth = aBarPositionSequence[0];
-            pFS->singleElement( FSNS( XML_c, XML_gapWidth ),
-                XML_val, I32S( nGapWidth ),
-                FSEND );
         }
     }
 
