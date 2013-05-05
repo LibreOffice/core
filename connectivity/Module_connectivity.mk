@@ -35,7 +35,6 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 
 ifneq ($(SOLAR_JAVA),)
 $(eval $(call gb_Module_add_targets,connectivity,\
-	AllLangResTarget_hsqldb \
 	Configuration_hsqldb \
 	Configuration_jdbc \
 	Jar_sdbc_hsqldb \
