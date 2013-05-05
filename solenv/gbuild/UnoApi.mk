@@ -12,15 +12,6 @@ gb_UnoApi_DOCDIR := $(gb_Package_SDKDIRNAME)/docs/common/ref
 gb_UnoApi_SRCDOCDIR := $(call gb_CustomTarget_get_workdir,odk/docs/common/ref)
 gb_UnoApi_ENABLE_INSTALL := $(and $(filter host,$(gb_Side)),$(filter ODK,$(BUILD_TYPE)))
 
-# NOTE: This is needed temporarily to force rebuild with API files from
-# $(WORKDIR), thus fixing generated deps. Otherwise, a change of an .idl
-# file would not rebuild a .cxx if it still depended on the $(OUTDIR)
-# version of the header.
-define gb_UnoApi__make_outdir_headers_rule
-$(OUTDIR)/inc/$(1)/%.hdl $(OUTDIR)/inc/$(1)/%.hpp :
-	@true
-endef
-
 .PHONY : $(call gb_UnoApi_get_clean_target,%)
 $(call gb_UnoApi_get_clean_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
@@ -43,8 +34,6 @@ $(call gb_UnoApi_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(1))
 $(call gb_UnoApi_get_target,$(1)) : $(call gb_UnoApiHeadersTarget_get_target,$(1))
 $(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_UnoApiTarget_get_clean_target,$(1))
 $(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_UnoApiHeadersTarget_get_clean_target,$(1))
-
-$(call gb_UnoApi__make_outdir_headers_rule,$(1))
 
 $(call gb_Deliver_add_deliverable,$(call gb_UnoApi_get_target,$(1)),$(call gb_UnoApiTarget_get_target,$(1)),$(1))
 
