@@ -1503,6 +1503,15 @@ void DrawingML::WriteFill( Reference< XPropertySet > xPropSet )
     if( aFillStyle == FillStyle_HATCH )
         return;
 
+    if ( aFillStyle == FillStyle_SOLID && GetProperty( xPropSet, OUString("FillTransparence") ) )
+    {
+        // map full transparent background to no fill
+        sal_Int16 nVal = 0;
+        xPropSet->getPropertyValue( "FillTransparence" ) >>= nVal;
+        if ( nVal == 100 )
+            aFillStyle = FillStyle_NONE;
+    }
+
     switch( aFillStyle )
     {
     case ::com::sun::star::drawing::FillStyle_SOLID :
