@@ -916,14 +916,13 @@ void ViewShell::Reformat()
     }
 }
 
- void ViewShell::ChgNumberDigits()
- {
-     SdrModel* pTmpDrawModel = getIDocumentDrawModelAccess()->GetDrawModel();
-     if ( pTmpDrawModel )
-            pTmpDrawModel->ReformatAllTextObjects();
-     Reformat();
- }
-
+void ViewShell::ChgNumberDigits()
+{
+    SdrModel* pTmpDrawModel = getIDocumentDrawModelAccess()->GetDrawModel();
+    if ( pTmpDrawModel )
+           pTmpDrawModel->ReformatAllTextObjects();
+    Reformat();
+}
 
 void ViewShell::CalcLayout()
 {
@@ -1087,8 +1086,7 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
                     aPageRect.SSize() = rFormatPage.GetBoundRect().SSize();
                 }
 
-                    // OD 12.02.2003 #i9719#, #105645# - consider new border
-                    // and shadow width
+                // OD 12.02.2003 #i9719#, #105645# - consider new border and shadow width
                 if ( aPageRect.IsOver( aBoth ) )
                 {
                     SwTwips nPageLeft = 0;
@@ -1120,7 +1118,7 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
                             if (pObj->IsFormatPossible())
                             {
                                 const Rectangle &rBound = pObj->GetObjRect().SVRect();
-                            // OD 03.03.2003 #107927# - use correct datatype
+                                // OD 03.03.2003 #107927# - use correct datatype
                                 const SwTwips nL = std::max( 0L, rBound.Left() - nOfst );
                                 if ( nL < nMinLeft )
                                     nMinLeft = nL;
