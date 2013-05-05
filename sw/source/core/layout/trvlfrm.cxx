@@ -283,6 +283,7 @@ sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
             SwCntntNode* pTextNd = aTextPos.nNode.GetNode( ).GetCntntNode( );
             double nTextDistance = 0;
             bool bValidTextDistance = false;
+            bool bConsiderBackground = true;
             if ( pTextNd )
             {
                 SwCntntFrm* pTextFrm = pTextNd->getLayoutFrm( getRootFrm( ) );
@@ -291,19 +292,18 @@ sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 
                 nTextDistance = lcl_getDistance( rTextRect, rPoint );
                 bValidTextDistance = true;
-            }
 
-            bool bConsiderBackground = true;
-            // If the text position is a clickable field, then that should have priority.
-            if (pTextNd->IsTxtNode())
-            {
-                SwTxtNode* pTxtNd = pTextNd->GetTxtNode();
-                SwTxtAttr* pTxtAttr = pTxtNd->GetTxtAttrForCharAt(aTextPos.nContent.GetIndex(), RES_TXTATR_FIELD);
-                if (pTxtAttr)
+                // If the text position is a clickable field, then that should have priority.
+                if (pTextNd->IsTxtNode())
                 {
-                    const SwField* pField = pTxtAttr->GetFld().GetFld();
-                    if (pField->IsClickable())
-                        bConsiderBackground = false;
+                    SwTxtNode* pTxtNd = pTextNd->GetTxtNode();
+                    SwTxtAttr* pTxtAttr = pTxtNd->GetTxtAttrForCharAt(aTextPos.nContent.GetIndex(), RES_TXTATR_FIELD);
+                    if (pTxtAttr)
+                    {
+                        const SwField* pField = pTxtAttr->GetFld().GetFld();
+                        if (pField->IsClickable())
+                            bConsiderBackground = false;
+                    }
                 }
             }
 
