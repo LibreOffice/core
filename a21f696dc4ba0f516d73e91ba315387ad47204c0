@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//9Tc\u003d",
+        "filename": "xmloff/source/core/xmlexp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2406,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2013-05-05T16:00:54Z",
+      "side": 1,
+      "message": "Why the second stream operator?",
+      "revId": "a21f696dc4ba0f516d73e91ba315387ad47204c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//9TY\u003d",
+        "filename": "xmloff/source/core/xmlexp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2423,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2013-05-05T16:00:54Z",
+      "side": 1,
+      "message": "Why the second stream operator?",
+      "revId": "a21f696dc4ba0f516d73e91ba315387ad47204c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//9TU\u003d",
+        "filename": "xmloff/source/core/xmlimp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2013-05-05T16:00:54Z",
+      "side": 1,
+      "message": "Why the second stream operator?",
+      "revId": "a21f696dc4ba0f516d73e91ba315387ad47204c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
