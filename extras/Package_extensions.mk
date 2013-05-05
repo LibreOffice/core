@@ -27,22 +27,22 @@ ifneq ($(NUMBERTEXT_EXTENSION_PACK),)
 $(eval $(call gb_Package_add_file,extras_extensions,bin/numbertext.oxt,$(NUMBERTEXT_EXTENSION_PACK)))
 endif
 ifneq ($(SUNTEMPLATES_DE_PACK),)
-$(eval $(call gb_Package_add_file,extras_extensions,bin/Sun-ODF-Template-Pack-de,$(SUNTEMPLATES_DE_PACK)))
+$(eval $(call gb_Package_add_file,extras_extensions,bin/Sun-ODF-Template-Pack-de.oxt,$(SUNTEMPLATES_DE_PACK)))
 endif
 ifneq ($(SUNTEMPLATES_EN_US_PACK),)
-$(eval $(call gb_Package_add_file,extras_extensions,bin/Sun-ODF-Template-Pack-en-US,$(SUNTEMPLATES_EN_US_PACK)))
+$(eval $(call gb_Package_add_file,extras_extensions,bin/Sun-ODF-Template-Pack-en-US.oxt,$(SUNTEMPLATES_EN_US_PACK)))
 endif
 ifneq ($(SUNTEMPLATES_ES_PACK),)
-$(eval $(call gb_Package_add_file,extras_extensions,bin/Sun-ODF-Template-Pack-es,$(SUNTEMPLATES_ES_PACK)))
+$(eval $(call gb_Package_add_file,extras_extensions,bin/Sun-ODF-Template-Pack-es.oxt,$(SUNTEMPLATES_ES_PACK)))
 endif
 ifneq ($(SUNTEMPLATES_FR_PACK),)
-$(eval $(call gb_Package_add_file,extras_extensions,bin/Sun-ODF-Template-Pack-fr,$(SUNTEMPLATES_FR_PACK)))
+$(eval $(call gb_Package_add_file,extras_extensions,bin/Sun-ODF-Template-Pack-fr.oxt,$(SUNTEMPLATES_FR_PACK)))
 endif
 ifneq ($(SUNTEMPLATES_HU_PACK),)
-$(eval $(call gb_Package_add_file,extras_extensions,bin/Sun-ODF-Template-Pack-hu,$(SUNTEMPLATES_HU_PACK)))
+$(eval $(call gb_Package_add_file,extras_extensions,bin/Sun-ODF-Template-Pack-hu.oxt,$(SUNTEMPLATES_HU_PACK)))
 endif
 ifneq ($(SUNTEMPLATES_IT_PACK),)
-$(eval $(call gb_Package_add_file,extras_extensions,bin/Sun-ODF-Template-Pack-it,$(SUNTEMPLATES_IT_PACK)))
+$(eval $(call gb_Package_add_file,extras_extensions,bin/Sun-ODF-Template-Pack-it.oxt,$(SUNTEMPLATES_IT_PACK)))
 endif
 ifneq ($(TYPO_EXTENSION_PACK),)
 $(eval $(call gb_Package_add_file,extras_extensions,bin/typo.oxt,$(TYPO_EXTENSION_PACK)))
