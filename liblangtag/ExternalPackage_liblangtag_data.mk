@@ -11,8 +11,11 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,liblangtag_data,langtag))
 
 $(eval $(call gb_ExternalPackage_set_outdir,liblangtag_data,$(INSTDIR)))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files_with_dir,liblangtag_data,share/liblangtag,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,liblangtag_data,share/liblangtag,\
 	data/language-subtag-registry.xml \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,liblangtag_data,share/liblangtag/common/bcp47,\
 	data/common/bcp47/calendar.xml \
 	data/common/bcp47/collation.xml \
 	data/common/bcp47/currency.xml \
@@ -24,6 +27,9 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files_with_dir,liblangtag_data,sha
 	data/common/bcp47/transform_mt.xml \
 	data/common/bcp47/transform_private_use.xml \
 	data/common/bcp47/variant.xml \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,liblangtag_data,share/liblangtag/common/supplemental,\
 	data/common/supplemental/likelySubtags.xml \
 ))
 
