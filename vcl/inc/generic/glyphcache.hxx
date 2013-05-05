@@ -211,7 +211,7 @@ public:
 #endif
 
     int                 GetGlyphIndex( sal_UCS4 ) const;
-    int                 GetRawGlyphIndex( sal_UCS4 ) const;
+    int                 GetRawGlyphIndex( sal_UCS4, sal_UCS4 = 0 ) const;
     int                 FixupGlyphIndex( int nGlyphIndex, sal_UCS4 ) const;
     bool                GetGlyphOutline( int nGlyphIndex, ::basegfx::B2DPolyPolygon& ) const;
     bool                GetAntialiasAdvice( void ) const;

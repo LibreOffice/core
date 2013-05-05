@@ -1177,7 +1177,7 @@ int ServerFont::ApplyGlyphTransform( int nGlyphFlags,
 
 // -----------------------------------------------------------------------
 
-int ServerFont::GetRawGlyphIndex( sal_UCS4 aChar ) const
+int ServerFont::GetRawGlyphIndex(sal_UCS4 aChar, sal_UCS4 aVS) const
 {
     if( mpFontInfo->IsSymbolFont() )
     {
@@ -1216,18 +1216,27 @@ int ServerFont::GetRawGlyphIndex( sal_UCS4 aChar ) const
             aChar = aChar*256 + (aTempArray[i] & 0xFF);
     }
 
-    // cache glyph indexes in font info to share between different sizes
-    int nGlyphIndex = mpFontInfo->GetGlyphIndex( aChar );
-    if( nGlyphIndex < 0 )
+    int nGlyphIndex = 0;
+    // If asked, check first for variant glyph with the given Unicode variation
+    // selector. This is quite uncommon so we don't bother with caching here.
+    if (aVS)
+        nGlyphIndex = FT_Face_GetCharVariantIndex(maFaceFT, aChar, aVS);
+
+    if (nGlyphIndex == 0)
     {
-        nGlyphIndex = FT_Get_Char_Index( maFaceFT, aChar );
-        if( !nGlyphIndex)
+        // cache glyph indexes in font info to share between different sizes
+        nGlyphIndex = mpFontInfo->GetGlyphIndex( aChar );
+        if( nGlyphIndex < 0 )
         {
-            // check if symbol aliasing helps
-            if( (aChar <= 0x00FF) && mpFontInfo->IsSymbolFont() )
-                nGlyphIndex = FT_Get_Char_Index( maFaceFT, aChar | 0xF000 );
+            nGlyphIndex = FT_Get_Char_Index( maFaceFT, aChar );
+            if( !nGlyphIndex)
+            {
+                // check if symbol aliasing helps
+                if( (aChar <= 0x00FF) && mpFontInfo->IsSymbolFont() )
+                    nGlyphIndex = FT_Get_Char_Index( maFaceFT, aChar | 0xF000 );
+            }
+            mpFontInfo->CacheGlyphIndex( aChar, nGlyphIndex );
         }
-        mpFontInfo->CacheGlyphIndex( aChar, nGlyphIndex );
     }
 
     return nGlyphIndex;

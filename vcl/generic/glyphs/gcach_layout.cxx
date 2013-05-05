@@ -246,13 +246,7 @@ static hb_bool_t getFontGlyph(hb_font_t* /*font*/, void* pFontData,
         void* /*pUserData*/)
 {
     ServerFont* pFont = (ServerFont*) pFontData;
-    *nGlyphIndex = 0;
-
-    if (vs)
-        *nGlyphIndex = pFont->GetRawGlyphIndex(ch /*, vs*/); // XXX handle variation selectors
-
-    if (*nGlyphIndex == 0)
-        *nGlyphIndex = pFont->GetRawGlyphIndex(ch);
+    *nGlyphIndex = pFont->GetRawGlyphIndex(ch, vs);
 
     return *nGlyphIndex != 0;
 }
