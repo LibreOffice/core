@@ -806,6 +806,16 @@ void ChartExport::exportChart( Reference< ::com::sun::star::chart::XChartDocumen
     {
         exportView3D();
 
+        // floor
+        Reference< beans::XPropertySet > xFloor( mxNewDiagram->getFloor(), uno::UNO_QUERY );
+        if( xFloor.is() )
+        {
+            pFS->startElement( FSNS( XML_c, XML_floor ),
+                FSEND );
+            exportShapeProps( xFloor );
+            pFS->endElement( FSNS( XML_c, XML_floor ) );
+        }
+
         // sideWall
 
         // backWall
@@ -816,16 +826,6 @@ void ChartExport::exportChart( Reference< ::com::sun::star::chart::XChartDocumen
                 FSEND );
             exportShapeProps( xBackWall );
             pFS->endElement( FSNS( XML_c, XML_backWall ) );
-        }
-
-        // floor
-        Reference< beans::XPropertySet > xFloor( mxNewDiagram->getFloor(), uno::UNO_QUERY );
-        if( xFloor.is() )
-        {
-            pFS->startElement( FSNS( XML_c, XML_floor ),
-                FSEND );
-            exportShapeProps( xFloor );
-            pFS->endElement( FSNS( XML_c, XML_floor ) );
         }
 
     }
