@@ -2200,14 +2200,6 @@ void ChartExport::_exportAxis(
             FSEND );
     }
 
-    if( nAxisType == XML_catAx )
-    {
-        // FIXME: seems not support? lblAlgn
-        const char* sLblAlgn = "ctr";
-        pFS->singleElement( FSNS( XML_c, XML_lblAlgn ),
-            XML_val, sLblAlgn,
-            FSEND );
-    }
     if( ( nAxisType == XML_catAx )
         || ( nAxisType == XML_dateAx ) )
     {
@@ -2216,6 +2208,15 @@ void ChartExport::_exportAxis(
         pFS->singleElement( FSNS( XML_c, XML_auto ),
             XML_val, isAuto,
             FSEND );
+
+        if( nAxisType == XML_catAx )
+        {
+            // FIXME: seems not support? lblAlgn
+            const char* sLblAlgn = "ctr";
+            pFS->singleElement( FSNS( XML_c, XML_lblAlgn ),
+                    XML_val, sLblAlgn,
+                    FSEND );
+        }
 
         // FIXME: seems not support? lblOffset
         sal_Int32 nLblOffset = 100;
