@@ -94,8 +94,12 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
     bGrafikArrived = sal_True;
 }
 
-// Konstruktor fuer den SW/G-Reader. Dieser ctor wird verwendet,
-// wenn eine gelinkte Grafik gelesen wird. Sie liest diese NICHT ein.
+/** Create new SW/G reader.
+ *
+ * Use this ctor if you want to read a linked graphic.
+ *
+ * @note Does not read/open the image itself!
+ */
 SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
                       const String& rGrfName, const String& rFltName,
                       SwGrfFmtColl *pGrfColl,
@@ -123,7 +127,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
         if( INET_PROT_FILE == aUrl.GetProtocol() &&
             FStatHelper::IsDocument( aUrl.GetMainURL( INetURLObject::NO_DECODE ) ))
         {
-            // File vorhanden, Verbindung herstellen ohne ein Update
+            // file exists, so create connection without an update
             ((SwBaseLink*)&refLink)->Connect();
         }
     }
@@ -141,15 +145,14 @@ sal_Bool SwGrfNode::ReRead(
     OSL_ENSURE( pGraphic || pGrfObj || rGrfName.Len(),
             "GraphicNode without a name, Graphic or GraphicObject" );
 
-    // ReadRead mit Namen
+    // with name
     if( refLink.Is() )
     {
-        OSL_ENSURE( !bInSwapIn, "ReRead: stehe noch im SwapIn" );
+        OSL_ENSURE( !bInSwapIn, "ReRead: I am still in SwapIn" );
 
         if( rGrfName.Len() )
         {
-            // Besonderheit: steht im FltNamen DDE, handelt es sich um eine
-            //                  DDE-gelinkte Grafik
+            // Note: If there is DDE in the FltName, than it is a DDE-linked graphic
             String sCmd( rGrfName );
             if( rFltName.Len() )
             {
@@ -171,7 +174,7 @@ sal_Bool SwGrfNode::ReRead(
 
             refLink->SetLinkSourceName( sCmd );
         }
-        else        // kein Name mehr, Link aufheben
+        else // no name anymore, so remove link
         {
             GetDoc()->GetLinkManager().Remove( refLink );
             refLink.Clear();
@@ -194,9 +197,8 @@ sal_Bool SwGrfNode::ReRead(
         }
         else
         {
-            // MIB 25.02.97: Daten der alten Grafik zuruecksetzen, damit
-            // die korrekte Ersatz-Darstellung erscheint, wenn die
-            // der neue Link nicht geladen werden konnte.
+            // reset data of the old graphic so that the correct placeholder is
+            // shown in case the new link could not be loaded
             Graphic aGrf; aGrf.SetDefaultType();
             maGrfObj.SetGraphic( aGrf, rGrfName );
 
@@ -242,17 +244,15 @@ sal_Bool SwGrfNode::ReRead(
             maGrfObj.SetSwapState();
         bReadGrf = sal_True;
     }
-        // Import einer Grafik:
-        // Ist die Grafik bereits geladen?
+    // Was the graphic already loaded?
     else if( !bNewGrf && GRAPHIC_NONE != maGrfObj.GetType() )
         return sal_True;
-
     else
     {
         if( HasStreamName() )
             DelStreamName();
 
-        // einen neuen Grafik-Link anlegen
+        // create new link for the graphic object
         InsertLink( rGrfName, rFltName );
 
         if( GetNodes().IsDocNodes() )
@@ -262,7 +262,7 @@ sal_Bool SwGrfNode::ReRead(
                 maGrfObj.SetGraphic( *pGraphic, rGrfName );
                 onGraphicChanged();
                 bReadGrf = sal_True;
-                // Verbindung herstellen ohne ein Update; Grafik haben wir!
+                // create connection without update, as we have the graphic
                 ((SwBaseLink*)&refLink)->Connect();
             }
             else if( pGrfObj )
@@ -271,14 +271,13 @@ sal_Bool SwGrfNode::ReRead(
                 maGrfObj.SetLink( rGrfName );
                 onGraphicChanged();
                 bReadGrf = sal_True;
-                // Verbindung herstellen ohne ein Update; Grafik haben wir!
+                // create connection without update, as we have the graphic
                 ((SwBaseLink*)&refLink)->Connect();
             }
             else
             {
-                // MIB 25.02.97: Daten der alten Grafik zuruecksetzen, damit
-                // die korrekte Ersatz-Darstellung erscheint, wenn die
-                // der neue Kink nicht geladen werden konnte.
+                // reset data of the old graphic so that the correct placeholder is
+                // shown in case the new link could not be loaded
                 Graphic aGrf; aGrf.SetDefaultType();
                 maGrfObj.SetGraphic( aGrf, rGrfName );
                 onGraphicChanged();
@@ -291,12 +290,12 @@ sal_Bool SwGrfNode::ReRead(
         }
     }
 
-    // Bug 39281: Size nicht sofort loeschen - Events auf ImageMaps
-    //            sollten nicht beim Austauschen nicht ins "leere greifen"
+    // Bug 39281: Do not delete Size immediately - Events on ImageMaps should have
+    // something to work with when swapping
     if( bSetTwipSize )
         SetTwipSize( ::GetGraphicSizeTwip( maGrfObj.GetGraphic(), 0 ) );
 
-    // erzeuge noch einen Update auf die Frames
+    // create an updates for the frames
     if( bReadGrf && bNewGrf )
     {
         SwMsgPoolItem aMsgHint( RES_UPDATE_ATTR );
@@ -317,7 +316,7 @@ SwGrfNode::~SwGrfNode()
     SwDoc* pDoc = GetDoc();
     if( refLink.Is() )
     {
-        OSL_ENSURE( !bInSwapIn, "DTOR: stehe noch im SwapIn" );
+        OSL_ENSURE( !bInSwapIn, "DTOR: I am still in SwapIn" );
         pDoc->GetLinkManager().Remove( refLink );
         refLink->Disconnect();
     }
@@ -335,8 +334,7 @@ SwGrfNode::~SwGrfNode()
 //        if( !pDoc->IsInDtor() && HasStreamName() )
 //          DelStreamName();
     }
-    //#39289# Die Frames muessen hier bereits geloescht weil der DTor der
-    //Frms die Grafik noch fuer StopAnimation braucht.
+    //#39289# delete frames already here since the Frms' dtor needs the graphic for its StopAnimation
     if( GetDepends() )
         DelFrms();
 }
@@ -433,7 +431,7 @@ SwGrfNode * SwNodes::MakeGrfNode( const SwNodeIndex & rWhere,
 {
     OSL_ENSURE( pGrfColl, "MakeGrfNode: Formatpointer ist 0." );
     SwGrfNode *pNode;
-    // Delayed erzeugen nur aus dem SW/G-Reader
+    // create object delayed, only from a SW/G-reader
     if( bDelayed )
         pNode = new SwGrfNode( rWhere, rGrfName,
                                 rFltName, pGrfColl, pAutoAttr );
@@ -476,14 +474,14 @@ sal_Bool SwGrfNode::ImportGraphic( SvStream& rStrm )
     return sal_False;
 }
 
-// Returnwert:
-// -1 : ReRead erfolgreich
-//  0 : nicht geladen
-//  1 : Einlesen erfolgreich
-
+/**
+ * @return -1 if ReRead successful,
+ *          1 if reading successful,
+ *          0 if not loaded
+ */
 short SwGrfNode::SwapIn( sal_Bool bWaitForData )
 {
-    if( bInSwapIn )                 // nicht rekuriv!!
+    if( bInSwapIn ) // not recursively!
         return !maGrfObj.IsSwappedOut();
 
     short nRet = 0;
@@ -495,13 +493,13 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
         if( GRAPHIC_NONE == maGrfObj.GetType() ||
             GRAPHIC_DEFAULT == maGrfObj.GetType() )
         {
-            // noch nicht geladener Link
+            // link was not loaded yet
             //TODO pLink->setInputStream(getInputStream());
             if( pLink->SwapIn( bWaitForData ) )
                 nRet = -1;
             else if( GRAPHIC_DEFAULT == maGrfObj.GetType() )
             {
-                // keine default Bitmap mehr, also neu Painten!
+                // no default bitmap anymore, thus re-paint
                 delete mpReplacementGraphic;
                 mpReplacementGraphic = 0;
 
@@ -512,7 +510,7 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
             }
         }
         else if( maGrfObj.IsSwappedOut() ) {
-            // nachzuladender Link
+            // link to download
             //TODO pLink->setInputStream(getInputStream());
             nRet = pLink->SwapIn( bWaitForData ) ? 1 : 0;
         }
@@ -521,7 +519,7 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
     }
     else if( maGrfObj.IsSwappedOut() )
     {
-        // Die Grafik ist im Storage oder im TempFile drin
+        // graphic is in storage or in a temp file
         if( !HasStreamName() )
             nRet = (short)maGrfObj.SwapIn();
         else
@@ -557,7 +555,7 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
     }
     else
         nRet = 1;
-    OSL_ENSURE( nRet, "Grafik kann nicht eingeswapt werden" );
+    OSL_ENSURE( nRet, "Cannot swap in graphic" );
 
     if( nRet )
     {
@@ -576,15 +574,14 @@ short SwGrfNode::SwapOut()
     {
         if( !refLink.Is() )
         {
-            // Das Swapping brauchen wir nur fuer Embedded Pictures
-            // Die Grafik wird in eine TempFile geschrieben, wenn
-            // sie frisch eingefuegt war, d.h. wenn es noch keinen
-            // Streamnamen im Storage gibt.
+            // Swapping is only needed for embedded pictures.
+            // The graphic will be written into a temp file if it is new, i.e.
+            // if there is no stream name in the storage yet
             if( !HasStreamName() )
                 if( !maGrfObj.SwapOut() )
                     return 0;
         }
-        // Geschriebene Grafiken oder Links werden jetzt weggeschmissen
+        // written graphics and links are removed here
         return (short) maGrfObj.SwapOut( NULL );
     }
     return 1;
@@ -616,18 +613,20 @@ bool SwGrfNode::GetFileFilterNms( String* pFileNm, String* pFilterNm ) const
     return bRet;
 }
 
-// Eine Grafik Undo-faehig machen. Falls sie sich bereits in
-// einem Storage befindet, muss sie geladen werden.
+/** Make a graphic object ready for UNDO.
+ *
+ * If it is already in storage, it needs to be loaded.
+ */
 sal_Bool SwGrfNode::SavePersistentData()
 {
     if( refLink.Is() )
     {
-        OSL_ENSURE( !bInSwapIn, "SavePersistentData: stehe noch im SwapIn" );
+        OSL_ENSURE( !bInSwapIn, "SavePersistentData: I am still in SwapIn" );
         GetDoc()->GetLinkManager().Remove( refLink );
         return sal_True;
     }
 
-    // Erst mal reinswappen, falls sie im Storage ist
+    // swap in first if already in storage
     if( HasStreamName() && !SwapIn() )
         return sal_False;
 
@@ -644,7 +643,7 @@ sal_Bool SwGrfNode::SavePersistentData()
 //    if( HasStreamName() )
 //        DelStreamName();
 
-    // Und in TempFile rausswappen
+    // swap out into temp file
     return (sal_Bool) SwapOut();
 }
 
@@ -710,16 +709,15 @@ void SwGrfNode::ReleaseLink()
     }
 }
 
-
 void SwGrfNode::SetTwipSize( const Size& rSz )
 {
     nGrfSize = rSz;
     if( IsScaleImageMap() && nGrfSize.Width() && nGrfSize.Height() )
     {
-        // Image-Map an Grafik-Groesse anpassen
+        // resize Image-Map to size of the graphic
         ScaleImageMap();
 
-        // Image-Map nicht noch einmal skalieren
+        // do not re-scale Image-Map
         SetScaleImageMap( sal_False );
     }
 }
@@ -729,7 +727,7 @@ void SwGrfNode::ScaleImageMap()
     if( !nGrfSize.Width() || !nGrfSize.Height() )
         return;
 
-    // dann die Image-Map skalieren
+    // re-scale Image-Map
     SwFrmFmt* pFmt = GetFlyFmt();
 
     if( !pFmt )
@@ -753,7 +751,7 @@ void SwGrfNode::ScaleImageMap()
         nWidth -= rBox.CalcLineSpace(BOX_LINE_LEFT) +
                   rBox.CalcLineSpace(BOX_LINE_RIGHT);
 
-        OSL_ENSURE( nWidth>0, "Gibt es 0 twip breite Grafiken!?" );
+        OSL_ENSURE( nWidth>0, "Do any 0 twip wide graphics exist!?" );
 
         if( nGrfSize.Width() != nWidth )
         {
@@ -768,7 +766,7 @@ void SwGrfNode::ScaleImageMap()
         nHeight -= rBox.CalcLineSpace(BOX_LINE_TOP) +
                    rBox.CalcLineSpace(BOX_LINE_BOTTOM);
 
-        OSL_ENSURE( nHeight>0, "Gibt es 0 twip hohe Grafiken!?" );
+        OSL_ENSURE( nHeight>0, "Do any 0 twip high graphics exist!?" );
 
         if( nGrfSize.Height() != nHeight )
         {
@@ -784,12 +782,11 @@ void SwGrfNode::ScaleImageMap()
     }
 }
 
-
 void SwGrfNode::DelStreamName()
 {
     if( HasStreamName() )
     {
-        // Dann die Grafik im Storage loeschen
+        // then remove graphic from storage
         uno::Reference < embed::XStorage > xDocStg = GetDoc()->GetDocStorage();
         if( xDocStg.is() )
         {
@@ -936,7 +933,7 @@ void SwGrfNode::_GetStreamStorageNames( String& rStrmName,
 
 SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 {
-    // kopiere die Formate in das andere Dokument:
+    // copy formats into the other document
     SwGrfFmtColl* pColl = pDoc->CopyGrfColl( *GetGrfColl() );
 
     Graphic aTmpGrf;
@@ -1058,12 +1055,12 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
     return (long)pRet;
 }
 
-// alle QuickDraw-Bitmaps eines speziellen Docs loeschen
+/// delete all QuickDraw-Bitmaps in the specified document
 void DelAllGrfCacheEntries( SwDoc* pDoc )
 {
     if( pDoc )
     {
-        // alle Graphic-Links mit dem Namen aus dem Cache loeschen
+        // delete all Graphic-Links with this name from cache
         const sfx2::LinkManager& rLnkMgr = pDoc->GetLinkManager();
         const ::sfx2::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
         SwGrfNode* pGrfNd;

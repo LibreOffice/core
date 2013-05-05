@@ -79,7 +79,7 @@ bool SwMirrorGrf::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     bool bRet = true;
     sal_Bool bVal;
-    // Vertikal und Horizontal sind mal getauscht worden!
+    // vertical and horizontal were swapped at some point
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
@@ -105,7 +105,7 @@ bool SwMirrorGrf::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bRet = true;
     sal_Bool bVal = *(sal_Bool*)rVal.getValue();
-    // Vertikal und Horizontal sind mal getauscht worden!
+    // vertical and horizontal were swapped at some point
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
