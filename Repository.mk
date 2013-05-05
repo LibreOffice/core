@@ -72,6 +72,12 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     xrmex \
 ))
 
+ifneq ($(OS),WNT)
+$(eval $(call gb_Helper_register_executables,NONE,\
+    liboapprover \
+))
+endif
+
 $(eval $(call gb_Helper_register_executables,SDK, \
     idlc \
 ))
@@ -145,7 +151,6 @@ $(eval $(call gb_Helper_register_executables,OOO,\
     soffice.bin \
     unopkg.bin \
     gengal.bin \
-    liboapprover \
 ))
 
 ifeq ($(OS),MACOSX)
