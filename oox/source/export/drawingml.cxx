@@ -1536,16 +1536,16 @@ void DrawingML::WriteFill( Reference< XPropertySet > xPropSet )
 
     switch( aFillStyle )
     {
-    case ::com::sun::star::drawing::FillStyle_SOLID :
+    case FillStyle_SOLID :
         WriteSolidFill( xPropSet );
         break;
-    case ::com::sun::star::drawing::FillStyle_GRADIENT :
+    case FillStyle_GRADIENT :
         WriteGradientFill( xPropSet );
         break;
-    case ::com::sun::star::drawing::FillStyle_BITMAP :
+    case FillStyle_BITMAP :
         WriteBlipFill( xPropSet, "FillBitmapURL" );
         break;
-    case ::com::sun::star::drawing::FillStyle_NONE:
+    case FillStyle_NONE:
         mpFS->singleElementNS( XML_a, XML_noFill, FSEND );
         break;
     default:
