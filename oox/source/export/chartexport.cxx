@@ -2734,6 +2734,16 @@ void ChartExport::exportView3D()
             XML_val, I32S( nRotationY ),
             FSEND );
     }
+    // rAngAx
+    if( GetProperty( xPropSet, "RightAngledAxes" ) )
+    {
+        sal_Bool bRightAngled = sal_False;
+        mAny >>= bRightAngled;
+        const char* sRightAngled = bRightAngled ? "1":"0";
+        pFS->singleElement( FSNS( XML_c, XML_rAngAx ),
+            XML_val, sRightAngled,
+            FSEND );
+    }
     // perspective
     if( GetProperty( xPropSet, "Perspective" ) )
     {
@@ -2743,16 +2753,6 @@ void ChartExport::exportView3D()
         nPerspective *= 2;
         pFS->singleElement( FSNS( XML_c, XML_perspective ),
             XML_val, I32S( nPerspective ),
-            FSEND );
-    }
-    // rAngAx
-    if( GetProperty( xPropSet, "RightAngledAxes" ) )
-    {
-        sal_Bool bRightAngled = sal_False;
-        mAny >>= bRightAngled;
-        const char* sRightAngled = bRightAngled ? "1":"0";
-        pFS->singleElement( FSNS( XML_c, XML_rAngAx ),
-            XML_val, sRightAngled,
             FSEND );
     }
     pFS->endElement( FSNS( XML_c, XML_view3D ) );
