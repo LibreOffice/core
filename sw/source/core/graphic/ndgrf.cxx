@@ -55,9 +55,6 @@
 
 using namespace com::sun::star;
 
-// --------------------
-// SwGrfNode
-// --------------------
 SwGrfNode::SwGrfNode(
         const SwNodeIndex & rWhere,
         const String& rGrfName, const String& rFltName,
@@ -99,8 +96,6 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
 
 // Konstruktor fuer den SW/G-Reader. Dieser ctor wird verwendet,
 // wenn eine gelinkte Grafik gelesen wird. Sie liest diese NICHT ein.
-
-
 SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
                       const String& rGrfName, const String& rFltName,
                       SwGrfFmtColl *pGrfColl,
@@ -311,7 +306,6 @@ sal_Bool SwGrfNode::ReRead(
     return bReadGrf;
 }
 
-
 SwGrfNode::~SwGrfNode()
 {
     delete mpReplacementGraphic;
@@ -429,7 +423,6 @@ SwCntntNode *SwGrfNode::SplitCntntNode( const SwPosition & )
     return this;
 }
 
-
 SwGrfNode * SwNodes::MakeGrfNode( const SwNodeIndex & rWhere,
                                 const String& rGrfName,
                                 const String& rFltName,
@@ -458,7 +451,6 @@ SwGrfNode * SwNodes::MakeGrfNode( const SwNodeIndex & rWhere,
     OSL_ENSURE( pGrfColl, "MakeGrfNode: Formatpointer ist 0." );
     return new SwGrfNode( rWhere, rGrfObj, pGrfColl, pAutoAttr );
 }
-
 
 Size SwGrfNode::GetTwipSize() const
 {
@@ -576,7 +568,6 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
     return nRet;
 }
 
-
 short SwGrfNode::SwapOut()
 {
     if( maGrfObj.GetType() != GRAPHIC_DEFAULT &&
@@ -598,7 +589,6 @@ short SwGrfNode::SwapOut()
     }
     return 1;
 }
-
 
 bool SwGrfNode::GetFileFilterNms( String* pFileNm, String* pFilterNm ) const
 {
@@ -626,10 +616,8 @@ bool SwGrfNode::GetFileFilterNms( String* pFileNm, String* pFilterNm ) const
     return bRet;
 }
 
-
 // Eine Grafik Undo-faehig machen. Falls sie sich bereits in
 // einem Storage befindet, muss sie geladen werden.
-
 sal_Bool SwGrfNode::SavePersistentData()
 {
     if( refLink.Is() )
@@ -660,7 +648,6 @@ sal_Bool SwGrfNode::SavePersistentData()
     return (sal_Bool) SwapOut();
 }
 
-
 sal_Bool SwGrfNode::RestorePersistentData()
 {
     if( refLink.Is() )
@@ -673,7 +660,6 @@ sal_Bool SwGrfNode::RestorePersistentData()
     }
     return sal_True;
 }
-
 
 void SwGrfNode::InsertLink( const String& rGrfName, const String& rFltName )
 {
@@ -706,7 +692,6 @@ void SwGrfNode::InsertLink( const String& rGrfName, const String& rFltName )
     }
     maGrfObj.SetLink( rGrfName );
 }
-
 
 void SwGrfNode::ReleaseLink()
 {
@@ -907,7 +892,6 @@ SvStream* SwGrfNode::_GetStreamForEmbedGrf(
     return pStrm;
 }
 
-
 // #i53025# - stream couldn't be in a 3.1 - 5.2 storage any more.
 // Thus, removing corresponding code.
 void SwGrfNode::_GetStreamStorageNames( String& rStrmName,
@@ -1074,7 +1058,6 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
     return (long)pRet;
 }
 
-
 // alle QuickDraw-Bitmaps eines speziellen Docs loeschen
 void DelAllGrfCacheEntries( SwDoc* pDoc )
 {
@@ -1163,7 +1146,6 @@ sal_Bool SwGrfNode::IsTransparent() const
 
     return bRet;
 }
-
 
 sal_Bool SwGrfNode::IsSelected() const
 {

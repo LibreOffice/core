@@ -43,9 +43,7 @@ using namespace ::com::sun::star;
 TYPEINIT1_AUTOFACTORY(SwCropGrf, SfxPoolItem)
 TYPEINIT1_AUTOFACTORY(SwGammaGrf, SfxPoolItem)
 
-/******************************************************************************
- *  Implementierung     class SwMirrorGrf
- ******************************************************************************/
+// SwMirrorGrf
 
 SfxPoolItem* SwMirrorGrf::Clone( SfxItemPool* ) const
 {
@@ -69,12 +67,14 @@ static sal_Bool lcl_IsHoriOnEvenPages(int nEnum, sal_Bool bToggle)
                    nEnum == RES_MIRROR_GRAPH_BOTH;
             return bEnum != bToggle;
 }
+
 static sal_Bool lcl_IsHoriOnOddPages(int nEnum)
 {
     sal_Bool bEnum = nEnum == RES_MIRROR_GRAPH_VERT ||
                    nEnum == RES_MIRROR_GRAPH_BOTH;
             return bEnum;
 }
+
 bool SwMirrorGrf::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     bool bRet = true;
@@ -149,10 +149,7 @@ bool SwMirrorGrf::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-
-/******************************************************************************
- *  Implementierung     class SwCropGrf
- ******************************************************************************/
+// SwCropGrf
 
 SwCropGrf::SwCropGrf()
     : SvxGrfCrop( RES_GRFATR_CROPGRF )
@@ -167,20 +164,18 @@ SfxPoolItem* SwCropGrf::Clone( SfxItemPool* ) const
     return new SwCropGrf( *this );
 }
 
-// ------------------------------------------------------------------
+// SwRotationGrf
 
 SfxPoolItem* SwRotationGrf::Clone( SfxItemPool * ) const
 {
     return new SwRotationGrf( GetValue(), aUnrotatedSize );
 }
 
-
 int SwRotationGrf::operator==( const SfxPoolItem& rCmp ) const
 {
     return SfxUInt16Item::operator==( rCmp ) &&
         GetUnrotatedSize() == ((SwRotationGrf&)rCmp).GetUnrotatedSize();
 }
-
 
 bool SwRotationGrf::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
@@ -206,47 +201,39 @@ bool SwRotationGrf::PutValue( const uno::Any& rVal, sal_uInt8 )
     return false;
 }
 
-// ------------------------------------------------------------------
+// Sw___Grf::Clone(..)
 
 SfxPoolItem* SwLuminanceGrf::Clone( SfxItemPool * ) const
 {
     return new SwLuminanceGrf( *this );
 }
 
-// ------------------------------------------------------------------
-
 SfxPoolItem* SwContrastGrf::Clone( SfxItemPool * ) const
 {
     return new SwContrastGrf( *this );
 }
-
-// ------------------------------------------------------------------
 
 SfxPoolItem* SwChannelRGrf::Clone( SfxItemPool * ) const
 {
     return new SwChannelRGrf( *this );
 }
 
-// ------------------------------------------------------------------
-
 SfxPoolItem* SwChannelGGrf::Clone( SfxItemPool * ) const
 {
     return new SwChannelGGrf( *this );
 }
-
-// ------------------------------------------------------------------
 
 SfxPoolItem* SwChannelBGrf::Clone( SfxItemPool * ) const
 {
     return new SwChannelBGrf( *this );
 }
 
-// ------------------------------------------------------------------
-
 SfxPoolItem* SwGammaGrf::Clone( SfxItemPool * ) const
 {
     return new SwGammaGrf( *this );
 }
+
+// SwGammaGrf
 
 int SwGammaGrf::operator==( const SfxPoolItem& rCmp ) const
 {
@@ -265,20 +252,20 @@ bool SwGammaGrf::PutValue( const uno::Any& rVal, sal_uInt8 )
     return rVal >>= nValue;
 }
 
-// ------------------------------------------------------------------
+// Sw___Grf::Clone(..) cont'd
 
 SfxPoolItem* SwInvertGrf::Clone( SfxItemPool * ) const
 {
     return new SwInvertGrf( *this );
 }
 
-// ------------------------------------------------------------------
-
 SfxPoolItem* SwTransparencyGrf::Clone( SfxItemPool * ) const
 {
     return new SwTransparencyGrf( *this );
 }
-// ------------------------------------------------------------------
+
+// SwTransparencyGrf
+
 bool SwTransparencyGrf::QueryValue( uno::Any& rVal,
                                         sal_uInt8 ) const
 {
@@ -288,7 +275,7 @@ bool SwTransparencyGrf::QueryValue( uno::Any& rVal,
     rVal <<= nRet;
     return true;
 }
-// ------------------------------------------------------------------
+
 bool SwTransparencyGrf::PutValue( const uno::Any& rVal,
                                         sal_uInt8 )
 {
@@ -309,12 +296,14 @@ bool SwTransparencyGrf::PutValue( const uno::Any& rVal,
     return true;
 }
 
-// ------------------------------------------------------------------
+// Sw___Grf::Clone(..) cont'd
 
 SfxPoolItem* SwDrawModeGrf::Clone( SfxItemPool * ) const
 {
     return new SwDrawModeGrf( *this );
 }
+
+// SwDrawModeGrf
 
 sal_uInt16 SwDrawModeGrf::GetValueCount() const
 {
@@ -340,7 +329,5 @@ bool SwDrawModeGrf::PutValue( const uno::Any& rVal,
     }
     return false;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
