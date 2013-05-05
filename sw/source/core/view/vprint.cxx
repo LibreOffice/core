@@ -293,7 +293,6 @@ void ViewShell::CalcPagesForPrint( sal_uInt16 nMax )
     SET_CURR_SHELL( this );
 
     SwRootFrm* pMyLayout = GetLayout();
-    // ULONG nStatMax = pLayout->GetPageNum();
 
     const SwFrm *pPage = pMyLayout->Lower();
     SwLayAction aAction( pMyLayout, Imp() );
@@ -314,7 +313,6 @@ void ViewShell::CalcPagesForPrint( sal_uInt16 nMax )
 
         maVisArea = aOldVis; //reset due to the paints
         Imp()->SetFirstVisPageInvalid();
-//       SwPaintQueue::Repaint();
     }
 
     pMyLayout->EndAllAction();
@@ -324,10 +322,6 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 {
     OSL_ENSURE( this->IsA( TYPE(SwFEShell) ),"ViewShell::Prt for FEShell only");
     SwFEShell* pFESh = (SwFEShell*)this;
-    // Let's create a new document
-//    SwDoc *pPrtDoc = new SwDoc;
-//    pPrtDoc->acquire();
-//    pPrtDoc->SetRefForDocShell( (SvEmbeddedObjectRef*)&(long&)rDocShellRef );
     pPrtDoc->LockExpFlds();
 
     // use given printer
@@ -392,9 +386,6 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
             ((SwTxtNode*)pLastNd)->CopyCollFmt( *pTxtNd );
     }
 
-    // a new one has been created in CORE (copying OLE objects)
-//      if( aDocShellRef.Is() )
-//          SwDataExchange::InitOle( aDocShellRef, pPrtDoc );
     // fill it with the selected content
     pFESh->Copy( pPrtDoc );
 
@@ -511,18 +502,6 @@ sal_Bool ViewShell::PrintOrPDFExport(
 
         ::SetSwVisArea( pViewSh2, pStPage->Frm() );
 
-// FIXME disabled because rPrintData.aOffset is always (0,0)
-#if 0
-        //  consider offset when printing an envelope
-        if( pStPage->GetFmt()->GetPoolFmtId() == RES_POOLPAGE_JAKET )
-        {
-            Point aNewOrigin = pOutDev->GetMapMode().GetOrigin();
-            aNewOrigin += rPrintData.aOffset;
-            MapMode aTmp( pOutDev->GetMapMode() );
-            aTmp.SetOrigin( aNewOrigin );
-            pOutDev->SetMapMode( aTmp );
-        }
-#endif
         pShell->InitPrt( pOutDev );
 
         ::SetSwVisArea( pViewSh2, pStPage->Frm() );
@@ -572,13 +551,11 @@ void ViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintDat
         // Removing this gives us a performance gain during saving the
         // document because the thumbnail creation will not trigger a complete
         // formatting of the document.
-        // Format pages for printing
-        // pSh->CalcPagesForPrint( SHRT_MAX );
+
         //#39275# now Meyer wants again a Clipping
         pOleOut->Push( PUSH_CLIPREGION );
         pOleOut->IntersectClipRegion( aSwRect.SVRect() );
         pSh->GetLayout()->Paint( aSwRect );
-//      SFX_APP()->SpoilDemoOutput( *pOleOut, rRect );
 
         pOleOut->Pop();
         // first the CurrShell object needs to be destroyed!

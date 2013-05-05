@@ -529,14 +529,12 @@ void SwPagePreviewLayout::_CalcDocPrevwPaintRect()
 
     Size aSize;
     if ( mbDoesLayoutColsFitIntoWindow )
-        //aSize.Width() = mnPrevwLayoutWidth;
         aSize.Width() = std::min( mnPrevwLayoutWidth,
                              maPreviewDocRect.GetWidth() - aTopLeftPos.X() );
     else
         aSize.Width() = std::min( maPreviewDocRect.GetWidth() - aTopLeftPos.X(),
                              maWinSize.Width() - maAdditionalPaintOffset.X() );
     if ( mbDoesLayoutRowsFitIntoWindow )
-        //aSize.Height() = mnPrevwLayoutHeight;
         aSize.Height() = std::min( mnPrevwLayoutHeight,
                               maPreviewDocRect.GetHeight() - aTopLeftPos.Y() );
     else

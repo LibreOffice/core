@@ -97,8 +97,6 @@ void ViewShell::PrintProspect(
 
     std::pair< sal_Int32, sal_Int32 > rPagesToPrint =
             rPrintData.GetRenderData().GetPagePairsForProspectPrinting()[ nRenderer ];
-// const USHORT nPageMax = static_cast< USHORT >(rPagesToPrint.first > rPagesToPrint.second ?
-//            rPagesToPrint.first : rPagesToPrint.second);
     OSL_ENSURE( rPagesToPrint.first  == -1 || rPrintData.GetRenderData().GetValidPagesSet().count( rPagesToPrint.first ) == 1, "first Page not valid" );
     OSL_ENSURE( rPagesToPrint.second == -1 || rPrintData.GetRenderData().GetValidPagesSet().count( rPagesToPrint.second ) == 1, "second Page not valid" );
 
@@ -213,7 +211,6 @@ void ViewShell::PrintProspect(
 
             Point aPos( aSttPt );
             aPos -= aShell.maVisArea.Pos();
-//            aPos -= aPrtOff;
             aMapMode.SetOrigin( aPos );
             pPrinter->SetMapMode( aMapMode );
             pStPage->GetUpper()->Paint( pStPage->Frm() );

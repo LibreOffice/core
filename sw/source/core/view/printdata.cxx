@@ -456,9 +456,6 @@ bool SwPrintUIOptions::IsPrintTables() const
     // take care of different property names currently in use for this option.
     // for compatibility the old name should win (may still be used for PDF export or via Uno API)
 
-//    bool bRes = getBoolValue( "PrintTablesGraphicsAndDiagrams", sal_True );
-//    bRes = getBoolValue( "PrintTables", bRes );
-//    return bRes;
     // for now it was decided that tables should always be printed
     return true;
 }
