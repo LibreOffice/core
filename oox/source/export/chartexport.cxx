@@ -1127,6 +1127,20 @@ void ChartExport::exportBarChart( Reference< chart2::XChartType > xChartType )
     exportSeries( xChartType, nAttachedAxis );
 
     Reference< XPropertySet > xTypeProp( xChartType, uno::UNO_QUERY );
+
+    if( xTypeProp.is() && GetProperty( xTypeProp, "GapwidthSequence") )
+    {
+        uno::Sequence< sal_Int32 > aBarPositionSequence;
+        mAny >>= aBarPositionSequence;
+        if( aBarPositionSequence.getLength() )
+        {
+            sal_Int32 nGapWidth = aBarPositionSequence[0];
+            pFS->singleElement( FSNS( XML_c, XML_gapWidth ),
+                XML_val, I32S( nGapWidth ),
+                FSEND );
+        }
+    }
+
     if( mbIs3DChart )
     {
         // Shape
