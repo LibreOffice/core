@@ -36,7 +36,10 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Library_migrationoo2 \
     Library_migrationoo3 \
     Library_unopkgapp \
-    $(if $(gb_RUNNABLE_INSTDIR),Package_pagein_install) \
+    $(if $(gb_RUNNABLE_INSTDIR),\
+        Package_pagein_install \
+        Package_scripts_install \
+    ) \
     Package_scripts \
     Pagein_calc \
     Pagein_common \
