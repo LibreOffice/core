@@ -46,8 +46,6 @@ using namespace css;
 using namespace cssu;
 using ::rtl::OUString;
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
-
 namespace svx { namespace sidebar {
 
 
