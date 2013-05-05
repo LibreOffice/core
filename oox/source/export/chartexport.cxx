@@ -918,9 +918,6 @@ void ChartExport::exportTitle( Reference< XShape > xShape )
     FSHelperPtr pFS = GetFS();
     pFS->startElement( FSNS( XML_c, XML_title ),
             FSEND );
-    // TODO:customize layout
-    pFS->singleElement( FSNS( XML_c, XML_layout ),
-            FSEND );
 
     pFS->startElement( FSNS( XML_c, XML_tx ),
             FSEND );
@@ -963,6 +960,11 @@ void ChartExport::exportTitle( Reference< XShape > xShape )
 
     pFS->endElement( FSNS( XML_c, XML_rich ) );
     pFS->endElement( FSNS( XML_c, XML_tx ) );
+
+    // TODO:customize layout
+    pFS->singleElement( FSNS( XML_c, XML_layout ),
+            FSEND );
+
     pFS->endElement( FSNS( XML_c, XML_title ) );
 }
 
