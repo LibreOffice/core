@@ -44,7 +44,7 @@
       <value>${FILEFORMATNAME}</value>
     </prop>
     <prop oor:name="ooOpenSourceContext">
-      <value>${OPENSOURCE}</value>
+      <value>1</value>
     </prop>
   </node>
   <node oor:name="Office">
