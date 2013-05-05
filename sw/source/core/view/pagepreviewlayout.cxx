@@ -122,8 +122,6 @@ void SwPagePreviewLayout::_ClearPrevwPageData()
 /** calculate page preview layout sizes
 
     OD 18.12.2002 #103492#
-
-    @author OD
 */
 void SwPagePreviewLayout::_CalcPrevwLayoutSizes()
 {
@@ -176,12 +174,11 @@ void SwPagePreviewLayout::_CalcPrevwLayoutSizes()
 
     OD 11.12.2002 #103492#
     initialize the page preview settings for a given layout.
+
     side effects:
     (1) If parameter <_bCalcScale> is true, mapping mode with calculated
     scaling is set at the output device and the zoom at the view options of
     the given view shell is set with the calculated scaling.
-
-    @author OD
 */
 bool SwPagePreviewLayout::Init( const sal_uInt16 _nCols,
                                 const sal_uInt16 _nRows,
@@ -252,12 +249,7 @@ bool SwPagePreviewLayout::Init( const sal_uInt16 _nCols,
     return true;
 }
 
-/** apply new zoom at given view shell
-
-    OD 11.12.2002 #103492# - implementation of <_ApplyNewZoomAtViewShell>
-
-    @author OD
-*/
+/** apply new zoom at given view shell */
 void SwPagePreviewLayout::_ApplyNewZoomAtViewShell( sal_uInt8 _aNewZoom )
 {
     SwViewOption aNewViewOptions = *(mrParentViewShell.GetViewOptions());
@@ -274,8 +266,6 @@ void SwPagePreviewLayout::_ApplyNewZoomAtViewShell( sal_uInt8 _aNewZoom )
 /** method to adjust page preview layout to document changes
 
     OD 18.12.2002 #103492#
-
-    @author OD
 */
 bool SwPagePreviewLayout::ReInit()
 {
@@ -297,12 +287,13 @@ bool SwPagePreviewLayout::ReInit()
 // =============================================================================
 // methods to prepare paint of page preview
 // =============================================================================
+
 /** prepare paint of page preview
 
     OD 12.12.2002 #103492#
     OD 21.03.2003 #108282# - delete parameter _onStartPageVirtNum
 
-    @author OD, _nProposedStartPageNum, _onStartPageNum are absolute
+    @note _nProposedStartPageNum, _onStartPageNum are absolute
 */
 bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
                                    const Point      _aProposedStartPos,
@@ -502,8 +493,6 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
 /** calculate additional paint offset
 
     OD 12.12.2002 #103492#
-
-    @author OD
 */
 void SwPagePreviewLayout::_CalcAdditionalPaintOffset()
 {
@@ -535,8 +524,6 @@ void SwPagePreviewLayout::_CalcAdditionalPaintOffset()
 /** calculate painted preview document rectangle
 
     OD 12.12.2002 #103492#
-
-    @author OD
 */
 void SwPagePreviewLayout::_CalcDocPrevwPaintRect()
 {
@@ -564,8 +551,6 @@ void SwPagePreviewLayout::_CalcDocPrevwPaintRect()
 /** calculate preview pages
 
     OD 12.12.2002 #103492#
-
-    @author OD
 */
 void SwPagePreviewLayout::_CalcPreviewPages()
 {
@@ -681,8 +666,6 @@ void SwPagePreviewLayout::_CalcPreviewPages()
 /** determines preview data for a given page and a given preview offset
 
     OD 13.12.2002 #103492#
-
-    @author OD
 */
 bool SwPagePreviewLayout::_CalcPreviewDataForPage( const SwPageFrm& _rPage,
                                                    const Point& _rPrevwOffset,
@@ -725,8 +708,6 @@ bool SwPagePreviewLayout::_CalcPreviewDataForPage( const SwPageFrm& _rPage,
 /** enable/disable book preview
 
     OD 2004-03-04 #i18143#
-
-    @author OD
 */
 bool SwPagePreviewLayout::SetBookPreviewMode( const bool _bEnableBookPreview,
                                               sal_uInt16& _onStartPageNum,
@@ -765,11 +746,10 @@ bool SwPagePreviewLayout::SetBookPreviewMode( const bool _bEnableBookPreview,
 // methods to determine new data for changing the current shown part of the
 // document preview.
 // =============================================================================
+
 /** calculate start position for new scale
 
     OD 12.12.2002 #103492#
-
-    @author OD
 */
 Point SwPagePreviewLayout::GetPreviewStartPosForNewScale(
                           const Fraction& _aNewScale,
@@ -830,7 +810,7 @@ Point SwPagePreviewLayout::GetPreviewStartPosForNewScale(
 
 /** determines, if page with given page number is visible in preview
 
-    @author OD, _nPageNum is absolut!
+    @note _nPageNum is absolut!
 */
 bool SwPagePreviewLayout::IsPageVisible( const sal_uInt16 _nPageNum ) const
 {
@@ -840,7 +820,7 @@ bool SwPagePreviewLayout::IsPageVisible( const sal_uInt16 _nPageNum ) const
 
 /** calculate data to bring new selected page into view.
 
-    @author OD, IN/OUT parameters are absolute page numbers!!!
+    @note IN/OUT parameters are absolute page numbers!!!
 */
 bool SwPagePreviewLayout::CalcStartValuesForSelectedPageMove(
                                 const sal_Int16  _nHoriMove,
@@ -934,10 +914,7 @@ bool SwPagePreviewLayout::CalcStartValuesForSelectedPageMove(
     return true;
 }
 
-/** checks, if given position is inside a shown document page
-
-    @author OD
-*/
+/** checks, if given position is inside a shown document page */
 struct PrevwPosInsidePagePred
 {
     const Point mnPrevwPos;
@@ -996,10 +973,7 @@ bool SwPagePreviewLayout::IsPrevwPosInDocPrevwPage( const Point  _aPrevwPos,
     return bIsPosInsideDoc;
 }
 
-/** determine window page scroll amount
-
-    @author OD
-*/
+/** determine window page scroll amount */
 SwTwips SwPagePreviewLayout::GetWinPagesScrollAmount(
                                 const sal_Int16 _nWinPagesToScroll ) const
 {
@@ -1040,11 +1014,10 @@ SwTwips SwPagePreviewLayout::GetWinPagesScrollAmount(
 // =============================================================================
 // methods to paint page preview layout
 // =============================================================================
+
 /** paint prepared preview
 
     OD 12.12.2002 #103492#
-
-    @author OD
 */
 bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
 {
@@ -1209,8 +1182,6 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
 /** repaint pages on page preview
 
     OD 18.12.2002 #103492#
-
-    @author OD
 */
 void SwPagePreviewLayout::Repaint( const Rectangle _aInvalidCoreRect ) const
 {
@@ -1260,8 +1231,6 @@ void SwPagePreviewLayout::Repaint( const Rectangle _aInvalidCoreRect ) const
 /** paint selection mark at page
 
     OD 17.12.2002 #103492#
-
-    @author OD
 */
 void SwPagePreviewLayout::_PaintSelectMarkAtPage(
                                     const PrevwPage* _aSelectedPrevwPage ) const
@@ -1321,7 +1290,7 @@ void SwPagePreviewLayout::_PaintSelectMarkAtPage(
     Perform paint for current selected page in order to unmark it.
     Set new selected page and perform paint to mark this page.
 
-    @author OD, _nSelectedPage, mnSelectedPage are absolut
+    @note _nSelectedPage, mnSelectedPage are absolut
 */
 void SwPagePreviewLayout::MarkNewSelectedPage( const sal_uInt16 _nSelectedPage )
 {
@@ -1362,15 +1331,13 @@ void SwPagePreviewLayout::MarkNewSelectedPage( const sal_uInt16 _nSelectedPage )
         _PaintSelectMarkAtPage( pNewSelectedPrevwPage );
 }
 
-
 // =============================================================================
 // helper methods
 // =============================================================================
+
 /** get preview page by physical page number
 
     OD 17.12.2002 #103492#
-
-    @author OD
 */
 struct EqualsPageNumPred
 {
@@ -1398,7 +1365,7 @@ const PrevwPage* SwPagePreviewLayout::_GetPrevwPageByPageNum( const sal_uInt16 _
 
     OD 17.01.2003 #103492#
 
-    @author OD, _nPageNum is relative
+    @note _nPageNum is relative
 */
 sal_uInt16 SwPagePreviewLayout::GetRowOfPage( sal_uInt16 _nPageNum ) const
 {
@@ -1422,7 +1389,7 @@ sal_uInt16 SwPagePreviewLayout::GetRowOfPage( sal_uInt16 _nPageNum ) const
 
     OD 17.01.2003 #103492#
 
-    @author OD, _nPageNum is relative
+    @note _nPageNum is relative
 */
 sal_uInt16 SwPagePreviewLayout::GetColOfPage( sal_uInt16 _nPageNum ) const
 {
@@ -1451,8 +1418,6 @@ Size SwPagePreviewLayout::GetPrevwDocSize() const
 /** get size of a preview page by its physical page number
 
     OD 15.01.2003 #103492#
-
-    @author OD
 */
 Size SwPagePreviewLayout::GetPrevwPageSizeByPageNum( sal_uInt16 _nPageNum ) const
 {
@@ -1470,8 +1435,6 @@ Size SwPagePreviewLayout::GetPrevwPageSizeByPageNum( sal_uInt16 _nPageNum ) cons
 /** get virtual page number by its physical page number
 
     OD 21.03.2003 #108282#
-
-    @author OD
 */
 sal_uInt16 SwPagePreviewLayout::GetVirtPageNumByPageNum( sal_uInt16 _nPageNum ) const
 {
@@ -1486,10 +1449,7 @@ sal_uInt16 SwPagePreviewLayout::GetVirtPageNumByPageNum( sal_uInt16 _nPageNum ) 
     }
 }
 
-/** Convert absolute to relative page numbers (see PrintEmptyPages)
-
-    @author FME
-*/
+/** Convert absolute to relative page numbers (see PrintEmptyPages) */
 sal_uInt16 SwPagePreviewLayout::ConvertAbsoluteToRelativePageNum( sal_uInt16 _nAbsPageNum ) const
 {
     if ( mbBookPreview || mbPrintEmptyPages || !_nAbsPageNum )
@@ -1512,10 +1472,7 @@ sal_uInt16 SwPagePreviewLayout::ConvertAbsoluteToRelativePageNum( sal_uInt16 _nA
     return nRet;
 }
 
-/** Convert relative to absolute page numbers (see PrintEmptyPages)
-
-    @author FME
-*/
+/** Convert relative to absolute page numbers (see PrintEmptyPages) */
 sal_uInt16 SwPagePreviewLayout::ConvertRelativeToAbsolutePageNum( sal_uInt16 _nRelPageNum ) const
 {
     if ( mbBookPreview || mbPrintEmptyPages || !_nRelPageNum )

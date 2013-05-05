@@ -87,7 +87,7 @@ void SwViewImp::Init( const SwViewOption *pNewOpt )
     pDrawView->SetMarkHdlSizePixel(9);
 }
 
-// SwViewImp::SwViewImp()  CTor for the core internals
+/// CTor for the core internals
 SwViewImp::SwViewImp( ViewShell *pParent ) :
     pSh( pParent ),
     pDrawView( 0 ),
@@ -379,7 +379,7 @@ void SwViewImp::InvalidateAccessibleRelationSet( const SwFlyFrm *pMaster,
     } while ( pTmp != pVSh );
 }
 
-// invalidate CONTENT_FLOWS_FROM/_TO relation for paragraphs
+/// invalidate CONTENT_FLOWS_FROM/_TO relation for paragraphs
 void SwViewImp::_InvalidateAccessibleParaFlowRelation( const SwTxtFrm* _pFromTxtFrm,
                                                        const SwTxtFrm* _pToTxtFrm )
 {
@@ -410,7 +410,7 @@ void SwViewImp::_InvalidateAccessibleParaFlowRelation( const SwTxtFrm* _pFromTxt
     } while ( pTmp != pVSh );
 }
 
-// invalidate text selection for paragraphs
+/// invalidate text selection for paragraphs
 void SwViewImp::_InvalidateAccessibleParaTextSelection()
 {
     ViewShell* pVSh = GetShell();
@@ -426,7 +426,7 @@ void SwViewImp::_InvalidateAccessibleParaTextSelection()
     } while ( pTmp != pVSh );
 }
 
-// invalidate attributes for paragraphs
+/// invalidate attributes for paragraphs
 void SwViewImp::_InvalidateAccessibleParaAttrs( const SwTxtFrm& rTxtFrm )
 {
     ViewShell* pVSh = GetShell();

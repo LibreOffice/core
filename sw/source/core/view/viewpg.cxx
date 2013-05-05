@@ -79,7 +79,7 @@ void ViewShell::AdjustOptionsForPagePreview(SwPrintData const& rPrintOptions)
     return;
 }
 
-// print brochure
+/// print brochure
 // OD 05.05.2003 #i14016# - consider empty pages on calculation of the scaling
 // for a page to be printed.
 void ViewShell::PrintProspect(

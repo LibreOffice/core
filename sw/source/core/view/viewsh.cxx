@@ -1171,14 +1171,12 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
     }
     GetWin()->Update();
 
-    // --> OD 2010-02-11 #i88070#
-    if ( pPostItMgr )
+    if ( pPostItMgr ) // #i88070#
     {
         pPostItMgr->Rescale();
         pPostItMgr->CalcRects();
         pPostItMgr->LayoutPostIts();
     }
-    // <--
 
     if ( !bScrolled && pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() )
         pPostItMgr->CorrectPositions();
@@ -2237,7 +2235,7 @@ void ViewShell::InvalidateAccessibleFocus()
         Imp()->GetAccessibleMap().InvalidateFocus();
 }
 
-/*
+/**
  * invalidate CONTENT_FLOWS_FROM/_TO relation for paragraphs #i27138#
  */
 void ViewShell::InvalidateAccessibleParaFlowRelation( const SwTxtFrm* _pFromTxtFrm,
@@ -2249,7 +2247,7 @@ void ViewShell::InvalidateAccessibleParaFlowRelation( const SwTxtFrm* _pFromTxtF
     }
 }
 
-/*
+/**
  * invalidate text selection for paragraphs #i27301#
  */
 void ViewShell::InvalidateAccessibleParaTextSelection()

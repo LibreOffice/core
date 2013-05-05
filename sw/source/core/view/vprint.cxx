@@ -649,14 +649,7 @@ sal_Bool ViewShell::IsAnyFieldInDoc() const
     return sal_False;
 }
 
-
-
-/******************************************************************************
- *  SwDrawViewSave
- *
- *  Saves some settings at the draw view
- ******************************************************************************/
-
+///  Saves some settings at the draw view
 SwDrawViewSave::SwDrawViewSave( SdrView* pSdrView )
     : pDV( pSdrView )
 {
