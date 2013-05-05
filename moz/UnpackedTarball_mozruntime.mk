@@ -9,6 +9,6 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,mozruntime))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,mozruntime,$(MOZ_ZIP_RUNTIME)))
+$(eval $(call gb_UnpackedTarball_set_tarball,mozruntime,$(MOZ_ZIP_RUNTIME),0))
 
 # vim: set noet sw=4 ts=4:
