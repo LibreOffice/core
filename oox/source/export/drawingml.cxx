@@ -1500,8 +1500,7 @@ void DrawingML::WriteFill( Reference< XPropertySet > xPropSet )
     FillStyle aFillStyle( FillStyle_NONE );
     xPropSet->getPropertyValue( S( "FillStyle" ) ) >>= aFillStyle;
 
-    if( aFillStyle == FillStyle_NONE ||
-        aFillStyle == FillStyle_HATCH )
+    if( aFillStyle == FillStyle_HATCH )
         return;
 
     switch( aFillStyle )
@@ -1514,6 +1513,9 @@ void DrawingML::WriteFill( Reference< XPropertySet > xPropSet )
         break;
     case ::com::sun::star::drawing::FillStyle_BITMAP :
         WriteBlipFill( xPropSet, S( "FillBitmapURL" ) );
+        break;
+    case ::com::sun::star::drawing::FillStyle_NONE:
+        mpFS->singleElementNS( XML_a, XML_noFill, FSEND );
         break;
     default:
         ;
