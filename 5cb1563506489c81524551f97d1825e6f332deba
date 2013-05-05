@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//9T0\u003d",
+        "filename": "vcl/source/edit/textundo.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-05-05T06:43:23Z",
+      "side": 1,
+      "message": "do not delete",
+      "revId": "5cb1563506489c81524551f97d1825e6f332deba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
