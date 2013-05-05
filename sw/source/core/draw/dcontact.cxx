@@ -67,7 +67,6 @@
 
 using namespace ::com::sun::star;
 
-
 TYPEINIT1( SwContact, SwClient )
 TYPEINIT1( SwFlyDrawContact, SwContact )
 TYPEINIT1( SwDrawContact, SwContact )
@@ -88,13 +87,12 @@ void setContextWritingMode( SdrObject* pObj, SwFrm* pAnchor )
     }
 }
 
-
-// The Get reverse way: seeks the format to the specified object.
-// If the object is a SwVirtFlyDrawObj then the format of this
-// will be acquired.
-// Otherwise it is just a simple drawing object. This has a
-// UserCall and is the client of the searched format.
-
+/** The Get reverse way: seeks the format to the specified object.
+ * If the object is a SwVirtFlyDrawObj then the format of this
+ * will be acquired.
+ * Otherwise it is just a simple drawing object. This has a
+ * UserCall and is the client of the searched format.
+*/
 SwFrmFmt *FindFrmFmt( SdrObject *pObj )
 {
     SwFrmFmt* pRetval = 0L;
@@ -151,9 +149,7 @@ SwRect GetBoundRectOfAnchoredObj( const SdrObject* pObj )
     return aRet;
 }
 
-/** Returns the UserCall if applicable from the group object
-    #i26791# - change return type
-*/
+/// Returns the UserCall if applicable from the group object
 SwContact* GetUserCall( const SdrObject* pObj )
 {
     SdrObject *pTmp;
@@ -486,9 +482,11 @@ void SwFlyDrawContact::Modify( const SfxPoolItem*, const SfxPoolItem * )
 {
 }
 
-// override method to control Writer fly frames,
-// which are linked, and to assure that all objects anchored at/inside the
-// Writer fly frame are also made visible.
+/**
+ * @note Overriding method to control Writer fly frames, which are linked, and
+ *       to assure that all objects anchored at/inside the Writer fly frame are
+ *       also made visible.
+ */
 void SwFlyDrawContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
 {
     OSL_ENSURE( _pDrawObj->ISA(SwVirtFlyDrawObj),
@@ -525,9 +523,11 @@ void SwFlyDrawContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
     SwContact::MoveObjToVisibleLayer( _pDrawObj );
 }
 
-// override method to control Writer fly frames,
-// which are linked, and to assure that all objects anchored at/inside the
-// Writer fly frame are also made invisible.
+/**
+ * @note Override method to control Writer fly frames, which are linked, and
+ *       to assure that all objects anchored at/inside the Writer fly frame are
+ *       also made invisible.
+ */
 void SwFlyDrawContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
 {
     OSL_ENSURE( _pDrawObj->ISA(SwVirtFlyDrawObj),
@@ -607,8 +607,8 @@ SwDrawContact::SwDrawContact( SwFrmFmt* pToRegisterIn, SdrObject* pObj ) :
                                 InsertObject( pObj, pObj->GetOrdNumDirect() );
     }
 
-    //Controls have to be always in the Control-Layer. This is also true for
-    //group objects, if they contain controls.
+    // Controls have to be always in the Control-Layer. This is also true for
+    // group objects, if they contain controls.
     if ( ::CheckControlLayer( pObj ) )
     {
         // set layer of object to corresponding invisible layer.
@@ -763,11 +763,12 @@ SdrObject* SwDrawContact::GetMaster()
            : 0L;
 }
 
-// overload <SwContact::SetMaster(..)> in order to
-// assert, if the 'master' drawing object is replaced.
-// replace of master object correctly handled, if
-// handled by method <SwDrawContact::ChangeMasterObject(..)>. Thus, assert
-// only, if a debug level is given.
+/**
+ * @note Overloading <SwContact::SetMaster(..)> in order to assert, if the
+ *       'master' drawing object is replaced. The latter is correctly handled,
+ *       if handled by method <SwDrawContact::ChangeMasterObject(..)>. Thus,
+ *       assert only, if a debug level is given.
+ */
 void SwDrawContact::SetMaster( SdrObject* _pNewMaster )
 {
     if ( _pNewMaster )
@@ -822,7 +823,7 @@ SwFrm* SwDrawContact::GetAnchorFrm( SdrObject* _pDrawObj )
     return pAnchorFrm;
 }
 
-// method to create a new 'virtual' drawing object.
+/// create a new 'virtual' drawing object.
 SwDrawVirtObj* SwDrawContact::CreateVirtObj()
 {
     // determine 'master'
@@ -837,9 +838,11 @@ SwDrawVirtObj* SwDrawContact::CreateVirtObj()
     return pNewDrawVirtObj;
 }
 
-// destroys a given 'virtual' drawing object.
-// side effect: 'virtual' drawing object is removed from data structure
-//              <maDrawVirtObjs>.
+/** destroys a given 'virtual' drawing object.
+ *
+ * side effect: 'virtual' drawing object is removed from data structure
+ *              <maDrawVirtObjs>.
+ */
 void SwDrawContact::DestroyVirtObj( SwDrawVirtObj* _pVirtObj )
 {
     if ( _pVirtObj )
@@ -849,8 +852,10 @@ void SwDrawContact::DestroyVirtObj( SwDrawVirtObj* _pVirtObj )
     }
 }
 
-// add a 'virtual' drawing object to drawing page.
-// Use an already created one, which isn't used, or create a new one.
+/** add a 'virtual' drawing object to drawing page.
+ *
+ * Use an already created one, which isn't used, or create a new one.
+ */
 SwDrawVirtObj* SwDrawContact::AddVirtObj()
 {
     SwDrawVirtObj* pAddedDrawVirtObj = 0L;
@@ -875,7 +880,7 @@ SwDrawVirtObj* SwDrawContact::AddVirtObj()
     return pAddedDrawVirtObj;
 }
 
-// remove 'virtual' drawing objects and destroy them.
+/// remove 'virtual' drawing objects and destroy them.
 void SwDrawContact::RemoveAllVirtObjs()
 {
     for ( std::list<SwDrawVirtObj*>::iterator aDrawVirtObjsIter = maDrawVirtObjs.begin();
@@ -925,7 +930,7 @@ bool SwDrawContact::VirtObjAnchoredAtFrmPred::operator() ( const SwDrawVirtObj* 
     return ( pObjAnchorFrm == mpAnchorFrm );
 }
 
-// get drawing object ('master' or 'virtual') by frame.
+/// get drawing object ('master' or 'virtual') by frame.
 SdrObject* SwDrawContact::GetDrawObjectByAnchorFrm( const SwFrm& _rAnchorFrm )
 {
     SdrObject* pRetDrawObj = 0L;
@@ -1091,8 +1096,8 @@ void SwDrawContact::Changed( const SdrObject& rObj,
         pTmpRoot->EndAllAction();
 }
 
-// helper class for method <SwDrawContact::_Changed(..)> for handling nested
-// <SdrObjUserCall> events
+/// helper class for method <SwDrawContact::_Changed(..)> for handling nested
+/// <SdrObjUserCall> events
 class NestedUserCallHdl
 {
     private:
@@ -1635,7 +1640,7 @@ void SwDrawContact::DisconnectFromLayout( bool _bMoveMasterToInvisibleLayer )
     mbDisconnectInProgress = false;
 }
 
-// method to remove 'master' drawing object from drawing page.
+/// method to remove 'master' drawing object from drawing page.
 void SwDrawContact::RemoveMasterFromDrawPage()
 {
     if ( GetMaster() )
@@ -1889,7 +1894,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
     }
 }
 
-// insert 'master' drawing object into drawing page
+/// insert 'master' drawing object into drawing page
 void SwDrawContact::InsertMasterIntoDrawPage()
 {
     if ( !GetMaster()->IsInserted() )
@@ -1966,7 +1971,7 @@ void SwDrawContact::ChangeMasterObject( SdrObject *pNewMaster )
     _InvalidateObjs();
 }
 
-// get data collection of anchored objects, handled by with contact
+/// get data collection of anchored objects, handled by with contact
 void SwDrawContact::GetAnchoredObjs( std::list<SwAnchoredObject*>& _roAnchoredObjs ) const
 {
     _roAnchoredObjs.push_back( const_cast<SwAnchoredDrawObject*>(&maAnchoredDrawObj) );
@@ -1991,11 +1996,14 @@ namespace sdr
         class VOCOfDrawVirtObj : public ViewObjectContactOfSdrObj
         {
         protected:
-            // This method is responsible for creating the graphical visualisation data which is
-            // stored/cached in the local primitive. Default gets view-independent Primitive
-            // from the ViewContact using ViewContact::getViewIndependentPrimitive2DSequence(), takes care of
-            // visibility, handles glue and ghosted.
-            // This method will not handle included hierarchies and not check geometric visibility.
+            /**
+             * This method is responsible for creating the graphical visualisation data which is
+             * stored/cached in the local primitive. Default gets view-independent Primitive from
+             * the ViewContact using ViewContact::getViewIndependentPrimitive2DSequence(), takes
+             * care of visibility, handles glue and ghosted.
+             *
+             * This method will not handle included hierarchies and not check geometric visibility.
+             */
             virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const;
 
         public:
@@ -2010,20 +2018,22 @@ namespace sdr
         class VCOfDrawVirtObj : public ViewContactOfVirtObj
         {
         protected:
-            // Create a Object-Specific ViewObjectContact, set ViewContact and
-            // ObjectContact. Always needs to return something. Default is to create
-            // a standard ViewObjectContact containing the given ObjectContact and *this
+            /** Create a Object-Specific ViewObjectContact, set ViewContact and ObjectContact.
+             *
+             * Always needs to return something. Default is to create a standard ViewObjectContact
+             * containing the given ObjectContact and *this.
+             */
             virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
 
         public:
-            // basic constructor, used from SdrObject.
+            /// basic constructor, used from SdrObject.
             VCOfDrawVirtObj(SwDrawVirtObj& rObj)
             :   ViewContactOfVirtObj(rObj)
             {
             }
             virtual ~VCOfDrawVirtObj();
 
-            // access to SwDrawVirtObj
+            /// access to SwDrawVirtObj
             SwDrawVirtObj& GetSwDrawVirtObj() const
             {
                 return (SwDrawVirtObj&)mrObject;
@@ -2036,7 +2046,7 @@ namespace sdr
 {
     namespace contact
     {
-        // recursively collect primitive data from given VOC with given offset
+        /// recursively collect primitive data from given VOC with given offset
         void impAddPrimitivesFromGroup(const ViewObjectContact& rVOC, const basegfx::B2DHomMatrix& rOffsetMatrix, const DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DSequence& rxTarget)
         {
             const sal_uInt32 nSubHierarchyCount(rVOC.GetViewContact().GetObjectCount());
@@ -2263,7 +2273,7 @@ void SwDrawVirtObj::RemoveFromDrawingPage()
     }
 }
 
-// is 'virtual' drawing object connected to writer layout and to drawing layer.
+/// Is 'virtual' drawing object connected to writer layout and to drawing layer?
 bool SwDrawVirtObj::IsConnected() const
 {
     bool bRetVal = GetAnchorFrm() &&

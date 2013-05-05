@@ -202,9 +202,7 @@ SdrObject* SwDrawView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTo
     return pRetval;
 }
 
-// SwDrawView::AddCustomHdl()
-// Gets called every time the handles need to be build
-
+/// Gets called every time the handles need to be build
 void SwDrawView::AddCustomHdl()
 {
     const SdrMarkList &rMrkList = GetMarkedObjectList();
@@ -317,11 +315,7 @@ SdrObject* SwDrawView::GetMaxToBtmObj(SdrObject* pObj) const
     return 0;
 }
 
-// SwDrawView::ObjOrderChanged()
-
-// determine maximal order number for a 'child' object of given 'parent' object
-// @author OD
-
+/// determine maximal order number for a 'child' object of given 'parent' object
 sal_uInt32 SwDrawView::_GetMaxChildOrdNum( const SwFlyFrm& _rParentObj,
                                            const SdrObject* _pExclChildObj ) const
 {
@@ -353,11 +347,7 @@ sal_uInt32 SwDrawView::_GetMaxChildOrdNum( const SwFlyFrm& _rParentObj,
     return nMaxChildOrdNum;
 }
 
-/** method to move 'repeated' objects of the given moved object to the
- *  according level
- *
- *  @author OD
- */
+/// method to move 'repeated' objects of the given moved object to the according level
 void SwDrawView::_MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
                                     const std::vector<SdrObject*>& _rMovedChildObjs ) const
 {
@@ -908,11 +898,7 @@ void SwDrawView::CheckPossibilities()
     bResizeProtect  |= bProtect | bSzProtect;
 }
 
-/** replace marked <SwDrawVirtObj>-objects by its reference object for delete
- *  marked objects.
- *
- *  @author OD
-*/
+/// replace marked <SwDrawVirtObj>-objects by its reference object for delete marked objects.
 void SwDrawView::ReplaceMarkedDrawVirtObjs( SdrMarkView& _rMarkView )
 {
     SdrPageView* pDrawPageView = _rMarkView.GetSdrPageView();

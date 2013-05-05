@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svx/svxids.hrc>
 #include <tools/stream.hxx>
 #include <unotools/pathoptions.hxx>
@@ -125,11 +124,13 @@ SwDrawDocument::~SwDrawDocument()
     ClearModel(sal_True);
 }
 
-// This method creates a new page (SdPage) and thereupon returns a pointer
-// to it back. The drawing engine is using this method while loading for
-// the creating of pages (whose type it not even know, because they are
-// inherited from SdrPage).
-
+/** Create a new page (SdPage) and return a pointer to it back.
+ *
+ * The drawing engine is using this method while loading for the creating of
+ * pages (whose type it not even know, because they are inherited from SdrPage).
+ *
+ * @return Pointer to the new page.
+ */
 SdrPage* SwDrawDocument::AllocPage(bool bMasterPage)
 {
     SwDPage* pPage = new SwDPage(*this, 0 != bMasterPage);
@@ -150,7 +151,6 @@ SdrLayerID SwDrawDocument::GetControlExportLayerId( const SdrObject & ) const
 
 uno::Reference< uno::XInterface > SwDrawDocument::createUnoModel()
 {
-
     uno::Reference< uno::XInterface > xModel;
 
     try
@@ -167,6 +167,5 @@ uno::Reference< uno::XInterface > SwDrawDocument::createUnoModel()
 
     return xModel;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

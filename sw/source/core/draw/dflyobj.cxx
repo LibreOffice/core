@@ -23,7 +23,6 @@
 #include <editeng/opaqitem.hxx>
 #include <svx/svdpage.hxx>
 
-
 #include <fmtclds.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
@@ -70,19 +69,25 @@ namespace sdr
 {
     namespace contact
     {
-        // #i95264# currently needed since createViewIndependentPrimitive2DSequence()
-        // is called when RecalcBoundRect() is used. There should currently no VOCs being
-        // constructed since it gets not visualized (instead the corresponding SwVirtFlyDrawObj's
-        // referencing this one are visualized).
+        /**
+         * @see #i95264#
+         *
+         * currently needed since createViewIndependentPrimitive2DSequence() is called when
+         * RecalcBoundRect() is used. There should currently no VOCs being constructed since it
+         * gets not visualized (instead the corresponding SwVirtFlyDrawObj's referencing this one
+         * are visualized).
+         */
         class VCOfSwFlyDrawObj : public ViewContactOfSdrObj
         {
         protected:
-            // This method is responsible for creating the graphical visualisation data
-            // ONLY based on model data
+            /** This method is responsible for creating the graphical visualisation data
+             *
+             * @note ONLY based on model data
+             */
             virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
 
         public:
-            // basic constructor, used from SdrObject.
+            /// basic constructor, used from SdrObject.
             VCOfSwFlyDrawObj(SwFlyDrawObj& rObj)
             :   ViewContactOfSdrObj(rObj)
             {
@@ -131,16 +136,14 @@ sal_uInt32 SwFlyDrawObj::GetObjInventor() const
     return SWGInventor;
 }
 
-
 sal_uInt16 SwFlyDrawObj::GetObjIdentifier() const
 {
     return SwFlyDrawObjIdentifier;
 }
 
-
 // SwVirtFlyDrawObj::CToren, Dtor
 
-// AW: Need own primitive to get the FlyFrame paint working
+// TODO: Need own primitive to get the FlyFrame paint working
 
 namespace drawinglayer
 {
@@ -153,7 +156,7 @@ namespace drawinglayer
             const basegfx::B2DRange                 maOuterRange;
 
         protected:
-            // method which is to be used to implement the local decomposition of a 2D primitive
+            /// method which is to be used to implement the local decomposition of a 2D primitive
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
@@ -179,7 +182,7 @@ namespace drawinglayer
             const SwVirtFlyDrawObj& getSwVirtFlyDrawObj() const { return mrSwVirtFlyDrawObj; }
             const basegfx::B2DRange& getOuterRange() const { return maOuterRange; }
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d
@@ -261,19 +264,21 @@ namespace sdr
         class VCOfSwVirtFlyDrawObj : public ViewContactOfVirtObj
         {
         protected:
-            // This method is responsible for creating the graphical visualisation data
-            // ONLY based on model data
+            /** This method is responsible for creating the graphical visualisation data
+             *
+             * @note ONLY based on model data
+             */
             virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
 
         public:
-            // basic constructor, used from SdrObject.
+            /// basic constructor, used from SdrObject.
             VCOfSwVirtFlyDrawObj(SwVirtFlyDrawObj& rObj)
             :   ViewContactOfVirtObj(rObj)
             {
             }
             virtual ~VCOfSwVirtFlyDrawObj();
 
-            // access to SwVirtFlyDrawObj
+            /// access to SwVirtFlyDrawObj
             SwVirtFlyDrawObj& GetSwVirtFlyDrawObj() const
             {
                 return (SwVirtFlyDrawObj&)mrObject;
@@ -316,7 +321,6 @@ namespace sdr
         }
     } // end of namespace contact
 } // end of namespace sdr
-
 
 basegfx::B2DRange SwVirtFlyDrawObj::getOuterBound() const
 {
@@ -529,25 +533,21 @@ const Rectangle& SwVirtFlyDrawObj::GetLastBoundRect() const
     return GetCurrentBoundRect();
 }
 
-
 void SwVirtFlyDrawObj::RecalcBoundRect()
 {
     SetRect();
 }
-
 
 void SwVirtFlyDrawObj::RecalcSnapRect()
 {
     SetRect();
 }
 
-
 const Rectangle& SwVirtFlyDrawObj::GetSnapRect()  const
 {
     SetRect();
     return aOutRect;
 }
-
 
 void SwVirtFlyDrawObj::SetSnapRect(const Rectangle& )
 {
@@ -559,19 +559,16 @@ void SwVirtFlyDrawObj::SetSnapRect(const Rectangle& )
         pUserCall->Changed(*this, SDRUSERCALL_RESIZE, aTmp);
 }
 
-
 void SwVirtFlyDrawObj::NbcSetSnapRect(const Rectangle& )
 {
     SetRect();
 }
-
 
 const Rectangle& SwVirtFlyDrawObj::GetLogicRect() const
 {
     SetRect();
     return aOutRect;
 }
-
 
 void SwVirtFlyDrawObj::SetLogicRect(const Rectangle& )
 {
@@ -583,12 +580,10 @@ void SwVirtFlyDrawObj::SetLogicRect(const Rectangle& )
         pUserCall->Changed(*this, SDRUSERCALL_RESIZE, aTmp);
 }
 
-
 void SwVirtFlyDrawObj::NbcSetLogicRect(const Rectangle& )
 {
     SetRect();
 }
-
 
 ::basegfx::B2DPolyPolygon SwVirtFlyDrawObj::TakeXorPoly() const
 {
@@ -748,7 +743,6 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         pFmt->SetFmtAttr( aSet );
 }
 
-
 void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
             const Fraction& xFact, const Fraction& yFact)
 {
@@ -856,14 +850,12 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
     }
 }
 
-
 void SwVirtFlyDrawObj::Move(const Size& rSiz)
 {
     NbcMove( rSiz );
     SetChanged();
     GetFmt()->GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false);
 }
-
 
 void SwVirtFlyDrawObj::Resize(const Point& rRef,
                     const Fraction& xFact, const Fraction& yFact, bool /*bUnsetRelative*/)
@@ -880,13 +872,11 @@ Pointer  SwVirtFlyDrawObj::GetMacroPointer(
     return Pointer( POINTER_REFHAND );
 }
 
-
 bool SwVirtFlyDrawObj::HasMacro() const
 {
     const SwFmtURL &rURL = pFlyFrm->GetFmt()->GetURL();
     return rURL.GetMap() || rURL.GetURL().Len();
 }
-
 
 SdrObject* SwVirtFlyDrawObj::CheckMacroHit( const SdrObjMacroHitRec& rRec ) const
 {
