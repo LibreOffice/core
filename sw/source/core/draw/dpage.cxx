@@ -195,7 +195,7 @@ sal_Bool SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
                 }
                 else
                 {
-            // then display the help:
+                    // then display the help:
                     Rectangle aRect( rEvt.GetMousePosPixel(), Size(1,1) );
                     Help::ShowQuickHelp( pWindow, aRect, sTxt );
                 }
