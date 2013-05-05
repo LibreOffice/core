@@ -80,6 +80,7 @@ Module gid_Module_Langpack_Resource_Template
              gid_File_Res_Dkt,
              gid_File_Res_Editeng,
              gid_File_Res_Eur,
+             gid_File_Res_Flash,
              gid_File_Res_For,
              gid_File_Res_Forui,
              gid_File_Res_Fps_Office,
