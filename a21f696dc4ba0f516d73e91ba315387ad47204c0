@@ -50,6 +50,24 @@
       "revId": "a21f696dc4ba0f516d73e91ba315387ad47204c0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//9Sk\u003d",
+        "filename": "xmloff/source/core/xmlimp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-05-05T20:54:08Z",
+      "side": 1,
+      "message": "because otherwise you don\u0027t get the actual Version number ? (loVersion is a variable not a string litteral here.\n\nbecause that was what the original code did ?",
+      "parentUuid": "AAAAXH//9TU\u003d",
+      "revId": "a21f696dc4ba0f516d73e91ba315387ad47204c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
