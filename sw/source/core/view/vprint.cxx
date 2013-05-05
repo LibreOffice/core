@@ -70,10 +70,8 @@
 #include <fmtpdsc.hxx>      // SwFmtPageDesc
 #include <globals.hrc>
 
-
 using namespace ::com::sun::star;
 
-//--------------------------------------------------------------------
 /// Painting buffer
 class SwQueuedPaint
 {
@@ -102,7 +100,6 @@ public:
     ~SwDrawViewSave();
 };
 
-
 void SwPaintQueue::Add( ViewShell *pNew, const SwRect &rNew )
 {
     SwQueuedPaint *pPt;
@@ -122,8 +119,6 @@ void SwPaintQueue::Add( ViewShell *pNew, const SwRect &rNew )
     else
         pQueue = pNQ;
 }
-
-
 
 void SwPaintQueue::Repaint()
 {
@@ -155,8 +150,6 @@ void SwPaintQueue::Repaint()
     }
 }
 
-
-
 void SwPaintQueue::Remove( ViewShell *pSh )
 {
     SwQueuedPaint *pPt;
@@ -179,13 +172,6 @@ void SwPaintQueue::Remove( ViewShell *pSh )
     }
 }
 
-/******************************************************************************
- *  Methode     :   void SetSwVisArea( ViewShell *pSh, Point aPrtOffset, ...
- *  Beschreibung:
- *  Erstellt    :   OK 04.11.94 16:27
- *  Aenderung   :
- ******************************************************************************/
-
 void SetSwVisArea( ViewShell *pSh, const SwRect &rRect, sal_Bool /*bPDFExport*/ )
 {
     OSL_ENSURE( !pSh->GetWin(), "Drucken mit Window?" );
@@ -205,8 +191,6 @@ void SetSwVisArea( ViewShell *pSh, const SwRect &rRect, sal_Bool /*bPDFExport*/ 
     aMapMode.SetOrigin( aPt );
     pOut->SetMapMode( aMapMode );
 }
-
-/******************************************************************************/
 
 void ViewShell::InitPrt( OutputDevice *pOutDev )
 {
@@ -230,13 +214,6 @@ void ViewShell::InitPrt( OutputDevice *pOutDev )
     if ( !mpWin )
         mpOut = pOutDev;
 }
-
-/******************************************************************************
- *  Methode     :   void ViewShell::ChgAllPageOrientation
- *  Erstellt    :   MA 08. Aug. 95
- *  Aenderung   :
- ******************************************************************************/
-
 
 void ViewShell::ChgAllPageOrientation( sal_uInt16 eOri )
 {
@@ -277,13 +254,6 @@ void ViewShell::ChgAllPageOrientation( sal_uInt16 eOri )
     }
 }
 
-/******************************************************************************
- *  Methode     :   void ViewShell::ChgAllPageOrientation
- *  Erstellt    :   MA 08. Aug. 95
- *  Aenderung   :
- ******************************************************************************/
-
-
 void ViewShell::ChgAllPageSize( Size &rSz )
 {
     OSL_ENSURE( mnStartAction, "missing an Action" );
@@ -318,7 +288,6 @@ void ViewShell::ChgAllPageSize( Size &rSz )
     }
 }
 
-
 void ViewShell::CalcPagesForPrint( sal_uInt16 nMax )
 {
     SET_CURR_SHELL( this );
@@ -350,8 +319,6 @@ void ViewShell::CalcPagesForPrint( sal_uInt16 nMax )
 
     pMyLayout->EndAllAction();
 }
-
-/******************************************************************************/
 
 SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 {
@@ -485,9 +452,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
     SwPrintData const& rPrintData,
     sal_Int32 nRenderer     /* the index in the vector of pages to be printed */ )
 {
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// CAUTION: Do also always update the printing routines in viewpg.cxx (PrintProspect)!
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // CAUTION: Do also always update the printing routines in viewpg.cxx (PrintProspect)!
 
     const sal_Int32 nMaxRenderer = rPrintData.GetRenderData().GetPagesToPrint().size() - 1;
     OSL_ENSURE( 0 <= nRenderer && nRenderer <= nMaxRenderer, "nRenderer out of bounds");
@@ -558,7 +523,6 @@ sal_Bool ViewShell::PrintOrPDFExport(
             pOutDev->SetMapMode( aTmp );
         }
 #endif
-
         pShell->InitPrt( pOutDev );
 
         ::SetSwVisArea( pViewSh2, pStPage->Frm() );
@@ -576,15 +540,6 @@ sal_Bool ViewShell::PrintOrPDFExport(
 
     return sal_True;
 }
-
-/******************************************************************************
- *  Methode     :   PrtOle2()
- *  Beschreibung:
- *  Erstellt    :   PK 07.12.94
- *  Aenderung   :   MA 16. Feb. 95
- ******************************************************************************/
-
-
 
 void ViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintData& rOptions,
                          OutputDevice* pOleOut, const Rectangle& rRect )
@@ -667,7 +622,6 @@ SwDrawViewSave::~SwDrawViewSave()
         pDV->SetLayerPrintable( sLayerNm, bPrintControls );
     }
 }
-
 
 // OD 09.01.2003 #i6467# - method also called for page preview
 void ViewShell::PrepareForPrint( const SwPrintData &rOptions )

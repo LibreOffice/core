@@ -37,15 +37,6 @@
 #include <accessibilityoptions.hxx>
 #include <switerator.hxx>
 
-
-/*************************************************************************
-|*
-|*  ViewShell::Init()
-|*
-|*  Letzte Aenderung    MA 14. Jun. 96
-|*
-|*************************************************************************/
-
 void ViewShell::Init( const SwViewOption *pNewOpt )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "ViewShell::Init" );
@@ -312,15 +303,6 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     mbInConstructor = false;
 
 }
-
-/******************************************************************************
-|*
-|*  ViewShell::~ViewShell()
-|*
-|*  Ersterstellung      MA ??
-|*  Letzte Aenderung    MA 10. May. 95
-|*
-******************************************************************************/
 
 ViewShell::~ViewShell()
 {

@@ -42,7 +42,6 @@
 
 #include <IDocumentDrawModelAccess.hxx>
 
-
 void SwViewImp::StartAction()
 {
     if ( HasDrawView() )
@@ -53,7 +52,6 @@ void SwViewImp::StartAction()
     }
 }
 
-
 void SwViewImp::EndAction()
 {
     if ( HasDrawView() )
@@ -63,7 +61,6 @@ void SwViewImp::EndAction()
             ((SwFEShell*)pSh)->SetChainMarker(); // might have changed
     }
 }
-
 
 void SwViewImp::LockPaint()
 {
@@ -78,13 +75,11 @@ void SwViewImp::LockPaint()
     }
 }
 
-
 void SwViewImp::UnlockPaint()
 {
     if ( bResetHdlHiddenPaint )
         GetDrawView()->showMarkHandles();
 }
-
 
 void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
                             SwPrintData const*const pPrintData,

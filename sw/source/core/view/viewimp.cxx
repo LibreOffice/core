@@ -107,7 +107,6 @@ SwViewImp::SwViewImp( ViewShell *pParent ) :
     bFirstPageInvalid = sal_True;
 }
 
-
 SwViewImp::~SwViewImp()
 {
     delete pAccMap;
@@ -127,12 +126,10 @@ SwViewImp::~SwViewImp()
     OSL_ENSURE( !pIdleAct,"Be idle for the rest of your life." );
 }
 
-
 void SwViewImp::DelRegion()
 {
     DELETEZ(pRegion);
 }
-
 
 sal_Bool SwViewImp::AddPaintRect( const SwRect &rRect )
 {
@@ -146,13 +143,11 @@ sal_Bool SwViewImp::AddPaintRect( const SwRect &rRect )
     return sal_False;
 }
 
-
 void SwViewImp::CheckWaitCrsr()
 {
     if ( pLayAct )
         pLayAct->CheckWaitCrsr();
 }
-
 
 sal_Bool SwViewImp::IsCalcLayoutProgress() const
 {
@@ -160,7 +155,6 @@ sal_Bool SwViewImp::IsCalcLayoutProgress() const
         return pLayAct->IsCalcLayout();
     return sal_False;
 }
-
 
 sal_Bool SwViewImp::IsUpdateExpFlds()
 {
@@ -171,8 +165,6 @@ sal_Bool SwViewImp::IsUpdateExpFlds()
     }
      return sal_False;
 }
-
-
 
 void SwViewImp::SetFirstVisPage()
 {
@@ -209,7 +201,6 @@ void SwViewImp::SetFirstVisPage()
     }
     bFirstPageInvalid = sal_False;
 }
-
 
 void SwViewImp::MakeDrawView()
 {
@@ -256,7 +247,6 @@ void SwViewImp::MakeDrawView()
         }
     }
 }
-
 
 Color SwViewImp::GetRetoucheColor() const
 {

@@ -101,7 +101,6 @@ void ViewShell::ToggleHeaderFooterEdit()
     GetWin()->Invalidate();
 }
 
-//////////////////////////////////////////////////////////////////////////////
 // #i72754# 2nd set of Pre/PostPaints
 // This time it uses the lock counter (mPrePostPaintRegions empty/non-empty) to allow only one activation
 // and deactivation and mpPrePostOutDev to remember the OutDev from the BeginDrawLayers
@@ -180,9 +179,7 @@ void ViewShell::DLPostPaint2(bool bPaintFormLayer)
         mpTargetPaintWindow = 0;
     }
 }
-
-//////////////////////////////////////////////////////////////////////////////
-
+// end of Pre/PostPaints
 
 void ViewShell::ImplEndAction( const sal_Bool bIdleEnd )
 {
@@ -416,7 +413,6 @@ void ViewShell::ImplEndAction( const sal_Bool bIdleEnd )
     ViewShell::mbLstAct = sal_False;
     Imp()->EndAction();
 
-
     //We artificially end the action here to enable the automatic scrollbars
     //to adjust themselves correctly
     //EndAction sends a Notify, and that must call Start-/EndAction to
@@ -429,13 +425,11 @@ void ViewShell::ImplEndAction( const sal_Bool bIdleEnd )
         Imp()->FireAccessibleEvents();
 }
 
-
 void ViewShell::ImplStartAction()
 {
     mbPaintWorks = sal_False;
     Imp()->StartAction();
 }
-
 
 void ViewShell::ImplLockPaint()
 {
@@ -443,7 +437,6 @@ void ViewShell::ImplLockPaint()
         GetWin()->EnablePaint( sal_False ); //Also cut off the controls.
     Imp()->LockPaint();
 }
-
 
 void ViewShell::ImplUnlockPaint( sal_Bool bVirDev )
 {
@@ -500,7 +493,6 @@ void ViewShell::ImplUnlockPaint( sal_Bool bVirDev )
         Imp()->UnlockPaint();
 }
 
-
 sal_Bool ViewShell::AddPaintRect( const SwRect & rRect )
 {
     sal_Bool bRet = sal_False;
@@ -518,7 +510,6 @@ sal_Bool ViewShell::AddPaintRect( const SwRect & rRect )
     } while ( pSh != this );
     return bRet;
 }
-
 
 void ViewShell::InvalidateWindows( const SwRect &rRect )
 {
@@ -539,7 +530,6 @@ void ViewShell::InvalidateWindows( const SwRect &rRect )
         } while ( pSh != this );
     }
 }
-
 
 void ViewShell::MakeVisible( const SwRect &rRect )
 {
@@ -571,7 +561,6 @@ void ViewShell::MakeVisible( const SwRect &rRect )
     }
 }
 
-
 Window* ViewShell::CareChildWin(ViewShell& rVSh)
 {
     if(rVSh.mpSfxViewShell)
@@ -586,12 +575,10 @@ Window* ViewShell::CareChildWin(ViewShell& rVSh)
     return NULL;
 }
 
-
 Point ViewShell::GetPagePos( sal_uInt16 nPageNum ) const
 {
     return GetLayout()->GetPagePos( nPageNum );
 }
-
 
 sal_uInt16 ViewShell::GetNumPages()
 {
@@ -656,7 +643,6 @@ sal_Bool ViewShell::HasCharts() const
     return bRet;
 }
 
-
 void ViewShell::LayoutIdle()
 {
 #ifdef TCOVER
@@ -700,7 +686,6 @@ void ViewShell::LayoutIdle()
         DBG_PROFSTOP( LayoutIdle );
     }
 }
-
 
 static void lcl_InvalidateAllCntnt( ViewShell& rSh, sal_uInt8 nInv )
 {
@@ -836,7 +821,6 @@ void ViewShell::SetUseFormerLineSpacing( bool _bUseFormerLineSpacing )
     }
 }
 
-
 /**
  * Sets IDocumentSettingAccess if former object positioning should be used.
  * #i11860#
@@ -853,7 +837,6 @@ void ViewShell::SetUseFormerObjectPositioning( bool _bUseFormerObjPos )
     }
 }
 
-
 // #i28701#
 void ViewShell::SetConsiderWrapOnObjPos( bool _bConsiderWrapOnObjPos )
 {
@@ -865,7 +848,6 @@ void ViewShell::SetConsiderWrapOnObjPos( bool _bConsiderWrapOnObjPos )
         lcl_InvalidateAllObjPos( *this );
     }
 }
-
 
 void ViewShell::SetUseFormerTextWrapping( bool _bUseFormerTextWrapping )
 {
@@ -879,7 +861,6 @@ void ViewShell::SetUseFormerTextWrapping( bool _bUseFormerTextWrapping )
     }
 }
 
-
 // #i45491#
 void ViewShell::SetDoNotJustifyLinesWithManualBreak( bool _bDoNotJustifyLinesWithManualBreak )
 {
@@ -892,7 +873,6 @@ void ViewShell::SetDoNotJustifyLinesWithManualBreak( bool _bDoNotJustifyLinesWit
         lcl_InvalidateAllCntnt( *this, nInv );
     }
 }
-
 
 void ViewShell::Reformat()
 {
@@ -973,7 +953,6 @@ void ViewShell::CalcLayout()
         ::EndProgress( GetDoc()->GetDocShell() );
 }
 
-
 void ViewShell::SetFirstVisPageInvalid()
 {
     ViewShell *pSh = this;
@@ -985,7 +964,6 @@ void ViewShell::SetFirstVisPageInvalid()
 
     } while ( pSh != this );
 }
-
 
 void ViewShell::SizeChgNotify()
 {
@@ -1014,7 +992,6 @@ void ViewShell::SizeChgNotify()
         ::SizeNotify( this, GetDocSize() );
     }
 }
-
 
 void ViewShell::VisPortChgd( const SwRect &rRect)
 {
@@ -1183,9 +1160,7 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
 
     if( Imp()->IsAccessible() )
         Imp()->UpdateAccessible();
-
 }
-
 
 sal_Bool ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect )
 {
@@ -1420,7 +1395,6 @@ sal_Bool ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRe
     return sal_False;
 }
 
-
 void ViewShell::PaintDesktop( const SwRect &rRect )
 {
     if ( !GetWin() && !GetOut()->GetConnectMetaFile() )
@@ -1502,7 +1476,6 @@ void ViewShell::PaintDesktop( const SwRect &rRect )
         _PaintDesktop( aRegion );
 }
 
-
 // PaintDesktop is split in two, this part is also used by PreViewPage
 void ViewShell::_PaintDesktop( const SwRegionRects &rRegion )
 {
@@ -1554,7 +1527,6 @@ void ViewShell::_PaintDesktop( const SwRegionRects &rRegion )
 
     GetOut()->Pop();
 }
-
 
 sal_Bool ViewShell::CheckInvalidForPaint( const SwRect &rRect )
 {
@@ -1656,7 +1628,6 @@ sal_Bool ViewShell::CheckInvalidForPaint( const SwRect &rRect )
     }
     return bRet;
 }
-
 
 void ViewShell::Paint(const Rectangle &rRect)
 {
@@ -1783,7 +1754,6 @@ void ViewShell::Paint(const Rectangle &rRect)
     }
 }
 
-
 void ViewShell::SetBrowseBorder( const Size& rNew )
 {
     if( rNew != maBrowseBorder )
@@ -1812,7 +1782,6 @@ sal_Int32 ViewShell::GetBrowseWidth() const
     else
         return maVisArea.Width() - 2 * GetOut()->PixelToLogic(maBrowseBorder).Width();
 }
-
 
 void ViewShell::CheckBrowseView( sal_Bool bBrowseChgd )
 {
@@ -1870,12 +1839,10 @@ void ViewShell::CheckBrowseView( sal_Bool bBrowseChgd )
     UnlockPaint();
 }
 
-
 SwRootFrm *ViewShell::GetLayout() const
 {
     return mpLayout.get();
 }
-/***********************************************************************/
 
 OutputDevice& ViewShell::GetRefDev() const
 {
@@ -1897,11 +1864,9 @@ const SwNodes& ViewShell::GetNodes() const
     return mpDoc->GetNodes();
 }
 
-
 void ViewShell::DrawSelChanged()
 {
 }
-
 
 Size ViewShell::GetDocSize() const
 {
@@ -1913,12 +1878,10 @@ Size ViewShell::GetDocSize() const
     return aSz;
 }
 
-
 SfxItemPool& ViewShell::GetAttrPool()
 {
     return GetDoc()->GetAttrPool();
 }
-
 
 void ViewShell::ApplyViewOptions( const SwViewOption &rOpt )
 {
@@ -2096,7 +2059,6 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
 
 }
 
-
 void ViewShell::SetUIOptions( const SwViewOption &rOpt )
 {
     mpOpt->SetUIOptions(rOpt);
@@ -2107,7 +2069,6 @@ void ViewShell::SetUIOptions( const SwViewOption &rOpt )
 
     mpOpt->SetSymbolFont(rOpt.GetSymbolFont());
 }
-
 
 void ViewShell::SetReadonlyOption(sal_Bool bSet)
 {
@@ -2139,7 +2100,6 @@ void ViewShell::SetReadonlyOption(sal_Bool bSet)
     }
 }
 
-
 void  ViewShell::SetPDFExportOption(sal_Bool bSet)
 {
     if( bSet != mpOpt->IsPDFExport() )
@@ -2150,7 +2110,6 @@ void  ViewShell::SetPDFExportOption(sal_Bool bSet)
     }
 }
 
-
 void  ViewShell::SetReadonlySelectionOption(sal_Bool bSet)
 {
     if( bSet != mpOpt->IsSelectionInReadonly() )
@@ -2159,12 +2118,10 @@ void  ViewShell::SetReadonlySelectionOption(sal_Bool bSet)
     }
 }
 
-
 void ViewShell::SetPrtFormatOption( sal_Bool bSet )
 {
     mpOpt->SetPrtFormat( bSet );
 }
-
 
 void ViewShell::UISizeNotify()
 {
@@ -2177,7 +2134,6 @@ void ViewShell::UISizeNotify()
         bInSizeNotify = bOld;
     }
 }
-
 
 void    ViewShell::SetRestoreActions(sal_uInt16 nSet)
 {
@@ -2279,7 +2235,6 @@ SwAccessibleMap* ViewShell::GetAccessibleMap()
     return 0;
 }
 
-
 void ViewShell::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions)
 {
     if(mpOpt->IsPagePreview() && !rAccessibilityOptions.GetIsForPagePreviews())
@@ -2335,7 +2290,6 @@ const Size ViewShell::GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) c
     return aSize;
 }
 
-
 // #i12836# enhanced pdf export
 sal_Int32 ViewShell::GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const SwRect& rRect ) const
 {
@@ -2365,7 +2319,6 @@ sal_Int32 ViewShell::GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const SwR
 
     return nRet;
 }
-
 
 // --> PB 2007-05-30 #146850#
 const BitmapEx& ViewShell::GetReplacementBitmap( bool bIsErrorState )
@@ -2434,6 +2387,7 @@ const IDocumentListItems* ViewShell::getIDocumentListItemsAccess() const
 {
     return mpDoc;
 }
+
 const IDocumentOutlineNodes* ViewShell::getIDocumentOutlineNodesAccess() const
 {
     return mpDoc;

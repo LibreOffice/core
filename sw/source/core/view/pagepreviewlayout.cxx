@@ -43,9 +43,8 @@
 // Note: method defined in '/sw/source/core/layout/paintfrm.cxx'
 extern void SwCalcPixStatics( OutputDevice *pOut );
 
-// =============================================================================
 // methods to initialize page preview layout
-// =============================================================================
+
 SwPagePreviewLayout::SwPagePreviewLayout( ViewShell& _rParentViewShell,
                                           const SwRootFrm& _rLayoutRootFrm )
     : mnXFree ( 4*142 ),
@@ -284,9 +283,7 @@ bool SwPagePreviewLayout::ReInit()
     return true;
 }
 
-// =============================================================================
 // methods to prepare paint of page preview
-// =============================================================================
 
 /** prepare paint of page preview
 
@@ -742,10 +739,8 @@ bool SwPagePreviewLayout::SetBookPreviewMode( const bool _bEnableBookPreview,
     return bRet;
 }
 
-// =============================================================================
 // methods to determine new data for changing the current shown part of the
 // document preview.
-// =============================================================================
 
 /** calculate start position for new scale
 
@@ -1011,9 +1006,7 @@ SwTwips SwPagePreviewLayout::GetWinPagesScrollAmount(
     return nScrollAmount;
 }
 
-// =============================================================================
 // methods to paint page preview layout
-// =============================================================================
 
 /** paint prepared preview
 
@@ -1331,9 +1324,7 @@ void SwPagePreviewLayout::MarkNewSelectedPage( const sal_uInt16 _nSelectedPage )
         _PaintSelectMarkAtPage( pNewSelectedPrevwPage );
 }
 
-// =============================================================================
 // helper methods
-// =============================================================================
 
 /** get preview page by physical page number
 

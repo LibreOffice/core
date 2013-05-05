@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <printdata.hxx>
 
 #include <globals.hrc>
@@ -34,26 +33,21 @@
 #include <unotools/moduleoptions.hxx>
 #include <vcl/outdev.hxx>
 
-
 extern bool sw_GetPostIts( IDocumentFieldsAccess* pIDFA, _SetGetExpFlds * pSrtLst );
-
 
 using namespace ::com::sun::star;
 
-
-//////////////////////////////////////////////////////////////////////
+// SwRenderData
 
 SwRenderData::SwRenderData()
 {
 }
-
 
 SwRenderData::~SwRenderData()
 {
     OSL_ENSURE( !m_pPostItShell, "m_pPostItShell should already have been deleted" );
     OSL_ENSURE( !m_pPostItFields, " should already have been deleted" );
 }
-
 
 void SwRenderData::CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, OutputDevice *pOutDev )
 {
@@ -70,7 +64,6 @@ void SwRenderData::CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, 
     m_pPostItShell.reset(new ViewShell(*new SwDoc, 0, &aViewOpt, pOutDev));
 }
 
-
 void SwRenderData::DeletePostItData()
 {
     if (HasPostItData())
@@ -86,6 +79,7 @@ SfxObjectShellLock const& SwRenderData::GetTempDocShell() const
 {
     return m_xTempDocShell;
 }
+
 void SwRenderData::SetTempDocShell(SfxObjectShellLock const& xShell)
 {
     m_xTempDocShell = xShell;
@@ -95,7 +89,6 @@ bool SwRenderData::NeedNewViewOptionAdjust( const ViewShell& rCompare ) const
 {
     return m_pViewOptionAdjust ? ! m_pViewOptionAdjust->checkShell( rCompare ) : true;
 }
-
 
 void SwRenderData::ViewOptionAdjustStart(
         ViewShell &rSh, const SwViewOption &rViewOptions)
@@ -108,12 +101,10 @@ void SwRenderData::ViewOptionAdjustStart(
             new SwViewOptionAdjust_Impl( rSh, rViewOptions ));
 }
 
-
 void SwRenderData::ViewOptionAdjust(SwPrintData const*const pPrtOptions)
 {
     m_pViewOptionAdjust->AdjustViewOptions( pPrtOptions );
 }
-
 
 void SwRenderData::ViewOptionAdjustStop()
 {
@@ -124,7 +115,6 @@ void SwRenderData::ViewOptionAdjustCrashPreventionKludge()
 {
     m_pViewOptionAdjust->DontTouchThatViewShellItSmellsFunny();
 }
-
 
 void SwRenderData::MakeSwPrtOptions(
     SwDocShell const*const pDocShell,
@@ -169,8 +159,7 @@ void SwRenderData::MakeSwPrtOptions(
     rOptions.SetRenderData( this );
 }
 
-
-//////////////////////////////////////////////////////////////////////
+// SwPrintUIOptions
 
 SwPrintUIOptions::SwPrintUIOptions(
     sal_uInt16 nCurrentPage,
@@ -423,7 +412,6 @@ SwPrintUIOptions::SwPrintUIOptions(
     assert(nIdx == nNumProps);
 }
 
-
 SwPrintUIOptions::~SwPrintUIOptions()
 {
 }
@@ -515,7 +503,5 @@ bool SwPrintUIOptions::processPropertiesAndCheckFormat( const uno::Sequence< bea
 
     return bChanged;
 }
-
-//////////////////////////////////////////////////////////////////////
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
