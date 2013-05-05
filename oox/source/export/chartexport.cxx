@@ -2042,10 +2042,6 @@ void ChartExport::_exportAxis(
 
     pFS->endElement( FSNS( XML_c, XML_scaling ) );
 
-    // title
-    if( xAxisTitle.is() )
-        exportTitle( xAxisTitle );
-
     sal_Bool bVisible = sal_True;
     if( xAxisProp.is() )
     {
@@ -2078,6 +2074,10 @@ void ChartExport::_exportAxis(
         exportShapeProps( xMajorGrid );
         pFS->endElement( FSNS( XML_c, XML_minorGridlines ) );
     }
+
+    // title
+    if( xAxisTitle.is() )
+        exportTitle( xAxisTitle );
 
     // majorTickMark
     sal_Int32 nValue = 0;
