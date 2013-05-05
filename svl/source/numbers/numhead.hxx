@@ -22,38 +22,6 @@
 
 #include <tools/stream.hxx>
 
-// -----------------------------------------------------------------------
-
-        //  "Automatischer" Record-Header mit Groessenangabe
-
-/*                      wird fuer SvNumberFormatter nicht gebraucht
-class SvNumReadHeader
-{
-private:
-    SvStream&   rStream;
-    sal_uLong       nDataEnd;
-
-public:
-    SvNumReadHeader(SvStream& rNewStream);
-    ~SvNumReadHeader();
-
-    sal_uLong   BytesLeft() const;
-};
-
-class SvNumWriteHeader
-{
-private:
-    SvStream&   rStream;
-    sal_uLong       nDataPos;
-    sal_uLong       nDataSize;
-
-public:
-    SvNumWriteHeader(SvStream& rNewStream, sal_uLong nDefault = 0);
-    ~SvNumWriteHeader();
-};
-
-*/
-
         //  Header mit Groessenangaben fuer mehrere Objekte
 
 class ImpSvNumMultipleReadHeader
