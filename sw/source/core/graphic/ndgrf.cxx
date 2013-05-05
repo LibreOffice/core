@@ -209,9 +209,7 @@ sal_Bool SwGrfNode::ReRead(
                     SwMsgPoolItem aMsgHint( RES_GRF_REREAD_AND_INCACHE );
                     ModifyNotification( &aMsgHint, &aMsgHint );
                 }
-                // #i59688#
-                // do not load linked graphic, if it isn't a new linked graphic.
-//                else {
+                // #i59688# - do not load linked graphic, if it isn't a new linked graphic.
                 else if ( bNewGrf )
                 {
                     //TODO refLink->setInputStream(getInputStream());
@@ -224,7 +222,7 @@ sal_Bool SwGrfNode::ReRead(
     }
     else if( pGraphic && !rGrfName.Len() )
     {
-        // MIB 27.02.2001: Old stream must be deleted before the new one is set.
+        // Old stream must be deleted before the new one is set.
         if( HasStreamName() )
             DelStreamName();
 
@@ -234,7 +232,7 @@ sal_Bool SwGrfNode::ReRead(
     }
     else if( pGrfObj && !rGrfName.Len() )
     {
-        // MIB 27.02.2001: Old stream must be deleted before the new one is set.
+        // Old stream must be deleted before the new one is set.
         if( HasStreamName() )
             DelStreamName();
 
@@ -322,17 +320,15 @@ SwGrfNode::~SwGrfNode()
     }
     else
     {
-        // #i40014# - A graphic node, which are in linked
-        // section, whose link is another section is the document, doesn't
+        // #i40014# - A graphic node, which is in a linked
+        // section, whose link is another section in the document, doesn't
         // have to remove the stream from the storage.
         // Because it's hard to detect this case here and it would only fix
         // one problem with shared graphic files - there are also problems,
         // a certain graphic file is referenced by two independent graphic nodes,
         // brush item or drawing objects, the stream isn't no longer removed here.
-        // To do this stuff correct, a reference counting on shared streams
-        // inside one document have to be implemented.
-//        if( !pDoc->IsInDtor() && HasStreamName() )
-//          DelStreamName();
+        // To do this stuff correctly, a reference counting on shared streams
+        // inside one document has to be implemented.
     }
     //#39289# delete frames already here since the Frms' dtor needs the graphic for its StopAnimation
     if( GetDepends() )
@@ -375,13 +371,6 @@ void SwGrfNode::onGraphicChanged()
                 }
             }
         }
-
-        // do not use this currently; it seems that this name has to be unique in
-        // the writer model and is already set to some default
-        //if(aName.Len() && pFlyFmt)
-        //{
-        //    pFlyFmt->SetName(aName);
-        //}
 
         if(aTitle.Len())
         {
@@ -494,7 +483,6 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
             GRAPHIC_DEFAULT == maGrfObj.GetType() )
         {
             // link was not loaded yet
-            //TODO pLink->setInputStream(getInputStream());
             if( pLink->SwapIn( bWaitForData ) )
                 nRet = -1;
             else if( GRAPHIC_DEFAULT == maGrfObj.GetType() )
@@ -511,7 +499,6 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
         }
         else if( maGrfObj.IsSwappedOut() ) {
             // link to download
-            //TODO pLink->setInputStream(getInputStream());
             nRet = pLink->SwapIn( bWaitForData ) ? 1 : 0;
         }
         else
@@ -524,11 +511,8 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
             nRet = (short)maGrfObj.SwapIn();
         else
         {
-
-            // #i48434# - usage of new method <_GetStreamForEmbedGrf(..)>
             try
             {
-                // #i53025# - needed correction of new method <_GetStreamForEmbedGrf(..)>
                 String aStrmName, aPicStgName;
                 _GetStreamStorageNames( aStrmName, aPicStgName );
                 uno::Reference < embed::XStorage > refPics = _GetDocSubstorageOrRoot( aPicStgName );
@@ -634,14 +618,12 @@ sal_Bool SwGrfNode::SavePersistentData()
     // Do not delete graphic file in storage, because the graphic file could
     // be referenced by other graphic nodes.
     // Because it's hard to detect this case here and it would only fix
-    // one problem with shared graphic files - there are also problems,
+    // one problem with shared graphic files - there are also problems, if
     // a certain graphic file is referenced by two independent graphic nodes,
     // brush item or drawing objects, the stream isn't no longer removed here.
     // To do this stuff correct, a reference counting on shared streams
-    // inside one document have to be implemented.
+    // inside one document has to be implemented.
     // Important note: see also fix for #i40014#
-//    if( HasStreamName() )
-//        DelStreamName();
 
     // swap out into temp file
     return (sal_Bool) SwapOut();
@@ -699,7 +681,6 @@ void SwGrfNode::ReleaseLink()
         {
             bInSwapIn = sal_True;
             SwBaseLink* pLink = (SwBaseLink*)(::sfx2::SvBaseLink*) refLink;
-            //TODO pLink->setInputStream(getInputStream());
             pLink->SwapIn( sal_True, sal_True );
             bInSwapIn = sal_False;
         }
@@ -843,8 +824,6 @@ uno::Reference< embed::XStorage > SwGrfNode::_GetDocSubstorageOrRoot( const Stri
     provided via parameter. Otherwise the returned stream will be closed
     after the method returns, because its parent stream is closed and deleted.
     Proposed name of embedded graphic stream is also provided by parameter.
-
-    @author OD
 */
 SvStream* SwGrfNode::_GetStreamForEmbedGrf(
             const uno::Reference< embed::XStorage >& _refPics,
@@ -889,8 +868,6 @@ SvStream* SwGrfNode::_GetStreamForEmbedGrf(
     return pStrm;
 }
 
-// #i53025# - stream couldn't be in a 3.1 - 5.2 storage any more.
-// Thus, removing corresponding code.
 void SwGrfNode::_GetStreamStorageNames( String& rStrmName,
                                         String& rStorName ) const
 {
@@ -940,10 +917,8 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     SwBaseLink* pLink = (SwBaseLink*)(::sfx2::SvBaseLink*) refLink;
     if( !pLink && HasStreamName() )
     {
-        // #i48434# - usage of new method <_GetStreamForEmbedGrf(..)>
         try
         {
-            // #i53025# - needed correction of new method <_GetStreamForEmbedGrf(..)>
             String aStrmName, aPicStgName;
             _GetStreamStorageNames( aStrmName, aPicStgName );
             uno::Reference < embed::XStorage > refPics = _GetDocSubstorageOrRoot( aPicStgName );
@@ -1022,10 +997,8 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
 
         if( HasStreamName() )
         {
-            // #i48434# - usage of new method <_GetStreamForEmbedGrf(..)>
             try
             {
-                // #i53025# - needed correction of new method <_GetStreamForEmbedGrf(..)>
                 String aStrmName, aPicStgName;
                 _GetStreamStorageNames( aStrmName, aPicStgName );
                 uno::Reference < embed::XStorage > refPics = _GetDocSubstorageOrRoot( aPicStgName );
@@ -1079,7 +1052,7 @@ void DelAllGrfCacheEntries( SwDoc* pDoc )
     }
 }
 
-// returns the with our graphic attributes filled Graphic-Attr-Structure
+/// returns the Graphic-Attr-Structure filled with our graphic attributes
 GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
                                         const SwFrm* pFrm ) const
 {
@@ -1214,10 +1187,8 @@ void SwGrfNode::ApplyInputStream(
 
 void SwGrfNode::UpdateLinkWithInputStream()
 {
-    // --> OD #i85105#
     // do not work on link, if a <SwapIn> has been triggered.
     if ( !bInSwapIn && IsLinkedFile() )
-    // <--
     {
         GetLink()->setStreamToLoadFrom( mxInputStream, mbIsStreamReadOnly );
         GetLink()->Update();
