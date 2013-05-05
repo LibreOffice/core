@@ -63,8 +63,6 @@ static bool bInResize = false;
 TYPEINIT1( SwFlyDrawObj, SdrObject )
 TYPEINIT1( SwVirtFlyDrawObj, SdrVirtObj )
 
-// SwFlyDrawObj::Ctor
-
 namespace sdr
 {
     namespace contact
@@ -141,8 +139,6 @@ sal_uInt16 SwFlyDrawObj::GetObjIdentifier() const
     return SwFlyDrawObjIdentifier;
 }
 
-// SwVirtFlyDrawObj::CToren, Dtor
-
 // TODO: Need own primitive to get the FlyFrame paint working
 
 namespace drawinglayer
@@ -169,10 +165,8 @@ namespace drawinglayer
             {
             }
 
-            // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
-            // get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
             // overloaded to allow callbacks to wrap_DoPaintObject
@@ -399,21 +393,14 @@ SwVirtFlyDrawObj::~SwVirtFlyDrawObj()
         GetPage()->RemoveObject( GetOrdNum() );
 }
 
-// SwVirtFlyDrawObj::GetFmt()
-
-
 const SwFrmFmt *SwVirtFlyDrawObj::GetFmt() const
 {
     return GetFlyFrm()->GetFmt();
 }
-
-
 SwFrmFmt *SwVirtFlyDrawObj::GetFmt()
 {
     return GetFlyFrm()->GetFmt();
 }
-
-// SwVirtFlyDrawObj::Paint()
 
 // --> OD #i102707#
 namespace
@@ -497,8 +484,6 @@ void SwVirtFlyDrawObj::wrap_DoPaintObject() const
     }
 }
 
-// SwVirtFlyDrawObj::TakeObjInfo()
-
 void SwVirtFlyDrawObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
 {
     rInfo.bSelectAllowed     = rInfo.bMoveAllowed =
@@ -520,7 +505,6 @@ void SwVirtFlyDrawObj::SetRect() const
     else
         ((SwVirtFlyDrawObj*)this)->aOutRect = Rectangle();
 }
-
 
 const Rectangle& SwVirtFlyDrawObj::GetCurrentBoundRect() const
 {
@@ -865,6 +849,7 @@ void SwVirtFlyDrawObj::Resize(const Point& rRef,
     GetFmt()->GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false);
 }
 
+// Macro
 
 Pointer  SwVirtFlyDrawObj::GetMacroPointer(
     const SdrObjMacroHitRec& ) const
@@ -911,6 +896,8 @@ SdrObject* SwVirtFlyDrawObj::CheckMacroHit( const SdrObjMacroHitRec& rRec ) cons
     }
     return SdrObject::CheckMacroHit( rRec );
 }
+
+// Dragging
 
 bool SwVirtFlyDrawObj::supportsFullDrag() const
 {

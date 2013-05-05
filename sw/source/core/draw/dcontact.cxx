@@ -126,13 +126,7 @@ sal_Bool HasWrap( const SdrObject* pObj )
     return sal_False;
 }
 
-/*****************************************************************************
- *
- * GetBoundRect returns the BoundRect _inclusive_ distance of the object.
- *
- *****************************************************************************/
-
-// #i68520# - change naming
+/// returns the BoundRect _inclusive_ distance of the object.
 SwRect GetBoundRectOfAnchoredObj( const SdrObject* pObj )
 {
     SwRect aRet( pObj->GetCurrentBoundRect() );
@@ -475,8 +469,6 @@ void SwFlyDrawContact::SetMaster( SdrObject* _pNewMaster )
             "<SwFlyDrawContact::SetMaster(..)> - wrong type of new master object" );
     mpMasterObj = static_cast<SwFlyDrawObj *>(_pNewMaster);
 }
-
-// SwFlyDrawContact::Modify()
 
 void SwFlyDrawContact::Modify( const SfxPoolItem*, const SfxPoolItem * )
 {
@@ -979,8 +971,6 @@ SdrObject* SwDrawContact::GetDrawObjectByAnchorFrm( const SwFrm& _rAnchorFrm )
     return pRetDrawObj;
 }
 
-// SwDrawContact::Changed
-
 void SwDrawContact::NotifyBackgrdOfAllVirtObjs( const Rectangle* pOldBoundRect )
 {
     for ( std::list<SwDrawVirtObj*>::iterator aDrawVirtObjIter = maDrawVirtObjs.begin();
@@ -1434,8 +1424,6 @@ namespace
     }
 }
 
-// SwDrawContact::Modify()
-
 void SwDrawContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     OSL_ENSURE( !mbDisconnectInProgress,
@@ -1585,8 +1573,6 @@ void SwDrawContact::_InvalidateObjs( const bool _bUpdateSortedObjsList )
     }
 }
 
-// SwDrawContact::DisconnectFromLayout()
-
 void SwDrawContact::DisconnectFromLayout( bool _bMoveMasterToInvisibleLayer )
 {
     mbDisconnectInProgress = true;
@@ -1696,8 +1682,6 @@ void SwDrawContact::DisconnectObjFromLayout( SdrObject* _pDrawObj )
         }
     }
 }
-
-// SwDrawContact::ConnectToLayout()
 
 static SwTxtFrm* lcl_GetFlyInCntntAnchor( SwTxtFrm* _pProposedAnchorFrm,
                                    const xub_StrLen _nTxtOfs )
@@ -1905,8 +1889,6 @@ void SwDrawContact::InsertMasterIntoDrawPage()
     GetMaster()->SetUserCall( this );
 }
 
-// SwDrawContact::FindPage(), ChkPage()
-
 SwPageFrm* SwDrawContact::FindPage( const SwRect &rRect )
 {
     // --> #i28701# - use method <GetPageFrm()>
@@ -1950,8 +1932,6 @@ void SwDrawContact::ChkPage()
         }
     }
 }
-
-// SwDrawContact::ChangeMasterObject()
 
 // Important note:
 // method is called by method <SwDPage::ReplaceObject(..)>, which called its
@@ -2161,7 +2141,8 @@ sdr::contact::ViewContact* SwDrawVirtObj::CreateObjectSpecificViewContact()
     return new sdr::contact::VCOfDrawVirtObj(*this);
 }
 
-// implemetation of SwDrawVirtObj
+// SwDrawVirtObj
+
 SwDrawVirtObj::SwDrawVirtObj( SdrObject&        _rNewObj,
                               SwDrawContact&    _rDrawContact )
     : SdrVirtObj( _rNewObj ),
@@ -2199,8 +2180,8 @@ SwDrawVirtObj* SwDrawVirtObj::Clone() const
     return pObj;
 }
 
-// connection to writer layout: <GetAnchoredObj()>, <SetAnchorFrm(..)>,
-// <GetAnchorFrm()>, <SetPageFrm(..)>, <GetPageFrm()> and <RemoveFromWriterLayout()>
+// connection to writer layout
+
 const SwAnchoredObject* SwDrawVirtObj::GetAnchoredObj() const
 {
     return &maAnchoredDrawObj;
@@ -2232,8 +2213,6 @@ void SwDrawVirtObj::RemoveFromWriterLayout()
         maAnchoredDrawObj.AnchorFrm()->RemoveDrawObj( maAnchoredDrawObj );
     }
 }
-
-// connection to writer layout: <AddToDrawingPage()>, <RemoveFromDrawingPage()>
 
 void SwDrawVirtObj::AddToDrawingPage()
 {

@@ -55,17 +55,10 @@ SwDPage::SwDPage(SwDrawDocument& rNewModel, sal_Bool bMasterPage) :
 {
 }
 
-
 SwDPage::~SwDPage()
 {
     delete pGridLst;
 }
-
-/*************************************************************************
-|*
-|*  SwDPage::ReplaceObject()
-|*
-*************************************************************************/
 
 SdrObject*  SwDPage::ReplaceObject( SdrObject* pNewObj, sal_uLong nObjNum )
 {
@@ -78,12 +71,6 @@ SdrObject*  SwDPage::ReplaceObject( SdrObject* pNewObj, sal_uLong nObjNum )
     return FmFormPage::ReplaceObject( pNewObj, nObjNum );
 }
 
-/*************************************************************************
-|*
-|*  SwDPage::GetGridFrameList()
-|*
-*************************************************************************/
-
 void InsertGridFrame( SdrPageGridFrameList *pLst, const SwFrm *pPg )
 {
     SwRect aPrt( pPg->Prt() );
@@ -92,7 +79,6 @@ void InsertGridFrame( SdrPageGridFrameList *pLst, const SwFrm *pPg )
     const Rectangle aPaper( pPg->Frm().SVRect() );
     pLst->Insert( SdrPageGridFrame( aPaper, aUser ) );
 }
-
 
 const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
                         const SdrPageView* pPV, const Rectangle *pRect ) const
@@ -236,7 +222,5 @@ Reference< XInterface > SwDPage::createUnoPage()
     }
     return xRet;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

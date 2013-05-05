@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "hintids.hxx"
 #include <editeng/protitem.hxx>
 #include <svx/svdpagv.hxx>
@@ -55,9 +54,7 @@
 #include <sortedobjs.hxx>
 #include <flyfrms.hxx>
 
-
 using namespace com::sun::star;
-
 
 class SwSdrHdl : public SdrHdl
 {
@@ -127,7 +124,6 @@ sal_Bool SwDrawView::IsAntiAliasing() const
 {
     return getOptionsDrawinglayer().IsAntiAliasing();
 }
-
 
 SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, sal_uInt16 nTol, const SdrMarkList &rMrkList)
 {
@@ -247,8 +243,6 @@ void SwDrawView::AddCustomHdl()
                                      pAnch->IsRightToLeft() ) );
 }
 
-// SwDrawView::GetMaxToTopObj(), _GetMaxToTopObj()
-
 SdrObject* SwDrawView::GetMaxToTopObj( SdrObject* pObj ) const
 {
     if ( GetUserCall(pObj) )
@@ -293,8 +287,6 @@ SdrObject* SwDrawView::GetMaxToTopObj( SdrObject* pObj ) const
     }
     return 0;
 }
-
-// SwDrawView::GetMaxToBtmObj()
 
 SdrObject* SwDrawView::GetMaxToBtmObj(SdrObject* pObj) const
 {
@@ -657,8 +649,6 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
     _MoveRepeatedObjs( *pMovedAnchoredObj, aMovedChildObjs );
 }
 
-// SwDrawView::TakeDragLimit()
-
 sal_Bool SwDrawView::TakeDragLimit( SdrDragMode eMode,
                                             Rectangle& rRect ) const
 {
@@ -676,8 +666,6 @@ sal_Bool SwDrawView::TakeDragLimit( SdrDragMode eMode,
     }
     return bRet;
 }
-
-// SwDrawView::CalcAnchor()
 
 const SwFrm* SwDrawView::CalcAnchor()
 {
@@ -759,8 +747,6 @@ const SwFrm* SwDrawView::CalcAnchor()
     return pAnch;
 }
 
-// SwDrawView::ShowDragXor(), HideDragXor()
-
 void SwDrawView::ShowDragAnchor()
 {
     SdrHdl* pHdl = aHdl.GetHdl(HDL_ANCHOR);
@@ -773,8 +759,6 @@ void SwDrawView::ShowDragAnchor()
         pHdl->SetPos(aAnchorPoint);
     }
 }
-
-// SwDrawView::MarkListHasChanged()
 
 void SwDrawView::MarkListHasChanged()
 {
@@ -858,7 +842,6 @@ void SwDrawView::CheckPossibilities()
 
                             // TODO/LATER: retrieve Aspect - from where?!
                             bSzProtect |= ( embed::EmbedMisc::EMBED_NEVERRESIZE & xObj->getStatus( embed::Aspects::MSOLE_CONTENT ) ) ? sal_True : sal_False;
-
 
                             // #i972: protect position if it is a Math object anchored 'as char' and baseline alignment is activated
                             SwDoc* pDoc = Imp().GetShell()->GetDoc();
