@@ -11,12 +11,4 @@
 
 $(eval $(call gb_Module_Module,unixODBC))
 
-ifeq ($(SYSTEM_ODBC_HEADERS),NO)
-
-$(eval $(call gb_Module_add_targets,unixODBC,\
-	Package_inc \
-))
-
-endif
-
 # vim: set noet sw=4 ts=4:

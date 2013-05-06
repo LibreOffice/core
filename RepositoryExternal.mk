@@ -122,7 +122,10 @@ endef
 else
 
 define gb_LinkTarget__use_odbc_headers
-$(call gb_LinkTarget_use_package,$(1),odbc_inc)
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(SRCDIR)/unixODBC/inc \
+	$$(INCLUDE) \
+)
 
 endef
 
