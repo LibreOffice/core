@@ -8408,21 +8408,14 @@ uno::Reference< XClipboard > Window::GetClipboard()
         {
             try
             {
-                uno::Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
                 uno::Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
-
-                mpWindowImpl->mpFrameData->mxClipboard = uno::Reference< XClipboard >( xFactory->createInstance( OUString("com.sun.star.datatransfer.clipboard.SystemClipboardExt") ), UNO_QUERY );
-
-                if( !mpWindowImpl->mpFrameData->mxClipboard.is() )
-                {
-                    Reference<XSystemClipboard> xSystemClipboard;
+                Reference<XSystemClipboard> xSystemClipboard;
 #if defined(UNX) && !defined(MACOSX)          // unix clipboard needs to be initialized
-                    xSystemClipboard = SystemClipboard::createUnix( xContext, Application::GetDisplayConnection(), "CLIPBOARD", vcl::createBmpConverter() );
+                xSystemClipboard = SystemClipboard::createUnix( xContext, Application::GetDisplayConnection(), "CLIPBOARD", vcl::createBmpConverter() );
 #else
-                    xSystemClipboard = SystemClipboard::createDefault(xContext);
+                xSystemClipboard = SystemClipboard::createDefault(xContext);
 #endif
-                    mpWindowImpl->mpFrameData->mxClipboard.set( xSystemClipboard, UNO_QUERY );
-                }
+                mpWindowImpl->mpFrameData->mxClipboard.set( xSystemClipboard, UNO_QUERY );
             }
             // createInstance can throw any exception
             catch (const Exception&)
@@ -8456,13 +8449,8 @@ uno::Reference< XClipboard > Window::GetPrimarySelection()
                 Reference<XSystemClipboard> xSystemClipboard = SystemClipboard::createUnix( xContext, Application::GetDisplayConnection(), "PRIMARY", vcl::createBmpConverter() );
                 mpWindowImpl->mpFrameData->mxSelection = uno::Reference< XClipboard >( xSystemClipboard, UNO_QUERY );
 #       else
-                static uno::Reference< XClipboard > s_xSelection;
-
-                if ( !s_xSelection.is() )
-                    s_xSelection.set( xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.datatransfer.clipboard.GenericClipboardExt", xContext ), UNO_QUERY );
-
-                if ( !s_xSelection.is() )
-                    s_xSelection.set( xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.datatransfer.clipboard.GenericClipboard", xContext ), UNO_QUERY );
+                static uno::Reference< XClipboard > s_xSelection(
+                    xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.datatransfer.clipboard.GenericClipboard", xContext ), UNO_QUERY );
 
                 mpWindowImpl->mpFrameData->mxSelection = s_xSelection;
 #       endif
