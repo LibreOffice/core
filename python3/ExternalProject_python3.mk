@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalProject_ExternalProject,python3,python3))
+$(eval $(call gb_ExternalProject_ExternalProject,python3))
 
 $(eval $(call gb_ExternalProject_use_externals,python3,\
 	expat \

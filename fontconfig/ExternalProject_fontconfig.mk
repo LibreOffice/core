@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalProject_ExternalProject,fontconfig,fontconfig))
+$(eval $(call gb_ExternalProject_ExternalProject,fontconfig))
 
 $(eval $(call gb_ExternalProject_use_packages,fontconfig,\
 	freetype \

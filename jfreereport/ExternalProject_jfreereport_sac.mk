@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalProject_ExternalProject,jfreereport_sac,jfreereport_sac))
+$(eval $(call gb_ExternalProject_ExternalProject,jfreereport_sac))
 
 $(eval $(call gb_ExternalProject_register_targets,jfreereport_sac,\
 	build \

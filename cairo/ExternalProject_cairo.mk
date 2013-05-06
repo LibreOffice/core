@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalProject_ExternalProject,cairo,cairo))
+$(eval $(call gb_ExternalProject_ExternalProject,cairo))
 
 $(eval $(call gb_ExternalProject_use_external_project,cairo,pixman))
 

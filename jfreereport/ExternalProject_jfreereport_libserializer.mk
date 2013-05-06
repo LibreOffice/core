@@ -10,7 +10,7 @@
 # for VERSION
 include $(SRCDIR)/jfreereport/version.mk
 
-$(eval $(call gb_ExternalProject_ExternalProject,jfreereport_libserializer,jfreereport_libserializer))
+$(eval $(call gb_ExternalProject_ExternalProject,jfreereport_libserializer))
 
 $(eval $(call gb_ExternalProject_register_targets,jfreereport_libserializer,\
 	build \

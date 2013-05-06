@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalProject_ExternalProject,apache_commons_lang,apache_commons_lang))
+$(eval $(call gb_ExternalProject_ExternalProject,apache_commons_lang))
 
 $(eval $(call gb_ExternalProject_register_targets,apache_commons_lang,\
 	build \

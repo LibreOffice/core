@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalProject_ExternalProject,lpsolve,lpsolve))
+$(eval $(call gb_ExternalProject_ExternalProject,lpsolve))
 
 $(eval $(call gb_ExternalProject_register_targets,lpsolve,\
 	build \

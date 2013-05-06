@@ -55,16 +55,15 @@ $(call gb_ExternalProject_get_clean_target,%) :
 			$(call gb_ExternalProject_get_statedir,$*) \
 	)
 
-# Define a new external project, using an unpacked tarball
+# Define a new external project, using an unpacked tarball of the same name
 #
-# gb_ExternalProject_ExternalProject project unpacked
+# gb_ExternalProject_ExternalProject project
 define gb_ExternalProject_ExternalProject
-$(if $(2),,$(call gb_Output_error,gb_ExternalProject_ExternalProject: no unpacked parameter))
-$(call gb_ExternalProject_get_target,$(1)) : EXTERNAL_WORKDIR := $(call gb_UnpackedTarball_get_dir,$(2))
+$(call gb_ExternalProject_get_target,$(1)) : EXTERNAL_WORKDIR := $(call gb_UnpackedTarball_get_dir,$(1))
 
 $(call gb_ExternalProject_get_preparation_target,$(1)) :| $(dir $(call gb_ExternalProject_get_target,$(1))).dir
-$(call gb_ExternalProject_get_preparation_target,$(1)) : $(call gb_UnpackedTarball_get_target,$(2))
-$(call gb_ExternalProject_get_clean_target,$(1)) : $(call gb_UnpackedTarball_get_clean_target,$(2))
+$(call gb_ExternalProject_get_preparation_target,$(1)) : $(call gb_UnpackedTarball_get_target,$(1))
+$(call gb_ExternalProject_get_clean_target,$(1)) : $(call gb_UnpackedTarball_get_clean_target,$(1))
 $(call gb_ExternalProject_get_target,$(1)) : $(call gb_ExternalProject_get_preparation_target,$(1))
 $(call gb_ExternalProject_get_target,$(1)) :| $(dir $(call gb_ExternalProject_get_target,$(1))).dir
 
