@@ -404,7 +404,7 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     Rectangle aRect( Point( 1, 1 ), Size( nWidth - 2, nHeight - 2 ) );
     aVDev.DrawRect( aRect );
 
-    String aString;
+    OUString aString;
     int nLen;
     sal_uInt8* pDest = ImplSearchEntry( pBuf, (sal_uInt8*)"%%Title:", nBytesRead - 32, 8 );
     if ( pDest )
@@ -416,9 +416,7 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
         sal_uInt8 aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
         if ( strcmp( (const char*)pDest, "none" ) != 0 )
         {
-            aString.AppendAscii( " Title:" );
-            aString.AppendAscii( (char*)pDest );
-            aString.AppendAscii( "\n" );
+            aString += " Title:" + OUString::createFromAscii( (char*)pDest ) + "\n";
         }
         pDest[ nLen ] = aOldValue;
     }
@@ -430,9 +428,7 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
             pDest++;
         nLen = ImplGetLen( pDest, 32 );
         sal_uInt8 aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
-        aString.AppendAscii( " Creator:" );
-        aString.AppendAscii( (char*)pDest );
-        aString.AppendAscii( "\n" );
+        aString += " Creator:" + OUString::createFromAscii( (char*)pDest ) + "\n";
         pDest[ nLen ] = aOldValue;
     }
     pDest = ImplSearchEntry( pBuf, (sal_uInt8*)"%%CreationDate:", nBytesRead - 32, 15 );
@@ -445,9 +441,7 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
         sal_uInt8 aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
         if ( strcmp( (const char*)pDest, "none" ) != 0 )
         {
-            aString.AppendAscii( " CreationDate:" );
-            aString.AppendAscii( (char*)pDest );
-            aString.AppendAscii( "\n" );
+            aString += " CreationDate:" + OUString::createFromAscii( (char*)pDest ) + "\n";
         }
         pDest[ nLen ] = aOldValue;
     }
@@ -459,8 +453,7 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
         long nNumber = ImplGetNumber( &pDest, nCount );
         if ( nCount && ( (sal_uInt32)nNumber < 10 ) )
         {
-            aString.AppendAscii( " LanguageLevel:" );
-            aString.Append( OUString::valueOf( nNumber ) );
+            aString += " LanguageLevel:" + OUString::valueOf( nNumber );
         }
     }
     aVDev.DrawText( aRect, aString, TEXT_DRAW_CLIP | TEXT_DRAW_MULTILINE );
