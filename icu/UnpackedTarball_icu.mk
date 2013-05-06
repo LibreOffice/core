@@ -14,7 +14,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,icu,$(ICU_TARBALL)))
 # *ONLY* for ICU 51(.1)!
 # http://site.icu-project.org/download/51#TOC-Known-Issues
 $(eval $(call gb_UnpackedTarball_set_pre_action,icu,\
-	$(GNUTAR) -x -z -f $(TARFILE_LOCATION)/$(ICU_51_LAYOUT_FIX_TARBALL) \
+	$(GNUTAR) -x -z -f $(gb_UnpackedTarget_TARFILE_LOCATION)/$(ICU_51_LAYOUT_FIX_TARBALL) \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_patches,icu,\
