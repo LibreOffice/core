@@ -94,7 +94,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/datatransf
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/datatransfer/clipboard,\
 	SystemClipboard \
-	SystemClipboardExt \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/deployment,\
 	ExtensionManager \
