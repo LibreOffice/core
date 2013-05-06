@@ -78,31 +78,6 @@ void SidebarDockingWindow::GetFocus()
 
 
 
-long SidebarDockingWindow::PreNotify (NotifyEvent& rEvent)
-{
-    switch (rEvent.GetType())
-    {
-        case EVENT_KEYINPUT:
-        {
-            const KeyEvent* pKeyEvent = rEvent.GetKeyEvent();
-            if (pKeyEvent != NULL)
-                return mpSidebarController->GetFocusManager().NotifyDockingWindowEvent(*pKeyEvent);
-            else
-                break;
-        }
-
-        case EVENT_GETFOCUS:
-            OSL_TRACE("");
-            break;
-
-    }
-
-    return SfxDockingWindow::PreNotify(rEvent);
-}
-
-
-
-
 SfxChildWindow* SidebarDockingWindow::GetChildWindow (void)
 {
     return GetChildWindow_Impl();

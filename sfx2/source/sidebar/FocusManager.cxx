@@ -18,6 +18,7 @@
 
 #include "FocusManager.hxx"
 #include "Panel.hxx"
+#include "DeckTitleBar.hxx"
 #include "sfx2/sidebar/Tools.hxx"
 #include "TitleBar.hxx"
 #include <vcl/button.hxx>
@@ -27,36 +28,20 @@
 
 namespace sfx2 { namespace sidebar {
 
-namespace
+FocusManager::FocusLocation::FocusLocation (const PanelComponent eComponent, const sal_Int32 nIndex)
+    : meComponent(eComponent),
+      mnIndex(nIndex)
 {
-    enum PanelComponent
-    {
-        PC_TitleBar,
-        PC_ToolBox,
-        PC_Content,
-        PC_None
-    };
-
-    PanelComponent GetFocusedComponent (const Panel& rPanel)
-    {
-        if (rPanel.HasFocus())
-            return PC_Content;
-        else if (rPanel.GetTitleBar() != NULL)
-        {
-            if (rPanel.GetTitleBar()->HasFocus())
-                return PC_TitleBar;
-            else if (rPanel.GetTitleBar()->GetToolBox().HasFocus())
-                return PC_ToolBox;
-        }
-        return PC_None;
-    }
 }
 
 
-FocusManager::FocusManager (void)
-    : maPanels(),
+
+
+FocusManager::FocusManager (const ::boost::function<void(const Panel&)>& rShowPanelFunctor)
+    : mpDeckTitleBar(),
+      maPanels(),
       maButtons(),
-      mpTopLevelWindow(NULL)
+      maShowPanelFunctor(rShowPanelFunctor)
 {
 }
 
@@ -73,8 +58,7 @@ FocusManager::~FocusManager (void)
 
 void FocusManager::GrabFocus (void)
 {
-    if ( ! maPanels.empty())
-        FocusPanel(0);
+    FocusDeckTitle();
 }
 
 
@@ -82,16 +66,16 @@ void FocusManager::GrabFocus (void)
 
 void FocusManager::Clear (void)
 {
+    SetDeckTitle(NULL);
     ClearPanels();
     ClearButtons();
 }
 
 
 
+
 void FocusManager::ClearPanels (void)
 {
-    SetTopLevelWindow(NULL);
-
     ::std::vector<Panel*> aPanels;
     aPanels.swap(maPanels);
     for (::std::vector<Panel*>::iterator iPanel(aPanels.begin()),iEnd(aPanels.end());
@@ -104,6 +88,8 @@ void FocusManager::ClearPanels (void)
             UnregisterWindow(*(*iPanel)->GetTitleBar());
             UnregisterWindow((*iPanel)->GetTitleBar()->GetToolBox());
         }
+
+        (*iPanel)->RemoveChildEventListener(LINK(this, FocusManager, ChildEventListener));
     }
 }
 
@@ -124,6 +110,25 @@ void FocusManager::ClearButtons (void)
 
 
 
+void FocusManager::SetDeckTitle (DeckTitleBar* pDeckTitleBar)
+{
+    if (mpDeckTitleBar != NULL)
+    {
+        UnregisterWindow(*mpDeckTitleBar);
+        UnregisterWindow(mpDeckTitleBar->GetToolBox());
+    }
+    mpDeckTitleBar = pDeckTitleBar;
+
+    if (mpDeckTitleBar != NULL)
+    {
+        RegisterWindow(*mpDeckTitleBar);
+        RegisterWindow(mpDeckTitleBar->GetToolBox());
+    }
+}
+
+
+
+
 void FocusManager::SetPanels (const SharedPanelContainer& rPanels)
 {
     ClearPanels();
@@ -137,10 +142,12 @@ void FocusManager::SetPanels (const SharedPanelContainer& rPanels)
             RegisterWindow(*(*iPanel)->GetTitleBar());
             RegisterWindow((*iPanel)->GetTitleBar()->GetToolBox());
         }
+
+        // Register also as child event listener at the panel.
+        (*iPanel)->AddChildEventListener(LINK(this, FocusManager, ChildEventListener));
+
         maPanels.push_back(iPanel->get());
     }
-
-    RegisterTopLevelListener();
 }
 
 
@@ -177,66 +184,35 @@ void FocusManager::UnregisterWindow (Window& rWindow)
 
 
 
-void FocusManager::RegisterTopLevelListener (void)
+FocusManager::FocusLocation FocusManager::GetFocusLocation (const Window& rWindow) const
 {
-    if (maPanels.empty())
-        return;
-    Window* pWindow = maPanels.front();
-    while (pWindow != NULL && pWindow->GetParent()!=NULL)
+    // Check the deck title.
+    if (mpDeckTitleBar != NULL)
     {
-        pWindow = pWindow->GetParent();
+        if (mpDeckTitleBar == &rWindow)
+            return FocusLocation(PC_DeckTitle, -1);
+        else if (&mpDeckTitleBar->GetToolBox() == &rWindow)
+            return FocusLocation(PC_DeckToolBox, -1);
     }
-    SetTopLevelWindow(pWindow);
-}
 
-
-
-
-void FocusManager::SetTopLevelWindow (Window* pWindow)
-{
-    if (mpTopLevelWindow != pWindow)
-    {
-        if (mpTopLevelWindow != NULL)
-        {
-            UnregisterWindow(*mpTopLevelWindow);
-            mpTopLevelWindow->RemoveChildEventListener(LINK(this, FocusManager, WindowEventListener));
-        }
-        mpTopLevelWindow = pWindow;
-        if (mpTopLevelWindow != NULL)
-        {
-            RegisterWindow(*mpTopLevelWindow);
-            mpTopLevelWindow->AddChildEventListener(LINK(this, FocusManager, WindowEventListener));
-        }
-    }
-}
-
-
-
-
-sal_Int32 FocusManager::GetPanelIndex (const Window& rWindow) const
-{
+    // Search the panels.
     for (sal_Int32 nIndex=0,nCount(maPanels.size()); nIndex<nCount; ++nIndex)
     {
         if (maPanels[nIndex] == &rWindow)
-            return nIndex;
+            return FocusLocation(PC_PanelContent, nIndex);
         TitleBar* pTitleBar = maPanels[nIndex]->GetTitleBar();
         if (pTitleBar == &rWindow)
-            return nIndex;
+            return FocusLocation(PC_PanelTitle, nIndex);
         if (pTitleBar!=NULL && &pTitleBar->GetToolBox()==&rWindow)
-            return nIndex;
+            return FocusLocation(PC_PanelToolBox, nIndex);
     }
-    return -1;
-}
 
-
-
-
-sal_Int32 FocusManager::GetButtonIndex (const Window& rWindow) const
-{
+    // Search the buttons.
     for (sal_Int32 nIndex=0,nCount(maButtons.size()); nIndex<nCount; ++nIndex)
         if (maButtons[nIndex] == &rWindow)
-            return nIndex;
-    return -1;
+            return FocusLocation(PC_TabBar, nIndex);
+
+    return FocusLocation(PC_None, -1);
 }
 
 
@@ -274,6 +250,32 @@ bool FocusManager::IsAnyButtonFocused (void) const
 
 
 
+void FocusManager::FocusDeckTitle (void)
+{
+    if (IsDeckTitleVisible())
+    {
+        ToolBox& rToolBox = mpDeckTitleBar->GetToolBox();
+        if (rToolBox.GetItemCount() > 0)
+        {
+            rToolBox.GrabFocus();
+            rToolBox.Invalidate();
+        }
+    }
+    else
+        FocusPanel(0);
+}
+
+
+
+
+bool FocusManager::IsDeckTitleVisible (void) const
+{
+    return mpDeckTitleBar != NULL && mpDeckTitleBar->IsVisible();
+}
+
+
+
+
 void FocusManager::FocusPanel (const sal_Int32 nPanelIndex)
 {
     Panel& rPanel (*maPanels[nPanelIndex]);
@@ -285,6 +287,8 @@ void FocusManager::FocusPanel (const sal_Int32 nPanelIndex)
     }
     else
         FocusPanelContent(nPanelIndex);
+    if (maShowPanelFunctor)
+        maShowPanelFunctor(rPanel);
 }
 
 
@@ -349,24 +353,25 @@ void FocusManager::RemoveWindow (Window& rWindow)
 
 
 bool FocusManager::MoveFocusInsidePanel (
-    const sal_Int32 nPanelIndex,
+    const FocusLocation aFocusLocation,
     const sal_Int32 nDirection)
 {
-    Panel& rPanel (*maPanels[nPanelIndex]);
-    switch (GetFocusedComponent(rPanel))
+    const bool bHasToolBoxItem (
+        maPanels[aFocusLocation.mnIndex]->GetTitleBar()->GetToolBox().GetItemCount() > 0);
+    switch (aFocusLocation.meComponent)
     {
-        case  PC_TitleBar:
-            if (nDirection > 0)
-                rPanel.GetTitleBar()->GetToolBox().GrabFocus();
+        case  PC_PanelTitle:
+            if (nDirection > 0 && bHasToolBoxItem)
+                maPanels[aFocusLocation.mnIndex]->GetTitleBar()->GetToolBox().GrabFocus();
             else
-                FocusPanelContent(nPanelIndex);
+                FocusPanelContent(aFocusLocation.mnIndex);
             return true;
 
-        case PC_ToolBox:
-            if (nDirection > 0)
-                FocusPanelContent(nPanelIndex);
+        case PC_PanelToolBox:
+            if (nDirection < 0 && bHasToolBoxItem)
+                maPanels[aFocusLocation.mnIndex]->GetTitleBar()->GrabFocus();
             else
-                rPanel.GetTitleBar()->GrabFocus();
+                FocusPanelContent(aFocusLocation.mnIndex);
             return true;
 
         default:
@@ -377,141 +382,140 @@ bool FocusManager::MoveFocusInsidePanel (
 
 
 
-long FocusManager::NotifyDockingWindowEvent (const KeyEvent& rKeyEvent)
-{
-    switch(rKeyEvent.GetKeyCode().GetCode())
-    {
-        case KEY_F6:
-            if (rKeyEvent.GetKeyCode().IsShift())
-            {
-                if (IsAnyButtonFocused())
-                {
-                    FocusPanel(0);
-                    return 1;
-                }
-            }
-            else
-            {
-                if (IsAnyPanelFocused())
-                {
-                    FocusButton(0);
-                    return 1;
-                }
-            }
-            break;
-    }
-    return 0;
-}
-
-
-
-
 void FocusManager::HandleKeyEvent (
     const KeyCode& rKeyCode,
     const Window& rWindow)
 {
-    if (rKeyCode.GetModifier() != 0)
-        return;
-
-    const sal_Int32 nPanelIndex (GetPanelIndex(rWindow));
-    sal_Int32 nButtonIndex (nPanelIndex==-1 ? GetButtonIndex(rWindow) : -1);
+    const FocusLocation aLocation (GetFocusLocation(rWindow));
 
     switch (rKeyCode.GetCode())
     {
-        case KEY_F6:
-            if (nPanelIndex >= 0)
-                FocusButton(0);
-            else
-                return;
-            break;
-
         case KEY_SPACE:
-            if (nPanelIndex >= 0)
+            switch (aLocation.meComponent)
             {
-                if (GetFocusedComponent(*maPanels[nPanelIndex]) == PC_TitleBar)
-                {
-                    // Toggle the expansion state.
-                    maPanels[nPanelIndex]->SetExpanded( ! maPanels[nPanelIndex]->IsExpanded());
-                }
-            }
-            else if (nButtonIndex >= 0)
-            {
-                // Activate the button.
-                ClickButton(nButtonIndex);
+                case PC_PanelTitle:
+                    // Toggle panel between expanded and collapsed.
+                    maPanels[aLocation.mnIndex]->SetExpanded( ! maPanels[aLocation.mnIndex]->IsExpanded());
+                    break;
+
+                case PC_TabBar:
+                    // Activate the button.
+                    ClickButton(aLocation.mnIndex);
+                    break;
+
+                default:
+                    break;
             }
             return;
 
         case KEY_RETURN:
-            if (nPanelIndex >= 0)
+            switch (aLocation.meComponent)
             {
-                if (GetFocusedComponent(*maPanels[nPanelIndex]) == PC_TitleBar)
-                {
+                case PC_DeckToolBox:
+                    FocusButton(0);
+                    break;
+
+                case PC_PanelTitle:
                     // Enter the panel.
-                    FocusPanelContent(nPanelIndex);
-                }
-            }
-            else if (nButtonIndex >= 0)
-            {
-                // Activate the button.
-                ClickButton(nButtonIndex);
+                    FocusPanelContent(aLocation.mnIndex);
+                    break;
+
+                case PC_TabBar:
+                    // Activate the button.
+                    ClickButton(aLocation.mnIndex);
+                    break;
+
+                default:
+                    break;
             }
             return;
 
         case KEY_TAB:
-            if (nPanelIndex >= 0)
+            switch (aLocation.meComponent)
             {
-                if (rKeyCode.IsShift())
-                    MoveFocusInsidePanel(nPanelIndex, -1);
-                else
-                    MoveFocusInsidePanel(nPanelIndex, +1);
+                case PC_PanelTitle:
+                case PC_PanelToolBox:
+                case PC_PanelContent:
+                    if (rKeyCode.IsShift())
+                        MoveFocusInsidePanel(aLocation, -1);
+                    else
+                        MoveFocusInsidePanel(aLocation, +1);
+                    break;
+
+                default:
+                    break;
             }
             break;
 
         case KEY_LEFT:
         case KEY_UP:
-            // Go to previous element in focus ring.
-            if (nPanelIndex >= 0)
+            switch (aLocation.meComponent)
             {
-                FocusPanel((nPanelIndex + maPanels.size() - 1) % maPanels.size());
-            }
-            else if (nButtonIndex >= 0)
-            {
-                FocusButton((nButtonIndex + maButtons.size() - 1) % maButtons.size());
+                case PC_PanelTitle:
+                case PC_PanelToolBox:
+                case PC_PanelContent:
+                    // Go to previous panel or the deck title.
+                    if (aLocation.mnIndex > 0)
+                        FocusPanel(aLocation.mnIndex-1);
+                    else if (IsDeckTitleVisible())
+                        FocusDeckTitle();
+                    else
+                        FocusButton(maButtons.size()-1);
+                    break;
+
+                case PC_DeckTitle:
+                case PC_DeckToolBox:
+                    // Focus the last button.
+                    FocusButton(maButtons.size()-1);
+                    break;
+
+                case PC_TabBar:
+                    // Go to previous tab bar item.
+                    if (aLocation.mnIndex == 0)
+                        FocusPanel(maPanels.size()-1);
+                    else
+                        FocusButton((aLocation.mnIndex + maButtons.size() - 1) % maButtons.size());
+                    break;
+
+                default:
+                    break;
             }
             break;
 
         case KEY_RIGHT:
         case KEY_DOWN:
-            // Go to next element in focus ring.
-            if (nPanelIndex >= 0)
+            switch(aLocation.meComponent)
             {
-                FocusPanel((nPanelIndex + 1) % maPanels.size());
-            }
-            else if (nButtonIndex >= 0)
-            {
-                FocusButton((nButtonIndex + 1) % maButtons.size());
-            }
-            break;
-    }
-}
+                case PC_PanelTitle:
+                case PC_PanelToolBox:
+                case PC_PanelContent:
+                    // Go to next panel.
+                    if (aLocation.mnIndex < static_cast<sal_Int32>(maPanels.size())-1)
+                        FocusPanel(aLocation.mnIndex+1);
+                    else
+                        FocusButton(0);
+                    break;
 
+                case PC_DeckTitle:
+                case PC_DeckToolBox:
+                    // Focus the first panel.
+                    FocusPanel(0);
+                    break;
 
+                case PC_TabBar:
+                    // Go to next tab bar item.
+                    if (aLocation.mnIndex < static_cast<sal_Int32>(maButtons.size())-1)
+                        FocusButton(aLocation.mnIndex + 1);
+                    else if (IsDeckTitleVisible())
+                        FocusDeckTitle();
+                    else
+                        FocusPanel(0);
+                    break;
 
-
-void FocusManager::HandleTopLevelEvent (VclWindowEvent& rEvent)
-{
-    switch (rEvent.GetId())
-    {
-        case VCLEVENT_WINDOW_KEYINPUT:
-        {
-            KeyEvent* pKeyEvent = static_cast<KeyEvent*>(rEvent.GetData());
-            switch (pKeyEvent->GetKeyCode().GetCode())
-            {
-                case KEY_F6:
-                    OSL_TRACE("");
+                default:
                     break;
             }
-        }
+            break;
     }
 }
 
@@ -531,29 +535,85 @@ IMPL_LINK(FocusManager, WindowEventListener, VclSimpleEvent*, pEvent)
     if (pSource == NULL)
         return 0;
 
-    if (pSource == mpTopLevelWindow)
-        HandleTopLevelEvent(*pWindowEvent);
-    else
-        switch (pWindowEvent->GetId())
+    switch (pWindowEvent->GetId())
+    {
+        case VCLEVENT_WINDOW_KEYINPUT:
         {
-            case VCLEVENT_WINDOW_KEYINPUT:
-            {
-                KeyEvent* pKeyEvent = static_cast<KeyEvent*>(pWindowEvent->GetData());
-                HandleKeyEvent(pKeyEvent->GetKeyCode(), *pSource);
-                return 1;
-            }
-
-            case VCLEVENT_OBJECT_DYING:
-                RemoveWindow(*pSource);
-                return 1;
-
-            case VCLEVENT_WINDOW_GETFOCUS:
-            case VCLEVENT_WINDOW_LOSEFOCUS:
-                pSource->Invalidate();
+            KeyEvent* pKeyEvent = static_cast<KeyEvent*>(pWindowEvent->GetData());
+            HandleKeyEvent(pKeyEvent->GetKeyCode(), *pSource);
+            return 1;
         }
+
+        case VCLEVENT_OBJECT_DYING:
+            RemoveWindow(*pSource);
+            return 1;
+
+        case VCLEVENT_WINDOW_GETFOCUS:
+        case VCLEVENT_WINDOW_LOSEFOCUS:
+            pSource->Invalidate();
+    }
+
     return 0;
 }
 
+
+
+
+IMPL_LINK(FocusManager, ChildEventListener, VclSimpleEvent*, pEvent)
+{
+    if (pEvent == NULL)
+        return 0;
+
+    if ( ! pEvent->ISA(VclWindowEvent))
+        return 0;
+
+    VclWindowEvent* pWindowEvent = static_cast<VclWindowEvent*>(pEvent);
+    Window* pSource = pWindowEvent->GetWindow();
+    if (pSource == NULL)
+        return 0;
+
+    switch (pWindowEvent->GetId())
+    {
+        case VCLEVENT_WINDOW_KEYINPUT:
+        {
+            KeyEvent* pKeyEvent = static_cast<KeyEvent*>(pWindowEvent->GetData());
+
+            // Go up the window hierarchy to find the parent of the
+            // event source which is known to us.
+            Window* pWindow = pSource;
+            FocusLocation aLocation (PC_None, -1);
+            while (true)
+            {
+                if (pWindow == NULL)
+                    break;
+                aLocation = GetFocusLocation(*pWindow);
+                if (aLocation.meComponent != PC_None)
+                    break;
+                pWindow = pWindow->GetParent();
+            }
+
+            if (aLocation.meComponent != PC_None)
+            {
+                switch (pKeyEvent->GetKeyCode().GetCode())
+                {
+                    case KEY_ESCAPE:
+                        // Return focus back to the panel title.
+                        FocusPanel(aLocation.mnIndex);
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            break;
+        }
+
+        default:
+            break;
+    }
+
+    return 1;
+}
 
 
 } } // end of namespace sfx2::sidebar

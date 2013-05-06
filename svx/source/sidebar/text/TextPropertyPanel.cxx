@@ -160,18 +160,14 @@ TextPropertyPanel::TextPropertyPanel (
     :   Control(pParent, SVX_RES(RID_SIDEBAR_TEXT_PANEL)),
         mpFontNameBox (new SvxSBFontNameBox(this, SVX_RES(CB_SBFONT_FONT))),
         maFontSizeBox       (this, SVX_RES(MB_SBFONT_FONTSIZE)),
-        mpToolBoxIncDecBackground(ControlFactory::CreateToolBoxBackground(this)),
-        mpToolBoxIncDec(ControlFactory::CreateToolBox(
-                mpToolBoxIncDecBackground.get(),
-                SVX_RES(TB_INCREASE_DECREASE))),
         mpToolBoxFontBackground(ControlFactory::CreateToolBoxBackground(this)),
         mpToolBoxFont(ControlFactory::CreateToolBox(
                 mpToolBoxFontBackground.get(),
                 SVX_RES(TB_FONT))),
-        mpToolBoxFontColorBackground(ControlFactory::CreateToolBoxBackground(this)),
-        mpToolBoxFontColor(ControlFactory::CreateToolBox(
-                mpToolBoxFontColorBackground.get(),
-                SVX_RES(TB_FONTCOLOR))),
+        mpToolBoxIncDecBackground(ControlFactory::CreateToolBoxBackground(this)),
+        mpToolBoxIncDec(ControlFactory::CreateToolBox(
+                mpToolBoxIncDecBackground.get(),
+                SVX_RES(TB_INCREASE_DECREASE))),
         mpToolBoxScriptBackground(ControlFactory::CreateToolBoxBackground(this)),
         mpToolBoxScript(ControlFactory::CreateToolBox(
                 mpToolBoxScriptBackground.get(),
@@ -184,6 +180,10 @@ TextPropertyPanel::TextPropertyPanel (
         mpToolBoxSpacing(ControlFactory::CreateToolBox(
                 mpToolBoxSpacingBackground.get(),
                 SVX_RES(TB_SPACING))),
+        mpToolBoxFontColorBackground(ControlFactory::CreateToolBoxBackground(this)),
+        mpToolBoxFontColor(ControlFactory::CreateToolBox(
+                mpToolBoxFontColorBackground.get(),
+                SVX_RES(TB_FONTCOLOR))),
         mpToolBoxHighlightBackground(ControlFactory::CreateToolBoxBackground(this)),
         mpToolBoxHighlight(ControlFactory::CreateToolBox(
                 mpToolBoxHighlightBackground.get(),

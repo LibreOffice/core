@@ -206,6 +206,12 @@ private:
     void ProcessNewWidth (const sal_Int32 nNewWidth);
     void UpdateCloseIndicator (const bool bIsIndicatorVisible);
 
+    /** Typically called when a panel is focused via keyboard.
+        Tries to scroll the deck up or down to make the given panel
+        completely visible.
+    */
+    void ShowPanel (const Panel& rPanel);
+
     virtual void SAL_CALL disposing (void);
 };
 

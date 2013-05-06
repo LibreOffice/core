@@ -134,6 +134,14 @@ ToolBox& TitleBar::GetToolBox (void)
 
 
 
+const ToolBox& TitleBar::GetToolBox (void) const
+{
+    return maToolBox;
+}
+
+
+
+
 void TitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
 {
     (void)nItemIndex;
@@ -181,6 +189,10 @@ void TitleBar::PaintTitle (const Rectangle& rTitleBox)
 void TitleBar::PaintFocus (const Rectangle& rFocusBox)
 {
     Push(PUSH_FONT | PUSH_TEXTCOLOR | PUSH_LINECOLOR | PUSH_FILLCOLOR);
+
+    Font aFont(GetFont());
+    aFont.SetWeight(WEIGHT_BOLD);
+    SetFont(aFont);
 
     const Rectangle aTextBox (
         GetTextRect(

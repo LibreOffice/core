@@ -100,13 +100,16 @@ SidebarController::SidebarController (
               ::boost::bind(&SidebarController::ShowPopupMenu, this, _1,_2,_3))),
       mxFrame(rxFrame),
       maCurrentContext(OUString(), OUString()),
+      maRequestedContext(),
       msCurrentDeckId(A2S("PropertyDeck")),
+      msCurrentDeckTitle(),
       maPropertyChangeForwarder(::boost::bind(&SidebarController::BroadcastPropertyChange, this)),
       maContextChangeUpdate(::boost::bind(&SidebarController::UpdateConfigurations, this)),
       mbIsDeckRequestedOpen(),
       mbIsDeckOpen(),
       mbCanDeckBeOpened(true),
       mnSavedSidebarWidth(pParentWindow->GetSizePixel().Width()),
+      maFocusManager(::boost::bind(&SidebarController::ShowPanel, this, _1)),
       mxReadOnlyModeDispatch(),
       mbIsDocumentReadOnly(false),
       mpSplitWindow(NULL),
@@ -603,6 +606,7 @@ void SidebarController::SwitchToDeck (
 
     // Tell the focus manager about the new panels and tab bar
     // buttons.
+    maFocusManager.SetDeckTitle(mpCurrentDeck->GetTitleBar());
     maFocusManager.SetPanels(aNewPanels);
     mpTabBar->UpdateFocusManager(maFocusManager);
     UpdateTitleBarIcons();
@@ -1151,6 +1155,15 @@ void SidebarController::UpdateTitleBarIcons (void)
                : pPanelDescriptor->msTitleBarIconURL);
         (*iPanel)->GetTitleBar()->SetIcon(Tools::GetImage(sIconURL, mxFrame));
     }
+}
+
+
+
+
+void SidebarController::ShowPanel (const Panel& rPanel)
+{
+    if (mpCurrentDeck)
+        mpCurrentDeck->ShowPanel(rPanel);
 }
 
 

@@ -40,6 +40,7 @@ public:
         long nWidth,
         long nHeight,
         sal_uInt16 nFlags);
+    virtual long Notify (NotifyEvent& rEvent);
 
 private:
     bool mbParentIsBorder;

@@ -25,17 +25,32 @@ class Button;
 class KeyCode;
 class VclSimpleEvent;
 
+
 namespace sfx2 { namespace sidebar {
 
+class DeckTitleBar;
+
 /** Concentrate all focus handling in this class.
-    There are two rings of windows that accept the input focus: panels
-    and tab bar buttons.
-    Arrow keys move the focus between them.  Tab moves focus between rings.
+
+    There is one ring of windows that accept the input focus which are
+    cycled through with the arrow keys:
+    - the closer in the deck title (present only when docked)
+    - the panel title bars
+    - the tab bar items
+
+    When the focus is in a panel title then focus travels over
+    - the panel title
+    - the panel closer
+    - the panel content
+
+    Once the focus is in the panel content then focus cycles through
+    all controls inside the panel but not back to the title bar of
+    the panel.  Escape places the focus back in the panel title.
 */
 class FocusManager
 {
 public:
-    FocusManager (void);
+    FocusManager (const ::boost::function<void(const Panel&)>& rShowPanelFunctor);
     ~FocusManager (void);
 
     /** Forget all panels and buttons.  Remove all window listeners.
@@ -48,22 +63,38 @@ public:
     */
     void GrabFocus (void);
 
-    /** Handle the key event that was sent to the docking window.
-    */
-    long NotifyDockingWindowEvent (const KeyEvent& rKeyEvent);
-
+    void SetDeckTitle (DeckTitleBar* pDeckTitleBar);
     void SetPanels (const SharedPanelContainer& rPanels);
-
     void SetButtons (const ::std::vector<Button*>& rButtons);
 
 private:
+    DeckTitleBar* mpDeckTitleBar;
     ::std::vector<Panel*> maPanels;
     ::std::vector<Button*> maButtons;
-    Window* mpTopLevelWindow;
+    const ::boost::function<void(const Panel&)> maShowPanelFunctor;
+
+    enum PanelComponent
+    {
+        PC_DeckTitle,
+        PC_DeckToolBox,
+        PC_PanelTitle,
+        PC_PanelToolBox,
+        PC_PanelContent,
+        PC_TabBar,
+        PC_None
+    };
+    class FocusLocation
+    {
+    public:
+        PanelComponent meComponent;
+        sal_Int32 mnIndex;
+        FocusLocation (const PanelComponent eComponent, const sal_Int32 nIndex);
+    };
 
     /** Listen for key events for panels and buttons.
     */
     DECL_LINK(WindowEventListener, VclSimpleEvent*);
+    DECL_LINK(ChildEventListener, VclSimpleEvent*);
 
     void ClearPanels (void);
     void ClearButtons (void);
@@ -73,16 +104,16 @@ private:
     */
     void RegisterWindow (Window& rWindow);
     void UnregisterWindow (Window& rWindow);
-    void RegisterTopLevelListener (void);
 
     /** Remove the window from the panel or the button container.
     */
     void RemoveWindow (Window& rWindow);
 
-    sal_Int32 GetPanelIndex (const Window& rWindow) const;
-    sal_Int32 GetButtonIndex (const Window& rWindow) const;
     bool IsAnyPanelFocused (void) const;
     bool IsAnyButtonFocused (void) const;
+
+    void FocusDeckTitle (void);
+    bool IsDeckTitleVisible (void) const;
 
     /** Set the focus to the title bar of the panel or, if the the
         title bar is not visible, directly to the panel.
@@ -92,15 +123,15 @@ private:
     void FocusButton (const sal_Int32 nButtonIndex);
     void ClickButton (const sal_Int32 nButtonIndex);
     bool MoveFocusInsidePanel (
-        const sal_Int32 nPanelIndex,
+        const FocusLocation aLocation,
         const sal_Int32 nDirection);
 
     void HandleKeyEvent (
         const KeyCode& rKeyCode,
         const Window& rWindow);
 
-    void SetTopLevelWindow (Window* pWindow);
-    void HandleTopLevelEvent (VclWindowEvent& rEvent);
+    FocusLocation GetFocusLocation (const Window& rWindow) const;
+
 };
 
 } } // end of namespace sfx2::sidebar

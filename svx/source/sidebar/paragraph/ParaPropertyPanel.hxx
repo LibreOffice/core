@@ -108,20 +108,20 @@ private:
     ::boost::scoped_ptr<FixedText>          maFTUL;
     ::boost::scoped_ptr<Window>             maTbxUL_IncDecBackground;
     ::boost::scoped_ptr<ToolBox>            maTbxUL_IncDec;
-    ::boost::scoped_ptr<SvxRelativeField>   maTopDist;
-    ::boost::scoped_ptr<SvxRelativeField>   maBottomDist;
-    //Line spacing
-    ::boost::scoped_ptr<Window>             maLineSPTbxBackground;
-    ::boost::scoped_ptr<ToolBox>            maLineSPTbx;
-    //Indent
     ::boost::scoped_ptr<FixedText>          maFTIndent;
     ::boost::scoped_ptr<Window>             maTbxIndent_IncDecBackground;
     ::boost::scoped_ptr<ToolBox>            maTbxIndent_IncDec;
+    ::boost::scoped_ptr<SvxRelativeField>   maTopDist;
+    ::boost::scoped_ptr<SvxRelativeField>   maLeftIndent;
+    ::boost::scoped_ptr<SvxRelativeField>   maBottomDist;
+    ::boost::scoped_ptr<SvxRelativeField>   maRightIndent;
+    //Line spacing
+    ::boost::scoped_ptr<Window>             maLineSPTbxBackground;
+    ::boost::scoped_ptr<ToolBox>            maLineSPTbx;
+    ::boost::scoped_ptr<SvxRelativeField>   maFLineIndent;
+    //Indent
     ::boost::scoped_ptr<Window>             maTbxProDemoteBackground;
     ::boost::scoped_ptr<ToolBox>            maTbxProDemote;
-    ::boost::scoped_ptr<SvxRelativeField>   maLeftIndent;
-    ::boost::scoped_ptr<SvxRelativeField>   maRightIndent;
-    ::boost::scoped_ptr<SvxRelativeField>   maFLineIndent;
     ::boost::scoped_ptr< ::svx::ToolboxButtonColorUpdater > mpColorUpdater;
 
     /**********************************************************
