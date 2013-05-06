@@ -75,7 +75,6 @@ $(eval $(call gb_Helper_register_executables,SDK, \
 ifneq ($(OS),IOS)
 
 $(eval $(call gb_Helper_register_executables,SDK, \
-    autodoc \
     climaker \
     cppumaker \
     javamaker \
@@ -675,7 +674,6 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     codemaker \
     codemaker_cpp \
     codemaker_java \
-    cosv \
     dtobj \
 	findsofficepath \
 	gnu_getopt \
@@ -700,7 +698,6 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     salcpprt \
     testtools_bridgetest_s \
     transex \
-    udm \
     ulingu \
     vclmain \
     writerperfect \

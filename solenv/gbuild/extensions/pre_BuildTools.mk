@@ -17,7 +17,6 @@ endif
 # Tools we need to build for cross-compiling
 gb_BUILD_TOOLS = \
 	$(foreach executable, \
-		autodoc \
 		bestreversemap \
 		cfgex \
 		cpp \

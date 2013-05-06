@@ -10,14 +10,12 @@
 $(eval $(call gb_Module_Module,cross_toolset))
 
 $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
-	autodoc \
 	basegfx \
 	binaryurp \
 	bridges \
 	cli_ure \
 	codemaker \
 	comphelper \
-	cosv \
 	cppu \
 	cppuhelper \
 	external \
@@ -52,7 +50,6 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 	tools \
 	ucbhelper \
 	udkapi \
-	udm \
 	unoidl \
 	unoil \
 	unotest \

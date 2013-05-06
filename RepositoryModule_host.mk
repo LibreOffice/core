@@ -18,7 +18,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	animations \
 	$(call gb_Helper_optional,APACHE_COMMONS,apache-commons) \
 	apple_remote \
-	autodoc \
 	avmedia \
 	basctl \
 	basebmp \
@@ -38,7 +37,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	comphelper \
 	configmgr \
 	$(call gb_Helper_optional,DBCONNECTIVITY,connectivity) \
-	cosv \
 	cppcanvas \
 	cppu \
 	cppuhelper \
@@ -191,7 +189,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	ucbhelper \
 	$(call gb_Helper_optional,UCPP,ucpp) \
 	udkapi \
-	udm \
 	UnoControls \
 	unodevtools \
 	unoil \
