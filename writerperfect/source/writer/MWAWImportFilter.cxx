@@ -29,7 +29,6 @@
 
 #include "common/DocumentHandler.hxx"
 #include "common/WPXSvStream.hxx"
-#include "common/WriterPerfectDebug.hxx"
 #include "MWAWImportFilter.hxx"
 
 #include <iostream>
@@ -83,7 +82,7 @@ static double getSizeInPt(WPXProperty const &prop)
     else if (c == 'n') ;
     else if (c == '%')
     {
-        WRITER_DEBUG_MSG(("MWAWObjectHandlerInternal::getSizeInPoint: called with a percent property\n"));
+        SAL_WARN("writerperfect", "MWAWObjectHandlerInternal::getSizeInPoint: called with a percent property");
     }
     return res *= 72.;
 }
@@ -271,7 +270,7 @@ bool MWAWObjectHandlerInternal::Shape::read(const char *psName, WPXPropertyList 
             }
             if (!readOk)
             {
-                WRITER_DEBUG_MSG(("MWAWObjectHandlerInternal::Shape::read: find an unknown key '%s'\n",i.key()));
+                SAL_WARN("writerperfect", "MWAWObjectHandlerInternal::Shape::read: find an unknown key '"  << i.key() << "'");
             }
         }
     }
@@ -297,7 +296,7 @@ bool MWAWObjectHandlerInternal::Shape::drawLine(OdfDocumentHandler *output) cons
 {
     if (m_x.size() < 2 || m_y.size() < 2)
     {
-        WRITER_DEBUG_MSG(("MWAWObjectHandlerInternal::Shape::drawLine: PB\n"));
+        SAL_WARN("writerperfect", "MWAWObjectHandlerInternal::Shape::drawLine: PB");
         return false;
     }
 
@@ -318,7 +317,7 @@ bool MWAWObjectHandlerInternal::Shape::drawRectangle(OdfDocumentHandler *output)
 {
     if (m_x.size() < 1 || m_y.size() < 1)
     {
-        WRITER_DEBUG_MSG(("MWAWObjectHandlerInternal::Shape::drawRectangle: PB\n"));
+        SAL_WARN("writerperfect", "MWAWObjectHandlerInternal::Shape::drawRectangle: PB");
         return false;
     }
 
@@ -335,7 +334,7 @@ bool MWAWObjectHandlerInternal::Shape::drawRectangle(OdfDocumentHandler *output)
     {
         if (m_rw > 0.0 || m_rh > 0.0)
         {
-            WRITER_DEBUG_MSG(("MWAWObjectHandlerInternal::Shape::drawRectangle:: can only create a rectangle\n"));
+            SAL_WARN("writerperfect", "MWAWObjectHandlerInternal::Shape::drawRectangle:: can only create a rectangle");
         }
         output->startElement("draw:rect", list);
         output->endElement("draw:rect");
@@ -389,7 +388,7 @@ bool MWAWObjectHandlerInternal::Shape::drawCircle(OdfDocumentHandler *output) co
 {
     if (m_x.size() < 1 || m_y.size() < 1)
     {
-        WRITER_DEBUG_MSG(("MWAWObjectHandlerInternal::Shape::drawCircle: PB\n"));
+        SAL_WARN("writerperfect", "MWAWObjectHandlerInternal::Shape::drawCircle: PB");
         return false;
     }
 
@@ -418,12 +417,12 @@ bool MWAWObjectHandlerInternal::Shape::drawArc(OdfDocumentHandler *output) const
 {
     if (m_angle.size() < 2)
     {
-        WRITER_DEBUG_MSG(("MWAWObjectHandlerInternal::Shape::drawArc: angle are filled, call draw Circle\n"));
+        SAL_INFO("writerperfect", "MWAWObjectHandlerInternal::Shape::drawArc: angle are filled, call draw Circle");
         return drawCircle(output);
     }
     if (m_x.size() < 1 || m_y.size() < 1)
     {
-        WRITER_DEBUG_MSG(("MWAWObjectHandlerInternal::Shape::drawArc: PB\n"));
+        SAL_WARN("writerperfect", "MWAWObjectHandlerInternal::Shape::drawArc: PB");
         return false;
     }
 
@@ -469,7 +468,7 @@ bool MWAWObjectHandlerInternal::Shape::drawPolygon(OdfDocumentHandler *output, b
 {
     if (m_x.size() < 1 || m_y.size() != m_x.size())
     {
-        WRITER_DEBUG_MSG(("MWAWObjectHandlerInternal::Shape::drawPolygon: PB\n"));
+        SAL_WARN("writerperfect", "MWAWObjectHandlerInternal::Shape::drawPolygon: PB");
         return false;
     }
     std::stringstream s;
@@ -513,7 +512,7 @@ bool MWAWObjectHandlerInternal::Shape::drawPath(OdfDocumentHandler *output) cons
 {
     if (m_path.length()==0 || m_w <= 0 || m_h <= 0)
     {
-        WRITER_DEBUG_MSG(("MWAWObjectHandlerInternal::Shape::drawPath: PB\n"));
+        SAL_WARN("writerperfect", "MWAWObjectHandlerInternal::Shape::drawPath: PB");
         return false;
     }
 
@@ -542,7 +541,7 @@ bool MWAWObjectHandlerInternal::Document::open(const char *psName, WPXPropertyLi
         psName += 8;
     else
     {
-        WRITER_DEBUG_MSG(("MWAWObjectHandlerInternal::Document::open Unknown tag '%s'..\n", psName));
+        SAL_WARN("writerperfect", "MWAWObjectHandlerInternal::Document::open Unknown tag '" << psName << "'.." );
         return false;
     }
     if (strcmp(psName, "document") == 0)
@@ -555,7 +554,7 @@ bool MWAWObjectHandlerInternal::Document::open(const char *psName, WPXPropertyLi
             else if (strcmp(i.key(), "h") == 0) m_h = getSizeInPt(*i());
             else
             {
-                WRITER_DEBUG_MSG(("MWAWObjectHandlerInternal::Document::open: find an unknown key '%s'\n",i.key()));
+                SAL_WARN("writerperfect", "MWAWObjectHandlerInternal::Document::open: find an unknown key '" << i.key() << "'");
             }
         }
         return true;
@@ -573,14 +572,14 @@ bool MWAWObjectHandlerInternal::Document::open(const char *psName, WPXPropertyLi
         {
             if (id == 0)
             {
-                WRITER_DEBUG_MSG(("MWAWObjectHandlerInternal::Document::open shape created without style..\n"));
+                SAL_WARN("writerperfect", "MWAWObjectHandlerInternal::Document::open shape created without style..");
                 styles.push_back(WPXPropertyList());
             }
             shapes.push_back(shape);
             return true;
         }
     }
-    WRITER_DEBUG_MSG(("MWAWObjectHandlerInternal::Document::open Unknown tag '%s'..\n", psName));
+    SAL_WARN("writerperfect", "MWAWObjectHandlerInternal::Document::open Unknown tag '" << psName << "'..");
     return false;
 }
 
@@ -591,7 +590,7 @@ bool MWAWObjectHandlerInternal::Document::close(const char *)
 
 void MWAWObjectHandlerInternal::Document::characters(WPXString const &)
 {
-    WRITER_DEBUG_MSG(("Document::characters must NOT be called..\n"));
+    SAL_WARN("writerperfect", "Document::characters must NOT be called..");
 }
 
 void MWAWObjectHandlerInternal::Document::write(OdfDocumentHandler *output)
@@ -817,7 +816,7 @@ void MWAWObjectHandlerInternal::Document::writeStyle (OdfDocumentHandler *output
                 list.insert("draw:marker-end-width",  getStringSizeInPt(*i()).c_str());
             else
             {
-                WRITER_DEBUG_MSG(("MWAWObjectHandlerInternal::Document::writeStyle: find an unknown key '%s'\n",i.key()));
+                SAL_WARN("writerperfect", "MWAWObjectHandlerInternal::Document::writeStyle: find an unknown key '" << i.key() << "'");
             }
         }
 
@@ -831,7 +830,7 @@ void MWAWObjectHandlerInternal::Document::writeStyle (OdfDocumentHandler *output
 sal_Bool SAL_CALL MWAWImportFilter::importImpl( const Sequence< ::com::sun::star::beans::PropertyValue > &aDescriptor )
 throw (RuntimeException)
 {
-    WRITER_DEBUG_MSG(("MWAWImportFilter::importImpl: Got here!\n"));
+    SAL_INFO("writerperfect", "MWAWImportFilter::importImpl");
 
     sal_Int32 nLength = aDescriptor.getLength();
     const PropertyValue *pValue = aDescriptor.getConstArray();
@@ -871,20 +870,20 @@ throw (RuntimeException)
 sal_Bool SAL_CALL MWAWImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue > &aDescriptor )
 throw (RuntimeException)
 {
-    WRITER_DEBUG_MSG(("MWAWImportFilter::filter: Got here!\n"));
+    SAL_INFO("writerperfect", "MWAWImportFilter::filter");
     return importImpl ( aDescriptor );
 }
 void SAL_CALL MWAWImportFilter::cancel(  )
 throw (RuntimeException)
 {
-    WRITER_DEBUG_MSG(("MWAWImportFilter::cancel: Got here!\n"));
+    SAL_INFO("writerperfect", "MWAWImportFilter::cancel");
 }
 
 // XImporter
 void SAL_CALL MWAWImportFilter::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent > &xDoc )
 throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
-    WRITER_DEBUG_MSG(("MWAWImportFilter::getTargetDocument: Got here!\n"));
+    SAL_INFO("writerperfect", "MWAWImportFilter::getTargetDocument");
     mxDoc = xDoc;
 }
 
@@ -892,7 +891,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 OUString SAL_CALL MWAWImportFilter::detect( com::sun::star::uno::Sequence< PropertyValue > &Descriptor )
 throw( com::sun::star::uno::RuntimeException )
 {
-    WRITER_DEBUG_MSG(("MWAWImportFilter::detect: Got here!\n"));
+    SAL_INFO("writerperfect", "MWAWImportFilter::detect");
 
     MWAWConfidence confidence = MWAW_CONFIDENCE_NONE;
     MWAWDocument::DocumentType docType = MWAWDocument::UNKNOWN;
@@ -1007,7 +1006,7 @@ throw( com::sun::star::uno::RuntimeException )
 void SAL_CALL MWAWImportFilter::initialize( const Sequence< Any > &aArguments )
 throw (Exception, RuntimeException)
 {
-    WRITER_DEBUG_MSG(("MWAWImportFilter::initialize: Got here!\n"));
+    SAL_INFO("writerperfect", "MWAWImportFilter::initialize");
     Sequence < PropertyValue > aAnySeq;
     sal_Int32 nLength = aArguments.getLength();
     if ( nLength && ( aArguments[0] >>= aAnySeq ) )

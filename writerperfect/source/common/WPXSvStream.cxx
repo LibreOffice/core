@@ -8,7 +8,6 @@
  */
 
 #include "WPXSvStream.hxx"
-#include "WriterPerfectDebug.hxx"
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -85,7 +84,7 @@ WPXSvInputStreamImpl::WPXSvInputStreamImpl( Reference< XInputStream > xStream ) 
             }
             catch ( ... )
             {
-                WRITER_DEBUG_MSG(("mnLength = mxSeekable->getLength() threw exception\n"));
+                SAL_WARN("writerperfect", "mnLength = mxSeekable->getLength() threw exception");
                 mnLength = 0;
             }
         }
@@ -161,7 +160,7 @@ int WPXSvInputStreamImpl::seek(long offset, WPX_SEEK_TYPE seekType)
     }
     catch (...)
     {
-        WRITER_DEBUG_MSG(("mxSeekable->seek(offset) threw exception\n"));
+        SAL_WARN("writerperfect", "mxSeekable->seek(offset) threw exception");
         return -1;
     }
 }

@@ -30,7 +30,6 @@
 
 #include "common/DocumentHandler.hxx"
 #include "common/WPXSvStream.hxx"
-#include "common/WriterPerfectDebug.hxx"
 #include "MSWorksImportFilter.hxx"
 
 #include <iostream>
@@ -59,7 +58,7 @@ using com::sun::star::xml::sax::XParser;
 sal_Bool SAL_CALL MSWorksImportFilter::importImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
 throw (RuntimeException)
 {
-    WRITER_DEBUG_MSG(("MSWorksImportFilter::importImpl: Got here!\n"));
+    SAL_INFO("writerperfect", "MSWorksImportFilter::importImpl");
 
     sal_Int32 nLength = aDescriptor.getLength();
     const PropertyValue *pValue = aDescriptor.getConstArray();
@@ -98,20 +97,20 @@ throw (RuntimeException)
 sal_Bool SAL_CALL MSWorksImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
 throw (RuntimeException)
 {
-    WRITER_DEBUG_MSG(("MSWorksImportFilter::filter: Got here!\n"));
+    SAL_INFO("writerperfect", "MSWorksImportFilter::filter");
     return importImpl ( aDescriptor );
 }
 void SAL_CALL MSWorksImportFilter::cancel(  )
 throw (RuntimeException)
 {
-    WRITER_DEBUG_MSG(("MSWorksImportFilter::cancel: Got here!\n"));
+    SAL_INFO("writerperfect", "MSWorksImportFilter::cancel");
 }
 
 // XImporter
 void SAL_CALL MSWorksImportFilter::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
 throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
-    WRITER_DEBUG_MSG(("MSWorksImportFilter::getTargetDocument: Got here!\n"));
+    SAL_INFO("writerperfect", "MSWorksImportFilter::getTargetDocument");
     mxDoc = xDoc;
 }
 
@@ -119,7 +118,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 OUString SAL_CALL MSWorksImportFilter::detect( com::sun::star::uno::Sequence< PropertyValue >& Descriptor )
 throw( com::sun::star::uno::RuntimeException )
 {
-    WRITER_DEBUG_MSG(("MSWorksImportFilter::detect: Got here!\n"));
+    SAL_INFO("writerperfect", "MSWorksImportFilter::detect");
 
     WPSConfidence confidence = WPS_CONFIDENCE_NONE;
     OUString sTypeName;
@@ -164,7 +163,7 @@ throw( com::sun::star::uno::RuntimeException )
 void SAL_CALL MSWorksImportFilter::initialize( const Sequence< Any >& aArguments )
 throw (Exception, RuntimeException)
 {
-    WRITER_DEBUG_MSG(("MSWorksImportFilter::initialize: Got here!\n"));
+    SAL_INFO("writerperfect", "MSWorksImportFilter::initialize");
     Sequence < PropertyValue > aAnySeq;
     sal_Int32 nLength = aArguments.getLength();
     if ( nLength && ( aArguments[0] >>= aAnySeq ) )

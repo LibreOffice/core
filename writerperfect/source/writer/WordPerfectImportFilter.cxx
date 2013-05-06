@@ -30,7 +30,6 @@
 
 #include "common/DocumentHandler.hxx"
 #include "common/WPXSvStream.hxx"
-#include "common/WriterPerfectDebug.hxx"
 #include "WordPerfectImportFilter.hxx"
 
 using ::ucbhelper::Content;
@@ -86,7 +85,7 @@ static bool handleEmbeddedWPGImage(const WPXBinaryData &input, WPXBinaryData &ou
 sal_Bool SAL_CALL WordPerfectImportFilter::importImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
 throw (RuntimeException)
 {
-    WRITER_DEBUG_MSG(("WordPerfectImportFilter::importImpl: Got here!\n"));
+    SAL_INFO("writerperfect", "WordPerfectImportFilter::importImpl");
 
     sal_Int32 nLength = aDescriptor.getLength();
     const PropertyValue *pValue = aDescriptor.getConstArray();
@@ -151,20 +150,20 @@ throw (RuntimeException)
 sal_Bool SAL_CALL WordPerfectImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
 throw (RuntimeException)
 {
-    WRITER_DEBUG_MSG(("WordPerfectImportFilter::filter: Got here!\n"));
+    SAL_INFO("writerperfect", "WordPerfectImportFilter::filter");
     return importImpl ( aDescriptor );
 }
 void SAL_CALL WordPerfectImportFilter::cancel(  )
 throw (RuntimeException)
 {
-    WRITER_DEBUG_MSG(("WordPerfectImportFilter::cancel: Got here!\n"));
+    SAL_INFO("writerperfect", "WordPerfectImportFilter::cancel");
 }
 
 // XImporter
 void SAL_CALL WordPerfectImportFilter::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
 throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
-    WRITER_DEBUG_MSG(("WordPerfectImportFilter::getTargetDocument: Got here!\n"));
+    SAL_INFO("writerperfect", "WordPerfectImportFilter::getTargetDocument");
     mxDoc = xDoc;
 }
 
@@ -172,7 +171,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 OUString SAL_CALL WordPerfectImportFilter::detect( Sequence< PropertyValue >& Descriptor )
 throw( RuntimeException )
 {
-    WRITER_DEBUG_MSG(("WordPerfectImportFilter::detect: Got here!\n"));
+    SAL_INFO("writerperfect", "WordPerfectImportFilter::detect");
 
     WPDConfidence confidence = WPD_CONFIDENCE_NONE;
     OUString sTypeName;
@@ -217,7 +216,7 @@ throw( RuntimeException )
 void SAL_CALL WordPerfectImportFilter::initialize( const Sequence< Any >& aArguments )
 throw (Exception, RuntimeException)
 {
-    WRITER_DEBUG_MSG(("WordPerfectImportFilter::initialize: Got here!\n"));
+    SAL_INFO("writerperfect", "WordPerfectImportFilter::initialize");
     Sequence < PropertyValue > aAnySeq;
     sal_Int32 nLength = aArguments.getLength();
     if ( nLength && ( aArguments[0] >>= aAnySeq ) )
