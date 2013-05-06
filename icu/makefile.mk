@@ -46,6 +46,7 @@ TARFILE_ROOTDIR=icu
 #http://bugs.icu-project.org/trac/ticket/8198 rendering with 0D30 and 0D31
 
 PATCH_FILES=\
+    icu4c.10129.wintz.patch \
     icu4c.9948.mlym-crash.patch \
     icu4c-bsd.patch \
     icu4c-build.patch \
