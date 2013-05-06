@@ -32,12 +32,9 @@ $(eval $(call gb_Library_add_sdi_headers,sd,\
     sd/sdi/sdslots \
 ))
 
-$(eval $(call gb_Library_use_packages,sd,\
-	bluez_bluetooth_inc \
-))
-
 $(eval $(call gb_Library_set_include,sd,\
     $$(INCLUDE) \
+    -I$(SRCDIR)/bluez_bluetooth/inc \
     -I$(SRCDIR)/sd/inc \
     -I$(SRCDIR)/sd/source/ui/inc \
     -I$(SRCDIR)/sd/source/ui/slidesorter/inc \

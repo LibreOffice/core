@@ -10,9 +10,4 @@
 
 $(eval $(call gb_Module_Module,bluez_bluetooth))
 
-
-$(eval $(call gb_Module_add_targets,bluez_bluetooth,\
-        Package_inc \
-))
-
 # vim: set noet sw=4 ts=4:
