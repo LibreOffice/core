@@ -31,24 +31,17 @@ class DateField;
 class TimeField;
 class VclMultiLineEdit;
 
-namespace vcl { namespace detail {
-
-class SAL_DLLPUBLIC_TEMPLATE ModuleMap:
-    public boost::ptr_map<OUString, osl::Module>
-{};
-
-} }
-
 class VCL_DLLPUBLIC VclBuilder: private boost::noncopyable
 {
 public:
     typedef std::map<OString, OString> stringmap;
     typedef Window* (*customMakeWidget)(Window *pParent, stringmap &rVec);
 private:
+    typedef boost::ptr_map<OUString, osl::Module> ModuleMap;
     //We store these until the builder is deleted, that way we can use the
     //ui-previewer on custom widgets and guarantee the modules they are from
     //exist for the duration of the dialog
-    vcl::detail::ModuleMap m_aModuleMap;
+    ModuleMap m_aModuleMap;
 
     //If the toplevel window has any properties which need to be set on it,
     //but the toplevel is the owner of the builder, then its ctor

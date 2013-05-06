@@ -1223,7 +1223,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
             OUString sFunction(OStringToOUString(OString("make") + name.copy(nDelim+1), RTL_TEXTENCODING_UTF8));
 #ifndef DISABLE_DYNLOADING
             OUString sModule = sModuleBuf.makeStringAndClear();
-            vcl::detail::ModuleMap::iterator aI = m_aModuleMap.find(sModule);
+            ModuleMap::iterator aI = m_aModuleMap.find(sModule);
             osl::Module* pModule = NULL;
             if (aI == m_aModuleMap.end())
             {
