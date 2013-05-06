@@ -94,6 +94,7 @@ protected:
     sal_Bool                    mbUseTaggedPDF;
     sal_Int32                   mnPDFTypeSelection;
     sal_Bool                    mbExportNotes;
+    sal_Bool                    mbViewPDF;
     sal_Bool                    mbExportNotesPages;
     sal_Bool                    mbUseTransitionEffects;
     sal_Bool                    mbIsSkipEmptyPages;
@@ -210,6 +211,7 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     CheckBox                    maCbExportBookmarks;
     CheckBox                    maCbExportHiddenSlides;
     CheckBox                    maCbExportNotes;
+    CheckBox                    maCbViewPDF;
     CheckBox                    maCbExportNotesPages;
 
     CheckBox                    maCbExportEmptyPages;

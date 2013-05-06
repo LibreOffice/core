@@ -496,6 +496,7 @@ PDFExtOutDevData::PDFExtOutDevData( const OutputDevice& rOutDev ) :
     mrOutDev                ( rOutDev ),
     mbTaggedPDF             ( sal_False ),
     mbExportNotes           ( sal_True ),
+    mbViewPDF               ( sal_True ),
     mbExportNotesPages      ( sal_False ),
     mbTransitionEffects     ( sal_True ),
     mbUseLosslessCompression( sal_True ),
@@ -552,9 +553,17 @@ sal_Bool PDFExtOutDevData::GetIsExportNotes() const
 {
     return mbExportNotes;
 }
+sal_Bool PDFExtOutDevData::GetIsViewPDF() const
+{
+    return mbViewPDF;
+}
 void PDFExtOutDevData::SetIsExportNotes( const sal_Bool bExportNotes )
 {
     mbExportNotes = bExportNotes;
+}
+void PDFExtOutDevData::SetIsViewPDF( const sal_Bool bViewPDF )
+{
+    mbViewPDF = bViewPDF;
 }
 sal_Bool PDFExtOutDevData::GetIsExportNotesPages() const
 {
