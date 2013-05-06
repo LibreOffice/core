@@ -31,6 +31,7 @@
 
 #include <map>
 
+#include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_set.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -367,7 +368,7 @@ private:
 //  complete conditional formatting
 //
 
-class SC_DLLPUBLIC ScConditionalFormat
+class SC_DLLPUBLIC ScConditionalFormat: private boost::noncopyable
 {
     ScDocument*         pDoc;
     sal_uInt32          nKey;               // Index in attributes
@@ -378,7 +379,6 @@ class SC_DLLPUBLIC ScConditionalFormat
 
 public:
             ScConditionalFormat(sal_uInt32 nNewKey, ScDocument* pDocument);
-            ScConditionalFormat(const ScConditionalFormat& r);
             ~ScConditionalFormat();
 
     // true copy of formulas (for Ref-Undo / between documents)
@@ -390,8 +390,8 @@ public:
     // don't use the same name as for the const version
     ScRangeList& GetRangeList() { return maRanges; }
 
-    bool IsEmpty() const         { return maEntries.empty(); }
-    size_t size() const           { return maEntries.size(); }
+    bool IsEmpty() const;
+    size_t size() const;
 
     void            CompileAll();
     void            CompileXML();
@@ -434,16 +434,19 @@ public:
 class SC_DLLPUBLIC ScConditionalFormatList
 {
 private:
-    boost::ptr_set<ScConditionalFormat> maConditionalFormats;
     typedef boost::ptr_set<ScConditionalFormat> ConditionalFormatContainer;
+    ConditionalFormatContainer maConditionalFormats;
+
+    void operator =(ScConditionalFormatList const &) SAL_DELETED_FUNCTION;
+
 public:
     ScConditionalFormatList() {}
     ScConditionalFormatList(const ScConditionalFormatList& rList);
     ScConditionalFormatList(ScDocument* pDoc, const ScConditionalFormatList& rList);
     ~ScConditionalFormatList() {}
 
-    void    InsertNew( ScConditionalFormat* pNew )
-                { maConditionalFormats.insert(pNew); }
+    void    InsertNew( ScConditionalFormat* pNew );
+
     /**
      * Checks that all cond formats have a non empty range.
      * Deletes empty cond formats.
@@ -480,13 +483,6 @@ public:
     void startRendering();
     void endRendering();
 };
-
-// see http://www.boost.org/doc/libs/1_49_0/libs/ptr_container/doc/tutorial.html#cloneability
-//for MSVC we need:
-inline ScFormatEntry* new_clone( const ScFormatEntry& rFormat )
-{
-    return rFormat.Clone();
-}
 
 #endif
 

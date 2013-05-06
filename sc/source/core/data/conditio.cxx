@@ -1829,19 +1829,6 @@ ScConditionalFormat::ScConditionalFormat(sal_uInt32 nNewKey, ScDocument* pDocume
 {
 }
 
-ScConditionalFormat::ScConditionalFormat(const ScConditionalFormat& r) :
-    pDoc( r.pDoc ),
-    nKey( r.nKey ),
-    maRanges( r.maRanges )
-{
-    for (CondFormatContainer::const_iterator itr = r.maEntries.begin(); itr != r.maEntries.end(); ++itr)
-    {
-        ScFormatEntry* pNewEntry = itr->Clone(r.pDoc);
-        maEntries.push_back( pNewEntry );
-        pNewEntry->SetParent(this);
-    }
-}
-
 ScConditionalFormat* ScConditionalFormat::Clone(ScDocument* pNewDoc) const
 {
     // echte Kopie der Formeln (fuer Ref-Undo / zwischen Dokumenten)
@@ -1888,6 +1875,16 @@ void ScConditionalFormat::AddEntry( ScFormatEntry* pNew )
 {
     maEntries.push_back(pNew);
     pNew->SetParent(this);
+}
+
+bool ScConditionalFormat::IsEmpty() const
+{
+    return maEntries.empty();
+}
+
+size_t ScConditionalFormat::size() const
+{
+    return maEntries.size();
 }
 
 ScConditionalFormat::~ScConditionalFormat()
@@ -2104,6 +2101,11 @@ ScConditionalFormatList::ScConditionalFormatList(ScDocument* pDoc, const ScCondi
 {
     for(const_iterator itr = rList.begin(); itr != rList.end(); ++itr)
         InsertNew( itr->Clone(pDoc) );
+}
+
+void ScConditionalFormatList::InsertNew( ScConditionalFormat* pNew )
+{
+    maConditionalFormats.insert(pNew);
 }
 
 bool ScConditionalFormatList::operator==( const ScConditionalFormatList& r ) const
