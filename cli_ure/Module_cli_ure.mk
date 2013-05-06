@@ -18,7 +18,6 @@ ifeq ($(BUILD_CLI),YES)
 $(eval $(call gb_Module_add_targets,cli_ure,\
 	CliLibrary_cli_basetypes \
 	CliLibrary_cli_ure \
-	CliUnoApi_cli_uretypes \
 	CustomTarget_cli_ure_assemblies \
 	Package_config \
 ))
@@ -28,6 +27,7 @@ ifeq ($(COM),MSC)
 # Original implementation for Windows
 $(eval $(call gb_Module_add_targets,cli_ure,\
 	CliNativeLibrary_cli_cppuhelper \
+	CliUnoApi_cli_uretypes \
 	Executable_climaker \
 	Library_cli_cppuhelper_native \
 	Library_cli_uno \
@@ -47,8 +47,14 @@ $(eval $(call gb_Module_add_targets,cli_ure,\
 
 ifeq ($(ENABLE_MONO_CLIMAKER),YES)
 $(eval $(call gb_Module_add_targets,cli_ure,\
+        CliUnoApi_cli_uretypes \
         Executable_climaker_mono \
         Library_climaker \
+))
+else
+$(eval $(call gb_Module_add_targets,cli_ure,\
+        CustomTarget_cli_uretypes \
+        Package_cli_uretypes \
 ))
 endif
 
