@@ -266,7 +266,7 @@ sub create_directories
                 if (length($languagestring) > $installer::globals::max_lang_length )
                 {
                     my $number_of_languages = get_number_of_langs($languagestring);
-                    chomp(my $shorter = `echo $languagestring | md5sum | sed -e "s/ .*//g"`);
+                    chomp(my $shorter = `echo $languagestring | $ENV{'MD5SUM'} | sed -e "s/ .*//g"`);
                     my $id = substr($shorter, 0, 8); # taking only the first 8 digits
                     $languagestring = "lang_" . $number_of_languages . "_id_" . $id;
                 }
