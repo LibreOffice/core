@@ -42,6 +42,7 @@ public:
     void testFdo45724();
     void testFdo46020();
     void testFirstHeaderFooter();
+    void testFdo42144();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -60,6 +61,7 @@ void Test::run()
         {"fdo45724.odt", &Test::testFdo45724},
         {"fdo46020.odt", &Test::testFdo46020},
         {"first-header-footer.doc", &Test::testFirstHeaderFooter},
+        {"fdo42144.odt", &Test::testFdo42144},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -137,6 +139,13 @@ void Test::testFirstHeaderFooter()
     CPPUNIT_ASSERT_EQUAL(OUString("Odd page footer 2"), parseDump("/root/page[5]/footer/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("Even page header 2"),  parseDump("/root/page[6]/header/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("Even page footer 2"),  parseDump("/root/page[6]/footer/txt/text()"));
+}
+
+void Test::testFdo42144()
+{
+    // Footer wasn't disabled -- instead empty footer was exported.
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(xStyle, "FooterIsOn")));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
