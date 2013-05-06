@@ -114,6 +114,7 @@ define gb_Library_add_auxtarget
 $(call gb_LinkTarget_add_auxtarget,$(call gb_Library_get_linktargetname,$(1)),$(dir $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))))/$(notdir $(2)))
 $(call gb_Library_get_target,$(1)) : $(2)
 $(2) : $(dir $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))))/$(notdir $(2))
+$(2) :| $(dir $(2)).dir
 $(call gb_Library_get_clean_target,$(1)) : AUXTARGETS += $(2)
 
 endef
