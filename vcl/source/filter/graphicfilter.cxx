@@ -84,17 +84,17 @@ static ::osl::Mutex& getListMutex()
     return s_aListProtection;
 }
 
-class ImpFilterOutputStream : public ::cppu::WeakImplHelper1< ::com::sun::star::io::XOutputStream >
+class ImpFilterOutputStream : public ::cppu::WeakImplHelper1< css::io::XOutputStream >
 {
 protected:
 
     SvStream&               mrStm;
 
-    virtual void SAL_CALL   writeBytes( const ::com::sun::star::uno::Sequence< sal_Int8 >& rData )
-        throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL   writeBytes( const css::uno::Sequence< sal_Int8 >& rData )
+        throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException)
         { mrStm.Write( rData.getConstArray(), rData.getLength() ); }
     virtual void SAL_CALL   flush()
-        throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
+        throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException)
         { mrStm.Flush(); }
     virtual void SAL_CALL   closeOutput() throw() {}
 
@@ -113,16 +113,16 @@ static sal_Bool DirEntryExists( const INetURLObject& rObj )
     try
     {
         ::ucbhelper::Content aCnt( rObj.GetMainURL( INetURLObject::NO_DECODE ),
-                             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                             css::uno::Reference< css::ucb::XCommandEnvironment >(),
                              comphelper::getProcessComponentContext() );
 
         bExists = aCnt.isDocument();
     }
-    catch(const ::com::sun::star::ucb::CommandAbortedException&)
+    catch(const css::ucb::CommandAbortedException&)
     {
         SAL_WARN( "svtools.filter", "CommandAbortedException" );
     }
-    catch(const ::com::sun::star::ucb::ContentCreationException&)
+    catch(const css::ucb::ContentCreationException&)
     {
         SAL_WARN( "svtools.filter", "ContentCreationException" );
     }
@@ -138,13 +138,13 @@ static void KillDirEntry( const String& rMainUrl )
     try
     {
         ::ucbhelper::Content aCnt( rMainUrl,
-                             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                             css::uno::Reference< css::ucb::XCommandEnvironment >(),
                              comphelper::getProcessComponentContext() );
 
         aCnt.executeCommand( "delete",
-                             ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
+                             css::uno::makeAny( sal_Bool( sal_True ) ) );
     }
-    catch(const ::com::sun::star::ucb::CommandAbortedException&)
+    catch(const css::ucb::CommandAbortedException&)
     {
         SAL_WARN( "svtools.filter", "CommandAbortedException" );
     }
@@ -892,7 +892,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
             if( ( nMode == 1 ) || ( nMode == 2 ) )
             {
                 GDIMetaFile aMtf( rGraphic.GetGDIMetaFile() );
-                ::com::sun::star::awt::Size aDefaultSize( 10000, 10000 );
+                css::awt::Size aDefaultSize( 10000, 10000 );
                 Size aNewSize( OutputDevice::LogicToLogic( Size( nLogicalWidth, nLogicalHeight ), MAP_100TH_MM, aMtf.GetPrefMapMode() ) );
 
                 if( aNewSize.Width() && aNewSize.Height() )
@@ -2007,41 +2007,38 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
                     // do the normal GDIMetaFile export instead
                     try
                     {
-                        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-                        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+                        css::uno::Reference< css::uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
-                        if( xMgr.is() )
+                        css::uno::Reference< css::xml::sax::XDocumentHandler > xSaxWriter(
+                            xml::sax::Writer::create( xContext ), uno::UNO_QUERY_THROW);
+
+                        css::uno::Reference< css::svg::XSVGWriter > xSVGWriter(
+                            xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.svg.SVGWriter", xContext ),
+                            css::uno::UNO_QUERY );
+
+                        if( xSaxWriter.is() && xSVGWriter.is() )
                         {
-                            ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > xSaxWriter(
-                                xml::sax::Writer::create( xContext ), uno::UNO_QUERY_THROW);
+                            css::uno::Reference< css::io::XActiveDataSource > xActiveDataSource(
+                                xSaxWriter, css::uno::UNO_QUERY );
 
-                            ::com::sun::star::uno::Reference< ::com::sun::star::svg::XSVGWriter > xSVGWriter( xMgr->createInstance(
-                                OUString( "com.sun.star.svg.SVGWriter" ) ), ::com::sun::star::uno::UNO_QUERY );
-
-                            if( xSaxWriter.is() && xSVGWriter.is() )
+                            if( xActiveDataSource.is() )
                             {
-                                ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSource > xActiveDataSource(
-                                    xSaxWriter, ::com::sun::star::uno::UNO_QUERY );
+                                const css::uno::Reference< css::uno::XInterface > xStmIf(
+                                    static_cast< ::cppu::OWeakObject* >( new ImpFilterOutputStream( rOStm ) ) );
 
-                                if( xActiveDataSource.is() )
-                                {
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xStmIf(
-                                        static_cast< ::cppu::OWeakObject* >( new ImpFilterOutputStream( rOStm ) ) );
+                                SvMemoryStream aMemStm( 65535, 65535 );
 
-                                    SvMemoryStream aMemStm( 65535, 65535 );
+                                // #i119735# just use GetGDIMetaFile, it will create a buffered version of contained bitmap now automatically
+                                ( (GDIMetaFile&) aGraphic.GetGDIMetaFile() ).Write( aMemStm );
 
-                                    // #i119735# just use GetGDIMetaFile, it will create a bufferd version of contained bitmap now automatically
-                                    ( (GDIMetaFile&) aGraphic.GetGDIMetaFile() ).Write( aMemStm );
-
-                                    xActiveDataSource->setOutputStream( ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >(
-                                        xStmIf, ::com::sun::star::uno::UNO_QUERY ) );
-                                    ::com::sun::star::uno::Sequence< sal_Int8 > aMtfSeq( (sal_Int8*) aMemStm.GetData(), aMemStm.Tell() );
-                                    xSVGWriter->write( xSaxWriter, aMtfSeq );
-                                }
+                                xActiveDataSource->setOutputStream( css::uno::Reference< css::io::XOutputStream >(
+                                    xStmIf, css::uno::UNO_QUERY ) );
+                                css::uno::Sequence< sal_Int8 > aMtfSeq( (sal_Int8*) aMemStm.GetData(), aMemStm.Tell() );
+                                xSVGWriter->write( xSaxWriter, aMtfSeq );
                             }
                         }
                     }
-                    catch(const ::com::sun::star::uno::Exception&)
+                    catch(const css::uno::Exception&)
                     {
                         nStatus = GRFILTER_IOERROR;
                     }

@@ -29,7 +29,6 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 
-using namespace ::utl                       ;   // getProcessServiceFactory
 using namespace ::com::sun::star::lang      ;   // XMultiServiceFactory
 using namespace ::com::sun::star::beans     ;   // PropertyValue
 using namespace ::com::sun::star::uno       ;   // Reference
