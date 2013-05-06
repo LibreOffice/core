@@ -537,6 +537,33 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
             }
         }
     }
+    else if ( rCEvt.GetCommand() == COMMAND_QUERYCHARPOSITION )
+    {
+        if ( mpIMEInfos && mpIMEInfos->nLen )
+        {
+            EditPaM aPaM( pView->pImpEditView->GetEditSelection().Max() );
+            if ( !IsFormatted() )
+                FormatDoc();
+
+            ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( GetEditDoc().GetPos( aPaM.GetNode() ) );
+            sal_uInt16 nLine = pParaPortion->GetLines().FindLine( aPaM.GetIndex(), sal_True );
+            const EditLine* pLine = pParaPortion->GetLines()[nLine];
+            if ( pLine )
+            {
+                Rectangle* aRects = new Rectangle[ mpIMEInfos->nLen ];
+                for (sal_uInt16 i = 0; i < mpIMEInfos->nLen; ++i)
+                {
+                    sal_uInt16 nInputPos = mpIMEInfos->aPos.GetIndex() + i;
+                    if ( nInputPos > pLine->GetEnd() )
+                        nInputPos = pLine->GetEnd();
+                    Rectangle aR2 = GetEditCursor( pParaPortion, nInputPos );
+                    aRects[ i ] = pView->GetImpEditView()->GetWindowPos( aR2 );
+                }
+                pView->GetWindow()->SetCompositionCharRect( aRects, mpIMEInfos->nLen );
+                delete[] aRects;
+            }
+        }
+    }
 
     GetSelEngine().Command( rCEvt );
 }

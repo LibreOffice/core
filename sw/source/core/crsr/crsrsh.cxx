@@ -1005,6 +1005,11 @@ sal_Bool SwCrsrShell::GotoPage( sal_uInt16 nPage )
     return bRet;
 }
 
+sal_Bool SwCrsrShell::GetCharRectAt(SwRect& rRect, const SwPosition* pPos)
+{
+    SwCntntFrm* pFrm = GetCurrFrm();
+    return pFrm->GetCharRect( rRect, *pPos );
+}
 
 void SwCrsrShell::GetPageNum( sal_uInt16 &rnPhyNum, sal_uInt16 &rnVirtNum,
                               sal_Bool bAtCrsrPos, const sal_Bool bCalcFrm )

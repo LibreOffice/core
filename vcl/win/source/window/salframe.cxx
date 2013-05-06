@@ -5523,6 +5523,32 @@ static LRESULT ImplHandleIMEConfirmReconvertString( HWND hWnd, LPARAM lParam )
     return TRUE;
 }
 
+static LRESULT ImplHandleIMEQueryCharPosition( HWND hWnd, LPARAM lParam ) {
+    WinSalFrame* pFrame = GetWindowPtr( hWnd );
+    PIMECHARPOSITION pQueryCharPosition = (PIMECHARPOSITION) lParam;
+    if ( pQueryCharPosition->dwSize < sizeof(IMECHARPOSITION) )
+        return FALSE;
+
+    SalQueryCharPositionEvent aEvt;
+    aEvt.mbValid = false;
+    aEvt.mnCharPos = pQueryCharPosition->dwCharPos;
+
+    pFrame->CallCallback( SALEVENT_QUERYCHARPOSITION, (void*)&aEvt );
+
+    if ( !aEvt.mbValid )
+        return FALSE;
+
+    pQueryCharPosition->pt.x = aEvt.mnPointX;
+    pQueryCharPosition->pt.y = aEvt.mnPointY;
+    pQueryCharPosition->cLineHeight = aEvt.mnLineHeight;
+    pQueryCharPosition->rcDocument.left = aEvt.mnDocumentBoundX;
+    pQueryCharPosition->rcDocument.top = aEvt.mnDocumentBoundY;
+    pQueryCharPosition->rcDocument.right = aEvt.mnDocumentBoundX + aEvt.mnDocumentBoundWidth;
+    pQueryCharPosition->rcDocument.bottom = aEvt.mnDocumentBoundY + aEvt.mnDocumentBoundHeight;
+
+    return TRUE;
+}
+
 #endif // WINVER >= 0x0500
 
 // -----------------------------------------------------------------------
@@ -5945,11 +5971,16 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
                 nRet = ImplHandleIMEReconvertString( hWnd, lParam );
                 rDef = FALSE;
             }
-        else if( (sal_uIntPtr)( wParam ) == IMR_CONFIRMRECONVERTSTRING )
-        {
-        nRet = ImplHandleIMEConfirmReconvertString( hWnd, lParam );
-        rDef = FALSE;
-        }
+            else if( (sal_uIntPtr)( wParam ) == IMR_CONFIRMRECONVERTSTRING )
+            {
+                nRet = ImplHandleIMEConfirmReconvertString( hWnd, lParam );
+                rDef = FALSE;
+            }
+            else if ( (sal_uIntPtr)( wParam ) == IMR_QUERYCHARPOSITION )
+            {
+                nRet = ImplHandleIMEQueryCharPosition( hWnd, lParam );
+                rDef = FALSE;
+            }
             break;
 #endif // WINVER >= 0x0500
     }

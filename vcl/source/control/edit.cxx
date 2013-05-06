@@ -2313,6 +2313,40 @@ void Edit::Command( const CommandEvent& rCEvt )
         Selection aSelection( pData->GetStart(), pData->GetEnd() );
         SetSelection(aSelection);
     }
+    else if ( rCEvt.GetCommand() == COMMAND_QUERYCHARPOSITION )
+    {
+        if (mpIMEInfos && mpIMEInfos->nLen > 0)
+        {
+            OUString aText = ImplGetText();
+            sal_Int32   nDXBuffer[256];
+            sal_Int32*  pDXBuffer = NULL;
+            sal_Int32*  pDX = nDXBuffer;
+
+            if( !aText.isEmpty() )
+            {
+                if( (size_t) (2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
+                {
+                    pDXBuffer = new sal_Int32[2*(aText.getLength()+1)];
+                    pDX = pDXBuffer;
+                }
+
+                GetCaretPositions( aText, pDX, 0, aText.getLength() );
+            }
+            long    nTH = GetTextHeight();
+            Point   aPos( mnXOffset, ImplGetTextYPosition() );
+
+            Rectangle* aRects = new Rectangle[ mpIMEInfos->nLen ];
+            for ( int nIndex = 0; nIndex < mpIMEInfos->nLen; ++nIndex )
+            {
+                Rectangle aRect( aPos, Size( 10, nTH ) );
+                aRect.Left() = pDX[2*(nIndex+mpIMEInfos->nPos)] + mnXOffset + ImplGetExtraOffset();
+                aRects[ nIndex ] = aRect;
+            }
+            SetCompositionCharRect( aRects, mpIMEInfos->nLen );
+            delete[] aRects;
+            delete[] pDXBuffer;
+        }
+    }
     else
         Control::Command( rCEvt );
 }

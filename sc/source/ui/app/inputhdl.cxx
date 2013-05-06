@@ -3351,6 +3351,21 @@ bool ScInputHandler::InputCommand( const CommandEvent& rCEvt, bool bForce )
             }
         }
     }
+    else if ( rCEvt.GetCommand() == COMMAND_QUERYCHARPOSITION )
+    {
+        if ( eMode != SC_INPUT_NONE )
+        {
+            UpdateActiveView();
+            if (pTableView || pTopView)
+            {
+                if (pTableView)
+                    pTableView->Command( rCEvt );
+                else if (pTopView)                      // call only once
+                    pTopView->Command( rCEvt );
+                bUsed = true;
+            }
+        }
+    }
     else
     {
         if ( bForce || eMode != SC_INPUT_NONE )

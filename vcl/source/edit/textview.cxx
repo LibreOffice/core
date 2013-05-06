@@ -904,6 +904,8 @@ void TextView::MouseMove( const MouseEvent& rMouseEvent )
     mpImpl->mpSelEngine->SelMouseMove( rMouseEvent );
 }
 
+extern "C" void __stdcall OutputDebugStringA(const char *);
+
 void TextView::Command( const CommandEvent& rCEvt )
 {
     mpImpl->mpTextEngine->CheckIdleFormatter();    // Falls schnelles Tippen und MouseButtonDown

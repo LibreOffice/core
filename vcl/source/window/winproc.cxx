@@ -2348,6 +2348,53 @@ static void ImplHandleStartReconversion( Window *pWindow )
 
 // -----------------------------------------------------------------------
 
+static void ImplHandleSalQueryCharPosition( Window *pWindow,
+                                            SalQueryCharPositionEvent *pEvt )
+{
+    pEvt->mbValid = false;            // The data is valid or not.
+    pEvt->mnPointX = 0;               // Target - X
+    pEvt->mnPointY = 0;               // Target - X
+    pEvt->mnLineHeight = 0;           // The line height.
+    pEvt->mnDocumentBoundX = 0;       // BoundRect - X
+    pEvt->mnDocumentBoundY = 0;       // BoundRect - Y
+    pEvt->mnDocumentBoundWidth = 0;   // BoundRect - Width
+    pEvt->mnDocumentBoundHeight = 0;  // BoundRect - Height
+
+    ImplSVData* pSVData = ImplGetSVData();
+    Window*     pChild = pSVData->maWinData.mpExtTextInputWin;
+
+    if ( !pChild )
+        pChild = ImplGetKeyInputWindow( pWindow );
+    else
+    {
+        // Test, if the Window is related to the frame
+        if ( !pWindow->ImplIsWindowOrChild( pChild ) )
+            pChild = ImplGetKeyInputWindow( pWindow );
+    }
+
+    if( pChild )
+    {
+        ImplCallCommand( pChild, COMMAND_QUERYCHARPOSITION );
+
+        ImplWinData* pWinData = pChild->ImplGetWinData();
+        if ( pWinData->mpCompositionCharRects && pEvt->mnCharPos < static_cast<sal_uLong>( pWinData->mnCompositionCharRects ) )
+        {
+            const Rectangle& aRect = pWinData->mpCompositionCharRects[ pEvt->mnCharPos ];
+            Rectangle aDeviceRect = pChild->ImplLogicToDevicePixel( aRect );
+            Point aAbsScreenPos = pChild->OutputToAbsoluteScreenPixel( pChild->ScreenToOutputPixel(aDeviceRect.TopLeft()) );
+            pEvt->mnPointX = aAbsScreenPos.X();
+            // For vertical writing, X-Y points top-right rather than top-left.
+            if ( pWinData->mbVertical != sal_False )
+                pEvt->mnPointX += aDeviceRect.GetWidth();
+            pEvt->mnPointY = aAbsScreenPos.Y();
+            pEvt->mnLineHeight = (pWinData->mbVertical != sal_False) ? aDeviceRect.GetWidth() : aDeviceRect.GetHeight();
+            pEvt->mbValid = true;
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
 long ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
                           sal_uInt16 nEvent, const void* pEvent )
 {
@@ -2658,6 +2705,9 @@ long ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
                 nRet = ImplHandleWheelEvent( pWindow, aSalWheelMouseEvent );
             }
             }
+            break;
+        case SALEVENT_QUERYCHARPOSITION:
+            ImplHandleSalQueryCharPosition( pWindow, (SalQueryCharPositionEvent*)pEvent );
             break;
 #ifdef DBG_UTIL
         default:
