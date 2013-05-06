@@ -4399,6 +4399,7 @@ if test "$enable_headless" = "yes"; then
     enable_unix_qstart_libpng=no
     enable_cairo_canvas=no
     enable_gnome_vfs=no
+    enable_opengl=no
 fi
 
 dnl ===================================================================
