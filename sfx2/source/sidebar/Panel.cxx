@@ -52,7 +52,7 @@ namespace sfx2 { namespace sidebar {
 Panel::Panel (
     const PanelDescriptor& rPanelDescriptor,
     Window* pParentWindow,
-    const ::boost::function<void(void)>& rDeckLayoutTrigger )
+    const ::boost::function<void(void)>& rDeckLayoutTrigger)
     : Window(pParentWindow),
       msPanelId(rPanelDescriptor.msId),
       mpTitleBar(new PanelTitleBar(
@@ -68,7 +68,6 @@ Panel::Panel (
     SetBackground(Theme::GetPaint(Theme::Paint_PanelBackground).GetWallpaper());
 
 #ifdef DEBUG
-    OSL_TRACE("creating Panel at %x", this);
     SetText(A2S("Panel"));
 #endif
 }
@@ -78,7 +77,6 @@ Panel::Panel (
 
 Panel::~Panel (void)
 {
-    OSL_TRACE("destroying Panel at %x", this);
     Dispose();
 }
 

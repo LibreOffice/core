@@ -53,6 +53,7 @@ public:
         sal_uInt16 nFlags = WINDOW_POSSIZE_ALL);
 
     ToolBox& GetToolBox (void);
+    const ToolBox& GetToolBox (void) const;
 
 protected:
     ToolBox maToolBox;

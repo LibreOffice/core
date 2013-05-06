@@ -52,7 +52,6 @@ public:
 protected:
     // Window overridables
     virtual void GetFocus (void);
-    virtual long PreNotify (NotifyEvent& rEvent);
 
 private:
     ::rtl::Reference<sfx2::sidebar::SidebarController> mpSidebarController;
