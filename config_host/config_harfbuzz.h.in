@@ -1,6 +1,0 @@
-#ifndef CONFIG_HARFBUZZ_H
-#define CONFIG_HARFBUZZ_H
-
-#define ENABLE_HARFBUZZ 0
-
-#endif

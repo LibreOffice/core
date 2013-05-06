@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_harfbuzz.h>
 #include <gcach_ftyp.hxx>
 #include <sallayout.hxx>
 #include <salgdi.hxx>
@@ -31,10 +30,9 @@
 #include <sal/alloca.h>
 #include <rtl/instance.hxx>
 
-#if ENABLE_HARFBUZZ
 #include <harfbuzz/hb-icu.h>
 #include <harfbuzz/hb-ot.h>
-#endif
+
 #include <layout/LayoutEngine.h>
 #include <layout/LEFontInstance.h>
 #include <layout/LELanguages.h>
@@ -50,10 +48,7 @@
 ServerFontLayout::ServerFontLayout( ServerFont& rFont )
 :   mrServerFont( rFont )
 {
-    bUseHarfBuzz = false;
-#if ENABLE_HARFBUZZ
-    bUseHarfBuzz = (getenv("SAL_USE_HARFBUZZ") != NULL);
-#endif
+    bUseHarfBuzz = (getenv("SAL_USE_ICULE") == NULL);
 }
 
 void ServerFontLayout::DrawText( SalGraphics& rSalGraphics ) const
@@ -208,7 +203,6 @@ static bool needNextCode(sal_Unicode cChar)
     return lcl_CharIsJoiner(cChar) || U16_IS_TRAIL(cChar);
 }
 
-#if ENABLE_HARFBUZZ
 static hb_blob_t *getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData)
 {
     char pTagName[5];
@@ -537,7 +531,6 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 
     return true;
 }
-#endif // ENABLE_HARFBUZZ
 
 // =======================================================================
 // bridge to ICU LayoutEngine
@@ -1214,12 +1207,10 @@ ServerFontLayoutEngine* ServerFont::GetLayoutEngine(bool bUseHarfBuzz)
 {
     // find best layout engine for font, platform, script and language
     if (!mpLayoutEngine) {
-#if ENABLE_HARFBUZZ
         if (bUseHarfBuzz)
             mpLayoutEngine = new HbLayoutEngine(*this);
         else
-#endif
-        mpLayoutEngine = new IcuLayoutEngine(*this);
+            mpLayoutEngine = new IcuLayoutEngine(*this);
     }
     return mpLayoutEngine;
 }

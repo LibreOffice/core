@@ -720,11 +720,6 @@ AC_ARG_ENABLE(graphite,
         [Enables the compilation of Graphite smart font rendering.])
 )
 
-AC_ARG_ENABLE(harfbuzz,
-    AS_HELP_STRING([--enable-harfbuzz],
-        [Determines whether to use HarfBuzz text layout engine.])
-)
-
 AC_ARG_ENABLE(fetch-external,
     AS_HELP_STRING([--disable-fetch-external],
         [Disables fetching external tarballs from web sources.])
@@ -8482,10 +8477,9 @@ dnl ===================================================================
 dnl HarfBuzz
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable HarfBuzz support])
-if test "$_os" != "WINNT" -a "$_os" != "Darwin" && test "$enable_harfbuzz" = "" -o "$enable_harfbuzz" != "no"; then
+if test "$_os" != "WINNT" -a "$_os" != "Darwin"; then
     AC_MSG_RESULT([yes])
     ENABLE_HARFBUZZ="TRUE"
-    AC_DEFINE(ENABLE_HARFBUZZ)
     libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz >= 0.9.10])
 else
     AC_MSG_RESULT([no])
@@ -11978,7 +11972,6 @@ AC_CONFIG_HEADERS([config_host/config_clang.h])
 AC_CONFIG_HEADERS([config_host/config_features.h])
 AC_CONFIG_HEADERS([config_host/config_global.h])
 AC_CONFIG_HEADERS([config_host/config_graphite.h])
-AC_CONFIG_HEADERS([config_host/config_harfbuzz.h])
 AC_CONFIG_HEADERS([config_host/config_lgpl.h])
 AC_CONFIG_HEADERS([config_host/config_kde4.h])
 AC_CONFIG_HEADERS([config_host/config_mingw.h])
