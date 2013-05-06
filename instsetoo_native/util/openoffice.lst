@@ -32,7 +32,7 @@ Globals
             CREATE_MSP_INSTALLSET 1
             UPDATE_DATABASE_LISTNAME finals_instsetoo.txt
             PACKAGEMAP package_names.txt,package_names_ext.txt
-            WINDOWSPATCHLEVEL 20
+            WINDOWSPATCHLEVEL 21
             OOOVENDOR The Document Foundation
             OOODOWNLOADNAME 1
             BUILDIDCWS {buildidcws}
