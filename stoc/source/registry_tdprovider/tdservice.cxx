@@ -337,8 +337,7 @@ ServiceTypeDescriptionImpl::getConstructors() throw (RuntimeException) {
                         || reader.getMethodExceptionCount(i) != 0)))
             {
                 throw RuntimeException(
-                    OUString(
-                            "Service has bad constructors"),
+                    OUString("Service has bad constructors"),
                     static_cast< OWeakObject * >(this));
             }
             (*ctors)[i] = new Constructor(
@@ -364,8 +363,7 @@ void ServiceTypeDescriptionImpl::getReferences()
     sal_uInt16 superTypes = aReader.getSuperTypeCount();
     if (superTypes > 1) {
         throw RuntimeException(
-            OUString(
-                    "Service has more than one supertype"),
+            OUString("Service has more than one supertype"),
             static_cast< OWeakObject * >(this));
     }
     if (superTypes == 1) {
@@ -373,9 +371,8 @@ void ServiceTypeDescriptionImpl::getReferences()
         if ( aReader.getReferenceCount() != 0
              || aReader.getFieldCount() != 0 )
             throw RuntimeException(
-                OUString(
-                        "Service is single-interface--based but also has"
-                        " references and/or properties" ),
+                OUString("Service is single-interface--based but also has"
+                         " references and/or properties" ),
                 static_cast< OWeakObject * >( this ) );
         Reference< XTypeDescription > ifc;
         try
@@ -385,17 +382,15 @@ void ServiceTypeDescriptionImpl::getReferences()
         catch ( NoSuchElementException const & e )
         {
             throw RuntimeException(
-                OUString(
-                        "com.sun.star.container.NoSuchElementException: " )
+                OUString("com.sun.star.container.NoSuchElementException: " )
                 + e.Message,
                 static_cast< OWeakObject * >( this ) );
         }
         OSL_ASSERT(ifc.is());
         if (resolveTypedefs(ifc)->getTypeClass() != TypeClass_INTERFACE) {
             throw RuntimeException(
-                OUString(
-                        "Single-interface--based service is not based on"
-                        " interface type" ),
+                OUString("Single-interface--based service is not based on"
+                         " interface type" ),
                 static_cast< OWeakObject * >( this ) );
         }
         MutexGuard guard(getMutex());
@@ -437,9 +432,7 @@ void ServiceTypeDescriptionImpl::getReferences()
                     catch ( NoSuchElementException const & e )
                     {
                         throw RuntimeException(
-                            OUString(
-                                    "com.sun.star.container."
-                                    "NoSuchElementException: " )
+                            OUString("com.sun.star.container.NoSuchElementException: " )
                             + e.Message,
                             static_cast< OWeakObject * >( this ) );
                     }
@@ -450,8 +443,7 @@ void ServiceTypeDescriptionImpl::getReferences()
                         // optional service
                         if ( !( aTypeDesc >>= aOptionalServices[ nOS ] ) )
                             throw RuntimeException(
-                                OUString(
-                                        "Service 'export' is not a service" ),
+                                OUString("Service 'export' is not a service" ),
                                 static_cast< OWeakObject * >( this ) );
                         nOS++;
                     }
@@ -460,8 +452,7 @@ void ServiceTypeDescriptionImpl::getReferences()
                         // mandatory service
                         if ( !( aTypeDesc >>= aMandatoryServices[ nMS ] ) )
                             throw RuntimeException(
-                                OUString(
-                                        "Service 'export' is not a service" ),
+                                OUString("Service 'export' is not a service" ),
                                 static_cast< OWeakObject * >( this ) );
                         nMS++;
                     }
@@ -479,9 +470,7 @@ void ServiceTypeDescriptionImpl::getReferences()
                     catch ( NoSuchElementException const & e )
                     {
                         throw RuntimeException(
-                            OUString(
-                                    "com.sun.star.container."
-                                    "NoSuchElementException: " )
+                            OUString("com.sun.star.container.NoSuchElementException: " )
                             + e.Message,
                             static_cast< OWeakObject * >( this ) );
                     }
@@ -492,9 +481,8 @@ void ServiceTypeDescriptionImpl::getReferences()
                         // optional interface
                         if ( !( aTypeDesc >>= aOptionalInterfaces[ nOI ] ) )
                             throw RuntimeException(
-                                OUString(
-                                        "Service 'supports' is not an"
-                                        " interface" ),
+                                OUString("Service 'supports' is not an"
+                                         " interface" ),
                                 static_cast< OWeakObject * >( this ) );
                         nOI++;
                     }
@@ -503,9 +491,8 @@ void ServiceTypeDescriptionImpl::getReferences()
                         // mandatory interface
                         if ( !( aTypeDesc >>= aMandatoryInterfaces[ nMI ] ) )
                             throw RuntimeException(
-                                OUString(
-                                        "Service 'supports' is not an"
-                                        " interface" ),
+                                OUString("Service 'supports' is not an"
+                                         " interface" ),
                                 static_cast< OWeakObject * >( this ) );
                         nMI++;
                     }

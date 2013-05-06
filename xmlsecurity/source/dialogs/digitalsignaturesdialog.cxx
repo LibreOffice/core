@@ -99,14 +99,14 @@ void SaveODFItem::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {
                 m_nODF = nTmp;
             else
                 throw uno::RuntimeException(
-                    OUString(
-                        "[xmlsecurity]SaveODFItem::SaveODFItem(): Wrong Type!"), 0 );
+                    OUString("[xmlsecurity]SaveODFItem::SaveODFItem(): Wrong Type!"),
+                    0 );
 
         }
         else
             throw uno::RuntimeException(
-                OUString(
-                    "[xmlsecurity] Could not open property Office.Common/Save/ODF/DefaultVersion"), 0);
+                OUString("[xmlsecurity] Could not open property Office.Common/Save/ODF/DefaultVersion"),
+                0);
     }
 }
 

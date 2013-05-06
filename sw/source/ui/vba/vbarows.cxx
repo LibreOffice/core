@@ -260,9 +260,8 @@ void SwVbaRows::setIndentWithAdjustNone( sal_Int32 indent ) throw (uno::RuntimeE
     if ((nNewWidth <= 0) || (nWidth <= 0))
     {
         throw uno::RuntimeException(
-            OUString(
-                    "Pb with width, in SwVbaRows::setIndentWithAdjustProportional (nNewWidth <= 0) || (nWidth <= 0)"
-            ),
+            OUString("Pb with width, in SwVbaRows::setIndentWithAdjustProportional "
+                     "(nNewWidth <= 0) || (nWidth <= 0)"),
             uno::Reference< uno::XInterface >()
         );
     }

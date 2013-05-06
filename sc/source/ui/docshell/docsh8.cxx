@@ -336,20 +336,16 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
         uno::Any aAny;
 
         aAny <<= xConnection;
-        xRowProp->setPropertyValue(
-                    OUString(SC_DBPROP_ACTIVECONNECTION), aAny );
+        xRowProp->setPropertyValue( OUString(SC_DBPROP_ACTIVECONNECTION), aAny );
 
         aAny <<= nType;
-        xRowProp->setPropertyValue(
-                    OUString(SC_DBPROP_COMMANDTYPE), aAny );
+        xRowProp->setPropertyValue( OUString(SC_DBPROP_COMMANDTYPE), aAny );
 
         aAny <<= OUString( aTabName );
-        xRowProp->setPropertyValue(
-                    OUString(SC_DBPROP_COMMAND), aAny );
+        xRowProp->setPropertyValue( OUString(SC_DBPROP_COMMAND), aAny );
 
         aAny <<= false;
-        xRowProp->setPropertyValue(
-                    OUString(SC_DBPROP_PROPCHANGE_NOTIFY), aAny );
+        xRowProp->setPropertyValue( OUString(SC_DBPROP_PROPCHANGE_NOTIFY), aAny );
 
         xRowSet->execute();
 
@@ -934,16 +930,13 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, CharSet eCharS
         if (!xRowProp.is()) return SCERR_EXPORT_CONNECT;
 
         aAny <<= xConnection;
-        xRowProp->setPropertyValue(
-                    OUString(SC_DBPROP_ACTIVECONNECTION), aAny );
+        xRowProp->setPropertyValue( OUString(SC_DBPROP_ACTIVECONNECTION), aAny );
 
         aAny <<= (sal_Int32) sdb::CommandType::TABLE;
-        xRowProp->setPropertyValue(
-                    OUString(SC_DBPROP_COMMANDTYPE), aAny );
+        xRowProp->setPropertyValue( OUString(SC_DBPROP_COMMANDTYPE), aAny );
 
         aAny <<= OUString( aTabName );
-        xRowProp->setPropertyValue(
-                    OUString(SC_DBPROP_COMMAND), aAny );
+        xRowProp->setPropertyValue( OUString(SC_DBPROP_COMMAND), aAny );
 
         xRowSet->execute();
 

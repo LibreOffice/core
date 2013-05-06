@@ -77,8 +77,7 @@ css::uno::Reference< css::uno::XInterface > SingletonFactory::createInstanceWith
                 OUString( "UnoVirtualMachine" ),
                 css::uno::makeAny( handle ) ) ) );
     return xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-        OUString(
-                "com.sun.star.java.JavaVirtualMachine"),
+        OUString("com.sun.star.java.JavaVirtualMachine"),
         css::uno::Sequence< css::uno::Any >( &arg, 1 ), xContext );
 }
 
@@ -87,8 +86,7 @@ css::uno::Reference< css::uno::XInterface > SingletonFactory::createInstanceWith
     throw (css::uno::Exception)
 {
     return xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-        OUString(
-                "com.sun.star.java.JavaVirtualMachine"),
+        OUString("com.sun.star.java.JavaVirtualMachine"),
         args, xContext );
 }
 
@@ -108,9 +106,7 @@ namespace javaunohelper {
             loader );
     } catch ( ::jvmaccess::UnoVirtualMachine::CreationException & ) {
         throw css::uno::RuntimeException(
-            OUString(
-                    "jmvaccess::UnoVirtualMachine::CreationException"
-                    " occurred" ),
+            OUString("jmvaccess::UnoVirtualMachine::CreationException occurred" ),
             css::uno::Reference< css::uno::XInterface >() );
     }
 }
@@ -121,8 +117,7 @@ css::uno::Reference< css::uno::XComponentContext > install_vm_singleton(
 {
     css::uno::Reference< css::lang::XSingleComponentFactory > xFac( new SingletonFactory( vm_access ) );
     ::cppu::ContextEntry_Init entry(
-        OUString(
-                "/singletons/com.sun.star.java.theJavaVirtualMachine"),
+        OUString("/singletons/com.sun.star.java.theJavaVirtualMachine"),
         css::uno::makeAny( xFac ), true );
     return ::cppu::createComponentContext( &entry, 1, xContext );
 }

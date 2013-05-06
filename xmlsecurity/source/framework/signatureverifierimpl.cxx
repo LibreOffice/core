@@ -173,8 +173,7 @@ void SAL_CALL SignatureVerifierImpl::initialize(
 OUString SignatureVerifierImpl_getImplementationName ()
     throw (cssu::RuntimeException)
 {
-    return OUString(
-        IMPLEMENTATION_NAME );
+    return OUString( IMPLEMENTATION_NAME );
 }
 
 sal_Bool SAL_CALL SignatureVerifierImpl_supportsService( const OUString& ServiceName )

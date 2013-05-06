@@ -535,14 +535,11 @@ SAL_IMPLEMENT_MAIN()
             if (! aUnoUrl.endsWithIgnoreAsciiCaseAsciiL(
                     RTL_CONSTASCII_STRINGPARAM(";uno.ComponentContext") ))
                 throw RuntimeException(
-                    OUString(
-                                  "expected UNO-URL with instance name "
-                                  "uno.ComponentContext!" ),
+                    OUString("expected UNO-URL with instance name uno.ComponentContext!" ),
                     Reference<XInterface>() );
             if (bSingleInstance)
                 throw RuntimeException(
-                    OUString(
-                                  "unexpected option --singleinstance!"),
+                    OUString("unexpected option --singleinstance!"),
                     Reference<XInterface>() );
         }
         if (!aImplName.isEmpty() && aLocation.isEmpty())

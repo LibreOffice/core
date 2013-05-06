@@ -201,8 +201,7 @@ bool SingletonFactory::m_bDisposed = false;
 
 OUString serviceGetImplementationName()
 {
-    return OUString(
-                             "com.sun.star.comp.stoc.JavaVirtualMachine");
+    return OUString("com.sun.star.comp.stoc.JavaVirtualMachine");
 }
 
 css::uno::Sequence< OUString > serviceGetSupportedServiceNames()
@@ -257,8 +256,7 @@ bool askForRetry(css::uno::Any const & rException)
     if (xContext.is())
     {
         css::uno::Reference< css::task::XInteractionHandler > xHandler;
-        xContext->getValueByName(OUString(
-                                         "java-vm.interaction-handler"))
+        xContext->getValueByName(OUString("java-vm.interaction-handler"))
             >>= xHandler;
         if (xHandler.is())
         {
@@ -369,8 +367,7 @@ void getDefaultLocaleFromConfig(
 {
     css::uno::Reference<css::uno::XInterface> xConfRegistry =
         xSMgr->createInstanceWithContext(
-        OUString(
-                          "com.sun.star.configuration.ConfigurationRegistry"), xCtx );
+        OUString("com.sun.star.configuration.ConfigurationRegistry"), xCtx );
     if(!xConfRegistry.is())
         throw css::uno::RuntimeException(
             OUString("javavm.cxx: couldn't get ConfigurationRegistry"), 0);
@@ -424,8 +421,7 @@ void getJavaPropsFromSafetySettings(
 {
     css::uno::Reference<css::uno::XInterface> xConfRegistry =
         xSMgr->createInstanceWithContext(
-            OUString(
-                              "com.sun.star.configuration.ConfigurationRegistry"),
+            OUString("com.sun.star.configuration.ConfigurationRegistry"),
             xCtx);
     if(!xConfRegistry.is())
         throw css::uno::RuntimeException(
@@ -598,8 +594,7 @@ JavaVirtualMachine::initialize(css::uno::Sequence< css::uno::Any > const &
             OUString(), static_cast< cppu::OWeakObject * >(this));
     if (m_xUnoVirtualMachine.is())
         throw css::uno::RuntimeException(
-            OUString(
-                              "bad call to initialize"),
+            OUString("bad call to initialize"),
             static_cast< cppu::OWeakObject * >(this));
     css::beans::NamedValue val;
     if (rArguments.getLength() == 1 && (rArguments[0] >>= val) && val.Name == "UnoVirtualMachine" )
@@ -627,16 +622,14 @@ JavaVirtualMachine::initialize(css::uno::Sequence< css::uno::Any > const &
                 m_xUnoVirtualMachine = new jvmaccess::UnoVirtualMachine(vm, 0);
             } catch (jvmaccess::UnoVirtualMachine::CreationException &) {
                 throw css::uno::RuntimeException(
-                    OUString(
-                            "jvmaccess::UnoVirtualMachine::CreationException"),
+                    OUString("jvmaccess::UnoVirtualMachine::CreationException"),
                     static_cast< cppu::OWeakObject * >(this));
             }
         }
     }
     if (!m_xUnoVirtualMachine.is()) {
         throw css::lang::IllegalArgumentException(
-            OUString(
-                    "sequence of exactly one any containing either (a) a"
+            OUString("sequence of exactly one any containing either (a) a"
                     " com.sun.star.beans.NamedValue with Name"
                     " \"UnoVirtualMachine\" and Value a hyper representing a"
                     " non-null pointer to a jvmaccess:UnoVirtualMachine, or (b)"
@@ -785,9 +778,8 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
                 //%PRODUCTNAME requires a Java runtime environment (JRE) to perform this task.
                 //Please install a JRE and restart %PRODUCTNAME.
                 css::java::JavaNotFoundException exc(
-                    OUString(
-                            "JavaVirtualMachine::getJavaVM failed because"
-                            " No suitable JRE found!"),
+                    OUString("JavaVirtualMachine::getJavaVM failed because"
+                             " No suitable JRE found!"),
                     static_cast< cppu::OWeakObject * >(this));
                 askForRetry(css::uno::makeAny(exc));
                 return css::uno::Any();
@@ -796,9 +788,8 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             {
                 //An unexpected error occurred
                 throw css::uno::RuntimeException(
-                    OUString(
-                                      "[JavaVirtualMachine]:An unexpected error occurred"
-                                      " while searching for a Java!"), 0);
+                    OUString("[JavaVirtualMachine]:An unexpected error occurred"
+                             " while searching for a Java!"), 0);
             }
         }
         case JFW_E_INVALID_SETTINGS:
@@ -808,9 +799,8 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             // - Options - %PRODUCTNAME - Java, select the Java runtime environment
             // you want to have used by %PRODUCTNAME.
             css::java::InvalidJavaSettingsException exc(
-                OUString(
-                        "JavaVirtualMachine::getJavaVM failed because"
-                        " Java settings have changed!"),
+                OUString("JavaVirtualMachine::getJavaVM failed because"
+                         " Java settings have changed!"),
                 static_cast< cppu::OWeakObject * >(this));
             askForRetry(css::uno::makeAny(exc));
             return css::uno::Any();
@@ -822,9 +812,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             //this task. However, use of a JRE has been disabled. Do you want to
             //enable the use of a JRE now?
             css::java::JavaDisabledException exc(
-                OUString(
-                        "JavaVirtualMachine::getJavaVM failed because"
-                        " Java is disabled!"),
+                OUString("JavaVirtualMachine::getJavaVM failed because Java is disabled!"),
                 static_cast< cppu::OWeakObject * >(this));
             if( ! askForRetry(css::uno::makeAny(exc)))
                 return css::uno::Any();
@@ -863,9 +851,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             //is defective. Please select another version or install a new JRE
             //and select it under Tools - Options - %PRODUCTNAME - Java.
             css::java::JavaVMCreationFailureException exc(
-                OUString(
-                        "JavaVirtualMachine::getJavaVM failed because"
-                        " Java is defective!"),
+                OUString("JavaVirtualMachine::getJavaVM failed because Java is defective!"),
                 static_cast< cppu::OWeakObject * >(this), 0);
             askForRetry(css::uno::makeAny(exc));
             return css::uno::Any();
@@ -882,9 +868,8 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             //For the selected Java runtime environment to work properly,
             //%PRODUCTNAME must be restarted. Please restart %PRODUCTNAME now.
             css::java::RestartRequiredException exc(
-                OUString(
-                        "JavaVirtualMachine::getJavaVM failed because"
-                        "Office must be restarted before Java can be used!"),
+                OUString("JavaVirtualMachine::getJavaVM failed because "
+                         "Office must be restarted before Java can be used!"),
                 static_cast< cppu::OWeakObject * >(this));
             askForRetry(css::uno::makeAny(exc));
             return css::uno::Any();
@@ -893,9 +878,8 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             //RuntimeException: error is somewhere in the java framework.
             //An unexpected error occurred
             throw css::uno::RuntimeException(
-                OUString(
-                                  "[JavaVirtualMachine]:An unexpected error occurred"
-                                  " while starting Java!"), 0);
+                OUString("[JavaVirtualMachine]:An unexpected error occurred"
+                         " while starting Java!"), 0);
         }
 
         if (bStarted)
@@ -922,9 +906,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             setUpUnoVirtualMachine(guard.getEnvironment());
         } catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &) {
             throw css::uno::RuntimeException(
-                OUString(
-                        "jvmaccess::VirtualMachine::AttachGuard::"
-                        "CreationException occurred"),
+                OUString("jvmaccess::VirtualMachine::AttachGuard::CreationException occurred"),
                 static_cast< cppu::OWeakObject * >(this));
         }
     }
@@ -932,9 +914,8 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
     default: // RETURN_JAVAVM
         if (m_pJavaVm == 0) {
             throw css::uno::RuntimeException(
-                OUString(
-                        "JavaVirtualMachine service was initialized in a way"
-                        " that the requested JavaVM pointer is not available"),
+                OUString("JavaVirtualMachine service was initialized in a way"
+                         " that the requested JavaVM pointer is not available"),
                 static_cast< cppu::OWeakObject * >(this));
         }
         return css::uno::makeAny(reinterpret_cast< sal_IntPtr >(m_pJavaVm));
@@ -1002,9 +983,7 @@ void SAL_CALL JavaVirtualMachine::registerThread()
             OUString(), static_cast< cppu::OWeakObject * >(this));
     if (!m_xUnoVirtualMachine.is())
         throw css::uno::RuntimeException(
-            OUString(
-                              "JavaVirtualMachine::registerThread:"
-                              " null VirtualMachine"),
+            OUString("JavaVirtualMachine::registerThread: null VirtualMachine"),
             static_cast< cppu::OWeakObject * >(this));
     GuardStack * pStack
         = static_cast< GuardStack * >(m_aAttachGuards.getData());
@@ -1022,9 +1001,8 @@ void SAL_CALL JavaVirtualMachine::registerThread()
     catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &)
     {
         throw css::uno::RuntimeException(
-            OUString(
-                    "JavaVirtualMachine::registerThread: jvmaccess::"
-                    "VirtualMachine::AttachGuard::CreationException"),
+            OUString("JavaVirtualMachine::registerThread: jvmaccess::"
+                     "VirtualMachine::AttachGuard::CreationException"),
             static_cast< cppu::OWeakObject * >(this));
     }
 }
@@ -1038,17 +1016,13 @@ void SAL_CALL JavaVirtualMachine::revokeThread()
             OUString(), static_cast< cppu::OWeakObject * >(this));
     if (!m_xUnoVirtualMachine.is())
         throw css::uno::RuntimeException(
-            OUString(
-                              "JavaVirtualMachine::revokeThread:"
-                              " null VirtualMachine"),
+            OUString("JavaVirtualMachine::revokeThread: null VirtualMachine"),
             static_cast< cppu::OWeakObject * >(this));
     GuardStack * pStack
         = static_cast< GuardStack * >(m_aAttachGuards.getData());
     if (pStack == 0 || pStack->empty())
         throw css::uno::RuntimeException(
-            OUString(
-                              "JavaVirtualMachine::revokeThread:"
-                              " no matching registerThread"),
+            OUString("JavaVirtualMachine::revokeThread: no matching registerThread"),
             static_cast< cppu::OWeakObject * >(this));
     delete pStack->top();
     pStack->pop();
@@ -1106,74 +1080,62 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
     }
     else if ( aAccessor == "ooInetHTTPProxyName" )
     {
-        aPropertyName = OUString(
-                                          "http.proxyHost");
+        aPropertyName = OUString("http.proxyHost");
         rEvent.Element >>= aPropertyValue;
     }
     else if ( aAccessor == "ooInetHTTPProxyPort" )
     {
-        aPropertyName
-            = OUString("http.proxyPort");
+        aPropertyName = OUString("http.proxyPort");
         sal_Int32 n = 0;
         rEvent.Element >>= n;
         aPropertyValue = OUString::valueOf(n);
     }
     else if ( aAccessor == "ooInetHTTPSProxyName" )
     {
-        aPropertyName = OUString(
-                                          "https.proxyHost");
+        aPropertyName = OUString("https.proxyHost");
         rEvent.Element >>= aPropertyValue;
     }
     else if ( aAccessor == "ooInetHTTPSProxyPort" )
     {
-        aPropertyName
-            = OUString("https.proxyPort");
+        aPropertyName = OUString("https.proxyPort");
         sal_Int32 n = 0;
         rEvent.Element >>= n;
         aPropertyValue = OUString::valueOf(n);
     }
     else if ( aAccessor == "ooInetFTPProxyName" )
     {
-        aPropertyName = OUString(
-                                          "ftp.proxyHost");
+        aPropertyName = OUString("ftp.proxyHost");
         rEvent.Element >>= aPropertyValue;
     }
     else if ( aAccessor == "ooInetFTPProxyPort" )
     {
-        aPropertyName = OUString(
-                                          "ftp.proxyPort");
+        aPropertyName = OUString("ftp.proxyPort");
         sal_Int32 n = 0;
         rEvent.Element >>= n;
         aPropertyValue = OUString::valueOf(n);
     }
     else if ( aAccessor == "ooInetNoProxy" )
     {
-        aPropertyName = OUString(
-                                          "http.nonProxyHosts");
-        aPropertyName2 = OUString(
-                                           "ftp.nonProxyHosts");
+        aPropertyName = OUString("http.nonProxyHosts");
+        aPropertyName2 = OUString("ftp.nonProxyHosts");
         rEvent.Element >>= aPropertyValue;
         aPropertyValue = aPropertyValue.replace(';', '|');
     }
     else if ( aAccessor == "NetAccess" )
     {
-        aPropertyName = OUString(
-                                          "appletviewer.security.mode");
+        aPropertyName = OUString("appletviewer.security.mode");
         sal_Int32 n = 0;
         if (rEvent.Element >>= n)
             switch (n)
             {
             case 0:
-                aPropertyValue = OUString(
-                                                   "host");
+                aPropertyValue = OUString("host");
                 break;
             case 1:
-                aPropertyValue = OUString(
-                                                   "unrestricted");
+                aPropertyValue = OUString("unrestricted");
                 break;
             case 3:
-                aPropertyValue = OUString(
-                                                   "none");
+                aPropertyValue = OUString("none");
                 break;
             }
         else
@@ -1182,16 +1144,13 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
     }
     else if ( aAccessor == "Security" )
     {
-        aPropertyName = OUString(
-                                          "stardiv.security.disableSecurity");
+        aPropertyName = OUString("stardiv.security.disableSecurity");
         sal_Bool b = sal_Bool();
         if (rEvent.Element >>= b)
             if (b)
-                aPropertyValue = OUString(
-                                                   "false");
+                aPropertyValue = OUString("false");
             else
-                aPropertyValue = OUString(
-                                                   "true");
+                aPropertyValue = OUString("true");
         else
             return;
         bSecurityChanged = true;
@@ -1320,9 +1279,7 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
         catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &)
         {
             throw css::uno::RuntimeException(
-                OUString(
-                                  "jvmaccess::VirtualMachine::AttachGuard::"
-                                  "CreationException"),
+                OUString("jvmaccess::VirtualMachine::AttachGuard::CreationException"),
                 0);
         }
     }
@@ -1404,8 +1361,7 @@ void JavaVirtualMachine::registerConfigChangesListener()
             m_xInetConfiguration
                 = css::uno::Reference< css::container::XContainer >(
                     xConfigProvider->createInstanceWithArguments(
-                        OUString(
-                             "com.sun.star.configuration.ConfigurationAccess"),
+                        OUString("com.sun.star.configuration.ConfigurationAccess"),
                         aArguments),
                     css::uno::UNO_QUERY);
 
@@ -1429,8 +1385,7 @@ void JavaVirtualMachine::registerConfigChangesListener()
             m_xJavaConfiguration
                 = css::uno::Reference< css::container::XContainer >(
                     xConfigProvider->createInstanceWithArguments(
-                        OUString(
-                             "com.sun.star.configuration.ConfigurationAccess"),
+                        OUString("com.sun.star.configuration.ConfigurationAccess"),
                         aArguments2),
                     css::uno::UNO_QUERY);
 
@@ -1589,8 +1544,7 @@ void JavaVirtualMachine::setUpUnoVirtualMachine(JNIEnv * environment) {
             OUString("$URE_INTERNAL_JAVA_DIR/"));
     } catch (css::lang::IllegalArgumentException &) {
         throw css::uno::RuntimeException(
-            OUString(
-                    "com::sun::star::lang::IllegalArgumentException"),
+            OUString("com::sun::star::lang::IllegalArgumentException"),
             static_cast< cppu::OWeakObject * >(this));
     }
     OUString classPath;
@@ -1691,8 +1645,7 @@ void JavaVirtualMachine::setUpUnoVirtualMachine(JNIEnv * environment) {
             m_xVirtualMachine, cl2);
     } catch (jvmaccess::UnoVirtualMachine::CreationException &) {
         throw css::uno::RuntimeException(
-            OUString(
-                    "jvmaccess::UnoVirtualMachine::CreationException"),
+            OUString("jvmaccess::UnoVirtualMachine::CreationException"),
             static_cast< cppu::OWeakObject * >(this));
     }
 }

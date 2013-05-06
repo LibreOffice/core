@@ -54,11 +54,9 @@ private:
     ScriptingConstantsPool& operator = ( const ScriptingConstantsPool & );
     ScriptingConstantsPool()
         : DOC_REF( "SCRIPTING_DOC_REF" ),
-        DOC_STORAGE_ID(
-            "SCRIPTING_DOC_STORAGE_ID" ),
+        DOC_STORAGE_ID( "SCRIPTING_DOC_STORAGE_ID" ),
         DOC_URI( "SCRIPTING_DOC_URI" ),
-        RESOLVED_STORAGE_ID(
-            "SCRIPTING_RESOLVED_STORAGE_ID" ),
+        RESOLVED_STORAGE_ID( "SCRIPTING_RESOLVED_STORAGE_ID" ),
         SCRIPT_INFO( "SCRIPT_INFO" ),
         SCRIPTSTORAGEMANAGER_SERVICE(
             "/singletons/com.sun.star.script.framework.storage.theScriptStorageManager" ),
