@@ -1451,16 +1451,14 @@ namespace cppcanvas
                         }
                     case EmfPlusRecordTypeFillPolygon:
                         {
-#if OSL_DEBUG_LEVEL > 1
                             sal_uInt8 index = flags & 0xff;
-#endif
                             sal_uInt32 brushIndexOrColor;
                             sal_Int32 points;
 
                             rMF >> brushIndexOrColor;
                             rMF >> points;
 
-                            SAL_INFO("cppcanvas.emf", "EMF+ FillPolygon in slot: " << &index << " points: " << points);
+                            SAL_INFO("cppcanvas.emf", "EMF+ FillPolygon in slot: " << +index << " points: " << points);
                             SAL_INFO("cppcanvas.emf", "EMF+\t: " << ((flags & 0x8000) ? "color" : "brush index") << " 0x" << std::hex << brushIndexOrColor);
 
                             EMFPPath path (points, true);
