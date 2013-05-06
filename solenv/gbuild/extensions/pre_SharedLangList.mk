@@ -25,13 +25,23 @@ else
 # expand ALL based on language list)
 gb_WITH_LANG=$(completelangiso)
 endif
+gb_HELP_LANGS := en-US
 
 ifneq ($(ENABLE_RELEASE_BUILD),TRUE)
 ifneq ($(WITH_LANG),)
 gb_WITH_LANG += qtz
+gb_HELP_LANGS += qtz
 endif
 endif
 
 gb_TRANS_LANGS = $(filter-out en-US,$(filter-out qtz,$(gb_WITH_LANG)))
+
+gb_HELP_LANGS += \
+	$(foreach lang,$(filter-out $(WITH_POOR_HELP_LOCALIZATIONS),$(gb_TRANS_LANGS)),\
+		$(if \
+			$(and \
+				$(wildcard $(SRCDIR)/helpcontent2/source/auxiliary/$(lang)),\
+				$(wildcard $(SRCDIR)/translations/source/$(lang)/helpcontent2)),\
+			$(lang)))
 
 # vim: set noet ts=4 sw=4:

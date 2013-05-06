@@ -7,27 +7,14 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-gb_AllLangHelp_HELPDIRNAME := helpcontent2
-gb_AllLangHelp_AUXDIRNAME := auxiliary
-gb_AllLangHelp_HELPDIR := $(gb_AllLangHelp_HELPDIRNAME)/source
-gb_AllLangHelp_AUXDIR := $(gb_AllLangHelp_HELPDIR)/$(gb_AllLangHelp_AUXDIRNAME)
-gb_AllLangHelp_TRANLATIONSDIR := $(SRCDIR)/translations
-
 # class AllLangHelp
 
 # Creates and delivers all language versions of a module.
 
-gb_AllLangHelp_LANGS := en-US $(filter-out en-US,$(gb_WITH_LANG))
-
-define gb_AllLangHelp__translation_exists
-$(or \
-	$(filter en-US qtz,$(1)),\
-	$(and \
-		$(wildcard $(SRCDIR)/$(gb_AllLangHelp_AUXDIR)/$(1)),\
-		$(wildcard $(gb_AllLangHelp_TRANLATIONSDIR)/source/$(1)/$(gb_AllLangHelp_HELPDIRNAME)) \
-	) \
-)
-endef
+gb_AllLangHelp_HELPDIRNAME := helpcontent2
+gb_AllLangHelp_AUXDIRNAME := auxiliary
+gb_AllLangHelp_HELPDIR := $(gb_AllLangHelp_HELPDIRNAME)/source
+gb_AllLangHelp_AUXDIR := $(gb_AllLangHelp_HELPDIR)/$(gb_AllLangHelp_AUXDIRNAME)
 
 gb_AllLangHelp__get_helpname = $(1)/$(2)
 
@@ -63,9 +50,8 @@ endef
 #
 # gb_AllLangHelp_AllLangHelp module
 define gb_AllLangHelp_AllLangHelp
-$(foreach lang,$(gb_AllLangHelp_LANGS),\
-	$(if $(call gb_AllLangHelp__translation_exists,$(lang)),\
-		$(call gb_AllLangHelp_AllLangHelp__one_lang,$(1),$(lang),$(call gb_AllLangHelp__get_helpname,$(1),$(lang)))))
+$(foreach lang,$(gb_HELP_LANGS),\
+	$(call gb_AllLangHelp_AllLangHelp__one_lang,$(1),$(lang),$(call gb_AllLangHelp__get_helpname,$(1),$(lang))))
 
 $(call gb_AllLangHelp_get_target,$(1)) :| $(dir $(call gb_AllLangHelp_get_target,$(1))).dir
 
@@ -76,10 +62,8 @@ endef
 
 # gb_AllLangHelp_set_treefile module treefile
 define gb_AllLangHelp_set_treefile
-$(foreach lang,$(gb_AllLangHelp_LANGS),\
-	$(if $(call gb_AllLangHelp__translation_exists,$(lang)),\
-		$(call gb_HelpTarget_set_treefile,$(call gb_AllLangHelp__get_helpname,$(1),$(lang)),$(2),$(gb_AllLangHelp_HELPDIR)/text) \
-	) \
+$(foreach lang,$(gb_HELP_LANGS),\
+	$(call gb_HelpTarget_set_treefile,$(call gb_AllLangHelp__get_helpname,$(1),$(lang)),$(2),$(gb_AllLangHelp_HELPDIR)/text) \
 )
 
 endef
@@ -88,10 +72,8 @@ endef
 #
 # gb_AllLangHelp_add_helpfile module file
 define gb_AllLangHelp_add_helpfile
-$(foreach lang,$(gb_AllLangHelp_LANGS),\
-	$(if $(call gb_AllLangHelp__translation_exists,$(lang)),\
-		$(call gb_HelpTarget_add_helpfile,$(call gb_AllLangHelp__get_helpname,$(1),$(lang)),$(2)) \
-	) \
+$(foreach lang,$(gb_HELP_LANGS),\
+	$(call gb_HelpTarget_add_helpfile,$(call gb_AllLangHelp__get_helpname,$(1),$(lang)),$(2)) \
 )
 
 endef
@@ -100,10 +82,8 @@ endef
 #
 # gb_AllLangHelp_add_helpfiles module file(s)
 define gb_AllLangHelp_add_helpfiles
-$(foreach lang,$(gb_AllLangHelp_LANGS),\
-	$(if $(call gb_AllLangHelp__translation_exists,$(lang)),\
-		$(call gb_HelpTarget_add_helpfiles,$(call gb_AllLangHelp__get_helpname,$(1),$(lang)),$(2)) \
-	) \
+$(foreach lang,$(gb_HELP_LANGS),\
+	$(call gb_HelpTarget_add_helpfiles,$(call gb_AllLangHelp__get_helpname,$(1),$(lang)),$(2)) \
 )
 
 endef
@@ -112,10 +92,8 @@ endef
 #
 # gb_AllLangHelp_add_localized_file module basedir file
 define gb_AllLangHelp_add_localized_file
-$(foreach lang,$(gb_AllLangHelp_LANGS),\
-	$(if $(call gb_AllLangHelp__translation_exists,$(lang)),\
-		$(call gb_HelpTarget_add_file,$(call gb_AllLangHelp__get_helpname,$(1),$(lang)),$(2)/$(lang)/$(3)) \
-	) \
+$(foreach lang,$(gb_HELP_LANGS),\
+	$(call gb_HelpTarget_add_file,$(call gb_AllLangHelp__get_helpname,$(1),$(lang)),$(2)/$(lang)/$(3)) \
 )
 
 endef
@@ -124,10 +102,8 @@ endef
 #
 # gb_AllLangHelp_add_localized_files module basedir file(s)
 define gb_AllLangHelp_add_localized_files
-$(foreach lang,$(gb_AllLangHelp_LANGS),\
-	$(if $(call gb_AllLangHelp__translation_exists,$(lang)),\
-		$(call gb_HelpTarget_add_files,$(call gb_AllLangHelp__get_helpname,$(1),$(lang)),$(addprefix $(2)/$(lang)/,$(3))) \
-	) \
+$(foreach lang,$(gb_HELP_LANGS),\
+	$(call gb_HelpTarget_add_files,$(call gb_AllLangHelp__get_helpname,$(1),$(lang)),$(addprefix $(2)/$(lang)/,$(3))) \
 )
 
 endef
@@ -138,10 +114,8 @@ endef
 #
 # gb_AllLangHelp_add_helpdir_file module filename file
 define gb_AllLangHelp_add_helpdir_file
-$(foreach lang,$(gb_AllLangHelp_LANGS),\
-	$(if $(call gb_AllLangHelp__translation_exists,$(lang)),\
-		$(call gb_HelpTarget_add_helpdir_file,$(call gb_AllLangHelp__get_helpname,$(1),$(lang)),$(2),$(3)) \
-	) \
+$(foreach lang,$(gb_HELP_LANGS),\
+	$(call gb_HelpTarget_add_helpdir_file,$(call gb_AllLangHelp__get_helpname,$(1),$(lang)),$(2),$(3)) \
 )
 
 endef
@@ -156,11 +130,7 @@ endef
 #
 # gb_AllLangHelp_use_module module other-module
 define gb_AllLangHelp_use_module
-$(foreach lang,$(gb_AllLangHelp_LANGS),\
-	$(if $(call gb_AllLangHelp__translation_exists,$(lang)),\
-		$(call gb_AllLangHelp__use_module,$(1),$(2),$(lang)) \
-	) \
-)
+$(foreach lang,$(gb_HELP_LANGS),$(call gb_AllLangHelp__use_module,$(1),$(2),$(lang)))
 
 endef
 
@@ -184,11 +154,7 @@ endef
 #
 # gb_AllLangHelp_use_linked_module module other-module
 define gb_AllLangHelp_use_linked_module
-$(foreach lang,$(gb_AllLangHelp_LANGS),\
-	$(if $(call gb_AllLangHelp__translation_exists,$(lang)),\
-		$(call gb_AllLangHelp__use_linked_module,$(1),$(2),$(lang)) \
-	) \
-)
+$(foreach lang,$(gb_HELP_LANGS),$(call gb_AllLangHelp__use_linked_module,$(1),$(2),$(lang)))
 
 endef
 
