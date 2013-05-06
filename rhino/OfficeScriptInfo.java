@@ -28,7 +28,7 @@
 
 package org.mozilla.javascript.tools.debugger;
 import java.net.URL;
-import java.util.Hashtable;
+import java.util.HashMap;
 import org.mozilla.javascript.Scriptable;
 
 public class OfficeScriptInfo
