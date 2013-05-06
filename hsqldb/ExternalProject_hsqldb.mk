@@ -7,9 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalProject_ExternalProject,hsqldb))
-
-$(eval $(call gb_ExternalProject_use_unpacked,hsqldb,hsqldb))
+$(eval $(call gb_ExternalProject_ExternalProject,hsqldb,hsqldb))
 
 $(eval $(call gb_ExternalProject_register_targets,hsqldb,\
 	build \

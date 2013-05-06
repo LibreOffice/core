@@ -7,9 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalProject_ExternalProject,openssl))
-
-$(eval $(call gb_ExternalProject_use_unpacked,openssl,openssl))
+$(eval $(call gb_ExternalProject_ExternalProject,openssl,openssl))
 
 $(eval $(call gb_ExternalProject_register_targets,openssl,\
 	build \

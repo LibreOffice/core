@@ -7,9 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalProject_ExternalProject,apache_commons_httpclient))
-
-$(eval $(call gb_ExternalProject_use_unpacked,apache_commons_httpclient,apache_commons_httpclient))
+$(eval $(call gb_ExternalProject_ExternalProject,apache_commons_httpclient,apache_commons_httpclient))
 
 $(eval $(call gb_ExternalProject_use_external,apache_commons_httpclient,commons-codec))
 $(eval $(call gb_ExternalProject_use_external,apache_commons_httpclient,commons-logging))

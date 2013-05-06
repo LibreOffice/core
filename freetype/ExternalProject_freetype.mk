@@ -7,9 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalProject_ExternalProject,freetype))
-
-$(eval $(call gb_ExternalProject_use_unpacked,freetype,freetype))
+$(eval $(call gb_ExternalProject_ExternalProject,freetype,freetype))
 
 $(eval $(call gb_ExternalProject_register_targets,freetype,\
 	build \

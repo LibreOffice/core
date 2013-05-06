@@ -10,9 +10,7 @@
 # for VERSION
 include $(SRCDIR)/jfreereport/version.mk
 
-$(eval $(call gb_ExternalProject_ExternalProject,jfreereport_libxml))
-
-$(eval $(call gb_ExternalProject_use_unpacked,jfreereport_libxml,jfreereport_libxml))
+$(eval $(call gb_ExternalProject_ExternalProject,jfreereport_libxml,jfreereport_libxml))
 
 $(eval $(call gb_ExternalProject_register_targets,jfreereport_libxml,\
 	build \

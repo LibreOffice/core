@@ -7,9 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalProject_ExternalProject,nss))
-
-$(eval $(call gb_ExternalProject_use_unpacked,nss,nss))
+$(eval $(call gb_ExternalProject_ExternalProject,nss,nss))
 
 $(eval $(call gb_ExternalProject_use_externals,nss,\
 	unistd_headers \

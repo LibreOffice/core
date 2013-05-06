@@ -7,9 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalProject_ExternalProject,jfreereport_flow_engine))
-
-$(eval $(call gb_ExternalProject_use_unpacked,jfreereport_flow_engine,jfreereport_flow_engine))
+$(eval $(call gb_ExternalProject_ExternalProject,jfreereport_flow_engine,jfreereport_flow_engine))
 
 $(eval $(call gb_ExternalProject_use_packages,jfreereport_flow_engine,\
 	jfreereport_liblayout \

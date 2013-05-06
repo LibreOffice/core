@@ -55,13 +55,16 @@ $(call gb_ExternalProject_get_clean_target,%) :
 			$(call gb_ExternalProject_get_statedir,$*) \
 	)
 
-# Define a new external project
+# Define a new external project, using an unpacked tarball
 #
-# gb_ExternalProject_ExternalProject project
+# gb_ExternalProject_ExternalProject project unpacked
 define gb_ExternalProject_ExternalProject
-$(call gb_ExternalProject_get_target,$(1)) : EXTERNAL_WORKDIR :=
+$(if $(2),,$(call gb_Output_error,gb_ExternalProject_ExternalProject: no unpacked parameter))
+$(call gb_ExternalProject_get_target,$(1)) : EXTERNAL_WORKDIR := $(call gb_UnpackedTarball_get_dir,$(2))
 
 $(call gb_ExternalProject_get_preparation_target,$(1)) :| $(dir $(call gb_ExternalProject_get_target,$(1))).dir
+$(call gb_ExternalProject_get_preparation_target,$(1)) : $(call gb_UnpackedTarball_get_target,$(2))
+$(call gb_ExternalProject_get_clean_target,$(1)) : $(call gb_UnpackedTarball_get_clean_target,$(2))
 $(call gb_ExternalProject_get_target,$(1)) : $(call gb_ExternalProject_get_preparation_target,$(1))
 $(call gb_ExternalProject_get_target,$(1)) :| $(dir $(call gb_ExternalProject_get_target,$(1))).dir
 
@@ -70,15 +73,9 @@ $(call gb_Helper_make_userfriendly_targets,$(1),ExternalProject)
 
 endef
 
-# Use unpacked tarball as source for build
-#
-# gb_ExternalProject_use_unpacked project unpacked
+# replaced by second parameter to ctor
 define gb_ExternalProject_use_unpacked
-$(call gb_ExternalProject_get_target,$(1)) : EXTERNAL_WORKDIR := $(call gb_UnpackedTarball_get_dir,$(2))
-
-$(call gb_ExternalProject_get_preparation_target,$(1)) : $(call gb_UnpackedTarball_get_target,$(2))
-$(call gb_ExternalProject_get_clean_target,$(1)) : $(call gb_UnpackedTarball_get_clean_target,$(2))
-
+$(call gb_Output_error,gb_ExternalProject_use_unpacked was removed)
 endef
 
 # Register a target in state directory

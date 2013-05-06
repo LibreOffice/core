@@ -7,9 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalProject_ExternalProject,libodfgen))
-
-$(eval $(call gb_ExternalProject_use_unpacked,libodfgen,odfgen))
+$(eval $(call gb_ExternalProject_ExternalProject,libodfgen,odfgen))
 
 $(eval $(call gb_ExternalProject_use_autoconf,libodfgen,build))
 

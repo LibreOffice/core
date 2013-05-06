@@ -7,9 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalProject_ExternalProject,apache_commons_logging))
-
-$(eval $(call gb_ExternalProject_use_unpacked,apache_commons_logging,apache_commons_logging))
+$(eval $(call gb_ExternalProject_ExternalProject,apache_commons_logging,apache_commons_logging))
 
 # TODO: this should go into RepositoryExternal.mk
 ifneq ($(SYSTEM_TOMCAT),YES)

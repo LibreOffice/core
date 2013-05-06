@@ -7,9 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalProject_ExternalProject,hunspell))
-
-$(eval $(call gb_ExternalProject_use_unpacked,hunspell,hunspell))
+$(eval $(call gb_ExternalProject_ExternalProject,hunspell,hunspell))
 
 $(eval $(call gb_ExternalProject_register_targets,hunspell,\
 	build \

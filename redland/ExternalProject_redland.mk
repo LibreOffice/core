@@ -7,9 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalProject_ExternalProject,redland))
-
-$(eval $(call gb_ExternalProject_use_unpacked,redland,redland))
+$(eval $(call gb_ExternalProject_ExternalProject,redland,redland))
 
 $(eval $(call gb_ExternalProject_use_packages,redland, \
     raptor \

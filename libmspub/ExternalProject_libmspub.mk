@@ -7,9 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalProject_ExternalProject,libmspub))
-
-$(eval $(call gb_ExternalProject_use_unpacked,libmspub,mspub))
+$(eval $(call gb_ExternalProject_ExternalProject,libmspub,mspub))
 
 $(eval $(call gb_ExternalProject_use_autoconf,libmspub,build))
 
