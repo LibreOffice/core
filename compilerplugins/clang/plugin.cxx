@@ -56,21 +56,12 @@ bool Plugin::ignoreLocation( SourceLocation loc )
     const char* bufferName = compiler.getSourceManager().getPresumedLoc( expansionLoc ).getFilename();
     if( bufferName == NULL )
         return true;
-    if( strncmp( bufferName, OUTDIR, strlen( OUTDIR )) != 0
-        && strncmp( bufferName, WORKDIR, strlen( WORKDIR )) != 0
-        && strncmp( bufferName, BUILDDIR, strlen( BUILDDIR )) != 0
-        && strncmp( bufferName, SRCDIR, strlen( SRCDIR )) != 0 )
-        return true; // not in LO sources
-    // Sometimes a VisitXXX function may be called more than once for one source location.
-    // This can happen e.g. with a default argument for a function, if it involves constructing
-    // a temporary, then this temporary will be constructed whenever the function is called
-    // and the default argument is needed. As this would mean processing the same piece of code
-    // more than once, and thus possibly modifying the source code more than once, just
-    // ignore an already seen location.
-    if( alreadySeen.find( loc ) != alreadySeen.end())
-        return true;
-    alreadySeen.insert( loc );
-    return false;
+    if( strncmp( bufferName, OUTDIR, strlen( OUTDIR )) == 0
+        || strncmp( bufferName, WORKDIR, strlen( WORKDIR )) == 0
+        || strncmp( bufferName, BUILDDIR, strlen( BUILDDIR )) == 0
+        || strncmp( bufferName, SRCDIR, strlen( SRCDIR )) == 0 )
+        return false; // ok
+    return true;
     }
 
 void Plugin::registerPlugin( Plugin* (*create)( CompilerInstance&, Rewriter& ), const char* optionName, bool isRewriter )
