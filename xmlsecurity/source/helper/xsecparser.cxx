@@ -27,8 +27,6 @@
 namespace cssu = com::sun::star::uno;
 namespace cssxs = com::sun::star::xml::sax;
 
-#define RTL_ASCII_USTRINGPARAM( asciiStr ) asciiStr, strlen( asciiStr ), RTL_TEXTENCODING_ASCII_US
-
 XSecParser::XSecParser(
     XSecController* pXSecController,
     const cssu::Reference< cssxs::XDocumentHandler >& xNextHandler )
@@ -40,13 +38,11 @@ XSecParser::XSecParser(
 
 OUString XSecParser::getIdAttr(const cssu::Reference< cssxs::XAttributeList >& xAttribs )
 {
-    OUString ouIdAttr = xAttribs->getValueByName(
-        OUString(RTL_ASCII_USTRINGPARAM("id")));
+    OUString ouIdAttr = xAttribs->getValueByName(OUString("id"));
 
     if (ouIdAttr == NULL)
     {
-        ouIdAttr = xAttribs->getValueByName(
-            OUString(RTL_ASCII_USTRINGPARAM("Id")));
+        ouIdAttr = xAttribs->getValueByName(OUString("Id"));
     }
 
     return ouIdAttr;
@@ -93,7 +89,7 @@ void SAL_CALL XSecParser::startElement(
             m_pXSecController->collectToVerify( ouIdAttr );
         }
 
-        if ( aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNATURE)) )
+        if ( aName == TAG_SIGNATURE )
         {
             m_pXSecController->addSignature();
             if (ouIdAttr != NULL)
@@ -101,9 +97,9 @@ void SAL_CALL XSecParser::startElement(
                 m_pXSecController->setId( ouIdAttr );
             }
         }
-        else if ( aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_REFERENCE)) )
+        else if ( aName == TAG_REFERENCE )
         {
-            OUString ouUri = xAttribs->getValueByName(OUString(RTL_ASCII_USTRINGPARAM(ATTR_URI)));
+            OUString ouUri = xAttribs->getValueByName(ATTR_URI);
             DBG_ASSERT( ouUri != NULL, "URI == NULL" );
 
             if (ouUri.startsWith(CHAR_FRAGMENT))
@@ -122,13 +118,13 @@ void SAL_CALL XSecParser::startElement(
                 m_bReferenceUnresolved = true;
             }
         }
-            else if (aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_TRANSFORM)))
+            else if (aName == TAG_TRANSFORM)
             {
             if ( m_bReferenceUnresolved )
             {
-                OUString ouAlgorithm = xAttribs->getValueByName(OUString(RTL_ASCII_USTRINGPARAM(ATTR_ALGORITHM)));
+                OUString ouAlgorithm = xAttribs->getValueByName(ATTR_ALGORITHM);
 
-                if (ouAlgorithm != NULL && ouAlgorithm == OUString(RTL_ASCII_USTRINGPARAM(ALGO_C14N)))
+                if (ouAlgorithm != NULL && ouAlgorithm == ALGO_C14N)
                 /*
                 * a xml stream
                 */
@@ -138,41 +134,39 @@ void SAL_CALL XSecParser::startElement(
                 }
             }
             }
-            else if (aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_X509ISSUERNAME)))
+            else if (aName == TAG_X509ISSUERNAME)
             {
             m_ouX509IssuerName = OUString();
             m_bInX509IssuerName = true;
             }
-            else if (aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_X509SERIALNUMBER)))
+            else if (aName == TAG_X509SERIALNUMBER)
             {
             m_ouX509SerialNumber = OUString();
             m_bInX509SerialNumber = true;
             }
-            else if (aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_X509CERTIFICATE)))
+            else if (aName == TAG_X509CERTIFICATE)
             {
             m_ouX509Certificate = OUString();
             m_bInX509Certificate = true;
             }
-            else if (aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNATUREVALUE)))
+            else if (aName == TAG_SIGNATUREVALUE)
             {
             m_ouSignatureValue = OUString();
                 m_bInSignatureValue = true;
             }
-            else if (aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_DIGESTVALUE)))
+            else if (aName == TAG_DIGESTVALUE)
             {
-            m_ouDigestValue = OUString();
+            m_ouDigestValue = "";
                 m_bInDigestValue = true;
             }
-            else if ( aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNATUREPROPERTY)) )
+            else if ( aName == TAG_SIGNATUREPROPERTY )
         {
             if (ouIdAttr != NULL)
             {
                 m_pXSecController->setPropertyId( ouIdAttr );
             }
         }
-            else if (aName == OUString(RTL_CONSTASCII_USTRINGPARAM(NSTAG_DC))
-                        +OUString(":")
-                        +OUString(RTL_CONSTASCII_USTRINGPARAM(TAG_DATE)))
+            else if (aName == NSTAG_DC ":" TAG_DATE)
             {
             m_ouDate = OUString();
                 m_bInDate = true;
@@ -204,11 +198,11 @@ void SAL_CALL XSecParser::endElement( const OUString& aName )
 {
     try
     {
-        if (aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_DIGESTVALUE)))
+        if (aName == TAG_DIGESTVALUE)
             {
                 m_bInDigestValue = false;
             }
-        else if ( aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_REFERENCE)) )
+        else if ( aName == TAG_REFERENCE )
         {
             if ( m_bReferenceUnresolved )
             /*
@@ -221,33 +215,31 @@ void SAL_CALL XSecParser::endElement( const OUString& aName )
 
             m_pXSecController->setDigestValue( m_ouDigestValue );
         }
-        else if ( aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNEDINFO)) )
+        else if ( aName == TAG_SIGNEDINFO )
         {
             m_pXSecController->setReferenceCount();
         }
-        else if ( aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNATUREVALUE)) )
+        else if ( aName == TAG_SIGNATUREVALUE )
         {
             m_pXSecController->setSignatureValue( m_ouSignatureValue );
                 m_bInSignatureValue = false;
         }
-            else if (aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_X509ISSUERNAME)))
+            else if (aName == TAG_X509ISSUERNAME)
             {
             m_pXSecController->setX509IssuerName( m_ouX509IssuerName );
             m_bInX509IssuerName = false;
             }
-            else if (aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_X509SERIALNUMBER)))
+            else if (aName == TAG_X509SERIALNUMBER)
             {
             m_pXSecController->setX509SerialNumber( m_ouX509SerialNumber );
             m_bInX509SerialNumber = false;
             }
-            else if (aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_X509CERTIFICATE)))
+            else if (aName == TAG_X509CERTIFICATE)
             {
             m_pXSecController->setX509Certificate( m_ouX509Certificate );
             m_bInX509Certificate = false;
             }
-            else if (aName == OUString(RTL_CONSTASCII_USTRINGPARAM(NSTAG_DC))
-                        +OUString(":")
-                        +OUString(RTL_CONSTASCII_USTRINGPARAM(TAG_DATE)))
+            else if (aName == NSTAG_DC ":" TAG_DATE)
         {
             m_pXSecController->setDate( m_ouDate );
                 m_bInDate = false;

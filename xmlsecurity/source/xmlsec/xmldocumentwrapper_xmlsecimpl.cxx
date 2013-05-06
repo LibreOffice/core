@@ -48,8 +48,7 @@ namespace cssxw = com::sun::star::xml::wrapper;
 
 #define STRXMLNS "xmlns"
 
-#define RTL_ASCII_USTRINGPARAM( asciiStr ) asciiStr, strlen( asciiStr ), RTL_TEXTENCODING_ASCII_US
-#define RTL_UTF8_USTRINGPARAM( asciiStr ) asciiStr, strlen( asciiStr ), RTL_TEXTENCODING_UTF8
+#define C2U( asciiStr ) asciiStr, strlen( asciiStr ), RTL_TEXTENCODING_UTF8
 
 /* used by the recursiveDelete method */
 #define NODE_REMOVED    0
@@ -64,7 +63,7 @@ XMLDocumentWrapper_XmlSecImpl::XMLDocumentWrapper_XmlSecImpl( )
     /*
      * creates the virtual root element
      */
-    saxHelper.startElement(OUString(RTL_UTF8_USTRINGPARAM( "root" )), cssu::Sequence<cssxcsax::XMLAttribute>());
+    saxHelper.startElement(OUString(C2U( "root" )), cssu::Sequence<cssxcsax::XMLAttribute>());
 
     m_pRootElement = saxHelper.getCurrentNode();
     m_pCurrentElement = m_pRootElement;
@@ -221,16 +220,16 @@ void XMLDocumentWrapper_XmlSecImpl::sendStartElement(
         if (pNsDef->prefix == NULL)
         {
             pAttributeList->AddAttribute(
-                OUString(RTL_UTF8_USTRINGPARAM( STRXMLNS )),
-                OUString(RTL_UTF8_USTRINGPARAM( (sal_Char*)pNsHref )));
+                OUString(C2U( STRXMLNS )),
+                OUString(C2U( (sal_Char*)pNsHref )));
         }
         else
         {
             pAttributeList->AddAttribute(
-                OUString(RTL_UTF8_USTRINGPARAM( STRXMLNS ))
-                +OUString(RTL_UTF8_USTRINGPARAM( ":" ))
-                +OUString(RTL_UTF8_USTRINGPARAM( (sal_Char*)pNsPrefix )),
-                OUString(RTL_UTF8_USTRINGPARAM( (sal_Char*)pNsHref )));
+                OUString(C2U( STRXMLNS ))
+                +OUString(C2U( ":" ))
+                +OUString(C2U( (sal_Char*)pNsPrefix )),
+                OUString(C2U( (sal_Char*)pNsHref )));
         }
 
         pNsDef = pNsDef->next;
@@ -246,18 +245,18 @@ void XMLDocumentWrapper_XmlSecImpl::sendStartElement(
         OUString ouAttrName;
         if (pAttrNs == NULL)
         {
-            ouAttrName = OUString(RTL_UTF8_USTRINGPARAM( (sal_Char*)pAttrName ));
+            ouAttrName = OUString(C2U( (sal_Char*)pAttrName ));
         }
         else
         {
-            ouAttrName = OUString(RTL_UTF8_USTRINGPARAM( (sal_Char*)pAttrNs->prefix))
-                +OUString(RTL_UTF8_USTRINGPARAM( (sal_Char*)":" ))
-                +OUString(RTL_UTF8_USTRINGPARAM( (sal_Char*)pAttrName ));
+            ouAttrName = OUString(C2U( (sal_Char*)pAttrNs->prefix))
+                +OUString(C2U( (sal_Char*)":" ))
+                +OUString(C2U( (sal_Char*)pAttrName ));
         }
 
         pAttributeList->AddAttribute(
             ouAttrName,
-            OUString(RTL_UTF8_USTRINGPARAM( (sal_Char*)(pAttr->children->content))));
+            OUString(C2U( (sal_Char*)(pAttr->children->content))));
         pAttr = pAttr->next;
     }
 
@@ -266,12 +265,12 @@ void XMLDocumentWrapper_XmlSecImpl::sendStartElement(
     if (xHandler.is())
     {
         xHandler->startElement(
-            OUString(RTL_UTF8_USTRINGPARAM ( ((sal_Char*)(sNodeName.getStr())) )),
+            OUString(C2U ( ((sal_Char*)(sNodeName.getStr())) )),
             xAttrList);
     }
 
     xHandler2->startElement(
-        OUString(RTL_UTF8_USTRINGPARAM ( ((sal_Char*)(sNodeName.getStr())) )),
+        OUString(C2U ( ((sal_Char*)(sNodeName.getStr())) )),
         xAttrList);
 }
 
@@ -313,10 +312,10 @@ void XMLDocumentWrapper_XmlSecImpl::sendEndElement(
 
     if (xHandler.is())
     {
-        xHandler->endElement(OUString(RTL_UTF8_USTRINGPARAM ( ((sal_Char*)(sNodeName.getStr())) )));
+        xHandler->endElement(OUString(C2U ( ((sal_Char*)(sNodeName.getStr())) )));
     }
 
-    xHandler2->endElement(OUString(RTL_UTF8_USTRINGPARAM ( ((sal_Char*)(sNodeName.getStr())) )));
+    xHandler2->endElement(OUString(C2U ( ((sal_Char*)(sNodeName.getStr())) )));
 }
 
 void XMLDocumentWrapper_XmlSecImpl::sendNode(
@@ -363,23 +362,23 @@ void XMLDocumentWrapper_XmlSecImpl::sendNode(
     {
         if (xHandler.is())
         {
-            xHandler->characters(OUString(RTL_UTF8_USTRINGPARAM ( ((sal_Char*)(pNode->content)) )));
+            xHandler->characters(OUString(C2U ( ((sal_Char*)(pNode->content)) )));
         }
 
-        xHandler2->characters(OUString(RTL_UTF8_USTRINGPARAM ( ((sal_Char*)(pNode->content)) )));
+        xHandler2->characters(OUString(C2U ( ((sal_Char*)(pNode->content)) )));
     }
     else if (type == XML_PI_NODE)
     {
         if (xHandler.is())
         {
             xHandler->processingInstruction(
-                OUString(RTL_UTF8_USTRINGPARAM ( ((sal_Char*)(pNode->name)) )),
-                OUString(RTL_UTF8_USTRINGPARAM ( ((sal_Char*)(pNode->content)) )));
+                OUString(C2U ( ((sal_Char*)(pNode->name)) )),
+                OUString(C2U ( ((sal_Char*)(pNode->content)) )));
         }
 
         xHandler2->processingInstruction(
-            OUString(RTL_UTF8_USTRINGPARAM ( ((sal_Char*)(pNode->name)) )),
-            OUString(RTL_UTF8_USTRINGPARAM ( ((sal_Char*)(pNode->content)) )));
+            OUString(C2U ( ((sal_Char*)(pNode->name)) )),
+            OUString(C2U ( ((sal_Char*)(pNode->content)) )));
     }
 }
 
@@ -745,7 +744,7 @@ void SAL_CALL XMLDocumentWrapper_XmlSecImpl::removeCurrentElement(  )
      */
     saxHelper.endElement(
         OUString(
-            RTL_UTF8_USTRINGPARAM (
+            C2U (
                 (sal_Char*)(pOldCurrentElement->name)
             )));
     m_pCurrentElement = saxHelper.getCurrentNode();
@@ -780,7 +779,7 @@ OUString SAL_CALL XMLDocumentWrapper_XmlSecImpl::getNodeName( const cssu::Refere
     throw (cssu::RuntimeException)
 {
     xmlNodePtr pNode = checkElement(node);
-    return OUString(RTL_UTF8_USTRINGPARAM ( (sal_Char*)pNode->name ));
+    return OUString(C2U ( (sal_Char*)pNode->name ));
 }
 
 void SAL_CALL XMLDocumentWrapper_XmlSecImpl::clearUselessData(
@@ -1055,7 +1054,7 @@ void SAL_CALL XMLDocumentWrapper_XmlSecImpl::_setDocumentLocator( sal_Int32 /*co
 OUString XMLDocumentWrapper_XmlSecImpl_getImplementationName ()
     throw (cssu::RuntimeException)
 {
-    return OUString ( RTL_ASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
+    return OUString ( IMPLEMENTATION_NAME );
 }
 
 sal_Bool SAL_CALL XMLDocumentWrapper_XmlSecImpl_supportsService( const OUString& ServiceName )
@@ -1069,7 +1068,7 @@ cssu::Sequence< OUString > SAL_CALL XMLDocumentWrapper_XmlSecImpl_getSupportedSe
 {
     cssu::Sequence < OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( RTL_ASCII_USTRINGPARAM ( SERVICE_NAME ) );
+    pArray[0] =  OUString ( SERVICE_NAME );
     return aRet;
 }
 #undef SERVICE_NAME

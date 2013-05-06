@@ -108,8 +108,6 @@
 #define INITIALIZED       1
 #define FAILTOINITIALIZED 2
 
-#define RTL_ASCII_USTRINGPARAM( asciiStr ) asciiStr, strlen( asciiStr ), RTL_TEXTENCODING_ASCII_US
-
 // forward declaration
 class XSecParser;
 
