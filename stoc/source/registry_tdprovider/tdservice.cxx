@@ -71,11 +71,8 @@ private:
 namespace stoc_rdbtdp
 {
 
-//==================================================================================================
-//
-// class PropertyTypeDescriptionImpl
-//
-//==================================================================================================
+// PropertyTypeDescriptionImpl
+
 class PropertyTypeDescriptionImpl : public WeakImplHelper1< XPropertyTypeDescription >
 {
     OUString                      _aName;
@@ -103,19 +100,18 @@ public:
         throw ( RuntimeException );
 };
 
-//__________________________________________________________________________________________________
 // virtual
 PropertyTypeDescriptionImpl::~PropertyTypeDescriptionImpl() {}
 
 // XTypeDescription
-//__________________________________________________________________________________________________
+
 // virtual
 TypeClass PropertyTypeDescriptionImpl::getTypeClass()
     throw ( RuntimeException )
 {
     return TypeClass_PROPERTY;
 }
-//__________________________________________________________________________________________________
+
 // virtual
 OUString PropertyTypeDescriptionImpl::getName()
     throw ( RuntimeException )
@@ -124,7 +120,7 @@ OUString PropertyTypeDescriptionImpl::getName()
 }
 
 // XPropertyTypeDescription
-//__________________________________________________________________________________________________
+
 // virtual
 sal_Int16 SAL_CALL PropertyTypeDescriptionImpl::getPropertyFlags()
     throw ( RuntimeException )
@@ -132,7 +128,6 @@ sal_Int16 SAL_CALL PropertyTypeDescriptionImpl::getPropertyFlags()
     return _nFlags;
 }
 
-//__________________________________________________________________________________________________
 // virtual
 Reference< XTypeDescription > SAL_CALL
 PropertyTypeDescriptionImpl::getPropertyTypeDescription()
@@ -141,25 +136,20 @@ PropertyTypeDescriptionImpl::getPropertyTypeDescription()
     return _xTD;
 }
 
-//==================================================================================================
-//
-// ServiceTypeDescriptionImpl implementation
-//
-//==================================================================================================
+// ServiceTypeDescriptionImpl
 
-//__________________________________________________________________________________________________
 // virtual
 ServiceTypeDescriptionImpl::~ServiceTypeDescriptionImpl() {}
 
 // XTypeDescription
-//__________________________________________________________________________________________________
+
 // virtual
 TypeClass ServiceTypeDescriptionImpl::getTypeClass()
     throw(::com::sun::star::uno::RuntimeException)
 {
     return TypeClass_SERVICE;
 }
-//__________________________________________________________________________________________________
+
 // virtual
 OUString ServiceTypeDescriptionImpl::getName()
     throw(::com::sun::star::uno::RuntimeException)
@@ -168,7 +158,7 @@ OUString ServiceTypeDescriptionImpl::getName()
 }
 
 // XServiceTypeDescription
-//__________________________________________________________________________________________________
+
 // virtual
 Sequence< Reference< XServiceTypeDescription > > SAL_CALL
 ServiceTypeDescriptionImpl::getMandatoryServices()
@@ -178,7 +168,6 @@ ServiceTypeDescriptionImpl::getMandatoryServices()
     return _aMandatoryServices;
 }
 
-//__________________________________________________________________________________________________
 // virtual
 Sequence< Reference< XServiceTypeDescription > > SAL_CALL
 ServiceTypeDescriptionImpl::getOptionalServices()
@@ -188,7 +177,6 @@ ServiceTypeDescriptionImpl::getOptionalServices()
     return _aOptionalServices;
 }
 
-//__________________________________________________________________________________________________
 // virtual
 Sequence< Reference< XInterfaceTypeDescription > > SAL_CALL
 ServiceTypeDescriptionImpl::getMandatoryInterfaces()
@@ -198,7 +186,6 @@ ServiceTypeDescriptionImpl::getMandatoryInterfaces()
     return _aMandatoryInterfaces;
 }
 
-//__________________________________________________________________________________________________
 // virtual
 Sequence< Reference< XInterfaceTypeDescription > > SAL_CALL
 ServiceTypeDescriptionImpl::getOptionalInterfaces()
@@ -208,7 +195,6 @@ ServiceTypeDescriptionImpl::getOptionalInterfaces()
     return _aOptionalInterfaces;
 }
 
-//__________________________________________________________________________________________________
 // virtual
 Sequence< Reference< XPropertyTypeDescription > > SAL_CALL
 ServiceTypeDescriptionImpl::getProperties()
@@ -348,7 +334,6 @@ ServiceTypeDescriptionImpl::getConstructors() throw (RuntimeException) {
     return *_pCtors;
 }
 
-//__________________________________________________________________________________________________
 void ServiceTypeDescriptionImpl::getReferences()
     throw ( RuntimeException )
 {

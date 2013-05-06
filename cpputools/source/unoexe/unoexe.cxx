@@ -59,19 +59,17 @@ using namespace com::sun::star::connection;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::container;
 
-
 namespace unoexe
 {
 
 static sal_Bool s_quiet = false;
 
-//--------------------------------------------------------------------------------------------------
 static inline void out( const sal_Char * pText )
 {
     if (! s_quiet)
         fprintf( stderr, "%s", pText );
 }
-//--------------------------------------------------------------------------------------------------
+
 static inline void out( const OUString & rText )
 {
     if (! s_quiet)
@@ -81,7 +79,6 @@ static inline void out( const OUString & rText )
     }
 }
 
-//--------------------------------------------------------------------------------------------------
 static const char arUsingText[] =
 "\nusing:\n\n"
 "uno [-c ComponentImplementationName -l LocationUrl | -s ServiceName]\n"
@@ -90,7 +87,6 @@ static const char arUsingText[] =
 "    [--quiet]\n"
 "    [-- Argument1 Argument2 ...]\n";
 
-//--------------------------------------------------------------------------------------------------
 static sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
                             sal_uInt32 * pnIndex, const OUString & aArg)
     throw (RuntimeException)
@@ -147,7 +143,7 @@ static sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
     }
     return sal_False;
 }
-//--------------------------------------------------------------------------------------------------
+
 static sal_Bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
                             sal_uInt32 * pnIndex, const OUString & aArg)
 {
@@ -167,13 +163,6 @@ static sal_Bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
     return sal_False;
 }
 
-
-//##################################################################################################
-//##################################################################################################
-//##################################################################################################
-
-
-//--------------------------------------------------------------------------------------------------
 template< class T >
 void createInstance(
     Reference< T > & rxOut,
@@ -246,7 +235,7 @@ void createInstance(
         throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
     }
 }
-//--------------------------------------------------------------------------------------------------
+
 static Reference< XInterface > loadComponent(
     const Reference< XComponentContext > & xContext,
     const OUString & rImplName, const OUString & rLocation )
@@ -331,13 +320,6 @@ static Reference< XInterface > loadComponent(
     }
 }
 
-
-//##################################################################################################
-//##################################################################################################
-//##################################################################################################
-
-
-//==================================================================================================
 class OInstanceProvider
     : public WeakImplHelper1< XInstanceProvider >
 {
@@ -374,7 +356,7 @@ public:
     virtual Reference< XInterface > SAL_CALL getInstance( const OUString & rName )
         throw (NoSuchElementException, RuntimeException);
 };
-//__________________________________________________________________________________________________
+
 inline Reference< XInterface > OInstanceProvider::createInstance()
     throw (Exception)
 {
@@ -391,7 +373,7 @@ inline Reference< XInterface > OInstanceProvider::createInstance()
 
     return xRet;
 }
-//__________________________________________________________________________________________________
+
 Reference< XInterface > OInstanceProvider::getInstance( const OUString & rName )
     throw (NoSuchElementException, RuntimeException)
 {
@@ -438,7 +420,6 @@ Reference< XInterface > OInstanceProvider::getInstance( const OUString & rName )
     throw NoSuchElementException( buf.makeStringAndClear(), Reference< XInterface >() );
 }
 
-//==================================================================================================
 struct ODisposingListener : public WeakImplHelper1< XEventListener >
 {
     Condition cDisposed;
@@ -447,16 +428,15 @@ struct ODisposingListener : public WeakImplHelper1< XEventListener >
     virtual void SAL_CALL disposing( const EventObject & rEvt )
         throw (RuntimeException);
 
-    //----------------------------------------------------------------------------------------------
     static void waitFor( const Reference< XComponent > & xComp );
 };
-//__________________________________________________________________________________________________
+
 void ODisposingListener::disposing( const EventObject & )
     throw (RuntimeException)
 {
     cDisposed.set();
 }
-//--------------------------------------------------------------------------------------------------
+
 void ODisposingListener::waitFor( const Reference< XComponent > & xComp )
 {
     ODisposingListener * pListener = new ODisposingListener();
@@ -466,13 +446,6 @@ void ODisposingListener::waitFor( const Reference< XComponent > & xComp )
     pListener->cDisposed.wait();
 }
 
-
-//##################################################################################################
-//##################################################################################################
-//##################################################################################################
-
-
-//##################################################################################################
 } // namespace unoexe
 
 using namespace unoexe;
@@ -497,7 +470,7 @@ SAL_IMPLEMENT_MAIN()
         sal_Bool bSingleAccept = sal_False;
         sal_Bool bSingleInstance = sal_False;
 
-        //#### read command line arguments #########################################################
+        // read command line arguments
 
         sal_uInt32 nPos = 0;
         // read up to arguments
@@ -559,7 +532,7 @@ SAL_IMPLEMENT_MAIN()
 
         xContext = defaultBootstrap_InitialComponentContext();
 
-        //#### accept, instanciate, etc. ###########################################################
+        // accept, instanciate, etc.
 
         if (!aUnoUrl.isEmpty()) // accepting connections
         {
