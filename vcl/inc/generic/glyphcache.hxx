@@ -262,8 +262,6 @@ private:
     long                        mnCos;
     long                        mnSin;
 
-    int                         mnZWJ;
-    int                         mnZWNJ;
     bool                        mbCollectedZW;
 
     int                         mnWidth;

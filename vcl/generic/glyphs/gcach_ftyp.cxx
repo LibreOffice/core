@@ -660,8 +660,6 @@ ServerFont::ServerFont( const FontSelectPattern& rFSD, FtFontInfo* pFI )
     mpNextGCFont( NULL ),
     mnCos( 0x10000),
     mnSin( 0 ),
-    mnZWJ( 0 ),
-    mnZWNJ( 0 ),
     mbCollectedZW( false ),
     mnPrioEmbedded(nDefaultPrioEmbedded),
     mnPrioAntiAlias(nDefaultPrioAntiAlias),
