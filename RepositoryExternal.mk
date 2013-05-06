@@ -185,11 +185,11 @@ endef
 
 endif
 
-ifeq (SANE,$(filter SANE,$(BUILD_TYPE))$(filter WNT,$(OS)))
+ifeq (SANE,$(filter SANE,$(BUILD_TYPE)))
 
 define gb_LinkTarget__use_sane_headers
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(SRCDIR)/sane/inc \
+	-I$(SRCDIR)/$(if $(filter WNT,$(OS)),twain,sane)/inc \
 	$$(INCLUDE) \
 )
 

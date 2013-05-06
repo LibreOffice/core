@@ -38,8 +38,6 @@ $(eval $(call gb_Library_add_exception_objects,scn,\
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_use_packages,scn,twain_inc))
-
 $(eval $(call gb_Library_add_exception_objects,scn,\
 	extensions/source/scanner/scanwin \
 ))

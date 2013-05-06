@@ -10,8 +10,3 @@
 
 $(eval $(call gb_Module_Module,twain))
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,twain,\
-	Package_inc \
-))
-endif
