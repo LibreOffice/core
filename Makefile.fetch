@@ -115,6 +115,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,HARFBUZZ,$(HARFBUZZ_TARBALL)) \
 		$(call fetch_Optional,HYPHEN,$(HYPHEN_TARBALL)) \
 		$(call fetch_Optional,ICU,$(ICU_TARBALL)) \
+		$(call fetch_Optional,ICU,$(ICU_51_LAYOUT_FIX_TARBALL)) \
 		$(call fetch_Optional,JFREEREPORT,$(JFREEREPORT_FLOW_ENGINE_TARBALL)) \
 		$(call fetch_Optional,JFREEREPORT,$(JFREEREPORT_FLUTE_TARBALL)) \
 		$(call fetch_Optional,JFREEREPORT,$(JFREEREPORT_LIBBASE_TARBALL)) \
