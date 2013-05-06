@@ -28,7 +28,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	$(call gb_Helper_optional,BOOST,boost) \
 	$(call gb_Helper_optional,BSH,beanshell) \
 	binaryurp \
-	$(call gb_Helper_optional,BLUEZ,bluez_bluetooth) \
 	bridges \
 	$(call gb_Helper_optional,CAIRO,cairo) \
 	canvas \
@@ -119,7 +118,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	$(call gb_Helper_optional,DESKTOP,l10ntools) \
 	$(call gb_Helper_optional,MARIADB,libmariadb) \
 	$(call gb_Helper_optional,MDDS,mdds) \
-	Mesa \
 	$(call gb_Helper_optional,MORE_FONTS,more_fonts) \
 	$(call gb_Helper_optional,MOZ,moz) \
 	$(call gb_Helper_optional,MARIADBC,mysqlc) \
@@ -156,7 +154,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	rsc \
 	sal \
 	salhelper \
-	sane \
 	sax \
 	sc \
 	scaddins \
@@ -190,13 +187,11 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	tools \
 	touch \
 	tubes \
-	twain \
 	ucb \
 	ucbhelper \
 	$(call gb_Helper_optional,UCPP,ucpp) \
 	udkapi \
 	udm \
-	unixODBC \
 	UnoControls \
 	unodevtools \
 	unoil \
@@ -212,7 +207,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	wizards \
 	writerfilter \
 	writerperfect \
-	$(call gb_Helper_optional,X11_EXTENSIONS,x11_extensions) \
 	xmerge \
 	$(call gb_Helper_optional,DESKTOP,xmlhelp) \
 	xmloff \
