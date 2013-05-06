@@ -60,13 +60,13 @@ gb_CliAssemblyTarget_KEYFILE_DEFAULT := $(SRCDIR)/cli_ure/source/cliuno.snk
 define gb_CliAssemblyTarget__command
 $(call gb_Output_announce,$(2),$(true),AL ,2)
 $(call gb_Helper_abbreviate_dirs,\
-	$(if $(filter YES,$(ENABLE_MONO_CLIMAKER)),cp $(CLI_ASSEMBLY_CONFIGFILE) $(dir $(CLI_ASSEMBLY_OUTFILE)) && ) \
+	$(if $(filter YES,$(ENABLE_MONO)),cp $(CLI_ASSEMBLY_CONFIGFILE) $(dir $(CLI_ASSEMBLY_OUTFILE)) && ) \
 	al \
 		-nologo \
 		-out:$(CLI_ASSEMBLY_OUTFILE) \
 		-version:$(CLI_ASSEMBLY_VERSION) \
 		-keyfile:$(call gb_Helper_windows_path,$(CLI_ASSEMBLY_KEYFILE)) \
-		$(if $(filter YES,$(ENABLE_MONO_CLIMAKER)),-link:$(notdir $(CLI_ASSEMBLY_CONFIGFILE)),-link:$(CLI_ASSEMBLY_CONFIGFILE) ) \
+		$(if $(filter YES,$(ENABLE_MONO)),-link:$(notdir $(CLI_ASSEMBLY_CONFIGFILE)),-link:$(CLI_ASSEMBLY_CONFIGFILE) ) \
 		$(if $(CLI_ASSEMBLY_PLATFORM),-platform:$(CLI_ASSEMBLY_PLATFORM)) && \
 	touch $(1) \
 )
