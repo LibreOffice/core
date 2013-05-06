@@ -18,6 +18,7 @@
 #include <clang/Basic/FileManager.h>
 #include <clang/Basic/SourceManager.h>
 #include <clang/Frontend/CompilerInstance.h>
+#include <set>
 
 #if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 2
 #include <clang/Rewrite/Rewriter.h>
@@ -114,6 +115,7 @@ class RewritePlugin
         enum { isRewriter = true };
         bool reportEditFailure( SourceLocation loc );
         bool adjustForWholeStatement( SourceRange* range );
+        set< SourceLocation > removals;
     };
 
 /**

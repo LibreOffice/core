@@ -110,6 +110,9 @@ bool RewritePlugin::insertTextBefore( SourceLocation Loc, StringRef Str )
 // given to this overload would not match afterwards.
 bool RewritePlugin::removeText( SourceLocation Start, unsigned Length, RewriteOptions opts )
     {
+    if( removals.find( Start ) != removals.end())
+        report( DiagnosticsEngine::Warning, "double code removal, possible plugin error", Start );
+    removals.insert( Start );
     if( opts.RemoveWholeStatement )
         {
         SourceRange range( Start, Start.getLocWithOffset( Length - 1 ));
@@ -125,6 +128,9 @@ bool RewritePlugin::removeText( SourceLocation Start, unsigned Length, RewriteOp
 
 bool RewritePlugin::removeText( SourceRange range, RewriteOptions opts )
     {
+    if( removals.find( range.getBegin()) != removals.end())
+        report( DiagnosticsEngine::Warning, "double code removal, possible plugin error", range.getBegin());
+    removals.insert( range.getBegin());
     if( opts.RemoveWholeStatement )
         {
         if( !adjustForWholeStatement( &range ))
@@ -166,6 +172,9 @@ bool RewritePlugin::adjustForWholeStatement( SourceRange* range )
 
 bool RewritePlugin::replaceText( SourceLocation Start, unsigned OrigLength, StringRef NewStr )
     {
+    if( OrigLength != 0 && removals.find( Start ) != removals.end())
+        report( DiagnosticsEngine::Warning, "double code replacement, possible plugin error", Start );
+    removals.insert( Start );
     if( rewriter.ReplaceText( Start, OrigLength, NewStr ))
         return reportEditFailure( Start );
     return true;
@@ -173,6 +182,9 @@ bool RewritePlugin::replaceText( SourceLocation Start, unsigned OrigLength, Stri
 
 bool RewritePlugin::replaceText( SourceRange range, StringRef NewStr )
     {
+    if( removals.find( range.getBegin()) != removals.end())
+        report( DiagnosticsEngine::Warning, "double code replacement, possible plugin error", range.getBegin());
+    removals.insert( range.getBegin());
     if( rewriter.ReplaceText( range, NewStr ))
         return reportEditFailure( range.getBegin());
     return true;
@@ -180,6 +192,9 @@ bool RewritePlugin::replaceText( SourceRange range, StringRef NewStr )
 
 bool RewritePlugin::replaceText( SourceRange range, SourceRange replacementRange )
     {
+    if( removals.find( range.getBegin()) != removals.end())
+        report( DiagnosticsEngine::Warning, "double code replacement, possible plugin error", range.getBegin());
+    removals.insert( range.getBegin());
     if( rewriter.ReplaceText( range, replacementRange ))
         return reportEditFailure( range.getBegin());
     return true;
