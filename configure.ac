@@ -4330,7 +4330,7 @@ if test "$enable_headless" = "yes"; then
     test_tde=no
     test_kde=no
     test_kde4=no
-    test_unix_quickstarter=no
+    enable_unix_qstart_libpng=no
     enable_cairo_canvas=no
     enable_gnome_vfs=no
 fi
@@ -9536,7 +9536,9 @@ AC_SUBST(TELEPATHY_LIBS)
 
 dnl ===================================================================
 
-PKG_CHECK_MODULES( LIBPNG, libpng, ENABLE_QUICKSTART_LIBPNG="TRUE", ENABLE_QUICKSTART_LIBPNG="" )
+if test "$enable_headless" != "yes"; then
+    PKG_CHECK_MODULES( LIBPNG, libpng, ENABLE_QUICKSTART_LIBPNG="TRUE", ENABLE_QUICKSTART_LIBPNG="" )
+fi
 AC_SUBST(LIBPNG_LIBS)
 AC_SUBST(LIBPNG_CFLAGS)
 
