@@ -382,7 +382,7 @@ OUString SAXEventKeeperImpl::printBufferNode(
         rc += OUString::valueOf( pBlocker->getBufferId() );
         rc += OUString( "(SecId=" );
         rc += OUString::valueOf( pBlocker->getSecurityId() );
-        rc += OUString( RTL_CONSTASCII_USTRINGPARAM( ")" ));
+        rc += OUString( ")" );
         rc += OUString( " " );
     }
     rc += OUString( "\n" );
@@ -1368,7 +1368,7 @@ void SAL_CALL SAXEventKeeperImpl::initialize( const cssu::Sequence< cssu::Any >&
 OUString SAXEventKeeperImpl_getImplementationName ()
     throw (cssu::RuntimeException)
 {
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
+    return OUString ( IMPLEMENTATION_NAME );
 }
 
 sal_Bool SAL_CALL SAXEventKeeperImpl_supportsService( const OUString& ServiceName )
@@ -1382,7 +1382,7 @@ cssu::Sequence< OUString > SAL_CALL SAXEventKeeperImpl_getSupportedServiceNames(
 {
     cssu::Sequence < OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+    pArray[0] =  OUString ( SERVICE_NAME );
     return aRet;
 }
 #undef SERVICE_NAME

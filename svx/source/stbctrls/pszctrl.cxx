@@ -178,9 +178,9 @@ SvxPosSizeStatusBarControl::SvxPosSizeStatusBarControl( sal_uInt16 _nSlotId,
     pImp->aPosImage = Image( ResId( RID_SVXBMP_POSITION, DIALOG_MGR() ) );
     pImp->aSizeImage = Image( ResId( RID_SVXBMP_SIZE, DIALOG_MGR() ) );
 
-    addStatusListener( OUString( RTL_CONSTASCII_USTRINGPARAM( STR_POSITION )));         // SID_ATTR_POSITION
-    addStatusListener( OUString( RTL_CONSTASCII_USTRINGPARAM( STR_TABLECELL )));   // SID_TABLE_CELL
-    addStatusListener( OUString( RTL_CONSTASCII_USTRINGPARAM( STR_FUNC )));    // SID_PSZ_FUNCTION
+    addStatusListener( OUString( STR_POSITION ));         // SID_ATTR_POSITION
+    addStatusListener( OUString( STR_TABLECELL ));   // SID_TABLE_CELL
+    addStatusListener( OUString( STR_FUNC ));    // SID_PSZ_FUNCTION
 }
 
 // -----------------------------------------------------------------------

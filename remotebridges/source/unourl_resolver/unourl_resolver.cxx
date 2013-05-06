@@ -51,13 +51,13 @@ namespace unourl_resolver
 Sequence< OUString > resolver_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
+    seqNames.getArray()[0] = OUString(SERVICENAME);
     return seqNames;
 }
 
 OUString resolver_getImplementationName()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM(IMPLNAME));
+    return OUString(IMPLNAME);
 }
 
 //==================================================================================================

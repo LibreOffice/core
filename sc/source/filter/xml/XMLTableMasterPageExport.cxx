@@ -109,13 +109,13 @@ void XMLTableMasterPageExport::exportMasterPageContent(
                 const Reference < XPropertySet > & rPropSet,
                 sal_Bool bAutoStyles )
 {
-    Reference < sheet::XHeaderFooterContent > xHeader(rPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_PAGE_RIGHTHDRCON ) ) ), uno::UNO_QUERY);
+    Reference < sheet::XHeaderFooterContent > xHeader(rPropSet->getPropertyValue( OUString( SC_UNO_PAGE_RIGHTHDRCON ) ), uno::UNO_QUERY);
 
-    Reference < sheet::XHeaderFooterContent > xHeaderLeft(rPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_PAGE_LEFTHDRCONT ) ) ), uno::UNO_QUERY);
+    Reference < sheet::XHeaderFooterContent > xHeaderLeft(rPropSet->getPropertyValue( OUString( SC_UNO_PAGE_LEFTHDRCONT ) ), uno::UNO_QUERY);
 
-    Reference < sheet::XHeaderFooterContent > xFooter(rPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_PAGE_RIGHTFTRCON ) ) ), uno::UNO_QUERY);
+    Reference < sheet::XHeaderFooterContent > xFooter(rPropSet->getPropertyValue( OUString( SC_UNO_PAGE_RIGHTFTRCON ) ), uno::UNO_QUERY);
 
-    Reference < sheet::XHeaderFooterContent > xFooterLeft(rPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_PAGE_LEFTFTRCONT ) ) ), uno::UNO_QUERY);
+    Reference < sheet::XHeaderFooterContent > xFooterLeft(rPropSet->getPropertyValue( OUString( SC_UNO_PAGE_LEFTFTRCONT ) ), uno::UNO_QUERY);
 
     if( bAutoStyles )
     {
@@ -146,19 +146,19 @@ void XMLTableMasterPageExport::exportMasterPageContent(
     }
     else
     {
-        sal_Bool bHeader(::cppu::any2bool(rPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_PAGE_HDRON ) ) )));
+        sal_Bool bHeader(::cppu::any2bool(rPropSet->getPropertyValue( OUString( SC_UNO_PAGE_HDRON ) )));
 
         exportHeaderFooter(xHeader, XML_HEADER, bHeader );
 
-        sal_Bool bLeftHeader(!::cppu::any2bool(rPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_PAGE_HDRSHARED ) ) )) && bHeader);
+        sal_Bool bLeftHeader(!::cppu::any2bool(rPropSet->getPropertyValue( OUString( SC_UNO_PAGE_HDRSHARED ) )) && bHeader);
 
         exportHeaderFooter( xHeaderLeft, XML_HEADER_LEFT, bLeftHeader );
 
-        sal_Bool bFooter(::cppu::any2bool(rPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_PAGE_FTRON ) ) )));
+        sal_Bool bFooter(::cppu::any2bool(rPropSet->getPropertyValue( OUString( SC_UNO_PAGE_FTRON ) )));
 
         exportHeaderFooter( xFooter, XML_FOOTER, bFooter );
 
-        sal_Bool bLeftFooter = (!::cppu::any2bool(rPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_PAGE_FTRSHARED ) ) )) && bFooter);
+        sal_Bool bLeftFooter = (!::cppu::any2bool(rPropSet->getPropertyValue( OUString( SC_UNO_PAGE_FTRSHARED ) )) && bFooter);
 
         exportHeaderFooter( xFooterLeft, XML_FOOTER_LEFT, bLeftFooter );
     }

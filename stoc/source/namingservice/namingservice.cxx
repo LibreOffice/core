@@ -51,13 +51,13 @@ namespace stoc_namingservice
 static Sequence< OUString > ns_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
+    seqNames.getArray()[0] = OUString(SERVICENAME);
     return seqNames;
 }
 
 static OUString ns_getImplementationName()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM(IMPLNAME));
+    return OUString(IMPLNAME);
 }
 
 struct equalOWString_Impl
@@ -99,7 +99,7 @@ public:
     throw(::com::sun::star::uno::RuntimeException);
     static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static()
     {
-        OUString aStr( OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME)) );
+        OUString aStr( OUString(SERVICENAME) );
         return Sequence< OUString >( &aStr, 1 );
     }
 

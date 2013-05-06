@@ -519,8 +519,8 @@ bool XFillBitmapItem::QueryValue(::com::sun::star::uno::Any& rVal, sal_uInt8 nMe
     if( nMemberId == MID_GRAFURL ||
         nMemberId == 0 )
     {
-        aURL = OUString(RTL_CONSTASCII_USTRINGPARAM(
-            UNO_NAME_GRAPHOBJ_URLPREFIX));
+        aURL = OUString(
+            UNO_NAME_GRAPHOBJ_URLPREFIX);
         aURL += OStringToOUString(
             GetGraphicObject().GetUniqueID(),
             RTL_TEXTENCODING_ASCII_US);

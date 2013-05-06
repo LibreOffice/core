@@ -453,13 +453,13 @@ Reference < XInterface > SAL_CALL OPipeImpl_CreateInstance(
 
 OUString    OPipeImpl_getImplementationName()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
+    return OUString( IMPLEMENTATION_NAME );
 }
 
 Sequence<OUString> OPipeImpl_getSupportedServiceNames(void)
 {
     Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ));
+    aRet.getArray()[0] = OUString( SERVICE_NAME );
     return aRet;
 }
 }

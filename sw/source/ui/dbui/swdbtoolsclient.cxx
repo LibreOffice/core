@@ -104,7 +104,7 @@ void SwDbtoolsClient::registerClient()
         OSL_ENSURE(NULL == getDbToolsClientFactoryFunction(), "SwDbtoolsClient::registerClient: inconsistence: already have a factory function!");
 
 #ifndef DISABLE_DYNLOADING
-        const OUString sModuleName(RTL_CONSTASCII_USTRINGPARAM(SVLIBRARY("dbtools")));
+        const OUString sModuleName(SVLIBRARY("dbtools"));
 
         // load the dbtools library
         getDbToolsClientModule() = osl_loadModuleRelative(

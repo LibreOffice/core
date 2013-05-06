@@ -860,7 +860,7 @@ Reference< XComponentContext > SAL_CALL createComponentContext(
     SAL_THROW(())
 {
     uno::Environment curr_env(Environment::getCurrent());
-    uno::Environment source_env(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(CPPU_STRINGIFY(CPPU_ENV))));
+    uno::Environment source_env(rtl::OUString(CPPU_STRINGIFY(CPPU_ENV)));
 
     uno::Mapping curr2source(curr_env, source_env);
     uno::Mapping source2curr(source_env, curr_env);

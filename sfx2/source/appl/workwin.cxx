@@ -159,7 +159,7 @@ LayoutManagerListener::LayoutManagerListener(
     SfxWorkWindow* pWrkWin ) :
     m_bHasFrame( sal_False ),
     m_pWrkWin( pWrkWin ),
-    m_aLayoutManagerPropName( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ))
+    m_aLayoutManagerPropName( "LayoutManager" )
 {
 }
 
@@ -603,10 +603,10 @@ SfxWorkWindow::SfxWorkWindow( Window *pWin, SfxBindings& rB, SfxWorkWindow* pPar
     bShowStatusBar( sal_False ),
 #endif
     m_nLock( 0 ),
-    m_aStatusBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/statusbar/statusbar" )),
-    m_aLayoutManagerPropName( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )),
-    m_aTbxTypeName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/" )),
-    m_aProgressBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/progressbar/progressbar" ))
+    m_aStatusBarResName( "private:resource/statusbar/statusbar" ),
+    m_aLayoutManagerPropName( "LayoutManager" ),
+    m_aTbxTypeName( "private:resource/toolbar/" ),
+    m_aProgressBarResName( "private:resource/progressbar/progressbar" )
 {
     DBG_CTOR(SfxWorkWindow, 0);
     DBG_ASSERT (pBindings, "No Bindings!");

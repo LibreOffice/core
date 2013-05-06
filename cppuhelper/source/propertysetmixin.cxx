@@ -485,18 +485,16 @@ PropertySetMixinImpl::Impl::Impl(
             css::uno::Reference< css::container::XHierarchicalNameAccess >(
                 m_context->getValueByName(
                     rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
                             "/singletons/com.sun.star.reflection."
-                            "theTypeDescriptionManager"))),
+                            "theTypeDescriptionManager")),
                 css::uno::UNO_QUERY_THROW)->getByHierarchicalName(
                     m_type.getTypeName()),
             css::uno::UNO_QUERY_THROW);
     } catch (css::container::NoSuchElementException & e) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "unexpected"
-                    " com.sun.star.container.NoSuchElementException: "))
+                    " com.sun.star.container.NoSuchElementException: ")
              + e.Message),
             css::uno::Reference< css::uno::XInterface >());
     }
@@ -541,9 +539,8 @@ void PropertySetMixinImpl::Impl::setProperty(
     {
         throw css::lang::IllegalArgumentException(
             (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "flagging as ambiguous/defaulted non-ambiguous/defaulted"
-                    " property "))
+                    " property ")
              + name),
             object, illegalArgumentPosition);
     }
@@ -576,9 +573,8 @@ void PropertySetMixinImpl::Impl::setProperty(
         } else {
             throw css::uno::RuntimeException(
                 (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
                         "unexpected"
-                        " com.sun.star.lang.IllegalArgumentException: "))
+                        " com.sun.star.lang.IllegalArgumentException: ")
                  + e.Message),
                 object);
         }
@@ -690,10 +686,9 @@ css::uno::Any PropertySetMixinImpl::Impl::getProperty(
                 {
                     throw css::uno::RuntimeException(
                         rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
                                 "unexpected type of"
                                 " com.sun.star.beans.Ambiguous IsAmbiguous"
-                                " member")),
+                                " member"),
                         object);
                 }
                 value = css::uno::Reference< css::reflection::XIdlField2 >(
@@ -703,9 +698,8 @@ css::uno::Any PropertySetMixinImpl::Impl::getProperty(
             } catch (css::lang::IllegalArgumentException & e) {
                 throw css::uno::RuntimeException(
                     (rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
                             "unexpected com.sun.star.lang."
-                            "IllegalArgumentException: "))
+                            "IllegalArgumentException: ")
                      + e.Message),
                     object);
             }
@@ -727,10 +721,9 @@ css::uno::Any PropertySetMixinImpl::Impl::getProperty(
                 {
                     throw css::uno::RuntimeException(
                         rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
                                 "unexpected type of"
                                 " com.sun.star.beans.Defaulted IsDefaulted"
-                                " member")),
+                                " member"),
                         object);
                 }
                 value = css::uno::Reference< css::reflection::XIdlField2 >(
@@ -740,9 +733,8 @@ css::uno::Any PropertySetMixinImpl::Impl::getProperty(
             } catch (css::lang::IllegalArgumentException & e) {
                 throw css::uno::RuntimeException(
                     (rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
                             "unexpected com.sun.star.lang."
-                            "IllegalArgumentException: "))
+                            "IllegalArgumentException: ")
                      + e.Message),
                     object);
             }
@@ -764,9 +756,8 @@ css::uno::Any PropertySetMixinImpl::Impl::getProperty(
                 {
                     throw css::uno::RuntimeException(
                         rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
                                 "unexpected type of com.sun.star.beans.Optional"
-                                " IsPresent member")),
+                                " IsPresent member"),
                         object);
                 }
                 if (!present) {
@@ -780,9 +771,8 @@ css::uno::Any PropertySetMixinImpl::Impl::getProperty(
             } catch (css::lang::IllegalArgumentException & e) {
                 throw css::uno::RuntimeException(
                     (rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
                             "unexpected com.sun.star.lang."
-                            "IllegalArgumentException: "))
+                            "IllegalArgumentException: ")
                      + e.Message),
                     object);
             }
@@ -825,9 +815,8 @@ PropertySetMixinImpl::Impl::getReflection(rtl::OUString const & typeName) const
     } catch (css::uno::Exception & e) {
         throw css::uno::DeploymentException(
             (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "component context fails to supply service"
-                    " com.sun.star.reflection.CoreReflection: "))
+                    " com.sun.star.reflection.CoreReflection: ")
              + e.Message),
             m_context);
     }
@@ -870,17 +859,15 @@ css::uno::Any PropertySetMixinImpl::Impl::wrapValue(
         } catch (css::lang::IllegalArgumentException & e) {
             throw css::uno::RuntimeException(
                 (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
                         "unexpected"
-                        " com.sun.star.lang.IllegalArgumentException: "))
+                        " com.sun.star.lang.IllegalArgumentException: ")
                  + e.Message),
                 object);
         } catch (css::lang::IllegalAccessException & e) {
             throw css::uno::RuntimeException(
                 (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
                         "unexpected"
-                        " com.sun.star.lang.IllegalAccessException: "))
+                        " com.sun.star.lang.IllegalAccessException: ")
                  + e.Message),
                 object);
         }
@@ -909,17 +896,15 @@ css::uno::Any PropertySetMixinImpl::Impl::wrapValue(
         } catch (css::lang::IllegalArgumentException & e) {
             throw css::uno::RuntimeException(
                 (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
                         "unexpected"
-                        " com.sun.star.lang.IllegalArgumentException: "))
+                        " com.sun.star.lang.IllegalArgumentException: ")
                  + e.Message),
                 object);
         } catch (css::lang::IllegalAccessException & e) {
             throw css::uno::RuntimeException(
                 (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
                         "unexpected"
-                        " com.sun.star.lang.IllegalAccessException: "))
+                        " com.sun.star.lang.IllegalAccessException: ")
                  + e.Message),
                 object);
         }
@@ -951,17 +936,15 @@ css::uno::Any PropertySetMixinImpl::Impl::wrapValue(
         } catch (css::lang::IllegalArgumentException & e) {
             throw css::uno::RuntimeException(
                 (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
                         "unexpected"
-                        " com.sun.star.lang.IllegalArgumentException: "))
+                        " com.sun.star.lang.IllegalArgumentException: ")
                  + e.Message),
                 object);
         } catch (css::lang::IllegalAccessException & e) {
             throw css::uno::RuntimeException(
                 (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
                         "unexpected"
-                        " com.sun.star.lang.IllegalAccessException: "))
+                        " com.sun.star.lang.IllegalAccessException: ")
                  + e.Message),
                 object);
         }

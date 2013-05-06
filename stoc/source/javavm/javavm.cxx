@@ -636,13 +636,12 @@ JavaVirtualMachine::initialize(css::uno::Sequence< css::uno::Any > const &
     if (!m_xUnoVirtualMachine.is()) {
         throw css::lang::IllegalArgumentException(
             OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "sequence of exactly one any containing either (a) a"
                     " com.sun.star.beans.NamedValue with Name"
                     " \"UnoVirtualMachine\" and Value a hyper representing a"
                     " non-null pointer to a jvmaccess:UnoVirtualMachine, or (b)"
                     " a hyper representing a non-null pointer to a"
-                    " jvmaccess::VirtualMachine required")),
+                    " jvmaccess::VirtualMachine required"),
             static_cast< cppu::OWeakObject * >(this), 0);
     }
     m_xVirtualMachine = m_xUnoVirtualMachine->getVirtualMachine();
@@ -787,9 +786,8 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
                 //Please install a JRE and restart %PRODUCTNAME.
                 css::java::JavaNotFoundException exc(
                     OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
                             "JavaVirtualMachine::getJavaVM failed because"
-                            " No suitable JRE found!")),
+                            " No suitable JRE found!"),
                     static_cast< cppu::OWeakObject * >(this));
                 askForRetry(css::uno::makeAny(exc));
                 return css::uno::Any();
@@ -798,9 +796,9 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             {
                 //An unexpected error occurred
                 throw css::uno::RuntimeException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    OUString(
                                       "[JavaVirtualMachine]:An unexpected error occurred"
-                                      " while searching for a Java!")), 0);
+                                      " while searching for a Java!"), 0);
             }
         }
         case JFW_E_INVALID_SETTINGS:
@@ -811,9 +809,8 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             // you want to have used by %PRODUCTNAME.
             css::java::InvalidJavaSettingsException exc(
                 OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
                         "JavaVirtualMachine::getJavaVM failed because"
-                        " Java settings have changed!")),
+                        " Java settings have changed!"),
                 static_cast< cppu::OWeakObject * >(this));
             askForRetry(css::uno::makeAny(exc));
             return css::uno::Any();
@@ -826,9 +823,8 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             //enable the use of a JRE now?
             css::java::JavaDisabledException exc(
                 OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
                         "JavaVirtualMachine::getJavaVM failed because"
-                        " Java is disabled!")),
+                        " Java is disabled!"),
                 static_cast< cppu::OWeakObject * >(this));
             if( ! askForRetry(css::uno::makeAny(exc)))
                 return css::uno::Any();
@@ -868,9 +864,8 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             //and select it under Tools - Options - %PRODUCTNAME - Java.
             css::java::JavaVMCreationFailureException exc(
                 OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
                         "JavaVirtualMachine::getJavaVM failed because"
-                        " Java is defective!")),
+                        " Java is defective!"),
                 static_cast< cppu::OWeakObject * >(this), 0);
             askForRetry(css::uno::makeAny(exc));
             return css::uno::Any();
@@ -888,9 +883,8 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             //%PRODUCTNAME must be restarted. Please restart %PRODUCTNAME now.
             css::java::RestartRequiredException exc(
                 OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
                         "JavaVirtualMachine::getJavaVM failed because"
-                        "Office must be restarted before Java can be used!")),
+                        "Office must be restarted before Java can be used!"),
                 static_cast< cppu::OWeakObject * >(this));
             askForRetry(css::uno::makeAny(exc));
             return css::uno::Any();
@@ -899,9 +893,9 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             //RuntimeException: error is somewhere in the java framework.
             //An unexpected error occurred
             throw css::uno::RuntimeException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM(
+                OUString(
                                   "[JavaVirtualMachine]:An unexpected error occurred"
-                                  " while starting Java!")), 0);
+                                  " while starting Java!"), 0);
         }
 
         if (bStarted)
@@ -929,9 +923,8 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
         } catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &) {
             throw css::uno::RuntimeException(
                 OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
                         "jvmaccess::VirtualMachine::AttachGuard::"
-                        "CreationException occurred")),
+                        "CreationException occurred"),
                 static_cast< cppu::OWeakObject * >(this));
         }
     }
@@ -940,9 +933,8 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
         if (m_pJavaVm == 0) {
             throw css::uno::RuntimeException(
                 OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
                         "JavaVirtualMachine service was initialized in a way"
-                        " that the requested JavaVM pointer is not available")),
+                        " that the requested JavaVM pointer is not available"),
                 static_cast< cppu::OWeakObject * >(this));
         }
         return css::uno::makeAny(reinterpret_cast< sal_IntPtr >(m_pJavaVm));
@@ -1010,9 +1002,9 @@ void SAL_CALL JavaVirtualMachine::registerThread()
             OUString(), static_cast< cppu::OWeakObject * >(this));
     if (!m_xUnoVirtualMachine.is())
         throw css::uno::RuntimeException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM(
+            OUString(
                               "JavaVirtualMachine::registerThread:"
-                              " null VirtualMachine")),
+                              " null VirtualMachine"),
             static_cast< cppu::OWeakObject * >(this));
     GuardStack * pStack
         = static_cast< GuardStack * >(m_aAttachGuards.getData());
@@ -1031,9 +1023,8 @@ void SAL_CALL JavaVirtualMachine::registerThread()
     {
         throw css::uno::RuntimeException(
             OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "JavaVirtualMachine::registerThread: jvmaccess::"
-                    "VirtualMachine::AttachGuard::CreationException")),
+                    "VirtualMachine::AttachGuard::CreationException"),
             static_cast< cppu::OWeakObject * >(this));
     }
 }
@@ -1047,17 +1038,17 @@ void SAL_CALL JavaVirtualMachine::revokeThread()
             OUString(), static_cast< cppu::OWeakObject * >(this));
     if (!m_xUnoVirtualMachine.is())
         throw css::uno::RuntimeException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM(
+            OUString(
                               "JavaVirtualMachine::revokeThread:"
-                              " null VirtualMachine")),
+                              " null VirtualMachine"),
             static_cast< cppu::OWeakObject * >(this));
     GuardStack * pStack
         = static_cast< GuardStack * >(m_aAttachGuards.getData());
     if (pStack == 0 || pStack->empty())
         throw css::uno::RuntimeException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM(
+            OUString(
                               "JavaVirtualMachine::revokeThread:"
-                              " no matching registerThread")),
+                              " no matching registerThread"),
             static_cast< cppu::OWeakObject * >(this));
     delete pStack->top();
     pStack->pop();
@@ -1329,9 +1320,9 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
         catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &)
         {
             throw css::uno::RuntimeException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM(
+                OUString(
                                   "jvmaccess::VirtualMachine::AttachGuard::"
-                                  "CreationException")),
+                                  "CreationException"),
                 0);
         }
     }

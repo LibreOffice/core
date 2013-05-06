@@ -53,15 +53,15 @@ private:
     ScriptingConstantsPool( const ScriptingConstantsPool & );
     ScriptingConstantsPool& operator = ( const ScriptingConstantsPool & );
     ScriptingConstantsPool()
-        : DOC_REF( RTL_CONSTASCII_USTRINGPARAM( "SCRIPTING_DOC_REF" ) ),
-        DOC_STORAGE_ID( RTL_CONSTASCII_USTRINGPARAM(
-            "SCRIPTING_DOC_STORAGE_ID" ) ),
-        DOC_URI( RTL_CONSTASCII_USTRINGPARAM( "SCRIPTING_DOC_URI" ) ),
-        RESOLVED_STORAGE_ID( RTL_CONSTASCII_USTRINGPARAM(
-            "SCRIPTING_RESOLVED_STORAGE_ID" ) ),
-        SCRIPT_INFO( RTL_CONSTASCII_USTRINGPARAM( "SCRIPT_INFO" ) ),
-        SCRIPTSTORAGEMANAGER_SERVICE( RTL_CONSTASCII_USTRINGPARAM(
-            "/singletons/com.sun.star.script.framework.storage.theScriptStorageManager" ) ),
+        : DOC_REF( "SCRIPTING_DOC_REF" ),
+        DOC_STORAGE_ID(
+            "SCRIPTING_DOC_STORAGE_ID" ),
+        DOC_URI( "SCRIPTING_DOC_URI" ),
+        RESOLVED_STORAGE_ID(
+            "SCRIPTING_RESOLVED_STORAGE_ID" ),
+        SCRIPT_INFO( "SCRIPT_INFO" ),
+        SCRIPTSTORAGEMANAGER_SERVICE(
+            "/singletons/com.sun.star.script.framework.storage.theScriptStorageManager" ),
         SHARED_STORAGE_ID( 0 ), USER_STORAGE_ID( 1 ),
         DOC_STORAGE_ID_NOT_SET( -1 )
     {}

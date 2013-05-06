@@ -1799,7 +1799,7 @@ void SAL_CALL OReportDefinition::load( const uno::Sequence< beans::PropertyValue
         aStorageSource <<= sURL;
     else
         throw lang::IllegalArgumentException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "No input source (URL or InputStream) found." ) ),
+            OUString( "No input source (URL or InputStream) found." ),
                 // TODO: resource
             *this,
             1
@@ -2112,7 +2112,7 @@ void SAL_CALL OReportDefinition::setMimeType( const OUString& _mimetype ) throw 
     uno::Sequence< OUString > aList = getAvailableMimeTypes();
     const OUString* pEnd = aList.getConstArray()+aList.getLength();
     if ( ::std::find(aList.getConstArray(),pEnd,_mimetype) == pEnd )
-        throwIllegallArgumentException(OUString(RTL_CONSTASCII_USTRINGPARAM("getAvailableMimeTypes()"))
+        throwIllegallArgumentException(OUString("getAvailableMimeTypes()")
                         ,*this
                         ,1
                         ,m_aProps->m_xContext);

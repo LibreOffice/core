@@ -246,7 +246,7 @@ ScVbaApplication::getSelection() throw (uno::RuntimeException)
 
     Reference< view::XSelectionSupplier > xSelSupp( xModel->getCurrentController(), UNO_QUERY_THROW );
     Reference< beans::XPropertySet > xPropSet( xSelSupp, UNO_QUERY_THROW );
-    OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_FILTERED_RANGE_SELECTION ) );
+    OUString aPropName( SC_UNO_FILTERED_RANGE_SELECTION );
     uno::Any aOldVal = xPropSet->getPropertyValue( aPropName );
     uno::Any any;
     any <<= false;
@@ -885,7 +885,7 @@ ScVbaApplication::getTemplatesPath() throw (uno::RuntimeException)
 OUString SAL_CALL
 ScVbaApplication::getPathSeparator() throw (uno::RuntimeException)
 {
-    static OUString sPathSep( RTL_CONSTASCII_USTRINGPARAM( FILE_PATH_SEPERATOR ) );
+    static OUString sPathSep( FILE_PATH_SEPERATOR );
     return sPathSep;
 }
 

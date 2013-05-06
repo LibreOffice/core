@@ -73,7 +73,7 @@ sal_Int64 SAL_CALL XMLElementWrapper_XmlSecImpl::getSomething( const cssu::Seque
 OUString XMLElementWrapper_XmlSecImpl_getImplementationName ()
     throw (cssu::RuntimeException)
 {
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
+    return OUString ( IMPLEMENTATION_NAME );
 }
 
 sal_Bool SAL_CALL XMLElementWrapper_XmlSecImpl_supportsService( const OUString& ServiceName )
@@ -87,7 +87,7 @@ cssu::Sequence< OUString > SAL_CALL XMLElementWrapper_XmlSecImpl_getSupportedSer
 {
     cssu::Sequence < OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+    pArray[0] =  OUString ( SERVICE_NAME );
     return aRet;
 }
 #undef SERVICE_NAME

@@ -223,9 +223,9 @@ css::uno::Reference< css::beans::XPropertySet > ImeStatusWindow::getConfig()
                     css::uno::UNO_QUERY);
             if (!m_xConfig.is())
                 throw css::uno::RuntimeException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    OUString(
                                       "null com.sun.star.configuration."
-                                      "ConfigurationUpdateAccess")),
+                                      "ConfigurationUpdateAccess"),
                     0);
             bAdd = true;
         }

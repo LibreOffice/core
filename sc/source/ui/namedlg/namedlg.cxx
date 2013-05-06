@@ -303,7 +303,7 @@ bool ScNameDlg::IsFormulaValid()
 ScRangeName* ScNameDlg::GetRangeName(const OUString& rScope)
 {
     if (rScope == maGlobalNameStr)
-        return maRangeMap.find(OUString(RTL_CONSTASCII_USTRINGPARAM(STR_GLOBAL_RANGE_NAME)))->second;
+        return maRangeMap.find(OUString(STR_GLOBAL_RANGE_NAME))->second;
     else
         return maRangeMap.find(rScope)->second;
 }

@@ -1533,8 +1533,8 @@ Sequence< OUString > SAL_CALL ColorPicker_getSupportedServiceNames() throw( Runt
 ColorPicker::ColorPicker( Reference< XComponentContext > const & xContext )
 : ColorPickerBase( m_aMutex )
 , mxContext( xContext )
-, msColorKey( RTL_CONSTASCII_USTRINGPARAM( "Color" ) )
-, msModeKey( RTL_CONSTASCII_USTRINGPARAM( "Mode" ) )
+, msColorKey( "Color" )
+, msModeKey( "Mode" )
 , mnColor( 0 )
 , mnMode( 0 )
 {

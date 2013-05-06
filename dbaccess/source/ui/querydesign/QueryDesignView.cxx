@@ -2932,7 +2932,7 @@ OUString OQueryDesignView::getStatement()
     {
         OUString aTmp("( ");
         aTmp += aJoinCrit;
-        aTmp += OUString(RTL_CONSTASCII_USTRINGPARAM(" )"));
+        aTmp += OUString(" )");
         if(aCriteriaListStr.getLength())
         {
             aTmp += C_AND;

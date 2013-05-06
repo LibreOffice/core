@@ -167,11 +167,11 @@ SvXMLImportContext* OXMLFixedContent::_CreateChildContext(
                                                 0x0020, sal_True );
             break;
         case XML_TOK_PAGE_NUMBER:
-            m_sPageText += s_sStringConcat + OUString(RTL_CONSTASCII_USTRINGPARAM(" PageNumber()"));
+            m_sPageText += s_sStringConcat + OUString(" PageNumber()");
             m_bFormattedField = true;
             break;
         case XML_TOK_PAGE_COUNT:
-            m_sPageText += s_sStringConcat + OUString(RTL_CONSTASCII_USTRINGPARAM(" PageCount()"));
+            m_sPageText += s_sStringConcat + OUString(" PageCount()");
             m_bFormattedField = true;
             break;
         default:
@@ -215,7 +215,7 @@ void OXMLFixedContent::Characters( const OUString& rChars )
     m_sLabel += rChars;
     if ( !rChars.isEmpty() )
     {
-        static const OUString s_Quote(RTL_CONSTASCII_USTRINGPARAM("\""));
+        static const OUString s_Quote("\"");
         if ( !m_sPageText.isEmpty() )
         {
             static const OUString s_sStringConcat(" & ");

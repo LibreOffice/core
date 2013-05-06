@@ -63,7 +63,7 @@ namespace bridge_object
 //--------------------------------------------------------------------------------------------------
 inline static Sequence< OUString > getSupportedServiceNames()
 {
-    OUString aName( RTL_CONSTASCII_USTRINGPARAM(SERVICENAME) );
+    OUString aName( SERVICENAME );
     return Sequence< OUString >( &aName, 1 );
 }
 
@@ -1148,7 +1148,7 @@ Reference< XCurrentContextChecker > Test_Impl::getCurrentContextChecker()
 OUString Test_Impl::getImplementationName()
     throw (RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) );
+    return OUString( IMPLNAME );
 }
 //__________________________________________________________________________________________________
 sal_Bool Test_Impl::supportsService( const OUString & rServiceName )
@@ -1193,7 +1193,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) ),
+            OUString( IMPLNAME ),
             bridge_object::Test_Impl_create,
             bridge_object::getSupportedServiceNames() ) );
 

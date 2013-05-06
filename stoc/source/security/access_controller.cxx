@@ -1010,7 +1010,7 @@ Reference< XInterface > SAL_CALL ac_create(
 Sequence< OUString > ac_getSupportedServiceNames() SAL_THROW(())
 {
     Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICE_NAME));
+    aSNS.getArray()[0] = OUString(SERVICE_NAME);
     return aSNS;
 }
 //--------------------------------------------------------------------------------------------------

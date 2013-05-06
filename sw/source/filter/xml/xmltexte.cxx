@@ -181,9 +181,9 @@ SwXMLTextParagraphExport::SwXMLTextParagraphExport(
         SwXMLExport& rExp,
          SvXMLAutoStylePoolP& _rAutoStylePool ) :
     XMLTextParagraphExport( rExp, _rAutoStylePool ),
-    sTextTable( RTL_CONSTASCII_USTRINGPARAM( "TextTable" ) ),
-    sEmbeddedObjectProtocol( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ) ),
-    sGraphicObjectProtocol( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:" ) ),
+    sTextTable( "TextTable" ),
+    sEmbeddedObjectProtocol( "vnd.sun.star.EmbeddedObject:" ),
+    sGraphicObjectProtocol( "vnd.sun.star.GraphicObject:" ),
     aAppletClassId( SO3_APPLET_CLASSID ),
     aPluginClassId( SO3_PLUGIN_CLASSID ),
     aIFrameClassId( SO3_IFRAME_CLASSID ),

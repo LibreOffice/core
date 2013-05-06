@@ -46,13 +46,13 @@ static const sal_Int32 CACHE_SIZE = 256;
 static Sequence< OUString > core_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(SERVICENAME) );
+    seqNames.getArray()[0] = OUString( SERVICENAME );
     return seqNames;
 }
 
 static OUString core_getImplementationName()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM(IMPLNAME));
+    return OUString(IMPLNAME);
 }
 //__________________________________________________________________________________________________
 IdlReflectionServiceImpl::IdlReflectionServiceImpl(
@@ -368,7 +368,7 @@ Reference< XIdlClass > IdlReflectionServiceImpl::forType( typelib_TypeDescriptio
         return xRet;
     }
     throw RuntimeException(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("IdlReflectionServiceImpl::forType() failed!") ),
+        OUString( "IdlReflectionServiceImpl::forType() failed!" ),
         (XWeak *)(OWeakObject *)this );
 }
 
@@ -382,8 +382,8 @@ const Mapping & IdlReflectionServiceImpl::getCpp2Uno()
         if (! _aCpp2Uno.is())
         {
             _aCpp2Uno = Mapping(
-                OUString( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ),
-                OUString( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) ) );
+                OUString( CPPU_CURRENT_LANGUAGE_BINDING_NAME ),
+                OUString( UNO_LB_UNO ) );
             OSL_ENSURE( _aCpp2Uno.is(), "### cannot get c++ to uno mapping!" );
             if (! _aCpp2Uno.is())
             {
@@ -405,8 +405,8 @@ const Mapping & IdlReflectionServiceImpl::getUno2Cpp()
         if (! _aUno2Cpp.is())
         {
             _aUno2Cpp = Mapping(
-                OUString( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) ),
-                OUString( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ) );
+                OUString( UNO_LB_UNO ),
+                OUString( CPPU_CURRENT_LANGUAGE_BINDING_NAME ) );
             OSL_ENSURE( _aUno2Cpp.is(), "### cannot get uno to c++ mapping!" );
             if (! _aUno2Cpp.is())
             {

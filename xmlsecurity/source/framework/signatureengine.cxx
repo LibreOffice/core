@@ -114,7 +114,7 @@ void SignatureEngine::tryToPerform( )
     if (checkReady())
     {
         const OUString ouSignatureTemplate (
-            RTL_CONSTASCII_USTRINGPARAM( SIGNATURE_TEMPLATE ) );
+            SIGNATURE_TEMPLATE );
         cssu::Reference < cssxc::XXMLSignatureTemplate >
             xSignatureTemplate( mxMSF->createInstance( ouSignatureTemplate ), cssu::UNO_QUERY );
 

@@ -7368,7 +7368,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
                     eFS = com::sun::star::drawing::FillStyle_BITMAP;
 
                     const XFillBitmapItem aXFillBitmapItem((const XFillBitmapItem&)pObj->GetMergedItem( XATTR_FILLBITMAP ));
-                    OUString aURL( RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));
+                    OUString aURL( UNO_NAME_GRAPHOBJ_URLPREFIX);
                     aURL += OStringToOUString(
                         aXFillBitmapItem.GetGraphicObject().GetUniqueID(),
                         RTL_TEXTENCODING_ASCII_US);

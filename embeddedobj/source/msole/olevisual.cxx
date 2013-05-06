@@ -54,7 +54,7 @@ embed::VisualRepresentation OleEmbeddedObject::GetVisualRepresentationInNativeFo
     {
         // it's a bitmap
         aVisualRepr.Flavor = datatransfer::DataFlavor(
-            OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" )),
+            OUString( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" ),
             OUString( "Bitmap" ),
             ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
     }
@@ -62,7 +62,7 @@ embed::VisualRepresentation OleEmbeddedObject::GetVisualRepresentationInNativeFo
     {
         // it's a metafile
         aVisualRepr.Flavor = datatransfer::DataFlavor(
-            OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" )),
+            OUString( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ),
             OUString( "Windows Metafile" ),
             ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
     }

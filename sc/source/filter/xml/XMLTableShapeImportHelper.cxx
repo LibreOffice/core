@@ -61,7 +61,7 @@ void XMLTableShapeImportHelper::SetLayer(uno::Reference<drawing::XShape>& rShape
     {
         uno::Reference< beans::XPropertySet > xShapeProp( rShape, uno::UNO_QUERY );
         if( xShapeProp.is() )
-            xShapeProp->setPropertyValue(OUString( RTL_CONSTASCII_USTRINGPARAM( SC_LAYERID ) ), uno::makeAny(nLayerID) );
+            xShapeProp->setPropertyValue(OUString( SC_LAYERID ), uno::makeAny(nLayerID) );
     }
 }
 

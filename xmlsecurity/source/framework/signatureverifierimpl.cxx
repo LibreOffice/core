@@ -174,7 +174,7 @@ OUString SignatureVerifierImpl_getImplementationName ()
     throw (cssu::RuntimeException)
 {
     return OUString(
-        RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
+        IMPLEMENTATION_NAME );
 }
 
 sal_Bool SAL_CALL SignatureVerifierImpl_supportsService( const OUString& ServiceName )
@@ -188,7 +188,7 @@ cssu::Sequence< OUString > SAL_CALL SignatureVerifierImpl_getSupportedServiceNam
 {
     cssu::Sequence < OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+    pArray[0] =  OUString ( SERVICE_NAME );
     return aRet;
 }
 #undef SERVICE_NAME

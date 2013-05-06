@@ -88,9 +88,9 @@ SwXMLExport::SwXMLExport(
     bBlock( sal_False ),
     bShowProgress( sal_True ),
     doc( NULL ),
-    sNumberFormat(RTL_CONSTASCII_USTRINGPARAM("NumberFormat")),
-    sIsProtected(RTL_CONSTASCII_USTRINGPARAM("IsProtected")),
-    sCell(RTL_CONSTASCII_USTRINGPARAM("Cell"))
+    sNumberFormat("NumberFormat"),
+    sIsProtected("IsProtected"),
+    sCell("Cell")
 {
     _InitItemExport();
 }

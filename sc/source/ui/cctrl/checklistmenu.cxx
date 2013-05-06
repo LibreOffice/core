@@ -76,7 +76,7 @@ ScMenuFloatingWindow::ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc, sa
     PopupMenuFloatingWindow(pParent),
     maOpenTimer(this),
     maCloseTimer(this),
-    maName(RTL_CONSTASCII_USTRINGPARAM("ScMenuFloatingWindow")),
+    maName("ScMenuFloatingWindow"),
     mnSelectedMenu(MENU_NOT_SELECTED),
     mnClickedMenu(MENU_NOT_SELECTED),
     mpDoc(pDoc),

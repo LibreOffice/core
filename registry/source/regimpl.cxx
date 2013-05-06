@@ -427,7 +427,7 @@ ORegistry::ORegistry()
     : m_refCount(1)
     , m_readOnly(sal_False)
     , m_isOpen(sal_False)
-    , ROOT( RTL_CONSTASCII_USTRINGPARAM("/") )
+    , ROOT( "/" )
 {
 }
 

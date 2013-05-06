@@ -135,8 +135,8 @@ struct OUStringLess
 DBG_NAME(SvXMLEmbeddedObjectHelper)
 SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper() :
     WeakComponentImplHelper2< XEmbeddedObjectResolver, XNameAccess >( maMutex ),
-    maReplacementGraphicsContainerStorageName( RTL_CONSTASCII_USTRINGPARAM(XML_CONTAINERSTORAGE_NAME) ),
-    maReplacementGraphicsContainerStorageName60( RTL_CONSTASCII_USTRINGPARAM(XML_CONTAINERSTORAGE_NAME_60) ),
+    maReplacementGraphicsContainerStorageName( XML_CONTAINERSTORAGE_NAME ),
+    maReplacementGraphicsContainerStorageName60( XML_CONTAINERSTORAGE_NAME_60 ),
     mpDocPersist( 0 ),
     meCreateMode( EMBEDDEDOBJECTHELPER_MODE_READ ),
     mpStreamMap( 0 )
@@ -146,8 +146,8 @@ SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper() :
 
 SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper( ::comphelper::IEmbeddedHelper& rDocPersist, SvXMLEmbeddedObjectHelperMode eCreateMode ) :
     WeakComponentImplHelper2< XEmbeddedObjectResolver, XNameAccess >( maMutex ),
-    maReplacementGraphicsContainerStorageName( RTL_CONSTASCII_USTRINGPARAM(XML_CONTAINERSTORAGE_NAME) ),
-    maReplacementGraphicsContainerStorageName60( RTL_CONSTASCII_USTRINGPARAM(XML_CONTAINERSTORAGE_NAME_60) ),
+    maReplacementGraphicsContainerStorageName( XML_CONTAINERSTORAGE_NAME ),
+    maReplacementGraphicsContainerStorageName60( XML_CONTAINERSTORAGE_NAME_60 ),
     mpDocPersist( 0 ),
     meCreateMode( EMBEDDEDOBJECTHELPER_MODE_READ ),
     mpStreamMap( 0 )
@@ -482,7 +482,7 @@ OUString SvXMLEmbeddedObjectHelper::ImplInsertEmbeddedObjectURL(
         }
 
         ImplReadObject( aContainerStorageName, aObjectStorageName, pClassId, pOut ? pOut->GetStream() : 0 );
-        sRetURL = OUString( RTL_CONSTASCII_USTRINGPARAM(XML_EMBEDDEDOBJECT_URL_BASE) );
+        sRetURL = OUString( XML_EMBEDDEDOBJECT_URL_BASE );
         sRetURL += aObjectStorageName;
 
         if( pOut )

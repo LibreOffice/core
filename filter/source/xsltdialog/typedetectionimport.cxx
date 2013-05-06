@@ -37,19 +37,19 @@ using namespace std;
 
 TypeDetectionImporter::TypeDetectionImporter( Reference< XMultiServiceFactory >& xMSF )
 :   mxMSF(xMSF),
-    sRootNode( RTL_CONSTASCII_USTRINGPARAM( "oor:component-data" ) ),
-    sNode( RTL_CONSTASCII_USTRINGPARAM( "node" ) ),
-    sName( RTL_CONSTASCII_USTRINGPARAM( "oor:name" ) ),
-    sProp( RTL_CONSTASCII_USTRINGPARAM( "prop" ) ),
-    sValue( RTL_CONSTASCII_USTRINGPARAM( "value" ) ),
-    sUIName( RTL_CONSTASCII_USTRINGPARAM( "UIName" ) ),
-    sData( RTL_CONSTASCII_USTRINGPARAM( "Data" ) ),
-    sFilters( RTL_CONSTASCII_USTRINGPARAM( "Filters" ) ),
-    sTypes( RTL_CONSTASCII_USTRINGPARAM( "Types" ) ),
-    sFilterAdaptorService( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.XmlFilterAdaptor" ) ),
-    sXSLTFilterService( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.documentconversion.XSLTFilter" ) ),
-    sCdataAttribute( RTL_CONSTASCII_USTRINGPARAM( "CDATA" ) ),
-    sWhiteSpace( RTL_CONSTASCII_USTRINGPARAM( " " ) )
+    sRootNode( "oor:component-data" ),
+    sNode( "node" ),
+    sName( "oor:name" ),
+    sProp( "prop" ),
+    sValue( "value" ),
+    sUIName( "UIName" ),
+    sData( "Data" ),
+    sFilters( "Filters" ),
+    sTypes( "Types" ),
+    sFilterAdaptorService( "com.sun.star.comp.Writer.XmlFilterAdaptor" ),
+    sXSLTFilterService( "com.sun.star.documentconversion.XSLTFilter" ),
+    sCdataAttribute( "CDATA" ),
+    sWhiteSpace( " " )
 {
 }
 

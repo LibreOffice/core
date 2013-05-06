@@ -197,7 +197,7 @@ Reference< lang::XSingleComponentFactory > create_bootstrap_macro_expander_facto
                                                         s_get_service_names() ));
 
     uno::Environment curr_env(Environment::getCurrent());
-    uno::Environment target_env(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(CPPU_STRINGIFY(CPPU_ENV))));
+    uno::Environment target_env(rtl::OUString(CPPU_STRINGIFY(CPPU_ENV)));
 
     uno::Mapping target2curr(target_env, curr_env);
 

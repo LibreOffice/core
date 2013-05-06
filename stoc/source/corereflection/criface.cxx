@@ -323,9 +323,8 @@ void IdlAttributeFieldImpl::checkException(
         } else {
             throw WrappedTargetRuntimeException(
                 OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
                         "non-RuntimeException occurred when accessing an"
-                        " interface type attribute")),
+                        " interface type attribute"),
                 context, e);
         }
     }

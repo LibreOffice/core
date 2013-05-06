@@ -118,7 +118,7 @@ IMPL_LINK_NOARG(ScLinkedAreaDlg, FileHdl)
 
     // #i53241# replace HTML filter with DataQuery filter
     if (aFilter.equalsAscii(FILTERNAME_HTML))
-        aFilter = OUString(RTL_CONSTASCII_USTRINGPARAM(FILTERNAME_QUERY));
+        aFilter = OUString(FILTERNAME_QUERY);
 
     LoadDocument( aEntered, aFilter, aOptions );
 
@@ -213,8 +213,8 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg 
         WaitObject aWait( this );
 
         // replace HTML filter with DataQuery filter
-        const OUString aHTMLFilterName( RTL_CONSTASCII_USTRINGPARAM( FILTERNAME_HTML ) );
-        const OUString aWebQFilterName( RTL_CONSTASCII_USTRINGPARAM( FILTERNAME_QUERY ) );
+        const OUString aHTMLFilterName( FILTERNAME_HTML );
+        const OUString aWebQFilterName( FILTERNAME_QUERY );
 
         const SfxFilter* pFilter = pMed->GetFilter();
         if (pFilter && aHTMLFilterName.equals(pFilter->GetFilterName()))

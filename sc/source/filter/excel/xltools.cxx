@@ -453,9 +453,9 @@ OUString XclTools::GetXclFontName( const OUString& rFontName )
 
 // built-in defined names -----------------------------------------------------
 
-const OUString XclTools::maDefNamePrefix( RTL_CONSTASCII_USTRINGPARAM( "Excel_BuiltIn_" ) );
+const OUString XclTools::maDefNamePrefix( "Excel_BuiltIn_" );
 
-const OUString XclTools::maDefNamePrefixXml ( RTL_CONSTASCII_USTRINGPARAM( "_xlnm." ) );
+const OUString XclTools::maDefNamePrefixXml ( "_xlnm." );
 
 static const sal_Char* const ppcDefNames[] =
 {
@@ -524,8 +524,8 @@ sal_Unicode XclTools::GetBuiltInDefNameIndex( const OUString& rDefName )
 
 // built-in style names -------------------------------------------------------
 
-const OUString XclTools::maStyleNamePrefix1( RTL_CONSTASCII_USTRINGPARAM( "Excel_BuiltIn_" ) );
-const OUString XclTools::maStyleNamePrefix2( RTL_CONSTASCII_USTRINGPARAM( "Excel Built-in " ) );
+const OUString XclTools::maStyleNamePrefix1( "Excel_BuiltIn_" );
+const OUString XclTools::maStyleNamePrefix2( "Excel Built-in " );
 
 static const sal_Char* const ppcStyleNames[] =
 {
@@ -647,8 +647,8 @@ bool XclTools::GetBuiltInStyleId( sal_uInt8& rnStyleId, sal_uInt8& rnLevel, cons
 
 // conditional formatting style names -----------------------------------------
 
-const OUString XclTools::maCFStyleNamePrefix1( RTL_CONSTASCII_USTRINGPARAM( "Excel_CondFormat_" ) );
-const OUString XclTools::maCFStyleNamePrefix2( RTL_CONSTASCII_USTRINGPARAM( "ConditionalStyle_" ) );
+const OUString XclTools::maCFStyleNamePrefix1( "Excel_CondFormat_" );
+const OUString XclTools::maCFStyleNamePrefix2( "ConditionalStyle_" );
 
 OUString XclTools::GetCondFormatStyleName( SCTAB nScTab, sal_Int32 nFormat, sal_uInt16 nCondition )
 {
@@ -688,8 +688,8 @@ void XclTools::SkipSubStream( XclImpStream& rStrm )
 
 // Basic macro names ----------------------------------------------------------
 
-const OUString XclTools::maSbMacroPrefix( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.script:" ) );
-const OUString XclTools::maSbMacroSuffix( RTL_CONSTASCII_USTRINGPARAM( "?language=Basic&location=document" ) );
+const OUString XclTools::maSbMacroPrefix( "vnd.sun.star.script:" );
+const OUString XclTools::maSbMacroSuffix( "?language=Basic&location=document" );
 
 OUString XclTools::GetSbMacroUrl( const OUString& rMacroName, SfxObjectShell* pDocShell )
 {

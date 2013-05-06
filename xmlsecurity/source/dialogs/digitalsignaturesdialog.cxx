@@ -99,8 +99,8 @@ void SaveODFItem::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {
                 m_nODF = nTmp;
             else
                 throw uno::RuntimeException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "[xmlsecurity]SaveODFItem::SaveODFItem(): Wrong Type!")), 0 );
+                    OUString(
+                        "[xmlsecurity]SaveODFItem::SaveODFItem(): Wrong Type!"), 0 );
 
         }
         else

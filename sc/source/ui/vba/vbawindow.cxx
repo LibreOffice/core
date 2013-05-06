@@ -309,7 +309,7 @@ ScVbaWindow::getCaption() throw (uno::RuntimeException)
     static sal_Int32 nCrudLen = sCrud.getLength();
 
     OUString sTitle;
-    getFrameProps()->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM ( SC_UNONAME_TITLE ) ) ) >>= sTitle;
+    getFrameProps()->getPropertyValue( OUString( SC_UNONAME_TITLE ) ) >>= sTitle;
     sal_Int32 nCrudIndex = sTitle.indexOf( sCrud );
     // adjust title ( by removing crud )
     // sCrud string present
@@ -345,7 +345,7 @@ ScVbaWindow::getCaption() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaWindow::setCaption( const uno::Any& _caption ) throw (uno::RuntimeException)
 {
-    getFrameProps()->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_TITLE ) ), _caption );
+    getFrameProps()->setPropertyValue( OUString( SC_UNONAME_TITLE ), _caption );
 }
 
 uno::Any SAL_CALL
@@ -495,7 +495,7 @@ ScVbaWindow::RangeSelection() throw (script::BasicErrorException, uno::RuntimeEx
 ::sal_Bool SAL_CALL
 ScVbaWindow::getDisplayGridlines() throw (uno::RuntimeException)
 {
-    OUString sName( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_SHOWGRID ) );
+    OUString sName( SC_UNO_SHOWGRID );
     sal_Bool bGrid = sal_True;
     getControllerProps()->getPropertyValue( sName ) >>= bGrid;
     return bGrid;
@@ -505,14 +505,14 @@ ScVbaWindow::getDisplayGridlines() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaWindow::setDisplayGridlines( ::sal_Bool _displaygridlines ) throw (uno::RuntimeException)
 {
-    OUString sName( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_SHOWGRID ) );
+    OUString sName( SC_UNO_SHOWGRID );
     getControllerProps()->setPropertyValue( sName, uno::makeAny( _displaygridlines ));
 }
 
 ::sal_Bool SAL_CALL
 ScVbaWindow::getDisplayHeadings() throw (uno::RuntimeException)
 {
-    OUString sName( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_COLROWHDR ) );
+    OUString sName( SC_UNO_COLROWHDR );
     sal_Bool bHeading = sal_True;
     getControllerProps()->getPropertyValue( sName ) >>= bHeading;
     return bHeading;
@@ -521,14 +521,14 @@ ScVbaWindow::getDisplayHeadings() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaWindow::setDisplayHeadings( ::sal_Bool _bDisplayHeadings ) throw (uno::RuntimeException)
 {
-    OUString sName( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_COLROWHDR ) );
+    OUString sName( SC_UNO_COLROWHDR );
     getControllerProps()->setPropertyValue( sName, uno::makeAny( _bDisplayHeadings ));
 }
 
 ::sal_Bool SAL_CALL
 ScVbaWindow::getDisplayHorizontalScrollBar() throw (uno::RuntimeException)
 {
-    OUString sName( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_HORSCROLL ) );
+    OUString sName( SC_UNO_HORSCROLL );
     sal_Bool bHorizontalScrollBar = sal_True;
     getControllerProps()->getPropertyValue( sName ) >>= bHorizontalScrollBar;
     return bHorizontalScrollBar;
@@ -537,14 +537,14 @@ ScVbaWindow::getDisplayHorizontalScrollBar() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaWindow::setDisplayHorizontalScrollBar( ::sal_Bool _bDisplayHorizontalScrollBar ) throw (uno::RuntimeException)
 {
-    OUString sName( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_HORSCROLL ) );
+    OUString sName( SC_UNO_HORSCROLL );
     getControllerProps()->setPropertyValue( sName, uno::makeAny( _bDisplayHorizontalScrollBar ));
 }
 
 ::sal_Bool SAL_CALL
 ScVbaWindow::getDisplayOutline() throw (uno::RuntimeException)
 {
-    OUString sName( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_OUTLSYMB ) );
+    OUString sName( SC_UNO_OUTLSYMB );
     sal_Bool bOutline = sal_True;
     getControllerProps()->getPropertyValue( sName ) >>= bOutline;
     return bOutline;
@@ -553,14 +553,14 @@ ScVbaWindow::getDisplayOutline() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaWindow::setDisplayOutline( ::sal_Bool _bDisplayOutline ) throw (uno::RuntimeException)
 {
-    OUString sName( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_OUTLSYMB ) );
+    OUString sName( SC_UNO_OUTLSYMB );
     getControllerProps()->setPropertyValue( sName, uno::makeAny( _bDisplayOutline ));
 }
 
 ::sal_Bool SAL_CALL
 ScVbaWindow::getDisplayVerticalScrollBar() throw (uno::RuntimeException)
 {
-    OUString sName( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_VERTSCROLL ) );
+    OUString sName( SC_UNO_VERTSCROLL );
     sal_Bool bVerticalScrollBar = sal_True;
     getControllerProps()->getPropertyValue( sName ) >>= bVerticalScrollBar;
     return bVerticalScrollBar;
@@ -569,14 +569,14 @@ ScVbaWindow::getDisplayVerticalScrollBar() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaWindow::setDisplayVerticalScrollBar( ::sal_Bool _bDisplayVerticalScrollBar ) throw (uno::RuntimeException)
 {
-    OUString sName( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_VERTSCROLL ) );
+    OUString sName( SC_UNO_VERTSCROLL );
     getControllerProps()->setPropertyValue( sName, uno::makeAny( _bDisplayVerticalScrollBar ));
 }
 
 ::sal_Bool SAL_CALL
 ScVbaWindow::getDisplayWorkbookTabs() throw (uno::RuntimeException)
 {
-    OUString sName( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_SHEETTABS ) );
+    OUString sName( SC_UNO_SHEETTABS );
     sal_Bool bWorkbookTabs = sal_True;
     getControllerProps()->getPropertyValue( sName ) >>= bWorkbookTabs;
     return bWorkbookTabs;
@@ -585,7 +585,7 @@ ScVbaWindow::getDisplayWorkbookTabs() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaWindow::setDisplayWorkbookTabs( ::sal_Bool _bDisplayWorkbookTabs ) throw (uno::RuntimeException)
 {
-    OUString sName( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_SHEETTABS ) );
+    OUString sName( SC_UNO_SHEETTABS );
     getControllerProps()->setPropertyValue( sName, uno::makeAny( _bDisplayWorkbookTabs ));
 }
 
@@ -731,7 +731,7 @@ uno::Any SAL_CALL
 ScVbaWindow::getZoom() throw (uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xProps = getControllerProps();
-    OUString sName( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_ZOOMTYPE ) );
+    OUString sName( SC_UNO_ZOOMTYPE );
     sal_Int16 nZoomType = view::DocumentZoomType::PAGE_WIDTH;
     xProps->getPropertyValue( sName ) >>= nZoomType;
     if( nZoomType == view::DocumentZoomType::PAGE_WIDTH )
@@ -740,7 +740,7 @@ ScVbaWindow::getZoom() throw (uno::RuntimeException)
     }
     else if( nZoomType == view::DocumentZoomType::BY_VALUE )
     {
-        sName = OUString( RTL_CONSTASCII_USTRINGPARAM(SC_UNO_ZOOMVALUE));
+        sName = OUString( SC_UNO_ZOOMVALUE);
         sal_Int16 nZoom = 100;
         xProps->getPropertyValue( sName ) >>= nZoom;
         return uno::makeAny( nZoom );

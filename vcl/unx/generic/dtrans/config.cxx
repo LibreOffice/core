@@ -67,14 +67,14 @@ sal_Int32 SelectionManager::getSelectionTimeout()
  */
 
 DtransX11ConfigItem::DtransX11ConfigItem() :
-    ConfigItem( OUString( RTL_CONSTASCII_USTRINGPARAM( SETTINGS_CONFIGNODE ) ),
+    ConfigItem( OUString( SETTINGS_CONFIGNODE ),
                 CONFIG_MODE_DELAYED_UPDATE ),
     m_nSelectionTimeout( 3 )
 {
     if( IsValidConfigMgr() )
     {
         Sequence< OUString > aKeys( 1 );
-        aKeys.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( SELECTION_PROPERTY ) );
+        aKeys.getArray()[0] = OUString( SELECTION_PROPERTY );
         Sequence< Any > aValues = GetProperties( aKeys );
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "found %" SAL_PRIdINT32 " properties for %s\n", aValues.getLength(), SELECTION_PROPERTY );

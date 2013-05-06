@@ -764,7 +764,7 @@ void XclImpAutoFilterData::CreateScDBData()
     if( bActive || bCriteria)
     {
         ScDocument* pDoc = pExcRoot->pIR->GetDocPtr();
-        String aNewName = OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
+        String aNewName = OUString(STR_DB_LOCAL_NONAME);
         pCurrDBData = new ScDBData(aNewName , Tab(),
                                 StartCol(),StartRow(), EndCol(),EndRow() );
         if(bCriteria)

@@ -45,7 +45,7 @@
 namespace {
 struct Gregorian : public rtl::StaticWithInit<rtl::OUString, Gregorian> {
     const rtl::OUString operator () () {
-        return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CONST_TEST_STRING ));
+        return rtl::OUString( CONST_TEST_STRING );
     }
 };
 }
@@ -97,7 +97,7 @@ public:
             :m_nOK(0),
              m_nFails(0)
         {
-            m_sConstStr = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CONST_TEST_STRING ));
+            m_sConstStr = rtl::OUString( CONST_TEST_STRING );
         }
 
     sal_Int32 getOK() { return m_nOK; }

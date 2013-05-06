@@ -1974,8 +1974,8 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
 
     if (!pTxtAttr)
     {
-        throw uno::RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "SwXDocumentIndexMark::InsertTOXMark(): cannot insert attribute")),
+        throw uno::RuntimeException(OUString(
+            "SwXDocumentIndexMark::InsertTOXMark(): cannot insert attribute"),
             0);
     }
 

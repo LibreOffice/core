@@ -79,12 +79,12 @@ uno::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     try
     {
         /* Build XML Security Context */
-        const OUString sSecyrutyContext ( RTL_CONSTASCII_USTRINGPARAM( SECURITY_CONTEXT ) );
+        const OUString sSecyrutyContext ( SECURITY_CONTEXT );
         uno::Reference< cssxc::XXMLSecurityContext > xSecCtx( m_xContext->getServiceManager()->createInstanceWithContext(sSecyrutyContext, m_xContext), uno::UNO_QUERY );
         if( !xSecCtx.is() )
             return NULL;
 
-        const OUString sSecyrutyEnvironment ( RTL_CONSTASCII_USTRINGPARAM( SECURITY_ENVIRONMENT ) );
+        const OUString sSecyrutyEnvironment ( SECURITY_ENVIRONMENT );
         uno::Reference< cssxc::XSecurityEnvironment > xSecEnv( m_xContext->getServiceManager()->createInstanceWithContext(sSecyrutyEnvironment, m_xContext), uno::UNO_QUERY );
         uno::Reference< cssl::XUnoTunnel > xEnvTunnel( xSecEnv , uno::UNO_QUERY ) ;
         if( !xEnvTunnel.is() )
@@ -123,7 +123,7 @@ OUString SEInitializer_NssImpl_getImplementationName ()
     throw (uno::RuntimeException)
 {
 
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
+    return OUString ( IMPLEMENTATION_NAME );
 }
 
 sal_Bool SAL_CALL SEInitializer_NssImpl_supportsService( const OUString& ServiceName )
@@ -137,8 +137,8 @@ uno::Sequence< OUString > SAL_CALL SEInitializer_NssImpl_getSupportedServiceName
 {
     uno::Sequence < OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SE_SERVICE_NAME ) );
-    pArray[1] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( NSS_SERVICE_NAME ) );
+    pArray[0] =  OUString ( SE_SERVICE_NAME );
+    pArray[1] =  OUString ( NSS_SERVICE_NAME );
     return aRet;
 }
 

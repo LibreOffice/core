@@ -162,7 +162,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
             {
                 Reference< XConfigManager >xCfgMgr ( mxMSF->createInstance(
                     OUString( "com.sun.star.config.SpecialConfigManager" ) ), UNO_QUERY );
-                OUString PathString(xCfgMgr->substituteVariables(OUString(RTL_CONSTASCII_USTRINGPARAM("$(progurl)"))));
+                OUString PathString(xCfgMgr->substituteVariables(OUString("$(progurl)")));
                 PathString = PathString.concat(OUString( "/" ));
                 msTemplateName=PathString.concat(msTemplateName);
             }
@@ -388,8 +388,8 @@ Sequence< OUString > SAL_CALL XmlFilterAdaptor_getSupportedServiceNames(  )
 {
     Sequence < OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME1 ) );
-    pArray[1] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME2 ) );
+    pArray[0] =  OUString ( SERVICE_NAME1 );
+    pArray[1] =  OUString ( SERVICE_NAME2 );
     return aRet;
 }
 #undef SERVICE_NAME1

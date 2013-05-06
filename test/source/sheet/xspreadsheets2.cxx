@@ -40,9 +40,9 @@ using namespace css::uno;
 namespace apitest {
 
 XSpreadsheets2::XSpreadsheets2():
-    aSrcSheetName(RTL_CONSTASCII_USTRINGPARAM("SheetToCopy")),
-    aSrcFileName(RTL_CONSTASCII_USTRINGPARAM("rangenamessrc.ods")),
-    aDestFileBase(RTL_CONSTASCII_USTRINGPARAM("ScNamedRangeObj.ods"))
+    aSrcSheetName("SheetToCopy"),
+    aSrcFileName("rangenamessrc.ods"),
+    aDestFileBase("ScNamedRangeObj.ods")
 {
 }
 

@@ -491,7 +491,7 @@ ScVbaWorksheets::getServiceNames()
 bool ScVbaWorksheets::nameExists( uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc, const OUString & name, SCTAB& nTab ) throw ( lang::IllegalArgumentException )
 {
     if (!xSpreadDoc.is())
-        throw lang::IllegalArgumentException( OUString( RTL_CONSTASCII_USTRINGPARAM( "nameExists() xSpreadDoc is null" ) ), uno::Reference< uno::XInterface  >(), 1 );
+        throw lang::IllegalArgumentException( OUString( "nameExists() xSpreadDoc is null" ), uno::Reference< uno::XInterface  >(), 1 );
     uno::Reference <container::XIndexAccess> xIndex( xSpreadDoc->getSheets(), uno::UNO_QUERY );
     if ( xIndex.is() )
     {

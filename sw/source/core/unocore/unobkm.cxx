@@ -666,7 +666,7 @@ SwXFieldmark::CreateXFieldmark(SwDoc & rDoc, ::sw::mark::IMark & rMark)
 SwXFieldmark::getCheckboxFieldmark()
 {
     ::sw::mark::ICheckboxFieldmark* pCheckboxFm = NULL;
-    if ( getFieldType() == OUString( RTL_CONSTASCII_USTRINGPARAM(ODF_FORMCHECKBOX) ) )
+    if ( getFieldType() == OUString( ODF_FORMCHECKBOX ) )
     {
         // evil #TODO #FIXME casting away the const-ness
         pCheckboxFm = const_cast<sw::mark::ICheckboxFieldmark*>(dynamic_cast< const ::sw::mark::ICheckboxFieldmark* >( GetBookmark()));

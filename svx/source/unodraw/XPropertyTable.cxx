@@ -668,7 +668,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoXBitmapTable_createInstance( XP
 // SvxUnoXPropertyTable
 uno::Any SvxUnoXBitmapTable::getAny( const XPropertyEntry* pEntry ) const throw()
 {
-    OUString aURL( RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));
+    OUString aURL( UNO_NAME_GRAPHOBJ_URLPREFIX);
     const GraphicObject& rGraphicObject(((XBitmapEntry*)pEntry)->GetGraphicObject());
     aURL += OStringToOUString(rGraphicObject.GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
 

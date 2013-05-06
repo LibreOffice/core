@@ -569,7 +569,7 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
         UpdateFontList();
         InitDraw();
 
-        SetError( nErr, OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+        SetError( nErr, OUString( OSL_LOG_PREFIX ) );
         bRet = !IsError( nErr );
 
         if ( bRet && !pDoc->IsInLoadAsynchron() &&
@@ -620,7 +620,7 @@ sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
             OSL_FAIL("Code removed!");
         }
 
-        SetError( nErr, OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+        SetError( nErr, OUString( OSL_LOG_PREFIX ) );
         bRet = !IsError( nErr );
 
     } while( false );

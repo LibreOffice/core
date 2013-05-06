@@ -70,7 +70,7 @@ ToolbarLayoutManager::ToolbarLayoutManager(
     m_aFullAddonTbxPrefix( "private:resource/toolbar/addon_" ),
     m_aCustomTbxPrefix( "custom_" ),
     m_aCustomizeCmd( "ConfigureDialog" ),
-    m_aToolbarTypeString( RTL_CONSTASCII_USTRINGPARAM( UIRESOURCETYPE_TOOLBAR ))
+    m_aToolbarTypeString( UIRESOURCETYPE_TOOLBAR )
 {
     // initialize rectangles to zero values
     setZeroRectangle( m_aDockingAreaOffsets );

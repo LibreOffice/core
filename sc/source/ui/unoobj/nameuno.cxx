@@ -443,8 +443,8 @@ uno::Sequence<OUString> SAL_CALL ScNamedRangeObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException)
 {
     uno::Sequence<OUString> aRet(2);
-    aRet[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( SCNAMEDRANGEOBJ_SERVICE ) );
-    aRet[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( SCLINKTARGET_SERVICE ) );
+    aRet[0] = OUString( SCNAMEDRANGEOBJ_SERVICE );
+    aRet[1] = OUString( SCLINKTARGET_SERVICE );
     return aRet;
 }
 

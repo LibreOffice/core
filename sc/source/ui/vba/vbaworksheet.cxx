@@ -111,7 +111,7 @@ using namespace ooo::vba;
 static void getNewSpreadsheetName (OUString &aNewName, OUString aOldName, uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc )
 {
     if (!xSpreadDoc.is())
-        throw lang::IllegalArgumentException( OUString( RTL_CONSTASCII_USTRINGPARAM( "getNewSpreadsheetName() xSpreadDoc is null" ) ), uno::Reference< uno::XInterface  >(), 1 );
+        throw lang::IllegalArgumentException( OUString( "getNewSpreadsheetName() xSpreadDoc is null" ), uno::Reference< uno::XInterface  >(), 1 );
     static OUString aUnderScore( "_" );
     int currentNum =2;
     aNewName = aOldName + aUnderScore + OUString::number(currentNum) ;
@@ -125,7 +125,7 @@ static void getNewSpreadsheetName (OUString &aNewName, OUString aOldName, uno::R
 static void removeAllSheets( uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc, OUString aSheetName)
 {
     if (!xSpreadDoc.is())
-        throw lang::IllegalArgumentException( OUString( RTL_CONSTASCII_USTRINGPARAM( "removeAllSheets() xSpreadDoc is null" ) ), uno::Reference< uno::XInterface  >(), 1 );
+        throw lang::IllegalArgumentException( OUString( "removeAllSheets() xSpreadDoc is null" ), uno::Reference< uno::XInterface  >(), 1 );
     uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
     uno::Reference <container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
 

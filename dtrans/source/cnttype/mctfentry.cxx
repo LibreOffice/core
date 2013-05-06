@@ -77,7 +77,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL mcnttype_component_getFactory( const sal_Cha
     if ( pSrvManager && ( 0 == rtl_str_compare( pImplName, MIMECONTENTTYPEFACTORY_IMPL_NAME ) ) )
     {
         Sequence< OUString > aSNS( 1 );
-        aSNS.getArray( )[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( MIMECONTENTTYPEFACTORY_SERVICE_NAME ) );
+        aSNS.getArray( )[0] = OUString( MIMECONTENTTYPEFACTORY_SERVICE_NAME );
 
         Reference< XSingleServiceFactory > xFactory ( createSingleFactory(
             reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),

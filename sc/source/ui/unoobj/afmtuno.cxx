@@ -202,7 +202,7 @@ uno::Sequence<OUString> ScAutoFormatsObj::getSupportedServiceNames_Static()
 {
     uno::Sequence<OUString> aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCAUTOFORMATSOBJ_SERVICE ));
+    pArray[0] = OUString( SCAUTOFORMATSOBJ_SERVICE );
     return aRet;
 }
 

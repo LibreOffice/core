@@ -129,17 +129,17 @@ static void load_Separators( OUString &sFieldSeparators, OUString &sTextSeparato
     }
     ScLinkConfigItem aItem( aSepPath );
 
-    pNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( MERGE_DELIMITERS ));
-    pNames[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( SEPARATORS ));
-    pNames[2] = OUString(RTL_CONSTASCII_USTRINGPARAM( TEXT_SEPARATORS ));
-    pNames[3] = OUString(RTL_CONSTASCII_USTRINGPARAM( FIXED_WIDTH ));
+    pNames[0] = OUString( MERGE_DELIMITERS );
+    pNames[1] = OUString( SEPARATORS );
+    pNames[2] = OUString( TEXT_SEPARATORS );
+    pNames[3] = OUString( FIXED_WIDTH );
     if (eCall != SC_TEXTTOCOLUMNS)
     {
-        pNames[4] = OUString(RTL_CONSTASCII_USTRINGPARAM( FROM_ROW ));
-        pNames[5] = OUString(RTL_CONSTASCII_USTRINGPARAM( CHAR_SET ));
-        pNames[6] = OUString(RTL_CONSTASCII_USTRINGPARAM( QUOTED_AS_TEXT ));
-        pNames[7] = OUString(RTL_CONSTASCII_USTRINGPARAM( DETECT_SPECIAL_NUM ));
-        pNames[8] = OUString(RTL_CONSTASCII_USTRINGPARAM( LANGUAGE ));
+        pNames[4] = OUString( FROM_ROW );
+        pNames[5] = OUString( CHAR_SET );
+        pNames[6] = OUString( QUOTED_AS_TEXT );
+        pNames[7] = OUString( DETECT_SPECIAL_NUM );
+        pNames[8] = OUString( LANGUAGE );
     }
     aValues = aItem.GetProperties( aNames );
     pProperties = aValues.getConstArray();
@@ -202,17 +202,17 @@ static void save_Separators(
     }
     ScLinkConfigItem aItem( aSepPath );
 
-    pNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( MERGE_DELIMITERS ));
-    pNames[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( SEPARATORS ));
-    pNames[2] = OUString(RTL_CONSTASCII_USTRINGPARAM( TEXT_SEPARATORS ));
-    pNames[3] = OUString(RTL_CONSTASCII_USTRINGPARAM( FIXED_WIDTH ));
+    pNames[0] = OUString( MERGE_DELIMITERS );
+    pNames[1] = OUString( SEPARATORS );
+    pNames[2] = OUString( TEXT_SEPARATORS );
+    pNames[3] = OUString( FIXED_WIDTH );
     if (eCall != SC_TEXTTOCOLUMNS)
     {
-        pNames[4] = OUString(RTL_CONSTASCII_USTRINGPARAM( FROM_ROW ));
-        pNames[5] = OUString(RTL_CONSTASCII_USTRINGPARAM( CHAR_SET ));
-        pNames[6] = OUString(RTL_CONSTASCII_USTRINGPARAM( QUOTED_AS_TEXT ));
-        pNames[7] = OUString(RTL_CONSTASCII_USTRINGPARAM( DETECT_SPECIAL_NUM ));
-        pNames[8] = OUString(RTL_CONSTASCII_USTRINGPARAM( LANGUAGE ));
+        pNames[4] = OUString( FROM_ROW );
+        pNames[5] = OUString( CHAR_SET );
+        pNames[6] = OUString( QUOTED_AS_TEXT );
+        pNames[7] = OUString( DETECT_SPECIAL_NUM );
+        pNames[8] = OUString( LANGUAGE );
     }
     aValues = aItem.GetProperties( aNames );
     pProperties = aValues.getArray();

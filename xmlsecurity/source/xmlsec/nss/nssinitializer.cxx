@@ -303,7 +303,7 @@ bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContex
         deleteRootsModule();
 
 #if defined SYSTEM_NSS
-        OUString rootModule(RTL_CONSTASCII_USTRINGPARAM("libnssckbi" SAL_DLLEXTENSION));
+        OUString rootModule("libnssckbi" SAL_DLLEXTENSION);
 #else
         OUString rootModule(RTL_CONSTASCII_USTRINGPARAM("${LO_LIB_DIR}/libnssckbi" SAL_DLLEXTENSION));
 #endif
@@ -479,7 +479,7 @@ OUString ONSSInitializer_getImplementationName ()
     throw (cssu::RuntimeException)
 {
 
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
+    return OUString ( IMPLEMENTATION_NAME );
 }
 
 sal_Bool SAL_CALL ONSSInitializer_supportsService( const OUString& ServiceName )
@@ -493,7 +493,7 @@ cssu::Sequence< OUString > SAL_CALL ONSSInitializer_getSupportedServiceNames(  )
 {
     cssu::Sequence < OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( NSS_SERVICE_NAME ) );
+    pArray[0] =  OUString ( NSS_SERVICE_NAME );
     return aRet;
 }
 

@@ -253,7 +253,7 @@ ContextMenuHelper::ContextMenuHelper(
     const uno::Reference< frame::XFrame >& xFrame,
     bool bAutoRefresh ) :
     m_xWeakFrame( xFrame ),
-    m_aSelf( RTL_CONSTASCII_USTRINGPARAM( "_self" )),
+    m_aSelf( "_self" ),
     m_bAutoRefresh( bAutoRefresh ),
     m_bUICfgMgrAssociated( false )
 {

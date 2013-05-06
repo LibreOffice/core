@@ -114,10 +114,10 @@ uno::Sequence< beans::StringPair > SAL_CALL DocTemplLocaleHelper::ReadLocalizati
 
 // -----------------------------------
 DocTemplLocaleHelper::DocTemplLocaleHelper()
-: m_aGroupListElement( RTL_CONSTASCII_USTRINGPARAM( "groupuinames:template-group-list" ) )
-, m_aGroupElement( RTL_CONSTASCII_USTRINGPARAM( "groupuinames:template-group" ) )
-, m_aNameAttr( RTL_CONSTASCII_USTRINGPARAM( "groupuinames:name" ) )
-, m_aUINameAttr( RTL_CONSTASCII_USTRINGPARAM( "groupuinames:default-ui-name" ) )
+: m_aGroupListElement( "groupuinames:template-group-list" )
+, m_aGroupElement( "groupuinames:template-group" )
+, m_aNameAttr( "groupuinames:name" )
+, m_aUINameAttr( "groupuinames:default-ui-name" )
 {
 }
 

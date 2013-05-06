@@ -1019,7 +1019,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
 
             uno::Sequence<beans::PropertyValue> aSequence(1);
             beans::PropertyValue* pArray = aSequence.getArray();
-            pArray[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_PAGESIZE ));
+            pArray[0].Name = OUString( SC_UNONAME_PAGESIZE );
             pArray[0].Value <<= aPageSize;
 
             if( ! pPrinterOptions )
@@ -1066,17 +1066,17 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
     long nPropCount = bWasCellRange ? 3 : 2;
     uno::Sequence<beans::PropertyValue> aSequence(nPropCount);
     beans::PropertyValue* pArray = aSequence.getArray();
-    pArray[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_PAGESIZE ));
+    pArray[0].Name = OUString( SC_UNONAME_PAGESIZE );
     pArray[0].Value <<= aPageSize;
     // #i111158# all positions are relative to the whole page, including non-printable area
-    pArray[1].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_INC_NP_AREA ));
+    pArray[1].Name = OUString( SC_UNONAME_INC_NP_AREA );
     pArray[1].Value = uno::makeAny( sal_True );
     if ( bWasCellRange )
     {
         table::CellRangeAddress aRangeAddress( nTab,
                         aCellRange.aStart.Col(), aCellRange.aStart.Row(),
                         aCellRange.aEnd.Col(), aCellRange.aEnd.Row() );
-        pArray[2].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_SOURCERANGE ));
+        pArray[2].Name = OUString( SC_UNONAME_SOURCERANGE );
         pArray[2].Value <<= aRangeAddress;
     }
 
@@ -1559,7 +1559,7 @@ uno::Reference< container::XIndexAccess > SAL_CALL ScModelObj::getViewData(  )
             OUString sName;
             pDocShell->GetDocument()->GetName( pDocShell->GetDocument()->GetVisibleTab(), sName );
             OUString sOUName(sName);
-            aSeq[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ACTIVETABLE));
+            aSeq[0].Name = OUString(SC_ACTIVETABLE);
             aSeq[0].Value <<= sOUName;
             xCont->insertByIndex( 0, uno::makeAny( aSeq ) );
         }
@@ -2029,8 +2029,8 @@ uno::Sequence<OUString> SAL_CALL ScModelObj::getSupportedServiceNames()
 {
     uno::Sequence<OUString> aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCMODELOBJ_SERVICE ));
-    pArray[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCDOCSETTINGS_SERVICE ));
+    pArray[0] = OUString( SCMODELOBJ_SERVICE );
+    pArray[1] = OUString( SCDOCSETTINGS_SERVICE );
     return aRet;
 }
 

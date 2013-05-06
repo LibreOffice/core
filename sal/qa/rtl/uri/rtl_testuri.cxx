@@ -204,8 +204,7 @@ void Test::test_Uri() {
     aBuffer.append(static_cast< sal_Unicode >('A')); // A
     aText1 = aBuffer.makeStringAndClear();
     aText2 = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "%ED%A0%80" "%F0%90%8F%BF" "%ED%BF%BF" "A"));
+            "%ED%A0%80" "%F0%90%8F%BF" "%ED%BF%BF" "A");
     CPPUNIT_ASSERT_MESSAGE(
         "failure 11",
         (rtl::Uri::encode(
@@ -226,8 +225,7 @@ void Test::test_Uri() {
          == aText2));
 
     aText1 = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "%ed%a0%80" "%f0%90%8f%bf" "%ed%bf%bf" "A"));
+            "%ed%a0%80" "%f0%90%8f%bf" "%ed%bf%bf" "A");
     aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("%ED%A0%80"));
     aBuffer.append(static_cast< sal_Unicode >(0xD800));
     aBuffer.append(static_cast< sal_Unicode >(0xDFFF));

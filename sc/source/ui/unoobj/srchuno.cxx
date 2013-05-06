@@ -209,8 +209,8 @@ uno::Sequence<OUString> SAL_CALL ScCellSearchObj::getSupportedServiceNames()
 {
     uno::Sequence<OUString> aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCSEARCHDESCRIPTOR_SERVICE ));
-    pArray[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCREPLACEDESCRIPTOR_SERVICE ));
+    pArray[0] = OUString( SCSEARCHDESCRIPTOR_SERVICE );
+    pArray[1] = OUString( SCREPLACEDESCRIPTOR_SERVICE );
     return aRet;
 }
 

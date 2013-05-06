@@ -205,7 +205,7 @@ embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRe
             throw uno::RuntimeException();
 
         datatransfer::DataFlavor aDataFlavor(
-                OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" )),
+                OUString( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" ),
                 OUString( "GDIMetaFile" ),
                 ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
 

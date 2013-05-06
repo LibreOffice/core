@@ -1606,7 +1606,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                         if(seqCoordinates1 == seqCoordinates2)
                             bIsDefaultPath = true;
 
-                        const rtl::OUString sType( RTL_CONSTASCII_USTRINGPARAM ( "Type" ) );
+                        const rtl::OUString sType( "Type" );
                         rtl::OUString sShpType;
                         SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)(const SdrCustomShapeGeometryItem&)pCustomShapeObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
                         Any* pAny = rGeometryItem.GetPropertyValueByName( sType );
@@ -1630,7 +1630,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                             fWidth = nCoordWidth/2;
                             fHeight = nCoordHeight/2;
 
-                            const rtl::OUString sViewBox( RTL_CONSTASCII_USTRINGPARAM ( "ViewBox" ) );
+                            const rtl::OUString sViewBox( "ViewBox" );
                             const Any* pViewBox = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sViewBox );
                             com::sun::star::awt::Rectangle aViewBox;
                             if ( pViewBox && (*pViewBox >>= aViewBox ) )

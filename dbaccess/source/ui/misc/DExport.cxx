@@ -882,8 +882,8 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
         }
     }
 
-    aSql = aSql.replaceAt(aSql.getLength()-1,1,OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
-    aValues = aValues.replaceAt(aValues.getLength()-1,1,OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
+    aSql = aSql.replaceAt(aSql.getLength()-1,1,OUString(")"));
+    aValues = aValues.replaceAt(aValues.getLength()-1,1,OUString(")"));
 
     aSql += aValues;
     // now create,fill and execute the prepared statement

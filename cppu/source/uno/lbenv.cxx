@@ -1075,7 +1075,7 @@ static bool loadEnv(OUString const  & cLibStem,
     if (!hMod)
         return false;
 
-    OUString aSymbolName(RTL_CONSTASCII_USTRINGPARAM(UNO_INIT_ENVIRONMENT));
+    OUString aSymbolName(UNO_INIT_ENVIRONMENT);
     uno_initEnvironmentFunc fpInit = (uno_initEnvironmentFunc)
         ::osl_getFunctionSymbol( hMod, aSymbolName.pData );
 

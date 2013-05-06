@@ -144,20 +144,20 @@ SvStream& operator<<( SvStream& rOStm, const TransferableObjectDescriptor& rObjD
 
 static OUString ImplGetParameterString( const TransferableObjectDescriptor& rObjDesc )
 {
-    const OUString   aChar( RTL_CONSTASCII_USTRINGPARAM( "\"" ));
+    const OUString   aChar( "\"" );
     const OUString   aClassName( rObjDesc.maClassName.GetHexName() );
     OUString         aParams;
 
     if( !aClassName.isEmpty() )
     {
-        aParams += OUString( RTL_CONSTASCII_USTRINGPARAM( ";classname=\"" ));
+        aParams += OUString( ";classname=\"" );
         aParams += aClassName;
         aParams += aChar;
     }
 
     if( !rObjDesc.maTypeName.isEmpty() )
     {
-        aParams += OUString( RTL_CONSTASCII_USTRINGPARAM( ";typename=\"" ));
+        aParams += OUString( ";typename=\"" );
         aParams += rObjDesc.maTypeName;
         aParams += aChar;
     }
@@ -180,28 +180,28 @@ static OUString ImplGetParameterString( const TransferableObjectDescriptor& rObj
                 pToAccept[nChar] = sal_True;
         }
 
-        aParams += OUString( RTL_CONSTASCII_USTRINGPARAM( ";displayname=\"" ));
+        aParams += OUString( ";displayname=\"" );
         aParams += ::rtl::Uri::encode( rObjDesc.maDisplayName, pToAccept, rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8 );
         aParams += aChar;
     }
 
-    aParams += OUString( RTL_CONSTASCII_USTRINGPARAM( ";viewaspect=\"" ));
+    aParams += OUString( ";viewaspect=\"" );
     aParams += OUString::number( rObjDesc.mnViewAspect );
     aParams += aChar;
 
-    aParams += OUString( RTL_CONSTASCII_USTRINGPARAM( ";width=\"" ));
+    aParams += OUString( ";width=\"" );
     aParams += OUString::valueOf( rObjDesc.maSize.Width() );
     aParams += aChar;
 
-    aParams += OUString( RTL_CONSTASCII_USTRINGPARAM( ";height=\"" ));
+    aParams += OUString( ";height=\"" );
     aParams += OUString::valueOf( rObjDesc.maSize.Height() );
     aParams += aChar;
 
-    aParams += OUString( RTL_CONSTASCII_USTRINGPARAM( ";posx=\"" ));
+    aParams += OUString( ";posx=\"" );
     aParams += OUString::valueOf( rObjDesc.maDragStartPos.X() );
     aParams += aChar;
 
-    aParams += OUString( RTL_CONSTASCII_USTRINGPARAM( ";posy=\"" ));
+    aParams += OUString( ";posy=\"" );
     aParams += OUString::valueOf( rObjDesc.maDragStartPos.X() );
     aParams += aChar;
 

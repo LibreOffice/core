@@ -310,7 +310,7 @@ FontWorkAlignmentWindow::FontWorkAlignmentWindow( svt::ToolboxController& rContr
 , maImgAlgin3( SVX_RES( IMG_FONTWORK_ALIGN_RIGHT_16   ) )
 , maImgAlgin4( SVX_RES( IMG_FONTWORK_ALIGN_WORD_16    ) )
 , maImgAlgin5( SVX_RES( IMG_FONTWORK_ALIGN_STRETCH_16 ) )
-, msFontworkAlignment( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontworkAlignment" ) )
+, msFontworkAlignment( ".uno:FontworkAlignment" )
 {
     SetHelpId( HID_POPUP_FONTWORK_ALIGN );
     SetSelectHdl( LINK( this, FontWorkAlignmentWindow, SelectHdl ) );
@@ -496,8 +496,8 @@ private:
 FontWorkCharacterSpacingWindow::FontWorkCharacterSpacingWindow( svt::ToolboxController& rController, const Reference< XFrame >& rFrame, Window* pParentWindow )
 : ToolbarMenu( rFrame, pParentWindow, SVX_RES( RID_SVXFLOAT_FONTWORK_CHARSPACING ))
 , mrController( rController )
-, msFontworkCharacterSpacing( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontworkCharacterSpacing" ) )
-, msFontworkKernCharacterPairs( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontworkKernCharacterPairs" ) )
+, msFontworkCharacterSpacing( ".uno:FontworkCharacterSpacing" )
+, msFontworkKernCharacterPairs( ".uno:FontworkKernCharacterPairs" )
 {
     SetHelpId( HID_POPUP_FONTWORK_CHARSPACE );
     SetSelectHdl( LINK( this, FontWorkCharacterSpacingWindow, SelectHdl ) );

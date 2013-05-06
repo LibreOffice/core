@@ -710,9 +710,9 @@ XMLTableStylesContext::XMLTableStylesContext( SvXMLImport& rImport,
         const bool bTempAutoStyles ) :
     SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList ),
     sCellStyleServiceName( OUString( "com.sun.star.style.CellStyle" )),
-    sColumnStyleServiceName( OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME ))),
-    sRowStyleServiceName( OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME ))),
-    sTableStyleServiceName( OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME ))),
+    sColumnStyleServiceName( OUString( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME )),
+    sRowStyleServiceName( OUString( XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME )),
+    sTableStyleServiceName( OUString( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME )),
     nNumberFormatIndex(-1),
     nConditionalFormatIndex(-1),
     nCellStyleIndex(-1),
@@ -1052,9 +1052,9 @@ void ScMasterPageContext::Finish( sal_Bool bOverwrite )
 {
     XMLTextMasterPageContext::Finish(bOverwrite);
     if (!bContainsRightFooter)
-        ClearContent(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_PAGE_RIGHTFTRCON)));
+        ClearContent(OUString(SC_UNO_PAGE_RIGHTFTRCON));
     if (!bContainsRightHeader)
-        ClearContent(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_PAGE_RIGHTHDRCON)));
+        ClearContent(OUString(SC_UNO_PAGE_RIGHTHDRCON));
 }
 
 // ---------------------------------------------------------------------------

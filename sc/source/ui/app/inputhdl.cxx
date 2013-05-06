@@ -2759,7 +2759,7 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
                 if (!aReplace.equalsAsciiL("\"", 1))
                     aString = aString.replaceAll(
                         aReplace,
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("\"")));
+                        OUString("\""));
 
                 aReplace = OUString(pAuto->GetEndDoubleQuote());
                 if (aReplace.isEmpty())
@@ -2767,7 +2767,7 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
                 if (!aReplace.equalsAsciiL("\"", 1))
                     aString = aString.replaceAll(
                         aReplace,
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("\"")));
+                        OUString("\""));
 
                 aReplace = OUString(pAuto->GetStartSingleQuote());
                 if (aReplace.isEmpty())

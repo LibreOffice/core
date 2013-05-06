@@ -253,7 +253,7 @@ uno::Sequence<OUString> ScFunctionAccess::getSupportedServiceNames_Static()
 {
     uno::Sequence<OUString> aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCFUNCTIONACCESS_SERVICE ));
+    pArray[0] = OUString( SCFUNCTIONACCESS_SERVICE );
     return aRet;
 }
 
@@ -277,8 +277,8 @@ uno::Sequence<OUString> SAL_CALL ScFunctionAccess::getSupportedServiceNames()
 {
     uno::Sequence<OUString> aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCFUNCTIONACCESS_SERVICE ));
-    pArray[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCDOCSETTINGS_SERVICE ));
+    pArray[0] = OUString( SCFUNCTIONACCESS_SERVICE );
+    pArray[1] = OUString( SCDOCSETTINGS_SERVICE );
     return aRet;
 }
 

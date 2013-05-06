@@ -145,7 +145,7 @@ void ScXMLTableColContext::EndElement()
                         }
                     }
                 }
-                OUString sVisible(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLVIS));
+                OUString sVisible(SC_UNONAME_CELLVIS);
                 bool bValue(true);
                 if (!IsXMLToken(sVisibility, XML_VISIBLE))
                     bValue = false;

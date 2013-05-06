@@ -134,14 +134,14 @@ uno::Reference<uno::XInterface> SAL_CALL ScFilterOptionsObj_CreateInstance(
 
 OUString ScFilterOptionsObj::getImplementationName_Static()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( SCFILTEROPTIONSOBJ_IMPLNAME ));
+    return OUString( SCFILTEROPTIONSOBJ_IMPLNAME );
 }
 
 uno::Sequence<OUString> ScFilterOptionsObj::getSupportedServiceNames_Static()
 {
     uno::Sequence<OUString> aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCFILTEROPTIONSOBJ_SERVICE ));
+    pArray[0] = OUString( SCFILTEROPTIONSOBJ_SERVICE );
     return aRet;
 }
 
@@ -152,7 +152,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScFilterOptionsObj::getPropertyValu
     uno::Sequence<beans::PropertyValue> aRet(1);
     beans::PropertyValue* pArray = aRet.getArray();
 
-    pArray[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_FILTEROPTIONS ));
+    pArray[0].Name = OUString( SC_UNONAME_FILTEROPTIONS );
     pArray[0].Value <<= aFilterOptions;
 
     return aRet;

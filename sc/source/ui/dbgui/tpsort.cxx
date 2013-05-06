@@ -596,7 +596,7 @@ void ScTabPageSortOptions::Init()
         String          theArea;
         ScDBCollection* pDBColl     = pDoc->GetDBCollection();
         const SCTAB     nCurTab     = pViewData->GetTabNo();
-        OUString          theDbName   = OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
+        OUString          theDbName   = OUString(STR_DB_LOCAL_NONAME);
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
         m_pLbOutPos->Clear();

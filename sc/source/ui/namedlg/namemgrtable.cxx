@@ -148,7 +148,7 @@ const ScRangeData* ScRangeManagerTable::findRangeData(const ScRangeNameLine& rLi
 {
     const ScRangeName* pRangeName;
     if (rLine.aScope == maGlobalString)
-        pRangeName = mrRangeMap.find(OUString(RTL_CONSTASCII_USTRINGPARAM(STR_GLOBAL_RANGE_NAME)))->second;
+        pRangeName = mrRangeMap.find(OUString(STR_GLOBAL_RANGE_NAME))->second;
     else
         pRangeName = mrRangeMap.find(rLine.aScope)->second;
 

@@ -44,7 +44,7 @@ inline Reference< XCurrentContext > SAL_CALL getCurrentContext()
     SAL_THROW(())
 {
     Reference< XCurrentContext > xRet;
-    ::rtl::OUString aEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
+    ::rtl::OUString aEnvTypeName( CPPU_CURRENT_LANGUAGE_BINDING_NAME );
     ::uno_getCurrentContext( (void **)&xRet, aEnvTypeName.pData, 0 );
     return xRet;
 }
@@ -57,7 +57,7 @@ inline bool SAL_CALL setCurrentContext(
     Reference< XCurrentContext > const & xContext )
     SAL_THROW(())
 {
-    ::rtl::OUString aEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
+    ::rtl::OUString aEnvTypeName( CPPU_CURRENT_LANGUAGE_BINDING_NAME );
     return (::uno_setCurrentContext( xContext.get(), aEnvTypeName.pData, 0 ) != sal_False);
 }
 
@@ -97,7 +97,7 @@ public:
 //__________________________________________________________________________________________________
 inline ContextLayer::ContextLayer( Reference< XCurrentContext > const & xNewContext )
     SAL_THROW(())
-    : m_aEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) )
+    : m_aEnvTypeName( CPPU_CURRENT_LANGUAGE_BINDING_NAME )
 {
     ::uno_getCurrentContext( (void **)&m_xPreviousContext, m_aEnvTypeName.pData, 0 );
     ::uno_setCurrentContext( xNewContext.get(), m_aEnvTypeName.pData, 0 );

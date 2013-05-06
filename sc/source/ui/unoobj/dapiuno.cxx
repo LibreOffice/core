@@ -373,7 +373,7 @@ static bool lcl_IsDuplicated( const Reference<XPropertySet> xDimProps )
 {
     try
     {
-        Any aAny = xDimProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_ORIGINAL ) ) );
+        Any aAny = xDimProps->getPropertyValue( OUString( SC_UNO_DP_ORIGINAL ) );
         Reference< XNamed > xOriginal( aAny, UNO_QUERY );
         return xOriginal.is();
     }
@@ -392,7 +392,7 @@ static OUString lcl_GetOriginalName( const Reference< XNamed > xDim )
     {
         try
         {
-            Any aAny = xDimProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ORIGINAL)));
+            Any aAny = xDimProps->getPropertyValue(OUString(SC_UNO_DP_ORIGINAL));
             aAny >>= xOriginal;
         }
         catch( Exception& )
@@ -1001,13 +1001,13 @@ Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPrope
                 {
                     uno::Sequence<beans::PropertyValue> aSeq( 4 );
                     beans::PropertyValue* pArray = aSeq.getArray();
-                    pArray[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_SOURCENAME ));
+                    pArray[0].Name = OUString( SC_UNO_DP_SOURCENAME );
                     pArray[0].Value <<= pServiceDesc->aParSource;
-                    pArray[1].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_OBJECTNAME ));
+                    pArray[1].Name = OUString( SC_UNO_DP_OBJECTNAME );
                     pArray[1].Value <<= pServiceDesc->aParName;
-                    pArray[2].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_USERNAME ));
+                    pArray[2].Name = OUString( SC_UNO_DP_USERNAME );
                     pArray[2].Value <<= pServiceDesc->aParUser;
-                    pArray[3].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_PASSWORD ));
+                    pArray[3].Name = OUString( SC_UNO_DP_PASSWORD );
                     pArray[3].Value <<= pServiceDesc->aParPass;
                     aRet <<= aSeq;
                 }
@@ -1061,7 +1061,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotDescriptorBase::getDataLayoutFi
         {
             if( pSaveData->GetDataLayoutDimension() )
             {
-                ScFieldIdentifier aFieldId( OUString( RTL_CONSTASCII_USTRINGPARAM( SC_DATALAYOUT_NAME ) ), 0, true );
+                ScFieldIdentifier aFieldId( OUString( SC_DATALAYOUT_NAME ), 0, true );
                 return new ScDataPilotFieldObj( *this, aFieldId );
             }
         }
@@ -1593,7 +1593,7 @@ static sal_Int32 lcl_GetFieldCount( const Reference<XDimensionsSupplier>& rSourc
         for (sal_Int32 i = 0; i < nIntCount; ++i)
         {
             xDim.set(xIntDims->getByIndex(i), UNO_QUERY);
-            if (xDim.is() && (xDim->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ORIENTATION))) == rOrient))
+            if (xDim.is() && (xDim->getPropertyValue(OUString(SC_UNO_DP_ORIENTATION)) == rOrient))
                 ++nRet;
         }
     }
@@ -1633,7 +1633,7 @@ static sal_Bool lcl_GetFieldDataByIndex( const Reference<XDimensionsSupplier>& r
         while (i < nIntCount && !bOk)
         {
             xDim.set(xIntDims->getByIndex(i), UNO_QUERY);
-            if (xDim.is() && (xDim->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ORIENTATION))) == rOrient))
+            if (xDim.is() && (xDim->getPropertyValue(OUString(SC_UNO_DP_ORIENTATION)) == rOrient))
             {
                 if (nPos == nIndex)
                 {
@@ -1675,7 +1675,7 @@ static sal_Bool lcl_GetFieldDataByIndex( const Reference<XDimensionsSupplier>& r
             OUString sOriginalName( lcl_GetOriginalName( xDimName ) );
             rFieldId.maFieldName = sOriginalName;
             rFieldId.mbDataLayout = ScUnoHelpFunctions::GetBoolProperty( xDim,
-                        OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ISDATALAYOUT)) );
+                        OUString(SC_UNO_DP_ISDATALAYOUT) );
 
             sal_Int32 nRepeat = 0;
             if ( rOrient.hasValue() && lcl_IsDuplicated( xDim ) )
@@ -1853,7 +1853,7 @@ OUString SAL_CALL ScDataPilotFieldObj::getName() throw(RuntimeException)
     if( ScDPSaveDimension* pDim = GetDPDimension() )
     {
         if( pDim->IsDataLayout() )
-            aName = OUString( RTL_CONSTASCII_USTRINGPARAM( SC_DATALAYOUT_NAME ) );
+            aName = OUString( SC_DATALAYOUT_NAME );
         else
         {
             const OUString* pLayoutName = pDim->GetLayoutName();
@@ -3490,7 +3490,7 @@ Any SAL_CALL ScDataPilotItemObj::getPropertyValue( const OUString& aPropertyName
                     {
                         Reference< XPropertySet > xMemberProps( xMember, UNO_QUERY );
                         if( xMemberProps.is() )
-                            aRet = xMemberProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_SHOWDETAILS ) ) );
+                            aRet = xMemberProps->getPropertyValue( OUString( SC_UNO_DP_SHOWDETAILS ) );
                         else
                             aRet <<= true;
                     }
@@ -3505,7 +3505,7 @@ Any SAL_CALL ScDataPilotItemObj::getPropertyValue( const OUString& aPropertyName
                     {
                         Reference< XPropertySet > xMemberProps( xMember, UNO_QUERY );
                         if( xMemberProps.is() )
-                            aRet <<= !cppu::any2bool( xMemberProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_ISVISIBLE ) ) ) );
+                            aRet <<= !cppu::any2bool( xMemberProps->getPropertyValue( OUString( SC_UNO_DP_ISVISIBLE ) ) );
                         else
                             aRet <<= false;
                     }

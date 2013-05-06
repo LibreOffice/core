@@ -19,7 +19,7 @@ using namespace css::uno;
 
 namespace apitest {
 
-XNameContainer::XNameContainer(): maNameToRemove(RTL_CONSTASCII_USTRINGPARAM("XNameContainer"))
+XNameContainer::XNameContainer(): maNameToRemove("XNameContainer")
 {
 }
 

@@ -645,7 +645,7 @@ OUString createLocalRangeName(const OUString& rName, const OUString& rTableName)
     OUStringBuffer aString (rName);
     aString.append(OUString(" ("));
     aString.append(rTableName);
-    aString.append(OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
+    aString.append(OUString(")"));
     return aString.makeStringAndClear();
 }
 }

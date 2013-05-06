@@ -50,8 +50,8 @@ sal_Bool XMLCodeNameProvider::_getCodeName( const uno::Any& aAny, String& rCodeN
 
 XMLCodeNameProvider::XMLCodeNameProvider( ScDocument* pDoc ) :
     mpDoc( pDoc ),
-    msDocName( RTL_CONSTASCII_USTRINGPARAM("*doc*") ),
-    msCodeNameProp( RTL_CONSTASCII_USTRINGPARAM("CodeName") )
+    msDocName( "*doc*" ),
+    msCodeNameProp( "CodeName" )
 {
 }
 

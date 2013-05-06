@@ -35,17 +35,17 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-const static OUString VALIDATION( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_VALIDAT ) );
-const static OUString IGNOREBLANK( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_IGNOREBL ) );
-const static OUString SHOWINPUT( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_SHOWINP  ) );
-const static OUString SHOWERROR( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_SHOWERR  ) );
-const static OUString ERRORTITLE( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_ERRTITLE  ) );
-const static OUString INPUTTITLE( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_INPTITLE  ) );
-const static OUString INPUTMESS( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_INPMESS  ) );
-const static OUString ERRORMESS( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_ERRMESS  ) );
-const static OUString STYPE( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_TYPE  ) );
-const static OUString SHOWLIST( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_SHOWLIST  ) );
-const static OUString ALERTSTYLE( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_ERRALSTY  ) );
+const static OUString VALIDATION( SC_UNONAME_VALIDAT );
+const static OUString IGNOREBLANK( SC_UNONAME_IGNOREBL );
+const static OUString SHOWINPUT( SC_UNONAME_SHOWINP  );
+const static OUString SHOWERROR( SC_UNONAME_SHOWERR  );
+const static OUString ERRORTITLE(  SC_UNONAME_ERRTITLE  );
+const static OUString INPUTTITLE(  SC_UNONAME_INPTITLE  );
+const static OUString INPUTMESS(  SC_UNONAME_INPMESS  );
+const static OUString ERRORMESS(  SC_UNONAME_ERRMESS  );
+const static OUString STYPE(  SC_UNONAME_TYPE  );
+const static OUString SHOWLIST(  SC_UNONAME_SHOWLIST  );
+const static OUString ALERTSTYLE(  SC_UNONAME_ERRALSTY  );
 
 static void
 lcl_setValidationProps( const uno::Reference< table::XCellRange >& xRange, const uno::Reference< beans::XPropertySet >& xProps )

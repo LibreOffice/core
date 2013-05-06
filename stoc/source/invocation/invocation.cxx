@@ -69,13 +69,13 @@ namespace stoc_inv
 static Sequence< OUString > inv_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
+    seqNames.getArray()[0] = OUString(SERVICENAME);
     return seqNames;
 }
 
 static OUString inv_getImplementationName()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM(IMPLNAME));
+    return OUString(IMPLNAME);
 }
 
 // TODO: Zentral implementieren
@@ -601,7 +601,7 @@ void Invocation_Impl::setValue( const OUString& PropertyName, const Any& Value )
         catch (const Exception & exc)
         {
             throw InvocationTargetException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("exception occurred in setValue(): ") ) +
+                OUString( "exception occurred in setValue(): " ) +
                 exc.Message, Reference< XInterface >(), makeAny( exc /* though sliced */ ) );
         }
     }
@@ -912,7 +912,7 @@ InvocationInfo SAL_CALL Invocation_Impl::getInfoForName( const OUString& aName, 
     if( !bFound )
     {
         throw IllegalArgumentException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("Unknown name, getExactName() failed!") ),
+            OUString( "Unknown name, getExactName() failed!" ),
             (XWeak *)(OWeakObject *)this, 0 );
     }
     return aRetInfo;

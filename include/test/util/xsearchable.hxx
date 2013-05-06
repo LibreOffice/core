@@ -15,7 +15,7 @@ class OOO_DLLPUBLIC_TEST XSearchable
 {
 public:
     XSearchable(const OUString& rString, sal_Int32 nCount) : maSearchString(rString), mnCount(nCount) {}
-    XSearchable() : maSearchString(RTL_CONSTASCII_USTRINGPARAM("SearchString")), mnCount(1) {}
+    XSearchable() : maSearchString("SearchString"), mnCount(1) {}
     virtual ~XSearchable();
 
     void testFindFirst();

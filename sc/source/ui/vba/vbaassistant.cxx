@@ -30,7 +30,7 @@ using namespace ooo::vba;
 using namespace ooo::vba::office::MsoAnimationType;
 
 ScVbaAssistant::ScVbaAssistant( const uno::Reference< XHelperInterface > xParent, const uno::Reference< uno::XComponentContext > xContext ): ScVbaAssistantImpl_BASE( xParent, xContext ),
-m_sName( RTL_CONSTASCII_USTRINGPARAM( "Clippit" ) )
+m_sName( "Clippit" )
 {
     m_bIsVisible = false;
     m_nPointsLeft = 795;

@@ -267,8 +267,8 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
 
     if (!pTxtAttr)
     {
-        throw uno::RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "SwXReferenceMark::InsertRefMark(): cannot insert attribute")), 0);
+        throw uno::RuntimeException(OUString(
+            "SwXReferenceMark::InsertRefMark(): cannot insert attribute"), 0);
     }
 
     m_pMarkFmt = &pTxtAttr->GetRefMark();

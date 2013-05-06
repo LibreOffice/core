@@ -1647,7 +1647,7 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
         {
             sal_Bool bSwapped = static_cast< SdrGrafObj* >( mpObj.get() )->IsSwappedOut();
             const GraphicObject& rGrafObj = static_cast< SdrGrafObj*>( mpObj.get() )->GetGraphicObject(true);
-            OUString aURL( RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));
+            OUString aURL( UNO_NAME_GRAPHOBJ_URLPREFIX);
             aURL += OStringToOUString(rGrafObj.GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
             rValue <<= aURL;
             if ( bSwapped )
@@ -1662,7 +1662,7 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
 
         if(pGrafObj)
         {
-            OUString aURL(RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));
+            OUString aURL(UNO_NAME_GRAPHOBJ_URLPREFIX);
             aURL += OStringToOUString(pGrafObj->GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
             rValue <<= aURL;
         }

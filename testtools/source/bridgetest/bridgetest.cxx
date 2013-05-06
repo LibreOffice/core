@@ -73,7 +73,7 @@ Sequence<T> cloneSequence(const Sequence<T>& val);
 //--------------------------------------------------------------------------------------------------
 inline static Sequence< OUString > getSupportedServiceNames()
 {
-    OUString aName( RTL_CONSTASCII_USTRINGPARAM(SERVICENAME) );
+    OUString aName( SERVICENAME );
     return Sequence< OUString >( &aName, 1 );
 }
 
@@ -1092,9 +1092,9 @@ inline bool makeSurrogate(
     Environment aCppEnv_ano;
 
     OUString aCppEnvTypeName(
-        RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
+        CPPU_CURRENT_LANGUAGE_BINDING_NAME );
     OUString aUnoEnvTypeName(
-        RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) );
+        UNO_LB_UNO );
     // official:
     uno_getEnvironment(
         reinterpret_cast< uno_Environment ** >( &aCppEnv_official ),
@@ -1147,9 +1147,9 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
     {
         if (! rArgs.getLength())
         {
-            throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM(
+            throw RuntimeException( OUString(
                                                   "no test object specified!\n"
-                                                  "usage : ServiceName of test object | -u unourl of test object\n" ) ),
+                                                  "usage : ServiceName of test object | -u unourl of test object\n" ),
                                     Reference< XInterface >() );
         }
 
@@ -1238,7 +1238,7 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
 OUString TestBridgeImpl::getImplementationName()
     throw (RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) );
+    return OUString( IMPLNAME );
 }
 //__________________________________________________________________________________________________
 sal_Bool TestBridgeImpl::supportsService( const OUString & rServiceName )
@@ -1286,7 +1286,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
         Reference< XInterface > xFactory(
             createSingleComponentFactory(
                 bridge_test::TestBridgeImpl_create,
-                OUString( RTL_CONSTASCII_USTRINGPARAM(IMPLNAME) ),
+                OUString( IMPLNAME ),
                 bridge_test::getSupportedServiceNames() ) );
 
         if (xFactory.is())

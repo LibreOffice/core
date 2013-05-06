@@ -483,8 +483,8 @@ uno::Sequence<OUString> SAL_CALL ScDocumentConfiguration::getSupportedServiceNam
 {
     uno::Sequence<OUString> aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCCOMPSCPREADSHEETSETTINGS_SERVICE ));
-    pArray[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCDOCUMENTSETTINGS_SERVICE ));
+    pArray[0] = OUString( SCCOMPSCPREADSHEETSETTINGS_SERVICE );
+    pArray[1] = OUString( SCDOCUMENTSETTINGS_SERVICE );
     return aRet;
 }
 

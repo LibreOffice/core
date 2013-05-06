@@ -55,9 +55,8 @@ namespace cppu_threadpool {
         {
             throw css::lang::DisposedException(
                 rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
                         "cppu_threadpool::ORequestThread created after"
-                        " cppu_threadpool::ThreadAdmin has been disposed")),
+                        " cppu_threadpool::ThreadAdmin has been disposed"),
                 css::uno::Reference< css::uno::XInterface >());
         }
         m_lst.push_back( p );

@@ -261,9 +261,7 @@ void SwVbaRows::setIndentWithAdjustNone( sal_Int32 indent ) throw (uno::RuntimeE
     {
         throw uno::RuntimeException(
             OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "Pb with width, in SwVbaRows::setIndentWithAdjustProportional (nNewWidth <= 0) || (nWidth <= 0)"
-                )
             ),
             uno::Reference< uno::XInterface >()
         );

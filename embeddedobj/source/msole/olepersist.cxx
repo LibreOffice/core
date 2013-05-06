@@ -1088,7 +1088,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM( "The object waits for saveCompleted() call!\n" )),
+                    OUString( "The object waits for saveCompleted() call!\n" ),
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     OSL_ENSURE( m_xParentStorage.is() && m_xObjectStream.is(), "The object has no valid persistence!\n" );
@@ -1347,7 +1347,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
             saveCompleted( ( m_xParentStorage != xStorage || !m_aEntryName.equals( sEntName ) ) );
         else
             throw embed::WrongStateException(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM( "The object waits for saveCompleted() call!\n" )),
+                        OUString( "The object waits for saveCompleted() call!\n" ),
                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
@@ -1679,7 +1679,7 @@ sal_Bool SAL_CALL OleEmbeddedObject::hasEntry()
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM( "The object waits for saveCompleted() call!\n" )),
+                    OUString( "The object waits for saveCompleted() call!\n" ),
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( m_xObjectStream.is() )
@@ -1715,7 +1715,7 @@ OUString SAL_CALL OleEmbeddedObject::getEntryName()
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM( "The object waits for saveCompleted() call!\n" )),
+                    OUString( "The object waits for saveCompleted() call!\n" ),
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     return m_aEntryName;
@@ -1760,7 +1760,7 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM( "The object waits for saveCompleted() call!\n" )),
+                    OUString( "The object waits for saveCompleted() call!\n" ),
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( m_bReadOnly )
@@ -1869,7 +1869,7 @@ sal_Bool SAL_CALL OleEmbeddedObject::isReadonly()
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM( "The object waits for saveCompleted() call!\n" )),
+                    OUString( "The object waits for saveCompleted() call!\n" ),
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     return m_bReadOnly;
@@ -1910,7 +1910,7 @@ void SAL_CALL OleEmbeddedObject::reload(
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM( "The object waits for saveCompleted() call!\n" )),
+                    OUString( "The object waits for saveCompleted() call!\n" ),
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     // TODO:
@@ -1966,7 +1966,7 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM( "The object waits for saveCompleted() call!\n" )),
+                    OUString( "The object waits for saveCompleted() call!\n" ),
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
 
@@ -2081,7 +2081,7 @@ OUString SAL_CALL OleEmbeddedObject::getLinkURL()
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM( "The object waits for saveCompleted() call!\n" )),
+                    OUString( "The object waits for saveCompleted() call!\n" ),
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( !m_bIsLink )

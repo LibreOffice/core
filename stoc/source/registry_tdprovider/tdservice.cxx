@@ -374,9 +374,8 @@ void ServiceTypeDescriptionImpl::getReferences()
              || aReader.getFieldCount() != 0 )
             throw RuntimeException(
                 OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
                         "Service is single-interface--based but also has"
-                        " references and/or properties" ) ),
+                        " references and/or properties" ),
                 static_cast< OWeakObject * >( this ) );
         Reference< XTypeDescription > ifc;
         try
@@ -395,9 +394,8 @@ void ServiceTypeDescriptionImpl::getReferences()
         if (resolveTypedefs(ifc)->getTypeClass() != TypeClass_INTERFACE) {
             throw RuntimeException(
                 OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
                         "Single-interface--based service is not based on"
-                        " interface type" ) ),
+                        " interface type" ),
                 static_cast< OWeakObject * >( this ) );
         }
         MutexGuard guard(getMutex());
@@ -440,9 +438,8 @@ void ServiceTypeDescriptionImpl::getReferences()
                     {
                         throw RuntimeException(
                             OUString(
-                                RTL_CONSTASCII_USTRINGPARAM(
                                     "com.sun.star.container."
-                                    "NoSuchElementException: " ) )
+                                    "NoSuchElementException: " )
                             + e.Message,
                             static_cast< OWeakObject * >( this ) );
                     }
@@ -483,9 +480,8 @@ void ServiceTypeDescriptionImpl::getReferences()
                     {
                         throw RuntimeException(
                             OUString(
-                                RTL_CONSTASCII_USTRINGPARAM(
                                     "com.sun.star.container."
-                                    "NoSuchElementException: " ) )
+                                    "NoSuchElementException: " )
                             + e.Message,
                             static_cast< OWeakObject * >( this ) );
                     }
@@ -497,9 +493,8 @@ void ServiceTypeDescriptionImpl::getReferences()
                         if ( !( aTypeDesc >>= aOptionalInterfaces[ nOI ] ) )
                             throw RuntimeException(
                                 OUString(
-                                    RTL_CONSTASCII_USTRINGPARAM(
                                         "Service 'supports' is not an"
-                                        " interface" ) ),
+                                        " interface" ),
                                 static_cast< OWeakObject * >( this ) );
                         nOI++;
                     }
@@ -509,9 +504,8 @@ void ServiceTypeDescriptionImpl::getReferences()
                         if ( !( aTypeDesc >>= aMandatoryInterfaces[ nMI ] ) )
                             throw RuntimeException(
                                 OUString(
-                                    RTL_CONSTASCII_USTRINGPARAM(
                                         "Service 'supports' is not an"
-                                        " interface" ) ),
+                                        " interface" ),
                                 static_cast< OWeakObject * >( this ) );
                         nMI++;
                     }

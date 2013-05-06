@@ -66,9 +66,9 @@ ImpSVGDialog::ImpSVGDialog( Window* pParent/*, ResMgr& rResMgr*/, Sequence< Prop
     maCBUseNativeDecoration.SetPosSizePixel( Point( implMap( *this, 12 ), implMap( *this, 41 ) ),
                                              Size( implMap( *this, 142 ), implMap( *this, 10 ) ) );
 
-    maCBTinyProfile.Check( maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( SVG_PROP_TINYPROFILE ) ), sal_False ) );
-    maCBEmbedFonts.Check( maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( SVG_PROP_EMBEDFONTS ) ), sal_True ) );
-    maCBUseNativeDecoration.Check( maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( SVG_PROP_NATIVEDECORATION ) ), sal_True ) );
+    maCBTinyProfile.Check( maConfigItem.ReadBool( OUString( SVG_PROP_TINYPROFILE ), sal_False ) );
+    maCBEmbedFonts.Check( maConfigItem.ReadBool( OUString( SVG_PROP_EMBEDFONTS ), sal_True ) );
+    maCBUseNativeDecoration.Check( maConfigItem.ReadBool( OUString( SVG_PROP_NATIVEDECORATION ), sal_True ) );
 
     maBTOK.SetPosSizePixel( Point( implMap( *this, 12 ), implMap( *this, 57 ) ),
                             Size( implMap( *this, 50 ), implMap( *this, 14 ) ) );
@@ -101,9 +101,9 @@ ImpSVGDialog::~ImpSVGDialog()
 
 Sequence< PropertyValue > ImpSVGDialog::GetFilterData()
 {
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( SVG_PROP_TINYPROFILE ) ), maCBTinyProfile.IsChecked() );
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( SVG_PROP_EMBEDFONTS ) ), maCBEmbedFonts.IsChecked() );
-    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( SVG_PROP_NATIVEDECORATION ) ), maCBUseNativeDecoration.IsChecked() );
+    maConfigItem.WriteBool( OUString( SVG_PROP_TINYPROFILE ), maCBTinyProfile.IsChecked() );
+    maConfigItem.WriteBool( OUString( SVG_PROP_EMBEDFONTS ), maCBEmbedFonts.IsChecked() );
+    maConfigItem.WriteBool( OUString( SVG_PROP_NATIVEDECORATION ), maCBUseNativeDecoration.IsChecked() );
 
     return( maConfigItem.GetFilterData() );
 }

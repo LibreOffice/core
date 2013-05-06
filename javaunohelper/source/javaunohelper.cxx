@@ -68,7 +68,7 @@ jboolean Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
     if (lib)
     {
         // ========================= LATEST VERSION =========================
-        OUString aGetEnvName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETENV) );
+        OUString aGetEnvName( COMPONENT_GETENV );
         oslGenericFunction pSym =
             osl_getFunctionSymbol( lib, aGetEnvName.pData );
         if (pSym)
@@ -91,7 +91,7 @@ jboolean Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
             uno_getEnvironment(
                 (uno_Environment **)&java_env, java_env_name.pData, vm_access.get() );
 
-            OUString aWriteInfoName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_WRITEINFO) );
+            OUString aWriteInfoName( COMPONENT_WRITEINFO );
             pSym = osl_getFunctionSymbol( lib, aWriteInfoName.pData );
             if (pSym)
             {
@@ -151,7 +151,7 @@ jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
     OUString aLibName( pJLibName );
     pJEnv->ReleaseStringChars( jLibName, pJLibName);
 
-    aLibName += OUString( RTL_CONSTASCII_USTRINGPARAM(SAL_DLLEXTENSION) );
+    aLibName += OUString( SAL_DLLEXTENSION );
 
     jobject joSLL_cpp = 0;
 
@@ -160,7 +160,7 @@ jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
     if (lib)
     {
         // ========================= LATEST VERSION =========================
-        OUString aGetEnvName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETENV) );
+        OUString aGetEnvName( COMPONENT_GETENV );
         oslGenericFunction pSym =
             osl_getFunctionSymbol( lib, aGetEnvName.pData );
         if (pSym)
@@ -184,7 +184,7 @@ jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
             uno_getEnvironment(
                 (uno_Environment **)&java_env, java_env_name.pData, vm_access.get() );
 
-            OUString aGetFactoryName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETFACTORY) );
+            OUString aGetFactoryName( COMPONENT_GETFACTORY );
             pSym = osl_getFunctionSymbol( lib, aGetFactoryName.pData );
             if (pSym)
             {

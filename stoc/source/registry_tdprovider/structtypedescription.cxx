@@ -100,9 +100,8 @@ css::uno::Sequence< OUString > StructTypeDescription::getTypeParameters()
             {
                 throw css::uno::RuntimeException(
                     OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
                             "type parameter of polymorphic struct type template"
-                            " not RT_ACCESS_INVALID/RT_REF_TYPE_PARAMETER")),
+                            " not RT_ACCESS_INVALID/RT_REF_TYPE_PARAMETER"),
                     static_cast< cppu::OWeakObject * >(this));
             }
             parameters[i] = reader.getReferenceTypeName(i);

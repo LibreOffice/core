@@ -141,9 +141,9 @@ namespace
         }
 
         uno::Sequence<beans::PropertyValue> aProps(2);
-        aProps[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_EXTENSION));
+        aProps[0].Name = OUString(SC_DBPROP_EXTENSION);
         aProps[0].Value <<= OUString( aExtension );
-        aProps[1].Name = OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_CHARSET));
+        aProps[1].Name = OUString(SC_DBPROP_CHARSET);
         aProps[1].Value <<= aCharSetStr;
 
         _rConnection = _rDrvMgr->getConnectionWithInfo( aConnUrl, aProps );
@@ -325,7 +325,7 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
         ScProgress aProgress( this, ScGlobal::GetRscString( STR_LOAD_DOC ), 0 );
         uno::Reference<lang::XMultiServiceFactory> xFactory = comphelper::getProcessServiceFactory();
         uno::Reference<sdbc::XRowSet> xRowSet( xFactory->createInstance(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_ROWSET )) ),
+                            OUString( SC_SERVICE_ROWSET ) ),
                             uno::UNO_QUERY);
         ::utl::DisposableComponent aRowSetHelper(xRowSet);
         uno::Reference<beans::XPropertySet> xRowProp( xRowSet, uno::UNO_QUERY );
@@ -337,19 +337,19 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
 
         aAny <<= xConnection;
         xRowProp->setPropertyValue(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_ACTIVECONNECTION)), aAny );
+                    OUString(SC_DBPROP_ACTIVECONNECTION), aAny );
 
         aAny <<= nType;
         xRowProp->setPropertyValue(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_COMMANDTYPE)), aAny );
+                    OUString(SC_DBPROP_COMMANDTYPE), aAny );
 
         aAny <<= OUString( aTabName );
         xRowProp->setPropertyValue(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_COMMAND)), aAny );
+                    OUString(SC_DBPROP_COMMAND), aAny );
 
         aAny <<= false;
         xRowProp->setPropertyValue(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_PROPCHANGE_NOTIFY)), aAny );
+                    OUString(SC_DBPROP_PROPCHANGE_NOTIFY), aAny );
 
         xRowSet->execute();
 
@@ -874,7 +874,7 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, CharSet eCharS
         if (!xTableDesc.is()) return SCERR_EXPORT_CONNECT;
 
         aAny <<= OUString( aTabName );
-        xTableDesc->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_NAME)), aAny );
+        xTableDesc->setPropertyValue( OUString(SC_DBPROP_NAME), aAny );
 
         // create columns
 
@@ -907,16 +907,16 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, CharSet eCharS
             if (!xColumnDesc.is()) return SCERR_EXPORT_CONNECT;
 
             aAny <<= pColNames[nCol];
-            xColumnDesc->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_NAME)), aAny );
+            xColumnDesc->setPropertyValue( OUString(SC_DBPROP_NAME), aAny );
 
             aAny <<= pColTypes[nCol];
-            xColumnDesc->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_TYPE)), aAny );
+            xColumnDesc->setPropertyValue( OUString(SC_DBPROP_TYPE), aAny );
 
             aAny <<= pColLengths[nCol];
-            xColumnDesc->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_PRECISION)), aAny );
+            xColumnDesc->setPropertyValue( OUString(SC_DBPROP_PRECISION), aAny );
 
             aAny <<= pColScales[nCol];
-            xColumnDesc->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_SCALE)), aAny );
+            xColumnDesc->setPropertyValue( OUString(SC_DBPROP_SCALE), aAny );
 
             xColumnsAppend->appendByDescriptor( xColumnDesc );
         }
@@ -926,7 +926,7 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, CharSet eCharS
         // get row set for writing
         uno::Reference<lang::XMultiServiceFactory> xFactory = comphelper::getProcessServiceFactory();
         uno::Reference<sdbc::XRowSet> xRowSet( xFactory->createInstance(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_ROWSET )) ),
+                            OUString( SC_SERVICE_ROWSET ) ),
                             uno::UNO_QUERY);
         ::utl::DisposableComponent aRowSetHelper(xRowSet);
         uno::Reference<beans::XPropertySet> xRowProp( xRowSet, uno::UNO_QUERY );
@@ -935,15 +935,15 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, CharSet eCharS
 
         aAny <<= xConnection;
         xRowProp->setPropertyValue(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_ACTIVECONNECTION)), aAny );
+                    OUString(SC_DBPROP_ACTIVECONNECTION), aAny );
 
         aAny <<= (sal_Int32) sdb::CommandType::TABLE;
         xRowProp->setPropertyValue(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_COMMANDTYPE)), aAny );
+                    OUString(SC_DBPROP_COMMANDTYPE), aAny );
 
         aAny <<= OUString( aTabName );
         xRowProp->setPropertyValue(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_COMMAND)), aAny );
+                    OUString(SC_DBPROP_COMMAND), aAny );
 
         xRowSet->execute();
 

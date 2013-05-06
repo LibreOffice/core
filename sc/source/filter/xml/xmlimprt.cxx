@@ -1946,11 +1946,11 @@ ScXMLImport::ScXMLImport(
     pDoc( NULL ),
     pChangeTrackingImportHelper(NULL),
     pStylesImportHelper(NULL),
-    sNumberFormat(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT)),
-    sLocale(RTL_CONSTASCII_USTRINGPARAM(SC_LOCALE)),
-    sCellStyle(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLSTYL)),
-    sStandardFormat(RTL_CONSTASCII_USTRINGPARAM(SC_STANDARDFORMAT)),
-    sType(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_TYPE)),
+    sNumberFormat(SC_UNONAME_NUMFMT),
+    sLocale(SC_LOCALE),
+    sCellStyle(SC_UNONAME_CELLSTYL),
+    sStandardFormat(SC_STANDARDFORMAT),
+    sType(SC_UNONAME_TYPE),
     pDocElemTokenMap( 0 ),
     pStylesElemTokenMap( 0 ),
     pStylesAttrTokenMap( 0 ),
@@ -2660,7 +2660,7 @@ bool ScXMLImport::IsCurrencySymbol(const sal_Int32 nNumberFormat, const OUString
                 if (xNumberPropertySet.is())
                 {
                     OUString sTemp;
-                    if ( xNumberPropertySet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_CURRENCYSYMBOL))) >>= sTemp)
+                    if ( xNumberPropertySet->getPropertyValue(OUString(SC_CURRENCYSYMBOL)) >>= sTemp)
                     {
                         if (sCurrentCurrency.equals(sTemp))
                             return true;
@@ -2974,7 +2974,7 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
     if (xPropertySetInfo.is())
     {
         OUString const sOrganizerMode(
-            RTL_CONSTASCII_USTRINGPARAM("OrganizerMode"));
+            "OrganizerMode");
         if (xPropertySetInfo->hasPropertyByName(sOrganizerMode))
         {
             sal_Bool bStyleOnly(sal_False);
@@ -3022,8 +3022,8 @@ void ScXMLImport::SetLabelRanges()
         uno::Reference <beans::XPropertySet> xPropertySet (GetModel(), uno::UNO_QUERY);
         if (xPropertySet.is())
         {
-            uno::Any aColAny = xPropertySet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_COLLABELRNG)));
-            uno::Any aRowAny = xPropertySet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_ROWLABELRNG)));
+            uno::Any aColAny = xPropertySet->getPropertyValue(OUString(SC_UNO_COLLABELRNG));
+            uno::Any aRowAny = xPropertySet->getPropertyValue(OUString(SC_UNO_ROWLABELRNG));
 
             uno::Reference< sheet::XLabelRanges > xColRanges;
             uno::Reference< sheet::XLabelRanges > xRowRanges;
@@ -3067,7 +3067,7 @@ class NamedRangesSwitch
 {
 public:
     NamedRangesSwitch(Reference<beans::XPropertySet>& xPropSet) :
-        mxPropSet(xPropSet), maPropName(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_MODIFY_BROADCAST))
+        mxPropSet(xPropSet), maPropName(SC_UNO_MODIFY_BROADCAST)
     {
         uno::Any any;
         any <<= false;

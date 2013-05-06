@@ -45,7 +45,7 @@ struct StaticDebugBaseAddressFilter
         OStringVec vec;
         rtl_uString * pStr = 0;
         rtl::OUString const name(
-            RTL_CONSTASCII_USTRINGPARAM("OSL_DEBUGBASE_STORE_ADDRESSES") );
+            "OSL_DEBUGBASE_STORE_ADDRESSES" );
         if (osl_getEnvironment( name.pData, &pStr ) == osl_Process_E_None) {
             rtl::OUString const str(pStr);
             rtl_uString_release(pStr);

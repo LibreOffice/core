@@ -748,7 +748,7 @@ sal_Bool SAL_CALL installTypeDescriptionManager(
     SAL_THROW(())
 {
     uno::Environment curr_env(Environment::getCurrent());
-    uno::Environment target_env(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(CPPU_STRINGIFY(CPPU_ENV))));
+    uno::Environment target_env(rtl::OUString(CPPU_STRINGIFY(CPPU_ENV)));
 
     uno::Mapping curr2target(curr_env, target_env);
 

@@ -715,7 +715,7 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                                             {
                                                 OUString sCondition("is-true-formula(");
                                                 sCondition += xSheetCondition->getFormula1();
-                                                sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
+                                                sCondition += OUString(")");
                                                 rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_CONDITION, sCondition);
                                                 rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_APPLY_STYLE_NAME, rScXMLExport.EncodeStyleName( sStyleName ));
                                                 OUString sOUBaseAddress;
@@ -738,11 +738,11 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                                                     sCondition += xSheetCondition->getFormula1();
                                                     sCondition += OUString(",");
                                                     sCondition += xSheetCondition->getFormula2();
-                                                    sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
+                                                    sCondition += OUString(")");
                                                 }
                                                 else
                                                 {
-                                                    sCondition = OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content()"));
+                                                    sCondition = OUString("cell-content()");
                                                     switch (aOperator)
                                                     {
                                                         case sheet::ConditionOperator_LESS:

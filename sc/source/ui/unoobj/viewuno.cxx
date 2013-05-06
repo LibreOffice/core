@@ -2210,8 +2210,8 @@ uno::Sequence<OUString> SAL_CALL ScTabViewObj::getSupportedServiceNames()
 {
     uno::Sequence<OUString> aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCTABVIEWOBJ_SERVICE ));
-    pArray[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCVIEWSETTINGS_SERVICE ));
+    pArray[0] = OUString( SCTABVIEWOBJ_SERVICE );
+    pArray[1] = OUString( SCVIEWSETTINGS_SERVICE );
     return aRet;
 }
 

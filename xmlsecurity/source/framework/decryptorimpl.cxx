@@ -179,7 +179,7 @@ void SAL_CALL DecryptorImpl::initialize( const cssu::Sequence< cssu::Any >& aArg
 OUString DecryptorImpl_getImplementationName ()
     throw (cssu::RuntimeException)
 {
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
+    return OUString ( IMPLEMENTATION_NAME );
 }
 
 sal_Bool SAL_CALL DecryptorImpl_supportsService( const OUString& ServiceName )
@@ -193,7 +193,7 @@ cssu::Sequence< OUString > SAL_CALL DecryptorImpl_getSupportedServiceNames(  )
 {
     cssu::Sequence < OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+    pArray[0] =  OUString ( SERVICE_NAME );
     return aRet;
 }
 #undef SERVICE_NAME

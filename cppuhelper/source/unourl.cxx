@@ -216,8 +216,8 @@ inline UnoUrl::Impl * UnoUrl::Impl::create(rtl::OUString const & rUrl)
 {
     if (!rUrl.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("uno:"), 0))
         throw rtl::MalformedUriException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                              "UNO URL does not start with \"uno:\"")));
+            rtl::OUString(
+                              "UNO URL does not start with \"uno:\""));
     sal_Int32 i = RTL_CONSTASCII_LENGTH("uno:");
     sal_Int32 j = rUrl.indexOf(';', i);
     if (j < 0)

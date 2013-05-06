@@ -135,9 +135,9 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
         // get a java vm, where we can create a loader
         css::uno::Reference<XJavaVM> javaVM_xJavaVM(
             m_xComponentContext->getValueByName(
-                OUString(RTL_CONSTASCII_USTRINGPARAM(
+                OUString(
                              "/singletons/"
-                             "com.sun.star.java.theJavaVirtualMachine"))),
+                             "com.sun.star.java.theJavaVirtualMachine")),
             UNO_QUERY_THROW);
 
         // Use the special protocol of XJavaVM.getJavaVM:  If the passed in
@@ -227,7 +227,7 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
                     "javaloader error - no Java environment available"), css::uno::Reference<XInterface>());
 
             // why is there no convinient contructor?
-            OUString sCppu_current_lb_name(RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME));
+            OUString sCppu_current_lb_name(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
             uno_getEnvironment(&pUno_environment, sCppu_current_lb_name.pData, NULL);
             if(!pUno_environment)
                 throw RuntimeException(OUString(
@@ -267,9 +267,9 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
         catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &)
         {
             throw RuntimeException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM(
+                OUString(
                                 "jvmaccess::VirtualMachine::AttachGuard"
-                                "::CreationException")),0);
+                                "::CreationException"),0);
         }
 
         // set the service manager at the javaloader

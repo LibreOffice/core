@@ -277,7 +277,7 @@ OUString BufferNode::printChildren() const
         rc += OUString( "(" );
         rc += OUString( "SecID=" );
         rc += OUString::valueOf(((ElementCollector*)(*ii))->getSecurityId());
-        rc += OUString( RTL_CONSTASCII_USTRINGPARAM( ")" ));
+        rc += OUString( ")" );
         rc += OUString( " " );
     }
 

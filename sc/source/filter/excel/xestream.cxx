@@ -1150,7 +1150,7 @@ bool XclExpXmlStream::exportDocument() throw()
 
 OUString XlsxExport_getImplementationName()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( IMPL_NAME ) );
+    return OUString( IMPL_NAME );
 }
 
 ::oox::ole::VbaProject* XclExpXmlStream::implCreateVbaProject() const

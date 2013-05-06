@@ -139,31 +139,31 @@ void ScXMLSortContext::EndElement()
     if (nAlgoLength)
         ++i;
     uno::Sequence <beans::PropertyValue> aSortDescriptor(7 + i);
-    aSortDescriptor[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_BINDFMT));
+    aSortDescriptor[0].Name = OUString(SC_UNONAME_BINDFMT);
     aSortDescriptor[0].Value = ::cppu::bool2any(bBindFormatsToContent);
-    aSortDescriptor[1].Name = OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_COPYOUT));
+    aSortDescriptor[1].Name = OUString(SC_UNONAME_COPYOUT);
     aSortDescriptor[1].Value = ::cppu::bool2any(bCopyOutputData);
-    aSortDescriptor[2].Name = OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISCASE));
+    aSortDescriptor[2].Name = OUString(SC_UNONAME_ISCASE);
     aSortDescriptor[2].Value = ::cppu::bool2any(bIsCaseSensitive);
-    aSortDescriptor[3].Name = OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISULIST));
+    aSortDescriptor[3].Name = OUString(SC_UNONAME_ISULIST);
     aSortDescriptor[3].Value = ::cppu::bool2any(bEnabledUserList);
-    aSortDescriptor[4].Name = OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_OUTPOS));
+    aSortDescriptor[4].Name = OUString(SC_UNONAME_OUTPOS);
     aSortDescriptor[4].Value <<= aOutputPosition;
-    aSortDescriptor[5].Name = OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_UINDEX));
+    aSortDescriptor[5].Name = OUString(SC_UNONAME_UINDEX);
     aSortDescriptor[5].Value <<= nUserListIndex;
-    aSortDescriptor[6].Name = OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SORTFLD));
+    aSortDescriptor[6].Name = OUString(SC_UNONAME_SORTFLD);
     aSortDescriptor[6].Value <<= aSortFields;
     if (nLangLength || nCountryLength)
     {
         lang::Locale aLocale;
         aLocale.Language = sLanguage;
         aLocale.Country = sCountry;
-        aSortDescriptor[7].Name = OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_COLLLOC));
+        aSortDescriptor[7].Name = OUString(SC_UNONAME_COLLLOC);
         aSortDescriptor[7].Value <<= aLocale;
     }
     if (nAlgoLength)
     {
-        aSortDescriptor[6 + i].Name = OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_COLLALG));
+        aSortDescriptor[6 + i].Name = OUString(SC_UNONAME_COLLALG);
         aSortDescriptor[6 + i].Value <<= sAlgorithm;
     }
     pDatabaseRangeContext->SetSortSequence(aSortDescriptor);

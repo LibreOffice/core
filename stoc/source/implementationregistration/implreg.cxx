@@ -83,21 +83,21 @@ struct StringPool
     OUString com_sun_star_registry_SimpleRegistry;
     OUString Registry;
     StringPool()
-        : sImplementationName( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME ) )
-        , sServiceName( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME ) )
-        , TMP( RTL_CONSTASCII_USTRINGPARAM( "TMP" ) )
-        , TEMP( RTL_CONSTASCII_USTRINGPARAM( "TEMP" ) )
-        , slash_UNO_slash_REGISTRY_LINKS( RTL_CONSTASCII_USTRINGPARAM("/UNO/REGISTRY_LINKS"))
-        , slash_IMPLEMENTATIONS( RTL_CONSTASCII_USTRINGPARAM( "/IMPLEMENTATIONS" ) )
-        , slash_UNO( RTL_CONSTASCII_USTRINGPARAM("/UNO"))
-        , slash_UNO_slash_SERVICES( RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"))
-        , slash_UNO_slash_SINGLETONS( RTL_CONSTASCII_USTRINGPARAM("/UNO/SINGLETONS"))
-        , slash_SERVICES( RTL_CONSTASCII_USTRINGPARAM("/SERVICES/") )
-        , slash_UNO_slash_LOCATION( RTL_CONSTASCII_USTRINGPARAM("/UNO/LOCATION") )
-        , slash_UNO_slash_ACTIVATOR( RTL_CONSTASCII_USTRINGPARAM("/UNO/ACTIVATOR") )
-        , colon_old( RTL_CONSTASCII_USTRINGPARAM(":old"))
-        , com_sun_star_registry_SimpleRegistry(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.SimpleRegistry") )
-        , Registry( RTL_CONSTASCII_USTRINGPARAM("Registry") )
+        : sImplementationName( IMPLNAME )
+        , sServiceName( SERVICENAME )
+        , TMP( "TMP" )
+        , TEMP( "TEMP" )
+        , slash_UNO_slash_REGISTRY_LINKS( "/UNO/REGISTRY_LINKS")
+        , slash_IMPLEMENTATIONS( "/IMPLEMENTATIONS" )
+        , slash_UNO( "/UNO")
+        , slash_UNO_slash_SERVICES( "/UNO/SERVICES")
+        , slash_UNO_slash_SINGLETONS( "/UNO/SINGLETONS")
+        , slash_SERVICES( "/SERVICES/" )
+        , slash_UNO_slash_LOCATION( "/UNO/LOCATION" )
+        , slash_UNO_slash_ACTIVATOR( "/UNO/ACTIVATOR" )
+        , colon_old( ":old")
+        , com_sun_star_registry_SimpleRegistry("com.sun.star.registry.SimpleRegistry" )
+        , Registry( "Registry" )
         {}
 private:
     StringPool( const StringPool & );
@@ -1082,7 +1082,7 @@ static void prepareRegistry(
     if (!subKeys.getLength())
     {
         throw InvalidRegistryException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "prepareRegistry(): source registry is empty" ) ),
+            OUString( "prepareRegistry(): source registry is empty" ),
             Reference< XInterface > () );
     }
 
@@ -1568,9 +1568,9 @@ void ImplementationRegistration::prepareRegister(
     else
     {
         throw CannotRegisterImplementationException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM(
+            OUString(
                 "ImplementationRegistration::registerImplementation() "
-                "no componentcontext available to instantiate loader")),
+                "no componentcontext available to instantiate loader"),
             Reference< XInterface > () );
     }
 }
@@ -1820,7 +1820,7 @@ void ImplementationRegistration::doRegister(
             else
             {
                 throw CannotRegisterImplementationException(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( "ImplementationRegistration::doRegistration() component registration signaled failure" ) ),
+                    OUString( "ImplementationRegistration::doRegistration() component registration signaled failure" ),
                     Reference< XInterface > () );
             }
 

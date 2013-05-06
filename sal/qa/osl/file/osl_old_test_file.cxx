@@ -97,7 +97,7 @@ using ::rtl::OString;
 void oldtestfile::test_file_001()
 {
 #ifndef WIN32
-    OUString base1( RTL_CONSTASCII_USTRINGPARAM( "file:///" TEST_VOLUME "bla" ) );
+    OUString base1( "file:///" TEST_VOLUME "bla" );
     int i;
     for( i = 0 ; aSource1[i] ; i +=2 )
     {
@@ -116,7 +116,7 @@ void oldtestfile::test_file_001()
 void oldtestfile::test_file_002()
 {
 #ifndef WIN32
-    OUString base2( RTL_CONSTASCII_USTRINGPARAM( "file:///" TEST_VOLUME "bla/blubs/schnubbel" ) );
+    OUString base2( "file:///" TEST_VOLUME "bla/blubs/schnubbel" );
     int i;
     for(  i = 0 ; aSource2[i] ; i +=2 )
     {
@@ -135,7 +135,7 @@ void oldtestfile::test_file_002()
 void oldtestfile::test_file_004()
 {
 #ifndef WIN32
-    OUString base4( RTL_CONSTASCII_USTRINGPARAM( "file:///" TEST_VOLUME "bla/" ) );
+    OUString base4( "file:///" TEST_VOLUME "bla/" );
     int i;
     for( i = 0 ; aSource1[i] ; i +=2 )
     {

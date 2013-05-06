@@ -293,14 +293,14 @@ ORptExport::ORptExport(const Reference< XComponentContext >& _rxContext,sal_uInt
     GetAutoStylePool()->AddFamily( XML_STYLE_FAMILY_TEXT_PARAGRAPH, sFamily,
                               m_xParaPropMapper, aPrefix );
 
-    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_CELL, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME)),
-        m_xCellStylesExportPropertySetMapper, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX)));
-    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_COLUMN, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME)),
-        m_xColumnStylesExportPropertySetMapper, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX)));
-    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_ROW, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME)),
-        m_xRowStylesExportPropertySetMapper, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX)));
-    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_TABLE, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME)),
-        m_xTableStylesExportPropertySetMapper, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX)));
+    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_CELL, OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME),
+        m_xCellStylesExportPropertySetMapper, OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX));
+    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_COLUMN, OUString(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME),
+        m_xColumnStylesExportPropertySetMapper, OUString(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX));
+    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_ROW, OUString(XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME),
+        m_xRowStylesExportPropertySetMapper, OUString(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX));
+    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_TABLE, OUString(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME),
+        m_xTableStylesExportPropertySetMapper, OUString(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX));
 }
 // -----------------------------------------------------------------------------
 Reference< XInterface > ORptExport::create(Reference< XComponentContext > const & xContext)
@@ -1027,8 +1027,8 @@ OUString ORptExport::convertFormula(const OUString& _sFormula)
 bool ORptExport::exportFormula(enum ::xmloff::token::XMLTokenEnum eName,const OUString& _sFormula)
 {
     const OUString sFieldData = convertFormula(_sFormula);
-    static const OUString s_sPageNumber(RTL_CONSTASCII_USTRINGPARAM("PageNumber()"));
-    static const OUString s_sPageCount(RTL_CONSTASCII_USTRINGPARAM("PageCount()"));
+    static const OUString s_sPageNumber("PageNumber()");
+    static const OUString s_sPageCount("PageCount()");
     sal_Int32 nPageNumberIndex = sFieldData.indexOf(s_sPageNumber);
     sal_Int32 nPageCountIndex = sFieldData.indexOf(s_sPageCount);
     bool bRet = nPageNumberIndex != -1 || nPageCountIndex != -1;
@@ -1086,20 +1086,20 @@ sal_Bool ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDef
                     OUString sExpression  = sField;
                     if ( !sExpression.isEmpty() )
                     {
-                        static OUString s_sQuote(RTL_CONSTASCII_USTRINGPARAM("\"\""));
+                        static OUString s_sQuote("\"\"");
                         sal_Int32 nIndex = sExpression.indexOf('"');
                         while ( nIndex > -1 )
                         {
                             sExpression = sExpression.replaceAt(nIndex,1,s_sQuote);
                             nIndex = sExpression.indexOf('"',nIndex+2);
                         }
-                        OUString sFormula(RTL_CONSTASCII_USTRINGPARAM("rpt:HASCHANGED(\""));
+                        OUString sFormula("rpt:HASCHANGED(\"");
 
                         TGroupFunctionMap::iterator aGroupFind = m_aGroupFunctionMap.find(xGroup);
                         if ( aGroupFind != m_aGroupFunctionMap.end() )
                             sExpression = aGroupFind->second->getName();
                         sFormula += sExpression;
-                        sFormula += OUString(RTL_CONSTASCII_USTRINGPARAM("\")"));
+                        sFormula += OUString("\")");
                         sExpression = sFormula;
                     }
                     AddAttribute(XML_NAMESPACE_REPORT, XML_SORT_EXPRESSION, sField);
@@ -1425,8 +1425,8 @@ void ORptExport::exportParagraph(const Reference< XReportControlModel >& _xRepor
     if ( Reference<XFormattedField>(_xReportElement,uno::UNO_QUERY).is() )
     {
         OUString sFieldData = _xReportElement->getDataField();
-        static const OUString s_sPageNumber(RTL_CONSTASCII_USTRINGPARAM("PageNumber()"));
-        static const OUString s_sPageCount(RTL_CONSTASCII_USTRINGPARAM("PageCount()"));
+        static const OUString s_sPageNumber("PageNumber()");
+        static const OUString s_sPageCount("PageCount()");
         static const OUString s_sReportPrefix("rpt:");
         sFieldData = sFieldData.copy(s_sReportPrefix.getLength(),sFieldData.getLength() - s_sReportPrefix.getLength());
         sal_Int32 nPageNumberIndex = sFieldData.indexOf(s_sPageNumber);
@@ -1543,7 +1543,7 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                         break;
                     case report::GroupOn::QUARTAL:
                         sFunction   = OUString("INT((MONTH");
-                        sPostfix    = OUString(RTL_CONSTASCII_USTRINGPARAM("-1)/3)+1"));
+                        sPostfix    = OUString("-1)/3)+1");
                         sFunctionName = OUString("QUARTAL_") + sExpression;
                         break;
                     case report::GroupOn::MONTH:
@@ -1573,7 +1573,7 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                             sExpression = sCountName;
                             // The reference to sCountName in the formula of sFunctionName refers to the *old* value
                             // so we need to expand the the formula of sCountName
-                            sPrefix = OUString(RTL_CONSTASCII_USTRINGPARAM(" + 1) / ")) + OUString::valueOf(xGroup->getGroupInterval());
+                            sPrefix = OUString(" + 1) / ") + OUString::valueOf(xGroup->getGroupInterval());
                             sFunctionName = sFunction + OUString("_") + sExpression;
                             sFunction = sFunction + OUString("(");
                             sInitialFormula = OUString("rpt:0");
@@ -1600,7 +1600,7 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
 
                     if ( !sPrefix.isEmpty() )
                         sFunction += sPrefix;
-                    sFunction += OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
+                    sFunction += OUString(")");
                     if ( !sPostfix.isEmpty() )
                         sFunction += sPostfix;
                     xFunction->setFormula(sFunction);

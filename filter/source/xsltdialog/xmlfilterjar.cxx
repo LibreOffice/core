@@ -62,12 +62,12 @@ using ::rtl::Uri;
 
 XMLFilterJarHelper::XMLFilterJarHelper( Reference< XMultiServiceFactory >& xMSF )
 : mxMSF( xMSF ),
-    sVndSunStarPackage( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package:" ) ),
-    sXSLTPath( RTL_CONSTASCII_USTRINGPARAM( "$(user)/xslt/" ) ),
-    sTemplatePath( RTL_CONSTASCII_USTRINGPARAM( "$(user)/template/") ),
-    sSpecialConfigManager( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.config.SpecialConfigManager" ) ),
-    sPump( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.Pump" ) ),
-    sProgPath( RTL_CONSTASCII_USTRINGPARAM( "$(prog)/" ) )
+    sVndSunStarPackage( "vnd.sun.star.Package:" ),
+    sXSLTPath( "$(user)/xslt/" ),
+    sTemplatePath( "$(user)/template/" ),
+    sSpecialConfigManager( "com.sun.star.config.SpecialConfigManager" ),
+    sPump( "com.sun.star.io.Pump" ),
+    sProgPath( "$(prog)/" )
 {
     try
     {

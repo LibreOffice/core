@@ -105,7 +105,7 @@ ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pPa
         aStrChildContent     (SC_RESSTR(STR_CHG_CHILD_CONTENT)),
         aStrChildOrgContent  (SC_RESSTR(STR_CHG_CHILD_ORGCONTENT)),
         aStrEmpty            (SC_RESSTR(STR_CHG_EMPTY)),
-        aUnknown(RTL_CONSTASCII_USTRINGPARAM("Unknown")),
+        aUnknown("Unknown"),
         bAcceptEnableFlag(true),
         bRejectEnableFlag(true),
         bNeedsUpdate(false),

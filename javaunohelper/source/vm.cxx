@@ -109,9 +109,8 @@ namespace javaunohelper {
     } catch ( ::jvmaccess::UnoVirtualMachine::CreationException & ) {
         throw css::uno::RuntimeException(
             OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "jmvaccess::UnoVirtualMachine::CreationException"
-                    " occurred" ) ),
+                    " occurred" ),
             css::uno::Reference< css::uno::XInterface >() );
     }
 }

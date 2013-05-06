@@ -3253,13 +3253,13 @@ void OReportController::createDateTime(const Sequence< PropertyValue >& _aArgs)
     sal_Bool bDate = aMap.getUnpackedValueOrDefault(PROPERTY_DATE_STATE,sal_False);
     if ( bDate )
     {
-        sFunction = OUString (RTL_CONSTASCII_USTRINGPARAM("TODAY()"));
+        sFunction = OUString ("TODAY()");
         createControl(aMap.getAsConstPropertyValueList(),xSection,sFunction);
     }
     sal_Bool bTime = aMap.getUnpackedValueOrDefault(PROPERTY_TIME_STATE,sal_False);
     if ( bTime )
     {
-        sFunction = OUString (RTL_CONSTASCII_USTRINGPARAM("TIMEVALUE(NOW())"));
+        sFunction = OUString ("TIMEVALUE(NOW())");
         aMap[PROPERTY_FORMATKEY] <<= aMap.getUnpackedValueOrDefault(PROPERTY_FORMATKEYTIME,sal_Int32(0));
         createControl(aMap.getAsConstPropertyValueList(),xSection,sFunction);
     }
@@ -3282,12 +3282,12 @@ void OReportController::createPageNumber(const Sequence< PropertyValue >& _aArgs
     sal_Bool bStateOfPage = aMap.getUnpackedValueOrDefault(PROPERTY_STATE,sal_False);
 
     String sFunction = String(ModuleRes(STR_RPT_PN_PAGE));
-    OUString sPageNumber(RTL_CONSTASCII_USTRINGPARAM("PageNumber()"));
+    OUString sPageNumber("PageNumber()");
     sFunction.SearchAndReplace(OUString("#PAGENUMBER#"),sPageNumber);
 
     if ( bStateOfPage )
     {
-        OUString sPageCount(RTL_CONSTASCII_USTRINGPARAM("PageCount()"));
+        OUString sPageCount("PageCount()");
         sFunction += String(ModuleRes(STR_RPT_PN_PAGE_OF));
         sFunction.SearchAndReplace(OUString("#PAGECOUNT#"),sPageCount);
     }

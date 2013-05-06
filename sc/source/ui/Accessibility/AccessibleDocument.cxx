@@ -91,8 +91,8 @@ struct ScShapeDataLess
     OUString msLayerId;
     OUString msZOrder;
     ScShapeDataLess()
-        : msLayerId(RTL_CONSTASCII_USTRINGPARAM( "LayerID" )),
-        msZOrder(RTL_CONSTASCII_USTRINGPARAM( "ZOrder" ))
+        : msLayerId( "LayerID" ),
+        msZOrder( "ZOrder" )
     {
     }
     void ConvertLayerId(sal_Int16& rLayerID) const // changes the number of the LayerId so it the accessibility order

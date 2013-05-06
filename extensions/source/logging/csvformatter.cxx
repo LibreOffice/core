@@ -105,13 +105,13 @@ namespace logging
 //= private helpers
 namespace
 {
-    const sal_Unicode quote_char = OUString(RTL_CONSTASCII_USTRINGPARAM("\"")).toChar();
+    const sal_Unicode quote_char = OUString("\"").toChar();
     const sal_Unicode comma_char = OUString(",").toChar();
     const OUString dos_newline = OUString("\r\n");
 
     inline bool needsQuoting(const OUString& str)
     {
-        static const OUString quote_trigger_chars = OUString( RTL_CONSTASCII_USTRINGPARAM("\",\n\r"));
+        static const OUString quote_trigger_chars = OUString( "\",\n\r");
         sal_Int32 len = str.getLength();
         for(sal_Int32 i=0; i<len; i++)
             if(quote_trigger_chars.indexOf(str[i])!=-1)

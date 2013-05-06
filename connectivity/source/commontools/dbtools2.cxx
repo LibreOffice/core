@@ -241,7 +241,7 @@ namespace
         }
 
         if ( nColCount )
-            sSql = sSql.replaceAt(sSql.getLength()-1,1,OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
+            sSql = sSql.replaceAt(sSql.getLength()-1,1,OUString(")"));
         return sSql;
     }
 }
@@ -364,9 +364,9 @@ OUString createSqlCreateTableStatement(  const Reference< XPropertySet >& descri
     else
     {
         if ( aSql.lastIndexOf(',') == (aSql.getLength()-1) )
-            aSql = aSql.replaceAt(aSql.getLength()-1,1,OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
+            aSql = aSql.replaceAt(aSql.getLength()-1,1,OUString(")"));
         else
-            aSql += OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
+            aSql += OUString(")");
     }
     return aSql;
 }

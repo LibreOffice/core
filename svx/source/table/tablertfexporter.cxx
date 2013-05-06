@@ -73,7 +73,7 @@ SdrTableRtfExporter::SdrTableRtfExporter( SvStream& rStrm, SdrTableObj& rObj )
 : mrStrm( rStrm )
 , mrObj( rObj )
 , mxTable( rObj.getTable() )
-, msSize( RTL_CONSTASCII_USTRINGPARAM("Size") )
+, msSize( "Size" )
 {
 }
 

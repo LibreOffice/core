@@ -286,7 +286,7 @@ static OUString & getIniFileName_Impl()
                 fileName = fileName.copy(0, fileName.getLength() - progExt.getLength());
 
             // append config file suffix
-            fileName += OUString(RTL_CONSTASCII_USTRINGPARAM(SAL_CONFIGFILE("")));
+            fileName += OUString(SAL_CONFIGFILE(""));
         }
 #endif
 
@@ -491,19 +491,19 @@ bool Bootstrap_Impl::getValue(
     }
     if (key == "_OS") {
         rtl_uString_assign(
-            value, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(RTL_OS)).pData);
+            value, rtl::OUString(RTL_OS).pData);
         return true;
     }
     if (key == "_ARCH") {
         rtl_uString_assign(
-            value, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(RTL_ARCH)).pData);
+            value, rtl::OUString(RTL_ARCH).pData);
         return true;
     }
     if (key == "_CPPU_ENV") {
         rtl_uString_assign(
             value,
             (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(SAL_STRINGIFY(CPPU_ENV))).
+                SAL_STRINGIFY(CPPU_ENV)).
              pData));
         return true;
     }

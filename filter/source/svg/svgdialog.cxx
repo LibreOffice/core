@@ -49,7 +49,7 @@ using namespace ::com::sun::star::document;
 OUString SVGDialog_getImplementationName ()
     throw (RuntimeException)
 {
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( SVG_DIALOG_IMPLEMENTATION_NAME ) );
+    return OUString ( SVG_DIALOG_IMPLEMENTATION_NAME );
 }
 
 // -----------------------------------------------------------------------------
@@ -69,7 +69,7 @@ Sequence< OUString > SAL_CALL SVGDialog_getSupportedServiceNames()
 {
     Sequence< OUString > aRet( 1 );
 
-    aRet.getArray()[ 0 ] = OUString ( RTL_CONSTASCII_USTRINGPARAM ( SVG_DIALOG_SERVICE_NAME ) );
+    aRet.getArray()[ 0 ] = OUString ( SVG_DIALOG_SERVICE_NAME );
 
     return aRet;
 }

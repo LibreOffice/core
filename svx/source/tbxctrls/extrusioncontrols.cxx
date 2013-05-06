@@ -80,8 +80,8 @@ ExtrusionDirectionWindow::ExtrusionDirectionWindow(
     mrController( rController ) ,
     maImgPerspective( SVX_RES( IMG_PERSPECTIVE ) ) ,
     maImgParallel(    SVX_RES( IMG_PARALLEL    ) ) ,
-    msExtrusionDirection(  RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionDirection"  ) ) ,
-    msExtrusionProjection( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionProjection" ) )
+    msExtrusionDirection(  ".uno:ExtrusionDirection"  ) ,
+    msExtrusionProjection( ".uno:ExtrusionProjection" )
 {
     SetHelpId( HID_MENU_EXTRUSION_DIRECTION );
 
@@ -343,8 +343,8 @@ ExtrusionDepthWindow::ExtrusionDepthWindow(
     , maImgDepth4( SVX_RES( IMG_DEPTH_4 ) )
     , maImgDepthInfinity( SVX_RES( IMG_DEPTH_INFINITY ) )
     , mfDepth( -1.0 )
-    , msExtrusionDepth( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionDepth" ) )
-    , msMetricUnit(     RTL_CONSTASCII_USTRINGPARAM( ".uno:MetricUnit"     ) )
+    , msExtrusionDepth( ".uno:ExtrusionDepth" )
+    , msMetricUnit(     ".uno:MetricUnit"     )
 {
     SetHelpId( HID_MENU_EXTRUSION_DEPTH );
 
@@ -578,8 +578,8 @@ ExtrusionLightingWindow::ExtrusionLightingWindow( svt::ToolboxController& rContr
 , mbLevelEnabled( false )
 , mnDirection( FROM_FRONT )
 , mbDirectionEnabled( false )
-, msExtrusionLightingDirection( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionLightingDirection" ))
-, msExtrusionLightingIntensity( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionLightingIntensity" ))
+, msExtrusionLightingDirection( ".uno:ExtrusionLightingDirection" )
+, msExtrusionLightingIntensity( ".uno:ExtrusionLightingIntensity" )
 {
     sal_uInt16 i;
     for( i = FROM_TOP_LEFT; i <= FROM_BOTTOM_RIGHT; i++ )
@@ -838,7 +838,7 @@ ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(
     , maImgSurface2( SVX_RES( IMG_MATTE ) )
     , maImgSurface3( SVX_RES( IMG_PLASTIC ) )
     , maImgSurface4( SVX_RES( IMG_METAL ) )
-    , msExtrusionSurface( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionSurface" ) )
+    , msExtrusionSurface( ".uno:ExtrusionSurface" )
 {
     SetHelpId( HID_MENU_EXTRUSION_SURFACE );
     SetSelectHdl( LINK( this, ExtrusionSurfaceWindow, SelectHdl ) );

@@ -180,7 +180,7 @@ ScXMLChangeTrackingImportHelper::ScXMLChangeTrackingImportHelper() :
     pDoc(NULL),
     pTrack(NULL),
     pCurrentAction(NULL),
-    sIDPrefix(RTL_CONSTASCII_USTRINGPARAM(SC_CHANGE_ID_PREFIX)),
+    sIDPrefix(SC_CHANGE_ID_PREFIX),
     nMultiSpanned(0),
     nMultiSpannedSlaveCount(0),
     bChangeTrack(false)

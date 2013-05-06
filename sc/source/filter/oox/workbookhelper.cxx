@@ -158,7 +158,7 @@ public:
             }
         }
         if ( !mpDoc )
-            throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("Workbookhelper::getScDocument(): Failed to access ScDocument from model" ) ), Reference< XInterface >() );
+            throw RuntimeException( OUString( "Workbookhelper::getScDocument(): Failed to access ScDocument from model" ), Reference< XInterface >() );
         return *mpDoc;
     }
 

@@ -1030,9 +1030,9 @@ try
                 {
                     OSL_UNUSED( e );
 #ifdef DBG_UTIL
-                    OUString sMessage(RTL_CONSTASCII_USTRINGPARAM("TransferFormComponentProperties : could not transfer the value for property \""));
+                    OUString sMessage("TransferFormComponentProperties : could not transfer the value for property \"");
                     sMessage += pResult->Name;
-                    sMessage += OUString(RTL_CONSTASCII_USTRINGPARAM("\""));
+                    sMessage += OUString("\"");
                     OSL_FAIL(OUStringToOString(sMessage, RTL_TEXTENCODING_ASCII_US).getStr());
 #endif
                 }

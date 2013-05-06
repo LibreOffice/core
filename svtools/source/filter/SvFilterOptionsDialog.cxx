@@ -68,7 +68,7 @@ uno::Sequence< OUString > SAL_CALL SvFilterOptionsDialog_getSupportedServiceName
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ) );
+    pArray[0] = OUString( SERVICE_NAME );
     return aRet;
 }
 #undef SERVICE_NAME

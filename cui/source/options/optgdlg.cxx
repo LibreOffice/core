@@ -634,7 +634,7 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet)
             aAutoStr += m_pIconStyleLB->GetEntry( aIconStyleItemId[nAutoStyle] );
 
         m_pIconStyleLB->RemoveEntry( 0 );
-        m_pIconStyleLB->InsertEntry( aAutoStr += OUString(RTL_CONSTASCII_USTRINGPARAM(")") ), 0 );
+        m_pIconStyleLB->InsertEntry( aAutoStr += OUString(")" ), 0 );
         // separate auto and other icon themes
         m_pIconStyleLB->SetSeparatorPos( 0 );
     }

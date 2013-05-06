@@ -111,7 +111,7 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     mpQueryParam(new ScQueryParam),
-    sDatabaseRangeName(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)),
+    sDatabaseRangeName(STR_DB_LOCAL_NONAME),
     aSortSequence(),
     nRefresh(0),
     nSubTotalsUserListIndex(0),
@@ -344,7 +344,7 @@ ScDBData* ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
         size_t nOldSize = aSortSequence.getLength();
         aSortSequence.realloc(nOldSize + 1);
         beans::PropertyValue aProperty;
-        aProperty.Name = OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ORIENT));
+        aProperty.Name = OUString(SC_UNONAME_ORIENT);
         table::TableOrientation eOrient = mpQueryParam->bByRow ?
             table::TableOrientation_ROWS : table::TableOrientation_COLUMNS;
         aProperty.Value <<= eOrient;
@@ -448,7 +448,7 @@ void ScXMLDatabaseRangeContext::EndElement()
 
     if (meRangeType == ScDBCollection::SheetAnonymous)
     {
-        OUString aName(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
+        OUString aName(STR_DB_LOCAL_NONAME);
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<ScDBData> pData(ConvertToDBData(aName));
         SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -465,7 +465,7 @@ void ScXMLDatabaseRangeContext::EndElement()
     }
     else if (meRangeType == ScDBCollection::GlobalAnonymous)
     {
-        OUString aName(RTL_CONSTASCII_USTRINGPARAM(STR_DB_GLOBAL_NONAME));
+        OUString aName(STR_DB_GLOBAL_NONAME);
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<ScDBData> pData(ConvertToDBData(aName));
         SAL_WNODEPRECATED_DECLARATIONS_POP

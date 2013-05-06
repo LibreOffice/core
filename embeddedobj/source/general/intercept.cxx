@@ -197,7 +197,7 @@ Interceptor::addStatusListener(
         aStateEvent.FeatureDescriptor = OUString("Update");
         aStateEvent.IsEnabled = sal_True;
         aStateEvent.Requery = sal_False;
-        aStateEvent.State <<= (OUString( RTL_CONSTASCII_USTRINGPARAM("($1) ")) + m_pDocHolder->GetTitle() );
+        aStateEvent.State <<= (OUString( "($1) ") + m_pDocHolder->GetTitle() );
         Control->statusChanged(aStateEvent);
 
         {
@@ -221,7 +221,7 @@ Interceptor::addStatusListener(
         aStateEvent.FeatureDescriptor = OUString("Close and Return");
         aStateEvent.IsEnabled = sal_True;
         aStateEvent.Requery = sal_False;
-        aStateEvent.State <<= (OUString( RTL_CONSTASCII_USTRINGPARAM("($2) ")) + m_pDocHolder->GetTitle() );
+        aStateEvent.State <<= (OUString( "($2) ") + m_pDocHolder->GetTitle() );
         Control->statusChanged(aStateEvent);
 
 
@@ -243,7 +243,7 @@ Interceptor::addStatusListener(
         aStateEvent.FeatureDescriptor = OUString("SaveCopyTo");
         aStateEvent.IsEnabled = sal_True;
         aStateEvent.Requery = sal_False;
-        aStateEvent.State <<= (OUString( RTL_CONSTASCII_USTRINGPARAM("($3)")));
+        aStateEvent.State <<= (OUString( "($3)"));
         Control->statusChanged(aStateEvent);
 
         {

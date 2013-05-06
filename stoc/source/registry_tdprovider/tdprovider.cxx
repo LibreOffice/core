@@ -56,13 +56,13 @@ namespace stoc_bootstrap
 uno::Sequence< OUString > rdbtdp_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
+    seqNames.getArray()[0] = OUString(SERVICENAME);
     return seqNames;
 }
 
 OUString rdbtdp_getImplementationName()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM(IMPLNAME));
+    return OUString(IMPLNAME);
 }
 }
 
@@ -94,9 +94,9 @@ class ProviderImpl
     public:
         TypeDescriptionManagerWrapper( ProviderImpl * pProvider )
             : m_xTDMgr( pProvider->_xContext->getValueByName(
-                            OUString( RTL_CONSTASCII_USTRINGPARAM(
+                            OUString(
                                           "/singletons/com.sun.star.reflection."
-                                          "theTypeDescriptionManager") ) ),
+                                          "theTypeDescriptionManager" ) ),
                         UNO_QUERY_THROW ),
               m_xThisProvider( pProvider )
             {}

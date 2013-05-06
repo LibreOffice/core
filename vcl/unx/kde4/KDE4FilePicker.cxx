@@ -702,7 +702,7 @@ void SAL_CALL KDE4FilePicker::disposing( const lang::EventObject &rEvent )
 OUString SAL_CALL KDE4FilePicker::getImplementationName()
     throw( uno::RuntimeException )
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( FILE_PICKER_IMPL_NAME ));
+    return OUString( FILE_PICKER_IMPL_NAME );
 }
 
 sal_Bool SAL_CALL KDE4FilePicker::supportsService( const OUString& ServiceName )

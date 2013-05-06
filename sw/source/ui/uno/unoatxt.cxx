@@ -1028,8 +1028,8 @@ const struct SvEventDescription aAutotextEvents[] =
 SwAutoTextEventDescriptor::SwAutoTextEventDescriptor(
     SwXAutoTextEntry& rAutoText ) :
         SvBaseEventDescriptor(aAutotextEvents),
-        sSwAutoTextEventDescriptor(RTL_CONSTASCII_USTRINGPARAM(
-            "SwAutoTextEventDescriptor")),
+        sSwAutoTextEventDescriptor(
+            "SwAutoTextEventDescriptor"),
         rAutoTextEntry(rAutoText)
 {
 }

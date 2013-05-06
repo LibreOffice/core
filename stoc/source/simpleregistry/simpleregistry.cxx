@@ -272,9 +272,8 @@ css::registry::RegistryKeyType Key::getKeyType(OUString const & rKeyName)
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getKeyType:"
-                    " underlying RegistryKey::getKeyType() = ")) +
+                    " underlying RegistryKey::getKeyType() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
@@ -305,9 +304,8 @@ css::registry::RegistryValueType Key::getValueType()
     default:
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getValueType:"
-                    " underlying RegistryKey::getValueInfo() = ")) +
+                    " underlying RegistryKey::getValueInfo() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
@@ -347,16 +345,14 @@ sal_Int32 Key::getLongValue() throw (
     case REG_INVALID_VALUE:
         throw css::registry::InvalidValueException(
             OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getLongValue:"
-                    " underlying RegistryKey::getValue() = REG_INVALID_VALUE")),
+                    " underlying RegistryKey::getValue() = REG_INVALID_VALUE"),
             static_cast< OWeakObject * >(this));
     default:
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getLongValue:"
-                    " underlying RegistryKey::getValue() = ")) +
+                    " underlying RegistryKey::getValue() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
@@ -372,9 +368,8 @@ void Key::setLongValue(sal_Int32 value)
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key setLongValue:"
-                    " underlying RegistryKey::setValue() = ")) +
+                    " underlying RegistryKey::setValue() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
@@ -395,17 +390,15 @@ css::uno::Sequence< sal_Int32 > Key::getLongListValue() throw (
     case REG_INVALID_VALUE:
         throw css::registry::InvalidValueException(
             OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getLongListValue:"
                     " underlying RegistryKey::getLongListValue() ="
-                    " REG_INVALID_VALUE")),
+                    " REG_INVALID_VALUE"),
             static_cast< OWeakObject * >(this));
     default:
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getLongListValue:"
-                    " underlying RegistryKey::getLongListValue() = ")) +
+                    " underlying RegistryKey::getLongListValue() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
@@ -413,9 +406,8 @@ css::uno::Sequence< sal_Int32 > Key::getLongListValue() throw (
     if (n > SAL_MAX_INT32) {
         throw css::registry::InvalidValueException(
             OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getLongListValue:"
-                    " underlying RegistryKey::getLongListValue() too large")),
+                    " underlying RegistryKey::getLongListValue() too large"),
             static_cast< OWeakObject * >(this));
     }
     css::uno::Sequence< sal_Int32 > value(static_cast< sal_Int32 >(n));
@@ -439,9 +431,8 @@ void Key::setLongListValue(css::uno::Sequence< sal_Int32 > const & seqValue)
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key setLongListValue:"
-                    " underlying RegistryKey::setLongListValue() = ")) +
+                    " underlying RegistryKey::setLongListValue() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
@@ -458,18 +449,16 @@ OUString Key::getAsciiValue() throw (
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getAsciiValue:"
-                    " underlying RegistryKey::getValueInfo() = ")) +
+                    " underlying RegistryKey::getValueInfo() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
     if (type != RG_VALUETYPE_STRING) {
         throw css::registry::InvalidValueException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getAsciiValue:"
-                    " underlying RegistryKey type = ")) +
+                    " underlying RegistryKey type = ") +
              OUString::number(type)),
             static_cast< OWeakObject * >(this));
     }
@@ -477,18 +466,16 @@ OUString Key::getAsciiValue() throw (
     if (size == 0) {
         throw css::registry::InvalidValueException(
             OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getAsciiValue:"
                     " underlying RegistryKey size 0 cannot happen due to"
-                    " design error")),
+                    " design error"),
             static_cast< OWeakObject * >(this));
     }
     if (size > SAL_MAX_INT32) {
         throw css::registry::InvalidValueException(
             OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getAsciiValue:"
-                    " underlying RegistryKey size too large")),
+                    " underlying RegistryKey size too large"),
             static_cast< OWeakObject * >(this));
     }
     std::vector< char > list(size);
@@ -496,19 +483,17 @@ OUString Key::getAsciiValue() throw (
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getAsciiValue:"
-                    " underlying RegistryKey::getValue() = ")) +
+                    " underlying RegistryKey::getValue() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
     if (list[size - 1] != '\0') {
         throw css::registry::InvalidValueException(
             OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getAsciiValue:"
                     " underlying RegistryKey value must be null-terminated due"
-                    " to design error")),
+                    " to design error"),
             static_cast< OWeakObject * >(this));
     }
     OUString value;
@@ -521,9 +506,8 @@ OUString Key::getAsciiValue() throw (
     {
         throw css::registry::InvalidValueException(
             OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getAsciiValue:"
-                    " underlying RegistryKey not UTF-8")),
+                    " underlying RegistryKey not UTF-8"),
             static_cast< OWeakObject * >(this));
     }
     return value;
@@ -541,9 +525,8 @@ void Key::setAsciiValue(OUString const & value)
     {
         throw css::uno::RuntimeException(
             OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key setAsciiValue:"
-                    " value not UTF-16")),
+                    " value not UTF-16"),
             static_cast< OWeakObject * >(this));
     }
     RegError err = key_.setValue(
@@ -553,9 +536,8 @@ void Key::setAsciiValue(OUString const & value)
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key setAsciiValue:"
-                    " underlying RegistryKey::setValue() = ")) +
+                    " underlying RegistryKey::setValue() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
@@ -576,18 +558,16 @@ css::uno::Sequence< OUString > Key::getAsciiListValue() throw (
     case REG_INVALID_VALUE:
         throw css::registry::InvalidValueException(
             OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key"
                     " getAsciiListValue: underlying"
-                    " RegistryKey::getStringListValue() = REG_INVALID_VALUE")),
+                    " RegistryKey::getStringListValue() = REG_INVALID_VALUE"),
             static_cast< OWeakObject * >(this));
     default:
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key"
                     " getAsciiListValue: underlying"
-                    " RegistryKey::getStringListValue() = ")) +
+                    " RegistryKey::getStringListValue() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
@@ -595,10 +575,9 @@ css::uno::Sequence< OUString > Key::getAsciiListValue() throw (
     if (n > SAL_MAX_INT32) {
         throw css::registry::InvalidValueException(
             OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key"
                     " getAsciiListValue: underlying"
-                    " RegistryKey::getStringListValue() too large")),
+                    " RegistryKey::getStringListValue() too large"),
             static_cast< OWeakObject * >(this));
     }
     css::uno::Sequence< OUString > value(static_cast< sal_Int32 >(n));
@@ -614,10 +593,9 @@ css::uno::Sequence< OUString > Key::getAsciiListValue() throw (
         {
             throw css::registry::InvalidValueException(
                 OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
                         "com.sun.star.registry.SimpleRegistry key"
                         " getAsciiListValue: underlying RegistryKey not"
-                        " UTF-8")),
+                        " UTF-8"),
                 static_cast< OWeakObject * >(this));
         }
     }
@@ -639,9 +617,8 @@ void Key::setAsciiListValue(
         {
             throw css::uno::RuntimeException(
                 OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
                         "com.sun.star.registry.SimpleRegistry key"
-                        " setAsciiListValue: value not UTF-16")),
+                        " setAsciiListValue: value not UTF-16"),
                 static_cast< OWeakObject * >(this));
         }
         list.push_back(utf8);
@@ -658,10 +635,9 @@ void Key::setAsciiListValue(
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key"
                     " setAsciiListValue: underlying"
-                    " RegistryKey::setStringListValue() = ")) +
+                    " RegistryKey::setStringListValue() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
@@ -678,18 +654,16 @@ OUString Key::getStringValue() throw (
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getStringValue:"
-                    " underlying RegistryKey::getValueInfo() = ")) +
+                    " underlying RegistryKey::getValueInfo() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
     if (type != RG_VALUETYPE_UNICODE) {
         throw css::registry::InvalidValueException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getStringValue:"
-                    " underlying RegistryKey type = ")) +
+                    " underlying RegistryKey type = ") +
              OUString::number(type)),
             static_cast< OWeakObject * >(this));
     }
@@ -698,18 +672,16 @@ OUString Key::getStringValue() throw (
     if (size == 0 || (size & 1) == 1) {
         throw css::registry::InvalidValueException(
             OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getStringValue:"
                     " underlying RegistryKey size 0 or odd cannot happen due to"
-                    " design error")),
+                    " design error"),
             static_cast< OWeakObject * >(this));
     }
     if (size > SAL_MAX_INT32) {
         throw css::registry::InvalidValueException(
             OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getStringValue:"
-                    " underlying RegistryKey size too large")),
+                    " underlying RegistryKey size too large"),
             static_cast< OWeakObject * >(this));
     }
     std::vector< sal_Unicode > list(size);
@@ -717,19 +689,17 @@ OUString Key::getStringValue() throw (
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getStringValue:"
-                    " underlying RegistryKey::getValue() = ")) +
+                    " underlying RegistryKey::getValue() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
     if (list[size/2 - 1] != 0) {
         throw css::registry::InvalidValueException(
             OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getStringValue:"
                     " underlying RegistryKey value must be null-terminated due"
-                    " to design error")),
+                    " to design error"),
             static_cast< OWeakObject * >(this));
     }
     return OUString(&list[0], static_cast< sal_Int32 >(size/2 - 1));
@@ -747,9 +717,8 @@ void Key::setStringValue(OUString const & value)
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key setStringValue:"
-                    " underlying RegistryKey::setValue() = ")) +
+                    " underlying RegistryKey::setValue() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
@@ -770,18 +739,16 @@ css::uno::Sequence< OUString > Key::getStringListValue() throw (
     case REG_INVALID_VALUE:
         throw css::registry::InvalidValueException(
             OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key"
                     " getStringListValue: underlying"
-                    " RegistryKey::getUnicodeListValue() = REG_INVALID_VALUE")),
+                    " RegistryKey::getUnicodeListValue() = REG_INVALID_VALUE"),
             static_cast< OWeakObject * >(this));
     default:
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key"
                     " getStringListValue: underlying"
-                    " RegistryKey::getUnicodeListValue() = ")) +
+                    " RegistryKey::getUnicodeListValue() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
@@ -789,10 +756,9 @@ css::uno::Sequence< OUString > Key::getStringListValue() throw (
     if (n > SAL_MAX_INT32) {
         throw css::registry::InvalidValueException(
             OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key"
                     " getStringListValue: underlying"
-                    " RegistryKey::getUnicodeListValue() too large")),
+                    " RegistryKey::getUnicodeListValue() too large"),
             static_cast< OWeakObject * >(this));
     }
     css::uno::Sequence< OUString > value(static_cast< sal_Int32 >(n));
@@ -817,10 +783,9 @@ void Key::setStringListValue(
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key"
                     " setStringListValue: underlying"
-                    " RegistryKey::setUnicodeListValue() = ")) +
+                    " RegistryKey::setUnicodeListValue() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
@@ -838,27 +803,24 @@ css::uno::Sequence< sal_Int8 > Key::getBinaryValue()
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getBinaryValue:"
-                    " underlying RegistryKey::getValueInfo() = ")) +
+                    " underlying RegistryKey::getValueInfo() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
     if (type != RG_VALUETYPE_BINARY) {
         throw css::registry::InvalidValueException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getBinaryValue:"
-                    " underlying RegistryKey type = ")) +
+                    " underlying RegistryKey type = ") +
              OUString::number(type)),
             static_cast< OWeakObject * >(this));
     }
     if (size > SAL_MAX_INT32) {
         throw css::registry::InvalidValueException(
             OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getBinaryValue:"
-                    " underlying RegistryKey size too large")),
+                    " underlying RegistryKey size too large"),
             static_cast< OWeakObject * >(this));
     }
     css::uno::Sequence< sal_Int8 > value(static_cast< sal_Int32 >(size));
@@ -866,9 +828,8 @@ css::uno::Sequence< sal_Int8 > Key::getBinaryValue()
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getBinaryValue:"
-                    " underlying RegistryKey::getValue() = ")) +
+                    " underlying RegistryKey::getValue() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
@@ -886,9 +847,8 @@ void Key::setBinaryValue(css::uno::Sequence< sal_Int8 > const & value)
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key setBinaryValue:"
-                    " underlying RegistryKey::setValue() = ")) +
+                    " underlying RegistryKey::setValue() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
@@ -909,9 +869,8 @@ css::uno::Reference< css::registry::XRegistryKey > Key::openKey(
     default:
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key openKey:"
-                    " underlying RegistryKey::openKey() = ")) +
+                    " underlying RegistryKey::openKey() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
@@ -932,9 +891,8 @@ css::uno::Reference< css::registry::XRegistryKey > Key::createKey(
     default:
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key createKey:"
-                    " underlying RegistryKey::createKey() = ")) +
+                    " underlying RegistryKey::createKey() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
@@ -948,9 +906,8 @@ void Key::closeKey()
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key closeKey:"
-                    " underlying RegistryKey::closeKey() = ")) +
+                    " underlying RegistryKey::closeKey() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
@@ -964,9 +921,8 @@ void Key::deleteKey(OUString const & rKeyName)
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key deleteKey:"
-                    " underlying RegistryKey::deleteKey() = ")) +
+                    " underlying RegistryKey::deleteKey() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
@@ -982,9 +938,8 @@ Key::openKeys()
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key openKeys:"
-                    " underlying RegistryKey::openSubKeys() = ")) +
+                    " underlying RegistryKey::openSubKeys() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
@@ -992,9 +947,8 @@ Key::openKeys()
     if (n > SAL_MAX_INT32) {
         throw css::registry::InvalidRegistryException(
             OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getKeyNames:"
-                    " underlying RegistryKey::getKeyNames() too large")),
+                    " underlying RegistryKey::getKeyNames() too large"),
             static_cast< OWeakObject * >(this));
     }
     css::uno::Sequence< css::uno::Reference< css::registry::XRegistryKey > >
@@ -1015,9 +969,8 @@ css::uno::Sequence< OUString > Key::getKeyNames()
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getKeyNames:"
-                    " underlying RegistryKey::getKeyNames() = ")) +
+                    " underlying RegistryKey::getKeyNames() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
@@ -1025,9 +978,8 @@ css::uno::Sequence< OUString > Key::getKeyNames()
     if (n > SAL_MAX_INT32) {
         throw css::registry::InvalidRegistryException(
             OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getKeyNames:"
-                    " underlying RegistryKey::getKeyNames() too large")),
+                    " underlying RegistryKey::getKeyNames() too large"),
             static_cast< OWeakObject * >(this));
     }
     css::uno::Sequence< OUString > names(static_cast< sal_Int32 >(n));
@@ -1050,9 +1002,8 @@ sal_Bool Key::createLink(
     case REG_DETECT_RECURSION:
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key createLink:"
-                    " underlying RegistryKey::createLink() = ")) +
+                    " underlying RegistryKey::createLink() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     default:
@@ -1068,9 +1019,8 @@ void Key::deleteLink(OUString const & rLinkName)
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key deleteLink:"
-                    " underlying RegistryKey::deleteLink() = ")) +
+                    " underlying RegistryKey::deleteLink() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
@@ -1085,9 +1035,8 @@ OUString Key::getLinkTarget(OUString const & rLinkName)
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getLinkTarget:"
-                    " underlying RegistryKey::getLinkTarget() = ")) +
+                    " underlying RegistryKey::getLinkTarget() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
@@ -1103,9 +1052,8 @@ OUString Key::getResolvedName(OUString const & aKeyName)
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getResolvedName:"
-                    " underlying RegistryKey::getResolvedName() = ")) +
+                    " underlying RegistryKey::getResolvedName() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
@@ -1134,8 +1082,7 @@ void SimpleRegistry::open(
                     "com.sun.star.registry.SimpleRegistry.open(") +
              rURL +
              OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "): underlying Registry::open/create() = ")) +
+                    "): underlying Registry::open/create() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
@@ -1154,9 +1101,8 @@ void SimpleRegistry::close()
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry.close:"
-                    " underlying Registry::close() = ")) +
+                    " underlying Registry::close() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
@@ -1170,9 +1116,8 @@ void SimpleRegistry::destroy()
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry.destroy:"
-                    " underlying Registry::destroy() = ")) +
+                    " underlying Registry::destroy() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
@@ -1187,9 +1132,8 @@ css::uno::Reference< css::registry::XRegistryKey > SimpleRegistry::getRootKey()
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry.getRootKey:"
-                    " underlying Registry::getRootKey() = ")) +
+                    " underlying Registry::getRootKey() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }
@@ -1222,16 +1166,14 @@ void SimpleRegistry::mergeKey(
     case REG_MERGE_ERROR:
         throw css::registry::MergeConflictException(
             OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry.mergeKey:"
-                    " underlying Registry::mergeKey() = REG_MERGE_ERROR")),
+                    " underlying Registry::mergeKey() = REG_MERGE_ERROR"),
             static_cast< cppu::OWeakObject * >(this));
     default:
         throw css::registry::InvalidRegistryException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry.mergeKey:"
-                    " underlying Registry::getRootKey/mergeKey() = ")) +
+                    " underlying Registry::getRootKey/mergeKey() = ") +
              OUString::number(err)),
             static_cast< OWeakObject * >(this));
     }

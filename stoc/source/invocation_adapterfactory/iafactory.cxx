@@ -63,13 +63,13 @@ static Sequence< OUString > invadp_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(1);
     seqNames.getArray()[0] =
-        OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
+        OUString(SERVICENAME);
     return seqNames;
 }
 
 static OUString invadp_getImplementationName()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM(IMPLNAME));
+    return OUString(IMPLNAME);
 }
 
 struct hash_ptr

@@ -126,7 +126,7 @@ void ScFilterOptionsMgr::Init()
                                                 pViewData->GetTabNo() ) );
         ScDBCollection* pDBColl     = pDoc->GetDBCollection();
         OUStringBuffer theDbArea;
-        OUString   theDbName(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
+        OUString   theDbName(STR_DB_LOCAL_NONAME);
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
         theCurArea.Format( theAreaStr, SCR_ABS_3D, pDoc, eConv );

@@ -47,7 +47,7 @@ ScChangeTrackingExportHelper::ScChangeTrackingExportHelper(ScXMLExport& rTempExp
     pChangeTrack(NULL),
     pEditTextObj(NULL),
     pDependings(NULL),
-    sChangeIDPrefix(RTL_CONSTASCII_USTRINGPARAM(SC_CHANGE_ID_PREFIX))
+    sChangeIDPrefix(SC_CHANGE_ID_PREFIX)
 {
     pChangeTrack = rExport.GetDocument() ? rExport.GetDocument()->GetChangeTrack() : NULL;
     pDependings = new ScChangeActionMap();

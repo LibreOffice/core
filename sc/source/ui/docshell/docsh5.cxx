@@ -277,7 +277,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
             }
             else
             {
-                aNewName = OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
+                aNewName = OUString(STR_DB_LOCAL_NONAME);
                 pNoNameData = new ScDBData(aNewName , nTab,
                                 nStartCol,nStartRow, nEndCol,nEndRow,
                                 sal_True, bHasHeader );

@@ -60,7 +60,7 @@ static SvxBorderLine gEmptyBorder;
 TableLayouter::TableLayouter( const TableModelRef& xTableModel )
 : mxTable( xTableModel )
 , meWritingMode( WritingMode_LR_TB )
-, msSize( RTL_CONSTASCII_USTRINGPARAM( "Size" ) )
+, msSize( "Size" )
 {
 }
 

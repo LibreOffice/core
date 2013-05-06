@@ -1798,15 +1798,15 @@ Sequence< OUString > SwXTextDocument::getSupportedServiceNames(void) throw( Runt
     Sequence< OUString > aRet (3);
     OUString* pArray = aRet.getArray();
 
-    pArray[0] = OUString ( RTL_CONSTASCII_USTRINGPARAM ( ( "com.sun.star.document.OfficeDocument"  ) ) );
-    pArray[1] = OUString ( RTL_CONSTASCII_USTRINGPARAM ( ( "com.sun.star.text.GenericTextDocument" ) ) );
+    pArray[0] = OUString ( ( "com.sun.star.document.OfficeDocument"  ) );
+    pArray[1] = OUString ( ( "com.sun.star.text.GenericTextDocument" ) );
 
     if (bTextDoc)
-        pArray[2] = OUString ( RTL_CONSTASCII_USTRINGPARAM ( ( "com.sun.star.text.TextDocument" ) ) );
+        pArray[2] = OUString ( ( "com.sun.star.text.TextDocument" ) );
     else if (bWebDoc)
-        pArray[2] = OUString ( RTL_CONSTASCII_USTRINGPARAM ( ( "com.sun.star.text.WebDocument" ) ) );
+        pArray[2] = OUString ( ( "com.sun.star.text.WebDocument" ) );
     else if (bGlobalDoc)
-        pArray[2] = OUString ( RTL_CONSTASCII_USTRINGPARAM ( ( "com.sun.star.text.GlobalDocument" ) ) );
+        pArray[2] = OUString ( ( "com.sun.star.text.GlobalDocument" ) );
 
     return aRet;
 }

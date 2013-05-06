@@ -48,9 +48,9 @@ static void load_FixedWidthList(ScCsvSplits &aSplits)
     const Any *pProperties;
     Sequence<OUString> aNames(1);
     OUString* pNames = aNames.getArray();
-    ScLinkConfigItem aItem( OUString(RTL_CONSTASCII_USTRINGPARAM( SEP_PATH )) );
+    ScLinkConfigItem aItem( OUString( SEP_PATH ) );
 
-    pNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( FIXED_WIDTH_LIST ));
+    pNames[0] = OUString( FIXED_WIDTH_LIST );
     aValues = aItem.GetProperties( aNames );
     pProperties = aValues.getConstArray();
 
@@ -83,9 +83,9 @@ static void save_FixedWidthList(ScCsvSplits aSplits)
     Any *pProperties;
     Sequence<OUString> aNames(1);
     OUString* pNames = aNames.getArray();
-    ScLinkConfigItem aItem( OUString(RTL_CONSTASCII_USTRINGPARAM( SEP_PATH )) );
+    ScLinkConfigItem aItem( OUString( SEP_PATH ) );
 
-    pNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( FIXED_WIDTH_LIST ));
+    pNames[0] = OUString( FIXED_WIDTH_LIST );
     aValues = aItem.GetProperties( aNames );
     pProperties = aValues.getArray();
     pProperties[0] <<= sFixedWidthLists;

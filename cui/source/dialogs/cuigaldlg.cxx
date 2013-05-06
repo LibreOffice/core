@@ -824,9 +824,9 @@ SfxTabPage* TPGalleryThemeProperties::Create( Window* pParent, const SfxItemSet&
 
 OUString TPGalleryThemeProperties::addExtension( const OUString& _rDisplayText, const OUString& _rExtension )
 {
-    OUString sAllFilter( RTL_CONSTASCII_USTRINGPARAM( "(*.*)" ) );
+    OUString sAllFilter( "(*.*)" );
     OUString sOpenBracket( " (" );
-    OUString sCloseBracket( RTL_CONSTASCII_USTRINGPARAM( ")" ) );
+    OUString sCloseBracket( ")" );
     OUString sRet = _rDisplayText;
 
     if ( sRet.indexOf( sAllFilter ) == -1 )

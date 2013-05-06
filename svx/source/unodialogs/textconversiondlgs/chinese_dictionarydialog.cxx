@@ -482,7 +482,7 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
 
     SvtLinguConfig  aLngCfg;
     sal_Bool bValue = sal_Bool();
-    Any aAny( aLngCfg.GetProperty( OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_REVERSE_MAPPING )) ) );
+    Any aAny( aLngCfg.GetProperty( OUString( UPN_IS_REVERSE_MAPPING ) ) );
     if( aAny >>= bValue )
         m_aCB_Reverse.Check( bValue );
 
@@ -831,7 +831,7 @@ short ChineseDictionaryDialog::Execute()
         SvtLinguConfig  aLngCfg;
         Any aAny;
         aAny <<= sal_Bool( !!m_aCB_Reverse.IsChecked() );
-        aLngCfg.SetProperty( OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_REVERSE_MAPPING )), aAny );
+        aLngCfg.SetProperty( OUString( UPN_IS_REVERSE_MAPPING ), aAny );
 
         m_aCT_DictionaryToSimplified.save();
         m_aCT_DictionaryToTraditional.save();

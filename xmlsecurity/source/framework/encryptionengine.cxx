@@ -113,7 +113,7 @@ void EncryptionEngine::tryToPerform( )
     if (checkReady())
     {
         const OUString sEncryptionTemplate (
-            RTL_CONSTASCII_USTRINGPARAM( ENCRYPTION_TEMPLATE ) );
+            ENCRYPTION_TEMPLATE );
         cssu::Reference < cssxc::XXMLEncryptionTemplate > xEncryptionTemplate(
             mxMSF->createInstance( sEncryptionTemplate ), cssu::UNO_QUERY );
 

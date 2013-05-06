@@ -36,7 +36,7 @@ using namespace css::uno;
 namespace apitest {
 
 XNamedRanges::XNamedRanges():
-    maNameToRemove(RTL_CONSTASCII_USTRINGPARAM("initial1"))
+    maNameToRemove("initial1")
 {
 
 }

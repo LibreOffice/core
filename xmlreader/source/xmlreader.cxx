@@ -251,8 +251,7 @@ bool XmlReader::skipComment() {
     if (i < 0) {
         throw css::uno::RuntimeException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "premature end (within comment) of ")) +
+                    "premature end (within comment) of ") +
              fileUrl_),
             css::uno::Reference< css::uno::XInterface >());
     }
@@ -260,8 +259,7 @@ bool XmlReader::skipComment() {
     if (read() != '>') {
         throw css::uno::RuntimeException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "illegal \"--\" within comment in ")) +
+                    "illegal \"--\" within comment in ") +
              fileUrl_),
             css::uno::Reference< css::uno::XInterface >());
     }
@@ -289,8 +287,7 @@ void XmlReader::skipDocumentTypeDeclaration() {
         case '\0': // i.e., EOF
             throw css::uno::RuntimeException(
                 (OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "premature end (within DTD) of ")) +
+                        "premature end (within DTD) of ") +
                  fileUrl_),
                 css::uno::Reference< css::uno::XInterface >());
         case '"':
@@ -301,8 +298,7 @@ void XmlReader::skipDocumentTypeDeclaration() {
                 if (i < 0) {
                     throw css::uno::RuntimeException(
                         (OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
-                                "premature end (within DTD) of ")) +
+                                "premature end (within DTD) of ") +
                          fileUrl_),
                         css::uno::Reference< css::uno::XInterface >());
                 }
@@ -318,8 +314,7 @@ void XmlReader::skipDocumentTypeDeclaration() {
                 case '\0': // i.e., EOF
                     throw css::uno::RuntimeException(
                         (OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
-                                "premature end (within DTD) of ")) +
+                                "premature end (within DTD) of ") +
                          fileUrl_),
                         css::uno::Reference< css::uno::XInterface >());
                 case '"':
@@ -330,8 +325,7 @@ void XmlReader::skipDocumentTypeDeclaration() {
                         if (i < 0) {
                             throw css::uno::RuntimeException(
                             (OUString(
-                                RTL_CONSTASCII_USTRINGPARAM(
-                                    "premature end (within DTD) of ")) +
+                                    "premature end (within DTD) of ") +
                              fileUrl_),
                             css::uno::Reference< css::uno::XInterface >());
                         }
@@ -343,8 +337,7 @@ void XmlReader::skipDocumentTypeDeclaration() {
                     case '\0': // i.e., EOF
                         throw css::uno::RuntimeException(
                             (OUString(
-                                RTL_CONSTASCII_USTRINGPARAM(
-                                    "premature end (within DTD) of ")) +
+                                    "premature end (within DTD) of ") +
                              fileUrl_),
                             css::uno::Reference< css::uno::XInterface >());
                     case '!':
@@ -362,8 +355,7 @@ void XmlReader::skipDocumentTypeDeclaration() {
                     if (read() != '>') {
                         throw css::uno::RuntimeException(
                             (OUString(
-                                RTL_CONSTASCII_USTRINGPARAM(
-                                    "missing \">\" of DTD in ")) +
+                                    "missing \">\" of DTD in ") +
                              fileUrl_),
                             css::uno::Reference< css::uno::XInterface >());
                     }
@@ -393,8 +385,7 @@ Span XmlReader::scanCdataSection() {
     if (i < 0) {
         throw css::uno::RuntimeException(
             (OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "premature end (within CDATA section) of ")) +
+                    "premature end (within CDATA section) of ") +
              fileUrl_),
             css::uno::Reference< css::uno::XInterface >());
     }

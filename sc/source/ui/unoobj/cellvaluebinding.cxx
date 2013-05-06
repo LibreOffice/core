@@ -458,7 +458,7 @@ namespace calc
         {
             OUString sMessage( "The given type (" );
             sMessage += _rType.getTypeName();
-            sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM( ") is not supported by this binding." ) );
+            sMessage += OUString( ") is not supported by this binding." );
                 // TODO: localize this error message
 
             throw IncompatibleTypesException( sMessage, *pNonConstThis );

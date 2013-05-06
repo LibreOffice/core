@@ -150,7 +150,7 @@ void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, sal_Bo
 }
 
 SwViewOption::SwViewOption() :
-    sSymbolFont( RTL_CONSTASCII_USTRINGPARAM( "symbol" ) ),
+    sSymbolFont( "symbol" ),
     aRetoucheColor( COL_TRANSPARENT ),
     mnViewLayoutColumns( 0 ),
     nPagePrevRow( 1 ),

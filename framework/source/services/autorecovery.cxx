@@ -337,7 +337,7 @@ void CacheLockGuard::unlock()
     {
         OSL_FAIL("Wrong using of member m_nDocCacheLock detected. A ref counted value shouldn't reach values <0 .-)");
         throw css::uno::RuntimeException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Wrong using of member m_nDocCacheLock detected. A ref counted value shouldn't reach values <0 .-)")),
+                OUString("Wrong using of member m_nDocCacheLock detected. A ref counted value shouldn't reach values <0 .-)"),
                 m_xOwner);
     }
     aWriteLock.unlock();

@@ -323,7 +323,7 @@ OUString VendorSettings::getPluginLibrary(const OUString& sVendor)
     for (sal_Int32 i = 1; ; i++)
     {
         OUString sName =
-            OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_PARAMETER)) +
+            OUString(UNO_JAVA_JFW_PARAMETER) +
             OUString::valueOf(i);
         OUString sValue;
         if (Bootstrap::get()->getFrom(sName, sValue) == sal_True)
@@ -358,7 +358,7 @@ OString BootParams::getClasspath()
     OString sClassPath;
     OUString sCP;
     if (Bootstrap::get()->getFrom(
-        OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_CLASSPATH)),
+        OUString(UNO_JAVA_JFW_CLASSPATH),
         sCP) == sal_True)
     {
         sClassPath = OUStringToOString(
@@ -371,7 +371,7 @@ OString BootParams::getClasspath()
 
     OUString sEnvCP;
     if (Bootstrap::get()->getFrom(
-        OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_ENV_CLASSPATH)),
+        OUString(UNO_JAVA_JFW_ENV_CLASSPATH),
         sEnvCP) == sal_True)
     {
         char * pCp = getenv("CLASSPATH");
@@ -393,7 +393,7 @@ OUString BootParams::getVendorSettings()
 {
     OUString sVendor;
     OUString sName(
-        RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_VENDOR_SETTINGS));
+        UNO_JAVA_JFW_VENDOR_SETTINGS);
     if (Bootstrap::get()->getFrom(sName ,sVendor) == sal_True)
     {
         //check the value of the bootstrap variable
@@ -433,9 +433,9 @@ OUString BootParams::getJREHome()
     OUString sJRE;
     OUString sEnvJRE;
     sal_Bool bJRE = Bootstrap::get()->getFrom(
-        OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_JREHOME)) ,sJRE);
+        OUString(UNO_JAVA_JFW_JREHOME) ,sJRE);
     sal_Bool bEnvJRE = Bootstrap::get()->getFrom(
-        OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_ENV_JREHOME)) ,sEnvJRE);
+        OUString(UNO_JAVA_JFW_ENV_JREHOME) ,sEnvJRE);
 
     if (bJRE == sal_True && bEnvJRE == sal_True)
     {
@@ -496,7 +496,7 @@ OUString BootParams::getClasspathUrls()
 {
     OUString sParams;
     Bootstrap::get()->getFrom(
-        OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_CLASSPATH_URLS)),
+        OUString(UNO_JAVA_JFW_CLASSPATH_URLS),
         sParams);
 #if OSL_DEBUG_LEVEL >=2
     OString sValue = OUStringToOString(sParams, osl_getThreadTextEncoding());
@@ -518,23 +518,23 @@ JFW_MODE getMode()
         OUString sValue;
         const rtl::Bootstrap * aBoot = Bootstrap::get();
         OUString sJREHome(
-            RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_JREHOME));
+            UNO_JAVA_JFW_JREHOME);
         if (aBoot->getFrom(sJREHome, sValue) == sal_False)
         {
             OUString sEnvJRE(
-            RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_ENV_JREHOME));
+            UNO_JAVA_JFW_ENV_JREHOME);
             if (aBoot->getFrom(sEnvJRE, sValue) == sal_False)
             {
                 OUString sClasspath(
-                    RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_CLASSPATH));
+                    UNO_JAVA_JFW_CLASSPATH);
                 if (aBoot->getFrom(sClasspath, sValue) == sal_False)
                 {
                     OUString sEnvClasspath(
-                        RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_ENV_CLASSPATH));
+                        UNO_JAVA_JFW_ENV_CLASSPATH);
                     if (aBoot->getFrom(sEnvClasspath, sValue) == sal_False)
                     {
                         OUString sParams = OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_PARAMETER)) +
+                            UNO_JAVA_JFW_PARAMETER) +
                             OUString::valueOf((sal_Int32)1);
                         if (aBoot->getFrom(sParams, sValue) == sal_False)
                         {

@@ -290,7 +290,7 @@ OUString SAL_CALL ODatabaseMetaData::getCatalogTerm(  ) throw(SQLException, Runt
 OUString ODatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
 {
     // normally this is "
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("\""));
+    return OUString( "\"");
 }
 // -------------------------------------------------------------------------
 OUString SAL_CALL ODatabaseMetaData::getExtraNameCharacters(  ) throw(SQLException, RuntimeException)

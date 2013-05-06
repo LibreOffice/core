@@ -374,7 +374,7 @@ uno::Sequence<OUString> ScSpreadsheetSettings::getSupportedServiceNames_Static()
 {
     uno::Sequence<OUString> aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCSPREADSHEETSETTINGS_SERVICE ));
+    pArray[0] = OUString( SCSPREADSHEETSETTINGS_SERVICE );
     return aRet;
 }
 
@@ -636,7 +636,7 @@ uno::Sequence<OUString> ScRecentFunctionsObj::getSupportedServiceNames_Static()
 {
     uno::Sequence<OUString> aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCRECENTFUNCTIONSOBJ_SERVICE ));
+    pArray[0] = OUString( SCRECENTFUNCTIONSOBJ_SERVICE );
     return aRet;
 }
 
@@ -717,7 +717,7 @@ uno::Sequence<OUString> ScFunctionListObj::getSupportedServiceNames_Static()
 {
     uno::Sequence<OUString> aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCFUNCTIONLISTOBJ_SERVICE ));
+    pArray[0] = OUString( SCFUNCTIONLISTOBJ_SERVICE );
     return aRet;
 }
 
@@ -730,21 +730,21 @@ static void lcl_FillSequence( uno::Sequence<beans::PropertyValue>& rSequence, co
 
     beans::PropertyValue* pArray = rSequence.getArray();
 
-    pArray[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_ID ));
+    pArray[0].Name = OUString( SC_UNONAME_ID );
     pArray[0].Value <<= (sal_Int32) rDesc.nFIndex;
 
-    pArray[1].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_CATEGORY ));
+    pArray[1].Name = OUString( SC_UNONAME_CATEGORY );
     pArray[1].Value <<= (sal_Int32) rDesc.nCategory;
 
-    pArray[2].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_NAME ));
+    pArray[2].Name = OUString( SC_UNONAME_NAME );
     if (rDesc.pFuncName)
         pArray[2].Value <<= OUString( *rDesc.pFuncName );
 
-    pArray[3].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_DESCRIPTION ));
+    pArray[3].Name = OUString( SC_UNONAME_DESCRIPTION );
     if (rDesc.pFuncDesc)
         pArray[3].Value <<= OUString( *rDesc.pFuncDesc );
 
-    pArray[4].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_ARGUMENTS ));
+    pArray[4].Name = OUString( SC_UNONAME_ARGUMENTS );
     if (rDesc.ppDefArgNames && rDesc.ppDefArgDescs && rDesc.pDefArgFlags )
     {
         sal_uInt16 nCount = rDesc.nArgCount;

@@ -1875,7 +1875,7 @@ sal_Bool GeometryHandler::impl_isDefaultFunction_nothrow( const uno::Reference< 
             xub_StrLen end = sFormula.Len();
             if ( aTextSearch.SearchFrwrd(sFormula,&start,&end) && start == 0 && end == sFormula.Len()) // default function found
             {
-                aSearchOptions.searchString = OUString(RTL_CONSTASCII_USTRINGPARAM("\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]"));
+                aSearchOptions.searchString = OUString("\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]");
                 utl::TextSearch aDataSearch(aSearchOptions);
                 aDataSearch.SearchFrwrd(sFormula,&start,&end );
                 ++start;
@@ -1902,7 +1902,7 @@ void GeometryHandler::loadDefaultFunctions()
         m_aCounterFunction.m_bDeepTraversing = sal_False;
         m_aCounterFunction.m_sName = String(ModuleRes(RID_STR_F_COUNTER));
         m_aCounterFunction.m_sFormula = OUString("rpt:[%FunctionName] + 1");
-        m_aCounterFunction.m_sSearchString = OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:\\[[:alpha:]+([:space:]*[:alnum:]*)*\\][:space:]*\\+[:space:]*[:digit:]*"));
+        m_aCounterFunction.m_sSearchString = OUString("rpt:\\[[:alpha:]+([:space:]*[:alnum:]*)*\\][:space:]*\\+[:space:]*[:digit:]*");
         m_aCounterFunction.m_sInitialFormula.IsPresent = sal_True;
         m_aCounterFunction.m_sInitialFormula.Value = OUString("rpt:1");
 
@@ -1913,21 +1913,21 @@ void GeometryHandler::loadDefaultFunctions()
 
         aDefault.m_sName = String(ModuleRes(RID_STR_F_ACCUMULATION));
         aDefault.m_sFormula = OUString("rpt:[%Column] + [%FunctionName]");
-        aDefault.m_sSearchString = OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:\\[[:alpha:]+([:space:]*[:alnum:]*)*\\][:space:]*\\+[:space:]*\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]"));
+        aDefault.m_sSearchString = OUString("rpt:\\[[:alpha:]+([:space:]*[:alnum:]*)*\\][:space:]*\\+[:space:]*\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]");
         aDefault.m_sInitialFormula.IsPresent = sal_True;
         aDefault.m_sInitialFormula.Value = OUString("rpt:[%Column]");
         m_aDefaultFunctions.push_back(aDefault);
 
         aDefault.m_sName = String(ModuleRes(RID_STR_F_MINIMUM));
-        aDefault.m_sFormula = OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:IF([%Column] < [%FunctionName];[%Column];[%FunctionName])"));
-        aDefault.m_sSearchString = OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:IF\\((\\[[:alpha:]+([:space:]*[:alnum:]*)*\\])[:space:]*<[:space:]*(\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]);[:space:]*\\1[:space:]*;[:space:]*\\3[:space:]*\\)"));
+        aDefault.m_sFormula = OUString("rpt:IF([%Column] < [%FunctionName];[%Column];[%FunctionName])");
+        aDefault.m_sSearchString = OUString("rpt:IF\\((\\[[:alpha:]+([:space:]*[:alnum:]*)*\\])[:space:]*<[:space:]*(\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]);[:space:]*\\1[:space:]*;[:space:]*\\3[:space:]*\\)");
         aDefault.m_sInitialFormula.IsPresent = sal_True;
         aDefault.m_sInitialFormula.Value = OUString("rpt:[%Column]");
         m_aDefaultFunctions.push_back(aDefault);
 
         aDefault.m_sName = String(ModuleRes(RID_STR_F_MAXIMUM));
-        aDefault.m_sFormula = OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:IF([%Column] > [%FunctionName];[%Column];[%FunctionName])"));
-        aDefault.m_sSearchString = OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:IF\\((\\[[:alpha:]+([:space:]*[:alnum:]*)*\\])[:space:]*>[:space:]*(\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]);[:space:]*\\1[:space:]*;[:space:]*\\3[:space:]*\\)"));
+        aDefault.m_sFormula = OUString("rpt:IF([%Column] > [%FunctionName];[%Column];[%FunctionName])");
+        aDefault.m_sSearchString = OUString("rpt:IF\\((\\[[:alpha:]+([:space:]*[:alnum:]*)*\\])[:space:]*>[:space:]*(\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]);[:space:]*\\1[:space:]*;[:space:]*\\3[:space:]*\\)");
         aDefault.m_sInitialFormula.IsPresent = sal_True;
         aDefault.m_sInitialFormula.Value = OUString("rpt:[%Column]");
         m_aDefaultFunctions.push_back(aDefault);

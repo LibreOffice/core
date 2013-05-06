@@ -83,22 +83,22 @@ bool ScMyValidation::IsEqual(const ScMyValidation& aVal) const
 ScMyValidationsContainer::ScMyValidationsContainer()
     : aValidationVec(),
     sEmptyString(),
-    sERRALSTY(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRALSTY)),
-    sIGNOREBL(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_IGNOREBL)),
-    sSHOWLIST(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWLIST)),
-    sTYPE(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_TYPE)),
-    sSHOWINP(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWINP)),
-    sSHOWERR(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWERR)),
-    sINPTITLE(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INPTITLE)),
-    sINPMESS(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INPMESS)),
-    sERRTITLE(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRTITLE)),
-    sERRMESS(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRMESS)),
-    sOnError(RTL_CONSTASCII_USTRINGPARAM("OnError")),
-    sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType")),
-    sStarBasic(RTL_CONSTASCII_USTRINGPARAM("StarBasic")),
-    sScript(RTL_CONSTASCII_USTRINGPARAM("Script")),
-    sLibrary(RTL_CONSTASCII_USTRINGPARAM("Library")),
-    sMacroName(RTL_CONSTASCII_USTRINGPARAM("MacroName"))
+    sERRALSTY(SC_UNONAME_ERRALSTY),
+    sIGNOREBL(SC_UNONAME_IGNOREBL),
+    sSHOWLIST(SC_UNONAME_SHOWLIST),
+    sTYPE(SC_UNONAME_TYPE),
+    sSHOWINP(SC_UNONAME_SHOWINP),
+    sSHOWERR(SC_UNONAME_SHOWERR),
+    sINPTITLE(SC_UNONAME_INPTITLE),
+    sINPMESS(SC_UNONAME_INPMESS),
+    sERRTITLE(SC_UNONAME_ERRTITLE),
+    sERRMESS(SC_UNONAME_ERRMESS),
+    sOnError("OnError"),
+    sEventType("EventType"),
+    sStarBasic("StarBasic"),
+    sScript("Script"),
+    sLibrary("Library"),
+    sMacroName("MacroName")
 {
 }
 
@@ -188,26 +188,26 @@ OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const ScMy
         {
             //case sheet::ValidationType_CUSTOM
             case sheet::ValidationType_DATE :
-                sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-date()"));
+                sCondition += OUString("cell-content-is-date()");
             break;
             case sheet::ValidationType_DECIMAL :
-                sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-decimal-number()"));
+                sCondition += OUString("cell-content-is-decimal-number()");
             break;
             case sheet::ValidationType_LIST :
                 sCondition += OUString("cell-content-is-in-list(");
                 sCondition += aValidation.sFormula1;
-                sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
+                sCondition += OUString(")");
             break;
             case sheet::ValidationType_TEXT_LEN :
                 if (aValidation.aOperator != sheet::ConditionOperator_BETWEEN &&
                     aValidation.aOperator != sheet::ConditionOperator_NOT_BETWEEN)
-                    sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-text-length()"));
+                    sCondition += OUString("cell-content-text-length()");
             break;
             case sheet::ValidationType_TIME :
-                sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-time()"));
+                sCondition += OUString("cell-content-is-time()");
             break;
             case sheet::ValidationType_WHOLE :
-                sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-whole-number()"));
+                sCondition += OUString("cell-content-is-whole-number()");
             break;
             default:
             {
@@ -226,7 +226,7 @@ OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const ScMy
                 aValidation.aOperator != sheet::ConditionOperator_NOT_BETWEEN)
             {
                 if (aValidation.aValidationType != sheet::ValidationType_TEXT_LEN)
-                    sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content()"));
+                    sCondition += OUString("cell-content()");
                 switch (aValidation.aOperator)
                 {
                     case sheet::ConditionOperator_EQUAL :
@@ -273,7 +273,7 @@ OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const ScMy
                 sCondition += aValidation.sFormula1;
                 sCondition += OUString(",");
                 sCondition += aValidation.sFormula2;
-                sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
+                sCondition += OUString(")");
             }
         }
         else

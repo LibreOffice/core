@@ -824,9 +824,9 @@ namespace svxform
 
         lcl_ReplaceString() :
             lcl_ResourceString(),
-            m_sDoc_API(      RTL_CONSTASCII_USTRINGPARAM("all") ),
-            m_sInstance_API( RTL_CONSTASCII_USTRINGPARAM("instance") ),
-            m_sNone_API(     RTL_CONSTASCII_USTRINGPARAM("none") )
+            m_sDoc_API(      "all" ),
+            m_sInstance_API( "instance" ),
+            m_sNone_API(     "none" )
         {
             init();
         }
@@ -897,9 +897,9 @@ namespace svxform
 
         lcl_MethodString() :
             lcl_ResourceString(),
-            m_sPost_API( RTL_CONSTASCII_USTRINGPARAM("post") ),
-            m_sPut_API(  RTL_CONSTASCII_USTRINGPARAM("put") ),
-            m_sGet_API(  RTL_CONSTASCII_USTRINGPARAM("get") )
+            m_sPost_API( "post" ),
+            m_sPut_API(  "put" ),
+            m_sGet_API(  "get" )
         {
             init();
         }

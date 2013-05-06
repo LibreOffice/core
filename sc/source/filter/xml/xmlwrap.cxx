@@ -420,7 +420,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
         if (bStylesOnly)
         {
             OUString const sOrganizerMode(
-                RTL_CONSTASCII_USTRINGPARAM("OrganizerMode"));
+                "OrganizerMode");
             xInfoSet->setPropertyValue(sOrganizerMode, uno::makeAny(sal_True));
         }
 

@@ -435,7 +435,7 @@ uno::Reference< sheet::XFormulaOpCodeMapper > FormulaDlg_Impl::GetFormulaOpCodeM
 
         uno::Sequence< OUString > aArgs(3);
         aArgs[TOKEN_OPEN]   = OUString("(");
-        aArgs[TOKEN_CLOSE]  = OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
+        aArgs[TOKEN_CLOSE]  = OUString(")");
         aArgs[TOKEN_SEP]    = OUString(";");
         m_aSeparatorsOpCodes = m_xOpCodeMapper->getMappings(aArgs,sheet::FormulaLanguage::ODFF);
 

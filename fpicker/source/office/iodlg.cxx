@@ -2176,7 +2176,7 @@ short SvtFileDialog::PrepareExecute()
         // if applicable set respectively create filter for all files
         if ( !bHasAll )
         {
-            SvtFileDialogFilter_Impl* pAllFilter = implAddFilter( aAll, OUString(RTL_CONSTASCII_USTRINGPARAM(FILEDIALOG_FILTER_ALL)) );
+            SvtFileDialogFilter_Impl* pAllFilter = implAddFilter( aAll, OUString(FILEDIALOG_FILTER_ALL) );
             _pImp->InsertFilterListEntry( pAllFilter );
             _pImp->SetCurFilter( pAllFilter, aAll );
         }

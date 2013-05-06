@@ -161,7 +161,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
                                                 theQueryData.nRow2,
                                                 nSrcTab ) );
         ScDBCollection* pDBColl     = pDoc->GetDBCollection();
-        OUString theDbName = OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
+        OUString theDbName = OUString(STR_DB_LOCAL_NONAME);
 
         /*
          * Ueberpruefen, ob es sich bei dem uebergebenen

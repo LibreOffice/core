@@ -430,7 +430,7 @@ static Mapping loadExternalMapping(
 
         if (hModule)
         {
-            OUString aSymbolName( RTL_CONSTASCII_USTRINGPARAM(UNO_EXT_GETMAPPING) );
+            OUString aSymbolName( UNO_EXT_GETMAPPING );
             uno_ext_getMappingFunc fpGetMapFunc =
                 (uno_ext_getMappingFunc)::osl_getFunctionSymbol(
                     hModule, aSymbolName.pData );
@@ -507,7 +507,7 @@ static Mapping getMediateMapping(
     // backwards: from dest to source of mapping chain
 
     // connect to uno
-    OUString aUnoEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) );
+    OUString aUnoEnvTypeName( UNO_LB_UNO );
     if (rTo.getTypeName() == aUnoEnvTypeName) // to is uno
     {
         aUno = rTo;

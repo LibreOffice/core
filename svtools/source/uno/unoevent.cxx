@@ -45,13 +45,13 @@ const sal_Char sAPI_SvDetachedEventDescriptor[] = "SvDetachedEventDescriptor";
 //
 
 SvBaseEventDescriptor::SvBaseEventDescriptor( const SvEventDescription* pSupportedMacroItems ) :
-        sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType")),
-        sMacroName(RTL_CONSTASCII_USTRINGPARAM("MacroName")),
-        sLibrary(RTL_CONSTASCII_USTRINGPARAM("Library")),
-        sStarBasic(RTL_CONSTASCII_USTRINGPARAM("StarBasic")),
-        sJavaScript(RTL_CONSTASCII_USTRINGPARAM("JavaScript")),
-        sScript(RTL_CONSTASCII_USTRINGPARAM("Script")),
-        sNone(RTL_CONSTASCII_USTRINGPARAM("None")),
+        sEventType("EventType"),
+        sMacroName("MacroName"),
+        sLibrary("Library"),
+        sStarBasic("StarBasic"),
+        sJavaScript("JavaScript"),
+        sScript("Script"),
+        sNone("None"),
         sServiceName(RTL_CONSTASCII_USTRINGPARAM(sAPI_ServiceName)),
         sEmpty(),
         mpSupportedMacroItems(pSupportedMacroItems),

@@ -76,7 +76,7 @@ void TestBreakIterator::testLineBreaking()
 
     //See https://bugs.freedesktop.org/show_bug.cgi?id=31271
     {
-        OUString aTest(RTL_CONSTASCII_USTRINGPARAM("(some text here)"));
+        OUString aTest("(some text here)");
 
         aLocale.Language = OUString("en");
         aLocale.Country = OUString("US");

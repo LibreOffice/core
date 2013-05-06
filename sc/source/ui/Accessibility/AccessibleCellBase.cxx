@@ -113,7 +113,7 @@ sal_Int32 SAL_CALL ScAccessibleCellBase::getForeground()
                             uno::Reference<beans::XPropertySet> xCellProps(xCell, uno::UNO_QUERY);
                             if (xCellProps.is())
                             {
-                                uno::Any aAny = xCellProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CCOLOR)));
+                                uno::Any aAny = xCellProps->getPropertyValue(OUString(SC_UNONAME_CCOLOR));
                                 aAny >>= nColor;
                             }
                         }
@@ -154,7 +154,7 @@ sal_Int32 SAL_CALL ScAccessibleCellBase::getBackground()
                             uno::Reference<beans::XPropertySet> xCellProps(xCell, uno::UNO_QUERY);
                             if (xCellProps.is())
                             {
-                                uno::Any aAny = xCellProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLBACK)));
+                                uno::Any aAny = xCellProps->getPropertyValue(OUString(SC_UNONAME_CELLBACK));
                                 aAny >>= nColor;
                             }
                         }

@@ -204,9 +204,9 @@ void ScXMLTableRowContext::EndElement()
                         bFiltered = true;
                     }
                     if (!bVisible)
-                        xRowProperties->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISVISIBLE)), uno::makeAny(bVisible));
+                        xRowProperties->setPropertyValue(OUString(SC_ISVISIBLE), uno::makeAny(bVisible));
                     if (bFiltered)
-                        xRowProperties->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISFILTERED)), uno::makeAny(bFiltered));
+                        xRowProperties->setPropertyValue(OUString(SC_ISFILTERED), uno::makeAny(bFiltered));
                 }
             }
         }

@@ -120,10 +120,10 @@ SvXMLImportContext* OXMLCell::CreateChildContext(
             }
             break;
         case XML_TOK_PAGE_NUMBER:
-            m_sText += s_sStringConcat + OUString(RTL_CONSTASCII_USTRINGPARAM(" PageNumber()"));
+            m_sText += s_sStringConcat + OUString(" PageNumber()");
             break;
         case XML_TOK_PAGE_COUNT:
-            m_sText += s_sStringConcat + OUString(RTL_CONSTASCII_USTRINGPARAM(" PageCount()"));
+            m_sText += s_sStringConcat + OUString(" PageCount()");
             break;
         case XML_TOK_FORMATTED_TEXT:
             {
@@ -258,7 +258,7 @@ void OXMLCell::Characters( const OUString& rChars )
 {
     if ( !rChars.isEmpty() )
     {
-        static const OUString s_Quote(RTL_CONSTASCII_USTRINGPARAM("\""));
+        static const OUString s_Quote("\"");
         if ( !m_sText.isEmpty() )
         {
             static const OUString s_sStringConcat(" & ");

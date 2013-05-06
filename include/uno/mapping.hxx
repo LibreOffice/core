@@ -305,8 +305,8 @@ template< class C >
 inline sal_Bool mapToCpp( Reference< C > * ppRet, uno_Interface * pUnoI ) SAL_THROW(())
 {
     Mapping aMapping(
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) ),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ) );
+        ::rtl::OUString( UNO_LB_UNO ),
+        ::rtl::OUString( CPPU_CURRENT_LANGUAGE_BINDING_NAME ) );
     OSL_ASSERT( aMapping.is() );
     aMapping.mapInterface(
             (void **)ppRet, pUnoI, ::cppu::getTypeFavourUnsigned( ppRet ) );
@@ -328,8 +328,8 @@ template< class C >
 inline sal_Bool mapToUno( uno_Interface ** ppRet, const Reference< C > & x ) SAL_THROW(())
 {
     Mapping aMapping(
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) ) );
+        ::rtl::OUString( CPPU_CURRENT_LANGUAGE_BINDING_NAME ),
+        ::rtl::OUString( UNO_LB_UNO ) );
     OSL_ASSERT( aMapping.is() );
     aMapping.mapInterface(
             (void **)ppRet, x.get(), ::cppu::getTypeFavourUnsigned( &x ) );

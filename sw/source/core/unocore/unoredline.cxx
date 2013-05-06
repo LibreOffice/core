@@ -139,9 +139,9 @@ uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursor(void)
         // no content node outside of a table could be found, and therefore we
         // except.
         uno::RuntimeException aExcept;
-        aExcept.Message = OUString( RTL_CONSTASCII_USTRINGPARAM(
+        aExcept.Message = OUString(
             "No content node found that is inside this change section "
-            "but outside of a table" ) );
+            "but outside of a table" );
         throw aExcept;
     }
 
