@@ -5193,6 +5193,50 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             }
         }
         break;
+        case COMMAND_QUERYCHARPOSITION:
+        {
+            SwWrtShell &rSh = m_rView.GetWrtShell();
+            sal_Bool bVertical = rSh.IsInVerticalText();
+            const SwPosition& rPos = *rSh.GetCrsr()->GetPoint();
+            SwDocShell* pDocSh = m_rView.GetDocShell();
+            SwDoc *pDoc = pDocSh->GetDoc();
+            SwExtTextInput* pInput = pDoc->GetExtTextInput( rPos.nNode.GetNode(), rPos.nContent.GetIndex() );
+            if ( pInput )
+            {
+                const SwPosition& rStart = *pInput->Start();
+                const SwPosition& rEnd = *pInput->End();
+                int nSize = 0;
+                for ( SwIndex nIndex = rStart.nContent; nIndex < rEnd.nContent; ++nIndex )
+                {
+                    ++nSize;
+                }
+                Window& rWin = rSh.GetView().GetEditWin();
+                if ( nSize == 0 )
+                {
+                    // When the composition does not exist, use Caret rect instead.
+                    SwRect aCaretRect ( rSh.GetCharRect() );
+                    Rectangle aRect( aCaretRect.Left(), aCaretRect.Top(), aCaretRect.Right(), aCaretRect.Bottom() );
+                    rWin.SetCompositionCharRect( &aRect, 1, bVertical );
+                }
+                else
+                {
+                    Rectangle* aRects = new Rectangle[ nSize ];
+                    int nRectIndex = 0;
+                    for ( SwIndex nIndex = rStart.nContent; nIndex < rEnd.nContent; ++nIndex )
+                    {
+                        const SwPosition aPos( rStart.nNode, nIndex );
+                        SwRect aRect ( rSh.GetCharRect() );
+                        rSh.GetCharRectAt( aRect, &aPos );
+                        aRects[ nRectIndex ] = Rectangle( aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom() );
+                        ++nRectIndex;
+                    }
+                    rWin.SetCompositionCharRect( aRects, nSize, bVertical );
+                    delete[] aRects;
+                }
+            }
+            bCallBase = false;
+        }
+        break;
 #if OSL_DEBUG_LEVEL > 0
         default:
             OSL_ENSURE( !this, "unknown command." );

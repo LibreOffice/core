@@ -351,6 +351,8 @@ inline CommandSelectionChangeData::CommandSelectionChangeData( sal_uLong nStart,
 #define COMMAND_MEDIA                   ((sal_uInt16)17)
 #define COMMAND_SELECTIONCHANGE         ((sal_uInt16)18)
 #define COMMAND_PREPARERECONVERSION     ((sal_uInt16)19)
+#define COMMAND_QUERYCHARPOSITION       ((sal_uInt16)20)
+
 
 class VCL_DLLPUBLIC CommandEvent
 {

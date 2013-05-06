@@ -2348,6 +2348,50 @@ static void ImplHandleStartReconversion( Window *pWindow )
 
 // -----------------------------------------------------------------------
 
+static void ImplHandleSalQueryCharPosition( Window *pWindow,
+                                            SalQueryCharPositionEvent *pEvt )
+{
+    pEvt->mbValid = false;
+    pEvt->mbVertical = false;
+    pEvt->mnCursorBoundX = 0;
+    pEvt->mnCursorBoundY = 0;
+    pEvt->mnCursorBoundWidth = 0;
+    pEvt->mnCursorBoundHeight = 0;
+
+    ImplSVData* pSVData = ImplGetSVData();
+    Window*     pChild = pSVData->maWinData.mpExtTextInputWin;
+
+    if ( !pChild )
+        pChild = ImplGetKeyInputWindow( pWindow );
+    else
+    {
+        // Test, if the Window is related to the frame
+        if ( !pWindow->ImplIsWindowOrChild( pChild ) )
+            pChild = ImplGetKeyInputWindow( pWindow );
+    }
+
+    if( pChild )
+    {
+        ImplCallCommand( pChild, COMMAND_QUERYCHARPOSITION );
+
+        ImplWinData* pWinData = pChild->ImplGetWinData();
+        if ( pWinData->mpCompositionCharRects && pEvt->mnCharPos < static_cast<sal_uLong>( pWinData->mnCompositionCharRects ) )
+        {
+            const Rectangle& aRect = pWinData->mpCompositionCharRects[ pEvt->mnCharPos ];
+            Rectangle aDeviceRect = pChild->ImplLogicToDevicePixel( aRect );
+            Point aAbsScreenPos = pChild->OutputToAbsoluteScreenPixel( pChild->ScreenToOutputPixel(aDeviceRect.TopLeft()) );
+            pEvt->mnCursorBoundX = aAbsScreenPos.X();
+            pEvt->mnCursorBoundY = aAbsScreenPos.Y();
+            pEvt->mnCursorBoundWidth = aDeviceRect.GetWidth();
+            pEvt->mnCursorBoundHeight = aDeviceRect.GetHeight();
+            pEvt->mbVertical = (pWinData->mbVertical != sal_False);
+            pEvt->mbValid = true;
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
 long ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
                           sal_uInt16 nEvent, const void* pEvent )
 {
@@ -2658,6 +2702,9 @@ long ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
                 nRet = ImplHandleWheelEvent( pWindow, aSalWheelMouseEvent );
             }
             }
+            break;
+        case SALEVENT_QUERYCHARPOSITION:
+            ImplHandleSalQueryCharPosition( pWindow, (SalQueryCharPositionEvent*)pEvent );
             break;
 #ifdef DBG_UTIL
         default:

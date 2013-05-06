@@ -680,6 +680,8 @@ public:
     const Rectangle*    GetCursorRect() const;
     long                GetCursorExtTextInputWidth() const;
 
+    void                SetCompositionCharRect( const Rectangle* pRect, long nCompositionLength, sal_Bool bVertical = sal_False );
+
     using               OutputDevice::SetSettings;
     virtual void        SetSettings( const AllSettings& rSettings );
     virtual void        SetSettings( const AllSettings& rSettings, sal_Bool bChild );

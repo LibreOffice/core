@@ -1372,8 +1372,10 @@ ImplWinData* Window::ImplGetWinData() const
         ((Window*)this)->mpWindowImpl->mpWinData = new ImplWinData;
         mpWindowImpl->mpWinData->mpExtOldText     = NULL;
         mpWindowImpl->mpWinData->mpExtOldAttrAry  = NULL;
-        mpWindowImpl->mpWinData->mpCursorRect     = 0;
+        mpWindowImpl->mpWinData->mpCursorRect     = NULL;
         mpWindowImpl->mpWinData->mnCursorExtWidth = 0;
+        mpWindowImpl->mpWinData->mpCompositionCharRects = NULL;
+        mpWindowImpl->mpWinData->mnCompositionCharRects = 0;
         mpWindowImpl->mpWinData->mpFocusRect      = NULL;
         mpWindowImpl->mpWinData->mpTrackRect      = NULL;
         mpWindowImpl->mpWinData->mnTrackFlags     = 0;
@@ -4644,6 +4646,8 @@ Window::~Window()
             delete mpWindowImpl->mpWinData->mpExtOldAttrAry;
         if ( mpWindowImpl->mpWinData->mpCursorRect )
             delete mpWindowImpl->mpWinData->mpCursorRect;
+        if ( mpWindowImpl->mpWinData->mpCompositionCharRects)
+            delete[] mpWindowImpl->mpWinData->mpCompositionCharRects;
         if ( mpWindowImpl->mpWinData->mpFocusRect )
             delete mpWindowImpl->mpWinData->mpFocusRect;
         if ( mpWindowImpl->mpWinData->mpTrackRect )
@@ -5655,6 +5659,24 @@ long Window::GetCursorExtTextInputWidth() const
 
     ImplWinData* pWinData = ImplGetWinData();
     return pWinData->mnCursorExtWidth;
+}
+
+// -----------------------------------------------------------------------
+
+void Window::SetCompositionCharRect( const Rectangle* pRect, long nCompositionLength, sal_Bool bVertical ) {
+    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
+
+    ImplWinData* pWinData = ImplGetWinData();
+    delete[] pWinData->mpCompositionCharRects;
+    pWinData->mbVertical = bVertical;
+    pWinData->mpCompositionCharRects = NULL;
+    pWinData->mnCompositionCharRects = nCompositionLength;
+    if ( pRect && (nCompositionLength > 0) )
+    {
+        pWinData->mpCompositionCharRects = new Rectangle[nCompositionLength];
+        for (long i = 0; i < nCompositionLength; ++i)
+            pWinData->mpCompositionCharRects[i] = pRect[i];
+    }
 }
 
 // -----------------------------------------------------------------------

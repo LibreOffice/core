@@ -5523,6 +5523,47 @@ static LRESULT ImplHandleIMEConfirmReconvertString( HWND hWnd, LPARAM lParam )
     return TRUE;
 }
 
+static LRESULT ImplHandleIMEQueryCharPosition( HWND hWnd, LPARAM lParam ) {
+    WinSalFrame* pFrame = GetWindowPtr( hWnd );
+    PIMECHARPOSITION pQueryCharPosition = (PIMECHARPOSITION) lParam;
+    if ( pQueryCharPosition->dwSize < sizeof(IMECHARPOSITION) )
+        return FALSE;
+
+    SalQueryCharPositionEvent aEvt;
+    aEvt.mbValid = false;
+    aEvt.mnCharPos = pQueryCharPosition->dwCharPos;
+
+    pFrame->CallCallback( SALEVENT_QUERYCHARPOSITION, (void*)&aEvt );
+
+    if ( !aEvt.mbValid )
+        return FALSE;
+
+    if ( aEvt.mbVertical )
+    {
+        // For vertical writing, the base line is left edge of the rectangle
+        // and the target position is top-right corner.
+        pQueryCharPosition->pt.x = aEvt.mnCursorBoundX + aEvt.mnCursorBoundWidth;
+        pQueryCharPosition->pt.y = aEvt.mnCursorBoundY;
+        pQueryCharPosition->cLineHeight = aEvt.mnCursorBoundWidth;
+    }
+    else
+    {
+        // For horizontal writing, the base line is the bottom edge of the rectangle.
+        // and the target position is top-left corner.
+        pQueryCharPosition->pt.x = aEvt.mnCursorBoundX;
+        pQueryCharPosition->pt.y = aEvt.mnCursorBoundY;
+        pQueryCharPosition->cLineHeight = aEvt.mnCursorBoundHeight;
+    }
+
+    // Currently not supported but many IMEs usually ignore them.
+    pQueryCharPosition->rcDocument.left = 0;
+    pQueryCharPosition->rcDocument.top = 0;
+    pQueryCharPosition->rcDocument.right = 0;
+    pQueryCharPosition->rcDocument.bottom = 0;
+
+    return TRUE;
+}
+
 #endif // WINVER >= 0x0500
 
 // -----------------------------------------------------------------------
@@ -5945,11 +5986,16 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
                 nRet = ImplHandleIMEReconvertString( hWnd, lParam );
                 rDef = FALSE;
             }
-        else if( (sal_uIntPtr)( wParam ) == IMR_CONFIRMRECONVERTSTRING )
-        {
-        nRet = ImplHandleIMEConfirmReconvertString( hWnd, lParam );
-        rDef = FALSE;
-        }
+            else if( (sal_uIntPtr)( wParam ) == IMR_CONFIRMRECONVERTSTRING )
+            {
+                nRet = ImplHandleIMEConfirmReconvertString( hWnd, lParam );
+                rDef = FALSE;
+            }
+            else if ( (sal_uIntPtr)( wParam ) == IMR_QUERYCHARPOSITION )
+            {
+                nRet = ImplHandleIMEQueryCharPosition( hWnd, lParam );
+                rDef = FALSE;
+            }
             break;
 #endif // WINVER >= 0x0500
     }

@@ -82,6 +82,7 @@ class FontSelectPattern;
 #define SALEVENT_STARTRECONVERSION      ((sal_uInt16)45)
 #define SALEVENT_EXTERNALZOOM           ((sal_uInt16)46)
 #define SALEVENT_EXTERNALSCROLL         ((sal_uInt16)47)
+#define SALEVENT_QUERYCHARPOSITION      ((sal_uInt16)48)
 
 // MOUSELEAVE must send, when the pointer leave the client area and
 // the mouse is not captured
@@ -211,6 +212,18 @@ struct SalSurroundingTextSelectionChangeEvent
 {
     sal_uLong       mnStart;        // The beginning index of selected range
     sal_uLong       mnEnd;          // The end index of selected range
+};
+
+// QUERYCHARPOSITION
+struct SalQueryCharPositionEvent
+{
+    bool            mbValid;                // The data is valid or not.
+    sal_uLong       mnCharPos;              // The index of character in a composition.
+    bool            mbVertical;             // The text is vertical or not.
+    long            mnCursorBoundX;         // The cursor bounds corresponding to the character specified by mnCharPos - X
+    long            mnCursorBoundY;         // The cursor bounds corresponding to the character specified by mnCharPos - Y
+    long            mnCursorBoundWidth;     // The cursor bounds corresponding to the character specified by mnCharPos - Width
+    long            mnCursorBoundHeight;    // The cursor bounds corresponding to the character specified by mnCharPos - Height
 };
 
 // ------------------
