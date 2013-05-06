@@ -413,24 +413,8 @@ namespace drawinglayer
         // direct draw of transformed BitmapEx primitive
         void VclProcessor2D::RenderBitmapPrimitive2D(const primitive2d::BitmapPrimitive2D& rBitmapCandidate)
         {
-            // check local ViewPort
-            const basegfx::B2DRange& rDiscreteViewPort(getViewInformation2D().getDiscreteViewport());
-            const basegfx::B2DHomMatrix aLocalTransform(maCurrentTransformation * rBitmapCandidate.getTransform());
-
-            if(!rDiscreteViewPort.isEmpty())
-            {
-                // check if we are visible
-                basegfx::B2DRange aUnitRange(0.0, 0.0, 1.0, 1.0);
-
-                aUnitRange.transform(aLocalTransform);
-
-                if(!aUnitRange.overlaps(rDiscreteViewPort))
-                {
-                    return;
-                }
-            }
-
             BitmapEx aBitmapEx(rBitmapCandidate.getBitmapEx());
+            const basegfx::B2DHomMatrix aLocalTransform(maCurrentTransformation * rBitmapCandidate.getTransform());
 
             if(maBColorModifierStack.count())
             {

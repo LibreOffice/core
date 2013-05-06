@@ -1356,7 +1356,10 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_BITMAPPRIMITIVE2D :
                 {
-                    // direct draw of transformed BitmapEx primitive; use default processing
+                    // direct draw of transformed BitmapEx primitive; use default processing, but without
+                    // former testing if graphic content is inside discrete local viewport; this is not
+                    // setup for metafile targets (metafile renderer tries to render in logic coordinates,
+                    // the mapping is kept to the OutputDevice for better Metafile recording)
                     RenderBitmapPrimitive2D(static_cast< const primitive2d::BitmapPrimitive2D& >(rCandidate));
                     break;
                 }

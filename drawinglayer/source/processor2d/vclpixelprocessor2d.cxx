@@ -176,6 +176,25 @@ namespace drawinglayer
                 case PRIMITIVE2D_ID_BITMAPPRIMITIVE2D :
                 {
                     // direct draw of transformed BitmapEx primitive
+                    const primitive2d::BitmapPrimitive2D& rBitmapCandidate = static_cast< const primitive2d::BitmapPrimitive2D& >(rCandidate);
+
+                    // check if graphic content is inside discrete local ViewPort
+                    const basegfx::B2DRange& rDiscreteViewPort(getViewInformation2D().getDiscreteViewport());
+                    const basegfx::B2DHomMatrix aLocalTransform(maCurrentTransformation * rBitmapCandidate.getTransform());
+
+                    if(!rDiscreteViewPort.isEmpty())
+                    {
+                        basegfx::B2DRange aUnitRange(0.0, 0.0, 1.0, 1.0);
+
+                        aUnitRange.transform(aLocalTransform);
+
+                        if(!aUnitRange.overlaps(rDiscreteViewPort))
+                        {
+                            // content is outside discrete local ViewPort
+                            break;
+                        }
+                    }
+
                     RenderBitmapPrimitive2D(static_cast< const primitive2d::BitmapPrimitive2D& >(rCandidate));
                     break;
                 }
