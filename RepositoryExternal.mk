@@ -78,7 +78,10 @@ gb_LinkTarget__use_mesa_headers :=
 else
 
 define gb_LinkTarget__use_mesa_headers
-$(eval $(call gb_LinkTarget_use_package,$(1),Mesa_inc))
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(SRCDIR)/Mesa/inc \
+	$$(INCLUDE) \
+)
 
 endef
 

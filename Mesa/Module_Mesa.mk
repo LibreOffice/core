@@ -9,10 +9,4 @@
 
 $(eval $(call gb_Module_Module,Mesa))
 
-ifeq ($(SYSTEM_MESA_HEADERS),NO)
-
-$(eval $(call gb_Module_add_targets,Mesa,Package_inc))
-
-endif
-
 # vim: set noet sw=4:
