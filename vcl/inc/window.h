@@ -116,6 +116,9 @@ struct ImplWinData
     sal_uInt16*             mpExtOldAttrAry;
     Rectangle*          mpCursorRect;
     long                mnCursorExtWidth;
+    sal_Bool            mbVertical;
+    Rectangle*          mpCompositionCharRects;
+    long                mnCompositionCharRects;
     Rectangle*          mpFocusRect;
     Rectangle*          mpTrackRect;
     sal_uInt16              mnTrackFlags;

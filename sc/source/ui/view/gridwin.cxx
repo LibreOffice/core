@@ -2813,7 +2813,8 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
     if ( nCmd == COMMAND_STARTEXTTEXTINPUT ||
          nCmd == COMMAND_ENDEXTTEXTINPUT ||
          nCmd == COMMAND_EXTTEXTINPUT ||
-         nCmd == COMMAND_CURSORPOS )
+         nCmd == COMMAND_CURSORPOS ||
+         nCmd == COMMAND_QUERYCHARPOSITION )
     {
         sal_Bool bEditView = pViewData->HasEditView( eWhich );
         if (!bEditView)

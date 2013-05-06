@@ -526,6 +526,10 @@ public:
      * Returns if cursor is wholly or partly within visible range.
      */
     sal_Bool IsCrsrVisible() const { return VisArea().IsOver( GetCharRect() ); }
+    /*
+     * Returns SwRect, at which the character is located.
+     */
+    sal_Bool GetCharRectAt(SwRect& rRect, const SwPosition* pPos);
 
     // Return current page number:
     // TRUE:  in which cursor is located.
