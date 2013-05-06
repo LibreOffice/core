@@ -21,10 +21,15 @@
 #define __com_sun_star_rendering_MtfRenderer_idl__
 
 #include <com/sun/star/rendering/XMtfRenderer.idl>
+#include <com/sun/star/rendering/XBitmapCanvas.idl>
 
 module com { module sun { module star { module rendering {
 
-    service MtfRenderer : XMtfRenderer;
+service MtfRenderer : XMtfRenderer
+{
+    createWithBitmapCanvas([in] XBitmapCanvas Canvas);
+};
+
 
 }; }; }; };
 

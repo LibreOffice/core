@@ -408,55 +408,48 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
 
         Size aSize (rDestSize.Width () + 1, rDestSize.Height () + 1);
         uno::Reference<rendering::XBitmap> xBitmap = xCanvas->getDevice ()->createCompatibleAlphaBitmap (vcl::unotools::integerSize2DFromSize( aSize));
-        uno::Reference< lang::XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
         if( xBitmap.is () )
         {
-            uno::Reference< rendering::XMtfRenderer > xMtfRenderer;
-            uno::Sequence< uno::Any > args (1);
             uno::Reference< rendering::XBitmapCanvas > xBitmapCanvas( xBitmap, uno::UNO_QUERY );
             if( xBitmapCanvas.is() )
             {
-                args[0] = uno::Any( xBitmapCanvas );
-                xMtfRenderer.set( xFactory->createInstanceWithArguments( OUString("com.sun.star.rendering.MtfRenderer"),
-                                                                         args ), uno::UNO_QUERY );
+                uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+                uno::Reference< rendering::XMtfRenderer > xMtfRenderer = rendering::MtfRenderer::createWithBitmapCanvas( xContext, xBitmapCanvas );
 
-                if( xMtfRenderer.is() )
+                xBitmapCanvas->clear();
+                uno::Reference< beans::XFastPropertySet > xMtfFastPropertySet( xMtfRenderer, uno::UNO_QUERY );
+                if( xMtfFastPropertySet.is() )
+                    // set this metafile to the renderer to
+                    // speedup things (instead of copying data to
+                    // sequence of bytes passed to renderer)
+                    xMtfFastPropertySet->setFastPropertyValue( 0, uno::Any( reinterpret_cast<sal_Int64>( this ) ) );
+
+                xMtfRenderer->draw( rDestSize.Width(), rDestSize.Height() );
+
+                uno::Reference< beans::XFastPropertySet > xFastPropertySet( xBitmapCanvas, uno::UNO_QUERY );
+                if( xFastPropertySet.get() )
                 {
-                    xBitmapCanvas->clear();
-                    uno::Reference< beans::XFastPropertySet > xMtfFastPropertySet( xMtfRenderer, uno::UNO_QUERY );
-                    if( xMtfFastPropertySet.is() )
-                        // set this metafile to the renderer to
-                        // speedup things (instead of copying data to
-                        // sequence of bytes passed to renderer)
-                        xMtfFastPropertySet->setFastPropertyValue( 0, uno::Any( reinterpret_cast<sal_Int64>( this ) ) );
-
-                    xMtfRenderer->draw( rDestSize.Width(), rDestSize.Height() );
-
-                    uno::Reference< beans::XFastPropertySet > xFastPropertySet( xBitmapCanvas, uno::UNO_QUERY );
-                    if( xFastPropertySet.get() )
-                    {
-                        // 0 means get BitmapEx
-                        uno::Any aAny = xFastPropertySet->getFastPropertyValue( 0 );
-                        BitmapEx* pBitmapEx = (BitmapEx*) *reinterpret_cast<const sal_Int64*>(aAny.getValue());
-                        if( pBitmapEx ) {
-                            pOut->DrawBitmapEx( rPos, *pBitmapEx );
-                            delete pBitmapEx;
-                            return true;
-                        }
-                    }
-
-                    SalBitmap* pSalBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
-                    pSalBmp->SetHasAlpha( true );
-
-                    if( pSalBmp->Create( xBitmapCanvas, aSize ) )
-                    {
-                        Bitmap aBitmap( pSalBmp );
-                        pOut->DrawBitmap( rPos, aBitmap );
+                    // 0 means get BitmapEx
+                    uno::Any aAny = xFastPropertySet->getFastPropertyValue( 0 );
+                    BitmapEx* pBitmapEx = (BitmapEx*) *reinterpret_cast<const sal_Int64*>(aAny.getValue());
+                    if( pBitmapEx ) {
+                        pOut->DrawBitmapEx( rPos, *pBitmapEx );
+                        delete pBitmapEx;
                         return true;
                     }
-
-                    delete pSalBmp;
                 }
+
+                SalBitmap* pSalBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
+                pSalBmp->SetHasAlpha( true );
+
+                if( pSalBmp->Create( xBitmapCanvas, aSize ) )
+                {
+                    Bitmap aBitmap( pSalBmp );
+                    pOut->DrawBitmap( rPos, aBitmap );
+                    return true;
+                }
+
+                delete pSalBmp;
             }
         }
     }
