@@ -19,6 +19,19 @@
 # Package is sufficient if no files--e.g., headers--from the unpacked
 # tarball need to be delivered.)
 #
+# An ExternalProject always uses one UnpackedTarball with the same name.
+# The dependency strucure ensures that any change on a dependency
+# of the ExternalProject will cause the UnpackedTarball to be unpacked
+# again, so the ExternalProject always does a clean build and is not at
+# the mercy of the external's build system's dubious incremental builds.
+#
+# ExternalProject target
+# => ExternalProject state target(s) (these actually build stuff)
+#    => UnpackedTarball target (unpack the tarball)
+#       => UnpackedTarball prepare target
+#          => ExternalProject prepare target
+#             => stuff the external depends upon
+#
 # ExternalProject has no gbuild abstraction for actually building the
 # external code, so it is necessary to define rule(s) and recipe(s) to
 # handle it. It does not matter if there are several rules handling
@@ -62,9 +75,9 @@ define gb_ExternalProject_ExternalProject
 $(call gb_ExternalProject_get_target,$(1)) : EXTERNAL_WORKDIR := $(call gb_UnpackedTarball_get_dir,$(1))
 
 $(call gb_ExternalProject_get_preparation_target,$(1)) :| $(dir $(call gb_ExternalProject_get_target,$(1))).dir
-$(call gb_ExternalProject_get_preparation_target,$(1)) : $(call gb_UnpackedTarball_get_target,$(1))
+$(call gb_UnpackedTarball_get_preparation_target,$(1)) : $(call gb_ExternalProject_get_preparation_target,$(1))
 $(call gb_ExternalProject_get_clean_target,$(1)) : $(call gb_UnpackedTarball_get_clean_target,$(1))
-$(call gb_ExternalProject_get_target,$(1)) : $(call gb_ExternalProject_get_preparation_target,$(1))
+$(call gb_ExternalProject_get_target,$(1)) : $(call gb_UnpackedTarball_get_target,$(1))
 $(call gb_ExternalProject_get_target,$(1)) :| $(dir $(call gb_ExternalProject_get_target,$(1))).dir
 
 $$(eval $$(call gb_Module_register_target,$(call gb_ExternalProject_get_target,$(1)),$(call gb_ExternalProject_get_clean_target,$(1))))
@@ -87,7 +100,7 @@ endef
 # gb_ExternalProject_register_target project target
 define gb_ExternalProject_register_target
 $(call gb_ExternalProject_get_target,$(1)) : $(call gb_ExternalProject_get_state_target,$(1),$(2))
-$(call gb_ExternalProject_get_state_target,$(1),$(2)) : $(call gb_ExternalProject_get_preparation_target,$(1))
+$(call gb_ExternalProject_get_state_target,$(1),$(2)) : $(call gb_UnpackedTarball_get_target,$(1))
 $(call gb_ExternalProject_get_state_target,$(1),$(2)) :| $(dir $(call gb_ExternalProject_get_state_target,$(1),$(2))).dir
 
 endef
