@@ -261,7 +261,7 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
          *  @see enableControl()
          *
          *  @param  nFeatures
-         *          flag field(!) knows all features wich must be enabled.
+         *          flag field(!) knows all features which must be enabled.
          */
         void impl_sta_enableFeatures(::sal_Int32 nFeatures, ::sal_Int32 nTemplate);
 

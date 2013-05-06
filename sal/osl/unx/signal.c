@@ -268,7 +268,7 @@ static sal_Bool InitSignal()
             Signals[i].Action = ACT_IGNORE;
 #endif
 
-        /* hack: stomcatd is attaching JavaVM wich dont work with an sigaction(SEGV) */
+        /* hack: stomcatd is attaching JavaVM which does not work with an sigaction(SEGV) */
         if ((bSetSEGVHandler || Signals[i].Signal != SIGSEGV)
         && (bSetWINCHHandler || Signals[i].Signal != SIGWINCH)
         && (bSetILLHandler   || Signals[i].Signal != SIGILL))

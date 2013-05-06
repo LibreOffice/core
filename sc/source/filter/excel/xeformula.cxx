@@ -697,7 +697,7 @@ void XclExpFmlaCompImpl::RecalcTokenClass( const XclExpTokenConvInfo& rConvInfo,
                 case EXC_PARAMCONV_RPX:
                     /*  If parent token has REF class (REF token in REFTYPE
                         function parameter), then RPX repeats the previous
-                        effective conversion (wich will be either ORG or ARR,
+                        effective conversion (which will be either ORG or ARR,
                         but never VAL), otherwise falls back to ORG conversion. */
                     eClassConv = bWasRefClass ? ePrevClassConv : EXC_CLASSCONV_ORG;
                 break;

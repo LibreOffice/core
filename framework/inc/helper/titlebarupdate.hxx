@@ -139,7 +139,7 @@ class TitleBarUpdate : // interfaces
                     of our frame.
 
             @param  xFrame
-                    contains the component, wich must be identified.
+                    contains the component, which must be identified.
 
             @param  rInfo
                     describe the module in its details.

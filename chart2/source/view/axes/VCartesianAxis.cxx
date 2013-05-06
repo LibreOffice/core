@@ -1472,7 +1472,7 @@ void VCartesianAxis::createMaximumLabels()
         pTickFactory2D->updateScreenValues( m_aAllTickInfos );
 
         //create tick mark text shapes
-        //@todo: iterate through all tick depth wich should be labeled
+        //@todo: iterate through all tick depth which should be labeled
 
         AxisLabelProperties aAxisLabelProperties( m_aAxisLabelProperties );
         if( isAutoStaggeringOfLabelsAllowed( aAxisLabelProperties, pTickFactory2D->isHorizontalAxis(), pTickFactory2D->isVerticalAxis() ) )

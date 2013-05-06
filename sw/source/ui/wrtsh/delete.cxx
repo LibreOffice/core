@@ -179,7 +179,7 @@ long SwWrtShell::DelLeft()
             EnterStdMode();
     }
 
-    // JP 29.06.95: never erase a table wich standing in front of.
+    // JP 29.06.95: never erase a table standing in front of it.
     bool bSwap = false;
     const SwTableNode * pWasInTblNd = SwCrsrShell::IsCrsrInTbl();
 

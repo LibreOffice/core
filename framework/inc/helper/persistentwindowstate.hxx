@@ -121,7 +121,7 @@ class PersistentWindowState :   // interfaces
                     needed to create needed uno resources.
 
             @param  xFrame
-                    contains the component, wich must be identified.
+                    contains the component, which must be identified.
 
             @return [string]
                     a module identifier for the current frame component.

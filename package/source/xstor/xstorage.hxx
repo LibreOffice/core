@@ -160,7 +160,7 @@ struct OStorage_Impl
 
     SwitchablePersistenceStream* m_pSwitchStream;
 
-    sal_Int32 m_nStorageType; // the mode in wich the storage is used
+    sal_Int32 m_nStorageType; // the mode in which the storage is used
 
     // the _rels substorage that is handled in a special way in embed::StorageFormats::OFOPXML
     SotElement_Impl* m_pRelStorElement;

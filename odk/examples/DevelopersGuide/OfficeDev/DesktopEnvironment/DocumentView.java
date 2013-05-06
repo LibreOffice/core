@@ -46,7 +46,7 @@ import java.awt.event.WindowEvent;
 // __________ Implementation __________
 
 /**
- * This implement a java frame wich contains
+ * This implement a java frame which contains
  * an office document, shows some status information
  * about that, provides simple functionality on it
  * (e.g. toggle menubar, save document) and
@@ -78,7 +78,7 @@ public class DocumentView extends    JFrame
     /**
      * @member  mxFrame             office frame which contains the document of this view
      *
-     * @member  maStatusView        special panel wich show available status information of currently loaded document
+     * @member  maStatusView        special panel which shows available status information of currently loaded document
      * @member  maDocumentView      use JNI mechanism to plug an office window into our own java UI container (used for inplace mode only!)
      * @member  maCustomizeView     special panel makes it possible to toggle menubar/toolbar or objectbar of loaded document
      * @member  maInterceptor       interceptor thread which intercept "new" menu of office frame to open new frames inside this java application

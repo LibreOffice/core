@@ -551,7 +551,7 @@ OUString ObjectIdentifier::createParticleForLegend(
     OUStringBuffer aRet;
 
     Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
-    //todo: if more than one diagram is implemeted, find the correct diagram wich is owner of the given legend
+    //todo: if more than one diagram is implemeted, find the correct diagram which is owner of the given legend
 
     aRet.append( ObjectIdentifier::createParticleForDiagram( xDiagram, xChartModel ) );
     aRet.appendAscii(":");

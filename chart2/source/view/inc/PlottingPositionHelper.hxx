@@ -137,7 +137,7 @@ protected: //member
     bool   m_bAllowShiftZAxisPos;
 };
 
-//describes wich axis of the drawinglayer scene or sreen axis are the normal axis
+//describes which axis of the drawinglayer scene or sreen axis are the normal axis
 enum NormalAxis
 {
       NormalAxis_X

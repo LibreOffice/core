@@ -44,7 +44,7 @@ import com.sun.star.uno.UnoRuntime;
 /**
  * This class can be used to intercept dispatched URL's
  * on any frame used in this demo application.
- * It intercept all URL's wich try to create a new empty frame.
+ * It intercept all URL's which try to create a new empty frame.
  * (e.g. "private:factory/swriter")
  * Nobody can guarantee that this interception will be realy used -
  * because another interceptor (registered at a later time then this one!)

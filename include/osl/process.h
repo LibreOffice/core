@@ -149,7 +149,7 @@ typedef void* oslProcess;
     [in] The number of environment variables to set.
 
     @param pProcess
-    [out] Pointer to a oslProcess variable, wich receives the handle of the newly created process.
+    [out] Pointer to a oslProcess variable, which receives the handle of the newly created process.
     This parameter must not be NULL.
 
     @return
@@ -219,7 +219,7 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_executeProcess(
     [in] The number of environment variables to set.
 
     @param pProcess
-    [out] Pointer to a oslProcess variable, wich receives the handle of the newly created process.
+    [out] Pointer to a oslProcess variable, which receives the handle of the newly created process.
     This parameter must not be NULL.
 
     @param pChildInputWrite

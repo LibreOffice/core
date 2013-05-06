@@ -26,7 +26,7 @@ namespace bib
     // source in bibbeam.cxx
 
     void HandleTaskPaneList( Window* pWindow, sal_Bool bAddToList );
-        // pWindow: just an system window or something wich is child of a system window
+        // pWindow: just an system window or something which is child of a system window
 
     inline void AddToTaskPaneList( Window* pWindowToBeHandled )
     {

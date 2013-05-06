@@ -259,7 +259,7 @@ void ChildrenManagerImpl::CreateListOfVisibleShapes (
 
     Rectangle aVisibleArea = maShapeTreeInfo.GetViewForwarder()->GetVisibleArea();
 
-    // Add the visible shapes for wich the accessible objects already exist.
+    // Add the visible shapes for which the accessible objects already exist.
     AccessibleShapeList::iterator I,aEnd = maAccessibleShapes.end();
     for (I=maAccessibleShapes.begin(); I != aEnd; ++I)
     {

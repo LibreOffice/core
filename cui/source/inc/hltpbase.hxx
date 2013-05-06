@@ -46,7 +46,7 @@
 #include "hlmarkwn.hxx"
 #include "iconcdlg.hxx"
 
-/// ComboBox-Control, wich is filled with all current framenames
+/// ComboBox-Control, which is filled with all current framenames
 class SvxFramesComboBox : public ComboBox
 {
 public:

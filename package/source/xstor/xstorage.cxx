@@ -68,7 +68,7 @@ struct StorInternalData_Impl
     ::cppu::OMultiTypeInterfaceContainerHelper m_aListenersContainer; // list of listeners
     ::cppu::OTypeCollection* m_pTypeCollection;
     sal_Bool m_bIsRoot;
-    sal_Int32 m_nStorageType; // the mode in wich the storage is used
+    sal_Int32 m_nStorageType; // the mode in which the storage is used
     sal_Bool m_bReadOnlyWrap;
 
     OChildDispListener_Impl* m_pSubElDispListener;

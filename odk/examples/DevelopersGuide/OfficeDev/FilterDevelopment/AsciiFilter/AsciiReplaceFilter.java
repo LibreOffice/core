@@ -362,7 +362,7 @@ public class AsciiReplaceFilter
 
         /**
         * Makes the filter process breakable. To do so the outside code may use threads.
-        * We use a internal "condition" variable wich is queried by the real filter method on
+        * We use a internal "condition" variable which is queried by the real filter method on
         * every loop they do. So it's more a polling mechanism.
         */
         public void cancel()

@@ -230,7 +230,7 @@ private:
     OUString         aIntName;
     sal_uInt16              nUINameID;
     sal_uInt16              nDescrID;           // leads also to parameter descriptions!
-    sal_Bool                bDouble;            // flag for names, wich already exist in Calc
+    sal_Bool                bDouble;            // flag for names that already exist in Calc
     sal_Bool                bWithOpt;           // has internal parameter on first position
 
     sal_uInt16              nParam;             // num of parameters

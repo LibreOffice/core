@@ -434,7 +434,7 @@ public class FunctionHelper
      * till he deosn't need it any longer. Otherwise the dispatcher can(!)
      * die by decreasing his refcount.
      *
-     * @param   xFrame      frame wich should be the target of this dispatch
+     * @param   xFrame      frame which should be the target of this dispatch
      * @param   aURL        full parsed and converted office URL for dispatch
      * @param   lProperties optional arguments for dispatch
      * @param   xListener   optional listener which is registered automaticly for status events
@@ -497,7 +497,7 @@ public class FunctionHelper
      * Returning of the dispatch object isn't neccessary.
      * Nobody must hold it alive longer the dispatch needs.
      *
-     * @param   xFrame      frame wich should be the target of this dispatch
+     * @param   xFrame      frame which should be the target of this dispatch
      * @param   aURL        full parsed and converted office URL for dispatch
      * @param   lProperties optional arguments for dispatch
      * @param   xListener   optional listener which is registered automaticly for status events
@@ -542,7 +542,7 @@ public class FunctionHelper
      * The result of this operation will be the loaded document for success
      * or null if loading failed.
      *
-     * @param   xFrame          frame wich should be the target of this load call
+     * @param   xFrame          frame which should be the target of this load call
      * @param   sURL            unparsed URL for loading
      * @param   lProperties     optional arguments
      *

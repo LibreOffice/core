@@ -43,7 +43,7 @@ interface TextEditView : BaseTextEditView
     uuid = "09782660-111A-101D-9757-6E74207A7520"
 ]
 {
-     // Slots, wich are not needed in the WebDocShell
+     // Slots, which are not needed in the WebDocShell
     FN_INSERT_OBJ_CTRL
     [
         ExecMethod = Execute ;

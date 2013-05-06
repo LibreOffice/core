@@ -169,7 +169,7 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProper
         tMakePropertyNameMap
         ( "CharColor",                "CharColor" )
         ( "CharContoured",            "CharContoured" )
-        ( "CharEmphasis",             "CharEmphasis" )//the service style::CharacterProperties  describes a property called 'CharEmphasize' wich is nowhere implemented
+        ( "CharEmphasis",             "CharEmphasis" )//the service style::CharacterProperties  describes a property called 'CharEmphasize' which is nowhere implemented
 
         ( "CharFontFamily",           "CharFontFamily" )
         ( "CharFontFamilyAsian",      "CharFontFamilyAsian" )

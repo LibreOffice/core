@@ -4831,7 +4831,7 @@ sal_uInt32 EscherEx::EnterGroup( const OUString& rShapeName, const Rectangle* pB
     AddAtom( 16, ESCHER_Spgr, 1 );
     PtReplaceOrInsert( ESCHER_Persist_Grouping_Snap | mnGroupLevel,
                         mpOutStrm->Tell() );
-    *mpOutStrm  << (sal_Int32)aRect.Left()  // Bounding box for the grouped shapes the wich they will be attached
+    *mpOutStrm  << (sal_Int32)aRect.Left()  // Bounding box for the grouped shapes to which they will be attached
                 << (sal_Int32)aRect.Top()
                 << (sal_Int32)aRect.Right()
                 << (sal_Int32)aRect.Bottom();
@@ -4881,7 +4881,7 @@ sal_Bool EscherEx::SetGroupSnapRect( sal_uInt32 nGroupLevel, const Rectangle& rR
         sal_uInt32 nCurrentPos = mpOutStrm->Tell();
         if ( DoSeek( ESCHER_Persist_Grouping_Snap | ( nGroupLevel - 1 ) ) )
         {
-            *mpOutStrm  << (sal_Int32)rRect.Left()  // Bounding box for the grouped shapes the wich they will be attached
+            *mpOutStrm  << (sal_Int32)rRect.Left()  // Bounding box for the grouped shapes to which they will be attached
                         << (sal_Int32)rRect.Top()
                         << (sal_Int32)rRect.Right()
                         << (sal_Int32)rRect.Bottom();

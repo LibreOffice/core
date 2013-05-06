@@ -68,7 +68,7 @@ Things to watch for:
   "OK" (replace) preselected if x < y, and "Cancel" otherwise.
 
 - If replacing an installed version x of an extension e with a version y fails
-  because y has unsatisfied dependencies, or because y has a license to wich the
+  because y has unsatisfied dependencies, or because y has a license to which the
   user does not agree, version x is left installed afterwards.
 
 - Checking for already installed versions of an extension is only done within a

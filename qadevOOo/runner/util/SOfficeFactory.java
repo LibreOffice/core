@@ -425,7 +425,7 @@ public class SOfficeFactory {
     }
 
     /**
-     * creates a Diagram wich specified in kind(String)
+     * creates a Diagram as specified in kind
      */
     public XDiagram createDiagram(XComponent oDoc, String kind) {
         XInterface oInterface = null;
@@ -444,8 +444,8 @@ public class SOfficeFactory {
         return oDiagram;
     }
 
-    /*
-    // create a Control-Instance which specified in kind(String)
+    /**
+     * creates a control instance as specified in kind
      */
     public XInterface createControl(XComponent oDoc, String kind) {
 
@@ -462,8 +462,8 @@ public class SOfficeFactory {
         return oControl;
     }
 
-    /*
-    // create an Instance which is specified in kind(String)
+    /**
+     * create an Instance as specified in kind
      */
     public Object createInstance(XComponent oDoc, String kind) {
 

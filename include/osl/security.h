@@ -74,7 +74,7 @@ SAL_DLLPUBLIC oslSecurityError SAL_CALL osl_loginUser(
     the maped drive on this server.
     @param[in] strUserName denotes the name of the user to logg in.
     @param[in] strPasswd the password for this user.
-    @param[in] strFileServer denotes the file server on wich the user is logged in.
+    @param[in] strFileServer denotes the file server on which the user is logged in.
     @param[out] pSecurity returns the security handle if user could be logged in.
     @return osl_Security_E_None if user could be logged in, otherwise an error-code.
     @see osl_freeSecurityHandle

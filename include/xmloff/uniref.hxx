@@ -29,7 +29,7 @@
  * An instance of this class holds a pointer to an object. The lifetime of
  * the object is controled by the instance. The constructor calls
  * acquire() and the destructor calls release().
- * You could delive your class from the baseclass UniRefBase wich implements
+ * You could derive your class from the baseclass UniRefBase which implements
  * the methods acquire and release, yet.
  */
 template< class T > class UniReference

@@ -100,7 +100,7 @@ namespace pcr
         // and insert all entries below this root into the listbox
         if (xSearch.is())
         {
-            // check wich service the allowed components must suppport
+            // check which service the allowed components must suppport
             sal_Int16 nClassId = 0;
             try { nClassId = ::comphelper::getINT16(m_xControlModel->getPropertyValue(PROPERTY_CLASSID)); } catch(...) { }
             m_sRequiredService = (FormComponentType::RADIOBUTTON == nClassId) ? OUString(SERVICE_COMPONENT_GROUPBOX) : OUString(SERVICE_COMPONENT_FIXEDTEXT);

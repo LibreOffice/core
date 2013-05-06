@@ -583,7 +583,7 @@ int ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
     if( chart2::AxisType::REALNUMBER != m_nAxisType )
         aCbxLogarithm.Show( false );
 
-    //check wich entries need user action
+    //check which entries need user action
 
     if ( aCbxLogarithm.IsChecked() &&
             ( ( !aCbxAutoMin.IsChecked() && fMin <= 0.0 )

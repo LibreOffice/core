@@ -272,7 +272,7 @@ public class RecoveryTools {
      * This function uses accessibility to handle modal dialogs like the
      * "Are you sure" dialog.
      * It clicks the named button given in parameter <CODE>buttonName</CODE>
-     * @param buttonName the name of the button wich should be clicked
+     * @param buttonName the name of the button which should be clicked
      */
     public void handleModalDialog(XMultiServiceFactory xMSF, String buttonName)
                 throws com.sun.star.accessibility.IllegalAccessibleComponentStateException

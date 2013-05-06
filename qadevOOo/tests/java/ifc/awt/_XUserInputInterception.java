@@ -412,7 +412,7 @@ public class _XUserInputInterception extends MultiMethodTest {
 
         /**
          * Creates an instacne of this class. The parameter <CODE>eType</CODE> represents
-         * the kind of event wich will be triggert at <CODE>run()</CODE>
+         * the kind of event which will be triggert at <CODE>run()</CODE>
          * @param model the model of a document
          * @param eType the kind of event which should be trigger
          */
@@ -423,7 +423,7 @@ public class _XUserInputInterception extends MultiMethodTest {
         }
 
         /**
-         * Triggers the event wich is represented by <CODE>eventType</CODE>
+         * Triggers the event which is represented by <CODE>eventType</CODE>
          * The scenarios are:
          * <ul>
          *    <li>EventTest.EventTriggerType.MOUSE_KLICK_INTO_DOC

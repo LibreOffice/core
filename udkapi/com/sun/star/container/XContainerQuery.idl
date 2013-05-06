@@ -47,7 +47,7 @@ published interface XContainerQuery: com::sun::star::uno::XInterface
         @param Query    items of sub set must match to this query<br>
                         example:<br>
                         (1)<br>
-                        query as parameter sequence to return all elements wich match
+                        query as parameter sequence to return all elements which match
                         the name pattern and supports a special feature; sort it ascending<br>
                         "name=*myname_??_;sort=ascending;feature=VISIBLE"<br>
                         (2)<br>
@@ -70,7 +70,7 @@ published interface XContainerQuery: com::sun::star::uno::XInterface
         @param Properties   items of sub set must support given properties as minimum<br>
                             example:<br>
                             (supported)<br>
-                            search for items wich match the name pattern and supports the VISIBLE feature<br>
+                            search for items which match the name pattern and supports the VISIBLE feature<br>
                             Parameters[0].Name  = "name"<br>
                             Parameters[0].Value = "*myname_??_"<br>
                             Parameters[1].Name  = "feature"<br>

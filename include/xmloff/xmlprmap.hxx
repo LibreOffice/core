@@ -148,7 +148,7 @@ public:
                                    sal_uInt32 nPropType,
                                    sal_Int32 nStartAt = -1 ) const;
 
-    /** Retrieves a PropertyHandler for that property wich placed at nIndex in the XMLPropertyMapEntry-array */
+    /** Retrieves a PropertyHandler for that property which placed at nIndex in the XMLPropertyMapEntry-array */
     const XMLPropertyHandler* GetPropertyHandler( sal_Int32 nIndex ) const
     {
         DBG_ASSERT( (nIndex >= 0) && (nIndex < (sal_Int32)aMapEntries.size() ), "illegal access to invalid entry!" );

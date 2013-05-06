@@ -260,7 +260,7 @@ public class utils {
     public static String getOfficeUserPath(XMultiServiceFactory msf) {
         String userPath = null;
 
-        // get a folder wich is located in the user dir
+        // get a folder located in the user dir
         try {
             userPath = getOfficeSettingsValue(msf, "UserConfig");
         } catch (Exception e) {

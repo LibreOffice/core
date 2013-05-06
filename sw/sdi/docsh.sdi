@@ -21,7 +21,7 @@ interface TextDocument : BaseTextDocument
     uuid = "0D960120-111C-101D-9757-6E74207A7520"
 ]
 {
-    // Slots, wich are not needed in the WebDocShell
+    // Slots, which are not needed in the WebDocShell
 
     FN_OUTLINE_TO_IMPRESS
     [

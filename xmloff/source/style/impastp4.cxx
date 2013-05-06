@@ -318,7 +318,7 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
 
     /////////////////////////////////////////////////////////////////////////////////////
     // create, initialize and fill helper-structure (SvXMLAutoStylePoolProperties_Impl)
-    // wich contains a parent-name and a SvXMLAutoStylePoolProperties_Impl
+    // which contains a parent-name and a SvXMLAutoStylePoolProperties_Impl
     //
     const SvXMLAutoStylePoolParentsP_Impl *pParents =
         rFamily.mpParentList;

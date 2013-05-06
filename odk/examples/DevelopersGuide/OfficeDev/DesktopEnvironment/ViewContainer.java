@@ -141,7 +141,7 @@ public class ViewContainer extends Thread
         // hook at the runtime class. So our run() method will be called.
         // Our view container should be empty - but
         // our listener container can include some references.
-        // These objects wich to be informed then and release e.g. some
+        // These objects will be informed then and release e.g. some
         // remote references.
         if (nViewCount<1)
         {

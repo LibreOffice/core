@@ -65,7 +65,7 @@ class PictWriter {
 private:
 
     sal_Bool bStatus;
-    sal_uLong nLastPercent; // with wich number pCallback has been called the last time
+    sal_uLong nLastPercent; // with which number pCallback has been called the last time
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
     SvStream * pPict;

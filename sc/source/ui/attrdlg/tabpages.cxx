@@ -95,7 +95,7 @@ void ScTabPageProtection::Reset( const SfxItemSet& rCoreAttrs )
     bDontCare = bTriEnabled;
     if (bTriEnabled)
     {
-       //  Defaults wich appear when a TriState will be clicked away:
+       //  Defaults which appear when a TriState will be clicked away:
        //  (because everything combined is an attribute, and also only
        //   everything combined as DontCare can be available - #38543#)
 

@@ -61,7 +61,7 @@ public class FilterFactory extends TestCase {
      * <code>com.sun.star.comp.framework.FilterFactory</code>.
      * Prepares relation for
      * <code>XMultiServiceFactory.createInstanceWithArguments</code> method
-     * test. Only filters wich have their service names can be instantiated
+     * test. Only filters which have their service names can be instantiated
      * in some reasons (?). For instantiation used filter type as service
      * name and its name as a parameter. <p>
      */

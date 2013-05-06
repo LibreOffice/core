@@ -535,7 +535,7 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
     if ( ( bOriChg  || bPgSzChg ) &&
         RET_YES == QueryBox(0, WB_YES_NO | WB_DEF_OK, aMsg).Execute() )
     {
-        // Flags wich changes for  <SetPrinter(SfxPrinter*)> are maintained
+        // Flags with changes for  <SetPrinter(SfxPrinter*)> are maintained
         nChangedFlags |= nNewOpt;
     }
 

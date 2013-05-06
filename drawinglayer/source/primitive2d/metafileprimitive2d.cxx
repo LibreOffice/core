@@ -1613,7 +1613,7 @@ namespace
 
     /** This is the main interpreter method. It is designed to handle the given Metafile
         completely inside the given context and target. It may use and modify the context and
-        target. This design allows to call itself recursively wich adapted contexts and
+        target. This design allows to call itself recursively which adapted contexts and
         targets as e.g. needed for the META_FLOATTRANSPARENT_ACTION where the content is expressed
         as a metafile as sub-content.
 

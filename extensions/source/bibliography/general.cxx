@@ -823,7 +823,7 @@ sal_Bool BibGeneralPage::HandleShortCutKey( const KeyEvent& rKeyEvent )
                 DBG_ASSERT( aControls[ nCtrlIndex ].is(), "-BibGeneralPage::HandleShortCutKey(): valid index and no control?" );
 
                 uno::Reference< awt::XControl >  xControl( aControls[ nCtrlIndex ], UNO_QUERY );
-                DBG_ASSERT( xControl.is(), "-BibGeneralPage::HandleShortCutKey(): a control wich is not a control!" );
+                DBG_ASSERT( xControl.is(), "-BibGeneralPage::HandleShortCutKey(): a control which is not a control!" );
 
                 Window*         pWindow = VCLUnoHelper::GetWindow( xControl->getPeer() );
 

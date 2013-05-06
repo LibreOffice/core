@@ -860,7 +860,7 @@ XMultiPropertySet
      *  a XVetoableChangeListener is meant. For XPropertyChangeListener and XPropertiesChangeListener
      *  it is to be set to false.
      *
-     * @param properties    Properties wich will be or have been affected.
+     * @param properties    Properties which will be or have been affected.
      * @param newValues the new values of the properties.
      * @param oldValues the old values of the properties.
      * @param bVetoable true means fire to VetoableChangeListener, false means fire to
