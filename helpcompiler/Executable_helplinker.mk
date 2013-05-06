@@ -9,8 +9,9 @@
 
 $(eval $(call gb_Executable_Executable,HelpLinker))
 
-$(eval $(call gb_Executable_use_package,HelpLinker,\
-    helpcompiler_inc \
+$(eval $(call gb_Executable_set_include,HelpLinker,\
+	-I$(SRCDIR)/helpcompiler/inc \
+	$$(INCLUDE) \
 ))
 
 $(eval $(call gb_Executable_use_libraries,HelpLinker,\

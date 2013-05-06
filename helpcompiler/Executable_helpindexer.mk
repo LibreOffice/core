@@ -9,13 +9,9 @@
 
 $(eval $(call gb_Executable_Executable,HelpIndexer))
 
-$(eval $(call gb_Executable_use_package,HelpIndexer,\
-    helpcompiler_inc \
-))
-
 $(eval $(call gb_Executable_use_libraries,HelpIndexer,\
     sal \
-    helplinker \
+	helplinker \
 ))
 
 $(eval $(call gb_Executable_use_externals,HelpIndexer,\

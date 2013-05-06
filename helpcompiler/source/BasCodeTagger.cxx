@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <helpcompiler/BasCodeTagger.hxx>
+#include <BasCodeTagger.hxx>
 
 LibXmlTreeWalker::LibXmlTreeWalker( xmlDocPtr doc )
 {

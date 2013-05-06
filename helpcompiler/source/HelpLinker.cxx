@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <helpcompiler/HelpCompiler.hxx>
-#include <helpcompiler/HelpLinker.hxx>
+#include <HelpCompiler.hxx>
+#include <HelpLinker.hxx>
 
 #include <map>
 

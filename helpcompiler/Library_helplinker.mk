@@ -9,8 +9,9 @@
 
 $(eval $(call gb_Library_Library,helplinker))
 
-$(eval $(call gb_Library_use_package,helplinker,\
-    helpcompiler_inc\
+$(eval $(call gb_Library_set_include,helplinker,\
+	-I$(SRCDIR)/helpcompiler/inc \
+	$$(INCLUDE) \
 ))
 
 $(eval $(call gb_Library_add_defs,helplinker,\

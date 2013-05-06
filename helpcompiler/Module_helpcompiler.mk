@@ -13,7 +13,6 @@ $(eval $(call gb_Module_add_targets,helpcompiler,\
     Executable_helpindexer \
     Executable_helplinker \
     Library_helplinker \
-    Package_inc \
 ))
 
 # vim:set noet sw=4 ts=4:

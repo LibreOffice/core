@@ -18,8 +18,8 @@
  */
 
 
-#include <helpcompiler/HelpCompiler.hxx>
-#include <helpcompiler/BasCodeTagger.hxx>
+#include <HelpCompiler.hxx>
+#include <BasCodeTagger.hxx>
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>
