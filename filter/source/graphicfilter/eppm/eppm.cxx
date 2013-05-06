@@ -222,8 +222,12 @@ void PPMWriter::ImplWriteNumber(sal_Int32 nNumber)
 // - exported function -
 // ---------------------
 
+#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
+#define GraphicExport eppGraphicExport
+#endif
+
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-eppGraphicExport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool)
+GraphicExport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool)
 {
     PPMWriter aPPMWriter(rStream);
     return aPPMWriter.WritePPM( rGraphic, pFilterConfigItem );

@@ -19,10 +19,14 @@
 #include <osl/file.hxx>
 #include <osl/process.h>
 
+#ifdef LIBO_MERGELIBS
+#define GraphicImport itgGraphicImport
+#endif
+
 extern "C"
 {
     SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-        itgGraphicImport(SvStream & rStream, Graphic & rGraphic,
+        GraphicImport(SvStream & rStream, Graphic & rGraphic,
         FilterConfigItem*, sal_Bool);
 }
 
@@ -57,7 +61,7 @@ bool TgaFilterTest::load(const OUString &,
 {
     SvFileStream aFileStream(rURL, STREAM_READ);
     Graphic aGraphic;
-    return itgGraphicImport(aFileStream, aGraphic, NULL, 0);
+    return GraphicImport(aFileStream, aGraphic, NULL, 0);
 }
 
 void TgaFilterTest::testCVEs()

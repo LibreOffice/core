@@ -985,7 +985,7 @@ PFilterCall ImpFilterLibCacheEntry::GetImportFunction()
     if( !mpfnImport )
     {
 #ifndef DISABLE_DYNLOADING
-        mpfnImport = (PFilterCall) maLibrary.getFunctionSymbol(OUString(maFiltername+IMPORT_FUNCTION_NAME));
+        mpfnImport = (PFilterCall) maLibrary.getFunctionSymbol(OUString(IMPORT_FUNCTION_NAME));
 #else
         if( maFiltername.EqualsAscii( "icd" ) )
             mpfnImport = icdGraphicImport;

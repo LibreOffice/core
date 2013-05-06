@@ -1864,8 +1864,12 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
 
 //================== GraphicImport - the exported function ================
 
+#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
+#define GraphicImport iptGraphicImport
+#endif
+
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-iptGraphicImport( SvStream& rIStm, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
+GraphicImport( SvStream& rIStm, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
 {
     GDIMetaFile aMTF;
     PictReader  aPictReader;

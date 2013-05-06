@@ -475,8 +475,12 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
 
 //================== GraphicImport - the exported function ================
 
+#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
+#define GraphicImport ipsGraphicImport
+#endif
+
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-ipsGraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
+GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
 {
     if ( rStream.GetError() )
         return sal_False;

@@ -1366,8 +1366,12 @@ sal_Bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
 
 //================== GraphicImport - the exported function ================
 
+#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
+#define GraphicImport itiGraphicImport
+#endif
+
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-itiGraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
+GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
 {
     TIFFReader aTIFFReader;
 

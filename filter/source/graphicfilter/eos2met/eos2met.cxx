@@ -2552,8 +2552,12 @@ sal_Bool METWriter::WriteMET( const GDIMetaFile& rMTF, SvStream& rTargetStream, 
 
 //================== GraphicExport - the exported Function ================
 
+#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
+#define GraphicExport emeGraphicExport
+#endif
+
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-emeGraphicExport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool )
+GraphicExport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool )
 {   METWriter aMETWriter;
 
     // #119735# just use GetGDIMetaFile, it will create a bufferd version of contained bitmap now automatically

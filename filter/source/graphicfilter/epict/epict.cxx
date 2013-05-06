@@ -2266,8 +2266,12 @@ sal_Bool PictWriter::WritePict(const GDIMetaFile & rMTF, SvStream & rTargetStrea
 
 //================== GraphicExport - the exported Function ================
 
+#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
+#define GraphicExport eptGraphicExport
+#endif
+
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-eptGraphicExport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool)
+GraphicExport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool)
 {
     PictWriter      aPictWriter;
 

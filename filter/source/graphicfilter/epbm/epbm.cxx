@@ -189,8 +189,12 @@ void PBMWriter::ImplWriteNumber(sal_Int32 nNumber)
 // - exported function -
 // ---------------------
 
+#if defined(DISABLE_DYNLOADING) || defined(LIBO_MERGELIBS)
+#define GraphicExport epbGraphicExport
+#endif
+
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-epbGraphicExport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool)
+GraphicExport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool)
 {
     PBMWriter aPBMWriter(rStream);
 
