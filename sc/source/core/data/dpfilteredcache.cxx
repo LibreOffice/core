@@ -172,7 +172,7 @@ void ScDPFilteredCache::fillTable(
         {
             if (nRow > nEndSegment)
             {
-                if (!maShowByFilter.search_tree(nRow, bShow, NULL, &nEndSegment))
+                if (!maShowByFilter.search_tree(nRow, bShow, NULL, &nEndSegment).second)
                 {
                     OSL_FAIL("Tree search failed!");
                     continue;

@@ -208,7 +208,7 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
         if (GetColFlag(nCol, EXC_COLROW_USED))
         {
             sal_uInt16 nTmp;
-            if (maColWidths.search_tree(nCol, nTmp))
+            if (maColWidths.search_tree(nCol, nTmp).second)
                 nWidth = nTmp;
         }
 
@@ -258,7 +258,7 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
                     for (SCROW i = nPrevRow; i <= nRow - 1; ++i)
                     {
                         SCROW nLast;
-                        if (!maRowHeights.search_tree(i, nHeight, NULL, &nLast))
+                        if (!maRowHeights.search_tree(i, nHeight, NULL, &nLast).second)
                         {
                             // search failed for some reason
                             return;

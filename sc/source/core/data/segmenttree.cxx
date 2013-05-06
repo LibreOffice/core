@@ -159,7 +159,7 @@ bool ScFlatSegmentsImpl<_ValueType, _ExtValueType>::getRangeData(SCCOLROW nPos, 
     if (!maSegments.is_tree_valid())
         maSegments.build_tree();
 
-    if (!maSegments.search_tree(nPos, nValue, &nPos1, &nPos2))
+    if (!maSegments.search_tree(nPos, nValue, &nPos1, &nPos2).second)
         return false;
 
     rData.mnPos1 = nPos1;

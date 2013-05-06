@@ -1280,7 +1280,7 @@ sal_Int32 ScRowStyles::GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32
         r.build_tree();
     sal_Int32 nStyle;
     sal_Int32 nStart, nEnd;
-    if (r.search_tree(nField, nStyle, &nStart, &nEnd))
+    if (r.search_tree(nField, nStyle, &nStart, &nEnd).second)
     {
         // Cache this value for better performance.
         maCache.mnTable = nTable;
