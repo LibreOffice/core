@@ -258,7 +258,7 @@ OCommonStatement::StatementType OCommonStatement::parseSql( const OUString& sql 
     else if(!bAdjusted) //Our sql parser does not support a statement like "create table foo"
                         // So we append ("E-mail" varchar) to the last of it to make it work
     {
-        return parseSql(sql + OUString( "(""E-mail"" caracter)"),sal_True);
+        return parseSql(sql + OUString( "(""E-mail"" character)"),sal_True);
     }
 
     getOwnConnection()->throwSQLException( STR_QUERY_TOO_COMPLEX, *this );
