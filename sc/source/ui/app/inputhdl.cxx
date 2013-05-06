@@ -70,7 +70,7 @@
 #include "userlist.hxx"
 #include "rfindlst.hxx"
 #include "inputopt.hxx"
-#include "formulacell.hxx"             // fuer Formel-Preview
+#include "simpleformulacalc.hxx"
 #include "compiler.hxx"         // fuer Formel-Preview
 #include "editable.hxx"
 #include "funcdesc.hxx"
@@ -1307,48 +1307,48 @@ static OUString lcl_Calculate( const OUString& rFormula, ScDocument* pDoc, const
     if(rFormula.isEmpty())
         return String();
 
-    boost::scoped_ptr<ScFormulaCell> pCell(new ScFormulaCell( pDoc, rPos, rFormula ));
+    boost::scoped_ptr<ScSimpleFormulaCalculator> pCalc( new ScSimpleFormulaCalculator( pDoc, rPos, rFormula ) );
 
     // HACK! um bei ColRowNames kein #REF! zu bekommen,
     // wenn ein Name eigentlich als Bereich in die Gesamt-Formel
     // eingefuegt wird, bei der Einzeldarstellung aber als
     // single-Zellbezug interpretiert wird
-    bool bColRowName = pCell->HasColRowName();
+    bool bColRowName = pCalc->HasColRowName();
     if ( bColRowName )
     {
         // ColRowName im RPN-Code?
-        if ( pCell->GetCode()->GetCodeLen() <= 1 )
+        if ( pCalc->GetCode()->GetCodeLen() <= 1 )
         {   // ==1: einzelner ist als Parameter immer Bereich
             // ==0: es waere vielleicht einer, wenn..
             OUStringBuffer aBraced;
             aBraced.append('(');
             aBraced.append(rFormula);
             aBraced.append(')');
-            pCell.reset(new ScFormulaCell( pDoc, rPos, aBraced.makeStringAndClear() ));
+            pCalc.reset( new ScSimpleFormulaCalculator( pDoc, rPos, aBraced.makeStringAndClear() ) );
         }
         else
             bColRowName = false;
     }
 
-    sal_uInt16 nErrCode = pCell->GetErrCode();
+    sal_uInt16 nErrCode = pCalc->GetErrCode();
     if ( nErrCode != 0 )
         return ScGlobal::GetErrorString(nErrCode);
 
     SvNumberFormatter& aFormatter = *(pDoc->GetFormatTable());
     OUString aValue;
-    if ( pCell->IsValue() )
+    if ( pCalc->IsValue() )
     {
-        double n = pCell->GetValue();
+        double n = pCalc->GetValue();
         sal_uLong nFormat = aFormatter.GetStandardFormat( n, 0,
-                pCell->GetFormatType(), ScGlobal::eLnge );
+                pCalc->GetFormatType(), ScGlobal::eLnge );
         aFormatter.GetInputLineString( n, nFormat, aValue );
         //! display OutputString but insert InputLineString
     }
     else
     {
-        OUString aStr = pCell->GetString();
+        OUString aStr = pCalc->GetString();
         sal_uLong nFormat = aFormatter.GetStandardFormat(
-                pCell->GetFormatType(), ScGlobal::eLnge);
+                pCalc->GetFormatType(), ScGlobal::eLnge);
         {
             Color* pColor;
             aFormatter.GetOutputString( aStr, nFormat,
