@@ -7,14 +7,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UnpackedTarball_UnpackedTarball,odfgen))
+$(eval $(call gb_UnpackedTarball_UnpackedTarball,libwpd))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,odfgen,$(ODFGEN_TARBALL)))
-
-$(eval $(call gb_UnpackedTarball_set_patchlevel,odfgen,1))
-
-$(eval $(call gb_UnpackedTarball_add_patches,odfgen,\
-       libodfgen/libodfgen-0.0.0-android.patch \
-))
+$(eval $(call gb_UnpackedTarball_set_tarball,libwpd,$(WPD_TARBALL)))
 
 # vim: set noet sw=4 ts=4:

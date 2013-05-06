@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,libwpg,wpg))
+$(eval $(call gb_ExternalPackage_ExternalPackage,libwpg,libwpg))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,libwpg,inc/external/libwpg,\
 	src/lib/libwpg.h \

@@ -14,7 +14,7 @@ ifeq ($(SYSTEM_MSPUB),NO)
 $(eval $(call gb_Module_add_targets,libmspub,\
 	ExternalPackage_libmspub \
 	ExternalProject_libmspub \
-	UnpackedTarball_mspub \
+	UnpackedTarball_libmspub \
 ))
 
 endif

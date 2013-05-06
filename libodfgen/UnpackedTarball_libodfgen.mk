@@ -7,15 +7,14 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UnpackedTarball_UnpackedTarball,mwaw))
+$(eval $(call gb_UnpackedTarball_UnpackedTarball,libodfgen))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,mwaw,$(MWAW_TARBALL)))
+$(eval $(call gb_UnpackedTarball_set_tarball,libodfgen,$(ODFGEN_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,mwaw,1))
+$(eval $(call gb_UnpackedTarball_set_patchlevel,libodfgen,1))
 
-$(eval $(call gb_UnpackedTarball_add_patches,mwaw,\
-       libmwaw/libmwaw-0.1.7-autotools.patch \
-       libmwaw/libmwaw-0.1.7-misc.patch \
+$(eval $(call gb_UnpackedTarball_add_patches,libodfgen,\
+       libodfgen/libodfgen-0.0.0-android.patch \
 ))
 
 # vim: set noet sw=4 ts=4:

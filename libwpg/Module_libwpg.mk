@@ -14,7 +14,7 @@ ifeq ($(SYSTEM_WPG),NO)
 $(eval $(call gb_Module_add_targets,libwpg,\
 	ExternalProject_libwpg \
 	ExternalPackage_libwpg \
-	UnpackedTarball_wpg \
+	UnpackedTarball_libwpg \
 ))
 
 endif

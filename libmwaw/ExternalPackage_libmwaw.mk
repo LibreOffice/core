@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,libmwaw,mwaw))
+$(eval $(call gb_ExternalPackage_ExternalPackage,libmwaw,libmwaw))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,libmwaw,inc/external/libmwaw,\
 	src/lib/libmwaw.hxx \

@@ -14,7 +14,7 @@ ifeq ($(SYSTEM_LIBORCUS),NO)
 $(eval $(call gb_Module_add_targets,liborcus,\
 	ExternalProject_liborcus \
 	ExternalPackage_liborcus \
-	UnpackedTarball_orcus \
+	UnpackedTarball_liborcus \
 ))
 
 endif

@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,libwpd,wpd))
+$(eval $(call gb_ExternalPackage_ExternalPackage,libwpd,libwpd))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,libwpd,inc/external/libwpd,\
 	src/lib/libwpd.h \

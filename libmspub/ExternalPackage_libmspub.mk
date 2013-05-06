@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,libmspub,mspub))
+$(eval $(call gb_ExternalPackage_ExternalPackage,libmspub,libmspub))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,libmspub,inc/external/libmspub,\
 	src/lib/libmspub.h \

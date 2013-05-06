@@ -7,31 +7,31 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UnpackedTarball_UnpackedTarball,orcus))
+$(eval $(call gb_UnpackedTarball_UnpackedTarball,liborcus))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,orcus,$(ORCUS_TARBALL)))
+$(eval $(call gb_UnpackedTarball_set_tarball,liborcus,$(ORCUS_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,orcus,0))
+$(eval $(call gb_UnpackedTarball_set_patchlevel,liborcus,0))
 
-orcus_patches :=
+liborcus_patches :=
 
 # make config.sub recognize arm-linux-androideabi
-orcus_patches += liborcus_0.1.0-configure.patch
+liborcus_patches += liborcus_0.1.0-configure.patch
 
 # don't use dllimport
-orcus_patches += liborcus_0.1.0-dllimport.patch
+liborcus_patches += liborcus_0.1.0-dllimport.patch
 
 ifeq ($(OS),MACOSX)
 # no "tac" command on OS X, but "tail -r"
-orcus_patches += liborcus_0.1.0-tac.patch
+liborcus_patches += liborcus_0.1.0-tac.patch
 endif
 
 # <https://gitorious.org/orcus/orcus/merge_requests/2#
 # f60d6eecee72349993a392a9a63ddf3383d3b8c8-
 # f60d6eecee72349993a392a9a63ddf3383d3b8c8@2>:
 
-$(eval $(call gb_UnpackedTarball_add_patches,orcus,\
-	$(foreach patch,$(orcus_patches),liborcus/$(patch)) \
+$(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
+	$(foreach patch,$(liborcus_patches),liborcus/$(patch)) \
 ))
 
 # vim: set noet sw=4 ts=4:

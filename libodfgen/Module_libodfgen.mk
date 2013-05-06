@@ -14,7 +14,7 @@ ifeq ($(SYSTEM_ODFGEN),NO)
 $(eval $(call gb_Module_add_targets,libodfgen,\
 	ExternalPackage_libodfgen \
 	ExternalProject_libodfgen \
-	UnpackedTarball_odfgen \
+	UnpackedTarball_libodfgen \
 ))
 
 endif

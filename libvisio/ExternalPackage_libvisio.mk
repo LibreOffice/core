@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,libvisio,visio))
+$(eval $(call gb_ExternalPackage_ExternalPackage,libvisio,libvisio))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,libvisio,inc/external/libvisio,\
 	src/lib/libvisio.h \

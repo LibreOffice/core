@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalProject_ExternalProject,libcdr,cdr))
+$(eval $(call gb_ExternalProject_ExternalProject,libcdr,libcdr))
 
 $(eval $(call gb_ExternalProject_use_autoconf,libcdr,build))
 

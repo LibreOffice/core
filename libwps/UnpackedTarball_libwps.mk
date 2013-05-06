@@ -7,9 +7,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UnpackedTarball_UnpackedTarball,visio))
+$(eval $(call gb_UnpackedTarball_UnpackedTarball,libwps))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,visio,$(VISIO_TARBALL)))
-
+$(eval $(call gb_UnpackedTarball_set_tarball,libwps,$(WPS_TARBALL)))
 
 # vim: set noet sw=4 ts=4:

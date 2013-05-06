@@ -7,8 +7,15 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UnpackedTarball_UnpackedTarball,mspub))
+$(eval $(call gb_UnpackedTarball_UnpackedTarball,libmwaw))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,mspub,$(MSPUB_TARBALL)))
+$(eval $(call gb_UnpackedTarball_set_tarball,libmwaw,$(MWAW_TARBALL)))
+
+$(eval $(call gb_UnpackedTarball_set_patchlevel,libmwaw,1))
+
+$(eval $(call gb_UnpackedTarball_add_patches,libmwaw,\
+       libmwaw/libmwaw-0.1.7-autotools.patch \
+       libmwaw/libmwaw-0.1.7-misc.patch \
+))
 
 # vim: set noet sw=4 ts=4:

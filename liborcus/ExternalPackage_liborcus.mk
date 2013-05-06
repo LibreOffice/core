@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,liborcus,orcus))
+$(eval $(call gb_ExternalPackage_ExternalPackage,liborcus,liborcus))
 
 $(eval $(call gb_ExternalPackage_use_external_project,liborcus,liborcus))
 

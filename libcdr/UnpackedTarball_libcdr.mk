@@ -7,13 +7,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UnpackedTarball_UnpackedTarball,cdr))
+$(eval $(call gb_UnpackedTarball_UnpackedTarball,libcdr))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,cdr,$(CDR_TARBALL)))
+$(eval $(call gb_UnpackedTarball_set_tarball,libcdr,$(CDR_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,cdr,1))
+$(eval $(call gb_UnpackedTarball_set_patchlevel,libcdr,1))
 
-$(eval $(call gb_UnpackedTarball_add_patches,cdr,\
+$(eval $(call gb_UnpackedTarball_add_patches,libcdr,\
        libcdr/libcdr-0.0.13.patch \
 ))
 
