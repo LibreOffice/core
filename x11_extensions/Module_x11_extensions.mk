@@ -9,8 +9,4 @@
 
 $(eval $(call gb_Module_Module,x11_extensions))
 
-$(eval $(call gb_Module_add_targets,x11_extensions,\
-	Package_inc \
-))
-
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

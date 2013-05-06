@@ -2456,8 +2456,9 @@ ifeq ($(GUIBASE),unx)
 ifneq ($(filter X11_EXTENSIONS,$(BUILD_TYPE)),)
 
 define gb_LinkTarget__use_x11extensions
-$(call gb_LinkTarget_use_packages,$(1),\
-	x11_extensions_inc \
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(SRCDIR)/x11_extensions/inc \
+	$$(INCLUDE) \
 )
 endef
 
