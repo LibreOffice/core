@@ -400,20 +400,20 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 
 
             // getting the string for the creator
-            String aCreator;
+            OUString aCreator;
             Reference< XServiceInfo > xInfo( mxSrcDoc, UNO_QUERY );
             if ( xInfo.is() )
             {
                 if ( xInfo->supportsService( "com.sun.star.presentation.PresentationDocument" ) )
-                    aCreator.AppendAscii( "Impress" );
+                    aCreator += "Impress";
                 else if ( xInfo->supportsService( "com.sun.star.drawing.DrawingDocument" ) )
-                    aCreator.AppendAscii( "Draw" );
+                    aCreator += "Draw";
                 else if ( xInfo->supportsService( "com.sun.star.text.TextDocument" ) )
-                    aCreator.AppendAscii( "Writer" );
+                    aCreator += "Writer";
                 else if ( xInfo->supportsService( "com.sun.star.sheet.SpreadsheetDocument" ) )
-                    aCreator.AppendAscii( "Calc" );
+                    aCreator += "Calc";
                 else if ( xInfo->supportsService( "com.sun.star.formula.FormulaProperties"  ) )
-                    aCreator.AppendAscii( "Math" );
+                    aCreator += "Math";
             }
 
             Reference< document::XDocumentPropertiesSupplier > xDocumentPropsSupplier( mxSrcDoc, UNO_QUERY );
@@ -846,7 +846,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                   OUString sShowOnlineLayout( "ShowOnlineLayout" );
                   uno::Reference< beans::XPropertySet > xViewProperties;
 
-                if ( aCreator.EqualsAscii( "Writer" ) )
+                if ( aCreator.equalsAscii( "Writer" ) )
                 {
                     //i92835 if Writer is in web layout mode this has to be switched to normal view and back to web view in the end
                     try
@@ -867,7 +867,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 
                 const sal_Int32 nPageCount = xRenderable->getRendererCount( aSelection, aRenderOptions );
 
-                if ( mbExportNotesPages && aCreator.EqualsAscii( "Impress" ) )
+                if ( mbExportNotesPages && aCreator.equalsAscii( "Impress" ) )
                 {
                     uno::Reference< drawing::XShapes > xShapes;     // sj: do not allow to export notes when
                     if ( ! ( aSelection >>= xShapes ) )             // exporting a selection -> todo: in the dialog
