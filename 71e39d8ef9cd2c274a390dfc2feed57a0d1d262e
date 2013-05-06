@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//9O4\u003d",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1654,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-05-06T13:19:07Z",
+      "side": 1,
+      "message": "As this item is now moved to a rather large scope, please rename it from pItem to something more distinguishable, e.g pWritingDirectionItem",
+      "revId": "71e39d8ef9cd2c274a390dfc2feed57a0d1d262e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//9PE\u003d",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1991,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-05-06T13:19:07Z",
+      "side": 1,
+      "message": "This instance does not need to be new\u0027ed, it can be created as an automatic stack variable with the advantage that the memory management overhead is not needed then.\n\n SvtCTLOptions aCTLOptions;\n\nThe entire block should be executed only if \npCurrentWritingMode-\u003eGetValue() \u003d\u003d FRMDIR_HORI_RIGHT_TOP is true, creating the SvtCTLOptions instance is not necessary otherwise.",
+      "revId": "71e39d8ef9cd2c274a390dfc2feed57a0d1d262e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//9PA\u003d",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1992,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-05-06T13:19:07Z",
+      "side": 1,
+      "message": "... and here\n\n aCTLOptions.GetCTLTextNumerals() \u003d\u003d SvtCTLOptions::NUMERALS_CONTEXT",
+      "revId": "71e39d8ef9cd2c274a390dfc2feed57a0d1d262e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//9Po\u003d",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1996,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-05-06T13:19:07Z",
+      "side": 1,
+      "message": "This switches on distinct locales only, not on a primary language value where the secondary value may be different. This should instead be\n\n switch (ctl \u0026 LANGUAGE_MASK_PRIMARY)\n\nand ...",
+      "revId": "71e39d8ef9cd2c274a390dfc2feed57a0d1d262e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//9Pk\u003d",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1998,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-05-06T13:19:07Z",
+      "side": 1,
+      "message": "... here\n\n case LANGUAGE_ARABIC_SAUDI_ARABIA \u0026 LANGUAGE_MASK_PRIMARY :",
+      "revId": "71e39d8ef9cd2c274a390dfc2feed57a0d1d262e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//9Pg\u003d",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2003,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-05-06T13:19:07Z",
+      "side": 1,
+      "message": "...\n\n case LANGUAGE_FARSI \u0026 LANGUAGE_MASK_PRIMARY :",
+      "revId": "71e39d8ef9cd2c274a390dfc2feed57a0d1d262e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//9PY\u003d",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2008,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-05-06T13:19:07Z",
+      "side": 1,
+      "message": "...\n\n case LANGUAGE_URDU_PAKISTAN \u0026 LANGUAGE_MASK_PRIMARY :",
+      "revId": "71e39d8ef9cd2c274a390dfc2feed57a0d1d262e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//9PU\u003d",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2013,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-05-06T13:19:07Z",
+      "side": 1,
+      "message": "Remove block then, covered by case LANGUAGE_URDU_PAKISTAN \u0026 LANGUAGE_MASK_PRIMARY",
+      "revId": "71e39d8ef9cd2c274a390dfc2feed57a0d1d262e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//9PQ\u003d",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2018,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-05-06T13:19:07Z",
+      "side": 1,
+      "message": "Remove block then, covered by case LANGUAGE_URDU_PAKISTAN \u0026 LANGUAGE_MASK_PRIMARY",
+      "revId": "71e39d8ef9cd2c274a390dfc2feed57a0d1d262e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//9O8\u003d",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2025,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-05-06T13:19:07Z",
+      "side": 1,
+      "message": "This needs to be removed then if aCTLOptions is used instead.",
+      "revId": "71e39d8ef9cd2c274a390dfc2feed57a0d1d262e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
