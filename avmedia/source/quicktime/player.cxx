@@ -148,7 +148,7 @@ bool Player::create( const ::rtl::OUString& rURL )
         {
             OSL_TRACE( "NSMovie create failed with error %ld (%s)",
                        (long)[pErr code],
-                       [[pErr localizedDescription] cString]
+                       [[pErr localizedDescription] UTF8String]
                        );
         }
         [pool release];
