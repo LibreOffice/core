@@ -1183,7 +1183,7 @@ void WW8_WrPlcSepx::OutHeaderFooter( WW8Export& rWrt, bool bHeader,
     else if ( rWrt.bWrtWW8 )
     {
         pTxtPos->Append( rCpPos );
-        if (rWrt.bHasHdr && nBreakCode!=0)
+        if ((bHeader? rWrt.bHasHdr : rWrt.bHasFtr) && nBreakCode!=0)
         {
             rWrt.WriteStringAsPara( aEmptyStr ); // Empty paragraph for empty header/footer
             rWrt.WriteStringAsPara( aEmptyStr ); // a CR that WW8 needs for end of the stream

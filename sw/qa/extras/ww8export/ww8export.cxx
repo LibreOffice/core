@@ -25,6 +25,7 @@ public:
     void testZoom();
     void test56513();
     void testNewPageStylesTable();
+    void testFdo42144();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -46,6 +47,7 @@ void Test::run()
         {"zoom.doc", &Test::testZoom},
         {"fdo56513.doc", &Test::test56513},
         {"new-page-styles.doc", &Test::testNewPageStylesTable},
+        {"fdo42144.odt", &Test::testFdo42144},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -138,6 +140,13 @@ void Test::testNewPageStylesTable()
     CPPUNIT_ASSERT_EQUAL(OUString("Sigma Space Performance Goals and Results (Page 1)*"),  parseDump("/root/page[1]/header/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("Sigma Space Performance Assessment (Page 2)****"),   parseDump("/root/page[2]/header/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("Sigma Space Performance Goals: Next Year (Page 3)*******"),  parseDump("/root/page[3]/header/txt/text()"));
+}
+
+void Test::testFdo42144()
+{
+    // Footer wasn't disabled -- instead empty footer was exported.
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(xStyle, "FooterIsOn")));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
