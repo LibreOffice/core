@@ -72,17 +72,6 @@ bool ServerFontLayout::LayoutText( ImplLayoutArgs& rArgs )
 }
 
 // -----------------------------------------------------------------------
-long ServerFontLayout::GetTextWidth() const
-{
-    long nWidth;
-    if (bUseHarfBuzz)
-        nWidth = GetWidth();
-    else
-        nWidth = GenericSalLayout::GetTextWidth();
-
-    return nWidth;
-}
-
 void ServerFontLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
     GenericSalLayout::AdjustLayout( rArgs );
@@ -524,7 +513,7 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             int32_t nYAdvance = pHbPositions[i].y_advance >> 6;
 
             Point aNewPos = Point(aCurrPos.X() + nXOffset, -(aCurrPos.Y() + nYOffset));
-            const GlyphItem aGI(nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nXAdvance);
+            const GlyphItem aGI(nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nXAdvance, nXOffset);
             rLayout.AppendGlyph(aGI);
 
             aCurrPos.X() += nXAdvance;
@@ -533,7 +522,6 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 
         hb_buffer_destroy(pHbBuffer);
     }
-    rLayout.SetWidth(aCurrPos.X());
 
     hb_font_destroy(pHbFont);
 

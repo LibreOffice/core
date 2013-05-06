@@ -996,7 +996,7 @@ long GenericSalLayout::GetTextWidth() const
         long nXPos = pG->maLinearPos.X();
         if( nMinPos > nXPos )
             nMinPos = nXPos;
-        nXPos += pG->mnNewWidth;
+        nXPos += pG->mnNewWidth - pG->mnXOffset;
         if( nMaxPos < nXPos )
             nMaxPos = nXPos;
     }

@@ -317,7 +317,6 @@ private:
     SAL_DLLPRIVATE  ServerFontLayout& operator=( const ServerFontLayout& );
 
     bool            bUseHarfBuzz;
-    long            mnTextWidth;
 
 public:
                     ServerFontLayout( ServerFont& );
@@ -325,12 +324,7 @@ public:
     virtual void    AdjustLayout( ImplLayoutArgs& );
     virtual void    ApplyDXArray( ImplLayoutArgs& );
     virtual void    DrawText( SalGraphics& ) const;
-    virtual long    GetTextWidth() const;
     ServerFont&     GetServerFont() const   { return mrServerFont; }
-
-    // used by layout engine
-    void            SetWidth( long nWidth ) { mnTextWidth = nWidth; }
-    long            GetWidth() const { return mnTextWidth; }
 };
 
 // =======================================================================

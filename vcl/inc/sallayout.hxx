@@ -310,6 +310,7 @@ struct GlyphItem
     int     mnCharPos;      // index in string
     int     mnOrigWidth;    // original glyph width
     int     mnNewWidth;     // width after adjustments
+    int     mnXOffset;
     sal_GlyphId mnGlyphIndex;
     Point   maLinearPos;    // absolute position of non rotated string
 
@@ -320,8 +321,18 @@ public:
                 long nFlags, int nOrigWidth )
             :   mnFlags(nFlags), mnCharPos(nCharPos),
                 mnOrigWidth(nOrigWidth), mnNewWidth(nOrigWidth),
+                mnXOffset(0),
                 mnGlyphIndex(nGlyphIndex), maLinearPos(rLinearPos)
             {}
+
+            GlyphItem( int nCharPos, sal_GlyphId nGlyphIndex, const Point& rLinearPos,
+                long nFlags, int nOrigWidth, int nXOffset )
+            :   mnFlags(nFlags), mnCharPos(nCharPos),
+                mnOrigWidth(nOrigWidth), mnNewWidth(nOrigWidth),
+                mnXOffset(nXOffset),
+                mnGlyphIndex(nGlyphIndex), maLinearPos(rLinearPos)
+            {}
+
 
     enum{ FALLBACK_MASK=0xFF, IS_IN_CLUSTER=0x100, IS_RTL_GLYPH=0x200, IS_DIACRITIC=0x400 };
 
