@@ -24,6 +24,6 @@ Control RID_SIDEBAR_EMPTY_PANEL
     {
         Pos = MAP_APPFONT(2,2);
         Size = MAP_APPFONT(100,24);
-        Text [en-US] = "Properties for the task that you are performing are not available in the sidebar at this time.";
+        Text [en-US] = "Properties for the task that you are performing are not available for the current selection";
     };
 };
