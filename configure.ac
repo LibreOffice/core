@@ -7175,6 +7175,20 @@ if test "$with_system_jpeg" = "yes"; then
         [AC_MSG_ERROR(jpeg.h not found. install libjpeg)], [])
     AC_CHECK_LIB(jpeg, jpeg_resync_to_restart, [ JPEG3RDLIB=-ljpeg ],
     [AC_MSG_CHECKING(jpeg library not found or fuctional)], [])
+    AC_MSG_CHECKING([[libjpeg version is 8 or greater]])
+	AC_PREPROC_IFELSE([ AC_LANG_SOURCE(
+			  [[
+#include <stdio.h>
+#include <jpeglib.h>
+#if JPEG_LIB_VERSION < 80
+#error "wrong version"
+#endif
+int main(int c, char**v) { return 0; }
+			  ]]) ],
+			  [AC_MSG_RESULT(yes)],
+		          [AC_MSG_RESULT(no)
+                           AC_MSG_ERROR(jpeg library version >= 8 required)
+                          ])
     libo_MINGW_CHECK_DLL([libjpeg])
 else
     AC_MSG_RESULT([internal])
