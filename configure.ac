@@ -9641,6 +9641,8 @@ if test -z "$enable_opengl"; then
         # As such with some suitable minor tweaks the Mac OpenGL transitions code would presumably
         # build fine for iOS, too, but let's leave that for later
         enable_opengl=no
+    elif test "$enable_headless" = "yes"; then
+        enable_opengl=no
     else
         enable_opengl=yes
     fi
