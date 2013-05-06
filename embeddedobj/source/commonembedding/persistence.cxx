@@ -56,8 +56,6 @@
 
 #include <tools/diagnose_ex.h>
 
-#define USE_STORAGEBASED_DOCUMENT
-
 using namespace ::com::sun::star;
 
 
@@ -259,7 +257,6 @@ void OCommonEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::X
     m_xParentStorage = xNewParentStorage;
     m_aEntryName = aNewName;
 
-#ifdef USE_STORAGEBASED_DOCUMENT
     // the linked document should not be switched
     if ( !m_bIsLink )
     {
@@ -267,7 +264,6 @@ void OCommonEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::X
         if ( xDoc.is() )
             SwitchDocToStorage_Impl( xDoc, m_xObjectStorage );
     }
-#endif
 
     try {
         if ( xComponent.is() )
@@ -494,11 +490,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
     }
 
     uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY );
-    uno::Reference< document::XStorageBasedDocument > xDoc
-#ifdef USE_STORAGEBASED_DOCUMENT
-            ( xDocument, uno::UNO_QUERY )
-#endif
-            ;
+    uno::Reference< document::XStorageBasedDocument > xDoc( xDocument, uno::UNO_QUERY );
     if ( !xDoc.is() && !xLoadable.is() ) ///BUG: This should be || instead of && ?
         throw uno::RuntimeException();
 
@@ -744,7 +736,6 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl( const uno::Reference< embed:
     if ( !xStorage.is() )
         throw uno::RuntimeException(); // TODO:
 
-#ifdef USE_STORAGEBASED_DOCUMENT
     uno::Reference< document::XStorageBasedDocument > xDoc;
     {
         osl::MutexGuard aGuard( m_aMutex );
@@ -773,7 +764,6 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl( const uno::Reference< embed:
             SwitchDocToStorage_Impl( xDoc, xStorage );
     }
     else
-#endif
     {
         // store document to temporary stream based on temporary file
         uno::Reference < io::XInputStream > xTempIn = StoreDocumentToTempStream_Impl( nStorageFormat, aBaseURL, aHierarchName );
