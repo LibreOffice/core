@@ -22,7 +22,7 @@
 
 #include <vcl/window.hxx>
 #include <vcl/split.hxx>
-#include "dataview.hxx"
+#include <dbaccess/dataview.hxx>
 #include <com/sun/star/frame/XFrame2.hpp>
 #include "QueryViewSwitch.hxx"
 #include <vcl/dockwin.hxx>

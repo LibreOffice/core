@@ -32,7 +32,7 @@
 #include <svtools/treelistbox.hxx>
 #include <unotools/viewoptions.hxx>
 #include "indexes.hxx"
-#include "ToolBoxHelper.hxx"
+#include <dbaccess/ToolBoxHelper.hxx>
 
 //......................................................................
 namespace dbaui

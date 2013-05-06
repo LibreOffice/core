@@ -22,7 +22,6 @@ $(eval $(call gb_Module_add_targets,dbaccess,\
     Library_dbmm \
     Library_dbu \
     Library_sdbt \
-    Package_inc \
     UIConfig_dbaccess \
 	UIConfig_dbapp \
 	UIConfig_dbbrowser \

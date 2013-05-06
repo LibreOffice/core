@@ -20,7 +20,7 @@
 #ifndef SUBCOMPONENTS_HXX
 #define SUBCOMPONENTS_HXX
 
-#include "dbaccessdllapi.h"
+#include <dbaccess/dbaccessdllapi.h>
 
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
 

@@ -25,7 +25,7 @@
 #include <tools/resid.hxx>
 
 #include <com/sun/star/awt/PosSize.hpp>
-#include "dataview.hxx"
+#include <dbaccess/dataview.hxx>
 #include <unotools/eventlisteneradapter.hxx>
 
 

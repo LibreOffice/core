@@ -20,7 +20,7 @@
 #ifndef _SBA_BWRCTRLR_HXX
 #define _SBA_BWRCTRLR_HXX
 
-#include "genericcontroller.hxx"
+#include <dbaccess/genericcontroller.hxx>
 #include "moduledbu.hxx"
 #include "brwview.hxx"
 #include "sbagrid.hxx"

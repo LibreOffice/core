@@ -53,7 +53,7 @@
 #include "dbaccess_helpid.hrc"
 #include "dbu_app.hrc"
 #include "callbacks.hxx"
-#include "IController.hxx"
+#include <dbaccess/IController.hxx>
 #include "dbustrings.hrc"
 #include "dbaccess_slotid.hrc"
 #include "databaseobjectview.hxx"

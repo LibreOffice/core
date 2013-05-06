@@ -20,7 +20,7 @@
 #ifndef DBAUI_SINGLEDOCCONTROLLER_HXX
 #define DBAUI_SINGLEDOCCONTROLLER_HXX
 
-#include "dbsubcomponentcontroller.hxx"
+#include <dbaccess/dbsubcomponentcontroller.hxx>
 
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 

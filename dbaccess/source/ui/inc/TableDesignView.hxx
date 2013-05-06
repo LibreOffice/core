@@ -19,7 +19,7 @@
 #ifndef DBAUI_TABLEDESIGNVIEW_HXX
 #define DBAUI_TABLEDESIGNVIEW_HXX
 
-#include "dataview.hxx"
+#include <dbaccess/dataview.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <vcl/split.hxx>

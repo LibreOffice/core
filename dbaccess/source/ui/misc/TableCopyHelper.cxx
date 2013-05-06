@@ -22,7 +22,7 @@
 #include "sqlmessage.hxx"
 #include <vcl/msgbox.hxx>
 #include "WCopyTable.hxx"
-#include "genericcontroller.hxx"
+#include <dbaccess/genericcontroller.hxx>
 #include "WCPage.hxx"
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
@@ -34,7 +34,7 @@
 #include "HtmlReader.hxx"
 #include "TokenWriter.hxx"
 #include "UITools.hxx"
-#include "dataview.hxx"
+#include <dbaccess/dataview.hxx>
 #include "dbu_resource.hrc"
 #include <unotools/ucbhelper.hxx>
 #include <tools/urlobj.hxx>

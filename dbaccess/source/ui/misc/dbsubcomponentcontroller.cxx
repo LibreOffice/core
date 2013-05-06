@@ -20,11 +20,11 @@
 
 #include "browserids.hxx"
 #include "commontypes.hxx"
-#include "dataview.hxx"
+#include <dbaccess/dataview.hxx>
 #include "dbu_misc.hrc"
 #include "dbustrings.hrc"
 #include "moduledbu.hxx"
-#include "dbsubcomponentcontroller.hxx"
+#include <dbaccess/dbsubcomponentcontroller.hxx>
 
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

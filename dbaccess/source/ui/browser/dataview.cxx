@@ -18,13 +18,13 @@
  */
 
 
-#include "dataview.hxx"
+#include <dbaccess/dataview.hxx>
 #include <toolkit/unohlp.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/imgmgr.hxx>
-#include "IController.hxx"
+#include <dbaccess/IController.hxx>
 #include "UITools.hxx"
 #include <sfx2/sfx.hrc>
 #include <svtools/imgdef.hxx>

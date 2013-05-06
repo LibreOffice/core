@@ -9,10 +9,6 @@
 
 $(eval $(call gb_Library_Library,dbmm))
 
-$(eval $(call gb_Library_use_package,dbmm,\
-	dbaccess_inc \
-))
-
 $(eval $(call gb_Library_set_include,dbmm,\
     $$(INCLUDE) \
 	-I$(SRCDIR)/dbaccess/inc \

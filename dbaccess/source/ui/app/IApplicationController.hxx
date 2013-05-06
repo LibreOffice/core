@@ -20,7 +20,7 @@
 #ifndef DBA30D_IAPPLICATIONCONTROLLER_HXX
 #define DBA30D_IAPPLICATIONCONTROLLER_HXX
 
-#include "IController.hxx"
+#include <dbaccess/IController.hxx>
 #include "AppElementType.hxx"
 #include "callbacks.hxx"
 

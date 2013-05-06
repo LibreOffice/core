@@ -9,13 +9,8 @@
 
 $(eval $(call gb_Library_Library,sdbt))
 
-$(eval $(call gb_Library_use_packages,sdbt,\
-	dbaccess_inc \
-))
-
 $(eval $(call gb_Library_set_include,sdbt,\
     $$(INCLUDE) \
-	-I$(SRCDIR)/dbaccess/inc \
 	-I$(SRCDIR)/dbaccess/source/inc/ \
 	-I$(SRCDIR)/dbaccess/source/sdbtools/inc \
 ))

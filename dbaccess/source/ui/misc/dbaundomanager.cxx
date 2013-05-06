@@ -18,7 +18,7 @@
  */
 
 
-#include "dbaundomanager.hxx"
+#include <dbaccess/dbaundomanager.hxx>
 
 #include <com/sun/star/lang/DisposedException.hpp>
 

@@ -20,7 +20,7 @@
 #ifndef STORAGESTREAM_HXX
 #define STORAGESTREAM_HXX
 
-#include "dbaccessdllapi.h"
+#include <dbaccess/dbaccessdllapi.h>
 
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

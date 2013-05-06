@@ -19,7 +19,7 @@
 #ifndef DBAUI_APPVIEW_HXX
 #define DBAUI_APPVIEW_HXX
 
-#include "dataview.hxx"
+#include <dbaccess/dataview.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/ucb/XContent.hpp>

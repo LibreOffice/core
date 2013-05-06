@@ -25,7 +25,7 @@
 #include "callbacks.hxx"
 #include "commontypes.hxx"
 #include "dsntypes.hxx"
-#include "genericcontroller.hxx"
+#include <dbaccess/genericcontroller.hxx>
 #include "linkeddocuments.hxx"
 #include "moduledbu.hxx"
 #include "TableCopyHelper.hxx"

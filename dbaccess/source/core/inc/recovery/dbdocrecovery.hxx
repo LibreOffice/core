@@ -20,7 +20,7 @@
 #ifndef DBACCESS_DBDOCRECOVERY_HXX
 #define DBACCESS_DBDOCRECOVERY_HXX
 
-#include "dbaccessdllapi.h"
+#include <dbaccess/dbaccessdllapi.h>
 
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/frame/XController.hpp>

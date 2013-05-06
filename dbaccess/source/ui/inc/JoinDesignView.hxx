@@ -20,7 +20,7 @@
 #ifndef DBAUI_JOINDESIGNVIEW_HXX
 #define DBAUI_JOINDESIGNVIEW_HXX
 
-#include "dataview.hxx"
+#include <dbaccess/dataview.hxx>
 #ifndef _VECTOR_
 #include <vector>
 #endif

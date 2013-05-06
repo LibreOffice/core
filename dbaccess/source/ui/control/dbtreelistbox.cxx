@@ -33,7 +33,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <vcl/help.hxx>
 #include "tabletree.hrc"
-#include "IController.hxx"
+#include <dbaccess/IController.hxx>
 #include <framework/actiontriggerhelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <framework/imageproducer.hxx>

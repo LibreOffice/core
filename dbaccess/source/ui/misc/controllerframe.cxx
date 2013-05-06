@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "controllerframe.hxx"
-#include "IController.hxx"
+#include <dbaccess/controllerframe.hxx>
+#include <dbaccess/IController.hxx>
 
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>

@@ -21,7 +21,6 @@
 #include <cppuhelper/factory.hxx>
 #include <osl/diagnose.h>
 #include "dbu_reghelper.hxx"
-#include "dbaccessdllapi.h"
 
 
 using namespace ::dbaui;

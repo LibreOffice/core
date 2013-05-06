@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ToolBoxHelper.hxx"
+#include <dbaccess/ToolBoxHelper.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/miscopt.hxx>

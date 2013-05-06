@@ -20,7 +20,7 @@
 #ifndef SUBCOMPONENTLOADER_HXX
 #define SUBCOMPONENTLOADER_HXX
 
-#include "dbaccessdllapi.h"
+#include <dbaccess/dbaccessdllapi.h>
 
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/frame/XController.hpp>

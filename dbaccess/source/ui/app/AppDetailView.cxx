@@ -36,7 +36,7 @@
 #include "AppDetailPageHelper.hxx"
 #include <vcl/svapp.hxx>
 #include "callbacks.hxx"
-#include "IController.hxx"
+#include <dbaccess/IController.hxx>
 #include "moduledbu.hxx"
 #include <svtools/localresaccess.hxx>
 #include "svtools/treelistentry.hxx"

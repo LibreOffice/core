@@ -39,7 +39,7 @@
 #include "AppTitleWindow.hxx"
 #include "dsntypes.hxx"
 #include "dbustrings.hrc"
-#include "IController.hxx"
+#include <dbaccess/IController.hxx>
 #include "browserids.hxx"
 #include <unotools/pathoptions.hxx>
 #include "IApplicationController.hxx"
