@@ -5967,7 +5967,7 @@ SalLayout* OutputDevice::getFallbackFontThatFits(ImplFontEntry &rFallbackFont,
                 pFallback->Release();
                 pFallback = NULL;
             }
-            SAL_WARN_IF(pFallback, "vcl.gdi", "we couldn't layout text with a smaller point size that worked with a bigger one");
+            SAL_WARN_IF(!pFallback, "vcl.gdi", "we couldn't layout text with a smaller point size that worked with a bigger one");
         }
     }
     return pFallback;
