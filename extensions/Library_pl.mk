@@ -13,8 +13,6 @@ $(eval $(call gb_Library_Library,pl))
 
 $(eval $(call gb_Library_set_componentfile,pl,extensions/source/plugin/pl))
 
-$(eval $(call gb_Library_use_package,pl,np_sdk_inc))
-
 $(eval $(call gb_Library_use_externals,pl,\
 	boost_headers \
 	npapi_headers \

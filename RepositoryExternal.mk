@@ -89,9 +89,12 @@ endif
 
 ifeq ($(SYSTEM_NPAPI_HEADERS),YES)
 
+# yes this uses internal headers too...
+# they are split across 2 dirs for this reason
 define gb_LinkTarget__use_npapi_headers
 $(call gb_LinkTarget_set_include,$(1),\
 	$(NPAPI_HEADERS_CFLAGS) \
+	-I$(SRCDIR)/np_sdk \
 	$$(INCLUDE) \
 )
 
@@ -100,9 +103,9 @@ endef
 else #!SYSTEM_NPAPI_HEADERS
 
 define gb_LinkTarget__use_npapi_headers
-$(call gb_LinkTarget_use_package,$(1),npapi)
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(OUTDIR)/inc/external/npsdk \
+	-I$(SRCDIR)/np_sdk/inc \
+	-I$(SRCDIR)/np_sdk \
 	$$(INCLUDE) \
 )
 

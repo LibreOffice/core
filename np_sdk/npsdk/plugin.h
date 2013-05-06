@@ -23,7 +23,7 @@
 #include "npapi.h"
 
 /* OpenOffice.org/LibreOffice modified the implementations of NP_Initialize and
-   NP_Shutdown in np_sdk/mozsrc/ to call NPP_Initialize and NPP_Shutdown, resp.,
+   NP_Shutdown in np_sdk/npsdk/ to call NPP_Initialize and NPP_Shutdown, resp.,
    defined in extensions/source/nsplugin/source/npshell.cxx:
 */
 

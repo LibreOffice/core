@@ -14,10 +14,6 @@ endif
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,plugcon))
 
-$(eval $(call gb_StaticLibrary_use_packages,plugcon,\
-    np_sdk_inc \
-))
-
 $(eval $(call gb_StaticLibrary_use_externals,plugcon,\
     boost_headers \
     npapi_headers \

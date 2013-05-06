@@ -11,10 +11,6 @@
 
 $(eval $(call gb_Library_Library,npsoplugin))
 
-$(eval $(call gb_Library_use_packages,npsoplugin,\
-	np_sdk_inc \
-))
-
 $(eval $(call gb_Library_use_externals,npsoplugin,\
     boost_headers \
     npapi_headers \
