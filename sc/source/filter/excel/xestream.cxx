@@ -950,16 +950,16 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelper
     const char* pUnderline = lcl_GetUnderlineStyle( rFontData.GetScUnderline(), bHaveUnderline );
     const char* pVertAlign = lcl_ToVerticalAlignmentRun( rFontData.GetScEscapement(), bHaveVertAlign );
 
-    lcl_WriteValue( pStream, nFontId,        XclXmlUtils::ToOString( rFontData.maName ).getStr() );
-    lcl_WriteValue( pStream, XML_charset,    rFontData.mnCharSet != 0 ? OString::valueOf( (sal_Int32) rFontData.mnCharSet ).getStr() : NULL );
-    lcl_WriteValue( pStream, XML_family,     OString::valueOf( (sal_Int32) rFontData.mnFamily ).getStr() );
     lcl_WriteValue( pStream, XML_b,          rFontData.mnWeight > 400 ? XclXmlUtils::ToPsz( rFontData.mnWeight > 400 ) : NULL );
     lcl_WriteValue( pStream, XML_i,          rFontData.mbItalic ? XclXmlUtils::ToPsz( rFontData.mbItalic ) : NULL );
     lcl_WriteValue( pStream, XML_strike,     rFontData.mbStrikeout ? XclXmlUtils::ToPsz( rFontData.mbStrikeout ) : NULL );
-    lcl_WriteValue( pStream, XML_outline,    rFontData.mbOutline ? XclXmlUtils::ToPsz( rFontData.mbOutline ) : NULL );
-    lcl_WriteValue( pStream, XML_shadow,     rFontData.mbShadow ? XclXmlUtils::ToPsz( rFontData.mbShadow ) : NULL );
     // OOXTODO: lcl_WriteValue( rStream, XML_condense, );    // mac compatibility setting
     // OOXTODO: lcl_WriteValue( rStream, XML_extend, );      // compatibility setting
+    lcl_WriteValue( pStream, XML_outline,    rFontData.mbOutline ? XclXmlUtils::ToPsz( rFontData.mbOutline ) : NULL );
+    lcl_WriteValue( pStream, XML_shadow,     rFontData.mbShadow ? XclXmlUtils::ToPsz( rFontData.mbShadow ) : NULL );
+    lcl_WriteValue( pStream, XML_u,          bHaveUnderline ? pUnderline : NULL );
+    lcl_WriteValue( pStream, XML_vertAlign,  bHaveVertAlign ? pVertAlign : NULL );
+    lcl_WriteValue( pStream, XML_sz,         OString::valueOf( (double) (rFontData.mnHeight / 20.0) ).getStr() );  // Twips->Pt
     if( rFontData.maColor != Color( 0xFF, 0xFF, 0xFF, 0xFF ) )
         pStream->singleElement( XML_color,
                 // OOXTODO: XML_auto,       bool
@@ -968,9 +968,9 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelper
                 // OOXTODO: XML_theme,      index into <clrScheme/>
                 // OOXTODO: XML_tint,       double
                 FSEND );
-    lcl_WriteValue( pStream, XML_sz,         OString::valueOf( (double) (rFontData.mnHeight / 20.0) ).getStr() );  // Twips->Pt
-    lcl_WriteValue( pStream, XML_u,          bHaveUnderline ? pUnderline : NULL );
-    lcl_WriteValue( pStream, XML_vertAlign,  bHaveVertAlign ? pVertAlign : NULL );
+    lcl_WriteValue( pStream, nFontId,        XclXmlUtils::ToOString( rFontData.maName ).getStr() );
+    lcl_WriteValue( pStream, XML_family,     OString::valueOf( (sal_Int32) rFontData.mnFamily ).getStr() );
+    lcl_WriteValue( pStream, XML_charset,    rFontData.mnCharSet != 0 ? OString::valueOf( (sal_Int32) rFontData.mnCharSet ).getStr() : NULL );
 
     return pStream;
 }
