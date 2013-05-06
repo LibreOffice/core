@@ -43,6 +43,7 @@ TARFILE_ROOTDIR=icu
 #http://bugs.icu-project.org/trac/ticket/8320 for crash with FreeSerif
 
 PATCH_FILES=\
+    icu4c.10129.wintz.patch \
     icu4c-build.patch \
     icu4c.8320.freeserif.crash.patch \
     icu4c-aix.patch \
