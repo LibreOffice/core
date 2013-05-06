@@ -188,8 +188,9 @@ endif
 ifeq (SANE,$(filter SANE,$(BUILD_TYPE))$(filter WNT,$(OS)))
 
 define gb_LinkTarget__use_sane_headers
-$(call gb_LinkTarget_use_packages,$(1),\
-	sane_inc \
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(SRCDIR)/sane/inc \
+	$$(INCLUDE) \
 )
 
 endef

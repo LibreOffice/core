@@ -10,10 +10,3 @@
 
 $(eval $(call gb_Module_Module,sane))
 
-ifneq ($(OS),WNT)
-ifneq (,$(filter SANE,$(BUILD_TYPE)))
-$(eval $(call gb_Module_add_targets,sane,\
-	Package_inc \
-))
-endif
-endif
