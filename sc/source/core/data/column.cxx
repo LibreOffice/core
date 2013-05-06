@@ -1225,6 +1225,8 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
     maTextWidths.resize(MAXROWCOUNT);
     maScriptTypes.insert_empty(nStartRow, nSize);
     maScriptTypes.resize(MAXROWCOUNT);
+    maBroadcasters.insert_empty(nStartRow, nSize);
+    maBroadcasters.resize(MAXROWCOUNT);
 
     CellStorageModified();
 }

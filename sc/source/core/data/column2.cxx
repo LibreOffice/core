@@ -1513,6 +1513,11 @@ SvtBroadcaster* ScColumn::GetBroadcaster(SCROW nRow)
     return maBroadcasters.get<SvtBroadcaster*>(nRow);
 }
 
+const SvtBroadcaster* ScColumn::GetBroadcaster(SCROW nRow) const
+{
+    return maBroadcasters.get<SvtBroadcaster*>(nRow);
+}
+
 unsigned short ScColumn::GetTextWidth(SCROW nRow) const
 {
     return maTextWidths.get<unsigned short>(nRow);

@@ -50,6 +50,7 @@
 #include "types.hxx"
 #include "conditio.hxx"
 #include "globstr.hrc"
+#include "tokenarray.hxx"
 
 #include "formula/IFunctionDescription.hxx"
 
@@ -119,6 +120,13 @@ public:
      * Another test for formula dependency tracking, inspired by fdo#56278.
      */
     void testFormulaDepTracking2();
+
+    /**
+     * More direct test for cell broadcaster management, used to track formula
+     * dependencies.
+     */
+    void testCellBroadcaster();
+
     void testFuncParam();
     void testNamedRange();
     void testCSV();
@@ -267,6 +275,7 @@ public:
     CPPUNIT_TEST(testVolatileFunc);
     CPPUNIT_TEST(testFormulaDepTracking);
     CPPUNIT_TEST(testFormulaDepTracking2);
+    CPPUNIT_TEST(testCellBroadcaster);
     CPPUNIT_TEST(testFuncParam);
     CPPUNIT_TEST(testNamedRange);
     CPPUNIT_TEST(testCSV);
@@ -1516,6 +1525,49 @@ void Test::testFormulaDepTracking2()
     CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(1, 1, 0)); // B2 should now equal 0.
 
     m_pDoc->DeleteTab(0);
+}
+
+void Test::testCellBroadcaster()
+{
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet", m_pDoc->InsertTab (0, "foo"));
+
+    AutoCalcSwitch aACSwitch(m_pDoc, true); // turn on auto calculation.
+    m_pDoc->SetString(ScAddress(1,0,0), "=A1"); // B1 depends on A1.
+    double val = m_pDoc->GetValue(ScAddress(1,0,0)); // A1 is empty, so the result should be 0.
+    CPPUNIT_ASSERT_EQUAL(0.0, val);
+
+    const SvtBroadcaster* pBC = m_pDoc->GetBroadcaster(ScAddress(0,0,0));
+    CPPUNIT_ASSERT_MESSAGE("Cell A1 should have a broadcaster.", pBC);
+
+    // Change the value of A1 and make sure that B1 follows.
+    m_pDoc->SetValue(ScAddress(0,0,0), 1.23);
+    val = m_pDoc->GetValue(ScAddress(1,0,0));
+    CPPUNIT_ASSERT_EQUAL(1.23, val);
+
+    // Move column A down 5 cells. Make sure B1 now references A6, not A1.
+    m_pDoc->InsertRow(0, 0, 0, 0, 0, 5);
+    ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1,0,0));
+    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell.", pFC);
+    ScTokenArray* pTokens = pFC->GetCode();
+    ScToken* pToken = static_cast<ScToken*>(pTokens->First());
+    CPPUNIT_ASSERT_MESSAGE("Reference token not found.", pToken && pToken->GetType() == formula::svSingleRef);
+    ScSingleRefData& rRef = pToken->GetSingleRef();
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCsCOL>(-1), rRef.nRelCol);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCsROW>(5), rRef.nRelRow);
+
+    // Make sure the broadcaster has also moved.
+    pBC = m_pDoc->GetBroadcaster(ScAddress(0,0,0));
+    CPPUNIT_ASSERT_MESSAGE("Broadcaster shouldn't exist at A1.", !pBC);
+    pBC = m_pDoc->GetBroadcaster(ScAddress(0,5,0));
+    CPPUNIT_ASSERT_MESSAGE("Broadcaster should exist at A6.", pBC);
+
+    // Set new value to A6 and make sure B1 gets updated.
+    m_pDoc->SetValue(ScAddress(0,5,0), 45.6);
+    val = m_pDoc->GetValue(ScAddress(1,0,0));
+    CPPUNIT_ASSERT_EQUAL(45.6, val);
+
+    m_pDoc->DeleteTab(0);
+    CPPUNIT_ASSERT_MESSAGE("good, all test passed.", false);
 }
 
 void Test::testFuncParam()

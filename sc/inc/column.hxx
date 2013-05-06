@@ -473,6 +473,7 @@ public:
     void SetNumberFormat( SCROW nRow, sal_uInt32 nNumberFormat );
 
     SvtBroadcaster* GetBroadcaster( SCROW nRow );
+    const SvtBroadcaster* GetBroadcaster( SCROW nRow ) const;
 
 private:
     void DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDelFlag );

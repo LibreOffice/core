@@ -2168,6 +2168,14 @@ SvtBroadcaster* ScTable::GetBroadcaster( SCCOL nCol, SCROW nRow )
     return aCol[nCol].GetBroadcaster(nRow);
 }
 
+const SvtBroadcaster* ScTable::GetBroadcaster( SCCOL nCol, SCROW nRow ) const
+{
+    if (!ValidColRow(nCol, nRow))
+        return NULL;
+
+    return aCol[nCol].GetBroadcaster(nRow);
+}
+
 void ScTable::DeleteConditionalFormat( sal_uLong nIndex )
 {
     mpCondFormatList->erase(nIndex);

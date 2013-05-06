@@ -832,6 +832,7 @@ public:
     ScRefCellValue GetRefCellValue( SCCOL nCol, SCROW nRow );
 
     SvtBroadcaster* GetBroadcaster( SCCOL nCol, SCROW nRow );
+    const SvtBroadcaster* GetBroadcaster( SCCOL nCol, SCROW nRow ) const;
 
     /** Replace behaves differently to the Search; adjust the rCol and rRow accordingly.
 

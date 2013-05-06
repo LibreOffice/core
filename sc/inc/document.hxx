@@ -1950,6 +1950,9 @@ public:
     const double* FetchDoubleArray(
         sc::FormulaGroupContext& rCxt, const ScAddress& rPos, SCROW nLength ) const;
 
+    SvtBroadcaster* GetBroadcaster( const ScAddress& rPos );
+    const SvtBroadcaster* GetBroadcaster( const ScAddress& rPos ) const;
+
 private: // CLOOK-Impl-methods
 
     /**
@@ -1966,8 +1969,6 @@ private: // CLOOK-Impl-methods
     private:
         ScDocument* mpDoc;
     };
-
-    SvtBroadcaster* GetBroadcaster( const ScAddress& rPos );
 
     bool TableExists( SCTAB nTab ) const;
 
