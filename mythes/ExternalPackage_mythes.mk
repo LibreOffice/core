@@ -17,8 +17,4 @@ $(eval $(call gb_ExternalPackage_add_file,mythes,lib/libmythes.a,.libs/libmythes
 
 endif
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,mythes,inc,\
-    mythes.hxx \
-))
-
 # vim: set noet sw=4 ts=4:
