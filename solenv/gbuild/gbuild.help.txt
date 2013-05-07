@@ -62,6 +62,7 @@ AVAILABLE TARGETS
        o Extension
        o ExternalPackage
        o ExternalProject
+       o Gallery
        o Helper
        o InstallModule
        o InstallScript

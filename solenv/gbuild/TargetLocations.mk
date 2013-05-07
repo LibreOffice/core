@@ -118,6 +118,7 @@ gb_ExternalProject_get_statedir = $(WORKDIR)/ExternalProject/$(1)
 gb_ExternalProject_get_preparation_target = $(WORKDIR)/ExternalProject/$(1).prepare
 gb_ExternalProject_get_state_target = $(WORKDIR)/ExternalProject/$(1)/$(2)
 gb_ExternalProject_get_target = $(WORKDIR)/ExternalProject/$(1).done
+gb_Gallery_get_target = $(WORKDIR)/Gallery/$(1).done
 gb_GeneratedPackage_get_target = $(WORKDIR)/GeneratedPackage/$(1).filelist
 gb_HelpIndexTarget_get_target = $(WORKDIR)/HelpIndexTarget/$(1).done
 gb_HelpJarTarget_get_target = $(WORKDIR)/HelpJarTarget/$(1).done
@@ -272,6 +273,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	Dictionary \
 	ExternalPackage \
 	ExtensionTarget \
+	Gallery \
 	GeneratedPackage \
 	HelpTarget \
 	HelpIndexTarget \

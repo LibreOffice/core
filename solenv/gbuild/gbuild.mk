@@ -313,6 +313,7 @@ include $(foreach class, \
 	ExternalPackage \
 	CustomTarget \
 	ExternalProject \
+	Gallery \
 	Pagein \
 	PrecompiledHeaders \
 	Pyuno \

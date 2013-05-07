@@ -41,7 +41,9 @@ typedef ::std::list<OUString> FileNameList;
 
 class GalApp : public Application
 {
+    bool mbInBuildTree;
 public:
+    GalApp() : mbInBuildTree( false ) {}
     virtual int Main();
 
 protected:
@@ -141,6 +143,7 @@ static int PrintHelp()
     fprintf( stdout, "\t\t\ttheme files.\n");
     fprintf( stdout, " files\t\t\tlists files to be added to the gallery. Absolute paths\n");
     fprintf( stdout, "\t\t\tare required.\n");
+    // --build-tree not documented - only useful during the build ...
 
     return EXIT_SUCCESS;
 }
@@ -154,37 +157,43 @@ static OUString Smartify( const OUString &rPath )
 
 void GalApp::Init()
 {
-    if( getenv( "OOO_INSTALL_PREFIX" ) == NULL ) {
-        OUString fileName = GetAppFileName();
-        int lastSlash = fileName.lastIndexOf( '/' );
+    try {
+        if( !mbInBuildTree && getenv( "OOO_INSTALL_PREFIX" ) == NULL ) {
+            OUString fileName = GetAppFileName();
+            int lastSlash = fileName.lastIndexOf( '/' );
 #ifdef WNT
         // Don't know which directory separators GetAppFileName() returns on Windows.
         // Be safe and take into consideration they might be backslashes.
-        if( fileName.lastIndexOf( '\\' ) > lastSlash )
-            lastSlash = fileName.lastIndexOf( '\\' );
+            if( fileName.lastIndexOf( '\\' ) > lastSlash )
+                lastSlash = fileName.lastIndexOf( '\\' );
 #endif
-        OUString baseBinDir = fileName.copy( 0, lastSlash );
-        OUString installPrefix = baseBinDir + OUString::createFromAscii( "/../.." );
+            OUString baseBinDir = fileName.copy( 0, lastSlash );
+            OUString installPrefix = baseBinDir + OUString::createFromAscii( "/../.." );
 
-        OUString envVar( "OOO_INSTALL_PREFIX");
-        osl_setEnvironment(envVar.pData, installPrefix.pData);
-    }
-    OSL_TRACE( "OOO_INSTALL_PREFIX=%s", getenv( "OOO_INSTALL_PREFIX" ) );
+            OUString envVar( "OOO_INSTALL_PREFIX");
+            osl_setEnvironment(envVar.pData, installPrefix.pData);
+        }
+        OSL_TRACE( "OOO_INSTALL_PREFIX=%s", getenv( "OOO_INSTALL_PREFIX" ) );
 
-    uno::Reference<uno::XComponentContext> xComponentContext
-        = ::cppu::defaultBootstrap_InitialComponentContext();
-    xMSF = uno::Reference<lang::XMultiServiceFactory>
-        ( xComponentContext->getServiceManager(), uno::UNO_QUERY );
-    if( !xMSF.is() )
-    {
-        fprintf( stderr, "Failed to bootstrap\n" );
+        uno::Reference<uno::XComponentContext> xComponentContext
+            = ::cppu::defaultBootstrap_InitialComponentContext();
+        xMSF = uno::Reference<lang::XMultiServiceFactory>
+            ( xComponentContext->getServiceManager(), uno::UNO_QUERY );
+        if( !xMSF.is() )
+        {
+            fprintf( stderr, "Failed to bootstrap\n" );
+            exit( 1 );
+        }
+        ::comphelper::setProcessServiceFactory( xMSF );
+
+        // For backwards compatibility, in case some code still uses plain
+        // createInstance w/o args directly to obtain an instance:
+        com::sun::star::ucb::UniversalContentBroker::create(xComponentContext);
+    } catch (const uno::Exception &e) {
+        fprintf( stderr, "Bootstrap exception '%s'\n",
+                 rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         exit( 1 );
     }
-    ::comphelper::setProcessServiceFactory( xMSF );
-
-    // For backwards compatibility, in case some code still uses plain
-    // createInstance w/o args directly to obtain an instance:
-    com::sun::star::ucb::UniversalContentBroker::create(xComponentContext);
 }
 
 int GalApp::Main()
@@ -202,6 +211,8 @@ int GalApp::Main()
             continue;
         else if ( aParam == "--help" || aParam == "-h"  )
             return PrintHelp();
+        else if ( aParam == "--build-tree" )
+            mbInBuildTree = true;
         else if ( aParam == "--name" )
             aName = GetCommandLineParam( ++i );
         else if ( aParam == "--path" )

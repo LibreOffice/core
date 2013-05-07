@@ -13,6 +13,7 @@ $(eval $(call gb_Module_add_targets,extras,\
 	AllLangPackage_autotextshare \
 	CustomTarget_autocorr \
 	CustomTarget_glade \
+	Gallery_test \
 	Package_autocorr \
 	Package_autotextuser \
 	Package_cfgsrvbitmapunx \
