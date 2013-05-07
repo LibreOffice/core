@@ -23,7 +23,6 @@ ifneq ($(SOLAR_JAVA),)
 $(eval $(call gb_Module_add_targets,smoketest,\
 	Extension_TestExtension \
 	Jar_TestExtension \
-	Jar_smoketest \
 ))
 endif
 
@@ -37,6 +36,12 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,smoketest,\
 	CppunitTest_smoketest \
 ))
 
+endif
+
+ifneq ($(SOLAR_JAVA),)
+$(eval $(call gb_Module_add_targets,smoketest,\
+	Jar_smoketest \
+))
 endif
 
 # vim: set noet sw=4 ts=4:
