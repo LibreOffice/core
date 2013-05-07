@@ -45,10 +45,52 @@ using namespace ::com::sun::star;
 // - SgaObject -
 // -------------
 
-SgaObject::SgaObject() :
-        bIsValid    ( sal_False ),
-        bIsThumbBmp ( sal_True )
+SgaObject::SgaObject()
+:   bIsValid    ( sal_False ),
+    bIsThumbBmp ( sal_True )
 {
+}
+
+BitmapEx SgaObject::createPreviewBitmapEx(const Size& rSizePixel) const
+{
+    BitmapEx aRetval;
+
+    if(rSizePixel.Width() && rSizePixel.Height())
+    {
+        if(SGA_OBJ_SOUND == GetObjKind())
+        {
+            aRetval = GAL_RES(RID_SVXBMP_GALLERY_MEDIA);
+        }
+        else if(IsThumbBitmap())
+        {
+            aRetval = GetThumbBmp();
+        }
+        else
+        {
+            const Graphic aGraphic(GetThumbMtf());
+
+            aRetval = aGraphic.GetBitmapEx();
+        }
+
+        if(!aRetval.IsEmpty())
+        {
+            const Size aCurrentSizePixel(aRetval.GetSizePixel());
+            const double fScaleX((double)rSizePixel.Width() / (double)aCurrentSizePixel.Width());
+            const double fScaleY((double)rSizePixel.Height() / (double)aCurrentSizePixel.Height());
+            const double fScale(std::min(fScaleX, fScaleY));
+
+            // only scale when need to decrease, no need to make bigger as original. Also
+            // prevent scaling close to 1.0 which is not needed for pixel graphics
+            if(fScale < 1.0 && fabs(1.0 - fScale) > 0.005)
+            {
+                static sal_uInt32 nScaleFlag = BMP_SCALE_BESTQUALITY;
+
+                aRetval.Scale(fScale, fScale, nScaleFlag);
+            }
+        }
+    }
+
+    return aRetval;
 }
 
 // ------------------------------------------------------------------------

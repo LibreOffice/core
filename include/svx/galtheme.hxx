@@ -45,7 +45,13 @@ struct GalleryObject
     INetURLObject   aURL;
     sal_uInt32      nOffset;
     SgaObjKind      eObjKind;
-    sal_Bool        bDummy;
+    bool            mbDelete;
+
+    //UI visualization buffering
+    BitmapEx        maPreviewBitmapEx;
+    Size            maPreparedSize;
+    String          maTitle;
+    String          maPath;
 };
 
 typedef ::std::vector< GalleryObject* > GalleryObjectList;
@@ -219,6 +225,10 @@ public:
     SvStream&                   WriteData( SvStream& rOut ) const;
     SvStream&                   ReadData( SvStream& rIn );
     static SVX_DLLPUBLIC void   InsertAllThemes( ListBox& rListBox );
+
+    // for buffering PreviewBitmaps and strings for object and path
+    void GetPreviewBitmapExAndStrings(sal_uIntPtr nPos, BitmapEx& rBitmapEx, Size& rSize, String& rTitle, String& rPath) const;
+    void SetPreviewBitmapExAndStrings(sal_uIntPtr nPos, const BitmapEx& rBitmapEx, const Size& rSize, const String& rTitle, const String& rPath);
 };
 
 SvStream& operator<<( SvStream& rOut, const GalleryTheme& rTheme );
