@@ -659,6 +659,10 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 ))
 
 define gb_LinkTarget__use_cmis
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,cmis)/src \
+	$$(INCLUDE) \
+)
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	cmislib \
 )
