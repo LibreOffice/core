@@ -24,6 +24,8 @@
 
 #include "macros.inc"
 
+#include "AutoInstallLibs/tde"
+
 #if defined( ENABLE_TDE )
 Module gid_Module_Optional_Tde
     ParentID = gid_Module_Optional;
@@ -31,7 +33,7 @@ Module gid_Module_Optional_Tde
     PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_TDE);
     Styles = ();
-    Files = (
+    Files = (auto_Tde_Lib_ALL
 #ifdef ENABLE_TDE
     gid_File_Lib_Tdebe
 #endif // ENABLE_TDE
