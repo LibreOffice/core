@@ -132,6 +132,7 @@ int nspluginOOoModuleHook (void** aResult)
         fprintf (stderr, "Can't open myself '%s'\n", dlerror());
         return 1;
     }
+    dlclose(dl_handle);
 
     Dl_info dl_info = { 0,0,0,0 };
     if(!dladdr((void *)nspluginOOoModuleHook, &dl_info))
