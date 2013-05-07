@@ -131,7 +131,7 @@ Bitmap XLineEndList::CreateBitmapForUI( long nIndex )
             ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
             : DRAWMODE_DEFAULT);
 
-        if(rStyleSettings.GetUIPreviewUsesCheckeredBackground())
+        if(rStyleSettings.GetPreviewUsesCheckeredBackground())
         {
             const Point aNull(0, 0);
             static const sal_uInt32 nLen(8);

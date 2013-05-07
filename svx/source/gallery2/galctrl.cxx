@@ -262,7 +262,7 @@ void drawTransparenceBackground(OutputDevice& rOut, const Point& rPos, const Siz
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
-    if(rStyleSettings.GetUIPreviewUsesCheckeredBackground())
+    if(rStyleSettings.GetPreviewUsesCheckeredBackground())
     {
         // draw checkered background
         static const sal_uInt32 nLen(8);

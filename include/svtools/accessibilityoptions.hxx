@@ -62,6 +62,10 @@ public:
     // only be changed when the color palette is changed from the default
     sal_Int16   GetColorValueSetColumnCount() const;
 
+    // option to make previews show the content with a checkeded background to allow
+    // simple identification and better preview of transparent content
+    sal_Bool    GetPreviewUsesCheckeredBackground() const;
+
     void        SetIsForPagePreviews(sal_Bool bSet);
     void        SetIsHelpTipsDisappear(sal_Bool bSet);
     void        SetIsAllowAnimatedGraphics(sal_Bool bSet);
@@ -75,6 +79,7 @@ public:
     void        SetEdgeBlending(sal_Int16 nSet);
     void        SetListBoxMaximumLineCount(sal_Int16 nSet);
     void        SetColorValueSetColumnCount(sal_Int16 nSet);
+    void        SetPreviewUsesCheckeredBackground(sal_Bool bSet);
 
     sal_Bool                IsModified() const;
     void                    Commit();

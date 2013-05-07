@@ -130,7 +130,7 @@ void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
 
             aVDev.SetOutputSizePixel(aSize);
 
-            if(rStyleSettings.GetUIPreviewUsesCheckeredBackground())
+            if(rStyleSettings.GetPreviewUsesCheckeredBackground())
             {
                 static const sal_uInt32 nLen(8);
                 static const Color aW(COL_WHITE);

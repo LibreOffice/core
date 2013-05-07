@@ -59,6 +59,7 @@ namespace
     const char s_sColorValueSetColumnCount[] = "ColorValueSetColumnCount";
     const char s_sEdgeBlending[] = "EdgeBlending";
     const char s_sListBoxMaximumLineCount[] = "ListBoxMaximumLineCount";
+    const char s_sPreviewUsesCheckeredBackground[]  = "PreviewUsesCheckeredBackground";
 }
 
 // class SvtAccessibilityOptions_Impl ---------------------------------------------
@@ -86,6 +87,7 @@ public:
     sal_Int16   GetEdgeBlending() const;
     sal_Int16   GetListBoxMaximumLineCount() const;
     sal_Int16   GetColorValueSetColumnCount() const;
+    sal_Bool    GetPreviewUsesCheckeredBackground() const;
 
     void        SetAutoDetectSystemHC(sal_Bool bSet);
     void        SetIsForPagePreviews(sal_Bool bSet);
@@ -99,6 +101,7 @@ public:
     void        SetEdgeBlending(sal_Int16 nSet);
     void        SetListBoxMaximumLineCount(sal_Int16 nSet);
     void        SetColorValueSetColumnCount(sal_Int16 nSet);
+    void        SetPreviewUsesCheckeredBackground(sal_Bool bSet);
 
     sal_Bool    IsModified() const { return bIsModified; };
 };
@@ -357,6 +360,24 @@ sal_Int16 SvtAccessibilityOptions_Impl::GetColorValueSetColumnCount() const
     return nRet;
 }
 
+sal_Bool SvtAccessibilityOptions_Impl::GetPreviewUsesCheckeredBackground() const
+{
+    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
+    sal_Bool bRet = sal_False;
+
+    try
+    {
+        if(xNode.is())
+            xNode->getPropertyValue(s_sPreviewUsesCheckeredBackground) >>= bRet;
+    }
+    catch(const css::uno::Exception& ex)
+    {
+        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+    }
+
+    return bRet;
+}
+
 void SvtAccessibilityOptions_Impl::SetAutoDetectSystemHC(sal_Bool bSet)
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
@@ -583,6 +604,14 @@ void SvtAccessibilityOptions_Impl::SetVCLSettings()
         StyleSettingsChanged = true;
     }
 
+    const bool bPreviewUsesCheckeredBackground(GetPreviewUsesCheckeredBackground());
+
+    if(aStyleSettings.GetPreviewUsesCheckeredBackground() != bPreviewUsesCheckeredBackground)
+    {
+        aStyleSettings.SetPreviewUsesCheckeredBackground(bPreviewUsesCheckeredBackground);
+        StyleSettingsChanged = true;
+    }
+
     if(StyleSettingsChanged)
     {
         aAllSettings.SetStyleSettings(aStyleSettings);
@@ -641,6 +670,26 @@ void SvtAccessibilityOptions_Impl::SetColorValueSetColumnCount(sal_Int16 nSet)
         if(xNode.is() && xNode->getPropertyValue(s_sColorValueSetColumnCount)!=nSet)
         {
             xNode->setPropertyValue(s_sColorValueSetColumnCount, css::uno::makeAny(nSet));
+            ::comphelper::ConfigurationHelper::flush(m_xCfg);
+
+            bIsModified = sal_True;
+        }
+    }
+    catch(const css::uno::Exception& ex)
+    {
+        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
+    }
+}
+
+void SvtAccessibilityOptions_Impl::SetPreviewUsesCheckeredBackground(sal_Bool bSet)
+{
+    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
+
+    try
+    {
+        if(xNode.is() && xNode->getPropertyValue(s_sPreviewUsesCheckeredBackground)!=bSet)
+        {
+            xNode->setPropertyValue(s_sPreviewUsesCheckeredBackground, css::uno::makeAny(bSet));
             ::comphelper::ConfigurationHelper::flush(m_xCfg);
 
             bIsModified = sal_True;
@@ -756,6 +805,10 @@ sal_Int16 SvtAccessibilityOptions::GetColorValueSetColumnCount() const
 {
     return sm_pSingleImplConfig->GetColorValueSetColumnCount();
 }
+sal_Bool SvtAccessibilityOptions::GetPreviewUsesCheckeredBackground() const
+{
+    return sm_pSingleImplConfig->GetPreviewUsesCheckeredBackground();
+}
 
 // -----------------------------------------------------------------------
 void SvtAccessibilityOptions::SetAutoDetectSystemHC(sal_Bool bSet)
@@ -809,6 +862,10 @@ void SvtAccessibilityOptions::SetListBoxMaximumLineCount(sal_Int16 nSet)
 void SvtAccessibilityOptions::SetColorValueSetColumnCount(sal_Int16 nSet)
 {
     sm_pSingleImplConfig->SetColorValueSetColumnCount(nSet);
+}
+void SvtAccessibilityOptions::SetPreviewUsesCheckeredBackground(sal_Bool bSet)
+{
+    sm_pSingleImplConfig->SetPreviewUsesCheckeredBackground(bSet);
 }
 
 // -----------------------------------------------------------------------

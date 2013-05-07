@@ -6262,6 +6262,19 @@
         </info>
         <value>8</value>
       </prop>
+      <prop oor:name="PreviewUsesCheckeredBackground" oor:type="xs:boolean">
+        <info>
+          <author>ALG</author>
+          <desc>
+            This option allows to make previews (e.g. UI previews for object attirbutes) show the content with a checkeded 
+            background to allow simple identification and better preview of transparent content, e.g. when a draw object
+            is filled with a transparent graphic (SVG or bitmap) the preview will show the checkered background shine
+            through, so the user can identify that the fill has transparency with a single look.
+          </desc>
+          <label>Shows previews with shining through checkered background to visualize transparency.</label>
+         </info>
+         <value>false</value>
+       </prop>
     </group>
     <group oor:name="ExternalApps" oor:extensible="true">
       <info>
