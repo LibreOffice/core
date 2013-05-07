@@ -2006,6 +2006,13 @@ endef
 else # !SYSTEM_CLUCENE
 
 define gb_LinkTarget__use_clucene
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,clucene)/src/core \
+	-I$(call gb_UnpackedTarball_get_dir,clucene)/src/shared \
+	-I$(call gb_UnpackedTarball_get_dir,clucene)/src/contribs-lib \
+	$$(INCLUDE) \
+)
+
 $(call gb_LinkTarget_use_libraries,$(1),\
 	clucene \
 )
