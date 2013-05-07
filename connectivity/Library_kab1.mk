@@ -22,6 +22,7 @@ $(eval $(call gb_Library_use_sdk_api,kab1))
 $(eval $(call gb_Library_set_include,kab1,\
 	-I$(SRCDIR)/connectivity/source/inc \
 	$$(INCLUDE) \
+	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \
 ))
 
 $(eval $(call gb_Library_use_libraries,kab1,\

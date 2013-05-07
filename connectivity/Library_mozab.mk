@@ -14,6 +14,7 @@ $(eval $(call gb_Library_set_componentfile,mozab2,connectivity/source/drivers/mo
 $(eval $(call gb_Library_set_include,mozab2,\
 	-I$(SRCDIR)/connectivity/source/inc \
 	$$(INCLUDE) \
+	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \
 ))
 
 $(eval $(call gb_Library_use_external,mozab2,boost_headers))

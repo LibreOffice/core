@@ -15,6 +15,7 @@ $(eval $(call gb_Library_set_componentfile,ado,connectivity/source/drivers/ado/a
 $(eval $(call gb_Library_set_include,ado,\
 	-I$(SRCDIR)/connectivity/source/inc \
 	$$(INCLUDE) \
+	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \
 ))
 
 $(eval $(call gb_Library_use_external,ado,boost_headers))
