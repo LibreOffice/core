@@ -58,12 +58,15 @@ $(eval $(call gb_CppunitTest_use_components,sw_filters_test,\
     configmgr/source/configmgr \
     dbaccess/util/dba \
     fileaccess/source/fileacc \
+    filter/source/config/cache/filterconfig1 \
     forms/util/frm \
     framework/util/fwk \
     i18npool/util/i18npool \
+    oox/util/oox \
     package/source/xstor/xstor \
     package/util/package2 \
     sax/source/expatwrap/expwrap \
+    sax/source/fastparser/fastsax \
     sfx2/util/sfx \
     svtools/util/svt \
     sw/util/msword \
@@ -71,12 +74,16 @@ $(eval $(call gb_CppunitTest_use_components,sw_filters_test,\
     toolkit/util/tk \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
+    unotools/util/utl \
     unoxml/source/service/unoxml \
+    writerfilter/util/writerfilter \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),xmlhelp/util/ucpchelp1) \
 	xmloff/source/transform/xof \
     xmloff/util/xo \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_filters_test))
+
+$(eval $(call gb_CppunitTest_use_filter_configuration,sw_filters_test))
 
 # vim: set noet sw=4 ts=4:

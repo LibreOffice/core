@@ -107,6 +107,11 @@ void SwFiltersTest::testCVEs()
     testDir(OUString("Text (encoded)"),
             getURLFromSrc("/sw/qa/core/data/txt/"),
             OUString(FILTER_TEXT_DLG));
+
+    testDir(OUString("MS Word 2007 XML"),
+            getURLFromSrc("/sw/qa/core/data/ooxml/"),
+            OUString(),
+            SFX_FILTER_STARONEFILTER);
 }
 
 void SwFiltersTest::setUp()
