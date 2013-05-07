@@ -105,6 +105,7 @@ struct ImplObjStack
 {
     ImplObjStack*   mpPrev;
     MapMode*        mpMapMode;
+    bool            mbMapActive;
     Region*         mpClipRegion;
     Color*          mpLineColor;
     Color*          mpFillColor;
@@ -2351,10 +2352,8 @@ void OutputDevice::Push( sal_uInt16 nFlags )
         pData->meRasterOp = GetRasterOp();
     if ( nFlags & PUSH_MAPMODE )
     {
-        if ( mbMap )
-            pData->mpMapMode = new MapMode( maMapMode );
-        else
-            pData->mpMapMode = NULL;
+        pData->mpMapMode = new MapMode( maMapMode );
+        pData->mbMapActive = mbMap;
     }
     if ( nFlags & PUSH_CLIPREGION )
     {
@@ -2450,6 +2449,7 @@ void OutputDevice::Pop()
             SetMapMode( *pData->mpMapMode );
         else
             SetMapMode();
+        mbMap = pData->mbMapActive;
     }
     if ( pData->mnFlags & PUSH_CLIPREGION )
         ImplSetClipRegion( pData->mpClipRegion );
