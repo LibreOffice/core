@@ -12,16 +12,13 @@ $(eval $(call gb_Library_Library,odbcbase))
 
 $(eval $(call gb_Library_set_warnings_not_errors,odbcbase))
 
-$(eval $(call gb_Library_use_packages,odbcbase,\
-	connectivity_generated \
-))
-
 $(eval $(call gb_Library_use_sdk_api,odbcbase))
 
 $(eval $(call gb_Library_set_include,odbcbase,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/connectivity/inc \
 	-I$(SRCDIR)/connectivity/source/inc \
+	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \
 ))
 
 $(eval $(call gb_Library_add_defs,odbcbase,\

@@ -15,6 +15,7 @@ $(eval $(call gb_Library_set_include,dbu,\
     -I$(SRCDIR)/dbaccess/source/inc \
     -I$(SRCDIR)/dbaccess/source/ui/inc \
     -I$(call gb_SrsTemplateTarget_get_include_dir,dbaccess) \
+	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \
 ))
 
 $(eval $(call gb_Library_set_precompiled_header,dbu,$(SRCDIR)/dbaccess/inc/pch/precompiled_dbu))

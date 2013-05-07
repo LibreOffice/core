@@ -13,6 +13,7 @@ $(eval $(call gb_Library_set_include,frm,\
     $$(INCLUDE) \
     -I$(SRCDIR)/forms/source/inc \
     -I$(SRCDIR)/forms/source/solar/inc \
+	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \
 ))
 
 $(eval $(call gb_Library_use_api,frm,\

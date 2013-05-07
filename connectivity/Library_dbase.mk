@@ -20,6 +20,7 @@ $(eval $(call gb_Library_set_include,dbase,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/connectivity/inc \
 	-I$(SRCDIR)/connectivity/source/inc \
+	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \
 ))
 
 $(eval $(call gb_Library_use_libraries,dbase,\

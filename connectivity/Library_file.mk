@@ -10,10 +10,6 @@
 
 $(eval $(call gb_Library_Library,file))
 
-$(eval $(call gb_Library_use_packages,file,\
-	connectivity_generated \
-))
-
 $(eval $(call gb_Library_add_defs,file,\
 	-DOOO_DLLIMPLEMENTATION_FILE \
 ))
@@ -24,6 +20,7 @@ $(eval $(call gb_Library_set_include,file,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/connectivity/inc \
 	-I$(SRCDIR)/connectivity/source/inc \
+	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \
 ))
 
 $(eval $(call gb_Library_use_external,file,boost_headers))

@@ -11,10 +11,6 @@ $(eval $(call gb_Library_Library,mork))
 
 $(eval $(call gb_Library_set_componentfile,mork,connectivity/source/drivers/mork/mork))
 
-$(eval $(call gb_Library_use_packages,mork,\
-	connectivity_generated \
-))
-
 $(eval $(call gb_Library_add_defs,mork,\
 	-DLO_DLLIMPLEMENTATION_MORK \
 ))
@@ -22,6 +18,7 @@ $(eval $(call gb_Library_add_defs,mork,\
 $(eval $(call gb_Library_set_include,mork,\
 	-I$(SRCDIR)/connectivity/source/inc \
 	$$(INCLUDE) \
+	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \
 ))
 
 $(eval $(call gb_Library_use_custom_headers,mork,\

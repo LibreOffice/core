@@ -9,14 +9,11 @@
 
 $(eval $(call gb_Library_Library,dba))
 
-$(eval $(call gb_Library_use_packages,dba,\
-	connectivity_generated \
-))
-
 $(eval $(call gb_Library_set_include,dba,\
     $$(INCLUDE) \
 	-I$(SRCDIR)/dbaccess/source/inc \
 	-I$(SRCDIR)/dbaccess/source/core/inc \
+	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \
 ))
 
 $(eval $(call gb_Library_add_defs,dba,\
