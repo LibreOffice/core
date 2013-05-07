@@ -57,11 +57,10 @@
 /* external functions (C++ code, declared as extern "C" */
 extern "C" int WorkOnTokenSet( int, char* );
 extern "C" int Argument( char * );
-extern "C" int InitXrmExport( char * , char * );
+extern "C" int InitXrmExport( char * );
 extern "C" int EndXrmExport();
 extern "C" int GetError();
 extern "C" int SetError();
-extern "C" char *GetOutputFile( int argc, char* argv[]);
 extern "C" FILE *GetXrmFile();
 extern "C" int isQuiet();
 extern "C" char* getFilename();
@@ -214,28 +213,24 @@ void yyerror ( const char *s )
 	SetError();
 }
 
+//SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
+        // these are not used, so just quiet warnings
+        (void) argc;
+        (void) argv;
 	/* error level */
 	int nRetValue = 0;
-	char *pOutput;
 	FILE *pFile;
 
-	pOutput = GetOutputFile( argc, argv );
-
-	if ( !pOutput )
-	{
-		return 1;
-	}
 	pFile = GetXrmFile();
-	InitXrmExport( pOutput , getFilename() );
+	/* create global instance of class XmlExport */
+	InitXrmExport( getFilename() );
 
-    if ( !pFile )
+        if ( !pFile )
 		return 1;
 
    	yyin = pFile;
 
-	/* create global instance of class XmlExport */
-	//InitXrmExport( pOutput );
 
 	/* start parser */
    	yylex();

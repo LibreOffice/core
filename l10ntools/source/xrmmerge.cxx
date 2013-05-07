@@ -53,32 +53,7 @@ XRMResParser *pParser = NULL;
 extern "C" {
 // the whole interface to lexer is in this extern "C" section
 
-extern char *GetOutputFile( int argc, char* argv[])
-{
-    bDisplayName = sal_False;
-    bExtensionDescription = sal_False;
-
-    common::HandledArgs aArgs;
-    if ( common::handleArguments(argc, argv, aArgs) )
-    {
-        bMergeMode = aArgs.m_bMergeMode;
-        sLanguage = aArgs.m_sLanguage;
-        sInputFileName = aArgs.m_sInputFile;
-        sOutputFile = aArgs.m_sOutputFile;
-        sMergeSrc = aArgs.m_sMergeSrc;
-        char *pReturn = new char[ sOutputFile.getLength() + 1 ];
-        std::strcpy( pReturn, sOutputFile.getStr());
-        return pReturn;
-    }
-    else
-    {
-        // command line is not valid
-        common::writeUsage("xrmex","*.xrm/*.xml");
-        return NULL;
-    }
-}
-
-int InitXrmExport( char*, char* pFilename)
+int InitXrmExport( char* pFilename)
 {
     // instanciate Export
     OString sFilename( pFilename );
