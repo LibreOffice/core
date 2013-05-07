@@ -20,6 +20,7 @@ $(eval $(call gb_Library_use_externals,kabdrv1,\
 $(eval $(call gb_Library_set_include,kabdrv1,\
 	-I$(SRCDIR)/connectivity/source/inc \
 	$$(INCLUDE) \
+	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \
 ))
 
 $(eval $(call gb_Library_add_libs,kabdrv1,\
