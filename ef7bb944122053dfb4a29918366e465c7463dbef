@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//9NA\u003d",
+        "filename": "filter/source/graphicfilter/ieps/ieps.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1000186
+      },
+      "writtenOn": "2013-05-07T13:29:19Z",
+      "side": 1,
+      "message": "What do you think to remove this chained atributions and do only one operation:\n\naString +\u003d \" Title:\" + OUString::createFromAscii( (char*)pDest ) + \"\\n\"\n?\n\nI believe you can kill some lines of code doing this at these two files of your patch :)\n\nNice work ^^",
+      "revId": "ef7bb944122053dfb4a29918366e465c7463dbef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
