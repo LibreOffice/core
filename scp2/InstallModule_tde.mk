@@ -11,15 +11,6 @@ $(eval $(call gb_InstallModule_InstallModule,scp2/tde))
 
 $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/tde,tde))
 
-$(eval $(call gb_InstallModule_define_if_set,scp2/tde,\
-	ENABLE_TDE \
-	ENABLE_TDEAB \
-))
-
-$(eval $(call gb_InstallModule_add_scpfiles,scp2/tde,\
-    scp2/source/tde/file_tde \
-))
-
 $(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/tde,\
     scp2/source/tde/module_tde \
 ))

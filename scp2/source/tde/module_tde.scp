@@ -26,7 +26,6 @@
 
 #include "AutoInstallLibs/tde"
 
-#if defined( ENABLE_TDE )
 Module gid_Module_Optional_Tde
     ParentID = gid_Module_Optional;
     Default = YES;
@@ -34,10 +33,6 @@ Module gid_Module_Optional_Tde
     MOD_NAME_DESC(MODULE_OPTIONAL_TDE);
     Styles = ();
     Files = (auto_Tde_Lib_ALL
-#ifdef ENABLE_TDE
-    gid_File_Lib_Tdebe
-#endif // ENABLE_TDE
     );
 End
-#endif
 
