@@ -2127,7 +2127,8 @@ $(call gb_LinkTarget_use_packages,$(1),\
 )
 
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(OUTDIR)/inc/postgresql \
+	-I$(call gb_UnpackedTarball_get_dir,postgresql)/src/include \
+	-I$(call gb_UnpackedTarball_get_dir,postgresql)/src/interfaces/libpq \
 	$$(INCLUDE) \
 )
 

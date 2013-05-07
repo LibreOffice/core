@@ -11,11 +11,6 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,postgresql,postgresql))
 
 $(eval $(call gb_ExternalPackage_use_external_project,postgresql,postgresql))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,postgresql,inc/postgresql,\
-	src/include/postgres_ext.h \
-	src/interfaces/libpq/libpq-fe.h \
-))
-
 ifeq ($(OS),WNT)
 $(eval $(call gb_ExternalPackage_add_files,postgresql,lib,\
 	src/interfaces/libpq/libpq.lib \
