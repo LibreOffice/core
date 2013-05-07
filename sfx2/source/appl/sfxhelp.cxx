@@ -660,6 +660,7 @@ static bool impl_showOnlineHelp( const String& rURL )
 
     OUString aHelpLink( "http://help.libreoffice.org/"  );
     aHelpLink += rURL.Copy( aInternal.Len() );
+    aHelpLink = aHelpLink.replaceAlL("%2F","/");
     try
     {
         Reference< XSystemShellExecute > xSystemShell(
