@@ -681,3 +681,5 @@ struct ZoomSlider
     INT16  SvxMaxZoom           MID_ZOOMSLIDER_MAXZOOM;
 };
 item ZoomSlider SvxZoomSliderItem;
+
+item String SvxGalleryItem; // dummy for sequence

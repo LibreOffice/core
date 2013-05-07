@@ -469,34 +469,6 @@ SfxVoidItem AutoPilotMenu SID_AUTOPILOTMENU
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem BackgroundImage SID_GALLERY_BG_BRUSH
-(SfxStringItem ImageFile SID_FILE_NAME)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* status: */
-    SlotType = SfxStringItem
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_INSERT;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem Backspace SID_BACKSPACE
 ()
 [

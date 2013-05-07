@@ -88,6 +88,7 @@
 #include <svx/xlncapit.hxx>
 #include <svx/xlinjoit.hxx>
 #include <svx/AffineMatrixItem.hxx>
+#include <svx/galleryitem.hxx>
 
 // #i25616#
 #include <svx/sdshitm.hxx>

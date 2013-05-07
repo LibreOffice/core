@@ -80,6 +80,8 @@
 #define CMD_SID_ATTRIBUTES_LINE                     ".uno:FormatLine"
 #define CMD_SID_FM_FORMATTEDFIELD                   ".uno:FormattedField"
 #define CMD_SID_UNGROUP                             ".uno:FormatUngroup"
+#define CMD_SID_GALLERY_ENABLE_ADDCOPY              ".uno:GalleryEnableAddCopy"
+#define CMD_SID_GALLERY_FORMATS                     ".uno:InsertGalleryPic"
 #define CMD_SID_ATTR_GRAF_CROP                      ".uno:GrafAttrCrop"
 #define CMD_SID_GRFFILTER_MOSAIC                    ".uno:GraphicFilterMosaic"
 #define CMD_SID_GRFFILTER_POSTER                    ".uno:GraphicFilterPoster"

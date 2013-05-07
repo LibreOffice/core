@@ -30,6 +30,9 @@
 #include <svtools/miscopt.hxx>
 #include "svx/galbrws.hxx"
 
+#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
+
 // ----------------------
 // - GalleryBrowserMode -
 // ----------------------
@@ -90,6 +93,7 @@ class GalleryListView;
 class GalleryPreview;
 class Menu;
 class SgaObject;
+struct DispatchInfo;
 
 namespace svx { namespace sidebar { class GalleryControl; } }
 
@@ -115,7 +119,9 @@ private:
     sal_uIntPtr             mnCurActionPos;
     GalleryBrowserMode  meMode;
     GalleryBrowserMode  meLastMode;
-    sal_Bool                mbCurActionIsLinkage;
+
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > m_xContext;
+    com::sun::star::uno::Reference< com::sun::star::util::XURLTransformer > m_xTransformer;
 
     void                InitSettings();
 
@@ -123,7 +129,6 @@ private:
     void                ImplUpdateInfoBar();
     sal_uIntPtr               ImplGetSelectedItemId( const Point* pSelPosPixel, Point& rSelPos );
     void                ImplSelectItemId( sal_uIntPtr nItemId );
-    void                ImplExecute( sal_uInt16 nId );
 
     // Control
     virtual void        Resize();
@@ -132,7 +137,6 @@ private:
     // SfxListener
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-                        DECL_LINK( MenuSelectHdl, Menu* pMenu );
                         DECL_LINK( SelectObjectHdl, void* );
                         DECL_LINK( SelectTbxHdl, ToolBox* );
                         DECL_LINK( MiscHdl, void* );
@@ -162,14 +166,24 @@ public:
     INetURLObject       GetURL() const;
     String              GetFilterName() const;
     Graphic             GetGraphic() const;
-    sal_Bool                IsLinkage() const;
 
     sal_Int8            AcceptDrop( DropTargetHelper& rTarget, const AcceptDropEvent& rEvt );
     sal_Int8            ExecuteDrop( DropTargetHelper& rTarget, const ExecuteDropEvent& rEvt );
     void                StartDrag( Window* pWindow, const Point* pDragPoint = NULL );
     void                TogglePreview( Window* pWindow, const Point* pPreviewPoint = NULL );
     void                ShowContextMenu( Window* pWindow, const Point* pContextPoint = NULL );
-    sal_Bool                KeyInput( const KeyEvent& rEvt, Window* pWindow );
+    sal_Bool            KeyInput( const KeyEvent& rEvt, Window* pWindow );
+
+    com::sun::star::uno::Reference< com::sun::star::frame::XFrame > GetFrame() const;
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > GetUNOContext() const { return m_xContext; }
+    com::sun::star::uno::Reference< com::sun::star::util::XURLTransformer > GetURLTransformer() const { return m_xTransformer; }
+
+    void Execute( sal_uInt16 nId );
+    void Dispatch( sal_uInt16 nId,
+                   const com::sun::star::uno::Reference< com::sun::star::frame::XDispatch > &rxDispatch = com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >(),
+                   const com::sun::star::util::URL &rURL = com::sun::star::util::URL() );
+
+    DECL_STATIC_LINK( GalleryBrowser2, AsyncDispatch_Impl, DispatchInfo* );
 };
 
 #endif

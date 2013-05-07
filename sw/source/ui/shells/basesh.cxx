@@ -106,6 +106,8 @@
 #include <comcore.hrc>
 
 #include <unomid.h>
+#include <svx/galleryitem.hxx>
+#include <com/sun/star/gallery/GalleryItemType.hpp>
 
 FlyMode SwBaseShell::eFrameMode = FLY_DRAG_END;
 
@@ -690,38 +692,40 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         break;
         case SID_GALLERY_FORMATS:
         {
+            SFX_ITEMSET_ARG( pArgs, pGalleryItem, SvxGalleryItem, SID_GALLERY_FORMATS, sal_False );
+            if ( !pGalleryItem )
+                break;
+
             const int nSelType = rSh.GetSelectionType();
-            if(SFX_ITEM_SET == pArgs->GetItemState( nSlot, sal_True, &pItem))
+            sal_Int8 nGalleryItemType( pGalleryItem->GetType() );
+
+            if ( (!rSh.IsSelFrmMode() || nSelType & nsSelectionType::SEL_GRF) &&
+                nGalleryItemType == com::sun::star::gallery::GalleryItemType::GRAPHIC )
             {
-                GalleryExplorer* pGal = 0;
-                if ( (!rSh.IsSelFrmMode() || nSelType & nsSelectionType::SEL_GRF) &&
-                    0!= (pGal = SVX_GALLERY())&&
-                    0 != (SGA_FORMAT_GRAPHIC & ((SfxUInt32Item*)pItem)->GetValue()))
+                SwWait aWait( *rView.GetDocShell(), sal_True );
+
+                String aGrfName, aFltName;
+                const Graphic aGrf( pGalleryItem->GetGraphic() );
+
+                if( pGalleryItem->IsLink() )
                 {
-                    SwWait aWait( *rView.GetDocShell(), sal_True );
-
-                    String aGrfName, aFltName;
-                    const Graphic aGrf( pGal->GetGraphic() );
-
-                    if( pGal->IsLinkage() )
-                    {
-                        // Linked
-                        aGrfName = pGal->GetURL().GetMainURL(INetURLObject::NO_DECODE);
-                        aFltName = pGal->GetFilterName();
-                    }
-
-                    if ( nSelType & nsSelectionType::SEL_GRF )
-                        rSh.ReRead( aGrfName, aFltName, &aGrf );
-                    else
-                        rSh.Insert( aGrfName, aFltName, aGrf );
-
-                    GetView().GetEditWin().GrabFocus();
+                    // Linked
+                    aGrfName = pGalleryItem->GetURL();
+                    aFltName = pGalleryItem->GetFilterName();
                 }
-                else if(!rSh.IsSelFrmMode() && SGA_FORMAT_SOUND & ((SfxUInt32Item*)pItem)->GetValue())
-                {
-                    const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, pGal->GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
-                       GetView().GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_AVMEDIA, SFX_CALLMODE_SYNCHRON, &aMediaURLItem, 0L );
-                }
+
+                if ( nSelType & nsSelectionType::SEL_GRF )
+                    rSh.ReRead( aGrfName, aFltName, &aGrf );
+                else
+                    rSh.Insert( aGrfName, aFltName, aGrf );
+
+                GetView().GetEditWin().GrabFocus();
+            }
+            else if(!rSh.IsSelFrmMode() &&
+                nGalleryItemType == com::sun::star::gallery::GalleryItemType::MEDIA  )
+            {
+                const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, pGalleryItem->GetURL() );
+                GetView().GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_AVMEDIA, SFX_CALLMODE_SYNCHRON, &aMediaURLItem, 0L );
             }
         }
         break;
@@ -2731,14 +2735,22 @@ void SwBaseShell::ExecuteGallery(SfxRequest &rReq)
     {
         case SID_GALLERY_BG_BRUSH:
         {
+            if ( !pArgs )
+                break;
+
             int nSel = rSh.GetSelectionType();
             if ( nSel & nsSelectionType::SEL_DRW_TXT )
                 break;
 
-            sal_uInt8 nPos = (sal_uInt8)((SfxUInt16Item &)pArgs->Get(SID_GALLERY_BG_POS)).GetValue();
+            SFX_REQUEST_ARG( rReq, pPos, SfxUInt16Item, SID_GALLERY_BG_POS, sal_False );
+            SFX_REQUEST_ARG( rReq, pBrush, SvxBrushItem, SID_GALLERY_BG_BRUSH, sal_False );
+            if ( !pPos || !pBrush )
+                break;
+
+            sal_uInt8 nPos = pPos->GetValue();
             ++nPos;
 
-            SvxBrushItem aBrush( (SvxBrushItem&)pArgs->Get(SID_GALLERY_BG_BRUSH));
+            SvxBrushItem aBrush( *pBrush );
             aBrush.SetWhich( RES_BACKGROUND );
             if ( nPos == nParagraphPos )
                 rSh.SetAttr( aBrush );

@@ -36,64 +36,9 @@ namespace
 // - GalleryExplorer -
 // -------------------
 
-Gallery* GalleryExplorer::ImplGetGallery()
-{
-    static Gallery* pGallery = NULL;
-
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-
-    if( !pGallery )
-        pGallery = Gallery::GetGalleryInstance();
-
-    return pGallery;
-}
-
-// ------------------------------------------------------------------------
-
-GalleryExplorer* GalleryExplorer::GetGallery()
-{
-    static GalleryExplorer* pThis = NULL;
-
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-
-    // only create a dummy object which can be accessed
-    if( !pThis )
-        pThis = new GalleryExplorer;
-
-    return pThis;
-}
-
-// ------------------------------------------------------------------------
-
-INetURLObject GalleryExplorer::GetURL() const
-{
-    return GALLERYBROWSER()->GetURL();
-}
-
-String GalleryExplorer::GetFilterName() const
-{
-    return GALLERYBROWSER()->GetFilterName();
-}
-
-// ------------------------------------------------------------------------
-
-Graphic GalleryExplorer::GetGraphic() const
-{
-    return GALLERYBROWSER()->GetGraphic();
-}
-
-// ------------------------------------------------------------------------
-
-sal_Bool GalleryExplorer::IsLinkage() const
-{
-    return GALLERYBROWSER()->IsLinkage();
-}
-
-// ------------------------------------------------------------------------
-
 bool GalleryExplorer::FillThemeList( std::vector<String>& rThemeList )
 {
-    Gallery* pGal = ImplGetGallery();
+    Gallery* pGal = ::Gallery::GetGalleryInstance();
 
     if( pGal )
     {
@@ -113,7 +58,7 @@ bool GalleryExplorer::FillThemeList( std::vector<String>& rThemeList )
 
 sal_Bool GalleryExplorer::FillObjList( const String& rThemeName, std::vector<String> &rObjList )
 {
-    Gallery* pGal = ImplGetGallery();
+    Gallery* pGal = ::Gallery::GetGalleryInstance();
 
     if( pGal )
     {
@@ -136,7 +81,7 @@ sal_Bool GalleryExplorer::FillObjList( const String& rThemeName, std::vector<Str
 
 sal_Bool GalleryExplorer::FillObjList( const sal_uInt32 nThemeId, std::vector<String> &rObjList )
 {
-    Gallery* pGal = ImplGetGallery();
+    Gallery* pGal = ::Gallery::GetGalleryInstance();
 
     if (!pGal)
         return false;
@@ -164,7 +109,7 @@ bool GalleryExplorer::FillObjList( const sal_uInt32 nThemeId, std::vector<OUStri
 
 sal_Bool GalleryExplorer::FillObjListTitle( const sal_uInt32 nThemeId, std::vector< OUString >& rList )
 {
-    Gallery* pGal = ImplGetGallery();
+    Gallery* pGal = ::Gallery::GetGalleryInstance();
     if( pGal )
     {
         SfxListener     aListener;
@@ -192,21 +137,7 @@ sal_Bool GalleryExplorer::FillObjListTitle( const sal_uInt32 nThemeId, std::vect
 
 sal_Bool GalleryExplorer::InsertURL( const String& rThemeName, const String& rURL )
 {
-    return InsertURL( rThemeName, rURL, SGA_FORMAT_ALL );
-}
-
-// ------------------------------------------------------------------------
-
-sal_Bool GalleryExplorer::InsertURL( sal_uIntPtr nThemeId, const String& rURL )
-{
-    return InsertURL( nThemeId, rURL, SGA_FORMAT_ALL );
-}
-
-// ------------------------------------------------------------------------
-
-sal_Bool GalleryExplorer::InsertURL( const String& rThemeName, const String& rURL, const sal_uIntPtr )
-{
-    Gallery*    pGal = ImplGetGallery();
+    Gallery*    pGal = ::Gallery::GetGalleryInstance();
     sal_Bool        bRet = sal_False;
 
     if( pGal )
@@ -228,10 +159,10 @@ sal_Bool GalleryExplorer::InsertURL( const String& rThemeName, const String& rUR
 
 // ------------------------------------------------------------------------
 
-sal_Bool GalleryExplorer::InsertURL( sal_uIntPtr nThemeId, const String& rURL, const sal_uIntPtr nSgaFormat )
+sal_Bool GalleryExplorer::InsertURL( sal_uIntPtr nThemeId, const String& rURL )
 {
-    Gallery* pGal = ImplGetGallery();
-    return( pGal ? InsertURL( pGal->GetThemeName( nThemeId ), rURL, nSgaFormat ) : sal_False );
+    Gallery* pGal = ::Gallery::GetGalleryInstance();
+    return( pGal ? InsertURL( pGal->GetThemeName( nThemeId ), rURL ) : sal_False );
 }
 
 // ------------------------------------------------------------------------
@@ -240,7 +171,7 @@ sal_Bool GalleryExplorer::GetGraphicObj( const String& rThemeName, sal_uIntPtr n
                                      Graphic* pGraphic, BitmapEx* pThumb,
                                      sal_Bool bProgress )
 {
-    Gallery*    pGal = ImplGetGallery();
+    Gallery*    pGal = ::Gallery::GetGalleryInstance();
     sal_Bool        bRet = sal_False;
 
     if( pGal )
@@ -269,7 +200,7 @@ sal_Bool GalleryExplorer::GetGraphicObj( sal_uIntPtr nThemeId, sal_uIntPtr nPos,
                                      Graphic* pGraphic, BitmapEx* pThumb,
                                      sal_Bool bProgress )
 {
-    Gallery* pGal = ImplGetGallery();
+    Gallery* pGal = ::Gallery::GetGalleryInstance();
     return( pGal ? GetGraphicObj( pGal->GetThemeName( nThemeId ), nPos, pGraphic, pThumb, bProgress ) : sal_False );
 }
 
@@ -277,7 +208,7 @@ sal_Bool GalleryExplorer::GetGraphicObj( sal_uIntPtr nThemeId, sal_uIntPtr nPos,
 
 sal_uIntPtr GalleryExplorer::GetSdrObjCount( const String& rThemeName )
 {
-    Gallery*    pGal = ImplGetGallery();
+    Gallery*    pGal = ::Gallery::GetGalleryInstance();
     sal_uIntPtr     nRet = 0;
 
     if( pGal )
@@ -302,7 +233,7 @@ sal_uIntPtr GalleryExplorer::GetSdrObjCount( const String& rThemeName )
 
 sal_uIntPtr GalleryExplorer::GetSdrObjCount( sal_uIntPtr nThemeId  )
 {
-    Gallery* pGal = ImplGetGallery();
+    Gallery* pGal = ::Gallery::GetGalleryInstance();
     return( pGal ? GetSdrObjCount( pGal->GetThemeName( nThemeId ) ) : sal_False );
 }
 
@@ -311,7 +242,7 @@ sal_uIntPtr GalleryExplorer::GetSdrObjCount( sal_uIntPtr nThemeId  )
 sal_Bool GalleryExplorer::GetSdrObj( const String& rThemeName, sal_uIntPtr nSdrModelPos,
                                  SdrModel* pModel, BitmapEx* pThumb )
 {
-    Gallery*    pGal = ImplGetGallery();
+    Gallery*    pGal = ::Gallery::GetGalleryInstance();
     sal_Bool        bRet = sal_False;
 
     if( pGal )
@@ -348,7 +279,7 @@ sal_Bool GalleryExplorer::GetSdrObj( const String& rThemeName, sal_uIntPtr nSdrM
 sal_Bool GalleryExplorer::GetSdrObj( sal_uIntPtr nThemeId, sal_uIntPtr nSdrModelPos,
                                  SdrModel* pModel, BitmapEx* pThumb )
 {
-    Gallery* pGal = ImplGetGallery();
+    Gallery* pGal = ::Gallery::GetGalleryInstance();
     return( pGal ? GetSdrObj( pGal->GetThemeName( nThemeId ), nSdrModelPos, pModel, pThumb ) : sal_False );
 }
 
@@ -356,7 +287,7 @@ sal_Bool GalleryExplorer::GetSdrObj( sal_uIntPtr nThemeId, sal_uIntPtr nSdrModel
 
 sal_Bool GalleryExplorer::BeginLocking( const String& rThemeName )
 {
-    Gallery*    pGal = ImplGetGallery();
+    Gallery*    pGal = ::Gallery::GetGalleryInstance();
     sal_Bool        bRet = sal_False;
 
     if( pGal )
@@ -377,7 +308,7 @@ sal_Bool GalleryExplorer::BeginLocking( const String& rThemeName )
 
 sal_Bool GalleryExplorer::BeginLocking( sal_uIntPtr nThemeId )
 {
-    Gallery* pGal = ImplGetGallery();
+    Gallery* pGal = ::Gallery::GetGalleryInstance();
     return( pGal ? BeginLocking( pGal->GetThemeName( nThemeId ) ) : sal_False );
 }
 
@@ -385,7 +316,7 @@ sal_Bool GalleryExplorer::BeginLocking( sal_uIntPtr nThemeId )
 
 sal_Bool GalleryExplorer::EndLocking( const String& rThemeName )
 {
-    Gallery*    pGal = ImplGetGallery();
+    Gallery*    pGal = ::Gallery::GetGalleryInstance();
     sal_Bool        bRet = sal_False;
 
     if( pGal )
@@ -416,7 +347,7 @@ sal_Bool GalleryExplorer::EndLocking( const String& rThemeName )
 
 sal_Bool GalleryExplorer::EndLocking( sal_uIntPtr nThemeId )
 {
-    Gallery* pGal = ImplGetGallery();
+    Gallery* pGal = ::Gallery::GetGalleryInstance();
     return( pGal ? EndLocking( pGal->GetThemeName( nThemeId ) ) : sal_False );
 }
 

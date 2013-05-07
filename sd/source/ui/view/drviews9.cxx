@@ -57,6 +57,9 @@
 #include "sdresid.hxx"
 #include "fupoor.hxx"
 
+#include <svx/galleryitem.hxx>
+#include <com/sun/star/gallery/GalleryItemType.hpp>
+
 namespace sd {
 
 
@@ -68,125 +71,121 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
 
     const SfxItemSet* pArgs = rReq.GetArgs();
 
-    if ( pArgs )
+    SFX_ITEMSET_ARG( pArgs, pGalleryItem, SvxGalleryItem, SID_GALLERY_FORMATS, sal_False );
+    if ( !pGalleryItem )
+        return;
+
+    GetDocSh()->SetWaitCursor( sal_True );
+
+    sal_Int8 nType( pGalleryItem->GetType() );
+    // insert graphic
+    if (nType == com::sun::star::gallery::GalleryItemType::GRAPHIC)
     {
-        const sal_uInt32        nFormats = ( (SfxUInt32Item&) pArgs->Get( SID_GALLERY_FORMATS ) ).GetValue();
-        GalleryExplorer*    pGal = SVX_GALLERY();
+        Graphic aGraphic( pGalleryItem->GetGraphic() );
 
-        if ( pGal )
+        // reduce size if necessary
+        Window aWindow (GetActiveWindow());
+        aWindow.SetMapMode(aGraphic.GetPrefMapMode());
+        Size aSizePix = aWindow.LogicToPixel(aGraphic.GetPrefSize());
+        aWindow.SetMapMode( MapMode(MAP_100TH_MM) );
+        Size aSize = aWindow.PixelToLogic(aSizePix);
+
+        // constrain size to page size if necessary
+        SdrPage* pPage = mpDrawView->GetSdrPageView()->GetPage();
+        Size aPageSize = pPage->GetSize();
+        aPageSize.Width() -= pPage->GetLftBorder() + pPage->GetRgtBorder();
+        aPageSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder();
+
+
+        // Falls Grafik zu gross, wird die Grafik
+        // in die Seite eingepasst
+        if ( ( ( aSize.Height() > aPageSize.Height() ) || ( aSize.Width()   > aPageSize.Width() ) ) &&
+            aSize.Height() && aPageSize.Height() )
         {
-            GetDocSh()->SetWaitCursor( sal_True );
+            float fGrfWH =  (float)aSize.Width() /
+                            (float)aSize.Height();
+            float fWinWH =  (float)aPageSize.Width() /
+                            (float)aPageSize.Height();
 
-            // insert graphic
-            if (nFormats & SGA_FORMAT_GRAPHIC)
+            // constrain size to page size if necessary
+            if ((fGrfWH != 0.F) && (fGrfWH < fWinWH))
             {
-                Graphic aGraphic = pGal->GetGraphic();
-
-                // reduce size if necessary
-                Window aWindow (GetActiveWindow());
-                aWindow.SetMapMode(aGraphic.GetPrefMapMode());
-                Size aSizePix = aWindow.LogicToPixel(aGraphic.GetPrefSize());
-                aWindow.SetMapMode( MapMode(MAP_100TH_MM) );
-                Size aSize = aWindow.PixelToLogic(aSizePix);
-
-                // constrain size to page size if necessary
-                SdrPage* pPage = mpDrawView->GetSdrPageView()->GetPage();
-                Size aPageSize = pPage->GetSize();
-                aPageSize.Width() -= pPage->GetLftBorder() + pPage->GetRgtBorder();
-                aPageSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder();
-
-
-                // if the graphic is to big, we fit it into the page
-                if ( ( ( aSize.Height() > aPageSize.Height() ) || ( aSize.Width()   > aPageSize.Width() ) ) &&
-                    aSize.Height() && aPageSize.Height() )
-                {
-                    float fGrfWH =  (float)aSize.Width() /
-                                    (float)aSize.Height();
-                    float fWinWH =  (float)aPageSize.Width() /
-                                    (float)aPageSize.Height();
-
-                    // adjust graphic to page size (scales)
-                    if ((fGrfWH != 0.F) && (fGrfWH < fWinWH))
-                    {
-                        aSize.Width() = (long)(aPageSize.Height() * fGrfWH);
-                        aSize.Height()= aPageSize.Height();
-                    }
-                    else
-                    {
-                        aSize.Width() = aPageSize.Width();
-                        aSize.Height()= (long)(aPageSize.Width() / fGrfWH);
-                    }
-                }
-
-
-                // set output rectangle for graphic
-                Point aPnt ((aPageSize.Width()  - aSize.Width())  / 2,
-                            (aPageSize.Height() - aSize.Height()) / 2);
-                aPnt += Point(pPage->GetLftBorder(), pPage->GetUppBorder());
-                Rectangle aRect (aPnt, aSize);
-
-                SdrGrafObj* pGrafObj = NULL;
-
-                sal_Bool bInsertNewObject = sal_True;
-
-                if ( mpDrawView->AreObjectsMarked() )
-                {
-                    // is there a empty graphic object?
-                    const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-
-                    if (rMarkList.GetMarkCount() == 1)
-                    {
-                        SdrMark* pMark = rMarkList.GetMark(0);
-                        SdrObject* pObj = pMark->GetMarkedSdrObj();
-
-                        if (pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_GRAF)
-                        {
-                            pGrafObj = (SdrGrafObj*) pObj;
-
-                            if( pGrafObj->IsEmptyPresObj() )
-                            {
-                                // the empty graphic object gets a new graphic
-                                bInsertNewObject = sal_False;
-
-                                SdrGrafObj* pNewGrafObj = (SdrGrafObj*) pGrafObj->Clone();
-                                pNewGrafObj->SetEmptyPresObj(sal_False);
-                                pNewGrafObj->SetOutlinerParaObject(NULL);
-                                pNewGrafObj->SetGraphic(aGraphic);
-
-                                String aStr(mpDrawView->GetDescriptionOfMarkedObjects());
-                                aStr += sal_Unicode(' ');
-                                aStr += String(SdResId(STR_UNDO_REPLACE));
-                                mpDrawView->BegUndo(aStr);
-                                SdrPageView* pPV = mpDrawView->GetSdrPageView();
-                                mpDrawView->ReplaceObjectAtView(pGrafObj, *pPV, pNewGrafObj);
-                                mpDrawView->EndUndo();
-                            }
-                        }
-                    }
-                }
-
-
-                if( bInsertNewObject )
-                {
-                    pGrafObj = new SdrGrafObj(aGraphic, aRect);
-                    SdrPageView* pPV = mpDrawView->GetSdrPageView();
-                    mpDrawView->InsertObjectAtView(pGrafObj, *pPV, SDRINSERT_SETDEFLAYER);
-                }
-
-                // should we just use a link?
-                if( pGrafObj && pGal->IsLinkage() )
-                    pGrafObj->SetGraphicLink( pGal->GetURL().GetMainURL( INetURLObject::NO_DECODE ), pGal->GetFilterName() );
+                aSize.Width() = (long)(aPageSize.Height() * fGrfWH);
+                aSize.Height()= aPageSize.Height();
             }
-            // insert sound
-            else if( nFormats & SGA_FORMAT_SOUND )
+            else
             {
-                const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, pGal->GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
-                   GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_AVMEDIA, SFX_CALLMODE_SYNCHRON, &aMediaURLItem, 0L );
+                aSize.Width() = aPageSize.Width();
+                aSize.Height()= (long)(aPageSize.Width() / fGrfWH);
             }
-
-            GetDocSh()->SetWaitCursor( sal_False );
         }
+
+        // set output rectangle for graphic
+        Point aPnt ((aPageSize.Width()  - aSize.Width())  / 2,
+                    (aPageSize.Height() - aSize.Height()) / 2);
+        aPnt += Point(pPage->GetLftBorder(), pPage->GetUppBorder());
+        Rectangle aRect (aPnt, aSize);
+
+        SdrGrafObj* pGrafObj = NULL;
+
+        sal_Bool bInsertNewObject = sal_True;
+
+        if ( mpDrawView->AreObjectsMarked() )
+        {
+            // is there a empty graphic object?
+            const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
+
+            if (rMarkList.GetMarkCount() == 1)
+            {
+                SdrMark* pMark = rMarkList.GetMark(0);
+                SdrObject* pObj = pMark->GetMarkedSdrObj();
+
+                if (pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_GRAF)
+                {
+                    pGrafObj = (SdrGrafObj*) pObj;
+
+                    if( pGrafObj->IsEmptyPresObj() )
+                    {
+                        // the empty graphic object gets a new graphic
+                        bInsertNewObject = sal_False;
+
+                        SdrGrafObj* pNewGrafObj = (SdrGrafObj*) pGrafObj->Clone();
+                        pNewGrafObj->SetEmptyPresObj(sal_False);
+                        pNewGrafObj->SetOutlinerParaObject(NULL);
+                        pNewGrafObj->SetGraphic(aGraphic);
+
+                        String aStr(mpDrawView->GetDescriptionOfMarkedObjects());
+                        aStr += sal_Unicode(' ');
+                        aStr += String(SdResId(STR_UNDO_REPLACE));
+                        mpDrawView->BegUndo(aStr);
+                        SdrPageView* pPV = mpDrawView->GetSdrPageView();
+                        mpDrawView->ReplaceObjectAtView(pGrafObj, *pPV, pNewGrafObj);
+                        mpDrawView->EndUndo();
+                    }
+                }
+            }
+        }
+
+
+        if( bInsertNewObject )
+        {
+            pGrafObj = new SdrGrafObj(aGraphic, aRect);
+            SdrPageView* pPV = mpDrawView->GetSdrPageView();
+            mpDrawView->InsertObjectAtView(pGrafObj, *pPV, SDRINSERT_SETDEFLAYER);
+        }
+
+        // Soll nur ein Link benutzt werden?
+        if( pGrafObj && pGalleryItem->IsLink() )
+            pGrafObj->SetGraphicLink( pGalleryItem->GetURL(), pGalleryItem->GetFilterName() );
     }
+    // insert sound
+    else if( nType == com::sun::star::gallery::GalleryItemType::MEDIA )
+    {
+        const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, pGalleryItem->GetURL() );
+        GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_AVMEDIA, SFX_CALLMODE_SYNCHRON, &aMediaURLItem, 0L );
+    }
+
+    GetDocSh()->SetWaitCursor( sal_False );
 }
 
 

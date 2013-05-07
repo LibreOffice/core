@@ -63,11 +63,6 @@ private:
 
 protected:
     void ThemeSelectionHasChanged (void);
-
-    INetURLObject GetURL (void) const;
-    String GetFilterName (void) const;
-    Graphic GetGraphic (void) const;
-    sal_Bool IsLinkage (void) const;
 };
 
 } } // end of namespace svx::sidebar

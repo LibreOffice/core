@@ -964,7 +964,7 @@ void SlideTransitionPane::openSoundFileDialog()
         else // not in sound list
         {
             // try to insert into gallery
-            if( GalleryExplorer::InsertURL( GALLERY_THEME_USERSOUNDS, aFile, SGA_FORMAT_SOUND ) )
+            if( GalleryExplorer::InsertURL( GALLERY_THEME_USERSOUNDS, aFile ) )
             {
                 updateSoundList();
                 bValidSoundFile = lcl_findSoundInList( maSoundList, aFile, nPos );

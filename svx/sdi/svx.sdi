@@ -405,6 +405,35 @@ SfxVoidItem AutoFormat SID_AUTOFORMAT
 
 //--------------------------------------------------------------------------
 
+SfxVoidItem BackgroundImage SID_GALLERY_BG_BRUSH
+(SvxBrushItem Background SID_GALLERY_BG_BRUSH, SfxUInt16Item Position SID_GALLERY_BG_POS)
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* status: */
+    SlotType = SfxStringItem
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_INSERT;
+]
+
+//--------------------------------------------------------------------------
+
 SfxStringItem TableStyle SID_TABLE_STYLE
 ()
 [
@@ -6338,13 +6367,13 @@ SfxVoidItem PreviousAnnotation SID_PREVIOUS_POSTIT
 ]
 
 //--------------------------------------------------------------------------
-SfxUInt32Item InsertGalleryPic SID_GALLERY_FORMATS
-()
+SfxVoidItem InsertGalleryPic SID_GALLERY_FORMATS
+(SvxGalleryItem GalleryItem SID_GALLERY_FORMATS)
 [
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Cachable,
-    FastCall = TRUE,
+    FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,

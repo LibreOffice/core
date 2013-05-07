@@ -1751,7 +1751,7 @@ void CustomAnimationEffectTabPage::openSoundFileDialog()
         if( nPos < 0 ) // not in Soundliste
         {
             // try to insert in Gallery
-            if( GalleryExplorer::InsertURL( GALLERY_THEME_USERSOUNDS, aFile, SGA_FORMAT_SOUND ) )
+            if( GalleryExplorer::InsertURL( GALLERY_THEME_USERSOUNDS, aFile ) )
             {
                 clearSoundListBox();
                 fillSoundListBox();

@@ -549,7 +549,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/ui/view/drawview \
 	sc/source/ui/view/editsh \
 	sc/source/ui/view/formatsh \
-	sc/source/ui/view/galwrap \
 	sc/source/ui/view/gridmerg \
 	sc/source/ui/view/gridwin \
 	sc/source/ui/view/gridwin2 \

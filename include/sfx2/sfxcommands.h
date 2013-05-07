@@ -41,6 +41,7 @@
 #define CMD_SID_OBJECT                              ".uno:ObjectMenue"
 #define CMD_SID_OPENDOC                             ".uno:Open"
 #define CMD_SID_WEBHTML                             ".uno:WebHtml"
+#define CMD_SID_GALLERY_BG_BRUSH                    ".uno:BackgroundImage"
 #define CMD_SID_OPENHYPERLINK                       ".uno:OpenHyperlink"
 #define CMD_SID_DOCINFO_TITLE                       ".uno:DocInfoTitle"
 #define CMD_SID_OPENTEMPLATE                        ".uno:OpenTemplate"

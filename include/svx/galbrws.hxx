@@ -26,8 +26,6 @@
 #include <tools/urlobj.hxx>
 #include "svx/svxdllapi.h"
 
-#define GALLERYBROWSER() ((GalleryBrowser*)( SfxViewFrame::Current()->GetChildWindow(GalleryChildWindow::GetChildWindowId())->GetWindow()))
-
 class SVX_DLLPUBLIC GalleryChildWindow : public SfxChildWindow
 {
 public:
@@ -76,12 +74,7 @@ public:
                                             Window* pParent, const ResId& rResId );
                             ~GalleryBrowser();
 
-    INetURLObject           GetURL() const;
-    String                  GetFilterName() const;
-    Graphic                 GetGraphic() const;
-    sal_Bool                    IsLinkage() const;
-
-    sal_Bool                    KeyInput( const KeyEvent& rKEvt, Window* pWindow );
+    sal_Bool                KeyInput( const KeyEvent& rKEvt, Window* pWindow );
 };
 
 #endif // _SVX_GALBRWS_HXX_
