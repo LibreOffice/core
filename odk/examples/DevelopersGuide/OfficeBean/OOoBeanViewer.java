@@ -32,8 +32,9 @@
  *
  *************************************************************************/
 
-package com.sun.star.comp.beans;
+package org.libreoffice.sdk.examples.developers_guide.office_bean;
 
+import com.sun.star.comp.beans.OOoBean;
 import javax.swing.filechooser.*;
 import javax.swing.*;
 import java.io.*;

@@ -43,9 +43,7 @@ include $(SETTINGS)/std.mk
 # Define non-platform/compiler specific settings
 OUT_COMP_CLASS = $(OUT_CLASS)/OOoBeanViewer
 
-# normally the idl file should be stored in a directory tree fitting the module structure,
-# for the example we know the module structure
-PACKAGE = com/sun/star/comp/beans
+PACKAGE = org/libreoffice/sdk/examples/developers_guide/office_bean
 
 JAVAFILES  = \
 	OOoBeanViewer.java \
