@@ -381,11 +381,10 @@ XRMResMerge::XRMResMerge(
                 sFilename( rFilename ) ,
                 pResData( NULL )
 {
-    if (!rMergeSource.isEmpty())
+    if (!rMergeSource.isEmpty() && sLanguage.equalsIgnoreAsciiCase("ALL"))
+    {
         pMergeDataFile = new MergeDataFile(
             rMergeSource, sInputFileName, false);
-    if( sLanguage.equalsIgnoreAsciiCase("ALL") )
-    {
         aLanguages = pMergeDataFile->GetLanguages();
     }
     else
