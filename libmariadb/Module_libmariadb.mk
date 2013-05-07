@@ -12,7 +12,6 @@ $(eval $(call gb_Module_Module,libmariadb))
 ifeq ($(SYSTEM_MARIADB),NO)
 
 $(eval $(call gb_Module_add_targets,libmariadb,\
-	ExternalPackage_libmariadb \
 	StaticLibrary_mariadb \
 	UnpackedTarball_mariadb \
 ))

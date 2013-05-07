@@ -43,11 +43,6 @@ $(eval $(call gb_Library_add_defs,mysqlcppconn,\
 	-D_SCL_SECURE_NO_WARNINGS ) \
 ))
 
-$(eval $(call gb_Library_set_include,mysqlcppconn,\
-	$$(INCLUDE) \
-	$(MARIADB_CFLAGS) \
-))
-
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,mysqlcppconn,\
 	-lpthread \

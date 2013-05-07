@@ -57,13 +57,16 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 ))
 
 define gb_LinkTarget__use_mariadb
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(MARIADB_CFLAGS) \
+)
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	mariadblib \
 )
 
 endef
 define gb_ExternalProject__use_mariadb
-$(call gb_ExternalProject_use_package,$(1),libmariadb_inc)
 $(call gb_ExternalProject_use_static_libraries,$(1),mariadblib)
 
 endef
