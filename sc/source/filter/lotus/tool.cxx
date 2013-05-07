@@ -101,7 +101,8 @@ void PutFormString( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char* pString )
     pDoc->ApplyAttr( nCol, nRow, nTab, *pJustify );
     ScSetStringParam aParam;
     aParam.setTextInput();
-    pDoc->SetString(ScAddress(nCol,nRow,nTab), String(pString, pLotusRoot->eCharsetQ), &aParam);
+    if (pString)
+        pDoc->SetString(ScAddress(nCol,nRow,nTab), String(pString, pLotusRoot->eCharsetQ), &aParam);
 }
 
 
