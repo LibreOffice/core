@@ -68,7 +68,6 @@ typedef ::comphelper::SequenceAsVector< OUString > TStringList;
 // Guids used for IFileDialog::SetClientGuid
 static const GUID CLIENTID_FILEDIALOG_SIMPLE        = {0xB8628FD3, 0xA3F5, 0x4845, 0x9B, 0x62, 0xD5, 0x1E, 0xDF, 0x97, 0xC4, 0x83};
 static const GUID CLIENTID_FILEDIALOG_OPTIONS       = {0x93ED486F, 0x0D04, 0x4807, 0x8C, 0x44, 0xAC, 0x26, 0xCB, 0x6C, 0x5D, 0x36};
-static const GUID CLIENTID_FILESAVE                 = {0x3B2E2261, 0x402D, 0x4049, 0xB0, 0xC0, 0x91, 0x13, 0xF8, 0x6E, 0x84, 0x7C};
 static const GUID CLIENTID_FILESAVE_PASSWORD        = {0xC12D4F4C, 0x4D41, 0x4D4F, 0x97, 0xEF, 0x87, 0xF9, 0x8D, 0xB6, 0x1E, 0xA6};
 static const GUID CLIENTID_FILESAVE_SELECTION       = {0x5B2482B3, 0x0358, 0x4E09, 0xAA, 0x64, 0x2B, 0x76, 0xB2, 0xA0, 0xDD, 0xFE};
 static const GUID CLIENTID_FILESAVE_TEMPLATE        = {0x9996D877, 0x20D5, 0x424B, 0x9C, 0x2E, 0xD3, 0xB6, 0x31, 0xEC, 0xF7, 0xCE};
@@ -500,14 +499,11 @@ void VistaFilePickerImpl::impl_sta_enableFeatures(::sal_Int32 nFeatures, ::sal_I
             aGUID = CLIENTID_FILEDIALOG_OPTIONS;
             break;
 
-        case css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION :
-            aGUID = CLIENTID_FILESAVE;
-            break;
-
         case css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD :
             aGUID = CLIENTID_FILESAVE_PASSWORD;
             break;
 
+        case css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION :
         case css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION_SELECTION :
             aGUID = CLIENTID_FILESAVE_SELECTION;
             break;
