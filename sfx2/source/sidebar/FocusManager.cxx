@@ -98,8 +98,9 @@ void FocusManager::ClearPanels (void)
 
 void FocusManager::ClearButtons (void)
 {
-    ::std::vector<Window*> aButtons;
-    for (::std::vector<Window*>::iterator iButton(aButtons.begin()),iEnd(aButtons.end());
+    ::std::vector<Button*> aButtons;
+    aButtons.swap(maButtons);
+    for (::std::vector<Button*>::iterator iButton(aButtons.begin()),iEnd(aButtons.end());
          iButton!=iEnd;
         ++iButton)
     {
@@ -278,6 +279,8 @@ bool FocusManager::IsDeckTitleVisible (void) const
 
 void FocusManager::FocusPanel (const sal_Int32 nPanelIndex)
 {
+    if (nPanelIndex<0 || nPanelIndex>=static_cast<sal_Int32>(maPanels.size()))
+        return;
     Panel& rPanel (*maPanels[nPanelIndex]);
     TitleBar* pTitleBar = rPanel.GetTitleBar();
     if (pTitleBar!=NULL && pTitleBar->IsVisible())
