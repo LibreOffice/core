@@ -16,36 +16,24 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_packages_zip_XZipFileAccess_idl__
-#define __com_sun_star_packages_zip_XZipFileAccess_idl__
+#ifndef __com_sun_star_packages_zip_XZipFileAccess2_idl__
+#define __com_sun_star_packages_zip_XZipFileAccess2_idl__
 
-#include <com/sun/star/container/NoSuchElementException.idl>
-#include <com/sun/star/io/XInputStream.idl>
-#include <com/sun/star/io/IOException.idl>
-#include <com/sun/star/uno/XInterface.idl>
-
+#include <com/sun/star/packages/zip/XZipFileAccess.idl>
+#include <com/sun/star/container/XNameAccess.idl>
 
 
 module com {  module sun {  module star {   module packages {  module zip {
 
 
-/** allows to get reading access to non-encrypted entries inside zip file.
+/**
+    Merged interface for ZipFileAccess service.
+    @since LibreOffice 4.1
  */
-interface XZipFileAccess: ::com::sun::star::uno::XInterface
+interface XZipFileAccess2
 {
-    /** allows to get stream by specifying a pattern.
-
-        <p>
-        The first stream with a name that fits to the pattern will be returned.
-        The pattern allows to use "*" wildcard symbol. If the name contains "*"
-        or "\" symbols itself they must guarded with backslash "\".
-        The slashes have no special meaning here so they can be replaced
-        by wildcards also.
-        </p>
-     */
-    ::com::sun::star::io::XInputStream getStreamByPattern( [in] string aPattern )
-        raises( ::com::sun::star::container::NoSuchElementException,
-                ::com::sun::star::io::IOException );
+    interface XZipFileAccess;
+    interface com::sun::star::container::XNameAccess;
 
 };
 

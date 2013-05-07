@@ -19,11 +19,8 @@
 #ifndef __com_sun_star_packages_zip_ZipFileAccess_idl__
 #define __com_sun_star_packages_zip_ZipFileAccess_idl__
 
-#include <com/sun/star/packages/zip/XZipFileAccess.idl>
-#include <com/sun/star/lang/XInitialization.idl>
-#include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/container/XNameAccess.idl>
-#include <com/sun/star/io/IOException.idl>
+#include <com/sun/star/packages/zip/XZipFileAccess2.idl>
+#include <com/sun/star/ucb/InteractiveIOException.idl>
 
 
 
@@ -32,12 +29,9 @@ module com {  module sun {  module star {   module packages {  module zip {
 
 /** allows to get reading access to non-encrypted entries inside zip file.
  */
-service ZipFileAccess
+service ZipFileAccess : XZipFileAccess2
 {
-    interface XZipFileAccess;
-    interface ::com::sun::star::container::XNameAccess;
-    interface ::com::sun::star::lang::XInitialization;
-    interface ::com::sun::star::lang::XComponent;
+    createWithURL([in] string URL) raises ( com::sun::star::io::IOException, com::sun::star::ucb::InteractiveIOException );
 };
 
 

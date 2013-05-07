@@ -20,7 +20,7 @@
 #ifndef _ZIPFILEACCESS_HXX_
 #define _ZIPFILEACCESS_HXX_
 
-#include <com/sun/star/packages/zip/XZipFileAccess.hpp>
+#include <com/sun/star/packages/zip/XZipFileAccess2.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -28,16 +28,15 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 
 #include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase4.hxx>
 
 #include <mutexholder.hxx>
 
 #include <ZipFile.hxx>
 #include <HashMaps.hxx>
 
-class OZipFileAccess : public ::cppu::WeakImplHelper5<
-                        ::com::sun::star::packages::zip::XZipFileAccess,
-                        ::com::sun::star::container::XNameAccess,
+class OZipFileAccess : public ::cppu::WeakImplHelper4<
+                        ::com::sun::star::packages::zip::XZipFileAccess2,
                         ::com::sun::star::lang::XInitialization,
                         ::com::sun::star::lang::XComponent,
                         ::com::sun::star::lang::XServiceInfo >

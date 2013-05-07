@@ -243,6 +243,9 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/packages/m
 	ManifestReader \
 	ManifestWriter \
 ))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/packages/zip,\
+	ZipFileAccess \
+))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/plugin,\
 	PluginManager \
 ))
@@ -968,9 +971,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/package
 	PackageFolder \
 	PackageFolderEnumeration \
 	PackageStream \
-))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/packages/zip,\
-	ZipFileAccess \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/presentation,\
 	ChartShape \
@@ -2879,6 +2879,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/packages/manifes
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/packages/zip,\
 	XZipFileAccess \
+	XZipFileAccess2 \
 	ZipConstants \
 	ZipEntry \
 	ZipException \

@@ -31,6 +31,7 @@
 #include "com/sun/star/io/XInputStream.hpp"
 #include "com/sun/star/lang/Locale.hpp"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#include "com/sun/star/packages/zip/ZipFileAccess.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
@@ -344,13 +345,11 @@ bool ImplImageTree::find(
 
     for (Paths::iterator i(m_paths.begin()); i != m_paths.end();) {
         if (!i->second.is()) {
-            css::uno::Sequence< css::uno::Any > args(1);
-            args[0] <<= i->first + ".zip";
             try {
                 i->second.set(
-                    comphelper::getProcessServiceFactory()->createInstanceWithArguments(
-                        OUString( "com.sun.star.packages.zip.ZipFileAccess"),
-                        args),
+                    css::packages::zip::ZipFileAccess::createWithURL(
+                       comphelper::getProcessComponentContext(),
+                       i->first + ".zip"),
                     css::uno::UNO_QUERY_THROW);
             } catch (css::uno::RuntimeException &) {
                 throw;
