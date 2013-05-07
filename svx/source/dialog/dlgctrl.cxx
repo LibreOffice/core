@@ -1416,7 +1416,7 @@ namespace
             {
                 const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
-                if(rStyleSettings.GetUIPreviewUsesCheckeredBackground())
+                if(rStyleSettings.GetPreviewUsesCheckeredBackground())
                 {
                     const Point aNull(0, 0);
                     static const sal_uInt32 nLen(8);
@@ -1924,7 +1924,24 @@ void SvxPreviewBase::LocalPrePaint()
         mpBufferDevice->SetMapMode(GetMapMode());
     }
 
-    mpBufferDevice->Erase();
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+
+    if(rStyleSettings.GetPreviewUsesCheckeredBackground())
+    {
+        const Point aNull(0, 0);
+        static const sal_uInt32 nLen(8);
+        static const Color aW(COL_WHITE);
+        static const Color aG(0xef, 0xef, 0xef);
+        const bool bWasEnabled(mpBufferDevice->IsMapModeEnabled());
+
+        mpBufferDevice->EnableMapMode(false);
+        mpBufferDevice->DrawCheckered(aNull, mpBufferDevice->GetOutputSizePixel(), nLen, aW, aG);
+        mpBufferDevice->EnableMapMode(bWasEnabled);
+    }
+    else
+    {
+        mpBufferDevice->Erase();
+    }
 }
 
 void SvxPreviewBase::LocalPostPaint()

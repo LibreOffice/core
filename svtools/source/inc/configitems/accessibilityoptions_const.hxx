@@ -31,19 +31,20 @@
 
 namespace
 {
-    static const ::rtl::OUString s_sAccessibility               = ::rtl::OUString::createFromAscii("org.openoffice.Office.Common/Accessibility");
-    static const ::rtl::OUString s_sAutoDetectSystemHC          = ::rtl::OUString::createFromAscii("AutoDetectSystemHC");
-    static const ::rtl::OUString s_sIsForPagePreviews           = ::rtl::OUString::createFromAscii("IsForPagePreviews");
-    static const ::rtl::OUString s_sIsHelpTipsDisappear         = ::rtl::OUString::createFromAscii("IsHelpTipsDisappear");
-    static const ::rtl::OUString s_sHelpTipSeconds              = ::rtl::OUString::createFromAscii("HelpTipSeconds");
-    static const ::rtl::OUString s_sIsAllowAnimatedGraphics     = ::rtl::OUString::createFromAscii("IsAllowAnimatedGraphics");
-    static const ::rtl::OUString s_sIsAllowAnimatedText         = ::rtl::OUString::createFromAscii("IsAllowAnimatedText");
-    static const ::rtl::OUString s_sIsAutomaticFontColor        = ::rtl::OUString::createFromAscii("IsAutomaticFontColor");
-    static const ::rtl::OUString s_sIsSystemFont                = ::rtl::OUString::createFromAscii("IsSystemFont");
-    static const ::rtl::OUString s_sIsSelectionInReadonly       = ::rtl::OUString::createFromAscii("IsSelectionInReadonly");
-    static const ::rtl::OUString s_sEdgeBlending                = ::rtl::OUString::createFromAscii("EdgeBlending");
-    static const ::rtl::OUString s_sListBoxMaximumLineCount     = ::rtl::OUString::createFromAscii("ListBoxMaximumLineCount");
-    static const ::rtl::OUString s_sColorValueSetColumnCount    = ::rtl::OUString::createFromAscii("ColorValueSetColumnCount");
+    static const ::rtl::OUString s_sAccessibility                   = ::rtl::OUString::createFromAscii("org.openoffice.Office.Common/Accessibility");
+    static const ::rtl::OUString s_sAutoDetectSystemHC              = ::rtl::OUString::createFromAscii("AutoDetectSystemHC");
+    static const ::rtl::OUString s_sIsForPagePreviews               = ::rtl::OUString::createFromAscii("IsForPagePreviews");
+    static const ::rtl::OUString s_sIsHelpTipsDisappear             = ::rtl::OUString::createFromAscii("IsHelpTipsDisappear");
+    static const ::rtl::OUString s_sHelpTipSeconds                  = ::rtl::OUString::createFromAscii("HelpTipSeconds");
+    static const ::rtl::OUString s_sIsAllowAnimatedGraphics         = ::rtl::OUString::createFromAscii("IsAllowAnimatedGraphics");
+    static const ::rtl::OUString s_sIsAllowAnimatedText             = ::rtl::OUString::createFromAscii("IsAllowAnimatedText");
+    static const ::rtl::OUString s_sIsAutomaticFontColor            = ::rtl::OUString::createFromAscii("IsAutomaticFontColor");
+    static const ::rtl::OUString s_sIsSystemFont                    = ::rtl::OUString::createFromAscii("IsSystemFont");
+    static const ::rtl::OUString s_sIsSelectionInReadonly           = ::rtl::OUString::createFromAscii("IsSelectionInReadonly");
+    static const ::rtl::OUString s_sEdgeBlending                    = ::rtl::OUString::createFromAscii("EdgeBlending");
+    static const ::rtl::OUString s_sListBoxMaximumLineCount         = ::rtl::OUString::createFromAscii("ListBoxMaximumLineCount");
+    static const ::rtl::OUString s_sColorValueSetColumnCount        = ::rtl::OUString::createFromAscii("ColorValueSetColumnCount");
+    static const ::rtl::OUString s_sPreviewUsesCheckeredBackground  = ::rtl::OUString::createFromAscii("PreviewUsesCheckeredBackground");
 }
 
 #endif //  INCLUDE_CONFIGITEMS_ACCESSIBILITYOPTIONS_CONST_HXX
