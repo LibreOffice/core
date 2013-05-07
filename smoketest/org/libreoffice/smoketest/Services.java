@@ -15,19 +15,18 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-package com.sun.star.comp;
+
+package org.libreoffice.smoketest;
 
 import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lang.XSingleComponentFactory;
-import com.sun.star.comp.juhtest.SmoketestCommandEnvironment;
-
 
 /** This class is the registration class for all services in this module.
  *
  * Note that not all files which can be used as service need to be registered
  * by this class.
  */
-public class JavaUNOHelperServices {
+public class Services {
 
      /**
      * Gives a factory for creating the service.

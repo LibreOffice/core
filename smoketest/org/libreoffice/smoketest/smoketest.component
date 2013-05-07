@@ -19,7 +19,7 @@
 
 <component loader="com.sun.star.loader.Java2"
     xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.juhtest.SmoketestCommandEnvironment">
+  <implementation name="org.libreoffice.smoketest.SmoketestCommandEnvironment">
     <service name="com.sun.star.deployment.test.SmoketestCommandEnvironment"/>
   </implementation>
 </component>

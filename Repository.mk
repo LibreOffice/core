@@ -758,6 +758,7 @@ $(eval $(call gb_Helper_register_jars,OOO, \
 	reportbuilder \
 	reportbuilderwizard \
 	sdbc_hsqldb \
+	smoketest \
 	table \
 	unoil \
 	web \

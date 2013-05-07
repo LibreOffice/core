@@ -123,6 +123,7 @@ Module gid_Module_Root_Files_3
 	gid_File_Jar_Accessbridge,
 	gid_File_Jar_Officebean,
 	gid_File_Jar_Report,
+	gid_File_Jar_Smoketest,
 	gid_File_Jar_Table,
 	gid_File_Jar_Letter,
 	gid_File_Jar_Form,

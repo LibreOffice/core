@@ -40,7 +40,7 @@ Sub TestExtensions
 
     &apos;Create an implementation of com.sun.star.ucb.XCommandEnvironment which is needed for
     &apos;adding the extension. The implementation is in
-    &apos;javaunohelper/com/sun/star/comp/juhtest/SmoketestCommandEnvironment.java and the code is in juh.jar
+    &apos;smoketest/org/libreoffice/smoketest/SmoketestCommandEnvironment.java and the code is in smoketest.jar
     cmdEnv = createUnoService(cUnoSmoketestCommandEnvironment)
 
     &apos;Create the component context and then get the singleton ExtensionManager

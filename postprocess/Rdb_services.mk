@@ -232,6 +232,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 		xmerge/source/bridge/XMergeBridge \
 		scripting/java/ScriptFramework \
 		scripting/java/ScriptProviderForJava \
+		smoketest/org/libreoffice/smoketest/smoketest \
 		wizards/com/sun/star/wizards/form/form \
 		connectivity/source/drivers/hsqldb/hsqldb \
 		connectivity/source/drivers/jdbc/jdbc \

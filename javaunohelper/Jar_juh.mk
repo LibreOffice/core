@@ -12,7 +12,6 @@ $(eval $(call gb_Jar_Jar,juh))
 $(eval $(call gb_Jar_use_jars,juh,\
     jurt \
     ridl \
-    unoil \
 ))
 
 $(eval $(call gb_Jar_set_packageroot,juh,com))
@@ -21,17 +20,13 @@ $(eval $(call gb_Jar_add_manifest_classpath,juh,ridl.jar jurt.jar ../../lib/ ../
 
 $(eval $(call gb_Jar_set_manifest,juh,$(SRCDIR)/javaunohelper/util/manifest))
 
-$(eval $(call gb_Jar_set_componentfile,juh,javaunohelper/util/juh,URE))
-
 $(eval $(call gb_Jar_add_sourcefiles,juh,\
-    javaunohelper/com/sun/star/comp/JavaUNOHelperServices \
     javaunohelper/com/sun/star/comp/helper/Bootstrap \
     javaunohelper/com/sun/star/comp/helper/BootstrapException \
     javaunohelper/com/sun/star/comp/helper/ComponentContext \
     javaunohelper/com/sun/star/comp/helper/ComponentContextEntry \
     javaunohelper/com/sun/star/comp/helper/SharedLibraryLoader \
     javaunohelper/com/sun/star/comp/helper/UnoInfo \
-    javaunohelper/com/sun/star/comp/juhtest/SmoketestCommandEnvironment \
     javaunohelper/com/sun/star/lib/uno/adapter/ByteArrayToXInputStreamAdapter \
     javaunohelper/com/sun/star/lib/uno/adapter/InputStreamToXInputStreamAdapter \
     javaunohelper/com/sun/star/lib/uno/adapter/OutputStreamToXOutputStreamAdapter \

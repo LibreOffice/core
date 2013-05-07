@@ -30,7 +30,6 @@ $(eval $(call gb_Rdb_add_components,ure/services,\
 
 ifneq ($(SOLAR_JAVA),)
 $(eval $(call gb_Rdb_add_components,ure/services,\
-    javaunohelper/util/juh \
     stoc/source/javaloader/javaloader \
     stoc/source/javavm/javavm \
 ))

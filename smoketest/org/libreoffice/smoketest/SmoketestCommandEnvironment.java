@@ -15,7 +15,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-package com.sun.star.comp.juhtest;
+
+package org.libreoffice.smoketest;
 
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lib.uno.helper.WeakBase;
