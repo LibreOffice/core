@@ -27,6 +27,8 @@
 
 #include "macros.inc"
 
+#include "AutoInstallLibs/gnome"
+
 Module gid_Module_Optional_Gnome
     ParentID = gid_Module_Optional;
     Default = YES;
@@ -36,7 +38,7 @@ Module gid_Module_Optional_Gnome
 #ifdef ENABLE_GNOMEVFS
     XpdCheckSolaris = "SUNWgnome-vfs";
 #endif
-    Files = (
+    Files = (auto_Gnome_lib_ALL
 #ifdef ENABLE_EVOAB2
       gid_File_Lib_Evoab,
 #endif

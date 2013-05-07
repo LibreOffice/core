@@ -225,6 +225,9 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,TDE, \
     $(if $(ENABLE_TDE),tdebe1) \
 ))
 
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,GNOME, \
+))
+
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,KDE, \
     $(if $(ENABLE_KDE),kdebe1) \
     $(if $(ENABLE_KDE4),kde4be1) \
