@@ -84,7 +84,7 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/stlunosequence.hxx>
 #include <comphelper/string.hxx>
-#include <writerfilter/doctok/sprmids.hxx>
+#include <doctok/sprmids.hxx>
 
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"

@@ -12,7 +12,6 @@ $(eval $(call gb_Module_Module,writerfilter))
 $(eval $(call gb_Module_add_targets,writerfilter,\
     CustomTarget_source \
     Library_writerfilter \
-    Package_sprmids \
 ))
 
 $(eval $(call gb_Module_add_check_targets,writerfilter,\

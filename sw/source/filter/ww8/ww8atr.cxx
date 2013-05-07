@@ -115,7 +115,7 @@
 #include <chpfld.hxx>
 #include <fmthdft.hxx>
 
-#include <writerfilter/doctok/sprmids.hxx>
+#include <doctok/sprmids.hxx>
 
 #include <fmtcntnt.hxx>
 #include "writerhelper.hxx"

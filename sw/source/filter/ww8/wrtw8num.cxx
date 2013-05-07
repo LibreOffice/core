@@ -30,7 +30,7 @@
 #include <ndtxt.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 
-#include <writerfilter/doctok/sprmids.hxx>
+#include <doctok/sprmids.hxx>
 
 #include "ww8attributeoutput.hxx"
 #include "writerhelper.hxx"

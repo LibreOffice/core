@@ -265,7 +265,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/wmf.hxx>
 #include <vector>
-#include <writerfilter/doctok/sprmids.hxx>
+#include <doctok/sprmids.hxx>
 #include <xmloff/odffields.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

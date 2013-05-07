@@ -51,7 +51,7 @@
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
 
-#include <writerfilter/doctok/sprmids.hxx>
+#include <doctok/sprmids.hxx>
 
 #include <doc.hxx>
 #include "writerhelper.hxx"

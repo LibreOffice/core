@@ -82,7 +82,7 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 
-#include <writerfilter/doctok/sprmids.hxx>
+#include <doctok/sprmids.hxx>
 
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"

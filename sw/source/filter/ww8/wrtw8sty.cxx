@@ -60,7 +60,7 @@
 #include <msfilter.hxx>
 #include <swmodule.hxx>
 
-#include <writerfilter/doctok/sprmids.hxx>
+#include <doctok/sprmids.hxx>
 
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"
