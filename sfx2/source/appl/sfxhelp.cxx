@@ -649,6 +649,7 @@ static bool impl_showOnlineHelp( const OUString& rURL )
 
     OUString aHelpLink( "http://help.libreoffice.org/"  );
     aHelpLink += rURL.copy( aInternal.getLength() );
+    aHelpLink = aHelpLink.replaceAll("%2F","/");
     try
     {
         Reference< XSystemShellExecute > xSystemShell(
