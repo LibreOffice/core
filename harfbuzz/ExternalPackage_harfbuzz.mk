@@ -9,23 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,harfbuzz,harfbuzz))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,harfbuzz,inc/external/harfbuzz,\
-	src/hb.h \
-	src/hb-blob.h \
-	src/hb-buffer.h \
-	src/hb-common.h \
-	src/hb-font.h \
-	src/hb-icu.h \
-	src/hb-ot.h \
-	src/hb-ot-layout.h \
-	src/hb-ot-tag.h \
-	src/hb-set.h \
-	src/hb-shape.h \
-	src/hb-shape-plan.h \
-	src/hb-unicode.h \
-	src/hb-version.h \
-))
-
 $(eval $(call gb_ExternalPackage_use_external_project,harfbuzz,harfbuzz))
 
 $(eval $(call gb_ExternalPackage_add_file,harfbuzz,lib/libharfbuzz.a,src/.libs/libharfbuzz.a))

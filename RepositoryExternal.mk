@@ -1217,6 +1217,10 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	harfbuzz \
 ))
 define gb_LinkTarget__use_harfbuzz
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,harfbuzz)/src \
+	$$(INCLUDE) \
+)
 $(call gb_LinkTarget_use_package,$(1),\
 	harfbuzz \
 )

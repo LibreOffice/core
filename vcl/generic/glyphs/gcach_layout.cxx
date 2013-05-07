@@ -30,8 +30,8 @@
 #include <sal/alloca.h>
 #include <rtl/instance.hxx>
 
-#include <harfbuzz/hb-icu.h>
-#include <harfbuzz/hb-ot.h>
+#include <hb-icu.h>
+#include <hb-ot.h>
 
 #include <layout/LayoutEngine.h>
 #include <layout/LEFontInstance.h>
