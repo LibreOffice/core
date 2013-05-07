@@ -11,7 +11,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,oox/generated))
 
 oox_SRC := $(SRCDIR)/oox/source/token
 oox_MISC := $(call gb_CustomTarget_get_workdir,oox/generated)/misc
-oox_INC := $(call gb_CustomTarget_get_workdir,oox/generated)/inc
+oox_INC := $(call gb_CustomTarget_get_workdir,oox/generated)
 oox_GENHEADERPATH := $(oox_INC)/oox/token
 
 $(oox_MISC)/vmlexport-shape-types.cxx : \

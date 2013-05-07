@@ -61,7 +61,7 @@ writerfilter_ALL = \
 	$(patsubst %,$(writerfilter_WORK)/OOXMLFactory_%.hxx,$(writerfilter_OOXMLNAMESPACES)) \
 	$(patsubst %,$(writerfilter_WORK)/OOXMLFactory_%.cxx,$(writerfilter_OOXMLNAMESPACES)) \
 
-writerfilter_DEP_ooxml_Namespaces_txt=$(OUTDIR)/inc/oox/namespaces.txt
+writerfilter_DEP_ooxml_Namespaces_txt=$(call gb_CustomTarget_get_workdir,oox/generated)/misc/namespaces.txt
 writerfilter_GEN_doctok_ResourceIds_hxx=$(writerfilter_WORK)/doctok/resourceids.hxx
 writerfilter_GEN_doctok_Resources_cxx=$(writerfilter_WORK)/resources.cxx
 writerfilter_GEN_doctok_Resources_hxx=$(writerfilter_WORK)/doctok/resources.hxx
@@ -187,9 +187,10 @@ $(writerfilter_GEN_ooxml_ResourceIds_hxx) : $(writerfilter_SRC_ooxml_ResourceIds
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,XSL,1)
 	$(call gb_Helper_abbreviate_dirs, $(writerfilter_XSLTCOMMAND) $(writerfilter_SRC_ooxml_ResourceIds_xsl) $(writerfilter_GEN_ooxml_Model_processed)) > $@
 
-$(writerfilter_GEN_ooxml_Token_tmp) : $(OUTDIR)/inc/oox/tokens.txt | $(writerfilter_WORK)/.dir
+$(writerfilter_GEN_ooxml_Token_tmp) : $(SRCDIR)/oox/source/token/tokens.txt | $(writerfilter_WORK)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,CAT,1)
-	sed "s/\(.*\)/<fasttoken>\1<\/fasttoken>/" < $(OUTDIR)/inc/oox/tokens.txt > $@
+	sed "s/\(.*\)/<fasttoken>\1<\/fasttoken>/" \
+		< $(SRCDIR)/oox/source/token/tokens.txt > $@
 
 $(writerfilter_GEN_ooxml_Token_xml) : $(writerfilter_SRC)/ooxml/tokenxmlheader $(writerfilter_GEN_ooxml_Token_tmp) $(writerfilter_SRC)/ooxml/tokenxmlfooter
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,CAT,1)

@@ -9,11 +9,6 @@
 
 $(eval $(call gb_Library_Library,oox))
 
-$(eval $(call gb_Library_use_packages,oox,\
-    oox_generated \
-    oox_tokens \
-))
-
 $(eval $(call gb_Library_set_precompiled_header,oox,$(SRCDIR)/oox/inc/pch/precompiled_oox))
 
 $(eval $(call gb_Library_use_custom_headers,oox,oox/generated))
@@ -21,7 +16,6 @@ $(eval $(call gb_Library_use_custom_headers,oox,oox/generated))
 $(eval $(call gb_Library_set_include,oox,\
     $$(INCLUDE) \
     -I$(SRCDIR)/oox/inc \
-    -I$(call gb_CustomTarget_get_workdir,oox/generated)/inc \
 ))
 
 ifeq ($(COM)-$(OS)-$(CPUNAME),GCC-LINUX-IA64)
