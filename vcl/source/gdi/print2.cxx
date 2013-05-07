@@ -614,7 +614,14 @@ static Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
     }
 
     if( !aActionBounds.IsEmpty() )
-        return rOut.LogicToPixel( aActionBounds );
+    {
+        // fdo#40421 limit current action's output to clipped area
+        if( rOut.IsClipRegion() )
+            return rOut.LogicToPixel(
+                rOut.GetClipRegion().GetBoundRect().Intersection( aActionBounds ) );
+        else
+            return rOut.LogicToPixel( aActionBounds );
+    }
     else
         return Rectangle();
 }
