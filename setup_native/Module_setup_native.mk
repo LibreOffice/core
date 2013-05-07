@@ -13,7 +13,6 @@ $(eval $(call gb_Module_add_targets,setup_native,\
 	$(if $(filter LINUX SOLARIS,$(OS)),Library_getuid) \
 	CustomTarget_spell \
 	Package_packinfo \
-	Package_spell \
 	Package_misc \
 ))
 
