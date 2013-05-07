@@ -22,7 +22,6 @@ $(eval $(call gb_Module_Module,sfx2))
 $(eval $(call gb_Module_add_targets,sfx2,\
     AllLangResTarget_sfx2 \
     Library_sfx \
-    Package_sdi \
     UIConfig_sfx \
 ))
 

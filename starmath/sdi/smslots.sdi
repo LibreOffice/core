@@ -28,8 +28,8 @@ StarMath
     SlotIdFile ( "svx/svxids.hrc" )
 ]
 {
-    include "sfx2/sfxitems.sdi"
-    include "sfx2/sfx.sdi"
+    include "sfxitems.sdi"
+    include "sfx.sdi"
     include "svx/svxitems.sdi"
     include "svx/xoitems.sdi"
     include "svx/svx.sdi"

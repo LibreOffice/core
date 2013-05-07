@@ -19,10 +19,6 @@
 
 $(eval $(call gb_Library_Library,sfx))
 
-$(eval $(call gb_Library_use_packages,sfx,\
-    sfx2_sdi \
-))
-
 $(eval $(call gb_Library_add_sdi_headers,sfx,sfx2/sdi/sfxslots))
 
 $(eval $(call gb_Library_set_componentfile,sfx,sfx2/util/sfx))

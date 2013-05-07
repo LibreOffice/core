@@ -460,6 +460,7 @@ $(eval $(call gb_SdiTarget_set_include,svx/sdi/svxslots,\
     $$(INCLUDE) \
     -I$(SRCDIR)/svx/inc \
     -I$(SRCDIR)/svx/sdi \
+    -I$(SRCDIR)/sfx2/sdi \
 ))
 
 # Runtime dependency for unit-tests

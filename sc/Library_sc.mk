@@ -589,6 +589,7 @@ $(eval $(call gb_SdiTarget_SdiTarget,sc/sdi/scslots,sc/sdi/scalc))
 $(eval $(call gb_SdiTarget_set_include,sc/sdi/scslots,\
 	-I$(SRCDIR)/sc/inc \
 	-I$(SRCDIR)/sc/sdi \
+	-I$(SRCDIR)/sfx2/sdi \
 	$$(INCLUDE) \
 ))
 

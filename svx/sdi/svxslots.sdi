@@ -26,8 +26,8 @@ SlotIdFile( "svxslots.hrc" )
 {
     //=========================================================================
 
-    include "sfx2/sfxitems.sdi"
-    include "sfx2/sfx.sdi"
+    include "sfxitems.sdi"
+    include "sfx.sdi"
     include "svxitems.sdi"
     include "xoitems.sdi"
     include "svx.sdi"

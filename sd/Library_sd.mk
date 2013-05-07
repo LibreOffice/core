@@ -16,6 +16,7 @@ $(eval $(call gb_SdiTarget_SdiTarget,sd/sdi/sdslots,sd/sdi/sdslots))
 $(eval $(call gb_SdiTarget_set_include,sd/sdi/sdslots,\
     -I$(SRCDIR)/sd/inc \
     -I$(SRCDIR)/sd/sdi \
+    -I$(SRCDIR)/sfx2/sdi \
     $$(INCLUDE) \
 ))
 
@@ -24,6 +25,7 @@ $(eval $(call gb_SdiTarget_SdiTarget,sd/sdi/sdgslots,sd/sdi/sdgslots))
 $(eval $(call gb_SdiTarget_set_include,sd/sdi/sdgslots,\
     -I$(SRCDIR)/sd/inc \
     -I$(SRCDIR)/sd/sdi \
+    -I$(SRCDIR)/sfx2/sdi \
     $$(INCLUDE) \
 ))
 
