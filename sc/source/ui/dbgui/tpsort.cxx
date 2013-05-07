@@ -169,13 +169,13 @@ void ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
     if ( aSortData.maKeyState[0].bDoSort )
     {
         // Make sure that the all sort keys are reset
-        for ( sal_uInt16 i=nSortKeyCount; i<aSortData.maKeyState.size(); i++ )
+        for ( sal_uInt16 i=nSortKeyCount; i<aSortData.GetSortKeyCount(); i++ )
         {
             maSortKeyCtrl.AddSortKey(i+1);
             maSortKeyItems[i].m_pLbSort->SetSelectHdl( LINK( this,
                                  ScTabPageSortFields, SelectHdl ) );
         }
-        nSortKeyCount = aSortData.maKeyState.size();
+        nSortKeyCount = aSortData.GetSortKeyCount();
         FillFieldLists(0);
 
         for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
@@ -265,7 +265,7 @@ sal_Bool ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
         if ( nSortPos[i] == LISTBOX_ENTRY_NOTFOUND ) nSortPos[i] = 0;
     }
 
-    if( nSortKeyCount >= aNewSortData.maKeyState.size() )
+    if( nSortKeyCount >= aNewSortData.GetSortKeyCount() )
         aNewSortData.maKeyState.resize(nSortKeyCount);
 
     if ( nSortPos[0] > 0 )
