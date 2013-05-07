@@ -94,8 +94,8 @@ gbuild_modules := $(filter-out Module%,$(subst /, ,$(subst $(SRCDIR)/,,$(wildcar
 $(eval $(call gbuild_modules_rules,$(gbuild_modules)))
 
 gbuild_TARGETS := AllLangHelp \
+	AllLangPackage \
 	AllLangResTarget \
-	AllLangZip \
 	AutoInstallLibs \
 	CliLibrary \
 	CliNativeLibrary \
