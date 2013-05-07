@@ -760,55 +760,13 @@ IMPL_FIXEDMEMPOOL_NEWDEL( XclExpFormulaCell )
 
 XclExpFormulaCell::XclExpFormulaCell(
         const XclExpRoot& rRoot, const XclAddress& rXclPos,
-        const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId,
-        const ScFormulaCell& rScFmlaCell,
+        sal_uInt32 nForcedXFId, const ScFormulaCell& rScFmlaCell,
         XclExpArrayBuffer& rArrayBfr,
         XclExpShrfmlaBuffer& rShrfmlaBfr,
         XclExpTableopBuffer& rTableopBfr ) :
     XclExpSingleCellBase( EXC_ID2_FORMULA, 0, rXclPos, nForcedXFId ),
     mrScFmlaCell( const_cast< ScFormulaCell& >( rScFmlaCell ) )
 {
-    // *** Find result number format overwriting cell number format *** -------
-
-    if( GetXFId() == EXC_XFID_NOTFOUND )
-    {
-        SvNumberFormatter& rFormatter = rRoot.GetFormatter();
-        XclExpNumFmtBuffer& rNumFmtBfr = rRoot.GetNumFmtBuffer();
-
-        // current cell number format
-        sal_uLong nScNumFmt = pPattern ?
-            GETITEMVALUE( pPattern->GetItemSet(), SfxUInt32Item, ATTR_VALUE_FORMAT, sal_uLong ) :
-            rNumFmtBfr.GetStandardFormat();
-
-        // alternative number format passed to XF buffer
-        sal_uLong nAltScNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND;
-        /*  Xcl doesn't know Boolean number formats, we write
-            "TRUE";"FALSE" (language dependent). Don't do it for automatic
-            formula formats, because Excel gets them right. */
-        /*  #i8640# Don't set text format, if we have string results. */
-        short nFormatType = mrScFmlaCell.GetFormatType();
-        if( ((nScNumFmt % SV_COUNTRY_LANGUAGE_OFFSET) == 0) &&
-                (nFormatType != NUMBERFORMAT_LOGICAL) &&
-                (nFormatType != NUMBERFORMAT_TEXT) )
-            nAltScNumFmt = mrScFmlaCell.GetStandardFormat( rFormatter, nScNumFmt );
-        /*  If cell number format is Boolean and automatic formula
-            format is Boolean don't write that ugly special format. */
-        else if( (nFormatType == NUMBERFORMAT_LOGICAL) &&
-                (rFormatter.GetType( nScNumFmt ) == NUMBERFORMAT_LOGICAL) )
-            nAltScNumFmt = rNumFmtBfr.GetStandardFormat();
-
-        // #i41420# find script type according to result type (always latin for numeric results)
-        sal_Int16 nScript = ApiScriptType::LATIN;
-        bool bForceLineBreak = false;
-        if( nFormatType == NUMBERFORMAT_TEXT )
-        {
-            String aResult = mrScFmlaCell.GetString();
-            bForceLineBreak = mrScFmlaCell.IsMultilineResult();
-            nScript = XclExpStringHelper::GetLeadingScriptType( rRoot, aResult );
-        }
-        SetXFId( rRoot.GetXFBuffer().InsertWithNumFmt( pPattern, nScript, nAltScNumFmt, bForceLineBreak ) );
-    }
-
     // *** Convert the formula token array *** --------------------------------
 
     ScAddress aScPos( static_cast< SCCOL >( rXclPos.mnCol ), static_cast< SCROW >( rXclPos.mnRow ), rRoot.GetCurrScTab() );
@@ -2374,7 +2332,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
             case CELLTYPE_FORMULA:
             {
                 xCell.reset(new XclExpFormulaCell(
-                    GetRoot(), aXclPos, pPattern, nMergeBaseXFId,
+                    GetRoot(), aXclPos, nMergeBaseXFId,
                     *rScCell.mpFormula, maArrayBfr, maShrfmlaBfr, maTableopBfr));
             }
             break;
