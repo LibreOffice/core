@@ -301,7 +301,7 @@ public class OOoBeanTest
         }
     }
 
-    /** Test repeated OOoBean.acquireSystemWindow and OOoBean.releaseSystemWindow
+    /** Test repeated OOoBean.aquireSystemWindow and OOoBean.releaseSystemWindow
      * calls.
      * @throws Exception
      */
@@ -315,7 +315,7 @@ public class OOoBeanTest
             for (int i = 0; i < 100; i++)
             {
                 b.releaseSystemWindow();
-                b.acquireSystemWindow();
+                b.aquireSystemWindow();
             }
             if (!f.checkUnoFramePosition())
             {
@@ -418,7 +418,7 @@ public class OOoBeanTest
                     bean.releaseSystemWindow();
                     frame.remove(bean);
                     frame.add(bean, BorderLayout.CENTER);
-                    bean.acquireSystemWindow();
+                    bean.aquireSystemWindow();
                 }
 
                 if (!isWindows())
@@ -503,7 +503,7 @@ public class OOoBeanTest
                             try {
 
                             frame.add(bean, BorderLayout.CENTER);
-                            bean.acquireSystemWindow();
+                            bean.aquireSystemWindow();
                             frame.validate();
                             } catch (Exception e) {
                                 e.printStackTrace();

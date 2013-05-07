@@ -444,7 +444,7 @@ public class OOoBean
         was made visible (java.lang.Component.setVisible(true)).
         <p>
         Another scenario is that a OOoBean contains a document and is removed
-        from a Java container and later added again. Then acquireSystemWindow needs
+        from a Java container and later added again. Then aquireSystemWindow needs
         to be called after the container window is displayed.
         <p>
 
@@ -454,7 +454,7 @@ public class OOoBean
         @throws NoConnectionException
             if the connection is not established.
      */
-    public synchronized void acquireSystemWindow()
+    public synchronized void aquireSystemWindow()
         throws
             SystemWindowException,
 
