@@ -26,34 +26,11 @@
  ************************************************************************/
 #include "macros.inc"
 
-#ifdef ENABLE_GIO
-STD_LIB_FILE( gid_File_Lib_GIO, ucpgio1 )
-
-STD_LIB_FILE(gid_File_Lib_Losessioninstall, losessioninstall)
-#endif
-
-#ifdef ENABLE_GNOMEVFS
-STD_LIB_FILE( gid_File_Lib_Gnomevfs, ucpgvfs1 )
-#endif
-
 #if (defined ENABLE_GCONF && defined ENABLE_LOCKDOWN) || defined ENABLE_GIO
 File gid_File_Share_Registry_Gnome_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Brand_Dir_Share_Registry;
     Name = "gnome.xcd";
-End
-#endif
-
-#ifdef ENABLE_GCONF
-STD_LIB_FILE( gid_File_Lib_Gconfbe, gconfbe1 )
-#endif
-
-#ifdef ENABLE_SYSTRAY_GTK
-File gid_File_Lib_QStart_Gtk
-    Name = LIBNAME(qstart_gtk);
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
 End
 #endif

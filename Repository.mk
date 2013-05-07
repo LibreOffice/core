@@ -233,6 +233,14 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,TDE, \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,GNOME, \
+    $(if $(ENABLE_EVOAB2),evoab) \
+    $(if $(ENABLE_GTK),vclplug_gtk) \
+    $(if $(ENABLE_GTK3),vclplug_gtk3) \
+    $(if $(ENABLE_GCONF),gconfbe1) \
+    $(if $(ENABLE_SYSTRAY_GTK),qstart_gtk) \
+    $(if $(ENABLE_GIO),losessioninstall) \
+    $(if $(ENABLE_GIO),ucpgio1) \
+    $(if $(ENABLE_GNOMEVFS),ucpgvfs1) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,KDE, \
@@ -390,7 +398,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     calc \
     dbp \
     dbu \
-    evoab \
 	filtertracer \
     log \
 	MacOSXSpell \
@@ -400,7 +407,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     placeware \
     pricing \
     protocolhandler \
-    qstart_gtk \
     rpt \
     rptui \
     rptxml \
@@ -418,8 +424,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     textfd \
     updatecheckui \
     $(if $(DISABLE_SCRIPTING),,vbahelper) \
-    vclplug_gtk \
-    vclplug_gtk3 \
     vclplug_tde \
     vclplug_kde \
     vclplug_kde4 \
@@ -613,12 +617,10 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     fastsax \
     fpicker \
     fps_office \
-    gconfbe1 \
     gdipluscanvas \
     hatchwindowfactory \
     i18nsearch \
     ldapbe2 \
-    losessioninstall \
     macbe1 \
     migrationoo2 \
     migrationoo3 \
@@ -636,8 +638,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     syssh \
     ucpcmis1 \
     ucpext \
-    ucpgio1 \
-    ucpgvfs1 \
     ucptdoc1 \
     updatefeed \
     vbaevents \

@@ -163,19 +163,6 @@ End
 
 #endif
 
-#ifdef UNX
-#ifdef ENABLE_GTK
-#ifdef ENABLE_SYSTRAY_GTK
-File gid_File_Lib_QStart_Gtk
-    Name = LIBNAME(qstart_gtk);
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-End
-#endif
-#endif
-#endif
-
 File gid_File_Lib_Dbpool
     LIB_FILE_BODY;
     Styles = (PACKED);
@@ -324,12 +311,6 @@ File gid_File_Lib_Macab_Drv_1
     Name = STRING(CONCAT2(libmacabdrv1,UNXSUFFIX));
 End
 #endif  // #ifdef MACOSX
-
-#ifdef ENABLE_EVOAB2
-
-STD_LIB_FILE( gid_File_Lib_Evoab , evoab)
-
-#endif  // #ifdef ENABLE_EVOAB2
 
 #endif  // #ifdef UNX
 
@@ -657,22 +638,6 @@ STD_LIB_FILE( gid_File_Lib_Pl , pl)
 #endif
 
 #if defined(UNX) && ! defined(MACOSX)
-#ifdef ENABLE_GTK
-File gid_File_Lib_Vclplug_Gtk
-    Name = LIBNAME(vclplug_gtk);
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-End
-#endif
-#ifdef ENABLE_GTK3
-File gid_File_Lib_Vclplug_Gtk3
-    Name = LIBNAME(vclplug_gtk3);
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-End
-#endif
 #ifdef ENABLE_TDE
 #ifndef MACOSX
 File gid_File_Lib_Vclplug_Tde
