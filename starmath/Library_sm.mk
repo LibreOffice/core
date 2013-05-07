@@ -93,6 +93,7 @@ $(eval $(call gb_SdiTarget_SdiTarget,starmath/sdi/smslots,starmath/sdi/smath))
 $(eval $(call gb_SdiTarget_set_include,starmath/sdi/smslots,\
         -I$(SRCDIR)/starmath/inc \
         -I$(SRCDIR)/starmath/sdi \
+        -I$(SRCDIR)/svx/sdi \
         -I$(SRCDIR)/sfx2/sdi \
         $$(INCLUDE) \
 ))

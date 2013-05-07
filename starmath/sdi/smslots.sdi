@@ -30,9 +30,9 @@ StarMath
 {
     include "sfxitems.sdi"
     include "sfx.sdi"
-    include "svx/svxitems.sdi"
-    include "svx/xoitems.sdi"
-    include "svx/svx.sdi"
+    include "svxitems.sdi"
+    include "xoitems.sdi"
+    include "svx.sdi"
     include "smath.sdi"
     interface StarMath
     [

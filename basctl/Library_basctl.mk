@@ -125,6 +125,7 @@ $(eval $(call gb_Library_add_sdi_headers,basctl,basctl/sdi/basslots))
 $(eval $(call gb_SdiTarget_SdiTarget,basctl/sdi/basslots,basctl/sdi/baside))
 
 $(eval $(call gb_SdiTarget_set_include,basctl/sdi/basslots,\
+    -I$(SRCDIR)/svx/sdi \
     -I$(SRCDIR)/sfx2/sdi \
     $$(INCLUDE) \
 ))
