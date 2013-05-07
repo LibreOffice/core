@@ -156,8 +156,8 @@ protected:
         void notify() const;
 
     private:
-        BoundListeners(BoundListeners &); // not defined
-        void operator =(BoundListeners); // not defined
+        BoundListeners( const BoundListeners&); // not defined
+        void operator=( const BoundListeners&); // not defined
 
         class Impl;
         Impl * m_impl;
@@ -378,8 +378,8 @@ protected:
             com::sun::star::uno::RuntimeException);
 
 private:
-    PropertySetMixinImpl(PropertySetMixinImpl &); // not defined
-    void operator =(PropertySetMixinImpl &); // not defined
+    PropertySetMixinImpl( const PropertySetMixinImpl&); // not defined
+    void operator=( const PropertySetMixinImpl&); // not defined
 
     PropertySetMixinImpl(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
@@ -474,8 +474,8 @@ protected:
     ~PropertySetMixin() {}
 
 private:
-    PropertySetMixin(PropertySetMixin &); // not defined
-    void operator =(PropertySetMixin &); // not defined
+    PropertySetMixin( const PropertySetMixin&); // not defined
+    void operator=( const PropertySetMixin&); // not defined
 };
 
 #if defined _MSC_VER
