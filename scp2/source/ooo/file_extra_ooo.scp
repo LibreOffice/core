@@ -71,7 +71,6 @@ File gid_File_Extra_Cfgsrv
     TXT_FILE_BODY;
     Styles = (FILELIST);
     Name = "extras_cfgsrvnolang.filelist";
-    Patchfiles = ();
 End
 
 File gid_File_sd_web
@@ -181,7 +180,6 @@ File gid_File_Extra_Gallsystem
     TXT_FILE_BODY;
     Styles = (FILELIST);
     Name = "extras_gallsystem.filelist";
-    Patchfiles = ();
 End
 
 File gid_File_Extra_Gallwwwback
@@ -203,7 +201,6 @@ File gid_File_Extra_Palettes
     USER_FILE_BODY;
     Styles = (FILELIST, WORKSTATION, DONT_OVERWRITE);
     Name = "extras_palettes.filelist";
-    Patchfiles = ();
 End
 
 File gid_File_Extra_Tpllayoutimpr
