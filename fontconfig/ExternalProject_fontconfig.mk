@@ -23,7 +23,7 @@ $(call gb_ExternalProject_get_state_target,fontconfig,build) :
 		./configure \
 			--disable-shared \
 			--with-arch=arm \
-			--with-expat-includes=$(OUTDIR)/inc/external/expat \
+			--with-expat-includes=$(call gb_UnpackedTarball_get_dir,expat)/lib \
 			--with-expat-lib=$(OUTDIR)/lib \
 			--with-freetype-config=$(OUTDIR)/bin/freetype-config \
 			--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \

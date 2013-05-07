@@ -460,12 +460,8 @@ define gb_LinkTarget__use_expat_impl
 $(if $(2),,$(error gb_LinkTarget__use_expat_impl needs additional parameter))
 
 $(call gb_LinkTarget_set_include,$(1),\
-    -I$(OUTDIR)/inc/external/expat \
+	-I$(call gb_UnpackedTarball_get_dir,expat)/lib \
     $$(INCLUDE) \
-)
-
-$(call gb_LinkTarget_use_packages,$(1),\
-	expat_inc \
 )
 
 $(call gb_LinkTarget_use_static_libraries,$(1),\
@@ -475,7 +471,6 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 endef
 
 define gb_ExternalProject__use_expat
-$(call gb_ExternalProject_use_package,$(1),expat_inc)
 $(call gb_ExternalProject_use_static_libraries,$(1),expat)
 
 endef

@@ -88,7 +88,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 		CC="$(strip $(CC) \
 			$(if $(filter NO,$(SYSTEM_OPENSSL)),-I$(call gb_UnpackedTarball_get_dir,openssl)/include) \
 			$(if $(and $(filter NO,$(SYSTEM_OPENSSL)), $(filter-out YES,$(DISABLE_OPENSSL))),-I$(call gb_UnpackedTarball_get_dir,openssl)/include) \
-			$(if $(filter NO,$(SYSTEM_EXPAT)),-I$(OUTDIR)/inc/external/expat) \
+			$(if $(filter NO,$(SYSTEM_EXPAT)),-I$(call gb_UnpackedTarball_get_dir,expat)/lib) \
 			$(if $(SYSBASE), -I$(SYSBASE)/usr/include) \
 			)" \
 		$(if $(python3_cflags),CFLAGS='$(python3_cflags)') \

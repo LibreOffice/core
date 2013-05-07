@@ -12,7 +12,6 @@ $(eval $(call gb_Module_Module,expat))
 ifeq ($(SYSTEM_EXPAT),NO)
 
 $(eval $(call gb_Module_add_targets,expat,\
-	ExternalPackage_expat \
 	UnpackedTarball_expat \
 	StaticLibrary_expat \
 ))
