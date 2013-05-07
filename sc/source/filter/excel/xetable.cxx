@@ -887,20 +887,24 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
 
 void XclExpFormulaCell::WriteContents( XclExpStream& rStrm )
 {
+    sal_uInt16 nScErrCode = mrScFmlaCell.GetErrCode();
+    if( nScErrCode )
+    {
+        rStrm << EXC_FORMULA_RES_ERROR << sal_uInt8( 0 )
+            << XclTools::GetXclErrorCode( nScErrCode )
+            << sal_uInt8( 0 ) << sal_uInt16( 0 )
+            << sal_uInt16( 0xFFFF );
+
+        return;
+    }
+
     // result of the formula
     switch( mrScFmlaCell.GetFormatType() )
     {
         case NUMBERFORMAT_NUMBER:
         {
             // either value or error code
-            sal_uInt16 nScErrCode = mrScFmlaCell.GetErrCode();
-            if( nScErrCode )
-                rStrm << EXC_FORMULA_RES_ERROR << sal_uInt8( 0 )
-                      << XclTools::GetXclErrorCode( nScErrCode )
-                      << sal_uInt8( 0 ) << sal_uInt16( 0 )
-                      << sal_uInt16( 0xFFFF );
-            else
-                rStrm << mrScFmlaCell.GetValue();
+            rStrm << mrScFmlaCell.GetValue();
         }
         break;
 
