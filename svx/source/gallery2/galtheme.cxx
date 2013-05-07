@@ -471,6 +471,44 @@ SgaObject* GalleryTheme::AcquireObject( sal_uIntPtr nPos )
 
 // ------------------------------------------------------------------------
 
+void GalleryTheme::GetPreviewBitmapExAndStrings(sal_uIntPtr nPos, BitmapEx& rBitmapEx, Size& rSize, String& rTitle, String& rPath) const
+{
+    const GalleryObject* pGalleryObject = aObjectList.GetObject(nPos);
+
+    if(pGalleryObject)
+    {
+        rBitmapEx = pGalleryObject->maPreviewBitmapEx;
+        rSize = pGalleryObject->maPreparedSize;
+        rTitle = pGalleryObject->maTitle;
+        rPath = pGalleryObject->maPath;
+    }
+    else
+    {
+        OSL_ENSURE(false, "OOps, no GalleryObject at this index (!)");
+    }
+}
+
+// ------------------------------------------------------------------------
+
+void GalleryTheme::SetPreviewBitmapExAndStrings(sal_uIntPtr nPos, const BitmapEx& rBitmapEx, const Size& rSize, const String& rTitle, const String& rPath)
+{
+    GalleryObject* pGalleryObject = aObjectList.GetObject(nPos);
+
+    if(pGalleryObject)
+    {
+        pGalleryObject->maPreviewBitmapEx = rBitmapEx;
+        pGalleryObject->maPreparedSize = rSize;
+        pGalleryObject->maTitle = rTitle;
+        pGalleryObject->maPath = rPath;
+    }
+    else
+    {
+        OSL_ENSURE(false, "OOps, no GalleryObject at this index (!)");
+    }
+}
+
+// ------------------------------------------------------------------------
+
 void GalleryTheme::ReleaseObject( SgaObject* pObject )
 {
     delete pObject;
@@ -544,7 +582,7 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
 
         // LoeschFlag zuruecksetzen
         for ( i = 0; i < nCount; i++ )
-            aObjectList.GetObject( i )->bDummy = sal_False;
+            aObjectList.GetObject( i )->mbDelete = false;
 
         for( i = 0; ( i < nCount ) && !bAbortActualize; i++ )
         {
@@ -567,7 +605,7 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
                 {
                     SgaObjectSound aObjSound( aURL );
                     if( !InsertObject( aObjSound ) )
-                        pEntry->bDummy = sal_True;
+                        pEntry->mbDelete = true;
                 }
                 else
                 {
@@ -585,12 +623,12 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
                             pNewObj = (SgaObject*) new SgaObjectBmp( aGraphic, aURL, aFormat );
 
                         if( !InsertObject( *pNewObj ) )
-                            pEntry->bDummy = sal_True;
+                            pEntry->mbDelete = true;
 
                         delete pNewObj;
                     }
                     else
-                        pEntry->bDummy = sal_True; // Loesch-Flag setzen
+                        pEntry->mbDelete = true; // Loesch-Flag setzen
                 }
             }
             else
@@ -607,7 +645,7 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
                         SgaObjectSvDraw aNewObj( *pIStm, pEntry->aURL );
 
                         if( !InsertObject( aNewObj ) )
-                            pEntry->bDummy = sal_True;
+                            pEntry->mbDelete = true;
 
                         pIStm->SetBufferSize( 0L );
                     }
@@ -619,7 +657,7 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
         pEntry = aObjectList.First();
         while( pEntry )
         {
-            if( pEntry->bDummy )
+            if( pEntry->mbDelete )
             {
                 Broadcast( GalleryHint( GALLERY_HINT_CLOSE_OBJECT, GetName(), reinterpret_cast< sal_uIntPtr >( pEntry ) ) );
                 delete aObjectList.Remove( pEntry );

@@ -88,7 +88,6 @@ protected:
     sal_Bool                    CreateThumb( const Graphic& rGraphic );
 
 public:
-
                             SgaObject();
     virtual                 ~SgaObject() {};
 
@@ -106,6 +105,8 @@ public:
 
     friend SvStream&        operator<<( SvStream& rOut, const SgaObject& rObj );
     friend SvStream&        operator>>( SvStream& rIn, SgaObject& rObj );
+
+    BitmapEx createPreviewBitmapEx(const Size& rSizePixel) const;
 };
 
 // ------------------
