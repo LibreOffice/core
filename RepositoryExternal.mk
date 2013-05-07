@@ -2860,6 +2860,20 @@ $(call gb_Executable_add_runtime_dependencies,climaker,\
 )
 endef
 
+define gb_Executable__register_gengal.bin
+$(call gb_Executable_add_runtime_dependencies,gengal.bin,\
+	$(call gb_AllLangResTarget_get_target,ofa) \
+	$(call gb_Configuration_get_target,registry) \
+	$(call gb_Configuration_get_target,fcfg_langpack) \
+	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
+	$(call gb_Library_get_target,vclplug_svp) \
+	$(call gb_Package_get_target_for_build,cppuhelper_unorc) \
+	$(call gb_Rdb_get_outdir_target_for_build,ure/services) \
+	$(call gb_UnoApi_get_target,offapi) \
+	$(call gb_UnoApi_get_target,udkapi) \
+)
+endef
+
 ifneq ($(SYSTEM_ICU),YES)
 
 define gb_Executable__register_gendict

@@ -7,12 +7,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Gallery_Gallery,extras/source/gallery,gallery,Fun Gallery))
+$(eval $(call gb_Gallery_Gallery,test,extras/source/gallery,Fun Gallery))
 
-$(eval $(call gb_Gallery_add_files,extras/source/gallery, \
+$(eval $(call gb_Gallery_add_files,test,\
+	extras/source/gallery/apples.gif \
 	extras/source/gallery/bigapple.gif \
-	extras/source/gallery/sky.gif      \
-	extras/source/gallery/flower.gif   \
-	extras/source/gallery/apples.gif ))
+	extras/source/gallery/flower.gif \
+	extras/source/gallery/sky.gif \
+))
 
 # vim: set noet sw=4 ts=4:

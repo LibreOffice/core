@@ -38,6 +38,7 @@ gb_BUILD_TOOLS = \
 		ulfex \
 		xrmex \
 		$(call gb_Helper_optional_for_host,DESKTOP, \
+			gengal.bin \
 			HelpIndexer \
 			HelpLinker \
 		) \
