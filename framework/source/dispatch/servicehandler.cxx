@@ -262,8 +262,12 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
     // ignore all errors - inclusive runtime errors!
     // E.g. a script based service (written in phyton) could not be executed
     // because it contains syntax errors, which was detected at runtime ...
-    catch(const css::uno::Exception&)
-        { xService.clear(); }
+    catch(const css::uno::Exception& e)
+    {
+        SAL_WARN(
+            "fwk.dispatch", "ignored UNO Exception \"" << e.Message << '"');
+        xService.clear();
+    }
 
     return xService;
 }

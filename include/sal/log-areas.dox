@@ -127,6 +127,7 @@ certain functionality.
 
 @li @c fwk - framework
 @li @c fwk.desktop
+@li @c fwk.dispatch
 @li @c fwk.session
 
 @section i18nlangtag
