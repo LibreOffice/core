@@ -30,31 +30,7 @@
 #include "scitems.hxx"
 #include <editeng/memberids.hrc>
 
-
 #define ITEMID_DBTYPE           0
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #include <sfx2/msg.hxx>
 #include <svl/stritem.hxx>
@@ -135,6 +111,7 @@
 #include <svx/xlncapit.hxx>
 #include <svx/xlinjoit.hxx>
 #include <svx/AffineMatrixItem.hxx>
+#include <svx/galleryitem.hxx>
 
 #define SFX_TYPEMAP
 #include "scslots.hxx"

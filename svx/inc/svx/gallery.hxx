@@ -34,16 +34,6 @@
 // - Defines -
 // -----------
 
-#define SGA_FORMAT_NONE     0x00000000L
-#define SGA_FORMAT_STRING   0x00000001L
-#define SGA_FORMAT_GRAPHIC  0x00000010L
-#define SGA_FORMAT_SOUND    0x00000100L
-#define SGA_FORMAT_OLE          0x00001000L
-#define SGA_FORMAT_SVDRAW   0x00010000L
-#define SGA_FORMAT_ALL      0xFFFFFFFFL
-
-#define SVX_GALLERY() (GalleryExplorer::GetGallery())
-
 // Defines for preinstalled themes
 #define GALLERY_THEME_3D                1
 #define GALLERY_THEME_ANIMATIONS    2
@@ -101,21 +91,7 @@ class OutputDevice;
 
 class SVX_DLLPUBLIC GalleryExplorer
 {
-private:
-
-    SVX_DLLPRIVATE static Gallery*              ImplGetGallery();
-
 public:
-
-    static GalleryExplorer*     GetGallery();
-
-public:
-
-    INetURLObject               GetURL() const;
-    String                      GetFilterName() const;
-    Graphic                     GetGraphic() const;
-    sal_Bool                        GetVCDrawModel( FmFormModel& rModel ) const;
-    sal_Bool                        IsLinkage() const;
 
     static sal_Bool                 FillThemeList( List& rThemeList );
 
@@ -128,11 +104,6 @@ public:
 
     static sal_Bool                 InsertURL( const String& rThemeName, const String& rURL );
     static sal_Bool                 InsertURL( sal_uIntPtr nThemeId, const String& rURL );
-
-    static sal_Bool                 InsertURL( const String& rThemeName, const String& rURL,
-                                           const sal_uIntPtr nSgaFormat /* = SGA_FORMAT_ALL */ );
-    static sal_Bool                 InsertURL( sal_uIntPtr nThemeId, const String& rURL,
-                                           const sal_uIntPtr nSgaFormat /* = SGA_FORMAT_ALL */ );
 
     static sal_uIntPtr              GetObjCount( const String& rThemeName );
     static sal_uIntPtr              GetObjCount( sal_uIntPtr nThemeId );

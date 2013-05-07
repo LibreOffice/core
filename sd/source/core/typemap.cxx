@@ -132,6 +132,7 @@
 #include <svx/xflftrit.hxx>
 #include <svx/xlinjoit.hxx>
 #include <svx/AffineMatrixItem.hxx>
+#include <svx/galleryitem.hxx>
 
 #define SFX_TYPEMAP
 #include "sdslots.hxx"

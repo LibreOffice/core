@@ -266,41 +266,6 @@ void GalleryBrowser::ThemeSelectionHasChanged()
 
 // -----------------------------------------------------------------------------
 
-INetURLObject GalleryBrowser::GetURL() const
-{
-    return mpBrowser2->GetURL();
-}
-
-// -----------------------------------------------------------------------------
-
-String GalleryBrowser::GetFilterName() const
-{
-    return mpBrowser2->GetFilterName();
-}
-
-// -----------------------------------------------------------------------------
-
-Graphic GalleryBrowser::GetGraphic() const
-{
-    return mpBrowser2->GetGraphic();
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool GalleryBrowser::GetVCDrawModel( FmFormModel& rModel ) const
-{
-    return mpBrowser2->GetVCDrawModel( rModel );
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool GalleryBrowser::IsLinkage() const
-{
-    return mpBrowser2->IsLinkage();
-}
-
-// -----------------------------------------------------------------------------
-
 IMPL_LINK( GalleryBrowser, SplitHdl, void*, EMPTYARG )
 {
     if(mpSplitter->IsHorizontal())

@@ -141,6 +141,7 @@
 #include <svx/xlncapit.hxx>
 #include <svx/xlinjoit.hxx>
 #include <svx/AffineMatrixItem.hxx>
+#include <svx/galleryitem.hxx>
 
 #define SFX_TYPEMAP
 #include <sfx2/msg.hxx>

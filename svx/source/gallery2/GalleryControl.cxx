@@ -240,48 +240,6 @@ void GalleryControl::ThemeSelectionHasChanged (void)
 }
 
 
-
-
-INetURLObject GalleryControl::GetURL (void) const
-{
-    return mpBrowser2->GetURL();
-}
-
-
-
-
-String GalleryControl::GetFilterName (void) const
-{
-    return mpBrowser2->GetFilterName();
-}
-
-
-
-
-Graphic GalleryControl::GetGraphic(void) const
-{
-    return mpBrowser2->GetGraphic();
-}
-
-
-
-
-sal_Bool GalleryControl::GetVCDrawModel( FmFormModel& rModel ) const
-{
-    return mpBrowser2->GetVCDrawModel( rModel );
-}
-
-
-
-
-sal_Bool GalleryControl::IsLinkage (void) const
-{
-    return mpBrowser2->IsLinkage();
-}
-
-
-
-
 IMPL_LINK( GalleryControl, SplitHdl, void*, EMPTYARG )
 {
     if(mpSplitter->IsHorizontal())

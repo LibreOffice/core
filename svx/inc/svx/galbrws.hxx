@@ -95,12 +95,6 @@ public:
                                             Window* pParent, const ResId& rResId );
                             ~GalleryBrowser();
 
-    INetURLObject           GetURL() const;
-    String                  GetFilterName() const;
-    Graphic                 GetGraphic() const;
-    sal_Bool                    GetVCDrawModel( FmFormModel& rModel ) const;
-    sal_Bool                    IsLinkage() const;
-
     sal_Bool                    KeyInput( const KeyEvent& rKEvt, Window* pWindow );
 };
 
