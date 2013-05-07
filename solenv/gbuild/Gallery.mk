@@ -1,3 +1,12 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
 .PHONY : $(call gb_Gallery_get_clean_target,%)
 $(call gb_Gallery_get_clean_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
@@ -109,3 +118,5 @@ endef
 define gb_Gallery_add_files
 $(foreach fname,$(2),$(call gb_Gallery__add_file,$(1),$(fname)))
 endef
+
+# vim: set noet sw=4 ts=4:
