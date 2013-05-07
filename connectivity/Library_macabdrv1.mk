@@ -32,6 +32,7 @@ $(eval $(call gb_Library_set_include,macabdrv1,\
         $$(INCLUDE) \
         -I$(SRCDIR)/connectivity/inc \
         -I$(SRCDIR)/connectivity/source/inc \
+	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,macabdrv1,\
