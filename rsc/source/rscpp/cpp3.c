@@ -194,6 +194,7 @@ int AddInclude( char* pIncStr )
         *incend++ = pIncPos;
         pIncPos   = strtok( NULL, ";" );
     }
+    free(pIncEnv);
     return( 1 );
 }
 
