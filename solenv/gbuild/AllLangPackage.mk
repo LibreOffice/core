@@ -45,14 +45,14 @@ endef
 define gb_AllLangPackage__AllLangPackage_onelang
 $(call gb_Package_Package_internal,$(2),$(3))
 $(call gb_Package_set_outdir,$(2),$(INSTDIR))
+$(call gb_AllLangPackage_get_target,$(1)) : $(call gb_Package_get_target,$(2))
+$(call gb_AllLangPackage_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(2))
 
 endef
 
 # gb_AllLangPackage__add_to_package target package destination source
 define gb_AllLangPackage__add_to_package
 $(call gb_Package_add_file,$(2),$(3),$(4))
-$(call gb_AllLangPackage_get_target,$(1)) : $(call gb_Package_get_target,$(2))
-$(call gb_AllLangPackage_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(2))
 
 endef
 
