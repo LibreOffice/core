@@ -98,6 +98,7 @@ public:
         aVec.insert(p3);
         aVec.DeleteAndDestroyAll();
         CPPUNIT_ASSERT( aVec.size() == 0 );
+        delete p4;
     }
 
     void testInsertRange()
@@ -131,6 +132,7 @@ public:
 
         CPPUNIT_ASSERT( aVec.lower_bound(p1) == aVec.begin() );
         CPPUNIT_ASSERT( aVec.lower_bound(p4) == aVec.end() );
+        delete p4;
     }
 
     void testBasics_FindPtr()
@@ -239,6 +241,7 @@ public:
 
         aVec.DeleteAndDestroyAll();
         CPPUNIT_ASSERT( aVec.size() == 0 );
+        delete p4;
     }
 
 
