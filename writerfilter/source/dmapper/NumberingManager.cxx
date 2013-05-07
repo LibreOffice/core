@@ -937,7 +937,9 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                     uno::Sequence<beans::Property> properties = info->getProperties();
                     try
                     {
-                        m_pCurrentDefinition->GetCurrentLevel()->SetGraphicURL(xPropertySet->getPropertyValue("GraphicURL").get<OUString>());
+                        uno::Any aAny = xPropertySet->getPropertyValue("GraphicURL");
+                        if (aAny.has<OUString>())
+                            m_pCurrentDefinition->GetCurrentLevel()->SetGraphicURL(aAny.get<OUString>());
                     } catch(const beans::UnknownPropertyException&)
                     {}
                     try

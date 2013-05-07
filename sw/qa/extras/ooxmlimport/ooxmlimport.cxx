@@ -77,7 +77,7 @@ public:
     void testN778140();
     void testN778828();
     void testInk();
-    void testN779834();
+    void testNoCrash();
     void testN779627();
     void testN779941();
     void testFdo55187();
@@ -157,7 +157,7 @@ void Test::run()
         {"n778140.docx", &Test::testN778140},
         {"n778828.docx", &Test::testN778828},
         {"ink.docx", &Test::testInk},
-        {"n779834.docx", &Test::testN779834},
+        {"n779834.docx", &Test::testNoCrash},
         {"n779627.docx", &Test::testN779627},
         {"n779941.docx", &Test::testN779941},
         {"fdo55187.docx", &Test::testFdo55187},
@@ -191,6 +191,7 @@ void Test::run()
         {"n592908-frame.docx", &Test::testN592908_Frame},
         {"n592908-picture.docx", &Test::testN592908_Picture},
         {"n779630.docx", &Test::testN779630},
+        {"fdo64256.docx", &Test::testNoCrash},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -878,9 +879,9 @@ void Test::testInk()
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.drawing.OpenBezierShape"));
 }
 
-void Test::testN779834()
+void Test::testNoCrash()
 {
-    // This document simply crashed the importer.
+    // These documents simply crashed the importer.
 }
 
 void Test::testN779627()
