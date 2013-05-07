@@ -189,6 +189,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/graphic,\
 	GraphicObject \
 	GraphicProvider \
 	Primitive2DTools \
+	SvgTools \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/inspection,\
 	DefaultHelpProvider \
@@ -2651,7 +2652,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/graphic,\
 	GraphicColorMode \
 	GraphicType \
 	PrimitiveFactory2D \
-	SvgTools \
 	XGraphic \
 	XGraphicObject \
 	XGraphicProvider \

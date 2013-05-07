@@ -25,16 +25,11 @@ module com { module sun { module star { module graphic
 {
 
 /** Service that describes the necessary interfaces and properties
-    to handle svg files
+    to handle svg files.
+    Parses a svg file to a sequence of  B2DPrimitives for internal usage
  */
 
-service SvgTools
-{
-    /** Interface to parse a svg file to a sequence of
-        B2DPrimitives for internal usage
-    */
-    interface ::com::sun::star::graphic::XSvgParser;
-};
+service SvgTools : XSvgParser;
 
 } ; } ; } ; } ;
 

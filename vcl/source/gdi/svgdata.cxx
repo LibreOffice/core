@@ -21,7 +21,7 @@
 #include <vcl/svgdata.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/graphic/XSvgParser.hpp>
+#include <com/sun/star/graphic/SvgTools.hpp>
 #include <com/sun/star/graphic/Primitive2DTools.hpp>
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
 #include <vcl/canvastools.hxx>
@@ -119,17 +119,13 @@ void SvgData::ensureSequenceAndRange()
         if(myInputStream.is())
         {
             // create SVG interpreter
-            uno::Reference< lang::XMultiServiceFactory > xFactory(::comphelper::getProcessServiceFactory());
-            const OUString aServiceName("com.sun.star.graphic.SvgTools");
+            uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
 
             try
             {
-                const uno::Reference< graphic::XSvgParser > xSvgParser(xFactory->createInstance(aServiceName), uno::UNO_QUERY_THROW);
+                const uno::Reference< graphic::XSvgParser > xSvgParser = graphic::SvgTools::create(xContext);
 
-                if(xSvgParser.is())
-                {
-                    maSequence = xSvgParser->getDecomposition(myInputStream, maPath);
-                }
+                maSequence = xSvgParser->getDecomposition(myInputStream, maPath);
             }
             catch(const uno::Exception&)
             {
