@@ -19,6 +19,10 @@ $(eval $(call gb_Library_set_include,dbu,\
 
 $(eval $(call gb_Library_set_precompiled_header,dbu,$(SRCDIR)/dbaccess/inc/pch/precompiled_dbu))
 
+$(eval $(call gb_Library_use_custom_headers,dbu,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_sdk_api,dbu))
 
 $(eval $(call gb_Library_add_defs,dbu,\

@@ -36,6 +36,10 @@ $(eval $(call gb_Library_add_defs,vclplug_gtk,\
 ))
 endif
 
+$(eval $(call gb_Library_use_custom_headers,vclplug_gtk,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_sdk_api,vclplug_gtk))
 
 $(eval $(call gb_Library_use_libraries,vclplug_gtk,\

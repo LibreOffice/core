@@ -13,6 +13,10 @@ $(eval $(call gb_CppunitTest_use_libraries,officecfg_cppheader_test,\
 	$(gb_UWINAPI) \
 ))
 
+$(eval $(call gb_CppUnitTest_use_custom_headers,officecfg_cppheader_test,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,officecfg_cppheader_test, \
     officecfg/qa/cppheader \
 ))
@@ -20,7 +24,5 @@ $(eval $(call gb_CppunitTest_add_exception_objects,officecfg_cppheader_test, \
 $(eval $(call gb_CppunitTest_use_api,officecfg_cppheader_test, \
     udkapi \
 ))
-
-$(eval $(call gb_CppunitTest_use_package,officecfg_cppheader_test,officecfg_cppheader))
 
 # vim: set noet sw=4 ts=4:

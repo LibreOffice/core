@@ -24,6 +24,10 @@ $(eval $(call gb_Library_add_defs,cui,\
     $(if $(EXTRA_BUILDID),-DEXTRA_BUILDID=\""$(EXTRA_BUILDID)"\") \
 ))
 
+$(eval $(call gb_Library_use_custom_headers,cui,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_sdk_api,cui))
 
 $(eval $(call gb_Library_use_libraries,cui,\

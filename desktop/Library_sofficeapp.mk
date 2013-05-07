@@ -18,6 +18,10 @@ $(eval $(call gb_Library_set_include,sofficeapp,\
 
 $(eval $(call gb_Library_use_external,sofficeapp,boost_headers))
 
+$(eval $(call gb_Library_use_custom_headers,sofficeapp,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_sdk_api,sofficeapp))
 
 $(eval $(call gb_Library_add_defs,sofficeapp,\

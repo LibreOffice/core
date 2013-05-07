@@ -25,6 +25,10 @@ $(eval $(call gb_Library_add_defs,spa,\
 
 $(eval $(call gb_Library_use_external,spa,boost_headers))
 
+$(eval $(call gb_Library_use_custom_headers,spa,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_sdk_api,spa))
 
 $(eval $(call gb_Library_use_libraries,spa,\
@@ -39,7 +43,6 @@ $(eval $(call gb_Library_use_libraries,spa,\
     sal \
 	$(gb_UWINAPI) \
 ))
-
 
 $(eval $(call gb_Library_add_exception_objects,spa,\
     padmin/source/adddlg \

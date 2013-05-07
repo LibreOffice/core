@@ -34,6 +34,10 @@ $(eval $(call gb_Library_set_include,sw,\
     $$(INCLUDE) \
 ))
 
+$(eval $(call gb_Library_use_custom_headers,sw,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_sdk_api,sw))
 
 $(eval $(call gb_Library_add_defs,sw,\

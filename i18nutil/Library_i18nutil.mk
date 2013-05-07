@@ -23,6 +23,10 @@ $(eval $(call gb_Library_use_externals,i18nutil,\
 	icu_headers \
 ))
 
+$(eval $(call gb_Library_use_custom_headers,i18nutil,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_sdk_api,i18nutil))
 
 $(eval $(call gb_Library_add_defs,i18nutil,\

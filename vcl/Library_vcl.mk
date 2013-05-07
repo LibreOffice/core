@@ -60,6 +60,10 @@ $(eval $(call gb_Library_add_defs,vcl,\
 
 $(eval $(call gb_Library_use_sdk_api,vcl))
 
+$(eval $(call gb_Library_use_custom_headers,vcl,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_externals,vcl,\
 	jpeg \
 	nss3 \

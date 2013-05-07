@@ -23,6 +23,10 @@ $(eval $(call gb_Library_set_precompiled_header,svt,$(SRCDIR)/svtools/inc/pch/pr
 
 $(eval $(call gb_Library_set_componentfile,svt,svtools/util/svt))
 
+$(eval $(call gb_Library_use_custom_headers,svt,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_sdk_api,svt))
 
 $(eval $(call gb_Library_set_include,svt,\

@@ -40,6 +40,10 @@ $(eval $(call gb_Library_set_include,basctl,\
 
 $(eval $(call gb_Library_use_external,basctl,boost_headers))
 
+$(eval $(call gb_Library_use_custom_headers,basctl,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_sdk_api,basctl))
 
 $(eval $(call gb_Library_use_libraries,basctl,\

@@ -19,8 +19,8 @@
 
 $(eval $(call gb_Library_Library,comphelper))
 
-$(eval $(call gb_Library_use_packages,comphelper,\
-	officecfg_cppheader \
+$(eval $(call gb_Library_use_custom_headers,comphelper,\
+	officecfg/registry \
 ))
 
 $(eval $(call gb_Library_set_componentfile,comphelper,comphelper/util/comphelp))

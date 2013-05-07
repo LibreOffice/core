@@ -37,6 +37,10 @@ $(eval $(call gb_Library_add_defs,vclplug_gtk3,\
     -DVCLPLUG_GTK_IMPLEMENTATION \
 ))
 
+$(eval $(call gb_Library_use_custom_headers,vclplug_gtk3,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_sdk_api,vclplug_gtk3))
 
 $(eval $(call gb_Library_add_libs,vclplug_gtk3,\

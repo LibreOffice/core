@@ -22,6 +22,10 @@ $(eval $(call gb_Library_set_include,xsec_xmlsec,\
 	-I$(call gb_UnpackedTarball_get_dir,xmlsec/include) \
 ))
 
+$(eval $(call gb_Library_use_custom_headers,xsec_xmlsec,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_sdk_api,xsec_xmlsec))
 
 $(eval $(call gb_Library_add_defs,xsec_xmlsec,\

@@ -24,6 +24,10 @@ $(eval $(call gb_Library_add_defs,chartcore,\
 
 $(eval $(call gb_Library_use_external,chartcore,boost_headers))
 
+$(eval $(call gb_Library_use_custom_headers,chartcore,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_sdk_api,chartcore))
 
 $(eval $(call gb_Library_use_libraries,chartcore,\

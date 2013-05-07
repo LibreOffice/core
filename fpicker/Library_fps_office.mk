@@ -14,6 +14,10 @@ $(eval $(call gb_Library_set_componentfile,fps_office,fpicker/source/office/fps_
 
 $(eval $(call gb_Library_use_external,fps_office,boost_headers))
 
+$(eval $(call gb_Library_use_custom_headers,fps_office,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_sdk_api,fps_office))
 
 $(eval $(call gb_Library_use_libraries,fps_office,\

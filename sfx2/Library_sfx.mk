@@ -27,6 +27,10 @@ $(eval $(call gb_Library_add_sdi_headers,sfx,sfx2/sdi/sfxslots))
 
 $(eval $(call gb_Library_set_componentfile,sfx,sfx2/util/sfx))
 
+$(eval $(call gb_Library_use_custom_headers,sfx,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_sdk_api,sfx))
 
 $(eval $(call gb_Library_set_include,sfx,\

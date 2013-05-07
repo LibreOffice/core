@@ -52,6 +52,10 @@ $(eval $(call gb_Library_add_defs,sd,\
 ))
 endif
 
+$(eval $(call gb_Library_use_custom_headers,sd,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_sdk_api,sd))
 
 $(eval $(call gb_Library_use_libraries,sd,\
