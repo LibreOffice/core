@@ -95,6 +95,7 @@ extern "C" {
 #include <config_vclplug.h>
 
 #if ENABLE_GTK
+#define GLIB_DISABLE_DEPRECATION_WARNINGS
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 #else

@@ -38,7 +38,6 @@
 #include <fcntl.h>
 #include <signal.h>
 
-#define GLIB_DISABLE_DEPRECATION_WARNINGS
 #include <plugin/unx/plugcon.hxx>
 
 #include <osl/file.h>
