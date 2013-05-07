@@ -674,22 +674,22 @@ static const char* lcl_GetErrorString( sal_uInt16 nScErrCode )
 
 void XclXmlUtils::GetFormulaTypeAndValue( ScFormulaCell& rCell, const char*& rsType, OUString& rsValue )
 {
+    sal_uInt16 nScErrCode = rCell.GetErrCode();
+    if( nScErrCode )
+    {
+        rsType = "e";
+        rsValue = ToOUString( lcl_GetErrorString( nScErrCode ) );
+
+        return;
+    }
+
     switch( rCell.GetFormatType() )
     {
         case NUMBERFORMAT_NUMBER:
         {
             // either value or error code
-            sal_uInt16 nScErrCode = rCell.GetErrCode();
-            if( nScErrCode )
-            {
-                rsType = "e";
-                rsValue = ToOUString( lcl_GetErrorString( nScErrCode ) );
-            }
-            else
-            {
-                rsType = "n";
-                rsValue = OUString::valueOf( rCell.GetValue() );
-            }
+            rsType = "n";
+            rsValue = OUString::valueOf( rCell.GetValue() );
         }
         break;
 
