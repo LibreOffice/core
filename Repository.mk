@@ -222,6 +222,10 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 endif
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,GRAPHICFILTER, \
+    svgfilter \
+    flash \
+    wpftdraw \
+    graphicfilter \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,TDE, \
@@ -388,8 +392,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     dbu \
     evoab \
 	filtertracer \
-	flash \
-    graphicfilter \
     log \
 	MacOSXSpell \
     mork \
@@ -413,7 +415,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     spa \
     spell \
     sts \
-    svgfilter \
     textfd \
     updatecheckui \
     $(if $(DISABLE_SCRIPTING),,vbahelper) \
@@ -423,7 +424,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     vclplug_kde \
     vclplug_kde4 \
     vclplug_svp \
-    wpftdraw \
 ))
 
 ifneq (,$(filter ANDROID IOS,$(OS)))
