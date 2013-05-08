@@ -1656,7 +1656,6 @@ void PrintFontManager::initialize()
         m_aFonts.clear();
         m_aFontDirectories.clear();
         m_aPrivateFontDirectories.clear();
-        m_aOverrideFonts.clear();
     }
 
 #if OSL_DEBUG_LEVEL > 1
@@ -1951,7 +1950,7 @@ namespace {
     };
 }
 
-void PrintFontManager::getFontList( ::std::list< fontID >& rFontIDs, const PPDParser* pParser, bool bUseOverrideMetrics )
+void PrintFontManager::getFontList( ::std::list< fontID >& rFontIDs, const PPDParser* pParser )
 {
     rFontIDs.clear();
     boost::unordered_map< fontID, PrintFont* >::const_iterator it;
@@ -1980,20 +1979,6 @@ void PrintFontManager::getFontList( ::std::list< fontID >& rFontIDs, const PPDPa
                        BuiltinFontIdentifierHash
                        > aBuiltinFonts;
 
-        std::map<int, fontID > aOverridePSNames;
-        if( bUseOverrideMetrics )
-        {
-            readOverrideMetrics();
-            for( std::vector<fontID>::const_iterator over = m_aOverrideFonts.begin();
-                 over != m_aOverrideFonts.end(); ++over )
-            {
-                boost::unordered_map<fontID,PrintFont*>::const_iterator font_it = m_aFonts.find( *over );
-                DBG_ASSERT( font_it != m_aFonts.end(), "override to nonexistant font" );
-                if( font_it != m_aFonts.end() )
-                    aOverridePSNames[ font_it->second->m_nPSName ] = *over;
-            }
-        }
-
         int nFonts = pParser->getFonts();
         for( int i = 0; i < nFonts; i++ )
             aBuiltinPSNames.insert( m_pAtoms->getAtom( ATOM_PSNAME, pParser->getFont( i ) ) );
@@ -2003,30 +1988,13 @@ void PrintFontManager::getFontList( ::std::list< fontID >& rFontIDs, const PPDPa
             if( it->second->m_eType == fonttype::Builtin &&
                 aBuiltinPSNames.find( pFont->m_nPSName ) != aBuiltinPSNames.end() )
             {
-                bool bInsert = true;
-                if( bUseOverrideMetrics )
-                {
-                    // in override case only use the override fonts, not their counterparts
-                    std::map<int,fontID>::const_iterator over = aOverridePSNames.find( pFont->m_nPSName );
-                    if( over != aOverridePSNames.end() && over->second != it->first )
-                        bInsert = false;
-                }
-                else
-                {
-                    // do not insert override fonts in non override case
-                    if( std::find( m_aOverrideFonts.begin(), m_aOverrideFonts.end(), it->first ) != m_aOverrideFonts.end() )
-                        bInsert = false;
-                }
-                if( bInsert )
-                {
-                    aBuiltinFonts.insert( BuiltinFontIdentifier(
-                        m_pAtoms->getString( ATOM_FAMILYNAME, pFont->m_nFamilyName ),
-                        pFont->m_eItalic,
-                        pFont->m_eWeight,
-                        pFont->m_ePitch,
-                        pFont->m_aEncoding
-                        ) );
-                }
+                aBuiltinFonts.insert( BuiltinFontIdentifier(
+                    m_pAtoms->getString( ATOM_FAMILYNAME, pFont->m_nFamilyName ),
+                    pFont->m_eItalic,
+                    pFont->m_eWeight,
+                    pFont->m_ePitch,
+                    pFont->m_aEncoding
+                ) );
             }
         }
         for( it = m_aFonts.begin(); it != m_aFonts.end(); ++it )
@@ -2036,22 +2004,7 @@ void PrintFontManager::getFontList( ::std::list< fontID >& rFontIDs, const PPDPa
             {
                 if( aBuiltinPSNames.find( pFont->m_nPSName ) != aBuiltinPSNames.end() )
                 {
-                    bool bInsert = true;
-                    if( bUseOverrideMetrics )
-                    {
-                        // in override case only use the override fonts, not their counterparts
-                        std::map<int,fontID>::const_iterator over = aOverridePSNames.find( pFont->m_nPSName );
-                        if( over != aOverridePSNames.end() && over->second != it->first )
-                            bInsert = false;
-                    }
-                    else
-                    {
-                        // do not insert override fonts in non override case
-                        if( std::find( m_aOverrideFonts.begin(), m_aOverrideFonts.end(), it->first ) != m_aOverrideFonts.end() )
-                            bInsert = false;
-                    }
-                    if( bInsert )
-                        rFontIDs.push_back( it->first );
+                    rFontIDs.push_back( it->first );
                 }
             }
             else if( aBuiltinFonts.find( BuiltinFontIdentifier(
@@ -2122,11 +2075,11 @@ void PrintFontManager::fillPrintFontInfo( PrintFont* pFont, PrintFontInfo& rInfo
 
 // -------------------------------------------------------------------------
 
-void PrintFontManager::getFontListWithFastInfo( ::std::list< FastPrintFontInfo >& rFonts, const PPDParser* pParser, bool bUseOverrideMetrics )
+void PrintFontManager::getFontListWithFastInfo( ::std::list< FastPrintFontInfo >& rFonts, const PPDParser* pParser )
 {
     rFonts.clear();
     ::std::list< fontID > aFontList;
-    getFontList( aFontList, pParser, bUseOverrideMetrics );
+    getFontList( aFontList, pParser );
 
     ::std::list< fontID >::iterator it;
     for( it = aFontList.begin(); it != aFontList.end(); ++it )
@@ -2867,165 +2820,4 @@ namespace
         return n;
     }
 }
-bool PrintFontManager::readOverrideMetrics()
-{
-    if( ! m_aOverrideFonts.empty() )
-        return false;
-
-    css::uno::Reference< XMultiServiceFactory > xFact( comphelper::getProcessServiceFactory() );
-    if( !xFact.is() )
-        return false;
-    css::uno::Reference< XMaterialHolder > xMat(
-                xFact->createInstance( "com.sun.star.psprint.CompatMetricOverride" ),
-                UNO_QUERY );
-    if( !xMat.is() )
-        return false;
-
-    Any aAny( xMat->getMaterial() );
-    Sequence< Any > aOverrideFonts;
-    if( ! (aAny >>= aOverrideFonts ) )
-        return false;
-    sal_Int32 nFonts = aOverrideFonts.getLength();
-    for( sal_Int32 i = 0; i < nFonts; i++ )
-    {
-        Sequence< NamedValue > aMetrics;
-        if( ! (aOverrideFonts.getConstArray()[i] >>= aMetrics) )
-            continue;
-        BuiltinFont* pFont = new BuiltinFont();
-        pFont->m_nDirectory = 0;
-        pFont->m_bUserOverride = false;
-        pFont->m_pMetrics = new PrintFontMetrics;
-        memset( pFont->m_pMetrics->m_aPages, 0xff, sizeof( pFont->m_pMetrics->m_aPages ) );
-        pFont->m_pMetrics->m_bKernPairsQueried = true;
-        sal_Int32 nProps = aMetrics.getLength();
-        const NamedValue* pProps = aMetrics.getConstArray();
-        for( sal_Int32 n = 0; n < nProps; n++ )
-        {
-            if ( pProps[n].Name == "FamilyName" )
-                pFont->m_nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME,
-                                                          getString(pProps[n].Value),
-                                                          sal_True );
-            else if ( pProps[n].Name == "PSName" )
-                pFont->m_nPSName = m_pAtoms->getAtom( ATOM_PSNAME,
-                                                      getString(pProps[n].Value),
-                                                      sal_True );
-            else if ( pProps[n].Name == "StyleName" )
-                pFont->m_aStyleName = getString(pProps[n].Value);
-            else if ( pProps[n].Name == "Italic" )
-                pFont->m_eItalic = static_cast<FontItalic>(getInt(pProps[n].Value));
-            else if ( pProps[n].Name == "Width" )
-                pFont->m_eWidth = static_cast<FontWidth>(getInt(pProps[n].Value));
-            else if ( pProps[n].Name == "Weight" )
-                pFont->m_eWeight = static_cast<FontWeight>(getInt(pProps[n].Value));
-            else if ( pProps[n].Name == "Pitch" )
-                pFont->m_ePitch = static_cast<FontPitch>(getInt(pProps[n].Value));
-            else if ( pProps[n].Name == "Encoding" )
-                pFont->m_aEncoding = static_cast<rtl_TextEncoding>(getInt(pProps[n].Value));
-            else if ( pProps[n].Name == "FontEncodingOnly" )
-                pFont->m_bFontEncodingOnly = getBool(pProps[n].Value);
-            else if ( pProps[n].Name == "GlobalMetricXWidth" )
-                pFont->m_aGlobalMetricX.width = getInt(pProps[n].Value);
-            else if ( pProps[n].Name == "GlobalMetricXHeight" )
-                pFont->m_aGlobalMetricX.height = getInt(pProps[n].Value);
-            else if ( pProps[n].Name == "GlobalMetricYWidth" )
-                pFont->m_aGlobalMetricY.width = getInt(pProps[n].Value);
-            else if ( pProps[n].Name == "GlobalMetricYHeight" )
-                pFont->m_aGlobalMetricY.height = getInt(pProps[n].Value);
-            else if ( pProps[n].Name == "Ascend" )
-                pFont->m_nAscend = getInt(pProps[n].Value);
-            else if ( pProps[n].Name == "Descend" )
-                pFont->m_nDescend = getInt(pProps[n].Value);
-            else if ( pProps[n].Name == "Leading" )
-                pFont->m_nLeading = getInt(pProps[n].Value);
-            else if ( pProps[n].Name == "XMin" )
-                pFont->m_nXMin = getInt(pProps[n].Value);
-            else if ( pProps[n].Name == "YMin" )
-                pFont->m_nYMin = getInt(pProps[n].Value);
-            else if ( pProps[n].Name == "XMax" )
-                pFont->m_nXMax = getInt(pProps[n].Value);
-            else if ( pProps[n].Name == "YMax" )
-                pFont->m_nYMax = getInt(pProps[n].Value);
-            else if ( pProps[n].Name == "VerticalSubstitutes" )
-                pFont->m_bHaveVerticalSubstitutedGlyphs = getBool(pProps[n].Value);
-            else if ( pProps[n].Name == "EncodingVector" )
-            {
-                Sequence< NamedValue > aEncoding;
-                pProps[n].Value >>= aEncoding;
-                sal_Int32 nEnc = aEncoding.getLength();
-                const NamedValue* pEnc = aEncoding.getConstArray();
-                for( sal_Int32 m = 0; m < nEnc; m++ )
-                {
-                    sal_Unicode cCode = *pEnc[m].Name.getStr();
-                    sal_Int32 nGlyph = getInt(pEnc[m].Value);
-                    pFont->m_aEncodingVector[ cCode ] = nGlyph;
-                }
-            }
-            else if ( pProps[n].Name == "NonEncoded" )
-            {
-                Sequence< NamedValue > aEncoding;
-                pProps[n].Value >>= aEncoding;
-                sal_Int32 nEnc = aEncoding.getLength();
-                const NamedValue* pEnc = aEncoding.getConstArray();
-                for( sal_Int32 m = 0; m < nEnc; m++ )
-                {
-                    sal_Unicode cCode = *pEnc[m].Name.getStr();
-                    OUString aGlyphName( getString(pEnc[m].Value) );
-                    pFont->m_aNonEncoded[ cCode ] = OUStringToOString(aGlyphName,RTL_TEXTENCODING_ASCII_US);
-                }
-            }
-            else if ( pProps[n].Name == "CharacterMetrics" )
-            {
-                // fill pFont->m_pMetrics->m_aMetrics
-                // expect triples of int: int -> CharacterMetric.{ width, height }
-                Sequence< sal_Int32 > aSeq;
-                pProps[n].Value >>= aSeq;
-                sal_Int32 nInts = aSeq.getLength();
-                const sal_Int32* pInts = aSeq.getConstArray();
-                for( sal_Int32 m = 0; m < nInts; m+=3 )
-                {
-                    pFont->m_pMetrics->m_aMetrics[ pInts[m] ].width = static_cast<short int>(pInts[m+1]);
-                    pFont->m_pMetrics->m_aMetrics[ pInts[m] ].height = static_cast<short int>(pInts[m+2]);
-                }
-            }
-            else if ( pProps[n].Name == "XKernPairs" )
-            {
-                // fill pFont->m_pMetrics->m_aXKernPairs
-                // expection name: <unicode1><unicode2> value: ((height << 16)| width)
-                Sequence< NamedValue > aKern;
-                pProps[n].Value >>= aKern;
-                KernPair aPair;
-                const NamedValue* pVals = aKern.getConstArray();
-                int nPairs = aKern.getLength();
-                for( int m = 0; m < nPairs; m++ )
-                {
-                    if( pVals[m].Name.getLength() == 2 )
-                    {
-                        aPair.first = pVals[m].Name.getStr()[0];
-                        aPair.second = pVals[m].Name.getStr()[1];
-                        sal_Int32 nKern = getInt( pVals[m].Value );
-                        aPair.kern_x = static_cast<short int>(nKern & 0xffff);
-                        aPair.kern_y = static_cast<short int>((sal_uInt32(nKern) >> 16) & 0xffff);
-                        pFont->m_pMetrics->m_aXKernPairs.push_back( aPair );
-                    }
-                }
-            }
-        }
-        // sanity check
-        if( pFont->m_nPSName                        &&
-            pFont->m_nFamilyName                    &&
-            ! pFont->m_pMetrics->m_aMetrics.empty() )
-        {
-            m_aOverrideFonts.push_back( m_nNextFontID );
-            m_aFonts[ m_nNextFontID++ ] = pFont;
-        }
-        else
-        {
-            DBG_ASSERT( 0, "override font failed" );
-            delete pFont;
-        }
-    }
-
-    return true;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

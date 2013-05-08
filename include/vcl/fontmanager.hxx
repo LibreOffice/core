@@ -284,8 +284,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
 
     mutable FontCache*                                                        m_pFontCache;
 
-    mutable std::vector< fontID >               m_aOverrideFonts;
-
     OString getAfmFile( PrintFont* pFont ) const;
     OString getFontFile( PrintFont* pFont ) const;
 
@@ -343,8 +341,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     */
     bool addFontconfigDir(const OString& rDirectory);
 
-    bool readOverrideMetrics();
-
     std::set<OString> m_aPreviousLangSupportRequests;
     std::vector<OString> m_aCurrentRequests;
     Timer m_aFontInstallerTimer;
@@ -371,9 +367,9 @@ public:
     // returns the ids of all managed fonts. on pParser != NULL
     // all fonttype::Builtin type fonts are not listed
     // which do not occur in the PPD of pParser
-    void getFontList( std::list< fontID >& rFontIDs, const PPDParser* pParser = NULL, bool bUseOverrideMetrics = false );
+    void getFontList( std::list< fontID >& rFontIDs, const PPDParser* pParser = NULL );
     // get the font list and fast font info. see getFontList for pParser
-    void getFontListWithFastInfo( std::list< FastPrintFontInfo >& rFonts, const PPDParser* pParser = NULL, bool bUseOverrideMetrics = false );
+    void getFontListWithFastInfo( std::list< FastPrintFontInfo >& rFonts, const PPDParser* pParser = NULL );
 
     // get font info for a specific font
     bool getFontInfo( fontID nFontID, PrintFontInfo& rInfo ) const;

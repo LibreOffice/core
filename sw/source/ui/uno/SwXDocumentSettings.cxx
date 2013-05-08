@@ -662,10 +662,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         }
         break;
         case HANDLE_USE_OLD_PRINTER_METRICS:
-        {
-            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
-            mpDoc->set(IDocumentSettingAccess::USE_OLD_PRINTER_METRICS, bTmp);
-        }
+            // ignore - this is a dead property
         break;
         case HANDLE_TABS_RELATIVE_TO_INDENT:
         {
@@ -1085,12 +1082,6 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_UNIX_FORCE_ZERO_EXT_LEADING:
         {
             sal_Bool bTmp = mpDoc->get(IDocumentSettingAccess::UNIX_FORCE_ZERO_EXT_LEADING);
-            rValue.setValue( &bTmp, ::getBooleanCppuType() );
-        }
-        break;
-        case HANDLE_USE_OLD_PRINTER_METRICS:
-        {
-            sal_Bool bTmp = mpDoc->get(IDocumentSettingAccess::USE_OLD_PRINTER_METRICS);
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;

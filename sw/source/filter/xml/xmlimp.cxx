@@ -1455,14 +1455,6 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
         // The flag might be set from setting the printer, so it
         // it is required to clear it.
         pDoc->SetOLEPrtNotifyPending( !pPrinter->IsKnown() );
-
-        // old printer metrics compatibility
-        if (  pDoc->get(IDocumentSettingAccess::USE_OLD_PRINTER_METRICS ) &&
-             !pDoc->get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE ) )
-        {
-            pPrinter->Compat_OldPrinterMetrics( true );
-            pDoc->GetDocShell()->UpdateFontList();
-        }
     }
 }
 

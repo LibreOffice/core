@@ -52,9 +52,8 @@ class VCL_PLUGIN_PUBLIC SalInfoPrinter
 public:
     std::vector< PaperInfo  >           m_aPaperFormats;    // all printer supported formats
     bool                                m_bPapersInit;      // set to true after InitPaperFormats
-    bool                                m_bCompatMetrics;
 
-    SalInfoPrinter() : m_bPapersInit( false ), m_bCompatMetrics( false ) {}
+    SalInfoPrinter() : m_bPapersInit( false ) {}
     virtual ~SalInfoPrinter();
 
     // SalGraphics or NULL, but two Graphics for all SalFrames
