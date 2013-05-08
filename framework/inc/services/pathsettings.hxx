@@ -28,11 +28,12 @@
 #include <stdtypes.h>
 #include <properties.h>
 
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/util/XPathSettings.hpp>
 
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -50,6 +51,7 @@ namespace framework
 class PathSettings : public  css::lang::XTypeProvider             ,
                      public  css::lang::XServiceInfo              ,
                      public  css::util::XChangesListener          , // => XEventListener
+                     public css::util::XPathSettings              , // => XPropertySet
                      // base classes
                      // Order is necessary for right initialization!
                      private ThreadHelpBase                       ,
@@ -173,10 +175,150 @@ class PathSettings : public  css::lang::XTypeProvider             ,
 
         using ::cppu::OPropertySetHelper::disposing;
 
+
+        /**
+         * XPathSettings attribute methods
+         */
+        virtual OUString SAL_CALL getAddin() throw (css::uno::RuntimeException)
+            { return getStringProperty("Addin"); }
+        virtual void SAL_CALL setAddin(const OUString& p1) throw (css::uno::RuntimeException)
+            { setStringProperty("Addin", p1); }
+        virtual OUString getAutoCorrect() throw (css::uno::RuntimeException)
+            { return getStringProperty("AutoCorrect"); }
+        virtual void SAL_CALL setAutoCorrect(const OUString& p1) throw (css::uno::RuntimeException)
+            { setStringProperty("AutoCorrect", p1); }
+        virtual OUString SAL_CALL getAutoText() throw (css::uno::RuntimeException)
+            { return getStringProperty("AutoText"); }
+        virtual void SAL_CALL setAutoText(const OUString& p1) throw (css::uno::RuntimeException)
+            { setStringProperty("AutoText", p1); }
+        virtual OUString SAL_CALL getBackup() throw (css::uno::RuntimeException)
+            { return getStringProperty("Backup"); }
+        virtual void SAL_CALL setBackup(const OUString& p1) throw (css::uno::RuntimeException)
+            { setStringProperty("Backup", p1); }
+        virtual OUString SAL_CALL getBasic() throw (css::uno::RuntimeException)
+            { return getStringProperty("Basic"); }
+        virtual void SAL_CALL setBasic(const OUString& p1) throw (css::uno::RuntimeException)
+            { setStringProperty("Basic", p1); }
+        virtual OUString SAL_CALL getBitmap() throw (css::uno::RuntimeException)
+            { return getStringProperty("Bitmap"); }
+        virtual void SAL_CALL setBitmap(const OUString& p1) throw (css::uno::RuntimeException)
+            { setStringProperty("Bitmap", p1); }
+        virtual OUString SAL_CALL getConfig() throw (css::uno::RuntimeException)
+            { return getStringProperty("Config"); }
+        virtual void SAL_CALL setConfig(const OUString& p1) throw (css::uno::RuntimeException)
+            { setStringProperty("Config", p1); }
+        virtual OUString SAL_CALL getDictionary() throw (css::uno::RuntimeException)
+            { return getStringProperty("Dictionary"); }
+        virtual void SAL_CALL setDictionary(const OUString& p1) throw (css::uno::RuntimeException)
+            { setStringProperty("Dictionary", p1); }
+        virtual OUString SAL_CALL getFavorite() throw (css::uno::RuntimeException)
+            { return getStringProperty("Favorite"); }
+        virtual void SAL_CALL setFavorite(const OUString& p1) throw (css::uno::RuntimeException)
+            { setStringProperty("Favorite", p1); }
+        virtual OUString SAL_CALL getFilter() throw (css::uno::RuntimeException)
+            { return getStringProperty("Filter"); }
+        virtual void SAL_CALL setFilter(const OUString& p1) throw (css::uno::RuntimeException)
+            { setStringProperty("Filter", p1); }
+        virtual OUString SAL_CALL getGallery() throw (css::uno::RuntimeException)
+            { return getStringProperty("Gallery"); }
+        virtual void SAL_CALL setGallery(const OUString& p1) throw (css::uno::RuntimeException)
+            { setStringProperty("Gallery", p1); }
+        virtual OUString SAL_CALL getGraphic() throw (css::uno::RuntimeException)
+            { return getStringProperty("Graphic"); }
+        virtual void SAL_CALL setGraphic(const OUString& p1) throw (css::uno::RuntimeException)
+            { setStringProperty("Graphic", p1); }
+        virtual OUString SAL_CALL getHelp() throw (css::uno::RuntimeException)
+            { return getStringProperty("Help"); }
+        virtual void SAL_CALL setHelp(const OUString& p1) throw (css::uno::RuntimeException)
+            { setStringProperty("Help", p1); }
+        virtual OUString SAL_CALL getLinguistic() throw (css::uno::RuntimeException)
+            { return getStringProperty("Linguistic"); }
+        virtual void SAL_CALL setLinguistic(const OUString& p1) throw (css::uno::RuntimeException)
+            { setStringProperty("Linguistic", p1); }
+        virtual OUString SAL_CALL getModule() throw (css::uno::RuntimeException)
+            { return getStringProperty("Module"); }
+        virtual void SAL_CALL setModule(const OUString& p1) throw (css::uno::RuntimeException)
+            { setStringProperty("Module", p1); }
+        virtual OUString SAL_CALL getPalette() throw (css::uno::RuntimeException)
+            { return getStringProperty("Palette"); }
+        virtual void SAL_CALL setPalette(const OUString& p1) throw (css::uno::RuntimeException)
+            { setStringProperty("Palette", p1); }
+        virtual OUString SAL_CALL getPlugin() throw (css::uno::RuntimeException)
+            { return getStringProperty("Plugin"); }
+        virtual void SAL_CALL setPlugin(const OUString& p1) throw (css::uno::RuntimeException)
+            { setStringProperty("Plugin", p1); }
+        virtual OUString SAL_CALL getStorage() throw (css::uno::RuntimeException)
+            { return getStringProperty("Storage"); }
+        virtual void SAL_CALL setStorage(const OUString& p1) throw (css::uno::RuntimeException)
+            { setStringProperty("Storage", p1); }
+        virtual OUString SAL_CALL getTemp() throw (css::uno::RuntimeException)
+            { return getStringProperty("Temp"); }
+        virtual void SAL_CALL setTemp(const OUString& p1) throw (css::uno::RuntimeException)
+            { setStringProperty("Temp", p1); }
+        virtual OUString SAL_CALL getTemplate() throw (css::uno::RuntimeException)
+            { return getStringProperty("Template"); }
+        virtual void SAL_CALL setTemplate(const OUString& p1) throw (css::uno::RuntimeException)
+            { setStringProperty("Template", p1); }
+        virtual OUString SAL_CALL getUIConfig() throw (css::uno::RuntimeException)
+            { return getStringProperty("UIConfig"); }
+        virtual void SAL_CALL setUIConfig(const OUString& p1) throw (css::uno::RuntimeException)
+            { setStringProperty("UIConfig", p1); }
+        virtual OUString SAL_CALL getUserConfig() throw (css::uno::RuntimeException)
+            { return getStringProperty("UserConfig"); }
+        virtual void SAL_CALL setUserConfig(const OUString& p1) throw (css::uno::RuntimeException)
+            { setStringProperty("UserConfig", p1); }
+        virtual OUString SAL_CALL getUserDictionary() throw (css::uno::RuntimeException)
+            { return getStringProperty("UserDictionary"); }
+        virtual void SAL_CALL setUserDictionary(const OUString& p1) throw (css::uno::RuntimeException)
+            { setStringProperty("UserDictionary", p1); }
+        virtual OUString SAL_CALL getWork() throw (css::uno::RuntimeException)
+            { return getStringProperty("Work"); }
+        virtual void SAL_CALL setWork(const OUString& p1) throw (css::uno::RuntimeException)
+            { setStringProperty("Work", p1); }
+        virtual OUString SAL_CALL getBasePathShareLayer() throw (css::uno::RuntimeException)
+            { return getStringProperty("UIConfig"); }
+        virtual void SAL_CALL setBasePathShareLayer(const OUString& p1) throw (css::uno::RuntimeException)
+            { setStringProperty("UIConfig", p1); }
+        virtual OUString SAL_CALL getBasePathUserLayer() throw (css::uno::RuntimeException)
+            { return getStringProperty("UserConfig"); }
+        virtual void SAL_CALL setBasePathUserLayer(const OUString& p1) throw (css::uno::RuntimeException)
+            { setStringProperty("UserConfig", p1); }
+
+
+
+        /**
+         * overrides to resolve inheritance ambiguity
+         */
+        virtual void SAL_CALL setPropertyValue(const OUString& p1, const css::uno::Any& p2)
+            throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException)
+            { ::cppu::OPropertySetHelper::setPropertyValue(p1, p2); }
+        virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& p1)
+            throw (com::sun::star::beans::UnknownPropertyException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException)
+            { return ::cppu::OPropertySetHelper::getPropertyValue(p1); }
+        virtual void SAL_CALL addPropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2)
+            throw (com::sun::star::beans::UnknownPropertyException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException)
+            { ::cppu::OPropertySetHelper::addPropertyChangeListener(p1, p2); }
+        virtual void SAL_CALL removePropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2)
+            throw (com::sun::star::beans::UnknownPropertyException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException)
+            { ::cppu::OPropertySetHelper::removePropertyChangeListener(p1, p2); }
+        virtual void SAL_CALL addVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2)
+            throw (com::sun::star::beans::UnknownPropertyException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException)
+            { ::cppu::OPropertySetHelper::addVetoableChangeListener(p1, p2); }
+        virtual void SAL_CALL removeVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2)
+            throw (com::sun::star::beans::UnknownPropertyException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException)
+            { ::cppu::OPropertySetHelper::removeVetoableChangeListener(p1, p2); }
+
+
     // ___________________________________________
     // helper
 
     private:
+
+        OUString getStringProperty(const OUString& p1)
+            throw(css::uno::RuntimeException);
+
+        void setStringProperty(const OUString& p1, const OUString& p2)
+            throw(css::uno::RuntimeException);
 
         /** read all configured paths and create all needed internal structures. */
         void impl_readAll();
@@ -264,7 +406,7 @@ class PathSettings : public  css::lang::XTypeProvider             ,
         virtual void                                                SAL_CALL getFastPropertyValue            (       css::uno::Any&  aValue          ,
                                                                                                                      sal_Int32       nHandle         ) const;
         virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper                   (                                       );
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo              (                                       ) throw(::com::sun::star::uno::RuntimeException);
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo              (                                       ) throw(::css::uno::RuntimeException);
 
         /** factory methods to guarantee right (but on demand) initialized members ... */
         css::uno::Reference< css::util::XStringSubstitution > fa_getSubstitution();

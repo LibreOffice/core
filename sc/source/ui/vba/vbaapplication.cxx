@@ -19,21 +19,23 @@
 
 #include <stdio.h>
 
-#include <com/sun/star/sheet/XSpreadsheetView.hpp>
-#include <com/sun/star/sheet/XSpreadsheets.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <ooo/vba/excel/XlCalculation.hpp>
-#include <com/sun/star/sheet/XCellRangeReferrer.hpp>
-#include <com/sun/star/sheet/XCalculatable.hpp>
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/sheet/XCalculatable.hpp>
+#include <com/sun/star/sheet/XCellRangeAddressable.hpp>
+#include <com/sun/star/sheet/XCellRangeReferrer.hpp>
+#include <com/sun/star/sheet/XNamedRanges.hpp>
+#include <com/sun/star/sheet/XSpreadsheetView.hpp>
+#include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#include <ooo/vba/excel/XlMousePointer.hpp>
-#include <com/sun/star/sheet/XNamedRanges.hpp>
-#include <com/sun/star/sheet/XCellRangeAddressable.hpp>
+#include <com/sun/star/util/PathSettings.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <ooo/vba/XExecutableDialog.hpp>
+#include <ooo/vba/excel/XlCalculation.hpp>
+#include <ooo/vba/excel/XlMousePointer.hpp>
 
 #include "vbaapplication.hxx"
 #include "vbaworkbooks.hxx"
@@ -879,20 +881,19 @@ ScVbaApplication::Calculate() throw(  script::BasicErrorException , uno::Runtime
     xCalculatable->calculateAll();
 }
 
-static uno::Reference< beans::XPropertySet > lcl_getPathSettingsService( const uno::Reference< uno::XComponentContext >& xContext ) throw ( uno::RuntimeException )
+static uno::Reference< util::XPathSettings > lcl_getPathSettingsService( const uno::Reference< uno::XComponentContext >& xContext ) throw ( uno::RuntimeException )
 {
-    static uno::Reference< beans::XPropertySet >  xPathSettings;
+    static uno::Reference< util::XPathSettings >  xPathSettings;
     if ( !xPathSettings.is() )
     {
-        uno::Reference< lang::XMultiComponentFactory > xSMgr( xContext->getServiceManager(), uno::UNO_QUERY_THROW );
-        xPathSettings.set( xSMgr->createInstanceWithContext( OUString("com.sun.star.util.PathSettings"), xContext ), uno::UNO_QUERY_THROW );
+        xPathSettings.set( util::PathSettings::create( xContext ) );
     }
     return xPathSettings;
 }
 OUString ScVbaApplication::getOfficePath( const OUString& _sPathType ) throw ( uno::RuntimeException )
 {
     OUString sRetPath;
-    uno::Reference< beans::XPropertySet > xProps = lcl_getPathSettingsService( mxContext );
+    uno::Reference< util::XPathSettings > xProps = lcl_getPathSettingsService( mxContext );
     try
     {
         OUString sUrl;
@@ -914,10 +915,10 @@ OUString ScVbaApplication::getOfficePath( const OUString& _sPathType ) throw ( u
 void SAL_CALL
 ScVbaApplication::setDefaultFilePath( const OUString& DefaultFilePath ) throw (uno::RuntimeException)
 {
-    uno::Reference< beans::XPropertySet > xProps = lcl_getPathSettingsService( mxContext );
+    uno::Reference< util::XPathSettings > xProps = lcl_getPathSettingsService( mxContext );
     OUString aURL;
     osl::FileBase::getFileURLFromSystemPath( DefaultFilePath, aURL );
-    xProps->setPropertyValue( OUString("Work"), uno::Any( aURL ) );
+    xProps->setWork( aURL );
 }
 
 OUString SAL_CALL

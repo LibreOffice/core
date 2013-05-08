@@ -62,13 +62,20 @@
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/configmgr.hxx>
-#include <com/sun/star/ui/ItemType.hpp>
-#include <com/sun/star/ui/ItemStyle.hpp>
-#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/FileSystemStorageFactory.hpp>
+#include <com/sun/star/frame/XFramesSupplier.hpp>
+#include <com/sun/star/frame/XFrames.hpp>
+#include <com/sun/star/frame/XLayoutManager.hpp>
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/UICommandDescription.hpp>
+#include <com/sun/star/graphic/GraphicProvider.hpp>
+#include <com/sun/star/ui/ItemType.hpp>
+#include <com/sun/star/ui/ItemStyle.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfiguration.hpp>
 #include <com/sun/star/ui/XUIConfigurationListener.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
@@ -79,16 +86,10 @@
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/ui/WindowStateConfiguration.hpp>
-#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
-#include <com/sun/star/frame/XFrames.hpp>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/graphic/GraphicProvider.hpp>
-#include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/embed/FileSystemStorageFactory.hpp>
+#include <com/sun/star/util/PathSettings.hpp>
 
 #include "dlgname.hxx"
 
@@ -5013,15 +5014,11 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
     m_xGraphProvider = uno::Reference< graphic::XGraphicProvider >(
         graphic::GraphicProvider::create( xComponentContext ) );
 
-    uno::Reference< beans::XPropertySet > xPropSet(
-        xServiceManager->createInstance( OUString("com.sun.star.util.PathSettings"  ) ),
-        uno::UNO_QUERY );
+    uno::Reference< css::util::XPathSettings > xPathSettings =
+        css::util::PathSettings::create( xComponentContext );
 
-    uno::Any aAny = xPropSet->getPropertyValue( OUString( "UserConfig"  ) );
 
-    OUString aDirectory;
-
-    aAny >>= aDirectory;
+    OUString aDirectory = xPathSettings->getUserConfig();
 
     sal_Int32 aCount = aDirectory.getLength();
 

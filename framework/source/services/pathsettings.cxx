@@ -74,29 +74,34 @@ sal_Int32 impl_getPropGroup(sal_Int32 nID)
 }
 
 
+#define SERVICENAME_PATHSETTINGS                                DECLARE_ASCII("com.sun.star.util.PathSettings"                      )
+#define IMPLEMENTATIONNAME_PATHSETTINGS                         DECLARE_ASCII("com.sun.star.comp.framework.PathSettings"            )
+
 namespace framework
 {
 
 //-----------------------------------------------------------------------------
 // XInterface, XTypeProvider, XServiceInfo
 
-DEFINE_XINTERFACE_7                     (   PathSettings                                             ,
+DEFINE_XINTERFACE_8                     (   PathSettings                                             ,
                                             OWeakObject                                              ,
                                             DIRECT_INTERFACE ( css::lang::XTypeProvider              ),
                                             DIRECT_INTERFACE ( css::lang::XServiceInfo               ),
                                             DERIVED_INTERFACE( css::lang::XEventListener, css::util::XChangesListener),
                                             DIRECT_INTERFACE ( css::util::XChangesListener           ),
-                                            DIRECT_INTERFACE ( css::beans::XPropertySet              ),
+                                            DIRECT_INTERFACE ( css::util::XPathSettings              ),
+                                            DERIVED_INTERFACE( css::beans::XPropertySet, css::util::XPathSettings),
                                             DIRECT_INTERFACE ( css::beans::XFastPropertySet          ),
                                             DIRECT_INTERFACE ( css::beans::XMultiPropertySet        )
                                         )
 
-DEFINE_XTYPEPROVIDER_7                  (   PathSettings                                            ,
+DEFINE_XTYPEPROVIDER_8                  (   PathSettings                                            ,
                                             css::lang::XTypeProvider                                ,
                                             css::lang::XServiceInfo                                 ,
                                             css::lang::XEventListener                               ,
                                             css::util::XChangesListener                             ,
-                                            css::beans::XPropertySet                                ,
+                                            css::util::XPathSettings                                ,
+                                            css::beans::XPropertySet                            ,
                                             css::beans::XFastPropertySet                            ,
                                             css::beans::XMultiPropertySet
                                         )
@@ -192,6 +197,23 @@ void SAL_CALL PathSettings::disposing(const css::lang::EventObject& aSource)
         m_xCfgNew.clear();
 
     aWriteLock.unlock();
+}
+
+//-----------------------------------------------------------------------------
+OUString PathSettings::getStringProperty(const OUString& p1)
+    throw(css::uno::RuntimeException)
+{
+    css::uno::Any a = ::cppu::OPropertySetHelper::getPropertyValue(p1);
+    OUString s;
+    a >>= s;
+    return s;
+}
+
+//-----------------------------------------------------------------------------
+void PathSettings::setStringProperty(const OUString& p1, const OUString& p2)
+    throw(css::uno::RuntimeException)
+{
+    ::cppu::OPropertySetHelper::setPropertyValue(p1, css::uno::Any(p2));
 }
 
 //-----------------------------------------------------------------------------
@@ -1124,6 +1146,8 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgNew()
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
     css::uno::Reference< css::container::XNameAccess >     xCfg  = m_xCfgNew;
+    if (xCfg.is())
+       return xCfg;
     aReadLock.unlock();
     // <- SAFE
 

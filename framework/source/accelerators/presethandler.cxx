@@ -26,14 +26,15 @@
 #include <threadhelp/writeguard.hxx>
 #include <services.h>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/configuration/CorruptedUIConfigurationException.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/FileSystemStorageFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/util/PathSettings.hpp>
 
 #include <vcl/svapp.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -43,9 +44,6 @@
 
 #define SUBSTORAGE_GLOBAL       DECLARE_ASCII("global" )
 #define SUBSTORAGE_MODULES      DECLARE_ASCII("modules")
-
-#define BASEPATH_SHARE_LAYER    DECLARE_ASCII("UIConfig"  )
-#define BASEPATH_USER_LAYER     DECLARE_ASCII("UserConfig")
 
 #define RELPATH_SHARE_LAYER     DECLARE_ASCII("soffice.cfg")
 #define RELPATH_USER_LAYER      DECLARE_ASCII("soffice.cfg")
@@ -228,12 +226,10 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
-    css::uno::Reference< css::beans::XPropertySet > xPathSettings(
-        xSMGR->createInstance(SERVICENAME_PATHSETTINGS),
-        css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::util::XPathSettings > xPathSettings =
+        css::util::PathSettings::create( comphelper::getComponentContext(xSMGR) );
 
-    OUString sShareLayer;
-    xPathSettings->getPropertyValue(BASEPATH_SHARE_LAYER) >>= sShareLayer;
+    OUString sShareLayer = xPathSettings->getBasePathShareLayer();
 
     // "UIConfig" is a "multi path" ... use first part only here!
     sal_Int32 nPos = sShareLayer.indexOf(';');
@@ -288,12 +284,10 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
-    css::uno::Reference< css::beans::XPropertySet > xPathSettings(
-        xSMGR->createInstance(SERVICENAME_PATHSETTINGS),
-        css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::util::XPathSettings > xPathSettings =
+        css::util::PathSettings::create( comphelper::getComponentContext(xSMGR) );
 
-    OUString sUserLayer;
-    xPathSettings->getPropertyValue(BASEPATH_USER_LAYER) >>= sUserLayer ;
+    OUString sUserLayer = xPathSettings->getBasePathUserLayer();
 
     // Note: May be an user uses URLs without a final slash! Check it ...
     sal_Int32 nPos = sUserLayer.lastIndexOf('/');

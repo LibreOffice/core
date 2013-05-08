@@ -28,10 +28,10 @@
 #include <unotools/ucbhelper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
-
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/util/PathSettings.hpp>
 
 #include "linguistic/misc.hxx"
 
@@ -70,28 +70,25 @@ static uno::Sequence< OUString > GetMultiPaths_Impl(
     OUString                    aWritablePath;
 
     bool bSuccess = true;
-    uno::Reference< lang::XMultiServiceFactory >  xMgr( comphelper::getProcessServiceFactory() );
-    if (xMgr.is())
+    uno::Reference< uno::XComponentContext >  xContext( comphelper::getProcessComponentContext() );
+    try
     {
-        try
-        {
-            String aInternal( rPathPrefix );
-            String aUser( rPathPrefix );
-            String aWriteable( rPathPrefix );
-            aInternal .AppendAscii( "_internal" );
-            aUser     .AppendAscii( "_user" );
-            aWriteable.AppendAscii( "_writable" );
+        String aInternal( rPathPrefix );
+        String aUser( rPathPrefix );
+        String aWriteable( rPathPrefix );
+        aInternal .AppendAscii( "_internal" );
+        aUser     .AppendAscii( "_user" );
+        aWriteable.AppendAscii( "_writable" );
 
-            uno::Reference< beans::XPropertySet > xPathSettings( xMgr->createInstance(
-                    "com.sun.star.util.PathSettings" ), uno::UNO_QUERY_THROW );
-            xPathSettings->getPropertyValue( aInternal )  >>= aInternalPaths;
-            xPathSettings->getPropertyValue( aUser )      >>= aUserPaths;
-            xPathSettings->getPropertyValue( aWriteable ) >>= aWritablePath;
-        }
-        catch (uno::Exception &)
-        {
-            bSuccess = false;
-        }
+        uno::Reference< util::XPathSettings > xPathSettings =
+            util::PathSettings::create( xContext );
+        xPathSettings->getPropertyValue( aInternal )  >>= aInternalPaths;
+        xPathSettings->getPropertyValue( aUser )      >>= aUserPaths;
+        xPathSettings->getPropertyValue( aWriteable ) >>= aWritablePath;
+    }
+    catch (uno::Exception &)
+    {
+        bSuccess = false;
     }
     if (bSuccess)
     {

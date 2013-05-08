@@ -47,6 +47,7 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
+#include <com/sun/star/util/PathSettings.hpp>
 #include <officecfg/Office/Common.hxx>
 #include "optHeaderTabListbox.hxx"
 #include <readonlyimage.hxx>
@@ -77,7 +78,7 @@ struct OptPath_Impl
     SvtDefaultOptions           m_aDefOpt;
     Image                       m_aLockImage;
     OUString                    m_sMultiPathDlg;
-    Reference< XPropertySet >   m_xPathSettings;
+    Reference< css::util::XPathSettings >   m_xPathSettings;
 
     OptPath_Impl(const Image& rLockImage, const OUString& rMultiPathDlg)
         : m_aLockImage(rLockImage)
@@ -716,66 +717,61 @@ void SvxPathTabPage::GetPathList(
 {
     String sCfgName = getCfgName_Impl( _nPathHandle );
 
-    // load PathSettings service if necessary
-    if ( !pImpl->m_xPathSettings.is() )
-    {
-        Reference< XMultiServiceFactory > xSMgr = comphelper::getProcessServiceFactory();
-        pImpl->m_xPathSettings = Reference< XPropertySet >( xSMgr->createInstance(
-            OUString( "com.sun.star.util.PathSettings" ) ), UNO_QUERY );
-    }
-
     try
     {
-        if ( pImpl->m_xPathSettings.is() )
+        // load PathSettings service if necessary
+        if ( !pImpl->m_xPathSettings.is() )
         {
-            // load internal paths
-            String sProp( sCfgName );
-            sProp = sCfgName;
-            sProp += POSTFIX_INTERNAL;
-            Any aAny = pImpl->m_xPathSettings->getPropertyValue( sProp );
-            Sequence< OUString > aPathSeq;
-            if ( aAny >>= aPathSeq )
-            {
-                long i, nCount = aPathSeq.getLength();
-                const OUString* pPaths = aPathSeq.getConstArray();
-
-                for ( i = 0; i < nCount; ++i )
-                {
-                    if ( _rInternalPath.Len() > 0 )
-                        _rInternalPath += ';';
-                    _rInternalPath += String( pPaths[i] );
-                }
-            }
-            // load user paths
-            sProp = sCfgName;
-            sProp += POSTFIX_USER;
-            aAny = pImpl->m_xPathSettings->getPropertyValue( sProp );
-            if ( aAny >>= aPathSeq )
-            {
-                long i, nCount = aPathSeq.getLength();
-                const OUString* pPaths = aPathSeq.getConstArray();
-
-                for ( i = 0; i < nCount; ++i )
-                {
-                    if ( _rUserPath.Len() > 0 )
-                        _rUserPath += ';';
-                    _rUserPath += String( pPaths[i] );
-                }
-            }
-            // then the writable path
-            sProp = sCfgName;
-            sProp += POSTFIX_WRITABLE;
-            aAny = pImpl->m_xPathSettings->getPropertyValue( sProp );
-            OUString sWritablePath;
-            if ( aAny >>= sWritablePath )
-                _rWritablePath = String( sWritablePath );
-
-            // and the readonly flag
-            sProp = sCfgName;
-            Reference< XPropertySetInfo > xInfo = pImpl->m_xPathSettings->getPropertySetInfo();
-            Property aProp = xInfo->getPropertyByName( sProp );
-            _rReadOnly = ( ( aProp.Attributes & PropertyAttribute::READONLY ) == PropertyAttribute::READONLY );
+            Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+            pImpl->m_xPathSettings = css::util::PathSettings::create( xContext );
         }
+
+        // load internal paths
+        String sProp( sCfgName );
+        sProp += POSTFIX_INTERNAL;
+        Any aAny = pImpl->m_xPathSettings->getPropertyValue( sProp );
+        Sequence< OUString > aPathSeq;
+        if ( aAny >>= aPathSeq )
+        {
+            long i, nCount = aPathSeq.getLength();
+            const OUString* pPaths = aPathSeq.getConstArray();
+
+            for ( i = 0; i < nCount; ++i )
+            {
+                if ( _rInternalPath.Len() > 0 )
+                    _rInternalPath += ';';
+                _rInternalPath += String( pPaths[i] );
+            }
+        }
+        // load user paths
+        sProp = sCfgName;
+        sProp += POSTFIX_USER;
+        aAny = pImpl->m_xPathSettings->getPropertyValue( sProp );
+        if ( aAny >>= aPathSeq )
+        {
+            long i, nCount = aPathSeq.getLength();
+            const OUString* pPaths = aPathSeq.getConstArray();
+
+            for ( i = 0; i < nCount; ++i )
+            {
+                if ( _rUserPath.Len() > 0 )
+                    _rUserPath += ';';
+                _rUserPath += String( pPaths[i] );
+            }
+        }
+        // then the writable path
+        sProp = sCfgName;
+        sProp += POSTFIX_WRITABLE;
+        aAny = pImpl->m_xPathSettings->getPropertyValue( sProp );
+        OUString sWritablePath;
+        if ( aAny >>= sWritablePath )
+            _rWritablePath = String( sWritablePath );
+
+        // and the readonly flag
+        sProp = sCfgName;
+        Reference< XPropertySetInfo > xInfo = pImpl->m_xPathSettings->getPropertySetInfo();
+        Property aProp = xInfo->getPropertyByName( sProp );
+        _rReadOnly = ( ( aProp.Attributes & PropertyAttribute::READONLY ) == PropertyAttribute::READONLY );
     }
     catch( const Exception& )
     {
@@ -790,36 +786,32 @@ void SvxPathTabPage::SetPathList(
 {
     String sCfgName = getCfgName_Impl( _nPathHandle );
 
-    // load PathSettings service if necessary
-    if ( !pImpl->m_xPathSettings.is() )
-    {
-        Reference< XMultiServiceFactory > xSMgr = comphelper::getProcessServiceFactory();
-        pImpl->m_xPathSettings = Reference< XPropertySet >( xSMgr->createInstance(
-                "com.sun.star.util.PathSettings" ), UNO_QUERY );
-    }
-
     try
     {
-        if ( pImpl->m_xPathSettings.is() )
+        // load PathSettings service if necessary
+        if ( !pImpl->m_xPathSettings.is() )
         {
-            // save user paths
-            char cDelim = MULTIPATH_DELIMITER;
-            sal_uInt16 nCount = comphelper::string::getTokenCount(_rUserPath, cDelim);
-            Sequence< OUString > aPathSeq( nCount );
-            OUString* pArray = aPathSeq.getArray();
-            for ( sal_uInt16 i = 0; i < nCount; ++i )
-                pArray[i] = OUString( _rUserPath.GetToken( i, cDelim ) );
-            String sProp( sCfgName );
-            sProp += POSTFIX_USER;
-            Any aValue = makeAny( aPathSeq );
-            pImpl->m_xPathSettings->setPropertyValue( sProp, aValue );
-
-            // then the writable path
-            aValue = makeAny( OUString( _rWritablePath ) );
-            sProp = sCfgName;
-            sProp += POSTFIX_WRITABLE;
-            pImpl->m_xPathSettings->setPropertyValue( sProp, aValue );
+            Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+            pImpl->m_xPathSettings = css::util::PathSettings::create( xContext );
         }
+
+        // save user paths
+        char cDelim = MULTIPATH_DELIMITER;
+        sal_uInt16 nCount = comphelper::string::getTokenCount(_rUserPath, cDelim);
+        Sequence< OUString > aPathSeq( nCount );
+        OUString* pArray = aPathSeq.getArray();
+        for ( sal_uInt16 i = 0; i < nCount; ++i )
+            pArray[i] = OUString( _rUserPath.GetToken( i, cDelim ) );
+        String sProp( sCfgName );
+        sProp += POSTFIX_USER;
+        Any aValue = makeAny( aPathSeq );
+        pImpl->m_xPathSettings->setPropertyValue( sProp, aValue );
+
+        // then the writable path
+        aValue = makeAny( OUString( _rWritablePath ) );
+        sProp = sCfgName;
+        sProp += POSTFIX_WRITABLE;
+        pImpl->m_xPathSettings->setPropertyValue( sProp, aValue );
     }
     catch( const Exception& e )
     {

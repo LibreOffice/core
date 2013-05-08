@@ -35,9 +35,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/util/PathSettings.hpp>
 #include <com/sun/star/util/PathSubstitution.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <rtl/instance.hxx>
 
@@ -417,24 +418,13 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
 
     // Create necessary services
-    m_xPathSettings = Reference< XFastPropertySet >( xContext->getServiceManager()->createInstanceWithContext(
-                                                     "com.sun.star.util.PathSettings", xContext),
-                                                UNO_QUERY );
-    if ( !m_xPathSettings.is() )
-    {
-        // #112719#: check for existance
-        OSL_FAIL( "SvtPathOptions_Impl::SvtPathOptions_Impl(): #112719# happened again!" );
-        throw RuntimeException(
-            OUString( "Service com.sun.star.util.PathSettings cannot be created" ),
-            Reference< XInterface >() );
-    }
-
+    Reference< XPathSettings > xPathSettings = PathSettings::create(xContext);
+    m_xPathSettings.set( xPathSettings, UNO_QUERY_THROW );
     m_xSubstVariables.set( PathSubstitution::create(xContext) );
     m_xMacroExpander = theMacroExpander::get(xContext);
 
     // Create temporary hash map to have a mapping between property names and property handles
-    Reference< XPropertySet > xPropertySet = Reference< XPropertySet >( m_xPathSettings, UNO_QUERY );
-    Reference< XPropertySetInfo > xPropSetInfo = xPropertySet->getPropertySetInfo();
+    Reference< XPropertySetInfo > xPropSetInfo = xPathSettings->getPropertySetInfo();
     Sequence< Property > aPathPropSeq = xPropSetInfo->getProperties();
 
     NameToHandleMap aTempHashMap;

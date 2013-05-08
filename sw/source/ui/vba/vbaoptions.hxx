@@ -32,9 +32,8 @@ class SwVbaOptions : public SwVbaOptions_BASE,
 {
 private:
     OUString msDefaultFilePath;
-    css::uno::Reference< css::lang::XMultiServiceFactory > mxFactory;
 public:
-    SwVbaOptions( css::uno::Reference< css::uno::XComponentContext >& m_xContext ) throw ( css::uno::RuntimeException );
+    SwVbaOptions( css::uno::Reference< css::uno::XComponentContext >& m_xContext );
     virtual ~SwVbaOptions();
 
     // Attributes

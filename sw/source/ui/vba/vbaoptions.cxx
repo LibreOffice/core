@@ -22,16 +22,16 @@
 #include <ooo/vba/word/WdLineStyle.hpp>
 #include <ooo/vba/word/WdLineWidth.hpp>
 #include <ooo/vba/word/WdColorIndex.hpp>
-#include <com/sun/star/util/XStringSubstitution.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/util/XStringSubstitution.hpp>
+#include <com/sun/star/util/PathSettings.hpp>
 #include <osl/file.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaOptions::SwVbaOptions( uno::Reference<uno::XComponentContext >& xContext ) throw ( uno::RuntimeException ) : SwVbaOptions_BASE( uno::Reference< XHelperInterface >(), xContext )
+SwVbaOptions::SwVbaOptions( uno::Reference<uno::XComponentContext >& xContext ) : SwVbaOptions_BASE( uno::Reference< XHelperInterface >(), xContext )
 {
-    mxFactory.set( comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
 }
 
 SwVbaOptions::~SwVbaOptions()
@@ -95,7 +95,7 @@ void SwVbaOptions::setValueEvent( const uno::Any& value )
     value >>= sNewPath;
     OUString sNewPathUrl;
     ::osl::File::getFileURLFromSystemPath( sNewPath, sNewPathUrl );
-    uno::Reference< beans::XPropertySet > xPathSettings( mxFactory->createInstance( OUString("com.sun.star.util.PathSettings") ), uno::UNO_QUERY_THROW );
+    uno::Reference< util::XPathSettings > xPathSettings = util::PathSettings::create( comphelper::getProcessComponentContext() );
     OUString sOldPathUrl;
     xPathSettings->getPropertyValue( msDefaultFilePath ) >>= sOldPathUrl;
     // path could be a multipath, Microsoft doesn't support this feature in Word currently
@@ -110,7 +110,7 @@ void SwVbaOptions::setValueEvent( const uno::Any& value )
 
 uno::Any SwVbaOptions::getValueEvent()
 {
-    uno::Reference< beans::XPropertySet > xPathSettings( mxFactory->createInstance( OUString("com.sun.star.util.PathSettings") ), uno::UNO_QUERY_THROW );
+    uno::Reference< util::XPathSettings > xPathSettings = util::PathSettings::create( comphelper::getProcessComponentContext() );
     OUString sPathUrl;
     xPathSettings->getPropertyValue( msDefaultFilePath ) >>= sPathUrl;
     // path could be a multipath, Microsoft doesn't support this feature in Word currently

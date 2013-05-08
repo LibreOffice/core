@@ -405,6 +405,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/util,\
 	NumberFormatter \
 	NumberFormatsSupplier \
 	PathSubstitution \
+	PathSettings \
 	TextSearch \
 	theOfficeInstallationDirectories \
 	UriAbbreviation \
@@ -1528,7 +1529,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/util,\
 	NumberFormatSettings \
 	NumberFormats \
 	OfficeInstallationDirectories \
-	PathSettings \
 	ReplaceDescriptor \
 	SearchDescriptor \
 	SortDescriptor \
@@ -4061,6 +4061,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/util,\
 	XNumberFormatter \
 	XNumberFormatter2 \
 	XOfficeInstallationDirectories \
+	XPathSettings \
 	XPropertyReplace \
 	XProtectable \
 	XRefreshListener \

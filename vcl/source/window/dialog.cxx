@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/util/PathSettings.hpp>
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
 
@@ -477,19 +478,15 @@ Dialog::Dialog( WindowType nType )
     ImplInitDialogData();
 }
 
-#define BASEPATH_SHARE_LAYER OUString("UIConfig")
 #define RELPATH_SHARE_LAYER OUString("soffice.cfg")
-#define SERVICENAME_PATHSETTINGS OUString("com.sun.star.util.PathSettings")
 
 OUString VclBuilderContainer::getUIRootDir()
 {
     /*to-do, check if user config has an override before using shared one, etc*/
-    css::uno::Reference< css::beans::XPropertySet > xPathSettings(
-        ::comphelper::getProcessServiceFactory()->createInstance(SERVICENAME_PATHSETTINGS),
-                css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::util::XPathSettings > xPathSettings = css::util::PathSettings::create(
+        ::comphelper::getProcessComponentContext() );
 
-    OUString sShareLayer;
-    xPathSettings->getPropertyValue(BASEPATH_SHARE_LAYER) >>= sShareLayer;
+    OUString sShareLayer = xPathSettings->getBasePathShareLayer();
 
     // "UIConfig" is a "multi path" ... use first part only here!
     sal_Int32 nPos = sShareLayer.indexOf(';');
