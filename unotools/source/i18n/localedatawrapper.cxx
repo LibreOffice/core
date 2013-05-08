@@ -20,6 +20,7 @@
 
 #include <string.h>      // memcpy()
 #include <stdio.h>       // fprintf(), stderr
+#include <string>
 
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/numberformatcodewrapper.hxx>
@@ -1168,7 +1169,7 @@ static sal_Unicode* ImplAdd2UNum( sal_Unicode* pBuf, sal_uInt16 nNumber, bool bL
 
 static sal_Unicode* ImplAdd9UNum( sal_Unicode* pBuf, sal_uInt32 nNumber, bool bLeading )
 {
-    DBG_ASSERT( nNumber < 1000000000, "ImplAdd2UNum() - Number >= 1000000000" );
+    DBG_ASSERT( nNumber < 1000000000, "ImplAdd9UNum() - Number >= 1000000000" );
 
     std::ostringstream ostr;
     if (bLeading)
@@ -1177,7 +1178,8 @@ static sal_Unicode* ImplAdd9UNum( sal_Unicode* pBuf, sal_uInt32 nNumber, bool bL
         ostr.width(9);
     }
     ostr << nNumber;
-    for(const char *pAB=ostr.str().c_str(); *pAB != '\0'; ++pAB, ++pBuf)
+    std::string aStr = ostr.str();
+    for(const char *pAB= aStr.c_str(); *pAB != '\0'; ++pAB, ++pBuf)
     {
         *pBuf = *pAB;
     }
