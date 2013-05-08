@@ -221,6 +221,9 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 
 endif
 
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,GRAPHICFILTER, \
+))
+
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,TDE, \
     $(if $(ENABLE_TDE),tdebe1) \
 ))
