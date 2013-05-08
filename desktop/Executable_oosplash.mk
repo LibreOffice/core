@@ -55,6 +55,12 @@ $(eval $(call gb_Executable_use_externals,oosplash,\
 
 endif
 
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Executable_add_libs,oosplash,\
+    -lm \
+))
+endif
+
 ifeq ($(OS),SOLARIS)
 
 $(eval $(call gb_Executable_add_libs,oosplash,\
