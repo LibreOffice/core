@@ -29,6 +29,7 @@ $(eval $(call gb_Library_set_include,mozabdrv,\
 	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/xpcom \
 	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/xpcom_obsolete \
 	$$(INCLUDE) \
+	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,mozabdrv))
