@@ -365,8 +365,7 @@ BrowseEvent BrowserDataWin::CreateBrowseEvent( const Point& rPosPixel )
 sal_Int8 BrowserDataWin::AcceptDrop( const AcceptDropEvent& _rEvt )
 {
     bCallingDropCallback = sal_True;
-    sal_Int8 nReturn = DND_ACTION_NONE;
-    nReturn = GetParent()->AcceptDrop( BrowserAcceptDropEvent( this, _rEvt ) );
+    sal_Int8 nReturn = GetParent()->AcceptDrop( BrowserAcceptDropEvent( this, _rEvt ) );
     bCallingDropCallback = sal_False;
     return nReturn;
 }
@@ -375,8 +374,7 @@ sal_Int8 BrowserDataWin::AcceptDrop( const AcceptDropEvent& _rEvt )
 sal_Int8 BrowserDataWin::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 {
     bCallingDropCallback = sal_True;
-    sal_Int8 nReturn = DND_ACTION_NONE;
-    nReturn = GetParent()->ExecuteDrop( BrowserExecuteDropEvent( this, _rEvt ) );
+    sal_Int8 nReturn = GetParent()->ExecuteDrop( BrowserExecuteDropEvent( this, _rEvt ) );
     bCallingDropCallback = sal_False;
     return nReturn;
 }
