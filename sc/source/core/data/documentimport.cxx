@@ -115,7 +115,7 @@ void ScDocumentImport::finalize()
             for (; itCell != itCellEnd; ++itCell)
             {
                 itWidthPos = rCol.maTextWidths.set<unsigned short>(itWidthPos, itCell->nRow, TEXTWIDTH_DIRTY);
-                itScriptPos = rCol.maScriptTypes.set<unsigned short>(itScriptPos, itCell->nRow, SC_SCRIPTTYPE_UNKNOWN);
+                itScriptPos = rCol.maScriptTypes.set<unsigned char>(itScriptPos, itCell->nRow, SC_SCRIPTTYPE_UNKNOWN);
             }
         }
     }
