@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//9Ks\u003d",
+        "filename": "sc/source/filter/lotus/tool.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-05-08T08:46:49Z",
+      "side": 1,
+      "message": "hmm, not sure about this, if pString is NULL wont String just get constructed as an empty String ? ( so maybe a bit of a false positive if that is correct )\nBut.. the real issue is that if the above is correct we now prevent SetString being called for a particular cell address which I suppose means we now possibly don\u0027t reset a cell string value ( to empty string )  where previously we would have right?",
+      "revId": "4adcf5ac3dc2d62416f9a0de7ad59e61ac2742aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
