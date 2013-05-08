@@ -1058,11 +1058,12 @@ rtl::Reference< Entity > readEntity(
 UnoidlProvider::UnoidlProvider(OUString const & uri):
     file_(new detail::MappedFile(uri))
 {
-    if (file_->size < 8 || std::memcmp(file_->address, "UNOIDL\0\xFF", 8) != 0)
+    if (file_->size < 8 || std::memcmp(file_->address, "UNOIDL\xFF\0", 8) != 0)
     {
         throw FileFormatException(
             file_->uri,
-            "UNOIDL format: does not begin with magic UNOIDL\\0\\xFF");
+            "UNOIDL format: does not begin with magic UNOIDL\\xFF and version"
+            " 0");
     }
     sal_uInt32 off = file_->read32(8);
     mapSize_ = file_->read32(12);

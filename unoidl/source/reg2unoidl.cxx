@@ -17,11 +17,13 @@
 #include <utility>
 #include <vector>
 
+#include "config_version.h"
 #include "osl/endian.h"
 #include "osl/file.h"
 #include "osl/file.hxx"
 #include "osl/process.h"
 #include "rtl/process.h"
+#include "rtl/string.h"
 #include "rtl/string.hxx"
 #include "rtl/textenc.h"
 #include "rtl/textcvt.h"
@@ -746,9 +748,14 @@ SAL_IMPLEMENT_MAIN() {
             << +e << std::endl;
         std::exit(EXIT_FAILURE);
     }
-    write(f, "UNOIDL\0\xFF", 8);
+    write(f, "UNOIDL\xFF\0", 8);
     write32(f, 0); // root map offset
     write32(f, 0); // root map size
+    write(
+        f,
+        RTL_CONSTASCII_STRINGPARAM(
+            "\0** Created by LibreOffice " LIBO_VERSION_DOTTED
+            " reg2unoidl **\0"));
     sal_uInt64 off;
     std::size_t size;
     try {
