@@ -1290,6 +1290,7 @@ namespace svx
     SuggestionList::~SuggestionList()
     {
         Clear();
+        delete[] m_ppElements;
     }
 
     bool SuggestionList::Set( const String& _rElement, sal_uInt16 _nNumOfElement )
