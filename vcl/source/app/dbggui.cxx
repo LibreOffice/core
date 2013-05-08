@@ -427,10 +427,10 @@ class DbgInfoDialog : public ModalDialog
 private:
     ListBox         maListBox;
     OKButton        maOKButton;
-    sal_Bool            mbHelpText;
+    bool            mbHelpText;
 
 public:
-                    DbgInfoDialog( Window* pParent, sal_Bool bHelpText = sal_False );
+                    DbgInfoDialog( Window* pParent, bool bHelpText = false );
 
     void            SetInfoText( const OUString& rStr );
 };
@@ -619,7 +619,7 @@ void DbgWindow::InsertLine( const OUString& rLine )
 {
     OUString   aStr = convertLineEnd(rLine, LINEEND_LF);
     sal_Int32  nPos = aStr.indexOf( _LF );
-    sal_Bool   bFirstEntry = sal_True;
+    bool       bFirstEntry = true;
     while ( nPos != -1 )
     {
         if ( maLstBox.GetEntryCount() >= DBGWIN_MAXLINES )
@@ -628,7 +628,7 @@ void DbgWindow::InsertLine( const OUString& rLine )
         sal_uInt16 nInsertionPos = maLstBox.InsertEntry( aStr.copy( 0, nPos ) );
         if ( bFirstEntry )
             maLstBox.SetEntryData( nInsertionPos, reinterpret_cast< void* >( 1 ) );
-        bFirstEntry = sal_False;
+        bFirstEntry = false;
 
         aStr = aStr.replaceAt( 0, nPos+1, "" );
         nPos = aStr.indexOf( _LF );
@@ -1094,7 +1094,7 @@ void DbgDialog::RequestHelp( const HelpEvent& rHEvt )
 {
     if ( rHEvt.GetMode() & HELPMODE_CONTEXT )
     {
-        DbgInfoDialog aInfoDialog( this, sal_True );
+        DbgInfoDialog aInfoDialog( this, true );
         OUString aHelpText;
         const sal_Char** pHelpStrs = pDbgHelpText;
         while ( *pHelpStrs )
@@ -1110,7 +1110,7 @@ void DbgDialog::RequestHelp( const HelpEvent& rHEvt )
 
 // =======================================================================
 
-DbgInfoDialog::DbgInfoDialog( Window* pParent, sal_Bool bHelpText ) :
+DbgInfoDialog::DbgInfoDialog( Window* pParent, bool bHelpText ) :
     ModalDialog( pParent, WB_STDMODAL ),
     maListBox( this, WB_BORDER | WB_AUTOHSCROLL ),
     maOKButton( this, WB_DEFBUTTON )
@@ -1187,7 +1187,7 @@ void DbgInfoDialog::SetInfoText( const OUString& rStr )
 
 void DbgDialogTest( Window* pWindow )
 {
-    sal_Bool        aAccelBuf[65536];
+    bool        aAccelBuf[65536] = {0};
     sal_uInt16      nChildCount = pWindow->GetChildCount();
     Window*     pGetChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
     Window*     pChild;
@@ -1197,14 +1197,13 @@ void DbgDialogTest( Window* pWindow )
         return;
 
     Rectangle*  pRectAry = (Rectangle*)new long[(sizeof(Rectangle)*nChildCount)/sizeof(long)];
-    memset( aAccelBuf, 0, sizeof( aAccelBuf ) );
     memset( pRectAry, 0, sizeof(Rectangle)*nChildCount );
 
     if ( pWindow->IsDialog() )
     {
-        sal_Bool    bOKCancelButton = sal_False;
-        sal_Bool    bDefPushButton = sal_False;
-        sal_Bool    bButton = sal_False;
+        bool    bOKCancelButton = false;
+        bool    bDefPushButton = false;
+        bool    bButton = false;
         pGetChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
         while ( pGetChild )
         {
@@ -1212,11 +1211,11 @@ void DbgDialogTest( Window* pWindow )
 
             if ( pChild->ImplIsPushButton() )
             {
-                bButton = sal_True;
+                bButton = true;
                 if ( (pChild->GetType() == WINDOW_OKBUTTON) || (pChild->GetType() == WINDOW_CANCELBUTTON) )
-                    bOKCancelButton = sal_True;
+                    bOKCancelButton = true;
                 if ( pChild->GetStyle() & WB_DEFBUTTON )
-                    bDefPushButton = sal_True;
+                    bDefPushButton = true;
             }
 
             pGetChild = pGetChild->GetWindow( WINDOW_NEXT );
@@ -1266,7 +1265,7 @@ void DbgDialogTest( Window* pWindow )
                         if ( aAccelBuf[cAccel] )
                             DbgOutTypef( DBG_OUT_ERROR, "Double mnemonic char: %c", cAccel );
                         else
-                            aAccelBuf[cAccel] = sal_True;
+                            aAccelBuf[cAccel] = true;
                     }
                 }
             }
@@ -1416,66 +1415,66 @@ void DbgDialogTest( Window* pWindow )
 
             if ( pChild->IsVisible() )
             {
-                sal_Bool bMaxWarning = sal_False;
+                bool bMaxWarning = false;
                 if ( pChild->GetType() == WINDOW_NUMERICFIELD )
                 {
                     NumericField* pField = (NumericField*)pChild;
                     if ( pField->GetMax() == LONG_MAX )
-                        bMaxWarning = sal_True;
+                        bMaxWarning = true;
                 }
                 else if ( pChild->GetType() == WINDOW_METRICFIELD )
                 {
                     MetricField* pField = (MetricField*)pChild;
                     if ( pField->GetMax() == LONG_MAX )
-                        bMaxWarning = sal_True;
+                        bMaxWarning = true;
                 }
                 else if ( pChild->GetType() == WINDOW_CURRENCYFIELD )
                 {
                     CurrencyField* pField = (CurrencyField*)pChild;
                     if ( pField->GetMax() == LONG_MAX )
-                        bMaxWarning = sal_True;
+                        bMaxWarning = true;
                 }
                 else if ( pChild->GetType() == WINDOW_TIMEFIELD )
                 {
                     TimeField* pField = (TimeField*)pChild;
                     if ( pField->GetMax() == Time( 23, 59, 59, 99 ) )
-                        bMaxWarning = sal_True;
+                        bMaxWarning = true;
                 }
                 else if ( pChild->GetType() == WINDOW_DATEFIELD )
                 {
                     DateField* pField = (DateField*)pChild;
                     if ( pField->GetMax() == Date( 31, 12, 9999 ) )
-                        bMaxWarning = sal_True;
+                        bMaxWarning = true;
                 }
                 else if ( pChild->GetType() == WINDOW_NUMERICBOX )
                 {
                     NumericBox* pBox = (NumericBox*)pChild;
                     if ( pBox->GetMax() == LONG_MAX )
-                        bMaxWarning = sal_True;
+                        bMaxWarning = true;
                 }
                 else if ( pChild->GetType() == WINDOW_METRICBOX )
                 {
                     MetricBox* pBox = (MetricBox*)pChild;
                     if ( pBox->GetMax() == LONG_MAX )
-                        bMaxWarning = sal_True;
+                        bMaxWarning = true;
                 }
                 else if ( pChild->GetType() == WINDOW_CURRENCYBOX )
                 {
                     CurrencyBox* pBox = (CurrencyBox*)pChild;
                     if ( pBox->GetMax() == LONG_MAX )
-                        bMaxWarning = sal_True;
+                        bMaxWarning = true;
                 }
                 else if ( pChild->GetType() == WINDOW_TIMEBOX )
                 {
                     TimeBox* pBox = (TimeBox*)pChild;
                     if ( pBox->GetMax() == Time( 23, 59, 59, 99 ) )
-                        bMaxWarning = sal_True;
+                        bMaxWarning = true;
                 }
                 else if ( pChild->GetType() == WINDOW_DATEBOX )
                 {
                     DateBox* pBox = (DateBox*)pChild;
                     if ( pBox->GetMax() == Date( 31, 12, 9999 ) )
-                        bMaxWarning = sal_True;
+                        bMaxWarning = true;
                 }
                 if ( bMaxWarning )
                 {
@@ -1716,12 +1715,12 @@ long SolarWindowPrinter::doIt()
 
 void DbgPrintWindow( const char* pLine )
 {
-    static sal_Bool bIn = sal_False;
+    static bool bIn = false;
 
     // keine rekursiven Traces
     if ( bIn )
         return;
-    bIn = sal_True;
+    bIn = true;
 
     SolarWindowPrinter aPrinter( String( pLine, RTL_TEXTENCODING_UTF8 ) );
     TimeValue aTimeout; aTimeout.Seconds = 2; aTimeout.Nanosec = 0;
@@ -1730,7 +1729,7 @@ void DbgPrintWindow( const char* pLine )
     if ( aPrinter.didTimeout() )
         DbgPrintShell( pLine );
 
-    bIn = sal_False;
+    bIn = false;
 }
 
 // -----------------------------------------------------------------------

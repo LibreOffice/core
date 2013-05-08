@@ -1598,7 +1598,7 @@ extern "C" { static void SAL_CALL thisModule() {} }
 UnoWrapperBase* Application::GetUnoWrapper( sal_Bool bCreateIfNotExist )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    static sal_Bool bAlreadyTriedToCreate = sal_False;
+    static bool bAlreadyTriedToCreate = false;
     if ( !pSVData->mpUnoWrapper && bCreateIfNotExist && !bAlreadyTriedToCreate )
     {
 #ifndef DISABLE_DYNLOADING
@@ -1624,7 +1624,7 @@ UnoWrapperBase* Application::GetUnoWrapper( sal_Bool bCreateIfNotExist )
 #else
         pSVData->mpUnoWrapper = CreateUnoWrapper();
 #endif
-        bAlreadyTriedToCreate = sal_True;
+        bAlreadyTriedToCreate = true;
     }
     return pSVData->mpUnoWrapper;
 }
@@ -1662,7 +1662,7 @@ void Application::SetFilterHdl( const Link& rLink )
 
 // -----------------------------------------------------------------------
 
-sal_Bool ImplCallHotKey( const KeyCode& rKeyCode )
+bool ImplCallHotKey( const KeyCode& rKeyCode )
 {
     ImplSVData*     pSVData = ImplGetSVData();
     ImplHotKey*     pHotKeyData = pSVData->maAppData.mpFirstHotKey;
@@ -1671,13 +1671,13 @@ sal_Bool ImplCallHotKey( const KeyCode& rKeyCode )
         if ( pHotKeyData->maKeyCode.IsDefinedKeyCodeEqual( rKeyCode ) )
         {
             pHotKeyData->maLink.Call( pHotKeyData->mpUserData );
-            return sal_True;
+            return true;
         }
 
         pHotKeyData = pHotKeyData->mpNext;
     }
 
-    return sal_False;
+    return false;
 }
 
 // -----------------------------------------------------------------------

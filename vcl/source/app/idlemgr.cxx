@@ -27,7 +27,7 @@ struct ImplIdleData
 {
     Link        maIdleHdl;
     sal_uInt16      mnPriority;
-    sal_Bool        mbTimeout;
+    bool        mbTimeout;
 };
 
 #define IMPL_IDLETIMEOUT         350
@@ -73,7 +73,7 @@ sal_Bool ImplIdleMgr::InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority )
     ImplIdleData* pIdleData = new ImplIdleData;
     pIdleData->maIdleHdl    = rLink;
     pIdleData->mnPriority   = nPriority;
-    pIdleData->mbTimeout    = sal_False;
+    pIdleData->mbTimeout    = false;
 
     if ( nPos < mpIdleList->size() ) {
         ImplIdleList::iterator it = mpIdleList->begin();
@@ -114,12 +114,12 @@ IMPL_LINK_NOARG(ImplIdleMgr, TimeoutHdl)
     for ( size_t i = 0; i < mpIdleList->size(); ++i ) {
         ImplIdleData* pIdleData = (*mpIdleList)[ i ];
         if ( !pIdleData->mbTimeout ) {
-            pIdleData->mbTimeout = sal_True;
+            pIdleData->mbTimeout = true;
             pIdleData->maIdleHdl.Call( GetpApp() );
             // May have been removed in the handler
             for ( size_t j = 0; j < mpIdleList->size(); ++j ) {
                 if ( (*mpIdleList)[ j ] == pIdleData ) {
-                    pIdleData->mbTimeout = sal_False;
+                    pIdleData->mbTimeout = false;
                     break;
                 }
             }
