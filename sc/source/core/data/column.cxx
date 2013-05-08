@@ -1121,7 +1121,8 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
 {
     pAttrArray->InsertRow( nStartRow, nSize );
 
-    //! Search
+    maBroadcasters.insert_empty(nStartRow, nSize);
+    maBroadcasters.resize(MAXROWCOUNT);
 
     if ( maItems.empty() )
         return;
@@ -1225,8 +1226,6 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
     maTextWidths.resize(MAXROWCOUNT);
     maScriptTypes.insert_empty(nStartRow, nSize);
     maScriptTypes.resize(MAXROWCOUNT);
-    maBroadcasters.insert_empty(nStartRow, nSize);
-    maBroadcasters.resize(MAXROWCOUNT);
 
     CellStorageModified();
 }

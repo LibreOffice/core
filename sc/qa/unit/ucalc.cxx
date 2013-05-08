@@ -1643,6 +1643,19 @@ void Test::testCellBroadcaster()
     pBC = m_pDoc->GetBroadcaster(ScAddress(1,2,0));
     CPPUNIT_ASSERT_MESSAGE("Broadcaster in B3 should have been removed.", !pBC);
 
+    // Clear everything and start over.
+    clearRange(m_pDoc, ScRange(0,0,0,10,100,0));
+
+    m_pDoc->SetString(ScAddress(1,0,0), "=A1"); // B1 depends on A1.
+    pBC = m_pDoc->GetBroadcaster(ScAddress(0,0,0));
+    CPPUNIT_ASSERT_MESSAGE("Broadcaster should exist in A1.", pBC);
+
+    // While column A is still empty, move column A down 2 cells. This should
+    // move the broadcaster from A1 to A3.
+    m_pDoc->InsertRow(0, 0, 0, 0, 0, 2);
+    pBC = m_pDoc->GetBroadcaster(ScAddress(0,2,0));
+    CPPUNIT_ASSERT_MESSAGE("Broadcaster should exist in A3.", pBC);
+
     m_pDoc->DeleteTab(0);
 }
 
