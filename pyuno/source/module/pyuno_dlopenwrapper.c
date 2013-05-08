@@ -61,7 +61,7 @@ static void * load(void * address, char const * symbol) {
     }
     strncpy(libname, dl_info.dli_fname, len);
     strcpy(libname + len, SAL_DLLPREFIX "pyuno" SAL_DLLEXTENSION);
-    h = dlopen(libname, RTLD_NOW | RTLD_GLOBAL);
+    h = dlopen(libname, RTLD_LAZY | RTLD_GLOBAL);
     free(libname);
     if (h == NULL) {
         fprintf(stderr, "failed to load pyuno: '%s'\n", dlerror());
