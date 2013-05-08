@@ -770,8 +770,8 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAtPoint
     {
         SwRect aLogBounds( GetBounds( *(GetMap()), GetFrm() ) ); // twip rel to doc root
         Point aPixPos( GetMap()->CoreToPixel( aLogBounds.SVRect() ).TopLeft() );
-        aPixPoint.X() += aPixPos.X();
-        aPixPoint.Y() += aPixPos.Y();
+        aPixPoint.setX(aPixPoint.getX() + aPixPos.getX());
+        aPixPoint.setY(aPixPoint.getY() + aPixPos.getY());
     }
 
     const SwAccessibleChild aChild( GetChildAtPixel( aPixPoint, *(GetMap()) ) );
@@ -844,7 +844,7 @@ awt::Rectangle SAL_CALL SwAccessibleContext::getBoundsImpl(sal_Bool bRelative)
         {
             SwRect aParentLogBounds( GetBounds( *(GetMap()), pParent ) ); // twip rel to doc root
             Point aParentPixPos( GetMap()->CoreToPixel( aParentLogBounds.SVRect() ).TopLeft() );
-            aPixBounds.Move( -aParentPixPos.X(), -aParentPixPos.Y() );
+            aPixBounds.Move( -aParentPixPos.getX(), -aParentPixPos.getY() );
         }
     }
 
@@ -881,7 +881,7 @@ awt::Point SAL_CALL SwAccessibleContext::getLocationOnScreen()
 
     /* getBoundsImpl already checked that GetWindow returns valid pointer. */
     aPixPos = GetWindow()->OutputToAbsoluteScreenPixel(aPixPos);
-    awt::Point aPoint(aPixPos.X(), aPixPos.Y());
+    awt::Point aPoint(aPixPos.getX(), aPixPos.getY());
 
     return aPoint;
 }

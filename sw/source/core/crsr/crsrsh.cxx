@@ -1164,8 +1164,8 @@ void SwCrsrShell::VisPortChgd( const SwRect & rRect )
         m_pVisCrsr->Hide();
 
     m_bVisPortChgd = sal_True;
-    m_aOldRBPos.X() = VisArea().Right();
-    m_aOldRBPos.Y() = VisArea().Bottom();
+    m_aOldRBPos.setX(VisArea().Right());
+    m_aOldRBPos.setY(VisArea().Bottom());
 
     // For not having problems with the SV cursor, Update() is called for the
     // Window in ViewShell::VisPo...
@@ -1423,14 +1423,14 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                 m_pTblCrsr->Show();
 
             // set Cursor-Points to the new Positions
-            m_pTblCrsr->GetPtPos().X() = m_aCharRect.Left();
-            m_pTblCrsr->GetPtPos().Y() = m_aCharRect.Top();
+            m_pTblCrsr->GetPtPos().setX(m_aCharRect.Left());
+            m_pTblCrsr->GetPtPos().setY(m_aCharRect.Top());
 
             if( m_bSVCrsrVis )
             {
-                m_aCrsrHeight.X() = 0;
-                m_aCrsrHeight.Y() = aTmpState.aRealHeight.Y() < 0 ?
-                                  -m_aCharRect.Width() : m_aCharRect.Height();
+                m_aCrsrHeight.setX(0);
+                m_aCrsrHeight.setY(aTmpState.aRealHeight.getY() < 0 ?
+                                  -m_aCharRect.Width() : m_aCharRect.Height());
                 m_pVisCrsr->Show(); // show again
             }
             m_eMvState = MV_NONE;  // state for cursor travelling - GetCrsrOfst
@@ -1631,15 +1631,15 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                 m_aCrsrHeight = aTmpState.aRealHeight;
             else
             {
-                m_aCrsrHeight.X() = 0;
-                m_aCrsrHeight.Y() = aTmpState.aRealHeight.Y() < 0 ?
-                                  -m_aCharRect.Width() : m_aCharRect.Height();
+                m_aCrsrHeight.setX(0);
+                m_aCrsrHeight.setY(aTmpState.aRealHeight.getY() < 0 ?
+                                  -m_aCharRect.Width() : m_aCharRect.Height());
             }
         }
         else
         {
-            m_aCrsrHeight.X() = 0;
-            m_aCrsrHeight.Y() = m_aCharRect.Height();
+            m_aCrsrHeight.setX(0);
+            m_aCrsrHeight.setY(m_aCharRect.Height());
         }
 
         if( !bFirst && aOld == m_aCharRect )
@@ -1657,8 +1657,8 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
         bFirst = false;
 
         // update cursor Points to the new Positions
-        pShellCrsr->GetPtPos().X() = m_aCharRect.Left();
-        pShellCrsr->GetPtPos().Y() = m_aCharRect.Top();
+        pShellCrsr->GetPtPos().setX(m_aCharRect.Left());
+        pShellCrsr->GetPtPos().setY(m_aCharRect.Top());
 
         if( !(eFlags & SwCrsrShell::UPDOWN ))   // delete old Pos. of Up/Down
         {
@@ -1751,9 +1751,9 @@ void SwCrsrShell::RefreshBlockCursor()
         if( pFrm )
         {
             if( pFrm->IsVertical() )
-                aPt.Y() = pFrm->Frm().Top() + GetUpDownX();
+                aPt.setY(pFrm->Frm().Top() + GetUpDownX());
             else
-                aPt.X() = pFrm->Frm().Left() + GetUpDownX();
+                aPt.setX(pFrm->Frm().Left() + GetUpDownX());
         }
         aMk = rBlock.GetMkPos();
     }
@@ -2262,8 +2262,8 @@ sal_Bool SwCrsrShell::SetVisCrsr( const Point &rPt )
             m_aCrsrHeight = aTmpState.aRealHeight;
         else
         {
-            m_aCrsrHeight.X() = 0;
-            m_aCrsrHeight.Y() = m_aCharRect.Height();
+            m_aCrsrHeight.setX(0);
+            m_aCrsrHeight.setY(m_aCharRect.Height());
         }
 
         m_pVisCrsr->SetDragCrsr( true );
@@ -2601,12 +2601,12 @@ void SwCrsrShell::MakeSelVisible()
     {
         SwRect aTmp( m_aCharRect );
         long nDiff = m_aCharRect.Height() - VisArea().Height();
-        if( nDiff < m_aCrsrHeight.X() )
+        if( nDiff < m_aCrsrHeight.getX() )
             aTmp.Top( nDiff + m_aCharRect.Top() );
         else
         {
-            aTmp.Top( m_aCrsrHeight.X() + m_aCharRect.Top() );
-            aTmp.Height( m_aCrsrHeight.Y() );
+            aTmp.Top( m_aCrsrHeight.getX() + m_aCharRect.Top() );
+            aTmp.Height( m_aCrsrHeight.getY() );
         }
         if( !aTmp.HasArea() )
         {

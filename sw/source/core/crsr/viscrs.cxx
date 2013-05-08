@@ -104,23 +104,23 @@ void SwVisCrsr::Hide()
 void SwVisCrsr::_SetPosAndShow()
 {
     SwRect aRect;
-    long nTmpY = pCrsrShell->m_aCrsrHeight.Y();
+    long nTmpY = pCrsrShell->m_aCrsrHeight.getY();
     if( 0 > nTmpY )
     {
         nTmpY = -nTmpY;
         aTxtCrsr.SetOrientation( 900 );
         aRect = SwRect( pCrsrShell->m_aCharRect.Pos(),
            Size( pCrsrShell->m_aCharRect.Height(), nTmpY ) );
-        aRect.Pos().X() += pCrsrShell->m_aCrsrHeight.X();
+        aRect.Pos().setX(aRect.Pos().getX() + pCrsrShell->m_aCrsrHeight.getX());
         if( pCrsrShell->IsOverwriteCrsr() )
-            aRect.Pos().Y() += aRect.Width();
+            aRect.Pos().setY(aRect.Pos().getY() + aRect.Width());
     }
     else
     {
         aTxtCrsr.SetOrientation( 0 );
         aRect = SwRect( pCrsrShell->m_aCharRect.Pos(),
            Size( pCrsrShell->m_aCharRect.Width(), nTmpY ) );
-        aRect.Pos().Y() += pCrsrShell->m_aCrsrHeight.X();
+        aRect.Pos().setY(aRect.Pos().getY() + pCrsrShell->m_aCrsrHeight.getX());
     }
 
     // check if cursor should show the current cursor bidi level
