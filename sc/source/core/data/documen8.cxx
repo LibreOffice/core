@@ -1561,7 +1561,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
                     }
                     pEngine->ClearModifyFlag();
 
-                    sal_uInt16 nLastPar = pEngine->GetParagraphCount();
+                    sal_Int32 nLastPar = pEngine->GetParagraphCount();
                     if (nLastPar)
                         --nLastPar;
                     xub_StrLen nTxtLen = pEngine->GetTextLen(nLastPar);

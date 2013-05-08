@@ -41,7 +41,7 @@ class CommandEvent;
 /**************************************************************************/
 
     void SmGetLeftSelectionPart(const ESelection &rSelection,
-                                sal_uInt16 &nPara, sal_uInt16 &nPos);
+                                sal_Int32 &nPara, sal_uInt16 &nPos);
 
 /**************************************************************************/
 

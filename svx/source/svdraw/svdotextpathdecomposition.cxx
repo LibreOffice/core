@@ -74,7 +74,7 @@ namespace
         String                                      maText;
         xub_StrLen                                  mnTextStart;
         xub_StrLen                                  mnTextLength;
-        sal_uInt16                                  mnParagraph;
+        sal_Int32                                   mnParagraph;
         xub_StrLen                                  mnIndex;
         SvxFont                                     maFont;
         ::std::vector< double >                     maDblDXArray;   // double DXArray, font size independent -> unit coordinate system
@@ -127,7 +127,7 @@ namespace
         const String& getText() const { return maText; }
         xub_StrLen getTextStart() const { return mnTextStart; }
         xub_StrLen getTextLength() const { return mnTextLength; }
-        sal_uInt16 getParagraph() const { return mnParagraph; }
+        sal_Int32 getParagraph() const { return mnParagraph; }
         xub_StrLen getIndex() const { return mnIndex; }
         const SvxFont& getFont() const { return maFont; }
         bool isRTL() const { return mbRTL; }
@@ -705,7 +705,7 @@ void SdrTextObj::impDecomposePathTextPrimitive(
         // get loop count
         sal_uInt32 nLoopCount(rPathPolyPolygon.count());
 
-        if(rOutliner.GetParagraphCount() < nLoopCount)
+        if(static_cast<sal_uInt32>(rOutliner.GetParagraphCount()) < nLoopCount)
         {
             nLoopCount = rOutliner.GetParagraphCount();
         }
@@ -730,7 +730,7 @@ void SdrTextObj::impDecomposePathTextPrimitive(
                 {
                     const impPathTextPortion& rCandidate = rPathTextPortions[b];
 
-                    if(rCandidate.getParagraph() == a)
+                    if(static_cast<sal_uInt32>(rCandidate.getParagraph()) == a)
                     {
                         aParagraphTextPortions.push_back(&rCandidate);
                     }

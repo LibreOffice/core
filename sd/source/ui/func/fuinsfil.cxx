@@ -575,14 +575,14 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     while( !pDocliner->HasParaFlag( pPara, PARAFLAG_ISPAGE ) )
         pPara = pDocliner->GetParent(pPara);
 
-    sal_uLong nTargetPos = pDocliner->GetAbsPos(pPara) + 1;
+    sal_Int32 nTargetPos = pDocliner->GetAbsPos(pPara) + 1;
 
     // Layout der Vorgaengerseite uebernehmen
     sal_uInt16 nPage = 0;
     pPara = pDocliner->GetParagraph( pDocliner->GetAbsPos( pPara ) - 1 );
     while (pPara)
     {
-        sal_uLong nPos = pDocliner->GetAbsPos( pPara );
+        sal_Int32 nPos = pDocliner->GetAbsPos( pPara );
         if ( pDocliner->HasParaFlag( pPara, PARAFLAG_ISPAGE ) )
             nPage++;
         pPara = pDocliner->GetParagraph( nPos - 1 );
@@ -619,14 +619,14 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     }
     else
     {
-        sal_uLong nParaCount = pOutliner->GetParagraphCount();
+        sal_Int32 nParaCount = pOutliner->GetParagraphCount();
 
         // fuer Fortschrittsanzeige: Anzahl der Ebene-0-Absaetze
         sal_uInt16 nNewPages = 0;
         pPara = pOutliner->GetParagraph( 0 );
         while (pPara)
         {
-            sal_uLong nPos = pOutliner->GetAbsPos( pPara );
+            sal_Int32 nPos = pOutliner->GetAbsPos( pPara );
             if( pOutliner->HasParaFlag( pPara, PARAFLAG_ISPAGE ) )
                 nNewPages++;
             pPara = pOutliner->GetParagraph( ++nPos );
@@ -643,13 +643,13 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
         pDocliner->GetUndoManager().EnterListAction(
                                     String(SdResId(STR_UNDO_INSERT_FILE)), String() );
 
-        sal_uLong nSourcePos = 0;
+        sal_Int32 nSourcePos = 0;
         SfxStyleSheet* pStyleSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_OUTLINE );
         Paragraph* pSourcePara = pOutliner->GetParagraph( 0 );
         while (pSourcePara)
         {
-            sal_uLong nPos = pOutliner->GetAbsPos( pSourcePara );
-            sal_Int16 nDepth = pOutliner->GetDepth( (sal_uInt16) nPos );
+            sal_Int32 nPos = pOutliner->GetAbsPos( pSourcePara );
+            sal_Int16 nDepth = pOutliner->GetDepth( nPos );
 
             // den letzte Absatz nur uebernehmen, wenn er gefuellt ist
             if (nSourcePos < nParaCount - 1 ||
