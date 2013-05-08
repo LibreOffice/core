@@ -69,6 +69,16 @@ Directory gid_Dir_Bundle_Contents_Library_Spotlight_Bundle_Contents
 End
 #endif
 
+#if defined MACOSX
+Unixlink gid_Unixlink_Applications
+    BIN_FILE_BODY;
+    Styles = ();
+    Dir = PD_PROGDIR;
+    Name = "Applications";
+    Target = "/Applications";
+End
+#endif
+
 Directory gid_Dir_Wizards
     Styles = (CREATE);
     ParentID = gid_Brand_Dir_Program;
