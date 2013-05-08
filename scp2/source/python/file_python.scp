@@ -134,41 +134,49 @@ End
 Directory gid_Dir_PythonFramework
     ParentID = gid_Brand_Dir_Program;
     HostName = "LibreOfficePython.framework";
+    Styles = (CREATE);
 End
 
 Directory gid_Dir_PythonFramework_Versions
     ParentID = gid_Dir_PythonFramework;
     HostName = "Versions";
+    Styles = (CREATE);
 End
 
 Directory gid_Dir_PythonFramework_Versions_ver
     ParentID = gid_Dir_PythonFramework_Versions;
     HostName = STRING(PYMAJMIN);
+    Styles = (CREATE);
 End
 
 Directory gid_Dir_PythonFramework_Versions_ver_bin
     ParentID = gid_Dir_PythonFramework_Versions_ver;
     HostName = "bin";
+    Styles = (CREATE);
 End
 
 Directory gid_Dir_PythonFramework_Versions_ver_lib
     ParentID = gid_Dir_PythonFramework_Versions_ver;
     HostName = "lib";
+    Styles = (CREATE);
 End
 
 Directory gid_Dir_PythonFramework_Versions_ver_lib_pkgconfig
     ParentID = gid_Dir_PythonFramework_Versions_ver_lib;
     HostName = "pkgconfig";
+    Styles = (CREATE);
 End
 
 Directory gid_Dir_PythonFramework_Versions_ver_lib_pythonver
     ParentID = gid_Dir_PythonFramework_Versions_ver_lib;
     HostName = STRING(CONCAT2(python,PYMAJMIN));
+    Styles = (CREATE);
 End
 
 Directory gid_Dir_PythonFramework_Versions_ver_lib_pythonver_config
     ParentID = gid_Dir_PythonFramework_Versions_ver_lib_pythonver;
     HostName = STRING(CONCAT3(config-,PYMAJMIN,m));
+    Styles = (CREATE);
 End
 
 Unixlink gid_Unixlink_Python_Headers
