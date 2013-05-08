@@ -3038,6 +3038,9 @@ namespace cppcanvas
 
         ImplRenderer::~ImplRenderer()
         {
+            // don't leak EMFPObjects
+            for(unsigned int i=0; i<SAL_N_ELEMENTS(aObjects); ++i)
+                delete aObjects[i];
         }
 
         bool ImplRenderer::drawSubset( sal_Int32    nStartIndex,

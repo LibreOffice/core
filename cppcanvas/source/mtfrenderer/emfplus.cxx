@@ -110,11 +110,6 @@ namespace cppcanvas
         }
 #endif
 
-        struct EMFPObject
-        {
-            virtual ~EMFPObject() {}
-        };
-
         struct EMFPPath : public EMFPObject
         {
             ::basegfx::B2DPolyPolygon    aPolygon;
