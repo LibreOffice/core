@@ -27,13 +27,15 @@
 
 #include "macros.inc"
 
+#include "AutoInstallLibs/graphicfilter"
+
 Module gid_Module_Optional_Grfflt
     PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC ( MODULE_OPTIONAL_GRFFLT );
     Sortkey = "600";
     ParentID = gid_Module_Optional;
     Default = YES;
-    Files = (
+    Files = (auto_Graphicfilter_Lib_ALL
         gid_File_Lib_Svg,
         gid_File_Lib_Flash,
         gid_File_Lib_WpftDraw,
