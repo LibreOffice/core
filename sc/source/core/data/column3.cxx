@@ -328,10 +328,9 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
 
     for ( SCSIZE nIdx = nStartIndex; nIdx <= nEndIndex; ++nIdx )
     {
-        SCROW nRow = maItems[nIdx].nRow;
-        if (((nDelFlag & IDF_CONTENTS) == IDF_CONTENTS) && maBroadcasters.is_empty(nRow))
+        if (((nDelFlag & IDF_CONTENTS) == IDF_CONTENTS))
         {
-            // all content is deleted and cell does not contain broadcaster
+            // all content is to be deleted.
 
             ScBaseCell* pOldCell = maItems[ nIdx ].pCell;
             if (pOldCell->GetCellType() == CELLTYPE_FORMULA)
