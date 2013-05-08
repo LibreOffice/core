@@ -19,13 +19,7 @@
 
 #include <tools/stream.hxx>
 
-#ifndef _ZLIB_H
-#ifdef SYSTEM_ZLIB
-#include "zlib.h"
-#else
-#include "zlib/zlib.h"
-#endif
-#endif
+#include <zlib.h>
 
 #include <tools/zcodec.hxx>
 #include <rtl/crc.h>

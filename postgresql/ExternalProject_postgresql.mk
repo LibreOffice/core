@@ -11,7 +11,10 @@ $(eval $(call gb_ExternalProject_ExternalProject,postgresql))
 
 $(eval $(call gb_ExternalProject_use_package,postgresql,openldap))
 
-$(eval $(call gb_ExternalProject_use_external,postgresql,openssl))
+$(eval $(call gb_ExternalProject_use_externals,postgresql,\
+	openssl \
+	zlib \
+))
 
 $(eval $(call gb_ExternalProject_register_targets,postgresql,\
 	build \
@@ -34,8 +37,9 @@ $(call gb_ExternalProject_get_state_target,postgresql,build) :
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(and $(filter YES,$(WITH_KRB5)), $(filter-out YES,$(DISABLE_OPENSSL))),--with-krb5) \
 			$(if $(and $(filter YES,$(WITH_GSSAPI)), $(filter-out YES,$(DISABLE_OPENSSL))),--with-gssapi) \
-			CPPFLAGS="$(if $(filter NO,$(SYSTEM_OPENLDAP)),\
-			-I$(call gb_UnpackedTarball_get_dir,openldap/include)) \
+			CPPFLAGS="$(ZLIB_CFLAGS) \
+				$(if $(filter NO,$(SYSTEM_OPENLDAP)),\
+					-I$(call gb_UnpackedTarball_get_dir,openldap/include)) \
 			$(if $(and $(filter NO,$(SYSTEM_OPENSSL)), $(filter-out YES,$(DISABLE_OPENSSL))),\
 			-I$(call gb_UnpackedTarball_get_dir,openssl/include))" \
 			$(if $(filter NO,$(SYSTEM_OPENLDAP)), \

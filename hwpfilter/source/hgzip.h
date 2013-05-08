@@ -20,12 +20,7 @@
 #ifndef _HWPGZIP_H_
 #define _HWPGZIP_H_
 
-// DVO: add zlib/ prefix
-#ifdef SYSTEM_ZLIB
 #include <zlib.h>
-#else
-#include "zlib/zlib.h"
-#endif
 
 class HStream;
 /**

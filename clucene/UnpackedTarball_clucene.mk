@@ -24,7 +24,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,clucene,0))
 # http://sourceforge.net/mailarchive/message.php?msg_id=29143260
 $(eval $(call gb_UnpackedTarball_add_patches,clucene,\
 	clucene/patches/clucene-debug.patch \
-	clucene/patches/clucene-internal-zlib.patch \
 	clucene/patches/clucene-multimap-put.patch \
 	clucene/patches/clucene-narrowing-conversions.patch \
 	clucene/patches/clucene-nullptr.patch \

@@ -343,12 +343,8 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 define gb_LinkTarget__use_zlib_multiarch
 $(if $(2),,$(call gb_Output_error,gb_LinkTarget__use_zlib_multiarch needs two arguments))
 
-$(call gb_LinkTarget_use_packages,$(1),\
-	zlib_inc \
-)
-
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(OUTDIR)/inc/external/zlib \
+	$(ZLIB_CFLAGS) \
 	$$(INCLUDE) \
 )
 
@@ -369,7 +365,6 @@ $(call gb_LinkTarget__use_zlib_multiarch,$(1),zlib_x64)
 endef
 
 define gb_ExternalProject__use_zlib
-$(call gb_ExternalProject_use_package,$(1),zlib_inc)
 $(call gb_ExternalProject_use_static_libraries,$(1),zlib)
 
 endef

@@ -38,7 +38,7 @@
  DEFAULT_CFLAGS += -I. -I$(top_srcdir)
  DEFAULT_CFLAGS += $(PIXMAN_CFLAGS) $(LIBPNG_CFLAGS) $(ZLIB_CFLAGS)
 +DEFAULT_CFLAGS += $(SOLARINC)
-+DEFAULT_CFLAGS += -I$(SOLARVER)/$(INPATH)/inc/zlib -DZLIB_FIX -DDISABLE_SOME_FLOATING_POINT=1
++DEFAULT_CFLAGS += -DDISABLE_SOME_FLOATING_POINT=1
  
  CAIRO_CFLAGS = $(DEFAULT_CFLAGS) $(CFLAGS)
  
@@ -198,20 +198,6 @@
  		 cairo_cc_flag=yes
  else
    cairo_cc_stderr=`test -f conftest.err && cat conftest.err`
---- misc/cairo-1.10.2/src/cairo-deflate-stream.c	2010-06-18 13:47:12.000000000 +0200
-+++ misc/build/cairo-1.10.2/src/cairo-deflate-stream.c	2010-06-18 13:47:12.000000000 +0200
-@@ -37,7 +37,11 @@
- #include "cairoint.h"
- #include "cairo-error-private.h"
- #include "cairo-output-stream-private.h"
-+#ifdef ZLIB_FIX
-+#include <zlib/zlib.h>
-+#else
- #include <zlib.h>
-+#endif
- 
- #define BUFFER_SIZE 16384
- 
 --- misc/cairo-1.10.2/src/cairo-output-stream.c	2010-07-12 10:57:03.000000000 +0200
 +++ misc/build/cairo-1.10.2/src/cairo-output-stream.c	2010-07-12 10:57:03.000000000 +0200
 @@ -313,7 +313,11 @@
@@ -226,34 +212,6 @@
      decimal_point_len = strlen (decimal_point);
  
      assert (decimal_point_len != 0);
---- misc/cairo-1.10.2/src/cairo-pdf-surface.c	2010-12-25 15:21:34.000000000 +0100
-+++ misc/build/cairo-1.10.2/src/cairo-pdf-surface.c	2010-12-25 15:21:34.000000000 +0100
-@@ -57,7 +57,11 @@
- #include "cairo-type3-glyph-surface-private.h"
- 
- #include <time.h>
-+#ifdef ZLIB_FIX
-+#include <zlib/zlib.h>
-+#else
- #include <zlib.h>
-+#endif
- 
- /* Issues:
-  *
---- misc/cairo-1.10.2/src/cairo-ps-surface.c	2010-12-25 15:21:34.000000000 +0100
-+++ misc/build/cairo-1.10.2/src/cairo-ps-surface.c	2010-12-25 15:21:34.000000000 +0100
-@@ -72,7 +72,11 @@
- #include <stdio.h>
- #include <ctype.h>
- #include <time.h>
-+#ifdef ZLIB_FIX
-+#include <zlib/zlib.h>
-+#else
- #include <zlib.h>
-+#endif
- #include <errno.h>
- 
- #define DEBUG_PS 0
 --- misc/cairo-1.10.2/src/cairo-ft-font.c	2010-12-25 15:21:34.000000000 +0100
 +++ misc/build/cairo-1.10.2/src/cairo-ft-font.c	2010-12-25 15:21:34.000000000 +0100
 @@ -534,16 +534,16 @@

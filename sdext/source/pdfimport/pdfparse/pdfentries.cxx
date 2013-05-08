@@ -26,11 +26,8 @@
 #include <rtl/alloc.h>
 #include <rtl/digest.h>
 #include <rtl/cipher.h>
-#ifdef SYSTEM_ZLIB
-#include "zlib.h"
-#else
-#include <zlib/zlib.h>
-#endif
+
+#include <zlib.h>
 
 #include <math.h>
 #include <map>
