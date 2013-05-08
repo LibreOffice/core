@@ -48,12 +48,7 @@ namespace xls {
 // ============================================================================
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::awt;
-using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::sheet;
-using namespace ::com::sun::star::style;
-using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 
 using ::oox::core::Relations;
@@ -323,14 +318,14 @@ void PageSettings::setFitToPagesMode( bool bFitToPages )
 void PageSettings::finalizeImport()
 {
     OUStringBuffer aStyleNameBuffer( "PageStyle_" );
-    Reference< XNamed > xSheetName( getSheet(), UNO_QUERY );
+    Reference<container::XNamed> xSheetName(getSheet(), UNO_QUERY);
     if( xSheetName.is() )
         aStyleNameBuffer.append( xSheetName->getName() );
     else
         aStyleNameBuffer.append( static_cast< sal_Int32 >( getSheetIndex() + 1 ) );
     OUString aStyleName = aStyleNameBuffer.makeStringAndClear();
 
-    Reference< XStyle > xStyle = createStyleObject( aStyleName, true );
+    Reference<style::XStyle> xStyle = createStyleObject(aStyleName, true);
     PropertySet aStyleProps( xStyle );
     getPageSettingsConverter().writePageSettingsProperties( aStyleProps, maModel, getSheetType() );
 
@@ -360,16 +355,16 @@ enum HFPortionId
 
 struct HFPortionInfo
 {
-    Reference< XText >  mxText;                 /// XText interface of this portion.
-    Reference< XTextCursor > mxStart;           /// Start position of current text range for formatting.
-    Reference< XTextCursor > mxEnd;             /// End position of current text range for formatting.
+    Reference<text::XText>  mxText;                 /// XText interface of this portion.
+    Reference<text::XTextCursor> mxStart;           /// Start position of current text range for formatting.
+    Reference<text::XTextCursor> mxEnd;             /// End position of current text range for formatting.
     double              mfTotalHeight;          /// Sum of heights of previous lines in points.
     double              mfCurrHeight;           /// Height of the current text line in points.
 
-    bool                initialize( const Reference< XText >& rxText );
+    bool                initialize( const Reference<text::XText>& rxText );
 };
 
-bool HFPortionInfo::initialize( const Reference< XText >& rxText )
+bool HFPortionInfo::initialize( const Reference<text::XText>& rxText )
 {
     mfTotalHeight = mfCurrHeight = 0.0;
     mxText = rxText;
@@ -393,16 +388,16 @@ public:
     /** Parses the passed string and creates the header/footer contents.
         @returns  The total height of the converted header or footer in points. */
     double              parse(
-                            const Reference< XHeaderFooterContent >& rxContext,
+                            const Reference<sheet::XHeaderFooterContent>& rxContext,
                             const OUString& rData );
 
 private:
     /** Returns the current edit engine text object. */
     inline HFPortionInfo& getPortion() { return maPortions[ meCurrPortion ]; }
     /** Returns the start cursor of the current text range. */
-    inline const Reference< XTextCursor >& getStartPos() { return getPortion().mxStart; }
+    inline const Reference<text::XTextCursor>& getStartPos() { return getPortion().mxStart; }
     /** Returns the end cursor of the current text range. */
-    inline const Reference< XTextCursor >& getEndPos() { return getPortion().mxEnd; }
+    inline const Reference<text::XTextCursor>& getEndPos() { return getPortion().mxEnd; }
 
     /** Returns the current line height of the specified portion. */
     double              getCurrHeight( HFPortionId ePortion ) const;
@@ -422,9 +417,9 @@ private:
     void                appendLineBreak();
 
     /** Creates a text field from the passed service name. */
-    Reference< XTextContent > createField( const OUString& rServiceName ) const;
+    Reference<text::XTextContent> createField( const OUString& rServiceName ) const;
     /** Appends the passed text field. */
-    void                appendField( const Reference< XTextContent >& rxContent );
+    void                appendField( const Reference<text::XTextContent>& rxContent );
 
     /** Sets the passed font name if it is valid. */
     void                convertFontName( const OUString& rStyle );
@@ -498,7 +493,7 @@ HeaderFooterParser::HeaderFooterParser( const WorkbookHelper& rHelper ) :
 {
 }
 
-double HeaderFooterParser::parse( const Reference< XHeaderFooterContent >& rxContext, const OUString& rData )
+double HeaderFooterParser::parse( const Reference<sheet::XHeaderFooterContent>& rxContext, const OUString& rData )
 {
     if( !rxContext.is() || rData.isEmpty() ||
             !maPortions[ HF_LEFT ].initialize( rxContext->getLeftText() ) ||
@@ -576,7 +571,7 @@ double HeaderFooterParser::parse( const Reference< XHeaderFooterContent >& rxCon
 
                     case 'F':   // file name
                     {
-                        Reference< XTextContent > xContent = createField( maFileNameService );
+                        Reference<text::XTextContent> xContent = createField( maFileNameService );
                         PropertySet aPropSet( xContent );
                         aPropSet.setProperty( PROP_FileFormat, ::com::sun::star::text::FilenameDisplayFormat::NAME_AND_EXT );
                         appendField( xContent );
@@ -585,7 +580,7 @@ double HeaderFooterParser::parse( const Reference< XHeaderFooterContent >& rxCon
                     case 'Z':   // file path (without file name), OOXML, BIFF12, and BIFF8 only
                         if( (getFilterType() == FILTER_OOXML) || ((getFilterType() == FILTER_BIFF) && (getBiff() == BIFF8)) )
                         {
-                            Reference< XTextContent > xContent = createField( maFileNameService );
+                            Reference<text::XTextContent> xContent = createField( maFileNameService );
                             PropertySet aPropSet( xContent );
                             // FilenameDisplayFormat::PATH not supported by Calc
                             aPropSet.setProperty( PROP_FileFormat, ::com::sun::star::text::FilenameDisplayFormat::FULL );
@@ -598,7 +593,7 @@ double HeaderFooterParser::parse( const Reference< XHeaderFooterContent >& rxCon
                     break;
                     case 'D':   // date
                     {
-                        Reference< XTextContent > xContent = createField( maDateTimeService );
+                        Reference<text::XTextContent> xContent = createField( maDateTimeService );
                         PropertySet aPropSet( xContent );
                         aPropSet.setProperty( PROP_IsDate, true );
                         appendField( xContent );
@@ -606,7 +601,7 @@ double HeaderFooterParser::parse( const Reference< XHeaderFooterContent >& rxCon
                     break;
                     case 'T':   // time
                     {
-                        Reference< XTextContent > xContent = createField( maDateTimeService );
+                        Reference<text::XTextContent> xContent = createField( maDateTimeService );
                         PropertySet aPropSet( xContent );
                         aPropSet.setProperty( PROP_IsDate, false );
                         appendField( xContent );
@@ -772,7 +767,7 @@ void HeaderFooterParser::updateCurrHeight()
 
 void HeaderFooterParser::setAttributes()
 {
-    Reference< XTextRange > xRange( getStartPos(), UNO_QUERY );
+    Reference<text::XTextRange> xRange( getStartPos(), UNO_QUERY );
     getEndPos()->gotoRange( xRange, sal_False );
     getEndPos()->gotoEnd( sal_True );
     if( !getEndPos()->isCollapsed() )
@@ -804,9 +799,9 @@ void HeaderFooterParser::appendLineBreak()
     getPortion().mfCurrHeight = 0;
 }
 
-Reference< XTextContent > HeaderFooterParser::createField( const OUString& rServiceName ) const
+Reference<text::XTextContent> HeaderFooterParser::createField( const OUString& rServiceName ) const
 {
-    Reference< XTextContent > xContent;
+    Reference<text::XTextContent> xContent;
     try
     {
         xContent.set( getBaseFilter().getModelFactory()->createInstance( rServiceName ), UNO_QUERY_THROW );
@@ -820,12 +815,12 @@ Reference< XTextContent > HeaderFooterParser::createField( const OUString& rServ
     return xContent;
 }
 
-void HeaderFooterParser::appendField( const Reference< XTextContent >& rxContent )
+void HeaderFooterParser::appendField( const Reference<text::XTextContent>& rxContent )
 {
     getEndPos()->gotoEnd( sal_False );
     try
     {
-        Reference< XTextRange > xRange( getEndPos(), UNO_QUERY_THROW );
+        Reference<text::XTextRange> xRange( getEndPos(), UNO_QUERY_THROW );
         getPortion().mxText->insertTextContent( xRange, rxContent, sal_False );
         updateCurrHeight();
     }
@@ -1043,18 +1038,18 @@ void PageSettingsConverter::writePageSettingsProperties(
     // paper size
     if( !rModel.mbValidSettings )
     {
-        Size aSize;
+        awt::Size aSize;
         bool bValid = false;
 
         if( (0 < rModel.mnPaperSize) && (rModel.mnPaperSize < static_cast< sal_Int32 >( STATIC_ARRAY_SIZE( spPaperSizeTable ) )) )
         {
             const ApiPaperSize& rPaperSize = spPaperSizeTable[ rModel.mnPaperSize ];
-            aSize = Size( rPaperSize.mnWidth, rPaperSize.mnHeight );
+            aSize = awt::Size( rPaperSize.mnWidth, rPaperSize.mnHeight );
             bValid = true;
         }
         if( rModel.mnPaperWidth > 0 && rModel.mnPaperHeight > 0 )
         {
-            aSize = Size( rModel.mnPaperWidth, rModel.mnPaperHeight );
+            aSize = awt::Size( rModel.mnPaperWidth, rModel.mnPaperHeight );
             bValid = true;
         }
 
@@ -1153,7 +1148,7 @@ sal_Int32 PageSettingsConverter::writeHeaderFooter(
     sal_Int32 nHeight = 0;
     if( !rContent.isEmpty() )
     {
-        Reference< XHeaderFooterContent > xHFContent( rPropSet.getAnyProperty( nPropId ), UNO_QUERY );
+        Reference<sheet::XHeaderFooterContent> xHFContent(rPropSet.getAnyProperty(nPropId), UNO_QUERY);
         if( xHFContent.is() )
         {
             double fTotalHeight = mxHFParser->parse( xHFContent, rContent );
