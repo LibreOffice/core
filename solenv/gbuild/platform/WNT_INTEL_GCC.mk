@@ -126,7 +126,7 @@ gb_LinkTarget_INCLUDE +=\
 define gb_LinkTarget__command_dynamiclinkexecutable
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
-	$(gb_CXX) $(strip \
+	$(if $(CXXOBJECTS)$(GENCXXOBJECTS)$(EXTRAOBJECTLISTS),$(gb_CXX),$(gb_CC)) $(strip \
 		$(gb_Executable_TARGETTYPEFLAGS) \
 		$(if $(filter YES,$(TARGETGUI)), -mwindows, -mconsole) \
 		$(T_LDFLAGS) \
@@ -147,7 +147,7 @@ endef
 define gb_LinkTarget__command_dynamiclinklibrary
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
-	$(gb_CXX) $(strip \
+	$(if $(CXXOBJECTS)$(GENCXXOBJECTS)$(EXTRAOBJECTLISTS),$(gb_CXX),$(gb_CC)) $(strip \
 		$(gb_Library_TARGETTYPEFLAGS) \
 		$(T_LDFLAGS) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \

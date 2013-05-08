@@ -184,10 +184,11 @@ endif
 
 # note that `cat $(extraobjectlist)` is needed to build with older gcc versions, e.g. 4.1.2 on SLED10
 # we want to use @$(extraobjectlist) in the long run
+# link with C compiler if there are no C++ files (pyuno_wrapper depends on this)
 define gb_LinkTarget__command_dynamiclink
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
-	$(gb_CXX) \
+	$(if $(CXXOBJECTS)$(GENCXXOBJECTS)$(EXTRAOBJECTLISTS),$(gb_CXX),$(gb_CC)) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(if $(filter-out $(foreach lib,frm scfilt wpftdraw,$(call gb_Library_get_linktargetname,$(lib))),$*),$(gb_LTOFLAGS)) \
 		$(if $(SOVERSION),-Wl$(COMMA)--soname=$(notdir $(1)).$(SOVERSION)) \

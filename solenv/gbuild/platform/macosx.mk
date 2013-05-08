@@ -138,7 +138,7 @@ endef
 define gb_LinkTarget__command_dynamiclink
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
-	$(gb_CXX) \
+	$(if $(CXXOBJECTS)$(OBJCXXOBJECTS)$(GENCXXOBJECTS)$(EXTRAOBJECTLISTS),$(gb_CXX),$(gb_CC)) \
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
 		$(if $(filter Bundle,$(TARGETTYPE)),$(gb_Bundle_TARGETTYPEFLAGS)) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
