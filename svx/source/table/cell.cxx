@@ -258,9 +258,9 @@ namespace sdr
                         pOutliner->SetText(*pParaObj);
                     }
 
-                    sal_uInt32 nParaCount(pOutliner->GetParagraphCount());
+                    sal_Int32 nParaCount(pOutliner->GetParagraphCount());
 
-                    for(sal_uInt16 nPara = 0; nPara < nParaCount; nPara++)
+                    for(sal_Int32 nPara = 0; nPara < nParaCount; nPara++)
                     {
                         SfxItemSet aSet(pOutliner->GetParaAttribs(nPara));
                         aSet.Put(rSet);
@@ -278,7 +278,7 @@ namespace sdr
                             mpItemSet->Put(aNewSet);
                         }
 
-                        OutlinerParaObject* pTemp = pOutliner->CreateParaObject(0, (sal_uInt16)nParaCount);
+                        OutlinerParaObject* pTemp = pOutliner->CreateParaObject(0, nParaCount);
                         pOutliner->Clear();
 
                         mxCell->SetOutlinerParaObject(pTemp);
@@ -750,7 +750,7 @@ SdrTextHorzAdjust Cell::GetTextHorizontalAdjust() const
 void Cell::SetOutlinerParaObject( OutlinerParaObject* pTextObject )
 {
     SdrText::SetOutlinerParaObject( pTextObject );
-    maSelection.nStartPara = 0xffff;
+    maSelection.nStartPara = EE_PARA_MAX_COUNT;
 
     if( pTextObject == 0 )
         ForceOutlinerParaObject( OUTLINERMODE_TEXTOBJECT );
@@ -1593,14 +1593,14 @@ void SAL_CALL Cell::setAllPropertiesToDefault(  ) throw (RuntimeException)
     if( pParaObj )
     {
         rOutliner.SetText(*pParaObj);
-        sal_uInt32 nParaCount(rOutliner.GetParagraphCount());
+        sal_Int32 nParaCount(rOutliner.GetParagraphCount());
 
         if(nParaCount)
         {
-            ESelection aSelection( 0, 0, EE_PARA_ALL, EE_PARA_ALL);
+            ESelection aSelection( 0, 0, EE_PARA_ALL, EE_TEXTPOS_ALL);
             rOutliner.RemoveAttribs(aSelection, sal_True, 0);
 
-            OutlinerParaObject* pTemp = rOutliner.CreateParaObject(0, (sal_uInt16)nParaCount);
+            OutlinerParaObject* pTemp = rOutliner.CreateParaObject(0, nParaCount);
             rOutliner.Clear();
 
             SetOutlinerParaObject(pTemp);
@@ -1730,7 +1730,7 @@ Reference< XTextRange > SAL_CALL Cell::getEnd(  ) throw (RuntimeException)
 
 OUString SAL_CALL Cell::getString(  ) throw (RuntimeException)
 {
-    maSelection.nStartPara = 0xffff;
+    maSelection.nStartPara = EE_PARA_MAX_COUNT;
     return SvxUnoTextBase::getString();
 }
 

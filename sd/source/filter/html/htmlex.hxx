@@ -177,7 +177,7 @@ class HtmlExport
     String  CreateNavBar( sal_uInt16 nSdPage, bool bIsText ) const;
     String  CreateBodyTag() const;
 
-    String  ParagraphToHTMLString( SdrOutliner* pOutliner, sal_uLong nPara, const Color& rBackgroundColor );
+    String  ParagraphToHTMLString( SdrOutliner* pOutliner, sal_Int32 nPara, const Color& rBackgroundColor );
     String  TextAttribToHTMLString( SfxItemSet* pSet, HtmlState* pState, const Color& rBackgroundColor );
 
     String  CreateTextForTitle( SdrOutliner* pOutliner, SdPage* pPage, const Color& rBackgroundColor );

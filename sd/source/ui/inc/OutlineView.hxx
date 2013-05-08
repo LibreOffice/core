@@ -155,7 +155,7 @@ public:
     /** creates and inserts an empty slide for the given paragraph. */
     SdPage* InsertSlideForParagraph( Paragraph* pPara );
 
-    void UpdateParagraph( sal_uInt16 nPara );
+    void UpdateParagraph( sal_Int32 nPara );
 
 protected:
     virtual void OnBeginPasteOrDrop( PasteOrDropInfos* pInfos );
@@ -183,8 +183,8 @@ private:
     std::vector<Paragraph*> maOldParaOrder;
     std::vector<Paragraph*> maSelectedParas;
 
-    sal_uInt16              mnPagesToProcess;    // for the progress bar
-    sal_uInt16              mnPagesProcessed;
+    sal_Int32               mnPagesToProcess;    // for the progress bar
+    sal_Int32               mnPagesProcessed;
 
     sal_Bool                mbFirstPaint;
 

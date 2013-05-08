@@ -220,7 +220,7 @@ void EditHTMLParser::NextToken( int nToken )
     case HTML_CENTER_ON:
     case HTML_CENTER_OFF:
                             {
-                                sal_uInt16 nNode = mpEditEngine->GetEditDoc().GetPos( aCurSel.Max().GetNode() );
+                                sal_Int32 nNode = mpEditEngine->GetEditDoc().GetPos( aCurSel.Max().GetNode() );
                                 SfxItemSet aItems( aCurSel.Max().GetNode()->GetContentAttribs().GetItems() );
                                 aItems.ClearItem( EE_PARA_JUST );
                                 if ( nToken == HTML_CENTER_ON )
@@ -546,7 +546,7 @@ void EditHTMLParser::ImpSetAttribs( const SfxItemSet& rItems, EditSelection* pSe
     }
 
     ContentNode* pSN = aStartPaM.GetNode();
-    sal_uInt16 nStartNode = mpEditEngine->GetEditDoc().GetPos( pSN );
+    sal_Int32 nStartNode = mpEditEngine->GetEditDoc().GetPos( pSN );
 
     // If an attribute goes from 0 to current Paragraph length,
     // then it should be a paragraph attribute!
@@ -557,7 +557,7 @@ void EditHTMLParser::ImpSetAttribs( const SfxItemSet& rItems, EditSelection* pSe
     // not really HTML:
 #ifdef DBG_UTIL
     ContentNode* pEN = aEndPaM.GetNode();
-    sal_uInt16 nEndNode = mpEditEngine->GetEditDoc().GetPos( pEN );
+    sal_Int32 nEndNode = mpEditEngine->GetEditDoc().GetPos( pEN );
     DBG_ASSERT( nStartNode == nEndNode, "ImpSetAttribs: Several paragraphs?" );
 #endif
 
@@ -583,7 +583,7 @@ void EditHTMLParser::ImpSetStyleSheet( sal_uInt16 nHLevel )
     // Enough for Calc, would have to be clarified with StyleSheets
     // that they should also be in the app so that when they are feed
     // in a different engine still are here ...
-    sal_uInt16 nNode = mpEditEngine->GetEditDoc().GetPos( aCurSel.Max().GetNode() );
+    sal_Int32 nNode = mpEditEngine->GetEditDoc().GetPos( aCurSel.Max().GetNode() );
 
     SfxItemSet aItems( aCurSel.Max().GetNode()->GetContentAttribs().GetItems() );
 

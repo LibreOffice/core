@@ -509,7 +509,7 @@ void EditView::RemoveAttribs( sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich )
     PIMPE->FormatAndUpdate( this );
 }
 
-void EditView::RemoveCharAttribs( sal_uInt16 nPara, sal_uInt16 nWhich )
+void EditView::RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
@@ -599,7 +599,7 @@ void EditView::PasteSpecial()
     pImpEditView->Paste(aClipBoard, sal_True );
 }
 
-Point EditView::GetWindowPosTopLeft( sal_uInt16 nParagraph )
+Point EditView::GetWindowPosTopLeft( sal_Int32 nParagraph )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
@@ -620,7 +620,7 @@ XubString EditView::GetSelected()
     return PIMPEE->GetSelected( pImpEditView->GetEditSelection() );
 }
 
-void EditView::MoveParagraphs( Range aParagraphs, sal_uInt16 nNewPos )
+void EditView::MoveParagraphs( Range aParagraphs, sal_Int32 nNewPos )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
@@ -640,8 +640,7 @@ void EditView::MoveParagraphs( long nDiff )
     if ( nDiff > 0 )
         nDest++;
     DBG_ASSERT( ( nDest >= 0 ) && ( nDest <= pImpEditView->pEditEngine->GetParagraphCount() ), "MoveParagraphs - wrong Parameters!" );
-    MoveParagraphs( aRange,
-        sal::static_int_cast< sal_uInt16 >( nDest ) );
+    MoveParagraphs( aRange, sal::static_int_cast< sal_Int32 >( nDest ) );
 }
 
 void EditView::SetBackgroundColor( const Color& rColor )
@@ -730,11 +729,11 @@ SfxStyleSheet* EditView::GetStyleSheet()
 
     EditSelection aSel( pImpEditView->GetEditSelection() );
     aSel.Adjust( PIMPE->GetEditDoc() );
-    sal_uInt16 nStartPara = PIMPE->GetEditDoc().GetPos( aSel.Min().GetNode() );
-    sal_uInt16 nEndPara = PIMPE->GetEditDoc().GetPos( aSel.Max().GetNode() );
+    sal_Int32 nStartPara = PIMPE->GetEditDoc().GetPos( aSel.Min().GetNode() );
+    sal_Int32 nEndPara = PIMPE->GetEditDoc().GetPos( aSel.Max().GetNode() );
 
     SfxStyleSheet* pStyle = NULL;
-    for ( sal_uInt16 n = nStartPara; n <= nEndPara; n++ )
+    for ( sal_Int32 n = nStartPara; n <= nEndPara; n++ )
     {
         SfxStyleSheet* pTmpStyle = PIMPE->GetStyleSheet( n );
         if ( ( n != nStartPara ) && ( pStyle != pTmpStyle ) )
@@ -1083,7 +1082,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             {
                 ESelection aSel = GetSelection();
                 aSel.nStartPos = 0;
-                aSel.nEndPos = 0xFFFF;
+                aSel.nEndPos = EE_TEXTPOS_ALL;
                 SetSelection( aSel );
             }
             SetAttribs( aAttrs );
@@ -1197,18 +1196,19 @@ void EditView::InsertField( const SvxFieldItem& rFld )
 const SvxFieldItem* EditView::GetFieldUnderMousePointer() const
 {
     DBG_CHKTHIS( EditView, 0 );
-    sal_uInt16 nPara, nPos;
+    sal_Int32 nPara;
+    sal_uInt16 nPos;
     return GetFieldUnderMousePointer( nPara, nPos );
 }
 
-const SvxFieldItem* EditView::GetField( const Point& rPos, sal_uInt16* pPara, sal_uInt16* pPos ) const
+const SvxFieldItem* EditView::GetField( const Point& rPos, sal_Int32* pPara, sal_uInt16* pPos ) const
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     return pImpEditView->GetField( rPos, pPara, pPos );
 }
 
-const SvxFieldItem* EditView::GetFieldUnderMousePointer( sal_uInt16& nPara, sal_uInt16& nPos ) const
+const SvxFieldItem* EditView::GetFieldUnderMousePointer( sal_Int32& nPara, sal_uInt16& nPos ) const
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
@@ -1289,7 +1289,7 @@ void EditView::ChangeFontSize( bool bGrow, const FontList* pFontList )
 
     if( aSel.HasRange() )
     {
-        for( sal_uInt16 nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
+        for( sal_Int32 nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
         {
             std::vector<sal_uInt16> aPortions;
             rEditEngine.GetPortions( nPara, aPortions );
@@ -1298,7 +1298,7 @@ void EditView::ChangeFontSize( bool bGrow, const FontList* pFontList )
                 aPortions.push_back( rEditEngine.GetTextLen(nPara) );
 
             const sal_uInt16 nBeginPos = (nPara == aSel.nStartPara) ? aSel.nStartPos : 0;
-            const sal_uInt16 nEndPos = (nPara == aSel.nEndPara) ? aSel.nEndPos : 0xffff;
+            const sal_uInt16 nEndPos = (nPara == aSel.nEndPara) ? aSel.nEndPos : EE_TEXTPOS_ALL;
 
             for ( size_t nPos = 0; nPos < aPortions.size(); ++nPos )
             {

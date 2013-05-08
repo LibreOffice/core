@@ -201,8 +201,8 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
 
                     while (pPara)
                     {
-                        sal_uLong nParaPos = pOutliner->GetAbsPos( pPara );
-                        sal_Int16 nDepth = pOutliner->GetDepth( (sal_uInt16) nParaPos );
+                        sal_Int32 nParaPos = pOutliner->GetAbsPos( pPara );
+                        sal_Int16 nDepth = pOutliner->GetDepth( nParaPos );
                         String aName(rPage.GetLayoutName());
                         aName += (sal_Unicode)(' ');
                         aName += OUString::number( (nDepth <= 0) ? 1 : nDepth + 1 );
@@ -243,7 +243,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                         pPara = iter != aSelList.rend() ? *iter : NULL;
 
                         if( !pPara && nDepth > 0 &&  rSet.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON &&
-                            pOutliner->GetDepth( (sal_uInt16) pOutliner->GetAbsPos(*(aSelList.begin())) ) > 0 )
+                            pOutliner->GetDepth( pOutliner->GetAbsPos(*(aSelList.begin())) ) > 0 )
                             pPara = pOutliner->GetParagraph( 0 );  // Put NumBulletItem in outline level 1
                     }
 

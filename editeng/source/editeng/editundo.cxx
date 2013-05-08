@@ -145,7 +145,7 @@ OUString EditUndo::GetComment() const
 }
 
 EditUndoDelContent::EditUndoDelContent(
-    EditEngine* pEE, ContentNode* pNode, size_t nPortion) :
+    EditEngine* pEE, ContentNode* pNode, sal_Int32 nPortion) :
     EditUndo(EDITUNDO_DELCONTENT, pEE),
     bDelObject(true),
     nNode(nPortion),
@@ -200,7 +200,7 @@ void EditUndoDelContent::Redo()
 }
 
 EditUndoConnectParas::EditUndoConnectParas(
-    EditEngine* pEE, sal_uInt16 nN, sal_uInt16 nSP,
+    EditEngine* pEE, sal_Int32 nN, sal_uInt16 nSP,
     const SfxItemSet& rLeftParaAttribs, const SfxItemSet& rRightParaAttribs,
     const SfxStyleSheet* pLeftStyle, const SfxStyleSheet* pRightStyle, bool bBkwrd) :
     EditUndo(EDITUNDO_CONNECTPARAS, pEE),
@@ -248,7 +248,7 @@ void EditUndoConnectParas::Undo()
     if (GetEditEngine()->GetStyleSheetPool())
     {
         if ( aLeftStyleName.Len() )
-            GetEditEngine()->SetStyleSheet( (sal_uInt16)nNode, (SfxStyleSheet*)GetEditEngine()->GetStyleSheetPool()->Find( aLeftStyleName, eLeftStyleFamily ) );
+            GetEditEngine()->SetStyleSheet( nNode, (SfxStyleSheet*)GetEditEngine()->GetStyleSheetPool()->Find( aLeftStyleName, eLeftStyleFamily ) );
         if ( aRightStyleName.Len() )
             GetEditEngine()->SetStyleSheet( nNode+1, (SfxStyleSheet*)GetEditEngine()->GetStyleSheetPool()->Find( aRightStyleName, eRightStyleFamily ) );
     }
@@ -265,7 +265,7 @@ void EditUndoConnectParas::Redo()
 }
 
 EditUndoSplitPara::EditUndoSplitPara(
-    EditEngine* pEE, sal_uInt16 nN, sal_uInt16 nSP) :
+    EditEngine* pEE, sal_Int32 nN, sal_uInt16 nSP) :
     EditUndo(EDITUNDO_SPLITPARA, pEE),
     nNode(nN), nSepPos(nSP) {}
 
@@ -391,7 +391,7 @@ void EditUndoInsertFeature::Redo()
 }
 
 EditUndoMoveParagraphs::EditUndoMoveParagraphs(
-    EditEngine* pEE, const Range& rParas, sal_uInt16 n) :
+    EditEngine* pEE, const Range& rParas, sal_Int32 n) :
     EditUndo(EDITUNDO_MOVEPARAGRAPHS, pEE), nParagraphs(rParas), nDest(n) {}
 
 EditUndoMoveParagraphs::~EditUndoMoveParagraphs() {}
@@ -415,7 +415,7 @@ void EditUndoMoveParagraphs::Undo()
     else
         nTmpDest += aTmpRange.Len();
 
-    EditSelection aNewSel = GetEditEngine()->MoveParagraphs(aTmpRange, (sal_uInt16)nTmpDest, 0);
+    EditSelection aNewSel = GetEditEngine()->MoveParagraphs(aTmpRange, nTmpDest, 0);
     GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );
 }
 
@@ -427,7 +427,7 @@ void EditUndoMoveParagraphs::Redo()
 }
 
 EditUndoSetStyleSheet::EditUndoSetStyleSheet(
-    EditEngine* pEE, sal_uInt16 nP, const String& rPrevName, SfxStyleFamily ePrevFam,
+    EditEngine* pEE, sal_Int32 nP, const String& rPrevName, SfxStyleFamily ePrevFam,
     const String& rNewName, SfxStyleFamily eNewFam, const SfxItemSet& rPrevParaAttribs) :
     EditUndo(EDITUNDO_STYLESHEET, pEE),
     aPrevName(rPrevName),
@@ -459,7 +459,7 @@ void EditUndoSetStyleSheet::Redo()
 }
 
 EditUndoSetParaAttribs::EditUndoSetParaAttribs(
-    EditEngine* pEE, sal_uInt16 nP, const SfxItemSet& rPrevItems, const SfxItemSet& rNewItems) :
+    EditEngine* pEE, sal_Int32 nP, const SfxItemSet& rPrevItems, const SfxItemSet& rNewItems) :
     EditUndo(EDITUNDO_PARAATTRIBS, pEE),
     nPara(nP),
     aPrevItems(rPrevItems),
@@ -521,7 +521,7 @@ void EditUndoSetAttribs::Undo()
     DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
     EditEngine* pEE = GetEditEngine();
     bool bFields = false;
-    for ( sal_uInt16 nPara = aESel.nStartPara; nPara <= aESel.nEndPara; nPara++ )
+    for ( sal_Int32 nPara = aESel.nStartPara; nPara <= aESel.nEndPara; nPara++ )
     {
         const ContentAttribsInfo& rInf = aPrevAttribs[nPara-aESel.nStartPara];
 

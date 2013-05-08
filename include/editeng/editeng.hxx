@@ -223,7 +223,7 @@ public:
 
     sal_uInt16          GetScriptType( const ESelection& rSelection ) const;
     LanguageType    GetLanguage(const EditPaM& rPaM) const;
-    LanguageType    GetLanguage( sal_uInt16 nPara, sal_uInt16 nPos ) const;
+    LanguageType    GetLanguage( sal_Int32 nPara, sal_uInt16 nPos ) const;
 
     void            TransliterateText( const ESelection& rSelection, sal_Int32 nTransliterationMode );
     EditSelection   TransliterateText( const EditSelection& rSelection, sal_Int32 nTransliterationMode );
@@ -251,23 +251,23 @@ public:
     sal_uInt32      GetTextHeightNTP() const;
     sal_uInt32      CalcTextWidth();
 
-    String          GetText( sal_uInt16 nParagraph ) const;
-    xub_StrLen      GetTextLen( sal_uInt16 nParagraph ) const;
-    sal_uInt32      GetTextHeight( sal_uInt16 nParagraph ) const;
+    String          GetText( sal_Int32 nParagraph ) const;
+    xub_StrLen      GetTextLen( sal_Int32 nParagraph ) const;
+    sal_uInt32      GetTextHeight( sal_Int32 nParagraph ) const;
 
-    sal_uInt16          GetParagraphCount() const;
+    sal_Int32       GetParagraphCount() const;
 
-    sal_uInt16          GetLineCount( sal_uInt16 nParagraph ) const;
-    xub_StrLen      GetLineLen( sal_uInt16 nParagraph, sal_uInt16 nLine ) const;
-    void            GetLineBoundaries( /*out*/sal_uInt16 &rStart, /*out*/sal_uInt16 &rEnd, sal_uInt16 nParagraph, sal_uInt16 nLine ) const;
-    sal_uInt16          GetLineNumberAtIndex( sal_uInt16 nPara, sal_uInt16 nIndex ) const;
-    sal_uInt32      GetLineHeight( sal_uInt16 nParagraph, sal_uInt16 nLine = 0 );
-    ParagraphInfos  GetParagraphInfos( sal_uInt16 nPara );
-    sal_uInt16          FindParagraph( long nDocPosY );
+    sal_uInt16      GetLineCount( sal_Int32 nParagraph ) const;
+    xub_StrLen      GetLineLen( sal_Int32 nParagraph, sal_uInt16 nLine ) const;
+    void            GetLineBoundaries( /*out*/sal_uInt16 &rStart, /*out*/sal_uInt16 &rEnd, sal_Int32 nParagraph, sal_uInt16 nLine ) const;
+    sal_uInt16      GetLineNumberAtIndex( sal_Int32 nPara, sal_uInt16 nIndex ) const;
+    sal_uInt32      GetLineHeight( sal_Int32 nParagraph, sal_uInt16 nLine = 0 );
+    ParagraphInfos  GetParagraphInfos( sal_Int32 nPara );
+    sal_Int32       FindParagraph( long nDocPosY );
     EPosition       FindDocPosition( const Point& rDocPos ) const;
     Rectangle       GetCharacterBounds( const EPosition& rPos ) const;
 
-    String          GetWord( sal_uInt16 nPara, xub_StrLen nIndex );
+    String          GetWord( sal_Int32 nPara, xub_StrLen nIndex );
 
     ESelection      GetWord( const ESelection& rSelection, sal_uInt16 nWordType ) const;
 
@@ -275,33 +275,33 @@ public:
     void            SetText( const OUString& rStr );
 
     EditTextObject* CreateTextObject();
-    EditTextObject* CreateTextObject( sal_uInt16 nPara, sal_uInt16 nParas = 1 );
+    EditTextObject* CreateTextObject( sal_Int32 nPara, sal_Int32 nParas = 1 );
     EditTextObject* CreateTextObject( const ESelection& rESelection );
     void            SetText( const EditTextObject& rTextObject );
 
-    void            RemoveParagraph( sal_uInt16 nPara );
-    void            InsertParagraph( sal_uInt16 nPara, const EditTextObject& rTxtObj );
-    void            InsertParagraph( sal_uInt16 nPara, const String& rText);
+    void            RemoveParagraph( sal_Int32 nPara );
+    void            InsertParagraph( sal_Int32 nPara, const EditTextObject& rTxtObj );
+    void            InsertParagraph( sal_Int32 nPara, const String& rText);
 
-    void            SetText( sal_uInt16 nPara, const String& rText);
+    void            SetText( sal_Int32 nPara, const String& rText);
 
-    virtual void                SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rSet );
-    virtual const SfxItemSet&   GetParaAttribs( sal_uInt16 nPara ) const;
+    virtual void                SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet );
+    virtual const SfxItemSet&   GetParaAttribs( sal_Int32 nPara ) const;
 
-    void                GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>& rLst ) const;
+    void            GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const;
 
-    SfxItemSet          GetAttribs( sal_uInt16 nPara, sal_uInt16 nStart, sal_uInt16 nEnd, sal_uInt8 nFlags = 0xFF ) const;
-    SfxItemSet          GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib = EditEngineAttribs_All );
+    SfxItemSet      GetAttribs( sal_Int32 nPara, sal_uInt16 nStart, sal_uInt16 nEnd, sal_uInt8 nFlags = 0xFF ) const;
+    SfxItemSet      GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib = EditEngineAttribs_All );
 
-    sal_Bool                HasParaAttrib( sal_uInt16 nPara, sal_uInt16 nWhich ) const;
-    const SfxPoolItem&  GetParaAttrib( sal_uInt16 nPara, sal_uInt16 nWhich );
+    sal_Bool        HasParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich ) const;
+    const SfxPoolItem&  GetParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich );
 
-    Font            GetStandardFont( sal_uInt16 nPara );
-    SvxFont         GetStandardSvxFont( sal_uInt16 nPara );
+    Font            GetStandardFont( sal_Int32 nPara );
+    SvxFont         GetStandardSvxFont( sal_Int32 nPara );
 
     void            RemoveAttribs( const ESelection& rSelection, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich );
 
-    void            ShowParagraph( sal_uInt16 nParagraph, sal_Bool bShow = sal_True );
+    void            ShowParagraph( sal_Int32 nParagraph, sal_Bool bShow = sal_True );
 
     ::svl::IUndoManager&
                     GetUndoManager();
@@ -328,10 +328,10 @@ public:
     sal_Bool            IsInSelectionMode() const;
 
     void            StripPortions();
-    void            GetPortions( sal_uInt16 nPara, std::vector<sal_uInt16>& rList );
+    void            GetPortions( sal_Int32 nPara, std::vector<sal_uInt16>& rList );
 
-    long            GetFirstLineStartX( sal_uInt16 nParagraph );
-    Point           GetDocPosTopLeft( sal_uInt16 nParagraph );
+    long            GetFirstLineStartX( sal_Int32 nParagraph );
+    Point           GetDocPosTopLeft( sal_Int32 nParagraph );
     Point           GetDocPos( const Point& rPaperPos ) const;
     sal_Bool            IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder = 0 );
 
@@ -362,14 +362,14 @@ public:
     sal_uInt32      GetControlWord() const;
 
     void            QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel );
-    void            QuickRemoveCharAttribs( sal_uInt16 nPara, sal_uInt16 nWhich = 0 );
+    void            QuickRemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich = 0 );
     void            QuickMarkInvalid( const ESelection& rSel );
     void            QuickFormatDoc( sal_Bool bFull = sal_False );
     void            QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel );
     void            QuickInsertLineBreak( const ESelection& rSel );
     void            QuickInsertText( const String& rText, const ESelection& rSel );
     void            QuickDelete( const ESelection& rSel );
-    void            QuickMarkToBeRepainted( sal_uInt16 nPara );
+    void            QuickMarkToBeRepainted( sal_Int32 nPara );
 
     void            SetGlobalCharStretching( sal_uInt16 nX = 100, sal_uInt16 nY = 100 );
     void            GetGlobalCharStretching( sal_uInt16& rX, sal_uInt16& rY ) const;
@@ -381,9 +381,9 @@ public:
     SfxStyleSheetPool*  GetStyleSheetPool();
 
     void SetStyleSheet(const EditSelection& aSel, SfxStyleSheet* pStyle);
-    void                SetStyleSheet( sal_uInt16 nPara, SfxStyleSheet* pStyle );
-    const SfxStyleSheet* GetStyleSheet( sal_uInt16 nPara ) const;
-    SfxStyleSheet* GetStyleSheet( sal_uInt16 nPara );
+    void                 SetStyleSheet( sal_Int32 nPara, SfxStyleSheet* pStyle );
+    const SfxStyleSheet* GetStyleSheet( sal_Int32 nPara ) const;
+    SfxStyleSheet* GetStyleSheet( sal_Int32 nPara );
 
     void            SetWordDelimiters( const String& rDelimiters );
     String          GetWordDelimiters() const;
@@ -429,10 +429,10 @@ public:
     bool UpdateFieldsOnly();
     void            RemoveFields( sal_Bool bKeepFieldText, TypeId aType = NULL );
 
-    sal_uInt16          GetFieldCount( sal_uInt16 nPara ) const;
-    EFieldInfo      GetFieldInfo( sal_uInt16 nPara, sal_uInt16 nField ) const;
+    sal_uInt16      GetFieldCount( sal_Int32 nPara ) const;
+    EFieldInfo      GetFieldInfo( sal_Int32 nPara, sal_uInt16 nField ) const;
 
-    sal_Bool            IsRightToLeft( sal_uInt16 nPara ) const;
+    sal_Bool        IsRightToLeft( sal_Int32 nPara ) const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >
                     CreateTransferable( const ESelection& rSelection ) const;
@@ -443,17 +443,17 @@ public:
     void            SetBeginPasteOrDropHdl( const Link& rLink );
     void            SetEndPasteOrDropHdl( const Link& rLink );
 
-    virtual void    PaintingFirstLine( sal_uInt16 nPara, const Point& rStartPos, long nBaseLineY, const Point& rOrigin, short nOrientation, OutputDevice* pOutDev );
-    virtual void    ParagraphInserted( sal_uInt16 nNewParagraph );
-    virtual void    ParagraphDeleted( sal_uInt16 nDeletedParagraph );
-    virtual void    ParagraphConnected( sal_uInt16 nLeftParagraph, sal_uInt16 nRightParagraph );
-    virtual void    ParaAttribsChanged( sal_uInt16 nParagraph );
+    virtual void    PaintingFirstLine( sal_Int32 nPara, const Point& rStartPos, long nBaseLineY, const Point& rOrigin, short nOrientation, OutputDevice* pOutDev );
+    virtual void    ParagraphInserted( sal_Int32 nNewParagraph );
+    virtual void    ParagraphDeleted( sal_Int32 nDeletedParagraph );
+    virtual void    ParagraphConnected( sal_Int32 nLeftParagraph, sal_Int32 nRightParagraph );
+    virtual void    ParaAttribsChanged( sal_Int32 nParagraph );
     virtual void    StyleSheetChanged( SfxStyleSheet* pStyle );
-    virtual void    ParagraphHeightChanged( sal_uInt16 nPara );
+    virtual void    ParagraphHeightChanged( sal_Int32 nPara );
 
     virtual void DrawingText(
         const Point& rStartPos, const String& rText, sal_uInt16 nTextStart, sal_uInt16 nTextLen, const sal_Int32* pDXArray,
-        const SvxFont& rFont, sal_uInt16 nPara, xub_StrLen nIndex, sal_uInt8 nRightToLeft,
+        const SvxFont& rFont, sal_Int32 nPara, xub_StrLen nIndex, sal_uInt8 nRightToLeft,
         const EEngineData::WrongSpellVector* pWrongSpellVector,
         const SvxFieldData* pFieldData,
         bool bEndOfLine,
@@ -465,22 +465,22 @@ public:
 
     virtual void DrawingTab(
         const Point& rStartPos, long nWidth, const String& rChar,
-        const SvxFont& rFont, sal_uInt16 nPara, xub_StrLen nIndex, sal_uInt8 nRightToLeft,
+        const SvxFont& rFont, sal_Int32 nPara, xub_StrLen nIndex, sal_uInt8 nRightToLeft,
         bool bEndOfLine,
         bool bEndOfParagraph,
         const Color& rOverlineColor,
         const Color& rTextLineColor);
     virtual String  GetUndoComment( sal_uInt16 nUndoId ) const;
-    virtual sal_Bool    FormattingParagraph( sal_uInt16 nPara );
+    virtual sal_Bool    FormattingParagraph( sal_Int32 nPara );
     virtual sal_Bool    SpellNextDocument();
-    virtual void    FieldClicked( const SvxFieldItem& rField, sal_uInt16 nPara, xub_StrLen nPos );
-    virtual void    FieldSelected( const SvxFieldItem& rField, sal_uInt16 nPara, xub_StrLen nPos );
-    virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, xub_StrLen nPos, Color*& rTxtColor, Color*& rFldColor );
+    virtual void    FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, xub_StrLen nPos );
+    virtual void    FieldSelected( const SvxFieldItem& rField, sal_Int32 nPara, xub_StrLen nPos );
+    virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, xub_StrLen nPos, Color*& rTxtColor, Color*& rFldColor );
 
     // to be overloaded if access to bullet information needs to be provided
-    virtual const SvxNumberFormat * GetNumberFormat( sal_uInt16 nPara ) const;
+    virtual const SvxNumberFormat * GetNumberFormat( sal_Int32 nPara ) const;
 
-    virtual Rectangle GetBulletArea( sal_uInt16 nPara );
+    virtual Rectangle GetBulletArea( sal_Int32 nPara );
 
     static SfxItemPool* CreatePool( sal_Bool bLoadRefCounts = sal_True );
     static SfxItemPool& GetGlobalItemPool();
@@ -543,8 +543,8 @@ public:
     ESelection CreateESelection(const EditSelection& rSel);
     EditSelection CreateSelection(const ESelection& rSel);
 
-    const SfxItemSet& GetBaseParaAttribs(sal_uInt16 nPara) const;
-    void SetParaAttribsOnly(sal_uInt16 nPara, const SfxItemSet& rSet);
+    const SfxItemSet& GetBaseParaAttribs(sal_Int32 nPara) const;
+    void SetParaAttribsOnly(sal_Int32 nPara, const SfxItemSet& rSet);
     void SetAttribs(const EditSelection& rSel, const SfxItemSet& rSet, sal_uInt8 nSpecial = 0);
 
     String GetSelected(const EditSelection& rSel, const LineEnd eParaSep = LINEEND_LF) const;
@@ -552,7 +552,7 @@ public:
 
     sal_uInt16 GetScriptType(const EditSelection& rSel) const;
 
-    void RemoveParaPortion(size_t nNode);
+    void RemoveParaPortion(sal_Int32 nNode);
 
     void SetCallParaInsertedOrDeleted(bool b);
     bool IsCallParaInsertedOrDeleted() const;
@@ -560,15 +560,15 @@ public:
     void AppendDeletedNodeInfo(DeletedNodeInfo* pInfo);
     void UpdateSelections();
 
-    void InsertContent(ContentNode* pNode, sal_uInt16 nPos);
-    EditPaM SplitContent(sal_uInt16 nNode, sal_uInt16 nSepPos);
-    EditPaM ConnectContents(sal_uInt16 nLeftNode, bool bBackward);
+    void InsertContent(ContentNode* pNode, sal_Int32 nPos);
+    EditPaM SplitContent(sal_Int32 nNode, sal_uInt16 nSepPos);
+    EditPaM ConnectContents(sal_Int32 nLeftNode, bool bBackward);
 
     EditPaM InsertFeature(const EditSelection& rEditSelection, const SfxPoolItem& rItem);
 
-    EditSelection MoveParagraphs(const Range& rParagraphs, sal_uInt16 nNewPos, EditView* pCurView);
+    EditSelection MoveParagraphs(const Range& rParagraphs, sal_Int32 nNewPos, EditView* pCurView);
 
-    void RemoveCharAttribs(sal_uInt16 nPara, sal_uInt16 nWhich = 0, bool bRemoveFeatures = false);
+    void RemoveCharAttribs(sal_Int32 nPara, sal_uInt16 nWhich = 0, bool bRemoveFeatures = false);
     void RemoveCharAttribs(const EditSelection& rSel, bool bRemoveParaAttribs, sal_uInt16 nWhich = 0);
 
     ViewsType& GetEditViews();

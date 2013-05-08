@@ -192,11 +192,11 @@ void SdTransformOOo2xDocument::transformTextShape( SdrTextObj& rTextShape )
         {
             mrOutliner.SetText( *pOPO );
 
-            sal_uInt32 nCount = mrOutliner.GetParagraphCount();
+            sal_Int32 nCount = mrOutliner.GetParagraphCount();
 
             bool bChange = false;
 
-            for(sal_uInt16 nPara = 0; nPara < nCount; nPara++)
+            for(sal_Int32 nPara = 0; nPara < nCount; nPara++)
             {
                 SfxItemSet aParaSet( mrOutliner.GetParaAttribs( nPara ) );
 

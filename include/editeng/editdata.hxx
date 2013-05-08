@@ -40,10 +40,14 @@ enum EVAnchorMode       {
             ANCHOR_TOP_HCENTER, ANCHOR_VCENTER_HCENTER, ANCHOR_BOTTOM_HCENTER,
             ANCHOR_TOP_RIGHT,   ANCHOR_VCENTER_RIGHT,   ANCHOR_BOTTOM_RIGHT };
 
-#define EE_PARA_NOT_FOUND       0xFFFF
-#define EE_PARA_APPEND          0xFFFF
-#define EE_PARA_ALL             0xFFFF
-#define EE_INDEX_NOT_FOUND      0xFFFF
+#define EE_PARA_NOT_FOUND       SAL_MAX_INT32
+#define EE_PARA_APPEND          SAL_MAX_INT32
+#define EE_PARA_ALL             SAL_MAX_INT32
+#define EE_PARA_MAX_COUNT       SAL_MAX_INT32
+
+#define EE_INDEX_NOT_FOUND      SAL_MAX_UINT16
+#define EE_TEXTPOS_ALL          SAL_MAX_UINT16
+#define EE_TEXTPOS_MAX_COUNT    SAL_MAX_UINT16
 
 EDITENG_DLLPUBLIC extern const size_t EE_APPEND;
 
@@ -96,7 +100,7 @@ class SfxStyleSheet;
 
 struct EPosition
 {
-    sal_uInt16      nPara;
+    sal_Int32   nPara;
     xub_StrLen  nIndex;
 
     EPosition() :
@@ -105,7 +109,7 @@ struct EPosition
     {
     }
 
-    EPosition( sal_uInt16 nPara_, xub_StrLen nPos_ ) :
+    EPosition( sal_Int32 nPara_, xub_StrLen nPos_ ) :
         nPara( nPara_ ),
         nIndex( nPos_ )
     {
@@ -114,14 +118,14 @@ struct EPosition
 
 struct ESelection
 {
-    sal_uInt16      nStartPara;
+    sal_Int32   nStartPara;
     xub_StrLen  nStartPos;
-    sal_uInt16      nEndPara;
+    sal_Int32   nEndPara;
     xub_StrLen  nEndPos;
 
     ESelection() : nStartPara( 0 ), nStartPos( 0 ), nEndPara( 0 ), nEndPos( 0 ) {}
 
-    ESelection( sal_uInt16 nStPara, xub_StrLen nStPos, sal_uInt16 nEPara, xub_StrLen nEPos ) :
+    ESelection( sal_Int32 nStPara, xub_StrLen nStPos, sal_Int32 nEPara, xub_StrLen nEPos ) :
         nStartPara( nStPara ),
         nStartPos( nStPos ),
         nEndPara( nEPara ),
@@ -129,7 +133,7 @@ struct ESelection
     {
     }
 
-    ESelection( sal_uInt16 nPara, xub_StrLen nPos ) :
+    ESelection( sal_Int32 nPara, xub_StrLen nPos ) :
         nStartPara( nPara ),
         nStartPos( nPos ),
         nEndPara( nPara ),
@@ -198,7 +202,7 @@ inline void ESelection::Adjust()
 
     if ( bSwap )
     {
-        sal_uInt16 nSPar = nStartPara; sal_uInt16 nSPos = nStartPos;
+        sal_Int32  nSPar = nStartPara; sal_uInt16 nSPos = nStartPos;
         nStartPara = nEndPara; nStartPos = nEndPos;
         nEndPara = nSPar; nEndPos = nSPos;
     }
@@ -211,7 +215,7 @@ struct EDITENG_DLLPUBLIC EFieldInfo
     EPosition       aPosition;
 
     EFieldInfo();
-    EFieldInfo( const SvxFieldItem& rFieldItem, sal_uInt16 nPara, sal_uInt16 nPos );
+    EFieldInfo( const SvxFieldItem& rFieldItem, sal_Int32 nPara, sal_uInt16 nPos );
     ~EFieldInfo();
 
     EFieldInfo( const EFieldInfo& );
@@ -279,18 +283,18 @@ struct EECharAttrib
 {
     const SfxPoolItem*  pAttr;
 
-    sal_uInt16              nPara;
+    sal_Int32           nPara;
     xub_StrLen          nStart;
     xub_StrLen          nEnd;
 };
 
 struct MoveParagraphsInfo
 {
-    sal_uInt16  nStartPara;
-    sal_uInt16  nEndPara;
-    sal_uInt16  nDestPara;
+    sal_Int32  nStartPara;
+    sal_Int32  nEndPara;
+    sal_Int32  nDestPara;
 
-    MoveParagraphsInfo( sal_uInt16 nS, sal_uInt16 nE, sal_uInt16 nD )
+    MoveParagraphsInfo( sal_Int32 nS, sal_Int32 nE, sal_Int32 nD )
         { nStartPara = nS; nEndPara = nE; nDestPara = nD; }
 };
 
@@ -300,10 +304,10 @@ struct MoveParagraphsInfo
 struct PasteOrDropInfos
 {
     sal_uInt16  nAction;
-    sal_uInt16  nStartPara;
-    sal_uInt16  nEndPara;
+    sal_Int32   nStartPara;
+    sal_Int32   nEndPara;
 
-    PasteOrDropInfos() : nAction(0), nStartPara(0xFFFF), nEndPara(0xFFFF)  {}
+    PasteOrDropInfos() : nAction(0), nStartPara(0xFFFFFFFF), nEndPara(0xFFFFFFFF)  {}
 };
 
 enum EENotifyType
@@ -354,10 +358,10 @@ struct EENotify
     EditEngine*     pEditEngine;
     EditView*       pEditView;
 
-    sal_uInt16          nParagraph; // only valid in PARAGRAPHINSERTED/EE_NOTIFY_PARAGRAPHREMOVED
+    sal_Int32       nParagraph; // only valid in PARAGRAPHINSERTED/EE_NOTIFY_PARAGRAPHREMOVED
 
-    sal_uInt16          nParam1;
-    sal_uInt16          nParam2;
+    sal_Int32       nParam1;
+    sal_Int32       nParam2;
 
     EENotify( EENotifyType eType )
         { eNotificationType = eType; pEditEngine = NULL; pEditView = NULL; nParagraph = EE_PARA_NOT_FOUND; nParam1 = 0; nParam2 = 0; }

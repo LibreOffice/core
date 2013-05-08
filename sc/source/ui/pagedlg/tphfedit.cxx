@@ -142,8 +142,8 @@ EditTextObject* ScEditWindow::CreateTextObject()
     //  (GetAttribs beim Format-Dialog-Aufruf gibt immer gesetzte Items zurueck)
 
     const SfxItemSet& rEmpty = pEdEngine->GetEmptyItemSet();
-    sal_uInt16 nParCnt = pEdEngine->GetParagraphCount();
-    for (sal_uInt16 i=0; i<nParCnt; i++)
+    sal_Int32 nParCnt = pEdEngine->GetParagraphCount();
+    for (sal_Int32 i=0; i<nParCnt; i++)
         pEdEngine->SetParaAttribs( i, rEmpty );
 
     return pEdEngine->CreateTextObject();

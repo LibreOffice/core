@@ -436,8 +436,8 @@ XclExpStringRef lclCreateFormattedString(
     sal_Int16 nLastScript = XclExpStringHelper::GetLeadingScriptType( rRoot, rEE.GetText() );
 
     // process all paragraphs
-    sal_uInt16 nParaCount = rEE.GetParagraphCount();
-    for( sal_uInt16 nPara = 0; nPara < nParaCount; ++nPara )
+    sal_Int32 nParaCount = rEE.GetParagraphCount();
+    for( sal_Int32 nPara = 0; nPara < nParaCount; ++nPara )
     {
         ESelection aSel( nPara, 0 );
         String aParaText( rEE.GetText( nPara ) );
@@ -709,8 +709,8 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
             pFontList = pInfoItem->GetFontList();
     }
 
-    sal_uInt16 nParaCount = mrEE.GetParagraphCount();
-    for( sal_uInt16 nPara = 0; nPara < nParaCount; ++nPara )
+    sal_Int32 nParaCount = mrEE.GetParagraphCount();
+    for( sal_Int32 nPara = 0; nPara < nParaCount; ++nPara )
     {
         ESelection aSel( nPara, 0 );
         String aParaText;

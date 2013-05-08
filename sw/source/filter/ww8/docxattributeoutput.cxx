@@ -2618,11 +2618,11 @@ void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
     const EditTextObject& rEditObj = rParaObj.GetTextObject();
     MSWord_SdrAttrIter aAttrIter( m_rExport, rEditObj, TXT_HFTXTBOX );
 
-    sal_uInt16 nPara = rEditObj.GetParagraphCount();
+    sal_Int32 nPara = rEditObj.GetParagraphCount();
 
     m_pSerializer->startElementNS( XML_w, XML_textbox, FSEND );
     m_pSerializer->startElementNS( XML_w, XML_txbxContent, FSEND );
-    for (sal_uInt16 n = 0; n < nPara; ++n)
+    for (sal_Int32 n = 0; n < nPara; ++n)
     {
         if( n )
             aAttrIter.NextPara( n );

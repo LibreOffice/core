@@ -362,7 +362,7 @@ void AnnotationWindow::InitControls()
 
 void AnnotationWindow::StartEdit()
 {
-    getView()->SetSelection(ESelection(0xFFFF,0xFFFF,0xFFFF,0xFFFF));
+    getView()->SetSelection(ESelection(EE_PARA_MAX_COUNT,EE_TEXTPOS_MAX_COUNT,EE_PARA_MAX_COUNT,EE_TEXTPOS_MAX_COUNT));
     getView()->ShowCursor();
 }
 
@@ -467,7 +467,7 @@ void AnnotationWindow::SetLanguage(const SvxLanguageItem &aNewItem)
     Engine()->SetModifyHdl( Link() );
     ESelection aOld = getView()->GetSelection();
 
-    ESelection aNewSelection( 0, 0, (sal_uInt16)Engine()->GetParagraphCount()-1, USHRT_MAX );
+    ESelection aNewSelection( 0, 0, Engine()->GetParagraphCount()-1, EE_TEXTPOS_ALL );
     getView()->SetSelection( aNewSelection );
     SfxItemSet aEditAttr(getView()->GetAttribs());
     aEditAttr.Put(aNewItem);

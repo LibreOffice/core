@@ -761,7 +761,7 @@ void SwSidebarWin::SetLanguage(const SvxLanguageItem aNewItem)
     Engine()->SetModifyHdl( Link() );
     ESelection aOld = GetOutlinerView()->GetSelection();
 
-    ESelection aNewSelection( 0, 0, (sal_uInt16)Engine()->GetParagraphCount()-1, USHRT_MAX );
+    ESelection aNewSelection( 0, 0, Engine()->GetParagraphCount()-1, EE_TEXTPOS_ALL );
     GetOutlinerView()->SetSelection( aNewSelection );
     SfxItemSet aEditAttr(GetOutlinerView()->GetAttribs());
     aEditAttr.Put(aNewItem);

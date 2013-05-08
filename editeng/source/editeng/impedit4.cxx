@@ -234,7 +234,7 @@ void ImpEditEngine::Write( SvStream& rOutput, EETextFormat eFormat, EditSelectio
 
 sal_uInt32 ImpEditEngine::WriteText( SvStream& rOutput, EditSelection aSel )
 {
-    sal_uInt16 nStartNode, nEndNode;
+    sal_Int32 nStartNode, nEndNode;
     sal_Bool bRange = aSel.HasRange();
     if ( bRange )
     {
@@ -249,7 +249,7 @@ sal_uInt32 ImpEditEngine::WriteText( SvStream& rOutput, EditSelection aSel )
     }
 
     // iterate over the paragraphs ...
-    for ( sal_uInt16 nNode = nStartNode; nNode <= nEndNode; nNode++  )
+    for ( sal_Int32 nNode = nStartNode; nNode <= nEndNode; nNode++  )
     {
         ContentNode* pNode = aEditDoc.GetObject( nNode );
         DBG_ASSERT( pNode, "Node not founden: Search&Replace" );
@@ -270,7 +270,7 @@ sal_uInt32 ImpEditEngine::WriteText( SvStream& rOutput, EditSelection aSel )
     return rOutput.GetError();
 }
 
-sal_Bool ImpEditEngine::WriteItemListAsRTF( ItemList& rLst, SvStream& rOutput, sal_uInt16 nPara, sal_uInt16 nPos,
+sal_Bool ImpEditEngine::WriteItemListAsRTF( ItemList& rLst, SvStream& rOutput, sal_Int32 nPara, sal_uInt16 nPos,
                         std::vector<SvxFontItem*>& rFontTable, SvxColorList& rColorList )
 {
     const SfxPoolItem* pAttrItem = rLst.First();
@@ -336,7 +336,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     if ( !IsFormatted() )
         FormatDoc();
 
-    sal_uInt16 nStartNode, nEndNode;
+    sal_Int32 nStartNode, nEndNode;
     aSel.Adjust( aEditDoc );
 
     nStartNode = aEditDoc.GetPos( aSel.Min().GetNode() );
@@ -540,7 +540,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
 
     // iterate over the paragraphs ...
     rOutput << '{' << endl;
-    for ( sal_uInt16 nNode = nStartNode; nNode <= nEndNode; nNode++  )
+    for ( sal_Int32 nNode = nStartNode; nNode <= nEndNode; nNode++  )
     {
         ContentNode* pNode = aEditDoc.GetObject( nNode );
         DBG_ASSERT( pNode, "Node not found: Search&Replace" );
@@ -699,7 +699,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
 }
 
 
-void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput, sal_uInt16 nPara, sal_uInt16 nPos,
+void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput, sal_Int32 nPara, sal_uInt16 nPos,
                             std::vector<SvxFontItem*>& rFontTable, SvxColorList& rColorList )
 {
     sal_uInt16 nWhich = rItem.Which();
@@ -1029,7 +1029,7 @@ EditTextObject* ImpEditEngine::CreateTextObject( EditSelection aSel, SfxItemPool
     if ( pTxtObj->mpImpl->IsOwnerOfPool() )
         pTxtObj->mpImpl->GetPool()->SetDefaultMetric( (SfxMapUnit) eMapUnit );
 
-    sal_uInt16 nStartNode, nEndNode;
+    sal_Int32 nStartNode, nEndNode;
     sal_uInt32 nTextPortions = 0;
 
     aSel.Adjust( aEditDoc );
@@ -1045,7 +1045,7 @@ EditTextObject* ImpEditEngine::CreateTextObject( EditSelection aSel, SfxItemPool
     pTxtObj->mpImpl->SetScriptType(GetScriptType(aSel));
 
     // iterate over the paragraphs ...
-    sal_uInt16 nNode;
+    sal_Int32 nNode;
     for ( nNode = nStartNode; nNode <= nEndNode; nNode++  )
     {
         ContentNode* pNode = aEditDoc.GetObject( nNode );
@@ -1230,10 +1230,14 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
             bConvertItems = sal_True;
     }
 
-    size_t nContents = rTextObject.mpImpl->GetContents().size();
-    sal_uInt16 nPara = aEditDoc.GetPos( aPaM.GetNode() );
+    // Before, paragraph count was of type sal_uInt16 so if nContents exceeded
+    // 0xFFFF this wouldn't had worked anyway, given that nPara is used to
+    // number paragraphs and is fearlessly incremented.
+    sal_Int32 nContents = static_cast<sal_Int32>(rTextObject.mpImpl->GetContents().size());
+    SAL_WARN_IF( nContents < 0, "editeng", "ImpEditEngine::InsertTextObject - contents overflow " << nContents);
+    sal_Int32 nPara = aEditDoc.GetPos( aPaM.GetNode() );
 
-    for (size_t n = 0; n < nContents; ++n, ++nPara)
+    for (sal_Int32 n = 0; n < nContents; ++n, ++nPara)
     {
         const ContentInfo* pC = &rTextObject.mpImpl->GetContents()[n];
         sal_Bool bNewContent = aPaM.GetNode()->Len() ? sal_False: sal_True;
@@ -1483,8 +1487,8 @@ sal_Bool ImpEditEngine::HasConvertibleTextPortion( LanguageType nSrcLang )
 {
     sal_Bool    bHasConvTxt = sal_False;
 
-    sal_uInt16 nParas = pEditEngine->GetParagraphCount();
-    for (sal_uInt16 k = 0;  k < nParas;  ++k)
+    sal_Int32 nParas = pEditEngine->GetParagraphCount();
+    for (sal_Int32 k = 0;  k < nParas;  ++k)
     {
         std::vector<sal_uInt16> aPortions;
         pEditEngine->GetPortions( k, aPortions );
@@ -1661,7 +1665,7 @@ void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
         if (bAllowImplicitChangesForNotConvertibleText &&
             !pEditEngine->GetText( pConvInfo->aConvContinue.nPara ).Len())
         {
-            sal_uInt16 nPara = pConvInfo->aConvContinue.nPara;
+            sal_Int32 nPara = pConvInfo->aConvContinue.nPara;
             ESelection aESel( nPara, 0, nPara, 0 );
             // see comment for below same function call
             SetLanguageAndFont( aESel,
@@ -1679,7 +1683,7 @@ void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
         sal_uInt16 nCurPos      = USHRT_MAX;
         EPaM aCurStart = CreateEPaM( aCurSel.Min() );
         std::vector<sal_uInt16> aPortions;
-        pEditEngine->GetPortions( (sal_uInt16)aCurStart.nPara, aPortions );
+        pEditEngine->GetPortions( aCurStart.nPara, aPortions );
         for ( size_t nPos = 0; nPos < aPortions.size(); ++nPos )
         {
             sal_uInt16 nEnd   = aPortions[ nPos ];
@@ -2238,10 +2242,10 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
     sal_Bool bRestartTimer = sal_False;
 
     ContentNode* pLastNode = aEditDoc.GetObject( aEditDoc.Count() - 1 );
-    sal_uInt16 nNodes = GetEditDoc().Count();
-    sal_uInt16 nInvalids = 0;
+    sal_Int32 nNodes = GetEditDoc().Count();
+    sal_Int32 nInvalids = 0;
     Sequence< PropertyValue > aEmptySeq;
-    for ( sal_uInt16 n = 0; n < nNodes; n++ )
+    for ( sal_Int32 n = 0; n < nNodes; n++ )
     {
         ContentNode* pNode = GetEditDoc().GetObject( n );
         if ( pThisNodeOnly )
@@ -2580,8 +2584,8 @@ sal_Bool ImpEditEngine::ImpSearch( const SvxSearchItem& rSearchItem,
 
     sal_Bool bBack = rSearchItem.GetBackward();
     sal_Bool bSearchInSelection = rSearchItem.GetSelection();
-    sal_uInt16 nStartNode = aEditDoc.GetPos( rStartPos.GetNode() );
-    sal_uInt16 nEndNode;
+    sal_Int32 nStartNode = aEditDoc.GetPos( rStartPos.GetNode() );
+    sal_Int32 nEndNode;
     if ( bSearchInSelection )
     {
         nEndNode = aEditDoc.GetPos( bBack ? rSearchSelection.Min().GetNode() : rSearchSelection.Max().GetNode() );
@@ -2594,12 +2598,12 @@ sal_Bool ImpEditEngine::ImpSearch( const SvxSearchItem& rSearchItem,
     utl::TextSearch aSearcher( aSearchOptions );
 
     // iterate over the paragraphs ...
-    for ( sal_uInt16 nNode = nStartNode;
+    for ( sal_Int32 nNode = nStartNode;
             bBack ? ( nNode >= nEndNode ) : ( nNode <= nEndNode) ;
             bBack ? nNode-- : nNode++ )
     {
         // For backwards-search if nEndNode = 0:
-        if ( nNode >= 0xFFFF )
+        if ( nNode < 0 )
             return sal_False;
 
         ContentNode* pNode = aEditDoc.GetObject( nNode );
@@ -2689,8 +2693,8 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
 
     EditSelection aNewSel( aSel );
 
-    const sal_uInt16 nStartNode = aEditDoc.GetPos( aSel.Min().GetNode() );
-    const sal_uInt16 nEndNode = aEditDoc.GetPos( aSel.Max().GetNode() );
+    const sal_Int32 nStartNode = aEditDoc.GetPos( aSel.Min().GetNode() );
+    const sal_Int32 nEndNode = aEditDoc.GetPos( aSel.Max().GetNode() );
 
     sal_Bool bChanges = sal_False;
     sal_Bool bLenChanged = sal_False;
@@ -2699,7 +2703,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
     utl::TransliterationWrapper aTranslitarationWrapper( ::comphelper::getProcessComponentContext(), nTransliterationMode );
     sal_Bool bConsiderLanguage = aTranslitarationWrapper.needLanguageForTheMode();
 
-    for ( sal_uInt16 nNode = nStartNode; nNode <= nEndNode; nNode++ )
+    for ( sal_Int32 nNode = nStartNode; nNode <= nEndNode; nNode++ )
     {
         ContentNode* pNode = aEditDoc.GetObject( nNode );
         const XubString& aNodeStr = pNode->GetString();
@@ -2965,7 +2969,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 if (aSel.Max().GetNode() == rData.aSelection.Max().GetNode())
                     aNewSel.Max().GetIndex() = aNewSel.Max().GetIndex() + nDiffs;
 
-                sal_uInt16 nSelNode = aEditDoc.GetPos( rData.aSelection.Min().GetNode() );
+                sal_Int32 nSelNode = aEditDoc.GetPos( rData.aSelection.Min().GetNode() );
                 ParaPortion* pParaPortion = GetParaPortions()[nSelNode];
                 pParaPortion->MarkSelectionInvalid( rData.nStart,
                         std::max< sal_uInt16 >( rData.nStart + rData.nLen,

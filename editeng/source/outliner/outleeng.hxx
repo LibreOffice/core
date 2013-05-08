@@ -32,21 +32,21 @@ protected:
 
     // derived from EditEngine. Allows Outliner objetcs to provide
     // bullet access to the EditEngine.
-    virtual const SvxNumberFormat*  GetNumberFormat( sal_uInt16 nPara ) const;
+    virtual const SvxNumberFormat*  GetNumberFormat( sal_Int32 nPara ) const;
 
 public:
                         OutlinerEditEng( Outliner* pOwner, SfxItemPool* pPool );
                         ~OutlinerEditEng();
 
-    virtual void        PaintingFirstLine( sal_uInt16 nPara, const Point& rStartPos, long nBaseLineY, const Point& rOrigin, short nOrientation, OutputDevice* pOutDev );
+    virtual void        PaintingFirstLine( sal_Int32 nPara, const Point& rStartPos, long nBaseLineY, const Point& rOrigin, short nOrientation, OutputDevice* pOutDev );
 
-    virtual void        ParagraphInserted( sal_uInt16 nNewParagraph );
-    virtual void        ParagraphDeleted( sal_uInt16 nDeletedParagraph );
-    virtual void        ParagraphConnected( sal_uInt16 nLeftParagraph, sal_uInt16 nRightParagraph );
+    virtual void        ParagraphInserted( sal_Int32 nNewParagraph );
+    virtual void        ParagraphDeleted( sal_Int32 nDeletedParagraph );
+    virtual void        ParagraphConnected( sal_Int32 nLeftParagraph, sal_Int32 nRightParagraph );
 
     virtual void DrawingText(
         const Point& rStartPos, const XubString& rText, sal_uInt16 nTextStart, sal_uInt16 nTextLen, const sal_Int32* pDXArray, const SvxFont& rFont,
-        sal_uInt16 nPara, sal_uInt16 nIndex, sal_uInt8 nRightToLeft,
+        sal_Int32 nPara, sal_uInt16 nIndex, sal_uInt8 nRightToLeft,
         const EEngineData::WrongSpellVector* pWrongSpellVector,
         const SvxFieldData* pFieldData,
         bool bEndOfLine,
@@ -58,27 +58,27 @@ public:
 
     virtual void DrawingTab(
         const Point& rStartPos, long nWidth, const String& rChar,
-        const SvxFont& rFont, sal_uInt16 nPara, xub_StrLen nIndex, sal_uInt8 nRightToLeft,
+        const SvxFont& rFont, sal_Int32 nPara, xub_StrLen nIndex, sal_uInt8 nRightToLeft,
         bool bEndOfLine,
         bool bEndOfParagraph,
         const Color& rOverlineColor,
         const Color& rTextLineColor);
 
     virtual void        StyleSheetChanged( SfxStyleSheet* pStyle );
-    virtual void        ParaAttribsChanged( sal_uInt16 nPara );
+    virtual void        ParaAttribsChanged( sal_Int32 nPara );
     virtual sal_Bool        SpellNextDocument();
     virtual XubString   GetUndoComment( sal_uInt16 nUndoId ) const;
 
     // for text conversion
     virtual sal_Bool        ConvertNextDocument();
 
-    virtual void        FieldClicked( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos );
-    virtual void        FieldSelected( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos );
-    virtual OUString    CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rTxtColor, Color*& rFldColor );
+    virtual void        FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos );
+    virtual void        FieldSelected( const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos );
+    virtual OUString    CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos, Color*& rTxtColor, Color*& rFldColor );
 
-    virtual Rectangle   GetBulletArea( sal_uInt16 nPara );
+    virtual Rectangle   GetBulletArea( sal_Int32 nPara );
 
-       virtual void        SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rSet );
+       virtual void        SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet );
 
     // belongs into class Outliner, move there before incompatible update!
     Link                aOutlinerNotifyHdl;

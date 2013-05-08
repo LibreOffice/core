@@ -41,8 +41,8 @@ OUString getString( const _T& rVal )
     if (rVal.meType == CELLTYPE_EDIT)
     {
         OUStringBuffer aRet;
-        size_t n = rVal.mpEditText->GetParagraphCount();
-        for (size_t i = 0; i < n; ++i)
+        sal_Int32 n = rVal.mpEditText->GetParagraphCount();
+        for (sal_Int32 i = 0; i < n; ++i)
         {
             if (i > 0)
                 aRet.append('\n');

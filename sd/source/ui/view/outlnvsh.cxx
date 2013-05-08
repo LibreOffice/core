@@ -770,7 +770,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     // allow 'Select All'?
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_SELECTALL ) )
     {
-        sal_uLong nParaCount = pOutl->GetParagraphCount();
+        sal_Int32 nParaCount = pOutl->GetParagraphCount();
         sal_Bool bDisable = nParaCount == 0;
         if (!bDisable && nParaCount == 1)
         {
@@ -819,14 +819,14 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
         Paragraph* pPara = *iter;
 
         sal_Int16 nDepth;
-        sal_Int16 nTmpDepth = pOutl->GetDepth( (sal_uInt16) pOutl->GetAbsPos( pPara ) );
+        sal_Int16 nTmpDepth = pOutl->GetDepth( pOutl->GetAbsPos( pPara ) );
         bool bPage = pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE );
 
         while (iter != aSelList.begin())
         {
             pPara = *iter;
 
-            nDepth = pOutl->GetDepth( (sal_uInt16) pOutl->GetAbsPos( pPara ) );
+            nDepth = pOutl->GetDepth( pOutl->GetAbsPos( pPara ) );
 
             if( nDepth != nTmpDepth || bPage != pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE ))
                 bUnique = sal_False;
@@ -875,7 +875,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     // otherwise look through all paragraphs
     if (bDisableCollapseAll || bDisableExpandAll)
     {
-        sal_uLong nParaPos = 0;
+        sal_Int32 nParaPos = 0;
         Paragraph* pPara = pOutl->GetParagraph( nParaPos );
         while (pPara && (bDisableCollapseAll || bDisableExpandAll))
         {
@@ -1685,7 +1685,7 @@ bool OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
         // if we have a title object and a text, set the text
         if( pTO )
         {
-            pOPO = pOutliner->CreateParaObject( (sal_uInt16) pOutliner->GetAbsPos( pPara ), 1 );
+            pOPO = pOutliner->CreateParaObject( pOutliner->GetAbsPos( pPara ), 1 );
             pOPO->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
             pOPO->SetVertical( pTO->IsVerticalWriting() );
             if( pTO->GetOutlinerParaObject() && (pOPO->GetTextObject() == pTO->GetOutlinerParaObject()->GetTextObject()) )
@@ -1761,9 +1761,9 @@ bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
     }
 
     // how many paragraphs in the outline?
-    sal_uLong nTitlePara     = pOutliner->GetAbsPos( pPara );
-    sal_uLong nPara          = nTitlePara + 1;
-    sal_uLong nParasInLayout = 0L;
+    sal_Int32 nTitlePara     = pOutliner->GetAbsPos( pPara );
+    sal_Int32 nPara          = nTitlePara + 1;
+    sal_Int32 nParasInLayout = 0L;
     pPara = pOutliner->GetParagraph( nPara );
     while( pPara && !pOutliner->HasParaFlag(pPara, PARAFLAG_ISPAGE) )
     {
@@ -1774,7 +1774,7 @@ bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
     {
         // create an OutlinerParaObject
         pPara = pOutliner->GetParagraph( nTitlePara + 1 );
-        pOPO  = pOutliner->CreateParaObject( (sal_uInt16) nTitlePara + 1, (sal_uInt16) nParasInLayout );
+        pOPO  = pOutliner->CreateParaObject( nTitlePara + 1, nParasInLayout );
     }
 
     if( pOPO )
@@ -1864,10 +1864,10 @@ sal_uLong OutlineViewShell::Read(SvStream& rInput, const String& rBaseURL, sal_u
     SfxStyleSheet* pTitleSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE );
     SfxStyleSheet* pOutlSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_OUTLINE );
 
-    sal_uInt16 nParaCount = (sal_uInt16)pOutl->GetParagraphCount();
+    sal_Int32 nParaCount = pOutl->GetParagraphCount();
     if ( nParaCount > 0 )
     {
-        for ( sal_uInt16 nPara = 0; nPara < nParaCount; nPara++ )
+        for ( sal_Int32 nPara = 0; nPara < nParaCount; nPara++ )
         {
             pOlView->UpdateParagraph( nPara );
 

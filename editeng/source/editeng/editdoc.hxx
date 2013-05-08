@@ -54,11 +54,11 @@ class EditDoc;
 
 struct EPaM
 {
-    sal_uInt16 nPara;
+    sal_Int32  nPara;
     sal_uInt16 nIndex;
 
     EPaM()                              { nPara = 0; nIndex = 0; }
-    EPaM( sal_uInt16 nP, sal_uInt16 nI )        { nPara = nP; nIndex = nI; }
+    EPaM( sal_Int32 nP, sal_uInt16 nI ) { nPara = nP; nIndex = nI; }
     EPaM( const EPaM& r)                { nPara = r.nPara; nIndex = r.nIndex; }
     EPaM& operator = ( const EPaM& r )  { nPara = r.nPara; nIndex = r.nIndex; return *this; }
     inline sal_Bool operator == ( const EPaM& r ) const;
@@ -649,20 +649,20 @@ public:
 
     void            Reset();
     long GetYOffset(const ParaPortion* pPPortion) const;
-    sal_uInt16 FindParagraph(long nYOffset) const;
+    sal_Int32 FindParagraph(long nYOffset) const;
 
-    const ParaPortion* SafeGetObject(size_t nPos) const;
-    ParaPortion* SafeGetObject(size_t nPos);
+    const ParaPortion* SafeGetObject(sal_Int32 nPos) const;
+    ParaPortion* SafeGetObject(sal_Int32 nPos);
 
-    sal_uInt16 GetPos(const ParaPortion* p) const;
-    ParaPortion* operator[](size_t nPos);
-    const ParaPortion* operator[](size_t nPos) const;
+    sal_Int32 GetPos(const ParaPortion* p) const;
+    ParaPortion* operator[](sal_Int32 nPos);
+    const ParaPortion* operator[](sal_Int32 nPos) const;
 
-    ParaPortion* Release(size_t nPos);
-    void Remove(size_t nPos);
-    void Insert(size_t nPos, ParaPortion* p);
+    ParaPortion* Release(sal_Int32 nPos);
+    void Remove(sal_Int32 nPos);
+    void Insert(sal_Int32 nPos, ParaPortion* p);
     void Append(ParaPortion* p);
-    size_t Count() const;
+    sal_Int32 Count() const;
 
 #if OSL_DEBUG_LEVEL > 2
     // temporary:
@@ -711,15 +711,15 @@ class DeletedNodeInfo
 {
 private:
     sal_uIntPtr     nInvalidAdressPtr;
-    sal_uInt16  nInvalidParagraph;
+    sal_Int32       nInvalidParagraph;
 
 public:
-            DeletedNodeInfo( sal_uIntPtr nInvAdr, sal_uInt16 nPos )
+            DeletedNodeInfo( sal_uIntPtr nInvAdr, sal_Int32 nPos )
                                             {   nInvalidAdressPtr = nInvAdr;
                                                 nInvalidParagraph = nPos; }
 
     sal_uIntPtr GetInvalidAdress() const { return nInvalidAdressPtr; }
-    sal_uInt16  GetPosition() const { return nInvalidParagraph; }
+    sal_Int32   GetPosition() const { return nInvalidParagraph; }
 };
 
 // -------------------------------------------------------------------------
@@ -778,7 +778,7 @@ public:
     String          GetText( LineEnd eEnd ) const;
     sal_uLong           GetTextLen() const;
 
-    XubString       GetParaAsString( sal_uInt16 nNode ) const;
+    XubString       GetParaAsString( sal_Int32 nNode ) const;
     XubString       GetParaAsString(const ContentNode* pNode, sal_uInt16 nStartPos = 0, sal_uInt16 nEndPos = 0xFFFF, bool bResolveFields = true) const;
 
     EditPaM GetStartPaM() const;
@@ -796,17 +796,17 @@ public:
     sal_Bool            RemoveAttribs( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, EditCharAttrib*& rpStarting, EditCharAttrib*& rpEnding, sal_uInt16 nWhich = 0 );
     void            FindAttribs( ContentNode* pNode, sal_uInt16 nStartPos, sal_uInt16 nEndPos, SfxItemSet& rCurSet );
 
-    size_t GetPos(const ContentNode* pNode) const;
-    const ContentNode* GetObject(size_t nPos) const;
-    ContentNode* GetObject(size_t nPos);
-    size_t Count() const;
-    const ContentNode* operator[](size_t nPos) const;
-    ContentNode* operator[](size_t nPos);
-    void Insert(size_t nPos, ContentNode* p);
+    sal_Int32 GetPos(const ContentNode* pNode) const;
+    const ContentNode* GetObject(sal_Int32 nPos) const;
+    ContentNode* GetObject(sal_Int32 nPos);
+    sal_Int32 Count() const;
+    const ContentNode* operator[](sal_Int32 nPos) const;
+    ContentNode* operator[](sal_Int32 nPos);
+    void Insert(sal_Int32 nPos, ContentNode* p);
     /// deletes
-    void Remove(size_t nPos);
+    void Remove(sal_Int32 nPos);
     /// does not delete
-    void Release(size_t nPos);
+    void Release(sal_Int32 nPos);
 
     static OUString GetSepStr( LineEnd eEnd );
 };

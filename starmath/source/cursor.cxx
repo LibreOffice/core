@@ -1447,7 +1447,7 @@ void SmCursor::EndEdit(){
     SmNodeToTextVisitor(pTree, formula);
     //pTree->CreateTextFromNode(formula);
     pDocShell->aText = formula;
-    pDocShell->GetEditEngine().QuickInsertText( formula, ESelection( 0, 0, EE_PARA_ALL, EE_PARA_ALL ) );
+    pDocShell->GetEditEngine().QuickInsertText( formula, ESelection( 0, 0, EE_PARA_ALL, EE_TEXTPOS_ALL ) );
     pDocShell->GetEditEngine().QuickFormatDoc();
 }
 

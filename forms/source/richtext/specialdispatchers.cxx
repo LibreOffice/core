@@ -67,10 +67,10 @@ namespace frm
         if ( !pEngine )
             return;
 
-        sal_uInt16 nParagraphs = pEngine->GetParagraphCount();
+        sal_Int32 nParagraphs = pEngine->GetParagraphCount();
         if ( nParagraphs )
         {
-            sal_uInt16 nLastParaNumber = nParagraphs - 1;
+            sal_Int32 nLastParaNumber = nParagraphs - 1;
             xub_StrLen nParaLen = pEngine->GetTextLen( nLastParaNumber );
             getEditView()->SetSelection( ESelection( 0, 0, nLastParaNumber, nParaLen ) );
         }

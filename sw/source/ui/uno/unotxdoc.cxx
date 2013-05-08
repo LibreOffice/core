@@ -3265,12 +3265,12 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
         if(pOutliner)
         {
             EditEngine& rEditEng = (EditEngine&)pOutliner->GetEditEngine();
-            sal_uLong nParCount = pOutliner->GetParagraphCount();
-            for (sal_uLong nPar=0; nPar<nParCount; nPar++)
+            sal_Int32 nParCount = pOutliner->GetParagraphCount();
+            for (sal_Int32 nPar=0; nPar<nParCount; nPar++)
             {
                 //every paragraph
                 std::vector<sal_uInt16> aPortions;
-                rEditEng.GetPortions( (sal_uInt16)nPar, aPortions );
+                rEditEng.GetPortions( nPar, aPortions );
 
                 for ( size_t nPos = aPortions.size(); nPos; )
                 {
@@ -3278,7 +3278,7 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
                     --nPos;
                     sal_uInt16 nEnd = aPortions[ nPos ];
                     sal_uInt16 nStart = nPos ? aPortions[ nPos - 1 ] : 0;
-                    ESelection aSelection( (sal_uInt16)nPar, nStart, (sal_uInt16)nPar, nEnd );
+                    ESelection aSelection( nPar, nStart, nPar, nEnd );
                     SfxItemSet aAttr = rEditEng.GetAttribs( aSelection );
 
                     LanguageType nLang = LANGUAGE_DONTKNOW;

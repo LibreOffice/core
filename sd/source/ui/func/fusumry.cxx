@@ -189,9 +189,9 @@ void FuSummaryPage::DoExecute( SfxRequest& )
 
         // remove hard break- and character attributes
         SfxItemSet aEmptyEEAttr(mpDoc->GetPool(), EE_ITEMS_START, EE_ITEMS_END);
-        sal_uLong nParaCount = pOutl->GetParagraphCount();
+        sal_Int32 nParaCount = pOutl->GetParagraphCount();
 
-        for (sal_uInt16 nPara = 0; nPara < nParaCount; nPara++)
+        for (sal_Int32 nPara = 0; nPara < nParaCount; nPara++)
         {
             pOutl->SetStyleSheet( nPara, pStyle );
             pOutl->QuickRemoveCharAttribs(nPara);

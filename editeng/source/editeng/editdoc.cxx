@@ -702,8 +702,8 @@ size_t FastGetPos(const _Array& rArray, const _Val* p, size_t& rLastPos)
         if (&rArray.at(nIdx) == p)
             return rLastPos = nIdx;
 
-    // 0xFFFF is used to signify "not found" condition. We need to change this.
-    return std::numeric_limits<sal_uInt16>::max();
+    // XXX "not found" condition for sal_Int32 indexes
+    return EE_PARA_NOT_FOUND;
 }
 
 }
@@ -716,33 +716,48 @@ ParaPortionList::~ParaPortionList()
 {
 }
 
-sal_uInt16 ParaPortionList::GetPos(const ParaPortion* p) const
+sal_Int32 ParaPortionList::GetPos(const ParaPortion* p) const
 {
     return FastGetPos(maPortions, p, nLastCache);
 }
 
-ParaPortion* ParaPortionList::operator [](size_t nPos)
+ParaPortion* ParaPortionList::operator [](sal_Int32 nPos)
 {
-    return nPos < maPortions.size() ? &maPortions[nPos] : NULL;
+    return 0 <= nPos && static_cast<size_t>(nPos) < maPortions.size() ? &maPortions[nPos] : NULL;
 }
 
-const ParaPortion* ParaPortionList::operator [](size_t nPos) const
+const ParaPortion* ParaPortionList::operator [](sal_Int32 nPos) const
 {
-    return nPos < maPortions.size() ? &maPortions[nPos] : NULL;
+    return 0 <= nPos && static_cast<size_t>(nPos) < maPortions.size() ? &maPortions[nPos] : NULL;
 }
 
-ParaPortion* ParaPortionList::Release(size_t nPos)
+ParaPortion* ParaPortionList::Release(sal_Int32 nPos)
 {
+    if (nPos < 0 || maPortions.size() <= static_cast<size_t>(nPos))
+    {
+        SAL_WARN( "editeng", "ParaPortionList::Release - out of bounds pos " << nPos);
+        return NULL;
+    }
     return maPortions.release(maPortions.begin()+nPos).release();
 }
 
-void ParaPortionList::Remove(size_t nPos)
+void ParaPortionList::Remove(sal_Int32 nPos)
 {
+    if (nPos < 0 || maPortions.size() <= static_cast<size_t>(nPos))
+    {
+        SAL_WARN( "editeng", "ParaPortionList::Remove - out of bounds pos " << nPos);
+        return;
+    }
     maPortions.erase(maPortions.begin()+nPos);
 }
 
-void ParaPortionList::Insert(size_t nPos, ParaPortion* p)
+void ParaPortionList::Insert(sal_Int32 nPos, ParaPortion* p)
 {
+    if (nPos < 0 || maPortions.size() < static_cast<size_t>(nPos))
+    {
+        SAL_WARN( "editeng", "ParaPortionList::Insert - out of bounds pos " << nPos);
+        return;
+    }
     maPortions.insert(maPortions.begin()+nPos, p);
 }
 
@@ -751,9 +766,15 @@ void ParaPortionList::Append(ParaPortion* p)
     maPortions.push_back(p);
 }
 
-size_t ParaPortionList::Count() const
+sal_Int32 ParaPortionList::Count() const
 {
-    return maPortions.size();
+    size_t nSize = maPortions.size();
+    if (nSize > SAL_MAX_INT32)
+    {
+        SAL_WARN( "editeng", "ParaPortionList::Count - overflow " << nSize);
+        return SAL_MAX_INT32;
+    }
+    return nSize;
 }
 
 void ParaPortionList::Reset()
@@ -775,26 +796,26 @@ long ParaPortionList::GetYOffset(const ParaPortion* pPPortion) const
     return nHeight;
 }
 
-sal_uInt16 ParaPortionList::FindParagraph(long nYOffset) const
+sal_Int32 ParaPortionList::FindParagraph(long nYOffset) const
 {
     long nY = 0;
     for (size_t i = 0, n = maPortions.size(); i < n; ++i)
     {
         nY += maPortions[i].GetHeight(); // should also be correct even in bVisible!
         if ( nY > nYOffset )
-            return i;
+            return i <= SAL_MAX_INT32 ? static_cast<sal_Int32>(i) : SAL_MAX_INT32;
     }
     return EE_PARA_NOT_FOUND;
 }
 
-const ParaPortion* ParaPortionList::SafeGetObject(size_t nPos) const
+const ParaPortion* ParaPortionList::SafeGetObject(sal_Int32 nPos) const
 {
-    return nPos < maPortions.size() ? &maPortions[nPos] : NULL;
+    return 0 <= nPos && static_cast<size_t>(nPos) < maPortions.size() ? &maPortions[nPos] : NULL;
 }
 
-ParaPortion* ParaPortionList::SafeGetObject(size_t nPos)
+ParaPortion* ParaPortionList::SafeGetObject(sal_Int32 nPos)
 {
-    return nPos < maPortions.size() ? &maPortions[nPos] : NULL;
+    return 0 <= nPos && static_cast<size_t>(nPos) < maPortions.size() ? &maPortions[nPos] : NULL;
 }
 
 #if OSL_DEBUG_LEVEL > 2
@@ -1230,11 +1251,11 @@ sal_Bool EditSelection::Adjust( const EditDoc& rNodes )
     const ContentNode* pStartNode = aStartPaM.GetNode();
     const ContentNode* pEndNode = aEndPaM.GetNode();
 
-    sal_uInt16 nStartNode = rNodes.GetPos( pStartNode );
-    sal_uInt16 nEndNode = rNodes.GetPos( pEndNode );
+    sal_Int32 nStartNode = rNodes.GetPos( pStartNode );
+    sal_Int32 nEndNode = rNodes.GetPos( pEndNode );
 
-    DBG_ASSERT( nStartNode != USHRT_MAX, "Node out of range in Adjust(1)" );
-    DBG_ASSERT( nEndNode != USHRT_MAX, "Node out of range in Adjust(2)" );
+    DBG_ASSERT( nStartNode != SAL_MAX_INT32, "Node out of range in Adjust(1)" );
+    DBG_ASSERT( nEndNode != SAL_MAX_INT32, "Node out of range in Adjust(2)" );
 
     sal_Bool bSwap = sal_False;
     if ( nStartNode > nEndNode )
@@ -1963,7 +1984,7 @@ void EditDoc::CreateDefFont( sal_Bool bUseStyles )
     aDefFont.SetVertical( IsVertical() );
     aDefFont.SetOrientation( IsVertical() ? 2700 : 0 );
 
-    for ( sal_uInt16 nNode = 0; nNode < Count(); nNode++ )
+    for ( sal_Int32 nNode = 0; nNode < Count(); nNode++ )
     {
         ContentNode* pNode = GetObject( nNode );
         pNode->GetCharAttribs().GetDefFont() = aDefFont;
@@ -1976,55 +1997,70 @@ static const sal_Unicode aCR[] = { 0x0d, 0x00 };
 static const sal_Unicode aLF[] = { 0x0a, 0x00 };
 static const sal_Unicode aCRLF[] = { 0x0d, 0x0a, 0x00 };
 
-size_t EditDoc::GetPos(const ContentNode* p) const
+sal_Int32 EditDoc::GetPos(const ContentNode* p) const
 {
     return FastGetPos(maContents, p, nLastCache);
 }
 
-const ContentNode* EditDoc::GetObject(size_t nPos) const
+const ContentNode* EditDoc::GetObject(sal_Int32 nPos) const
 {
-    return nPos < maContents.size() ? &maContents[nPos] : NULL;
+    return 0 <= nPos && static_cast<size_t>(nPos) < maContents.size() ? &maContents[nPos] : NULL;
 }
 
-ContentNode* EditDoc::GetObject(size_t nPos)
+ContentNode* EditDoc::GetObject(sal_Int32 nPos)
 {
-    return nPos < maContents.size() ? &maContents[nPos] : NULL;
+    return 0 <= nPos && static_cast<size_t>(nPos) < maContents.size() ? &maContents[nPos] : NULL;
 }
 
-const ContentNode* EditDoc::operator[](size_t nPos) const
+const ContentNode* EditDoc::operator[](sal_Int32 nPos) const
 {
     return GetObject(nPos);
 }
 
-ContentNode* EditDoc::operator[](size_t nPos)
+ContentNode* EditDoc::operator[](sal_Int32 nPos)
 {
     return GetObject(nPos);
 }
 
-void EditDoc::Insert(size_t nPos, ContentNode* p)
+void EditDoc::Insert(sal_Int32 nPos, ContentNode* p)
 {
+    if (nPos < 0 || nPos == SAL_MAX_INT32)
+    {
+        SAL_WARN( "editeng", "EditDoc::Insert - overflow pos " << nPos);
+        return;
+    }
     maContents.insert(maContents.begin()+nPos, p);
 }
 
-void EditDoc::Remove(size_t nPos)
+void EditDoc::Remove(sal_Int32 nPos)
 {
-    if (nPos >= maContents.size())
+    if (nPos < 0 || static_cast<size_t>(nPos) >= maContents.size())
+    {
+        SAL_WARN( "editeng", "EditDoc::Remove - out of bounds pos " << nPos);
         return;
-
+    }
     maContents.erase(maContents.begin() + nPos);
 }
 
-void EditDoc::Release(size_t nPos)
+void EditDoc::Release(sal_Int32 nPos)
 {
-    if (nPos >= maContents.size())
+    if (nPos < 0 || static_cast<size_t>(nPos) >= maContents.size())
+    {
+        SAL_WARN( "editeng", "EditDoc::Release - out of bounds pos " << nPos);
         return;
-
+    }
     maContents.release(maContents.begin() + nPos).release();
 }
 
-size_t EditDoc::Count() const
+sal_Int32 EditDoc::Count() const
 {
-    return maContents.size();
+    size_t nSize = maContents.size();
+    if (nSize > SAL_MAX_INT32)
+    {
+        SAL_WARN( "editeng", "EditDoc::Count - overflow " << nSize);
+        return SAL_MAX_INT32;
+    }
+    return static_cast<sal_Int32>(nSize);
 }
 
 OUString EditDoc::GetSepStr( LineEnd eEnd )
@@ -2042,7 +2078,7 @@ OUString EditDoc::GetSepStr( LineEnd eEnd )
 XubString EditDoc::GetText( LineEnd eEnd ) const
 {
     sal_uLong nLen = GetTextLen();
-    size_t nNodes = Count();
+    sal_Int32 nNodes = Count();
     if (nNodes == 0)
         return OUString();
 
@@ -2054,8 +2090,8 @@ XubString EditDoc::GetText( LineEnd eEnd ) const
 
     rtl_uString* newStr = rtl_uString_alloc(nLen);
     sal_Unicode* pCur = newStr->buffer;
-    size_t nLastNode = nNodes-1;
-    for ( sal_uInt16 nNode = 0; nNode < nNodes; nNode++ )
+    sal_Int32 nLastNode = nNodes-1;
+    for ( sal_Int32 nNode = 0; nNode < nNodes; nNode++ )
     {
         String aTmp( GetParaAsString( GetObject(nNode) ) );
         memcpy( pCur, aTmp.GetBuffer(), aTmp.Len()*sizeof(sal_Unicode) );
@@ -2070,7 +2106,7 @@ XubString EditDoc::GetText( LineEnd eEnd ) const
     return OUString(newStr, SAL_NO_ACQUIRE);
 }
 
-XubString EditDoc::GetParaAsString( sal_uInt16 nNode ) const
+XubString EditDoc::GetParaAsString( sal_Int32 nNode ) const
 {
     return GetParaAsString( GetObject( nNode ) );
 }
@@ -2136,7 +2172,7 @@ EditPaM EditDoc::GetEndPaM() const
 sal_uLong EditDoc::GetTextLen() const
 {
     sal_uLong nLen = 0;
-    for ( sal_uInt16 nNode = 0; nNode < Count(); nNode++ )
+    for ( sal_Int32 nNode = 0; nNode < Count(); nNode++ )
     {
         const ContentNode* pNode = GetObject( nNode );
         nLen += pNode->Len();
@@ -2225,7 +2261,7 @@ EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, sal_Bool bKeepEndingAttribs )
 {
     DBG_ASSERT( aPaM.GetNode(), "Blinder PaM in EditDoc::InsertParaBreak" );
     ContentNode* pCurNode = aPaM.GetNode();
-    sal_uInt16 nPos = GetPos( pCurNode );
+    sal_Int32 nPos = GetPos( pCurNode );
     XubString aStr = aPaM.GetNode()->Copy( aPaM.GetIndex() );
     aPaM.GetNode()->Erase( aPaM.GetIndex() );
 
@@ -2292,7 +2328,7 @@ EditPaM EditDoc::ConnectParagraphs( ContentNode* pLeft, ContentNode* pRight )
 
     // the one to the right disappears.
     RemoveItemsFromPool(*pRight);
-    sal_uInt16 nRight = GetPos( pRight );
+    sal_Int32 nRight = GetPos( pRight );
     Remove( nRight );
 
     SetModified(true);

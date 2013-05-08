@@ -334,7 +334,7 @@ String HtmlState::SetLink( const String& aLink, const String& aTarget )
 // methods of the class HtmlExport
 // *********************************************************************
 
-static String getParagraphStyle( SdrOutliner* pOutliner, sal_uInt16 nPara )
+static String getParagraphStyle( SdrOutliner* pOutliner, sal_Int32 nPara )
 {
     SfxItemSet aParaSet( pOutliner->GetParaAttribs( nPara ) );
 
@@ -1203,19 +1203,19 @@ String HtmlExport::CreateTextForPage( SdrOutliner* pOutliner,
             pOutliner->Clear();
             pOutliner->SetText( *pOPO );
 
-            sal_uLong nCount = pOutliner->GetParagraphCount();
+            sal_Int32 nCount = pOutliner->GetParagraphCount();
 
             Paragraph* pPara = NULL;
             sal_Int16 nActDepth = -1;
 
             String aParaText;
-            for (sal_uLong nPara = 0; nPara < nCount; nPara++)
+            for (sal_Int32 nPara = 0; nPara < nCount; nPara++)
             {
                 pPara = pOutliner->GetParagraph(nPara);
                 if(pPara == 0)
                     continue;
 
-                const sal_Int16 nDepth = (sal_uInt16) pOutliner->GetDepth( (sal_uInt16) nPara );
+                const sal_Int16 nDepth = (sal_uInt16) pOutliner->GetDepth( nPara );
                 aParaText = ParagraphToHTMLString(pOutliner,nPara,rBackgroundColor);
 
                 if(aParaText.Len() == 0)
@@ -1300,8 +1300,8 @@ String HtmlExport::CreateTextForNotesPage( SdrOutliner* pOutliner,
             pOutliner->Clear();
             pOutliner->SetText( *pOPO );
 
-            sal_uLong nCount = pOutliner->GetParagraphCount();
-            for (sal_uLong nPara = 0; nPara < nCount; nPara++)
+            sal_Int32 nCount = pOutliner->GetParagraphCount();
+            for (sal_Int32 nPara = 0; nPara < nCount; nPara++)
             {
                 aStr.AppendAscii("<p style=\"");
                 aStr.Append( getParagraphStyle( pOutliner, nPara ) );
@@ -1318,7 +1318,7 @@ String HtmlExport::CreateTextForNotesPage( SdrOutliner* pOutliner,
 // =====================================================================
 // converts a paragraph of the outliner to html
 // =====================================================================
-String HtmlExport::ParagraphToHTMLString( SdrOutliner* pOutliner, sal_uLong nPara, const Color& rBackgroundColor )
+String HtmlExport::ParagraphToHTMLString( SdrOutliner* pOutliner, sal_Int32 nPara, const Color& rBackgroundColor )
 {
     String aStr;
 
@@ -1336,14 +1336,14 @@ String HtmlExport::ParagraphToHTMLString( SdrOutliner* pOutliner, sal_uLong nPar
 
     HtmlState aState( (mbUserAttr || mbDocColors)  ? maTextColor : Color(COL_BLACK) );
     std::vector<sal_uInt16> aPortionList;
-    rEditEngine.GetPortions( (sal_uInt16) nPara, aPortionList );
+    rEditEngine.GetPortions( nPara, aPortionList );
 
     sal_uInt16 nPos1 = 0;
     for( std::vector<sal_uInt16>::const_iterator it( aPortionList.begin() ); it != aPortionList.end(); ++it )
     {
         sal_uInt16 nPos2 = *it;
 
-        ESelection aSelection( (sal_uInt16) nPara, nPos1, (sal_uInt16) nPara, nPos2);
+        ESelection aSelection( nPara, nPos1, nPara, nPos2);
 
         SfxItemSet aSet( rEditEngine.GetAttribs( aSelection ) );
 

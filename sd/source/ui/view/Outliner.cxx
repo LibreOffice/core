@@ -1403,7 +1403,7 @@ ESelection Outliner::GetSearchStartPosition (void)
     {
         // Retrieve the position after the last character in the last
         // paragraph.
-        sal_uInt16 nParagraphCount = static_cast<sal_uInt16>(GetParagraphCount());
+        sal_Int32 nParagraphCount = GetParagraphCount();
         if (nParagraphCount == 0)
             aPosition = ESelection();
         else

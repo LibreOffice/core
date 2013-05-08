@@ -89,14 +89,14 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
     std::vector<Paragraph*>::const_iterator iter = aSelList.begin();
     Paragraph* pPara = aSelList.empty() ? NULL : *iter;
 
-    nDepth = pOutl->GetDepth((sal_uInt16)pOutl->GetAbsPos( pPara ) );
+    nDepth = pOutl->GetDepth(pOutl->GetAbsPos( pPara ) );
     bool bPage = pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE );
 
     while( iter != aSelList.end() )
     {
         pPara = *iter;
 
-        nTmp = pOutl->GetDepth((sal_uInt16) pOutl->GetAbsPos( pPara ) );
+        nTmp = pOutl->GetDepth( pOutl->GetAbsPos( pPara ) );
 
         if( nDepth != nTmp )
         {

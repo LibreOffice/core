@@ -222,10 +222,10 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         case SID_SELECTALL:
         {
             ::Outliner* pOutl = pOlView->GetOutliner();
-            sal_uLong nParaCount = pOutl->GetParagraphCount();
+            sal_Int32 nParaCount = pOutl->GetParagraphCount();
             if (nParaCount > 0)
             {
-                pOutlinerView->SelectRange( 0, (sal_uInt16) nParaCount );
+                pOutlinerView->SelectRange( 0, nParaCount );
             }
             Cancel();
         }

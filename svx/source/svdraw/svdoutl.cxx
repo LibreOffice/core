@@ -74,7 +74,7 @@ void SdrOutliner::SetTextObjNoInit( const SdrTextObj* pObj )
     mpTextObj.reset( const_cast< SdrTextObj* >(pObj) );
 }
 
-OUString SdrOutliner::CalcFieldValue(const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos,
+OUString SdrOutliner::CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos,
                                      Color*& rpTxtColor, Color*& rpFldColor)
 {
     bool bOk = false;

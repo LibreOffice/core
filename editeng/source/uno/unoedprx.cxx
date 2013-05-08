@@ -66,11 +66,11 @@ public:
     ~SvxAccessibleTextIndex() {};
 
     // Get/Set current paragraph
-    void SetParagraph( sal_uInt16 nPara )
+    void SetParagraph( sal_Int32 nPara )
     {
         mnPara = nPara;
     }
-    sal_uInt16 GetParagraph() const { return mnPara; }
+    sal_Int32 GetParagraph() const { return mnPara; }
 
     /** Set the index in the UAA semantic
 
@@ -81,7 +81,7 @@ public:
         The text forwarder to use in the calculations
      */
     void SetIndex( sal_Int32 nIndex, const SvxTextForwarder& rTF );
-    void SetIndex( sal_uInt16 nPara, sal_Int32 nIndex, const SvxTextForwarder& rTF ) { SetParagraph(nPara); SetIndex(nIndex, rTF); }
+    void SetIndex( sal_Int32 nPara, sal_Int32 nIndex, const SvxTextForwarder& rTF ) { SetParagraph(nPara); SetIndex(nIndex, rTF); }
     sal_Int32 GetIndex() const { return mnIndex; }
 
     /** Set the index in the edit engine semantic
@@ -96,7 +96,7 @@ public:
         The text forwarder to use in the calculations
      */
     void SetEEIndex( sal_uInt16 nEEIndex, const SvxTextForwarder& rTF );
-    void SetEEIndex( sal_uInt16 nPara, sal_uInt16 nEEIndex, const SvxTextForwarder& rTF ) { SetParagraph(nPara); SetEEIndex(nEEIndex, rTF); }
+    void SetEEIndex( sal_Int32 nPara, sal_uInt16 nEEIndex, const SvxTextForwarder& rTF ) { SetParagraph(nPara); SetEEIndex(nEEIndex, rTF); }
     sal_uInt16 GetEEIndex() const;
 
     void SetFieldOffset( sal_Int32 nOffset, sal_Int32 nLen ) { mnFieldOffset = nOffset; mnFieldLen = nLen; }
@@ -115,7 +115,7 @@ public:
     sal_Bool IsEditableRange( const SvxAccessibleTextIndex& rEnd ) const;
 
 private:
-    sal_uInt16    mnPara;
+    sal_Int32 mnPara;
     sal_Int32 mnIndex;
     sal_Int32 mnEEIndex;
     sal_Int32 mnFieldOffset;
@@ -438,14 +438,14 @@ SvxAccessibleTextAdapter::~SvxAccessibleTextAdapter()
 {
 }
 
-sal_uInt16 SvxAccessibleTextAdapter::GetParagraphCount() const
+sal_Int32 SvxAccessibleTextAdapter::GetParagraphCount() const
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     return mrTextForwarder->GetParagraphCount();
 }
 
-sal_uInt16 SvxAccessibleTextAdapter::GetTextLen( sal_uInt16 nParagraph ) const
+sal_uInt16 SvxAccessibleTextAdapter::GetTextLen( sal_Int32 nParagraph ) const
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
@@ -492,8 +492,8 @@ String SvxAccessibleTextAdapter::GetText( const ESelection& rSel ) const
         sStr = sStr.Copy(0, static_cast< sal_uInt16 > (sStr.Len() - (aEndIndex.GetFieldLen() - aEndIndex.GetFieldOffset())) );
     }
 
-    EBulletInfo aBulletInfo1 = GetBulletInfo( static_cast< sal_uInt16 >(aStartIndex.GetParagraph()) );
-    EBulletInfo aBulletInfo2 = GetBulletInfo( static_cast< sal_uInt16 >(aEndIndex.GetParagraph()) );
+    EBulletInfo aBulletInfo1 = GetBulletInfo( aStartIndex.GetParagraph() );
+    EBulletInfo aBulletInfo2 = GetBulletInfo( aEndIndex.GetParagraph() );
 
     if( aStartIndex.InBullet() )
     {
@@ -554,14 +554,14 @@ SfxItemSet SvxAccessibleTextAdapter::GetAttribs( const ESelection& rSel, sal_Boo
                                         bOnlyHardAttrib );
 }
 
-SfxItemSet SvxAccessibleTextAdapter::GetParaAttribs( sal_uInt16 nPara ) const
+SfxItemSet SvxAccessibleTextAdapter::GetParaAttribs( sal_Int32 nPara ) const
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     return mrTextForwarder->GetParaAttribs( nPara );
 }
 
-void SvxAccessibleTextAdapter::SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rSet )
+void SvxAccessibleTextAdapter::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet )
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
@@ -573,7 +573,7 @@ void SvxAccessibleTextAdapter::RemoveAttribs( const ESelection& , sal_Bool , sal
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 }
 
-void SvxAccessibleTextAdapter::GetPortions( sal_uInt16 nPara, std::vector<sal_uInt16>& rList ) const
+void SvxAccessibleTextAdapter::GetPortions( sal_Int32 nPara, std::vector<sal_uInt16>& rList ) const
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
@@ -594,7 +594,7 @@ sal_uInt16 SvxAccessibleTextAdapter::GetItemState( const ESelection& rSel, sal_u
                                           nWhich );
 }
 
-sal_uInt16 SvxAccessibleTextAdapter::GetItemState( sal_uInt16 nPara, sal_uInt16 nWhich ) const
+sal_uInt16 SvxAccessibleTextAdapter::GetItemState( sal_Int32 nPara, sal_uInt16 nWhich ) const
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
@@ -663,21 +663,21 @@ SfxItemPool* SvxAccessibleTextAdapter::GetPool() const
     return mrTextForwarder->GetPool();
 }
 
-OUString SvxAccessibleTextAdapter::CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor )
+OUString SvxAccessibleTextAdapter::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor )
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     return mrTextForwarder->CalcFieldValue( rField, nPara, nPos, rpTxtColor, rpFldColor );
 }
 
-void SvxAccessibleTextAdapter::FieldClicked( const SvxFieldItem& rField, sal_uInt16 nPara, xub_StrLen nPos )
+void SvxAccessibleTextAdapter::FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, xub_StrLen nPos )
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     mrTextForwarder->FieldClicked( rField, nPara, nPos );
 }
 
-sal_uInt16 SvxAccessibleTextAdapter::CalcEditEngineIndex( sal_uInt16 nPara, sal_Int32 nLogicalIndex )
+sal_uInt16 SvxAccessibleTextAdapter::CalcEditEngineIndex( sal_Int32 nPara, sal_Int32 nLogicalIndex )
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
@@ -698,7 +698,7 @@ sal_Bool SvxAccessibleTextAdapter::IsValid() const
         return sal_False;
 }
 
-LanguageType SvxAccessibleTextAdapter::GetLanguage( sal_uInt16 nPara, sal_uInt16 nPos ) const
+LanguageType SvxAccessibleTextAdapter::GetLanguage( sal_Int32 nPara, sal_uInt16 nPos ) const
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
@@ -709,28 +709,28 @@ LanguageType SvxAccessibleTextAdapter::GetLanguage( sal_uInt16 nPara, sal_uInt16
     return mrTextForwarder->GetLanguage( nPara, aIndex.GetEEIndex() );
 }
 
-sal_uInt16 SvxAccessibleTextAdapter::GetFieldCount( sal_uInt16 nPara ) const
+sal_uInt16 SvxAccessibleTextAdapter::GetFieldCount( sal_Int32 nPara ) const
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     return mrTextForwarder->GetFieldCount( nPara );
 }
 
-EFieldInfo SvxAccessibleTextAdapter::GetFieldInfo( sal_uInt16 nPara, sal_uInt16 nField ) const
+EFieldInfo SvxAccessibleTextAdapter::GetFieldInfo( sal_Int32 nPara, sal_uInt16 nField ) const
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     return mrTextForwarder->GetFieldInfo( nPara, nField );
 }
 
-EBulletInfo SvxAccessibleTextAdapter::GetBulletInfo( sal_uInt16 nPara ) const
+EBulletInfo SvxAccessibleTextAdapter::GetBulletInfo( sal_Int32 nPara ) const
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     return mrTextForwarder->GetBulletInfo( nPara );
 }
 
-Rectangle SvxAccessibleTextAdapter::GetCharBounds( sal_uInt16 nPara, sal_uInt16 nIndex ) const
+Rectangle SvxAccessibleTextAdapter::GetCharBounds( sal_Int32 nPara, sal_uInt16 nIndex ) const
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
@@ -790,7 +790,7 @@ Rectangle SvxAccessibleTextAdapter::GetCharBounds( sal_uInt16 nPara, sal_uInt16 
     return aRect;
 }
 
-Rectangle SvxAccessibleTextAdapter::GetParaBounds( sal_uInt16 nPara ) const
+Rectangle SvxAccessibleTextAdapter::GetParaBounds( sal_Int32 nPara ) const
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
@@ -825,7 +825,7 @@ OutputDevice* SvxAccessibleTextAdapter::GetRefDevice() const
     return mrTextForwarder->GetRefDevice();
 }
 
-sal_Bool SvxAccessibleTextAdapter::GetIndexAtPoint( const Point& rPoint, sal_uInt16& nPara, sal_uInt16& nIndex ) const
+sal_Bool SvxAccessibleTextAdapter::GetIndexAtPoint( const Point& rPoint, sal_Int32& nPara, sal_uInt16& nIndex ) const
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
@@ -900,7 +900,7 @@ sal_Bool SvxAccessibleTextAdapter::GetIndexAtPoint( const Point& rPoint, sal_uIn
     return sal_True;
 }
 
-sal_Bool SvxAccessibleTextAdapter::GetWordIndices( sal_uInt16 nPara, sal_uInt16 nIndex, sal_uInt16& nStart, sal_uInt16& nEnd ) const
+sal_Bool SvxAccessibleTextAdapter::GetWordIndices( sal_Int32 nPara, sal_uInt16 nIndex, sal_uInt16& nStart, sal_uInt16& nEnd ) const
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
@@ -955,7 +955,7 @@ sal_Bool SvxAccessibleTextAdapter::GetWordIndices( sal_uInt16 nPara, sal_uInt16 
     return sal_True;
 }
 
-sal_Bool SvxAccessibleTextAdapter::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, sal_uInt16 nPara, sal_uInt16 nIndex ) const
+sal_Bool SvxAccessibleTextAdapter::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, sal_Int32 nPara, sal_uInt16 nIndex ) const
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
@@ -1007,14 +1007,14 @@ sal_Bool SvxAccessibleTextAdapter::GetAttributeRun( sal_uInt16& nStartIndex, sal
     return sal_True;
 }
 
-sal_uInt16 SvxAccessibleTextAdapter::GetLineCount( sal_uInt16 nPara ) const
+sal_uInt16 SvxAccessibleTextAdapter::GetLineCount( sal_Int32 nPara ) const
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     return mrTextForwarder->GetLineCount( nPara );
 }
 
-sal_uInt16 SvxAccessibleTextAdapter::GetLineLen( sal_uInt16 nPara, sal_uInt16 nLine ) const
+sal_uInt16 SvxAccessibleTextAdapter::GetLineLen( sal_Int32 nPara, sal_uInt16 nLine ) const
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
@@ -1040,12 +1040,12 @@ sal_uInt16 SvxAccessibleTextAdapter::GetLineLen( sal_uInt16 nPara, sal_uInt16 nL
         return static_cast< sal_uInt16 >(aEndIndex.GetIndex());
 }
 
-void SvxAccessibleTextAdapter::GetLineBoundaries( /*out*/sal_uInt16 &rStart, /*out*/sal_uInt16 &rEnd, sal_uInt16 nParagraph, sal_uInt16 nLine ) const
+void SvxAccessibleTextAdapter::GetLineBoundaries( /*out*/sal_uInt16 &rStart, /*out*/sal_uInt16 &rEnd, sal_Int32 nParagraph, sal_uInt16 nLine ) const
 {
     mrTextForwarder->GetLineBoundaries( rStart, rEnd, nParagraph, nLine );
 }
 
-sal_uInt16 SvxAccessibleTextAdapter::GetLineNumberAtIndex( sal_uInt16 nPara, sal_uInt16 nIndex ) const
+sal_uInt16 SvxAccessibleTextAdapter::GetLineNumberAtIndex( sal_Int32 nPara, sal_uInt16 nIndex ) const
 {
     return mrTextForwarder->GetLineNumberAtIndex( nPara, nIndex );
 }
@@ -1083,14 +1083,14 @@ sal_Bool SvxAccessibleTextAdapter::QuickFormatDoc( sal_Bool bFull )
     return mrTextForwarder->QuickFormatDoc( bFull );
 }
 
-sal_Int16 SvxAccessibleTextAdapter::GetDepth( sal_uInt16 nPara ) const
+sal_Int16 SvxAccessibleTextAdapter::GetDepth( sal_Int32 nPara ) const
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     return mrTextForwarder->GetDepth( nPara );
 }
 
-sal_Bool SvxAccessibleTextAdapter::SetDepth( sal_uInt16 nPara, sal_Int16 nNewDepth )
+sal_Bool SvxAccessibleTextAdapter::SetDepth( sal_Int32 nPara, sal_Int16 nNewDepth )
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
@@ -1102,7 +1102,7 @@ void SvxAccessibleTextAdapter::SetForwarder( SvxTextForwarder& rForwarder )
     mrTextForwarder = &rForwarder;
 }
 
-sal_Bool SvxAccessibleTextAdapter::HaveImageBullet( sal_uInt16 nPara ) const
+sal_Bool SvxAccessibleTextAdapter::HaveImageBullet( sal_Int32 nPara ) const
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
@@ -1120,7 +1120,7 @@ sal_Bool SvxAccessibleTextAdapter::HaveImageBullet( sal_uInt16 nPara ) const
     }
 }
 
-sal_Bool SvxAccessibleTextAdapter::HaveTextBullet( sal_uInt16 nPara ) const
+sal_Bool SvxAccessibleTextAdapter::HaveTextBullet( sal_Int32 nPara ) const
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
@@ -1169,7 +1169,7 @@ void SvxAccessibleTextAdapter::AppendParagraph()
     OSL_FAIL( "not implemented" );
 }
 
-xub_StrLen SvxAccessibleTextAdapter::AppendTextPortion( sal_uInt16, const String &, const SfxItemSet & )
+xub_StrLen SvxAccessibleTextAdapter::AppendTextPortion( sal_Int32, const String &, const SfxItemSet & )
 {
     OSL_FAIL( "not implemented" );
     return 0;

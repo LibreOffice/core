@@ -843,7 +843,7 @@ MSWord_SdrAttrIter::MSWord_SdrAttrIter( MSWordExportBase& rWr,
     NextPara( 0 );
 }
 
-void MSWord_SdrAttrIter::NextPara( sal_uInt16 nPar )
+void MSWord_SdrAttrIter::NextPara( sal_Int32 nPar )
 {
     nPara = nPar;
     // Attributwechsel an Pos 0 wird ignoriert, da davon ausgegangen
@@ -1123,9 +1123,9 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp
     const EditTextObject& rEditObj = rParaObj.GetTextObject();
     MSWord_SdrAttrIter aAttrIter( *this, rEditObj, nTyp );
 
-    sal_uInt16 nPara = rEditObj.GetParagraphCount();
+    sal_Int32 nPara = rEditObj.GetParagraphCount();
     sal_uInt8 bNul = 0;
-    for( sal_uInt16 n = 0; n < nPara; ++n )
+    for( sal_Int32 n = 0; n < nPara; ++n )
     {
         if( n )
             aAttrIter.NextPara( n );

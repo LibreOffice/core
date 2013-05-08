@@ -95,8 +95,8 @@ namespace accessibility
         SfxBroadcaster&         GetBroadcaster() const { return *(const_cast<AccessibleEmptyEditSource_Impl*>(this)); }
 
         // SvxTextForwarder
-        sal_uInt16          GetParagraphCount() const { return 1; }
-        sal_uInt16          GetTextLen( sal_uInt16 /*nParagraph*/ ) const { return 0; }
+        sal_Int32          GetParagraphCount() const { return 1; }
+        sal_uInt16          GetTextLen( sal_Int32 /*nParagraph*/ ) const { return 0; }
         String          GetText( const ESelection& /*rSel*/ ) const { return String(); }
         SfxItemSet      GetAttribs( const ESelection& /*rSel*/, sal_Bool /*bOnlyHardAttrib*/ = 0 ) const
         {
@@ -105,13 +105,13 @@ namespace accessibility
             // a deleted Pool by design.
             return SfxItemSet(SdrObject::GetGlobalDrawObjectItemPool());
         }
-        SfxItemSet      GetParaAttribs( sal_uInt16 /*nPara*/ ) const { return GetAttribs(ESelection()); }
-        void            SetParaAttribs( sal_uInt16 /*nPara*/, const SfxItemSet& /*rSet*/ ) {}
+        SfxItemSet      GetParaAttribs( sal_Int32 /*nPara*/ ) const { return GetAttribs(ESelection()); }
+        void            SetParaAttribs( sal_Int32 /*nPara*/, const SfxItemSet& /*rSet*/ ) {}
         void            RemoveAttribs( const ESelection& /*rSelection*/, sal_Bool /*bRemoveParaAttribs*/, sal_uInt16 /*nWhich*/ ){}
-        void            GetPortions( sal_uInt16 /*nPara*/, std::vector<sal_uInt16>& /*rList*/ ) const {}
+        void            GetPortions( sal_Int32 /*nPara*/, std::vector<sal_uInt16>& /*rList*/ ) const {}
 
         sal_uInt16          GetItemState( const ESelection& /*rSel*/, sal_uInt16 /*nWhich*/ ) const { return 0; }
-        sal_uInt16          GetItemState( sal_uInt16 /*nPara*/, sal_uInt16 /*nWhich*/ ) const { return 0; }
+        sal_uInt16          GetItemState( sal_Int32 /*nPara*/, sal_uInt16 /*nWhich*/ ) const { return 0; }
 
         SfxItemPool*    GetPool() const { return NULL; }
 
@@ -123,35 +123,35 @@ namespace accessibility
         const SfxItemSet * GetEmptyItemSetPtr() { return 0; }
 
         void        AppendParagraph() {}
-        xub_StrLen  AppendTextPortion( sal_uInt16 /*nPara*/, const String & /*rText*/, const SfxItemSet & /*rSet*/ ) { return 0; }
+        xub_StrLen  AppendTextPortion( sal_Int32 /*nPara*/, const String & /*rText*/, const SfxItemSet & /*rSet*/ ) { return 0; }
 
         //XTextCopy
         void        CopyText(const SvxTextForwarder& ){}
 
-        OUString    CalcFieldValue( const SvxFieldItem& /*rField*/, sal_uInt16 /*nPara*/, sal_uInt16 /*nPos*/, Color*& /*rpTxtColor*/, Color*& /*rpFldColor*/ )
+        OUString    CalcFieldValue( const SvxFieldItem& /*rField*/, sal_Int32 /*nPara*/, sal_uInt16 /*nPos*/, Color*& /*rpTxtColor*/, Color*& /*rpFldColor*/ )
         {
             return  OUString();
         }
-        void            FieldClicked( const SvxFieldItem&, sal_uInt16, xub_StrLen ) {;}
+        void            FieldClicked( const SvxFieldItem&, sal_Int32, xub_StrLen ) {;}
 
         sal_Bool            IsValid() const { return sal_True; }
 
         void            SetNotifyHdl( const Link& ) {}
-        LanguageType    GetLanguage( sal_uInt16, sal_uInt16 ) const { return LANGUAGE_DONTKNOW; }
-        sal_uInt16          GetFieldCount( sal_uInt16 ) const { return 0; }
-        EFieldInfo      GetFieldInfo( sal_uInt16, sal_uInt16 ) const { return EFieldInfo(); }
-        EBulletInfo     GetBulletInfo( sal_uInt16 ) const { return EBulletInfo(); }
-        Rectangle       GetCharBounds( sal_uInt16, sal_uInt16 ) const { return Rectangle(); }
-        Rectangle       GetParaBounds( sal_uInt16 ) const { return Rectangle(); }
+        LanguageType    GetLanguage( sal_Int32, sal_uInt16 ) const { return LANGUAGE_DONTKNOW; }
+        sal_uInt16          GetFieldCount( sal_Int32 ) const { return 0; }
+        EFieldInfo      GetFieldInfo( sal_Int32, sal_uInt16 ) const { return EFieldInfo(); }
+        EBulletInfo     GetBulletInfo( sal_Int32 ) const { return EBulletInfo(); }
+        Rectangle       GetCharBounds( sal_Int32, sal_uInt16 ) const { return Rectangle(); }
+        Rectangle       GetParaBounds( sal_Int32 ) const { return Rectangle(); }
         MapMode         GetMapMode() const { return MapMode(); }
         OutputDevice*   GetRefDevice() const { return NULL; }
-        sal_Bool        GetIndexAtPoint( const Point&, sal_uInt16&, sal_uInt16& ) const { return sal_False; }
-        sal_Bool        GetWordIndices( sal_uInt16, sal_uInt16, sal_uInt16&, sal_uInt16& ) const { return sal_False; }
-        sal_Bool        GetAttributeRun( sal_uInt16&, sal_uInt16&, sal_uInt16, sal_uInt16 ) const { return sal_False; }
-        sal_uInt16          GetLineCount( sal_uInt16 nPara ) const { return nPara == 0 ? 1 : 0; }
-        sal_uInt16          GetLineLen( sal_uInt16, sal_uInt16 ) const { return 0; }
-        void            GetLineBoundaries( /*out*/sal_uInt16 & rStart, /*out*/sal_uInt16 & rEnd, sal_uInt16 /*nParagraph*/, sal_uInt16 /*nLine*/ ) const  { rStart = rEnd = 0; }
-        sal_uInt16          GetLineNumberAtIndex( sal_uInt16 /*nPara*/, sal_uInt16 /*nIndex*/ ) const   { return 0; }
+        sal_Bool        GetIndexAtPoint( const Point&, sal_Int32&, sal_uInt16& ) const { return sal_False; }
+        sal_Bool        GetWordIndices( sal_Int32, sal_uInt16, sal_uInt16&, sal_uInt16& ) const { return sal_False; }
+        sal_Bool        GetAttributeRun( sal_uInt16&, sal_uInt16&, sal_Int32, sal_uInt16 ) const { return sal_False; }
+        sal_uInt16          GetLineCount( sal_Int32 nPara ) const { return nPara == 0 ? 1 : 0; }
+        sal_uInt16          GetLineLen( sal_Int32, sal_uInt16 ) const { return 0; }
+        void            GetLineBoundaries( /*out*/sal_uInt16 & rStart, /*out*/sal_uInt16 & rEnd, sal_Int32 /*nParagraph*/, sal_uInt16 /*nLine*/ ) const  { rStart = rEnd = 0; }
+        sal_uInt16          GetLineNumberAtIndex( sal_Int32 /*nPara*/, sal_uInt16 /*nIndex*/ ) const   { return 0; }
 
         // the following two methods would, strictly speaking, require
         // a switch to a real EditSource, too. Fortunately, the
@@ -164,8 +164,8 @@ namespace accessibility
         sal_Bool        Delete( const ESelection& ) { return sal_False; }
         sal_Bool        InsertText( const String&, const ESelection& ) { return sal_False; }
         sal_Bool        QuickFormatDoc( sal_Bool ) { return sal_True; }
-        sal_Int16       GetDepth( sal_uInt16 ) const { return -1; }
-        sal_Bool        SetDepth( sal_uInt16, sal_Int16 ) { return sal_True; }
+        sal_Int16       GetDepth( sal_Int32 ) const { return -1; }
+        sal_Bool        SetDepth( sal_Int32, sal_Int16 ) { return sal_True; }
 
         Rectangle       GetVisArea() const { return Rectangle(); }
         Point           LogicToPixel( const Point& rPoint, const MapMode& /*rMapMode*/ ) const { return rPoint; }

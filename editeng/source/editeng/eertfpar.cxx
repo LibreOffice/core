@@ -112,7 +112,7 @@ SvParserState EditRTFParser::CallParser()
     if ( nLastAction == ACTION_INSERTPARABRK )
     {
         ContentNode* pCurNode = aCurSel.Max().GetNode();
-        sal_uInt16 nPara = mpEditEngine->GetEditDoc().GetPos(pCurNode);
+        sal_Int32 nPara = mpEditEngine->GetEditDoc().GetPos(pCurNode);
         ContentNode* pPrevNode = mpEditEngine->GetEditDoc().GetObject(nPara-1);
         DBG_ASSERT( pPrevNode, "Invalid RTF-Document?!" );
         EditSelection aSel;
@@ -155,9 +155,9 @@ void EditRTFParser::AddRTFDefaultValues( const EditPaM& rStart, const EditPaM& r
     SvxFontItem aFontItem( aDefFont.GetFamily(), aDefFont.GetName(),
                     aDefFont.GetStyleName(), aDefFont.GetPitch(), aDefFont.GetCharSet(), EE_CHAR_FONTINFO );
 
-    sal_uInt16 nStartPara = mpEditEngine->GetEditDoc().GetPos( rStart.GetNode() );
-    sal_uInt16 nEndPara = mpEditEngine->GetEditDoc().GetPos( rEnd.GetNode() );
-    for ( sal_uInt16 nPara = nStartPara; nPara <= nEndPara; nPara++ )
+    sal_Int32 nStartPara = mpEditEngine->GetEditDoc().GetPos( rStart.GetNode() );
+    sal_Int32 nEndPara = mpEditEngine->GetEditDoc().GetPos( rEnd.GetNode() );
+    for ( sal_Int32 nPara = nStartPara; nPara <= nEndPara; nPara++ )
     {
         ContentNode* pNode = mpEditEngine->GetEditDoc().GetObject( nPara );
         DBG_ASSERT( pNode, "AddRTFDefaultValues - No paragraph?!" );
@@ -275,7 +275,7 @@ void EditRTFParser::SetEndPrevPara( SvxNodeIdx*& rpNodePos,
     //                      This "\pard" always apply on the right paragraph.
 
     ContentNode* pN = aCurSel.Max().GetNode();
-    sal_uInt16 nCurPara = mpEditEngine->GetEditDoc().GetPos( pN );
+    sal_Int32 nCurPara = mpEditEngine->GetEditDoc().GetPos( pN );
     DBG_ASSERT( nCurPara != 0, "Paragraph equal to 0: SetEnfPrevPara" );
     if ( nCurPara )
         nCurPara--;
@@ -348,8 +348,8 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
 
     ContentNode* pSN = aStartPaM.GetNode();
     ContentNode* pEN = aEndPaM.GetNode();
-    sal_uInt16 nStartNode = mpEditEngine->GetEditDoc().GetPos( pSN );
-    sal_uInt16 nEndNode = mpEditEngine->GetEditDoc().GetPos( pEN );
+    sal_Int32 nStartNode = mpEditEngine->GetEditDoc().GetPos( pSN );
+    sal_Int32 nEndNode = mpEditEngine->GetEditDoc().GetPos( pEN );
     sal_Int16 nOutlLevel = 0xff;
 
     if (rSet.StyleNo() && mpEditEngine->GetStyleSheetPool() && mpEditEngine->IsImportRTFStyleSheetsSet())
@@ -371,7 +371,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
 
     // Note: Selection can reach over several paragraphs.
     // All Complete paragraphs are paragraph attributes ...
-    for ( sal_uInt16 z = nStartNode+1; z < nEndNode; z++ )
+    for ( sal_Int32 z = nStartNode+1; z < nEndNode; z++ )
     {
         DBG_ASSERT(mpEditEngine->GetEditDoc().GetObject(z), "Node does not exist yet(RTF)");
         mpEditEngine->SetParaAttribsOnly(z, rSet.GetAttrSet());
@@ -412,7 +412,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     // OutlLevel...
     if ( nOutlLevel != 0xff )
     {
-        for ( sal_uInt16 n = nStartNode; n <= nEndNode; n++ )
+        for ( sal_Int32 n = nStartNode; n <= nEndNode; n++ )
         {
             ContentNode* pNode = mpEditEngine->GetEditDoc().GetObject( n );
             pNode->GetContentAttribs().GetItems().Put( SfxInt16Item( EE_PARA_OUTLLEVEL, nOutlLevel ) );
@@ -593,7 +593,7 @@ void EditRTFParser::SkipGroup()
 EditNodeIdx::EditNodeIdx(EditEngine* pEE, ContentNode* pNd) :
     mpEditEngine(pEE), mpNode(pNd) {}
 
-sal_uLong EditNodeIdx::GetIdx() const
+sal_Int32 EditNodeIdx::GetIdx() const
 {
     return mpEditEngine->GetEditDoc().GetPos(mpNode);
 }
@@ -616,7 +616,7 @@ SvxNodeIdx* EditPosition::MakeNodeIdx() const
     return new EditNodeIdx(mpEditEngine, mpCurSel->Max().GetNode());
 }
 
-sal_uLong EditPosition::GetNodeIdx() const
+sal_Int32 EditPosition::GetNodeIdx() const
 {
     ContentNode* pN = mpCurSel->Max().GetNode();
     return mpEditEngine->GetEditDoc().GetPos(pN);

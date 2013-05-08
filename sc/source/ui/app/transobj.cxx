@@ -423,7 +423,7 @@ sal_Bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObj
                     //  write old format without support for unicode characters.
                     //  Get the data from the EditEngine's transferable instead.
 
-                    sal_uInt16 nParCnt = pEngine->GetParagraphCount();
+                    sal_Int32 nParCnt = pEngine->GetParagraphCount();
                     if ( nParCnt == 0 )
                         nParCnt = 1;
                     ESelection aSel( 0, 0, nParCnt-1, pEngine->GetTextLen(nParCnt-1) );

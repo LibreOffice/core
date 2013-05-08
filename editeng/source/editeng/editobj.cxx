@@ -221,12 +221,12 @@ EditTextObject::~EditTextObject()
     delete mpImpl;
 }
 
-size_t EditTextObject::GetParagraphCount() const
+sal_Int32 EditTextObject::GetParagraphCount() const
 {
     return mpImpl->GetParagraphCount();
 }
 
-String EditTextObject::GetText(size_t nPara) const
+String EditTextObject::GetText(sal_Int32 nPara) const
 {
     return mpImpl->GetText(nPara);
 }
@@ -241,7 +241,7 @@ bool EditTextObject::HasOnlineSpellErrors() const
     return mpImpl->HasOnlineSpellErrors();
 }
 
-void EditTextObject::GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>& rLst ) const
+void EditTextObject::GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const
 {
     mpImpl->GetCharAttribs(nPara, rLst);
 }
@@ -256,7 +256,7 @@ const SvxFieldItem* EditTextObject::GetField() const
     return mpImpl->GetField();
 }
 
-const SvxFieldData* EditTextObject::GetFieldData(size_t nPara, size_t nPos, sal_Int32 nType) const
+const SvxFieldData* EditTextObject::GetFieldData(sal_Int32 nPara, size_t nPos, sal_Int32 nType) const
 {
     return mpImpl->GetFieldData(nPara, nPos, nType);
 }
@@ -266,7 +266,7 @@ bool EditTextObject::HasField( sal_Int32 nType ) const
     return mpImpl->HasField(nType);
 }
 
-const SfxItemSet& EditTextObject::GetParaAttribs(size_t nPara) const
+const SfxItemSet& EditTextObject::GetParaAttribs(sal_Int32 nPara) const
 {
     return mpImpl->GetParaAttribs(nPara);
 }
@@ -276,12 +276,12 @@ bool EditTextObject::RemoveCharAttribs( sal_uInt16 nWhich )
     return mpImpl->RemoveCharAttribs(nWhich);
 }
 
-void EditTextObject::GetStyleSheet(size_t nPara, String& rName, SfxStyleFamily& eFamily) const
+void EditTextObject::GetStyleSheet(sal_Int32 nPara, String& rName, SfxStyleFamily& eFamily) const
 {
     mpImpl->GetStyleSheet(nPara, rName, eFamily);
 }
 
-void EditTextObject::SetStyleSheet(size_t nPara, const String& rName, const SfxStyleFamily& eFamily)
+void EditTextObject::SetStyleSheet(sal_Int32 nPara, const String& rName, const SfxStyleFamily& eFamily)
 {
     mpImpl->SetStyleSheet(nPara, rName, eFamily);
 }
@@ -635,14 +635,20 @@ ContentInfo* EditTextObjectImpl::CreateAndInsertContent()
     return &aContents.back();
 }
 
-size_t EditTextObjectImpl::GetParagraphCount() const
+sal_Int32 EditTextObjectImpl::GetParagraphCount() const
 {
-    return aContents.size();
+    size_t nSize = aContents.size();
+    if (nSize > EE_PARA_MAX_COUNT)
+    {
+        SAL_WARN( "editeng", "EditTextObjectImpl::GetParagraphCount - overflow " << nSize);
+        return EE_PARA_MAX_COUNT;
+    }
+    return static_cast<sal_Int32>(nSize);
 }
 
-String EditTextObjectImpl::GetText(size_t nPara) const
+String EditTextObjectImpl::GetText(sal_Int32 nPara) const
 {
-    if (nPara >= aContents.size())
+    if (nPara < 0 || static_cast<size_t>(nPara) >= aContents.size())
         return String();
 
     return aContents[nPara].GetText();
@@ -668,8 +674,11 @@ bool EditTextObjectImpl::HasOnlineSpellErrors() const
     return false;
 }
 
-void EditTextObjectImpl::GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>& rLst ) const
+void EditTextObjectImpl::GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const
 {
+    if (nPara < 0 || static_cast<size_t>(nPara) >= aContents.size())
+        return;
+
     rLst.clear();
     const ContentInfo& rC = aContents[nPara];
     for (size_t nAttr = 0; nAttr < rC.aAttribs.size(); ++nAttr)
@@ -708,9 +717,9 @@ const SvxFieldItem* EditTextObjectImpl::GetField() const
     return 0;
 }
 
-const SvxFieldData* EditTextObjectImpl::GetFieldData(size_t nPara, size_t nPos, sal_Int32 nType) const
+const SvxFieldData* EditTextObjectImpl::GetFieldData(sal_Int32 nPara, size_t nPos, sal_Int32 nType) const
 {
-    if (nPara >= aContents.size())
+    if (nPara < 0 || static_cast<size_t>(nPara) >= aContents.size())
         return NULL;
 
     const ContentInfo& rC = aContents[nPara];
@@ -768,14 +777,17 @@ bool EditTextObjectImpl::HasField( sal_Int32 nType ) const
     return false;
 }
 
-const SfxItemSet& EditTextObjectImpl::GetParaAttribs(size_t nPara) const
+const SfxItemSet& EditTextObjectImpl::GetParaAttribs(sal_Int32 nPara) const
 {
     const ContentInfo& rC = aContents[nPara];
     return rC.GetParaAttribs();
 }
 
-void EditTextObjectImpl::SetParaAttribs(size_t nPara, const SfxItemSet& rAttribs)
+void EditTextObjectImpl::SetParaAttribs(sal_Int32 nPara, const SfxItemSet& rAttribs)
 {
+    if (nPara < 0 || static_cast<size_t>(nPara) >= aContents.size())
+        return;
+
     ContentInfo& rC = aContents[nPara];
     rC.GetParaAttribs().Set(rAttribs);
     ClearPortionInfo();
@@ -785,7 +797,7 @@ bool EditTextObjectImpl::RemoveCharAttribs( sal_uInt16 _nWhich )
 {
     bool bChanged = false;
 
-    for ( sal_uInt16 nPara = aContents.size(); nPara; )
+    for ( size_t nPara = aContents.size(); nPara; )
     {
         ContentInfo& rC = aContents[--nPara];
 
@@ -807,9 +819,9 @@ bool EditTextObjectImpl::RemoveCharAttribs( sal_uInt16 _nWhich )
     return bChanged;
 }
 
-void EditTextObjectImpl::GetStyleSheet(size_t nPara, String& rName, SfxStyleFamily& rFamily) const
+void EditTextObjectImpl::GetStyleSheet(sal_Int32 nPara, String& rName, SfxStyleFamily& rFamily) const
 {
-    if (nPara >= aContents.size())
+    if (nPara < 0 || static_cast<size_t>(nPara) >= aContents.size())
         return;
 
     const ContentInfo& rC = aContents[nPara];
@@ -817,9 +829,9 @@ void EditTextObjectImpl::GetStyleSheet(size_t nPara, String& rName, SfxStyleFami
     rFamily = rC.GetFamily();
 }
 
-void EditTextObjectImpl::SetStyleSheet(size_t nPara, const String& rName, const SfxStyleFamily& rFamily)
+void EditTextObjectImpl::SetStyleSheet(sal_Int32 nPara, const String& rName, const SfxStyleFamily& rFamily)
 {
-    if (nPara >= aContents.size())
+    if (nPara < 0 || static_cast<size_t>(nPara) >= aContents.size())
         return;
 
     ContentInfo& rC = aContents[nPara];
@@ -908,13 +920,16 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
 
     // The number of paragraphs ...
     size_t nParagraphs = aContents.size();
-    rOStream << static_cast<sal_uInt16>(nParagraphs);
+    // FIXME: this truncates, check usage of stream and if it can be changed,
+    // i.e. is not persistent, adapt this and reader.
+    sal_uInt16 nParagraphs_Stream = static_cast<sal_uInt16>(nParagraphs);
+    rOStream << nParagraphs_Stream;
 
     sal_Unicode nUniChar = CH_FEATURE;
     char cFeatureConverted = OString(&nUniChar, 1, eEncoding).toChar();
 
     // The individual paragraphs ...
-    for (size_t nPara = 0; nPara < nParagraphs; ++nPara)
+    for (size_t nPara = 0; nPara < nParagraphs_Stream; ++nPara)
     {
         const ContentInfo& rC = aContents[nPara];
 
@@ -1039,7 +1054,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
     rOStream << static_cast<sal_Bool>(bStoreUnicodeStrings);
     if ( bStoreUnicodeStrings )
     {
-        for ( sal_uInt16 nPara = 0; nPara < nParagraphs; nPara++ )
+        for ( size_t nPara = 0; nPara < nParagraphs_Stream; nPara++ )
         {
             const ContentInfo& rC = aContents[nPara];
             sal_uInt16 nL = rC.GetText().Len();

@@ -282,7 +282,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                     {
                         pPara = *iter;
 
-                        sal_Int16 nDepth = pOutl->GetDepth( (sal_uInt16) pOutl->GetAbsPos( pPara ) );
+                        sal_Int16 nDepth = pOutl->GetDepth( pOutl->GetAbsPos( pPara ) );
 
                         if (nDepth > 0 || (bOutlineViewSh && (nDepth <= 0) && !pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE )) )
                         {
@@ -427,17 +427,17 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         {
             ESelection aSel = pOLV->GetSelection();
             aSel.Adjust();
-            sal_uLong nStartPara = aSel.nStartPara;
-            sal_uLong nEndPara = aSel.nEndPara;
+            sal_Int32 nStartPara = aSel.nStartPara;
+            sal_Int32 nEndPara = aSel.nEndPara;
             if( !aSel.HasRange() )
             {
                 nStartPara = 0;
                 nEndPara = pOLV->GetOutliner()->GetParagraphCount() - 1;
             }
             long nUpper = 0L;
-            for( sal_uLong nPara = nStartPara; nPara <= nEndPara; nPara++ )
+            for( sal_Int32 nPara = nStartPara; nPara <= nEndPara; nPara++ )
             {
-                const SfxItemSet& rItems = pOLV->GetOutliner()->GetParaAttribs( (sal_uInt16)nPara );
+                const SfxItemSet& rItems = pOLV->GetOutliner()->GetParaAttribs( nPara );
                 const SvxULSpaceItem& rItem = (const SvxULSpaceItem&) rItems.Get( EE_PARA_ULSPACE );
                 nUpper = std::max( nUpper, (long)rItem.GetUpper() );
             }

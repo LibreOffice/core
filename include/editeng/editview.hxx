@@ -152,15 +152,15 @@ public:
     void            Redo();
 
     // especially for Oliver Specht
-    Point           GetWindowPosTopLeft( sal_uInt16 nParagraph );
-    void            MoveParagraphs( Range aParagraphs, sal_uInt16 nNewPos );
+    Point           GetWindowPosTopLeft( sal_Int32 nParagraph );
+    void            MoveParagraphs( Range aParagraphs, sal_Int32 nNewPos );
     void            MoveParagraphs( long nDiff );
 
     const SfxItemSet&   GetEmptyItemSet();
     SfxItemSet          GetAttribs();
     void                SetAttribs( const SfxItemSet& rSet );
     void                RemoveAttribs( sal_Bool bRemoveParaAttribs = sal_False, sal_uInt16 nWhich = 0 );
-    void                RemoveCharAttribs( sal_uInt16 nPara, sal_uInt16 nWhich = 0 );
+    void                RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich = 0 );
     void                RemoveAttribsKeepLanguages( sal_Bool bRemoveParaAttribs = sal_False );
 
     sal_uLong           Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, sal_Bool bSelect = sal_False, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
@@ -205,8 +205,8 @@ public:
 
     void                InsertField( const SvxFieldItem& rFld );
     const SvxFieldItem* GetFieldUnderMousePointer() const;
-    const SvxFieldItem* GetFieldUnderMousePointer( sal_uInt16& nPara, xub_StrLen& nPos ) const;
-    const SvxFieldItem* GetField( const Point& rPos, sal_uInt16* pnPara = NULL, xub_StrLen* pnPos = NULL ) const;
+    const SvxFieldItem* GetFieldUnderMousePointer( sal_Int32& nPara, xub_StrLen& nPos ) const;
+    const SvxFieldItem* GetField( const Point& rPos, sal_Int32* pnPara = NULL, xub_StrLen* pnPos = NULL ) const;
 
     const SvxFieldItem* GetFieldAtSelection() const;
 

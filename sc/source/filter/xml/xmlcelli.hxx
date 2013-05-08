@@ -66,7 +66,7 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
 
     ScEditEngineDefaulter* mpEditEngine;
     OUStringBuffer maParagraph;
-    sal_uInt16 mnCurParagraph;
+    sal_Int32 mnCurParagraph;
 
     ParaFormatsType maFormats;
     FieldsType maFields;
