@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//9LY\u003d",
+        "filename": "sfx2/source/appl/sfxhelp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-05-08T07:21:41Z",
+      "side": 1,
+      "message": "AlL -\u003e All is needed.",
+      "revId": "cb1c902786f45aa3a78c2bb5512489423a5dbbe2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
