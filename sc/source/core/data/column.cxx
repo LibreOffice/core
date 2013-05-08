@@ -1211,7 +1211,6 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
             if (pBC)
             {
                 MoveListeners( *pBC, pDelRows[i] - nSize );
-                maBroadcasters.set_empty(nDelRow, nDelRow);
                 ppDelCells[i]->Delete();
             }
         }
