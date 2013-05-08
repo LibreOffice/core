@@ -313,15 +313,16 @@ $(call gb_LinkTarget_add_auxtargets,$(2),\
 $(if $(filter $(gb_MERGEDLIBS),$(1)),,\
 $(call gb_Library_add_auxtarget,$(1),$(OUTDIR)/bin/$(notdir $(3))))
 
+# substitute .pyd here because pyuno has to follow python's crazy conventions
 ifneq ($(ENABLE_CRASHDUMP),)
 $(call gb_Library_add_auxtargets,$(1),\
-		$(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.pdb,$(3))) \
-		$(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.ilk,$(3))) \
+	$(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.pdb,$(patsubst %.pyd,%.dll,$(3)))) \
+	$(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.ilk,$(patsubst %.pyd,%.dll,$(3)))) \
 )
 else
 $(call gb_LinkTarget_add_auxtargets,$(2),\
-	$(patsubst %.dll,%.pdb,$(3)) \
-	$(patsubst %.dll,%.ilk,$(3)) \
+	$(patsubst %.dll,%.pdb,$(patsubst %.pyd,%.dll,$(3))) \
+	$(patsubst %.dll,%.ilk,$(patsubst %.pyd,%.dll,$(3))) \
 )
 endif
 
