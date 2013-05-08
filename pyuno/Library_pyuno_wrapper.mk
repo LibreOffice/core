@@ -32,14 +32,12 @@ $(eval $(call gb_Library_use_externals,pyuno_wrapper,\
 $(eval $(call gb_Library_add_ldflags,pyuno_wrapper,-nostdlib))
 $(eval $(call gb_Library_add_libs,pyuno_wrapper,-lc))
 
-ifneq ($(OS)$(COM),WNTMSC)
 ifeq ($(filter DRAGONFLY FREEBSD NETBSD OPENBSD MACOSX,$(OS)),)
 
 $(eval $(call gb_Library_add_libs,pyuno_wrapper,\
 	-ldl \
 ))
 
-endif
 endif
 
 $(eval $(call gb_Library_add_cobjects,pyuno_wrapper,\
