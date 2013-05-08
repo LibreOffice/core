@@ -1056,11 +1056,10 @@ void SfxTemplateManagerDlg::OnTemplateExport()
         OUString aTemplateList;
         INetURLObject aPathObj(xFolderPicker->getDirectory());
         aPathObj.setFinalSlash();
+        sal_uInt16 i = 1;
 
         if (mpSearchView->IsVisible())
         {
-            sal_uInt16 i = 1;
-
             std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter = maSelTemplates.begin();
             for (pIter = maSelTemplates.begin(); pIter != maSelTemplates.end(); ++pIter, ++i)
             {
@@ -1090,7 +1089,6 @@ void SfxTemplateManagerDlg::OnTemplateExport()
         {
             // export templates from the current view
 
-            sal_uInt16 i = 1;
             sal_uInt16 nRegionItemId = maView->getCurRegionItemId();
 
             std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter = maSelTemplates.begin();
@@ -1400,6 +1398,9 @@ void SfxTemplateManagerDlg::OnTemplateSaveAs()
             if (!aFolderList.isEmpty())
             {
             }
+
+            //refresh view
+            mpCurView->reload();
         }
     }
 }
