@@ -39,7 +39,7 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 		pixman_LIBS="-L$(call gb_UnpackedTarball_get_dir,pixman)/pixman/.libs -lpixman-1" \
 		COMPRESS=$(if $(filter YES,$(SYSTEM_ZLIB)),compress,z_compress) \
 		ZLIB3RDLIB=-lz \
-		$(if $(filter NO,$(SYSTEM_LIBPNG)),png_CFLAGS="-I$(OUTDIR)/inc/external/libpng" png_LIBS="-L$(OUTDIR)/lib -lpng") \
+		png_CFLAGS="$(LIBPNG_CFLAGS)" png_LIBS="$(LIBPNG_LIBS)" \
 		$(if $(filter IOS,$(OS)),--disable-shared,--disable-static) \
 		$(if $(filter ANDROID IOS,$(OS)),--disable-xlib,--enable-xlib) \
 		$(if $(filter IOS,$(OS)),--enable-quartz --enable-quartz-font) \

@@ -1875,6 +1875,10 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
 ))
 
 define gb_LinkTarget__use_png
+$(call gb_LinkTarget_set_include,$(1),\
+	$(LIBPNG_CFLAGS) \
+	$$(INCLUDE) \
+)
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	png \
 )

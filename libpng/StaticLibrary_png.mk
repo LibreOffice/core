@@ -13,8 +13,6 @@ $(eval $(call gb_StaticLibrary_set_warnings_not_errors,png))
 
 $(eval $(call gb_StaticLibrary_use_unpacked,png,png))
 
-$(eval $(call gb_StaticLibrary_use_package,png,libpng_inc))
-
 $(eval $(call gb_StaticLibrary_use_externals,png,\
 	zlib \
 ))
