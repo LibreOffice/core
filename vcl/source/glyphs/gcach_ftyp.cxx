@@ -131,7 +131,7 @@ FT_Error (*pFTEmbolden)(FT_GlyphSlot);
 FT_Error (*pFTOblique)(FT_GlyphSlot);
 static bool bEnableSizeFT = false;
 
-typedef ::std::hash_map< const char*, FtFontFile*, CStringHash, CStringEqual> FontFileList;
+typedef ::std::hash_map< const char*, FtFontFile*, rtl::CStringHash, rtl::CStringEqual> FontFileList;
 namespace { struct vclFontFileList : public rtl::Static< FontFileList, vclFontFileList > {}; }
 
 // -----------------------------------------------------------------------
