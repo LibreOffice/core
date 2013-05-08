@@ -26,15 +26,9 @@
 #include "svx/EnhancedCustomShapeTypeNames.hxx"
 #include <osl/mutex.hxx>
 #include <hash_map>
+#include "rtl/string.hxx"
 
-struct TCheck
-{
-    bool operator()( const char* s1, const char* s2 ) const
-    {
-        return strcmp( s1, s2 ) == 0;
-    }
-};
-typedef std::hash_map< const char*, MSO_SPT, std::hash<const char*>, TCheck> TypeNameHashMap;
+typedef std::hash_map< const char*, MSO_SPT, rtl::CStringHash, rtl::CStringEqual> TypeNameHashMap;
 static TypeNameHashMap* pHashMap = NULL;
 static ::osl::Mutex& getHashMapMutex()
 {

@@ -930,8 +930,31 @@ struct OStringHash
 
 /* ======================================================================= */
 
+/** Equality functor for classic c-strings (i.e. null-terminated char* strings) */
+struct CStringEqual
+{
+    bool operator()( const char* p1, const char* p2) const {
+        while( *p1)
+            if( *(p1++) != *(p2++))
+                return false;
+        return true;
+    }
+};
+
+/** Hashing functor for classic c-strings (i.e. null-terminated char* strings) */
+struct CStringHash
+{
+    size_t operator()( const char* p) const {
+        size_t n = 0;
+        while( *p)
+            n += 4*n + *(p++);
+        return n;
+    }
+};
+
 } /* Namespace */
 
 #endif /* __cplusplus */
 
 #endif /* _RTL_STRING_HXX_ */
+
