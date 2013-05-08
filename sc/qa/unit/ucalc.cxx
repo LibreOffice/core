@@ -1547,28 +1547,37 @@ bool broadcasterShifted(const ScDocument& rDoc, const ScAddress& rFrom, const Sc
     return true;
 }
 
-bool checkRelativeRefToken(ScDocument& rDoc, const ScAddress& rPos, SCsCOL nRelCol, SCsROW nRelRow)
+ScToken* getSingleRefToken(ScDocument& rDoc, const ScAddress& rPos)
 {
     ScFormulaCell* pFC = rDoc.GetFormulaCell(rPos);
     if (!pFC)
     {
         cerr << "Formula cell expected, but not found." << endl;
-        return false;
+        return NULL;
     }
 
     ScTokenArray* pTokens = pFC->GetCode();
     if (!pTokens)
     {
         cerr << "Token array is not present." << endl;
-        return false;
+        return NULL;
     }
 
     ScToken* pToken = static_cast<ScToken*>(pTokens->First());
     if (!pToken || pToken->GetType() != formula::svSingleRef)
     {
         cerr << "Not a single reference token." << endl;
-        return false;
+        return NULL;
     }
+
+    return pToken;
+}
+
+bool checkRelativeRefToken(ScDocument& rDoc, const ScAddress& rPos, SCsCOL nRelCol, SCsROW nRelRow)
+{
+    ScToken* pToken = getSingleRefToken(rDoc, rPos);
+    if (!pToken)
+        return false;
 
     ScSingleRefData& rRef = pToken->GetSingleRef();
     if (!rRef.IsColRel() || rRef.nRelCol != nRelCol)
@@ -1580,6 +1589,22 @@ bool checkRelativeRefToken(ScDocument& rDoc, const ScAddress& rPos, SCsCOL nRelC
     if (!rRef.IsRowRel() || rRef.nRelRow != nRelRow)
     {
         cerr << "Unexpected relative row address." << endl;
+        return false;
+    }
+
+    return true;
+}
+
+bool checkDeletedRefToken(ScDocument& rDoc, const ScAddress& rPos)
+{
+    ScToken* pToken = getSingleRefToken(rDoc, rPos);
+    if (!pToken)
+        return false;
+
+    ScSingleRefData& rRef = pToken->GetSingleRef();
+    if (!rRef.IsDeleted())
+    {
+        cerr << "Deleted reference is expected, but it's still a valid reference." << endl;
         return false;
     }
 
@@ -1660,6 +1685,52 @@ void Test::testCellBroadcaster()
     m_pDoc->DeleteRow(0, 0, 0, 0, 0, 2);
     CPPUNIT_ASSERT_MESSAGE("Broadcaster relocation failed.",
                            broadcasterShifted(*m_pDoc, ScAddress(0,2,0), ScAddress(0,0,0)));
+
+    // Clear everything again
+    clearRange(m_pDoc, ScRange(0,0,0,10,100,0));
+
+    // B1:B3 depends on A1:A3
+    m_pDoc->SetString(ScAddress(1,0,0), "=A1");
+    m_pDoc->SetString(ScAddress(1,1,0), "=A2");
+    m_pDoc->SetString(ScAddress(1,2,0), "=A3");
+    CPPUNIT_ASSERT_MESSAGE("Relative reference check in B1 failed.",
+                           checkRelativeRefToken(*m_pDoc, ScAddress(1,0,0), -1, 0));
+    CPPUNIT_ASSERT_MESSAGE("Relative reference check in B2 failed.",
+                           checkRelativeRefToken(*m_pDoc, ScAddress(1,1,0), -1, 0));
+    CPPUNIT_ASSERT_MESSAGE("Relative reference check in B3 failed.",
+                           checkRelativeRefToken(*m_pDoc, ScAddress(1,2,0), -1, 0));
+    CPPUNIT_ASSERT_MESSAGE("Broadcaster should exist in A1.", m_pDoc->GetBroadcaster(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_MESSAGE("Broadcaster should exist in A2.", m_pDoc->GetBroadcaster(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_MESSAGE("Broadcaster should exist in A3.", m_pDoc->GetBroadcaster(ScAddress(0,2,0)));
+
+    // Insert Rows at row 2, down 5 rows.
+    m_pDoc->InsertRow(0, 0, 0, 0, 1, 5);
+    CPPUNIT_ASSERT_MESSAGE("Broadcaster should exist in A1.", m_pDoc->GetBroadcaster(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_MESSAGE("Relative reference check in B1 failed.",
+                           checkRelativeRefToken(*m_pDoc, ScAddress(1,0,0), -1, 0));
+
+    // Broadcasters in A2 and A3 should shift down by 5 rows.
+    CPPUNIT_ASSERT_MESSAGE("Broadcaster relocation failed.",
+                           broadcasterShifted(*m_pDoc, ScAddress(0,1,0), ScAddress(0,6,0)));
+    CPPUNIT_ASSERT_MESSAGE("Broadcaster relocation failed.",
+                           broadcasterShifted(*m_pDoc, ScAddress(0,2,0), ScAddress(0,7,0)));
+
+    // B2 and B3 should reference shifted cells.
+    CPPUNIT_ASSERT_MESSAGE("Relative reference check in B2 failed.",
+                           checkRelativeRefToken(*m_pDoc, ScAddress(1,1,0), -1, 5));
+    CPPUNIT_ASSERT_MESSAGE("Relative reference check in B2 failed.",
+                           checkRelativeRefToken(*m_pDoc, ScAddress(1,2,0), -1, 5));
+
+    // Delete cells with broadcasters.
+    m_pDoc->DeleteRow(0, 0, 0, 0, 4, 6);
+    CPPUNIT_ASSERT_MESSAGE("Broadcaster should NOT exist in A7.", !m_pDoc->GetBroadcaster(ScAddress(0,6,0)));
+    CPPUNIT_ASSERT_MESSAGE("Broadcaster should NOT exist in A8.", !m_pDoc->GetBroadcaster(ScAddress(0,7,0)));
+
+    // References in B2 and B3 should be invalid.
+    CPPUNIT_ASSERT_MESSAGE("Deleted reference check in B2 failed.",
+                           checkDeletedRefToken(*m_pDoc, ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_MESSAGE("Deleted reference check in B3 failed.",
+                           checkDeletedRefToken(*m_pDoc, ScAddress(1,2,0)));
 
     m_pDoc->DeleteTab(0);
 }
