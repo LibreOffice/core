@@ -68,11 +68,11 @@ public:
     void SetVertical(bool bNew);
 
     // data read access
-    sal_uInt32 Count() const;
-    sal_Int16 GetDepth(sal_uInt16 nPara) const;
+    sal_Int32 Count() const;
+    sal_Int16 GetDepth(sal_Int32 nPara) const;
     const EditTextObject& GetTextObject() const;
     bool IsEditDoc() const;
-    const ParagraphData& GetParagraphData(sal_uInt32 nIndex) const;
+    const ParagraphData& GetParagraphData(sal_Int32 nIndex) const;
 
     // portion info support
     void ClearPortionInfo();

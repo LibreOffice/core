@@ -3643,7 +3643,7 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
             // wurde an der Position ein Escapement aufgespannt, so entferne
             // das jetzt. Fussnoten sind bei uns immer hochgestellt.
             SvxRTFItemStackType* pTmp = aSaveStack.empty() ? 0 : aSaveStack.back();
-            if( pTmp && pTmp->GetSttNodeIdx() ==
+            if( pTmp && static_cast<sal_uLong>(pTmp->GetSttNodeIdx()) ==
                 pPam->GetPoint()->nNode.GetIndex() &&
                 pTmp->GetSttCnt() == nPos )
                 pTmp->GetAttrSet().ClearItem( RES_CHRATR_ESCAPEMENT );
@@ -4168,7 +4168,7 @@ void SwRTFParser::DelLastNode()
                 {
                     SvxRTFItemStackType* pStkEntry = (SvxRTFItemStackType*)
                                                     GetAttrStack()[ --n ];
-                    if( nNodeIdx == pStkEntry->GetSttNode().GetIdx() )
+                    if( nNodeIdx == static_cast<sal_uLong>(pStkEntry->GetSttNode().GetIdx()) )
                     {
                         if( !bMove )
                         {
@@ -4205,7 +4205,7 @@ void SwRTFParser::UnknownAttrToken( int nToken, SfxItemSet* pSet )
                 // Crsr nicht mehr in der Tabelle ?
                 if( !pPam->GetNode()->FindTableNode() && _do )
                 {
-                    sal_uLong nOldPos = pPam->GetPoint()->nNode.GetIndex();
+                    sal_Int32 nOldPos = pPam->GetPoint()->nNode.GetIndex();
 
                     // dann wieder in die letzte Box setzen
                     // (kann durch einlesen von Flys geschehen!)
@@ -4385,7 +4385,7 @@ bool BookmarkPosition::operator==(const BookmarkPosition rhs)
     return(maMkNode.GetIndex() == rhs.maMkNode.GetIndex() && mnMkCntnt == rhs.mnMkCntnt);
 }
 
-sal_uLong SwNodeIdx::GetIdx() const
+sal_Int32 SwNodeIdx::GetIdx() const
 {
     return aIdx.GetIndex();
 }
@@ -4405,7 +4405,7 @@ SvxNodeIdx* SwxPosition::MakeNodeIdx() const
     return new SwNodeIdx( pPam->GetPoint()->nNode );
 }
 
-sal_uLong   SwxPosition::GetNodeIdx() const
+sal_Int32 SwxPosition::GetNodeIdx() const
 {
     return pPam->GetPoint()->nNode.GetIndex();
 }

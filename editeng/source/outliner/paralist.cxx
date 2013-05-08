@@ -126,28 +126,38 @@ void ParagraphList::Clear( sal_Bool bDestroyParagraphs )
 
 void ParagraphList::Append( Paragraph* pPara)
 {
+    SAL_WARN_IF( maEntries.size() >= EE_PARA_MAX_COUNT, "editeng", "ParagraphList::Append - overflow");
     maEntries.push_back(pPara);
 }
 
-void ParagraphList::Insert( Paragraph* pPara, sal_uLong nAbsPos)
+void ParagraphList::Insert( Paragraph* pPara, sal_Int32 nAbsPos)
 {
-    OSL_ASSERT(nAbsPos != ULONG_MAX && nAbsPos <= maEntries.size());
+    SAL_WARN_IF( nAbsPos < 0 || (maEntries.size() < static_cast<size_t>(nAbsPos) && nAbsPos != EE_PARA_APPEND),
+            "editeng", "ParagraphList::Insert - bad insert position " << nAbsPos);
+    SAL_WARN_IF( maEntries.size() >= EE_PARA_MAX_COUNT, "editeng", "ParagraphList::Insert - overflow");
 
-    maEntries.insert(maEntries.begin()+nAbsPos,pPara);
+    if (nAbsPos < 0 || maEntries.size() <= static_cast<size_t>(nAbsPos))
+        Append( pPara);
+    else
+        maEntries.insert(maEntries.begin()+nAbsPos,pPara);
 }
 
-void ParagraphList::Remove( sal_uLong nPara )
+void ParagraphList::Remove( sal_Int32 nPara )
 {
-    OSL_ASSERT(nPara < maEntries.size());
+    if (nPara < 0 || maEntries.size() <= static_cast<size_t>(nPara))
+    {
+        SAL_WARN( "editeng", "ParagraphList::Remove - out of bounds " << nPara);
+        return;
+    }
 
     maEntries.erase(maEntries.begin() + nPara );
 }
 
-void ParagraphList::MoveParagraphs( sal_uLong nStart, sal_uLong nDest, sal_uLong _nCount )
+void ParagraphList::MoveParagraphs( sal_Int32 nStart, sal_Int32 nDest, sal_Int32 _nCount )
 {
-    OSL_ASSERT(nStart < maEntries.size() && nDest < maEntries.size());
+    OSL_ASSERT(static_cast<size_t>(nStart) < maEntries.size() && static_cast<size_t>(nDest) < maEntries.size());
 
-    if ( ( nDest < nStart ) || ( nDest >= ( nStart + _nCount ) ) )
+    if ( (( nDest < nStart ) || ( nDest >= ( nStart + _nCount ) )) && nStart >= 0 && nDest >= 0 && _nCount >= 0 )
     {
         std::vector<Paragraph*> aParas;
         std::vector<Paragraph*>::iterator iterBeg = maEntries.begin() + nStart;
@@ -172,29 +182,29 @@ void ParagraphList::MoveParagraphs( sal_uLong nStart, sal_uLong nDest, sal_uLong
 
 sal_Bool ParagraphList::HasChildren( Paragraph* pParagraph ) const
 {
-    sal_uLong n = GetAbsPos( pParagraph );
+    sal_Int32 n = GetAbsPos( pParagraph );
     Paragraph* pNext = GetParagraph( ++n );
     return ( pNext && ( pNext->GetDepth() > pParagraph->GetDepth() ) ) ? sal_True : sal_False;
 }
 
 sal_Bool ParagraphList::HasHiddenChildren( Paragraph* pParagraph ) const
 {
-    sal_uLong n = GetAbsPos( pParagraph );
+    sal_Int32 n = GetAbsPos( pParagraph );
     Paragraph* pNext = GetParagraph( ++n );
     return ( pNext && ( pNext->GetDepth() > pParagraph->GetDepth() ) && !pNext->IsVisible() ) ? sal_True : sal_False;
 }
 
 sal_Bool ParagraphList::HasVisibleChildren( Paragraph* pParagraph ) const
 {
-    sal_uLong n = GetAbsPos( pParagraph );
+    sal_Int32 n = GetAbsPos( pParagraph );
     Paragraph* pNext = GetParagraph( ++n );
     return ( pNext && ( pNext->GetDepth() > pParagraph->GetDepth() ) && pNext->IsVisible() ) ? sal_True : sal_False;
 }
 
-sal_uLong ParagraphList::GetChildCount( Paragraph* pParent ) const
+sal_Int32 ParagraphList::GetChildCount( Paragraph* pParent ) const
 {
-    sal_uLong nChildCount = 0;
-    sal_uLong n = GetAbsPos( pParent );
+    sal_Int32 nChildCount = 0;
+    sal_Int32 n = GetAbsPos( pParent );
     Paragraph* pPara = GetParagraph( ++n );
     while ( pPara && ( pPara->GetDepth() > pParent->GetDepth() ) )
     {
@@ -207,7 +217,7 @@ sal_uLong ParagraphList::GetChildCount( Paragraph* pParent ) const
 Paragraph* ParagraphList::GetParent( Paragraph* pParagraph /*, sal_uInt16& rRelPos */ ) const
 {
     /* rRelPos = 0 */;
-    sal_uLong n = GetAbsPos( pParagraph );
+    sal_Int32 n = GetAbsPos( pParagraph );
     Paragraph* pPrev = GetParagraph( --n );
     while ( pPrev && ( pPrev->GetDepth() >= pParagraph->GetDepth() ) )
     {
@@ -221,10 +231,10 @@ Paragraph* ParagraphList::GetParent( Paragraph* pParagraph /*, sal_uInt16& rRelP
 
 void ParagraphList::Expand( Paragraph* pParent )
 {
-    sal_uLong nChildCount = GetChildCount( pParent );
-    sal_uLong nPos = GetAbsPos( pParent );
+    sal_Int32 nChildCount = GetChildCount( pParent );
+    sal_Int32 nPos = GetAbsPos( pParent );
 
-    for ( sal_uLong n = 1; n <= nChildCount; n++  )
+    for ( sal_Int32 n = 1; n <= nChildCount; n++  )
     {
         Paragraph* pPara = GetParagraph( nPos+n );
         if ( !( pPara->IsVisible() ) )
@@ -237,10 +247,10 @@ void ParagraphList::Expand( Paragraph* pParent )
 
 void ParagraphList::Collapse( Paragraph* pParent )
 {
-    sal_uLong nChildCount = GetChildCount( pParent );
-    sal_uLong nPos = GetAbsPos( pParent );
+    sal_Int32 nChildCount = GetChildCount( pParent );
+    sal_Int32 nPos = GetAbsPos( pParent );
 
-    for ( sal_uLong n = 1; n <= nChildCount; n++  )
+    for ( sal_Int32 n = 1; n <= nChildCount; n++  )
     {
         Paragraph* pPara = GetParagraph( nPos+n );
         if ( pPara->IsVisible() )
@@ -251,9 +261,9 @@ void ParagraphList::Collapse( Paragraph* pParent )
     }
 }
 
-sal_uLong ParagraphList::GetAbsPos( Paragraph* pParent ) const
+sal_Int32 ParagraphList::GetAbsPos( Paragraph* pParent ) const
 {
-    sal_uLong pos = 0;
+    sal_Int32 pos = 0;
     std::vector<Paragraph*>::const_iterator iter;
     for (iter = maEntries.begin(); iter != maEntries.end(); ++iter, ++pos)
     {
@@ -261,7 +271,7 @@ sal_uLong ParagraphList::GetAbsPos( Paragraph* pParent ) const
             return pos;
     }
 
-    return ~0;
+    return EE_PARA_NOT_FOUND;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

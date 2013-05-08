@@ -108,7 +108,7 @@ private:
     int             mnLastToken;
     bool            mbNewDef;
 
-    sal_uInt16          mnStartPara;
+    sal_Int32       mnStartPara;
 
     sal_Int32       mnColCnt;
     sal_Int32       mnRowCnt;
@@ -273,7 +273,7 @@ void SdrTableRTFParser::FillTable()
                     if( xCellInfo->maItemSet.GetItemState(SDRATTR_TABLE_BORDER,sal_False,&pPoolItem)==SFX_ITEM_SET)
                         xCell->SetMergedItem( *pPoolItem );
 
-                    OutlinerParaObject* pTextObject = mpOutliner->CreateParaObject( (sal_uInt16)xCellInfo->mnStartPara, (sal_uInt16)xCellInfo->mnParaCount );
+                    OutlinerParaObject* pTextObject = mpOutliner->CreateParaObject( xCellInfo->mnStartPara, xCellInfo->mnParaCount );
                     if( pTextObject )
                     {
                         SdrOutliner& rOutliner=mrTableObj.ImpGetDrawOutliner();
