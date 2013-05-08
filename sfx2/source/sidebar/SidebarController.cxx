@@ -382,7 +382,6 @@ void SidebarController::UpdateConfigurations (void)
             maCurrentContext,
             mbIsDocumentReadOnly,
             mxFrame);
-        mpTabBar->SetDecks(aDecks);
 
         // Notify the tab bar about the updated set of decks.
         mpTabBar->SetDecks(aDecks);
@@ -414,13 +413,12 @@ void SidebarController::UpdateConfigurations (void)
             // We did not find a valid deck.
             RequestCloseDeck();
             return;
-
-            // Tell the tab bar to highlight the button associated
-            // with the deck.
-            mpTabBar->HighlightDeck(sNewDeckId);
         }
 
-        msCurrentDeckId = sNewDeckId;
+        // Tell the tab bar to highlight the button associated
+        // with the deck.
+        mpTabBar->HighlightDeck(sNewDeckId);
+
         SwitchToDeck(
             *ResourceManager::Instance().GetDeckDescriptor(sNewDeckId),
             maCurrentContext);
