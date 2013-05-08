@@ -60,7 +60,6 @@ public:
     css::uno::Reference< com::sun::star::lang::XMultiServiceFactory > getFactory(){return m_xFactory;}
 private:
 
-    ProfileAccess* m_ProfileAccess;
     virtual ~MorkDriver() {}
 
     virtual OUString SAL_CALL getImplementationName()

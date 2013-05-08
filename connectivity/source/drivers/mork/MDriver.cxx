@@ -33,7 +33,6 @@ MorkDriver::MorkDriver(css::uno::Reference< css::uno::XComponentContext > const 
 {
     SAL_INFO("connectivity.mork", "=> MorkDriver::MorkDriver()" );
 //    css::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xServiceFactory(;
-    m_ProfileAccess = new ProfileAccess();
     assert(context.is());
 }
 
