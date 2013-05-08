@@ -240,7 +240,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 		wizards/com/sun/star/wizards/query/query \
 		wizards/com/sun/star/wizards/report/report \
 		wizards/com/sun/star/wizards/table/table \
-		wizards/com/sun/star/wizards/web/web \
 	) \
 ))
 
