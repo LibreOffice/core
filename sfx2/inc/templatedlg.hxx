@@ -143,8 +143,8 @@ private:
     ToolBox *mpTemplateBar;
     TemplateSearchView *mpSearchView;
     TemplateAbstractView *mpCurView;
-    TemplateLocalView *maView;
-    TemplateRemoteView *mpOnlineView;
+    TemplateLocalView *mpLocalView;
+    TemplateRemoteView *mpRemoteView;
     PopupMenu *mpActionMenu;
     PopupMenu *mpRepositoryMenu;
     PopupMenu *mpTemplateDefaultMenu;
