@@ -1635,6 +1635,14 @@ void Test::testCellBroadcaster()
     CPPUNIT_ASSERT_MESSAGE("Broadcaster relocation failed.",
                            broadcasterShifted(*m_pDoc, ScAddress(0,2,0), ScAddress(1,2,0)));
 
+    // Delete formula in C2, which should remove the broadcaster in B3.
+    pBC = m_pDoc->GetBroadcaster(ScAddress(1,2,0));
+    CPPUNIT_ASSERT_MESSAGE("Broadcaster in B3 should still exist.", pBC);
+    clearRange(m_pDoc, ScAddress(2,0,0));
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(ScAddress(2,0,0))); // C2 should be empty.
+    pBC = m_pDoc->GetBroadcaster(ScAddress(1,2,0));
+    CPPUNIT_ASSERT_MESSAGE("Broadcaster in B3 should have been removed.", !pBC);
+
     m_pDoc->DeleteTab(0);
 }
 
