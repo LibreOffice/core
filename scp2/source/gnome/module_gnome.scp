@@ -38,7 +38,7 @@ Module gid_Module_Optional_Gnome
 #ifdef ENABLE_GNOMEVFS
     XpdCheckSolaris = "SUNWgnome-vfs";
 #endif
-    Files = (auto_Gnome_lib_ALL
+    Files = (
 #ifdef ENABLE_EVOAB2
       gid_File_Lib_Evoab,
 #endif
