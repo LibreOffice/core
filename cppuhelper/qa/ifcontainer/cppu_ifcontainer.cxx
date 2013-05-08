@@ -34,22 +34,6 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
-
-struct equalStr
-{
-    bool operator()(
-        const char * const &rA,
-        const char * const &rB) const
-        { return !strcmp(rA, rB); }
-};
-struct hashStr
-{
-    size_t operator()( const char * &rName ) const
-    {
-        return rtl::OString(rName).hashCode();
-    }
-};
-
 class ContainerListener;
 
 struct ContainerStats {
@@ -254,7 +238,7 @@ namespace cppu_ifcontainer
         void testOMultiTypeInterfaceContainerHelperVar()
         {
             typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<
-                const char *,hashStr,equalStr> StrContainer;
+                const char*, rtl::CStringHash, rtl::CStringEqual> StrContainer;
 
             const char *pTypes[nTests] =
             {

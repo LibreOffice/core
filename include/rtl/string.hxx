@@ -1672,6 +1672,20 @@ struct OStringHash
         { return (size_t)rString.hashCode(); }
 };
 
+/** Equality functor for classic c-strings (i.e. null-terminated char* strings) */
+struct CStringEqual
+{
+    bool operator()( const char* p1, const char* p2) const
+        { return rtl_str_compare(p1, p2) == 0; }
+};
+
+/** Hashing functor for classic c-strings (i.e. null-terminated char* strings) */
+struct CStringHash
+{
+    size_t operator()(const char* p) const
+        { return rtl_str_hashCode(p); }
+};
+
 /* ======================================================================= */
 
 /**

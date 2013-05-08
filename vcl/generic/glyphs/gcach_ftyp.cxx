@@ -135,9 +135,8 @@ void (*pFTEmbolden)(FT_GlyphSlot);
 static FT_UInt (*pFT_Face_GetCharVariantIndex)(FT_Face, FT_ULong, FT_ULong);
 static bool bEnableSizeFT = false;
 
-struct EqStr{ bool operator()(const char* a, const char* b) const { return !strcmp(a,b); } };
-struct HashStr { size_t operator()( const char* s ) const { return rtl_str_hashCode(s); } };
-typedef ::boost::unordered_map<const char*,boost::shared_ptr<FtFontFile>,HashStr, EqStr> FontFileList;
+typedef ::boost::unordered_map<const char*, boost::shared_ptr<FtFontFile>, rtl::CStringHash, rtl::CStringEqual> FontFileList;
+
 namespace { struct vclFontFileList : public rtl::Static< FontFileList, vclFontFileList > {}; }
 
 // -----------------------------------------------------------------------

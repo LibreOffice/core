@@ -509,23 +509,7 @@ static const CustomShapeTypeTranslationTable pCustomShapeTypeTranslationTable[] 
     { "ooxml-ribbon", "ribbon" },
 };
 
-struct StringHash
-{
-    size_t operator()( const char* s ) const
-    {
-        return rtl_str_hashCode(s);
-    }
-};
-
-struct StringCheck
-{
-    bool operator()( const char* s1, const char* s2 ) const
-    {
-        return strcmp( s1, s2 ) == 0;
-    }
-};
-
-typedef boost::unordered_map< const char*, const char*, StringHash, StringCheck> CustomShapeTypeTranslationHashMap;
+typedef boost::unordered_map< const char*, const char*, rtl::CStringHash, rtl::CStringEqual> CustomShapeTypeTranslationHashMap;
 static CustomShapeTypeTranslationHashMap* pCustomShapeTypeTranslationHashMap = NULL;
 
 static const char* lcl_GetPresetGeometry( const char* sShapeType )
@@ -1109,7 +1093,7 @@ ShapeExport& ShapeExport::WriteRectangleShape( Reference< XShape > xShape )
 }
 
 typedef ShapeExport& (ShapeExport::*ShapeConverter)( Reference< XShape > );
-typedef boost::unordered_map< const char*, ShapeConverter, StringHash, StringCheck> NameToConvertMapType;
+typedef boost::unordered_map< const char*, ShapeConverter, rtl::CStringHash, rtl::CStringEqual> NameToConvertMapType;
 
 static const NameToConvertMapType& lcl_GetConverters()
 {

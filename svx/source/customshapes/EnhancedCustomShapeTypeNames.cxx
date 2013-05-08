@@ -21,21 +21,8 @@
 #include <osl/mutex.hxx>
 #include <boost/unordered_map.hpp>
 
-struct THash
-{
-    size_t operator()( const char* s ) const
-    {
-        return rtl_str_hashCode(s);
-    }
-};
-struct TCheck
-{
-    bool operator()( const char* s1, const char* s2 ) const
-    {
-        return strcmp( s1, s2 ) == 0;
-    }
-};
-typedef boost::unordered_map< const char*, MSO_SPT, THash, TCheck> TypeNameHashMap;
+typedef boost::unordered_map< const char*, MSO_SPT, rtl::CStringHash, rtl::CStringEqual> TypeNameHashMap;
+
 static TypeNameHashMap* pHashMap = NULL;
 static ::osl::Mutex& getHashMapMutex()
 {
