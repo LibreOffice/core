@@ -54,8 +54,12 @@ namespace cppcanvas
     {
         struct OutDevState;
         struct ActionFactoryParameters;
-        struct EMFPObject;
         struct XForm;
+
+        struct EMFPObject
+        {
+            virtual ~EMFPObject() {}
+        };
 
         // state stack of OutputDevice, to correctly handle
         // push/pop actions

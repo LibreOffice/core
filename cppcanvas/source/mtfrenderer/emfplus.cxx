@@ -117,11 +117,6 @@ namespace cppcanvas
             s.Seek (pos);
         });
 
-        struct EMFPObject
-        {
-            virtual ~EMFPObject() {}
-        };
-
         struct EMFPPath : public EMFPObject
         {
             ::basegfx::B2DPolyPolygon    aPolygon;
