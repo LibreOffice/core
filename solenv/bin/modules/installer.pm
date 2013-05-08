@@ -331,7 +331,8 @@ sub run {
 
     if ( $installer::globals::languagepack ) { installer::scriptitems::use_langpack_copy_scpaction($scpactionsinproductarrayref); }
     if ( $installer::globals::helppack ) { installer::scriptitems::use_langpack_copy_scpaction($scpactionsinproductarrayref); }
-    if ( $allvariableshashref->{'PRODUCTNAME'} eq "LibO-dev" ) { installer::scriptitems::use_devversion_copy_scpaction($scpactionsinproductarrayref); }
+    # TODO: why is this not done in scp2 based on the value of $(ENABLE_RELEASE_BUILD)?
+    if ( $allvariableshashref->{'PRODUCTNAME'} eq "LibreOfficeDev" ) { installer::scriptitems::use_devversion_copy_scpaction($scpactionsinproductarrayref); }
 
     installer::scriptitems::change_keys_of_scpactions($scpactionsinproductarrayref);
 
