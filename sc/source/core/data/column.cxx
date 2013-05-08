@@ -1194,29 +1194,14 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
 
     if (bCountChanged)
     {
-        SCSIZE nDelCount = maItems.size() - nNewCount;
-        ScBaseCell** ppDelCells = new ScBaseCell*[nDelCount];
-        SCROW* pDelRows = new SCROW[nDelCount];
-        for (i = 0; i < nDelCount; i++)
-        {
-            ppDelCells[i] = maItems[nNewCount+i].pCell;
-            pDelRows[i] = maItems[nNewCount+i].nRow;
-        }
-        maItems.resize( nNewCount );
+        // Some cells in the lower part of the cell array have been pushed out
+        // beyond MAXROW. Delete them.
+        std::vector<ColEntry>::iterator itBeg = maItems.begin();
+        std::advance(itBeg, nNewCount);
+        for (std::vector<ColEntry>::iterator it = itBeg; it != maItems.end(); ++it)
+            it->pCell->Delete();
 
-        for (i = 0; i < nDelCount; i++)
-        {
-            SCROW nDelRow = pDelRows[i];
-            SvtBroadcaster* pBC = GetBroadcaster(nDelRow);
-            if (pBC)
-            {
-                MoveListeners( *pBC, pDelRows[i] - nSize );
-                ppDelCells[i]->Delete();
-            }
-        }
-
-        delete [] pDelRows;
-        delete [] ppDelCells;
+        maItems.erase(itBeg, maItems.end());
     }
 
     pDocument->SetAutoCalc( bOldAutoCalc );
