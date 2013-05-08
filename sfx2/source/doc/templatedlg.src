@@ -241,6 +241,17 @@ TabPage TAB_TEMPLATE_MANAGER
 
             ToolBoxItem
             {
+                Identifier = TBI_TEMPLATE_OPEN;
+                Text [ en-US ] = "Open";
+
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "actionview030.png"; };
+                };
+            };
+
+            ToolBoxItem
+            {
                 Identifier = TBI_TEMPLATE_EDIT;
                 Text [ en-US ] = "Edit";
 

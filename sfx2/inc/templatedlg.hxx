@@ -80,6 +80,7 @@ private:
 
     void OnTemplateImport ();
     void OnTemplateSearch ();
+    void OnTemplateOpen ();
     void OnTemplateEdit ();
     void OnTemplateProperties ();
     void OnTemplateDelete ();

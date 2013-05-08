@@ -314,6 +314,7 @@ void SfxTemplateManagerDlg::setSaveMode(bool bMode)
         mpTemplateBar->ShowItem(TBI_TEMPLATE_SAVE);
         mpTemplateBar->ShowItem(TBI_TEMPLATE_PROPERTIES);
         mpTemplateBar->ShowItem(TBI_TEMPLATE_DEFAULT);
+        mpTemplateBar->HideItem(TBI_TEMPLATE_OPEN);
         mpTemplateBar->HideItem(TBI_TEMPLATE_EDIT);
         mpTemplateBar->HideItem(TBI_TEMPLATE_MOVE);
         mpTemplateBar->HideItem(TBI_TEMPLATE_EXPORT);
@@ -525,6 +526,9 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg,TBXTemplateHdl)
 {
     switch(mpTemplateBar->GetCurItemId())
     {
+    case TBI_TEMPLATE_OPEN:
+        OnTemplateOpen();
+        break;
     case TBI_TEMPLATE_EDIT:
         OnTemplateEdit();
         break;
@@ -877,6 +881,7 @@ void SfxTemplateManagerDlg::OnTemplateState (const ThumbnailViewItem *pItem)
         {
             if (!mbIsSaveMode)
             {
+                mpTemplateBar->HideItem(TBI_TEMPLATE_OPEN);
                 mpTemplateBar->HideItem(TBI_TEMPLATE_EDIT);
                 mpTemplateBar->HideItem(TBI_TEMPLATE_PROPERTIES);
                 mpTemplateBar->HideItem(TBI_TEMPLATE_DEFAULT);
@@ -907,6 +912,7 @@ void SfxTemplateManagerDlg::OnTemplateState (const ThumbnailViewItem *pItem)
             {
                 if (!mbIsSaveMode)
                 {
+                    mpTemplateBar->ShowItem(TBI_TEMPLATE_OPEN);
                     mpTemplateBar->ShowItem(TBI_TEMPLATE_EDIT);
                     mpTemplateBar->ShowItem(TBI_TEMPLATE_PROPERTIES);
                     mpTemplateBar->ShowItem(TBI_TEMPLATE_DEFAULT);
@@ -1164,6 +1170,13 @@ void SfxTemplateManagerDlg::OnTemplateSearch ()
     mpSearchEdit->SetText(OUString());
     if (!bVisible)
         mpSearchEdit->GrabFocus();
+}
+
+void SfxTemplateManagerDlg::OnTemplateOpen ()
+{
+    ThumbnailViewItem *pItem = const_cast<ThumbnailViewItem*>(*maSelTemplates.begin());
+
+    OpenTemplateHdl(pItem);
 }
 
 void SfxTemplateManagerDlg::OnTemplateEdit ()
