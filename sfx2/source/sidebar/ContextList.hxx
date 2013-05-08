@@ -31,7 +31,8 @@
 
 namespace sfx2 { namespace sidebar {
 
-
+/** Per context data for deck and panel descriptors.
+*/
 class ContextList
 {
 public:
@@ -50,6 +51,8 @@ public:
     */
     const Entry* GetMatch (
         const Context& rContext) const;
+    Entry* GetMatch (
+        const Context& rContext);
 
     void AddContextDescription (
         const Context& rContext,
