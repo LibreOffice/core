@@ -20,6 +20,18 @@ $(eval $(call gb_Library_use_externals,pyuno_wrapper,\
     python_headers \
 ))
 
+# python "import pyuno" dlopens pyuno.so as RTLD_LOCAL, so g++ exception
+# handling used to not work, so pyuno.so (pyuno_wrapper) is just a thin wrapper
+# that dlopens libpyuno.so as RTLD_GLOBAL; but when pyuno.so wrapper links
+# against libstdc++ (which has not previously been loaded into python process),
+# that resolves its _ZNSs4_Rep20_S_empty_rep_storageE to itself, but later LO
+# libs (loaded though RTLD_GLOBAL libpyuno.so) may resolve that symbol to e.g.
+# cppu, because they happen to see that before libstdc++; so the requirement has
+# always been that RTLD_LOCAL-loaded pyuno.so wrapper implicitly load into the
+# process as little as possible:
+$(eval $(call gb_Library_add_ldflags,pyuno_wrapper,-nostdlib))
+$(eval $(call gb_Library_add_libs,pyuno_wrapper,-lc))
+
 ifneq ($(OS)$(COM),WNTMSC)
 ifeq ($(filter DRAGONFLY FREEBSD NETBSD OPENBSD MACOSX,$(OS)),)
 
