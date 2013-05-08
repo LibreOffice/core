@@ -351,7 +351,7 @@ static long getMaxNonOutlier(const std::vector<long> &rG, long nAvgDimension)
         aEnd = rG.end(); aI != aEnd; ++aI)
     {
         long nPrimaryChildDimension = *aI;
-        if (nPrimaryChildDimension <= nAvgDimension * 1.5)
+        if (nPrimaryChildDimension < nAvgDimension * 1.5)
         {
             nMaxDimensionNonOutlier = std::max(nPrimaryChildDimension,
                 nMaxDimensionNonOutlier);
@@ -370,7 +370,7 @@ static std::vector<long> setButtonSizes(const std::vector<long> &rG,
         aI != aEnd; ++aI)
     {
         long nPrimaryChildDimension = *aI;
-        if (nPrimaryChildDimension <= nAvgDimension * 1.5)
+        if (nPrimaryChildDimension < nAvgDimension * 1.5)
             aVec.push_back(nMaxNonOutlier);
         else
             aVec.push_back(nPrimaryChildDimension);
