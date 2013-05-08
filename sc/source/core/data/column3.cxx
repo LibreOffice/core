@@ -164,7 +164,12 @@ void ScColumn::FreeAll()
 
 void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
 {
+    SCROW nEndRow = nStartRow + nSize - 1;
+
     pAttrArray->DeleteRow( nStartRow, nSize );
+
+    maBroadcasters.erase(nStartRow, nEndRow);
+    maBroadcasters.resize(MAXROWCOUNT);
 
     if ( maItems.empty() )
         return ;
@@ -178,12 +183,10 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
     pDocument->SetAutoCalc( false ); // Avoid calculating it multiple times
 
     bool bFound = false;
-    SCROW nEndRow = nStartRow + nSize - 1;
     SCSIZE nStartIndex = 0;
     SCSIZE nEndIndex = 0;
     SCSIZE i;
 
-    maBroadcasters.set_empty(nStartRow, nEndRow);
 
     for ( i = nFirstIndex; i < maItems.size() && maItems[i].nRow <= nEndRow; i++ )
     {
@@ -215,8 +218,6 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
     maTextWidths.resize(MAXROWCOUNT);
     maScriptTypes.erase(nStartRow, nEndRow);
     maScriptTypes.resize(MAXROWCOUNT);
-    maBroadcasters.erase(nStartRow, nEndRow);
-    maBroadcasters.resize(MAXROWCOUNT);
 
     ScAddress aAdr( nCol, 0, nTab );
     ScHint aHint( SC_HINT_DATACHANGED, aAdr, NULL ); // only areas (ScBaseCell* == NULL)

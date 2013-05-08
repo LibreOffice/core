@@ -1653,8 +1653,13 @@ void Test::testCellBroadcaster()
     // While column A is still empty, move column A down 2 cells. This should
     // move the broadcaster from A1 to A3.
     m_pDoc->InsertRow(0, 0, 0, 0, 0, 2);
-    pBC = m_pDoc->GetBroadcaster(ScAddress(0,2,0));
-    CPPUNIT_ASSERT_MESSAGE("Broadcaster should exist in A3.", pBC);
+    CPPUNIT_ASSERT_MESSAGE("Broadcaster relocation failed.",
+                           broadcasterShifted(*m_pDoc, ScAddress(0,0,0), ScAddress(0,2,0)));
+
+    // Move it back while column A is still empty.
+    m_pDoc->DeleteRow(0, 0, 0, 0, 0, 2);
+    CPPUNIT_ASSERT_MESSAGE("Broadcaster relocation failed.",
+                           broadcasterShifted(*m_pDoc, ScAddress(0,2,0), ScAddress(0,0,0)));
 
     m_pDoc->DeleteTab(0);
 }
