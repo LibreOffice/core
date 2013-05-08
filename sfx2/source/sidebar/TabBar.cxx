@@ -254,6 +254,14 @@ void TabBar::DataChanged (const DataChangedEvent& rDataChangedEvent)
 
 
 
+long TabBar::Notify (NotifyEvent& rEvent)
+{
+    return sal_False;
+}
+
+
+
+
 RadioButton* TabBar::CreateTabItem (const DeckDescriptor& rDeckDescriptor)
 {
     RadioButton* pItem = ControlFactory::CreateTabItem(this);
