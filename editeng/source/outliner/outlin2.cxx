@@ -195,7 +195,7 @@ String Outliner::GetWordDelimiters() const
     return pEditEngine->GetWordDelimiters();
 }
 
-String Outliner::GetWord( sal_uInt16 nPara, sal_uInt16 nIndex )
+String Outliner::GetWord( sal_Int32 nPara, sal_uInt16 nIndex )
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->GetWord( nPara, nIndex );
@@ -279,7 +279,7 @@ Paragraph* Outliner::GetParent( Paragraph* pParagraph ) const
     return pParaList->GetParent( pParagraph );
 }
 
-sal_uLong Outliner::GetChildCount( Paragraph* pParent ) const
+sal_Int32 Outliner::GetChildCount( Paragraph* pParent ) const
 {
     DBG_CHKTHIS(Outliner,0);
     return pParaList->GetChildCount( pParent );
@@ -309,10 +309,10 @@ SfxStyleSheetPool* Outliner::GetStyleSheetPool()
     return pEditEngine->GetStyleSheetPool();
 }
 
-SfxStyleSheet* Outliner::GetStyleSheet( sal_uLong nPara )
+SfxStyleSheet* Outliner::GetStyleSheet( sal_Int32 nPara )
 {
     DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->GetStyleSheet( (sal_uInt16)nPara );
+    return pEditEngine->GetStyleSheet( nPara );
 }
 
 sal_Bool Outliner::IsInSelectionMode() const
@@ -375,25 +375,25 @@ sal_Bool Outliner::IsInUndo()
     return pEditEngine->IsInUndo();
 }
 
-sal_uLong Outliner::GetLineCount( sal_uLong nParagraph ) const
+sal_uLong Outliner::GetLineCount( sal_Int32 nParagraph ) const
 {
     DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->GetLineCount( (sal_uInt16)nParagraph );
+    return pEditEngine->GetLineCount( nParagraph );
 }
 
-sal_uInt16 Outliner::GetLineLen( sal_uLong nParagraph, sal_uInt16 nLine ) const
+sal_uInt16 Outliner::GetLineLen( sal_Int32 nParagraph, sal_uInt16 nLine ) const
 {
     DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->GetLineLen( (sal_uInt16)nParagraph, nLine );
+    return pEditEngine->GetLineLen( nParagraph, nLine );
 }
 
-sal_uLong Outliner::GetLineHeight( sal_uLong nParagraph, sal_uLong nLine )
+sal_uLong Outliner::GetLineHeight( sal_Int32 nParagraph, sal_uInt16 nLine )
 {
     DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->GetLineHeight( (sal_uInt16)nParagraph, (sal_uInt16)nLine );
+    return pEditEngine->GetLineHeight( nParagraph, nLine );
 }
 
-void Outliner::QuickRemoveCharAttribs( sal_uInt16 nPara, sal_uInt16 nWhich )
+void Outliner::QuickRemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich )
 {
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->QuickRemoveCharAttribs( nPara, nWhich );
@@ -489,10 +489,10 @@ OutputDevice* Outliner::GetRefDevice() const
     return pEditEngine->GetRefDevice();
 }
 
-sal_uLong Outliner::GetTextHeight( sal_uLong nParagraph ) const
+sal_uLong Outliner::GetTextHeight( sal_Int32 nParagraph ) const
 {
     DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->GetTextHeight((sal_uInt16)nParagraph );
+    return pEditEngine->GetTextHeight(nParagraph );
 }
 
 Point Outliner::GetDocPos( const Point& rPaperPos ) const
@@ -501,10 +501,10 @@ Point Outliner::GetDocPos( const Point& rPaperPos ) const
     return pEditEngine->GetDocPos( rPaperPos );
 }
 
-Point Outliner::GetDocPosTopLeft( sal_uLong nParagraph )
+Point Outliner::GetDocPosTopLeft( sal_Int32 nParagraph )
 {
     DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->GetDocPosTopLeft( (sal_uInt16)nParagraph );
+    return pEditEngine->GetDocPosTopLeft( nParagraph );
 }
 
 sal_Bool Outliner::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder )
@@ -521,7 +521,7 @@ sal_Bool Outliner::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder, sal_Bo
     if ( !bTextPos )
     {
         Point aDocPos = GetDocPos( rPaperPos );
-        sal_uInt16 nPara = pEditEngine->FindParagraph( aDocPos.Y() );
+        sal_Int32 nPara = pEditEngine->FindParagraph( aDocPos.Y() );
         if ( ( nPara != EE_PARA_NOT_FOUND ) && ImplHasBullet( nPara ) )
         {
             Rectangle aBulArea = ImpCalcBulletArea( nPara, sal_True, sal_True );
@@ -580,8 +580,8 @@ void Outliner::SetGlobalCharStretching( sal_uInt16 nX, sal_uInt16 nY )
     DBG_CHKTHIS(Outliner,0);
 
     // reset bullet size
-    sal_uInt16 nParagraphs = (sal_uInt16)pParaList->GetParagraphCount();
-    for ( sal_uInt16 nPara = 0; nPara < nParagraphs; nPara++ )
+    sal_Int32 nParagraphs = pParaList->GetParagraphCount();
+    for ( sal_Int32 nPara = 0; nPara < nParagraphs; nPara++ )
     {
         Paragraph* pPara = pParaList->GetParagraph( nPara );
         if ( pPara )
@@ -644,7 +644,7 @@ sal_uInt16 Outliner::GetScriptType( const ESelection& rSelection ) const
     return pEditEngine->GetScriptType( rSelection );
 }
 
-LanguageType Outliner::GetLanguage( sal_uInt16 nPara, sal_uInt16 nPos ) const
+LanguageType Outliner::GetLanguage( sal_Int32 nPara, sal_uInt16 nPos ) const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->GetLanguage( nPara, nPos );

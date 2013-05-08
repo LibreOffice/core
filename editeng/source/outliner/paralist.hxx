@@ -20,6 +20,9 @@
 #ifndef _PARALIST_HXX
 #define _PARALIST_HXX
 
+#include <sal/config.h>
+#include <sal/log.hxx>
+
 #include <vector>
 
 #include <tools/link.hxx>
@@ -31,28 +34,34 @@ class ParagraphList
 public:
     void            Clear( sal_Bool bDestroyParagraphs );
 
-    sal_uInt32      GetParagraphCount() const
+    sal_Int32       GetParagraphCount() const
     {
-        return maEntries.size();
+        size_t nSize = maEntries.size();
+        if (nSize > SAL_MAX_INT32)
+        {
+            SAL_WARN( "editeng", "ParagraphList::GetParagraphCount - overflow " << nSize);
+            return SAL_MAX_INT32;
+        }
+        return nSize;
     }
 
-    Paragraph*      GetParagraph( sal_uLong nPos ) const
+    Paragraph*      GetParagraph( sal_Int32 nPos ) const
     {
-        return nPos < maEntries.size() ? maEntries[nPos] : NULL;
+        return 0 <= nPos && static_cast<size_t>(nPos) < maEntries.size() ? maEntries[nPos] : NULL;
     }
 
-    sal_uLong           GetAbsPos( Paragraph* pParent ) const;
+    sal_Int32       GetAbsPos( Paragraph* pParent ) const;
 
     void            Append( Paragraph *pPara);
-    void            Insert( Paragraph* pPara, sal_uLong nAbsPos);
-    void            Remove( sal_uLong nPara );
-    void            MoveParagraphs( sal_uLong nStart, sal_uLong nDest, sal_uLong nCount );
+    void            Insert( Paragraph* pPara, sal_Int32 nAbsPos);
+    void            Remove( sal_Int32 nPara );
+    void            MoveParagraphs( sal_Int32 nStart, sal_Int32 nDest, sal_Int32 nCount );
 
     Paragraph*      GetParent( Paragraph* pParagraph /*, sal_uInt16& rRelPos */ ) const;
     sal_Bool            HasChildren( Paragraph* pParagraph ) const;
     sal_Bool            HasHiddenChildren( Paragraph* pParagraph ) const;
     sal_Bool            HasVisibleChildren( Paragraph* pParagraph ) const;
-    sal_uLong           GetChildCount( Paragraph* pParagraph ) const;
+    sal_Int32       GetChildCount( Paragraph* pParagraph ) const;
 
     void            Expand( Paragraph* pParent );
     void            Collapse( Paragraph* pParent );

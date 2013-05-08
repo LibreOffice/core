@@ -592,7 +592,7 @@ namespace SwLangHelper
 
     void SelectPara( EditView &rEditView, const ESelection &rCurSel )
     {
-        ESelection aParaSel( rCurSel.nStartPara, 0, rCurSel.nStartPara, USHRT_MAX );
+        ESelection aParaSel( rCurSel.nStartPara, 0, rCurSel.nStartPara, EE_TEXTPOS_ALL );
         rEditView.SetSelection( aParaSel );
     }
 

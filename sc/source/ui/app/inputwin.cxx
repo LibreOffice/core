@@ -729,7 +729,7 @@ void ScInputWindow::SwitchToTextWin()
         EditView* pView = aTextWindow.GetEditView();
         if (pView)
         {
-            sal_uInt16 nPara =  pView->GetEditEngine()->GetParagraphCount() ? ( pView->GetEditEngine()->GetParagraphCount() - 1 ) : 0;
+            sal_Int32 nPara =  pView->GetEditEngine()->GetParagraphCount() ? ( pView->GetEditEngine()->GetParagraphCount() - 1 ) : 0;
             xub_StrLen nLen = pView->GetEditEngine()->GetTextLen( nPara );
             ESelection aSel( nPara, nLen, nPara, nLen );
             pView->SetSelection( aSel );                // set cursor to end of text

@@ -32,7 +32,7 @@ SvxEditSourceHint::SvxEditSourceHint( sal_uLong _nId ) :
 {
 }
 
-SvxEditSourceHint::SvxEditSourceHint( sal_uLong _nId, sal_uLong nValue, sal_uLong nStart, sal_uLong nEnd ) :
+SvxEditSourceHint::SvxEditSourceHint( sal_uLong _nId, sal_uLong nValue, sal_Int32 nStart, sal_Int32 nEnd ) :
     TextHint( _nId, nValue ),
     mnStart( nStart),
     mnEnd( nEnd )
@@ -44,12 +44,12 @@ sal_uLong SvxEditSourceHint::GetValue() const
     return TextHint::GetValue();
 }
 
-sal_uLong SvxEditSourceHint::GetStartValue() const
+sal_Int32 SvxEditSourceHint::GetStartValue() const
 {
     return mnStart;
 }
 
-sal_uLong SvxEditSourceHint::GetEndValue() const
+sal_Int32 SvxEditSourceHint::GetEndValue() const
 {
     return mnEnd;
 }
@@ -104,7 +104,7 @@ sal_uLong SvxEditSourceHint::GetEndValue() const
     return ::std::auto_ptr<SfxHint>( new SfxHint() );
 }
 
-sal_Bool SvxEditSourceHelper::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, const EditEngine& rEE, sal_uInt16 nPara, sal_uInt16 nIndex )
+sal_Bool SvxEditSourceHelper::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, const EditEngine& rEE, sal_Int32 nPara, sal_uInt16 nIndex )
 {
     std::vector<EECharAttrib> aCharAttribs;
 

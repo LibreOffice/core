@@ -571,7 +571,7 @@ basegfx::B2DPolyPolygon SdrMeasureObj::ImpCalcXPoly(const ImpMeasurePoly& rPol) 
     return aRetval;
 }
 
-bool SdrMeasureObj::CalcFieldValue(const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos,
+bool SdrMeasureObj::CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos,
     bool bEdit,
     Color*& rpTxtColor, Color*& rpFldColor, XubString& rRet) const
 {

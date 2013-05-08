@@ -323,7 +323,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
     fprintf( fp, "================================================================================" );
     fprintf( fp, "\n==================   Document   ================================================" );
     fprintf( fp, "\n================================================================================" );
-    for ( sal_uInt16 nPortion = 0; nPortion < pEE->pImpEditEngine->GetParaPortions(). Count(); nPortion++)
+    for ( sal_Int32 nPortion = 0; nPortion < pEE->pImpEditEngine->GetParaPortions().Count(); nPortion++)
     {
         ParaPortion* pPPortion = pEE->pImpEditEngine->GetParaPortions()[nPortion];
         fprintf( fp, "\nParagraph %i: Length = %i, Invalid = %i\nText = '%s'",
@@ -463,7 +463,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
         aR = pV->GetVisArea();
         fprintf( fp, "\n  VisArea: nX=%li, nY=%li, dX=%li, dY=%li", aR.TopLeft().X(), aR.TopLeft().Y(), aR.GetSize().Width(), aR.GetSize().Height() );
         ESelection aSel = pV->GetSelection();
-        fprintf( fp, "\n  Selection: Start=%u,%u, End=%u,%u", aSel.nStartPara, aSel.nStartPos, aSel.nEndPara, aSel.nEndPos );
+        fprintf( fp, "\n  Selection: Start=%d,%u, End=%d,%u", aSel.nStartPara, aSel.nStartPos, aSel.nEndPara, aSel.nEndPos );
     }
     if ( pEE->GetActiveView() )
     {

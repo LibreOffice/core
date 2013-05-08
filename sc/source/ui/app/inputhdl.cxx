@@ -814,7 +814,7 @@ void ScInputHandler::ShowTipCursor()
 
     if ( bFormulaMode && pActiveView && pFormulaDataPara && pEngine->GetParagraphCount() == 1 )
     {
-        String aFormula = pEngine->GetText( (sal_uInt16) 0 );
+        String aFormula = pEngine->GetText( 0 );
         ESelection aSel = pActiveView->GetSelection();
         aSel.Adjust();
         if( aSel.nEndPos )
@@ -1041,7 +1041,7 @@ void ScInputHandler::UseFormulaData()
     //  Formeln duerfen nur 1 Absatz haben
     if ( pActiveView && pFormulaData && pEngine->GetParagraphCount() == 1 )
     {
-        String aTotal = pEngine->GetText( (sal_uInt16) 0 );
+        String aTotal = pEngine->GetText( 0 );
         ESelection aSel = pActiveView->GetSelection();
         aSel.Adjust();
 
@@ -1248,7 +1248,7 @@ static void lcl_CompleteFunction( EditView* pView, const String& rInsert, bool& 
             //  schon eine Klammer steht (z.B. wenn der Funktionsname geaendert wurde).
 
             ESelection aWordSel = pView->GetSelection();
-            String aOld = pView->GetEditEngine()->GetText((sal_uInt16)0);
+            String aOld = pView->GetEditEngine()->GetText(0);
             sal_Unicode cNext = aOld.GetChar(aWordSel.nEndPos);
             if ( cNext == '(' )
             {
@@ -1385,7 +1385,7 @@ void ScInputHandler::FormulaPreview()
     {
         String aPart = pActiveView->GetSelected();
         if (!aPart.Len())
-            aPart = pEngine->GetText((sal_uInt16)0);
+            aPart = pEngine->GetText(0);
         ScDocument* pDoc = pActiveViewSh->GetViewData()->GetDocShell()->GetDocument();
         aValue = lcl_Calculate( aPart, pDoc, aCursorPos );
     }
@@ -1482,7 +1482,7 @@ bool ScInputHandler::CursorAtClosingPar()
     {
         ESelection aSel = pActiveView->GetSelection();
         xub_StrLen nPos = aSel.nStartPos;
-        String aFormula = pEngine->GetText((sal_uInt16)0);
+        String aFormula = pEngine->GetText(0);
         if ( nPos < aFormula.Len() && aFormula.GetChar(nPos) == ')' )
             return true;
     }
@@ -1550,7 +1550,7 @@ void ScInputHandler::UseColData()           // beim Tippen
         ESelection aSel = pActiveView->GetSelection();
         aSel.Adjust();
 
-        sal_uInt16 nParCnt = pEngine->GetParagraphCount();
+        sal_Int32 nParCnt = pEngine->GetParagraphCount();
         if ( aSel.nEndPara+1 == nParCnt )
         {
             xub_StrLen nParLen = pEngine->GetTextLen( aSel.nEndPara );
@@ -1625,7 +1625,7 @@ void ScInputHandler::NextAutoEntry( bool bBack )
 
             ESelection aSel = pActiveView->GetSelection();
             aSel.Adjust();
-            sal_uInt16 nParCnt = pEngine->GetParagraphCount();
+            sal_Int32 nParCnt = pEngine->GetParagraphCount();
             if ( aSel.nEndPara+1 == nParCnt && aSel.nStartPara == aSel.nEndPara )
             {
                 rtl::OUString aText = GetEditText(pEngine);
@@ -1698,7 +1698,7 @@ void ScInputHandler::UpdateParenthesis()
                 //  Das Zeichen links vom Cursor wird angeschaut
 
                 xub_StrLen nPos = aSel.nStartPos - 1;
-                String aFormula = pEngine->GetText((sal_uInt16)0);
+                String aFormula = pEngine->GetText(0);
                 sal_Unicode c = aFormula.GetChar(nPos);
                 if ( c == '(' || c == ')' )
                 {
@@ -1712,8 +1712,8 @@ void ScInputHandler::UpdateParenthesis()
                         if (bParenthesisShown)
                         {
                             //  alte Hervorhebung wegnehmen
-                            sal_uInt16 nCount = pEngine->GetParagraphCount();
-                            for (sal_uInt16 i=0; i<nCount; i++)
+                            sal_Int32 nCount = pEngine->GetParagraphCount();
+                            for (sal_Int32 i=0; i<nCount; i++)
                                 pEngine->QuickRemoveCharAttribs( i, EE_CHAR_WEIGHT );
                         }
 
@@ -1739,8 +1739,8 @@ void ScInputHandler::UpdateParenthesis()
 
     if ( bParenthesisShown && !bFound && pTableView )
     {
-        sal_uInt16 nCount = pEngine->GetParagraphCount();
-        for (sal_uInt16 i=0; i<nCount; i++)
+        sal_Int32 nCount = pEngine->GetParagraphCount();
+        for (sal_Int32 i=0; i<nCount; i++)
             pTableView->RemoveCharAttribs( i, EE_CHAR_WEIGHT );
     }
 
@@ -1911,8 +1911,8 @@ void ScInputHandler::RemoveRangeFinder()
     //  pRangeFindList und Farben loeschen
 
     pEngine->SetUpdateMode(false);
-    sal_uInt16 nCount = pEngine->GetParagraphCount();   // koennte gerade neu eingefuegt worden sein
-    for (sal_uInt16 i=0; i<nCount; i++)
+    sal_Int32 nCount = pEngine->GetParagraphCount();   // koennte gerade neu eingefuegt worden sein
+    for (sal_Int32 i=0; i<nCount; i++)
         pEngine->QuickRemoveCharAttribs( i, EE_CHAR_COLOR );
     pEngine->SetUpdateMode(true);
 
@@ -2102,7 +2102,7 @@ static void lcl_SetTopSelection( EditView* pEditView, ESelection& rSel )
     OSL_ENSURE( rSel.nStartPara==0 && rSel.nEndPara==0, "SetTopSelection: Para != 0" );
 
     EditEngine* pEngine = pEditView->GetEditEngine();
-    sal_uInt16 nCount = pEngine->GetParagraphCount();
+    sal_Int32 nCount = pEngine->GetParagraphCount();
     if (nCount > 1)
     {
         xub_StrLen nParLen = pEngine->GetTextLen(rSel.nStartPara);
@@ -2262,9 +2262,9 @@ void ScInputHandler::UpdateFormulaMode()
     SfxApplication* pSfxApp = SFX_APP();
 
     if ( pEngine->GetParagraphCount() == 1 &&
-         ( pEngine->GetText((sal_uInt16)0).GetChar(0) == '=' ||
-           pEngine->GetText((sal_uInt16)0).GetChar(0) == '+' ||
-           pEngine->GetText((sal_uInt16)0).GetChar(0) == '-' ) &&
+         ( pEngine->GetText(0).GetChar(0) == '=' ||
+           pEngine->GetText(0).GetChar(0) == '+' ||
+           pEngine->GetText(0).GetChar(0) == '-' ) &&
          !bProtected )
     {
         if (!bFormulaMode)
@@ -2413,7 +2413,7 @@ void ScInputHandler::SetMode( ScInputMode eNewMode )
             }
         }
 
-        sal_uInt16 nPara    = pEngine->GetParagraphCount()-1;
+        sal_Int32 nPara    = pEngine->GetParagraphCount()-1;
         xub_StrLen nLen = pEngine->GetText(nPara).Len();
         sal_uInt16 nCount   = pEngine->GetViewCount();
 
@@ -2471,7 +2471,7 @@ static void lcl_SelectionToEnd( EditView* pView )
     if ( pView )
     {
         EditEngine* pEngine = pView->GetEditEngine();
-        sal_uInt16 nParCnt = pEngine->GetParagraphCount();
+        sal_Int32 nParCnt = pEngine->GetParagraphCount();
         if ( nParCnt == 0 )
             nParCnt = 1;
         ESelection aSel( nParCnt-1, pEngine->GetTextLen(nParCnt-1) );   // empty selection, cursor at the end
@@ -2597,13 +2597,13 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
 
     if ( bModified && !bForget )            // was wird eingeben (Text/Objekt) ?
     {
-        sal_uInt16 nParCnt = pEngine->GetParagraphCount();
+        sal_Int32 nParCnt = pEngine->GetParagraphCount();
         if ( nParCnt == 0 )
             nParCnt = 1;
 
         bool bUniformAttribs = true;
         SfxItemSet aPara1Attribs = pEngine->GetAttribs(0, 0, pEngine->GetTextLen(0));
-        for (sal_uInt16 nPara = 1; nPara < nParCnt; ++nPara)
+        for (sal_Int32 nPara = 1; nPara < nParCnt; ++nPara)
         {
             SfxItemSet aPara2Attribs = pEngine->GetAttribs(nPara, 0, pEngine->GetTextLen(nPara));
             if (!(aPara1Attribs == aPara2Attribs))
@@ -3758,7 +3758,7 @@ bool ScInputHandler::GetTextAndFields( ScEditEngineDefaulter& rDestEngine )
     {
         //  Feldbefehle enthalten?
 
-        sal_uInt16 nParCnt = pEngine->GetParagraphCount();
+        sal_Int32 nParCnt = pEngine->GetParagraphCount();
         SfxItemSet aSet = pEngine->GetAttribs( ESelection(0,0,nParCnt,0) );
         SfxItemState eFieldState = aSet.GetItemState( EE_FEATURE_FIELD, false );
         if ( eFieldState == SFX_ITEM_DONTCARE || eFieldState == SFX_ITEM_SET )
@@ -3771,14 +3771,14 @@ bool ScInputHandler::GetTextAndFields( ScEditEngineDefaulter& rDestEngine )
 
             //  Attribute loeschen
 
-            for (sal_uInt16 i=0; i<nParCnt; i++)
+            for (sal_Int32 i=0; i<nParCnt; i++)
                 rDestEngine.QuickRemoveCharAttribs( i );
 
             //  Absaetze zusammenfassen
 
             while ( nParCnt > 1 )
             {
-                xub_StrLen nLen = rDestEngine.GetTextLen( (sal_uInt16)0 );
+                xub_StrLen nLen = rDestEngine.GetTextLen( 0 );
                 ESelection aSel( 0,nLen, 1,0 );
                 rDestEngine.QuickInsertText( rtl::OUString(' '), aSel );       // Umbruch durch Space ersetzen
                 --nParCnt;

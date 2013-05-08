@@ -234,9 +234,9 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
             const EditTextObject& rTextObj=pOutlinerParaObject->GetTextObject();
             XubString aStyleName;
             SfxStyleFamily eStyleFam;
-            sal_uInt16 nParaAnz=rTextObj.GetParagraphCount();
+            sal_Int32 nParaAnz=rTextObj.GetParagraphCount();
 
-            for(sal_uInt16 nParaNum(0); nParaNum < nParaAnz; nParaNum++)
+            for(sal_Int32 nParaNum(0); nParaNum < nParaAnz; nParaNum++)
             {
                 rTextObj.GetStyleSheet(nParaNum, aStyleName, eStyleFam);
 
@@ -335,7 +335,7 @@ void SdrTextObj::RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& 
                 pOutliner->SetText(*pOutlinerParaObject);
             }
 
-            ESelection aSelAll( 0, 0, 0xffff, 0xffff );
+            ESelection aSelAll( 0, 0, EE_PARA_ALL, EE_TEXTPOS_ALL );
             std::vector<sal_uInt16>::const_iterator aIter( rCharWhichIds.begin() );
             while( aIter != rCharWhichIds.end() )
             {
@@ -344,8 +344,8 @@ void SdrTextObj::RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& 
 
             if(!pEdtOutl || (pText != getActiveText()) )
             {
-                const sal_uInt32 nParaCount = pOutliner->GetParagraphCount();
-                OutlinerParaObject* pTemp = pOutliner->CreateParaObject(0, (sal_uInt16)nParaCount);
+                const sal_Int32 nParaCount = pOutliner->GetParagraphCount();
+                OutlinerParaObject* pTemp = pOutliner->CreateParaObject(0, nParaCount);
                 pOutliner->Clear();
                 NbcSetOutlinerParaObjectForText(pTemp, pText);
             }
@@ -364,7 +364,7 @@ bool SdrTextObj::HasText() const
     if( pOPO )
     {
         const EditTextObject& rETO = pOPO->GetTextObject();
-        sal_uInt16 nParaCount = rETO.GetParagraphCount();
+        sal_Int32 nParaCount = rETO.GetParagraphCount();
 
         if( nParaCount > 0 )
             bHasText = (nParaCount > 1) || (rETO.GetText( 0 ).Len() != 0);
