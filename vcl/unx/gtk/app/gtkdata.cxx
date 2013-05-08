@@ -30,7 +30,6 @@
 #include <sys/types.h>
 #include <sys/time.h>
 #endif
-#define GLIB_DISABLE_DEPRECATION_WARNINGS
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/gtk/gtkframe.hxx>
