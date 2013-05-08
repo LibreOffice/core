@@ -38,6 +38,8 @@ $(call gb_PythonTest_get_target,%) :
 			$(if $(value gb_CppunitTest_postprocess), \
 				rm -fr $@.core && mkdir $@.core && cd $@.core &&)) \
 		($(gb_PythonTest_PRECOMMAND) \
+		$(if $(G_SLICE),G_SLICE=$(G_SLICE)) \
+		$(if $(GLIBCXX_FORCE_NEW),GLIBCXX_FORCE_NEW=$(GLIBCXX_FORCE_NEW)) \
 		URE_BOOTSTRAP=vnd.sun.star.pathname:$(gb_DEVINSTALLROOT)/program/fundamentalrc \
 		PYTHONPATH=$(PYPATH) \
 		UserInstallation="$(call gb_Helper_make_url,$(OUTDIR)/unittest)" \
