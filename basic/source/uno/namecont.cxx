@@ -1927,6 +1927,19 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
 
         if( pImplLib->implIsModified() || bComplete )
         {
+// For the moment don't copy storage (as an optimisation )
+// but instead always write to storage from memory.
+// Testing pImplLib->implIsModified() is not reliable,
+// IMHO the value of pImplLib->implIsModified() should
+// reflect whether the library ( in-memory ) model
+// is in sync with the library container's own storage. Currently
+// whenever the library model is written to *any* storage
+// pImplLib->implSetModified( sal_False ) is called
+// The way the code works, especially the way that sfx uses
+// temp storage when saving ( and later sets the root storage of the
+// library container ) and similar madness in dbaccess means some surgery
+// is required to make it possible to successfully use this optimisation
+#if 0
             // Can we simply copy the storage?
             if( !mbOldInfoFormat && !pImplLib->implIsModified() && !mbOasis2OOoFormat && xSourceLibrariesStor.is() )
             {
@@ -1941,6 +1954,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                 }
             }
             else
+#endif
             {
                 uno::Reference< embed::XStorage > xLibraryStor;
                 if( bStorage )
