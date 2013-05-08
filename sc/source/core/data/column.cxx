@@ -1687,6 +1687,9 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
 {
     pAttrArray->MoveTo(nStartRow, nEndRow, *rCol.pAttrArray);
 
+    // Move the broadcasters to the destination column.
+    maBroadcasters.transfer(nStartRow, nEndRow, rCol.maBroadcasters, nStartRow);
+
     if (maItems.empty())
         // No cells to move.
         return;
@@ -1702,10 +1705,17 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
         aRows.push_back( nRow);
         rCol.Insert( nRow, maItems[i].pCell);
     }
+
     SCSIZE nStopPos = i;
     if (nStartPos < nStopPos)
     {
-        // Create list of ranges of cell entry positions
+        // At least one cell gets copied to the destination column.
+        maTextWidths.set_empty(nStartRow, nEndRow);
+        maScriptTypes.set_empty(nStartRow, nEndRow);
+
+        CellStorageModified();
+
+        // Create list of ranges of cell entry positions.
         typedef ::std::pair<SCSIZE,SCSIZE> PosPair;
         typedef ::std::vector<PosPair> EntryPosPairs;
         EntryPosPairs aEntries;
@@ -1736,7 +1746,6 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
         ScAddress& rAddress = aHint.GetAddress();
 
         // must iterate backwards, because indexes of following cells become invalid
-        bool bErased = false;
         for (EntryPosPairs::reverse_iterator it( aEntries.rbegin());
                 it != aEntries.rend(); ++it)
         {
@@ -1749,14 +1758,6 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
             }
             // Erase the slots containing pointers to the dummy cell instance.
             maItems.erase(maItems.begin() + nStartPos, maItems.begin() + nStopPos);
-            bErased = true;
-        }
-
-        if (bErased)
-        {
-            maTextWidths.set_empty(nStartRow, nEndRow);
-            maScriptTypes.set_empty(nStartRow, nEndRow);
-            CellStorageModified();
         }
     }
 }

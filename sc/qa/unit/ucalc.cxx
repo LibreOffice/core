@@ -1527,6 +1527,67 @@ void Test::testFormulaDepTracking2()
     m_pDoc->DeleteTab(0);
 }
 
+namespace {
+
+bool broadcasterShifted(const ScDocument& rDoc, const ScAddress& rFrom, const ScAddress& rTo)
+{
+    const SvtBroadcaster* pBC = rDoc.GetBroadcaster(rFrom);
+    if (pBC)
+    {
+        cerr << "Broadcaster shouldn't be here." << endl;
+        return false;
+    }
+
+    pBC = rDoc.GetBroadcaster(rTo);
+    if (!pBC)
+    {
+        cerr << "Broadcaster should be here." << endl;
+        return false;
+    }
+    return true;
+}
+
+bool checkRelativeRefToken(ScDocument& rDoc, const ScAddress& rPos, SCsCOL nRelCol, SCsROW nRelRow)
+{
+    ScFormulaCell* pFC = rDoc.GetFormulaCell(rPos);
+    if (!pFC)
+    {
+        cerr << "Formula cell expected, but not found." << endl;
+        return false;
+    }
+
+    ScTokenArray* pTokens = pFC->GetCode();
+    if (!pTokens)
+    {
+        cerr << "Token array is not present." << endl;
+        return false;
+    }
+
+    ScToken* pToken = static_cast<ScToken*>(pTokens->First());
+    if (!pToken || pToken->GetType() != formula::svSingleRef)
+    {
+        cerr << "Not a single reference token." << endl;
+        return false;
+    }
+
+    ScSingleRefData& rRef = pToken->GetSingleRef();
+    if (!rRef.IsColRel() || rRef.nRelCol != nRelCol)
+    {
+        cerr << "Unexpected relative column address." << endl;
+        return false;
+    }
+
+    if (!rRef.IsRowRel() || rRef.nRelRow != nRelRow)
+    {
+        cerr << "Unexpected relative row address." << endl;
+        return false;
+    }
+
+    return true;
+}
+
+}
+
 void Test::testCellBroadcaster()
 {
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet", m_pDoc->InsertTab (0, "foo"));
@@ -1546,28 +1607,35 @@ void Test::testCellBroadcaster()
 
     // Move column A down 5 cells. Make sure B1 now references A6, not A1.
     m_pDoc->InsertRow(0, 0, 0, 0, 0, 5);
-    ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1,0,0));
-    CPPUNIT_ASSERT_MESSAGE("Expected a formula cell.", pFC);
-    ScTokenArray* pTokens = pFC->GetCode();
-    ScToken* pToken = static_cast<ScToken*>(pTokens->First());
-    CPPUNIT_ASSERT_MESSAGE("Reference token not found.", pToken && pToken->GetType() == formula::svSingleRef);
-    ScSingleRefData& rRef = pToken->GetSingleRef();
-    CPPUNIT_ASSERT_EQUAL(static_cast<SCsCOL>(-1), rRef.nRelCol);
-    CPPUNIT_ASSERT_EQUAL(static_cast<SCsROW>(5), rRef.nRelRow);
+    CPPUNIT_ASSERT_MESSAGE("Relative reference check failed.",
+                           checkRelativeRefToken(*m_pDoc, ScAddress(1,0,0), -1, 5));
 
     // Make sure the broadcaster has also moved.
-    pBC = m_pDoc->GetBroadcaster(ScAddress(0,0,0));
-    CPPUNIT_ASSERT_MESSAGE("Broadcaster shouldn't exist at A1.", !pBC);
-    pBC = m_pDoc->GetBroadcaster(ScAddress(0,5,0));
-    CPPUNIT_ASSERT_MESSAGE("Broadcaster should exist at A6.", pBC);
+    CPPUNIT_ASSERT_MESSAGE("Broadcaster relocation failed.",
+                           broadcasterShifted(*m_pDoc, ScAddress(0,0,0), ScAddress(0,5,0)));
 
     // Set new value to A6 and make sure B1 gets updated.
     m_pDoc->SetValue(ScAddress(0,5,0), 45.6);
     val = m_pDoc->GetValue(ScAddress(1,0,0));
     CPPUNIT_ASSERT_EQUAL(45.6, val);
 
+    // Move column A up 3 cells, and make sure B1 now references A3, not A6.
+    m_pDoc->DeleteRow(0, 0, 0, 0, 0, 3);
+    CPPUNIT_ASSERT_MESSAGE("Relative reference check failed.",
+                           checkRelativeRefToken(*m_pDoc, ScAddress(1,0,0), -1, 2));
+
+    // The broadcaster should also have been relocated from A6 to A3.
+    CPPUNIT_ASSERT_MESSAGE("Broadcaster relocation failed.",
+                           broadcasterShifted(*m_pDoc, ScAddress(0,5,0), ScAddress(0,2,0)));
+
+    // Insert cells over A1:A10 and shift cells to right.
+    m_pDoc->InsertCol(ScRange(0, 0, 0, 0, 10, 0));
+    CPPUNIT_ASSERT_MESSAGE("Relative reference check failed.",
+                           checkRelativeRefToken(*m_pDoc, ScAddress(2,0,0), -1, 2));
+    CPPUNIT_ASSERT_MESSAGE("Broadcaster relocation failed.",
+                           broadcasterShifted(*m_pDoc, ScAddress(0,2,0), ScAddress(1,2,0)));
+
     m_pDoc->DeleteTab(0);
-    CPPUNIT_ASSERT_MESSAGE("good, all test passed.", false);
 }
 
 void Test::testFuncParam()

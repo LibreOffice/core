@@ -215,6 +215,8 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
     maTextWidths.resize(MAXROWCOUNT);
     maScriptTypes.erase(nStartRow, nEndRow);
     maScriptTypes.resize(MAXROWCOUNT);
+    maBroadcasters.erase(nStartRow, nEndRow);
+    maBroadcasters.resize(MAXROWCOUNT);
 
     ScAddress aAdr( nCol, 0, nTab );
     ScHint aHint( SC_HINT_DATACHANGED, aAdr, NULL ); // only areas (ScBaseCell* == NULL)
