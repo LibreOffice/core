@@ -1,0 +1,43 @@
+sadly python's build system is so awful it needs patching to find internal zlib
+
+--- python3/setup.py	2013-05-08 13:42:03.826304937 +0200
++++ python3/setup.py	2013-05-08 13:57:53.027231320 +0200
+@@ -1332,7 +1332,11 @@
+         #
+         # You can upgrade zlib to version 1.1.4 yourself by going to
+         # http://www.gzip.org/zlib/
+-        zlib_inc = find_file('zlib.h', [], inc_dirs)
++        if os.environ.get('SYSTEM_ZLIB') == 'NO':
++            zlib_incdir = os.environ.get('WORKDIR') + '/' + '/UnpackedTarball/zlib/'
++            zlib_inc = find_file('zlib.h', inc_dirs, [zlib_incdir])
++        else:
++            zlib_inc = find_file('zlib.h', [], inc_dirs)
+         have_zlib = False
+         if zlib_inc is not None:
+             zlib_h = zlib_inc[0] + '/zlib.h'
+@@ -1347,13 +1351,23 @@
+                         version = line.split()[2]
+                         break
+             if version >= version_req:
+-                if (self.compiler.find_library_file(lib_dirs, 'z')):
++                if os.environ.get('SYSTEM_ZLIB') == 'NO':
++                    zlib_lib = 'zlib'
++                    zlib_libdir = os.environ.get('OUTDIR') + '/' + 'lib'
++#                    zlib_found = find_library_file(self.compiler, zlib_lib, lib_dirs, [zlib_libdir])
++                    zlib_found = [zlib_libdir]
++                else:
++                    zlib_lib = 'z'
++                    zlib_found = self.compiler.find_library_file(lib_dirs, zlib_lib)
++                if zlib_found:
+                     if host_platform == "darwin":
+                         zlib_extra_link_args = ('-Wl,-search_paths_first',)
+                     else:
+                         zlib_extra_link_args = ()
+                     exts.append( Extension('zlib', ['zlibmodule.c'],
+-                                           libraries = ['z'],
++                                           libraries = [zlib_lib],
++                                           include_dirs = zlib_inc,
++                                           library_dirs = zlib_found,
+                                            extra_link_args = zlib_extra_link_args))
+                     have_zlib = True
+                 else:

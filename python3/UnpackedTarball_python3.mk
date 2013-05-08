@@ -34,6 +34,14 @@ $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 	python3/python-3.3.0-pythreadstate.patch.1 \
 ))
 
+ifneq ($(COM),MSC)
+ifeq ($(SYSTEM_ZLIB),NO)
+$(eval $(call gb_UnpackedTarball_add_patches,python3,\
+	python3/python-3.3.0-zlib.patch.1 \
+))
+endif
+endif
+
 ifneq ($(OS),WNT)
 $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 	python3/python-3.3.0-15833.patch.1 \

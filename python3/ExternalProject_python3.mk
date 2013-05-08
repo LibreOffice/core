@@ -12,6 +12,7 @@ $(eval $(call gb_ExternalProject_ExternalProject,python3))
 $(eval $(call gb_ExternalProject_use_externals,python3,\
 	expat \
 	openssl \
+	zlib \
 ))
 
 $(eval $(call gb_ExternalProject_register_targets,python3,\
@@ -66,7 +67,7 @@ else
 # create a symlink "LO_lib" because the .so are in a directory with platform
 # specific name like build/lib.linux-x86_64-3.3
 
-python3_cflags =
+python3_cflags = $(ZLIB_CFLAGS)
 ifeq ($(ENABLE_VALGRIND),TRUE)
     python3_cflags += $(VALGRIND_CFLAGS)
 endif
