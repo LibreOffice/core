@@ -1371,7 +1371,15 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
             }
         }
 
-        aPath.SearchAndReplace(m_aDestDir, String());
+        if ( m_aDestDir.Len() > 0 )
+        {
+            if ( aPath.SearchAndReplace(m_aDestDir, String()) != STRING_NOTFOUND )
+                bRel = m_bDestDirRelative;
+            else
+                SAL_WARN( "svx", "failed to replace destdir of '"
+                          << m_aDestDir << "' in '" << aPath << "'");
+        }
+
         rOStm << bRel;
         write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStm, aPath, RTL_TEXTENCODING_UTF8);
         rOStm << pObj->nOffset << (sal_uInt16) pObj->eObjKind;
@@ -1505,7 +1513,6 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
                     }
                 }
             }
-
             aObjectList.push_back( pObj );
         }
 

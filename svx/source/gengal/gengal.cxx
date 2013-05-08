@@ -42,8 +42,9 @@ typedef ::std::list<OUString> FileNameList;
 class GalApp : public Application
 {
     bool mbInBuildTree;
+    bool mbRelativeURLs;
 public:
-    GalApp() : mbInBuildTree( false ) {}
+    GalApp() : mbInBuildTree( false ), mbRelativeURLs( false ) {}
     virtual int Main();
 
 protected:
@@ -63,7 +64,7 @@ void disposeGallery( Gallery* pGallery )
 
 static void createTheme( OUString aThemeName, OUString aGalleryURL,
                          OUString aDestDir, sal_uInt32 nNumFrom,
-                         FileNameList &rFiles )
+                         FileNameList &rFiles, bool bRelativeURLs )
 {
     Gallery* pGallery;
 
@@ -99,7 +100,7 @@ static void createTheme( OUString aThemeName, OUString aGalleryURL,
 
     fprintf( stderr, "Using DestDir: %s\n",
              OUStringToOString( aDestDir, RTL_TEXTENCODING_UTF8 ).getStr() );
-    pGalTheme->SetDestDir(String(aDestDir));
+    pGalTheme->SetDestDir( String( aDestDir ), bRelativeURLs );
 
     FileNameList::const_iterator aIter;
 
@@ -134,11 +135,16 @@ static int PrintHelp()
 
     fprintf( stdout, "options:\n");
     fprintf( stdout, " --name <theme>\t\tdefines the user visible name of the created or updated theme.\n");
+
     fprintf( stdout, " --path <dir>\t\tdefines directory where the gallery files are created\n");
     fprintf( stdout, "\t\t\tor updated.\n");
+
     fprintf( stdout, " --destdir <dir>\tdefines a path prefix to be removed from the paths\n");
     fprintf( stdout, "\t\t\tstored in the gallery files. It is useful to create\n");
     fprintf( stdout, "\t\t\tRPM packages using the BuildRoot feature.\n");
+
+    fprintf( stdout, " --relative-urls\t\tflags that after removing the destdir, the URL should be a path relative to the gallery folder in the install\n");
+    fprintf( stdout, "\t\t\tprimarily used for internal gallery generation at compile time.\n");
     fprintf( stdout, " --number-from <num>\tdefines minimal number for the newly created gallery\n");
     fprintf( stdout, "\t\t\ttheme files.\n");
     fprintf( stdout, " files\t\t\tlists files to be added to the gallery. Absolute paths\n");
@@ -212,15 +218,20 @@ int GalApp::Main()
         else if ( aParam == "--help" || aParam == "-h"  )
             return PrintHelp();
         else if ( aParam == "--build-tree" )
+        {
+            mbRelativeURLs = true;
             mbInBuildTree = true;
+        }
         else if ( aParam == "--name" )
             aName = GetCommandLineParam( ++i );
         else if ( aParam == "--path" )
             aPath = Smartify( GetCommandLineParam( ++i ) );
         else if ( aParam == "--destdir" )
             aDestDir = GetCommandLineParam( ++i );
+        else if ( aParam == "--relative-urls" )
+            mbRelativeURLs = true;
         else if ( aParam == "--number-from" )
-             nNumFrom = GetCommandLineParam( ++i ).ToInt32();
+            nNumFrom = GetCommandLineParam( ++i ).ToInt32();
         else
             aFiles.push_back( Smartify( aParam ) );
     }
@@ -228,7 +239,7 @@ int GalApp::Main()
     if( aFiles.size() < 1 )
         return PrintHelp();
 
-    createTheme( aName, aPath, aDestDir, nNumFrom, aFiles );
+    createTheme( aName, aPath, aDestDir, nNumFrom, aFiles, mbRelativeURLs );
 
     // Without this we get extraordinary crashes from the
     // drawinglayer VirtualDevice cache when importing svg
