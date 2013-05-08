@@ -15,7 +15,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libmwaw,1))
 
 $(eval $(call gb_UnpackedTarball_add_patches,libmwaw,\
        libmwaw/libmwaw-0.1.7-autotools.patch \
-       libmwaw/libmwaw-0.1.7-misc.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
