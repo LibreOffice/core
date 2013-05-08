@@ -266,6 +266,7 @@ void TreeParser::Merge(
                 << "language of Mergedata file: "
                 << m_sLang.getStr() << " - "
                 << vLanguages[0].getStr() << std::endl;
+            delete pMergeDataFile;
             return;
         }
     }
