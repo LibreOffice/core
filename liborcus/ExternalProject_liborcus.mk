@@ -46,7 +46,7 @@ ifeq ($(COM),MSC)
 liborcus_CPPFLAGS+=-DBOOST_ALL_NO_LIB
 endif
 ifeq ($(SYSTEM_ZLIB),NO)
-liborcus_CPPFLAGS+=-I$(OUTDIR)/inc/external/zlib
+liborcus_CPPFLAGS+=$(ZLIB_CFLAGS)
 endif
 #
 # OSes that use the GNU C++ library need to use -D_GLIBCXX_DEBUG in

@@ -32,7 +32,7 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 	$(call gb_ExternalProject_run,build,\
 	./configure \
 		$(if $(debug),STRIP=" ") \
-		CFLAGS="$(if $(debug),-g) $(SOLARINC)" \
+		CFLAGS="$(if $(debug),-g) $(ZLIB_CFLAGS)" \
 		LDFLAGS='-L$(OUTDIR)/lib' \
 		$(if $(filter ANDROID IOS,$(OS)),PKG_CONFIG=./dummy_pkg_config) \
 		pixman_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,pixman)/pixman" \

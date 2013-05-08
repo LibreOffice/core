@@ -12,7 +12,6 @@ $(eval $(call gb_Module_Module,zlib))
 ifeq ($(SYSTEM_ZLIB),NO)
 
 $(eval $(call gb_Module_add_targets,zlib,\
-	ExternalPackage_zlib \
 	StaticLibrary_zlib \
 	UnpackedTarball_zlib \
 ))
