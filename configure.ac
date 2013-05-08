@@ -7128,7 +7128,7 @@ else
     AC_MSG_RESULT([internal])
     SYSTEM_ZLIB=NO
     BUILD_TYPE="$BUILD_TYPE ZLIB"
-    ZLIB_CFLAGS="-I${OUTDIR}/inc/external/zlib"
+    ZLIB_CFLAGS="-I${WORKDIR}/UnpackedTarball/zlib"
     ZLIB_LIBS="-L${OUTDIR}/lib -lzlib"
 fi
 AC_SUBST(ZLIB_CFLAGS)

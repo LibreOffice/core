@@ -17,11 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifdef SYSTEM_ZLIB
-#include "zlib.h"
-#else
-#include <zlib/zlib.h>
-#endif
+#include <zlib.h>
 
 #include "outputwrap.hxx"
 #include "contentsink.hxx"
