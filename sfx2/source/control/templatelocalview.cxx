@@ -165,6 +165,7 @@ void TemplateLocalView::showRegion(const OUString &rName)
     {
         if (maRegions[i]->maTitle == rName)
         {
+            maFTName.SetText(rName);
             showRegion(maRegions[i]);
             break;
         }
