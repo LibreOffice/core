@@ -51,10 +51,12 @@ TypeManager_Base;
 
 class TypeManager: private osl::Mutex, public TypeManager_Base {
 public:
-    explicit TypeManager(rtl::OUString const & rdbUris);
+    TypeManager();
 
     using TypeManager_Base::acquire;
     using TypeManager_Base::release;
+
+    void init(rtl::OUString const & rdbUris);
 
     css::uno::Any find(rtl::OUString const & name);
 

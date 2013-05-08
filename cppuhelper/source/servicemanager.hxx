@@ -129,12 +129,12 @@ public:
         ImplementationMap singletons;
     };
 
-    explicit ServiceManager(rtl::OUString const & rdbUris):
-        ServiceManagerBase(*static_cast< osl::Mutex * >(this))
-    { readRdbs(rdbUris); }
+    ServiceManager(): ServiceManagerBase(*static_cast< osl::Mutex * >(this)) {}
 
     using ServiceManagerBase::acquire;
     using ServiceManagerBase::release;
+
+    void init(rtl::OUString const & rdbUris) { readRdbs(rdbUris); }
 
     void setContext(
         css::uno::Reference< css::uno::XComponentContext > const & context)

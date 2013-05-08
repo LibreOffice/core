@@ -1863,10 +1863,12 @@ void Enumeration::findNextMatch() {
 
 }
 
-cppuhelper::TypeManager::TypeManager(rtl::OUString const & rdbUris):
+cppuhelper::TypeManager::TypeManager():
     TypeManager_Base(*static_cast< osl::Mutex * >(this)),
     manager_(new unoidl::Manager)
-{
+{}
+
+void cppuhelper::TypeManager::init(rtl::OUString const & rdbUris) {
     readRdbs(rdbUris);
 }
 

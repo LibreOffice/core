@@ -56,11 +56,10 @@ cppu::defaultBootstrap_InitialComponentContext(rtl::OUString const & iniUri)
             css::uno::Reference< css::uno::XInterface >());
     }
     rtl::Reference< cppuhelper::ServiceManager > smgr(
-        new cppuhelper::ServiceManager(
-            getBootstrapVariable(bs, "UNO_SERVICES")));
-    rtl::Reference< cppuhelper::TypeManager > tmgr(
-        new cppuhelper::TypeManager(
-            getBootstrapVariable(bs, "UNO_TYPES")));
+        new cppuhelper::ServiceManager);
+    smgr->init(getBootstrapVariable(bs, "UNO_SERVICES"));
+    rtl::Reference< cppuhelper::TypeManager > tmgr(new cppuhelper::TypeManager);
+    tmgr->init(getBootstrapVariable(bs, "UNO_TYPES"));
     cppu::ContextEntry_Init entry;
     std::vector< cppu::ContextEntry_Init > context_values;
     context_values.push_back(
