@@ -12,7 +12,6 @@ $(eval $(call gb_Module_Module,jpeg))
 ifeq ($(SYSTEM_JPEG),NO)
 
 $(eval $(call gb_Module_add_targets,jpeg,\
-	ExternalPackage_jpeg \
     UnpackedTarball_jpeg \
     StaticLibrary_jpeg \
 ))

@@ -395,8 +395,8 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 
 define gb_LinkTarget__use_jpeg
 $(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,jpeg) \
 	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/external/jpeg \
 )
 
 $(call gb_LinkTarget_use_static_libraries,$(1),\
