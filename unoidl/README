@@ -21,7 +21,13 @@ format).
 
 == Specification of the new UNOIDL types.rdb format ==
 
-Uses the following definitions:
+The format uses byte-oriented, platform-independent, binary files.  Larger
+quantities are stored LSB first, without alignment requirements.  Offsets are
+32 bit, effectively limiting the overall file size to 4GB, but that is not
+considered a limitation in practice (and avoids unnecessary bloat compared to
+64 bit offsets).
+
+The following definitions are used throughout:
 
 * UInt16: 2-byte value, LSB first
 * UInt32: 4-byte value, LSB first
@@ -35,24 +41,37 @@ Uses the following definitions:
 * Entry: Offset of NUL-Name followed by Offset of payload
 * Map: zero or more Entries
 
+The file starts with an 8 byte header, followed by information about the root
+map (reg2unoidl generates files in a single depth-first pass, so the root map
+itself is at the end of the file):
+
+* 8 byte header "UNOIDL\0\xFF"
+* Offset of root Map
+* UInt32 number of entries of root Map
+...
+
 Layout of per-entry payload in the root or a module Map:
 
 * kind byte:
+
 ** 0: module
 *** followed by:
 **** UInt32 number N1 of entries of Map
 **** N1 * Entry
+
 ** otherwise:
 *** 0x80 bit: 1 if published
 *** 0x40 bit: 1 if deprecated
 *** 0x20 bit: flag (may only be 1 for certain kinds, see below)
 *** remaining bits:
+
 **** 1: enum type
 ***** followed by:
 ****** UInt32 number N1 of members
 ****** N1 * tuple of:
 ******* Offset of Idx-Name
 ******* UInt32
+
 **** 2: plain struct type (with base if flag is 1)
 ***** followed by:
 ****** if "with base": Offset of Idx-Name
@@ -60,6 +79,7 @@ Layout of per-entry payload in the root or a module Map:
 ****** N1 * tuple of:
 ******* Offset of Idx-Name name
 ******* Offset of Idx-Name type
+
 **** 3: polymorphic struct type template
 ***** followed by:
 ****** UInt32 number N1 of type parameters
@@ -69,6 +89,7 @@ Layout of per-entry payload in the root or a module Map:
 ******* kind byte: 0x01 bit is 1 if parameterized type
 ******* Offset of Idx-Name name
 ******* Offset of Idx-Name type
+
 **** 4: exception type (with base if flag is 1)
 ***** followed by:
 ****** if "with base": Offset of Idx-Name
@@ -76,6 +97,7 @@ Layout of per-entry payload in the root or a module Map:
 ****** N1 * tuple of:
 ******* Offset of Idx-Name name
 ******* Offset of Idx-Name type
+
 **** 5: interface type
 ***** followed by:
 ****** UInt32 number N1 of direct mandatory bases
@@ -104,13 +126,16 @@ Layout of per-entry payload in the root or a module Map:
 ******** Offset of Idx-Name type
 ******* UInt32 number N8 of exceptions
 ******* N8 * Offset of Idx-Name
+
 **** 6: typedef
 ***** followed by:
 ****** Offset of Idx-Name
+
 **** 7: constant group
 ***** followed by:
 ****** UInt32 number N1 of entries of Map
 ****** N1 * Entry
+
 **** 8: single-interface--based service (with default constructor if flag is 1)
 ***** followed by:
 ****** Offset of Idx-Name
@@ -125,6 +150,7 @@ Layout of per-entry payload in the root or a module Map:
 ********* Offset of Idx-Name type
 ******** UInt32 number N3 of exceptions
 ******** N3 * Offset of Idx-Name
+
 **** 9: accumulation-based service
 ***** followed by:
 ****** UInt32 number N1 of direct mandatory base services
@@ -149,9 +175,11 @@ Layout of per-entry payload in the root or a module Map:
 ******** 0x0001 bit: 1 if maybevoid
 ******* Offset of Idx-Name name
 ******* Offset of Idx-Name type
+
 **** 10: interface-based singleton
 ***** followed by:
 ****** Offset of Idx-Name
+
 **** 11: service-based singleton
 ***** followed by:
 ****** Offset of Idx-Name
@@ -161,32 +189,35 @@ Layout of per-entry payload in a constant group Map:
 * kind byte:
 ** 0x80 bit: 1 if deprecated
 ** remaining bits:
+
 *** 0: BOOLEAN
 **** followed by value byte, 0 represents false, 1 represents true
+
 *** 1: BYTE
 **** followed by value byte, representing values with two's complement
+
 *** 2: SHORT
 **** followed by UInt16 value, representing values with two's complement
+
 *** 3: UNSIGNED SHORT
 **** followed by UInt16 value
+
 *** 4: LONG
 **** followed by UInt32 value, representing values with two's complement
+
 *** 5: UNSIGNED LONG
 **** followed by UInt32 value
+
 *** 6: HYPER
 **** followed by UInt64 value, representing values with two's complement
+
 *** 7: UNSIGNED HYPER
 **** followed by UInt64 value
+
 *** 8: FLOAT
 **** followed by 4-byte value, representing values in ISO 60599 binary32 format,
       LSB first
+
 *** 9: DOUBLE
 **** followed by 8-byte value, representing values in ISO 60599 binary64 format,
       LSB first
-
-Memory layout:
-
-* 8 byte header "UNOIDL\0\xFF
-* Offset of root Map
-* UInt32 number of entries of root Map
-...
