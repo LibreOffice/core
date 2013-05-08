@@ -43,7 +43,7 @@ $(eval $(call gb_Executable_add_libs,oosplash,\
 endif
 endif
 
-ifeq ($(ENABLE_QUICKSTART_LIBPNG),TRUE)
+ifneq ($(ENABLE_HEADLESS),TRUE)
 
 $(eval $(call gb_Executable_add_defs,oosplash,\
     -DENABLE_QUICKSTART_LIBPNG \

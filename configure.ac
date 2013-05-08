@@ -979,13 +979,6 @@ AC_ARG_ENABLE(headless,
         server usage. Work in progress, use only if you are hacking on
         it. Not related to the --headless option.]), ,)
 
-AC_ARG_ENABLE(unix-qstart-libpng,
-    AS_HELP_STRING([--disable-unix-qstart-libpng],
-        [On UNIX systems, we have a faster splash app, that can use libpng to
-         render its splash, if we can safely link to the system libpng then
-         enabling this is a good idea (ie. for Linux Distro packaging).]),
-,enable_unix_qstart_libpng=yes)
-
 AC_ARG_ENABLE(rpath,
     AS_HELP_STRING([--disable-rpath],
         [Disable the use of relative paths in shared libraries.]),
@@ -1649,11 +1642,6 @@ AC_ARG_WITH(system-npapi-headers,
          extensions/source/plugin (ENABLE_NPAPI_FROM_BROWSER=YES)]),,
     [with_system_npapi_headers="$with_system_headers"]
 )
-
-AC_ARG_WITH(system-libpng,
-    AS_HELP_STRING([--with-system-libpng],
-        [Use libpng already on system.]),,
-    [with_system_libpng=auto])
 
 AC_ARG_WITH(linker-hash-style,
     AS_HELP_STRING([--with-linker-hash-style],
@@ -4330,7 +4318,6 @@ if test "$enable_headless" = "yes"; then
     test_tde=no
     test_kde=no
     test_kde4=no
-    enable_unix_qstart_libpng=no
     enable_cairo_canvas=no
     enable_gnome_vfs=no
 fi
@@ -9536,21 +9523,6 @@ AC_SUBST(TELEPATHY_LIBS)
 
 dnl ===================================================================
 
-if test "$enable_headless" != "yes"; then
-    PKG_CHECK_MODULES( LIBPNG, libpng, ENABLE_QUICKSTART_LIBPNG="TRUE", ENABLE_QUICKSTART_LIBPNG="" )
-fi
-AC_SUBST(LIBPNG_LIBS)
-AC_SUBST(LIBPNG_CFLAGS)
-
-AC_MSG_CHECKING([whether to enable libpng linking in quickstarter])
-if test "x$enable_unix_qstart_libpng" != "xno"; then
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
-    ENABLE_QUICKSTART_LIBPNG=""
-fi
-AC_SUBST(ENABLE_QUICKSTART_LIBPNG)
-
 SPLIT_APP_MODULES=""
 if test "$enable_split_app_modules" = "yes"; then
     SPLIT_APP_MODULES="YES"
@@ -11085,32 +11057,7 @@ dnl ===================================================================
 dnl Test whether to build libpng or rely on the system version
 dnl ===================================================================
 
-AC_MSG_CHECKING([whether to use the system libpng])
-
-dnl How should and does this interact with the checks for libpng
-dnl related to use of libpng in the quickstarter above? This needs to
-dnl be unified.
-
-if test "$with_system_libpng" = "auto"; then
-    case "$_os" in
-    WINNT|Darwin|iOS|Android)
-        with_system_libpng="$with_system_libs"
-        ;;
-    *)
-        with_system_libpng=yes
-        ;;
-    esac
-fi
-
-if test "$with_system_libpng" = yes; then
-    SYSTEM_LIBPNG=YES
-    AC_MSG_RESULT([yes])
-else
-    SYSTEM_LIBPNG=NO
-    BUILD_TYPE="$BUILD_TYPE LIBPNG"
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(SYSTEM_LIBPNG)
+libo_CHECK_SYSTEM_MODULE([libpng],[LIBPNG],[libpng],["-I${OUTDIR}/inc/external"],["-L${OUTDIR}/lib -lpng"])
 
 dnl ===================================================================
 dnl Check for runtime JVM search path
