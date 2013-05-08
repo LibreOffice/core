@@ -1,0 +1,10 @@
+--- libmwaw-0.1.8/src/lib/MWAWOLEStream.cxx
++++ libmwaw-0.1.8/src/lib/MWAWOLEStream.cxx
+@@ -43,6 +43,7 @@
+ #endif
+ 
+ #include <cstring>
++#include <cctype>
+ #include <iostream>
+ #include <list>
+ #include <set>
