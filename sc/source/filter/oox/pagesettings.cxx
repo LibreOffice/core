@@ -31,6 +31,7 @@
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sax/tools/converter.hxx>
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/graphichelper.hxx"
@@ -40,7 +41,7 @@
 #include "excelhandlers.hxx"
 #include "stylesbuffer.hxx"
 #include "unitconverter.hxx"
-#include <sax/tools/converter.hxx>
+#include "document.hxx"
 
 namespace oox {
 namespace xls {
@@ -329,8 +330,9 @@ void PageSettings::finalizeImport()
     PropertySet aStyleProps( xStyle );
     getPageSettingsConverter().writePageSettingsProperties( aStyleProps, maModel, getSheetType() );
 
-    PropertySet aSheetProps( getSheet() );
-    aSheetProps.setProperty( PROP_PageStyle, aStyleName );
+    // Set page style name to the sheet.
+    SCTAB nTab = getSheetIndex();
+    getScDocument().SetPageStyle(nTab, aStyleName);
 }
 
 void PageSettings::importPictureData( const Relations& rRelations, const OUString& rRelId )
