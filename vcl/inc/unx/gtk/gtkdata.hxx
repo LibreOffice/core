@@ -21,6 +21,7 @@
 #define _VCL_GTKDATA_HXX
 
 #include <prex.h>
+#define GLIB_DISABLE_DEPRECATION_WARNINGS
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>
