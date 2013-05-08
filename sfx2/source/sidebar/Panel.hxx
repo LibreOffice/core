@@ -18,6 +18,7 @@
 #ifndef SFX_SIDEBAR_PANEL_HXX
 #define SFX_SIDEBAR_PANEL_HXX
 
+#include "Context.hxx"
 #include <vcl/window.hxx>
 
 #include <com/sun/star/ui/XUIElement.hpp>
@@ -45,7 +46,9 @@ public:
     Panel (
         const PanelDescriptor& rPanelDescriptor,
         Window* pParentWindow,
-        const ::boost::function<void(void)>& rDeckLayoutTrigger );
+        const bool bIsInitiallyExpanded,
+        const ::boost::function<void(void)>& rDeckLayoutTrigger,
+        const ::boost::function<Context(void)>& rContextAccess);
     virtual ~Panel (void);
 
     void Dispose (void);
@@ -76,7 +79,7 @@ private:
     cssu::Reference<css::ui::XSidebarPanel> mxPanelComponent;
     bool mbIsExpanded;
     const ::boost::function<void(void)> maDeckLayoutTrigger;
-    Rectangle maBoundingBox;
+    const ::boost::function<Context(void)> maContextAccess;
 };
 typedef ::boost::shared_ptr<Panel> SharedPanel;
 typedef ::std::vector<SharedPanel> SharedPanelContainer;

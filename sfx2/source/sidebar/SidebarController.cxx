@@ -565,19 +565,19 @@ void SidebarController::SwitchToDeck (
         {
             // Panel already exists in current deck.  Reuse it.
             aNewPanels[nWriteIndex] = *iPanel;
+            aNewPanels[nWriteIndex]->SetExpanded(rPanelContexDescriptor.mbIsInitiallyVisible);
         }
         else
         {
             // Panel does not yet exist.  Create it.
             aNewPanels[nWriteIndex] = CreatePanel(
                 rPanelContexDescriptor.msId,
-                mpCurrentDeck->GetPanelParentWindow());
+                mpCurrentDeck->GetPanelParentWindow(),
+                rPanelContexDescriptor.mbIsInitiallyVisible);
             bHasPanelSetChanged = true;
         }
         if (aNewPanels[nWriteIndex] != NULL)
         {
-            // Depending on the context we have to collapse the panel.
-            aNewPanels[nWriteIndex]->SetExpanded(rPanelContexDescriptor.mbIsInitiallyVisible);
             // Depending on the context we have to apply the show menu functor.
             aNewPanels[nWriteIndex]->SetShowMenuFunctor(
                 rPanelContexDescriptor.msMenuCommand.getLength()>0
@@ -641,7 +641,8 @@ bool SidebarController::ArePanelSetsEqual (
 
 SharedPanel SidebarController::CreatePanel (
     const OUString& rsPanelId,
-    ::Window* pParentWindow )
+    ::Window* pParentWindow,
+    const bool bIsInitiallyExpanded)
 {
     const PanelDescriptor* pPanelDescriptor = ResourceManager::Instance().GetPanelDescriptor(rsPanelId);
     if (pPanelDescriptor == NULL)
@@ -651,7 +652,9 @@ SharedPanel SidebarController::CreatePanel (
     SharedPanel pPanel (new Panel(
         *pPanelDescriptor,
         pParentWindow,
-        ::boost::bind(&Deck::RequestLayout, mpCurrentDeck.get()) ) );
+        bIsInitiallyExpanded,
+        ::boost::bind(&Deck::RequestLayout, mpCurrentDeck.get()),
+        ::boost::bind(&SidebarController::GetCurrentContext, this)));
 
     // Create the XUIElement.
     Reference<ui::XUIElement> xUIElement (CreateUIElement(
@@ -1164,6 +1167,14 @@ void SidebarController::ShowPanel (const Panel& rPanel)
 {
     if (mpCurrentDeck)
         mpCurrentDeck->ShowPanel(rPanel);
+}
+
+
+
+
+Context SidebarController::GetCurrentContext (void) const
+{
+    return maCurrentContext;
 }
 
 

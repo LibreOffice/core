@@ -90,6 +90,14 @@ public:
         const ::rtl::OUString& rsDeckId,
         const cssu::Reference<css::frame::XFrame>& rxFrame);
 
+    /** Remember the expansions state per panel and context.
+        This is not persistent past application end.
+    */
+    void StorePanelExpansionState (
+        const ::rtl::OUString& rsPanelId,
+        const bool bExpansionState,
+        const Context& rContext);
+
     static ::rtl::OUString GetModuleName (
         const cssu::Reference<css::frame::XFrame>& rxFrame);
 

@@ -21,6 +21,7 @@
 #include "PanelDescriptor.hxx"
 #include "sfx2/sidebar/Theme.hxx"
 #include "Paint.hxx"
+#include "ResourceManager.hxx"
 
 #ifdef DEBUG
 #include "sfx2/sidebar/Tools.hxx"
@@ -47,7 +48,9 @@ namespace sfx2 { namespace sidebar {
 Panel::Panel (
     const PanelDescriptor& rPanelDescriptor,
     Window* pParentWindow,
-    const ::boost::function<void(void)>& rDeckLayoutTrigger)
+    const bool bIsInitiallyExpanded,
+    const ::boost::function<void(void)>& rDeckLayoutTrigger,
+    const ::boost::function<Context(void)>& rContextAccess)
     : Window(pParentWindow),
       msPanelId(rPanelDescriptor.msId),
       mpTitleBar(new PanelTitleBar(
@@ -57,8 +60,9 @@ Panel::Panel (
       mbIsTitleBarOptional(rPanelDescriptor.mbIsTitleBarOptional),
       mxElement(),
       mxPanelComponent(),
-      mbIsExpanded(true),
-      maDeckLayoutTrigger(rDeckLayoutTrigger)
+      mbIsExpanded(bIsInitiallyExpanded),
+      maDeckLayoutTrigger(rDeckLayoutTrigger),
+      maContextAccess(rContextAccess)
 {
     SetBackground(Theme::GetPaint(Theme::Paint_PanelBackground).GetWallpaper());
 
@@ -153,6 +157,12 @@ void Panel::SetExpanded (const bool bIsExpanded)
     {
         mbIsExpanded = bIsExpanded;
         maDeckLayoutTrigger();
+
+        if (maContextAccess)
+            ResourceManager::Instance().StorePanelExpansionState(
+                msPanelId,
+                bIsExpanded,
+                maContextAccess());
     }
 }
 

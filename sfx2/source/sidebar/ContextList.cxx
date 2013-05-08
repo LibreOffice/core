@@ -50,6 +50,18 @@ const ContextList::Entry* ContextList::GetMatch (const Context& rContext) const
 
 
 
+ContextList::Entry* ContextList::GetMatch (const Context& rContext)
+{
+    const ::std::vector<Entry>::const_iterator iEntry = FindBestMatch(rContext);
+    if (iEntry != maEntries.end())
+        return const_cast<Entry*>(&*iEntry);
+    else
+        return NULL;
+}
+
+
+
+
 ::std::vector<ContextList::Entry>::const_iterator ContextList::FindBestMatch (const Context& rContext) const
 {
     sal_Int32 nBestMatch (Context::NoMatch);

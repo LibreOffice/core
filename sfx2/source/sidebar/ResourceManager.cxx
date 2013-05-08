@@ -561,6 +561,30 @@ void ResourceManager::ReadLegacyAddons (const Reference<frame::XFrame>& rxFrame)
 
 
 
+void ResourceManager::StorePanelExpansionState (
+    const ::rtl::OUString& rsPanelId,
+    const bool bExpansionState,
+    const Context& rContext)
+{
+    for (PanelContainer::iterator
+             iPanel(maPanels.begin()),
+             iEnd(maPanels.end());
+         iPanel!=iEnd;
+         ++iPanel)
+    {
+        if (iPanel->msId.equals(rsPanelId))
+        {
+            ContextList::Entry* pEntry (
+                iPanel->maContextList.GetMatch (rContext));
+            if (pEntry != NULL)
+                pEntry->mbIsInitiallyVisible = bExpansionState;
+        }
+    }
+}
+
+
+
+
 ::rtl::OUString ResourceManager::GetModuleName (
     const cssu::Reference<css::frame::XFrame>& rxFrame)
 {

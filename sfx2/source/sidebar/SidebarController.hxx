@@ -168,7 +168,8 @@ private:
         const bool bWantsCanvas);
     SharedPanel CreatePanel (
         const ::rtl::OUString& rsPanelId,
-        ::Window* pParentWindow );
+        ::Window* pParentWindow,
+        const bool bIsInitiallyExpanded);
     void SwitchToDeck (
         const DeckDescriptor& rDeckDescriptor,
         const Context& rContext);
@@ -211,6 +212,8 @@ private:
         completely visible.
     */
     void ShowPanel (const Panel& rPanel);
+
+    Context GetCurrentContext (void) const;
 
     virtual void SAL_CALL disposing (void);
 };
