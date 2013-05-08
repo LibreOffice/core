@@ -315,7 +315,6 @@ STD_JAR_FILE( gid_File_Jar_Smoketest, smoketest )
 STD_JAR_FILE( gid_File_Jar_Table, table )
 STD_JAR_FILE( gid_File_Jar_Form, form )
 STD_JAR_FILE( gid_File_Jar_Query, query )
-STD_JAR_FILE( gid_File_Jar_Web, web )
 STD_JAR_FILE( gid_File_Jar_Xmerge, xmerge )
 STD_JAR_FILE( gid_File_Jar_Xmergebridge, XMergeBridge )
 #endif
