@@ -99,7 +99,7 @@ static SdPage* GetCurrentPage( sd::ViewShell* pViewSh, EditFieldInfo* pInfo, boo
         int nPgNum = 0;
         Outliner* pOutl = pSdView->GetOutliner();
         long nPos = pInfo->GetPara();
-        sal_uLong nParaPos = 0;
+        sal_Int32 nParaPos = 0;
 
         for( Paragraph* pPara = pOutl->GetParagraph( 0 ); pPara && nPos >= 0; pPara = pOutl->GetParagraph( ++nParaPos ), nPos-- )
         {

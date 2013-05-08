@@ -38,7 +38,7 @@ OutlinerUndoBase::OutlinerUndoBase( sal_uInt16 _nId, Outliner* pOutliner )
     mpOutliner = pOutliner;
 }
 
-OutlinerUndoChangeParaFlags::OutlinerUndoChangeParaFlags( Outliner* pOutliner, sal_uInt16 nPara, sal_uInt16 nOldFlags, sal_uInt16 nNewFlags )
+OutlinerUndoChangeParaFlags::OutlinerUndoChangeParaFlags( Outliner* pOutliner, sal_Int32 nPara, sal_uInt16 nOldFlags, sal_uInt16 nNewFlags )
 : OutlinerUndoBase( OLUNDO_DEPTH, pOutliner )
 {
     mnPara = nPara;
@@ -71,7 +71,7 @@ void OutlinerUndoChangeParaFlags::ImplChangeFlags( sal_uInt16 nFlags )
     }
 }
 
-OutlinerUndoChangeParaNumberingRestart::OutlinerUndoChangeParaNumberingRestart( Outliner* pOutliner, sal_uInt16 nPara,
+OutlinerUndoChangeParaNumberingRestart::OutlinerUndoChangeParaNumberingRestart( Outliner* pOutliner, sal_Int32 nPara,
         sal_Int16 nOldNumberingStartValue, sal_Int16 nNewNumberingStartValue,
         sal_Bool  bOldParaIsNumberingRestart, sal_Bool bNewParaIsNumberingRestart )
 : OutlinerUndoBase( OLUNDO_DEPTH, pOutliner )
@@ -101,7 +101,7 @@ void OutlinerUndoChangeParaNumberingRestart::ImplApplyData( const ParaRestartDat
     pOutliner->SetParaIsNumberingRestart( mnPara, rData.mbParaIsNumberingRestart );
 }
 
-OutlinerUndoChangeDepth::OutlinerUndoChangeDepth( Outliner* pOutliner, sal_uInt16 nPara, sal_Int16 nOldDepth, sal_Int16 nNewDepth )
+OutlinerUndoChangeDepth::OutlinerUndoChangeDepth( Outliner* pOutliner, sal_Int32 nPara, sal_Int16 nOldDepth, sal_Int16 nNewDepth )
     : OutlinerUndoBase( OLUNDO_DEPTH, pOutliner )
 {
     mnPara = nPara;
@@ -125,7 +125,7 @@ void OutlinerUndoChangeDepth::Repeat()
 }
 
 
-OutlinerUndoCheckPara::OutlinerUndoCheckPara( Outliner* pOutliner, sal_uInt16 nPara )
+OutlinerUndoCheckPara::OutlinerUndoCheckPara( Outliner* pOutliner, sal_Int32 nPara )
     : OutlinerUndoBase( OLUNDO_DEPTH, pOutliner )
 {
     mnPara = nPara;
@@ -183,7 +183,7 @@ void OLUndoExpand::Restore( sal_Bool bUndo )
         bExpand = sal_True;
     if( !pParas )
     {
-        pPara = pOutliner->GetParagraph( (sal_uLong)nCount );
+        pPara = pOutliner->GetParagraph( nCount );
         if( bExpand )
             pOutliner->Expand( pPara );
         else
@@ -191,9 +191,9 @@ void OLUndoExpand::Restore( sal_Bool bUndo )
     }
     else
     {
-        for( sal_uInt16 nIdx = 0; nIdx < nCount; nIdx++ )
+        for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
         {
-            pPara = pOutliner->GetParagraph( (sal_uLong)(pParas[nIdx]) );
+            pPara = pOutliner->GetParagraph( pParas[nIdx] );
             if( bExpand )
                 pOutliner->Expand( pPara );
             else

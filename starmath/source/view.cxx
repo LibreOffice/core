@@ -392,11 +392,12 @@ void SmGraphicWindow::Paint(const Rectangle&)
     const SmEditWindow *pEdit = pViewShell->GetEditWindow();
     if (pEdit)
     {   // get new position for formula-cursor (for possible altered formula)
-        sal_uInt16  nRow, nCol;
+        sal_Int32  nRow;
+        sal_uInt16 nCol;
         SmGetLeftSelectionPart(pEdit->GetSelection(), nRow, nCol);
         nRow++;
         nCol++;
-        const SmNode *pFound = SetCursorPos(nRow, nCol);
+        const SmNode *pFound = SetCursorPos(static_cast<sal_uInt16>(nRow), nCol);
 
         SmModule  *pp = SM_MOD();
         if (pFound && pp->GetConfig()->IsShowFormulaCursor())

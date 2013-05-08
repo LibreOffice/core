@@ -198,8 +198,8 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
 
         case SID_SELECTALL:
             {
-                sal_uLong nCount = pOutliner->GetParagraphCount();
-                ESelection aSel( 0,0,(sal_uInt16)nCount,0 );
+                sal_Int32 nCount = pOutliner->GetParagraphCount();
+                ESelection aSel( 0,0,nCount,0 );
                 pOutView->SetSelection( aSel );
             }
             break;
@@ -604,12 +604,12 @@ static void lcl_RemoveFields( OutlinerView& rOutView )
     //! GetPortions and GetAttribs should be const!
     EditEngine& rEditEng = (EditEngine&)pOutliner->GetEditEngine();
 
-    sal_uLong nParCount = pOutliner->GetParagraphCount();
-    for (sal_uLong nPar=0; nPar<nParCount; nPar++)
+    sal_Int32 nParCount = pOutliner->GetParagraphCount();
+    for (sal_Int32 nPar=0; nPar<nParCount; nPar++)
         if ( nPar >= aSel.nStartPara && nPar <= aSel.nEndPara )
         {
             std::vector<sal_uInt16> aPortions;
-            rEditEng.GetPortions( (sal_uInt16)nPar, aPortions );
+            rEditEng.GetPortions( nPar, aPortions );
             //! GetPortions should use xub_StrLen instead of USHORT
 
             for ( size_t nPos = aPortions.size(); nPos; )
@@ -622,7 +622,7 @@ static void lcl_RemoveFields( OutlinerView& rOutView )
                      ( nPar > aSel.nStartPara || nStart >= aSel.nStartPos ) &&
                      ( nPar < aSel.nEndPara   || nEnd   <= aSel.nEndPos ) )
                 {
-                    ESelection aFieldSel( (sal_uInt16)nPar, nStart, (sal_uInt16)nPar, nEnd );
+                    ESelection aFieldSel( nPar, nStart, nPar, nEnd );
                     SfxItemSet aSet = rEditEng.GetAttribs( aFieldSel );
                     if ( aSet.GetItemState( EE_FEATURE_FIELD ) == SFX_ITEM_ON )
                     {

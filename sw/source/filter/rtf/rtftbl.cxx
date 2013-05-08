@@ -867,7 +867,7 @@ void SwRTFParser::NewTblLine()
 
     pBox = pLns->back()->GetTabBoxes().front();
 
-    sal_uLong nOldPos = pPam->GetPoint()->nNode.GetIndex();
+    sal_Int32 nOldPos = pPam->GetPoint()->nNode.GetIndex();
     pPam->GetPoint()->nNode = *pBox->GetSttNd();
     pPam->Move( fnMoveForward );
     m_nCurrentBox = 0;
@@ -909,7 +909,7 @@ void SwRTFParser::NewTblLine()
     SvxRTFItemStack& rAttrStk = GetAttrStack();
     const SvxRTFItemStackType* pStk;
     for( size_t n = 0; n < rAttrStk.size(); ++n )
-        if( ( pStk = rAttrStk[ n ])->GetSttNodeIdx() == sal_uLong(nOldPos) &&
+        if( ( pStk = rAttrStk[ n ])->GetSttNodeIdx() == nOldPos &&
             !pStk->GetSttCnt() )
             ((SvxRTFItemStackType*)pStk)->SetStartPos( SwxPosition( pPam ) );
 }

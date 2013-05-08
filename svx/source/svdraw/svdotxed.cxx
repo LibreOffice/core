@@ -234,7 +234,7 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
         // to make the gray field background vanish again
         rOutl.UpdateFields();
 
-        sal_uInt16 nParaAnz = static_cast< sal_uInt16 >( rOutl.GetParagraphCount() );
+        sal_Int32 nParaAnz = rOutl.GetParagraphCount();
         pNewText = rOutl.CreateParaObject( 0, nParaAnz );
 
         // need to end edit mode early since SetOutlinerParaObject already

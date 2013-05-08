@@ -895,7 +895,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
         SvxRTFItemStackType *pAkt = aAttrStack.empty() ? 0 : aAttrStack.back();
 
         do {        // middle check loop
-            sal_uLong nOldSttNdIdx = pOld->pSttNd->GetIdx();
+            sal_Int32 nOldSttNdIdx = pOld->pSttNd->GetIdx();
             if( !pOld->pChildList &&
                 ((!pOld->aAttrSet.Count() && !pOld->nStyleNo ) ||
                 (nOldSttNdIdx == pInsPos->GetNodeIdx() &&
@@ -929,7 +929,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
             if( bCrsrBack )
             {
                 // at the beginning of a paragraph? Move back one position
-                sal_uLong nNd = pInsPos->GetNodeIdx();
+                sal_Int32 nNd = pInsPos->GetNodeIdx();
                 MovePos( sal_False );
                 // if can not move backward then later dont move forward !
                 bCrsrBack = nNd != pInsPos->GetNodeIdx();
@@ -1225,8 +1225,8 @@ void SvxRTFItemStackType::MoveFullNode(const SvxNodeIdx &rOldNode,
     }
 
     //And the same for all the children
-    sal_uInt16 nCount = pChildList ? pChildList->size() : 0;
-    for (sal_uInt16 i = 0; i < nCount; ++i)
+    sal_Int32 nCount = pChildList ? pChildList->size() : 0;
+    for (sal_Int32 i = 0; i < nCount; ++i)
     {
         SvxRTFItemStackType* pStk = &(*pChildList)[i];
         pStk->MoveFullNode(rOldNode, rNewNode);

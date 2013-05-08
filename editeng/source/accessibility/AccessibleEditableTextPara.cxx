@@ -178,11 +178,11 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= SAL_MAX_INT32,
                    "AccessibleEditableTextPara::getLocale: paragraph index value overflow");
 
         // return locale of first character in the paragraph
-        return LanguageTag(GetTextForwarder().GetLanguage( static_cast< sal_uInt16 >( GetParagraphIndex() ), 0 )).getLocale();
+        return LanguageTag(GetTextForwarder().GetLanguage( GetParagraphIndex(), 0 )).getLocale();
     }
 
     void AccessibleEditableTextPara::implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex )
@@ -220,16 +220,16 @@ namespace accessibility
         SvxTextForwarder&   rCacheTF = GetTextForwarder();
         const sal_Int32     nParaIndex = GetParagraphIndex();
 
-        DBG_ASSERT(nParaIndex >= 0 && nParaIndex <= USHRT_MAX,
+        DBG_ASSERT(nParaIndex >= 0 && nParaIndex <= SAL_MAX_INT32,
                    "AccessibleEditableTextPara::implGetLineBoundary: paragraph index value overflow");
 
-        const sal_Int32 nTextLen = rCacheTF.GetTextLen( static_cast< sal_uInt16 >( nParaIndex ) );
+        const sal_Int32 nTextLen = rCacheTF.GetTextLen( nParaIndex );
 
         CheckPosition(nIndex);
 
         rBoundary.startPos = rBoundary.endPos = -1;
 
-        const sal_uInt16 nLineCount=rCacheTF.GetLineCount( static_cast< sal_uInt16 >( nParaIndex ) );
+        const sal_uInt16 nLineCount=rCacheTF.GetLineCount( nParaIndex );
 
         if( nIndex == nTextLen )
         {
@@ -237,7 +237,7 @@ namespace accessibility
             if( nLineCount <= 1 )
                 rBoundary.startPos = 0;
             else
-                rBoundary.startPos = nTextLen - rCacheTF.GetLineLen( static_cast< sal_uInt16 >( nParaIndex ),
+                rBoundary.startPos = nTextLen - rCacheTF.GetLineLen( nParaIndex,
                                                                      nLineCount-1 );
 
             rBoundary.endPos = nTextLen;
@@ -249,11 +249,11 @@ namespace accessibility
             sal_Int32 nCurIndex;
             for( nLine=0, nCurIndex=0; nLine<nLineCount; ++nLine )
             {
-                nCurIndex += rCacheTF.GetLineLen( static_cast< sal_uInt16 >( nParaIndex ), nLine);
+                nCurIndex += rCacheTF.GetLineLen( nParaIndex, nLine);
 
                 if( nCurIndex > nIndex )
                 {
-                    rBoundary.startPos = nCurIndex - rCacheTF.GetLineLen(static_cast< sal_uInt16 >( nParaIndex ), nLine);
+                    rBoundary.startPos = nCurIndex - rCacheTF.GetLineLen( nParaIndex, nLine);
                     rBoundary.endPos = nCurIndex;
                     break;
                 }
@@ -394,10 +394,10 @@ namespace accessibility
         // check overflow
         DBG_ASSERT(nStartEEIndex >= 0 && nStartEEIndex <= USHRT_MAX &&
                    nEndEEIndex >= 0 && nEndEEIndex <= USHRT_MAX &&
-                   GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+                   GetParagraphIndex() >= 0 && GetParagraphIndex() <= SAL_MAX_INT32,
                    "AccessibleEditableTextPara::MakeSelection: index value overflow");
 
-        sal_uInt16 nParaIndex = static_cast< sal_uInt16 >( GetParagraphIndex() );
+        sal_Int32 nParaIndex = GetParagraphIndex();
         return ESelection( nParaIndex, static_cast< sal_uInt16 >( nStartEEIndex ),
                            nParaIndex, static_cast< sal_uInt16 >( nEndEEIndex ) );
     }
@@ -449,7 +449,7 @@ namespace accessibility
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
         ESelection aSelection;
-        sal_uInt16 nPara = static_cast< sal_uInt16 > ( GetParagraphIndex() );
+        sal_Int32 nPara = GetParagraphIndex();
         if( !GetEditViewForwarder().GetSelection( aSelection ) )
             return sal_False;
 
@@ -620,10 +620,10 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= SAL_MAX_INT32,
                    "AccessibleEditableTextPara::HaveChildren: paragraph index value overflow");
 
-        return GetTextForwarder().HaveImageBullet( static_cast< sal_uInt16 >(GetParagraphIndex()) );
+        return GetTextForwarder().HaveImageBullet( GetParagraphIndex() );
     }
 
     Rectangle AccessibleEditableTextPara::LogicToPixel( const Rectangle& rRect, const MapMode& rMapMode, SvxViewForwarder& rForwarder )
@@ -729,12 +729,12 @@ namespace accessibility
         DBG_ASSERT(nIndex >= 0 && nIndex <= USHRT_MAX,
                    "AccessibleEditableTextPara::GetAttributeRun: index value overflow");
 
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= SAL_MAX_INT32,
                    "AccessibleEditableTextPara::getLocale: paragraph index value overflow");
 
         return GetTextForwarder().GetAttributeRun( nStartIndex,
                                                    nEndIndex,
-                                                   static_cast< sal_uInt16 >(GetParagraphIndex()),
+                                                   GetParagraphIndex(),
                                                    static_cast< sal_uInt16 >(nIndex) );
     }
 
@@ -963,7 +963,7 @@ namespace accessibility
 
         SolarMutexGuard aGuard;
 
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= SAL_MAX_INT32,
                    "AccessibleEditableTextPara::contains: index value overflow");
 
         awt::Rectangle aTmpRect = getBounds();
@@ -1014,11 +1014,11 @@ namespace accessibility
 
         SolarMutexGuard aGuard;
 
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= SAL_MAX_INT32,
                    "AccessibleEditableTextPara::getBounds: index value overflow");
 
         SvxTextForwarder& rCacheTF = GetTextForwarder();
-        Rectangle aRect = rCacheTF.GetParaBounds( static_cast< sal_uInt16 >( GetParagraphIndex() ) );
+        Rectangle aRect = rCacheTF.GetParaBounds( GetParagraphIndex() );
 
         // convert to screen coordinates
         Rectangle aScreenRect = AccessibleEditableTextPara::LogicToPixel( aRect,
@@ -1272,7 +1272,8 @@ namespace accessibility
 
         SolarMutexGuard aGuard;
 
-        sal_uInt16 nPara, nIndex;
+        sal_Int32 nPara;
+        sal_uInt16 nIndex;
 
         // offset from surrounding cell/shape
         Point aOffset( GetEEOffset() );
@@ -1283,7 +1284,7 @@ namespace accessibility
         Point aLogPoint( GetViewForwarder().PixelToLogic( aPoint, rCacheTF.GetMapMode() ) );
 
         // re-offset to parent (paragraph)
-        Rectangle aParaRect = rCacheTF.GetParaBounds( static_cast< sal_uInt16 >( GetParagraphIndex() ) );
+        Rectangle aParaRect = rCacheTF.GetParaBounds( GetParagraphIndex() );
         aLogPoint.Move( aParaRect.Left(), aParaRect.Top() );
 
         if( rCacheTF.GetIndexAtPoint( aLogPoint, nPara, nIndex ) &&
@@ -1423,7 +1424,7 @@ namespace accessibility
             // implGetAttributeRunBoundary() method there
             case AccessibleTextType::ATTRIBUTE_RUN:
             {
-                const sal_Int32 nTextLen = GetTextForwarder().GetTextLen( static_cast< sal_uInt16 >( GetParagraphIndex() ) );
+                const sal_Int32 nTextLen = GetTextForwarder().GetTextLen( GetParagraphIndex() );
 
                 if( nIndex == nTextLen )
                 {
@@ -1471,7 +1472,7 @@ namespace accessibility
             // implGetAttributeRunBoundary() method there
             case AccessibleTextType::ATTRIBUTE_RUN:
             {
-                const sal_Int32 nTextLen = GetTextForwarder().GetTextLen( static_cast< sal_uInt16 >( GetParagraphIndex() ) );
+                const sal_Int32 nTextLen = GetTextForwarder().GetTextLen( GetParagraphIndex() );
                 sal_uInt16 nStartIndex, nEndIndex;
 
                 if( nIndex == nTextLen )
@@ -2104,8 +2105,8 @@ namespace accessibility
         if (bValidPara)
         {
             // we explicitly allow for the index to point at the character right behind the text
-            if (0 <= nIndex && nIndex <= rCacheTF.GetTextLen( static_cast< sal_uInt16 >(nPara) ))
-                nRes = rCacheTF.GetLineNumberAtIndex( static_cast< sal_uInt16 >(nPara), static_cast< sal_uInt16 >(nIndex) );
+            if (0 <= nIndex && nIndex <= rCacheTF.GetTextLen( nPara ))
+                nRes = rCacheTF.GetLineNumberAtIndex( nPara, static_cast< sal_uInt16 >(nIndex) );
             else
                 throw lang::IndexOutOfBoundsException();
         }
@@ -2124,10 +2125,10 @@ namespace accessibility
         DBG_ASSERT( bValidPara, "getTextAtLineNumber: current paragraph index out of range" );
         if (bValidPara)
         {
-            if (0 <= nLineNo && nLineNo < rCacheTF.GetLineCount( static_cast< sal_uInt16 >(nPara) ))
+            if (0 <= nLineNo && nLineNo < rCacheTF.GetLineCount( nPara ))
             {
                 sal_uInt16 nStart = 0, nEnd = 0;
-                rCacheTF.GetLineBoundaries( nStart, nEnd, static_cast< sal_uInt16 >(nPara), static_cast< sal_uInt16 >(nLineNo) );
+                rCacheTF.GetLineBoundaries( nStart, nEnd, nPara, static_cast< sal_uInt16 >(nLineNo) );
                 if (nStart != 0xFFFF && nEnd != 0xFFFF)
                 {
                     try

@@ -69,7 +69,7 @@ class SwNodeIdx : public SvxNodeIdx
     SwNodeIndex aIdx;
 public:
     SwNodeIdx( const SwNodeIndex& rIdx ) : aIdx( rIdx ) {}
-    virtual sal_uLong   GetIdx() const;
+    virtual sal_Int32   GetIdx() const;
     virtual SvxNodeIdx* Clone() const;
 };
 
@@ -94,7 +94,7 @@ class SwxPosition : public SvxPosition
 public:
     SwxPosition( SwPaM* pCrsr ) : pPam( pCrsr ) {}
 
-    virtual sal_uLong   GetNodeIdx() const;
+    virtual sal_Int32  GetNodeIdx() const;
     virtual xub_StrLen GetCntIdx() const;
 
     // erzeuge von sich selbst eine Kopie

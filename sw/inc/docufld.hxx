@@ -556,7 +556,7 @@ public:
     const OutlinerParaObject*   GetTextObject() const;
     void SetTextObject( OutlinerParaObject* pText );
 
-    sal_uInt32 GetNumberOfParagraphs() const;
+    sal_Int32 GetNumberOfParagraphs() const;
 
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );

@@ -35,7 +35,7 @@ private:
 public:
     EditNodeIdx(EditEngine* pEE, ContentNode* pNd = NULL);
 
-    virtual sal_uLong   GetIdx() const;
+    virtual sal_Int32   GetIdx() const;
     virtual SvxNodeIdx* Clone() const;
     ContentNode* GetNode() { return mpNode; }
 };
@@ -49,7 +49,7 @@ private:
 public:
     EditPosition(EditEngine* pIEE, EditSelection* pSel);
 
-    virtual sal_uLong   GetNodeIdx() const;
+    virtual sal_Int32   GetNodeIdx() const;
     virtual sal_uInt16  GetCntIdx() const;
 
     // clone

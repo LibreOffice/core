@@ -106,7 +106,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
             aEditView.InsertText( rxTransferable, String(), sal_True );
         }
 
-        sal_uLong nParCnt = pEngine->GetParagraphCount();
+        sal_Int32 nParCnt = pEngine->GetParagraphCount();
         if (nParCnt)
         {
             SCROW nEndRow = nStartRow + static_cast<SCROW>(nParCnt) - 1;
@@ -125,7 +125,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
             // Temporarily turn off undo generation for this lot
             bool bUndoEnabled = pDoc->IsUndoEnabled();
             pDoc->EnableUndo( false );
-            for( sal_uInt16 n = 0; n < nParCnt; n++ )
+            for( sal_Int32 n = 0; n < nParCnt; n++ )
             {
                 EditTextObject* pObject = pEngine->CreateTextObject( n );
                 EnterData( nStartCol, nRow, nTab, pObject, true );
@@ -745,7 +745,7 @@ void ScViewFunc::InsertBookmark( const String& rDescription, const String& rURL,
         }
     }
 
-    sal_uInt16 nPara = aEngine.GetParagraphCount();
+    sal_Int32 nPara = aEngine.GetParagraphCount();
     if (nPara)
         --nPara;
     xub_StrLen nTxtLen = aEngine.GetTextLen(nPara);

@@ -194,30 +194,30 @@ EditTextObject::~EditTextObject()
     DBG_DTOR( EE_EditTextObject, 0 );
 }
 
-size_t EditTextObject::GetParagraphCount() const
+sal_Int32 EditTextObject::GetParagraphCount() const
 {
     OSL_FAIL( "Virtual method direct from EditTextObject!" );
     return 0;
 }
 
-String EditTextObject::GetText(size_t /* nParagraph */) const
+String EditTextObject::GetText(sal_Int32 /* nParagraph */) const
 {
     OSL_FAIL( "Virtual method direct from EditTextObject!" );
     return String();
 }
 
-void EditTextObject::Insert(const EditTextObject& /* rObj */, size_t /* nPara */)
+void EditTextObject::Insert(const EditTextObject& /* rObj */, sal_Int32 /* nPara */)
 {
     OSL_FAIL( "Virtual method direct from EditTextObject!" );
 }
 
-EditTextObject* EditTextObject::CreateTextObject(size_t /*nPara*/, size_t /*nParas*/) const
+EditTextObject* EditTextObject::CreateTextObject(sal_Int32 /*nPara*/, sal_Int32 /*nParas*/) const
 {
     OSL_FAIL( "Virtual method direct from EditTextObject!" );
     return 0;
 }
 
-void EditTextObject::RemoveParagraph(size_t /*nPara*/)
+void EditTextObject::RemoveParagraph(sal_Int32 /*nPara*/)
 {
     OSL_FAIL( "Virtual method direct from EditTextObject!" );
 }
@@ -245,7 +245,7 @@ sal_Bool EditTextObject::HasCharAttribs( sal_uInt16 ) const
     return false;
 }
 
-void EditTextObject::GetCharAttribs( sal_uInt16 /*nPara*/, std::vector<EECharAttrib>& /*rLst*/ ) const
+void EditTextObject::GetCharAttribs( sal_Int32 /*nPara*/, std::vector<EECharAttrib>& /*rLst*/ ) const
 {
     OSL_FAIL( "Virtual method direct from EditTextObject!" );
 }
@@ -273,13 +273,13 @@ sal_Bool EditTextObject::HasField( TypeId /*aType*/ ) const
     return false;
 }
 
-SfxItemSet EditTextObject::GetParaAttribs(size_t /*nPara*/) const
+SfxItemSet EditTextObject::GetParaAttribs(sal_Int32 /*nPara*/) const
 {
     OSL_FAIL( "Virtual method direct from EditTextObject!" );
     return SfxItemSet( *(SfxItemPool*)NULL );
 }
 
-void EditTextObject::SetParaAttribs(size_t /*nPara*/, const SfxItemSet& /*rAttribs*/)
+void EditTextObject::SetParaAttribs(sal_Int32 /*nPara*/, const SfxItemSet& /*rAttribs*/)
 {
     OSL_FAIL( "Virtual method direct from EditTextObject!" );
 }
@@ -302,12 +302,12 @@ sal_Bool EditTextObject::HasStyleSheet( const XubString& /*rName*/, SfxStyleFami
     return false;
 }
 
-void EditTextObject::GetStyleSheet(size_t /*nPara*/, String& /*rName*/, SfxStyleFamily& /*eFamily*/) const
+void EditTextObject::GetStyleSheet(sal_Int32 /*nPara*/, String& /*rName*/, SfxStyleFamily& /*eFamily*/) const
 {
     OSL_FAIL( "Virtual method direct from EditTextObject!" );
 }
 
-void EditTextObject::SetStyleSheet(size_t /*nPara*/, const String& /*rName*/, const SfxStyleFamily& /*eFamily*/)
+void EditTextObject::SetStyleSheet(sal_Int32 /*nPara*/, const String& /*rName*/, const SfxStyleFamily& /*eFamily*/)
 {
     OSL_FAIL( "Virtual method direct from EditTextObject!" );
 }
@@ -676,27 +676,33 @@ ContentInfo* BinTextObject::CreateAndInsertContent()
     return &aContents.back();
 }
 
-size_t BinTextObject::GetParagraphCount() const
+sal_Int32 BinTextObject::GetParagraphCount() const
 {
-    return aContents.size();
+    size_t nSize = aContents.size();
+    if (nSize > EE_PARA_MAX_COUNT)
+    {
+        SAL_WARN( "editeng", "EditTextObjectImpl::GetParagraphCount - overflow " << nSize);
+        return EE_PARA_MAX_COUNT;
+    }
+    return static_cast<sal_Int32>(nSize);
 }
 
-String BinTextObject::GetText(size_t nPara) const
+String BinTextObject::GetText(sal_Int32 nPara) const
 {
-    if (nPara >= aContents.size())
+    if (nPara < 0 || static_cast<size_t>(nPara) >= aContents.size())
         return String();
 
     return aContents[nPara].GetText();
 }
 
-void BinTextObject::Insert(const EditTextObject& rObj, size_t nDestPara)
+void BinTextObject::Insert(const EditTextObject& rObj, sal_Int32 nDestPara)
 {
     DBG_ASSERT( rObj.Which() == EE_FORMAT_BIN, "UTO: unknown Textobjekt" );
 
     const BinTextObject& rBinObj = (const BinTextObject&)rObj;
 
-    if (nDestPara > aContents.size())
-        nDestPara = aContents.size();
+    if (static_cast<size_t>(nDestPara) > aContents.size())
+        nDestPara = static_cast<sal_Int32>(aContents.size());
 
     const ContentInfosType& rCIs = rBinObj.aContents;
     for (size_t i = 0, n = rCIs.size(); i < n; ++i)
@@ -710,9 +716,9 @@ void BinTextObject::Insert(const EditTextObject& rObj, size_t nDestPara)
     ClearPortionInfo();
 }
 
-EditTextObject* BinTextObject::CreateTextObject(size_t nPara, size_t nParas) const
+EditTextObject* BinTextObject::CreateTextObject(sal_Int32 nPara, sal_Int32 nParas) const
 {
-    if (nPara >= aContents.size() || !nParas)
+    if (nPara < 0 || static_cast<size_t>(nPara) >= aContents.size() || nParas <= 0)
         return NULL;
 
     // Only split the Pool, when a the Pool is set externally.
@@ -734,10 +740,10 @@ EditTextObject* BinTextObject::CreateTextObject(size_t nPara, size_t nParas) con
     return pObj;
 }
 
-void BinTextObject::RemoveParagraph(size_t nPara)
+void BinTextObject::RemoveParagraph(sal_Int32 nPara)
 {
-    DBG_ASSERT( nPara < aContents.size(), "BinTextObject::GetText: Paragraph does not exist!" );
-    if (nPara >= aContents.size())
+    DBG_ASSERT( nPara >= 0 && static_cast<size_t>(nPara) < aContents.size(), "BinTextObject::GetText: Paragraph does not exist!" );
+    if (nPara < 0 || static_cast<size_t>(nPara) >= aContents.size())
         return;
 
     ContentInfosType::iterator it = aContents.begin();
@@ -791,8 +797,11 @@ sal_Bool BinTextObject::HasCharAttribs( sal_uInt16 _nWhich ) const
     return false;
 }
 
-void BinTextObject::GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>& rLst ) const
+void BinTextObject::GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const
 {
+    if (nPara < 0 || static_cast<size_t>(nPara) >= aContents.size())
+        return;
+
     rLst.clear();
     const ContentInfo& rC = aContents[nPara];
     for (size_t nAttr = 0; nAttr < rC.aAttribs.size(); ++nAttr)
@@ -878,14 +887,17 @@ sal_Bool BinTextObject::HasField( TypeId aType ) const
     return false;
 }
 
-SfxItemSet BinTextObject::GetParaAttribs(size_t nPara) const
+SfxItemSet BinTextObject::GetParaAttribs(sal_Int32 nPara) const
 {
     const ContentInfo& rC = aContents[nPara];
     return rC.GetParaAttribs();
 }
 
-void BinTextObject::SetParaAttribs(size_t nPara, const SfxItemSet& rAttribs)
+void BinTextObject::SetParaAttribs(sal_Int32 nPara, const SfxItemSet& rAttribs)
 {
+    if (nPara < 0 || static_cast<size_t>(nPara) >= aContents.size())
+        return;
+
     ContentInfo& rC = aContents[nPara];
     rC.GetParaAttribs().Set(rAttribs);
     ClearPortionInfo();
@@ -895,7 +907,7 @@ sal_Bool BinTextObject::RemoveCharAttribs( sal_uInt16 _nWhich )
 {
     sal_Bool bChanged = false;
 
-    for ( sal_uInt16 nPara = aContents.size(); nPara; )
+    for ( size_t nPara = aContents.size(); nPara; )
     {
         ContentInfo& rC = aContents[--nPara];
 
@@ -959,9 +971,9 @@ sal_Bool BinTextObject::HasStyleSheet( const XubString& rName, SfxStyleFamily eF
     return false;
 }
 
-void BinTextObject::GetStyleSheet(size_t nPara, String& rName, SfxStyleFamily& rFamily) const
+void BinTextObject::GetStyleSheet(sal_Int32 nPara, String& rName, SfxStyleFamily& rFamily) const
 {
-    if (nPara >= aContents.size())
+    if (nPara < 0 || static_cast<size_t>(nPara) >= aContents.size())
         return;
 
     const ContentInfo& rC = aContents[nPara];
@@ -969,9 +981,9 @@ void BinTextObject::GetStyleSheet(size_t nPara, String& rName, SfxStyleFamily& r
     rFamily = rC.GetFamily();
 }
 
-void BinTextObject::SetStyleSheet(size_t nPara, const String& rName, const SfxStyleFamily& rFamily)
+void BinTextObject::SetStyleSheet(sal_Int32 nPara, const String& rName, const SfxStyleFamily& rFamily)
 {
-    if (nPara >= aContents.size())
+    if (nPara < 0 || static_cast<size_t>(nPara) >= aContents.size())
         return;
 
     ContentInfo& rC = aContents[nPara];
@@ -1060,13 +1072,16 @@ void BinTextObject::StoreData( SvStream& rOStream ) const
 
     // The number of paragraphs ...
     size_t nParagraphs = aContents.size();
-    rOStream << static_cast<sal_uInt16>(nParagraphs);
+    // FIXME: this truncates, check usage of stream and if it can be changed,
+    // i.e. is not persistent, adapt this and reader.
+    sal_uInt16 nParagraphs_Stream = static_cast<sal_uInt16>(nParagraphs);
+    rOStream << nParagraphs_Stream;
 
     sal_Unicode nUniChar = CH_FEATURE;
     char cFeatureConverted = rtl::OString(&nUniChar, 1, eEncoding).toChar();
 
     // The individual paragraphs ...
-    for (size_t nPara = 0; nPara < nParagraphs; ++nPara)
+    for (size_t nPara = 0; nPara < nParagraphs_Stream; ++nPara)
     {
         const ContentInfo& rC = aContents[nPara];
 
@@ -1191,7 +1206,7 @@ void BinTextObject::StoreData( SvStream& rOStream ) const
     rOStream << static_cast<sal_Bool>(bStoreUnicodeStrings);
     if ( bStoreUnicodeStrings )
     {
-        for ( sal_uInt16 nPara = 0; nPara < nParagraphs; nPara++ )
+        for ( size_t nPara = 0; nPara < nParagraphs_Stream; nPara++ )
         {
             const ContentInfo& rC = aContents[nPara];
             sal_uInt16 nL = rC.GetText().Len();

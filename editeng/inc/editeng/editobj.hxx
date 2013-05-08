@@ -79,12 +79,12 @@ public:
     static EditTextObject*  Create( SvStream& rIStream,
                                 SfxItemPool* pGlobalTextObjectPool = 0 );
 
-    virtual size_t GetParagraphCount() const;
+    virtual sal_Int32 GetParagraphCount() const;
 
-    virtual String GetText(size_t nParagraph) const;
-    virtual void Insert(const EditTextObject& rObj, size_t nPara);
-    virtual void RemoveParagraph(size_t nPara);
-    virtual EditTextObject* CreateTextObject(size_t nPara, size_t nParas = 1) const;
+    virtual String GetText(sal_Int32 nParagraph) const;
+    virtual void Insert(const EditTextObject& rObj, sal_Int32 nPara);
+    virtual void RemoveParagraph(sal_Int32 nPara);
+    virtual EditTextObject* CreateTextObject(sal_Int32 nPara, sal_Int32 nParas = 1) const;
 
     virtual sal_Bool        HasPortionInfo() const;
     virtual void        ClearPortionInfo();
@@ -92,7 +92,7 @@ public:
     virtual sal_Bool        HasOnlineSpellErrors() const;
 
     virtual sal_Bool        HasCharAttribs( sal_uInt16 nWhich = 0 ) const;
-    virtual void        GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>& rLst ) const;
+    virtual void        GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const;
 
     virtual sal_Bool        RemoveCharAttribs( sal_uInt16 nWhich = 0 );
     virtual sal_Bool        RemoveParaAttribs( sal_uInt16 nWhich = 0 );
@@ -103,12 +103,12 @@ public:
     virtual const SvxFieldItem* GetField() const;
     virtual sal_Bool        HasField( TypeId aType = NULL ) const;
 
-    virtual SfxItemSet GetParaAttribs(size_t nPara) const;
-    virtual void SetParaAttribs(size_t nPara, const SfxItemSet& rAttribs);
+    virtual SfxItemSet GetParaAttribs(sal_Int32 nPara) const;
+    virtual void SetParaAttribs(sal_Int32 nPara, const SfxItemSet& rAttribs);
 
     virtual sal_Bool        HasStyleSheet( const XubString& rName, SfxStyleFamily eFamily ) const;
-    virtual void GetStyleSheet(size_t nPara, String& rName, SfxStyleFamily& eFamily) const;
-    virtual void SetStyleSheet(size_t nPara, const String& rName, const SfxStyleFamily& eFamily);
+    virtual void GetStyleSheet(sal_Int32 nPara, String& rName, SfxStyleFamily& eFamily) const;
+    virtual void SetStyleSheet(sal_Int32 nPara, const String& rName, const SfxStyleFamily& eFamily);
     virtual sal_Bool        ChangeStyleSheets(  const XubString& rOldName, SfxStyleFamily eOldFamily,
                                             const XubString& rNewName, SfxStyleFamily eNewFamily );
     virtual void        ChangeStyleSheetName( SfxStyleFamily eFamily, const XubString& rOldName, const XubString& rNewName );
