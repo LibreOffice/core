@@ -756,8 +756,8 @@ void DocxExport::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTy
     const EditTextObject& rEditObj = rParaObj.GetTextObject();
     MSWord_SdrAttrIter aAttrIter( *this, rEditObj, nTyp );
 
-    sal_uInt16 nPara = rEditObj.GetParagraphCount();
-    for( sal_uInt16 n = 0; n < nPara; ++n )
+    sal_Int32 nPara = rEditObj.GetParagraphCount();
+    for( sal_Int32 n = 0; n < nPara; ++n )
     {
         if( n )
             aAttrIter.NextPara( n );

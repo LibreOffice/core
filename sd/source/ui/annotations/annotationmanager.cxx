@@ -473,9 +473,9 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
         aStr.Append( sQuote );
         aStr.Append( OUString("\"\n") );
 
-        sal_uInt16 nParaCount = comphelper::string::getTokenCount(aStr, '\n');
-        for( sal_uInt16 nPara = 0; nPara < nParaCount; nPara++ )
-            pOutliner->Insert( aStr.GetToken( nPara, '\n' ), LIST_APPEND, -1 );
+        sal_Int32 nParaCount = comphelper::string::getTokenCount(aStr, '\n');
+        for( sal_Int32 nPara = 0; nPara < nParaCount; nPara++ )
+            pOutliner->Insert( aStr.GetToken( nPara, '\n' ), EE_PARA_APPEND, -1 );
 
         if( pOutliner->GetParagraphCount() > 1 )
         {
@@ -483,7 +483,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
             aAnswerSet.Put(SvxPostureItem(ITALIC_NORMAL,EE_CHAR_ITALIC));
 
             ESelection aSel;
-            aSel.nEndPara = (sal_uInt16)pOutliner->GetParagraphCount()-2;
+            aSel.nEndPara = pOutliner->GetParagraphCount()-2;
             aSel.nEndPos = pOutliner->GetText( pOutliner->GetParagraph( aSel.nEndPara ) ).Len();
 
             pOutliner->QuickSetAttribs( aAnswerSet, aSel );

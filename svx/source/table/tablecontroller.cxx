@@ -1653,7 +1653,7 @@ void SvxTableController::EditCell( const CellPos& rPos, ::Window* pWindow, const
         if(!pTableObj->GetOutlinerParaObject() && mpView->GetTextEditOutliner())
         {
             ::Outliner* pOutl = mpView->GetTextEditOutliner();
-            sal_uIntPtr nParaAnz = pOutl->GetParagraphCount();
+            sal_Int32 nParaAnz = pOutl->GetParagraphCount();
             Paragraph* p1stPara = pOutl->GetParagraph( 0 );
 
             if(nParaAnz==1 && p1stPara)

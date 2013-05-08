@@ -132,14 +132,14 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             {
                 ESelection aSel = pOLV->GetSelection();
                 aSel.Adjust();
-                sal_uLong nStartPara = aSel.nStartPara;
-                sal_uLong nEndPara = aSel.nEndPara;
+                sal_Int32 nStartPara = aSel.nStartPara;
+                sal_Int32 nEndPara = aSel.nEndPara;
                 if( !aSel.HasRange() )
                 {
                     nStartPara = 0;
                     nEndPara = pOLV->GetOutliner()->GetParagraphCount() - 1;
                 }
-                for( sal_uLong nPara = nStartPara; nPara <= nEndPara; nPara++ )
+                for( sal_Int32 nPara = nStartPara; nPara <= nEndPara; nPara++ )
                 {
                     SfxStyleSheet* pStyleSheet = NULL;
                     if (pOLV->GetOutliner() != NULL)
@@ -147,7 +147,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     if (pStyleSheet != NULL)
                     {
                         SfxItemSet aAttr( pStyleSheet->GetItemSet() );
-                        SfxItemSet aTmpSet( pOLV->GetOutliner()->GetParaAttribs( (sal_uInt16) nPara ) );
+                        SfxItemSet aTmpSet( pOLV->GetOutliner()->GetParaAttribs( nPara ) );
                         aAttr.Put( aTmpSet, sal_False ); // sal_False= InvalidItems is not default, handle it as "holes"
                         const SvxULSpaceItem& rItem = (const SvxULSpaceItem&) aAttr.Get( EE_PARA_ULSPACE );
                         SvxULSpaceItem* pNewItem = (SvxULSpaceItem*) rItem.Clone();
@@ -175,7 +175,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                         SfxItemSet aNewAttrs( aAttr );
                         aNewAttrs.Put( *pNewItem );
                         delete pNewItem;
-                        pOLV->GetOutliner()->SetParaAttribs( (sal_uInt16)nPara, aNewAttrs );
+                        pOLV->GetOutliner()->SetParaAttribs( nPara, aNewAttrs );
                     }
                 }
             }

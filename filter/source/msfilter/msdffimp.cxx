@@ -3491,7 +3491,7 @@ void SvxMSDffManager::ReadObjText( const OUString& rText, SdrObject* pObj )
         rOutliner.SetUpdateMode( sal_False );
         rOutliner.SetVertical( pText->IsVerticalWriting() );
 
-        sal_uInt16 nParaIndex = 0;
+        sal_Int32 nParaIndex = 0;
         sal_Int32 nParaSize;
         const sal_Unicode* pCurrent, *pBuf = rText.getStr();
         const sal_Unicode* pEnd = rText.getStr() + rText.getLength();
@@ -4253,7 +4253,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             rOutliner.SetText( *pParaObj );
                             VirtualDevice aVirDev( 1 );
                             aVirDev.SetMapMode( MAP_100TH_MM );
-                            sal_uInt32 i, nParagraphs = rOutliner.GetParagraphCount();
+                            sal_Int32 i, nParagraphs = rOutliner.GetParagraphCount();
                             if ( nParagraphs )
                             {
                                 sal_Bool bCreateNewParaObject = sal_False;
@@ -4262,9 +4262,9 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                     sal_Bool bIsRTL = aVirDev.GetTextIsRTL( rOutliner.GetText( rOutliner.GetParagraph( i ) ), 0, STRING_LEN );
                                     if ( bIsRTL )
                                     {
-                                        SfxItemSet aSet2( rOutliner.GetParaAttribs( (sal_uInt16)i ) );
+                                        SfxItemSet aSet2( rOutliner.GetParaAttribs( i ) );
                                         aSet2.Put( SvxFrameDirectionItem( FRMDIR_HORI_RIGHT_TOP, EE_PARA_WRITINGDIR ) );
-                                        rOutliner.SetParaAttribs( (sal_uInt16)i, aSet2 );
+                                        rOutliner.SetParaAttribs( i, aSet2 );
                                         bCreateNewParaObject = sal_True;
                                     }
                                 }

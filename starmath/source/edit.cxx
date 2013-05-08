@@ -59,7 +59,7 @@ using namespace com::sun::star::uno;
 
 
 void SmGetLeftSelectionPart(const ESelection &rSel,
-                            sal_uInt16 &nPara, sal_uInt16 &nPos)
+                            sal_Int32 &nPara, sal_uInt16 &nPos)
     // returns paragraph number and position of the selections left part
 {
     // compare start and end of selection and use the one that comes first
@@ -266,11 +266,12 @@ IMPL_LINK(SmEditWindow, CursorMoveTimerHdl, Timer *, EMPTYARG /*pTimer*/)
         if (pView)
         {
             // get row and column to look for
-            sal_uInt16  nRow, nCol;
+            sal_Int32  nRow;
+            sal_uInt16 nCol;
             SmGetLeftSelectionPart(aNewSelection, nRow, nCol);
             nRow++;
             nCol++;
-            pView->GetGraphicWindow().SetCursorPos(nRow, nCol);
+            pView->GetGraphicWindow().SetCursorPos(static_cast<sal_uInt16>(nRow), nCol);
             aOldSelection = aNewSelection;
         }
     }
@@ -697,8 +698,8 @@ void SmEditWindow::SelectAll()
     OSL_ENSURE( pEditView, "NULL pointer" );
     if (pEditView)
     {
-        // 0xFFFF as last two parameters refers to the end of the text
-        pEditView->SetSelection( ESelection( 0, 0, 0xFFFF, 0xFFFF ) );
+        // ALL as last two parameters refers to the end of the text
+        pEditView->SetSelection( ESelection( 0, 0, EE_PARA_ALL, EE_TEXTPOS_ALL ) );
     }
 }
 
@@ -757,7 +758,7 @@ void SmEditWindow::SelNextMark()
     {
         ESelection eSelection = pEditView->GetSelection();
         sal_Int32 nPos = eSelection.nEndPos;
-        sal_uInt16     nCounts    = pEditEngine->GetParagraphCount();
+        sal_Int32 nCounts = pEditEngine->GetParagraphCount();
 
         while (eSelection.nEndPara < nCounts)
         {
@@ -788,7 +789,7 @@ void SmEditWindow::SelPrevMark()
         sal_Int32 nMax = eSelection.nStartPos;
         OUString aText(pEditEngine->GetText(eSelection.nStartPara));
         OUString aMark("<?>");
-        sal_uInt16     nCounts    = pEditEngine->GetParagraphCount();
+        sal_Int32 nCounts = pEditEngine->GetParagraphCount();
 
         do
         {

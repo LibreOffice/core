@@ -350,7 +350,7 @@ void ImpEditEngine::CheckIdleFormatter()
 
 void ImpEditEngine::FormatFullDoc()
 {
-    for ( sal_uInt16 nPortion = 0; nPortion < GetParaPortions().Count(); nPortion++ )
+    for ( sal_Int32 nPortion = 0; nPortion < GetParaPortions().Count(); nPortion++ )
         GetParaPortions()[nPortion]->MarkSelectionInvalid( 0, GetParaPortions()[nPortion]->GetNode()->Len() );
     FormatDoc();
 }
@@ -377,7 +377,7 @@ void ImpEditEngine::FormatDoc()
     sal_Bool bMapChanged = ImpCheckRefMapMode();
 
     aInvalidRect = Rectangle();  // make empty
-    for ( sal_uInt16 nPara = 0; nPara < GetParaPortions().Count(); nPara++ )
+    for ( sal_Int32 nPara = 0; nPara < GetParaPortions().Count(); nPara++ )
     {
         ParaPortion* pParaPortion = GetParaPortions()[nPara];
         if ( pParaPortion->MustRepaint() || ( pParaPortion->IsInvalid() && pParaPortion->IsVisible() ) )
@@ -398,7 +398,7 @@ void ImpEditEngine::FormatDoc()
                 if ( !bGrow && GetTextRanger() )
                 {
                     // For a change in height all below must be reformatted ...
-                    for ( sal_uInt16 n = nPara+1; n < GetParaPortions().Count(); n++ )
+                    for ( sal_Int32 n = nPara+1; n < GetParaPortions().Count(); n++ )
                     {
                         ParaPortion* pPP = GetParaPortions()[n];
                         pPP->MarkSelectionInvalid( 0, pPP->GetNode()->Len() );
@@ -532,7 +532,7 @@ void ImpEditEngine::CheckAutoPageSize()
         {
             // If ahead is centered / right or tabs ...
             aStatus.GetStatusWord() |= !IsVertical() ? EE_STAT_TEXTWIDTHCHANGED : EE_STAT_TEXTHEIGHTCHANGED;
-            for ( sal_uInt16 nPara = 0; nPara < GetParaPortions().Count(); nPara++ )
+            for ( sal_Int32 nPara = 0; nPara < GetParaPortions().Count(); nPara++ )
             {
                 // Only paragraphs which are not aligned to the left need to be
                 // reformatted, the height can not be changed here anymore.
@@ -575,7 +575,7 @@ static sal_Int32 ImplCalculateFontIndependentLineSpacing( const sal_Int32 nFontH
     return ( nFontHeight * 12 ) / 10;   // + 20%
 }
 
-sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
+sal_Bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 {
     ParaPortion* pParaPortion = GetParaPortions()[nPara];
 
@@ -1631,7 +1631,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
 
     if ( !aStatus.IsOutliner() )
     {
-        sal_uInt16 nPara = GetParaPortions().GetPos( pParaPortion );
+        sal_Int32 nPara = GetParaPortions().GetPos( pParaPortion );
         SvxAdjust eJustification = GetJustification( nPara );
         long nMaxLineWidth = !IsVertical() ? aPaperSize.Width() : aPaperSize.Height();
         nMaxLineWidth -= GetXValue( rLRItem.GetRight() );
@@ -1672,7 +1672,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
         }
         else if ( rLSItem.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP )
         {
-            sal_uInt16 nPara = GetParaPortions().GetPos( pParaPortion );
+            sal_Int32 nPara = GetParaPortions().GetPos( pParaPortion );
             if ( nPara || IsFixedCellHeight() || pTmpLine->GetStartPortion() ) // Not the very first line
             {
                 // There are documents with PropLineSpace 0, why?
@@ -2502,7 +2502,7 @@ void ImpEditEngine::SetTextRanger( TextRanger* pRanger )
         delete pTextRanger;
         pTextRanger = pRanger;
 
-        for ( sal_uInt16 nPara = 0; nPara < GetParaPortions().Count(); nPara++ )
+        for ( sal_Int32 nPara = 0; nPara < GetParaPortions().Count(); nPara++ )
         {
             ParaPortion* pParaPortion = GetParaPortions()[nPara];
             pParaPortion->MarkSelectionInvalid( 0, pParaPortion->GetNode()->Len() );
@@ -2873,7 +2873,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
     // --------------------------------------------------
     // Over all the paragraphs ...
     // --------------------------------------------------
-    for ( sal_uInt16 n = 0; n < GetParaPortions().Count(); n++ )
+    for ( sal_Int32 n = 0; n < GetParaPortions().Count(); n++ )
     {
         const ParaPortion* pPortion = GetParaPortions()[n];
         DBG_ASSERT( pPortion, "NULL-Pointer in TokenList in Paint" );
@@ -3839,7 +3839,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRect, OutputDev
 
 }
 
-void ImpEditEngine::InsertContent( ContentNode* pNode, sal_uInt16 nPos )
+void ImpEditEngine::InsertContent( ContentNode* pNode, sal_Int32 nPos )
 {
     DBG_ASSERT( pNode, "NULL-Pointer in InsertContent! " );
     DBG_ASSERT( IsInUndo(), "InsertContent only for Undo()!" );
@@ -3850,7 +3850,7 @@ void ImpEditEngine::InsertContent( ContentNode* pNode, sal_uInt16 nPos )
         GetEditEnginePtr()->ParagraphInserted( nPos );
 }
 
-EditPaM ImpEditEngine::SplitContent( sal_uInt16 nNode, sal_uInt16 nSepPos )
+EditPaM ImpEditEngine::SplitContent( sal_Int32 nNode, sal_uInt16 nSepPos )
 {
     ContentNode* pNode = aEditDoc.GetObject( nNode );
     DBG_ASSERT( pNode, "Invalid Node in SplitContent" );
@@ -3860,7 +3860,7 @@ EditPaM ImpEditEngine::SplitContent( sal_uInt16 nNode, sal_uInt16 nSepPos )
     return ImpInsertParaBreak( aPaM );
 }
 
-EditPaM ImpEditEngine::ConnectContents( sal_uInt16 nLeftNode, sal_Bool bBackward )
+EditPaM ImpEditEngine::ConnectContents( sal_Int32 nLeftNode, sal_Bool bBackward )
 {
     ContentNode* pLeftNode = aEditDoc.GetObject( nLeftNode );
     ContentNode* pRightNode = aEditDoc.GetObject( nLeftNode+1 );
@@ -3885,7 +3885,7 @@ void ImpEditEngine::SetUpdateMode( bool bUp, EditView* pCurView, sal_Bool bForce
         FormatAndUpdate( pCurView );
 }
 
-void ImpEditEngine::ShowParagraph( sal_uInt16 nParagraph, bool bShow )
+void ImpEditEngine::ShowParagraph( sal_Int32 nParagraph, bool bShow )
 {
     ParaPortion* pPPortion = GetParaPortions().SafeGetObject( nParagraph );
     DBG_ASSERT( pPPortion, "ShowParagraph: Paragraph does not exist! ");
@@ -3937,7 +3937,7 @@ void ImpEditEngine::ShowParagraph( sal_uInt16 nParagraph, bool bShow )
     }
 }
 
-EditSelection ImpEditEngine::MoveParagraphs( Range aOldPositions, sal_uInt16 nNewPos, EditView* pCurView )
+EditSelection ImpEditEngine::MoveParagraphs( Range aOldPositions, sal_Int32 nNewPos, EditView* pCurView )
 {
     DBG_ASSERT( GetParaPortions().Count() != 0, "No paragraphs found: MoveParagraphs" );
     if ( GetParaPortions().Count() == 0 )
@@ -3956,8 +3956,8 @@ EditSelection ImpEditEngine::MoveParagraphs( Range aOldPositions, sal_uInt16 nNe
     {
         // in this case one can redraw directly without invalidating the
         // Portions
-        sal_uInt16 nFirstPortion = std::min( (sal_uInt16)aOldPositions.Min(), nNewPos );
-        sal_uInt16 nLastPortion = std::max( (sal_uInt16)aOldPositions.Max(), nNewPos );
+        sal_Int32 nFirstPortion = std::min( static_cast<sal_Int32>(aOldPositions.Min()), nNewPos );
+        sal_Int32 nLastPortion = std::max( static_cast<sal_Int32>(aOldPositions.Max()), nNewPos );
 
         ParaPortion* pUpperPortion = GetParaPortions().SafeGetObject( nFirstPortion );
         ParaPortion* pLowerPortion = GetParaPortions().SafeGetObject( nLastPortion );
@@ -3973,13 +3973,13 @@ EditSelection ImpEditEngine::MoveParagraphs( Range aOldPositions, sal_uInt16 nNe
     else
     {
         // redraw from the upper invalid position
-        sal_uInt16 nFirstInvPara = std::min( (sal_uInt16)aOldPositions.Min(), nNewPos );
+        sal_Int32 nFirstInvPara = std::min( static_cast<sal_Int32>(aOldPositions.Min()), nNewPos );
         InvalidateFromParagraph( nFirstInvPara );
     }
     return aSel;
 }
 
-void ImpEditEngine::InvalidateFromParagraph( sal_uInt16 nFirstInvPara )
+void ImpEditEngine::InvalidateFromParagraph( sal_Int32 nFirstInvPara )
 {
     // The following paragraphs are not invalidated, since ResetHeight()
     // => size change => all the following are re-issued anyway.
@@ -4039,7 +4039,7 @@ ContentNode* ImpEditEngine::GetNextVisNode( ContentNode* pCurNode )
 
 const ParaPortion* ImpEditEngine::GetPrevVisPortion( const ParaPortion* pCurPortion ) const
 {
-    sal_uInt16 nPara = GetParaPortions().GetPos( pCurPortion );
+    sal_Int32 nPara = GetParaPortions().GetPos( pCurPortion );
     DBG_ASSERT( nPara < GetParaPortions().Count() , "Portion not found: GetPrevVisPortion" );
     const ParaPortion* pPortion = nPara ? GetParaPortions()[--nPara] : 0;
     while ( pPortion && !pPortion->IsVisible() )
@@ -4050,7 +4050,7 @@ const ParaPortion* ImpEditEngine::GetPrevVisPortion( const ParaPortion* pCurPort
 
 const ParaPortion* ImpEditEngine::GetNextVisPortion( const ParaPortion* pCurPortion ) const
 {
-    sal_uInt16 nPara = GetParaPortions().GetPos( pCurPortion );
+    sal_Int32 nPara = GetParaPortions().GetPos( pCurPortion );
     DBG_ASSERT( nPara < GetParaPortions().Count() , "Portion not found: GetPrevVisNode" );
     const ParaPortion* pPortion = GetParaPortions().SafeGetObject( ++nPara );
     while ( pPortion && !pPortion->IsVisible() )
@@ -4064,9 +4064,9 @@ long ImpEditEngine::CalcVertLineSpacing(Point& rStartPos) const
     long nTotalOccupiedHeight = 0;
     sal_uInt16 nTotalLineCount = 0;
     const ParaPortionList& rParaPortions = GetParaPortions();
-    sal_uInt16 nParaCount = rParaPortions.Count();
+    sal_Int32 nParaCount = rParaPortions.Count();
 
-    for (sal_uInt16 i = 0; i < nParaCount; ++i)
+    for (sal_Int32 i = 0; i < nParaCount; ++i)
     {
         if (GetVerJustification(i) != SVX_VER_JUSTIFY_BLOCK)
             // All paragraphs must have the block justification set.
@@ -4107,7 +4107,7 @@ long ImpEditEngine::CalcVertLineSpacing(Point& rStartPos) const
     return nTotalSpace / (nTotalLineCount-1);
 }
 
-EditPaM ImpEditEngine::InsertParagraph( sal_uInt16 nPara )
+EditPaM ImpEditEngine::InsertParagraph( sal_Int32 nPara )
 {
     EditPaM aPaM;
     if ( nPara != 0 )
@@ -4127,7 +4127,7 @@ EditPaM ImpEditEngine::InsertParagraph( sal_uInt16 nPara )
     return ImpInsertParaBreak( aPaM );
 }
 
-EditSelection* ImpEditEngine::SelectParagraph( sal_uInt16 nPara )
+EditSelection* ImpEditEngine::SelectParagraph( sal_Int32 nPara )
 {
     EditSelection* pSel = 0;
     ContentNode* pNode = GetEditDoc().GetObject( nPara );
@@ -4202,9 +4202,9 @@ const SvxNumberFormat* ImpEditEngine::GetNumberFormat( const ContentNode *pNode 
     if (pNode)
     {
         // get index of paragraph
-        sal_uInt16 nPara = GetEditDoc().GetPos( const_cast< ContentNode * >(pNode) );
-        DBG_ASSERT( nPara < USHRT_MAX, "node not found in array" );
-        if (nPara < USHRT_MAX)
+        sal_Int32 nPara = GetEditDoc().GetPos( const_cast< ContentNode * >(pNode) );
+        DBG_ASSERT( nPara < EE_PARA_NOT_FOUND, "node not found in array" );
+        if (nPara < EE_PARA_NOT_FOUND)
         {
             // the called function may be overloaded by an OutlinerEditEng object to provide
             // access to the SvxNumberFormat of the Outliner.
@@ -4292,7 +4292,7 @@ void ImpEditEngine::ImplInitDigitMode(OutputDevice* pOutDev, LanguageType eCurLa
         pOutDev->SetDigitLanguage(ImplCalcDigitLang(eCurLang));
 }
 
-void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, sal_uInt16 nPara, sal_uInt16 nIndex )
+void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, sal_Int32 nPara, sal_uInt16 nIndex )
 {
     sal_Bool bR2L = sal_False;
     if ( nIndex == 0xFFFF )

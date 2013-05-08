@@ -351,8 +351,8 @@ bool lcl_hasWordBreak( const Reference< drawing::XShape >& rxShape )
                 SvxTextForwarder* pTextForwarder = pTextEditSource->GetTextForwarder();
                 if ( pTextForwarder )
                 {
-                    sal_uInt16 nParaCount = pTextForwarder->GetParagraphCount();
-                    for ( sal_uInt16 nPara = 0; nPara < nParaCount; ++nPara )
+                    sal_Int32 nParaCount = pTextForwarder->GetParagraphCount();
+                    for ( sal_Int32 nPara = 0; nPara < nParaCount; ++nPara )
                     {
                         sal_uInt16 nLineCount = pTextForwarder->GetLineCount( nPara );
                         for ( sal_uInt16 nLine = 0; nLine < nLineCount; ++nLine )

@@ -116,9 +116,9 @@ void FuExpandPage::DoExecute( SfxRequest& )
 
             // remove hard paragraph- and character attributes
             SfxItemSet aEmptyEEAttr(mpDoc->GetPool(), EE_ITEMS_START, EE_ITEMS_END);
-            sal_uLong nParaCount1 = pOutl->GetParagraphCount();
+            sal_Int32 nParaCount1 = pOutl->GetParagraphCount();
 
-            for (sal_uInt16 nPara = 0; nPara < nParaCount1; nPara++)
+            for (sal_Int32 nPara = 0; nPara < nParaCount1; nPara++)
             {
                 pOutl->QuickRemoveCharAttribs(nPara);
                 pOutl->SetParaAttribs(nPara, aEmptyEEAttr);
@@ -129,8 +129,8 @@ void FuExpandPage::DoExecute( SfxRequest& )
 
             while (pPara)
             {
-                sal_uLong nParaPos = pOutl->GetAbsPos( pPara );
-                sal_Int16 nDepth = pOutl->GetDepth( (sal_uInt16) nParaPos );
+                sal_Int32 nParaPos = pOutl->GetAbsPos( pPara );
+                sal_Int16 nDepth = pOutl->GetDepth( nParaPos );
                 if ( nDepth == 0 )
                 {
                     // page with title & structuring!
@@ -181,7 +181,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                     // create title text objects
                     SdrTextObj* pTextObj = (SdrTextObj*) pPage->GetPresObj(PRESOBJ_TITLE);
 
-                    OutlinerParaObject* pOutlinerParaObject = pOutl->CreateParaObject( (sal_uInt16) nParaPos, 1);
+                    OutlinerParaObject* pOutlinerParaObject = pOutl->CreateParaObject( nParaPos, 1);
                     pOutlinerParaObject->SetOutlinerMode(OUTLINERMODE_TITLEOBJECT);
 
                     if( pOutlinerParaObject->GetDepth(0) != -1 )
@@ -205,7 +205,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                     SfxStyleSheet* pSheet = pPage->GetStyleSheetForPresObj(PRESOBJ_TITLE);
                     pTextObj->NbcSetStyleSheet(pSheet, sal_False);
 
-                    sal_uLong nChildCount = pOutl->GetChildCount(pPara);
+                    sal_Int32 nChildCount = pOutl->GetChildCount(pPara);
 
                     if (nChildCount > 0)
                     {
@@ -213,18 +213,18 @@ void FuExpandPage::DoExecute( SfxRequest& )
                         SdrTextObj* pOutlineObj = (SdrTextObj*) pPage->GetPresObj(PRESOBJ_OUTLINE);
                         pPara = pOutl->GetParagraph( ++nParaPos );
 
-                        OutlinerParaObject* pOPO = pOutl->CreateParaObject( (sal_uInt16) nParaPos, (sal_uInt16) nChildCount);
+                        OutlinerParaObject* pOPO = pOutl->CreateParaObject( nParaPos, nChildCount);
 
                         SdrOutliner* pTempOutl = SdrMakeOutliner( OUTLINERMODE_OUTLINEOBJECT, mpDoc );
                         pTempOutl->SetText( *pOPO );
 
-                        sal_uLong nParaCount2 = pTempOutl->GetParagraphCount();
-                        sal_uLong nPara;
+                        sal_Int32 nParaCount2 = pTempOutl->GetParagraphCount();
+                        sal_Int32 nPara;
                         for( nPara = 0; nPara < nParaCount2; nPara++ )
                         {
                             pTempOutl->SetDepth (
                                 pTempOutl->GetParagraph( nPara ),
-                                pTempOutl->GetDepth((sal_uInt16) nPara ) - 1);
+                                pTempOutl->GetDepth( nPara ) - 1);
                         }
 
                         delete pOPO;

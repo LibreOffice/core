@@ -1398,7 +1398,7 @@ private:
     std::vector<EECharAttrib> aTxtAtrArr;
     std::vector<const EECharAttrib*> aChrTxtAtrArr;
     std::vector<rtl_TextEncoding> aChrSetArr;
-    sal_uInt16 nPara;
+    sal_Int32 nPara;
     xub_StrLen nAktSwPos;
     xub_StrLen nTmpSwPos;                   // for HasItem()
     rtl_TextEncoding eNdChrSet;
@@ -1414,7 +1414,7 @@ private:
 public:
     MSWord_SdrAttrIter( MSWordExportBase& rWr, const EditTextObject& rEditObj,
         sal_uInt8 nType );
-    void NextPara( sal_uInt16 nPar );
+    void NextPara( sal_Int32 nPar );
     void OutParaAttr(bool bCharAttr);
     void OutEEField(const SfxPoolItem& rHt);
 

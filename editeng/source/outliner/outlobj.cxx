@@ -183,14 +183,20 @@ void OutlinerParaObject::SetVertical(bool bNew)
     }
 }
 
-sal_uInt32 OutlinerParaObject::Count() const
+sal_Int32 OutlinerParaObject::Count() const
 {
-    return mpImplOutlinerParaObject->maParagraphDataVector.size();
+    size_t nSize = mpImplOutlinerParaObject->maParagraphDataVector.size();
+    if (nSize > EE_PARA_MAX_COUNT)
+    {
+        SAL_WARN( "editeng", "OutlinerParaObject::Count - overflow " << nSize);
+        return EE_PARA_MAX_COUNT;
+    }
+    return static_cast<sal_Int32>(nSize);
 }
 
-sal_Int16 OutlinerParaObject::GetDepth(sal_uInt16 nPara) const
+sal_Int16 OutlinerParaObject::GetDepth(sal_Int32 nPara) const
 {
-    if(nPara < mpImplOutlinerParaObject->maParagraphDataVector.size())
+    if(0 <= nPara && static_cast<size_t>(nPara) < mpImplOutlinerParaObject->maParagraphDataVector.size())
     {
         return mpImplOutlinerParaObject->maParagraphDataVector[nPara].getDepth();
     }
@@ -210,9 +216,9 @@ bool OutlinerParaObject::IsEditDoc() const
     return mpImplOutlinerParaObject->mbIsEditDoc;
 }
 
-const ParagraphData& OutlinerParaObject::GetParagraphData(sal_uInt32 nIndex) const
+const ParagraphData& OutlinerParaObject::GetParagraphData(sal_Int32 nIndex) const
 {
-    if(nIndex < mpImplOutlinerParaObject->maParagraphDataVector.size())
+    if(0 <= nIndex && static_cast<size_t>(nIndex) < mpImplOutlinerParaObject->maParagraphDataVector.size())
     {
         return mpImplOutlinerParaObject->maParagraphDataVector[nIndex];
     }
@@ -247,12 +253,12 @@ void OutlinerParaObject::ChangeStyleSheetName(SfxStyleFamily eFamily,
 void OutlinerParaObject::SetStyleSheets(sal_uInt16 nLevel, const OUString rNewName,
     const SfxStyleFamily& rNewFamily)
 {
-    const sal_uInt32 nCount(mpImplOutlinerParaObject->maParagraphDataVector.size());
+    const sal_Int32 nCount(Count());
 
     if(nCount)
     {
         ImplMakeUnique();
-        sal_uInt16 nDecrementer(sal::static_int_cast< sal_uInt16 >(nCount));
+        sal_Int32 nDecrementer(nCount);
 
         for(;nDecrementer;)
         {

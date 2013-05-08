@@ -461,9 +461,9 @@ SdrObject* SwWW8ImplReader::ReadPolyLine( WW8_DPHEAD* pHd, const WW8_DO* pDo,
 
 ESelection SwWW8ImplReader::GetESelection( long nCpStart, long nCpEnd )
 {
-    sal_uInt16 nPCnt = mpDrawEditEngine->GetParagraphCount();
-    sal_uInt16 nSP = 0;
-    sal_uInt16 nEP = 0;
+    sal_Int32 nPCnt = mpDrawEditEngine->GetParagraphCount();
+    sal_Int32 nSP = 0;
+    sal_Int32 nEP = 0;
     while(      (nSP < nPCnt)
             &&  (nCpStart >= mpDrawEditEngine->GetTextLen( nSP ) + 1) )
     {
@@ -478,7 +478,7 @@ ESelection SwWW8ImplReader::GetESelection( long nCpStart, long nCpEnd )
         nCpEnd -= mpDrawEditEngine->GetTextLen( nEP ) + 1;
         nEP++;
     }
-    return ESelection( nSP, (sal_uInt16)nCpStart, nEP, (sal_uInt16)nCpEnd );
+    return ESelection( nSP, nCpStart, nEP, nCpEnd );
 }
 
 // InsertTxbxStyAttrs() setzt die Style-Attribute in den uebergebenen ItemSet.

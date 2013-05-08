@@ -556,7 +556,7 @@ OUString ScPostIt::GetText() const
     if( const EditTextObject* pEditObj = GetEditTextObject() )
     {
         OUStringBuffer aBuffer;
-        for( sal_uInt16 nPara = 0, nParaCount = pEditObj->GetParagraphCount(); nPara < nParaCount; ++nPara )
+        for( sal_Int32 nPara = 0, nParaCount = pEditObj->GetParagraphCount(); nPara < nParaCount; ++nPara )
         {
             if( nPara > 0 )
                 aBuffer.append( sal_Unicode( '\n' ) );

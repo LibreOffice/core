@@ -1327,7 +1327,7 @@ void ScViewData::EditGrowY( sal_Bool bInitial )
         //  because this occurs in the normal progress of editing a formula.
         //  Subsequent calls with empty text might involve changed attributes (including
         //  font height), so they are treated like normal text.
-        String aText = pEngine->GetText( (sal_uInt16) 0 );
+        String aText = pEngine->GetText(  0 );
         if ( ( aText.Len() == 0 && bInitial ) || aText.GetChar(0) == (sal_Unicode)'=' )
             nAllowedExtra = SC_GROWY_BIG_EXTRA;
     }

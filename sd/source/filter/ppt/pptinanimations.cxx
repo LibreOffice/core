@@ -3070,9 +3070,9 @@ sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, An
 
                         const EditTextObject& rEditTextObject = pOPO->GetTextObject();
 
-                        const sal_uInt16 nParaCount = rEditTextObject.GetParagraphCount();
+                        const sal_Int32 nParaCount = rEditTextObject.GetParagraphCount();
 
-                        sal_uInt16 nPara = 0;
+                        sal_Int32 nPara = 0;
 
                         while( (nPara < nParaCount) && (begin > 0) )
                         {
@@ -3086,7 +3086,8 @@ sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, An
                         {
                             ParagraphTarget aParaTarget;
                             rTarget >>= aParaTarget.Shape;
-                            aParaTarget.Paragraph = nPara;
+                            /* FIXME: Paragraph should be sal_Int32 as well */
+                            aParaTarget.Paragraph = static_cast<sal_Int16>(nPara);
                             rTarget = makeAny( aParaTarget );
 
                             rSubType = ShapeAnimationSubType::ONLY_TEXT;

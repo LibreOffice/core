@@ -86,14 +86,14 @@ namespace accessibility
     ESelection MakeSelection( sal_Int32 nStartPara, sal_Int32 nStartIndex,
                               sal_Int32 nEndPara, sal_Int32 nEndIndex )
     {
-        DBG_ASSERT(nStartPara >= 0 && nStartPara <= USHRT_MAX &&
+        DBG_ASSERT(nStartPara >= 0 && nStartPara <= SAL_MAX_INT32 &&
                    nStartIndex >= 0 && nStartIndex <= USHRT_MAX &&
-                   nEndPara >= 0 && nEndPara <= USHRT_MAX &&
+                   nEndPara >= 0 && nEndPara <= SAL_MAX_INT32 &&
                    nEndIndex >= 0 && nEndIndex <= USHRT_MAX ,
                    "AccessibleStaticTextBase_Impl::MakeSelection: index value overflow");
 
-        return ESelection( static_cast< sal_uInt16 >(nStartPara), static_cast< sal_uInt16 >(nStartIndex),
-                           static_cast< sal_uInt16 >(nEndPara), static_cast< sal_uInt16 >(nEndIndex) );
+        return ESelection( nStartPara, static_cast< sal_uInt16 >(nStartIndex),
+                           nEndPara, static_cast< sal_uInt16 >(nEndIndex) );
     }
 
     //------------------------------------------------------------------------
@@ -321,11 +321,18 @@ namespace accessibility
 
     sal_Int32 AccessibleStaticTextBase_Impl::Internal2Index( EPosition nEEIndex ) const
     {
+        // XXX checks for overflow and returns maximum if so
         sal_Int32 aRes(0);
-        int i;
-        for(i=0; i<nEEIndex.nPara; ++i)
-            aRes += GetParagraph(i).getCharacterCount();
+        for(sal_Int32 i=0; i<nEEIndex.nPara; ++i)
+        {
+            sal_Int32 nCount = GetParagraph(i).getCharacterCount();
+            if (SAL_MAX_INT32 - aRes > nCount)
+                return SAL_MAX_INT32;
+            aRes += nCount;
+        }
 
+        if (SAL_MAX_INT32 - aRes > nEEIndex.nIndex)
+            return SAL_MAX_INT32;
         return aRes + nEEIndex.nIndex;
     }
 
@@ -365,11 +372,11 @@ namespace accessibility
             if( nCurrIndex > nFlatIndex )
             {
                 // check overflow
-                DBG_ASSERT(nCurrPara >= 0 && nCurrPara <= USHRT_MAX &&
+                DBG_ASSERT(nCurrPara >= 0 && nCurrPara <= SAL_MAX_INT32 &&
                            nFlatIndex - nCurrIndex + nCurrCount >= 0 && nFlatIndex - nCurrIndex + nCurrCount <= USHRT_MAX ,
                            "AccessibleStaticTextBase_Impl::Index2Internal: index value overflow");
 
-                return EPosition( static_cast< sal_uInt16 >(nCurrPara), static_cast< sal_uInt16 >(nFlatIndex - nCurrIndex + nCurrCount) );
+                return EPosition( nCurrPara, static_cast< sal_uInt16 >(nFlatIndex - nCurrIndex + nCurrCount) );
             }
         }
 
@@ -377,11 +384,11 @@ namespace accessibility
         if( bExclusive && nCurrIndex == nFlatIndex )
         {
             // check overflow
-            DBG_ASSERT(nCurrPara >= 0 && nCurrPara <= USHRT_MAX &&
+            DBG_ASSERT(nCurrPara > 0 && nCurrPara <= SAL_MAX_INT32 &&
                        nFlatIndex - nCurrIndex + nCurrCount >= 0 && nFlatIndex - nCurrIndex + nCurrCount <= USHRT_MAX ,
                        "AccessibleStaticTextBase_Impl::Index2Internal: index value overflow");
 
-            return EPosition( static_cast< sal_uInt16 >(nCurrPara-1), static_cast< sal_uInt16 >(nFlatIndex - nCurrIndex + nCurrCount) );
+            return EPosition( nCurrPara-1, static_cast< sal_uInt16 >(nFlatIndex - nCurrIndex + nCurrCount) );
         }
 
         // not found? Out of bounds

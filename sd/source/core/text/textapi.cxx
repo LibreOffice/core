@@ -171,7 +171,7 @@ void TextApiObject::SetText( OutlinerParaObject& rText )
         pModel->AddUndo( new UndoTextAPIChanged( *pModel, this ) );
 
     mpSource->SetText( rText );
-    maSelection.nStartPara = 0xffff;
+    maSelection.nStartPara = EE_PARA_MAX_COUNT;
 }
 
 String TextApiObject::GetText()

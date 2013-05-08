@@ -465,7 +465,7 @@ bool SdrTextObj::HasTextImpl( SdrOutliner* pOutliner )
     if(pOutliner)
     {
         Paragraph* p1stPara=pOutliner->GetParagraph( 0 );
-        sal_uIntPtr nParaAnz=pOutliner->GetParagraphCount();
+        sal_Int32 nParaAnz=pOutliner->GetParagraphCount();
         if(p1stPara==NULL)
             nParaAnz=0;
 
@@ -840,7 +840,7 @@ OutlinerParaObject* SdrTextObj::GetEditOutlinerParaObject() const
     OutlinerParaObject* pPara=NULL;
     if( HasTextImpl( pEdtOutl ) )
     {
-        sal_uInt16 nParaAnz = static_cast< sal_uInt16 >( pEdtOutl->GetParagraphCount() );
+        sal_Int32 nParaAnz = pEdtOutl->GetParagraphCount();
         pPara = pEdtOutl->CreateParaObject(0, nParaAnz);
     }
     return pPara;

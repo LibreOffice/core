@@ -963,8 +963,8 @@ void ScColumn::RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow )
                 pDocument->ApplyAsianEditSettings( *pEngine );
             }
             pEngine->SetText( *pData );
-            sal_uInt16 nParCount = pEngine->GetParagraphCount();
-            for (sal_uInt16 nPar=0; nPar<nParCount; nPar++)
+            sal_Int32 nParCount = pEngine->GetParagraphCount();
+            for (sal_Int32 nPar=0; nPar<nParCount; nPar++)
             {
                 pEngine->QuickRemoveCharAttribs( nPar );
                 const SfxItemSet& rOld = pEngine->GetParaAttribs( nPar );

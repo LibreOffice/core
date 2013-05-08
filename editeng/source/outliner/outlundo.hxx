@@ -38,14 +38,14 @@ public:
 class OutlinerUndoChangeParaFlags : public OutlinerUndoBase
 {
 private:
-    sal_uInt16      mnPara;
+    sal_Int32       mnPara;
     sal_uInt16      mnOldFlags;
     sal_uInt16      mnNewFlags;
 
     void ImplChangeFlags( sal_uInt16 nFlags );
 
 public:
-    OutlinerUndoChangeParaFlags( Outliner* pOutliner, sal_uInt16 nPara, sal_uInt16 nOldDepth, sal_uInt16 nNewDepth );
+    OutlinerUndoChangeParaFlags( Outliner* pOutliner, sal_Int32 nPara, sal_uInt16 nOldDepth, sal_uInt16 nNewDepth );
 
     virtual void    Undo();
     virtual void    Redo();
@@ -54,7 +54,7 @@ public:
 class OutlinerUndoChangeParaNumberingRestart : public OutlinerUndoBase
 {
 private:
-    sal_uInt16      mnPara;
+    sal_Int32       mnPara;
 
     struct ParaRestartData
     {
@@ -67,7 +67,7 @@ private:
 
     void ImplApplyData( const ParaRestartData& rData );
 public:
-    OutlinerUndoChangeParaNumberingRestart( Outliner* pOutliner, sal_uInt16 nPara,
+    OutlinerUndoChangeParaNumberingRestart( Outliner* pOutliner, sal_Int32 nPara,
         sal_Int16 nOldNumberingStartValue, sal_Int16 mnNewNumberingStartValue,
         sal_Bool  nOldbParaIsNumberingRestart, sal_Bool nbNewParaIsNumberingRestart );
 
@@ -79,12 +79,12 @@ class OutlinerUndoChangeDepth : public OutlinerUndoBase
 {
     using SfxUndoAction::Repeat;
 private:
-    sal_uInt16          mnPara;
+    sal_Int32       mnPara;
     sal_Int16       mnOldDepth;
     sal_Int16       mnNewDepth;
 
 public:
-                    OutlinerUndoChangeDepth( Outliner* pOutliner, sal_uInt16 nPara, sal_Int16 nOldDepth, sal_Int16 nNewDepth );
+                    OutlinerUndoChangeDepth( Outliner* pOutliner, sal_Int32 nPara, sal_Int16 nOldDepth, sal_Int16 nNewDepth );
 
     virtual void    Undo();
     virtual void    Redo();
@@ -98,10 +98,10 @@ class OutlinerUndoCheckPara : public OutlinerUndoBase
 {
     using SfxUndoAction::Repeat;
 private:
-    sal_uInt16          mnPara;
+    sal_Int32       mnPara;
 
 public:
-                    OutlinerUndoCheckPara( Outliner* pOutliner, sal_uInt16 nPara );
+                    OutlinerUndoCheckPara( Outliner* pOutliner, sal_Int32 nPara );
 
     virtual void    Undo();
     virtual void    Redo();
@@ -126,7 +126,7 @@ public:
 
     sal_uInt16* pParas;  // 0 == nCount contains paragraph number
     Outliner* pOutliner;
-    sal_uInt16 nCount;
+    sal_Int32 nCount;
 };
 
 #endif

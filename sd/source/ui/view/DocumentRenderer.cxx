@@ -1751,7 +1751,7 @@ private:
                     pTextObj = dynamic_cast<SdrTextObj*>(pPage->GetPresObj(PRESOBJ_TEXT));  // Untertitel vorhanden?
                 }
 
-                sal_uLong nParaCount1 = pOutliner->GetParagraphCount();
+                sal_Int32 nParaCount1 = pOutliner->GetParagraphCount();
 
                 if (pTextObj!=NULL
                     && !pTextObj->IsEmptyPresObj()
@@ -1766,7 +1766,7 @@ private:
                     for (sal_Int32 nPara=nParaCount1; nPara<nParaCount2; ++nPara)
                     {
                         Paragraph* pP = pOutliner->GetParagraph(nPara);
-                        if (pP!=NULL && pOutliner->GetDepth((sal_uInt16)nPara) > 0)
+                        if (pP!=NULL && pOutliner->GetDepth(nPara) > 0)
                             pOutliner->SetDepth(pP, 0);
                     }
                 }
@@ -1778,9 +1778,9 @@ private:
             // the current page.
             if (nH > nPageH && pPara!=NULL)
             {
-                sal_uLong nCnt = pOutliner->GetAbsPos(
+                sal_Int32 nCnt = pOutliner->GetAbsPos(
                     pOutliner->GetParagraph( pOutliner->GetParagraphCount() - 1 ) );
-                sal_uLong nParaPos = pOutliner->GetAbsPos( pPara );
+                sal_Int32 nParaPos = pOutliner->GetAbsPos( pPara );
                 nCnt -= nParaPos;
                 pPara = pOutliner->GetParagraph( ++nParaPos );
                 if ( nCnt && pPara )

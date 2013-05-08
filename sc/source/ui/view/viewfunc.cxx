@@ -651,7 +651,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
             if ( !bSimple && aEngine.GetParagraphCount() == 1 )
             {
-                String aParStr = aEngine.GetText( (sal_uInt16) 0 );
+                String aParStr = aEngine.GetText( 0 );
                 if ( aParStr.GetChar(0) == '=' )
                     bSimple = sal_True;
             }

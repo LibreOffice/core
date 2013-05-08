@@ -172,9 +172,9 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion, OutputD
 
     ContentNode* pStartNode = aTmpSel.Min().GetNode();
     ContentNode* pEndNode = aTmpSel.Max().GetNode();
-    sal_uInt16 nStartPara = pEditEngine->GetEditDoc().GetPos( pStartNode );
-    sal_uInt16 nEndPara = pEditEngine->GetEditDoc().GetPos( pEndNode );
-    for ( sal_uInt16 nPara = nStartPara; nPara <= nEndPara; nPara++ )
+    sal_Int32 nStartPara = pEditEngine->GetEditDoc().GetPos( pStartNode );
+    sal_Int32 nEndPara = pEditEngine->GetEditDoc().GetPos( pEndNode );
+    for ( sal_Int32 nPara = nStartPara; nPara <= nEndPara; nPara++ )
     {
         ParaPortion* pTmpPortion = pEditEngine->GetParaPortions().SafeGetObject( nPara );
         DBG_ASSERT( pTmpPortion, "Portion in Selection not found!" );
@@ -653,8 +653,8 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
     EditPaM aPaM( aEditSelection.Max() );
 
     sal_uInt16 nTextPortionStart = 0;
-    sal_uInt16 nPara = pEditEngine->GetEditDoc().GetPos( aPaM.GetNode() );
-    if (nPara == USHRT_MAX) // #i94322
+    sal_Int32 nPara = pEditEngine->GetEditDoc().GetPos( aPaM.GetNode() );
+    if (nPara == EE_PARA_NOT_FOUND) // #i94322
         return;
 
     const ParaPortion* pParaPortion = pEditEngine->GetParaPortions()[nPara];
@@ -1145,8 +1145,8 @@ String ImpEditView::SpellIgnoreOrAddWord( sal_Bool bAdd )
                     xDic->add( aWord, sal_False, String() );
             }
             EditDoc& rDoc = pEditEngine->GetEditDoc();
-            sal_uInt16 nNodes = rDoc.Count();
-            for ( sal_uInt16 n = 0; n < nNodes; n++ )
+            sal_Int32 nNodes = rDoc.Count();
+            for ( sal_Int32 n = 0; n < nNodes; n++ )
             {
                 ContentNode* pNode = rDoc.GetObject( n );
                 pNode->GetWrongList()->MarkWrongsInvalid();
@@ -1173,7 +1173,7 @@ void ImpEditView::DeleteSelected()
     ShowCursor( DoAutoScroll(), sal_True );
 }
 
-const SvxFieldItem* ImpEditView::GetField( const Point& rPos, sal_uInt16* pPara, sal_uInt16* pPos ) const
+const SvxFieldItem* ImpEditView::GetField( const Point& rPos, sal_Int32* pPara, sal_uInt16* pPos ) const
 {
     if( !GetOutputArea().IsInside( rPos ) )
         return 0;
@@ -1208,10 +1208,10 @@ const SvxFieldItem* ImpEditView::GetField( const Point& rPos, sal_uInt16* pPara,
     return NULL;
 }
 
-sal_Bool ImpEditView::IsBulletArea( const Point& rPos, sal_uInt16* pPara )
+sal_Bool ImpEditView::IsBulletArea( const Point& rPos, sal_Int32* pPara )
 {
     if ( pPara )
-        *pPara = 0xFFFF;
+        *pPara = EE_PARA_NOT_FOUND;
 
     if( !GetOutputArea().IsInside( rPos ) )
         return sal_False;
@@ -1221,7 +1221,7 @@ sal_Bool ImpEditView::IsBulletArea( const Point& rPos, sal_uInt16* pPara )
 
     if ( aPaM.GetIndex() == 0 )
     {
-        sal_uInt16 nPara = pEditEngine->GetEditDoc().GetPos( aPaM.GetNode() );
+        sal_Int32 nPara = pEditEngine->GetEditDoc().GetPos( aPaM.GetNode() );
         Rectangle aBulletArea = pEditEngine->GetBulletArea( nPara );
         long nY = pEditEngine->GetDocPosTopLeft( nPara ).Y();
         const ParaPortion* pParaPortion = pEditEngine->GetParaPortions()[nPara];
@@ -1356,9 +1356,9 @@ sal_Bool ImpEditView::IsInSelection( const EditPaM& rPaM )
 
     aSel.Adjust( pEditEngine->GetEditDoc() );
 
-    sal_uInt16 nStartNode = pEditEngine->GetEditDoc().GetPos( aSel.Min().GetNode() );
-    sal_uInt16 nEndNode = pEditEngine->GetEditDoc().GetPos( aSel.Max().GetNode() );
-    sal_uInt16 nCurNode = pEditEngine->GetEditDoc().GetPos( rPaM.GetNode() );
+    sal_Int32 nStartNode = pEditEngine->GetEditDoc().GetPos( aSel.Min().GetNode() );
+    sal_Int32 nEndNode = pEditEngine->GetEditDoc().GetPos( aSel.Max().GetNode() );
+    sal_Int32 nCurNode = pEditEngine->GetEditDoc().GetPos( rPaM.GetNode() );
 
     if ( ( nCurNode > nStartNode ) && ( nCurNode < nEndNode ) )
         return sal_True;
@@ -1546,7 +1546,8 @@ void ImpEditView::dragGestureRecognized( const ::com::sun::star::datatransfer::d
     else
     {
         // Field?!
-        sal_uInt16 nPara, nPos;
+        sal_Int32 nPara;
+        sal_uInt16 nPos;
         Point aMousePos = GetWindow()->PixelToLogic( aMousePosPixel );
         const SvxFieldItem* pField = GetField( aMousePos, &nPara, &nPos );
         if ( pField )
@@ -1568,7 +1569,7 @@ void ImpEditView::dragGestureRecognized( const ::com::sun::star::datatransfer::d
             EditPaM aStartPaM( pEditEngine->GetEditDoc().GetObject( nPara ), 0 );
             EditPaM aEndPaM( aStartPaM );
             const SfxInt16Item& rLevel = (const SfxInt16Item&) pEditEngine->GetParaAttrib( nPara, EE_PARA_OUTLLEVEL );
-            for ( sal_uInt16 n = nPara +1; n < pEditEngine->GetEditDoc().Count(); n++ )
+            for ( sal_Int32 n = nPara +1; n < pEditEngine->GetEditDoc().Count(); n++ )
             {
                 const SfxInt16Item& rL = (const SfxInt16Item&) pEditEngine->GetParaAttrib( n, EE_PARA_OUTLLEVEL );
                 if ( rL.GetValue() > rLevel.GetValue() )
@@ -1627,7 +1628,7 @@ void ImpEditView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSo
                 ESelection aNewSel( pDragAndDropInfo->aDropSel.nEndPara, pDragAndDropInfo->aDropSel.nEndPos,
                                     pDragAndDropInfo->aDropSel.nEndPara, pDragAndDropInfo->aDropSel.nEndPos );
                 sal_Bool bBeforeSelection = aDropPos.IsLess( pDragAndDropInfo->aBeginDragSel );
-                sal_uInt16 nParaDiff = pDragAndDropInfo->aBeginDragSel.nEndPara - pDragAndDropInfo->aBeginDragSel.nStartPara;
+                sal_Int32 nParaDiff = pDragAndDropInfo->aBeginDragSel.nEndPara - pDragAndDropInfo->aBeginDragSel.nStartPara;
                 if ( bBeforeSelection )
                 {
                     // Adjust aToBeDelSel.
@@ -1858,7 +1859,7 @@ void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTarge
             pDragAndDropInfo->aDropDest = aPaM;
             if ( pDragAndDropInfo->bOutlinerMode )
             {
-                sal_uInt16 nPara = pEditEngine->GetEditDoc().GetPos( aPaM.GetNode() );
+                sal_Int32 nPara = pEditEngine->GetEditDoc().GetPos( aPaM.GetNode() );
                 ParaPortion* pPPortion = pEditEngine->GetParaPortions().SafeGetObject( nPara );
                 long nDestParaStartY = pEditEngine->GetParaPortions().GetYOffset( pPPortion );
                 long nRel = aDocPos.Y() - nDestParaStartY;

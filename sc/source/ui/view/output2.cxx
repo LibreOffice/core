@@ -2100,8 +2100,8 @@ static void lcl_ScaleFonts( EditEngine& rEngine, long nPercent )
     if ( bUpdateMode )
         rEngine.SetUpdateMode( false );
 
-    sal_uInt16 nParCount = rEngine.GetParagraphCount();
-    for (sal_uInt16 nPar=0; nPar<nParCount; nPar++)
+    sal_Int32 nParCount = rEngine.GetParagraphCount();
+    for (sal_Int32 nPar=0; nPar<nParCount; nPar++)
     {
         std::vector<sal_uInt16> aPortions;
         rEngine.GetPortions( nPar, aPortions );

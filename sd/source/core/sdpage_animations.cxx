@@ -106,6 +106,8 @@ void SdPage::onParagraphInserted( ::Outliner* pOutliner, Paragraph* pPara, SdrOb
     {
         ParagraphTarget aTarget;
         aTarget.Shape = Reference< XShape >( pObj->getUnoShape(), UNO_QUERY );
+        /* FIXME: Paragraph should be sal_Int32, though more than 64k
+         * paragrapsh at a shape are unlikely.. */
         aTarget.Paragraph = (sal_Int16)pOutliner->GetAbsPos( pPara );
 
         getMainSequence()->insertTextRange( makeAny( aTarget ) );
@@ -119,6 +121,8 @@ void SdPage::onParagraphRemoving( ::Outliner* pOutliner, Paragraph* pPara, SdrOb
     {
         ParagraphTarget aTarget;
         aTarget.Shape = Reference< XShape >( pObj->getUnoShape(), UNO_QUERY );
+        /* FIXME: Paragraph should be sal_Int32, though more than 64k
+         * paragrapsh at a shape are unlikely.. */
         aTarget.Paragraph = (sal_Int16)pOutliner->GetAbsPos( pPara );
 
         getMainSequence()->disposeTextRange( makeAny( aTarget ) );

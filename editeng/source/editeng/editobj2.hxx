@@ -208,28 +208,28 @@ public:
     void                    SetPortionInfo( XParaPortionList* pP )
                                 { pPortionInfo = pP; }
 
-    size_t GetParagraphCount() const;
-    String GetText(size_t nParagraph) const;
+    sal_Int32 GetParagraphCount() const;
+    String GetText(sal_Int32 nParagraph) const;
 
     void ClearPortionInfo();
 
     bool HasOnlineSpellErrors() const;
 
-    void GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>& rLst ) const;
+    void GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const;
 
     bool RemoveCharAttribs( sal_uInt16 nWhich = 0 );
 
     bool IsFieldObject() const;
     const SvxFieldItem* GetField() const;
-    const SvxFieldData* GetFieldData(size_t nPara, size_t nPos, sal_Int32 nType) const;
+    const SvxFieldData* GetFieldData(sal_Int32 nPara, size_t nPos, sal_Int32 nType) const;
 
     bool HasField( sal_Int32 nType = com::sun::star::text::textfield::Type::UNSPECIFIED ) const;
 
-    const SfxItemSet& GetParaAttribs(size_t nPara) const;
-    void SetParaAttribs(size_t nPara, const SfxItemSet& rAttribs);
+    const SfxItemSet& GetParaAttribs(sal_Int32 nPara) const;
+    void SetParaAttribs(sal_Int32 nPara, const SfxItemSet& rAttribs);
 
-    void GetStyleSheet(size_t nPara, String& rName, SfxStyleFamily& eFamily) const;
-    void SetStyleSheet(size_t nPara, const String& rName, const SfxStyleFamily& eFamily);
+    void GetStyleSheet(sal_Int32 nPara, String& rName, SfxStyleFamily& eFamily) const;
+    void SetStyleSheet(sal_Int32 nPara, const String& rName, const SfxStyleFamily& eFamily);
     bool ChangeStyleSheets(
         const XubString& rOldName, SfxStyleFamily eOldFamily, const String& rNewName, SfxStyleFamily eNewFamily );
     void ChangeStyleSheetName( SfxStyleFamily eFamily, const XubString& rOldName, const XubString& rNewName );

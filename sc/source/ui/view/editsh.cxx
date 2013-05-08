@@ -304,7 +304,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
         case SID_SELECTALL:
             {
-                sal_uInt16 nPar = pEngine->GetParagraphCount();
+                sal_Int32 nPar = pEngine->GetParagraphCount();
                 if (nPar)
                 {
                     xub_StrLen nLen = pEngine->GetTextLen(nPar-1);

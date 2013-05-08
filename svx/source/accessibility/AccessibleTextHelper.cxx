@@ -257,7 +257,7 @@ namespace accessibility
 
     AccessibleTextHelper_Impl::AccessibleTextHelper_Impl() :
         mxFrontEnd( NULL ),
-        maLastSelection( EE_PARA_NOT_FOUND,EE_PARA_NOT_FOUND,EE_PARA_NOT_FOUND,EE_PARA_NOT_FOUND ),
+        maLastSelection( EE_PARA_NOT_FOUND,EE_INDEX_NOT_FOUND,EE_PARA_NOT_FOUND,EE_INDEX_NOT_FOUND ),
         mnFirstVisibleChild( -1 ),
         mnLastVisibleChild( -2 ),
         mnStartIndex( 0 ),
@@ -562,7 +562,7 @@ namespace accessibility
                         OSL_TRACE("AccessibleTextHelper_Impl::UpdateSelection(): Parent has focus!");
                     }
 
-                    sal_uInt16 nMaxValidParaIndex( static_cast< sal_uInt16 >( GetTextForwarder().GetParagraphCount() ) - 1 );
+                    sal_Int32 nMaxValidParaIndex( GetTextForwarder().GetParagraphCount() - 1 );
 
                     // notify all affected paragraphs (TODO: may be suboptimal,
                     // since some paragraphs might stay selected)
@@ -674,7 +674,7 @@ namespace accessibility
                             ESelection aTmpSel( aSelection );
                             aTmpSel.Adjust();
                             // first submit event for new and changed selection
-                            sal_uInt32 nPara = aTmpSel.nStartPara;
+                            sal_Int32 nPara = aTmpSel.nStartPara;
                             for ( ; nPara <= aTmpSel.nEndPara; ++nPara )
                             {
                                 if ( nPara < aTmpLastSel.nStartPara ||
@@ -835,7 +835,7 @@ namespace accessibility
                 DBG_ASSERT(nCurrPara >= 0 && nCurrPara <= USHRT_MAX,
                            "AccessibleTextHelper_Impl::UpdateVisibleChildren: index value overflow");
 
-                aTmpBB = rCacheTF.GetParaBounds( static_cast< sal_uInt16 >( nCurrPara ) );
+                aTmpBB = rCacheTF.GetParaBounds( nCurrPara );
 
                 // convert to screen coordinates
                 aParaBB = ::accessibility::AccessibleEditableTextPara::LogicToPixel( aTmpBB, rCacheTF.GetMapMode(), rCacheVF );
@@ -1102,13 +1102,13 @@ namespace accessibility
             @return number of changed paragraphs, -1 for
             "every paragraph changed"
         */
-        int GetNumberOfParasChanged() { return mnParasChanged; }
+        sal_Int32 GetNumberOfParasChanged() { return mnParasChanged; }
         /** Query index of last added/removed paragraph
 
             @return index of lastly added paragraphs, -1 for none
             added so far.
         */
-        int GetParaIndex() { return mnParaIndex; }
+        sal_Int32 GetParaIndex() { return mnParaIndex; }
         /** Query hint id of last interesting event
 
             @return hint id of last interesting event (REMOVED/INSERTED).
@@ -1119,9 +1119,9 @@ namespace accessibility
         /** number of paragraphs changed during queue processing. -1 for
             "every paragraph changed"
         */
-        int mnParasChanged;
+        sal_Int32 mnParasChanged;
         /// index of paragraph added/removed last
-        int mnParaIndex;
+        sal_Int32 mnParaIndex;
         /// TextHint ID (removed/inserted) of last interesting event
         int mnHintId;
     };
@@ -1302,7 +1302,7 @@ namespace accessibility
                                 // #108900# Delegate change event to children
                                 AccessibleTextHelper_ChildrenTextChanged aNotifyChildrenFunctor;
 
-                                if( nPara == static_cast<sal_Int32>(EE_PARA_ALL) )
+                                if( nPara == EE_PARA_ALL )
                                 {
                                     // #108900# Call every child
                                     ::std::for_each( maParaManager.begin(), maParaManager.end(),
@@ -1374,8 +1374,8 @@ namespace accessibility
                                 // change children state
                                 maParaManager.SetActive( sal_False );
 
-                                maLastSelection = ESelection( EE_PARA_NOT_FOUND, EE_PARA_NOT_FOUND,
-                                                              EE_PARA_NOT_FOUND, EE_PARA_NOT_FOUND);
+                                maLastSelection = ESelection( EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND,
+                                                              EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND);
                                 break;
                             }
                             default:
@@ -1696,7 +1696,7 @@ namespace accessibility
             DBG_ASSERT(nChild >= 0 && nChild <= USHRT_MAX,
                        "AccessibleTextHelper_Impl::getAccessibleAt: index value overflow");
 
-            Rectangle aParaBounds( rCacheTF.GetParaBounds( static_cast< sal_uInt16 > (nChild) ) );
+            Rectangle aParaBounds( rCacheTF.GetParaBounds( nChild ) );
 
             if( aParaBounds.IsInside( aLogPoint ) )
                 return getAccessibleChild( nChild - mnFirstVisibleChild + GetStartIndex() );

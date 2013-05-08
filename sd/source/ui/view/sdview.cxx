@@ -606,7 +606,7 @@ void View::SelectAll()
     {
         OutlinerView* pOLV = GetTextEditOutlinerView();
         const ::Outliner* pOutliner = GetTextEditOutliner();
-        pOLV->SelectRange( 0, (sal_uInt16) pOutliner->GetParagraphCount() );
+        pOLV->SelectRange( 0, pOutliner->GetParagraphCount() );
     }
     else
     {
@@ -1177,7 +1177,7 @@ void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
             // new paragraph, depending on the paragraph depth
             SfxStyleSheetBasePool* pStylePool = GetDoc().GetStyleSheetPool();
 
-            for ( sal_uInt16 nPara = pInfos->nStartPara; nPara <= pInfos->nEndPara; nPara++ )
+            for ( sal_Int32 nPara = pInfos->nStartPara; nPara <= pInfos->nEndPara; nPara++ )
             {
                 sal_Int16 nDepth = pOutliner->GetDepth( nPara );
 
@@ -1200,7 +1200,7 @@ void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
         else
         {
             // just put the object style on each new paragraph
-            for ( sal_uInt16 nPara = pInfos->nStartPara; nPara <= pInfos->nEndPara; nPara++ )
+            for ( sal_Int32 nPara = pInfos->nStartPara; nPara <= pInfos->nEndPara; nPara++ )
             {
                 pOutliner->SetStyleSheet( nPara, pStyleSheet );
             }

@@ -78,9 +78,15 @@ namespace accessibility
             mnFocusedChild = -1;
     }
 
-    sal_uInt32 AccessibleParaManager::GetNum() const
+    sal_Int32 AccessibleParaManager::GetNum() const
     {
-        return maChildren.size();
+        size_t nSize = maChildren.size();
+        if (nSize > SAL_MAX_INT32)
+        {
+            SAL_WARN( "editeng", "AccessibleParaManager::GetNum - overflow " << nSize);
+            return SAL_MAX_INT32;
+        }
+        return static_cast<sal_Int32>(nSize);
     }
 
     AccessibleParaManager::VectorOfChildren::iterator AccessibleParaManager::begin()
@@ -103,11 +109,12 @@ namespace accessibility
         return maChildren.end();
     }
 
-    void AccessibleParaManager::Release( sal_uInt32 nPara )
+    void AccessibleParaManager::Release( sal_Int32 nPara )
     {
-        DBG_ASSERT( maChildren.size() > nPara, "AccessibleParaManager::Release: invalid index" );
+        DBG_ASSERT( 0 <= nPara && maChildren.size() > static_cast<size_t>(nPara),
+                "AccessibleParaManager::Release: invalid index" );
 
-        if( maChildren.size() > nPara )
+        if( 0 <= nPara && maChildren.size() > static_cast<size_t>(nPara) )
         {
             ShutdownPara( GetChild( nPara ) );
 
@@ -116,14 +123,15 @@ namespace accessibility
         }
     }
 
-    void AccessibleParaManager::FireEvent( sal_uInt32 nPara,
+    void AccessibleParaManager::FireEvent( sal_Int32 nPara,
                                            const sal_Int16 nEventId,
                                            const uno::Any& rNewValue,
                                            const uno::Any& rOldValue ) const
     {
-        DBG_ASSERT( maChildren.size() > nPara, "AccessibleParaManager::FireEvent: invalid index" );
+        DBG_ASSERT( 0 <= nPara && maChildren.size() > static_cast<size_t>(nPara),
+                "AccessibleParaManager::FireEvent: invalid index" );
 
-        if( maChildren.size() > nPara )
+        if( 0 <= nPara && maChildren.size() > static_cast<size_t>(nPara) )
         {
             WeakPara::HardRefType maChild( GetChild( nPara ).first.get() );
             if( maChild.is() )
@@ -136,11 +144,12 @@ namespace accessibility
         return aChild.is();
     }
 
-    sal_Bool AccessibleParaManager::IsReferencable( sal_uInt32 nChild ) const
+    sal_Bool AccessibleParaManager::IsReferencable( sal_Int32 nChild ) const
     {
-        DBG_ASSERT( maChildren.size() > nChild, "AccessibleParaManager::IsReferencable: invalid index" );
+        DBG_ASSERT( 0 <= nChild && maChildren.size() > static_cast<size_t>(nChild),
+                "AccessibleParaManager::IsReferencable: invalid index" );
 
-        if( maChildren.size() > nChild )
+        if( 0 <= nChild && maChildren.size() > static_cast<size_t>(nChild) )
         {
             // retrieve hard reference from weak one
             return IsReferencable( GetChild( nChild ).first.get() );
@@ -151,11 +160,12 @@ namespace accessibility
         }
     }
 
-    AccessibleParaManager::WeakChild AccessibleParaManager::GetChild( sal_uInt32 nParagraphIndex ) const
+    AccessibleParaManager::WeakChild AccessibleParaManager::GetChild( sal_Int32 nParagraphIndex ) const
     {
-        DBG_ASSERT( maChildren.size() > nParagraphIndex, "AccessibleParaManager::GetChild: invalid index" );
+        DBG_ASSERT( 0 <= nParagraphIndex && maChildren.size() > static_cast<size_t>(nParagraphIndex),
+                "AccessibleParaManager::GetChild: invalid index" );
 
-        if( maChildren.size() > nParagraphIndex )
+        if( 0 <= nParagraphIndex && maChildren.size() > static_cast<size_t>(nParagraphIndex) )
         {
             return maChildren[ nParagraphIndex ];
         }
@@ -168,11 +178,12 @@ namespace accessibility
     AccessibleParaManager::Child AccessibleParaManager::CreateChild( sal_Int32                              nChild,
                                                                      const uno::Reference< XAccessible >&   xFrontEnd,
                                                                      SvxEditSourceAdapter&                  rEditSource,
-                                                                     sal_uInt32                             nParagraphIndex )
+                                                                     sal_Int32                              nParagraphIndex )
     {
-        DBG_ASSERT( maChildren.size() > nParagraphIndex, "AccessibleParaManager::CreateChild: invalid index" );
+        DBG_ASSERT( 0 <= nParagraphIndex && maChildren.size() > static_cast<size_t>(nParagraphIndex),
+                "AccessibleParaManager::CreateChild: invalid index" );
 
-        if( maChildren.size() > nParagraphIndex )
+        if( 0 <= nParagraphIndex && maChildren.size() > static_cast<size_t>(nParagraphIndex) )
         {
             // retrieve hard reference from weak one
             WeakPara::HardRefType aChild( GetChild( nParagraphIndex ).first.get() );
@@ -240,7 +251,7 @@ namespace accessibility
     void AccessibleParaManager::InitChild( AccessibleEditableTextPara&  rChild,
                                            SvxEditSourceAdapter&        rEditSource,
                                            sal_Int32                    nChild,
-                                           sal_uInt32                   nParagraphIndex ) const
+                                           sal_Int32                    nParagraphIndex ) const
     {
         rChild.SetEditSource( &rEditSource );
         rChild.SetIndexInParent( nChild );
@@ -254,7 +265,7 @@ namespace accessibility
             rChild.SetState( AccessibleStateType::EDITABLE );
         }
 
-        if( mnFocusedChild == static_cast<sal_Int32>(nParagraphIndex) )
+        if( mnFocusedChild == nParagraphIndex )
             rChild.SetState( AccessibleStateType::FOCUSED );
 
         // add states passed from outside
@@ -331,17 +342,20 @@ namespace accessibility
         const uno::Any& mrOldValue;
     };
 
-    void AccessibleParaManager::FireEvent( sal_uInt32 nStartPara,
-                                           sal_uInt32 nEndPara,
+    void AccessibleParaManager::FireEvent( sal_Int32 nStartPara,
+                                           sal_Int32 nEndPara,
                                            const sal_Int16 nEventId,
                                            const uno::Any& rNewValue,
                                            const uno::Any& rOldValue ) const
     {
-        DBG_ASSERT( maChildren.size() > nStartPara &&
-                    maChildren.size() >= nEndPara , "AccessibleParaManager::FireEvent: invalid index" );
+        DBG_ASSERT( 0 <= nStartPara && 0 <= nEndPara &&
+                    maChildren.size() > static_cast<size_t>(nStartPara) &&
+                    maChildren.size() >= static_cast<size_t>(nEndPara) ,
+                    "AccessibleParaManager::FireEvent: invalid index" );
 
-        if( maChildren.size() > nStartPara &&
-            maChildren.size() >= nEndPara )
+        if( 0 <= nStartPara && 0 <= nEndPara &&
+                maChildren.size() > static_cast<size_t>(nStartPara) &&
+                maChildren.size() >= static_cast<size_t>(nEndPara) )
         {
             VectorOfChildren::const_iterator front = maChildren.begin();
             VectorOfChildren::const_iterator back = front;
@@ -367,13 +381,16 @@ namespace accessibility
         }
     };
 
-    void AccessibleParaManager::Release( sal_uInt32 nStartPara, sal_uInt32 nEndPara )
+    void AccessibleParaManager::Release( sal_Int32 nStartPara, sal_Int32 nEndPara )
     {
-        DBG_ASSERT( maChildren.size() > nStartPara &&
-                    maChildren.size() >= nEndPara, "AccessibleParaManager::Release: invalid index" );
+        DBG_ASSERT( 0 <= nStartPara && 0 <= nEndPara &&
+                    maChildren.size() > static_cast<size_t>(nStartPara) &&
+                    maChildren.size() >= static_cast<size_t>(nEndPara),
+                    "AccessibleParaManager::Release: invalid index" );
 
-        if( maChildren.size() > nStartPara &&
-            maChildren.size() >= nEndPara )
+        if( 0 <= nStartPara && 0 <= nEndPara &&
+                maChildren.size() > static_cast<size_t>(nStartPara) &&
+                maChildren.size() >= static_cast<size_t>(nEndPara) )
         {
             VectorOfChildren::iterator front = maChildren.begin();
             VectorOfChildren::iterator back = front;

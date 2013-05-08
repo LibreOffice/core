@@ -395,7 +395,7 @@ IMPL_LINK( OutlineView, ParagraphInsertedHdl, ::Outliner *, pOutliner )
 
         Paragraph* pPara = pOutliner->GetHdlParagraph();
 
-        sal_uInt16 nAbsPos = (sal_uInt16)mrOutliner.GetAbsPos( pPara );
+        sal_Int32 nAbsPos = mrOutliner.GetAbsPos( pPara );
 
         UpdateParagraph( nAbsPos );
 
@@ -617,7 +617,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
                 pParagraph = *iter;
 
                 if( !pOutliner->HasParaFlag( pParagraph, PARAFLAG_ISPAGE ) &&
-                    (pOutliner->GetDepth( (sal_uInt16) pOutliner->GetAbsPos( pParagraph ) ) <= 0) )
+                    (pOutliner->GetDepth( pOutliner->GetAbsPos( pParagraph ) ) <= 0) )
                     mnPagesToProcess++;
             }
 
@@ -717,7 +717,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
         }
         pOutliner->UpdateFields();
     }
-    else if ( (pOutliner->GetPrevDepth() == 1) && ( pOutliner->GetDepth( (sal_uInt16) pOutliner->GetAbsPos( pPara ) ) == 2 ) )
+    else if ( (pOutliner->GetPrevDepth() == 1) && ( pOutliner->GetDepth( pOutliner->GetAbsPos( pPara ) ) == 2 ) )
     {
         // how many titles are in front of the title paragraph in question?
         sal_Int32 nPos = -1L;
@@ -757,8 +757,8 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
         if( pPage )
         {
             SfxStyleSheet* pStyleSheet = NULL;
-            sal_uLong nPara = pOutliner->GetAbsPos( pPara );
-            sal_Int16 nDepth = pOutliner->GetDepth( (sal_uInt16) nPara );
+            sal_Int32 nPara = pOutliner->GetAbsPos( pPara );
+            sal_Int16 nDepth = pOutliner->GetDepth( nPara );
             bool bSubTitle = pPage->GetPresObj(PRESOBJ_TEXT) != NULL;
 
             if( pOutliner->HasParaFlag(pPara, PARAFLAG_ISPAGE) )
@@ -785,7 +785,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
 
             // before we set the style sheet we need to preserve the bullet item
             // since all items will be deleted while setting a new style sheet
-             SfxItemSet aOldAttrs( pOutliner->GetParaAttribs( (sal_uInt16)nPara ) );
+             SfxItemSet aOldAttrs( pOutliner->GetParaAttribs( nPara ) );
 
             pOutliner->SetStyleSheet( nPara, pStyleSheet );
 
@@ -793,9 +793,9 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
             if ( pOutliner->GetPrevDepth() != -1 && nDepth != -1 &&
                  aOldAttrs.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON )
             {
-                SfxItemSet aAttrs( pOutliner->GetParaAttribs( (sal_uInt16)nPara ) );
+                SfxItemSet aAttrs( pOutliner->GetParaAttribs( nPara ) );
                 aAttrs.Put( *aOldAttrs.GetItem( EE_PARA_NUMBULLET ) );
-                pOutliner->SetParaAttribs( (sal_uInt16)nPara, aAttrs );
+                pOutliner->SetParaAttribs( nPara, aAttrs );
             }
         }
     }
@@ -868,7 +868,7 @@ IMPL_LINK( OutlineView, BeginMovingHdl, ::Outliner *, pOutliner )
 
     // select the pages belonging to the paragraphs on level 0 to select
     sal_uInt16 nPos = 0;
-    sal_uLong nParaPos = 0;
+    sal_Int32 nParaPos = 0;
     Paragraph* pPara = pOutliner->GetParagraph( 0 );
     std::vector<Paragraph*>::const_iterator fiter;
 
@@ -905,7 +905,7 @@ IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner *, pOutliner )
 
     // look for the first of the selected paragraphs in the new ordering
     sal_uInt16 nPosNewOrder = 0;
-    sal_uLong nParaPos = 0;
+    sal_Int32 nParaPos = 0;
     Paragraph*  pPara = pOutliner->GetParagraph( 0 );
     Paragraph*  pPrev = NULL;
     while (pPara && pPara != pSearchIt)
@@ -1149,7 +1149,7 @@ void OutlineView::FillOutliner()
             mrOutliner.SetDepth(pPara, -1);
 
             // do not apply hard attributes from the previous paragraph
-            mrOutliner.SetParaAttribs( (sal_uInt16)mrOutliner.GetAbsPos(pPara),
+            mrOutliner.SetParaAttribs( mrOutliner.GetAbsPos(pPara),
                                        mrOutliner.GetEmptyItemSet() );
 
             mrOutliner.SetStyleSheet( mrOutliner.GetAbsPos( pPara ), pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE ) );
@@ -1157,9 +1157,9 @@ void OutlineView::FillOutliner()
 
         mrOutliner.SetParaFlag( pPara, PARAFLAG_ISPAGE );
 
-        sal_uLong nPara = mrOutliner.GetAbsPos( pPara );
+        sal_Int32 nPara = mrOutliner.GetAbsPos( pPara );
 
-        UpdateParagraph( (sal_uInt16)nPara );
+        UpdateParagraph( nPara );
 
         // remember paragraph of currently selected page
         if (pPage->IsSelected())
@@ -1177,14 +1177,14 @@ void OutlineView::FillOutliner()
             OutlinerParaObject* pOPO = pTO->GetOutlinerParaObject();
             if (pOPO)
             {
-                sal_uInt16 nParaCount1 = (sal_uInt16)mrOutliner.GetParagraphCount();
+                sal_Int32 nParaCount1 = mrOutliner.GetParagraphCount();
                 sal_Bool bVertical = pOPO->IsVertical();
                 pOPO->SetVertical( sal_False );
                 mrOutliner.AddText(*pOPO);
                 pOPO->SetVertical( bVertical );
 
-                sal_uInt16 nParaCount2 = (sal_uInt16)mrOutliner.GetParagraphCount();
-                for (sal_uInt16 n = nParaCount1; n < nParaCount2; n++)
+                sal_Int32 nParaCount2 = mrOutliner.GetParagraphCount();
+                for (sal_Int32 n = nParaCount1; n < nParaCount2; n++)
                 {
                     if( bSubTitle )
                     {
@@ -1220,7 +1220,7 @@ void OutlineView::FillOutliner()
  */
 IMPL_LINK_NOARG(OutlineView, RemovingPagesHdl)
 {
-    sal_uInt16 nNumOfPages = mrOutliner.GetSelPageCount();
+    sal_Int32 nNumOfPages = mrOutliner.GetSelPageCount();
 
     if (nNumOfPages > PROCESS_WITH_PROGRESS_THRESHOLD)
     {
@@ -1302,7 +1302,7 @@ Paragraph* OutlineView::GetParagraphForPage( ::Outliner& rOutl, SdPage* pPage )
     // we finde the actual page
     sal_uInt32 nPagesToSkip = (pPage->GetPageNum() - 1) >> 1;
 
-    sal_uInt32 nParaPos = 0;
+    sal_Int32 nParaPos = 0;
     Paragraph* pPara = rOutl.GetParagraph( 0 );
     while( pPara )
     {
@@ -1368,7 +1368,7 @@ void OutlineView::SetSelectedPages()
 
     // select the pages belonging to the paragraphs on level 0 to select
     sal_uInt16 nPos = 0;
-    sal_uLong nParaPos = 0;
+    sal_Int32 nParaPos = 0;
     Paragraph *pPara = mrOutliner.GetParagraph( 0 );
     std::vector<Paragraph*>::const_iterator fiter;
 
@@ -1728,7 +1728,7 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo)
         if( pPara && mrOutliner.HasParaFlag(pPara,PARAFLAG_ISPAGE) )
         {
             long nPage = 0; // todo, printing??
-            for ( sal_uInt16 n = 0; n <= pInfo->mnPara; n++ )
+            for ( sal_Int32 n = 0; n <= pInfo->mnPara; n++ )
             {
                 Paragraph* p = mrOutliner.GetParagraph( n );
                 if ( mrOutliner.HasParaFlag(p,PARAFLAG_ISPAGE) )
@@ -1803,7 +1803,7 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo)
 
 // --------------------------------------------------------------------
 
-void OutlineView::UpdateParagraph( sal_uInt16 nPara )
+void OutlineView::UpdateParagraph( sal_Int32 nPara )
 {
     SfxItemSet aNewAttrs2( mrOutliner.GetParaAttribs( nPara ) );
     aNewAttrs2.Put( maLRSpaceItem );
@@ -1823,7 +1823,7 @@ void OutlineView::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
     SdPage* pPage = 0;
     SfxStyleSheetBasePool* pStylePool = GetDoc().GetStyleSheetPool();
 
-    for( sal_uInt16 nPara = pInfos->nStartPara; nPara <= pInfos->nEndPara; nPara++ )
+    for( sal_Int32 nPara = pInfos->nStartPara; nPara <= pInfos->nEndPara; nPara++ )
     {
         Paragraph* pPara = mrOutliner.GetParagraph( nPara );
 

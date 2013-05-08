@@ -1574,7 +1574,7 @@ void ScFiltersTest::testRichTextContentODS()
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, pDoc->GetCellType(aPos));
     const EditTextObject* pEditText = pDoc->GetEditText(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pEditText->GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), pEditText->GetParagraphCount());
     OUString aParaText = pEditText->GetText(0);
     CPPUNIT_ASSERT_EQUAL(OUString("one"), aParaText);
     aParaText = pEditText->GetText(1);
@@ -1587,7 +1587,7 @@ void ScFiltersTest::testRichTextContentODS()
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, pDoc->GetCellType(aPos));
     pEditText = pDoc->GetEditText(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pEditText->GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pEditText->GetParagraphCount());
     aParaText = pEditText->GetText(0);
     CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.indexOf("Sheet name is ") == 0);
     CPPUNIT_ASSERT_MESSAGE("Sheet name field item not found.", pEditText->HasField(text::textfield::Type::TABLE));
@@ -1597,7 +1597,7 @@ void ScFiltersTest::testRichTextContentODS()
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, pDoc->GetCellType(aPos));
     pEditText = pDoc->GetEditText(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pEditText->GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pEditText->GetParagraphCount());
     aParaText = pEditText->GetText(0);
     CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.indexOf("URL: ") == 0);
     CPPUNIT_ASSERT_MESSAGE("URL field item not found.", pEditText->HasField(text::textfield::Type::URL));
@@ -1607,7 +1607,7 @@ void ScFiltersTest::testRichTextContentODS()
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, pDoc->GetCellType(aPos));
     pEditText = pDoc->GetEditText(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pEditText->GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pEditText->GetParagraphCount());
     aParaText = pEditText->GetText(0);
     CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.indexOf("Date: ") == 0);
     CPPUNIT_ASSERT_MESSAGE("Date field item not found.", pEditText->HasField(text::textfield::Type::DATE));
@@ -1617,7 +1617,7 @@ void ScFiltersTest::testRichTextContentODS()
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, pDoc->GetCellType(aPos));
     pEditText = pDoc->GetEditText(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pEditText->GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pEditText->GetParagraphCount());
     aParaText = pEditText->GetText(0);
     CPPUNIT_ASSERT_MESSAGE("Unexpected text.", aParaText.indexOf("Title: ") == 0);
     CPPUNIT_ASSERT_MESSAGE("DocInfo title field item not found.", pEditText->HasField(text::textfield::Type::DOCINFO_TITLE));
@@ -1627,7 +1627,7 @@ void ScFiltersTest::testRichTextContentODS()
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, pDoc->GetCellType(aPos));
     pEditText = pDoc->GetEditText(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pEditText->GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pEditText->GetParagraphCount());
     aParaText = pEditText->GetText(0);
     CPPUNIT_ASSERT_EQUAL(OUString("Sentence with bold and italic."), aParaText);
     std::vector<EECharAttrib> aAttribs;
@@ -1659,7 +1659,7 @@ void ScFiltersTest::testRichTextContentODS()
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_EDIT, pDoc->GetCellType(aPos));
     pEditText = pDoc->GetEditText(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pEditText->GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), pEditText->GetParagraphCount());
     aParaText = pEditText->GetText(0);
     CPPUNIT_ASSERT_EQUAL(OUString("bold"), aParaText);
     aParaText = pEditText->GetText(1);
