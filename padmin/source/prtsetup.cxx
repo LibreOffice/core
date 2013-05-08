@@ -650,7 +650,7 @@ RTSFontSubstPage::RTSFontSubstPage( RTSDialog* pParent ) :
     // fill to box
     PrintFontManager& rFontManager = PrintFontManager::get();
     ::std::list< FastPrintFontInfo > aFonts;
-    rFontManager.getFontListWithFastInfo( aFonts, m_pParent->m_aJobData.m_pParser, false );
+    rFontManager.getFontListWithFastInfo( aFonts, m_pParent->m_aJobData.m_pParser );
     ::std::list< FastPrintFontInfo >::const_iterator it;
     ::boost::unordered_map< OUString, int, OUStringHash > aToMap, aFromMap;
     for( it = aFonts.begin(); it != aFonts.end(); ++it )

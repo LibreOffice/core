@@ -357,8 +357,6 @@ public:
     void                        SetErrorHdl( const Link& rLink ) { maErrorHdl = rLink; }
     const Link&                 GetErrorHdl() const { return maErrorHdl; }
 
-    void                        Compat_OldPrinterMetrics( bool bSet );
-
     /** checks the printer list and updates it necessary
     *
     *   sends a DataChanged event of type DATACHANGED_PRINTER

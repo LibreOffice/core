@@ -181,7 +181,6 @@ bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
         // #i68949#
         case CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME: return mbClipAsCharacterAnchoredWriterFlyFrames;
         case UNIX_FORCE_ZERO_EXT_LEADING: return mbUnixForceZeroExtLeading;
-        case USE_OLD_PRINTER_METRICS: return mbOldPrinterMetrics;
         case TABS_RELATIVE_TO_INDENT : return mbTabRelativeToIndent;
         case PROTECT_FORM: return mbProtectForm;
         // #i89181#
@@ -310,9 +309,6 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
             mbProtectForm = value;
             break;
 
-        case USE_OLD_PRINTER_METRICS:
-            mbOldPrinterMetrics = value;
-            break;
         case TABS_RELATIVE_TO_INDENT:
             mbTabRelativeToIndent = value;
             break;

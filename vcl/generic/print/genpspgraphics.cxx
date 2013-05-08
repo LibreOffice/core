@@ -894,7 +894,7 @@ void GenPspGraphics::GetDevFontList( ImplDevFontList *pList )
 {
     ::std::list< psp::fontID > aList;
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-    rMgr.getFontList( aList, m_pJobData->m_pParser, m_pInfoPrinter->m_bCompatMetrics );
+    rMgr.getFontList( aList, m_pJobData->m_pParser );
 
     ::std::list< psp::fontID >::iterator it;
     psp::FastPrintFontInfo aInfo;

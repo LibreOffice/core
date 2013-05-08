@@ -689,17 +689,6 @@ Printer::~Printer()
         pSVData->maGDIData.mpLastPrinter = mpPrev;
 }
 
-void Printer::Compat_OldPrinterMetrics( bool bSet )
-{
-    // propagate flag
-    if( mpInfoPrinter )
-        mpInfoPrinter->m_bCompatMetrics = bSet;
-
-    // get new font data
-    ImplUpdateFontData( sal_True );
-}
-
-
 sal_uLong Printer::GetCapabilities( sal_uInt16 nType ) const
 {
     if ( IsDisplayPrinter() )

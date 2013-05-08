@@ -65,7 +65,6 @@ namespace com { namespace sun { namespace star { namespace i18n { struct Forbidd
          CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME,
 
          UNIX_FORCE_ZERO_EXT_LEADING,
-         USE_OLD_PRINTER_METRICS,
          TABS_RELATIVE_TO_INDENT,
          PROTECT_FORM,
          // #i89181#
