@@ -91,6 +91,7 @@ private:
 
     GalleryObjectList           aObjectList;
     String                      m_aDestDir;
+    bool                        m_bDestDirRelative;
     SotStorageRef               aSvDrawStorageRef;
     Gallery*                    pParent;
     GalleryThemeEntry*          pThm;
@@ -140,8 +141,10 @@ public:
     SVX_DLLPUBLIC const OUString& GetName() const;
     const OUString&        GetRealName() const;
 
+    // used for building gallery themes during compilation:
     const String&               GetDestDir() const { return m_aDestDir; }
-    void                        SetDestDir(const String& rDestDir) { m_aDestDir = rDestDir; }
+    void                        SetDestDir(const String& rDestDir, bool bRelative = true)
+                                { m_aDestDir = rDestDir; m_bDestDirRelative = bRelative; }
 
     const INetURLObject&        GetThmURL() const;
     SVX_DLLPUBLIC const INetURLObject&      GetSdgURL() const;

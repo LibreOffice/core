@@ -59,6 +59,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	SAL_USE_VCLPLUGIN=svp \
 	$(call gb_Executable_get_command,gengal.bin) \
 		$(call gb_Gallery__make_env_args) \
+		--build-tree \
 		--destdir $(GALLERY_BASEDIR) \
 		--name "$(GALLERY_NAME)" \
 		--path $(call gb_Gallery_get_workdir,$(2))) \
@@ -98,11 +99,14 @@ $(WORKDIR)/Gallery/%.sdv :
 $(WORKDIR)/Gallery/%.thm :
 	touch $@
 
+$(WORKDIR)/Gallery/%.sdg :
+	touch $@
+
 gb_Gallery_get_packagename = Gallery/$(1)
 
 # Create a gallery.
 #
-# basedir will be stripped from paths of the files when they are
+# basedir less one directory will be stripped from paths of the files when they are
 # inserted into the gallery.
 #
 # gb_Gallery_Gallery gallery basedir name
@@ -115,10 +119,12 @@ endef
 define gb_Gallery__Gallery_impl
 $(call gb_Package_Package_internal,$(2),$(call gb_Gallery_get_workdir,$(1)))
 $(call gb_Package_set_outdir,$(2),$(INSTDIR))
+$(call gb_Package_add_file,$(2),$(gb_Gallery_INSTDIR)/$(1).sdg,sg1.sdg)
 $(call gb_Package_add_file,$(2),$(gb_Gallery_INSTDIR)/$(1).sdv,sg1.sdv)
 $(call gb_Package_add_file,$(2),$(gb_Gallery_INSTDIR)/$(1).thm,sg1.thm)
 
-$(call gb_Gallery_get_target,$(1)) : GALLERY_BASEDIR := $(SRCDIR)/$(3)
+# strip URL, without / to help the internal gallery system
+$(call gb_Gallery_get_target,$(1)) : GALLERY_BASEDIR := $(patsubst %/,%,$(call gb_Helper_make_url,$(dir $(SRCDIR)/$(3))))
 $(call gb_Gallery_get_target,$(1)) : GALLERY_FILES :=
 $(call gb_Gallery_get_target,$(1)) : GALLERY_NAME := $(4)
 

@@ -7,13 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Gallery_Gallery,test,extras/source/gallery,Fun Gallery))
+$(eval $(call gb_Package_Package,extras_gallmytheme,$(SRCDIR)/extras/source/gallery/gallery_sound))
 
-$(eval $(call gb_Gallery_add_files,test,\
-	extras/source/gallery/apples.gif \
-	extras/source/gallery/bigapple.gif \
-	extras/source/gallery/flower.gif \
-	extras/source/gallery/sky.gif \
+$(eval $(call gb_Package_set_outdir,extras_gallmytheme,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_files,extras_gallmytheme,presets/gallery,\
+	sg30.sdv \
+	sg30.thm \
 ))
-
-# vim: set noet sw=4 ts=4:

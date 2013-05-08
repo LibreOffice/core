@@ -13,7 +13,7 @@ $(eval $(call gb_Module_add_targets,extras,\
 	AllLangPackage_autotextshare \
 	CustomTarget_autocorr \
 	CustomTarget_glade \
-	Gallery_test \
+	Gallery_sound \
 	Package_autocorr \
 	Package_autotextuser \
 	Package_cfgsrvbitmapunx \
@@ -30,9 +30,9 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_gallenvironment \
 	Package_gallfinance \
 	Package_gallhtmlexpo \
+	Package_gallmytheme \
 	Package_gallpeople \
 	Package_gallroot \
-	Package_gallsound \
 	Package_gallsounds \
 	Package_gallsymbols \
 	Package_gallsystem \

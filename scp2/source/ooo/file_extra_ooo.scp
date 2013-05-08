@@ -235,7 +235,14 @@ File gid_File_Extra_Gallsound
     Dir = FILELIST_DIR;
     USER_FILE_BODY;
     Styles = (FILELIST, WORKSTATION, DONT_OVERWRITE);
-    Name = "extras_gallsound.filelist";
+    Name = "Gallery/sound.filelist";
+End
+
+File gid_File_Extra_Gallmytheme
+    Dir = FILELIST_DIR;
+    USER_FILE_BODY;
+    Styles = (FILELIST, WORKSTATION, DONT_OVERWRITE);
+    Name = "extras_gallmytheme.filelist";
 End
 
 File gid_File_Extra_Gallsounds
