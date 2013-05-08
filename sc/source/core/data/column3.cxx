@@ -435,9 +435,6 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
             (*aIt)->Delete();
         }
     }
-
-    // TODO: Broadcasting is temporarily removed from this method. Add it back
-    // once the broadcaster refactoring is finished.
 }
 
 
