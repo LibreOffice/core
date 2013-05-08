@@ -104,7 +104,7 @@ uno::Reference <task::XStatusIndicator> ScXMLImportWrapper::GetStatusIndicator()
     return xStatusIndicator;
 }
 
-sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiServiceFactory>& xServiceFactory,
+sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XComponentContext>& xContext,
     uno::Reference<frame::XModel>& xModel, uno::Reference<xml::sax::XParser>& xParser,
     xml::sax::InputSource& aParserInput,
     const OUString& sComponentName, const OUString& sDocName,
@@ -169,8 +169,8 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     rDoc.SetRangeOverflowType(0);   // is modified by the importer if limits are exceeded
 
     uno::Reference<xml::sax::XDocumentHandler> xDocHandler(
-        xServiceFactory->createInstanceWithArguments(
-            sComponentName, aArgs ),
+        xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+            sComponentName, aArgs, xContext ),
         uno::UNO_QUERY );
     OSL_ENSURE( xDocHandler.is(), "can't get Calc importer" );
     uno::Reference<document::XImporter> xImporter( xDocHandler, uno::UNO_QUERY );
@@ -317,12 +317,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "sb99857", "ScXMLImportWrapper::Import" );
 
-    uno::Reference<lang::XMultiServiceFactory> xServiceFactory =
-                                        comphelper::getProcessServiceFactory();
     uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
-    OSL_ENSURE( xServiceFactory.is(), "got no service manager" );
-    if( !xServiceFactory.is() )
-        return false;
 
     xml::sax::InputSource aParserInput;
     if (pMedium)
@@ -433,11 +428,10 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
             // RDF metadata: ODF >= 1.2
             try
             {
-                ::comphelper::ComponentContext aContext( xServiceFactory );
                 const uno::Reference< rdf::XDocumentMetadataAccess > xDMA(
                     xModel, uno::UNO_QUERY_THROW );
                 const uno::Reference< rdf::XURI > xBaseURI(
-                    ::sfx2::createBaseURI( aContext.getUNOContext(), xStorage, aBaseURL, aName ) );
+                    ::sfx2::createBaseURI( xContext, xStorage, aBaseURL, aName ) );
                 const uno::Reference< task::XInteractionHandler > xHandler(
                     pObjSh->GetMedium()->GetInteractionHandler() );
                 xDMA->loadMetadataFromStorage( xStorage, xBaseURI, xHandler );
@@ -469,7 +463,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "meta import start" );
 
         nMetaRetval = ImportFromComponent(
-                                xServiceFactory, xModel, xXMLParser, aParserInput,
+                                xContext, xModel, xXMLParser, aParserInput,
                                 bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisMetaImporter")
                                 : OUString("com.sun.star.comp.Calc.XMLMetaImporter"),
                                 "meta.xml", "Meta.xml", aMetaArgs, false);
@@ -513,7 +507,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "settings import start" );
 
             nSettingsRetval = ImportFromComponent(
-                                xServiceFactory, xModel, xXMLParser, aParserInput,
+                                xContext, xModel, xXMLParser, aParserInput,
                                 bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisSettingsImporter")
                                        : OUString("com.sun.star.comp.Calc.XMLSettingsImporter"),
                                 "settings.xml", sEmpty, aSettingsArgs, false);
@@ -525,7 +519,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
         {
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "styles import start" );
 
-            nStylesRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
+            nStylesRetval = ImportFromComponent(xContext, xModel, xXMLParser, aParserInput,
                 bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisStylesImporter")
                        : OUString("com.sun.star.comp.Calc.XMLStylesImporter"),
                 OUString("styles.xml"),
@@ -546,7 +540,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "content import start" );
 
-            nDocRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
+            nDocRetval = ImportFromComponent(xContext, xModel, xXMLParser, aParserInput,
                 bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisContentImporter")
                        : OUString("com.sun.star.comp.Calc.XMLContentImporter"),
                 OUString("content.xml"),
@@ -657,7 +651,7 @@ static bool lcl_HasValidStream(ScDocument& rDoc)
     return false;
 }
 
-sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServiceFactory>& xServiceFactory,
+sal_Bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentContext>& xContext,
     uno::Reference<frame::XModel>& xModel, uno::Reference<xml::sax::XWriter>& xWriter,
     uno::Sequence<beans::PropertyValue>& aDescriptor, const OUString& sName,
     const OUString& sMediaType, const OUString& sComponentName,
@@ -704,8 +698,9 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
     xWriter->setOutputStream( xOut );
 
     uno::Reference<document::XFilter> xFilter(
-        xServiceFactory->createInstanceWithArguments( sComponentName , aArgs ),
-            uno::UNO_QUERY );
+        xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+            sComponentName , aArgs, xContext ),
+        uno::UNO_QUERY );
     OSL_ENSURE( xFilter.is(), "can't get exporter" );
     uno::Reference<document::XExporter> xExporter( xFilter, uno::UNO_QUERY );
     uno::Reference<lang::XComponent> xComponent( xModel, uno::UNO_QUERY );
@@ -774,11 +769,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "sb99857", "ScXMLImportWrapper::Export" );
 
-    uno::Reference<lang::XMultiServiceFactory> xServiceFactory(comphelper::getProcessServiceFactory());
     uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
-    OSL_ENSURE( xServiceFactory.is(), "got no service manager" );
-    if( !xServiceFactory.is() )
-        return false;
 
     uno::Reference<xml::sax::XWriter> xWriter = xml::sax::Writer::create(xContext);
 
@@ -899,7 +890,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "meta export start" );
 
-            bMetaRet = ExportToComponent(xServiceFactory, xModel, xWriter, aDescriptor,
+            bMetaRet = ExportToComponent(xContext, xModel, xWriter, aDescriptor,
                 OUString("meta.xml"),
                 sTextMediaType,
                 bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisMetaExporter")
@@ -940,7 +931,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "styles export start" );
 
-            bStylesRet = ExportToComponent(xServiceFactory, xModel, xWriter, aDescriptor,
+            bStylesRet = ExportToComponent(xContext, xModel, xWriter, aDescriptor,
                 OUString("styles.xml"),
                 sTextMediaType,
                 bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisStylesExporter")
@@ -964,7 +955,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "content export start" );
 
-            bDocRet = ExportToComponent(xServiceFactory, xModel, xWriter, aDescriptor,
+            bDocRet = ExportToComponent(xContext, xModel, xWriter, aDescriptor,
                 OUString("content.xml"),
                 sTextMediaType,
                 bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisContentExporter")
@@ -992,7 +983,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "settings export start" );
 
-            bSettingsRet = ExportToComponent(xServiceFactory, xModel, xWriter, aDescriptor,
+            bSettingsRet = ExportToComponent(xContext, xModel, xWriter, aDescriptor,
                 OUString("settings.xml"),
                 sTextMediaType,
                 bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisSettingsExporter")

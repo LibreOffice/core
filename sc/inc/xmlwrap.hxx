@@ -50,7 +50,7 @@ class ScXMLImportWrapper
 
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator> GetStatusIndicator();
 
-    sal_uInt32 ImportFromComponent(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& xServiceFactory,
+    sal_uInt32 ImportFromComponent(const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& xContext,
         com::sun::star::uno::Reference<com::sun::star::frame::XModel>& xModel,
         com::sun::star::uno::Reference<com::sun::star::xml::sax::XParser>& xParser,
         com::sun::star::xml::sax::InputSource& aParserInput,
@@ -58,7 +58,7 @@ class ScXMLImportWrapper
         com::sun::star::uno::Sequence<com::sun::star::uno::Any>& aArgs,
         sal_Bool bMustBeSuccessfull);
 
-    sal_Bool ExportToComponent(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& xServiceFactory,
+    sal_Bool ExportToComponent(const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& xContext,
         com::sun::star::uno::Reference<com::sun::star::frame::XModel>& xModel,
         com::sun::star::uno::Reference<com::sun::star::xml::sax::XWriter>& xWriter,
         com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aDescriptor,
