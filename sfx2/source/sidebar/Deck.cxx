@@ -215,6 +215,56 @@ void Deck::DataChanged (const DataChangedEvent& rEvent)
 
 
 
+long Deck::Notify (NotifyEvent& rEvent)
+{
+    if (rEvent.GetType() != EVENT_COMMAND)
+        return sal_False;
+
+    CommandEvent* pCommandEvent = reinterpret_cast<CommandEvent*>(rEvent.GetData());
+    if (pCommandEvent == NULL)
+        return sal_False;
+
+    switch (pCommandEvent->GetCommand())
+    {
+        case COMMAND_WHEEL:
+        {
+            if ( ! mpVerticalScrollBar
+                || ! mpVerticalScrollBar->IsVisible())
+                return sal_False;
+
+            // Ignore all wheel commands from outside the vertical
+            // scroll bar.  Otherwise after a scroll we might land on
+            // a spin field and subsequent wheel events would change
+            // the value of that control.
+            if (rEvent.GetWindow() != mpVerticalScrollBar.get())
+                return sal_True;
+
+            // Get the wheel data and check that it describes a valid
+            // vertical scroll.
+            const CommandWheelData* pData = pCommandEvent->GetWheelData();
+            if (pData==NULL
+                || pData->GetModifier()
+                || pData->GetMode() != COMMAND_WHEEL_SCROLL
+                || pData->IsHorz())
+                return sal_False;
+
+            // Execute the actual scroll action.
+            long nDelta = pData->GetDelta();
+            mpVerticalScrollBar->DoScroll(
+                mpVerticalScrollBar->GetThumbPos() - nDelta);
+            return sal_True;
+        }
+
+        default:
+            break;
+    }
+
+    return sal_False;
+}
+
+
+
+
 void Deck::SetPanels (const SharedPanelContainer& rPanels)
 {
     maPanels = rPanels;
@@ -270,7 +320,6 @@ void Deck::ShowPanel (const Panel& rPanel)
         // Add the title bar into the extent.
         if (rPanel.GetTitleBar() != NULL && rPanel.GetTitleBar()->IsVisible())
             nPanelTop = rPanel.GetTitleBar()->GetPosPixel().Y();
-
 
         // Determine what the new thumb position should be like.
         // When the whole panel does not fit then make its top visible
@@ -413,5 +462,6 @@ void Deck::ScrollContainerWindow::SetSeparators (const ::std::vector<sal_Int32>&
 {
     maSeparators = rSeparators;
 }
+
 
 } } // end of namespace sfx2::sidebar
