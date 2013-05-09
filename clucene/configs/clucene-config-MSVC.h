@@ -2,7 +2,9 @@
 #define _SRC_CLUCENE_CLUCENE_CONFIG_H 1
 
 /* src/shared/CLucene/clucene-config.h.
-*  Generated automatically at end of cmake.
+*  Normally generated automatically at end of cmake,
+*  but here in LibreOffice this actually is a copy of
+*  clucene/configs/clucene-config-MSVC.h.
 */
 
 /* CMake will look for these headers: */
