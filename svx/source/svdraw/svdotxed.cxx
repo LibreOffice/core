@@ -231,14 +231,11 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
     {
         OutlinerParaObject* pNewText = NULL;
 
-        if(HasTextImpl( &rOutl ) )
-        {
-            // to make the gray field background vanish again
-            rOutl.UpdateFields();
+        // to make the gray field background vanish again
+        rOutl.UpdateFields();
 
-            sal_uInt16 nParaAnz = static_cast< sal_uInt16 >( rOutl.GetParagraphCount() );
-            pNewText = rOutl.CreateParaObject( 0, nParaAnz );
-        }
+        sal_uInt16 nParaAnz = static_cast< sal_uInt16 >( rOutl.GetParagraphCount() );
+        pNewText = rOutl.CreateParaObject( 0, nParaAnz );
 
         // need to end edit mode early since SetOutlinerParaObject already
         // uses GetCurrentBoundRect() which needs to take the text into account
