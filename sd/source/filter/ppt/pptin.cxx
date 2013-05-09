@@ -1413,9 +1413,7 @@ void ImplSdPPTImport::SetHeaderFooterPageSettings( SdPage* pPage, const PptSlide
                         pPage->NbcInsertObject( pObj, 0 );
                 }
             }
-            String aPlaceHolderString;
-            if ( pHFE->pPlaceholder )
-                aPlaceHolderString = pHFE->pPlaceholder[ i ];
+            String aPlaceHolderString = pHFE->pPlaceholder[ i ];
 
             sd::HeaderFooterSettings rHeaderFooterSettings( pPage->getHeaderFooterSettings() );
             switch( i )
