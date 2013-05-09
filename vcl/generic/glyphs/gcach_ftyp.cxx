@@ -132,6 +132,7 @@ static FT_Error (*pFTNewSize)(FT_Face,FT_Size*);
 static FT_Error (*pFTActivateSize)(FT_Size);
 static FT_Error (*pFTDoneSize)(FT_Size);
 void (*pFTEmbolden)(FT_GlyphSlot);
+static FT_UInt (*pFT_Face_GetCharVariantIndex)(FT_Face, FT_ULong, FT_ULong);
 static bool bEnableSizeFT = false;
 
 struct EqStr{ bool operator()(const char* a, const char* b) const { return !strcmp(a,b); } };
@@ -495,6 +496,7 @@ FreetypeManager::FreetypeManager()
     pFTActivateSize = FT_Activate_Size;
     pFTDoneSize = FT_Done_Size;
     pFTEmbolden = FT_GlyphSlot_Embolden;
+    pFT_Face_GetCharVariantIndex = FT_Face_GetCharVariantIndex;
     nFTVERSION = FTVERSION;
 #else
 #ifdef RTLD_DEFAULT // true if a good dlfcn.h header was included
@@ -511,6 +513,7 @@ FreetypeManager::FreetypeManager()
     pFTActivateSize = (FT_Error(*)(FT_Size))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_Activate_Size" );
     pFTDoneSize     = (FT_Error(*)(FT_Size))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_Done_Size" );
     pFTEmbolden     = (void(*)(FT_GlyphSlot))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_GlyphSlot_Embolden" );
+    pFT_Face_GetCharVariantIndex = (FT_UInt(*)(FT_Face, FT_ULong, FT_ULong))(sal_IntPtr)dlsym( RTLD_DEFAULT, "FT_Face_GetCharVariantIndex" );
 
     bEnableSizeFT = (pFTNewSize!=NULL) && (pFTActivateSize!=NULL) && (pFTDoneSize!=NULL);
 
@@ -527,6 +530,10 @@ FreetypeManager::FreetypeManager()
     // disable artificial emboldening with the Freetype API for older versions
     if( nFTVERSION < 2110 )
         pFTEmbolden = NULL;
+    // disable FT_Face_GetCharVariantIndex for older versions
+    // https://bugzilla.mozilla.org/show_bug.cgi?id=618406#c8
+    if( nFTVERSION < 2404 )
+        pFT_Face_GetCharVariantIndex = NULL;
 
 #else // RTLD_DEFAULT
     // assume systems where dlsym is not possible use supplied library
@@ -1217,8 +1224,8 @@ int ServerFont::GetRawGlyphIndex(sal_UCS4 aChar, sal_UCS4 aVS) const
     int nGlyphIndex = 0;
     // If asked, check first for variant glyph with the given Unicode variation
     // selector. This is quite uncommon so we don't bother with caching here.
-    if (aVS)
-        nGlyphIndex = FT_Face_GetCharVariantIndex(maFaceFT, aChar, aVS);
+    if (aVS && pFT_Face_GetCharVariantIndex)
+        nGlyphIndex = (*pFT_Face_GetCharVariantIndex)(maFaceFT, aChar, aVS);
 
     if (nGlyphIndex == 0)
     {
