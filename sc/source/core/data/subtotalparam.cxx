@@ -162,8 +162,6 @@ bool ScSubTotalParam::operator==( const ScSubTotalParam& rOther ) const
 
             if ( bEqual && (nSubTotals[i] > 0) )
             {
-                bEqual = (pSubTotals != NULL) && (pFunctions != NULL);
-
                 for (SCCOL j=0; (j<nSubTotals[i]) && bEqual; j++)
                 {
                     bEqual =   bEqual
