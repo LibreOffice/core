@@ -65,6 +65,8 @@
 #include "com/sun/star/lang/XServiceName.hpp"
 #include "com/sun/star/lang/XSingleServiceFactory.hpp"
 #include "com/sun/star/linguistic2/LinguServiceManager.hpp"
+#include "com/sun/star/packages/zip/ZipFileAccess.hpp"
+#include "com/sun/star/rendering/CanvasFactory.hpp"
 #include "com/sun/star/rendering/XCanvas.hpp"
 #include "com/sun/star/rendering/XSpriteCanvas.hpp"
 #include "com/sun/star/script/XInvocation.hpp"
@@ -207,11 +209,11 @@
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
 #include <com/sun/star/geometry/RealSize2D.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
+#include <com/sun/star/graphic/Primitive2DTools.hpp>
+#include <com/sun/star/graphic/SvgTools.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicRenderer.hpp>
-#include <com/sun/star/graphic/XPrimitive2DRenderer.hpp>
-#include <com/sun/star/graphic/XSvgParser.hpp>
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/CharacterClassification.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
@@ -235,6 +237,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/rendering/CanvasFactory.hpp>
 #include <com/sun/star/rendering/ColorComponentTag.hpp>
 #include <com/sun/star/rendering/ColorSpaceType.hpp>
 #include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
