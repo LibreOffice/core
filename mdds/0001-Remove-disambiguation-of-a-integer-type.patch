@@ -1,0 +1,25 @@
+From 46cf3188790b821b359e13b14e2211898ab2139b Mon Sep 17 00:00:00 2001
+From: Kohei Yoshida <kohei.yoshida@gmail.com>
+Date: Thu, 9 May 2013 14:48:41 -0400
+Subject: [PATCH] Remove disambiguation of a integer type.
+
+---
+ include/mdds/multi_type_vector_def.inl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/mdds/multi_type_vector_def.inl b/include/mdds/multi_type_vector_def.inl
+index 2299a7b..f443e08 100644
+--- a/include/mdds/multi_type_vector_def.inl
++++ misc/build/mdds_0.8.0/include/mdds/multi_type_vector_def.inl
+@@ -1479,7 +1479,7 @@ multi_type_vector<_CellBlockFunc>::transfer_single_block(
+ 
+         // Insert two new blocks below current.
+         size_type blk2_size = blk_dest->m_size - dest_pos_in_block - len;
+-        dest.m_blocks.insert(dest.m_blocks.begin()+dest_block_index+1, 2, NULL);
++        dest.m_blocks.insert(dest.m_blocks.begin()+dest_block_index+1, 2u, NULL);
+         dest.m_blocks[dest_block_index+1] = new block(len);
+         dest.m_blocks[dest_block_index+2] = new block(blk2_size);
+         blk_dest->m_size = dest_pos_in_block;
+-- 
+1.8.0
+
