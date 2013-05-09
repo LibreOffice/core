@@ -25,14 +25,6 @@ ScXMLChartExportWrapper::ScXMLChartExportWrapper( com::sun::star::uno::Reference
 
 bool ScXMLChartExportWrapper::Export()
 {
-    uno::Reference<lang::XMultiServiceFactory> xServiceFactory(comphelper::getProcessServiceFactory());
-    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
-    OSL_ENSURE( xServiceFactory.is(), "got no service manager" );
-    if( !xServiceFactory.is() )
-        return false;
-
-    //uno::Reference<xml::sax::XWriter> xWriter = xml::sax::Writer::create(xContext);
-
     if ( !mxStorage.is() )
         mxStorage = mrMedium.GetOutputStorage();
 
