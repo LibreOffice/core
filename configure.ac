@@ -8082,6 +8082,8 @@ if test "$with_system_mdds" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_MDDS=YES
 
+    PKG_CHECK_MODULES(MDDS, mdds >= 0.8.0)
+
     dnl ===================================================================
     dnl Determine which hash container mdds shall use
     dnl ===================================================================
@@ -8093,16 +8095,6 @@ if test "$with_system_mdds" = "yes"; then
         MDDS_CPPFLAGS="-DMDDS_HASH_CONTAINER_BOOST"
         AC_MSG_RESULT([boost::unordered_map])
     fi
-
-    AC_LANG_PUSH([C++])
-    save_CPPFLAGS="$CPPFLAGS"
-    CPPFLAGS="$CPPFLAGS $MDDS_CPPFLAGS"
-    AC_CHECK_HEADER(mdds/multi_type_vector.hpp, [],
-        [AC_MSG_ERROR(mdds/multi_type_vector.hpp not found. Install mdds >= 0.7.0)], [])
-    AC_CHECK_TYPE(mdds::multi_type_vector<int>::iterator, [],
-        [AC_MSG_ERROR(mdds/multi_type_matrix.hpp does not define multi_type_vector::iterator. Install mdds >= 0.7.0)], [#include <mdds/multi_type_vector.hpp>])
-    CPPFLAGS="$save_CPPFLAGS"
-    AC_LANG_POP([C++])
 else
     AC_MSG_RESULT([internal])
     BUILD_TYPE="$BUILD_TYPE MDDS"
