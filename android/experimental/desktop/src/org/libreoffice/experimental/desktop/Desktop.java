@@ -52,6 +52,12 @@ public class Desktop
 
     BootstrapContext bootstrapContext;
 
+    private static final Integer ZERO = 0;
+
+    private static int normalize(Number value) {
+        return ZERO.compareTo(-value.intValue());
+    }
+
     private void initBootstrapContext()
     {
         bootstrapContext = new BootstrapContext();
@@ -293,7 +299,7 @@ public class Desktop
             // the scroll must have ended.
 
             if (scrollInProgress) {
-                AppSupport.scroll((int) translateX, (int) translateY);
+                AppSupport.scroll(normalize(translateX), normalize(translateY));
                 translateX = translateY = 0;
                 scrollInProgress = false;
                 scrollJustEnded = true;
