@@ -16,6 +16,23 @@
       "revId": "b38003a348293d9412eb69cf7b018fa41bda0188",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//9Hg\u003d",
+        "filename": "xmloff/source/text/txtparai.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2267,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-05-09T12:48:21Z",
+      "side": 1,
+      "message": "This does not make sense. There is no way this could be null here in the normal course of events. It would crash much sooner in the destructor if it were. And an (implicitly called) destructor is never run on null object anyway. Just use SAL_WARN.",
+      "revId": "b38003a348293d9412eb69cf7b018fa41bda0188",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
