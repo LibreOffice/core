@@ -151,9 +151,7 @@ void QuartzSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbac
 
     pMetric->mnAscent = static_cast<long>( CTFontGetAscent(font) * mfFakeDPIScale + 0.5);
     pMetric->mnDescent = static_cast<long>(CTFontGetDescent(font) * mfFakeDPIScale + 0.5);
-    const long nExtDescent  = static_cast<long>((CTFontGetLeading(font) + CTFontGetDescent(font)) *
-                                                mfFakeDPIScale + 0.5);
-    pMetric->mnExtLeading   = nExtDescent + pMetric->mnDescent;
+    pMetric->mnExtLeading = static_cast<long>(CTFontGetLeading(font) * mfFakeDPIScale + 0.5);
     pMetric->mnIntLeading   = 0;
     pMetric->mnWidth = m_style->GetFontStretchedSize();
 
