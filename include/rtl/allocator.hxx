@@ -127,7 +127,7 @@ public:
     }
 
     //-----------------------------------------
-#if HAVE_CXX11_PERFECT_FORWARDING
+#if HAVE_CXX11_PERFECT_FORWARDING && !defined(_LIBCPP_VERSION)
     template< typename... Args >
     void construct (pointer p, Args &&... value)
     {
