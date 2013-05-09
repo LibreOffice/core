@@ -35,7 +35,7 @@ Module gid_Module_Optional_Grfflt
     Sortkey = "600";
     ParentID = gid_Module_Optional;
     Default = YES;
-    Files = (auto_Graphicfilter_Lib_ALL
+    Files = (
         gid_File_Lib_Svg,
         gid_File_Lib_Flash,
         gid_File_Lib_WpftDraw,
