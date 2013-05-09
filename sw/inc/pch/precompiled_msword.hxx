@@ -91,6 +91,7 @@
 #include <cstdio>
 #include <cstring>
 #include <ctype.h>
+#include <doctok/sprmids.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/autokernitem.hxx>
 #include <editeng/blinkitem.hxx>
@@ -265,7 +266,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/wmf.hxx>
 #include <vector>
-#include <doctok/sprmids.hxx>
 #include <xmloff/odffields.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
