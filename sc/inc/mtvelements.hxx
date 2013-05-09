@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_MTVBLOCKFUNC_HXX
-#define SC_MTVBLOCKFUNC_HXX
+#ifndef SC_MTVELEMENTS_HXX
+#define SC_MTVELEMENTS_HXX
 
 #include "svl/broadcast.hxx"
 
@@ -17,13 +17,28 @@
 
 namespace sc {
 
+struct CellTextAttr
+{
+    sal_uInt16 mnTextWidth;
+    sal_uInt8 mnScriptType;
+
+    CellTextAttr();
+    CellTextAttr(const CellTextAttr& r);
+    CellTextAttr(sal_uInt16 nTextWidth, sal_uInt8 nScriptType);
+};
+
 // Custom element type IDs for multi_type_vector.
 
 const mdds::mtv::element_t element_type_broadcaster = mdds::mtv::element_type_user_start;
+const mdds::mtv::element_t element_type_celltextattr = mdds::mtv::element_type_user_start + 1;
 
 // Custom element blocks.
 
 typedef mdds::mtv::noncopyable_managed_element_block<element_type_broadcaster, SvtBroadcaster> custom_broadcaster_block;
+typedef mdds::mtv::default_element_block<element_type_celltextattr, CellTextAttr> custom_celltextattr_block;
+
+// This needs to be in the same namespace as CellTextAttr.
+MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(CellTextAttr, element_type_celltextattr, CellTextAttr(), custom_celltextattr_block)
 
 }
 

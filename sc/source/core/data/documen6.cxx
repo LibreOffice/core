@@ -32,6 +32,7 @@
 #include "scrdata.hxx"
 #include "poolhelp.hxx"
 #include "attrib.hxx"
+#include "globalnames.hxx"
 
 using namespace com::sun::star;
 

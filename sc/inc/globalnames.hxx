@@ -19,6 +19,10 @@
 
 #define DATE_TIME_FACTOR 86400.0
 
+// in addition to SCRIPTTYPE_... flags from scripttypeitem.hxx:
+// set (in nScriptType) if type has not been determined yet
+#define SC_SCRIPTTYPE_UNKNOWN 0x08
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

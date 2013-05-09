@@ -29,10 +29,6 @@
 
 #define USE_MEMPOOL
 
-// in addition to SCRIPTTYPE_... flags from scripttypeitem.hxx:
-// set (in nScriptType) if type has not been determined yet
-#define SC_SCRIPTTYPE_UNKNOWN   0x08
-
 class ScDocument;
 class EditTextObject;
 class ScMatrix;
