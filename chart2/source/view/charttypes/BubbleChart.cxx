@@ -62,7 +62,6 @@ BubbleChart::BubbleChart( const uno::Reference<XChartType>& xChartTypeModel
     if( !m_pMainPosHelper )
         m_pMainPosHelper = new PlottingPositionHelper();
     PlotterBase::m_pPosHelper = m_pMainPosHelper;
-    VSeriesPlotter::m_pMainPosHelper = m_pMainPosHelper;
 }
 
 BubbleChart::~BubbleChart()
