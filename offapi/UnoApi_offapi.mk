@@ -75,6 +75,9 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/awt/tree,\
 	MutableTreeNode \
 	TreeControl \
 ))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/chart2,\
+	FormattedString \
+))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/chart2/data,\
 	DatabaseDataProvider \
     LabeledDataSequence \
@@ -609,7 +612,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/chart2,
 	Diagram \
 	ErrorBar \
 	ExponentialScaling \
-	FormattedString \
 	GridProperties \
 	Legend \
 	LinearScaling \
@@ -2004,6 +2006,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/chart2,\
 	XDiagram \
 	XDiagramProvider \
 	XFormattedString \
+	XFormattedString2 \
 	XInternalDataProvider \
 	XLabeled \
 	XLegend \

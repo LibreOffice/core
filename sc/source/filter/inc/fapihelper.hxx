@@ -46,11 +46,6 @@ class SfxObjectShell;
 class ScfApiHelper
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               XInterfaceRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    XServiceFactoryRef;
-    typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >                       UnoAnySequence;
-
-public:
     /** Converts a tools color to a UNO color value. */
     inline static sal_Int32 ConvertToApiColor( const Color& rColor )
                             { return static_cast< sal_Int32 >( rColor.GetColor() ); }
@@ -64,23 +59,23 @@ public:
                             VectorToSequence( const ::std::vector< Type >& rVector );
 
     /** Returns the service name provided via the XServiceName interface, or an empty string on error. */
-    static OUString GetServiceName( XInterfaceRef xInt );
+    static OUString GetServiceName( const css::uno::Reference< css::uno::XInterface >& xInt );
 
     /** Returns the multi service factory from a document shell. */
-    static XServiceFactoryRef GetServiceFactory( SfxObjectShell* pShell );
+    static css::uno::Reference< css::lang::XMultiServiceFactory > GetServiceFactory( SfxObjectShell* pShell );
 
     /** Creates an instance from the passed service name, using the passed service factory. */
-    static XInterfaceRef CreateInstance(
-                            XServiceFactoryRef xFactory,
+    static css::uno::Reference< css::uno::XInterface > CreateInstance(
+                            const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory,
                             const OUString& rServiceName );
 
     /** Creates an instance from the passed service name, using the service factory of the passed object. */
-    static XInterfaceRef CreateInstance(
+    static css::uno::Reference< css::uno::XInterface > CreateInstance(
                             SfxObjectShell* pShell,
                             const OUString& rServiceName );
 
     /** Creates an instance from the passed service name, using the process service factory. */
-    static XInterfaceRef CreateInstance( const OUString& rServiceName );
+    static css::uno::Reference< css::uno::XInterface > CreateInstance( const OUString& rServiceName );
 
     /** Opens a password dialog and returns the encryption data.
         @return  The encryption data or an empty sequence on 'Cancel' or any error. */
@@ -116,36 +111,27 @@ template< typename Type >
 class ScfPropertySet
 {
 public:
-    typedef ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet >         XPropertySetRef;
-    typedef ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XMultiPropertySet >    XMultiPropSetRef;
-    typedef ::com::sun::star::uno::Any                          UnoAny;
-    typedef ::com::sun::star::uno::Sequence< UnoAny >           UnoAnySequence;
-    typedef ::com::sun::star::uno::Sequence< OUString >  OUStringSequence;
-
-public:
     inline explicit     ScfPropertySet() {}
     /** Constructs a property set wrapper with the passed UNO property set. */
-    inline explicit     ScfPropertySet( XPropertySetRef xPropSet ) { Set( xPropSet ); }
+    inline explicit     ScfPropertySet( const css::uno::Reference< css::beans::XPropertySet > & xPropSet ) { Set( xPropSet ); }
     /** Constructs a property set wrapper after querying the XPropertySet interface. */
     template< typename InterfaceType >
-    inline explicit     ScfPropertySet( ::com::sun::star::uno::Reference< InterfaceType > xInterface ) { Set( xInterface ); }
+    inline explicit     ScfPropertySet( const css::uno::Reference< InterfaceType >& xInterface ) { Set( xInterface ); }
 
                         ~ScfPropertySet();
 
     /** Sets the passed UNO property set and releases the old UNO property set. */
-    void                Set( XPropertySetRef xPropSet );
+    void                Set( css::uno::Reference< css::beans::XPropertySet > xPropSet );
     /** Queries the passed interface for an XPropertySet and releases the old UNO property set. */
     template< typename InterfaceType >
     inline void         Set( ::com::sun::star::uno::Reference< InterfaceType > xInterface )
-                            { Set( XPropertySetRef( xInterface, ::com::sun::star::uno::UNO_QUERY ) ); }
+                            { Set( css::uno::Reference< css::beans::XPropertySet >( xInterface, ::com::sun::star::uno::UNO_QUERY ) ); }
 
     /** Returns true, if the contained XPropertySet interface is valid. */
     inline bool         Is() const { return mxPropSet.is(); }
 
     /** Returns the contained XPropertySet interface. */
-    inline XPropertySetRef GetApiPropertySet() const { return mxPropSet; }
+    inline css::uno::Reference< css::beans::XPropertySet > GetApiPropertySet() const { return mxPropSet; }
 
     /** Returns the service name provided via the XServiceName interface, or an empty string on error. */
     OUString     GetServiceName() const;
@@ -157,13 +143,13 @@ public:
 
     /** Gets the specified property from the property set.
         @return  true, if the Any could be filled with the property value. */
-    bool                GetAnyProperty( UnoAny& rValue, const OUString& rPropName ) const;
+    bool                GetAnyProperty( css::uno::Any& rValue, const OUString& rPropName ) const;
 
     /** Gets the specified property from the property set.
         @return  true, if the passed variable could be filled with the property value. */
     template< typename Type >
     inline bool         GetProperty( Type& rValue, const OUString& rPropName ) const
-                            { UnoAny aAny; return GetAnyProperty( aAny, rPropName ) && (aAny >>= rValue); }
+                            { css::uno::Any aAny; return GetAnyProperty( aAny, rPropName ) && (aAny >>= rValue); }
 
     /** Gets the specified Boolean property from the property set.
         @return  true = property contains true; false = property contains false or error occurred. */
@@ -179,12 +165,12 @@ public:
     /** Gets the specified properties from the property set. Tries to use the XMultiPropertySet interface.
         @param rPropNames  The property names. MUST be ordered alphabetically.
         @param rValues  The related property values. */
-    void                GetProperties( UnoAnySequence& rValues, const OUStringSequence& rPropNames ) const;
+    void                GetProperties( css::uno::Sequence< css::uno::Any >& rValues, const css::uno::Sequence< OUString >& rPropNames ) const;
 
     // Set properties ---------------------------------------------------------
 
     /** Puts the passed Any into the property set. */
-    void                SetAnyProperty( const OUString& rPropName, const UnoAny& rValue );
+    void                SetAnyProperty( const OUString& rPropName, const css::uno::Any& rValue );
 
     /** Puts the passed value into the property set. */
     template< typename Type >
@@ -206,12 +192,12 @@ public:
     /** Puts the passed properties into the property set. Tries to use the XMultiPropertySet interface.
         @param rPropNames  The property names. MUST be ordered alphabetically.
         @param rValues  The related property values. */
-    void                SetProperties( const OUStringSequence& rPropNames, const UnoAnySequence& rValues );
+    void                SetProperties( const css::uno::Sequence< OUString > & rPropNames, const css::uno::Sequence< css::uno::Any >& rValues );
 
     // ------------------------------------------------------------------------
 private:
-    XPropertySetRef     mxPropSet;          /// The mandatory property set interface.
-    XMultiPropSetRef    mxMultiPropSet;     /// The optional multi property set interface.
+    css::uno::Reference< css::beans::XPropertySet >       mxPropSet;          /// The mandatory property set interface.
+    css::uno::Reference< css::beans::XMultiPropertySet >  mxMultiPropSet;     /// The optional multi property set interface.
 };
 
 // ----------------------------------------------------------------------------
@@ -233,9 +219,6 @@ private:
 class ScfPropSetHelper
 {
 public:
-    typedef ::com::sun::star::uno::Any UnoAny;
-
-public:
     /** @param ppPropNames  A null-terminated array of ASCII property names. */
     explicit            ScfPropSetHelper( const sal_Char* const* ppcPropNames );
 
@@ -248,7 +231,7 @@ public:
     template< typename Type >
     bool                ReadValue( Type& rValue );
     /** Reads an Any from the value sequence. */
-    bool                ReadValue( UnoAny& rAny );
+    bool                ReadValue( css::uno::Any& rAny );
     /** Reads a tools string from the value sequence. */
     bool                ReadValue( String& rString );
     /** Reads a color value from the value sequence. */
@@ -265,7 +248,7 @@ public:
     template< typename Type >
     void                WriteValue( const Type& rValue );
     /** Writes an Any to the value sequence. */
-    void                WriteValue( const UnoAny& rAny );
+    void                WriteValue( const css::uno::Any& rAny );
     /** Writes a tools string to the value sequence. */
     inline void         WriteValue( const String& rString )
                             { WriteValue( OUString( rString ) ); }
@@ -281,14 +264,11 @@ public:
     // ------------------------------------------------------------------------
 private:
     /** Returns a pointer to the next Any to be written to. */
-    UnoAny*             GetNextAny();
+    css::uno::Any*             GetNextAny();
 
 private:
-    typedef ::com::sun::star::uno::Sequence< OUString >  OUStringSequence;
-    typedef ::com::sun::star::uno::Sequence< UnoAny >           UnoAnySequence;
-
-    OUStringSequence    maNameSeq;          /// Sequence of property names.
-    UnoAnySequence      maValueSeq;         /// Sequence of property values.
+    css::uno::Sequence< OUString >       maNameSeq;          /// Sequence of property names.
+    css::uno::Sequence< css::uno::Any >  maValueSeq;         /// Sequence of property values.
     ScfInt32Vec         maNameOrder;        /// Maps initial order to alphabetical order.
     size_t              mnNextIdx;          /// Counter for next Any to be processed.
 };
@@ -298,14 +278,14 @@ private:
 template< typename Type >
 bool ScfPropSetHelper::ReadValue( Type& rValue )
 {
-    UnoAny* pAny = GetNextAny();
+    css::uno::Any* pAny = GetNextAny();
     return pAny && (*pAny >>= rValue);
 }
 
 template< typename Type >
 void ScfPropSetHelper::WriteValue( const Type& rValue )
 {
-    UnoAny* pAny = GetNextAny();
+    css::uno::Any* pAny = GetNextAny();
     if( pAny )
         *pAny <<= rValue;
 }

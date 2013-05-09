@@ -37,6 +37,7 @@
 #include <com/sun/star/chart/TimeUnit.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/XDiagramPositioning.hpp>
+#include <com/sun/star/chart2/FormattedString.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
@@ -875,25 +876,21 @@ Sequence< Reference< XFormattedString > > XclImpChSourceLink::CreateStringSequen
     {
         for( XclImpStringIterator aIt( *mxString ); aIt.Is(); ++aIt )
         {
-            Reference< XFormattedString > xFmtStr(
-                ScfApiHelper::CreateInstance( SERVICE_CHART2_FORMATTEDSTRING ), UNO_QUERY );
-            if( xFmtStr.is() )
-            {
-                // set text data
-                xFmtStr->setString( aIt.GetPortionText() );
+            Reference< css::chart2::XFormattedString2 > xFmtStr = css::chart2::FormattedString::create( comphelper::getProcessComponentContext() );
+            // set text data
+            xFmtStr->setString( aIt.GetPortionText() );
 
-                // set font formatting and font color
-                ScfPropertySet aStringProp( xFmtStr );
-                sal_uInt16 nFontIdx = aIt.GetPortionFont();
-                if( (nFontIdx == EXC_FONT_NOTFOUND) && (aIt.GetPortionIndex() == 0) )
-                    // leading unformatted portion - use passed font settings
-                    rRoot.ConvertFont( aStringProp, nLeadFontIdx, &rLeadFontColor );
-                else
-                    rRoot.ConvertFont( aStringProp, nFontIdx );
+            // set font formatting and font color
+            ScfPropertySet aStringProp( xFmtStr );
+            sal_uInt16 nFontIdx = aIt.GetPortionFont();
+            if( (nFontIdx == EXC_FONT_NOTFOUND) && (aIt.GetPortionIndex() == 0) )
+                // leading unformatted portion - use passed font settings
+                rRoot.ConvertFont( aStringProp, nLeadFontIdx, &rLeadFontColor );
+            else
+                rRoot.ConvertFont( aStringProp, nFontIdx );
 
-                // add string to vector of strings
-                aStringVec.push_back( xFmtStr );
-            }
+            // add string to vector of strings
+            aStringVec.push_back( xFmtStr );
         }
     }
     return ScfApiHelper::VectorToSequence( aStringVec );

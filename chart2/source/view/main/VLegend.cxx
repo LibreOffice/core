@@ -168,7 +168,7 @@ awt::Size lcl_createTextShapes(
             xTarget->add( xEntry );
 
             // set label text
-            Sequence< Reference< XFormattedString > > aLabelSeq = (*aIt).aLabel;
+            Sequence< Reference< XFormattedString2 > > aLabelSeq = (*aIt).aLabel;
             for( sal_Int32 i = 0; i < aLabelSeq.getLength(); ++i )
             {
                 // todo: support more than one text range

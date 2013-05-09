@@ -56,7 +56,7 @@ using namespace ::com::sun::star;
 
 // Static helper functions ====================================================
 
-OUString ScfApiHelper::GetServiceName( Reference< XInterface > xInt )
+OUString ScfApiHelper::GetServiceName( const Reference< XInterface >& xInt )
 {
     OUString aService;
     Reference< XServiceName > xServiceName( xInt, UNO_QUERY );
@@ -74,7 +74,7 @@ Reference< XMultiServiceFactory > ScfApiHelper::GetServiceFactory( SfxObjectShel
 }
 
 Reference< XInterface > ScfApiHelper::CreateInstance(
-        Reference< XMultiServiceFactory > xFactory, const OUString& rServiceName )
+        const Reference< XMultiServiceFactory >& xFactory, const OUString& rServiceName )
 {
     Reference< XInterface > xInt;
     if( xFactory.is() )
@@ -323,9 +323,9 @@ void ScfPropSetHelper::ReadFromPropertySet( const ScfPropertySet& rPropSet )
     mnNextIdx = 0;
 }
 
-bool ScfPropSetHelper::ReadValue( UnoAny& rAny )
+bool ScfPropSetHelper::ReadValue( Any& rAny )
 {
-    UnoAny* pAny = GetNextAny();
+    Any* pAny = GetNextAny();
     if( pAny )
         rAny = *pAny;
     return pAny != 0;
@@ -367,7 +367,7 @@ void ScfPropSetHelper::InitializeWrite( bool bClearAllAnys )
 
 void ScfPropSetHelper::WriteValue( const Any& rAny )
 {
-    if( UnoAny* pAny = GetNextAny() )
+    if( Any* pAny = GetNextAny() )
         *pAny = rAny;
 }
 

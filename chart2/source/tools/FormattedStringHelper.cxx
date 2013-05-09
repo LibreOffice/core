@@ -21,6 +21,7 @@
 #include "FormattedStringHelper.hxx"
 #include "macros.hxx"
 #include "PropertyHelper.hxx"
+#include <com/sun/star/chart2/FormattedString.hpp>
 
 //.............................................................................
 namespace chart
@@ -32,27 +33,24 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-Sequence< Reference< chart2::XFormattedString > >
+Sequence< Reference< chart2::XFormattedString2 > >
             FormattedStringHelper::createFormattedStringSequence(
                      const Reference< uno::XComponentContext > & xContext
                     , const OUString & rString
                     , const Reference< beans::XPropertySet > & xTextProperties ) throw()
 {
-    Reference< XFormattedString > xFormStr;
+    Reference< XFormattedString2 > xFormStr;
     try
     {
         if( xContext.is() )
         {
-            xFormStr.set(
-                xContext->getServiceManager()->createInstanceWithContext(
-                    "com.sun.star.chart2.FormattedString", xContext ),
-                uno::UNO_QUERY_THROW );
+            xFormStr = chart2::FormattedString::create(xContext);
 
             xFormStr->setString( rString );
 
             // set character properties
             comphelper::copyProperties(
-                xTextProperties, Reference< beans::XPropertySet >( xFormStr, uno::UNO_QUERY ) );
+                xTextProperties, Reference< beans::XPropertySet >( xFormStr, uno::UNO_QUERY_THROW ) );
         }
     }
     catch( const uno::Exception & ex )
@@ -60,7 +58,7 @@ Sequence< Reference< chart2::XFormattedString > >
         ASSERT_EXCEPTION( ex );
     }
 
-    return Sequence< Reference< XFormattedString > >( & xFormStr, 1 );
+    return Sequence< Reference< XFormattedString2 > >( & xFormStr, 1 );
 }
 
 //.............................................................................

@@ -17,14 +17,29 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef com_sun_star_chart2_FormattedString_idl
-#define com_sun_star_chart2_FormattedString_idl
+#ifndef com_sun_star_chart2_XFormattedString2_idl
+#define com_sun_star_chart2_XFormattedString2_idl
 
-#include <com/sun/star/chart2/XFormattedString2.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/style/CharacterProperties.idl>
+#include <com/sun/star/style/CharacterPropertiesAsian.idl>
+#include <com/sun/star/style/CharacterPropertiesComplex.idl>
+#include <com/sun/star/chart2/XFormattedString.idl>
 
 module com { module sun { module star { module chart2 {
 
-service FormattedString : XFormattedString2;
+/**
+    Provides unified interface for FormattedString service.
+
+    @since LibreOffice 4.1
+*/
+interface XFormattedString2
+{
+    interface com::sun::star::beans::XPropertySet;
+
+    interface com::sun::star::chart2::XFormattedString;
+
+};
 
 }; }; }; };
 

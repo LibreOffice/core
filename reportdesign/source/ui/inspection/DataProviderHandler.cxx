@@ -28,11 +28,11 @@
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <com/sun/star/inspection/PropertyLineElement.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
+#include <com/sun/star/chart2/FormattedString.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XChartType.hpp>
-#include <com/sun/star/chart2/XFormattedString.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
@@ -246,9 +246,9 @@ void DataProviderHandler::impl_updateChartTitle_throw(const uno::Any& _aValue)
         }
         if ( xTitle.is() )
         {
-            uno::Reference< chart2::XFormattedString> xFormatted(m_xContext->getServiceManager()->createInstanceWithContext(OUString("com.sun.star.chart2.FormattedString"),m_xContext),uno::UNO_QUERY);
+            uno::Reference< chart2::XFormattedString2> xFormatted = chart2::FormattedString::create(m_xContext);
             OUString sStr;
-            _aValue>>= sStr;
+            _aValue >>= sStr;
             xFormatted->setString(sStr);
             uno::Sequence< uno::Reference< chart2::XFormattedString> > aArgs(1);
             aArgs[0] = xFormatted;

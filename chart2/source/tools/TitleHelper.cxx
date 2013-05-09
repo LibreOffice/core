@@ -22,6 +22,7 @@
 #include "macros.hxx"
 #include "AxisHelper.hxx"
 #include "DiagramHelper.hxx"
+#include <com/sun/star/chart2/FormattedString.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <rtl/ustrbuf.hxx>
 
@@ -300,30 +301,23 @@ void TitleHelper::setCompleteString( const OUString& rNewText
     }
     else
     {
-        uno::Reference< uno::XInterface > xI(
-            xContext->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.chart2.FormattedString", xContext ) );
-        uno::Reference< XFormattedString > xFormattedString( xI, uno::UNO_QUERY );
+        uno::Reference< chart2::XFormattedString2 > xFormattedString =
+            chart2::FormattedString::create( xContext );
 
-        if(xFormattedString.is())
+        xFormattedString->setString( aNewText );
+        aNewStringList[0].set( xFormattedString );
+        if( pDefaultCharHeight != 0 )
         {
-            xFormattedString->setString( aNewText );
-            aNewStringList[0].set( xFormattedString );
-            if( pDefaultCharHeight != 0 )
+            try
             {
-                try
-                {
-                    uno::Reference< beans::XPropertySet > xProp( xFormattedString, uno::UNO_QUERY_THROW );
-
-                    uno::Any aFontSize( uno::makeAny( *pDefaultCharHeight ));
-                    xProp->setPropertyValue( "CharHeight", aFontSize );
-                    xProp->setPropertyValue( "CharHeightAsian", aFontSize );
-                    xProp->setPropertyValue( "CharHeightComplex", aFontSize );
-                }
-                catch( const uno::Exception & ex )
-                {
-                    ASSERT_EXCEPTION( ex );
-                }
+                uno::Any aFontSize( uno::makeAny( *pDefaultCharHeight ));
+                xFormattedString->setPropertyValue( "CharHeight", aFontSize );
+                xFormattedString->setPropertyValue( "CharHeightAsian", aFontSize );
+                xFormattedString->setPropertyValue( "CharHeightComplex", aFontSize );
+            }
+            catch( const uno::Exception & ex )
+            {
+                ASSERT_EXCEPTION( ex );
             }
         }
     }

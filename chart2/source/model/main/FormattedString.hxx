@@ -26,7 +26,7 @@
 #include "ServiceMacros.hxx"
 #include "ModifyListenerHelper.hxx"
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/chart2/XFormattedString.hpp>
+#include <com/sun/star/chart2/XFormattedString2.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
@@ -36,11 +36,11 @@ namespace chart
 namespace impl
 {
 typedef ::cppu::WeakImplHelper5<
-    ::com::sun::star::chart2::XFormattedString,
-    ::com::sun::star::lang::XServiceInfo,
-    ::com::sun::star::util::XCloneable,
-    ::com::sun::star::util::XModifyBroadcaster,
-    ::com::sun::star::util::XModifyListener >
+    ::css::chart2::XFormattedString2,
+    ::css::lang::XServiceInfo,
+    ::css::util::XCloneable,
+    ::css::util::XModifyBroadcaster,
+    ::css::util::XModifyListener >
     FormattedString_Base;
 }
 
@@ -50,8 +50,8 @@ class FormattedString :
     public ::property::OPropertySet
 {
 public:
-    FormattedString( ::com::sun::star::uno::Reference<
-           ::com::sun::star::uno::XComponentContext > const & xContext );
+    FormattedString( ::css::uno::Reference<
+           ::css::uno::XComponentContext > const & xContext );
     virtual ~FormattedString();
 
     /// declare XServiceInfo methods
@@ -60,52 +60,67 @@ public:
     APPHELPER_SERVICE_FACTORY_HELPER( FormattedString )
 
     /// merge XInterface implementations
-     DECLARE_XINTERFACE()
+    DECLARE_XINTERFACE()
     /// merge XTypeProvider implementations
-     DECLARE_XTYPEPROVIDER()
+    DECLARE_XTYPEPROVIDER()
+
+
+    virtual void SAL_CALL setPropertyValue(const OUString& p1, const css::uno::Any& p2) throw (css::uno::RuntimeException)
+        { ::property::OPropertySet::setPropertyValue(p1, p2); }
+    virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& p1) throw (css::uno::RuntimeException)
+        { return ::property::OPropertySet::getPropertyValue(p1); }
+    virtual void SAL_CALL addPropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) throw (css::uno::RuntimeException)
+        { ::property::OPropertySet::addPropertyChangeListener(p1, p2); }
+    virtual void SAL_CALL removePropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) throw (css::uno::RuntimeException)
+        { ::property::OPropertySet::removePropertyChangeListener(p1, p2); }
+    virtual void SAL_CALL addVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) throw (css::uno::RuntimeException)
+        { ::property::OPropertySet::addVetoableChangeListener(p1, p2); }
+    virtual void SAL_CALL removeVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) throw (css::uno::RuntimeException)
+        { ::property::OPropertySet::removeVetoableChangeListener(p1, p2); }
+
 
 protected:
     explicit FormattedString( const FormattedString & rOther );
 
     // ____ XFormattedString ____
     virtual OUString SAL_CALL getString()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::css::uno::RuntimeException);
     virtual void SAL_CALL setString( const OUString& String )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::css::uno::RuntimeException);
 
     // ____ OPropertySet ____
-    virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw(::com::sun::star::beans::UnknownPropertyException);
+    virtual ::css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
+        throw(::css::beans::UnknownPropertyException);
 
     // ____ OPropertySet ____
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
 
     // ____ XPropertySet ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
+    virtual ::css::uno::Reference< ::css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::css::uno::RuntimeException);
 
     // ____ XCloneable ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::css::uno::Reference< ::css::util::XCloneable > SAL_CALL createClone()
+        throw (::css::uno::RuntimeException);
 
     // ____ XModifyBroadcaster ____
     virtual void SAL_CALL addModifyListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException);
+        const ::css::uno::Reference< ::css::util::XModifyListener >& aListener )
+        throw (::css::uno::RuntimeException);
     virtual void SAL_CALL removeModifyListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException);
+        const ::css::uno::Reference< ::css::util::XModifyListener >& aListener )
+        throw (::css::uno::RuntimeException);
 
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
-        const ::com::sun::star::lang::EventObject& aEvent )
-        throw (::com::sun::star::uno::RuntimeException);
+        const ::css::lang::EventObject& aEvent )
+        throw (::css::uno::RuntimeException);
 
     // ____ XEventListener (base of XModifyListener) ____
     virtual void SAL_CALL disposing(
-        const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException);
+        const ::css::lang::EventObject& Source )
+        throw (::css::uno::RuntimeException);
 
     // ____ OPropertySet ____
     virtual void firePropertyChangeEvent();
@@ -116,7 +131,7 @@ protected:
 private:
     OUString m_aString;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > m_xModifyEventForwarder;
+    ::css::uno::Reference< ::css::util::XModifyListener > m_xModifyEventForwarder;
 };
 
 } //  namespace chart

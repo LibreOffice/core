@@ -20,9 +20,9 @@
 #include "oox/drawingml/chart/titleconverter.hxx"
 
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
+#include <com/sun/star/chart2/FormattedString.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
-#include <com/sun/star/chart2/XFormattedString.hpp>
 #include <com/sun/star/chart2/XLegend.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
@@ -117,10 +117,10 @@ Sequence< Reference< XFormattedString > > TextConverter::createStringSequence(
 Reference< XFormattedString > TextConverter::appendFormattedString(
         ::std::vector< Reference< XFormattedString > >& orStringVec, const OUString& rString, bool bAddNewLine ) const
 {
-    Reference< XFormattedString > xFmtStr;
+    Reference< XFormattedString2 > xFmtStr;
     try
     {
-        xFmtStr.set( ConverterRoot::createInstance( "com.sun.star.chart2.FormattedString" ), UNO_QUERY_THROW );
+        xFmtStr = FormattedString::create( ConverterRoot::getComponentContext() );
         xFmtStr->setString( bAddNewLine ? (rString + OUString( sal_Unicode( '\n' ) )) : rString );
         orStringVec.push_back( xFmtStr );
     }

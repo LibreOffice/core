@@ -21,7 +21,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
-#include <com/sun/star/chart2/XFormattedString.hpp>
+#include <com/sun/star/chart2/XFormattedString2.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -60,7 +60,7 @@ struct ViewLegendEntry
      */
     ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XFormattedString > >  aLabel;
+            ::com::sun::star::chart2::XFormattedString2 > >  aLabel;
 };
 
 class LegendEntryProvider
