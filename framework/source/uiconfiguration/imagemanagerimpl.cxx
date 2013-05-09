@@ -1427,9 +1427,6 @@ void ImageManagerImpl::clear()
 {
     ResetableGuard aGuard( m_aLock );
 
-    if (!m_pUserImageList)
-        return;
-
     for ( sal_Int32 n = 0; n < ImageType_COUNT; n++ )
     {
         delete m_pUserImageList[n];
