@@ -327,7 +327,7 @@ ScVbaApplication::getActiveCell() throw (uno::RuntimeException )
 }
 
 uno::Any SAL_CALL
-ScVbaApplication::International( sal_Int32 Index ) throw (uno::RuntimeException)
+ScVbaApplication::International( sal_Int32 /*Index*/ ) throw (uno::RuntimeException)
 {
     // complete stub for now
     // #TODO flesh out some of the Indices we could handle
