@@ -82,7 +82,7 @@ void ScColumn::Insert( SCROW nRow, ScBaseCell* pNewCell )
                 ((ScFormulaCell*)pNewCell)->SetDirty();
             else
                 pDocument->Broadcast(
-                    ScHint(SC_HINT_DATACHANGED, ScAddress(nCol, nRow, nTab), GetBroadcaster(nRow)));
+                    ScHint(SC_HINT_DATACHANGED, ScAddress(nCol, nRow, nTab)));
         }
     }
 }
@@ -123,7 +123,7 @@ void ScColumn::Delete( SCROW nRow )
     pCell->Delete();
 
     pDocument->Broadcast(
-        ScHint(SC_HINT_DATACHANGED, ScAddress(nCol, nRow, nTab), GetBroadcaster(nRow)));
+        ScHint(SC_HINT_DATACHANGED, ScAddress(nCol, nRow, nTab)));
 
     CellStorageModified();
 }
@@ -139,7 +139,7 @@ void ScColumn::DeleteAtIndex( SCSIZE nIndex )
     pCell->Delete();
 
     pDocument->Broadcast(
-        ScHint(SC_HINT_DATACHANGED, ScAddress(nCol, nRow, nTab), GetBroadcaster(nRow)));
+        ScHint(SC_HINT_DATACHANGED, ScAddress(nCol, nRow, nTab)));
 
     maTextWidths.set_empty(nRow, nRow);
     maScriptTypes.set_empty(nRow, nRow);
@@ -220,7 +220,7 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
     maScriptTypes.resize(MAXROWCOUNT);
 
     ScAddress aAdr( nCol, 0, nTab );
-    ScHint aHint( SC_HINT_DATACHANGED, aAdr, NULL ); // only areas (ScBaseCell* == NULL)
+    ScHint aHint(SC_HINT_DATACHANGED, aAdr); // only areas (ScBaseCell* == NULL)
     ScAddress& rAddress = aHint.GetAddress();
     // for sparse occupation use single broadcasts, not ranges
     bool bSingleBroadcasts = (((maItems.back().nRow - maItems[i].nRow) /
@@ -485,11 +485,10 @@ void ScColumn::DeleteArea(SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag)
         pAttrArray->DeleteHardAttr( nStartRow, nEndRow );
 
     // Broadcast the changes.
-    ScHint aHint(SC_HINT_DATACHANGED, ScAddress(nCol, 0, nTab), NULL);
+    ScHint aHint(SC_HINT_DATACHANGED, ScAddress(nCol, 0, nTab));
     for (SCROW i = nStartRow; i <= nEndRow; ++i)
     {
         aHint.GetAddress().SetRow(i);
-        aHint.SetBroadcaster(GetBroadcaster(i));
         pDocument->Broadcast(aHint);
     }
 }
@@ -1068,8 +1067,8 @@ void ScColumn::BroadcastInArea( SCROW nRow1, SCROW nRow2 )
         if ( pCell->GetCellType() == CELLTYPE_FORMULA )
             ((ScFormulaCell*)pCell)->SetDirty();
         else
-            pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED,
-                ScAddress(nCol, nRow, nTab), GetBroadcaster(nRow)));
+            pDocument->Broadcast( ScHint(SC_HINT_DATACHANGED,
+                ScAddress(nCol, nRow, nTab)));
         nIndex++;
     }
 }
@@ -1324,8 +1323,8 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                     ((ScFormulaCell*)pNewCell)->SetDirty();
                 }
                 else
-                    pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED,
-                        ScAddress(nCol, nRow, nTabP), GetBroadcaster(nRow)));
+                    pDocument->Broadcast(
+                        ScHint(SC_HINT_DATACHANGED, ScAddress(nCol, nRow, nTabP)));
             }
             else
             {

@@ -122,7 +122,7 @@ void ScAddInAsync::CallBack( sal_uLong nHandleP, void* pData )
             return;
     }
     p->bValid = sal_True;
-    p->Broadcast( ScHint( SC_HINT_DATACHANGED, ScAddress(), NULL ) );
+    p->Broadcast( ScHint(SC_HINT_DATACHANGED, ScAddress()) );
 
     for ( ScAddInDocs::iterator it = p->pDocs->begin(); it != p->pDocs->end(); ++it )
     {

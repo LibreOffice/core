@@ -19,17 +19,7 @@
 
 #include "brdcst.hxx"
 
-ScHint::ScHint( sal_uLong n, const ScAddress& a, SvtBroadcaster* p ) :
-    SfxSimpleHint(n), aAddress(a), mpBroadcaster(p) {}
-
-SvtBroadcaster* ScHint::GetBroadcaster() const
-{
-    return mpBroadcaster;
-}
-
-void ScHint::SetBroadcaster( SvtBroadcaster* p )
-{
-    mpBroadcaster = p;
-}
+ScHint::ScHint( sal_uLong n, const ScAddress& a ) :
+    SfxSimpleHint(n), aAddress(a) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

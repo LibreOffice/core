@@ -2650,7 +2650,7 @@ void ScChart2DataSequence::RebuildDataCache()
     if (!m_bExtDataRebuildQueued)
     {
         m_aDataArray.clear();
-        m_pDocument->BroadcastUno(ScHint(SC_HINT_DATACHANGED, ScAddress(), NULL));
+        m_pDocument->BroadcastUno(ScHint(SC_HINT_DATACHANGED, ScAddress()));
         m_bExtDataRebuildQueued = true;
         m_bGotDataChangedHint = true;
     }

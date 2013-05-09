@@ -33,15 +33,11 @@ class SvtBroadcaster;
 
 class ScHint : public SfxSimpleHint
 {
-private:
     ScAddress   aAddress;
-    SvtBroadcaster* mpBroadcaster;
 
 public:
     TYPEINFO();
-    ScHint( sal_uLong n, const ScAddress& a, SvtBroadcaster* p );
-    SvtBroadcaster* GetBroadcaster() const;
-    void SetBroadcaster( SvtBroadcaster* p );
+    ScHint( sal_uLong n, const ScAddress& a );
     const ScAddress&    GetAddress() const { return aAddress; }
           ScAddress&    GetAddress()       { return aAddress; }
     void                SetAddress( const ScAddress& rAdr ) { aAddress = rAdr; }

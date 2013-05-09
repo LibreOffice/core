@@ -115,7 +115,7 @@ void SAL_CALL ScAddInListener::modified( const ::com::sun::star::sheet::ResultEv
 
     // notify document of changes
 
-    Broadcast( ScHint( SC_HINT_DATACHANGED, ScAddress(), NULL ) );
+    Broadcast( ScHint(SC_HINT_DATACHANGED, ScAddress()) );
 
     for ( ScAddInDocs::iterator it = pDocs->begin(); it != pDocs->end(); ++it )
     {

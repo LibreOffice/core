@@ -73,7 +73,7 @@ void ScDocument::Broadcast( const ScHint& rHint )
     {
         ScBulkBroadcast aBulkBroadcast( pBASM);     // scoped bulk broadcast
         bool bIsBroadcasted = false;
-        SvtBroadcaster* pBC = rHint.GetBroadcaster();
+        SvtBroadcaster* pBC = GetBroadcaster(rHint.GetAddress());
         if ( pBC )
         {
             pBC->Broadcast( rHint );
@@ -445,7 +445,7 @@ void ScDocument::TrackFormulas( sal_uLong nHintId )
         do
         {
             pBC = GetBroadcaster(pTrack->aPos);
-            ScHint aHint(nHintId, pTrack->aPos, pBC);
+            ScHint aHint(nHintId, pTrack->aPos);
             if (pBC)
                 pBC->Broadcast( aHint );
             pBASM->AreaBroadcast( aHint );

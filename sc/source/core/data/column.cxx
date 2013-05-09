@@ -1138,7 +1138,7 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
     SCSIZE nNewCount = maItems.size();
     bool bCountChanged = false;
     ScAddress aAdr( nCol, 0, nTab );
-    ScHint aHint( SC_HINT_DATACHANGED, aAdr, NULL );    // only areas (ScBaseCell* == NULL)
+    ScHint aHint(SC_HINT_DATACHANGED, aAdr);    // only areas (ScBaseCell* == NULL)
     ScAddress& rAddress = aHint.GetAddress();
     // for sparse occupation use single broadcasts, not ranges
     bool bSingleBroadcasts = (((maItems.back().nRow - maItems[i].nRow) /
@@ -1725,7 +1725,7 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
         }
         // Broadcast changes
         ScAddress aAdr( nCol, 0, nTab );
-        ScHint aHint(SC_HINT_DATACHANGED, aAdr, NULL);  // areas only
+        ScHint aHint(SC_HINT_DATACHANGED, aAdr);  // areas only
         ScAddress& rAddress = aHint.GetAddress();
 
         // must iterate backwards, because indexes of following cells become invalid
@@ -2104,7 +2104,7 @@ void ScColumn::SetDirty( const ScRange& rRange )
     pDocument->SetAutoCalc( false );    // no multiple recalculation
     SCROW nRow2 = rRange.aEnd.Row();
     ScAddress aPos( nCol, 0, nTab );
-    ScHint aHint( SC_HINT_DATACHANGED, aPos, NULL );
+    ScHint aHint(SC_HINT_DATACHANGED, aPos);
     SCROW nRow;
     SCSIZE nIndex;
     Search( rRange.aStart.Row(), nIndex );
@@ -2116,7 +2116,6 @@ void ScColumn::SetDirty( const ScRange& rRange )
         else
         {
             aHint.GetAddress().SetRow( nRow );
-            aHint.SetBroadcaster(GetBroadcaster(nRow));
             pDocument->Broadcast( aHint );
         }
         nIndex++;
@@ -2133,7 +2132,7 @@ void ScColumn::SetTableOpDirty( const ScRange& rRange )
     pDocument->SetAutoCalc( false );    // no multiple recalculation
     SCROW nRow2 = rRange.aEnd.Row();
     ScAddress aPos( nCol, 0, nTab );
-    ScHint aHint( SC_HINT_TABLEOPDIRTY, aPos, NULL );
+    ScHint aHint(SC_HINT_TABLEOPDIRTY, aPos);
     SCROW nRow;
     SCSIZE nIndex;
     Search( rRange.aStart.Row(), nIndex );
@@ -2145,7 +2144,6 @@ void ScColumn::SetTableOpDirty( const ScRange& rRange )
         else
         {
             aHint.GetAddress().SetRow( nRow );
-            aHint.SetBroadcaster(GetBroadcaster(nRow));
             pDocument->Broadcast( aHint );
         }
         nIndex++;
