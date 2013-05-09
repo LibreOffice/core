@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//9Ho\u003d",
+        "filename": "xmloff/source/text/txtparai.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 897,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-05-09T12:33:39Z",
+      "side": 1,
+      "message": "This condition does not make sense. The original checked that m_sProperty.getLength() is empty iff m_bHaveAbout is false. Your change compares 0/1 to an arbitrary number.",
+      "revId": "b38003a348293d9412eb69cf7b018fa41bda0188",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
