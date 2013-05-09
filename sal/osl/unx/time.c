@@ -22,6 +22,7 @@
 
 #include <osl/diagnose.h>
 #include <osl/time.h>
+#include <time.h>
 
 /* FIXME: detection should be done in configure script */
 #if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD) || \
@@ -38,15 +39,20 @@
 
 sal_Bool SAL_CALL osl_getSystemTime(TimeValue* tv)
 {
-    struct timeval tp;
+    struct timespec tp;
+    int res;
 
-    /* FIXME: use higher resolution */
-    gettimeofday(&tp, NULL);
+    res = clock_gettime(CLOCK_REALTIME, &tp);
+
+    if (res != 0)
+    {
+        return sal_False;
+    }
 
     tv->Seconds = tp.tv_sec;
-    tv->Nanosec = tp.tv_usec * 1000;
+    tv->Nanosec = tp.tv_nsec;
 
-    return (sal_True);
+    return sal_True;
 }
 
 
