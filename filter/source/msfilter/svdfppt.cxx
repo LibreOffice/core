@@ -2207,7 +2207,6 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                 rOutliner.SetStyleSheet( 0, pSheet );
         }
         rOutliner.SetVertical( pTextObj->GetVertical() );
-        sal_Int16 nLastStartNumbering = -1;
         const PPTParagraphObj* pPreviousParagraph = NULL;
         for ( PPTParagraphObj* pPara = pTextObj->First(); pPara; pPara = pTextObj->Next() )
         {
@@ -2302,7 +2301,6 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                 pPara->GetAttrib( PPT_ParaAttr_BulletOn, nIsBullet2, nDestinationInstance );
                 if ( !nIsBullet2 )
                     aParagraphAttribs.Put( SfxBoolItem( EE_PARA_BULLETSTATE, sal_False ) );
-
 
                 pPreviousParagraph = pPara;
                 if ( !aSelection.nStartPos )    // in PPT empty paragraphs never gets a bullet
@@ -3582,7 +3580,7 @@ sal_Bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rM
         sal_Int16 nBuStart = *rStartNumbering;
         //The Seventh bit of nBuFlags that specifies whether fBulletHasAutoNumber exists,
         //and fBulletHasAutoNumber that specifies whether this paragraph has an automatic numbering scheme.
-        if ( ( nBuFlags & 0x02000000 ) && ( nBuStart != 1 ))
+        if ( ( nBuFlags & 0x02000000 ) && ( nBuStart != -1 ))
         {
             rNumberFormat.SetStart( static_cast<sal_uInt16>(nBuStart) );
         }
