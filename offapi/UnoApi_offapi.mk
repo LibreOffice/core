@@ -76,7 +76,11 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/awt/tree,\
 	TreeControl \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/chart2,\
+	CartesianCoordinateSystem2d \
+	CartesianCoordinateSystem3d \
 	FormattedString \
+	PolarCoordinateSystem2d \
+	PolarCoordinateSystem3d \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/chart2/data,\
 	DatabaseDataProvider \

@@ -37,7 +37,14 @@
 #include <com/sun/star/chart/TimeUnit.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/XDiagramPositioning.hpp>
+#include <com/sun/star/chart/DataLabelPlacement.hpp>
+#include <com/sun/star/chart/ErrorBarStyle.hpp>
+#include <com/sun/star/chart/MissingValueTreatment.hpp>
+#include <com/sun/star/chart2/CartesianCoordinateSystem2d.hpp>
+#include <com/sun/star/chart2/CartesianCoordinateSystem3d.hpp>
 #include <com/sun/star/chart2/FormattedString.hpp>
+#include <com/sun/star/chart2/PolarCoordinateSystem2d.hpp>
+#include <com/sun/star/chart2/PolarCoordinateSystem3d.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
@@ -45,9 +52,6 @@
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
-#include <com/sun/star/chart2/data/XDataProvider.hpp>
-#include <com/sun/star/chart2/data/XDataReceiver.hpp>
-#include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
@@ -57,10 +61,10 @@
 #include <com/sun/star/chart2/TickmarkStyle.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
+#include <com/sun/star/chart2/data/XDataProvider.hpp>
+#include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
-#include <com/sun/star/chart/DataLabelPlacement.hpp>
-#include <com/sun/star/chart/ErrorBarStyle.hpp>
-#include <com/sun/star/chart/MissingValueTreatment.hpp>
 
 #include <sfx2/objsh.hxx>
 #include <svx/svdpage.hxx>
@@ -2316,25 +2320,23 @@ bool XclImpChType::HasCategoryLabels() const
 
 Reference< XCoordinateSystem > XclImpChType::CreateCoordSystem( bool b3dChart ) const
 {
-    // service name
-    OUString aCoordSysService;
+    // create the coordinate system object
+    Reference< css::uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+    Reference< XCoordinateSystem > xCoordSystem;
     if( maTypeInfo.mbPolarCoordSystem )
     {
         if( b3dChart )
-            aCoordSysService = SERVICE_CHART2_POLARCOORDSYS3D;
+            xCoordSystem = css::chart2::PolarCoordinateSystem2d::create(xContext);
         else
-            aCoordSysService = SERVICE_CHART2_POLARCOORDSYS2D;
+            xCoordSystem = css::chart2::PolarCoordinateSystem3d::create(xContext);
     }
     else
     {
         if( b3dChart )
-            aCoordSysService = SERVICE_CHART2_CARTESIANCOORDSYS3D;
+            xCoordSystem = css::chart2::CartesianCoordinateSystem3d::create(xContext);
         else
-            aCoordSysService = SERVICE_CHART2_CARTESIANCOORDSYS2D;
+            xCoordSystem = css::chart2::CartesianCoordinateSystem2d::create(xContext);
     }
-
-    // create the coordinate system object
-    Reference< XCoordinateSystem > xCoordSystem( ScfApiHelper::CreateInstance( aCoordSysService ), UNO_QUERY );
 
     // swap X and Y axis
     if( maTypeInfo.mbSwappedAxesSet )

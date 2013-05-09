@@ -49,8 +49,6 @@ class XclRoot;
 #define SERVICE_DRAWING_HATCHTABLE          "com.sun.star.drawing.HatchTable"
 
 #define SERVICE_CHART2_AXIS                 "com.sun.star.chart2.Axis"
-#define SERVICE_CHART2_CARTESIANCOORDSYS2D  "com.sun.star.chart2.CartesianCoordinateSystem2d"
-#define SERVICE_CHART2_CARTESIANCOORDSYS3D  "com.sun.star.chart2.CartesianCoordinateSystem3d"
 #define SERVICE_CHART2_DATAPROVIDER         "com.sun.star.chart2.data.DataProvider"
 #define SERVICE_CHART2_DATASERIES           "com.sun.star.chart2.DataSeries"
 #define SERVICE_CHART2_DIAGRAM              "com.sun.star.chart2.Diagram"
@@ -61,8 +59,6 @@ class XclRoot;
 #define SERVICE_CHART2_LINEARSCALING        "com.sun.star.chart2.LinearScaling"
 #define SERVICE_CHART2_LOGREGCURVE          "com.sun.star.chart2.LogarithmicRegressionCurve"
 #define SERVICE_CHART2_LOGSCALING           "com.sun.star.chart2.LogarithmicScaling"
-#define SERVICE_CHART2_POLARCOORDSYS2D      "com.sun.star.chart2.PolarCoordinateSystem2d"
-#define SERVICE_CHART2_POLARCOORDSYS3D      "com.sun.star.chart2.PolarCoordinateSystem3d"
 #define SERVICE_CHART2_POTREGCURVE          "com.sun.star.chart2.PotentialRegressionCurve"
 #define SERVICE_CHART2_TITLE                "com.sun.star.chart2.Title"
 

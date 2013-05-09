@@ -20,6 +20,10 @@
 #include "oox/drawingml/chart/typegroupconverter.hxx"
 
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
+#include <com/sun/star/chart2/CartesianCoordinateSystem2d.hpp>
+#include <com/sun/star/chart2/CartesianCoordinateSystem3d.hpp>
+#include <com/sun/star/chart2/PolarCoordinateSystem2d.hpp>
+#include <com/sun/star/chart2/PolarCoordinateSystem3d.hpp>
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
@@ -238,25 +242,23 @@ OUString TypeGroupConverter::getSingleSeriesTitle() const
 
 Reference< XCoordinateSystem > TypeGroupConverter::createCoordinateSystem()
 {
-    // find service name for coordinate system
-    OUString aServiceName;
+    // create the coordinate system object
+    Reference< css::uno::XComponentContext > xContext = getComponentContext();
+    Reference< XCoordinateSystem > xCoordSystem;
     if( maTypeInfo.mbPolarCoordSystem )
     {
         if( mb3dChart )
-            aServiceName = "com.sun.star.chart2.PolarCoordinateSystem3d";
+            xCoordSystem = css::chart2::PolarCoordinateSystem2d::create(xContext);
         else
-            aServiceName = "com.sun.star.chart2.PolarCoordinateSystem2d";
+            xCoordSystem = css::chart2::PolarCoordinateSystem3d::create(xContext);
     }
     else
     {
         if( mb3dChart )
-            aServiceName = "com.sun.star.chart2.CartesianCoordinateSystem3d";
+            xCoordSystem = css::chart2::CartesianCoordinateSystem3d::create(xContext);
         else
-            aServiceName = "com.sun.star.chart2.CartesianCoordinateSystem2d";
+            xCoordSystem = css::chart2::CartesianCoordinateSystem2d::create(xContext);
     }
-
-    // create the coordinate system object
-    Reference< XCoordinateSystem > xCoordSystem( createInstance( aServiceName ), UNO_QUERY );
 
     // swap X and Y axis
     if( maTypeInfo.mbSwappedAxesSet )
