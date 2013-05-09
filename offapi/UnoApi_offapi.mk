@@ -343,6 +343,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sheet,\
 	ExternalDocLinks \
 	ExternalSheetCache \
 	FilterFormulaParser \
+	GlobalSheetSettings \
 	FormulaOpCodeMapper \
 	RecentFunctions \
 	Solver \
@@ -1185,7 +1186,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sheet,\
 	FunctionDescription \
 	FunctionDescriptionEnumeration \
 	FunctionDescriptions \
-	GlobalSheetSettings \
 	HeaderFooterContent \
 	LabelRange \
 	LabelRanges \
@@ -3440,6 +3440,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/sheet,\
 	XFormulaTokens \
 	XFunctionAccess \
 	XFunctionDescriptions \
+	XGlobalSheetSettings \
 	XGoalSeek \
 	XHeaderFooterContent \
 	XHierarchiesSupplier \

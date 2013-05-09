@@ -88,22 +88,21 @@
 #include <svx/svdpage.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/form/XFormsSupplier2.hpp>
+#include <com/sun/star/io/XActiveDataSource.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/sheet/XUsedAreaCursor.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/XAreaLinks.hpp>
 #include <com/sun/star/sheet/XAreaLink.hpp>
-#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/sheet/XPrintAreas.hpp>
-#include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/util/XProtectable.hpp>
-#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/sheet/XUniqueCellFormatRangesSupplier.hpp>
 #include <com/sun/star/sheet/XCellRangesQuery.hpp>
 #include <com/sun/star/sheet/CellFlags.hpp>
-#include <com/sun/star/util/XMergeable.hpp>
 #include <com/sun/star/sheet/XArrayFormulaRange.hpp>
-#include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/sheet/XLabelRanges.hpp>
 #include <com/sun/star/sheet/XLabelRange.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
@@ -111,10 +110,12 @@
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
 #include <com/sun/star/sheet/XSheetLinkable.hpp>
-#include <com/sun/star/form/XFormsSupplier2.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/io/XSeekable.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/sheet/GlobalSheetSettings.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/table/XColumnRowRange.hpp>
+#include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/util/XMergeable.hpp>
+#include <com/sun/star/util/XProtectable.hpp>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
@@ -418,17 +419,9 @@ void ScXMLShapeExport::onExport( const uno::Reference < drawing::XShape >& xShap
 
 sal_Int16 ScXMLExport::GetFieldUnit()
 {
-    com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xProperties(
-                comphelper::getProcessServiceFactory()->createInstance(
-                    OUString( "com.sun.star.sheet.GlobalSheetSettings" ) ),
-                com::sun::star::uno::UNO_QUERY);
-    if (xProperties.is())
-    {
-        sal_Int16 nFieldUnit = 0;
-        if (xProperties->getPropertyValue(OUString("Metric")) >>= nFieldUnit)
-            return nFieldUnit;
-    }
-    return 0;
+    css::uno::Reference<css::sheet::XGlobalSheetSettings> xProperties =
+                css::sheet::GlobalSheetSettings::create( comphelper::getProcessComponentContext() );
+    return xProperties->getMetric();
 }
 
 

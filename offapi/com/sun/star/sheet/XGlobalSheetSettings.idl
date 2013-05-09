@@ -1,0 +1,161 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef __com_sun_star_sheet_XGlobalSheetSettings_idl__
+#define __com_sun_star_sheet_XGlobalSheetSettings_idl__
+
+#include <com/sun/star/beans/XPropertySet.idl>
+
+
+module com {  module sun {  module star {  module sheet {
+
+
+/**
+    @since LibreOffice 4.1
+ */
+published interface XGlobalSheetSettings
+{
+
+//! service com::sun::star::beans::PropertySet;
+    /** provides access to the properties.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+
+    /** specifies whether the cursor is moved after entering into cells.
+     */
+    [attribute] boolean MoveSelection;
+
+
+    /** contains the direction the cursor moves after entering cells.
+
+        @see com::sun::star::sheet::MoveDirection
+     */
+    [attribute] short MoveDirection;
+
+
+    /** specifies whether the enter key can be used to start editing a cell.
+     */
+    [attribute] boolean EnterEdit;
+
+
+    /** specifies whether cell formatting is extended when entering data.
+     */
+    [attribute] boolean ExtendFormat;
+
+
+    /** specifies whether ranges are highlighted on the sheet when
+        editing a formula.
+     */
+    [attribute] boolean RangeFinder;
+
+
+    /** specifies whether formula references are extended when cells
+        are inserted below or to the right of them.
+     */
+    [attribute] boolean ExpandReferences;
+
+
+    /** specifies whether the current selection is highlighted in
+        column and row headers.
+     */
+    [attribute] boolean MarkHeader;
+
+
+    /** specifies whether the enter key moves the cursor to the column
+        it was in before using the tab key to change columns.
+     */
+    [attribute] boolean UseTabCol;
+
+
+    /** contains the metric for all spreadsheet documents.
+
+        @see com::sun::star::util::MeasureUnit
+     */
+    [attribute] short Metric;
+
+
+    /** contains the default scale for new spreadsheet documents
+        (in percent).
+
+        <p>There are several special values:</p>
+        <p>-1 = Optimal width</p>
+        <p>-2 = Show whole page</p>
+        <p>-3 = Page width</p>
+     */
+    [attribute] short Scale;
+
+
+    /** specifies whether automatic completion of text in a cell is used.
+     */
+    [attribute] boolean DoAutoComplete;
+
+
+    /** contains the function that is displayed in the status bar.
+
+        @see com::sun::star::sheet::StatusBarFunction
+     */
+    [attribute] short StatusBarFunction;
+
+
+    /** contains the string lists used for sorting and filling.
+
+        <p>Each string contains the members of a list, separated by
+        commas.</p>
+     */
+    [attribute] sequence< string > UserLists;
+
+
+    /** specifies the update mode for external linked data.
+
+        <p>0 = always</p>
+        <p>1 = never</p>
+        <p>2 = on demand</p>
+     */
+    [attribute] short LinkUpdateMode;
+
+
+    /** specifies whether all sheets or only selected sheets are printed.
+     */
+    [attribute] boolean PrintAllSheets;
+
+
+    /** specifies whether empty pages are printed.
+     */
+    [attribute] boolean PrintEmptyPages;
+
+
+    /** specifies whether printer metrics are used for display.
+     */
+    [attribute] boolean UsePrinterMetrics;
+
+
+    /** specifies whether a warning is shown before replacing cells
+        (i.e. when pasting from clipboard).
+     */
+    [attribute] boolean ReplaceCellsWarning;
+
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

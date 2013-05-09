@@ -17,17 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <cppuhelper/bootstrap.hxx>
-#include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/Introspection.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/script/Converter.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/Introspection.hpp>
+#include <com/sun/star/script/Converter.hpp>
+#include <com/sun/star/sheet/GlobalSheetSettings.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
+
 
 #include <comphelper/processfactory.hxx>
 
@@ -111,26 +113,21 @@ class PasteCellsWarningReseter
 {
 private:
     bool bInitialWarningState;
-    static uno::Reference< beans::XPropertySet > getGlobalSheetSettings() throw ( uno::RuntimeException )
+    static uno::Reference< sheet::XGlobalSheetSettings > getGlobalSheetSettings() throw ( uno::RuntimeException )
     {
-        static uno::Reference<uno::XComponentContext > xContext(
-            comphelper::getProcessComponentContext() );
-        static uno::Reference<lang::XMultiComponentFactory > xServiceManager(
-            xContext->getServiceManager() );
-        static uno::Reference< beans::XPropertySet > xProps( xServiceManager->createInstanceWithContext( OUString(  "com.sun.star.sheet.GlobalSheetSettings"  ) ,xContext ), uno::UNO_QUERY_THROW );
+        static uno::Reference< sheet::XGlobalSheetSettings > xProps = sheet::sheet( comphelper::getProcessComponentContext() );
         return xProps;
     }
 
     bool getReplaceCellsWarning() throw ( uno::RuntimeException )
     {
-        sal_Bool res = false;
-        getGlobalSheetSettings()->getPropertyValue( OUString(REPLACE_CELLS_WARNING) ) >>= res;
+        sal_Bool res = getGlobalSheetSettings()->getReplaceCellsWarning();
         return ( res == sal_True );
     }
 
     void setReplaceCellsWarning( bool bState ) throw ( uno::RuntimeException )
     {
-        getGlobalSheetSettings()->setPropertyValue( OUString(REPLACE_CELLS_WARNING), uno::makeAny( bState ) );
+        getGlobalSheetSettings()->setReplaceCellsWarning( bState );
     }
 public:
     PasteCellsWarningReseter() throw ( uno::RuntimeException )

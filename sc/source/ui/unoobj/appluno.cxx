@@ -378,6 +378,22 @@ uno::Sequence<OUString> ScSpreadsheetSettings::getSupportedServiceNames_Static()
     return aRet;
 }
 
+sal_Bool ScSpreadsheetSettings::getPropertyBool(const OUString& aPropertyName) throw (css::uno::RuntimeException)
+{
+   uno::Any any = getPropertyValue(aPropertyName);
+   sal_Bool b;
+   any >>= b;
+   return b;
+}
+
+sal_Int16 ScSpreadsheetSettings::getPropertyInt16(const OUString& aPropertyName) throw (css::uno::RuntimeException)
+{
+   uno::Any any = getPropertyValue(aPropertyName);
+   sal_Int16 b;
+   any >>= b;
+   return b;
+}
+
 // XPropertySet
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScSpreadsheetSettings::getPropertySetInfo()

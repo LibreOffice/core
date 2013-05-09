@@ -21,6 +21,8 @@
 
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/sheet/XSheetCellRange.hpp>
+#include <com/sun/star/sheet/GlobalSheetSettings.hpp>
+
 #include "docuno.hxx"
 #include "tabvwsh.hxx"
 #include "transobj.hxx"
@@ -107,26 +109,21 @@ class PasteCellsWarningReseter
 {
 private:
     bool bInitialWarningState;
-    static uno::Reference< beans::XPropertySet > getGlobalSheetSettings() throw ( uno::RuntimeException )
+    static uno::Reference< sheet::XGlobalSheetSettings > getGlobalSheetSettings() throw ( uno::RuntimeException )
     {
-        static uno::Reference<uno::XComponentContext > xContext(
-            comphelper::getProcessComponentContext() );
-        static uno::Reference<lang::XMultiComponentFactory > xServiceManager(
-                xContext->getServiceManager() );
-        static uno::Reference< beans::XPropertySet > xProps( xServiceManager->createInstanceWithContext( OUString( "com.sun.star.sheet.GlobalSheetSettings" ) ,xContext ), uno::UNO_QUERY_THROW );
+        static uno::Reference< sheet::XGlobalSheetSettings > xProps = sheet::GlobalSheetSettings::create( comphelper::getProcessComponentContext() );
         return xProps;
     }
 
     bool getReplaceCellsWarning() throw ( uno::RuntimeException )
     {
-        sal_Bool res = false;
-        getGlobalSheetSettings()->getPropertyValue( REPLACE_CELLS_WARNING ) >>= res;
+        sal_Bool res = getGlobalSheetSettings()->getReplaceCellsWarning();
         return ( res == sal_True );
     }
 
     void setReplaceCellsWarning( bool bState ) throw ( uno::RuntimeException )
     {
-        getGlobalSheetSettings()->setPropertyValue( REPLACE_CELLS_WARNING, uno::makeAny( bState ) );
+        getGlobalSheetSettings()->setReplaceCellsWarning( bState );
     }
 public:
     PasteCellsWarningReseter() throw ( uno::RuntimeException )
