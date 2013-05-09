@@ -149,10 +149,10 @@ void QuartzSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbac
     CTFontRef font = m_style->GetFont();
     DBG_ASSERT(font, "GetFontMetric without font set in style");
 
-    pMetric->mnAscent = static_cast<long>( CTFontGetAscent(font) * mfFakeDPIScale + 0.5);
+    pMetric->mnAscent = static_cast<long>(CTFontGetAscent(font) * mfFakeDPIScale + 0.5);
     pMetric->mnDescent = static_cast<long>(CTFontGetDescent(font) * mfFakeDPIScale + 0.5);
     pMetric->mnExtLeading = static_cast<long>(CTFontGetLeading(font) * mfFakeDPIScale + 0.5);
-    pMetric->mnIntLeading   = 0;
+    pMetric->mnIntLeading = 0;
     pMetric->mnWidth = m_style->GetFontStretchedSize();
 
     SAL_INFO( "vcl.coretext.gr",
