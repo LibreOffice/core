@@ -67,6 +67,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <editeng/charhiddenitem.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <doctok/sprmids.hxx>
 #include <fmtpdsc.hxx>
 #include <node.hxx>
 #include <ndtxt.hxx> // SwTxtNode, siehe unten: JoinNode()
@@ -1558,17 +1559,17 @@ void WW8FlyPara::Read(sal_uInt8 nOrigSp29, WW8PLCFx_Cp_FKP* pPap)
     }
     else
     {
-        SetValSprm( &nSp26, pPap, 0x8418 ); // X-Position
+        SetValSprm( &nSp26, pPap, NS_sprm::LN_PDxaAbs ); // X-Position
         //set in me or in parent style
-        mbVertSet |= SetValSprm( &nSp27, pPap, 0x8419 );    // Y-Position
-        SetValSprm( &nSp45, pPap, 0x442B ); // Hoehe
-        SetValSprm( &nSp28, pPap, 0x841A ); // Breite
-        SetValSprm( &nLeMgn, pPap, 0x842F );    // L-Raender
-        SetValSprm( &nRiMgn, pPap, 0x842F );    // R-Raender
-        SetValSprm( &nUpMgn, pPap, 0x842E );    // U-Raender
-        SetValSprm( &nLoMgn, pPap, 0x842E );    // D-Raender
+        mbVertSet |= SetValSprm( &nSp27, pPap, NS_sprm::LN_PDyaAbs );    // Y-Position
+        SetValSprm( &nSp45, pPap, NS_sprm::LN_PWHeightAbs ); // Hoehe
+        SetValSprm( &nSp28, pPap, NS_sprm::LN_PDxaWidth ); // Breite
+        SetValSprm( &nLeMgn, pPap, NS_sprm::LN_PDxaFromText );    // L-Raender
+        SetValSprm( &nRiMgn, pPap, NS_sprm::LN_PDxaFromText );    // R-Raender
+        SetValSprm( &nUpMgn, pPap, NS_sprm::LN_PDyaFromText );    // U-Raender
+        SetValSprm( &nLoMgn, pPap, NS_sprm::LN_PDyaFromText );    // D-Raender
 
-        pS = pPap->HasSprm( 0x2423 );                               // Umfluss
+        pS = pPap->HasSprm( NS_sprm::LN_PWr );                               // Umfluss
         if( pS )
             nSp37 = *pS;
     }
