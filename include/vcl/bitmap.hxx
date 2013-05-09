@@ -208,6 +208,7 @@ class Lanczos3Kernel : public Kernel
 {
 
 public:
+    Lanczos3Kernel() : Kernel () {}
     virtual double GetWidth() const { return 3.0; }
     virtual double Calculate (double x) const
     {
@@ -226,6 +227,9 @@ public:
 };
 
 class BicubicKernel : public Kernel {
+public:
+    BicubicKernel() : Kernel () {}
+private:
     virtual double GetWidth() const { return 2.0; }
     virtual double Calculate (double x) const
     {
@@ -247,6 +251,9 @@ class BicubicKernel : public Kernel {
 };
 
 class BilinearKernel : public Kernel {
+public:
+    BilinearKernel() : Kernel () {}
+private:
     virtual double GetWidth() const { return 1.0; }
     virtual double Calculate (double x) const
     {
@@ -263,6 +270,9 @@ class BilinearKernel : public Kernel {
 };
 
 class BoxKernel : public Kernel {
+public:
+    BoxKernel() : Kernel () {}
+private:
     virtual double GetWidth() const { return 0.5; }
     virtual double Calculate (double x) const
     {
