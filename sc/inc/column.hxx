@@ -25,7 +25,7 @@
 #include "address.hxx"
 #include "rangenam.hxx"
 #include "types.hxx"
-#include "mtvblockfunc.hxx"
+#include "mtvelements.hxx"
 #include "formula/types.hxx"
 
 #include <set>
