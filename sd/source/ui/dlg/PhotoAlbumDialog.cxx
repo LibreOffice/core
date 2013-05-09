@@ -55,9 +55,7 @@ SdPhotoAlbumDialog::SdPhotoAlbumDialog(Window* pWindow, SdDrawDocument* pActDoc)
     get(pImg, "preview_img");
 
     get(pInsTypeCombo, "opt_combo");
-
     get(pASRCheck, "asr_check");
-    get(pFilenameLab, "filename_lab");
 
     pCancelBtn->SetClickHdl(LINK(this, SdPhotoAlbumDialog, CancelHdl));
     pCreateBtn->SetClickHdl(LINK(this, SdPhotoAlbumDialog, CreateHdl));
@@ -614,10 +612,10 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl)
 
             for ( sal_Int32 i = 0; i < aFilesArr.getLength(); i++ )
             {
-                // Store full path, show filename only
-                OUString sFileName = aFilesArr[i].copy(aFilesArr[i].lastIndexOf("/")).replaceAll("/","");
-                sal_Int16 nPos = pImagesLst->InsertEntry( sFileName );
-                pImagesLst->SetEntryData(nPos, (void*)new OUString(aFilesArr[i]));
+                // Store full path, show filename only. Use INetURLObject to display spaces in filename correctly
+                INetURLObject aUrl = INetURLObject(aFilesArr[i]);
+                sal_Int16 nPos = pImagesLst->InsertEntry( aUrl.GetLastName(INetURLObject::DECODE_WITH_CHARSET, RTL_TEXTENCODING_UTF8) );
+                pImagesLst->SetEntryData(nPos, (OUString*) new OUString(aUrl.GetMainURL(INetURLObject::DECODE_WITH_CHARSET, RTL_TEXTENCODING_UTF8)));
             }
         }
     }
@@ -726,7 +724,6 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, RemoveHdl)
 {
     pImagesLst->RemoveEntry( pImagesLst->GetSelectEntryPos() );
     pImg->SetImage(Image());
-    pFilenameLab->SetText("");
 
     if(pImagesLst->GetEntryCount() >= 1)
     {
@@ -774,7 +771,6 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, SelectHdl)
         GraphicFilter aCurFilter;
         Graphic aGraphic;
         INetURLObject aURLObj( sImgUrl );
-        pFilenameLab->SetText(sImgUrl);
 
         sal_uInt16 nFilter = GRFILTER_FORMAT_DONTKNOW;
 
@@ -820,7 +816,6 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, SelectHdl)
     else
     {
         pImg->SetImage(Image());
-        pFilenameLab->SetText("");
     }
 
     return 0;
