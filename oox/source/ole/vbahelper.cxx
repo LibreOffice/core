@@ -30,7 +30,7 @@ using namespace ::com::sun::star::uno;
 
 // ============================================================================
 
-/*static*/ bool VbaHelper::readDirRecord( sal_uInt16& rnRecId, StreamDataSequence& rRecData, BinaryInputStream& rInStrm )
+bool VbaHelper::readDirRecord( sal_uInt16& rnRecId, StreamDataSequence& rRecData, BinaryInputStream& rInStrm )
 {
     // read the record header
     sal_Int32 nRecSize;
@@ -45,7 +45,7 @@ using namespace ::com::sun::star::uno;
     return !rInStrm.isEof() && (rInStrm.readData( rRecData, nRecSize ) == nRecSize);
 }
 
-/*static*/ bool VbaHelper::extractKeyValue( OUString& rKey, OUString& rValue, const OUString& rKeyValue )
+bool VbaHelper::extractKeyValue( OUString& rKey, OUString& rValue, const OUString& rKeyValue )
 {
     sal_Int32 nEqSignPos = rKeyValue.indexOf( '=' );
     if( nEqSignPos > 0 )

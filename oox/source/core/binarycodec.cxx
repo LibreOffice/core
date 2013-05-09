@@ -108,7 +108,7 @@ sal_uInt16 lclGetHash( const sal_uInt8* pnPassData, sal_Int32 nBufferSize )
 
 // ============================================================================
 
-/*static*/ sal_uInt16 CodecHelper::getPasswordHash( const AttributeList& rAttribs, sal_Int32 nElement )
+sal_uInt16 CodecHelper::getPasswordHash( const AttributeList& rAttribs, sal_Int32 nElement )
 {
     sal_Int32 nPasswordHash = rAttribs.getIntegerHex( nElement, 0 );
     OSL_ENSURE( (0 <= nPasswordHash) && (nPasswordHash <= SAL_MAX_UINT16), "CodecHelper::getPasswordHash - invalid password hash" );

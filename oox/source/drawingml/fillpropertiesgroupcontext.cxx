@@ -272,7 +272,7 @@ Reference< XFastContextHandler > FillPropertiesContext::createFastChildContext(
     return createFillContext( *this, nElement, rxAttribs, mrFillProps );
 }
 
-/*static*/ Reference< XFastContextHandler > FillPropertiesContext::createFillContext(
+Reference< XFastContextHandler > FillPropertiesContext::createFillContext(
         ContextHandler& rParent, sal_Int32 nElement,
         const Reference< XFastAttributeList >& rxAttribs, FillProperties& rFillProps )
 {

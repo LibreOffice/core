@@ -232,7 +232,7 @@ ShapeContextBase::ShapeContextBase( ContextHandler2Helper& rParent ) :
 {
 }
 
-/*static*/ ContextHandlerRef ShapeContextBase::createShapeContext( ContextHandler2Helper& rParent,
+ContextHandlerRef ShapeContextBase::createShapeContext( ContextHandler2Helper& rParent,
         ShapeContainer& rShapes, sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( nElement )

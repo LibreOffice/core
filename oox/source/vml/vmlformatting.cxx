@@ -62,7 +62,7 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
 
 // ----------------------------------------------------------------------------
 
-/*static*/ bool ConversionHelper::separatePair( OUString& orValue1, OUString& orValue2,
+bool ConversionHelper::separatePair( OUString& orValue1, OUString& orValue2,
         const OUString& rValue, sal_Unicode cSep )
 {
     sal_Int32 nSepPos = rValue.indexOf( cSep );
@@ -78,14 +78,14 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
     return !orValue1.isEmpty() && !orValue2.isEmpty();
 }
 
-/*static*/ bool ConversionHelper::decodeBool( const OUString& rValue )
+bool ConversionHelper::decodeBool( const OUString& rValue )
 {
     sal_Int32 nToken = AttributeConversion::decodeToken( rValue );
     // anything else than 't' or 'true' is considered to be false, as specified
     return (nToken == XML_t) || (nToken == XML_true);
 }
 
-/*static*/ double ConversionHelper::decodePercent( const OUString& rValue, double fDefValue )
+double ConversionHelper::decodePercent( const OUString& rValue, double fDefValue )
 {
     if( rValue.isEmpty() )
         return fDefValue;
@@ -108,7 +108,7 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
     return fDefValue;
 }
 
-/*static*/ sal_Int64 ConversionHelper::decodeMeasureToEmu( const GraphicHelper& rGraphicHelper,
+sal_Int64 ConversionHelper::decodeMeasureToEmu( const GraphicHelper& rGraphicHelper,
         const OUString& rValue, sal_Int32 nRefValue, bool bPixelX, bool bDefaultAsPixel )
 {
     // default for missing values is 0
@@ -168,13 +168,13 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
     return static_cast< sal_Int64 >( fValue + 0.5 );
 }
 
-/*static*/ sal_Int32 ConversionHelper::decodeMeasureToHmm( const GraphicHelper& rGraphicHelper,
+sal_Int32 ConversionHelper::decodeMeasureToHmm( const GraphicHelper& rGraphicHelper,
         const OUString& rValue, sal_Int32 nRefValue, bool bPixelX, bool bDefaultAsPixel )
 {
     return ::oox::drawingml::convertEmuToHmm( decodeMeasureToEmu( rGraphicHelper, rValue, nRefValue, bPixelX, bDefaultAsPixel ) );
 }
 
-/*static*/ Color ConversionHelper::decodeColor( const GraphicHelper& rGraphicHelper,
+Color ConversionHelper::decodeColor( const GraphicHelper& rGraphicHelper,
         const OptValue< OUString >& roVmlColor, const OptValue< double >& roVmlOpacity,
         sal_Int32 nDefaultRgb, sal_Int32 nPrimaryRgb )
 {
@@ -266,7 +266,7 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
     return aDmlColor;
 }
 
-/*static*/ void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& rPointLists, ::std::vector< ::std::vector< PolygonFlags > >& rFlagLists, const OUString& rPath )
+void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& rPointLists, ::std::vector< ::std::vector< PolygonFlags > >& rFlagLists, const OUString& rPath )
 {
     ::std::vector< sal_Int32 > aCoordList;
     Point aCurrentPoint;

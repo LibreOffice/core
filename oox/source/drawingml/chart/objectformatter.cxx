@@ -1132,7 +1132,7 @@ void ObjectFormatter::convertAutomaticFill( PropertySet& rPropSet, ObjectType eO
         pFormat->convertAutomaticFill( rPropSet, nSeriesIdx );
 }
 
-/*static*/ bool ObjectFormatter::isAutomaticFill( const ModelRef< Shape >& rxShapeProp )
+bool ObjectFormatter::isAutomaticFill( const ModelRef< Shape >& rxShapeProp )
 {
     return !rxShapeProp || !rxShapeProp->getFillProperties().moFillType.has();
 }

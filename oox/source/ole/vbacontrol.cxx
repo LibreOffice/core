@@ -716,7 +716,7 @@ void VbaFormControl::moveEmbeddedToAbsoluteParent()
     }
 }
 
-/*static*/ bool VbaFormControl::compareByTabIndex( const VbaFormControlRef& rxLeft, const VbaFormControlRef& rxRight )
+bool VbaFormControl::compareByTabIndex( const VbaFormControlRef& rxLeft, const VbaFormControlRef& rxRight )
 {
     // sort controls without model to the end
     sal_Int32 nLeftTabIndex = rxLeft->mxSiteModel.get() ? rxLeft->mxSiteModel->getTabIndex() : SAL_MAX_INT32;

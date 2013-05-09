@@ -247,7 +247,7 @@ StdFontInfo::StdFontInfo( const OUString& rName, sal_uInt32 nHeight,
 
 // ============================================================================
 
-/*static*/ sal_Int32 OleHelper::decodeOleColor(
+sal_Int32 OleHelper::decodeOleColor(
         const GraphicHelper& rGraphicHelper, sal_uInt32 nOleColor, bool bDefaultColorBgr )
 {
     static const sal_Int32 spnSystemColors[] =
@@ -279,12 +279,12 @@ StdFontInfo::StdFontInfo( const OUString& rName, sal_uInt32 nHeight,
     return API_RGB_BLACK;
 }
 
-/*static*/ sal_uInt32 OleHelper::encodeOleColor( sal_Int32 nRgbColor )
+sal_uInt32 OleHelper::encodeOleColor( sal_Int32 nRgbColor )
 {
     return OLE_COLORTYPE_BGR | lclSwapRedBlue( static_cast< sal_uInt32 >( nRgbColor & 0xFFFFFF ) );
 }
 
-/*static*/ OUString OleHelper::importGuid( BinaryInputStream& rInStrm )
+OUString OleHelper::importGuid( BinaryInputStream& rInStrm )
 {
     OUStringBuffer aBuffer;
     aBuffer.append( sal_Unicode( '{' ) );
@@ -303,7 +303,7 @@ StdFontInfo::StdFontInfo( const OUString& rName, sal_uInt32 nHeight,
     return aBuffer.makeStringAndClear();
 }
 
-/*static*/ bool OleHelper::importStdFont( StdFontInfo& orFontInfo, BinaryInputStream& rInStrm, bool bWithGuid )
+bool OleHelper::importStdFont( StdFontInfo& orFontInfo, BinaryInputStream& rInStrm, bool bWithGuid )
 {
     if( bWithGuid )
     {
@@ -321,7 +321,7 @@ StdFontInfo::StdFontInfo( const OUString& rName, sal_uInt32 nHeight,
     return !rInStrm.isEof() && (nVersion <= 1);
 }
 
-/*static*/ bool OleHelper::importStdPic( StreamDataSequence& orGraphicData, BinaryInputStream& rInStrm, bool bWithGuid )
+bool OleHelper::importStdPic( StreamDataSequence& orGraphicData, BinaryInputStream& rInStrm, bool bWithGuid )
 {
     if( bWithGuid )
     {

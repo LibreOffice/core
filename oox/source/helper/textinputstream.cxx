@@ -184,7 +184,7 @@ OUString TextInputStream::readToChar( sal_Unicode cChar, bool bIncludeChar )
     return OUString();
 }
 
-/*static*/ Reference< XTextInputStream2 > TextInputStream::createXTextInputStream(
+Reference< XTextInputStream2 > TextInputStream::createXTextInputStream(
         const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& rxInStrm, rtl_TextEncoding eTextEnc )
 {
     Reference< XTextInputStream2 > xTextStrm;

@@ -217,7 +217,7 @@ Color::~Color()
 {
 }
 
-/*static*/ sal_Int32 Color::getDmlPresetColor( sal_Int32 nToken, sal_Int32 nDefaultRgb )
+sal_Int32 Color::getDmlPresetColor( sal_Int32 nToken, sal_Int32 nDefaultRgb )
 {
     /*  Do not pass nDefaultRgb to ContainerHelper::getVectorElement(), to be
         able to catch the existing vector entries without corresponding XML
@@ -226,7 +226,7 @@ Color::~Color()
     return (nRgbValue >= 0) ? nRgbValue : nDefaultRgb;
 }
 
-/*static*/ sal_Int32 Color::getVmlPresetColor( sal_Int32 nToken, sal_Int32 nDefaultRgb )
+sal_Int32 Color::getVmlPresetColor( sal_Int32 nToken, sal_Int32 nDefaultRgb )
 {
     /*  Do not pass nDefaultRgb to ContainerHelper::getVectorElement(), to be
         able to catch the existing vector entries without corresponding XML
