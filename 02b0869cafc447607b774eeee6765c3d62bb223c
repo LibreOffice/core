@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//9Js\u003d",
+        "filename": "scp2/source/graphicfilter/file_graphicfilter.scp",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-05-09T03:28:20Z",
+      "side": 0,
+      "message": "graphicfilter.xcd is not a library! You cannot remove it.",
+      "revId": "02b0869cafc447607b774eeee6765c3d62bb223c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//9Jo\u003d",
+        "filename": "scp2/source/graphicfilter/file_graphicfilter.scp",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-05-09T03:28:20Z",
+      "side": 0,
+      "message": "Ditto here. this defines a resource file (actually a set of localized res files).",
+      "revId": "02b0869cafc447607b774eeee6765c3d62bb223c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
