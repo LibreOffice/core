@@ -286,10 +286,7 @@ void PptSlideLayoutAtom::Clear()
 {
     eLayout = 0;
     for ( sal_uInt16 i = 0; i < 8; i++ )
-    {
         aPlaceholderId[ i ] = 0;
-        aPlacementId[ i ] = 0;
-    }
 }
 
 SvStream& operator>>( SvStream& rIn, PptSlideLayoutAtom& rAtom )

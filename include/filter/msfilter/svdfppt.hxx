@@ -195,7 +195,6 @@ struct PptSlideLayoutAtom
 {
     sal_Int32           eLayout;                // 0..18
     sal_uInt8           aPlaceholderId[ 8 ];
-    sal_uLong           aPlacementId[ 8 ];
 
 public:
                         PptSlideLayoutAtom() { Clear(); }

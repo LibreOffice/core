@@ -2322,6 +2322,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
             const PptSlideLayoutAtom* pSlideLayout = GetSlideLayoutAtom();
             if ( pSlideLayout || ( eAktPageKind == PPT_NOTEPAGE ) )
             {
+                sal_uInt32 nPlacementId = pPlaceHolder->nPlacementId;
                 sal_Int16 nPlaceholderId = pPlaceHolder->nPlaceholderId;
                 sal_uInt16 i = 0;
                 if ( eAktPageKind == PPT_SLIDEPAGE )
@@ -2401,7 +2402,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                             ApplyAttributes( rStCtrl, aSet );
                             pPresObj->SetMergedItemSet(aSet);
 
-                            if ( ( eAktPageKind != PPT_NOTEPAGE ) && ( pSlideLayout->aPlacementId[ i ] != (sal_uLong)-1 ) )
+                            if ( ( eAktPageKind != PPT_NOTEPAGE ) && ( nPlacementId != 0xffffffff ) )
                             {
                                 SdrObject* pTitleObj = ((SdPage&)pPage->TRG_GetMasterPage()).GetPresObj( PRESOBJ_TITLE );
                                 SdrObject* pOutlineObj = ((SdPage&)pPage->TRG_GetMasterPage()).GetPresObj( PRESOBJ_OUTLINE );
@@ -2420,7 +2421,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                                 Rectangle aLogicRect( pPresObj->GetLogicRect() );
                                 Size      aLogicSize( aLogicRect.GetSize() );
 
-                                switch ( pSlideLayout->aPlacementId[ i ] )
+                                switch ( nPlacementId )
                                 {
                                     case 0 :            // position in title area
                                     {
