@@ -49,6 +49,10 @@ OPENSSL_PLATFORM := \
           ,\
             $(if $(filter I,$(CPU)),VC-WIN32,VC-WIN64A)\
           )\
+        ,\
+          $(if $(filter MACOSX,$(OS)),\
+            $(if $(filter I,$(CPU)),darwin-i386-cc,darwin64-x86_64-cc)\
+          )\
         )\
       )\
     )\
@@ -70,7 +74,7 @@ else
 $(call gb_ExternalProject_get_state_target,openssl,build):
 	$(call gb_ExternalProject_run,build,\
 		unset MAKEFLAGS \
-		&& $(if $(filter LINUX FREEBSD ANDROID SOLARIS IOS,$(OS)),./Configure,\
+		&& $(if $(filter LINUX MACOSX FREEBSD ANDROID SOLARIS IOS,$(OS)),./Configure,\
 		$(if $(filter WNT,$(OS)),$(PERL) Configure,./config)) \
 			$(OPENSSL_PLATFORM) \
 			$(if $(filter ANDROID,$(OS)),\
