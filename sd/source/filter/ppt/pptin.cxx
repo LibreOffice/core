@@ -2332,8 +2332,6 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                     sal_Bool    bVertical = sal_False;
                     if ( ( pTextObj->GetShapeType() == mso_sptRectangle ) || ( pTextObj->GetShapeType() == mso_sptTextBox ) )
                     {
-                        if ( pTextObj->Count() )
-                            bEmptyPresObj = sal_False;
                         switch ( nPlaceholderId )
                         {
                             case PPT_PLACEHOLDER_NOTESBODY :            ePresObjKind = PRESOBJ_NOTES;   break;
@@ -2348,7 +2346,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
 
                             default :
                             {
-                                if ( !pTextObj->Count() )
+                                if ( pTextObj->Count() == 0 )
                                 {
                                     switch ( nPlaceholderId )
                                     {
@@ -2360,6 +2358,8 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                                         case PPT_PLACEHOLDER_ORGANISZATIONCHART : ePresObjKind = PRESOBJ_ORGCHART; break;
                                     }
                                 }
+                                else
+                                    bEmptyPresObj = sal_False;
                             };
                         }
                     }
