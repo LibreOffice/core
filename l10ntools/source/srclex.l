@@ -68,6 +68,7 @@ void YYWarning();
 
 %option yylineno
 %option never-interactive
+%option nounistd
 
 %p 24000
 %e 1200

@@ -33,7 +33,7 @@
 
 #ifdef UNIX
 
-
+#include <unistd.h>
 #include <pthread.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -44,7 +44,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include <unistd.h>
 #include <string.h>
 
 #define SO_SERVER_PORT 8100

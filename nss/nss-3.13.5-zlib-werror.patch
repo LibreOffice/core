@@ -1,10 +1,12 @@
 --- misc/nss-3.13.5/mozilla/security/nss/lib/zlib/gzguts.h	2010-08-22 03:07:03.000000000 +0200
 +++ misc/build/nss-3.13.5/mozilla/security/nss/lib/zlib/gzguts.h	2012-07-17 08:52:14.821552788 +0200
-@@ -26,6 +26,7 @@
+@@ -26,6 +26,9 @@
  #  include <limits.h>
  #endif
  #include <fcntl.h>
++#ifndef _WIN32
 +#include <unistd.h>
++#endif
  
  #ifdef NO_DEFLATE       /* for compatibility with old definition */
  #  define NO_GZCOMPRESS

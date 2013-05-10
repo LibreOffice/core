@@ -261,6 +261,7 @@ static void parseLineAndFile(sal_Char* pBuf)
 
 %option noyywrap
 %option never-interactive
+%option nounistd
 
 %x DOCU
 %x COMMENT

@@ -26,6 +26,7 @@ $(eval $(call gb_Library_add_defs,raptor2,\
 	-D_WINDOWS \
 	-D_USRDLL \
 	-DWIN32_EXPORTS \
+	-DYY_NO_UNISTD_H \
 ))
 
 $(eval $(call gb_Library_add_generated_cobjects,raptor2,\

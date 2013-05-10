@@ -17,7 +17,6 @@ $(eval $(call gb_Executable_set_include,idlc,\
 
 $(eval $(call gb_Executable_use_externals,idlc,\
 	boost_headers \
-	unistd_headers \
 ))
 
 $(eval $(call gb_Executable_use_libraries,idlc,\

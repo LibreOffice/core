@@ -21,7 +21,6 @@
 #include <string.h>
 #include <list>
 
-#include <unistd.h>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/weak.hxx>
@@ -49,6 +48,8 @@
 
 #if defined(SAL_W32)
 #include <io.h>
+#else
+#include <unistd.h>
 #endif
 
 

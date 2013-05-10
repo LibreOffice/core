@@ -32,7 +32,6 @@
 #include <osl/file.hxx>
 #include <osl/thread.h>
 #include <rtl/ustring.hxx>
-#include <unistd.h>
 #include <signal.h>
 
 #include <stdio.h>
@@ -43,6 +42,8 @@
 #if ( defined WNT )                     // Windows
 #   include <windows.h>
 #   include <tchar.h>
+#else
+#include <unistd.h>
 #endif
 
 #include "rtl/allocator.hxx"

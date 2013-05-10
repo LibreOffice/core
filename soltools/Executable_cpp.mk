@@ -9,10 +9,6 @@
 
 $(eval $(call gb_Executable_Executable,cpp))
 
-$(eval $(call gb_Executable_use_externals,cpp,\
-    unistd_headers \
-))
-
 $(eval $(call gb_Executable_add_cobjects,cpp,\
     soltools/cpp/_cpp \
     soltools/cpp/_eval \

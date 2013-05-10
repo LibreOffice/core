@@ -66,6 +66,7 @@ int bText=0;
 
 %option yylineno
 %option never-interactive
+%option nounistd
 
 %p 24000
 %e 1200

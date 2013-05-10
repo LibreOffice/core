@@ -10,7 +10,9 @@
 #define _SD_IMPRESSREMOTE_COMMUNICATOR_HXX
 
 #include <stdlib.h>
+#ifndef _WIN32
 #include <unistd.h>
+#endif
 #include <sys/types.h>
 #include <vector>
 

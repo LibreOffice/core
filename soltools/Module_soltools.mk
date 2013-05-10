@@ -14,10 +14,4 @@ $(eval $(call gb_Module_add_targets_for_build,soltools,\
     Executable_makedepend \
 ))
 
-ifeq ($(OS)$(COM),WNTMSC)
-$(eval $(call gb_Module_add_targets,soltools,\
-    Package_inc \
-))
-endif # WNTMSC
-
 # vim:set noet sw=4 ts=4:

@@ -1,0 +1,12 @@
+--- UnpackedTarball/langtag/liblangtag/lt-utils.c	2013-05-10 14:36:54.445200000 +0200
++++ UnpackedTarball/langtag/liblangtag/lt-utils.c	2013-05-10 14:38:31.446000000 +0200
+@@ -23,7 +23,9 @@
+ #if HAVE_STRING_H
+ #include <string.h>
+ #endif
++#if HAVE_UNISTD_H
+ #include <unistd.h>
++#endif
+ #include <sys/types.h>
+ #include "lt-messages.h"
+ #include "lt-utils.h"

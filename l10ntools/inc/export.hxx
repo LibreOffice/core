@@ -36,9 +36,10 @@
 #include <queue>
 #include <string>
 
-#include <unistd.h>
 #ifdef WNT
 #include <direct.h>
+#else
+#include <unistd.h>
 #endif
 
 #define NO_TRANSLATE_ISO        "x-no-translate"
