@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,desktop_pagein_install,$(OUTDIR)/bin))
 
 $(eval $(call gb_Package_set_outdir,desktop_pagein_install,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,desktop_pagein_install,program,\
+$(eval $(call gb_Package_add_files,desktop_pagein_install,$(gb_Pyuno_PROGRAMDIRNAME),\
     pagein-calc \
     pagein-common \
     pagein-draw \
