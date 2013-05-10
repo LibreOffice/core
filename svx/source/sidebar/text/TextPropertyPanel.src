@@ -60,6 +60,7 @@ Control RID_SIDEBAR_TEXT_PANEL
         DropDown = TRUE;
         HelpID = HID_COMBO_FONT_NAME ;
         QuickHelpText [ en-US ] = "Font";
+//        Command = ".uno:CharFontName";
     };
     MetricBox MB_SBFONT_FONTSIZE
     {
@@ -70,6 +71,7 @@ Control RID_SIDEBAR_TEXT_PANEL
         DropDown = TRUE;
         HelpID = HID_METRIC_FONT_SIZE;
         QuickHelpText [ en-US ] = "Font Size";
+//        Command = ".uno:FontHeight";
     };
 
     ToolBox TB_INCREASE_DECREASE
@@ -86,11 +88,13 @@ Control RID_SIDEBAR_TEXT_PANEL
             {
                 Identifier = TBI_INCREASE;
                 HelpID = HID_PPROPERTYPANEL_TEXT_TBI_INCREASE;
+                Command = ".uno:Grow";
             };
             ToolBoxItem
             {
                 Identifier = TBI_DECREASE;
                 HelpID = HID_PPROPERTYPANEL_TEXT_TBI_DECREASE;
+                Command = ".uno:Shrink";
             };
         };
     };
@@ -108,27 +112,32 @@ Control RID_SIDEBAR_TEXT_PANEL
             {
                 Identifier = TBI_BOLD;
                 HelpID = HID_PPROPERTYPANEL_TEXT_TBI_BOLD;
+                Command = ".uno:Bold";
             };
             ToolBoxItem
             {
                 Identifier = TBI_ITALIC;
                 HelpID = HID_PPROPERTYPANEL_TEXT_TBI_ITALIC;
+                Command = ".uno:Italic";
             };
             ToolBoxItem
             {
                 Identifier = TBI_UNDERLINE;
                 DropDown = TRUE ;
                 HelpID = HID_PPROPERTYPANEL_TEXT_TBI_UNDERLINE;
+                Command = ".uno:Underline";
             };
             ToolBoxItem
             {
                 Identifier = TBI_STRIKEOUT;
                 HelpID = HID_PPROPERTYPANEL_TEXT_TBI_STRIKEOUT;
+                Command = ".uno:Strikeout";
             };
             ToolBoxItem
             {
                 Identifier = TBI_SHADOWED;
                 HelpID = HID_PPROPERTYPANEL_TEXT_TBI_SHADOWED;
+                Command = ".uno:Shadowed";
             };
         };
     };
@@ -148,6 +157,7 @@ Control RID_SIDEBAR_TEXT_PANEL
                 Identifier = TBI_FONTCOLOR ;
                 HelpID = HID_PPROPERTYPANEL_TEXT_TBI_FONT_COLOR;
                 DropDown = TRUE ;
+                Command = ".uno:Color";
             };
         };
     };
@@ -167,6 +177,7 @@ Control RID_SIDEBAR_TEXT_PANEL
                 Identifier = TBI_HIGHLIGHT ;
                 HelpID = HID_PPROPERTYPANEL_TEXT_TBI_HIGHLIGHT_COLOR;
                 DropDown = TRUE ;
+                Command = ".uno:CharacterBackgroundPattern";
             };
         };
     };
@@ -185,11 +196,13 @@ Control RID_SIDEBAR_TEXT_PANEL
             {
                 Identifier = TBI_SUPER_SW;
                 HelpID = HID_PPROPERTYPANEL_TEXT_TBI_SUPER_SW;
+                Command = ".uno:SuperScript";
             };
             ToolBoxItem
             {
                 Identifier = TBI_SUB_SW;
                 HelpID = HID_PPROPERTYPANEL_TEXT_TBI_SUB_SW;
+                Command = ".uno:SubScript";
             };
         };
     };
@@ -207,11 +220,13 @@ Control RID_SIDEBAR_TEXT_PANEL
             {
                 Identifier = TBI_SUPER;
                 HelpID = HID_PPROPERTYPANEL_TEXT_TBI_SUPER;
+                Command = ".uno:SuperScript";
             };
             ToolBoxItem
             {
                 Identifier = TBI_SUB;
                 HelpID = HID_PPROPERTYPANEL_TEXT_TBI_SUB;
+                Command = ".uno:SubScript";
             };
         };
     };
@@ -231,6 +246,7 @@ Control RID_SIDEBAR_TEXT_PANEL
                 Identifier = TBI_SPACING;
                 DropDown = TRUE ;
                 HelpID = HID_TBI_SPACING;
+                Command = ".uno:Spacing";
             };
         };
     };

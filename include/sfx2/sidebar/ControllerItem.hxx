@@ -88,7 +88,7 @@ public:
         Changes of this state are notified via the
         ItemUpdateReceiverInterface::NotifyContextChang() method.
     */
-    bool IsEnabled (void) const;
+    bool IsEnabled (const SfxItemState eState) const;
 
     /** Force the controller item to call its NotifyItemUpdate
         callback with up-to-date data.

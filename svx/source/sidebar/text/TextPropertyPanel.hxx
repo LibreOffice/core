@@ -57,6 +57,7 @@ public:
         SfxBindings* pBindings);
 
     virtual void DataChanged (const DataChangedEvent& rEvent);
+
     ::sfx2::sidebar::ControllerItem& GetSpaceController();
     long GetSelFontSize();
     void SetSpacing(long nKern);

@@ -133,15 +133,17 @@ void ControllerItem::StateChanged (
     SfxItemState eState,
     const SfxPoolItem* pState)
 {
-    mrItemUpdateReceiver.NotifyItemUpdate(nSID, eState, pState, IsEnabled());
+    mrItemUpdateReceiver.NotifyItemUpdate(nSID, eState, pState, IsEnabled(eState));
 }
 
 
 
 
-bool ControllerItem::IsEnabled (void) const
+bool ControllerItem::IsEnabled (SfxItemState eState) const
 {
-    if ( ! SvtCommandOptions().HasEntries(SvtCommandOptions::CMDOPTION_DISABLED))
+    if (eState == SFX_ITEM_DISABLED)
+        return false;
+    else if ( ! SvtCommandOptions().HasEntries(SvtCommandOptions::CMDOPTION_DISABLED))
     {
         // There are no disabled commands.
         return true;
@@ -168,7 +170,7 @@ void ControllerItem::RequestUpdate (void)
 {
     SfxPoolItem* pState = NULL;
     const SfxItemState eState (GetBindings().QueryState(GetId(), pState));
-    mrItemUpdateReceiver.NotifyItemUpdate(GetId(), eState, pState, IsEnabled());
+    mrItemUpdateReceiver.NotifyItemUpdate(GetId(), eState, pState, IsEnabled(eState));
 }
 
 
