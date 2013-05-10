@@ -104,7 +104,7 @@ namespace cppcanvas
             sal_Int16 data;
             for (; i > 0; i --) {
                 s >> data;
-                SAL_INFO ("cppcanvas.emf", "EMF+\tdata: " << std::hex << data);
+                SAL_INFO ("cppcanvas.emf", "EMF+\tdata: " << std::hex << data << std::dec);
             }
             s.Seek (pos);
         }
@@ -285,7 +285,7 @@ namespace cppcanvas
                 s >> header >> parts;
 
                 SAL_INFO ("cppcanvas.emf", "EMF+\tregion");
-                SAL_INFO ("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << header << " parts: " << parts);
+                SAL_INFO ("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << header << " parts: " << parts << std::dec );
 
                 if (parts) {
                     if( parts<0 || sal_uInt32(parts)>SAL_MAX_INT32/sizeof(sal_Int32) )
@@ -295,12 +295,12 @@ namespace cppcanvas
 
                     for (int i = 0; i < parts; i ++) {
                         s >> combineMode [i];
-                        SAL_INFO ("cppcanvas.emf", "EMF+\tcombine mode [" << i << "]: 0x" << std::hex << combineMode [i]);
+                        SAL_INFO ("cppcanvas.emf", "EMF+\tcombine mode [" << i << "]: 0x" << std::hex << combineMode [i] << std::dec);
                     }
                 }
 
                 s >> initialState;
-                SAL_INFO ("cppcanvas.emf", "EMF+\tinitial state: 0x" << std::hex << initialState);
+                SAL_INFO ("cppcanvas.emf", "EMF+\tinitial state: 0x" << std::hex << initialState << std::dec);
             }
         };
 
@@ -370,7 +370,7 @@ namespace cppcanvas
 
                 s >> header >> type;
 
-                SAL_INFO ("cppcanvas.emf", "EMF+\tbrush\nEMF+\theader: 0x" << std::hex << header << " type: " << type);
+                SAL_INFO ("cppcanvas.emf", "EMF+\tbrush\nEMF+\theader: 0x" << std::hex << header << " type: " << type << std::dec);
 
                 switch (type) {
                 case 0:
@@ -379,7 +379,7 @@ namespace cppcanvas
 
                         s >> color;
                         solidColor = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
-                        SAL_INFO ("cppcanvas.emf", "EMF+\tsolid color: 0x" << std::hex << color);
+                        SAL_INFO ("cppcanvas.emf", "EMF+\tsolid color: 0x" << std::hex << color << std::dec);
 
                         break;
                     }
@@ -388,13 +388,13 @@ namespace cppcanvas
                     {
                         s >> additionalFlags >> wrapMode;
 
-                        SAL_INFO ("cppcanvas.emf", "EMF+\tpath gradient, additional flags: 0x" << std::hex << additionalFlags);
+                        SAL_INFO ("cppcanvas.emf", "EMF+\tpath gradient, additional flags: 0x" << std::hex << additionalFlags << std::dec);
 
                         sal_uInt32 color;
 
                         s >> color;
                         solidColor = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
-                        SAL_INFO("cppcanvas.emf", "EMF+\tcenter color: 0x" << std::hex << color);
+                        SAL_INFO("cppcanvas.emf", "EMF+\tcenter color: 0x" << std::hex << color << std::dec);
 
                         s >> areaX >> areaY;
                         SAL_INFO("cppcanvas.emf", "EMF+\tcenter point: " << areaX << "," << areaY);
@@ -411,7 +411,7 @@ namespace cppcanvas
                             surroundColors[i] = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
                             if (i == 0)
                                 secondColor = surroundColors [0];
-                            SAL_INFO("cppcanvas.emf", "EMF+\tsurround color[" << i << "]: 0x" << std::hex << color);
+                            SAL_INFO("cppcanvas.emf", "EMF+\tsurround color[" << i << "]: 0x" << std::hex << color << std::dec);
                         }
 
                         if (additionalFlags & 0x01) {
@@ -430,7 +430,7 @@ namespace cppcanvas
                             s >> pathHeader >> pathPoints >> pathFlags;
 
                             SAL_INFO("cppcanvas.emf", "EMF+\tpath (brush path gradient)");
-                            SAL_INFO("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << pathHeader << " points: " << pathPoints << " additional flags: 0x" << pathFlags);
+                            SAL_INFO("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << pathHeader << " points: " << std::dec << pathPoints << " additional flags: 0x" << std::hex << pathFlags << std::dec );
 
                             path = new EMFPPath (pathPoints);
                             path->Read (s, pathFlags, rR);
@@ -487,7 +487,7 @@ namespace cppcanvas
                             for (int i=0; i < colorblendPoints; i ++) {
                                 s >> color;
                                 colorblendColors [i] = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
-                                SAL_INFO("cppcanvas.emf", "EMF+\tcolor[" << i << "]: 0x" << std::hex << color);
+                                SAL_INFO("cppcanvas.emf", "EMF+\tcolor[" << i << "]: 0x" << std::hex << color << std::dec);
                             }
                         }
                         } else {
@@ -502,7 +502,7 @@ namespace cppcanvas
                     {
                         s >> additionalFlags >> wrapMode;
 
-                        SAL_INFO("cppcanvas.emf", "EMF+\tlinear gradient, additional flags: 0x" << std::hex << additionalFlags);
+                        SAL_INFO("cppcanvas.emf", "EMF+\tlinear gradient, additional flags: 0x" << std::hex << additionalFlags << std::dec);
 
                         s >> areaX >> areaY >> areaWidth >> areaHeight;
 
@@ -512,11 +512,11 @@ namespace cppcanvas
 
                         s >> color;
                         solidColor = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
-                        SAL_INFO("cppcanvas.emf", "EMF+\tfirst color: 0x" << std::hex << color);
+                        SAL_INFO("cppcanvas.emf", "EMF+\tfirst color: 0x" << std::hex << color << std::dec);
 
                         s >> color;
                         secondColor = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
-                        SAL_INFO("cppcanvas.emf", "EMF+\tsecond color: 0x" << std::hex << color);
+                        SAL_INFO("cppcanvas.emf", "EMF+\tsecond color: 0x" << std::hex << color << std::dec);
 
                         // repeated colors, unknown meaning, see http://www.aces.uiuc.edu/~jhtodd/Metafile/MetafileRecords/ObjectBrush.html
                         s >> color;
@@ -564,14 +564,14 @@ namespace cppcanvas
                             for (int i=0; i < colorblendPoints; i ++) {
                                 s >> color;
                                 colorblendColors [i] = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
-                                SAL_INFO("cppcanvas.emf", "EMF+\tcolor[" << i << "]: 0x" << std::hex << color);
+                                SAL_INFO("cppcanvas.emf", "EMF+\tcolor[" << i << "]: 0x" << std::hex << color << std::dec);
                             }
                         }
 
                         break;
                     }
                 default:
-                    SAL_INFO("cppcanvas.emf", "EMF+\tunhandled brush type: " << std::hex << type);
+                    SAL_INFO("cppcanvas.emf", "EMF+\tunhandled brush type: " << std::hex << type << std::dec);
                 }
             }
         };
@@ -618,8 +618,8 @@ namespace cppcanvas
 
                 s >> header >> unknown >> penFlags >> unknown2 >> width;
 
-                SAL_INFO("cppcanvas.emf", "EMF+\tpen\nEMF+\theader: 0x" << std::hex << header << " unknown: 0x" << std::hex << unknown <<
-                            " additional flags: 0x" << std::hex << penFlags << " unknown: 0x" << std::hex << unknown2 << " width: " << width);
+                SAL_INFO("cppcanvas.emf", "EMF+\tpen\nEMF+\theader: 0x" << std::hex << header << " unknown: 0x" << unknown <<
+                            " additional flags: 0x" << penFlags << " unknown: 0x" << unknown2 << " width: " << std::dec << width );
 
                 if (penFlags & 1)
                     s >> transformation;
@@ -724,11 +724,11 @@ namespace cppcanvas
 
                 s >> header >> type;
 
-                SAL_INFO("cppcanvas.emf", "EMF+\timage\nEMF+\theader: 0x" << std::hex << header << " type: " << std::hex << type);
+                SAL_INFO("cppcanvas.emf", "EMF+\timage\nEMF+\theader: 0x" << std::hex << header << " type: " << type << std::dec );
 
                 if (type == 1) { // bitmap
                     s >> width >> height >> stride >> pixelFormat >> unknown;
-                    SAL_INFO("cppcanvas.emf", "EMF+\tbitmap width: " << width << " height: " << height << " stride: " << "pixelFormat: 0x" << std::hex << pixelFormat);
+                    SAL_INFO("cppcanvas.emf", "EMF+\tbitmap width: " << width << " height: " << height << " stride: " << "pixelFormat: 0x" << std::hex << pixelFormat << std::dec);
                     if (width == 0) { // non native formats
                         GraphicFilter filter;
 
@@ -785,8 +785,8 @@ namespace cppcanvas
                 OSL_ASSERT( ( header >> 12 ) == 0xdbc01 );
 
                 SAL_INFO("cppcanvas.emf", "EMF+\tfont\n"
-                           << "EMF+\theader: 0x" << std::hex << (header >> 12) << " version: 0x" << std::hex << (header & 0x1fff) << " size: " << emSize << " unit: 0x" << std::hex << sizeUnit);
-                SAL_INFO("cppcanvas.emf", "EMF+\tflags: 0x" << std::hex << fontFlags << " reserved: 0x" << std::hex << reserved << " length: 0x" << std::hex << length);
+                           << "EMF+\theader: 0x" << std::hex << (header >> 12) << " version: 0x" << (header & 0x1fff) << " size: " << std::dec << emSize << " unit: 0x" << std::hex << sizeUnit << std::dec);
+                SAL_INFO("cppcanvas.emf", "EMF+\tflags: 0x" << std::hex << fontFlags << " reserved: 0x" << reserved << " length: 0x" << std::hex << length << std::dec);
 
                 if( length > 0 && length < 0x4000 ) {
                     sal_Unicode *chars = (sal_Unicode *) alloca( sizeof( sal_Unicode ) * length );
@@ -887,7 +887,7 @@ namespace cppcanvas
             ActionSharedPtr pPolyAction;
 
             if (isColor) {
-                SAL_INFO("cppcanvas.emf", "EMF+\t\tcolor fill:0x" << std::hex << brushIndexOrColor);
+                SAL_INFO("cppcanvas.emf", "EMF+\t\tcolor fill:0x" << std::hex << brushIndexOrColor << std::dec);
                 rState.isFillColorSet = true;
                 rState.isLineColorSet = false;
 
@@ -1158,7 +1158,7 @@ namespace cppcanvas
                 rObjectStream >> header >> points >> pathFlags;
 
                 SAL_INFO("cppcanvas.emf", "EMF+\tpath");
-                SAL_INFO("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << header << " points: " << points << " additional flags: 0x" << std::hex << pathFlags);
+                SAL_INFO("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << header << " points: " << std::dec << points << " additional flags: 0x" << std::hex << pathFlags << std::dec);
 
                 EMFPPath *path;
                 aObjects [index] = path = new EMFPPath (points);
@@ -1190,7 +1190,7 @@ namespace cppcanvas
                     break;
                 }
             default:
-                SAL_INFO("cppcanvas.emf", "EMF+\tObject unhandled flags: 0x" << std::hex << (flags & 0xff00));
+                SAL_INFO("cppcanvas.emf", "EMF+\tObject unhandled flags: 0x" << std::hex << (flags & 0xff00) << std::dec);
                 break;
             }
         }
@@ -1294,7 +1294,7 @@ namespace cppcanvas
                         rMF >> header >> version >> nHDPI >> nVDPI;
 
                         SAL_INFO("cppcanvas.emf", "EMF+ Header");
-                        SAL_INFO("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << header << " version: " << version << " horizontal DPI: " << nHDPI << " vertical DPI: " << nVDPI << " dual: " << (flags & 1));
+                        SAL_INFO("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << header << " version: " << std::dec << version << " horizontal DPI: " << nHDPI << " vertical DPI: " << nVDPI << " dual: " << (flags & 1));
 
                         break;
                     case EmfPlusRecordTypeEndOfFile:
@@ -1404,7 +1404,7 @@ namespace cppcanvas
 
                             rMF >> brushIndexOrColor >> rectangles;
 
-                            SAL_INFO("cppcanvas.emf", "EMF+\t" << ((flags & 0x8000) ? "color" : "brush index") << ": 0x" << std::hex << brushIndexOrColor);
+                            SAL_INFO("cppcanvas.emf", "EMF+\t" << ((flags & 0x8000) ? "color" : "brush index") << ": 0x" << std::hex << brushIndexOrColor << std::dec);
 
                             for (int i=0; i < rectangles; i++) {
                                 if (flags & 0x4000) {
@@ -1454,7 +1454,7 @@ namespace cppcanvas
                             rMF >> points;
 
                             SAL_INFO("cppcanvas.emf", "EMF+ FillPolygon in slot: " << +index << " points: " << points);
-                            SAL_INFO("cppcanvas.emf", "EMF+\t: " << ((flags & 0x8000) ? "color" : "brush index") << " 0x" << std::hex << brushIndexOrColor);
+                            SAL_INFO("cppcanvas.emf", "EMF+\t: " << ((flags & 0x8000) ? "color" : "brush index") << " 0x" << std::hex << brushIndexOrColor << std::dec);
 
                             EMFPPath path (points, true);
                             path.Read (rMF, flags, *this);
@@ -1839,7 +1839,7 @@ namespace cppcanvas
                         break;
                     }
                     case EmfPlusRecordTypeDrawDriverString: {
-                        SAL_INFO("cppcanvas.emf", "EMF+ DrawDriverString, flags: 0x" << std::hex << flags);
+                        SAL_INFO("cppcanvas.emf", "EMF+ DrawDriverString, flags: 0x" << std::hex << flags << std::dec);
                         sal_uInt32 brushIndexOrColor;
                         sal_uInt32 optionFlags;
                         sal_uInt32 hasMatrix;
@@ -1847,8 +1847,8 @@ namespace cppcanvas
 
                         rMF >> brushIndexOrColor >> optionFlags >> hasMatrix >> glyphsCount;
 
-                        SAL_INFO("cppcanvas.emf", "EMF+\t: " << ((flags & 0x8000) ? "color" : "brush index") << " 0x" << std::hex << brushIndexOrColor);
-                        SAL_INFO("cppcanvas.emf", "EMF+\toption flags: 0x" << std::hex << optionFlags);
+                        SAL_INFO("cppcanvas.emf", "EMF+\t: " << ((flags & 0x8000) ? "color" : "brush index") << " 0x" << std::hex << brushIndexOrColor << std::dec);
+                        SAL_INFO("cppcanvas.emf", "EMF+\toption flags: 0x" << std::hex << optionFlags << std::dec);
                         SAL_INFO("cppcanvas.emf", "EMF+\thas matrix: " << hasMatrix);
                         SAL_INFO("cppcanvas.emf", "EMF+\tglyphs: " << glyphsCount);
 
