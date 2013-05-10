@@ -1476,7 +1476,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                                 }
                             }
 
-                            if( bTranslateList )
+                            if( bTranslateList && nLIndex < vMergeEntryVector.size() )
                             {
                                 OString sText;
                                 sal_Bool bText;
