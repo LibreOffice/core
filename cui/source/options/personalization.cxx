@@ -83,19 +83,8 @@ IMPL_LINK( SelectPersonaDialog, VisitPersonas, PushButton*, /*pButton*/ )
 }
 
 SvxPersonalizationTabPage::SvxPersonalizationTabPage( Window *pParent, const SfxItemSet &rSet )
-    : SfxTabPage( pParent, "PersonalizationTabPage", "cui/ui/personalization_tab.ui", rSet ),
-      m_aBackgroundURL()
+    : SfxTabPage( pParent, "PersonalizationTabPage", "cui/ui/personalization_tab.ui", rSet )
 {
-    // background image
-    get( m_pNoBackground, "no_background" );
-    get( m_pDefaultBackground, "default_background" );
-
-    get( m_pOwnBackground, "own_background" );
-    m_pOwnBackground->SetClickHdl( LINK( this, SvxPersonalizationTabPage, ForceSelect ) );
-
-    get( m_pSelectBackground, "select_background" );
-    m_pSelectBackground->SetClickHdl( LINK( this, SvxPersonalizationTabPage, SelectBackground ) );
-
     // persona
     get( m_pNoPersona, "no_persona" );
     get( m_pDefaultPersona, "default_persona" );
@@ -118,13 +107,6 @@ SfxTabPage* SvxPersonalizationTabPage::Create( Window *pParent, const SfxItemSet
 
 sal_Bool SvxPersonalizationTabPage::FillItemSet( SfxItemSet & )
 {
-    // background image
-    OUString aBackground( "default" );
-    if ( m_pNoBackground->IsChecked() )
-        aBackground = "no";
-    else if ( m_pOwnBackground->IsChecked() )
-        aBackground = "own";
-
     // persona
     OUString aPersona( "default" );
     if ( m_pNoPersona->IsChecked() )
@@ -135,9 +117,7 @@ sal_Bool SvxPersonalizationTabPage::FillItemSet( SfxItemSet & )
     bool bModified = false;
     uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
     if ( xContext.is() &&
-            ( aBackground != officecfg::Office::Common::Misc::BackgroundImage::get( xContext ) ||
-              m_aBackgroundURL != officecfg::Office::Common::Misc::BackgroundImageURL::get( xContext ) ||
-              aPersona != officecfg::Office::Common::Misc::Persona::get( xContext ) ||
+            ( aPersona != officecfg::Office::Common::Misc::Persona::get( xContext ) ||
               m_aPersonaSettings != officecfg::Office::Common::Misc::PersonaSettings::get( xContext ) ) )
     {
         bModified = true;
@@ -146,8 +126,6 @@ sal_Bool SvxPersonalizationTabPage::FillItemSet( SfxItemSet & )
     // write
     boost::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
 
-    officecfg::Office::Common::Misc::BackgroundImage::set( aBackground, batch );
-    officecfg::Office::Common::Misc::BackgroundImageURL::set( m_aBackgroundURL, batch );
     officecfg::Office::Common::Misc::Persona::set( aPersona, batch );
     officecfg::Office::Common::Misc::PersonaSettings::set( m_aPersonaSettings, batch );
 
@@ -167,21 +145,6 @@ void SvxPersonalizationTabPage::Reset( const SfxItemSet & )
 {
     uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
-    // background image
-    OUString aBackground( "default" );
-    if ( xContext.is() )
-    {
-        aBackground = officecfg::Office::Common::Misc::BackgroundImage::get( xContext );
-        m_aBackgroundURL = officecfg::Office::Common::Misc::BackgroundImageURL::get( xContext );
-    }
-
-    if ( aBackground == "no" )
-        m_pNoBackground->Check();
-    else if ( aBackground == "own" )
-        m_pOwnBackground->Check();
-    else
-        m_pDefaultBackground->Check();
-
     // persona
     OUString aPersona( "default" );
     if ( xContext.is() )
@@ -196,37 +159,6 @@ void SvxPersonalizationTabPage::Reset( const SfxItemSet & )
         m_pOwnPersona->Check();
     else
         m_pDefaultPersona->Check();
-}
-
-IMPL_LINK( SvxPersonalizationTabPage, SelectBackground, PushButton*, /*pButton*/ )
-{
-    uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-
-    uno::Reference< ui::dialogs::XFilePicker3 > xFilePicker = ui::dialogs::FilePicker::createWithMode(xContext, ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE);
-
-    xFilePicker->setMultiSelectionMode( false );
-
-    uno::Reference< ui::dialogs::XFilePickerControlAccess > xController( xFilePicker, uno::UNO_QUERY );
-    if ( xController.is() )
-        xController->setValue( ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, uno::makeAny( sal_True ) );
-
-    xFilePicker->appendFilter( "Background images (*.jpg;*.png)", "*.jpg;*.png" ); // TODO localize
-
-    while ( xFilePicker->execute() == ui::dialogs::ExecutableDialogResults::OK )
-    {
-        OUString aFile( xFilePicker->getFiles()[0] );
-
-        if ( aFile.startsWith( "file:///" ) && ( aFile.endsWith( ".png" ) || aFile.endsWith( ".jpg" ) ) )
-        {
-            m_aBackgroundURL = aFile;
-            m_pOwnBackground->Check();
-            break;
-        }
-
-        // TODO display what is wrong (not a file:// or not .png / .jpg)
-    }
-
-    return 0;
 }
 
 IMPL_LINK( SvxPersonalizationTabPage, SelectPersona, PushButton*, /*pButton*/ )
@@ -250,9 +182,7 @@ IMPL_LINK( SvxPersonalizationTabPage, SelectPersona, PushButton*, /*pButton*/ )
 
 IMPL_LINK( SvxPersonalizationTabPage, ForceSelect, RadioButton*, pButton )
 {
-    if ( pButton == m_pOwnBackground && m_aBackgroundURL.isEmpty() )
-        SelectBackground( m_pSelectBackground );
-    else if ( pButton == m_pOwnPersona && m_aPersonaSettings.isEmpty() )
+    if ( pButton == m_pOwnPersona && m_aPersonaSettings.isEmpty() )
         SelectPersona( m_pSelectPersona );
 
     return 0;

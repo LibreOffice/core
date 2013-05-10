@@ -19,12 +19,6 @@ class SvxPersonalizationTabPage : public SfxTabPage
     using SfxTabPage::DeactivatePage;
 
 private:
-    RadioButton *m_pNoBackground;           ///< Just the default look, without any bitmap
-    RadioButton *m_pDefaultBackground;      ///< Use the built-in bitmap for Writer background
-    RadioButton *m_pOwnBackground;          ///< Use the user-defined bitmap
-    PushButton *m_pSelectBackground;        ///< Let the user select in the 'own' case
-    OUString m_aBackgroundURL;              ///< URL of the background image in the 'own' case
-
     RadioButton *m_pNoPersona;              ///< Just the default look, without any bitmap
     RadioButton *m_pDefaultPersona;         ///< Use the built-in bitmap
     RadioButton *m_pOwnPersona;             ///< Use the user-defined bitmap
@@ -44,13 +38,10 @@ public:
     virtual void Reset( const SfxItemSet &rSet );
 
 private:
-    /// Handle the bacground selection
-    DECL_LINK( SelectBackground, PushButton* );
-
     /// Handle the Persona selection
     DECL_LINK( SelectPersona, PushButton* );
 
-    /// When 'own' is chosen, but the background image or Persona is not chosen yet.
+    /// When 'own' is chosen, but the Persona is not chosen yet.
     DECL_LINK( ForceSelect, RadioButton* );
 
     /// Download the bitmaps + color settings, and copy them to user's profile.

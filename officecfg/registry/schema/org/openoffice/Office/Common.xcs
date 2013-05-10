@@ -5608,40 +5608,6 @@
         </constraints>
         <value>auto</value>
       </prop>
-      <prop oor:name="BackgroundImage" oor:type="xs:string" oor:nillable="false">
-        <!-- UIHints: Tools  Options General Personalization -->
-        <info>
-          <desc>Specifies whether we should use background image in the
-            workplace.</desc>
-        </info>
-        <constraints>
-          <enumeration oor:value="no">
-            <info>
-              <desc>No - the user wants only solid bacground.</desc>
-            </info>
-          </enumeration>
-          <enumeration oor:value="default">
-            <info>
-              <desc>Default - the LibreOffice default background image.</desc>
-            </info>
-          </enumeration>
-          <enumeration oor:value="own">
-            <info>
-              <desc>The user installed an own background image, and wants to
-                use that.  It's URL is in BackgroundImageURL.</desc>
-            </info>
-          </enumeration>
-        </constraints>
-        <value>default</value>
-      </prop>
-      <prop oor:name="BackgroundImageURL" oor:type="xs:string" oor:nillable="false">
-        <!-- UIHints: Tools  Options General Personalization -->
-        <info>
-          <desc>URL of the image the user wants to use; it is used only when
-            BackgroundImage is 'own'.</desc>
-        </info>
-        <value/>
-      </prop>
       <prop oor:name="Persona" oor:type="xs:string" oor:nillable="false">
         <!-- UIHints: Tools  Options General Personalization -->
         <info>
