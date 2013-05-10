@@ -864,7 +864,6 @@ sal_Bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uLong 
     {
         switch(nScaleFlag)
         {
-            default:
             case BMP_SCALE_NONE :
             {
                 return false;
@@ -925,7 +924,6 @@ sal_Bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uLong 
         }
     }
 
-    // should not happen
     return false;
 }
 
