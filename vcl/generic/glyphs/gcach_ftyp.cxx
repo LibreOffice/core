@@ -928,18 +928,6 @@ int ServerFont::GetEmUnits() const
 
 void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
 {
-    const int UNDETERMINED = 0xFEED;
-    static int nUseNewLineHeight = UNDETERMINED;
-    if (nUseNewLineHeight == UNDETERMINED)
-    {
-        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex());
-        if (nUseNewLineHeight == UNDETERMINED)
-        {
-            const char* pEnv = getenv( "SAL_USE_NEW_LINEHEIGHT");
-            nUseNewLineHeight = (pEnv ? atoi(pEnv) : 0);
-        }
-    }
-
     static_cast<ImplFontAttributes&>(rTo) = mpFontInfo->GetFontAttributes();
 
     rTo.mbScalableFont  = true;
@@ -966,15 +954,8 @@ void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
     const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
     rTo.mnAscent            = (+rMetrics.ascender + 32) >> 6;
     rTo.mnDescent           = (-rMetrics.descender + 32) >> 6;
-    if (nUseNewLineHeight)
-    {
-        rTo.mnExtLeading    = ((rMetrics.height + 32) >> 6) - (rTo.mnAscent + rTo.mnDescent);
-        rTo.mnIntLeading    = (rTo.mnAscent + rTo.mnDescent) - ((maFaceFT->units_per_EM + 32) >> 6);
-    }
-    else
-    {
-        rTo.mnIntLeading    = ((rMetrics.height + 32) >> 6) - (rTo.mnAscent + rTo.mnDescent);
-    }
+    rTo.mnExtLeading        = ((rMetrics.height + 32) >> 6) - (rTo.mnAscent + rTo.mnDescent);
+    rTo.mnIntLeading        = (rTo.mnAscent + rTo.mnDescent) - ((maFaceFT->units_per_EM + 32) >> 6);
     rTo.mnSlant             = 0;
 
     const TT_OS2* pOS2 = (const TT_OS2*)FT_Get_Sfnt_Table( maFaceFT, ft_sfnt_os2 );
@@ -1010,67 +991,12 @@ void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
         }
 
         const double fScale = (double)GetFontSelData().mnHeight / maFaceFT->units_per_EM;
-        if (nUseNewLineHeight)
+        if( pOS2->sTypoAscender || pOS2->sTypoDescender )
         {
-            if( pOS2->sTypoAscender || pOS2->sTypoDescender )
-            {
-                rTo.mnAscent     = (long)(  pOS2->sTypoAscender  * fScale + 0.5 );
-                rTo.mnDescent    = (long)( -pOS2->sTypoDescender * fScale + 0.5 );
-                rTo.mnExtLeading = (long)(  pOS2->sTypoLineGap   * fScale + 0.5 );
-                rTo.mnIntLeading = (long)( (pOS2->sTypoAscender - pOS2->sTypoDescender - maFaceFT->units_per_EM) * fScale + 0.5 );
-            }
-        }
-        else
-        {
-            // #108862# sanity check, some fonts treat descent as signed !!!
-            int nDescent = pOS2->usWinDescent;
-            if( nDescent > 5*maFaceFT->units_per_EM )
-                nDescent = (short)pOS2->usWinDescent; // interpret it as signed!
-
-            if( pOS2->usWinAscent || pOS2->usWinDescent ) // #i30551#
-            {
-                rTo.mnAscent     = (long)( +pOS2->usWinAscent * fScale + 0.5 );
-                rTo.mnDescent    = (long)( +nDescent * fScale + 0.5 );
-                rTo.mnIntLeading = (long)( (+pOS2->usWinAscent + pOS2->usWinDescent - maFaceFT->units_per_EM) * fScale + 0.5 );
-            }
-            rTo.mnExtLeading = 0;
-            const TT_HoriHeader* pHHEA = (const TT_HoriHeader*)FT_Get_Sfnt_Table( maFaceFT, ft_sfnt_hhea );
-            if( (pHHEA != NULL) && (pOS2->usWinAscent || pOS2->usWinDescent) )
-            {
-                int nExtLeading = pHHEA->Line_Gap;
-                nExtLeading -= (pOS2->usWinAscent + pOS2->usWinDescent);
-                nExtLeading += (pHHEA->Ascender - pHHEA->Descender);
-                if( nExtLeading > 0 )
-                    rTo.mnExtLeading = (long)(nExtLeading * fScale + 0.5);
-            }
-
-            // Check for CJK capabilities of the current font
-            // #107888# workaround for Asian...
-            // TODO: remove when ExtLeading fully implemented
-            sal_Bool bCJKCapable = ((pOS2->ulUnicodeRange2 & 0x2DF00000) != 0);
-
-            if ( bCJKCapable && (pOS2->usWinAscent || pOS2->usWinDescent) )
-            {
-                rTo.mnIntLeading += rTo.mnExtLeading;
-
-                // #109280# The line height for Asian fonts is too small.
-                // Therefore we add half of the external leading to the
-                // ascent, the other half is added to the descent.
-                const long nHalfTmpExtLeading = rTo.mnExtLeading / 2;
-                const long nOtherHalfTmpExtLeading = rTo.mnExtLeading - nHalfTmpExtLeading;
-
-                // #110641# external leading for Asian fonts.
-                // The factor 0.3 has been verified during experiments.
-                const long nCJKExtLeading = (long)(0.30 * (rTo.mnAscent + rTo.mnDescent));
-
-                if ( nCJKExtLeading > rTo.mnExtLeading )
-                    rTo.mnExtLeading = nCJKExtLeading - rTo.mnExtLeading;
-                else
-                    rTo.mnExtLeading = 0;
-
-                rTo.mnAscent += nHalfTmpExtLeading;
-                rTo.mnDescent += nOtherHalfTmpExtLeading;
-            }
+            rTo.mnAscent     = (long)(  pOS2->sTypoAscender  * fScale + 0.5 );
+            rTo.mnDescent    = (long)( -pOS2->sTypoDescender * fScale + 0.5 );
+            rTo.mnExtLeading = (long)(  pOS2->sTypoLineGap   * fScale + 0.5 );
+            rTo.mnIntLeading = (long)( (pOS2->sTypoAscender - pOS2->sTypoDescender - maFaceFT->units_per_EM) * fScale + 0.5 );
         }
     }
 
