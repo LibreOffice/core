@@ -26,7 +26,7 @@ Public sProductname as String
 Function ElimChar(ByVal BigString as String, ElimArray() as String)
 Dim i% ,n%
 	For i = 0 to Ubound(ElimArray)
-		BigString = DeleteStr(BigString,ElimArray(i)
+		BigString = DeleteStr(BigString,ElimArray(i))
 	Next
 	ElimChar = BigString
 End Function
