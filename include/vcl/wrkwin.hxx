@@ -57,7 +57,7 @@ private:
     SAL_DLLPRIVATE WorkWindow&  operator =( const WorkWindow& rWin );
 
 protected:
-    explict         WorkWindow( WindowType nType );
+    explicit        WorkWindow( WindowType nType );
     SAL_DLLPRIVATE void ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData = NULL );
     SAL_DLLPRIVATE void ImplSetFrameState( sal_uLong aFrameState );
 
