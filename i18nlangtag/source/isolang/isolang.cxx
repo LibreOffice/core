@@ -511,6 +511,7 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_YOMBE,                 "yom", "CD" },
     { LANGUAGE_USER_YOMBE_CONGO,           "yom", "CG" },
     { LANGUAGE_USER_SIDAMA,                "sid", "ET" },
+    { LANGUAGE_USER_NKO,                   "nqo", "GN" },
     { LANGUAGE_MULTIPLE,                   "mul", ""   },   // multiple languages, many languages are used
     { LANGUAGE_UNDETERMINED,               "und", ""   },   // undetermined language, language cannot be identified
     { LANGUAGE_NONE,                       "zxx", ""   },   // added to ISO 639-2 on 2006-01-11: Used to declare the absence of linguistic information

@@ -360,6 +360,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Tsaangi" ; LANGUAGE_USER_TSAANGI ; > ;
         < "Yaka" ; LANGUAGE_USER_YAKA ; > ;
         < "Yombe (Congo)" ; LANGUAGE_USER_YOMBE_CONGO ; > ;
+        < "N'ko" ; LANGUAGE_USER_NKO ; > ;
     };
 };
 
