@@ -38,11 +38,10 @@ class GalleryThemeEntry
 {
 private:
 
-    OUString           aName;
+    OUString                aName;
     INetURLObject           aThmURL;
     INetURLObject           aSdgURL;
     INetURLObject           aSdvURL;
-    sal_uInt32              nFileNumber;
     sal_uInt32              nId;
     sal_Bool                bReadOnly;
     sal_Bool                bModified;
@@ -54,12 +53,11 @@ private:
 public:
 
                             GalleryThemeEntry( const INetURLObject& rBaseURL, const String& rName,
-                                               sal_uInt32 nFileNumber, sal_Bool bReadOnly,
-                                               sal_Bool bNewFile, sal_uInt32 nId, sal_Bool bThemeNameFromResource );
+                                               sal_Bool bReadOnly, sal_Bool bNewFile,
+                                               sal_uInt32 nId, sal_Bool bThemeNameFromResource );
                             ~GalleryThemeEntry() {};
 
-    const OUString&    GetThemeName() const { return aName; }
-    sal_uInt32              GetFileNumber() const { return nFileNumber; }
+    const OUString&         GetThemeName() const { return aName; }
 
     const INetURLObject&    GetThmURL() const { return aThmURL; }
     const INetURLObject&    GetSdgURL() const { return aSdgURL; }
@@ -124,8 +122,7 @@ private:
     INetURLObject               aRelURL;
     INetURLObject               aUserURL;
     rtl_TextEncoding            nReadTextEncoding;
-    sal_uIntPtr                     nLastFileNumber;
-    sal_Bool                        bMultiPath;
+    sal_Bool                    bMultiPath;
 
     void                        ImplLoad( const OUString& rMultiPath );
     void                        ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbIsReadOnly );
@@ -151,7 +148,7 @@ public:
     SVX_DLLPUBLIC sal_Bool          HasTheme( const String& rThemeName );
     OUString                   GetThemeName( sal_uIntPtr nThemeId ) const;
 
-    SVX_DLLPUBLIC sal_Bool          CreateTheme( const String& rThemeName, sal_uInt32 nNumFrom = 0 );
+    SVX_DLLPUBLIC sal_Bool          CreateTheme( const String& rThemeName );
     sal_Bool                        RenameTheme( const String& rOldName, const String& rNewName );
     SVX_DLLPUBLIC sal_Bool                      RemoveTheme( const String& rThemeName );
 

@@ -46,24 +46,22 @@ using namespace ::com::sun::star;
 // ---------------------
 
 GalleryThemeEntry::GalleryThemeEntry( const INetURLObject& rBaseURL, const String& rName,
-                                      sal_uInt32 _nFileNumber, sal_Bool _bReadOnly,
-                                      sal_Bool _bNewFile, sal_uInt32 _nId, sal_Bool _bThemeNameFromResource ) :
-        nFileNumber                             ( _nFileNumber ),
+                                      sal_Bool _bReadOnly, sal_Bool _bNewFile,
+                                      sal_uInt32 _nId, sal_Bool _bThemeNameFromResource ) :
         nId                                     ( _nId ),
         bReadOnly                               ( _bReadOnly ),
         bThemeNameFromResource  ( _bThemeNameFromResource )
 {
     INetURLObject aURL( rBaseURL );
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
-    String aFileName( String( "sg"  ) );
 
-    aURL.Append( ( aFileName += OUString::number( nFileNumber ) ) += String( RTL_CONSTASCII_USTRINGPARAM( ".thm" ) ) );
+    aURL.setExtension( "thm" );
     aThmURL = ImplGetURLIgnoreCase( aURL );
 
-    aURL.setExtension( String( RTL_CONSTASCII_USTRINGPARAM( "sdg" ) ) );
+    aURL.setExtension( "sdg" );
     aSdgURL = ImplGetURLIgnoreCase( aURL );
 
-    aURL.setExtension( String( RTL_CONSTASCII_USTRINGPARAM( "sdv" ) ) );
+    aURL.setExtension( "sdv" );
     aSdvURL = ImplGetURLIgnoreCase( aURL );
 
     SetModified( _bNewFile );
@@ -172,7 +170,6 @@ public:
 
 Gallery::Gallery( const OUString& rMultiPath )
 :       nReadTextEncoding   ( osl_getThreadTextEncoding() )
-,       nLastFileNumber     ( 0 )
 ,       bMultiPath          ( sal_False )
 {
     ImplLoad( rMultiPath );
@@ -406,14 +403,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
                                 GalleryThemeEntry* pEntry = GalleryTheme::CreateThemeEntry( aThmURL, rbDirIsReadOnly || bReadOnly );
 
                                 if( pEntry )
-                                {
-                                    const sal_uIntPtr nFileNumber = (sal_uIntPtr) String(aThmURL.GetBase()).Erase( 0, 2 ).Erase( 6 ).ToInt32();
-
                                     aThemeList.push_back( pEntry );
-
-                                    if( nFileNumber > nLastFileNumber )
-                                        nLastFileNumber = nFileNumber;
-                                }
                             }
                         }
                         catch( const ucb::ContentCreationException& )
@@ -547,15 +537,15 @@ sal_Bool Gallery::HasTheme( const String& rThemeName )
 
 // ------------------------------------------------------------------------
 
-sal_Bool Gallery::CreateTheme( const String& rThemeName, sal_uInt32 nNumFrom )
+sal_Bool Gallery::CreateTheme( const String& rThemeName )
 {
     sal_Bool bRet = sal_False;
 
     if( !HasTheme( rThemeName ) && ( GetUserURL().GetProtocol() != INET_PROT_NOT_VALID ) )
     {
-        nLastFileNumber = nNumFrom > nLastFileNumber ? nNumFrom : nLastFileNumber + 1;
-        GalleryThemeEntry* pNewEntry = new GalleryThemeEntry( GetUserURL(), rThemeName,
-                                                              nLastFileNumber,
+        INetURLObject aURL( GetUserURL() );
+        aURL.Append( rThemeName );
+        GalleryThemeEntry* pNewEntry = new GalleryThemeEntry( aURL, rThemeName,
                                                               sal_False, sal_True, 0, sal_False );
 
         aThemeList.push_back( pNewEntry );

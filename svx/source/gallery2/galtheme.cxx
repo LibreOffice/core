@@ -751,11 +751,7 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, sa
                 }
 
                 INetURLObject aPathURL( rURL );
-
-                aPathURL.removeSegment();
-                aPathURL.removeFinalSlash();
                 pRet = new GalleryThemeEntry( aPathURL, aThemeName,
-                                              String(rURL.GetBase()).Copy( 2, 6 ).ToInt32(),
                                               bReadOnly, sal_False, nThemeId,
                                               bThemeNameFromResource );
             }
