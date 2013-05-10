@@ -196,7 +196,8 @@ ScVbaNames::Add( const css::uno::Any& Name ,
         if ( !xRange.is() )
             xRange = new ScVbaRange( mxParent, mxContext, xUnoRange );
 
-        uno::Reference< excel::XRange > xArea( xRange->Areas( uno::makeAny( 1 ) ), uno::UNO_QUERY );
+        uno::Reference< excel::XRange > xArea( xRange->Areas( uno::makeAny( sal_Int32(1) ) ), uno::UNO_QUERY );
+
         uno::Any xAny = xArea->getCellRange() ;
 
         uno::Reference< sheet::XCellRangeAddressable > thisRangeAdd( xAny, ::uno::UNO_QUERY_THROW);
