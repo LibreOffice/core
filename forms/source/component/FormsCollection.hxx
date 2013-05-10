@@ -105,7 +105,9 @@ public:
         { OInterfaceContainer::removeByName(p1); }
     virtual sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException)
         { return OInterfaceContainer::getCount(); }
-    virtual com::sun::star::uno::Any SAL_CALL getByIndex(sal_Int32 p1) throw (css::uno::RuntimeException)
+    virtual com::sun::star::uno::Any SAL_CALL getByIndex(sal_Int32 p1)
+        throw (css::lang::IndexOutOfBoundsException,
+               css::lang::WrappedTargetException, css::uno::RuntimeException)
         { return OInterfaceContainer::getByIndex(p1); }
     virtual void SAL_CALL replaceByIndex(sal_Int32 p1, const com::sun::star::uno::Any& p2) throw (css::uno::RuntimeException)
         { return OInterfaceContainer::replaceByIndex(p1, p2); }
