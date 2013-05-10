@@ -27,6 +27,7 @@ $(eval $(call gb_InstallModule_add_scpfiles,scp2/base,\
 $(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/base,\
     scp2/source/base/module_base \
     scp2/source/base/postgresqlsdbc \
+    scp2/source/base/firebirdsdbc \
 ))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
