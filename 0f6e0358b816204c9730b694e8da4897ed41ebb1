@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//9C8\u003d",
+        "filename": "cppcanvas/source/mtfrenderer/emfplus.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 788,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-05-10T13:03:51Z",
+      "side": 1,
+      "message": "sizeUnit should be printed in hex, or the 0x should be dropped",
+      "revId": "0f6e0358b816204c9730b694e8da4897ed41ebb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
