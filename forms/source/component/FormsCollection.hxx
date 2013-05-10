@@ -91,17 +91,27 @@ public:
         { return OInterfaceContainer::getElementType(); }
     virtual sal_Bool SAL_CALL hasElements() throw (css::uno::RuntimeException)
         { return OInterfaceContainer::hasElements(); }
-     virtual com::sun::star::uno::Any SAL_CALL getByName(const rtl::OUString& p1) throw (css::uno::RuntimeException)
+    virtual com::sun::star::uno::Any SAL_CALL getByName(const rtl::OUString& p1)
+        throw (css::container::NoSuchElementException,
+               css::lang::WrappedTargetException, css::uno::RuntimeException)
         { return OInterfaceContainer::getByName(p1); }
     virtual com::sun::star::uno::Sequence<rtl::OUString> SAL_CALL getElementNames() throw (css::uno::RuntimeException)
         { return OInterfaceContainer::getElementNames(); }
     virtual sal_Bool SAL_CALL hasByName(const rtl::OUString& p1) throw (css::uno::RuntimeException)
         { return OInterfaceContainer::hasByName(p1); }
-    virtual void SAL_CALL replaceByName(const rtl::OUString& p1, const com::sun::star::uno::Any& p2) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL replaceByName(const rtl::OUString& p1, const com::sun::star::uno::Any& p2)
+        throw (css::lang::IllegalArgumentException,
+               css::container::NoSuchElementException,
+               css::lang::WrappedTargetException, css::uno::RuntimeException)
         { OInterfaceContainer::replaceByName(p1, p2); }
-    virtual void SAL_CALL insertByName(const rtl::OUString& p1, const com::sun::star::uno::Any& p2) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL insertByName(const rtl::OUString& p1, const com::sun::star::uno::Any& p2)
+        throw (css::lang::IllegalArgumentException,
+               css::container::ElementExistException,
+               css::lang::WrappedTargetException, css::uno::RuntimeException)
         { OInterfaceContainer::insertByName(p1, p2); }
-    virtual void SAL_CALL removeByName(const rtl::OUString& p1) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL removeByName(const rtl::OUString& p1)
+        throw (css::container::NoSuchElementException,
+               css::lang::WrappedTargetException, css::uno::RuntimeException)
         { OInterfaceContainer::removeByName(p1); }
     virtual sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException)
         { return OInterfaceContainer::getCount(); }
@@ -109,35 +119,56 @@ public:
         throw (css::lang::IndexOutOfBoundsException,
                css::lang::WrappedTargetException, css::uno::RuntimeException)
         { return OInterfaceContainer::getByIndex(p1); }
-    virtual void SAL_CALL replaceByIndex(sal_Int32 p1, const com::sun::star::uno::Any& p2) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL replaceByIndex(sal_Int32 p1, const com::sun::star::uno::Any& p2)
+        throw (css::lang::IllegalArgumentException,
+               css::lang::IndexOutOfBoundsException,
+               css::lang::WrappedTargetException, css::uno::RuntimeException)
         { return OInterfaceContainer::replaceByIndex(p1, p2); }
-    virtual void SAL_CALL insertByIndex(sal_Int32 p1, const com::sun::star::uno::Any& p2) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL insertByIndex(sal_Int32 p1, const com::sun::star::uno::Any& p2)
+        throw (css::lang::IllegalArgumentException,
+               css::lang::IndexOutOfBoundsException,
+               css::lang::WrappedTargetException, css::uno::RuntimeException)
         { return OInterfaceContainer::insertByIndex(p1, p2); }
-    virtual void SAL_CALL removeByIndex(sal_Int32 p1) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL removeByIndex(sal_Int32 p1)
+        throw (css::lang::IndexOutOfBoundsException,
+               css::lang::WrappedTargetException, css::uno::RuntimeException)
         { return OInterfaceContainer::removeByIndex(p1); }
     virtual com::sun::star::uno::Reference<com::sun::star::container::XEnumeration> SAL_CALL createEnumeration() throw (css::uno::RuntimeException)
         { return OInterfaceContainer::createEnumeration(); }
-    virtual void SAL_CALL registerScriptEvent(sal_Int32 p1, const com::sun::star::script::ScriptEventDescriptor& p2) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL registerScriptEvent(sal_Int32 p1, const com::sun::star::script::ScriptEventDescriptor& p2)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
         { OInterfaceContainer::registerScriptEvent(p1, p2); }
-    virtual void SAL_CALL registerScriptEvents(sal_Int32 p1, const com::sun::star::uno::Sequence<com::sun::star::script::ScriptEventDescriptor>& p2) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL registerScriptEvents(sal_Int32 p1, const com::sun::star::uno::Sequence<com::sun::star::script::ScriptEventDescriptor>& p2)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
         { OInterfaceContainer::registerScriptEvents(p1, p2); }
-    virtual void SAL_CALL revokeScriptEvent(sal_Int32 p1, const rtl::OUString& p2, const rtl::OUString& p3, const rtl::OUString& p4) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL revokeScriptEvent(sal_Int32 p1, const rtl::OUString& p2, const rtl::OUString& p3, const rtl::OUString& p4)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
         { OInterfaceContainer::revokeScriptEvent(p1, p2, p3, p4); }
-    virtual void SAL_CALL revokeScriptEvents(sal_Int32 p1) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL revokeScriptEvents(sal_Int32 p1)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
         { OInterfaceContainer::revokeScriptEvents(p1); }
-    virtual void SAL_CALL insertEntry(sal_Int32 p1) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL insertEntry(sal_Int32 p1)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
         { OInterfaceContainer::insertEntry(p1); }
-    virtual void SAL_CALL removeEntry(sal_Int32 p1) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL removeEntry(sal_Int32 p1)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
         { OInterfaceContainer::removeEntry(p1); }
-    virtual com::sun::star::uno::Sequence<com::sun::star::script::ScriptEventDescriptor> SAL_CALL getScriptEvents(sal_Int32 p1) throw (css::uno::RuntimeException)
+    virtual com::sun::star::uno::Sequence<com::sun::star::script::ScriptEventDescriptor> SAL_CALL getScriptEvents(sal_Int32 p1)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
         { return OInterfaceContainer::getScriptEvents(p1); }
-    virtual void SAL_CALL attach(sal_Int32 p1, const com::sun::star::uno::Reference<com::sun::star::uno::XInterface>& p2, const com::sun::star::uno::Any& p3) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL attach(sal_Int32 p1, const com::sun::star::uno::Reference<com::sun::star::uno::XInterface>& p2, const com::sun::star::uno::Any& p3)
+        throw (css::lang::IllegalArgumentException,
+               css::lang::ServiceNotRegisteredException,
+               css::uno::RuntimeException)
         { OInterfaceContainer::attach(p1, p2, p3); }
-    virtual void SAL_CALL detach(sal_Int32 p1, const com::sun::star::uno::Reference<com::sun::star::uno::XInterface>& p2) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL detach(sal_Int32 p1, const com::sun::star::uno::Reference<com::sun::star::uno::XInterface>& p2)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
         { OInterfaceContainer::detach(p1, p2); }
-    virtual void SAL_CALL addScriptListener(const com::sun::star::uno::Reference<com::sun::star::script::XScriptListener>& p1) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL addScriptListener(const com::sun::star::uno::Reference<com::sun::star::script::XScriptListener>& p1)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
         { OInterfaceContainer::addScriptListener(p1); }
-    virtual void SAL_CALL removeScriptListener(const com::sun::star::uno::Reference<com::sun::star::script::XScriptListener>& p1) throw (css::uno::RuntimeException)
+    virtual void SAL_CALL removeScriptListener(const com::sun::star::uno::Reference<com::sun::star::script::XScriptListener>& p1)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
         { OInterfaceContainer::removeScriptListener(p1); }
     virtual void SAL_CALL dispose() throw (css::uno::RuntimeException)
         { FormsCollectionComponentBase::dispose(); }
