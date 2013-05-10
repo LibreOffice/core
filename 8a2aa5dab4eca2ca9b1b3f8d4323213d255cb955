@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//9EI\u003d",
+        "filename": "cppcanvas/source/mtfrenderer/emfplus.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-05-10T12:47:21Z",
+      "side": 1,
+      "message": "I suppose we want parts in hex mode too.",
+      "revId": "8a2aa5dab4eca2ca9b1b3f8d4323213d255cb955",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//9EE\u003d",
+        "filename": "cppcanvas/source/mtfrenderer/emfplus.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-05-10T12:47:21Z",
+      "side": 1,
+      "message": "type should be printed in hex mode too, should it not?",
+      "revId": "8a2aa5dab4eca2ca9b1b3f8d4323213d255cb955",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//9EA\u003d",
+        "filename": "cppcanvas/source/mtfrenderer/emfplus.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-05-10T12:47:21Z",
+      "side": 1,
+      "message": "ditto for pathFlags here",
+      "revId": "8a2aa5dab4eca2ca9b1b3f8d4323213d255cb955",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//9D8\u003d",
+        "filename": "cppcanvas/source/mtfrenderer/emfplus.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-05-10T12:47:21Z",
+      "side": 1,
+      "message": "ditto for type",
+      "revId": "8a2aa5dab4eca2ca9b1b3f8d4323213d255cb955",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//9D4\u003d",
+        "filename": "cppcanvas/source/mtfrenderer/emfplus.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 788,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-05-10T12:47:21Z",
+      "side": 1,
+      "message": "Ditto for sizeUnit. Alternatively, drop the 0x.",
+      "revId": "8a2aa5dab4eca2ca9b1b3f8d4323213d255cb955",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//9Dw\u003d",
+        "filename": "cppcanvas/source/mtfrenderer/emfplus.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1161,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-05-10T12:47:21Z",
+      "side": 1,
+      "message": "ditto for points and pathFlags",
+      "revId": "8a2aa5dab4eca2ca9b1b3f8d4323213d255cb955",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
