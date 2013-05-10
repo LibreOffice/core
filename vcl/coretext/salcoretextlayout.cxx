@@ -76,6 +76,8 @@ private:
     // mutable members since these details are all lazy initialized
     mutable int mnGlyphCount;
 
+    mutable CTFontRef* mpGlyphFonts;
+
     mutable CGGlyph* mpGlyphs;
     mutable CGFloat* mpCharWidths;
     mutable int* mpGlyphs2Chars;
@@ -106,6 +108,7 @@ CoreTextLayout::CoreTextLayout(QuartzSalGraphics* graphics, CoreTextStyleInfo* s
     mpStyle(style),
     mnCharCount(-1),
     mnGlyphCount(-1),
+    mpGlyphFonts(NULL),
     mpGlyphs(NULL),
     mpCharWidths(NULL),
     mpGlyphs2Chars(NULL),
@@ -182,6 +185,10 @@ void CoreTextLayout::Justify( long nNewWidth )
 
 void CoreTextLayout::InvalidateMeasurements()
 {
+    if( mpGlyphFonts ) {
+        delete[] mpGlyphFonts;
+        mpGlyphFonts = NULL;
+    }
     if( mpGlyphs ) {
         delete[] mpGlyphs;
         mpGlyphs = NULL;
@@ -213,14 +220,7 @@ void CoreTextLayout::DrawText( SalGraphics& rGraphics ) const
     if( mnCharCount <= 0 || !gr.CheckContext() )
         return;
 
-    CGFontRef cg_font = CTFontCopyGraphicsFont(mpStyle->GetFont(), NULL);
-    if( !cg_font ) {
-        SAL_INFO( "vcl.coretext.layout", "Error cg_font is NULL" );
-        return;
-    }
     CGContextSaveGState( gr.mrContext );
-    CGContextSetFont(gr.mrContext, cg_font);
-    CGContextSetFontSize(gr.mrContext, CTFontGetSize(mpStyle->GetFont()));
     CGContextSetTextDrawingMode(gr.mrContext, kCGTextFill);
     CGContextSetShouldAntialias( gr.mrContext, true );
     CGContextSetShouldSubpixelPositionFonts( gr.mrContext, false );
@@ -231,7 +231,7 @@ void CoreTextLayout::DrawText( SalGraphics& rGraphics ) const
     else {
         CGContextSetRGBFillColor(gr.mrContext, 0.0, 0.0, 0.0, 1.0);
     }
-    CFRelease(cg_font);
+
     CGContextSetTextMatrix(gr.mrContext, CGAffineTransformMakeScale(1.0, -1.0));
     CGContextSetShouldAntialias( gr.mrContext, !gr.mbNonAntialiasedText );
 
@@ -245,7 +245,30 @@ void CoreTextLayout::DrawText( SalGraphics& rGraphics ) const
 
     CGContextTranslateCTM(gr.mrContext, pos.X(), pos.Y());
 
-    CGContextShowGlyphsWithAdvances(gr.mrContext, mpGlyphs, mpGlyphAdvances, mnGlyphCount);
+    int i = 0;
+    while (i < mnGlyphCount)
+    {
+        CTFontRef pCTFont = mpGlyphFonts[i];
+
+        // Find the number of glyphs using the same font
+        int nGlyphs = 1;
+        while ((i + nGlyphs < mnGlyphCount) && CFEqual(mpGlyphFonts[i + nGlyphs], pCTFont))
+            nGlyphs++;
+
+        CGFontRef pCGFont = CTFontCopyGraphicsFont(pCTFont, NULL);
+        if (!pCGFont) {
+            SAL_INFO("vcl.coretext.layout", "Error pCGFont is NULL");
+            return;
+        }
+
+        CGContextSetFont(gr.mrContext, pCGFont);
+        CFRelease(pCGFont);
+        CGContextSetFontSize(gr.mrContext, CTFontGetSize(pCTFont));
+
+        CGContextShowGlyphsWithAdvances(gr.mrContext, &mpGlyphs[i], &mpGlyphAdvances[i], nGlyphs);
+
+        i += nGlyphs;
+    }
 
 #ifndef IOS
     // Request an update of the changed window area. Like in the ATSUI
@@ -572,6 +595,7 @@ void CoreTextLayout::GetMeasurements()
 {
     InvalidateMeasurements();
 
+    mpGlyphFonts = new CTFontRef[ mnGlyphCount ];
     mpGlyphs = new CGGlyph[ mnGlyphCount ];
     mpCharWidths = new CGFloat[ mnCharCount ];
     mpGlyphs2Chars = new int[ mnGlyphCount ];
@@ -587,6 +611,9 @@ void CoreTextLayout::GetMeasurements()
         CTRunRef run = (CTRunRef)CFArrayGetValueAtIndex( runs, runIx );
         if ( !run )
             continue;
+
+        CFDictionaryRef runAttributes = CTRunGetAttributes(run);
+        CTFontRef runFont = (CTFontRef)CFDictionaryGetValue(runAttributes, kCTFontAttributeName);
 
         std::ostringstream glyphPositionInfo;
         std::ostringstream glyphAdvancesInfo;
@@ -622,6 +649,8 @@ void CoreTextLayout::GetMeasurements()
                 mpGlyphs2Chars[ lineGlyphIx ] = charIx;
 
                 mpCharWidths[ charIx ] = mpGlyphAdvances[ lineGlyphIx ].width;
+
+                mpGlyphFonts[ lineGlyphIx ] = runFont;
             }
 #ifdef SAL_LOG_INFO
             for ( int i = 0; i < runGlyphCount; i++ ) {
