@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//9FA\u003d",
+        "filename": "vcl/source/filter/wmf/enhwmf.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-05-10T11:59:46Z",
+      "side": 1,
+      "message": "The basefield flag of a stream is persistent. That means you have to change it back to decimal after you are done with it (Strictly speaking, you should save the current state of basefield and restore to that state afterwards, in case it was set to something different than decimal already, but I think using std::dec is good enough).",
+      "revId": "f7ba02c8c04b7edb7bc65949ad567ffb7df13d64",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//9E8\u003d",
+        "filename": "vcl/source/filter/wmf/enhwmf.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-05-10T11:59:46Z",
+      "side": 1,
+      "message": "You can use the modifier std::showbase (turned off again by std::noshowbase) instead of explicitly printing \"0x\".",
+      "revId": "f7ba02c8c04b7edb7bc65949ad567ffb7df13d64",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
