@@ -67,8 +67,6 @@ private:
 
     CheckBox*   pASRCheck;
 
-    FixedText*  pFilenameLab;
-
     SdDrawDocument* pDoc;
     GraphicFilter* mpGraphicFilter;
 
