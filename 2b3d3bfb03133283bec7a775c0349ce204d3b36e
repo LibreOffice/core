@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//9GA\u003d",
+        "filename": "xmloff/source/text/txtparai.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 897,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-05-10T11:36:04Z",
+      "side": 1,
+      "message": "This is still wrong, because the condition is the same as before,\nbut it has a negated meaning now. The first cut would be a simple\nnegation:\n\n!(!m_bHaveAbout \u003d\u003d !m_sProperty.getLength())\n\nBut we can simplify this to:\n\n!(!m_bHaveAbout \u003d\u003d m_sProperty.isEmpty())\n\n, further to\n\n!(m_bHaveAbout !\u003d m_sProperty.isEmpty())\n\nand finally to\n\nm_bHaveAbout \u003d\u003d m_sProperty.isEmpty()",
+      "revId": "2b3d3bfb03133283bec7a775c0349ce204d3b36e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
