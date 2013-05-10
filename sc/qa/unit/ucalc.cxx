@@ -11,6 +11,7 @@
 
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
+#include <osl/time.h>
 
 #include "scdll.hxx"
 #include "formulacell.hxx"
@@ -91,6 +92,16 @@ using ::std::vector;
 
 namespace {
 
+double getTimeDiff(const TimeValue& t1, const TimeValue& t2)
+{
+    double tv1 = t1.Seconds;
+    double tv2 = t2.Seconds;
+    tv1 += t1.Nanosec / 1000000000.0;
+    tv2 += t2.Nanosec / 1000000000.0;
+
+    return tv1 - tv2;
+}
+
 class Test : public test::BootstrapFixture {
 public:
     Test();
@@ -98,6 +109,12 @@ public:
     virtual void setUp();
     virtual void tearDown();
 
+    /**
+     * Basic performance regression test. Pick some actions that *should* take
+     * only a fraction of a second to complete, and make sure they stay that
+     * way.
+     */
+    void testPerf();
     void testCollator();
     void testRangeList();
     void testInput();
@@ -265,6 +282,7 @@ public:
     void testCondFormatINSDEL();
 
     CPPUNIT_TEST_SUITE(Test);
+    CPPUNIT_TEST(testPerf);
     CPPUNIT_TEST(testCollator);
     CPPUNIT_TEST(testRangeList);
     CPPUNIT_TEST(testInput);
@@ -446,6 +464,29 @@ void Test::tearDown()
 {
     m_xDocShRef.Clear();
     BootstrapFixture::tearDown();
+}
+
+void Test::testPerf()
+{
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet", m_pDoc->InsertTab (0, "foo"));
+
+    TimeValue aTimeBefore, aTimeAfter;
+
+    // Clearing an already empty sheet should finish in a fraction of a
+    // second.  Flag failure if it takes more than one second.  Clearing 100
+    // columns should be large enough to flag if something goes wrong.
+    osl_getSystemTime(&aTimeBefore);
+    clearRange(m_pDoc, ScRange(0,0,0,99,MAXROW,0));
+    osl_getSystemTime(&aTimeAfter);
+    double diff = getTimeDiff(aTimeAfter, aTimeBefore);
+    if (diff >= 1.0)
+    {
+        std::ostringstream os;
+        os << "Clearing an empty sheet took " << diff << " seconds. It should be instant.";
+        CPPUNIT_FAIL(os.str().c_str());
+    }
+
+    m_pDoc->DeleteTab(0);
 }
 
 void Test::testCollator()
@@ -1731,6 +1772,17 @@ void Test::testCellBroadcaster()
                            checkDeletedRefToken(*m_pDoc, ScAddress(1,1,0)));
     CPPUNIT_ASSERT_MESSAGE("Deleted reference check in B3 failed.",
                            checkDeletedRefToken(*m_pDoc, ScAddress(1,2,0)));
+
+    // Clear everything again
+    clearRange(m_pDoc, ScRange(0,0,0,10,100,0));
+
+    m_pDoc->SetString(ScAddress(1,0,0), "=A1"); // B1 references A1.
+    m_pDoc->SetValue(ScAddress(0,0,0), 12.3);
+    CPPUNIT_ASSERT_EQUAL(12.3, m_pDoc->GetValue(ScAddress(1,0,0)));
+
+    // Clear the entire column A.
+    clearRange(m_pDoc, ScRange(0,0,0,0,MAXROW,0));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(1,0,0)));
 
     m_pDoc->DeleteTab(0);
 }
