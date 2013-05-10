@@ -38,7 +38,6 @@ namespace drawinglayer { namespace primitive2d {
     class FillGraphicPrimitive2D;
     class PolyPolygonGradientPrimitive2D;
     class PolyPolygonGraphicPrimitive2D;
-    class PolyPolygonColorPrimitive2D;
     class MetafilePrimitive2D;
     class MaskPrimitive2D;
     class UnifiedTransparencePrimitive2D;
@@ -95,7 +94,6 @@ namespace drawinglayer
             void RenderBitmapPrimitive2D(const primitive2d::BitmapPrimitive2D& rBitmapCandidate);
             void RenderFillGraphicPrimitive2D(const primitive2d::FillGraphicPrimitive2D& rFillBitmapCandidate);
             void RenderPolyPolygonGraphicPrimitive2D(const primitive2d::PolyPolygonGraphicPrimitive2D& rPolygonCandidate);
-            void RenderPolyPolygonColorPrimitive2D(const primitive2d::PolyPolygonColorPrimitive2D& rPolygonCandidate);
             void RenderMaskPrimitive2DPixel(const primitive2d::MaskPrimitive2D& rMaskCandidate);
             void RenderModifiedColorPrimitive2D(const primitive2d::ModifiedColorPrimitive2D& rModifiedCandidate);
             void RenderUnifiedTransparencePrimitive2D(const primitive2d::UnifiedTransparencePrimitive2D& rTransCandidate);

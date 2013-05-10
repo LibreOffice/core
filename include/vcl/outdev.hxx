@@ -534,6 +534,7 @@ public:
     SAL_DLLPRIVATE bool ImpTryDrawPolyLineDirect(
         const basegfx::B2DPolygon& rB2DPolygon,
         double fLineWidth = 0.0,
+        double fTransparency = 0.0,
         basegfx::B2DLineJoin eLineJoin = basegfx::B2DLINEJOIN_NONE,
         com::sun::star::drawing::LineCap eLineCap = com::sun::star::drawing::LineCap_BUTT);
 
@@ -673,6 +674,12 @@ public:
         double fLineWidth = 0.0,
         basegfx::B2DLineJoin = basegfx::B2DLINEJOIN_ROUND,
         com::sun::star::drawing::LineCap = com::sun::star::drawing::LineCap_BUTT);
+    bool TryDrawPolyLineDirect(
+        const basegfx::B2DPolygon& rB2DPolygon,
+        double fLineWidth = 0.0,
+        double fTransparency = 0.0,
+        basegfx::B2DLineJoin eLineJoin = basegfx::B2DLINEJOIN_NONE,
+        com::sun::star::drawing::LineCap eLineCap = com::sun::star::drawing::LineCap_BUTT);
 
     /** Render the given polygon as a line stroke
 

@@ -26,6 +26,15 @@
 #include <vcl/outdev.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
+// predefines
+
+namespace drawinglayer { namespace primitive2d {
+    class PolyPolygonColorPrimitive2D;
+    class PolygonHairlinePrimitive2D;
+    class PolygonStrokePrimitive2D;
+}}
+
+//////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
 {
@@ -45,6 +54,11 @@ namespace drawinglayer
                 called from the common process()-implementation
              */
             virtual void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
+
+            // some helpers to try direct paints (shortcuts)
+            bool tryDrawPolyPolygonColorPrimitive2DDirect(const drawinglayer::primitive2d::PolyPolygonColorPrimitive2D& rSource, double fTransparency);
+            bool tryDrawPolygonHairlinePrimitive2DDirect(const drawinglayer::primitive2d::PolygonHairlinePrimitive2D& rSource, double fTransparency);
+            bool tryDrawPolygonStrokePrimitive2DDirect(const drawinglayer::primitive2d::PolygonStrokePrimitive2D& rSource, double fTransparency);
 
         public:
             /// constructor/destructor

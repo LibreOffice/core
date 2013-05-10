@@ -2148,6 +2148,7 @@ void OutputDevice::ImpDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPo
 bool OutputDevice::ImpTryDrawPolyLineDirect(
     const basegfx::B2DPolygon& rB2DPolygon,
     double fLineWidth,
+    double fTransparency,
     basegfx::B2DLineJoin eLineJoin,
     com::sun::star::drawing::LineCap eLineCap)
 {
@@ -2177,11 +2178,62 @@ bool OutputDevice::ImpTryDrawPolyLineDirect(
     // draw the polyline
     return mpGraphics->DrawPolyLine(
         aB2DPolygon,
-        0.0,
+        fTransparency,
         aB2DLineWidth,
         eLineJoin,
         eLineCap,
         this);
+}
+
+bool OutputDevice::TryDrawPolyLineDirect(
+    const basegfx::B2DPolygon& rB2DPolygon,
+    double fLineWidth,
+    double fTransparency,
+    basegfx::B2DLineJoin eLineJoin,
+    com::sun::star::drawing::LineCap eLineCap)
+{
+    // AW: Do NOT paint empty PolyPolygons
+    if(!rB2DPolygon.count())
+        return true;
+
+    // we need a graphics
+    if( !mpGraphics )
+        if( !ImplGetGraphics() )
+            return false;
+
+    if( mbInitClipRegion )
+        ImplInitClipRegion();
+
+    if( mbOutputClipped )
+        return true;
+
+    if( mbInitLineColor )
+        ImplInitLineColor();
+
+    const bool bTryAA((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+        && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
+        && ROP_OVERPAINT == GetRasterOp()
+        && IsLineColor());
+
+    if(bTryAA)
+    {
+        if(ImpTryDrawPolyLineDirect(rB2DPolygon, fLineWidth, fTransparency, eLineJoin, eLineCap))
+        {
+            // worked, add metafile action (if recorded) and return true
+            if( mpMetaFile )
+            {
+                LineInfo aLineInfo;
+                if( fLineWidth != 0.0 )
+                    aLineInfo.SetWidth( static_cast<long>(fLineWidth+0.5) );
+                const Polygon aToolsPolygon( rB2DPolygon );
+                mpMetaFile->AddAction( new MetaPolyLineAction( aToolsPolygon, aLineInfo ) );
+            }
+
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void OutputDevice::DrawPolyLine(
@@ -2191,8 +2243,6 @@ void OutputDevice::DrawPolyLine(
     com::sun::star::drawing::LineCap eLineCap)
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-    (void)eLineJoin; // ATM used in UNX, but not in WNT, access it for warning-free
-    (void)eLineCap;
 
     if( mpMetaFile )
     {
@@ -2226,7 +2276,7 @@ void OutputDevice::DrawPolyLine(
         && IsLineColor());
 
     // use b2dpolygon drawing if possible
-    if(bTryAA && ImpTryDrawPolyLineDirect(rB2DPolygon, fLineWidth, eLineJoin, eLineCap))
+    if(bTryAA && ImpTryDrawPolyLineDirect(rB2DPolygon, fLineWidth, 0.0, eLineJoin, eLineCap))
     {
         return;
     }
