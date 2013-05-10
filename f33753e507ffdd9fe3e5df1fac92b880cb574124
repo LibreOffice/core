@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//9EY\u003d",
+        "filename": "config_host.mk.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-05-10T12:32:57Z",
+      "side": 0,
+      "message": "I think we still want to have TMP set, because it is used by some build tools (idlc, for example: see idlc/source/idlccompile.cxx:127). Or you can adapt the runtime uses in the code to prefer TMPDIR if set.",
+      "revId": "f33753e507ffdd9fe3e5df1fac92b880cb574124",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
