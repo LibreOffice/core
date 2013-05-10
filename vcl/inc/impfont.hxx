@@ -32,6 +32,8 @@
 // - Impl_Font -
 // ------------
 
+typedef sal_uInt32 FontRefCount;
+
 class Impl_Font
 {
 public:
@@ -50,7 +52,7 @@ private:
     friend class Font;
     void                AskConfig();
 
-    int                 mnRefCount;
+    FontRefCount        mnRefCount;
     String              maFamilyName;
     String              maStyleName;
     Size                maSize;
@@ -99,7 +101,7 @@ private:
     long    mnLineHeight;  // Ascent+Descent+EmphasisMark
     long    mnSlant;       // Slant
     sal_uInt16  mnMiscFlags;   // Misc Flags
-    sal_uInt32  mnRefCount;    // Reference Counter
+    FontRefCount mnRefCount;    // Reference Counter
 
     enum { DEVICE_FLAG=1, SCALABLE_FLAG=2, LATIN_FLAG=4, CJK_FLAG=8, CTL_FLAG=16 };
 
@@ -206,7 +208,7 @@ private:
     const sal_uInt16*       mpGlyphIds;       // individual glyphid mappings
     int                 mnRangeCount;
     int                 mnCharCount;      // covered codepoints
-    mutable int         mnRefCount;
+    mutable FontRefCount    mnRefCount;
 };
 
 // CmapResult is a normalized version of the many CMAP formats

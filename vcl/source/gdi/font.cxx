@@ -240,11 +240,12 @@ Font::Font( const Font& rFont )
 {
     DBG_CTOR( Font, NULL );
     DBG_CHKOBJ( &rFont, Font, NULL );
-    DBG_ASSERT( rFont.mpImplFont->mnRefCount < 0xFFFE, "Font: RefCount overflow" );
+    bool bRefIncrementable = rFont.mpImplFont->mnRefCount < ::std::numeric_limits<FontRefCount>::max();
+    DBG_ASSERT( bRefIncrementable, "Font: RefCount overflow" );
 
     mpImplFont = rFont.mpImplFont;
     // do not count static objects (where RefCount is zero)
-    if ( mpImplFont->mnRefCount )
+    if ( mpImplFont->mnRefCount && bRefIncrementable )
         mpImplFont->mnRefCount++;
 }
 
@@ -579,11 +580,12 @@ Font& Font::operator=( const Font& rFont )
 {
     DBG_CHKTHIS( Font, NULL );
     DBG_CHKOBJ( &rFont, Font, NULL );
-    DBG_ASSERT( rFont.mpImplFont->mnRefCount < 0xFFFE, "Font: RefCount overflow" );
+    bool bRefIncrementable = rFont.mpImplFont->mnRefCount < ::std::numeric_limits<FontRefCount>::max();
+    DBG_ASSERT( bRefIncrementable, "Font: RefCount overflow" );
 
     // Increment RefCount first, so that we can reference ourselves
     // RefCount == 0 for static objects
-    if ( rFont.mpImplFont->mnRefCount )
+    if ( rFont.mpImplFont->mnRefCount && bRefIncrementable )
         rFont.mpImplFont->mnRefCount++;
 
     // If it's not static ImplData and if it's the last reference, delete it
