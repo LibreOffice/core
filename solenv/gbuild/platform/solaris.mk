@@ -28,6 +28,8 @@
 
 gb_DEVINSTALLROOT := $(DEVINSTALLDIR)/opt
 
+gb_PROGRAMDIRNAME := program
+
 include $(GBUILDDIR)/platform/com_GCC_defs.mk
 
 gb_MKTEMP := mktemp -t gbuild.XXXXXX
@@ -431,10 +433,6 @@ cp $(3) $(1)
 endef
 
 gb_UIMenubarTarget_UIMenubarTarget_platform :=
-
-# Pyuno class
-
-gb_Pyuno_PROGRAMDIRNAME := program
 
 # Python
 gb_Python_PRECOMMAND := $(gb_Helper_set_ld_path) PYTHONHOME="$(INSTDIR)/program/python-core-$(PYTHON_VERSION)" PYTHONPATH="$(INSTDIR)/program/python-core-$(PYTHON_VERSION)/lib:$(INSTDIR)/program/python-core-$(PYTHON_VERSION)/lib/lib-dynload"

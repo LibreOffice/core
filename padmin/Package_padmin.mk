@@ -21,6 +21,6 @@ $(eval $(call gb_Package_Package,padmin,$(SRCDIR)/padmin/source))
 
 $(eval $(call gb_Package_set_outdir,padmin,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_file,padmin,program/spadmin,spadmin.sh))
+$(eval $(call gb_Package_add_file,padmin,$(gb_PROGRAMDIRNAME)/spadmin,spadmin.sh))
 
 # vim: set noet sw=4 ts=4:

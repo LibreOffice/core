@@ -30,6 +30,8 @@ gb_COMPILERDEFAULTOPTFLAGS := -Os
 gb_CPUDEFS := -D_M_IX86
 gb_TMPDIR:=$(if $(TMPDIR),$(TMPDIR),/tmp)
 
+gb_PROGRAMDIRNAME := program
+
 # please make generic modifications to either of these
 include $(GBUILDDIR)/platform/com_GCC_defs.mk
 include $(GBUILDDIR)/platform/windows.mk
@@ -424,10 +426,6 @@ cp $(3) $(1)
 endef
 
 gb_UIMenubarTarget_UIMenubarTarget_platform :=
-
-# Pyuno class
-
-gb_Pyuno_PROGRAMDIRNAME := program
 
 # Python
 gb_PYTHON_PRECOMMAND := PATH="$${PATH}:$(OUTDIR_FOR_BUILD)/bin" PYTHONHOME="$(OUTDIR_FOR_BUILD)/lib/python" PYTHONPATH="$(OUTDIR_FOR_BUILD)/lib/python;$(OUTDIR_FOR_BUILD)/lib/python/lib-dynload"

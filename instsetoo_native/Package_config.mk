@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,instsetoo_native_config,$(SRCDIR)/instsetoo_nat
 
 $(eval $(call gb_Package_set_outdir,instsetoo_native_config,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,instsetoo_native_config,program,\
+$(eval $(call gb_Package_add_files,instsetoo_native_config,$(gb_PROGRAMDIRNAME),\
 	bootstraprc \
 	fundamentalrc \
 	unorc \

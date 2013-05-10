@@ -28,6 +28,8 @@
 
 gb_CPUDEFS := -DARM32
 
+gb_PROGRAMDIRNAME := program
+
 ifeq ($(CC),)
 $(error You must set CC in the environment. See README.cross for example.)
 endif
@@ -289,10 +291,6 @@ cp $(3) $(1)
 endef
 
 gb_UIMenubarTarget_UIMenubarTarget_platform :=
-
-# Pyuno class
-
-gb_Pyuno_PROGRAMDIRNAME := program
 
 # Python
 gb_PYTHON_PRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib

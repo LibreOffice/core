@@ -17,15 +17,15 @@ $(eval $(call gb_Package_add_file,desktop_scripts_install,bin/ure-link,ure-link)
 
 else
 
-$(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_Pyuno_PROGRAMDIRNAME)/gdbtrace,gdbtrace))
-$(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_Pyuno_PROGRAMDIRNAME)/sbase,sbase.sh))
-$(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_Pyuno_PROGRAMDIRNAME)/scalc,scalc.sh))
-$(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_Pyuno_PROGRAMDIRNAME)/sdraw,sdraw.sh))
-$(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_Pyuno_PROGRAMDIRNAME)/simpress,simpress.sh))
-$(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_Pyuno_PROGRAMDIRNAME)/smath,smath.sh))
-$(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_Pyuno_PROGRAMDIRNAME)/swriter,swriter.sh))
-$(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_Pyuno_PROGRAMDIRNAME)/unoinfo,unoinfo.sh))
-$(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_Pyuno_PROGRAMDIRNAME)/unopkg,unopkg.sh))
+$(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_PROGRAMDIRNAME)/gdbtrace,gdbtrace))
+$(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_PROGRAMDIRNAME)/sbase,sbase.sh))
+$(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_PROGRAMDIRNAME)/scalc,scalc.sh))
+$(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_PROGRAMDIRNAME)/sdraw,sdraw.sh))
+$(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_PROGRAMDIRNAME)/simpress,simpress.sh))
+$(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_PROGRAMDIRNAME)/smath,smath.sh))
+$(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_PROGRAMDIRNAME)/swriter,swriter.sh))
+$(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_PROGRAMDIRNAME)/unoinfo,unoinfo.sh))
+$(eval $(call gb_Package_add_file,desktop_scripts_install,$(gb_PROGRAMDIRNAME)/unopkg,unopkg.sh))
 
 endif
 

@@ -28,6 +28,8 @@
 
 gb_DEVINSTALLROOT := $(DEVINSTALLDIR)/opt
 
+gb_PROGRAMDIRNAME := program
+
 # Convert path to file URL.
 define gb_Helper_make_url
 file:///$(strip $(1))
@@ -598,10 +600,6 @@ cp $(3) $(1)
 endef
 
 gb_UIMenubarTarget_UIMenubarTarget_platform :=
-
-# Pyuno class
-
-gb_Pyuno_PROGRAMDIRNAME := program
 
 # Python
 gb_Python_PRECOMMAND := PATH="$(shell cygpath -w $(INSTDIR)/program);$(shell cygpath -w $(OUTDIR)/bin)" PYTHONHOME="$(INSTDIR)/program/python-core-$(PYTHON_VERSION)" PYTHONPATH="$(INSTDIR)/program/python-core-$(PYTHON_VERSION)/lib;$(INSTDIR)/program/python-core-$(PYTHON_VERSION)/lib/lib-dynload:$(INSTDIR)/program"

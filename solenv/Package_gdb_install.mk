@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,solenv_gdb_install,$(call gb_CustomTarget_get_w
 
 $(eval $(call gb_Package_set_outdir,solenv_gdb_install,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,solenv_gdb_install,program,\
+$(eval $(call gb_Package_add_files,solenv_gdb_install,$(gb_PROGRAMDIRNAME),\
 	$(call gb_Library_get_runtime_filename,svl)-gdb.py \
 	$(call gb_Library_get_runtime_filename,sw)-gdb.py \
 	$(call gb_Library_get_runtime_filename,tl)-gdb.py \

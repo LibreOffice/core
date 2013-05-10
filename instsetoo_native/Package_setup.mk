@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,instsetoo_native_setup,$(call gb_CustomTarget_g
 
 $(eval $(call gb_Package_set_outdir,instsetoo_native_setup,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,instsetoo_native_setup,program,\
+$(eval $(call gb_Package_add_files,instsetoo_native_setup,$(gb_PROGRAMDIRNAME),\
 	ooenv \
 	$(if $(filter TRUE,$(DISABLE_PYTHON)),,pythonloader.unorc) \
 	versionrc \

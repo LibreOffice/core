@@ -11,11 +11,11 @@ $(eval $(call gb_Package_Package,desktop_branding_custom,$(CUSTOM_BRAND_DIR)))
 
 $(eval $(call gb_Package_set_outdir,desktop_branding_custom,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,desktop_branding_custom,$(gb_Pyuno_PROGRAMDIRNAME),\
+$(eval $(call gb_Package_add_files,desktop_branding_custom,$(gb_PROGRAMDIRNAME),\
     $(filter $(BRAND_INTRO_IMAGES),$(CUSTOM_BRAND_IMAGES)) \
 ))
 
-$(eval $(call gb_Package_add_files,desktop_branding_custom,$(gb_Pyuno_PROGRAMDIRNAME)/shell,\
+$(eval $(call gb_Package_add_files,desktop_branding_custom,$(gb_PROGRAMDIRNAME)/shell,\
     $(filter-out $(BRAND_INTRO_IMAGES),$(CUSTOM_BRAND_IMAGES)) \
 ))
 

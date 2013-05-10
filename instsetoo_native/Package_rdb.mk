@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,instsetoo_native_rdb,$(OUTDIR)))
 
 $(eval $(call gb_Package_set_outdir,instsetoo_native_rdb,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,instsetoo_native_rdb,program/services,\
+$(eval $(call gb_Package_add_files,instsetoo_native_rdb,$(gb_PROGRAMDIRNAME)/services,\
 	xml/services.rdb \
 	$(call gb_Helper_optional,POSTGRESQL,$(if $(filter YES,$(BUILD_POSTGRESQL_SDBC)),xml/postgresql-sdbc.rdb)) \
 	$(if $(filter TRUE,$(DISABLE_SCRIPTING)),,\
@@ -22,7 +22,7 @@ $(eval $(call gb_Package_add_files,instsetoo_native_rdb,program/services,\
 	) \
 ))
 
-$(eval $(call gb_Package_add_files,instsetoo_native_rdb,program/types,\
+$(eval $(call gb_Package_add_files,instsetoo_native_rdb,$(gb_PROGRAMDIRNAME)/types,\
 	bin/offapi.rdb \
 	bin/oovbaapi.rdb \
 ))
