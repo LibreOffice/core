@@ -13,25 +13,46 @@ $(eval $(call gb_ExternalProject_register_targets,openssl,\
 	build \
 ))
 
-OPENSSL_PLATFORM := $(if $(filter LINUX FREEBSD ANDROID,$(OS)),\
-	$(if $(filter I,$(CPU)),\
-	  $(if $(filter GNU/kFreeBSD,$(shell uname)),debian-kfreebsd-i386,linux-elf),\
-	  $(if $(filter X,$(CPU)),\
-	    $(if $(filter GNU/kFreeBSD,$(shell uname)),debian-kfreebsd-amd64,\
-		$(if $(filter TRUE, $(ENABLE_DBGUTIL)), debug-linux-generic64, linux-generic64)),\
-	    $(if $(filter TRUE, $(ENABLE_DBGUTIL)), debug-linux-generic32, linux-generic32))),\
-	$(if $(filter SOLARIS,$(OS)),\
-	$(if $(filter INTEL,$(CPUNAME)),\
-	$(if $(filter X,$(CPU)),\
-	solaris64-x86_64-cc,solaris-x86-cc),\
-	solaris-sparcv9-cc),\
-	$(if $(filter IOS,$(OS)),\
-	ios-armv7,\
-	$(if $(filter WNT,$(OS)),\
-	$(if $(filter GCC,$(COM)),\
-	mingw,\
-	$(if $(filter I,$(CPU)),\
-	VC-WIN32,VC-WIN64A))))))
+# For multi-line conditionals, align the $(if and the corresponding ),
+# putting the latter on a line of its own. Also put the "else" comma
+# on a line of its own. Hopefully should make the logic more clear.
+
+OPENSSL_PLATFORM := \
+  $(if $(filter LINUX FREEBSD ANDROID,$(OS)),\
+    $(if $(filter I,$(CPU)),\
+      $(if $(filter GNU/kFreeBSD,$(shell uname)),debian-kfreebsd-i386,linux-elf)\
+    ,\
+      $(if $(filter X,$(CPU)),\
+        $(if $(filter GNU/kFreeBSD,$(shell uname)),\
+          debian-kfreebsd-amd64\
+        ,\
+          $(if $(filter TRUE, $(ENABLE_DBGUTIL)), debug-linux-generic64, linux-generic64)\
+        )\
+      ,\
+        $(if $(filter TRUE, $(ENABLE_DBGUTIL)), debug-linux-generic32, linux-generic32)\
+      )\
+    )\
+  ,\
+    $(if $(filter SOLARIS,$(OS)),\
+      $(if $(filter INTEL,$(CPUNAME)),\
+        $(if $(filter X,$(CPU)),solaris64-x86_64-cc,solaris-x86-cc)\
+      ,\
+        solaris-sparcv9-cc\
+      )\
+    ,\
+      $(if $(filter IOS,$(OS)),\
+        ios-armv7\
+      ,\
+        $(if $(filter WNT,$(OS)),\
+          $(if $(filter GCC,$(COM)),\
+            mingw\
+          ,\
+            $(if $(filter I,$(CPU)),VC-WIN32,VC-WIN64A)\
+          )\
+        )\
+      )\
+    )\
+  )
 
 ifeq ($(COM),MSC)
 $(call gb_ExternalProject_get_state_target,openssl,build):
