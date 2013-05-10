@@ -11,7 +11,7 @@ $(eval $(call gb_Package_Package,extras_galltxtshapes,$(SRCDIR)/extras/source/ga
 
 $(eval $(call gb_Package_set_outdir,extras_galltxtshapes,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_files,extras_galltxtshapes,share/gallery/txtshapes,\
+$(eval $(call gb_Package_add_files,extras_galltxtshapes,share/gallery/textshapes,\
 	Circle01-DarkBlue.png \
 	Circle02-LightBlue.png \
 	Circle03-Green.png \
