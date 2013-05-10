@@ -45,6 +45,7 @@
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <sfx2/sidebar/Theme.hxx>
+#include <sfx2/sidebar/PanelLayouter.hxx>
 #include "sfx2/imagemgr.hxx"
 #include <svtools/ctrltool.hxx>
 #include <svtools/unitconv.hxx>
@@ -73,17 +74,8 @@ namespace svx { namespace sidebar {
 #undef HAS_IA2
 
 
-#define FONT_CONTROL_WIDTH      160
-#define SIZE_CONTROL_WIDTH      80
-#define CONTROL_COMBOX_HEIGHT   20
-#define CONTROL_HEIGHT_5X       120
 
-
-#define TEXT_SECTIONPAGE_HEIGHT_S   SECTIONPAGE_MARGIN_VERTICAL_TOP + CBOX_HEIGHT  + ( TOOLBOX_ITEM_HEIGHT + 2 ) + CONTROL_SPACING_VERTICAL * 1 + SECTIONPAGE_MARGIN_VERTICAL_BOT
-#define TEXT_SECTIONPAGE_HEIGHT     SECTIONPAGE_MARGIN_VERTICAL_TOP + CBOX_HEIGHT  + ( TOOLBOX_ITEM_HEIGHT + 2 ) * 2 + CONTROL_SPACING_VERTICAL * 2 + SECTIONPAGE_MARGIN_VERTICAL_BOT
-
-
-    PopupControl* TextPropertyPanel::CreateCharacterSpacingControl (PopupContainer* pParent)
+PopupControl* TextPropertyPanel::CreateCharacterSpacingControl (PopupContainer* pParent)
 {
     return new TextCharacterSpacingControl(pParent, *this, mpBindings);
 }
@@ -344,6 +336,7 @@ void TextPropertyPanel::DataChanged (const DataChangedEvent& rEvent)
 
 
 
+
 void TextPropertyPanel::Initialize (void)
 {
     //<<modify fill font list
@@ -429,11 +422,6 @@ void TextPropertyPanel::Initialize (void)
     maFontSizeBox.SetSelectHdl(aLink);
     aLink = LINK(this, TextPropertyPanel, FontSizeLoseFocus);
     maFontSizeBox.SetLoseFocusHdl(aLink);
-
-    Size aSize(PROPERTYPAGE_WIDTH, TEXT_SECTIONPAGE_HEIGHT);
-    aSize = LogicToPixel( aSize, MapMode(MAP_APPFONT) );
-    aSize.setWidth(GetOutputSizePixel().Width());
-    SetSizePixel(aSize);
 }
 
 void TextPropertyPanel::EndSpacingPopupMode (void)
@@ -953,16 +941,38 @@ void TextPropertyPanel::NotifyItemUpdate (
             {
                 mpHeightItem = (SvxFontHeightItem*)pState;//const SvxFontHeightItem*
                 SfxMapUnit eUnit = maFontSizeControl.GetCoreMetric();
-                long iValue = (long)CalcToPoint( mpHeightItem->GetHeight(), eUnit, 10 );
+                const sal_Int64 nValue (CalcToPoint(mpHeightItem->GetHeight(), eUnit, 10 ));
                 mpToolBoxIncDec->Enable();
 
                 mpToolBoxIncDec->SetItemState(TBI_INCREASE, STATE_NOCHECK);
                 mpToolBoxIncDec->SetItemState(TBI_DECREASE, STATE_NOCHECK);
 
+                // For Writer we have to update the states of the
+                // increase and decrease buttons here, because we have
+                // no access to the slots used by Writer.
+                switch(maContext.GetCombinedContext_DI())
+                {
+                    case CombinedEnumContext(Application_DrawImpress, Context_DrawText):
+                    case CombinedEnumContext(Application_DrawImpress, Context_Text):
+                    case CombinedEnumContext(Application_DrawImpress, Context_Table):
+                    case CombinedEnumContext(Application_DrawImpress, Context_OutlineText):
+                    case CombinedEnumContext(Application_DrawImpress, Context_Draw):
+                    case CombinedEnumContext(Application_DrawImpress, Context_TextObject):
+                    case CombinedEnumContext(Application_DrawImpress, Context_Graphic):
+                        break;
+
+                    default:
+                    {
+                        mpToolBoxIncDec->EnableItem(TBI_INCREASE, bIsEnabled && nValue<960);
+                        mpToolBoxIncDec->EnableItem(TBI_DECREASE, bIsEnabled && nValue>60);
+                        break;
+                    }
+                }
+
                 if( mbFocusOnFontSizeCtrl )
                     return;
 
-                maFontSizeBox.SetValue( iValue );
+                maFontSizeBox.SetValue(nValue);
                 maFontSizeBox.LoseFocus();
 
                 UpdateItem(SID_SHRINK_FONT_SIZE);
@@ -1156,8 +1166,8 @@ void TextPropertyPanel::NotifyItemUpdate (
             {
                 meEscape = SVX_ESCAPEMENT_OFF;
             }
-            mpToolBoxScriptSw->EnableItem(TBI_SUPER, bIsItemEnabled && bIsEnabled);
-            mpToolBoxScriptSw->EnableItem(TBI_SUB, bIsItemEnabled && bIsEnabled);
+            mpToolBoxScriptSw->EnableItem(TBI_SUPER_SW, bIsItemEnabled && bIsEnabled);
+            mpToolBoxScriptSw->EnableItem(TBI_SUB_SW, bIsItemEnabled && bIsEnabled);
             break;
         }
 
@@ -1233,17 +1243,27 @@ void TextPropertyPanel::NotifyItemUpdate (
                 case CombinedEnumContext(Application_DrawImpress, Context_Draw):
                 case CombinedEnumContext(Application_DrawImpress, Context_TextObject):
                 case CombinedEnumContext(Application_DrawImpress, Context_Graphic):
+                {
                     if(eState == SFX_ITEM_DISABLED)
                         mpToolBoxIncDec->Disable();
                     else
                         mpToolBoxIncDec->Enable();
-                break;
+                    const sal_Int64 nSize (maFontSizeBox.GetValue());
+                    switch(nSID)
+                    {
+                        case SID_GROW_FONT_SIZE:
+                            mpToolBoxIncDec->EnableItem(TBI_INCREASE, bIsEnabled && nSize<960);
+                            break;
+
+                        case SID_SHRINK_FONT_SIZE:
+                            mpToolBoxIncDec->EnableItem(TBI_DECREASE, bIsEnabled && nSize>60);
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
             }
-            const sal_Int32 nSize (maFontSizeBox.GetValue());
-            if (nSID == SID_GROW_FONT_SIZE)
-                mpToolBoxIncDec->EnableItem(TBI_INCREASE, bIsEnabled && nSize<960);
-            else
-                mpToolBoxIncDec->EnableItem(TBI_DECREASE, bIsEnabled && nSize>60);
             break;
     }
 }
