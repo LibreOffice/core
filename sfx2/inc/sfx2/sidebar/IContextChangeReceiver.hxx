@@ -23,6 +23,7 @@
 #define SFX_SIDEBAR_CONTEXT_CHANGE_RECEIVER_INTERFACE_HXX
 
 #include "EnumContext.hxx"
+#include "sfx2/dllapi.h"
 
 
 namespace sfx2 { namespace sidebar {
@@ -31,8 +32,9 @@ namespace sfx2 { namespace sidebar {
 class SFX2_DLLPUBLIC IContextChangeReceiver
 {
 public:
-    virtual void HandleContextChange (
-        const EnumContext aContext) = 0;
+    virtual ~IContextChangeReceiver (void);
+
+    virtual void HandleContextChange (const EnumContext aContext) = 0;
 };
 
 } } // end of namespace ::sd::sidebar

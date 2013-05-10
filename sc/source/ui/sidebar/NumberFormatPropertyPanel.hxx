@@ -22,7 +22,6 @@
 #ifndef SC_PROPERTYPANEL_NUMFORMAT_HXX
 #define SC_PROPERTYPANEL_NUMFORMAT_HXX
 
-#include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <boost/scoped_ptr.hpp>
@@ -97,6 +96,6 @@ private:
 
 } } // end of namespace ::sc::sidebar
 
-#endif SC_PROPERTYPANEL_NUMFORMAT_HXX
+#endif
 
 // eof

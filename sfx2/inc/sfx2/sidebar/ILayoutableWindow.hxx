@@ -22,6 +22,7 @@
 #ifndef SFX_SIDEBAR_LAYOUTABLE_WINDOW_INTERFACE_HXX
 #define SFX_SIDEBAR_LAYOUTABLE_WINDOW_INTERFACE_HXX
 
+#include "sfx2/dllapi.h"
 #include <tools/gen.hxx>
 #include <sal/types.h>
 
@@ -32,9 +33,11 @@ class Window;
 namespace sfx2 { namespace sidebar {
 
 
-class ILayoutableWindow
+class SFX2_DLLPUBLIC ILayoutableWindow
 {
 public:
+    virtual ~ILayoutableWindow (void);
+
     /** Return the preferred height with the constraint, that the
         window will be set to the given width.
     */
