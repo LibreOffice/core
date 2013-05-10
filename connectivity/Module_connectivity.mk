@@ -84,6 +84,14 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 ))
 endif
 
+ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
+$(eval $(call gb_Module_add_targets,connectivity,\
+	Configuration_firebird \
+	Library_firebird-sdbc \
+	Rdb_firebird-sdbc \
+))
+endif
+
 ifeq ($(BUILD_POSTGRESQL_SDBC),YES)
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_postgresql \

@@ -2048,6 +2048,76 @@ gb_LinkTarget__use_openldap :=
 endif # SYSTEM_OPENLDAP
 
 
+ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
+
+ifeq ($(SYSTEM_FIREBIRD),YES)
+
+define gb_LinkTarget__use_firebird
+$(call gb_LinkTarget_set_include,$(1),\
+	$(FIREBIRD_CFLAGS) \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(FIREBIRD_LIBS))
+
+endef
+
+# gb_LinkTarget__use_atomic_ops :=
+# gb_LinkTarget__use_tommath :=
+
+else # !SYSTEM_FIREBIRD
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	firebird \
+))
+define gb_LinkTarget__use_firebird
+$(call gb_LinkTarget_use_unpacked,$(1),firebird)
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(OUTDIR)/inc/external/firebird \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_use_libraries,$(1),\
+	firebird \
+)
+
+endef
+
+# $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+# 	atomic_ops \
+# ))
+
+# define gb_LinkTarget__use_atomic_ops
+# $(call gb_LinkTarget_use_static_libraries,$(1),\
+# 	atomic_ops \
+# )
+
+# endef
+# define gb_ExternalProject__use_atomic_ops
+# $(call gb_ExternalProject_use_package,$(1),atomic_ops)
+# $(call gb_ExternalProject_use_static_libraries,$(1),atomic_ops)
+
+# endef
+
+# define gb_LinkTarget__use_tommath
+# $(call gb_LinkTarget_set_include,$(1),\
+# 	$(TOMMATH_CFLAGS) \
+# 	$$(INCLUDE) \
+# )
+
+# $(call gb_LinkTarget_add_libs,$(1),$(TOMMATH_LIBS))
+
+# endef
+
+endif # SYSTEM_FIREBIRD
+
+else # !ENABLE_FIREBIRD_SDBC
+
+gb_LinkTarget__use_firebird :=
+# gb_LinkTarget__use_atomic_ops :=
+# gb_LinkTarget__use_tommath :=
+
+endif # ENABLE_FIREBIRD_SDBC
+
+
 ifeq ($(SYSTEM_POSTGRESQL),YES)
 
 define gb_LinkTarget__use_postgresql
