@@ -151,12 +151,6 @@ using namespace std;
 #define EMR_SETLINKEDUFIS              119
 #define EMR_SETTEXTJUSTIFICATION       120
 
-#if OSL_DEBUG_LEVEL > 1
-#define EMFP_DEBUG(x) x
-#else
-#define EMFP_DEBUG(x)
-#endif
-
 
 #ifdef OSL_BIGENDIAN
 // currently unused
@@ -226,24 +220,27 @@ static sal_Bool ImplReadRegion( PolyPolygon& rPolyPoly, SvStream& rSt, sal_uInt3
     return bOk;
 }
 
-EMFP_DEBUG(void dumpWords( SvStream& s, int i )
+#if OSL_DEBUG_LEVEL > 1
+void dumpWords( SvStream& s, int i )
 {
     sal_uInt32 pos = s.Tell();
     sal_Int16 data;
     for( ; i > 0; i -- ) {
         s >> data;
-        EMFP_DEBUG(printf ("\t\t\tdata: %04hx\n", data));
+        SAL_INFO("vcl.emf", "\t\t\tdata: " << std::hex << data << std::dec);
     }
     s.Seek (pos);
-});
+};
+#endif
 
 void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, sal_Bool& bHaveDC)
 {
     if (!bEMFPlus) {
         pOut->PassEMFPlusHeaderInfo();
 
+#if OSL_DEBUG_LEVEL > 1
         // debug code - write the stream to debug file /tmp/emf-stream.emf
-        EMFP_DEBUG(int pos = pWMF->Tell();
+        int pos = pWMF->Tell();
         pWMF->Seek(0);
         SvFileStream file( OUString( "/tmp/emf-stream.emf" ), STREAM_WRITE | STREAM_TRUNC );
 
@@ -251,7 +248,9 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, sal_Bool& bHaveDC)
         file.Flush();
         file.Close();
 
-        pWMF->Seek( pos );)
+        pWMF->Seek( pos );
+#endif
+
     }
     bEMFPlus = true;
 
@@ -265,7 +264,7 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, sal_Bool& bHaveDC)
 
     OSL_ASSERT(length >= 4);
     // reduce by 32bit length itself, skip in SeekRel if
-    // impossibly unavailble
+    // impossibly unavailable
     sal_uInt32 nRemainder = length >= 4 ? length-4 : length;
 
     const size_t nRequiredHeaderSize = 12;
@@ -277,12 +276,12 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, sal_Bool& bHaveDC)
         *pWMF >> type >> flags >> size >> dataSize;
         nRemainder -= nRequiredHeaderSize;
 
-        EMFP_DEBUG(printf ("\t\tEMF+ record type: %d\n", type));
+        SAL_INFO ("vcl.emf", "\t\tEMF+ record type: " << std::hex << type << std::dec);
 
         // GetDC
         if( type == 16388 ) {
             bHaveDC = true;
-            EMFP_DEBUG(printf ("\t\tEMF+ lock DC (device context)\n"));
+            SAL_INFO ("vcl.emf", "\t\tEMF+ lock DC (device context)");
         }
 
         // Get the length of the remaining data of this record based
@@ -454,26 +453,27 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
         if(  !aBmpSaveList.empty()
           && ( nRecType != EMR_STRETCHBLT )
           && ( nRecType != EMR_STRETCHDIBITS )
-          )
+          ) {
             pOut->ResolveBitmapActions( aBmpSaveList );
+        }
 
         bFlag = sal_False;
 
-        EMFP_DEBUG(printf ("0x%04x-0x%04x record type: %d size: %d\n",(unsigned int) (nNextPos - nRecSize),(unsigned int) nNextPos, (int)nRecType,(int) nRecSize));
+        SAL_INFO ("vcl.emf", "0x" << std::hex << (nNextPos - nRecSize) <<  "-0x" << nNextPos << " record type: " << std::dec << nRecType << " size: " <<  nRecSize << std::dec);
 
         if( bEnableEMFPlus && nRecType == EMR_GDICOMMENT ) {
             sal_uInt32 length;
 
             *pWMF >> length;
 
-            EMFP_DEBUG(printf ("\tGDI comment\n\t\tlength: %d\n", (int)length));
+            SAL_INFO("vcl.emf", "\tGDI comment\n\t\tlength: " << length);
 
             if( pWMF->good() && length >= 4 ) {
                 sal_uInt32 id;
 
                 *pWMF >> id;
 
-                EMFP_DEBUG(printf ("\t\tbegin %c%c%c%c id: 0x%x\n", (char)(id & 0xff), (char)((id & 0xff00) >> 8), (char)((id & 0xff0000) >> 16), (char)((id & 0xff000000) >> 24), (unsigned int)id));
+                SAL_INFO ("vcl.emf", "\t\tbegin " << (char)(id & 0xff) << (char)((id & 0xff00) >> 8) << (char)((id & 0xff0000) >> 16) << (char)((id & 0xff000000) >> 24) << " id: 0x" << std::hex << id << std::dec);
 
                 // EMF+ comment (FIXME: BE?)
                 if( id == 0x2B464D45 && nRecSize >= 12 )
@@ -482,7 +482,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 else if( id == 0x43494447 && nRecSize >= 12 ) {
                     // TODO: ReadGDIComment()
                 } else {
-                    EMFP_DEBUG(printf ("\t\tunknown id: 0x%x\n",(unsigned int) id));
+                    SAL_INFO ("vcl.emf", "\t\tunknown id: 0x" << std::hex << id << std::dec);
                 }
             }
         }
@@ -1341,16 +1341,21 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
 
 sal_Bool EnhWMFReader::ReadHeader()
 {
-    sal_uInt32      nsal_uInt32, nHeaderSize, nPalEntries;
+    sal_uInt32      nType, nSignature, nVersion;
+    sal_uInt32      nHeaderSize, nPalEntries;
     sal_Int32       nLeft, nTop, nRight, nBottom;
 
     // Spare me the METAFILEHEADER here
-    // Reading the METAHEADER
-    *pWMF >> nsal_uInt32 >> nHeaderSize;
-    if ( nsal_uInt32 != 1 )         // Type
+    // Reading the METAHEADER - EMR_HEADER ([MS-EMF] section 2.3.4.2 EMR_HEADER Record Types)
+    *pWMF >> nType >> nHeaderSize;
+    if ( nType != 1 ) { // per [MS-EMF] 2.3.4.2 EMF Header Record Types, type MUST be 0x00000001
+        SAL_WARN("vcl.emf", "EMF header type is not set to 0x00000001 - possibly corrupted file?");
         return sal_False;
+    }
 
-    // bound size
+    // Start reading the EMR_HEADER Header object
+
+    // bound size (RectL object, see [MS-WMF] section 2.2.2.19)
     Rectangle rclBounds;    // rectangle in logical units
     *pWMF >> nLeft >> nTop >> nRight >> nBottom;
     rclBounds.Left() = nLeft;
@@ -1358,7 +1363,7 @@ sal_Bool EnhWMFReader::ReadHeader()
     rclBounds.Right() = nRight;
     rclBounds.Bottom() = nBottom;
 
-    // picture frame size
+    // picture frame size (RectL object)
     Rectangle rclFrame;     // rectangle in device units 1/100th mm
     *pWMF >> nLeft >> nTop >> nRight >> nBottom;
     rclFrame.Left() = nLeft;
@@ -1366,27 +1371,67 @@ sal_Bool EnhWMFReader::ReadHeader()
     rclFrame.Right() = nRight;
     rclFrame.Bottom() = nBottom;
 
-    *pWMF >> nsal_uInt32;                               // signature
+    *pWMF >> nSignature;
 
-    if ( nsal_uInt32 != 0x464d4520 )
+    // nSignature MUST be the ASCII characters "FME", see [WS-EMF] 2.2.9 Header Object
+    // and 2.1.14 FormatSignature Enumeration
+    if ( nSignature != 0x464d4520 ) {
+        SAL_WARN("vcl.emf", "EMF\t\tSignature is not 0x464d4520 (\"FME\") - possibly corrupted file?");
         return sal_False;
+    }
 
-    *pWMF >> nsal_uInt32;                               // nVersion
+    *pWMF >> nVersion;  // according to [WS-EMF] 2.2.9, this SHOULD be 0x0001000, however
+                        // Microsoft note that not even Windows checks this...
+    if ( nVersion != 0x00010000 ) {
+        SAL_WARN("vcl.emf", "EMF\t\tThis really should be 0x00010000, though not absolutely essential...");
+    }
+
     *pWMF >> nEndPos;                                   // size of metafile
     nEndPos += nStartPos;
 
     sal_uInt32 nStrmPos = pWMF->Tell();                 // checking if nEndPos is valid
     pWMF->Seek( STREAM_SEEK_TO_END );
-    if ( pWMF->Tell() < nEndPos )
-        nEndPos = pWMF->Tell();
+    sal_uInt32 nActualFileSize = pWMF->Tell();
+
+    if ( nActualFileSize < nEndPos ) {
+        SAL_WARN("vcl.emf", "EMF\t\tEMF Header object records number of bytes as " << nEndPos
+                            << ", however the file size is actually " << nActualFileSize
+                            << " bytes. Possible file corruption?");
+        nEndPos = nActualFileSize;
+    }
     pWMF->Seek( nStrmPos );
 
     *pWMF >> nRecordCount;
 
-    if ( !nRecordCount )
+    if ( !nRecordCount ) {
+        SAL_WARN("vcl.emf", "EMF\t\tEMF Header object shows record counter as 0! This shouldn't "
+                            "be possible... indicator of possible file corruption?");
         return sal_False;
+    }
 
-    pWMF->SeekRel( 0xc );
+    // the number of "handles", or graphics objects used in the metafile
+
+    sal_uInt16 nHandlesCount;
+    *pWMF >> nHandlesCount;
+
+    // the next 2 bytes are reserved, but according to [MS-EMF] section 2.2.9
+    // it MUST be 0x000 and MUST be ignored... the thing is, having such a specific
+    // value is actually pretty useful in checking if there is possible corruption
+
+    sal_uInt16 nReserved;
+    *pWMF >> nReserved;
+
+    if ( nReserved != 0x0000 ) {
+        SAL_WARN("vcl.emf", "EMF\t\tEMF Header object's reserved field is NOT 0x0000... possible "
+                            "corruption?");
+    }
+
+    // The next 4 bytes specifies the number of characters in the metafile description.
+    // The 4 bytes after that specific the offset from this record that contains the
+    // metafile description... zero means no description string.
+    // For now, we ignore it.
+
+    pWMF->SeekRel( 0x8 );
 
     sal_Int32 nPixX, nPixY, nMillX, nMillY;
     *pWMF >> nPalEntries >> nPixX >> nPixY >> nMillX >> nMillY;
