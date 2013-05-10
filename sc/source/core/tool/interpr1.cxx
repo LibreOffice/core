@@ -3703,6 +3703,10 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                         ++nCount;
                     break;
                 }
+                if (glSubTotal && pDok->RowFiltered( aAdr.Row(), aAdr.Tab()))
+                {
+                    break;
+                }
                 ScBaseCell* pCell = GetCell( aAdr );
                 if ( pCell )
                 {
