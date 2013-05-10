@@ -145,7 +145,7 @@ void ComboBox::ImplInit( Window* pParent, WinBits nStyle )
 {
     ImplInitStyle( nStyle );
 
-    sal_Bool bNoBorder = ( nStyle & WB_NOBORDER ) ? sal_True : sal_False;
+    bool bNoBorder = ( nStyle & WB_NOBORDER ) ? true : false;
     if ( !(nStyle & WB_DROPDOWN) )
     {
         nStyle &= ~WB_BORDER;
@@ -373,7 +373,7 @@ IMPL_LINK( ComboBox, ImplAutocompleteHdl, Edit*, pEdit )
 IMPL_LINK_NOARG(ComboBox, ImplSelectHdl)
 {
     sal_Bool bPopup = IsInDropDown();
-    sal_Bool bCallSelect = sal_False;
+    bool bCallSelect = false;
     if ( mpImplLB->IsSelectionChanged() || bPopup )
     {
         OUString aText;
@@ -436,7 +436,7 @@ IMPL_LINK_NOARG(ComboBox, ImplSelectHdl)
             aNewSelection.Min() = aText.getLength();
         mpSubEdit->SetSelection( aNewSelection );
 
-        bCallSelect = sal_True;
+        bCallSelect = true;
     }
 
     // #84652# Call GrabFocus and EndPopupMode before calling Select/Modify, but after changing the text

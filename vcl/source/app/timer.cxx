@@ -42,8 +42,8 @@ struct ImplTimerData
     Timer*          mpSVTimer;      // Pointer to SV Timer instance
     sal_uLong           mnUpdateTime;   // Last Update Time
     sal_uLong           mnTimerUpdate;  // TimerCallbackProcs on stack
-    sal_Bool            mbDelete;       // Was timer deleted during Update()?
-    sal_Bool            mbInTimeout;    // Are we in a timeout handler?
+    bool            mbDelete;       // Was timer deleted during Update()?
+    bool            mbInTimeout;    // Are we in a timeout handler?
 };
 
 // =======================================================================
@@ -125,13 +125,13 @@ void Timer::ImplTimerCallbackProc()
                 if ( !pTimerData->mpSVTimer->mbAuto )
                 {
                     pTimerData->mpSVTimer->mbActive = sal_False;
-                    pTimerData->mbDelete = sal_True;
+                    pTimerData->mbDelete = true;
                 }
 
                 // call Timeout
-                pTimerData->mbInTimeout = sal_True;
+                pTimerData->mbInTimeout = true;
                 pTimerData->mpSVTimer->Timeout();
-                pTimerData->mbInTimeout = sal_False;
+                pTimerData->mbInTimeout = false;
             }
         }
 
@@ -233,7 +233,7 @@ Timer::~Timer()
 {
     if ( mpTimerData )
     {
-        mpTimerData->mbDelete = sal_True;
+        mpTimerData->mbDelete = true;
         mpTimerData->mpSVTimer = NULL;
     }
 }
@@ -284,8 +284,8 @@ void Timer::Start()
         mpTimerData->mpSVTimer      = this;
         mpTimerData->mnUpdateTime   = Time::GetSystemTicks();
         mpTimerData->mnTimerUpdate  = pSVData->mnTimerUpdate;
-        mpTimerData->mbDelete       = sal_False;
-        mpTimerData->mbInTimeout    = sal_False;
+        mpTimerData->mbDelete       = false;
+        mpTimerData->mbInTimeout    = false;
 
         // insert last due to SFX!
         ImplTimerData* pPrev = NULL;
@@ -312,7 +312,7 @@ void Timer::Start()
     {
         mpTimerData->mnUpdateTime    = Time::GetSystemTicks();
         mpTimerData->mnTimerUpdate   = pSVData->mnTimerUpdate;
-        mpTimerData->mbDelete        = sal_False;
+        mpTimerData->mbDelete        = false;
     }
 }
 
@@ -323,7 +323,7 @@ void Timer::Stop()
     mbActive = sal_False;
 
     if ( mpTimerData )
-        mpTimerData->mbDelete = sal_True;
+        mpTimerData->mbDelete = true;
 }
 
 // -----------------------------------------------------------------------

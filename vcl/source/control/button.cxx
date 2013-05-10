@@ -261,9 +261,9 @@ void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
                                    bool bAddImageSep )
 {
     OUString        aText( GetText() );
-    sal_Bool        bDrawImage = HasImage() && ! ( ImplGetButtonState() & BUTTON_DRAW_NOIMAGE );
-    sal_Bool        bDrawText  = !aText.isEmpty() && ! ( ImplGetButtonState() & BUTTON_DRAW_NOTEXT );
-    sal_Bool        bHasSymbol = pSymbolRect ? sal_True : sal_False;
+    bool            bDrawImage = HasImage() && ! ( ImplGetButtonState() & BUTTON_DRAW_NOIMAGE );
+    bool            bDrawText  = !aText.isEmpty() && ! ( ImplGetButtonState() & BUTTON_DRAW_NOTEXT );
+    bool            bHasSymbol = pSymbolRect ? true : false;
 
     // No text and no image => nothing to do => return
     if ( !bDrawImage && !bDrawText && !bHasSymbol )
@@ -780,7 +780,7 @@ sal_uInt16 PushButton::ImplGetTextStyle( sal_uLong nDrawFlags ) const
 
 static void ImplDrawBtnDropDownArrow( OutputDevice* pDev,
                                       long nX, long nY,
-                                      Color& rColor, sal_Bool bBlack )
+                                      Color& rColor, bool bBlack )
 {
     Color aOldLineColor = pDev->GetLineColor();
     Color aOldFillColor = pDev->GetFillColor();
@@ -899,7 +899,7 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, sal_uLong nDrawF
 
         if ( mnDDStyle == PUSHBUTTON_DROPDOWN_TOOLBOX && !bLayout )
         {
-            sal_Bool    bBlack = sal_False;
+            bool bBlack = false;
             Color   aArrowColor( COL_BLACK );
 
             if ( !(nDrawFlags & WINDOW_DRAW_MONO) )
@@ -909,7 +909,7 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, sal_uLong nDrawF
                 else
                 {
                     aArrowColor = Color( COL_LIGHTGREEN );
-                    bBlack = sal_True;
+                    bBlack = true;
                 }
             }
 
@@ -972,7 +972,7 @@ void PushButton::ImplDrawPushButton( bool bLayout )
             break;
     }
 
-    sal_Bool bDropDown = ( IsSymbol() && (GetSymbol()==SYMBOL_SPIN_DOWN) && GetText().isEmpty() );
+    bool bDropDown = ( IsSymbol() && (GetSymbol()==SYMBOL_SPIN_DOWN) && GetText().isEmpty() );
 
     if( bDropDown && (aCtrlType == CTRL_COMBOBOX || aCtrlType == CTRL_LISTBOX ) )
     {
@@ -1114,7 +1114,7 @@ void PushButton::ImplSetDefButton( sal_Bool bSet )
     Size aSize( GetSizePixel() );
     Point aPos( GetPosPixel() );
     int dLeft(0), dRight(0), dTop(0), dBottom(0);
-    sal_Bool bSetPos = sal_False;
+    bool bSetPos = false;
 
     if ( (IsNativeControlSupported(CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL)) == sal_True )
     {
@@ -1551,7 +1551,7 @@ long PushButton::PreNotify( NotifyEvent& rNEvt )
                     break;
             }
 
-            sal_Bool bDropDown = ( IsSymbol() && (GetSymbol()==SYMBOL_SPIN_DOWN) && GetText().isEmpty() );
+            bool bDropDown = ( IsSymbol() && (GetSymbol()==SYMBOL_SPIN_DOWN) && GetText().isEmpty() );
 
             if( bDropDown && GetParent()->IsNativeControlSupported( aCtrlType, PART_ENTIRE_CONTROL) &&
                    !GetParent()->IsNativeControlSupported( aCtrlType, PART_BUTTON_DOWN) )
@@ -2221,7 +2221,7 @@ void RadioButton::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
     }
     else
     {
-        sal_Bool    bTopImage   = (nWinStyle & WB_TOP) != 0;
+        bool        bTopImage   = (nWinStyle & WB_TOP) != 0;
         Size        aImageSize  = maImage.GetSizePixel();
         Rectangle   aImageRect( rPos, rSize );
         long        nTextHeight = pDev->GetTextHeight();

@@ -101,19 +101,19 @@ struct DDInfo
     Cursor          aCursor;
     Selection       aDndStartSel;
     xub_StrLen      nDropPos;
-    sal_Bool            bStarterOfDD;
-    sal_Bool            bDroppedInMe;
-    sal_Bool            bVisCursor;
-    sal_Bool            bIsStringSupported;
+    bool            bStarterOfDD;
+    bool            bDroppedInMe;
+    bool            bVisCursor;
+    bool            bIsStringSupported;
 
     DDInfo()
     {
         aCursor.SetStyle( CURSOR_SHADOW );
         nDropPos = 0;
-        bStarterOfDD = sal_False;
-        bDroppedInMe = sal_False;
-        bVisCursor = sal_False;
-        bIsStringSupported = sal_False;
+        bStarterOfDD = false;
+        bDroppedInMe = false;
+        bVisCursor = false;
+        bIsStringSupported = false;
     }
 };
 
@@ -125,8 +125,8 @@ struct Impl_IMEInfos
     sal_uInt16*   pAttribs;
     xub_StrLen    nPos;
     xub_StrLen    nLen;
-    sal_Bool      bCursor;
-    sal_Bool      bWasCursorOverwrite;
+    bool          bCursor;
+    bool          bWasCursorOverwrite;
 
                 Impl_IMEInfos( xub_StrLen nPos, const OUString& rOldTextAfterStartPos );
                 ~Impl_IMEInfos();
@@ -142,9 +142,9 @@ Impl_IMEInfos::Impl_IMEInfos( xub_StrLen nP, const OUString& rOldTextAfterStartP
 {
     nPos = nP;
     nLen = 0;
-    bCursor = sal_True;
+    bCursor = true;
     pAttribs = NULL;
-    bWasCursorOverwrite = sal_False;
+    bWasCursorOverwrite = false;
 }
 
 // -----------------------------------------------------------------------
@@ -552,7 +552,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
     }
 
     Cursor* pCursor = GetCursor();
-    sal_Bool bVisCursor = pCursor ? pCursor->IsVisible() : sal_False;
+    bool bVisCursor = pCursor ? pCursor->IsVisible() : false;
     if ( pCursor )
         pCursor->Hide();
 
@@ -585,7 +585,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
 
     ImplPaintBorder( 0, GetOutputSizePixel().Width() );
 
-    sal_Bool bDrawSelection = maSelection.Len() && ( HasFocus() || ( GetStyle() & WB_NOHIDESELECTION ) || mbActivePopup );
+    bool bDrawSelection = maSelection.Len() && ( HasFocus() || ( GetStyle() & WB_NOHIDESELECTION ) || mbActivePopup );
 
     long nPos = nStart ? pDX[2*nStart] : 0;
     aPos.X() = nPos + mnXOffset + ImplGetExtraOffset();
@@ -903,7 +903,7 @@ void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, sal_B
         sal_Bool bCTLSequenceCheckingRestricted     = sal_False;
         sal_Bool bCTLSequenceCheckingTypeAndReplace = sal_False;
         sal_Bool bCTLFontEnabled                    = sal_False;
-        sal_Bool bIsInputSequenceChecking           = sal_False;
+        bool bIsInputSequenceChecking               = false;
         //
         // get access to the configuration of this office module
         try
@@ -929,7 +929,7 @@ void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, sal_B
         }
         catch(...)
         {
-            bIsInputSequenceChecking = sal_False;   // continue with inserting the new text
+            bIsInputSequenceChecking = false;   // continue with inserting the new text
         }
         //
         uno::Reference < i18n::XBreakIterator > xBI( ImplGetBreakIterator(), UNO_QUERY );
@@ -1935,8 +1935,8 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_u
     // Border/Background
     pDev->SetLineColor();
     pDev->SetFillColor();
-    sal_Bool bBorder = !(nFlags & WINDOW_DRAW_NOBORDER ) && (GetStyle() & WB_BORDER);
-    sal_Bool bBackground = !(nFlags & WINDOW_DRAW_NOBACKGROUND) && IsControlBackground();
+    bool bBorder = !(nFlags & WINDOW_DRAW_NOBORDER ) && (GetStyle() & WB_BORDER);
+    bool bBackground = !(nFlags & WINDOW_DRAW_NOBACKGROUND) && IsControlBackground();
     if ( bBorder || bBackground )
     {
         Rectangle aRect( aPos, aSize );
@@ -2451,7 +2451,7 @@ void Edit::ImplShowDDCursor()
         mpDDInfo->aCursor.SetPos( aCursorRect.TopLeft() );
         mpDDInfo->aCursor.SetSize( aCursorRect.GetSize() );
         mpDDInfo->aCursor.Show();
-        mpDDInfo->bVisCursor = sal_True;
+        mpDDInfo->bVisCursor = true;
     }
 }
 
@@ -2462,7 +2462,7 @@ void Edit::ImplHideDDCursor()
     if ( mpDDInfo && mpDDInfo->bVisCursor )
     {
         mpDDInfo->aCursor.Hide();
-        mpDDInfo->bVisCursor = sal_False;
+        mpDDInfo->bVisCursor = false;
     }
 }
 
@@ -2982,7 +2982,7 @@ void Edit::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::Dra
     SolarMutexGuard aVclGuard;
 
     if ( !IsTracking() && maSelection.Len() &&
-         !(GetStyle() & WB_PASSWORD) && (!mpDDInfo || mpDDInfo->bStarterOfDD == sal_False) ) // Kein Mehrfach D&D
+         !(GetStyle() & WB_PASSWORD) && (!mpDDInfo || mpDDInfo->bStarterOfDD == false) ) // Kein Mehrfach D&D
     {
         Selection aSel( maSelection );
         aSel.Justify();
@@ -2995,7 +2995,7 @@ void Edit::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::Dra
             if ( !mpDDInfo )
                 mpDDInfo = new DDInfo;
 
-            mpDDInfo->bStarterOfDD = sal_True;
+            mpDDInfo->bStarterOfDD = true;
             mpDDInfo->aDndStartSel = aSel;
 
 
@@ -3056,7 +3056,7 @@ void Edit::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent&
         if ( aSel.Len() && !mpDDInfo->bStarterOfDD )
             ImplDelete( aSel, EDIT_DEL_RIGHT, EDIT_DELMODE_SIMPLE );
 
-        mpDDInfo->bDroppedInMe = sal_True;
+        mpDDInfo->bDroppedInMe = true;
 
         aSel.Min() = mpDDInfo->nDropPos;
         aSel.Max() = mpDDInfo->nDropPos;
@@ -3097,14 +3097,14 @@ void Edit::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragE
     // search for string data type
     const Sequence< com::sun::star::datatransfer::DataFlavor >& rFlavors( rDTDE.SupportedDataFlavors );
     sal_Int32 nEle = rFlavors.getLength();
-    mpDDInfo->bIsStringSupported = sal_False;
+    mpDDInfo->bIsStringSupported = false;
     for( sal_Int32 i = 0; i < nEle; i++ )
     {
         sal_Int32 nIndex = 0;
         OUString aMimetype = rFlavors[i].MimeType.getToken( 0, ';', nIndex );
         if ( aMimetype == "text/plain" )
         {
-            mpDDInfo->bIsStringSupported = sal_True;
+            mpDDInfo->bIsStringSupported = true;
             break;
         }
     }

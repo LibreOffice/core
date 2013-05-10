@@ -153,7 +153,7 @@ int ImplSVMain()
 
     int nReturn = EXIT_FAILURE;
 
-    sal_Bool bInit = InitVCL();
+    bool bInit = InitVCL();
 
     if( bInit )
     {
@@ -239,12 +239,12 @@ uno::Any SAL_CALL DesktopEnvironmentContext::getValueByName( const OUString& Nam
     return retVal;
 }
 
-sal_Bool InitVCL()
+bool InitVCL()
 {
     RTL_LOGFILE_CONTEXT( aLog, "vcl (ss112471) ::InitVCL" );
 
     if( pExceptionHandler != NULL )
-        return sal_False;
+        return false;
 
     EmbeddedFontsHelper::clearTemporaryFontFiles();
 
@@ -269,7 +269,7 @@ sal_Bool InitVCL()
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ ::CreateSalInstance" );
     pSVData->mpDefInst = CreateSalInstance();
     if ( !pSVData->mpDefInst )
-        return sal_False;
+        return false;
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "} ::CreateSalInstance" );
 
     // Desktop Environment context (to be able to get value of "system.desktop-environment" as soon as possible)
@@ -302,7 +302,7 @@ sal_Bool InitVCL()
     // initialise debug data
     DBGGUI_INIT();
 
-    return sal_True;
+    return true;
 }
 
 #ifdef ANDROID

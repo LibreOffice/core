@@ -64,12 +64,12 @@ static sal_Int64 ImplPower10( sal_uInt16 n )
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
-                                        sal_Bool bStrictFormat, sal_Bool bThousandSep,
+static bool ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
+                                        bool bStrictFormat, bool bThousandSep,
                                         const LocaleDataWrapper& rLocaleDataWrappper )
 {
     if ( !bStrictFormat )
-        return sal_False;
+        return false;
     else
     {
         sal_Unicode cChar = rKEvt.GetCharCode();
@@ -81,26 +81,26 @@ static sal_Bool ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
              string::equals(rLocaleDataWrappper.getNumDecimalSep(), cChar) ||
              (bThousandSep && string::equals(rLocaleDataWrappper.getNumThousandSep(), cChar)) ||
              (cChar == '-') )
-            return sal_False;
+            return false;
         else
-            return sal_True;
+            return true;
     }
 }
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
+static bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
                                  sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrappper,
-                                 sal_Bool bCurrency = sal_False )
+                                 bool bCurrency = false )
 {
     OUString            aStr = rStr;
     OUStringBuffer aStr1, aStr2;
-    sal_Bool            bNegative = sal_False;
+    bool                bNegative = false;
     sal_Int32           nDecPos;
 
     // react on empty string
     if ( rStr.isEmpty() )
-        return sal_False;
+        return false;
 
     // remove leading and trailing spaces
     aStr = aStr.trim();
@@ -119,7 +119,7 @@ static sal_Bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
     if ( bCurrency )
     {
         if ( aStr[0] == '(' && aStr[aStr.getLength()-1] == ')' )
-            bNegative = sal_True;
+            bNegative = true;
         if ( !bNegative )
         {
             for (sal_Int32 i=0; i < aStr.getLength(); i++ )
@@ -128,7 +128,7 @@ static sal_Bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
                     break;
                 else if ( aStr[i] == '-' )
                 {
-                    bNegative = sal_True;
+                    bNegative = true;
                     break;
                 }
             }
@@ -145,7 +145,7 @@ static sal_Bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
                         break;
                     else if ( aStr[i] == '-' )
                     {
-                        bNegative = sal_True;
+                        bNegative = true;
                         break;
                     }
                 }
@@ -155,7 +155,7 @@ static sal_Bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
     else
     {
         if ( !aStr1.isEmpty() && aStr1[0] == '-')
-            bNegative = sal_True;
+            bNegative = true;
     }
 
     // remove all unwanted charaters
@@ -175,7 +175,7 @@ static sal_Bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
     }
 
     if ( aStr1.isEmpty() && aStr2.isEmpty() )
-        return sal_False;
+        return false;
 
     if ( aStr1.isEmpty() )
         aStr1 = "0";
@@ -206,7 +206,7 @@ static sal_Bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
         if( nIndex < aStr.getLength() )
         {
             rValue = bNegative ? SAL_MIN_INT64 : SAL_MAX_INT64;
-            return sal_True;
+            return true;
         }
     }
     if (bRound)
@@ -219,7 +219,7 @@ static sal_Bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
 
     rValue = nValue;
 
-    return sal_True;
+    return true;
 }
 
 static void ImplUpdateSeparatorString( String& io_rText,
@@ -1084,11 +1084,11 @@ void NumericBox::InsertValue( sal_Int64 nValue, sal_uInt16 nPos )
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplMetricProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
-                                       sal_Bool, sal_Bool bUseThousandSep, const LocaleDataWrapper& rWrapper )
+static bool ImplMetricProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
+                                       bool, bool bUseThousandSep, const LocaleDataWrapper& rWrapper )
 {
     // no meaningfull strict format; therefore allow all characters
-    return ImplNumericProcessKeyInput( pEdit, rKEvt, sal_False, bUseThousandSep, rWrapper );
+    return ImplNumericProcessKeyInput( pEdit, rKEvt, false, bUseThousandSep, rWrapper );
 }
 
 // -----------------------------------------------------------------------
@@ -1412,13 +1412,13 @@ double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplMetricGetValue( const OUString& rStr, double& rValue, sal_Int64 nBaseValue,
+static bool ImplMetricGetValue( const OUString& rStr, double& rValue, sal_Int64 nBaseValue,
                                 sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper, FieldUnit eUnit )
 {
     // Zahlenwert holen
     sal_Int64 nValue;
     if ( !ImplNumericGetValue( rStr, nValue, nDecDigits, rLocaleDataWrapper ) )
-        return sal_False;
+        return false;
 
     // Einheit rausfinden
     FieldUnit eEntryUnit = ImplMetricGetUnit( rStr );
@@ -1427,7 +1427,7 @@ static sal_Bool ImplMetricGetValue( const OUString& rStr, double& rValue, sal_In
     // caution: conversion to double loses precision
     rValue = MetricField::ConvertDoubleValue( (double)nValue, nBaseValue, nDecDigits, eEntryUnit, eUnit );
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -2066,20 +2066,20 @@ sal_Int64 MetricBox::GetValue() const
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplCurrencyProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
-                                         sal_Bool, sal_Bool bUseThousandSep, const LocaleDataWrapper& rWrapper )
+static bool ImplCurrencyProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
+                                         bool, bool bUseThousandSep, const LocaleDataWrapper& rWrapper )
 {
     // no strict format set; therefore allow all characters
-    return ImplNumericProcessKeyInput( pEdit, rKEvt, sal_False, bUseThousandSep, rWrapper );
+    return ImplNumericProcessKeyInput( pEdit, rKEvt, false, bUseThousandSep, rWrapper );
 }
 
 // -----------------------------------------------------------------------
 
-inline sal_Bool ImplCurrencyGetValue( const OUString& rStr, sal_Int64& rValue,
+inline bool ImplCurrencyGetValue( const OUString& rStr, sal_Int64& rValue,
                                   sal_uInt16 nDecDigits, const LocaleDataWrapper& rWrapper )
 {
     // fetch number
-    return ImplNumericGetValue( rStr, rValue, nDecDigits, rWrapper, sal_True );
+    return ImplNumericGetValue( rStr, rValue, nDecDigits, rWrapper, true );
 }
 
 // -----------------------------------------------------------------------
@@ -2087,7 +2087,7 @@ inline sal_Bool ImplCurrencyGetValue( const OUString& rStr, sal_Int64& rValue,
 sal_Bool CurrencyFormatter::ImplCurrencyReformat( const OUString& rStr, OUString& rOutStr )
 {
     sal_Int64 nValue;
-    if ( !ImplNumericGetValue( rStr, nValue, GetDecimalDigits(), ImplGetLocaleDataWrapper(), sal_True ) )
+    if ( !ImplNumericGetValue( rStr, nValue, GetDecimalDigits(), ImplGetLocaleDataWrapper(), true ) )
         return sal_True;
     else
     {
