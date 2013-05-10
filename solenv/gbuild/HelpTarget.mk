@@ -280,8 +280,9 @@ gb_HelpLinkTarget_DEPS := \
 	$(gb_HelpLinkTarget_IDXCAPTIONTARGET) \
 	$(gb_HelpLinkTarget_IDXCONTENTTARGET)
 
-# first delete the index stuff since when it is generated an existing _0.cfs
-# will not be overwritten; instead a new _1.cfs etc. created until disk is full
+# delete index files here too just to be on the safe side...
+# the index files in the .idxl dir are ceated by HelpIndexer,
+# the ones outside the dir by HelpLinker
 define gb_HelpLinkTarget__command
 $(call gb_Output_announce,$(2),$(true),HLK,3)
 	$(if $(HELP_INDEXED),rm -rf $(addprefix $(HELP_WORKDIR)/,$(HELP_INDEXED)) && \)
@@ -419,11 +420,14 @@ endef
 gb_HelpIndexTarget_DEPS := $(call gb_Executable_get_runtime_dependencies,HelpIndexer)
 gb_HelpIndexTarget_COMMAND := $(call gb_Executable_get_command,HelpIndexer)
 
+# first delete the index stuff since when it is generated an existing _0.cfs
+# will not be overwritten; instead a new _1.cfs etc. created until disk is full
 define gb_HelpIndexTarget__command
 $(call gb_Output_announce,$*,$(true),HIX,3)
 $(call gb_Helper_abbreviate_dirs,\
 	(\
-		$(gb_HelpIndexTarget_COMMAND) \
+		rm -rf $(HELP_WORKDIR)/$(HELP_MODULE).idxl \
+		&& $(gb_HelpIndexTarget_COMMAND) \
 			-dir $(HELP_WORKDIR) \
 			-lang $(HELP_LANG) \
 			-mod $(HELP_MODULE) \
