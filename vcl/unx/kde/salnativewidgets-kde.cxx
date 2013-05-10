@@ -648,7 +648,7 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     }
     else if ( strcmp( QScrollBar_String, pClassName ) == 0 )
     {
-    const ScrollbarValue* pScrollbarVal = (aValue.getType() == CTRL_SCROLLBAR) ? static_cast<const ScrollbarValue*>(&aValue) : NULL;
+    const ScrollbarValue* pValue = (aValue.getType() == CTRL_SCROLLBAR) ? static_cast<const ScrollbarValue*>(&aValue) : NULL;
 
     QStyle::SCFlags eActive = QStyle::SC_None;
     if ( pValue )
@@ -1052,7 +1052,7 @@ QScrollBar *WidgetPainter::scrollBar( const Rectangle& rControlRegion,
     m_pScrollBar->resize( qRect.size() );
     m_pScrollBar->setOrientation( bHorizontal? Qt::Horizontal: Qt::Vertical );
 
-    const ScrollbarValue* pScrollbarVal = (aValue.getType() == CTRL_SCROLLBAR) ? static_cast<const ScrollbarValue*>(&aValue) : NULL;
+    const ScrollbarValue* pValue = (aValue.getType() == CTRL_SCROLLBAR) ? static_cast<const ScrollbarValue*>(&aValue) : NULL;
     if ( pValue )
     {
         m_pScrollBar->setMinValue( pValue->mnMin );
