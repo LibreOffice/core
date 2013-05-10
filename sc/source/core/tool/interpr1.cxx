@@ -4119,6 +4119,10 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                         ++nCount;
                     break;
                 }
+                if (glSubTotal && pDok->RowFiltered( aAdr.Row(), aAdr.Tab()))
+                {
+                    break;
+                }
                 ScRefCellValue aCell;
                 aCell.assign(*pDok, aAdr);
                 if (!aCell.isEmpty())
