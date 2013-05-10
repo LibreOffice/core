@@ -117,8 +117,7 @@ void ScColumn::Append( SCROW nRow, ScBaseCell* pCell )
     maItems.back().pCell = pCell;
     maItems.back().nRow  = nRow;
 
-    maTextWidths.set<unsigned short>(nRow, TEXTWIDTH_DIRTY);
-    maScriptTypes.set<unsigned char>(nRow, SC_SCRIPTTYPE_UNKNOWN);
+    maCellTextAttrs.set<sc::CellTextAttr>(nRow, sc::CellTextAttr());
     CellStorageModified();
 }
 
@@ -131,8 +130,7 @@ void ScColumn::Delete( SCROW nRow )
 
     ScBaseCell* pCell = maItems[nIndex].pCell;
     maItems.erase(maItems.begin() + nIndex);
-    maTextWidths.set_empty(nRow, nRow);
-    maScriptTypes.set_empty(nRow, nRow);
+    maCellTextAttrs.set_empty(nRow, nRow);
     // Should we free memory here (delta)? It'll be slower!
     if (pCell->GetCellType() == CELLTYPE_FORMULA)
         static_cast<ScFormulaCell*>(pCell)->EndListeningTo(pDocument);
@@ -157,8 +155,7 @@ void ScColumn::DeleteAtIndex( SCSIZE nIndex )
     pDocument->Broadcast(
         ScHint(SC_HINT_DATACHANGED, ScAddress(nCol, nRow, nTab)));
 
-    maTextWidths.set_empty(nRow, nRow);
-    maScriptTypes.set_empty(nRow, nRow);
+    maCellTextAttrs.set_empty(nRow, nRow);
     CellStorageModified();
 }
 
@@ -170,10 +167,8 @@ void ScColumn::FreeAll()
     maItems.clear();
 
     // Text width should keep a logical empty range of 0-MAXROW when the cell array is empty.
-    maTextWidths.clear();
-    maTextWidths.resize(MAXROWCOUNT);
-    maScriptTypes.clear();
-    maScriptTypes.resize(MAXROWCOUNT);
+    maCellTextAttrs.clear();
+    maCellTextAttrs.resize(MAXROWCOUNT);
     CellStorageModified();
 }
 
@@ -233,10 +228,8 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
     // There are cells below the deletion point.  Shift their row positions.
 
     // Shift the text width array too (before the broadcast).
-    maTextWidths.erase(nStartRow, nEndRow);
-    maTextWidths.resize(MAXROWCOUNT);
-    maScriptTypes.erase(nStartRow, nEndRow);
-    maScriptTypes.resize(MAXROWCOUNT);
+    maCellTextAttrs.erase(nStartRow, nEndRow);
+    maCellTextAttrs.resize(MAXROWCOUNT);
 
     ScAddress aAdr( nCol, 0, nTab );
     ScHint aHint(SC_HINT_DATACHANGED, aAdr); // only areas (ScBaseCell* == NULL)
@@ -438,8 +431,7 @@ void ScColumn::DeleteRange(
             std::advance(itEraseEnd, nEndSegment);
             maItems.erase(itErase, itEraseEnd);
 
-            maTextWidths.set_empty(nStartRow, nEndRow);
-            maScriptTypes.set_empty(nStartRow, nEndRow);
+            maCellTextAttrs.set_empty(nStartRow, nEndRow);
 
             nEndSegment = nStartSegment;
         }
@@ -1336,8 +1328,7 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
 
                 pOldCell->Delete();
                 maItems[i].pCell = pNewCell; // Replace
-                maTextWidths.set<unsigned short>(nRow, TEXTWIDTH_DIRTY);
-                maScriptTypes.set<unsigned char>(nRow, SC_SCRIPTTYPE_UNKNOWN);
+                maCellTextAttrs.set<sc::CellTextAttr>(nRow, sc::CellTextAttr());
                 CellStorageModified();
 
                 if ( pNewCell->GetCellType() == CELLTYPE_FORMULA )

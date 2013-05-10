@@ -73,27 +73,6 @@ ScNeededSizeOptions::ScNeededSizeOptions() :
 {
 }
 
-void ScColumn::SwapScriptTypes( ScriptType& rSrc, SCROW nSrcRow, ScriptType& rDest, SCROW nDestRow )
-{
-    unsigned char nSrcVal = 0;
-    unsigned char nDestVal = 0;
-
-    if (!rSrc.is_empty(nSrcRow))
-        nSrcVal = rSrc.get<unsigned char>(nSrcRow);
-    if (!rDest.is_empty(nDestRow))
-        nDestVal = rDest.get<unsigned char>(nDestRow);
-
-    if (nDestVal)
-        rSrc.set(nSrcRow, nDestVal);
-    else
-        rSrc.set_empty(nSrcRow, nSrcRow);
-
-    if (nSrcVal)
-        rDest.set(nDestRow, nSrcVal);
-    else
-        rDest.set_empty(nDestRow, nDestRow);
-}
-
 std::vector<ColEntry>::iterator ScColumn::Search( SCROW nRow )
 {
     // Find first cell whose position is equal or greater than nRow.
@@ -111,8 +90,7 @@ std::vector<ColEntry>::const_iterator ScColumn::Search( SCROW nRow ) const
 }
 
 ScColumn::ScColumn() :
-    maTextWidths(MAXROWCOUNT),
-    maScriptTypes(MAXROWCOUNT),
+    maCellTextAttrs(MAXROWCOUNT),
     maBroadcasters(MAXROWCOUNT),
     nCol( 0 ),
     pAttrArray( NULL ),
@@ -897,14 +875,11 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
             maItems[nIndex1].pCell = pCell2;
             maItems[nIndex2].pCell = pCell1;
 
-            // Swap text width values.
-            unsigned short nVal1 = maTextWidths.get<unsigned short>(nRow1);
-            unsigned short nVal2 = maTextWidths.get<unsigned short>(nRow2);
-            maTextWidths.set<unsigned short>(nRow1, nVal2);
-            maTextWidths.set<unsigned short>(nRow2, nVal1);
-
-            // Swap script types.
-            SwapScriptTypes(maScriptTypes, nRow1, maScriptTypes, nRow2);
+            // Swap text width values and script types.
+            sc::CellTextAttr aVal1 = maCellTextAttrs.get<sc::CellTextAttr>(nRow1);
+            sc::CellTextAttr aVal2 = maCellTextAttrs.get<sc::CellTextAttr>(nRow2);
+            maCellTextAttrs.set(nRow1, aVal2);
+            maCellTextAttrs.set(nRow2, aVal1);
 
             CellStorageModified();
         }
@@ -915,8 +890,7 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
 
             // remove ColEntry at old position
             maItems.erase( maItems.begin() + nIndex1 );
-            maTextWidths.set_empty(nRow1, nRow1);
-            maScriptTypes.set_empty(nRow1, nRow1);
+            maCellTextAttrs.set_empty(nRow1, nRow1);
 
             // Empty text width at the cell 1 position.  For now, we don't
             // transfer the old value to the cell 2 position since Insert() is
@@ -1042,14 +1016,11 @@ void ScColumn::SwapCell( SCROW nRow, ScColumn& rCol)
             pFmlaCell2->UpdateReference(URM_MOVE, aRange, -dx, 0, 0);
         }
 
-        // Swap the text widths.
-        unsigned short nVal1 = maTextWidths.get<unsigned short>(nRow);
-        unsigned short nVal2 = rCol.maTextWidths.get<unsigned short>(nRow);
-        maTextWidths.set<unsigned short>(nRow, nVal2);
-        rCol.maTextWidths.set<unsigned short>(nRow, nVal1);
-
-        // Swap script types.
-        SwapScriptTypes(maScriptTypes, nRow, rCol.maScriptTypes, nRow);
+        // Swap text width values and script types.
+        sc::CellTextAttr aVal1 = maCellTextAttrs.get<sc::CellTextAttr>(nRow);
+        sc::CellTextAttr aVal2 = rCol.maCellTextAttrs.get<sc::CellTextAttr>(nRow);
+        maCellTextAttrs.set(nRow, aVal2);
+        rCol.maCellTextAttrs.set(nRow, aVal1);
 
         CellStorageModified();
         rCol.CellStorageModified();
@@ -1069,8 +1040,7 @@ void ScColumn::SwapCell( SCROW nRow, ScColumn& rCol)
             pFmlaCell1->UpdateReference(URM_MOVE, aRange, dx, 0, 0);
         }
 
-        maTextWidths.set_empty(nRow, nRow);
-        maScriptTypes.set_empty(nRow, nRow);
+        maCellTextAttrs.set_empty(nRow, nRow);
         CellStorageModified();
 
         // We don't transfer the text width to the destination column because
@@ -1206,11 +1176,8 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
 
     pDocument->SetAutoCalc( bOldAutoCalc );
 
-    maTextWidths.insert_empty(nStartRow, nSize);
-    maTextWidths.resize(MAXROWCOUNT);
-    maScriptTypes.insert_empty(nStartRow, nSize);
-    maScriptTypes.resize(MAXROWCOUNT);
-
+    maCellTextAttrs.insert_empty(nStartRow, nSize);
+    maCellTextAttrs.resize(MAXROWCOUNT);
     CellStorageModified();
 }
 
@@ -1296,7 +1263,7 @@ void ScColumn::CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol
     if (nRow1 > nRow2)
         return;
 
-    CopyScriptTypesToDocument(nRow1, nRow2, rDestCol);
+    CopyCellTextAttrsToDocument(nRow1, nRow2, rDestCol);
 
     // First, clear the destination column for the row range specified.
     std::vector<ColEntry>::iterator it, itEnd;
@@ -1307,7 +1274,6 @@ void ScColumn::CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol
         itEnd = std::find_if(it, rDestCol.maItems.end(), FindAboveRow(nRow2));
         std::for_each(it, itEnd, DeleteCell());
         rDestCol.maItems.erase(it, itEnd);
-        rDestCol.maTextWidths.set_empty(nRow1, nRow2);
     }
 
     // Determine the range of cells in the original column that need to be copied.
@@ -1375,12 +1341,6 @@ void ScColumn::CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol
     // destination column shouldn't have any cells within the specified range.
     it = std::find_if(rDestCol.maItems.begin(), rDestCol.maItems.end(), FindAboveRow(nRow2));
     rDestCol.maItems.insert(it, aCopied.begin(), aCopied.end());
-
-    // Set text width values dirty for all non-empty cell positions.
-    it = aCopied.begin();
-    itEnd = aCopied.end();
-    for (; it != itEnd; ++it)
-        rDestCol.maTextWidths.set<unsigned short>(it->nRow, TEXTWIDTH_DIRTY);
 }
 
 void ScColumn::CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDestCol )
@@ -1635,8 +1595,7 @@ void ScColumn::MarkScenarioIn( ScMarkData& rDestMark ) const
 void ScColumn::SwapCol(ScColumn& rCol)
 {
     maItems.swap(rCol.maItems);
-    maTextWidths.swap(rCol.maTextWidths);
-    maScriptTypes.swap(rCol.maScriptTypes);
+    maCellTextAttrs.swap(rCol.maCellTextAttrs);
 
     CellStorageModified();
     rCol.CellStorageModified();
@@ -1693,9 +1652,7 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
     if (nStartPos < nStopPos)
     {
         // At least one cell gets copied to the destination column.
-        maTextWidths.set_empty(nStartRow, nEndRow);
-        maScriptTypes.set_empty(nStartRow, nEndRow);
-
+        maCellTextAttrs.set_empty(nStartRow, nEndRow);
         CellStorageModified();
 
         // Create list of ranges of cell entry positions.

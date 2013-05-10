@@ -1371,16 +1371,16 @@ void ScColumn::CellStorageModified()
 #if DEBUG_COLUMN_STORAGE
     if (maItems.empty())
     {
-        if (maTextWidths.empty())
+        if (maCellTextAttrs.empty())
         {
             cout << "ScColumn::CellStorageModified: Text width array is empty, but shouldn't." << endl;
             cout.flush();
             abort();
         }
 
-        if (maTextWidths.block_size() != 1 || maTextWidths.begin()->type != mdds::mtv::element_type_empty)
+        if (maCellTextAttrs.block_size() != 1 || maCellTextAttrs.begin()->type != mdds::mtv::element_type_empty)
         {
-            cout << "ScColumn::CellStorageModified: When the cell array is empty, the text with array should consist of one empty block." << endl;
+            cout << "ScColumn::CellStorageModified: When the cell array is empty, the cell text attribute array should consist of one empty block." << endl;
             cout.flush();
             abort();
         }
@@ -1410,11 +1410,11 @@ void ScColumn::CellStorageModified()
 #endif
 }
 
-void ScColumn::CopyScriptTypesToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol) const
+void ScColumn::CopyCellTextAttrsToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol) const
 {
-    rDestCol.maScriptTypes.set_empty(nRow1, nRow2); // Empty the destination range first.
+    rDestCol.maCellTextAttrs.set_empty(nRow1, nRow2); // Empty the destination range first.
 
-    ScriptType::const_iterator itBlk = maScriptTypes.begin(), itBlkEnd = maScriptTypes.end();
+    CTAttrStoreType::const_iterator itBlk = maCellTextAttrs.begin(), itBlkEnd = maCellTextAttrs.end();
 
     // Locate the top row position.
     size_t nOffsetInBlock = 0;
@@ -1437,7 +1437,7 @@ void ScColumn::CopyScriptTypesToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDe
     nRowPos = static_cast<size_t>(nRow2); // End row position.
 
     // Keep copying until we hit the end row position.
-    mdds::mtv::uchar_element_block::const_iterator itData, itDataEnd;
+    sc::custom_celltextattr_block::const_iterator itData, itDataEnd;
     for (; itBlk != itBlkEnd; ++itBlk, nBlockStart = nBlockEnd, nOffsetInBlock = 0)
     {
         nBlockEnd = nBlockStart + itBlk->size;
@@ -1446,30 +1446,30 @@ void ScColumn::CopyScriptTypesToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDe
             // Empty block.
             if (nBlockStart <= nRowPos && nRowPos <= nBlockEnd)
                 // This block contains the end row.
-                rDestCol.maScriptTypes.set_empty(nBlockStart + nOffsetInBlock, nRowPos);
+                rDestCol.maCellTextAttrs.set_empty(nBlockStart + nOffsetInBlock, nRowPos);
             else
-                rDestCol.maScriptTypes.set_empty(nBlockStart + nOffsetInBlock, nBlockEnd-1);
+                rDestCol.maCellTextAttrs.set_empty(nBlockStart + nOffsetInBlock, nBlockEnd-1);
 
             continue;
         }
 
         // Non-empty block.
-        itData = mdds::mtv::uchar_element_block::begin(*itBlk->data);
-        itDataEnd = mdds::mtv::uchar_element_block::end(*itBlk->data);
+        itData = sc::custom_celltextattr_block::begin(*itBlk->data);
+        itDataEnd = sc::custom_celltextattr_block::end(*itBlk->data);
         std::advance(itData, nOffsetInBlock);
 
         if (nBlockStart <= nRowPos && nRowPos <= nBlockEnd)
         {
             // This block contains the end row. Only copy partially.
             size_t nOffset = nRowPos - nBlockStart + 1;
-            itDataEnd = mdds::mtv::uchar_element_block::begin(*itBlk->data);
+            itDataEnd = sc::custom_celltextattr_block::begin(*itBlk->data);
             std::advance(itDataEnd, nOffset);
 
-            rDestCol.maScriptTypes.set(nBlockStart + nOffsetInBlock, itData, itDataEnd);
+            rDestCol.maCellTextAttrs.set(nBlockStart + nOffsetInBlock, itData, itDataEnd);
             break;
         }
 
-        rDestCol.maScriptTypes.set(nBlockStart + nOffsetInBlock, itData, itDataEnd);
+        rDestCol.maCellTextAttrs.set(nBlockStart + nOffsetInBlock, itData, itDataEnd);
     }
 }
 
@@ -1502,8 +1502,7 @@ void ScColumn::SetCell(SCROW nRow, ScBaseCell* pNewCell)
             maItems[nIndex].nRow  = nRow;
         }
 
-        maTextWidths.set<unsigned short>(nRow, TEXTWIDTH_DIRTY);
-        maScriptTypes.set<unsigned char>(nRow, SC_SCRIPTTYPE_UNKNOWN);
+        maCellTextAttrs.set(nRow, sc::CellTextAttr());
         CellStorageModified();
     }
 }
@@ -1518,22 +1517,24 @@ const SvtBroadcaster* ScColumn::GetBroadcaster(SCROW nRow) const
     return maBroadcasters.get<SvtBroadcaster*>(nRow);
 }
 
-unsigned short ScColumn::GetTextWidth(SCROW nRow) const
+sal_uInt16 ScColumn::GetTextWidth(SCROW nRow) const
 {
-    return maTextWidths.get<unsigned short>(nRow);
+    return maCellTextAttrs.get<sc::CellTextAttr>(nRow).mnTextWidth;
 }
 
-void ScColumn::SetTextWidth(SCROW nRow, unsigned short nWidth)
+void ScColumn::SetTextWidth(SCROW nRow, sal_uInt16 nWidth)
 {
-    maTextWidths.set(nRow, nWidth);
+    sc::CellTextAttr aVal = maCellTextAttrs.get<sc::CellTextAttr>(nRow);
+    aVal.mnTextWidth = nWidth;
+    maCellTextAttrs.set(nRow, aVal);
 }
 
 sal_uInt8 ScColumn::GetScriptType( SCROW nRow ) const
 {
-    if (!ValidRow(nRow) || maScriptTypes.is_empty(nRow))
+    if (!ValidRow(nRow) || maCellTextAttrs.is_empty(nRow))
         return 0;
 
-    return maScriptTypes.get<unsigned char>(nRow);
+    return maCellTextAttrs.get<sc::CellTextAttr>(nRow).mnScriptType;
 }
 
 void ScColumn::SetScriptType( SCROW nRow, sal_uInt8 nType )
@@ -1542,9 +1543,20 @@ void ScColumn::SetScriptType( SCROW nRow, sal_uInt8 nType )
         return;
 
     if (!nType)
-        maScriptTypes.set_empty(nRow, nRow);
+    {
+        if (maCellTextAttrs.is_empty(nRow))
+            return;
+
+        sc::CellTextAttr aVal = maCellTextAttrs.get<sc::CellTextAttr>(nRow);
+        aVal.mnScriptType = nType;
+        maCellTextAttrs.set(nRow, aVal);
+    }
     else
-        maScriptTypes.set<unsigned char>(nRow, nType);
+    {
+        sc::CellTextAttr aVal = maCellTextAttrs.get<sc::CellTextAttr>(nRow);
+        aVal.mnScriptType = nType;
+        maCellTextAttrs.set(nRow, aVal);
+    }
 }
 
 size_t ScColumn::GetFormulaHash( SCROW nRow ) const

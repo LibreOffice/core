@@ -122,16 +122,16 @@ class ScColumn
     typedef mdds::mtv::custom_block_func1<sc::element_type_broadcaster, sc::custom_broadcaster_block> BCBlkFunc;
     typedef mdds::multi_type_vector<BCBlkFunc> BCStoreType;
 
-    typedef mdds::multi_type_vector<mdds::mtv::element_block_func> TextWidthType;
-    typedef mdds::multi_type_vector<mdds::mtv::element_block_func> ScriptType;
+    // Cell text attribute container.
+    typedef mdds::mtv::custom_block_func1<sc::element_type_celltextattr, sc::custom_celltextattr_block> CTAttrFunc;
+    typedef mdds::multi_type_vector<CTAttrFunc> CTAttrStoreType;
 
-    // Only stores empty or unsigned short values.  Empty values correspond
-    // with empty cells. All non-empty cell positions must have unsigned short
-    // values; either the reall text widths or TEXTWIDTH_DIRTY.
-    TextWidthType maTextWidths;
-
-    // Script types are stored as unsigned char.
-    ScriptType maScriptTypes;
+    // Empty values correspond with empty cells. All non-empty cell positions
+    // must have non-empty elements. For text width, the value should be
+    // either the real text width, or TEXTWIDTH_DIRTY in case it hasn't been
+    // calculated yet. For script type, it should be either the real script
+    // type value or SC_SCRIPTTYPE_UNKNOWN.
+    CTAttrStoreType maCellTextAttrs;
 
     BCStoreType maBroadcasters;
 
@@ -164,8 +164,6 @@ friend class ScDocumentImport;
 
     ScColumn(const ScColumn&); // disabled
     ScColumn& operator= (const ScColumn&); // disabled
-
-    static void SwapScriptTypes( ScriptType& rSrc, SCROW nSrcRow, ScriptType& rDest, SCROW nDestRow );
 
     std::vector<ColEntry>::iterator Search( SCROW nRow );
     std::vector<ColEntry>::const_iterator Search( SCROW nRow ) const;
@@ -494,7 +492,7 @@ private:
      */
     void CellStorageModified();
 
-    void CopyScriptTypesToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol) const;
+    void CopyCellTextAttrsToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol) const;
 
     void SetCell(SCROW nRow, ScBaseCell* pNewCell);
 };

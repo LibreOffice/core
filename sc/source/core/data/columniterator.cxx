@@ -13,21 +13,21 @@
 #include "table.hxx"
 
 ScColumnTextWidthIterator::ScColumnTextWidthIterator(ScColumn& rCol, SCROW nStartRow, SCROW nEndRow) :
-    mrTextWidths(rCol.maTextWidths),
+    mrCellTextAttrs(rCol.maCellTextAttrs),
     mnEnd(static_cast<size_t>(nEndRow)),
     mnCurPos(0),
-    miBlockCur(mrTextWidths.begin()),
-    miBlockEnd(mrTextWidths.end())
+    miBlockCur(mrCellTextAttrs.begin()),
+    miBlockEnd(mrCellTextAttrs.end())
 {
     init(nStartRow, nEndRow);
 }
 
 ScColumnTextWidthIterator::ScColumnTextWidthIterator(ScDocument& rDoc, const ScAddress& rStartPos, SCROW nEndRow) :
-    mrTextWidths(rDoc.maTabs[rStartPos.Tab()]->aCol[rStartPos.Col()].maTextWidths),
+    mrCellTextAttrs(rDoc.maTabs[rStartPos.Tab()]->aCol[rStartPos.Col()].maCellTextAttrs),
     mnEnd(static_cast<size_t>(nEndRow)),
     mnCurPos(0),
-    miBlockCur(mrTextWidths.begin()),
-    miBlockEnd(mrTextWidths.end())
+    miBlockCur(mrCellTextAttrs.begin()),
+    miBlockEnd(mrCellTextAttrs.end())
 {
     init(rStartPos.Row(), nEndRow);
 }
@@ -47,7 +47,7 @@ void ScColumnTextWidthIterator::next()
     // Move to the next block.
     for (++miBlockCur; miBlockCur != miBlockEnd; ++miBlockCur)
     {
-        if (miBlockCur->type != mdds::mtv::element_type_ushort)
+        if (miBlockCur->type != sc::element_type_celltextattr)
         {
             // We don't iterator over this block.
             mnCurPos += miBlockCur->size;
@@ -77,13 +77,13 @@ SCROW ScColumnTextWidthIterator::getPos() const
 sal_uInt16 ScColumnTextWidthIterator::getValue() const
 {
     OSL_ASSERT(miBlockCur != miBlockEnd && miDataCur != miDataEnd);
-    return *miDataCur;
+    return miDataCur->mnTextWidth;
 }
 
 void ScColumnTextWidthIterator::setValue(sal_uInt16 nVal)
 {
     OSL_ASSERT(miBlockCur != miBlockEnd && miDataCur != miDataEnd);
-    *miDataCur = nVal;
+    miDataCur->mnTextWidth = nVal;
 }
 
 void ScColumnTextWidthIterator::init(SCROW nStartRow, SCROW nEndRow)
@@ -110,7 +110,7 @@ void ScColumnTextWidthIterator::init(SCROW nStartRow, SCROW nEndRow)
         return;
 
     // Locate the initial row position within this block.
-    if (miBlockCur->type == mdds::mtv::element_type_ushort)
+    if (miBlockCur->type == sc::element_type_celltextattr)
     {
         // This block stores text widths for non-empty cells.
         size_t nOffsetInBlock = nStart - nBlockStart;
@@ -128,7 +128,7 @@ void ScColumnTextWidthIterator::init(SCROW nStartRow, SCROW nEndRow)
     for (; miBlockCur != miBlockEnd; ++miBlockCur, nBlockStart = nBlockEnd)
     {
         nBlockEnd = nBlockStart + miBlockCur->size; // non-inclusive end point.
-        if (miBlockCur->type != mdds::mtv::element_type_ushort)
+        if (miBlockCur->type != sc::element_type_celltextattr)
             continue;
 
         // Found!
@@ -145,11 +145,11 @@ void ScColumnTextWidthIterator::init(SCROW nStartRow, SCROW nEndRow)
 void ScColumnTextWidthIterator::getDataIterators(size_t nOffsetInBlock)
 {
     OSL_ENSURE(miBlockCur != miBlockEnd, "block is at end position");
-    OSL_ENSURE(miBlockCur->type == mdds::mtv::element_type_ushort,
+    OSL_ENSURE(miBlockCur->type == sc::custom_celltextattr_block,
                "wrong block type - unsigned short block expected.");
 
-    miDataCur = mdds::mtv::ushort_element_block::begin(*miBlockCur->data);
-    miDataEnd = mdds::mtv::ushort_element_block::end(*miBlockCur->data);
+    miDataCur = sc::custom_celltextattr_block::begin(*miBlockCur->data);
+    miDataEnd = sc::custom_celltextattr_block::end(*miBlockCur->data);
 
     std::advance(miDataCur, nOffsetInBlock);
 }

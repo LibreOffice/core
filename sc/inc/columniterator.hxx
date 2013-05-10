@@ -18,15 +18,15 @@ class ScColumn;
 
 class ScColumnTextWidthIterator : boost::noncopyable
 {
-    typedef ScColumn::TextWidthType TextWidthType;
+    typedef ScColumn::CTAttrStoreType CTAttrStoreType;
 
-    TextWidthType& mrTextWidths;
+    CTAttrStoreType& mrCellTextAttrs;
     const size_t mnEnd;
     size_t mnCurPos;
-    TextWidthType::iterator miBlockCur;
-    TextWidthType::iterator miBlockEnd;
-    mdds::mtv::ushort_element_block::iterator miDataCur;
-    mdds::mtv::ushort_element_block::iterator miDataEnd;
+    CTAttrStoreType::iterator miBlockCur;
+    CTAttrStoreType::iterator miBlockEnd;
+    sc::custom_celltextattr_block::iterator miDataCur;
+    sc::custom_celltextattr_block::iterator miDataEnd;
 
 public:
     ScColumnTextWidthIterator(ScColumn& rCol, SCROW nStartRow, SCROW nEndRow);

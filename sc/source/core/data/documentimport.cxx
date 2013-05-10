@@ -109,14 +109,10 @@ void ScDocumentImport::finalize()
                 // Column has no cells. Skip it.
                 continue;
 
-            ScColumn::TextWidthType::iterator itWidthPos = rCol.maTextWidths.begin();
-            ScColumn::ScriptType::iterator itScriptPos = rCol.maScriptTypes.begin();
+            ScColumn::CTAttrStoreType::iterator itCTAPos = rCol.maCellTextAttrs.begin();
             std::vector<ColEntry>::iterator itCell = rCol.maItems.begin(), itCellEnd = rCol.maItems.end();
             for (; itCell != itCellEnd; ++itCell)
-            {
-                itWidthPos = rCol.maTextWidths.set<unsigned short>(itWidthPos, itCell->nRow, TEXTWIDTH_DIRTY);
-                itScriptPos = rCol.maScriptTypes.set<unsigned char>(itScriptPos, itCell->nRow, SC_SCRIPTTYPE_UNKNOWN);
-            }
+                itCTAPos = rCol.maCellTextAttrs.set<sc::CellTextAttr>(itCTAPos, itCell->nRow, sc::CellTextAttr());
         }
     }
 }
