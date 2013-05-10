@@ -2324,16 +2324,8 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
             {
                 sal_uInt32 nPlacementId = pPlaceHolder->nPlacementId;
                 sal_Int16 nPlaceholderId = pPlaceHolder->nPlaceholderId;
-                sal_uInt16 i = 0;
+
                 if ( eAktPageKind == PPT_SLIDEPAGE )
-                {
-                    for ( ; i < 8; i++ )
-                    {
-                        if ( pSlideLayout->aPlaceholderId[ i ] == nPlaceholderId )
-                            break;
-                    }
-                }
-                if ( i < 8 )
                 {
                     PresObjKind ePresObjKind = PRESOBJ_NONE;
                     sal_Bool    bEmptyPresObj = sal_True;
