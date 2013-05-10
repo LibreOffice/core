@@ -17,7 +17,6 @@
  */
 #include "InsertPropertyPanel.hxx"
 #include "InsertPropertyPanel.hrc"
-#include "SimpleToolBoxController.hxx"
 #include "sfx2/sidebar/CommandInfoProvider.hxx"
 
 #include <sfx2/sidebar/Theme.hxx>
@@ -26,6 +25,7 @@
 
 #include <svx/dialmgr.hxx>
 #include <svtools/miscopt.hxx>
+#include <svtools/generictoolboxcontroller.hxx>
 #include <vcl/toolbox.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <framework/sfxhelperfunctions.hxx>
@@ -275,7 +275,12 @@ void InsertPropertyPanel::CreateController (
             UNO_QUERY);
         if ( ! aDescriptor.mxController.is())
             aDescriptor.mxController.set(
-                static_cast<XWeak*>(new SimpleToolBoxController(mxFrame, *pToolBox, nItemId, sCommandName)),
+                static_cast<XWeak*>(new svt::GenericToolboxController(
+                        ::comphelper::getProcessServiceFactory(),
+                        mxFrame,
+                        pToolBox,
+                        nItemId,
+                        sCommandName)),
                 UNO_QUERY);
         if ( ! aDescriptor.mxController.is())
             return;
