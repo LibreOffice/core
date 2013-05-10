@@ -2301,33 +2301,33 @@ dnl  Checks for C compiler,
 dnl  The check for the C++ compiler is later on.
 dnl ===================================================================
 if test "$_os" != "WINNT" -a "$WITH_MINGW" != "yes"; then
-	GCC_HOME_SET="true"
-	AC_MSG_CHECKING([gcc home])
-	if test -z "$with_gcc_home"; then
-		if test "$enable_icecream" = "yes"; then
-			if test -d "/usr/lib/icecc/bin"; then
-				GCC_HOME="/usr/lib/icecc/"
-			else
-				GCC_HOME="/opt/icecream/"
-			fi
-		else
-			GCC_HOME=`which gcc | $SED -e s,/bin/gcc,,`
-			GCC_HOME_SET="false"
-		fi
-	else
-		GCC_HOME="$with_gcc_home"
-	fi
-	AC_MSG_RESULT($GCC_HOME)
-	AC_SUBST(GCC_HOME)
+    GCC_HOME_SET="true"
+    AC_MSG_CHECKING([gcc home])
+    if test -z "$with_gcc_home"; then
+        if test "$enable_icecream" = "yes"; then
+            if test -d "/usr/lib/icecc/bin"; then
+                GCC_HOME="/usr/lib/icecc/"
+            else
+                GCC_HOME="/opt/icecream/"
+            fi
+        else
+            GCC_HOME=`which gcc | $SED -e s,/bin/gcc,,`
+            GCC_HOME_SET="false"
+        fi
+    else
+        GCC_HOME="$with_gcc_home"
+    fi
+    AC_MSG_RESULT($GCC_HOME)
+    AC_SUBST(GCC_HOME)
 
-	if test "$GCC_HOME_SET" = "true"; then
-		if test -z "$CC"; then
-			CC="$GCC_HOME/bin/gcc"
-		fi
-		if test -z "$CXX"; then
-			CXX="$GCC_HOME/bin/g++"
-		fi
-	fi
+    if test "$GCC_HOME_SET" = "true"; then
+        if test -z "$CC"; then
+            CC="$GCC_HOME/bin/gcc"
+        fi
+        if test -z "$CXX"; then
+            CXX="$GCC_HOME/bin/g++"
+        fi
+    fi
 fi
 
 dnl The following checks for gcc, cc and then cl (if it weren't guarded for win32)
@@ -6334,7 +6334,7 @@ if test "$SOLAR_JAVA" != ""; then
     fi
 
     if test `$JAVADOC --version 2>&1 | $GREP -c "gjdoc"` -gt 0; then
-	JAVADOCISGJDOC="yes"
+    JAVADOCISGJDOC="yes"
     fi
 fi
 AC_SUBST(JAVADOCISGJDOC)
