@@ -1200,6 +1200,21 @@ packageversion = "%PACKAGEVERSION"
 End
 
 Start
+module = "gid_Module_Optional_FirebirdSdbc"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-firebird-sdbc"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-base"
+packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-postgresql-sdbc"
+freebsdrequires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-base"
+requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-base"
+copyright = "2012 The Document Foundation"
+solariscopyright = "solariscopyrightfile"
+vendor = "The Document Foundation"
+description = "Firebird Connector driver for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
+End
+
+Start
 module = "gid_Module_Pdfimport"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-extension-pdf-import"
 solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01 (Name="Core module for %PRODUCTNAME %PRODUCTVERSION"), %BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core02 (Name="Core module for %PRODUCTNAME %PRODUCTVERSION"), %BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core03 (Name="Core module for %PRODUCTNAME %PRODUCTVERSION"), %BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core04 (Name="Core module for %PRODUCTNAME %PRODUCTVERSION"), %BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core05 (Name="Core module for %PRODUCTNAME %PRODUCTVERSION"), %BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core06 (Name="Core module for %PRODUCTNAME %PRODUCTVERSION"), %BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core07 (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"

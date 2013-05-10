@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ *  Effective License of whole file:
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 3, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ *  Parts "Copyright by Sun Microsystems, Inc" prior to August 2011:
+ *
+ *    The Contents of this file are made available subject to the terms of
+ *    the GNU Lesser General Public License Version 3
+ *
+ *    Copyright: 2008 by Sun Microsystems, Inc.
+ *
+ *  All parts contributed on or after August 2011:
+ *
+ *    This Source Code Form is subject to the terms of the Mozilla Public
+ *    License, v. 2.0. If a copy of the MPL was not distributed with this
+ *    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ ************************************************************************ -->
+<oor:component-data oor:name="Drivers" oor:package="org.openoffice.Office.DataAccess" xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <node oor:name="Installed" install:module="firebird">
+    <node oor:name="sdbc:firebird:*" oor:op="replace">
+      <prop oor:name="Driver">
+        <value>com.sun.star.comp.sdbc.FirebirdDriver</value>
+      </prop>
+      <prop oor:name="DriverTypeDisplayName" oor:type="xs:string">
+        <value xml:lang="en-US">Firebird</value>
+      </prop>
+      <node oor:name="Properties">
+        <!-- Don't use ODBC syntax for date&time literals and (full) outer joins,
+             as PostgreSQL does not support it,
+             but supports the _interior_ of these escapes just fine. -->
+        <node oor:name="EscapeDateTime" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>false</value>
+          </prop>
+        </node>
+        <!--   Confusingly, this corresponds to "UseBracketedOuterJoinSyntax" in the Features -->
+        <node oor:name="EnableOuterJoinEscape" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>false</value>
+          </prop>
+        </node>
+      </node>
+      <node oor:name="Features">
+        <!-- These entries enable the "Advanced Settings" UI to change the settings
+             whose default is set in node "Properties" above;
+             as this is guaranteed not to work with PostgreSQL,
+             we don't let people shoot themselves in the foot and don't enable the UI. -->
+      <!--   <node oor:name="EscapeDateTime" oor:op="replace"> -->
+      <!--     <prop oor:name="Value" oor:type="xs:boolean"> -->
+      <!--       <value>false</value> -->
+      <!--     </prop> -->
+      <!--   </node> -->
+        <!--   Confusingly, this corresponds to "EnableOuterJoinEscape" in the Properties -->
+      <!--   <node oor:name="UseBracketedOuterJoinSyntax" oor:op="replace"> -->
+      <!--     <prop oor:name="Value" oor:type="xs:boolean"> -->
+      <!--       <value>false</value> -->
+      <!--     </prop> -->
+      <!--   </node> -->
+      </node>
+      <node oor:name="MetaData">
+       <node oor:name="Authentication" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:string">
+            <value>UserPassword</value>
+          </prop>
+        </node>
+      </node>
+    </node>
+  </node>
+</oor:component-data>
+
+<!-- Local Variables: -->
+<!-- indent-tabs-mode: nil -->
+<!-- End: -->

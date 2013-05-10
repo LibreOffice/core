@@ -610,6 +610,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     dlgprov \
     expwrap \
     fastsax \
+    firebird-sdbc \
     fpicker \
     fps_office \
     gdipluscanvas \
