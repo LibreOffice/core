@@ -19,6 +19,7 @@
 #define SFX_SIDEBAR_PANEL_BASE_HXX
 
 #include "EnumContext.hxx"
+#include "IContextChangeReceiver.hxx"
 
 #include <cppuhelper/compbase4.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -63,7 +64,7 @@ public:
     static cssu::Reference<css::ui::XUIElement> Create (
         const ::rtl::OUString& rsResourceURL,
         const cssu::Reference<css::frame::XFrame>& rxFrame,
-        Window* mpWindow,
+        Window* pControl,
         const css::ui::LayoutSize& rLayoutSize);
 
     // XContextChangeEventListener

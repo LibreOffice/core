@@ -18,7 +18,6 @@
 #ifndef SC_PROPERTYPANEL_ALIGNMENT_HXX
 #define SC_PROPERTYPANEL_ALIGNMENT_HXX
 
-#include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <vcl/fixed.hxx>
