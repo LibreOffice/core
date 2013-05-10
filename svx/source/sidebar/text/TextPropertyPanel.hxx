@@ -61,7 +61,6 @@ public:
         SfxBindings* pBindings);
 
     virtual void DataChanged (const DataChangedEvent& rEvent);
-    virtual void Resize (void);
 
     ::sfx2::sidebar::ControllerItem& GetSpaceController();
     long GetSelFontSize();
