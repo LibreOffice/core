@@ -24,7 +24,7 @@
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 
 #include <vbahelper/vbahelperinterface.hxx>
-
+#include <formula/grammar.hxx>
 class ScDocument;
 
 typedef InheritedHelperInterfaceImpl1< ov::excel::XName > NameImpl_BASE;
@@ -34,7 +34,8 @@ class ScVbaName : public NameImpl_BASE
     css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::sheet::XNamedRange > mxNamedRange;
     css::uno::Reference< css::sheet::XNamedRanges > mxNames;
-
+    OUString getContent( const formula::FormulaGrammar::Grammar eGrammar, bool prependEquals = true );
+    void setContent( const OUString& sContent, const formula::FormulaGrammar::Grammar eGrammar, bool removeEquals = true );
 protected:
     virtual css::uno::Reference< css::frame::XModel >  getModel() { return mxModel; }
     virtual css::uno::Reference< ov::excel::XWorksheet > getWorkSheet() throw (css::uno::RuntimeException);

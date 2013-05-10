@@ -30,6 +30,9 @@
 #include <vcl/msgbox.hxx>
 #include "tabvwsh.hxx"
 #include "viewdata.hxx"
+#include "nameuno.hxx"
+#include "compiler.hxx"
+#include "tokenarray.hxx"
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -92,81 +95,64 @@ ScVbaName::setVisible( sal_Bool /*bVisible*/ ) throw (css::uno::RuntimeException
 {
 }
 
+OUString ScVbaName::getContent( const formula::FormulaGrammar::Grammar eGrammar, bool bPrependEquals )
+{
+    ScNamedRangeObj* pNamedRange = dynamic_cast< ScNamedRangeObj* >( mxNamedRange.get() );
+    OUString aContent;
+    if ( pNamedRange )
+    {
+        ScRangeData* pData = pNamedRange->GetRangeData_Impl();
+        if (pData)
+            pData->GetSymbol( aContent, eGrammar );
+    }
+    if ( bPrependEquals )
+    {
+        if (aContent.indexOf('=') != 0)
+            aContent = OUString::createFromAscii("=") + aContent;
+    }
+    return aContent;
+}
+
+void  ScVbaName::setContent( const OUString& rContent, const formula::FormulaGrammar::Grammar eGrammar, bool bRemoveEquals )
+{
+    OUString sContent( rContent );
+    if ( bRemoveEquals )
+    {
+        if (sContent.indexOf('=') == 0)
+            sContent = sContent.copy(1);
+    }
+    ScNamedRangeObj* pNamedRange = dynamic_cast< ScNamedRangeObj* >( mxNamedRange.get() );
+
+    // We should be able to do the below by just setting calling SetCode on pNamedRange
+    // right?
+    if ( pNamedRange && pNamedRange->pDocShell )
+    {
+
+        ScDocument* pDoc = pNamedRange->pDocShell->GetDocument();
+        ScRangeData* pOldData = pNamedRange->GetRangeData_Impl();
+        if (pOldData)
+        {
+            // Shorter way of doing this ?
+            ScCompiler aComp( pDoc, pOldData->GetPos() );
+            aComp.SetGrammar( eGrammar );
+            ScTokenArray aArray(*aComp.CompileString( sContent ) );
+            pOldData->SetCode( aArray );
+        }
+    }
+}
+
 OUString
 ScVbaName::getValue() throw (css::uno::RuntimeException)
 {
-    OUString sValue = mxNamedRange->getContent();
-    OUString sSheetName = getWorkSheet()->getName();
-    OUString sSegmentation = OUString::createFromAscii( ";" );
-    OUString sNewSegmentation = OUString::createFromAscii( "," );
-    OUString sResult;
-    sal_Int32 nFrom = 0;
-    sal_Int32 nTo = 0;
-    nTo = sValue.indexOf( sSegmentation, nFrom );
-    while ( nTo != -1 )
-    {
-        OUString sTmpValue = sValue.copy( nFrom, nTo - nFrom );
-        if ( sTmpValue.toChar() == '$' )
-        {
-            OUString sTmp = sTmpValue.copy( 1 );
-            sTmp = sTmp.replaceAt(0, OUString(sSheetName + OUString::createFromAscii(".")).getLength(), sSheetName + OUString::createFromAscii("!"));
-            sResult += sTmp;
-            sResult += sNewSegmentation;
-        }
-        nFrom = nTo + 1;
-        nTo = sValue.indexOf( sSegmentation, nFrom );
-    }
-    OUString sTmpValue = sValue.copy( nFrom );
-    if ( sTmpValue.toChar() == '$' )
-    {
-        OUString sTmp = sTmpValue.copy(1);
-        sTmp = sTmp.replaceAt(0, OUString(sSheetName + OUString::createFromAscii(".")).getLength(), sSheetName + OUString::createFromAscii("!"));
-        sResult += sTmp;
-    }
-    if (sResult.indexOf('=') != 0)
-    {
-        sResult = OUString::createFromAscii("=") + sResult;
-    }
+    rtl::OUString sResult = getContent( formula::FormulaGrammar::GRAM_NATIVE_XL_A1, true );
+
     return sResult;
 }
 
 void
 ScVbaName::setValue( const OUString & rValue ) throw (css::uno::RuntimeException)
 {
-    OUString sSheetName = getWorkSheet()->getName();
-    OUString sValue = rValue;
-    OUString sSegmentation = OUString::createFromAscii( "," );
-    OUString sNewSegmentation = OUString::createFromAscii( ";" );
-    OUString sResult;
-    sal_Int32 nFrom = 0;
-    sal_Int32 nTo = 0;
-    if (sValue.indexOf('=') == 0)
-    {
-        OUString sTmp = sValue.copy(1);
-        sValue = sTmp;
-    }
-    nTo = sValue.indexOf( sSegmentation, nFrom );
-    while ( nTo != -1 )
-    {
-        OUString sTmpValue = sValue.copy( nFrom, nTo - nFrom );
-        sTmpValue = sTmpValue.replaceAt(0, OUString(sSheetName + OUString::createFromAscii("!")).getLength(), sSheetName + OUString::createFromAscii("."));
-        if (sTmpValue.copy(0, sSheetName.getLength()).equals(sSheetName))
-        {
-            sTmpValue = OUString::createFromAscii("$") + sTmpValue;
-        }
-        sTmpValue += sNewSegmentation;
-        sResult += sTmpValue;
-        nFrom = nTo + 1;
-        nTo = sValue.indexOf( sSegmentation, nFrom );
-    }
-    OUString sTmpValue = sValue.copy( nFrom );
-    sTmpValue = sTmpValue.replaceAt(0, OUString(sSheetName + OUString::createFromAscii("!")).getLength(), sSheetName + OUString::createFromAscii("."));
-    if (sTmpValue.copy(0, sSheetName.getLength()).equals(sSheetName))
-    {
-        sTmpValue = OUString::createFromAscii("$") + sTmpValue;
-    }
-    sResult += sTmpValue;
-    mxNamedRange->setContent(sResult);
+    setContent( rValue, formula::FormulaGrammar::GRAM_NATIVE_XL_A1, true );
 }
 
 OUString
@@ -196,19 +182,20 @@ ScVbaName::setRefersToLocal( const OUString & rRefersTo ) throw (css::uno::Runti
 OUString
 ScVbaName::getRefersToR1C1() throw (css::uno::RuntimeException)
 {
-    return getRefersTo();
+    rtl::OUString sResult = getContent( formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1, true );
+    return  sResult;
 }
 
 void
 ScVbaName::setRefersToR1C1( const OUString & rRefersTo ) throw (css::uno::RuntimeException)
 {
-    setRefersTo( rRefersTo );
+    setContent( rRefersTo, formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1, true );
 }
 
 OUString
 ScVbaName::getRefersToR1C1Local() throw (css::uno::RuntimeException)
 {
-    return getRefersTo();
+    return getRefersToR1C1();
 }
 
 void

@@ -48,7 +48,7 @@ class ScRangeData;
 class ScTokenArray;
 class ScNamedRangesObj;
 
-class ScNamedRangeObj : public ::cppu::WeakImplHelper6<
+class SC_DLLPUBLIC ScNamedRangeObj : public ::cppu::WeakImplHelper6<
                             ::com::sun::star::sheet::XNamedRange,
                             ::com::sun::star::sheet::XFormulaTokens,
                             ::com::sun::star::sheet::XCellRangeReferrer,
@@ -64,6 +64,7 @@ private:
     com::sun::star::uno::Reference< com::sun::star::container::XNamed > mxSheet;
 
 private:
+friend class ScVbaName;
     ScRangeData*            GetRangeData_Impl();
     void                    Modify_Impl( const String* pNewName,
                                         const ScTokenArray* pNewTokens, const String* pNewContent,

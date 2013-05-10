@@ -30,6 +30,9 @@
 #include <vcl/msgbox.hxx>
 #include "tabvwsh.hxx"
 #include "viewdata.hxx"
+#include "compiler.hxx"
+#include "tokenarray.hxx"
+#include "cellsuno.hxx"
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -117,36 +120,109 @@ ScVbaNames::Add( const css::uno::Any& Name ,
                                              uno::Reference< uno::XInterface >() );
         }
     }
+    uno::Reference< table::XCellRange > xUnoRange;
     if ( RefersTo.hasValue() || RefersToR1C1.hasValue() || RefersToR1C1Local.hasValue() )
     {
+        OUString sFormula;
+
+        formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_NATIVE_XL_A1;
         if ( RefersTo.hasValue() )
-            RefersTo >>= xRange;
+        {
+            if ( RefersTo.getValueTypeClass() == uno::TypeClass_STRING )
+                RefersTo >>= sFormula;
+            else
+                RefersTo >>= xRange;
+        }
         if ( RefersToR1C1.hasValue() )
-            RefersToR1C1 >>= xRange;
+        {
+            if ( RefersToR1C1.getValueTypeClass() == uno::TypeClass_STRING )
+            {
+                RefersToR1C1 >>= sFormula;
+                eGram = formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1;
+            }
+            else
+                RefersToR1C1 >>= xRange;
+        }
         if ( RefersToR1C1Local.hasValue() )
-            RefersToR1C1Local >>= xRange;
+        {
+            if ( RefersToR1C1Local.getValueTypeClass() == uno::TypeClass_STRING )
+            {
+                RefersToR1C1Local >>= sFormula;
+                eGram = formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1;
+            }
+            else
+                RefersToR1C1Local >>= xRange;
+        }
+        if ( !xRange.is() && !sFormula.isEmpty() )
+        {
+            ScAddress aBlank;
+            ScCompiler aComp( getScDocument(), aBlank );
+            aComp.SetGrammar( eGram );
+            ScTokenArray* pTokens = aComp.CompileString( sFormula );
+            if ( pTokens )
+            {
+                ScRange aRange;
+                ScDocShell* pDocSh = excel::getDocShell(getModel());
+                if ( pTokens->IsValidReference( aRange ) )
+                    xUnoRange =  new ScCellRangeObj( pDocSh, aRange );
+                else
+                {
+                    // assume it's an address try strip the '=' if it's there
+                    // and try and create a range ( must be a better way )
+                    if ( sFormula.startsWith("=") )
+                        sFormula = sFormula.copy(1);
+                    ScRangeList aCellRanges;
+                    sal_uInt16 nFlags = 0;
+
+                    formula::FormulaGrammar::AddressConvention eConv = ( eGram == formula::FormulaGrammar::GRAM_NATIVE_XL_A1 ) ? formula::FormulaGrammar::CONV_XL_A1 : formula::FormulaGrammar::CONV_XL_R1C1;
+                    if ( ScVbaRange::getCellRangesForAddress( nFlags, sFormula, pDocSh, aCellRanges, eConv , ',' ) )
+                    {
+                        if ( aCellRanges.size() == 1 )
+                            xUnoRange =  new ScCellRangeObj( pDocSh, *aCellRanges.front() );
+                        else
+                        {
+                            uno::Reference< sheet::XSheetCellRangeContainer > xRanges( new ScCellRangesObj( pDocSh, aCellRanges ) );
+                            xRange = new ScVbaRange( mxParent, mxContext, xRanges );
+                        }
+                    }
+
+                }
+            }
+        }
     }
 
-    if ( xRange.is() )
+    if ( xRange.is() || xUnoRange.is() )
     {
-        ScVbaRange* pRange = dynamic_cast< ScVbaRange* >( xRange.get() );
-        uno::Reference< table::XCellRange > thisRange ;
-        uno::Any xAny = pRange->getCellRange() ;
-        if ( xAny.hasValue() )
-            xAny >>= thisRange;
-        uno::Reference< sheet::XCellRangeAddressable > thisRangeAdd( thisRange, ::uno::UNO_QUERY_THROW);
+        if ( !xRange.is() )
+            xRange = new ScVbaRange( mxParent, mxContext, xUnoRange );
+
+        uno::Reference< excel::XRange > xArea( xRange->Areas( uno::makeAny( 1 ) ), uno::UNO_QUERY );
+        uno::Any xAny = xArea->getCellRange() ;
+
+        uno::Reference< sheet::XCellRangeAddressable > thisRangeAdd( xAny, ::uno::UNO_QUERY_THROW);
+
         table::CellRangeAddress aAddr = thisRangeAdd->getRangeAddress();
         ScAddress aPos( static_cast< SCCOL >( aAddr.StartColumn ) , static_cast< SCROW >( aAddr.StartRow ) , static_cast< SCTAB >(aAddr.Sheet ) );
         uno::Any xAny2 ;
-        String sRangeAdd = xRange->Address( xAny2, xAny2 , xAny2 , xAny2, xAny2 );
         if ( mxNames.is() )
         {
             RangeType nType = RT_NAME;
             table::CellAddress aCellAddr( aAddr.Sheet , aAddr.StartColumn , aAddr.StartRow );
             if ( mxNames->hasByName( sName ) )
                 mxNames->removeByName(sName);
-            OUString sTmp = "$" + xRange->getWorksheet()->getName() + "." + sRangeAdd;
+            OUString sTmp = "$";
+            uno::Reference< ov::XCollection > xCol( xRange->Areas( uno::Any() ), uno::UNO_QUERY );
+            for ( sal_Int32 nArea = 1; nArea <= xCol->getCount(); ++nArea )
+            {
+                xArea.set( xRange->Areas( uno::makeAny( nArea ) ), uno::UNO_QUERY_THROW );
+
+                String sRangeAdd = xArea->Address( xAny2, xAny2 , xAny2 , xAny2, xAny2 );
+                if ( nArea > 1 )
+                    sTmp += ",";
+                sTmp = sTmp + "'" + xRange->getWorksheet()->getName() + "'." + sRangeAdd;
+            }
             mxNames->addNewByName( sName , sTmp , aCellAddr , (sal_Int32)nType);
+            return Item( uno::makeAny( sName ), uno::Any() );
         }
     }
     return css::uno::Any();
