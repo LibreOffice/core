@@ -61,6 +61,22 @@ extern const ScFormulaCell* pLastFormulaTreeTop; // in cellform.cxx
 using namespace formula;
 // STATIC DATA -----------------------------------------------------------
 
+namespace {
+
+void broadcastCells(ScDocument& rDoc, SCCOL nCol, SCROW nTab, const std::vector<SCROW>& rRows)
+{
+    // Broadcast the changes.
+    ScHint aHint(SC_HINT_DATACHANGED, ScAddress(nCol, 0, nTab));
+    std::vector<SCROW>::const_iterator itRow = rRows.begin(), itRowEnd = rRows.end();
+    for (; itRow != itRowEnd; ++itRow)
+    {
+        aHint.GetAddress().SetRow(*itRow);
+        rDoc.Broadcast(aHint);
+    }
+}
+
+}
+
 void ScColumn::Insert( SCROW nRow, ScBaseCell* pNewCell )
 {
     SetCell(nRow, pNewCell);
@@ -200,7 +216,10 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
 
     if (bFound)
     {
-        DeleteRange( nStartIndex, nEndIndex, IDF_CONTENTS );
+        std::vector<SCROW> aDeletedRows;
+        DeleteRange(nStartIndex, nEndIndex, IDF_CONTENTS, aDeletedRows);
+        broadcastCells(*pDocument, nCol, nTab, aDeletedRows);
+
         Search( nStartRow, i );
         if ( i >= maItems.size() )
         {
@@ -310,7 +329,8 @@ bool checkDeleteCellByFlag(
 
 }
 
-void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDelFlag )
+void ScColumn::DeleteRange(
+    SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDelFlag, std::vector<SCROW>& rDeletedRows )
 {
     /*  If caller specifies to not remove the note caption objects, all cells
         have to forget the pointers to them. This is used e.g. while undoing a
@@ -333,6 +353,8 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
             // all content is to be deleted.
 
             ScBaseCell* pOldCell = maItems[ nIdx ].pCell;
+            rDeletedRows.push_back(maItems[nIdx].nRow);
+
             if (pOldCell->GetCellType() == CELLTYPE_FORMULA)
             {
                 // cache formula cell, will be deleted below
@@ -368,6 +390,8 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
             }
             else
                 pOldCell->Delete();
+
+            rDeletedRows.push_back(maItems[nIdx].nRow);
         }
 
         if (!bDelete)
@@ -436,7 +460,6 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
     }
 }
 
-
 void ScColumn::DeleteArea(SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag)
 {
     //  FreeAll must not be called here due to Broadcasters
@@ -448,10 +471,14 @@ void ScColumn::DeleteArea(SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag)
         nContMask |= IDF_NOCAPTIONS;
     sal_uInt16 nContFlag = nDelFlag & nContMask;
 
+    std::vector<SCROW> aDeletedRows;
+
     if ( !maItems.empty() && nContFlag)
     {
         if (nStartRow==0 && nEndRow==MAXROW)
-            DeleteRange( 0, maItems.size()-1, nContFlag );
+        {
+            DeleteRange(0, maItems.size()-1, nContFlag, aDeletedRows);
+        }
         else
         {
             sal_Bool bFound=false;
@@ -468,7 +495,7 @@ void ScColumn::DeleteArea(SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag)
                     nEndIndex = i;
                 }
             if (bFound)
-                DeleteRange( nStartIndex, nEndIndex, nContFlag );
+                DeleteRange(nStartIndex, nEndIndex, nContFlag, aDeletedRows);
         }
     }
 
@@ -484,13 +511,9 @@ void ScColumn::DeleteArea(SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag)
     else if ((nDelFlag & IDF_ATTRIB) != 0)
         pAttrArray->DeleteHardAttr( nStartRow, nEndRow );
 
-    // Broadcast the changes.
-    ScHint aHint(SC_HINT_DATACHANGED, ScAddress(nCol, 0, nTab));
-    for (SCROW i = nStartRow; i <= nEndRow; ++i)
-    {
-        aHint.GetAddress().SetRow(i);
-        pDocument->Broadcast(aHint);
-    }
+    // Broadcast on only cells that were deleted; no point broadcasting on
+    // cells that were already empty before the deletion.
+    broadcastCells(*pDocument, nCol, nTab, aDeletedRows);
 }
 
 

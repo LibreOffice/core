@@ -476,7 +476,8 @@ public:
     const SvtBroadcaster* GetBroadcaster( SCROW nRow ) const;
 
 private:
-    void DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDelFlag );
+    void DeleteRange(
+        SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDelFlag, std::vector<SCROW>& rDeletedRows );
 
     const ScFormulaCell* FetchFormulaCell( SCROW nRow ) const;
 
