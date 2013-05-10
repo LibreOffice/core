@@ -426,6 +426,13 @@ postprocess_FILES_postgresqlsdbc := $(postprocess_MOD)/org/openoffice/Office/Dat
 postprocess_DRIVERS += postgresql
 endif
 
+ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
+postprocess_XCDS += firebirdsdbc.xcd
+postprocess_DEPS_firebirdsdbc := main
+postprocess_FILES_firebirdsdbc := $(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-firebird.xcu
+postprocess_DRIVERS += firebird
+endif
+
 ifeq (unx,$(GUIBASE))
 ifneq (,$(or $(filter TRUEYES,$(ENABLE_GCONF)$(ENABLE_LOCKDOWN))$(filter TRUE,$(ENABLE_GIO))))
 postprocess_XCDS += gnome.xcd

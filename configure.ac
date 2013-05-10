@@ -1169,6 +1169,12 @@ AC_ARG_ENABLE(lotuswordpro,
         [Disable the build of the Lotus Word Pro filter.]),
 ,enable_lotuswordpro=yes)
 
+AC_ARG_ENABLE(firebird-sdbc,
+    AS_HELP_STRING([--enable-firebird-sdbc],
+        [Enable the build of the Firebird-SDBC driver. Work in progress,
+         use only if you are hacking on it.]),
+,enable_firebird_sdbc=no)
+
 AC_ARG_ENABLE(coretext,
     AS_HELP_STRING([--enable-coretext],
         [Use CoreText framework on Mac (instead of ATSU).
@@ -1434,6 +1440,23 @@ AC_ARG_WITH(libpq-path,
                                                   your libpq installation>
     ],
 ,)
+
+AC_ARG_WITH(system-firebird,
+    AS_HELP_STRING([--with-system-firebird],
+        [Use Firebird libraries already on system, for building the Firebird-SDBC
+         driver. If fb_config is not in PATH, use FBCONFIG to point to it.]),,
+    [with_system_firebird="$with_system_libs"])
+
+# To be replaced with IBPP, in case we want ot use it
+dnl AC_ARG_WITH(libibpp-path,
+dnl     AS_HELP_STRING([--with-libibpp-path],
+dnl         [Use this Firebird C++ API (libibpp) installation for building
+dnl          the Firebird-SDBC extension.])
+dnl     [
+dnl                           Usage:     --with-libibpp-path=<absolute path to
+dnl                                                   your libibpp installation>
+dnl     ],
+dnl ,)
 
 AC_ARG_WITH(system-hsqldb,
     AS_HELP_STRING([--with-system-hsqldb],
@@ -8068,6 +8091,74 @@ AC_SUBST(BUILD_POSTGRESQL_SDBC)
 AC_SUBST(SYSTEM_POSTGRESQL)
 AC_SUBST(POSTGRESQL_INC)
 AC_SUBST(POSTGRESQL_LIB)
+
+dnl ===================================================================
+dnl Check for Firebird stuff
+dnl ===================================================================
+ENABLE_FIREBIRD_SDBC=""
+if test "x$enable_firebird_sdbc" != "xno"; then
+
+    SCPDEFS="$SCPDEFS -DWITH_FIREBIRD_SDBC"
+
+    dnl ===================================================================
+    dnl Check for system Firebird
+    dnl ===================================================================
+    AC_MSG_CHECKING([which Firebird to use])
+    if test "$with_system_firebird" = "yes"; then
+        AC_MSG_RESULT([external])
+        SYSTEM_FIREBIRD=YES
+        AC_PATH_PROG(FIREBIRDCONFIG, [fb_config])
+        if test -z "$FIREBIRDCONFIG"; then
+            AC_MSG_ERROR([fb_config is missing. Install Firebird package.])
+        fi
+        AC_MSG_CHECKING([Firebird version])
+        FIREBIRD_VERSION=`$FIREBIRDCONFIG --version`
+        FIREBIRD_MAJOR=`$FIREBIRDCONFIG --version | cut -d"." -f1`
+        FIREBIRD_MINOR=`$FIREBIRDCONFIG --version | cut -d"." -f2`
+        if test "$FIREBIRD_MAJOR" -eq "2" -a "$FIREBIRD_MINOR" -eq "5"; then
+            AC_MSG_RESULT([OK])
+        else
+            AC_MSG_ERROR([use 2.5.x])
+        fi
+        AC_MSG_CHECKING([for Firebird Client library])
+        FIREBIRD_CFLAGS=`$FIREBIRDCONFIG --cflags`
+        FIREBIRD_LIBS=`$FIREBIRDCONFIG --embedlibs`
+        dnl FIREBIRD_LIBS=`$FIREBIRDCONFIG --libs`
+        AC_MSG_RESULT([includes $FIREBIRD_CFLAGS, libraries $FIREBIRD_LIBS])
+    else
+        AC_MSG_RESULT([internal])
+        SYSTEM_FIREBIRD=NO
+        FIREBIRD_CFLAGS="-I${WORKDIR}/UnpackedTarball/firebird/include"
+        FIREBIRD_LIBS="-L${OUTDIR}/lib -lfbembed"
+        dnl FIREBIRD_LIBS="-L${OUTDIR}/lib -lfbclient"
+
+        AC_CHECK_HEADERS(atomic_ops.h, [],
+            [AC_MSG_ERROR(atomic_ops.h not found. install Libatomic-ops)], [])
+
+        dnl TODO: Checking to build IBPP in case we want to use it for the SDBC driver
+
+        dnl dnl HP-UX atomic routines are in atomic library, not standard C library.
+        dnl dnl If we can't find atomic routines in vendor library, look for atomic_ops.
+        dnl AC_SEARCH_LIBS(atomic_inc, atomic,,
+        dnl 	AC_CHECK_LIB(atomic_ops, main))
+
+        dnl dnl check for tommath presence
+        dnl save_LIBS=$LIBS
+        dnl AC_CHECK_HEADER(tommath.h,,AC_MSG_ERROR(Include file for tommath not found - please install development tommath package))
+        dnl AC_CHECK_LIB(tommath, mp_init, TOMMATH_LIBS=-ltommath, AC_MSG_ERROR(Library tommath not found - please install development tommath package))
+        dnl LIBS=$save_LIBS
+
+        BUILD_TYPE="$BUILD_TYPE FIREBIRD"
+    fi
+
+    ENABLE_FIREBIRD_SDBC="TRUE"
+fi
+AC_SUBST(ENABLE_FIREBIRD_SDBC)
+AC_SUBST(SYSTEM_FIREBIRD)
+AC_SUBST(FIREBIRD_CFLAGS)
+AC_SUBST(FIREBIRD_LIBS)
+dnl AC_SUBST([TOMMATH_CFLAGS])
+dnl AC_SUBST([TOMMATH_LIBS])
 
 dnl ===================================================================
 dnl Check for system curl

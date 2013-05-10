@@ -251,6 +251,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	flat \
 	file \
 	filterconfig \
+	firebird-sdbc \
 	fpicker \
 	fps_office \
 	for \
