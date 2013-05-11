@@ -7279,7 +7279,15 @@ dnl Check whether freetype is available
 dnl ===================================================================
 if test  "$test_freetype" = "yes"; then
     AC_MSG_CHECKING([whether freetype is available])
-    PKG_CHECK_MODULES( FREETYPE, freetype2 >= 2.0 )
+    # FreeType has 3 different kinds of versions
+    # * release, like 2.4.10
+    # * libtool, like 13.0.7 (this what pkg-config returns)
+    # * soname
+    # FreeType's docs/VERSION.DLL provides a table mapping between the three
+    #
+    # 9.4.3 is 2.1.5; the first FreeType release to provide a freetype2.pc file
+    # XXX: replace this with a real minimum required version
+    PKG_CHECK_MODULES( FREETYPE, freetype2 >= 9.4.3 )
 else
     case "$BUILD_TYPE" in
     *FREETYPE*)
