@@ -380,8 +380,8 @@ void GalleryIconView::UserDraw( const UserDrawEvent& rUDEvt )
 
                 if(bTransparent)
                 {
-                    // draw checkered background
-                    drawCheckered(*pDev, aPos, aSize);
+                    // draw checkered background for full rectangle.
+                    drawCheckered(*pDev, rRect.TopLeft(), rRect.GetSize());
                 }
 
                 aGraphic.Draw( pDev, aPos, aSize );
