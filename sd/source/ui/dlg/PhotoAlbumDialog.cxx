@@ -45,8 +45,7 @@ SdPhotoAlbumDialog::SdPhotoAlbumDialog(Window* pWindow, SdDrawDocument* pActDoc)
     get(pCancelBtn, "cancel_btn");
     get(pCreateBtn, "create_btn");
 
-    get(pFileBtn, "file_btn");
-    get(pTextBtn, "textbox_btn");
+    get(pAddBtn, "add_btn");
     get(pUpBtn, "up_btn");
     get(pDownBtn, "down_btn");
     get(pRemoveBtn, "rem_btn");
@@ -60,8 +59,7 @@ SdPhotoAlbumDialog::SdPhotoAlbumDialog(Window* pWindow, SdDrawDocument* pActDoc)
     pCancelBtn->SetClickHdl(LINK(this, SdPhotoAlbumDialog, CancelHdl));
     pCreateBtn->SetClickHdl(LINK(this, SdPhotoAlbumDialog, CreateHdl));
 
-    pFileBtn->SetClickHdl(LINK(this, SdPhotoAlbumDialog, FileHdl));
-    pTextBtn->SetClickHdl(LINK(this, SdPhotoAlbumDialog, TextHdl));
+    pAddBtn->SetClickHdl(LINK(this, SdPhotoAlbumDialog, FileHdl));
     pUpBtn->SetClickHdl(LINK(this, SdPhotoAlbumDialog, UpHdl));
     pUpBtn->Disable();
     pDownBtn->SetClickHdl(LINK(this, SdPhotoAlbumDialog, DownHdl));
@@ -72,7 +70,7 @@ SdPhotoAlbumDialog::SdPhotoAlbumDialog(Window* pWindow, SdDrawDocument* pActDoc)
 
     mpGraphicFilter = new GraphicFilter;
     sDirUrl = "";
-    pFileBtn->GrabFocus();
+    pAddBtn->GrabFocus();
     pImagesLst->Clear();
 }
 
@@ -606,22 +604,6 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl)
             }
         }
     }
-    EnableDisableButtons();
-    return 0;
-}
-
-IMPL_LINK_NOARG(SdPhotoAlbumDialog, TextHdl)
-{
-    sal_Int16 nPos;
-    sal_Int16 nInsertPos = pImagesLst->GetSelectEntryPos();
-    if (nInsertPos < 0)
-        nPos = pImagesLst->InsertEntry( OUString(SD_RESSTR(STR_PHOTO_ALBUM_TEXTBOX)));
-    else
-        nPos = pImagesLst->InsertEntry( OUString(SD_RESSTR(STR_PHOTO_ALBUM_TEXTBOX)), nInsertPos);
-
-    OUString sStr(SD_RESSTR(STR_PHOTO_ALBUM_TEXTBOX));
-    pImagesLst->SetEntryData(nPos, (void*)new OUString(sStr));
-
     EnableDisableButtons();
     return 0;
 }
