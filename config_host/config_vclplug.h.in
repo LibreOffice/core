@@ -11,5 +11,7 @@ Settings about which X11 desktops have support enabled.
 #define ENABLE_KDE 0
 #define ENABLE_KDE4 0
 #define ENABLE_TDE 0
+#define ENABLE_GNOME_VFS 0
+#define ENABLE_GIO 0
 
 #endif

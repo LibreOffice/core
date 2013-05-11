@@ -9346,6 +9346,7 @@ if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_gnome_vfs" = "yes" -
     ENABLE_GNOMEVFS="TRUE"
     AC_MSG_RESULT([yes])
     PKG_CHECK_MODULES( GNOMEVFS, gnome-vfs-2.0 >= 2.6.0 )
+    AC_DEFINE(ENABLE_GNOME_VFS)
 else
     AC_MSG_RESULT([no])
 fi
@@ -9485,6 +9486,7 @@ if test  "$test_gtk" = "yes"; then
             ENABLE_GIO="TRUE"
             AC_MSG_RESULT([yes])
             PKG_CHECK_MODULES( GIO, gio-2.0 )
+            AC_DEFINE(ENABLE_GIO)
         else
             AC_MSG_RESULT([no])
         fi
