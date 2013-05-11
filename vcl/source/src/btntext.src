@@ -141,4 +141,14 @@ String SV_BUTTONTEXT_NEXT
     Text [ en-US ] = "~Next" ;
 };
 
+String SV_BUTTONTEXT_GO_UP
+{
+    Text [ en-US ] = "~Up" ;
+};
+
+String SV_BUTTONTEXT_GO_DOWN
+{
+    Text [ en-US ] = "Do~wn" ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
