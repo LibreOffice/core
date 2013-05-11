@@ -96,7 +96,7 @@ static void configureUcb()
                         ".*", false);
         }
     }
-    catch ( const uno::Exception & )
+    catch ( const Exception & )
     {
         SAL_WARN( "desktop", "missing gnome-vfs component to initialize thread workaround" );
     }
