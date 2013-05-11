@@ -8291,7 +8291,7 @@ SfxVoidItem InsertFieldSheet SID_INSERT_FIELD_SHEET
     MenuConfig = TRUE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
-    GroupId = GID_OPTIONS;
+    GroupId = GID_INSERT;
 ]
 
 SfxVoidItem InsertFieldDocTitle SID_INSERT_FIELD_TITLE
@@ -8315,7 +8315,7 @@ SfxVoidItem InsertFieldDocTitle SID_INSERT_FIELD_TITLE
     MenuConfig = TRUE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
-    GroupId = GID_OPTIONS;
+    GroupId = GID_INSERT;
 ]
 
 SfxVoidItem InsertFieldDateVariable SID_INSERT_FIELD_DATE_VAR
@@ -8339,7 +8339,7 @@ SfxVoidItem InsertFieldDateVariable SID_INSERT_FIELD_DATE_VAR
     MenuConfig = TRUE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
-    GroupId = GID_OPTIONS;
+    GroupId = GID_INSERT;
 ]
 
 
