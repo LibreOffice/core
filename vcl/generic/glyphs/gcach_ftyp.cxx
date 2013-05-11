@@ -63,13 +63,8 @@
 #endif
 #include "rtl/instance.hxx"
 
-#ifndef FREETYPE_PATCH
-    // VERSION_MINOR in freetype.h is too coarse
-    // if patch-level is not available we need to fine-tune the version ourselves
-    #define FTVERSION 2005
-#else
-    #define FTVERSION (1000*FREETYPE_MAJOR + 100*FREETYPE_MINOR + FREETYPE_PATCH)
-#endif
+#define FTVERSION (1000*FREETYPE_MAJOR + 100*FREETYPE_MINOR + FREETYPE_PATCH)
+
 #if FTVERSION >= 2200
 typedef const FT_Vector* FT_Vector_CPtr;
 #else // FTVERSION < 2200
@@ -521,11 +516,6 @@ FreetypeManager::FreetypeManager()
         pFTLibraryVersion( aLibFT, &nMajor, &nMinor, &nPatch );
     nFTVERSION = nMajor * 1000 + nMinor * 100 + nPatch;
 
-    // disable embedded bitmaps for Freetype-2.1.3 unless explicitly
-    // requested by env var below because it crashes StarOffice on RH9
-    // reason: double free in freetype's embedded bitmap handling
-    if( nFTVERSION == 2103 )
-        nDefaultPrioEmbedded = 0;
     // disable artificial emboldening with the Freetype API for older versions
     if( nFTVERSION < 2110 )
         pFTEmbolden = NULL;
@@ -716,14 +706,10 @@ ServerFont::ServerFont( const FontSelectPattern& rFSD, FtFontInfo* pFI )
     FT_Encoding eEncoding = FT_ENCODING_UNICODE;
     if( mpFontInfo->IsSymbolFont() )
     {
-#if (FTVERSION < 2000)
-        eEncoding = FT_ENCODING_NONE;
-#else
         if( FT_IS_SFNT( maFaceFT ) )
             eEncoding = ft_encoding_symbol;
         else
             eEncoding = FT_ENCODING_ADOBE_CUSTOM; // freetype wants this for PS symbol fonts
-#endif
     }
     rc = FT_Select_Charmap( maFaceFT, eEncoding );
     // no standard encoding applies => we need an encoding converter
@@ -854,13 +840,11 @@ void ServerFont::SetFontOptions( boost::shared_ptr<ImplFontOptions> pFontOptions
     if( mpFontOptions->DontUseHinting() )
       mnPrioAutoHint = 0;
 
-#if (FTVERSION >= 2005) || defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
     if( mnPrioAutoHint <= 0 )
-#endif
         mnLoadFlags |= FT_LOAD_NO_HINTING;
 
 #if defined(FT_LOAD_TARGET_LIGHT) && defined(FT_LOAD_TARGET_NORMAL)
-    if( !(mnLoadFlags & FT_LOAD_NO_HINTING) && (nFTVERSION >= 2103))
+    if( !(mnLoadFlags & FT_LOAD_NO_HINTING) )
     {
        mnLoadFlags |= FT_LOAD_TARGET_NORMAL;
        switch( mpFontOptions->GetHintStyle() )
@@ -1113,14 +1097,6 @@ int ServerFont::ApplyGlyphTransform( int nGlyphFlags,
         // orthogonal transforms are better handled by bitmap operations
         if( bStretched || (bForBitmapProcessing && (nAngle % 900) != 0) )
         {
-            // workaround for compatibility with older FT versions
-            if( nFTVERSION < 2102 )
-            {
-                FT_Fixed t = aMatrix.xy;
-                aMatrix.xy = aMatrix.yx;
-                aMatrix.yx = t;
-            }
-
             // apply non-orthogonal or stretch transformations
             FT_Glyph_Transform( pGlyphFT, &aMatrix, NULL );
             nAngle = 0;
@@ -1259,11 +1235,7 @@ static int lcl_GetCharWidth( FT_FaceRec_* pFaceFT, double fStretch, int nGlyphFl
     if( nGlyphFlags & GF_ROTMASK )  // for bVertical rotated glyphs
     {
         const FT_Size_Metrics& rMetrics = pFaceFT->size->metrics;
-#if (FTVERSION < 2000)
-        nCharWidth = (int)((rMetrics.height - rMetrics.descender) * fStretch);
-#else
         nCharWidth = (int)((rMetrics.height + rMetrics.descender) * fStretch);
-#endif
     }
 
     return (nCharWidth + 32) >> 6;
@@ -1285,20 +1257,7 @@ void ServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
 //      nLoadFlags |= FT_LOAD_NO_BITMAP;
 
     FT_Error rc = -1;
-#if (FTVERSION <= 2008)
-    // #88364# freetype<=2005 prefers autohinting to embedded bitmaps
-    // => first we have to try without hinting
-    if( (nLoadFlags & (FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP)) == 0 )
-    {
-        rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags|FT_LOAD_NO_HINTING );
-        if( (rc==FT_Err_Ok) && (maFaceFT->glyph->format!=FT_GLYPH_FORMAT_BITMAP) )
-            rc = -1; // mark as "loading embedded bitmap" was unsuccessful
-        nLoadFlags |= FT_LOAD_NO_BITMAP;
-    }
-
-    if( rc != FT_Err_Ok )
-#endif
-        rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
+    rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
 
     if( rc != FT_Err_Ok )
     {
@@ -1370,31 +1329,17 @@ bool ServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap ) const
     if( mbArtItalic )
         nLoadFlags |= FT_LOAD_NO_BITMAP;
 
-#if (FTVERSION >= 2002)
     // for 0/90/180/270 degree fonts enable hinting even if not advisable
     // non-hinted and non-antialiased bitmaps just look too ugly
     if( (mnCos==0 || mnSin==0) && (mnPrioAutoHint > 0) )
         nLoadFlags &= ~FT_LOAD_NO_HINTING;
-#endif
 
     if( mnPrioEmbedded <= mnPrioAutoHint )
         nLoadFlags |= FT_LOAD_NO_BITMAP;
 
     FT_Error rc = -1;
-#if (FTVERSION <= 2008)
-    // #88364# freetype<=2005 prefers autohinting to embedded bitmaps
-    // => first we have to try without hinting
-    if( (nLoadFlags & (FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP)) == 0 )
-    {
-        rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags|FT_LOAD_NO_HINTING );
-        if( (rc==FT_Err_Ok) && (maFaceFT->glyph->format != FT_GLYPH_FORMAT_BITMAP) )
-            rc = -1; // mark as "loading embedded bitmap" was unsuccessful
-        nLoadFlags |= FT_LOAD_NO_BITMAP;
-    }
+    rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
 
-    if( rc != FT_Err_Ok )
-#endif
-        rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
     if( rc != FT_Err_Ok )
         return false;
 
@@ -1412,10 +1357,7 @@ bool ServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap ) const
     {
         FT_Matrix aMatrix;
         aMatrix.xx = aMatrix.yy = 0x10000L;
-        if( nFTVERSION >= 2102 )    // Freetype 2.1.2 API swapped xy with yx
-            aMatrix.xy = 0x6000L, aMatrix.yx = 0;
-        else
-            aMatrix.yx = 0x6000L, aMatrix.xy = 0;
+        aMatrix.xy = 0x6000L, aMatrix.yx = 0;
         FT_Glyph_Transform( pGlyphFT, &aMatrix, NULL );
     }
 
@@ -1437,8 +1379,7 @@ bool ServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap ) const
     {
         if( pGlyphFT->format == FT_GLYPH_FORMAT_OUTLINE )
             ((FT_OutlineGlyphRec*)pGlyphFT)->outline.flags |= FT_OUTLINE_HIGH_PRECISION;
-        // #i15743# freetype API 2.1.3 changed the FT_RENDER_MODE_MONO constant
-        FT_Render_Mode nRenderMode = (FT_Render_Mode)((nFTVERSION<2103) ? 1 : FT_RENDER_MODE_MONO);
+        FT_Render_Mode nRenderMode = FT_RENDER_MODE_MONO;
 
         rc = FT_Glyph_To_Bitmap( &pGlyphFT, nRenderMode, NULL, sal_True );
         if( rc != FT_Err_Ok )
@@ -1538,32 +1479,14 @@ bool ServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap ) const
     if( mbArtItalic )
         nLoadFlags |= FT_LOAD_NO_BITMAP;
 
-#if (FTVERSION <= 2004) && !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
-    // autohinting in FT<=2.0.4 makes antialiased glyphs look worse
-    nLoadFlags |= FT_LOAD_NO_HINTING;
-#else
     if( (nGlyphFlags & GF_UNHINTED) || (mnPrioAutoHint < mnPrioAntiAlias) )
         nLoadFlags |= FT_LOAD_NO_HINTING;
-#endif
 
     if( mnPrioEmbedded <= mnPrioAntiAlias )
         nLoadFlags |= FT_LOAD_NO_BITMAP;
 
     FT_Error rc = -1;
-#if (FTVERSION <= 2008)
-    // #88364# freetype<=2005 prefers autohinting to embedded bitmaps
-    // => first we have to try without hinting
-    if( (nLoadFlags & (FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP)) == 0 )
-    {
-        rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags|FT_LOAD_NO_HINTING );
-        if( (rc==FT_Err_Ok) && (maFaceFT->glyph->format != FT_GLYPH_FORMAT_BITMAP) )
-            rc = -1; // mark as "loading embedded bitmap" was unsuccessful
-        nLoadFlags |= FT_LOAD_NO_BITMAP;
-    }
-
-    if( rc != FT_Err_Ok )
-#endif
-        rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
+    rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
 
     if( rc != FT_Err_Ok )
         return false;
@@ -1582,10 +1505,7 @@ bool ServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap ) const
     {
         FT_Matrix aMatrix;
         aMatrix.xx = aMatrix.yy = 0x10000L;
-        if( nFTVERSION >= 2102 )    // Freetype 2.1.2 API swapped xy with yx
-            aMatrix.xy = 0x6000L, aMatrix.yx = 0;
-        else
-            aMatrix.yx = 0x6000L, aMatrix.xy = 0;
+        aMatrix.xy = 0x6000L, aMatrix.yx = 0;
         FT_Glyph_Transform( pGlyphFT, &aMatrix, NULL );
     }
 
@@ -2236,8 +2156,7 @@ bool ServerFont::GetGlyphOutline( int nGlyphIndex,
 
 #ifdef FT_LOAD_TARGET_LIGHT
     // enable "light hinting" if available
-    if( nFTVERSION >= 2103 )
-        nLoadFlags |= FT_LOAD_TARGET_LIGHT;
+    nLoadFlags |= FT_LOAD_TARGET_LIGHT;
 #endif
 
     FT_Error rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
@@ -2259,10 +2178,7 @@ bool ServerFont::GetGlyphOutline( int nGlyphIndex,
     {
         FT_Matrix aMatrix;
         aMatrix.xx = aMatrix.yy = 0x10000L;
-        if( nFTVERSION >= 2102 )    // Freetype 2.1.2 API swapped xy with yx
-            aMatrix.xy = 0x6000L, aMatrix.yx = 0;
-        else
-            aMatrix.yx = 0x6000L, aMatrix.xy = 0;
+        aMatrix.xy = 0x6000L, aMatrix.yx = 0;
         FT_Glyph_Transform( pGlyphFT, &aMatrix, NULL );
     }
 
