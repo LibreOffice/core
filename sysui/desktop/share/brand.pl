@@ -20,10 +20,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-
-#*********************************************************************
 #
-# main
+# This tool is used to re-write and substitute variables
+# into Unix .desktop, mimelnk, .keys files etc.
 #
 
 $destdir = pop @ARGV;
@@ -31,6 +30,7 @@ mkdir $destdir,0777;
 
 $productname = "LibreOffice";
 $productfilename = "libreoffice";
+$urls = 0;
 $prefix = "";
 $iconprefix = "";
 
@@ -56,6 +56,10 @@ while ($_ = $ARGV[0], /^-/) {
     if (/^--category/) {
         $category = $ARGV[0];
         shift;
+    }
+    # Whether we can handle URLs on the command-line
+    if (/^--urls/) {
+    $urls = 1;
     }
 }
 
@@ -109,6 +113,12 @@ while (<>) {
 
         # replace %PRODUCTNAME placeholders
         s/%PRODUCTNAME/$productname/g;
+
+        if ( $urls ) {
+            s/%%FILE%%/%U/g;
+        } else {
+            s/%%FILE%%/%F/g;
+        }
 
         print OUTFILE "$_\n";
     }
