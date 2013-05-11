@@ -37,6 +37,18 @@ $(eval $(call gb_Library_add_defs,vclplug_gtk,\
 ))
 endif
 
+ifeq ($(ENABLE_GIO),TRUE)
+$(eval $(call gb_Library_add_defs,vclplug_gtk,\
+	-DENABLE_GIO \
+))
+endif
+
+ifeq ($(ENABLE_GNOMEVFS),TRUE)
+$(eval $(call gb_Library_add_defs,vclplug_gtk,\
+	-DENABLE_GNOME_VFS \
+))
+endif
+
 $(eval $(call gb_Library_use_sdk_api,vclplug_gtk))
 
 $(eval $(call gb_Library_use_libraries,vclplug_gtk,\
