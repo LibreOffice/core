@@ -38,7 +38,7 @@ $(eval $(call gb_Library_use_sdk_api,sofficeapp))
 
 $(eval $(call gb_Library_add_defs,sofficeapp,\
     -DDESKTOP_DLLIMPLEMENTATION \
-    $(if $(filter TRUE,$(ENABLE_GNOMEVFS)),-DGNOME_VFS_ENABLED) \
+    $(if $(filter TRUE,$(ENABLE_GNOMEVFS)),-DENABLE_GNOME_VFS) \
     $(if $(filter WNT,$(GUI)),-DENABLE_QUICKSTART_APPLET) \
     $(if $(filter aqua,$(GUIBASE)),-DENABLE_QUICKSTART_APPLET) \
     $(if $(filter TRUE,$(ENABLE_SYSTRAY_GTK)),-DENABLE_QUICKSTART_APPLET) \
