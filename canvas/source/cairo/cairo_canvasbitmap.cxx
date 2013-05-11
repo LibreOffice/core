@@ -134,7 +134,7 @@ namespace cairocanvas
         return maCanvasHelper.repaint( pSurface, viewState, renderState );
     }
 
-        void SAL_CALL CanvasBitmap::setFastPropertyValue( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rAny )  throw (uno::RuntimeException)
+    void SAL_CALL CanvasBitmap::setFastPropertyValue( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rAny )  throw (uno::RuntimeException)
     {
         sal_Int64 nPointer = 0;
 
