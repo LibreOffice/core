@@ -22,7 +22,7 @@ NoDisplay=true
 Icon=math
 Type=Application
 Categories=Office;Education;Science;Math;X-Red-Hat-Base;X-MandrivaLinux-Office-Other;
-Exec=${UNIXBASISROOTNAME} --math %U
+Exec=${UNIXBASISROOTNAME} --math %%FILE%%
 MimeType=application/vnd.oasis.opendocument.formula;application/vnd.sun.xml.math;application/vnd.oasis.opendocument.formula-template;text/mathml;
 Name=%PRODUCTNAME Math
 GenericName=Formula Editor
@@ -34,5 +34,5 @@ InitialPreference=5
 X-Ayatana-Desktop-Shortcuts=X-New
 [X-New Shortcut Group]
 UnityQuicklist=New Formula
-Exec=libreoffice --math %U
+Exec=libreoffice --math %%FILE%%
 TargetEnvironment=Unity

@@ -21,7 +21,7 @@ Terminal=false
 Icon=impress
 Type=Application
 Categories=Office;Presentation;X-Red-Hat-Base;X-MandrivaLinux-Office-Presentations;
-Exec=${UNIXBASISROOTNAME} --impress %U
+Exec=${UNIXBASISROOTNAME} --impress %%FILE%%
 MimeType=application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;application/vnd.sun.xml.impress;application/vnd.sun.xml.impress.template;application/mspowerpoint;application/vnd.ms-powerpoint;application/vnd.openxmlformats-officedocument.presentationml.presentation;application/vnd.ms-powerpoint.presentation.macroenabled.12;application/vnd.openxmlformats-officedocument.presentationml.template;application/vnd.ms-powerpoint.template.macroenabled.12;application/vnd.openxmlformats-officedocument.presentationml.slide;application/vnd.openxmlformats-officedocument.presentationml.slideshow;application/vnd.ms-powerpoint.slideshow.macroEnabled.12;
 Name=%PRODUCTNAME Impress
 GenericName=Presentation
@@ -33,5 +33,5 @@ InitialPreference=5
 X-Ayatana-Desktop-Shortcuts=X-New
 [X-New Shortcut Group]
 UnityQuicklist=New Presentation
-Exec=libreoffice --impress %U
+Exec=libreoffice --impress %%FILE%%
 TargetEnvironment=Unity

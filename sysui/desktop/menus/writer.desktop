@@ -21,7 +21,7 @@ Terminal=false
 Icon=writer
 Type=Application
 Categories=Office;WordProcessor;X-Red-Hat-Base;X-MandrivaLinux-Office-Wordprocessors;
-Exec=${UNIXBASISROOTNAME} --writer %U
+Exec=${UNIXBASISROOTNAME} --writer %%FILE%%
 MimeType=application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;application/vnd.oasis.opendocument.text-web;application/vnd.oasis.opendocument.text-master;application/vnd.sun.xml.writer;application/vnd.sun.xml.writer.template;application/vnd.sun.xml.writer.global;application/msword;application/vnd.ms-word;application/x-doc;application/x-hwp;application/rtf;text/rtf;application/vnd.wordperfect;application/wordperfect;application/vnd.lotus-wordpro;application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/vnd.ms-word.document.macroenabled.12;application/vnd.openxmlformats-officedocument.wordprocessingml.template;application/vnd.ms-word.template.macroenabled.12;application/vnd.ms-works;application/vnd.stardivision.writer-global;application/x-extension-txt;application/x-t602;text/plain;
 Name=%PRODUCTNAME Writer
 GenericName=Word Processor
@@ -33,5 +33,5 @@ InitialPreference=5
 X-Ayatana-Desktop-Shortcuts=X-New
 [X-New Shortcut Group]
 UnityQuicklist=New Document
-Exec=libreoffice --writer %U
+Exec=libreoffice --writer %%FILE%%
 TargetEnvironment=Unity

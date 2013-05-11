@@ -21,7 +21,7 @@ Terminal=false
 Icon=base
 Type=Application
 Categories=Office;Database;X-Red-Hat-Base;X-MandrivaLinux-MoreApplications-Databases;
-Exec=${UNIXBASISROOTNAME} --base %U
+Exec=${UNIXBASISROOTNAME} --base %%FILE%%
 MimeType=application/vnd.oasis.opendocument.database;application/vnd.sun.xml.base;
 Name=%PRODUCTNAME Base
 GenericName=Database Development
@@ -33,5 +33,5 @@ InitialPreference=5
 X-Ayatana-Desktop-Shortcuts=X-New
 [X-New Shortcut Group]
 UnityQuicklist=New Database
-Exec=libreoffice --base %U
+Exec=libreoffice --base %%FILE%%
 TargetEnvironment=Unity

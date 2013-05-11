@@ -2,7 +2,7 @@
 Version=1.0
 Terminal=false
 Type=Application
-Exec=${UNIXBASISROOTNAME} %U
+Exec=${UNIXBASISROOTNAME} %%FILE%%
 MimeType=application/vnd.oasis.opendocument.text-flat-xml;application/vnd.oasis.opendocument.spreadsheet-flat-xml;application/vnd.oasis.opendocument.graphics-flat-xml;application/vnd.oasis.opendocument.presentation-flat-xml;
 Name=%PRODUCTNAME XSLT based filters
 GenericName=XSLT based filters

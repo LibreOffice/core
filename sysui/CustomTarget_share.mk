@@ -7,6 +7,16 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+ifeq ($(ENABLE_GIO),TRUE)
+	brand_URIPARAM := --urls
+else
+ifeq ($(ENABLE_GNOMEVFS),TRUE)
+	brand_URIPARAM := --urls
+else
+	brand_URIPARAM :=
+endif
+endif
+
 share_WORKDIR := $(call gb_CustomTarget_get_workdir,sysui/share)
 share_SRCDIR := $(SRCDIR)/sysui/desktop
 
@@ -201,6 +211,7 @@ $(share_WORKDIR)/%/build.flag: $(share_SRCDIR)/share/brand.pl $(LAUNCHERS) \
 	mkdir -p $(dir $@)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
 	$(PERL) $(share_SRCDIR)/share/brand.pl -p $(PRODUCTNAME.$*)$(PRODUCTVERSION) -u '$$(UNIXPRODUCTNAME)$$(BRANDPACKAGEVERSION)' \
+		$(brand_URIPARAM) \
 		--iconprefix '$$(UNIXBASISROOTNAME)' $^ $(share_WORKDIR)/$*
 	$(PERL) $(share_SRCDIR)/share/translate.pl -p $(PRODUCTNAME.$*)$(PRODUCTVERSION) -d $(share_WORKDIR)/$* \
 		--ext "desktop" --key "Comment" $(share_WORKDIR)/launcher_comment.ulf
