@@ -133,6 +133,7 @@ public:
     void testFdo51916();
     void testFdo61193();
     void testFdo63023();
+    void testFdo42109();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -257,6 +258,7 @@ void Test::run()
         {"fdo51916.rtf", &Test::testFdo51916},
         {"hello.rtf", &Test::testFdo61193},
         {"fdo63023.rtf", &Test::testFdo63023},
+        {"fdo42109.rtf", &Test::testFdo42109},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1221,6 +1223,16 @@ void Test::testFdo63023()
     uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "HeaderText");
     // Back color was black (0) in the header, due to missing color table in the substream.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFFFF99), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xHeaderText), 1), "CharBackColor"));
+}
+
+void Test::testFdo42109()
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("B1"), uno::UNO_QUERY);
+    // Make sure the page number is imported as a field in the B1 cell.
+    CPPUNIT_ASSERT_EQUAL(OUString("TextField"), getProperty<OUString>(getRun(getParagraphOfText(1, xCell->getText()), 1), "TextPortionType"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
