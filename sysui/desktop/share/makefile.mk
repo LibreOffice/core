@@ -31,6 +31,16 @@ TARGET=desktopshare
 
 # --- Files --------------------------------------------------------
 
+.IF "$(ENABLE_GIO)"=="TRUE"
+BRAND_URIPARAM:=--urls
+.ELSE			# "$(ENABLE_GIO)"!="TRUE" 
+.IF "$(ENABLE_GNOMEVFS)"=="TRUE"
+BRAND_URIPARAM:=--urls
+.ELSE			# "$(ENABLE_GNOMEVFS)"!="TRUE"
+BRAND_URIPARAM:=
+.ENDIF			# "$(ENABLE_GNOMEVFS)"=="TRUE"
+.ENDIF			# "$(ENABLE_GIO)"=="TRUE"
+
 .IF "$(WITH_LANG)"!=""
 ULFDIR:=$(COMMONMISC)$/$(TARGET)
 .ELSE			# "$(WITH_LANG)"!=""
@@ -147,7 +157,7 @@ $(LAUNCHERFLAGFILE) : $(LAUNCHERDEPN)
     @@-$(MKDIRHIER) $(@:db).$(INPATH).$(@:f)
     @echo Creating desktop entries for $(@:f) ..
     @echo ---------------------------------
-    @$(PERL) brand.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -u $(UNIXWRAPPERNAME) --iconprefix '$${{UNIXBASISROOTNAME}}-' $< $(@:db).$(INPATH).$(@:f)
+    @$(PERL) brand.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -u $(UNIXWRAPPERNAME) $(BRAND_URIPARAM) --iconprefix '$${{UNIXBASISROOTNAME}}-' $< $(@:db).$(INPATH).$(@:f)
     @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH).$(@:f) --ext "desktop" --key "Name" $(ULFDIR)$/launcher_name.ulf
     @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH).$(@:f) --ext "desktop" --key "Comment" $(ULFDIR)$/launcher_comment.ulf
     @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH).$(@:f) --ext "desktop" --key "GenericName" $(ULFDIR)$/launcher_genericname.ulf
