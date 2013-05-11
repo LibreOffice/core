@@ -7308,23 +7308,6 @@ dnl Check for system libwpg
 dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([libwpg],[WPG],[libwpg-0.2],["-I${OUTDIR}/inc/external"],["-L${OUTDIR}/lib -lwpglib"])
 
-dnl ===================================================================
-dnl Check whether freetype2 supports emboldening
-dnl ===================================================================
-if test  "$test_freetype" = "yes"; then
-    save_CPPFLAGS="$CPPFLAGS"
-    save_LDFLAGS="$LDFLAGS"
-    save_LIBS="$LIBS"
-    CPPFLAGS="$CPPFLAGS $FREETYPE_CFLAGS"
-    LDFLAGS="$LDFLAGS $FREETYPE_LIBS"
-    AC_CHECK_LIB(freetype, FT_GlyphSlot_Embolden,
-                 [USE_FT_EMBOLDEN="YES"], [USE_FT_EMBOLDEN="NO"], [])
-    LDFLAGS="$save_LDFLAGS"
-    CPPFLAGS="$save_CPPFLAGS"
-    LIBS="$save_LIBS"
-fi
-AC_SUBST(USE_FT_EMBOLDEN)
-
 # ===================================================================
 # Check for system libxslt
 # to prevent incompatibilities between internal libxml2 and external libxslt,
