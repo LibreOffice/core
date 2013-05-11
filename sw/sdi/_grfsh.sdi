@@ -46,30 +46,35 @@ interface BaseTextGraphic
     [
         ExecMethod = Execute ;
         StateMethod = GetAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
     SID_COMPRESS_GRAPHIC
     [
         ExecMethod = Execute ;
         StateMethod = GetAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
     SID_EXTERNAL_EDIT
     [
         ExecMethod = Execute ;
         StateMethod = GetAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
     SID_ROTATE_GRAPHIC_LEFT
     [
         ExecMethod = ExecuteRotation ;
-        StateMethod = GetAttrState ;
+        StateMethod = GetAttrStateForRotation ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
     SID_ROTATE_GRAPHIC_RIGHT
     [
         ExecMethod = ExecuteRotation ;
-        StateMethod = GetAttrState ;
+        StateMethod = GetAttrStateForRotation ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
     SID_INSERT_GRAPHIC // zeigt auf FN_FORMAT_GRAFIC_DLG

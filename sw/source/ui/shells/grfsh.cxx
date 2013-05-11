@@ -595,22 +595,6 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
             if( rSh.GetGraphicType() == GRAPHIC_NONE )
                 bDisable = true;
             break;
-        case SID_ROTATE_GRAPHIC_LEFT:
-        case SID_ROTATE_GRAPHIC_RIGHT:
-            if( rSh.GetGraphicType() == GRAPHIC_NONE )
-            {
-                bDisable = true;
-            }
-            else
-            {
-                Graphic aGraphic = *rSh.GetGraphic();
-                GraphicNativeTransform aTransform(aGraphic);
-                if (!aTransform.canBeRotated())
-                {
-                    bDisable = true;
-                }
-            }
-            break;
         case SID_COLOR_SETTINGS:
         {
             if ( bParentCntProt || !bIsGrfCntnt )
@@ -785,6 +769,47 @@ void SwGrfShell::ExecuteRotation(SfxRequest &rReq)
 
     rShell.EndUndo(UNDO_END);
     rShell.EndAllAction();
+}
+
+void SwGrfShell::GetAttrStateForRotation(SfxItemSet &rSet)
+{
+    SwWrtShell& rShell = GetShell();
+    bool bIsParentContentProtected = 0 != rShell.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT );
+
+    SetGetStateSet( &rSet );
+
+    SfxWhichIter aIterator( rSet );
+    sal_uInt16 nWhich = aIterator.FirstWhich();
+    while( nWhich )
+    {
+        bool bDisable = bIsParentContentProtected;
+        switch( nWhich )
+        {
+        case SID_ROTATE_GRAPHIC_LEFT:
+        case SID_ROTATE_GRAPHIC_RIGHT:
+            if( rShell.GetGraphicType() == GRAPHIC_NONE )
+            {
+                bDisable = true;
+            }
+            else
+            {
+                Graphic aGraphic = *rShell.GetGraphic();
+                GraphicNativeTransform aTransform(aGraphic);
+                if (!aTransform.canBeRotated())
+                {
+                    bDisable = true;
+                }
+            }
+            break;
+        default:
+            bDisable = false;
+        }
+
+        if( bDisable )
+            rSet.DisableItem( nWhich );
+        nWhich = aIterator.NextWhich();
+    }
+    SetGetStateSet( 0 );
 }
 
 

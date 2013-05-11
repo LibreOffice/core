@@ -28,6 +28,8 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FlipVertical" toolbar:helpid="20426"/>
  <toolbar:toolbaritem xlink:href=".uno:FlipHorizontal" toolbar:helpid="20425"/>
+ <toolbar:toolbaritem xlink:href=".uno:RotateLeft" toolbar:helpid=""/>
+ <toolbar:toolbaritem xlink:href=".uno:RotateRight" toolbar:helpid=""/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FrameDialog" toolbar:helpid="20458"/>
 </toolbar:toolbar>

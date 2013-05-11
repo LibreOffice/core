@@ -1294,7 +1294,7 @@ Menu MN_GRF_POPUPMENU
         {
             Identifier = SID_MENU_MANAGE_GRAPHIC ;
             Command = ".uno:ManageGraphicMenu" ;
-            Text [ en-US ] = "~Manage Graphic" ;
+            Text [ en-US ] = "~Rotate Image" ;
             SubMenu = Menu
             {
                 ItemList =
@@ -1302,13 +1302,13 @@ Menu MN_GRF_POPUPMENU
                     MenuItem
                     {
                         Identifier = SID_ROTATE_GRAPHIC_LEFT ;
-                        Command = ".uno:RotateGraphicLeft" ;
+                        Command = ".uno:RotateLeft" ;
                         Text [ en-US ] = "Rotate 90° Left" ;
                     };
                     MenuItem
                     {
                         Identifier = SID_ROTATE_GRAPHIC_RIGHT ;
-                        Command = ".uno:RotateGraphicRight" ;
+                        Command = ".uno:RotateRight" ;
                         Text [ en-US ] = "Rotate 90° Right" ;
                     };
                 };

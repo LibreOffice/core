@@ -5964,7 +5964,7 @@ SfxVoidItem ExternalEdit SID_EXTERNAL_EDIT
     GroupId = GID_GRAPHIC;
 ]
 
-SfxVoidItem RotateGraphicLeft SID_ROTATE_GRAPHIC_LEFT
+SfxVoidItem RotateLeft SID_ROTATE_GRAPHIC_LEFT
 
 [
     /* flags: */
@@ -5988,7 +5988,7 @@ SfxVoidItem RotateGraphicLeft SID_ROTATE_GRAPHIC_LEFT
     GroupId = GID_GRAPHIC;
 ]
 
-SfxVoidItem RotateGraphicRight SID_ROTATE_GRAPHIC_RIGHT
+SfxVoidItem RotateRight SID_ROTATE_GRAPHIC_RIGHT
 
 [
     /* flags: */

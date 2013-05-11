@@ -27,10 +27,11 @@ public:
     SFX_DECL_INTERFACE(SW_GRFSHELL)
 
     void Execute(SfxRequest& rRequest);
-    void ExecuteRotation(SfxRequest &rRequest);
     void ExecAttr(SfxRequest& rRequest);
-
     void GetAttrState(SfxItemSet& rRequest);
+
+    void ExecuteRotation(SfxRequest &rRequest);
+    void GetAttrStateForRotation(SfxItemSet& rRequest);
 
     SwGrfShell(SwView &rView);
 };

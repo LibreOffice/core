@@ -319,6 +319,12 @@
           <menu:menuitem menu:id=".uno:FlipVertical"/>
         </menu:menupopup>
       </menu:menu>
+      <menu:menu menu:id=".uno:RotateMenu">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:RotateLeft"/>
+          <menu:menuitem menu:id=".uno:RotateRight"/>
+        </menu:menupopup>
+      </menu:menu>
       <menu:menu menu:id=".uno:GroupMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:FormatGroup"/>

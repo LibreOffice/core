@@ -5354,6 +5354,11 @@
           <value xml:lang="en-US">~Flip</value>
         </prop>
       </node>
+      <node oor:name=".uno:RotateMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Ro~tate</value>
+        </prop>
+      </node>
       <node oor:name=".uno:AnchorMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">A~nchor</value>
