@@ -31,8 +31,6 @@ BEGIN {
     if (!showincludes_prefix) {
         showincludes_prefix = "Note: including file:"
     }
-    regex = "^ *" showincludes_prefix " *"
-    pattern = "/" regex "/"
 
     # to match especially drive letters in whitelist case insensitive
     IGNORECASE = 1
@@ -42,8 +40,10 @@ BEGIN {
 }
 
 {
-    if ($0 ~ regex) {
-        sub(regex, "")
+    sub(/^ */, "")
+    if (index($0, showincludes_prefix) == 1) {
+        $0 = substr($0, 1, length(showincludes_prefix))
+        sub(/^ */, "")
         gsub(/\\/, "/")
         gsub(/ /, "\\ ")
         if ($0 ~ whitelist) { # filter out system headers
