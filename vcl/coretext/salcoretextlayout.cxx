@@ -308,34 +308,37 @@ void CoreTextLayout::DropGlyph( int /*nStart*/ )
 
 long CoreTextLayout::FillDXArray( sal_Int32* pDXArray ) const
 {
-    // Short circuit requests which don't need full details
-    if( !pDXArray ) {
-        return GetTextWidth();
+    if (pDXArray)
+    {
+        for (int i = 0; i < mnCharCount; i++)
+            pDXArray[i] = 0;
+
+        CFArrayRef runs = CTLineGetGlyphRuns(mpLine);
+        const CFIndex nRuns = CFArrayGetCount(runs);
+
+        for (CFIndex runIndex = 0; runIndex < nRuns; runIndex++)
+        {
+            CTRunRef run = (CTRunRef)CFArrayGetValueAtIndex(runs, runIndex);
+            if (!run)
+                continue;
+
+            const CFIndex runGlyphCount = CTRunGetGlyphCount(run);
+            if (runGlyphCount)
+            {
+                CFIndex runStringIndices[runGlyphCount];
+                CGSize runGlyphAdvances[runGlyphCount];
+                CTRunGetStringIndices(run, CFRangeMake(0, 0), runStringIndices);
+                CTRunGetAdvances(run, CFRangeMake(0, 0), runGlyphAdvances);
+                for (int i = 0; i < runGlyphCount; i++)
+                {
+                    const CFIndex charIndex = runStringIndices[i];
+                    pDXArray[charIndex] += runGlyphAdvances[i].width;
+                }
+            }
+        }
     }
 
-    // Distribute the widths among the string elements
-    long width = 0;
-    float scale = mpStyle->GetFontStretchFactor();
-    CGFloat accumulatedWidth = 0;
-
-    std::ostringstream DXArrayInfo;
-    for( int i = 0; i < mnCharCount; ++i ) {
-        // Convert and adjust for accumulated rounding errors
-        accumulatedWidth += mpCharWidths[ i ];
-        const long old_width = width;
-        width = round_to_long( accumulatedWidth * scale );
-        pDXArray[i] = width - old_width;
-#ifdef SAL_LOG_INFO
-        if ( i < 7 )
-            DXArrayInfo << " " << pDXArray[i];
-        else if ( i == 7 )
-            DXArrayInfo << "...";
-#endif
-    }
-
-    SAL_INFO( "vcl.coretext.layout", "FillDXArray(" << this << "):" << DXArrayInfo.str() << ", result=" << width );
-
-    return width;
+    return GetTextWidth();
 }
 
 bool CoreTextLayout::GetBoundRect( SalGraphics& rGraphics, Rectangle& rVCLRect ) const
@@ -508,13 +511,8 @@ int CoreTextLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor )
 
 long CoreTextLayout::GetTextWidth() const
 {
-    CGContextRef context = mpGraphics->GetContext();
-    if (!context) {
-        SAL_INFO( "vcl.coretext.layout", "GetTextWidth(): no context!?");
-        return 0;
-    }
-    CGRect bound_rect = CTLineGetImageBounds(mpLine, context);
-    long w = round_to_long((bound_rect.size.width + CTLineGetTrailingWhitespaceWidth(mpLine)) * mpStyle->GetFontStretchFactor());
+    double width = CTLineGetTypographicBounds(mpLine, NULL, NULL, NULL);
+    long w = round_to_long(width + CTLineGetTrailingWhitespaceWidth(mpLine));
 
     SAL_INFO( "vcl.coretext.layout", "GetTextWidth(" << this << ") returning " << w );
 
