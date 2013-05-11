@@ -63,7 +63,6 @@ private:
     FixedImage*     pImg;
 
     ListBox*    pInsTypeCombo;
-
     CheckBox*   pASRCheck;
 
     SdDrawDocument* pDoc;
@@ -96,8 +95,7 @@ private:
 
     enum SlideImageLayout
     {
-        FIT_TO_SLIDE=0,
-        TITLE_ONE_IMAGE,
+        ONE_IMAGE=0,
         TWO_IMAGES,
         FOUR_IMAGES
     };

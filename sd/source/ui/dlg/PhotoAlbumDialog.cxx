@@ -95,111 +95,64 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
     {
         Reference< drawing::XDrawPagesSupplier > xDPS( pDoc->getUnoModel(), uno::UNO_QUERY );
         Reference< drawing::XDrawPages > xDrawPages( xDPS->getDrawPages(), uno::UNO_QUERY );
-        Reference< lang::XMultiServiceFactory > xShapeFactory( pDoc->getUnoModel(), uno::UNO_QUERY  );
+        Reference< lang::XMultiServiceFactory > xShapeFactory( pDoc->getUnoModel(), uno::UNO_QUERY );
 
         Reference< XComponentContext > xContext(::comphelper::getProcessComponentContext());
         Reference< graphic::XGraphicProvider> xProvider(graphic::GraphicProvider::create(xContext));
 
         // get the option
         sal_uInt16 nOpt = pInsTypeCombo->GetSelectEntryPos();
-        if ( nOpt == FIT_TO_SLIDE )
+        if ( nOpt == ONE_IMAGE )
         {
             OUString sUrl;
-
             for( sal_Int16 i = 0; i < pImagesLst->GetEntryCount(); ++i )
             {
                 OUString* pData = (OUString*) pImagesLst->GetEntryData(i);
                 sUrl = *pData;
-                if (sUrl != "Text Box")
+
+                Reference< drawing::XDrawPage > xSlide = appendNewSlide(AUTOLAYOUT_NONE, xDrawPages);
+                Reference< beans::XPropertySet > xSlideProps( xSlide, uno::UNO_QUERY );
+
+                Reference< graphic::XGraphic > xGraphic = createXGraphicFromUrl(sUrl, xProvider);
+
+                Image aImg(xGraphic);
+                // Save the original size, multiplied with 100
+                ::awt::Size aPicSize(aImg.GetSizePixel().Width()*100, aImg.GetSizePixel().Height()*100);
+
+                Reference< drawing::XShape > xShape(
+                    xShapeFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"),
+                    uno::UNO_QUERY);
+
+                Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
+                xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
+
+
+                ::awt::Size aPageSize;
+
+                xSlideProps->getPropertyValue(
+                    OUString("Width")) >>= aPageSize.Width;
+                xSlideProps->getPropertyValue(
+                    OUString("Height")) >>= aPageSize.Height;
+
+                ::awt::Point aPicPos;
+
+                if(pASRCheck->IsChecked())
                 {
-                    Reference< drawing::XDrawPage > xSlide = appendNewSlide(AUTOLAYOUT_NONE, xDrawPages);
-                    Reference< beans::XPropertySet > xSlideProps( xSlide, uno::UNO_QUERY );
-
-                    Reference< graphic::XGraphic > xGraphic = createXGraphicFromUrl(sUrl, xProvider);
-
-                    Image aImg(xGraphic);
-                    // Save the original size, multiplied with 100
-                    ::awt::Size aPicSize(aImg.GetSizePixel().Width()*100, aImg.GetSizePixel().Height()*100);
-
-                    Reference< drawing::XShape > xShape(
-                        xShapeFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"),
-                        uno::UNO_QUERY);
-
-                    Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-                    xProps->setPropertyValue("Graphic", ::uno::Any(xGraphic));
-
-
-                    ::awt::Size aPageSize;
-
-                    xSlideProps->getPropertyValue(
-                        OUString("Width")) >>= aPageSize.Width;
-                    xSlideProps->getPropertyValue(
-                        OUString("Height")) >>= aPageSize.Height;
-
-                    ::awt::Point aPicPos;
-
-                    if(pASRCheck->IsChecked())
-                    {
-                        // Resize the image, with keeping ASR
-                        aPicSize = createASRSize(aPicSize, aPageSize);
-                    }
-                    else
-                    {
-                        aPicSize.Width = aPageSize.Width;
-                        aPicSize.Height = aPageSize.Height;
-                    }
-                    xShape->setSize(aPicSize);
-                    aPicPos.X = (aPageSize.Width - aPicSize.Width)/2;
-                    aPicPos.Y = (aPageSize.Height - aPicSize.Height)/2;
-
-                    xShape->setPosition(aPicPos);
-                    xSlide->add(xShape);
+                    // Resize the image, with keeping ASR
+                    aPicSize = createASRSize(aPicSize, aPageSize);
                 }
-                else // insert an empty slide, with centered text box
+                else
                 {
-                    appendNewSlide(AUTOLAYOUT_ONLY_TEXT, xDrawPages);
+                    aPicSize.Width = aPageSize.Width;
+                    aPicSize.Height = aPageSize.Height;
                 }
-            }
-        }
-        else if( nOpt == TITLE_ONE_IMAGE )
-        {
-            OUString sUrl;
 
-            for( sal_Int16 i = 0; i < pImagesLst->GetEntryCount(); ++i )
-            {
-                OUString* pData = (OUString*) pImagesLst->GetEntryData(i);
-                sUrl = *pData;
-                if ( sUrl != SD_RESSTR(STR_PHOTO_ALBUM_TEXTBOX) )
-                {
+                xShape->setSize(aPicSize);
+                aPicPos.X = (aPageSize.Width - aPicSize.Width)/2;
+                aPicPos.Y = (aPageSize.Height - aPicSize.Height)/2;
 
-                    Reference< drawing::XDrawPage > xSlide = appendNewSlide(AUTOLAYOUT_NONE, xDrawPages);
-                    Reference< beans::XPropertySet > xSlideProps( xSlide, uno::UNO_QUERY );
-                    Reference< drawing::XShape > xShape = createXShapeFromUrl(sUrl, xShapeFactory, xProvider);
-
-                    ::awt::Size aPicSize(xShape->getSize());
-                    ::awt::Size aPageSize;
-
-                    xSlideProps->getPropertyValue(
-                        OUString("Width")) >>= aPageSize.Width;
-                    xSlideProps->getPropertyValue(
-                        OUString("Height")) >>= aPageSize.Height;
-
-                    ::awt::Point aPicPos;
-
-                    aPicPos.X = (aPageSize.Width - aPicSize.Width)/2;
-                    aPicPos.Y = (aPageSize.Height - aPicSize.Height)/2;
-
-                    xShape->setSize(aPicSize);
-                    xShape->setPosition(aPicPos);
-                    xSlide->add(xShape);
-
-                    SdPage* pSlide = pDoc->GetSdPage( pDoc->GetSdPageCount(PK_STANDARD)-1, PK_STANDARD);
-                    pSlide->SetAutoLayout(AUTOLAYOUT_TITLE_CONTENT, sal_True);
-                }
-                else // insert an empty slide, with centered text box
-                {
-                    appendNewSlide(AUTOLAYOUT_ONLY_TEXT, xDrawPages);
-                }
+                xShape->setPosition(aPicPos);
+                xSlide->add(xShape);
             }
         }
         else if( nOpt == TWO_IMAGES )
@@ -231,13 +184,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                 pData = (OUString*) pD2;
                 sUrl2 = pData ? OUString(*pData) : "";
 
-                if( sUrl1 == SD_RESSTR(STR_PHOTO_ALBUM_TEXTBOX) ) // create a Text Box
-                {
-                    SdPage* pSlide = pDoc->GetSdPage( pDoc->GetSdPageCount(PK_STANDARD)-1, PK_STANDARD);
-                    pSlide->CreatePresObj(PRESOBJ_TEXT, sal_False, Rectangle(Point(100,100), Point(aPageSize.Width/2-100, aPageSize.Height-100)), sal_True);
-                }
-                else if( sUrl1.isEmpty()){} // nothing to do
-                else
+                if( !sUrl1.isEmpty() )
                 {
 
                     Reference< graphic::XGraphic > xGraphic = createXGraphicFromUrl(sUrl1, xProvider);
@@ -273,13 +220,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                     xSlide->add(xShape);
                 }
 
-                if( sUrl2 == SD_RESSTR(STR_PHOTO_ALBUM_TEXTBOX) ) // create a Text Box
-                {
-                    SdPage* pSlide = pDoc->GetSdPage( pDoc->GetSdPageCount(PK_STANDARD)-1, PK_STANDARD);
-                    pSlide->CreatePresObj(PRESOBJ_TEXT, sal_False, Rectangle(Point(aPageSize.Width/2 + 100,100), Point(aPageSize.Width-100, aPageSize.Height-100)), sal_True);
-                }
-                else if( sUrl2.isEmpty()){} // nothing to do
-                else
+                if( !sUrl2.isEmpty() )
                 {
                     Reference< graphic::XGraphic > xGraphic = createXGraphicFromUrl(sUrl2, xProvider);
 
@@ -356,15 +297,8 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                 pData = (OUString*) pD4;
                 sUrl4 = pData ? OUString(*pData) : "";
 
-                if( sUrl1 == SD_RESSTR(STR_PHOTO_ALBUM_TEXTBOX) ) // create a Text Box
+                if( !sUrl1.isEmpty() )
                 {
-                    SdPage* pSlide = pDoc->GetSdPage( pDoc->GetSdPageCount(PK_STANDARD)-1, PK_STANDARD);
-                    pSlide->CreatePresObj(PRESOBJ_TEXT, sal_False, Rectangle(Point(100,100), Point(aPageSize.Width/2-100, aPageSize.Height/2-100)), sal_True);
-                }
-                else if( sUrl1.isEmpty()){} // nothing to do
-                else
-                {
-
                     Reference< graphic::XGraphic > xGraphic = createXGraphicFromUrl(sUrl1, xProvider);
 
                     Image aImg(xGraphic);
@@ -397,14 +331,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                     xShape->setPosition(aPicPos);
                     xSlide->add(xShape);
                 }
-
-                if( sUrl2 == SD_RESSTR(STR_PHOTO_ALBUM_TEXTBOX) ) // create a Text Box
-                {
-                    SdPage* pSlide = pDoc->GetSdPage( pDoc->GetSdPageCount(PK_STANDARD)-1, PK_STANDARD);
-                    pSlide->CreatePresObj(PRESOBJ_TEXT, sal_False, Rectangle(Point(aPageSize.Width/2 + 100,100), Point(aPageSize.Width-100, aPageSize.Height/2-100)), sal_True);
-                }
-                else if( sUrl2.isEmpty()){} // nothing to do
-                else
+                if( !sUrl2.isEmpty() )
                 {
                     Reference< graphic::XGraphic > xGraphic = createXGraphicFromUrl(sUrl2, xProvider);
 
@@ -438,14 +365,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                     xShape->setPosition(aPicPos);
                     xSlide->add(xShape);
                 }
-
-                if( sUrl3 == SD_RESSTR(STR_PHOTO_ALBUM_TEXTBOX) ) // create a Text Box
-                {
-                    SdPage* pSlide = pDoc->GetSdPage( pDoc->GetSdPageCount(PK_STANDARD)-1, PK_STANDARD);
-                    pSlide->CreatePresObj(PRESOBJ_TEXT, sal_False, Rectangle(Point(100,aPageSize.Height/2-100), Point(aPageSize.Width/2-100, aPageSize.Height-100)), sal_True);
-                }
-                else if( sUrl3.isEmpty()){} // nothing to do
-                else
+                if( !sUrl3.isEmpty() )
                 {
 
                     Reference< graphic::XGraphic > xGraphic = createXGraphicFromUrl(sUrl3, xProvider);
@@ -481,14 +401,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                     xShape->setPosition(aPicPos);
                     xSlide->add(xShape);
                 }
-
-                if( sUrl4 == SD_RESSTR(STR_PHOTO_ALBUM_TEXTBOX) ) // create a Text Box
-                {
-                    SdPage* pSlide = pDoc->GetSdPage( pDoc->GetSdPageCount(PK_STANDARD)-1, PK_STANDARD);
-                    pSlide->CreatePresObj(PRESOBJ_TEXT, sal_False, Rectangle(Point(aPageSize.Width/2 + 100,aPageSize.Height/2 - 100), Point(aPageSize.Width-100, aPageSize.Height-100)), sal_True);
-                }
-                else if( sUrl4.isEmpty()){} // nothing to do
-                else
+                if( !sUrl4.isEmpty() )
                 {
                     Reference< graphic::XGraphic > xGraphic = createXGraphicFromUrl(sUrl4, xProvider);
 
