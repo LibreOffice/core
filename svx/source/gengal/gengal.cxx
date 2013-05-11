@@ -63,8 +63,8 @@ void disposeGallery( Gallery* pGallery )
 }
 
 static void createTheme( OUString aThemeName, OUString aGalleryURL,
-                         OUString aDestDir, sal_uInt32 nNumFrom,
-                         FileNameList &rFiles, bool bRelativeURLs )
+                         OUString aDestDir, FileNameList &rFiles,
+                         bool bRelativeURLs )
 {
     Gallery* pGallery;
 
@@ -82,7 +82,7 @@ static void createTheme( OUString aThemeName, OUString aGalleryURL,
 
     GalleryTheme *pGalTheme;
     if( !pGallery->HasTheme( aThemeName) ) {
-            if( !pGallery->CreateTheme( aThemeName, nNumFrom ) ) {
+            if( !pGallery->CreateTheme( aThemeName ) ) {
                     fprintf( stderr, "Failed to create theme\n" );
                     exit( 1 );
             }
@@ -131,7 +131,7 @@ static int PrintHelp()
     fprintf( stdout, "Utility to generate LibreOffice gallery files\n\n" );
 
     fprintf( stdout, "using: gengal --name <name> --path <dir> [ --destdir <path> ]\n");
-    fprintf( stdout, "              [ --number-from <num> ] [ files ... ]\n\n" );
+    fprintf( stdout, "              [ files ... ]\n\n" );
 
     fprintf( stdout, "options:\n");
     fprintf( stdout, " --name <theme>\t\tdefines the user visible name of the created or updated theme.\n");
@@ -145,7 +145,6 @@ static int PrintHelp()
 
     fprintf( stdout, " --relative-urls\t\tflags that after removing the destdir, the URL should be a path relative to the gallery folder in the install\n");
     fprintf( stdout, "\t\t\tprimarily used for internal gallery generation at compile time.\n");
-    fprintf( stdout, " --number-from <num>\tdefines minimal number for the newly created gallery\n");
     fprintf( stdout, "\t\t\ttheme files.\n");
     fprintf( stdout, " files\t\t\tlists files to be added to the gallery. Absolute paths\n");
     fprintf( stdout, "\t\t\tare required.\n");
@@ -206,7 +205,6 @@ int GalApp::Main()
 {
     OUString aPath, aDestDir;
     OUString aName( "Default name" );
-    sal_uInt32 nNumFrom = 0;
     FileNameList aFiles;
 
     for( sal_uInt32 i = 0; i < GetCommandLineParamCount(); i++ )
@@ -231,7 +229,8 @@ int GalApp::Main()
         else if ( aParam == "--relative-urls" )
             mbRelativeURLs = true;
         else if ( aParam == "--number-from" )
-            nNumFrom = GetCommandLineParam( ++i ).ToInt32();
+            fprintf ( stderr, "--number-from is deprecated, themes now "
+                      "have filenames based on their names\n" );
         else
             aFiles.push_back( Smartify( aParam ) );
     }
@@ -239,7 +238,7 @@ int GalApp::Main()
     if( aFiles.size() < 1 )
         return PrintHelp();
 
-    createTheme( aName, aPath, aDestDir, nNumFrom, aFiles, mbRelativeURLs );
+    createTheme( aName, aPath, aDestDir, aFiles, mbRelativeURLs );
 
     // Without this we get extraordinary crashes from the
     // drawinglayer VirtualDevice cache when importing svg
