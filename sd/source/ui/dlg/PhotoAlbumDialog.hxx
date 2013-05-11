@@ -54,8 +54,7 @@ private:
     CancelButton*   pCancelBtn;
     PushButton*     pCreateBtn;
 
-    PushButton*     pFileBtn;
-    PushButton*     pTextBtn;
+    PushButton*     pAddBtn;
     PushButton*     pUpBtn;
     PushButton*     pDownBtn;
     PushButton*     pRemoveBtn;
