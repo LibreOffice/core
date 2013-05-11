@@ -597,19 +597,6 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl)
                 OSL_FAIL("Could not find config for Create Photo Album function");
             }
 
-            if( aFilesArr.getLength() == 1)
-            {
-                pRemoveBtn->Enable();
-                pUpBtn->Disable();
-                pDownBtn->Disable();
-            }
-            else
-            {
-                pRemoveBtn->Enable();
-                pUpBtn->Enable();
-                pDownBtn->Enable();
-            }
-
             for ( sal_Int32 i = 0; i < aFilesArr.getLength(); i++ )
             {
                 // Store full path, show filename only. Use INetURLObject to display spaces in filename correctly
@@ -619,6 +606,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl)
             }
         }
     }
+    EnableDisableButtons();
     return 0;
 }
 
@@ -634,12 +622,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, TextHdl)
     OUString sStr(SD_RESSTR(STR_PHOTO_ALBUM_TEXTBOX));
     pImagesLst->SetEntryData(nPos, (void*)new OUString(sStr));
 
-    if(pImagesLst->GetEntryCount() >= 1)
-    {
-        pRemoveBtn->Enable();
-        pUpBtn->Disable();
-        pDownBtn->Disable();
-    }
+    EnableDisableButtons();
     return 0;
 }
 
@@ -669,16 +652,9 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, UpHdl)
         pImagesLst->SetEntryData( nActPos, (void*) new OUString(sUpper));
 
         pImagesLst->SelectEntryPos(nActPos - 1);
-
-        pDownBtn->Enable();
-
     }
 
-    if(pImagesLst->GetSelectEntryPos() == 0)
-    {
-        pDownBtn->Enable();
-        pUpBtn->Disable();
-    }
+    EnableDisableButtons();
     return 0;
 }
 
@@ -707,16 +683,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, DownHdl)
         pImagesLst->SelectEntryPos(nActPos + 1);
 
     }
-
-    if(pImagesLst->GetEntry(pImagesLst->GetSelectEntryPos() + 1) != OUString(""))
-    {
-        pDownBtn->Enable();
-        pUpBtn->Enable();
-    }
-    else
-    {
-        pDownBtn->Disable();
-    }
+    EnableDisableButtons();
     return 0;
 }
 
@@ -725,18 +692,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, RemoveHdl)
     pImagesLst->RemoveEntry( pImagesLst->GetSelectEntryPos() );
     pImg->SetImage(Image());
 
-    if(pImagesLst->GetEntryCount() >= 1)
-    {
-        pRemoveBtn->Enable();
-        pUpBtn->Disable();
-        pDownBtn->Disable();
-    }
-    else
-    {
-        pRemoveBtn->Disable();
-        pUpBtn->Disable();
-        pDownBtn->Disable();
-    }
+    EnableDisableButtons();
     return 0;
 }
 
@@ -744,27 +700,6 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, SelectHdl)
 {
     OUString* pData = (OUString*) pImagesLst->GetEntryData(pImagesLst->GetSelectEntryPos());
     OUString sImgUrl = pData ? OUString(*pData) : "";
-    // Some UI functionality: if you select the first/last item in the list,
-    // the Up/Down button gets enabled/diabled (meaning: you cannot move up/down the item)
-    // disable/enable moving up
-    if(pImagesLst->GetSelectEntryPos() == 0)
-    {
-        pUpBtn->Disable();
-    }
-    else
-    {
-        pUpBtn->Enable();
-    }
-
-    // disable/enable moving down
-    if(pImagesLst->GetEntry(pImagesLst->GetSelectEntryPos() + 1) == OUString(""))
-    {
-        pDownBtn->Disable();
-    }
-    else
-    {
-        pDownBtn->Enable();
-    }
 
     if (sImgUrl != SD_RESSTR(STR_PHOTO_ALBUM_TEXTBOX))
     {
@@ -817,7 +752,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, SelectHdl)
     {
         pImg->SetImage(Image());
     }
-
+    EnableDisableButtons();
     return 0;
 }
 
@@ -891,6 +826,15 @@ Reference< graphic::XGraphic> SdPhotoAlbumDialog::createXGraphicFromUrl(const OU
 short SdPhotoAlbumDialog::Execute()
 {
     return ModalDialog::Execute();
+}
+
+void SdPhotoAlbumDialog::EnableDisableButtons()
+{
+    pRemoveBtn->Enable(pImagesLst->GetSelectEntryCount() > 0);
+    pUpBtn->Enable(pImagesLst->GetSelectEntryCount() > 0 &&
+                   pImagesLst->GetSelectEntryPos() != 0);
+    pDownBtn->Enable(pImagesLst->GetSelectEntryCount() > 0 &&
+                     pImagesLst->GetSelectEntryPos() < pImagesLst->GetEntryCount()-1);
 }
 
 

@@ -93,6 +93,8 @@ private:
     Reference< graphic::XGraphic> createXGraphicFromUrl(const OUString& sUrl,
         Reference< graphic::XGraphicProvider> xProvider);
 
+    void EnableDisableButtons();
+
     enum SlideImageLayout
     {
         FIT_TO_SLIDE=0,
