@@ -1315,9 +1315,10 @@ void SfxBindings::UpdateSlotServer_Impl()
             pImp->bContextChanged = sal_True;
     }
 
-    for(SfxStateCacheArr_Impl::const_iterator it = pImp->pCaches->begin(); it != pImp->pCaches->end(); ++it)
+    for (size_t i = 0, nCount = pImp->pCaches->size(); i < nCount; ++i)
     {
-        SfxStateCache *pCache = *it;
+        SfxStateCache *pCache = (*pImp->pCaches)[i];
+        //GetSlotServer can modify pImp->pCaches
         pCache->GetSlotServer(*pDispatcher, pImp->xProv);
     }
     pImp->bMsgDirty = pImp->bAllMsgDirty = sal_False;
