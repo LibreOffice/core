@@ -949,16 +949,57 @@ void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
 
     rFactor = 0x100;
 
-    rTo.mnWidth             = mnWidth;
-
-    const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
-    rTo.mnAscent            = (+rMetrics.ascender + 32) >> 6;
-    rTo.mnDescent           = (-rMetrics.descender + 32) >> 6;
-    rTo.mnExtLeading        = ((rMetrics.height + 32) >> 6) - (rTo.mnAscent + rTo.mnDescent);
-    rTo.mnIntLeading        = (rTo.mnAscent + rTo.mnDescent) - ((maFaceFT->units_per_EM + 32) >> 6);
-    rTo.mnSlant             = 0;
-
     const TT_OS2* pOS2 = (const TT_OS2*)FT_Get_Sfnt_Table( maFaceFT, ft_sfnt_os2 );
+    const double fScale = (double)GetFontSelData().mnHeight / maFaceFT->units_per_EM;
+
+    rTo.mnAscent = 0;
+    rTo.mnDescent = 0;
+    rTo.mnExtLeading = 0;
+    rTo.mnSlant = 0;
+    rTo.mnIntLeading = (rTo.mnAscent + rTo.mnDescent) - ((maFaceFT->units_per_EM + 32) >> 6);
+    rTo.mnWidth = mnWidth;
+
+    // Calculating ascender and descender:
+    // FreeType >= 2.4.6 does the right thing, so we just use what it gives us,
+    // for earlier versions we emulate its behaviour; take them from 'hhea'
+    // table, if zero take them from 'OS/2' table.
+    if (nFTVERSION >= 2406)
+    {
+        const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
+        rTo.mnAscent = (rMetrics.ascender + 32) >> 6;
+        rTo.mnDescent = (-rMetrics.descender + 32) >> 6;
+        rTo.mnExtLeading = ((rMetrics.height + 32) >> 6) - (rTo.mnAscent + rTo.mnDescent);
+    }
+    else
+    {
+        const TT_HoriHeader* pHHea = (const TT_HoriHeader*)FT_Get_Sfnt_Table(maFaceFT, ft_sfnt_hhea);
+        if (pHHea)
+        {
+            rTo.mnAscent = pHHea->Ascender * fScale + 0.5;
+            rTo.mnDescent = -pHHea->Descender * fScale + 0.5;
+            rTo.mnExtLeading = pHHea->Line_Gap * fScale + 0.5;
+        }
+
+        if (!(rTo.mnAscent || rTo.mnDescent))
+        {
+            if (pOS2 && (pOS2->version != 0xFFFF))
+            {
+                if (pOS2->sTypoAscender || pOS2->sTypoDescender)
+                {
+                    rTo.mnAscent = pOS2->sTypoAscender * fScale + 0.5;
+                    rTo.mnDescent = -pOS2->sTypoDescender * fScale + 0.5;
+                    rTo.mnExtLeading = pOS2->sTypoLineGap * fScale + 0.5;
+                }
+                else
+                {
+                    rTo.mnAscent = pOS2->usWinAscent * fScale + 0.5;
+                    rTo.mnDescent = pOS2->usWinDescent * fScale + 0.5;
+                    rTo.mnDescent = 0;
+                }
+            }
+        }
+    }
+
     if( pOS2 && (pOS2->version != 0xFFFF) )
     {
         // map the panose info from the OS2 table to their VCL counterparts
@@ -988,15 +1029,6 @@ void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
             case 0: // fall through
             case 1: // fall through
             default: rTo.SetPitch( PITCH_DONTKNOW ); break;
-        }
-
-        const double fScale = (double)GetFontSelData().mnHeight / maFaceFT->units_per_EM;
-        if( pOS2->sTypoAscender || pOS2->sTypoDescender )
-        {
-            rTo.mnAscent     = (long)(  pOS2->sTypoAscender  * fScale + 0.5 );
-            rTo.mnDescent    = (long)( -pOS2->sTypoDescender * fScale + 0.5 );
-            rTo.mnExtLeading = (long)(  pOS2->sTypoLineGap   * fScale + 0.5 );
-            rTo.mnIntLeading = (long)( (pOS2->sTypoAscender - pOS2->sTypoDescender - maFaceFT->units_per_EM) * fScale + 0.5 );
         }
     }
 
