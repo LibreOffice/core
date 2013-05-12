@@ -1253,9 +1253,14 @@ void SwView::Move()
 
 sal_Bool SwView::HandleWheelCommands( const CommandEvent& rCEvt )
 {
-    sal_Bool bOk = sal_False;
     const CommandWheelData* pWData = rCEvt.GetWheelData();
-    if( pWData && COMMAND_WHEEL_ZOOM == pWData->GetMode() )
+    if (!pWData)
+    {
+        return sal_False;
+    }
+
+    sal_Bool bOk = sal_False;
+    if( COMMAND_WHEEL_ZOOM == pWData->GetMode() )
     {
         long nFact = m_pWrtShell->GetViewOptions()->GetZoom();
         if( 0L > pWData->GetDelta() )
@@ -1266,7 +1271,7 @@ sal_Bool SwView::HandleWheelCommands( const CommandEvent& rCEvt )
         SetZoom( SVX_ZOOM_PERCENT, nFact );
         bOk = sal_True;
     }
-    else if( pWData && COMMAND_WHEEL_ZOOM_SCALE == pWData->GetMode() )
+    else if( COMMAND_WHEEL_ZOOM_SCALE == pWData->GetMode() )
     {
         int newZoom = 100 * (m_pWrtShell->GetViewOptions()->GetZoom() / 100.0) * (pWData->GetDelta() / 100.0);
         SetZoom( SVX_ZOOM_PERCENT, std::max( 20, std::min( 600, newZoom ) ) );
@@ -1280,7 +1285,7 @@ sal_Bool SwView::HandleWheelCommands( const CommandEvent& rCEvt )
             m_bWheelScrollInProgress=true;
         }
 
-        if (pWData && (COMMAND_WHEEL_SCROLL==pWData->GetMode()) && (((sal_uLong)0xFFFFFFFF) == pWData->GetScrollLines()))
+        if ((COMMAND_WHEEL_SCROLL==pWData->GetMode()) && (((sal_uLong)0xFFFFFFFF) == pWData->GetScrollLines()))
             {
                         if (pWData->GetDelta()<0)
                                 PhyPageDown();
