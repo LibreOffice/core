@@ -226,7 +226,7 @@ namespace cppcanvas
                     }
                 }
 
-                if (polygon.count ())
+                if (polygon.count ()) {
                     aPolygon.append (polygon);
 
 #if OSL_DEBUG_LEVEL > 1
@@ -238,15 +238,16 @@ namespace cppcanvas
                             SAL_INFO ("cppcanvas.emf", "point: " << point.getX() << "," << point.getY());
                             if (polygon.isPrevControlPointUsed(j)) {
                                 point = polygon.getPrevControlPoint(j);
-                                SAL_INFO ("cppcanvas.emf", "prev: " << point.getX() "," << point.getY());
+                                SAL_INFO ("cppcanvas.emf", "prev: " << point.getX() << "," << point.getY());
                             }
                             if (polygon.isNextControlPointUsed(j)) {
                                 point = polygon.getNextControlPoint(j);
-                                SAL_INFO ("cppcanvas.emf", "next: " << point.getX() "," << point.getY());
+                                SAL_INFO ("cppcanvas.emf", "next: " << point.getX() << "," << point.getY());
                             }
                         }
                     }
 #endif
+                }
 
                 return aPolygon;
             }
@@ -370,7 +371,8 @@ namespace cppcanvas
 
                 s >> header >> type;
 
-                SAL_INFO ("cppcanvas.emf", "EMF+\tbrush\nEMF+\theader: 0x" << std::hex << header << " type: " << type << std::dec);
+                SAL_INFO ("cppcanvas.emf", "EMF+\tbrush");
+                SAL_INFO ("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << header << " type: " << type << std::dec);
 
                 switch (type) {
                 case 0:
@@ -618,7 +620,8 @@ namespace cppcanvas
 
                 s >> header >> unknown >> penFlags >> unknown2 >> width;
 
-                SAL_INFO("cppcanvas.emf", "EMF+\tpen\nEMF+\theader: 0x" << std::hex << header << " unknown: 0x" << unknown <<
+                SAL_INFO("cppcanvas.emf", "EMF+\tpen");
+                SAL_INFO("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << header << " unknown: 0x" << unknown <<
                             " additional flags: 0x" << penFlags << " unknown: 0x" << unknown2 << " width: " << std::dec << width );
 
                 if (penFlags & 1)
@@ -760,7 +763,7 @@ namespace cppcanvas
 
                         mfStream >> file;
                         file.Flush();
-                        file.Close()
+                        file.Close();
 #endif
                 }
             }
@@ -1263,6 +1266,10 @@ namespace cppcanvas
                 rMF >> type >> flags >> size >> dataSize;
 
                 next = rMF.Tell() + ( size - 12 );
+
+                if (size < 12) {
+                    SAL_INFO("cppcanvas.emf", "Size field is less than 12 bytes");
+                }
 
                 SAL_INFO("cppcanvas.emf", "EMF+ record size: " << size << " type: " << type << " flags: " << flags << " data size: " << dataSize);
 
@@ -1911,10 +1918,10 @@ namespace cppcanvas
                         }
 
                         break;
-                                                            }
+                    }
                     default:
                         SAL_INFO("cppcanvas.emf", "EMF+ unhandled record type: " << type);
-                        SAL_INFO("cppcanvas.emf", "EMF+\tTODO\n");
+                        SAL_INFO("cppcanvas.emf", "EMF+\tTODO");
                     }
                 }
 
