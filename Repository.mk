@@ -232,6 +232,9 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,TDE, \
     $(if $(ENABLE_TDE),tdebe1) \
 ))
 
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ONLINEUPDATE, \
+))
+
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,GNOME, \
 ))
 
