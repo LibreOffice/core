@@ -4529,7 +4529,6 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
             long nPosX = 0;
             for (SCCOL nX=0; nX<=nX2; nX++)                 // wegen Ueberhaengen
             {
-                std::auto_ptr< ScPatternAttr > pPreviewPattr;
                 if (nX==nX1) nPosX = nInitPosX;                 // positions before nX1 are calculated individually
 
                 CellInfo*   pInfo = &pThisRowInfo->pCellInfo[nX+1];
