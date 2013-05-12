@@ -232,6 +232,11 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,TDE, \
     $(if $(ENABLE_TDE),tdebe1) \
 ))
 
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ONLINEUPDATE, \
+    updatecheckui \
+    updchk \
+))
+
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,GNOME, \
 ))
 
@@ -416,7 +421,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     spell \
     sts \
     textfd \
-    updatecheckui \
     $(if $(DISABLE_SCRIPTING),,vbahelper) \
     vclplug_gtk \
     vclplug_gtk3 \
@@ -551,7 +555,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     ucphier1 \
     ucppkg1 \
     unopkgapp \
-    updchk \
     xmlsecurity \
     xsec_fw \
     xsec_xmlsec \
