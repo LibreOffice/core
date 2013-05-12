@@ -203,6 +203,21 @@ static bool needNextCode(sal_Unicode cChar)
     return lcl_CharIsJoiner(cChar) || U16_IS_TRAIL(cChar);
 }
 
+std::ostream &operator <<(std::ostream& s, ServerFont* pFont)
+{
+#ifndef SAL_LOG_INFO
+    (void) pFont;
+#else
+    FT_Face aFace = pFont->GetFtFace();
+    const char* pName = FT_Get_Postscript_Name(aFace);
+    if (pName)
+        s << pName;
+    else
+        s << pFont->GetFontFileName();
+#endif
+    return s;
+}
+
 static hb_blob_t *getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData)
 {
     char pTagName[5];
@@ -213,6 +228,9 @@ static hb_blob_t *getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
     pTagName[4] = 0;
 
     ServerFont* pFont = (ServerFont*) pUserData;
+
+    SAL_INFO("vcl.harfbuzz.layout", "getFontTable(" << pFont << ", " << pTagName << ")");
+
     sal_uLong nLength;
     const unsigned char* pBuffer = pFont->GetTable(pTagName, &nLength);
 
@@ -284,6 +302,8 @@ static hb_position_t getGlyphKerningH(hb_font_t* /*font*/, void* pFontData,
     ServerFont* pFont = (ServerFont*) pFontData;
     FT_Face aFace = pFont->GetFtFace();
 
+    SAL_INFO("vcl.harfbuzz.layout", "getGlyphKerningH(" << pFont << ", " << nGlyphIndex1 << ", " << nGlyphIndex2 << ")");
+
     FT_Error error;
     FT_Vector kerning;
     hb_position_t ret;
@@ -312,8 +332,10 @@ static hb_bool_t getGlyphExtents(hb_font_t* /*font*/, void* pFontData,
 {
     ServerFont* pFont = (ServerFont*) pFontData;
     FT_Face aFace = pFont->GetFtFace();
-    FT_Error error;
 
+    SAL_INFO("vcl.harfbuzz.layout", "getGlyphExtents(" << pFont << ", " << nGlyphIndex << ")");
+
+    FT_Error error;
     error = FT_Load_Glyph(aFace, nGlyphIndex, FT_LOAD_DEFAULT);
     if (!error)
     {
@@ -331,11 +353,13 @@ static hb_bool_t getGlyphContourPoint(hb_font_t* /*font*/, void* pFontData,
         hb_position_t *x, hb_position_t *y,
         void* /*pUserData*/)
 {
+    bool ret = false;
     ServerFont* pFont = (ServerFont*) pFontData;
     FT_Face aFace = pFont->GetFtFace();
-    FT_Error error;
-    bool ret = false;
 
+    SAL_INFO("vcl.harfbuzz.layout", "getGlyphContourPoint(" << pFont << ", " << nGlyphIndex << ", " << nPointIndex << ")");
+
+    FT_Error error;
     error = FT_Load_Glyph(aFace, nGlyphIndex, FT_LOAD_DEFAULT);
     if (!error)
     {
@@ -406,6 +430,8 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 {
     ServerFont& rFont = rLayout.GetServerFont();
     FT_Face aFtFace = rFont.GetFtFace();
+
+    SAL_INFO("vcl.harfbuzz.layout", "layout(" << this << ",rArgs=" << rArgs << ")");
 
     hb_font_t *pHbFont = hb_font_create(mpHbFace);
     hb_font_set_funcs(pHbFont, getFontFuncs(), &rFont, NULL);
