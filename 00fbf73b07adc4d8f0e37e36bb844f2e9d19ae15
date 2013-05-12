@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//8+0\u003d",
+        "filename": "vcl/source/filter/wmf/enhwmf.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-05-12T05:59:54Z",
+      "side": 1,
+      "message": "Please don\u0027t unnecessarily add several short lines of debugging output. This is a matter of opinion I guess, but I prefer to have oe debugging output line of a length up to 100 characters or so, instead of several short ones.",
+      "revId": "00fbf73b07adc4d8f0e37e36bb844f2e9d19ae15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
