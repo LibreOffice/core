@@ -1026,6 +1026,7 @@ namespace frm
         }
         m_nConvertedBoundValuesType = nFieldType;
         OSL_ENSURE(dst == m_aConvertedBoundValues.end(), "OListBoxModel::convertBoundValues expected to have overwritten all of m_aConvertedBoundValues, but did not.");
+        assert(dst == m_aConvertedBoundValues.end());
     }
     //------------------------------------------------------------------------------
     sal_Int32 OListBoxModel::getValueType() const
@@ -1056,6 +1057,9 @@ namespace frm
             *dst = *src;
             dst->setTypeKind(nFieldType);
         }
+        m_nConvertedBoundValuesType = nFieldType;
+        OSL_ENSURE(dst == aValues.end(), "OListBoxModel::impl_getValues expected to have set all of aValues, but did not.");
+        assert(dst == aValues.end());
         return aValues;
     }
     //------------------------------------------------------------------------------
