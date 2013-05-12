@@ -8092,6 +8092,8 @@ if test "$with_system_mdds" = "yes"; then
         [AC_MSG_ERROR(mdds/multi_type_vector.hpp not found. Install mdds >= 0.8.0)], [])
     AC_CHECK_TYPE(mdds::multi_type_vector<int>::iterator, [],
         [AC_MSG_ERROR(mdds/multi_type_matrix.hpp does not define multi_type_vector::iterator. Install mdds >= 0.8.0)], [#include <mdds/multi_type_vector.hpp>])
+    AC_CHECK_HEADER(mdds/multi_type_vector_custom_func1.hpp, [],
+        [AC_MSG_ERROR(mdds/multi_type_vector_custom_func1.hpp not found. Install mdds >= 0.8.0)], [])
     CPPFLAGS="$save_CPPFLAGS"
     AC_LANG_POP([C++])
 else
