@@ -313,7 +313,7 @@
       <CurrencySymbol>kr.</CurrencySymbol>
       <BankSymbol>ISK</BankSymbol>
       <CurrencyName>Íslensk króna</CurrencyName>
-      <DecimalPlaces>2</DecimalPlaces>
+      <DecimalPlaces>0</DecimalPlaces>
     </Currency>
   </LC_CURRENCY>
   <LC_TRANSLITERATION>
