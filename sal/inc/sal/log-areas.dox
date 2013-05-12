@@ -86,6 +86,10 @@ certain functionality.
 @li @c oox.xmlstream - XmlStream class
 @li @c oox.storage - ZipStorage class
 
+@section forms
+
+@li @c forms.runtime
+
 @section formula
 
 @li @c formula.core
