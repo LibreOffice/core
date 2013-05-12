@@ -86,7 +86,7 @@ OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
                 {
                     // needs to be translated into a ::com::sun::star::uno::Type
                     static std::map< OUString, css::uno::Type > s_aTypeNameMap;
-                    if (!s_aTypeNameMap.size())
+                    if (s_aTypeNameMap.empty())
                     {
                         s_aTypeNameMap[GetXMLToken( XML_BOOLEAN)]   = ::getBooleanCppuType();
                         s_aTypeNameMap[GetXMLToken( XML_FLOAT)]     = ::getCppuType( static_cast< double* >(NULL) );
