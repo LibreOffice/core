@@ -254,7 +254,8 @@ namespace svxform
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::Clear" );
         Reference< css::form::XForms >  xForms( GetForms());
-        xForms->removeContainerListener((XContainerListener*)m_pPropChangeList);
+        if(xForms.is())
+            xForms->removeContainerListener((XContainerListener*)m_pPropChangeList);
 
         //////////////////////////////////////////////////////////////////////
         // RootList loeschen
