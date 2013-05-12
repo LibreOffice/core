@@ -81,6 +81,7 @@ namespace frm
     using ::com::sun::star::sdbc::XRowSet;
     using ::com::sun::star::sdbc::XResultSetUpdate;
     using ::com::sun::star::form::runtime::XFormController;
+    using ::com::sun::star::form::runtime::XFormOperations;
     using ::com::sun::star::form::runtime::XFeatureInvalidation;
     using ::com::sun::star::form::runtime::FeatureState;
     using ::com::sun::star::lang::IllegalArgumentException;
@@ -452,8 +453,128 @@ namespace frm
         {
             return ( _nFeature != FormFeature::TotalRecords );
         }
-    }
 
+        template < typename TYPE >
+        TYPE lcl_safeGetPropertyValue_throw( const Reference< XPropertySet >& _rxProperties, const OUString& _rPropertyName, TYPE _Default )
+        {
+            TYPE value( _Default );
+            OSL_PRECOND( _rxProperties.is(), "FormOperations::<foo>: no cursor (already disposed?)!" );
+            if ( _rxProperties.is() )
+                OSL_VERIFY( _rxProperties->getPropertyValue( _rPropertyName ) >>= value );
+            return value;
+        }
+
+        // returns false if parent should *abort* (user pressed cancel)
+        bool checkConfirmation(bool &needConfirmation, bool &shouldCommit)
+        {
+            if(needConfirmation)
+            {
+                // TODO: shouldn't this be done with an interaction handler?
+                QueryBox aQuery( NULL, WB_YES_NO_CANCEL | WB_DEF_YES, FRM_RES_STRING( RID_STR_QUERY_SAVE_MODIFIED_ROW ) );
+                switch ( aQuery.Execute() )
+                {
+                case RET_NO:
+                    shouldCommit = false;
+                    // no break on purpose: don't ask again!
+                case RET_YES:
+                    needConfirmation = false;
+                    return true;
+                case RET_CANCEL:
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        bool commit1Form(Reference< XFormController > xCntrl, bool &needConfirmation, bool &shouldCommit)
+        {
+            Reference< XFormOperations > xFrmOps(xCntrl->getFormOperations());
+            if (!xFrmOps->commitCurrentControl())
+                return false;
+
+            if(xFrmOps->isModifiedRow())
+            {
+                if(!checkConfirmation(needConfirmation, shouldCommit))
+                    return false;
+                sal_Bool _;
+                if (shouldCommit && !xFrmOps->commitCurrentRecord(_))
+                    return false;
+            }
+            return true;
+        }
+
+        bool commitFormAndSubforms(Reference< XFormController > xCntrl, bool needConfirmation)
+        {
+            bool shouldCommit(true);
+            assert(xCntrl.is());
+            Reference< XIndexAccess > xSubForms(xCntrl, UNO_QUERY);
+            assert(xSubForms.is());
+            if(xSubForms.is())
+            {
+                const sal_Int32 cnt = xSubForms->getCount();
+                for(int i=0; i < cnt; ++i)
+                {
+                    Reference< XFormController > xSubForm(xSubForms->getByIndex(i), UNO_QUERY);
+                    assert(xSubForm.is());
+                    if (xSubForm.is())
+                    {
+                        if (!commit1Form(xSubForm, needConfirmation, shouldCommit))
+                            return false;
+                    }
+                }
+            }
+
+            if(!commit1Form(xCntrl, needConfirmation, shouldCommit))
+                return false;
+
+            return true;
+        }
+
+        bool commit1Form(Reference< XForm > xFrm, bool &needConfirmation, bool &shouldCommit)
+        {
+            Reference< XPropertySet > xProps(xFrm, UNO_QUERY_THROW);
+            // nothing to do if the record is not modified
+            if(!lcl_safeGetPropertyValue_throw( xProps, PROPERTY_ISMODIFIED, false ))
+                return true;
+
+            if(!checkConfirmation(needConfirmation, shouldCommit))
+                return false;
+            if(shouldCommit)
+            {
+                Reference< XResultSetUpdate > xUpd(xFrm, UNO_QUERY_THROW);
+                // insert respectively update the row
+                if ( lcl_safeGetPropertyValue_throw( xProps, PROPERTY_ISNEW, false ) )
+                    xUpd->insertRow();
+                else
+                    xUpd->updateRow();
+            }
+            return true;
+        }
+
+        bool commitFormAndSubforms(Reference< XForm > xFrm, bool needConfirmation)
+        {
+            // No control...  do what we can with the models
+            bool shouldCommit(true);
+            Reference< XIndexAccess > xFormComps(xFrm, UNO_QUERY_THROW);
+            assert( xFormComps.is() );
+
+            const sal_Int32 cnt = xFormComps->getCount();
+            for(int i=0; i < cnt; ++i)
+            {
+                Reference< XForm > xSubForm(xFormComps->getByIndex(i), UNO_QUERY);
+                if(xSubForm.is())
+                {
+                    if(!commit1Form(xSubForm, needConfirmation, shouldCommit))
+                        return false;
+                }
+            }
+
+            if(!commit1Form(xFrm, needConfirmation, shouldCommit))
+                return false;
+
+            return true;
+        }
+    }
     //--------------------------------------------------------------------
     void SAL_CALL FormOperations::execute( ::sal_Int16 _nFeature ) throw (RuntimeException, IllegalArgumentException, SQLException, WrappedTargetException)
     {
@@ -462,30 +583,24 @@ namespace frm
 
         if ( ( _nFeature != FormFeature::DeleteRecord ) && ( _nFeature != FormFeature::UndoRecordChanges ) )
         {
-            // if we have a controller, commit the current control
-            if ( m_xController.is() )
-                if ( !impl_commitCurrentControl_throw() )
-                    return;
 
-            // commit the current record
-            bool bCommitCurrentRecord = true;
-            // (but before, let the user confirm if necessary)
-            if ( impl_isModifiedRow_throw() )
+
+            if(m_xController.is())
             {
-                if ( lcl_needConfirmCommit( _nFeature ) )
-                {
-                    // TODO: shouldn't this be done with an interaction handler?
-                    QueryBox aQuery( NULL, WB_YES_NO_CANCEL | WB_DEF_YES, FRM_RES_STRING( RID_STR_QUERY_SAVE_MODIFIED_ROW ) );
-                    switch ( aQuery.Execute() )
-                    {
-                    case RET_NO: bCommitCurrentRecord = false; break;
-                    case RET_CANCEL: return;
-                    }
-                }
+                if(!commitFormAndSubforms(m_xController, lcl_needConfirmCommit( _nFeature )))
+                    return;
             }
-
-            if ( bCommitCurrentRecord && !impl_commitCurrentRecord_throw() )
-                return;
+            else if(m_xCursor.is())
+            {
+                Reference< XForm > xForm(m_xCursor, UNO_QUERY);
+                assert(xForm.is());
+                if(!commitFormAndSubforms(xForm, lcl_needConfirmCommit( _nFeature )))
+                    return;
+            }
+            else
+            {
+                SAL_WARN( "forms.runtime", "No cursor, but trying to execute form operation " << _nFeature );
+            }
         }
 
         try
@@ -1227,20 +1342,6 @@ namespace frm
             return true;
 
         return false;
-    }
-
-    //--------------------------------------------------------------------
-    namespace
-    {
-        template < typename TYPE >
-        TYPE lcl_safeGetPropertyValue_throw( const Reference< XPropertySet >& _rxProperties, const OUString& _rPropertyName, TYPE _Default )
-        {
-            TYPE value( _Default );
-            OSL_PRECOND( _rxProperties.is(), "FormOperations::<foo>: no cursor (already disposed?)!" );
-            if ( _rxProperties.is() )
-                OSL_VERIFY( _rxProperties->getPropertyValue( _rPropertyName ) >>= value );
-            return value;
-        }
     }
 
     //--------------------------------------------------------------------

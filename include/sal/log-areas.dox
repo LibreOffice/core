@@ -114,6 +114,11 @@ certain functionality.
 @li @c oox.storage - ZipStorage class
 @li @c oox.ppt - pptx filter
 
+@section forms
+
+@li @c forms.component
+@li @c forms.runtime
+
 @section formula
 
 @li @c formula.core
@@ -339,7 +344,6 @@ certain functionality.
 @li @c cppcanvas.emf
 @li @c cppuhelper
 @li @c cppu
-@li @c forms
 @li @c helpcompiler
 @li @c linguistic
 @li @c oox
