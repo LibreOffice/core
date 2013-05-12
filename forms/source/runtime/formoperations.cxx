@@ -936,7 +936,7 @@ namespace frm
     //--------------------------------------------------------------------
     bool FormOperations::impl_commitCurrentControl_throw() const
     {
-        DBG_ASSERT( m_nMethodNestingLevel, "FormOperations::impl_commitCurrentRecord_throw: to be called within a MethodGuard'ed section only!" );
+        DBG_ASSERT( m_nMethodNestingLevel, "FormOperations::impl_commitCurrentControl_throw: to be called within a MethodGuard'ed section only!" );
         OSL_PRECOND( m_xController.is(), "FormOperations::commitCurrentControl: no controller!" );
         if ( !m_xController.is() )
             return false;
