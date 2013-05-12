@@ -345,15 +345,6 @@ public:
     SAL_DLLPRIVATE sal_Bool             ImplScaleInterpolate( const double& rScaleX, const double& rScaleY );
     SAL_DLLPRIVATE sal_Bool             ImplScaleSuper( const double& rScaleX, const double& rScaleY );
     SAL_DLLPRIVATE sal_Bool             ImplScaleConvolution( const double& rScaleX, const double& rScaleY, const Kernel& aKernel);
-    SAL_DLLPRIVATE bool                 ImplScaleConvolution( const double& rScaleX, const double& rScaleY, Kernel& aKernel);
-    SAL_DLLPRIVATE bool                 ImplTransformAveraging( const double& rScaleX, const double& rScaleY,
-                                                const Rectangle& rRotatedRectangle, const long nAngle10, const Color& rFillColor );
-    SAL_DLLPRIVATE bool                 ImplTransformBilinearFiltering( const double& rScaleX, const double& rScaleY,
-                                                const Rectangle& rRotatedRectangle, const long nAngle10, const Color& rFillColor );
-
-    SAL_DLLPRIVATE static void          ImplCalculateContributions( const int aSourceSize, const int aDestinationSize,
-                                                int& aNumberOfContributions, double*& pWeights, int*& pPixels, int*& pCount,
-                                                Kernel& aKernel );
 
     SAL_DLLPRIVATE bool                 ImplConvolutionPass( Bitmap& aNewBitmap, const int nNewSize, BitmapReadAccess* pReadAcc,
                                                 int aNumberOfContributions, double* pWeights, int* pPixels, int* pCount );
