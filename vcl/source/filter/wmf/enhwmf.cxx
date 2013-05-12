@@ -943,10 +943,10 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                     sal_Int32 xDest(0), yDest(0), cxDest(0), cyDest(0);
 
                     BLENDFUNCTION aFunc;
-                    sal_Int32 xSrc(0), ySrc(0);
+                    sal_Int32 xSrc(0), ySrc(0), cxSrc(0), cySrc(0);
                     XForm xformSrc;
                     sal_uInt32 BkColorSrc(0), iUsageSrc(0), offBmiSrc(0);
-                    sal_uInt32 cbBmiSrc(0), offBitsSrc(0), cbBitsSrc(0), cxSrc(0), cySrc(0);
+                    sal_uInt32 cbBmiSrc(0), offBitsSrc(0), cbBitsSrc(0);
 
                     sal_uInt32   nStart = pWMF->Tell() - 8;
                     pWMF->SeekRel( 0x10 );
