@@ -1986,7 +1986,6 @@ void PlainStructType::dumpComprehensiveGetCppuType(FileStream & out) {
         << indent() << "{\n";
     inc();
     out << indent() << "::rtl::OUString the_name( \"" << name_ << "\" );\n";
-    std::map< OUString, sal_uInt32 > parameters;
     std::map< OUString, sal_uInt32 > types;
     std::vector< unoidl::PlainStructTypeEntity::Member >::size_type n = 0;
     for (std::vector< unoidl::PlainStructTypeEntity::Member >::const_iterator i(
