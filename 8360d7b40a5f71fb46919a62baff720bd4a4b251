@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//8/Q\u003d",
+        "filename": "scp2/source/ooo/module_ooo.scp",
+        "patchSetId": 1
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-05-12T05:26:40Z",
+      "side": 1,
+      "message": "typo: _IT -\u003e _IS",
+      "revId": "8360d7b40a5f71fb46919a62baff720bd4a4b251",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
