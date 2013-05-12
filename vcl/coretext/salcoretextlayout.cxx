@@ -33,7 +33,7 @@
 class CoreTextLayout SAL_FINAL : public SalLayout
 {
 public:
-    CoreTextLayout( QuartzSalGraphics* graphics, CoreTextStyleInfo* style);
+    CoreTextLayout( CoreTextStyleInfo* style );
     ~CoreTextLayout();
 
     // Overrides in same order as in base class, without "virtual" and
@@ -67,7 +67,6 @@ private:
     sal_Unicode *mpSavedStr;
 #endif
 
-    QuartzSalGraphics* mpGraphics;
     CoreTextStyleInfo* mpStyle;
 
     int mnCharCount;                    // ==mnEndCharPos-mnMinCharPos
@@ -100,11 +99,10 @@ private:
     mutable CFArrayRef mpRuns;
 };
 
-CoreTextLayout::CoreTextLayout(QuartzSalGraphics* graphics, CoreTextStyleInfo* style) :
+CoreTextLayout::CoreTextLayout(CoreTextStyleInfo* style) :
 #ifndef NDEBUG
     mpSavedStr(NULL),
 #endif
-    mpGraphics(graphics),
     mpStyle(style),
     mnCharCount(-1),
     mnGlyphCount(-1),
@@ -693,7 +691,7 @@ void CoreTextLayout::Simplify( bool /*bIsBase*/ )
 
 SalLayout* QuartzSalGraphics::GetTextLayout( ImplLayoutArgs&, int /*nFallbackLevel*/ )
 {
-    CoreTextLayout* layout = new CoreTextLayout( this, m_style );
+    CoreTextLayout* layout = new CoreTextLayout( m_style );
 
     return layout;
 }
