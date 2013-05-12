@@ -518,28 +518,28 @@ OUStringList FilterFactory::impl_getSortedFilterListForModule(const OUString& sM
 
     // merge both lists together
     OUStringList           lMergedFilters = lSortedFilters;
-    OUStringList::iterator pIt2;
-    OUStringList::iterator pIt3;
-    for (  pIt2  = lOtherFilters.begin();
-           pIt2 != lOtherFilters.end()  ;
-         ++pIt2                         )
+    const OUStringList::const_iterator itlOtherFiltersEnd = lOtherFilters.end();
+    const OUStringList::const_iterator itlSortedFiltersEnd = lSortedFilters.end();
+    for (OUStringList::const_iterator  pIt  = lOtherFilters.begin();
+           pIt != itlOtherFiltersEnd  ;
+         ++pIt                         )
     {
-        const OUString& rFilter = *pIt2;
-        pIt3 = ::std::find(lSortedFilters.begin(), lSortedFilters.end(), rFilter);
-        if (pIt3 == lSortedFilters.end())
-            lMergedFilters.push_back(rFilter);
+        if (::std::find(lSortedFilters.begin(), lSortedFilters.end(), *pIt) == itlSortedFiltersEnd)
+            lMergedFilters.push_back(*pIt);
     }
+
+    OUStringList::iterator pItToErase;
 
     // remove all filters from this merged list, which does not fit the flag specification
     if (nIFlags != -1)
     {
-        pIt2 = ::std::remove_if(lMergedFilters.begin(), lMergedFilters.end(), stlcomp_removeIfMatchFlags(pCache, nIFlags, sal_True));
-        lMergedFilters.erase(pIt2, lMergedFilters.end());
+        pItToErase = ::std::remove_if(lMergedFilters.begin(), lMergedFilters.end(), stlcomp_removeIfMatchFlags(pCache, nIFlags, sal_True));
+        lMergedFilters.erase(pItToErase, lMergedFilters.end());
     }
     if (nEFlags != -1)
     {
-        pIt2 = ::std::remove_if(lMergedFilters.begin(), lMergedFilters.end(), stlcomp_removeIfMatchFlags(pCache, nEFlags, sal_False));
-        lMergedFilters.erase(pIt2, lMergedFilters.end());
+        pItToErase = ::std::remove_if(lMergedFilters.begin(), lMergedFilters.end(), stlcomp_removeIfMatchFlags(pCache, nEFlags, sal_False));
+        lMergedFilters.erase(pItToErase, lMergedFilters.end());
     }
 
     // sort the default filter to the front of this list
