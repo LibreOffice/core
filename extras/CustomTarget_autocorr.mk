@@ -27,6 +27,7 @@ extras_AUTOCORR_LANGS := \
 	ga-IE:ga-IE \
 	hr:hr-HR \
 	hu:hu-HU \
+	is:is-IS \
 	it:it-IT \
 	ja:ja-JP \
 	ko:ko-KR \
@@ -128,6 +129,8 @@ extras_AUTOCORR_XMLFILES := \
 	hu/acor/META-INF/manifest.xml \
 	hu/acor/SentenceExceptList.xml \
 	hu/acor/WordExceptList.xml \
+	is/acor/META-INF/manifest.xml \
+	is/acor/SentenceExceptList.xml \
 	it/acor/BlockList.xml \
 	it/acor/DocumentList.xml \
 	it/acor/META-INF/manifest.xml \
@@ -248,6 +251,7 @@ extras_AUTOCORR_MIMETYPEFILES := \
 	fr/acor/mimetype \
 	ga-IE/acor/mimetype \
 	hu/acor/mimetype \
+	is/acor/mimetype \
 	it/acor/mimetype \
 	lb-LU/acor/mimetype \
 	lt/acor/mimetype \

@@ -29,6 +29,7 @@ $(eval $(call gb_Package_add_files,extras_autocorr,share/autocorr,\
 	acor_ga-IE.dat \
 	acor_hr-HR.dat \
 	acor_hu-HU.dat \
+	acor_is-IS.dat \
 	acor_it-IT.dat \
 	acor_ja-JP.dat \
 	acor_ko-KR.dat \
