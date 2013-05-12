@@ -1504,19 +1504,19 @@ namespace cppcanvas
 
                             pen->SetStrokeAttributes (aStrokeAttributes, *this, rState);
 
-                ActionSharedPtr pPolyAction(
-                    internal::PolyPolyActionFactory::createPolyPolyAction(
-                        polygon, rFactoryParms.mrCanvas, rState, aStrokeAttributes ) );
+                            ActionSharedPtr pPolyAction(
+                                internal::PolyPolyActionFactory::createPolyPolyAction(
+                                    polygon, rFactoryParms.mrCanvas, rState, aStrokeAttributes ) );
 
-                if( pPolyAction )
-                {
-                    maActions.push_back(
-                        MtfAction(
-                            pPolyAction,
-                            rFactoryParms.mrCurrActionIndex ) );
+                            if( pPolyAction )
+                            {
+                                maActions.push_back(
+                                    MtfAction(
+                                        pPolyAction,
+                                        rFactoryParms.mrCurrActionIndex ) );
 
-                    rFactoryParms.mrCurrActionIndex += pPolyAction->getActionCount()-1;
-                }
+                                rFactoryParms.mrCurrActionIndex += pPolyAction->getActionCount()-1;
+                            }
 
                             break;
                         }
