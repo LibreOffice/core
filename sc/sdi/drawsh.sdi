@@ -142,6 +142,7 @@ interface TableDraw
     SID_DELETE_CONTENTS [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
     SID_CUT             [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
     SID_COPY            [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_PASTE           [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
     SID_SELECTALL       [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
     SID_OBJECT_ROTATE   [ ExecMethod = ExecDrawFunc; StateMethod = GetState; Export = FALSE; ]
     SID_OBJECT_MIRROR   [ ExecMethod = ExecDrawFunc; StateMethod = GetState; Export = FALSE; ]
