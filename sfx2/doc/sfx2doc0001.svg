@@ -1,0 +1,99 @@
+<!DOCTYPE svg>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 950 350">
+  <defs>
+    <g id="box00" transform="translate(50,75)">
+      <rect height="50" width="100" style="fill:none;stroke-width:1;stroke:rgb(0,0,0)"/>
+      <text x="10" y="20" font-size="16">SfxView</text>
+      <text x="10" y="40" font-size="16">Subclass</text>
+    </g>
+    <g id="box01" transform="translate(50,75)">
+      <rect height="50" width="100" style="fill:none;stroke-width:1;stroke:rgb(0,0,0)"/>
+      <text x="70" y="40" font-size="7">Missing</text>
+    </g>
+    <g id="box02" transform="translate(50,75)">
+      <rect height="50" width="100" style="fill:none;stroke-width:1;stroke:rgb(0,0,0)"/>
+      <text x="10" y="10" font-size="10">Ability to process</text>
+      <text x="60" y="40" font-size="7">SfxSlot</text>
+    </g>
+  </defs>
+  <g>
+  <use xlink:href="#box00" transform="translate(150,0)"/>
+  <g transform="translate(250,0)">
+    <use xlink:href="#box02" />
+    <text x="60" y="100" font-size="10">"SID_PASTE"</text>
+  </g>
+  <g transform="translate(350,0)">
+    <use xlink:href="#box02" />
+    <text x="60" y="100" font-size="10">"SID_CUT"</text>
+  </g>
+  <use xlink:href="#box01" transform="translate(450,0)"/>
+  <use xlink:href="#box01" transform="translate(550,0)"/>
+  <use xlink:href="#box01" transform="translate(650,0)"/>
+  <use xlink:href="#box00" transform="translate(150,50)"/>
+  <g transform="translate(250,50)">
+    <use xlink:href="#box02" />
+    <text x="60" y="100" font-size="10">"SID_PASTE"</text>
+  </g>
+  <use xlink:href="#box01" transform="translate(350,50)"/>
+  <use xlink:href="#box01" transform="translate(450,50)"/>
+  <use xlink:href="#box01" transform="translate(550,50)"/>
+  <g transform="translate(650,50)">
+    <use xlink:href="#box02" />
+    <text x="60" y="100" font-size="10">"SID_FLOAT"</text>
+  </g>
+  <use xlink:href="#box00" transform="translate(150,100)"/>
+  <g transform="translate(250,100)">
+    <use xlink:href="#box02" />
+    <text x="60" y="100" font-size="10">"SID_PASTE"</text>
+  </g>
+  <g transform="translate(350,100)">
+    <use xlink:href="#box02" />
+    <text x="60" y="100" font-size="10">"SID_CUT"</text>
+  </g>
+  <use xlink:href="#box01" transform="translate(450,100)"/>
+  <g transform="translate(550,100)">
+    <use xlink:href="#box02" />
+    <text x="60" y="100" font-size="10">"SID_VOMIT"</text>
+  </g>
+  <g transform="translate(650,100)">
+    <use xlink:href="#box02" />
+    <text x="60" y="100" font-size="10">"SID_FLOAT"</text>
+  </g>
+  <g transform="translate(350,0)">
+    <polygon fill="red" points="-20 80 -10 80 -10 0 10 0 10 80 20 80 0 100"/>
+    <text fill="white" stroke="white" stroke-width="0.1" transform="translate(-6,0) rotate(90, 0, 0) "> SID_PASTE </text>
+  </g>
+  <g transform="translate(450,0)">
+    <polygon fill="cyan" points="-20 80 -10 80 -10 0 10 0 10 80 20 80 0 100"/>
+    <text fill="white" stroke="white" stroke-width="0.1" transform="translate(-6,0) rotate(90, 0, 0) "> SID_CUT </text>
+  </g>
+  <g transform="translate(550,0)">
+    <polygon fill="lightsteelblue" points="-20 230 -10 230 -10 0 10 0 10 230 20 230 0 250"/>
+    <text fill="white" stroke="white" stroke-width="0.1" transform="translate(-6,0) rotate(90, 0, 0) "> SID_NEY </text>
+  </g>
+  <g transform="translate(650,0)">
+    <polygon fill="orange" points="-20 180 -10 180 -10 0 10 0 10 180 20 180 0 200"/>
+    <text fill="white" stroke="white" stroke-width="0.1" transform="translate(-6,0) rotate(90, 0, 0) "> SID_VOMIT </text>
+  </g>
+  <g transform="translate(100,25)">
+    <polygon fill="steelblue" points="-100 130 -50 130 -50 200 50 200 50 130 100 130 0 50"/>
+    <text fill="black" stroke="none" transform="translate(-40,100) " font-size="10">last pushed</text>
+    <text fill="black" stroke="none" transform="translate(-40,115) " font-size="10">=lower nSlot</text>
+    <text fill="black" stroke="none" transform="translate(-40,135) " font-size="10">last pushed slots</text>
+    <text fill="black" stroke="none" transform="translate(-40,150) " font-size="10">go first</text>
+  </g>
+  <path d="M200,75 a10,10 0 0,1 10,-10 l35,0 l5,-10 l5,10 l35,0 a10,10 0 0,1 10,10" stroke-width="1" stroke="rgb(0,0,0)" style="fill:none"/>
+  <text fill="black" stroke="none" transform="translate(200,10)" font-size="10"> dispatcher's Shell stack</text>
+  <text fill="black" stroke="none" transform="translate(200,25)" font-size="10"> (a Stack of pointers) </text>
+  <text fill="black" stroke="none" transform="translate(200,40)" font-size="10"> Declared in dispatch.cxx </text>
+  <text fill="black" stroke="none" transform="translate(200,55)" font-size="10"> As SfxShellStack_Impl </text>
+  <text fill="black" stroke="none" transform="translate(475,270)" font-size="20"> Command ignored </text>
+  <polygon fill="black" points="750,110 750,90 755,95 845,45 855,55 765,105 770,110"/>
+  <text fill="black" stroke="none" transform="translate(850,30)" font-size="10">Empty: no entry in</text>
+  <text fill="black" stroke="none" transform="translate(850,40)" font-size="10">sdi file corresponding</text>
+  <text fill="black" stroke="none" transform="translate(850,50)" font-size="10">to that subclass</text>
+  </g>
+
+</svg>
+<!-- vim:set shiftwidth=2 softtabstop=2 expandtab: -->
