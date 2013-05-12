@@ -16,6 +16,24 @@
       "revId": "00fbf73b07adc4d8f0e37e36bb844f2e9d19ae15",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//8+s\u003d",
+        "filename": "vcl/source/filter/wmf/enhwmf.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2013-05-12T07:46:11Z",
+      "side": 1,
+      "message": "I didn\u0027t. That was what was in the original code.",
+      "parentUuid": "AAAAXH//8+0\u003d",
+      "revId": "00fbf73b07adc4d8f0e37e36bb844f2e9d19ae15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
