@@ -420,7 +420,7 @@ static void lcl_InitArray( ScSubTotalFunc eFunc,
 }
 
 static double lcl_CalcData( ScSubTotalFunc eFunc,
-                        double fCount, double fSum, double fSumSqr)
+                        double& fCount, double fSum, double fSumSqr)
 {
     if (fCount < 0.0)
         return 0.0;
