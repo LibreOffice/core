@@ -275,7 +275,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
                 aDebugString = rInf.GetTxt();
 #endif
 
-                OUString rOldTxt = rInf.GetTxt();
+                OUString& rOldTxt = const_cast<OUString&> (rInf.GetTxt());
                 rOldTxt = rOldTxt.replaceAt( rInf.GetIdx() - 1, 1, aTxt );
                 rInf.SetIdx( rInf.GetIdx() + nFieldDiff );
             }
@@ -487,9 +487,9 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
                     "I've got field trouble, part2!" );
             nCutPos = nCutPos - nFieldDiff;
 
-            XubString& rOldTxt = (XubString&)rInf.GetTxt();
-            rOldTxt.Erase( nOldIdx - 1, nFieldDiff + 1 );
-            rOldTxt.Insert( cFldChr, nOldIdx - 1 );
+            OUString& rOldTxt = const_cast<OUString&> (rInf.GetTxt());
+            OUString aReplacement( cFldChr );
+            rOldTxt = rOldTxt.replaceAt( nOldIdx - 1, nFieldDiff + 1, aReplacement);
             rInf.SetIdx( nOldIdx );
 
 #if OSL_DEBUG_LEVEL > 0
