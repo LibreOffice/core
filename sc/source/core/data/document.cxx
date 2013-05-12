@@ -1831,9 +1831,10 @@ void ScDocument::CopyToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
     {
         bool bOldAutoCalc = pDestDoc->GetAutoCalc();
         pDestDoc->SetAutoCalc( false );     // avoid multiple calculations
-        for (SCTAB i = nTab1; i <= nTab2 && i < static_cast<SCTAB>(maTabs.size()); i++)
+        SCTAB nMinSizeBothTabs = static_cast<SCTAB>(std::min(maTabs.size(), pDestDoc->maTabs.size()));
+        for (SCTAB i = nTab1; i <= nTab2 && i < nMinSizeBothTabs; i++)
         {
-            if (maTabs[i] && i < static_cast<SCTAB>(pDestDoc->maTabs.size()) && pDestDoc->maTabs[i])
+            if (maTabs[i] && pDestDoc->maTabs[i])
                 maTabs[i]->CopyToTable( nCol1, nRow1, nCol2, nRow2, nFlags,
                                       bOnlyMarked, pDestDoc->maTabs[i], pMarks,
                                       false, bColRowFlags );
@@ -1884,8 +1885,9 @@ void ScDocument::CopyToDocument(const ScRange& rRange,
         pDestDoc->aDocName = aDocName;
     bool bOldAutoCalc = pDestDoc->GetAutoCalc();
     pDestDoc->SetAutoCalc( false );     // avoid multiple calculations
-    for (SCTAB i = aNewRange.aStart.Tab(); i <= aNewRange.aEnd.Tab() && i < static_cast<SCTAB>(maTabs.size()); i++)
-        if (maTabs[i] && i < static_cast<SCTAB>(pDestDoc->maTabs.size()) && pDestDoc->maTabs[i])
+    SCTAB nMinSizeBothTabs = static_cast<SCTAB>(std::min(maTabs.size(), pDestDoc->maTabs.size()));
+    for (SCTAB i = aNewRange.aStart.Tab(); i <= aNewRange.aEnd.Tab() && i < nMinSizeBothTabs; i++)
+        if (maTabs[i] && pDestDoc->maTabs[i])
             maTabs[i]->CopyToTable(aNewRange.aStart.Col(), aNewRange.aStart.Row(),
                                  aNewRange.aEnd.Col(), aNewRange.aEnd.Row(),
                                  nFlags, bOnlyMarked, pDestDoc->maTabs[i],
@@ -1908,9 +1910,10 @@ void ScDocument::UndoToDocument(const ScRange& rRange,
     if (nTab1 > 0)
         CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTab1-1, IDF_FORMULA, false, pDestDoc, pMarks );
 
-    for (SCTAB i = nTab1; i <= nTab2 && i < static_cast<SCTAB>(maTabs.size()); i++)
+    SCTAB nMinSizeBothTabs = static_cast<SCTAB>(std::min(maTabs.size(), pDestDoc->maTabs.size()));
+    for (SCTAB i = nTab1; i <= nTab2 && i < nMinSizeBothTabs; i++)
     {
-        if (maTabs[i] && i < static_cast<SCTAB>(pDestDoc->maTabs.size()) && pDestDoc->maTabs[i])
+        if (maTabs[i] && pDestDoc->maTabs[i])
             maTabs[i]->UndoToTable(aNewRange.aStart.Col(), aNewRange.aStart.Row(),
                                     aNewRange.aEnd.Col(), aNewRange.aEnd.Row(),
                                     nFlags, bOnlyMarked, pDestDoc->maTabs[i], pMarks);
@@ -2181,8 +2184,9 @@ void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClip
         return;
 
     std::set<sal_uInt16> aUsedNames;        // indexes of named ranges that are used in the copied cells
-    for (SCTAB i = 0; i < static_cast<SCTAB>(maTabs.size()); ++i)
-        if (maTabs[i] && i < static_cast<SCTAB>(pClipDoc->maTabs.size()) && pClipDoc->maTabs[i])
+    SCTAB nMinSizeBothTabs = static_cast<SCTAB>(std::min(maTabs.size(), pClipDoc->maTabs.size()));
+    for (SCTAB i = 0; i < nMinSizeBothTabs; ++i)
+        if (maTabs[i] && pClipDoc->maTabs[i])
             if ( bAllTabs || !pMarks || pMarks->GetTableSelect(i) )
                 maTabs[i]->FindRangeNamesInUse(
                     rClipRange.aStart.Col(), rClipRange.aStart.Row(),
@@ -2843,8 +2847,9 @@ void ScDocument::MixDocument( const ScRange& rRange, sal_uInt16 nFunction, bool 
 {
     SCTAB nTab1 = rRange.aStart.Tab();
     SCTAB nTab2 = rRange.aEnd.Tab();
-    for (SCTAB i = nTab1; i <= nTab2 && i < static_cast<SCTAB>(maTabs.size()); i++)
-        if (maTabs[i] && i < static_cast<SCTAB>(pSrcDoc->maTabs.size()) && pSrcDoc->maTabs[i])
+    SCTAB nMinSizeBothTabs = static_cast<SCTAB>(std::min(maTabs.size(), pSrcDoc->maTabs.size()));
+    for (SCTAB i = nTab1; i <= nTab2 && i < nMinSizeBothTabs; i++)
+        if (maTabs[i] && pSrcDoc->maTabs[i])
             maTabs[i]->MixData( rRange.aStart.Col(), rRange.aStart.Row(),
                                 rRange.aEnd.Col(), rRange.aEnd.Row(),
                                 nFunction, bSkipEmpty, pSrcDoc->maTabs[i] );
