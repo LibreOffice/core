@@ -1286,16 +1286,15 @@ sal_Bool SwView::HandleWheelCommands( const CommandEvent& rCEvt )
         }
 
         if ((COMMAND_WHEEL_SCROLL==pWData->GetMode()) && (((sal_uLong)0xFFFFFFFF) == pWData->GetScrollLines()))
-            {
-                        if (pWData->GetDelta()<0)
-                                PhyPageDown();
-                        else
-                                PhyPageUp();
-                        bOk = sal_True;
-                }
+        {
+            if (pWData->GetDelta()<0)
+                PhyPageDown();
+            else
+                PhyPageUp();
+            bOk = sal_True;
+        }
         else
-            bOk = m_pEditWin->HandleScrollCommand( rCEvt,
-                            m_pHScrollbar, m_pVScrollbar);
+            bOk = m_pEditWin->HandleScrollCommand(rCEvt, m_pHScrollbar, m_pVScrollbar);
 
         // Restore default state for case when scroll command comes from dragging scrollbar handle
         m_bWheelScrollInProgress=false;
