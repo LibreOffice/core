@@ -19,7 +19,7 @@
 
 
 #include <crsskip.hxx>
-#include <hintids.hxx>  //_immer_ vor den solar-Items
+#include <hintids.hxx>  //_always_ before the solar-items
 
 #include <sfx2/lnkbase.hxx>
 #include <fmtfld.hxx>
@@ -90,7 +90,6 @@ static String& lcl_AppendRedlineStr( String& rStr, sal_uInt16 nRedlId )
     return rStr;
 }
 
-// STATIC DATA -----------------------------------------------------------
 void SwTextShell::ExecField(SfxRequest &rReq)
 {
     SwWrtShell& rSh = GetShell();
@@ -186,7 +185,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
     }
     if(bMore)
     {
-        // hier kommen die Slots mit FldMgr
+        // Here come the slots with FldMgr.
         SwFldMgr aFldMgr(GetShellPtr());
         switch(nSlot)
         {
@@ -289,9 +288,9 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             {
                 SfxViewFrame* pVFrame = GetView().GetViewFrame();
                 if (!pVFrame->HasChildWindow(FN_INSERT_FIELD))
-                    pVFrame->ToggleChildWindow(FN_INSERT_FIELD);    // Dialog anzeigen
+                    pVFrame->ToggleChildWindow(FN_INSERT_FIELD);    // Show dialog
 
-                // Flddlg auf neue TabPage umschalten
+                // Switch Flddlg at a new TabPage
                 sal_uInt16 nId = SwFldDlgWrapper::GetChildWindowId();
                 SwFldDlgWrapper *pWrp = (SwFldDlgWrapper*)pVFrame->GetChildWindow(nId);
                 if (pWrp)
@@ -362,7 +361,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     rSh.Push();
                     rSh.SwCrsrShell::Left(1, CRSR_SKIP_CHARS, sal_False);
                     pPostIt = (SwPostItField*)aFldMgr.GetCurFld();
-                    rSh.Pop(sal_False); // Cursorpos restaurieren
+                    rSh.Pop(sal_False); // Restore cursor position
                  }
 
                 if (pPostIt)
@@ -418,15 +417,15 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                                 pRedline->GetRedlineData().GetTimeStamp() ),
                                 SID_ATTR_POSTIT_DATE ));
 
-                    // Traveling nur bei mehr als einem Feld
+                    // Traveling only if more than one field.
                     rSh.StartAction();
 
                     rSh.Push();
                     const SwRedline *pActRed = rSh.SelPrevRedline();
 
                     if (pActRed == pRedline)
-                    {   // Neuer Cursor steht am Anfang des Current Redlines
-                        rSh.Pop();  // Alten Cursor wegwerfen
+                    {   // New cursor is at the beginning of the current redlines.
+                        rSh.Pop();  // Throw old cursor away
                         rSh.Push();
                         pActRed = rSh.SelPrevRedline();
                     }
@@ -436,13 +435,13 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     rSh.EndAction();
 
                     rSh.ClearMark();
-                    rSh.SelNextRedline();   // Aktueller Redline wird selektiert
+                    rSh.SelNextRedline();   // Select current redline.
 
                     rSh.StartAction();
                     rSh.Push();
                     pActRed = rSh.SelNextRedline();
                     sal_Bool bNext = pActRed != 0;
-                    rSh.Pop(sal_False); // Cursorpos restaurieren
+                    rSh.Pop(sal_False); // Restore cursor position
 
                     if( rSh.IsCrsrPtAtEnd() )
                         rSh.SwapPam();
@@ -477,7 +476,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
                         String sMsg(((const SvxPostItTextItem&)pOutSet->Get(SID_ATTR_POSTIT_TEXT)).GetValue());
 
-                        // Kommentar einfuegen bzw aendern
+                        // Insert or change a comment
                         rSh.SetRedlineComment(sMsg);
                     }
 
@@ -559,7 +558,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 goto FIELD_INSERT;
             case FN_INSERT_FLD_PGNUMBER:
                 nInsertType = TYP_PAGENUMBERFLD;
-                nInsertFormat = SVX_NUM_PAGEDESC; // wie Seitenvorlage
+                nInsertFormat = SVX_NUM_PAGEDESC; // Like page template
                 bIsText = false;
                 goto FIELD_INSERT;
             case FN_INSERT_FLD_PGCOUNT :
@@ -724,7 +723,7 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
         const SfxPoolItem* pItem;
         if(SFX_ITEM_SET == aSet.GetItemState(RES_TXTATR_INETFMT, sal_False, &pItem))
         {
-            // Links selektieren
+            // Select links
             rSh.SwCrsrShell::SelectTxtAttr(RES_TXTATR_INETFMT, sal_False);
         }
         switch (nType)
@@ -769,16 +768,16 @@ IMPL_LINK( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog *, pBtn )
     SwWrtShell* pSh = GetShellPtr();
     AbstractSvxPostItDialog *pDlg = (AbstractSvxPostItDialog*)pBtn;
 
-    // Kommentar einfuegen bzw aendern
+    // Insert or change a comment.
     pSh->SetRedlineComment(pDlg->GetNote());
 
     const SwRedline *pRedline = pSh->GetCurrRedline();
 
     if (pRedline)
     {
-        // Traveling nur bei mehr als einem Feld
+        // Traveling only if more than one field.
         if( !pSh->IsCrsrPtAtEnd() )
-            pSh->SwapPam(); // Cursor hinter den Redline stellen
+            pSh->SwapPam(); // Move the cursor behind the Redline.
 
         pSh->Push();
         const SwRedline *pActRed = pSh->SelNextRedline();
@@ -822,14 +821,14 @@ IMPL_LINK( SwTextShell, RedlinePrevHdl, AbstractSvxPostItDialog *, pBtn )
     SwWrtShell* pSh = GetShellPtr();
     AbstractSvxPostItDialog *pDlg = (AbstractSvxPostItDialog*)pBtn;
 
-    // Kommentar einfuegen bzw aendern
+    // Insert or change a comment.
     pSh->SetRedlineComment(pDlg->GetNote());
 
     const SwRedline *pRedline = pSh->GetCurrRedline();
 
     if (pRedline)
     {
-        // Traveling nur bei mehr als einem Feld
+        // Traveling only if more than one field.
         pSh->Push();
         const SwRedline *pActRed = pSh->SelPrevRedline();
         pSh->Pop(pActRed != 0);

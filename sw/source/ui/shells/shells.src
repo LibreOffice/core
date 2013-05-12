@@ -200,7 +200,7 @@ String STR_SHELLNAME_NAVIGATION
 {
         Text [ en-US ] = "Navigation" ;
 };
- //Strings fuer Gallery/Hintergrund
+ //Strings for gallery/background
 String STR_SWBG_PARAGRAPH
 {
         Text [ en-US ] = "Paragraph" ;
@@ -241,7 +241,7 @@ String STR_SWBG_FOOTER
 {
         Text [ en-US ] = "Footer" ;
 };
- //Ende: Strings fuer Gallery/Hintergrund
+ //End: strings for gallery/background
 
 // #i68101# no longer needed:
 // String STR_NAME_SHAPE_LABEL {// String STR_NAME_SHAPE_DIALOG { Text [ en-US ] = "Name Object"; };

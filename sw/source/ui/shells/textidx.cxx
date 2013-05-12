@@ -32,7 +32,7 @@
 #include "cmdid.h"
 #include "view.hxx"
 #include "wrtsh.hxx"
-#include "swundo.hxx"                   // fuer Undo-Ids
+#include "swundo.hxx"                   // for Undo-Ids
 #include "textsh.hxx"
 #include "idxmrk.hxx"
 #include "cnttab.hxx"
@@ -41,7 +41,6 @@
 #include <index.hrc>
 #include <globals.hrc>
 
-// STATIC DATA -----------------------------------------------------------
 void SwTextShell::ExecIdx(SfxRequest &rReq)
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
@@ -83,8 +82,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
             SwTOXMgr aMgr(GetShellPtr());
             sal_uInt16 nRet = RET_OK;
             if(aMgr.GetTOXMarkCount() > 1)
-            {   // Mehrere Marken, welche solls denn sein ?
-                //
+            {   // Several marks, which should it be?
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
                 VclAbstractDialog* pMultDlg = pFact->CreateMultiTOXMarkDlg( DLG_MULTMRK,
@@ -125,7 +123,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
 
             long nWidth = aRect.Width();
             aSet.Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth));
-            // Hoehe=Breite fuer konsistentere Vorschau (analog zu Bereich bearbeiten)
+            // Height = width for a more consistent preview (analogous to edit range)
             aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
             const SwTOXBase* pCurTOX = 0;
             sal_Bool bGlobal = sal_False;
