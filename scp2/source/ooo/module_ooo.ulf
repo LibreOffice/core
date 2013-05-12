@@ -193,6 +193,12 @@ en-US = "Croatian"
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_HR]
 en-US = "Croatian spelling dictionary, and hyphenation rules"
 
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_IS]
+en-US = "Icelandic"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_IS]
+en-US = "Icelandic spelling dictionary and thesaurus"
+
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_IT]
 en-US = "Italian"
 

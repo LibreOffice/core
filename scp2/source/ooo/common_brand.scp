@@ -275,6 +275,11 @@ Directory gid_Brand_Dir_Share_Extensions_Dict_Hr
     DosName = "dict-hr";
 End
 
+Directory gid_Brand_Dir_Share_Extensions_Dict_Is
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-is";
+End
+
 Directory gid_Brand_Dir_Share_Extensions_Dict_It
     ParentID = gid_Brand_Dir_Share_Extensions;
     DosName = "dict-it";
