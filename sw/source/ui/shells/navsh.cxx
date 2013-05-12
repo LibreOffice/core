@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-
-
 #include "cmdid.h"
 #include <svx/svdview.hxx>
 #include <svl/srchitem.hxx>
@@ -18,23 +16,17 @@
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objface.hxx>
-
 #include "wrtsh.hxx"
 #include "view.hxx"
 #include "edtwin.hxx"
 #include "helpid.h"
 #include "globals.hrc"
-
 #include "navsh.hxx"
-
-
 #include "popup.hrc"
 #include "shells.hrc"
 #define SwNavigationShell
 #include "swslots.hxx"
-
 #include <unomid.h>
-
 #include "navmgr.hxx"
 
 
@@ -80,10 +72,7 @@ void SwNavigationShell::Execute(SfxRequest &rReq)
         pSdrView->GetModel()->SetChanged(sal_True);
 }
 
-/*--------------------------------------------------------------------
-  determine if the buttons should be enabled/disabled
-  --------------------------------------------------------------------*/
-
+// determine if the buttons should be enabled/disabled
 
 void SwNavigationShell::GetState(SfxItemSet &rSet)
 {
@@ -114,4 +103,5 @@ void SwNavigationShell::GetState(SfxItemSet &rSet)
       nWhich = aIter.NextWhich();
     }
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

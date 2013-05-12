@@ -31,14 +31,13 @@
 #include "swabstdlg.hxx"
 #include <misc.hrc>
 
-// STATIC DATA -----------------------------------------------------------
 void SwTextShell::ExecGlossary(SfxRequest &rReq)
 {
     sal_uInt16 nSlot = rReq.GetSlot();
     ::GetGlossaries()->UpdateGlosPath(!rReq.IsAPI() ||
                                         FN_GLOSSARY_DLG == nSlot );
     SwGlossaryHdl* pGlosHdl = GetView().GetGlosHdl();
-    // SwGlossaryList updaten?
+    // Update SwGlossaryList?
     bool bUpdateList = false;
 
     const SfxItemSet *pArgs = rReq.GetArgs();
@@ -78,7 +77,7 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
                 if ( fnSetActGroup )
                     (*fnSetActGroup)( aGroup );
                 pGlosHdl->SetCurGroup(aGroup, sal_True);
-                //eingestellte Gruppe muss in NewGlossary ggf. erzeugt werden!
+                // Chosen group must be created in NewGlossary if necessary!
                 pGlosHdl->NewGlossary( aName, aShortName, sal_True );
                 rReq.Done();
             }

@@ -150,7 +150,7 @@ void SwListShell::Execute(SfxRequest &rReq)
 
                 rReq.Done();
                 rSh.NumUpDown( nSlot == FN_NUM_BULLET_DOWN );
-                pFrame->GetBindings().Invalidate( SID_TABLE_CELL ); // StatusZeile updaten!
+                pFrame->GetBindings().Invalidate( SID_TABLE_CELL ); // Update status line!
             }
             break;
 
@@ -228,7 +228,6 @@ void SwListShell::Execute(SfxRequest &rReq)
     }
 }
 
-
 void SwListShell::GetState(SfxItemSet &rSet)
 {
     SfxWhichIter aIter( rSet );
@@ -265,13 +264,11 @@ void SwListShell::GetState(SfxItemSet &rSet)
     }
 }
 
-
 SwListShell::SwListShell(SwView &_rView) :
     SwBaseShell(_rView)
 {
     SetName(OUString("List"));
     SetHelpId(SW_LISTSHELL);
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -91,7 +91,6 @@ namespace
     };
 }
 
-
 SFX_IMPL_INTERFACE(SwGrfShell, SwBaseShell, SW_RES(STR_SHELLNAME_GRAPHIC))
 {
     SFX_POPUPMENU_REGISTRATION(SW_RES(MN_GRF_POPUPMENU));
@@ -228,13 +227,12 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             aSet.Put( aMgr.GetAttrSet() );
             aSet.SetParent( aMgr.GetAttrSet().GetParent() );
 
-            // Bei %-Werten Groesse initialisieren
+            // At percentage values ​​initialize size
             SwFmtFrmSize aSizeCopy = (const SwFmtFrmSize&)aSet.Get(RES_FRM_SIZE);
             if (aSizeCopy.GetWidthPercent() && aSizeCopy.GetWidthPercent() != 0xff)
                 aSizeCopy.SetWidth(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Width());
             if (aSizeCopy.GetHeightPercent() && aSizeCopy.GetHeightPercent() != 0xff)
                 aSizeCopy.SetHeight(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Height());
-
             // and now set the size for "external" tabpages
             {
                 SvxSizeItem aSzItm( SID_ATTR_GRAF_FRMSIZE, aSizeCopy.GetSize() );
@@ -319,7 +317,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     pSet->Put( aSize );
                 }
 
-                // Vorlagen-AutoUpdate
+                // Templates AutoUpdate
                 SwFrmFmt* pFmt = rSh.GetCurFrmFmt();
                 if(pFmt && pFmt->IsAutoUpdateFmt())
                 {
@@ -420,7 +418,6 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             return;
     }
 }
-
 
 void SwGrfShell::ExecAttr( SfxRequest &rReq )
 {
