@@ -374,7 +374,7 @@ namespace cppcanvas
                 s >> header >> type;
 
                 SAL_INFO ("cppcanvas.emf", "EMF+\tbrush");
-                SAL_INFO ("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << header << " type: " << << std::hex << type << std::dec);
+                SAL_INFO ("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << header << " type: " << type << std::dec);
 
                 switch (type) {
                 case 0:
