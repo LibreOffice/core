@@ -2455,10 +2455,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         sal_Int16 nNumbering;
         switch( nIntValue )
         {
-            case 1:  nNumbering = style::NumberingType::ROMAN_UPPER;
-            case 2:  nNumbering = style::NumberingType::ROMAN_LOWER;
-            case 3:  nNumbering = style::NumberingType::CHARS_UPPER_LETTER;
-            case 4:  nNumbering = style::NumberingType::CHARS_LOWER_LETTER;
+            case 1:  nNumbering = style::NumberingType::ROMAN_UPPER;break;
+            case 2:  nNumbering = style::NumberingType::ROMAN_LOWER;break;
+            case 3:  nNumbering = style::NumberingType::CHARS_UPPER_LETTER;break;
+            case 4:  nNumbering = style::NumberingType::CHARS_LOWER_LETTER;break;
             case 0:
             default:
                     nNumbering = style::NumberingType::ARABIC;
