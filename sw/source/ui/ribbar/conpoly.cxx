@@ -28,26 +28,10 @@
 #include "conpoly.hxx"
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
-
-
 ConstPolygon::ConstPolygon(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView) :
                 SwDrawBase(pWrtShell, pEditWin, pSwView)
 {
 }
-
-/*************************************************************************
-|*
-|* MouseButtonDown-event
-|*
-\************************************************************************/
-
-
 
 sal_Bool ConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 {
@@ -59,28 +43,12 @@ sal_Bool ConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
     return (bReturn);
 }
 
-/*************************************************************************
-|*
-|* MouseMove-event
-|*
-\************************************************************************/
-
-
-
 sal_Bool ConstPolygon::MouseMove(const MouseEvent& rMEvt)
 {
     sal_Bool bReturn = SwDrawBase::MouseMove(rMEvt);
 
     return bReturn;
 }
-
-/*************************************************************************
-|*
-|* MouseButtonUp-event
-|*
-\************************************************************************/
-
-
 
 sal_Bool ConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
 {
@@ -113,14 +81,6 @@ sal_Bool ConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
     return (bReturn);
 }
 
-/*************************************************************************
-|*
-|* Function aktivieren
-|*
-\************************************************************************/
-
-
-
 void ConstPolygon::Activate(const sal_uInt16 nSlotId)
 {
     switch (nSlotId)
@@ -143,7 +103,5 @@ void ConstPolygon::Activate(const sal_uInt16 nSlotId)
 
     SwDrawBase::Activate(nSlotId);
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -43,7 +43,7 @@
 #include "edtwin.hxx"
 #include "helpid.h"
 
-// nur fuers UpdateRange - Box in dem der gestackte Cursor sthet loeschen
+// Only for the UpdateRange: Delete the box in which the stacked cursor is positioned.
 #include "pam.hxx"
 
 #include "swundo.hxx"
@@ -53,8 +53,6 @@
 #include <IDocumentContentOperations.hxx>
 
 SFX_IMPL_POS_CHILDWINDOW_WITHID( SwInputChild, FN_EDIT_FORMULA, SFX_OBJECTBAR_OBJECT )
-
-//==================================================================
 
 SwInputWindow::SwInputWindow( Window* pParent, SfxBindings* pBind )
     : ToolBox(  pParent ,   SW_RES( RID_TBX_FORMULA )),
@@ -120,13 +118,11 @@ SwInputWindow::SwInputWindow( Window* pParent, SfxBindings* pBind )
     aPopMenu.SetSelectHdl(LINK( this, SwInputWindow, MenuHdl ));
 }
 
-//==================================================================
-
 SwInputWindow::~SwInputWindow()
 {
     SfxImageManager::GetImageManager( SW_MOD() )->ReleaseToolBox(this);
 
-    //Lineale aufwecken
+    // wake rulers
     if(pView)
     {
         pView->GetHRuler().SetActive( sal_True );
@@ -153,14 +149,11 @@ void SwInputWindow::CleanupUglyHackWithUndo()
     }
 }
 
-
-//==================================================================
-
 void SwInputWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( rDCEvt.GetType() == DATACHANGED_SETTINGS && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        //      update item images
+        // update item images
         SwModule *pMod  = SW_MOD();
         SfxImageManager *pImgMgr = SfxImageManager::GetImageManager( pMod );
         SetItemImage( FN_FORMULA_CALC,   pImgMgr->GetImage(FN_FORMULA_CALC   ));
@@ -170,8 +163,6 @@ void SwInputWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
     ToolBox::DataChanged( rDCEvt );
 }
-
-//==================================================================
 
 void SwInputWindow::Resize()
 {
@@ -186,19 +177,17 @@ void SwInputWindow::Resize()
     aEdit.Invalidate();
 }
 
-//==================================================================
-
 void SwInputWindow::ShowWin()
 {
     bIsTable = sal_False;
-    //Lineale anhalten
+    // stop rulers
     if(pView)
     {
         pView->GetHRuler().SetActive( sal_False );
         pView->GetVRuler().SetActive( sal_False );
 
         OSL_ENSURE(pWrtShell, "no WrtShell!");
-        // Cursor in Tabelle
+        // Cursor in table
         bIsTable = pWrtShell->IsCrsrInTbl() ? sal_True : sal_False;
 
         if( bFirst )
@@ -217,12 +206,11 @@ void SwInputWindow::ShowWin()
         else
             aPos.SetText(SW_RESSTR(STR_TBL_FORMULA));
 
-        // Aktuelles Feld bearbeiten
+        // Edit current field
         OSL_ENSURE(pMgr == 0, "FieldManager not deleted");
         pMgr = new SwFldMgr;
 
-        // Formel soll immer mit einem "=" beginnen, hier
-        // also setzen
+        // Formular should always begin with "=" , so set here
         String sEdit = OUString('=');
         if( pMgr->GetCurFld() && TYP_FORMELFLD == pMgr->GetCurTypeId() )
         {
@@ -268,7 +256,7 @@ void SwInputWindow::ShowWin()
 
         if( bFirst )
         {
-            // WrtShell Flags richtig setzen
+            // Set WrtShell flags correctly
             pWrtShell->SttSelect();
             pWrtShell->EndSelect();
         }
@@ -284,7 +272,7 @@ void SwInputWindow::ShowWin()
         aEdit.Invalidate();
         aEdit.Update();
         aEdit.GrabFocus();
-        // UserInterface fuer die Eingabe abklemmen
+        // For input cut the UserInterface
 
         pView->GetEditWin().LockKeyInput(sal_True);
         pView->GetViewFrame()->GetDispatcher()->Lock(sal_True);
@@ -292,7 +280,6 @@ void SwInputWindow::ShowWin()
     }
     ToolBox::Show();
 }
-//==================================================================
 
 IMPL_LINK( SwInputWindow, MenuHdl, Menu *, pMenu )
 {
@@ -337,7 +324,7 @@ static const char * const aStrArr[] = {
 IMPL_LINK_NOARG(SwInputWindow, DropdownClickHdl)
 {
     sal_uInt16 nCurID = GetCurItemId();
-    EndSelection(); // setzt CurItemId zurueck !
+    EndSelection(); // reset back CurItemId !
     switch ( nCurID )
     {
         case FN_FORMULA_CALC :
@@ -352,13 +339,10 @@ IMPL_LINK_NOARG(SwInputWindow, DropdownClickHdl)
     return sal_True;
 }
 
-//==================================================================
-
-
 void SwInputWindow::Click( )
 {
     sal_uInt16 nCurID = GetCurItemId();
-    EndSelection(); // setzt CurItemId zurueck !
+    EndSelection(); // reset back CurItemId !
     switch ( nCurID )
     {
         case FN_FORMULA_CANCEL:
@@ -374,8 +358,6 @@ void SwInputWindow::Click( )
    }
 }
 
-//==================================================================
-
 void  SwInputWindow::ApplyFormula()
 {
     pView->GetViewFrame()->GetDispatcher()->Lock(sal_False);
@@ -383,8 +365,7 @@ void  SwInputWindow::ApplyFormula()
     CleanupUglyHackWithUndo();
     pWrtShell->Pop( sal_False );
 
-    // Formel soll immer mit einem "=" beginnen, hier
-    // also wieder entfernen
+    // Formular should always begin with "=", so remove it here again
     String sEdit(comphelper::string::strip(aEdit.GetText(), ' '));
     if( sEdit.Len() && '=' == sEdit.GetChar( 0 ) )
         sEdit.Erase( 0, 1 );
@@ -397,8 +378,6 @@ void  SwInputWindow::ApplyFormula()
     aArgs[1] = 0;
     pView->GetViewFrame()->GetBindings().Execute( FN_EDIT_FORMULA, aArgs, 0, SFX_CALLMODE_ASYNCHRON );
 }
-
-//==================================================================
 
 void  SwInputWindow::CancelFormula()
 {
@@ -418,7 +397,6 @@ void  SwInputWindow::CancelFormula()
     }
     pView->GetViewFrame()->GetDispatcher()->Execute( FN_EDIT_FORMULA, SFX_CALLMODE_ASYNCHRON);
 }
-//==================================================================
 
 const sal_Unicode CH_LRE = 0x202a;
 const sal_Unicode CH_PDF = 0x202c;
@@ -442,9 +420,9 @@ IMPL_LINK( SwInputWindow, SelTblCellsNotify, SwWrtShell *, pCaller )
 
         if( sNew != sOldFml )
         {
-            // Die WrtShell ist in der Tabellen Selektion
-            // dann die Tabellen Selektion wieder aufheben, sonst steht der
-            // Cursor "im Wald" und das LiveUpdate funktioniert nicht!
+            // The WrtShell is in the table selection,
+            // then cancel the table selection otherwise, the cursor is
+            // positioned "in the forest" and the live update does not work!
             pWrtShell->StartAllAction();
 
             SwPaM aPam( *pWrtShell->GetStkCrsr()->GetPoint() );
@@ -515,8 +493,6 @@ void SwInputWindow::DelBoxCntnt()
     }
 }
 
-//==================================================================
-
 void InputEdit::KeyInput(const KeyEvent& rEvent)
 {
     const KeyCode aCode = rEvent.GetKeyCode();
@@ -527,8 +503,6 @@ void InputEdit::KeyInput(const KeyEvent& rEvent)
     else
         Edit::KeyInput(rEvent);
 }
-
-//==================================================================
 
 void InputEdit::UpdateRange(const String& rBoxes,
                                     const String& rName )
@@ -547,8 +521,8 @@ void InputEdit::UpdateRange(const String& rBoxes,
     aBoxes += rBoxes;
     Selection aSelection(GetSelection());
     sal_uInt16 nSel = (sal_uInt16) aSelection.Len();
-    //OS: mit dem folgenden Ausdruck wird sichergestellt, dass im overwrite-Modus
-    //die selektierte schliessende Klammer nicht geloescht wird
+    // OS: The following expression ensures that in the overwrite mode,
+    // the selected closing parenthesis will be not deleted.
     if( nSel && ( nSel > 1 ||
                   GetText()[ (sal_uInt16)aSelection.Min() ] != cClose ))
         Cut();
@@ -596,14 +570,14 @@ void InputEdit::UpdateRange(const String& rBoxes,
                 }
                 ++nEndPos;
             }
-            // nur wenn akt. Pos im Breich oder direkt dahinter liegt
+            // Only if the current position lies in the range or right behind.
             if( bFound && !( nStartPos < (sal_uInt16)aSelection.Max() &&
                              (sal_uInt16)aSelection.Max() <= nEndPos + 1 ))
                 bFound = false;
         }
         if( bFound )
         {
-            nPos = ++nStartPos + 1; // wir wollen dahinter
+            nPos = ++nStartPos + 1; // We want behind
             aActText.Erase( nStartPos, nEndPos - nStartPos );
             aActText.Insert( aBoxes, nStartPos );
             nPos = nPos + aBoxes.Len();
@@ -626,7 +600,6 @@ void InputEdit::UpdateRange(const String& rBoxes,
     GrabFocus();
 
 }
-//==================================================================
 
 SwInputChild::SwInputChild(Window* _pParent,
                                 sal_uInt16 nId,
@@ -639,7 +612,6 @@ SwInputChild::SwInputChild(Window* _pParent,
     ((SwInputWindow*)pWindow)->ShowWin();
     eChildAlignment = SFX_ALIGN_LOWESTTOP;
 }
-
 
 SwInputChild::~SwInputChild()
 {

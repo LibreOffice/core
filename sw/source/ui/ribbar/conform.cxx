@@ -29,18 +29,12 @@
 
 extern bool bNoInterrupt;       // in mainwn.cxx
 
-/**
- * Ctor
- */
 ConstFormControl::ConstFormControl(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView) :
     SwDrawBase(pWrtShell, pEditWin, pSwView)
 {
     m_bInsForm = true;
 }
 
-/**
- * MouseButtonDown event
- */
 sal_Bool ConstFormControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
     sal_Bool bReturn = sal_False;
@@ -85,9 +79,6 @@ sal_Bool ConstFormControl::MouseButtonDown(const MouseEvent& rMEvt)
     return (bReturn);
 }
 
-/**
- * Activate
- */
 void ConstFormControl::Activate(const sal_uInt16 nSlotId)
 {
     m_pWin->SetSdrDrawMode( static_cast<SdrObjKind>(nSlotId) );
