@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Gallery_Gallery,transportation,extras/source/gallery/transportation))
 
-$(eval $(call gb_Gallery_add_files,transportation,\
+$(eval $(call gb_Gallery_add_files,transportation,share/gallery/transportation,\
     extras/source/gallery/transportation/Airplane-Blue.png \
     extras/source/gallery/transportation/Bicycle-Blue.png \
     extras/source/gallery/transportation/Boat.png \

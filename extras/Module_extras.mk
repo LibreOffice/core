@@ -32,7 +32,6 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_gallmytheme \
 	Package_gallpeople \
 	Package_gallroot \
-	Package_gallsounds \
 	Package_gallsymbols \
 	Package_gallsystem \
 	Package_gallwwwback \

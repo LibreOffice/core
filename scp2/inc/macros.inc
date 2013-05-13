@@ -430,6 +430,12 @@ File gid_File_Extra_Gall##id \
     TXT_FILE_BODY; \
     Styles = (FILELIST, WORKSTATION, DONT_OVERWRITE); \
     Name = STRING(CONCAT3(Gallery/,id,.filelist)); \
+End \
+File gid_File_Extra_GallFiles##id \
+    Dir = FILELIST_DIR; \
+    TXT_FILE_BODY; \
+    Styles = (FILELIST, WORKSTATION, DONT_OVERWRITE); \
+    Name = STRING(CONCAT3(Gallery/Files/,id,.filelist)); \
 End
 
 

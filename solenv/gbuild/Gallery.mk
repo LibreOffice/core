@@ -95,7 +95,10 @@ $(call gb_Gallery_get_clean_target,%) :
 			$(call gb_Gallery_get_workdir,$*) \
 	)
 
+# the theme package
 gb_Gallery_get_packagename = Gallery/$(1)
+# the files package
+gb_Gallery_get_files_packagename = Gallery/Files/$(1)
 
 # Create a gallery.
 #
@@ -105,6 +108,10 @@ gb_Gallery_get_packagename = Gallery/$(1)
 # gb_Gallery_Gallery gallery basedir name
 define gb_Gallery_Gallery
 $(call gb_Gallery__Gallery_impl,$(1),$(call gb_Gallery_get_packagename,$(1)),$(2),$(3))
+
+# setup the files package - we install all of these too
+$(call gb_Package_Package_internal,$(call gb_Gallery_get_files_packagename,$(1)),$(SRCDIR)/$(2))
+$(call gb_Package_set_outdir,$(call gb_Gallery_get_files_packagename,$(1)),$(INSTDIR))
 
 endef
 
@@ -129,6 +136,7 @@ $(call gb_Gallery_get_workdir,$(1))/$(1).sdg \
 $(call gb_Gallery_get_workdir,$(1))/$(1).sdv \
 $(call gb_Gallery_get_workdir,$(1))/$(1).thm : $(call gb_Gallery_get_target,$(1))
 $(call gb_Gallery__get_final_target,$(1)) : $(call gb_Package_get_target,$(2))
+
 $(call gb_Gallery_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(2))
 $(call gb_Gallery_get_target,$(1)) :| $(dir $(call gb_Gallery_get_target,$(1))).dir \
 	$(call gb_Gallery_get_workdir,$(1))/.dir
@@ -169,8 +177,9 @@ endef
 #
 # gb_Gallery_add_file gallery file
 define gb_Gallery_add_file
-$(call gb_Gallery_get_target,$(1)) : $(SRCDIR)/$(2)
-$(call gb_Gallery_get_target,$(1)) : GALLERY_FILES += $(call gb_Helper_make_url,$(SRCDIR)/$(2))
+$(call gb_Gallery_get_target,$(1)) : $(SRCDIR)/$(3)
+$(call gb_Gallery_get_target,$(1)) : GALLERY_FILES += $(call gb_Helper_make_url,$(SRCDIR)/$(3))
+$(call gb_Package_add_file,$(call gb_Gallery_get_files_packagename,$(1)),$(2)/$(notdir $(3)),$(notdir $(3)))
 
 endef
 
@@ -180,7 +189,7 @@ endef
 #
 # gb_Gallery_add_files gallery file(s)
 define gb_Gallery_add_files
-$(foreach fname,$(2),$(call gb_Gallery_add_file,$(1),$(fname)))
+$(foreach fname,$(3),$(call gb_Gallery_add_file,$(1),$(2),$(fname)))
 
 endef
 
