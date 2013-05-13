@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "AAAAXH//80o\u003d",
+        "filename": "formula/source/ui/dlg/formula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 830,
+      "author": {
+        "id": 1000186
+      },
+      "writtenOn": "2013-05-13T22:29:54Z",
+      "side": 1,
+      "message": "This case you can turn this in one line:\nOUString aFormula      \u003d m_pHelper-\u003egetCurrentFormula() + \" )\";",
+      "revId": "6efdc458b570fdbac6daf9f7f98018a25d6df2cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//80k\u003d",
+        "filename": "formula/source/ui/dlg/formula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1039,
+      "author": {
+        "id": 1000186
+      },
+      "writtenOn": "2013-05-13T22:29:54Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "6efdc458b570fdbac6daf9f7f98018a25d6df2cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//80g\u003d",
+        "filename": "formula/source/ui/dlg/formula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1434,
+      "author": {
+        "id": 1000186
+      },
+      "writtenOn": "2013-05-13T22:29:54Z",
+      "side": 1,
+      "message": "I believe you want to remove this AppendAscii :)",
+      "revId": "6efdc458b570fdbac6daf9f7f98018a25d6df2cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXH//80w\u003d",
         "filename": "padmin/source/adddlg.cxx",
         "patchSetId": 1
