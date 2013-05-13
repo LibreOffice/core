@@ -591,7 +591,7 @@ void DrawView::DeleteMarked()
                     // Move the new PresObj to the position before the
                     // object it will replace.
                     pUndoManager->AddUndoAction(
-                        mpDoc->GetSdrUndoFactory().CreateUndoObjectOrdNum(
+                        mrDoc.GetSdrUndoFactory().CreateUndoObjectOrdNum(
                             *pNewObj,
                             pNewObj->GetOrdNum(),
                             pObj->GetOrdNum()));
