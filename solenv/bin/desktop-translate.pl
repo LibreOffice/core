@@ -20,6 +20,12 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
+#
+# Translates multiple .desktop files at once with strings from .ulf
+# files; if you add new translateable .ulf files please add them to
+# l10ntools/source/localize.cxx
+#
+
 my ($prefix, $ext, $key);
 my $productname = "LibreOffice";
 my $workdir = ".";
