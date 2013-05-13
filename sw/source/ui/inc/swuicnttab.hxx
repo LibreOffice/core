@@ -62,7 +62,6 @@ struct SwIndexSections_Impl;
 class SwMultiTOXTabDialog : public SfxTabDialog
 {
     Window                  aExampleContainerWIN;
-    Window                  aExampleWIN;
     CheckBox                aShowExampleCB;
     SwTOXMgr*               pMgr;
     SwWrtShell&             rSh;

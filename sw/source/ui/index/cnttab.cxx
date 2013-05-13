@@ -224,7 +224,6 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet
                     sal_uInt16 nToxType, sal_Bool bGlobal) :
         SfxTabDialog(   pParent, SW_RES(DLG_MULTI_TOX), &rSet),
         aExampleContainerWIN(this, SW_RES(WIN_EXAMPLE)),
-        aExampleWIN( &aExampleContainerWIN, 0 ),
         aShowExampleCB( this, SW_RES(CB_SHOWEXAMPLE)),
         pMgr( new SwTOXMgr( &rShell ) ),
         rSh(rShell),
@@ -238,9 +237,6 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet
         bGlobalFlag(bGlobal)
 {
     FreeResource();
-
-    aExampleWIN.SetPosSizePixel(aExampleContainerWIN.GetPosPixel(),
-                                aExampleContainerWIN.GetSizePixel());
 
     eCurrentTOXType.eType = TOX_CONTENT;
     eCurrentTOXType.nIndex = 0;
@@ -528,7 +524,7 @@ IMPL_LINK( SwMultiTOXTabDialog, ShowPreviewHdl, CheckBox *, pBox )
             {
                 Link aLink(LINK(this, SwMultiTOXTabDialog, CreateExample_Hdl));
                 pExampleFrame = new SwOneExampleFrame(
-                        aExampleWIN, EX_SHOW_ONLINE_LAYOUT, &aLink, &sTemplate);
+                        aExampleContainerWIN, EX_SHOW_ONLINE_LAYOUT, &aLink, &sTemplate);
 
                 if(!pExampleFrame->IsServiceAvailable())
                 {
