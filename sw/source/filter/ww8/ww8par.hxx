@@ -1690,7 +1690,7 @@ public:     // eigentlich private, geht aber leider nur public
 
     void Read_TabRowEnd(        sal_uInt16, const sal_uInt8* pData, short nLen );
     void Read_TabCellEnd(        sal_uInt16, const sal_uInt8* pData, short nLen );
-    static bool ParseTabPos(WW8_TablePos *aTabPos, WW8PLCFx_Cp_FKP* pPap);
+    bool ParseTabPos(WW8_TablePos *aTabPos, WW8PLCFx_Cp_FKP* pPap);
     void Read_Shade(            sal_uInt16, const sal_uInt8* pData, short nLen );
     void Read_ANLevelNo(        sal_uInt16, const sal_uInt8* pData, short nLen );
     void Read_ANLevelDesc(      sal_uInt16, const sal_uInt8* pData, short nLen );

@@ -1997,7 +1997,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
         //Get the end of row new table positioning data
         WW8_CP nMyStartCp=nStartCp;
         if (pIo->SearchRowEnd(pPap, nMyStartCp, pIo->nInTable))
-            if (SwWW8ImplReader::ParseTabPos(&aTabPos, pPap))
+            if (pIo->ParseTabPos(&aTabPos, pPap))
                 pTabPos = &aTabPos;
 
         //Move back to this cell
