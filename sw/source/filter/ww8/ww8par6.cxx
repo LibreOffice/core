@@ -2164,6 +2164,8 @@ SwTwips SwWW8ImplReader::MoveOutsideFly(SwFrmFmt *pFlyFmt,
     const SwPosition &rPos, bool bTableJoin)
 {
     SwTwips nRetWidth = 0;
+    if (!pFlyFmt)
+        return nRetWidth;
     // Alle Attribute schliessen, da sonst Attribute entstehen koennen,
     // die aus Flys rausragen
     WW8DupProperties aDup(rDoc,pCtrlStck);
@@ -2314,10 +2316,15 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo,
 
         WW8FlySet aFlySet(*this, pWFlyPara, pSFlyPara, false);
 
-        pSFlyPara->pFlyFmt = rDoc.MakeFlySection( pSFlyPara->eAnchor,
-            pPaM->GetPoint(), &aFlySet );
-        OSL_ENSURE(pSFlyPara->pFlyFmt->GetAnchor().GetAnchorId() ==
-            pSFlyPara->eAnchor, "Not the anchor type requested!");
+        if (pTabPos && pTabPos->bNoFly)
+            pSFlyPara->pFlyFmt = 0;
+        else
+        {
+            pSFlyPara->pFlyFmt = rDoc.MakeFlySection( pSFlyPara->eAnchor,
+                    pPaM->GetPoint(), &aFlySet );
+            OSL_ENSURE(pSFlyPara->pFlyFmt->GetAnchor().GetAnchorId() ==
+                    pSFlyPara->eAnchor, "Not the anchor type requested!");
+        }
 
         if (pSFlyPara->pFlyFmt)
         {
@@ -2328,7 +2335,7 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo,
             pWWZOrder->InsertTextLayerObject(pOurNewObject);
         }
 
-        if (FLY_AS_CHAR != pSFlyPara->eAnchor)
+        if (FLY_AS_CHAR != pSFlyPara->eAnchor && pSFlyPara->pFlyFmt)
         {
             pAnchorStck->AddAnchor(*pPaM->GetPoint(),pSFlyPara->pFlyFmt);
         }
@@ -2342,7 +2349,8 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo,
         pSFlyPara->pOldAnchorStck = pAnchorStck;
         pAnchorStck = new SwWW8FltAnchorStack(&rDoc, nFieldFlags);
 
-        MoveInsideFly(pSFlyPara->pFlyFmt);
+        if (pSFlyPara->pFlyFmt)
+            MoveInsideFly(pSFlyPara->pFlyFmt);
 
         // 1) ReadText() wird nicht wie beim W4W-Reader rekursiv aufgerufen,
         //    da die Laenge des Apo zu diesen Zeitpunkt noch nicht feststeht,
@@ -2445,7 +2453,8 @@ void SwWW8ImplReader::StopApo()
             pNd->JoinNext();
         }
 
-        pSFlyPara->pFlyFmt->SetFmtAttr(SvxBrushItem(aBg, RES_BACKGROUND));
+        if (pSFlyPara->pFlyFmt)
+            pSFlyPara->pFlyFmt->SetFmtAttr(SvxBrushItem(aBg, RES_BACKGROUND));
 
         DeleteAnchorStk();
         pAnchorStck = pSFlyPara->pOldAnchorStck;
@@ -2469,7 +2478,7 @@ void SwWW8ImplReader::StopApo()
         #i27204# Added AutoWidth setting. Left the old CalculateFlySize in place
         so that if the user unselects autowidth, the width doesn't max out
         */
-        else if( !pWFlyPara->nSp28 )
+        else if( !pWFlyPara->nSp28 && pSFlyPara->pFlyFmt)
         {
             using namespace sw::util;
             SfxItemSet aFlySet( pSFlyPara->pFlyFmt->GetAttrSet() );
@@ -4811,6 +4820,17 @@ bool SwWW8ImplReader::ParseTabPos(WW8_TablePos *pTabPos, WW8PLCFx_Cp_FKP* pPap)
         if (0 != (pRes = pPap->HasSprm(0x941F)))
             pTabPos->nLoMgn = SVBT16ToShort(pRes);
         bRet = true;
+    }
+    if (0 != (pRes = pPap->HasSprm(NS_sprm::LN_TDefTable)))
+    {
+        WW8TabBandDesc aDesc;
+        aDesc.ReadDef(false, pRes);
+        int nTableWidth = aDesc.nCenter[aDesc.nWwCols] - aDesc.nCenter[0];
+        int nTextAreaWidth = maSectionManager.GetTextAreaWidth();
+        // If the table is wider than the text area, then don't create a fly
+        // for the table: no wrapping will be performed anyway, but multi-page
+        // tables will be broken.
+        pTabPos->bNoFly = nTableWidth >= nTextAreaWidth;
     }
     return bRet;
 }
