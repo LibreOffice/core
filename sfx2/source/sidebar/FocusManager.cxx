@@ -282,7 +282,7 @@ bool FocusManager::IsDeckTitleVisible (void) const
 
 void FocusManager::FocusPanel (const sal_Int32 nPanelIndex)
 {
-    if (nPanelIndex<0 || nPanelIndex>=maPanels.size())
+    if (nPanelIndex<0 || nPanelIndex>=static_cast<sal_Int32>(maPanels.size()))
         return;
     Panel& rPanel (*maPanels[nPanelIndex]);
     TitleBar* pTitleBar = rPanel.GetTitleBar();
@@ -496,7 +496,7 @@ void FocusManager::HandleKeyEvent (
                 case PC_PanelToolBox:
                 case PC_PanelContent:
                     // Go to next panel.
-                    if (aLocation.mnIndex < maPanels.size()-1)
+                    if (aLocation.mnIndex < static_cast<sal_Int32>(maPanels.size())-1)
                         FocusPanel(aLocation.mnIndex+1);
                     else
                         FocusButton(0);
@@ -510,7 +510,7 @@ void FocusManager::HandleKeyEvent (
 
                 case PC_TabBar:
                     // Go to next tab bar item.
-                    if (aLocation.mnIndex < maButtons.size()-1)
+                    if (aLocation.mnIndex < static_cast<sal_Int32>(maButtons.size())-1)
                         FocusButton(aLocation.mnIndex + 1);
                     else if (IsDeckTitleVisible())
                         FocusDeckTitle();
