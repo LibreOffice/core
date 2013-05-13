@@ -63,6 +63,7 @@ $(eval $(call gb_Library_add_libs,sal,\
 	) \
 	$(if $(filter $(OS),LINUX), \
 		-ldl \
+		-lrt \
 	) \
 	$(if $(filter $(OS),SOLARIS), \
 		-lnsl \
