@@ -73,12 +73,12 @@ static uno::Sequence< OUString > GetMultiPaths_Impl(
     uno::Reference< uno::XComponentContext >  xContext( comphelper::getProcessComponentContext() );
     try
     {
-        String aInternal( rPathPrefix );
-        String aUser( rPathPrefix );
-        String aWriteable( rPathPrefix );
-        aInternal .AppendAscii( "_internal" );
-        aUser     .AppendAscii( "_user" );
-        aWriteable.AppendAscii( "_writable" );
+        OUString aInternal( rPathPrefix );
+        OUString aUser( rPathPrefix );
+        OUString aWriteable( rPathPrefix );
+        aInternal += "_internal";
+        aUser     += "_user";
+        aWriteable+= "_writable";
 
         uno::Reference< util::XPathSettings > xPathSettings =
             util::PathSettings::create( xContext );

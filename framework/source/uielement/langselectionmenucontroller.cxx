@@ -207,23 +207,23 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     if ( pVCLPopupMenu )
         pPopupMenu = (PopupMenu *)pVCLPopupMenu->GetMenu();
 
-    String aCmd;
-    String aCmd_Dialog;
-    String aCmd_Language;
+    OUString aCmd;
+    OUString aCmd_Dialog;
+    OUString aCmd_Language;
     if( eMode == MODE_SetLanguageSelectionMenu )
     {
-        aCmd_Dialog.AppendAscii(".uno:FontDialog?Language:string=*");
-        aCmd_Language.AppendAscii(".uno:LanguageStatus?Language:string=Current_");
+        aCmd_Dialog += ".uno:FontDialog?Language:string=*";
+        aCmd_Language += ".uno:LanguageStatus?Language:string=Current_";
     }
     else if ( eMode == MODE_SetLanguageParagraphMenu )
     {
-        aCmd_Dialog.AppendAscii(".uno:FontDialogForParagraph");
-        aCmd_Language.AppendAscii(".uno:LanguageStatus?Language:string=Paragraph_");
+        aCmd_Dialog += ".uno:FontDialogForParagraph";
+        aCmd_Language += ".uno:LanguageStatus?Language:string=Paragraph_";
     }
     else if ( eMode == MODE_SetLanguageAllTextMenu )
     {
-        aCmd_Dialog.AppendAscii(".uno:LanguageStatus?Language:string=*");
-        aCmd_Language.AppendAscii(".uno:LanguageStatus?Language:string=Default_");
+        aCmd_Dialog += ".uno:LanguageStatus?Language:string=*";
+        aCmd_Language += ".uno:LanguageStatus?Language:string=Default_";
     }
 
     SvtLanguageTable    aLanguageTable;
@@ -264,15 +264,13 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     // entry for LANGUAGE_NONE
     ++nItemId;
     pPopupMenu->InsertItem( nItemId, String(FwlResId( STR_LANGSTATUS_NONE )) );
-    aCmd=aCmd_Language;
-    aCmd.AppendAscii("LANGUAGE_NONE");
+    aCmd = aCmd_Language + "LANGUAGE_NONE";
     pPopupMenu->SetItemCommand( nItemId, aCmd );
 
     // entry for 'Reset to default language'
     ++nItemId;
     pPopupMenu->InsertItem( nItemId, String(FwlResId( STR_RESET_TO_DEFAULT_LANGUAGE )) );
-    aCmd=aCmd_Language;
-    aCmd.AppendAscii("RESET_LANGUAGES");
+    aCmd = aCmd_Language + "RESET_LANGUAGES";
     pPopupMenu->SetItemCommand( nItemId, aCmd );
 
     // entry for opening the Format/Character dialog

@@ -708,9 +708,8 @@ void RTSFontSubstPage::update()
     for( it = m_pParent->m_aJobData.m_aFontSubstitutes.begin();
          it != m_pParent->m_aJobData.m_aFontSubstitutes.end(); ++it )
     {
-        String aEntry( it->first );
-        aEntry.AppendAscii( " -> " );
-        aEntry.Append( String( it->second ) );
+        OUString aEntry( it->first );
+        aEntry += " -> " + it->second;
         m_aSubstitutionsBox.InsertEntry( aEntry );
     }
 }
