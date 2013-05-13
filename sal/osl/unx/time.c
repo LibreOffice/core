@@ -24,6 +24,8 @@
 #include <osl/time.h>
 #include <time.h>
 
+#include <features.h>
+
 /* FIXME: detection should be done in configure script */
 #if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD) || \
     defined(LINUX) || defined(OPENBSD) || defined(DRAGONFLY)
@@ -33,6 +35,10 @@
 #define HAS_ALTZONE 1
 #endif
 
+#if defined(LINUX) && (_POSIX_C_SOURCE >= 199309L)
+#define USE_CLOCK_GETTIME
+#endif
+
 /*--------------------------------------------------
  * osl_getSystemTime
  *-------------------------------------------------*/
@@ -40,7 +46,7 @@
 sal_Bool SAL_CALL osl_getSystemTime(TimeValue* tv)
 {
     int res;
-#if defined(LINUX)
+#if defined(USE_CLOCK_GETTIME)
     struct timespec tp;
 
     res = clock_gettime(CLOCK_REALTIME, &tp);
@@ -56,7 +62,7 @@ sal_Bool SAL_CALL osl_getSystemTime(TimeValue* tv)
     }
 
     tv->Seconds = tp.tv_sec;
-    #if defined(LINUX)
+    #if defined(USE_CLOCK_GETTIME)
     tv->Nanosec = tp.tv_nsec;
     #else
     tv->Nanosec = tp.tv_usec * 1000;
