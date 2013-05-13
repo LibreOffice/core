@@ -316,7 +316,7 @@ else
 	@ooinstall -l $(DEVINSTALLDIR)/opt
 endif
 endif
-	@rm -f $(SRCDIR)/install && ln -s $(DEVINSTALLDIR)/opt/ $(SRCDIR)/install
+	@rm -f $(BUILDDIR)/install && ln -s $(DEVINSTALLDIR)/opt/ $(BUILDDIR)/install
 	@echo
 	@echo "If you want to edit the .ui files with glade first execute:"
 	@echo
@@ -325,12 +325,12 @@ ifeq ($(OS),LINUX)
 	@echo
 	@echo "Developer installation finished, you can now execute:"
 	@echo
-	@echo "$(SRCDIR)/install/program/soffice"
+	@echo "$(BUILDDIR)/install/program/soffice"
 else ifeq ($(OS),MACOSX)
 	@echo
 	@echo "Developer installation finished, you can now run:"
 	@echo
-	@echo "  open $(SRCDIR)/install/LibreOffice.app"
+	@echo "  open $(BUILDDIR)/install/LibreOffice.app"
 	@echo
 	@echo "To debug: gdb install/LibreOffice.app/Contents/MacOS/soffice"
 endif
@@ -338,6 +338,7 @@ endif
 dev-install-nocheck: build-nocheck
 	$(MAKE) dev-install -o build
 
+# FIXME: shouldn't linkoo be BUILDDIR vs SRCDIR aware ?
 dev-update:
 ifeq ($(DISABLE_LINKOO),TRUE)
 	@linkoo --copy $(DEVINSTALLDIR)/opt $(SRCDIR)
@@ -354,7 +355,7 @@ else
 	@ooinstall $(DEVINSTALLDIR)/opt
 	@install-gdb-printers
 endif
-	@rm -f $(SRCDIR)/install && ln -s $(DEVINSTALLDIR)/opt/ $(SRCDIR)/install
+	@rm -f $(BUILDDIR)/install && ln -s $(DEVINSTALLDIR)/opt/ $(BUILDDIR)/install
 
 distro-pack-install: install
 	$(SRCDIR)/bin/distro-install-clean-up
