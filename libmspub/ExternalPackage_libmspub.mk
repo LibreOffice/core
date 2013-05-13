@@ -10,9 +10,9 @@
 $(eval $(call gb_ExternalPackage_ExternalPackage,libmspub,libmspub))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,libmspub,inc/external/libmspub,\
-	src/lib/libmspub.h \
-	src/lib/MSPUBDocument.h \
-	src/lib/MSPUBStringVector.h \
+	inc/libmspub/libmspub.h \
+	inc/libmspub/MSPUBDocument.h \
+	inc/libmspub/MSPUBStringVector.h \
 ))
 
 $(eval $(call gb_ExternalPackage_use_external_project,libmspub,libmspub))
