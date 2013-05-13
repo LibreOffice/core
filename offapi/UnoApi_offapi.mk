@@ -395,6 +395,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ui,\
     AddressBookSourceDialog \
 	GlobalAcceleratorConfiguration \
     ModuleUIConfigurationManagerSupplier \
+	UICategoryDescription \
 	UIConfigurationManager \
     UIElementFactoryManager \
 	WindowContentFactory \
@@ -1522,7 +1523,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/ui,\
 	ModuleUICommandDescription \
 	ModuleUIConfigurationManager \
 	ModuleWindowStateConfiguration \
-	UICategoryDescription \
 	UIElement \
 	UIElementFactory \
 	UIElementSettings \

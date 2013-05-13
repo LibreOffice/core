@@ -424,7 +424,7 @@ void _SfxMacroTabPage::FillMacroList()
 {
     mpImpl->pGroupLB->Init(
         ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory >(),
+            ::com::sun::star::uno::XComponentContext >(),
         GetFrame(),
         OUString() );
 }

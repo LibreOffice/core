@@ -134,7 +134,7 @@ class SfxConfigGroupListBox_Impl : public SvTreeListBox
     sal_uLong                       nMode;
 
     OUString m_sModuleLongName;
-    css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::frame::XFrame > m_xFrame;
     css::uno::Reference< css::container::XNameAccess > m_xGlobalCategoryInfo;
     css::uno::Reference< css::container::XNameAccess > m_xModuleCategoryInfo;
@@ -172,8 +172,8 @@ public:
     ~SfxConfigGroupListBox_Impl();
     void                ClearAll();
 
-    void                Init(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR          ,
-                             const css::uno::Reference< css::frame::XFrame >&              xFrame         ,
+    void                Init(const css::uno::Reference< css::uno::XComponentContext >& xContext,
+                             const css::uno::Reference< css::frame::XFrame >&          xFrame,
                              const OUString&                                        sModuleLongName);
     void                SetFunctionListBox( SfxConfigFunctionListBox_Impl *pBox )
                         { pFunctionListBox = pBox; }

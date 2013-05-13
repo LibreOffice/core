@@ -822,47 +822,46 @@ SfxAcceleratorConfigPage::~SfxAcceleratorConfigPage()
 void SfxAcceleratorConfigPage::InitAccCfg()
 {
     // already initialized ?
-    if (m_xSMGR.is())
+    if (m_xContext.is())
         return; // yes -> do nothing
 
     try
     {
         // no - initialize this instance
-        m_xSMGR = ::comphelper::getProcessServiceFactory();
+        m_xContext = ::comphelper::getProcessComponentContext();
 
-        m_xUICmdDescription = css::frame::UICommandDescription::create(
-                comphelper::getComponentContext(m_xSMGR));
+        m_xUICmdDescription = css::frame::UICommandDescription::create(m_xContext);
 
         // get the current active frame, which should be our "parent"
         // for this session
         m_xFrame = GetFrame();
         if ( !m_xFrame.is() )
         {
-            css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( comphelper::getComponentContext(m_xSMGR) );
+            css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( m_xContext );
             m_xFrame = xDesktop->getActiveFrame();
         }
 
         // identify module
-        css::uno::Reference< css::frame::XModuleManager2 > xModuleManager(
-                 css::frame::ModuleManager::create(comphelper::getComponentContext(m_xSMGR)));
+        css::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
+                 css::frame::ModuleManager::create(m_xContext);
         m_sModuleLongName = xModuleManager->identify(m_xFrame);
         ::comphelper::SequenceAsHashMap lModuleProps(xModuleManager->getByName(m_sModuleLongName));
         m_sModuleShortName = lModuleProps.getUnpackedValueOrDefault(MODULEPROP_SHORTNAME, OUString());
         m_sModuleUIName    = lModuleProps.getUnpackedValueOrDefault(MODULEPROP_UINAME   , OUString());
 
         // get global accelerator configuration
-        m_xGlobal = css::ui::GlobalAcceleratorConfiguration::create(comphelper::getComponentContext(m_xSMGR));
+        m_xGlobal = css::ui::GlobalAcceleratorConfiguration::create(m_xContext);
 
         // get module accelerator configuration
 
-        css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier(css::ui::ModuleUIConfigurationManagerSupplier::create(comphelper::getComponentContext(m_xSMGR)));
+        css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier( css::ui::ModuleUIConfigurationManagerSupplier::create(m_xContext) );
         css::uno::Reference< css::ui::XUIConfigurationManager > xUICfgManager = xModuleCfgSupplier->getUIConfigurationManager(m_sModuleLongName);
         m_xModule = css::uno::Reference< css::ui::XAcceleratorConfiguration >(xUICfgManager->getShortCutManager(), css::uno::UNO_QUERY_THROW);
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
     catch(const css::uno::Exception&)
-        { m_xSMGR.clear(); }
+        { m_xContext.clear(); }
 }
 
 //-----------------------------------------------
@@ -1185,7 +1184,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RadioHdl)
     aEntriesBox.SetUpdateMode( sal_True );
     aEntriesBox.Invalidate();
 
-     pGroupLBox->Init(m_xSMGR, m_xFrame, m_sModuleLongName);
+    pGroupLBox->Init(m_xContext, m_xFrame, m_sModuleLongName);
 
     // pb: #133213# do not select NULL entries
     SvTreeListEntry* pEntry = aEntriesBox.GetEntry( 0, 0 );
@@ -1231,7 +1230,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl)
         {
             // URL doesn't point to a loaded document, try to access it as a single storage
             // dont forget to release the storage afterwards!
-            css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory( css::embed::StorageFactory::create( comphelper::getComponentContext(m_xSMGR) ) );
+            css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory( css::embed::StorageFactory::create( m_xContext ) );
             css::uno::Sequence< css::uno::Any >                     lArgs(2);
             lArgs[0] <<= sCfgName;
             lArgs[1] <<= css::embed::ElementModes::READ;
@@ -1240,7 +1239,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl)
             css::uno::Reference< css::embed::XStorage > xUIConfig = xRootStorage->openStorageElement(FOLDERNAME_UICONFIG, css::embed::ElementModes::READ);
             if (xUIConfig.is())
             {
-                css::uno::Reference< css::ui::XUIConfigurationManager2 > xCfgMgr2 = css::ui::UIConfigurationManager::create( comphelper::getComponentContext(m_xSMGR) );
+                css::uno::Reference< css::ui::XUIConfigurationManager2 > xCfgMgr2 = css::ui::UIConfigurationManager::create( m_xContext );
                 xCfgMgr2->setStorage(xUIConfig);
                 xCfgMgr.set( xCfgMgr2, css::uno::UNO_QUERY_THROW );
             }
@@ -1314,7 +1313,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl)
         else
         {
             // URL doesn't point to a loaded document, try to access it as a single storage
-            css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory( css::embed::StorageFactory::create( comphelper::getComponentContext(m_xSMGR) ) );
+            css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory( css::embed::StorageFactory::create( m_xContext ) );
             css::uno::Sequence< css::uno::Any >                     lArgs(2);
             lArgs[0] <<= sCfgName;
             lArgs[1] <<= css::embed::ElementModes::WRITE;
@@ -1336,7 +1335,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl)
             if (sMediaType.isEmpty())
                 xUIConfigProps->setPropertyValue(MEDIATYPE_PROPNAME, css::uno::makeAny(MEDIATYPE_UICONFIG));
 
-            css::uno::Reference< css::ui::XUIConfigurationManager2 > xCfgMgr2 = css::ui::UIConfigurationManager::create( comphelper::getComponentContext(m_xSMGR) );
+            css::uno::Reference< css::ui::XUIConfigurationManager2 > xCfgMgr2 = css::ui::UIConfigurationManager::create( m_xContext );
             xCfgMgr2->setStorage(xUIConfig);
             xCfgMgr.set( xCfgMgr2, css::uno::UNO_QUERY_THROW );
         }

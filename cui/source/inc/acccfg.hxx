@@ -138,7 +138,7 @@ private:
     SfxStylesInfo_Impl              m_aStylesInfo;
     sal_Bool                        m_bStylesInfoInitialized;
 
-    css::uno::Reference< css::lang::XMultiServiceFactory >     m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext >     m_xContext;
     css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xGlobal;
     css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xModule;
     css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xAct;

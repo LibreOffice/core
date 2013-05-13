@@ -20,22 +20,22 @@
 #include "cfgutil.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/frame/XDispatchInformationProvider.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
-#include <com/sun/star/script/provider/XScriptProvider.hpp>
-#include <com/sun/star/script/browse/XBrowseNode.hpp>
-#include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
-
-#include <com/sun/star/script/browse/XBrowseNodeFactory.hpp>
-#include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
-#include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
-#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/UICommandDescription.hpp>
+#include <com/sun/star/frame/XDispatchInformationProvider.hpp>
+#include <com/sun/star/script/browse/XBrowseNode.hpp>
+#include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
+#include <com/sun/star/script/browse/XBrowseNodeFactory.hpp>
+#include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
+#include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
+#include <com/sun/star/script/provider/XScriptProvider.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/ui/UICategoryDescription.hpp>
 
 #include "acccfg.hrc"
 #include "helpid.hrc"
@@ -65,8 +65,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::document;
-
-static OUString SERVICE_UICATEGORYDESCRIPTION ("com.sun.star.ui.UICategoryDescription");
 
 SfxStylesInfo_Impl::SfxStylesInfo_Impl()
 {}
@@ -540,23 +538,22 @@ namespace
 }
 
 //-----------------------------------------------
-void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR          ,
-                                      const css::uno::Reference< css::frame::XFrame >&              xFrame         ,
+void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::uno::XComponentContext >& xContext,
+                                      const css::uno::Reference< css::frame::XFrame >&          xFrame,
                                       const OUString&                                        sModuleLongName)
 {
     SetUpdateMode(sal_False);
     ClearAll(); // Remove all old entries from treelist box
 
     m_xFrame = xFrame;
-    if ( xSMGR.is())
+    if( xContext.is() )
     {
-        m_xSMGR           = xSMGR;
+        m_xContext        = xContext;
         m_sModuleLongName = sModuleLongName;
 
-        m_xGlobalCategoryInfo = css::uno::Reference< css::container::XNameAccess >(m_xSMGR->createInstance(SERVICE_UICATEGORYDESCRIPTION), css::uno::UNO_QUERY_THROW);
-        m_xModuleCategoryInfo = css::uno::Reference< css::container::XNameAccess >(m_xGlobalCategoryInfo->getByName(m_sModuleLongName)   , css::uno::UNO_QUERY_THROW);
-        m_xUICmdDescription   = css::frame::UICommandDescription::create(
-                ::comphelper::getComponentContext(m_xSMGR));
+        m_xGlobalCategoryInfo = css::ui::UICategoryDescription::create( m_xContext );
+        m_xModuleCategoryInfo = css::uno::Reference< css::container::XNameAccess >(m_xGlobalCategoryInfo->getByName(m_sModuleLongName), css::uno::UNO_QUERY_THROW);
+        m_xUICmdDescription   = css::frame::UICommandDescription::create( m_xContext );
 
         InitModule();
         InitBasic();
@@ -699,7 +696,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
     }
 
     // add styles
-    if ( m_xSMGR.is() )
+    if ( m_xContext.is() )
     {
         String sStyle( pImp->m_aStrGroupStyles );
         SvTreeListEntry *pEntry = InsertEntry( sStyle, 0 );

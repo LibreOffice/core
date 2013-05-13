@@ -37,22 +37,24 @@
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/container/XEnumeration.hpp>
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
+#include <com/sun/star/document/XScriptInvocationContext.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XDispatchInformationProvider.hpp>
+#include <com/sun/star/frame/DispatchInformation.hpp>
+#include <com/sun/star/frame/UICommandDescription.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
 #include <com/sun/star/script/browse/XBrowseNodeFactory.hpp>
 #include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
-#include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/container/XEnumeration.hpp>
-#include <com/sun/star/document/XEmbeddedScripts.hpp>
-#include <com/sun/star/document/XScriptInvocationContext.hpp>
-#include <com/sun/star/frame/XDispatchInformationProvider.hpp>
-#include <com/sun/star/frame/DispatchInformation.hpp>
-#include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/frame/UICommandDescription.hpp>
+#include <com/sun/star/ui/UICategoryDescription.hpp>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -396,9 +398,6 @@ void SvxConfigGroupListBox::Init(bool bShowSlots, const Reference< frame::XFrame
     // are we showing builtin commands?
     if ( m_bShowSlots && m_xFrame.is() )
     {
-        Reference< lang::XMultiComponentFactory > xMCF =
-            xContext->getServiceManager();
-
         Reference< frame::XDispatchInformationProvider > xDIP(
             m_xFrame, UNO_QUERY );
 
@@ -414,33 +413,26 @@ void SvxConfigGroupListBox::Init(bool bShowSlots, const Reference< frame::XFrame
                 frame::UICommandDescription::create(xContext) );
         xNameAccess->getByName( aModuleId ) >>= m_xModuleCommands;
 
-        Reference< container::XNameAccess > xAllCategories(
-            xMCF->createInstanceWithContext(
-                OUString(
-                    "com.sun.star.ui.UICategoryDescription" ),
-                xContext ),
-            UNO_QUERY );
+        Reference< container::XNameAccess > xAllCategories =
+            ui::UICategoryDescription::create( xContext );
 
         Reference< container::XNameAccess > xModuleCategories;
-        if ( xAllCategories.is() )
+        if ( !aModuleId.isEmpty() )
         {
-            if ( !aModuleId.isEmpty() )
+            try
             {
-                try
-                {
-                    xModuleCategories = Reference< container::XNameAccess >(
-                           xAllCategories->getByName( aModuleId ), UNO_QUERY );
-                }
-                catch ( container::NoSuchElementException& )
-                {
-                }
+                xModuleCategories = Reference< container::XNameAccess >(
+                       xAllCategories->getByName( aModuleId ), UNO_QUERY );
             }
-
-            if ( !xModuleCategories.is() )
+            catch ( container::NoSuchElementException& )
             {
-                xModuleCategories = xAllCategories;
             }
         }
+
+         if ( !xModuleCategories.is() )
+         {
+             xModuleCategories = xAllCategories;
+         }
 
         if ( xModuleCategories.is() )
         {
