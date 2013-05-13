@@ -75,6 +75,7 @@
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
+#include <com/sun/star/ui/ImageManager.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfiguration.hpp>
 #include <com/sun/star/ui/XUIConfigurationListener.hpp>
@@ -5006,8 +5007,6 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
         aFtNote.SetText( replaceSixteen( aFtNote.GetText(), m_nExpectedSize ) );
     }
 
-    uno::Reference< lang::XMultiServiceFactory > xServiceManager =
-        ::comphelper::getProcessServiceFactory();
     uno::Reference< uno::XComponentContext > xComponentContext =
         ::comphelper::getProcessComponentContext();
 
@@ -5058,10 +5057,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
     aPropValue.Value <<= com::sun::star::embed::ElementModes::READWRITE;
     aProp[ 1 ] <<= aPropValue;
 
-    m_xImportedImageManager = uno::Reference< com::sun::star::ui::XImageManager >(
-        xServiceManager->createInstanceWithArguments(
-        OUString("com.sun.star.ui.ImageManager"  ), aProp ),
-        uno::UNO_QUERY );
+    m_xImportedImageManager = css::ui::ImageManager::create( xComponentContext );
 
     ImageInfo mImageInfo;
     uno::Sequence< OUString > names;
