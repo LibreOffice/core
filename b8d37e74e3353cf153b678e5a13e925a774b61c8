@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//81s\u003d",
+        "filename": "sfx2/doc/sfx2doc.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-05-13T17:16:32Z",
+      "side": 1,
+      "message": "can we avoid gratuitous trailling spaces please ?",
+      "revId": "b8d37e74e3353cf153b678e5a13e925a774b61c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
