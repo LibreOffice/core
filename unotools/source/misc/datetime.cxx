@@ -392,7 +392,7 @@ bool ISO8601parseTime(const OUString &aTimeStr, starutil::Time& rTime)
     sal_Int32 n = 0;
     OUString tokInt;
     OUString tokFrac;
-    bool bFrac;
+    bool bFrac = false;
     // hours
     if (bSuccess && (bSuccess = getISO8601TimeToken(aTimeStr, n, tokInt, bFrac, tokFrac)))
     {
