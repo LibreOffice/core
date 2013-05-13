@@ -227,17 +227,17 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl)
         {
             aText = ScGlobal::GetRscString( STR_PAGEHEADER );
             if ( bRightPage )
-                pDlg->setTabPage( ScRightHeaderEditPage::Create( pDlg, aDataSet ), NULL, nSettingsId );
+                pDlg->setTabPage( ScRightHeaderEditPage::Create( pDlg->get_content_area(), aDataSet ), NULL, nSettingsId );
             else
-                pDlg->setTabPage( ScLeftHeaderEditPage::Create( pDlg, aDataSet ), NULL, nSettingsId );
+                pDlg->setTabPage( ScLeftHeaderEditPage::Create( pDlg->get_content_area(), aDataSet ), NULL, nSettingsId );
         }
         else
         {
             aText = ScGlobal::GetRscString( STR_PAGEFOOTER );
             if ( bRightPage )
-                pDlg->setTabPage( ScRightFooterEditPage::Create( pDlg, aDataSet ), NULL, nSettingsId );
+                pDlg->setTabPage( ScRightFooterEditPage::Create( pDlg->get_content_area(), aDataSet ), NULL, nSettingsId );
             else
-                pDlg->setTabPage( ScLeftFooterEditPage::Create( pDlg, aDataSet ), NULL, nSettingsId );
+                pDlg->setTabPage( ScLeftFooterEditPage::Create( pDlg->get_content_area(), aDataSet ), NULL, nSettingsId );
         }
 
         SvxNumType eNumType = ((const SvxPageItem&)aDataSet.Get(ATTR_PAGE)).GetNumType();
