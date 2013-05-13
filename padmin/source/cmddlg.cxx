@@ -529,9 +529,8 @@ void RTSCommandPage::UpdateCommands()
 
 void RTSCommandPage::ConnectCommand()
 {
-    String aString( m_aConnectedTo.GetText().getToken( 0, ':' ) );
-    aString.AppendAscii( ": " );
-    aString += m_aCommandsCB.GetText();
+    OUString aString = ( m_aConnectedTo.GetText().getToken( 0, ':' ) )
+        + ": " + m_aCommandsCB.GetText();
 
     m_aConnectedTo.SetText( aString );
 }

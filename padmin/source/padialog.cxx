@@ -254,10 +254,9 @@ void PADialog::UpdateText()
     if( !aDev.isEmpty() )
     {
         const PrinterInfo& rInfo = m_rPIManager.getPrinterInfo( aDev );
-        String aDriver( rInfo.m_aPrinterName );
-        aDriver.AppendAscii( " (" );
-        aDriver += String( rInfo.m_aDriverName );
-        aDriver.Append( ')' );
+
+        OUString aDriver = rInfo.m_aPrinterName + " (" + rInfo.m_aDriverName + ")";
+
         m_aDriver.SetText( aDriver );
         m_aCommand.SetText( rInfo.m_aCommand );
         m_aComment.SetText( rInfo.m_aComment );
@@ -707,12 +706,10 @@ void PADialog::UpdateDevice()
         if( bAutoQueue )
             continue;
 
-        String aEntry( *it );
+        OUString aEntry( *it );
         if( *it == m_rPIManager.getDefaultPrinter() )
         {
-            aEntry.AppendAscii( " (" );
-            aEntry += m_aDefPrt;
-            aEntry.AppendAscii( ")" );
+            aEntry += " (" + OUString( m_aDefPrt ) + ")";
         }
         int nPos =
             m_aDevicesLB.InsertEntry( aEntry,
