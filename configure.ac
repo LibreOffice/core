@@ -7030,7 +7030,6 @@ else
         if test "$with_doxygen" = yes; then
             AC_PATH_PROG([DOXYGEN], [doxygen])
             if test -z "$DOXYGEN"; then
-                AC_MSG_RESULT([no])
                 if test "$enable_odk" = "" ; then
                     enable_odk="no"
                 else
