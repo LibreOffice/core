@@ -60,6 +60,7 @@
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 #include <com/sun/star/linguistic2/LinguProperties.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
+#include <com/sun/star/setup/UpdateCheck.hpp>
 #include <comphelper/processfactory.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/optitems.hxx>
@@ -1553,17 +1554,13 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             // Disable Online Update page if service not installed
             if( RID_SVXPAGE_ONLINEUPDATE == nPageId )
             {
-                const OUString sService = "com.sun.star.setup.UpdateCheck";
-
                 try
                 {
-                    Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-                    Reference < XInterface > xService( xFactory->createInstance( sService ) );
-
+                    Reference < XInterface > xService( setup::UpdateCheck::create( ::comphelper::getProcessComponentContext() ) );
                     if( ! xService.is() )
                         continue;
                 }
-                catch ( ::com::sun::star::loader::CannotActivateFactoryException& )
+                catch ( ::com::sun::star::uno::DeploymentException& )
                 {
                     continue;
                 }
