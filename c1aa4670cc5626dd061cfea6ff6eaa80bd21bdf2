@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//8+A\u003d",
+        "filename": "scp2/source/onlineupdate/file_onlineupdate.scp",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000186
+      },
+      "writtenOn": "2013-05-13T04:36:49Z",
+      "side": 0,
+      "message": "This is what I get when I try a git grep with unpack_update in Linux after a compilation:\n\nmarcos@jedi:~/gitroot/core$ git grep unpack_update\nextensions/source/update/check/updatecheck.cxx:            aUnpackPath  +\u003d \"unpack_update\";\nsetup_native/Package_scripts.mk:$(eval $(call gb_Package_add_file,setup_native/scripts,bin/unpack_update,unpack_update.sh))\n\nThis can be removed, or this is still used in another place?",
+      "revId": "c1aa4670cc5626dd061cfea6ff6eaa80bd21bdf2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
