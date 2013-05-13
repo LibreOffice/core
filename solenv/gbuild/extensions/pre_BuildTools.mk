@@ -10,8 +10,8 @@
 
 ifeq (,$(filter WNT,$(OS)))
 	gb_GENGAL = gengal.bin
-else
-	gb_GENGAL = gengal.exe
+else # windows appends the .exe
+	gb_GENGAL = gengal
 endif
 
 # Tools we need to build for cross-compiling
