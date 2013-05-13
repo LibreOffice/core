@@ -360,67 +360,64 @@ sal_Bool SpellCheckerDispatcher::isValid_Impl(
             const OUString *pImplNames = pEntry->aSvcImplNames.getConstArray();
             Reference< XSpellChecker >  *pRef  = pEntry->aSvcRefs .getArray();
 
-            Reference< XMultiServiceFactory > xMgr(
-                comphelper::getProcessServiceFactory() );
-            if (xMgr.is())
+            Reference< XComponentContext > xContext(
+                comphelper::getProcessComponentContext() );
+
+            // build service initialization argument
+            Sequence< Any > aArgs(2);
+            aArgs.getArray()[0] <<= GetPropSet();
+
+            while (i < nLen  &&  (!bTmpResValid  ||  sal_False == bTmpRes))
             {
-                // build service initialization argument
-                Sequence< Any > aArgs(2);
-                aArgs.getArray()[0] <<= GetPropSet();
-
-                while (i < nLen  &&  (!bTmpResValid  ||  sal_False == bTmpRes))
+                // create specific service via it's implementation name
+                Reference< XSpellChecker > xSpell;
+                try
                 {
-                    // create specific service via it's implementation name
-                    Reference< XSpellChecker > xSpell;
-                    try
-                    {
-                        xSpell = Reference< XSpellChecker >(
-                                xMgr->createInstanceWithArguments(
-                                pImplNames[i], aArgs ),  UNO_QUERY );
-                    }
-                    catch (uno::Exception &)
-                    {
-                        DBG_ASSERT( 0, "createInstanceWithArguments failed" );
-                    }
-                    pRef [i] = xSpell;
-
-                    Reference< XLinguServiceEventBroadcaster >
-                            xBroadcaster( xSpell, UNO_QUERY );
-                    if (xBroadcaster.is())
-                        rMgr.AddLngSvcEvtBroadcaster( xBroadcaster );
-
-                    bTmpResValid = sal_True;
-                    if (xSpell.is()  &&  xSpell->hasLocale( aLocale ))
-                    {
-                        bTmpRes = GetCache().CheckWord( aChkWord, nLanguage );
-                        if (!bTmpRes)
-                        {
-                            bTmpRes = xSpell->isValid( aChkWord, aLocale, rProperties );
-
-                            // Add correct words to the cache.
-                            // But not those that are correct only because of
-                            // the temporary supplied settings.
-                            if (bTmpRes  &&  0 == rProperties.getLength())
-                                GetCache().AddWord( aChkWord, nLanguage );
-                        }
-                    }
-                    else
-                        bTmpResValid = sal_False;
-
-                    if (bTmpResValid)
-                        bRes = bTmpRes;
-
-                    pEntry->nLastTriedSvcIndex = (sal_Int16) i;
-                    ++i;
+                    xSpell = Reference< XSpellChecker >(
+                                xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                                    pImplNames[i], aArgs, xContext ),
+                                UNO_QUERY );
                 }
-
-                // if language is not supported by any of the services
-                // remove it from the list.
-                if (i == nLen)
+                catch (uno::Exception &)
                 {
-                    if (!SvcListHasLanguage( *pEntry, nLanguage ))
-                        aSvcMap.erase( nLanguage );
+                    DBG_ASSERT( 0, "createInstanceWithArguments failed" );
                 }
+                pRef [i] = xSpell;
+
+                Reference< XLinguServiceEventBroadcaster >
+                        xBroadcaster( xSpell, UNO_QUERY );
+                if (xBroadcaster.is())
+                    rMgr.AddLngSvcEvtBroadcaster( xBroadcaster );
+
+                bTmpResValid = sal_True;
+                if (xSpell.is()  &&  xSpell->hasLocale( aLocale ))
+                {
+                    bTmpRes = GetCache().CheckWord( aChkWord, nLanguage );
+                    if (!bTmpRes)
+                    {
+                        bTmpRes = xSpell->isValid( aChkWord, aLocale, rProperties );
+                         // Add correct words to the cache.
+                        // But not those that are correct only because of
+                        // the temporary supplied settings.
+                        if (bTmpRes  &&  0 == rProperties.getLength())
+                            GetCache().AddWord( aChkWord, nLanguage );
+                    }
+                }
+                else
+                    bTmpResValid = sal_False;
+                if (bTmpResValid)
+                    bRes = bTmpRes;
+
+                pEntry->nLastTriedSvcIndex = (sal_Int16) i;
+                ++i;
+            }
+
+            // if language is not supported by any of the services
+            // remove it from the list.
+            if (i == nLen)
+            {
+                if (!SvcListHasLanguage( *pEntry, nLanguage ))
+                    aSvcMap.erase( nLanguage );
             }
         }
 
@@ -548,86 +545,85 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
             const OUString *pImplNames = pEntry->aSvcImplNames.getConstArray();
             Reference< XSpellChecker >  *pRef  = pEntry->aSvcRefs .getArray();
 
-            Reference< XMultiServiceFactory > xMgr(
-                comphelper::getProcessServiceFactory() );
-            if (xMgr.is())
+            Reference< XComponentContext > xContext(
+                comphelper::getProcessComponentContext() );
+
+            // build service initialization argument
+            Sequence< Any > aArgs(2);
+            aArgs.getArray()[0] <<= GetPropSet();
+
+            sal_Int32 nNumSugestions = -1;
+            while (i < nLen  &&  (!bTmpResValid || xTmpRes.is()))
             {
-                // build service initialization argument
-                Sequence< Any > aArgs(2);
-                aArgs.getArray()[0] <<= GetPropSet();
-
-                sal_Int32 nNumSugestions = -1;
-                while (i < nLen  &&  (!bTmpResValid || xTmpRes.is()))
+                // create specific service via it's implementation name
+                Reference< XSpellChecker > xSpell;
+                try
                 {
-                    // create specific service via it's implementation name
-                    Reference< XSpellChecker > xSpell;
-                    try
-                    {
-                        xSpell = Reference< XSpellChecker >(
-                                xMgr->createInstanceWithArguments(
-                                pImplNames[i], aArgs ), UNO_QUERY );
-                    }
-                    catch (uno::Exception &)
-                    {
-                        DBG_ASSERT( 0, "createInstanceWithArguments failed" );
-                    }
-                    pRef [i] = xSpell;
+                    xSpell = Reference< XSpellChecker >(
+                                xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                                    pImplNames[i], aArgs, xContext ),
+                                UNO_QUERY );
+                }
+                catch (uno::Exception &)
+                {
+                    DBG_ASSERT( 0, "createInstanceWithArguments failed" );
+                }
+                pRef [i] = xSpell;
 
-                    Reference< XLinguServiceEventBroadcaster >
-                            xBroadcaster( xSpell, UNO_QUERY );
-                    if (xBroadcaster.is())
-                        rMgr.AddLngSvcEvtBroadcaster( xBroadcaster );
+                Reference< XLinguServiceEventBroadcaster >
+                        xBroadcaster( xSpell, UNO_QUERY );
+                if (xBroadcaster.is())
+                    rMgr.AddLngSvcEvtBroadcaster( xBroadcaster );
 
-                    bTmpResValid = sal_True;
-                    if (xSpell.is()  &&  xSpell->hasLocale( aLocale ))
-                    {
-                        sal_Bool bOK = GetCache().CheckWord( aChkWord, nLanguage );
-                        if (bOK)
-                            xTmpRes = NULL;
-                        else
-                        {
-                            xTmpRes = xSpell->spell( aChkWord, aLocale, rProperties );
-
-                            // Add correct words to the cache.
-                            // But not those that are correct only because of
-                            // the temporary supplied settings.
-                            if (!xTmpRes.is()  &&  0 == rProperties.getLength())
-                                GetCache().AddWord( aChkWord, nLanguage );
-                        }
-                    }
+                bTmpResValid = sal_True;
+                if (xSpell.is()  &&  xSpell->hasLocale( aLocale ))
+                {
+                    sal_Bool bOK = GetCache().CheckWord( aChkWord, nLanguage );
+                    if (bOK)
+                        xTmpRes = NULL;
                     else
-                        bTmpResValid = sal_False;
-
-                    // return first found result if the word is not known by any checker.
-                    // But if that result has no suggestions use the first one that does
-                    // provide suggestions for the misspelled word.
-                    if (!xRes.is() && bTmpResValid)
                     {
-                        xRes = xTmpRes;
-                        nNumSugestions = 0;
-                        if (xRes.is())
-                            nNumSugestions = xRes->getAlternatives().getLength();
-                    }
-                    sal_Int32 nTmpNumSugestions = 0;
-                    if (xTmpRes.is() && bTmpResValid)
-                        nTmpNumSugestions = xTmpRes->getAlternatives().getLength();
-                    if (xRes.is() && nNumSugestions == 0 && nTmpNumSugestions > 0)
-                    {
-                        xRes = xTmpRes;
-                        nNumSugestions = nTmpNumSugestions;
-                    }
+                        xTmpRes = xSpell->spell( aChkWord, aLocale, rProperties );
 
-                    pEntry->nLastTriedSvcIndex = (sal_Int16) i;
-                    ++i;
+                        // Add correct words to the cache.
+                        // But not those that are correct only because of
+                        // the temporary supplied settings.
+                        if (!xTmpRes.is()  &&  0 == rProperties.getLength())
+                            GetCache().AddWord( aChkWord, nLanguage );
+                    }
                 }
+                else
+                    bTmpResValid = sal_False;
 
-                // if language is not supported by any of the services
-                // remove it from the list.
-                if (i == nLen)
+                // return first found result if the word is not known by any checker.
+                // But if that result has no suggestions use the first one that does
+                // provide suggestions for the misspelled word.
+                if (!xRes.is() && bTmpResValid)
                 {
-                    if (!SvcListHasLanguage( *pEntry, nLanguage ))
-                        aSvcMap.erase( nLanguage );
+                    xRes = xTmpRes;
+                    nNumSugestions = 0;
+                    if (xRes.is())
+                        nNumSugestions = xRes->getAlternatives().getLength();
                 }
+                sal_Int32 nTmpNumSugestions = 0;
+                if (xTmpRes.is() && bTmpResValid)
+                    nTmpNumSugestions = xTmpRes->getAlternatives().getLength();
+                if (xRes.is() && nNumSugestions == 0 && nTmpNumSugestions > 0)
+                {
+                    xRes = xTmpRes;
+                    nNumSugestions = nTmpNumSugestions;
+                }
+
+                pEntry->nLastTriedSvcIndex = (sal_Int16) i;
+                ++i;
+            }
+
+            // if language is not supported by any of the services
+            // remove it from the list.
+            if (i == nLen)
+            {
+                if (!SvcListHasLanguage( *pEntry, nLanguage ))
+                    aSvcMap.erase( nLanguage );
             }
         }
 

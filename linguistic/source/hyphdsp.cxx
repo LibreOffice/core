@@ -321,44 +321,43 @@ Reference< XHyphenatedWord > SAL_CALL
             {
                 Reference< XHyphenator > *pRef = pEntry->aSvcRefs.getArray();
 
-                Reference< XMultiServiceFactory > xMgr(
-                    comphelper::getProcessServiceFactory() );
-                if (xMgr.is())
+                Reference< XComponentContext > xContext(
+                    comphelper::getProcessComponentContext() );
+
+                // build service initialization argument
+                Sequence< Any > aArgs(2);
+                aArgs.getArray()[0] <<= GetPropSet();
+
+                // create specific service via it's implementation name
+                try
                 {
-                    // build service initialization argument
-                    Sequence< Any > aArgs(2);
-                    aArgs.getArray()[0] <<= GetPropSet();
-
-                    // create specific service via it's implementation name
-                    try
-                    {
-                        xHyph = Reference< XHyphenator >(
-                                xMgr->createInstanceWithArguments(
-                                pEntry->aSvcImplNames[0], aArgs ), UNO_QUERY );
-                    }
-                    catch (uno::Exception &)
-                    {
-                        DBG_ASSERT( 0, "createInstanceWithArguments failed" );
-                    }
-                    pRef [i] = xHyph;
-
-                    Reference< XLinguServiceEventBroadcaster >
-                            xBroadcaster( xHyph, UNO_QUERY );
-                    if (xBroadcaster.is())
-                        rMgr.AddLngSvcEvtBroadcaster( xBroadcaster );
-
-                    if (xHyph.is()  &&  xHyph->hasLocale( rLocale ))
-                        xRes = xHyph->hyphenate( aChkWord, rLocale, nChkMaxLeading,
-                                                rProperties );
-
-                    pEntry->nLastTriedSvcIndex = (sal_Int16) i;
-                    ++i;
-
-                    // if language is not supported by the services
-                    // remove it from the list.
-                    if (xHyph.is()  &&  !xHyph->hasLocale( rLocale ))
-                        aSvcMap.erase( nLanguage );
+                    xHyph = Reference< XHyphenator >(
+                                xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                                    pEntry->aSvcImplNames[0], aArgs, xContext ),
+                                UNO_QUERY );
                 }
+                catch (uno::Exception &)
+                {
+                    DBG_ASSERT( 0, "createInstanceWithArguments failed" );
+                }
+                pRef [i] = xHyph;
+
+                Reference< XLinguServiceEventBroadcaster >
+                        xBroadcaster( xHyph, UNO_QUERY );
+                if (xBroadcaster.is())
+                    rMgr.AddLngSvcEvtBroadcaster( xBroadcaster );
+
+                if (xHyph.is()  &&  xHyph->hasLocale( rLocale ))
+                    xRes = xHyph->hyphenate( aChkWord, rLocale, nChkMaxLeading,
+                                            rProperties );
+
+                pEntry->nLastTriedSvcIndex = (sal_Int16) i;
+                ++i;
+
+                // if language is not supported by the services
+                // remove it from the list.
+                if (xHyph.is()  &&  !xHyph->hasLocale( rLocale ))
+                    aSvcMap.erase( nLanguage );
             }
         }   // if (xEntry.is())
     }
@@ -453,44 +452,42 @@ Reference< XHyphenatedWord > SAL_CALL
             {
                 Reference< XHyphenator > *pRef = pEntry->aSvcRefs.getArray();
 
-                Reference< XMultiServiceFactory > xMgr(
-                    comphelper::getProcessServiceFactory() );
-                if (xMgr.is())
+                Reference< XComponentContext > xContext(
+                    comphelper::getProcessComponentContext() );
+
+                // build service initialization argument
+                Sequence< Any > aArgs(2);
+                aArgs.getArray()[0] <<= GetPropSet();
+
+                // create specific service via it's implementation name
+                try
                 {
-                    // build service initialization argument
-                    Sequence< Any > aArgs(2);
-                    aArgs.getArray()[0] <<= GetPropSet();
-
-                    // create specific service via it's implementation name
-                    try
-                    {
-                        xHyph = Reference< XHyphenator >(
-                                xMgr->createInstanceWithArguments(
-                                pEntry->aSvcImplNames[0], aArgs ), UNO_QUERY );
-                    }
-                    catch (uno::Exception &)
-                    {
-                        DBG_ASSERT( 0, "createInstanceWithArguments failed" );
-                    }
-                    pRef [i] = xHyph;
-
-                    Reference< XLinguServiceEventBroadcaster >
-                            xBroadcaster( xHyph, UNO_QUERY );
-                    if (xBroadcaster.is())
-                        rMgr.AddLngSvcEvtBroadcaster( xBroadcaster );
-
-                    if (xHyph.is()  &&  xHyph->hasLocale( rLocale ))
-                        xRes = xHyph->queryAlternativeSpelling( aChkWord, rLocale,
-                                    nChkIndex, rProperties );
-
-                    pEntry->nLastTriedSvcIndex = (sal_Int16) i;
-                    ++i;
-
-                    // if language is not supported by the services
-                    // remove it from the list.
-                    if (xHyph.is()  &&  !xHyph->hasLocale( rLocale ))
-                        aSvcMap.erase( nLanguage );
+                    xHyph = Reference< XHyphenator >(
+                                xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                                    pEntry->aSvcImplNames[0], aArgs, xContext ), UNO_QUERY );
                 }
+                catch (uno::Exception &)
+                {
+                    DBG_ASSERT( 0, "createInstanceWithArguments failed" );
+                }
+                pRef [i] = xHyph;
+
+                Reference< XLinguServiceEventBroadcaster >
+                        xBroadcaster( xHyph, UNO_QUERY );
+                if (xBroadcaster.is())
+                    rMgr.AddLngSvcEvtBroadcaster( xBroadcaster );
+
+                if (xHyph.is()  &&  xHyph->hasLocale( rLocale ))
+                    xRes = xHyph->queryAlternativeSpelling( aChkWord, rLocale,
+                                nChkIndex, rProperties );
+
+                pEntry->nLastTriedSvcIndex = (sal_Int16) i;
+                ++i;
+
+                // if language is not supported by the services
+                // remove it from the list.
+                if (xHyph.is()  &&  !xHyph->hasLocale( rLocale ))
+                    aSvcMap.erase( nLanguage );
             }
         }   // if (xEntry.is())
     }
@@ -578,43 +575,42 @@ Reference< XPossibleHyphens > SAL_CALL
             {
                 Reference< XHyphenator > *pRef = pEntry->aSvcRefs.getArray();
 
-                Reference< XMultiServiceFactory > xMgr(
-                    comphelper::getProcessServiceFactory() );
-                if (xMgr.is())
+                Reference< XComponentContext > xContext(
+                    comphelper::getProcessComponentContext() );
+
+                // build service initialization argument
+                Sequence< Any > aArgs(2);
+                aArgs.getArray()[0] <<= GetPropSet();
+
+                // create specific service via it's implementation name
+                try
                 {
-                    // build service initialization argument
-                    Sequence< Any > aArgs(2);
-                    aArgs.getArray()[0] <<= GetPropSet();
-
-                    // create specific service via it's implementation name
-                    try
-                    {
-                        xHyph = Reference< XHyphenator >(
-                                xMgr->createInstanceWithArguments(
-                                pEntry->aSvcImplNames[0], aArgs ), UNO_QUERY );
-                    }
-                    catch (uno::Exception &)
-                    {
-                        DBG_ASSERT( 0, "createWithArguments failed" );
-                    }
-                    pRef [i] = xHyph;
-
-                    Reference< XLinguServiceEventBroadcaster >
-                            xBroadcaster( xHyph, UNO_QUERY );
-                    if (xBroadcaster.is())
-                        rMgr.AddLngSvcEvtBroadcaster( xBroadcaster );
-
-                    if (xHyph.is()  &&  xHyph->hasLocale( rLocale ))
-                        xRes = xHyph->createPossibleHyphens( aChkWord, rLocale, rProperties );
-
-                    pEntry->nLastTriedSvcIndex = (sal_Int16) i;
-                    ++i;
-
-                    // if language is not supported by the services
-                    // remove it from the list.
-                    if (xHyph.is()  &&  !xHyph->hasLocale( rLocale ))
-                        aSvcMap.erase( nLanguage );
+                    xHyph = Reference< XHyphenator >(
+                                xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                                    pEntry->aSvcImplNames[0], aArgs, xContext ),
+                                UNO_QUERY );
                 }
+                catch (uno::Exception &)
+                {
+                    DBG_ASSERT( 0, "createWithArguments failed" );
+                }
+                pRef [i] = xHyph;
+
+                Reference< XLinguServiceEventBroadcaster >
+                        xBroadcaster( xHyph, UNO_QUERY );
+                if (xBroadcaster.is())
+                    rMgr.AddLngSvcEvtBroadcaster( xBroadcaster );
+
+                if (xHyph.is()  &&  xHyph->hasLocale( rLocale ))
+                    xRes = xHyph->createPossibleHyphens( aChkWord, rLocale, rProperties );
+
+                pEntry->nLastTriedSvcIndex = (sal_Int16) i;
+                ++i;
+
+                // if language is not supported by the services
+                // remove it from the list.
+                if (xHyph.is()  &&  !xHyph->hasLocale( rLocale ))
+                    aSvcMap.erase( nLanguage );
             }
         }   // if (xEntry.is())
     }

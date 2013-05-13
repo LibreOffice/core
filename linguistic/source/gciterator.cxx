@@ -233,8 +233,7 @@ static lang::Locale lcl_GetPrimaryLanguageOfSentence(
 }
 
 
-GrammarCheckingIterator::GrammarCheckingIterator( const uno::Reference< lang::XMultiServiceFactory > & rxMgr ) :
-    m_xMSF( rxMgr ),
+GrammarCheckingIterator::GrammarCheckingIterator() :
     m_bEnd( sal_False ),
     m_aCurCheckedDocId(),
     m_bGCServicesChecked( sal_False ),
@@ -459,10 +458,10 @@ uno::Reference< linguistic2::XProofreader > GrammarCheckingIterator::GetGrammarC
         {
             try
             {
-                uno::Reference< lang::XMultiServiceFactory > xMgr(
-                        comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
+                uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
                 uno::Reference< linguistic2::XProofreader > xGC(
-                        xMgr->createInstance( aSvcImplName ), uno::UNO_QUERY_THROW );
+                        xContext->getServiceManager()->createInstanceWithContext(aSvcImplName, xContext),
+                        uno::UNO_QUERY_THROW );
                 uno::Reference< linguistic2::XSupportedLocales > xSuppLoc( xGC, uno::UNO_QUERY_THROW );
 
                 if (xSuppLoc->hasLocale( rLocale ))
@@ -901,7 +900,6 @@ throw (uno::RuntimeException)
 
         // releaase all UNO references
 
-        m_xMSF.clear();
         m_xBreakIterator.clear();
 
         // clear containers with UNO references AND have those references released
@@ -1131,10 +1129,10 @@ static uno::Sequence< OUString > GrammarCheckingIterator_getSupportedServiceName
 
 
 static uno::Reference< uno::XInterface > SAL_CALL GrammarCheckingIterator_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory > & rxSMgr )
+    const uno::Reference< lang::XMultiServiceFactory > & /*rxSMgr*/ )
 throw(uno::Exception)
 {
-    return static_cast< ::cppu::OWeakObject * >(new GrammarCheckingIterator( rxSMgr ));
+    return static_cast< ::cppu::OWeakObject * >(new GrammarCheckingIterator());
 }
 
 

@@ -158,44 +158,43 @@ Sequence< Reference< XMeaning > > SAL_CALL
             const OUString *pImplNames = pEntry->aSvcImplNames.getConstArray();
             Reference< XThesaurus > *pRef = pEntry->aSvcRefs.getArray();
 
-            Reference< XMultiServiceFactory > xMgr(
-                comphelper::getProcessServiceFactory() );
-            if (xMgr.is())
+            Reference< XComponentContext > xContext(
+                comphelper::getProcessComponentContext() );
+
+            // build service initialization argument
+            Sequence< Any > aArgs(1);
+            aArgs.getArray()[0] <<= GetPropSet();
+
+            while (i < nLen  &&  aMeanings.getLength() == 0)
             {
-                // build service initialization argument
-                Sequence< Any > aArgs(1);
-                aArgs.getArray()[0] <<= GetPropSet();
-
-                while (i < nLen  &&  aMeanings.getLength() == 0)
+                // create specific service via it's implementation name
+                Reference< XThesaurus > xThes;
+                try
                 {
-                    // create specific service via it's implementation name
-                    Reference< XThesaurus > xThes;
-                    try
-                    {
-                        xThes = Reference< XThesaurus >(
-                                xMgr->createInstanceWithArguments(
-                                pImplNames[i], aArgs ), UNO_QUERY );
-                    }
-                    catch (uno::Exception &)
-                    {
-                        DBG_ASSERT( 0, "createInstanceWithArguments failed" );
-                    }
-                    pRef[i] = xThes;
-
-                    if (xThes.is()  &&  xThes->hasLocale( rLocale ))
-                        aMeanings = xThes->queryMeanings( aChkWord, rLocale, rProperties );
-
-                    pEntry->nLastTriedSvcIndex = (sal_Int16) i;
-                    ++i;
+                    xThes = Reference< XThesaurus >(
+                                xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                                    pImplNames[i], aArgs, xContext ),
+                                UNO_QUERY );
                 }
-
-                // if language is not supported by any of the services
-                // remove it from the list.
-                if (i == nLen  &&  aMeanings.getLength() == 0)
+                catch (uno::Exception &)
                 {
-                    if (!SvcListHasLanguage( pEntry->aSvcRefs, rLocale ))
-                        aSvcMap.erase( nLanguage );
+                    DBG_ASSERT( 0, "createInstanceWithArguments failed" );
                 }
+                pRef[i] = xThes;
+
+                if (xThes.is()  &&  xThes->hasLocale( rLocale ))
+                    aMeanings = xThes->queryMeanings( aChkWord, rLocale, rProperties );
+
+                pEntry->nLastTriedSvcIndex = (sal_Int16) i;
+                ++i;
+            }
+
+            // if language is not supported by any of the services
+            // remove it from the list.
+            if (i == nLen  &&  aMeanings.getLength() == 0)
+            {
+                if (!SvcListHasLanguage( pEntry->aSvcRefs, rLocale ))
+                    aSvcMap.erase( nLanguage );
             }
         }
     }

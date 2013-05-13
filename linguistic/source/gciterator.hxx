@@ -83,9 +83,6 @@ class GrammarCheckingIterator:
     >,
     public LinguDispatcher
 {
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >    m_xMSF;
-
-
     //the queue is keeping track of all senteces to be checked
     //every element of this queue is a FlatParagraphEntry struct-object
     typedef std::deque< FPEntry > FPQueue_t;
@@ -153,7 +150,7 @@ public:
 
     void DequeueAndCheck();
 
-    explicit GrammarCheckingIterator( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > & rxMgr );
+    explicit GrammarCheckingIterator();
     virtual ~GrammarCheckingIterator();
 
     // XProofreadingIterator

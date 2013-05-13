@@ -79,9 +79,9 @@ static uno::Sequence< lang::Locale > GetAvailLocales(
 {
     uno::Sequence< lang::Locale > aRes;
 
-    uno::Reference< lang::XMultiServiceFactory >  xFac( comphelper::getProcessServiceFactory() );
+    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
     sal_Int32 nNames = rSvcImplNames.getLength();
-    if (nNames  &&  xFac.is())
+    if( nNames )
     {
         std::set< LanguageType > aLanguages;
 
@@ -101,7 +101,9 @@ static uno::Sequence< lang::Locale > GetAvailLocales(
             try
             {
                 xSuppLoc = uno::Reference< linguistic2::XSupportedLocales >(
-                        xFac->createInstanceWithArguments( pImplNames[i], aArgs ), uno::UNO_QUERY );
+                                xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                                   pImplNames[i], aArgs, xContext ),
+                                uno::UNO_QUERY );
             }
             catch (uno::Exception &)
             {
@@ -1059,55 +1061,50 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
     {
         pAvailSpellSvcs = new SvcInfoArray;
 
-        uno::Reference< lang::XMultiServiceFactory >  xFac( comphelper::getProcessServiceFactory() );
-        if (xFac.is())
+        uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+
+        uno::Reference< container::XContentEnumerationAccess > xEnumAccess( xContext->getServiceManager(), uno::UNO_QUERY );
+        uno::Reference< container::XEnumeration > xEnum;
+        if (xEnumAccess.is())
+            xEnum = xEnumAccess->createContentEnumeration( SN_SPELLCHECKER );
+
+        if (xEnum.is())
         {
-            uno::Reference< container::XContentEnumerationAccess > xEnumAccess( xFac, uno::UNO_QUERY );
-            uno::Reference< container::XEnumeration > xEnum;
-            if (xEnumAccess.is())
-                xEnum = xEnumAccess->createContentEnumeration( SN_SPELLCHECKER );
-
-            if (xEnum.is())
+            while (xEnum->hasMoreElements())
             {
-                while (xEnum->hasMoreElements())
+                uno::Any aCurrent = xEnum->nextElement();
+                uno::Reference< lang::XSingleComponentFactory > xCompFactory;
+                uno::Reference< lang::XSingleServiceFactory > xFactory;
+
+                uno::Reference< linguistic2::XSpellChecker > xSvc;
+                if ( cppu::extractInterface( xCompFactory, aCurrent ) || ::cppu::extractInterface( xFactory, aCurrent ) )
                 {
-                    uno::Any aCurrent = xEnum->nextElement();
-                    uno::Reference< lang::XSingleComponentFactory > xCompFactory;
-                    uno::Reference< lang::XSingleServiceFactory > xFactory;
-
-                    uno::Reference< linguistic2::XSpellChecker > xSvc;
-                    if ( cppu::extractInterface( xCompFactory, aCurrent ) || ::cppu::extractInterface( xFactory, aCurrent ) )
+                    try
                     {
-                        try
-                        {
-                            uno::Reference < uno::XComponentContext > xContext(
-                                comphelper::getComponentContext( xFac ) );
-                            xSvc = uno::Reference< linguistic2::XSpellChecker >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
-                        }
-                        catch (const uno::Exception &)
-                        {
-                            DBG_ASSERT( 0, "createInstance failed" );
-                        }
+                        xSvc = uno::Reference< linguistic2::XSpellChecker >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
+                    }
+                    catch (const uno::Exception &)
+                    {
+                        DBG_ASSERT( 0, "createInstance failed" );
+                    }
+                }
+
+                if (xSvc.is())
+                {
+                    OUString            aImplName;
+                    uno::Sequence< sal_Int16 >    aLanguages;
+                    uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
+                    if (xInfo.is())
+                        aImplName = xInfo->getImplementationName();
+                    DBG_ASSERT( !aImplName.isEmpty(), "empty implementation name" );
+                    uno::Reference< linguistic2::XSupportedLocales > xSuppLoc( xSvc, uno::UNO_QUERY );
+                    DBG_ASSERT( xSuppLoc.is(), "interfaces not supported" );
+                    if (xSuppLoc.is()) {
+                        uno::Sequence<lang::Locale> aLocaleSequence(xSuppLoc->getLocales());
+                        aLanguages = LocaleSeqToLangSeq( aLocaleSequence );
                     }
 
-                    if (xSvc.is())
-                    {
-                        OUString            aImplName;
-                        uno::Sequence< sal_Int16 >    aLanguages;
-                        uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
-                        if (xInfo.is())
-                            aImplName = xInfo->getImplementationName();
-                        DBG_ASSERT( !aImplName.isEmpty(),
-                                "empty implementation name" );
-                        uno::Reference< linguistic2::XSupportedLocales > xSuppLoc( xSvc, uno::UNO_QUERY );
-                        DBG_ASSERT( xSuppLoc.is(), "interfaces not supported" );
-                        if (xSuppLoc.is()) {
-                            uno::Sequence<lang::Locale> aLocaleSequence(xSuppLoc->getLocales());
-                            aLanguages = LocaleSeqToLangSeq( aLocaleSequence );
-                        }
-
-                        pAvailSpellSvcs->push_back( new SvcInfo( aImplName, aLanguages ) );
-                    }
+                    pAvailSpellSvcs->push_back( new SvcInfo( aImplName, aLanguages ) );
                 }
             }
         }
@@ -1121,55 +1118,51 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
     {
         pAvailGrammarSvcs = new SvcInfoArray;
 
-        uno::Reference< lang::XMultiServiceFactory >  xFac( comphelper::getProcessServiceFactory() );
-        if (xFac.is())
+        uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+
+        uno::Reference< container::XContentEnumerationAccess > xEnumAccess( xContext->getServiceManager(), uno::UNO_QUERY );
+        uno::Reference< container::XEnumeration > xEnum;
+        if (xEnumAccess.is())
+            xEnum = xEnumAccess->createContentEnumeration( SN_GRAMMARCHECKER );
+
+        if (xEnum.is())
         {
-            uno::Reference< container::XContentEnumerationAccess > xEnumAccess( xFac, uno::UNO_QUERY );
-            uno::Reference< container::XEnumeration > xEnum;
-            if (xEnumAccess.is())
-                xEnum = xEnumAccess->createContentEnumeration( SN_GRAMMARCHECKER );
-
-            if (xEnum.is())
+            while (xEnum->hasMoreElements())
             {
-                while (xEnum->hasMoreElements())
+                uno::Any aCurrent = xEnum->nextElement();
+                uno::Reference< lang::XSingleComponentFactory > xCompFactory;
+                uno::Reference< lang::XSingleServiceFactory > xFactory;
+
+                uno::Reference< linguistic2::XProofreader > xSvc;
+                if ( cppu::extractInterface( xCompFactory, aCurrent ) || ::cppu::extractInterface( xFactory, aCurrent ) )
                 {
-                    uno::Any aCurrent = xEnum->nextElement();
-                    uno::Reference< lang::XSingleComponentFactory > xCompFactory;
-                    uno::Reference< lang::XSingleServiceFactory > xFactory;
-
-                    uno::Reference< linguistic2::XProofreader > xSvc;
-                    if ( cppu::extractInterface( xCompFactory, aCurrent ) || ::cppu::extractInterface( xFactory, aCurrent ) )
+                    try
                     {
-                        try
-                        {
-                            uno::Reference < uno::XComponentContext > xContext(
-                                comphelper::getComponentContext( xFac ) );
-                            xSvc = uno::Reference< linguistic2::XProofreader >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
-                        }
-                        catch (const uno::Exception &)
-                        {
-                            DBG_ASSERT( 0, "createInstance failed" );
-                        }
+                        xSvc = uno::Reference< linguistic2::XProofreader >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
+                    }
+                    catch (const uno::Exception &)
+                    {
+                        DBG_ASSERT( 0, "createInstance failed" );
+                    }
+                }
+
+                if (xSvc.is())
+                {
+                    OUString            aImplName;
+                    uno::Sequence< sal_Int16 >   aLanguages;
+                    uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
+                    if (xInfo.is())
+                        aImplName = xInfo->getImplementationName();
+                    DBG_ASSERT( !aImplName.isEmpty(),"empty implementation name" );
+                    uno::Reference< linguistic2::XSupportedLocales > xSuppLoc( xSvc, uno::UNO_QUERY );
+                    DBG_ASSERT( xSuppLoc.is(), "interfaces not supported" );
+                    if (xSuppLoc.is())
+                    {
+                        uno::Sequence<lang::Locale> aLocaleSequence(xSuppLoc->getLocales());
+                        aLanguages = LocaleSeqToLangSeq( aLocaleSequence );
                     }
 
-                    if (xSvc.is())
-                    {
-                        OUString            aImplName;
-                        uno::Sequence< sal_Int16 >   aLanguages;
-                        uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
-                        if (xInfo.is())
-                            aImplName = xInfo->getImplementationName();
-                        DBG_ASSERT( !aImplName.isEmpty(),
-                                "empty implementation name" );
-                        uno::Reference< linguistic2::XSupportedLocales > xSuppLoc( xSvc, uno::UNO_QUERY );
-                        DBG_ASSERT( xSuppLoc.is(), "interfaces not supported" );
-                        if (xSuppLoc.is()) {
-                            uno::Sequence<lang::Locale> aLocaleSequence(xSuppLoc->getLocales());
-                            aLanguages = LocaleSeqToLangSeq( aLocaleSequence );
-                        }
-
-                        pAvailGrammarSvcs->push_back( new SvcInfo( aImplName, aLanguages ) );
-                    }
+                    pAvailGrammarSvcs->push_back( new SvcInfo( aImplName, aLanguages ) );
                 }
             }
         }
@@ -1182,56 +1175,49 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
     if (!pAvailHyphSvcs)
     {
         pAvailHyphSvcs = new SvcInfoArray;
-        uno::Reference< lang::XMultiServiceFactory >  xFac( comphelper::getProcessServiceFactory() );
-        if (xFac.is())
+        uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+
+        uno::Reference< container::XContentEnumerationAccess > xEnumAccess( xContext->getServiceManager(), uno::UNO_QUERY );
+        uno::Reference< container::XEnumeration > xEnum;
+        if (xEnumAccess.is())
+            xEnum = xEnumAccess->createContentEnumeration( SN_HYPHENATOR );
+
+        if (xEnum.is())
         {
-            uno::Reference< container::XContentEnumerationAccess > xEnumAccess( xFac, uno::UNO_QUERY );
-            uno::Reference< container::XEnumeration > xEnum;
-            if (xEnumAccess.is())
-                xEnum = xEnumAccess->createContentEnumeration( SN_HYPHENATOR );
-
-            if (xEnum.is())
+            while (xEnum->hasMoreElements())
             {
-                while (xEnum->hasMoreElements())
+                uno::Any aCurrent = xEnum->nextElement();
+                uno::Reference< lang::XSingleComponentFactory > xCompFactory;
+                uno::Reference< lang::XSingleServiceFactory > xFactory;
+
+                uno::Reference< linguistic2::XHyphenator > xSvc;
+                if ( cppu::extractInterface( xCompFactory, aCurrent ) || ::cppu::extractInterface( xFactory, aCurrent ) )
                 {
-                    uno::Any aCurrent = xEnum->nextElement();
-                    uno::Reference< lang::XSingleComponentFactory > xCompFactory;
-                    uno::Reference< lang::XSingleServiceFactory > xFactory;
-
-                    uno::Reference< linguistic2::XHyphenator > xSvc;
-                    if ( cppu::extractInterface( xCompFactory, aCurrent ) || ::cppu::extractInterface( xFactory, aCurrent ) )
+                    try
                     {
-                        try
-                        {
-                            uno::Reference < uno::XComponentContext > xContext(
-                                comphelper::getComponentContext( xFac ) );
-                            xSvc = uno::Reference< linguistic2::XHyphenator >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
-
-                        }
-                        catch (const uno::Exception &)
-                        {
-                            DBG_ASSERT( 0, "createInstance failed" );
-                        }
+                        xSvc = uno::Reference< linguistic2::XHyphenator >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
                     }
-
-                    if (xSvc.is())
+                    catch (const uno::Exception &)
                     {
-                        OUString            aImplName;
-                        uno::Sequence< sal_Int16 >    aLanguages;
-                        uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
-                        if (xInfo.is())
-                            aImplName = xInfo->getImplementationName();
-                        DBG_ASSERT( !aImplName.isEmpty(),
-                                "empty implementation name" );
-                        uno::Reference< linguistic2::XSupportedLocales > xSuppLoc( xSvc, uno::UNO_QUERY );
-                        DBG_ASSERT( xSuppLoc.is(), "interfaces not supported" );
-                        if (xSuppLoc.is()) {
-                            uno::Sequence<lang::Locale> aLocaleSequence(xSuppLoc->getLocales());
-                            aLanguages = LocaleSeqToLangSeq( aLocaleSequence );
-                        }
-
-                        pAvailHyphSvcs->push_back( new SvcInfo( aImplName, aLanguages ) );
+                        DBG_ASSERT( 0, "createInstance failed" );
                     }
+                }
+                if (xSvc.is())
+                {
+                    OUString            aImplName;
+                    uno::Sequence< sal_Int16 >    aLanguages;
+                    uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
+                    if (xInfo.is())
+                        aImplName = xInfo->getImplementationName();
+                    DBG_ASSERT( !aImplName.isEmpty(), "empty implementation name" );
+                    uno::Reference< linguistic2::XSupportedLocales > xSuppLoc( xSvc, uno::UNO_QUERY );
+                    DBG_ASSERT( xSuppLoc.is(), "interfaces not supported" );
+                    if (xSuppLoc.is())
+                    {
+                        uno::Sequence<lang::Locale> aLocaleSequence(xSuppLoc->getLocales());
+                        aLanguages = LocaleSeqToLangSeq( aLocaleSequence );
+                    }
+                    pAvailHyphSvcs->push_back( new SvcInfo( aImplName, aLanguages ) );
                 }
             }
         }
@@ -1245,56 +1231,50 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
     {
         pAvailThesSvcs = new SvcInfoArray;
 
-        uno::Reference< lang::XMultiServiceFactory >  xFac( comphelper::getProcessServiceFactory() );
-        if (xFac.is())
+        uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+
+        uno::Reference< container::XContentEnumerationAccess > xEnumAccess( xContext->getServiceManager(), uno::UNO_QUERY );
+        uno::Reference< container::XEnumeration > xEnum;
+        if (xEnumAccess.is())
+            xEnum = xEnumAccess->createContentEnumeration( SN_THESAURUS );
+
+        if (xEnum.is())
         {
-            uno::Reference< container::XContentEnumerationAccess > xEnumAccess( xFac, uno::UNO_QUERY );
-            uno::Reference< container::XEnumeration > xEnum;
-            if (xEnumAccess.is())
-                xEnum = xEnumAccess->createContentEnumeration( SN_THESAURUS );
-
-            if (xEnum.is())
+            while (xEnum->hasMoreElements())
             {
-                while (xEnum->hasMoreElements())
+                uno::Any aCurrent = xEnum->nextElement();
+                uno::Reference< lang::XSingleComponentFactory > xCompFactory;
+                uno::Reference< lang::XSingleServiceFactory > xFactory;
+
+                uno::Reference< linguistic2::XThesaurus > xSvc;
+                if ( cppu::extractInterface( xCompFactory, aCurrent ) || ::cppu::extractInterface( xFactory, aCurrent ) )
                 {
-                    uno::Any aCurrent = xEnum->nextElement();
-
-                    uno::Reference< lang::XSingleComponentFactory > xCompFactory;
-                    uno::Reference< lang::XSingleServiceFactory > xFactory;
-
-                    uno::Reference< linguistic2::XThesaurus > xSvc;
-                    if ( cppu::extractInterface( xCompFactory, aCurrent ) || ::cppu::extractInterface( xFactory, aCurrent ) )
+                    try
                     {
-                        try
-                        {
-                            uno::Reference < uno::XComponentContext > xContext(
-                                comphelper::getComponentContext( xFac ) );
-                            xSvc = uno::Reference< linguistic2::XThesaurus >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
-                        }
-                        catch (const uno::Exception &)
-                        {
-                            DBG_ASSERT( 0, "createInstance failed" );
-                        }
+                        xSvc = uno::Reference< linguistic2::XThesaurus >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
+                    }
+                    catch (const uno::Exception &)
+                    {
+                        DBG_ASSERT( 0, "createInstance failed" );
+                    }
+                }
+                if (xSvc.is())
+                {
+                    OUString            aImplName;
+                    uno::Sequence< sal_Int16 >    aLanguages;
+                    uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
+                    if (xInfo.is())
+                        aImplName = xInfo->getImplementationName();
+                    DBG_ASSERT( !aImplName.isEmpty(), "empty implementation name" );
+                    uno::Reference< linguistic2::XSupportedLocales > xSuppLoc( xSvc, uno::UNO_QUERY );
+                    DBG_ASSERT( xSuppLoc.is(), "interfaces not supported" );
+                    if (xSuppLoc.is())
+                    {
+                        uno::Sequence<lang::Locale> aLocaleSequence(xSuppLoc->getLocales());
+                        aLanguages = LocaleSeqToLangSeq( aLocaleSequence );
                     }
 
-                    if (xSvc.is())
-                    {
-                        OUString            aImplName;
-                        uno::Sequence< sal_Int16 >    aLanguages;
-                        uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
-                        if (xInfo.is())
-                            aImplName = xInfo->getImplementationName();
-                        DBG_ASSERT( !aImplName.isEmpty(),
-                                "empty implementation name" );
-                        uno::Reference< linguistic2::XSupportedLocales > xSuppLoc( xSvc, uno::UNO_QUERY );
-                        DBG_ASSERT( xSuppLoc.is(), "interfaces not supported" );
-                        if (xSuppLoc.is()) {
-                            uno::Sequence<lang::Locale> aLocaleSequence(xSuppLoc->getLocales());
-                            aLanguages = LocaleSeqToLangSeq( aLocaleSequence );
-                        }
-
-                        pAvailThesSvcs->push_back( new SvcInfo( aImplName, aLanguages ) );
-                    }
+                    pAvailThesSvcs->push_back( new SvcInfo( aImplName, aLanguages ) );
                 }
             }
         }

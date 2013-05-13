@@ -237,7 +237,6 @@ void ConvDic::Save()
     DBG_ASSERT(!INetURLObject( aMainURL ).HasError(), "invalid URL");
 
     uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
-    uno::Reference< lang::XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
 
     // get XOutputStream stream
     uno::Reference< io::XStream > xStream;
