@@ -155,4 +155,13 @@ Resource RID_SIDEBAR_RESOURCE
     };
 };
 
+String SFX_STR_SIDEBAR_MORE_OPTIONS
+{
+    Text [en-US] = "More Options";
+};
+
+String SFX_STR_SIDEBAR_CLOSE_DECK
+{
+    Text [en-US] = "Close Sidebar Deck";
+};
 

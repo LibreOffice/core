@@ -18,6 +18,8 @@
 
 #include "DeckTitleBar.hxx"
 #include "sfx2/sidebar/Theme.hxx"
+#include "sfx2/sfxresid.hxx"
+#include "Sidebar.hrc"
 
 #include <vcl/image.hxx>
 
@@ -39,16 +41,12 @@ DeckTitleBar::DeckTitleBar (
     : TitleBar(rsTitle, pParentWindow, GetBackgroundPaint()),
       mnCloserItemIndex(1),
       maCloserAction(rCloserAction),
-      mbIsCloserVisible(rCloserAction)
+      mbIsCloserVisible(false)
 {
     OSL_ASSERT(pParentWindow != NULL);
 
     if (maCloserAction)
-    {
-        maToolBox.InsertItem(
-            mnCloserItemIndex,
-            Theme::GetImage(Theme::Image_Closer));
-    }
+        SetCloserVisible(true);
 
 #ifdef DEBUG
     SetText(A2S("DeckTitleBar"));
@@ -72,9 +70,14 @@ void DeckTitleBar::SetCloserVisible (const bool bIsCloserVisible)
         mbIsCloserVisible = bIsCloserVisible;
 
         if (mbIsCloserVisible)
+        {
             maToolBox.InsertItem(
                 mnCloserItemIndex,
                 Theme::GetImage(Theme::Image_Closer));
+            maToolBox.SetQuickHelpText(
+                mnCloserItemIndex,
+                String(SfxResId(SFX_STR_SIDEBAR_CLOSE_DECK)));
+        }
         else
             maToolBox.RemoveItem(
                 maToolBox.GetItemPos(mnCloserItemIndex));

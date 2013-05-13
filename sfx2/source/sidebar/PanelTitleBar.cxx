@@ -17,6 +17,8 @@
  */
 
 #include "PanelTitleBar.hxx"
+#include "sfx2/sfxresid.hxx"
+#include "Sidebar.hrc"
 
 #include "Paint.hxx"
 #include "Panel.hxx"
@@ -73,6 +75,9 @@ void PanelTitleBar::SetMenuAction ( const ::boost::function<void(void)>& rMenuAc
             mnMenuItemIndex,
             Theme::GetImage(Theme::Image_PanelMenu));
         maToolBox.SetOutStyle(TOOLBOX_STYLE_FLAT);
+        maToolBox.SetQuickHelpText(
+            mnMenuItemIndex,
+            String(SfxResId(SFX_STR_SIDEBAR_MORE_OPTIONS)));
     }
     else if ( maMenuAction && !rMenuAction )
     {
