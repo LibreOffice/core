@@ -4163,7 +4163,9 @@ static void impl_WriteTabElement( FSHelperPtr pSerializer,
         break;
     }
 
-    pTabElementAttrList->add( FSNS( XML_w, XML_pos ), OString::valueOf( rTab.GetTabPos() + nCurrentLeft ) );
+    // Because GetTabPos already includes indent, we don't need to add nCurrentLeft (CurrentLeft is indentation information)
+    //pTabElementAttrList->add( FSNS( XML_w, XML_pos ), OString::valueOf( rTab.GetTabPos() + nCurrentLeft ) );
+    pTabElementAttrList->add( FSNS( XML_w, XML_pos ), OString::valueOf( rTab.GetTabPos()                ) );
 
     sal_Unicode cFillChar = rTab.GetFill();
 
