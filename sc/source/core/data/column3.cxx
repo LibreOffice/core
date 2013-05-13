@@ -331,8 +331,7 @@ void ScColumn::DeleteRange(
         drawing undo. */
 
     // cache all formula cells, they will be deleted at end of this function
-    typedef ::std::vector< ScFormulaCell* > FormulaCellVector;
-    FormulaCellVector aDelCells;
+    std::vector<ScFormulaCell*> aDelCells;
     aDelCells.reserve( nEndIndex - nStartIndex + 1 );
 
     typedef mdds::flat_segment_tree<SCSIZE, bool> RemovedSegments_t;
@@ -437,19 +436,8 @@ void ScColumn::DeleteRange(
         }
     }
 
-    // *** delete all formula cells ***
-    if (!aDelCells.empty())
-    {
-        // First, all cells stop listening, may save unneeded broadcasts and
-        // recalcualtions.
-        // NOTE: this actually may remove ScNoteCell entries from maItems if
-        // the last listener is removed from a broadcaster.
-        for ( FormulaCellVector::iterator aIt = aDelCells.begin(), aEnd = aDelCells.end(); aIt != aEnd; ++aIt )
-        {
-            (*aIt)->EndListeningTo( pDocument );
-            (*aIt)->Delete();
-        }
-    }
+    pDocument->EndListeningFormulaCells(aDelCells);
+    std::for_each(aDelCells.begin(), aDelCells.end(), ScDeleteObjectByPtr<ScFormulaCell>());
 }
 
 void ScColumn::DeleteArea(SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag)

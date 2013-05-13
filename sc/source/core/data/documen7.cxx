@@ -200,6 +200,15 @@ void ScDocument::EndListeningCell( const ScAddress& rAddress,
         maTabs[nTab]->EndListening( rAddress, pListener );
 }
 
+void ScDocument::EndListeningFormulaCells( std::vector<ScFormulaCell*>& rCells )
+{
+    if (rCells.empty())
+        return;
+
+    std::vector<ScFormulaCell*>::iterator it = rCells.begin(), itEnd = rCells.end();
+    for (; it != itEnd; ++it)
+        (*it)->EndListeningTo(this);
+}
 
 void ScDocument::PutInFormulaTree( ScFormulaCell* pCell )
 {

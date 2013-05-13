@@ -1753,6 +1753,9 @@ public:
                                             SvtListener* pListener );
     void                EndListeningCell( const ScAddress& rAddress,
                                             SvtListener* pListener );
+
+    void EndListeningFormulaCells( std::vector<ScFormulaCell*>& rCells );
+
     void                PutInFormulaTree( ScFormulaCell* pCell );
     void                RemoveFromFormulaTree( ScFormulaCell* pCell );
 
