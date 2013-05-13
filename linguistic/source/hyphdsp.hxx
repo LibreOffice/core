@@ -55,7 +55,7 @@ class HyphenatorDispatcher :
     HyphSvcByLangMap_t      aSvcMap;
 
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >                     xPropSet;
+        ::com::sun::star::linguistic2::XLinguProperties >          xPropSet;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSearchableDictionaryList > xDicList;
 
@@ -66,7 +66,7 @@ class HyphenatorDispatcher :
     HyphenatorDispatcher & operator = (const HyphenatorDispatcher &);
 
     inline ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >
+        ::com::sun::star::linguistic2::XLinguProperties >
             GetPropSet();
     inline ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSearchableDictionaryList >
@@ -139,7 +139,7 @@ public:
 
 
 inline ::com::sun::star::uno::Reference<
-    ::com::sun::star::beans::XPropertySet >
+    ::com::sun::star::linguistic2::XLinguProperties >
         HyphenatorDispatcher::GetPropSet()
 {
     return xPropSet.is() ?

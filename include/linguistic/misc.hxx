@@ -29,6 +29,7 @@
 #include <com/sun/star/linguistic2/XDictionaryEntry.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
+#include <com/sun/star/linguistic2/XLinguProperties.hpp>
 
 #include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
 #include <cppuhelper/implbase1.hxx> // helper for implementations
@@ -56,7 +57,6 @@ class LocaleDataWrapper;
 #define SN_SPELLCHECKER             "com.sun.star.linguistic2.SpellChecker"
 #define SN_HYPHENATOR               "com.sun.star.linguistic2.Hyphenator"
 #define SN_THESAURUS                "com.sun.star.linguistic2.Thesaurus"
-#define SN_LINGU_PROPERTIES         "com.sun.star.linguistic2.LinguProperties"
 
 
 namespace linguistic
@@ -150,7 +150,7 @@ LNG_DLLPUBLIC sal_Bool      IsNumeric( const String &rText );
 
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > GetOneInstanceService( const char *pServiceName );
-LNG_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > GetLinguProperties();
+LNG_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XLinguProperties > GetLinguProperties();
 ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSearchableDictionaryList > GetDictionaryList();
 ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionary > GetIgnoreAllList();
 

@@ -24,6 +24,7 @@
 #include <tools/string.hxx>
 #include <com/sun/star/util/Language.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceManager2.hpp>
+#include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
@@ -52,7 +53,7 @@ class EDITENG_DLLPUBLIC LinguMgr
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSearchableDictionaryList > xDicList;
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >         xProp;
+        ::com::sun::star::linguistic2::XLinguProperties >          xProp;
 
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionary >    xIgnoreAll;
@@ -71,7 +72,7 @@ class EDITENG_DLLPUBLIC LinguMgr
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSearchableDictionaryList > GetDicList();
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >         GetProp();
+        ::com::sun::star::linguistic2::XLinguProperties >          GetProp();
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionary >    GetStandard();
     static ::com::sun::star::uno::Reference<
@@ -94,7 +95,7 @@ public:
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSearchableDictionaryList > GetDictionaryList();
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >         GetLinguPropertySet();
+        ::com::sun::star::linguistic2::XLinguProperties >          GetLinguPropertySet();
 
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XLinguServiceManager2 > GetLngSvcMgr();
@@ -167,7 +168,7 @@ EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
 EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XSearchableDictionaryList > SvxGetDictionaryList();
 EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
-    ::com::sun::star::beans::XPropertySet >         SvxGetLinguPropertySet();
+    ::com::sun::star::linguistic2::XLinguProperties >          SvxGetLinguPropertySet();
 //TODO: remove argument or provide SvxGetIgnoreAllList with the same one
 EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XDictionary >    SvxGetOrCreatePosDic(

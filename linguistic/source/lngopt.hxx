@@ -27,12 +27,14 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <unotools/lingucfg.hxx>
 #include <svl/itemprop.hxx>
 #include <unotools/configitem.hxx>
+#include <unotools/linguprops.hxx>
 #include <com/sun/star/uno/Any.h>
 #include <tools/solar.h>
 
@@ -92,7 +94,7 @@ typedef cppu::OMultiTypeInterfaceContainerHelperVar
 class LinguProps :
     public cppu::WeakImplHelper5
     <
-        com::sun::star::beans::XPropertySet,
+        com::sun::star::linguistic2::XLinguProperties,
         com::sun::star::beans::XFastPropertySet,
         com::sun::star::beans::XPropertyAccess,
         com::sun::star::lang::XComponent,
@@ -113,8 +115,83 @@ class LinguProps :
 
     void    launchEvent( const ::com::sun::star::beans::PropertyChangeEvent &rEvt ) const;
 
+    sal_Bool getPropertyBool(const OUString& aPropertyName) throw (css::uno::RuntimeException);
+    sal_Int16 getPropertyInt16(const OUString& aPropertyName) throw (css::uno::RuntimeException);
+    css::lang::Locale getPropertyLocale(const OUString& aPropertyName) throw (css::uno::RuntimeException);
+    void setProperty(const OUString& aPropertyName, sal_Bool p1) throw (css::uno::RuntimeException)
+        { setPropertyValue( aPropertyName, css::uno::Any(p1) ); }
+    void setProperty(const OUString& aPropertyName, sal_Int16 p1) throw (css::uno::RuntimeException)
+        { setPropertyValue( aPropertyName, css::uno::Any(p1) ); }
+    void setProperty(const OUString& aPropertyName, css::lang::Locale p1) throw (css::uno::RuntimeException)
+        { setPropertyValue( aPropertyName, css::uno::Any(p1) ); }
+
 public:
     LinguProps();
+
+    virtual sal_Bool SAL_CALL getIsUseDictionaryList() throw (css::uno::RuntimeException)
+        { return getPropertyBool(UPN_IS_USE_DICTIONARY_LIST); }
+    virtual void SAL_CALL setIsUseDictionaryList(sal_Bool p1) throw (css::uno::RuntimeException)
+        { setProperty(UPN_IS_USE_DICTIONARY_LIST, p1); }
+    virtual sal_Bool SAL_CALL getIsIgnoreControlCharacters() throw (css::uno::RuntimeException)
+        { return getPropertyBool(UPN_IS_IGNORE_CONTROL_CHARACTERS); }
+    virtual void SAL_CALL setIsIgnoreControlCharacters(sal_Bool p1) throw (css::uno::RuntimeException)
+        { setProperty(UPN_IS_IGNORE_CONTROL_CHARACTERS, p1); }
+    virtual sal_Bool SAL_CALL getIsSpellUpperCase() throw (css::uno::RuntimeException)
+        { return getPropertyBool(UPN_IS_SPELL_UPPER_CASE); }
+    virtual void SAL_CALL setIsSpellUpperCase(sal_Bool p1) throw (css::uno::RuntimeException)
+        { setProperty(UPN_IS_SPELL_UPPER_CASE, p1); }
+    virtual sal_Bool SAL_CALL getIsSpellWithDigits() throw (css::uno::RuntimeException)
+        { return getPropertyBool(UPN_IS_SPELL_WITH_DIGITS); }
+    virtual void SAL_CALL setIsSpellWithDigits(sal_Bool p1) throw (css::uno::RuntimeException)
+        { setProperty(UPN_IS_SPELL_WITH_DIGITS, p1); }
+    virtual sal_Bool SAL_CALL getIsSpellCapitalization() throw (css::uno::RuntimeException)
+        { return getPropertyBool(UPN_IS_SPELL_CAPITALIZATION); }
+    virtual void SAL_CALL setIsSpellCapitalization(sal_Bool p1) throw (css::uno::RuntimeException)
+        { setProperty(UPN_IS_SPELL_CAPITALIZATION, p1); }
+    virtual sal_Int16 SAL_CALL getHyphMinLeading() throw (css::uno::RuntimeException)
+        { return getPropertyBool(UPN_HYPH_MIN_LEADING); }
+    virtual void SAL_CALL setHyphMinLeading(sal_Int16 p1) throw (css::uno::RuntimeException)
+        { setProperty(UPN_HYPH_MIN_LEADING, p1); }
+    virtual sal_Int16 SAL_CALL getHyphMinTrailing() throw (css::uno::RuntimeException)
+        { return getPropertyInt16(UPN_HYPH_MIN_TRAILING); }
+    virtual void SAL_CALL setHyphMinTrailing(sal_Int16 p1) throw (css::uno::RuntimeException)
+        { setProperty(UPN_HYPH_MIN_TRAILING, p1); }
+    virtual sal_Int16 SAL_CALL getHyphMinWordLength() throw (css::uno::RuntimeException)
+        { return getPropertyInt16(UPN_HYPH_MIN_WORD_LENGTH); }
+    virtual void SAL_CALL setHyphMinWordLength(sal_Int16 p1) throw (css::uno::RuntimeException)
+        { setProperty(UPN_HYPH_MIN_WORD_LENGTH, p1); }
+    virtual com::sun::star::lang::Locale SAL_CALL getDefaultLocale() throw (css::uno::RuntimeException)
+        { return getPropertyLocale(UPN_DEFAULT_LOCALE); }
+    virtual void SAL_CALL setDefaultLocale(const com::sun::star::lang::Locale& p1) throw (css::uno::RuntimeException)
+        { setProperty(UPN_DEFAULT_LOCALE, p1); }
+    virtual sal_Bool SAL_CALL getIsHyphAuto() throw (css::uno::RuntimeException)
+        { return getPropertyBool(UPN_IS_HYPH_AUTO); }
+    virtual void SAL_CALL setIsHyphAuto(sal_Bool p1) throw (css::uno::RuntimeException)
+        { setProperty(UPN_IS_HYPH_AUTO, p1); }
+    virtual sal_Bool SAL_CALL getIsHyphSpecial() throw (css::uno::RuntimeException)
+        { return getPropertyBool(UPN_IS_HYPH_SPECIAL); }
+    virtual void SAL_CALL setIsHyphSpecial(sal_Bool p1) throw (css::uno::RuntimeException)
+        { setProperty(UPN_IS_HYPH_SPECIAL, p1); }
+    virtual sal_Bool SAL_CALL getIsSpellAuto() throw (css::uno::RuntimeException)
+        { return getPropertyBool(UPN_IS_SPELL_AUTO); }
+    virtual void SAL_CALL setIsSpellAuto(sal_Bool p1) throw (css::uno::RuntimeException)
+        { setProperty(UPN_IS_SPELL_AUTO, p1); }
+    virtual sal_Bool SAL_CALL getIsSpellSpecial() throw (css::uno::RuntimeException)
+        { return getPropertyBool(UPN_IS_SPELL_SPECIAL); }
+    virtual void SAL_CALL setIsSpellSpecial(sal_Bool p1) throw (css::uno::RuntimeException)
+        { setProperty(UPN_IS_SPELL_SPECIAL, p1); }
+    virtual sal_Bool SAL_CALL getIsWrapReverse() throw (css::uno::RuntimeException)
+        { return getPropertyBool(UPN_IS_WRAP_REVERSE); }
+    virtual void SAL_CALL setIsWrapReverse(sal_Bool p1) throw (css::uno::RuntimeException)
+        { setProperty(UPN_IS_WRAP_REVERSE, p1); }
+    virtual com::sun::star::lang::Locale SAL_CALL getDefaultLocale_CJK() throw (css::uno::RuntimeException)
+        { return getPropertyLocale(UPN_DEFAULT_LOCALE_CJK); }
+    virtual void SAL_CALL setDefaultLocale_CJK(const com::sun::star::lang::Locale& p1) throw (css::uno::RuntimeException)
+        { setProperty(UPN_DEFAULT_LOCALE_CJK, p1); }
+    virtual css::lang::Locale SAL_CALL getDefaultLocale_CTL() throw (css::uno::RuntimeException)
+        { return getPropertyLocale(UPN_DEFAULT_LOCALE_CTL); }
+    virtual void SAL_CALL setDefaultLocale_CTL(const com::sun::star::lang::Locale& p1) throw (css::uno::RuntimeException)
+        { setProperty(UPN_DEFAULT_LOCALE_CTL, p1); }
 
     // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);

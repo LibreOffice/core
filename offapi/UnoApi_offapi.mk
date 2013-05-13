@@ -223,6 +223,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/linguistic
 	ConversionDictionaryList \
 	DictionaryList \
 	LanguageGuessing \
+	LinguProperties \
 	LinguServiceManager \
 	Proofreader \
 	ProofreadingIterator \
@@ -967,7 +968,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/linguis
 	Dictionary \
 	HangulHanjaConversionDictionary \
 	Hyphenator \
-	LinguProperties \
 	SpellChecker \
 	Thesaurus \
 ))
@@ -2799,6 +2799,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/linguistic2,\
 	XHyphenatedWord \
 	XHyphenator \
 	XLanguageGuessing \
+	XLinguProperties \
 	XLinguServiceEventBroadcaster \
 	XLinguServiceEventListener \
 	XLinguServiceManager \

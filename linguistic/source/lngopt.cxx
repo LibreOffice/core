@@ -458,8 +458,32 @@ uno::Sequence< OUString > LinguProps::getSupportedServiceNames_Static()
     MutexGuard  aGuard( GetLinguMutex() );
 
     uno::Sequence< OUString > aSNS( 1 );    // more than 1 service possible
-    aSNS.getArray()[0] = SN_LINGU_PROPERTIES;
+    aSNS.getArray()[0] = "com.sun.star.linguistic2.LinguProperties";
     return aSNS;
+}
+
+sal_Bool LinguProps::getPropertyBool(const OUString& aPropertyName) throw (css::uno::RuntimeException)
+{
+   uno::Any any = getPropertyValue(aPropertyName);
+   sal_Bool b = sal_False;
+   any >>= b;
+   return b;
+}
+
+sal_Int16 LinguProps::getPropertyInt16(const OUString& aPropertyName) throw (css::uno::RuntimeException)
+{
+   uno::Any any = getPropertyValue(aPropertyName);
+   sal_Int16 b = sal_False;
+   any >>= b;
+   return b;
+}
+
+Locale LinguProps::getPropertyLocale(const OUString& aPropertyName) throw (css::uno::RuntimeException)
+{
+   uno::Any any = getPropertyValue(aPropertyName);
+   css::lang::Locale b;
+   any >>= b;
+   return b;
 }
 
 void * SAL_CALL LinguProps_getFactory( const sal_Char * pImplName,

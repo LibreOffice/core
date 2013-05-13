@@ -160,11 +160,8 @@ SvxSpellWrapper::SvxSpellWrapper( Window* pWn,
     bRevAllowed ( bRevAllow ),
     bAllRight   ( bIsAllRight )
 {
-    Reference< beans::XPropertySet >  xProp( SvxGetLinguPropertySet() );
-    sal_Bool bWrapReverse = xProp.is() ?
-        *(sal_Bool*)xProp->getPropertyValue(
-            OUString(UPN_IS_WRAP_REVERSE) ).getValue()
-        : sal_False;
+    Reference< linguistic2::XLinguProperties >  xProp( SvxGetLinguPropertySet() );
+    sal_Bool bWrapReverse = xProp.is() ? xProp->getIsWrapReverse() : sal_False;
     bReverse = bRevAllow && bWrapReverse;
     bStartDone = bOther || ( !bReverse && bStart );
     bEndDone   = bReverse && bStart && !bOther;
@@ -399,11 +396,8 @@ void SvxSpellWrapper::SpellDocument( )
 
 sal_Bool SvxSpellWrapper::SpellNext( )
 {
-    Reference< beans::XPropertySet >  xProp( SvxGetLinguPropertySet() );
-    sal_Bool bWrapReverse = xProp.is() ?
-            *(sal_Bool*)xProp->getPropertyValue(
-                OUString(UPN_IS_WRAP_REVERSE) ).getValue()
-            : sal_False;
+    Reference< linguistic2::XLinguProperties >  xProp( SvxGetLinguPropertySet() );
+    sal_Bool bWrapReverse = xProp.is() ? xProp->getIsWrapReverse() : sal_False;
     sal_Bool bActRev = bRevAllowed && bWrapReverse;
 
     // bActRev is the direction after Spell checking, bReverse is the one
@@ -447,10 +441,7 @@ sal_Bool SvxSpellWrapper::SpellNext( )
     }
     else if ( bStartDone && bEndDone )
     {
-        sal_Bool bIsSpellSpecial = xProp.is() ?
-            *(sal_Bool*)xProp->getPropertyValue(
-                OUString(UPN_IS_SPELL_SPECIAL) ).getValue()
-            : sal_False;
+        sal_Bool bIsSpellSpecial = xProp.is() ? xProp->getIsSpellSpecial() : sal_False;
         // Body area done, ask for special area
         if( !IsHyphen() && bIsSpellSpecial && HasOtherCnt() )
         {

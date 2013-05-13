@@ -59,7 +59,7 @@ static const struct
 
 static void lcl_AddAsPropertyChangeListener(
         Reference< XPropertyChangeListener > xListener,
-        Reference< XPropertySet > &rPropSet )
+        Reference< XLinguProperties > &rPropSet )
 {
     if (xListener.is() && rPropSet.is())
     {
@@ -74,7 +74,7 @@ static void lcl_AddAsPropertyChangeListener(
 
 static void lcl_RemoveAsPropertyChangeListener(
         Reference< XPropertyChangeListener > xListener,
-        Reference< XPropertySet > &rPropSet )
+        Reference< XLinguProperties > &rPropSet )
 {
     if (xListener.is() && rPropSet.is())
     {
@@ -126,7 +126,7 @@ void FlushListener::SetDicList( Reference<XSearchableDictionaryList> &rDL )
 }
 
 
-void FlushListener::SetPropSet( Reference< XPropertySet > &rPS )
+void FlushListener::SetPropSet( Reference< XLinguProperties > &rPS )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -207,14 +207,14 @@ SpellCache::SpellCache()
     xFlushLstnr = pFlushLstnr;
     Reference<XSearchableDictionaryList> aDictionaryList(GetDictionaryList());
     pFlushLstnr->SetDicList( aDictionaryList ); //! after reference is established
-    Reference<XPropertySet> aPropertySet(GetLinguProperties());
+    Reference<XLinguProperties> aPropertySet(GetLinguProperties());
     pFlushLstnr->SetPropSet( aPropertySet );    //! after reference is established
 }
 
 SpellCache::~SpellCache()
 {
     Reference<XSearchableDictionaryList>  aEmptyList;
-    Reference<XPropertySet>     aEmptySet;
+    Reference<XLinguProperties>     aEmptySet;
     pFlushLstnr->SetDicList( aEmptyList );
     pFlushLstnr->SetPropSet( aEmptySet );
 }

@@ -32,6 +32,7 @@
 #include <com/sun/star/linguistic2/DictionaryList.hpp>
 #include <com/sun/star/linguistic2/XAvailableLocales.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
+#include <com/sun/star/linguistic2/LinguProperties.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
@@ -517,7 +518,7 @@ uno::Reference< XSpellChecker1 >    LinguMgr::xSpell        = 0;
 uno::Reference< XHyphenator >       LinguMgr::xHyph         = 0;
 uno::Reference< XThesaurus >        LinguMgr::xThes         = 0;
 uno::Reference< XSearchableDictionaryList >   LinguMgr::xDicList      = 0;
-uno::Reference< XPropertySet >      LinguMgr::xProp         = 0;
+uno::Reference< XLinguProperties >  LinguMgr::xProp         = 0;
 uno::Reference< XDictionary >       LinguMgr::xIgnoreAll    = 0;
 uno::Reference< XDictionary >       LinguMgr::xChangeAll    = 0;
 
@@ -557,7 +558,7 @@ uno::Reference< XSearchableDictionaryList > LinguMgr::GetDictionaryList()
     return xDicList.is() ? xDicList : GetDicList();
 }
 
-uno::Reference< XPropertySet > LinguMgr::GetLinguPropertySet()
+uno::Reference< linguistic2::XLinguProperties > LinguMgr::GetLinguPropertySet()
 {
     return xProp.is() ? xProp : GetProp();
 }
@@ -634,7 +635,7 @@ uno::Reference< XSearchableDictionaryList > LinguMgr::GetDicList()
     return xDicList;
 }
 
-uno::Reference< XPropertySet > LinguMgr::GetProp()
+uno::Reference< linguistic2::XLinguProperties > LinguMgr::GetProp()
 {
     if (bExiting)
         return 0;
@@ -642,9 +643,7 @@ uno::Reference< XPropertySet > LinguMgr::GetProp()
     if (!pExitLstnr)
         pExitLstnr = new LinguMgrExitLstnr;
 
-    uno::Reference< XMultiServiceFactory >  xMgr( getProcessServiceFactory() );
-    xProp = uno::Reference< XPropertySet > ( xMgr->createInstance(
-                "com.sun.star.linguistic2.LinguProperties" ), UNO_QUERY );
+    xProp = linguistic2::LinguProperties::create( getProcessComponentContext()  );
     return xProp;
 }
 
@@ -756,7 +755,7 @@ uno::Reference< XSearchableDictionaryList >  SvxGetDictionaryList()
     return LinguMgr::GetDictionaryList();
 }
 
-uno::Reference< XPropertySet >  SvxGetLinguPropertySet()
+uno::Reference< XLinguProperties >  SvxGetLinguPropertySet()
 {
     return LinguMgr::GetLinguPropertySet();
 }

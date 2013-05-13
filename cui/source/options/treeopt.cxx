@@ -58,6 +58,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
+#include <com/sun/star/linguistic2/LinguProperties.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <comphelper/processfactory.hxx>
 #include <editeng/langitem.hxx>
@@ -1436,23 +1437,14 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
     {
         bSaveSpellCheck = ( (const SfxBoolItem*)pItem )->GetValue();
     }
-    Reference< XMultiServiceFactory >  xMgr( ::comphelper::getProcessServiceFactory() );
-    Reference< XPropertySet >  xProp(
-            xMgr->createInstance( OUString( "com.sun.star.linguistic2.LinguProperties" ) ),
-            UNO_QUERY );
+    Reference< XComponentContext >  xContext( ::comphelper::getProcessComponentContext() );
+    Reference< XLinguProperties >  xProp = LinguProperties::create( xContext );
     if ( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_HYPHENREGION, sal_False, &pItem ) )
     {
         const SfxHyphenRegionItem* pHyphenItem = (const SfxHyphenRegionItem*)pItem;
 
-        if (xProp.is())
-        {
-            xProp->setPropertyValue(
-                    OUString(UPN_HYPH_MIN_LEADING),
-                    makeAny((sal_Int16) pHyphenItem->GetMinLead()) );
-            xProp->setPropertyValue(
-                    OUString(UPN_HYPH_MIN_TRAILING),
-                    makeAny((sal_Int16) pHyphenItem->GetMinTrail()) );
-        }
+        xProp->setHyphMinLeading( (sal_Int16) pHyphenItem->GetMinLead() );
+        xProp->setHyphMinTrailing( (sal_Int16) pHyphenItem->GetMinTrail() );
         bSaveSpellCheck = sal_True;
     }
 
@@ -1483,12 +1475,7 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
             pDispatch->Execute(SID_AUTOSPELL_CHECK,
                 SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD, pItem, 0L);
 
-            if (xProp.is())
-            {
-                xProp->setPropertyValue(
-                        OUString(UPN_IS_SPELL_AUTO),
-                        makeAny(bOnlineSpelling) );
-            }
+            xProp->setIsSpellAuto( bOnlineSpelling );
         }
 
         if( bSaveSpellCheck )

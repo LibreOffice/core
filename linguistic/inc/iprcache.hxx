@@ -30,6 +30,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/linguistic2/XDictionaryListEventListener.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
+#include <com/sun/star/linguistic2/XLinguProperties.hpp>
 
 #include <rtl/string.hxx>
 #include <i18nlangtag/lang.h>
@@ -61,7 +62,7 @@ class FlushListener :
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSearchableDictionaryList >    xDicList;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >             xPropSet;
+        ::com::sun::star::linguistic2::XLinguProperties >             xPropSet;
     Flushable                                              *pFlushObj;
 
     // don't allow to use copy-constructor and assignment-operator
@@ -75,7 +76,7 @@ public:
     inline void SetFlushObj( Flushable *pFO)    { pFlushObj = pFO; }
 
     void        SetDicList( ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSearchableDictionaryList > &rDL );
-    void        SetPropSet( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &rPS );
+    void        SetPropSet( ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XLinguProperties > &rPS );
 
     //XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& rSource ) throw(::com::sun::star::uno::RuntimeException);

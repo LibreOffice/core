@@ -24,19 +24,19 @@
 #include <svl/lngmisc.hxx>
 #include <ucbhelper/content.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
+#include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-
-#include <com/sun/star/beans/PropertyValues.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/linguistic2/DictionaryType.hpp>
 #include <com/sun/star/linguistic2/DictionaryList.hpp>
+#include <com/sun/star/linguistic2/LinguProperties.hpp>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Reference.h>
 #include <comphelper/processfactory.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
@@ -741,28 +741,9 @@ sal_Bool IsNumeric( const String &rText )
 
 
 
-uno::Reference< XInterface > GetOneInstanceService( const char *pServiceName )
+uno::Reference< XLinguProperties > GetLinguProperties()
 {
-    uno::Reference< XInterface > xRef;
-
-    uno::Reference< XMultiServiceFactory > xMgr(
-        comphelper::getProcessServiceFactory() );
-    try
-    {
-        xRef = xMgr->createInstance( OUString::createFromAscii( pServiceName ) );
-    }
-    catch (const uno::Exception &)
-    {
-        DBG_ASSERT( 0, "createInstance failed" );
-    }
-
-    return xRef;
-}
-
-uno::Reference< XPropertySet > GetLinguProperties()
-{
-    return uno::Reference< XPropertySet > (
-        GetOneInstanceService( SN_LINGU_PROPERTIES ), UNO_QUERY );
+    return LinguProperties::create( comphelper::getProcessComponentContext() );
 }
 
 uno::Reference< XSearchableDictionaryList > GetDictionaryList()

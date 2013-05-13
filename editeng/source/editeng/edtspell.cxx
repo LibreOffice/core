@@ -136,7 +136,6 @@ sal_Bool EditSpellWrapper::SpellMore()
         {
             // The text has been entered into the engine, when backwords then
             // it must be behind the selection.
-            Reference< XPropertySet >  xProp( SvxGetLinguPropertySet() );
             pEditView->GetImpEditView()->SetEditSelection(
                         pEE->GetEditDoc().GetStartPaM() );
         }
