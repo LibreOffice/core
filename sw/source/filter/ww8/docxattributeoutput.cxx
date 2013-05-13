@@ -4141,7 +4141,7 @@ void DocxAttributeOutput::ParaWidows( const SvxWidowsItem& rWidows )
 }
 
 static void impl_WriteTabElement( FSHelperPtr pSerializer,
-        const SvxTabStop& rTab, long nCurrentLeft )
+                                  const SvxTabStop& rTab, long /* nCurrentLeft */ )
 {
     FastAttributeList *pTabElementAttrList = pSerializer->createAttrList();
 
