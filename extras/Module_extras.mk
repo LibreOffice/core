@@ -13,7 +13,6 @@ $(eval $(call gb_Module_add_targets,extras,\
 	AllLangPackage_autotextshare \
 	CustomTarget_autocorr \
 	CustomTarget_glade \
-	Gallery_sound \
 	Package_autocorr \
 	Package_autotextuser \
 	Package_cfgsrvbitmapunx \
@@ -54,6 +53,12 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_tplwizstyles \
 	Package_wordbook \
 ))
+
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+$(eval $(call gb_Module_add_targets,extras,\
+	Gallery_sound \
+))
+endif
 
 ifeq ($(WITH_EXTRA_EXTENSIONS),YES)
 $(eval $(call gb_Module_add_targets,extras,\
