@@ -59,7 +59,7 @@ $(call gb_Output_announce,$(2),$(true),GAL,1)
 $(call gb_Helper_abbreviate_dirs,\
 	rm -f $(call gb_Gallery_get_workdir,$(2))/* && \
 	SAL_USE_VCLPLUGIN=svp \
-	$(call gb_Executable_get_command,gengal.bin) \
+	$(call gb_Executable_get_command,$(gb_GENGAL),$(ICECREAM_RUN)) \
 		$(call gb_Gallery__make_env_args) \
 		--build-tree \
 		--destdir $(GALLERY_BASEDIR) \
@@ -78,7 +78,7 @@ $(dir $(call gb_Gallery_get_target,$(1)))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_Gallery_get_target,%) : \
-		$(call gb_Executable_get_runtime_dependencies,gengal.bin) \
+		$(call gb_Executable_get_runtime_dependencies,$(gb_GENGAL)) \
 		$(gb_Gallery_EXTRA_DEPENCENCIES)
 	$(call gb_Gallery__command,$@,$*)
 

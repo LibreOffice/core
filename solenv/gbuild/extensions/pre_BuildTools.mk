@@ -7,6 +7,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+
+ifeq (,$(filter WNT,$(OS)))
+	gb_GENGAL = gengal.bin
+else
+	gb_GENGAL = gengal.exe
+endif
+
 # Tools we need to build for cross-compiling
 gb_BUILD_TOOLS = \
 	$(foreach executable, \
@@ -38,7 +45,7 @@ gb_BUILD_TOOLS = \
 		ulfex \
 		xrmex \
 		$(call gb_Helper_optional_for_host,DESKTOP, \
-			gengal.bin \
+			$(gb_GENGAL) \
 			HelpIndexer \
 			HelpLinker \
 		) \

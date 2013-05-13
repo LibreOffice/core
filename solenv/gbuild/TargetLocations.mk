@@ -399,7 +399,7 @@ endef
 #
 # gb_Executable_get_command executable
 define gb_Executable_get_command
-$(gb_Helper_set_ld_path) $(call gb_Executable_get_target_for_build,$(1))
+$(gb_Helper_set_ld_path) $(2) $(call gb_Executable_get_target_for_build,$(1))
 endef
 
 gb_Executable_get_linktargetname = Executable/$(1)$(gb_Executable_EXT)
