@@ -50,12 +50,6 @@ T* lcl_popOrZero( ::std::stack<T*> & rStack )
 }
 }
 
-static inline bool strnccmp(const String &u1, xub_StrLen nIdx,
-                              const sal_Char *s2, xub_StrLen nLen)
-{
-    return u1.EqualsIgnoreCaseAscii( s2, nIdx, nLen );
-}
-
 static const sal_Unicode aDelimiterTable[] =
 {
     ' ',    '\t',   '\n',   '\r',   '+',    '-',    '*',    '/',    '=',    '#',
@@ -63,14 +57,6 @@ static const sal_Unicode aDelimiterTable[] =
     ')',    '{',    '}',    '[',    ']',    '^',    '_',
     '\0'    // end of list symbol
 };
-
-
-static inline bool IsDigit( sal_Unicode cChar )
-{
-    return '0' <= cChar && cChar <= '9';
-}
-
-///////////////////////////////////////////////////////////////////////////
 
 SmToken::SmToken() :
     eType       (TUNKNOWN),
@@ -432,7 +418,7 @@ void SmParser::NextToken()
         // #i45779# parse numbers correctly
         // i.e. independent from the locale setting.
         // (note that #i11752# remains fixed)
-        if ((aRes.TokenType & KParseType::IDENTNAME) && IsDigit( cFirstChar ))
+        if ((aRes.TokenType & KParseType::IDENTNAME) && CharClass::isAsciiDigit( cFirstChar ))
         {
             ParseResult aTmpRes;
             LanguageTag aOldLoc( aCC.getLanguageTag() );
@@ -928,7 +914,7 @@ void SmParser::NextToken()
                         {
                             cChar = m_aBufferString.GetChar( ++m_nBufferIndex );
                         }
-                        while ( cChar == '.' || IsDigit( cChar ) );
+                        while ( cChar == '.' || CharClass::isAsciiDigit( cChar ) );
 
                         m_aCurToken.aText = m_aBufferString.Copy( sal::static_int_cast< xub_StrLen >(nTxtStart),
                                                             sal::static_int_cast< xub_StrLen >(m_nBufferIndex - nTxtStart) );
@@ -1915,7 +1901,7 @@ static bool lcl_IsNumber(const OUString& rText)
             else
                 bPoint = true;
         }
-        else if ( !IsDigit( cChar ) )
+        else if ( !CharClass::isAsciiDigit( cChar ) )
             return false;
     }
     return true;
