@@ -179,18 +179,27 @@ ImpEditEngine::~ImpEditEngine()
     delete pColorConfig;
     delete pCTLOptions;
     if ( bOwnerOfRefDev )
+    {
+        SolarMutexGuard g;
         delete pRefDev;
+    }
     delete pSpellInfo;
 }
 
 void ImpEditEngine::SetRefDevice( OutputDevice* pRef )
 {
     if ( bOwnerOfRefDev )
+    {
+        SolarMutexGuard g;
         delete pRefDev;
+    }
 
     if ( !pRef )
     {
-        pRefDev = new VirtualDevice;
+        {
+            SolarMutexGuard g;
+            pRefDev = new VirtualDevice;
+        }
         pRefDev->SetMapMode( MAP_TWIP );
         bOwnerOfRefDev = true;
     } else
@@ -215,7 +224,10 @@ void ImpEditEngine::SetRefMapMode( const MapMode& rMapMode )
 
     if ( !bOwnerOfRefDev )
     {
-        pRefDev = new VirtualDevice;
+        {
+            SolarMutexGuard g;
+            pRefDev = new VirtualDevice;
+        }
         pRefDev->SetMapMode( MAP_TWIP );
         SetRefDevice( pRefDev );
         bOwnerOfRefDev = true;
