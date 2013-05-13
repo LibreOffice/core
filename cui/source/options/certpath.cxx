@@ -18,7 +18,7 @@
 #include "certpath.hrc"
 #include "dialmgr.hxx"
 
-#include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
+#include <com/sun/star/mozilla/MozillaBootstrap.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <comphelper/processfactory.hxx>
@@ -71,10 +71,7 @@ CertPathDialog::CertPathDialog( Window* pParent ) :
             "mozilla" };
         sal_Int32 nProduct = SAL_N_ELEMENTS(productTypes);
 
-        uno::Reference<uno::XInterface> xInstance = comphelper::getProcessServiceFactory()->createInstance(
-            "com.sun.star.mozilla.MozillaBootstrap");
-
-        uno::Reference<mozilla::XMozillaBootstrap> xMozillaBootstrap(xInstance, uno::UNO_QUERY_THROW);
+        uno::Reference<mozilla::XMozillaBootstrap> xMozillaBootstrap = mozilla::MozillaBootstrap::create( comphelper::getProcessComponentContext() );
 
         for (sal_Int32 i = 0; i < nProduct; ++i)
         {

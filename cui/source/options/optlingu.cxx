@@ -517,7 +517,6 @@ class SvxLinguData_Impl
     LangImplNameTable                   aCfgHyphTable;
     LangImplNameTable                   aCfgThesTable;
     LangImplNameTable                   aCfgGrammarTable;
-    uno::Reference< XMultiServiceFactory >   xMSF;
     uno::Reference< XLinguServiceManager2 >  xLinguSrvcMgr;
 
 
@@ -730,8 +729,8 @@ static void lcl_MergeDisplayArray(
 SvxLinguData_Impl::SvxLinguData_Impl() :
     nDisplayServices    (0)
 {
-    xMSF = ::comphelper::getProcessServiceFactory();
-    xLinguSrvcMgr = LinguServiceManager::create(comphelper::getComponentContext(xMSF));
+    uno::Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    xLinguSrvcMgr = LinguServiceManager::create(xContext);
 
     const Locale& rCurrentLocale = Application::GetSettings().GetLanguageTag().getLocale();
     Sequence<Any> aArgs(2);//second arguments has to be empty!
@@ -748,7 +747,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
         ServiceInfo_Impl aInfo;
         aInfo.sSpellImplName = pSpellNames[nIdx];
         aInfo.xSpell = uno::Reference<XSpellChecker>(
-                        xMSF->createInstanceWithArguments(aInfo.sSpellImplName, aArgs), UNO_QUERY);
+                        xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aInfo.sSpellImplName, aArgs, xContext), UNO_QUERY);
 
         uno::Reference<XServiceDisplayName> xDispName(aInfo.xSpell, UNO_QUERY);
         if(xDispName.is())
@@ -772,7 +771,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
         ServiceInfo_Impl aInfo;
         aInfo.sGrammarImplName = pGrammarNames[nIdx];
         aInfo.xGrammar = uno::Reference<XProofreader>(
-                        xMSF->createInstanceWithArguments(aInfo.sGrammarImplName, aArgs), UNO_QUERY);
+                        xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aInfo.sGrammarImplName, aArgs, xContext), UNO_QUERY);
 
         uno::Reference<XServiceDisplayName> xDispName(aInfo.xGrammar, UNO_QUERY);
         if(xDispName.is())
@@ -796,7 +795,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
         ServiceInfo_Impl aInfo;
         aInfo.sHyphImplName = pHyphNames[nIdx];
         aInfo.xHyph = uno::Reference<XHyphenator>(
-                        xMSF->createInstanceWithArguments(aInfo.sHyphImplName, aArgs), UNO_QUERY);
+                        xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aInfo.sHyphImplName, aArgs, xContext), UNO_QUERY);
 
         uno::Reference<XServiceDisplayName> xDispName(aInfo.xHyph, UNO_QUERY);
         if(xDispName.is())
@@ -820,7 +819,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
         ServiceInfo_Impl aInfo;
         aInfo.sThesImplName = pThesNames[nIdx];
         aInfo.xThes = uno::Reference<XThesaurus>(
-                        xMSF->createInstanceWithArguments(aInfo.sThesImplName, aArgs), UNO_QUERY);
+                        xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aInfo.sThesImplName, aArgs, xContext), UNO_QUERY);
 
         uno::Reference<XServiceDisplayName> xDispName(aInfo.xThes, UNO_QUERY);
         if(xDispName.is())
@@ -871,14 +870,12 @@ SvxLinguData_Impl::SvxLinguData_Impl( const SvxLinguData_Impl &rData ) :
     aCfgHyphTable       (rData.aCfgHyphTable),
     aCfgThesTable       (rData.aCfgThesTable),
     aCfgGrammarTable    (rData.aCfgGrammarTable),
-    xMSF                (rData.xMSF),
     xLinguSrvcMgr       (rData.xLinguSrvcMgr)
 {
 }
 
 SvxLinguData_Impl & SvxLinguData_Impl::operator = (const SvxLinguData_Impl &rData)
 {
-    xMSF                = rData.xMSF;
     xLinguSrvcMgr       = rData.xLinguSrvcMgr;
     aAllServiceLocales  = rData.aAllServiceLocales;
     aCfgSpellTable      = rData.aCfgSpellTable;
