@@ -7,16 +7,16 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_JunitTest_JunitTest,dbaccess_ju_unoapi))
+$(eval $(call gb_JunitTest_JunitTest,dbaccess_unoapi))
 
-$(eval $(call gb_JunitTest_set_defs,dbaccess_ju_unoapi,\
+$(eval $(call gb_JunitTest_set_defs,dbaccess_unoapi,\
     $$(DEFS) \
     -Dorg.openoffice.test.arg.sce=$(SRCDIR)/dbaccess/qa/unoapi/dbaccess.sce \
     -Dorg.openoffice.test.arg.xcl=$(SRCDIR)/dbaccess/qa/unoapi/knownissues.xcl \
     -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/dbaccess/qa/unoapi/testdocuments \
 ))
 
-$(eval $(call gb_JunitTest_use_jars,dbaccess_ju_unoapi,\
+$(eval $(call gb_JunitTest_use_jars,dbaccess_unoapi,\
     OOoRunner \
     jurt \
     ridl \
@@ -24,7 +24,7 @@ $(eval $(call gb_JunitTest_use_jars,dbaccess_ju_unoapi,\
     unoil \
 ))
 
-$(eval $(call gb_JunitTest_add_classes,dbaccess_ju_unoapi,\
+$(eval $(call gb_JunitTest_add_classes,dbaccess_unoapi,\
     org.openoffice.test.UnoApiTest \
 ))
 
