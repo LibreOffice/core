@@ -241,8 +241,8 @@ void ScStyleSheetPool::CreateStandardStyles()
 
     Color           aColBlack   ( COL_BLACK );
     Color           aColGrey    ( COL_LIGHTGRAY );
-    String          aStr;
-    xub_StrLen      nStrLen;
+    OUString        aStr;
+    sal_Int32       nStrLen;
     String          aHelpFile;//XXX JN welcher Text???
     SfxItemSet*     pSet            = NULL;
     SfxItemSet*     pHFSet          = NULL;
@@ -388,9 +388,9 @@ void ScStyleSheetPool::CreateStandardStyles()
     // Fusszeile:
     // [leer][Seite \SEITE\][leer]
     //----------------------------------------
-    aStr = SCSTR( STR_PAGE ); aStr += ' ';
+    aStr = SCSTR( STR_PAGE ) + " ";
     pEdEngine->SetText( aStr );
-    nStrLen = aStr.Len();
+    nStrLen = aStr.getLength();
     pEdEngine->QuickInsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(0,nStrLen,0,nStrLen) );
     pTxtObj = pEdEngine->CreateTextObject();
     pFooterItem->SetLeftArea  ( *pEmptyTxtObj );
@@ -437,7 +437,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     // Kopfzeile:
     // [\TABELLE\ (\DATEI\)][leer][\DATUM\, \ZEIT\]
     //----------------------------------------
-    aStr = OUString(" ()");
+    aStr = " ()";
     pEdEngine->SetText( aStr );
     pEdEngine->QuickInsertField( SvxFieldItem(SvxFileField(), EE_FEATURE_FIELD), ESelection(0,2,0,2) );
     pEdEngine->QuickInsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), ESelection() );
@@ -445,7 +445,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     pHeaderItem->SetLeftArea( *pTxtObj );
     pHeaderItem->SetCenterArea( *pEmptyTxtObj );
     DELETEZ( pTxtObj );
-    aStr = OUString(", ");
+    aStr = ", ";
     pEdEngine->SetText( aStr );
     pEdEngine->QuickInsertField( SvxFieldItem(SvxTimeField(), EE_FEATURE_FIELD), ESelection(0,2,0,2) );
     pEdEngine->QuickInsertField( SvxFieldItem(SvxDateField(Date( Date::SYSTEM ),SVXDATETYPE_VAR), EE_FEATURE_FIELD),
@@ -459,10 +459,10 @@ void ScStyleSheetPool::CreateStandardStyles()
     // Fusszeile:
     // [leer][Seite: \SEITE\ / \SEITEN\][leer]
     //----------------------------------------
-    aStr = SCSTR( STR_PAGE ); aStr += ' ';
-    nStrLen = aStr.Len();
-    aStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM(" / "));
-    xub_StrLen nStrLen2 = aStr.Len();
+    aStr = SCSTR( STR_PAGE ) + " ";
+    nStrLen = aStr.getLength();
+    aStr += " / ";
+    sal_Int32 nStrLen2 = aStr.getLength();
     pEdEngine->SetText( aStr );
     pEdEngine->QuickInsertField( SvxFieldItem(SvxPagesField(), EE_FEATURE_FIELD), ESelection(0,nStrLen2,0,nStrLen2) );
     pEdEngine->QuickInsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(0,nStrLen,0,nStrLen) );

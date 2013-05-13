@@ -823,11 +823,10 @@ void FormulaDlg_Impl::FillControls(sal_Bool &rbNext, sal_Bool &rbPrev)
     //  2. Page or Edit: show selected function
 
     xub_StrLen nFStart     = pData->GetFStart();
-    String aFormula        = m_pHelper->getCurrentFormula();
+    OUString aFormula      = OUString(m_pHelper->getCurrentFormula()) + " )";
     xub_StrLen nNextFStart = nFStart;
     xub_StrLen nNextFEnd   = 0;
 
-    aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " )" ));
     DeleteArgs();
     const IFunctionDescription* pOldFuncDesc = pFuncDesc;
     sal_Bool bTestFlag = sal_False;
@@ -1035,8 +1034,7 @@ IMPL_LINK_NOARG(FormulaDlg_Impl, DblClkHdl)
     const IFunctionDescription* pDesc = pFuncPage->GetFuncDesc(nFunc);
     m_pHelper->insertEntryToLRUList(pDesc);
 
-    String aFuncName = pFuncPage->GetSelFunctionName();
-    aFuncName.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "()" ));
+    OUString aFuncName = OUString( pFuncPage->GetSelFunctionName() ) + "()";
     m_pHelper->setCurrentFormula(aFuncName);
     pMEdit->ReplaceSelected(aFuncName);
 
@@ -1428,16 +1426,14 @@ void FormulaDlg_Impl::RefInputStartAfter( RefEdit* /*pEdit*/, RefButton* /*pButt
 
     if( pTheRefEdit )
     {
-        String aStr = aTitle2;
-        aStr += ' ';
-        aStr += aFtEditName.GetText();
-        aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "( " ) );
+        OUString aStr = OUString(aTitle2) + " " + aFtEditName.GetText() + "( ";
+
         if( pParaWin->GetActiveLine() > 0 )
-            aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "...; " ) );
+            aStr += "...; ";
         aStr += pParaWin->GetActiveArgName();
         if( pParaWin->GetActiveLine() + 1 < nArgs )
-            aStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "; ..." ));
-        aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " )" ) );
+            aStr += "; ...";
+        aStr += " )";
 
         m_pParent->SetText( MnemonicGenerator::EraseAllMnemonicChars( aStr ) );
     }
