@@ -137,7 +137,10 @@ DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBas
 
     mpSelectionChangeHandler->Connect();
 
-    SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_DrawPage));
+    if (mpFrameView->GetViewShEditMode(mePageKind) == EM_PAGE)
+        SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_DrawPage));
+    else
+        SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_MasterPage));
 
     doShow();
 }

@@ -458,6 +458,11 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
         Invalidate( SID_TITLE_MASTERPAGE );
         Invalidate( SID_NOTES_MASTERPAGE );
         Invalidate( SID_HANDOUT_MASTERPAGE );
+
+        if (meEditMode == EM_PAGE)
+            SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_DrawPage));
+        else
+            SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_MasterPage));
     }
 }
 
