@@ -19,75 +19,14 @@
  *
  *************************************************************/
 
-#include "precompiled_sfx2.hxx"
-
-#include "AsynchronousCall.hxx"
-
-#include <vcl/svapp.hxx>
+#include <sfx2/sidebar/IContextChangeReceiver.hxx>
 
 
 namespace sfx2 { namespace sidebar {
 
-AsynchronousCall::AsynchronousCall (const Action& rAction)
-    : maAction(rAction),
-      mnCallId(0)
+
+IContextChangeReceiver::~IContextChangeReceiver (void)
 {
 }
 
-
-
-
-AsynchronousCall::~AsynchronousCall (void)
-{
-    CancelRequest();
-}
-
-
-
-
-void AsynchronousCall::RequestCall (const Action& rAction)
-{
-    CancelRequest();
-    maAction = rAction;
-    RequestCall();
-}
-
-
-
-
-void AsynchronousCall::RequestCall (void)
-{
-    if (mnCallId == 0)
-    {
-        Link aLink (LINK(this, AsynchronousCall, HandleUserCall));
-        mnCallId = Application::PostUserEvent(aLink);
-    }
-}
-
-
-
-
-void AsynchronousCall::CancelRequest (void)
-{
-    if (mnCallId != 0)
-    {
-        Application::RemoveUserEvent(mnCallId);
-        mnCallId = 0;
-    }
-}
-
-
-
-
-IMPL_LINK(AsynchronousCall, HandleUserCall, void*, EMPTYARG )
-{
-    mnCallId = 0;
-    if (maAction)
-        maAction();
-
-    return sal_True;
-}
-
-
-} } // end of namespace sfx2::sidebar
-
+} } // end of namespace ::sd::sidebar
