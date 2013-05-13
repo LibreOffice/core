@@ -45,6 +45,7 @@ using namespace ::comphelper;
 void SwVisitingCardPage::InitFrameControl()
 {
     Link aLink(LINK(this, SwVisitingCardPage, FrameControlInitializedHdl));
+    aExampleWIN.Show();
     pExampleFrame = new SwOneExampleFrame( aExampleWIN,
                                     EX_SHOW_BUSINESS_CARDS, &aLink );
 
