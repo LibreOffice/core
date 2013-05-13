@@ -116,15 +116,19 @@ while (<SOURCE>) {
 
 close(SOURCE);
 
+my $processed = 0;
 # process templates
 foreach $template (keys %templates) {
     my $outfile = $templates{$template}->{'outfile'};
 
     # open the template file - ignore sections for which no
     # templates exist
-    unless(open(TEMPLATE, $outfile)) {
-        print STDERR "Warning: No template found for item '$template' : '$outfile' : '$_': $!\n";
-        exit -1;
+    if (open(TEMPLATE, $outfile)) {
+       $processed++;
+    } elsif ($ext eq 'str') { # string files processed one by one
+       next;
+    } else {
+        die "Warning: No template found for item '$template' : '$outfile' : '$_': $!\n";
     }
 
     # open output file
@@ -160,4 +164,8 @@ foreach $template (keys %templates) {
     if (close(OUTFILE)) {
         system "mv -f $outfile.tmp $outfile\n";
     }
+}
+
+if ($ext eq 'str' && $processed == 0) {
+    die "Warning: No matching templates processed";
 }

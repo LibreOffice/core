@@ -9,4 +9,7 @@
 [sound]
 en-US = "Sounds"
 
+[txtshapes]
+en-US = "Text Shapes"
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -224,19 +224,8 @@ File gid_File_Extra_Galltransport
     Name = "extras_galltransport.filelist";
 End
 
-File gid_File_Extra_Galltxtshapes
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "extras_galltxtshapes.filelist";
-End
-
-File gid_File_Extra_Gallsound
-    Dir = FILELIST_DIR;
-    USER_FILE_BODY;
-    Styles = (FILELIST, WORKSTATION, DONT_OVERWRITE);
-    Name = "Gallery/sound.filelist";
-End
+GALLERY_FILELIST(txtshapes)
+GALLERY_FILELIST(sound)
 
 File gid_File_Extra_Gallmytheme
     Dir = FILELIST_DIR;

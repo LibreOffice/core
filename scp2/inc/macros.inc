@@ -285,7 +285,7 @@ End
         Value = STRING(CONCAT2(LibreOffice.,name)); \
         Styles = (); \
     End
-    
+
 #define REGISTRY_ENTRY_KINDMAP(name, modid, key) \
     RegistryItem CONCAT2(gid_Regitem_Software_Manufacturer_Productname_Productversion_Explorer_KindMap_,name) \
         ParentID = PREDEFINED_HKEY_LOCAL_MACHINE; \
@@ -422,5 +422,15 @@ End
         Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID); \
     End
 
-#endif // MACROS_INC
+#define GALLERY_NAME(id) \
 
+#define GALLERY_FILELIST(id) \
+File gid_File_Extra_Gall##id \
+    Dir = FILELIST_DIR; \
+    TXT_FILE_BODY; \
+    Styles = (FILELIST, WORKSTATION, DONT_OVERWRITE); \
+    Name = STRING(CONCAT3(Gallery/,id,.filelist)); \
+End
+
+
+#endif // MACROS_INC
