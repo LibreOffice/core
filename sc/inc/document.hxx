@@ -49,6 +49,7 @@
 namespace editeng { class SvxBorderLine; }
 namespace sc {
     struct FormulaGroupContext;
+    class EndListeningContext;
 }
 class SvxFontItem;
 
@@ -1753,6 +1754,8 @@ public:
                                             SvtListener* pListener );
     void                EndListeningCell( const ScAddress& rAddress,
                                             SvtListener* pListener );
+
+    void EndListeningCell( sc::EndListeningContext& rCxt, const ScAddress& rPos, SvtListener& rListener );
 
     void EndListeningFormulaCells( std::vector<ScFormulaCell*>& rCells );
 

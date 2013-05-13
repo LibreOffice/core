@@ -49,6 +49,7 @@ namespace com { namespace sun { namespace star {
 
 namespace sc {
     struct FormulaGroupContext;
+    class EndListeningContext;
 }
 
 class SfxItemSet;
@@ -932,6 +933,7 @@ private:
 
     void        StartListening( const ScAddress& rAddress, SvtListener* pListener );
     void        EndListening( const ScAddress& rAddress, SvtListener* pListener );
+    void EndListening( sc::EndListeningContext& rCxt, SCCOL nCol, SCROW nRow, SvtListener& rListener );
     void        StartAllListeners();
     void        StartNeededListeners(); // only for cells where NeedsListening()==TRUE
     void        SetRelNameDirty();

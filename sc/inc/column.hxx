@@ -48,6 +48,7 @@ namespace editeng { class SvxBorderLine; }
 
 namespace sc {
     struct FormulaGroupContext;
+    class EndListeningContext;
 }
 
 class Fraction;
@@ -439,6 +440,7 @@ public:
 
     void        StartListening( SvtListener& rLst, SCROW nRow );
     void        EndListening( SvtListener& rLst, SCROW nRow );
+    void EndListening( sc::EndListeningContext& rCxt, SCROW nRow, SvtListener& rListener );
     void        MoveListeners( SvtBroadcaster& rSource, SCROW nDestRow );
     void        StartAllListeners();
     void        StartNeededListeners(); // only for cells where NeedsListening()==true

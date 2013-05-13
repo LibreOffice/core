@@ -28,6 +28,12 @@
 
 #include <set>
 
+namespace sc {
+
+class EndListeningContext;
+
+}
+
 class ScTokenArray;
 struct ScSimilarFormulaDelta;
 
@@ -309,6 +315,7 @@ public:
     void StartListeningTo( ScDocument* pDoc );
     void EndListeningTo(
         ScDocument* pDoc, ScTokenArray* pArr = NULL, ScAddress aPos = ScAddress() );
+    void EndListeningTo( sc::EndListeningContext& rCxt );
 };
 
 #endif

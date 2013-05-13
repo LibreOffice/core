@@ -1097,6 +1097,14 @@ void ScTable::EndListening( const ScAddress& rAddress, SvtListener* pListener )
     aCol[rAddress.Col()].EndListening( *pListener, rAddress.Row() );
 }
 
+void ScTable::EndListening( sc::EndListeningContext& rCxt, SCCOL nCol, SCROW nRow, SvtListener& rListener )
+{
+    if (!ValidCol(nCol))
+        return;
+
+    aCol[nCol].EndListening(rCxt, nRow, rListener);
+}
+
 void ScTable::SetPageStyle( const OUString& rName )
 {
     if ( aPageStyle != rName )

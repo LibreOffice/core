@@ -44,6 +44,7 @@
 #include "svl/intitem.hxx"
 #include "rtl/strbuf.hxx"
 #include "formulagroup.hxx"
+#include "listenercontext.hxx"
 
 #include <boost/bind.hpp>
 
@@ -3322,6 +3323,64 @@ void ScFormulaCell::EndListeningTo( ScDocument* pDoc, ScTokenArray* pArr,
                             rRef2.nTab ), this );
                     }
                 }
+            break;
+            default:
+                ;   // nothing
+        }
+    }
+}
+
+void ScFormulaCell::EndListeningTo( sc::EndListeningContext& rCxt )
+{
+    if (rCxt.getDoc().IsClipOrUndo() || IsInChangeTrack())
+        return;
+
+    ScDocument& rDoc = rCxt.getDoc();
+    rDoc.SetDetectiveDirty(true);  // It has changed something
+
+    if (pCode->IsRecalcModeAlways())
+    {
+        rDoc.EndListeningArea(BCA_LISTEN_ALWAYS, this);
+        return;
+    }
+
+    pCode->Reset();
+    ScToken* t;
+    while ( ( t = static_cast<ScToken*>(pCode->GetNextReferenceRPN()) ) != NULL )
+    {
+        StackVar eType = t->GetType();
+        ScSingleRefData& rRef1 = t->GetSingleRef();
+        ScSingleRefData& rRef2 = (eType == svDoubleRef ? t->GetDoubleRef().Ref2 : rRef1);
+        switch (eType)
+        {
+            case svSingleRef:
+            {
+                ScAddress aCell = rRef1.toAbs(aPos);
+                if (aCell.IsValid())
+                    rDoc.EndListeningCell(rCxt, aCell, *this);
+            }
+            break;
+            case svDoubleRef:
+            {
+                ScAddress aCell1 = rRef1.toAbs(aPos);
+                ScAddress aCell2 = rRef2.toAbs(aPos);
+                if (aCell1.IsValid() && aCell2.IsValid())
+                {
+                    if (t->GetOpCode() == ocColRowNameAuto)
+                    {   // automagically
+                        if ( rRef1.IsColRel() )
+                        {   // ColName
+                            aCell2.SetRow(MAXROW);
+                        }
+                        else
+                        {   // RowName
+                            aCell2.SetCol(MAXCOL);
+                        }
+                    }
+
+                    rDoc.EndListeningArea(ScRange(aCell1, aCell2), this);
+                }
+            }
             break;
             default:
                 ;   // nothing

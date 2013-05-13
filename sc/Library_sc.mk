@@ -139,6 +139,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/data/global \
 	sc/source/core/data/global2 \
 	sc/source/core/data/globalx \
+	sc/source/core/data/listenercontext \
 	sc/source/core/data/markarr \
 	sc/source/core/data/markdata \
 	sc/source/core/data/mtvelements \

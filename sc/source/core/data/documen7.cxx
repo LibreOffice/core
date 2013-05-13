@@ -36,6 +36,7 @@
 #include "colorscale.hxx"
 #include "sheetevents.hxx"
 #include "tokenarray.hxx"
+#include "listenercontext.hxx"
 
 #include <tools/shl.hxx>
 
@@ -200,14 +201,26 @@ void ScDocument::EndListeningCell( const ScAddress& rAddress,
         maTabs[nTab]->EndListening( rAddress, pListener );
 }
 
+void ScDocument::EndListeningCell(
+    sc::EndListeningContext& rCxt, const ScAddress& rPos, SvtListener& rListener )
+{
+    if (!TableExists(rPos.Tab()))
+        return;
+
+    maTabs[rPos.Tab()]->EndListening(rCxt, rPos.Col(), rPos.Row(), rListener);
+}
+
 void ScDocument::EndListeningFormulaCells( std::vector<ScFormulaCell*>& rCells )
 {
     if (rCells.empty())
         return;
 
+    sc::EndListeningContext aCxt(*this);
     std::vector<ScFormulaCell*>::iterator it = rCells.begin(), itEnd = rCells.end();
     for (; it != itEnd; ++it)
-        (*it)->EndListeningTo(this);
+        (*it)->EndListeningTo(aCxt);
+
+    aCxt.purgeEmptyBroadcasters();
 }
 
 void ScDocument::PutInFormulaTree( ScFormulaCell* pCell )

@@ -91,6 +91,8 @@ struct SC_DLLPUBLIC ScSingleRefData        // Single reference (one address) int
     /// In external references nTab is -1
     inline  bool ValidExternal() const;
 
+    ScAddress toAbs( const ScAddress& rPos ) const;
+
             void SmartRelAbs( const ScAddress& rPos );
             void CalcRelFromAbs( const ScAddress& rPos );
             void CalcAbsIfRel( const ScAddress& rPos );

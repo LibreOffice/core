@@ -58,6 +58,7 @@
 #include "tokenarray.hxx"
 #include "globalnames.hxx"
 #include "formulagroup.hxx"
+#include "listenercontext.hxx"
 
 #include <math.h>
 
@@ -1900,6 +1901,18 @@ void ScColumn::EndListening( SvtListener& rLst, SCROW nRow )
     if (!pBC->HasListeners())
         // There is no more listeners for this cell. Remove the broadcaster.
         maBroadcasters.set_empty(nRow, nRow);
+}
+
+void ScColumn::EndListening( sc::EndListeningContext& rCxt, SCROW nRow, SvtListener& rListener )
+{
+    SvtBroadcaster* pBC = GetBroadcaster(nRow);
+    if (!pBC)
+        return;
+
+    rListener.EndListening(*pBC);
+    if (!pBC->HasListeners())
+        // There is no more listeners for this cell. Add it to the purge list for later purging.
+        rCxt.addEmptyBroadcasterPosition(nCol, nRow, nTab);
 }
 
 void ScColumn::CompileDBFormula()

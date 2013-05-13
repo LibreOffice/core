@@ -27,6 +27,17 @@ void ScSingleRefData::CalcRelFromAbs( const ScAddress& rPos )
     nRelTab = nTab - rPos.Tab();
 }
 
+ScAddress ScSingleRefData::toAbs( const ScAddress& rPos ) const
+{
+    SCCOL nRetCol = Flags.bColRel ? nRelCol + rPos.Col() : nCol;
+    SCROW nRetRow = Flags.bRowRel ? nRelRow + rPos.Row() : nRow;
+    SCTAB nRetTab = Flags.bTabRel ? nRelTab + rPos.Tab() : nTab;
+
+    if (!ValidCol(nRetCol) || !ValidRow(nRetRow) || !ValidTab(nRetTab))
+        return ScAddress(ScAddress::INITIALIZE_INVALID);
+
+    return ScAddress(nRetCol, nRetRow, nRetTab);
+}
 
 void ScSingleRefData::SmartRelAbs( const ScAddress& rPos )
 {
