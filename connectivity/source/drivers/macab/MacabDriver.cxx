@@ -276,7 +276,7 @@ sal_Bool SAL_CALL MacabDriver::acceptsURL( const OUString& url )
         return sal_False;
 
     // here we have to look whether we support this URL format
-    return url.startsWith("sdbc:address:macab:");
+    return url.equals("sdbc:address:macab");
 }
 // --------------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL MacabDriver::getPropertyInfo( const OUString&, const Sequence< PropertyValue >& ) throw(SQLException, RuntimeException)
