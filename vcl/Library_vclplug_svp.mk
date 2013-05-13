@@ -51,7 +51,6 @@ $(eval $(call gb_Library_use_libraries,vclplug_svp,\
 $(eval $(call gb_Library_use_externals,vclplug_svp,\
 	boost_headers \
 	freetype_headers \
-	icule \
 	icuuc \
 ))
 

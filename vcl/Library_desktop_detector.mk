@@ -49,7 +49,6 @@ $(eval $(call gb_Library_use_libraries,desktop_detector,\
 
 $(eval $(call gb_Library_use_externals,desktop_detector,\
 	boost_headers \
-	icule \
 	icuuc \
 ))
 

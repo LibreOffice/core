@@ -67,7 +67,6 @@ $(eval $(call gb_Library_use_externals,vclplug_gtk,\
 	gio \
 	gtk \
 	gthread \
-	icule \
 	icuuc \
 ))
 

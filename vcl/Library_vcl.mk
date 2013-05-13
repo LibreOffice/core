@@ -94,7 +94,6 @@ $(eval $(call gb_Library_use_externals,vcl,\
 	boost_headers \
 	gio \
 	harfbuzz \
-	icule \
 	icuuc \
 	icu_headers \
 	lcms2 \

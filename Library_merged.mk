@@ -44,7 +44,6 @@ $(eval $(call gb_Library_use_externals,merged,\
 	harfbuzz \
 	hunspell \
 	icui18n \
-	icule \
 	icuuc \
 	jpeg \
 	lcms2 \

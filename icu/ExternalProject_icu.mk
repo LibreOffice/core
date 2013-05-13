@@ -38,9 +38,9 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 		./configure \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 			--with-cross-build=$(subst $(INPATH),$(INPATH_FOR_BUILD),$(call gb_UnpackedTarball_get_dir,icu))/source) \
-			--enable-layout --disable-static --enable-shared --disable-samples \
+			--disable-layout --disable-static --enable-shared --disable-samples \
 		&& $(MAKE) \
-		&&  for lib in icudata icuin icuuc icule icutu; do \
+		&&  for lib in icudata icuin icuuc icutu; do \
 			touch $$lib; \
 			done \
 	,source)
@@ -70,7 +70,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 		CPPFLAGS=$(icu_CPPFLAGS) CFLAGS=$(icu_CFLAGS) \
 		CXXFLAGS=$(icu_CXXFLAGS) LDFLAGS=$(icu_LDFLAGS) \
 		./configure \
-			--enable-layout --disable-samples \
+			--disable-layout --disable-samples \
 			$(if $(filter IOS ANDROID,$(OS)),--disable-dyload) \
 			$(if $(filter ANDROID,$(OS)),--disable-strict) \
 			$(if $(filter SOLARIS AIX,$(OS)),--disable-64bit-libs) \
@@ -85,7 +85,6 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 			$(gb_Package_SOURCEDIR_icu)/source/lib/libicudata$(gb_Library_DLLEXT).$(icu_VERSION) \
 			$(gb_Package_SOURCEDIR_icu)/source/lib/libicuuc$(gb_Library_DLLEXT).$(icu_VERSION) \
 			$(gb_Package_SOURCEDIR_icu)/source/lib/libicui18n$(gb_Library_DLLEXT).$(icu_VERSION) \
-			$(gb_Package_SOURCEDIR_icu)/source/lib/libicule$(gb_Library_DLLEXT).$(icu_VERSION) \
 			$(gb_Package_SOURCEDIR_icu)/source/lib/libicutu$(gb_Library_DLLEXT).$(icu_VERSION)) \
 	,source)
 

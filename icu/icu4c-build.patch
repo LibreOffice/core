@@ -87,25 +87,3 @@
  
  ## Remove shared library 's'
  STATIC_PREFIX_WHEN_USED = 
---- misc/icu/source/layout/ArabicShaping.cpp	2010-09-29 20:38:38.000000000 +0200
-+++ misc/build/icu/source/layout/ArabicShaping.cpp	2011-03-15 10:56:26.655056238 +0100
-@@ -79,7 +79,6 @@
- #define markFeatureMask 0x00040000UL
- #define mkmkFeatureMask 0x00020000UL
- 
--#define NO_FEATURES   0
- #define ISOL_FEATURES (isolFeatureMask | ligaFeatureMask | msetFeatureMask | markFeatureMask | ccmpFeatureMask | rligFeatureMask | caltFeatureMask | dligFeatureMask | cswhFeatureMask | cursFeatureMask | kernFeatureMask | mkmkFeatureMask)
- 
- #define SHAPE_MASK 0xF0000000UL
-@@ -174,11 +173,7 @@
-         LEUnicode c = chars[in];
-         ShapeType t = getShapeType(c);
- 
--        if (t == ST_NOSHAPE_NONE) {
--            glyphStorage.setAuxData(out, NO_FEATURES, success);
--        } else {
-             glyphStorage.setAuxData(out, ISOL_FEATURES, success);
--        }
- 
-         if ((t & MASK_TRANSPARENT) != 0) {
-             continue;

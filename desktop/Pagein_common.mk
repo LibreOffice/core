@@ -16,7 +16,6 @@ $(eval $(call gb_Pagein_add_objects,common,\
     i18nlangtag \
     $(if $(findstring YES,$(SYSTEM_ICU)),,\
         icui18n \
-        icule \
         icuuc \
     ) \
     lng \

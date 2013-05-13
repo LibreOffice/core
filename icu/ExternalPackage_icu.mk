@@ -18,13 +18,11 @@ ifeq ($(COM),GCC)
 $(eval $(call gb_ExternalPackage_add_file,icu,lib/libicudata.dll.a,source/stubdata/icudt.lib))
 $(eval $(call gb_ExternalPackage_add_file,icu,lib/libicuuc.dll.a,source/lib/icuuc.lib))
 $(eval $(call gb_ExternalPackage_add_file,icu,lib/libicui18n.dll.a,source/lib/icuin.lib))
-$(eval $(call gb_ExternalPackage_add_file,icu,lib/libicule.dll.a,source/lib/icule.lib))
 $(eval $(call gb_ExternalPackage_add_file,icu,lib/libicutu.dll.a,source/lib/icutu.lib))
 $(eval $(call gb_ExternalPackage_add_libraries_for_install,icu,bin,\
 	source/lib/icudt$(ICU_MAJOR).dll \
 	source/lib/icuuc$(ICU_MAJOR).dll \
 	source/lib/icuin$(ICU_MAJOR).dll \
-	source/lib/icule$(ICU_MAJOR).dll \
 	source/lib/icutu$(ICU_MAJOR).dll \
 ))
 $(eval $(call gb_ExternalPackage_add_files,icu,bin,\
@@ -38,14 +36,12 @@ $(eval $(call gb_ExternalPackage_add_files,icu,lib,\
 	source/lib/icudt$(if $(MSVC_USE_DEBUG_RUNTIME),d).lib \
 	source/lib/icuuc$(if $(MSVC_USE_DEBUG_RUNTIME),d).lib \
 	source/lib/icuin$(if $(MSVC_USE_DEBUG_RUNTIME),d).lib \
-	source/lib/icule$(if $(MSVC_USE_DEBUG_RUNTIME),d).lib \
 	source/lib/icutu$(if $(MSVC_USE_DEBUG_RUNTIME),d).lib\
 ))
 $(eval $(call gb_ExternalPackage_add_libraries_for_install,icu,bin,\
 	source/lib/icudt$(if $(MSVC_USE_DEBUG_RUNTIME),d)$(ICU_MAJOR).dll \
 	source/lib/icuuc$(if $(MSVC_USE_DEBUG_RUNTIME),d)$(ICU_MAJOR).dll \
 	source/lib/icuin$(if $(MSVC_USE_DEBUG_RUNTIME),d)$(ICU_MAJOR).dll \
-	source/lib/icule$(if $(MSVC_USE_DEBUG_RUNTIME),d)$(ICU_MAJOR).dll \
 	source/lib/icutu$(if $(MSVC_USE_DEBUG_RUNTIME),d)$(ICU_MAJOR).dll \
 ))
 $(eval $(call gb_ExternalPackage_add_files,icu,bin,\
@@ -60,7 +56,6 @@ $(eval $(call gb_ExternalPackage_add_files,icu,lib,\
 	source/lib/libicudata.a \
 	source/lib/libicuuc.a \
 	source/lib/libicui18n.a \
-	source/lib/libicule.a \
 	source/lib/libicutu.a \
 ))
 else ifeq ($(OS),ANDROID)
@@ -68,7 +63,6 @@ $(eval $(call gb_ExternalPackage_add_libraries_for_install,icu,lib,\
 	source/lib/libicudatalo.so \
 	source/lib/libicuuclo.so \
 	source/lib/libicui18nlo.so \
-	source/lib/libiculelo.so \
 	source/lib/libicutulo.so \
 ))
 else
@@ -81,9 +75,6 @@ $(eval $(call gb_ExternalPackage_add_file,icu,lib/libicuuc$(gb_Library_DLLEXT),s
 $(eval $(call gb_ExternalPackage_add_library_for_install,icu,lib/libicui18n$(gb_Library_DLLEXT).$(icu_VERSION),source/lib/libicui18n$(gb_Library_DLLEXT).$(icu_VERSION)))
 $(eval $(call gb_ExternalPackage_add_library_for_install,icu,lib/libicui18n$(gb_Library_DLLEXT).$(ICU_MAJOR),source/lib/libicui18n$(gb_Library_DLLEXT).$(icu_VERSION)))
 $(eval $(call gb_ExternalPackage_add_file,icu,lib/libicui18n$(gb_Library_DLLEXT),source/lib/libicui18n$(gb_Library_DLLEXT).$(icu_VERSION)))
-$(eval $(call gb_ExternalPackage_add_library_for_install,icu,lib/libicule$(gb_Library_DLLEXT).$(icu_VERSION),source/lib/libicule$(gb_Library_DLLEXT).$(icu_VERSION)))
-$(eval $(call gb_ExternalPackage_add_library_for_install,icu,lib/libicule$(gb_Library_DLLEXT).$(ICU_MAJOR),source/lib/libicule$(gb_Library_DLLEXT).$(icu_VERSION)))
-$(eval $(call gb_ExternalPackage_add_file,icu,lib/libicule$(gb_Library_DLLEXT),source/lib/libicule$(gb_Library_DLLEXT).$(icu_VERSION)))
 $(eval $(call gb_ExternalPackage_add_file,icu,lib/libicutu$(gb_Library_DLLEXT).$(icu_VERSION),source/lib/libicutu$(gb_Library_DLLEXT).$(icu_VERSION)))
 $(eval $(call gb_ExternalPackage_add_file,icu,lib/libicutu$(gb_Library_DLLEXT).$(ICU_MAJOR),source/lib/libicutu$(gb_Library_DLLEXT).$(icu_VERSION)))
 $(eval $(call gb_ExternalPackage_add_file,icu,lib/libicutu$(gb_Library_DLLEXT),source/lib/libicutu$(gb_Library_DLLEXT).$(icu_VERSION)))

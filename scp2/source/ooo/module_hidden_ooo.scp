@@ -176,7 +176,6 @@ Module gid_Module_Root_Files_5
     gid_File_Lib_Macab_Drv_1,
 	gid_File_Lib_Icudata,
 	gid_File_Lib_Icui18n,
-	gid_File_Lib_Icule,
 	gid_File_Lib_Icuuc,
 	gid_File_Lib_Mork,
 	gid_File_Lib_Mozabdrv,

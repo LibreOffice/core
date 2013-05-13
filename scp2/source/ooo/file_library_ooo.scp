@@ -327,21 +327,6 @@ File gid_File_Lib_Icui18n
     Styles = (PACKED);
 End
 
-File gid_File_Lib_Icule
-    LIB_FILE_BODY;
-  #ifdef UNX
-    Name = STRING(CONCAT6(libicule,UNXSUFFIX,.,ICU_MAJOR,.,ICU_MINOR));
-  #else
-  #ifdef MSVC_PKG_DEBUG_RUNTIME
-    Name = STRING(CONCAT3(iculed,ICU_MAJOR,.dll));
-  #else
-    Name = STRING(CONCAT3(icule,ICU_MAJOR,.dll));
-  #endif // MSVC_PKG_DEBUG_RUNTIME
-  #endif
-    Dir = SCP2_OOO_BIN_DIR;
-    Styles = (PACKED);
-End
-
 File gid_File_Lib_Icuuc
     LIB_FILE_BODY;
   #ifdef UNX

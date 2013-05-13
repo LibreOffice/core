@@ -1063,10 +1063,6 @@ define gb_LinkTarget__use_icui18n
 $(call gb_LinkTarget_add_libs,$(1),-licui18n)
 
 endef
-define gb_LinkTarget__use_icule
-$(call gb_LinkTarget_add_libs,$(1),-licule)
-
-endef
 define gb_LinkTarget__use_icutu
 $(call gb_LinkTarget_add_libs,$(1),-licutu)
 
@@ -1144,18 +1140,10 @@ endef
 endif
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	icule$(gb_ICU_suffix) \
 	icutu$(gb_ICU_suffix) \
 	icuuc$(gb_ICU_suffix) \
 ))
 
-define gb_LinkTarget__use_icule
-$(call gb_LinkTarget_use_package,$(1),icu)
-$(call gb_LinkTarget_use_libraries,$(1),\
-	icule$(gb_ICU_suffix) \
-)
-
-endef
 define gb_LinkTarget__use_icutu
 $(call gb_LinkTarget_use_package,$(1),icu)
 $(call gb_LinkTarget_use_libraries,$(1),\

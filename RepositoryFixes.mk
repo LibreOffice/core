@@ -102,7 +102,7 @@ gb_Library_FILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_FILENAMES))
 
 
 gb_Library_NOILIBFILENAMES_D := \
-    icudt icuin icule icuuc \
+    icudt icuin icuuc \
     lcms2 \
 
 # change the names of all import libraries that don't have an "i" prefix as in our standard naming schema

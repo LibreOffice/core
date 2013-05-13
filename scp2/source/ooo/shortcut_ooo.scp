@@ -43,17 +43,6 @@ Shortcut gid_Shortcut_Lib_Icui18n
     Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
 End
 
-Shortcut gid_Shortcut_Lib_Icule
-    FileID = gid_File_Lib_Icule;
-    Dir = SCP2_OOO_BIN_DIR;
-#ifndef AIX
-    Name = STRING(CONCAT4(libicule,UNXSUFFIX,.,ICU_MAJOR));
-#else
-    Name = "libicule.so";
-#endif
-    Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
-End
-
 Shortcut gid_Shortcut_Lib_Icuuc
     FileID = gid_File_Lib_Icuuc;
     Dir = SCP2_OOO_BIN_DIR;
