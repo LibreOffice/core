@@ -320,7 +320,7 @@ void OAddFieldWindow::Update()
             m_aActions.EnableItem(m_aActions.GetItemId(j),sal_False);
         }
 
-        String aTitle(ModuleRes(RID_STR_FIELDSELECTION));
+        OUString aTitle(ModuleRes(RID_STR_FIELDSELECTION));
         SetText(aTitle);
         if ( m_xRowSet.is() )
         {
@@ -357,8 +357,7 @@ void OAddFieldWindow::Update()
             lcl_addToList( *m_pListBox, aParamNames );
 
             // set title
-            aTitle.AppendAscii(" ");
-            aTitle += m_aCommandName.getStr();
+            aTitle += " " + OUString( m_aCommandName.getStr() );
             SetText( aTitle );
             if ( !m_aCommandName.isEmpty() )
             {
