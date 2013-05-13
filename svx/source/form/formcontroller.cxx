@@ -76,6 +76,7 @@
 #include <comphelper/flagguard.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <connectivity/IParseContext.hxx>
 #include <toolkit/controls/unocontrol.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
@@ -3228,7 +3229,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                         {
                             OUString aCompText = aRow[(*iter).xText];
                             aCompText += OUString(" ");
-                            OString aVal = m_xParser->getContext().getIntlKeywordAscii(OParseContext::KEY_AND);
+                            OString aVal = m_xParser->getContext().getIntlKeywordAscii(IParseContext::KEY_AND);
                             aCompText += OUString(aVal.getStr(),aVal.getLength(),RTL_TEXTENCODING_ASCII_US);
                             aCompText += OUString(" ");
                             aCompText += ::comphelper::getString(pRefValues[j].Value);

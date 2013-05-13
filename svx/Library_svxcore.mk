@@ -34,7 +34,6 @@ $(eval $(call gb_Library_set_include,svxcore,\
     -I$(SRCDIR)/svx/source/inc \
     $$(INCLUDE) \
     -I$(WORKDIR)/SdiTarget/svx/sdi \
-	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \
 ))
 
 $(eval $(call gb_Library_set_precompiled_header,svxcore,$(SRCDIR)/svx/inc/pch/precompiled_svxcore))

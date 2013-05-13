@@ -71,7 +71,6 @@
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/stl_types.hxx>
-#include <connectivity/sqlparse.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <vcl/timer.hxx>
 
