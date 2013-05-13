@@ -450,9 +450,9 @@ sal_Bool SAL_CALL SpellChecker_writeInfo(
 {
     try
     {
-        String aImpl( '/' );
-        aImpl += SpellChecker::getImplementationName_Static().getStr();
-        aImpl.AppendAscii( "/UNO/SERVICES" );
+        OUString aImpl( "/" + SpellChecker::getImplementationName_Static().getStr() +
+            "/UNO/SERVICES" );
+
         Reference< registry::XRegistryKey > xNewKey =
                 pRegistryKey->createKey( aImpl );
         Sequence< OUString > aServices =

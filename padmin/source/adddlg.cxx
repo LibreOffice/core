@@ -274,10 +274,10 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                     FindFiles( aPPDDir, aFiles, OUString(  "PS;PPD;PS.GZ;PPD.GZ"  ), true );
                     for( file = aFiles.begin(); file != aFiles.end(); ++file )
                     {
-                        String aFile( aPPDDir );
-                        if( aFile.GetChar( aFile.Len() ) != '/' )
-                            aFile.AppendAscii( "/" );
-                        aFile.Append( *file );
+                        OUString aFile( aPPDDir );
+                        if( !aFile.endsWith( "/" ) )
+                            aFile += "/";
+                        aFile += *file;
 
                         int nPos = file->SearchBackward( '.' );
                         if( file->Copy( 0, nPos ) == String( aPPD ) )
