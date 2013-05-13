@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//80w\u003d",
+        "filename": "padmin/source/adddlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2013-05-13T21:14:43Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be fixed to: if ( aFile.getLength() \u0026\u0026 aFile[ aFile.getLength()-1 ] !\u003d \u0027/\u0027) ?",
+      "revId": "6efdc458b570fdbac6daf9f7f98018a25d6df2cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
