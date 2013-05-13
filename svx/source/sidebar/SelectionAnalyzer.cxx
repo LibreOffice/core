@@ -117,9 +117,17 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SD (
         case 1:
         {
             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-            if ( pObj->ISA(SdrTextObj) && ((SdrTextObj*)pObj)->IsInEditMode() )
+            if (pObj->ISA(SdrTextObj) && ((SdrTextObj*)pObj)->IsInEditMode())
             {
-                eContext = EnumContext::Context_DrawText;
+                if (pObj->GetObjIdentifier() == OBJ_TABLE)
+                {
+                    // Let a table object take precedence over text
+                    // edit mode.  The panels for text editing are
+                    // present for table context as well, anyway.
+                    eContext = EnumContext::Context_Table;
+                }
+                else
+                    eContext = EnumContext::Context_DrawText;
             }
             else
             {

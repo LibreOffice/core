@@ -27,6 +27,11 @@ class SdrObject;
 
 namespace svx { namespace sidebar {
 
+/** Analyze the current selection of Calc or Draw/Impress documents
+    and return the associated sidebar context.
+
+    The decision is based on heuristics.  Do not expect pretty code.
+*/
 class SVX_DLLPUBLIC SelectionAnalyzer
 {
 public :
