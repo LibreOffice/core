@@ -335,7 +335,7 @@ HGLOBAL WinSalBitmap::ImplCreateDIB( const Size& rSize, sal_uInt16 nBits, const 
     // calculate bitmap size in Bytes
     const sal_uLong nAlignedWidth4Bytes = AlignedWidth4Bytes( nBits * rSize.Width() );
     const sal_uLong nImageSize = nAlignedWidth4Bytes * rSize.Height();
-    bool bOverflow = (nImageSize / nAlignedWidth4Bytes) != rSize.Height();
+    bool bOverflow = (nImageSize / nAlignedWidth4Bytes) != (sal_uLong) rSize.Height();
     if( bOverflow )
         return hDIB;
 
