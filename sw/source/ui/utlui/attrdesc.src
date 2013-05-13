@@ -19,9 +19,9 @@
 
 #include "globals.hrc"
 #include "attrdesc.hrc"
-/*---------------------------------------------------------------------
-    Strings fuer textuelle Attribute
- ---------------------------------------------------------------------*/
+
+// Strings for textual attributes.
+
 String STR_DROP_OVER
 {
     Text [ en-US ] = "Drop Caps over" ;

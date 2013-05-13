@@ -118,9 +118,8 @@ Resource RID_SHELLRES_AUTOFMTSTRS
 
 };
 
-/*---------------------------------------------------------------------
-    Diverses
- ---------------------------------------------------------------------*/
+// Miscellaneous
+
 String STR_EVENT_OBJECT_SELECT
 {
     Text [ en-US ] = "Click object" ;

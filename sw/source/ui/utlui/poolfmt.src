@@ -18,9 +18,8 @@
  */
 #include "poolfmt.hrc"
 
- // -----------------
- // Format-Namen
- // -----------------
+ // Format names
+
 String STR_POOLCHR_FOOTNOTE
 {
     Text [ en-US ] = "Footnote Characters" ;
@@ -86,7 +85,7 @@ String STR_POOLCHR_ENDNOTE_ANCHOR
     Text [ en-US ] = "Endnote Anchor";
 };
 
- // Zeichenvorlagen fuer HTML
+ // Drawing templates for HTML
 String STR_POOLCHR_HTML_EMPHASIS
 {
     Text [ en-US ] = "Emphasis" ;
@@ -124,7 +123,7 @@ String STR_POOLCHR_HTML_TELETYPE
     Text [ en-US ] = "Teletype" ;
 };
 
-// Rahmenvorlagen
+// Border templates
 String STR_POOLFRM_FRAME
 {
     Text [ en-US ] = "Frame" ;
@@ -153,9 +152,9 @@ String STR_POOLFRM_LABEL
 {
     Text [ en-US ] = "Labels" ;
 };
- // -----------------
- // Vorlagen-Namen
- // -----------------
+
+ // Template names
+
 String STR_POOLCOLL_STANDARD
 {
     Text [ en-US ] = "Default Style" ;
@@ -682,9 +681,9 @@ String STR_POOLPAGE_ENDNOTE
 {
     Text [ en-US ] = "Endnote" ;
 };
-/*
- Numerierungs Regeln
-*/
+
+// Numbering rules
+
 String STR_POOLNUMRULE_NUM1
 {
     Text [ en-US ] = "Numbering 1" ;
