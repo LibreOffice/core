@@ -144,7 +144,7 @@ SfxScriptLibraryContainer::SfxScriptLibraryContainer( const uno::Reference< embe
 SfxLibrary* SfxScriptLibraryContainer::implCreateLibrary( const OUString& aName )
 {
     (void)aName;    // Only needed for SfxDialogLibrary
-    SfxLibrary* pRet = new SfxScriptLibrary( maModifiable, mxMSF, mxSFI );
+    SfxLibrary* pRet = new SfxScriptLibrary( maModifiable, comphelper::getComponentContext(mxMSF), mxSFI );
     return pRet;
 }
 
@@ -154,7 +154,7 @@ SfxLibrary* SfxScriptLibraryContainer::implCreateLibraryLink( const OUString& aN
                                                               sal_Bool ReadOnly )
 {
     (void)aName;    // Only needed for SfxDialogLibrary
-    SfxLibrary* pRet = new SfxScriptLibrary( maModifiable, mxMSF, mxSFI,
+    SfxLibrary* pRet = new SfxScriptLibrary( maModifiable, comphelper::getComponentContext(mxMSF), mxSFI,
                                              aLibInfoFileURL, StorageURL, ReadOnly );
     return pRet;
 }
@@ -1231,21 +1231,21 @@ Reference< XInterface > SAL_CALL SfxScriptLibraryContainer::Create( const Refere
 
 // Ctor
 SfxScriptLibrary::SfxScriptLibrary( ModifiableHelper& _rModifiable,
-                                    const Reference< XMultiServiceFactory >& xMSF,
+                                    const Reference< XComponentContext >& xContext,
                                     const Reference< XSimpleFileAccess3 >& xSFI )
-    : SfxLibrary( _rModifiable, getCppuType( (const OUString *)0 ), xMSF, xSFI )
+    : SfxLibrary( _rModifiable, getCppuType( (const OUString *)0 ), xContext, xSFI )
     , mbLoadedSource( false )
     , mbLoadedBinary( false )
 {
 }
 
 SfxScriptLibrary::SfxScriptLibrary( ModifiableHelper& _rModifiable,
-                                    const Reference< XMultiServiceFactory >& xMSF,
+                                    const Reference< XComponentContext >& xContext,
                                     const Reference< XSimpleFileAccess3 >& xSFI,
                                     const OUString& aLibInfoFileURL,
                                     const OUString& aStorageURL,
                                     sal_Bool ReadOnly )
-    : SfxLibrary( _rModifiable, getCppuType( (const OUString *)0 ), xMSF, xSFI,
+    : SfxLibrary( _rModifiable, getCppuType( (const OUString *)0 ), xContext, xSFI,
                         aLibInfoFileURL, aStorageURL, ReadOnly)
     , mbLoadedSource( false )
     , mbLoadedBinary( false )

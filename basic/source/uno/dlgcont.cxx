@@ -87,7 +87,7 @@ SfxDialogLibraryContainer::SfxDialogLibraryContainer( const uno::Reference< embe
 // Methods to get library instances of the correct type
 SfxLibrary* SfxDialogLibraryContainer::implCreateLibrary( const OUString& aName )
 {
-    SfxLibrary* pRet = new SfxDialogLibrary( maModifiable, aName, mxMSF, mxSFI, this );
+    SfxLibrary* pRet = new SfxDialogLibrary( maModifiable, aName, comphelper::getComponentContext(mxMSF), mxSFI, this );
     return pRet;
 }
 
@@ -96,7 +96,7 @@ SfxLibrary* SfxDialogLibraryContainer::implCreateLibraryLink
       const OUString& StorageURL, sal_Bool ReadOnly )
 {
     SfxLibrary* pRet = new SfxDialogLibrary
-            ( maModifiable, aName, mxMSF, mxSFI, aLibInfoFileURL, StorageURL, ReadOnly, this );
+            ( maModifiable, aName, comphelper::getComponentContext(mxMSF), mxSFI, aLibInfoFileURL, StorageURL, ReadOnly, this );
     return pRet;
 }
 
@@ -533,10 +533,10 @@ Reference< XInterface > SAL_CALL SfxDialogLibraryContainer::Create( const Refere
 // Ctor
 SfxDialogLibrary::SfxDialogLibrary( ModifiableHelper& _rModifiable,
                                     const OUString& aName,
-                                    const Reference< XMultiServiceFactory >& xMSF,
+                                    const Reference< XComponentContext >& xContext,
                                     const Reference< XSimpleFileAccess3 >& xSFI,
                                     SfxDialogLibraryContainer* pParent )
-    : SfxLibrary( _rModifiable, getCppuType( (const Reference< XInputStreamProvider > *)0 ), xMSF, xSFI )
+    : SfxLibrary( _rModifiable, getCppuType( (const Reference< XInputStreamProvider > *)0 ), xContext, xSFI )
     , m_pParent( pParent )
     , m_aName( aName )
 {
@@ -544,14 +544,14 @@ SfxDialogLibrary::SfxDialogLibrary( ModifiableHelper& _rModifiable,
 
 SfxDialogLibrary::SfxDialogLibrary( ModifiableHelper& _rModifiable,
                                     const OUString& aName,
-                                    const Reference< XMultiServiceFactory >& xMSF,
+                                    const Reference< XComponentContext >& xContext,
                                     const Reference< XSimpleFileAccess3 >& xSFI,
                                     const OUString& aLibInfoFileURL,
                                     const OUString& aStorageURL,
                                     sal_Bool ReadOnly,
                                     SfxDialogLibraryContainer* pParent )
     : SfxLibrary( _rModifiable, getCppuType( (const Reference< XInputStreamProvider > *)0 ),
-                       xMSF, xSFI, aLibInfoFileURL, aStorageURL, ReadOnly)
+                       xContext, xSFI, aLibInfoFileURL, aStorageURL, ReadOnly)
     , m_pParent( pParent )
     , m_aName( aName )
 {

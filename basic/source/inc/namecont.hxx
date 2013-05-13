@@ -559,7 +559,7 @@ class SfxLibrary
     friend class SfxDialogLibraryContainer;
     friend class SfxScriptLibraryContainer;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >   mxMSF;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >       mxContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >      mxSFI;
 
     ModifiableHelper&   mrModifiable;
@@ -620,13 +620,13 @@ public:
     SfxLibrary(
         ModifiableHelper& _rModifiable,
         const ::com::sun::star::uno::Type& aType,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xMSF,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xSFI
     );
     SfxLibrary(
         ModifiableHelper& _rModifiable,
         const ::com::sun::star::uno::Type& aType,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xMSF,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xSFI,
         const OUString& aLibInfoFileURL,
         const OUString& aStorageURL,

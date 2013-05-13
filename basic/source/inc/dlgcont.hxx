@@ -124,7 +124,7 @@ public:
     (
         ModifiableHelper& _rModifiable,
         const OUString& aName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xMSF,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xSFI,
         SfxDialogLibraryContainer* pParent
     );
@@ -133,7 +133,7 @@ public:
     (
         ModifiableHelper& _rModifiable,
         const OUString& aName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xMSF,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xSFI,
         const OUString& aLibInfoFileURL, const OUString& aStorageURL, sal_Bool ReadOnly,
         SfxDialogLibraryContainer* pParent
