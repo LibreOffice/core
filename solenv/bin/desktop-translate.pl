@@ -29,6 +29,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 my ($prefix, $ext, $key);
 my $productname = "LibreOffice";
 my $workdir = ".";
+my $template_dir;
 
 while ($_ = $ARGV[0], /^-/) {
     shift;
@@ -53,6 +54,14 @@ while ($_ = $ARGV[0], /^-/) {
         $ext = $ARGV[0];
         shift;
     }
+    if (/^--template-dir/) {
+        $template_dir = $ARGV[0];
+        shift;
+    }
+}
+
+if (!defined $template_dir) {
+    $template_dir = "$workdir/$prefix";
 }
 
 # hack for unity section
@@ -65,8 +74,7 @@ my %templates;
 
 # open input file
 unless (open(SOURCE, $ARGV[0])) {
-    print STDERR "Can't open $ARGV[0] file: $!\n";
-    return;
+    die "Can't open $ARGV[0] file: $!\n";
 }
 
 # currently read template
@@ -81,7 +89,7 @@ while (<SOURCE>) {
         my %entry;
         # For every section in the specified ulf file there should exist
         # a template file in $workdir ..
-        $entry{'outfile'} = "$workdir/$prefix$template.$ext";
+        $entry{'outfile'} = "$template_dir$template.$ext";
         my %translations;
         $entry{'translations'} = \%translations;
         $templates{$template} = \%entry;
@@ -115,7 +123,7 @@ foreach $template (keys %templates) {
     # open the template file - ignore sections for which no
     # templates exist
     unless(open(TEMPLATE, $outfile)) {
-        print STDERR "Warning: No template found for item $_: $outfile: $!\n";
+        print STDERR "Warning: No template found for item '$template' : '$outfile' : '$_': $!\n";
         exit -1;
     }
 

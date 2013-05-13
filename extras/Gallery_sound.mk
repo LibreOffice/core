@@ -6,8 +6,9 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
+# this should probably be done with more general rules: but how ?
 
-$(eval $(call gb_Gallery_Gallery,sound,extras/source/gallery/sounds,Sounds))
+$(eval $(call gb_Gallery_Gallery,sound,extras/source/gallery/sounds))
 
 $(eval $(call gb_Gallery_add_files,sound,\
 	extras/source/gallery/sounds/apert2.wav \

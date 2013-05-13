@@ -30,6 +30,8 @@ gb_Gallery__UNO_TYPES := \
 	offapi \
 	udkapi
 
+gb_Gallery_TRANSLATE := $(SOLARENV)/bin/desktop-translate.pl
+
 # TODO: this should be in RepositoryExternal.mk, but it would lead to
 # duplication. Fix.
 gb_Gallery_EXTRA_DEPENCENCIES := \
@@ -93,15 +95,6 @@ $(call gb_Gallery_get_clean_target,%) :
 			$(call gb_Gallery_get_workdir,$*) \
 	)
 
-$(WORKDIR)/Gallery/%.sdv :
-	touch $@
-
-$(WORKDIR)/Gallery/%.thm :
-	touch $@
-
-$(WORKDIR)/Gallery/%.sdg :
-	touch $@
-
 gb_Gallery_get_packagename = Gallery/$(1)
 
 # Create a gallery.
@@ -115,21 +108,26 @@ $(call gb_Gallery__Gallery_impl,$(1),$(call gb_Gallery_get_packagename,$(1)),$(2
 
 endef
 
+
+gb_Gallery_basedir = $(patsubst %/,%,$(dir $(SRCDIR)/$(1)))
+
 # gb_Gallery__Gallery_impl gallery package basedir name
 define gb_Gallery__Gallery_impl
 $(call gb_Package_Package_internal,$(2),$(call gb_Gallery_get_workdir,$(1)))
 $(call gb_Package_set_outdir,$(2),$(INSTDIR))
-$(call gb_Package_add_file,$(2),$(gb_Gallery_INSTDIR)/$(1).sdg,sg1.sdg)
-$(call gb_Package_add_file,$(2),$(gb_Gallery_INSTDIR)/$(1).sdv,sg1.sdv)
-$(call gb_Package_add_file,$(2),$(gb_Gallery_INSTDIR)/$(1).thm,sg1.thm)
+$(call gb_Package_add_file,$(2),$(gb_Gallery_INSTDIR)/$(1).sdg,$(1).sdg)
+$(call gb_Package_add_file,$(2),$(gb_Gallery_INSTDIR)/$(1).sdv,$(1).sdv)
+$(call gb_Package_add_file,$(2),$(gb_Gallery_INSTDIR)/$(1).thm,$(1).thm)
+$(call gb_Package_add_file,$(2),$(gb_Gallery_INSTDIR)/$(1).str,$(1).str)
 
 # strip URL, without / to help the internal gallery system
-$(call gb_Gallery_get_target,$(1)) : GALLERY_BASEDIR := $(patsubst %/,%,$(call gb_Helper_make_url,$(dir $(SRCDIR)/$(3))))
+$(call gb_Gallery_get_target,$(1)) : GALLERY_BASEDIR := $(call gb_Helper_make_url,$(call gb_Gallery_basedir,$(3)))
 $(call gb_Gallery_get_target,$(1)) : GALLERY_FILES :=
-$(call gb_Gallery_get_target,$(1)) : GALLERY_NAME := $(4)
+$(call gb_Gallery_get_target,$(1)) : GALLERY_NAME := $(1)
 
-$(call gb_Gallery_get_workdir,$(1))/sg1.sdv \
-$(call gb_Gallery_get_workdir,$(1))/sg1.thm : $(call gb_Gallery_get_target,$(1))
+$(call gb_Gallery_get_workdir,$(1))/$(1).sdg \
+$(call gb_Gallery_get_workdir,$(1))/$(1).sdv \
+$(call gb_Gallery_get_workdir,$(1))/$(1).thm : $(call gb_Gallery_get_target,$(1))
 $(call gb_Gallery__get_final_target,$(1)) : $(call gb_Package_get_target,$(2))
 $(call gb_Gallery_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(2))
 $(call gb_Gallery_get_target,$(1)) :| $(dir $(call gb_Gallery_get_target,$(1))).dir \
@@ -137,6 +135,31 @@ $(call gb_Gallery_get_target,$(1)) :| $(dir $(call gb_Gallery_get_target,$(1))).
 
 $$(eval $$(call gb_Module_register_target,$(call gb_Gallery__get_final_target,$(1)),$(call gb_Gallery_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),Gallery,$(call gb_Gallery__get_final_target,$(1)))
+
+
+# this should probably be done with more general rules: but how ?
+ifneq ($(WITH_LANG),)
+$$(call gb_Gallery_get_workdir,$(1))/$(1).ulf : \
+	$$(call gb_Gallery_basedir,$(3))/share/gallery_names.ulf | $$(call gb_Executable_get_runtime_dependencies,ulfex) \
+	$(call gb_Gallery_get_target,$(1)) # that rule pre-cleans our output directory
+	$$(call gb_Output_announce,$@,$(true),SUM,1)
+	MERGEINPUT=`$(gb_MKTEMP)` && \
+	echo $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(3))).po) > $$$${MERGEINPUT} && \
+	$(call gb_Helper_abbreviate_dirs,\
+	$$(call gb_Executable_get_command,ulfex) -i $$< -o $$@ -m $$$${MERGEINPUT} -l all ) && \
+	rm -rf $$$${MERGEINPUT}
+else
+$$(call gb_Gallery_get_workdir,$(1))/$(1).ulf : $$(call gb_Gallery_basedir,$(3))/share/gallery_names.ulf
+	cp $< $@
+endif
+
+$(call gb_Gallery_get_workdir,$(1))/$(1).str : $(gb_Gallery_TRANSLATE) \
+		$$(call gb_Gallery_get_workdir,$(1))/$(1).ulf
+		cp -f $(SRCDIR)/$(3)/$(1).str $(call gb_Gallery_get_workdir,$(1))/$(1).str && \
+		$(PERL) $(gb_Gallery_TRANSLATE) -d $(WORKDIR)/$* \
+				--ext "str" --key "name" \
+				--template-dir $$(call gb_Gallery_get_workdir,$(1))/ \
+				$$(call gb_Gallery_get_workdir,$(1))/$(1).ulf
 
 endef
 

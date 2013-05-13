@@ -11370,7 +11370,8 @@ for lang in $WITH_LANG; do
         fi
     done
     if test "$vl" != "$lang"; then
-        AC_MSG_ERROR([invalid language: $lang; supported languages are: $ALL_LANGS])
+        # if you're reading this - you prolly quoted your languages remove the quotes ...
+        AC_MSG_ERROR([invalid language: '$lang' (vs '$v1'); supported languages are: $ALL_LANGS])
     fi
 done
 if test -n "$WITH_LANG" -a "$WITH_LANG" != "ALL"; then

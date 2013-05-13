@@ -301,6 +301,7 @@ bool includeProject(const OString& rProject) {
         "dictionaries",
         "editeng",
         "extensions",
+        "extras",
         "filter",
         "forms",
         "formula",
