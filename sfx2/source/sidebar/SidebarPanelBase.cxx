@@ -240,12 +240,4 @@ ui::LayoutSize SAL_CALL SidebarPanelBase::getHeightForWidth (const sal_Int32 nWi
     return ui::LayoutSize(0,0,0);
 }
 
-IContextChangeReceiver::~IContextChangeReceiver()
-{
-}
-
-ILayoutableWindow::~ILayoutableWindow()
-{
-}
-
 } } // end of namespace sfx2::sidebar
