@@ -35,7 +35,6 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_gallsounds \
 	Package_gallsymbols \
 	Package_gallsystem \
-	Package_galltransport \
 	Package_gallwwwback \
 	Package_gallwwwgraf \
 	Package_glade \
@@ -57,6 +56,7 @@ ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,extras,\
 	Gallery_sound \
 	Gallery_txtshapes \
+	Gallery_transportation \
 ))
 endif
 

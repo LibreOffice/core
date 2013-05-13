@@ -12,4 +12,7 @@ en-US = "Sounds"
 [txtshapes]
 en-US = "Text Shapes"
 
+[transportation]
+en-US = "Transportation"
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
