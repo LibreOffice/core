@@ -978,7 +978,7 @@ void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
                 {
                     rTo.mnAscent = pOS2->usWinAscent * fScale + 0.5;
                     rTo.mnDescent = pOS2->usWinDescent * fScale + 0.5;
-                    rTo.mnDescent = 0;
+                    rTo.mnExtLeading = 0;
                 }
             }
         }
