@@ -31,7 +31,12 @@ SAL_DLLPUBLIC_EXPORT LibLibreOffice *lo_init( const char *install_path )
 {
     if( !install_path )
         return NULL;
-    char *imp_lib = (char *) malloc( strlen (install_path) + sizeof( TARGET_LIB ) + 2 );
+    char* imp_lib = (char *) malloc( strlen (install_path) + sizeof( TARGET_LIB ) + 2 );
+    if(!imp_lib)
+    {
+        fprintf( stderr, "failed to open library : not enough memory\n");
+        return NULL;
+    }
     strcpy( imp_lib, install_path );
     strcat( imp_lib, "/" );
     strcat( imp_lib, TARGET_LIB );
@@ -39,12 +44,14 @@ SAL_DLLPUBLIC_EXPORT LibLibreOffice *lo_init( const char *install_path )
     if( !dlhandle )
     {
         fprintf( stderr, "failed to open library '%s'\n", imp_lib );
+        free( imp_lib );
         return NULL;
     }
 
     HookFunction *pSym = (HookFunction *) dlsym( dlhandle, "liblibreoffice_hook" );
     if( !pSym ) {
         fprintf( stderr, "failed to find hook in library '%s'\n", imp_lib );
+        free( imp_lib );
         return NULL;
     }
 
