@@ -163,7 +163,6 @@ void SwTextShell::ExecMovePage(SfxRequest &rReq)
     rReq.Done();
 }
 
-
 void SwTextShell::ExecMoveCol(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();

@@ -39,7 +39,7 @@
 
 void SwTextShell::ExecEnterNum(SfxRequest &rReq)
 {
-    //wg. Aufzeichnung schon vor dem evtl. Shellwechsel
+    //Because the record before any shell exchange.
     switch(rReq.GetSlot())
     {
     case FN_NUM_NUMBERING_ON:
@@ -136,7 +136,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                     SvxNumberFormat aFmt( aSvxRule.GetLevel( n ) );
                     if ( n && bHtml )
                     {
-                        // 1/2" fuer HTML
+                        // 1/2" for HTML
                         aFmt.SetLSpace(720);
                         aFmt.SetAbsLSpace(n * 720);
                     }
@@ -155,7 +155,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
 
         aSet.Put( SfxBoolItem( SID_PARAM_NUM_PRESET,sal_False ));
 
-        // vor dem Dialog wird der HtmlMode an der DocShell versenkt
+        // Before the dialogue of the HTML mode will be droped at the Docshell.
         pDocSh->PutItem(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(pDocSh)));
 
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -185,9 +185,8 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                 const bool bCreateList = (pCurRule == 0);
                 GetShell().SetCurNumRule( aSetRule, bCreateList );
             }
-            // wenn der Dialog mit OK verlassen wurde, aber nichts ausgewaehlt
-            // wurde dann muss die Numerierung zumindest eingeschaltet werden,
-            // wenn sie das noch nicht ist
+            // If the Dialog was leaved with OK but nothing was chosen then the
+            // numbering must be at least activated, if it is not already.
             else if( !pCurRule && SFX_ITEM_SET == aSet.GetItemState( SID_ATTR_NUMBERING_RULE, sal_False, &pItem ))
             {
                 rReq.AppendItem( *pItem );
@@ -213,6 +212,5 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         return;
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
