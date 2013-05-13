@@ -381,7 +381,7 @@ uno::Sequence<OUString> ScSpreadsheetSettings::getSupportedServiceNames_Static()
 sal_Bool ScSpreadsheetSettings::getPropertyBool(const OUString& aPropertyName) throw (css::uno::RuntimeException)
 {
    uno::Any any = getPropertyValue(aPropertyName);
-   sal_Bool b;
+   sal_Bool b = sal_False;
    any >>= b;
    return b;
 }
@@ -389,7 +389,7 @@ sal_Bool ScSpreadsheetSettings::getPropertyBool(const OUString& aPropertyName) t
 sal_Int16 ScSpreadsheetSettings::getPropertyInt16(const OUString& aPropertyName) throw (css::uno::RuntimeException)
 {
    uno::Any any = getPropertyValue(aPropertyName);
-   sal_Int16 b;
+   sal_Int16 b = sal_False;
    any >>= b;
    return b;
 }
