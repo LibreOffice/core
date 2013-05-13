@@ -112,7 +112,7 @@ ifeq (TRUE,$(LIBO_DEV_INSTALL))
 	rmdir $(DEVINSTALLDIR)/LibreOffice*_archive_sdk/LibreOffice*_SDK
 	rmdir $(DEVINSTALLDIR)/LibreOffice*_archive_sdk
 else # LIBO_DEV_INSTALL
-	$(call instsetoo_native_install_command,openoffice,$(instsetoo_native_WITH_LANG),,,$(PKGFORMAT))
+	$(call instsetoo_native_install_command,openoffice,$(if $(filter WNT,$(OS)),$(instsetoo_native_WITH_LANG),en-US),,,$(PKGFORMAT))
 ifeq (ODK,$(filter ODK,$(BUILD_TYPE)))
 	$(call instsetoo_native_install_command,sdkoo,en-US,_SDK,,$(PKGFORMAT))
 endif
