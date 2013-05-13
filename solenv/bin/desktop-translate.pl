@@ -137,7 +137,7 @@ foreach $template (keys %templates) {
                 # print "locale is $locale\n";
                 # print "value is $value\n";
                 if ($value) {
-                    if ($ext eq "desktop") {
+                    if ($ext eq "desktop" || $ext eq "str") {
                         print OUTFILE "$outkey\[$locale\]=$value\n";
                     } else {
                         print OUTFILE "\t\[$locale\]$outkey=$value\n";

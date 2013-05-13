@@ -45,6 +45,12 @@ OUString GalleryThemeEntry::ReadStrFromIni(const OUString &aKeyName )
             OUString aLocale;
             OUString aValue;
             sal_Int32 n;
+
+            // comments
+            if( aLine.indexOf( '#' ) == 0 )
+                continue;
+
+            // a[en_US] = Bob
             if( ( n = aLine.indexOf( '=' ) ) >= 1)
             {
                 aKey = OStringToOUString(
