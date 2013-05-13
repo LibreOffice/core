@@ -17,12 +17,12 @@ ifeq ($(OS)-$(COM),WNT-MSC)
 ifeq ($(CPUNAME),X86_64)
 python_arch_subdir=amd64/
 endif
-$(eval $(call gb_ExternalPackage_add_file,python3,program/python-core-$(PYTHON_VERSION)/bin/python.exe,LO_lib/$(python_arch_subdir)python$(if $(MSVC_USE_DEBUG_RUNTIME),_d).exe))
-$(eval $(call gb_ExternalPackage_add_file,python3,program/python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)$(if $(MSVC_USE_DEBUG_RUNTIME),_d).dll,LO_lib/$(python_arch_subdir)python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)$(if $(MSVC_USE_DEBUG_RUNTIME),_d).dll))
+$(eval $(call gb_ExternalPackage_add_file,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/bin/python.exe,LO_lib/$(python_arch_subdir)python$(if $(MSVC_USE_DEBUG_RUNTIME),_d).exe))
+$(eval $(call gb_ExternalPackage_add_file,python3,$(gb_Package_PROGRAMDIRNAME)/python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)$(if $(MSVC_USE_DEBUG_RUNTIME),_d).dll,LO_lib/$(python_arch_subdir)python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)$(if $(MSVC_USE_DEBUG_RUNTIME),_d).dll))
 ifeq ($(MSVC_USE_DEBUG_RUNTIME),)
-$(eval $(call gb_ExternalPackage_add_file,python3,program/python$(PYTHON_VERSION_MAJOR).dll,LO_lib/$(python_arch_subdir)python$(PYTHON_VERSION_MAJOR).dll))
+$(eval $(call gb_ExternalPackage_add_file,python3,$(gb_Package_PROGRAMDIRNAME)/python$(PYTHON_VERSION_MAJOR).dll,LO_lib/$(python_arch_subdir)python$(PYTHON_VERSION_MAJOR).dll))
 endif
-$(eval $(call gb_ExternalPackage_add_files,python3,program/python-core-$(PYTHON_VERSION)/lib/lib-dynload,\
+$(eval $(call gb_ExternalPackage_add_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/lib-dynload,\
 	LO_lib/$(python_arch_subdir)_ctypes$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	LO_lib/$(python_arch_subdir)_ctypes_test$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	LO_lib/$(python_arch_subdir)_decimal$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
@@ -40,13 +40,13 @@ $(eval $(call gb_ExternalPackage_add_files,python3,program/python-core-$(PYTHON_
 ))
 else ifeq ($(OS),WNT) # MinGW
 # TODO how are C modules called on this platform?
-$(eval $(call gb_ExternalPackage_add_file,python3,program/python-core-$(PYTHON_VERSION)/bin/python.exe,python.exe))
-$(eval $(call gb_ExternalPackage_add_file,python3,program/python$(PYTHON_VERSION_MAJOR).dll,python$(PYTHON_VERSION_MAJOR).dll))
+$(eval $(call gb_ExternalPackage_add_file,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/bin/python.exe,python.exe))
+$(eval $(call gb_ExternalPackage_add_file,python3,$(gb_Package_PROGRAMDIRNAME)/python$(PYTHON_VERSION_MAJOR).dll,python$(PYTHON_VERSION_MAJOR).dll))
 else
-$(eval $(call gb_ExternalPackage_add_file,python3,program/python.bin,python))
-$(eval $(call gb_ExternalPackage_add_file,python3,program/libpython$(PYTHON_VERSION_MAJOR).so,libpython$(PYTHON_VERSION_MAJOR).so))
-$(eval $(call gb_ExternalPackage_add_file,python3,program/libpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so,libpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so))
-$(eval $(call gb_ExternalPackage_add_file,python3,program/libpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so-gdb.py,Tools/gdb/libpython.py))
+$(eval $(call gb_ExternalPackage_add_file,python3,$(gb_Package_PROGRAMDIRNAME)/python.bin,python))
+$(eval $(call gb_ExternalPackage_add_file,python3,$(gb_Package_PROGRAMDIRNAME)/libpython$(PYTHON_VERSION_MAJOR).so,libpython$(PYTHON_VERSION_MAJOR).so))
+$(eval $(call gb_ExternalPackage_add_file,python3,$(gb_Package_PROGRAMDIRNAME)/libpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so,libpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so))
+$(eval $(call gb_ExternalPackage_add_file,python3,$(gb_Package_PROGRAMDIRNAME)/libpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so-gdb.py,Tools/gdb/libpython.py))
 # versioned lib/libpython3.3m.so.1.0 appears to be unnecessary?
 
 # Unfortunately the python build system does not allow to explicitly enable or
@@ -56,7 +56,7 @@ $(eval $(call gb_ExternalPackage_add_file,python3,program/libpython$(PYTHON_VERS
 # Obviously this list should not contain stuff with external dependencies
 # that may not be available on baseline systems.
 ifneq ($(OS),AIX)
-$(eval $(call gb_ExternalPackage_add_files,python3,program/python-core-$(PYTHON_VERSION)/lib/lib-dynload,\
+$(eval $(call gb_ExternalPackage_add_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/lib-dynload,\
 	LO_lib/array.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
 	LO_lib/atexit.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
 	LO_lib/audioop.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
@@ -123,7 +123,7 @@ endif
 # test - probably unnecessary? was explicitly removed #i116738#
 # venv - why would we need virtual environments
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/plat-linux,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/plat-linux,\
 	Lib/plat-linux/regen \
 	Lib/plat-linux/CDROM.py \
 	Lib/plat-linux/DLFCN.py \
@@ -131,12 +131,12 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-
 	Lib/plat-linux/TYPES.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/plat-darwin,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/plat-darwin,\
 	Lib/plat-darwin/IN.py \
 	Lib/plat-darwin/regen \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/plat-sunos5,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/plat-sunos5,\
 	Lib/plat-sunos5/regen \
 	Lib/plat-sunos5/CDIO.py \
 	Lib/plat-sunos5/DLFCN.py \
@@ -145,19 +145,19 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-
 	Lib/plat-sunos5/TYPES.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/plat-aix4,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/plat-aix4,\
 	Lib/plat-aix4/regen \
 	Lib/plat-aix4/IN.py \
 ))
 
 # that one is generated...
 ifneq ($(OS)-$(COM),WNT-MSC)
-$(eval $(call gb_ExternalPackage_add_files,python3,program/python-core-$(PYTHON_VERSION)/lib,\
+$(eval $(call gb_ExternalPackage_add_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib,\
 	Lib/_sysconfigdata.py \
 ))
 endif
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib,\
 	LICENSE \
 	Lib/__future__.py \
 	Lib/__phello__.foo.py \
@@ -316,31 +316,31 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-
 	Lib/zipfile.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/collections,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/collections,\
 	Lib/collections/__init__.py \
 	Lib/collections/__main__.py \
 	Lib/collections/abc.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/concurrent,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/concurrent,\
 	Lib/concurrent/__init__.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/concurrent/futures,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/concurrent/futures,\
 	Lib/concurrent/futures/__init__.py \
 	Lib/concurrent/futures/_base.py \
 	Lib/concurrent/futures/process.py \
 	Lib/concurrent/futures/thread.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/ctypes,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/ctypes,\
 	Lib/ctypes/__init__.py \
 	Lib/ctypes/_endian.py \
 	Lib/ctypes/util.py \
 	Lib/ctypes/wintypes.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/ctypes/macholib,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/ctypes/macholib,\
 	Lib/ctypes/macholib/README.ctypes \
 	Lib/ctypes/macholib/fetch_macholib \
 	Lib/ctypes/macholib/fetch_macholib.bat \
@@ -350,7 +350,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-
 	Lib/ctypes/macholib/framework.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/distutils,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/distutils,\
 	Lib/distutils/README \
 	Lib/distutils/__init__.py \
 	Lib/distutils/archive_util.py \
@@ -382,7 +382,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-
 	Lib/distutils/version.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/distutils/command,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/distutils/command,\
 	Lib/distutils/command/__init__.py \
 	Lib/distutils/command/bdist_dumb.py \
 	Lib/distutils/command/bdist_msi.py \
@@ -415,7 +415,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-
 	Lib/distutils/command/wininst-9.0.exe \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/email,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/email,\
 	Lib/email/__init__.py \
 	Lib/email/_encoded_words.py \
 	Lib/email/_header_value_parser.py \
@@ -438,7 +438,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-
 	Lib/email/utils.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/email/mime,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/email/mime,\
 	Lib/email/mime/__init__.py \
 	Lib/email/mime/application.py \
 	Lib/email/mime/audio.py \
@@ -450,7 +450,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-
 	Lib/email/mime/text.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/encodings,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/encodings,\
 	Lib/encodings/__init__.py \
 	Lib/encodings/aliases.py \
 	Lib/encodings/ascii.py \
@@ -573,13 +573,13 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-
 	Lib/encodings/zlib_codec.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/html,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/html,\
 	Lib/html/__init__.py \
 	Lib/html/entities.py \
 	Lib/html/parser.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/http,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/http,\
 	Lib/http/__init__.py \
 	Lib/http/client.py \
 	Lib/http/cookiejar.py \
@@ -587,7 +587,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-
 	Lib/http/server.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/importlib,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/importlib,\
 	Lib/importlib/__init__.py \
 	Lib/importlib/_bootstrap.py \
 	Lib/importlib/abc.py \
@@ -595,7 +595,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-
 	Lib/importlib/util.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/json,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/json,\
 	Lib/json/__init__.py \
 	Lib/json/decoder.py \
 	Lib/json/encoder.py \
@@ -603,7 +603,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-
 	Lib/json/tool.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/lib2to3,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/lib2to3,\
 	Lib/lib2to3/Grammar.txt \
 	Lib/lib2to3/PatternGrammar.txt \
 	Lib/lib2to3/__init__.py \
@@ -619,7 +619,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-
 	Lib/lib2to3/refactor.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/lib2to3/fixes,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/lib2to3/fixes,\
 	Lib/lib2to3/fixes/__init__.py \
 	Lib/lib2to3/fixes/fix_apply.py \
 	Lib/lib2to3/fixes/fix_basestring.py \
@@ -674,7 +674,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-
 	Lib/lib2to3/fixes/fix_zip.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/pgen2,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/pgen2,\
 	Lib/lib2to3/pgen2/__init__.py \
 	Lib/lib2to3/pgen2/conv.py \
 	Lib/lib2to3/pgen2/driver.py \
@@ -686,13 +686,13 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-
 	Lib/lib2to3/pgen2/token.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/logging,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/logging,\
 	Lib/logging/__init__.py \
 	Lib/logging/config.py \
 	Lib/logging/handlers.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/multiprocessing,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/multiprocessing,\
 	Lib/multiprocessing/__init__.py \
 	Lib/multiprocessing/connection.py \
 	Lib/multiprocessing/forking.py \
@@ -707,18 +707,18 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-
 	Lib/multiprocessing/util.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/multiprocessing/dummy,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/multiprocessing/dummy,\
 	Lib/multiprocessing/dummy/__init__.py \
 	Lib/multiprocessing/dummy/connection.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/pydoc_data,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/pydoc_data,\
 	Lib/pydoc_data/__init__.py \
 	Lib/pydoc_data/_pydoc.css \
 	Lib/pydoc_data/topics.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/unittest,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/unittest,\
 	Lib/unittest/__init__.py \
 	Lib/unittest/__main__.py \
 	Lib/unittest/case.py \
@@ -732,7 +732,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-
 	Lib/unittest/util.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/unittest/test,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/unittest/test,\
 	Lib/unittest/test/__init__.py \
 	Lib/unittest/test/dummy.py \
 	Lib/unittest/test/support.py \
@@ -751,7 +751,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-
 	Lib/unittest/test/_test_warnings.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/unittest/test/testmock,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/unittest/test/testmock,\
 	Lib/unittest/test/testmock/__init__.py \
 	Lib/unittest/test/testmock/support.py \
 	Lib/unittest/test/testmock/testcallable.py \
@@ -763,7 +763,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-
 	Lib/unittest/test/testmock/testwith.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/urllib,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/urllib,\
 	Lib/urllib/__init__.py \
 	Lib/urllib/error.py \
 	Lib/urllib/parse.py \
@@ -772,7 +772,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-
 	Lib/urllib/robotparser.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/wsgiref,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/wsgiref,\
 	Lib/wsgiref/__init__.py \
 	Lib/wsgiref/handlers.py \
 	Lib/wsgiref/headers.py \
@@ -781,11 +781,11 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-
 	Lib/wsgiref/validate.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/xml,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/xml,\
 	Lib/xml/__init__.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/xml/dom,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/xml/dom,\
 	Lib/xml/dom/__init__.py \
 	Lib/xml/dom/NodeFilter.py \
 	Lib/xml/dom/domreg.py \
@@ -796,7 +796,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-
 	Lib/xml/dom/xmlbuilder.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/xml/etree,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/xml/etree,\
 	Lib/xml/etree/__init__.py \
 	Lib/xml/etree/ElementInclude.py \
 	Lib/xml/etree/ElementPath.py \
@@ -804,12 +804,12 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-
 	Lib/xml/etree/cElementTree.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/xml/parsers,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/xml/parsers,\
 	Lib/xml/parsers/__init__.py \
 	Lib/xml/parsers/expat.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/xml/sax,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/xml/sax,\
 	Lib/xml/sax/__init__.py \
 	Lib/xml/sax/_exceptions.py \
 	Lib/xml/sax/expatreader.py \
@@ -818,13 +818,13 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-
 	Lib/xml/sax/xmlreader.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/xmlrpc,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/xmlrpc,\
 	Lib/xmlrpc/__init__.py \
 	Lib/xmlrpc/client.py \
 	Lib/xmlrpc/server.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,program/python-core-$(PYTHON_VERSION)/lib/site-packages,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/site-packages,\
 	Lib/site-packages/README \
 ))
 
