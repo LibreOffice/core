@@ -32,7 +32,7 @@
 # $(1): "Cppunit" or "Python"
 # $(2): the name of the unit test that failed
 define gb_UNIT_FAILED_MSG
-printf '\nError: a unit test failed, please do one of:\n\nexport DEBUGCPPUNIT=TRUE            # for exception catching\nexport GDBCPPUNITTRACE="gdb --args" # for interactive debugging\nexport VALGRIND=memcheck            # for memory checking\n\nand retry using: make %sTest_%s' $(1) $(2)
+printf '\nError: a unit test failed, please do one of:\n\nexport DEBUGCPPUNIT=TRUE            # for exception catching\nexport GDBCPPUNITTRACE="gdb --args" # for interactive debugging\nexport VALGRIND=memcheck            # for memory checking\n\nand retry using: make %sTest_%s\n\n' $(1) $(2)
 endef
 
 ifeq ($(strip $(DEBUGCPPUNIT)),TRUE)
