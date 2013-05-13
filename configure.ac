@@ -8646,7 +8646,7 @@ DISABLE_OPENSSL="NO"
 AC_MSG_CHECKING([whether to disable OpenSSL usage])
 if test "$enable_openssl" = "yes"; then
     AC_MSG_RESULT([no])
-    if test $_os = Darwin -a $MAC_OS_X_VERSION_MIN_REQUIRED -ge 1070; then
+    if test "$_os" = Darwin -a "${MAC_OS_X_VERSION_MIN_REQUIRED:-0}" -ge 1070; then
         # OpenSSL is deprecated when building for 10.7 or later.
         #
         # http://stackoverflow.com/questions/7406946/why-is-apple-deprecating-openssl-in-macos-10-7-lion
