@@ -39,15 +39,18 @@ namespace {
 void testErrorBar( Reference< XPropertySet > xErrorBar )
 {
     sal_Int32 nErrorBarStyle;
-    xErrorBar->getPropertyValue("ErrorBarStyle") >>= nErrorBarStyle;
+    CPPUNIT_ASSERT(
+        xErrorBar->getPropertyValue("ErrorBarStyle") >>= nErrorBarStyle);
     CPPUNIT_ASSERT_EQUAL(nErrorBarStyle, chart::ErrorBarStyle::RELATIVE);
-    bool bShowPositive, bShowNegative;
-    xErrorBar->getPropertyValue("ShowPositiveError") >>= bShowPositive;
+    bool bShowPositive = bool(), bShowNegative = bool();
+    CPPUNIT_ASSERT(
+        xErrorBar->getPropertyValue("ShowPositiveError") >>= bShowPositive);
     CPPUNIT_ASSERT(bShowPositive);
-    xErrorBar->getPropertyValue("ShowNegativeError") >>= bShowNegative;
+    CPPUNIT_ASSERT(
+        xErrorBar->getPropertyValue("ShowNegativeError") >>= bShowNegative);
     CPPUNIT_ASSERT(bShowNegative);
     double nVal;
-    xErrorBar->getPropertyValue("PositiveError") >>= nVal;
+    CPPUNIT_ASSERT(xErrorBar->getPropertyValue("PositiveError") >>= nVal);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(nVal, 10.0, 1e-10);
 }
 
