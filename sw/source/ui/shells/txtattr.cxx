@@ -177,7 +177,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
     SwWrtShell& rWrtSh = GetShell();
     SwTxtFmtColl* pColl = 0;
 
-    // nur gesetzt, wenn gesamter Absatz selektiert ist und AutoUpdateFmt gesetzt ist
+    // Is only set if the whole paragraph is selected and AutoUpdateFmt is set.
     if( rWrtSh.HasSelection() && rWrtSh.IsSelFullPara() )
     {
         pColl = rWrtSh.GetCurTxtFmtColl();
@@ -189,7 +189,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
     switch ( nSlot )
     {
         case FN_TXTATR_INET:
-        // Sonderbehandlung der PoolId des SwFmtInetFmt
+        // Special treatment of the PoolId of the SwFmtInetFmt
         if(bArgs)
         {
             const SfxPoolItem& rItem = pArgs->Get(nWhich );
@@ -215,7 +215,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
 
         case FN_GROW_FONT_SIZE:
             bGrow = sal_True;
-            // kein break !!
+            // No break !!
         case FN_SHRINK_FONT_SIZE:
         {
             SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONTHEIGHT, rPool );
@@ -236,7 +236,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
                     if (bGrow)
                     {
                         if( lSize == lFontMaxSz )
-                            break;      // das wars, hoeher gehts nicht
+                            break;      // That's all, further up is not possible
                         if( ( lSize += lFontInc ) > lFontMaxSz )
                             lSize = lFontMaxSz;
                     }
@@ -273,7 +273,7 @@ void SwTextShell::ExecParaAttr(SfxRequest &rReq)
     sal_uInt8 ePropL;
     const SfxItemSet* pArgs = rReq.GetArgs();
 
-    // gleich beide Attribute holen, ist nicht teuerer !!
+    // Get both attributes immediately isn't more expensive!!
     SfxItemSet aSet( GetPool(),
         RES_PARATR_LINESPACING, RES_PARATR_ADJUST,
         RES_FRAMEDIR, RES_FRAMEDIR,
@@ -505,14 +505,14 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
     SwWrtShell &rSh = GetShell();
     SfxItemPool& rPool = GetPool();
     SfxItemSet aCoreSet(rPool, aTxtFmtCollSetRange);
-    rSh.GetCurAttr(aCoreSet); // *alle* Textattribute von der Core erfragen
+    rSh.GetCurAttr(aCoreSet); // Request *all* text attributes from the core.
 
     SfxWhichIter aIter(rSet);
     sal_uInt16 nSlot = aIter.FirstWhich();
     sal_Bool bFlag = sal_False;
     SfxBoolItem aFlagItem;
     const SfxPoolItem* pItem = 0;
-    int eAdjust = -1;   // Illegaler Wert, um DONTCARE zu erkennen
+    int eAdjust = -1;   // Illegal value to recognize DONTCARE.
     SfxItemState eState = aCoreSet.GetItemState(RES_PARATR_ADJUST, sal_False, &pItem);
 
     if( SFX_ITEM_DEFAULT == eState )
@@ -711,7 +711,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             break;
 
             default:
-            // Nichts tun
+            // Do nothing
             nSlot = 0;
             break;
 
@@ -727,7 +727,5 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
 
     rSet.Put(aCoreSet,sal_False);
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -68,7 +68,7 @@
 #include <docstat.hxx>
 #include <outline.hxx>
 #include <tablemgr.hxx>
-#include <swundo.hxx>       // fuer Undo-IDs
+#include <swundo.hxx>       // for Undo-IDs
 #include <reffld.hxx>
 #include <docsh.hxx>
 #include <mdiexp.hxx>
@@ -152,8 +152,8 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
     }
         aCoreSet.Put( SfxUInt16Item( SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,
                     rWrtSh.GetScalingOfSelectedText() ) );
-    // Das CHRATR_BACKGROUND-Attribut wird fuer den Dialog in
-    // ein RES_BACKGROUND verwandelt und wieder zurueck ...
+    // The CHRATR_BACKGROUND attribute will be converted for the
+    // dialogue in a RES_BACKGROUND and back again ...
     const SfxPoolItem *pTmpBrush;
     if( SFX_ITEM_SET == aCoreSet.GetItemState( RES_CHRATR_BACKGROUND, sal_True, &pTmpBrush ) )
     {
@@ -199,7 +199,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
         sal_Bool bInsert = sal_False;
         xub_StrLen nInsert = 0;
 
-        // aus ungeklaerter Ursache ist das alte Item wieder im Set
+        // The old item is for unknown reasons back in the set again.
         if( !bSelectionPut && SFX_ITEM_SET == aTmpSet.GetItemState(FN_PARAM_SELECTION, sal_False, &pSelectionItem) )
         {
             String sInsert = ((const SfxStringItem*)pSelectionItem)->GetValue();
@@ -592,7 +592,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_AUTOFORMAT_REDLINE_APPLY:
         {
             SvxSwAutoFmtFlags aFlags(SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags());
-            // das muss fuer die Nachbearbeitung immer sal_False sein
+            // This must always be sal_False for the postprocessing.
             aFlags.bAFmtByInput = sal_False;
             aFlags.bWithRedlining = sal_True;
             rWrtSh.AutoFormat( &aFlags );
@@ -636,7 +636,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_AUTOFORMAT_APPLY:
         {
             SvxSwAutoFmtFlags aFlags(SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags());
-            // das muss fuer die Nachbearbeitung immer sal_False sein
+            // This must always be sal_False for the postprocessing.
             aFlags.bAFmtByInput = sal_False;
             rWrtSh.AutoFormat( &aFlags );
             rReq.Done();
@@ -658,7 +658,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         break;
         case FN_AUTO_CORRECT:
         {
-            // erstmal auf Blank defaulten
+            // At first set to blank as default.
             sal_Unicode cChar = ' ';
             rWrtSh.AutoCorrect( *SvxAutoCorrCfg::Get().GetAutoCorrect(), cChar );
             rReq.Done();
@@ -892,7 +892,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE,
                             ::GetHtmlMode(GetView().GetDocShell())));
 
-            // Tabulatoren, DefaultTabs ins ItemSet Stecken
+            // Tabulators: Put DefaultTabs into ItemSet
             const SvxTabStopItem& rDefTabs = (const SvxTabStopItem&)
                             GetPool().GetDefaultItem(RES_PARATR_TABSTOP);
 
@@ -900,11 +900,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
             SfxUInt16Item aDefDistItem( SID_ATTR_TABSTOP_DEFAULTS, nDefDist );
             aCoreSet.Put( aDefDistItem );
 
-            // Aktueller Tab
+            // Current tabulator
             SfxUInt16Item aTabPos( SID_ATTR_TABSTOP_POS, 0 );
             aCoreSet.Put( aTabPos );
 
-            // linker Rand als Offset
+            // Left border as offset
             //#i24363# tab stops relative to indent
             const long nOff = rWrtSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) ?
                 ((SvxLRSpaceItem&)aCoreSet.Get( RES_LR_SPACE )).GetTxtLeft() : 0;
@@ -915,14 +915,14 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if ( bUseCurCrsr )
                 ::PrepareBoxInfo( aCoreSet, rWrtSh );
 
-            //aktuelles Seitenformat
+            // Current page format
             ::SwToSfxPageDescAttr( aCoreSet );
 
             sal_uInt16 nDefPage = 0;
             if( pItem )
                 nDefPage = ((SfxUInt16Item *)pItem)->GetValue();
 
-            // Numerierungseigenschaften
+            // Properties of numbering
             if( rWrtSh.GetDoc()->GetCurrNumRule( *pPaM->GetPoint() ) )
             {
                 SfxBoolItem aStart( FN_NUMBER_NEWSTART, rWrtSh.IsNumRuleStart( pPaM ) );
@@ -949,7 +949,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             }
             else if ( NULL != pDlg && pDlg->Execute() == RET_OK )
             {
-                // Defaults evtl umsetzen
+                // Apply defaults if nessecary.
                 pSet = (SfxItemSet*)pDlg->GetOutputItemSet();
                 sal_uInt16 nNewDist;
                 if( SFX_ITEM_SET == pSet->GetItemState( SID_ATTR_TABSTOP_DEFAULTS, sal_False, &pItem ) &&

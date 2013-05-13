@@ -74,7 +74,7 @@
 #include <textsh.hxx>
 #include <frmfmt.hxx>
 #include <tablemgr.hxx>
-#include <swundo.hxx>       // fuer Undo-IDs
+#include <swundo.hxx>       // for Undo-IDs
 #include <shellio.hxx>
 #include <frmdlg.hxx>
 #include <usrpref.hxx>
@@ -215,7 +215,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
         if ( ERRCODE_NONE == aDlg.Execute() )
         {
-            // URL ermitteln
+            // Determine URL
             String aStrURL( aDlg.GetPath() );
             aStrURL = URIHelper::SmartRel2Abs(
                 INetURLObject(), aStrURL, URIHelper::GetMaybeFileHdl() );
@@ -505,7 +505,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             }
 
         }
-        // Rahmen neu anlegen
+        // Create new border
         SwFlyFrmAttrMgr aMgr( sal_True, GetShellPtr(), FRMMGR_TYPE_TEXT );
         if(pArgs)
         {
@@ -567,7 +567,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             aSet.Put(aMgr.GetAttrSet());
             aSet.SetParent( aMgr.GetAttrSet().GetParent() );
 
-            // Minimalgroesse in Spalten loeschen
+            // Delete minimum size in columns.
             SvxBoxInfoItem aBoxInfo((SvxBoxInfoItem &)aSet.Get(SID_ATTR_BORDER_INNER));
             const SvxBoxItem& rBox = (const SvxBoxItem&)aSet.Get(RES_BOX);
             aBoxInfo.SetMinDist(sal_False);
@@ -592,7 +592,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
                 aMgr.SetAttrSet(*pOutSet);
 
-                // beim ClickToEditFeld erst die Selektion loeschen
+                // At first delete the selection at the ClickToEditField.
                 if( rShell.IsInClickToEdit() )
                     rShell.DelRight();
 
@@ -751,7 +751,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                         if( pMacro )
                             aHLinkItem.SetMacro(HYPERDLG_EVENT_MOUSEOUT_OBJECT, *pMacro);
 
-                        // Text des Links besorgen
+                        // Get the text of the Link.
                         rSh.StartAction();
                         rSh.CreateCrsr();
                         rSh.SwCrsrShell::SelectTxtAttr(RES_TXTATR_INETFMT,sal_True);
@@ -960,10 +960,10 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
             aFontName = aFont.GetFamilyName();
     }
 
-    Font aNewFont(aFontName, Size(1,1)); // Size nur wg. CTOR
+    Font aNewFont(aFontName, Size(1,1)); // Size only because CTOR.
     if( !aChars.Len() )
     {
-        // Eingestellten Font als Default
+        // Set selected font as default.
         SfxAllItemSet aAllSet( rSh.GetAttrPool() );
         aAllSet.Put( SfxBoolItem( FN_PARAM_1, sal_False ) );
 
@@ -1004,7 +1004,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
     {
         rSh.StartAllAction();
 
-        // Selektierten Inhalt loeschen
+        // Delete selected content.
         SwRewriter aRewriter;
         aRewriter.AddRule(UndoArg1, SW_RESSTR(STR_SPECIALCHAR));
 
@@ -1026,7 +1026,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
                             GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() ) ));
         }
 
-        // Zeichen einfuegen
+        // Insert character.
         rSh.Insert( aChars );
 
         // #108876# a font attribute has to be set always due to a guessed script type
