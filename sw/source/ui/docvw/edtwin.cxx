@@ -5195,7 +5195,6 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
         break;
         case COMMAND_QUERYCHARPOSITION:
         {
-            SwWrtShell &rSh = m_rView.GetWrtShell();
             sal_Bool bVertical = rSh.IsInVerticalText();
             const SwPosition& rPos = *rSh.GetCrsr()->GetPoint();
             SwDocShell* pDocSh = m_rView.GetDocShell();
