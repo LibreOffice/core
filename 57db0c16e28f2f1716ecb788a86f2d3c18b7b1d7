@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//89Q\u003d",
+        "filename": "xmloff/source/transform/EventOASISTContext.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-05-13T08:02:55Z",
+      "side": 1,
+      "message": "Typo: go -\u003e got. We can as well fix it while we\u0027re here.",
+      "revId": "57db0c16e28f2f1716ecb788a86f2d3c18b7b1d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//89U\u003d",
+        "filename": "xmloff/source/transform/EventOASISTContext.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-05-13T08:02:55Z",
+      "side": 1,
+      "message": "Please change this to plain SAL_WARN. The message has nothing to do with whether \"this\" is non-null. (And I am pretty sure it would crash earlier in the function if \"this\" were null.)",
+      "revId": "57db0c16e28f2f1716ecb788a86f2d3c18b7b1d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//89M\u003d",
+        "filename": "xmloff/source/transform/Oasis2OOo.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1348,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-05-13T08:02:55Z",
+      "side": 1,
+      "message": "typo: go -\u003e got",
+      "revId": "57db0c16e28f2f1716ecb788a86f2d3c18b7b1d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//89I\u003d",
+        "filename": "xmloff/source/transform/Oasis2OOo.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1419,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-05-13T08:02:55Z",
+      "side": 1,
+      "message": "use SAL_WARN here",
+      "revId": "57db0c16e28f2f1716ecb788a86f2d3c18b7b1d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//89E\u003d",
+        "filename": "xmloff/source/transform/Oasis2OOo.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1691,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-05-13T08:02:55Z",
+      "side": 1,
+      "message": "use SAL_WARN here",
+      "revId": "57db0c16e28f2f1716ecb788a86f2d3c18b7b1d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
