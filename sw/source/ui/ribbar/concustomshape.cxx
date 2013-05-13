@@ -45,11 +45,6 @@
 
 #include <math.h>
 
-/*************************************************************************
-|*
-|* C'Tor
-|*
-\************************************************************************/
 ConstCustomShape::ConstCustomShape( SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView, SfxRequest& rReq )
     : SwDrawBase( pWrtShell, pEditWin, pSwView )
 {
@@ -61,7 +56,6 @@ OUString ConstCustomShape::GetShapeType() const
     return aCustomShape;
 }
 
-//static
 OUString ConstCustomShape::GetShapeTypeFromRequest( SfxRequest& rReq )
 {
     OUString aRet;
@@ -73,12 +67,6 @@ OUString ConstCustomShape::GetShapeTypeFromRequest( SfxRequest& rReq )
     }
     return aRet;
 }
-
-/*************************************************************************
-|*
-|* MouseButtonDown-event
-|*
-\************************************************************************/
 
 sal_Bool ConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 {
@@ -106,22 +94,10 @@ sal_Bool ConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-/*************************************************************************
-|*
-|* MouseButtonUp-event
-|*
-\************************************************************************/
-
 sal_Bool ConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 {
     return SwDrawBase::MouseButtonUp(rMEvt);
 }
-
-/*************************************************************************
-|*
-|* activate function
-|*
-\************************************************************************/
 
 void ConstCustomShape::Activate(const sal_uInt16 nSlotId)
 {
@@ -130,11 +106,7 @@ void ConstCustomShape::Activate(const sal_uInt16 nSlotId)
     SwDrawBase::Activate(nSlotId);
 }
 
-/*************************************************************************
-|*
-|* applying attributes
-|*
-\************************************************************************/
+// applying attributes
 
 void ConstCustomShape::SetAttributes( SdrObject* pObj )
 {

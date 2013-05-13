@@ -52,9 +52,9 @@ String RID_WEBTOOLS_TOOLBOX
 {
     Text [ en-US ] = "Main Toolbar/Web" ;
 };
-/*************************************************************************
-    Textleiste
-*************************************************************************/
+
+// Text bar
+
 String RID_WEBTEXT_TOOLBOX
 {
     Text [ en-US ] = "Text Object Bar/Web" ;

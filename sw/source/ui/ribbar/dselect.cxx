@@ -25,26 +25,16 @@
 #include "drawbase.hxx"
 #include "dselect.hxx"
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
 DrawSelection::DrawSelection(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView) :
                 SwDrawBase(pWrtShell, pEditWin, pSwView)
 {
     m_bCreateObj = false;
 }
 
-/*************************************************************************
-|*
-|* Tastaturereignisse bearbeiten
-|*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* sal_False.
-|*
-\************************************************************************/
+// Process keyboard events
+//
+// If a KeyEvent is processed then the return value is sal_True, otherwise
+// Sal_False.
 
 sal_Bool DrawSelection::KeyInput(const KeyEvent& rKEvt)
 {
@@ -70,12 +60,6 @@ sal_Bool DrawSelection::KeyInput(const KeyEvent& rKEvt)
     return (bReturn);
 }
 
-/*************************************************************************
-|*
-|* Function aktivieren
-|*
-\************************************************************************/
-
 void DrawSelection::Activate(const sal_uInt16 nSlotId)
 {
     m_pWin->SetSdrDrawMode(OBJ_NONE);
@@ -84,6 +68,5 @@ void DrawSelection::Activate(const sal_uInt16 nSlotId)
 
     m_pSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

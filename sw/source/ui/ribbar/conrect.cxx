@@ -36,10 +36,6 @@
 #include <drawbase.hxx>
 #include <conrect.hxx>
 
-
-/**
- * Ctor
- */
 ConstRectangle::ConstRectangle( SwWrtShell* pWrtShell, SwEditWin* pEditWin,
                                 SwView* pSwView )
     : SwDrawBase( pWrtShell, pEditWin, pSwView ),
@@ -49,9 +45,6 @@ ConstRectangle::ConstRectangle( SwWrtShell* pWrtShell, SwEditWin* pEditWin,
 {
 }
 
-/**
- * MouseButtonDown event
- */
 sal_Bool ConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 {
     sal_Bool bReturn;
@@ -69,9 +62,6 @@ sal_Bool ConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
     return (bReturn);
 }
 
-/**
- * MouseButtonUp event
- */
 sal_Bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 {
     sal_Bool bRet = SwDrawBase::MouseButtonUp(rMEvt);
@@ -146,9 +136,6 @@ sal_Bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
     return bRet;
 }
 
-/**
- * Activate
- */
 void ConstRectangle::Activate(const sal_uInt16 nSlotId)
 {
     bMarquee = bCapVertical = false;
@@ -196,7 +183,5 @@ void ConstRectangle::Activate(const sal_uInt16 nSlotId)
 
     SwDrawBase::Activate(nSlotId);
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

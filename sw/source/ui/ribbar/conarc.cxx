@@ -19,35 +19,16 @@
 
 #include <svx/svdobj.hxx>
 
-
 #include "view.hxx"
 #include "edtwin.hxx"
 #include "wrtsh.hxx"
 #include "drawbase.hxx"
 #include "conarc.hxx"
 
-
-
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
-
-
 ConstArc::ConstArc(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView)
     : SwDrawBase(pWrtShell, pEditWin, pSwView), nAnzButUp(0)
 {
 }
-
-/*************************************************************************
-|*
-|* MouseButtonDown-event
-|*
-\************************************************************************/
-
-
 
 sal_Bool ConstArc::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -60,14 +41,6 @@ sal_Bool ConstArc::MouseButtonDown( const MouseEvent& rMEvt )
     }
     return (bReturn);
 }
-
-/*************************************************************************
-|*
-|* MouseButtonUp-event
-|*
-\************************************************************************/
-
-
 
 sal_Bool ConstArc::MouseButtonUp( const MouseEvent& rMEvt )
 {
@@ -84,7 +57,7 @@ sal_Bool ConstArc::MouseButtonUp( const MouseEvent& rMEvt )
         else
         {   nAnzButUp++;
 
-            if (nAnzButUp == 3)     // Kreisbogenerzeugung beendet
+            if (nAnzButUp == 3)     // Generating of circular arc finished
             {
                 SwDrawBase::MouseButtonUp(rMEvt);
                 nAnzButUp = 0;
@@ -97,14 +70,6 @@ sal_Bool ConstArc::MouseButtonUp( const MouseEvent& rMEvt )
 
     return (bReturn);
 }
-
-/*************************************************************************
-|*
-|* Function aktivieren
-|*
-\************************************************************************/
-
-
 
 void ConstArc::Activate(const sal_uInt16 nSlotId)
 {
@@ -127,19 +92,11 @@ void ConstArc::Activate(const sal_uInt16 nSlotId)
     SwDrawBase::Activate(nSlotId);
 }
 
-/*************************************************************************
-|*
-|* Funktion deaktivieren
-|*
-\************************************************************************/
-
 void ConstArc::Deactivate()
 {
     nAnzButUp = 0;
 
     SwDrawBase::Deactivate();
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
