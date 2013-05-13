@@ -1528,7 +1528,7 @@ void DrawingML::WriteFill( Reference< XPropertySet > xPropSet )
     if ( aFillStyle == FillStyle_SOLID && GetProperty( xPropSet, "FillTransparence" ) )
     {
         // map full transparent background to no fill
-        sal_Int16 nVal;
+        sal_Int16 nVal = 0;
         xPropSet->getPropertyValue( "FillTransparence" ) >>= nVal;
         if ( nVal == 100 )
             aFillStyle = FillStyle_NONE;

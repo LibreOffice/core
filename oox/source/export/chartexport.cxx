@@ -2637,7 +2637,7 @@ void ChartExport::exportErrorBar(Reference< XPropertySet> xErrorBarProps, bool b
     pFS->singleElement( FSNS( XML_c, XML_errDir ),
             XML_val, bYError ? "y" : "x",
             FSEND );
-    bool bPositive, bNegative;
+    bool bPositive = false, bNegative = false;
     xErrorBarProps->getPropertyValue("ShowPositiveError") >>= bPositive;
     xErrorBarProps->getPropertyValue("ShowNegativeError") >>= bNegative;
     const char* pErrBarType;
@@ -2657,7 +2657,7 @@ void ChartExport::exportErrorBar(Reference< XPropertySet> xErrorBarProps, bool b
             XML_val, pErrBarType,
             FSEND );
 
-    sal_Int32 nErrorBarStyle;
+    sal_Int32 nErrorBarStyle = cssc::ErrorBarStyle::NONE;
     xErrorBarProps->getPropertyValue("ErrorBarStyle") >>= nErrorBarStyle;
     const char* pErrorBarStyle = getErrorBarStyle(nErrorBarStyle);
     pFS->singleElement( FSNS( XML_c, XML_errValType ),
