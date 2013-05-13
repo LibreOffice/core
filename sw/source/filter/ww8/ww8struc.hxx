@@ -794,6 +794,7 @@ struct WW8_TablePos
     sal_Int16 nLoMgn;
     sal_uInt8 nSp29;
     sal_uInt8 nSp37;
+    bool bNoFly;
 };
 
 struct WW8_FSPA
