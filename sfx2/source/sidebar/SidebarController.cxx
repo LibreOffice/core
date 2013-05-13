@@ -480,6 +480,7 @@ void SidebarController::SwitchToDeck (
 
         msCurrentDeckId = rDeckDescriptor.msId;
     }
+    mpTabBar->HighlightDeck(msCurrentDeckId);
 
     // Determine the panels to display in the deck.
     ResourceManager::PanelContextDescriptorContainer aPanelContextDescriptors;
