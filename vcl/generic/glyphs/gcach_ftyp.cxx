@@ -945,8 +945,10 @@ void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
 
     // Calculating ascender and descender:
     // FreeType >= 2.4.6 does the right thing, so we just use what it gives us,
-    // for earlier versions we emulate its behaviour; take them from 'hhea'
-    // table, if zero take them from 'OS/2' table.
+    // for earlier versions we emulate its behaviour;
+    // take them from 'hhea' table,
+    // if zero take them from 'OS/2' table,
+    // if zero take them from FreeType's font metrics
     if (nFTVERSION >= 2406)
     {
         const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
@@ -981,6 +983,14 @@ void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
                     rTo.mnExtLeading = 0;
                 }
             }
+        }
+
+        if (!(rTo.mnAscent || rTo.mnDescent))
+        {
+            const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
+            rTo.mnAscent = (rMetrics.ascender + 32) >> 6;
+            rTo.mnDescent = (-rMetrics.descender + 32) >> 6;
+            rTo.mnExtLeading = ((rMetrics.height + 32) >> 6) - (rTo.mnAscent + rTo.mnDescent);
         }
     }
 
