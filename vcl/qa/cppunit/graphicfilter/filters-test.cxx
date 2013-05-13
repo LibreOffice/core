@@ -38,8 +38,12 @@ public:
      */
     void testCVEs();
 
+    /// test scaling
+    void testScaling();
+
     CPPUNIT_TEST_SUITE(VclFiltersTest);
     CPPUNIT_TEST(testCVEs);
+    CPPUNIT_TEST(testScaling);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -51,6 +55,22 @@ bool VclFiltersTest::load(const OUString &,
     SvFileStream aFileStream(rURL, STREAM_READ);
     Graphic aGraphic;
     return aGraphicFilter.ImportGraphic(aGraphic, rURL, aFileStream) == 0;
+}
+
+void VclFiltersTest::testScaling()
+{
+    for (unsigned int i = BMP_SCALE_FAST; i <= BMP_SCALE_BOX; i++)
+    {
+        Bitmap aBitmap( Size( 413, 409 ), 24 );
+        BitmapEx aBitmapEx( aBitmap );
+
+        fprintf( stderr, "scale with type %d\n", i );
+        CPPUNIT_ASSERT( aBitmapEx.Scale( 0.1937046, 0.193154, i ) );
+        Size aAfter( aBitmapEx.GetSizePixel() );
+        fprintf( stderr, "size %ld, %ld\n", (long)aAfter.Width(),
+                 aAfter.Height() );
+        CPPUNIT_ASSERT( labs (aAfter.Height() - aAfter.Width()) <= 1 );
+    }
 }
 
 void VclFiltersTest::testCVEs()

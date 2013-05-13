@@ -2368,7 +2368,7 @@ namespace
 }
 
 // #i121233# Added BMP_SCALE_LANCZOS, BMP_SCALE_BICUBIC, BMP_SCALE_BILINEAR and
-// BMP_SCALE_BOX derived from the original commit from Tomaž Vajngerl (see
+// BMP_SCALE_BOX derived from the original commit from Tomas Vajngerl (see
 // bugzilla task for deitails) Thanks!
 sal_Bool Bitmap::ImplScaleConvolution(
     const double& rScaleX,
@@ -2426,29 +2426,38 @@ sal_Bool Bitmap::ImplScaleConvolution(
         const sal_uInt32 nInBetweenSizeHorFirst(nHeight * nNewWidth);
         const sal_uInt32 nInBetweenSizeVerFirst(nNewHeight * nWidth);
 
+        Bitmap aInterm;
         if(nInBetweenSizeHorFirst < nInBetweenSizeVerFirst)
         {
             if(bScaleHor)
             {
-                bResult = ImplScaleConvolutionHor(*this, aResult, fScaleX, aKernel);
+                bResult = ImplScaleConvolutionHor(*this, aInterm, fScaleX, aKernel);
             }
+            else
+                aInterm = *this;
 
             if(bResult && bScaleVer)
             {
-                bResult = ImplScaleConvolutionVer(*this, aResult, fScaleY, aKernel);
+                bResult = ImplScaleConvolutionVer(aInterm, aResult, fScaleY, aKernel);
             }
+            else
+                aResult = aInterm;
         }
         else
         {
             if(bScaleVer)
             {
-                bResult = ImplScaleConvolutionVer(*this, aResult, fScaleY, aKernel);
+                bResult = ImplScaleConvolutionVer(*this, aInterm, fScaleY, aKernel);
             }
+            else
+                aInterm = *this;
 
             if(bResult && bScaleHor)
             {
-                bResult = ImplScaleConvolutionHor(*this, aResult, fScaleX, aKernel);
+                bResult = ImplScaleConvolutionHor(aInterm, aResult, fScaleX, aKernel);
             }
+            else
+                aResult = aInterm;
         }
     }
 
