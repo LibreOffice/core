@@ -183,7 +183,7 @@ class PathSettings : public  css::lang::XTypeProvider             ,
             { return getStringProperty("Addin"); }
         virtual void SAL_CALL setAddin(const OUString& p1) throw (css::uno::RuntimeException)
             { setStringProperty("Addin", p1); }
-        virtual OUString getAutoCorrect() throw (css::uno::RuntimeException)
+        virtual OUString SAL_CALL getAutoCorrect() throw (css::uno::RuntimeException)
             { return getStringProperty("AutoCorrect"); }
         virtual void SAL_CALL setAutoCorrect(const OUString& p1) throw (css::uno::RuntimeException)
             { setStringProperty("AutoCorrect", p1); }
