@@ -181,6 +181,12 @@ $(eval $(call gb_Library_add_cobject,sal,sal/osl/unx/signal, \
 		-DSAL_ENABLE_CRASH_REPORT) \
 ))
 
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Library_add_libs,tl,\
+        -lrt \
+))
+endif
+
 ifneq ($(filter $(OS),MACOSX IOS),)
 $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/unx/osxlocale \
