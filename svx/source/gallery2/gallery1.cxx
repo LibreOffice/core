@@ -64,9 +64,16 @@ GalleryThemeEntry::GalleryThemeEntry( const INetURLObject& rBaseURL, const Strin
     aURL.setExtension( "sdv" );
     aSdvURL = ImplGetURLIgnoreCase( aURL );
 
+    aURL.setExtension( "str" );
+    aStrURL = ImplGetURLIgnoreCase( aURL );
+
     SetModified( _bNewFile );
 
-    if( nId && bThemeNameFromResource )
+    aName = ReadStrFromIni( "name" );
+
+    // This is awful - we shouldn't use these resources if we
+    // possibly can avoid them
+    if( aName.isEmpty() && nId && bThemeNameFromResource )
         aName = GAL_RESSTR( RID_GALLERYSTR_THEME_START + (sal_uInt16) nId );
 
     if( aName.isEmpty() )
@@ -573,12 +580,14 @@ sal_Bool Gallery::RemoveTheme( const String& rThemeName )
             INetURLObject   aThmURL( pThm->GetThmURL() );
             INetURLObject   aSdgURL( pThm->GetSdgURL() );
             INetURLObject   aSdvURL( pThm->GetSdvURL() );
+            INetURLObject   aStrURL( pThm->GetSdvURL() );
 
             ReleaseTheme( pThm, aListener );
 
             KillFile( aThmURL );
             KillFile( aSdgURL );
             KillFile( aSdvURL );
+            KillFile( aStrURL );
         }
 
         for ( GalleryThemeList::iterator it = aThemeList.begin(); it != aThemeList.end(); ++it )

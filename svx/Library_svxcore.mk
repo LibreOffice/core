@@ -123,6 +123,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/gallery2/galbrws2 \
     svx/source/gallery2/galctrl \
     svx/source/gallery2/galexpl \
+    svx/source/gallery2/galini \
     svx/source/gallery2/gallery1 \
     svx/source/gallery2/galmisc \
     svx/source/gallery2/galobj \

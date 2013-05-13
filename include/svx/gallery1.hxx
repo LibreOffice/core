@@ -42,6 +42,7 @@ private:
     INetURLObject           aThmURL;
     INetURLObject           aSdgURL;
     INetURLObject           aSdvURL;
+    INetURLObject           aStrURL;
     sal_uInt32              nId;
     sal_Bool                bReadOnly;
     sal_Bool                bModified;
@@ -62,6 +63,9 @@ public:
     const INetURLObject&    GetThmURL() const { return aThmURL; }
     const INetURLObject&    GetSdgURL() const { return aSdgURL; }
     const INetURLObject&    GetSdvURL() const { return aSdvURL; }
+    const INetURLObject&    GetStrURL() const { return aStrURL; }
+
+    OUString                ReadStrFromIni(const OUString &aKeyName );
 
     sal_Bool                IsReadOnly() const { return bReadOnly; }
     sal_Bool                IsDefault() const;

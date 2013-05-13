@@ -95,7 +95,7 @@ private:
     SotStorageRef               aSvDrawStorageRef;
     Gallery*                    pParent;
     GalleryThemeEntry*          pThm;
-    sal_uIntPtr                       mnThemeLockCount;
+    sal_uIntPtr                     mnThemeLockCount;
     sal_uIntPtr                     mnBroadcasterLockCount;
     sal_uIntPtr                     nDragPos;
     sal_Bool                        bDragging;
@@ -149,6 +149,7 @@ public:
     const INetURLObject&        GetThmURL() const;
     SVX_DLLPUBLIC const INetURLObject&      GetSdgURL() const;
     const INetURLObject&        GetSdvURL() const;
+    const INetURLObject&        GetStrURL() const;
 
     SVX_DLLPUBLIC sal_uInt32        GetId() const;
     void                        SetId( sal_uInt32 nNewId, sal_Bool bResetThemeName );
