@@ -22,8 +22,6 @@
 
 #include "generic/glyphcache.hxx"
 
-#include <rtl/textcvt.h>
-
 #include <config_graphite.h>
 #if ENABLE_GRAPHITE
 class GraphiteFaceWrapper;
