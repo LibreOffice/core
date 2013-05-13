@@ -1744,10 +1744,7 @@ void DbgAbort( char const * i_message )
 
 void ImplDbgTestSolarMutex()
 {
-    bool bCheck = ImplGetSVData()->mpDefInst->CheckYieldMutex();
-    (void)bCheck;
-    OSL_ENSURE( bCheck, "SolarMutex not locked" );
-    assert(bCheck);
+    assert(ImplGetSVData()->mpDefInst->CheckYieldMutex());
 }
 
 // =======================================================================
