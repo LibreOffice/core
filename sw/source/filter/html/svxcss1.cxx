@@ -373,6 +373,7 @@ SvxCSS1PropertyInfo::SvxCSS1PropertyInfo( const SvxCSS1PropertyInfo& rProp ) :
     nBottomBorderDistance( rProp.nBottomBorderDistance ),
     nLeftBorderDistance( rProp.nLeftBorderDistance ),
     nRightBorderDistance( rProp.nRightBorderDistance ),
+    nColumnCount( rProp.nColumnCount ),
     nLeft( rProp.nLeft ),
     nTop( rProp.nTop ),
     nWidth( rProp.nWidth ),
@@ -420,6 +421,9 @@ void SvxCSS1PropertyInfo::Clear()
     ePosition = SVX_CSS1_POS_NONE;
     nTopBorderDistance = nBottomBorderDistance =
     nLeftBorderDistance = nRightBorderDistance = USHRT_MAX;
+
+    nColumnCount = 0;
+
     nLeft = nTop = nWidth = nHeight = 0;
     eLeftType = eTopType = eWidthType = eHeightType = SVX_CSS1_LTYPE_NONE;
 
