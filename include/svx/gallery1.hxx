@@ -80,24 +80,6 @@ public:
 
 typedef ::std::vector< GalleryThemeEntry* > GalleryThemeList;
 
-// ---------------------------
-// - GalleryImportThemeEntry -
-// ---------------------------
-
-struct GalleryImportThemeEntry
-{
-    OUString aThemeName;
-    OUString aUIName;
-    INetURLObject aURL;
-};
-
-typedef ::std::vector< GalleryImportThemeEntry* > GalleryImportThemeList;
-
-// -----------------------------------------------------------------------------
-
-SvStream& operator<<( SvStream& rOut, const GalleryImportThemeEntry& rEntry );
-SvStream& operator>>( SvStream& rIn, GalleryImportThemeEntry& rEntry );
-
 // -----------
 // - Gallery -
 // -----------
@@ -110,14 +92,13 @@ class Gallery : public SfxBroadcaster
 {
     // only for gengal utility!
     friend Gallery* createGallery( const OUString& );
-    friend void disposeGallery( Gallery* );
+    friend void     disposeGallery( Gallery* );
 
     typedef std::vector<GalleryThemeCacheEntry*> GalleryCacheThemeList;
 
 private:
 
     GalleryThemeList            aThemeList;
-    GalleryImportThemeList      aImportList;
     GalleryCacheThemeList       aThemeCache;
     INetURLObject               aRelURL;
     INetURLObject               aUserURL;
@@ -145,12 +126,12 @@ public:
                                 { return nPos < aThemeList.size() ? aThemeList[ nPos ] : NULL; }
     const GalleryThemeEntry*    GetThemeInfo( const String& rThemeName ) { return ImplGetThemeEntry( rThemeName ); }
 
-    SVX_DLLPUBLIC sal_Bool          HasTheme( const String& rThemeName );
-    OUString                   GetThemeName( sal_uIntPtr nThemeId ) const;
+    SVX_DLLPUBLIC sal_Bool      HasTheme( const String& rThemeName );
+    OUString                    GetThemeName( sal_uIntPtr nThemeId ) const;
 
-    SVX_DLLPUBLIC sal_Bool          CreateTheme( const String& rThemeName );
-    sal_Bool                        RenameTheme( const String& rOldName, const String& rNewName );
-    SVX_DLLPUBLIC sal_Bool                      RemoveTheme( const String& rThemeName );
+    SVX_DLLPUBLIC sal_Bool      CreateTheme( const String& rThemeName );
+    sal_Bool                    RenameTheme( const String& rOldName, const String& rNewName );
+    SVX_DLLPUBLIC sal_Bool      RemoveTheme( const String& rThemeName );
 
     SVX_DLLPUBLIC GalleryTheme* AcquireTheme( const String& rThemeName, SfxListener& rListener );
     SVX_DLLPUBLIC void          ReleaseTheme( GalleryTheme* pTheme, SfxListener& rListener );
@@ -160,7 +141,7 @@ public:
     const INetURLObject&        GetUserURL() const { return aUserURL; }
     const INetURLObject&        GetRelativeURL() const { return aRelURL; }
 
-    sal_Bool                        IsMultiPath() const { return bMultiPath; }
+    sal_Bool                    IsMultiPath() const { return bMultiPath; }
 };
 
 #endif // _SVX_GALLERY1_HXX_

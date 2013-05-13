@@ -703,7 +703,7 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, sa
         {
             String          aThemeName;
             sal_uInt16      nVersion;
-            sal_Bool            bThemeNameFromResource = sal_False;
+            sal_Bool        bThemeNameFromResource = sal_False;
 
             *pIStm >> nVersion;
 

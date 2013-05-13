@@ -116,33 +116,6 @@ void GalleryThemeEntry::SetId( sal_uInt32 nNewId, sal_Bool bResetThemeName )
     bThemeNameFromResource = ( nId && bResetThemeName );
 }
 
-// ---------------------------
-// - GalleryImportThemeEntry -
-// ---------------------------
-
-SvStream& operator<<( SvStream& rOut, const GalleryImportThemeEntry& rEntry )
-{
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, rEntry.aThemeName, RTL_TEXTENCODING_UTF8);
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, rEntry.aUIName, RTL_TEXTENCODING_UTF8);
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, (rEntry.aURL.GetMainURL( INetURLObject::NO_DECODE )), RTL_TEXTENCODING_UTF8);
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, OUString(), RTL_TEXTENCODING_UTF8); //aImportName
-
-    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOut, OString());
-    return rOut;
-}
-
-// ------------------------------------------------------------------------
-
-SvStream& operator>>( SvStream& rIn, GalleryImportThemeEntry& rEntry )
-{
-    rEntry.aThemeName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIn, RTL_TEXTENCODING_UTF8);
-    rEntry.aUIName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIn, RTL_TEXTENCODING_UTF8);
-    rEntry.aURL = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIn, RTL_TEXTENCODING_UTF8);
-    read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIn, RTL_TEXTENCODING_UTF8); //aImportName
-    read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIn);
-    return rIn;
-}
-
 // --------------------------
 // - GalleryThemeCacheEntry -
 // --------------------------
@@ -183,11 +156,6 @@ Gallery::~Gallery()
     for ( size_t i = 0, n = aThemeList.size(); i < n; ++i )
         delete aThemeList[ i ];
     aThemeList.clear();
-
-    // Import-Liste loeschen
-    for ( size_t i = 0, n = aImportList.size(); i < n; ++i )
-        delete aImportList[ i ];
-    aImportList.clear();
 }
 
 // ------------------------------------------------------------------------

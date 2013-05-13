@@ -45,7 +45,7 @@ struct GalleryObject
     INetURLObject   aURL;
     sal_uInt32      nOffset;
     SgaObjKind      eObjKind;
-    sal_Bool            bDummy;
+    sal_Bool        bDummy;
 };
 
 typedef ::std::vector< GalleryObject* > GalleryObjectList;
