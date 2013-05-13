@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//880\u003d",
+        "filename": "desktop/source/app/appinit.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2013-05-13T08:14:29Z",
+      "side": 1,
+      "message": "Should be an #ifdef due to the change in the makefiles :-)",
+      "revId": "5ef22a0f8f8b75c1e4ee0b751ae4e5d4c92d573c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
