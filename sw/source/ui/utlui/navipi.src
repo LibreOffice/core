@@ -47,9 +47,7 @@ Window DLG_NAVIGATION_PI
     {
         198;
     };
-    /************************************************************************************
-    Toolbox ab 323 x
-************************************************************************************/
+    // Toolbox from 323 x
 #define NAVI_IDLIST \
         IdList =                                    \
         {                                           \
@@ -330,7 +328,7 @@ Window DLG_NAVIGATION_PI
         Spin = TRUE ;
         Minimum = 1 ;
         First = 1 ;
-         // Outline als Default
+         // Outline as default
         Maximum = 5 ;
         Last = 5 ;
         Value = 5 ;

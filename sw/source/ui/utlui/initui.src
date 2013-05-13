@@ -22,9 +22,8 @@
 #include "helpid.h"
 #include "initui.hrc"
 
-/*---------------------------------------------------------------------
-    Fehler Calculator
- ---------------------------------------------------------------------*/
+// Error calculator
+
 Resource RID_SW_SHELLRES
 {
     String STR_POSTIT_PAGE
