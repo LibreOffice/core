@@ -30,6 +30,7 @@ public:
     void testAllGapsWord();
     void testFdo59530();
     void testI120158();
+    void testN816603();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -52,7 +53,8 @@ void Test::run()
         {"n757905.doc", &Test::testN757905},
         {"all_gaps_word.doc", &Test::testAllGapsWord},
         {"fdo59530.doc", &Test::testFdo59530},
-        {"i120158.doc", &Test::testI120158}
+        {"i120158.doc", &Test::testI120158},
+        {"n816603.doc", &Test::testN816603},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -248,6 +250,14 @@ void Test::testI120158()
     uno::Reference<text::XTextRange> text0(paragraph0, uno::UNO_QUERY);
     OUString sFieldResult = text0->getString();
     CPPUNIT_ASSERT(sFieldResult.endsWith("AM") || sFieldResult.endsWith("PM"));
+}
+
+void Test::testN816603()
+{
+    // Bugdoc was 5 page in Word, 1 in Writer due to pointlessly wrapping the
+    // table in a frame. Exact layout may depend on fonts available, etc. --
+    // but at least make sure that our table spans over multiple pages now.
+    CPPUNIT_ASSERT(getPages() > 1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

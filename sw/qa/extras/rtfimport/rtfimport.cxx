@@ -143,8 +143,6 @@ public:
 
 private:
     void run();
-    /// Get page count.
-    int getPages();
     /// Copy&paste helper.
     void paste(OUString aFilename, uno::Reference<text::XTextRange> xTextRange = uno::Reference<text::XTextRange>())
     {
@@ -283,15 +281,6 @@ void Test::run()
         (this->*rEntry.pMethod)();
         finish();
     }
-}
-
-int Test::getPages()
-{
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
-    xCursor->jumpToLastPage();
-    return xCursor->getPage();
 }
 
 void Test::testFdo45553()
