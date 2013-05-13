@@ -79,7 +79,6 @@ EditDLL& EditDLL::Get()
 }
 
 GlobalEditData::GlobalEditData()
-    : m_aStdRefDevice(::com::sun::star::uno::Reference<com::sun::star::lang::XComponent>(::comphelper::getProcessComponentContext(), ::com::sun::star::uno::UNO_QUERY_THROW))
 {
     ppDefItems = NULL;
 }
@@ -186,16 +185,6 @@ uno::Reference< linguistic2::XLanguageGuessing > GlobalEditData::GetLanguageGues
         xLanguageGuesser = linguistic2::LanguageGuessing::create( comphelper::getProcessComponentContext() );
     }
     return xLanguageGuesser;
-}
-
-OutputDevice* GlobalEditData::GetStdRefDevice()
-{
-    if ( !m_aStdRefDevice )
-    {
-        m_aStdRefDevice.reset(new VirtualDevice);
-        m_aStdRefDevice->SetMapMode( MAP_TWIP );
-    }
-    return m_aStdRefDevice.get();
 }
 
 EditResId::EditResId( sal_uInt16 nId ):

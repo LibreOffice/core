@@ -150,10 +150,8 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     aOnlineSpellTimer.SetTimeout( 100 );
     aOnlineSpellTimer.SetTimeoutHdl( LINK( this, ImpEditEngine, OnlineSpellHdl ) );
 
-    pRefDev             = EE_DLL().GetGlobalData()->GetStdRefDevice();
-
     // Access data already from here on!
-    SetRefDevice( pRefDev );
+    SetRefDevice( NULL );
     InitDoc( sal_False );
 
     bCallParaInsertedOrDeleted = true;
@@ -190,11 +188,16 @@ void ImpEditEngine::SetRefDevice( OutputDevice* pRef )
     if ( bOwnerOfRefDev )
         delete pRefDev;
 
-    pRefDev = pRef;
-    bOwnerOfRefDev = false;
-
     if ( !pRef )
-        pRefDev = EE_DLL().GetGlobalData()->GetStdRefDevice();
+    {
+        pRefDev = new VirtualDevice;
+        pRefDev->SetMapMode( MAP_TWIP );
+        bOwnerOfRefDev = true;
+    } else
+    {
+        pRefDev = pRef;
+        bOwnerOfRefDev = false;
+    }
 
     nOnePixelInRef = (sal_uInt16)pRefDev->PixelToLogic( Size( 1, 0 ) ).Width();
 
@@ -210,8 +213,7 @@ void ImpEditEngine::SetRefMapMode( const MapMode& rMapMode )
     if ( GetRefDevice()->GetMapMode() == rMapMode )
         return;
 
-    // When RefDev == GlobalRefDev => create own!
-    if ( !bOwnerOfRefDev && ( pRefDev == EE_DLL().GetGlobalData()->GetStdRefDevice() ) )
+    if ( !bOwnerOfRefDev )
     {
         pRefDev = new VirtualDevice;
         pRefDev->SetMapMode( MAP_TWIP );
