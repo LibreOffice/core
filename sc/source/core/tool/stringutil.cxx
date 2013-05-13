@@ -341,6 +341,7 @@ ScInputStringType ScStringUtil::parseInputString(
     aRet.mnFormatType = 0;
     aRet.meType = ScInputStringType::Unknown;
     aRet.maText = rStr;
+    aRet.mfValue = 0.0;
 
     if (rStr.getLength() > 1 && rStr[0] == '=')
     {
