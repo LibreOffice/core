@@ -552,7 +552,6 @@ ServerFont::ServerFont( const FontSelectPattern& rFSD, FtFontInfo* pFI )
     maFaceFT( NULL ),
     maSizeFT( NULL ),
     mbFaceOk( false ),
-    maRecodeConverter( NULL ),
     mpLayoutEngine( NULL )
 {
     // TODO: move update of mpFontEntry into FontEntry class when
@@ -586,84 +585,15 @@ ServerFont::ServerFont( const FontSelectPattern& rFSD, FtFontInfo* pFI )
     if( rc != FT_Err_Ok )
         return;
 
-    // prepare for font encodings other than unicode or symbol
-    FT_Encoding eEncoding = FT_ENCODING_UNICODE;
+    FT_Select_Charmap(maFaceFT, FT_ENCODING_UNICODE);
+
     if( mpFontInfo->IsSymbolFont() )
     {
-        if( FT_IS_SFNT( maFaceFT ) )
-            eEncoding = ft_encoding_symbol;
-        else
+        FT_Encoding eEncoding = FT_ENCODING_MS_SYMBOL;
+        if (!FT_IS_SFNT(maFaceFT))
             eEncoding = FT_ENCODING_ADOBE_CUSTOM; // freetype wants this for PS symbol fonts
-    }
-    rc = FT_Select_Charmap( maFaceFT, eEncoding );
-    // no standard encoding applies => we need an encoding converter
-    if( rc != FT_Err_Ok )
-    {
-        rtl_TextEncoding eRecodeFrom = RTL_TEXTENCODING_UNICODE;
-        for( int i = maFaceFT->num_charmaps; --i >= 0; )
-        {
-            const FT_CharMap aCM = maFaceFT->charmaps[i];
-            if( aCM->platform_id == TT_PLATFORM_MICROSOFT )
-            {
-                switch( aCM->encoding_id )
-                {
-                    case TT_MS_ID_SJIS:
-                        eEncoding = FT_ENCODING_SJIS;
-                        eRecodeFrom = RTL_TEXTENCODING_SHIFT_JIS;
-                        break;
-                    case TT_MS_ID_GB2312:
-                        eEncoding = FT_ENCODING_GB2312;
-                        eRecodeFrom = RTL_TEXTENCODING_GB_2312;
-                        break;
-                    case TT_MS_ID_BIG_5:
-                        eEncoding = FT_ENCODING_BIG5;
-                        eRecodeFrom = RTL_TEXTENCODING_BIG5;
-                        break;
-                    case TT_MS_ID_WANSUNG:
-                        eEncoding = FT_ENCODING_WANSUNG;
-                        eRecodeFrom = RTL_TEXTENCODING_MS_949;
-                        break;
-                    case TT_MS_ID_JOHAB:
-                        eEncoding = FT_ENCODING_JOHAB;
-                        eRecodeFrom = RTL_TEXTENCODING_MS_1361;
-                        break;
-                }
-            }
-            else if( aCM->platform_id == TT_PLATFORM_MACINTOSH )
-            {
-                switch( aCM->encoding_id )
-                {
-                    case TT_MAC_ID_ROMAN:
-                        eEncoding = FT_ENCODING_APPLE_ROMAN;
-                        eRecodeFrom = RTL_TEXTENCODING_UNICODE; // TODO: use better match
-                        break;
-                    // TODO: add other encodings when Mac-only
-                    //       non-unicode fonts show up
-                }
-            }
-            else if( aCM->platform_id == TT_PLATFORM_ADOBE )
-            {
-                switch( aCM->encoding_id )
-                {
-#ifdef TT_ADOBE_ID_LATIN1
-                    case TT_ADOBE_ID_LATIN1:   // better unicode than nothing
-                        eEncoding = FT_ENCODING_ADOBE_LATIN_1;
-                        eRecodeFrom = RTL_TEXTENCODING_ISO_8859_1;
-                        break;
-#endif // TT_ADOBE_ID_LATIN1
-                    case TT_ADOBE_ID_STANDARD:   // better unicode than nothing
-                        eEncoding = FT_ENCODING_ADOBE_STANDARD;
-                        eRecodeFrom = RTL_TEXTENCODING_UNICODE; // TODO: use better match
-                        break;
-                }
-            }
-        }
 
-        if( FT_Err_Ok != FT_Select_Charmap( maFaceFT, eEncoding ) )
-            return;
-
-        if( eRecodeFrom != RTL_TEXTENCODING_UNICODE )
-            maRecodeConverter = rtl_createUnicodeToTextConverter( eRecodeFrom );
+        FT_Select_Charmap(maFaceFT, eEncoding);
     }
 
     mbFaceOk = true;
@@ -773,9 +703,6 @@ ServerFont::~ServerFont()
 {
     if( mpLayoutEngine )
         delete mpLayoutEngine;
-
-    if( maRecodeConverter )
-        rtl_destroyUnicodeToTextConverter( maRecodeConverter );
 
     if( maSizeFT )
         FT_Done_Size( maSizeFT );
@@ -1015,32 +942,6 @@ int ServerFont::GetRawGlyphIndex(sal_UCS4 aChar, sal_UCS4 aVS) const
             else if( aChar > 0xFF )
                 return 0;
         }
-    }
-
-    // if needed recode from unicode to font encoding
-    if( maRecodeConverter )
-    {
-        sal_Char aTempArray[8];
-        sal_Size nTempSize;
-        sal_uInt32 nCvtInfo;
-
-        // assume that modern UCS4 fonts have unicode CMAPs
-    // => no encoding remapping to unicode is needed
-        if( aChar > 0xFFFF )
-            return 0;
-
-        sal_Unicode aUCS2Char = static_cast<sal_Unicode>(aChar);
-        rtl_UnicodeToTextContext aContext = rtl_createUnicodeToTextContext( maRecodeConverter );
-        int nChars = rtl_convertUnicodeToText( maRecodeConverter, aContext,
-            &aUCS2Char, 1, aTempArray, sizeof(aTempArray),
-            RTL_UNICODETOTEXT_FLAGS_UNDEFINED_QUESTIONMARK
-            | RTL_UNICODETOTEXT_FLAGS_INVALID_QUESTIONMARK,
-            &nCvtInfo, &nTempSize );
-        rtl_destroyUnicodeToTextContext( maRecodeConverter, aContext );
-
-        aChar = 0;
-        for( int i = 0; i < nChars; ++i )
-            aChar = aChar*256 + (aTempArray[i] & 0xFF);
     }
 
     int nGlyphIndex = 0;
