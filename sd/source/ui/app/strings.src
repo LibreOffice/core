@@ -1273,4 +1273,9 @@ String STR_PHOTO_ALBUM_EMPTY_WARNING
      Text [ en-US ] = "Please add Images to the Album." ;
 };
 
+String STR_PHOTO_ALBUM_TEXTBOX
+{
+    Text [ en-US ] = "Text Slide";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
