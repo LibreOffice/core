@@ -31,6 +31,7 @@ public:
     void testFdo59530();
     void testI120158();
     void testN816603();
+    void testN816593();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -55,6 +56,7 @@ void Test::run()
         {"fdo59530.doc", &Test::testFdo59530},
         {"i120158.doc", &Test::testI120158},
         {"n816603.doc", &Test::testN816603},
+        {"n816593.doc", &Test::testN816593},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -258,6 +260,15 @@ void Test::testN816603()
     // table in a frame. Exact layout may depend on fonts available, etc. --
     // but at least make sure that our table spans over multiple pages now.
     CPPUNIT_ASSERT(getPages() > 1);
+}
+
+void Test::testN816593()
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    // Make sure that even if we import the two tables as non-floating, we
+    // still consider them different, and not merge them.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
