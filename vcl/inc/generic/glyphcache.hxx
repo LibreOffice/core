@@ -241,7 +241,7 @@ private:
     int                 ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_*, bool ) const;
     bool                ApplyGSUB( const FontSelectPattern& );
 
-    ServerFontLayoutEngine* GetLayoutEngine( bool );
+    ServerFontLayoutEngine* GetLayoutEngine();
 
     typedef ::boost::unordered_map<int,GlyphData> GlyphList;
     mutable GlyphList           maGlyphList;
