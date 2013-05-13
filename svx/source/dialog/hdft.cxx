@@ -253,7 +253,8 @@ sal_Bool SvxHFPage::FillItemSet( SfxItemSet& rSet )
     aSet.Put( SfxBoolItem( nWOn,      m_pTurnOnBox->IsChecked() ) );
     aSet.Put( SfxBoolItem( nWDynamic, m_pHeightDynBtn->IsChecked() ) );
     aSet.Put( SfxBoolItem( nWShared,  m_pCntSharedBox->IsChecked() ) );
-    aSet.Put( SfxBoolItem( nWSharedFirst,  m_pCntSharedFirstBox->IsChecked() ) );
+    if(m_pCntSharedFirstBox->IsVisible())
+        aSet.Put( SfxBoolItem( nWSharedFirst,  m_pCntSharedFirstBox->IsChecked() ) );
     if(m_pDynSpacingCB->IsVisible() && SFX_WHICH_MAX > nWDynSpacing)
     {
         SfxBoolItem* pBoolItem = (SfxBoolItem*)pPool->GetDefaultItem(nWDynSpacing).Clone();
