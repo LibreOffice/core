@@ -90,7 +90,6 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     m_aDownFT( this, SW_RES(           FT_DOWN               )),
     m_aDownPB( this, SW_RES(           PB_DOWN               )),
     m_aExampleContainerWIN( this, SW_RES(  WIN_EXAMPLECONTAINER      )),
-    m_aExampleWIN( this, 0 ),
     m_aZoomFT( this, SW_RES(           FT_ZOOM               )),
     m_aZoomLB( this, SW_RES(           LB_ZOOM               )),
 #ifdef _MSC_VER
@@ -103,9 +102,6 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     m_pWizard(_pParent)
 {
     FreeResource();
-    m_aExampleWIN.SetPosSizePixel(m_aExampleContainerWIN.GetPosPixel(),
-                                m_aExampleContainerWIN.GetSizePixel());
-
 
     const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
             OUString( FILTER_XML ),
@@ -130,11 +126,10 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     xStore->storeToURL( m_sExampleURL, aValues   );
 
     Link aLink(LINK(this, SwMailMergeLayoutPage, PreviewLoadedHdl_Impl));
-    m_pExampleFrame = new SwOneExampleFrame( m_aExampleWIN,
+    m_pExampleFrame = new SwOneExampleFrame( m_aExampleContainerWIN,
                                     EX_SHOW_DEFAULT_PAGE, &aLink, &m_sExampleURL );
 
-    m_aExampleWIN.Show( sal_False );
-    m_aExampleContainerWIN.Show(sal_True);
+    m_aExampleContainerWIN.Show(false);
 
     m_aLeftMF.SetValue(m_aLeftMF.Normalize(DEFAULT_LEFT_DISTANCE), FUNIT_TWIP);
     m_aTopMF.SetValue(m_aTopMF.Normalize(DEFAULT_TOP_DISTANCE), FUNIT_TWIP);
@@ -662,8 +657,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
 
 IMPL_LINK_NOARG(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl)
 {
-    m_aExampleWIN.Show( sal_True );
-    m_aExampleContainerWIN.Show(sal_False);
+    m_aExampleContainerWIN.Show(true);
 
     Reference< XModel > & xModel = m_pExampleFrame->GetModel();
     //now the ViewOptions should be set properly

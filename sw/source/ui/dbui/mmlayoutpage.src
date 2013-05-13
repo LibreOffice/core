@@ -129,7 +129,6 @@ TabPage DLG_MM_LAYOUT_PAGE
     {
         Pos = MAP_APPFONT ( 130 , 20 ) ;
         Size = MAP_APPFONT ( 124 , 159 ) ;
-        Border = TRUE;
     };
     FixedText       FT_ZOOM
     {
