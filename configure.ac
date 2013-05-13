@@ -7462,7 +7462,7 @@ no|disable)
     else
         # Unset variables set by the above AM_PATH_PYTHON so that
         # we actually do check anew.
-        unset PYTHON am_cv_pathless_PYTHON ac_cv_path_PYTHON
+        unset PYTHON am_cv_pathless_PYTHON ac_cv_path_PYTHON am_cv_python_version am_cv_python_platform am_cv_python_pythondir am_cv_python_pyexecdir
         AM_PATH_PYTHON([3.3],, [:])
         if test "$PYTHON" = :; then
             AC_MSG_RESULT([internal])
@@ -7515,7 +7515,7 @@ if test $enable_python = system; then
     elif test "$cross_compiling" != yes; then
         # Unset variables set by the above AM_PATH_PYTHON so that
         # we actually do check anew.
-        unset PYTHON am_cv_pathless_PYTHON ac_cv_path_PYTHON
+        unset PYTHON am_cv_pathless_PYTHON ac_cv_path_PYTHON am_cv_python_version am_cv_python_platform am_cv_python_pythondir am_cv_python_pyexecdir
         # This causes an error if no python command is found
         AM_PATH_PYTHON([3.3])
         python_include=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('INCLUDEPY'));"`
