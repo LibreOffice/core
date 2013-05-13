@@ -54,6 +54,7 @@ class SwMailMergeLayoutPage : public svt::OWizardPage
     PushButton          m_aDownPB;
 
     Window              m_aExampleContainerWIN;
+    Window              m_aExampleWIN;
 
     FixedText           m_aZoomFT;
     ListBox             m_aZoomLB;
