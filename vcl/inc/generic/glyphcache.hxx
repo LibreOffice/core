@@ -279,7 +279,6 @@ private:
 
     typedef ::boost::unordered_map<int,int> GlyphSubstitution;
     GlyphSubstitution           maGlyphSubstitution;
-    rtl_UnicodeToTextConverter  maRecodeConverter;
 
     ServerFontLayoutEngine*     mpLayoutEngine;
 };
