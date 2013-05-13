@@ -144,7 +144,7 @@ SfxScriptLibraryContainer::SfxScriptLibraryContainer( const uno::Reference< embe
 SfxLibrary* SfxScriptLibraryContainer::implCreateLibrary( const OUString& aName )
 {
     (void)aName;    // Only needed for SfxDialogLibrary
-    SfxLibrary* pRet = new SfxScriptLibrary( maModifiable, comphelper::getComponentContext(mxMSF), mxSFI );
+    SfxLibrary* pRet = new SfxScriptLibrary( maModifiable, mxContext, mxSFI );
     return pRet;
 }
 
@@ -154,7 +154,7 @@ SfxLibrary* SfxScriptLibraryContainer::implCreateLibraryLink( const OUString& aN
                                                               sal_Bool ReadOnly )
 {
     (void)aName;    // Only needed for SfxDialogLibrary
-    SfxLibrary* pRet = new SfxScriptLibrary( maModifiable, comphelper::getComponentContext(mxMSF), mxSFI,
+    SfxLibrary* pRet = new SfxScriptLibrary( maModifiable, mxContext, mxSFI,
                                              aLibInfoFileURL, StorageURL, ReadOnly );
     return pRet;
 }
@@ -178,7 +178,7 @@ void SAL_CALL SfxScriptLibraryContainer::writeLibraryElement( const Reference < 
     throw(Exception)
 {
     // Create sax writer
-    Reference< XWriter > xWriter = xml::sax::Writer::create(comphelper::getComponentContext(mxMSF));
+    Reference< XWriter > xWriter = xml::sax::Writer::create(mxContext);
 
     Reference< XTruncate > xTruncate( xOutput, UNO_QUERY );
     OSL_ENSURE( xTruncate.is(), "Currently only the streams that can be truncated are expected!" );
@@ -229,7 +229,7 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
 {
     Any aRetAny;
 
-    Reference< XParser > xParser = xml::sax::Parser::create( comphelper::getComponentContext(mxMSF) );
+    Reference< XParser > xParser = xml::sax::Parser::create( mxContext );
 
     // Read from storage?
     sal_Bool bStorage = xInStream.is();

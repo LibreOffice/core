@@ -218,7 +218,7 @@ class SfxLibraryContainer : public SfxLibraryContainer_BASE, public ::utl::OEven
     sal_Bool mbVBACompat;
     OUString msProjectName;
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >   mxMSF;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >       mxContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >      mxSFI;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XMacroExpander >         mxMacroExpander;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XStringSubstitution >    mxStringSubstitution;

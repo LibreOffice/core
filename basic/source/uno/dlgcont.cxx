@@ -87,7 +87,7 @@ SfxDialogLibraryContainer::SfxDialogLibraryContainer( const uno::Reference< embe
 // Methods to get library instances of the correct type
 SfxLibrary* SfxDialogLibraryContainer::implCreateLibrary( const OUString& aName )
 {
-    SfxLibrary* pRet = new SfxDialogLibrary( maModifiable, aName, comphelper::getComponentContext(mxMSF), mxSFI, this );
+    SfxLibrary* pRet = new SfxDialogLibrary( maModifiable, aName, mxContext, mxSFI, this );
     return pRet;
 }
 
@@ -96,7 +96,7 @@ SfxLibrary* SfxDialogLibraryContainer::implCreateLibraryLink
       const OUString& StorageURL, sal_Bool ReadOnly )
 {
     SfxLibrary* pRet = new SfxDialogLibrary
-            ( maModifiable, aName, comphelper::getComponentContext(mxMSF), mxSFI, aLibInfoFileURL, StorageURL, ReadOnly, this );
+            ( maModifiable, aName, mxContext, mxSFI, aLibInfoFileURL, StorageURL, ReadOnly, this );
     return pRet;
 }
 
@@ -236,17 +236,17 @@ void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< e
                 if ( xISP.is() )
                 {
                     Reference< io::XInputStream > xInput( xISP->createInputStream() );
-                    Reference< XNameContainer > xDialogModel( mxMSF->createInstance
-                        ( OUString( "com.sun.star.awt.UnoControlDialogModel" ) ) , UNO_QUERY );
-                    Reference< XComponentContext > xContext( comphelper::getComponentContext( mxMSF ) );
-                    ::xmlscript::importDialogModel( xInput, xDialogModel, xContext, mxOwnerDocument );
+                    Reference< XNameContainer > xDialogModel(
+                        mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.awt.UnoControlDialogModel", mxContext),
+                        UNO_QUERY );
+                    ::xmlscript::importDialogModel( xInput, xDialogModel, mxContext, mxOwnerDocument );
                     std::vector< OUString > vEmbeddedImageURLs;
                     GraphicObject::InspectForGraphicObjectImageURL( Reference< XInterface >( xDialogModel, UNO_QUERY ),  vEmbeddedImageURLs );
                     if ( !vEmbeddedImageURLs.empty() )
                     {
                         // Export the images to the storage
                         Reference< document::XGraphicObjectResolver > xGraphicResolver =
-                            document::GraphicObjectResolver::createWithStorage( xContext, xStorage );
+                            document::GraphicObjectResolver::createWithStorage( mxContext, xStorage );
                         std::vector< OUString >::iterator it = vEmbeddedImageURLs.begin();
                         std::vector< OUString >::iterator it_end = vEmbeddedImageURLs.end();
                         if ( xGraphicResolver.is() )
@@ -278,10 +278,11 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
     //  return aRetAny;
     //}
 
-    Reference< XParser > xParser = xml::sax::Parser::create( comphelper::getComponentContext(mxMSF) );
+    Reference< XParser > xParser = xml::sax::Parser::create( mxContext );
 
-    Reference< XNameContainer > xDialogModel( mxMSF->createInstance
-        ( OUString( "com.sun.star.awt.UnoControlDialogModel" ) ), UNO_QUERY );
+    Reference< XNameContainer > xDialogModel(
+        mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.awt.UnoControlDialogModel", mxContext),
+        UNO_QUERY );
     if( !xDialogModel.is() )
     {
         OSL_FAIL( "### couldn't create com.sun.star.awt.UnoControlDialogModel component\n" );
@@ -312,16 +313,13 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
     if( !xInput.is() )
         return aRetAny;
 
-    Reference< XComponentContext > xContext(
-        comphelper::getComponentContext( mxMSF ) );
-
     InputSource source;
     source.aInputStream = xInput;
     source.sSystemId    = aFile;
 
     try {
         // start parsing
-        xParser->setDocumentHandler( ::xmlscript::importDialogModel( xDialogModel, xContext, mxOwnerDocument ) );
+        xParser->setDocumentHandler( ::xmlscript::importDialogModel( xDialogModel, mxContext, mxOwnerDocument ) );
         xParser->parseStream( source );
     }
     catch(const Exception& )
@@ -335,7 +333,7 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
 
     // Create InputStream, TODO: Implement own InputStreamProvider
     // to avoid creating the DialogModel here!
-    Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext, mxOwnerDocument );
+    Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, mxContext, mxOwnerDocument );
     aRetAny <<= xISP;
     return aRetAny;
 }
@@ -377,8 +375,9 @@ Reference< ::com::sun::star::resource::XStringResourcePersistence >
         aArgs[4] <<= aComment;
 
         // TODO: Ctor
-        xRet = Reference< resource::XStringResourcePersistence >( mxMSF->createInstance
-            ( OUString("com.sun.star.resource.StringResourceWithStorage") ), UNO_QUERY );
+        xRet = Reference< resource::XStringResourcePersistence >(
+             mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.resource.StringResourceWithStorage", mxContext),
+             UNO_QUERY );
 
         uno::Reference< embed::XStorage > xLibrariesStor;
         uno::Reference< embed::XStorage > xLibraryStor;
@@ -425,8 +424,9 @@ Reference< ::com::sun::star::resource::XStringResourcePersistence >
         aArgs[5] <<= xDummyHandler;
 
         // TODO: Ctor
-        xRet = Reference< resource::XStringResourcePersistence >( mxMSF->createInstance
-            ( OUString("com.sun.star.resource.StringResourceWithLocation") ), UNO_QUERY );
+        xRet = Reference< resource::XStringResourcePersistence >(
+             mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.resource.StringResourceWithLocation", mxContext),
+             UNO_QUERY );
 
         // TODO: Ctor
         if( xRet.is() )

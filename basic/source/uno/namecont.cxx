@@ -387,12 +387,11 @@ SfxLibraryContainer::SfxLibraryContainer( void )
 {
     DBG_CTOR( SfxLibraryContainer, NULL );
 
-    mxMSF = comphelper::getProcessServiceFactory();
-    SAL_WARN_IF(!mxMSF.is(), "basic", "couldn't get ProcessServiceFactory");
+    mxContext = comphelper::getProcessComponentContext();
 
-    mxSFI = ucb::SimpleFileAccess::create( comphelper::getComponentContext(mxMSF) );
+    mxSFI = ucb::SimpleFileAccess::create( mxContext );
 
-    mxStringSubstitution = util::PathSubstitution::create( comphelper::getComponentContext(mxMSF) );
+    mxStringSubstitution = util::PathSubstitution::create( mxContext );
 }
 
 SfxLibraryContainer::~SfxLibraryContainer()
@@ -686,7 +685,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
         maLibraryPath = SvtPathOptions().GetBasicPath();
     }
 
-    Reference< XParser > xParser = xml::sax::Parser::create(comphelper::getComponentContext(mxMSF));
+    Reference< XParser > xParser = xml::sax::Parser::create(mxContext);
 
     uno::Reference< io::XInputStream > xInput;
 
@@ -1578,7 +1577,7 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
                                                      Reference< XSimpleFileAccess3 > xToUseSFI )
 {
     // Create sax writer
-    Reference< XWriter > xWriter = xml::sax::Writer::create(comphelper::getComponentContext(mxMSF));
+    Reference< XWriter > xWriter = xml::sax::Writer::create(mxContext);
 
     sal_Bool bLink = pLib->mbLink;
     bool bStorage = xStorage.is() && !bLink;
@@ -1678,7 +1677,7 @@ bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
                                                      const uno::Reference< embed::XStorage >& xStorage,
                                                      const OUString& aIndexFileName )
 {
-    Reference< XParser > xParser = xml::sax::Parser::create(comphelper::getComponentContext(mxMSF));
+    Reference< XParser > xParser = xml::sax::Parser::create(mxContext);
 
     sal_Bool bLink = sal_False;
     bool bStorage = false;
@@ -2051,7 +2050,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
 
     // Write library container info
     // Create sax writer
-    Reference< XWriter > xWriter = xml::sax::Writer::create(comphelper::getComponentContext(mxMSF));
+    Reference< XWriter > xWriter = xml::sax::Writer::create(mxContext);
 
     // Write info file
     uno::Reference< io::XOutputStream > xOut;
@@ -2800,7 +2799,7 @@ void SAL_CALL SfxLibraryContainer::exportLibrary( const OUString& Name, const OU
     Reference< XSimpleFileAccess3 > xToUseSFI;
     if( Handler.is() )
     {
-        xToUseSFI = ucb::SimpleFileAccess::create( comphelper::getComponentContext(mxMSF) );
+        xToUseSFI = ucb::SimpleFileAccess::create( mxContext );
         xToUseSFI->setInteractionHandler( Handler );
     }
 
@@ -2834,8 +2833,7 @@ OUString SfxLibraryContainer::expand_url( const OUString& url )
     {
         if( !mxMacroExpander.is() )
         {
-            Reference< XComponentContext > xContext(comphelper::getComponentContext( mxMSF ) );
-            Reference< util::XMacroExpander > xExpander = util::theMacroExpander::get(xContext);
+            Reference< util::XMacroExpander > xExpander = util::theMacroExpander::get(mxContext);
             MutexGuard guard( Mutex::getGlobalMutex() );
             if( !mxMacroExpander.is() )
             {
