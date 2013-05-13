@@ -66,8 +66,6 @@
 
 #include <iostream>
 
-#define MAX_COL 64  // WW6-Beschreibung: 32, WW6-UI: 31 & WW8-UI: 63!
-
 using namespace ::com::sun::star;
 
 
@@ -88,60 +86,6 @@ public:
 };
 
 typedef boost::ptr_vector<WW8SelBoxInfo> WW8MergeGroups;
-
-struct WW8TabBandDesc
-{
-    WW8TabBandDesc* pNextBand;
-    short nGapHalf;
-    short mnDefaultLeft;
-    short mnDefaultTop;
-    short mnDefaultRight;
-    short mnDefaultBottom;
-    bool mbHasSpacing;
-    short nLineHeight;
-    short nRows;
-    sal_uInt16 maDirections[MAX_COL + 1];
-    short nCenter[MAX_COL + 1]; // X-Rand aller Zellen dieses Bandes
-    short nWidth[MAX_COL + 1];  // Laenge aller Zellen dieses Bandes
-    short nWwCols;      // sal_uInt8 wuerde reichen, alignment -> short
-    short nSwCols;      // SW: so viele Spalten fuer den Writer
-    bool bLEmptyCol;    // SW: Links eine leere Zusatz-Spalte
-    bool bREmptyCol;    // SW: dito rechts
-    bool bCantSplit;
-    bool bCantSplit90;
-    WW8_TCell* pTCs;
-    sal_uInt8 nOverrideSpacing[MAX_COL + 1];
-    short nOverrideValues[MAX_COL + 1][4];
-    WW8_SHD* pSHDs;
-    sal_uInt32* pNewSHDs;
-    WW8_BRC aDefBrcs[6];
-
-    bool bExist[MAX_COL];           // Existiert diese Zelle ?
-    sal_uInt8 nTransCell[MAX_COL + 2];  // UEbersetzung WW-Index -> SW-Index
-
-    sal_uInt8 transCell(sal_uInt8 nWwCol) const
-    {
-        return nWwCol < SAL_N_ELEMENTS(nTransCell) ? nTransCell[nWwCol] : 0xFF;
-    }
-
-    WW8TabBandDesc();
-    WW8TabBandDesc(WW8TabBandDesc& rBand);    // tief kopieren
-    ~WW8TabBandDesc();
-    static void setcelldefaults(WW8_TCell *pCells, short nCells);
-    void ReadDef(bool bVer67, const sal_uInt8* pS);
-    void ProcessDirection(const sal_uInt8* pParams);
-    void ProcessSprmTSetBRC(bool bVer67, const sal_uInt8* pParamsTSetBRC);
-    void ProcessSprmTTableBorders(bool bVer67, const sal_uInt8* pParams);
-    void ProcessSprmTDxaCol(const sal_uInt8* pParamsTDxaCol);
-    void ProcessSprmTDelete(const sal_uInt8* pParamsTDelete);
-    void ProcessSprmTInsert(const sal_uInt8* pParamsTInsert);
-    void ProcessSpacing(const sal_uInt8* pParamsTInsert);
-    void ProcessSpecificSpacing(const sal_uInt8* pParamsTInsert);
-    void ReadShd(const sal_uInt8* pS );
-    void ReadNewShd(const sal_uInt8* pS, bool bVer67);
-
-    enum wwDIR {wwTOP = 0, wwLEFT = 1, wwBOTTOM = 2, wwRIGHT = 3};
-};
 
 WW8TabBandDesc::WW8TabBandDesc()
 {
