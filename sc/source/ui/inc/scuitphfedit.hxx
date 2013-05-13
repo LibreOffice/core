@@ -61,11 +61,8 @@ protected:
     virtual     ~ScHFEditPage();
 
 private:
-    //FixedText       aFtLeft;
     ScEditWindow*    m_pWndLeft;
-    //FixedText       aFtCenter;
     ScEditWindow*    m_pWndCenter;
-    //FixedText       aFtRight;
     ScEditWindow*    m_pWndRight;
     FixedText*       m_pFtDefinedHF;
     ListBox*         m_pLbDefined;

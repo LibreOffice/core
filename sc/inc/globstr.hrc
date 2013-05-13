@@ -509,14 +509,6 @@
 #define STR_CHANGED_MOVE_REJECTION_WARNING      402
 #define STR_CHANGED_DELETE_REJECTION_WARNING    403
 
-// #define STR_HF_NONE_IN_BRACKETS     404
-// #define STR_HF_OF                   405
-// #define STR_HF_OF_QUESTION          406
-// #define STR_HF_CREATED_BY           407
-// #define STR_HF_CONFIDENTIAL         408
-// #define STR_HF_CUSTOMIZED           409
-//#define STR_HF_CUSTOM_FOOTER        410
-
 #define STR_ERR_DATAPILOT_INPUT     411
 
 #define STR_DIV_ZERO                412     /* moved to compiler.src, keep define! */

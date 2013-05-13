@@ -119,18 +119,23 @@ ScHFEditPage::ScHFEditPage( Window*             pParent,
     m_pFtDefinedHF->Show();
     m_pFtCustomHF->Show();
 
-//     if( Application::GetSettings().GetLayoutRTL() )
-//     {
-//         Point pt1 = m_pWndLeft->GetPosPixel();
-//         Point pt2 = m_pWndRight->GetPosPixel();
-//         m_pWndLeft->SetPosPixel(pt2);
-//         m_pWndRight->SetPosPixel(pt1);
-//
-//         pt1 = aFtLeft.GetPosPixel();
-//         pt2 = aFtRight.GetPosPixel();
-//         aFtLeft.SetPosPixel(pt2);
-//         aFtRight.SetPosPixel(pt1);
-//    }
+    //swap left/right areas and their lables in RTL mode
+    if( Application::GetSettings().GetLayoutRTL() )
+    {
+        Window *pLeft = get<Window>("labelFT_LEFT");
+        Window *pRight = get<Window>("labelFT_RIGHT");
+        sal_Int32 nOldLeftAttach = pLeft->get_grid_left_attach();
+        sal_Int32 nOldRightAttach = pRight->get_grid_left_attach();
+        pLeft->set_grid_left_attach(nOldRightAttach);
+        pRight->set_grid_left_attach(nOldLeftAttach);
+
+        pLeft = m_pWndLeft;
+        pRight = m_pWndRight;
+        nOldLeftAttach = pLeft->get_grid_left_attach();
+        nOldRightAttach = pRight->get_grid_left_attach();
+        pLeft->set_grid_left_attach(nOldRightAttach);
+        pRight->set_grid_left_attach(nOldLeftAttach);
+    }
     m_pWndLeft->SetFont( aPatAttr );
     m_pWndCenter->SetFont( aPatAttr );
     m_pWndRight->SetFont( aPatAttr );
