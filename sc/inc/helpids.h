@@ -97,14 +97,6 @@
 #define HID_SC_GROUP_COLS                                       "SC_HID_SC_GROUP_COLS"
 #define HID_SC_GROUP_ROWS                                       "SC_HID_SC_GROUP_ROWS"
 
-#define HID_SC_HF_TEXT                                          "SC_HID_SC_HF_TEXT"
-#define HID_SC_HF_FILE                                          "SC_HID_SC_HF_FILE"
-#define HID_SC_HF_TABLE                                         "SC_HID_SC_HF_TABLE"
-#define HID_SC_HF_PAGE                                          "SC_HID_SC_HF_PAGE"
-#define HID_SC_HF_PAGES                                         "SC_HID_SC_HF_PAGES"
-#define HID_SC_HF_DATE                                          "SC_HID_SC_HF_DATE"
-#define HID_SC_HF_TIME                                          "SC_HID_SC_HF_TIME"
-
 #define HID_SC_HEADER_EDIT                                      "SC_HID_SC_HEADER_EDIT"
 #define HID_SC_FOOTER_EDIT                                      "SC_HID_SC_FOOTER_EDIT"
 
