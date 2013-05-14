@@ -580,7 +580,8 @@ void SidebarController::SwitchToDeck (
             aNewPanels[nWriteIndex] = CreatePanel(
                 rPanelContexDescriptor.msId,
                 mpCurrentDeck->GetPanelParentWindow(),
-                rPanelContexDescriptor.mbIsInitiallyVisible);
+                rPanelContexDescriptor.mbIsInitiallyVisible,
+                rContext);
             bHasPanelSetChanged = true;
         }
         if (aNewPanels[nWriteIndex] != NULL)
@@ -649,7 +650,8 @@ bool SidebarController::ArePanelSetsEqual (
 SharedPanel SidebarController::CreatePanel (
     const OUString& rsPanelId,
     ::Window* pParentWindow,
-    const bool bIsInitiallyExpanded)
+    const bool bIsInitiallyExpanded,
+    const Context& rContext)
 {
     const PanelDescriptor* pPanelDescriptor = ResourceManager::Instance().GetPanelDescriptor(rsPanelId);
     if (pPanelDescriptor == NULL)
@@ -667,7 +669,8 @@ SharedPanel SidebarController::CreatePanel (
     Reference<ui::XUIElement> xUIElement (CreateUIElement(
             pPanel->GetComponentInterface(),
             pPanelDescriptor->msImplementationURL,
-            pPanelDescriptor->mbWantsCanvas));
+            pPanelDescriptor->mbWantsCanvas,
+            rContext));
     if (xUIElement.is())
     {
         // Initialize the panel and add it to the active deck.
@@ -687,7 +690,8 @@ SharedPanel SidebarController::CreatePanel (
 Reference<ui::XUIElement> SidebarController::CreateUIElement (
     const Reference<awt::XWindowPeer>& rxWindow,
     const ::rtl::OUString& rsImplementationURL,
-    const bool bWantsCanvas)
+    const bool bWantsCanvas,
+    const Context& rContext)
 {
     try
     {
@@ -710,6 +714,8 @@ Reference<ui::XUIElement> SidebarController::CreateUIElement (
             Reference<rendering::XSpriteCanvas> xCanvas (VCLUnoHelper::GetWindow(rxWindow)->GetSpriteCanvas());
             aCreationArguments.put("Canvas", makeAny(xCanvas));
         }
+        aCreationArguments.put("ApplicationName", makeAny(rContext.msApplication));
+        aCreationArguments.put("ContextName", makeAny(rContext.msContext));
 
         Reference<ui::XUIElement> xUIElement(
             xUIElementFactory->createUIElement(
