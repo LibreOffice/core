@@ -30,10 +30,9 @@
 #include <osl/process.h>
 #include <osl/thread.h>
 
-/* Implementation of Filters test */
-
 using namespace ::com::sun::star;
 
+/// Test loading of files to assure they do not crash on load.
 class SdFiltersTest
     : public test::FiltersTest
     , public test::BootstrapFixture
@@ -41,7 +40,6 @@ class SdFiltersTest
 public:
     SdFiltersTest();
 
-    ::sd::DrawDocShellRef loadURL( const OUString &rURL );
     virtual bool load( const OUString &rFilter,
         const OUString &rURL, const OUString &rUserData,
         unsigned int nFilterFlags, unsigned int nClipboardID,
@@ -58,57 +56,8 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference<document::XFilter> m_xFilter;
     uno::Reference<uno::XInterface> m_xDrawComponent;
 };
-
-#define PPTX_FORMAT_TYPE 268959811
-
-struct FileFormat {
-    const char* pName; const char* pFilterName; const char* pTypeName; sal_uLong nFormatType;
-};
-
-// cf. sc/qa/unit/filters-test.cxx and filters/...*.xcu to fill out.
-FileFormat aFileFormats[] = {
-    { "pptx" , "Impress MS PowerPoint 2007 XML", "MS PowerPoint 2007 XML", PPTX_FORMAT_TYPE },
-    { 0, 0, 0, 0 }
-};
-
-::sd::DrawDocShellRef SdFiltersTest::loadURL( const OUString &rURL )
-{
-    FileFormat *pFmt = NULL;
-
-    for (size_t i = 0; i < SAL_N_ELEMENTS (aFileFormats); i++)
-    {
-        pFmt = aFileFormats + i;
-        if (pFmt->pName && rURL.endsWithIgnoreAsciiCaseAsciiL (pFmt->pName, strlen (pFmt->pName)))
-            break;
-    }
-    CPPUNIT_ASSERT_MESSAGE( "missing filter info", pFmt && pFmt->pName != NULL );
-
-    sal_uInt32 nFormat = 0;
-    if (pFmt->nFormatType)
-        nFormat = SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS;
-    SfxFilter* aFilter = new SfxFilter(
-        OUString::createFromAscii( pFmt->pFilterName ),
-        OUString(), pFmt->nFormatType, nFormat,
-        OUString::createFromAscii( pFmt->pTypeName ),
-        0, OUString(), OUString(), /* userdata */
-        OUString("private:factory/sdraw*") );
-    aFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
-
-    ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell();
-    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ);
-    pSrcMed->SetFilter(aFilter);
-    if ( !xDocShRef->DoLoad(pSrcMed) )
-    {
-        if (xDocShRef.Is())
-            xDocShRef->DoClose();
-        CPPUNIT_ASSERT_MESSAGE( "failed to load", false );
-    }
-
-    return xDocShRef;
-}
 
 bool SdFiltersTest::load(const OUString &rFilter, const OUString &rURL,
     const OUString &rUserData, unsigned int nFilterFlags, unsigned int nClipboardID,
