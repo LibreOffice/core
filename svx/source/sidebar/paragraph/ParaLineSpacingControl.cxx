@@ -67,7 +67,6 @@ ParaLineSpacingControl::ParaLineSpacingControl(Window* pParent, svx::sidebar::Pa
     , maSpacing115     (SVX_RES(IMG_SPACING115))
     , maSpacing15      (SVX_RES(IMG_SPACING15))
     , maSpacing2       (SVX_RES(IMG_SPACING2))
-    , maLPCustom       (SVX_RES(IMG_SPACINGLCUSTOM))
     , maSelSpacing1    (SVX_RES(IMG_SEL_SPACING1))
     , maSelSpacing115  (SVX_RES(IMG_SEL_SPACING115))
     , maSelSpacing15   (SVX_RES(IMG_SEL_SPACING15))
@@ -100,26 +99,20 @@ ParaLineSpacingControl::~ParaLineSpacingControl()
 
 void ParaLineSpacingControl::initial()
 {
-    //maLineSpacing.SetStyle( maLineSpacing.GetStyle()| WB_3DLOOK |  WB_NO_DIRECTSELECT  );
-    //maLineSpacing.SetControlBackground(GetSettings().GetStyleSettings().GetMenuColor());
-    //maLineSpacing.SetColor(GetSettings().GetStyleSettings().GetMenuColor());
-    //maLineSpacing.SetMinFont();
+    maLineSpacing.SetStyle( maLineSpacing.GetStyle()| WB_3DLOOK |  WB_NO_DIRECTSELECT  );
 
-    maLineSpacing.SetControlBackground(GetSettings().GetStyleSettings().GetHighContrastMode()?
-    GetSettings().GetStyleSettings().GetMenuColor():
-    sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
-    maLineSpacing.SetColor(GetSettings().GetStyleSettings().GetHighContrastMode()?
-    GetSettings().GetStyleSettings().GetMenuColor():
-    sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
-    maLineSpacing.SetBackground(GetSettings().GetStyleSettings().GetHighContrastMode()?
-    GetSettings().GetStyleSettings().GetMenuColor():
-    sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
-    //maFTSpacing.SetBackground(GetSettings().GetStyleSettings().GetHighContrastMode()?
-    //GetSettings().GetStyleSettings().GetMenuColor():
-    //sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
-    //maFTBy.SetBackground(GetSettings().GetStyleSettings().GetHighContrastMode()?
-    //GetSettings().GetStyleSettings().GetMenuColor():
-    //sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
+    maLineSpacing.SetControlBackground(
+        GetSettings().GetStyleSettings().GetHighContrastMode()
+        ? GetSettings().GetStyleSettings().GetMenuColor()
+        : sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
+    maLineSpacing.SetColor(
+        GetSettings().GetStyleSettings().GetHighContrastMode()
+        ? GetSettings().GetStyleSettings().GetMenuColor()
+        : sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
+    maLineSpacing.SetBackground(
+        GetSettings().GetStyleSettings().GetHighContrastMode()
+        ? GetSettings().GetStyleSettings().GetMenuColor()
+        : sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
 
     mpImg = new Image[4];
     mpImg[0] = maSpacing1;
@@ -162,13 +155,7 @@ void ParaLineSpacingControl::initial()
     aLineDistAtPercentBox.SetModifyHdl( aLink );
     aLineDistAtMetricBox.SetModifyHdl( aLink );
 }
-void ParaLineSpacingControl::ToGetFocus(bool bType)
-{
-    if(!bType)
-        aLineDist.GrabFocus();
-    else
-        maLineSpacing.GrabFocus();  //wj
-}
+
 
 void ParaLineSpacingControl::PopupModeEndCallback()
 {
@@ -483,24 +470,6 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
 
     aLineDist.SaveValue();
 
-    /*sal_uInt16 nID = pBox->GetCurItemId();
-    pBox->SetItemDown(nID, sal_True);
-
-    Size aFloatSz = GetOutputSizePixel();
-
-    GetLineSPFloatWin()->SetSizePixel( aFloatSz );
-
-    Point aPos=maLineSPTbx->GetPosPixel();
-    aPos.setX(aPos.getX());
-    aPos = OutputToScreenPixel( aPos );
-    Size aSize = maLineSPTbx->GetSizePixel();
-    Rectangle aRect( aPos, aSize );
-
-    GetLineSPFloatWin()->StartPopupMode( aRect, FLOATWIN_POPUPMODE_DOWN | FLOATWIN_POPUPMODE_NOFOCUSCLOSE);
-    GetLineSPFloatWin()->SetPopupModeFlags(GetLineSPFloatWin()->GetPopupModeFlags() | FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE );
-
-    pLineSPPage->ToGetFocus(bValueSetFocus);
-    */
     sal_uInt16 uCount = aLineDist.GetEntryCount();
     if( uCount == LLINESPACE_FIX + 1 )
     {

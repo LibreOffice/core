@@ -40,7 +40,6 @@ class ParaLineSpacingControl:public svx::sidebar::PopupControl
 public:
     ParaLineSpacingControl(Window* pParent, svx::sidebar::ParaPropertyPanel& rPanel);
     ~ParaLineSpacingControl();
-    void ToGetFocus(bool bType);
     void Rearrange(SfxItemState currSPState,FieldUnit currMetricUnit,SvxLineSpacingItem* currSPItem,const ::sfx2::sidebar::EnumContext currentContext);
     //virtual void Paint(const Rectangle& rect);
 
@@ -81,7 +80,6 @@ private:
     Image  maSpacing115;
     Image  maSpacing15;
     Image  maSpacing2;
-    Image  maLPCustom;
 
     Image  maSelSpacing1;
     Image  maSelSpacing115;

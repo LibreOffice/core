@@ -113,7 +113,6 @@
 #define IMG_SPACING115                     19
 #define IMG_SPACING15                      20
 #define IMG_SPACING2                       21
-#define IMG_SPACINGLCUSTOM                 22
 #define IMG_SEL_SPACING1                   23
 #define IMG_SEL_SPACING115                 24
 #define IMG_SEL_SPACING15                  25
