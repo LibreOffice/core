@@ -39,7 +39,6 @@
 
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
-
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/ChartErrorCategory.hpp>
 #include <com/sun/star/chart/ChartErrorIndicatorType.hpp>
@@ -47,14 +46,13 @@
 #include <com/sun/star/chart/X3DDisplay.hpp>
 #include <com/sun/star/chart/XStatisticDisplay.hpp>
 #include <com/sun/star/chart/XDiagramPositioning.hpp>
-
+#include <com/sun/star/chart2/RegressionEquation.hpp>
+#include <com/sun/star/chart2/RelativePosition.hpp>
+#include <com/sun/star/chart2/XChartTypeContainer.hpp>
+#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
 #include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
-#include <com/sun/star/chart2/XChartTypeContainer.hpp>
-#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
-#include <com/sun/star/chart2/RelativePosition.hpp>
-
 #include <com/sun/star/drawing/CameraGeometry.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -1316,42 +1314,36 @@ void SchXMLEquationContext::StartElement( const uno::Reference< xml::sax::XAttri
 
     if( !sAutoStyleName.isEmpty() || bShowEquation || bShowRSquare )
     {
-        uno::Reference< beans::XPropertySet > xEqProp;
-        uno::Reference< lang::XMultiServiceFactory > xFact( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
-        if( xFact.is())
-            xEqProp.set( xFact->createInstance(
-                             OUString(  "com.sun.star.chart2.RegressionEquation" )), uno::UNO_QUERY );
-        if( xEqProp.is())
+        uno::Reference< beans::XPropertySet > xEqProp = chart2::RegressionEquation::create( comphelper::getProcessComponentContext() );
+
+        if( !sAutoStyleName.isEmpty() )
         {
-            if( !sAutoStyleName.isEmpty() )
+            const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
+            if( pStylesCtxt )
             {
-                const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
-                if( pStylesCtxt )
-                {
-                    const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-                        mrImportHelper.GetChartFamilyID(), sAutoStyleName );
-                    // note: SvXMLStyleContext::FillPropertySet is not const
-                    XMLPropStyleContext * pPropStyleContext =
-                        const_cast< XMLPropStyleContext * >( dynamic_cast< const XMLPropStyleContext * >( pStyle ));
+                const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
+                    mrImportHelper.GetChartFamilyID(), sAutoStyleName );
+                // note: SvXMLStyleContext::FillPropertySet is not const
+                XMLPropStyleContext * pPropStyleContext =
+                    const_cast< XMLPropStyleContext * >( dynamic_cast< const XMLPropStyleContext * >( pStyle ));
 
-                    if( pPropStyleContext )
-                        pPropStyleContext->FillPropertySet( xEqProp );
-                }
+                if( pPropStyleContext )
+                    pPropStyleContext->FillPropertySet( xEqProp );
             }
-            xEqProp->setPropertyValue( OUString( "ShowEquation"), uno::makeAny( bShowEquation ));
-            xEqProp->setPropertyValue( OUString( "ShowCorrelationCoefficient"), uno::makeAny( bShowRSquare ));
-
-            if( bHasXPos && bHasYPos )
-            {
-                chart2::RelativePosition aRelPos;
-                aRelPos.Primary = static_cast< double >( aPosition.X ) / static_cast< double >( maChartSize.Width );
-                aRelPos.Secondary = static_cast< double >( aPosition.Y ) / static_cast< double >( maChartSize.Height );
-                xEqProp->setPropertyValue( OUString(  "RelativePosition" ),
-                                           uno::makeAny( aRelPos ));
-            }
-            SAL_WARN_IF( mrRegressionStyle.meType != DataRowPointStyle::REGRESSION, "xmloff.chart", "mrRegressionStyle.meType != DataRowPointStyle::REGRESSION" );
-            mrRegressionStyle.m_xEquationProperties.set( xEqProp );
         }
+        xEqProp->setPropertyValue( OUString( "ShowEquation"), uno::makeAny( bShowEquation ));
+        xEqProp->setPropertyValue( OUString( "ShowCorrelationCoefficient"), uno::makeAny( bShowRSquare ));
+
+        if( bHasXPos && bHasYPos )
+        {
+            chart2::RelativePosition aRelPos;
+            aRelPos.Primary = static_cast< double >( aPosition.X ) / static_cast< double >( maChartSize.Width );
+            aRelPos.Secondary = static_cast< double >( aPosition.Y ) / static_cast< double >( maChartSize.Height );
+            xEqProp->setPropertyValue( OUString(  "RelativePosition" ),
+                                       uno::makeAny( aRelPos ));
+        }
+        SAL_WARN_IF( mrRegressionStyle.meType != DataRowPointStyle::REGRESSION, "xmloff.chart", "mrRegressionStyle.meType != DataRowPointStyle::REGRESSION" );
+        mrRegressionStyle.m_xEquationProperties.set( xEqProp );
     }
 }
 

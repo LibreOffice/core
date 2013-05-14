@@ -81,6 +81,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/chart2,\
 	FormattedString \
 	PolarCoordinateSystem2d \
 	PolarCoordinateSystem3d \
+	RegressionEquation \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/chart2/data,\
 	DatabaseDataProvider \
