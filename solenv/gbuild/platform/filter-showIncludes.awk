@@ -42,7 +42,7 @@ BEGIN {
 {
     sub(/^ */, "")
     if (index($0, showincludes_prefix) == 1) {
-        $0 = substr($0, 1, length(showincludes_prefix))
+        $0 = substr($0, length(showincludes_prefix) + 1)
         sub(/^ */, "")
         gsub(/\\/, "/")
         gsub(/ /, "\\ ")
