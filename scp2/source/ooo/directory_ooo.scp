@@ -156,6 +156,17 @@ End
 
 #endif
 
+Directory gid_Dir_Share_Autotext
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "autotext";
+End
+
+Directory gid_Dir_Autotext_Language
+    ParentID = gid_Dir_Share_Autotext;
+    DIR_ISOLANGUAGE_ALL_LANG_2;
+    Styles = (CREATE);
+End
+
 Directory gid_Dir_Share_Xslt
     ParentID = gid_Brand_Dir_Share;
     DosName = "xslt";
