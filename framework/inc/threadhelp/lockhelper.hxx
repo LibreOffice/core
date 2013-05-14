@@ -31,23 +31,6 @@
 namespace framework{
 
 /*-************************************************************************************************************//**
-    @descr          If you use a lock or mutex as a member of your class and whish to use it earlier then other ones
-                    you should have a look on this implementation. You must use it as the first base class
-                    of your implementation - because base classes are initialized by his order and before your
-                    member! Thats why ist a good place to declare your thread help member so.
-*//*-*************************************************************************************************************/
-enum ELockType
-{
-    E_NOTHING       = 0 ,
-    E_OWNMUTEX      = 1 ,
-    E_SOLARMUTEX    = 2 ,
-    E_FAIRRWLOCK    = 3
-};
-
-#define ENVVAR_LOCKTYPE     DECLARE_ASCII("LOCKTYPE_FRAMEWORK")
-#define FALLBACK_LOCKTYPE   E_SOLARMUTEX
-
-/*-************************************************************************************************************//**
     @short          helper to set right lock in right situation
     @descr          This helper support different types of locking:
                         a)  no locks - transparent for user!
@@ -110,34 +93,11 @@ class FWI_DLLPUBLIC LockHelper : public  IMutex
         ::osl::Mutex&       getShareableOslMutex(                                   );
 
     //-------------------------------------------------------------------------------------------------------------
-    //  private methods
-    //-------------------------------------------------------------------------------------------------------------
-    private:
-
-        static ELockType& implts_getLockType();
-
-    //-------------------------------------------------------------------------------------------------------------
     //  private member
-    //  a) Make some member mutable for using in const functions!
-    //  b) "m_eLockType" define, which of follow members is used!
-    //     You can use "m_pFairRWLock" as a fair rw-lock (multiple reader / one writer / looks for incoming order of threads too) ...
-    //     or you can use a normal osl mutex ("m_pOwnMutex") ...
-    //     ... or the solarmuex as "m_pSolarMutex" (must be set from outside! because some components must be vcl-free!)
-    //     ... but sometimes you need a shareable osl mutex!
-    //     In this case you has some problems: i  ) If your lock type is set to E_OWNMUTEX => it's easy; you can use your member "m_pOwnMutex" - it's a osl mutex.
-    //                                              Creation and using of "m_pShareableOslMutex" isn't necessary!
-    //                                         ii ) Otherwise you have no osl mutex ... so you must create "m_pShareableOslMutex" and use it twice!
-    //                                              In this case you must lock two member everytime - "m_pShareableMutex" AND "m_pFairRWLock" or "m_pSolarMutex" or ...
-    //                                              It isn't realy fine - but the only possible way.
-    //                                         iii) There exist another special case - E_NOTHING is set! Then we should create this shareable mutex ...
-    //                                              nad you can use it ... but this implmentation ignore it.
+    //  Make some member mutable for using in const functions!
     //-------------------------------------------------------------------------------------------------------------
     private:
 
-        ELockType               m_eLockType             ;
-
-        mutable FairRWLock*     m_pFairRWLock           ;
-        mutable ::osl::Mutex*   m_pOwnMutex             ;
         mutable comphelper::SolarMutex* m_pSolarMutex   ;
         mutable ::osl::Mutex*   m_pShareableOslMutex    ;
         mutable sal_Bool        m_bDummySolarMutex      ;
