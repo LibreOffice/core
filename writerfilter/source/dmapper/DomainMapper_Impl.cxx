@@ -1647,6 +1647,10 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
     if (m_aTextAppendStack.empty())
         return;
     uno::Reference<text::XTextAppend> xTextAppend = m_aTextAppendStack.top().xTextAppend;
+
+    appendTableManager( );
+    appendTableHandler( );
+    getTableManager().startLevel();
     try
     {
         uno::Reference< lang::XServiceInfo > xSInfo( xShape, uno::UNO_QUERY_THROW );
@@ -1705,10 +1709,6 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                 xProps->setPropertyValue( rPropNameSupplier.GetName( PROP_ANCHOR_TYPE ), bIsGraphic  ?  uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) : uno::makeAny( text::TextContentAnchorType_AT_PARAGRAPH ) );
             }
         }
-
-        appendTableManager( );
-        appendTableHandler( );
-        getTableManager().startLevel();
     }
     catch ( const uno::Exception& e )
     {
@@ -1720,11 +1720,10 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
 
 void DomainMapper_Impl::PopShapeContext()
 {
+    getTableManager().endLevel();
+    popTableManager();
     if ( m_aAnchoredStack.size() > 0 )
     {
-        getTableManager().endLevel();
-        popTableManager();
-
         // For OLE object replacement shape, the text append context was already removed
         // or the OLE object couldn't be inserted.
         if ( !m_aAnchoredStack.top().bToRemove )
