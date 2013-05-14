@@ -50,13 +50,11 @@ public:
     virtual void setUp();
     virtual void tearDown();
 
-    void test();
     // Ensure CVEs remain unbroken
     void testCVEs();
     void testN778859();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
-    CPPUNIT_TEST(test);
     CPPUNIT_TEST(testN778859);
     CPPUNIT_TEST(testCVEs);
     CPPUNIT_TEST_SUITE_END();
@@ -112,35 +110,6 @@ FileFormat aFileFormats[] = {
     }
 
     return xDocShRef;
-}
-
-void SdFiltersTest::test()
-{
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/a.pptx"));
-    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
-    CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
-
-    SdDrawDocument *pDoc = xDocShRef->GetDoc();
-    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
-
-    // cf. SdrModel svx/svdmodel.hxx ...
-
-    CPPUNIT_ASSERT_MESSAGE( "wrong page count", pDoc->GetPageCount() == 3);
-
-    const SdrPage *pPage = pDoc->GetPage (1);
-    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
-
-    sal_uIntPtr nObjs = pPage->GetObjCount();
-    for (sal_uIntPtr i = 0; i < nObjs; i++)
-    {
-        SdrObject *pObj = pPage->GetObj(i);
-        SdrObjKind eKind = (SdrObjKind) pObj->GetObjIdentifier();
-        SdrTextObj *pTxt = dynamic_cast<SdrTextObj *>( pObj );
-        (void)pTxt; (void)eKind;
-    }
-
-    CPPUNIT_ASSERT_MESSAGE( "changed", !pDoc->IsChanged() );
-    xDocShRef->DoClose();
 }
 
 void SdFiltersTest::testN778859()

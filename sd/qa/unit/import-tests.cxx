@@ -24,10 +24,12 @@ class SdFiltersTest : public SdModelTestBase
 {
 public:
     void testDocumentLayout();
+    void testSmoketest();
     void testN759180();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(testDocumentLayout);
+    CPPUNIT_TEST(testSmoketest);
     CPPUNIT_TEST(testN759180);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -49,6 +51,35 @@ void SdFiltersTest::testDocumentLayout()
         ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc( "/sd/qa/unit/data/" ) + OUString::createFromAscii( aFilesToCompare[i].pInput ) );
         compareWithShapesDump( xDocShRef, getPathFromSrc( "/sd/qa/unit/data/" ) + OUString::createFromAscii( aFilesToCompare[i].pDump ) );
     }
+}
+
+void SdFiltersTest::testSmoketest()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/smoketest.pptx"));
+    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
+    CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+
+    // cf. SdrModel svx/svdmodel.hxx ...
+
+    CPPUNIT_ASSERT_MESSAGE( "wrong page count", pDoc->GetPageCount() == 3);
+
+    const SdrPage *pPage = pDoc->GetPage (1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+
+    sal_uIntPtr nObjs = pPage->GetObjCount();
+    for (sal_uIntPtr i = 0; i < nObjs; i++)
+    {
+        SdrObject *pObj = pPage->GetObj(i);
+        SdrObjKind eKind = (SdrObjKind) pObj->GetObjIdentifier();
+        SdrTextObj *pTxt = dynamic_cast<SdrTextObj *>( pObj );
+        (void)pTxt; (void)eKind;
+    }
+
+    CPPUNIT_ASSERT_MESSAGE( "changed", !pDoc->IsChanged() );
+    xDocShRef->DoClose();
 }
 
 void SdFiltersTest::testN759180()
