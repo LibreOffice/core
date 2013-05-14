@@ -32,18 +32,93 @@
 class ScHFEditDlg : public SfxTabDialog
 {
     SvxNumType eNumType;
+protected:
+    ScHFEditDlg(SfxViewFrame* pFrame, Window* pParent,
+        const SfxItemSet& rCoreSet, const OUString& rPageStyle,
+        sal_uInt16 nResId = RID_SCDLG_HFEDIT );
 public:
-            ScHFEditDlg( SfxViewFrame*      pFrame,
-                         Window*            pParent,
-                         const SfxItemSet&  rCoreSet,
-                         const String&      rPageStyle,
-                         sal_uInt16         nResId = RID_SCDLG_HFEDIT );
-
-            ~ScHFEditDlg();
-
     virtual void PageCreated( sal_uInt16 nId, SfxTabPage& rPage );
 };
 
+class ScHFEditHeaderDlg : public ScHFEditDlg
+{
+public:
+    ScHFEditHeaderDlg(SfxViewFrame* pFrame, Window* pParent,
+        const SfxItemSet& rCoreSet, const OUString& rPageStyle,
+        sal_uInt16 nResId);
+};
+
+class ScHFEditFooterDlg : public ScHFEditDlg
+{
+public:
+    ScHFEditFooterDlg(SfxViewFrame* pFrame, Window* pParent,
+        const SfxItemSet& rCoreSet, const OUString& rPageStyle,
+        sal_uInt16 nResId);
+};
+
+class ScHFEditLeftHeaderDlg : public ScHFEditDlg
+{
+public:
+    ScHFEditLeftHeaderDlg(SfxViewFrame* pFrame, Window* pParent,
+        const SfxItemSet& rCoreSet, const OUString& rPageStyle,
+        sal_uInt16 nResId);
+};
+
+class ScHFEditRightHeaderDlg : public ScHFEditDlg
+{
+public:
+    ScHFEditRightHeaderDlg(SfxViewFrame* pFrame, Window* pParent,
+        const SfxItemSet& rCoreSet, const OUString& rPageStyle,
+        sal_uInt16 nResId);
+};
+
+class ScHFEditLeftFooterDlg : public ScHFEditDlg
+{
+public:
+    ScHFEditLeftFooterDlg(SfxViewFrame* pFrame, Window* pParent,
+        const SfxItemSet& rCoreSet, const OUString& rPageStyle,
+        sal_uInt16 nResId);
+};
+
+class ScHFEditRightFooterDlg : public ScHFEditDlg
+{
+public:
+    ScHFEditRightFooterDlg(SfxViewFrame* pFrame, Window* pParent,
+        const SfxItemSet& rCoreSet, const OUString& rPageStyle,
+        sal_uInt16 nResId);
+};
+
+class ScHFEditSharedHeaderDlg : public ScHFEditDlg
+{
+public:
+    ScHFEditSharedHeaderDlg(SfxViewFrame* pFrame, Window* pParent,
+        const SfxItemSet& rCoreSet, const OUString& rPageStyle,
+        sal_uInt16 nResId);
+};
+
+class ScHFEditSharedFooterDlg : public ScHFEditDlg
+{
+public:
+    ScHFEditSharedFooterDlg(SfxViewFrame* pFrame, Window* pParent,
+        const SfxItemSet& rCoreSet, const OUString& rPageStyle,
+        sal_uInt16 nResId);
+};
+
+class ScHFEditAllDlg : public ScHFEditDlg
+{
+public:
+    ScHFEditAllDlg(SfxViewFrame* pFrame, Window* pParent,
+        const SfxItemSet& rCoreSet, const OUString& rPageStyle,
+        sal_uInt16 nResId);
+};
+
+class ScHFEditActiveDlg : public ScHFEditDlg
+{
+public:
+    ScHFEditActiveDlg(SfxViewFrame* pFrame, Window* pParent,
+        const SfxItemSet& rCoreSet, const OUString& rPageStyle,
+        sal_uInt16 nResId);
+};
 
 #endif // SC_HFEDTDLG_HXX
 

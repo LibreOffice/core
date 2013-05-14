@@ -53,7 +53,7 @@
 ScHFEditDlg::ScHFEditDlg( SfxViewFrame*     pFrameP,
                           Window*           pParent,
                           const SfxItemSet& rCoreSet,
-                          const String&     rPageStyle,
+                          const OUString&   rPageStyle,
                           sal_uInt16        nResIdP )
     :   SfxTabDialog( pFrameP, pParent, ScResId( nResIdP ), &rCoreSet )
 {
@@ -67,99 +67,163 @@ ScHFEditDlg::ScHFEditDlg( SfxViewFrame*     pFrameP,
     aTmp += rPageStyle;
     aTmp += ')';
     SetText( aTmp );
+}
 
-    switch ( nResIdP )
+ScHFEditHeaderDlg::ScHFEditHeaderDlg( SfxViewFrame*     pFrameP,
+                          Window*           pParent,
+                          const SfxItemSet& rCoreSet,
+                          const OUString&   rPageStyle,
+                          sal_uInt16        nResIdP )
+    :   ScHFEditDlg( pFrameP, pParent, rCoreSet, rPageStyle, nResIdP )
+{
+    AddTabPage( 1, ScRightHeaderEditPage::Create, NULL );
+    AddTabPage( 2, ScLeftHeaderEditPage::Create, NULL );
+
+    FreeResource();
+}
+
+ScHFEditFooterDlg::ScHFEditFooterDlg( SfxViewFrame*     pFrameP,
+                          Window*           pParent,
+                          const SfxItemSet& rCoreSet,
+                          const OUString&   rPageStyle,
+                          sal_uInt16        nResIdP )
+    :   ScHFEditDlg( pFrameP, pParent, rCoreSet, rPageStyle, nResIdP )
+{
+    AddTabPage( 1, ScRightFooterEditPage::Create, NULL );
+    AddTabPage( 2, ScLeftFooterEditPage::Create, NULL );
+
+    FreeResource();
+}
+
+ScHFEditLeftHeaderDlg::ScHFEditLeftHeaderDlg( SfxViewFrame*     pFrameP,
+                          Window*           pParent,
+                          const SfxItemSet& rCoreSet,
+                          const OUString&   rPageStyle,
+                          sal_uInt16        nResIdP )
+    :   ScHFEditDlg( pFrameP, pParent, rCoreSet, rPageStyle, nResIdP )
+{
+    AddTabPage( 1, ScLeftHeaderEditPage::Create, NULL );
+
+    FreeResource();
+}
+
+ScHFEditRightHeaderDlg::ScHFEditRightHeaderDlg( SfxViewFrame*     pFrameP,
+                          Window*           pParent,
+                          const SfxItemSet& rCoreSet,
+                          const OUString&   rPageStyle,
+                          sal_uInt16        nResIdP )
+    :   ScHFEditDlg( pFrameP, pParent, rCoreSet, rPageStyle, nResIdP )
+{
+    AddTabPage( 1, ScRightHeaderEditPage::Create, NULL );
+
+    FreeResource();
+}
+
+ScHFEditLeftFooterDlg::ScHFEditLeftFooterDlg( SfxViewFrame*     pFrameP,
+                          Window*           pParent,
+                          const SfxItemSet& rCoreSet,
+                          const OUString&   rPageStyle,
+                          sal_uInt16        nResIdP )
+    :   ScHFEditDlg( pFrameP, pParent, rCoreSet, rPageStyle, nResIdP )
+{
+    AddTabPage( 1, ScLeftFooterEditPage::Create, NULL );
+}
+
+ScHFEditRightFooterDlg::ScHFEditRightFooterDlg( SfxViewFrame*     pFrameP,
+                          Window*           pParent,
+                          const SfxItemSet& rCoreSet,
+                          const OUString&   rPageStyle,
+                          sal_uInt16        nResIdP )
+    :   ScHFEditDlg( pFrameP, pParent, rCoreSet, rPageStyle, nResIdP )
+{
+    AddTabPage( 1, ScRightFooterEditPage::Create, NULL );
+
+    FreeResource();
+}
+
+ScHFEditSharedHeaderDlg::ScHFEditSharedHeaderDlg( SfxViewFrame*     pFrameP,
+                          Window*           pParent,
+                          const SfxItemSet& rCoreSet,
+                          const OUString&   rPageStyle,
+                          sal_uInt16        nResIdP )
+    :   ScHFEditDlg( pFrameP, pParent, rCoreSet, rPageStyle, nResIdP )
+{
+    AddTabPage( 1, ScRightHeaderEditPage::Create, NULL );
+    AddTabPage( 2, ScRightFooterEditPage::Create, NULL );
+    AddTabPage( 3, ScLeftFooterEditPage::Create,  NULL );
+
+    FreeResource();
+}
+
+ScHFEditSharedFooterDlg::ScHFEditSharedFooterDlg( SfxViewFrame*     pFrameP,
+                          Window*           pParent,
+                          const SfxItemSet& rCoreSet,
+                          const OUString&   rPageStyle,
+                          sal_uInt16        nResIdP )
+    :   ScHFEditDlg( pFrameP, pParent, rCoreSet, rPageStyle, nResIdP )
+{
+    AddTabPage( 1, ScRightHeaderEditPage::Create, NULL );
+    AddTabPage( 2, ScLeftHeaderEditPage::Create, NULL );
+    AddTabPage( 3, ScRightFooterEditPage::Create, NULL );
+
+    FreeResource();
+}
+
+ScHFEditAllDlg::ScHFEditAllDlg( SfxViewFrame*     pFrameP,
+                          Window*           pParent,
+                          const SfxItemSet& rCoreSet,
+                          const OUString&   rPageStyle,
+                          sal_uInt16        nResIdP )
+    :   ScHFEditDlg( pFrameP, pParent, rCoreSet, rPageStyle, nResIdP )
+{
+    AddTabPage( 1, ScRightHeaderEditPage::Create, NULL );
+    AddTabPage( 2, ScLeftHeaderEditPage::Create, NULL );
+    AddTabPage( 3, ScRightFooterEditPage::Create, NULL );
+    AddTabPage( 4, ScLeftFooterEditPage::Create, NULL );
+
+    FreeResource();
+}
+
+ScHFEditActiveDlg::ScHFEditActiveDlg( SfxViewFrame*     pFrameP,
+                          Window*           pParent,
+                          const SfxItemSet& rCoreSet,
+                          const OUString&   rPageStyle,
+                          sal_uInt16        nResIdP )
+    :   ScHFEditDlg( pFrameP, pParent, rCoreSet, rPageStyle, nResIdP )
+{
+    const SvxPageItem&  rPageItem = (const SvxPageItem&)
+                rCoreSet.Get(
+                    rCoreSet.GetPool()->GetWhich(SID_ATTR_PAGE) );
+
+    sal_Bool bRightPage = ( SVX_PAGE_LEFT !=
+                        SvxPageUsage(rPageItem.GetPageUsage()) );
+
+    if ( bRightPage )
     {
-        case RID_SCDLG_HFED_HEADER:
-        case RID_SCDLG_HFEDIT_HEADER:
+        AddTabPage( 1, ScRightHeaderEditPage::Create, NULL );
+        AddTabPage( 2, ScRightFooterEditPage::Create, NULL );
+    }
+    else
+    {
+        //  #69193a# respect "shared" setting
+
+        sal_Bool bShareHeader = IS_SHARE_HEADER(rCoreSet);
+        if ( bShareHeader )
             AddTabPage( 1, ScRightHeaderEditPage::Create, NULL );
-            AddTabPage( 2, ScLeftHeaderEditPage::Create, NULL );
-            break;
-
-        case RID_SCDLG_HFED_FOOTER:
-        case RID_SCDLG_HFEDIT_FOOTER:
-            AddTabPage( 1, ScRightFooterEditPage::Create, NULL );
-            AddTabPage( 2, ScLeftFooterEditPage::Create, NULL );
-            break;
-
-        case RID_SCDLG_HFEDIT_LEFTHEADER:
+        else
             AddTabPage( 1, ScLeftHeaderEditPage::Create, NULL );
-            break;
 
-        case RID_SCDLG_HFEDIT_RIGHTHEADER:
-            AddTabPage( 1, ScRightHeaderEditPage::Create, NULL );
-            break;
-
-        case RID_SCDLG_HFEDIT_LEFTFOOTER:
-            AddTabPage( 1, ScLeftFooterEditPage::Create, NULL );
-            break;
-
-        case RID_SCDLG_HFEDIT_RIGHTFOOTER:
-            AddTabPage( 1, ScRightFooterEditPage::Create, NULL );
-            break;
-
-        case RID_SCDLG_HFEDIT_SHDR:
-            AddTabPage( 1, ScRightHeaderEditPage::Create, NULL );
+        sal_Bool bShareFooter = IS_SHARE_FOOTER(rCoreSet);
+        if ( bShareFooter )
             AddTabPage( 2, ScRightFooterEditPage::Create, NULL );
-            AddTabPage( 3, ScLeftFooterEditPage::Create,  NULL );
-            break;
-
-        case RID_SCDLG_HFEDIT_SFTR:
-            AddTabPage( 1, ScRightHeaderEditPage::Create, NULL );
-            AddTabPage( 2, ScLeftHeaderEditPage::Create, NULL );
-            AddTabPage( 3, ScRightFooterEditPage::Create, NULL );
-            break;
-
-        case RID_SCDLG_HFEDIT_ALL:
-            AddTabPage( 1, ScRightHeaderEditPage::Create, NULL );
-            AddTabPage( 2, ScLeftHeaderEditPage::Create, NULL );
-            AddTabPage( 3, ScRightFooterEditPage::Create, NULL );
-            AddTabPage( 4, ScLeftFooterEditPage::Create, NULL );
-            break;
-
-        default:
-        case RID_SCDLG_HFEDIT:
-            {
-                const SvxPageItem&  rPageItem = (const SvxPageItem&)
-                            rCoreSet.Get(
-                                rCoreSet.GetPool()->GetWhich(SID_ATTR_PAGE) );
-
-                sal_Bool bRightPage = ( SVX_PAGE_LEFT !=
-                                    SvxPageUsage(rPageItem.GetPageUsage()) );
-
-                if ( bRightPage )
-                {
-                    AddTabPage( 1, ScRightHeaderEditPage::Create, NULL );
-                    AddTabPage( 2, ScRightFooterEditPage::Create, NULL );
-                }
-                else
-                {
-                    //  #69193a# respect "shared" setting
-
-                    sal_Bool bShareHeader = IS_SHARE_HEADER(rCoreSet);
-                    if ( bShareHeader )
-                        AddTabPage( 1, ScRightHeaderEditPage::Create, NULL );
-                    else
-                        AddTabPage( 1, ScLeftHeaderEditPage::Create, NULL );
-
-                    sal_Bool bShareFooter = IS_SHARE_FOOTER(rCoreSet);
-                    if ( bShareFooter )
-                        AddTabPage( 2, ScRightFooterEditPage::Create, NULL );
-                    else
-                        AddTabPage( 2, ScLeftFooterEditPage::Create, NULL );
-                }
-            }
-            break;
+        else
+            AddTabPage( 2, ScLeftFooterEditPage::Create, NULL );
     }
 
     FreeResource();
 }
 
-// -----------------------------------------------------------------------
 
-ScHFEditDlg::~ScHFEditDlg()
-{
-}
 
 // -----------------------------------------------------------------------
 
