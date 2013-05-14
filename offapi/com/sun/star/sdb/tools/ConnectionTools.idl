@@ -22,12 +22,19 @@
 
 #include <com/sun/star/sdb/tools/XConnectionTools.idl>
 
+module com {  module sun {  module star {  module sdbc {
+ published interface XConnection;
+};};};};
+
 module com {  module sun {  module star {  module sdb {  module tools {
 
 /**
      @since LibreOffice 4.1
 */
-service ConnectionTools : XConnectionTools;
+service ConnectionTools : XConnectionTools
+{
+    createWithConnection([in] com::sun::star::sdbc::XConnection Connection);
+};
 
 }; }; }; }; };
 

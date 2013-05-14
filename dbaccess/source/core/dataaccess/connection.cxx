@@ -754,13 +754,8 @@ Reference< XNameAccess > SAL_CALL OConnection::getGroups(  ) throw(RuntimeExcept
 void OConnection::impl_loadConnectionTools_throw()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::impl_loadConnectionTools_throw" );
-    Sequence< Any > aArguments( 1 );
-    aArguments[0] <<= NamedValue( "Connection" , makeAny( Reference< XConnection >( this ) ) );
 
-    m_xConnectionTools = css::sdb::tools::ConnectionTools::create( m_aContext );
-    assert(Reference< XInitialization >(m_xConnectionTools, UNO_QUERY).is());
-    Reference< XInitialization > xInit(m_xConnectionTools, UNO_QUERY_THROW );
-    xInit->initialize(aArguments);
+    m_xConnectionTools = css::sdb::tools::ConnectionTools::createWithConnection( m_aContext, this );
 }
 
 Reference< XTableName > SAL_CALL OConnection::createTableName(  ) throw (RuntimeException)
