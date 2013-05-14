@@ -112,7 +112,8 @@ public:
     /**
      * Basic performance regression test. Pick some actions that *should* take
      * only a fraction of a second to complete, and make sure they stay that
-     * way.
+     * way. We set the threshold to 1 second for each action which should be
+     * large enough to accommodate slower machines or machines with high load.
      */
     void testPerf();
     void testCollator();
@@ -484,6 +485,30 @@ void Test::testPerf()
         std::ostringstream os;
         os << "Clearing an empty sheet took " << diff << " seconds. It should be instant.";
         CPPUNIT_FAIL(os.str().c_str());
+    }
+
+    {
+        // Switch to R1C1 to make it easier to input relative references in multiple cells.
+        FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
+
+        // Insert formulas in B1:B100000. This shouldn't take long, but may take
+        // close to a second on a slower machine. We don't measure this yet, for
+        // now.
+        for (SCROW i = 0; i < 100000; ++i)
+            m_pDoc->SetString(ScAddress(1,i,0), "=RC[-1]");
+
+        // Now, Delete B2:B100000. This should complete in a fraction of a second
+        // (0.06 sec on my machine).
+        osl_getSystemTime(&aTimeBefore);
+        clearRange(m_pDoc, ScRange(1,1,0,1,99999,0));
+        osl_getSystemTime(&aTimeAfter);
+        diff = getTimeDiff(aTimeAfter, aTimeBefore);
+        if (diff >= 1.0)
+        {
+            std::ostringstream os;
+            os << "Removal of a large array of formula cells took " << diff << " seconds. It should be instant.";
+            CPPUNIT_FAIL(os.str().c_str());
+        }
     }
 
     m_pDoc->DeleteTab(0);
