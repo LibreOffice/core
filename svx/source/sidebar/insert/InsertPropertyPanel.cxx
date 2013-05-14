@@ -276,7 +276,7 @@ void InsertPropertyPanel::CreateController (
         if ( ! aDescriptor.mxController.is())
             aDescriptor.mxController.set(
                 static_cast<XWeak*>(new svt::GenericToolboxController(
-                        ::comphelper::getProcessServiceFactory(),
+                        ::comphelper::getProcessComponentContext(),
                         mxFrame,
                         pToolBox,
                         nItemId,
