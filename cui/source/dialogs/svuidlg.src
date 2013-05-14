@@ -20,60 +20,6 @@
 #include <svtools/controldims.hrc>
 #include "svuidlg.hrc"
 
-ModalDialog MD_PASTE_OBJECT
-{
-    HelpID = "cui:ModalDialog:MD_PASTE_OBJECT";
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Moveable = TRUE ;
-    Size = MAP_APPFONT ( 282 , 135 ) ;  // 12 under listbox
-    Text [ en-US ] = "Paste Special" ;
-    FixedText FT_SOURCE
-    {
-        Pos = MAP_APPFONT ( 6 , 11 ) ;
-        Size = MAP_APPFONT ( 30 , 10 ) ;
-        Text [ en-US ] = "Source:" ;
-    };
-    FixedText FT_OBJECT_SOURCE
-    {
-        Pos = MAP_APPFONT ( 42 , 11 ) ;
-        Size = MAP_APPFONT ( 166 , 20 ) ;
-        WordBreak = TRUE ;
-    };
-    ListBox LB_INSERT_LIST
-    {
-        HelpID = "cui:ListBox:MD_PASTE_OBJECT:LB_INSERT_LIST";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 49 ) ;
-        Size = MAP_APPFONT ( 202 , 74 ) ;
-    };
-    FixedLine FL_CHOICE
-    {
-        Pos = MAP_APPFONT ( 6 , 38 ) ;
-        Size = MAP_APPFONT ( 214 , RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ en-US ] = "Selection" ;
-    };
-    OKButton 1
-    {
-        Pos = MAP_APPFONT ( 226 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        DefButton = TRUE ;
-    };
-    CancelButton 1
-    {
-        Pos = MAP_APPFONT ( 226 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    HelpButton 1
-    {
-        Pos = MAP_APPFONT ( 226 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    String S_OBJECT
-    {
-        Text [ en-US ] = "Object" ;
-    };
-};
 ModalDialog MD_UPDATE_BASELINKS
 {
     HelpID = "cui:ModalDialog:MD_UPDATE_BASELINKS";

@@ -28,7 +28,6 @@
 #include <vcl/group.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/msgbox.hxx>
-#include "svuidlg.hrc"
 #include <sot/formats.hxx>
 #include <sot/stg.hxx>
 #include <svtools/sores.hxx>
@@ -37,37 +36,26 @@
 #include <dialmgr.hxx>
 
 SvPasteObjectDialog::SvPasteObjectDialog( Window* pParent )
-
-    : ModalDialog( pParent, CUI_RES( MD_PASTE_OBJECT ) ),
-    aFtSource( this, CUI_RES( FT_SOURCE ) ),
-    aFtObjectSource( this, CUI_RES( FT_OBJECT_SOURCE ) ),
-    aFlChoice( this, CUI_RES( FL_CHOICE ) ),
-    aLbInsertList( this, CUI_RES( LB_INSERT_LIST ) ),
-    aOKButton1( this, CUI_RES( 1 ) ),
-    aCancelButton1( this, CUI_RES( 1 ) ),
-    aHelpButton1( this, CUI_RES( 1 ) )
+    : ModalDialog(pParent, "PasteSpecialDialog", "cui/ui/pastespecial.ui")
 {
-    FreeResource();
-    SetHelpId( HID_PASTE_DLG );
-    SetUniqueId( HID_PASTE_DLG );
+    get(m_pFtObjectSource, "source");
+    get(m_pLbInsertList, "list");
+    get(m_pOKButton, "ok");
 
-    Font aFont = aFtObjectSource.GetFont();
-    aFont.SetWeight( WEIGHT_LIGHT );
-    aFtObjectSource.SetFont( aFont );
-    aOKButton1.Disable();
+    m_pLbInsertList->SetDropDownLineCount(8);
+    m_pLbInsertList->set_width_request(m_pLbInsertList->approximate_char_width() * 32);
+    m_pOKButton->Disable();
 
     ObjectLB().SetSelectHdl( LINK( this, SvPasteObjectDialog, SelectHdl ) );
     ObjectLB().SetDoubleClickHdl( LINK( this, SvPasteObjectDialog, DoubleClickHdl ) );
-
-    aLbInsertList.SetAccessibleName(aFlChoice.GetText());
 }
 
 void SvPasteObjectDialog::SelectObject()
 {
     if (m_pLbInsertList->GetEntryCount())
     {
-        aLbInsertList.SelectEntryPos(0);
-        SelectHdl( &aLbInsertList );
+        m_pLbInsertList->SelectEntryPos(0);
+        SelectHdl(m_pLbInsertList);
     }
 }
 
@@ -75,8 +63,8 @@ IMPL_LINK( SvPasteObjectDialog, SelectHdl, ListBox *, pListBox )
 {
     (void)pListBox;
 
-    if ( !aOKButton1.IsEnabled() )
-        aOKButton1.Enable();
+    if ( !m_pOKButton->IsEnabled() )
+        m_pOKButton->Enable();
     return 0;
 }
 

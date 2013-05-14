@@ -32,14 +32,6 @@
 #define STR_WAITINGLINK                         32028
 
 
-#define FL_CHOICE              15
-#define LB_INSERT_LIST          7
-
-#define MD_PASTE_OBJECT     32001
-#define S_OBJECT               1
-#define FT_OBJECT_SOURCE       22
-#define FT_SOURCE              23
-
 #define MD_UPDATE_BASELINKS 32002
 #define LB_LINKS               30
 #define FT_FILES               31

@@ -39,19 +39,15 @@ class TransferableDataHelper;
 
 class SvPasteObjectDialog : public ModalDialog
 {
-    FixedText aFtSource;
-    FixedText aFtObjectSource;
-    FixedLine aFlChoice;
-    ListBox aLbInsertList;
-    OKButton aOKButton1;
-    CancelButton aCancelButton1;
-    HelpButton aHelpButton1;
+    FixedText* m_pFtObjectSource;
+    ListBox* m_pLbInsertList;
+    OKButton* m_pOKButton;
     ::std::map< SotFormatStringId, String > aSupplementMap;
     SvGlobalName    aObjClassName;
     String          aObjName;
 
-    ListBox&        ObjectLB()      { return aLbInsertList; }
-    FixedText&      ObjectSource()  { return aFtObjectSource; }
+    ListBox&        ObjectLB()      { return *m_pLbInsertList; }
+    FixedText&      ObjectSource()  { return *m_pFtObjectSource; }
 
     void            SelectObject();
     DECL_LINK( SelectHdl, ListBox * );
