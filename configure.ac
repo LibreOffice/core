@@ -9484,10 +9484,9 @@ if test  "$test_gtk" = "yes"; then
             if test "$ENABLE_GNOMEVFS" = "TRUE"; then
                 AC_MSG_ERROR([please use --enable-gio only together with --disable-gnome-vfs.])
             fi
-            ENABLE_GIO="TRUE"
-            AC_MSG_RESULT([yes])
-            PKG_CHECK_MODULES( GIO, gio-2.0 )
-            AC_DEFINE(ENABLE_GIO)
+            dnl Need at least 2.26 for the dbus support.
+            PKG_CHECK_MODULES([GIO], [gio-2.0 >= 2.26],
+                              [ENABLE_GIO="TRUE"], [ENABLE_GIO=""])
         else
             AC_MSG_RESULT([no])
         fi
