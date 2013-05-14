@@ -26,11 +26,13 @@ public:
     void testDocumentLayout();
     void testSmoketest();
     void testN759180();
+    void testN778859();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(testDocumentLayout);
     CPPUNIT_TEST(testSmoketest);
     CPPUNIT_TEST(testN759180);
+    CPPUNIT_TEST(testN778859);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -117,6 +119,24 @@ void SdFiltersTest::testN759180()
                 break;
             }
         }
+    }
+}
+
+void SdFiltersTest::testN778859()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/n778859.pptx"));
+    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
+    CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    {
+        // Get the object
+        SdrObject *pObj = pPage->GetObj(1);
+        SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
+        CPPUNIT_ASSERT(!pTxtObj->IsAutoFit());
     }
 }
 
