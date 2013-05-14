@@ -926,15 +926,7 @@ sub get_sourcepath_from_filename_and_includepath_classic
         $onefile = "";  # the sourcepath has to be empty
         if ( $write_logfile)
         {
-            if ( $ENV{'DEFAULT_TO_ENGLISH_FOR_PACKING'} )
-            {
-                $infoline = "WARNING: Source for $$searchfilenameref not found!\n";  # Important message in log file
-            }
-            else
-            {
-                $infoline = "ERROR: Source for $$searchfilenameref not found!\n";    # Important message in log file
-            }
-
+            $infoline = "ERROR: Source for $$searchfilenameref not found!\n";    # Important message in log file
             push( @installer::globals::logfileinfo, $infoline);
         }
     }
@@ -1002,15 +994,7 @@ sub get_sourcepath_from_filename_and_includepath
         $onefile = "";  # the sourcepath has to be empty
         if ( $write_logfile)
         {
-            if ( $ENV{'DEFAULT_TO_ENGLISH_FOR_PACKING'} )
-            {
-                $infoline = "WARNING: Source for $$searchfilenameref not found!\n";  # Important message in log file
-            }
-            else
-            {
-                $infoline = "ERROR: Source for $$searchfilenameref not found!\n";    # Important message in log file
-            }
-
+            $infoline = "ERROR: Source for $$searchfilenameref not found!\n";    # Important message in log file
             push( @installer::globals::logfileinfo, $infoline);
         }
     }
@@ -1097,54 +1081,6 @@ sub get_Source_Directory_For_Files_From_Includepathlist
         else { $sourcepathref = get_sourcepath_from_filename_and_includepath(\$onefilename, $includepatharrayref, 1); }
 
         $onefile->{'sourcepath'} = $$sourcepathref; # This $$sourcepathref is empty, if no source was found
-
-        # defaulting to english for multilingual files if DEFAULT_TO_ENGLISH_FOR_PACKING is set
-
-        if ( $ENV{'DEFAULT_TO_ENGLISH_FOR_PACKING'} )
-        {
-            if (( ! $onefile->{'sourcepath'} ) && ( $onefile->{'ismultilingual'} ))
-            {
-                my $oldname = $onefile->{'Name'};
-                my $oldlanguage = $onefile->{'specificlanguage'};
-                my $newlanguage = "en-US";
-                $onefilename = $onefile->{'Name'};
-                $onefilename =~ s/$oldlanguage\./$newlanguage\./;   # Example: tplwizfax_it.zip -> tplwizfax_en-US.zip
-                $onefilename =~ s/^\s*\Q$installer::globals::separator\E//;     # filename begins with a slash, for instance /registry/schema/org/openoffice/VCL.xcs
-                $sourcepathref = get_sourcepath_from_filename_and_includepath(\$onefilename, $includepatharrayref, 1);
-                $onefile->{'sourcepath'} = $$sourcepathref;                     # This $$sourcepathref is empty, if no source was found
-
-                if ($onefile->{'sourcepath'})   # defaulting to english was successful
-                {
-                    $infoline = "WARNING: Using $onefilename instead of $oldname\n";
-                    push( @installer::globals::logfileinfo, $infoline);
-                    print "    $infoline";
-
-                    # If the directory, in which the new file is installed, is not language dependent,
-                    # the filename has to be changed to avoid installation conflicts
-                    # No mechanism for resource files!
-                    # -> implementing for the content of ARCHIVE files
-
-                    if ( $onefile->{'Styles'} =~ /\bARCHIVE\b/ )
-                    {
-                        my $directorygid = $onefile->{'Dir'};
-                        my $islanguagedependent = determine_directory_language_dependency($directorygid, $dirsref);
-
-                        if ( ! $islanguagedependent )
-                        {
-                            $onefile->{'Styles'} =~ s/\bARCHIVE\b/ARCHIVE, RENAME_TO_LANGUAGE/; # Setting new flag RENAME_TO_LANGUAGE
-                            $infoline = "Setting flag RENAME_TO_LANGUAGE: File $onefile->{'Name'} in directory: $directorygid\n";
-                            push( @installer::globals::logfileinfo, $infoline);
-                        }
-                    }
-                }
-                else
-                {
-                    $infoline = "WARNING: Using $onefile->{'Name'} instead of $oldname was not successful\n";
-                    push( @installer::globals::logfileinfo, $infoline);
-                    $onefile->{'Name'} = $oldname;  # Switching back to old file name
-                }
-            }
-        }
     }
 
     $infoline = "\n";   # empty line after listing of all files
