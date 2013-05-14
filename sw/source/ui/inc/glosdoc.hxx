@@ -50,8 +50,7 @@ class SW_DLLPUBLIC SwGlossaries
     UnoAutoTextEntries      m_aGlossaryEntries;
 
     String                  m_aPath;
-    String                  m_sOldErrPath;
-    String                  m_sErrPath;
+    std::vector<rtl::OUString> m_aInvalidPaths;
     std::vector<String>     m_PathArr;
     std::vector<String>     m_GlosArr;
     sal_Bool                m_bError;

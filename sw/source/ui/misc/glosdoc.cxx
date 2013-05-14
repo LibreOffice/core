@@ -397,6 +397,20 @@ SwGlossaries::SwGlossaries()
     Description: set new path and recreate internal array
 ------------------------------------------------------------------------*/
 
+rtl::OUString lcl_makePath(const std::vector<rtl::OUString>& rPaths)
+{
+    std::vector<rtl::OUString>::const_iterator aIt(rPaths.begin());
+    const std::vector<rtl::OUString>::const_iterator aEnd(rPaths.end());
+    rtl::OUStringBuffer aPath(*aIt);
+    for (++aIt; aIt != aEnd; ++aIt)
+    {
+        aPath.append(SVT_SEARCHPATH_DELIMITER);
+        const INetURLObject aTemp(*aIt);
+        aPath.append(aTemp.GetFull());
+    }
+    return aPath.getStr();
+}
+
 void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
 {
     SvtPathOptions aPathOpt;
@@ -410,6 +424,7 @@ void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
 
         sal_uInt16 nTokenCount = comphelper::string::getTokenCount(m_aPath, SVT_SEARCHPATH_DELIMITER);
         std::vector<String> aDirArr;
+        std::vector<rtl::OUString> aInvalidPaths;
         for( sal_uInt16 i = 0; i < nTokenCount; i++ )
         {
             String sPth(m_aPath.GetToken(i, SVT_SEARCHPATH_DELIMITER));
@@ -422,26 +437,27 @@ void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
             }
             aDirArr.push_back(sPth);
             if( !FStatHelper::IsFolder( sPth ) )
-            {
-                if( m_sErrPath.Len() )
-                    m_sErrPath += SVT_SEARCHPATH_DELIMITER;
-                INetURLObject aTemp( sPth );
-                m_sErrPath += String(aTemp.GetFull());
-            }
+                aInvalidPaths.push_back(sPth);
             else
                 m_PathArr.push_back(sPth);
         }
 
-        if(!nTokenCount ||
-            (m_sErrPath.Len() && (bPathChanged || m_sOldErrPath != m_sErrPath)) )
+        if(!nTokenCount || !aInvalidPaths.empty())
         {
-            m_sOldErrPath = m_sErrPath;
-            // wrong path, that means AutoText directory doesn't exist
+            std::sort(aInvalidPaths.begin(), aInvalidPaths.end());
+            aInvalidPaths.erase(std::unique(aInvalidPaths.begin(), aInvalidPaths.end()), aInvalidPaths.end());
+            if (bPathChanged || (m_aInvalidPaths != aInvalidPaths))
+            {
+                m_aInvalidPaths = aInvalidPaths;
+                // wrong path, that means AutoText directory doesn't exist
 
-            ErrorHandler::HandleError( *new StringErrorInfo(
-                                    ERR_AUTOPATH_ERROR, m_sErrPath,
-                                    ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR ));
-            m_bError = sal_True;
+                ErrorHandler::HandleError( *new StringErrorInfo(
+                                        ERR_AUTOPATH_ERROR, lcl_makePath(m_aInvalidPaths),
+                                        ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR ));
+                m_bError = sal_True;
+            }
+            else
+                m_bError = sal_False;
         }
         else
             m_bError = sal_False;
@@ -457,7 +473,7 @@ void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
 void SwGlossaries::ShowError()
 {
     sal_uInt32 nPathError = *new StringErrorInfo(ERR_AUTOPATH_ERROR,
-                                            m_sErrPath, ERRCODE_BUTTON_OK );
+                                            lcl_makePath(m_aInvalidPaths), ERRCODE_BUTTON_OK );
     ErrorHandler::HandleError( nPathError );
 }
 
