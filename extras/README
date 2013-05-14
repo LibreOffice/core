@@ -1,1 +1,8 @@
 Contains templates, clipart galleries, palettes, symbol font etc.
+
+How-to add a new gallery:
+	+ create a directory extras/source/gallery/foo/
+	+ create a .str file extras/source/gallery/foo/foo.str
+	+ add a [foo] section to extras/source/gallery/share/gallery_names.ulf
+	+ add a Gallery_foo.mk at the top-level (and mention in Module_extra.mk)
+	+ add a new GALLERY_FILELIST statement in scp2/
