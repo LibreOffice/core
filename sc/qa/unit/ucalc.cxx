@@ -1776,13 +1776,37 @@ void Test::testCellBroadcaster()
     // Clear everything again
     clearRange(m_pDoc, ScRange(0,0,0,10,100,0));
 
-    m_pDoc->SetString(ScAddress(1,0,0), "=A1"); // B1 references A1.
-    m_pDoc->SetValue(ScAddress(0,0,0), 12.3);
-    CPPUNIT_ASSERT_EQUAL(12.3, m_pDoc->GetValue(ScAddress(1,0,0)));
+    // Switch to R1C1 to make it easier to input relative references in multiple cells.
+    FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
 
-    // Clear the entire column A.
-    clearRange(m_pDoc, ScRange(0,0,0,0,MAXROW,0));
-    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(1,0,0)));
+    // Have B1:B20 reference A1:A20.
+    val = 0.0;
+    for (SCROW i = 0; i < 20; ++i)
+    {
+        m_pDoc->SetValue(ScAddress(0,i,0), val++);
+        m_pDoc->SetString(ScAddress(1,i,0), "=RC[-1]");
+    }
+
+    // Ensure that the formula cells show correct values, and the referenced
+    // cells have broadcasters.
+    val = 0.0;
+    for (SCROW i = 0; i < 20; ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL(val++, m_pDoc->GetValue(ScAddress(1,i,0)));
+        pBC = m_pDoc->GetBroadcaster(ScAddress(0,i,0));
+        CPPUNIT_ASSERT_MESSAGE("Broadcast should exist here.", pBC);
+    }
+
+    // Delete formula cells in B2:B19.
+    clearRange(m_pDoc, ScRange(1,1,0,1,18,0));
+    // Ensure that A2:A19 no longer have broadcasters, but A1 and A20 still do.
+    CPPUNIT_ASSERT_MESSAGE("A1 should still have broadcaster.", m_pDoc->GetBroadcaster(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_MESSAGE("A20 should still have broadcaster.", m_pDoc->GetBroadcaster(ScAddress(0,19,0)));
+    for (SCROW i = 1; i <= 18; ++i)
+    {
+        pBC = m_pDoc->GetBroadcaster(ScAddress(0,i,0));
+        CPPUNIT_ASSERT_MESSAGE("Broadcaster should have been deleted.", !pBC);
+    }
 
     m_pDoc->DeleteTab(0);
 }

@@ -39,6 +39,7 @@
 #ifdef NDEBUG
 #undef NDEBUG
 #endif
+#define MDDS_MULTI_TYPE_VECTOR_DEBUG 1
 #endif
 
 #include <mdds/multi_type_vector.hpp>
