@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Gallery_Gallery,sound,extras/source/gallery/arrows))
+$(eval $(call gb_Gallery_Gallery,arrows,extras/source/gallery/arrows))
 
-$(eval $(call gb_Gallery_add_files,sound,share/gallery/arrows,\
+$(eval $(call gb_Gallery_add_files,arrows,share/gallery/arrows,\
 	extras/source/gallery/arrows/A01-Arrow-Gray-Left.png \
 	extras/source/gallery/arrows/A02-Arrow-DarkBlue-Right.png \
 	extras/source/gallery/arrows/A03-Arrow-Gray-Left.png \

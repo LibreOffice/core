@@ -8,9 +8,9 @@
 #
 # this should probably be done with more general rules: but how ?
 
-$(eval $(call gb_Gallery_Gallery,sound,extras/source/gallery/sounds))
+$(eval $(call gb_Gallery_Gallery,sounds,extras/source/gallery/sounds))
 
-$(eval $(call gb_Gallery_add_files,sound,share/gallery/sounds,\
+$(eval $(call gb_Gallery_add_files,sounds,share/gallery/sounds,\
 	extras/source/gallery/sounds/apert2.wav \
 	extras/source/gallery/sounds/apert.wav \
 	extras/source/gallery/sounds/applause.wav \

@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Gallery_Gallery,sound,extras/source/gallery/people))
+$(eval $(call gb_Gallery_Gallery,people,extras/source/gallery/people))
 
-$(eval $(call gb_Gallery_add_files,sound,share/gallery/people,\
+$(eval $(call gb_Gallery_add_files,people,share/gallery/people,\
 	extras/source/gallery/people/Artist-Female1.png \
 	extras/source/gallery/people/Artist-Female2.png \
 	extras/source/gallery/people/Artist-Male1.png \

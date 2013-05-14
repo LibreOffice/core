@@ -112,6 +112,8 @@ $(call gb_Gallery__Gallery_impl,$(1),$(call gb_Gallery_get_packagename,$(1)),$(2
 # setup the files package - we install all of these too
 $(call gb_Package_Package_internal,$(call gb_Gallery_get_files_packagename,$(1)),$(SRCDIR)/$(2))
 $(call gb_Package_set_outdir,$(call gb_Gallery_get_files_packagename,$(1)),$(INSTDIR))
+$(call gb_Gallery__get_final_target,$(1)) : $(call gb_Package_get_target,$(call gb_Gallery_get_files_packagename,$(1)))
+$(call gb_Gallery_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(call gb_Gallery_get_files_packagename,$(1)))
 
 endef
 
@@ -158,7 +160,7 @@ $$(call gb_Gallery_get_workdir,$(1))/$(1).ulf : \
 	rm -rf $$$${MERGEINPUT}
 else
 $$(call gb_Gallery_get_workdir,$(1))/$(1).ulf : $$(call gb_Gallery_basedir,$(3))/share/gallery_names.ulf
-	cp $< $@
+	cp $$< $$@
 endif
 
 $(call gb_Gallery_get_workdir,$(1))/$(1).str : $(gb_Gallery_TRANSLATE) \
