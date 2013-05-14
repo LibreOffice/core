@@ -377,9 +377,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
 ))
 
 ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
-$(eval $(call gb_Library_use_packages,svxcore,\
-	connectivity_generated \
-))
 
 $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/fmcomp/dbaexchange \
