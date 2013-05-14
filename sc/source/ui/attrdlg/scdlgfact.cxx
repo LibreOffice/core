@@ -1246,36 +1246,36 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScHFEditDlg( SfxViewF
     {
         case RID_SCDLG_HFED_HEADER:
         case RID_SCDLG_HFEDIT_HEADER:
-            pDlg = new ScHFEditHeaderDlg( pFrame, pParent, rCoreSet, rPageStyle, nResId );
+            pDlg = new ScHFEditHeaderDlg(pFrame, pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFED_FOOTER:
         case RID_SCDLG_HFEDIT_FOOTER:
-            pDlg = new ScHFEditFooterDlg( pFrame, pParent, rCoreSet, rPageStyle, nResId );
+            pDlg = new ScHFEditFooterDlg(pFrame, pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFEDIT_LEFTHEADER:
-            pDlg = new ScHFEditLeftHeaderDlg( pFrame, pParent, rCoreSet, rPageStyle, nResId );
+            pDlg = new ScHFEditLeftHeaderDlg(pFrame, pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFEDIT_RIGHTHEADER:
-            pDlg = new ScHFEditRightHeaderDlg( pFrame, pParent, rCoreSet, rPageStyle, nResId );
+            pDlg = new ScHFEditRightHeaderDlg(pFrame, pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFEDIT_LEFTFOOTER:
-            pDlg = new ScHFEditLeftFooterDlg( pFrame, pParent, rCoreSet, rPageStyle, nResId );
+            pDlg = new ScHFEditLeftFooterDlg(pFrame, pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFEDIT_RIGHTFOOTER:
-            pDlg = new ScHFEditRightFooterDlg( pFrame, pParent, rCoreSet, rPageStyle, nResId );
+            pDlg = new ScHFEditRightFooterDlg(pFrame, pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFEDIT_SHDR:
-            pDlg = new ScHFEditSharedHeaderDlg( pFrame, pParent, rCoreSet, rPageStyle, nResId );
+            pDlg = new ScHFEditSharedHeaderDlg(pFrame, pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFEDIT_SFTR:
-            pDlg = new ScHFEditSharedFooterDlg( pFrame, pParent, rCoreSet, rPageStyle, nResId );
+            pDlg = new ScHFEditSharedFooterDlg(pFrame, pParent, rCoreSet, rPageStyle);
             break;
         case RID_SCDLG_HFEDIT_ALL:
-            pDlg = new ScHFEditAllDlg( pFrame, pParent, rCoreSet, rPageStyle, nResId );
+            pDlg = new ScHFEditAllDlg(pFrame, pParent, rCoreSet, rPageStyle);
             break;
         default:
         case RID_SCDLG_HFEDIT:
-            pDlg = new ScHFEditActiveDlg( pFrame, pParent, rCoreSet, rPageStyle, nResId );
+            pDlg = new ScHFEditActiveDlg(pFrame, pParent, rCoreSet, rPageStyle);
             break;
     }
 

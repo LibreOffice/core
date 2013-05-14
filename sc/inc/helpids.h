@@ -34,19 +34,6 @@
 #define HID_SC_WIN_PREVIEW                                      "SC_HID_SC_WIN_PREVIEW"
 
 // Hilfe IDs fuer einzelne Controls (max.30) ---------------------------------
-//  Kopf/Fusszeilen Editfenster: Header/Footer links/rechts links/mitte/rechts
-#define HID_SC_HF_HLL                                           "SC_HID_SC_HF_HLL"
-#define HID_SC_HF_HLC                                           "SC_HID_SC_HF_HLC"
-#define HID_SC_HF_HLR                                           "SC_HID_SC_HF_HLR"
-#define HID_SC_HF_HRL                                           "SC_HID_SC_HF_HRL"
-#define HID_SC_HF_HRC                                           "SC_HID_SC_HF_HRC"
-#define HID_SC_HF_HRR                                           "SC_HID_SC_HF_HRR"
-#define HID_SC_HF_FLL                                           "SC_HID_SC_HF_FLL"
-#define HID_SC_HF_FLC                                           "SC_HID_SC_HF_FLC"
-#define HID_SC_HF_FLR                                           "SC_HID_SC_HF_FLR"
-#define HID_SC_HF_FRL                                           "SC_HID_SC_HF_FRL"
-#define HID_SC_HF_FRC                                           "SC_HID_SC_HF_FRC"
-#define HID_SC_HF_FRR                                           "SC_HID_SC_HF_FRR"
 //  Eintraege im Navigator
 #define HID_SC_NAVIPI_ENTRIES                                   "SC_HID_SC_NAVIPI_ENTRIES"
 #define HID_SC_NAVIPI_ROW                                       "SC_HID_SC_NAVIPI_ROW"
@@ -83,11 +70,6 @@
 #define HID_SCPAGE_SUBT_GROUP1                                  "SC_HID_SCPAGE_SUBT_GROUP1"
 #define HID_SCPAGE_SUBT_GROUP2                                  "SC_HID_SCPAGE_SUBT_GROUP2"
 #define HID_SCPAGE_SUBT_GROUP3                                  "SC_HID_SCPAGE_SUBT_GROUP3"
-
-#define HID_SCPAGE_HFED_HL                                      "SC_HID_SCPAGE_HFED_HL"
-#define HID_SCPAGE_HFED_HR                                      "SC_HID_SCPAGE_HFED_HR"
-#define HID_SCPAGE_HFED_FL                                      "SC_HID_SCPAGE_HFED_FL"
-#define HID_SCPAGE_HFED_FR                                      "SC_HID_SCPAGE_HFED_FR"
 
 #define HID_SCPAGE_CONTENT                                      "SC_HID_SCPAGE_CONTENT"
 #define HID_SCPAGE_LAYOUT                                       "SC_HID_SCPAGE_LAYOUT"

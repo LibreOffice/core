@@ -41,7 +41,6 @@
 #include "globstr.hrc"
 #include "tabvwsh.hxx"
 #include "prevwsh.hxx"
-#include "hfedtdlg.hrc"
 #include "AccessibleEditObject.hxx"
 
 #include "scabstdlg.hxx"

@@ -1023,11 +1023,6 @@
 #define RID_SCPAGE_SUBT_GROUP2          (SC_DIALOGS_START + 98)
 #define RID_SCPAGE_SUBT_GROUP3          (SC_DIALOGS_START + 99)
 
-#define RID_SCPAGE_HFED_HL              (SC_DIALOGS_START + 100)
-#define RID_SCPAGE_HFED_HR              (SC_DIALOGS_START + 101)
-#define RID_SCPAGE_HFED_FL              (SC_DIALOGS_START + 102)
-#define RID_SCPAGE_HFED_FR              (SC_DIALOGS_START + 103)
-
 // derivations from RID_SCDLG_MTRINPUT
 #define RID_SCDLG_COL_MAN               (SC_DIALOGS_START + 104)
 #define RID_SCDLG_COL_OPT               (SC_DIALOGS_START + 105)

@@ -59,6 +59,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/scalc,\
 ))
 
 $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
+	sc/uiconfig/scalc/ui/allheaderfooterdialog \
 	sc/uiconfig/scalc/ui/cellprotectionpage \
 	sc/uiconfig/scalc/ui/createnamesdialog \
 	sc/uiconfig/scalc/ui/dataform \
@@ -66,18 +67,27 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/deletecells \
 	sc/uiconfig/scalc/ui/deletecontents \
 	sc/uiconfig/scalc/ui/externaldata \
+	sc/uiconfig/scalc/ui/footerdialog \
 	sc/uiconfig/scalc/ui/formatcellsdialog \
 	sc/uiconfig/scalc/ui/goalseekdlg \
+	sc/uiconfig/scalc/ui/headerdialog \
 	sc/uiconfig/scalc/ui/headerfootercontent \
+	sc/uiconfig/scalc/ui/headerfooterdialog \
 	sc/uiconfig/scalc/ui/insertname \
 	sc/uiconfig/scalc/ui/insertsheet \
+	sc/uiconfig/scalc/ui/leftfooterdialog \
+	sc/uiconfig/scalc/ui/leftheaderdialog \
 	sc/uiconfig/scalc/ui/managenamesdialog \
 	sc/uiconfig/scalc/ui/printeroptions \
-        sc/uiconfig/scalc/ui/protectsheetdlg \
+	sc/uiconfig/scalc/ui/protectsheetdlg \
 	sc/uiconfig/scalc/ui/sheetprintpage \
+	sc/uiconfig/scalc/ui/rightfooterdialog \
+	sc/uiconfig/scalc/ui/rightheaderdialog \
 	sc/uiconfig/scalc/ui/selectrange \
 	sc/uiconfig/scalc/ui/selectsource \
 	sc/uiconfig/scalc/ui/sharedocumentdlg \
+	sc/uiconfig/scalc/ui/sharedfooterdialog \
+	sc/uiconfig/scalc/ui/sharedheaderdialog \
 	sc/uiconfig/scalc/ui/solverdlg \
 	sc/uiconfig/scalc/ui/sortcriteriapage \
 	sc/uiconfig/scalc/ui/sortkey \
