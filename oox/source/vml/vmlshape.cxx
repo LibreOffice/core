@@ -692,8 +692,8 @@ BezierShape::BezierShape(Drawing& rDrawing)
 
 Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const awt::Rectangle& rShapeRect ) const
 {
-    Reference< XShape > xShape = SimpleShape::implConvertAndInsert( rxShapes, rShapeRect );
     awt::Rectangle aCoordSys = getCoordSystem();
+    PolyPolygonBezierCoords aBezierCoords;
 
     if( (aCoordSys.Width > 0) && (aCoordSys.Height > 0) )
     {
@@ -747,7 +747,6 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
                 }
         }
 
-        PolyPolygonBezierCoords aBezierCoords;
         aBezierCoords.Coordinates.realloc( aCoordLists.size() );
         for ( unsigned int i = 0; i < aCoordLists.size(); i++ )
             aBezierCoords.Coordinates[i] = ContainerHelper::vectorToSequence( aCoordLists[i] );
@@ -756,6 +755,18 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
         for ( unsigned int i = 0; i < aFlagLists.size(); i++ )
             aBezierCoords.Flags[i] = ContainerHelper::vectorToSequence( aFlagLists[i] );
 
+        if( aCoordLists.front().front().X == aCoordLists.back().back().X
+            && aCoordLists.front().front().Y == aCoordLists.back().back().Y )
+        { // HACK: If the shape is in fact closed, which can be found out only when the path is known,
+          // force to closed bezier shape (otherwise e.g. fill won't work).
+            const_cast< BezierShape* >( this )->setService( "com.sun.star.drawing.ClosedBezierShape" );
+        }
+    }
+
+    Reference< XShape > xShape = SimpleShape::implConvertAndInsert( rxShapes, rShapeRect );
+
+    if( aBezierCoords.Coordinates.hasElements())
+    {
         PropertySet aPropSet( xShape );
         aPropSet.setProperty( PROP_PolyPolygonBezier, aBezierCoords );
     }
