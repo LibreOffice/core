@@ -194,10 +194,12 @@ FocusManager::FocusLocation FocusManager::GetFocusLocation (const Window& rWindo
 {
     // Check the deck title.
     if (mpDeckTitleBar != NULL)
+    {
         if (mpDeckTitleBar == &rWindow)
             return FocusLocation(PC_DeckTitle, -1);
         else if (&mpDeckTitleBar->GetToolBox() == &rWindow)
             return FocusLocation(PC_DeckToolBox, -1);
+    }
 
     // Search the panels.
     for (sal_Int32 nIndex=0,nCount(maPanels.size()); nIndex<nCount; ++nIndex)

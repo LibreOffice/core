@@ -29,6 +29,8 @@
 namespace css = ::com::sun::star;
 namespace cssu = ::com::sun::star::uno;
 
+class ToolBox;
+
 namespace sfx2 { namespace sidebar {
 
 /** Convenience class for easy creation of toolbox controllers.

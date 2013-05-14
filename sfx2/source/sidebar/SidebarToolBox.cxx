@@ -28,6 +28,9 @@
 #include "sfx2/sidebar/Tools.hxx"
 
 #include <vcl/gradient.hxx>
+#include <svtools/miscopt.hxx>
+#include <framework/imageproducer.hxx>
+#include <com/sun/star/frame/XSubToolbarController.hpp>
 
 
 using namespace ::com::sun::star;
