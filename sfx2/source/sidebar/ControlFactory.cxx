@@ -19,7 +19,7 @@
 
 #include "MenuButton.hxx"
 #include "TabItem.hxx"
-#include "SidebarToolBox.hxx"
+#include "sfx2/sidebar/SidebarToolBox.hxx"
 #include "ToolBoxBackground.hxx"
 #include "CustomImageRadioButton.hxx"
 #include <vcl/toolbox.hxx>
@@ -44,11 +44,27 @@ ImageRadioButton* ControlFactory::CreateTabItem (Window* pParentWindow)
 
 
 
-ToolBox* ControlFactory::CreateToolBox (
+SidebarToolBox* ControlFactory::CreateToolBox (
     Window* pParentWindow,
     const ResId& rResId)
 {
-    SidebarToolBox* pToolBox = new SidebarToolBox(pParentWindow, rResId);
+    SidebarToolBox* pToolBox = new SidebarToolBox(pParentWindow, rResId, NULL);
+    pToolBox->SetBorderWindow(pParentWindow);
+
+    pToolBox->Invalidate();
+
+    return pToolBox;
+}
+
+
+
+
+SidebarToolBox* ControlFactory::CreateToolBox (
+    Window* pParentWindow,
+    const ResId& rResId,
+    const cssu::Reference<css::frame::XFrame>& rxFrame)
+{
+    SidebarToolBox* pToolBox = new SidebarToolBox(pParentWindow, rResId, rxFrame);
     pToolBox->SetBorderWindow(pParentWindow);
 
     pToolBox->Invalidate();

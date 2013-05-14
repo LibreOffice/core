@@ -239,6 +239,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/sidebar/ContextChangeBroadcaster \
     sfx2/source/sidebar/ContextList \
     sfx2/source/sidebar/ControlFactory \
+    sfx2/source/sidebar/ControllerFactory \
     sfx2/source/sidebar/ControllerItem \
     sfx2/source/sidebar/CustomImageRadioButton \
     sfx2/source/sidebar/Deck \

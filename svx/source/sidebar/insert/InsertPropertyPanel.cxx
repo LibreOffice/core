@@ -22,6 +22,7 @@
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/Tools.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
+#include <sfx2/sidebar/ControllerFactory.hxx>
 
 #include <svx/dialmgr.hxx>
 #include <svtools/miscopt.hxx>
@@ -39,6 +40,7 @@
 using namespace css;
 using namespace cssu;
 using ::rtl::OUString;
+using ::sfx2::sidebar::SidebarToolBox;
 
 
 namespace svx { namespace sidebar {
@@ -51,19 +53,16 @@ InsertPropertyPanel::InsertPropertyPanel (
         mpStandardShapesBackground(sfx2::sidebar::ControlFactory::CreateToolBoxBackground(this)),
         mpStandardShapesToolBox(sfx2::sidebar::ControlFactory::CreateToolBox(
                 mpStandardShapesBackground.get(),
-                SVX_RES(TB_INSERT_STANDARD))),
+                SVX_RES(TB_INSERT_STANDARD),
+                rxFrame)),
         mpCustomShapesBackground(sfx2::sidebar::ControlFactory::CreateToolBoxBackground(this)),
         mpCustomShapesToolBox(sfx2::sidebar::ControlFactory::CreateToolBox(
                 mpCustomShapesBackground.get(),
-                SVX_RES(TB_INSERT_CUSTOM))),
-        maControllers(),
+                SVX_RES(TB_INSERT_CUSTOM),
+                rxFrame)),
         mxFrame(rxFrame)
 {
-    SetupToolBox(*mpStandardShapesToolBox);
-    SetupToolBox(*mpCustomShapesToolBox);
     FreeResource();
-
-    UpdateIcons();
 
     mpStandardShapesToolBox->Show();
     mpCustomShapesToolBox->Show();
@@ -80,17 +79,6 @@ InsertPropertyPanel::InsertPropertyPanel (
 
 InsertPropertyPanel::~InsertPropertyPanel (void)
 {
-    ControllerContainer aControllers;
-    aControllers.swap(maControllers);
-    for (ControllerContainer::iterator iController(aControllers.begin()), iEnd(aControllers.end());
-         iController!=iEnd;
-         ++iController)
-    {
-        Reference<lang::XComponent> xComponent (iController->second.mxController, UNO_QUERY);
-        if (xComponent.is())
-            xComponent->dispose();
-    }
-
     // Remove window child listener.
     Window* pTopWindow = this;
     while (pTopWindow->GetParent() != NULL)
@@ -101,88 +89,6 @@ InsertPropertyPanel::~InsertPropertyPanel (void)
     mpCustomShapesToolBox.reset();
     mpStandardShapesBackground.reset();
     mpCustomShapesBackground.reset();
-}
-
-
-
-
-void InsertPropertyPanel::SetupToolBox (ToolBox& rToolBox)
-{
-    const sal_uInt16 nItemCount (rToolBox.GetItemCount());
-    for (sal_uInt16 nItemIndex=0; nItemIndex<nItemCount; ++nItemIndex)
-        CreateController(rToolBox.GetItemId(nItemIndex));
-
-    rToolBox.SetDropdownClickHdl(LINK(this, InsertPropertyPanel, DropDownClickHandler));
-    rToolBox.SetClickHdl(LINK(this, InsertPropertyPanel, ClickHandler));
-    rToolBox.SetDoubleClickHdl(LINK(this, InsertPropertyPanel, DoubleClickHandler));
-    rToolBox.SetSelectHdl(LINK(this, InsertPropertyPanel, SelectHandler));
-    rToolBox.SetActivateHdl(LINK(this, InsertPropertyPanel, ActivateToolBox));
-    rToolBox.SetDeactivateHdl(LINK(this, InsertPropertyPanel, DeactivateToolBox));
-
-    rToolBox.SetSizePixel(rToolBox.CalcWindowSizePixel());
-}
-
-
-
-
-IMPL_LINK(InsertPropertyPanel, DropDownClickHandler, ToolBox*, pToolBox)
-{
-    if (pToolBox != NULL)
-    {
-        Reference<frame::XToolbarController> xController (GetControllerForItemId(pToolBox->GetCurItemId()));
-        if (xController.is())
-        {
-            Reference<awt::XWindow> xWindow = xController->createPopupWindow();
-            if (xWindow.is() )
-                xWindow->setFocus();
-        }
-    }
-    return 1;
-}
-
-
-
-
-IMPL_LINK(InsertPropertyPanel, ClickHandler, ToolBox*, pToolBox)
-{
-    if (pToolBox == NULL)
-        return 0;
-
-    Reference<frame::XToolbarController> xController (GetControllerForItemId(pToolBox->GetCurItemId()));
-    if (xController.is())
-        xController->click();
-
-    return 1;
-}
-
-
-
-
-IMPL_LINK(InsertPropertyPanel, DoubleClickHandler, ToolBox*, pToolBox)
-{
-    if (pToolBox == NULL)
-        return 0;
-
-    Reference<frame::XToolbarController> xController (GetControllerForItemId(pToolBox->GetCurItemId()));
-    if (xController.is())
-        xController->doubleClick();
-
-    return 1;
-}
-
-
-
-
-IMPL_LINK(InsertPropertyPanel, SelectHandler, ToolBox*, pToolBox)
-{
-    if (pToolBox == NULL)
-        return 0;
-
-    Reference<frame::XToolbarController> xController (GetControllerForItemId(pToolBox->GetCurItemId()));
-    if (xController.is())
-        xController->execute((sal_Int16)pToolBox->GetModifier());
-
-    return 1;
 }
 
 
@@ -200,7 +106,8 @@ IMPL_LINK(InsertPropertyPanel, WindowEventListener, VclSimpleEvent*, pEvent)
     if (pEvent->GetId() != VCLEVENT_TOOLBOX_SELECT)
         return 1;
 
-    ToolBox* pToolBox = dynamic_cast<ToolBox*>(dynamic_cast<VclWindowEvent*>(pEvent)->GetWindow());
+    Window* pWindow = dynamic_cast<VclWindowEvent*>(pEvent)->GetWindow();
+    ToolBox* pToolBox = dynamic_cast<ToolBox*>(pWindow);
     if (pToolBox == NULL)
         return 1;
 
@@ -217,199 +124,29 @@ IMPL_LINK(InsertPropertyPanel, WindowEventListener, VclSimpleEvent*, pEvent)
     if (nId == 0)
         return 1;
 
-    // Get toolbar controller.
-    const sal_uInt16 nItemId (GetItemIdForSubToolbarName(aURL.Path));
-    Reference<frame::XSubToolbarController> xController (GetControllerForItemId(nItemId), UNO_QUERY);
+    SidebarToolBox* pSidebarToolBox = dynamic_cast<SidebarToolBox*>(mpStandardShapesToolBox.get());
+    if (pSidebarToolBox == NULL)
+        return 1;
+    sal_uInt16 nItemId (pSidebarToolBox->GetItemIdForSubToolbarName(aURL.Path));
+    if (nItemId == 0)
+    {
+        pSidebarToolBox = dynamic_cast<SidebarToolBox*>(mpCustomShapesToolBox.get());
+        if (pSidebarToolBox == NULL)
+            return 1;
+        nItemId = pSidebarToolBox->GetItemIdForSubToolbarName(aURL.Path);
+        if (nItemId == 0)
+            return 1;
+    }
+
+    Reference<frame::XSubToolbarController> xController (pSidebarToolBox->GetControllerForItemId(nItemId), UNO_QUERY);
     if ( ! xController.is())
         return 1;
 
     const OUString sCommand (pToolBox->GetItemCommand(nId));
-    ControllerContainer::iterator iController (maControllers.find(nItemId));
-    if (iController != maControllers.end())
-        iController->second.msCurrentCommand = sCommand;
     xController->functionSelected(sCommand);
 
-    const sal_Bool bBigImages (SvtMiscOptions().AreCurrentSymbolsLarge());
-    Image aImage (framework::GetImageFromURL(mxFrame, sCommand, bBigImages));
-    pToolBox->SetItemImage(iController->first, aImage);
-
     return 1;
 }
-
-
-
-
-IMPL_LINK(InsertPropertyPanel, ActivateToolBox, ToolBox*, EMPTYARG)
-{
-    return 1;
-}
-
-
-
-
-IMPL_LINK(InsertPropertyPanel, DeactivateToolBox, ToolBox*, EMPTYARG)
-{
-    return 1;
-}
-
-
-
-
-void InsertPropertyPanel::CreateController (
-    const sal_uInt16 nItemId)
-{
-    ToolBox* pToolBox = GetToolBoxForItemId(nItemId);
-    if (pToolBox != NULL)
-    {
-        ItemDescriptor aDescriptor;
-
-        const OUString sCommandName (pToolBox->GetItemCommand(nItemId));
-
-        // Create a controller for the new item.
-        aDescriptor.mxController.set(
-            static_cast<XWeak*>(::framework::CreateToolBoxController(
-                    mxFrame,
-                    pToolBox,
-                    nItemId,
-                    sCommandName)),
-            UNO_QUERY);
-        if ( ! aDescriptor.mxController.is())
-            aDescriptor.mxController.set(
-                static_cast<XWeak*>(new svt::GenericToolboxController(
-                        ::comphelper::getProcessComponentContext(),
-                        mxFrame,
-                        pToolBox,
-                        nItemId,
-                        sCommandName)),
-                UNO_QUERY);
-        if ( ! aDescriptor.mxController.is())
-            return;
-
-        // Get dispatch object for the command.
-        aDescriptor.maURL = sfx2::sidebar::Tools::GetURL(sCommandName);
-        aDescriptor.msCurrentCommand = sCommandName;
-        aDescriptor.mxDispatch = sfx2::sidebar::Tools::GetDispatch(mxFrame, aDescriptor.maURL);
-        if ( ! aDescriptor.mxDispatch.is())
-            return;
-
-        // Initialize the controller with eg a service factory.
-        Reference<lang::XInitialization> xInitialization (aDescriptor.mxController, UNO_QUERY);
-        if (xInitialization.is())
-        {
-            beans::PropertyValue aPropValue;
-            std::vector<Any> aPropertyVector;
-
-            aPropValue.Name = A2S("Frame");
-            aPropValue.Value <<= mxFrame;
-            aPropertyVector.push_back(makeAny(aPropValue));
-
-            aPropValue.Name = A2S("ServiceManager");
-            aPropValue.Value <<= ::comphelper::getProcessServiceFactory();
-            aPropertyVector.push_back(makeAny(aPropValue));
-
-            aPropValue.Name = A2S("CommandURL");
-            aPropValue.Value <<= sCommandName;
-            aPropertyVector.push_back(makeAny(aPropValue));
-
-            Sequence<Any> aArgs (comphelper::containerToSequence(aPropertyVector));
-            xInitialization->initialize(aArgs);
-        }
-
-        Reference<util::XUpdatable> xUpdatable (aDescriptor.mxController, UNO_QUERY);
-        if (xUpdatable.is())
-            xUpdatable->update();
-
-        // Add label.
-        const OUString sLabel (sfx2::sidebar::CommandInfoProvider::Instance().GetLabelForCommand(
-                sCommandName,
-                mxFrame));
-        pToolBox->SetQuickHelpText(nItemId, sLabel);
-
-        // Add item to toolbox.
-        pToolBox->EnableItem(nItemId);
-        maControllers.insert(::std::make_pair(nItemId, aDescriptor));
-    }
-}
-
-
-
-
-ToolBox* InsertPropertyPanel::GetToolBoxForItemId (const sal_uInt16 nItemId) const
-{
-    switch(nItemId)
-    {
-        case TBI_STANDARD_LINE:
-        case TBI_STANDARD_ARROW:
-        case TBI_STANDARD_RECTANGLE:
-        case TBI_STANDARD_ELLIPSE:
-        case TBI_STANDARD_TEXT:
-        case TBI_STANDARD_LINES:
-        case TBI_STANDARD_CONNECTORS:
-        case TBI_STANDARD_ARROWS:
-            return mpStandardShapesToolBox.get();
-
-        case TBI_CUSTOM_BASICS:
-        case TBI_CUSTOM_SYMBOLS:
-        case TBI_CUSTOM_ARROWS:
-        case TBI_CUSTOM_FLOWCHARTS:
-        case TBI_CUSTOM_CALLOUTS:
-        case TBI_CUSTOM_STARS:
-            return mpCustomShapesToolBox.get();
-
-        default:
-            return NULL;
-    }
-}
-
-
-
-
-Reference<frame::XToolbarController> InsertPropertyPanel::GetControllerForItemId (const sal_uInt16 nItemId) const
-{
-    ControllerContainer::const_iterator iController (maControllers.find(nItemId));
-    if (iController != maControllers.end())
-        return iController->second.mxController;
-    else
-        return NULL;
-}
-
-
-
-
-sal_uInt16 InsertPropertyPanel::GetItemIdForSubToolbarName (const OUString& rsSubToolbarName) const
-{
-    for (ControllerContainer::const_iterator iController(maControllers.begin()), iEnd(maControllers.end());
-         iController!=iEnd;
-         ++iController)
-    {
-        Reference<frame::XSubToolbarController> xSubToolbarController (iController->second.mxController, UNO_QUERY);
-        if (xSubToolbarController.is())
-            if (xSubToolbarController->getSubToolbarName().equals(rsSubToolbarName))
-                return iController->first;
-    }
-    return 0;
-}
-
-
-
-
-void InsertPropertyPanel::UpdateIcons (void)
-{
-    const sal_Bool bBigImages (SvtMiscOptions().AreCurrentSymbolsLarge());
-
-    for (ControllerContainer::iterator iController(maControllers.begin()), iEnd(maControllers.end());
-         iController!=iEnd;
-         ++iController)
-    {
-        const ::rtl::OUString sCommandURL (iController->second.msCurrentCommand);
-        Image aImage (framework::GetImageFromURL(mxFrame, sCommandURL, bBigImages));
-        ToolBox* pToolBox = GetToolBoxForItemId(iController->first);
-        if (pToolBox != NULL)
-            pToolBox->SetItemImage(iController->first, aImage);
-    }
-}
-
-
 
 
 } } // end of namespace svx::sidebar

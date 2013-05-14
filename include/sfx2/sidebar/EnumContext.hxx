@@ -125,6 +125,9 @@ public:
     sal_Int32 GetCombinedContext_DI(void) const;
 
     const ::rtl::OUString& GetApplicationName (void) const;
+    Application GetApplication (void) const;
+    Application GetApplication_DI (void) const;
+
     const ::rtl::OUString& GetContextName (void) const;
 
     bool operator == (const EnumContext aOther);

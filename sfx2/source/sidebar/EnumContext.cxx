@@ -82,23 +82,39 @@ sal_Int32 EnumContext::GetCombinedContext (void) const
 
 sal_Int32 EnumContext::GetCombinedContext_DI (void) const
 {
-    switch (meApplication)
-    {
-        case Application_Draw:
-        case Application_Impress:
-            return CombinedEnumContext(Application_DrawImpress, meContext);
+    return CombinedEnumContext(GetApplication_DI(), meContext);
+}
 
-        case Application_Writer:
-        case Application_WriterGlobal:
-        case Application_WriterWeb:
-        case Application_WriterXML:
-        case Application_WriterForm:
-        case Application_WriterReport:
-            return CombinedEnumContext(Application_WriterVariants, meContext);
 
-        default:
-            return CombinedEnumContext(meApplication, meContext);
-    }
+
+
+EnumContext::Application EnumContext::GetApplication_DI (void) const
+{
+     switch (meApplication)
+     {
+         case Application_Draw:
+         case Application_Impress:
+            return Application_DrawImpress;
+
+         case Application_Writer:
+         case Application_WriterGlobal:
+         case Application_WriterWeb:
+         case Application_WriterXML:
+         case Application_WriterForm:
+         case Application_WriterReport:
+             return Application_WriterVariants;
+
+         default:
+             return meApplication;
+     }
+}
+
+
+
+
+EnumContext::Application EnumContext::GetApplication (void) const
+{
+    return meApplication;
 }
 
 

@@ -132,10 +132,6 @@ IMPL_LINK(ToolBoxBackground, WindowEventHandler, VclWindowEvent*, pEvent)
                     Hide();
                 break;
 
-            case SFX_HINT_DYING:
-                doLazyDelete();
-                break;
-
             default:
                 break;
         }

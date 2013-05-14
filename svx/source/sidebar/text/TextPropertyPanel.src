@@ -149,7 +149,6 @@ Control RID_SIDEBAR_TEXT_PANEL
         Pos = MAP_APPFONT (X3, THIRD_LINE_Y) ;
         Size = MAP_APPFONT (TOOLBOX_ITEM_DD_WIDTH ,TOOLBOX_ITEM_HEIGHT ) ;
         TabStop = TRUE ;
-        Text = "Font Color" ;
         ItemList =
         {
             ToolBoxItem
@@ -158,6 +157,24 @@ Control RID_SIDEBAR_TEXT_PANEL
                 HelpID = HID_PPROPERTYPANEL_TEXT_TBI_FONT_COLOR;
                 DropDown = TRUE ;
                 Command = ".uno:Color";
+            };
+        };
+    };
+    ToolBox TB_FONTCOLOR_SW
+    {
+        HelpID = HID_PPROPERTYPANEL_TEXT_TBX_FONT_COLOR;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT (X3, THIRD_LINE_Y) ;
+        Size = MAP_APPFONT (TOOLBOX_ITEM_DD_WIDTH ,TOOLBOX_ITEM_HEIGHT ) ;
+        TabStop = TRUE ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = TBI_FONTCOLOR ;
+                HelpID = HID_PPROPERTYPANEL_TEXT_TBI_FONT_COLOR;
+                DropDown = TRUE ;
+                Command = ".uno:FontColor";
             };
         };
     };
@@ -177,7 +194,7 @@ Control RID_SIDEBAR_TEXT_PANEL
                 Identifier = TBI_HIGHLIGHT ;
                 HelpID = HID_PPROPERTYPANEL_TEXT_TBI_HIGHLIGHT_COLOR;
                 DropDown = TRUE ;
-                Command = ".uno:CharacterBackgroundPattern";
+                Command = ".uno:BackColor";
             };
         };
     };

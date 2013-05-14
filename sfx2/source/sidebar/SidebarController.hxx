@@ -165,11 +165,13 @@ private:
     cssu::Reference<css::ui::XUIElement> CreateUIElement (
         const cssu::Reference<css::awt::XWindowPeer>& rxWindow,
         const ::rtl::OUString& rsImplementationURL,
-        const bool bWantsCanvas);
+        const bool bWantsCanvas,
+        const Context& rContext);
     SharedPanel CreatePanel (
         const ::rtl::OUString& rsPanelId,
         ::Window* pParentWindow,
-        const bool bIsInitiallyExpanded);
+        const bool bIsInitiallyExpanded,
+        const Context& rContext);
     void SwitchToDeck (
         const DeckDescriptor& rDeckDescriptor,
         const Context& rContext);

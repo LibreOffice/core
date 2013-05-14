@@ -30,11 +30,11 @@
 #define TB_FONT                 4
 #define TB_INCREASE_DECREASE    5
 #define TB_FONTCOLOR            6
-#define TB_SCRIPT_SW            7
+#define TB_FONTCOLOR_SW         7
 #define TB_HIGHLIGHT            8
 #define TB_SPACING              9
 #define TB_SCRIPT               10
-
+#define TB_SCRIPT_SW            11
 
 #define TBI_FONTCOLOR           50
 #define TBI_BOLD                51

@@ -39,7 +39,9 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <sfx2/sidebar/ControlFactory.hxx>
+#include <sfx2/sidebar/ControllerFactory.hxx>
 #include <sfx2/sidebar/Theme.hxx>
+#include <sfx2/sidebar/SidebarToolBox.hxx>
 #include "sfx2/imagemgr.hxx"
 #include <svtools/ctrltool.hxx>
 #include <svtools/unitconv.hxx>
@@ -86,36 +88,6 @@ namespace
     }
 } // end of anonymous namespace
 
-PopupControl* TextPropertyPanel::CreateFontColorPopupControl (PopupContainer* pParent)
-{
-    const ResId aResId(SVX_RES(STR_AUTOMATICE));
-
-    return new ColorControl(
-        pParent,
-        mpBindings,
-        SVX_RES(RID_POPUPPANEL_TEXTPAGE_FONT_COLOR),
-        SVX_RES(VS_FONT_COLOR),
-        ::boost::bind(GetAutomaticColor),
-        ::boost::bind(&TextPropertyPanel::SetFontColor, this, _1,_2),
-        pParent,
-        &aResId);
-}
-
-PopupControl* TextPropertyPanel::CreateBrushColorPopupControl (PopupContainer* pParent)
-{
-    const ResId aResId(SVX_RES(STR_AUTOMATICE));
-
-    return new ColorControl(
-        pParent,
-        mpBindings,
-        SVX_RES(RID_POPUPPANEL_TEXTPAGE_FONT_COLOR),
-        SVX_RES(VS_FONT_COLOR),
-        ::boost::bind(GetAutomaticColor),
-        ::boost::bind(&TextPropertyPanel::SetBrushColor, this, _1,_2),
-        pParent,
-        &aResId);
-}
-
 long TextPropertyPanel::GetSelFontSize()
 {
     long nH = 240;
@@ -129,7 +101,8 @@ long TextPropertyPanel::GetSelFontSize()
 TextPropertyPanel* TextPropertyPanel::Create (
     Window* pParent,
     const cssu::Reference<css::frame::XFrame>& rxFrame,
-    SfxBindings* pBindings)
+    SfxBindings* pBindings,
+    const ::sfx2::sidebar::EnumContext& rContext)
 {
     if (pParent == NULL)
         throw lang::IllegalArgumentException(A2S("no parent Window given to TextPropertyPanel::Create"), NULL, 0);
@@ -141,7 +114,8 @@ TextPropertyPanel* TextPropertyPanel::Create (
     return new TextPropertyPanel(
         pParent,
         rxFrame,
-        pBindings);
+        pBindings,
+        rContext);
 }
 
 
@@ -153,7 +127,8 @@ TextPropertyPanel* TextPropertyPanel::Create (
 TextPropertyPanel::TextPropertyPanel (
     Window* pParent,
     const cssu::Reference<css::frame::XFrame>& rxFrame,
-    SfxBindings* pBindings)
+    SfxBindings* pBindings,
+    const ::sfx2::sidebar::EnumContext& rContext)
     :   Control(pParent, SVX_RES(RID_SIDEBAR_TEXT_PANEL)),
         mpFontNameBox (new SvxSBFontNameBox(this, SVX_RES(CB_SBFONT_FONT))),
         maFontSizeBox       (this, SVX_RES(MB_SBFONT_FONTSIZE)),
@@ -180,12 +155,15 @@ TextPropertyPanel::TextPropertyPanel (
         mpToolBoxFontColorBackground(ControlFactory::CreateToolBoxBackground(this)),
         mpToolBoxFontColor(ControlFactory::CreateToolBox(
                 mpToolBoxFontColorBackground.get(),
-                SVX_RES(TB_FONTCOLOR))),
+                rContext.GetApplication_DI() == sfx2::sidebar::EnumContext::Application_WriterVariants
+                    ? SVX_RES(TB_FONTCOLOR_SW)
+                    : SVX_RES(TB_FONTCOLOR),
+                rxFrame)),
         mpToolBoxHighlightBackground(ControlFactory::CreateToolBoxBackground(this)),
         mpToolBoxHighlight(ControlFactory::CreateToolBox(
                 mpToolBoxHighlightBackground.get(),
-                SVX_RES(TB_HIGHLIGHT))),
-
+                SVX_RES(TB_HIGHLIGHT),
+                rxFrame)),
         mpFontColorUpdater(),
         mpHighlightUpdater(),
 
@@ -196,12 +174,10 @@ TextPropertyPanel::TextPropertyPanel (
         maUnderlineControl  (SID_ATTR_CHAR_UNDERLINE,   *pBindings, *this, A2S("Underline"),    rxFrame),
         maStrikeControl     (SID_ATTR_CHAR_STRIKEOUT,   *pBindings, *this, A2S("Strikeout"),    rxFrame),
         maShadowControl     (SID_ATTR_CHAR_SHADOWED,    *pBindings, *this, A2S("Shadowed"),     rxFrame),
-        maFontColorControl  (SID_ATTR_CHAR_COLOR,       *pBindings, *this, A2S("Color"),        rxFrame),
         maScriptControlSw   (SID_ATTR_CHAR_ESCAPEMENT,  *pBindings, *this, A2S("Escapement"),   rxFrame),
         maSuperScriptControl(SID_SET_SUPER_SCRIPT,      *pBindings, *this, A2S("SuperScript"),  rxFrame),
         maSubScriptControl  (SID_SET_SUB_SCRIPT,        *pBindings, *this, A2S("SubScript"),    rxFrame),
         maSpacingControl    (SID_ATTR_CHAR_KERNING,     *pBindings, *this, A2S("Spacing"),      rxFrame),
-        maHighlightControl  (SID_ATTR_BRUSH_CHAR, *pBindings, *this, A2S("CharacterBackgroundPattern"),rxFrame),
         maSDFontGrow        (SID_GROW_FONT_SIZE,        *pBindings, *this, A2S("Grow"),         rxFrame),
         maSDFontShrink      (SID_SHRINK_FONT_SIZE,      *pBindings, *this, A2S("Shrink"),       rxFrame),
 
@@ -211,14 +187,12 @@ TextPropertyPanel::TextPropertyPanel (
 
         maCharSpacePopup(this, ::boost::bind(&TextPropertyPanel::CreateCharacterSpacingControl, this, _1)),
         maUnderlinePopup(this, ::boost::bind(&TextPropertyPanel::CreateUnderlinePopupControl, this, _1)),
-        maFontColorPopup(this, ::boost::bind(&TextPropertyPanel::CreateFontColorPopupControl, this, _1)),
-        maBrushColorPopup(this, ::boost::bind(&TextPropertyPanel::CreateBrushColorPopupControl, this, _1)),
-
         mxFrame(rxFrame),
         maContext(),
         mpBindings(pBindings)
 {
     Initialize();
+
     FreeResource();
 }
 
@@ -358,10 +332,8 @@ void TextPropertyPanel::Initialize (void)
     SetupToolboxItems();
     InitToolBoxIncDec();
     InitToolBoxFont();
-    InitToolBoxFontColor();
     InitToolBoxScript();
     InitToolBoxSpacing();
-    InitToolBoxHighlight();
 
 #ifdef HAS_IA2
     mpFontNameBox->SetAccRelationLabeledBy(&mpFontNameBox);
@@ -386,27 +358,13 @@ void TextPropertyPanel::Initialize (void)
     mbPostureAvailable = true;
     mbWeightAvailable = true;
     meUnderline = UNDERLINE_NONE;
-    meUnderlineColor = COL_AUTO;   //
-    maColor = COL_BLACK;
-    mbColorAvailable = true;
-    maBackColor = COL_AUTO;
-    mbBackColorAvailable = true;
+    meUnderlineColor = COL_AUTO;
     meEscape = SVX_ESCAPEMENT_OFF;
     mbSuper = false;
     mbSub = false;
     mbKernAvailable = true;
     mbKernLBAvailable = true;
     mlKerning = 0;
-    mpFontColorUpdater.reset(new ToolboxButtonColorUpdater(
-            SID_ATTR_CHAR_COLOR,
-            TBI_FONTCOLOR,
-            mpToolBoxFontColor.get(),
-            TBX_UPDATER_MODE_CHAR_COLOR_NEW));
-    mpHighlightUpdater.reset(new ToolboxButtonColorUpdater(
-            SID_ATTR_BRUSH_CHAR,
-            TBI_HIGHLIGHT,
-            mpToolBoxHighlight.get(),
-            TBX_UPDATER_MODE_CHAR_COLOR_NEW));
 
     //set handler
     mpFontNameBox->SetBindings(mpBindings);
@@ -460,17 +418,6 @@ void TextPropertyPanel::InitToolBoxIncDec()
 
 
 
-void TextPropertyPanel::InitToolBoxFontColor()
-{
-    Size aTbxSize( mpToolBoxFontColor->CalcWindowSizePixel() );
-    mpToolBoxFontColor->SetOutputSizePixel( aTbxSize );
-    mpToolBoxFontColor->SetItemBits( TBI_FONTCOLOR, mpToolBoxFontColor->GetItemBits( TBI_FONTCOLOR ) | TIB_DROPDOWNONLY );
-
-    Link aLink = LINK(this, TextPropertyPanel, ToolBoxFontColorDropHdl);
-    mpToolBoxFontColor->SetDropdownClickHdl ( aLink );
-    mpToolBoxFontColor->SetSelectHdl ( aLink );
-
-}
 void TextPropertyPanel::InitToolBoxScript()
 {
     Size aTbxSize( mpToolBoxScriptSw->CalcWindowSizePixel() );
@@ -495,16 +442,6 @@ void TextPropertyPanel::InitToolBoxSpacing()
     mpToolBoxSpacing->SetDropdownClickHdl ( aLink );
     mpToolBoxSpacing->SetSelectHdl( aLink );
 }
-void TextPropertyPanel::InitToolBoxHighlight()
-{
-    Size aTbxSize( mpToolBoxHighlight->CalcWindowSizePixel() );
-    mpToolBoxHighlight->SetOutputSizePixel( aTbxSize );
-    mpToolBoxHighlight->SetItemBits( TBI_HIGHLIGHT, mpToolBoxHighlight->GetItemBits( TBI_HIGHLIGHT ) | TIB_DROPDOWNONLY );
-
-    Link aLink = LINK(this, TextPropertyPanel, ToolBoxHighlightDropHdl);
-    mpToolBoxHighlight->SetDropdownClickHdl ( aLink );
-    mpToolBoxHighlight->SetSelectHdl( aLink );
-}
 
 
 
@@ -520,7 +457,6 @@ void TextPropertyPanel::SetupToolboxItems (void)
     maStrikeControl.SetupToolBoxItem(*mpToolBoxFont, TBI_STRIKEOUT);
     maShadowControl.SetupToolBoxItem(*mpToolBoxFont, TBI_SHADOWED);
 
-    maFontColorControl.SetupToolBoxItem(*mpToolBoxFontColor, TBI_FONTCOLOR);
     //for sw
     maSuperScriptControl.SetupToolBoxItem(*mpToolBoxScriptSw, TBI_SUPER_SW);
     maSubScriptControl.SetupToolBoxItem(*mpToolBoxScriptSw, TBI_SUB_SW);
@@ -528,7 +464,6 @@ void TextPropertyPanel::SetupToolboxItems (void)
     maSuperScriptControl.SetupToolBoxItem(*mpToolBoxScript, TBI_SUPER);
     maSubScriptControl.SetupToolBoxItem(*mpToolBoxScript, TBI_SUB);
     maSpacingControl.SetupToolBoxItem(*mpToolBoxSpacing, TBI_SPACING);
-    maHighlightControl.SetupToolBoxItem(*mpToolBoxHighlight, TBI_HIGHLIGHT);
 }
 
 
@@ -792,22 +727,6 @@ IMPL_LINK(TextPropertyPanel, ToolBoxUnderlineClickHdl, ToolBox*, pToolBox)
 
 
 
-IMPL_LINK(TextPropertyPanel, ToolBoxFontColorDropHdl,ToolBox*, pToolBox)
-{
-    const sal_uInt16 nId = pToolBox->GetCurItemId();
-    if(nId == TBI_FONTCOLOR)
-    {
-        pToolBox->SetItemDown( nId, true );
-
-        maFontColorPopup.Show(*pToolBox);
-        maFontColorPopup.SetCurrentColor(maColor, mbColorAvailable);
-    }
-    return 0;
-}
-
-
-
-
 IMPL_LINK(TextPropertyPanel, ToolBoxSwScriptSelectHdl, ToolBox*, pToolBox)
 {
     const sal_uInt16 nId = pToolBox->GetCurItemId();
@@ -870,21 +789,6 @@ IMPL_LINK(TextPropertyPanel, ToolBoxScriptSelectHdl, ToolBox*, pToolBox)
     return 0;
 }
 
-
-
-
-IMPL_LINK(TextPropertyPanel, ToolBoxHighlightDropHdl, ToolBox*, pToolBox)
-{
-    const sal_uInt16 nId = pToolBox->GetCurItemId();
-    if(nId == TBI_HIGHLIGHT)
-    {
-        pToolBox->SetItemDown( nId, true );
-        maBrushColorPopup.Show(*pToolBox);
-        maBrushColorPopup.SetCurrentColor(maBackColor, mbBackColorAvailable);
-
-    }
-    return 0;
-}
 
 
 
@@ -1081,44 +985,6 @@ void TextPropertyPanel::NotifyItemUpdate (
                     : STATE_NOCHECK);
             break;
 
-        case SID_ATTR_CHAR_COLOR:
-            if( eState >= SFX_ITEM_DEFAULT && pState->ISA(SvxColorItem))
-            {
-                const SvxColorItem* pItem =  (const SvxColorItem*)pState;
-                maColor = pItem->GetValue();
-                mbColorAvailable = true;
-                if (mpFontColorUpdater)
-                    mpFontColorUpdater->Update(maColor);
-            }
-            else
-            {
-                mbColorAvailable = false;
-                maColor.SetColor(COL_AUTO);
-                if (mpFontColorUpdater)
-                    mpFontColorUpdater->Update(maColor);
-            }
-            mpToolBoxFontColor->EnableItem(TBI_FONTCOLOR, bIsEnabled);
-            break;
-
-        case SID_ATTR_BRUSH_CHAR:
-            if( eState >= SFX_ITEM_DEFAULT && pState->ISA(SvxBrushItem))
-            {
-                const SvxBrushItem* pItem =  (const SvxBrushItem*)pState;
-                maBackColor = pItem->GetColor();
-                mbBackColorAvailable = true;
-                if (mpHighlightUpdater)
-                    mpHighlightUpdater->Update(maBackColor);
-            }
-            else
-            {
-                mbBackColorAvailable = false;
-                maBackColor.SetColor(COL_AUTO);
-                if (mpHighlightUpdater)
-                    mpHighlightUpdater->Update(maBackColor);
-            }
-            mpToolBoxHighlight->EnableItem(TBI_HIGHLIGHT, bIsEnabled);
-            break;
-
         case SID_ATTR_CHAR_ESCAPEMENT:
         {
             bool bIsItemEnabled (true);
@@ -1292,9 +1158,6 @@ void TextPropertyPanel::UpdateItem (const sal_uInt16 nSlotId)
         case SID_ATTR_CHAR_SHADOWED:
             maShadowControl.RequestUpdate();
             break;
-        case SID_ATTR_CHAR_COLOR:
-            maFontColorControl.RequestUpdate();
-            break;
         case SID_ATTR_CHAR_ESCAPEMENT:
             maScriptControlSw.RequestUpdate();
             break;
@@ -1306,9 +1169,6 @@ void TextPropertyPanel::UpdateItem (const sal_uInt16 nSlotId)
             break;
         case SID_ATTR_CHAR_KERNING:
             maSpacingControl.RequestUpdate();
-            break;
-        case SID_ATTR_BRUSH_CHAR:
-            maHighlightControl.RequestUpdate();
             break;
         case SID_GROW_FONT_SIZE:
             maSDFontGrow.RequestUpdate();
@@ -1322,24 +1182,6 @@ void TextPropertyPanel::UpdateItem (const sal_uInt16 nSlotId)
 
 
 
-
-void TextPropertyPanel::SetFontColor (
-    const String& /*rsColorName*/,
-    const Color aColor)
-{
-    SvxColorItem aColorItem(aColor, SID_ATTR_CHAR_COLOR);
-    mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_COLOR, SFX_CALLMODE_RECORD, &aColorItem, 0L);
-    maColor = aColor;
-}
-
-void TextPropertyPanel::SetBrushColor (
-    const String& /*rsColorName*/,
-    const Color aColor)
-{
-    SvxBrushItem aBrushItem(aColor, SID_ATTR_BRUSH_CHAR);
-    mpBindings->GetDispatcher()->Execute(SID_ATTR_BRUSH_CHAR, SFX_CALLMODE_RECORD, &aBrushItem, 0L);
-    maBackColor = aColor;
-}
 
 Color& TextPropertyPanel::GetUnderlineColor()
 {

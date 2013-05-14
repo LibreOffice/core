@@ -19,21 +19,34 @@
 #define SFX_SIDEBAR_CONTROL_FACTORY_HXX
 
 #include <sfx2/dllapi.h>
+#include <sfx2/sidebar/SidebarToolBox.hxx>
 #include <vcl/button.hxx>
-
+#include <com/sun/star/frame/XFrame.hpp>
 class ToolBox;
 
 namespace sfx2 { namespace sidebar {
 
 class ToolBoxBackground;
 
-
 class SFX2_DLLPUBLIC ControlFactory
 {
 public:
     static CheckBox* CreateMenuButton (Window* pParentWindow);
     static ImageRadioButton* CreateTabItem (Window* pParentWindow);
-    static ToolBox* CreateToolBox (Window* pParentWindow, const ResId& rResId);
+
+    /** Create a tool box that does *not* handle its items.
+    */
+    static SidebarToolBox* CreateToolBox (
+        Window* pParentWindow,
+        const ResId& rResId);
+
+    /** Create a tool box that *does* handle its items.
+    */
+    static SidebarToolBox* CreateToolBox (
+        Window* pParentWindow,
+        const ResId& rResId,
+        const ::com::sun::star::uno::Reference<com::sun::star::frame::XFrame>& rxFrame);
+
     static Window* CreateToolBoxBackground (Window* pParentWindow);
     static ImageRadioButton* CreateCustomImageRadionButton(
         Window* pParentWindow,
