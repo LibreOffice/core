@@ -50,7 +50,7 @@ CControlCommandResult* SAL_CALL CControlCommand::handleRequest( CControlCommandR
     // redirect the request to the next element
     // so the base class implementation has to do it
 
-    OSL_ENSURE( pRequest, "inavlid parameter" );
+    OSL_ENSURE( pRequest, "invalid parameter" );
 
     CControlCommandResult* result;
     CControlCommand* nextCommand;
@@ -206,7 +206,7 @@ void SAL_CALL CLabelControlCommand::exec( CFilePickerState* aFilePickerState )
 
 CControlCommandResult* SAL_CALL CLabelControlCommand::handleRequest( CControlCommandRequest* aRequest )
 {
-    OSL_ENSURE( aRequest, "inavlid parameter" );
+    OSL_ENSURE( aRequest, "invalid parameter" );
 
     CControlCommandResult* result;
     CControlCommand* nextCommand;

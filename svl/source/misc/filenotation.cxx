@@ -125,7 +125,7 @@ namespace svt
             case N_URL: return m_sFileURL;
         }
 
-        OSL_FAIL("OFileNotation::get: inavlid enum value!");
+        OSL_FAIL("OFileNotation::get: invalid enum value!");
         return OUString();
     }
 

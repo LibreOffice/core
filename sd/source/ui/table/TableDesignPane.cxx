@@ -617,7 +617,7 @@ struct TableStyleSettings
 
 static void FillCellInfoVector( const Reference< XIndexAccess >& xTableStyle, CellInfoVector& rVector )
 {
-    DBG_ASSERT( xTableStyle.is() && (xTableStyle->getCount() == sdr::table::style_count ), "sd::FillCellInfoVector(), inavlid table style!" );
+    DBG_ASSERT( xTableStyle.is() && (xTableStyle->getCount() == sdr::table::style_count ), "sd::FillCellInfoVector(), invalid table style!" );
     if( xTableStyle.is() ) try
     {
         rVector.resize( sdr::table::style_count );

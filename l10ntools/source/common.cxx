@@ -94,7 +94,7 @@ void writeUsage(const OString& rName, const OString& rFileType)
         << " FileIn:   Source files (" << rFileType.getStr() << ")\n"
         << " FileOut:  Destination file (*.*)\n"
         << " DataBase: Mergedata (*.po)\n"
-        << " Lang: Restrict the handled languag; one element of\n"
+        << " Lang: Restrict the handled language; one element of\n"
         << " (de, en-US, ...) or all\n";
 }
 
@@ -116,7 +116,7 @@ void writePoEntry(
         }
         else
         {
-            std::cerr << rExecutable << " warning: inavlid po attributes extracted from " <<  rSourceFile << "\n";
+            std::cerr << rExecutable << " warning: invalid po attributes extracted from " <<  rSourceFile << "\n";
             if(aException == PoEntry::NOGROUPID)
             {
                 std::cerr << "No groupID specified!\n";
