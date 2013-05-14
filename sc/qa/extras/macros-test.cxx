@@ -179,6 +179,10 @@ void ScMacrosTest::testVba()
             OUString("Workbooks."),
             OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
+        {
+            OUString("Names."),
+            OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
+        },
     };
     OUString sTempDir;
     OUString sTempDirURL;
