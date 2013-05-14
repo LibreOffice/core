@@ -37,6 +37,7 @@ public:
         Application_WriterWeb,
         Application_WriterXML,
         Application_WriterForm,
+        Application_WriterReport,
         Application_Calc,
         Application_Draw,
         Application_Impress,

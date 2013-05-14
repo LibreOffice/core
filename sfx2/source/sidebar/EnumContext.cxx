@@ -92,6 +92,8 @@ sal_Int32 EnumContext::GetCombinedContext_DI (void) const
         case Application_WriterGlobal:
         case Application_WriterWeb:
         case Application_WriterXML:
+        case Application_WriterForm:
+        case Application_WriterReport:
             return CombinedEnumContext(Application_WriterVariants, meContext);
 
         default:
@@ -158,6 +160,7 @@ void EnumContext::ProvideApplicationContainers (void)
         AddEntry(A2S("com.sun.star.text.WebDocument"), EnumContext::Application_WriterWeb);
         AddEntry(A2S("com.sun.star.xforms.XMLFormDocument"), EnumContext::Application_WriterXML);
         AddEntry(A2S("com.sun.star.sdb.FormDesign"), EnumContext::Application_WriterForm);
+        AddEntry(A2S("com.sun.star.sdb.TextReportDesign"), EnumContext::Application_WriterReport);
         AddEntry(A2S("com.sun.star.sheet.SpreadsheetDocument"), EnumContext::Application_Calc);
         AddEntry(A2S("com.sun.star.drawing.DrawingDocument"), EnumContext::Application_Draw);
         AddEntry(A2S("com.sun.star.presentation.PresentationDocument"), EnumContext::Application_Impress);
