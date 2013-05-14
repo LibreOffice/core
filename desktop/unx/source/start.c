@@ -380,8 +380,10 @@ connect_pipe( rtl_uString *pPipePath )
 #endif
 
     if ( connect( fd, (struct sockaddr *)&addr, len ) < 0 )
-        return -1;
-
+    {
+        close(fd);
+        fd = -1;
+    }
     return fd;
 }
 
