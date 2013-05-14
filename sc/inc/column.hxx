@@ -474,6 +474,7 @@ public:
 
     SvtBroadcaster* GetBroadcaster( SCROW nRow );
     const SvtBroadcaster* GetBroadcaster( SCROW nRow ) const;
+    void DeleteBroadcasters( SCROW nRow1, SCROW nRow2 );
 
 private:
     void DeleteRange(

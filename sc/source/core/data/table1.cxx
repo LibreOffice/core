@@ -2168,6 +2168,14 @@ SvtBroadcaster* ScTable::GetBroadcaster( SCCOL nCol, SCROW nRow )
     return aCol[nCol].GetBroadcaster(nRow);
 }
 
+void ScTable::DeleteBroadcasters( SCCOL nCol, SCROW nRow1, SCROW nRow2 )
+{
+    if (!ValidCol(nCol))
+        return;
+
+    aCol[nCol].DeleteBroadcasters(nRow1, nRow2);
+}
+
 const SvtBroadcaster* ScTable::GetBroadcaster( SCCOL nCol, SCROW nRow ) const
 {
     if (!ValidColRow(nCol, nRow))

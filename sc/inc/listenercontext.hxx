@@ -11,14 +11,18 @@
 #define SC_LISTENERCONTEXT_HXX
 
 #include "address.hxx"
+#include "columnspanset.hxx"
+
+#include <boost/noncopyable.hpp>
 
 class ScDocument;
 
 namespace sc {
 
-class EndListeningContext
+class EndListeningContext : boost::noncopyable
 {
     ScDocument& mrDoc;
+    ColumnSpanSet maSet;
 public:
     EndListeningContext(ScDocument& rDoc);
     ScDocument& getDoc();

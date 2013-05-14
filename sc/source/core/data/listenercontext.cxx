@@ -12,6 +12,22 @@
 
 namespace sc {
 
+namespace {
+
+class PurgeAction : public ColumnSpanSet::Action
+{
+    ScDocument& mrDoc;
+public:
+    PurgeAction(ScDocument& rDoc) : mrDoc(rDoc) {}
+    virtual void execute(const ScAddress& rPos, SCROW nLength, bool bVal)
+    {
+        if (bVal)
+            mrDoc.DeleteBroadcasters(rPos, nLength);
+    };
+};
+
+}
+
 EndListeningContext::EndListeningContext(ScDocument& rDoc) : mrDoc(rDoc) {}
 
 ScDocument& EndListeningContext::getDoc()
@@ -21,10 +37,13 @@ ScDocument& EndListeningContext::getDoc()
 
 void EndListeningContext::addEmptyBroadcasterPosition(SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
+    maSet.set(nCol, nRow, nTab, true);
 }
 
 void EndListeningContext::purgeEmptyBroadcasters()
 {
+    PurgeAction aAction(mrDoc);
+    maSet.executeFromBottom(aAction);
 }
 
 }

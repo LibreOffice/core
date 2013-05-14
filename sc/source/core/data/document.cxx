@@ -2222,6 +2222,14 @@ const SvtBroadcaster* ScDocument::GetBroadcaster( const ScAddress& rPos ) const
     return maTabs[rPos.Tab()]->GetBroadcaster(rPos.Col(), rPos.Row());
 }
 
+void ScDocument::DeleteBroadcasters( const ScAddress& rTopPos, SCROW nLength )
+{
+    if (!TableExists(rTopPos.Tab()) || nLength <= 0)
+        return;
+
+    maTabs[rTopPos.Tab()]->DeleteBroadcasters(rTopPos.Col(), rTopPos.Row(), rTopPos.Row()+nLength-1);
+}
+
 bool ScDocument::TableExists( SCTAB nTab ) const
 {
     return ValidTab(nTab) && static_cast<size_t>(nTab) < maTabs.size() && maTabs[nTab];
