@@ -360,19 +360,15 @@ IMPL_LINK( SvxHyphenWordDialog, HyphenateAllHdl_Impl, Button *, EMPTYARG /*pButt
     {
         try
         {
-            uno::Reference< beans::XPropertySet >  xProp( SvxGetLinguPropertySet() );
-            const OUString aName( "IsHyphAuto" );
-            uno::Any aAny;
+            uno::Reference< linguistic2::XLinguProperties >  xProp( SvxGetLinguPropertySet() );
 
-            aAny <<= sal_True;
-            xProp->setPropertyValue( aName, aAny );
+            xProp->setIsHyphAuto( sal_True );
 
             bBusy = sal_True;
             ContinueHyph_Impl( /*nHyphPos*/nOldPos );
             bBusy = sal_False;
 
-            aAny <<= sal_False;
-            xProp->setPropertyValue( aName, aAny );
+            xProp->setIsHyphAuto( sal_False );
         }
         catch (uno::Exception &e)
         {

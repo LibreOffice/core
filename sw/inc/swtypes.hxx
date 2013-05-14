@@ -30,6 +30,7 @@
 namespace com { namespace sun { namespace star {
     namespace linguistic2{
         class XDictionaryList;
+        class XLinguProperties;
         class XSpellChecker1;
         class XHyphenator;
         class XThesaurus;
@@ -161,7 +162,7 @@ extern ResMgr* pSwResMgr;           // Is in swapp0.cxx.
 ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XThesaurus >     GetThesaurus();
 ::com::sun::star::uno::Reference<
-    ::com::sun::star::beans::XPropertySet >         GetLinguPropertySet();
+    ::com::sun::star::linguistic2::XLinguProperties > GetLinguPropertySet();
 
 // Returns the twip size of this graphic.
 SW_DLLPUBLIC Size GetGraphicSizeTwip( const Graphic&, OutputDevice* pOutDev );

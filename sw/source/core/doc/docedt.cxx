@@ -1823,7 +1823,6 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                     SwConversionArgs *pConvArgs  ) const
 {
     SwPosition* pSttPos = rPaM.Start(), *pEndPos = rPaM.End();
-    uno::Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
 
     SwSpellArgs      *pSpellArgs = 0;
     if (pConvArgs)

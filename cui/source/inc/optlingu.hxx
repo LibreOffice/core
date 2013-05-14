@@ -38,6 +38,7 @@ namespace beans{
 namespace linguistic2{
     class XDictionary;
     class XDictionaryList;
+    class XLinguProperties;
 }}}}
 
 class SvTreeListEntry;
@@ -123,7 +124,7 @@ private:
     String              sHyphSpecial;
 
     com::sun::star::uno::Reference<
-        com::sun::star::beans::XPropertySet >   xProp;
+        com::sun::star::linguistic2::XLinguProperties >     xProp;
 
     com::sun::star::uno::Reference<
         com::sun::star::linguistic2::XDictionaryList >      xDicList;

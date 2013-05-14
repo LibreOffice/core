@@ -313,7 +313,6 @@ void SwSpellIter::Start( SwEditShell *pShell, SwDocPositions eStart,
     if( GetSh() )
         return;
 
-     uno::Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
     xSpeller = ::GetSpellChecker();
     if ( xSpeller.is() )
         _Start( pShell, eStart, eEnd );

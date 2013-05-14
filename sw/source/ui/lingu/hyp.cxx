@@ -27,6 +27,7 @@
 #include <vcl/wrkwin.hxx>
 #include <linguistic/lngprops.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <swwait.hxx>
 
 #include "hyp.hxx"
@@ -54,9 +55,8 @@ SwHyphWrapper::SwHyphWrapper( SwView* pVw,
     bInSelection( bSelect ),
     bInfoBox( sal_False )
 {
-    uno::Reference< beans::XPropertySet >  xProp( GetLinguPropertySet() );
-    bAutomatic = xProp.is() ?
-            *(sal_Bool*)xProp->getPropertyValue(UPN_IS_HYPH_AUTO).getValue() : sal_False;
+    uno::Reference< linguistic2::XLinguProperties >  xProp( GetLinguPropertySet() );
+    bAutomatic = xProp.is() ? xProp->getIsHyphAuto() : sal_False;
     SetHyphen();
 }
 

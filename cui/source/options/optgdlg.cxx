@@ -1349,7 +1349,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         pLangConfig->aSysLocaleOptions.SetDatePatternsConfigString( aDatePatternsED.GetText());
 
     SfxObjectShell* pCurrentDocShell = SfxObjectShell::Current();
-    Reference< XPropertySet > xLinguProp( LinguMgr::GetLinguPropertySet(), UNO_QUERY );
+    Reference< css::linguistic2::XLinguProperties > xLinguProp = LinguMgr::GetLinguPropertySet();
     sal_Bool bCurrentDocCBChecked = aCurrentDocCB.IsChecked();
     if(aCurrentDocCB.IsEnabled())
         bLanguageCurrentDoc_Impl = bCurrentDocCBChecked;
@@ -1367,7 +1367,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
             OUString aPropName( "DefaultLocale" );
             pLangConfig->aLinguConfig.SetProperty( aPropName, aValue );
             if (xLinguProp.is())
-                xLinguProp->setPropertyValue( aPropName, aValue );
+                xLinguProp->setDefaultLocale( aLocale );
         }
         if(pCurrentDocShell)
         {
@@ -1387,7 +1387,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
             OUString aPropName( "DefaultLocale_CJK" );
             pLangConfig->aLinguConfig.SetProperty( aPropName, aValue );
             if (xLinguProp.is())
-                xLinguProp->setPropertyValue( aPropName, aValue );
+                xLinguProp->setDefaultLocale_CJK( aLocale );
         }
         if(pCurrentDocShell)
         {
@@ -1407,7 +1407,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
             OUString aPropName( "DefaultLocale_CTL" );
             pLangConfig->aLinguConfig.SetProperty( aPropName, aValue );
             if (xLinguProp.is())
-                xLinguProp->setPropertyValue( aPropName, aValue );
+                xLinguProp->setDefaultLocale_CTL( aLocale );
         }
         if(pCurrentDocShell)
         {

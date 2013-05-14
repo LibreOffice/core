@@ -270,9 +270,8 @@ void SwView::SpellStart( SvxSpellArea eWhich,
         bool bStartDone, bool bEndDone,
         SwConversionArgs *pConvArgs )
 {
-    Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
-    sal_Bool bIsWrapReverse = (!pConvArgs && xProp.is()) ?
-            *(sal_Bool*)xProp->getPropertyValue( UPN_IS_WRAP_REVERSE ).getValue() : sal_False;
+    Reference< XLinguProperties >  xProp = ::GetLinguPropertySet();
+    sal_Bool bIsWrapReverse = (!pConvArgs && xProp.is()) ? xProp->getIsWrapReverse() : sal_False;
 
     SwDocPositions eStart = DOCPOS_START;
     SwDocPositions eEnde  = DOCPOS_END;
@@ -451,13 +450,12 @@ void SwView::HyphenateDocument()
         sal_Bool bOldIdle = pVOpt->IsIdle();
         pVOpt->SetIdle( sal_False );
 
-        Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
+        Reference< XLinguProperties >  xProp( ::GetLinguPropertySet() );
 
 
         m_pWrtShell->StartUndo(UNDO_INSATTR);         // spaeter gueltig
 
-        sal_Bool bHyphSpecial = xProp.is() ?
-                *(sal_Bool*)xProp->getPropertyValue( UPN_IS_HYPH_SPECIAL ).getValue() : sal_False;
+        sal_Bool bHyphSpecial = xProp.is() ? xProp->getIsHyphSpecial() : sal_False;
         sal_Bool bSelection = ((SwCrsrShell*)m_pWrtShell)->HasSelection() ||
             m_pWrtShell->GetCrsr() != m_pWrtShell->GetCrsr()->GetNext();
         sal_Bool bOther = m_pWrtShell->HasOtherCnt() && bHyphSpecial && !bSelection;
@@ -473,9 +471,7 @@ void SwView::HyphenateDocument()
                 bOther = sal_True;
                 if (xProp.is())
                 {
-                    sal_Bool bTrue = sal_True;
-                    Any aTmp(&bTrue, ::getBooleanCppuType());
-                    xProp->setPropertyValue( UPN_IS_HYPH_SPECIAL, aTmp );
+                    xProp->setIsHyphSpecial( sal_True );
                 }
             }
             else

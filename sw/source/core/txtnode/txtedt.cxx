@@ -871,8 +871,6 @@ sal_uInt16 SwTxtNode::Spell(SwSpellArgs* pArgs)
     // Die Aehnlichkeiten zu SwTxtFrm::_AutoSpell sind beabsichtigt ...
     // ACHTUNG: Ev. Bugs in beiden Routinen fixen!
 
-    uno::Reference<beans::XPropertySet> xProp( GetLinguPropertySet() );
-
     xub_StrLen nBegin, nEnd;
 
     // modify string according to redline information and hidden text

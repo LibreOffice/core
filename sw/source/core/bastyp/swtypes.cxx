@@ -114,7 +114,7 @@ uno::Reference< linguistic2::XThesaurus >  GetThesaurus()
     return LinguMgr::GetThesaurus();
 }
 
-uno::Reference< beans::XPropertySet >  GetLinguPropertySet()
+uno::Reference< linguistic2::XLinguProperties >  GetLinguPropertySet()
 {
     return LinguMgr::GetLinguPropertySet();
 }

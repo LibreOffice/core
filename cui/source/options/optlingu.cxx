@@ -1117,7 +1117,7 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
     aLinguDicsEditPB.SetAccessibleName(sAccessibleNameDicsEdit);
     aLinguOptionsEditPB.SetAccessibleName(sAccessibleNameOptionEdit);
 
-    xProp = uno::Reference< XPropertySet >( SvxGetLinguPropertySet(), UNO_QUERY );
+    xProp = SvxGetLinguPropertySet();
     xDicList = uno::Reference< XDictionaryList >( SvxGetDictionaryList(), UNO_QUERY );
     if (xDicList.is())
     {

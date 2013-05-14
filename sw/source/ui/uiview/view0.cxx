@@ -39,6 +39,7 @@
 #include <uivwimp.hxx>
 #include <avmedia/mediaplayer.hxx>
 #include <swmodule.hxx>
+#include <com/sun/star/linguistic2/XLinguProperties.hpp>
 
 #include <sfx2/objface.hxx>
 #include <navipi.hxx>
@@ -356,7 +357,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     }
 
     sal_Bool bFlag = STATE_ON == eState;
-    uno::Reference< beans::XPropertySet >  xLngProp( ::GetLinguPropertySet() );
+    uno::Reference< linguistic2::XLinguProperties >  xLngProp( ::GetLinguPropertySet() );
 
     switch ( nSlot )
     {
@@ -503,7 +504,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
                 aCfg.SetProperty( aPropName, aVal );
 
                 if (xLngProp.is())
-                    xLngProp->setPropertyValue( aPropName, aVal );
+                    xLngProp->setIsSpellAuto( bSet );
 
                 // for the time being we do not have a specific option for grammarchecking.
                 // thus we'll use the one for spell checking...

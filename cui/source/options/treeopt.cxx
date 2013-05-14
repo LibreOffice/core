@@ -1203,7 +1203,7 @@ OfaPageResource::OfaPageResource() :
 
 SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
 {
-    Reference< XPropertySet >  xProp( SvxGetLinguPropertySet() );
+    Reference< XLinguProperties >  xProp( SvxGetLinguPropertySet() );
     SfxItemSet* pRet = 0;
     switch(nId)
     {
@@ -1267,10 +1267,8 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                         nMinTrail = 2;
             if (xProp.is())
             {
-                xProp->getPropertyValue( OUString(
-                        UPN_HYPH_MIN_LEADING) ) >>= nMinLead;
-                xProp->getPropertyValue( OUString(
-                        UPN_HYPH_MIN_TRAILING) ) >>= nMinTrail;
+                nMinLead = xProp->getHyphMinLeading();
+                nMinTrail = xProp->getHyphMinTrailing();
             }
             aHyphen.GetMinLead()  = (sal_uInt8)nMinLead;
             aHyphen.GetMinTrail() = (sal_uInt8)nMinTrail;
@@ -1300,7 +1298,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                         sal_Bool bVal = sal_False;
                         if (xProp.is())
                         {
-                            xProp->getPropertyValue( OUString( UPN_IS_SPELL_AUTO) ) >>= bVal;
+                            bVal = xProp->getIsSpellAuto();
                         }
 
                         pRet->Put(SfxBoolItem(SID_AUTOSPELL_CHECK, bVal));
