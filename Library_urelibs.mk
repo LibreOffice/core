@@ -31,6 +31,7 @@ $(eval $(call gb_Library_add_libs,urelibs,\
 	$(if $(filter $(OS),LINUX), \
 		-ldl \
 		-lpthread \
+		-lrt \
 	) \
 ))
 
