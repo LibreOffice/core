@@ -110,10 +110,14 @@
 #include <swcrsr.hxx>
 #include <SwRewriter.hxx>
 #include <globals.hrc>
+#include <app.hrc>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <swserv.hxx>
 #include <switerator.hxx>
+
+#include <vcl/GraphicNativeTransform.hxx>
+#include <vcl/GraphicNativeMetadata.hxx>
 
 extern bool bFrmDrag;
 extern bool bDDINetAttr;
@@ -367,6 +371,24 @@ namespace
         rDest.ReplaceStyles(rSrc, false);
 
         rSrcWrtShell.Copy(&rDest);
+    }
+
+    void lclCheckAndPerformRotation(Graphic& aGraphic)
+    {
+        GraphicNativeMetadata aMetadata;
+        if ( aMetadata.read(aGraphic) )
+        {
+            sal_uInt16 aRotation = aMetadata.getRotation();
+            if (aRotation != 0)
+            {
+                QueryBox aQueryBox(0, WB_YES_NO | WB_DEF_YES, SW_RES(STR_ROTATE_TO_STANDARD_ORIENTATION) );
+                if (aQueryBox.Execute() == RET_YES)
+                {
+                    GraphicNativeTransform aTransform( aGraphic );
+                    aTransform.rotate( aRotation );
+                }
+            }
+        }
     }
 }
 
@@ -1864,38 +1886,42 @@ int SwTransferable::_PasteTargetURL( TransferableDataHelper& rData,
             SwTransferable::_CheckForURLOrLNKFile( rData, sURL );
 
             //!!! check at FileSystem - only then it make sense to test graphics !!!
-            Graphic aGrf;
+            Graphic aGraphic;
             GraphicFilter &rFlt = GraphicFilter::GetGraphicFilter();
-            nRet = GRFILTER_OK == GraphicFilter::LoadGraphic( sURL, aEmptyStr, aGrf, &rFlt );
+            nRet = GRFILTER_OK == GraphicFilter::LoadGraphic( sURL, aEmptyStr, aGraphic, &rFlt );
+
             if( nRet )
             {
+                //Check and Perform rotation if needed
+                lclCheckAndPerformRotation(aGraphic);
+
                 switch( nAction )
                 {
                 case SW_PASTESDR_INSERT:
                     SwTransferable::SetSelInShell( rSh, sal_False, pPt );
-                    rSh.Insert( sURL, aEmptyStr, aGrf );
+                    rSh.Insert( sURL, aEmptyStr, aGraphic );
                     break;
 
                 case SW_PASTESDR_REPLACE:
                     if( rSh.IsObjSelected() )
                     {
-                        rSh.ReplaceSdrObj( sURL, aEmptyStr, &aGrf );
+                        rSh.ReplaceSdrObj( sURL, aEmptyStr, &aGraphic );
                         Point aPt( pPt ? *pPt : rSh.GetCrsrDocPos() );
                         SwTransferable::SetSelInShell( rSh, sal_True, &aPt );
                     }
                     else
-                        rSh.ReRead( sURL, aEmptyStr, &aGrf );
+                        rSh.ReRead( sURL, aEmptyStr, &aGraphic );
                     break;
 
                 case SW_PASTESDR_SETATTR:
                     if( rSh.IsObjSelected() )
-                        rSh.Paste( aGrf );
+                        rSh.Paste( aGraphic );
                     else if( OBJCNT_GRF == rSh.GetObjCntTypeOfSelection() )
-                        rSh.ReRead( sURL, aEmptyStr, &aGrf );
+                        rSh.ReRead( sURL, aEmptyStr, &aGraphic );
                     else
                     {
                         SwTransferable::SetSelInShell( rSh, sal_False, pPt );
-                        rSh.Insert( sURL, aEmptyStr, aGrf );
+                        rSh.Insert( sURL, aEmptyStr, aGraphic );
                     }
                     break;
                 default:
@@ -2147,7 +2173,7 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
 {
     int nRet = 0;
 
-    Graphic aGrf;
+    Graphic aGraphic;
     INetBookmark aBkmk;
     sal_Bool bCheckForGrf = sal_False, bCheckForImageMap = sal_False;
 
@@ -2155,7 +2181,7 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
     {
     case SOT_FORMAT_BITMAP:
     case SOT_FORMAT_GDIMETAFILE:
-        nRet = rData.GetGraphic( nFmt, aGrf );
+        nRet = rData.GetGraphic( nFmt, aGraphic );
         break;
 
     case SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK:
@@ -2188,7 +2214,7 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
         break;
 
     default:
-        nRet = rData.GetGraphic( nFmt, aGrf );
+        nRet = rData.GetGraphic( nFmt, aGraphic );
         break;
     }
 
@@ -2197,7 +2223,8 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
         //!!! check at FileSystem - only then it makes sense to test the graphics !!!
         GraphicFilter &rFlt = GraphicFilter::GetGraphicFilter();
         nRet = GRFILTER_OK == GraphicFilter::LoadGraphic( aBkmk.GetURL(), aEmptyStr,
-                                            aGrf, &rFlt );
+                                            aGraphic, &rFlt );
+
         if( !nRet && SW_PASTESDR_SETATTR == nAction &&
             SOT_FORMAT_FILE == nFmt &&
             // only at frame selection
@@ -2211,6 +2238,9 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
 
     if( nRet )
     {
+        //Check and Perform rotation if needed
+        lclCheckAndPerformRotation(aGraphic);
+
         String sURL;
         if( rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
             sURL = aBkmk.GetURL();
@@ -2219,18 +2249,18 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
         {
         case SW_PASTESDR_INSERT:
             SwTransferable::SetSelInShell( rSh, sal_False, pPt );
-            rSh.Insert( sURL, aEmptyStr, aGrf );
+            rSh.Insert( sURL, aEmptyStr, aGraphic );
         break;
 
         case SW_PASTESDR_REPLACE:
             if( rSh.IsObjSelected() )
             {
-                rSh.ReplaceSdrObj( sURL, aEmptyStr, &aGrf );
+                rSh.ReplaceSdrObj( sURL, aEmptyStr, &aGraphic );
                 Point aPt( pPt ? *pPt : rSh.GetCrsrDocPos() );
                 SwTransferable::SetSelInShell( rSh, sal_True, &aPt );
             }
             else
-                rSh.ReRead( sURL, aEmptyStr, &aGrf );
+                rSh.ReRead( sURL, aEmptyStr, &aGraphic );
             break;
 
         case SW_PASTESDR_SETATTR:
@@ -2247,13 +2277,13 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
                 }
             }
             else if( rSh.IsObjSelected() )
-                rSh.Paste( aGrf );
+                rSh.Paste( aGraphic );
             else if( OBJCNT_GRF == rSh.GetObjCntTypeOfSelection() )
-                rSh.ReRead( sURL, aEmptyStr, &aGrf );
+                rSh.ReRead( sURL, aEmptyStr, &aGraphic );
             else
             {
                 SwTransferable::SetSelInShell( rSh, sal_False, pPt );
-                rSh.Insert( aBkmk.GetURL(), aEmptyStr, aGrf );
+                rSh.Insert( aBkmk.GetURL(), aEmptyStr, aGraphic );
             }
             break;
         default:
