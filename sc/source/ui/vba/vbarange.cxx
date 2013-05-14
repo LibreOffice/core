@@ -2507,6 +2507,8 @@ ScVbaRange::Copy(const ::uno::Any& Destination) throw (uno::RuntimeException)
                                                 xRange->getColumn()-1,xRange->getRow()-1), uno::UNO_QUERY_THROW );
         uno::Reference< sheet::XCellRangeAddressable > xSource( mxRange, uno::UNO_QUERY);
         xMover->copyRange( xDestination->getCellAddress(), xSource->getRangeAddress() );
+        if ( ScVbaRange* pRange = getImplementation( xRange ) )
+            pRange->fireChangeEvent();
     }
     else
     {
