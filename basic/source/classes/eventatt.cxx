@@ -27,7 +27,7 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XDialog.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/awt/XDialogProvider.hpp>
+#include <com/sun/star/awt/DialogProvider.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -533,24 +533,17 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
     }
     Reference< XScriptListener > xScriptListener = new BasicScriptListener_Impl( GetSbData()->pInst->GetBasic(), xModel );
 
-    Sequence< Any > aArgs( 4 );
-    if( bDocDialog )
-    {
-       aArgs[ 0 ] <<= xModel;
-    }
-    else
-    {
-       aArgs[ 0 ] <<= uno::Reference< uno::XInterface >();
-    }
-    aArgs[ 1 ] <<= xInput;
-    aArgs[ 2 ] = aDlgLibAny;
-    aArgs[ 3 ] <<= xScriptListener;
     // Create a "living" Dialog
     Reference< XControl > xCntrl;
     try
     {
-        Reference< XDialogProvider >  xDlgProv( xMSF->createInstanceWithArguments(OUString("com.sun.star.comp.scripting.DialogProvider" ), aArgs ), UNO_QUERY );
-        xCntrl.set( xDlgProv->createDialog(OUString() ), UNO_QUERY_THROW );
+       Reference< XDialogProvider >  xDlgProv;;
+       if( bDocDialog )
+           xDlgProv = css::awt::DialogProvider::createWithModelAndListener( xContext, xModel, xInput, aDlgLibAny, xScriptListener );
+       else
+           xDlgProv = css::awt::DialogProvider::createWithModelAndListener( xContext, uno::Reference< frame::XModel >(), xInput, aDlgLibAny, xScriptListener );
+
+       xCntrl.set( xDlgProv->createDialog(OUString() ), UNO_QUERY_THROW );
        // Add dialog model to dispose vector
        Reference< XComponent > xDlgComponent( xCntrl->getModel(), UNO_QUERY );
        GetSbData()->pInst->getComponentVector().push_back( xDlgComponent );

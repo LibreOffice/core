@@ -22,6 +22,8 @@
 
 #include <com/sun/star/awt/XDialogProvider.idl>
 #include <com/sun/star/frame/XModel.idl>
+#include <com/sun/star/io/XInputStream.idl>
+#include <com/sun/star/script/XScriptListener.idl>
 
 
 
@@ -33,7 +35,13 @@ module com { module sun { module star { module awt {
  */
 service DialogProvider : com::sun::star::awt::XDialogProvider
 {
+
     createWithModel([in] com::sun::star::frame::XModel Model);
+
+    createWithModelAndListener([in] com::sun::star::frame::XModel Model,
+                     [in] com::sun::star::io::XInputStream InStream,
+                     [in] any DialogLib,
+                     [in] com::sun::star::script::XScriptListener ScriptListener);
 };
 
 
