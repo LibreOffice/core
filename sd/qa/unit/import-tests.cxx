@@ -7,139 +7,48 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sal/config.h>
-#include <unotest/filters-test.hxx>
-#include <test/bootstrapfixture.hxx>
-#include <test/xmldiff.hxx>
-#include <rtl/strbuf.hxx>
-#include <osl/file.hxx>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
+#include "sdmodeltestbase.hxx"
 
-#include <sfx2/app.hxx>
-#include <sfx2/docfilt.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/sfxmodelfactory.hxx>
 #include <svl/stritem.hxx>
-
-#include <svx/svdtext.hxx>
-#include <svx/svdotext.hxx>
-
-#include "drawdoc.hxx"
-#include "../source/ui/inc/DrawDocShell.hxx"
-
-#include <osl/process.h>
-#include <osl/thread.h>
-
-#include <string>
-#include <iostream>
-
-#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <drawinglayer/XShapeDumper.hxx>
-
 #include <editeng/editobj.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/fhgtitem.hxx>
 
-/* Implementation of Filters test */
+#include <svx/svdotext.hxx>
 
 using namespace ::com::sun::star;
 
-class SdFiltersTest
-    : public test::FiltersTest
-    , public test::BootstrapFixture
+/// Impress import filters tests.
+class SdFiltersTest : public SdModelTestBase
 {
 public:
-    SdFiltersTest();
-
-    ::sd::DrawDocShellRef loadURL( const OUString &rURL );
-    virtual bool load( const OUString &rFilter,
-        const OUString &rURL, const OUString &rUserData,
-        unsigned int nFilterFlags, unsigned int nClipboardID,
-        unsigned int nFilterVersion);
-
-    virtual void setUp();
-    virtual void tearDown();
-
-    void test();
+    void testDocumentLayout();
     void testN759180();
-    void testFdo47434();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
-    CPPUNIT_TEST(test);
+    CPPUNIT_TEST(testDocumentLayout);
     CPPUNIT_TEST(testN759180);
-    CPPUNIT_TEST(testFdo47434);
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<document::XFilter> m_xFilter;
-    uno::Reference<uno::XInterface> m_xDrawComponent;
-    void testStuff(::sd::DrawDocShellRef xDocShRef, const OString& fileNameBase);
 };
 
-#define PPTX_FORMAT_TYPE 268959811
-#define ODP_FORMAT_TYPE 285212967
+/** Test document against a reference XML dump of shapes.
 
-struct FileFormat {
-    const char* pName; const char* pFilterName; const char* pTypeName; sal_uLong nFormatType;
-};
-
-// cf. sc/qa/unit/filters-test.cxx and filters/...*.xcu to fill out.
-FileFormat aFileFormats[] = {
-    { "pptx" , "Impress MS PowerPoint 2007 XML", "MS PowerPoint 2007 XML", PPTX_FORMAT_TYPE },
-    { "odp" , "impress8", "impress8", ODP_FORMAT_TYPE },
-    { 0, 0, 0, 0 }
-};
-
-::sd::DrawDocShellRef SdFiltersTest::loadURL( const OUString &rURL )
+TODO: add info how to create the reference XML dump.
+*/
+void SdFiltersTest::testDocumentLayout()
 {
-    FileFormat *pFmt(0);
-
-    for (size_t i = 0; i < SAL_N_ELEMENTS (aFileFormats); i++)
+    struct { const char *pInput, *pDump; } aFilesToCompare[] =
     {
-        pFmt = aFileFormats + i;
-        if (pFmt->pName &&  rURL.endsWithIgnoreAsciiCaseAsciiL (pFmt->pName, strlen (pFmt->pName)))
-            break;
+        { "odp/shapes-test.odp", "xml/shapes-test_page" },
+        { "pptx/fdo47434-all.pptx", "pptx/xml/fdo47434_page" }
+    };
+
+    for ( unsigned int i = 0; i < SAL_N_ELEMENTS( aFilesToCompare ); ++i )
+    {
+        ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc( "/sd/qa/unit/data/" ) + OUString::createFromAscii( aFilesToCompare[i].pInput ) );
+        compareWithShapesDump( xDocShRef, getPathFromSrc( "/sd/qa/unit/data/" ) + OUString::createFromAscii( aFilesToCompare[i].pDump ) );
     }
-    CPPUNIT_ASSERT_MESSAGE( "missing filter info", pFmt->pName != NULL );
-
-    sal_uInt32 nFormat = 0;
-    if (pFmt->nFormatType)
-        nFormat = SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS;
-    SfxFilter* aFilter = new SfxFilter(
-        OUString::createFromAscii( pFmt->pFilterName ),
-        OUString(), pFmt->nFormatType, nFormat,
-        OUString::createFromAscii( pFmt->pTypeName ),
-        0, OUString(), OUString(), /* userdata */
-        OUString("private:factory/simpress*") );
-    aFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
-
-    ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell();
-    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ);
-    pSrcMed->SetFilter(aFilter);
-    if ( !xDocShRef->DoLoad(pSrcMed) )
-    {
-        if (xDocShRef.Is())
-            xDocShRef->DoClose();
-        CPPUNIT_ASSERT_MESSAGE( "failed to load", false );
-    }
-
-    return xDocShRef;
-}
-
-void SdFiltersTest::test()
-{
-    {
-        ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/shapes-test.odp"));
-        testStuff(xDocShRef, OUStringToOString(getPathFromSrc("/sd/qa/unit/data/xml/shapes-test_page"), RTL_TEXTENCODING_UTF8));
-    }
-    /*
-    {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/text-test.odp"));
-    testStuff(xDocShRef);
-    }*/
 }
 
 void SdFiltersTest::testN759180()
@@ -178,92 +87,6 @@ void SdFiltersTest::testN759180()
             }
         }
     }
-}
-
-void SdFiltersTest::testFdo47434()
-{
-    // The problem was the arrow that has cy < 180 and flipH = 0 is rendered incorrectly.
-    // Its height should be 1, not negative.
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/fdo47434-all.pptx"));
-    testStuff(xDocShRef, OUStringToOString(getPathFromSrc("/sd/qa/unit/data/pptx/xml/fdo47434_page"), RTL_TEXTENCODING_UTF8));
-}
-
-void SdFiltersTest::testStuff(::sd::DrawDocShellRef xDocShRef, const OString& fileNameBase)
-{
-    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
-    CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
-
-    uno::Reference<frame::XModel> xTempModel(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xTempModel.is());
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier (xTempModel, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(xDrawPagesSupplier.is());
-    uno::Reference< drawing::XDrawPages > xDrawPages = xDrawPagesSupplier->getDrawPages();
-    CPPUNIT_ASSERT(xDrawPages.is());
-
-    XShapeDumper xShapeDumper;
-    sal_Int32 nLength = xDrawPages->getCount();
-    OString aFileNameExt(".xml");
-    for (sal_Int32 i = 0; i < nLength; ++i)
-    {
-        uno::Reference<drawing::XDrawPage> xDrawPage;
-        uno::Any aAny = xDrawPages->getByIndex(i);
-        aAny >>= xDrawPage;
-        uno::Reference< drawing::XShapes > xShapes(xDrawPage, uno::UNO_QUERY_THROW);
-        OUString aString = xShapeDumper.dump(xShapes);
-        OStringBuffer aFileNameBuf(fileNameBase);
-        aFileNameBuf.append(i);
-        aFileNameBuf.append(aFileNameExt);
-
-        OString aFileName = aFileNameBuf.makeStringAndClear();
-
-        std::cout << aString << std::endl;
-        doXMLDiff(aFileName.getStr(),
-            OUStringToOString(aString, RTL_TEXTENCODING_UTF8).getStr(),
-            static_cast<int>(aString.getLength()),
-            OUStringToOString(
-                getPathFromSrc("/sd/qa/unit/data/tolerance.xml"),
-                RTL_TEXTENCODING_UTF8).getStr());
-    }
-    xDocShRef->DoClose();
-}
-
-bool SdFiltersTest::load(const OUString &rFilter, const OUString &rURL,
-    const OUString &rUserData, unsigned int nFilterFlags, unsigned int nClipboardID,
-    unsigned int nFilterVersion)
-{
-    SfxFilter aFilter(
-        rFilter,
-        OUString(), nFilterFlags, nClipboardID, OUString(), 0, OUString(),
-        rUserData, OUString() );
-    aFilter.SetVersion(nFilterVersion);
-
-    ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell();
-    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ);
-    pSrcMed->SetFilter(&aFilter);
-    bool bLoaded = xDocShRef->DoLoad(pSrcMed);
-    xDocShRef->DoClose();
-    return bLoaded;
-}
-
-SdFiltersTest::SdFiltersTest()
-{
-}
-
-void SdFiltersTest::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
-    // which is a private symbol to us, gets called
-    m_xDrawComponent =
-        getMultiServiceFactory()->createInstance(OUString("com.sun.star.comp.Draw.PresentationDocument"));
-    CPPUNIT_ASSERT_MESSAGE("no impress component!", m_xDrawComponent.is());
-}
-
-void SdFiltersTest::tearDown()
-{
-    uno::Reference< lang::XComponent >( m_xDrawComponent, uno::UNO_QUERY_THROW )->dispose();
-    test::BootstrapFixture::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdFiltersTest);
