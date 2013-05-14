@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//8yA\u003d",
+        "filename": "linguistic/source/misc2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000186
+      },
+      "writtenOn": "2013-05-14T11:03:15Z",
+      "side": 1,
+      "message": "Maybe you can use these directly too...\n\nWhat do you think?\n\nOUString aInternal( rPathPrefix + \"_internal\")",
+      "revId": "2301571729ee5c7b40fbe0c2d4c199b01a1e4cb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//8x8\u003d",
+        "filename": "linguistic/workben/sspellimp.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1000186
+      },
+      "writtenOn": "2013-05-14T11:03:15Z",
+      "side": 1,
+      "message": "too, you can put this in the constructor",
+      "revId": "2301571729ee5c7b40fbe0c2d4c199b01a1e4cb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
