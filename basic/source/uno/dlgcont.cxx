@@ -28,8 +28,8 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#include <com/sun/star/resource/XStringResourceWithStorage.hpp>
-#include <com/sun/star/resource/XStringResourceWithLocation.hpp>
+#include <com/sun/star/resource/StringResourceWithStorage.hpp>
+#include <com/sun/star/resource/StringResourceWithLocation.hpp>
 #include <com/sun/star/document/GraphicObjectResolver.hpp>
 #include "dlgcont.hxx"
 #include "sbmodule.hxx"
@@ -368,17 +368,6 @@ Reference< ::com::sun::star::resource::XStringResourcePersistence >
     sal_Bool bStorage = mxStorage.is();
     if( bStorage )
     {
-        Sequence<Any> aArgs( 5 );
-        aArgs[1] <<= bReadOnly;
-        aArgs[2] <<= aLocale;
-        aArgs[3] <<= OUString(aResourceFileNameBase);
-        aArgs[4] <<= aComment;
-
-        // TODO: Ctor
-        xRet = Reference< resource::XStringResourcePersistence >(
-             mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.resource.StringResourceWithStorage", mxContext),
-             UNO_QUERY );
-
         uno::Reference< embed::XStorage > xLibrariesStor;
         uno::Reference< embed::XStorage > xLibraryStor;
         try {
@@ -391,8 +380,6 @@ Reference< ::com::sun::star::resource::XStringResourcePersistence >
                 // TODO: Should be READWRITE with new storage concept using store() instead of storeTo()
             if ( !xLibraryStor.is() )
                 throw uno::RuntimeException();
-
-            aArgs[0] <<= xLibraryStor;
         }
         catch(const uno::Exception& )
         {
@@ -400,41 +387,15 @@ Reference< ::com::sun::star::resource::XStringResourcePersistence >
             return xRet;
         }
 
-        // TODO: Ctor
-        if( xRet.is() )
-        {
-            Reference< XInitialization > xInit( xRet, UNO_QUERY );
-            if( xInit.is() )
-                xInit->initialize( aArgs );
-        }
+        xRet = resource::StringResourceWithStorage::create(mxContext, xLibraryStor, bReadOnly, aLocale, OUString(aResourceFileNameBase), aComment);
     }
     else
     {
-        Sequence<Any> aArgs( 6 );
-
         OUString aLocation = createAppLibraryFolder( pDialogLibrary, aLibName );
-        aArgs[0] <<= aLocation;
-        aArgs[1] <<= bReadOnly;
-        aArgs[2] <<= aLocale;
-        aArgs[3] <<= OUString(aResourceFileNameBase);
-        aArgs[4] <<= aComment;
-
         // TODO: Real handler?
         Reference< task::XInteractionHandler > xDummyHandler;
-        aArgs[5] <<= xDummyHandler;
 
-        // TODO: Ctor
-        xRet = Reference< resource::XStringResourcePersistence >(
-             mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.resource.StringResourceWithLocation", mxContext),
-             UNO_QUERY );
-
-        // TODO: Ctor
-        if( xRet.is() )
-        {
-            Reference< XInitialization > xInit( xRet, UNO_QUERY );
-            if( xInit.is() )
-                xInit->initialize( aArgs );
-        }
+        xRet = resource::StringResourceWithLocation::create(mxContext, aLocation, bReadOnly, aLocale, OUString(aResourceFileNameBase), aComment, xDummyHandler);
     }
 
     return xRet;
