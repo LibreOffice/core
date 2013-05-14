@@ -257,7 +257,7 @@ void LockHelper::downgradeWriteAccess()
 
     @onerror    No error should occure.
 *//*-*************************************************************************************************************/
-LockHelper& LockHelper::getGlobalLock( comphelper::SolarMutex* pSolarMutex )
+LockHelper& LockHelper::getGlobalLock()
 {
     // Initialize static "member" only for one time!
     // Algorithm:
@@ -274,7 +274,7 @@ LockHelper& LockHelper::getGlobalLock( comphelper::SolarMutex* pSolarMutex )
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if( pLock == NULL )
         {
-            static LockHelper aLock( pSolarMutex );
+            static LockHelper aLock;
             pLock = &aLock;
         }
     }

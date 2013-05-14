@@ -89,7 +89,10 @@ class FWI_DLLPUBLIC LockHelper : public  IMutex
         //-------------------------------------------------------------------------------------------------------------
         //  something else
         //-------------------------------------------------------------------------------------------------------------
-        static LockHelper&  getGlobalLock       ( comphelper::SolarMutex* pSolarMutex = NULL );
+        static LockHelper&  getGlobalLock();
+            //TODO: this presumable should return the SolarMutex, though it
+            // actually returns some independent mutex
+
         ::osl::Mutex&       getShareableOslMutex(                                   );
 
     //-------------------------------------------------------------------------------------------------------------
