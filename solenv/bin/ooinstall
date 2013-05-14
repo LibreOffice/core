@@ -72,10 +72,6 @@ $ENV{LAST_MINOR} = 'm0';
 $ENV{OUT} = "../$ENV{'INPATH'}";
 $ENV{LOCAL_OUT} = $ENV{OUT};
 $ENV{LOCAL_COMMON_OUT} = $ENV{OUT};
-# FIXME: the following variable helps to install localizations even if some
-# files are not localized (like Japanese, Chinese wordbook), it makes
-# the installer to use the English localization of the file instead.
-$ENV{DEFAULT_TO_ENGLISH_FOR_PACKING} = 1;
 
 my @larr;
 $langs=$ENV{WITH_LANG_LIST};
