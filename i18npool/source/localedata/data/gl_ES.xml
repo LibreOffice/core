@@ -201,99 +201,99 @@
       <DaysOfWeek>
         <Day>
           <DayID>sun</DayID>
-          <DefaultAbbrvName>dom.</DefaultAbbrvName>
+          <DefaultAbbrvName>dom</DefaultAbbrvName>
           <DefaultFullName>domingo</DefaultFullName>
         </Day>
         <Day>
           <DayID>mon</DayID>
-          <DefaultAbbrvName>lun.</DefaultAbbrvName>
+          <DefaultAbbrvName>lun</DefaultAbbrvName>
           <DefaultFullName>luns</DefaultFullName>
         </Day>
         <Day>
           <DayID>tue</DayID>
-          <DefaultAbbrvName>mar.</DefaultAbbrvName>
+          <DefaultAbbrvName>mar</DefaultAbbrvName>
           <DefaultFullName>martes</DefaultFullName>
         </Day>
         <Day>
           <DayID>wed</DayID>
-          <DefaultAbbrvName>mér.</DefaultAbbrvName>
+          <DefaultAbbrvName>mér</DefaultAbbrvName>
           <DefaultFullName>mércores</DefaultFullName>
         </Day>
         <Day>
           <DayID>thu</DayID>
-          <DefaultAbbrvName>xov.</DefaultAbbrvName>
+          <DefaultAbbrvName>xov</DefaultAbbrvName>
           <DefaultFullName>xoves</DefaultFullName>
         </Day>
         <Day>
           <DayID>fri</DayID>
-          <DefaultAbbrvName>ven.</DefaultAbbrvName>
+          <DefaultAbbrvName>ven</DefaultAbbrvName>
           <DefaultFullName>venres</DefaultFullName>
         </Day>
         <Day>
           <DayID>sat</DayID>
-          <DefaultAbbrvName>sáb.</DefaultAbbrvName>
+          <DefaultAbbrvName>sáb</DefaultAbbrvName>
           <DefaultFullName>sábado</DefaultFullName>
         </Day>
       </DaysOfWeek>
       <MonthsOfYear>
         <Month>
           <MonthID>jan</MonthID>
-          <DefaultAbbrvName>xan.</DefaultAbbrvName>
+          <DefaultAbbrvName>xan</DefaultAbbrvName>
           <DefaultFullName>xaneiro</DefaultFullName>
         </Month>
         <Month>
           <MonthID>feb</MonthID>
-          <DefaultAbbrvName>feb.</DefaultAbbrvName>
+          <DefaultAbbrvName>feb</DefaultAbbrvName>
           <DefaultFullName>febreiro</DefaultFullName>
         </Month>
         <Month>
           <MonthID>mar</MonthID>
-          <DefaultAbbrvName>mar.</DefaultAbbrvName>
+          <DefaultAbbrvName>mar</DefaultAbbrvName>
           <DefaultFullName>marzo</DefaultFullName>
         </Month>
         <Month>
           <MonthID>apr</MonthID>
-          <DefaultAbbrvName>abr.</DefaultAbbrvName>
+          <DefaultAbbrvName>abr</DefaultAbbrvName>
           <DefaultFullName>abril</DefaultFullName>
         </Month>
         <Month>
           <MonthID>may</MonthID>
-          <DefaultAbbrvName>mai.</DefaultAbbrvName>
+          <DefaultAbbrvName>mai</DefaultAbbrvName>
           <DefaultFullName>maio</DefaultFullName>
         </Month>
         <Month>
           <MonthID>jun</MonthID>
-          <DefaultAbbrvName>xuñ.</DefaultAbbrvName>
+          <DefaultAbbrvName>xuñ</DefaultAbbrvName>
           <DefaultFullName>xuño</DefaultFullName>
         </Month>
         <Month>
           <MonthID>jul</MonthID>
-          <DefaultAbbrvName>xul.</DefaultAbbrvName>
+          <DefaultAbbrvName>xul</DefaultAbbrvName>
           <DefaultFullName>xullo</DefaultFullName>
         </Month>
         <Month>
           <MonthID>aug</MonthID>
-          <DefaultAbbrvName>ago.</DefaultAbbrvName>
+          <DefaultAbbrvName>ago</DefaultAbbrvName>
           <DefaultFullName>agosto</DefaultFullName>
         </Month>
         <Month>
           <MonthID>sep</MonthID>
-          <DefaultAbbrvName>set.</DefaultAbbrvName>
+          <DefaultAbbrvName>set</DefaultAbbrvName>
           <DefaultFullName>setembro</DefaultFullName>
         </Month>
         <Month>
           <MonthID>oct</MonthID>
-          <DefaultAbbrvName>out.</DefaultAbbrvName>
+          <DefaultAbbrvName>out</DefaultAbbrvName>
           <DefaultFullName>outubro</DefaultFullName>
         </Month>
         <Month>
           <MonthID>nov</MonthID>
-          <DefaultAbbrvName>nov.</DefaultAbbrvName>
+          <DefaultAbbrvName>nov</DefaultAbbrvName>
           <DefaultFullName>novembro</DefaultFullName>
         </Month>
         <Month>
           <MonthID>dec</MonthID>
-          <DefaultAbbrvName>dec.</DefaultAbbrvName>
+          <DefaultAbbrvName>dec</DefaultAbbrvName>
           <DefaultFullName>decembro</DefaultFullName>
         </Month>
       </MonthsOfYear>
