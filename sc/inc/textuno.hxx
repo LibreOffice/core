@@ -35,6 +35,8 @@
 #include "rtl/ref.hxx"
 #include "scdllapi.h"
 
+#include <boost/noncopyable.hpp>
+
 class EditEngine;
 class EditTextObject;
 class SvxEditEngineForwarder;
@@ -110,7 +112,7 @@ public:
 
 //  ScHeaderFooterTextData: shared data between sub objects of a ScHeaderFooterTextObj
 
-class ScHeaderFooterTextData
+class ScHeaderFooterTextData : boost::noncopyable
 {
 private:
     EditTextObject* mpTextObj;

@@ -200,6 +200,7 @@ ScHeaderFooterTextData::~ScHeaderFooterTextData()
 
     delete pForwarder;
     delete pEditEngine;
+    delete mpTextObj;
 }
 
 SvxTextForwarder* ScHeaderFooterTextData::GetTextForwarder()
