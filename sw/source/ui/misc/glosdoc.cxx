@@ -18,6 +18,7 @@
  */
 
 
+#include <algorithm>
 #include <memory>
 
 #include <com/sun/star/container/XNamed.hpp>
@@ -396,17 +397,6 @@ SwGlossaries::SwGlossaries()
     Description: set new path and recreate internal array
 ------------------------------------------------------------------------*/
 
-/* --------------------------------------------------
-*   #61050# double paths cause irritation - get rid of it
- * --------------------------------------------------*/
-static bool lcl_FindSameEntry(const std::vector<String*>& rDirArr, const String& rEntryURL)
-{
-    for(std::vector<String*>::const_iterator it(rDirArr.begin()); it != rDirArr.end(); ++it)
-        if( **it == rEntryURL )
-            return true;
-    return false;
-}
-
 void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
 {
     SvtPathOptions aPathOpt;
@@ -419,18 +409,18 @@ void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
         m_PathArr.clear();
 
         sal_uInt16 nTokenCount = comphelper::string::getTokenCount(m_aPath, SVT_SEARCHPATH_DELIMITER);
-        std::vector<String*> aDirArr;
+        std::vector<String> aDirArr;
         for( sal_uInt16 i = 0; i < nTokenCount; i++ )
         {
             String sPth(m_aPath.GetToken(i, SVT_SEARCHPATH_DELIMITER));
             sPth = URIHelper::SmartRel2Abs(
                 INetURLObject(), sPth, URIHelper::GetMaybeFileHdl());
 
-            if(i && lcl_FindSameEntry(aDirArr, sPth))
+            if(i && std::find(aDirArr.begin(), aDirArr.end(), sPth) != aDirArr.end())
             {
                 continue;
             }
-            aDirArr.push_back(new String(sPth));
+            aDirArr.push_back(sPth);
             if( !FStatHelper::IsFolder( sPth ) )
             {
                 if( m_sErrPath.Len() )
@@ -441,8 +431,6 @@ void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
             else
                 m_PathArr.push_back(sPth);
         }
-        for(std::vector<String*>::const_iterator it(aDirArr.begin()); it != aDirArr.end(); ++it)
-            delete *it;
 
         if(!nTokenCount ||
             (m_sErrPath.Len() && (bPathChanged || m_sOldErrPath != m_sErrPath)) )
