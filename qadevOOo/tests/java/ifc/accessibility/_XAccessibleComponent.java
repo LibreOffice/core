@@ -482,6 +482,11 @@ public class _XAccessibleComponent extends MultiMethodTest {
 
         result &= (size.Width == bounds.Width);
         result &= (size.Height == bounds.Height);
+        if (!result) {
+            log.println(
+                "bounds " + bounds.Width + "x" + bounds.Height + " vs. size "
+                + size.Width + "x" + size.Height);
+        }
 
         tRes.tested("getSize()", result);
     }
