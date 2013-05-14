@@ -27,7 +27,7 @@
 #include <com/sun/star/script/XEventAttacher2.hpp>
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/script/XAllListener.hpp>
-#include <com/sun/star/script/XInvocationAdapterFactory.hpp>
+#include <com/sun/star/script/InvocationAdapterFactory.hpp>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 
@@ -86,7 +86,7 @@ private:
 // Function to replace AllListenerAdapterService::createAllListerAdapter
 Reference< XInterface > createAllListenerAdapter
 (
-    const Reference< XInvocationAdapterFactory >& xInvocationAdapterFactory,
+    const Reference< XInvocationAdapterFactory2 >& xInvocationAdapterFactory,
     const Reference< XIdlClass >& xListenerType,
     const Reference< XAllListener >& xListener,
     const Any& Helper
@@ -98,7 +98,9 @@ Reference< XInterface > createAllListenerAdapter
        Reference< XInvocation > xInvocationToAllListenerMapper =
             (XInvocation*)new InvocationToAllListenerMapper( xListenerType, xListener, Helper );
         Type aListenerType( xListenerType->getTypeClass(), xListenerType->getName());
-        xAdapter = xInvocationAdapterFactory->createAdapter( xInvocationToAllListenerMapper, aListenerType );
+        Sequence<Type> arg2(1);
+        arg2[0] = aListenerType;
+        xAdapter = xInvocationAdapterFactory->createAdapter( xInvocationToAllListenerMapper, arg2 );
     }
     return xAdapter;
 }
@@ -209,7 +211,7 @@ sal_Bool SAL_CALL InvocationToAllListenerMapper::hasProperty(const OUString& Nam
 class EventAttacherImpl : public WeakImplHelper3 < XEventAttacher2, XInitialization, XServiceInfo >
 {
 public:
-    EventAttacherImpl( const Reference< XMultiServiceFactory >& );
+    EventAttacherImpl( const Reference< XComponentContext >& );
     ~EventAttacherImpl();
 
     // XServiceInfo
@@ -251,7 +253,7 @@ public:
 private:
     Reference<XEventListener> attachListenerForTarget(
         const Reference<XIntrospectionAccess>& xAccess,
-        const Reference<XInvocationAdapterFactory>& xInvocationAdapterFactory,
+        const Reference<XInvocationAdapterFactory2>& xInvocationAdapterFactory,
         const Reference<XAllListener>& xAllListener,
         const Any& aObject,
         const Any& aHelper,
@@ -265,24 +267,24 @@ private:
 
 private:
     Mutex                               m_aMutex;
-    Reference< XMultiServiceFactory >   m_xSMgr;
+    Reference< XComponentContext >      m_xContext;
 
     // Save Services
     Reference< XIntrospection >             m_xIntrospection;
     Reference< XIdlReflection >             m_xReflection;
     Reference< XTypeConverter >             m_xConverter;
-    Reference< XInvocationAdapterFactory >  m_xInvocationAdapterFactory;
+    Reference< XInvocationAdapterFactory2 >  m_xInvocationAdapterFactory;
 
     // needed services
     Reference< XIntrospection >             getIntrospection() throw( Exception );
     Reference< XIdlReflection >             getReflection() throw( Exception );
-    Reference< XInvocationAdapterFactory >  getInvocationAdapterService() throw( Exception );
+    Reference< XInvocationAdapterFactory2 >  getInvocationAdapterService() throw( Exception );
 };
 
 
 //*************************************************************************
-EventAttacherImpl::EventAttacherImpl( const Reference< XMultiServiceFactory >& rSMgr )
-    : m_xSMgr( rSMgr )
+EventAttacherImpl::EventAttacherImpl( const Reference< XComponentContext >& rxContext )
+    : m_xContext( rxContext )
 {
 }
 
@@ -295,7 +297,7 @@ EventAttacherImpl::~EventAttacherImpl()
 Reference< XInterface > SAL_CALL EventAttacherImpl_CreateInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( Exception )
 {
     Reference< XInterface > xRet;
-    XEventAttacher *pEventAttacher = (XEventAttacher*) new EventAttacherImpl(rSMgr);
+    XEventAttacher *pEventAttacher = (XEventAttacher*) new EventAttacherImpl( comphelper::getComponentContext(rSMgr) );
 
     if (pEventAttacher)
     {
@@ -349,7 +351,7 @@ void SAL_CALL EventAttacherImpl::initialize(const Sequence< Any >& Arguments) th
             throw IllegalArgumentException();
 
         // InvocationAdapter service ?
-        Reference< XInvocationAdapterFactory > xALAS;
+        Reference< XInvocationAdapterFactory2 > xALAS;
         pArray[i] >>= xALAS;
         if( xALAS.is() )
         {
@@ -394,7 +396,7 @@ Reference< XIntrospection > EventAttacherImpl::getIntrospection() throw( Excepti
     Guard< Mutex > aGuard( m_aMutex );
     if( !m_xIntrospection.is() )
     {
-        m_xIntrospection = Introspection::create( comphelper::getComponentContext(m_xSMgr) );
+        m_xIntrospection = Introspection::create( m_xContext );
     }
     return m_xIntrospection;
 }
@@ -406,20 +408,19 @@ Reference< XIdlReflection > EventAttacherImpl::getReflection() throw( Exception 
     Guard< Mutex > aGuard( m_aMutex );
     if( !m_xReflection.is() )
     {
-        m_xReflection = theCoreReflection::get(comphelper::getComponentContext(m_xSMgr));
+        m_xReflection = theCoreReflection::get(m_xContext);
     }
     return m_xReflection;
 }
 
 //*************************************************************************
 //*** Private helper methods ***
-Reference< XInvocationAdapterFactory > EventAttacherImpl::getInvocationAdapterService() throw( Exception )
+Reference< XInvocationAdapterFactory2 > EventAttacherImpl::getInvocationAdapterService() throw( Exception )
 {
     Guard< Mutex > aGuard( m_aMutex );
     if( !m_xInvocationAdapterFactory.is() )
     {
-        Reference< XInterface > xIFace( m_xSMgr->createInstance( OUString("com.sun.star.script.InvocationAdapterFactory") ) );
-        m_xInvocationAdapterFactory = Reference< XInvocationAdapterFactory >( xIFace, UNO_QUERY );
+        m_xInvocationAdapterFactory = InvocationAdapterFactory::create(m_xContext);
     }
     return m_xInvocationAdapterFactory;
 }
@@ -432,7 +433,7 @@ Reference< XTypeConverter > EventAttacherImpl::getConverter() throw( Exception )
     Guard< Mutex > aGuard( m_aMutex );
     if( !m_xConverter.is() )
     {
-        m_xConverter = Converter::create(comphelper::getComponentContext(m_xSMgr));
+        m_xConverter = Converter::create(m_xContext);
     }
     return m_xConverter;
 }
@@ -582,7 +583,7 @@ Reference< XEventListener > EventAttacherImpl::attachListener
     if( !xObject.is() || !AllListener.is() )
         throw IllegalArgumentException();
 
-    Reference< XInvocationAdapterFactory > xInvocationAdapterFactory = getInvocationAdapterService();
+    Reference< XInvocationAdapterFactory2 > xInvocationAdapterFactory = getInvocationAdapterService();
     if( !xInvocationAdapterFactory.is() )
         throw ServiceNotRegisteredException();
 
@@ -612,7 +613,7 @@ Reference< XEventListener > EventAttacherImpl::attachListener
 
 Reference<XEventListener> EventAttacherImpl::attachListenerForTarget(
     const Reference<XIntrospectionAccess>& xAccess,
-    const Reference<XInvocationAdapterFactory>& xInvocationAdapterFactory,
+    const Reference<XInvocationAdapterFactory2>& xInvocationAdapterFactory,
     const Reference<XAllListener>& xAllListener,
     const Any& aObject,
     const Any& aHelper,
@@ -725,7 +726,7 @@ Sequence< Reference<XEventListener> > EventAttacherImpl::attachListeners(
     if (!xObject.is())
         throw IllegalArgumentException();
 
-    Reference< XInvocationAdapterFactory > xInvocationAdapterFactory = getInvocationAdapterService();
+    Reference< XInvocationAdapterFactory2 > xInvocationAdapterFactory = getInvocationAdapterService();
     if( !xInvocationAdapterFactory.is() )
         throw ServiceNotRegisteredException();
 

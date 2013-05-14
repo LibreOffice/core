@@ -33,6 +33,7 @@
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/beans/Introspection.hpp>
 #include <com/sun/star/script/Converter.hpp>
+#include <com/sun/star/script/InvocationAdapterFactory.hpp>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
 
 
@@ -267,15 +268,7 @@ PyRef stRuntimeImpl::create( const Reference< XComponentContext > &ctx )
 
     c->xCoreReflection = theCoreReflection::get(ctx);
 
-    c->xAdapterFactory = Reference< XInvocationAdapterFactory2 > (
-        ctx->getServiceManager()->createInstanceWithContext(
-            OUString(  "com.sun.star.script.InvocationAdapterFactory"  ),
-            ctx ),
-        UNO_QUERY );
-    if( ! c->xAdapterFactory.is() )
-        throw RuntimeException(
-            OUString(  "pyuno: couldn't instantiate invocation adapter factory service" ),
-            Reference< XInterface > () );
+    c->xAdapterFactory = css::script::InvocationAdapterFactory::create(ctx);
 
     c->xIntrospection = Introspection::create(ctx);
 

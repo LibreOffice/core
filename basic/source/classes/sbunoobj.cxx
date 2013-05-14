@@ -49,6 +49,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/Introspection.hpp>
 #include <com/sun/star/script/BasicErrorException.hpp>
+#include <com/sun/star/script/InvocationAdapterFactory.hpp>
 #include <com/sun/star/script/XAllListener.hpp>
 #include <com/sun/star/script/XInvocationAdapterFactory.hpp>
 #include <com/sun/star/script/Converter.hpp>
@@ -3028,16 +3029,13 @@ void RTL_Impl_CreateUnoService( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWri
     // search for the service and instatiate it
     Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
     Reference< XInterface > xInterface;
-    if ( xFactory.is() )
+    try
     {
-        try
-        {
-            xInterface = xFactory->createInstance( aServiceName );
-        }
-        catch( const Exception& )
-        {
-            implHandleAnyException( ::cppu::getCaughtException() );
-        }
+        xInterface = xFactory->createInstance( aServiceName );
+    }
+    catch( const Exception& )
+    {
+        implHandleAnyException( ::cppu::getCaughtException() );
     }
 
     SbxVariableRef refVar = rPar.Get(0);
@@ -3086,16 +3084,13 @@ void RTL_Impl_CreateUnoServiceWithArguments( StarBASIC* pBasic, SbxArray& rPar, 
     // search for the service and instatiate it
     Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
     Reference< XInterface > xInterface;
-    if ( xFactory.is() )
+    try
     {
-        try
-        {
-            xInterface = xFactory->createInstanceWithArguments( aServiceName, aArgs );
-        }
-        catch( const Exception& )
-        {
-            implHandleAnyException( ::cppu::getCaughtException() );
-        }
+        xInterface = xFactory->createInstanceWithArguments( aServiceName, aArgs );
+    }
+    catch( const Exception& )
+    {
+        implHandleAnyException( ::cppu::getCaughtException() );
     }
 
     SbxVariableRef refVar = rPar.Get(0);
@@ -3131,19 +3126,12 @@ void RTL_Impl_GetProcessServiceManager( StarBASIC* pBasic, SbxArray& rPar, sal_B
 
     // get the global service manager
     Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
-    if( xFactory.is() )
-    {
-        Any aAny;
-        aAny <<= xFactory;
+    Any aAny;
+    aAny <<= xFactory;
 
-        // Create a SbUnoObject out of it and return it
-        SbUnoObjectRef xUnoObj = new SbUnoObject( OUString( "ProcessServiceManager" ), aAny );
-        refVar->PutObject( (SbUnoObject*)xUnoObj );
-    }
-    else
-    {
-        refVar->PutObject( NULL );
-    }
+    // Create a SbUnoObject out of it and return it
+    SbUnoObjectRef xUnoObj = new SbUnoObject( OUString( "ProcessServiceManager" ), aAny );
+    refVar->PutObject( (SbUnoObject*)xUnoObj );
 }
 
 void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
@@ -4060,7 +4048,7 @@ private:
 // Function to replace AllListenerAdapterService::createAllListerAdapter
 Reference< XInterface > createAllListenerAdapter
 (
-    const Reference< XInvocationAdapterFactory >& xInvocationAdapterFactory,
+    const Reference< XInvocationAdapterFactory2 >& xInvocationAdapterFactory,
     const Reference< XIdlClass >& xListenerType,
     const Reference< XAllListener >& xListener,
     const Any& Helper
@@ -4069,10 +4057,12 @@ Reference< XInterface > createAllListenerAdapter
     Reference< XInterface > xAdapter;
     if( xInvocationAdapterFactory.is() && xListenerType.is() && xListener.is() )
     {
-       Reference< XInvocation > xInvocationToAllListenerMapper =
+        Reference< XInvocation > xInvocationToAllListenerMapper =
             (XInvocation*)new InvocationToAllListenerMapper( xListenerType, xListener, Helper );
         Type aListenerType( xListenerType->getTypeClass(), xListenerType->getName() );
-        xAdapter = xInvocationAdapterFactory->createAdapter( xInvocationToAllListenerMapper, aListenerType );
+        Sequence<Type> arg2(1);
+        arg2[0] = aListenerType;
+        xAdapter = xInvocationAdapterFactory->createAdapter( xInvocationToAllListenerMapper, arg2 );
     }
     return xAdapter;
 }
@@ -4209,9 +4199,7 @@ void SbRtl_CreateUnoListener( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite
         return;
 
     // get the AllListenerAdapterService
-    Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
-    if( !xFactory.is() )
-        return;
+    Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
     // search the class
     Reference< XIdlClass > xClass = xCoreReflection->forName( aListenerClassName );
@@ -4219,8 +4207,8 @@ void SbRtl_CreateUnoListener( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite
         return;
 
     // From 1999-11-30: get the InvocationAdapterFactory
-    Reference< XInvocationAdapterFactory > xInvocationAdapterFactory = Reference< XInvocationAdapterFactory >(
-        xFactory->createInstance( OUString("com.sun.star.script.InvocationAdapterFactory") ), UNO_QUERY );
+    Reference< XInvocationAdapterFactory2 > xInvocationAdapterFactory =
+         InvocationAdapterFactory::create( xContext );
 
     BasicAllListener_Impl * p;
     Reference< XAllListener > xAllLst = p = new BasicAllListener_Impl( aPrefixName );

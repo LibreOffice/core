@@ -88,7 +88,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/registr
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/script,\
 	Engine \
-	InvocationAdapterFactory \
 	JavaScript \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/util,\
@@ -137,6 +136,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/script,\
 	AllListenerAdapter \
 	Converter \
 	Invocation \
+	InvocationAdapterFactory \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/uno,\
 	NamingService \

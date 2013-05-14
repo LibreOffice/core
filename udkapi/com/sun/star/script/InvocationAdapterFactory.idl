@@ -19,12 +19,9 @@
 #ifndef __com_sun_star_script_InvocationAdapterFactory_idl__
 #define __com_sun_star_script_InvocationAdapterFactory_idl__
 
-#include <com/sun/star/script/XInvocationAdapterFactory.idl>
 #include <com/sun/star/script/XInvocationAdapterFactory2.idl>
 
-
-
- module com {  module sun {  module star {  module script {
+module com {  module sun {  module star {  module script {
 
 /** Provides functionality to create an adapter that supports (a)
     special interface type(s) and maps calls to the interface's
@@ -43,18 +40,7 @@
         <type scope="com::sun::star::script">XInvocationAdapterFactory2</type>.
     </p>
  */
-published service InvocationAdapterFactory
-{
-    /** Interface for creating adapter objects.
-        This interface is deprecated.  Use <type>XInvocationAdapterFactory2</type>.
-        @deprecated
-    */
-    interface com::sun::star::script::XInvocationAdapterFactory;
-
-    /** Interface for creating adapter objects.
-    */
-    interface com::sun::star::script::XInvocationAdapterFactory2;
-};
+published service InvocationAdapterFactory : XInvocationAdapterFactory2;
 
 
 }; }; }; };
