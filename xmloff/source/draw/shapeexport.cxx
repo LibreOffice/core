@@ -149,9 +149,9 @@ uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement
                 {
                     aEngine = "com.sun.star.drawing.EnhancedCustomShapeEngine";
                 }
-                uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+                uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
-                if ( !aEngine.isEmpty() && xFactory.is() )
+                if ( !aEngine.isEmpty() )
                 {
                     uno::Sequence< uno::Any > aArgument( 1 );
                     uno::Sequence< beans::PropertyValue > aPropValues( 2 );
@@ -161,7 +161,8 @@ uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement
                     aPropValues[ 1 ].Name = OUString( "ForceGroupWithText" );
                     aPropValues[ 1 ].Value <<= bForceGroupWithText;
                     aArgument[ 0 ] <<= aPropValues;
-                    uno::Reference< uno::XInterface > xInterface( xFactory->createInstanceWithArguments( aEngine, aArgument ) );
+                    uno::Reference< uno::XInterface > xInterface(
+                        xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aEngine, aArgument, xContext) );
                     if ( xInterface.is() )
                     {
                         uno::Reference< drawing::XCustomShapeEngine > xCustomShapeEngine(

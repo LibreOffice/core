@@ -1970,21 +1970,17 @@ void SAL_CALL OOo2OasisTransformer::Initialize(
     Reference< XDocumentHandler > xDocHandler;
     if( !m_aSubServiceName.isEmpty() )
     {
-        Reference< XMultiServiceFactory > xFactory =
-            comphelper::getProcessServiceFactory();
-        if( xFactory.is() )
+        Reference< XComponentContext > xContext =
+            comphelper::getProcessComponentContext();
+        try
         {
-            try
-            {
-                // get filter component
-                xDocHandler = Reference< XDocumentHandler >(
-                        xFactory->createInstanceWithArguments( m_aSubServiceName,
-                                                               rArguments ),
-                        UNO_QUERY);
-            }
-            catch( Exception& )
-            {
-            }
+            // get filter component
+            xDocHandler = Reference< XDocumentHandler >(
+                    xContext->getServiceManager()->createInstanceWithArgumentsAndContext(m_aSubServiceName, rArguments, xContext),
+                    UNO_QUERY);
+        }
+        catch( Exception& )
+        {
         }
     }
 

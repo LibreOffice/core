@@ -644,8 +644,6 @@ AnimationNodeContext::AnimationNodeContext(
         }
         else
         {
-            Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-
             sal_Int16 nPresetClass = EffectPresetClass::CUSTOM;
 
             const sal_Char* pServiceName = 0;
@@ -698,10 +696,13 @@ AnimationNodeContext::AnimationNodeContext(
                 pServiceName = 0;
             }
 
-            if( pServiceName && xFactory.is() )
+            if( pServiceName )
             {
-                mxNode = Reference< XAnimationNode >( xFactory->createInstance(
-                    OUString::createFromAscii(pServiceName) ), UNO_QUERY_THROW );
+                Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+
+                mxNode = Reference< XAnimationNode >(
+                    xContext->getServiceManager()->createInstanceWithContext(OUString::createFromAscii(pServiceName), xContext),
+                    UNO_QUERY_THROW );
 
                 if( nPresetClass != EffectPresetClass::CUSTOM )
                 {
