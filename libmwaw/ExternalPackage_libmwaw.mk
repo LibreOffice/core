@@ -10,9 +10,9 @@
 $(eval $(call gb_ExternalPackage_ExternalPackage,libmwaw,libmwaw))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,libmwaw,inc/external/libmwaw,\
-	src/lib/libmwaw.hxx \
-	src/lib/MWAWDocument.hxx \
-	src/lib/MWAWPropertyHandler.hxx \
+	inc/libmwaw/libmwaw.hxx \
+	inc/libmwaw/MWAWDocument.hxx \
+	inc/libmwaw/MWAWPropertyHandler.hxx \
 ))
 
 $(eval $(call gb_ExternalPackage_use_external_project,libmwaw,libmwaw))
