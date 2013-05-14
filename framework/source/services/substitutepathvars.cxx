@@ -790,7 +790,7 @@ throw ( NoSuchElementException, RuntimeException )
 
     // Search for first occure of "$(...".
     sal_Int32   nDepth = 0;
-    sal_Int32   bSubstitutionCompleted = sal_False;
+    bool        bSubstitutionCompleted = false;
     sal_Int32   nPosition       = aWorkText.indexOf( m_aVarStart );     // = first position of "$(" in string
     sal_Int32   nLength = 0; // = count of letters from "$(" to ")" in string
     bool        bVarNotSubstituted = false;
@@ -907,7 +907,7 @@ throw ( NoSuchElementException, RuntimeException )
         nPosition = aWorkText.indexOf( m_aVarStart );
         if ( nPosition == -1 )
         {
-            bSubstitutionCompleted = sal_True;
+            bSubstitutionCompleted = true;
             break; // All variables are substituted
         }
         else

@@ -4622,7 +4622,7 @@ we check in the following sequence:
             {
                 if( m_aContext.ConvertOOoTargetToPDFTarget )
                 {
-                    sal_Int32 bChangeFileExtensionToPDF = false;
+                    bool bChangeFileExtensionToPDF = false;
                     //examine the file type (.odm .odt. .odp, odg, ods)
                     if( aFileExtension.equalsIgnoreAsciiCase(OUString( "odm"  ) ) )
                         bChangeFileExtensionToPDF = true;

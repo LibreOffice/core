@@ -6380,7 +6380,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
     DffRecordHeader aExtParaHd;
     aExtParaHd.nRecType = 0;    // set empty
 
-    sal_uInt32 bStatus = sal_True;
+    bool bStatus = true;
 
     DffRecordHeader aShapeContainerHd;
     rIn >> aShapeContainerHd;
@@ -6446,13 +6446,13 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                     case PPT_SLIDEPAGE :
                     break;
                     default :
-                        bStatus = sal_False;
+                        bStatus = false;
                 }
                 if ( bStatus )
                 {
                     sal_uInt32 nSlideId = rSdrPowerPointImport.GetAktPageId();
                     if ( !nSlideId )
-                        bStatus = sal_False;
+                        bStatus = false;
                     else
                     {
                         if ( !aExtParaHd.nRecType )
@@ -6496,7 +6496,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                         if ( pPageList && ( rSdrPowerPointImport.nAktPageNum < pPageList->size() ) )
                             pE = (*pPageList)[ rSdrPowerPointImport.nAktPageNum ];
                         if ( (!pE) || (!pE->nSlidePersistStartOffset) || ( pE->aPersistAtom.nSlideId != nSlideId ) )
-                            bStatus = sal_False;
+                            bStatus = false;
                         else
                         {
                             rIn.Seek( pE->nSlidePersistStartOffset );
@@ -6516,7 +6516,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                 aClientTextBoxHd.SeekToEndOfRecord( rIn );
                             }
                             if ( rIn.Tell() > pE->nSlidePersistEndOffset )
-                                bStatus = sal_False;
+                                bStatus = false;
                             else
                             {   // patching the RecordHeader
                                 aClientTextBoxHd.nFilePos -= DFF_COMMON_RECORD_HEADER_SIZE;
