@@ -70,7 +70,6 @@
     #undef  ENABLE_WARNINGS
     #undef  ENABLE_EVENTDEBUG
     #undef  ENABLE_REGISTRATIONDEBUG
-    #undef  ENABLE_MUTEXDEBUG
 //    #undef  ENABLE_TIMEMEASURE
     #undef  ENABLE_MEMORYMEASURE
     #undef  ENABLE_FILTERDBG
@@ -97,11 +96,6 @@
 //  special macros to debug service registration
 //*****************************************************************************************************************
 #include <macros/debug/registration.hxx>
-
-//*****************************************************************************************************************
-//  special macros to debug threading mechanism
-//*****************************************************************************************************************
-#include <macros/debug/mutex.hxx>
 
 //*****************************************************************************************************************
 //  special macros to debug our filter cache!

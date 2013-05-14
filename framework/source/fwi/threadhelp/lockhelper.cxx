@@ -506,8 +506,6 @@ ELockType& LockHelper::implts_getLockType()
                 eType = (ELockType)(sValue.toInt32());
             }
 
-            LOG_LOCKTYPE( FALLBACK_LOCKTYPE, eType )
-
             pType = &eType;
         }
     }

@@ -200,10 +200,6 @@ void  TransactionManager::registerTransaction( EExceptionMode eMode, ERejectReas
     // Safe access to internal member.
     ::osl::MutexGuard aAccessGuard( m_aAccessLock );
 
-    #ifdef ENABLE_MUTEXDEBUG
-    LOG_ASSERT2( m_nTransactionCount<0, "TransactionManager::acquire()", "Wrong ref count detected!" )
-    #endif
-
     // Register this new transaction.
     // If it is the first one .. close gate to disable changing of working mode.
     ++m_nTransactionCount;
@@ -230,10 +226,6 @@ void  TransactionManager::unregisterTransaction() throw( css::uno::RuntimeExcept
     // This call could not rejected!
     // Safe access to internal member.
     ::osl::MutexGuard aAccessGuard( m_aAccessLock );
-
-    #ifdef ENABLE_MUTEXDEBUG
-    LOG_ASSERT2( m_nTransactionCount<=0, "TransactionManager::release()", "Wrong ref count detected!" )
-    #endif
 
     // Deregister this transaction.
     // If it was the last one ... open gate to enable changing of working mode!

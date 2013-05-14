@@ -163,11 +163,6 @@ class FairRWLock : public  IRWLock
             // Used condition will open by last gone reader object.
             m_aSerializer.acquire();
             m_aWriteCondition.wait();
-
-            #ifdef ENABLE_MUTEXDEBUG
-            // A writer is an exclusiv accessor!
-            LOG_ASSERT2( m_nReadCount!=0, "FairRWLock::acquireWriteAccess()", "No threadsafe code detected ... : Read count != 0!" )
-            #endif
         }
 
         /*-****************************************************************************************************//**
@@ -188,11 +183,6 @@ class FairRWLock : public  IRWLock
             // hold seriliaze-mutex. All other user of these instance are blocked
             // by these mutex!
             // You don't need any other mutex here - you are the only one in the moment!
-
-            #ifdef ENABLE_MUTEXDEBUG
-            // A writer is an exclusiv accessor!
-            LOG_ASSERT2( m_nReadCount!=0, "FairRWLock::releaseWriteAccess()", "No threadsafe code detected ... : Read count != 0!" )
-            #endif
 
             m_aSerializer.release();
         }
@@ -220,11 +210,6 @@ class FairRWLock : public  IRWLock
             // You must be a writer to call this method!
             // We can't check it - but otherwise it's your problem ...
             // Thats why you don't need any mutex here.
-
-            #ifdef ENABLE_MUTEXDEBUG
-            // A writer is an exclusiv accessor!
-            LOG_ASSERT2( m_nReadCount!=0, "FairRWLock::downgradeWriteAccess()", "No threadsafe code detected ... : Read count != 0!" )
-            #endif
 
             // Register himself as "new" reader.
             // This value must be 0 before - because we support single writer access only!
