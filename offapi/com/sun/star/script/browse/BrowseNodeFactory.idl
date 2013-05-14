@@ -28,6 +28,7 @@ module com { module sun { module star { module script { module browse {
     This service is used to create Root XBrowseNodes.
 
     @since OOo 2.0
+    @deprecated use the singleton theBrowseNodeFactory
 */
 service BrowseNodeFactory
 {

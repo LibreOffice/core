@@ -49,6 +49,7 @@
 #include <com/sun/star/frame/UICommandDescription.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
+#include <com/sun/star/script/browse/theBrowseNodeFactory.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
 #include <com/sun/star/script/browse/XBrowseNodeFactory.hpp>
@@ -484,8 +485,7 @@ void SvxConfigGroupListBox::Init(bool bShowSlots, const Reference< frame::XFrame
 
     try
     {
-        Reference< browse::XBrowseNodeFactory > xFac( xContext->getValueByName(
-                                                          OUString( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory") ), UNO_QUERY_THROW );
+        Reference< browse::XBrowseNodeFactory > xFac = browse::theBrowseNodeFactory::get( xContext );
         rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) );
     }
     catch( const Exception& )

@@ -29,7 +29,7 @@
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
-#include <com/sun/star/script/browse/XBrowseNodeFactory.hpp>
+#include <com/sun/star/script/browse/theBrowseNodeFactory.hpp>
 #include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
@@ -567,8 +567,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::uno::XComp
         comphelper::getProcessComponentContext() );
     try
     {
-        Reference< browse::XBrowseNodeFactory > xFac( xCtx->getValueByName(
-           OUString( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory") ), UNO_QUERY_THROW );
+        Reference< browse::XBrowseNodeFactory > xFac = browse::theBrowseNodeFactory::get( xCtx );
         rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) );
     }
     catch( Exception& e )

@@ -37,6 +37,7 @@
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
 #include <com/sun/star/script/browse/XBrowseNodeFactory.hpp>
 #include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
+#include <com/sun/star/script/browse/theBrowseNodeFactory.hpp>
 #include <com/sun/star/script/provider/ScriptErrorRaisedException.hpp>
 #include <com/sun/star/script/provider/ScriptExceptionRaisedException.hpp>
 #include <com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
@@ -166,12 +167,9 @@ void SFTreeListBox::Init( const OUString& language  )
     OUString userStr("user");
     OUString shareStr("share");
 
-    OUString singleton("/singletons/com.sun.star.script.browse.theBrowseNodeFactory");
-
     try
     {
-        Reference< browse::XBrowseNodeFactory > xFac(
-            xCtx->getValueByName( singleton ), UNO_QUERY_THROW );
+        Reference< browse::XBrowseNodeFactory > xFac = browse::theBrowseNodeFactory::get(xCtx);
 
         rootNode.set( xFac->createView(
             browse::BrowseNodeFactoryViewTypes::MACROORGANIZER ) );

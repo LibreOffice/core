@@ -20,7 +20,7 @@
 #ifndef __com_sun_star_script_browse_theBrowseNodeFactory_idl__
 #define __com_sun_star_script_browse_theBrowseNodeFactory_idl__
 
-#include <com/sun/star/script/browse/BrowseNodeFactory.idl>
+#include <com/sun/star/script/browse/XBrowseNodeFactory.idl>
 
 module com { module sun { module star { module script { module browse {
 
@@ -34,10 +34,7 @@ module com { module sun { module star { module script { module browse {
 
     @since OOo 2.0
 */
-singleton theBrowseNodeFactory
-{
-    service BrowseNodeFactory;
-};
+singleton theBrowseNodeFactory : XBrowseNodeFactory;
 
 }; }; }; }; };
 
