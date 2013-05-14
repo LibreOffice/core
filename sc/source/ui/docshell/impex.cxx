@@ -2304,9 +2304,6 @@ rtl::OUString ReadCsvLine( SvStream &rStream, bool bEmbeddedLineBreak,
     {
         const sal_Unicode* pSeps = rFieldSeparators.GetBuffer();
 
-        // See if the separator(s) include tab.
-        bool bTabSep = lcl_UnicodeStrChr(pSeps, '\t') != NULL;
-
         QuoteType eQuoteState = FIELDEND_QUOTE;
         bool bFieldStart = true;
 
@@ -2321,16 +2318,6 @@ rtl::OUString ReadCsvLine( SvStream &rStream, bool bEmbeddedLineBreak,
             {
                 if (nQuotes)
                 {
-                    if (bTabSep && *p == '\t' && (nQuotes % 2) != 0)
-                    {
-                        // When tab-delimited, tab char ends quoted sequence
-                        // even if we haven't reached the end quote.  Doing
-                        // this helps keep mal-formed rows from damaging
-                        // other, well-formed rows.
-                        nQuotes = 0;
-                        break;
-                    }
-
                     if (*p == cFieldQuote)
                     {
                         if (bFieldStart)
