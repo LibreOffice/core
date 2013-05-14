@@ -43,7 +43,7 @@
 // sal/osl/unx/salinit.cxx::sal_detail_initialize updates this:
 bool sal_use_syslog;
 #else
-enum { sal_use_syslog = false; }
+enum { sal_use_syslog = false };
 #endif
 
 // Avoid the use of other sal code in this file as much as possible, so that
