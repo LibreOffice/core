@@ -85,15 +85,23 @@ private:
     bool compareAttributes(xmlNodePtr node1, xmlNodePtr node2);
     bool compareElements(xmlNodePtr node1, xmlNodePtr node2);
 
+    /// Error message for cppunit that prints out when expected and found are not equal.
+    void cppunitAssertEqual(const xmlChar *expected, const xmlChar *found);
+
+    /// Error message for cppunit that prints out when expected and found are not equal - for doubles.
+    void cppunitAssertEqualDouble(const xmlChar *node, double expected, double found, double delta);
+
     ToleranceContainer toleranceContainer;
     xmlDocPtr xmlFile1;
     xmlDocPtr xmlFile2;
+    std::string fileName;
 };
 
 
 
 
 XMLDiff::XMLDiff( const char* pFileName, const char* pContent, int size, const char* pToleranceFile)
+    : fileName(pFileName)
 {
     xmlFile1 = xmlParseFile(pFileName);
     xmlFile2 = xmlParseMemory(pContent, size);
@@ -169,9 +177,7 @@ bool XMLDiff::compare()
 #if USE_CPPUNIT
     CPPUNIT_ASSERT(root1);
     CPPUNIT_ASSERT(root2);
-    std::stringstream stringStream("Expected: ");
-    stringStream << (char*)root1->name << "\nFound: " << (char*) root2->name;
-    CPPUNIT_ASSERT_MESSAGE(stringStream.str(), xmlStrEqual(root1->name, root2->name));
+    cppunitAssertEqual(root1->name, root2->name);
 #else
     if (!root1 || !root2)
         return false;
@@ -201,9 +207,7 @@ bool checkForEmptyChildren(xmlNodePtr node)
 bool XMLDiff::compareElements(xmlNode* node1, xmlNode* node2)
 {
 #if USE_CPPUNIT
-    std::stringstream stringStream("Expected: ");
-    stringStream << (xmlChar*) node1->name << "\nFound: " << node2->name;
-    CPPUNIT_ASSERT_MESSAGE(stringStream.str(), xmlStrEqual( node1->name, node2->name ));
+    cppunitAssertEqual(node1->name, node2->name);
 #else
     if (!xmlStrEqual( node1->name, node2->name ))
         return false;
@@ -244,6 +248,26 @@ bool XMLDiff::compareElements(xmlNode* node1, xmlNode* node2)
     return true;
 }
 
+void XMLDiff::cppunitAssertEqual(const xmlChar *expected, const xmlChar *found)
+{
+#if USE_CPPUNIT
+    std::stringstream stringStream;
+    stringStream << "Reference: " << fileName << "\n- Expected: " << (const char*) expected << "\n- Found: " << (const char*) found;
+
+    CPPUNIT_ASSERT_MESSAGE(stringStream.str(), xmlStrEqual(expected, found));
+#endif
+}
+
+void XMLDiff::cppunitAssertEqualDouble(const xmlChar *node, double expected, double found, double delta)
+{
+#if USE_CPPUNIT
+    std::stringstream stringStream;
+    stringStream << "Reference: " << fileName << "\n- Node: " << (const char*) node;
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(stringStream.str(), expected, found, delta);
+#endif
+}
+
 namespace {
 
 bool compareValuesWithTolerance(double val1, double val2, double tolerance, bool relative)
@@ -267,7 +291,7 @@ bool XMLDiff::compareAttributes(xmlNodePtr node1, xmlNodePtr node2)
     for(attr1 = node1->properties, attr2 = node2->properties; attr1 != NULL && attr2 != NULL; attr1 = attr1->next, attr2 = attr2->next)
     {
 #if USE_CPPUNIT
-        CPPUNIT_ASSERT(xmlStrEqual( attr1->name, attr2->name ));
+        cppunitAssertEqual(attr1->name, attr2->name);
 #else
         if (!xmlStrEqual( attr1->name, attr2->name ))
             return false;
@@ -308,9 +332,7 @@ bool XMLDiff::compareAttributes(xmlNodePtr node1, xmlNodePtr node2)
             else
             {
 #if USE_CPPUNIT
-                CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
-                    reinterpret_cast< char const * >(attr1->name), dVal1, dVal2,
-                    1e-08);
+                cppunitAssertEqualDouble(attr1->name, dVal1, dVal2, 1e-08);
 #else
                 if (dVal1 != dVal2)
                     return false;
@@ -321,9 +343,7 @@ bool XMLDiff::compareAttributes(xmlNodePtr node1, xmlNodePtr node2)
         {
 
 #if USE_CPPUNIT
-            std::stringstream stringStream("Expected: ");
-            stringStream << (char*)val1 << "\nFound: " << (char*)val2;
-            CPPUNIT_ASSERT_MESSAGE(stringStream.str(), xmlStrEqual(val1, val2));
+            cppunitAssertEqual(val1, val2);
 #else
             if(!xmlStrEqual( val1, val2 ))
                 return false;
