@@ -112,7 +112,6 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     $(if $(filter DESKTOP,$(BUILD_TYPE)),\
         svl/source/misc/documentlockfile) \
     svl/source/misc/filenotation \
-    svl/source/misc/folderrestriction \
     svl/source/misc/fstathelper \
     svl/source/misc/getstringresource \
     svl/source/misc/inethist \
@@ -120,7 +119,6 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/misc/lngmisc \
     svl/source/misc/lockfilecommon \
     svl/source/misc/ownlist \
-    svl/source/misc/restrictedpaths \
     svl/source/misc/sharecontrolfile \
     svl/source/misc/strmadpt \
     svl/source/misc/urihelper \

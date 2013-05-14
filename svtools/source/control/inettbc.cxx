@@ -79,13 +79,11 @@ class SvtURLBox_Impl
 public:
     std::vector<OUString>      aURLs;
     std::vector<OUString>      aCompletions;
-    const IUrlFilter*               pUrlFilter;
     ::std::vector< WildCard >       m_aFilters;
 
     static sal_Bool TildeParsing( String& aText, String& aBaseUrl );
 
     inline SvtURLBox_Impl( )
-        :pUrlFilter( NULL )
     {
         FilterMatch::createWildCardFilterList(String(),m_aFilters);
     }
@@ -242,14 +240,6 @@ IMPL_STATIC_LINK( SvtMatchContext_Impl, Select_Impl, void*, )
             // note: if this doesn't work, we're not interested in: we're checking the
             // untouched sCompletion then
 
-        if ( pBox->pImp->pUrlFilter )
-        {
-            if ( !pBox->pImp->pUrlFilter->isUrlAllowed( sURL ) )
-            {   // this URL is not allowed
-                bValidCompletionsFiltered = true;
-                continue;
-            }
-        }
         if ( !sURL.isEmpty() && ( sURL[sURL.getLength()-1] != '/' ))
         {
             String sUpperURL( sURL );
@@ -985,7 +975,7 @@ void SvtURLBox::UpdatePicklistForSmartProtocol_Impl()
 
                     String aURL( aCurObj.GetMainURL( INetURLObject::DECODE_WITH_CHARSET ) );
 
-                    if ( aURL.Len() && ( !pImp->pUrlFilter || pImp->pUrlFilter->isUrlAllowed( aURL ) ) )
+                    if ( aURL.Len() )
                     {
                         sal_Bool bFound = (aURL.GetChar(aURL.Len()-1) == '/' );
                         if ( !bFound )
@@ -1385,11 +1375,6 @@ sal_Bool SvtURLBox_Impl::TildeParsing(
 #endif
 
     return sal_True;
-}
-
-void SvtURLBox::SetUrlFilter( const IUrlFilter* _pFilter )
-{
-    pImp->pUrlFilter = _pFilter;
 }
 
 void SvtURLBox::SetFilter(const String& _sFilter)

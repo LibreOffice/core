@@ -85,7 +85,6 @@
 #include <unotools/pathoptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/menuoptions.hxx>
-#include <svl/folderrestriction.hxx>
 #include <rtl/logfile.hxx>
 #include <rtl/bootstrap.hxx>
 #include <vcl/help.hxx>
@@ -1516,18 +1515,6 @@ int Desktop::Main()
         pExecGlobals->pPathOptions.reset( new SvtPathOptions);
         SetSplashScreenProgress(40);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create SvtPathOptions and SvtLanguageOptions" );
-
-        // Check special env variable
-        std::vector< String > aUnrestrictedFolders;
-        svt::getUnrestrictedFolders( aUnrestrictedFolders );
-
-        if ( !aUnrestrictedFolders.empty() )
-        {
-            // Set different working directory. The first entry is
-            // the new work path.
-            String aWorkPath = aUnrestrictedFolders[0];
-            SvtPathOptions().SetWorkPath( aWorkPath );
-        }
 
         xDesktop = css::frame::Desktop::create( xContext );
 

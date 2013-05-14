@@ -18,7 +18,6 @@
  */
 
 #include "contentenumeration.hxx"
-#include <svl/urlfilter.hxx>
 #include <svtools/inettbc.hxx>
 #include <svtools/imagemgr.hxx>
 
@@ -89,7 +88,6 @@ namespace svt
         ,m_rContent              ( _rContentToFill )
         ,m_rContentMutex         ( _rContentMutex  )
         ,m_xCommandEnv           ( _rxCommandEnv   )
-        ,m_pFilter               ( NULL            )
         ,m_pTranslator           ( _pTranslator    )
         ,m_bCancelled            ( false           )
         ,m_rBlackList            ( ::com::sun::star::uno::Sequence< OUString >() )
@@ -108,7 +106,6 @@ namespace svt
         m_bCancelled = true;
         m_pResultHandler = NULL;
         m_pTranslator = NULL;
-        m_pFilter = NULL;
         m_aFolder.aContent = ::ucbhelper::Content();
         m_aFolder.sURL = String();
     }
@@ -116,13 +113,11 @@ namespace svt
     //--------------------------------------------------------------------
     EnumerationResult FileViewContentEnumerator::enumerateFolderContentSync(
         const FolderDescriptor& _rFolder,
-        const IUrlFilter* _pFilter,
         const ::com::sun::star::uno::Sequence< OUString >& rBlackList )
     {
         {
             ::osl::MutexGuard aGuard( m_aMutex );
             m_aFolder = _rFolder;
-            m_pFilter = _pFilter;
             m_pResultHandler = NULL;
             m_rBlackList = rBlackList;
         }
@@ -131,11 +126,10 @@ namespace svt
 
     //--------------------------------------------------------------------
     void FileViewContentEnumerator::enumerateFolderContent(
-        const FolderDescriptor& _rFolder, const IUrlFilter* _pFilter, IEnumerationResultHandler* _pResultHandler )
+        const FolderDescriptor& _rFolder, IEnumerationResultHandler* _pResultHandler )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         m_aFolder = _rFolder;
-        m_pFilter = _pFilter;
         m_pResultHandler = _pResultHandler;
 
         OSL_ENSURE( m_aFolder.aContent.get().is() || m_aFolder.sURL.Len(),
@@ -240,9 +234,6 @@ namespace svt
                             // check for restrictions
                             {
                                 ::osl::MutexGuard aGuard( m_aMutex );
-                                if ( m_pFilter && !m_pFilter->isUrlAllowed( sRealURL ) )
-                                    continue;
-
                                 if ( /* m_rBlackList.hasElements() && */ URLOnBlackList ( sRealURL ) )
                                     continue;
                             }

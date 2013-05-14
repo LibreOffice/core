@@ -27,7 +27,6 @@
 #include <svtools/fileview.hxx>
 #include <svtools/ivctrl.hxx>
 #include <svtools/svmedit2.hxx>
-#include <svl/restrictedpaths.hxx>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 
@@ -122,8 +121,6 @@ private:
     String              aFolderURL;
     String              aMyDocumentsURL;
     String              aSamplesFolderURL;
-    ::svt::RestrictedPaths
-                        aURLFilter;
 
     sal_Bool            bIsTemplateFolder;
 

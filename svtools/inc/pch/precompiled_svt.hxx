@@ -356,7 +356,6 @@
 #include <svl/poolitem.hxx>
 #include <svl/smplhint.hxx>
 #include <svl/stritem.hxx>
-#include <svl/urlfilter.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>

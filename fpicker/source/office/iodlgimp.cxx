@@ -182,26 +182,22 @@ void SvtUpButton_Impl::FillURLMenu( PopupMenu* _pMenu )
         aObject.removeSegment();
         String aParentURL(aObject.GetMainURL(INetURLObject::NO_DECODE));
 
-        if (GetDialogParent()->isUrlAllowed(aParentURL))
+        String aTitle;
+        // 97148# --------------------------------
+        if (!GetDialogParent()->ContentGetTitle(aParentURL, aTitle) || aTitle.Len() == 0)
+            aTitle = aObject.getName();
+
+        Image aImage = ( nCount > 1 ) // if nCount == 1 means workplace, which detects the wrong image
+            ? SvFileInformationManager::GetImage( aObject ) : aVolumeImage;
+
+        _pMenu->InsertItem( nItemId++, aTitle, aImage );
+        _aURLs.push_back(aParentURL);
+
+        if ( nCount == 1 )
         {
-            String aTitle;
-            // 97148# --------------------------------
-            if (!GetDialogParent()->ContentGetTitle(aParentURL, aTitle) || aTitle.Len() == 0)
-                aTitle = aObject.getName();
-
-            Image aImage = ( nCount > 1 ) // if nCount == 1 means workplace, which detects the wrong image
-                ? SvFileInformationManager::GetImage( aObject ) : aVolumeImage;
-
-            _pMenu->InsertItem( nItemId++, aTitle, aImage );
-            _aURLs.push_back(aParentURL);
-
-            if ( nCount == 1 )
-            {
-                // adjust the title of the top level entry (the workspace)
-                _pMenu->SetItemText( --nItemId, SvtSimpleResId( STR_SVT_MIMETYPE_CNT_FSYSBOX ) );
-            }
+            // adjust the title of the top level entry (the workspace)
+            _pMenu->SetItemText( --nItemId, SvtSimpleResId( STR_SVT_MIMETYPE_CNT_FSYSBOX ) );
         }
-
         --nCount;
     }
 }

@@ -34,8 +34,6 @@
 #include <com/sun/star/ui/dialogs/XDialogClosedListener.hpp>
 #include <unotools/confignode.hxx>
 #include "svl/inettype.hxx"
-#include "svl/urlfilter.hxx"
-#include <svl/restrictedpaths.hxx>
 #include "asyncfilepicker.hxx"
 #include "OfficeControlAccess.hxx"
 #include "fpsmartcontent.hxx"
@@ -105,7 +103,6 @@ private:
     ImageList                   m_aImages;
     ::svt::SmartContent         m_aContent;
 
-    ::svt::RestrictedPaths      m_aURLFilter;
     ::std::set< Control* >      m_aDisabledControls;
 
     ::utl::OConfigurationNode   m_aConfiguration;
@@ -262,10 +259,6 @@ public:
     void                        RemovablePlaceSelected(bool enable = true);
 
     void                        displayIOException( const String& _rURL, ::com::sun::star::ucb::IOErrorCode _eCode );
-    void                        simulateAccessDenied( const String& _rURL )
-    {
-        displayIOException( _rURL, ::com::sun::star::ucb::IOErrorCode_ACCESS_DENIED );
-    }
 
     // originally from VclFileDialog
     virtual sal_Bool                AddControl( Window* pControl, sal_Bool bNewLine = sal_False );
@@ -297,16 +290,6 @@ public:
         @since #i42824#
     */
     void                        updateListboxLabelSizes();
-
-    /** checks URL access permissions
-
-        <p>with the "restriction" feature we have in the file dialog, it's possible that
-        only certain URLs can be browsed. This method checks whether a given URL belongs
-        to this set of permitted URLs.</p>
-
-        <p>If no "access restriction" is effective, this method always returns <TRUE/>.</p>
-    */
-    inline bool isUrlAllowed( const String& _rURL ) const { return m_aURLFilter.isUrlAllowed( _rURL ); }
 
 private:
     SvtFileDialogFilter_Impl*   implAddFilter( const String& _rFilter, const String& _rType );

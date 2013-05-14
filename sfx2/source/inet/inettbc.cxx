@@ -27,7 +27,6 @@
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/historyoptions.hxx>
-#include <svl/folderrestriction.hxx>
 #include <vcl/toolbox.hxx>
 #include <toolkit/unohlp.hxx>
 #include <osl/thread.hxx>

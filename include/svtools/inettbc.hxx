@@ -27,7 +27,6 @@
 
 #include <vcl/combobox.hxx>
 
-class IUrlFilter;
 class SvtMatchContext_Impl;
 class SvtURLBox_Impl;
 class SVT_DLLPUBLIC SvtURLBox : public ComboBox
@@ -83,7 +82,6 @@ public:
     static String                   ParseSmart( String aText, String aBaseURL, String aWorkDir );
 
     void                            SetFilter(const String& _sFilter);
-    void                            SetUrlFilter( const IUrlFilter* _pFilter );
 
     inline void                     EnableAutocompletion( sal_Bool _bEnable = sal_True )
                                         { bIsAutoCompleteEnabled = _bEnable; }

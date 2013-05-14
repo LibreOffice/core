@@ -529,15 +529,7 @@ void SvtFileViewWindow_Impl::OpenFolder( const String& rURL )
 
     rParent.SetPrevLevelButtonState( rURL );
 
-    aFileView.SetUrlFilter( &aURLFilter );
-
-    INetProtocol eProt = INetURLObject( rURL ).GetProtocol();
-    bIsTemplateFolder = ( eProt == INET_PROT_VND_SUN_STAR_HIER );
-    bool isNewDocumentFolder = ( eProt == INET_PROT_PRIVATE );
-
-    aURLFilter.enableFilter( !bIsTemplateFolder && !isNewDocumentFolder );
-
-    if ( isNewDocumentFolder )
+    if ( INetURLObject( rURL ).GetProtocol() == INET_PROT_PRIVATE )
     {
         aFileView.EnableNameReplacing( sal_False );
         aFileView.Initialize( GetNewDocContents() );

@@ -29,7 +29,6 @@
 #include <tools/string.hxx>
 #include <vcl/image.hxx>
 
-class IUrlFilter;
 //........................................................................
 namespace svt
 {
@@ -193,7 +192,6 @@ namespace svt
         FolderDescriptor                m_aFolder;
         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >
                                         m_xCommandEnv;
-        const IUrlFilter*               m_pFilter;
         const IContentTitleTranslation* m_pTranslator;
         IEnumerationResultHandler*      m_pResultHandler;
         bool                            m_bCancelled;
@@ -234,7 +232,6 @@ namespace svt
         */
         void    enumerateFolderContent(
                     const FolderDescriptor& _rFolder,
-                    const IUrlFilter* _pFilter,
                     IEnumerationResultHandler* _pResultHandler
                 );
 
@@ -242,7 +239,6 @@ namespace svt
         */
         EnumerationResult   enumerateFolderContentSync(
                     const FolderDescriptor& _rFolder,
-                    const IUrlFilter* _pFilter,
                     const ::com::sun::star::uno::Sequence< OUString >& rBlackList = ::com::sun::star::uno::Sequence< OUString >()
                 );
 

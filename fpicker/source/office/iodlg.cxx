@@ -508,7 +508,6 @@ void SvtFileDialog::Init_Impl
     _pImp->_pFtFileName = new FixedText( this, SvtResId( FT_EXPLORERFILE_FILENAME ) );
 
     SvtURLBox* pURLBox = new SvtURLBox( this, SvtResId( ED_EXPLORERFILE_FILENAME ) );
-    pURLBox->SetUrlFilter( &m_aURLFilter );
     _pImp->_pEdFileName = pURLBox;
     _pImp->_pEdFileName->Show();
     pURLBox->SetSelectHdl( LINK( this, SvtFileDialog, EntrySelectHdl_Impl ) );
@@ -545,7 +544,6 @@ void SvtFileDialog::Init_Impl
     }
 
     _pImp->_pEdCurrentPath = new SvtURLBox( this, SvtResId(ED_EXPLORERFILE_CURRENTPATH) );
-    _pImp->_pEdCurrentPath->SetUrlFilter( &m_aURLFilter );
     _pImp->_pEdCurrentPath->Show();
 
     _pImp->_pBtnFileOpen = new PushButton( this, SvtResId( BTN_EXPLORERFILE_OPEN ) );
@@ -568,7 +566,6 @@ void SvtFileDialog::Init_Impl
     _pFileView = new SvtFileView( this, SvtResId( CTL_EXPLORERFILE_FILELIST ),
                                        FILEDLG_TYPE_PATHDLG == _pImp->_eDlgType,
                                        _pImp->_bMultiSelection );
-    _pFileView->SetUrlFilter( &m_aURLFilter );
     _pFileView->EnableAutoResize();
 
     _pFileView->SetHelpId( HID_FILEDLG_STANDARD );
@@ -1141,12 +1138,6 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
         {
             if ( aFileName != pThis->_pFileView->GetViewURL() )
             {
-                if ( !pThis->m_aURLFilter.isUrlAllowed( aFileName ) )
-                {
-                    pThis->simulateAccessDenied( aFileName );
-                    return 0;
-                }
-
                 pThis->OpenURL_Impl( aFileName );
             }
             else
@@ -1175,13 +1166,6 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
     if ( aFileObj.HasError() )
     {
         ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
-        return 0;
-    }
-
-    // if restrictions for the allowed folders are in place, we need to do a check here
-    if ( !pThis->m_aURLFilter.isUrlAllowed( aFileObj.GetMainURL( INetURLObject::NO_DECODE ) ) )
-    {
-        pThis->simulateAccessDenied( aFileName );
         return 0;
     }
 
@@ -1669,7 +1653,7 @@ IMPL_LINK( SvtFileDialog, OpenDoneHdl_Impl, SvtFileView*, pView )
 {
     String sCurrentFolder( pView->GetViewURL() );
     // check if we can create new folders
-    EnableControl( _pImp->_pBtnNewFolder, ContentCanMakeFolder( sCurrentFolder ) && m_aURLFilter.isUrlAllowed( sCurrentFolder, false ) );
+    EnableControl( _pImp->_pBtnNewFolder, ContentCanMakeFolder( sCurrentFolder ) );
 
     // check if we can travel one level up
     bool bCanTravelUp = ContentHasParentFolder( pView->GetViewURL() );
@@ -1681,7 +1665,6 @@ IMPL_LINK( SvtFileDialog, OpenDoneHdl_Impl, SvtFileView*, pView )
             "SvtFileDialog::OpenDoneHdl_Impl: invalid current URL!" );
 
         aCurrentFolder.removeSegment();
-        bCanTravelUp &= m_aURLFilter.isUrlAllowed( aCurrentFolder.GetMainURL( INetURLObject::NO_DECODE ) );
     }
     EnableControl( _pImp->_pBtnUp, bCanTravelUp );
 
@@ -2131,11 +2114,6 @@ short SvtFileDialog::PrepareExecute()
         // - finally we're going to save that file, aren't we?
         m_aContent.enableOwnInteractionHandler(::svt::OFilePickerInteractionHandler::E_DOESNOTEXIST);
 
-    //.....................................................................
-    // care for possible restrictions on the paths we're allowed to show
-    if ( !m_aURLFilter.isUrlAllowed( _aPath ) )
-        _aPath = m_aURLFilter.getFilter()[0];
-
     // if applicable show filter
     _pImp->InitFilterList();
 
@@ -2327,7 +2305,6 @@ void SvtFileDialog::OpenURL_Impl( const String& _rURL )
 {
     _pFileView->EndInplaceEditing( false );
 
-    DBG_ASSERT( m_aURLFilter.isUrlAllowed( _rURL ), "SvtFileDialog::OpenURL_Impl: forbidden URL! Should have been handled by the caller!" );
     executeAsync( AsyncPickerAction::eOpenURL, _rURL, getMostCurrentFilter( _pImp ) );
 }
 

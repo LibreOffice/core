@@ -461,7 +461,6 @@ public:
 
     ViewTabListBox_Impl*    mpView;
     NameTranslator_Impl*    mpNameTrans;
-    const IUrlFilter*       mpUrlFilter;
     sal_uInt16              mnSortColumn;
     sal_Bool                mbAscending     : 1;
     sal_Bool                mbOnlyFolder    : 1;
@@ -1623,12 +1622,6 @@ void SvtFileView::SetConfigString( const String& rCfgStr )
 }
 
 // -----------------------------------------------------------------------
-void SvtFileView::SetUrlFilter( const IUrlFilter* _pFilter )
-{
-    mpImp->mpUrlFilter = _pFilter;
-}
-
-// -----------------------------------------------------------------------
 void SvtFileView::StateChanged( StateChangedType nStateChange )
 {
     if ( nStateChange == STATE_CHANGE_ENABLE )
@@ -1700,7 +1693,6 @@ SvtFileView_Impl::SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommand
     ,m_bRunningAsyncAction      ( false )
     ,m_bAsyncActionCancelled    ( false )
     ,mpNameTrans                ( NULL )
-    ,mpUrlFilter                ( NULL )
     ,mnSortColumn               ( COLUMN_TITLE )
     ,mbAscending                ( sal_True )
     ,mbOnlyFolder               ( bOnlyFolder )
@@ -1779,7 +1771,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
 
     if ( !pAsyncDescriptor )
     {
-        ::svt::EnumerationResult eResult = m_pContentEnumerator->enumerateFolderContentSync( _rFolder, mpUrlFilter, rBlackList );
+        ::svt::EnumerationResult eResult = m_pContentEnumerator->enumerateFolderContentSync( _rFolder, rBlackList );
         if ( ::svt::SUCCESS == eResult )
         {
             implEnumerationSuccess();
@@ -1809,7 +1801,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     pTimeout->Seconds = nMinTimeout / 1000L;
     pTimeout->Nanosec = ( nMinTimeout % 1000L ) * 1000000L;
 
-    m_pContentEnumerator->enumerateFolderContent( _rFolder, mpUrlFilter, this );
+    m_pContentEnumerator->enumerateFolderContent( _rFolder, this );
 
     // wait until the enumeration is finished
     // for this, release our own mutex (which is used by the enumerator thread)

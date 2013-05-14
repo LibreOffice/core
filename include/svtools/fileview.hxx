@@ -41,7 +41,6 @@ class ViewTabListBox_Impl;
 class SvtFileView_Impl;
 class SvTreeListEntry;
 class HeaderBar;
-class IUrlFilter;
 
 /// the result of an action in the FileView
 enum FileViewResult
@@ -191,8 +190,6 @@ public:
                             // save and load column size and sort order
     String                  GetConfigString() const;
     void                    SetConfigString( const String& rCfgStr );
-
-    void                    SetUrlFilter( const IUrlFilter* _pFilter );
 
     void                    EndInplaceEditing( bool _bCancel );
 

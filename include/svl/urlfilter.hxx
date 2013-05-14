@@ -23,18 +23,6 @@
 #include <tools/wldcrd.hxx>
 #include <functional>
 #include <vector>
-/** filters allowed URLs
-*/
-class IUrlFilter
-{
-public:
-    virtual bool isUrlAllowed( const OUString& _rURL ) const = 0;
-
-protected:
-    virtual inline ~IUrlFilter() = 0;
-};
-
-inline IUrlFilter::~IUrlFilter() {}
 
 struct FilterMatch : public ::std::unary_function< bool, WildCard >
 {
