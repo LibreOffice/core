@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXH//8xM\u003d",
+        "filename": "padmin/source/adddlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2013-05-14T13:33:23Z",
+      "side": 1,
+      "message": "Also, after further reading, this check could be done outside of the for loop (and I wonder if the OUStringBuffer operations above can be avoided in favour of OUString concatenation, but I know little about O(U)String and this could be better addressed in a later patch).",
+      "parentUuid": "AAAAXH//8xc\u003d",
+      "revId": "62fa3a869e0d0c16ec50aa1722e35afb87a23551",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXH//8xY\u003d",
         "filename": "sc/source/core/data/stlpool.cxx",
         "patchSetId": 4
