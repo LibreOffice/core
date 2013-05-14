@@ -389,7 +389,7 @@ sal_Bool ScSpreadsheetSettings::getPropertyBool(const OUString& aPropertyName) t
 sal_Int16 ScSpreadsheetSettings::getPropertyInt16(const OUString& aPropertyName) throw (css::uno::RuntimeException)
 {
    uno::Any any = getPropertyValue(aPropertyName);
-   sal_Int16 b = sal_False;
+   sal_Int16 b = 0;
    any >>= b;
    return b;
 }

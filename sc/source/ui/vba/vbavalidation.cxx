@@ -92,7 +92,7 @@ ScVbaValidation::getInCellDropdown() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaValidation::setInCellDropdown( ::sal_Bool  _incelldropdown  ) throw (uno::RuntimeException)
 {
-    sal_Int32 nDropDown = false;
+    sal_Int32 nDropDown = 0;
     if ( _incelldropdown )
         nDropDown = 1;
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps(m_xRange) );

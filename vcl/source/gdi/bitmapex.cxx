@@ -821,7 +821,7 @@ SvStream& operator>>( SvStream& rIStm, BitmapEx& rBitmapEx )
         }
         else
         {
-            sal_uInt8 bTransparent = false;
+            sal_uInt8 bTransparent = 0;
 
             rIStm >> bTransparent;
 

@@ -1218,7 +1218,7 @@ static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPa
 //returns a sal_uInt8 filled with a bit for each position that had a sprm
 //setting that border
 
-    sal_uInt8 nBorder = false;
+    sal_uInt8 nBorder = 0;
     if( pSep )
     {
         if( !bVer67 )

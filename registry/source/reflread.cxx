@@ -376,7 +376,7 @@ sal_Int8 ConstantPool::readBYTEConstant(sal_uInt16 index)
 
 sal_Int16 ConstantPool::readINT16Constant(sal_uInt16 index)
 {
-    sal_Int16 aINT16 = sal_False;
+    sal_Int16 aINT16 = 0;
 
     if (m_pIndex && (index> 0) && (index <= m_numOfEntries))
     {
@@ -391,7 +391,7 @@ sal_Int16 ConstantPool::readINT16Constant(sal_uInt16 index)
 
 sal_uInt16 ConstantPool::readUINT16Constant(sal_uInt16 index)
 {
-    sal_uInt16 asal_uInt16 = sal_False;
+    sal_uInt16 asal_uInt16 = 0;
 
     if (m_pIndex && (index> 0) && (index <= m_numOfEntries))
     {
@@ -406,7 +406,7 @@ sal_uInt16 ConstantPool::readUINT16Constant(sal_uInt16 index)
 
 sal_Int32 ConstantPool::readINT32Constant(sal_uInt16 index)
 {
-    sal_Int32 aINT32 = sal_False;
+    sal_Int32 aINT32 = 0;
 
     if (m_pIndex && (index> 0) && (index <= m_numOfEntries))
     {
@@ -421,7 +421,7 @@ sal_Int32 ConstantPool::readINT32Constant(sal_uInt16 index)
 
 sal_uInt32 ConstantPool::readUINT32Constant(sal_uInt16 index)
 {
-    sal_uInt32 aUINT32 = sal_False;
+    sal_uInt32 aUINT32 = 0;
 
     if (m_pIndex && (index> 0) && (index <= m_numOfEntries))
     {
@@ -436,7 +436,7 @@ sal_uInt32 ConstantPool::readUINT32Constant(sal_uInt16 index)
 
 sal_Int64 ConstantPool::readINT64Constant(sal_uInt16 index)
 {
-    sal_Int64 aINT64 = sal_False;
+    sal_Int64 aINT64 = 0;
 
     if (m_pIndex && (index> 0) && (index <= m_numOfEntries))
     {
@@ -451,7 +451,7 @@ sal_Int64 ConstantPool::readINT64Constant(sal_uInt16 index)
 
 sal_uInt64 ConstantPool::readUINT64Constant(sal_uInt16 index)
 {
-    sal_uInt64 aUINT64 = sal_False;
+    sal_uInt64 aUINT64 = 0;
 
     if (m_pIndex && (index> 0) && (index <= m_numOfEntries))
     {

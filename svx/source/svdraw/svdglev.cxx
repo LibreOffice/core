@@ -107,7 +107,7 @@ TRISTATE SdrGlueEditView::IsMarkedGluePointsEscDir(sal_uInt16 nThisEsc) const
 {
     ForceUndirtyMrkPnt();
     sal_Bool bFirst=sal_True;
-    sal_uInt16 nRet=sal_False;
+    sal_uInt16 nRet=0;
     ((SdrGlueEditView*)this)->ImpDoMarkedGluePoints(ImpGetEscDir,sal_True,&bFirst,&nThisEsc,&nRet);
     return (TRISTATE)nRet;
 }

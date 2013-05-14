@@ -207,7 +207,7 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
 
-    sal_Int32 affectedRows = sal_False;
+    sal_Int32 affectedRows = 0;
     try {
         affectedRows = ((sql::PreparedStatement *)cppStatement)->executeUpdate();
     } catch (const sql::SQLException &e) {
