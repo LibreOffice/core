@@ -146,6 +146,13 @@ my %replaceable = (
 #    'share/uno_packages' => '\.zip$'
 );
 
+my @instdir_replaceable = (
+    'share',
+    'program',
+#    'presets', # leave these guys alone for now
+    'help',
+);
+
 my @search_dirs = ( 'lib', 'bin', 'class' );
 
 my @known_duplicates = ( 'db.jar', 'libi18n', 'libnssckbi', 'libnssdbm', 'libsqlite3', 'libnssutil3', 'pythonloader.uno', 'pyuno', 'libpyuno' );
@@ -520,6 +527,46 @@ sub link_rdb_files()
     print "\n";
 }
 
+# instdir is an internal directory in the build tree
+# installdir is the directory we installed into.
+sub do_recursive_link($$)
+{
+    my ($instdir, $installdir) = @_;
+
+    (-d $installdir && -d $instdir) || die "not directories";
+
+    my $dirhandle;
+    if (opendir ($dirhandle, $instdir)) {
+	while (my $fname = readdir ($dirhandle)) {
+	    $fname =~ /^\./ && next;
+	    if (-d "$instdir/$fname") {
+		if (-d "$installdir/$fname") {
+		    do_recursive_link("$instdir/$fname", "$installdir/$fname");
+		} else {
+		    print STDERR "mismatching directories $instdir/$fname vs. $installdir/$fname\n";
+		}
+	    } elsif (-f "$installdir/$fname") {
+		do_link ($instdir, $installdir, $fname, $fname, 0);
+	    } else {
+		print STDERR "Warning: odd file type for $instdir/$fname\n";
+	    }
+	}
+    } else {
+	print STDERR "Couldn't scan '$instdir': $!";
+    }
+}
+
+sub link_instdir($$)
+{
+    my ($instdir, $installdir) = @_;
+
+    print "linking instdir ...\n";
+    for my $dir (@instdir_replaceable) {
+# include target ...
+	do_recursive_link("$instdir/$dir", "$installdir/$dir");
+    }
+}
+
 evilness ('undo');
 
 my $installed_files = build_installed_list ($OOO_INSTALL);
@@ -529,6 +576,7 @@ link_gdb_py();
 link_pagein_files();
 link_ui_files();
 link_rdb_files();
+link_instdir("$OOO_BUILD/instdir/$TARGET", $OOO_INSTALL);
 
 if (!-f "$OOO_INSTALL/" . $brand_program_dir . "/ooenv") {
     my $ooenv;
