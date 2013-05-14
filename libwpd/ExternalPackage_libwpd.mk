@@ -10,20 +10,20 @@
 $(eval $(call gb_ExternalPackage_ExternalPackage,libwpd,libwpd))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,libwpd,inc/external/libwpd,\
-	src/lib/libwpd.h \
-	src/lib/WPDocument.h \
-	src/lib/WPXBinaryData.h \
-	src/lib/WPXDocumentInterface.h \
-	src/lib/WPXProperty.h \
-	src/lib/WPXPropertyList.h \
-	src/lib/WPXString.h \
-	src/lib/WPXPropertyListVector.h \
+	inc/libwpd/libwpd.h \
+	inc/libwpd/WPDocument.h \
+	inc/libwpd/WPXBinaryData.h \
+	inc/libwpd/WPXDocumentInterface.h \
+	inc/libwpd/WPXProperty.h \
+	inc/libwpd/WPXPropertyList.h \
+	inc/libwpd/WPXString.h \
+	inc/libwpd/WPXPropertyListVector.h \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,libwpd,inc/external/libwpd-stream,\
-	src/lib/libwpd-stream.h \
-	src/lib/WPXStream.h \
-	src/lib/WPXStreamImplementation.h \
+	inc/libwpd-stream/libwpd-stream.h \
+	inc/libwpd-stream/WPXStream.h \
+	inc/libwpd-stream/WPXStreamImplementation.h \
 ))
 
 $(eval $(call gb_ExternalPackage_use_external_project,libwpd,libwpd))
