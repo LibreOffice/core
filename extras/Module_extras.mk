@@ -21,18 +21,10 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_database \
 	Package_databasebiblio \
 	Package_fonts \
-	Package_gallarrows \
 	Package_gallbullets \
-	Package_gallcomputers \
-	Package_galldiagrams \
-	Package_galleducation \
-	Package_gallenvironment \
-	Package_gallfinance \
 	Package_gallhtmlexpo \
 	Package_gallmytheme \
-	Package_gallpeople \
 	Package_gallroot \
-	Package_gallsymbols \
 	Package_gallsystem \
 	Package_gallwwwback \
 	Package_gallwwwgraf \
@@ -53,6 +45,14 @@ $(eval $(call gb_Module_add_targets,extras,\
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,extras,\
+	Gallery_arrows \
+	Gallery_computers \
+	Gallery_diagrams \
+	Gallery_education \
+	Gallery_environment \
+	Gallery_finance \
+	Gallery_people \
+	Gallery_symbols \
 	Gallery_sound \
 	Gallery_txtshapes \
 	Gallery_transportation \

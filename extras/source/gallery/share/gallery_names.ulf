@@ -6,8 +6,33 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
+[arrows]
+en-US = "Arrows"
+
+[computers]
+en-US = "Computers"
+
+[diagrams]
+en-US = "Diagrams"
+
+[education]
+en-US = "School & University"
+
+[environment]
+en-US = "Environment"
+
+[finance]
+en-US = "Finance"
+
+[people]
+en-US = "People"
+
 [sound]
 en-US = "Sounds"
+
+[symbols]
+en-US = "Symbols"
 
 [txtshapes]
 en-US = "Text Shapes"

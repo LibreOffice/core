@@ -21,30 +21,6 @@ $(eval $(call gb_Package_add_files,extras_gallsystem,share/gallery,\
 	sg4.sdg \
 	sg4.sdv \
 	sg4.thm \
-	sg10.sdg \
-	sg10.sdv \
-	sg10.thm \
-	sg11.sdg \
-	sg11.sdv \
-	sg11.thm \
-	sg12.sdg \
-	sg12.sdv \
-	sg12.thm \
-	sg13.sdg \
-	sg13.sdv \
-	sg13.thm \
-	sg14.sdg \
-	sg14.sdv \
-	sg14.thm \
-	sg15.sdg \
-	sg15.sdv \
-	sg15.thm \
-	sg16.sdg \
-	sg16.sdv \
-	sg16.thm \
-	sg17.sdg \
-	sg17.sdv \
-	sg17.thm \
 	sg24.sdg \
 	sg24.sdv \
 	sg24.thm \
