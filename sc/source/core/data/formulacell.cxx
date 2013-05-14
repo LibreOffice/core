@@ -3243,8 +3243,34 @@ void ScFormulaCell::StartListeningTo( ScDocument* pDoc )
     SetNeedsListening( false);
 }
 
-//  pArr gesetzt -> Referenzen von anderer Zelle nehmen
-// Then aPos must also be commited
+namespace {
+
+void endListeningArea(
+    ScFormulaCell* pCell, ScDocument& rDoc, const ScAddress& rPos, const ScToken& rToken)
+{
+    const ScSingleRefData& rRef1 = rToken.GetSingleRef();
+    const ScSingleRefData& rRef2 = rToken.GetSingleRef2();
+    ScAddress aCell1 = rRef1.toAbs(rPos);
+    ScAddress aCell2 = rRef2.toAbs(rPos);
+    if (aCell1.IsValid() && aCell2.IsValid())
+    {
+        if (rToken.GetOpCode() == ocColRowNameAuto)
+        {   // automagically
+            if ( rRef1.IsColRel() )
+            {   // ColName
+                aCell2.SetRow(MAXROW);
+            }
+            else
+            {   // RowName
+                aCell2.SetCol(MAXCOL);
+            }
+        }
+
+        rDoc.EndListeningArea(ScRange(aCell1, aCell2), pCell);
+    }
+}
+
+}
 
 void ScFormulaCell::EndListeningTo( ScDocument* pDoc, ScTokenArray* pArr,
         ScAddress aCellPos )
@@ -3269,60 +3295,17 @@ void ScFormulaCell::EndListeningTo( ScDocument* pDoc, ScTokenArray* pArr,
     ScToken* t;
     while ( ( t = static_cast<ScToken*>(pArr->GetNextReferenceRPN()) ) != NULL )
     {
-        StackVar eType = t->GetType();
-        ScSingleRefData& rRef1 = t->GetSingleRef();
-        ScSingleRefData& rRef2 = (eType == svDoubleRef ?
-            t->GetDoubleRef().Ref2 : rRef1);
-        switch( eType )
+        switch (t->GetType())
         {
             case svSingleRef:
-                rRef1.CalcAbsIfRel( aCellPos );
-                if ( rRef1.Valid() )
-                {
-                    pDoc->EndListeningCell(
-                        ScAddress( rRef1.nCol,
-                                   rRef1.nRow,
-                                   rRef1.nTab ), this );
-                }
+            {
+                ScAddress aCell = t->GetSingleRef().toAbs(aPos);
+                if (aCell.IsValid())
+                    pDoc->EndListeningCell(aCell, this);
+            }
             break;
             case svDoubleRef:
-                t->CalcAbsIfRel( aCellPos );
-                if ( rRef1.Valid() && rRef2.Valid() )
-                {
-                    if ( t->GetOpCode() == ocColRowNameAuto )
-                    {   // automagically
-                        if ( rRef1.IsColRel() )
-                        {   // ColName
-                            pDoc->EndListeningArea( ScRange (
-                                rRef1.nCol,
-                                rRef1.nRow,
-                                rRef1.nTab,
-                                rRef2.nCol,
-                                MAXROW,
-                                rRef2.nTab ), this );
-                        }
-                        else
-                        {   // RowName
-                            pDoc->EndListeningArea( ScRange (
-                                rRef1.nCol,
-                                rRef1.nRow,
-                                rRef1.nTab,
-                                MAXCOL,
-                                rRef2.nRow,
-                                rRef2.nTab ), this );
-                        }
-                    }
-                    else
-                    {
-                        pDoc->EndListeningArea( ScRange (
-                            rRef1.nCol,
-                            rRef1.nRow,
-                            rRef1.nTab,
-                            rRef2.nCol,
-                            rRef2.nRow,
-                            rRef2.nTab ), this );
-                    }
-                }
+                endListeningArea(this, *pDoc, aCellPos, *t);
             break;
             default:
                 ;   // nothing
@@ -3348,39 +3331,17 @@ void ScFormulaCell::EndListeningTo( sc::EndListeningContext& rCxt )
     ScToken* t;
     while ( ( t = static_cast<ScToken*>(pCode->GetNextReferenceRPN()) ) != NULL )
     {
-        StackVar eType = t->GetType();
-        ScSingleRefData& rRef1 = t->GetSingleRef();
-        ScSingleRefData& rRef2 = (eType == svDoubleRef ? t->GetDoubleRef().Ref2 : rRef1);
-        switch (eType)
+        switch (t->GetType())
         {
             case svSingleRef:
             {
-                ScAddress aCell = rRef1.toAbs(aPos);
+                ScAddress aCell = t->GetSingleRef().toAbs(aPos);
                 if (aCell.IsValid())
                     rDoc.EndListeningCell(rCxt, aCell, *this);
             }
             break;
             case svDoubleRef:
-            {
-                ScAddress aCell1 = rRef1.toAbs(aPos);
-                ScAddress aCell2 = rRef2.toAbs(aPos);
-                if (aCell1.IsValid() && aCell2.IsValid())
-                {
-                    if (t->GetOpCode() == ocColRowNameAuto)
-                    {   // automagically
-                        if ( rRef1.IsColRel() )
-                        {   // ColName
-                            aCell2.SetRow(MAXROW);
-                        }
-                        else
-                        {   // RowName
-                            aCell2.SetCol(MAXCOL);
-                        }
-                    }
-
-                    rDoc.EndListeningArea(ScRange(aCell1, aCell2), this);
-                }
-            }
+                endListeningArea(this, rDoc, aPos, *t);
             break;
             default:
                 ;   // nothing
