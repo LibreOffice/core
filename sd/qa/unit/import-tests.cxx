@@ -38,20 +38,32 @@ public:
 
 /** Test document against a reference XML dump of shapes.
 
-TODO: add info how to create the reference XML dump.
+If you want to update one of these tests, set the nUpdateMe to the index of
+the test, the dump XML's will be created (or rewritten) instead of checking.
+Use with care - when the test is failing, first find out why, instead of just
+updating .xml's blindly.
+
+NOTE: This approach is suitable only for tests of fixes that actually change
+the layout - best to check by reverting your fix locally after having added
+the test, and re-running; it should break.
 */
 void SdFiltersTest::testDocumentLayout()
 {
     struct { const char *pInput, *pDump; } aFilesToCompare[] =
     {
         { "odp/shapes-test.odp", "xml/shapes-test_page" },
-        { "pptx/fdo47434-all.pptx", "pptx/xml/fdo47434_page" }
+        { "pptx/fdo47434-all.pptx", "pptx/xml/fdo47434_page" },
+        { "n758621.ppt", "xml/n758621_" }
     };
 
-    for ( unsigned int i = 0; i < SAL_N_ELEMENTS( aFilesToCompare ); ++i )
+    for ( int i = 0; i < static_cast< int >( SAL_N_ELEMENTS( aFilesToCompare ) ); ++i )
     {
+        int nUpdateMe = -1; // index of test we want to update; supposedly only when the test is created
+
         ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc( "/sd/qa/unit/data/" ) + OUString::createFromAscii( aFilesToCompare[i].pInput ) );
-        compareWithShapesDump( xDocShRef, getPathFromSrc( "/sd/qa/unit/data/" ) + OUString::createFromAscii( aFilesToCompare[i].pDump ) );
+        compareWithShapesDump( xDocShRef,
+                getPathFromSrc( "/sd/qa/unit/data/" ) + OUString::createFromAscii( aFilesToCompare[i].pDump ),
+                i == nUpdateMe );
     }
 }
 

@@ -29,7 +29,7 @@
 using namespace ::com::sun::star;
 
 struct FileFormat {
-    const char* pName; const char* pFilterName; const char* pTypeName; sal_uLong nFormatType;
+    const char* pName; const char* pFilterName; const char* pTypeName; const char* pUserData; sal_uLong nFormatType;
 };
 
 // These values are taken from "Flags" in filter/source/config/fragments/filters/*
@@ -46,10 +46,10 @@ pTypeName: <prop oor:Name="UIName">...</prop>
 nFormatType: <prop oor:name="Flags">...</prop>
 */
 FileFormat aFileFormats[] = {
-    { "odp",  "impress8", "impress8", ODP_FORMAT_TYPE },
-    { "ppt",  "MS PowerPoint 97", "Microsoft PowerPoint 97/2000/XP/2003", PPT_FORMAT_TYPE },
-    { "pptx", "Impress MS PowerPoint 2007 XML", "MS PowerPoint 2007 XML", PPTX_FORMAT_TYPE },
-    { 0, 0, 0, 0 }
+    { "odp",  "impress8", "impress8", "", ODP_FORMAT_TYPE },
+    { "ppt",  "MS PowerPoint 97", "Microsoft PowerPoint 97/2000/XP/2003", "sdfilt", PPT_FORMAT_TYPE },
+    { "pptx", "Impress MS PowerPoint 2007 XML", "MS PowerPoint 2007 XML", "", PPTX_FORMAT_TYPE },
+    { 0, 0, 0, 0, 0 }
 };
 
 /// Base class for filter tests loading or roundtriping a document, and asserting the document model.
@@ -97,7 +97,8 @@ protected:
             OUString::createFromAscii( pFmt->pFilterName ),
             OUString(), pFmt->nFormatType, nFormat,
             OUString::createFromAscii( pFmt->pTypeName ),
-            0, OUString(), OUString(), /* userdata */
+            0, OUString(),
+            OUString::createFromAscii( pFmt->pUserData ),
             OUString("private:factory/simpress*") );
         aFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
@@ -108,14 +109,17 @@ protected:
         {
             if (xDocShRef.Is())
                 xDocShRef->DoClose();
-            CPPUNIT_ASSERT_MESSAGE( "failed to load", false );
+            CPPUNIT_ASSERT_MESSAGE( OUStringToOString( "failed to load " + rURL, RTL_TEXTENCODING_UTF8 ).getStr(), false );
         }
 
         return xDocShRef;
     }
 
-    /// Dump shapes in xDocShRef, and compare the dump against content of pShapesDumpFileNameBase<number>.xml.
-    void compareWithShapesDump( ::sd::DrawDocShellRef xDocShRef, const OUString &rShapesDumpFileNameBase )
+    /** Dump shapes in xDocShRef, and compare the dump against content of pShapesDumpFileNameBase<number>.xml.
+
+        @param bCreate Instead of comparing to the reference file(s), create it/them.
+    */
+    void compareWithShapesDump( ::sd::DrawDocShellRef xDocShRef, const OUString &rShapesDumpFileNameBase, bool bCreate = false )
     {
         CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
         CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
@@ -143,13 +147,21 @@ protected:
 
             OString aFileName = aFileNameBuf.makeStringAndClear();
 
-            std::cout << aString << std::endl;
-            doXMLDiff(aFileName.getStr(),
-                    OUStringToOString(aString, RTL_TEXTENCODING_UTF8).getStr(),
-                    static_cast<int>(aString.getLength()),
-                    OUStringToOString(
-                        getPathFromSrc("/sd/qa/unit/data/tolerance.xml"),
-                        RTL_TEXTENCODING_UTF8).getStr());
+            if ( bCreate )
+            {
+                std::ofstream aStream( aFileName.getStr(), std::ofstream::out );
+                aStream << aString;
+                aStream.close();
+            }
+            else
+            {
+                doXMLDiff(aFileName.getStr(),
+                        OUStringToOString(aString, RTL_TEXTENCODING_UTF8).getStr(),
+                        static_cast<int>(aString.getLength()),
+                        OUStringToOString(
+                            getPathFromSrc("/sd/qa/unit/data/tolerance.xml"),
+                            RTL_TEXTENCODING_UTF8).getStr());
+            }
         }
         xDocShRef->DoClose();
     }
@@ -160,3 +172,5 @@ private:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
