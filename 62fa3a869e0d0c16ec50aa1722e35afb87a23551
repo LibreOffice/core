@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//8xk\u003d",
+        "filename": "formula/source/ui/dlg/formula.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-05-14T12:08:14Z",
+      "side": 1,
+      "message": "Typo (+\u003d vs +) ? Although the return value is a temporary, so this doesn\u0027t matter in this exact case, it looks a bit confusing.",
+      "revId": "62fa3a869e0d0c16ec50aa1722e35afb87a23551",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//8xg\u003d",
+        "filename": "lotuswordpro/source/filter/lwptblformula.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-05-14T12:08:14Z",
+      "side": 1,
+      "message": "This does not erase the last \"|\", it replaces it with the whole string again.",
+      "revId": "62fa3a869e0d0c16ec50aa1722e35afb87a23551",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//8xc\u003d",
+        "filename": "padmin/source/adddlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-05-14T12:08:14Z",
+      "side": 1,
+      "message": "Nitpick: This can be more easily written as endsWith().",
+      "revId": "62fa3a869e0d0c16ec50aa1722e35afb87a23551",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//8xY\u003d",
+        "filename": "sc/source/core/data/stlpool.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-05-14T12:08:14Z",
+      "side": 1,
+      "message": "nStrLen is xub_StrLen, which is a too small type for OUString lengths (16bit vs 32bit), getLength() returns sal_Int32.",
+      "revId": "62fa3a869e0d0c16ec50aa1722e35afb87a23551",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
