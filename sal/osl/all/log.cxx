@@ -28,10 +28,12 @@
 
 #include "logformat.hxx"
 
-#if defined WNT
+#if defined ANDROID
+#include <android/log.h>
+#elif defined WNT
 #include <process.h>
 #define OSL_DETAIL_GETPID _getpid()
-#elif !defined ANDROID
+#else
 #include <unistd.h>
 #define OSL_DETAIL_GETPID getpid()
 #endif
@@ -40,10 +42,8 @@
 #include <syslog.h>
 // sal/osl/unx/salinit.cxx::sal_detail_initialize updates this:
 bool sal_use_syslog;
-#endif
-
-#ifdef ANDROID
-#include <android/log.h>
+#else
+enum { sal_use_syslog = false; }
 #endif
 
 // Avoid the use of other sal code in this file as much as possible, so that
@@ -59,8 +59,7 @@ bool equalStrings(
     return length1 == length2 && std::memcmp(string1, string2, length1) == 0;
 }
 
-#ifndef ANDROID
-
+#if !defined ANDROID
 char const * toString(sal_detail_LogLevel level) {
     switch (level) {
     default:
@@ -74,12 +73,11 @@ char const * toString(sal_detail_LogLevel level) {
         return "debug";
     }
 }
-
 #endif
 
-// getenv is not thread safe, so minimize use of result; except on Android,
-// see 60628799633ffde502cb105b98d3f254f93115aa "Notice if SAL_LOG is
-// changed while the process is running":
+// getenv is not thread safe, so minimize use of result; except on Android, see
+// 60628799633ffde502cb105b98d3f254f93115aa "Notice if SAL_LOG is changed while
+// the process is running":
 #if defined ANDROID
 
 char const * getEnvironmentVariable() {
@@ -105,24 +103,6 @@ char const * getEnvironmentVariable() {
     return env;
 }
 
-#endif
-
-#ifndef ANDROID
-#if HAVE_SYSLOG_H
-int toSyslogPriority(sal_detail_LogLevel level) {
-    switch (level) {
-    default:
-        assert(false); // this cannot happen
-        // fall through
-    case SAL_DETAIL_LOG_LEVEL_INFO:
-        return LOG_INFO;
-    case SAL_DETAIL_LOG_LEVEL_WARN:
-        return LOG_WARNING;
-    case SAL_DETAIL_LOG_LEVEL_DEBUG:
-        return LOG_DEBUG;
-    }
-}
-#endif
 #endif
 
 bool report(sal_detail_LogLevel level, char const * area) {
@@ -199,28 +179,27 @@ void log(
     char const * message)
 {
     std::ostringstream s;
-#ifndef ANDROID
-#if HAVE_SYSLOG_H
-    if (!sal_use_syslog)
-#endif
+#if !defined ANDROID
+    // On Android, the area will be used as the "tag," and log info already
+    // contains the PID
+    if (!sal_use_syslog) {
         s << toString(level) << ':';
-#endif
-    if (level == SAL_DETAIL_LOG_LEVEL_DEBUG) {
-        s << /*no area or where */ ' ' << message << '\n';
-    } else {
-#ifdef ANDROID
-        // The area will be used as the "tag", and log info already contgains the pid on Android
-#else
-        s << area << ':' << OSL_DETAIL_GETPID << ':';
-#endif
-        s << osl::Thread::getCurrentIdentifier() << ':';
-        if (strncmp(where, SRCDIR, sizeof(SRCDIR)-1) == 0)
-            s << where+sizeof(SRCDIR);
-        else
-            s << where;
-        s << message << '\n';
     }
-#ifdef ANDROID
+    if (level != SAL_DETAIL_LOG_LEVEL_DEBUG) {
+        s << area << ':';
+    }
+    s << OSL_DETAIL_GETPID << ':';
+#endif
+    s << osl::Thread::getCurrentIdentifier() << ':';
+    if (level == SAL_DETAIL_LOG_LEVEL_DEBUG) {
+        s << ' ';
+    } else {
+        s << (where
+              + (std::strncmp(where, SRCDIR "/", std::strlen(SRCDIR "/")) == 0
+                 ? std::strlen(SRCDIR "/") : 0));
+    }
+    s << message << '\n';
+#if defined ANDROID
     int android_log_level;
     switch (level) {
     case SAL_DETAIL_LOG_LEVEL_INFO:
@@ -236,16 +215,29 @@ void log(
         android_log_level = ANDROID_LOG_INFO;
         break;
     }
-    if (area == NULL)
-        area = "LibreOffice";
-    __android_log_print(android_log_level, area, "%s", s.str().c_str());
+    __android_log_print(
+        android_log_level, area == 0 ? "LibreOffice" : area, "%s",
+        s.str().c_str());
 #else
+    if (sal_use_syslog) {
 #if HAVE_SYSLOG_H
-    if (sal_use_syslog)
-        syslog(toSyslogPriority(level), "%s", s.str().c_str());
-    else
+        int prio;
+        switch (level) {
+        case SAL_DETAIL_LOG_LEVEL_INFO:
+            prio = LOG_INFO;
+        default:
+            assert(false); // this cannot happen
+            // fall through
+        case SAL_DETAIL_LOG_LEVEL_WARN:
+            prio = LOG_WARNING;
+        case SAL_DETAIL_LOG_LEVEL_DEBUG:
+            prio = LOG_DEBUG;
+        }
+        syslog(prio, "%s", s.str().c_str());
 #endif
+    } else {
         std::fputs(s.str().c_str(), stderr);
+    }
 #endif
 }
 
