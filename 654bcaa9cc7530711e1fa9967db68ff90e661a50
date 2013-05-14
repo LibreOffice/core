@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//8zM\u003d",
+        "filename": "lotuswordpro/source/filter/lwptblformula.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1000186
+      },
+      "writtenOn": "2013-05-14T02:41:18Z",
+      "side": 1,
+      "message": "What do you think about:\n\nreturn OUString(\"\u003c\" + LwpFormulaTools::GetCellAddr(m_aStartRow,m_aStartCol,pCellsMap) + \":\" + LwpFormulaTools::GetCellAddr(m_aEndRow,m_aEndCol,pCellsMap) + \"\u003e\")\n\n?",
+      "revId": "654bcaa9cc7530711e1fa9967db68ff90e661a50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//8zI\u003d",
+        "filename": "lotuswordpro/source/filter/lwptblformula.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1000186
+      },
+      "writtenOn": "2013-05-14T02:41:18Z",
+      "side": 1,
+      "message": "what about:\n\nOUString aFormula(LwpFormulaTools::GetName(m_nTokenType) + \" \")\n\n?",
+      "revId": "654bcaa9cc7530711e1fa9967db68ff90e661a50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
