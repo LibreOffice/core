@@ -1,0 +1,15 @@
+--- a/src/lib/MWAWTable.hxx
++++ b/src/lib/MWAWTable.hxx
+@@ -117,7 +117,11 @@ protected:
+               - c2.m_cell->box().size()[m_coord];
+       if (diffF < 0) return true;
+       if (diffF > 0) return false;
+-      return ssize_t(c1.m_cell) < ssize_t(c2.m_cell);
++#ifdef _WIN64
++      return __int64(c1.m_cell) < __int64(c2.m_cell);
++#else
++      return long(c1.m_cell) < long(c2.m_cell);
++#endif
+     }
+ 
+     //! the coord to compare
