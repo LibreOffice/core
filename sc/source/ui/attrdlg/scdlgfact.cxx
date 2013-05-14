@@ -1240,7 +1240,7 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScHFEditDlg( SfxViewF
                                                                         const String&       rPageStyle,
                                                                         sal_uInt16              nResId )
 {
-    SfxTabDialog* pDlg = new ScHFEditDlg( pFrame, pParent, rCoreSet,rPageStyle, nResId );
+    SfxTabDialog* pDlg = new ScHFEditDlg( pFrame, pParent, rCoreSet, rPageStyle, nResId );
     return new ScAbstractTabDialog_Impl( pDlg );
 }
 

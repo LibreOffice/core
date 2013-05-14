@@ -33,6 +33,7 @@
 
 #include "tphf.hxx"
 #include "sc.hrc"
+#include "scabstdlg.hxx"
 #include "globstr.hrc"
 #include "tabvwsh.hxx"
 #include "viewdata.hxx"
@@ -204,10 +205,14 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl)
                             ? RID_SCDLG_HFED_HEADER
                             : RID_SCDLG_HFED_FOOTER;
 
-        ScHFEditDlg* pDlg
-             = new ScHFEditDlg( pViewSh->GetViewFrame(), this,
-                                aDataSet, aStrPageStyle, nResId );
 
+        ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+        OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
+
+        SfxAbstractTabDialog* pDlg = pFact->CreateScHFEditDlg(
+            pViewSh->GetViewFrame(), this, aDataSet, aStrPageStyle, nResId);
+
+        OSL_ENSURE(pDlg, "Dialog create fail!");
         if ( pDlg->Execute() == RET_OK )
         {
             aDataSet.Put( *pDlg->GetOutputItemSet() );
