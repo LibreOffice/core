@@ -67,10 +67,7 @@ namespace {
 OUString createPath(
     OUString const & name, sal_Int32 pos, OUString const & locale)
 {
-    OUStringBuffer b(name.copy(0, pos + 1));
-    b.append(locale);
-    b.append(name.copy(pos));
-    return b.makeStringAndClear();
+    return name.copy(0, pos + 1) + locale + name.copy(pos);
 }
 
 boost::shared_ptr< SvStream > wrapFile(osl::File & file)
@@ -280,10 +277,7 @@ void ImplImageTree::resetPaths() {
         rtl::Bootstrap::expandMacros(url);
         INetURLObject u(url);
         OSL_ASSERT(!u.HasError());
-        OUStringBuffer b;
-        b.appendAscii("images_");
-        b.append(m_style);
-        bool ok = u.Append(b.makeStringAndClear(), INetURLObject::ENCODE_ALL);
+        bool ok = u.Append("images_" + m_style, INetURLObject::ENCODE_ALL);
         OSL_ASSERT(ok); (void) ok;
         m_paths.push_back(
             std::make_pair(
