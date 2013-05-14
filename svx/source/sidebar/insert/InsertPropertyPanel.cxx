@@ -112,7 +112,6 @@ IMPL_LINK(InsertPropertyPanel, WindowEventListener, VclSimpleEvent*, pEvent)
         return 1;
 
     Window* pWindow = dynamic_cast<VclWindowEvent*>(pEvent)->GetWindow();
-    Window* pParent = pWindow->GetParent();
     ToolBox* pToolBox = dynamic_cast<ToolBox*>(pWindow);
     if (pToolBox == NULL)
         return 1;
