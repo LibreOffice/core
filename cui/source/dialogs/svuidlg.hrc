@@ -22,10 +22,6 @@
 
 #define TB_LINKS                32014
 
-// gemeinsame Id's
-#define CB_DISPLAY_AS_ICON     12
-#define PB_CHANGE_ICON         14
-
 #define STR_AUTOLINK                            32006
 #define STR_MANUALLINK                          32007
 #define STR_BROKENLINK                          32008
@@ -41,8 +37,6 @@
 
 #define MD_PASTE_OBJECT     32001
 #define S_OBJECT               1
-#define RB_PASTE               20
-#define RB_PASTE_LINK          21
 #define FT_OBJECT_SOURCE       22
 #define FT_SOURCE              23
 

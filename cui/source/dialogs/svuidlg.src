@@ -40,46 +40,12 @@ ModalDialog MD_PASTE_OBJECT
         Size = MAP_APPFONT ( 166 , 20 ) ;
         WordBreak = TRUE ;
     };
-    RadioButton RB_PASTE
-    {
-        HelpID = "cui:RadioButton:MD_PASTE_OBJECT:RB_PASTE";
-        Hide = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 48 ) ;
-        Size = MAP_APPFONT ( 63 , 10 ) ;
-        Text [ en-US ] = "~Insert as" ;
-        Check = TRUE ;
-    };
-    RadioButton RB_PASTE_LINK
-    {
-        HelpID = "cui:RadioButton:MD_PASTE_OBJECT:RB_PASTE_LINK";
-        Hide = TRUE ;
-        Pos = MAP_APPFONT ( 78 , 48 ) ;
-        Size = MAP_APPFONT ( 63 , 10 ) ;
-        Text [ en-US ] = "Link to" ;
-    };
     ListBox LB_INSERT_LIST
     {
         HelpID = "cui:ListBox:MD_PASTE_OBJECT:LB_INSERT_LIST";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 49 ) ;
         Size = MAP_APPFONT ( 202 , 74 ) ;
-    };
-    CheckBox CB_DISPLAY_AS_ICON
-    {
-        HelpID = "cui:CheckBox:MD_PASTE_OBJECT:CB_DISPLAY_AS_ICON";
-        Hide = TRUE ;
-        Disable = TRUE ;
-        Pos = MAP_APPFONT ( 150 , 62 ) ;
-        Size = MAP_APPFONT ( 64 , 10 ) ;
-        Text [ en-US ] = "~As icon" ;
-    };
-    PushButton PB_CHANGE_ICON
-    {
-        HelpID = "cui:PushButton:MD_PASTE_OBJECT:PB_CHANGE_ICON";
-        Hide = TRUE ;
-        Pos = MAP_APPFONT ( 150 , 111 ) ;
-        Size = MAP_APPFONT ( 64 , 14 ) ;
-        Text [ en-US ] = "~Other Icon..." ;
     };
     FixedLine FL_CHOICE
     {

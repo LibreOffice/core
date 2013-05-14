@@ -41,10 +41,6 @@ class SvPasteObjectDialog : public ModalDialog
 {
     FixedText aFtSource;
     FixedText aFtObjectSource;
-    RadioButton aRbPaste;
-    RadioButton aRbPasteLink;
-    CheckBox aCbDisplayAsIcon;
-    PushButton aPbChangeIcon;
     FixedLine aFlChoice;
     ListBox aLbInsertList;
     OKButton aOKButton1;
@@ -53,20 +49,13 @@ class SvPasteObjectDialog : public ModalDialog
     ::std::map< SotFormatStringId, String > aSupplementMap;
     SvGlobalName    aObjClassName;
     String          aObjName;
-    sal_uInt16          nAspect;
-    sal_Bool            bLink;
 
     ListBox&        ObjectLB()      { return aLbInsertList; }
     FixedText&      ObjectSource()  { return aFtObjectSource; }
-    RadioButton&    PasteLink()     { return aRbPasteLink; }
-    CheckBox&       AsIconBox()     { return aCbDisplayAsIcon; }
 
     void            SelectObject();
     DECL_LINK( SelectHdl, ListBox * );
     DECL_LINK( DoubleClickHdl, ListBox * );
-    void            SetDefault();
-    sal_uInt16      GetAspect() const { return nAspect; }
-    sal_Bool        ShouldLink() const { return bLink; }
 
 public:
                 SvPasteObjectDialog( Window* pParent );

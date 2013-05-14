@@ -41,10 +41,6 @@ SvPasteObjectDialog::SvPasteObjectDialog( Window* pParent )
     : ModalDialog( pParent, CUI_RES( MD_PASTE_OBJECT ) ),
     aFtSource( this, CUI_RES( FT_SOURCE ) ),
     aFtObjectSource( this, CUI_RES( FT_OBJECT_SOURCE ) ),
-    aRbPaste( this, CUI_RES( RB_PASTE ) ),
-    aRbPasteLink( this, CUI_RES( RB_PASTE_LINK ) ),
-    aCbDisplayAsIcon( this, CUI_RES( CB_DISPLAY_AS_ICON ) ),
-    aPbChangeIcon( this, CUI_RES( PB_CHANGE_ICON ) ),
     aFlChoice( this, CUI_RES( FL_CHOICE ) ),
     aLbInsertList( this, CUI_RES( LB_INSERT_LIST ) ),
     aOKButton1( this, CUI_RES( 1 ) ),
@@ -62,15 +58,13 @@ SvPasteObjectDialog::SvPasteObjectDialog( Window* pParent )
 
     ObjectLB().SetSelectHdl( LINK( this, SvPasteObjectDialog, SelectHdl ) );
     ObjectLB().SetDoubleClickHdl( LINK( this, SvPasteObjectDialog, DoubleClickHdl ) );
-    SetDefault();
 
     aLbInsertList.SetAccessibleName(aFlChoice.GetText());
 }
 
 void SvPasteObjectDialog::SelectObject()
 {
-    if ( aLbInsertList.GetEntryCount() &&
-         !aRbPaste.IsVisible() && !aRbPasteLink.IsVisible() )
+    if (m_pLbInsertList->GetEntryCount())
     {
         aLbInsertList.SelectEntryPos(0);
         SelectHdl( &aLbInsertList );
@@ -94,12 +88,6 @@ IMPL_LINK_INLINE_START( SvPasteObjectDialog, DoubleClickHdl, ListBox *, pListBox
     return 0;
 }
 IMPL_LINK_INLINE_END( SvPasteObjectDialog, DoubleClickHdl, ListBox *, pListBox )
-
-void SvPasteObjectDialog::SetDefault()
-{
-    bLink   = sal_False;
-    nAspect = (sal_uInt16)::com::sun::star::embed::Aspects::MSOLE_CONTENT;
-}
 
 SvPasteObjectDialog::~SvPasteObjectDialog()
 {
@@ -177,7 +165,6 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
             }
             else if( SOT_FORMATSTR_ID_LINK_SOURCE == nFormat )
             {
-                PasteLink().Enable();
                 continue;
             }
             else if( !aName.Len() )
@@ -221,15 +208,8 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
 
     ObjectSource().SetText( aTypeName );
 
-    SetDefault();
-
     if( Dialog::Execute() == RET_OK )
     {
-        bLink = PasteLink().IsChecked();
-
-        if( AsIconBox().IsChecked() )
-            nAspect = (sal_uInt16)com::sun::star::embed::Aspects::MSOLE_ICON;
-
         nSelFormat  = (sal_uLong)ObjectLB().GetEntryData( ObjectLB().GetSelectEntryPos() );
     }
 
