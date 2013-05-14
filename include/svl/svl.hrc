@@ -105,8 +105,6 @@
 
 #define STR_SVT_MIMETYPE_END                (STR_SVT_MIMETYPE_AUDIO_WEBM)
 
-#define STR_COLUM_DT_AUTO                   (STR_SVT_MIMETYPE_END+1)
-
 #endif  // #ifndef _SVTOOLS_HRC
 
 // ******************************************************************* EOF

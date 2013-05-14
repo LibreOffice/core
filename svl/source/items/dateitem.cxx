@@ -18,7 +18,6 @@
  */
 
 #include <svl/dateitem.hxx>
-#include <svl/svl.hrc>
 
 #include <unotools/intlwrapper.hxx>
 #include <comphelper/processfactory.hxx>
