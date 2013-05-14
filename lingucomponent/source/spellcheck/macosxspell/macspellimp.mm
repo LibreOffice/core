@@ -83,7 +83,7 @@ PropertyHelper_Spell & MacSpellChecker::GetPropHelper_Impl()
 {
     if (!pPropHelper)
     {
-        Reference< XPropertySet >   xPropSet( GetLinguProperties(), UNO_QUERY );
+        Reference< XLinguProperties >   xPropSet( GetLinguProperties(), UNO_QUERY );
 
         pPropHelper = new PropertyHelper_Spell( (XSpellChecker *) this, xPropSet );
         xPropHelper = pPropHelper;

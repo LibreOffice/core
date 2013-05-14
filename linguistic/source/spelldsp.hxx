@@ -60,7 +60,7 @@ class SpellCheckerDispatcher :
     LinguOptions            aOpt;
 
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >                     xPropSet;
+        ::com::sun::star::linguistic2::XLinguProperties >           xPropSet;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSearchableDictionaryList >  xDicList;
 
@@ -75,7 +75,7 @@ class SpellCheckerDispatcher :
     inline linguistic::SpellCache &  GetCache() const;
 
     inline ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >
+        ::com::sun::star::linguistic2::XLinguProperties >
             GetPropSet();
     inline ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSearchableDictionaryList >
@@ -137,7 +137,7 @@ inline linguistic::SpellCache & SpellCheckerDispatcher::GetCache() const
 
 
 inline ::com::sun::star::uno::Reference<
-    ::com::sun::star::beans::XPropertySet >
+    ::com::sun::star::linguistic2::XLinguProperties >
         SpellCheckerDispatcher::GetPropSet()
 {
     return xPropSet.is() ?

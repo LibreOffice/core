@@ -101,7 +101,7 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XInterface > &rxSource,
             ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > &rxPropSet,
+                ::com::sun::star::linguistic2::XLinguProperties > &rxPropSet,
             int nAllowedEvents );
     virtual ~PropertyChgHelper();
 
@@ -161,7 +161,7 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XInterface > &rxSource,
             ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > &rxPropSet );
+                ::com::sun::star::linguistic2::XLinguProperties > &rxPropSet );
     virtual ~PropertyHelper_Thes();
 
     // XPropertyChangeListener
@@ -184,7 +184,7 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XInterface > &rxSource,
             ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > &rxPropSet );
+                ::com::sun::star::linguistic2::XLinguProperties > &rxPropSet );
     ~PropertyHelper_Thesaurus();
     void    AddAsPropListener();
     void    RemoveAsPropListener();
@@ -223,7 +223,7 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XInterface > &rxSource,
             ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > &rxPropSet );
+                ::com::sun::star::linguistic2::XLinguProperties > &rxPropSet );
     virtual ~PropertyHelper_Spell();
 
     virtual void    SetTmpPropVals( const com::sun::star::beans::PropertyValues &rPropVals );
@@ -256,7 +256,7 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XInterface > &rxSource,
             ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > &rxPropSet );
+                ::com::sun::star::linguistic2::XLinguProperties > &rxPropSet );
     ~PropertyHelper_Spelling();
 
     void    AddAsPropListener();
@@ -305,7 +305,7 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XInterface > &rxSource,
             ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > &rxPropSet);
+                ::com::sun::star::linguistic2::XLinguProperties > &rxPropSet);
     virtual ~PropertyHelper_Hyphen();
 
     virtual void    SetTmpPropVals( const com::sun::star::beans::PropertyValues &rPropVals );
@@ -334,7 +334,7 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XInterface > &rxSource,
             ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > &rxPropSet);
+                ::com::sun::star::linguistic2::XLinguProperties > &rxPropSet);
     ~PropertyHelper_Hyphenation();
 
     void    AddAsPropListener();

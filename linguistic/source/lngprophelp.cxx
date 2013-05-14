@@ -56,7 +56,7 @@ static int nCHCount = sizeof(aCH) / sizeof(aCH[0]);
 
 PropertyChgHelper::PropertyChgHelper(
         const Reference< XInterface > &rxSource,
-        Reference< XPropertySet > &rxPropSet,
+        Reference< XLinguProperties > &rxPropSet,
         int nAllowedEvents ) :
     PropertyChgHelperBase(),
     aPropNames          (nCHCount),
@@ -335,7 +335,7 @@ sal_Bool SAL_CALL
 
 PropertyHelper_Thes::PropertyHelper_Thes(
         const Reference< XInterface > &rxSource,
-        Reference< XPropertySet > &rxPropSet ) :
+        Reference< XLinguProperties > &rxPropSet ) :
     PropertyChgHelper   ( rxSource, rxPropSet, 0 )
 {
     SetDefaultValues();
@@ -370,7 +370,7 @@ static const char *aSP[] =
 
 PropertyHelper_Spell::PropertyHelper_Spell(
         const Reference< XInterface > & rxSource,
-        Reference< XPropertySet > &rxPropSet ) :
+        Reference< XLinguProperties > &rxPropSet ) :
     PropertyChgHelper   ( rxSource, rxPropSet, AE_SPELLCHECKER )
 {
     AddPropNames( aSP, sizeof(aSP) / sizeof(aSP[0]) );
@@ -558,7 +558,7 @@ static const char *aHP[] =
 
 PropertyHelper_Hyphen::PropertyHelper_Hyphen(
         const Reference< XInterface > & rxSource,
-        Reference< XPropertySet > &rxPropSet ) :
+        Reference< XLinguProperties > &rxPropSet ) :
     PropertyChgHelper   ( rxSource, rxPropSet, AE_HYPHENATOR )
 {
     AddPropNames( aHP, sizeof(aHP) / sizeof(aHP[0]) );
@@ -703,7 +703,7 @@ PropertyHelper_Thesaurus::PropertyHelper_Thesaurus(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XInterface > &rxSource,
             ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > &rxPropSet )
+                ::com::sun::star::linguistic2::XLinguProperties > &rxPropSet )
 {
     pInst = new PropertyHelper_Thes( rxSource, rxPropSet );
     xPropHelper = pInst;
@@ -732,7 +732,7 @@ PropertyHelper_Hyphenation::PropertyHelper_Hyphenation(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XInterface > &rxSource,
             ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > &rxPropSet)
+                ::com::sun::star::linguistic2::XLinguProperties > &rxPropSet)
 {
     pInst = new PropertyHelper_Hyphen( rxSource, rxPropSet );
     xPropHelper = pInst;
@@ -792,7 +792,7 @@ PropertyHelper_Spelling::PropertyHelper_Spelling(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XInterface > &rxSource,
             ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > &rxPropSet )
+                ::com::sun::star::linguistic2::XLinguProperties > &rxPropSet )
 {
     pInst = new PropertyHelper_Spell( rxSource, rxPropSet );
     xPropHelper = pInst;

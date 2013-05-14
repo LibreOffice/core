@@ -120,7 +120,7 @@ PropertyHelper_Thesaurus& Thesaurus::GetPropHelper_Impl()
 {
     if (!pPropHelper)
     {
-        Reference< XPropertySet >   xPropSet( GetLinguProperties(), UNO_QUERY );
+        Reference< XLinguProperties >   xPropSet( GetLinguProperties(), UNO_QUERY );
 
         pPropHelper = new PropertyHelper_Thesaurus( (XThesaurus *) this, xPropSet );
         pPropHelper->AddAsPropListener();   //! after a reference is established
@@ -554,7 +554,7 @@ void SAL_CALL Thesaurus::initialize( const Sequence< Any >& rArguments )
         sal_Int32 nLen = rArguments.getLength();
         if (1 == nLen)
         {
-            Reference< XPropertySet >   xPropSet;
+            Reference< XLinguProperties >   xPropSet;
             rArguments.getConstArray()[0] >>= xPropSet;
 
             //! Pointer allows for access of the non-UNO functions.

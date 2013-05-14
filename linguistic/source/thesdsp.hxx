@@ -58,14 +58,14 @@ class ThesaurusDispatcher :
     ThesSvcByLangMap_t      aSvcMap;
 
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >     xPropSet;
+        ::com::sun::star::linguistic2::XLinguProperties >     xPropSet;
 
     // disallow copy-constructor and assignment-operator for now
     ThesaurusDispatcher(const ThesaurusDispatcher &);
     ThesaurusDispatcher & operator = (const ThesaurusDispatcher &);
 
     inline ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >
+        ::com::sun::star::linguistic2::XLinguProperties >
             GetPropSet();
 
     void    ClearSvcList();
@@ -106,7 +106,7 @@ public:
 
 
 inline ::com::sun::star::uno::Reference<
-    ::com::sun::star::beans::XPropertySet >
+    ::com::sun::star::linguistic2::XLinguProperties >
         ThesaurusDispatcher::GetPropSet()
 {
     return xPropSet.is() ?

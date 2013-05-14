@@ -70,7 +70,7 @@ PropertyHelper_Spell & SpellChecker::GetPropHelper_Impl()
 {
     if (!pPropHelper)
     {
-        Reference< XPropertySet >   xPropSet( GetLinguProperties(), UNO_QUERY );
+        Reference< XLinguProperties >   xPropSet = GetLinguProperties();
 
         pPropHelper = new PropertyHelper_Spell( (XSpellChecker *) this, xPropSet );
         xPropHelper = pPropHelper;

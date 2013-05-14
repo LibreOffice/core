@@ -96,7 +96,7 @@ PropertyHelper_Hyphenation& Hyphenator::GetPropHelper_Impl()
 {
     if (!pPropHelper)
     {
-        Reference< XPropertySet >   xPropSet( GetLinguProperties(), UNO_QUERY );
+        Reference< XLinguProperties >   xPropSet( GetLinguProperties(), UNO_QUERY );
 
         pPropHelper = new PropertyHelper_Hyphenation ((XHyphenator *) this, xPropSet );
         pPropHelper->AddAsPropListener();   //! after a reference is established
@@ -790,7 +790,7 @@ void SAL_CALL Hyphenator::initialize( const Sequence< Any >& rArguments )
         sal_Int32 nLen = rArguments.getLength();
         if (2 == nLen)
         {
-            Reference< XPropertySet >   xPropSet;
+            Reference< XLinguProperties >   xPropSet;
             rArguments.getConstArray()[0] >>= xPropSet;
             //rArguments.getConstArray()[1] >>= xDicList;
 
