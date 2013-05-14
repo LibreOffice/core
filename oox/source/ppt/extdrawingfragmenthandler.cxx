@@ -65,8 +65,11 @@ ExtDrawingFragmentHandler::createFastChildContext( ::sal_Int32 aElement,
 }
 void SAL_CALL ExtDrawingFragmentHandler::endDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException)
 {
-    mpShapePtr->moveAllToPosition( mpOrgShapePtr->getPosition() );
-    mpShapePtr->setName( mpOrgShapePtr->getName() );
+    if( mpShapePtr )
+    {
+        mpShapePtr->moveAllToPosition( mpOrgShapePtr->getPosition() );
+        mpShapePtr->setName( mpOrgShapePtr->getName() );
+    }
 }
 
 } }
