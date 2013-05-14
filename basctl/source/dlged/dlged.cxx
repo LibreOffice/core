@@ -33,7 +33,7 @@
 #include "baside3.hxx"
 
 #include <com/sun/star/awt/XDialog.hpp>
-#include <com/sun/star/resource/XStringResourcePersistence.hpp>
+#include <com/sun/star/resource/StringResource.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/NumberFormatsSupplier.hpp>
 #include <comphelper/types.hxx>
@@ -932,11 +932,8 @@ void DlgEditor::Paste()
                     Reference< resource::XStringResourcePersistence > xStringResourcePersistence;
                     if( nCtrls > 0 && bSourceIsLocalized )
                     {
-                        Reference< lang::XMultiServiceFactory > xSMgr = getProcessServiceFactory();
-                        xStringResourcePersistence = Reference< resource::XStringResourcePersistence >( xSMgr->createInstance
-                            ( "com.sun.star.resource.StringResource" ), UNO_QUERY );
-                        if( xStringResourcePersistence.is() )
-                            xStringResourcePersistence->importBinary( aResData );
+                        xStringResourcePersistence = css::resource::StringResource::create( getProcessComponentContext() );
+                        xStringResourcePersistence->importBinary( aResData );
                     }
                     for( sal_uInt32 n = 0; n < nCtrls; n++ )
                     {
