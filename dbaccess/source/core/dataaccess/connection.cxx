@@ -758,6 +758,9 @@ void OConnection::impl_loadConnectionTools_throw()
     aArguments[0] <<= NamedValue( "Connection" , makeAny( Reference< XConnection >( this ) ) );
 
     m_xConnectionTools = css::sdb::tools::ConnectionTools::create( m_aContext );
+    assert(Reference< XInitialization >(m_xConnectionTools, UNO_QUERY).is());
+    Reference< XInitialization > xInit(m_xConnectionTools, UNO_QUERY_THROW );
+    xInit->initialize(aArguments);
 }
 
 Reference< XTableName > SAL_CALL OConnection::createTableName(  ) throw (RuntimeException)
