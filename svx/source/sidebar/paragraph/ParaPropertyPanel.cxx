@@ -820,20 +820,20 @@ IMPL_LINK(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pControl)
 {
     switch (pControl->GetCurItemId())
     {
-        case INDENT_INCREMENT:
+    case INDENT_INCREMENT:
         {
-            switch (maContext.GetCombinedContext())
+            switch (maContext.GetCombinedContext_DI())
             {
-                case CombinedEnumContext(Application_Writer, Context_Default):
-                case CombinedEnumContext(Application_Writer, Context_Text):
-                case CombinedEnumContext(Application_Writer, Context_Table):
+            case CombinedEnumContext(Application_WriterVariants, Context_Default):
+            case CombinedEnumContext(Application_WriterVariants, Context_Text):
+            case CombinedEnumContext(Application_WriterVariants, Context_Table):
                 {
                     SfxBoolItem aMargin( SID_INC_INDENT, sal_True );
                     GetBindings()->GetDispatcher()->Execute(
                         SID_INC_INDENT, SFX_CALLMODE_RECORD, &aMargin, 0L);
                 }
                 break;
-                default:
+            default:
                 {
                     SvxLRSpaceItem aMargin( SID_ATTR_PARA_LRSPACE );
 
@@ -850,20 +850,20 @@ IMPL_LINK(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pControl)
             }
         }
         break;
-        case INDENT_DECREMENT:
+    case INDENT_DECREMENT:
         {
-            switch (maContext.GetCombinedContext())
+            switch (maContext.GetCombinedContext_DI())
             {
-                case CombinedEnumContext(Application_Writer, Context_Default):
-                case CombinedEnumContext(Application_Writer, Context_Text):
-                case CombinedEnumContext(Application_Writer, Context_Table):
+            case CombinedEnumContext(Application_WriterVariants, Context_Default):
+            case CombinedEnumContext(Application_WriterVariants, Context_Text):
+            case CombinedEnumContext(Application_WriterVariants, Context_Table):
                 {
                     SfxBoolItem aMargin( SID_DEC_INDENT, sal_True );
                     GetBindings()->GetDispatcher()->Execute(
                         SID_DEC_INDENT, SFX_CALLMODE_RECORD, &aMargin, 0L);
                 }
                 break;
-                default:
+            default:
                 {
                     if((maTxtLeft - INDENT_STEP) < 0)
                         maTxtLeft = DEFAULT_VALUE;
@@ -885,7 +885,7 @@ IMPL_LINK(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pControl)
             }
         }
         break;
-        case ID_HANGING_INDENT:
+    case ID_HANGING_INDENT:
         {
             SvxLRSpaceItem aMargin( SID_ATTR_PARA_LRSPACE );
             aMargin.SetTxtLeft( (const long)GetCoreValue( *maLeftIndent.get(), m_eLRSpaceUnit ) + (const short)GetCoreValue( *maFLineIndent.get(), m_eLRSpaceUnit ) );
@@ -1157,12 +1157,12 @@ void ParaPropertyPanel::StateChangedAlignmentImpl( sal_uInt16 nSID, SfxItemState
 
 void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
-    switch (maContext.GetCombinedContext())
+    switch (maContext.GetCombinedContext_DI())
     {
 
-        case CombinedEnumContext(Application_Writer, Context_DrawText):
-        case CombinedEnumContext(Application_Calc, Context_DrawText):
-        case CombinedEnumContext(Application_Writer, Context_Annotation):
+    case CombinedEnumContext(Application_WriterVariants, Context_DrawText):
+    case CombinedEnumContext(Application_WriterVariants, Context_Annotation):
+    case CombinedEnumContext(Application_Calc, Context_DrawText):
         {
             maLeftIndent->SetMin( DEFAULT_VALUE );
             maRightIndent->SetMin( DEFAULT_VALUE );
@@ -1171,16 +1171,11 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
             maTbxProDemote->Hide();
         }
         break;
-        case CombinedEnumContext(Application_Draw, Context_DrawText):
-            case CombinedEnumContext(Application_Impress, Context_DrawText):
-        case CombinedEnumContext(Application_Draw, Context_Draw):
-        case CombinedEnumContext(Application_Draw, Context_TextObject):
-        case CombinedEnumContext(Application_Draw, Context_Graphic):
-        case CombinedEnumContext(Application_Impress, Context_Draw):
-        case CombinedEnumContext(Application_Impress, Context_TextObject):
-        case CombinedEnumContext(Application_Impress, Context_Graphic):
-        case CombinedEnumContext(Application_Impress, Context_Table):
-            case CombinedEnumContext(Application_Draw, Context_Table):
+    case CombinedEnumContext(Application_DrawImpress, Context_DrawText):
+    case CombinedEnumContext(Application_DrawImpress, Context_Draw):
+    case CombinedEnumContext(Application_DrawImpress, Context_TextObject):
+    case CombinedEnumContext(Application_DrawImpress, Context_Graphic):
+    case CombinedEnumContext(Application_DrawImpress, Context_Table):
         {
             maLeftIndent->SetMin( DEFAULT_VALUE );
             maRightIndent->SetMin( DEFAULT_VALUE );
@@ -1189,9 +1184,9 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
             maTbxProDemote->Show();
         }
         break;
-        case CombinedEnumContext(Application_Writer, Context_Default):
-        case CombinedEnumContext(Application_Writer, Context_Text):
-        case CombinedEnumContext(Application_Writer, Context_Table):
+    case CombinedEnumContext(Application_WriterVariants, Context_Default):
+    case CombinedEnumContext(Application_WriterVariants, Context_Text):
+    case CombinedEnumContext(Application_WriterVariants, Context_Table):
         {
             maLeftIndent->SetMin( NEGA_MAXVALUE, FUNIT_100TH_MM );
             maRightIndent->SetMin( NEGA_MAXVALUE, FUNIT_100TH_MM );
@@ -1221,9 +1216,9 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
         nVal = (long)maLeftIndent->Normalize( (long)nVal );
         maLeftIndent->SetValue( nVal, FUNIT_100TH_MM );
 
-        if(maContext.GetCombinedContext() != CombinedEnumContext(Application_Writer, Context_Text) &&
-            maContext.GetCombinedContext() != CombinedEnumContext(Application_Writer, Context_Default) &&
-            maContext.GetCombinedContext() != CombinedEnumContext(Application_Writer, Context_Table))
+        if ( maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Text)
+             && maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Default)
+             && maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Table))
         {
             maFLineIndent->SetMin( nVal*(-1), FUNIT_100TH_MM );
         }
@@ -1236,29 +1231,24 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
         nfVal = (long)maFLineIndent->Normalize( (long)nfVal );
         maFLineIndent->SetValue( nfVal, FUNIT_100TH_MM );
 
-        switch (maContext.GetCombinedContext())
+        switch (maContext.GetCombinedContext_DI())
         {
-            case CombinedEnumContext(Application_Writer, Context_DrawText):
-            case CombinedEnumContext(Application_Writer, Context_Text):
-            case CombinedEnumContext(Application_Writer, Context_Default):
-            case CombinedEnumContext(Application_Writer, Context_Table):
-            case CombinedEnumContext(Application_Writer, Context_Annotation):
+        case CombinedEnumContext(Application_WriterVariants, Context_DrawText):
+        case CombinedEnumContext(Application_WriterVariants, Context_Text):
+        case CombinedEnumContext(Application_WriterVariants, Context_Default):
+        case CombinedEnumContext(Application_WriterVariants, Context_Table):
+        case CombinedEnumContext(Application_WriterVariants, Context_Annotation):
             {
                 maLeftIndent->SetMax( MAX_SW - nrVal, FUNIT_100TH_MM );
                 maRightIndent->SetMax( MAX_SW - nVal, FUNIT_100TH_MM );
                 maFLineIndent->SetMax( MAX_SW - nVal - nrVal, FUNIT_100TH_MM );
             }
             break;
-            case CombinedEnumContext(Application_Draw, Context_DrawText):
-            case CombinedEnumContext(Application_Draw, Context_Draw):
-                case CombinedEnumContext(Application_Draw, Context_Table):
-            case CombinedEnumContext(Application_Draw, Context_TextObject):
-            case CombinedEnumContext(Application_Draw, Context_Graphic):
-            case CombinedEnumContext(Application_Impress, Context_TextObject):
-                case CombinedEnumContext(Application_Impress, Context_DrawText):
-            case CombinedEnumContext(Application_Impress, Context_Table):
-            case CombinedEnumContext(Application_Impress, Context_Draw):
-            case CombinedEnumContext(Application_Impress, Context_Graphic):
+        case CombinedEnumContext(Application_DrawImpress, Context_DrawText):
+        case CombinedEnumContext(Application_DrawImpress, Context_Draw):
+        case CombinedEnumContext(Application_DrawImpress, Context_Table):
+        case CombinedEnumContext(Application_DrawImpress, Context_TextObject):
+        case CombinedEnumContext(Application_DrawImpress, Context_Graphic):
             {
                 maLeftIndent->SetMax( MAX_SC_SD - nrVal, FUNIT_100TH_MM );
                 maRightIndent->SetMax( MAX_SC_SD - nVal, FUNIT_100TH_MM );
@@ -1268,17 +1258,14 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
 
         maTbxIndent_IncDec->Enable();
         maTbxIndent_IncDec->EnableItem(ID_HANGING_INDENT, sal_True);
-        if ( maContext.GetCombinedContext() != CombinedEnumContext(Application_Writer, Context_Text)
-             && maContext.GetCombinedContext() != CombinedEnumContext(Application_Writer, Context_Default)
-             && maContext.GetCombinedContext() != CombinedEnumContext(Application_Writer, Context_Table) )
+        if ( maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Text)
+             && maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Default)
+             && maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Table) )
         {
             maTbxIndent_IncDec->EnableItem(BT_TBX_INDENT_INC, sal_True);
             maTbxIndent_IncDec->EnableItem(BT_TBX_INDENT_DEC, sal_True);
         }
 
-//      maTbxProDemote->Enable();
-//      if( !mbOutLineRight && !mbOutLineLeft )
-//          maTbxProDemote->EnableItem(SD_HANGING_INDENT, sal_True);
         maTbxProDemote->EnableItem(SD_HANGING_INDENT, sal_True);
     }
     else if( eState == SFX_ITEM_DISABLED )
@@ -1287,14 +1274,14 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
         maRightIndent->Disable();
         maFLineIndent->Disable();
         maTbxIndent_IncDec->Disable();
-        if( maContext.GetCombinedContext() != CombinedEnumContext(Application_Writer, Context_Text)  &&
-            maContext.GetCombinedContext() != CombinedEnumContext(Application_Writer, Context_Default) &&
-            maContext.GetCombinedContext() !=  CombinedEnumContext(Application_Writer, Context_Table) )
+        if( maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Text)  &&
+            maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Default) &&
+            maContext.GetCombinedContext_DI() !=  CombinedEnumContext(Application_WriterVariants, Context_Table) )
             maTbxIndent_IncDec->Disable();
         else
             maTbxIndent_IncDec->EnableItem(ID_HANGING_INDENT, sal_False);
 
-//      maTbxProDemote->Disable();
+        //      maTbxProDemote->Disable();
         maTbxProDemote->EnableItem(SD_HANGING_INDENT, sal_False);
     }
     else
@@ -1302,13 +1289,12 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
         maLeftIndent->SetEmptyFieldValue();
         maRightIndent->SetEmptyFieldValue();
         maFLineIndent->SetEmptyFieldValue();
-        if( maContext.GetCombinedContext() != CombinedEnumContext(Application_Writer, Context_Text)  &&
-            maContext.GetCombinedContext() != CombinedEnumContext(Application_Writer, Context_Default) &&
-            maContext.GetCombinedContext() !=  CombinedEnumContext(Application_Writer, Context_Table) )
+        if( maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Text)  &&
+            maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Default) &&
+            maContext.GetCombinedContext_DI() !=  CombinedEnumContext(Application_WriterVariants, Context_Table) )
             maTbxIndent_IncDec->Disable();
         else
             maTbxIndent_IncDec->EnableItem(ID_HANGING_INDENT, sal_False);
-//      maTbxProDemote->Disable();
         maTbxProDemote->EnableItem(SD_HANGING_INDENT, sal_False);
     }
 }
@@ -1395,9 +1381,9 @@ void ParaPropertyPanel::StateChangeOutLineImpl( sal_uInt16 nSID, SfxItemState eS
 
 void ParaPropertyPanel::StateChangeIncDecImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
-    if ( ( maContext.GetCombinedContext() == CombinedEnumContext(Application_Writer, Context_Text)
-           || maContext.GetCombinedContext() == CombinedEnumContext(Application_Writer, Context_Default)
-           || maContext.GetCombinedContext() ==  CombinedEnumContext(Application_Writer, Context_Table) )
+    if ( ( maContext.GetCombinedContext_DI() == CombinedEnumContext(Application_WriterVariants, Context_Text)
+           || maContext.GetCombinedContext_DI() == CombinedEnumContext(Application_WriterVariants, Context_Default)
+           || maContext.GetCombinedContext_DI() ==  CombinedEnumContext(Application_WriterVariants, Context_Table) )
          && ( nSID == SID_INC_INDENT || nSID == SID_DEC_INDENT ) )
     {
         // Writer's text shell is the only one which provides reasonable states for Slots SID_INC_INDENT and SID_DEC_INDENT

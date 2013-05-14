@@ -470,24 +470,19 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
 
     aLineDist.SaveValue();
 
-    sal_uInt16 uCount = aLineDist.GetEntryCount();
+    const sal_uInt16 uCount = aLineDist.GetEntryCount();
     if( uCount == LLINESPACE_FIX + 1 )
     {
-        switch (currentContext.GetCombinedContext())
+        switch (currentContext.GetCombinedContext_DI())
         {
-            case CombinedEnumContext(Application_Impress, Context_Table):
-                case CombinedEnumContext(Application_Draw, Context_Table):
-            case CombinedEnumContext(Application_Writer, Context_DrawText):
-            case CombinedEnumContext(Application_Calc, Context_DrawText):
-            case CombinedEnumContext(Application_Draw, Context_DrawText):
-                case CombinedEnumContext(Application_Impress, Context_DrawText):
-            case CombinedEnumContext(Application_Writer, Context_Annotation):
-            case CombinedEnumContext(Application_Draw, Context_Draw):
-                case CombinedEnumContext(Application_Draw, Context_TextObject):
-                case CombinedEnumContext(Application_Draw, Context_Graphic):
-                case CombinedEnumContext(Application_Impress, Context_Draw):
-                case CombinedEnumContext(Application_Impress, Context_TextObject):
-                case CombinedEnumContext(Application_Impress, Context_Graphic):
+        case CombinedEnumContext(Application_DrawImpress, Context_Table):
+        case CombinedEnumContext(Application_DrawImpress, Context_DrawText):
+        case CombinedEnumContext(Application_DrawImpress, Context_Draw):
+        case CombinedEnumContext(Application_DrawImpress, Context_TextObject):
+        case CombinedEnumContext(Application_DrawImpress, Context_Graphic):
+        case CombinedEnumContext(Application_Calc, Context_DrawText):
+        case CombinedEnumContext(Application_WriterVariants, Context_DrawText):
+        case CombinedEnumContext(Application_WriterVariants, Context_Annotation):
             {
                 aLineDist.RemoveEntry(LLINESPACE_FIX);
             }
@@ -495,11 +490,11 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
     }
     else if( uCount == LLINESPACE_FIX)
     {
-        switch (currentContext.GetCombinedContext())
+        switch (currentContext.GetCombinedContext_DI())
         {
-            case CombinedEnumContext(Application_Writer, Context_Default):
-            case CombinedEnumContext(Application_Writer, Context_Text):
-            case CombinedEnumContext(Application_Writer, Context_Table):
+            case CombinedEnumContext(Application_WriterVariants, Context_Default):
+            case CombinedEnumContext(Application_WriterVariants, Context_Text):
+            case CombinedEnumContext(Application_WriterVariants, Context_Table):
             {
                 aLineDist.InsertEntry(OUString("Fixed"), LLINESPACE_FIX);
             }

@@ -1039,12 +1039,11 @@ void PosSizePropertyPanel::executeSize()
         SfxUInt32Item aWidthItem( SID_ATTR_TRANSFORM_WIDTH, (sal_uInt32) lWidth);
         SfxUInt32Item aHeightItem( SID_ATTR_TRANSFORM_HEIGHT, (sal_uInt32) lHeight);
         SfxAllEnumItem aPointItem (SID_ATTR_TRANSFORM_SIZE_POINT, (sal_uInt16)meRP);
-        const sal_Int32 nCombinedContext(maContext.GetCombinedContext());
+        const sal_Int32 nCombinedContext(maContext.GetCombinedContext_DI());
 
-        if( nCombinedContext == CombinedEnumContext(Application_Writer, Context_Graphic) // mnContextId == PROPERTY_CONTEXT_SW_GRAPHIC
-            || nCombinedContext == CombinedEnumContext(Application_Writer, Context_OLE) //mnContextId == PROPERTY_CONTEXT_SW_OLE
+        if( nCombinedContext == CombinedEnumContext(Application_WriterVariants, Context_Graphic)
+            || nCombinedContext == CombinedEnumContext(Application_WriterVariants, Context_OLE)
             )
-        // if( mnContextId == PROPERTY_CONTEXT_SW_GRAPHIC || mnContextId == PROPERTY_CONTEXT_SW_OLE )
         {
             GetBindings()->GetDispatcher()->Execute(SID_ATTR_TRANSFORM, SFX_CALLMODE_RECORD, &aWidthItem, &aHeightItem, &aPointItem, 0L );
         }
