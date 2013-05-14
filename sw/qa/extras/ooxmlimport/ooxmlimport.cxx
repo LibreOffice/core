@@ -20,6 +20,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/text/XFormField.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
@@ -111,6 +112,7 @@ public:
     void testN592908_Frame();
     void testN592908_Picture();
     void testN779630();
+    void testIndentation();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -191,6 +193,7 @@ void Test::run()
         {"n592908-frame.docx", &Test::testN592908_Frame},
         {"n592908-picture.docx", &Test::testN592908_Picture},
         {"n779630.docx", &Test::testN779630},
+        {"indentation.docx", &Test::testIndentation},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1367,6 +1370,13 @@ void Test::testN779630()
     CPPUNIT_ASSERT_EQUAL(OUString("dropdown default text"), getProperty<OUString>(xPropertySet, "DefaultText"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty< uno::Sequence<OUString> >(xPropertySet, "StringItemList").getLength());
     CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(xPropertySet, "Dropdown")));
+}
+
+void Test::testIndentation()
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("ParagraphStyles")->getByName("Standard"), uno::UNO_QUERY);
+    // This was RL_TB (e.g. right-to-left).
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, getProperty<sal_Int16>(xPropertySet, "WritingMode"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
