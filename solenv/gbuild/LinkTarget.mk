@@ -1371,6 +1371,17 @@ $(call gb_LinkTarget_get_external_headers_target,$(1)) :| $(call gb_ExternalProj
 
 endef
 
+# Use headers provided by another link target.
+#
+# This function should only be needed to enforce correct build ordering,
+# if the link target does not use the other link target.
+#
+# gb_LinkTarget_use_headers linktarget other-linktarget(s)
+define gb_LinkTarget_use_headers
+$(call gb_LinkTarget_get_external_headers_target,$(1)) :\
+    $(foreach linktarget,$(2),$(call gb_LinkTarget_get_headers_target,$(linktarget)))
+
+endef
 
 # this forwards to functions that must be defined in RepositoryExternal.mk.
 # $(eval $(call gb_LinkTarget_use_external,library,external))

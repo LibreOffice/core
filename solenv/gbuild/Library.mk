@@ -260,6 +260,7 @@ $(eval $(foreach method,\
 	use_package \
 	use_packages \
 	use_unpacked \
+	use_headers \
 	add_package_headers \
 	add_sdi_headers \
 	set_precompiled_header \
