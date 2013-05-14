@@ -64,13 +64,13 @@
 
 namespace {
 
-OUString createPath(
+static OUString createPath(
     OUString const & name, sal_Int32 pos, OUString const & locale)
 {
     return name.copy(0, pos + 1) + locale + name.copy(pos);
 }
 
-boost::shared_ptr< SvStream > wrapFile(osl::File & file)
+static boost::shared_ptr< SvStream > wrapFile(osl::File & file)
 {
     // This could use SvInputStream instead if that did not have a broken
     // SeekPos implementation for an XInputStream that is not also XSeekable
@@ -90,22 +90,7 @@ boost::shared_ptr< SvStream > wrapFile(osl::File & file)
     return s;
 }
 
-void loadFromFile(
-    osl::File & file,
-    OUString const & path, BitmapEx & bitmap)
-{
-    boost::shared_ptr< SvStream > s(wrapFile(file));
-    if (path.endsWith(".png"))
-    {
-        vcl::PNGReader aPNGReader( *s );
-        aPNGReader.SetIgnoreGammaChunk( sal_True );
-        bitmap = aPNGReader.Read();
-    } else {
-        *s >> bitmap;
-    }
-}
-
-boost::shared_ptr< SvStream > wrapStream(
+static boost::shared_ptr< SvStream > wrapStream(
     css::uno::Reference< css::io::XInputStream > const & stream)
 {
     // This could use SvInputStream instead if that did not have a broken
@@ -127,18 +112,17 @@ boost::shared_ptr< SvStream > wrapStream(
     return s;
 }
 
-void loadFromStream(
-    css::uno::Reference< css::io::XInputStream > const & stream,
-    OUString const & path, BitmapEx & bitmap)
+static void loadImageFromStream(
+    boost::shared_ptr< SvStream > pStream,
+    OUString const & rPath, BitmapEx & rBitmap)
 {
-    boost::shared_ptr< SvStream > s(wrapStream(stream));
-    if (path.endsWith(".png"))
+    if (rPath.endsWith(".png"))
     {
-        vcl::PNGReader aPNGReader( *s );
+        vcl::PNGReader aPNGReader( *pStream );
         aPNGReader.SetIgnoreGammaChunk( sal_True );
-        bitmap = aPNGReader.Read();
+        rBitmap = aPNGReader.Read();
     } else {
-        *s >> bitmap;
+        *pStream >> rBitmap;
     }
 }
 
@@ -271,27 +255,22 @@ void ImplImageTree::setStyle(OUString const & style) {
 
 void ImplImageTree::resetPaths() {
     m_paths.clear();
+
+    OUString url( "$BRAND_BASE_DIR/share/config/" );
+    rtl::Bootstrap::expandMacros(url);
+    if ( m_style != "default" )
     {
-        OUString url(
-            "$BRAND_BASE_DIR/share/config");
-        rtl::Bootstrap::expandMacros(url);
         INetURLObject u(url);
         OSL_ASSERT(!u.HasError());
         bool ok = u.Append("images_" + m_style, INetURLObject::ENCODE_ALL);
         OSL_ASSERT(ok); (void) ok;
-        m_paths.push_back(
-            std::make_pair(
-                u.GetMainURL(INetURLObject::NO_DECODE),
-                css::uno::Reference< css::container::XNameAccess >()));
+        url = u.GetMainURL(INetURLObject::NO_DECODE);
     }
-    if ( m_style == "default" )
-    {
-        OUString url( "$BRAND_BASE_DIR/share/config/images");
-        rtl::Bootstrap::expandMacros(url);
-        m_paths.push_back(
-            std::make_pair(
-                url, css::uno::Reference< css::container::XNameAccess >()));
-    }
+    else
+        url += "images";
+    m_paths.push_back(
+        std::make_pair(
+            url, css::uno::Reference< css::container::XNameAccess >()));
 }
 
 bool ImplImageTree::checkStyleCacheLookup(
@@ -329,7 +308,7 @@ bool ImplImageTree::find(
             {
                 osl::File file(i->first + "/" + *j);
                 if (file.open(osl_File_OpenFlag_Read) == ::osl::FileBase::E_None) {
-                    loadFromFile(file, *j, bitmap);
+                    loadImageFromStream( wrapFile(file), *j, bitmap );
                     file.close();
                     return true;
                 }
@@ -361,7 +340,7 @@ bool ImplImageTree::find(
                 css::uno::Reference< css::io::XInputStream > s;
                 bool ok = i->second->getByName(*j) >>= s;
                 OSL_ASSERT(ok); (void) ok;
-                loadFromStream(s, *j, bitmap);
+                loadImageFromStream( wrapStream(s), *j, bitmap );
                 return true;
             }
         }
