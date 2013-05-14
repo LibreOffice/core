@@ -18,7 +18,7 @@
  */
 
 #include "sfx2/docstoragemodifylistener.hxx"
-#include <osl/mutex.hxx>
+#include <comphelper/solarmutex.hxx>
 
 //........................................................................
 namespace sfx2
@@ -40,7 +40,7 @@ namespace sfx2
     //=
     //====================================================================
     //--------------------------------------------------------------------
-    DocumentStorageModifyListener::DocumentStorageModifyListener( IModifiableDocument& _rDocument, ::osl::SolarMutex& _rMutex )
+    DocumentStorageModifyListener::DocumentStorageModifyListener( IModifiableDocument& _rDocument, comphelper::SolarMutex& _rMutex )
         :m_pDocument( &_rDocument )
         ,m_rMutex( _rMutex )
     {
@@ -54,14 +54,14 @@ namespace sfx2
     //--------------------------------------------------------------------
     void DocumentStorageModifyListener::dispose()
     {
-        ::osl::SolarGuard aGuard( m_rMutex );
+        ::osl::Guard< comphelper::SolarMutex > aGuard( m_rMutex );
         m_pDocument = NULL;
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL DocumentStorageModifyListener::modified( const EventObject& /*aEvent*/ ) throw (RuntimeException)
     {
-        ::osl::SolarGuard aGuard( m_rMutex );
+        ::osl::Guard< comphelper::SolarMutex > aGuard( m_rMutex );
         // storageIsModified must not contain any locking!
         if ( m_pDocument )
             m_pDocument->storageIsModified();

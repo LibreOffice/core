@@ -33,7 +33,7 @@
 
 #include <list>
 
-
+namespace comphelper { class SolarMutex; }
 struct SystemParentData;
 struct SalPrinterQueueInfo;
 struct ImplJobSetup;
@@ -111,7 +111,7 @@ public:
     virtual SalBitmap*      CreateSalBitmap() = 0;
 
     // YieldMutex
-    virtual osl::SolarMutex*
+    virtual comphelper::SolarMutex*
                             GetYieldMutex() = 0;
     virtual sal_uLong       ReleaseYieldMutex() = 0;
     virtual void            AcquireYieldMutex( sal_uLong nCount ) = 0;

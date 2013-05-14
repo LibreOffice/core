@@ -17,49 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_SOLARMUTEX_HXX_
-#define _VCL_SOLARMUTEX_HXX_
+#include "sal/config.h"
 
-#include <comphelper/solarmutex.hxx>
-#include <osl/mutex.h>
-#include <vcl/dllapi.h>
+#include "comphelper/solarmutex.hxx"
 
-namespace vcl
-{
+comphelper::SolarMutex::SolarMutex() {}
 
-/** Implementation of the SolarMutex interface.
- */
-class VCL_DLLPUBLIC SolarMutexObject : public comphelper::SolarMutex
-{
-public:
-    //static SolarMutex& SAL_CALL getGlobalMutex();
-
-    /** Creates mutex
-     */
-    SolarMutexObject();
-
-    /** Implicitly destroys mutex
-     */
-    virtual ~SolarMutexObject();
-
-    virtual void acquire();
-
-    virtual void release();
-
-    virtual bool tryToAcquire();
-
-protected:
-    oslMutex    m_solarMutex;
-
-private:
-    /* Disable copy/assignment
-     */
-    SolarMutexObject( const SolarMutexObject& );
-    SolarMutexObject& SAL_CALL operator=( const SolarMutexObject& );
-};
-
-}
-
-#endif // _VCL_SOLARMUTEX_HXX_
+comphelper::SolarMutex::~SolarMutex() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

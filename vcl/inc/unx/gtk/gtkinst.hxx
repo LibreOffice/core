@@ -44,7 +44,7 @@ public:
                         GtkYieldMutex();
     virtual void        acquire();
     virtual void        release();
-    virtual sal_Bool    tryToAcquire()  { return SalYieldMutex::tryToAcquire(); }
+    virtual bool        tryToAcquire()  { return SalYieldMutex::tryToAcquire(); }
 
     void ThreadsEnter();
     void ThreadsLeave();

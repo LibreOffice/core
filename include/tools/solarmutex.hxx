@@ -20,14 +20,14 @@
 #define _TOOLS_SOLARMUTEX_HXX
 
 #include "tools/toolsdllapi.h"
-#include <osl/mutex.hxx>
+#include <comphelper/solarmutex.hxx>
 
 namespace tools
 {
     class TOOLS_DLLPUBLIC SolarMutex
     {
     public:
-        static void SetSolarMutex( ::osl::SolarMutex* pMutex );
+        static void SetSolarMutex( comphelper::SolarMutex* pMutex );
         static bool Acquire();
         static void Release();
     };

@@ -44,7 +44,7 @@ namespace framework{
 
     @onerror    -
 *//*-*************************************************************************************************************/
-LockHelper::LockHelper( ::osl::SolarMutex* pSolarMutex )
+LockHelper::LockHelper( comphelper::SolarMutex* pSolarMutex )
     :   m_pFairRWLock       ( NULL )
     ,   m_pOwnMutex         ( NULL )
     ,   m_pSolarMutex       ( NULL )
@@ -400,7 +400,7 @@ void LockHelper::downgradeWriteAccess()
 
     @onerror    No error should occure.
 *//*-*************************************************************************************************************/
-LockHelper& LockHelper::getGlobalLock( ::osl::SolarMutex* pSolarMutex )
+LockHelper& LockHelper::getGlobalLock( comphelper::SolarMutex* pSolarMutex )
 {
     // Initialize static "member" only for one time!
     // Algorithm:

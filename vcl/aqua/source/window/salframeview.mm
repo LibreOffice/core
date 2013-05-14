@@ -161,7 +161,7 @@ static AquaSalFrame* getMouseContainerFrame()
 {
     if( GetSalData() && GetSalData()->mpFirstInstance )
     {
-        osl::SolarMutex* pMutex = GetSalData()->mpFirstInstance->GetYieldMutex();
+        comphelper::SolarMutex* pMutex = GetSalData()->mpFirstInstance->GetYieldMutex();
         if( pMutex )
         {
             pMutex->acquire();
@@ -438,9 +438,9 @@ static AquaSalFrame* getMouseContainerFrame()
 	return NO;
 }
 
-// helper class similar to a osl::SolarGuard for the SalYieldMutex
-// the difference is that it only does tryToAcquire instead of aquire
-// so dreaded deadlocks like #i93512# are prevented
+// helper class similar to a osl::Guard< comphelper::SolarMutex > for the
+// SalYieldMutex; the difference is that it only does tryToAcquire instead of
+// acquire so dreaded deadlocks like #i93512# are prevented
 class TryGuard
 {
 public:

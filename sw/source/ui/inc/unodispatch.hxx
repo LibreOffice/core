@@ -27,6 +27,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <list>
+#include <comphelper/solarmutex.hxx>
 #include <osl/mutex.hxx>
 
 class SwView;
@@ -41,7 +42,7 @@ class SwXDispatchProviderInterceptor : public cppu::WeakImplHelper3
     class DispatchMutexLock_Impl
     {
         //::osl::MutexGuard   aGuard; #102295# solar mutex has to be used currently
-        osl::SolarGuard         aGuard;
+        osl::Guard< comphelper::SolarMutex > aGuard;
         DispatchMutexLock_Impl();
     public:
         DispatchMutexLock_Impl(SwXDispatchProviderInterceptor&);

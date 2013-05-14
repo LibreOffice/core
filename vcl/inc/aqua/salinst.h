@@ -20,7 +20,7 @@
 #ifndef _SV_SALINST_H
 #define _SV_SALINST_H
 
-#include "osl/mutex.hxx"
+#include "comphelper/solarmutex.hxx"
 #include "osl/thread.hxx"
 #include "osl/conditn.h"
 #include <vcl/solarmutex.hxx>
@@ -44,12 +44,12 @@ public:
                                                 SalYieldMutex();
     virtual void                                acquire();
     virtual void                                release();
-    virtual sal_Bool                            tryToAcquire();
+    virtual bool                                tryToAcquire();
     sal_uLong                                       GetAcquireCount() const { return mnCount; }
     oslThreadIdentifier                         GetThreadId() const { return mnThreadId; }
 };
 
-#define YIELD_GUARD osl::SolarGuard aGuard( GetSalData()->mpFirstInstance->GetYieldMutex() )
+#define YIELD_GUARD osl::Guard< comphelper::SolarMutex > aGuard( GetSalData()->mpFirstInstance->GetYieldMutex() )
 
 
 class AquaSalInstance : public SalInstance
@@ -107,7 +107,7 @@ public:
     virtual SalI18NImeStatus*   CreateI18NImeStatus();
     virtual SalSystem*          CreateSalSystem();
     virtual SalBitmap*          CreateSalBitmap();
-    virtual osl::SolarMutex*    GetYieldMutex();
+    virtual comphelper::SolarMutex* GetYieldMutex();
     virtual sal_uLong               ReleaseYieldMutex();
     virtual void                AcquireYieldMutex( sal_uLong nCount );
     virtual bool                CheckYieldMutex();

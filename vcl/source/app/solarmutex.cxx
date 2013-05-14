@@ -35,7 +35,7 @@ void SolarMutexObject::acquire()
     osl_acquireMutex( m_solarMutex );
 }
 
-sal_Bool SolarMutexObject::tryToAcquire()
+bool SolarMutexObject::tryToAcquire()
 {
     return osl_tryToAcquireMutex( m_solarMutex );
 }

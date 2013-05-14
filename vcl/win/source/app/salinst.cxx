@@ -23,7 +23,7 @@
 #include <process.h>
 
 #include <osl/file.hxx>
-#include <osl/mutex.hxx>
+#include <comphelper/solarmutex.hxx>
 
 #include <tools/solarmutex.hxx>
 
@@ -107,9 +107,9 @@ public: // for ImplSalYield()
 public:
                                 SalYieldMutex( WinSalInstance* pInstData );
 
-    virtual void SAL_CALL       acquire();
-    virtual void SAL_CALL       release();
-    virtual sal_Bool SAL_CALL   tryToAcquire();
+    virtual void                acquire();
+    virtual void                release();
+    virtual bool                tryToAcquire();
 
     sal_uLong                       GetAcquireCount( sal_uLong nThreadId );
 };
@@ -125,7 +125,7 @@ SalYieldMutex::SalYieldMutex( WinSalInstance* pInstData )
 
 // -----------------------------------------------------------------------
 
-void SAL_CALL SalYieldMutex::acquire()
+void SalYieldMutex::acquire()
 {
     SolarMutexObject::acquire();
     mnCount++;
@@ -134,7 +134,7 @@ void SAL_CALL SalYieldMutex::acquire()
 
 // -----------------------------------------------------------------------
 
-void SAL_CALL SalYieldMutex::release()
+void SalYieldMutex::release()
 {
     DWORD nThreadId = GetCurrentThreadId();
     if ( mnThreadId != nThreadId )
@@ -176,16 +176,16 @@ void SAL_CALL SalYieldMutex::release()
 
 // -----------------------------------------------------------------------
 
-sal_Bool SAL_CALL SalYieldMutex::tryToAcquire()
+bool SalYieldMutex::tryToAcquire()
 {
     if( SolarMutexObject::tryToAcquire() )
     {
         mnCount++;
         mnThreadId = GetCurrentThreadId();
-        return sal_True;
+        return true;
     }
     else
-        return sal_False;
+        return false;
 }
 
 // -----------------------------------------------------------------------
@@ -593,7 +593,7 @@ WinSalInstance::~WinSalInstance()
 
 // -----------------------------------------------------------------------
 
-osl::SolarMutex* WinSalInstance::GetYieldMutex()
+comphelper::SolarMutex* WinSalInstance::GetYieldMutex()
 {
     return mpSalYieldMutex;
 }

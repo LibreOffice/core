@@ -21,9 +21,9 @@
 
 namespace tools
 {
-    static ::osl::SolarMutex* pSolarMutex = 0;
+    static comphelper::SolarMutex* pSolarMutex = 0;
 
-    void SolarMutex::SetSolarMutex( ::osl::SolarMutex* pMutex )
+    void SolarMutex::SetSolarMutex( comphelper::SolarMutex* pMutex )
     {
         pSolarMutex = pMutex;
     }

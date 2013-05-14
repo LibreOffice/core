@@ -63,19 +63,19 @@ void SalYieldMutex::release()
     SolarMutexObject::release();
 }
 
-sal_Bool SalYieldMutex::tryToAcquire()
+bool SalYieldMutex::tryToAcquire()
 {
     if ( SolarMutexObject::tryToAcquire() )
     {
         mnThreadId = osl::Thread::getCurrentIdentifier();
         mnCount++;
-        return sal_True;
+        return true;
     }
     else
-        return sal_False;
+        return false;
 }
 
-osl::SolarMutex* SalGenericInstance::GetYieldMutex()
+comphelper::SolarMutex* SalGenericInstance::GetYieldMutex()
 {
     return mpSalYieldMutex;
 }

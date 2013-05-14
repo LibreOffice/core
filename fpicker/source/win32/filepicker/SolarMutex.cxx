@@ -19,7 +19,7 @@
 
 
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
+#include <comphelper/solarmutex.hxx>
 #include <osl/thread.hxx>
 
 int ReleaseSolarMutexOnMainThreadContext(unsigned nThreadId)
@@ -29,7 +29,7 @@ int ReleaseSolarMutexOnMainThreadContext(unsigned nThreadId)
 
     if ( nMainThreadId == nThreadId )
     {
-        ::osl::SolarMutex& rMutex = Application::GetSolarMutex();
+        comphelper::SolarMutex& rMutex = Application::GetSolarMutex();
         if ( rMutex.tryToAcquire() )
             nAcquireCount = Application::ReleaseSolarMutex() - 1;
     }

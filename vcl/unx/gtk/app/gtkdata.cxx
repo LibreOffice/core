@@ -825,7 +825,7 @@ extern "C" {
 
         SalData *pSalData = GetSalData();
 
-        osl::SolarGuard aGuard( pSalData->m_pInstance->GetYieldMutex() );
+        osl::Guard< comphelper::SolarMutex > aGuard( pSalData->m_pInstance->GetYieldMutex() );
 
         sal_gtk_timeout_defer( pTSource );
 
@@ -911,7 +911,7 @@ gboolean GtkData::userEventFn( gpointer data )
     gboolean bContinue = FALSE;
     GtkData *pThis = (GtkData *) data;
     SalGenericData *pData = GetGenericData();
-    osl::SolarGuard aGuard( pData->m_pInstance->GetYieldMutex() );
+    osl::Guard< comphelper::SolarMutex > aGuard( pData->m_pInstance->GetYieldMutex() );
     const SalGenericDisplay *pDisplay = pData->GetDisplay();
     if (pDisplay)
     {

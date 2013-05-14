@@ -95,19 +95,19 @@ VosMutexFacade::VosMutexFacade( ::osl::Mutex& _rMutex )
 {
 }
 
-void SAL_CALL VosMutexFacade::acquire()
+void VosMutexFacade::acquire()
 {
     m_rMutex.acquire();
 }
 
-sal_Bool SAL_CALL VosMutexFacade::tryToAcquire()
-{
-    return m_rMutex.tryToAcquire();
-}
-
-void SAL_CALL VosMutexFacade::release()
+void VosMutexFacade::release()
 {
     m_rMutex.release();
+}
+
+bool VosMutexFacade::tryToAcquire()
+{
+    return m_rMutex.tryToAcquire();
 }
 
 //============================================================
@@ -1194,7 +1194,7 @@ namespace
 {
     void lcl_modifyListening( ::sfx2::IModifiableDocument& _rDocument,
         const Reference< XStorage >& _rxStorage, ::rtl::Reference< ::sfx2::DocumentStorageModifyListener >& _inout_rListener,
-        ::osl::SolarMutex& _rMutex, bool _bListen )
+        comphelper::SolarMutex& _rMutex, bool _bListen )
     {
         Reference< XModifiable > xModify( _rxStorage, UNO_QUERY );
         OSL_ENSURE( xModify.is() || !_rxStorage.is(), "lcl_modifyListening: storage can't notify us!" );

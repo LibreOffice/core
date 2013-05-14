@@ -17,49 +17,34 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _VCL_SOLARMUTEX_HXX_
-#define _VCL_SOLARMUTEX_HXX_
+#ifndef INCLUDED_COMPHELPER_SOLARMUTEX_HXX
+#define INCLUDED_COMPHELPER_SOLARMUTEX_HXX
 
-#include <comphelper/solarmutex.hxx>
-#include <osl/mutex.h>
-#include <vcl/dllapi.h>
+#include "sal/config.h"
 
-namespace vcl
-{
+#include "boost/noncopyable.hpp"
+#include "comphelper/comphelperdllapi.h"
 
-/** Implementation of the SolarMutex interface.
- */
-class VCL_DLLPUBLIC SolarMutexObject : public comphelper::SolarMutex
-{
+namespace comphelper {
+
+/** SolarMutex interface, needed for Application::GetSolarMutex().
+*/
+class COMPHELPER_DLLPUBLIC SolarMutex: private boost::noncopyable {
 public:
-    //static SolarMutex& SAL_CALL getGlobalMutex();
+    virtual void acquire() = 0;
 
-    /** Creates mutex
-     */
-    SolarMutexObject();
+    virtual void release() = 0;
 
-    /** Implicitly destroys mutex
-     */
-    virtual ~SolarMutexObject();
-
-    virtual void acquire();
-
-    virtual void release();
-
-    virtual bool tryToAcquire();
+    virtual bool tryToAcquire() = 0;
 
 protected:
-    oslMutex    m_solarMutex;
+    SolarMutex();
 
-private:
-    /* Disable copy/assignment
-     */
-    SolarMutexObject( const SolarMutexObject& );
-    SolarMutexObject& SAL_CALL operator=( const SolarMutexObject& );
+    virtual ~SolarMutex();
 };
 
 }
 
-#endif // _VCL_SOLARMUTEX_HXX_
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

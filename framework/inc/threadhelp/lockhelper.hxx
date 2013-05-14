@@ -25,7 +25,7 @@
 #include <threadhelp/irwlock.h>
 #include <threadhelp/fairrwlock.hxx>
 
-#include <osl/mutex.hxx>
+#include <comphelper/solarmutex.hxx>
 #include <fwidllapi.h>
 
 namespace framework{
@@ -85,7 +85,7 @@ class FWI_DLLPUBLIC LockHelper : public  IMutex
         //-------------------------------------------------------------------------------------------------------------
         //  ctor/dtor
         //-------------------------------------------------------------------------------------------------------------
-                 LockHelper( ::osl::SolarMutex* pSolarMutex = NULL );
+                 LockHelper( comphelper::SolarMutex* pSolarMutex = NULL );
         virtual ~LockHelper(                                   );
 
         //-------------------------------------------------------------------------------------------------------------
@@ -106,7 +106,7 @@ class FWI_DLLPUBLIC LockHelper : public  IMutex
         //-------------------------------------------------------------------------------------------------------------
         //  something else
         //-------------------------------------------------------------------------------------------------------------
-        static LockHelper&  getGlobalLock       ( ::osl::SolarMutex* pSolarMutex = NULL );
+        static LockHelper&  getGlobalLock       ( comphelper::SolarMutex* pSolarMutex = NULL );
         ::osl::Mutex&       getShareableOslMutex(                                   );
 
     //-------------------------------------------------------------------------------------------------------------
@@ -138,7 +138,7 @@ class FWI_DLLPUBLIC LockHelper : public  IMutex
 
         mutable FairRWLock*     m_pFairRWLock           ;
         mutable ::osl::Mutex*   m_pOwnMutex             ;
-        mutable ::osl::SolarMutex*  m_pSolarMutex       ;
+        mutable comphelper::SolarMutex* m_pSolarMutex   ;
         mutable ::osl::Mutex*   m_pShareableOslMutex    ;
         mutable sal_Bool        m_bDummySolarMutex      ;
 };

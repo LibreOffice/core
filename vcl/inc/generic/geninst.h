@@ -58,7 +58,7 @@ public:
 
     virtual void        acquire();
     virtual void        release();
-    virtual sal_Bool    tryToAcquire();
+    virtual bool        tryToAcquire();
 
     virtual sal_uIntPtr GetAcquireCount() const { return mnCount; }
     oslThreadIdentifier GetThreadId() const { return mnThreadId; }
@@ -81,7 +81,7 @@ public:
     virtual ~SalGenericInstance();
 
     // Yield mutex
-    virtual osl::SolarMutex*    GetYieldMutex();
+    virtual comphelper::SolarMutex* GetYieldMutex();
     virtual sal_uIntPtr         ReleaseYieldMutex();
     virtual void                AcquireYieldMutex( sal_uIntPtr nCount );
     virtual bool                CheckYieldMutex();

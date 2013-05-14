@@ -63,7 +63,7 @@
 #include "com/sun/star/awt/XToolkit.hpp"
 #include "com/sun/star/uno/XNamingService.hpp"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "osl/mutex.hxx"
+#include "comphelper/solarmutex.hxx"
 #include "osl/process.h"
 
 #include <utility>
@@ -473,7 +473,7 @@ void Application::Quit()
 
 // -----------------------------------------------------------------------
 
-osl::SolarMutex& Application::GetSolarMutex()
+comphelper::SolarMutex& Application::GetSolarMutex()
 {
     ImplSVData* pSVData = ImplGetSVData();
     return *(pSVData->mpDefInst->GetYieldMutex());

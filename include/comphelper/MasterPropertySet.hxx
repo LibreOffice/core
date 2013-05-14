@@ -24,6 +24,7 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <comphelper/PropertyInfoHash.hxx>
 #include "comphelper/comphelperdllapi.h"
+#include "comphelper/solarmutex.hxx"
 #include <map>
 
 namespace comphelper
@@ -60,7 +61,7 @@ namespace comphelper
     {
     protected:
         MasterPropertySetInfo *mpInfo;
-        osl::SolarMutex* mpMutex;
+        SolarMutex* mpMutex;
         sal_uInt8 mnLastId;
         SlaveMap maSlaveMap;
         ::com::sun::star::uno::Reference < com::sun::star::beans::XPropertySetInfo > mxInfo;
@@ -92,7 +93,7 @@ namespace comphelper
             throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException );
 
     public:
-        MasterPropertySet( comphelper::MasterPropertySetInfo* pInfo, ::osl::SolarMutex* pMutex = NULL )
+        MasterPropertySet( comphelper::MasterPropertySetInfo* pInfo, SolarMutex* pMutex = NULL )
             throw();
         virtual ~MasterPropertySet()
             throw();

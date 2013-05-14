@@ -26,8 +26,8 @@
 
 #include <stdexcept>
 
+#include <comphelper/solarmutex.hxx>
 #include <osl/thread.hxx>
-#include <osl/mutex.hxx>
 #include <tools/string.hxx>
 #include <tools/link.hxx>
 #include <tools/solar.h>
@@ -165,7 +165,7 @@ public:
     static void                 Reschedule( bool bAllEvents = false );
     static void                 Yield( bool bAllEvents = false );
     static void                 EndYield();
-    static osl::SolarMutex&     GetSolarMutex();
+    static comphelper::SolarMutex& GetSolarMutex();
     static oslThreadIdentifier  GetMainThreadIdentifier();
     static sal_uLong                ReleaseSolarMutex();
     static void                 AcquireSolarMutex( sal_uLong nCount );
@@ -397,7 +397,7 @@ class VCL_DLLPUBLIC SolarMutexGuard
     private:
         SolarMutexGuard( const SolarMutexGuard& );
         const SolarMutexGuard& operator = ( const SolarMutexGuard& );
-        ::osl::SolarMutex& m_solarMutex;
+        comphelper::SolarMutex& m_solarMutex;
 
     public:
 
@@ -450,7 +450,7 @@ public:
             }
         }
 protected:
-    osl::SolarMutex& m_solarMutex;
+    comphelper::SolarMutex& m_solarMutex;
 };
 
 class VCL_DLLPUBLIC SolarMutexResettableGuard
@@ -496,7 +496,7 @@ public:
             }
         }
 protected:
-    osl::SolarMutex& m_solarMutex;
+    comphelper::SolarMutex& m_solarMutex;
 };
 
 

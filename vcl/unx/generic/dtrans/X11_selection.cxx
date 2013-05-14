@@ -64,7 +64,7 @@
 #include <osl/process.h>
 
 #include <comphelper/processfactory.hxx>
-#include <osl/mutex.hxx>
+#include <comphelper/solarmutex.hxx>
 
 #define DRAG_EVENT_MASK ButtonPressMask         |\
                               ButtonReleaseMask     |\
@@ -3308,7 +3308,7 @@ void SelectionManager::startDrag(
         */
         if( nPointerGrabSuccess != GrabSuccess )
         {
-            osl::SolarMutex& rSolarMutex( Application::GetSolarMutex() );
+            comphelper::SolarMutex& rSolarMutex( Application::GetSolarMutex() );
             if( rSolarMutex.tryToAcquire() )
             {
                 pCaptureFrame = GetGenericData()->GetSalDisplay()->GetCaptureFrame();
@@ -3349,7 +3349,7 @@ void SelectionManager::startDrag(
                 listener->dragDropEnd( aDragFailedEvent );
             if( pCaptureFrame )
             {
-                osl::SolarMutex& rSolarMutex( Application::GetSolarMutex() );
+                comphelper::SolarMutex& rSolarMutex( Application::GetSolarMutex() );
                 if( rSolarMutex.tryToAcquire() )
                     GetGenericData()->GetSalDisplay()->CaptureMouse( pCaptureFrame );
 #if OSL_DEBUG_LEVEL > 0
@@ -3438,7 +3438,7 @@ void SelectionManager::startDrag(
 
         if( pCaptureFrame )
         {
-            osl::SolarMutex& rSolarMutex( Application::GetSolarMutex() );
+            comphelper::SolarMutex& rSolarMutex( Application::GetSolarMutex() );
             if( rSolarMutex.tryToAcquire() )
                 GetGenericData()->GetSalDisplay()->CaptureMouse( pCaptureFrame );
 #if OSL_DEBUG_LEVEL > 0

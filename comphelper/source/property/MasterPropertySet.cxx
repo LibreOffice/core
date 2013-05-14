@@ -22,7 +22,7 @@
 #include <comphelper/MasterPropertySetInfo.hxx>
 #include <comphelper/ChainablePropertySet.hxx>
 #include <comphelper/ChainablePropertySetInfo.hxx>
-#include <osl/mutex.hxx>
+#include <comphelper/solarmutex.hxx>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -30,16 +30,16 @@
 
 class AutoOGuardArray
 {
-    boost::scoped_ptr< osl::SolarGuard > *  mpGuardArray;
+    boost::scoped_ptr< osl::Guard< comphelper::SolarMutex > > *  mpGuardArray;
 
 public:
     AutoOGuardArray( sal_Int32 nNumElements );
     ~AutoOGuardArray();
 
-    boost::scoped_ptr< osl::SolarGuard > &  operator[] ( sal_Int32 i ) { return mpGuardArray[i]; }
+    boost::scoped_ptr< osl::Guard< comphelper::SolarMutex > > &  operator[] ( sal_Int32 i ) { return mpGuardArray[i]; }
 };
 
-AutoOGuardArray::AutoOGuardArray( sal_Int32 nNumElements ) : mpGuardArray(new boost::scoped_ptr< osl::SolarGuard >[nNumElements])
+AutoOGuardArray::AutoOGuardArray( sal_Int32 nNumElements ) : mpGuardArray(new boost::scoped_ptr< osl::Guard< comphelper::SolarMutex > >[nNumElements])
 {
 }
 
@@ -67,7 +67,7 @@ SlaveData::SlaveData ( ChainablePropertySet *pSlave)
 {
 }
 
-MasterPropertySet::MasterPropertySet( comphelper::MasterPropertySetInfo* pInfo, osl::SolarMutex* pMutex )
+MasterPropertySet::MasterPropertySet( comphelper::MasterPropertySetInfo* pInfo, comphelper::SolarMutex* pMutex )
     throw()
 : mpInfo ( pInfo )
 , mpMutex ( pMutex )
@@ -105,9 +105,9 @@ void SAL_CALL MasterPropertySet::setPropertyValue( const OUString& rPropertyName
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    boost::scoped_ptr< osl::SolarGuard > pMutexGuard;
+    boost::scoped_ptr< osl::Guard< comphelper::SolarMutex > > pMutexGuard;
     if (mpMutex)
-        pMutexGuard.reset( new osl::SolarGuard(mpMutex) );
+        pMutexGuard.reset( new osl::Guard< comphelper::SolarMutex >(mpMutex) );
 
     PropertyDataHash::const_iterator aIter = mpInfo->maMap.find ( rPropertyName );
 
@@ -125,9 +125,9 @@ void SAL_CALL MasterPropertySet::setPropertyValue( const OUString& rPropertyName
         ChainablePropertySet * pSlave = maSlaveMap [ (*aIter).second->mnMapId ]->mpSlave;
 
         // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-        boost::scoped_ptr< osl::SolarGuard > pMutexGuard2;
+        boost::scoped_ptr< osl::Guard< comphelper::SolarMutex > > pMutexGuard2;
         if (pSlave->mpMutex)
-            pMutexGuard2.reset( new osl::SolarGuard(pSlave->mpMutex) );
+            pMutexGuard2.reset( new osl::Guard< comphelper::SolarMutex >(pSlave->mpMutex) );
 
         pSlave->_preSetValues();
         pSlave->_setSingleValue( *((*aIter).second->mpInfo), rValue );
@@ -139,9 +139,9 @@ Any SAL_CALL MasterPropertySet::getPropertyValue( const OUString& rPropertyName 
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    boost::scoped_ptr< osl::SolarGuard > pMutexGuard;
+    boost::scoped_ptr< osl::Guard< comphelper::SolarMutex > > pMutexGuard;
     if (mpMutex)
-        pMutexGuard.reset( new osl::SolarGuard(mpMutex) );
+        pMutexGuard.reset( new osl::Guard< comphelper::SolarMutex >(mpMutex) );
 
     PropertyDataHash::const_iterator aIter = mpInfo->maMap.find ( rPropertyName );
 
@@ -160,9 +160,9 @@ Any SAL_CALL MasterPropertySet::getPropertyValue( const OUString& rPropertyName 
         ChainablePropertySet * pSlave = maSlaveMap [ (*aIter).second->mnMapId ]->mpSlave;
 
         // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-        boost::scoped_ptr< osl::SolarGuard > pMutexGuard2;
+        boost::scoped_ptr< osl::Guard< comphelper::SolarMutex > > pMutexGuard2;
         if (pSlave->mpMutex)
-            pMutexGuard2.reset( new osl::SolarGuard(pSlave->mpMutex) );
+            pMutexGuard2.reset( new osl::Guard< comphelper::SolarMutex >(pSlave->mpMutex) );
 
         pSlave->_preGetValues();
         pSlave->_getSingleValue( *((*aIter).second->mpInfo), aAny );
@@ -200,9 +200,9 @@ void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< OUString >& 
     throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    boost::scoped_ptr< osl::SolarGuard > pMutexGuard;
+    boost::scoped_ptr< osl::Guard< comphelper::SolarMutex > > pMutexGuard;
     if (mpMutex)
-        pMutexGuard.reset( new osl::SolarGuard(mpMutex) );
+        pMutexGuard.reset( new osl::Guard< comphelper::SolarMutex >(mpMutex) );
 
     const sal_Int32 nCount = aPropertyNames.getLength();
 
@@ -239,7 +239,7 @@ void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< OUString >& 
                 {
                     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
                     if (pSlave->mpSlave->mpMutex)
-                        aOGuardArray[i].reset( new osl::SolarGuard(pSlave->mpSlave->mpMutex) );
+                        aOGuardArray[i].reset( new osl::Guard< comphelper::SolarMutex >(pSlave->mpSlave->mpMutex) );
 
                     pSlave->mpSlave->_preSetValues();
                     pSlave->SetInit ( sal_True );
@@ -266,9 +266,9 @@ Sequence< Any > SAL_CALL MasterPropertySet::getPropertyValues( const Sequence< O
     throw(RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    boost::scoped_ptr< osl::SolarGuard > pMutexGuard;
+    boost::scoped_ptr< osl::Guard< comphelper::SolarMutex > > pMutexGuard;
     if (mpMutex)
-        pMutexGuard.reset( new osl::SolarGuard(mpMutex) );
+        pMutexGuard.reset( new osl::Guard< comphelper::SolarMutex >(mpMutex) );
 
     const sal_Int32 nCount = aPropertyNames.getLength();
 
@@ -304,7 +304,7 @@ Sequence< Any > SAL_CALL MasterPropertySet::getPropertyValues( const Sequence< O
                 {
                     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
                     if (pSlave->mpSlave->mpMutex)
-                        aOGuardArray[i].reset( new osl::SolarGuard(pSlave->mpSlave->mpMutex) );
+                        aOGuardArray[i].reset( new osl::Guard< comphelper::SolarMutex >(pSlave->mpSlave->mpMutex) );
 
                     pSlave->mpSlave->_preGetValues();
                     pSlave->SetInit ( sal_True );
@@ -367,9 +367,9 @@ PropertyState SAL_CALL MasterPropertySet::getPropertyState( const OUString& Prop
         ChainablePropertySet * pSlave = maSlaveMap [ (*aIter).second->mnMapId ]->mpSlave;
 
         // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-        boost::scoped_ptr< osl::SolarGuard > pMutexGuard;
+        boost::scoped_ptr< osl::Guard< comphelper::SolarMutex > > pMutexGuard;
         if (pSlave->mpMutex)
-            pMutexGuard.reset( new osl::SolarGuard(pSlave->mpMutex) );
+            pMutexGuard.reset( new osl::Guard< comphelper::SolarMutex >(pSlave->mpMutex) );
 
         pSlave->_preGetPropertyState();
         pSlave->_getPropertyState( *((*aIter).second->mpInfo), aState );

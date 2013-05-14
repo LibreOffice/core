@@ -26,6 +26,7 @@
 
 #include <cppuhelper/implbase1.hxx>
 
+namespace comphelper { class SolarMutex; }
 
 //........................................................................
 namespace sfx2
@@ -55,10 +56,10 @@ namespace sfx2
     class SFX2_DLLPUBLIC DocumentStorageModifyListener : public DocumentStorageModifyListener_Base
     {
         IModifiableDocument*    m_pDocument;
-        ::osl::SolarMutex&      m_rMutex;
+        comphelper::SolarMutex& m_rMutex;
 
     public:
-        DocumentStorageModifyListener( IModifiableDocument& _rDocument, ::osl::SolarMutex& _rMutex );
+        DocumentStorageModifyListener( IModifiableDocument& _rDocument, comphelper::SolarMutex& _rMutex );
 
         void dispose();
 

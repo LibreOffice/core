@@ -59,7 +59,7 @@ public:
     virtual SalI18NImeStatus*   CreateI18NImeStatus();
     virtual SalSystem*          CreateSalSystem();
     virtual SalBitmap*          CreateSalBitmap();
-    virtual osl::SolarMutex*    GetYieldMutex();
+    virtual comphelper::SolarMutex* GetYieldMutex();
     virtual sal_uIntPtr         ReleaseYieldMutex();
     virtual void                AcquireYieldMutex( sal_uIntPtr nCount );
     virtual bool                CheckYieldMutex();

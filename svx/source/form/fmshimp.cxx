@@ -81,9 +81,9 @@
 #include <comphelper/evtmethodhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
+#include <comphelper/solarmutex.hxx>
 #include <comphelper/string.hxx>
 #include <connectivity/dbtools.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/logfile.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
@@ -837,7 +837,7 @@ void SAL_CALL FmXFormShell::propertyChange(const PropertyChangeEvent& evt) throw
         // (Solche Paints passieren zum Beispiel, wenn man einfach nur eine andere Applikation ueber das Office legt und wieder
         // zurueckschaltet).
         // Deshalb die Benutzung des SolarMutex, der sichert das ab.
-        ::osl::SolarMutex& rSolarSafety = Application::GetSolarMutex();
+        comphelper::SolarMutex& rSolarSafety = Application::GetSolarMutex();
         if (rSolarSafety.tryToAcquire())
         {
             m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_RECORD_TOTAL , sal_True, sal_False);

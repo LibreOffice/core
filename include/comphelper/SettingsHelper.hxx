@@ -43,7 +43,7 @@ namespace comphelper
         public ComphelperBase
     {
     public:
-        SettingsHelperNoState ( ComphelperBaseInfo *pInfo, ::osl::SolarMutex* pMutex = NULL)
+        SettingsHelperNoState ( ComphelperBaseInfo *pInfo, SolarMutex* pMutex = NULL)
         : ComphelperBase ( pInfo, pMutex )
         {}
         virtual ~SettingsHelperNoState () throw( ) {}

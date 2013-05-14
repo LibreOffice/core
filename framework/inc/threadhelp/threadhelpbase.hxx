@@ -45,7 +45,7 @@ struct ThreadHelpBase
     //  public methods
     //-------------------------------------------------------------------------------------------------------------
     public:
-        ThreadHelpBase( ::osl::SolarMutex* pSolarMutex = NULL )
+        ThreadHelpBase( comphelper::SolarMutex* pSolarMutex = NULL )
                 :   m_aLock( pSolarMutex )
         {
         }

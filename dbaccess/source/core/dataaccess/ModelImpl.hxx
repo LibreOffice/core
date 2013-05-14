@@ -62,13 +62,13 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/sharedmutex.hxx>
+#include <comphelper/solarmutex.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <sfx2/docmacromode.hxx>
 #include <sfx2/docstoragemodifylistener.hxx>
 #include <unotools/sharedunocomponent.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 
 #include <memory>
@@ -128,7 +128,7 @@ class OSharedConnectionManager;
 //============================================================
 /** a class which provides an IMutex interface to an OSL-based mutex
 */
-class VosMutexFacade : public ::osl::SolarMutex
+class VosMutexFacade : public comphelper::SolarMutex
 {
 public:
     /** beware of life time: the mutex you pass here must live as least as long
@@ -136,10 +136,9 @@ public:
     */
     VosMutexFacade( ::osl::Mutex& _rMutex );
 
-    // IMutex
-    virtual void SAL_CALL acquire();
-    virtual sal_Bool SAL_CALL tryToAcquire();
-    virtual void SAL_CALL release();
+    virtual void acquire();
+    virtual void release();
+    virtual bool tryToAcquire();
 
 private:
     ::osl::Mutex&   m_rMutex;

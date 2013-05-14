@@ -102,7 +102,7 @@ class AquaDelayedSettingsChanged : public Timer
 
 void AquaSalInstance::delayedSettingsChanged( bool bInvalidate )
 {
-    osl::SolarGuard aGuard( *mpSalYieldMutex );
+    osl::Guard< comphelper::SolarMutex > aGuard( *mpSalYieldMutex );
     AquaDelayedSettingsChanged* pTimer = new AquaDelayedSettingsChanged( bInvalidate );
     pTimer->SetTimeout( 50 );
     pTimer->Start();
@@ -460,7 +460,7 @@ void AquaSalInstance::PostUserEvent( AquaSalFrame* pFrame, sal_uInt16 nType, voi
 
 // -----------------------------------------------------------------------
 
-osl::SolarMutex* AquaSalInstance::GetYieldMutex()
+comphelper::SolarMutex* AquaSalInstance::GetYieldMutex()
 {
     return mpSalYieldMutex;
 }
