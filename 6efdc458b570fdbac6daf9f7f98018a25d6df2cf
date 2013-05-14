@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXH//8zk\u003d",
+        "filename": "formula/source/ui/dlg/formula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 830,
+      "author": {
+        "id": 1000176
+      },
+      "writtenOn": "2013-05-14T01:22:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAXH//80o\u003d",
+      "revId": "6efdc458b570fdbac6daf9f7f98018a25d6df2cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXH//80k\u003d",
         "filename": "formula/source/ui/dlg/formula.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2013-05-13T22:29:54Z",
       "side": 1,
       "message": "Ditto",
+      "revId": "6efdc458b570fdbac6daf9f7f98018a25d6df2cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//8zg\u003d",
+        "filename": "formula/source/ui/dlg/formula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1039,
+      "author": {
+        "id": 1000176
+      },
+      "writtenOn": "2013-05-14T01:22:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAXH//80k\u003d",
       "revId": "6efdc458b570fdbac6daf9f7f98018a25d6df2cf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXH//8zc\u003d",
+        "filename": "formula/source/ui/dlg/formula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1434,
+      "author": {
+        "id": 1000176
+      },
+      "writtenOn": "2013-05-14T01:22:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAXH//80g\u003d",
+      "revId": "6efdc458b570fdbac6daf9f7f98018a25d6df2cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXH//80w\u003d",
         "filename": "padmin/source/adddlg.cxx",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2013-05-13T21:14:43Z",
       "side": 1,
       "message": "Shouldn\u0027t this be fixed to: if ( aFile.getLength() \u0026\u0026 aFile[ aFile.getLength()-1 ] !\u003d \u0027/\u0027) ?",
+      "revId": "6efdc458b570fdbac6daf9f7f98018a25d6df2cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//8zY\u003d",
+        "filename": "padmin/source/adddlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000176
+      },
+      "writtenOn": "2013-05-14T01:22:39Z",
+      "side": 1,
+      "message": "I believe you is right. New patch set coming..",
+      "parentUuid": "AAAAXH//80w\u003d",
       "revId": "6efdc458b570fdbac6daf9f7f98018a25d6df2cf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
