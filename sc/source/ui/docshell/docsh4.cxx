@@ -1706,7 +1706,7 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                                                                                 GetActiveDialogParent(),
                                                                                 rStyleSet,
                                                                                 aStr,
-                                                                                RID_SCDLG_HFEDIT, nResId);
+                                                                                nResId);
                         OSL_ENSURE(pDlg, "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                         {

@@ -1238,22 +1238,10 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScHFEditDlg( SfxViewF
                                                                         Window*         pParent,
                                                                         const SfxItemSet&   rCoreSet,
                                                                         const String&       rPageStyle,
-                                                                        int nId,
                                                                         sal_uInt16              nResId )
 {
-    SfxTabDialog* pDlg=NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_HFEDIT :
-            pDlg = new ScHFEditDlg( pFrame, pParent, rCoreSet,rPageStyle, nResId );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new ScAbstractTabDialog_Impl( pDlg );
-    return 0;
+    SfxTabDialog* pDlg = new ScHFEditDlg( pFrame, pParent, rCoreSet,rPageStyle, nResId );
+    return new ScAbstractTabDialog_Impl( pDlg );
 }
 
 

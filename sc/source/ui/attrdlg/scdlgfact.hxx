@@ -559,7 +559,6 @@ public:
                                                     Window*         pParent,
                                                     const SfxItemSet&   rCoreSet,
                                                     const String&       rPageStyle,
-                                                    int nId,
                                                     sal_uInt16              nResId = RID_SCDLG_HFEDIT );
 
     virtual SfxAbstractTabDialog * CreateScStyleDlg( Window*                pParent,//add for ScStyleDlg
