@@ -107,7 +107,7 @@ private:
     OUString               maFieldString;
     OUString               maLiteralMask;
     sal_uInt16             mnFormatFlags;
-    sal_Bool               mbSameMask;
+    bool                   mbSameMask;
     sal_Bool               mbInPattKeyInput;
 
 protected:
@@ -115,7 +115,7 @@ protected:
 
     SAL_DLLPRIVATE void ImplSetMask(const OString& rEditMask,
         const OUString& rLiteralMask);
-    SAL_DLLPRIVATE sal_Bool     ImplIsSameMask() const { return mbSameMask; }
+    SAL_DLLPRIVATE bool     ImplIsSameMask() const { return mbSameMask; }
     SAL_DLLPRIVATE sal_Bool&    ImplGetInPattKeyInput() { return mbInPattKeyInput; }
 
 public:

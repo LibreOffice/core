@@ -120,11 +120,11 @@ static sal_Unicode* ImplAddNum( sal_Unicode* pBuf, sal_uLong nNumber, int nMinLe
 
 // -----------------------------------------------------------------------
 
-static sal_uInt16 ImplGetNum( const sal_Unicode*& rpBuf, sal_Bool& rbError )
+static sal_uInt16 ImplGetNum( const sal_Unicode*& rpBuf, bool& rbError )
 {
     if ( !*rpBuf )
     {
-        rbError = sal_True;
+        rbError = true;
         return 0;
     }
 
@@ -336,7 +336,7 @@ static OUString ImplPatternReformat( const OUString& rStr,
 // -----------------------------------------------------------------------
 
 static void ImplPatternMaxPos( const OUString& rStr, const OString& rEditMask,
-                               sal_uInt16 nFormatFlags, sal_Bool bSameMask,
+                               sal_uInt16 nFormatFlags, bool bSameMask,
                                sal_uInt16 nCursorPos, sal_Int32& rPos )
 {
 
@@ -380,7 +380,7 @@ static void ImplPatternMaxPos( const OUString& rStr, const OString& rEditMask,
 static void ImplPatternProcessStrictModify( Edit* pEdit,
                                             const OString& rEditMask,
                                             const OUString& rLiteralMask,
-                                            sal_uInt16 nFormatFlags, sal_Bool bSameMask )
+                                            sal_uInt16 nFormatFlags, bool bSameMask )
 {
     OUString aText = pEdit->GetText();
 
@@ -449,7 +449,7 @@ static xub_StrLen ImplPatternLeftPos(const OString& rEditMask, xub_StrLen nCurso
 // -----------------------------------------------------------------------
 
 static xub_StrLen ImplPatternRightPos( const OUString& rStr, const OString& rEditMask,
-                                       sal_uInt16 nFormatFlags, sal_Bool bSameMask,
+                                       sal_uInt16 nFormatFlags, bool bSameMask,
                                        sal_Int32 nCursorPos )
 {
     // search non-literal successor
@@ -470,16 +470,16 @@ static xub_StrLen ImplPatternRightPos( const OUString& rStr, const OString& rEdi
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
+static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
                                         const OString& rEditMask,
                                         const OUString& rLiteralMask,
                                         sal_Bool bStrictFormat,
                                         sal_uInt16 nFormatFlags,
-                                        sal_Bool bSameMask,
+                                        bool bSameMask,
                                         sal_Bool& rbInKeyInput )
 {
     if ( rEditMask.isEmpty() || !bStrictFormat )
-        return sal_False;
+        return false;
 
     Selection   aOldSel     = pEdit->GetSelection();
     KeyCode     aCode       = rKEvt.GetKeyCode();
@@ -498,7 +498,7 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
             if ( bShift )
                 aSel.Min() = aOldSel.Min();
             pEdit->SetSelection( aSel );
-            return sal_True;
+            return true;
         }
         else if ( nKeyCode == KEY_RIGHT )
         {
@@ -513,7 +513,7 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
             else
                 aSel.Min() = aSel.Max();
             pEdit->SetSelection( aSel );
-            return sal_True;
+            return true;
         }
         else if ( nKeyCode == KEY_HOME )
         {
@@ -530,7 +530,7 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
             if ( bShift )
                 aSel.Min() = aOldSel.Min();
             pEdit->SetSelection( aSel );
-            return sal_True;
+            return true;
         }
         else if ( nKeyCode == KEY_END )
         {
@@ -551,7 +551,7 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
             else
                 aSel.Min() = aSel.Max();
             pEdit->SetSelection( aSel );
-            return sal_True;
+            return true;
         }
         else if ( (nKeyCode == KEY_BACKSPACE) || (nKeyCode == KEY_DELETE) )
         {
@@ -611,7 +611,7 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
             else
                 pEdit->SetSelection( Selection( nNewPos ) );
 
-            return sal_True;
+            return true;
         }
         else if ( nKeyCode == KEY_INSERT )
         {
@@ -619,13 +619,13 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
             // mask is equal at all input positions
             if ( !bSameMask )
             {
-                return sal_True;
+                return true;
             }
         }
     }
 
     if ( rKEvt.GetKeyCode().IsMod2() || (cChar < 32) || (cChar == 127) )
-        return sal_False;
+        return false;
 
     Selection aSel = aOldSel;
     aSel.Justify();
@@ -660,7 +660,7 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
                             if ( nTempPos > nNewPos )
                             {
                                 pEdit->SetSelection( Selection( nTempPos ) );
-                                return sal_True;
+                                return true;
                             }
                         }
                         break;
@@ -677,7 +677,7 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
     if ( cChar )
     {
         OUStringBuffer  aStr = pEdit->GetText();
-        sal_Bool        bError = sal_False;
+        bool        bError = false;
         if ( bSameMask && pEdit->IsInsertMode() )
         {
             // crop spaces and literals at the end until current position
@@ -707,7 +707,7 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
                 aStr = ImplPatternReformat( aStr.toString(), rEditMask, rLiteralMask, nFormatFlags );
             }
             else
-                bError = sal_True;
+                bError = true;
         }
         else
         {
@@ -736,7 +736,7 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -745,7 +745,7 @@ void PatternFormatter::ImplSetMask(const OString& rEditMask, const OUString& rLi
 {
     m_aEditMask     = rEditMask;
     maLiteralMask   = rLiteralMask;
-    mbSameMask      = sal_True;
+    mbSameMask      = true;
 
     if ( m_aEditMask.getLength() != maLiteralMask.getLength() )
     {
@@ -770,14 +770,14 @@ void PatternFormatter::ImplSetMask(const OString& rEditMask, const OUString& rLi
                  (cTemp == EDITMASK_UPPERALLCHAR) ||
                  (cTemp == EDITMASK_NUMSPACE) )
             {
-                mbSameMask = sal_False;
+                mbSameMask = false;
                 break;
             }
             if ( i < rLiteralMask.getLength() )
             {
                 if ( rLiteralMask[i] != ' ' )
                 {
-                    mbSameMask = sal_False;
+                    mbSameMask = false;
                     break;
                 }
             }
@@ -785,7 +785,7 @@ void PatternFormatter::ImplSetMask(const OString& rEditMask, const OUString& rLi
                 c = cTemp;
             if ( cTemp != c )
             {
-                mbSameMask = sal_False;
+                mbSameMask = false;
                 break;
             }
         }
@@ -798,7 +798,7 @@ void PatternFormatter::ImplSetMask(const OString& rEditMask, const OUString& rLi
 PatternFormatter::PatternFormatter()
 {
     mnFormatFlags       = 0;
-    mbSameMask          = sal_True;
+    mbSameMask          = true;
     mbInPattKeyInput    = sal_False;
 }
 
@@ -1019,7 +1019,7 @@ static sal_uInt16 ImplCutNumberFromString( OUString& rStr )
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplCutMonthName( OUString& rStr, const OUString& _rLookupMonthName )
+static bool ImplCutMonthName( OUString& rStr, const OUString& _rLookupMonthName )
 {
     sal_Int32 index = 0;
     rStr = rStr.replaceFirst(_rLookupMonthName, OUString(), &index);
@@ -1057,7 +1057,7 @@ static OUString ImplGetDateSep( const LocaleDataWrapper& rLocaleDataWrapper, Ext
         return rLocaleDataWrapper.getDateSep();
 }
 
-static sal_Bool ImplDateProcessKeyInput( Edit*, const KeyEvent& rKEvt, ExtDateFieldFormat eFormat,
+static bool ImplDateProcessKeyInput( Edit*, const KeyEvent& rKEvt, ExtDateFieldFormat eFormat,
                                      const LocaleDataWrapper& rLocaleDataWrapper  )
 {
     sal_Unicode cChar = rKEvt.GetCharCode();
@@ -1066,22 +1066,22 @@ static sal_Bool ImplDateProcessKeyInput( Edit*, const KeyEvent& rKEvt, ExtDateFi
          (nGroup == KEYGROUP_MISC)||
          ((cChar >= '0') && (cChar <= '9')) ||
          (cChar == ImplGetDateSep( rLocaleDataWrapper, eFormat )[0]) )
-        return sal_False;
+        return false;
     else
-        return sal_True;
+        return true;
 }
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplDateGetValue( const OUString& rStr, Date& rDate, ExtDateFieldFormat eDateFormat,
+static bool ImplDateGetValue( const OUString& rStr, Date& rDate, ExtDateFieldFormat eDateFormat,
                               const LocaleDataWrapper& rLocaleDataWrapper, const CalendarWrapper& rCalendarWrapper,
                               const AllSettings& )
 {
     sal_uInt16 nDay = 0;
     sal_uInt16 nMonth = 0;
     sal_uInt16 nYear = 0;
-    sal_Bool bYear = sal_True;
-    sal_Bool bError = sal_False;
+    bool bYear = true;
+    bool bError = false;
     OUString aStr( rStr );
 
     if ( eDateFormat == XTDATEF_SYSTEM_LONG )
@@ -1113,11 +1113,11 @@ static sal_Bool ImplDateGetValue( const OUString& rStr, Date& rDate, ExtDateFiel
         OUString aDateSep = ImplGetDateSep( rLocaleDataWrapper, eDateFormat );
         sal_Int32 nSepPos = aStr.indexOf( aDateSep );
         if ( nSepPos < 0 )
-            return sal_False;
+            return false;
         nSepPos = aStr.indexOf( aDateSep, nSepPos+1 );
         if ( ( nSepPos < 0 ) || ( nSepPos == (aStr.getLength()-1) ) )
         {
-            bYear = sal_False;
+            bYear = false;
             nYear = Date( Date::SYSTEM ).GetYear();
         }
 
@@ -1170,16 +1170,16 @@ static sal_Bool ImplDateGetValue( const OUString& rStr, Date& rDate, ExtDateFiel
     }
 
     if ( bError || !nDay || !nMonth )
-        return sal_False;
+        return false;
 
     Date aNewDate( nDay, nMonth, nYear );
     DateFormatter::ExpandCentury( aNewDate, utl::MiscCfg().GetYear2000() );
     if ( aNewDate.IsValidDate() )
     {
         rDate = aNewDate;
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 // -----------------------------------------------------------------------
@@ -1218,7 +1218,7 @@ sal_Bool DateFormatter::ImplDateReformat( const OUString& rStr, OUString& rOutSt
 OUString DateFormatter::ImplGetDateAsText( const Date& rDate,
                                            const AllSettings& ) const
 {
-    sal_Bool bShowCentury = sal_False;
+    bool bShowCentury = false;
     switch ( GetExtDateFormat() )
     {
         case XTDATEF_SYSTEM_SHORT_YYYY:
@@ -1228,12 +1228,12 @@ OUString DateFormatter::ImplGetDateAsText( const Date& rDate,
         case XTDATEF_SHORT_YYYYMMDD:
         case XTDATEF_SHORT_YYYYMMDD_DIN5008:
         {
-            bShowCentury = sal_True;
+            bShowCentury = true;
         }
         break;
         default:
         {
-            bShowCentury = sal_False;
+            bShowCentury = false;
         }
     }
 
@@ -1245,7 +1245,7 @@ OUString DateFormatter::ImplGetDateAsText( const Date& rDate,
 
         // If year is not in double digit range
         if ( (nYear < nTwoDigitYearStart) || (nYear >= nTwoDigitYearStart+100) )
-            bShowCentury = sal_True;
+            bShowCentury = true;
     }
 
     sal_Unicode aBuf[128];
@@ -1591,7 +1591,7 @@ ExtDateFieldFormat DateFormatter::GetExtDateFormat( sal_Bool bResolveSystemForma
 
     if ( bResolveSystemFormat && ( eDateFormat <= XTDATEF_SYSTEM_SHORT_YYYY ) )
     {
-        sal_Bool bShowCentury = (eDateFormat == XTDATEF_SYSTEM_SHORT_YYYY);
+        bool bShowCentury = (eDateFormat == XTDATEF_SYSTEM_SHORT_YYYY);
         switch ( ImplGetLocaleDataWrapper().getDateFormat() )
         {
             case DMY:   eDateFormat = bShowCentury ? XTDATEF_SHORT_DDMMYYYY : XTDATEF_SHORT_DDMMYY;
@@ -1974,7 +1974,7 @@ long DateField::Notify( NotifyEvent& rNEvt )
             // !!! We should find out why dates are treated differently than other fields (see
             // also bug: 52384)
 
-            sal_Bool bTextLen = !GetText().isEmpty();
+            bool bTextLen = !GetText().isEmpty();
             if ( bTextLen || !IsEmptyFieldValueEnabled() )
             {
                 if ( !ImplAllowMalformedInput() )
@@ -2108,7 +2108,7 @@ long DateBox::Notify( NotifyEvent& rNEvt )
     {
         if ( MustBeReformatted() )
         {
-            sal_Bool bTextLen = !GetText().isEmpty();
+            bool bTextLen = !GetText().isEmpty();
             if ( bTextLen || !IsEmptyFieldValueEnabled() )
                 Reformat();
             else if ( !bTextLen && IsEmptyFieldValueEnabled() )
@@ -2149,7 +2149,7 @@ void DateBox::ReformatAll()
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplTimeProcessKeyInput( Edit*, const KeyEvent& rKEvt,
+static bool ImplTimeProcessKeyInput( Edit*, const KeyEvent& rKEvt,
                                      sal_Bool bStrictFormat, sal_Bool bDuration,
                                      TimeFieldFormat eFormat,
                                      const LocaleDataWrapper& rLocaleDataWrapper  )
@@ -2157,7 +2157,7 @@ static sal_Bool ImplTimeProcessKeyInput( Edit*, const KeyEvent& rKEvt,
     sal_Unicode cChar = rKEvt.GetCharCode();
 
     if ( !bStrictFormat )
-        return sal_False;
+        return false;
     else
     {
         sal_uInt16 nGroup = rKEvt.GetKeyCode().GetGroup();
@@ -2172,54 +2172,54 @@ static sal_Bool ImplTimeProcessKeyInput( Edit*, const KeyEvent& rKEvt,
              ((eFormat == TIMEF_100TH_SEC) && string::equals(rLocaleDataWrapper.getTime100SecSep(), cChar)) ||
              ((eFormat == TIMEF_SEC_CS) && string::equals(rLocaleDataWrapper.getTime100SecSep(), cChar)) ||
              (bDuration && (cChar == '-')) )
-            return sal_False;
+            return false;
         else
-            return sal_True;
+            return true;
     }
 }
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplIsOnlyDigits( const OUStringBuffer& _rStr )
+static bool ImplIsOnlyDigits( const OUStringBuffer& _rStr )
 {
     const sal_Unicode* _pChr = _rStr.getStr();
     for ( sal_Int32 i = 0; i < _rStr.getLength(); ++i, ++_pChr )
     {
         if ( *_pChr < '0' || *_pChr > '9' )
-            return sal_False;
+            return false;
     }
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplIsValidTimePortion( sal_Bool _bSkipInvalidCharacters, const OUStringBuffer& _rStr )
+static bool ImplIsValidTimePortion( sal_Bool _bSkipInvalidCharacters, const OUStringBuffer& _rStr )
 {
     if ( !_bSkipInvalidCharacters )
     {
         if ( ( _rStr.getLength() > 2 ) || ( _rStr.getLength() < 1 ) || !ImplIsOnlyDigits( _rStr ) )
-            return sal_False;
+            return false;
     }
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplCutTimePortion( OUStringBuffer& _rStr, xub_StrLen _nSepPos, sal_Bool _bSkipInvalidCharacters, short* _pPortion )
+static bool ImplCutTimePortion( OUStringBuffer& _rStr, xub_StrLen _nSepPos, sal_Bool _bSkipInvalidCharacters, short* _pPortion )
 {
     OUString sPortion(_rStr.getStr(), _nSepPos );
     _rStr = _nSepPos < _rStr.getLength()
         ? _rStr.copy( _nSepPos + 1 ) : OUStringBuffer();
 
     if ( !ImplIsValidTimePortion( _bSkipInvalidCharacters, sPortion ) )
-        return sal_False;
+        return false;
     *_pPortion = (short)sPortion.toInt32();
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
+static bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
                               TimeFieldFormat eFormat, sal_Bool bDuration,
                               const LocaleDataWrapper& rLocaleDataWrapper, sal_Bool _bSkipInvalidCharacters = sal_True )
 {
@@ -2231,7 +2231,7 @@ static sal_Bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
     Time        aTime( 0, 0, 0 );
 
     if ( rStr.isEmpty() )
-        return sal_False;
+        return false;
 
     // Search for separators
     if (!rLocaleDataWrapper.getTimeSep().isEmpty())
@@ -2253,34 +2253,34 @@ static sal_Bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
         }
     }
 
-    sal_Bool bNegative = sal_False;
+    bool bNegative = false;
     sal_Int32 nSepPos = aStr.indexOf( rLocaleDataWrapper.getTimeSep() );
     if ( aStr[0] == '-' )
-        bNegative = sal_True;
+        bNegative = true;
     if ( eFormat != TIMEF_SEC_CS )
     {
         if ( nSepPos < 0 )
             nSepPos = aStr.getLength();
         if ( !ImplCutTimePortion( aStr, nSepPos, _bSkipInvalidCharacters, &nHour ) )
-            return sal_False;
+            return false;
 
         nSepPos = aStr.indexOf( rLocaleDataWrapper.getTimeSep() );
         if ( !aStr.isEmpty() && aStr[0] == '-' )
-            bNegative = sal_True;
+            bNegative = true;
         if ( nSepPos >= 0 )
         {
             if ( !ImplCutTimePortion( aStr, nSepPos, _bSkipInvalidCharacters, &nMinute ) )
-                return sal_False;
+                return false;
 
             nSepPos = aStr.indexOf( rLocaleDataWrapper.getTimeSep() );
             if ( aStr[0] == '-' )
-                bNegative = sal_True;
+                bNegative = true;
             if ( nSepPos >= 0 )
             {
                 if ( !ImplCutTimePortion( aStr, nSepPos, _bSkipInvalidCharacters, &nSecond ) )
-                    return sal_False;
+                    return false;
                 if ( aStr[0] == '-' )
-                    bNegative = sal_True;
+                    bNegative = true;
                 n100Sec = (short)aStr.toString().toInt32();
             }
             else
@@ -2304,7 +2304,7 @@ static sal_Bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
 
         nSepPos = aStr.indexOf( rLocaleDataWrapper.getTimeSep() );
         if ( aStr[0] == '-' )
-            bNegative = sal_True;
+            bNegative = true;
         if ( nSepPos >= 0 )
         {
             nMinute = nSecond;
@@ -2313,7 +2313,7 @@ static sal_Bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
 
             nSepPos = aStr.indexOf( rLocaleDataWrapper.getTimeSep() );
             if ( aStr[0] == '-' )
-                bNegative = sal_True;
+                bNegative = true;
             if ( nSepPos >= 0 )
             {
                 nHour   = nMinute;
@@ -2361,7 +2361,7 @@ static sal_Bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
     }
 
     if ( (nMinute > 59) || (nSecond > 59) || (n100Sec > 100) )
-        return sal_False;
+        return false;
 
     if ( eFormat == TIMEF_NONE )
         nSecond = n100Sec = 0;
@@ -2372,7 +2372,7 @@ static sal_Bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
     {
         if ( bNegative || (nHour < 0) || (nMinute < 0) ||
              (nSecond < 0) || (n100Sec < 0) )
-            return sal_False;
+            return false;
 
         OUString aUpperCaseStr = aStr.toString().toAsciiUpperCase();
         OUString aAM(rLocaleDataWrapper.getTimeAM().toAsciiUpperCase());
@@ -2394,7 +2394,7 @@ static sal_Bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
         if ( bNegative || (nHour < 0) || (nMinute < 0) ||
              (nSecond < 0) || (n100Sec < 0) )
         {
-            bNegative   = sal_True;
+            bNegative   = true;
             nHour       = nHour < 0 ? -nHour : nHour;
             nMinute     = nMinute < 0 ? -nMinute : nMinute;
             nSecond     = nSecond < 0 ? -nSecond : nSecond;
@@ -2409,7 +2409,7 @@ static sal_Bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
 
     rTime = aTime;
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
