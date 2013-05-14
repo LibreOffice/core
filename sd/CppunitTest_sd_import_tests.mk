@@ -9,15 +9,15 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sd_regression_test))
+$(eval $(call gb_CppunitTest_CppunitTest,sd_import_tests))
 
-$(eval $(call gb_CppunitTest_use_external,sd_regression_test,boost_headers))
+$(eval $(call gb_CppunitTest_use_external,sd_import_tests,boost_headers))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,sd_regression_test, \
-    sd/qa/unit/regression-test \
+$(eval $(call gb_CppunitTest_add_exception_objects,sd_import_tests, \
+    sd/qa/unit/import-tests \
 ))
 
-$(eval $(call gb_CppunitTest_use_libraries,sd_regression_test, \
+$(eval $(call gb_CppunitTest_use_libraries,sd_import_tests, \
     avmedia \
     basegfx \
     comphelper \
@@ -52,20 +52,20 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_regression_test, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,sd_regression_test,\
+$(eval $(call gb_CppunitTest_set_include,sd_import_tests,\
     -I$(SRCDIR)/sd/source/ui/inc \
     -I$(SRCDIR)/sd/inc \
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,sd_regression_test,\
+$(eval $(call gb_CppunitTest_use_api,sd_import_tests,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_use_ure,sd_regression_test))
+$(eval $(call gb_CppunitTest_use_ure,sd_import_tests))
 
-$(eval $(call gb_CppunitTest_use_components,sd_regression_test,\
+$(eval $(call gb_CppunitTest_use_components,sd_import_tests,\
     animations/source/animcore/animcore \
     basic/util/sb \
     comphelper/util/comphelp \
@@ -106,16 +106,16 @@ $(eval $(call gb_CppunitTest_use_components,sd_regression_test,\
     xmlsecurity/util/xmlsecurity \
 ))
 
-$(eval $(call gb_CppunitTest_use_configuration,sd_regression_test))
+$(eval $(call gb_CppunitTest_use_configuration,sd_import_tests))
 
-$(eval $(call gb_CppunitTest_use_filter_configuration,sd_regression_test))
+$(eval $(call gb_CppunitTest_use_filter_configuration,sd_import_tests))
 
-$(eval $(call gb_CppunitTest_use_unittest_configuration,sd_regression_test))
+$(eval $(call gb_CppunitTest_use_unittest_configuration,sd_import_tests))
 
-$(eval $(call gb_CppunitTest_add_arguments,sd_regression_test,\
+$(eval $(call gb_CppunitTest_add_arguments,sd_import_tests,\
     "-env:SVG_DISABLE_FONT_EMBEDDING=YEAH" \
 ))
 
-$(call gb_CppunitTest_get_target,sd_regression_test) : $(call gb_AllLangResTarget_get_target,sd)
+$(call gb_CppunitTest_get_target,sd_import_tests) : $(call gb_AllLangResTarget_get_target,sd)
 
 # vim: set noet sw=4 ts=4:

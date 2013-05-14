@@ -25,7 +25,7 @@ $(eval $(call gb_Module_add_targets,sd,\
 ifneq ($(OS),DRAGONFLY)
 $(eval $(call gb_Module_add_check_targets,sd,\
     CppunitTest_sd_uimpress \
-    CppunitTest_sd_regression_test \
+    CppunitTest_sd_import_tests \
     CppunitTest_sd_filters_test \
 ))
 endif
