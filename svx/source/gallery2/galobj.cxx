@@ -66,8 +66,6 @@ sal_Bool SgaObject::CreateThumb( const Graphic& rGraphic )
 
         if( aBmpSize.Width() && aBmpSize.Height() )
         {
-            const Color aWhite( COL_WHITE );
-
             if( aBmpEx.GetPrefMapMode().GetMapUnit() != MAP_PIXEL &&
                 aBmpEx.GetPrefSize().Width() > 0 &&
                 aBmpEx.GetPrefSize().Height() > 0 )
