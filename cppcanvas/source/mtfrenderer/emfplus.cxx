@@ -1272,10 +1272,10 @@ namespace cppcanvas
 
                 rMF >> type >> flags >> size >> dataSize;
 
-                next = rMF.Tell() + ( size - 12 );
+                next = rMF.Tell() + ( size - 12 );  // we subtract the 12 byte header record and record specific data
 
                 if (size < 12) {
-                    SAL_INFO("cppcanvas.emf", "Size field is less than 12 bytes");
+                    SAL_WARN("cppcanvas.emf", "Size field is less than 12 bytes, this can't be because the header alone takes up 12 bytes");
                 }
 
                 SAL_INFO("cppcanvas.emf", "EMF+ record size: " << size << " type: " << type << " flags: " << flags << " data size: " << dataSize);
@@ -1941,7 +1941,7 @@ namespace cppcanvas
                 else
                 {
                     SAL_WARN("cppcanvas.emf", "ImplRenderer::processEMFPlus: "
-                            "size " << size << " > length " << length);
+                            "size " << size << " > length " << length << ". dataSize is " << dataSize);
 #if OSL_DEBUG_LEVEL > 1
                     dumpWords(rMF, length);
 #endif
