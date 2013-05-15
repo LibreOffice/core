@@ -54,7 +54,7 @@ public:
     virtual void Paint (const Rectangle& rRect);
 
     virtual Point GetPosPixel (void) const;
-    virtual void SetPosSizePixel (
+    virtual void setPosSizePixel (
         long nX,
         long nY,
         long nWidth,
