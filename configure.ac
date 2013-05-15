@@ -442,7 +442,6 @@ cygwin*|interix*|mingw32*)
     test_fontconfig=no
     _os=WINNT
     use_shl_version="TRUE"
-    DYNAMIC_CRT="TRUE"
 
     DLLPOST=".dll"
     LINKFLAGSNOUNDEFS=
@@ -617,7 +616,6 @@ if test "$_os" = "AIX"; then
 fi
 
 AC_SUBST(use_shl_version)
-AC_SUBST(DYNAMIC_CRT)
 
 AC_SUBST(WITH_MINGW)
 AC_SUBST(OSVERSION)
