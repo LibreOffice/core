@@ -270,6 +270,8 @@ public:
 
     OUString aODFVersion;
 
+    bool mbIsOOoXML;
+
     // Boolean, indicating that position attributes
     // of shapes are given in horizontal left-to-right layout. This is the case
     // for the OpenOffice.org file format. (#i28749#)
@@ -289,7 +291,7 @@ public:
         , hMathFontConv( 0 )
         , mbOwnGraphicResolver( false )
         , mbOwnEmbeddedResolver( false )
-        , mStreamName()
+        , mbIsOOoXML(false)
         // Convert drawing object positions from OOo file format to OASIS (#i28749#)
         , mbShapePositionInHoriL2R( sal_False )
         , mbTextDocInOOoFileFormat( sal_False )
@@ -831,7 +833,25 @@ void SAL_CALL SvXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
     mxModel = uno::Reference< frame::XModel >::query( xDoc );
     if( !mxModel.is() )
         throw lang::IllegalArgumentException();
-    if (mxModel.is() && !mxEventListener.is())
+
+    try
+    {
+        uno::Reference<document::XStorageBasedDocument> const xSBDoc(mxModel,
+                uno::UNO_QUERY_THROW);
+        uno::Reference<embed::XStorage> const xStor(
+                xSBDoc->getDocumentStorage());
+        if (xStor.is())
+        {
+            mpImpl->mbIsOOoXML =
+                ::comphelper::OStorageHelper::GetXStorageFormat(xStor)
+                   < SOFFICE_FILEFORMAT_8;
+        }
+    }
+    catch (uno::Exception const& e)
+    {
+        SAL_WARN("xmloff.core", "exception caught: " << e.Message);
+    }
+    if (!mxEventListener.is())
     {
         mxEventListener.set(new SvXMLImportEventListener(this));
         mxModel->addEventListener(mxEventListener);
@@ -1577,9 +1597,7 @@ sal_Bool SvXMLImport::IsODFVersionConsistent( const OUString& aODFVersion )
             uno::Reference< beans::XPropertySet > xStorProps( xStor, uno::UNO_QUERY_THROW );
 
             // the check should be done only for OASIS format
-            OUString aMediaType;
-            xStorProps->getPropertyValue( "MediaType" ) >>= aMediaType;
-            if ( ::comphelper::OStorageHelper::GetXStorageFormat( xStor ) >= SOFFICE_FILEFORMAT_8 )
+            if (!IsOOoXML())
             {
                 sal_Bool bRepairPackage = sal_False;
                 try
@@ -1844,6 +1862,11 @@ bool SvXMLImport::isGraphicLoadOnDemandSupported() const
 OUString SvXMLImport::GetODFVersion() const
 {
     return mpImpl->aODFVersion;
+}
+
+bool SvXMLImport::IsOOoXML() const
+{
+    return mpImpl->mbIsOOoXML;
 }
 
 // xml:id for RDF metadata

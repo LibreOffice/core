@@ -338,6 +338,7 @@ public:
     bool IsTableShapeSupported() const { return mbIsTableShapeSupported; }
 
     OUString GetODFVersion() const;
+    bool IsOOoXML() const; // legacy non-ODF format?
 
     /**
      * Record an error condition that occurred during import. The
