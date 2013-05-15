@@ -302,6 +302,7 @@ certain functionality.
 
 @section xmloff
 
+@li @c xmloff
 @li @c xmloff.core
 @li @c xmloff.draw
 @li @c xmloff.forms
