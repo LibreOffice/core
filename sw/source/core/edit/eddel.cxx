@@ -92,8 +92,11 @@ void SwEditShell::DeleteSel( SwPaM& rPam, sal_Bool* pUndo )
                 aDelPam.Move( fnMoveBackward, fnGoCntnt );
             }
                 // geschuetze Boxen ueberspringen !
+            //For i117395, in some situation, the node would be hidden or invisible, which makes the frame of it unavailable
+            //So verify it before use it.
+            SwCntntFrm* pFrm = NULL;
             if( !pNd->IsCntntNode() ||
-                !((SwCntntNode*)pNd)->getLayoutFrm( GetLayout() )->IsProtected() )
+                !((pFrm=((SwCntntNode*)pNd)->getLayoutFrm( GetLayout() ))!=NULL && pFrm->IsProtected()) )
             {
                 // alles loeschen
                 GetDoc()->DeleteAndJoin( aDelPam );
