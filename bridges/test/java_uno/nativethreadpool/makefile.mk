@@ -59,7 +59,7 @@ ALLTAR: test
 
 EXEC_CLASSPATH_TMP = $(foreach,i,$(JARFILES) $(SOLARBINDIR)$/$i)
 EXEC_CLASSPATH = \
-    $(strip $(subst,!,$(PATH_SEPARATOR) $(EXEC_CLASSPATH_TMP:s/ /!/)))
+    $(strip $(subst,!,$(LIBO_PATH_SEPARATOR) $(EXEC_CLASSPATH_TMP:s/ /!/)))
 
 $(MISC)$/$(TARGET)$/types.rdb: types.idl
     - rm $@
@@ -105,7 +105,7 @@ test .PHONY: $(SHL1TARGETN) $(BIN)$/$(TARGET).uno.jar $(BIN)$/$(TARGET).rdb
         -l $(SHL2TARGETN) -ro $(BIN)$/$(TARGET).rdb \
         -u 'uno:socket,host=localhost,port=3830;urp;test' --singleaccept &
     + $(AUGMENT_LIBRARY_PATH) OO_JAVA_PROPERTIES='RuntimeLib=$(JVM_LIB_URL)' \
-        CLASSPATH=$(EXEC_CLASSPATH)$(PATH_SEPARATOR)$(BIN)$/$(TARGET).uno.jar \
+        CLASSPATH=$(EXEC_CLASSPATH)$(LIBO_PATH_SEPARATOR)$(BIN)$/$(TARGET).uno.jar \
         uno -c test.javauno.nativethreadpool.client -l $(SHL1TARGETN) \
         -ro $(BIN)$/$(TARGET).rdb \
         -env:URE_INTERNAL_JAVA_DIR=file://$(SOLARBINDIR)

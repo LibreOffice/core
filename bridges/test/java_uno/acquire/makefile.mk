@@ -56,7 +56,7 @@ GIVE_EXEC_RIGHTS = chmod +x
 
 EXEC_CLASSPATH_TMP = $(foreach,i,$(JARFILES) $(SOLARBINDIR)$/$i)
 EXEC_CLASSPATH = \
-    $(strip $(subst,!,$(PATH_SEPARATOR) $(EXEC_CLASSPATH_TMP:s/ /!/)))
+    $(strip $(subst,!,$(LIBO_PATH_SEPARATOR) $(EXEC_CLASSPATH_TMP:s/ /!/)))
 
 $(BIN)$/$(TARGET).rdb: types.idl
     - rm $@
@@ -79,16 +79,16 @@ TEST_JAVAUNO_ACQUIRE_UNO_URL := \
 
 $(BIN)$/testacquire-java-client:
     echo java -classpath \
-        ..$/class$/test$(PATH_SEPARATOR)..$/class$(PATH_SEPARATOR)\
-..$/class$/java_uno.jar$(PATH_SEPARATOR)$(EXEC_CLASSPATH) \
+        ..$/class$/test$(LIBO_PATH_SEPARATOR)..$/class$(LIBO_PATH_SEPARATOR)\
+..$/class$/java_uno.jar$(LIBO_PATH_SEPARATOR)$(EXEC_CLASSPATH) \
         test.javauno.acquire.TestAcquire client \
         $(TEST_JAVAUNO_ACQUIRE_UNO_URL) > $@
     $(GIVE_EXEC_RIGHTS) $@
 
 $(BIN)$/testacquire-java-server:
     echo java -classpath \
-        ..$/class$/test$(PATH_SEPARATOR)..$/class$(PATH_SEPARATOR)\
-..$/class$/java_uno.jar$(PATH_SEPARATOR)$(EXEC_CLASSPATH) \
+        ..$/class$/test$(LIBO_PATH_SEPARATOR)..$/class$(LIBO_PATH_SEPARATOR)\
+..$/class$/java_uno.jar$(LIBO_PATH_SEPARATOR)$(EXEC_CLASSPATH) \
         test.javauno.acquire.TestAcquire server \
         $(TEST_JAVAUNO_ACQUIRE_UNO_URL) > $@
     $(GIVE_EXEC_RIGHTS) $@

@@ -33,8 +33,8 @@ JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
 MAXLINELENGTH = 100000
 
-OFFICE_CLASSPATH_TMP:=$(foreach,i,$(JARFILES) $(office)$/program$/classes$/$(i)$(PATH_SEPARATOR))
-OFFICE_CLASSPATH=$(OFFICE_CLASSPATH_TMP:t"")$(PATH_SEPARATOR)$(CLASSDIR)
+OFFICE_CLASSPATH_TMP:=$(foreach,i,$(JARFILES) $(office)$/program$/classes$/$(i)$(LIBO_PATH_SEPARATOR))
+OFFICE_CLASSPATH=$(OFFICE_CLASSPATH_TMP:t"")$(LIBO_PATH_SEPARATOR)$(CLASSDIR)
 
 OOOBEAN_OPTIONS=-Dcom.sun.star.officebean.Options=--norestore
 

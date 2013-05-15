@@ -39,13 +39,13 @@ JAVAFILES = \
 .IF "$(XCLASSPATH)" == ""
 XCLASSPATH := $(CLASSDIR)$/test
 .ELSE
-XCLASSPATH !:= $(XCLASSPATH)$(PATH_SEPARATOR)$(CLASSDIR)$/test
+XCLASSPATH !:= $(XCLASSPATH)$(LIBO_PATH_SEPARATOR)$(CLASSDIR)$/test
 .ENDIF
 
 EXEC_CLASSPATH_TMP = \
-    $(foreach,i,$(JARFILES) $(SOLARBINDIR)$/$i)$(PATH_SEPARATOR)$(XCLASSPATH)
+    $(foreach,i,$(JARFILES) $(SOLARBINDIR)$/$i)$(LIBO_PATH_SEPARATOR)$(XCLASSPATH)
 EXEC_CLASSPATH = \
-    $(strip $(subst,!,$(PATH_SEPARATOR) $(EXEC_CLASSPATH_TMP:s/ /!/)))
+    $(strip $(subst,!,$(LIBO_PATH_SEPARATOR) $(EXEC_CLASSPATH_TMP:s/ /!/)))
 
 JARFILES = juh.jar jurt.jar ridl.jar
 JAVACLASSFILES = \
@@ -96,14 +96,14 @@ ALLTAR : \
 
 $(OUT)$/bin$/TestRemote : $(JAVACLASSFILES)
     -rm -f $@
-    echo java -classpath ..$/class$/test$(PATH_SEPARATOR)..$/class$(PATH_SEPARATOR)$(EXEC_CLASSPATH) \
+    echo java -classpath ..$/class$/test$(LIBO_PATH_SEPARATOR)..$/class$(LIBO_PATH_SEPARATOR)$(EXEC_CLASSPATH) \
         test.java_uno.anytest.TestRemote > $@
     $(GIVE_EXEC_RIGHTS) $@
 
 $(OUT)$/bin$/TestJni : $(JAVACLASSFILES)
     -rm -f $@
     echo '$(AUGMENT_LIBRARY_PATH)' java -classpath \
-        .$(PATH_SEPARATOR)..$/class$(PATH_SEPARATOR)$(EXEC_CLASSPATH) \
+        .$(LIBO_PATH_SEPARATOR)..$/class$(LIBO_PATH_SEPARATOR)$(EXEC_CLASSPATH) \
         -Djava.library.path=..$/lib test.java_uno.anytest.TestJni >> $@
     $(GIVE_EXEC_RIGHTS) $@
 
