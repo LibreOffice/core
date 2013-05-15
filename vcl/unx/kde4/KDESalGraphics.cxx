@@ -297,6 +297,9 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         if (part == PART_MENU_ITEM)
         {
             QStyleOptionMenuItem option;
+            if ( nControlState & CTRL_STATE_ROLLOVER )
+                option.state |= QStyle::State_Selected;
+
             draw( QStyle::CE_MenuBarItem, &option, m_image,
                   vclStateValue2StateFlag(nControlState, value) );
         }
@@ -314,6 +317,9 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         if( part == PART_MENU_ITEM )
         {
             QStyleOptionMenuItem option;
+            if ( nControlState & CTRL_STATE_ROLLOVER )
+                option.state |= QStyle::State_Selected;
+
             draw( QStyle::CE_MenuItem, &option, m_image,
                   vclStateValue2StateFlag(nControlState, value) );
             // HACK: LO core first paints the entire popup and only then it paints menu items,
