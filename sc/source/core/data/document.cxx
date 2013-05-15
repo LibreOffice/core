@@ -2438,173 +2438,174 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
                                 bool bAsLink, bool bIncludeFiltered, bool bSkipAttrForEmpty,
                                 const ScRangeList * pDestRanges )
 {
-    if (!bIsClip)
+    if (bIsClip)
+        return;
+
+    if (!pClipDoc)
     {
-        if (!pClipDoc)
-        {
-            OSL_FAIL("CopyFromClip: no ClipDoc");
-            pClipDoc = SC_MOD()->GetClipDoc();
-        }
-        if (pClipDoc->bIsClip && pClipDoc->GetTableCount())
-        {
-            bool bOldAutoCalc = GetAutoCalc();
-            SetAutoCalc( false );   // avoid multiple recalculations
-
-            NumFmtMergeHandler aNumFmtMergeHdl(this, pClipDoc);
-
-            SCCOL nAllCol1 = rDestRange.aStart.Col();
-            SCROW nAllRow1 = rDestRange.aStart.Row();
-            SCCOL nAllCol2 = rDestRange.aEnd.Col();
-            SCROW nAllRow2 = rDestRange.aEnd.Row();
-
-            SCCOL nXw = 0;
-            SCROW nYw = 0;
-            ScRange aClipRange = pClipDoc->GetClipParam().getWholeRange();
-            for (SCTAB nTab = 0; nTab < static_cast<SCTAB>(pClipDoc->maTabs.size()); nTab++)    // find largest merge overlap
-                if (pClipDoc->maTabs[nTab])                   // all sheets of the clipboard content
-                {
-                    SCCOL nThisEndX = aClipRange.aEnd.Col();
-                    SCROW nThisEndY = aClipRange.aEnd.Row();
-                    pClipDoc->ExtendMerge( aClipRange.aStart.Col(),
-                                            aClipRange.aStart.Row(),
-                                            nThisEndX, nThisEndY, nTab );
-                    // only extra value from ExtendMerge
-                    nThisEndX = sal::static_int_cast<SCCOL>( nThisEndX - aClipRange.aEnd.Col() );
-                    nThisEndY = sal::static_int_cast<SCROW>( nThisEndY - aClipRange.aEnd.Row() );
-                    if ( nThisEndX > nXw )
-                        nXw = nThisEndX;
-                    if ( nThisEndY > nYw )
-                        nYw = nThisEndY;
-                }
-
-            SCCOL nDestAddX;
-            SCROW nDestAddY;
-            pClipDoc->GetClipArea( nDestAddX, nDestAddY, bIncludeFiltered );
-            nXw = sal::static_int_cast<SCCOL>( nXw + nDestAddX );
-            nYw = sal::static_int_cast<SCROW>( nYw + nDestAddY );   // ClipArea, plus ExtendMerge value
-
-            /*  Decide which contents to delete before copying. Delete all
-                contents if nInsFlag contains any real content flag.
-                #i102056# Notes are pasted from clipboard in a second pass,
-                together with the special flag IDF_ADDNOTES that states to not
-                overwrite/delete existing cells but to insert the notes into
-                these cells. In this case, just delete old notes from the
-                destination area. */
-            sal_uInt16 nDelFlag = IDF_NONE;
-            if ( (nInsFlag & (IDF_CONTENTS | IDF_ADDNOTES)) == (IDF_NOTE | IDF_ADDNOTES) )
-                nDelFlag |= IDF_NOTE;
-            else if ( nInsFlag & IDF_CONTENTS )
-                nDelFlag |= IDF_CONTENTS;
-            //  With bSkipAttrForEmpty, don't remove attributes, copy
-            //  on top of existing attributes instead.
-            if ( ( nInsFlag & IDF_ATTRIB ) && !bSkipAttrForEmpty )
-                nDelFlag |= IDF_ATTRIB;
-
-            ScCopyBlockFromClipParams aCBFCP;
-            aCBFCP.pRefUndoDoc = pRefUndoDoc;
-            aCBFCP.pClipDoc = pClipDoc;
-            aCBFCP.nInsFlag = nInsFlag;
-            aCBFCP.bAsLink  = bAsLink;
-            aCBFCP.bSkipAttrForEmpty = bSkipAttrForEmpty;
-            aCBFCP.nTabStart = MAXTAB;      // wird in der Schleife angepasst
-            aCBFCP.nTabEnd = 0;             // wird in der Schleife angepasst
-
-            //  Inc/DecRecalcLevel einmal aussen, damit nicht fuer jeden Block
-            //  die Draw-Seitengroesse neu berechnet werden muss
-            //! nur wenn ganze Zeilen/Spalten kopiert werden?
-
-            SCTAB nMax = static_cast<SCTAB>(maTabs.size());
-            ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
-            for (; itr != itrEnd && *itr < nMax; ++itr)
-                if (maTabs[*itr])
-                {
-                    if ( *itr < aCBFCP.nTabStart )
-                        aCBFCP.nTabStart = *itr;
-                    aCBFCP.nTabEnd = *itr;
-                }
-
-            ScRangeList aLocalRangeList;
-            if (!pDestRanges)
-            {
-                aLocalRangeList.Append( rDestRange);
-                pDestRanges = &aLocalRangeList;
-            }
-
-            bInsertingFromOtherDoc = true;  // kein Broadcast/Listener aufbauen bei Insert
-
-            SCCOL nClipStartCol = aClipRange.aStart.Col();
-            SCROW nClipStartRow = aClipRange.aStart.Row();
-            SCROW nClipEndRow = aClipRange.aEnd.Row();
-            for ( size_t nRange = 0; nRange < pDestRanges->size(); ++nRange )
-            {
-                const ScRange* pRange = (*pDestRanges)[nRange];
-                SCCOL nCol1 = pRange->aStart.Col();
-                SCROW nRow1 = pRange->aStart.Row();
-                SCCOL nCol2 = pRange->aEnd.Col();
-                SCROW nRow2 = pRange->aEnd.Row();
-
-                DeleteArea(nCol1, nRow1, nCol2, nRow2, rMark, nDelFlag);
-
-                SCCOL nC1 = nCol1;
-                SCROW nR1 = nRow1;
-                SCCOL nC2 = nC1 + nXw;
-                if (nC2 > nCol2)
-                    nC2 = nCol2;
-                SCROW nR2 = nR1 + nYw;
-                if (nR2 > nRow2)
-                    nR2 = nRow2;
-
-                do
-                {
-                    // Pasting is done column-wise, when pasting to a filtered
-                    // area this results in partitioning and we have to
-                    // remember and reset the start row for each column until
-                    // it can be advanced for the next chunk of unfiltered
-                    // rows.
-                    SCROW nSaveClipStartRow = nClipStartRow;
-                    do
-                    {
-                        nClipStartRow = nSaveClipStartRow;
-                        SCsCOL nDx = ((SCsCOL)nC1) - nClipStartCol;
-                        SCsROW nDy = ((SCsROW)nR1) - nClipStartRow;
-                        if ( bIncludeFiltered )
-                        {
-                            CopyBlockFromClip( nC1, nR1, nC2, nR2, rMark, nDx,
-                                    nDy, &aCBFCP );
-                            nClipStartRow += nR2 - nR1 + 1;
-                        }
-                        else
-                        {
-                            CopyNonFilteredFromClip( nC1, nR1, nC2, nR2, rMark,
-                                    nDx, nDy, &aCBFCP, nClipStartRow );
-                        }
-                        nC1 = nC2 + 1;
-                        nC2 = std::min((SCCOL)(nC1 + nXw), nCol2);
-                    } while (nC1 <= nCol2);
-                    if (nClipStartRow > nClipEndRow)
-                        nClipStartRow = aClipRange.aStart.Row();
-                    nC1 = nCol1;
-                    nC2 = nC1 + nXw;
-                    if (nC2 > nCol2)
-                        nC2 = nCol2;
-                    nR1 = nR2 + 1;
-                    nR2 = std::min((SCROW)(nR1 + nYw), nRow2);
-                } while (nR1 <= nRow2);
-            }
-
-            itr = rMark.begin();
-
-            bInsertingFromOtherDoc = false;
-
-            // Listener aufbauen nachdem alles inserted wurde
-            StartListeningFromClip( nAllCol1, nAllRow1, nAllCol2, nAllRow2, rMark, nInsFlag );
-            // nachdem alle Listener aufgebaut wurden, kann gebroadcastet werden
-            BroadcastFromClip( nAllCol1, nAllRow1, nAllCol2, nAllRow2, rMark, nInsFlag );
-            if (bResetCut)
-                pClipDoc->GetClipParam().mbCutMode = false;
-            SetAutoCalc( bOldAutoCalc );
-        }
+        OSL_FAIL("CopyFromClip: no ClipDoc");
+        pClipDoc = SC_MOD()->GetClipDoc();
     }
+
+    if (!pClipDoc->bIsClip || !pClipDoc->GetTableCount())
+        return;
+
+    bool bOldAutoCalc = GetAutoCalc();
+    SetAutoCalc( false );   // avoid multiple recalculations
+
+    NumFmtMergeHandler aNumFmtMergeHdl(this, pClipDoc);
+
+    SCCOL nAllCol1 = rDestRange.aStart.Col();
+    SCROW nAllRow1 = rDestRange.aStart.Row();
+    SCCOL nAllCol2 = rDestRange.aEnd.Col();
+    SCROW nAllRow2 = rDestRange.aEnd.Row();
+
+    SCCOL nXw = 0;
+    SCROW nYw = 0;
+    ScRange aClipRange = pClipDoc->GetClipParam().getWholeRange();
+    for (SCTAB nTab = 0; nTab < static_cast<SCTAB>(pClipDoc->maTabs.size()); nTab++)    // find largest merge overlap
+        if (pClipDoc->maTabs[nTab])                   // all sheets of the clipboard content
+        {
+            SCCOL nThisEndX = aClipRange.aEnd.Col();
+            SCROW nThisEndY = aClipRange.aEnd.Row();
+            pClipDoc->ExtendMerge( aClipRange.aStart.Col(),
+                                    aClipRange.aStart.Row(),
+                                    nThisEndX, nThisEndY, nTab );
+            // only extra value from ExtendMerge
+            nThisEndX = sal::static_int_cast<SCCOL>( nThisEndX - aClipRange.aEnd.Col() );
+            nThisEndY = sal::static_int_cast<SCROW>( nThisEndY - aClipRange.aEnd.Row() );
+            if ( nThisEndX > nXw )
+                nXw = nThisEndX;
+            if ( nThisEndY > nYw )
+                nYw = nThisEndY;
+        }
+
+    SCCOL nDestAddX;
+    SCROW nDestAddY;
+    pClipDoc->GetClipArea( nDestAddX, nDestAddY, bIncludeFiltered );
+    nXw = sal::static_int_cast<SCCOL>( nXw + nDestAddX );
+    nYw = sal::static_int_cast<SCROW>( nYw + nDestAddY );   // ClipArea, plus ExtendMerge value
+
+    /*  Decide which contents to delete before copying. Delete all
+        contents if nInsFlag contains any real content flag.
+        #i102056# Notes are pasted from clipboard in a second pass,
+        together with the special flag IDF_ADDNOTES that states to not
+        overwrite/delete existing cells but to insert the notes into
+        these cells. In this case, just delete old notes from the
+        destination area. */
+    sal_uInt16 nDelFlag = IDF_NONE;
+    if ( (nInsFlag & (IDF_CONTENTS | IDF_ADDNOTES)) == (IDF_NOTE | IDF_ADDNOTES) )
+        nDelFlag |= IDF_NOTE;
+    else if ( nInsFlag & IDF_CONTENTS )
+        nDelFlag |= IDF_CONTENTS;
+    //  With bSkipAttrForEmpty, don't remove attributes, copy
+    //  on top of existing attributes instead.
+    if ( ( nInsFlag & IDF_ATTRIB ) && !bSkipAttrForEmpty )
+        nDelFlag |= IDF_ATTRIB;
+
+    ScCopyBlockFromClipParams aCBFCP;
+    aCBFCP.pRefUndoDoc = pRefUndoDoc;
+    aCBFCP.pClipDoc = pClipDoc;
+    aCBFCP.nInsFlag = nInsFlag;
+    aCBFCP.bAsLink  = bAsLink;
+    aCBFCP.bSkipAttrForEmpty = bSkipAttrForEmpty;
+    aCBFCP.nTabStart = MAXTAB;      // wird in der Schleife angepasst
+    aCBFCP.nTabEnd = 0;             // wird in der Schleife angepasst
+
+    //  Inc/DecRecalcLevel einmal aussen, damit nicht fuer jeden Block
+    //  die Draw-Seitengroesse neu berechnet werden muss
+    //! nur wenn ganze Zeilen/Spalten kopiert werden?
+
+    SCTAB nMax = static_cast<SCTAB>(maTabs.size());
+    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
+    for (; itr != itrEnd && *itr < nMax; ++itr)
+        if (maTabs[*itr])
+        {
+            if ( *itr < aCBFCP.nTabStart )
+                aCBFCP.nTabStart = *itr;
+            aCBFCP.nTabEnd = *itr;
+        }
+
+    ScRangeList aLocalRangeList;
+    if (!pDestRanges)
+    {
+        aLocalRangeList.Append( rDestRange);
+        pDestRanges = &aLocalRangeList;
+    }
+
+    bInsertingFromOtherDoc = true;  // kein Broadcast/Listener aufbauen bei Insert
+
+    SCCOL nClipStartCol = aClipRange.aStart.Col();
+    SCROW nClipStartRow = aClipRange.aStart.Row();
+    SCROW nClipEndRow = aClipRange.aEnd.Row();
+    for ( size_t nRange = 0; nRange < pDestRanges->size(); ++nRange )
+    {
+        const ScRange* pRange = (*pDestRanges)[nRange];
+        SCCOL nCol1 = pRange->aStart.Col();
+        SCROW nRow1 = pRange->aStart.Row();
+        SCCOL nCol2 = pRange->aEnd.Col();
+        SCROW nRow2 = pRange->aEnd.Row();
+
+        DeleteArea(nCol1, nRow1, nCol2, nRow2, rMark, nDelFlag);
+
+        SCCOL nC1 = nCol1;
+        SCROW nR1 = nRow1;
+        SCCOL nC2 = nC1 + nXw;
+        if (nC2 > nCol2)
+            nC2 = nCol2;
+        SCROW nR2 = nR1 + nYw;
+        if (nR2 > nRow2)
+            nR2 = nRow2;
+
+        do
+        {
+            // Pasting is done column-wise, when pasting to a filtered
+            // area this results in partitioning and we have to
+            // remember and reset the start row for each column until
+            // it can be advanced for the next chunk of unfiltered
+            // rows.
+            SCROW nSaveClipStartRow = nClipStartRow;
+            do
+            {
+                nClipStartRow = nSaveClipStartRow;
+                SCsCOL nDx = ((SCsCOL)nC1) - nClipStartCol;
+                SCsROW nDy = ((SCsROW)nR1) - nClipStartRow;
+                if ( bIncludeFiltered )
+                {
+                    CopyBlockFromClip( nC1, nR1, nC2, nR2, rMark, nDx,
+                            nDy, &aCBFCP );
+                    nClipStartRow += nR2 - nR1 + 1;
+                }
+                else
+                {
+                    CopyNonFilteredFromClip( nC1, nR1, nC2, nR2, rMark,
+                            nDx, nDy, &aCBFCP, nClipStartRow );
+                }
+                nC1 = nC2 + 1;
+                nC2 = std::min((SCCOL)(nC1 + nXw), nCol2);
+            } while (nC1 <= nCol2);
+            if (nClipStartRow > nClipEndRow)
+                nClipStartRow = aClipRange.aStart.Row();
+            nC1 = nCol1;
+            nC2 = nC1 + nXw;
+            if (nC2 > nCol2)
+                nC2 = nCol2;
+            nR1 = nR2 + 1;
+            nR2 = std::min((SCROW)(nR1 + nYw), nRow2);
+        } while (nR1 <= nRow2);
+    }
+
+    itr = rMark.begin();
+
+    bInsertingFromOtherDoc = false;
+
+    // Listener aufbauen nachdem alles inserted wurde
+    StartListeningFromClip( nAllCol1, nAllRow1, nAllCol2, nAllRow2, rMark, nInsFlag );
+    // nachdem alle Listener aufgebaut wurden, kann gebroadcastet werden
+    BroadcastFromClip( nAllCol1, nAllRow1, nAllCol2, nAllRow2, rMark, nInsFlag );
+    if (bResetCut)
+        pClipDoc->GetClipParam().mbCutMode = false;
+    SetAutoCalc( bOldAutoCalc );
 }
 
 static SCROW lcl_getLastNonFilteredRow(
