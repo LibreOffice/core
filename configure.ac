@@ -6289,17 +6289,6 @@ if test "$SOLAR_JAVA" != ""; then
 fi
 AC_SUBST(JAVACISGCJ)
 
-JAVACISKAFFE=""
-dnl ===================================================================
-dnl Checks that javac is kaffe
-dnl ===================================================================
-if test "$SOLAR_JAVA" != ""; then
-    if test `$JAVACOMPILER -version 2>&1 | $GREP -c "Kaffe"` -gt 0; then
-        JAVACISKAFFE="yes"
-    fi
-fi
-AC_SUBST(JAVACISKAFFE)
-
 dnl ===================================================================
 dnl Checks for javadoc
 dnl ===================================================================
