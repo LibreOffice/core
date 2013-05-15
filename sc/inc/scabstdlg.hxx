@@ -491,7 +491,7 @@ public:
     virtual SfxAbstractTabDialog * CreateScHFEditDlg( SfxViewFrame*     pFrame, //add for ScHFEditDlg
                                                     Window*         pParent,
                                                     const SfxItemSet&   rCoreSet,
-                                                    const String&       rPageStyle,
+                                                    const OUString&       rPageStyle,
                                                     sal_uInt16              nResId = RID_SCDLG_HFEDIT ) = 0;
 
     virtual SfxAbstractTabDialog * CreateScStyleDlg( Window*                pParent,//add for ScStyleDlg
