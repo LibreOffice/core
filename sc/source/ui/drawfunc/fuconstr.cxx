@@ -83,6 +83,7 @@ Point FuConstruct::CurrentGridSyncOffsetAndPos( Point& rInOutPos )
         // involved. Lets calculate where aPos would be at 100% zoom
         // that's the actual correct position for the object ( when you
         // restore the zoom.
+        sal_Bool bNegative = pDoc->IsNegativePage(pView->GetTab());
         Rectangle aObjRect( rInOutPos, rInOutPos );
         ScRange aRange = pDoc->GetRange( pView->GetTab(), aObjRect );
         ScAddress aOldStt = aRange.aStart;
@@ -98,6 +99,12 @@ Point FuConstruct::CurrentGridSyncOffsetAndPos( Point& rInOutPos )
         Point aOff = ( rInOutPos - aCurPosHmm );
         rInOutPos = aOldPos + aOff;
         aRetGridOff = aCurPosHmm - aOldPos;
+        // fdo#64011 fix the X position when the sheet are RTL
+        if ( bNegative )
+        {
+            aRetGridOff.setX( aCurPosHmm.getX() + aOldPos.getX() );
+            rInOutPos.setX( aOff.getX() - aOldPos.getX() );
+        }
     }
     return aRetGridOff;
 }
