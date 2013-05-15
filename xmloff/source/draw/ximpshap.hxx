@@ -570,7 +570,7 @@ public:
 //////////////////////////////////////////////////////////////////////////////
 // draw:-frame
 
-class SdXMLFrameShapeContext : public SdXMLShapeContext, public multiImageImportHelper
+class SdXMLFrameShapeContext : public SdXMLShapeContext, public MultiImageImportHelper
 {
 private:
     sal_Bool mbSupportsReplacement;

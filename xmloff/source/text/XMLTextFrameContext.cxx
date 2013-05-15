@@ -1333,7 +1333,7 @@ XMLTextFrameContext::XMLTextFrameContext(
         const Reference< XAttributeList > & xAttrList,
         TextContentAnchorType eATyp )
 :   SvXMLImportContext( rImport, nPrfx, rLName )
-,   multiImageImportHelper()
+,   MultiImageImportHelper()
 ,   m_xAttrList( new SvXMLAttributeList( xAttrList ) )
 ,   m_pHyperlink( 0 )
     // Implement Title/Description Elements UI (#i73249#)

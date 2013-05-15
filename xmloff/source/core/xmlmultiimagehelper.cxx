@@ -74,13 +74,13 @@ namespace
 
 //////////////////////////////////////////////////////////////////////////////
 
-multiImageImportHelper::multiImageImportHelper()
+MultiImageImportHelper::MultiImageImportHelper()
 :   maImplContextVector(),
     mbSupportsMultipleContents(false)
 {
 }
 
-multiImageImportHelper::~multiImageImportHelper()
+MultiImageImportHelper::~MultiImageImportHelper()
 {
     while(!maImplContextVector.empty())
     {
@@ -89,7 +89,7 @@ multiImageImportHelper::~multiImageImportHelper()
     }
 }
 
-const SvXMLImportContext* multiImageImportHelper::solveMultipleImages()
+const SvXMLImportContext* MultiImageImportHelper::solveMultipleImages()
 {
     const SvXMLImportContext* pContext(0);
     if(maImplContextVector.size() > 1)
@@ -137,7 +137,7 @@ const SvXMLImportContext* multiImageImportHelper::solveMultipleImages()
     return pContext;
 }
 
-void multiImageImportHelper::addContent(const SvXMLImportContext& rSvXMLImportContext)
+void MultiImageImportHelper::addContent(const SvXMLImportContext& rSvXMLImportContext)
 {
     if(dynamic_cast< const SvXMLImportContext* >(&rSvXMLImportContext))
     {

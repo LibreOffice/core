@@ -3347,7 +3347,7 @@ SdXMLFrameShapeContext::SdXMLFrameShapeContext( SvXMLImport& rImport, sal_uInt16
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape)
 : SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
-    multiImageImportHelper(),
+    MultiImageImportHelper(),
     mbSupportsReplacement( sal_False ),
     mxImplContext(),
     mxReplImplContext()
