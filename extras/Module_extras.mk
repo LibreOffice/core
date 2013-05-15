@@ -43,7 +43,7 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_wordbook \
 ))
 
-ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+ifeq ($(WITH_GALLERY_BUILD),YES)
 $(eval $(call gb_Module_add_targets,extras,\
 	Gallery_arrows \
 	Gallery_computers \

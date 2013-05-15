@@ -161,6 +161,8 @@ File gid_File_Extra_Gallroot
     Name = "extras_gallroot.filelist";
 End
 
+#if defined (WITH_GALLERY_BUILD)
+
 GALLERY_FILELIST(arrows)
 GALLERY_FILELIST(computers)
 GALLERY_FILELIST(diagrams)
@@ -172,6 +174,8 @@ GALLERY_FILELIST(sounds)
 GALLERY_FILELIST(symbols)
 GALLERY_FILELIST(transportation)
 GALLERY_FILELIST(txtshapes)
+
+#endif
 
 File gid_File_Extra_Gallmytheme
     Dir = FILELIST_DIR;

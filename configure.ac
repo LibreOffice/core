@@ -1215,6 +1215,14 @@ AC_ARG_WITH(referenced-git,
     GIT_REFERENCE_SRC=$withval ,
 )
 
+AC_ARG_WITH(galleries,
+    AS_HELP_STRING([--with-galleries],
+        [Specify how galleries should be built. It is possible either to
+         build these internally from source ("build"), or to (optionally
+         download and) unpack them them from a package ("package"), or
+         to disable them ("no")]),
+)
+
 AC_ARG_WITH(theme,
     AS_HELP_STRING([--with-theme="theme1 theme2..."],
         [Choose which themes to include. By default those themes with an '*' are included.
@@ -2199,6 +2207,34 @@ fi
 
 # remenber SYSBASE value
 AC_SUBST(SYSBASE)
+
+dnl ===================================================================
+dnl  Sort out various gallery compilation options
+dnl ===================================================================
+AC_MSG_CHECKING([how to build and package galleries])
+if test -n "${with_galleries}"; then
+    if test "$with_galleries" = "build"; then
+        WITH_GALLERY_BUILD=YES
+        AC_MSG_RESULT([build from source images internally])
+    elif test "$with_galleries" = "package"; then
+        WITH_GALLERY_BUILD=PACKAGE
+        AC_MSG_ERROR([FIXME - implement build from pre-compiled package])
+    elif test "$with_galleries" = "no"; then
+        WITH_GALLERY_BUILD=
+        AC_MSG_RESULT([disable non-internal gallery build])
+    else
+        AC_MSG_ERROR([unknown value --with-galleries=$with_galleries])
+    fi
+else
+   if test $_os != iOS -a $_os != Android; then
+        WITH_GALLERY_BUILD=YES
+        AC_MSG_RESULT([internal src images for desktop])
+   else
+        WITH_GALLERY_BUILD=
+        AC_MSG_RESULT([disable src imgage build for non-desktop])
+   fi
+fi
+AC_SUBST(WITH_GALLERY_BUILD)
 
 dnl ===================================================================
 dnl  Checks if ccache is available

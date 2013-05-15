@@ -69,6 +69,7 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	SYSTEM_REDLAND \
 	SYSTEM_SNDFILE \
 	SYSTEM_STDLIBS \
+	WITH_GALLERY_BUILD \
 	WITH_MOZAB4WIN \
 	WITH_MYSPELL_DICTS \
 ))
