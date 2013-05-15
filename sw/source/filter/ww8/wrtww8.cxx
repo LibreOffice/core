@@ -2160,7 +2160,7 @@ void WW8AttributeOutput::TableSpacing(ww8::WW8TableNodeInfoInner::Pointer_t pTab
 
     // Writing these SPRM's will make the table a floating one, so only write
     // them in case the table is already inside a frame.
-    if (pTableFmt != NULL /*&& pTable->GetTableNode()->GetFlyFmt()*/)
+    if (pTableFmt != NULL && pTable->GetTableNode()->GetFlyFmt())
     {
         const SvxULSpaceItem & rUL = pTableFmt->GetULSpace();
 
