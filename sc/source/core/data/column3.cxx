@@ -78,30 +78,16 @@ void broadcastCells(ScDocument& rDoc, SCCOL nCol, SCROW nTab, const std::vector<
 
 }
 
+void ScColumn::Insert( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, ScBaseCell* pNewCell )
+{
+    SetCell(rBlockPos, nRow, pNewCell);
+    PostSetCell(nRow, pNewCell);
+}
+
 void ScColumn::Insert( SCROW nRow, ScBaseCell* pNewCell )
 {
     SetCell(nRow, pNewCell);
-
-    // When we insert from the Clipboard we still have wrong (old) References!
-    // First they are rewired in CopyBlockFromClip via UpdateReference and the
-    // we call StartListeningFromClip and BroadcastFromClip.
-    // If we insert into the Clipboard/andoDoc, we do not use a Broadcast.
-    // After Import we call CalcAfterLoad and in there Listening.
-    if ( !(pDocument->IsClipOrUndo() || pDocument->IsInsertingFromOtherDoc()) )
-    {
-        CellType eCellType = pNewCell->GetCellType();
-        if (eCellType == CELLTYPE_FORMULA)
-            static_cast<ScFormulaCell*>(pNewCell)->StartListeningTo(pDocument);
-
-        if (!pDocument->IsCalcingAfterLoad())
-        {
-            if ( eCellType == CELLTYPE_FORMULA )
-                ((ScFormulaCell*)pNewCell)->SetDirty();
-            else
-                pDocument->Broadcast(
-                    ScHint(SC_HINT_DATACHANGED, ScAddress(nCol, nRow, nTab)));
-        }
-    }
+    PostSetCell(nRow, pNewCell);
 }
 
 
@@ -111,6 +97,17 @@ void ScColumn::Insert( SCROW nRow, sal_uInt32 nNumberFormat, ScBaseCell* pCell )
     SetNumberFormat(nRow, nNumberFormat);
 }
 
+void ScColumn::Append( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, ScBaseCell* pCell )
+{
+    maItems.push_back(ColEntry());
+    maItems.back().pCell = pCell;
+    maItems.back().nRow  = nRow;
+
+    rBlockPos.miCellTextAttrPos =
+        maCellTextAttrs.set(rBlockPos.miCellTextAttrPos, nRow, sc::CellTextAttr());
+
+    CellStorageModified();
+}
 
 void ScColumn::Append( SCROW nRow, ScBaseCell* pCell )
 {
@@ -121,7 +118,6 @@ void ScColumn::Append( SCROW nRow, ScBaseCell* pCell )
     maCellTextAttrs.set<sc::CellTextAttr>(nRow, sc::CellTextAttr());
     CellStorageModified();
 }
-
 
 void ScColumn::Delete( SCROW nRow )
 {
@@ -561,6 +557,12 @@ ScFormulaCell* ScColumn::CreateRefCell( ScDocument* pDestDoc, const ScAddress& r
     return new ScFormulaCell( pDestDoc, rDestPos, &aArr );
 }
 
+bool ScColumn::InitBlockPosition( sc::ColumnBlockPosition& rBlockPos )
+{
+    rBlockPos.miBroadcasterPos = maBroadcasters.begin();
+    rBlockPos.miCellTextAttrPos = maCellTextAttrs.begin();
+    return true;
+}
 
 //  rColumn = source
 //  nRow1, nRow2 = target position
@@ -662,7 +664,13 @@ void ScColumn::CopyFromClip(
                 rColumn.CreateRefCell(pDocument, aDestPos, i, rCxt.getInsertFlag()) :
                 rColumn.CloneCell(i, rCxt.getInsertFlag(), *pDocument, aDestPos);
             if (pNewCell)
-                Insert( aDestPos.Row(), pNewCell );
+            {
+                sc::ColumnBlockPosition* p = rCxt.getBlockPosition(nTab, nCol);
+                if (p)
+                    Insert(*p, aDestPos.Row(), pNewCell);
+                else
+                    Insert(aDestPos.Row(), pNewCell);
+            }
         }
     }
 }

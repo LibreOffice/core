@@ -1474,7 +1474,43 @@ void ScColumn::CopyCellTextAttrsToDocument(SCROW nRow1, SCROW nRow2, ScColumn& r
     }
 }
 
-void ScColumn::SetCell(SCROW nRow, ScBaseCell* pNewCell)
+void ScColumn::SetCell( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, ScBaseCell* pNewCell )
+{
+    bool bIsAppended = false;
+    if ( !maItems.empty() )
+    {
+        if (maItems.back().nRow < nRow)
+        {
+            Append(rBlockPos, nRow, pNewCell);
+            bIsAppended = true;
+        }
+    }
+    if (!bIsAppended)
+    {
+        SCSIZE nIndex;
+        if (Search(nRow, nIndex))
+        {
+            ScBaseCell* pOldCell = maItems[nIndex].pCell;
+            if ( pOldCell->GetCellType() == CELLTYPE_FORMULA && !pDocument->IsClipOrUndo() )
+                static_cast<ScFormulaCell*>(pOldCell)->EndListeningTo( pDocument );
+            pOldCell->Delete();
+            maItems[nIndex].pCell = pNewCell;
+        }
+        else
+        {
+            maItems.insert(maItems.begin() + nIndex, ColEntry());
+            maItems[nIndex].pCell = pNewCell;
+            maItems[nIndex].nRow  = nRow;
+        }
+
+        rBlockPos.miCellTextAttrPos =
+            maCellTextAttrs.set(rBlockPos.miCellTextAttrPos, nRow, sc::CellTextAttr());
+
+        CellStorageModified();
+    }
+}
+
+void ScColumn::SetCell( SCROW nRow, ScBaseCell* pNewCell )
 {
     bool bIsAppended = false;
     if ( !maItems.empty() )
@@ -1505,6 +1541,30 @@ void ScColumn::SetCell(SCROW nRow, ScBaseCell* pNewCell)
 
         maCellTextAttrs.set(nRow, sc::CellTextAttr());
         CellStorageModified();
+    }
+}
+
+void ScColumn::PostSetCell( SCROW nRow, ScBaseCell* pNewCell )
+{
+    // When we insert from the Clipboard we still have wrong (old) References!
+    // First they are rewired in CopyBlockFromClip via UpdateReference and the
+    // we call StartListeningFromClip and BroadcastFromClip.
+    // If we insert into the Clipboard/andoDoc, we do not use a Broadcast.
+    // After Import we call CalcAfterLoad and in there Listening.
+    if ( !(pDocument->IsClipOrUndo() || pDocument->IsInsertingFromOtherDoc()) )
+    {
+        CellType eCellType = pNewCell->GetCellType();
+        if (eCellType == CELLTYPE_FORMULA)
+            static_cast<ScFormulaCell*>(pNewCell)->StartListeningTo(pDocument);
+
+        if (!pDocument->IsCalcingAfterLoad())
+        {
+            if ( eCellType == CELLTYPE_FORMULA )
+                ((ScFormulaCell*)pNewCell)->SetDirty();
+            else
+                pDocument->Broadcast(
+                    ScHint(SC_HINT_DATACHANGED, ScAddress(nCol, nRow, nTab)));
+        }
     }
 }
 

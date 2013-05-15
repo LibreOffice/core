@@ -65,6 +65,15 @@ typedef mdds::multi_type_vector<BCBlkFunc> BroadcasterStoreType;
 typedef mdds::mtv::custom_block_func1<sc::element_type_celltextattr, sc::custom_celltextattr_block> CTAttrFunc;
 typedef mdds::multi_type_vector<CTAttrFunc> CellTextAttrStoreType;
 
+/**
+ * Store position data for column array storage.
+ */
+struct ColumnBlockPosition
+{
+    BroadcasterStoreType::iterator miBroadcasterPos;
+    CellTextAttrStoreType::iterator miCellTextAttrPos;
+};
+
 }
 
 #endif

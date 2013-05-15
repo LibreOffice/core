@@ -746,6 +746,14 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
     }
 }
 
+bool ScTable::InitColumnBlockPosition( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol )
+{
+    if (!ValidCol(nCol))
+        return false;
+
+    return aCol[nCol].InitBlockPosition(rBlockPos);
+}
+
 void ScTable::CopyFromClip(
     sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     SCsCOL nDx, SCsROW nDy, ScTable* pTable )

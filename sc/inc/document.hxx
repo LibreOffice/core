@@ -51,6 +51,7 @@ namespace sc {
     struct FormulaGroupContext;
     class EndListeningContext;
     class CopyFromClipContext;
+    struct ColumnBlockPosition;
 }
 class SvxFontItem;
 
@@ -1140,6 +1141,9 @@ public:
 
     void            CopyTabToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 SCTAB nTab, ScDocument* pClipDoc = NULL);
+
+    bool InitColumnBlockPosition( sc::ColumnBlockPosition& rBlokPos, SCTAB nTab, SCCOL nCol );
+
     void CopyBlockFromClip(
         sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         const ScMarkData& rMark, SCsCOL nDx, SCsROW nDy );

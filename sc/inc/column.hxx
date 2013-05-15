@@ -39,6 +39,7 @@ namespace sc {
     struct FormulaGroupContext;
     class EndListeningContext;
     class CopyFromClipContext;
+    struct ColumnBlockPosition;
 }
 
 class Fraction;
@@ -160,8 +161,10 @@ public:
     bool    Search( SCROW nRow, SCSIZE& nIndex ) const;
     ScBaseCell* GetCell( SCROW nRow ) const;
     ScRefCellValue GetCellValue( SCROW nRow ) const;
+    void Insert( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, ScBaseCell* pCell );
     void        Insert( SCROW nRow, ScBaseCell* pCell );
     void        Insert( SCROW nRow, sal_uInt32 nFormatIndex, ScBaseCell* pCell );
+    void Append( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, ScBaseCell* pCell );
     void        Append( SCROW nRow, ScBaseCell* pCell );
     void        Delete( SCROW nRow );
     void        DeleteAtIndex( SCSIZE nIndex );
@@ -215,6 +218,7 @@ public:
     void CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, bool bKeepScenarioFlags) const;
     void CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol);
     void CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDestCol );
+    bool InitBlockPosition( sc::ColumnBlockPosition& rBlockPos );
     void CopyFromClip(
         sc::CopyFromClipContext& rCxt, SCROW nRow1, SCROW nRow2, long nDy, ScColumn& rColumn );
 
@@ -480,7 +484,9 @@ private:
 
     void CopyCellTextAttrsToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol) const;
 
-    void SetCell(SCROW nRow, ScBaseCell* pNewCell);
+    void SetCell( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, ScBaseCell* pNewCell );
+    void SetCell( SCROW nRow, ScBaseCell* pNewCell );
+    void PostSetCell( SCROW nRow, ScBaseCell* pNewCell );
 };
 
 

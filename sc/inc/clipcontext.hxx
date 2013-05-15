@@ -13,12 +13,20 @@
 #include "address.hxx"
 #include "mtvelements.hxx"
 
+#include <vector>
+#include <boost/unordered_map.hpp>
+
 class ScDocument;
 
 namespace sc {
 
 class CopyFromClipContext
 {
+    typedef boost::unordered_map<SCCOL, ColumnBlockPosition> ColumnsType;
+    typedef std::vector<ColumnsType> TablesType;
+
+    TablesType maTables;
+
     ScDocument* mpRefUndoDoc;
     ScDocument* mpClipDoc;
     sal_uInt16  mnInsertFlag;
@@ -33,9 +41,12 @@ public:
         ScDocument* pRefUndoDoc, ScDocument* pClipDoc, sal_uInt16 nInsertFlag,
         bool bAsLink, bool bSkipAttrForEmptyCells);
 
+    bool initBlockPositions(ScDocument& rDoc, SCCOL nCol1, SCCOL nCol2);
     void setTabRange(SCTAB nStart, SCTAB nEnd);
 
     ~CopyFromClipContext();
+
+    ColumnBlockPosition* getBlockPosition(SCTAB nTab, SCCOL nCol);
 
     ScDocument* getUndoDoc();
     ScDocument* getClipDoc();

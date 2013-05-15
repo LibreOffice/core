@@ -51,6 +51,7 @@ namespace sc {
     struct FormulaGroupContext;
     class EndListeningContext;
     class CopyFromClipContext;
+    struct ColumnBlockPosition;
 }
 
 class SfxItemSet;
@@ -384,6 +385,9 @@ public:
                            bool bKeepScenarioFlags, bool bCloneNoteCaptions);
     void CopyStaticToDocument(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScTable* pDestTab);
     void CopyCellToDocument( SCCOL nSrcCol, SCROW nSrcRow, SCCOL nDestCol, SCROW nDestRow, ScTable& rDestTab );
+
+    bool InitColumnBlockPosition( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol );
+
     void CopyFromClip(
         sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         SCsCOL nDx, SCsROW nDy, ScTable* pTable );
