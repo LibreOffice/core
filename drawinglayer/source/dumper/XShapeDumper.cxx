@@ -85,7 +85,6 @@ void dumpPolyPolygonAsElement(com::sun::star::drawing::PointSequenceSequence aPo
 void dumpGeometryAsElement(com::sun::star::drawing::PointSequenceSequence aGeometry, xmlTextWriterPtr xmlWriter);
 
 // CharacterProperties.idl
-void dumpCharFontNameAsAttribute(OUString aCharFontName, xmlTextWriterPtr xmlWriter);
 void dumpCharHeightAsAttribute(float fHeight, xmlTextWriterPtr xmlWriter);
 void dumpCharColorAsAttribute(sal_Int32 aColor, xmlTextWriterPtr xmlWriter);
 
@@ -685,11 +684,6 @@ void dumpGeometryAsElement(drawing::PointSequenceSequence aGeometry, xmlTextWrit
 }
 
 // CharacterProperties.idl
-void dumpCharFontNameAsAttribute(OUString aCharFontName, xmlTextWriterPtr xmlWriter)
-{
-    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fontName"), "%s", OUStringToOString( aCharFontName, RTL_TEXTENCODING_UTF8 ).getStr() );
-}
-
 void dumpCharHeightAsAttribute(float fHeight, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fontHeight"), "%f", fHeight );
@@ -1145,13 +1139,6 @@ void dumpCustomShapeReplacementURLAsAttribute(OUString sCustomShapeReplacementUR
 void dumpTextPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter)
 {
     uno::Reference< beans::XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
-    if(xInfo->hasPropertyByName("CharFontName"))
-    {
-        uno::Any anotherAny = xPropSet->getPropertyValue("CharFontName");
-        OUString aCharFontName;
-        if(anotherAny >>= aCharFontName)
-            dumpCharFontNameAsAttribute(aCharFontName, xmlWriter);
-    }
     if(xInfo->hasPropertyByName("CharHeight"))
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("CharHeight");
