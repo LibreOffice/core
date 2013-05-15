@@ -50,6 +50,7 @@ public:
 protected:
     uno::Reference<lang::XMultiServiceFactory> xMSF;
     void Init();
+    void DeInit();
 };
 
 Gallery* createGallery( const OUString& rURL )
@@ -240,14 +241,15 @@ int GalApp::Main()
 
     createTheme( aName, aPath, aDestDir, aFiles, mbRelativeURLs );
 
-    // Without this we get extraordinary crashes from the
-    // drawinglayer VirtualDevice cache when importing svg
+    return EXIT_SUCCESS;
+}
+
+void GalApp::DeInit()
+{
     uno::Reference< lang::XComponent >(
         comphelper::getProcessComponentContext(),
         uno::UNO_QUERY_THROW )-> dispose();
     ::comphelper::setProcessServiceFactory( NULL );
-
-    return EXIT_SUCCESS;
 }
 
 void vclmain::createApplication()
