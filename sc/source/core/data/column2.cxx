@@ -1864,13 +1864,37 @@ void ScColumn::FindUsed( SCROW nStartRow, SCROW nEndRow, bool* pUsed ) const
 
 void ScColumn::StartListening( SvtListener& rLst, SCROW nRow )
 {
-    SvtBroadcaster* pBC = GetBroadcaster(nRow);
-    if (!pBC)
+    std::pair<BCStoreType::iterator,size_t> aPos = maBroadcasters.position(nRow);
+    BCStoreType::iterator it = aPos.first; // block position.
+    size_t nElemPos = aPos.second; // element position within the block.
+    switch (it->type)
     {
-        pBC = new SvtBroadcaster;
-        maBroadcasters.set(nRow, pBC);
+        case sc::element_type_broadcaster:
+        {
+            // Broadcaster already exists here.
+            sc::custom_broadcaster_block::iterator itData = sc::custom_broadcaster_block::begin(*it->data);
+            std::advance(itData, nElemPos);
+            SvtBroadcaster* pBC = *itData;
+            rLst.StartListening(*pBC);
+        }
+        break;
+        case mdds::mtv::element_type_empty:
+        {
+            // No broadcaster exists at this position yet.
+            SvtBroadcaster* pBC = new SvtBroadcaster;
+            rLst.StartListening(*pBC);
+            maBroadcasters.set(it, nRow, pBC);
+        }
+        break;
+        default:
+#if DEBUG_COLUMN_STORAGE
+            cout << "ScColumn::StartListening: wrong block type encountered in the broadcaster storage." << endl;
+            cout.flush();
+            abort();
+#else
+            ;
+#endif
     }
-    rLst.StartListening(*pBC);
 }
 
 void ScColumn::MoveListeners( SvtBroadcaster& rSource, SCROW nDestRow )
