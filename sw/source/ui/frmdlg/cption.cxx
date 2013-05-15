@@ -99,7 +99,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     get(m_pFormatText, "numbering_label");
     get(m_pFormatBox, "numbering");
     get(m_pNumberingSeparatorFT, "num_separator");
-    get(m_pNumberingSeparatorED, "num_seperator_edit");
+    get(m_pNumberingSeparatorED, "num_separator_edit");
     get(m_pSepText, "separator_label");
     get(m_pSepEdit, "separator_edit");
     get(m_pPosText, "position_label");

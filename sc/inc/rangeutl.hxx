@@ -107,7 +107,7 @@ public:
                             OUString& rString,
                             const OUString& rNewStr,
                             sal_Bool bAppendStr,
-                            sal_Unicode cSeperator = ' ');
+                            sal_Unicode cSeparator = ' ');
 
     static sal_Int32    IndexOf(
                             const OUString& rString,
@@ -122,14 +122,14 @@ public:
 
     static sal_Int32    GetTokenCount(
                             const OUString& rString,
-                            sal_Unicode cSeperator = ' ',
+                            sal_Unicode cSeparator = ' ',
                             sal_Unicode cQuote = '\'');
 
     static void         GetTokenByOffset(
                             OUString& rToken,
                             const OUString& rString,
                             sal_Int32& nOffset,
-                            sal_Unicode cSeperator = ' ',
+                            sal_Unicode cSeparator = ' ',
                             sal_Unicode cQuote = '\'');
 
     static void         AppendTableName(
@@ -144,7 +144,7 @@ public:
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Int32& nOffset,
-                            sal_Unicode cSeperator = ' ',
+                            sal_Unicode cSeparator = ' ',
                             sal_Unicode cQuote = '\'');
     static sal_Bool     GetRangeFromString(
                             ScRange& rRange,
@@ -152,14 +152,14 @@ public:
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Int32& nOffset,
-                            sal_Unicode cSeperator = ' ',
+                            sal_Unicode cSeparator = ' ',
                             sal_Unicode cQuote = '\'');
     static sal_Bool     GetRangeListFromString(
                             ScRangeList& rRangeList,
                             const OUString& rRangeListStr,
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
-                            sal_Unicode cSeperator = ' ',
+                            sal_Unicode cSeparator = ' ',
                             sal_Unicode cQuote = '\'');
 
     static sal_Bool     GetAreaFromString(
@@ -168,7 +168,7 @@ public:
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Int32& nOffset,
-                            sal_Unicode cSeperator = ' ',
+                            sal_Unicode cSeparator = ' ',
                             sal_Unicode cQuote = '\'');
 
 // String to Range API
@@ -178,7 +178,7 @@ public:
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Int32& nOffset,
-                            sal_Unicode cSeperator = ' ',
+                            sal_Unicode cSeparator = ' ',
                             sal_Unicode cQuote = '\'');
     static sal_Bool     GetRangeFromString(
                             ::com::sun::star::table::CellRangeAddress& rRange,
@@ -186,14 +186,14 @@ public:
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Int32& nOffset,
-                            sal_Unicode cSeperator = ' ',
+                            sal_Unicode cSeparator = ' ',
                             sal_Unicode cQuote = '\'');
     static sal_Bool     GetRangeListFromString(
                             ::com::sun::star::uno::Sequence< ::com::sun::star::table::CellRangeAddress >& rRangeSeq,
                             const OUString& rRangeListStr,
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
-                            sal_Unicode cSeperator = ' ',
+                            sal_Unicode cSeparator = ' ',
                             sal_Unicode cQuote = '\'');
 
 // Range to String core
@@ -202,7 +202,7 @@ public:
                             const ScAddress& rAddress,
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
-                            sal_Unicode cSeperator = ' ',
+                            sal_Unicode cSeparator = ' ',
                             sal_Bool bAppendStr = false,
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
     static void         GetStringFromRange(
@@ -210,7 +210,7 @@ public:
                             const ScRange& rRange,
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
-                            sal_Unicode cSeperator = ' ',
+                            sal_Unicode cSeparator = ' ',
                             sal_Bool bAppendStr = false,
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
     static void         GetStringFromRangeList(
@@ -218,7 +218,7 @@ public:
                             const ScRangeList* pRangeList,
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
-                            sal_Unicode cSeperator = ' ',
+                            sal_Unicode cSeparator = ' ',
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D));
 
     static void         GetStringFromArea(
@@ -226,7 +226,7 @@ public:
                             const ScArea& rArea,
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
-                            sal_Unicode cSeperator = ' ',
+                            sal_Unicode cSeparator = ' ',
                             sal_Bool bAppendStr = false,
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
 
@@ -236,7 +236,7 @@ public:
                             const ::com::sun::star::table::CellAddress& rAddress,
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
-                            sal_Unicode cSeperator = ' ',
+                            sal_Unicode cSeparator = ' ',
                             sal_Bool bAppendStr = false,
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
     static void         GetStringFromRange(
@@ -244,7 +244,7 @@ public:
                             const ::com::sun::star::table::CellRangeAddress& rRange,
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
-                            sal_Unicode cSeperator = ' ',
+                            sal_Unicode cSeparator = ' ',
                             sal_Bool bAppendStr = false,
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
     static void         GetStringFromRangeList(
@@ -252,7 +252,7 @@ public:
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::table::CellRangeAddress >& rRangeSeq,
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
-                            sal_Unicode cSeperator = ' ',
+                            sal_Unicode cSeparator = ' ',
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
 
 // XML Range to Calc Range

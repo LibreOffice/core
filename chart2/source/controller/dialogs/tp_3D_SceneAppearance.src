@@ -33,9 +33,9 @@
 #define POS_X_2 POS_X_1+WIDTH_FT+4
 
 #define POS_Y_SCHEME 8
-#define POS_Y_SEPERATOR (POS_Y_SCHEME+13)
+#define POS_Y_SEPARATOR (POS_Y_SCHEME+13)
 
-#define POS_Y_SHADING       (POS_Y_SEPERATOR+16)
+#define POS_Y_SHADING       (POS_Y_SEPARATOR+16)
 #define POS_Y_OBJECTLINES   (POS_Y_SHADING+16)
 #define POS_Y_ROUNDEDEDGE   (POS_Y_OBJECTLINES+16)
 
@@ -63,9 +63,9 @@ TabPage TP_3D_SCENEAPPEARANCE
         Pos = MAP_APPFONT ( POS_X_2 , POS_Y_SCHEME-2  ) ;
         Size = MAP_APPFONT ( WIDTH_LB , HEIGHT_LB ) ;
     };
-    FixedLine FL_SEPERATOR
+    FixedLine FL_SEPARATOR
     {
-        Pos = MAP_APPFONT ( POS_X_0 , POS_Y_SEPERATOR  ) ;
+        Pos = MAP_APPFONT ( POS_X_0 , POS_Y_SEPARATOR  ) ;
         Size = MAP_APPFONT ( WIDTH_FL , HEIGHT_FL ) ;
     };
 

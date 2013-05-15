@@ -199,7 +199,7 @@ class SmParser
     // map of used symbols (used to reduce file size by exporting only actually used symbols)
     std::set< OUString >   m_aUsedSymbols;
 
-    //! locale where '.' is decimal seperator!
+    //! locale where '.' is decimal separator!
     ::com::sun::star::lang::Locale m_aDotLoc;
 
     // declare copy-constructor and assignment-operator private

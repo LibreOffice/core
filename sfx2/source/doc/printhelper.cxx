@@ -675,7 +675,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 // real file on disk automaticly if it die - bt we have to share it with
                 // some other sources ... e.g. the ImplUCBPrintWatcher).
                 // And we put the name of this temp file to the descriptor instead
-                // of the URL. The URL we save for later using seperatly.
+                // of the URL. The URL we save for later using separately.
                 // Execution of the print job will be done later by executing
                 // a slot ...
                 pUCBPrintTempFile = new ::utl::TempFile();

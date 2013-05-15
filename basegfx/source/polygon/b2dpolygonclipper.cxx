@@ -736,7 +736,7 @@ namespace basegfx
 
                         if(nIndex > 1)
                         {
-                            // consume vertices until a single seperate triangle has been visited.
+                            // consume vertices until a single separate triangle has been visited.
                             if(!((nIndex+1)%3))
                             {
                                 // if any of the last three vertices was outside

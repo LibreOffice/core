@@ -287,7 +287,7 @@ void SwHTMLParser::NewDivision( int nToken )
             else
             {
                 aURL = URIHelper::SmartRel2Abs(INetURLObject( sBaseURL ), aHRef.Copy( 0, nPos ), Link(), false );
-                aURL += sfx2::cTokenSeperator;
+                aURL += sfx2::cTokenSeparator;
                 if( STRING_NOTFOUND == nPos2 )
                 {
                     aURL += aHRef.Copy( nPos+1 );
@@ -295,7 +295,7 @@ void SwHTMLParser::NewDivision( int nToken )
                 else
                 {
                     aURL += aHRef.Copy( nPos+1, nPos2 - (nPos+1) );
-                    aURL += sfx2::cTokenSeperator;
+                    aURL += sfx2::cTokenSeparator;
                     aURL += String(rtl::Uri::decode( aHRef.Copy( nPos2+1 ),
                                               rtl_UriDecodeWithCharset,
                                               RTL_TEXTENCODING_ISO_8859_1 ));

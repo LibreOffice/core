@@ -161,7 +161,7 @@ void DescriptionGenerator::AddProperty (const OUString& sPropertyName,
         && xState->getPropertyState(sPropertyName)!=beans::PropertyState_DEFAULT_VALUE)
         if (mxSet.is())
         {
-            // Append a seperator from previous Properties.
+            // Append a separator from previous Properties.
             if ( ! mbIsFirstProperty)
                 msDescription.append (sal_Unicode (','));
             else

@@ -303,7 +303,7 @@ final class InstallationFinder {
             return null;
         }
 
-        // empty standard error stream in a seperate thread
+        // empty standard error stream in a separate thread
         StreamGobbler gobbler = new StreamGobbler( proc.getErrorStream() );
         gobbler.start();
 

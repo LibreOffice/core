@@ -91,7 +91,7 @@ class SvtCmdOptions
         //           The while-loop starts with pointer on internal member list lSetupEntries, change to
         //           lUserEntries then and stop after that with NULL!
         //           Separator entries will be packed in another way then normal entries! We define
-        //           special strings "sEmpty" and "sSeperator" to perform too ...
+        //           special strings "sEmpty" and "sSeparator" to perform too ...
         Sequence< OUString > GetList() const
         {
             sal_Int32               nCount = (sal_Int32)m_aCommandHashMap.size();

@@ -50,7 +50,7 @@
 
 #define FILE_EXTENSION          DECLARE_ASCII(".xml")
 
-#define PATH_SEPERATOR          DECLARE_ASCII("/")
+#define PATH_SEPARATOR          DECLARE_ASCII("/")
 
 static const ::sal_Int32 ID_CORRUPT_UICONFIG_SHARE   = 1;
 static const ::sal_Int32 ID_CORRUPT_UICONFIG_USER    = 2;
@@ -423,7 +423,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
         case E_GLOBAL :
         {
             sRelPathBuf.append(SUBSTORAGE_GLOBAL);
-            sRelPathBuf.append(PATH_SEPERATOR   );
+            sRelPathBuf.append(PATH_SEPARATOR   );
             sRelPathBuf.append(sResource        );
             sRelPathShare = sRelPathBuf.makeStringAndClear();
             sRelPathUser  = sRelPathShare;
@@ -436,9 +436,9 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
         case E_MODULES :
         {
             sRelPathBuf.append(SUBSTORAGE_MODULES);
-            sRelPathBuf.append(PATH_SEPERATOR    );
+            sRelPathBuf.append(PATH_SEPARATOR    );
             sRelPathBuf.append(sModule           );
-            sRelPathBuf.append(PATH_SEPERATOR    );
+            sRelPathBuf.append(PATH_SEPARATOR    );
             sRelPathBuf.append(sResource         );
             sRelPathShare = sRelPathBuf.makeStringAndClear();
             sRelPathUser  = sRelPathShare;
@@ -846,7 +846,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPat
     // Otherwhise we have no acc config at all, which can make other trouble.
     OUString sLocalizedPath;
     sLocalizedPath  = sPath;
-    sLocalizedPath += PATH_SEPERATOR;
+    sLocalizedPath += PATH_SEPARATOR;
     if (pLocaleFolder != lSubFolders.end())
         sLocalizedPath += *pLocaleFolder;
     else

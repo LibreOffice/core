@@ -910,7 +910,7 @@ OSQLParseNode* OSQLParser::convertNode(sal_Int32 nType,OSQLParseNode*& pLiteral)
                 case DataType::FLOAT:
                 case DataType::REAL:
                 case DataType::DOUBLE:
-                    // kill thousand seperators if any
+                    // kill thousand separators if any
                     killThousandSeparator(pReturn);
                     break;
                 case DataType::CHAR:
@@ -932,7 +932,7 @@ OSQLParseNode* OSQLParser::convertNode(sal_Int32 nType,OSQLParseNode*& pLiteral)
                 case DataType::FLOAT:
                 case DataType::REAL:
                 case DataType::DOUBLE:
-                    // kill thousand seperators if any
+                    // kill thousand separators if any
                     killThousandSeparator(pReturn);
                     break;
                 case DataType::CHAR:

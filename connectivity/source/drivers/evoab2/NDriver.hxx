@@ -28,7 +28,7 @@
 #include <osl/module.h>
 
 #define EVOAB_EVOLUTION_SCHEMA  "evolution"
-/*In Future, when seperate schema is required for ldap, groupwise*/
+/*In Future, when separate schema is required for ldap, groupwise*/
 #define EVOAB_LDAP_SCHEMA   "ldap"
 #define EVOAB_GWISE_SCHEMA  "groupwise"
 

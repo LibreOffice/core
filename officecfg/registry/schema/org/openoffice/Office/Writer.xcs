@@ -5441,10 +5441,10 @@
       <info>
         <desc>Contains settings for word counting</desc>
       </info>
-      <prop oor:name="AdditionalSeperators" oor:type="xs:string" oor:nillable="false">
+      <prop oor:name="AdditionalSeparators" oor:type="xs:string" oor:nillable="false">
         <info>
-          <desc>configures additional word seperators for word counting</desc>
-          <label>Additional Word Seperators</label>
+          <desc>configures additional word separators for word counting</desc>
+          <label>Additional Word Separators</label>
         </info>
         <value>—–</value>
       </prop>

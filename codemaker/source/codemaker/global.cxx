@@ -86,14 +86,14 @@ OString createFileNameFromType( const OString& destination,
 
     length += prefix.getLength() + type.getLength() + postfix.getLength();
 
-    sal_Bool withSeperator = sal_False;
+    sal_Bool withSeparator = sal_False;
     if (destination.getStr()[destination.getLength()] != '\\' &&
         destination.getStr()[destination.getLength()] != '/' &&
         type.getStr()[0] != '\\' &&
         type.getStr()[0] != '/')
     {
         length++;
-        withSeperator = sal_True;
+        withSeparator = sal_True;
     }
 
     OStringBuffer fileNameBuf(length);
@@ -103,7 +103,7 @@ OString createFileNameFromType( const OString& destination,
     else
         fileNameBuf.append(destination.getStr(), destination.getLength());
 
-    if (withSeperator)
+    if (withSeparator)
         fileNameBuf.append("/", 1);
 
     OString tmpStr(type);

@@ -915,14 +915,14 @@ public class TextDocuments {
                     // Make sure that the autotext group contains at least one block
                     if ( aBlockNames.length > 0 )
                     {
-                        // Split the current cell vertically into two seperate cells
+                        // Split the current cell vertically into two separate cells
                         xTableCursor.splitRange ( (short) 1, false );
 
                         // Put the cursor in the newly created right hand cell
                         // and select it
                         xTableCursor.goRight ( (short) 1, false );
 
-                        // Split this cell horizontally to make a seperate cell
+                        // Split this cell horizontally to make a separate cell
                         // for each Autotext block
                         if ( ( aBlockNames.length -1 ) > 0 )
                             xTableCursor.splitRange (

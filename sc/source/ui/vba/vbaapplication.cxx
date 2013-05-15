@@ -103,9 +103,9 @@ using ::com::sun::star::uno::UNO_QUERY;
 
 // #TODO is this defined somewhere else?
 #if ( defined UNX ) //unix
-#define FILE_PATH_SEPERATOR "/"
+#define FILE_PATH_SEPARATOR "/"
 #else // windows
-#define FILE_PATH_SEPERATOR "\\"
+#define FILE_PATH_SEPARATOR "\\"
 #endif
 
 // ============================================================================
@@ -942,7 +942,7 @@ ScVbaApplication::getTemplatesPath() throw (uno::RuntimeException)
 OUString SAL_CALL
 ScVbaApplication::getPathSeparator() throw (uno::RuntimeException)
 {
-    static OUString sPathSep( FILE_PATH_SEPERATOR );
+    static OUString sPathSep( FILE_PATH_SEPARATOR );
     return sPathSep;
 }
 

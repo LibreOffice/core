@@ -138,10 +138,10 @@ private:
     FixedText*  mpFTChangeOrder;
     PushButton* mpPBMoveUp;
     PushButton* mpPBMoveDown;
-    FixedLine*  mpFLSeperator1;
+    FixedLine*  mpFLSeparator1;
     PushButton* mpPBPlay;
     PushButton* mpPBSlideShow;
-    FixedLine*  mpFLSeperator2;
+    FixedLine*  mpFLSeparator2;
     CheckBox*   mpCBAutoPreview;
 
     String      maStrModify;

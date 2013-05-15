@@ -1364,7 +1364,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     // Attention: Detect services are part of the standard set!
-    // So there is no need to handle it seperatly.
+    // So there is no need to handle it separately.
 
     // ------------------------------------------
     // a) The standard set of config value is needed.
@@ -2340,13 +2340,13 @@ CacheItem FilterCache::impl_readOldItem(const css::uno::Reference< css::containe
 
 
 OUStringList FilterCache::impl_tokenizeString(const OUString& sData     ,
-                                                    sal_Unicode      cSeperator)
+                                                    sal_Unicode      cSeparator)
 {
     OUStringList lData  ;
     sal_Int32    nToken = 0;
     do
     {
-        OUString sToken = sData.getToken(0, cSeperator, nToken);
+        OUString sToken = sData.getToken(0, cSeparator, nToken);
         lData.push_back(sToken);
     }
     while(nToken >= 0);

@@ -470,7 +470,7 @@ void BarChart::createShapes()
 
                 double fMinimumY = 0.0, fMaximumY = 0.0;
                 aXSlotIter->calculateYMinAndMaxForCategory( nPointIndex
-                    , isSeperateStackingForDifferentSigns( 1 ), fMinimumY, fMaximumY, nAttachedAxisIndex );
+                    , isSeparateStackingForDifferentSigns( 1 ), fMinimumY, fMaximumY, nAttachedAxisIndex );
 
                 if( !::rtl::math::isNan( fMaximumY ) && fMaximumY > 0)
                     aLogicYSumMap[nAttachedAxisIndex] += fMaximumY;
@@ -513,7 +513,7 @@ void BarChart::createShapes()
 
                 double fMinimumY = 0.0, fMaximumY = 0.0;
                 aXSlotIter->calculateYMinAndMaxForCategory( nPointIndex
-                    , isSeperateStackingForDifferentSigns( 1 ), fMinimumY, fMaximumY, nAttachedAxisIndex );
+                    , isSeparateStackingForDifferentSigns( 1 ), fMinimumY, fMaximumY, nAttachedAxisIndex );
 
                 double fLogicPositiveYSum = 0.0;
                 if( !::rtl::math::isNan( fMaximumY ) )

@@ -51,7 +51,7 @@ public:
     virtual bool isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex ) = 0;
     virtual bool isExpandWideValuesToZero( sal_Int32 nDimensionIndex ) = 0;
     virtual bool isExpandNarrowValuesTowardZero( sal_Int32 nDimensionIndex ) = 0;
-    virtual bool isSeperateStackingForDifferentSigns( sal_Int32 nDimensionIndex ) = 0;
+    virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex ) = 0;
 
     //return a constant out of ::com::sun::star::chart::TimeUnit that allows to display the smallest distance between occuring dates
     virtual long calculateTimeResolutionOnXAxis() = 0;
@@ -83,7 +83,7 @@ public:
     virtual bool isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex );
     virtual bool isExpandWideValuesToZero( sal_Int32 nDimensionIndex );
     virtual bool isExpandNarrowValuesTowardZero( sal_Int32 nDimensionIndex );
-    virtual bool isSeperateStackingForDifferentSigns( sal_Int32 nDimensionIndex );
+    virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex );
 
     virtual long calculateTimeResolutionOnXAxis();
     virtual void setTimeResolutionOnXAxis( long nTimeResolution, const Date& rNullDate );

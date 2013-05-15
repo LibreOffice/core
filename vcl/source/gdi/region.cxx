@@ -203,7 +203,7 @@ ImplRegion* ImplRectilinearPolygonToBands (const PolyPolygon& rPolyPoly)
             OSL_ASSERT(aStart.X() == aEnd.X());
 
             // Sort y-coordinates to simplify the algorithm and store the
-            // direction seperately.  The direction is calculated as it is
+            // direction separately.  The direction is calculated as it is
             // in other places (but seems to be the wrong way.)
             const long nTop (::std::min(aStart.Y(), aEnd.Y()));
             const long nBottom (::std::max(aStart.Y(), aEnd.Y()));

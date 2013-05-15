@@ -34,7 +34,7 @@ namespace framework{
 
 #define PACKAGENAME_PROTOCOLHANDLER                 DECLARE_ASCII("Office.ProtocolHandler"                          )   /// name of our configuration package
 
-#define CFG_PATH_SEPERATOR                          DECLARE_ASCII("/"                                               )   /// separator for configuration paths
+#define CFG_PATH_SEPARATOR                          DECLARE_ASCII("/"                                               )   /// separator for configuration paths
 
 #define SETNAME_HANDLER                             DECLARE_ASCII("HandlerSet"                                      )   /// name of configuration set inside package
 #define PROPERTY_PROTOCOLS                          DECLARE_ASCII("Protocols"                                       )   /// properties of a protocol handler

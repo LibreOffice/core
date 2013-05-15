@@ -682,7 +682,7 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
                             const sal_Unicode cChar = aStr.GetChar(j);
                             if (cDecimalDelimiter && cChar == cDecimalDelimiter)
                                 aBuf.append('.');
-                            else if ( cChar == '.' ) // special case, if decimal seperator isn't '.' we have to put the string after it
+                            else if ( cChar == '.' ) // special case, if decimal separator isn't '.' we have to put the string after it
                                 continue;
                             else if (cThousandDelimiter && cChar == cThousandDelimiter)
                             {

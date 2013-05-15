@@ -47,7 +47,7 @@ enum CompatibilityOptions
 
 /*-************************************************************************************************************//**
     @descr          The method GetList() returns a list of property values.
-                    Use follow defines to seperate values by names.
+                    Use follow defines to separate values by names.
 *//*-*************************************************************************************************************/
 #define COMPATIBILITY_PROPERTYNAME_NAME                     OUString( "Name" )
 #define COMPATIBILITY_PROPERTYNAME_MODULE                   OUString( "Module" )

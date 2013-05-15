@@ -335,7 +335,7 @@ bool wwSectionManager::SetCols(SwFrmFmt &rFmt, const wwSection &rSection,
     SwFmtCol aCol;                      // Create SwFmtCol
 
     //sprmSDxaColumns   - Default distance is 1.25 cm
-    sal_Int32 nColSpace = rSection.StandardColSeperation();
+    sal_Int32 nColSpace = rSection.StandardColSeparation();
 
     const SEPr& rSep = rSection.maSep;
 

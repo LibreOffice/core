@@ -72,7 +72,7 @@ $HY = [:LineBreak =  Hyphen:];
 $H2 = [:LineBreak =  H2:];
 $H3 = [:LineBreak =  H3:];
 $ID = [[:LineBreak =  Ideographic:] - [\ufe30]];
-$IN = [:LineBreak =  Inseperable:];
+$IN = [:LineBreak =  Inseparable:];
 $IS = [[:LineBreak =  Infix_Numeric:] [\ufe30]];
 $JL = [:LineBreak =  JL:];
 $JV = [:LineBreak =  JV:];

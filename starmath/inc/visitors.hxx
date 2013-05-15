@@ -272,7 +272,7 @@ public:
 private:
     /** Visit a selectable pNode
      * Can be used to handle pNodes that can be selected, that doesn't have more SmCaretPos'
-     * than 0 and 1 inside them. SmTextNode should be handle seperately!
+     * than 0 and 1 inside them. SmTextNode should be handle separately!
      * Also note that pNodes such as SmBinVerNode cannot be selected, don't this method for
      * it.
      */

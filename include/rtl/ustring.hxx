@@ -1733,7 +1733,7 @@ public:
         while ( nIndex >= 0 );
 
       @param    token       the number of the token to return
-      @param    cTok        the character which seperate the tokens.
+      @param    cTok        the character which separate the tokens.
       @param    index       the position at which the token is searched in the
                             string.
                             The index must not be greater than the length of the

@@ -47,7 +47,7 @@ public:
     //-------------------------------------------------------------------------
     // MinimumAndMaximumSupplier
     //-------------------------------------------------------------------------
-    virtual bool isSeperateStackingForDifferentSigns( sal_Int32 nDimensionIndex );
+    virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex );
 
     //-------------------------------------------------------------------------
 

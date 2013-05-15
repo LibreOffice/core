@@ -1869,10 +1869,10 @@ bool SwView::JumpToSwMark( const String& rMark )
                                            INetURLObject::DECODE_WITH_CHARSET,
                                         RTL_TEXTENCODING_UTF8 ));
 
-        xub_StrLen nLastPos, nPos = sMark.Search( cMarkSeperator );
+        xub_StrLen nLastPos, nPos = sMark.Search( cMarkSeparator );
         if( STRING_NOTFOUND != nPos )
             while( STRING_NOTFOUND != ( nLastPos =
-                sMark.Search( cMarkSeperator, nPos + 1 )) )
+                sMark.Search( cMarkSeparator, nPos + 1 )) )
                 nPos = nLastPos;
 
         IDocumentMarkAccess::const_iterator_t ppMark;

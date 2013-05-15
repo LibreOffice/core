@@ -63,11 +63,11 @@ bool SwTable::IsTblComplexForChart( const String& rSelection ) const
         if( '<' == sBox.GetChar( 0  ) ) sBox.Erase( 0, 1 );
         if( '>' == sBox.GetChar( sBox.Len()-1  ) ) sBox.Erase( sBox.Len()-1 );
 
-        xub_StrLen nSeperator = sBox.Search( ':' );
-        OSL_ENSURE( STRING_NOTFOUND != nSeperator, "no valid selection" );
+        xub_StrLen nSeparator = sBox.Search( ':' );
+        OSL_ENSURE( STRING_NOTFOUND != nSeparator, "no valid selection" );
 
-        pSttBox = GetTblBox( sBox.Copy( 0, nSeperator ));
-        pEndBox = GetTblBox( sBox.Copy( nSeperator+1 ));
+        pSttBox = GetTblBox( sBox.Copy( 0, nSeparator ));
+        pEndBox = GetTblBox( sBox.Copy( nSeparator+1 ));
     }
     else
     {

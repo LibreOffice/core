@@ -123,7 +123,7 @@ public:
 protected:
     OString      m_localName;
     OString      m_scopedName;       // full qualified name
-    OString      m_fullName;         // full qualified name with '/' as seperator
+    OString      m_fullName;         // full qualified name with '/' as separator
     AstScope*           m_pScope;
     NodeType            m_nodeType;
     sal_Bool            m_bImported;        // imported ?

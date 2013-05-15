@@ -163,7 +163,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                         INetURLObject::WAS_ENCODED,
                                            INetURLObject::DECODE_UNAMBIGUOUS);
                 //#i63832# remove the link target type
-                xub_StrLen nFound = sTxt.Search(cMarkSeperator);
+                xub_StrLen nFound = sTxt.Search(cMarkSeparator);
                 if( nFound != STRING_NOTFOUND && (++nFound) < sTxt.Len() )
                 {
                     String sSuffix( sTxt.Copy(nFound) );

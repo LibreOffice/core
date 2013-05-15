@@ -639,7 +639,7 @@ void SwDocTest::testSwScanner()
         aDocStat.Reset();
 
         //But default configuration should, msword-alike treak emdash
-        //and endash as word seperators for word-counting
+        //and endash as word separators for word-counting
         m_pDoc->AppendTxtNode(*aPaM.GetPoint());
         m_pDoc->InsertString(aPaM, sTemplate.replace('X', 0x2013));
         pTxtNode = aPaM.GetNode()->GetTxtNode();

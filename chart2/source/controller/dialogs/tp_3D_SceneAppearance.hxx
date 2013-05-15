@@ -70,7 +70,7 @@ private:
     FixedText       m_aFT_Scheme;
     ListBox         m_aLB_Scheme;
 
-    FixedLine       m_aFL_Seperator;
+    FixedLine       m_aFL_Separator;
 
     CheckBox        m_aCB_Shading;
     CheckBox        m_aCB_ObjectLines;

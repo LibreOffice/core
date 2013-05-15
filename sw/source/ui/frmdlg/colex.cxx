@@ -355,7 +355,7 @@ void SwColumnOnlyExample::Paint( const Rectangle& /*rRect*/ )
 
     SetFillColor( aGrayColor );
 
-    //column seperator?
+    //column separator?
     long nLength = aLogSize.Height() - 2 * aTL.Y();
     Point aUp( aTL );
     Point aDown( aTL.X(), nLength );

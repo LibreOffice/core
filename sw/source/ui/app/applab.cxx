@@ -337,8 +337,8 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
                             SwSectionData aSect(FILE_LINK_SECTION,
                                     pSh->GetUniqueSectionName());
                             OUStringBuffer sLinkName;
-                            sLinkName.append(sfx2::cTokenSeperator);
-                            sLinkName.append(sfx2::cTokenSeperator);
+                            sLinkName.append(sfx2::cTokenSeparator);
+                            sLinkName.append(sfx2::cTokenSeparator);
                             sLinkName.append(MASTER_LABEL);
                             aSect.SetLinkFileName(sLinkName.makeStringAndClear());
                             aSect.SetProtectFlag(true);

@@ -1073,7 +1073,7 @@ void MigrationImpl::compareOldAndNewConfig(const OUString& sParent,
                                            const uno::Reference< container::XIndexContainer >& xIndexNew,
                                            const OUString& sResourceURL)
 {
-    const OUString MENU_SEPERATOR(" | ");
+    const OUString MENU_SEPARATOR(" | ");
 
     ::std::vector< MigrationItem > vOldItems;
     ::std::vector< MigrationItem > vNewItems;
@@ -1127,7 +1127,7 @@ void MigrationImpl::compareOldAndNewConfig(const OUString& sParent,
         {
             OUString sName;
             if (!sParent.isEmpty())
-                sName = sParent + MENU_SEPERATOR + it->m_sCommandURL;
+                sName = sParent + MENU_SEPARATOR + it->m_sCommandURL;
             else
                 sName = it->m_sCommandURL;
             compareOldAndNewConfig(sName, it->m_xPopupMenu, pFound->m_xPopupMenu, sResourceURL);
@@ -1159,7 +1159,7 @@ void MigrationImpl::compareOldAndNewConfig(const OUString& sParent,
         {
             OUString sName;
             if (!sParent.isEmpty())
-                sName = sParent + MENU_SEPERATOR + it->m_sCommandURL;
+                sName = sParent + MENU_SEPARATOR + it->m_sCommandURL;
             else
                 sName = it->m_sCommandURL;
             compareOldAndNewConfig(sName, pFound->m_xPopupMenu, it->m_xPopupMenu, sResourceURL);

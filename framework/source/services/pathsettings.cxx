@@ -51,7 +51,7 @@
 #define CFGPROP_WRITEPATH OUString("WritePath")
 
 /*
-    0 : old style              "Template"              string using ";" as seperator
+    0 : old style              "Template"              string using ";" as separator
     1 : internal paths         "Template_internal"     string list
     2 : user paths             "Template_user"         string list
     3 : write path             "Template_write"        string

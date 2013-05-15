@@ -63,7 +63,7 @@ CandleStickChart::~CandleStickChart()
 // MinimumAndMaximumSupplier
 //-------------------------------------------------------------------------
 
-bool CandleStickChart::isSeperateStackingForDifferentSigns( sal_Int32 /* nDimensionIndex */ )
+bool CandleStickChart::isSeparateStackingForDifferentSigns( sal_Int32 /* nDimensionIndex */ )
 {
     return false;
 }

@@ -30,7 +30,7 @@ ENABLE_EXCEPTIONS = TRUE
 .IF "$(XCLASSPATH)" == ""
 XCLASSPATH := $(CLASSDIR)$/test
 .ELSE
-XCLASSPATH !:= $(XCLASSPATH)$(PATH_SEPERATOR)$(CLASSDIR)$/test
+XCLASSPATH !:= $(XCLASSPATH)$(PATH_SEPARATOR)$(CLASSDIR)$/test
 .ENDIF
 
 DLLPRE = # no leading "lib" on .so files
@@ -59,7 +59,7 @@ GIVE_EXEC_RIGHTS = chmod +x
 
 EXEC_CLASSPATH_TMP = $(foreach,i,$(JARFILES) $(SOLARBINDIR)$/$i)
 EXEC_CLASSPATH = \
-    $(strip $(subst,!,$(PATH_SEPERATOR) $(EXEC_CLASSPATH_TMP:s/ /!/)))
+    $(strip $(subst,!,$(PATH_SEPARATOR) $(EXEC_CLASSPATH_TMP:s/ /!/)))
 
 $(MISC)$/$(TARGET).rdb: types.idl
     - rm $@
@@ -74,8 +74,8 @@ $(SLOFILES) $(JAVACLASSFILES): $(MISC)$/$(TARGET).rdb
 
 $(BIN)$/testequals: $(BIN)$/testequals_services.rdb
     echo '$(AUGMENT_LIBRARY_PATH)' java -classpath \
-        ..$/class$/test$(PATH_SEPERATOR)..$/class$(PATH_SEPERATOR)\
-..$/class$/java_uno.jar$(PATH_SEPERATOR)$(EXEC_CLASSPATH) \
+        ..$/class$/test$(PATH_SEPARATOR)..$/class$(PATH_SEPARATOR)\
+..$/class$/java_uno.jar$(PATH_SEPARATOR)$(EXEC_CLASSPATH) \
         test.java_uno.equals.TestEquals $(SOLARBINDIR)$/types.rdb \
         testequals_services.rdb > $@
     $(GIVE_EXEC_RIGHTS) $@

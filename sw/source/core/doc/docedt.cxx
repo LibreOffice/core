@@ -1343,7 +1343,7 @@ void sw_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
                     ::_RestoreCntntIdx( pDoc, aBkmkArr, aIdx.GetIndex() );
 
                 // If the passed PaM is not in the Crsr ring,
-                // treat it seperately (e.g. when it's being called from AutoFormat)
+                // treat it separately (e.g. when it's being called from AutoFormat)
                 if( pOldTxtNd == rPam.GetBound( sal_True ).nContent.GetIdxReg() )
                     rPam.GetBound( sal_True ) = aAlphaPos;
                 if( pOldTxtNd == rPam.GetBound( sal_False ).nContent.GetIdxReg() )

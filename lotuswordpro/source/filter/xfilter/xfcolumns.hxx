@@ -64,7 +64,7 @@
 #include "xfcolor.hxx"
 #include <vector>
 
-#define     XFCOLUMNS_FLAG_SEPERATOR    0X00000001
+#define     XFCOLUMNS_FLAG_SEPARATOR    0X00000001
 #define     XFCOLUMNS_FLAG_GAP          0X00000010
 
 /**
@@ -142,7 +142,7 @@ public:
         m_fGap = 0;
     }
 public:
-    void    SetSeperator(XFColumnSep& aSeperator);
+    void    SetSeparator(XFColumnSep& aSeparator);
     void    SetGap(double fGap);
     void    SetCount(sal_uInt16 nCount);
     void    AddColumn(XFColumn& column);
@@ -153,7 +153,7 @@ private:
     sal_uInt16  m_nCount;
     double      m_fGap;
     std::vector<XFColumn>   m_aColumns;
-    XFColumnSep m_aSeperator;
+    XFColumnSep m_aSeparator;
 
 };
 

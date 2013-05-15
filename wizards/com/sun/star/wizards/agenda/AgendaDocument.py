@@ -751,7 +751,7 @@ class Topics(object):
     We hold the format of the last row, because one might wish to give it
     a special format, other than the one on the bottom of each topic.
     The left and right borders of the whole table are, on the other side,
-    part of the topics rows format, and need not be preserved seperateley.
+    part of the topics rows format, and need not be preserved separateley.
     '''
     table = None
     lastRowFormat = []

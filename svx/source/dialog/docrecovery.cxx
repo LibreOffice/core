@@ -2019,14 +2019,14 @@ void BrokenRecoveryDialog::impl_askForSavePath()
             String  aPreview = LoadCrashFile( GetPreviewURL() );
             ErrorRepSendDialog *pMainDlg = (ErrorRepSendDialog *)_pParent;
 
-            String aSeperator = OUString( "\r\n\r\n================\r\n\r\n"  );
+            String aSeparator = OUString( "\r\n\r\n================\r\n\r\n"  );
 
             String aContent = pMainDlg->GetDocType();
             if ( aContent.Len() > 0 )
-                aContent += aSeperator;
+                aContent += aSeparator;
             aContent += pMainDlg->GetUsing();
             if ( aContent.Len() > 0 )
-                aContent += aSeperator;
+                aContent += aSeparator;
             aContent += aPreview;
 
             maContentML.SetText( aContent );

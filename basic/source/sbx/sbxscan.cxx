@@ -506,7 +506,7 @@ static sal_uInt16 printfmtnum( double nNum, OUString& rRes, const OUString& rWFm
     short   nPrec  = 0;             // number of positions after decimal point
     short   nWidth = 0;             // number range completely
     short   nLen;                   // length of converted number
-    bool    bPoint = false;         // true: with 1000 seperators
+    bool    bPoint = false;         // true: with 1000 separators
     bool    bTrail = false;         // true, if following minus
     bool    bSign  = false;         // true: always with leading sign
     bool    bNeg   = false;         // true: number is negative

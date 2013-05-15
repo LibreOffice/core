@@ -689,10 +689,10 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
                 {
                     String sTmp;
                     if(!sParam1.Len())
-                        (sParam1 = sfx2::cTokenSeperator)
-                                += sfx2::cTokenSeperator;
+                        (sParam1 = sfx2::cTokenSeparator)
+                                += sfx2::cTokenSeparator;
 
-                    sParam1.SetToken( nPart, sfx2::cTokenSeperator,
+                    sParam1.SetToken( nPart, sfx2::cTokenSeparator,
                                 ::GetString( rValue, sTmp ));
                 }
                 else if(3 == nPart)
@@ -871,7 +871,7 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
                             rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_ELEMENT))  ? 2 :
                             rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC_UPDATE)) ? 3 : USHRT_MAX;
                     if(nPart  < 3 )
-                        pStr = &(sStr = sParam1.GetToken(nPart, sfx2::cTokenSeperator));
+                        pStr = &(sStr = sParam1.GetToken(nPart, sfx2::cTokenSeparator));
                     else if(3 == nPart)
                         aRet.setValue(&bParam1, ::getBooleanCppuType());
                 }

@@ -1542,7 +1542,7 @@ FormulaToken* ScTokenArray::AddRawToken( const ScRawToken& r )
 }
 
 // Utility function to ensure that there is strict alternation of values and
-// seperators.
+// separators.
 static bool
 checkArraySep( bool & bPrevWasSep, bool bNewVal )
 {

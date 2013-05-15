@@ -891,10 +891,10 @@ const SfxFilter* SfxFilterMatcherIter::Next()
 
 /*---------------------------------------------------------------
     helper to build own formated string from given stringlist by
-    using given seperator
+    using given separator
   ---------------------------------------------------------------*/
 OUString implc_convertStringlistToString( const uno::Sequence< OUString >& lList     ,
-                                                 const sal_Unicode&                                        cSeperator,
+                                                 const sal_Unicode&                                        cSeparator,
                                                  const OUString&                                    sPrefix   )
 {
     OUStringBuffer   sString ( 1000 )           ;
@@ -909,7 +909,7 @@ OUString implc_convertStringlistToString( const uno::Sequence< OUString >& lList
         sString.append( lList[nItem] );
         if( nItem+1<nCount )
         {
-            sString.append( cSeperator );
+            sString.append( cSeparator );
         }
     }
     return sString.makeStringAndClear();

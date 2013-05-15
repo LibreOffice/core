@@ -177,7 +177,7 @@ Control DLG_CUSTOMANIMATIONPANE
         Size = MAP_APPFONT( 16, 14 );
     };
 
-    FixedLine FL_SEPERATOR1
+    FixedLine FL_SEPARATOR1
     {
         OutputSize = TRUE;
         Size = MAP_APPFONT( 8, 8 );
@@ -201,7 +201,7 @@ Control DLG_CUSTOMANIMATIONPANE
         Text [ en-US ] = "S~lide Show";
     };
 
-    FixedLine FL_SEPERATOR2
+    FixedLine FL_SEPARATOR2
     {
         Size = MAP_APPFONT( 8, 8 );
     };

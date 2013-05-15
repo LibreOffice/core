@@ -54,7 +54,7 @@
 
 # B. untested functions:
 #    functions need Client/Server model and blocking mode of transmission. some of the functions
-#    can not run through on testshl2 env while the same code can run successfully in normal seperate
+#    can not run through on testshl2 env while the same code can run successfully in normal separate
 #    files.
 #    1) in DatagramSocket class:
 #        osl_receiveFromSocket;

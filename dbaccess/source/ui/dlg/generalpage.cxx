@@ -260,7 +260,7 @@ namespace dbaui
     }
 
     // For the databaseWizard we only have one entry for the MySQL Database,
-    // because we have a seperate tabpage to retrieve the respective datasource type
+    // because we have a separate tabpage to retrieve the respective datasource type
     // ( ::dbaccess::DST_MYSQL_ODBC ||  ::dbaccess::DST_MYSQL_JDBC). Therefore we use  ::dbaccess::DST_MYSQL_JDBC as a temporary
     // representative for all MySQl databases)
     // Also, embedded databases (embedded HSQL, at the moment), are not to appear in the list of

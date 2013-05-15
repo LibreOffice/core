@@ -727,9 +727,9 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
 }
 
 // -----------------------------------------------------------------------------
-// AS: Because JPEGs require the alpha channel provided seperately (JPEG does not
-//  natively support alpha channel, but SWF lets you provide it seperately), we
-//  extract the alpha channel into a seperate array here.
+// AS: Because JPEGs require the alpha channel provided separately (JPEG does not
+//  natively support alpha channel, but SWF lets you provide it separately), we
+//  extract the alpha channel into a separate array here.
 void getBitmapData( const BitmapEx& aBmpEx, sal_uInt8*& tgadata, sal_uInt8*& tgaAlphadata, sal_uInt32& nWidth, sal_uInt32& nHeight )
 {
     if( !aBmpEx.IsEmpty() )
@@ -830,7 +830,7 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
 #endif
 
     // AS: SWF files let you provide an Alpha mask for JPEG images, but we have
-    //  to ZLIB compress the alpha channel seperately.
+    //  to ZLIB compress the alpha channel separately.
     uLong alpha_compressed_size = 0;
     sal_uInt8 *pAlphaCompressed = NULL;
     if (bmpSource.IsAlpha() || bmpSource.IsTransparent())
@@ -1004,7 +1004,7 @@ void Writer::Impl_writeBmp( sal_uInt16 nBitmapId, sal_uInt32 width, sal_uInt32 h
 
 void Writer::Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal_uInt32 nJpgDataLength, sal_uInt8 *pAlphaCompressed, sal_uInt32 alpha_compressed_size )
 {
-    // AS: Go through the actuall JPEG bits, seperating out the
+    // AS: Go through the actuall JPEG bits, separating out the
     //  header fields from the actual image fields.  Fields are
     //  identifed by 0xFFXX where XX is the field type.  Both
     //  the header and the image need start and stop (D8 and D9),

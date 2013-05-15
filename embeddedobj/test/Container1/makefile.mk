@@ -25,9 +25,9 @@ PACKAGE = embeddedobj$/test
 .INCLUDE: settings.mk
 
 # EXEC_CLASSPATH_TMP = \
-# 	$(foreach,i,$(JARFILES) $(SOLARBINDIR)$/$i)$(PATH_SEPERATOR)
+# 	$(foreach,i,$(JARFILES) $(SOLARBINDIR)$/$i)$(PATH_SEPARATOR)
 # EXEC_CLASSPATH = \
-# 	$(strip $(subst,!,$(PATH_SEPERATOR) $(EXEC_CLASSPATH_TMP:s/ /!/)))
+# 	$(strip $(subst,!,$(PATH_SEPARATOR) $(EXEC_CLASSPATH_TMP:s/ /!/)))
 
 #----- compile .java files -----------------------------------------
 
@@ -66,11 +66,11 @@ JavaStorageTestExample : $(CLASSFILES)
 # echo $(EXEC_CLASSPATH)
 
 run: $(CLASSFILES)
-    +set PATH=$(PATH)$(PATH_SEPERATOR)$(JDK14PATH)$/jre$/bin && \
+    +set PATH=$(PATH)$(PATH_SEPARATOR)$(JDK14PATH)$/jre$/bin && \
     java -classpath "$(OUT)$/class;$(OUT)$/lib;$(OUT)$/bin;$(JDK14PATH)$/jre$/bin;$(JDK14PATH)$/jre$/lib;$(CLASSPATH)" embeddedobj.test.EmbedContFrame
 
 debug: $(CLASSFILES)
-    +set PATH=$(PATH)$(PATH_SEPERATOR)$(JDK14PATH)$/jre$/bin && \
+    +set PATH=$(PATH)$(PATH_SEPARATOR)$(JDK14PATH)$/jre$/bin && \
     jdb -classpath "$(OUT)$/class;$(OUT)$/lib;$(OUT)$/bin;$(CLASSPATH)" embeddedobj.test.EmbedContFrame
 
 clean :

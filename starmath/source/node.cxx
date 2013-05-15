@@ -2550,7 +2550,7 @@ void SmMatrixNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     // norm distance from which the following two are calcutated
     const int  nNormDist = 3 * GetFont().GetSize().Height();
 
-    // define horizontal and vertical minimal distances that seperate
+    // define horizontal and vertical minimal distances that separate
     // the elements
     long  nHorDist = nNormDist * rFormat.GetDistance(DIS_MATRIXCOL) / 100L,
           nVerDist = nNormDist * rFormat.GetDistance(DIS_MATRIXROW) / 100L;

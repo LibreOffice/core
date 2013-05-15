@@ -23,8 +23,8 @@
 namespace framework{
     namespace constant{
 
-const sal_Unicode ContainerQuery::SEPERATOR_PARAM = (sal_Unicode)':';
-const sal_Unicode ContainerQuery::SEPERATOR_VALUE = (sal_Unicode)'=';
+const sal_Unicode ContainerQuery::SEPARATOR_PARAM = (sal_Unicode)':';
+const sal_Unicode ContainerQuery::SEPARATOR_VALUE = (sal_Unicode)'=';
 
     } // namespace constant
 } // namespace framework

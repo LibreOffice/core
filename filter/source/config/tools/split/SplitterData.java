@@ -58,11 +58,11 @@ public class SplitterData
     public java.io.File m_aFragmentDirContentHandlers;
 
     /** enable/disable grouping of filters by its application modules. */
-    public boolean m_bSeperateFiltersByModule;
+    public boolean m_bSeparateFiltersByModule;
 
     /** directories to group all filter fragments ... if requested.
      *  Must be relative to "m_aOutDir/m_aFragmentDirFilters" and
-     *  will be used only, if "m_bSeperateFiltersByModule" is set to true. */
+     *  will be used only, if "m_bSeparateFiltersByModule" is set to true. */
     public java.io.File m_aFragmentDirModuleSWriter;
     public java.io.File m_aFragmentDirModuleSWeb;
     public java.io.File m_aFragmentDirModuleSGlobal;

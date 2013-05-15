@@ -257,7 +257,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
             Reference< XCellRange > xCellRange( xPropSet, UNO_QUERY_THROW );
             for ( sal_Int32 nColumn = 0; nColumn < nColumnCount; ++nColumn )
             {
-                // get current cell, remarks row index is 0, because we get the range for each row seperate
+                // get current cell, remarks row index is 0, because we get the range for each row separate
                 Reference< XPropertySet > xCellSet( xCellRange->getCellByPosition(nColumn, 0), UNO_QUERY_THROW );
 
                 // get style
@@ -358,7 +358,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
 
             for ( sal_Int32 columnIndex = 0; columnIndex < columnCount; columnIndex++ )
             {
-                // get current cell, remarks row index is 0, because we get the range for each row seperate
+                // get current cell, remarks row index is 0, because we get the range for each row separate
                 Reference< XCell > xCell( xCellRange->getCellByPosition(columnIndex, 0), UNO_QUERY_THROW );
 
                 // use XMergeableCell interface from offapi

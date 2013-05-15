@@ -1246,7 +1246,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_string_newTrim(
     the number of the token to return, starting at index.
 
     @param cTok
-    the character that seperates the tokens.
+    the character that separates the tokens.
 
     @param idx
     the position at which searching for the token starts.  Must not be greater

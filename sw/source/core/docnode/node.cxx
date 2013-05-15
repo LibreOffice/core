@@ -815,7 +815,7 @@ const SwTxtNode* SwNode::FindOutlineNodeOfLevel( sal_uInt8 nLvl ) const
                     ->GetAttrOutlineLevel() - 1 )
                 --nPos;
 
-            if( !nPos )     // Get seperately when 0
+            if( !nPos )     // Get separately when 0
                 pRet = rONds[0]->GetTxtNode();
         }
     }

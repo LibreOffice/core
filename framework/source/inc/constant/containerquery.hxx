@@ -29,8 +29,8 @@ struct ContainerQuery
 {
     public:
 
-        static const sal_Unicode SEPERATOR_PARAM;
-        static const sal_Unicode SEPERATOR_VALUE;
+        static const sal_Unicode SEPARATOR_PARAM;
+        static const sal_Unicode SEPARATOR_VALUE;
 };
 
     } // namespace constant

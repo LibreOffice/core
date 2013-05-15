@@ -2853,7 +2853,7 @@ void MSWordExportBase::AddLinkTarget(const String& rURL)
         return;
 
     String aURL( BookmarkToWriter( rURL.Copy( 1 ) ) );
-    xub_StrLen nPos = aURL.SearchBackward( cMarkSeperator );
+    xub_StrLen nPos = aURL.SearchBackward( cMarkSeparator );
 
     if( nPos < 2 )
         return;

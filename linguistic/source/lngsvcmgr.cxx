@@ -1311,8 +1311,8 @@ void LngSvcMgr::SetCfgServiceLists( SpellCheckerDispatcher &rSpellDsp )
             if (pValues[i] >>= aSvcImplNames)
             {
                 String aLocaleStr( pNames[i] );
-                xub_StrLen nSeperatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
-                aLocaleStr = aLocaleStr.Copy( nSeperatorPos + 1 );
+                xub_StrLen nSeparatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
+                aLocaleStr = aLocaleStr.Copy( nSeparatorPos + 1 );
                 rSpellDsp.SetServiceList( LanguageTag(aLocaleStr).getLocale(), aSvcImplNames );
             }
         }
@@ -1353,8 +1353,8 @@ void LngSvcMgr::SetCfgServiceLists( GrammarCheckingIterator &rGrammarDsp )
                     aSvcImplNames.realloc(1);
 
                 String aLocaleStr( pNames[i] );
-                xub_StrLen nSeperatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
-                aLocaleStr = aLocaleStr.Copy( nSeperatorPos + 1 );
+                xub_StrLen nSeparatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
+                aLocaleStr = aLocaleStr.Copy( nSeparatorPos + 1 );
                 rGrammarDsp.SetServiceList( LanguageTag(aLocaleStr).getLocale(), aSvcImplNames );
             }
         }
@@ -1395,8 +1395,8 @@ void LngSvcMgr::SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp )
                     aSvcImplNames.realloc(1);
 
                 String aLocaleStr( pNames[i] );
-                xub_StrLen nSeperatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
-                aLocaleStr = aLocaleStr.Copy( nSeperatorPos + 1 );
+                xub_StrLen nSeparatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
+                aLocaleStr = aLocaleStr.Copy( nSeparatorPos + 1 );
                 rHyphDsp.SetServiceList( LanguageTag(aLocaleStr).getLocale(), aSvcImplNames );
             }
         }
@@ -1433,8 +1433,8 @@ void LngSvcMgr::SetCfgServiceLists( ThesaurusDispatcher &rThesDsp )
             if (pValues[i] >>= aSvcImplNames)
             {
                 String aLocaleStr( pNames[i] );
-                xub_StrLen nSeperatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
-                aLocaleStr = aLocaleStr.Copy( nSeperatorPos + 1 );
+                xub_StrLen nSeparatorPos = aLocaleStr.SearchBackward( sal_Unicode( '/' ) );
+                aLocaleStr = aLocaleStr.Copy( nSeparatorPos + 1 );
                 rThesDsp.SetServiceList( LanguageTag(aLocaleStr).getLocale(), aSvcImplNames );
             }
         }

@@ -209,7 +209,7 @@ sal_Bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
     {
         boost::shared_ptr< comphelper::ConfigurationChanges > batch(
             comphelper::ConfigurationChanges::create());
-        officecfg::Office::Writer::WordCount::AdditionalSeperators::set(aWordCountED.GetText(), batch);
+        officecfg::Office::Writer::WordCount::AdditionalSeparators::set(aWordCountED.GetText(), batch);
         batch->commit();
         bRet = sal_True;
     }
@@ -310,7 +310,7 @@ void SwLoadOptPage::Reset( const SfxItemSet& rSet)
     }
     aUseCharUnit.SaveValue();
 
-    aWordCountED.SetText(officecfg::Office::Writer::WordCount::AdditionalSeperators::get());
+    aWordCountED.SetText(officecfg::Office::Writer::WordCount::AdditionalSeparators::get());
     aWordCountED.SaveValue();
 }
 

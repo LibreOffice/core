@@ -154,7 +154,7 @@ bool BubbleChart::isExpandIfValuesCloseToBorder( sal_Int32 /*nDimensionIndex*/ )
     return true;
 }
 
-bool BubbleChart::isSeperateStackingForDifferentSigns( sal_Int32 /*nDimensionIndex*/ )
+bool BubbleChart::isSeparateStackingForDifferentSigns( sal_Int32 /*nDimensionIndex*/ )
 {
     return false;
 }

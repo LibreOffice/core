@@ -61,7 +61,7 @@
 
 // Simulating hold events does deactivate sending of individual requests for pressed down/released.
 // Instead special hold events are being triggered when the user is pressing and holding a button for a small period.
-// Simulation is activated only for those buttons and remote control that do not have a seperate event already
+// Simulation is activated only for those buttons and remote control that do not have a separate event already
 - (BOOL) simulateHoldEvent;
 - (void) setSimulateHoldEvent: (BOOL) value;
 

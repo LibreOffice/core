@@ -122,7 +122,7 @@ void ControlContainer::SetExpansionState (
         // control then that is always expanded.
         do
         {
-            // Ignore a call with an invalid index. (The seperate comparison
+            // Ignore a call with an invalid index. (The separate comparison
             // with -1 is not strictly necessary but it is here just in
             // case.)
             if (nIndex>=GetControlCount() || nIndex==(sal_uInt32)-1)

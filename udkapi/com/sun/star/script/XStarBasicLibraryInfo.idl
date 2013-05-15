@@ -63,7 +63,7 @@ published interface XStarBasicLibraryInfo: com::sun::star::uno::XInterface
 
     /** returns an
         URL describing the location where the library is stored if the library
-        is stored seperately (for example not in the main XML file but in a
+        is stored separately (for example not in the main XML file but in a
         special library format file), an empty string otherwise.
         This information can be useful to optimize the access to the library,
         e.g., for loading on demand.

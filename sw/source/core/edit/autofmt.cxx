@@ -2051,7 +2051,7 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
                     bFirstSent = sal_True;
             default:
                 if( !( rAppCC.isLetterNumeric( *pTxt, nPos )
-                        || '/' == cChar )) //  '/' should not be a word seperator (e.g. '1/2' needs to be handled as one word for replacement)
+                        || '/' == cChar )) //  '/' should not be a word separator (e.g. '1/2' needs to be handled as one word for replacement)
                 {
                     --nPos;     // ++nPos von dem for ungueltig machen !
                     ++bBreak;

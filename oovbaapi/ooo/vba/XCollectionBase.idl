@@ -36,7 +36,7 @@ module ooo { module vba {
 
     The various VBA collection objects expect a specific number of arguments in
     the "Item" method, therefore this method is not part of this base interface
-    but has to be specified seperately in every derived interface.
+    but has to be specified separately in every derived interface.
  */
 interface XCollectionBase
 {

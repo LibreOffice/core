@@ -4761,7 +4761,7 @@ void WW8PLCFMan::AdvNoSprm(short nIdx, bool bStart)
 {
     /*
     For the case of a piece table we slave the piece table attribute iterator
-    to the piece table and access it through that only. They are two seperate
+    to the piece table and access it through that only. They are two separate
     structures, but act together as one logical one. The attributes only go
     to the next entry when the piece changes
     */
@@ -6427,9 +6427,9 @@ WW8PLCF_HdFt::WW8PLCF_HdFt( SvStream* pSt, WW8Fib& rFib, WW8Dop& rDop )
 
      /*
       cmc 23/02/2000: This dop.grpfIhdt has a bit set for each special
-      footnote *and endnote!!* seperator,continuation seperator, and
+      footnote *and endnote!!* separator,continuation separator, and
       continuation notice entry, the documentation does not mention the
-      endnote seperators, the documentation also gets the index numbers
+      endnote separators, the documentation also gets the index numbers
       backwards when specifiying which bits to test. The bottom six bits
       of this value must be tested and skipped over. Each section's
       grpfIhdt is then tested for the existence of the appropriate headers

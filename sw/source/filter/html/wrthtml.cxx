@@ -548,9 +548,9 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
         rHTMLWrt.Strm() << sOut.makeStringAndClear().getStr();
 
         const String& aFName = rSection.GetLinkFileName();
-        String aURL( aFName.GetToken(0,sfx2::cTokenSeperator) );
-        String aFilter( aFName.GetToken(1,sfx2::cTokenSeperator) );
-        String aSection( aFName.GetToken(2,sfx2::cTokenSeperator) );
+        String aURL( aFName.GetToken(0,sfx2::cTokenSeparator) );
+        String aFilter( aFName.GetToken(1,sfx2::cTokenSeparator) );
+        String aSection( aFName.GetToken(2,sfx2::cTokenSeparator) );
 
         String aEncURL( URIHelper::simpleNormalizedMakeRelative(rHTMLWrt.GetBaseURL(), aURL ) );
         sal_Unicode cDelim = 255U;
@@ -1076,7 +1076,7 @@ void SwHTMLWriter::OutImplicitMark( const String& rMark,
     if( rMark.Len() && !aImplicitMarks.empty() )
     {
         String sMark( rMark );
-        sMark.Append( cMarkSeperator );
+        sMark.Append( cMarkSeparator );
         sMark.AppendAscii( pMarkType );
         if( 0 != aImplicitMarks.erase( sMark ) )
         {
@@ -1089,7 +1089,7 @@ void SwHTMLWriter::OutImplicitMark( const String& rMark,
 void SwHTMLWriter::OutHyperlinkHRefValue( const String& rURL )
 {
     String sURL( rURL );
-    xub_StrLen nPos = sURL.SearchBackward( cMarkSeperator );
+    xub_StrLen nPos = sURL.SearchBackward( cMarkSeparator );
     if( STRING_NOTFOUND != nPos )
     {
         String sCmp(comphelper::string::remove(sURL.Copy(nPos+1), ' '));

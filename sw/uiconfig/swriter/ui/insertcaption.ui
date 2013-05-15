@@ -180,7 +180,7 @@
                             <property name="halign">start</property>
                             <property name="label" translatable="yes">Numbering separator</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">num_seperator_edit</property>
+                            <property name="mnemonic_widget">num_separator_edit</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -190,7 +190,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="num_seperator_edit">
+                          <object class="GtkEntry" id="num_separator_edit">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>

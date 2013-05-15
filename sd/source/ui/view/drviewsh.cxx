@@ -69,7 +69,7 @@ void DrawViewShell::MakeVisible(const Rectangle& rRect, ::Window& rWin)
     // smaller than the visible area, the user-defined zoom was
     // changed. This was decided to be a bug for 6.x, thus I developed a
     // version which instead handles X/Y bigger/smaller and visibility
-    // questions seperately. The new behaviour is triggered with the
+    // questions separately. The new behaviour is triggered with the
     // bZoomAllowed parameter which for old behaviour should be set to
     // sal_True. I looked at all uses of MakeVisible() in the application
     // and found no valid reason for really changing the zoom factor, thus I

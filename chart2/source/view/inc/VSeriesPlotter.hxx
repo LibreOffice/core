@@ -92,10 +92,10 @@ public:
     void getMinimumAndMaximiumYInContinuousXRange( double& rfMinY, double& rfMaxY, double fMinX, double fMaxX, sal_Int32 nAxisIndex ) const;
 
     void calculateYMinAndMaxForCategory( sal_Int32 nCategoryIndex
-                                            , bool bSeperateStackingForDifferentSigns
+                                            , bool bSeparateStackingForDifferentSigns
                                             , double& rfMinimumY, double& rfMaximumY, sal_Int32 nAxisIndex );
     void calculateYMinAndMaxForCategoryRange( sal_Int32 nStartCategoryIndex, sal_Int32 nEndCategoryIndex
-                                                , bool bSeperateStackingForDifferentSigns
+                                                , bool bSeparateStackingForDifferentSigns
                                                 , double& rfMinimumY, double& rfMaximumY, sal_Int32 nAxisIndex );
 
     ::std::vector< VDataSeries* >   m_aSeriesVector;
@@ -174,7 +174,7 @@ public:
     virtual bool isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex );
     virtual bool isExpandWideValuesToZero( sal_Int32 nDimensionIndex );
     virtual bool isExpandNarrowValuesTowardZero( sal_Int32 nDimensionIndex );
-    virtual bool isSeperateStackingForDifferentSigns( sal_Int32 nDimensionIndex );
+    virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex );
 
     virtual long calculateTimeResolutionOnXAxis();
     virtual void setTimeResolutionOnXAxis( long nTimeResolution, const Date& rNullDate );

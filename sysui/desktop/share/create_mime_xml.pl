@@ -22,7 +22,7 @@ $basedir = dirname($0);
 $productname = 'LibreOffice';
 $mimedir = $basedir.'/../mimetypes';
 
-$FS= ' ';       # field seperator (space) - for documents.ulf
+$FS= ' ';       # field separator (space) - for documents.ulf
 $, = "\n";      # set output field separator (newline)
 $\ = "\n";      # set output record separator (newline)
 

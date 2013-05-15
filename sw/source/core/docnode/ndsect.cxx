@@ -679,8 +679,8 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
     ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
     // The LinkFileName could only consist of separators
-    String sCompareString = OUString(sfx2::cTokenSeperator);
-    sCompareString += sfx2::cTokenSeperator;
+    String sCompareString = OUString(sfx2::cTokenSeparator);
+    sCompareString += sfx2::cTokenSeparator;
     const bool bUpdate =
            (!pSection->IsLinkType() && rNewData.IsLinkType())
             ||  (rNewData.GetLinkFileName().Len()

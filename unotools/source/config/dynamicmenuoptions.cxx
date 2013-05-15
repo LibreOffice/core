@@ -96,7 +96,7 @@ class SvtDynMenu
     public:
         // append setup written menu entry
         // Don't touch name of entry. It was defined by setup and must be the same everytime!
-        // Look for double menu entries here too ... may be some seperator items are supeflous ...
+        // Look for double menu entries here too ... may be some separator items are supeflous ...
         void AppendSetupEntry( const SvtDynMenuEntry& rEntry )
         {
             if(
@@ -111,7 +111,7 @@ class SvtDynMenu
         // append user specific menu entry
         // We must find unique name for it by using special prefix
         // and next count of user setted entries!
-        // Look for double menu entries here too ... may be some seperator items are supeflous ...
+        // Look for double menu entries here too ... may be some separator items are supeflous ...
         void AppendUserEntry( SvtDynMenuEntry& rEntry )
         {
             if(
@@ -138,7 +138,7 @@ class SvtDynMenu
         //           The while-loop starts with pointer on internal member list lSetupEntries, change to
         //           lUserEntries then and stop after that with NULL!
         //           Separator entries will be packed in another way then normal entries! We define
-        //           special strings "sEmpty" and "sSeperator" to perform too ...
+        //           special strings "sEmpty" and "sSeparator" to perform too ...
         Sequence< Sequence< PropertyValue > > GetList() const
         {
             sal_Int32                             nSetupCount = (sal_Int32)lSetupEntries.size();
@@ -146,7 +146,7 @@ class SvtDynMenu
             sal_Int32                             nStep       = 0;
             Sequence< PropertyValue >             lProperties ( PROPERTYCOUNT );
             Sequence< Sequence< PropertyValue > > lResult     ( nSetupCount+nUserCount );
-            OUString                              sSeperator  ( "private:separator" );
+            OUString                              sSeparator  ( "private:separator" );
             OUString                              sEmpty      ;
             const vector< SvtDynMenuEntry >*            pList       = &lSetupEntries;
 
@@ -161,9 +161,9 @@ class SvtDynMenu
                                                          pItem!=pList->end()  ;
                                                          ++pItem              )
                 {
-                    if( pItem->sURL == sSeperator )
+                    if( pItem->sURL == sSeparator )
                     {
-                        lProperties[OFFSET_URL              ].Value <<= sSeperator  ;
+                        lProperties[OFFSET_URL              ].Value <<= sSeparator  ;
                         lProperties[OFFSET_TITLE            ].Value <<= sEmpty      ;
                         lProperties[OFFSET_IMAGEIDENTIFIER  ].Value <<= sEmpty      ;
                         lProperties[OFFSET_TARGETNAME       ].Value <<= sEmpty      ;

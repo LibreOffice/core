@@ -256,7 +256,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
 
     ListBox*        m_pFmtLB;
 
-    FixedText*      m_pSeperatorFT;
+    FixedText*      m_pSeparatorFT;
     FixedText*      m_pPrefixFT;
     Edit*           m_pPrefixED;
     FixedText*      m_pSuffixFT;

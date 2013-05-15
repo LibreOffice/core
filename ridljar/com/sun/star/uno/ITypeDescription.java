@@ -149,7 +149,7 @@ public interface ITypeDescription {
      * names <var>M<sub>1</sub></var>, ..., <var>M<sub>n</sub></var> followed by
      * a simple name <var>S</var>, the corresponding type name consists of the
      * same sequence of module names and simple name, with <code>"."</code>
-     * seperating the individual elements.</p>
+     * separating the individual elements.</p>
      *
      * @return the type name.
      */

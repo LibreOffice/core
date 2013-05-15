@@ -137,7 +137,7 @@ private:
 
     XFHeaderStyle   *m_pHeaderStyle;
     XFFooterStyle   *m_pFooterStyle;
-    //seperator:
+    //separator:
     enumXFAlignType m_eSepAlign;
     double  m_fSepWidth;
     XFColor m_aSepColor;

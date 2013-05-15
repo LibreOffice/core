@@ -332,7 +332,7 @@ void SwDoc::UpdateFlds( SfxPoolItem *pNewHt, bool bCloseDB )
         case RES_SETEXPFLD:
         case RES_HIDDENTXTFLD:
         case RES_HIDDENPARAFLD:
-            // Expression fields are treated seperately
+            // Expression fields are treated separately
             if( !pNewHt )
                 break;
         default:
@@ -1226,7 +1226,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
 
     {
         const SwFieldType* pFldType;
-        // process seperately:
+        // process separately:
         for( n = mpFldTypes->size(); n; )
             switch( ( pFldType = (*mpFldTypes)[ --n ] )->Which() )
             {

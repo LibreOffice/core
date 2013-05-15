@@ -1001,7 +1001,7 @@ class FilterCache : public BaseLock
 
         /** TODO */
         OUStringList impl_tokenizeString(const OUString& sData     ,
-                                               sal_Unicode      cSeperator);
+                                               sal_Unicode      cSeparator);
 
         //---------------------------------------
 

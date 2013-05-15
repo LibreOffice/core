@@ -39,7 +39,7 @@ namespace accessibility {
     <ul>
     <li>The model broadcaster is used for getting notified about shape
     changes.  Using this broadcaster makes in unnecessary to register at
-    each shape seperately.</li>
+    each shape separately.</li>
     <li>The view forwarder is responsible for transformation between
     coordinate systems and for providing the visible area both with respect
     to a specific window.</li>

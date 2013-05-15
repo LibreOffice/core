@@ -338,7 +338,7 @@ bool SwDDEFieldType::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
         OSL_FAIL("illegal property");
     }
     if( nPart )
-        rVal <<= OUString(GetCmd().GetToken(nPart-1, sfx2::cTokenSeperator));
+        rVal <<= OUString(GetCmd().GetToken(nPart-1, sfx2::cTokenSeparator));
     return true;
 }
 
@@ -368,9 +368,9 @@ bool SwDDEFieldType::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
     if( nPart )
     {
         String sTmp, sCmd( GetCmd() );
-        while(3 > comphelper::string::getTokenCount(sCmd, sfx2::cTokenSeperator))
-            sCmd += sfx2::cTokenSeperator;
-        sCmd.SetToken( nPart-1, sfx2::cTokenSeperator, ::GetString( rVal, sTmp ) );
+        while(3 > comphelper::string::getTokenCount(sCmd, sfx2::cTokenSeparator))
+            sCmd += sfx2::cTokenSeparator;
+        sCmd.SetToken( nPart-1, sfx2::cTokenSeparator, ::GetString( rVal, sTmp ) );
         SetCmd( sCmd );
     }
     return true;

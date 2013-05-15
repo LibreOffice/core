@@ -28,7 +28,7 @@
 
 /*-************************************************************************************************************//**
     @descr          The method GetList() returns a list of property values.
-                    Use follow defines to seperate values by names.
+                    Use follow defines to separate values by names.
 *//*-*************************************************************************************************************/
 #define DYNAMICMENU_PROPERTYNAME_URL                    OUString("URL")
 #define DYNAMICMENU_PROPERTYNAME_TITLE                  OUString("Title")

@@ -555,7 +555,7 @@ SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
 
         if( USHRT_MAX != pSave->m_nCntnt )
         {
-            // split at ContentPosition, delete previous char (= seperator)
+            // split at ContentPosition, delete previous char (= separator)
             OSL_ENSURE( pTxtNd, "Where is my TextNode?" );
             SwIndex aCntPos( pTxtNd, pSave->m_nCntnt - 1 );
 

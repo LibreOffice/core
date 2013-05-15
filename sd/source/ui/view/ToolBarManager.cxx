@@ -112,7 +112,7 @@ private:
     list the current list and clears the current list.
 
     Each shell belongs to one group.  Different groups can be modified
-    seperately.
+    separately.
 */
 class ToolBarShellList
 {

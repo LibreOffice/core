@@ -3136,7 +3136,7 @@ void Frame::impl_checkMenuCloser()
     // -----------------------------
     // b)
     // There is no other frame ... means no other document frame. The help module
-    // will be handled seperatly and must(!) be ignored here ... excepting weself includes the help.
+    // will be handled separately and must(!) be ignored here ... excepting weself includes the help.
     else if (
         (aAnalyzer.m_lOtherVisibleFrames.getLength()==0) &&
         (!aAnalyzer.m_bReferenceIsHelp                 ) &&

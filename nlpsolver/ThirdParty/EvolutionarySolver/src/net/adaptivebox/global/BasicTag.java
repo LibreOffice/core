@@ -26,8 +26,8 @@ public class BasicTag {
   public static final String COLON_TAG = ":";
   public static final String COMMA_TAG = ",";
   public static final String DOT_TAG = ".";
-  public static final String NULL_SEPERATE_TAG = " \t";
-  public static final String SEPERATE_TAG = "|";
+  public static final String NULL_SEPARATE_TAG = " \t";
+  public static final String SEPARATE_TAG = "|";
   public static final String UNDERLINE_TAG = "_";
   public static final String INC_TAG = "+";
   public static final String DEC_TAG = "-";

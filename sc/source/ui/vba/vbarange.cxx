@@ -612,7 +612,7 @@ typedef ::std::vector< CellPos > vCellPos;
 
 // #FIXME - QUICK
 // we could probably could and should modify CellsEnumeration below
-// to handle rows and columns ( but I do this seperately for now
+// to handle rows and columns ( but I do this separately for now
 // and.. this class only handles singe areas ( does it have to handle
 // multi area ranges?? )
 class ColumnsRowEnumeration: public CellsEnumeration_BASE

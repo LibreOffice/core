@@ -1438,7 +1438,7 @@ public class NumericalHelper
                 /* converison idea: every digit is written with a maximum of two
                  * different roman symbols, using three in total, e.g. CC, CD, 
                  * DCC, CM for the hundreds (meaning 200, 400, 700 and 900).
-                 * So every digit is converted seperately with regard to the
+                 * So every digit is converted separately with regard to the
                  * special cases 4 and 9.
                  */
                 int symbolIndex = 0;

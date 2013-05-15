@@ -61,7 +61,7 @@ public class OfficeScriptInfo
             if ( info.closeCallback != null )
             {
                 System.out.println("** In removeSFScriptInfo  have callback for " + key );
-                info.closeCallback.run(); // really need to do this in seperate thread????
+                info.closeCallback.run(); // really need to do this in separate thread????
             }
         }
     }

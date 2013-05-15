@@ -49,7 +49,7 @@ public:
     // MinimumAndMaximumSupplier
     //-------------------------------------------------------------------------
     virtual bool isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex );
-    virtual bool isSeperateStackingForDifferentSigns( sal_Int32 nDimensionIndex );
+    virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex );
 
     //-------------------------------------------------------------------------
 

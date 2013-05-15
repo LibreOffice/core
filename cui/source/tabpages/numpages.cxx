@@ -1071,7 +1071,7 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(Window* pParent,
     get(m_pLevelLB, "levellb");
     get(m_pFmtLB, "numfmtlb");
 
-    get(m_pSeperatorFT, "separator");
+    get(m_pSeparatorFT, "separator");
     get(m_pPrefixFT, "prefixft");
     get(m_pPrefixED, "prefix");
     get(m_pSuffixFT, "suffixft");
@@ -1590,7 +1590,7 @@ void SvxNumOptionsTabPage::SwitchNumberType( sal_uInt8 nType, sal_Bool )
     sal_Bool bBitmap = (nType == SHOW_BITMAP);
     sal_Bool bEnableBitmap = (nType == SHOW_BITMAP);
     sal_Bool bNumeric = !(bBitmap||bBullet);
-    m_pSeperatorFT->Show(bNumeric);
+    m_pSeparatorFT->Show(bNumeric);
     m_pPrefixFT->Show(bNumeric);
     m_pPrefixED->Show(bNumeric);
     m_pSuffixFT->Show(bNumeric);

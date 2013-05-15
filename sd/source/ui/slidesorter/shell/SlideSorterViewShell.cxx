@@ -631,7 +631,7 @@ void SlideSorterViewShell::WriteFrameViewData (void)
                 mpFrameView->SetSelectedPage((pActualPage->GetPageNum()- 1) / 2);
             // else
             // The slide sorter is not expected to switch the current page
-            // other then by double clicks.  That is handled seperatly.
+            // other then by double clicks.  That is handled separately.
         }
         else
         {

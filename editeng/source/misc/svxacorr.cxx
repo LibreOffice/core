@@ -359,7 +359,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const String& rTxt,
         if( rCC.isLetterNumeric( rTxt, nEndPos - 1 ))
             break;
 
-    // Is the word a compounded word seperated by delimiters?
+    // Is the word a compounded word separated by delimiters?
     // If so, keep track of all delimiters so each constituent
     // word can be checked for two initial capital letters.
     xub_StrLen n = 0;

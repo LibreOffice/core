@@ -532,7 +532,7 @@ private:
         throw(LoadEnvException, css::uno::RuntimeException);
 
     /** @short  because showing of a frame is needed more then once ...
-                it's implemented as an seperate method .-)
+                it's implemented as an separate method .-)
 
         @descr  Note: Showing of a frame is bound to a special feature ...
                 a) If we recycle any existing frame, we must bring it to front.

@@ -39,9 +39,9 @@
 //------------------------------------------------------------------------
 
 #ifdef UNX
-#define PATH_SEPERATOR '/'
+#define PATH_SEPARATOR '/'
 #else
-#define PATH_SEPERATOR '\\'
+#define PATH_SEPARATOR '\\'
 #endif
 
 #define ENSURE( a, b ) if( !a ) { fprintf( stderr, b "\n" ); exit( -1 ); }
@@ -304,7 +304,7 @@ int SAL_CALL main( int argc, const char* argv[] )
     // check command line parameters
     //------------------------------------------------------------------
 
-    if ( NULL == ( app = strrchr( argv[0], PATH_SEPERATOR ) ) )
+    if ( NULL == ( app = strrchr( argv[0], PATH_SEPARATOR ) ) )
         app = argv[0];
     else
         app++;

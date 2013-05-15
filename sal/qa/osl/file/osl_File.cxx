@@ -280,7 +280,7 @@ inline sal_Bool t_compareTime( TimeValue *m_aEndTime,  TimeValue *m_aStartTime, 
 inline sal_Bool compareFileName( const ::rtl::OUString & ustr1, const ::rtl::OUString & ustr2 )
 {
     sal_Bool bOk;
-//on Windows, the seperatar is '\', so here change to '/', then compare
+//on Windows, the separator is '\', so here change to '/', then compare
 #if defined (WNT )
     ::rtl::OUString ustr1new,ustr2new;
     sal_Unicode reverseSlash = (sal_Unicode)'\\';
@@ -327,7 +327,7 @@ inline sal_Bool isURL( const ::rtl::OUString pathname )
     return ( ( pathname.indexOf( aPreURL ) == 0 ) ? sal_True : sal_False );
 }
 
-/** concat two part to form a URL or system path, add PATH_SEPERATOR between them if necessary, add "file:///" to beginning if necessary.
+/** concat two part to form a URL or system path, add PATH_SEPARATOR between them if necessary, add "file:///" to beginning if necessary.
 */
 inline void concatURL( ::rtl::OUString & pathname1, const ::rtl::OUString & pathname2 )
 {

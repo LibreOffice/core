@@ -586,8 +586,8 @@ bool SwGrfNode::GetFileFilterNms( String* pFileNm, String* pFilterNm ) const
             if( refLink->GetLinkManager()->GetDisplayNames(
                     refLink, &sApp, &sTopic, &sItem ) )
             {
-                ( *pFileNm = sApp ) += sfx2::cTokenSeperator;
-                ( *pFileNm += sTopic ) += sfx2::cTokenSeperator;
+                ( *pFileNm = sApp ) += sfx2::cTokenSeparator;
+                ( *pFileNm += sTopic ) += sfx2::cTokenSeparator;
                 *pFileNm += sItem;
                 pFilterNm->AssignAscii( RTL_CONSTASCII_STRINGPARAM( "DDE" ));
                 bRet = true;
@@ -654,8 +654,8 @@ void SwGrfNode::InsertLink( const String& rGrfName, const String& rFltName )
         {
             sal_Int32 nTmp = 0;
             String sApp, sTopic, sItem;
-            sApp = rGrfName.GetToken( 0, sfx2::cTokenSeperator, nTmp );
-            sTopic = rGrfName.GetToken( 0, sfx2::cTokenSeperator, nTmp );
+            sApp = rGrfName.GetToken( 0, sfx2::cTokenSeparator, nTmp );
+            sTopic = rGrfName.GetToken( 0, sfx2::cTokenSeparator, nTmp );
             sItem = rGrfName.Copy( nTmp );
             pIDLA->GetLinkManager().InsertDDELink( refLink,
                                             sApp, sTopic, sItem );

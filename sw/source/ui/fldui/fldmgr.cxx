@@ -869,7 +869,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
         return sal_False;
 
     switch(rData.nTypeId)
-    {   // ATTENTION this field is inserted by a seperate dialog
+    {   // ATTENTION this field is inserted by a separate dialog
         case TYP_POSTITFLD:
         {
             SwPostItFieldType* pType = (SwPostItFieldType*)pCurShell->GetFldType(0, RES_POSTITFLD);
@@ -1027,8 +1027,8 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
             //JP 28.08.95: DDE-Topics/-Items can have blanks in their names!
             //              That's not yet considered here.
             String sCmd( rData.sPar2 );
-            sal_uInt16 nTmpPos = sCmd.SearchAndReplace( ' ', sfx2::cTokenSeperator );
-            sCmd.SearchAndReplace( ' ', sfx2::cTokenSeperator, nTmpPos );
+            sal_uInt16 nTmpPos = sCmd.SearchAndReplace( ' ', sfx2::cTokenSeparator );
+            sCmd.SearchAndReplace( ' ', sfx2::cTokenSeparator, nTmpPos );
 
             SwDDEFieldType aType( rData.sPar1, sCmd, (sal_uInt16) nFormatId );
             SwDDEFieldType* pTyp = (SwDDEFieldType*) pCurShell->InsertFldType( aType );
@@ -1457,8 +1457,8 @@ void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
         {
             // DDE-Topics/-Items can have blanks in their names!
             //  That's not yet considered here!
-            sal_uInt16 nTmpPos = sPar2.SearchAndReplace( ' ', sfx2::cTokenSeperator );
-            sPar2.SearchAndReplace( ' ', sfx2::cTokenSeperator, nTmpPos );
+            sal_uInt16 nTmpPos = sPar2.SearchAndReplace( ' ', sfx2::cTokenSeparator );
+            sPar2.SearchAndReplace( ' ', sfx2::cTokenSeparator, nTmpPos );
             break;
         }
 

@@ -1267,7 +1267,7 @@ double VSeriesPlotter::getMinimumYInRange( double fMinimumX, double fMaximumX, s
             rXSlots[nN].calculateYMinAndMaxForCategoryRange(
                                 static_cast<sal_Int32>(fMinimumX-1.0) //first category (index 0) matches with real number 1.0
                                 , static_cast<sal_Int32>(fMaximumX-1.0) //first category (index 0) matches with real number 1.0
-                                , isSeperateStackingForDifferentSigns( 1 )
+                                , isSeparateStackingForDifferentSigns( 1 )
                                 , fLocalMinimum, fLocalMaximum, nAxisIndex );
             if(fMaximum<fLocalMaximum)
                 fMaximum=fLocalMaximum;
@@ -1301,7 +1301,7 @@ double VSeriesPlotter::getMaximumYInRange( double fMinimumX, double fMaximumX, s
             rXSlots[nN].calculateYMinAndMaxForCategoryRange(
                                 static_cast<sal_Int32>(fMinimumX-1.0) //first category (index 0) matches with real number 1.0
                                 , static_cast<sal_Int32>(fMaximumX-1.0) //first category (index 0) matches with real number 1.0
-                                , isSeperateStackingForDifferentSigns( 1 )
+                                , isSeparateStackingForDifferentSigns( 1 )
                                 , fLocalMinimum, fLocalMaximum, nAxisIndex );
             if(fMaximum<fLocalMaximum)
                 fMaximum=fLocalMaximum;
@@ -1362,7 +1362,7 @@ bool VSeriesPlotter::isExpandNarrowValuesTowardZero( sal_Int32 nDimensionIndex )
     return nDimensionIndex == 1;
 }
 
-bool VSeriesPlotter::isSeperateStackingForDifferentSigns( sal_Int32 nDimensionIndex )
+bool VSeriesPlotter::isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex )
 {
     // default implementation: only for Y axis
     return nDimensionIndex == 1;
@@ -1704,7 +1704,7 @@ void VDataSeriesGroup::getMinimumAndMaximiumYInContinuousXRange(
 }
 
 void VDataSeriesGroup::calculateYMinAndMaxForCategory( sal_Int32 nCategoryIndex
-        , bool bSeperateStackingForDifferentSigns
+        , bool bSeparateStackingForDifferentSigns
         , double& rfMinimumY, double& rfMaximumY, sal_Int32 nAxisIndex )
 {
     ::rtl::math::setInf(&rfMinimumY, false);
@@ -1733,7 +1733,7 @@ void VDataSeriesGroup::calculateYMinAndMaxForCategory( sal_Int32 nCategoryIndex
     ::std::vector< VDataSeries* >::const_iterator aSeriesIter = m_aSeriesVector.begin();
     ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = m_aSeriesVector.end();
 
-    if( bSeperateStackingForDifferentSigns )
+    if( bSeparateStackingForDifferentSigns )
     {
         for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
         {
@@ -1795,7 +1795,7 @@ void VDataSeriesGroup::calculateYMinAndMaxForCategory( sal_Int32 nCategoryIndex
 
 void VDataSeriesGroup::calculateYMinAndMaxForCategoryRange(
         sal_Int32 nStartCategoryIndex, sal_Int32 nEndCategoryIndex
-        , bool bSeperateStackingForDifferentSigns
+        , bool bSeparateStackingForDifferentSigns
         , double& rfMinimumY, double& rfMaximumY, sal_Int32 nAxisIndex )
 {
     //@todo maybe cache these values
@@ -1813,7 +1813,7 @@ void VDataSeriesGroup::calculateYMinAndMaxForCategoryRange(
         double fMaximumY; ::rtl::math::setNan(&fMaximumY);
 
         this->calculateYMinAndMaxForCategory( nCatIndex
-            , bSeperateStackingForDifferentSigns, fMinimumY, fMaximumY, nAxisIndex );
+            , bSeparateStackingForDifferentSigns, fMinimumY, fMaximumY, nAxisIndex );
 
         if(rfMinimumY > fMinimumY)
             rfMinimumY = fMinimumY;

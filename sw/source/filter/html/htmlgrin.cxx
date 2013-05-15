@@ -1118,7 +1118,7 @@ ANCHOR_SETEVENT:
         String sDecoded( INetURLObject::decode( aName, INET_HEX_ESCAPE,
                                            INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 ));
-        xub_StrLen nPos = sDecoded.SearchBackward( cMarkSeperator );
+        xub_StrLen nPos = sDecoded.SearchBackward( cMarkSeparator );
         if( STRING_NOTFOUND != nPos )
         {
             String sCmp(comphelper::string::remove(sDecoded.Copy(nPos+1), ' '));

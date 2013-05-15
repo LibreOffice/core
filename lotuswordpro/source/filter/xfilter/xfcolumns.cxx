@@ -128,10 +128,10 @@ void    XFColumnSep::ToXml(IXFStream *pStrm)
     pStrm->EndElement( A2OUSTR("style:column-sep") );
 }
 
-void    XFColumns::SetSeperator(XFColumnSep& aSeperator)
+void    XFColumns::SetSeparator(XFColumnSep& aSeparator)
 {
-    m_aSeperator = aSeperator;
-    m_nFlag |= XFCOLUMNS_FLAG_SEPERATOR;
+    m_aSeparator = aSeparator;
+    m_nFlag |= XFCOLUMNS_FLAG_SEPARATOR;
 }
 
 void    XFColumns::AddColumn(XFColumn& column)
@@ -163,9 +163,9 @@ void    XFColumns::ToXml(IXFStream *pStrm)
 
     pStrm->StartElement( A2OUSTR("style:columns") );
 
-    if( m_nFlag&XFCOLUMNS_FLAG_SEPERATOR )  //column-sep:
+    if( m_nFlag&XFCOLUMNS_FLAG_SEPARATOR )  //column-sep:
     {
-        m_aSeperator.ToXml(pStrm);
+        m_aSeparator.ToXml(pStrm);
     }
 
     if(!(m_nFlag&XFCOLUMNS_FLAG_GAP) )

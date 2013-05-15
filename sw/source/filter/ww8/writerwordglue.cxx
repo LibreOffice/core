@@ -107,7 +107,7 @@ namespace myImplHelpers
     /*
      SwTxtFmtColl and SwCharFmt are quite distinct types and how they are
      gotten is also distinct, but the algorithm to match word's eqivalents into
-     them is the same, so we put the different stuff into two seperate helper
+     them is the same, so we put the different stuff into two separate helper
      implementations and a core template that uses the helpers that uses the
      same algorithm to do the work. We'll make the helpers specializations of a
      non existing template so I can let the compiler figure out the right one

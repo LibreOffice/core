@@ -297,7 +297,7 @@ bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
                                          INetURLObject::DECODE_WITH_CHARSET,
                                         RTL_TEXTENCODING_UTF8 ));
 
-    xub_StrLen nPos = sItem.Search( cMarkSeperator );
+    xub_StrLen nPos = sItem.Search( cMarkSeparator );
 
     const CharClass& rCC = GetAppCharClass();
 

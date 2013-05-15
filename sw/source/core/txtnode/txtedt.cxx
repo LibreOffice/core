@@ -665,7 +665,7 @@ SwScanner::SwScanner( const SwTxtNode& rNd, const OUString& rTxt,
     //additional ones can be added in under tools->options
     if (nWordType == i18n::WordType::WORD_COUNT)
     {
-        OUString sDashes = officecfg::Office::Writer::WordCount::AdditionalSeperators::get();
+        OUString sDashes = officecfg::Office::Writer::WordCount::AdditionalSeparators::get();
         OUStringBuffer aBuf(aPreDashReplacementText);
         for (sal_Int32 i = nStartPos; i < nEndPos; ++i)
         {

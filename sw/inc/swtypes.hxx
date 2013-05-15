@@ -169,7 +169,7 @@ SW_DLLPUBLIC Size GetGraphicSizeTwip( const Graphic&, OutputDevice* pOutDev );
 
 
 // Separator for jumps to different content types in document.
-const sal_Unicode cMarkSeperator = '|';
+const sal_Unicode cMarkSeparator = '|';
 extern const sal_Char* pMarkToTable;        // Strings are
 extern const sal_Char* pMarkToFrame;        // in Init.cxx.
 extern const sal_Char* pMarkToRegion;

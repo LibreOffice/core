@@ -57,7 +57,7 @@ namespace framework{
     #error "name of login profile unknown!"
 #endif
 
-#define UNCPATHSEPERATOR                        sal_Unicode(0x002F)
+#define UNCPATHSEPARATOR                        sal_Unicode(0x002F)
 
 //  Use follow keys in follow order.
 //  [Global]

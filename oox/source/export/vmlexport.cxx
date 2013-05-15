@@ -854,7 +854,7 @@ sal_Int32 VMLExport::StartShape()
         /*
         #i13885#
         When the object is actively being edited, that text is not set into
-        the objects normal text object, but lives in a seperate object.
+        the objects normal text object, but lives in a separate object.
         */
         if (pTxtObj->IsTextEditActive())
         {

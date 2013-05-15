@@ -432,8 +432,8 @@ void SvFileObject::Edit( Window* pParent, sfx2::SvBaseLink* pLink, const Link& r
                 if( !aDlg.Execute() )
                 {
                     sFile = aDlg.GetPath();
-                    sFile += ::sfx2::cTokenSeperator;
-                    sFile += ::sfx2::cTokenSeperator;
+                    sFile += ::sfx2::cTokenSeparator;
+                    sFile += ::sfx2::cTokenSeparator;
                     sFile += aDlg.GetCurrentFilter();
 
                     if ( aEndEditLink.IsSet() )
@@ -535,8 +535,8 @@ IMPL_LINK( SvFileObject, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
         {
             String sURL( _pFileDlg->GetPath() );
             sFile = sURL;
-            sFile += ::sfx2::cTokenSeperator;
-            sFile += ::sfx2::cTokenSeperator;
+            sFile += ::sfx2::cTokenSeparator;
+            sFile += ::sfx2::cTokenSeparator;
             sFile += impl_getFilter( sURL );
         }
     }

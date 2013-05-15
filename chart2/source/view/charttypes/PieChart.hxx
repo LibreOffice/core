@@ -62,7 +62,7 @@ public:
     virtual bool isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex );
     virtual bool isExpandWideValuesToZero( sal_Int32 nDimensionIndex );
     virtual bool isExpandNarrowValuesTowardZero( sal_Int32 nDimensionIndex );
-    virtual bool isSeperateStackingForDifferentSigns( sal_Int32 nDimensionIndex );
+    virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex );
 
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------

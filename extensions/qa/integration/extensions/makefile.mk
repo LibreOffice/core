@@ -53,7 +53,7 @@ JARCOMPRESS 	= TRUE
 .ENDIF
 
 # classpath and argument list
-RUNNER_CLASSPATH = -cp $(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar$(PATH_SEPERATOR)$(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/ConnectivityTools.jar
+RUNNER_CLASSPATH = -cp $(CLASSPATH)$(PATH_SEPARATOR)$(SOLARBINDIR)$/OOoRunner.jar$(PATH_SEPARATOR)$(CLASSPATH)$(PATH_SEPARATOR)$(SOLARBINDIR)$/ConnectivityTools.jar
 RUNNER_ARGS = org.openoffice.Runner -TestBase java_complex -cs $(RUNNER_CONNECTION_STRING)
 
 # --- Targets ------------------------------------------------------

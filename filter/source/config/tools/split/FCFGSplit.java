@@ -73,7 +73,7 @@ public class FCFGSplit
     private static final java.lang.String CFGKEY_SUBDIR_FRAMELOADERS                  = "subdir_frameloaders"                 ;
     private static final java.lang.String CFGKEY_SUBDIR_CONTENTHANDLERS               = "subdir_contenthandlers"              ;
 
-    private static final java.lang.String CFGKEY_SEPERATE_FILTERS_BY_MODULE           = "seperate_filters_by_module"          ;
+    private static final java.lang.String CFGKEY_SEPARATE_FILTERS_BY_MODULE           = "separate_filters_by_module"          ;
 
     private static final java.lang.String CFGKEY_SUBDIR_MODULE_SWRITER                = "subdir_module_swriter"               ;
     private static final java.lang.String CFGKEY_SUBDIR_MODULE_SWEB                   = "subdir_module_sweb"                  ;
@@ -115,7 +115,7 @@ public class FCFGSplit
     private static final java.lang.String DEFAULT_SUBDIR_FRAMELOADERS                 = "FrameLoaders"                        ;
     private static final java.lang.String DEFAULT_SUBDIR_CONTENTHANDLERS              = "ContentHandlers"                     ;
 
-    private static final java.lang.String DEFAULT_SEPERATE_FILTERS_BY_MODULE          = "false"                               ;
+    private static final java.lang.String DEFAULT_SEPARATE_FILTERS_BY_MODULE          = "false"                               ;
 
     private static final java.lang.String DEFAULT_SUBDIR_MODULE_SWRITER               = "SWriter"                             ;
     private static final java.lang.String DEFAULT_SUBDIR_MODULE_SWEB                  = "SWeb"                                ;
@@ -179,51 +179,51 @@ public class FCFGSplit
 
     /** enable/disable generating of filter groups - separated by
      *  application modules. */
-    private static boolean m_bSeperateFiltersByModule;
+    private static boolean m_bSeparateFiltersByModule;
 
     /** specify the sub directory to generate filter groups
      *  for the module writer. Will be used only,
-     *  if m_bSeperateFiltersByModule is set to TRUE.*/
+     *  if m_bSeparateFiltersByModule is set to TRUE.*/
     private static java.lang.String m_sSubDirModuleSWriter;
 
     /** specify the sub directory to generate filter groups
      *  for the module writer/web. Will be used only,
-     *  if m_bSeperateFiltersByModule is set to TRUE.*/
+     *  if m_bSeparateFiltersByModule is set to TRUE.*/
     private static java.lang.String m_sSubDirModuleSWeb;
 
     /** specify the sub directory to generate filter groups
      *  for the module writer/global. Will be used only,
-     *  if m_bSeperateFiltersByModule is set to TRUE.*/
+     *  if m_bSeparateFiltersByModule is set to TRUE.*/
     private static java.lang.String m_sSubDirModuleSGlobal;
 
     /** specify the sub directory to generate filter groups
      *  for the module calc. Will be used only,
-     *  if m_bSeperateFiltersByModule is set to TRUE.*/
+     *  if m_bSeparateFiltersByModule is set to TRUE.*/
     private static java.lang.String m_sSubDirModuleSCalc;
 
     /** specify the sub directory to generate filter groups
      *  for the module draw. Will be used only,
-     *  if m_bSeperateFiltersByModule is set to TRUE.*/
+     *  if m_bSeparateFiltersByModule is set to TRUE.*/
     private static java.lang.String m_sSubDirModuleSDraw;
 
     /** specify the sub directory to generate filter groups
      *  for the module impress. Will be used only,
-     *  if m_bSeperateFiltersByModule is set to TRUE.*/
+     *  if m_bSeparateFiltersByModule is set to TRUE.*/
     private static java.lang.String m_sSubDirModuleSImpress;
 
     /** specify the sub directory to generate filter groups
      *  for the module math. Will be used only,
-     *  if m_bSeperateFiltersByModule is set to TRUE.*/
+     *  if m_bSeparateFiltersByModule is set to TRUE.*/
     private static java.lang.String m_sSubDirModuleSMath;
 
     /** specify the sub directory to generate filter groups
      *  for the module chart. Will be used only,
-     *  if m_bSeperateFiltersByModule is set to TRUE.*/
+     *  if m_bSeparateFiltersByModule is set to TRUE.*/
     private static java.lang.String m_sSubDirModuleSChart;
 
     /** specify the sub directory to generate filter groups
      *  for unknown modules - e.g. the graphic filters.
-     *  Will be used only, if m_bSeperateFiltersByModule
+     *  Will be used only, if m_bSeparateFiltersByModule
      *  is set to TRUE.*/
     private static java.lang.String m_sSubDirModuleOthers;
 
@@ -376,7 +376,7 @@ public class FCFGSplit
             aDataSet.m_aCache                       = aCache                    ;
             aDataSet.m_nFormat                      = m_nOutFormat              ;
             aDataSet.m_sEncoding                    = m_sOutEncoding            ;
-            aDataSet.m_bSeperateFiltersByModule     = m_bSeperateFiltersByModule;
+            aDataSet.m_bSeparateFiltersByModule     = m_bSeparateFiltersByModule;
             aDataSet.m_sFragmentExtension           = m_sFragmentExtension      ;
             aDataSet.m_aOutDir                      = aOutDir                   ;
 
@@ -386,7 +386,7 @@ public class FCFGSplit
             aDataSet.m_aFragmentDirFrameLoaders     = new java.io.File(aOutDir, m_sSubDirFrameLoaders   );
             aDataSet.m_aFragmentDirContentHandlers  = new java.io.File(aOutDir, m_sSubDirContentHandlers);
 
-            if (m_bSeperateFiltersByModule)
+            if (m_bSeparateFiltersByModule)
             {
                 aDataSet.m_aFragmentDirModuleSWriter  = new java.io.File(aDataSet.m_aFragmentDirFilters, m_sSubDirModuleSWriter );
                 aDataSet.m_aFragmentDirModuleSWeb     = new java.io.File(aDataSet.m_aFragmentDirFilters, m_sSubDirModuleSWeb    );
@@ -500,7 +500,7 @@ public class FCFGSplit
         m_sSubDirModuleSChart       = aCfg.getProperty(CFGKEY_SUBDIR_MODULE_SCHART      , DEFAULT_SUBDIR_MODULE_SCHART      );
         m_sSubDirModuleOthers       = aCfg.getProperty(CFGKEY_SUBDIR_MODULE_OTHERS      , DEFAULT_SUBDIR_MODULE_OTHERS      );
 
-        m_bSeperateFiltersByModule          = new java.lang.Boolean(aCfg.getProperty(CFGKEY_SEPERATE_FILTERS_BY_MODULE         , DEFAULT_SEPERATE_FILTERS_BY_MODULE         )).booleanValue();
+        m_bSeparateFiltersByModule          = new java.lang.Boolean(aCfg.getProperty(CFGKEY_SEPARATE_FILTERS_BY_MODULE         , DEFAULT_SEPARATE_FILTERS_BY_MODULE         )).booleanValue();
         m_bCreateCombineFilterFlag          = new java.lang.Boolean(aCfg.getProperty(CFGKEY_CREATE_COMBINE_FILTER_FLAG         , DEFAULT_CREATE_COMBINE_FILTER_FLAG         )).booleanValue();
         m_bRemoveFilterFlagBrowserPreferred = new java.lang.Boolean(aCfg.getProperty(CFGKEY_REMOVE_FILTER_FLAG_BROWSERPREFERRED, DEFAULT_REMOVE_FILTER_FLAG_BROWSERPREFERRED)).booleanValue();
         m_bRemoveFilterFlagPreferred        = new java.lang.Boolean(aCfg.getProperty(CFGKEY_REMOVE_FILTER_FLAG_PREFERRED       , DEFAULT_REMOVE_FILTER_FLAG_PREFERRED       )).booleanValue();

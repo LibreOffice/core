@@ -175,11 +175,11 @@ bool MergedMinimumAndMaximumSupplier::isExpandNarrowValuesTowardZero( sal_Int32 
     return false;
 }
 
-bool MergedMinimumAndMaximumSupplier::isSeperateStackingForDifferentSigns( sal_Int32 nDimensionIndex )
+bool MergedMinimumAndMaximumSupplier::isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex )
 {
     // should not be called
     for( MinimumAndMaximumSupplierSet::iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
-        if( (*aIt)->isSeperateStackingForDifferentSigns( nDimensionIndex ) )
+        if( (*aIt)->isSeparateStackingForDifferentSigns( nDimensionIndex ) )
             return true;
     return false;
 }

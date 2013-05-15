@@ -75,7 +75,7 @@ public:
         const SvxMSDffShapeOrders *pShapeOrders);
     void InsertTextLayerObject(SdrObject* pObject);
     /*
-     cmc: We should have have seperate ZOrder classes for 95- and 97+ and
+     cmc: We should have have separate ZOrder classes for 95- and 97+ and
      instantiate the appropriate one at run time.
      */
     void InsertDrawingObject(SdrObject* pObj, short nWwHeight);

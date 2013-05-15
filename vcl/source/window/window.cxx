@@ -5009,7 +5009,7 @@ void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
         }
     }
 
-    // #82968# notify event listeners for mouse and key events seperately and
+    // #82968# notify event listeners for mouse and key events separately and
     // not in PreNotify ( as for focus listeners )
     // this allows for procesing those events internally first and pass it to
     // the toolkit later

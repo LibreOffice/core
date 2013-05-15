@@ -1165,7 +1165,7 @@ namespace sfx2
             ::std::list< FilterGroup >::iterator pIter = aAllFilters.begin();
             ++pIter;
             ::std::for_each(
-                pIter, // first filter group was handled seperately, see above
+                pIter, // first filter group was handled separately, see above
                 aAllFilters.end(),
                 AppendFilterGroup( _rxFilterManager, &_rFileDlgImpl ) );
         }

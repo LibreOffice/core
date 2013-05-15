@@ -191,7 +191,7 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
                 aSuppLocales[k++] = aTmp;
             }
 
-            //! For each dictionary and each locale we need a seperate entry.
+            //! For each dictionary and each locale we need a separate entry.
             //! If this results in more than one dictionary per locale than (for now)
             //! it is undefined which dictionary gets used.
             //! In the future the implementation should support using several dictionaries

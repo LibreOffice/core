@@ -1592,7 +1592,7 @@ XFColumns* LwpLayout::GetXFColumns()
     boost::scoped_ptr<XFColumnSep> pColumnSep(GetColumnSep());
     if(pColumnSep)
     {
-        pColumns->SetSeperator(*pColumnSep);
+        pColumns->SetSeparator(*pColumnSep);
     }
 
     //set column count and column gap

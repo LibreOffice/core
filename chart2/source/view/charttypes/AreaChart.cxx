@@ -129,7 +129,7 @@ bool AreaChart::isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex )
         VSeriesPlotter::isExpandIfValuesCloseToBorder( nDimensionIndex );
 }
 
-bool AreaChart::isSeperateStackingForDifferentSigns( sal_Int32 /*nDimensionIndex*/ )
+bool AreaChart::isSeparateStackingForDifferentSigns( sal_Int32 /*nDimensionIndex*/ )
 {
     // no separate stacking in all types of line/area charts
     return false;

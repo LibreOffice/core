@@ -1204,9 +1204,9 @@ static SwDDEFieldType* lcl_GetDDEFieldType(SwXMLDDETableContext_Impl* pContext,
 {
     // make command string
     String sCommand(pContext->GetDDEApplication());
-    sCommand += sfx2::cTokenSeperator;
+    sCommand += sfx2::cTokenSeparator;
     sCommand += String(pContext->GetDDEItem());
-    sCommand += sfx2::cTokenSeperator;
+    sCommand += sfx2::cTokenSeparator;
     sCommand += String(pContext->GetDDETopic());
 
     sal_uInt16 nType = static_cast< sal_uInt16 >(pContext->GetIsAutomaticUpdate() ? sfx2::LINKUPDATE_ALWAYS

@@ -91,7 +91,7 @@ private:
     int HandlePile(int &rSetAlign,int nLevel,sal_uInt8 nSelector,
         sal_uInt8 nVariation);
     int HandleMatrix(int nLevel,sal_uInt8 nSelector,sal_uInt8 nVariarion);
-    void HandleMatrixSeperator(int nMatrixRows,int nMatrixCols,int &rCurCol,
+    void HandleMatrixSeparator(int nMatrixRows,int nMatrixCols,int &rCurCol,
         int &rCurRow);
     int HandleTemplate(int nLevel,sal_uInt8 &rSelector,sal_uInt8 &rVariation,
         xub_StrLen &rLastTemplateBracket);

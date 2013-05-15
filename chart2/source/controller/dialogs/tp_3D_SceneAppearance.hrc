@@ -24,7 +24,7 @@
 #define CB_SHADING     2
 #define CB_ROUNDEDEDGE 3
 
-#define FL_SEPERATOR 1
+#define FL_SEPARATOR 1
 
 #define LB_SCHEME 2
 

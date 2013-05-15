@@ -764,7 +764,7 @@ bool AttributeOutputBase::AnalyzeURL( const String& rUrl, const String& /*rTarge
     {
         sMark = BookmarkToWriter( rUrl.Copy(1) );
 
-        xub_StrLen nPos = sMark.SearchBackward( cMarkSeperator );
+        xub_StrLen nPos = sMark.SearchBackward( cMarkSeparator );
 
         String sRefType(comphelper::string::remove(sMark.Copy(nPos+1), ' '));
 

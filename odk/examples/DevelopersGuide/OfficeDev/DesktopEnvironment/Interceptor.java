@@ -466,7 +466,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
             if (m_bDead)
                 return null;
         }
-        // Resolve any request seperatly by using own "dispatch()" method.
+        // Resolve any request separately by using own "dispatch()" method.
         // Note: Don't pack return list if "null" objects occure!
         int                            nCount      = lDescriptor.length;
         com.sun.star.frame.XDispatch[] lDispatcher = new com.sun.star.frame.XDispatch[nCount];

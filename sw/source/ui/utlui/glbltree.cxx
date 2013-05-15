@@ -467,7 +467,7 @@ void     SwGlobalTree::RequestHelp( const HelpEvent& rHEvt )
             if (pItem && SV_ITEM_ID_LBOXSTRING == pItem->GetType())
             {
                 const SwSection* pSect = pCont->GetSection();
-                String sEntry = pSect->GetLinkFileName().GetToken(0, sfx2::cTokenSeperator);
+                String sEntry = pSect->GetLinkFileName().GetToken(0, sfx2::cTokenSeparator);
                 if(!pSect->IsConnectFlag())
                     sEntry.Insert(aContextStrings[ST_BROKEN_LINK - ST_GLOBAL_CONTEXT_FIRST], 0 );
                 Point aEntryPos = GetEntryPosition( pEntry );
@@ -1157,7 +1157,7 @@ sal_Bool    SwGlobalTree::Update(sal_Bool bHard)
 void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
 {
     String sFileName(pCont->GetSection()->GetLinkFileName().GetToken(0,
-            sfx2::cTokenSeperator));
+            sfx2::cTokenSeparator));
     bool bFound = false;
     const SfxObjectShell* pCurr = SfxObjectShell::GetFirst();
     while( !bFound && pCurr )
@@ -1299,7 +1299,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
             aFileUrl.SetSmartURL( sFileName );
             String sSectionName(String(aFileUrl.GetLastName(
                 INetURLObject::DECODE_UNAMBIGUOUS)).GetToken(0,
-                sfx2::cTokenSeperator));
+                sfx2::cTokenSeparator));
             sal_uInt16 nSectCount = rSh.GetSectionFmtCount();
             String sTempSectionName(sSectionName);
             sal_uInt16 nAddNumber = 0;
@@ -1361,9 +1361,9 @@ IMPL_LINK( SwGlobalTree, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
             {
                 SfxMedium* pMed = pMedList->at( i );
                 String sFileName = pMed->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
-                sFileName += sfx2::cTokenSeperator;
+                sFileName += sfx2::cTokenSeparator;
                 sFileName += pMed->GetFilter()->GetFilterName();
-                sFileName += sfx2::cTokenSeperator;
+                sFileName += sfx2::cTokenSeparator;
                 pFileNames[nPos++] = sFileName;
             }
             delete pMedList;

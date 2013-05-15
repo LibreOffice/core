@@ -39,7 +39,7 @@ namespace framework{
 
 /*-************************************************************************************************************//**
     @short          listen for modify events on model and tag frame container window so it can react accordingly
-    @descr          Used e.g. by our MAC port where such state is shown seperately on some controls of the
+    @descr          Used e.g. by our MAC port where such state is shown separately on some controls of the
                     title bar.
 
     @base           ThreadHelpBase

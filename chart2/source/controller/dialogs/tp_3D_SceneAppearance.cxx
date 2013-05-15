@@ -99,7 +99,7 @@ ThreeD_SceneAppearance_TabPage::ThreeD_SceneAppearance_TabPage(
                 , m_xChartModel     ( xChartModel )
                 , m_aFT_Scheme      ( this, SchResId( FT_SCHEME ) )
                 , m_aLB_Scheme      ( this, SchResId( LB_SCHEME ) )
-                , m_aFL_Seperator   ( this, SchResId( FL_SEPERATOR ) )
+                , m_aFL_Separator   ( this, SchResId( FL_SEPARATOR ) )
                 , m_aCB_Shading     ( this, SchResId( CB_SHADING ) )
                 , m_aCB_ObjectLines ( this, SchResId( CB_OBJECTLINES ) )
                 , m_aCB_RoundedEdge ( this, SchResId( CB_ROUNDEDEDGE ) )

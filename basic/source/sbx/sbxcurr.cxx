@@ -54,8 +54,8 @@ static OUString ImpCurrencyToString( const sal_Int64 &rVal )
 #ifdef MAYBEFUTURE
         if ( initialLen > 5 )
         {
-            sal_Int32 nThouSeperators = ( initialLen - 5 ) / 3;
-            nCapacity += nThouSeperators;
+            sal_Int32 nThouSeparators = ( initialLen - 5 ) / 3;
+            nCapacity += nThouSeparators;
         }
 #endif
     }
@@ -158,7 +158,7 @@ static sal_Int64 ImpStringToCurrency( const OUString &rStr )
     OUString sTmp( rStr.trim() );
     const sal_Unicode* p =  sTmp.getStr();
 
-    // normalise string number by removeing thousands & decimal point seperators
+    // normalise string number by removeing thousands & decimal point separators
     OUStringBuffer sNormalisedNumString( sTmp.getLength() +  nFractDigit );
 
     if ( *p == '-'  || *p == '+' )

@@ -788,7 +788,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
                         }
                         aDataLen[oi] = nL;
 
-                        // check that there is no other seperate sequence of data
+                        // check that there is no other separate sequence of data
                         // to be found because that is not supported
                         while (ii < iiEnd)
                         {

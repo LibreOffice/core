@@ -685,7 +685,7 @@ String SwTOXPara::GetURL() const
             SwFrmFmt* pFly = pNd->GetFlyFmt();
             if( pFly )
             {
-                (( aTxt = '#' ) += pFly->GetName() ) += cMarkSeperator;
+                (( aTxt = '#' ) += pFly->GetName() ) += cMarkSeparator;
                 const sal_Char* pStr;
                 switch( eType )
                 {
@@ -746,7 +746,7 @@ String SwTOXTable::GetURL() const
         aTxt = ((SwTableNode*)pNd)->GetTable().GetFrmFmt()->GetName();
         if( aTxt.Len() )
         {
-            ( aTxt.Insert( '#', 0 ) += cMarkSeperator ).
+            ( aTxt.Insert( '#', 0 ) += cMarkSeparator ).
                                             AppendAscii( pMarkToTable );
         }
     }

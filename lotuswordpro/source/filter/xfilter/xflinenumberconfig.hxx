@@ -74,7 +74,7 @@ public:
 
     void    SetNumberIncrement(sal_Int32 increment);
 
-    void    SetSeperator(sal_Int32 increment, OUString seperator);
+    void    SetSeparator(sal_Int32 increment, OUString separator);
 
     void    SetNumberFormat(OUString numfmt = A2OUSTR("1"));
 
@@ -127,10 +127,10 @@ inline void XFLineNumberConfig::SetNumberIncrement(sal_Int32 increment)
     m_nIncrement = increment;
 }
 
-inline void XFLineNumberConfig::SetSeperator(sal_Int32 increment, OUString seperator)
+inline void XFLineNumberConfig::SetSeparator(sal_Int32 increment, OUString separator)
 {
     m_nSepIncrement = increment;
-    m_strSeparator = seperator;
+    m_strSeparator = separator;
 }
 
 inline void XFLineNumberConfig::SetNumberFormat(OUString numfmt)

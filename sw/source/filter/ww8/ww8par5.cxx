@@ -397,7 +397,7 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
     }
 
     //e.g. inserting bookmark around field result, so we need to put
-    //it around the entire writer field, as we don't have the seperation
+    //it around the entire writer field, as we don't have the separation
     //of field and field result of word, see #i16941#
     SwPosition aStart(*pPaM->GetPoint());
     if (!maFieldStack.empty())
@@ -2482,8 +2482,8 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* /*pF*/, String& rStr 
     {
         // Bereich aus Quelle ( kein Switch ) ?
         ConvertUFName(aBook);
-        aPara += sfx2::cTokenSeperator;
-        aPara += sfx2::cTokenSeperator;
+        aPara += sfx2::cTokenSeparator;
+        aPara += sfx2::cTokenSeparator;
         aPara += aBook;
     }
 

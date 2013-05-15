@@ -237,8 +237,8 @@ bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
             case OBJECT_CLIENT_OLE:
                 {
                     sal_Int32 nPos = 0;
-                    String sFile( sLNm.GetToken( 0, ::sfx2::cTokenSeperator, nPos ) );
-                    String sRange( sLNm.GetToken( 0, ::sfx2::cTokenSeperator, nPos ) );
+                    String sFile( sLNm.GetToken( 0, ::sfx2::cTokenSeparator, nPos ) );
+                    String sRange( sLNm.GetToken( 0, ::sfx2::cTokenSeparator, nPos ) );
 
                     if( pFile )
                         *pFile = sFile;
@@ -262,8 +262,8 @@ bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
                 {
                     sal_Int32 nTmp = 0;
                     String sCmd( sLNm );
-                    String sServer( sCmd.GetToken( 0, cTokenSeperator, nTmp ) );
-                    String sTopic( sCmd.GetToken( 0, cTokenSeperator, nTmp ) );
+                    String sServer( sCmd.GetToken( 0, cTokenSeparator, nTmp ) );
+                    String sTopic( sCmd.GetToken( 0, cTokenSeparator, nTmp ) );
 
                     if( pType )
                         *pType = sServer;
@@ -395,7 +395,7 @@ void MakeLnkName( String& rName, const String* pType, const String& rFile,
     if( pType )
     {
         rName = comphelper::string::strip(*pType, ' ');
-        rName += cTokenSeperator;
+        rName += cTokenSeparator;
     }
     else if( rName.Len() )
         rName.Erase();
@@ -403,12 +403,12 @@ void MakeLnkName( String& rName, const String* pType, const String& rFile,
     rName += rFile;
 
     rName = comphelper::string::strip(rName, ' ');
-    rName += cTokenSeperator;
+    rName += cTokenSeparator;
     rName = comphelper::string::strip(rName, ' ');
     rName += rLink;
     if( pFilter )
     {
-        rName += cTokenSeperator;
+        rName += cTokenSeparator;
         rName += *pFilter;
         rName = comphelper::string::strip(rName, ' ');
     }
@@ -474,11 +474,11 @@ bool LinkManager::InsertFileLink( sfx2::SvBaseLink& rLink,
         return false;
 
     String sCmd( rFileNm );
-    sCmd += ::sfx2::cTokenSeperator;
+    sCmd += ::sfx2::cTokenSeparator;
     if( pRange )
         sCmd += *pRange;
     if( pFilterNm )
-        ( sCmd += ::sfx2::cTokenSeperator ) += *pFilterNm;
+        ( sCmd += ::sfx2::cTokenSeparator ) += *pFilterNm;
 
     return InsertLink( &rLink, nFileType, sfx2::LINKUPDATE_ONCALL, &sCmd );
 }
@@ -492,14 +492,14 @@ bool LinkManager::InsertFileLink(
 
     OUStringBuffer aBuf;
     aBuf.append(rFileNm);
-    aBuf.append(sfx2::cTokenSeperator);
+    aBuf.append(sfx2::cTokenSeparator);
 
     if (pRange)
         aBuf.append(*pRange);
 
     if (pFilterNm)
     {
-        aBuf.append(sfx2::cTokenSeperator);
+        aBuf.append(sfx2::cTokenSeparator);
         aBuf.append(*pFilterNm);
     }
 

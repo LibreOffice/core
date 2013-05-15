@@ -720,7 +720,7 @@ public:
     bool IsNotProtected() const { return maSep.fUnlocked != 0; }
     bool IsVertical() const;
     sal_Int16 NoCols() const { return maSep.ccolM1 + 1; }
-    sal_Int32 StandardColSeperation() const { return maSep.dxaColumns; }
+    sal_Int32 StandardColSeparation() const { return maSep.dxaColumns; }
     bool HasTitlePage() const { return maSep.fTitlePage ? true : false; }
     sal_uInt16 PageStartAt() const { return maSep.pgnStart; }
     bool PageRestartNo() const { return maSep.fPgnRestart ? true : false; }

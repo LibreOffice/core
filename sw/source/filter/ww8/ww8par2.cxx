@@ -466,7 +466,7 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     /*
     #i1140#
     If I have a table and apply a style to one of its frames that should cause
-    a paragraph that its applied to it to only exist as a seperate floating
+    a paragraph that its applied to it to only exist as a separate floating
     frame, then the behavour depends on which cell that it has been applied
     to. If its the first cell of a row then the whole table row jumps into the
     new frame, if its not then then the paragraph attributes are applied

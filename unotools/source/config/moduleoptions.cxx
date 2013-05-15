@@ -52,7 +52,7 @@
                             NAMELIST[ PROPERTYHANDLE_xxx ] => VALUELIST[ PROPERTYHANDLE_xxx ]
 *//*-*************************************************************************************************************/
 #define ROOTNODE_FACTORIES                  OUString("Setup/Office/Factories"        )
-#define PATHSEPERATOR                       OUString("/"                             )
+#define PATHSEPARATOR                       OUString("/"                             )
 
 // Attention: The property "ooSetupFactoryEmptyDocumentURL" is read from configuration but not used! There is
 //            special code that uses hard coded strings to return them.
@@ -467,7 +467,7 @@ void SvtModuleOptions_Impl::Commit()
 
         // These path is used to build full qualified property names ....
         // See pInfo->getChangedProperties() for further information
-        sBasePath  = PATHSEPERATOR + pInfo->getFactory() + PATHSEPERATOR;
+        sBasePath  = PATHSEPARATOR + pInfo->getFactory() + PATHSEPARATOR;
 
         const css::uno::Sequence< css::beans::PropertyValue > lChangedProperties = pInfo->getChangedProperties ( sBasePath );
         const css::beans::PropertyValue*                      pChangedProperties = lChangedProperties.getConstArray();
@@ -772,12 +772,12 @@ css::uno::Sequence< OUString > SvtModuleOptions_Impl::impl_ExpandSetNames( const
 
     for( sal_Int32 nName=0; nName<nCount; ++nName )
     {
-        pPropNames[nPropStart+PROPERTYHANDLE_SHORTNAME       ] = lSetNames[nName] + PATHSEPERATOR + PROPERTYNAME_SHORTNAME       ;
-        pPropNames[nPropStart+PROPERTYHANDLE_TEMPLATEFILE    ] = lSetNames[nName] + PATHSEPERATOR + PROPERTYNAME_TEMPLATEFILE    ;
-        pPropNames[nPropStart+PROPERTYHANDLE_WINDOWATTRIBUTES] = lSetNames[nName] + PATHSEPERATOR + PROPERTYNAME_WINDOWATTRIBUTES;
-        pPropNames[nPropStart+PROPERTYHANDLE_EMPTYDOCUMENTURL] = lSetNames[nName] + PATHSEPERATOR + PROPERTYNAME_EMPTYDOCUMENTURL;
-        pPropNames[nPropStart+PROPERTYHANDLE_DEFAULTFILTER   ] = lSetNames[nName] + PATHSEPERATOR + PROPERTYNAME_DEFAULTFILTER   ;
-        pPropNames[nPropStart+PROPERTYHANDLE_ICON            ] = lSetNames[nName] + PATHSEPERATOR + PROPERTYNAME_ICON            ;
+        pPropNames[nPropStart+PROPERTYHANDLE_SHORTNAME       ] = lSetNames[nName] + PATHSEPARATOR + PROPERTYNAME_SHORTNAME       ;
+        pPropNames[nPropStart+PROPERTYHANDLE_TEMPLATEFILE    ] = lSetNames[nName] + PATHSEPARATOR + PROPERTYNAME_TEMPLATEFILE    ;
+        pPropNames[nPropStart+PROPERTYHANDLE_WINDOWATTRIBUTES] = lSetNames[nName] + PATHSEPARATOR + PROPERTYNAME_WINDOWATTRIBUTES;
+        pPropNames[nPropStart+PROPERTYHANDLE_EMPTYDOCUMENTURL] = lSetNames[nName] + PATHSEPARATOR + PROPERTYNAME_EMPTYDOCUMENTURL;
+        pPropNames[nPropStart+PROPERTYHANDLE_DEFAULTFILTER   ] = lSetNames[nName] + PATHSEPARATOR + PROPERTYNAME_DEFAULTFILTER   ;
+        pPropNames[nPropStart+PROPERTYHANDLE_ICON            ] = lSetNames[nName] + PATHSEPARATOR + PROPERTYNAME_ICON            ;
         nPropStart += PROPERTYCOUNT;
     }
 
@@ -954,7 +954,7 @@ void SvtModuleOptions_Impl::MakeReadonlyStatesAvailable()
     {
         OUStringBuffer sPath(256);
         sPath.append(lFactories[i]             );
-        sPath.append(PATHSEPERATOR             );
+        sPath.append(PATHSEPARATOR             );
         sPath.append(PROPERTYNAME_DEFAULTFILTER);
 
         lFactories[i] = sPath.makeStringAndClear();

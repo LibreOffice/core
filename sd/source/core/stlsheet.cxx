@@ -382,7 +382,7 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
         if( pPage )
         {
             aRealStyle = pPage->GetLayoutName();
-            // cut after seperator string
+            // cut after separator string
 
             if( aRealStyle.indexOf(aSep) >= 0)
             {
@@ -474,7 +474,7 @@ SdStyleSheet* SdStyleSheet::GetPseudoStyleSheet() const
     SdStyleSheet* pPseudoStyle = NULL;
     OUString aSep( SD_LT_SEPARATOR );
     OUString aStyleName(aName);
-        // without layout name and seperator
+        // without layout name and separator
 
     if( aStyleName.indexOf(aSep) >=0 )
     {

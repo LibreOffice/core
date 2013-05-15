@@ -1770,7 +1770,7 @@ void SwHTMLWriter::AddLinkTarget( const String& rURL )
         sal_Unicode c = rURL.GetChar( --nPos );
         switch( c )
         {
-        case cMarkSeperator:
+        case cMarkSeparator:
             bFound = sal_True;
             break;
         case '%':
@@ -1804,7 +1804,7 @@ void SwHTMLWriter::AddLinkTarget( const String& rURL )
         if( bEncoded )
         {
             aURL.Erase( nPos, 2 );
-            aURL.SetChar( nPos-1, cMarkSeperator );
+            aURL.SetChar( nPos-1, cMarkSeparator );
         }
         aImplicitMarks.insert( aURL );
     }
@@ -1827,7 +1827,7 @@ void SwHTMLWriter::AddLinkTarget( const String& rURL )
             if( bEncoded )
             {
                 aURL.Erase( nPos, 2 );
-                aURL.SetChar( nPos-1, cMarkSeperator );
+                aURL.SetChar( nPos-1, cMarkSeparator );
             }
             aOutlineMarks.insert( aOutlineMarks.begin()+nIns, new String( aURL ) );
         }

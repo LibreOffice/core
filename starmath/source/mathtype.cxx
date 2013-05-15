@@ -1281,7 +1281,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                         }
 
 
-                        HandleMatrixSeperator(nMatrixRows,nMatrixCols,
+                        HandleMatrixSeparator(nMatrixRows,nMatrixCols,
                             nCurCol,nCurRow);
 
                         switch (nSelector)
@@ -1681,7 +1681,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                         //symbols that follow some of these
                                         //records. Foo Data.
 
-                        /*In matrices and piles we cannot seperate equation
+                        /*In matrices and piles we cannot separate equation
                          *lines with the newline keyword*/
                         if (nMatrixCols==0)
                             newline++;
@@ -1704,13 +1704,13 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                 if (xfLMOVE(nTag))
                     HandleNudge();
                 nRet = HandlePile(nSetAlign,nLevel,nSelector,nVariation);
-                HandleMatrixSeperator(nMatrixRows,nMatrixCols,nCurCol,nCurRow);
+                HandleMatrixSeparator(nMatrixRows,nMatrixCols,nCurCol,nCurRow);
                 break;
             case MATRIX:
                 if (xfLMOVE(nTag))
                     HandleNudge();
                 nRet = HandleMatrix(nLevel,nSelector,nVariation);
-                HandleMatrixSeperator(nMatrixRows,nMatrixCols,nCurCol,nCurRow);
+                HandleMatrixSeparator(nMatrixRows,nMatrixCols,nCurCol,nCurRow);
                 break;
             case EMBEL:
                 if (xfLMOVE(nTag))
@@ -1778,10 +1778,10 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
  *with fiddley logic to see if we are in a matrix or a pile or neither
 
  Note we cannot tell until after the event that this is the last entry
- of a pile, so we must strip the last seperator of a pile after this
+ of a pile, so we must strip the last separator of a pile after this
  is detected in the PILE handler
  */
-void MathType::HandleMatrixSeperator(int nMatrixRows,int nMatrixCols,
+void MathType::HandleMatrixSeparator(int nMatrixRows,int nMatrixCols,
     int &rCurCol,int &rCurRow)
 {
     if (nMatrixRows!=0)

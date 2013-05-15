@@ -54,8 +54,8 @@ const sal_Char pBuffer_Blank[]  = "";
 //        TEST_PLATFORM for test platform initial,
 //        TEST_PLATFORM_ROOT for root dir in comrresponding platform,
 //        TEST_PLATFORM_TEMP for temp dir in comrresponding platform,
-//        PATH_LIST_DELIMITER for seperator of path list in comrresponding platform,
-//        PATH_SEPERATOR for seperator in URL or system path in comrresponding platform,
+//        PATH_LIST_DELIMITER for separator of path list in comrresponding platform,
+//        PATH_SEPARATOR for separator in URL or system path in comrresponding platform,
 //        PATH_MAX/MAX_PATH for max path length in comrresponding platform,
 //------------------------------------------------------------------------
 
@@ -89,7 +89,7 @@ const sal_Char pBuffer_Blank[]  = "";
 #   define TEST_PLATFORM_ROOT   "/"
 #   define TEST_PLATFORM_TEMP   "tmp"
 #   define PATH_LIST_DELIMITER  ":"
-#   define PATH_SEPERATOR       "/"
+#   define PATH_SEPARATOR       "/"
 #endif
 
 #if (defined WNT )                      // Windows
@@ -102,7 +102,7 @@ const sal_Char pBuffer_Blank[]  = "";
 #   define TEST_PLATFORM_ROOT   "c:/"
 #   define TEST_PLATFORM_TEMP   "temp"
 #   define PATH_LIST_DELIMITER  ";"
-#   define PATH_SEPERATOR       "/"
+#   define PATH_SEPARATOR       "/"
 #endif
 
 
@@ -123,7 +123,7 @@ const sal_Char pBuffer_Blank[]  = "";
 // OS independent file definition
 //------------------------------------------------------------------------
 OSLTEST_DECLARE( NullURL,  "" );
-OSLTEST_DECLARE( SlashURL, PATH_SEPERATOR );
+OSLTEST_DECLARE( SlashURL, PATH_SEPARATOR );
 OSLTEST_DECLARE( PreURL, FILE_PREFIX );
 OSLTEST_DECLARE( RootURL,  FILE_PREFIX TEST_PLATFORM );
 

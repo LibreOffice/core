@@ -634,7 +634,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
         // TextAttributes with an end never expand their range
         if ( !bCharAttr && !bOtherAttr )
         {
-            // CharFmt and URL attributes are treated seperately!
+            // CharFmt and URL attributes are treated separately!
             // TEST_TEMP ToDo: AutoFmt!
             SfxItemSet aTxtSet( pDoc->GetAttrPool(),
                                 RES_TXTATR_REFMARK, RES_TXTATR_TOXMARK,
@@ -2086,7 +2086,7 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
         bNotifyLayout = true;
     }
 
-    // the header and footer attributes are copied seperately
+    // the header and footer attributes are copied separately
     // the content sections have to be copied in their entirety
     {
         SfxItemSet aAttrSet( rSrcDesc.GetMaster().GetAttrSet() );
@@ -2383,7 +2383,7 @@ void SwDoc::SetTxtFmtCollByAutoFmt( const SwPosition& rPos, sal_uInt16 nPoolId,
         {
             SfxItemSet aTmp( *pTNd->GetpSwAttrSet() );
             aTmp.Differentiate( *pSet );
-            // we handle the adjust item seperately
+            // we handle the adjust item separately
             const SfxPoolItem* pItem;
             if( SFX_ITEM_SET == pTNd->GetpSwAttrSet()->GetItemState(
                     RES_PARATR_ADJUST, sal_False, &pItem ))

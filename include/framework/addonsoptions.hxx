@@ -33,7 +33,7 @@
 
 /*-************************************************************************************************************//**
     @descr          The method GetAddonsMenu() returns a list of property values.
-                    Use follow defines to seperate values by names.
+                    Use follow defines to separate values by names.
 *//*-*************************************************************************************************************/
 #define ADDONSMENUITEM_STRING_URL                       "URL"
 #define ADDONSMENUITEM_STRING_TITLE                     "Title"

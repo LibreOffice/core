@@ -52,7 +52,7 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
     const SwFtnInfo& rFtnInfo = pDoc->GetFtnInfo();
 
     // For normal foot notes we treat per-chapter and per-document numbering
-    // seperately. For Endnotes we only have per-document numbering.
+    // separately. For Endnotes we only have per-document numbering.
     if( FTNNUM_CHAPTER == rFtnInfo.eNum )
     {
         const SwOutlineNodes& rOutlNds = pDoc->GetNodes().GetOutLineNds();

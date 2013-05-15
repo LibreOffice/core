@@ -439,8 +439,8 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                         //JP 28.08.95: DDE-Topics/-Items can have blanks in their names!
                         //              That's not considered here yet
                         String sCmd( pType->GetCmd() );
-                        sal_uInt16 nTmpPos = sCmd.SearchAndReplace( sfx2::cTokenSeperator, ' ' );
-                        sCmd.SearchAndReplace( sfx2::cTokenSeperator, ' ', nTmpPos );
+                        sal_uInt16 nTmpPos = sCmd.SearchAndReplace( sfx2::cTokenSeparator, ' ' );
+                        sCmd.SearchAndReplace( sfx2::cTokenSeparator, ' ', nTmpPos );
 
                         aValueED.SetText( sCmd );
                         aFormatLB.SelectEntryPos(pType->GetType());
@@ -1025,8 +1025,8 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
                         {
                             // DDE-Topics/-Items can have blanks in their names!
                             //  That's not being considered here yet.
-                            sal_uInt16 nTmpPos = sValue.SearchAndReplace( ' ', sfx2::cTokenSeperator );
-                            sValue.SearchAndReplace( ' ', sfx2::cTokenSeperator, nTmpPos );
+                            sal_uInt16 nTmpPos = sValue.SearchAndReplace( ' ', sfx2::cTokenSeparator );
+                            sValue.SearchAndReplace( ' ', sfx2::cTokenSeparator, nTmpPos );
                             ((SwDDEFieldType*)pType)->SetCmd(sValue);
                             ((SwDDEFieldType*)pType)->SetType((sal_uInt16)nFormat);
                         }
@@ -1063,8 +1063,8 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
                     {
                         // DDE-Topics/-Items can have blanks in their names!
                         //  That's not being considered here yet.
-                        sal_uInt16 nTmpPos = sValue.SearchAndReplace( ' ', sfx2::cTokenSeperator );
-                        sValue.SearchAndReplace( ' ', sfx2::cTokenSeperator, nTmpPos );
+                        sal_uInt16 nTmpPos = sValue.SearchAndReplace( ' ', sfx2::cTokenSeparator );
+                        sValue.SearchAndReplace( ' ', sfx2::cTokenSeparator, nTmpPos );
 
                         SwDDEFieldType aType(sName, sValue, (sal_uInt16)nFormat);
                         aSelectionLB.InsertEntry(sName);

@@ -60,8 +60,8 @@ namespace framework{
                     default_first                   set default filter on top of return list        false
                     case_sensitive                  compare "sort_prop" case sensitive              false
 *//*-*************************************************************************************************************/
-#define SEPERATOR_QUERYPARAM                            ((sal_Unicode)':')
-#define SEPERATOR_QUERYPARAMVALUE                       ((sal_Unicode)'=')
+#define SEPARATOR_QUERYPARAM                            ((sal_Unicode)':')
+#define SEPARATOR_QUERYPARAMVALUE                       ((sal_Unicode)'=')
 
 #define QUERYPARAM_IFLAGS                               DECLARE_ASCII("iflags"          )
 #define QUERYPARAM_EFLAGS                               DECLARE_ASCII("eflags"          )
@@ -112,11 +112,11 @@ class QueryBuilder
         //---------------------------------------------------------------------------------------------------------
         void addParam( const OUString& sParam, const OUString& sValue = OUString() )
         {
-            m_sParams.append( SEPERATOR_QUERYPARAM );
+            m_sParams.append( SEPARATOR_QUERYPARAM );
             m_sParams.append( sParam               );
             if( sValue.getLength() > 0 )
             {
-                m_sParams.append( SEPERATOR_QUERYPARAMVALUE );
+                m_sParams.append( SEPARATOR_QUERYPARAMVALUE );
                 m_sParams.append( sValue                    );
             }
         }
@@ -236,7 +236,7 @@ class QueryAnalyzer
             // Try to find base of it and safe it for faster access as enum value!
             sal_Int32 nToken = 0;
             OUString sParam;
-            OUString sBase = sNewQuery.getToken( 0, SEPERATOR_QUERYPARAM, nToken );
+            OUString sBase = sNewQuery.getToken( 0, SEPARATOR_QUERYPARAM, nToken );
 
             if (sBase.equalsIgnoreAsciiCase(BASE_QUERY_ALL))
                 m_eQuery = E_ALL;
@@ -262,7 +262,7 @@ class QueryAnalyzer
             // Try to get additional parameters ...
             while( nToken >= 0 )
             {
-                sParam = sNewQuery.getToken( 0, SEPERATOR_QUERYPARAM, nToken );
+                sParam = sNewQuery.getToken( 0, SEPARATOR_QUERYPARAM, nToken );
                 // "default_first"
                 if( sParam.startsWith( QUERYPARAM_DEFAULT_FIRST ) )
                 {
@@ -287,30 +287,30 @@ class QueryAnalyzer
                 else if( sParam.startsWith( QUERYPARAM_IFLAGS ) )
                 {
                     sal_Int32       nSubToken  = 0;
-                    sParam.getToken( 0, SEPERATOR_QUERYPARAMVALUE, nSubToken );
+                    sParam.getToken( 0, SEPARATOR_QUERYPARAMVALUE, nSubToken );
                     if( nSubToken > 0 )
                     {
-                        m_nIFlags = sParam.getToken( 0, SEPERATOR_QUERYPARAMVALUE, nSubToken ).toInt32();
+                        m_nIFlags = sParam.getToken( 0, SEPARATOR_QUERYPARAMVALUE, nSubToken ).toInt32();
                     }
                 }
                 // "eflags=<mask>"
                 else if( sParam.startsWith( QUERYPARAM_EFLAGS ) )
                 {
                     sal_Int32       nSubToken  = 0;
-                    sParam.getToken( 0, SEPERATOR_QUERYPARAMVALUE, nSubToken );
+                    sParam.getToken( 0, SEPARATOR_QUERYPARAMVALUE, nSubToken );
                     if( nSubToken > 0 )
                     {
-                        m_nEFlags = sParam.getToken( 0, SEPERATOR_QUERYPARAMVALUE, nSubToken ).toInt32();
+                        m_nEFlags = sParam.getToken( 0, SEPARATOR_QUERYPARAMVALUE, nSubToken ).toInt32();
                     }
                 }
                 // "sort_prop=<[name,uiname]>"
                 else if( sParam.startsWith( QUERYPARAM_SORT_PROP ) )
                 {
                     sal_Int32       nSubToken  = 0;
-                    sParam.getToken( 0, SEPERATOR_QUERYPARAMVALUE, nSubToken );
+                    sParam.getToken( 0, SEPARATOR_QUERYPARAMVALUE, nSubToken );
                     if( nSubToken > 0 )
                     {
-                        OUString sParamValue = sParam.getToken( 0, SEPERATOR_QUERYPARAMVALUE, nSubToken );
+                        OUString sParamValue = sParam.getToken( 0, SEPARATOR_QUERYPARAMVALUE, nSubToken );
                         if( sParamValue.startsWith( QUERYPARAMVALUE_SORT_PROP_NAME ) )
                             m_eSortProp = E_NAME;
                         else if( sParamValue.startsWith( QUERYPARAMVALUE_SORT_PROP_UINAME ) )

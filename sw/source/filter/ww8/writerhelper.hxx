@@ -764,7 +764,7 @@ namespace sw
 
             Word has the simple concept of a drawing object either in the
             foreground and in the background. We have an additional complexity
-            that form components live in a seperate layer, which seems
+            that form components live in a separate layer, which seems
             unnecessarily complicated. So in the winword filter we set the
             object's layer through this class with either SendObjectToHell for
             the bottom layer and SendObjectToHeaven for the top and we don't

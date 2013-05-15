@@ -666,7 +666,7 @@ static const WCHAR VSCLASS_MENUBAND[] = {'M','E','N','U','B','A','N','D',0};
 
 enum MENUBANDPARTS {
     MDP_NEWAPPBUTTON = 1,
-    MDP_SEPERATOR = 2,
+    MDP_SEPARATOR = 2,
 };
 
 enum MENUBANDSTATES {

@@ -425,7 +425,7 @@ void LwpFootnoteNumberOptions::Read(LwpObjectStream *pObjStrm)
 }
 
 /**
- * @descr  Read footnote seperator options information
+ * @descr  Read footnote separator options information
  */
 void LwpFootnoteSeparatorOptions::Read(LwpObjectStream *pObjStrm)
 {

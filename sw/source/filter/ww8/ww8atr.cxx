@@ -3262,7 +3262,7 @@ void WW8AttributeOutput::CharTwoLines( const SvxTwoLinesItem& rTwoLines )
         sal_Unicode cEnd = rTwoLines.GetEndBracket();
 
         /*
-        As per usual we have problems. We can have seperate left and right brackets
+        As per usual we have problems. We can have separate left and right brackets
         in OOo, it doesn't appear that you can in word. Also in word there appear
         to only be a limited number of possibilities, we can use pretty much
         anything.
@@ -4780,9 +4780,9 @@ void SwWW8WrTabu::Add(const SvxTabStop & rTS, long nAdjustment)
             break;
         case SVX_TAB_ADJUST_DECIMAL:
             /*
-            Theres nothing we can do btw the decimal seperator has been
+            Theres nothing we can do btw the decimal separator has been
             customized, but if you think different remember that different
-            locales have different seperators, i.e. german is a , while english
+            locales have different separators, i.e. german is a , while english
             is a .
             */
             nPara = 3;

@@ -177,7 +177,7 @@ private:
 
 // Separator in the link name for the DDE-/File-/Graphics- links
 // (only those who need to construct a SvLinkName)
-const sal_Unicode cTokenSeperator = 0xFFFF;
+const sal_Unicode cTokenSeparator = 0xFFFF;
 
 // create a string for the SvLinkName. For:
 // - DDE the first 3 Strings, (Server, Topic, Item)

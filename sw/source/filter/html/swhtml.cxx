@@ -370,7 +370,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
                 eJumpTo = JUMPTO_MARK;
                 xub_StrLen nLastPos, nPos = 0;
                 while( STRING_NOTFOUND != ( nLastPos =
-                        sJmpMark.Search( cMarkSeperator, nPos + 1 )) )
+                        sJmpMark.Search( cMarkSeparator, nPos + 1 )) )
                     nPos = nLastPos;
 
                 String sCmp;

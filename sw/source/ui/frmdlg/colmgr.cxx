@@ -80,7 +80,7 @@ void SwColMgr::SetGutterWidth(sal_uInt16 nGutterWidth, sal_uInt16 nPos )
 }
 
 /*------------------------------------------------------------------------
- Description:   height seperation line
+ Description:   height separation line
 ------------------------------------------------------------------------*/
 short SwColMgr::GetLineHeightPercent() const
 {

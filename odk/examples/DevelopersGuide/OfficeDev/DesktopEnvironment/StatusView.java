@@ -43,7 +43,7 @@ import java.lang.String;
 /**
  * Implement a view to show status information
  * of currently loaded document of a document view.
- * It use seperate listener threads to get this information
+ * It use separate listener threads to get this information
  * and actualize it automaticly if frame broadcast changes of
  * his contained document.
  * Threads are neccessary to prevent this view against deadlocks.

@@ -56,7 +56,7 @@ public:
         @param pPage
             The page pointer can in some situations not be detected from
             rxPage, e.g. after undo of page deletion.  Therefore supply it
-            seperately.
+            separately.
         @param nIndex
             This index is displayed in the view as page number.  It is not
             necessaryily the page index (not even when you add or subtract 1

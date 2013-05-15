@@ -60,7 +60,7 @@ public:
         void * start;
 
 #ifdef USE_DOUBLE_MMAP
-    /** When seperately mmapping the block for writing and executing
+    /** When separately mmapping the block for writing and executing
             exec points to the same memory as start, except start is used
             exclusively for writing and exec for executing
          */

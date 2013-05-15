@@ -235,9 +235,9 @@ void HandlerCFGAccess::read( HandlerHash** ppHandler ,
     for( nSource=0; nSource<nSourceCount; ++nSource )
     {
         OUStringBuffer sPath( SETNAME_HANDLER );
-        sPath.append(CFG_PATH_SEPERATOR);
+        sPath.append(CFG_PATH_SEPARATOR);
         sPath.append(lNames[nSource]);
-        sPath.append(CFG_PATH_SEPERATOR);
+        sPath.append(CFG_PATH_SEPARATOR);
         sPath.append(PROPERTY_PROTOCOLS);
 
         lFullNames[nTarget]  = sPath.makeStringAndClear();

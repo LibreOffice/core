@@ -306,7 +306,7 @@ bool PieChart::isExpandNarrowValuesTowardZero( sal_Int32 /* nDimensionIndex */ )
     return false;
 }
 
-bool PieChart::isSeperateStackingForDifferentSigns( sal_Int32 /* nDimensionIndex */ )
+bool PieChart::isSeparateStackingForDifferentSigns( sal_Int32 /* nDimensionIndex */ )
 {
     return false;
 }

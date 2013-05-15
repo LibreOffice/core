@@ -149,17 +149,17 @@ public class BuildEnvTools {
         String[] cmdLines = null;
         log.println("prepare command for platform " + mPlatform);
 
-        String seperator = "";
+        String separator = "";
         if (mPlatform.equals(PropertyName.WNTMSCI)) {
-            seperator = mCygwin ? ";" : "^";
+            separator = mCygwin ? ";" : "^";
         } else {
-            seperator = ";";
+            separator = ";";
         }
 
         String command = "";
         for (int i = 0; i < commands.length; i++) {
             if (i != 0) {
-                command += seperator;
+                command += separator;
             }
             command += commands[i];
         }

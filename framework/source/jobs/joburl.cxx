@@ -55,8 +55,8 @@ JobURL::JobURL( /*IN*/ const OUString& sURL )
         sal_Int32 t = JOBURL_PROTOCOL_LEN;
         do
         {
-            // seperate all token of "{[event=<name>],[alias=<name>],[service=<name>]}"
-            OUString sToken = sURL.getToken(0, JOBURL_PART_SEPERATOR, t);
+            // separate all token of "{[event=<name>],[alias=<name>],[service=<name>]}"
+            OUString sToken = sURL.getToken(0, JOBURL_PART_SEPARATOR, t);
             OUString sPartValue    ;
             OUString sPartArguments;
 
@@ -294,8 +294,8 @@ void JobURL::impldbg_checkIt()
     JobURL::impldbg_checkURL("vnd.sun.star.job:service=;"          , E_UNKNOWN, ""         , ""       , ""           , NULL, NULL, NULL);
 
     // check combinations
-    // Note: No additional spaces or tabs are allowed after a seperator occurred.
-    // Tab and spaces before a seperator will be used as value!
+    // Note: No additional spaces or tabs are allowed after a separator occurred.
+    // Tab and spaces before a separator will be used as value!
     JobURL::impldbg_checkURL("vnd.sun.star.job:event=onMyEvent;alias=myAlias;service=css.Service"  , E_EVENT | E_ALIAS | E_SERVICE , "onMyEvent", "myAlias", "css.Service" , NULL, NULL, NULL);
     JobURL::impldbg_checkURL("vnd.sun.star.job:service=css.Service;alias=myAlias"                  , E_ALIAS | E_SERVICE           , ""         , "myAlias", "css.Service" , NULL, NULL, NULL);
     JobURL::impldbg_checkURL("vnd.sun.star.job:service=css.Service ;alias=myAlias"                 , E_ALIAS | E_SERVICE           , ""         , "myAlias", "css.Service ", NULL, NULL, NULL);

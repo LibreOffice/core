@@ -450,8 +450,8 @@ sal_Bool SvXMLUnitConverter::convertDateTime( double& fDateTime,
 }
 
 
-SvXMLTokenEnumerator::SvXMLTokenEnumerator( const OUString& rString, sal_Unicode cSeperator /* = sal_Unicode(' ') */ )
-: maTokenString( rString ), mnNextTokenPos(0), mcSeperator( cSeperator )
+SvXMLTokenEnumerator::SvXMLTokenEnumerator( const OUString& rString, sal_Unicode cSeparator /* = sal_Unicode(' ') */ )
+: maTokenString( rString ), mnNextTokenPos(0), mcSeparator( cSeparator )
 {
 }
 
@@ -460,7 +460,7 @@ sal_Bool SvXMLTokenEnumerator::getNextToken( OUString& rToken )
     if( -1 == mnNextTokenPos )
         return sal_False;
 
-    int nTokenEndPos = maTokenString.indexOf( mcSeperator, mnNextTokenPos );
+    int nTokenEndPos = maTokenString.indexOf( mcSeparator, mnNextTokenPos );
     if( nTokenEndPos != -1 )
     {
         rToken = maTokenString.copy( mnNextTokenPos,

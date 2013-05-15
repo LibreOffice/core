@@ -38,9 +38,9 @@ EXTRAJARFILES = $(OOO_JUNIT_JAR)
 
 
 .IF "$(OS)"=="WNT"
-command_seperator=&&
+command_separator=&&
 .ELSE
-command_seperator=;
+command_separator=;
 .ENDIF
 
 
@@ -81,8 +81,8 @@ RESLIB2SRSFILES=$(RES2FILELIST)
 ALLTAR : copy_resources javatest
 
 copy_resources: $(RESLIB1TARGETN) $(RESLIB2TARGETN)
-    $(foreach,i,$(RESLIB1TARGETN) $(COPY) $i $(i:s/de/invalid/:s/_A_//) $(command_seperator)) echo
-    $(foreach,i,$(RESLIB2TARGETN) $(COPY) $i $(i:s/en-US/invalid/:s/_B_//) $(command_seperator)) echo
+    $(foreach,i,$(RESLIB1TARGETN) $(COPY) $i $(i:s/de/invalid/:s/_A_//) $(command_separator)) echo
+    $(foreach,i,$(RESLIB2TARGETN) $(COPY) $i $(i:s/en-US/invalid/:s/_B_//) $(command_separator)) echo
 
 
 .END

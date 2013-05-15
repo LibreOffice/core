@@ -45,7 +45,7 @@
 #include "swddetbl.hxx"
 #include <ndole.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <sfx2/linkmgr.hxx>  // for cTokenSeperator
+#include <sfx2/linkmgr.hxx>  // for cTokenSeparator
 #include "unotbl.hxx"
 #include "xmltexte.hxx"
 #include "xmlexp.hxx"
@@ -1136,11 +1136,11 @@ void SwXMLExport::ExportTable( const SwTableNode& rTblNd )
             // DDE command
             const String sCmd = pDDEFldType->GetCmd();
             AddAttribute( XML_NAMESPACE_OFFICE, XML_DDE_APPLICATION,
-                          sCmd.GetToken(0, sfx2::cTokenSeperator) );
+                          sCmd.GetToken(0, sfx2::cTokenSeparator) );
             AddAttribute( XML_NAMESPACE_OFFICE, XML_DDE_ITEM,
-                          sCmd.GetToken(1, sfx2::cTokenSeperator) );
+                          sCmd.GetToken(1, sfx2::cTokenSeparator) );
             AddAttribute( XML_NAMESPACE_OFFICE, XML_DDE_TOPIC,
-                          sCmd.GetToken(2, sfx2::cTokenSeperator) );
+                          sCmd.GetToken(2, sfx2::cTokenSeparator) );
 
             // auto update
             if (pDDEFldType->GetType() == sfx2::LINKUPDATE_ALWAYS)

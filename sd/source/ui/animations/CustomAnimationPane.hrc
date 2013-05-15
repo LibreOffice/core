@@ -43,10 +43,10 @@
 #define FT_CHANGE_ORDER             15
 #define PB_MOVE_UP                  16
 #define PB_MOVE_DOWN                17
-#define FL_SEPERATOR1               18
+#define FL_SEPARATOR1               18
 #define PB_PLAY                     19
 #define PB_SLIDE_SHOW               20
-#define FL_SEPERATOR2               21
+#define FL_SEPARATOR2               21
 #define CB_AUTOPREVIEW              22
 
 #endif // _SD_CUSTOMANIMATIONPANE_HXX

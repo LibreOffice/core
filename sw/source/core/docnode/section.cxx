@@ -560,8 +560,8 @@ const String& SwSection::GetLinkFileName() const
                     m_RefLink->GetLinkManager()->GetDisplayNames(
                         m_RefLink, 0, &sTmp, &sRange, &sFilter ))
                 {
-                    ( sTmp += sfx2::cTokenSeperator ) += sFilter;
-                    ( sTmp += sfx2::cTokenSeperator ) += sRange;
+                    ( sTmp += sfx2::cTokenSeparator ) += sFilter;
+                    ( sTmp += sfx2::cTokenSeparator ) += sRange;
                 }
                 else if( GetFmt() && !GetFmt()->GetSectionNode() )
                 {
@@ -1636,11 +1636,11 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
     case FILE_LINK_SECTION:
         {
             pLnk->SetContentType( FORMAT_FILE );
-            String sFltr( sCmd.GetToken( 1, sfx2::cTokenSeperator ) );
-            String sRange( sCmd.GetToken( 2, sfx2::cTokenSeperator ) );
+            String sFltr( sCmd.GetToken( 1, sfx2::cTokenSeparator ) );
+            String sRange( sCmd.GetToken( 2, sfx2::cTokenSeparator ) );
             pFmt->GetDoc()->GetLinkManager().InsertFileLink( *pLnk,
                                 static_cast<sal_uInt16>(m_Data.GetType()),
-                                sCmd.GetToken( 0, sfx2::cTokenSeperator ),
+                                sCmd.GetToken( 0, sfx2::cTokenSeparator ),
                                 ( sFltr.Len() ? &sFltr : 0 ),
                                 ( sRange.Len() ? &sRange : 0 ) );
         }

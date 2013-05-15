@@ -927,7 +927,7 @@ void SmXMLExport::ExportSubSupScript(const SmNode *pNode, int nLevel)
             }
         }
 
-        //Seperator element between suffix and prefix sub/sup pairs
+        //Separator element between suffix and prefix sub/sup pairs
         {
             SvXMLElementExport aPrescripts(*this, XML_NAMESPACE_MATH,
                 XML_MPRESCRIPTS, sal_True,sal_True);

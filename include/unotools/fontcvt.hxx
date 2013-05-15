@@ -54,8 +54,8 @@ public:
     //the string that can be converted to the same symbol font and returns the
     //name of that font. rIndex is modified to the last index that was
     //converted. Typically you call if continously until rIndex ==
-    //rString.Len() and handle each section as seperate 8bit strings using
-    //seperate fonts. Will return an empty string for a continous section
+    //rString.Len() and handle each section as separate 8bit strings using
+    //separate fonts. Will return an empty string for a continous section
     //that has no possible mapping.
     virtual String ConvertString(String &rString, xub_StrLen &rIndex) = 0;
     virtual ~StarSymbolToMSMultiFont() {}

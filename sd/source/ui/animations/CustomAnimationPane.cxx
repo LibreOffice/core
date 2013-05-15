@@ -183,10 +183,10 @@ CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBas
     mpPBMoveUp = new PushButton( this, SdResId( PB_MOVE_UP ) );
     mpPBMoveDown = new PushButton( this, SdResId( PB_MOVE_DOWN ) );
     mpFTChangeOrder = new FixedText( this, SdResId( FT_CHANGE_ORDER ) );
-    mpFLSeperator1 = new FixedLine( this, SdResId( FL_SEPERATOR1 ) );
+    mpFLSeparator1 = new FixedLine( this, SdResId( FL_SEPARATOR1 ) );
     mpPBPlay = new PushButton( this, SdResId( PB_PLAY ) );
     mpPBSlideShow = new PushButton( this, SdResId( PB_SLIDE_SHOW ) );
-    mpFLSeperator2 = new FixedLine( this, SdResId( FL_SEPERATOR2 ) );
+    mpFLSeparator2 = new FixedLine( this, SdResId( FL_SEPARATOR2 ) );
     mpCBAutoPreview = new CheckBox( this, SdResId( CB_AUTOPREVIEW ) );
 
     maStrProperty = mpFTProperty->GetText();
@@ -269,10 +269,10 @@ CustomAnimationPane::~CustomAnimationPane()
     delete mpFTChangeOrder;
     delete mpPBMoveUp;
     delete mpPBMoveDown;
-    delete mpFLSeperator1;
+    delete mpFLSeparator1;
     delete mpPBPlay;
     delete mpPBSlideShow;
-    delete mpFLSeperator2;
+    delete mpFLSeparator2;
     delete mpCBAutoPreview;
 }
 
@@ -517,11 +517,11 @@ void CustomAnimationPane::updateLayout()
     aCursor = Point( aOffset.X(), aPaneSize.Height() - mpCBAutoPreview->GetSizePixel().Height() - aOffset.Y() );
     mpCBAutoPreview->SetPosPixel( aCursor );
 
-    // place the seperator 2 fixed line
-    aCursor.Y() -= /* aOffset.Y() + */ mpFLSeperator2->GetSizePixel().Height();
-    aSize = mpFLSeperator2->GetSizePixel();
+    // place the separator 2 fixed line
+    aCursor.Y() -= /* aOffset.Y() + */ mpFLSeparator2->GetSizePixel().Height();
+    aSize = mpFLSeparator2->GetSizePixel();
     aSize.Width() = aPaneSize.Width() - 2 * aOffset.X();
-    mpFLSeperator2->SetPosSizePixel( aCursor, aSize );
+    mpFLSeparator2->SetPosSizePixel( aCursor, aSize );
 
     // next, layout and place the play and slide show buttons
     aCtrlSize = mpPBSlideShow->GetSizePixel();
@@ -547,12 +547,12 @@ void CustomAnimationPane::updateLayout()
         mpPBSlideShow->SetPosSizePixel( aCursor, aCtrlSize );
     }
 
-    // place the seperator 1 fixed line
+    // place the separator 1 fixed line
     aCursor.X() = aOffset.X();
-    aCursor.Y() -= /* aOffset.Y() + */ mpFLSeperator1->GetSizePixel().Height();
-    aSize = mpFLSeperator1->GetSizePixel();
+    aCursor.Y() -= /* aOffset.Y() + */ mpFLSeparator1->GetSizePixel().Height();
+    aSize = mpFLSeparator1->GetSizePixel();
     aSize.Width() = aPaneSize.Width() - 2 * aOffset.X();
-    mpFLSeperator1->SetPosSizePixel( aCursor, aSize );
+    mpFLSeparator1->SetPosSizePixel( aCursor, aSize );
 
     // place the move down button
     aSize = mpPBMoveDown->GetSizePixel();
@@ -710,10 +710,10 @@ void CustomAnimationPane::updateControls()
     mpFTChangeOrder->Enable( mxView.is() );
     mpPBMoveUp->Enable( mxView.is() );
     mpPBMoveDown->Enable( mxView.is() );
-    mpFLSeperator1->Enable( mxView.is() );
+    mpFLSeparator1->Enable( mxView.is() );
     mpPBPlay->Enable( mxView.is() );
     mpPBSlideShow->Enable( mxView.is() );
-    mpFLSeperator2->Enable( mxView.is() );
+    mpFLSeparator2->Enable( mxView.is() );
     mpCBAutoPreview->Enable( mxView.is() );
 
     if( !mxView.is() )

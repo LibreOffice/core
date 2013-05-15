@@ -66,7 +66,7 @@ FrameListAnalyzer::~FrameListAnalyzer()
     In case the request was "CloseWin" these splitted lists can be used too, to decide if the last window
     or document was closed. Then we have to initialize the backing window ...
     Last but not least we must know something about our special help frame. It must be handled
-    seperatly. And last but not least - the backing component frame must be detected too.
+    separately. And last but not least - the backing component frame must be detected too.
 */
 
 void FrameListAnalyzer::impl_analyze()

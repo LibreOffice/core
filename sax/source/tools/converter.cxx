@@ -270,7 +270,7 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
 
         return;
     }
-    // the sign is processed seperatly
+    // the sign is processed separately
     if( nMeasure < 0 )
     {
         nMeasure = -nMeasure;

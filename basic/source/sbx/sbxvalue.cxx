@@ -578,7 +578,7 @@ sal_Bool SbxValue::Put( const SbxValues& rVal )
 // Method to execute a pretreatment of the strings at special types.
 // In particular necessary for BASIC-IDE, so that
 // the output in the Watch-Window can be writen back with PutStringExt,
-// if Float were declared with ',' as the decimal seperator or BOOl
+// if Float were declared with ',' as the decimal separator or BOOl
 // explicit with "TRUE" or "FALSE".
 // Implementation in ImpConvStringExt (SBXSCAN.CXX)
 sal_Bool SbxValue::PutStringExt( const OUString& r )
@@ -715,7 +715,7 @@ sal_Bool SbxValue::IsFixed() const
 // A variable is numeric, if it is EMPTY or realy numeric
 // or if it contains a complete convertible String
 
-// #41692, implement it for RTL and Basic-Core seperably
+// #41692, implement it for RTL and Basic-Core separately
 sal_Bool SbxValue::IsNumeric() const
 {
     return ImpIsNumeric( /*bOnlyIntntl*/false );

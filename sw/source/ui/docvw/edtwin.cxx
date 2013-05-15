@@ -2290,7 +2290,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     (m_aInBuffer.Len() || !rSh.IsSttPara() || !rSh.IsEndPara() ))
                 {
                     // insert a blank ahead of the character. this ends up
-                    // between the expanded text and the new "non-word-seperator".
+                    // between the expanded text and the new "non-word-separator".
                     m_aInBuffer += ' ';
                 }
 

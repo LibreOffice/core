@@ -238,7 +238,7 @@ throw (::com::sun::star::uno::RuntimeException)
     subPopupMenu->insertItem( MID_LANG_PARA_MORE,  String( FwkResId( STR_LANGSTATUS_MORE )), 0, MID_LANG_PARA_MORE );
 
     // add last two entries to main menu
-    xPopupMenu->insertSeparator( MID_LANG_PARA_SEPERATOR );
+    xPopupMenu->insertSeparator( MID_LANG_PARA_SEPARATOR );
     xPopupMenu->insertItem( MID_LANG_PARA_STRING, String( FwkResId( STR_SET_LANGUAGE_FOR_PARAGRAPH )), 0, MID_LANG_PARA_STRING );
     xPopupMenu->setPopupMenu( MID_LANG_PARA_STRING, subPopupMenu );
 

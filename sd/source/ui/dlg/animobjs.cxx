@@ -957,7 +957,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
         // several objects: group the clones
         else if (nMarkCount > 1)
         {
-            // take objects seperately
+            // take objects separately
             if( bAllObjects )
             {
                 for( sal_uLong nObject= 0; nObject < nMarkCount; nObject++ )

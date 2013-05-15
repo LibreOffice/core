@@ -35,7 +35,7 @@ FILE_LINE_DELIMITER = vbCRLF
 '/**
 ' * Get data from file using a given separator.
 ' */
-function File_getDataVirtual( sFilename, sServerPath, sSeperator )
+function File_getDataVirtual( sFilename, sServerPath, sSeparator )
     call Err.Clear()
 
     Dim aFSObject, sServerFileName
@@ -47,8 +47,8 @@ function File_getDataVirtual( sFilename, sServerPath, sSeperator )
     if Err.Number = 0 then
         File_getDataVirtual = File_read( sServerFileName )
         If Not IsNull(File_getDataVirtual) Then
-            File_getDataVirtual = Replace( File_getDataVirtual, FILE_LINE_DELIMITER, sSeperator)
-            File_getDataVirtual = Split( File_getDataVirtual, sSeperator)
+            File_getDataVirtual = Replace( File_getDataVirtual, FILE_LINE_DELIMITER, sSeparator)
+            File_getDataVirtual = Split( File_getDataVirtual, sSeparator)
         End If
     end if
 end function

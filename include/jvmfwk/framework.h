@@ -107,7 +107,7 @@ extern "C" {
     -env:UNO_JAVA_JFW_PLUGIN=file:\\solver\\bin\\libsunjavaplugin.dll -register ....
     </p>
     <p>Additionall parameters for the Java VM can be provided. For every parameter
-    a seperate bootstrap parameter must be specified. The names are
+    a separate bootstrap parameter must be specified. The names are
     <code>UNO_JAVA_JFW_PARAMETER_X</code>, where X is 1,2, .. n. For example:</p>
     <p>
     regcomp -env:UNO_JAVA_JFW_PARAMETER_1=-Xdebug

@@ -47,7 +47,7 @@ namespace accessibility {
     @attention
         Note, that modifications of the underlying view that lead to
         different transformations between internal and screen coordinates or
-        change the validity of the forwarder have to be signaled seperately.
+        change the validity of the forwarder have to be signaled separately.
 */
 class IAccessibleViewForwarder
 {

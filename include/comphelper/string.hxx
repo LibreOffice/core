@@ -151,7 +151,7 @@ COMPHELPER_DLLPUBLIC OUString strip(const OUString &rIn,
 
   @param    rIn         the input OString
   @param    nToken      the number of the token to return
-  @param    cTok        the character which seperate the tokens.
+  @param    cTok        the character which separate the tokens.
   @return   the token   if token is negative or doesn't exist an empty token
                         is returned
 */
@@ -167,7 +167,7 @@ inline OString getToken(const OString &rIn,
 
   @param    rIn         the input OUString
   @param    nToken      the number of the token to return
-  @param    cTok        the character which seperate the tokens.
+  @param    cTok        the character which separate the tokens.
   @return   the token   if token is negative or doesn't exist an empty token
                         is returned
 */
@@ -180,7 +180,7 @@ inline OUString getToken(const OUString &rIn,
 /** Returns number of tokens in an OUString
 
   @param    rIn     the input OString
-  @param    cTok    the character which seperate the tokens.
+  @param    cTok    the character which separate the tokens.
   @return   the number of tokens
 */
 COMPHELPER_DLLPUBLIC sal_Int32 getTokenCount(const OString &rIn, sal_Char cTok);
@@ -188,7 +188,7 @@ COMPHELPER_DLLPUBLIC sal_Int32 getTokenCount(const OString &rIn, sal_Char cTok);
 /** Returns number of tokens in an OUString
 
   @param    rIn     the input OUString
-  @param    cTok    the character which seperate the tokens.
+  @param    cTok    the character which separate the tokens.
   @return   the number of tokens
 */
 COMPHELPER_DLLPUBLIC sal_Int32 getTokenCount(const OUString &rIn, sal_Unicode cTok);

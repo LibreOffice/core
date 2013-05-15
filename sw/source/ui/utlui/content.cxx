@@ -1639,7 +1639,7 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
             sUrl += sEntry;
             if(rToken.Len())
             {
-                sUrl += cMarkSeperator;
+                sUrl += cMarkSeparator;
                 sUrl += rToken;
             }
         }

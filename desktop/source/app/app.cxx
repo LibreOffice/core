@@ -2607,11 +2607,11 @@ String GetURL_Impl(
         return rName;
     }
 
-    // Add path seperator to these directory and make given URL (rName) absolute by using of current working directory
+    // Add path separator to these directory and make given URL (rName) absolute by using of current working directory
     // Attention: "setFinalSlash()" is necessary for calling "smartRel2Abs()"!!!
     // Otherwhise last part will be ignored and wrong result will be returned!!!
     // "smartRel2Abs()" interpret given URL as file not as path. So he truncate last element to get the base path ...
-    // But if we add a seperator - he doesn't do it anymore.
+    // But if we add a separator - he doesn't do it anymore.
     INetURLObject aObj;
     if (cwdUrl) {
         aObj.SetURL(*cwdUrl);

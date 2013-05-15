@@ -2019,7 +2019,7 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl(void *)
 
             if ( pStyle->IsUsed() )  // pStyle is in use in the document?
             {
-                if (bUsedStyle) // add a seperator for the second and later styles
+                if (bUsedStyle) // add a separator for the second and later styles
                     aMsg += ", ";
                 aMsg += aTemplName;
                 bUsedStyle = 1;
