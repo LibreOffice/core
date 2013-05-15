@@ -32,7 +32,7 @@ below.
 Note that in the case of LibreOffice, it is uncommon to run the
 configure script directly. Normally one uses the autogen.sh script.
 The autogen.sh script reads command-line options from file called
-autogen.lastrun if it exists. The typical way of working is to keep
+autogen.input if it exists. The typical way of working is to keep
 the configure parameters in that file and edit it as needed.
 
 
@@ -58,19 +58,19 @@ This OOo-originated MinGW support attempts to be for both running the
 Cygwin gcc in its -mno-cygwin mode, and a Windows-native MinGW
 compiler. The -mno-cygwin mechanism in the Cygwin gcc is rapidly being
 obsoleted, if it isn't already, and we have not attempted to try to
-keep it working; in fact we have activly cleaned out mechanisms
+keep it working; in fact we have actively cleaned out mechanisms
 related to this. Ditto for native MinGW. If one compiles natively on
 Windows, just use a version of Microsoft's compiler. OpenOffice.org
 and LibreOffice have been built for Windows all the time using that.
 
-The only case where it makes sense to use MinGW, is for
+The only case where it makes sense to use MinGW is for
 cross-compilation. There is just too much crack involved on Windows
 anyway, and it is a semi-miracle that the MSVC build under Cygwin
 works as nicely as it does.
 
 MinGW is available as cross-build toolchains pre-packaged in more or
 less official packages for many Linux distros including Debian, Fedora
-and openSUSE. For instance the mingw32 packages in the Open Build
+and openSUSE. For instance, the mingw32 packages in the Open Build
 Service, running on openSUSE, can be found at:
 
 http://download.opensuse.org/repositories/windows:/mingw:/win32/
