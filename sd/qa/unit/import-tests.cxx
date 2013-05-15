@@ -53,7 +53,8 @@ void SdFiltersTest::testDocumentLayout()
     {
         { "odp/shapes-test.odp", "xml/shapes-test_page" },
         { "pptx/fdo47434-all.pptx", "pptx/xml/fdo47434_page" },
-        { "n758621.ppt", "xml/n758621_" }
+        { "n758621.ppt", "xml/n758621_" },
+        { "fdo64586.ppt", "xml/fdo64586_" }
     };
 
     for ( int i = 0; i < static_cast< int >( SAL_N_ELEMENTS( aFilesToCompare ) ); ++i )
