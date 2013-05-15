@@ -85,8 +85,8 @@ private:
     DECL_LINK(ClickHandler, ToolBox*);
     DECL_LINK(DoubleClickHandler, ToolBox*);
     DECL_LINK(SelectHandler, ToolBox*);
-    DECL_LINK(Activate, ToolBox*);
-    DECL_LINK(Deactivate, ToolBox*);
+    DECL_LINK(ActivateToolBox, ToolBox*);
+    DECL_LINK(DeactivateToolBox, ToolBox*);
 
     void CreateController (
         const sal_uInt16 nItemId,

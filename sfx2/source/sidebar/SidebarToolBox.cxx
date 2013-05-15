@@ -60,8 +60,8 @@ SidebarToolBox::SidebarToolBox (
         SetClickHdl(LINK(this, SidebarToolBox, ClickHandler));
         SetDoubleClickHdl(LINK(this, SidebarToolBox, DoubleClickHandler));
         SetSelectHdl(LINK(this, SidebarToolBox, SelectHandler));
-        SetActivateHdl(LINK(this, SidebarToolBox, Activate));
-        SetDeactivateHdl(LINK(this, SidebarToolBox, Deactivate));
+        SetActivateHdl(LINK(this, SidebarToolBox, ActivateToolBox));
+        SetDeactivateHdl(LINK(this, SidebarToolBox, DeactivateToolBox));
     }
 
 #ifdef DEBUG
@@ -251,14 +251,13 @@ Reference<frame::XToolbarController> SidebarToolBox::GetControllerForItemId (con
 void SidebarToolBox::UpdateIcons (const Reference<frame::XFrame>& rxFrame)
 {
     const sal_Bool bBigImages (SvtMiscOptions().AreCurrentSymbolsLarge());
-    const bool bIsHighContrastActive (sfx2::sidebar::Theme::IsHighContrastMode());
 
     for (ControllerContainer::iterator iController(maControllers.begin()), iEnd(maControllers.end());
          iController!=iEnd;
          ++iController)
     {
         const ::rtl::OUString sCommandURL (iController->second.msCurrentCommand);
-        Image aImage (framework::GetImageFromURL(rxFrame, sCommandURL, bBigImages, bIsHighContrastActive));
+        Image aImage (framework::GetImageFromURL(rxFrame, sCommandURL, bBigImages));
         SetItemImage(iController->first, aImage);
     }
 }
@@ -349,7 +348,7 @@ IMPL_LINK(SidebarToolBox, SelectHandler, ToolBox*, pToolBox)
 
 
 
-IMPL_LINK(SidebarToolBox, Activate, ToolBox*, EMPTYARG)
+IMPL_LINK(SidebarToolBox, ActivateToolBox, ToolBox*, EMPTYARG)
 {
     return 1;
 }
@@ -357,7 +356,7 @@ IMPL_LINK(SidebarToolBox, Activate, ToolBox*, EMPTYARG)
 
 
 
-IMPL_LINK(SidebarToolBox, Deactivate, ToolBox*, EMPTYARG)
+IMPL_LINK(SidebarToolBox, DeactivateToolBox, ToolBox*, EMPTYARG)
 {
     return 1;
 }

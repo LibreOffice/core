@@ -15,7 +15,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "precompiled_sfx2.hxx"
 
 #include "sfx2/sidebar/ControllerFactory.hxx"
 #include "sfx2/sidebar/CommandInfoProvider.hxx"
@@ -53,7 +52,7 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
     if ( ! xController.is())
         xController.set(
             static_cast<XWeak*>(new svt::GenericToolboxController(
-                    ::comphelper::getProcessServiceFactory(),
+                    ::comphelper::getProcessComponentContext(),
                     rxFrame,
                     pToolBox,
                     nItemId,
