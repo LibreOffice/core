@@ -3455,9 +3455,6 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
 
         if(getSupportsMultipleContents() && dynamic_cast< SdXMLGraphicObjectShapeContext* >(pContext))
         {
-            if ( !maShapeId.isEmpty() )
-                GetImport().getInterfaceToIdentifierMapper().reserveIdentifier( maShapeId );
-
             addContent(*mxImplContext);
         }
     }
@@ -3534,11 +3531,13 @@ void SdXMLFrameShapeContext::EndElement()
     // solve if multiple image child contexts were imported
     const SvXMLImportContext* const pSelectedContext(solveMultipleImages());
     const SdXMLGraphicObjectShapeContext* pShapeContext( dynamic_cast<const SdXMLGraphicObjectShapeContext*>( pSelectedContext ) );
-    if ( pShapeContext )
+    if ( pShapeContext && !maShapeId.isEmpty() )
     {
+        // fdo#64512 and fdo#60075 - make sure *this* shape is
+        // registered for given ID
         assert( mxImplContext.Is() );
         const uno::Reference< uno::XInterface > xShape( pShapeContext->getShape() );
-        GetImport().getInterfaceToIdentifierMapper().registerReservedReference( maShapeId, xShape );
+        GetImport().getInterfaceToIdentifierMapper().registerReferenceAlways( maShapeId, xShape );
     }
 
     if( !mxImplContext.Is() )
