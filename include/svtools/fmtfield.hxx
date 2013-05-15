@@ -236,6 +236,7 @@ public:
 
 protected:
     virtual long Notify(NotifyEvent& rNEvt);
+    void impl_Modify(bool makeValueDirty = true);
     virtual void Modify();
 
     // CheckText ueberschreiben fuer Ueberpruefung zur Eingabezeit

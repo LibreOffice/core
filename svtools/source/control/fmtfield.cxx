@@ -487,13 +487,14 @@ void FormattedField::SetAutoColor(sal_Bool _bAutomatic)
 }
 
 //------------------------------------------------------------------------------
-void FormattedField::Modify()
+void FormattedField::impl_Modify(bool makeValueDirty)
 {
     DBG_CHKTHIS(FormattedField, NULL);
 
     if (!IsStrictFormat())
     {
-        m_bValueDirty = sal_True;
+        if(makeValueDirty)
+            m_bValueDirty = sal_True;
         SpinField::Modify();
         return;
     }
@@ -503,7 +504,8 @@ void FormattedField::Modify()
     {
         m_sLastValidText = sCheck;
         m_aLastSelection = GetSelection();
-        m_bValueDirty = sal_True;
+        if(makeValueDirty)
+            m_bValueDirty = sal_True;
     }
     else
     {
@@ -511,6 +513,14 @@ void FormattedField::Modify()
     }
 
     SpinField::Modify();
+}
+
+//------------------------------------------------------------------------------
+void FormattedField::Modify()
+{
+    DBG_CHKTHIS(FormattedField, NULL);
+
+    impl_Modify();
 }
 
 //------------------------------------------------------------------------------
@@ -789,10 +799,12 @@ void FormattedField::Commit()
 
     // did the text change?
     if ( GetText() != sOld )
-    {   // consider the field as modified
-        Modify();
-        // but we have the most recent value now
-        m_bValueDirty = sal_False;
+    {   // consider the field as modified,
+        // but we already have the most recent value;
+        // don't reparse it from the text
+        // (can lead to data loss when the format is lossy,
+        //  as is e.g. our default date format: 2-digit year!)
+        impl_Modify(false);
     }
 }
 
