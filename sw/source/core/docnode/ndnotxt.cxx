@@ -160,8 +160,8 @@ const PolyPolygon *SwNoTxtNode::HasContour() const
                         // #i102238#
                         if ( nGrfDPIx != 0 && nGrfDPIy != 0 )
                         {
-                            rPoly[i] = Point( rPoly[i].getX() * pOutDev->ImplGetDPIX() / nGrfDPIx,
-                                              rPoly[i].getY() * pOutDev->ImplGetDPIY() / nGrfDPIy );
+                            rPoly[i] = Point( rPoly[i].X() * pOutDev->ImplGetDPIX() / nGrfDPIx,
+                                              rPoly[i].Y() * pOutDev->ImplGetDPIY() / nGrfDPIy );
                         }
                     }
                     else

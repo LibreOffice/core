@@ -396,8 +396,8 @@ sal_Bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                         aPos -= rSttPt - pObj->GetSnapRect().TopLeft();
                         // OD 2004-04-05 #i26791# - change attributes instead of
                         // direct positioning
-                        pFmt->SetFmtAttr( SwFmtHoriOrient( aPos.getX(), text::HoriOrientation::NONE, text::RelOrientation::FRAME ) );
-                        pFmt->SetFmtAttr( SwFmtVertOrient( aPos.getY(), text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
+                        pFmt->SetFmtAttr( SwFmtHoriOrient( aPos.X(), text::HoriOrientation::NONE, text::RelOrientation::FRAME ) );
+                        pFmt->SetFmtAttr( SwFmtVertOrient( aPos.Y(), text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
                         // #i47455# - notify draw frame format
                         // that position attributes are already set.
                         if ( pFmt->ISA(SwDrawFrmFmt) )
@@ -541,8 +541,8 @@ sal_Bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
                 Point aPos( rInsPt );
                 aPos -= aNewAnch;
                 aPos -= rSttPt - pFly->Frm().Pos();
-                pFlyFmt->SetFmtAttr( SwFmtHoriOrient( aPos.getX(),text::HoriOrientation::NONE, text::RelOrientation::FRAME ) );
-                pFlyFmt->SetFmtAttr( SwFmtVertOrient( aPos.getY(),text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
+                pFlyFmt->SetFmtAttr( SwFmtHoriOrient( aPos.X(),text::HoriOrientation::NONE, text::RelOrientation::FRAME ) );
+                pFlyFmt->SetFmtAttr( SwFmtVertOrient( aPos.Y(),text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
             }
 
             const Point aPt( pDestShell->GetCrsrDocPos() );
@@ -1401,7 +1401,7 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
                 pNewObj->NbcResize( aNewRect.TopLeft(), aScaleWidth, aScaleHeight);
 
                 Point aVec = aOldObjRect.TopLeft() - aNewRect.TopLeft();
-                pNewObj->NbcMove(Size(aVec.getX(), aVec.getY()));
+                pNewObj->NbcMove(Size(aVec.X(), aVec.Y()));
 
                 if( pNewObj->ISA( SdrUnoObj ) )
                     pNewObj->SetLayer( GetDoc()->GetControlsId() );

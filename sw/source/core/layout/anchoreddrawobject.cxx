@@ -528,8 +528,8 @@ void SwAnchoredDrawObject::_SetDrawObjAnchor()
     if ( aNewAnchorPos != aCurrAnchorPos )
     {
         // determine movement to be applied after setting the new anchor position
-        Size aMove( aCurrAnchorPos.getX() - aNewAnchorPos.getX(),
-                    aCurrAnchorPos.getY() - aNewAnchorPos.getY() );
+        Size aMove( aCurrAnchorPos.X() - aNewAnchorPos.X(),
+                    aCurrAnchorPos.Y() - aNewAnchorPos.Y() );
         // set new anchor position
         DrawObj()->SetAnchorPos( aNewAnchorPos );
         // correct object position, caused by setting new anchor position

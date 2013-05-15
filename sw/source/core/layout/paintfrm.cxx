@@ -5416,11 +5416,11 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                     bool bBorder = bLeft || bRight;
                     while( nY < aInter.Top() )
                     {
-                        aTmp.Pos().setY(nY);
+                        aTmp.Pos().Y() = nY;
                         if( bGrid )
                         {
                             nY += nGrid;
-                            SwTwips nPosY = std::max( aInter.Top(), aTmp.Pos().getY() );
+                            SwTwips nPosY = std::max( aInter.Top(), aTmp.Pos().Y() );
                             SwTwips nHeight = std::min(nBottom, nY ) - nPosY;
                             if( nHeight )
                             {
@@ -5453,7 +5453,7 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                             nY += nRuby;
                             if( bBorder )
                             {
-                                SwTwips nPos = std::max(aInter.Top(),aTmp.Pos().getY());
+                                SwTwips nPos = std::max(aInter.Top(),aTmp.Pos().Y());
                                 SwTwips nH = std::min( nBottom, nY ) - nPos;
                                 SwRect aVert( Point( aGrid.Left(), nPos ),
                                             Size( 1, nH ) );
@@ -5463,7 +5463,7 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                                         PaintBorderLine(rRect,aVert,this,pCol);
                                     if( bRight )
                                     {
-                                        aVert.Pos().setX(nGridRight);
+                                        aVert.Pos().X() = nGridRight;
                                         PaintBorderLine(rRect,aVert,this,pCol);
                                     }
                                 }
@@ -5473,33 +5473,33 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                     }
                     while( nY <= nBottom )
                     {
-                        aTmp.Pos().setY(nY);
+                        aTmp.Pos().Y() = nY;
                         PaintBorderLine( rRect, aTmp, this, pCol);
                         if( bGrid )
                         {
                             nY += nGrid;
-                            SwTwips nHeight = std::min(nBottom, nY) - aTmp.Pos().getY();
+                            SwTwips nHeight = std::min(nBottom, nY) - aTmp.Pos().Y();
                             if( nHeight )
                             {
                                 if( bCell )
                                 {
-                                    SwRect aVert( Point( nX, aTmp.Pos().getY() ),
+                                    SwRect aVert( Point( nX, aTmp.Pos().Y() ),
                                                 Size( 1, nHeight ) );
                                     while( aVert.Left() <= nRight )
                                     {
                                         PaintBorderLine( rRect, aVert, this, pCol);
-                                        aVert.Pos().setX(aVert.Pos().getX() + nGridWidth);  //for textgrid refactor
+                                        aVert.Pos().X() += nGridWidth;  //for textgrid refactor
                                     }
                                 }
                                 else if( bBorder )
                                 {
                                     SwRect aVert( Point( aGrid.Left(),
-                                        aTmp.Pos().getY() ), Size( 1, nHeight ) );
+                                        aTmp.Pos().Y() ), Size( 1, nHeight ) );
                                     if( bLeft )
                                         PaintBorderLine(rRect,aVert,this,pCol);
                                     if( bRight )
                                     {
-                                        aVert.Pos().setX(nGridRight);
+                                        aVert.Pos().X() = nGridRight;
                                         PaintBorderLine(rRect,aVert,this,pCol);
                                     }
                                 }
@@ -5520,7 +5520,7 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                                         PaintBorderLine(rRect,aVert,this,pCol);
                                     if( bRight )
                                     {
-                                        aVert.Pos().setX(nGridRight);
+                                        aVert.Pos().X() = nGridRight;
                                         PaintBorderLine(rRect,aVert,this,pCol);
                                     }
                                 }
@@ -6467,7 +6467,7 @@ static drawinglayer::primitive2d::Primitive2DSequence lcl_CreatePageAreaDelimite
         basegfx::B2DVector aHorizVector( aXOffDirs[i], 0.0 );
         basegfx::B2DVector aVertVector( 0.0, aYOffDirs[i] );
 
-        basegfx::B2DPoint aBPoint( aPoints[i].X(), aPoints[i].getY() );
+        basegfx::B2DPoint aBPoint( aPoints[i].X(), aPoints[i].Y() );
 
         basegfx::B2DPolygon aPolygon;
         aPolygon.append( aBPoint + aHorizVector * nLineLength );
@@ -6522,7 +6522,7 @@ static drawinglayer::primitive2d::Primitive2DSequence lcl_CreateColumnAreaDelimi
         basegfx::B2DVector aHorizVector( aXOffDirs[i], 0.0 );
         basegfx::B2DVector aVertVector( 0.0, aYOffDirs[i] );
 
-        basegfx::B2DPoint aBPoint( aPoints[i].getX(), aPoints[i].getY() );
+        basegfx::B2DPoint aBPoint( aPoints[i].X(), aPoints[i].Y() );
 
         basegfx::B2DPolygon aPolygon;
         aPolygon.append( aBPoint + aHorizVector * nLineLength );

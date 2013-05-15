@@ -170,7 +170,7 @@ sal_Bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pOb
                     // For simplicity we put the cursor next to the upper-left
                     // corner.
                     Point aPt( pOldSelFly->Frm().Pos() );
-                    aPt.setX(aPt.getX() - 1);
+                    aPt.X() -= 1;
                     bool bUnLockView = !IsViewLocked();
                     LockView( sal_True );
                     SetCrsr( aPt, sal_True );
@@ -266,12 +266,12 @@ sal_Bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pOb
 |*
 *************************************************************************/
 
-#define LESS_X( aPt1, aPt2, bOld ) ( aPt1.getX() < aPt2.getX() || \
-        ( aPt1.getX() == aPt2.getX() && ( aPt1.getY() < aPt2.getY() || \
-        ( aPt1.getY() == aPt2.getY() && bOld ) ) ) )
-#define LESS_Y( aPt1, aPt2, bOld ) ( aPt1.getY() < aPt2.getY() || \
-        ( aPt1.getY() == aPt2.getY() && ( aPt1.getX() < aPt2.getX() || \
-        ( aPt1.getX() == aPt2.getX() && bOld ) ) ) )
+#define LESS_X( aPt1, aPt2, bOld ) ( aPt1.X() < aPt2.X() || \
+        ( aPt1.X() == aPt2.X() && ( aPt1.Y() < aPt2.Y() || \
+        ( aPt1.Y() == aPt2.Y() && bOld ) ) ) )
+#define LESS_Y( aPt1, aPt2, bOld ) ( aPt1.Y() < aPt2.Y() || \
+        ( aPt1.Y() == aPt2.Y() && ( aPt1.X() < aPt2.X() || \
+        ( aPt1.X() == aPt2.X() && bOld ) ) ) )
 
 sal_Bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
 {
@@ -1390,9 +1390,9 @@ const SdrObject* SwFEShell::GetBestObject( sal_Bool bNext, sal_uInt16 /*GOTOOBJ_
 
             // Special case if another object is on same Y.
             if( aCurPos != aPos &&          // only when it is not me
-                aCurPos.getY() == aPos.getY() &&  // Y positions equal
-                (bNext? (aCurPos.getX() > aPos.getX()) :  // lies next to me
-                        (aCurPos.getX() < aPos.getX())) ) // " reverse
+                aCurPos.Y() == aPos.Y() &&  // Y positions equal
+                (bNext? (aCurPos.X() > aPos.X()) :  // lies next to me
+                        (aCurPos.X() < aPos.X())) ) // " reverse
             {
                 aBestPos = Point( nTmp, nTmp );
                 SdrObjListIter aTmpIter( *pList, bFlat ? IM_FLAT : IM_DEEPNOGROUPS );
@@ -1411,10 +1411,10 @@ const SdrObject* SwFEShell::GetBestObject( sal_Bool bNext, sal_uInt16 /*GOTOOBJ_
                         aCurPos = pTmpObj->GetCurrentBoundRect().TopLeft();
 
                     if( aCurPos != aPos && aCurPos.Y() == aPos.Y() &&
-                        (bNext? (aCurPos.getX() > aPos.getX()) :  // lies next to me
-                                (aCurPos.getX() < aPos.getX())) &&    // " reverse
-                        (bNext? (aCurPos.getX() < aBestPos.getX()) :  // better as best
-                                (aCurPos.getX() > aBestPos.getX())) ) // " reverse
+                        (bNext? (aCurPos.X() > aPos.X()) :  // lies next to me
+                                (aCurPos.X() < aPos.X())) &&    // " reverse
+                        (bNext? (aCurPos.X() < aBestPos.X()) :  // better as best
+                                (aCurPos.X() > aBestPos.X())) ) // " reverse
                     {
                         aBestPos = aCurPos;
                         pBest = pTmpObj;
@@ -1424,32 +1424,32 @@ const SdrObject* SwFEShell::GetBestObject( sal_Bool bNext, sal_uInt16 /*GOTOOBJ_
             }
 
             if( (
-                (bNext? (aPos.getY() < aCurPos.getY()) :          // only below me
-                        (aPos.getY() > aCurPos.getY())) &&        // " reverse
-                (bNext? (aBestPos.getY() > aCurPos.getY()) :      // closer below
-                        (aBestPos.getY() < aCurPos.getY()))
+                (bNext? (aPos.Y() < aCurPos.Y()) :          // only below me
+                        (aPos.Y() > aCurPos.Y())) &&        // " reverse
+                (bNext? (aBestPos.Y() > aCurPos.Y()) :      // closer below
+                        (aBestPos.Y() < aCurPos.Y()))
                     ) ||    // " reverse
-                        (aBestPos.getY() == aCurPos.getY() &&
-                (bNext? (aBestPos.getX() > aCurPos.getX()) :      // further left
-                        (aBestPos.getX() < aCurPos.getX()))))     // " reverse
+                        (aBestPos.Y() == aCurPos.Y() &&
+                (bNext? (aBestPos.X() > aCurPos.X()) :      // further left
+                        (aBestPos.X() < aCurPos.X()))))     // " reverse
 
             {
                 aBestPos = aCurPos;
                 pBest = pObj;
             }
 
-            if( (bNext? (aTopPos.getY() > aCurPos.getY()) :       // higher as best
-                        (aTopPos.getY() < aCurPos.getY())) ||     // " reverse
-                        (aTopPos.getY() == aCurPos.getY() &&
-                (bNext? (aTopPos.getX() > aCurPos.getX()) :       // further left
-                        (aTopPos.getX() < aCurPos.getX()))))      // " reverse
+            if( (bNext? (aTopPos.Y() > aCurPos.Y()) :       // higher as best
+                        (aTopPos.Y() < aCurPos.Y())) ||     // " reverse
+                        (aTopPos.Y() == aCurPos.Y() &&
+                (bNext? (aTopPos.X() > aCurPos.X()) :       // further left
+                        (aTopPos.X() < aCurPos.X()))))      // " reverse
             {
                 aTopPos = aCurPos;
                 pTop = pObj;
             }
         }
         // unfortunately nothing found
-        if( (bNext? (aBestPos.getX() == LONG_MAX) : (aBestPos.getX() == 0)) )
+        if( (bNext? (aBestPos.X() == LONG_MAX) : (aBestPos.X() == 0)) )
             pBest = pTop;
     }
 
@@ -1630,7 +1630,7 @@ sal_Bool SwFEShell::ImpEndCreate()
     {
         SwPosition aPos( GetDoc()->GetNodes() );
         SwCrsrMoveState aState( MV_SETONLYTEXT );
-        Point aPoint( aPt.getX(), aPt.getY() + rBound.GetHeight()/2 );
+        Point aPoint( aPt.X(), aPt.Y() + rBound.GetHeight()/2 );
         GetLayout()->GetCrsrOfst( &aPos, aPoint, &aState ); //swmod 080317
 
         // characterbinding not allowed in readonly-content
@@ -2864,13 +2864,13 @@ long SwFEShell::GetSectionWidth( SwFmt& rFmt ) const
 
                     aInnerPoly.append(basegfx::B2DPoint(aRect.Left(), aRect.Bottom()));
 
-                    const basegfx::B2DPoint aCenterBottom(aRect.Center().getX(), aRect.Bottom());
+                    const basegfx::B2DPoint aCenterBottom(aRect.Center().X(), aRect.Bottom());
                     aInnerPoly.appendBezierSegment(
                         aCenterBottom,
                         aCenterBottom,
-                        basegfx::B2DPoint(aRect.Center().getX(), aRect.Center().getY()));
+                        basegfx::B2DPoint(aRect.Center().X(), aRect.Center().Y()));
 
-                    const basegfx::B2DPoint aCenterTop(aRect.Center().getX(), aRect.Top());
+                    const basegfx::B2DPoint aCenterTop(aRect.Center().X(), aRect.Top());
                     aInnerPoly.appendBezierSegment(
                         aCenterTop,
                         aCenterTop,
@@ -2888,11 +2888,11 @@ long SwFEShell::GetSectionWidth( SwFmt& rFmt ) const
 
                     aInnerPoly.appendBezierSegment(
                         basegfx::B2DPoint(aRect.Left(), aRect.Top()),
-                        basegfx::B2DPoint(aRect.Center().getX(), aRect.Top()),
-                        basegfx::B2DPoint(aRect.Center().getX(), aRect.Center().getY()));
+                        basegfx::B2DPoint(aRect.Center().X(), aRect.Top()),
+                        basegfx::B2DPoint(aRect.Center().X(), aRect.Center().Y()));
 
                     aInnerPoly.appendBezierSegment(
-                        basegfx::B2DPoint(aRect.Center().getX(), aRect.Bottom()),
+                        basegfx::B2DPoint(aRect.Center().X(), aRect.Bottom()),
                         basegfx::B2DPoint(aRect.Right(), aRect.Bottom()),
                         basegfx::B2DPoint(aRect.Right(), aRect.Top()));
 
@@ -2919,7 +2919,7 @@ long SwFEShell::GetSectionWidth( SwFmt& rFmt ) const
 
                     if(OBJ_PLIN == eSdrObjectKind)
                     {
-                        aInnerPoly.append(basegfx::B2DPoint(aRect.Center().getX(), aRect.Bottom()));
+                        aInnerPoly.append(basegfx::B2DPoint(aRect.Center().X(), aRect.Bottom()));
                     }
                     else
                     {
@@ -2933,8 +2933,8 @@ long SwFEShell::GetSectionWidth( SwFmt& rFmt ) const
                 {
                     sal_Int32 nYMiddle((aRect.Top() + aRect.Bottom()) / 2);
                     basegfx::B2DPolygon aTempPoly;
-                    aTempPoly.append(basegfx::B2DPoint(aRect.TopLeft().getX(), nYMiddle));
-                    aTempPoly.append(basegfx::B2DPoint(aRect.BottomRight().getX(), nYMiddle));
+                    aTempPoly.append(basegfx::B2DPoint(aRect.TopLeft().X(), nYMiddle));
+                    aTempPoly.append(basegfx::B2DPoint(aRect.BottomRight().X(), nYMiddle));
                     aPoly.append(aTempPoly);
                 }
                 break;

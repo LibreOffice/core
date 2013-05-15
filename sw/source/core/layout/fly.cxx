@@ -177,8 +177,7 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
 
     //Und erstmal in den Wald stellen die Kiste, damit bei neuen Dokument nicht
     //unnoetig viel formatiert wird.
-    Frm().Pos().setX(FAR_AWAY);
-    Frm().Pos().setY(FAR_AWAY);
+    Frm().Pos().X() = Frm().Pos().Y() = FAR_AWAY;
 }
 
 void SwFlyFrm::Chain( SwFrm* _pAnch )
@@ -1325,8 +1324,7 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
         if ( Frm().Top() == FAR_AWAY && Frm().Left() == FAR_AWAY )
         {
             //Sicherheitsschaltung wegnehmen (siehe SwFrm::CTor)
-            Frm().Pos().setX(0);
-            Frm().Pos().setY(0);
+            Frm().Pos().X() = Frm().Pos().Y() = 0;
             // #i68520#
             InvalidateObjRectWithSpaces();
         }
@@ -2680,7 +2678,7 @@ sal_Bool SwFlyFrm::GetContour( PolyPolygon&   rContour,
                             else
                                 aNewPoint = pOutDev->LogicToLogic( rPoly[ i ], aGrfMap, aDispMap  );
 
-                            rPoly[ i ] = Point( FRound( aNewPoint.getX() * fScaleX ), FRound( aNewPoint.getY() * fScaleY ) );
+                            rPoly[ i ] = Point( FRound( aNewPoint.X() * fScaleX ), FRound( aNewPoint.Y() * fScaleY ) );
                         }
                     }
                 }
@@ -2752,17 +2750,17 @@ const SwRect SwFlyFrm::GetObjBoundRect() const
 // #i68520#
 bool SwFlyFrm::_SetObjTop( const SwTwips _nTop )
 {
-    const bool bChanged( Frm().Pos().getY() != _nTop );
+    const bool bChanged( Frm().Pos().Y() != _nTop );
 
-    Frm().Pos().setY(_nTop);
+    Frm().Pos().Y() = _nTop;
 
     return bChanged;
 }
 bool SwFlyFrm::_SetObjLeft( const SwTwips _nLeft )
 {
-    const bool bChanged( Frm().Pos().getX() != _nLeft );
+    const bool bChanged( Frm().Pos().X() != _nLeft );
 
-    Frm().Pos().setX(_nLeft);
+    Frm().Pos().X() = _nLeft;
 
     return bChanged;
 }

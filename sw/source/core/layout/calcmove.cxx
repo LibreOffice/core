@@ -547,23 +547,23 @@ void SwFrm::MakePos()
 
                 // cells may now leave their uppers
                 if( bVert && FRM_CELL & nMyType && !mbReverse )
-                    maFrm.Pos().setX(maFrm.Pos().getX() - maFrm.Width() -pPrv->Frm().Width());
+                    maFrm.Pos().X() -= maFrm.Width() -pPrv->Frm().Width();
             }
             else if( bVert && FRM_NOTE_VERT & nMyType )
             {
                 if( mbReverse )
-                    maFrm.Pos().setX(maFrm.Pos().getX() + pPrv->Frm().Width());
+                    maFrm.Pos().X() += pPrv->Frm().Width();
                 else
                     //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
                 {
                     if ( bVertL2R )
-                           maFrm.Pos().setX(maFrm.Pos().getX() + pPrv->Frm().Width());
+                           maFrm.Pos().X() += pPrv->Frm().Width();
                     else
-                           maFrm.Pos().setX(maFrm.Pos().getX() - maFrm.Width());
+                           maFrm.Pos().X() -= maFrm.Width();
                   }
             }
             else
-                maFrm.Pos().setY(maFrm.Pos().getY() + pPrv->Frm().Height());
+                maFrm.Pos().Y() += pPrv->Frm().Height();
         }
         else if ( GetUpper() )
         {
@@ -602,17 +602,17 @@ void SwFrm::MakePos()
 
                     // cells may now leave their uppers
                     if( bVert && FRM_CELL & nMyType && !mbReverse )
-                        maFrm.Pos().setX(maFrm.Pos().getX() - maFrm.Width() -pPrv->Frm().Width());
+                        maFrm.Pos().X() -= maFrm.Width() -pPrv->Frm().Width();
                 }
                 else if( bVert && FRM_NOTE_VERT & nMyType )
                 {
                     if( mbReverse )
-                        maFrm.Pos().setX(maFrm.Pos().getX() + pPrv->Frm().Width());
+                        maFrm.Pos().X() += pPrv->Frm().Width();
                     else
-                        maFrm.Pos().setX(maFrm.Pos().getX() - maFrm.Width());
+                        maFrm.Pos().X() -= maFrm.Width();
                 }
                 else
-                    maFrm.Pos().setY(maFrm.Pos().getY() + pPrv->Frm().Height());
+                    maFrm.Pos().Y() += pPrv->Frm().Height();
             }
             else
             {
@@ -621,25 +621,22 @@ void SwFrm::MakePos()
                 if( FRM_NEIGHBOUR & nMyType && IsRightToLeft() )
                 {
                     if( bVert )
-                        maFrm.Pos().setY(maFrm.Pos().getY() + GetUpper()->Prt().Height()
-                                          - maFrm.Height());
+                        maFrm.Pos().Y() += GetUpper()->Prt().Height()
+                                          - maFrm.Height();
                     else
-                        maFrm.Pos().setX(maFrm.Pos().getY() + GetUpper()->Prt().Width()
-                                          - maFrm.Width());
+                        maFrm.Pos().X() += GetUpper()->Prt().Width()
+                                          - maFrm.Width();
                 }
                 //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
                 else if( bVert && !bVertL2R && FRM_NOTE_VERT & nMyType && !mbReverse )
-                    maFrm.Pos().setX(maFrm.Pos().getX() - maFrm.Width() - GetUpper()->Prt().Width());
+                    maFrm.Pos().X() -= maFrm.Width() - GetUpper()->Prt().Width();
             }
         }
         else
-        {
-            maFrm.Pos().setX(0);
-            maFrm.Pos().setY(0);
-        }
+            maFrm.Pos().X() = maFrm.Pos().Y() = 0;
         //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
         if( IsBodyFrm() && bVert && !bVertL2R && !mbReverse && GetUpper() )
-            maFrm.Pos().setX(maFrm.Pos().getX() + GetUpper()->Prt().Width() - maFrm.Width());
+            maFrm.Pos().X() += GetUpper()->Prt().Width() - maFrm.Width();
         mbValidPos = sal_True;
     }
 }
@@ -969,8 +966,7 @@ sal_Bool SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
 
             if( (Prt().*fnRect->fnGetHeight)() )
                 ((SwTxtFrm*)this)->HideHidden();
-            Prt().Pos().setX(0);
-            Prt().Pos().setY(0);
+            Prt().Pos().X() = Prt().Pos().Y() = 0;
             (Prt().*fnRect->fnSetWidth)( (Frm().*fnRect->fnGetWidth)() );
             (Prt().*fnRect->fnSetHeight)( 0 );
             nUpper = -( (Frm().*fnRect->fnGetHeight)() );

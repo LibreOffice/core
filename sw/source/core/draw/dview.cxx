@@ -730,7 +730,7 @@ const SwFrm* SwDrawView::CalcAnchor()
         }
         else if ( !bFly )
         {
-            const SwRect aRect( aPt.getX(), aPt.getY(), 1, 1 );
+            const SwRect aRect( aPt.X(), aPt.Y(), 1, 1 );
 
             SwDrawContact* pContact = (SwDrawContact*)GetUserCall(pObj);
             if ( pContact->GetAnchorFrm( pObj ) &&

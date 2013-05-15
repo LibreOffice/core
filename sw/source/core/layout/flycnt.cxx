@@ -1039,14 +1039,14 @@ static void lcl_PointToPrt( Point &rPoint, const SwFrm *pFrm )
 {
     SwRect aTmp( pFrm->Prt() );
     aTmp += pFrm->Frm().Pos();
-    if ( rPoint.getX() < aTmp.Left() )
-        rPoint.setX(aTmp.Left());
-    else if ( rPoint.getX() > aTmp.Right() )
-        rPoint.setX(aTmp.Right());
-    if ( rPoint.getY() < aTmp.Top() )
-        rPoint.setY(aTmp.Top());
-    else if ( rPoint.getY() > aTmp.Bottom() )
-        rPoint.setY(aTmp.Bottom());
+    if ( rPoint.X() < aTmp.Left() )
+        rPoint.X() = aTmp.Left();
+    else if ( rPoint.X() > aTmp.Right() )
+        rPoint.X() = aTmp.Right();
+    if ( rPoint.Y() < aTmp.Top() )
+        rPoint.Y() = aTmp.Top();
+    else if ( rPoint.Y() > aTmp.Bottom() )
+        rPoint.Y() = aTmp.Bottom();
 
 }
 
@@ -1214,7 +1214,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     Point aNew( rNew );
     //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
       if( ( GetAnchorFrm()->IsVertical() && !GetAnchorFrm()->IsVertLR() ) || GetAnchorFrm()->IsRightToLeft() )
-        aNew.setX(aNew.getX() + Frm().Width());
+        aNew.X() += Frm().Width();
     SwCntntFrm *pCnt = (SwCntntFrm*)::FindAnchor( GetAnchorFrm(), aNew );
     if( pCnt->IsProtected() )
         pCnt = (SwCntntFrm*)GetAnchorFrm();
@@ -1229,9 +1229,9 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
         ( !bRTL !=  !GetAnchorFrm()->IsRightToLeft() ) )
     {
         if( bVert || bRTL )
-            aNew.setX(aNew.getX() + Frm().Width());
+            aNew.X() += Frm().Width();
         else
-            aNew.setX(aNew.getX() - Frm().Width());
+            aNew.X() -= Frm().Width();
     }
 
     if ( pCnt->IsInDocBody() )
@@ -1305,7 +1305,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
             //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
             {
                 if ( pUp->IsVertLR()  )
-                    nDiff += pUp->Prt().Width() - pFollow->GetRelPos().getX();
+                    nDiff += pUp->Prt().Width() - pFollow->GetRelPos().X();
                 else
                        nDiff += pFollow->Frm().Left() + pFollow->Frm().Width()
                              - pUp->Frm().Left() - pUp->Prt().Left();

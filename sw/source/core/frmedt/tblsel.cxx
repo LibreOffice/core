@@ -329,33 +329,33 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
                                 const Point aBottomLeft( pCell->Frm().BottomLeft() );
                                 const Point aBottomRight( pCell->Frm().BottomRight() );
 
-                                if ( aTopLeft.getY() < aCurrentTopLeft.getY() ||
-                                     ( aTopLeft.getY() == aCurrentTopLeft.getY() &&
-                                       aTopLeft.getX() <  aCurrentTopLeft.getX() ) )
+                                if ( aTopLeft.Y() < aCurrentTopLeft.Y() ||
+                                     ( aTopLeft.Y() == aCurrentTopLeft.Y() &&
+                                       aTopLeft.X() <  aCurrentTopLeft.X() ) )
                                 {
                                     aCurrentTopLeft = aTopLeft;
                                     pCurrentTopLeftFrm = static_cast<const SwCellFrm*>( pCell );
                                 }
 
-                                if ( aTopRight.getY() < aCurrentTopRight.getY() ||
-                                     ( aTopRight.getY() == aCurrentTopRight.getY() &&
-                                       aTopRight.getX() >  aCurrentTopRight.getX() ) )
+                                if ( aTopRight.Y() < aCurrentTopRight.Y() ||
+                                     ( aTopRight.Y() == aCurrentTopRight.Y() &&
+                                       aTopRight.X() >  aCurrentTopRight.X() ) )
                                 {
                                     aCurrentTopRight = aTopRight;
                                     pCurrentTopRightFrm = static_cast<const SwCellFrm*>( pCell );
                                 }
 
-                                if ( aBottomLeft.getY() > aCurrentBottomLeft.getY() ||
-                                     ( aBottomLeft.getY() == aCurrentBottomLeft.getY() &&
-                                       aBottomLeft.getX() <  aCurrentBottomLeft.getX() ) )
+                                if ( aBottomLeft.Y() > aCurrentBottomLeft.Y() ||
+                                     ( aBottomLeft.Y() == aCurrentBottomLeft.Y() &&
+                                       aBottomLeft.X() <  aCurrentBottomLeft.X() ) )
                                 {
                                     aCurrentBottomLeft = aBottomLeft;
                                     pCurrentBottomLeftFrm = static_cast<const SwCellFrm*>( pCell );
                                 }
 
-                                if ( aBottomRight.getY() > aCurrentBottomRight.getY() ||
-                                     ( aBottomRight.getY() == aCurrentBottomRight.getY() &&
-                                       aBottomRight.getX() >  aCurrentBottomRight.getX() ) )
+                                if ( aBottomRight.Y() > aCurrentBottomRight.Y() ||
+                                     ( aBottomRight.Y() == aCurrentBottomRight.Y() &&
+                                       aBottomRight.X() >  aCurrentBottomRight.X() ) )
                                 {
                                     aCurrentBottomRight = aBottomRight;
                                     pCurrentBottomRightFrm = static_cast<const SwCellFrm*>( pCell );

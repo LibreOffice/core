@@ -154,14 +154,14 @@ void SwAccessibleTableData_Impl::CollectData( const SwFrm *pFrm )
                 // #i77106#
                 if ( IncludeRow( *pLower ) )
                 {
-                    maRows.insert( pLower->Frm().Top() - maTabFrmPos.getY() );
+                    maRows.insert( pLower->Frm().Top() - maTabFrmPos.Y() );
                     CollectData( pLower );
                 }
             }
             else if( pLower->IsCellFrm() &&
                      rLower.IsAccessible( mbIsInPagePreview ) )
             {
-                maColumns.insert( pLower->Frm().Left() - maTabFrmPos.getX() );
+                maColumns.insert( pLower->Frm().Left() - maTabFrmPos.X() );
             }
             else
             {
@@ -352,9 +352,9 @@ void SwAccessibleTableData_Impl::GetSelection(
         ::std::advance( aStt,
             static_cast< Int32Set_Impl::difference_type >( nStart ) );
         if( bColumns )
-            aArea.Left( *aStt + aPos.getX() );
+            aArea.Left( *aStt + aPos.X() );
         else
-            aArea.Top( *aStt + aPos.getY() );
+            aArea.Top( *aStt + aPos.Y() );
     }
     if( nEnd < static_cast< sal_Int32 >( rRowsOrColumns.size() ) )
     {
@@ -362,9 +362,9 @@ void SwAccessibleTableData_Impl::GetSelection(
         ::std::advance( aEnd,
             static_cast< Int32Set_Impl::difference_type >( nEnd ) );
         if( bColumns )
-            aArea.Right( *aEnd + aPos.getX() - 1 );
+            aArea.Right( *aEnd + aPos.X() - 1 );
         else
-            aArea.Bottom( *aEnd + aPos.getY() - 1 );
+            aArea.Bottom( *aEnd + aPos.Y() - 1 );
     }
 
     GetSelection( aPos, aArea, rSelBoxes, mpTabFrm, rSelHdl, bColumns );

@@ -148,23 +148,23 @@ static void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
         {
             if ( bR2L ) {
                   //FRMDIR_VERT_TOP_LEFT
-                  nHoriRelPos = aObjRect.Left() - aAnchorPos.getX();
-                  nVertRelPos = aObjRect.Top() - aAnchorPos.getY();
+                  nHoriRelPos = aObjRect.Left() - aAnchorPos.X();
+                  nVertRelPos = aObjRect.Top() - aAnchorPos.Y();
             } else {
                 //FRMDIR_VERT_TOP_RIGHT
-                nHoriRelPos = aObjRect.Top() - aAnchorPos.getY();
-                nVertRelPos = aAnchorPos.getX() - aObjRect.Right();
+                nHoriRelPos = aObjRect.Top() - aAnchorPos.Y();
+                nVertRelPos = aAnchorPos.X() - aObjRect.Right();
             }
         }
         else if ( bR2L )
         {
-            nHoriRelPos = aAnchorPos.getX() - aObjRect.Right();
-            nVertRelPos = aObjRect.Top() - aAnchorPos.getY();
+            nHoriRelPos = aAnchorPos.X() - aObjRect.Right();
+            nVertRelPos = aObjRect.Top() - aAnchorPos.Y();
         }
         else
         {
-            nHoriRelPos = aObjRect.Left() - aAnchorPos.getX();
-            nVertRelPos = aObjRect.Top() - aAnchorPos.getY();
+            nHoriRelPos = aObjRect.Left() - aAnchorPos.X();
+            nVertRelPos = aObjRect.Top() - aAnchorPos.Y();
         }
         //End of SCMS
     }
@@ -246,7 +246,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
             // grouped.
             Point aAnchorPos( pObj->GetAnchorPos() );
             pObj->NbcSetAnchorPos( Point( 0, 0 ) );
-            pObj->NbcMove( Size( aAnchorPos.getX(), aAnchorPos.getY() ) );
+            pObj->NbcMove( Size( aAnchorPos.X(), aAnchorPos.Y() ) );
         }
 
         pFmt = MakeDrawFrmFmt( OUString("DrawObject"),

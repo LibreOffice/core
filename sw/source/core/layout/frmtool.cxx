@@ -3435,8 +3435,8 @@ SwFrm* GetFrmOfModify( const SwRootFrm* pLayout, SwModify const& rMod, sal_uInt1
                     // nocht nicht "formatiert" sind
                     if( !bCalcFrm && nFrmType & FRM_FLY &&
                         ((SwFlyFrm*)pTmpFrm)->GetAnchorFrm() &&
-                        FAR_AWAY == pTmpFrm->Frm().Pos().getX() &&
-                        FAR_AWAY == pTmpFrm->Frm().Pos().getY() )
+                        FAR_AWAY == pTmpFrm->Frm().Pos().X() &&
+                        FAR_AWAY == pTmpFrm->Frm().Pos().Y() )
                         aCalcRect = ((SwFlyFrm*)pTmpFrm)->GetAnchorFrm()->Frm();
                     else
                         aCalcRect = pTmpFrm->Frm();
@@ -3450,7 +3450,7 @@ SwFrm* GetFrmOfModify( const SwRootFrm* pLayout, SwModify const& rMod, sal_uInt1
                     // Point not in rectangle. Compare distances:
                     const Point aCalcRectCenter = aCalcRect.Center();
                     const Point aDiff = aCalcRectCenter - *pPoint;
-                    const sal_uInt64 nCurrentDist = aDiff.getX() * aDiff.getX() + aDiff.getY() * aDiff.getY(); // opt: no sqrt
+                    const sal_uInt64 nCurrentDist = aDiff.X() * aDiff.X() + aDiff.Y() * aDiff.Y(); // opt: no sqrt
                     if ( !pMinFrm || nCurrentDist < nMinDist )
                     {
                         pMinFrm = pTmpFrm;

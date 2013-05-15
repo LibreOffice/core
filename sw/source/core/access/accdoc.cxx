@@ -202,7 +202,7 @@ awt::Point SAL_CALL SwAccessibleDocumentBase::getLocation()
     CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
 
     Point aPixPos( pWin->GetWindowExtentsRelative( pWin->GetAccessibleParentWindow() ).TopLeft() );
-    awt::Point aLoc( aPixPos.getX(), aPixPos.getY() );
+    awt::Point aLoc( aPixPos.X(), aPixPos.Y() );
 
     return aLoc;
 }
@@ -218,7 +218,7 @@ awt::Point SAL_CALL SwAccessibleDocumentBase::getLocation()
     CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
 
     Point aPixPos( pWin->GetWindowExtentsRelative( 0 ).TopLeft() );
-    awt::Point aLoc( aPixPos.getX(), aPixPos.getY() );
+    awt::Point aLoc( aPixPos.X(), aPixPos.Y() );
 
     return aLoc;
 }

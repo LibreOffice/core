@@ -307,13 +307,13 @@ static void lcl_CalcRect( Point& rPt, Size& rDim, sal_uInt16 nMirror )
 {
     if( nMirror == RES_MIRROR_GRAPH_VERT || nMirror == RES_MIRROR_GRAPH_BOTH )
     {
-        rPt.setX(rPt.getX() + rDim.Width() -1);
+        rPt.X() += rDim.Width() -1;
         rDim.Width() = -rDim.Width();
     }
 
     if( nMirror == RES_MIRROR_GRAPH_HOR || nMirror == RES_MIRROR_GRAPH_BOTH )
     {
-        rPt.setY(rPt.getY() + rDim.Height() -1);
+        rPt.Y() += rDim.Height() -1;
         rDim.Height() = -rDim.Height();
     }
 }
@@ -403,12 +403,12 @@ void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
     // Set the "visible" rectangle first
     if ( nLeftCrop > 0 )
     {
-        aVisPt.setX(aVisPt.getX() + nLeftCrop);
+        aVisPt.X()  += nLeftCrop;
         aVisSz.Width() -= nLeftCrop;
     }
     if ( nTopCrop > 0 )
     {
-        aVisPt.setY(aVisPt.getY() + nTopCrop);
+        aVisPt.Y()   += nTopCrop;
         aVisSz.Height() -= nTopCrop;
     }
     if ( nRightCrop > 0 )
@@ -423,9 +423,9 @@ void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
     if ( pOrigRect )
     {
         Size aTmpSz( aGrfSz );
-        aGrfPt.setX(aGrfPt.getY() + nLeftCrop);
+        aGrfPt.X()    += nLeftCrop;
         aTmpSz.Width() -= nLeftCrop + nRightCrop;
-        aGrfPt.setY(aGrfPt.getY() + nTopCrop);
+        aGrfPt.Y()      += nTopCrop;
         aTmpSz.Height()-= nTopCrop + nBottomCrop;
 
         if( RES_MIRROR_GRAPH_DONT != nMirror )
@@ -511,8 +511,8 @@ sal_Bool SwNoTxtFrm::GetCharRect( SwRect &rRect, const SwPosition& rPos,
     {
         if ( pCMS->bRealHeight )
         {
-            pCMS->aRealHeight.setY(rRect.Height());
-            pCMS->aRealHeight.setX(0);
+            pCMS->aRealHeight.Y() = rRect.Height();
+            pCMS->aRealHeight.X() = 0;
         }
     }
 

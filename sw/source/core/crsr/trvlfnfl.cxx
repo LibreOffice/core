@@ -322,9 +322,9 @@ sal_Bool SwCrsrShell::GotoFlyAnchor()
         aTmpRect = pFrm->Frm();
     Point aPt( aTmpRect.Left(), aTmpRect.Top() +
                 ( aTmpRect.Bottom() - aTmpRect.Top() ) / 2 );
-    aPt.setX(aPt.getX() > (pFrm->Frm().Left() + (pFrm->Frm().SSize().Width() / 2 ))
+    aPt.X() = aPt.X() > (pFrm->Frm().Left() + (pFrm->Frm().SSize().Width() / 2 ))
                 ? pFrm->Frm().Right()
-                : pFrm->Frm().Left());
+                : pFrm->Frm().Left();
 
     const SwPageFrm* pPageFrm = pFrm->FindPageFrm();
     const SwCntntFrm* pFndFrm = pPageFrm->GetCntntPos( aPt, sal_False, sal_True );

@@ -1625,7 +1625,7 @@ awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
     SwRect aFrmLogBounds( GetBounds( *(GetMap()) ) ); // twip rel to doc root
 
     Point aFrmPixPos( GetMap()->CoreToPixel( aFrmLogBounds.SVRect() ).TopLeft() );
-    aScreenRect.Move( -aFrmPixPos.getX(), -aFrmPixPos.getY() );
+    aScreenRect.Move( -aFrmPixPos.X(), -aFrmPixPos.Y() );
 
     // convert into AWT Rectangle
     return awt::Rectangle(
@@ -1662,8 +1662,8 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
     Point aPoint( rPoint.X, rPoint.Y );
     SwRect aLogBounds( GetBounds( *(GetMap()), GetFrm() ) ); // twip rel to doc root
     Point aPixPos( GetMap()->CoreToPixel( aLogBounds.SVRect() ).TopLeft() );
-    aPoint.setX(aPoint.getX() + aPixPos.getX());
-    aPoint.setY(aPoint.getY() + aPixPos.getY());
+    aPoint.X() += aPixPos.X();
+    aPoint.Y() += aPixPos.Y();
     MapMode aMapMode = pWin->GetMapMode();
     Point aCorePoint( GetMap()->PixelToCore( aPoint ) );
     if( !aLogBounds.IsInside( aCorePoint ) )
@@ -1700,17 +1700,17 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
         bool bVert = pFrm->IsVertical();
         bool bR2L = pFrm->IsRightToLeft();
 
-        if ( (!bVert && aResultRect.Pos().getX() > aCorePoint.getX()) ||
-             ( bVert && aResultRect.Pos().getY() > aCorePoint.getY()) ||
-             ( bR2L  && aResultRect.Right()   < aCorePoint.getX()) )
+        if ( (!bVert && aResultRect.Pos().X() > aCorePoint.X()) ||
+             ( bVert && aResultRect.Pos().Y() > aCorePoint.Y()) ||
+             ( bR2L  && aResultRect.Right()   < aCorePoint.X()) )
         {
             SwIndex aIdxPrev( pNode, nIndex - 1);
             SwPosition aPosPrev( *pNode, aIdxPrev );
             SwRect aResultRectPrev;
             pFrm->GetCharRect( aResultRectPrev, aPosPrev );
-            if ( (!bVert && aResultRectPrev.Pos().getX() < aCorePoint.getX() && aResultRect.Pos().getY() == aResultRectPrev.Pos().getY()) ||
-                 ( bVert && aResultRectPrev.Pos().getY() < aCorePoint.getY() && aResultRect.Pos().getX() == aResultRectPrev.Pos().getX()) ||
-                 (  bR2L && aResultRectPrev.Right()   > aCorePoint.getX() && aResultRect.Pos().getY() == aResultRectPrev.Pos().getY()) )
+            if ( (!bVert && aResultRectPrev.Pos().X() < aCorePoint.X() && aResultRect.Pos().Y() == aResultRectPrev.Pos().Y()) ||
+                 ( bVert && aResultRectPrev.Pos().Y() < aCorePoint.Y() && aResultRect.Pos().X() == aResultRectPrev.Pos().X()) ||
+                 (  bR2L && aResultRectPrev.Right()   > aCorePoint.X() && aResultRect.Pos().Y() == aResultRectPrev.Pos().Y()) )
                 aPos = aPosPrev;
         }
     }
@@ -2535,7 +2535,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getNumberOfLineWithCaret()
 
                 SwRect aFrmLogBounds( GetBounds( *(GetMap()) ) ); // twip rel to doc root
                 Point aFrmPixPos( GetMap()->CoreToPixel( aFrmLogBounds.SVRect() ).TopLeft() );
-                aScreenRect.Move( -aFrmPixPos.getX(), -aFrmPixPos.getY() );
+                aScreenRect.Move( -aFrmPixPos.X(), -aFrmPixPos.Y() );
 
                 // convert into AWT Rectangle
                 const awt::Rectangle aCursorRect( aScreenRect.Left(),

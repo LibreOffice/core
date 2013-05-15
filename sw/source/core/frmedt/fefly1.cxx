@@ -138,7 +138,7 @@ static sal_Bool lcl_FindAnchorPos( SwDoc& rDoc, const Point& rPt, const SwFrm& r
                 // textnode should be found, as only in those
                 // a content bound frame can be anchored
                 SwCrsrMoveState aState( MV_SETONLYTEXT );
-                aTmpPnt.setX(aTmpPnt.getX() - 1);                   // do not land in the fly!
+                aTmpPnt.X() -= 1;                   // do not land in the fly!
                 if( !pNewAnch->GetCrsrOfst( &aPos, aTmpPnt, &aState ) )
                 {
                     SwCntntNode* pCNd = ((SwCntntFrm*)pNewAnch)->GetNode();
@@ -158,7 +158,7 @@ static sal_Bool lcl_FindAnchorPos( SwDoc& rDoc, const Point& rPt, const SwFrm& r
             // search nearest SwFlyFrm
             SwCrsrMoveState aState( MV_SETONLYTEXT );
             SwPosition aPos( rDoc.GetNodes() );
-            aTmpPnt.setX(aTmpPnt.getX() - 1);                   // do not land in the fly!
+            aTmpPnt.X() -= 1;                   // do not land in the fly!
             rDoc.GetCurrentLayout()->GetCrsrOfst( &aPos, aTmpPnt, &aState );    //swmod 071108//swmod 071225
             pNewAnch = ::FindAnchor(
                 aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( rFrm.getRootFrm(), 0, 0, sal_False ),
@@ -325,7 +325,7 @@ const SwFrmFmt* SwFEShell::IsFlyInFly()
         SwNodeIndex aSwNodeIndex( GetDoc()->GetNodes() );
         SwPosition aPos( aSwNodeIndex );
         Point aPoint( aTmpPos );
-        aPoint.setX(aPoint.getX() - 1);                    //do not land in the fly!!
+        aPoint.X() -= 1;                    //do not land in the fly!!
         GetLayout()->GetCrsrOfst( &aPos, aPoint, &aState );
         // determine text frame by left-top-corner of object
         pTxtFrm = aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( GetLayout(), &aTmpPos, 0, sal_False );
@@ -367,11 +367,11 @@ void SwFEShell::SetFlyPos( const Point& rAbsPos )
             Point aOrient( pAnch->Frm().Pos() );
 
         if ( pFly->IsFlyInCntFrm() )
-            aOrient.setX(rAbsPos.getX());
+            aOrient.X() = rAbsPos.X();
 
         // calculate RelPos.
-        aOrient.setX(rAbsPos.getX() - aOrient.getX());
-        aOrient.setY(rAbsPos.getY() - aOrient.getY());
+        aOrient.X() = rAbsPos.X() - aOrient.X();
+        aOrient.Y() = rAbsPos.Y() - aOrient.Y();
         pFly->ChgRelPos( aOrient );
     }
     CallChgLnk();       // call the AttrChangeNotify on the UI-side.
@@ -1436,8 +1436,8 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
     if ( rRect.Top() != LONG_MIN && rRect.Pos() != aPt && !bPosProt )
     {
         aPt = rRect.Pos();
-        aPt.setX(aPt.getX() - pFly->Prt().Left());
-        aPt.setY(aPt.getY() - pFly->Prt().Top());
+        aPt.X() -= pFly->Prt().Left();
+        aPt.Y() -= pFly->Prt().Top();
 
         // in case of paragraph-bound Flys, starting from the new position,
         // a new anchor is to be set. The anchor and the new RelPos are
@@ -1449,8 +1449,8 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
             const SwFrmFmt *pFmt = pFly->GetFmt();
             const SwFmtVertOrient &rVert = pFmt->GetVertOrient();
             const SwFmtHoriOrient &rHori = pFmt->GetHoriOrient();
-            const long lXDiff = aPt.getX() - pFly->Frm().Left();
-            const long lYDiff = aPt.getY() - pFly->Frm().Top();
+            const long lXDiff = aPt.X() - pFly->Frm().Left();
+            const long lYDiff = aPt.Y() - pFly->Frm().Top();
             const Point aTmp( rHori.GetPos() + lXDiff,
                               rVert.GetPos() + lYDiff );
             pFly->ChgRelPos( aTmp );
@@ -1601,8 +1601,8 @@ const SwFrmFmt* SwFEShell::IsURLGrfAtPos( const Point& rPt, String* pURL,
                         // without MapMode-Offset, without Offset, o ... !!!!!
                         aPt = GetOut()->LogicToPixel(
                                 aPt, MapMode( MAP_TWIP ) );
-                        ((( *pURL += '?' ) += OUString::number( aPt.getX() ))
-                                  += ',' ) += OUString::number(aPt.getY() );
+                        ((( *pURL += '?' ) += OUString::number( aPt.X() ))
+                                  += ',' ) += OUString::number(aPt.Y() );
                     }
                 }
                 pRet = pFly->GetFmt();
@@ -1865,10 +1865,10 @@ sal_Bool SwFEShell::ReplaceSdrObj( const String& rGrfName, const String& rFltNam
                                 std::max( nHeight, long(MINFLY) )));
 
             if( SFX_ITEM_SET != aFrmSet.GetItemState( RES_HORI_ORIENT ))
-                aFrmSet.Put( SwFmtHoriOrient( aRelPos.getX(), text::HoriOrientation::NONE, text::RelOrientation::FRAME ));
+                aFrmSet.Put( SwFmtHoriOrient( aRelPos.X(), text::HoriOrientation::NONE, text::RelOrientation::FRAME ));
 
             if( SFX_ITEM_SET != aFrmSet.GetItemState( RES_VERT_ORIENT ))
-                aFrmSet.Put( SwFmtVertOrient( aRelPos.getY(), text::VertOrientation::NONE, text::RelOrientation::FRAME ));
+                aFrmSet.Put( SwFmtVertOrient( aRelPos.Y(), text::VertOrientation::NONE, text::RelOrientation::FRAME ));
 
         }
 

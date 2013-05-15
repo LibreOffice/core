@@ -1807,19 +1807,19 @@ static Point lcl_ProjectOntoClosestTableFrm( const SwTabFrm& rTab, const Point& 
     // project onto closest line:
     if ( bLeft || bRight )
     {
-        aRet.setX(aMin1.getX());
-        if ( aRet.getY() > aMin2.getY() )
-            aRet.setY(aMin2.getY());
-        else if ( aRet.getY() < aMin1.getY() )
-            aRet.setY(aMin1.getY());
+        aRet.X() = aMin1.X();
+        if ( aRet.Y() > aMin2.Y() )
+            aRet.Y() = aMin2.Y();
+        else if ( aRet.Y() < aMin1.Y() )
+            aRet.Y() = aMin1.Y();
     }
     else
     {
-        aRet.setY(aMin1.getY());
-        if ( aRet.getX() > aMin2.getX() )
-            aRet.setX(aMin2.getX());
-        else if ( aRet.getX() < aMin1.getX() )
-            aRet.setX(aMin1.getX());
+        aRet.Y() = aMin1.Y();
+        if ( aRet.X() > aMin2.X() )
+            aRet.X() = aMin2.X();
+        else if ( aRet.X() < aMin1.X() )
+            aRet.X() = aMin1.X();
     }
 
     return aRet;
