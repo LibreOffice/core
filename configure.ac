@@ -1215,23 +1215,6 @@ AC_ARG_WITH(referenced-git,
     GIT_REFERENCE_SRC=$withval ,
 )
 
-AC_ARG_WITH(vba-package-format,
-    AS_HELP_STRING([--with-vba-package-format],
-        [Specify package format for vba compatibility api. Specifying  "builtin"
-         means the api component and associated type library are  part of the
-         installation set. Specifying "extn" creates an uno extension that is
-         part of the installation set (located in the program directory) that
-         MUST be optionally registered using either the unopkg executeable or the
-         extension manager gui.])
-    [
-                          Note: "builtin" is the default, "extn" can cause
-                          problems.
-
-                          Usage:     --with-vba-package-format="builtin" or
-                                     --with-vba-package-format="extn"
-    ],
-,)
-
 AC_ARG_WITH(theme,
     AS_HELP_STRING([--with-theme="theme1 theme2..."],
         [Choose which themes to include. By default those themes with an '*' are included.
