@@ -7512,11 +7512,6 @@ if test $enable_python = system; then
                 PYTHON_CFLAGS="-I${MINGW_SYSROOT}/include/python$python_version"
                 PYTHON_LIBS="-L${MINGW_SYSROOT}/lib -lpython$python_version $python_libs"
                 AC_MSG_CHECKING([for python.exe])
-                AS_IF([test -f "$MINGW_SYSROOT/bin/python.exe"],
-                      [AC_MSG_RESULT([$MINGW_SYSROOT/bin/python.exe])
-                       MINGW_PYTHON_EXE=python.exe],
-                      [AC_MSG_RESULT([not found])
-                       AC_MSG_ERROR([could not find python.exe])])
                 libo_MINGW_CHECK_DLL([libpython$python_version])
                 libo_MINGW_CHECK_DLL([libreadline6])
                 libo_MINGW_CHECK_DLL([libtermcap])
@@ -7610,7 +7605,6 @@ AC_SUBST(PYTHON_LIBS)
 AC_SUBST(PYTHON_VERSION)
 AC_SUBST(PYTHON_VERSION_MAJOR)
 AC_SUBST(PYTHON_VERSION_MINOR)
-AC_SUBST([MINGW_PYTHON_EXE])
 
 AC_MSG_CHECKING([whether to build the MariaDB/MySQL Connector extension])
 if test "x$enable_ext_mariadb_connector" = "xyes" -a "x$enable_extension_integration" != "xno"; then
