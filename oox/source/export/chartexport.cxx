@@ -2684,7 +2684,7 @@ void ChartExport::exportErrorBar(Reference< XPropertySet> xErrorBarProps, bool b
     }
     else
     {
-        double nVal;
+        double nVal = 0.0;
         if(nErrorBarStyle == cssc::ErrorBarStyle::STANDARD_DEVIATION)
         {
             xErrorBarProps->getPropertyValue("Weight") >>= nVal;

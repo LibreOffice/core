@@ -56,7 +56,7 @@ void Chart2ImportTest::Fdo60083()
             static_cast<sal_Int32>(chart::ErrorBarStyle::RELATIVE),
             nErrorBarStyle);
 
-        double nVal;
+        double nVal = 0.0;
         CPPUNIT_ASSERT(
             xErrorBarYProps->getPropertyValue("PositiveError") >>= nVal);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(5.0, nVal, 1e-8);

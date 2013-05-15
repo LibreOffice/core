@@ -49,7 +49,7 @@ void testErrorBar( Reference< XPropertySet > xErrorBar )
     CPPUNIT_ASSERT(
         xErrorBar->getPropertyValue("ShowNegativeError") >>= bShowNegative);
     CPPUNIT_ASSERT(bShowNegative);
-    double nVal;
+    double nVal = 0.0;
     CPPUNIT_ASSERT(xErrorBar->getPropertyValue("PositiveError") >>= nVal);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(nVal, 10.0, 1e-10);
 }
