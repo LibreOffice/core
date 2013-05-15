@@ -441,7 +441,6 @@ cygwin*|interix*|mingw32*)
     test_freetype=no
     test_fontconfig=no
     _os=WINNT
-    use_shl_version="TRUE"
 
     DLLPOST=".dll"
     LINKFLAGSNOUNDEFS=
@@ -614,8 +613,6 @@ if test "$_os" = "AIX"; then
         AC_MSG_ERROR([gawk not found in \$PATH])
     fi
 fi
-
-AC_SUBST(use_shl_version)
 
 AC_SUBST(WITH_MINGW)
 AC_SUBST(OSVERSION)
