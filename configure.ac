@@ -1828,15 +1828,6 @@ AC_ARG_WITH(vendor,
     ],
 ,)
 
-AC_ARG_WITH(unix-wrapper,
-    AS_HELP_STRING([--with-unix-wrapper],
-        [Redefines the name of the UNIX wrapper that will be used in the desktop
-         files and in the desktop-integration RPMs.])
-    [
-                          Usage:     --with-unix-wrapper=ooffice
-    ],
-,)
-
 AC_ARG_WITH(compat-oowrappers,
     AS_HELP_STRING([--with-compat-oowrappers],
         [Install oo* wrappers in parallel with
@@ -11512,16 +11503,6 @@ else
     AC_MSG_RESULT([$OOO_VENDOR])
 fi
 AC_SUBST(OOO_VENDOR)
-
-UNIXWRAPPERNAME=
-AC_MSG_CHECKING([for UNIX wrapper name])
-if test -z "$with_unix_wrapper" -o "$with_unix_wrapper" = "no"  -o "$with_unix_wrapper" = "yes"; then
-    AC_MSG_RESULT([not set])
-else
-    UNIXWRAPPERNAME="$with_unix_wrapper"
-    AC_MSG_RESULT([$UNIXWRAPPERNAME])
-fi
-AC_SUBST(UNIXWRAPPERNAME)
 
 AC_MSG_CHECKING([whether to install the compat oo* wrappers])
 if test "$with_compat_oowrappers" = "yes"; then
