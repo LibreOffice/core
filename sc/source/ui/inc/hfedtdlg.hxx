@@ -36,7 +36,7 @@ public:
             ScHFEditDlg( SfxViewFrame*      pFrame,
                          Window*            pParent,
                          const SfxItemSet&  rCoreSet,
-                         const String&      rPageStyle,
+                         const OUString&    rPageStyle,
                          sal_uInt16         nResId = RID_SCDLG_HFEDIT );
 
             ~ScHFEditDlg();
