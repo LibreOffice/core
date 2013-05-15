@@ -41,9 +41,6 @@ UnoInterfaceToUniqueIdentifierMapper::~UnoInterfaceToUniqueIdentifierMapper()
     );
 }
 
-/** returns a unique identifier for the given uno object. IF a uno object is
-    registered more than once, the returned identifier is always the same.
-*/
 const OUString& UnoInterfaceToUniqueIdentifierMapper::registerReference( const Reference< XInterface >& rInterface )
 {
     // Be certain that the references we store in our table are to the
@@ -63,11 +60,6 @@ const OUString& UnoInterfaceToUniqueIdentifierMapper::registerReference( const R
     }
 }
 
-/** registers the given uno object with the given identifier.
-
-    @returns
-        false, if the given identifier already exists and is not associated with the given interface
-*/
 bool UnoInterfaceToUniqueIdentifierMapper::registerReference( const OUString& rIdentifier, const Reference< XInterface >& rInterface )
 {
     IdMap_t::const_iterator aIter;
@@ -118,10 +110,6 @@ bool UnoInterfaceToUniqueIdentifierMapper::registerReference( const OUString& rI
     }
 }
 
-/** @returns
-        the identifier for the given uno object. If this uno object is not already
-        registered, an empty string is returned
-*/
 const OUString& UnoInterfaceToUniqueIdentifierMapper::getIdentifier( const Reference< XInterface >& rInterface ) const
 {
     IdMap_t::const_iterator aIter;
@@ -136,10 +124,6 @@ const OUString& UnoInterfaceToUniqueIdentifierMapper::getIdentifier( const Refer
     }
 }
 
-/** @returns
-    the uno object that is registered with the given identifier. If no uno object
-    is registered with the given identifier, an empty reference is returned.
-*/
 const Reference< XInterface >& UnoInterfaceToUniqueIdentifierMapper::getReference( const OUString& rIdentifier ) const
 {
     IdMap_t::const_iterator aIter;
