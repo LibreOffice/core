@@ -73,6 +73,24 @@ $(call gb_Helper_abbreviate_dirs,\
 )
 endef
 
+define gb_Gallery__command_ulf
+$(call gb_Output_announce,$(2),$(true),ULF,1)
+MERGEINPUT=`$(gb_MKTEMP)` && \
+echo $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(GALLERY_BASEDIR))).po) > $${MERGEINPUT} && \
+$(call gb_Helper_abbreviate_dirs,\
+	$(call gb_Executable_get_command,ulfex) -i $(GALLERY_ULFFILE) -o $(1) -m $${MERGEINPUT} -l all) && \
+rm -rf $${MERGEINPUT}
+endef
+
+define gb_Gallery__command_str
+$(call gb_Output_announce,$(2),$(true),STR,1)
+cp -f $(GALLERY_STRFILE) $@ && \
+$(PERL) $(gb_Gallery_TRANSLATE) \
+		--ext "str" --key "name" \
+		-d $(GALLERY_WORKDIR) \
+		$(GALLERY_ULFFILE)
+endef
+
 gb_Gallery__get_final_target = $(WORKDIR)/Gallery/$(1).final
 
 $(dir $(call gb_Gallery_get_target,$(1))).dir :
@@ -88,6 +106,18 @@ $(call gb_Gallery_get_target,%) : \
 
 $(call gb_Gallery__get_final_target,%) :
 	touch $@
+
+ifneq ($(WITH_LANG),)
+$(call gb_Gallery_get_workdir,%).ulf : $(call gb_Executable_get_runtime_dependencies,ulfex)
+	$(call gb_Gallery__command_ulf,$@,$*)
+else
+$(call gb_Gallery_get_workdir,%).ulf :
+	$(call gb_Output_announce,$*,$(true),CPY,1)
+	cp $(GALLERY_ULFFILE) $@
+endif
+
+$(call gb_Gallery_get_workdir,%).str : $(gb_Gallery_TRANSLATE)
+	$(call gb_Gallery__command_str,$@,$*)
 
 .PHONY : $(call gb_Gallery_get_clean_target,%)
 $(call gb_Gallery_get_clean_target,%) :
@@ -125,6 +155,9 @@ endef
 
 gb_Gallery_basedir = $(patsubst %/,%,$(dir $(SRCDIR)/$(1)))
 
+# TODO: we process the same ulf file for every gallery. That does not
+# make sense.
+#
 # gb_Gallery__Gallery_impl gallery package basedir name
 define gb_Gallery__Gallery_impl
 $(call gb_Package_Package_internal,$(2),$(call gb_Gallery_get_workdir,$(1)))
@@ -138,6 +171,17 @@ $(call gb_Package_add_file,$(2),$(gb_Gallery_INSTDIR)/$(1).str,$(1).str)
 $(call gb_Gallery_get_target,$(1)) : GALLERY_BASEDIR := $(call gb_Helper_make_url,$(call gb_Gallery_basedir,$(3)))
 $(call gb_Gallery_get_target,$(1)) : GALLERY_FILES :=
 $(call gb_Gallery_get_target,$(1)) : GALLERY_NAME := $(1)
+$(call gb_Gallery_get_workdir,$(1))/$(1).str : GALLERY_STRFILE := $(SRCDIR)/$(3)/$(1).str
+$(call gb_Gallery_get_workdir,$(1))/$(1).str : GALLERY_ULFFILE := $(call gb_Gallery_get_workdir,$(1))/$(1).ulf
+$(call gb_Gallery_get_workdir,$(1))/$(1).str : GALLERY_WORKDIR := $(call gb_Gallery_get_workdir,$(1))
+$(call gb_Gallery_get_workdir,$(1))/$(1).ulf : GALLERY_BASEDIR := $(3)
+$(call gb_Gallery_get_workdir,$(1))/$(1).ulf : GALLERY_ULFFILE := $(call gb_Gallery_basedir,$(3))/share/gallery_names.ulf
+
+$(call gb_Gallery_get_workdir,$(1))/$(1).ulf : \
+	$(call gb_Gallery_basedir,$(3))/share/gallery_names.ulf \
+	$(call gb_Gallery_get_target,$(1)) # that rule pre-cleans our output directory
+
+$(call gb_Gallery_get_workdir,$(1))/$(1).str : $(call gb_Gallery_get_workdir,$(1))/$(1).ulf
 
 $(call gb_Gallery_get_workdir,$(1))/$(1).sdg \
 $(call gb_Gallery_get_workdir,$(1))/$(1).sdv \
@@ -150,31 +194,6 @@ $(call gb_Gallery_get_target,$(1)) :| $(dir $(call gb_Gallery_get_target,$(1))).
 
 $$(eval $$(call gb_Module_register_target,$(call gb_Gallery__get_final_target,$(1)),$(call gb_Gallery_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),Gallery,$(call gb_Gallery__get_final_target,$(1)))
-
-
-# this should probably be done with more general rules: but how ?
-ifneq ($(WITH_LANG),)
-$$(call gb_Gallery_get_workdir,$(1))/$(1).ulf : \
-	$$(call gb_Gallery_basedir,$(3))/share/gallery_names.ulf | $$(call gb_Executable_get_runtime_dependencies,ulfex) \
-	$(call gb_Gallery_get_target,$(1)) # that rule pre-cleans our output directory
-	$$(call gb_Output_announce,$@,$(true),SUM,1)
-	MERGEINPUT=`$(gb_MKTEMP)` && \
-	echo $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(3))).po) > $$$${MERGEINPUT} && \
-	$(call gb_Helper_abbreviate_dirs,\
-	$$(call gb_Executable_get_command,ulfex) -i $$< -o $$@ -m $$$${MERGEINPUT} -l all ) && \
-	rm -rf $$$${MERGEINPUT}
-else
-$$(call gb_Gallery_get_workdir,$(1))/$(1).ulf : $$(call gb_Gallery_basedir,$(3))/share/gallery_names.ulf
-	cp $$< $$@
-endif
-
-$(call gb_Gallery_get_workdir,$(1))/$(1).str : $(gb_Gallery_TRANSLATE) \
-		$$(call gb_Gallery_get_workdir,$(1))/$(1).ulf
-		cp -f $(SRCDIR)/$(3)/$(1).str $(call gb_Gallery_get_workdir,$(1))/$(1).str && \
-		$(PERL) $(gb_Gallery_TRANSLATE) \
-				--ext "str" --key "name" \
-				-d $$(call gb_Gallery_get_workdir,$(1))/ \
-				$$(call gb_Gallery_get_workdir,$(1))/$(1).ulf
 
 endef
 
