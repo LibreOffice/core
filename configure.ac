@@ -11785,12 +11785,10 @@ if test "$build_os" = "cygwin"; then
         ATL_LIB="$WINDOWS_SDK_HOME/lib" # Doesn't exist for VSE
         ATL_INCLUDE="$WINDOWS_SDK_HOME/include/atl"
         MFC_LIB="$WINDOWS_SDK_HOME/lib" # Doesn't exist for VSE
-        MFC_INCLUDE="$WINDOWS_SDK_HOME/include/mfc"
     else
         ATL_LIB="$COMPATH/atlmfc/lib"
         ATL_INCLUDE="$COMPATH/atlmfc/include"
         MFC_LIB="$COMPATH/atlmfc/lib"
-        MFC_INCLUDE="$WINDOWS_SDK_HOME/include/mfc"
     fi
     if test "$BITNESS_OVERRIDE" = 64; then
         ATL_LIB="$ATL_LIB/amd64"
@@ -11808,7 +11806,6 @@ fi
 
 AC_SUBST(ATL_INCLUDE)
 AC_SUBST(ATL_LIB)
-AC_SUBST(MFC_INCLUDE)
 AC_SUBST(MFC_LIB)
 AC_SUBST(WIN_FIND)
 AC_SUBST(WIN_GREP)
