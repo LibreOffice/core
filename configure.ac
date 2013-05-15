@@ -5315,9 +5315,6 @@ _ACEOF
     MINGW_LIB_INCLUDE_PATH="$_mingw_lib_include_path"
     AC_SUBST(MINGW_LIB_INCLUDE_PATH)
 
-    mingw_crtbegin=`$CC -print-file-name=crtbegin.o`
-    MINGW_CLIB_DIR=`dirname $mingw_crtbegin`
-
     AC_LANG_PUSH([C++])
 
     AC_MSG_CHECKING([for dynamic libgcc])
@@ -5363,7 +5360,6 @@ using namespace std;
 
     AC_LANG_POP([C++])
 
-    AC_SUBST(MINGW_CLIB_DIR)
     AC_SUBST(MINGW_SHARED_GCCLIB)
     AC_SUBST(MINGW_SHARED_GXXLIB)
     AC_SUBST(MINGW_SHARED_LIBSTDCPP)
