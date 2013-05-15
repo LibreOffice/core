@@ -30,14 +30,16 @@ $(eval $(call gb_Module_add_targets,scp2,\
 	InstallModule_onlineupdate \
 	InstallModule_ooo \
 	InstallModule_python \
-	InstallModule_sdkoo \
 	InstallModule_smoketest \
 	InstallModule_ure \
 	InstallModule_writer \
 	InstallModule_xsltfilter \
-	InstallScript_sdkoo \
 	InstallScript_setup_osl \
 	InstallScript_test \
+	$(if $(filter ODK,$(BUILD_TYPE)), \
+		InstallModule_sdkoo \
+		InstallScript_sdkoo \
+	) \
 	$(if $(filter WNT,$(OS)),\
 		InstallModule_activex \
 		InstallModule_quickstart \
