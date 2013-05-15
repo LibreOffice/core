@@ -144,8 +144,8 @@ namespace cppcanvas
             bool BitmapAction::renderPrimitive( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
                                                 const ::basegfx::B2DHomMatrix&                 rTransformation ) const
             {
-                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::BitmapAction::renderPrimitive()" );
-                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::BitmapAction: 0x%X", this );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::BitmapAction::renderPrimitive()" );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::BitmapAction: 0x" << std::hex << this );
 
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::prependToRenderState(aLocalState, rTransformation);

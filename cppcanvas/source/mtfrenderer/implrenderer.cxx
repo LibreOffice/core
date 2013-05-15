@@ -22,7 +22,6 @@
 #include <canvas/verbosetrace.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <rtl/logfile.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -2673,7 +2672,7 @@ namespace cppcanvas
                     break;
 
                     default:
-                        OSL_FAIL( "Unknown meta action type encountered" );
+                        SAL_WARN( "cppcanvas.emf", "Unknown meta action type encountered" );
                         break;
                 }
 
@@ -2919,7 +2918,7 @@ namespace cppcanvas
             CanvasGraphicHelper( rCanvas ),
             maActions()
         {
-            RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::ImplRenderer::ImplRenderer(mtf)" );
+            SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::ImplRenderer::ImplRenderer(mtf)" );
 
             OSL_ENSURE( rCanvas.get() != NULL && rCanvas->getUNOCanvas().is(),
                         "ImplRenderer::ImplRenderer(): Invalid canvas" );
@@ -3046,7 +3045,7 @@ namespace cppcanvas
         bool ImplRenderer::drawSubset( sal_Int32    nStartIndex,
                                        sal_Int32    nEndIndex ) const
         {
-            RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::ImplRenderer::drawSubset()" );
+            SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::ImplRenderer::drawSubset()" );
 
             ActionVector::const_iterator aRangeBegin;
             ActionVector::const_iterator aRangeEnd;
@@ -3083,7 +3082,7 @@ namespace cppcanvas
             }
             catch( uno::Exception& )
             {
-                OSL_FAIL( OUStringToOString(
+                SAL_WARN("cppcanvas.emf", "" << OUStringToOString(
                                 comphelper::anyToString( cppu::getCaughtException() ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
 
@@ -3095,7 +3094,7 @@ namespace cppcanvas
         ::basegfx::B2DRange ImplRenderer::getSubsetArea( sal_Int32  nStartIndex,
                                                          sal_Int32  nEndIndex ) const
         {
-            RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::ImplRenderer::getSubsetArea()" );
+            SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::ImplRenderer::getSubsetArea()" );
 
             ActionVector::const_iterator aRangeBegin;
             ActionVector::const_iterator aRangeEnd;
@@ -3132,7 +3131,7 @@ namespace cppcanvas
 
         bool ImplRenderer::draw() const
         {
-            RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::ImplRenderer::draw()" );
+            SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::ImplRenderer::draw()" );
 
             ::basegfx::B2DHomMatrix aMatrix;
             ::canvas::tools::getRenderStateTransform( aMatrix,
@@ -3144,7 +3143,7 @@ namespace cppcanvas
             }
             catch( uno::Exception& )
             {
-                OSL_FAIL( OUStringToOString(
+                SAL_WARN( "cppcanvas.emf", "" << OUStringToOString(
                                 comphelper::anyToString( cppu::getCaughtException() ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
 

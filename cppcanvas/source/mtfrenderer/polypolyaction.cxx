@@ -18,8 +18,6 @@
  */
 
 
-#include <rtl/logfile.hxx>
-
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 
@@ -152,8 +150,8 @@ namespace cppcanvas
             bool PolyPolyAction::renderPrimitive( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
                                                   const ::basegfx::B2DHomMatrix&                 rTransformation ) const
             {
-                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::PolyPolyAction::renderPrimitive()" );
-                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::PolyPolyAction: 0x%X", this );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::PolyPolyAction::renderPrimitive()" );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::PolyPolyAction: 0x" << std::hex << this );
 
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
@@ -281,8 +279,8 @@ namespace cppcanvas
             bool TexturedPolyPolyAction::renderPrimitive( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
                                                           const ::basegfx::B2DHomMatrix&                 rTransformation ) const
             {
-                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::PolyPolyAction::renderPrimitive()" );
-                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::PolyPolyAction: 0x%X", this );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::PolyPolyAction::renderPrimitive()" );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::PolyPolyAction: 0x" << std::hex << this );
 
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
@@ -394,8 +392,8 @@ namespace cppcanvas
             bool StrokedPolyPolyAction::renderPrimitive( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
                                                          const ::basegfx::B2DHomMatrix&                 rTransformation ) const
             {
-                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::PolyPolyAction::renderPrimitive()" );
-                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::PolyPolyAction: 0x%X", this );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::PolyPolyAction::renderPrimitive()" );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::PolyPolyAction: 0x" << std::hex << this );
 
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::prependToRenderState(aLocalState, rTransformation);

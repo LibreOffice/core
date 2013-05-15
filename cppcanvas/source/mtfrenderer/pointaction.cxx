@@ -18,7 +18,6 @@
  */
 
 
-#include <rtl/logfile.hxx>
 #include <com/sun/star/rendering/XCanvas.hpp>
 
 #include <sal/types.h>
@@ -103,8 +102,8 @@ namespace cppcanvas
 
             bool PointAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
-                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::PointAction::render()" );
-                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::PointAction: 0x%X", this );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::PointAction::render()" );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::PointAction: 0x" << std::hex << this );
 
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::prependToRenderState(aLocalState, rTransformation);

@@ -23,7 +23,6 @@
 
 #include <com/sun/star/util/Endianness.hpp>
 
-#include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
 
 #include <tools/poly.hxx>
@@ -112,7 +111,7 @@ namespace vclcanvas
         ENSURE_OR_THROW( mpDevice,
                           "disposed CanvasHelper" );
 
-        RTL_LOGFILE_CONTEXT( aLog, "::vclcanvas::CanvasBitmapHelper::getScaledBitmap()" );
+        SAL_INFO( "canvas.vcl", "::vclcanvas::CanvasBitmapHelper::getScaledBitmap()" );
 
         if( !mpBackBuffer || mpDevice )
             return uno::Reference< rendering::XBitmap >(); // we're disposed
@@ -129,7 +128,7 @@ namespace vclcanvas
     uno::Sequence< sal_Int8 > CanvasBitmapHelper::getData( rendering::IntegerBitmapLayout&      rLayout,
                                                            const geometry::IntegerRectangle2D&  rect )
     {
-        RTL_LOGFILE_CONTEXT( aLog, "::vclcanvas::CanvasBitmapHelper::getData()" );
+        SAL_INFO( "canvas.vcl", "::vclcanvas::CanvasBitmapHelper::getData()" );
 
         if( !mpBackBuffer )
             return uno::Sequence< sal_Int8 >(); // we're disposed
@@ -195,7 +194,7 @@ namespace vclcanvas
                                       const rendering::IntegerBitmapLayout& rLayout,
                                       const geometry::IntegerRectangle2D&   rect )
     {
-        RTL_LOGFILE_CONTEXT( aLog, "::vclcanvas::CanvasBitmapHelper::setData()" );
+        SAL_INFO( "canvas.vcl", "::vclcanvas::CanvasBitmapHelper::setData()" );
 
         if( !mpBackBuffer )
             return; // we're disposed
@@ -427,7 +426,7 @@ namespace vclcanvas
                                        const rendering::IntegerBitmapLayout& rLayout,
                                        const geometry::IntegerPoint2D&       pos )
     {
-        RTL_LOGFILE_CONTEXT( aLog, "::vclcanvas::CanvasBitmapHelper::setPixel()" );
+        SAL_INFO( "canvas.vcl", "::vclcanvas::CanvasBitmapHelper::setPixel()" );
 
         if( !mpBackBuffer )
             return; // we're disposed
@@ -491,7 +490,7 @@ namespace vclcanvas
     uno::Sequence< sal_Int8 > CanvasBitmapHelper::getPixel( rendering::IntegerBitmapLayout& rLayout,
                                                             const geometry::IntegerPoint2D& pos )
     {
-        RTL_LOGFILE_CONTEXT( aLog, "::vclcanvas::CanvasBitmapHelper::getPixel()" );
+        SAL_INFO( "canvas.vcl", "::vclcanvas::CanvasBitmapHelper::getPixel()" );
 
         if( !mpBackBuffer )
             return uno::Sequence< sal_Int8 >(); // we're disposed

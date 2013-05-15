@@ -22,7 +22,6 @@
 #include <tools/diagnose_ex.h>
 
 #include <rtl/math.hxx>
-#include <rtl/logfile.hxx>
 
 #include <com/sun/star/geometry/RealSize2D.hpp>
 #include <com/sun/star/geometry/RealPoint2D.hpp>
@@ -207,8 +206,8 @@ namespace vclcanvas
                                     const uno::Sequence< double >&  rDeviceColor,
                                     ModulationMode                  eModulationMode )
         {
-            RTL_LOGFILE_CONTEXT( aLog, "::vclcanvas::tools::transformBitmap()" );
-            RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::vclcanvas::tools::transformBitmap: 0x%X", &rBitmap );
+            SAL_INFO( "canvas.vcl", "::vclcanvas::tools::transformBitmap()" );
+            SAL_INFO( "canvas.vcl", "::vclcanvas::tools::transformBitmap: 0x" << std::hex << &rBitmap );
 
             // calc transformation and size of bitmap to be
             // generated. Note, that the translational components are

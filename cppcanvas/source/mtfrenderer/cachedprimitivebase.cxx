@@ -18,7 +18,6 @@
  */
 
 
-#include <rtl/logfile.hxx>
 
 #include <com/sun/star/rendering/RepaintResult.hpp>
 
@@ -47,8 +46,8 @@ namespace cppcanvas
 
         bool CachedPrimitiveBase::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
         {
-            RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::CachedPrimitiveBase::render()" );
-            RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::CachedPrimitiveBase: 0x%X", this );
+            SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::CachedPrimitiveBase::render()" );
+            SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::CachedPrimitiveBase: 0x" << std::hex << this );
 
             const rendering::ViewState& rViewState( mpCanvas->getViewState() );
             ::basegfx::B2DHomMatrix     aTotalTransform;

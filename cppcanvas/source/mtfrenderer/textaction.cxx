@@ -22,8 +22,6 @@
 #include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
 
-#include <rtl/logfile.hxx>
-
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
@@ -702,8 +700,8 @@ namespace cppcanvas
 
             bool TextAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
-                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::TextAction::render()" );
-                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::TextAction: 0x%X", this );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::TextAction::render()" );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::TextAction: 0x" << std::hex << this );
 
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
@@ -717,7 +715,7 @@ namespace cppcanvas
             bool TextAction::renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  /*rSubset*/ ) const
             {
-                OSL_FAIL( "TextAction::renderSubset(): Subset not supported by this object" );
+                SAL_WARN( "cppcanvas.emf", "TextAction::renderSubset(): Subset not supported by this object" );
 
                 // TODO(P1): Retrieve necessary font metric info for
                 // TextAction from XCanvas. Currently, the
@@ -748,7 +746,7 @@ namespace cppcanvas
             ::basegfx::B2DRange TextAction::getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
                                                        const Subset&                    /*rSubset*/ ) const
             {
-                OSL_FAIL( "TextAction::getBounds(): Subset not supported by this object" );
+                SAL_WARN( "cppcanvas.emf", "TextAction::getBounds(): Subset not supported by this object" );
 
                 // TODO(P1): Retrieve necessary font metric info for
                 // TextAction from XCanvas. Currently, the
@@ -934,8 +932,8 @@ namespace cppcanvas
 
             bool EffectTextAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
-                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::EffectTextAction::render()" );
-                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::EffectTextAction: 0x%X", this );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::EffectTextAction::render()" );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::EffectTextAction: 0x" << std::hex << this );
 
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
@@ -953,7 +951,7 @@ namespace cppcanvas
             bool EffectTextAction::renderSubset( const ::basegfx::B2DHomMatrix&   rTransformation,
                                                  const Subset&                    /*rSubset*/ ) const
             {
-                OSL_FAIL( "EffectTextAction::renderSubset(): Subset not supported by this object" );
+                SAL_WARN( "cppcanvas.emf", "EffectTextAction::renderSubset(): Subset not supported by this object" );
 
                 // TODO(P1): Retrieve necessary font metric info for
                 // TextAction from XCanvas. Currently, the
@@ -989,7 +987,7 @@ namespace cppcanvas
             ::basegfx::B2DRange EffectTextAction::getBounds( const ::basegfx::B2DHomMatrix& rTransformation,
                                                              const Subset&                  /*rSubset*/ ) const
             {
-                OSL_FAIL( "EffectTextAction::getBounds(): Subset not supported by this object" );
+                SAL_WARN( "cppcanvas.emf", "EffectTextAction::getBounds(): Subset not supported by this object" );
 
                 // TODO(P1): Retrieve necessary font metric info for
                 // TextAction from XCanvas. Currently, the
@@ -1101,8 +1099,8 @@ namespace cppcanvas
 
             bool TextArrayAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
-                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::TextArrayAction::render()" );
-                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::TextArrayAction: 0x%X", this );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::TextArrayAction::render()" );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::TextArrayAction: 0x" << std::hex << this );
 
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
@@ -1117,8 +1115,8 @@ namespace cppcanvas
             bool TextArrayAction::renderSubset( const ::basegfx::B2DHomMatrix&    rTransformation,
                                                 const Subset&                     rSubset ) const
             {
-                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::TextArrayAction::renderSubset()" );
-                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::TextArrayAction: 0x%X", this );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::TextArrayAction::renderSubset()" );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::TextArrayAction: 0x" << std::hex << this );
 
                 rendering::RenderState                      aLocalState( maState );
                 uno::Reference< rendering::XTextLayout >    xTextLayout( mxTextLayout );
@@ -1155,8 +1153,8 @@ namespace cppcanvas
             ::basegfx::B2DRange TextArrayAction::getBounds( const ::basegfx::B2DHomMatrix&  rTransformation,
                                                             const Subset&                   rSubset ) const
             {
-                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::TextArrayAction::getBounds( subset )" );
-                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::TextArrayAction: 0x%X", this );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::TextArrayAction::getBounds( subset )" );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::TextArrayAction: 0x" << std::hex << this );
 
                 rendering::RenderState                      aLocalState( maState );
                 uno::Reference< rendering::XTextLayout >    xTextLayout( mxTextLayout );
@@ -1353,8 +1351,8 @@ namespace cppcanvas
 
             bool EffectTextArrayAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
-                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::EffectTextArrayAction::render()" );
-                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::EffectTextArrayAction: 0x%X", this );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::EffectTextArrayAction::render()" );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::EffectTextArrayAction: 0x" << std::hex << this );
 
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
@@ -1407,8 +1405,8 @@ namespace cppcanvas
             bool EffectTextArrayAction::renderSubset( const ::basegfx::B2DHomMatrix&  rTransformation,
                                                       const Subset&                   rSubset ) const
             {
-                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::EffectTextArrayAction::renderSubset()" );
-                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::EffectTextArrayAction: 0x%X", this );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::EffectTextArrayAction::renderSubset()" );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::EffectTextArrayAction: 0x" << std::hex << this );
 
                 rendering::RenderState                   aLocalState( maState );
                 uno::Reference< rendering::XTextLayout > xTextLayout( mxTextLayout );
@@ -1478,8 +1476,8 @@ namespace cppcanvas
             ::basegfx::B2DRange EffectTextArrayAction::getBounds( const ::basegfx::B2DHomMatrix&    rTransformation,
                                                                   const Subset&                     rSubset ) const
             {
-                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::EffectTextArrayAction::getBounds( subset )" );
-                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::EffectTextArrayAction: 0x%X", this );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::EffectTextArrayAction::getBounds( subset )" );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::EffectTextArrayAction: 0x" << std::hex << this );
 
                 rendering::RenderState                   aLocalState( maState );
                 uno::Reference< rendering::XTextLayout > xTextLayout( mxTextLayout );
@@ -1749,8 +1747,8 @@ namespace cppcanvas
 
             bool OutlineAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
-                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::EffectTextArrayAction::render()" );
-                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::EffectTextArrayAction: 0x%X", this );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::EffectTextArrayAction::render()" );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::EffectTextArrayAction: 0x" << std::hex << this );
 
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
@@ -1837,8 +1835,8 @@ namespace cppcanvas
             bool OutlineAction::renderSubset( const ::basegfx::B2DHomMatrix&  rTransformation,
                                               const Subset&                   rSubset ) const
             {
-                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::OutlineAction::renderSubset()" );
-                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::OutlineAction: 0x%X", this );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::OutlineAction::renderSubset()" );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::OutlineAction: 0x" << std::hex << this );
 
                 if( rSubset.mnSubsetBegin == rSubset.mnSubsetEnd )
                     return true; // empty range, render nothing
@@ -1908,7 +1906,7 @@ namespace cppcanvas
             ::basegfx::B2DRange OutlineAction::getBounds( const ::basegfx::B2DHomMatrix&    rTransformation,
                                                           const Subset&                     /*rSubset*/ ) const
             {
-                OSL_FAIL( "OutlineAction::getBounds(): Subset not yet supported by this object" );
+                SAL_WARN( "cppcanvas.emf", "OutlineAction::getBounds(): Subset not yet supported by this object" );
 
                 return getBounds( rTransformation );
             }
