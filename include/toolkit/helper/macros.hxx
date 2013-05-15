@@ -44,7 +44,7 @@ const ::com::sun::star::uno::Sequence< sal_Int8 >& ClassName::GetUnoTunnelId() t
 
 #define IMPL_XUNOTUNNEL( ClassName ) \
 IMPL_XUNOTUNNEL_MINIMAL( ClassName ) \
-ClassName* ClassName::GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw() \
+ClassName* ClassName::GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) \
 { \
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xUT( rxIFace, ::com::sun::star::uno::UNO_QUERY ); \
     return xUT.is() ? reinterpret_cast<ClassName*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( ClassName::GetUnoTunnelId() ))) : NULL; \
@@ -67,7 +67,7 @@ const ::com::sun::star::uno::Sequence< sal_Int8 >& ClassName::GetUnoTunnelId() t
 { \
     return the##ClassName##UnoTunnelId::get().getSeq(); \
 } \
-ClassName* ClassName::GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw() \
+ClassName* ClassName::GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) \
 { \
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xUT( rxIFace, ::com::sun::star::uno::UNO_QUERY ); \
     return xUT.is() ? reinterpret_cast<ClassName*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( ClassName::GetUnoTunnelId() ))) : NULL; \
