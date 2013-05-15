@@ -1872,9 +1872,7 @@ void ScColumn::StartListening( SvtListener& rLst, SCROW nRow )
         case sc::element_type_broadcaster:
         {
             // Broadcaster already exists here.
-            sc::custom_broadcaster_block::iterator itData = sc::custom_broadcaster_block::begin(*it->data);
-            std::advance(itData, nElemPos);
-            SvtBroadcaster* pBC = *itData;
+            SvtBroadcaster* pBC = sc::custom_broadcaster_block::at(*it->data, nElemPos);
             rLst.StartListening(*pBC);
         }
         break;
