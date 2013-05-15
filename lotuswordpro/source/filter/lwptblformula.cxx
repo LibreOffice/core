@@ -594,6 +594,10 @@ OUString LwpFormulaFunc::ToString(LwpTableLayout* pCellsMap)
 {
     OUString aFormula;
 
+    OUString aFuncName = LwpFormulaTools::GetName(m_nTokenType);
+    aFormula += aFuncName;
+    aFormula += " ";//Append a blank space
+
     //Append args
     vector<LwpFormulaArg*>::iterator aItr;
     for (aItr=m_aArgs.begin();aItr!=m_aArgs.end();++aItr)
