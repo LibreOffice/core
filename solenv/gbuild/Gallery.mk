@@ -166,9 +166,9 @@ endif
 $(call gb_Gallery_get_workdir,$(1))/$(1).str : $(gb_Gallery_TRANSLATE) \
 		$$(call gb_Gallery_get_workdir,$(1))/$(1).ulf
 		cp -f $(SRCDIR)/$(3)/$(1).str $(call gb_Gallery_get_workdir,$(1))/$(1).str && \
-		$(PERL) $(gb_Gallery_TRANSLATE) -d $(WORKDIR)/$* \
+		$(PERL) $(gb_Gallery_TRANSLATE) \
 				--ext "str" --key "name" \
-				--template-dir $$(call gb_Gallery_get_workdir,$(1))/ \
+				-d $$(call gb_Gallery_get_workdir,$(1))/ \
 				$$(call gb_Gallery_get_workdir,$(1))/$(1).ulf
 
 endef
