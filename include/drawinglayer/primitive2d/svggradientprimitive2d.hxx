@@ -93,6 +93,9 @@ namespace drawinglayer
         class SvgGradientHelper
         {
         private:
+            /// the extra gradient transform
+            basegfx::B2DHomMatrix       maGradientTransform;
+
             /// geometric definition, the geometry to be filled
             basegfx::B2DPolyPolygon     maPolyPolygon;
 
@@ -147,6 +150,7 @@ namespace drawinglayer
         public:
             /// constructor
             SvgGradientHelper(
+                const basegfx::B2DHomMatrix& rGradientTransform,
                 const basegfx::B2DPolyPolygon& rPolyPolygon,
                 const SvgGradientEntryVector& rGradientEntries,
                 const basegfx::B2DPoint& rStart,
@@ -155,6 +159,7 @@ namespace drawinglayer
 	    virtual ~SvgGradientHelper() {}
 
             /// data read access
+            const basegfx::B2DHomMatrix& getGradientTransform() const { return maGradientTransform; }
             const basegfx::B2DPolyPolygon& getPolyPolygon() const { return maPolyPolygon; }
             const SvgGradientEntryVector& getGradientEntries() const { return maGradientEntries; }
             const basegfx::B2DPoint& getStart() const { return maStart; }
@@ -197,6 +202,7 @@ namespace drawinglayer
         public:
             /// constructor
             SvgLinearGradientPrimitive2D(
+                const basegfx::B2DHomMatrix& rGradientTransform,
                 const basegfx::B2DPolyPolygon& rPolyPolygon,
                 const SvgGradientEntryVector& rGradientEntries,
                 const basegfx::B2DPoint& rStart,
@@ -265,6 +271,7 @@ namespace drawinglayer
         public:
             /// constructor
             SvgRadialGradientPrimitive2D(
+                const basegfx::B2DHomMatrix& rGradientTransform,
                 const basegfx::B2DPolyPolygon& rPolyPolygon,
                 const SvgGradientEntryVector& rGradientEntries,
                 const basegfx::B2DPoint& rStart,

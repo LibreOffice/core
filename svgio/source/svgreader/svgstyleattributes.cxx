@@ -309,10 +309,11 @@ namespace svgio
             if(!aSvgGradientEntryVector.empty())
             {
                 basegfx::B2DHomMatrix aGeoToUnit;
+                basegfx::B2DHomMatrix aGradientTransform;
 
                 if(rFillGradient.getGradientTransform())
                 {
-                    aGeoToUnit = *rFillGradient.getGradientTransform();
+                    aGradientTransform = *rFillGradient.getGradientTransform();
                 }
 
                 if(userSpaceOnUse == rFillGradient.getGradientUnits())
@@ -357,6 +358,7 @@ namespace svgio
                     drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(
                         rTarget,
                         new drawinglayer::primitive2d::SvgLinearGradientPrimitive2D(
+                            aGradientTransform,
                             rPath,
                             aSvgGradientEntryVector,
                             aStart,
@@ -418,6 +420,7 @@ namespace svgio
                     drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(
                         rTarget,
                         new drawinglayer::primitive2d::SvgRadialGradientPrimitive2D(
+                            aGradientTransform,
                             rPath,
                             aSvgGradientEntryVector,
                             aStart,
@@ -1777,6 +1780,18 @@ namespace svgio
                 case SVGTokenMarkerEnd:
                 {
                     readLocalUrl(aContent, maMarkerEndXLink);
+                    break;
+                }
+                case SVGTokenDisplay:
+                {
+                    // There may be display:none statements inside of style defines, e.g. the following line:
+                    // style="display:none"
+                    // taken from a svg example; this needs to be parsed and set at the owning node. Do not call
+                    // mrOwner.parseAttribute(...) here, this would lead to a recursion
+                    if(aContent.getLength())
+                    {
+                        mrOwner.setDisplay(getDisplayFromContent(aContent));
+                    }
                     break;
                 }
                 default:

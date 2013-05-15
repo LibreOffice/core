@@ -280,12 +280,14 @@ namespace drawinglayer
         }
 
         SvgGradientHelper::SvgGradientHelper(
+            const basegfx::B2DHomMatrix& rGradientTransform,
             const basegfx::B2DPolyPolygon& rPolyPolygon,
             const SvgGradientEntryVector& rGradientEntries,
             const basegfx::B2DPoint& rStart,
             bool bUseUnitCoordinates,
             SpreadMethod aSpreadMethod)
-        :   maPolyPolygon(rPolyPolygon),
+        :   maGradientTransform(rGradientTransform),
+            maPolyPolygon(rPolyPolygon),
             maGradientEntries(rGradientEntries),
             maStart(rStart),
             maSpreadMethod(aSpreadMethod),
@@ -301,7 +303,8 @@ namespace drawinglayer
         {
             const SvgGradientHelper& rCompare = static_cast< const SvgGradientHelper& >(rSvgGradientHelper);
 
-            return (getPolyPolygon() == rCompare.getPolyPolygon()
+            return (getGradientTransform() == rCompare.getGradientTransform()
+                && getPolyPolygon() == rCompare.getPolyPolygon()
                 && getGradientEntries() == rCompare.getGradientEntries()
                 && getStart() == rCompare.getStart()
                 && getUseUnitCoordinates() == rCompare.getUseUnitCoordinates()
@@ -427,6 +430,11 @@ namespace drawinglayer
                     aUnitGradientToObject.translate(aStart.getX(), aStart.getY());
                 }
 
+                if(!getGradientTransform().isIdentity())
+                {
+                    aUnitGradientToObject = getGradientTransform() * aUnitGradientToObject;
+                }
+
                 // create inverse from it
                 basegfx::B2DHomMatrix aObjectToUnitGradient(aUnitGradientToObject);
                 aObjectToUnitGradient.invert();
@@ -545,6 +553,7 @@ namespace drawinglayer
         }
 
         SvgLinearGradientPrimitive2D::SvgLinearGradientPrimitive2D(
+            const basegfx::B2DHomMatrix& rGradientTransform,
             const basegfx::B2DPolyPolygon& rPolyPolygon,
             const SvgGradientEntryVector& rGradientEntries,
             const basegfx::B2DPoint& rStart,
@@ -552,7 +561,7 @@ namespace drawinglayer
             bool bUseUnitCoordinates,
             SpreadMethod aSpreadMethod)
         :   BufferedDecompositionPrimitive2D(),
-            SvgGradientHelper(rPolyPolygon, rGradientEntries, rStart, bUseUnitCoordinates, aSpreadMethod),
+            SvgGradientHelper(rGradientTransform, rPolyPolygon, rGradientEntries, rStart, bUseUnitCoordinates, aSpreadMethod),
             maEnd(rEnd)
         {
         }
@@ -748,11 +757,18 @@ namespace drawinglayer
                 else
                 {
                     // interpret in object coordinate system -> object aspect ratio will not scale result
+                    // use X-Axis with radius, it was already made relative to object width when coming from
+                    // SVG import
                     const double fRadius((aObjectTransform * basegfx::B2DVector(getRadius(), 0.0)).getLength());
                     const basegfx::B2DPoint aStart(aObjectTransform * getStart());
 
                     aUnitGradientToObject.scale(fRadius, fRadius);
                     aUnitGradientToObject.translate(aStart.getX(), aStart.getY());
+                }
+
+                if(!getGradientTransform().isIdentity())
+                {
+                    aUnitGradientToObject = getGradientTransform() * aUnitGradientToObject;
                 }
 
                 // create inverse from it
@@ -822,6 +838,7 @@ namespace drawinglayer
         }
 
         SvgRadialGradientPrimitive2D::SvgRadialGradientPrimitive2D(
+            const basegfx::B2DHomMatrix& rGradientTransform,
             const basegfx::B2DPolyPolygon& rPolyPolygon,
             const SvgGradientEntryVector& rGradientEntries,
             const basegfx::B2DPoint& rStart,
@@ -830,7 +847,7 @@ namespace drawinglayer
             SpreadMethod aSpreadMethod,
             const basegfx::B2DPoint* pFocal)
         :   BufferedDecompositionPrimitive2D(),
-            SvgGradientHelper(rPolyPolygon, rGradientEntries, rStart, bUseUnitCoordinates, aSpreadMethod),
+            SvgGradientHelper(rGradientTransform, rPolyPolygon, rGradientEntries, rStart, bUseUnitCoordinates, aSpreadMethod),
             mfRadius(fRadius),
             maFocal(rStart),
             maFocalVector(0.0, 0.0),

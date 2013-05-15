@@ -90,7 +90,7 @@ namespace svgio
             {
                 const double fOpacity(pStyle->getOpacity().getNumber());
 
-                if(fOpacity > 0.0)
+                if(fOpacity > 0.0 && Display_none != getDisplay())
                 {
                     drawinglayer::primitive2d::Primitive2DSequence aContent;
 
