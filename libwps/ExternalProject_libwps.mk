@@ -32,7 +32,6 @@ $(call gb_ExternalProject_get_state_target,libwps,build) :
 			--disable-werror \
 			CXXFLAGS="$(if $(filter NO,$(SYSTEM_BOOST)),-I$(call gb_UnpackedTarball_get_dir,boost),$(BOOST_CPPFLAGS))" \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-			$(if $(filter MSC,$(COM)),AR=lib.exe SED=sed.exe) \
 		&& (cd $(EXTERNAL_WORKDIR)/src/lib && $(MAKE)) \
 	)
 

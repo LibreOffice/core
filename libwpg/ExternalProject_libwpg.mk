@@ -30,7 +30,6 @@ $(call gb_ExternalProject_get_state_target,libwpg,build) :
 			--disable-debug \
 			--disable-werror \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-			$(if $(filter MSC,$(COM)),AR=lib.exe SED=sed.exe) \
 		&& (cd $(EXTERNAL_WORKDIR)/src/lib && $(MAKE)) \
 	)
 
