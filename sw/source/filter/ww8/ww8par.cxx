@@ -76,8 +76,6 @@
 #include <statstr.hrc>          // ResId fuer Statusleiste
 #include <swerror.h>            // ERR_WW8_...
 #include <swtable.hxx>          // class SwTableLines, ...
-// #i18732#
-#include <fmtfollowtextflow.hxx>
 #include <fchrfmt.hxx>
 #include <charfmt.hxx>
 
@@ -1511,8 +1509,6 @@ void SwWW8ImplReader::ImportDop()
     rDoc.set(IDocumentSettingAccess::TAB_COMPAT, true);
     // #i24363# tab stops relative to indent
     rDoc.set(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT, false);
-    // #i18732# - adjust default of option 'FollowTextFlow'
-    rDoc.SetDefault( SwFmtFollowTextFlow( sal_False ) );
 
     // Import Default-Tabs
     long nDefTabSiz = pWDop->dxaTab;

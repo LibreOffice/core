@@ -73,6 +73,7 @@
 #include <fmtclds.hxx>
 #include <fchrfmt.hxx>
 #include <fmtinfmt.hxx>
+#include <fmtfollowtextflow.hxx>
 #include <docary.hxx>
 #include <docstat.hxx>
 #include <doc.hxx>
@@ -330,6 +331,10 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
         pDoc->SetDefault( aFontHeightCJK );
         SvxFontHeightItem aFontHeightCTL(aFontHeights[2], 100, RES_CHRATR_CTL_FONTSIZE);
         pDoc->SetDefault( aFontHeightCTL );
+
+        // #i18732# - adjust default of option 'FollowTextFlow'
+        // TODO: not sure what the appropriate default for HTML should be?
+        pDoc->SetDefault( SwFmtFollowTextFlow(true) );
     }
 
     // Waehrend des Imports in den HTML-Modus schalten, damit die

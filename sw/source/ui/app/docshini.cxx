@@ -79,10 +79,6 @@
 #include <wrtsh.hxx>
 #include <swerror.h>
 #include <globals.hrc>
-
-// #i18732#
-#include <fmtfollowtextflow.hxx>
-
 #include <unochart.hxx>
 
 // text grid
@@ -303,13 +299,6 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     if( !bHTMLTemplSet &&
         FRMDIR_HORI_RIGHT_TOP == GetDefaultFrameDirection(GetAppLanguage()) )
         pDoc->SetDefault( SvxAdjustItem(SVX_ADJUST_RIGHT, RES_PARATR_ADJUST ) );
-
-    // OD 09.10.2003 #i18732# - set dynamic pool default for
-    // item RES_FOLLOW_TEXT_FLOW to sal_False for *new document*.
-    // Thus, redo this change in method <SwDoc::RemoveAllFmtLanguageDependencies()>,
-    // which is called from <SwDocShell::ConvertFrom(..)> in order to restore
-    // the static pool default.
-    pDoc->SetDefault( SwFmtFollowTextFlow( sal_False ) );
 
 // #i29550#
     pDoc->SetDefault( SfxBoolItem( RES_COLLAPSING_BORDERS, sal_True ) );

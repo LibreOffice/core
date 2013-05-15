@@ -108,14 +108,12 @@ void XMLGraphicsDefaultStyle::SetDefaults()
     if ( xInfo->hasPropertyByName( sTextWordWrap ) )
         xDefaults->setPropertyValue( sTextWordWrap, Any( bWordWrapDefault ) );
 
-    if (!GetImport().IsOOoXML()
+    if (GetImport().IsOOoXML()
         && xInfo->hasPropertyByName("IsFollowingTextFlow"))
     {
-        // MSO does not support "style:flow-with-text" so "false" is the better
-        // default (which may be overridden by the FillPropertySet below).
-        // Do not do this for OOoXML format: OOo 1.x only supported "true"
-        // so that is the more appropriate default.
-        xDefaults->setPropertyValue("IsFollowingTextFlow", uno::makeAny(false));
+        // OOo 1.x only supported "true" so that is the more appropriate
+        // default for OOoXML format documents.
+        xDefaults->setPropertyValue("IsFollowingTextFlow", uno::makeAny(true));
     }
 
     FillPropertySet( xDefaults );

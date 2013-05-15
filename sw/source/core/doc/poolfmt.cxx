@@ -2468,10 +2468,6 @@ void SwDoc::RemoveAllFmtLanguageDependencies()
         rDesc.GetLeft().SetFmtAttr( aFrameDir );
     }
 
-    // #i18732# - restore static pool default for item
-    // RES_FOLLOW_TEXT_FLOW.
-    GetAttrPool().ResetPoolDefaultItem( RES_FOLLOW_TEXT_FLOW );
-
     //#i16874# AutoKerning as default for new documents
     GetAttrPool().ResetPoolDefaultItem( RES_CHRATR_AUTOKERN );
 }

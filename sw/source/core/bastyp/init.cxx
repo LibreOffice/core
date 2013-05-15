@@ -587,7 +587,7 @@ void _InitCore()
     aAttrTab[ RES_ROW_SPLIT - POOLATTR_BEGIN ] =            new SwFmtRowSplit;
 
     // #i18732#
-    aAttrTab[ RES_FOLLOW_TEXT_FLOW - POOLATTR_BEGIN ] =     new SwFmtFollowTextFlow( sal_True );
+    aAttrTab[ RES_FOLLOW_TEXT_FLOW - POOLATTR_BEGIN ] =     new SwFmtFollowTextFlow(false);
     // collapsing borders #i29550#
     aAttrTab[ RES_COLLAPSING_BORDERS - POOLATTR_BEGIN ] =   new SfxBoolItem( RES_COLLAPSING_BORDERS, sal_False );
     // #i28701#
