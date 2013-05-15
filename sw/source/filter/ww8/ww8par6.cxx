@@ -3952,7 +3952,6 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
                     {
                         if (!lcl_HasExplicitLeft(pPlcxMan, bVer67))
                         {
-                            int tmp = pNumFmt->GetIndentAt();
                             aLR.SetTxtLeft(pNumFmt->GetIndentAt());
 
                             // If have not explicit left, set number format list tab position is doc default tab
