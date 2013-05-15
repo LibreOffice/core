@@ -9079,7 +9079,6 @@ if test -n "$ENABLE_DIRECTX" -a "$_os" = "WINNT"; then
     fi
 fi
 AC_SUBST(DIRECTXSDK_HOME)
-AC_SUBST(DIRECTXSDK_LIB)
 
 dnl ***************************************
 dnl Checking for bison and flex
