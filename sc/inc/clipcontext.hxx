@@ -10,13 +10,39 @@
 #ifndef SC_CLIPCONTEXT_HXX
 #define SC_CLIPCONTEXT_HXX
 
+#include "address.hxx"
+
+class ScDocument;
+
 namespace sc {
 
 class CopyFromClipContext
 {
+    ScDocument* mpRefUndoDoc;
+    ScDocument* mpClipDoc;
+    sal_uInt16  mnInsertFlag;
+    SCTAB       mnTabStart;
+    SCTAB       mnTabEnd;
+    bool        mbAsLink:1;
+    bool        mbSkipAttrForEmptyCells:1;
+
+    CopyFromClipContext(); // disabled
 public:
-    CopyFromClipContext();
+    CopyFromClipContext(
+        ScDocument* pRefUndoDoc, ScDocument* pClipDoc, sal_uInt16 nInsertFlag,
+        bool bAsLink, bool bSkipAttrForEmptyCells);
+
+    void setTabRange(SCTAB nStart, SCTAB nEnd);
+
     ~CopyFromClipContext();
+
+    ScDocument* getUndoDoc();
+    ScDocument* getClipDoc();
+    sal_uInt16 getInsertFlag() const;
+    SCTAB getTabStart() const;
+    SCTAB getTabEnd() const;
+    bool isAsLink() const;
+    bool isSkipAttrForEmptyCells() const;
 };
 
 }

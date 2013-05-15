@@ -386,7 +386,7 @@ public:
     void CopyCellToDocument( SCCOL nSrcCol, SCROW nSrcRow, SCCOL nDestCol, SCROW nDestRow, ScTable& rDestTab );
     void CopyFromClip(
         sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-        SCsCOL nDx, SCsROW nDy, sal_uInt16 nInsFlag, bool bAsLink, bool bSkipAttrForEmpty, ScTable* pTable );
+        SCsCOL nDx, SCsROW nDy, ScTable* pTable );
 
     void        StartListeningInArea( SCCOL nCol1, SCROW nRow1,
                                         SCCOL nCol2, SCROW nRow2 );

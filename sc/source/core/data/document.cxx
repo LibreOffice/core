@@ -103,17 +103,28 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::sheet::TablePageBreakData;
 using ::std::set;
 
-// The constant parameters to CopyBlockFromClip
-struct ScCopyBlockFromClipParams
+namespace {
+
+std::pair<SCTAB,SCTAB> getMarkedTableRange(const std::vector<ScTable*>& rTables, const ScMarkData& rMark)
 {
-    ScDocument* pRefUndoDoc;
-    ScDocument* pClipDoc;
-    sal_uInt16      nInsFlag;
-    SCTAB       nTabStart;
-    SCTAB       nTabEnd;
-    bool        bAsLink;
-    bool        bSkipAttrForEmpty;
-};
+    SCTAB nTabStart = MAXTAB;
+    SCTAB nTabEnd = 0;
+    SCTAB nMax = static_cast<SCTAB>(rTables.size());
+    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
+    for (; itr != itrEnd && *itr < nMax; ++itr)
+    {
+        if (!rTables[*itr])
+            continue;
+
+        if (*itr < nTabStart)
+            nTabStart = *itr;
+        nTabEnd = *itr;
+    }
+
+    return std::pair<SCTAB,SCTAB>(nTabStart,nTabEnd);
+}
+
+}
 
 struct ScDefaultAttr
 {
@@ -2302,21 +2313,21 @@ void ScDocument::BroadcastFromClip( SCCOL nCol1, SCROW nRow1,
 
 void ScDocument::CopyBlockFromClip(
     sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-    const ScMarkData& rMark, SCsCOL nDx, SCsROW nDy, const ScCopyBlockFromClipParams* pCBFCP )
+    const ScMarkData& rMark, SCsCOL nDx, SCsROW nDy )
 {
-    TableContainer& rClipTabs = pCBFCP->pClipDoc->maTabs;
-    SCTAB nTabEnd = pCBFCP->nTabEnd;
+    TableContainer& rClipTabs = rCxt.getClipDoc()->maTabs;
+    SCTAB nTabEnd = rCxt.getTabEnd();
     SCTAB nClipTab = 0;
-    for (SCTAB i = pCBFCP->nTabStart; i <= nTabEnd && i < static_cast<SCTAB>(maTabs.size()); i++)
+    for (SCTAB i = rCxt.getTabStart(); i <= nTabEnd && i < static_cast<SCTAB>(maTabs.size()); i++)
     {
         if (maTabs[i] && rMark.GetTableSelect(i) )
         {
             while (!rClipTabs[nClipTab]) nClipTab = (nClipTab+1) % (static_cast<SCTAB>(rClipTabs.size()));
 
-            maTabs[i]->CopyFromClip(rCxt, nCol1, nRow1, nCol2, nRow2, nDx, nDy,
-                pCBFCP->nInsFlag, pCBFCP->bAsLink, pCBFCP->bSkipAttrForEmpty, rClipTabs[nClipTab]);
+            maTabs[i]->CopyFromClip(
+                rCxt, nCol1, nRow1, nCol2, nRow2, nDx, nDy, rClipTabs[nClipTab]);
 
-            if ( pCBFCP->pClipDoc->pDrawLayer && ( pCBFCP->nInsFlag & IDF_OBJECTS ) )
+            if (rCxt.getClipDoc()->pDrawLayer && (rCxt.getInsertFlag() & IDF_OBJECTS))
             {
                 //  also copy drawing objects
 
@@ -2329,10 +2340,10 @@ void ScDocument::CopyBlockFromClip(
                     //  (copied in an extra step before pasting, or updated after pasting cells, but
                     //  before pasting objects).
 
-                    Rectangle aSourceRect = pCBFCP->pClipDoc->GetMMRect(
+                    Rectangle aSourceRect = rCxt.getClipDoc()->GetMMRect(
                                     nCol1-nDx, nRow1-nDy, nCol2-nDx, nRow2-nDy, nClipTab );
                     Rectangle aDestRect = GetMMRect( nCol1, nRow1, nCol2, nRow2, i );
-                    pDrawLayer->CopyFromClip( pCBFCP->pClipDoc->pDrawLayer, nClipTab, aSourceRect,
+                    pDrawLayer->CopyFromClip(rCxt.getClipDoc()->pDrawLayer, nClipTab, aSourceRect,
                                                 ScAddress( nCol1, nRow1, i ), aDestRect );
                 }
             }
@@ -2340,10 +2351,10 @@ void ScDocument::CopyBlockFromClip(
             nClipTab = (nClipTab+1) % (static_cast<SCTAB>(rClipTabs.size()));
         }
     }
-    if ( pCBFCP->nInsFlag & IDF_CONTENTS )
+    if (rCxt.getInsertFlag() & IDF_CONTENTS)
     {
         nClipTab = 0;
-        for (SCTAB i = pCBFCP->nTabStart; i <= nTabEnd && i < static_cast<SCTAB>(maTabs.size()); i++)
+        for (SCTAB i = rCxt.getTabStart(); i <= nTabEnd && i < static_cast<SCTAB>(maTabs.size()); i++)
         {
             if (maTabs[i] && rMark.GetTableSelect(i) )
             {
@@ -2359,19 +2370,19 @@ void ScDocument::CopyBlockFromClip(
                         && rClipTabs[(nClipTab + nFollow + 1) % static_cast<SCTAB>(rClipTabs.size())] )
                     ++nFollow;
 
-                if ( pCBFCP->pClipDoc->GetClipParam().mbCutMode )
+                if (rCxt.getClipDoc()->GetClipParam().mbCutMode)
                 {
                     bool bOldInserting = IsInsertingFromOtherDoc();
                     SetInsertingFromOtherDoc( true);
                     UpdateReference( URM_MOVE,
                         nCol1, nRow1, i, nCol2, nRow2, i+nFollow,
-                        nDx, nDy, nDz, pCBFCP->pRefUndoDoc, false );
+                        nDx, nDy, nDz, rCxt.getUndoDoc(), false );
                     SetInsertingFromOtherDoc( bOldInserting);
                 }
                 else
                     UpdateReference( URM_COPY,
                         nCol1, nRow1, i, nCol2, nRow2, i+nFollow,
-                        nDx, nDy, nDz, pCBFCP->pRefUndoDoc, false );
+                        nDx, nDy, nDz, rCxt.getUndoDoc(), false );
 
                 nClipTab = (nClipTab+nFollow+1) % (static_cast<SCTAB>(rClipTabs.size()));
                 i = sal::static_int_cast<SCTAB>( i + nFollow );
@@ -2383,34 +2394,33 @@ void ScDocument::CopyBlockFromClip(
 
 void ScDocument::CopyNonFilteredFromClip(
     sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-    const ScMarkData& rMark, SCsCOL nDx, SCsROW /*nDy*/, const ScCopyBlockFromClipParams* pCBFCP,
-    SCROW & rClipStartRow )
+    const ScMarkData& rMark, SCsCOL nDx, SCsROW /*nDy*/, SCROW & rClipStartRow )
 {
     //  call CopyBlockFromClip for ranges of consecutive non-filtered rows
     //  nCol1/nRow1 etc. is in target doc
 
     //  filtered state is taken from first used table in clipboard (as in GetClipArea)
     SCTAB nFlagTab = 0;
-    TableContainer& rClipTabs = pCBFCP->pClipDoc->maTabs;
+    TableContainer& rClipTabs = rCxt.getClipDoc()->maTabs;
     while ( nFlagTab < static_cast<SCTAB>(rClipTabs.size()) && !rClipTabs[nFlagTab] )
         ++nFlagTab;
 
     SCROW nSourceRow = rClipStartRow;
     SCROW nSourceEnd = 0;
-    if ( !pCBFCP->pClipDoc->GetClipParam().maRanges.empty() )
-        nSourceEnd = pCBFCP->pClipDoc->GetClipParam().maRanges.front()->aEnd.Row();
+    if (!rCxt.getClipDoc()->GetClipParam().maRanges.empty())
+        nSourceEnd = rCxt.getClipDoc()->GetClipParam().maRanges.front()->aEnd.Row();
     SCROW nDestRow = nRow1;
 
     while ( nSourceRow <= nSourceEnd && nDestRow <= nRow2 )
     {
         // skip filtered rows
-        nSourceRow = pCBFCP->pClipDoc->FirstNonFilteredRow(nSourceRow, nSourceEnd, nFlagTab);
+        nSourceRow = rCxt.getClipDoc()->FirstNonFilteredRow(nSourceRow, nSourceEnd, nFlagTab);
 
         if ( nSourceRow <= nSourceEnd )
         {
             // look for more non-filtered rows following
             SCROW nLastRow = nSourceRow;
-            pCBFCP->pClipDoc->RowFiltered(nSourceRow, nFlagTab, NULL, &nLastRow);
+            rCxt.getClipDoc()->RowFiltered(nSourceRow, nFlagTab, NULL, &nLastRow);
             SCROW nFollow = nLastRow - nSourceRow;
 
             if (nFollow > nSourceEnd - nSourceRow)
@@ -2420,7 +2430,7 @@ void ScDocument::CopyNonFilteredFromClip(
 
             SCsROW nNewDy = ((SCsROW)nDestRow) - nSourceRow;
             CopyBlockFromClip(
-                rCxt, nCol1, nDestRow, nCol2, nDestRow + nFollow, rMark, nDx, nNewDy, pCBFCP);
+                rCxt, nCol1, nDestRow, nCol2, nDestRow + nFollow, rMark, nDx, nNewDy);
 
             nSourceRow += nFollow + 1;
             nDestRow += nFollow + 1;
@@ -2501,28 +2511,9 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
     if ( ( nInsFlag & IDF_ATTRIB ) && !bSkipAttrForEmpty )
         nDelFlag |= IDF_ATTRIB;
 
-    ScCopyBlockFromClipParams aCBFCP;
-    aCBFCP.pRefUndoDoc = pRefUndoDoc;
-    aCBFCP.pClipDoc = pClipDoc;
-    aCBFCP.nInsFlag = nInsFlag;
-    aCBFCP.bAsLink  = bAsLink;
-    aCBFCP.bSkipAttrForEmpty = bSkipAttrForEmpty;
-    aCBFCP.nTabStart = MAXTAB;      // wird in der Schleife angepasst
-    aCBFCP.nTabEnd = 0;             // wird in der Schleife angepasst
-
-    //  Inc/DecRecalcLevel einmal aussen, damit nicht fuer jeden Block
-    //  die Draw-Seitengroesse neu berechnet werden muss
-    //! nur wenn ganze Zeilen/Spalten kopiert werden?
-
-    SCTAB nMax = static_cast<SCTAB>(maTabs.size());
-    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
-    for (; itr != itrEnd && *itr < nMax; ++itr)
-        if (maTabs[*itr])
-        {
-            if ( *itr < aCBFCP.nTabStart )
-                aCBFCP.nTabStart = *itr;
-            aCBFCP.nTabEnd = *itr;
-        }
+    sc::CopyFromClipContext aCxt(pRefUndoDoc, pClipDoc, nInsFlag, bAsLink, bSkipAttrForEmpty);
+    std::pair<SCTAB,SCTAB> aTabRanges = getMarkedTableRange(maTabs, rMark);
+    aCxt.setTabRange(aTabRanges.first, aTabRanges.second);
 
     ScRangeList aLocalRangeList;
     if (!pDestRanges)
@@ -2532,8 +2523,6 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
     }
 
     bInsertingFromOtherDoc = true;  // kein Broadcast/Listener aufbauen bei Insert
-
-    sc::CopyFromClipContext aCxt;
 
     SCCOL nClipStartCol = aClipRange.aStart.Col();
     SCROW nClipStartRow = aClipRange.aStart.Row();
@@ -2573,13 +2562,13 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
                 if ( bIncludeFiltered )
                 {
                     CopyBlockFromClip(
-                        aCxt, nC1, nR1, nC2, nR2, rMark, nDx, nDy, &aCBFCP);
+                        aCxt, nC1, nR1, nC2, nR2, rMark, nDx, nDy);
                     nClipStartRow += nR2 - nR1 + 1;
                 }
                 else
                 {
                     CopyNonFilteredFromClip(
-                        aCxt, nC1, nR1, nC2, nR2, rMark, nDx, nDy, &aCBFCP, nClipStartRow);
+                        aCxt, nC1, nR1, nC2, nR2, rMark, nDx, nDy, nClipStartRow);
                 }
                 nC1 = nC2 + 1;
                 nC2 = std::min((SCCOL)(nC1 + nXw), nCol2);
@@ -2594,8 +2583,6 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
             nR2 = std::min((SCROW)(nR1 + nYw), nRow2);
         } while (nR1 <= nRow2);
     }
-
-    itr = rMark.begin();
 
     bInsertingFromOtherDoc = false;
 
@@ -2643,26 +2630,9 @@ void ScDocument::CopyMultiRangeFromClip(
     SCROW nRow1 = rDestPos.Row();
     ScClipParam& rClipParam = pClipDoc->GetClipParam();
 
-    ScCopyBlockFromClipParams aCBFCP;
-    aCBFCP.pRefUndoDoc = NULL;
-    aCBFCP.pClipDoc = pClipDoc;
-    aCBFCP.nInsFlag = nInsFlag;
-    aCBFCP.bAsLink  = bAsLink;
-    aCBFCP.bSkipAttrForEmpty = bSkipAttrForEmpty;
-    aCBFCP.nTabStart = MAXTAB;
-    aCBFCP.nTabEnd = 0;
-
-    SCTAB nMax = static_cast<SCTAB>(maTabs.size());
-    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
-    for (; itr != itrEnd && *itr < nMax; ++itr)
-    {
-        if (maTabs[*itr])
-        {
-            if ( *itr < aCBFCP.nTabStart )
-                aCBFCP.nTabStart = *itr;
-            aCBFCP.nTabEnd = *itr;
-        }
-    }
+    sc::CopyFromClipContext aCxt(NULL, pClipDoc, nInsFlag, bAsLink, bSkipAttrForEmpty);
+    std::pair<SCTAB,SCTAB> aTabRanges = getMarkedTableRange(maTabs, rMark);
+    aCxt.setTabRange(aTabRanges.first, aTabRanges.second);
 
     ScRange aDestRange;
     rMark.GetMarkArea(aDestRange);
@@ -2672,9 +2642,8 @@ void ScDocument::CopyMultiRangeFromClip(
 
     SCROW nBegRow = nRow1;
     sal_uInt16 nDelFlag = IDF_CONTENTS;
-    const ScBitMaskCompressedArray<SCROW, sal_uInt8>& rFlags = GetRowFlagsArray(aCBFCP.nTabStart);
+    const ScBitMaskCompressedArray<SCROW, sal_uInt8>& rFlags = GetRowFlagsArray(aCxt.getTabStart());
 
-    sc::CopyFromClipContext aCxt;
     for ( size_t i = 0, n = rClipParam.maRanges.size(); i < n; ++i )
     {
         ScRange* p = rClipParam.maRanges[ i ];
@@ -2691,7 +2660,7 @@ void ScDocument::CopyMultiRangeFromClip(
         if (!bSkipAttrForEmpty)
             DeleteArea(nCol1, nBegRow, nCol2, nEndRow, rMark, nDelFlag);
 
-        CopyBlockFromClip(aCxt, nCol1, nBegRow, nCol2, nEndRow, rMark, nDx, nDy, &aCBFCP);
+        CopyBlockFromClip(aCxt, nCol1, nBegRow, nCol2, nEndRow, rMark, nDx, nDy);
         nRowCount -= nEndRow - nBegRow + 1;
 
         while (nRowCount > 0)
@@ -2710,7 +2679,7 @@ void ScDocument::CopyMultiRangeFromClip(
             if (!bSkipAttrForEmpty)
                 DeleteArea(nCol1, nBegRow, nCol2, nEndRow, rMark, nDelFlag);
 
-            CopyBlockFromClip(aCxt, nCol1, nBegRow, nCol2, nEndRow, rMark, nDx, nDy, &aCBFCP);
+            CopyBlockFromClip(aCxt, nCol1, nBegRow, nCol2, nEndRow, rMark, nDx, nDy);
             nRowCount -= nEndRow - nBegRow + 1;
         }
 
@@ -2723,8 +2692,6 @@ void ScDocument::CopyMultiRangeFromClip(
         if (rClipParam.meDirection == ScClipParam::Column)
             nCol1 += p->aEnd.Col() - p->aStart.Col() + 1;
     }
-
-    itr = rMark.begin();
 
     bInsertingFromOtherDoc = false;
 

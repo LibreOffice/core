@@ -11,8 +11,55 @@
 
 namespace sc {
 
-CopyFromClipContext::CopyFromClipContext() {}
+CopyFromClipContext::CopyFromClipContext(
+    ScDocument* pRefUndoDoc, ScDocument* pClipDoc, sal_uInt16 nInsertFlag,
+    bool bAsLink, bool bSkipAttrForEmptyCells) :
+    mpRefUndoDoc(pRefUndoDoc), mpClipDoc(pClipDoc), mnInsertFlag(nInsertFlag),
+    mnTabStart(0), mnTabEnd(0),
+    mbAsLink(bAsLink), mbSkipAttrForEmptyCells(bSkipAttrForEmptyCells) {}
+
 CopyFromClipContext::~CopyFromClipContext() {}
+
+void CopyFromClipContext::setTabRange(SCTAB nStart, SCTAB nEnd)
+{
+    mnTabStart = nStart;
+    mnTabEnd = nEnd;
+}
+
+ScDocument* CopyFromClipContext::getUndoDoc()
+{
+    return mpRefUndoDoc;
+}
+
+ScDocument* CopyFromClipContext::getClipDoc()
+{
+    return mpClipDoc;
+}
+
+sal_uInt16 CopyFromClipContext::getInsertFlag() const
+{
+    return mnInsertFlag;
+}
+
+SCTAB CopyFromClipContext::getTabStart() const
+{
+    return mnTabStart;
+}
+
+SCTAB CopyFromClipContext::getTabEnd() const
+{
+    return mnTabEnd;
+}
+
+bool CopyFromClipContext::isAsLink() const
+{
+    return mbAsLink;
+}
+
+bool CopyFromClipContext::isSkipAttrForEmptyCells() const
+{
+    return mbSkipAttrForEmptyCells;
+}
 
 }
 

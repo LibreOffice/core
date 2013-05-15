@@ -43,6 +43,7 @@
 #include "dbdata.hxx"
 #include "colorscale.hxx"
 #include "tokenarray.hxx"
+#include "clipcontext.hxx"
 
 #include "scitems.hxx"
 #include <editeng/boxitem.hxx>
@@ -747,7 +748,7 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
 
 void ScTable::CopyFromClip(
     sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-    SCsCOL nDx, SCsROW nDy, sal_uInt16 nInsFlag, bool bAsLink, bool bSkipAttrForEmpty, ScTable* pTable )
+    SCsCOL nDx, SCsROW nDy, ScTable* pTable )
 {
 
     if (nCol2 > MAXCOL)
@@ -758,10 +759,10 @@ void ScTable::CopyFromClip(
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
     {
         for ( SCCOL i = nCol1; i <= nCol2; i++)
-            aCol[i].CopyFromClip(rCxt, nRow1, nRow2, nDy, nInsFlag, bAsLink, bSkipAttrForEmpty, pTable->aCol[i - nDx]);
+            aCol[i].CopyFromClip(rCxt, nRow1, nRow2, nDy, pTable->aCol[i - nDx]);
 
 
-        if(nInsFlag != IDF_OBJECTS)
+        if (rCxt.getInsertFlag() != IDF_OBJECTS)
         {
             // make sure that there are no old references to the cond formats
             sal_uInt16 nWhichArray[2];
@@ -772,18 +773,18 @@ void ScTable::CopyFromClip(
         }
 
         //remove old notes
-        if (nInsFlag & (IDF_NOTE|IDF_ADDNOTES))
+        if (rCxt.getInsertFlag() & (IDF_NOTE|IDF_ADDNOTES))
             maNotes.erase(nCol1, nRow1, nCol2, nRow2);
 
-        bool bAddNotes = nInsFlag & (IDF_NOTE | IDF_ADDNOTES);
+        bool bAddNotes = rCxt.getInsertFlag() & (IDF_NOTE | IDF_ADDNOTES);
         if (bAddNotes)
         {
-            bool bCloneCaption = (nInsFlag & IDF_NOCAPTIONS) == 0;
+            bool bCloneCaption = (rCxt.getInsertFlag() & IDF_NOCAPTIONS) == 0;
             maNotes.CopyFromClip(pTable->maNotes, pDocument, nCol1, nRow1, nCol2, nRow2, nDx, nDy, nTab, bCloneCaption);
         }
 
 
-        if ((nInsFlag & IDF_ATTRIB) != 0)
+        if ((rCxt.getInsertFlag() & IDF_ATTRIB) != 0)
         {
             if (nRow1==0 && nRow2==MAXROW && pColWidth && pTable->pColWidth)
                 for (SCCOL i=nCol1; i<=nCol2; i++)
@@ -804,7 +805,7 @@ void ScTable::CopyFromClip(
             }
 
             // Zellschutz auf geschuetzter Tabelle nicht setzen
-            if ( IsProtected() && (nInsFlag & IDF_ATTRIB) )
+            if (IsProtected() && (rCxt.getInsertFlag() & IDF_ATTRIB))
             {
                 ScPatternAttr aPattern(pDocument->GetPool());
                 aPattern.GetItemSet().Put( ScProtectionAttr( false ) );

@@ -49,6 +49,7 @@
 #include "cellvalue.hxx"
 #include "tokenarray.hxx"
 #include "stlalgorithm.hxx"
+#include "clipcontext.hxx"
 
 #include <com/sun/star/i18n/LocaleDataItem.hpp>
 
@@ -565,12 +566,11 @@ ScFormulaCell* ScColumn::CreateRefCell( ScDocument* pDestDoc, const ScAddress& r
 //  nRow1, nRow2 = target position
 
 void ScColumn::CopyFromClip(
-    sc::CopyFromClipContext& rCxt, SCROW nRow1, SCROW nRow2, long nDy,
-    sal_uInt16 nInsFlag, bool bAsLink, bool bSkipAttrForEmpty, ScColumn& rColumn )
+    sc::CopyFromClipContext& rCxt, SCROW nRow1, SCROW nRow2, long nDy, ScColumn& rColumn )
 {
-    if ((nInsFlag & IDF_ATTRIB) != 0)
+    if ((rCxt.getInsertFlag() & IDF_ATTRIB) != 0)
     {
-        if ( bSkipAttrForEmpty )
+        if (rCxt.isSkipAttrForEmptyCells())
         {
             //  copy only attributes for non-empty cells
             //  (notes are not counted as non-empty here, to match the content behavior)
@@ -599,10 +599,10 @@ void ScColumn::CopyFromClip(
         else
             rColumn.pAttrArray->CopyAreaSafe( nRow1, nRow2, nDy, *pAttrArray );
     }
-    if ((nInsFlag & IDF_CONTENTS) == 0)
+    if ((rCxt.getInsertFlag() & IDF_CONTENTS) == 0)
         return;
 
-    if ( bAsLink && nInsFlag == IDF_ALL )
+    if (rCxt.isAsLink() && rCxt.getInsertFlag() == IDF_ALL)
     {
         // We also reference empty cells for "ALL"
         // IDF_ALL must always contain more flags when compared to "Insert contents" as
@@ -637,7 +637,7 @@ void ScColumn::CopyFromClip(
     SCSIZE nColCount = rColumn.maItems.size();
 
     // ignore IDF_FORMULA - "all contents but no formulas" results in the same number of cells
-    if ((nInsFlag & ( IDF_CONTENTS & ~IDF_FORMULA )) == ( IDF_CONTENTS & ~IDF_FORMULA ) && nRow2-nRow1 >= 64)
+    if ((rCxt.getInsertFlag() & ( IDF_CONTENTS & ~IDF_FORMULA )) == ( IDF_CONTENTS & ~IDF_FORMULA ) && nRow2-nRow1 >= 64)
     {
         //! Always do the Resize from the outside, where the number of repetitions is known
         //! (then it can be removed here)
@@ -658,9 +658,9 @@ void ScColumn::CopyFromClip(
 
             ScAddress aDestPos( nCol, (SCROW)nDestRow, nTab );
 
-            ScBaseCell* pNewCell = bAsLink ?
-                rColumn.CreateRefCell( pDocument, aDestPos, i, nInsFlag ) :
-                rColumn.CloneCell( i, nInsFlag, *pDocument, aDestPos );
+            ScBaseCell* pNewCell = rCxt.isAsLink() ?
+                rColumn.CreateRefCell(pDocument, aDestPos, i, rCxt.getInsertFlag()) :
+                rColumn.CloneCell(i, rCxt.getInsertFlag(), *pDocument, aDestPos);
             if (pNewCell)
                 Insert( aDestPos.Row(), pNewCell );
         }

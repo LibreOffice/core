@@ -236,8 +236,7 @@ public:
     void CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol);
     void CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDestCol );
     void CopyFromClip(
-        sc::CopyFromClipContext& rCxt, SCROW nRow1, SCROW nRow2, long nDy,
-        sal_uInt16 nInsFlag, bool bAsLink, bool bSkipAttrForEmpty, ScColumn& rColumn );
+        sc::CopyFromClipContext& rCxt, SCROW nRow1, SCROW nRow2, long nDy, ScColumn& rColumn );
 
     void        StartListeningInArea( SCROW nRow1, SCROW nRow2 );
     void        BroadcastInArea( SCROW nRow1, SCROW nRow2 );

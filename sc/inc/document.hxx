@@ -144,7 +144,6 @@ class ScRowBreakIterator;
 struct ScSetStringParam;
 class ScDocRowHeightUpdater;
 struct ScColWidthParam;
-struct ScCopyBlockFromClipParams;
 class ScSheetEvents;
 class ScProgress;
 class SvtListener;
@@ -1143,11 +1142,10 @@ public:
                                 SCTAB nTab, ScDocument* pClipDoc = NULL);
     void CopyBlockFromClip(
         sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-        const ScMarkData& rMark, SCsCOL nDx, SCsROW nDy, const ScCopyBlockFromClipParams* pCBFCP );
+        const ScMarkData& rMark, SCsCOL nDx, SCsROW nDy );
     void CopyNonFilteredFromClip(
         sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-        const ScMarkData& rMark, SCsCOL nDx, SCsROW nDy, const ScCopyBlockFromClipParams* pCBFCP,
-        SCROW & rClipStartRow );
+        const ScMarkData& rMark, SCsCOL nDx, SCsROW nDy, SCROW & rClipStartRow );
 
     void            StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
                                         SCCOL nCol2, SCROW nRow2,
