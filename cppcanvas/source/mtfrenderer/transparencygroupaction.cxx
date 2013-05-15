@@ -23,8 +23,6 @@
 #include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
 
-#include <rtl/logfile.hxx>
-
 #include <com/sun/star/rendering/XBitmap.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 
@@ -186,8 +184,8 @@ namespace cppcanvas
             bool TransparencyGroupAction::renderSubset( const ::basegfx::B2DHomMatrix&    rTransformation,
                                                         const Subset&                     rSubset ) const
             {
-                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::TransparencyGroupAction::renderSubset()" );
-                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::TransparencyGroupAction: 0x%X", this );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::TransparencyGroupAction::renderSubset()" );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::TransparencyGroupAction: 0x" << std::hex << this );
 
                 // determine overall transformation matrix (render, view,
                 // and passed transformation)
@@ -216,7 +214,7 @@ namespace cppcanvas
                                                 nRotate,
                                                 nShearX ) )
                 {
-                    OSL_FAIL( "TransparencyGroupAction::renderSubset(): non-decomposable transformation" );
+                    SAL_WARN( "cppcanvas.emf", "TransparencyGroupAction::renderSubset(): non-decomposable transformation" );
                     return false;
                 }
 
@@ -329,7 +327,7 @@ namespace cppcanvas
                                     break;
 
                                 default:
-                                    OSL_FAIL( "Unknown meta action type encountered" );
+                                    SAL_WARN( "cppcanvas.emf", "Unknown meta action type encountered" );
                                     break;
                             }
                         }

@@ -21,7 +21,6 @@
 #include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
 
 #include <com/sun/star/rendering/TexturingMode.hpp>
@@ -159,7 +158,7 @@ namespace dxcanvas
     uno::Sequence< sal_Int8 > BitmapCanvasHelper::getData( rendering::IntegerBitmapLayout&     bitmapLayout,
                                                            const geometry::IntegerRectangle2D& rect )
     {
-        RTL_LOGFILE_CONTEXT( aLog, "::dxcanvas::BitmapCanvasHelper::getData()" );
+        SAL_INFO( "canvas.directx", "::dxcanvas::BitmapCanvasHelper::getData()" );
 
         ENSURE_OR_THROW( mpTarget,
                           "::dxcanvas::BitmapCanvasHelper::getData(): disposed" );
@@ -175,7 +174,7 @@ namespace dxcanvas
                                       const rendering::IntegerBitmapLayout& bitmapLayout,
                                       const geometry::IntegerRectangle2D&   rect )
     {
-        RTL_LOGFILE_CONTEXT( aLog, "::dxcanvas::BitmapCanvasHelper::setData()" );
+        SAL_INFO( "canvas.directx", "::dxcanvas::BitmapCanvasHelper::setData()" );
 
         ENSURE_OR_THROW( mpTarget,
                           "::dxcanvas::BitmapCanvasHelper::setData(): disposed" );
@@ -190,7 +189,7 @@ namespace dxcanvas
                                        const rendering::IntegerBitmapLayout&  bitmapLayout,
                                        const geometry::IntegerPoint2D&        pos )
     {
-        RTL_LOGFILE_CONTEXT( aLog, "::dxcanvas::BitmapCanvasHelper::setPixel()" );
+        SAL_INFO( "canvas.directx", "::dxcanvas::BitmapCanvasHelper::setPixel()" );
 
         ENSURE_OR_THROW( mpTarget,
                           "::dxcanvas::BitmapCanvasHelper::setPixel(): disposed" );
@@ -204,7 +203,7 @@ namespace dxcanvas
     uno::Sequence< sal_Int8 > BitmapCanvasHelper::getPixel( rendering::IntegerBitmapLayout&   bitmapLayout,
                                                             const geometry::IntegerPoint2D&   pos )
     {
-        RTL_LOGFILE_CONTEXT( aLog, "::dxcanvas::BitmapCanvasHelper::getPixel()" );
+        SAL_INFO( "canvas.directx", "::dxcanvas::BitmapCanvasHelper::getPixel()" );
 
         ENSURE_OR_THROW( mpTarget,
                           "::dxcanvas::BitmapCanvasHelper::getPixel(): disposed" );

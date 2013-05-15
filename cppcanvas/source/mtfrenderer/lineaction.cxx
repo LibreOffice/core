@@ -21,7 +21,6 @@
 #include <lineaction.hxx>
 #include <outdevstate.hxx>
 
-#include <rtl/logfile.hxx>
 #include <com/sun/star/rendering/XCanvas.hpp>
 
 #include <tools/gen.hxx>
@@ -87,8 +86,8 @@ namespace cppcanvas
 
             bool LineAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
-                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::LineAction::render()" );
-                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::LineAction: 0x%X", this );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::LineAction::render()" );
+                SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::LineAction: 0x" << std::hex << this );
 
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
