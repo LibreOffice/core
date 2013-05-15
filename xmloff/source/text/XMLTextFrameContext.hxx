@@ -30,7 +30,7 @@ namespace com { namespace sun { namespace star {
 
 class XMLTextFrameContextHyperlink_Impl;
 
-class XMLTextFrameContext : public SvXMLImportContext, public multiImageImportHelper
+class XMLTextFrameContext : public SvXMLImportContext, public MultiImageImportHelper
 {
     ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XAttributeList > m_xAttrList;

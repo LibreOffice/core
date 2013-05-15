@@ -25,7 +25,7 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
-class multiImageImportHelper
+class MultiImageImportHelper
 {
 private:
     std::vector< SvXMLImportContextRef* >       maImplContextVector;
@@ -37,8 +37,8 @@ protected:
     virtual void removeGraphicFromImportContext(const SvXMLImportContext& rContext) const = 0;
 
 public:
-    multiImageImportHelper();
-    virtual ~multiImageImportHelper();
+    MultiImageImportHelper();
+    virtual ~MultiImageImportHelper();
 
     /// solve multiple imported images. The most valuable one is choosen,
     /// see imlementation for evtl. changing weights and/or adding filetypes.
