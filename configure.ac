@@ -11784,15 +11784,12 @@ if test "$build_os" = "cygwin"; then
     if test "$DISABLE_ACTIVEX" = "YES"; then
         ATL_LIB="$WINDOWS_SDK_HOME/lib" # Doesn't exist for VSE
         ATL_INCLUDE="$WINDOWS_SDK_HOME/include/atl"
-        MFC_LIB="$WINDOWS_SDK_HOME/lib" # Doesn't exist for VSE
     else
         ATL_LIB="$COMPATH/atlmfc/lib"
         ATL_INCLUDE="$COMPATH/atlmfc/include"
-        MFC_LIB="$COMPATH/atlmfc/lib"
     fi
     if test "$BITNESS_OVERRIDE" = 64; then
         ATL_LIB="$ATL_LIB/amd64"
-        MFC_LIB="$MFC_LIB/amd64"
     fi
     PathFormat "/usr/bin/grep.exe"
     WIN_GREP="$formatted_path"
@@ -11806,7 +11803,6 @@ fi
 
 AC_SUBST(ATL_INCLUDE)
 AC_SUBST(ATL_LIB)
-AC_SUBST(MFC_LIB)
 AC_SUBST(WIN_FIND)
 AC_SUBST(WIN_GREP)
 AC_SUBST(WIN_LS)
