@@ -3061,7 +3061,10 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().nUc = nParam;
             break;
         case RTF_U:
-            if ((SAL_MIN_INT16 <= nParam) && (nParam <= SAL_MAX_INT16))
+            // sal_Unicode is unsigned 16-bit, RTF may represent that as a
+            // signed SAL_MIN_INT16..SAL_MAX_INT16 or 0..SAL_MAX_UINT16. The
+            // static_cast() will do the right thing.
+            if ((SAL_MIN_INT16 <= nParam) && (nParam <= SAL_MAX_UINT16))
             {
                 m_aUnicodeBuffer.append(static_cast<sal_Unicode>(nParam));
                 m_aStates.top().nCharsToSkip = m_aStates.top().nUc;

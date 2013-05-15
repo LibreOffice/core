@@ -134,6 +134,7 @@ public:
     void testFdo61193();
     void testFdo63023();
     void testFdo42109();
+    void testFdo62977();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -257,6 +258,7 @@ void Test::run()
         {"hello.rtf", &Test::testFdo61193},
         {"fdo63023.rtf", &Test::testFdo63023},
         {"fdo42109.rtf", &Test::testFdo42109},
+        {"fdo62977.rtf", &Test::testFdo62977},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1222,6 +1224,12 @@ void Test::testFdo42109()
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName("B1"), uno::UNO_QUERY);
     // Make sure the page number is imported as a field in the B1 cell.
     CPPUNIT_ASSERT_EQUAL(OUString("TextField"), getProperty<OUString>(getRun(getParagraphOfText(1, xCell->getText()), 1), "TextPortionType"));
+}
+
+void Test::testFdo62977()
+{
+    // The middle character was imported as '?' instead of the proper unicode value.
+    getRun(getParagraph(1), 1, OUString("\xE5\xB9\xB4\xEF\xBC\x94\xE6\x9C\x88", 9, RTL_TEXTENCODING_UTF8));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
