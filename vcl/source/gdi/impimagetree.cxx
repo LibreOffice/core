@@ -194,7 +194,7 @@ bool ImplImageTree::doLoadImage(
         bitmap.SetEmpty();
     }
     std::vector< OUString > paths;
-    paths.push_back(name);
+    paths.push_back(getRealImageName(name));
     if (localized) {
         sal_Int32 pos = name.lastIndexOf('/');
         if (pos != -1) {
@@ -203,7 +203,7 @@ bool ImplImageTree::doLoadImage(
             for (std::vector< OUString >::const_reverse_iterator it( aFallbacks.rbegin());
                     it != aFallbacks.rend(); ++it)
             {
-                paths.push_back(createPath(name, pos, *it));
+                paths.push_back( getRealImageName( createPath(name, pos, *it) ) );
             }
         }
     }
@@ -226,6 +226,7 @@ void ImplImageTree::shutDown() {
         // for safety; empty m_style means "not initialized"
     m_iconCache.clear();
     m_checkStyleCache.clear();
+    m_iconLinkCache.clear();
 }
 
 void ImplImageTree::setStyle(OUString const & style) {
@@ -234,6 +235,8 @@ void ImplImageTree::setStyle(OUString const & style) {
         m_style = style;
         resetPaths();
         m_iconCache.clear();
+        m_iconLinkCache.clear();
+        loadImageLinks();
     }
 }
 
@@ -282,7 +285,8 @@ bool ImplImageTree::find(
     std::vector< OUString > const & paths, BitmapEx & bitmap)
 {
     if (!m_cacheIcons) {
-        for (std::vector< OUString >::const_reverse_iterator j(paths.rbegin());
+        for (std::vector< OUString >::const_reverse_iterator j(
+                 paths.rbegin());
              j != paths.rend(); ++j)
         {
             osl::File file(m_path.first + "/" + *j);
@@ -323,6 +327,84 @@ bool ImplImageTree::find(
         }
     }
     return false;
+}
+
+void ImplImageTree::loadImageLinks()
+{
+    const OUString aLinkFilename("links.txt");
+
+    if (!m_cacheIcons)
+    {
+        osl::File file(m_path.first + "/" + aLinkFilename);
+        if (file.open(osl_File_OpenFlag_Read) == ::osl::FileBase::E_None)
+        {
+            parseLinkFile( wrapFile(file) );
+            file.close();
+            return;
+        }
+    }
+
+    if ( !m_path.second.is() )
+    {
+        css::uno::Sequence< css::uno::Any > args(1);
+        args[0] <<= m_path.first + ".zip";
+        try
+        {
+            m_path.second.set(
+                comphelper::getProcessServiceFactory()->createInstanceWithArguments(
+                    OUString( "com.sun.star.packages.zip.ZipFileAccess"),
+                    args),
+                css::uno::UNO_QUERY_THROW);
+        }
+        catch (css::uno::RuntimeException &)
+        {
+            throw;
+        }
+        catch (const css::uno::Exception & e)
+        {
+            SAL_INFO("vcl", "ImplImageTree::find exception "
+                << e.Message << " for " << m_path.first);
+            return;
+        }
+    }
+    if ( m_path.second->hasByName(aLinkFilename) )
+    {
+        css::uno::Reference< css::io::XInputStream > s;
+        bool ok = m_path.second->getByName(aLinkFilename) >>= s;
+        OSL_ASSERT(ok); (void) ok;
+
+        parseLinkFile( wrapStream(s) );
+        return;
+    }
+}
+
+void ImplImageTree::parseLinkFile(boost::shared_ptr< SvStream > pStream)
+{
+    OString aLine;
+    OUString aLink, aOriginal;
+    while ( pStream->ReadLine( aLine ) )
+    {
+        sal_Int32 nIndex = 0;
+        if ( aLine.isEmpty() )
+            continue;
+        aLink = OStringToOUString( aLine.getToken(0, ' ', nIndex), RTL_TEXTENCODING_UTF8 );
+        aOriginal = OStringToOUString( aLine.getToken(0, ' ', nIndex), RTL_TEXTENCODING_UTF8 );
+        if ( aLink.isEmpty() || aOriginal.isEmpty() )
+        {
+            SAL_INFO("vcl", "ImplImageTree::parseLinkFile: icon links.txt parse error. "
+                "Link is incomplete." );
+            continue;
+        }
+        m_iconLinkCache[aLink] = aOriginal;
+    }
+}
+
+OUString const & ImplImageTree::getRealImageName(OUString const & name)
+{
+    IconLinkCache::iterator it(m_iconLinkCache.find(name));
+    if (it == m_iconLinkCache.end())
+        return name;
+    return it->second;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

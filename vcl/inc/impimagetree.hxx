@@ -72,12 +72,15 @@ private:
         OUString, bool, OUStringHash > CheckStyleCache;
     typedef boost::unordered_map<
         OUString, std::pair< bool, BitmapEx >, OUStringHash > IconCache;
+    typedef boost::unordered_map<
+        OUString, OUString, OUStringHash > IconLinkCache;
 
     OUString m_style;
     Path m_path;
     CheckStyleCache m_checkStyleCache;
     IconCache m_iconCache;
     bool m_cacheIcons;
+    IconLinkCache m_iconLinkCache;
 
     void setStyle(OUString const & style );
 
@@ -87,6 +90,10 @@ private:
     bool iconCacheLookup( OUString const & name, bool localized, BitmapEx & bitmap );
 
     bool find(std::vector< OUString > const & paths, BitmapEx & bitmap );
+
+    void loadImageLinks();
+    void parseLinkFile(boost::shared_ptr< SvStream > stream);
+    OUString const & getRealImageName(OUString const & name);
 };
 
 typedef salhelper::SingletonRef< ImplImageTree > ImplImageTreeSingletonRef;
