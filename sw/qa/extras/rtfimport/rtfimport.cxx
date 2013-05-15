@@ -147,6 +147,7 @@ public:
     void testFdo51916();
     void testFdo61193();
     void testFdo63023();
+    void testFdo62977();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -264,6 +265,7 @@ void Test::run()
         {"fdo51916.rtf", &Test::testFdo51916},
         {"hello.rtf", &Test::testFdo61193},
         {"fdo63023.rtf", &Test::testFdo63023},
+        {"fdo62977.rtf", &Test::testFdo62977},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -1212,6 +1214,12 @@ void Test::testFdo63023()
     uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "HeaderText");
     // Back color was black (0) in the header, due to missing color table in the substream.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFFFF99), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xHeaderText), 1), "CharBackColor"));
+}
+
+void Test::testFdo62977()
+{
+    // The middle character was imported as '?' instead of the proper unicode value.
+    getRun(getParagraph(1), 1, OUString("\xE5\xB9\xB4\xEF\xBC\x94\xE6\x9C\x88", 9, RTL_TEXTENCODING_UTF8));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
