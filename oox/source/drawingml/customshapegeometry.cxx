@@ -402,7 +402,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
             sal_Unicode n = rValue[ 0 ];
             if ( ( n == '+' ) || ( n == '-' ) )
             {
-                if ( !rValue.isEmpty() )
+                if ( rValue.getLength() > 1 )
                     n = rValue[ 1 ];
             }
             if ( ( n >= '0' ) && ( n <= '9' ) )
@@ -1063,7 +1063,6 @@ Reference< XFastContextHandler > Path2DContext::createFastChildContext( sal_Int3
         break;
         case A_TOKEN( lnTo ) :
         {
-
             if ( !mrSegments.empty() && ( mrSegments.back().Command == EnhancedCustomShapeSegmentCommand::LINETO ) )
                 mrSegments.back().Count++;
             else
