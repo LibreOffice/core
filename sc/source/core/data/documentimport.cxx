@@ -109,7 +109,7 @@ void ScDocumentImport::finalize()
                 // Column has no cells. Skip it.
                 continue;
 
-            ScColumn::CTAttrStoreType::iterator itCTAPos = rCol.maCellTextAttrs.begin();
+            sc::CellTextAttrStoreType::iterator itCTAPos = rCol.maCellTextAttrs.begin();
             std::vector<ColEntry>::iterator itCell = rCol.maItems.begin(), itCellEnd = rCol.maItems.end();
             for (; itCell != itCellEnd; ++itCell)
                 itCTAPos = rCol.maCellTextAttrs.set<sc::CellTextAttr>(itCTAPos, itCell->nRow, sc::CellTextAttr());

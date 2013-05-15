@@ -1415,7 +1415,7 @@ void ScColumn::CopyCellTextAttrsToDocument(SCROW nRow1, SCROW nRow2, ScColumn& r
 {
     rDestCol.maCellTextAttrs.set_empty(nRow1, nRow2); // Empty the destination range first.
 
-    CTAttrStoreType::const_iterator itBlk = maCellTextAttrs.begin(), itBlkEnd = maCellTextAttrs.end();
+    sc::CellTextAttrStoreType::const_iterator itBlk = maCellTextAttrs.begin(), itBlkEnd = maCellTextAttrs.end();
 
     // Locate the top row position.
     size_t nOffsetInBlock = 0;
@@ -1864,8 +1864,8 @@ void ScColumn::FindUsed( SCROW nStartRow, SCROW nEndRow, bool* pUsed ) const
 
 void ScColumn::StartListening( SvtListener& rLst, SCROW nRow )
 {
-    std::pair<BCStoreType::iterator,size_t> aPos = maBroadcasters.position(nRow);
-    BCStoreType::iterator it = aPos.first; // block position.
+    std::pair<sc::BroadcasterStoreType::iterator,size_t> aPos = maBroadcasters.position(nRow);
+    sc::BroadcasterStoreType::iterator it = aPos.first; // block position.
     size_t nElemPos = aPos.second; // element position within the block.
     switch (it->type)
     {

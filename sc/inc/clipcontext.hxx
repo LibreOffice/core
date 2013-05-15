@@ -11,6 +11,7 @@
 #define SC_CLIPCONTEXT_HXX
 
 #include "address.hxx"
+#include "mtvelements.hxx"
 
 class ScDocument;
 

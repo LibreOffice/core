@@ -33,18 +33,6 @@
 
 #include <boost/intrusive_ptr.hpp>
 
-#define DEBUG_COLUMN_STORAGE 0
-
-#if DEBUG_COLUMN_STORAGE
-#ifdef NDEBUG
-#undef NDEBUG
-#endif
-#define MDDS_MULTI_TYPE_VECTOR_DEBUG 1
-#endif
-
-#include <mdds/multi_type_vector.hpp>
-#include <mdds/multi_type_vector_custom_func1.hpp>
-
 namespace editeng { class SvxBorderLine; }
 
 namespace sc {
@@ -121,22 +109,14 @@ struct ColDoubleEntry
 
 class ScColumn
 {
-    // Broadcaster storage container
-    typedef mdds::mtv::custom_block_func1<sc::element_type_broadcaster, sc::custom_broadcaster_block> BCBlkFunc;
-    typedef mdds::multi_type_vector<BCBlkFunc> BCStoreType;
-
-    // Cell text attribute container.
-    typedef mdds::mtv::custom_block_func1<sc::element_type_celltextattr, sc::custom_celltextattr_block> CTAttrFunc;
-    typedef mdds::multi_type_vector<CTAttrFunc> CTAttrStoreType;
-
     // Empty values correspond with empty cells. All non-empty cell positions
     // must have non-empty elements. For text width, the value should be
     // either the real text width, or TEXTWIDTH_DIRTY in case it hasn't been
     // calculated yet. For script type, it should be either the real script
     // type value or SC_SCRIPTTYPE_UNKNOWN.
-    CTAttrStoreType maCellTextAttrs;
+    sc::CellTextAttrStoreType maCellTextAttrs;
 
-    BCStoreType maBroadcasters;
+    sc::BroadcasterStoreType maBroadcasters;
 
     SCCOL           nCol;
     SCTAB           nTab;

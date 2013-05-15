@@ -14,17 +14,13 @@
 
 #include "column.hxx"
 
-class ScColumn;
-
 class ScColumnTextWidthIterator : boost::noncopyable
 {
-    typedef ScColumn::CTAttrStoreType CTAttrStoreType;
-
-    CTAttrStoreType& mrCellTextAttrs;
+    sc::CellTextAttrStoreType& mrCellTextAttrs;
     const size_t mnEnd;
     size_t mnCurPos;
-    CTAttrStoreType::iterator miBlockCur;
-    CTAttrStoreType::iterator miBlockEnd;
+    sc::CellTextAttrStoreType::iterator miBlockCur;
+    sc::CellTextAttrStoreType::iterator miBlockEnd;
     sc::custom_celltextattr_block::iterator miDataCur;
     sc::custom_celltextattr_block::iterator miDataEnd;
 

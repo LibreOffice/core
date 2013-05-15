@@ -12,8 +12,18 @@
 
 #include "svl/broadcast.hxx"
 
+#define DEBUG_COLUMN_STORAGE 0
+
+#if DEBUG_COLUMN_STORAGE
+#ifdef NDEBUG
+#undef NDEBUG
+#endif
+#define MDDS_MULTI_TYPE_VECTOR_DEBUG 1
+#endif
+
 #include <mdds/multi_type_vector_macro.hpp>
-#include <mdds/multi_type_vector_types.hpp>
+#include <mdds/multi_type_vector.hpp>
+#include <mdds/multi_type_vector_custom_func1.hpp>
 
 namespace sc {
 
@@ -44,6 +54,18 @@ MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(CellTextAttr, element_type_celltextattr, CellT
 
 // This needs to be in global namespace just like SvtBroacaster is.
 MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(SvtBroadcaster, sc::element_type_broadcaster, NULL, sc::custom_broadcaster_block)
+
+namespace sc {
+
+// Broadcaster storage container
+typedef mdds::mtv::custom_block_func1<sc::element_type_broadcaster, sc::custom_broadcaster_block> BCBlkFunc;
+typedef mdds::multi_type_vector<BCBlkFunc> BroadcasterStoreType;
+
+// Cell text attribute container.
+typedef mdds::mtv::custom_block_func1<sc::element_type_celltextattr, sc::custom_celltextattr_block> CTAttrFunc;
+typedef mdds::multi_type_vector<CTAttrFunc> CellTextAttrStoreType;
+
+}
 
 #endif
 
