@@ -225,12 +225,9 @@ void ScMacrosTest::testVba()
     OUString sTempDirURL;
     osl::FileBase:: getTempDirURL( sTempDirURL );
     osl::FileBase::getSystemPathFromFileURL( sTempDirURL, sTempDir );
+    sTempDir += OUString( SAL_PATHDELIMITER );
+    OUString sTestFileName("My Test WorkBook.xls");
     Sequence< uno::Any > aParams;
-    if ( !sTempDir.isEmpty() )
-    {
-        aParams.realloc(1);
-        aParams[ 0 ] <<= sTempDir;
-    }
     for ( sal_uInt32  i=0; i<SAL_N_ELEMENTS( testInfo ); ++i )
     {
         rtl::OUString aFileName;
@@ -245,6 +242,14 @@ void ScMacrosTest::testVba()
         Sequence< sal_Int16 > aOutParamIndex;
         Sequence< Any > aOutParam;
 
+        bool bWorkbooksHandling = OUString( testInfo[i].sFileBaseName ).equalsAscii("Workbooks.") && !sTempDir.isEmpty() ;
+        if ( bWorkbooksHandling )
+        {
+            aParams.realloc(2);
+            aParams[ 0 ] <<= sTempDir;
+            aParams[ 1 ] <<= sTestFileName;
+        }
+
         SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
 
         CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
@@ -256,6 +261,14 @@ void ScMacrosTest::testVba()
         std::cout << "value of Ret " << rtl::OUStringToOString( aStringRes, RTL_TEXTENCODING_UTF8 ).getStr() << std::endl;
         CPPUNIT_ASSERT_MESSAGE( "script reported failure",aStringRes == "OK" );
         pFoundShell->DoClose();
+        if ( bWorkbooksHandling )
+        {
+            OUString sFileUrl;
+            OUString sFilePath = sTempDir + sTestFileName;
+            osl::FileBase::getFileURLFromSystemPath( sFilePath, sFileUrl );
+            if ( !sFileUrl.isEmpty() )
+                osl::File::remove( sFileUrl );
+        }
     }
 }
 
