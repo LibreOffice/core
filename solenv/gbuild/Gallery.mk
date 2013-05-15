@@ -58,15 +58,19 @@ define gb_Gallery__command
 $(call gb_Output_announce,$(2),$(true),GAL,1)
 $(call gb_Helper_abbreviate_dirs,\
 	rm -f $(call gb_Gallery_get_workdir,$(2))/* && \
-	SAL_USE_VCLPLUGIN=svp \
-	$(call gb_Executable_get_command,$(gb_GENGAL),$(ICECREAM_RUN)) \
-		$(call gb_Gallery__make_env_args) \
-		--build-tree \
-		--destdir $(GALLERY_BASEDIR) \
-		--name "$(GALLERY_NAME)" \
-		--path $(call gb_Gallery_get_workdir,$(2))) \
-		$(GALLERY_FILES) && \
-	touch $@
+	$(call gb_Helper_print_on_error,\
+		SAL_USE_VCLPLUGIN=svp \
+		$(call gb_Executable_get_command,$(gb_GENGAL),$(ICECREAM_RUN)) \
+			$(call gb_Gallery__make_env_args) \
+			--build-tree \
+			--destdir $(GALLERY_BASEDIR) \
+			--name "$(GALLERY_NAME)" \
+			--path $(call gb_Gallery_get_workdir,$(2)) \
+			$(GALLERY_FILES),\
+		$@.log \
+	) && \
+	touch $@ \
+)
 endef
 
 gb_Gallery__get_final_target = $(WORKDIR)/Gallery/$(1).final
@@ -92,6 +96,7 @@ $(call gb_Gallery_get_clean_target,%) :
 		rm -rf \
 			$(call gb_Gallery__get_final_target,$*) \
 			$(call gb_Gallery_get_target,$*) \
+			$(call gb_Gallery_get_target,$*).log \
 			$(call gb_Gallery_get_workdir,$*) \
 	)
 
