@@ -97,7 +97,7 @@ Partial::Partial(
             OUString seg;
             bool end = parseSegment(*i, &n, &seg);
             if (end) {
-                p->children[seg] = Node();
+                p->children[seg].clear();
                 break;
             }
             Node::Children::iterator j(p->children.find(seg));

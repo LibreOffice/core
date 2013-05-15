@@ -22,13 +22,13 @@
 
 #include "sal/config.h"
 
-#include <map>
+#include <boost/unordered_map.hpp> // using the boost container because it explicitly allows recursive types
 #include <set>
 
 #include "boost/noncopyable.hpp"
 
 #include "path.hxx"
-
+#include "rtl/ustring.hxx"
 
 namespace configmgr {
 
@@ -46,9 +46,10 @@ public:
 
 private:
     struct Node {
-        typedef std::map< OUString, Node > Children;
+        typedef boost::unordered_map< OUString, Node, OUStringHash > Children;
 
         Node(): startInclude(false) {}
+        void clear() { startInclude=false; children.clear(); }
 
         Children children;
         bool startInclude;
