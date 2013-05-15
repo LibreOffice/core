@@ -1237,7 +1237,7 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScAttrDlg(SfxViewFram
 SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScHFEditDlg( SfxViewFrame*       pFrame,
                                                                         Window*         pParent,
                                                                         const SfxItemSet&   rCoreSet,
-                                                                        const String&       rPageStyle,
+                                                                        const OUString&     rPageStyle,
                                                                         sal_uInt16          nResId )
 {
     SfxTabDialog* pDlg = NULL;

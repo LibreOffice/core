@@ -58,13 +58,10 @@ ScHFEditDlg::ScHFEditDlg( SfxViewFrame*     pFrameP,
 {
     eNumType = ((const SvxPageItem&)rCoreSet.Get(ATTR_PAGE)).GetNumType();
 
-    String aTmp = GetText();
+    OUString aTmp = GetText();
 
-    aTmp.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " (" ));
-    aTmp += ScGlobal::GetRscString( STR_PAGESTYLE );
-    aTmp.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ": " ));
-    aTmp += rPageStyle;
-    aTmp += ')';
+    aTmp += " (" + ScGlobal::GetRscString( STR_PAGESTYLE ) + ": " + rPageStyle + ")";
+
     SetText( aTmp );
 }
 
