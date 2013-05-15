@@ -355,6 +355,7 @@ void ScUndoDeleteTab::Undo()
             pDoc->SetVisible( nTab, pRefUndoDoc->IsVisible( nTab ) );
             pDoc->SetTabBgColor( nTab, pRefUndoDoc->GetTabBgColor(nTab) );
             pDoc->SetSheetEvents( nTab, pRefUndoDoc->GetSheetEvents( nTab ) );
+            pDoc->SetLayoutRTL( nTab, pRefUndoDoc->IsLayoutRTL( nTab ) );
 
             if ( pRefUndoDoc->IsTabProtected( nTab ) )
                 pDoc->SetTabProtection(nTab, pRefUndoDoc->GetTabProtection(nTab));

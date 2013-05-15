@@ -2170,6 +2170,7 @@ sal_Bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, sal_Bool bRecord
             pUndoDoc->SetVisible( nTab, pDoc->IsVisible( nTab ) );
             pUndoDoc->SetTabBgColor( nTab, pDoc->GetTabBgColor(nTab) );
             pUndoDoc->SetSheetEvents( nTab, pDoc->GetSheetEvents( nTab ) );
+            pUndoDoc->SetLayoutRTL( nTab, pDoc->IsLayoutRTL( nTab ) );
 
             if ( pDoc->IsTabProtected( nTab ) )
                 pUndoDoc->SetTabProtection(nTab, pDoc->GetTabProtection(nTab));
