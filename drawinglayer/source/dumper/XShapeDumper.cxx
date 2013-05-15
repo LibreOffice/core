@@ -84,6 +84,11 @@ void dumpPolygonKindAsAttribute(com::sun::star::drawing::PolygonKind ePolygonKin
 void dumpPolyPolygonAsElement(com::sun::star::drawing::PointSequenceSequence aPolyPolygon, xmlTextWriterPtr xmlWriter);
 void dumpGeometryAsElement(com::sun::star::drawing::PointSequenceSequence aGeometry, xmlTextWriterPtr xmlWriter);
 
+// CharacterProperties.idl
+void dumpCharFontNameAsAttribute(OUString aCharFontName, xmlTextWriterPtr xmlWriter);
+void dumpCharHeightAsAttribute(float fHeight, xmlTextWriterPtr xmlWriter);
+void dumpCharColorAsAttribute(sal_Int32 aColor, xmlTextWriterPtr xmlWriter);
+
 // TextProperties.idl
 void dumpIsNumberingAsAttribute(sal_Bool bIsNumbering, xmlTextWriterPtr xmlWriter);
 void dumpTextAutoGrowHeightAsAttribute(sal_Bool bTextAutoGrowHeight, xmlTextWriterPtr xmlWriter);
@@ -195,7 +200,7 @@ void dumpFillStyleAsAttribute(drawing::FillStyle eFillStyle, xmlTextWriterPtr xm
 
 void dumpFillColorAsAttribute(sal_Int32 aColor, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillColor"), "%" SAL_PRIdINT32, aColor);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillColor"), "%06x", (unsigned int) aColor);
 }
 
 void dumpFillTransparenceAsAttribute(sal_Int32 aTransparence, xmlTextWriterPtr xmlWriter)
@@ -235,8 +240,8 @@ void dumpGradientProperty(awt::Gradient aGradient, xmlTextWriterPtr xmlWriter)
         default:
             break;
     }
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("startColor"), "%" SAL_PRIdINT32, (sal_Int32) aGradient.StartColor);
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("endColor"), "%" SAL_PRIdINT32, (sal_Int32) aGradient.EndColor);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("startColor"), "%06x", (unsigned int) aGradient.StartColor);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("endColor"), "%06x", (unsigned int) aGradient.EndColor);
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("angle"), "%" SAL_PRIdINT32, (sal_Int32) aGradient.Angle);
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("border"), "%" SAL_PRIdINT32, (sal_Int32) aGradient.Border);
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("xOffset"), "%" SAL_PRIdINT32, (sal_Int32) aGradient.XOffset);
@@ -283,7 +288,7 @@ void dumpFillHatchAsElement(drawing::Hatch aHatch, xmlTextWriterPtr xmlWriter)
         default:
             break;
     }
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("color"), "%" SAL_PRIdINT32, (sal_Int32) aHatch.Color);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("color"), "%06x", (unsigned int) aHatch.Color);
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("distance"), "%" SAL_PRIdINT32, (sal_Int32) aHatch.Distance);
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("angle"), "%" SAL_PRIdINT32, (sal_Int32) aHatch.Angle);
     xmlTextWriterEndElement( xmlWriter );
@@ -481,7 +486,7 @@ void dumpLineDashNameAsAttribute(OUString sLineDashName, xmlTextWriterPtr xmlWri
 
 void dumpLineColorAsAttribute(sal_Int32 aLineColor, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineColor"), "%" SAL_PRIdINT32, aLineColor);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineColor"), "%06x", (unsigned int) aLineColor);
 }
 
 void dumpLineTransparenceAsAttribute(sal_Int32 aLineTransparence, xmlTextWriterPtr xmlWriter)
@@ -677,6 +682,22 @@ void dumpGeometryAsElement(drawing::PointSequenceSequence aGeometry, xmlTextWrit
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Geometry" ));
     dumpPointSequenceSequence(aGeometry, NULL, xmlWriter);
     xmlTextWriterEndElement( xmlWriter );
+}
+
+// CharacterProperties.idl
+void dumpCharFontNameAsAttribute(OUString aCharFontName, xmlTextWriterPtr xmlWriter)
+{
+    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fontName"), "%s", OUStringToOString( aCharFontName, RTL_TEXTENCODING_UTF8 ).getStr() );
+}
+
+void dumpCharHeightAsAttribute(float fHeight, xmlTextWriterPtr xmlWriter)
+{
+    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fontHeight"), "%f", fHeight );
+}
+
+void dumpCharColorAsAttribute(sal_Int32 aColor, xmlTextWriterPtr xmlWriter)
+{
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fontColor"), "%06x", (unsigned int) aColor);
 }
 
 // ----------------------------------------
@@ -926,7 +947,7 @@ void dumpShadowAsAttribute(sal_Bool bShadow, xmlTextWriterPtr xmlWriter)
 
 void dumpShadowColorAsAttribute(sal_Int32 aShadowColor, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("shadowColor"), "%" SAL_PRIdINT32, aShadowColor);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("shadowColor"), "%06x", (unsigned int) aShadowColor);
 }
 
 void dumpShadowTransparenceAsAttribute(sal_Int32 aShadowTransparence, xmlTextWriterPtr xmlWriter)
@@ -1124,6 +1145,29 @@ void dumpCustomShapeReplacementURLAsAttribute(OUString sCustomShapeReplacementUR
 void dumpTextPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter)
 {
     uno::Reference< beans::XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
+    if(xInfo->hasPropertyByName("CharFontName"))
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("CharFontName");
+        OUString aCharFontName;
+        if(anotherAny >>= aCharFontName)
+            dumpCharFontNameAsAttribute(aCharFontName, xmlWriter);
+    }
+    if(xInfo->hasPropertyByName("CharHeight"))
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("CharHeight");
+        float fHeight;
+        if(anotherAny >>= fHeight)
+            dumpCharHeightAsAttribute(fHeight, xmlWriter);
+    }
+    if(xInfo->hasPropertyByName("CharColor"))
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("CharColor");
+        sal_Int32 aColor = sal_Int32();
+        if(anotherAny >>= aColor)
+            dumpCharColorAsAttribute(aColor, xmlWriter);
+    }
+    // TODO - more properties from CharacterProperties.idl (similar to above)
+
     if(xInfo->hasPropertyByName("IsNumbering"))
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("IsNumbering");
