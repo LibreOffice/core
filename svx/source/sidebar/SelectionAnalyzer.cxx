@@ -449,6 +449,10 @@ bool SelectionAnalyzer::IsShapeType (const sal_uInt16 nType)
         case OBJ_POLY:
         case OBJ_FREELINE:
         case OBJ_FREEFILL:
+
+        // #122145# adding OBJ_OLE2 since these also allow line/fill style and may
+        // be multiselected/grouped with normal draw objects, e.g. math OLE objects
+        case OBJ_OLE2:
             return true;
 
         default:
