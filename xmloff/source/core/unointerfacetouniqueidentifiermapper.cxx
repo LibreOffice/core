@@ -31,14 +31,6 @@ UnoInterfaceToUniqueIdentifierMapper::UnoInterfaceToUniqueIdentifierMapper()
 {
 }
 
-UnoInterfaceToUniqueIdentifierMapper::~UnoInterfaceToUniqueIdentifierMapper()
-{
-    SAL_WARN_IF( !maReserved.empty(), "xmloff",
-            "there are " << maReserved.size()
-            << " ids left. This means a data loss: some connection(s) to shape(s) are missing."
-    );
-}
-
 const OUString& UnoInterfaceToUniqueIdentifierMapper::registerReference( const Reference< XInterface >& rInterface )
 {
     // Be certain that the references we store in our table are to the
