@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//8so\u003d",
+        "filename": "padmin/source/adddlg.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-05-15T13:54:13Z",
+      "side": 1,
+      "message": "This one is obviously the other way around.",
+      "revId": "3b5ec511e4cf3b9522321dacb8d92128ff433410",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
