@@ -408,15 +408,19 @@ namespace drawinglayer
                     // gradient vector defined by Start,End
                     const basegfx::B2DVector aVector(getEnd() - getStart());
                     const double fVectorLength(aVector.getLength());
-                    basegfx::B2DHomMatrix aUnitGradientToGradient;
 
-                    aUnitGradientToGradient.scale(fVectorLength, 1.0);
-                    aUnitGradientToGradient.rotate(atan2(aVector.getY(), aVector.getX()));
-                    aUnitGradientToGradient.translate(getStart().getX(), getStart().getY());
+                    aUnitGradientToObject.scale(fVectorLength, 1.0);
+                    aUnitGradientToObject.rotate(atan2(aVector.getY(), aVector.getX()));
+                    aUnitGradientToObject.translate(getStart().getX(), getStart().getY());
+
+                    if(!getGradientTransform().isIdentity())
+                    {
+                        aUnitGradientToObject = getGradientTransform() * aUnitGradientToObject;
+                    }
 
                     // create full transform from unit gradient coordinates to object coordinates
                     // including the SvgGradient transformation
-                    aUnitGradientToObject = aObjectTransform * aUnitGradientToGradient;
+                    aUnitGradientToObject = aObjectTransform * aUnitGradientToObject;
                 }
                 else
                 {
@@ -428,11 +432,11 @@ namespace drawinglayer
                     aUnitGradientToObject.scale(aVector.getLength(), 1.0);
                     aUnitGradientToObject.rotate(atan2(aVector.getY(), aVector.getX()));
                     aUnitGradientToObject.translate(aStart.getX(), aStart.getY());
-                }
 
-                if(!getGradientTransform().isIdentity())
-                {
-                    aUnitGradientToObject = getGradientTransform() * aUnitGradientToObject;
+                    if(!getGradientTransform().isIdentity())
+                    {
+                        aUnitGradientToObject = getGradientTransform() * aUnitGradientToObject;
+                    }
                 }
 
                 // create inverse from it
@@ -745,14 +749,17 @@ namespace drawinglayer
                 {
                     // interpret in unit coordinate system -> object aspect ratio will scale result
                     // create unit transform from unit vector to given linear gradient vector
-                    basegfx::B2DHomMatrix aUnitGradientToGradient;
+                    aUnitGradientToObject.scale(getRadius(), getRadius());
+                    aUnitGradientToObject.translate(getStart().getX(), getStart().getY());
 
-                    aUnitGradientToGradient.scale(getRadius(), getRadius());
-                    aUnitGradientToGradient.translate(getStart().getX(), getStart().getY());
+                    if(!getGradientTransform().isIdentity())
+                    {
+                        aUnitGradientToObject = getGradientTransform() * aUnitGradientToObject;
+                    }
 
                     // create full transform from unit gradient coordinates to object coordinates
                     // including the SvgGradient transformation
-                    aUnitGradientToObject = aObjectTransform * aUnitGradientToGradient;
+                    aUnitGradientToObject = aObjectTransform * aUnitGradientToObject;
                 }
                 else
                 {
@@ -764,11 +771,11 @@ namespace drawinglayer
 
                     aUnitGradientToObject.scale(fRadius, fRadius);
                     aUnitGradientToObject.translate(aStart.getX(), aStart.getY());
-                }
 
-                if(!getGradientTransform().isIdentity())
-                {
-                    aUnitGradientToObject = getGradientTransform() * aUnitGradientToObject;
+                    if(!getGradientTransform().isIdentity())
+                    {
+                        aUnitGradientToObject = getGradientTransform() * aUnitGradientToObject;
+                    }
                 }
 
                 // create inverse from it
