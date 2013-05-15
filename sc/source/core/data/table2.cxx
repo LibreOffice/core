@@ -745,9 +745,9 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
     }
 }
 
-void ScTable::CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                            SCsCOL nDx, SCsROW nDy, sal_uInt16 nInsFlag,
-                            bool bAsLink, bool bSkipAttrForEmpty, ScTable* pTable)
+void ScTable::CopyFromClip(
+    sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+    SCsCOL nDx, SCsROW nDy, sal_uInt16 nInsFlag, bool bAsLink, bool bSkipAttrForEmpty, ScTable* pTable )
 {
 
     if (nCol2 > MAXCOL)
@@ -758,7 +758,7 @@ void ScTable::CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
     {
         for ( SCCOL i = nCol1; i <= nCol2; i++)
-            aCol[i].CopyFromClip(nRow1, nRow2, nDy, nInsFlag, bAsLink, bSkipAttrForEmpty, pTable->aCol[i - nDx]);
+            aCol[i].CopyFromClip(rCxt, nRow1, nRow2, nDy, nInsFlag, bAsLink, bSkipAttrForEmpty, pTable->aCol[i - nDx]);
 
 
         if(nInsFlag != IDF_OBJECTS)

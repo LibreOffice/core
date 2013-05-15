@@ -50,6 +50,7 @@ namespace editeng { class SvxBorderLine; }
 namespace sc {
     struct FormulaGroupContext;
     class EndListeningContext;
+    class CopyFromClipContext;
 }
 class SvxFontItem;
 
@@ -1140,13 +1141,14 @@ public:
 
     void            CopyTabToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 SCTAB nTab, ScDocument* pClipDoc = NULL);
-    void            CopyBlockFromClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                                    const ScMarkData& rMark, SCsCOL nDx, SCsROW nDy,
-                                    const ScCopyBlockFromClipParams* pCBFCP );
-    void            CopyNonFilteredFromClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                                    const ScMarkData& rMark, SCsCOL nDx, SCsROW nDy,
-                                    const ScCopyBlockFromClipParams* pCBFCP,
-                                    SCROW & rClipStartRow );
+    void CopyBlockFromClip(
+        sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+        const ScMarkData& rMark, SCsCOL nDx, SCsROW nDy, const ScCopyBlockFromClipParams* pCBFCP );
+    void CopyNonFilteredFromClip(
+        sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+        const ScMarkData& rMark, SCsCOL nDx, SCsROW nDy, const ScCopyBlockFromClipParams* pCBFCP,
+        SCROW & rClipStartRow );
+
     void            StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
                                         SCCOL nCol2, SCROW nRow2,
                                         const ScMarkData& rMark, sal_uInt16 nInsFlag );

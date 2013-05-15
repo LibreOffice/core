@@ -90,6 +90,7 @@
 #include "stringutil.hxx"
 #include "formulaiter.hxx"
 #include "formulacell.hxx"
+#include "clipcontext.hxx"
 
 #include <map>
 #include <limits>
@@ -2299,11 +2300,9 @@ void ScDocument::BroadcastFromClip( SCCOL nCol1, SCROW nRow1,
     }
 }
 
-void ScDocument::CopyBlockFromClip( SCCOL nCol1, SCROW nRow1,
-                                    SCCOL nCol2, SCROW nRow2,
-                                    const ScMarkData& rMark,
-                                    SCsCOL nDx, SCsROW nDy,
-                                    const ScCopyBlockFromClipParams* pCBFCP )
+void ScDocument::CopyBlockFromClip(
+    sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+    const ScMarkData& rMark, SCsCOL nDx, SCsROW nDy, const ScCopyBlockFromClipParams* pCBFCP )
 {
     TableContainer& rClipTabs = pCBFCP->pClipDoc->maTabs;
     SCTAB nTabEnd = pCBFCP->nTabEnd;
@@ -2314,8 +2313,8 @@ void ScDocument::CopyBlockFromClip( SCCOL nCol1, SCROW nRow1,
         {
             while (!rClipTabs[nClipTab]) nClipTab = (nClipTab+1) % (static_cast<SCTAB>(rClipTabs.size()));
 
-            maTabs[i]->CopyFromClip( nCol1, nRow1, nCol2, nRow2, nDx, nDy,
-                pCBFCP->nInsFlag, pCBFCP->bAsLink, pCBFCP->bSkipAttrForEmpty, rClipTabs[nClipTab] );
+            maTabs[i]->CopyFromClip(rCxt, nCol1, nRow1, nCol2, nRow2, nDx, nDy,
+                pCBFCP->nInsFlag, pCBFCP->bAsLink, pCBFCP->bSkipAttrForEmpty, rClipTabs[nClipTab]);
 
             if ( pCBFCP->pClipDoc->pDrawLayer && ( pCBFCP->nInsFlag & IDF_OBJECTS ) )
             {
@@ -2382,12 +2381,10 @@ void ScDocument::CopyBlockFromClip( SCCOL nCol1, SCROW nRow1,
 }
 
 
-void ScDocument::CopyNonFilteredFromClip( SCCOL nCol1, SCROW nRow1,
-                                    SCCOL nCol2, SCROW nRow2,
-                                    const ScMarkData& rMark,
-                                    SCsCOL nDx, SCsROW /* nDy */,
-                                    const ScCopyBlockFromClipParams* pCBFCP,
-                                    SCROW & rClipStartRow )
+void ScDocument::CopyNonFilteredFromClip(
+    sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+    const ScMarkData& rMark, SCsCOL nDx, SCsROW /*nDy*/, const ScCopyBlockFromClipParams* pCBFCP,
+    SCROW & rClipStartRow )
 {
     //  call CopyBlockFromClip for ranges of consecutive non-filtered rows
     //  nCol1/nRow1 etc. is in target doc
@@ -2422,7 +2419,8 @@ void ScDocument::CopyNonFilteredFromClip( SCCOL nCol1, SCROW nRow1,
                 nFollow = nRow2 - nDestRow;
 
             SCsROW nNewDy = ((SCsROW)nDestRow) - nSourceRow;
-            CopyBlockFromClip( nCol1, nDestRow, nCol2, nDestRow + nFollow, rMark, nDx, nNewDy, pCBFCP );
+            CopyBlockFromClip(
+                rCxt, nCol1, nDestRow, nCol2, nDestRow + nFollow, rMark, nDx, nNewDy, pCBFCP);
 
             nSourceRow += nFollow + 1;
             nDestRow += nFollow + 1;
@@ -2535,6 +2533,8 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
 
     bInsertingFromOtherDoc = true;  // kein Broadcast/Listener aufbauen bei Insert
 
+    sc::CopyFromClipContext aCxt;
+
     SCCOL nClipStartCol = aClipRange.aStart.Col();
     SCROW nClipStartRow = aClipRange.aStart.Row();
     SCROW nClipEndRow = aClipRange.aEnd.Row();
@@ -2572,14 +2572,14 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
                 SCsROW nDy = ((SCsROW)nR1) - nClipStartRow;
                 if ( bIncludeFiltered )
                 {
-                    CopyBlockFromClip( nC1, nR1, nC2, nR2, rMark, nDx,
-                            nDy, &aCBFCP );
+                    CopyBlockFromClip(
+                        aCxt, nC1, nR1, nC2, nR2, rMark, nDx, nDy, &aCBFCP);
                     nClipStartRow += nR2 - nR1 + 1;
                 }
                 else
                 {
-                    CopyNonFilteredFromClip( nC1, nR1, nC2, nR2, rMark,
-                            nDx, nDy, &aCBFCP, nClipStartRow );
+                    CopyNonFilteredFromClip(
+                        aCxt, nC1, nR1, nC2, nR2, rMark, nDx, nDy, &aCBFCP, nClipStartRow);
                 }
                 nC1 = nC2 + 1;
                 nC2 = std::min((SCCOL)(nC1 + nXw), nCol2);
@@ -2674,6 +2674,7 @@ void ScDocument::CopyMultiRangeFromClip(
     sal_uInt16 nDelFlag = IDF_CONTENTS;
     const ScBitMaskCompressedArray<SCROW, sal_uInt8>& rFlags = GetRowFlagsArray(aCBFCP.nTabStart);
 
+    sc::CopyFromClipContext aCxt;
     for ( size_t i = 0, n = rClipParam.maRanges.size(); i < n; ++i )
     {
         ScRange* p = rClipParam.maRanges[ i ];
@@ -2690,7 +2691,7 @@ void ScDocument::CopyMultiRangeFromClip(
         if (!bSkipAttrForEmpty)
             DeleteArea(nCol1, nBegRow, nCol2, nEndRow, rMark, nDelFlag);
 
-        CopyBlockFromClip(nCol1, nBegRow, nCol2, nEndRow, rMark, nDx, nDy, &aCBFCP);
+        CopyBlockFromClip(aCxt, nCol1, nBegRow, nCol2, nEndRow, rMark, nDx, nDy, &aCBFCP);
         nRowCount -= nEndRow - nBegRow + 1;
 
         while (nRowCount > 0)
@@ -2709,7 +2710,7 @@ void ScDocument::CopyMultiRangeFromClip(
             if (!bSkipAttrForEmpty)
                 DeleteArea(nCol1, nBegRow, nCol2, nEndRow, rMark, nDelFlag);
 
-            CopyBlockFromClip(nCol1, nBegRow, nCol2, nEndRow, rMark, nDx, nDy, &aCBFCP);
+            CopyBlockFromClip(aCxt, nCol1, nBegRow, nCol2, nEndRow, rMark, nDx, nDy, &aCBFCP);
             nRowCount -= nEndRow - nBegRow + 1;
         }
 

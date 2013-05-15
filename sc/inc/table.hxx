@@ -50,6 +50,7 @@ namespace com { namespace sun { namespace star {
 namespace sc {
     struct FormulaGroupContext;
     class EndListeningContext;
+    class CopyFromClipContext;
 }
 
 class SfxItemSet;
@@ -383,8 +384,10 @@ public:
                            bool bKeepScenarioFlags, bool bCloneNoteCaptions);
     void CopyStaticToDocument(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScTable* pDestTab);
     void CopyCellToDocument( SCCOL nSrcCol, SCROW nSrcRow, SCCOL nDestCol, SCROW nDestRow, ScTable& rDestTab );
-    void        CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCsCOL nDx, SCsROW nDy,
-                                sal_uInt16 nInsFlag, bool bAsLink, bool bSkipAttrForEmpty, ScTable* pTable);
+    void CopyFromClip(
+        sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+        SCsCOL nDx, SCsROW nDy, sal_uInt16 nInsFlag, bool bAsLink, bool bSkipAttrForEmpty, ScTable* pTable );
+
     void        StartListeningInArea( SCCOL nCol1, SCROW nRow1,
                                         SCCOL nCol2, SCROW nRow2 );
     void        BroadcastInArea( SCCOL nCol1, SCROW nRow1,

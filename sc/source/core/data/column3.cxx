@@ -564,9 +564,9 @@ ScFormulaCell* ScColumn::CreateRefCell( ScDocument* pDestDoc, const ScAddress& r
 //  rColumn = source
 //  nRow1, nRow2 = target position
 
-void ScColumn::CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
-                                sal_uInt16 nInsFlag, bool bAsLink, bool bSkipAttrForEmpty,
-                                ScColumn& rColumn)
+void ScColumn::CopyFromClip(
+    sc::CopyFromClipContext& rCxt, SCROW nRow1, SCROW nRow2, long nDy,
+    sal_uInt16 nInsFlag, bool bAsLink, bool bSkipAttrForEmpty, ScColumn& rColumn )
 {
     if ((nInsFlag & IDF_ATTRIB) != 0)
     {
