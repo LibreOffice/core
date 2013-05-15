@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 #include "macros.inc"
-#include "AutoInstallLibs/ooo"
 
 #if defined SOLAR_JAVA && defined WNT
 File gid_File_Lib_Accessbridge
