@@ -99,24 +99,21 @@ SwCache::SwCache( const sal_uInt16 nInitSize
 SwCache::~SwCache()
 {
 #ifdef DBG_UTIL
-    {
-        OString sOut(m_aName + "\n" +
-                    "Number of new entries:                 " + OString::number(m_nAppend) + "\n" +
-                    "Number of insert on free places:       " + OString::number(m_nInsertFree) + "\n" +
-                    "Number of replacements:                " + OString::number(m_nReplace) + "\n" +
-                    "Number of successful Get's:            " + OString::number(m_nGetSuccess) + "\n" +
-                    "Number of failed Get's:                " + OString::number(m_nGetFail) + "\n" +
-                    "Number or reordering (LRU):            " + OString::number(m_nToTop) + "\n" +
-                    "Number of suppressions:                " + OString::number(m_nDelete) + "\n" +
-                    "Number of Get's without Index:         " + OString::number(m_nGetSeek) + "\n" +
-                    "Number of Seek for Get without Index:  " + OString::number(m_nAverageSeekCnt) + "\n" +
-                    "Number of Flush calls:                 " + OString::number(m_nFlushCnt) + "\n" +
-                    "Number of flushed objects:             " + OString::number(m_nFlushedObjects) + "\n" +
-                    "Number of Cache expansions:            " + OString::number(m_nIncreaseMax) + "\n" +
-                    "Number of Cache reductions:            " + OString::number(m_nDecreaseMax) + "\n");
-
-        OSL_TRACE(sOut.getStr());
-    }
+    SAL_INFO(
+        "sw.core",
+        m_aName << "; number of new entries: " << m_nAppend
+            << "; number of insert on free places: " << m_nInsertFree
+            << "; number of replacements: " << m_nReplace
+            << "; number of successful Get's: " << m_nGetSuccess
+            << "; number of failed Get's: " << m_nGetFail
+            << "; number or reordering (LRU): " << m_nToTop
+            << "; number of suppressions: " << m_nDelete
+            << "; number of Get's without Index: " << m_nGetSeek
+            << "; number of Seek for Get without Index: " << m_nAverageSeekCnt
+            << "; number of Flush calls: " << m_nFlushCnt
+            << "; number of flushed objects: " << m_nFlushedObjects
+            << "; number of Cache expansions: " << m_nIncreaseMax
+            << "; number of Cache reductions: " << m_nDecreaseMax);
     Check();
 #endif
 
