@@ -606,7 +606,7 @@ OUString LwpFormulaFunc::ToString(LwpTableLayout* pCellsMap)
     //erase the last "|"
     if (!m_aArgs.empty())
     {
-        aFormula.replaceAt(aFormula.getLength()-1,1,"");
+        aFormula = aFormula.replaceAt(aFormula.getLength()-1,1,"");
     }
     else
     {
