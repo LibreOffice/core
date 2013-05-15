@@ -1145,7 +1145,7 @@ public:
         const ScMarkData& rMark, SCsCOL nDx, SCsROW nDy );
     void CopyNonFilteredFromClip(
         sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-        const ScMarkData& rMark, SCsCOL nDx, SCsROW nDy, SCROW & rClipStartRow );
+        const ScMarkData& rMark, SCsCOL nDx, SCROW & rClipStartRow );
 
     void            StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
                                         SCCOL nCol2, SCROW nRow2,

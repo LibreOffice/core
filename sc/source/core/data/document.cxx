@@ -2394,7 +2394,7 @@ void ScDocument::CopyBlockFromClip(
 
 void ScDocument::CopyNonFilteredFromClip(
     sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-    const ScMarkData& rMark, SCsCOL nDx, SCsROW /*nDy*/, SCROW & rClipStartRow )
+    const ScMarkData& rMark, SCsCOL nDx, SCROW & rClipStartRow )
 {
     //  call CopyBlockFromClip for ranges of consecutive non-filtered rows
     //  nCol1/nRow1 etc. is in target doc
@@ -2568,7 +2568,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
                 else
                 {
                     CopyNonFilteredFromClip(
-                        aCxt, nC1, nR1, nC2, nR2, rMark, nDx, nDy, nClipStartRow);
+                        aCxt, nC1, nR1, nC2, nR2, rMark, nDx, nClipStartRow);
                 }
                 nC1 = nC2 + 1;
                 nC2 = std::min((SCCOL)(nC1 + nXw), nCol2);
