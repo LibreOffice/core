@@ -145,23 +145,21 @@ bool ImplImageTree::checkStyle(OUString const & style)
     setStyle(style);
 
     exists = false;
-    for (Paths::iterator i(m_paths.begin()); i != m_paths.end() && !exists; ++i) {
-        OUString aURL = i->first;
+    OUString aURL = m_path.first;
 
-        osl::File aZip(aURL + ".zip");
-        if (aZip.open(osl_File_OpenFlag_Read) == ::osl::FileBase::E_None) {
-            aZip.close();
-            exists = true;
-        }
+    osl::File aZip(aURL + ".zip");
+    if (aZip.open(osl_File_OpenFlag_Read) == ::osl::FileBase::E_None) {
+        aZip.close();
+        exists = true;
+    }
 
-        osl::Directory aLookaside(aURL);
-        if (aLookaside.open() == ::osl::FileBase::E_None) {
-            aLookaside.close();
-            exists = true;
-            m_cacheIcons = false;
-        } else {
-            m_cacheIcons = true;
-        }
+    osl::Directory aLookaside(aURL);
+    if (aLookaside.open() == ::osl::FileBase::E_None) {
+        aLookaside.close();
+        exists = true;
+        m_cacheIcons = false;
+    } else {
+        m_cacheIcons = true;
     }
     m_checkStyleCache[style] = exists;
     return exists;
@@ -239,7 +237,6 @@ bool ImplImageTree::doLoadImage(
 void ImplImageTree::shutDown() {
     m_style = OUString();
         // for safety; empty m_style means "not initialized"
-    m_paths.clear();
     m_iconCache.clear();
     m_checkStyleCache.clear();
 }
@@ -254,8 +251,6 @@ void ImplImageTree::setStyle(OUString const & style) {
 }
 
 void ImplImageTree::resetPaths() {
-    m_paths.clear();
-
     OUString url( "$BRAND_BASE_DIR/share/config/" );
     rtl::Bootstrap::expandMacros(url);
     if ( m_style != "default" )
@@ -268,9 +263,8 @@ void ImplImageTree::resetPaths() {
     }
     else
         url += "images";
-    m_paths.push_back(
-        std::make_pair(
-            url, css::uno::Reference< css::container::XNameAccess >()));
+    m_path = std::make_pair(
+        url, css::uno::Reference< css::container::XNameAccess >());
 }
 
 bool ImplImageTree::checkStyleCacheLookup(
@@ -301,50 +295,45 @@ bool ImplImageTree::find(
     std::vector< OUString > const & paths, BitmapEx & bitmap)
 {
     if (!m_cacheIcons) {
-        for (Paths::iterator i(m_paths.begin()); i != m_paths.end(); ++i) {
-            for (std::vector< OUString >::const_reverse_iterator j(
-                     paths.rbegin());
-                 j != paths.rend(); ++j)
-            {
-                osl::File file(i->first + "/" + *j);
-                if (file.open(osl_File_OpenFlag_Read) == ::osl::FileBase::E_None) {
-                    loadImageFromStream( wrapFile(file), *j, bitmap );
-                    file.close();
-                    return true;
-                }
+        for (std::vector< OUString >::const_reverse_iterator j(paths.rbegin());
+             j != paths.rend(); ++j)
+        {
+            osl::File file(m_path.first + "/" + *j);
+            if (file.open(osl_File_OpenFlag_Read) == ::osl::FileBase::E_None) {
+                loadImageFromStream( wrapFile(file), *j, bitmap );
+                file.close();
+                return true;
             }
         }
     }
 
-    for (Paths::iterator i(m_paths.begin()); i != m_paths.end();) {
-        if (!i->second.is()) {
-            try {
-                i->second.set(
-                    css::packages::zip::ZipFileAccess::createWithURL(
-                       comphelper::getProcessComponentContext(),
-                       i->first + ".zip"),
-                    css::uno::UNO_QUERY_THROW);
-            } catch (css::uno::RuntimeException &) {
-                throw;
-            } catch (const css::uno::Exception & e) {
-                SAL_INFO("vcl", "ImplImageTree::find exception "
-                    << e.Message << " for " << i->first);
-                i = m_paths.erase(i);
-                continue;
-            }
+    if (!m_path.second.is()) {
+        css::uno::Sequence< css::uno::Any > args(1);
+        args[0] <<= m_path.first + ".zip";
+        try {
+            m_path.second.set(
+                comphelper::getProcessServiceFactory()->createInstanceWithArguments(
+                    OUString( "com.sun.star.packages.zip.ZipFileAccess"),
+                    args),
+                css::uno::UNO_QUERY_THROW);
+        } catch (css::uno::RuntimeException &) {
+            throw;
+        } catch (const css::uno::Exception & e) {
+            SAL_INFO("vcl", "ImplImageTree::find exception "
+                << e.Message << " for " << m_path.first);
+            return false;
         }
-        for (std::vector< OUString >::const_reverse_iterator j(paths.rbegin());
-             j != paths.rend(); ++j)
-        {
-            if (i->second->hasByName(*j)) {
-                css::uno::Reference< css::io::XInputStream > s;
-                bool ok = i->second->getByName(*j) >>= s;
-                OSL_ASSERT(ok); (void) ok;
-                loadImageFromStream( wrapStream(s), *j, bitmap );
-                return true;
-            }
+    }
+    for (std::vector< OUString >::const_reverse_iterator j(paths.rbegin());
+         j != paths.rend(); ++j)
+    {
+        if (m_path.second->hasByName(*j)) {
+            css::uno::Reference< css::io::XInputStream > s;
+            bool ok = m_path.second->getByName(*j) >>= s;
+            OSL_ASSERT(ok); (void) ok;
+            loadImageFromStream( wrapStream(s), *j, bitmap );
+            return true;
         }
-        ++i;
     }
     return false;
 }
