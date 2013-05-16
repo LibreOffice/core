@@ -29,10 +29,7 @@
 #include "com/sun/star/uno/XInterface.hpp"
 #include "osl/file.hxx"
 #include "rtl/ref.hxx"
-#include "rtl/strbuf.hxx"
 #include "rtl/string.h"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 #include "xmlreader/span.hxx"
@@ -63,79 +60,79 @@ Type parseType(
         switch (reader.getNamespaceId(xmlreader::Span(text.begin, i))) {
         case ParseManager::NAMESPACE_OOR:
             if (xmlreader::Span(text.begin + i + 1, text.length - (i + 1)).
-                equals(RTL_CONSTASCII_STRINGPARAM("any")))
+                equals("any"))
             {
                 return TYPE_ANY;
             } else if (xmlreader::Span(
                            text.begin + i + 1, text.length - (i + 1)).
-                       equals(RTL_CONSTASCII_STRINGPARAM("boolean-list")))
+                       equals("boolean-list"))
             {
                 return TYPE_BOOLEAN_LIST;
             } else if (xmlreader::Span(
                            text.begin + i + 1, text.length - (i + 1)).
-                       equals(RTL_CONSTASCII_STRINGPARAM("short-list")))
+                       equals("short-list"))
             {
                 return TYPE_SHORT_LIST;
             } else if (xmlreader::Span(
                            text.begin + i + 1, text.length - (i + 1)).
-                       equals(RTL_CONSTASCII_STRINGPARAM("int-list")))
+                       equals("int-list"))
             {
                 return TYPE_INT_LIST;
             } else if (xmlreader::Span(
                            text.begin + i + 1, text.length - (i + 1)).
-                       equals(RTL_CONSTASCII_STRINGPARAM("long-list")))
+                       equals("long-list"))
             {
                 return TYPE_LONG_LIST;
             } else if (xmlreader::Span(
                            text.begin + i + 1, text.length - (i + 1)).
-                       equals(RTL_CONSTASCII_STRINGPARAM("double-list")))
+                       equals("double-list"))
             {
                 return TYPE_DOUBLE_LIST;
             } else if (xmlreader::Span(
                            text.begin + i + 1, text.length - (i + 1)).
-                       equals(RTL_CONSTASCII_STRINGPARAM("string-list")))
+                       equals("string-list"))
             {
                 return TYPE_STRING_LIST;
             } else if (xmlreader::Span(
                            text.begin + i + 1, text.length - (i + 1)).
-                       equals(RTL_CONSTASCII_STRINGPARAM("hexBinary-list")))
+                       equals("hexBinary-list"))
             {
                 return TYPE_HEXBINARY_LIST;
             }
             break;
         case ParseManager::NAMESPACE_XS:
             if (xmlreader::Span(text.begin + i + 1, text.length - (i + 1)).
-                equals(RTL_CONSTASCII_STRINGPARAM("boolean")))
+                equals("boolean"))
             {
                 return TYPE_BOOLEAN;
             } else if (xmlreader::Span(
                            text.begin + i + 1, text.length - (i + 1)).
-                       equals(RTL_CONSTASCII_STRINGPARAM("short")))
+                       equals("short"))
             {
                 return TYPE_SHORT;
             } else if (xmlreader::Span(
                            text.begin + i + 1, text.length - (i + 1)).
-                       equals(RTL_CONSTASCII_STRINGPARAM("int")))
+                       equals("int"))
             {
                 return TYPE_INT;
             } else if (xmlreader::Span(
                            text.begin + i + 1, text.length - (i + 1)).
-                       equals(RTL_CONSTASCII_STRINGPARAM("long")))
+                       equals("long"))
             {
                 return TYPE_LONG;
             } else if (xmlreader::Span(
                            text.begin + i + 1, text.length - (i + 1)).
-                       equals(RTL_CONSTASCII_STRINGPARAM("double")))
+                       equals("double"))
             {
                 return TYPE_DOUBLE;
             } else if (xmlreader::Span(
                            text.begin + i + 1, text.length - (i + 1)).
-                       equals(RTL_CONSTASCII_STRINGPARAM("string")))
+                       equals("string"))
             {
                 return TYPE_STRING;
             } else if (xmlreader::Span(
                            text.begin + i + 1, text.length - (i + 1)).
-                       equals(RTL_CONSTASCII_STRINGPARAM("hexBinary")))
+                       equals("hexBinary"))
             {
                 return TYPE_HEXBINARY;
             }
@@ -145,22 +142,20 @@ Type parseType(
         }
     }
     throw css::uno::RuntimeException(
-        (OUString("invalid type ") +
-         text.convertFromUtf8()),
+        "invalid type " + text.convertFromUtf8(),
         css::uno::Reference< css::uno::XInterface >());
 }
 
 bool parseBoolean(xmlreader::Span const & text) {
     assert(text.is());
-    if (text.equals(RTL_CONSTASCII_STRINGPARAM("true"))) {
+    if (text.equals("true")) {
         return true;
     }
-    if (text.equals(RTL_CONSTASCII_STRINGPARAM("false"))) {
+    if (text.equals("false")) {
         return false;
     }
     throw css::uno::RuntimeException(
-        (OUString("invalid boolean ") +
-         text.convertFromUtf8()),
+        "invalid boolean " + text.convertFromUtf8(),
         css::uno::Reference< css::uno::XInterface >());
 }
 
@@ -173,7 +168,7 @@ OUString parseTemplateReference(
             return *defaultTemplateName;
         }
         throw css::uno::RuntimeException(
-            OUString("missing node-type attribute"),
+            "missing node-type attribute",
             css::uno::Reference< css::uno::XInterface >());
     }
     return Data::fullTemplateName(component, nodeType);

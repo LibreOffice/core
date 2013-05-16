@@ -22,11 +22,12 @@
 
 #include "sal/config.h"
 
-#include "rtl/string.hxx"
-#include "rtl/stringutils.hxx"
-#include "rtl/ustring.hxx"
+#include <cstddef>
+
 #include "sal/types.h"
 #include "xmlreader/detail/xmlreaderdllapi.hxx"
+
+namespace rtl { class OUString; }
 
 namespace xmlreader {
 
@@ -39,6 +40,10 @@ struct OOO_DLLPUBLIC_XMLREADER Span {
 
     inline Span(char const * theBegin, sal_Int32 theLength):
         begin(theBegin), length(theLength) {}
+
+    template< std::size_t N > explicit inline Span(char const (& literal)[N]):
+        begin(literal), length(N - 1)
+    {}
 
     inline void clear() throw() { begin = 0; }
 
@@ -53,23 +58,13 @@ struct OOO_DLLPUBLIC_XMLREADER Span {
         return equals(Span(textBegin, textLength));
     }
 
-    inline bool equals(OString const & text) const {
-        return rtl_str_compare_WithLength(
-            begin, length, text.getStr(), text.getLength()) == 0;
-    }
-
-    /**
-     @overload
-     This function accepts an ASCII string literal as its argument.
-    */
-    template< typename T > bool
-    equals( T& literal, typename rtl::internal::ConstCharArrayDetector< T, rtl::internal::Dummy >::Type = rtl::internal::Dummy() ) SAL_THROW(())
+    template< std::size_t N > inline bool equals(char const (& literal)[N])
+        const
     {
-        assert( strlen( literal ) == rtl::internal::ConstCharArrayDetector< T >::size - 1 );
-        return rtl_str_compare_WithLength( begin, length, literal, rtl::internal::ConstCharArrayDetector< T, void >::size - 1 ) == 0;
+        return equals(Span(literal, N - 1));
     }
 
-    OUString convertFromUtf8() const;
+    rtl::OUString convertFromUtf8() const;
 };
 
 }

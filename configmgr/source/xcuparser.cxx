@@ -80,33 +80,27 @@ bool XcuParser::startElement(
     }
     if (state_.empty()) {
         if (nsId == ParseManager::NAMESPACE_OOR &&
-            name.equals(RTL_CONSTASCII_STRINGPARAM("component-data")))
+            name.equals("component-data"))
         {
             handleComponentData(reader);
-        } else if (nsId == ParseManager::NAMESPACE_OOR &&
-                   name.equals(RTL_CONSTASCII_STRINGPARAM("items")))
+        } else if (nsId == ParseManager::NAMESPACE_OOR && name.equals("items"))
         {
             state_.push(State(rtl::Reference< Node >(), false));
         } else {
             throw css::uno::RuntimeException(
-                (OUString("bad root element <") +
-                 name.convertFromUtf8() +
-                 OUString("> in ") +
+                ("bad root element <" + name.convertFromUtf8() + "> in " +
                  reader.getUrl()),
                 css::uno::Reference< css::uno::XInterface >());
         }
     } else if (state_.top().ignore) {
         state_.push(State(false));
     } else if (!state_.top().node.is()) {
-        if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
-            name.equals(RTL_CONSTASCII_STRINGPARAM("item")))
+        if (nsId == xmlreader::XmlReader::NAMESPACE_NONE && name.equals("item"))
         {
             handleItem(reader);
         } else {
             throw css::uno::RuntimeException(
-                (OUString("bad items node member <") +
-                 name.convertFromUtf8() +
-                 OUString("> in ") +
+                ("bad items node member <" + name.convertFromUtf8() + "> in " +
                  reader.getUrl()),
                 css::uno::Reference< css::uno::XInterface >());
         }
@@ -114,23 +108,21 @@ bool XcuParser::startElement(
         switch (state_.top().node->kind()) {
         case Node::KIND_PROPERTY:
             if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
-                name.equals(RTL_CONSTASCII_STRINGPARAM("value")))
+                name.equals("value"))
             {
                 handlePropValue(
                     reader,
                     dynamic_cast< PropertyNode * >(state_.top().node.get()));
             } else {
                 throw css::uno::RuntimeException(
-                    (OUString("bad property node member <") +
-                     name.convertFromUtf8() +
-                     OUString("> in ") +
-                     reader.getUrl()),
+                    ("bad property node member <" + name.convertFromUtf8() +
+                     "> in " + reader.getUrl()),
                     css::uno::Reference< css::uno::XInterface >());
             }
             break;
         case Node::KIND_LOCALIZED_PROPERTY:
             if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
-                name.equals(RTL_CONSTASCII_STRINGPARAM("value")))
+                name.equals("value"))
             {
                 handleLocpropValue(
                     reader,
@@ -138,48 +130,42 @@ bool XcuParser::startElement(
                         state_.top().node.get()));
             } else {
                 throw css::uno::RuntimeException(
-                    (OUString("bad localized property node member <") +
-                     name.convertFromUtf8() +
-                     OUString("> in ") +
-                     reader.getUrl()),
+                    ("bad localized property node member <" +
+                     name.convertFromUtf8() + "> in " + reader.getUrl()),
                     css::uno::Reference< css::uno::XInterface >());
             }
             break;
         case Node::KIND_LOCALIZED_VALUE:
             throw css::uno::RuntimeException(
-                (OUString("bad member <") +
-                 name.convertFromUtf8() +
-                 OUString("> in ") +
+                ("bad member <" + name.convertFromUtf8() + "> in " +
                  reader.getUrl()),
                 css::uno::Reference< css::uno::XInterface >());
         case Node::KIND_GROUP:
             if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
-                name.equals(RTL_CONSTASCII_STRINGPARAM("prop")))
+                name.equals("prop"))
             {
                 handleGroupProp(
                     reader,
                     dynamic_cast< GroupNode * >(state_.top().node.get()));
             } else if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
-                       name.equals(RTL_CONSTASCII_STRINGPARAM("node")))
+                       name.equals("node"))
             {
                 handleGroupNode(reader, state_.top().node);
             } else {
                 throw css::uno::RuntimeException(
-                    (OUString("bad group node member <") +
-                     name.convertFromUtf8() +
-                     OUString("> in ") +
-                     reader.getUrl()),
+                    ("bad group node member <" + name.convertFromUtf8() +
+                     "> in " + reader.getUrl()),
                     css::uno::Reference< css::uno::XInterface >());
             }
             break;
         case Node::KIND_SET:
             if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
-                name.equals(RTL_CONSTASCII_STRINGPARAM("node")))
+                name.equals("node"))
             {
                 handleSetNode(
                     reader, dynamic_cast< SetNode * >(state_.top().node.get()));
             } else if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
-                       name.equals(RTL_CONSTASCII_STRINGPARAM("prop")))
+                       name.equals("prop"))
             {
                 SAL_WARN(
                     "configmgr",
@@ -188,10 +174,8 @@ bool XcuParser::startElement(
                 state_.push(State(true)); // ignored
             } else {
                 throw css::uno::RuntimeException(
-                    (OUString("bad set node member <") +
-                     name.convertFromUtf8() +
-                     OUString("> in ") +
-                     reader.getUrl()),
+                    ("bad set node member <" + name.convertFromUtf8() +
+                     "> in " + reader.getUrl()),
                     css::uno::Reference< css::uno::XInterface >());
             }
             break;
@@ -234,21 +218,20 @@ void XcuParser::characters(xmlreader::Span const & text) {
 
 XcuParser::Operation XcuParser::parseOperation(xmlreader::Span const & text) {
     assert(text.is());
-    if (text.equals(RTL_CONSTASCII_STRINGPARAM("modify"))) {
+    if (text.equals("modify")) {
         return OPERATION_MODIFY;
     }
-    if (text.equals(RTL_CONSTASCII_STRINGPARAM("replace"))) {
+    if (text.equals("replace")) {
         return OPERATION_REPLACE;
     }
-    if (text.equals(RTL_CONSTASCII_STRINGPARAM("fuse"))) {
+    if (text.equals("fuse")) {
         return OPERATION_FUSE;
     }
-    if (text.equals(RTL_CONSTASCII_STRINGPARAM("remove"))) {
+    if (text.equals("remove")) {
         return OPERATION_REMOVE;
     }
     throw css::uno::RuntimeException(
-        (OUString("invalid op ") +
-         text.convertFromUtf8()),
+        "invalid op " + text.convertFromUtf8(),
         css::uno::Reference< css::uno::XInterface >());
 }
 
@@ -265,13 +248,11 @@ void XcuParser::handleComponentData(xmlreader::XmlReader & reader) {
         if (!reader.nextAttribute(&attrNsId, &attrLn)) {
             break;
         }
-        if (attrNsId == ParseManager::NAMESPACE_OOR &&
-            attrLn.equals(RTL_CONSTASCII_STRINGPARAM("package")))
+        if (attrNsId == ParseManager::NAMESPACE_OOR && attrLn.equals("package"))
         {
             if (hasPackage) {
                 throw css::uno::RuntimeException(
-                    (OUString("multiple component-update package attributes"
-                            " in ") +
+                    ("multiple component-update package attributes in " +
                      reader.getUrl()),
                     css::uno::Reference< css::uno::XInterface >());
             }
@@ -279,11 +260,11 @@ void XcuParser::handleComponentData(xmlreader::XmlReader & reader) {
             xmlreader::Span s(reader.getAttributeValue(false));
             buf.insert(0, s.begin, s.length);
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
-                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("name")))
+                   attrLn.equals("name"))
         {
             if (hasName) {
                 throw css::uno::RuntimeException(
-                    (OUString("multiple component-update name attributes in ") +
+                    ("multiple component-update name attributes in " +
                      reader.getUrl()),
                     css::uno::Reference< css::uno::XInterface >());
             }
@@ -291,25 +272,23 @@ void XcuParser::handleComponentData(xmlreader::XmlReader & reader) {
             xmlreader::Span s(reader.getAttributeValue(false));
             buf.append(s.begin, s.length);
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
-                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("op")))
+                   attrLn.equals("op"))
         {
             op = parseOperation(reader.getAttributeValue(true));
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
-                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("finalized")))
+                   attrLn.equals("finalized"))
         {
             finalized = xmldata::parseBoolean(reader.getAttributeValue(true));
         }
     }
     if (!hasPackage) {
         throw css::uno::RuntimeException(
-            (OUString("no component-data package attribute in ") +
-             reader.getUrl()),
+            "no component-data package attribute in " + reader.getUrl(),
             css::uno::Reference< css::uno::XInterface >());
     }
     if (!hasName) {
         throw css::uno::RuntimeException(
-            (OUString("no component-data name attribute in ") +
-             reader.getUrl()),
+            "no component-data name attribute in " + reader.getUrl(),
             css::uno::Reference< css::uno::XInterface >());
     }
     componentName_ = xmlreader::Span(buf.getStr(), buf.getLength()).
@@ -340,8 +319,7 @@ void XcuParser::handleComponentData(xmlreader::XmlReader & reader) {
         break;
     default:
         throw css::uno::RuntimeException(
-            (OUString("invalid operation on root node in ") +
-             reader.getUrl()),
+            "invalid operation on root node in " + reader.getUrl(),
             css::uno::Reference< css::uno::XInterface >());
     }
     int finalizedLayer = std::min(
@@ -359,16 +337,13 @@ void XcuParser::handleItem(xmlreader::XmlReader & reader) {
         if (!reader.nextAttribute(&attrNsId, &attrLn)) {
             break;
         }
-        if (attrNsId == ParseManager::NAMESPACE_OOR &&
-            attrLn.equals(RTL_CONSTASCII_STRINGPARAM("path")))
-        {
+        if (attrNsId == ParseManager::NAMESPACE_OOR && attrLn.equals("path")) {
             attrPath = reader.getAttributeValue(false);
         }
     }
     if (!attrPath.is()) {
         throw css::uno::RuntimeException(
-            (OUString("missing path attribute in ") +
-             reader.getUrl()),
+            "missing path attribute in " + reader.getUrl(),
             css::uno::Reference< css::uno::XInterface >());
     }
     OUString path(attrPath.convertFromUtf8());
@@ -425,41 +400,36 @@ void XcuParser::handlePropValue(
         if (!reader.nextAttribute(&attrNsId, &attrLn)) {
             break;
         }
-        if (attrNsId == ParseManager::NAMESPACE_XSI &&
-            attrLn.equals(RTL_CONSTASCII_STRINGPARAM("nil")))
-        {
+        if (attrNsId == ParseManager::NAMESPACE_XSI && attrLn.equals("nil")) {
             nil = xmldata::parseBoolean(reader.getAttributeValue(true));
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
-            attrLn.equals(RTL_CONSTASCII_STRINGPARAM("type")))
+                   attrLn.equals("type"))
         {
             Type type = xmldata::parseType(
                 reader, reader.getAttributeValue(true));
             if (valueParser_.type_ != TYPE_ANY && type != valueParser_.type_) {
                 throw css::uno::RuntimeException(
-                    (OUString("invalid value type in ") +
-                     reader.getUrl()),
+                    "invalid value type in " + reader.getUrl(),
                     css::uno::Reference< css::uno::XInterface >());
             }
             valueParser_.type_ = type;
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
-            attrLn.equals(RTL_CONSTASCII_STRINGPARAM("separator")))
+                   attrLn.equals("separator"))
         {
             xmlreader::Span s(reader.getAttributeValue(false));
             if (s.length == 0) {
                 throw css::uno::RuntimeException(
-                    (OUString("bad oor:separator attribute in ") +
-                     reader.getUrl()),
+                    "bad oor:separator attribute in " + reader.getUrl(),
                     css::uno::Reference< css::uno::XInterface >());
             }
             separator = OString(s.begin, s.length);
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
-            attrLn.equals(RTL_CONSTASCII_STRINGPARAM("external")))
+                   attrLn.equals("external"))
         {
             external = reader.getAttributeValue(true).convertFromUtf8();
             if (external.isEmpty()) {
                 throw css::uno::RuntimeException(
-                    (OUString("bad oor:external attribute value in ") +
-                     reader.getUrl()),
+                    "bad oor:external attribute value in " + reader.getUrl(),
                     css::uno::Reference< css::uno::XInterface >());
             }
         }
@@ -467,13 +437,12 @@ void XcuParser::handlePropValue(
     if (nil) {
         if (!prop->isNillable()) {
             throw css::uno::RuntimeException(
-                (OUString("xsi:nil attribute for non-nillable prop in ") +
-                 reader.getUrl()),
+                "xsi:nil attribute for non-nillable prop in " + reader.getUrl(),
                 css::uno::Reference< css::uno::XInterface >());
         }
         if (!external.isEmpty()) {
             throw css::uno::RuntimeException(
-                (OUString("xsi:nil and oor:external attributes for prop in ") +
+                ("xsi:nil and oor:external attributes for prop in " +
                  reader.getUrl()),
                 css::uno::Reference< css::uno::XInterface >());
         }
@@ -502,38 +471,36 @@ void XcuParser::handleLocpropValue(
             break;
         }
         if (attrNsId == xmlreader::XmlReader::NAMESPACE_XML &&
-            attrLn.equals(RTL_CONSTASCII_STRINGPARAM("lang")))
+            attrLn.equals("lang"))
         {
             name = reader.getAttributeValue(false).convertFromUtf8();
         } else if (attrNsId == ParseManager::NAMESPACE_XSI &&
-            attrLn.equals(RTL_CONSTASCII_STRINGPARAM("nil")))
+                   attrLn.equals("nil"))
         {
             nil = xmldata::parseBoolean(reader.getAttributeValue(true));
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
-            attrLn.equals(RTL_CONSTASCII_STRINGPARAM("type")))
+                   attrLn.equals("type"))
         {
             Type type = xmldata::parseType(
                 reader, reader.getAttributeValue(true));
             if (valueParser_.type_ != TYPE_ANY && type != valueParser_.type_) {
                 throw css::uno::RuntimeException(
-                    (OUString("invalid value type in ") +
-                     reader.getUrl()),
+                    "invalid value type in " + reader.getUrl(),
                     css::uno::Reference< css::uno::XInterface >());
             }
             valueParser_.type_ = type;
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
-            attrLn.equals(RTL_CONSTASCII_STRINGPARAM("separator")))
+                   attrLn.equals("separator"))
         {
             xmlreader::Span s(reader.getAttributeValue(false));
             if (s.length == 0) {
                 throw css::uno::RuntimeException(
-                    (OUString("bad oor:separator attribute in ") +
-                     reader.getUrl()),
+                    "bad oor:separator attribute in " + reader.getUrl(),
                     css::uno::Reference< css::uno::XInterface >());
             }
             separator = OString(s.begin, s.length);
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
-            attrLn.equals(RTL_CONSTASCII_STRINGPARAM("op")))
+                   attrLn.equals("op"))
         {
             op = parseOperation(reader.getAttributeValue(true));
         }
@@ -555,8 +522,7 @@ void XcuParser::handleLocpropValue(
     }
     if (nil && !locprop->isNillable()) {
         throw css::uno::RuntimeException(
-            (OUString("xsi:nil attribute for non-nillable prop in ") +
-             reader.getUrl()),
+            "xsi:nil attribute for non-nillable prop in " + reader.getUrl(),
             css::uno::Reference< css::uno::XInterface >());
     }
     switch (op) {
@@ -597,8 +563,7 @@ void XcuParser::handleLocpropValue(
         break;
     default:
         throw css::uno::RuntimeException(
-            (OUString("bad op attribute for value element in ") +
-             reader.getUrl()),
+            "bad op attribute for value element in " + reader.getUrl(),
             css::uno::Reference< css::uno::XInterface >());
     }
 }
@@ -617,29 +582,26 @@ void XcuParser::handleGroupProp(
         if (!reader.nextAttribute(&attrNsId, &attrLn)) {
             break;
         }
-        if (attrNsId == ParseManager::NAMESPACE_OOR &&
-                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("name")))
-        {
+        if (attrNsId == ParseManager::NAMESPACE_OOR && attrLn.equals("name")) {
             hasName = true;
             name = reader.getAttributeValue(false).convertFromUtf8();
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
-                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("type")))
+                   attrLn.equals("type"))
         {
             type = xmldata::parseType(reader, reader.getAttributeValue(true));
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
-                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("op")))
+                   attrLn.equals("op"))
         {
             op = parseOperation(reader.getAttributeValue(true));
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
-                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("finalized")))
+                   attrLn.equals("finalized"))
         {
             finalized = xmldata::parseBoolean(reader.getAttributeValue(true));
         }
     }
     if (!hasName) {
         throw css::uno::RuntimeException(
-            (OUString("no prop name attribute in ") +
-             reader.getUrl()),
+            "no prop name attribute in " + reader.getUrl(),
             css::uno::Reference< css::uno::XInterface >());
     }
     if (trackPath_) {
@@ -670,9 +632,7 @@ void XcuParser::handleGroupProp(
             break;
         default:
             throw css::uno::RuntimeException(
-                (OUString("inappropriate prop ") +
-                 name + OUString(" in ") +
-                 reader.getUrl()),
+                "inappropriate prop " + name + " in " + reader.getUrl(),
                 css::uno::Reference< css::uno::XInterface >());
         }
     }
@@ -688,10 +648,9 @@ void XcuParser::handleUnknownGroupProp(
         if (group->isExtensible()) {
             if (type == TYPE_ERROR) {
                 throw css::uno::RuntimeException(
-                    (OUString("missing type attribute for prop ") +
-                 name + OUString(" in ") +
-                 reader.getUrl()),
-                css::uno::Reference< css::uno::XInterface >());
+                    ("missing type attribute for prop " + name + " in " +
+                     reader.getUrl()),
+                    css::uno::Reference< css::uno::XInterface >());
             }
             valueParser_.type_ = type;
             rtl::Reference< Node > prop(
@@ -735,9 +694,7 @@ void XcuParser::handlePlainGroupProp(
         type != property->getStaticType())
     {
         throw css::uno::RuntimeException(
-            (OUString("invalid type for prop ") +
-             name + OUString(" in ") +
-             reader.getUrl()),
+            "invalid type for prop " + name + " in " + reader.getUrl(),
             css::uno::Reference< css::uno::XInterface >());
     }
     valueParser_.type_ = type == TYPE_ERROR ? property->getStaticType() : type;
@@ -755,8 +712,7 @@ void XcuParser::handlePlainGroupProp(
     case OPERATION_REMOVE:
         if (!property->isExtension()) {
             throw css::uno::RuntimeException(
-                (OUString("invalid remove of non-extension prop ") +
-                 name + OUString(" in ") +
+                ("invalid remove of non-extension prop " + name + " in " +
                  reader.getUrl()),
                 css::uno::Reference< css::uno::XInterface >());
         }
@@ -783,9 +739,7 @@ void XcuParser::handleLocalizedGroupProp(
         type != property->getStaticType())
     {
         throw css::uno::RuntimeException(
-            (OUString("invalid type for prop ") +
-             name + OUString(" in ") +
-             reader.getUrl()),
+            "invalid type for prop " + name + " in " + reader.getUrl(),
             css::uno::Reference< css::uno::XInterface >());
     }
     valueParser_.type_ = type == TYPE_ERROR ? property->getStaticType() : type;
@@ -815,8 +769,7 @@ void XcuParser::handleLocalizedGroupProp(
         break;
     case OPERATION_REMOVE:
         throw css::uno::RuntimeException(
-            (OUString("invalid remove of non-extension prop ") +
-             name + OUString(" in ") +
+            ("invalid remove of non-extension prop " + name + " in " +
              reader.getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
@@ -835,25 +788,22 @@ void XcuParser::handleGroupNode(
         if (!reader.nextAttribute(&attrNsId, &attrLn)) {
             break;
         }
-        if (attrNsId == ParseManager::NAMESPACE_OOR &&
-                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("name")))
-        {
+        if (attrNsId == ParseManager::NAMESPACE_OOR && attrLn.equals("name")) {
             hasName = true;
             name = reader.getAttributeValue(false).convertFromUtf8();
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
-                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("op")))
+                   attrLn.equals("op"))
         {
             op = parseOperation(reader.getAttributeValue(true));
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
-                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("finalized")))
+                   attrLn.equals("finalized"))
         {
             finalized = xmldata::parseBoolean(reader.getAttributeValue(true));
         }
     }
     if (!hasName) {
         throw css::uno::RuntimeException(
-            (OUString("no node name attribute in ") +
-             reader.getUrl()),
+            "no node name attribute in " + reader.getUrl(),
             css::uno::Reference< css::uno::XInterface >());
     }
     if (trackPath_) {
@@ -876,16 +826,13 @@ void XcuParser::handleGroupNode(
     Node::Kind kind = child->kind();
     if (kind != Node::KIND_GROUP && kind != Node::KIND_SET) {
         throw css::uno::RuntimeException(
-            (OUString("bad <node> \"") +
-             name +
-             OUString("\" of non group/set kind in ") +
+            ("bad <node> \"" + name + "\" of non group/set kind in " +
              reader.getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
     if (op != OPERATION_MODIFY && op != OPERATION_FUSE) {
         throw css::uno::RuntimeException(
-            (OUString("invalid operation on group node in ") +
-             reader.getUrl()),
+            "invalid operation on group node in " + reader.getUrl(),
             css::uno::Reference< css::uno::XInterface >());
     }
     int finalizedLayer = std::min(
@@ -913,38 +860,35 @@ void XcuParser::handleSetNode(xmlreader::XmlReader & reader, SetNode * set) {
         if (!reader.nextAttribute(&attrNsId, &attrLn)) {
             break;
         }
-        if (attrNsId == ParseManager::NAMESPACE_OOR &&
-                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("name")))
-        {
+        if (attrNsId == ParseManager::NAMESPACE_OOR && attrLn.equals("name")) {
             hasName = true;
             name = reader.getAttributeValue(false).convertFromUtf8();
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
-                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("component")))
+                   attrLn.equals("component"))
         {
             component = reader.getAttributeValue(false).convertFromUtf8();
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
-                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("node-type")))
+                   attrLn.equals("node-type"))
         {
             hasNodeType = true;
             nodeType = reader.getAttributeValue(false).convertFromUtf8();
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
-                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("op")))
+                   attrLn.equals("op"))
         {
             op = parseOperation(reader.getAttributeValue(true));
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
-                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("finalized")))
+                   attrLn.equals("finalized"))
         {
             finalized = xmldata::parseBoolean(reader.getAttributeValue(true));
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
-                   attrLn.equals(RTL_CONSTASCII_STRINGPARAM("mandatory")))
+                   attrLn.equals("mandatory"))
         {
             mandatory = xmldata::parseBoolean(reader.getAttributeValue(true));
         }
     }
     if (!hasName) {
         throw css::uno::RuntimeException(
-            (OUString("no node name attribute in ") +
-             reader.getUrl()),
+            "no node name attribute in " + reader.getUrl(),
             css::uno::Reference< css::uno::XInterface >());
     }
     if (trackPath_) {
@@ -960,22 +904,16 @@ void XcuParser::handleSetNode(xmlreader::XmlReader & reader, SetNode * set) {
             component, hasNodeType, nodeType, &set->getDefaultTemplateName()));
     if (!set->isValidTemplate(templateName)) {
         throw css::uno::RuntimeException(
-            (OUString("set member node ") +
-             name +
-             OUString(" references invalid template ") +
-             templateName + OUString(" in ") +
-             reader.getUrl()),
+            ("set member node " + name + " references invalid template " +
+             templateName + " in " + reader.getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
     rtl::Reference< Node > tmpl(
         data_.getTemplate(valueParser_.getLayer(), templateName));
     if (!tmpl.is()) {
         throw css::uno::RuntimeException(
-            (OUString("set member node ") +
-             name +
-             OUString(" references undefined template ") +
-             templateName + OUString(" in ") +
-             reader.getUrl()),
+            ("set member node " + name + " references undefined template " +
+             templateName + " in " + reader.getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
     int finalizedLayer = finalized ? valueParser_.getLayer() : Data::NO_LAYER;

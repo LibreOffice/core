@@ -29,7 +29,6 @@
 #include "com/sun/star/uno/XInterface.hpp"
 #include "osl/file.h"
 #include "rtl/string.h"
-#include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/log.hxx"
 #include "sal/types.h"
@@ -71,9 +70,7 @@ XmlReader::XmlReader(OUString const & fileUrl)
             fileUrl_, css::uno::Reference< css::uno::XInterface >());
     default:
         throw css::uno::RuntimeException(
-            (OUString("cannot open ") +
-             fileUrl_ + OUString(": ") +
-             OUString::number(e)),
+            "cannot open " + fileUrl_ + ": " + OUString::number(e),
             css::uno::Reference< css::uno::XInterface >());
     }
     e = osl_getFileSize(fileHandle_, &fileSize_);
@@ -90,16 +87,11 @@ XmlReader::XmlReader(OUString const & fileUrl)
                 "osl_closeFile of \"" << fileUrl_ << "\" failed with " << +e2);
         }
         throw css::uno::RuntimeException(
-            ("cannot mmap " + fileUrl_ + " (" +
-             OUString::number(e) + ")"),
+            "cannot mmap " + fileUrl_ + " (" + OUString::number(e) + ")",
             css::uno::Reference< css::uno::XInterface >());
     }
-    namespaceIris_.push_back(
-        Span(
-            RTL_CONSTASCII_STRINGPARAM(
-                "http://www.w3.org/XML/1998/namespace")));
-    namespaces_.push_back(
-        NamespaceData(Span(RTL_CONSTASCII_STRINGPARAM("xml")), NAMESPACE_XML));
+    namespaceIris_.push_back(Span("http://www.w3.org/XML/1998/namespace"));
+    namespaces_.push_back(NamespaceData(Span("xml"), NAMESPACE_XML));
     pos_ = static_cast< char * >(fileAddress_);
     end_ = pos_ + fileSize_;
     state_ = STATE_CONTENT;
@@ -124,18 +116,13 @@ XmlReader::~XmlReader() {
 int XmlReader::registerNamespaceIri(Span const & iri) {
     int id = toNamespaceId(namespaceIris_.size());
     namespaceIris_.push_back(iri);
-    if (iri.equals(
-            Span(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "http://www.w3.org/2001/XMLSchema-instance"))))
-    {
+    if (iri.equals("http://www.w3.org/2001/XMLSchema-instance")) {
         // Old user layer .xcu files used the xsi namespace prefix without
         // declaring a corresponding namespace binding, see issue 77174; reading
         // those files during migration would fail without this hack that can be
         // removed once migration is no longer relevant (see
         // configmgr::Components::parseModificationLayer):
-        namespaces_.push_back(
-            NamespaceData(Span(RTL_CONSTASCII_STRINGPARAM("xsi")), id));
+        namespaces_.push_back(NamespaceData(Span("xsi"), id));
     }
     return id;
 }
@@ -225,7 +212,7 @@ void XmlReader::normalizeLineEnds(Span const & text) {
         p += i + 1;
         n -= i + 1;
         if (n == 0 || *p != '\x0A') {
-            pad_.add(RTL_CONSTASCII_STRINGPARAM("\x0A"));
+            pad_.add("\x0A");
         }
     }
     pad_.add(p, n);
@@ -250,13 +237,13 @@ bool XmlReader::skipComment() {
         pos_, end_ - pos_, RTL_CONSTASCII_STRINGPARAM("--"));
     if (i < 0) {
         throw css::uno::RuntimeException(
-            (OUString("premature end (within comment) of ") + fileUrl_),
+            "premature end (within comment) of " + fileUrl_,
             css::uno::Reference< css::uno::XInterface >());
     }
     pos_ += i + RTL_CONSTASCII_LENGTH("--");
     if (read() != '>') {
         throw css::uno::RuntimeException(
-            (OUString("illegal \"--\" within comment in ") + fileUrl_),
+            "illegal \"--\" within comment in " + fileUrl_,
             css::uno::Reference< css::uno::XInterface >());
     }
     return true;
@@ -267,7 +254,7 @@ void XmlReader::skipProcessingInstruction() {
         pos_, end_ - pos_, RTL_CONSTASCII_STRINGPARAM("?>"));
     if (i < 0) {
         throw css::uno::RuntimeException(
-            (OUString("bad '<?' in ") + fileUrl_),
+            "bad '<?' in " + fileUrl_,
             css::uno::Reference< css::uno::XInterface >());
     }
     pos_ += i + RTL_CONSTASCII_LENGTH("?>");
@@ -281,7 +268,7 @@ void XmlReader::skipDocumentTypeDeclaration() {
         switch (c) {
         case '\0': // i.e., EOF
             throw css::uno::RuntimeException(
-                (OUString("premature end (within DTD) of ") + fileUrl_),
+                "premature end (within DTD) of " + fileUrl_,
                 css::uno::Reference< css::uno::XInterface >());
         case '"':
         case '\'':
@@ -290,7 +277,7 @@ void XmlReader::skipDocumentTypeDeclaration() {
                     pos_, end_ - pos_, c);
                 if (i < 0) {
                     throw css::uno::RuntimeException(
-                        (OUString("premature end (within DTD) of ") + fileUrl_),
+                        "premature end (within DTD) of " + fileUrl_,
                         css::uno::Reference< css::uno::XInterface >());
                 }
                 pos_ += i + 1;
@@ -304,7 +291,7 @@ void XmlReader::skipDocumentTypeDeclaration() {
                 switch (c) {
                 case '\0': // i.e., EOF
                     throw css::uno::RuntimeException(
-                        (OUString("premature end (within DTD) of ") + fileUrl_),
+                        "premature end (within DTD) of " + fileUrl_,
                         css::uno::Reference< css::uno::XInterface >());
                 case '"':
                 case '\'':
@@ -313,9 +300,8 @@ void XmlReader::skipDocumentTypeDeclaration() {
                             pos_, end_ - pos_, c);
                         if (i < 0) {
                             throw css::uno::RuntimeException(
-                            (OUString("premature end (within DTD) of ") +
-                             fileUrl_),
-                            css::uno::Reference< css::uno::XInterface >());
+                                "premature end (within DTD) of " + fileUrl_,
+                                css::uno::Reference< css::uno::XInterface >());
                         }
                         pos_ += i + 1;
                     }
@@ -324,8 +310,7 @@ void XmlReader::skipDocumentTypeDeclaration() {
                     switch (read()) {
                     case '\0': // i.e., EOF
                         throw css::uno::RuntimeException(
-                            (OUString("premature end (within DTD) of ") +
-                             fileUrl_),
+                            "premature end (within DTD) of " + fileUrl_,
                             css::uno::Reference< css::uno::XInterface >());
                     case '!':
                         skipComment();
@@ -341,7 +326,7 @@ void XmlReader::skipDocumentTypeDeclaration() {
                     skipSpace();
                     if (read() != '>') {
                         throw css::uno::RuntimeException(
-                            (OUString("missing \">\" of DTD in ") + fileUrl_),
+                            "missing \">\" of DTD in " + fileUrl_,
                             css::uno::Reference< css::uno::XInterface >());
                     }
                     return;
@@ -369,7 +354,7 @@ Span XmlReader::scanCdataSection() {
         pos_, end_ - pos_, RTL_CONSTASCII_STRINGPARAM("]]>"));
     if (i < 0) {
         throw css::uno::RuntimeException(
-            (OUString("premature end (within CDATA section) of ") + fileUrl_),
+            "premature end (within CDATA section) of " + fileUrl_,
             css::uno::Reference< css::uno::XInterface >());
     }
     pos_ += i + RTL_CONSTASCII_LENGTH("]]>");
@@ -433,7 +418,7 @@ char const * XmlReader::handleReference(char const * position, char const * end)
                 }
                 if (val > 0x10FFFF) { // avoid overflow
                     throw css::uno::RuntimeException(
-                        (OUString("'&#x...' too large in ") + fileUrl_),
+                        "'&#x...' too large in " + fileUrl_,
                         css::uno::Reference< css::uno::XInterface >());
                 }
             }
@@ -448,15 +433,14 @@ char const * XmlReader::handleReference(char const * position, char const * end)
                 }
                 if (val > 0x10FFFF) { // avoid overflow
                     throw css::uno::RuntimeException(
-                        (OUString("'&#...' too large in ") + fileUrl_),
+                        "'&#...' too large in " + fileUrl_,
                         css::uno::Reference< css::uno::XInterface >());
                 }
             }
         }
         if (position == p || *position++ != ';') {
             throw css::uno::RuntimeException(
-                (OUString("'&#...' missing ';' in ") +
-                 fileUrl_),
+                "'&#...' missing ';' in " + fileUrl_,
                 css::uno::Reference< css::uno::XInterface >());
         }
         assert(val >= 0 && val <= 0x10FFFF);
@@ -464,8 +448,7 @@ char const * XmlReader::handleReference(char const * position, char const * end)
             (val >= 0xD800 && val <= 0xDFFF) || val == 0xFFFE || val == 0xFFFF)
         {
             throw css::uno::RuntimeException(
-                (OUString("character reference denoting invalid character in ") +
-                 fileUrl_),
+                "character reference denoting invalid character in " + fileUrl_,
                 css::uno::Reference< css::uno::XInterface >());
         }
         char buf[4];
@@ -521,7 +504,7 @@ char const * XmlReader::handleReference(char const * position, char const * end)
             }
         }
         throw css::uno::RuntimeException(
-            (OUString("unknown entity reference in ") + fileUrl_),
+            "unknown entity reference in " + fileUrl_,
             css::uno::Reference< css::uno::XInterface >());
     }
 }
@@ -550,7 +533,7 @@ Span XmlReader::handleAttributeValue(
                 switch (space) {
                 case SPACE_NONE:
                     pad_.add(begin, p - begin);
-                    pad_.add(RTL_CONSTASCII_STRINGPARAM(" "));
+                    pad_.add(" ");
                     space = SPACE_BREAK;
                     break;
                 case SPACE_SPAN:
@@ -599,7 +582,7 @@ Span XmlReader::handleAttributeValue(
             case '\x0A':
                 pad_.add(begin, p - begin);
                 begin = ++p;
-                pad_.add(RTL_CONSTASCII_STRINGPARAM(" "));
+                pad_.add(" ");
                 break;
             case '\x0D':
                 pad_.add(begin, p - begin);
@@ -608,7 +591,7 @@ Span XmlReader::handleAttributeValue(
                     ++p;
                 }
                 begin = p;
-                pad_.add(RTL_CONSTASCII_STRINGPARAM(" "));
+                pad_.add(" ");
                 break;
             case '&':
                 pad_.add(begin, p - begin);
@@ -631,7 +614,7 @@ XmlReader::Result XmlReader::handleStartTag(int * nsId, Span * localName) {
     char const * nameColon = 0;
     if (!scanName(&nameColon)) {
         throw css::uno::RuntimeException(
-            (OUString("bad tag name in ") + fileUrl_),
+            "bad tag name in " + fileUrl_,
             css::uno::Reference< css::uno::XInterface >());
     }
     char const * nameEnd = pos_;
@@ -647,49 +630,47 @@ XmlReader::Result XmlReader::handleStartTag(int * nsId, Span * localName) {
         }
         if (pos_ == p) {
             throw css::uno::RuntimeException(
-                (OUString("missing whitespace before attribute in ") +
-                 fileUrl_),
+                "missing whitespace before attribute in " + fileUrl_,
                 css::uno::Reference< css::uno::XInterface >());
         }
         char const * attrNameBegin = pos_;
         char const * attrNameColon = 0;
         if (!scanName(&attrNameColon)) {
             throw css::uno::RuntimeException(
-                (OUString("bad attribute name in ") + fileUrl_),
+                "bad attribute name in " + fileUrl_,
                 css::uno::Reference< css::uno::XInterface >());
         }
         char const * attrNameEnd = pos_;
         skipSpace();
         if (read() != '=') {
             throw css::uno::RuntimeException(
-                (OUString("missing '=' in ") + fileUrl_),
+                "missing '=' in " + fileUrl_,
                 css::uno::Reference< css::uno::XInterface >());
         }
         skipSpace();
         char del = read();
         if (del != '\'' && del != '"') {
             throw css::uno::RuntimeException(
-                (OUString("bad attribute value in ") + fileUrl_),
+                "bad attribute value in " + fileUrl_,
                 css::uno::Reference< css::uno::XInterface >());
         }
         char const * valueBegin = pos_;
         sal_Int32 i = rtl_str_indexOfChar_WithLength(pos_, end_ - pos_, del);
         if (i < 0) {
             throw css::uno::RuntimeException(
-                (OUString("unterminated attribute value in ") + fileUrl_),
+                "unterminated attribute value in " + fileUrl_,
                 css::uno::Reference< css::uno::XInterface >());
         }
         char const * valueEnd = pos_ + i;
         pos_ += i + 1;
         if (attrNameColon == 0 &&
-            Span(attrNameBegin, attrNameEnd - attrNameBegin).equals(
-                RTL_CONSTASCII_STRINGPARAM("xmlns")))
+            Span(attrNameBegin, attrNameEnd - attrNameBegin).equals("xmlns"))
         {
             hasDefaultNs = true;
             defaultNsId = scanNamespaceIri(valueBegin, valueEnd);
         } else if (attrNameColon != 0 &&
                    Span(attrNameBegin, attrNameColon - attrNameBegin).equals(
-                       RTL_CONSTASCII_STRINGPARAM("xmlns")))
+                       "xmlns"))
         {
             namespaces_.push_back(
                 NamespaceData(
@@ -714,7 +695,7 @@ XmlReader::Result XmlReader::handleStartTag(int * nsId, Span * localName) {
     }
     if (peek() != '>') {
         throw css::uno::RuntimeException(
-            (OUString("missing '>' in ") + fileUrl_),
+            "missing '>' in " + fileUrl_,
             css::uno::Reference< css::uno::XInterface >());
     }
     ++pos_;
@@ -735,7 +716,7 @@ XmlReader::Result XmlReader::handleStartTag(int * nsId, Span * localName) {
 XmlReader::Result XmlReader::handleEndTag() {
     if (elements_.empty()) {
         throw css::uno::RuntimeException(
-            (OUString("spurious end tag in ") + fileUrl_),
+            "spurious end tag in " + fileUrl_,
             css::uno::Reference< css::uno::XInterface >());
     }
     char const * nameBegin = pos_;
@@ -744,14 +725,14 @@ XmlReader::Result XmlReader::handleEndTag() {
         !elements_.top().name.equals(nameBegin, pos_ - nameBegin))
     {
         throw css::uno::RuntimeException(
-            (OUString("tag mismatch in ") + fileUrl_),
+            "tag mismatch in " + fileUrl_,
             css::uno::Reference< css::uno::XInterface >());
     }
     handleElementEnd();
     skipSpace();
     if (peek() != '>') {
         throw css::uno::RuntimeException(
-            (OUString("missing '>' in ") + fileUrl_),
+            "missing '>' in " + fileUrl_,
             css::uno::Reference< css::uno::XInterface >());
     }
     ++pos_;
@@ -770,7 +751,7 @@ XmlReader::Result XmlReader::handleSkippedText(Span * data, int * nsId) {
         sal_Int32 i = rtl_str_indexOfChar_WithLength(pos_, end_ - pos_, '<');
         if (i < 0) {
             throw css::uno::RuntimeException(
-                (OUString("premature end of ") + fileUrl_),
+                "premature end of " + fileUrl_,
                 css::uno::Reference< css::uno::XInterface >());
         }
         pos_ += i + 1;
@@ -800,13 +781,13 @@ XmlReader::Result XmlReader::handleRawText(Span * text) {
         switch (peek()) {
         case '\0': // i.e., EOF
             throw css::uno::RuntimeException(
-                (OUString("premature end of ") + fileUrl_),
+                "premature end of " + fileUrl_,
                 css::uno::Reference< css::uno::XInterface >());
         case '\x0D':
             pad_.add(begin, pos_ - begin);
             ++pos_;
             if (peek() != '\x0A') {
-                pad_.add(RTL_CONSTASCII_STRINGPARAM("\x0A"));
+                pad_.add("\x0A");
             }
             begin = pos_;
             break;
@@ -866,7 +847,7 @@ XmlReader::Result XmlReader::handleNormalizedText(Span * text) {
         switch (peek()) {
         case '\0': // i.e., EOF
             throw css::uno::RuntimeException(
-                (OUString("premature end of ") + fileUrl_),
+                "premature end of " + fileUrl_,
                 css::uno::Reference< css::uno::XInterface >());
         case '\x09':
         case '\x0A':
@@ -906,7 +887,7 @@ XmlReader::Result XmlReader::handleNormalizedText(Span * text) {
                 break;
             case SPACE_BREAK:
                 pad_.add(flowBegin, flowEnd - flowBegin);
-                pad_.add(RTL_CONSTASCII_STRINGPARAM(" "));
+                pad_.add(" ");
                 break;
             }
             pos_ = handleReference(pos_, end_);
@@ -936,7 +917,7 @@ XmlReader::Result XmlReader::handleNormalizedText(Span * text) {
                             break;
                         case SPACE_BREAK:
                             pad_.add(flowBegin, flowEnd - flowBegin);
-                            pad_.add(RTL_CONSTASCII_STRINGPARAM(" "));
+                            pad_.add(" ");
                             break;
                         }
                         normalizeLineEnds(cdata);
@@ -976,7 +957,7 @@ XmlReader::Result XmlReader::handleNormalizedText(Span * text) {
                 break;
             case SPACE_BREAK:
                 pad_.add(flowBegin, flowEnd - flowBegin);
-                pad_.add(RTL_CONSTASCII_STRINGPARAM(" "));
+                pad_.add(" ");
                 flowBegin = pos_;
                 break;
             }

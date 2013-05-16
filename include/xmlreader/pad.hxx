@@ -22,6 +22,8 @@
 
 #include "sal/config.h"
 
+#include <cstddef>
+
 #include "rtl/strbuf.hxx"
 #include "sal/types.h"
 #include "xmlreader/detail/xmlreaderdllapi.hxx"
@@ -32,6 +34,10 @@ namespace xmlreader {
 class OOO_DLLPUBLIC_XMLREADER Pad {
 public:
     void add(char const * begin, sal_Int32 length);
+
+    template< std::size_t N > void add(char const (& literal)[N]) {
+        add(literal, N - 1);
+    }
 
     void addEphemeral(char const * begin, sal_Int32 length);
 

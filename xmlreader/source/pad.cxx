@@ -21,7 +21,6 @@
 
 #include <cassert>
 
-#include "rtl/string.h"
 #include "sal/types.h"
 #include "xmlreader/pad.hxx"
 #include "xmlreader/span.hxx"
@@ -61,7 +60,7 @@ Span Pad::get() const {
     if (span_.is()) {
         return span_;
     } else if (buffer_.getLength() == 0) {
-        return Span(RTL_CONSTASCII_STRINGPARAM(""));
+        return Span("");
     } else {
         return Span(buffer_.getStr(), buffer_.getLength());
     }

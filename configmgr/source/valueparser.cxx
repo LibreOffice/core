@@ -30,7 +30,6 @@
 #include "comphelper/sequenceasvector.hxx"
 #include "rtl/string.h"
 #include "rtl/string.hxx"
-#include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 #include "xmlreader/span.hxx"
@@ -68,15 +67,11 @@ bool parseHexDigit(char c, int * value) {
 
 bool parseValue(xmlreader::Span const & text, sal_Bool * value) {
     assert(text.is() && value != 0);
-    if (text.equals(RTL_CONSTASCII_STRINGPARAM("true")) ||
-        text.equals(RTL_CONSTASCII_STRINGPARAM("1")))
-    {
+    if (text.equals("true") || text.equals("1")) {
         *value = true;
         return true;
     }
-    if (text.equals(RTL_CONSTASCII_STRINGPARAM("false")) ||
-        text.equals(RTL_CONSTASCII_STRINGPARAM("0")))
-    {
+    if (text.equals("false") || text.equals("0")) {
         *value = false;
         return true;
     }
@@ -293,8 +288,7 @@ bool ValueParser::startElement(
     }
     switch (state_) {
     case STATE_TEXT:
-        if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
-            name.equals(RTL_CONSTASCII_STRINGPARAM("it")) &&
+        if (nsId == xmlreader::XmlReader::NAMESPACE_NONE && name.equals("it") &&
             isListType(type_) && separator_.isEmpty())
         {
             pad_.clear();
@@ -306,7 +300,7 @@ bool ValueParser::startElement(
         // fall through
     case STATE_IT:
         if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
-            name.equals(RTL_CONSTASCII_STRINGPARAM("unicode")) &&
+            name.equals("unicode") &&
             (type_ == TYPE_STRING || type_ == TYPE_STRING_LIST))
         {
             sal_Int32 scalar = -1;
@@ -317,7 +311,7 @@ bool ValueParser::startElement(
                     break;
                 }
                 if (attrNsId == ParseManager::NAMESPACE_OOR &&
-                    attrLn.equals(RTL_CONSTASCII_STRINGPARAM("scalar")))
+                    attrLn.equals("scalar"))
                 {
                     if (!parseValue(reader.getAttributeValue(true), &scalar)) {
                         scalar = -1;

@@ -26,8 +26,6 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
-#include "rtl/string.h"
-#include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "xmlreader/span.hxx"
 #include "xmlreader/xmlreader.hxx"
@@ -65,16 +63,14 @@ bool XcdParser::startElement(
     }
     switch (state_) {
     case STATE_START:
-        if (nsId == ParseManager::NAMESPACE_OOR &&
-            name.equals(RTL_CONSTASCII_STRINGPARAM("data")))
-        {
+        if (nsId == ParseManager::NAMESPACE_OOR && name.equals("data")) {
             state_ = STATE_DEPENDENCIES;
             return true;
         }
         break;
     case STATE_DEPENDENCIES:
         if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
-            name.equals(RTL_CONSTASCII_STRINGPARAM("dependency")))
+            name.equals("dependency"))
         {
             if (dependencyFile_.isEmpty()) {
                 dependencyOptional_ = false;
@@ -87,13 +83,12 @@ bool XcdParser::startElement(
                     }
                     if (attrNsId == xmlreader::XmlReader::NAMESPACE_NONE &&
                             //TODO: _OOR
-                        attrLn.equals(RTL_CONSTASCII_STRINGPARAM("file")))
+                        attrLn.equals("file"))
                     {
                         attrFile = reader.getAttributeValue(false);
                     } else if ((attrNsId ==
                                 xmlreader::XmlReader::NAMESPACE_NONE) &&
-                               attrLn.equals(
-                                   RTL_CONSTASCII_STRINGPARAM("optional")))
+                               attrLn.equals("optional"))
                     {
                         dependencyOptional_ = xmldata::parseBoolean(
                             reader.getAttributeValue(true));
@@ -129,7 +124,7 @@ bool XcdParser::startElement(
         // fall through
     case STATE_COMPONENTS:
         if (nsId == ParseManager::NAMESPACE_OOR &&
-            name.equals(RTL_CONSTASCII_STRINGPARAM("component-schema")))
+            name.equals("component-schema"))
         {
             nestedParser_ = new XcsParser(layer_, data_);
             nesting_ = 1;
@@ -137,7 +132,7 @@ bool XcdParser::startElement(
                 reader, nsId, name, existingDependencies);
         }
         if (nsId == ParseManager::NAMESPACE_OOR &&
-            name.equals(RTL_CONSTASCII_STRINGPARAM("component-data")))
+            name.equals("component-data"))
         {
             nestedParser_ = new XcuParser(layer_ + 1, data_, 0, 0, 0);
             nesting_ = 1;

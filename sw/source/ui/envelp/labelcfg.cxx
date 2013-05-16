@@ -87,19 +87,22 @@ SwLabelConfig::SwLabelConfig() :
     // fill m_aLabels and m_aManufacturers with the predefined labels
     res = reader.nextItem(
             xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
-    assert(res == xmlreader::XmlReader::RESULT_BEGIN &&
-                name.equals(RTL_CONSTASCII_STRINGPARAM("manufacturers")));
+    assert(
+        res == xmlreader::XmlReader::RESULT_BEGIN
+        && name.equals("manufacturers"));
     res = reader.nextItem(
             xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
     while (res != xmlreader::XmlReader::RESULT_END)
     {
         // Opening manufacturer
-        assert(res == xmlreader::XmlReader::RESULT_BEGIN &&
-                name.equals(RTL_CONSTASCII_STRINGPARAM("manufacturer")));
+        assert(
+            res == xmlreader::XmlReader::RESULT_BEGIN
+            && name.equals("manufacturer"));
         // Get the name
         reader.nextAttribute(&nsId, &name);
-        assert(nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
-                name.equals(RTL_CONSTASCII_STRINGPARAM("name")));
+        assert(
+            nsId == xmlreader::XmlReader::NAMESPACE_NONE
+            && name.equals("name"));
         sManufacturer = reader.getAttributeValue(false).convertFromUtf8();
 
         for(;;) {
@@ -108,14 +111,13 @@ SwLabelConfig::SwLabelConfig() :
                     xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
             if (res == xmlreader::XmlReader::RESULT_END)
                 break;
-            assert(res == xmlreader::XmlReader::RESULT_BEGIN &&
-                    name.equals(RTL_CONSTASCII_STRINGPARAM("label")));
+            assert(
+                res == xmlreader::XmlReader::RESULT_BEGIN
+                && name.equals("label"));
             // Get name value
-            sName = lcl_getValue(reader,
-                    xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("name")));
+            sName = lcl_getValue(reader, xmlreader::Span("name"));
             // Get measure value
-            sMeasure = lcl_getValue(reader,
-                    xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("measure")));
+            sMeasure = lcl_getValue(reader, xmlreader::Span("measure"));
             // Ending label mark
             lcl_assertEndingItem(reader);
             if ( m_aLabels.find( sManufacturer ) == m_aLabels.end() )
