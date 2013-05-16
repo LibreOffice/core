@@ -171,6 +171,7 @@ const OUString FrameworkHelper::msCenterPaneURL( msPaneURLPrefix + "CenterPane")
 const OUString FrameworkHelper::msFullScreenPaneURL( msPaneURLPrefix + "FullScreenPane");
 const OUString FrameworkHelper::msLeftImpressPaneURL( msPaneURLPrefix + "LeftImpressPane");
 const OUString FrameworkHelper::msLeftDrawPaneURL( msPaneURLPrefix + "LeftDrawPane");
+const OUString FrameworkHelper::msRightPaneURL( msPaneURLPrefix + "RightPane");
 const OUString FrameworkHelper::msSidebarPaneURL( msPaneURLPrefix + "SidebarPane");
 
 
@@ -184,6 +185,7 @@ const OUString FrameworkHelper::msNotesViewURL( msViewURLPrefix + "NotesView");
 const OUString FrameworkHelper::msHandoutViewURL( msViewURLPrefix + "HandoutView");
 const OUString FrameworkHelper::msSlideSorterURL( msViewURLPrefix + "SlideSorter");
 const OUString FrameworkHelper::msPresentationViewURL( msViewURLPrefix + "PresentationView");
+const OUString FrameworkHelper::msTaskPaneURL( msViewURLPrefix + "TaskPane");
 const OUString FrameworkHelper::msSidebarViewURL( msViewURLPrefix + "SidebarView");
 
 
@@ -194,6 +196,7 @@ const OUString FrameworkHelper::msViewTabBarURL( msToolBarURLPrefix + "ViewTabBa
 
 
 // Task panel URLs.
+// FIXME: MMeeks - this set of urls changed:
 const OUString FrameworkHelper::msTaskPanelURLPrefix( "private:resource/toolpanel/" );
 const OUString FrameworkHelper::msMasterPagesTaskPanelURL( msTaskPanelURLPrefix + "MasterPages");
 const OUString FrameworkHelper::msAllMasterPagesTaskPanelURL( msTaskPanelURLPrefix + "AllMasterPages" );
