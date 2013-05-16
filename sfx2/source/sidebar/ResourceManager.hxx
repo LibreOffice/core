@@ -102,9 +102,6 @@ public:
         const bool bExpansionState,
         const Context& rContext);
 
-    static ::rtl::OUString GetModuleName (
-        const cssu::Reference<css::frame::XFrame>& rxFrame);
-
 private:
     ResourceManager (void);
     ~ResourceManager (void);

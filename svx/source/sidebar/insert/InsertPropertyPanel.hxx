@@ -39,6 +39,8 @@ class ToolBox;
 
 namespace svx { namespace sidebar {
 
+/** This panel provides buttons for inserting shapes into a document.
+*/
 class InsertPropertyPanel
     : public Control
 {

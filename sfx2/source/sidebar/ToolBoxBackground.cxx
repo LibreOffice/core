@@ -34,11 +34,18 @@
 
 namespace sfx2 { namespace sidebar {
 
-ToolBoxBackground::ToolBoxBackground (Window* pParentWindow)
+ToolBoxBackground::ToolBoxBackground (
+    Window* pParentWindow,
+    const bool bShowBorder)
     : Window(pParentWindow, WB_DIALOGCONTROL),
-      maPadding(Tools::RectangleToSvBorder(Theme::GetRectangle(Theme::Rect_ToolBoxPadding)))
+      maPadding(bShowBorder
+          ? Tools::RectangleToSvBorder(Theme::GetRectangle(Theme::Rect_ToolBoxPadding))
+          : SvBorder())
 {
-    SetBackground(Theme::GetPaint(Theme::Paint_ToolBoxBackground).GetWallpaper());
+    if (bShowBorder)
+        SetBackground(Theme::GetPaint(Theme::Paint_ToolBoxBackground).GetWallpaper());
+    else
+        SetBackground(Wallpaper());
 
 #ifdef DEBUG
     SetText(A2S("ToolBoxBackground"));
