@@ -31,6 +31,7 @@
 #include <fldbas.hxx>
 #include <swtable.hxx>
 #include <ddefld.hxx>
+#include <unocrsr.hxx>
 #include <undobj.hxx>
 #include <IMark.hxx>
 #include <mvsave.hxx>
@@ -865,13 +866,15 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
 
     // If Undo is enabled, create the UndoCopy object
     SwUndoCpyDoc* pUndo = 0;
-    SwPaM aCpyPam( rPos );
+    // lcl_DeleteRedlines may delete the start or end node of the cursor when
+    // removing the redlines so use cursor that is corrected by PaMCorrAbs
+    ::boost::scoped_ptr<SwUnoCrsr> const pCopyPam(pDoc->CreateUnoCrsr(rPos));
 
     SwTblNumFmtMerge aTNFM( *this, *pDoc );
 
     if (pDoc->GetIDocumentUndoRedo().DoesUndo())
     {
-        pUndo = new SwUndoCpyDoc( aCpyPam );
+        pUndo = new SwUndoCpyDoc(*pCopyPam);
         pDoc->GetIDocumentUndoRedo().AppendUndo( pUndo );
     }
 
@@ -880,21 +883,21 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
 
     // Move the PaM one node back from the insert position, so that
     // the position doesn't get moved
-    aCpyPam.SetMark();
-    sal_Bool bCanMoveBack = aCpyPam.Move( fnMoveBackward, fnGoCntnt );
+    pCopyPam->SetMark();
+    sal_Bool bCanMoveBack = pCopyPam->Move(fnMoveBackward, fnGoCntnt);
     // If the position was shifted from more than one node, an end node has been skipped
     bool bAfterTable = false;
-    if ( ( rPos.nNode.GetIndex() - aCpyPam.GetPoint()->nNode.GetIndex() ) > 1 )
+    if ((rPos.nNode.GetIndex() - pCopyPam->GetPoint()->nNode.GetIndex()) > 1)
     {
         // First go back to the original place
-        aCpyPam.GetPoint()->nNode = rPos.nNode;
-        aCpyPam.GetPoint()->nContent = rPos.nContent;
+        pCopyPam->GetPoint()->nNode = rPos.nNode;
+        pCopyPam->GetPoint()->nContent = rPos.nContent;
 
         bCanMoveBack = false;
         bAfterTable = true;
     }
     if( !bCanMoveBack )
-        aCpyPam.GetPoint()->nNode--;
+        pCopyPam->GetPoint()->nNode--;
 
     SwNodeRange aRg( pStt->nNode, pEnd->nNode );
     SwNodeIndex aInsPos( rPos.nNode );
@@ -969,11 +972,11 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                         pDoc->SplitNode( rPos, false );
                     }
 
-                    if( bCanMoveBack && rPos == *aCpyPam.GetPoint() )
+                    if (bCanMoveBack && rPos == *pCopyPam->GetPoint())
                     {
                         // after the SplitNode, span the CpyPam correctly again
-                        aCpyPam.Move( fnMoveBackward, fnGoCntnt );
-                        aCpyPam.Move( fnMoveBackward, fnGoCntnt );
+                        pCopyPam->Move( fnMoveBackward, fnGoCntnt );
+                        pCopyPam->Move( fnMoveBackward, fnGoCntnt );
                     }
 
                     pDestTxtNd = pDoc->GetNodes()[ aInsPos.GetIndex()-1 ]->GetTxtNode();
@@ -1096,11 +1099,11 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                     pDoc->SplitNode( rPos, false );
                 }
 
-                if( bCanMoveBack && rPos == *aCpyPam.GetPoint() )
+                if (bCanMoveBack && rPos == *pCopyPam->GetPoint())
                 {
                     // after the SplitNode, span the CpyPam correctly again
-                    aCpyPam.Move( fnMoveBackward, fnGoCntnt );
-                    aCpyPam.Move( fnMoveBackward, fnGoCntnt );
+                    pCopyPam->Move( fnMoveBackward, fnGoCntnt );
+                    pCopyPam->Move( fnMoveBackward, fnGoCntnt );
                 }
 
                 // Correct the area again
@@ -1122,9 +1125,9 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 // See below, before the SetInsertRange funciton of the undo object will be called,
                 // the CpyPam would be moved to the next content position. This has to be avoided
                 // We want to be moved to the table node itself thus we have to set bCanMoveBack
-                // and to manipulate aCpyPam.
+                // and to manipulate pCopyPam.
                 bCanMoveBack = false;
-                aCpyPam.GetPoint()->nNode--;
+                pCopyPam->GetPoint()->nNode--;
             }
         }
 
@@ -1236,7 +1239,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
 
             // Put the breaks back into the first node
             if( aBrkSet.Count() && 0 != ( pDestTxtNd = pDoc->GetNodes()[
-                    aCpyPam.GetPoint()->nNode.GetIndex()+1 ]->GetTxtNode() ) )
+                    pCopyPam->GetPoint()->nNode.GetIndex()+1 ]->GetTxtNode()))
             {
                 pDestTxtNd->SetAttr( aBrkSet );
             }
@@ -1249,53 +1252,59 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
 
     if( rPos.nNode != aInsPos )
     {
-        aCpyPam.GetMark()->nNode = aInsPos;
-        aCpyPam.GetMark()->nContent.Assign( aCpyPam.GetCntntNode(sal_False), 0 );
-        rPos = *aCpyPam.GetMark();
+        pCopyPam->GetMark()->nNode = aInsPos;
+        pCopyPam->GetMark()->nContent.Assign(pCopyPam->GetCntntNode(sal_False), 0);
+        rPos = *pCopyPam->GetMark();
     }
     else
-        *aCpyPam.GetMark() = rPos;
+        *pCopyPam->GetMark() = rPos;
 
     if ( !bAfterTable )
-        aCpyPam.Move( fnMoveForward, bCanMoveBack ? fnGoCntnt : fnGoNode );
+        pCopyPam->Move( fnMoveForward, bCanMoveBack ? fnGoCntnt : fnGoNode );
     else
     {
         // Reset the offset to 0 as it was before the insertion
-        aCpyPam.GetPoint( )->nContent -= aCpyPam.GetPoint( )->nContent;
+        pCopyPam->GetPoint()->nContent -= pCopyPam->GetPoint()->nContent;
 
-        aCpyPam.GetPoint( )->nNode++;
+        pCopyPam->GetPoint()->nNode++;
         // If the next node is a start node, then step back: the start node
         // has been copied and needs to be in the selection for the undo
-        if ( aCpyPam.GetPoint()->nNode.GetNode().IsStartNode() )
-            aCpyPam.GetPoint( )->nNode--;
+        if (pCopyPam->GetPoint()->nNode.GetNode().IsStartNode())
+            pCopyPam->GetPoint()->nNode--;
 
     }
-    aCpyPam.Exchange();
+    pCopyPam->Exchange();
 
     // Also copy all bookmarks
     if( bCopyBookmarks && getIDocumentMarkAccess()->getMarksCount() )
-        lcl_CopyBookmarks( rPam, aCpyPam );
+        lcl_CopyBookmarks( rPam, *pCopyPam );
 
     if( nsRedlineMode_t::REDLINE_DELETE_REDLINES & eOld )
-        lcl_DeleteRedlines( rPam, aCpyPam );
+    {
+        assert(*pCopyPam->GetPoint() == rPos);
+        // the Node rPos points to may be deleted so unregister ...
+        rPos.nContent = SwIndex(0);
+        lcl_DeleteRedlines(rPam, *pCopyPam);
+        rPos = *pCopyPam->GetPoint(); // ... and restore.
+    }
 
     // If Undo is enabled, store the inserted area
     if (pDoc->GetIDocumentUndoRedo().DoesUndo())
     {
-        pUndo->SetInsertRange( aCpyPam, sal_True, bStartIsTxtNode );
+        pUndo->SetInsertRange( *pCopyPam, sal_True, bStartIsTxtNode );
     }
 
     if( pCpyRange )
     {
         pCpyRange->SetMark();
-        *pCpyRange->GetPoint() = *aCpyPam.GetPoint();
-        *pCpyRange->GetMark() = *aCpyPam.GetMark();
+        *pCpyRange->GetPoint() = *pCopyPam->GetPoint();
+        *pCpyRange->GetMark() = *pCopyPam->GetMark();
     }
 
     if ( pNumRuleToPropagate )
     {
         // #i86492# - use <SwDoc::SetNumRule(..)>, because it also handles the <ListId>
-        pDoc->SetNumRule( aCpyPam, *pNumRuleToPropagate, false,
+        pDoc->SetNumRule( *pCopyPam, *pNumRuleToPropagate, false,
                           aListIdToPropagate, sal_True, true );
     }
 
