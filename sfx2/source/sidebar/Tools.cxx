@@ -29,6 +29,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/frame/XModuleManager.hpp>
 
 #include <cstring>
 
@@ -176,6 +177,30 @@ Reference<frame::XDispatch> Tools::GetDispatch (
     Reference<frame::XDispatchProvider> xProvider (rxFrame, UNO_QUERY_THROW);
     Reference<frame::XDispatch> xDispatch (xProvider->queryDispatch(rURL, ::rtl::OUString(), 0));
     return xDispatch;
+}
+
+
+
+
+::rtl::OUString Tools::GetModuleName (
+    const cssu::Reference<css::frame::XFrame>& rxFrame)
+{
+    if ( ! rxFrame.is() || ! rxFrame->getController().is())
+        return ::rtl::OUString();
+
+    try
+    {
+        const ::comphelper::ComponentContext aContext (::comphelper::getProcessServiceFactory());
+        const Reference<frame::XModuleManager> xModuleManager (
+            aContext.createComponent("com.sun.star.frame.ModuleManager"),
+            UNO_QUERY_THROW);
+        return xModuleManager->identify(rxFrame);
+    }
+    catch (const Exception&)
+    {
+        // Ignored.
+    }
+    return ::rtl::OUString();
 }
 
 

@@ -76,9 +76,10 @@ SidebarToolBox* ControlFactory::CreateToolBox (
 
 
 Window* ControlFactory::CreateToolBoxBackground (
-    Window* pParentWindow)
+    Window* pParentWindow,
+    const bool bShowBorder)
 {
-    ToolBoxBackground* pBorderWindow = new ToolBoxBackground(pParentWindow);
+    ToolBoxBackground* pBorderWindow = new ToolBoxBackground(pParentWindow, bShowBorder);
     pBorderWindow->Show();
     return pBorderWindow;
 }

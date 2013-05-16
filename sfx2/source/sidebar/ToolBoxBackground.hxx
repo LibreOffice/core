@@ -32,7 +32,9 @@ class ToolBoxBackground
     : public Window
 {
 public:
-    ToolBoxBackground (Window* pParentWindow);
+    ToolBoxBackground (
+        Window* pParentWindow,
+        const bool bShowBorder);
     virtual ~ToolBoxBackground (void);
 
     /** Call this method once to

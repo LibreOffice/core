@@ -19,8 +19,9 @@
 #define SFX_SIDEBAR_CONTROLLER_FACTORY_HXX
 
 #include "sfx2/dllapi.h"
-#include <com/sun/star/frame/XToolbarController.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XToolbarController.hpp>
 
 namespace css = ::com::sun::star;
 namespace cssu = ::com::sun::star::uno;
@@ -29,7 +30,7 @@ class ToolBox;
 
 namespace sfx2 { namespace sidebar {
 
-/** Convenience class for easy creation of toolbox controllers.
+/** Convenience class for the easy creation of toolbox controllers.
 */
 class SFX2_DLLPUBLIC ControllerFactory
 {
@@ -38,7 +39,16 @@ public:
         ToolBox* pToolBox,
         const sal_uInt16 nItemId,
         const ::rtl::OUString& rsCommandName,
-        const cssu::Reference<css::frame::XFrame>& rxFrame);
+        const cssu::Reference<css::frame::XFrame>& rxFrame,
+        const cssu::Reference<css::awt::XWindow>& rxParentWindow,
+        const sal_Int32 nItemWidth);
+
+private:
+    static cssu::Reference<css::frame::XToolbarController> CreateToolBarController(
+        ToolBox* pToolBox,
+        const ::rtl::OUString& rsCommandName,
+        const cssu::Reference<css::frame::XFrame>& rxFrame,
+        const sal_Int32 nWidth);
 };
 
 

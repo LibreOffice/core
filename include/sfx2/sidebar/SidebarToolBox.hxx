@@ -76,7 +76,6 @@ private:
         cssu::Reference<css::frame::XToolbarController> mxController;
         css::util::URL maURL;
         rtl::OUString msCurrentCommand;
-        cssu::Reference<css::frame::XDispatch> mxDispatch;
     };
     typedef ::std::map<sal_uInt16, ItemDescriptor> ControllerContainer;
     ControllerContainer maControllers;
@@ -90,7 +89,8 @@ private:
 
     void CreateController (
         const sal_uInt16 nItemId,
-        const cssu::Reference<css::frame::XFrame>& rxFrame);
+        const cssu::Reference<css::frame::XFrame>& rxFrame,
+        const sal_Int32 nItemWidth = 0);
     void UpdateIcons (
         const cssu::Reference<css::frame::XFrame>& rxFrame);
 };
