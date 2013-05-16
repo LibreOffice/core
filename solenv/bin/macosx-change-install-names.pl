@@ -94,7 +94,7 @@ foreach $file (@ARGV)
             $change .= " -change $1 " . action($type, $loc, $4) . $6;
         }
     }
-    close(IN);
+    close(IN) or die "got $? from $call";
     if ($change ne "")
     {
         $call = "$ENV{'XCRUN'} install_name_tool$change $file";
