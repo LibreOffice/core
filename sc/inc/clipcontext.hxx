@@ -27,6 +27,8 @@ class CopyFromClipContext
 
     TablesType maTables;
 
+    ScDocument& mrDoc;
+
     ScDocument* mpRefUndoDoc;
     ScDocument* mpClipDoc;
     sal_uInt16  mnInsertFlag;
@@ -36,15 +38,15 @@ class CopyFromClipContext
     bool        mbSkipAttrForEmptyCells:1;
 
     CopyFromClipContext(); // disabled
+
 public:
-    CopyFromClipContext(
+    CopyFromClipContext(ScDocument& rDoc,
         ScDocument* pRefUndoDoc, ScDocument* pClipDoc, sal_uInt16 nInsertFlag,
         bool bAsLink, bool bSkipAttrForEmptyCells);
 
-    bool initBlockPositions(ScDocument& rDoc, SCCOL nCol1, SCCOL nCol2);
-    void setTabRange(SCTAB nStart, SCTAB nEnd);
-
     ~CopyFromClipContext();
+
+    void setTabRange(SCTAB nStart, SCTAB nEnd);
 
     ColumnBlockPosition* getBlockPosition(SCTAB nTab, SCCOL nCol);
 

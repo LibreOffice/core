@@ -2519,7 +2519,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
     if ( ( nInsFlag & IDF_ATTRIB ) && !bSkipAttrForEmpty )
         nDelFlag |= IDF_ATTRIB;
 
-    sc::CopyFromClipContext aCxt(pRefUndoDoc, pClipDoc, nInsFlag, bAsLink, bSkipAttrForEmpty);
+    sc::CopyFromClipContext aCxt(*this, pRefUndoDoc, pClipDoc, nInsFlag, bAsLink, bSkipAttrForEmpty);
     std::pair<SCTAB,SCTAB> aTabRanges = getMarkedTableRange(maTabs, rMark);
     aCxt.setTabRange(aTabRanges.first, aTabRanges.second);
 
@@ -2528,18 +2528,6 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
     {
         aLocalRangeList.Append( rDestRange);
         pDestRanges = &aLocalRangeList;
-    }
-
-    // Initialize column block positions first.
-    for (size_t nRange = 0; nRange < pDestRanges->size(); ++nRange)
-    {
-        const ScRange* pRange = (*pDestRanges)[nRange];
-        SCCOL nCol1 = pRange->aStart.Col();
-        SCCOL nCol2 = pRange->aEnd.Col();
-
-        if (!aCxt.initBlockPositions(*this, nCol1, nCol2))
-            // Initialization failed!
-            return;
     }
 
     bInsertingFromOtherDoc = true;  // kein Broadcast/Listener aufbauen bei Insert
@@ -2650,7 +2638,7 @@ void ScDocument::CopyMultiRangeFromClip(
     SCROW nRow1 = rDestPos.Row();
     ScClipParam& rClipParam = pClipDoc->GetClipParam();
 
-    sc::CopyFromClipContext aCxt(NULL, pClipDoc, nInsFlag, bAsLink, bSkipAttrForEmpty);
+    sc::CopyFromClipContext aCxt(*this, NULL, pClipDoc, nInsFlag, bAsLink, bSkipAttrForEmpty);
     std::pair<SCTAB,SCTAB> aTabRanges = getMarkedTableRange(maTabs, rMark);
     aCxt.setTabRange(aTabRanges.first, aTabRanges.second);
 
@@ -2674,9 +2662,6 @@ void ScDocument::CopyMultiRangeFromClip(
         SCsCOL nDx = static_cast<SCsCOL>(nCol1 - p->aStart.Col());
         SCsROW nDy = static_cast<SCsROW>(nBegRow - p->aStart.Row());
         SCCOL nCol2 = nCol1 + p->aEnd.Col() - p->aStart.Col();
-
-        if (!aCxt.initBlockPositions(*this, nCol1, nCol2))
-            return;
 
         SCROW nEndRow = lcl_getLastNonFilteredRow(rFlags, nBegRow, nLastMarkedRow, nRowCount);
 
