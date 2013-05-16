@@ -1,5 +1,9 @@
 Contains non-graphical helper code for office applications.
 
+Specifically this module does not depend on or use includes from module
+vcl. Originally all code in svtools that did not depend on vcl was split
+off into this svl ("svtools light") module.
+
 In particular the SfxItemSet is a property-bag like container that
 stores arbitrary sets of properties for everything from text run
 formats, to Chart regression line properties.
