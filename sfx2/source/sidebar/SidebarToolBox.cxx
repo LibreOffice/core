@@ -23,6 +23,7 @@
 #include "sfx2/sidebar/Tools.hxx"
 
 #include <vcl/gradient.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/miscopt.hxx>
 #include <framework/imageproducer.hxx>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
@@ -51,8 +52,15 @@ SidebarToolBox::SidebarToolBox (
     if (rxFrame.is())
     {
         const sal_uInt16 nItemCount (GetItemCount());
-        for (sal_uInt16 nItemIndex=0; nItemIndex<nItemCount; ++nItemIndex)
-            CreateController(GetItemId(nItemIndex), rxFrame);
+        if (nItemCount == 1)
+        {
+            // When there is only one item then make that as wide as
+            // the tool box.
+            CreateController(GetItemId(0), rxFrame, GetSizePixel().Width());
+        }
+        else
+            for (sal_uInt16 nItemIndex=0; nItemIndex<nItemCount; ++nItemIndex)
+                CreateController(GetItemId(nItemIndex), rxFrame, 0);
         UpdateIcons(rxFrame);
 
         SetSizePixel(CalcWindowSizePixel());
@@ -215,7 +223,8 @@ long SidebarToolBox::Notify (NotifyEvent& rEvent)
 
 void SidebarToolBox::CreateController (
     const sal_uInt16 nItemId,
-    const cssu::Reference<css::frame::XFrame>& rxFrame)
+    const cssu::Reference<css::frame::XFrame>& rxFrame,
+    const sal_Int32 nItemWidth)
 {
     ItemDescriptor aDescriptor;
 
@@ -225,13 +234,16 @@ void SidebarToolBox::CreateController (
         this,
         nItemId,
         sCommandName,
-        rxFrame);
-    aDescriptor.maURL = sfx2::sidebar::Tools::GetURL(sCommandName);
-    aDescriptor.msCurrentCommand = sCommandName;
-    aDescriptor.mxDispatch = sfx2::sidebar::Tools::GetDispatch(rxFrame, aDescriptor.maURL);
+        rxFrame,
+        VCLUnoHelper::GetInterface(this),
+        nItemWidth);
+    if (aDescriptor.mxController.is())
+    {
+        aDescriptor.maURL = sfx2::sidebar::Tools::GetURL(sCommandName);
+        aDescriptor.msCurrentCommand = sCommandName;
 
-    if (aDescriptor.mxController.is() && aDescriptor.mxDispatch.is())
         maControllers.insert(::std::make_pair(nItemId, aDescriptor));
+    }
 }
 
 

@@ -22,10 +22,12 @@
 
 #include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XUIControllerFactory.hpp>
 
 #include <framework/sfxhelperfunctions.hxx>
 #include <svtools/generictoolboxcontroller.hxx>
 #include <comphelper/processfactory.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 
 using namespace css;
@@ -39,17 +41,30 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
     ToolBox* pToolBox,
     const sal_uInt16 nItemId,
     const OUString& rsCommandName,
-    const Reference<frame::XFrame>& rxFrame)
+    const Reference<frame::XFrame>& rxFrame,
+    const Reference<awt::XWindow>& rxParentWindow,
+    const sal_Int32 nWidth)
 {
+    Reference<frame::XToolbarController> xController (
+        CreateToolBarController(
+            pToolBox,
+            rsCommandName,
+            rxFrame,
+            nWidth));
+
     // Create a controller for the new item.
-    Reference<frame::XToolbarController> xController(
-        static_cast<XWeak*>(::framework::CreateToolBoxController(
-                rxFrame,
-                pToolBox,
-                nItemId,
-                rsCommandName)),
-            UNO_QUERY);
     if ( ! xController.is())
+    {
+        xController.set(
+            static_cast<XWeak*>(::framework::CreateToolBoxController(
+                    rxFrame,
+                    pToolBox,
+                    nItemId,
+                    rsCommandName)),
+            UNO_QUERY);
+    }
+    if ( ! xController.is())
+    {
         xController.set(
             static_cast<XWeak*>(new svt::GenericToolboxController(
                     ::comphelper::getProcessComponentContext(),
@@ -58,6 +73,7 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
                     nItemId,
                     rsCommandName)),
             UNO_QUERY);
+    }
 
     // Initialize the controller with eg a service factory.
     Reference<lang::XInitialization> xInitialization (xController, UNO_QUERY);
@@ -82,22 +98,104 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
         xInitialization->initialize(aArgs);
     }
 
-    Reference<util::XUpdatable> xUpdatable (xController, UNO_QUERY);
-    if (xUpdatable.is())
-        xUpdatable->update();
-
-    // Add label.
     if (xController.is())
     {
-        const OUString sLabel (sfx2::sidebar::CommandInfoProvider::Instance().GetLabelForCommand(
-                rsCommandName,
-                rxFrame));
-        pToolBox->SetQuickHelpText(nItemId, sLabel);
-        pToolBox->EnableItem(nItemId);
+        if (rxParentWindow.is())
+        {
+            Reference<awt::XWindow> xItemWindow (xController->createItemWindow(rxParentWindow));
+            Window* pItemWindow = VCLUnoHelper::GetWindow(xItemWindow);
+            if (pItemWindow != NULL)
+            {
+                WindowType nType = pItemWindow->GetType();
+                if (nType == WINDOW_LISTBOX || nType == WINDOW_MULTILISTBOX || nType == WINDOW_COMBOBOX)
+                    pItemWindow->SetAccessibleName(pToolBox->GetItemText(nItemId));
+                if (nWidth > 0)
+                    pItemWindow->SetSizePixel(Size(nWidth, pItemWindow->GetSizePixel().Height()));
+                pToolBox->SetItemWindow(nItemId, pItemWindow);
+            }
+        }
+
+        Reference<util::XUpdatable> xUpdatable (xController, UNO_QUERY);
+        if (xUpdatable.is())
+            xUpdatable->update();
+
+        // Add label.
+        if (xController.is())
+        {
+            const OUString sLabel (sfx2::sidebar::CommandInfoProvider::Instance().GetLabelForCommand(
+                    rsCommandName,
+                    rxFrame));
+            pToolBox->SetQuickHelpText(nItemId, sLabel);
+            pToolBox->EnableItem(nItemId);
+        }
     }
 
     return xController;
 }
 
+
+
+
+Reference<frame::XToolbarController> ControllerFactory::CreateToolBarController(
+    ToolBox* pToolBox,
+    const OUString& rsCommandName,
+    const Reference<frame::XFrame>& rxFrame,
+    const sal_Int32 nWidth)
+{
+    try
+    {
+        Reference<frame::XUIControllerFactory> xFactory (
+            comphelper::getProcessServiceFactory()->createInstance(A2S("com.sun.star.frame.ToolbarControllerFactory")),
+            UNO_QUERY);
+        OUString sModuleName (Tools::GetModuleName(rxFrame));
+
+        if (xFactory.is() && xFactory->hasController(rsCommandName,  sModuleName))
+        {
+            beans::PropertyValue aPropValue;
+            std::vector<Any> aPropertyVector;
+
+            aPropValue.Name = A2S("ModuleIdentifier");
+            aPropValue.Value <<= sModuleName;
+            aPropertyVector.push_back( makeAny( aPropValue ));
+
+            aPropValue.Name = A2S("Frame");
+            aPropValue.Value <<= rxFrame;
+            aPropertyVector.push_back( makeAny( aPropValue ));
+
+            aPropValue.Name = A2S("ServiceManager");
+            aPropValue.Value <<= comphelper::getProcessServiceFactory();
+            aPropertyVector.push_back( makeAny( aPropValue ));
+
+            aPropValue.Name = A2S("ParentWindow");
+            aPropValue.Value <<= VCLUnoHelper::GetInterface(pToolBox);
+            aPropertyVector.push_back( makeAny( aPropValue ));
+
+            if (nWidth > 0)
+            {
+                aPropValue.Name = A2S("Width");
+                aPropValue.Value <<= nWidth;
+                aPropertyVector.push_back( makeAny( aPropValue ));
+            }
+
+            Reference<beans::XPropertySet> xFactoryProperties (comphelper::getProcessServiceFactory(), UNO_QUERY);
+            Reference<XComponentContext > xComponentContext;
+            if (xFactoryProperties.is())
+                xFactoryProperties->getPropertyValue(A2S("DefaultContext")) >>= xComponentContext;
+
+            Sequence<Any> aArgs (comphelper::containerToSequence(aPropertyVector));
+            return Reference<frame::XToolbarController>(
+                xFactory->createInstanceWithArgumentsAndContext(
+                    rsCommandName,
+                    aArgs,
+                    xComponentContext),
+                UNO_QUERY);
+        }
+    }
+    catch (Exception& rException)
+    {
+        // Ignore exception.
+    }
+    return NULL;
+}
 
 } } // end of namespace sfx2::sidebar

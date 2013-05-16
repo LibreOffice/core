@@ -60,6 +60,9 @@ public:
     static cssu::Reference<css::frame::XDispatch> GetDispatch (
         const cssu::Reference<css::frame::XFrame>& rxFrame,
         const css::util::URL& rURL);
+
+    static ::rtl::OUString GetModuleName (
+        const cssu::Reference<css::frame::XFrame>& rxFrame);
 };
 
 

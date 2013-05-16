@@ -495,7 +495,7 @@ void ResourceManager::ReadContextList (
 void ResourceManager::ReadLegacyAddons (const Reference<frame::XFrame>& rxFrame)
 {
     // Get module name for given frame.
-    ::rtl::OUString sModuleName (GetModuleName(rxFrame));
+    ::rtl::OUString sModuleName (Tools::GetModuleName(rxFrame));
     if (sModuleName.getLength() == 0)
         return;
     if (maProcessedApplications.find(sModuleName) != maProcessedApplications.end())
@@ -581,30 +581,6 @@ void ResourceManager::StorePanelExpansionState (
                 pEntry->mbIsInitiallyVisible = bExpansionState;
         }
     }
-}
-
-
-
-
-::rtl::OUString ResourceManager::GetModuleName (
-    const cssu::Reference<css::frame::XFrame>& rxFrame)
-{
-    if ( ! rxFrame.is() || ! rxFrame->getController().is())
-        return OUString();
-
-    try
-    {
-        const ::comphelper::ComponentContext aContext (::comphelper::getProcessServiceFactory());
-        const Reference<frame::XModuleManager> xModuleManager (
-            aContext.createComponent("com.sun.star.frame.ModuleManager"),
-            UNO_QUERY_THROW);
-        return xModuleManager->identify(rxFrame);
-    }
-    catch (const Exception&)
-    {
-        DBG_UNHANDLED_EXCEPTION();
-    }
-    return OUString();
 }
 
 
