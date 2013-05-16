@@ -1444,6 +1444,10 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 ))
 
 define gb_LinkTarget__use_visio
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,libvisio)/inc \
+	$$(INCLUDE) \
+)
 $(call gb_LinkTarget_use_package,$(1),\
 	libvisio \
 )
