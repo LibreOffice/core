@@ -947,7 +947,7 @@ struct CStringHash
     size_t operator()( const char* p) const {
         size_t n = 0;
         while( *p)
-            n += 4*n + *static_cast<const unsigned char*>(p++);
+            n += 4*n + *reinterpret_cast<const unsigned char*>(p++);
         return n;
     }
 };
