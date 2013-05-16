@@ -30,6 +30,8 @@
 
 // =======================================================================
 
+namespace {
+
 void ImplGetSpinbuttonValue( Window *pWin, const Rectangle& rUpperRect,
                             const Rectangle& rLowerRect,
                             sal_Bool bUpperIn, sal_Bool bLowerIn,
@@ -134,6 +136,8 @@ sal_Bool ImplDrawNativeSpinbuttons( Window *pWin, const SpinbuttonValue& rSpinbu
                     rSpinbuttonValue, OUString() );
     }
     return bNativeOK;
+}
+
 }
 
 void ImplDrawSpinButton( OutputDevice* pOutDev,
