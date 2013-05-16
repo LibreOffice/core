@@ -242,6 +242,12 @@ void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape 
     pShape->Create( pObj, this );
     OSL_ENSURE( pShape->GetSdrObject() == pObj, "SvxDrawPage::add: shape does not know about its newly created SdrObject!" );
 
+    if ( !pObj->IsInserted() )
+    {
+        pObj->SetModel(mpModel);
+        mpPage->InsertObject( pObj );
+    }
+
     mpModel->SetChanged();
 }
 
@@ -835,8 +841,12 @@ Reference< drawing::XShape >  SvxDrawPage::_CreateShape( SdrObject *pObj ) const
 SdrObject *SvxDrawPage::CreateSdrObject( const Reference< drawing::XShape > & xShape ) throw()
 {
     SdrObject* pObj = _CreateSdrObject( xShape );
-    if( pObj && !pObj->IsInserted() )
-        mpPage->InsertObject( pObj );
+    if( pObj)
+    {
+        pObj->SetModel(mpModel);
+        if ( !pObj->IsInserted() && !pObj->IsDoNotInsertIntoPageAutomatically() )
+            mpPage->InsertObject( pObj );
+    }
 
     return pObj;
 }
