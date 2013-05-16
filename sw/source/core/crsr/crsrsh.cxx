@@ -1024,6 +1024,23 @@ sal_Bool SwCrsrShell::IsSttPara() const
 sal_Bool SwCrsrShell::IsEndPara() const
 {   return( pCurCrsr->GetPoint()->nContent == pCurCrsr->GetCntntNode()->Len() ? sal_True : sal_False ); }
 
+bool SwCrsrShell::IsEndOfTable() const
+{
+    if (IsTableMode() || IsBlockMode() || !IsEndPara())
+    {
+        return false;
+    }
+    SwTableNode const*const pTableNode( IsCrsrInTbl() );
+    if (!pTableNode)
+    {
+        return false;
+    }
+    SwEndNode const*const pEndTableNode(pTableNode->EndOfSectionNode());
+    SwNodeIndex const lastNode(*pEndTableNode, -2);
+    SAL_WARN_IF(!lastNode.GetNode().GetTxtNode(), "sw.core",
+            "text node expected");
+    return (lastNode == pCurCrsr->GetPoint()->nNode);
+}
 
 sal_Bool SwCrsrShell::IsInFrontOfLabel() const
 {

@@ -732,6 +732,7 @@ public:
     sal_Bool IsEndSentence() const;
     sal_Bool IsSttPara() const;
     sal_Bool IsEndPara() const;
+    bool IsEndOfTable() const; ///< at the very last SwPosition inside a table
     sal_Bool IsStartOfDoc() const;
     sal_Bool IsEndOfDoc() const;
     sal_Bool IsInFrontOfLabel() const;
