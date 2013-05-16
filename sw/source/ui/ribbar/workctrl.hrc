@@ -45,8 +45,8 @@
 #define ST_TABLE_FORMULA  28
 #define ST_TABLE_FORMULA_ERROR  29
 
-// doppelter Eintrag! hrc und hxx
-// diese Ids bestimmen, was die Buttons unter dem Scrollbar tun
+// duplicate entry! hrc and hxx
+// these Ids specifiy the action of the buttons below the scroll bar
 #define NID_START   20000
 #define NID_NEXT    20000
 #define NID_PREV    20001

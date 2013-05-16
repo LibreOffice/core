@@ -45,10 +45,10 @@
 
 #include <vcl/svapp.hxx>
 
-// Size Abpruefung
+// Size check
 #define NAVI_ENTRIES 20
 #if NAVI_ENTRIES != NID_COUNT
-#error SwScrollNaviPopup-CTOR static Array falsche Size. Wurden neue IDs zugefuegt ??
+#error SwScrollNaviPopup-CTOR static array wrong size. Are new IDs added?
 #endif
 
 using namespace ::com::sun::star;
@@ -205,13 +205,13 @@ SfxPopupWindow* SwTbxAutoTextCtrl::CreatePopupWindow()
                 sal_uInt16 nGroupCount = pGlossaryList->GetGroupCount();
                 for(sal_uInt16 i = 1; i <= nGroupCount; i++)
                 {
-                    // Gruppenname mit Pfad-Extension besorgen
+                    // Acquire group name with path extension
                     String sTitle;
                     sal_uInt16 nBlockCount = pGlossaryList->GetBlockCount(i -1);
                     if(nBlockCount)
                     {
                         sal_uInt16 nIndex = 100 * (i);
-                        // aber ohne extension einfuegen
+                        // but insert without extension
                         pPopup->InsertItem( i, sTitle);
                         PopupMenu* pSub = new PopupMenu;
                         pSub->SetSelectHdl(aLnk);
@@ -243,7 +243,6 @@ SfxPopupWindow* SwTbxAutoTextCtrl::CreatePopupWindow()
     return 0;
 
 }
-
 
 SfxPopupWindowType SwTbxAutoTextCtrl::GetPopupWindowType() const
 {
@@ -334,7 +333,7 @@ void SwTbxAutoTextCtrl::DelPopup()
     }
 }
 
-/* Navigations-Popup */
+// Navigation-Popup
 // determine the order of the toolbox items
 static sal_uInt16 aNavigationInsertIds[ NAVI_ENTRIES ] =
 {
@@ -487,7 +486,7 @@ IMPL_LINK(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet)
         aToolBox.SetItemText(NID_NEXT, sQuickHelp[nSet - NID_START]);
         aToolBox.SetItemText(NID_PREV, sQuickHelp[nSet - NID_START + NID_COUNT]);
         aInfoField.SetText(aToolBox.GetItemText(nSet));
-        //check the current button only
+        // check the current button only
         for(sal_uInt16 i = 0; i < NID_COUNT; i++)
         {
             sal_uInt16 nItemId = aToolBox.GetItemId( i );
@@ -544,16 +543,12 @@ void SwNaviImageButton::Click()
     pPopup->StartPopupMode(aRect, FLOATWIN_POPUPMODE_LEFT|FLOATWIN_POPUPMODE_ALLOWTEAROFF);
 }
 
-//--------------------------------------------------------------------
-
 void SwNaviImageButton::SetPopupWindow( SfxPopupWindow* pWindow )
 {
     pPopupWindow = pWindow;
     pPopupWindow->SetPopupModeEndHdl( LINK( this, SwNaviImageButton, PopupModeEndHdl ));
     pPopupWindow->SetDeleteLink_Impl( LINK( this, SwNaviImageButton, ClosePopupWindow ));
 }
-
-//--------------------------------------------------------------------
 
 IMPL_LINK_NOARG(SwNaviImageButton, PopupModeEndHdl)
 {
@@ -575,7 +570,6 @@ IMPL_LINK_NOARG(SwNaviImageButton, PopupModeEndHdl)
     return 1;
 }
 
-//--------------------------------------------------------------------
 IMPL_LINK( SwNaviImageButton, ClosePopupWindow, SfxPopupWindow *, pWindow )
 {
     if ( pWindow == pFloatingWindow )

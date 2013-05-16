@@ -205,9 +205,9 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
     };
     Text [ en-US ] = "Navigation" ;
 };
-/***************************************************************
-    Strings fuer die Quickhelp der View-PgUp/Down-Buttons
-***************************************************************/
+
+// Strings for the quickhelp of the View-PgUp/Down-Buttons
+
 String STR_IMGBTN_NEXT_DOWN
 {
     Text = "" ;
