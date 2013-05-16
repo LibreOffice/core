@@ -20,3 +20,16 @@ index e8efd67..decb79a 100644
      xmlTextWriterEndElement( writer ); // End of Expires
      xmlTextWriterEndElement( writer ); // End of Timestamp
  
+diff --git src/libcmis/document.cxx src/libcmis/document.cxx
+index 7c2a8e6..e7014cb 100644
+--- src/libcmis/document.cxx
++++ src/libcmis/document.cxx
+@@ -78,7 +78,7 @@ namespace libcmis
+     {
+         long contentLength = 0;
+         map< string, libcmis::PropertyPtr >::const_iterator it = getProperties( ).find( string( "cmis:contentStreamLength" ) );
+-        if ( it != getProperties( ).end( ) && !it->second->getStrings( ).empty( ) )
++        if ( it != getProperties( ).end( ) && !it->second->getLongs( ).empty( ) )
+             contentLength = it->second->getLongs( ).front( );
+         return contentLength;
+     }
