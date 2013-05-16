@@ -48,7 +48,7 @@ static const sal_Int32 gaRightIconPadding (5);
 PanelTitleBar::PanelTitleBar (
     const ::rtl::OUString& rsTitle,
     Window* pParentWindow,
-    Panel* pPanel )
+    Panel* pPanel)
     : TitleBar(rsTitle, pParentWindow, GetBackgroundPaint()),
       mbIsLeftButtonDown(false),
       mpPanel(pPanel),
@@ -56,6 +56,12 @@ PanelTitleBar::PanelTitleBar (
       maMenuAction()
 {
     OSL_ASSERT(mpPanel != NULL);
+
+    const ::rtl::OUString sAccessibleName(
+        String(SfxResId(SFX_STR_SIDEBAR_ACCESSIBILITY_PANEL_PREFIX))
+            + rsTitle);
+    SetAccessibleName(sAccessibleName);
+    SetAccessibleDescription(sAccessibleName);
 
 #ifdef DEBUG
     SetText(A2S("PanelTitleBar"));
