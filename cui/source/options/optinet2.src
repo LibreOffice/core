@@ -202,44 +202,6 @@ TabPage RID_SVXPAGE_INET_PROXY
         Size = MAP_APPFONT ( 56 , 8 ) ;
         Text [ en-US ] = "Separator ;" ;
     };
-    FixedLine GB_DNS
-    {
-        Pos = MAP_APPFONT( 6, 100 );
-        Size = MAP_APPFONT( 248, 8 );
-        Text [ en-US ] = "DNS server" ;
-    };
-    RadioButton RB_DNS_AUTO
-    {
-        HelpID = "cui:RadioButton:RID_SVXPAGE_INET_PROXY:RB_DNS_AUTO";
-        Pos = MAP_APPFONT( 12, 111 );
-        Size = MAP_APPFONT( 236, 10 );
-        Text [ en-US ] = "~Automatic" ;
-    };
-    RadioButton RB_DNS_MANUAL
-    {
-        HelpID = "cui:RadioButton:RID_SVXPAGE_INET_PROXY:RB_DNS_MANUAL";
-        Pos = MAP_APPFONT( 12, 124 );
-        Size = MAP_APPFONT( 75, 10 );
-        Text [ en-US ] = "~Manual" ;
-    };
-    PatternField ED_DNS
-    {
-        HelpID = "cui:PatternField:RID_SVXPAGE_INET_PROXY:ED_DNS";
-        Pos = MAP_APPFONT( 90, 126 );
-        Size = MAP_APPFONT( 66, 12 );
-        Border = TRUE ;
-        LiteralMask = "   .   .   .   " ;
-        EditMask = "nnnLnnnLnnnLnnn" ;
-        StrictFormat = TRUE ;
-    };
-    String ST_MSG_255_0
-    {
-        Text [ en-US ] = "is not a valid entry for this field. Please specify a value between 0 and 255." ;
-    };
-    String ST_MSG_255_1
-    {
-        Text [ en-US ] = "is not a valid entry for this field. Please specify a value between 1 and 255." ;
-    };
 };
 
 ErrorBox RID_SVXERR_OPT_PROXYPORTS

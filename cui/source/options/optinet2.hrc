@@ -47,15 +47,6 @@
 #define FT_HTTPS_PORT               15
 #define ED_HTTPS_PORT               15
 
-// Protocols  --------------------------------------------------------------
-#define GB_DNS                      105
-#define RB_DNS_AUTO                 106
-#define RB_DNS_MANUAL               107
-#define ED_DNS                      107
-
-#define ST_MSG_255_0                111
-#define ST_MSG_255_1                112
-
 // Defines - JavaScriptDisableQueryBox_Impl -------------------------------
 
 #define IMG_JSCPT_WARNING           220
