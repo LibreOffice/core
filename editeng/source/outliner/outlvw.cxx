@@ -1312,7 +1312,7 @@ bool EDITENG_DLLPUBLIC GetStatusValueForThesaurusFromContext(
     const EditView &rEditView )
 {
     // get text and locale for thesaurus look up
-    String aText;
+    OUString aText;
     EditEngine *pEditEngine = rEditView.GetEditEngine();
     ESelection aTextSel( rEditView.GetSelection() );
     if (!aTextSel.HasRange())
@@ -1320,17 +1320,15 @@ bool EDITENG_DLLPUBLIC GetStatusValueForThesaurusFromContext(
     aText = pEditEngine->GetText( aTextSel );
     aTextSel.Adjust();
     LanguageType nLang = pEditEngine->GetLanguage( aTextSel.nStartPara, aTextSel.nStartPos );
-    String aLangText( LanguageTag( nLang ).getBcp47() );
+    OUString aLangText( LanguageTag( nLang ).getBcp47() );
 
     // set word and locale to look up as status value
-    String aStatusVal( aText );
-    aStatusVal.AppendAscii( "#" );
-    aStatusVal += aLangText;
+    OUString aStatusVal= aText + "#" + aLangText;
 
     rStatusVal  = aStatusVal;
     rLang       = nLang;
 
-    return aText.Len() > 0;
+    return aText.getLength() > 0;
 }
 
 
