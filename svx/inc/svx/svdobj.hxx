@@ -1051,6 +1051,11 @@ public:
     Rectangle GetBLIPSizeRectangle() const;
     void SetBLIPSizeRectangle( const Rectangle& aRect );
 
+    /// @see mbDoNotInsertIntoPageAutomatically
+    void SetDoNotInsertIntoPageAutomatically(bool bSet);
+    /// @see mbDoNotInsertIntoPageAutomatically
+    bool IsDoNotInsertIntoPageAutomatically() const;
+
 protected:
     /** Sets a new UNO shape
       *
@@ -1078,6 +1083,11 @@ private:
     SvxShape*   mpSvxShape;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface >
                 maWeakUnoShape;
+    /** HACK: Do not automatically insert newly created object into a page.
+      *
+      * The user needs to do it manually later.
+      */
+    bool mbDoNotInsertIntoPageAutomatically;
 };
 
 //************************************************************
