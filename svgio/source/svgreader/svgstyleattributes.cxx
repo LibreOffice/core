@@ -1187,7 +1187,7 @@ namespace svgio
         {
         }
 
-        void SvgStyleAttributes::parseStyleAttribute(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent)
+        void SvgStyleAttributes::parseStyleAttribute(const rtl::OUString& /* rTokenName */, SVGToken aSVGToken, const rtl::OUString& aContent)
         {
             switch(aSVGToken)
             {
