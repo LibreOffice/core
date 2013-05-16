@@ -14,10 +14,94 @@
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
   <CustomShapeGeometry>
-   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Type" handle="0" value="smiley" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="ViewBox">
+    <ViewBox x="0" y="0" width="21600" height="21600"/>
+   </PropertyValue>
+   <PropertyValue name="Type" value="smiley" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues">
+    <AdjustmentValues>
+     <EnhancedCustomShapeAdjustmentValue value="17520" propertyState="DIRECT_VALUE"/>
+    </AdjustmentValues>
+   </PropertyValue>
+   <PropertyValue name="Path">
+    <Path>
+     <PropertyValue name="GluePoints" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Coordinates">
+      <Coordinates>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10800" type="0"/>
+        <Second value="10800" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10800" type="0"/>
+        <Second value="10800" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="360" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="7305" type="0"/>
+        <Second value="7515" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="1165" type="0"/>
+        <Second value="1165" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="360" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14295" type="0"/>
+        <Second value="7515" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="1165" type="0"/>
+        <Second value="1165" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="360" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="4870" type="0"/>
+        <Second value="1" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="8680" type="0"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="12920" type="0"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="16730" type="0"/>
+        <Second value="1" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+      </Coordinates>
+     </PropertyValue>
+     <PropertyValue name="Segments">
+      <Segments>
+       <EnhancedCustomShapeSegment command="9" count="1"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="9" count="1"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="9" count="1"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="3" count="1"/>
+       <EnhancedCustomShapeSegment command="6" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+      </Segments>
+     </PropertyValue>
+    </Path>
+   </PropertyValue>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
   </CustomShapeGeometry>
@@ -36,10 +120,172 @@
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
   <CustomShapeGeometry>
-   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Type" handle="0" value="sun" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="ViewBox">
+    <ViewBox x="0" y="0" width="21600" height="21600"/>
+   </PropertyValue>
+   <PropertyValue name="Type" value="sun" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues">
+    <AdjustmentValues>
+     <EnhancedCustomShapeAdjustmentValue value="5400" propertyState="DIRECT_VALUE"/>
+    </AdjustmentValues>
+   </PropertyValue>
+   <PropertyValue name="Path">
+    <Path>
+     <PropertyValue name="GluePoints" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Coordinates">
+      <Coordinates>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="10800" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="4" type="1"/>
+        <Second value="8" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="4" type="1"/>
+        <Second value="9" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10" type="1"/>
+        <Second value="11" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="12" type="1"/>
+        <Second value="13" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14" type="1"/>
+        <Second value="15" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="16" type="1"/>
+        <Second value="17" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="18" type="1"/>
+        <Second value="19" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="20" type="1"/>
+        <Second value="21" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="22" type="1"/>
+        <Second value="23" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="24" type="1"/>
+        <Second value="25" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="26" type="1"/>
+        <Second value="27" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="28" type="1"/>
+        <Second value="29" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="30" type="1"/>
+        <Second value="31" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="32" type="1"/>
+        <Second value="33" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="34" type="1"/>
+        <Second value="35" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="36" type="1"/>
+        <Second value="37" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="38" type="1"/>
+        <Second value="39" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="40" type="1"/>
+        <Second value="41" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="42" type="1"/>
+        <Second value="43" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="44" type="1"/>
+        <Second value="45" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="46" type="1"/>
+        <Second value="47" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="48" type="1"/>
+        <Second value="49" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="50" type="1"/>
+        <Second value="51" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10800" type="0"/>
+        <Second value="10800" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="54" type="1"/>
+        <Second value="54" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="360" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+      </Coordinates>
+     </PropertyValue>
+     <PropertyValue name="Segments">
+      <Segments>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="2"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="2"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="2"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="2"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="2"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="2"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="2"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="2"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="9" count="1"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+      </Segments>
+     </PropertyValue>
+    </Path>
+   </PropertyValue>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
   </CustomShapeGeometry>
@@ -58,11 +304,86 @@
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
   <CustomShapeGeometry>
-   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="MirroredX" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Type" handle="0" value="moon" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="ViewBox">
+    <ViewBox x="0" y="0" width="21600" height="21600"/>
+   </PropertyValue>
+   <PropertyValue name="MirroredX" value="true" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Type" value="moon" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues">
+    <AdjustmentValues>
+     <EnhancedCustomShapeAdjustmentValue value="10800" propertyState="DIRECT_VALUE"/>
+    </AdjustmentValues>
+   </PropertyValue>
+   <PropertyValue name="Path">
+    <Path>
+     <PropertyValue name="GluePoints" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Coordinates">
+      <Coordinates>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21600" type="0"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="3" type="1"/>
+        <Second value="4" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="1"/>
+        <Second value="5080" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="1"/>
+        <Second value="10800" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="1"/>
+        <Second value="16520" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="3" type="1"/>
+        <Second value="5" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21600" type="0"/>
+        <Second value="21600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="9740" type="0"/>
+        <Second value="21600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="16730" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="10800" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="4870" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="9740" type="0"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21600" type="0"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+      </Coordinates>
+     </PropertyValue>
+     <PropertyValue name="Segments">
+      <Segments>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="3" count="4"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+      </Segments>
+     </PropertyValue>
+    </Path>
+   </PropertyValue>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
   </CustomShapeGeometry>
@@ -81,10 +402,82 @@
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
   <CustomShapeGeometry>
-   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Type" handle="0" value="non-primitive" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="ViewBox">
+    <ViewBox x="0" y="0" width="640" height="861"/>
+   </PropertyValue>
+   <PropertyValue name="Type" value="non-primitive" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Path">
+    <Path>
+     <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Coordinates">
+      <Coordinates>
+       <EnhancedCustomShapeParameterPair>
+        <First value="640" type="0"/>
+        <Second value="233" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="221" type="0"/>
+        <Second value="293" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="506" type="0"/>
+        <Second value="12" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="367" type="0"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="29" type="0"/>
+        <Second value="406" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="431" type="0"/>
+        <Second value="347" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="145" type="0"/>
+        <Second value="645" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="99" type="0"/>
+        <Second value="520" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="861" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="326" type="0"/>
+        <Second value="765" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="209" type="0"/>
+        <Second value="711" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="640" type="0"/>
+        <Second value="233" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="640" type="0"/>
+        <Second value="233" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+      </Coordinates>
+     </PropertyValue>
+     <PropertyValue name="Segments">
+      <Segments>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="12"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+      </Segments>
+     </PropertyValue>
+    </Path>
+   </PropertyValue>
+   <PropertyValue name="AdjustmentValues">
+    <AdjustmentValues/>
+   </PropertyValue>
   </CustomShapeGeometry>
  </XShape>
  <XShape positionX="18600" positionY="1400" sizeX="2400" sizeY="2600" type="com.sun.star.drawing.CustomShape" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="cfe7f5" fillTransparence="0" fillTransparenceGradientName="">
@@ -101,10 +494,85 @@
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
   <CustomShapeGeometry>
-   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Type" handle="0" value="heart" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="ViewBox">
+    <ViewBox x="0" y="0" width="11200" height="11200"/>
+   </PropertyValue>
+   <PropertyValue name="Type" value="heart" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues">
+    <AdjustmentValues>
+     <EnhancedCustomShapeAdjustmentValue value="1000" propertyState="DIRECT_VALUE"/>
+     <EnhancedCustomShapeAdjustmentValue value="1000" propertyState="DIRECT_VALUE"/>
+    </AdjustmentValues>
+   </PropertyValue>
+   <PropertyValue name="Path">
+    <Path>
+     <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="GluePoints" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Coordinates">
+      <Coordinates>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5606" type="0"/>
+        <Second value="11198" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="1"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="4" type="1"/>
+        <Second value="8" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="4" type="1"/>
+        <Second value="6" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="4" type="1"/>
+        <Second value="7" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2606" type="0"/>
+        <Second value="-1156" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5606" type="0"/>
+        <Second value="3" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="8606" type="0"/>
+        <Second value="-1156" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5" type="1"/>
+        <Second value="7" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5" type="1"/>
+        <Second value="6" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5" type="1"/>
+        <Second value="8" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="1" type="1"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5606" type="0"/>
+        <Second value="11198" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+      </Coordinates>
+     </PropertyValue>
+     <PropertyValue name="Segments">
+      <Segments>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="3" count="4"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+      </Segments>
+     </PropertyValue>
+    </Path>
+   </PropertyValue>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
   </CustomShapeGeometry>
@@ -123,10 +591,329 @@
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
   <CustomShapeGeometry>
-   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Type" handle="0" value="non-primitive" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="ViewBox">
+    <ViewBox x="0" y="0" width="21600" height="21600"/>
+   </PropertyValue>
+   <PropertyValue name="Type" value="non-primitive" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Path">
+    <Path>
+     <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Coordinates">
+      <Coordinates>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10800" type="0"/>
+        <Second value="5143" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="7593" type="0"/>
+        <Second value="5143" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5143" type="0"/>
+        <Second value="7593" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5143" type="0"/>
+        <Second value="10800" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5143" type="0"/>
+        <Second value="14007" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="7593" type="0"/>
+        <Second value="16457" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10800" type="0"/>
+        <Second value="16457" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14007" type="0"/>
+        <Second value="16457" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="16457" type="0"/>
+        <Second value="14007" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="16457" type="0"/>
+        <Second value="10800" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="16457" type="0"/>
+        <Second value="7593" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14007" type="0"/>
+        <Second value="5143" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10800" type="0"/>
+        <Second value="5143" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="10800" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="9159" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="1010" type="0"/>
+        <Second value="7827" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2468" type="0"/>
+        <Second value="7371" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2205" type="0"/>
+        <Second value="6866" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2057" type="0"/>
+        <Second value="6285" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2057" type="0"/>
+        <Second value="5657" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2057" type="0"/>
+        <Second value="3617" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="3616" type="0"/>
+        <Second value="2057" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5657" type="0"/>
+        <Second value="2057" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="6285" type="0"/>
+        <Second value="2057" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="6867" type="0"/>
+        <Second value="2206" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="7371" type="0"/>
+        <Second value="2468" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="7827" type="0"/>
+        <Second value="1010" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="9158" type="0"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10800" type="0"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="12442" type="0"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="13773" type="0"/>
+        <Second value="1010" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14229" type="0"/>
+        <Second value="2468" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14733" type="0"/>
+        <Second value="2206" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="15315" type="0"/>
+        <Second value="2057" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="15943" type="0"/>
+        <Second value="2057" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="17984" type="0"/>
+        <Second value="2057" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="19543" type="0"/>
+        <Second value="3617" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="19543" type="0"/>
+        <Second value="5657" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="19543" type="0"/>
+        <Second value="6285" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="19395" type="0"/>
+        <Second value="6866" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="19132" type="0"/>
+        <Second value="7371" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="20590" type="0"/>
+        <Second value="7827" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21600" type="0"/>
+        <Second value="9159" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21600" type="0"/>
+        <Second value="10800" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21600" type="0"/>
+        <Second value="12441" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="20590" type="0"/>
+        <Second value="13773" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="19132" type="0"/>
+        <Second value="14229" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="19395" type="0"/>
+        <Second value="14734" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="19543" type="0"/>
+        <Second value="15315" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="19543" type="0"/>
+        <Second value="15943" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="19543" type="0"/>
+        <Second value="17983" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="17984" type="0"/>
+        <Second value="19543" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="15943" type="0"/>
+        <Second value="19543" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="15315" type="0"/>
+        <Second value="19543" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14733" type="0"/>
+        <Second value="19394" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14229" type="0"/>
+        <Second value="19132" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="13773" type="0"/>
+        <Second value="20590" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="12442" type="0"/>
+        <Second value="21600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10800" type="0"/>
+        <Second value="21600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="9158" type="0"/>
+        <Second value="21600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="7827" type="0"/>
+        <Second value="20590" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="7371" type="0"/>
+        <Second value="19132" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="6867" type="0"/>
+        <Second value="19394" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="6285" type="0"/>
+        <Second value="19543" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5657" type="0"/>
+        <Second value="19543" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="3616" type="0"/>
+        <Second value="19543" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2057" type="0"/>
+        <Second value="17983" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2057" type="0"/>
+        <Second value="15943" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2057" type="0"/>
+        <Second value="15315" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2205" type="0"/>
+        <Second value="14734" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2468" type="0"/>
+        <Second value="14229" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="1010" type="0"/>
+        <Second value="13773" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="12441" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="10800" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+      </Coordinates>
+     </PropertyValue>
+     <PropertyValue name="Segments">
+      <Segments>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="3" count="4"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="3" count="20"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+      </Segments>
+     </PropertyValue>
+    </Path>
+   </PropertyValue>
+   <PropertyValue name="AdjustmentValues">
+    <AdjustmentValues/>
+   </PropertyValue>
   </CustomShapeGeometry>
  </XShape>
  <XShape positionX="1600" positionY="5600" sizeX="2400" sizeY="1600" type="com.sun.star.drawing.CustomShape" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="cfe7f5" fillTransparence="0" fillTransparenceGradientName="">
@@ -143,10 +930,518 @@
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
   <CustomShapeGeometry>
-   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Type" handle="0" value="non-primitive" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="ViewBox">
+    <ViewBox x="0" y="0" width="21600" height="21600"/>
+   </PropertyValue>
+   <PropertyValue name="Type" value="non-primitive" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Path">
+    <Path>
+     <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Coordinates">
+      <Coordinates>
+       <EnhancedCustomShapeParameterPair>
+        <First value="1930" type="0"/>
+        <Second value="7160" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="1530" type="0"/>
+        <Second value="4490" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="3400" type="0"/>
+        <Second value="1970" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5270" type="0"/>
+        <Second value="1970" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5860" type="0"/>
+        <Second value="1950" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="6470" type="0"/>
+        <Second value="2210" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="6970" type="0"/>
+        <Second value="2600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="7450" type="0"/>
+        <Second value="1390" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="8340" type="0"/>
+        <Second value="650" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="9340" type="0"/>
+        <Second value="650" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10004" type="0"/>
+        <Second value="690" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10710" type="0"/>
+        <Second value="1050" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="11210" type="0"/>
+        <Second value="1700" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="11570" type="0"/>
+        <Second value="630" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="12330" type="0"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="13150" type="0"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="13840" type="0"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14470" type="0"/>
+        <Second value="460" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14870" type="0"/>
+        <Second value="1160" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="15330" type="0"/>
+        <Second value="440" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="16020" type="0"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="16740" type="0"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="17910" type="0"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="18900" type="0"/>
+        <Second value="1130" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="19110" type="0"/>
+        <Second value="2710" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="20240" type="0"/>
+        <Second value="3150" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21060" type="0"/>
+        <Second value="4580" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21060" type="0"/>
+        <Second value="6220" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21060" type="0"/>
+        <Second value="6720" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21000" type="0"/>
+        <Second value="7200" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="20830" type="0"/>
+        <Second value="7660" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21310" type="0"/>
+        <Second value="8460" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21600" type="0"/>
+        <Second value="9450" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21600" type="0"/>
+        <Second value="10460" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21600" type="0"/>
+        <Second value="12750" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="20310" type="0"/>
+        <Second value="14680" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="18650" type="0"/>
+        <Second value="15010" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="18650" type="0"/>
+        <Second value="17200" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="17370" type="0"/>
+        <Second value="18920" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="15770" type="0"/>
+        <Second value="18920" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="15220" type="0"/>
+        <Second value="18920" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14700" type="0"/>
+        <Second value="18710" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14240" type="0"/>
+        <Second value="18310" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="13820" type="0"/>
+        <Second value="20240" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="12490" type="0"/>
+        <Second value="21600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="11000" type="0"/>
+        <Second value="21600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="9890" type="0"/>
+        <Second value="21600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="8840" type="0"/>
+        <Second value="20790" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="8210" type="0"/>
+        <Second value="19510" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="7620" type="0"/>
+        <Second value="20000" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="7930" type="0"/>
+        <Second value="20290" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="6240" type="0"/>
+        <Second value="20290" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="4850" type="0"/>
+        <Second value="20290" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="3570" type="0"/>
+        <Second value="19280" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2900" type="0"/>
+        <Second value="17640" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="1300" type="0"/>
+        <Second value="17600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="480" type="0"/>
+        <Second value="16300" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="480" type="0"/>
+        <Second value="14660" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="480" type="0"/>
+        <Second value="13900" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="690" type="0"/>
+        <Second value="13210" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="1070" type="0"/>
+        <Second value="12640" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="380" type="0"/>
+        <Second value="12160" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="11210" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="10120" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="8590" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="840" type="0"/>
+        <Second value="7330" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="1930" type="0"/>
+        <Second value="7160" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="1930" type="0"/>
+        <Second value="7160" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="1950" type="0"/>
+        <Second value="7410" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2040" type="0"/>
+        <Second value="7690" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2090" type="0"/>
+        <Second value="7920" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="6970" type="0"/>
+        <Second value="2600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="7200" type="0"/>
+        <Second value="2790" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="7480" type="0"/>
+        <Second value="3050" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="7670" type="0"/>
+        <Second value="3310" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="11210" type="0"/>
+        <Second value="1700" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="11130" type="0"/>
+        <Second value="1910" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="11080" type="0"/>
+        <Second value="2160" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="11030" type="0"/>
+        <Second value="2400" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14870" type="0"/>
+        <Second value="1160" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14720" type="0"/>
+        <Second value="1400" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14640" type="0"/>
+        <Second value="1720" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14540" type="0"/>
+        <Second value="2010" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="19110" type="0"/>
+        <Second value="2710" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="19130" type="0"/>
+        <Second value="2890" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="19230" type="0"/>
+        <Second value="3290" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="19190" type="0"/>
+        <Second value="3380" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="20830" type="0"/>
+        <Second value="7660" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="20660" type="0"/>
+        <Second value="8170" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="20430" type="0"/>
+        <Second value="8620" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="20110" type="0"/>
+        <Second value="8990" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="18660" type="0"/>
+        <Second value="15010" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="18740" type="0"/>
+        <Second value="14200" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="18280" type="0"/>
+        <Second value="12200" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="17000" type="0"/>
+        <Second value="11450" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14240" type="0"/>
+        <Second value="18310" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14320" type="0"/>
+        <Second value="17980" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14350" type="0"/>
+        <Second value="17680" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14370" type="0"/>
+        <Second value="17360" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="8220" type="0"/>
+        <Second value="19510" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="8060" type="0"/>
+        <Second value="19250" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="7960" type="0"/>
+        <Second value="18950" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="7860" type="0"/>
+        <Second value="18640" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2900" type="0"/>
+        <Second value="17640" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="3090" type="0"/>
+        <Second value="17600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="3280" type="0"/>
+        <Second value="17540" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="3460" type="0"/>
+        <Second value="17450" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="1070" type="0"/>
+        <Second value="12640" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="1400" type="0"/>
+        <Second value="12900" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="1780" type="0"/>
+        <Second value="13130" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2330" type="0"/>
+        <Second value="13040" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+      </Coordinates>
+     </PropertyValue>
+     <PropertyValue name="Segments">
+      <Segments>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="3" count="22"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="3" count="1"/>
+       <EnhancedCustomShapeSegment command="6" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="3" count="1"/>
+       <EnhancedCustomShapeSegment command="6" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="3" count="1"/>
+       <EnhancedCustomShapeSegment command="6" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="3" count="1"/>
+       <EnhancedCustomShapeSegment command="6" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="3" count="1"/>
+       <EnhancedCustomShapeSegment command="6" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="3" count="1"/>
+       <EnhancedCustomShapeSegment command="6" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="3" count="1"/>
+       <EnhancedCustomShapeSegment command="6" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="3" count="1"/>
+       <EnhancedCustomShapeSegment command="6" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="3" count="1"/>
+       <EnhancedCustomShapeSegment command="6" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="3" count="1"/>
+       <EnhancedCustomShapeSegment command="6" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="3" count="1"/>
+       <EnhancedCustomShapeSegment command="6" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+      </Segments>
+     </PropertyValue>
+    </Path>
+   </PropertyValue>
+   <PropertyValue name="AdjustmentValues">
+    <AdjustmentValues/>
+   </PropertyValue>
   </CustomShapeGeometry>
  </XShape>
  <XShape positionX="6000" positionY="5000" sizeX="3400" sizeY="2600" type="com.sun.star.drawing.CustomShape" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="cfe7f5" fillTransparence="0" fillTransparenceGradientName="">
@@ -163,10 +1458,80 @@
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
   <CustomShapeGeometry>
-   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Type" handle="0" value="forbidden" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="ViewBox">
+    <ViewBox x="0" y="0" width="21600" height="21600"/>
+   </PropertyValue>
+   <PropertyValue name="Type" value="forbidden" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues">
+    <AdjustmentValues>
+     <EnhancedCustomShapeAdjustmentValue value="2700" propertyState="DIRECT_VALUE"/>
+    </AdjustmentValues>
+   </PropertyValue>
+   <PropertyValue name="Path">
+    <Path>
+     <PropertyValue name="GluePoints" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Coordinates">
+      <Coordinates>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10800" type="0"/>
+        <Second value="10800" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10800" type="0"/>
+        <Second value="10800" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="360" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="1"/>
+        <Second value="0" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="1" type="1"/>
+        <Second value="1" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="9" type="1"/>
+        <Second value="10" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="11" type="1"/>
+        <Second value="12" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="1"/>
+        <Second value="0" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="1" type="1"/>
+        <Second value="1" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="13" type="1"/>
+        <Second value="14" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="15" type="1"/>
+        <Second value="16" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+      </Coordinates>
+     </PropertyValue>
+     <PropertyValue name="Segments">
+      <Segments>
+       <EnhancedCustomShapeSegment command="9" count="1"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="11" count="1"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="11" count="1"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+      </Segments>
+     </PropertyValue>
+    </Path>
+   </PropertyValue>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
   </CustomShapeGeometry>
@@ -185,10 +1550,464 @@
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
   <CustomShapeGeometry>
-   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Type" handle="0" value="NonPrimitive" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="ViewBox">
+    <ViewBox x="0" y="0" width="20590" height="20590"/>
+   </PropertyValue>
+   <PropertyValue name="Type" value="NonPrimitive" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Path">
+    <Path>
+     <PropertyValue name="Coordinates">
+      <Coordinates>
+       <EnhancedCustomShapeParameterPair>
+        <First value="3088" type="0"/>
+        <Second value="5088" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2369" type="0"/>
+        <Second value="5088" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="1915" type="0"/>
+        <Second value="5963" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="1288" type="0"/>
+        <Second value="5826" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="442" type="0"/>
+        <Second value="5641" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="202" type="0"/>
+        <Second value="5060" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="88" type="0"/>
+        <Second value="4390" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="-110" type="0"/>
+        <Second value="3232" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="88" type="0"/>
+        <Second value="867" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="88" type="0"/>
+        <Second value="867" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="88" type="0"/>
+        <Second value="477" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="477" type="0"/>
+        <Second value="88" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="867" type="0"/>
+        <Second value="88" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="867" type="0"/>
+        <Second value="88" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="3232" type="0"/>
+        <Second value="-110" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="4390" type="0"/>
+        <Second value="88" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5060" type="0"/>
+        <Second value="202" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5641" type="0"/>
+        <Second value="442" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5826" type="0"/>
+        <Second value="1288" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5963" type="0"/>
+        <Second value="1915" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5088" type="0"/>
+        <Second value="2369" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5088" type="0"/>
+        <Second value="3088" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5088" type="0"/>
+        <Second value="4505" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="6171" type="0"/>
+        <Second value="5588" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="7588" type="0"/>
+        <Second value="5588" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="9005" type="0"/>
+        <Second value="5588" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10088" type="0"/>
+        <Second value="4505" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10088" type="0"/>
+        <Second value="3088" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10088" type="0"/>
+        <Second value="2369" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="9213" type="0"/>
+        <Second value="1915" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="9350" type="0"/>
+        <Second value="1288" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="9535" type="0"/>
+        <Second value="442" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10115" type="0"/>
+        <Second value="202" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10786" type="0"/>
+        <Second value="88" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="11944" type="0"/>
+        <Second value="-110" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14310" type="0"/>
+        <Second value="88" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14310" type="0"/>
+        <Second value="88" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14699" type="0"/>
+        <Second value="88" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="15088" type="0"/>
+        <Second value="477" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="15088" type="0"/>
+        <Second value="867" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="15088" type="0"/>
+        <Second value="867" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14890" type="0"/>
+        <Second value="3232" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="15088" type="0"/>
+        <Second value="4390" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="15202" type="0"/>
+        <Second value="5060" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="15442" type="0"/>
+        <Second value="5641" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="16288" type="0"/>
+        <Second value="5826" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="16915" type="0"/>
+        <Second value="5963" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="17369" type="0"/>
+        <Second value="5088" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="18088" type="0"/>
+        <Second value="5088" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="19505" type="0"/>
+        <Second value="5088" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="20588" type="0"/>
+        <Second value="6171" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="20588" type="0"/>
+        <Second value="7588" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="20588" type="0"/>
+        <Second value="9005" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="19505" type="0"/>
+        <Second value="10088" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="18088" type="0"/>
+        <Second value="10088" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="17369" type="0"/>
+        <Second value="10088" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="16915" type="0"/>
+        <Second value="9213" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="16288" type="0"/>
+        <Second value="9350" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="15442" type="0"/>
+        <Second value="9535" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="15202" type="0"/>
+        <Second value="10115" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="15088" type="0"/>
+        <Second value="10786" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14890" type="0"/>
+        <Second value="11944" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="15088" type="0"/>
+        <Second value="14310" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="15088" type="0"/>
+        <Second value="14310" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="15088" type="0"/>
+        <Second value="14699" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14699" type="0"/>
+        <Second value="15088" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14310" type="0"/>
+        <Second value="15088" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14310" type="0"/>
+        <Second value="15088" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="11944" type="0"/>
+        <Second value="14890" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10786" type="0"/>
+        <Second value="15088" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10115" type="0"/>
+        <Second value="15202" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="9535" type="0"/>
+        <Second value="15442" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="9350" type="0"/>
+        <Second value="16288" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="9213" type="0"/>
+        <Second value="16915" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10088" type="0"/>
+        <Second value="17369" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10088" type="0"/>
+        <Second value="18088" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10088" type="0"/>
+        <Second value="19505" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="9005" type="0"/>
+        <Second value="20588" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="7588" type="0"/>
+        <Second value="20588" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="6171" type="0"/>
+        <Second value="20588" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5088" type="0"/>
+        <Second value="19505" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5088" type="0"/>
+        <Second value="18088" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5088" type="0"/>
+        <Second value="17369" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5963" type="0"/>
+        <Second value="16915" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5826" type="0"/>
+        <Second value="16288" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5641" type="0"/>
+        <Second value="15442" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5060" type="0"/>
+        <Second value="15202" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="4390" type="0"/>
+        <Second value="15088" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="3232" type="0"/>
+        <Second value="14890" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="867" type="0"/>
+        <Second value="15088" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="867" type="0"/>
+        <Second value="15088" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="477" type="0"/>
+        <Second value="15088" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="88" type="0"/>
+        <Second value="14699" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="88" type="0"/>
+        <Second value="14310" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="88" type="0"/>
+        <Second value="14310" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="-110" type="0"/>
+        <Second value="11944" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="88" type="0"/>
+        <Second value="10786" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="202" type="0"/>
+        <Second value="10115" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="442" type="0"/>
+        <Second value="9535" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="1288" type="0"/>
+        <Second value="9350" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="1915" type="0"/>
+        <Second value="9213" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2369" type="0"/>
+        <Second value="10088" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="3088" type="0"/>
+        <Second value="10088" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="4505" type="0"/>
+        <Second value="10088" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5588" type="0"/>
+        <Second value="9005" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5588" type="0"/>
+        <Second value="7588" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5588" type="0"/>
+        <Second value="6171" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="4505" type="0"/>
+        <Second value="5088" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="3088" type="0"/>
+        <Second value="5088" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+      </Coordinates>
+     </PropertyValue>
+     <PropertyValue name="Segments">
+      <Segments>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="3" count="36"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+      </Segments>
+     </PropertyValue>
+    </Path>
+   </PropertyValue>
+   <PropertyValue name="AdjustmentValues">
+    <AdjustmentValues/>
+   </PropertyValue>
   </CustomShapeGeometry>
  </XShape>
  <XShape positionX="15200" positionY="6000" sizeX="2000" sizeY="1200" type="com.sun.star.drawing.CustomShape" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="749" textMinimumFrameWidth="499" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="cfe7f5" fillTransparence="0" fillTransparenceGradientName="">
@@ -205,10 +2024,72 @@
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
   <CustomShapeGeometry>
-   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Type" handle="0" value="bracket-pair" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="ViewBox">
+    <ViewBox x="0" y="0" width="21600" height="21600"/>
+   </PropertyValue>
+   <PropertyValue name="Type" value="bracket-pair" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues">
+    <AdjustmentValues>
+     <EnhancedCustomShapeAdjustmentValue value="3700" propertyState="DIRECT_VALUE"/>
+    </AdjustmentValues>
+   </PropertyValue>
+   <PropertyValue name="Path">
+    <Path>
+     <PropertyValue name="GluePoints" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="StretchX" value="10800" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Coordinates">
+      <Coordinates>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="1"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="1" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="1"/>
+        <Second value="21600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="3" type="1"/>
+        <Second value="21600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21600" type="0"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21600" type="0"/>
+        <Second value="1" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="3" type="1"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+      </Coordinates>
+     </PropertyValue>
+     <PropertyValue name="Segments">
+      <Segments>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="14" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="1"/>
+       <EnhancedCustomShapeSegment command="15" count="1"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="14" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="1"/>
+       <EnhancedCustomShapeSegment command="15" count="1"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+      </Segments>
+     </PropertyValue>
+    </Path>
+   </PropertyValue>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
   </CustomShapeGeometry>
@@ -227,10 +2108,66 @@
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
   <CustomShapeGeometry>
-   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Type" handle="0" value="left-bracket" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="ViewBox">
+    <ViewBox x="0" y="0" width="21600" height="21600"/>
+   </PropertyValue>
+   <PropertyValue name="Type" value="left-bracket" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues">
+    <AdjustmentValues>
+     <EnhancedCustomShapeAdjustmentValue value="1800" propertyState="DIRECT_VALUE"/>
+    </AdjustmentValues>
+   </PropertyValue>
+   <PropertyValue name="Path">
+    <Path>
+     <PropertyValue name="GluePoints" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Coordinates">
+      <Coordinates>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21600" type="0"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10800" type="0"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="3" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="1" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="4" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10800" type="0"/>
+        <Second value="21600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21600" type="0"/>
+        <Second value="21600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+      </Coordinates>
+     </PropertyValue>
+     <PropertyValue name="Segments">
+      <Segments>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="3" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="1"/>
+       <EnhancedCustomShapeSegment command="3" count="1"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+      </Segments>
+     </PropertyValue>
+    </Path>
+   </PropertyValue>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
   </CustomShapeGeometry>
@@ -249,10 +2186,66 @@
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
   <CustomShapeGeometry>
-   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Type" handle="0" value="right-bracket" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="ViewBox">
+    <ViewBox x="0" y="0" width="21600" height="21600"/>
+   </PropertyValue>
+   <PropertyValue name="Type" value="right-bracket" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues">
+    <AdjustmentValues>
+     <EnhancedCustomShapeAdjustmentValue value="1800" propertyState="DIRECT_VALUE"/>
+    </AdjustmentValues>
+   </PropertyValue>
+   <PropertyValue name="Path">
+    <Path>
+     <PropertyValue name="GluePoints" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Coordinates">
+      <Coordinates>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10800" type="0"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21600" type="0"/>
+        <Second value="3" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21600" type="0"/>
+        <Second value="1" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21600" type="0"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21600" type="0"/>
+        <Second value="4" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10800" type="0"/>
+        <Second value="21600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="21600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+      </Coordinates>
+     </PropertyValue>
+     <PropertyValue name="Segments">
+      <Segments>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="3" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="1"/>
+       <EnhancedCustomShapeSegment command="3" count="1"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+      </Segments>
+     </PropertyValue>
+    </Path>
+   </PropertyValue>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
   </CustomShapeGeometry>
@@ -271,10 +2264,102 @@
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
   <CustomShapeGeometry>
-   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Type" handle="0" value="brace-pair" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="ViewBox">
+    <ViewBox x="0" y="0" width="21600" height="21600"/>
+   </PropertyValue>
+   <PropertyValue name="Type" value="brace-pair" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues">
+    <AdjustmentValues>
+     <EnhancedCustomShapeAdjustmentValue value="1800" propertyState="DIRECT_VALUE"/>
+    </AdjustmentValues>
+   </PropertyValue>
+   <PropertyValue name="Path">
+    <Path>
+     <PropertyValue name="GluePoints" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="StretchX" value="10800" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Coordinates">
+      <Coordinates>
+       <EnhancedCustomShapeParameterPair>
+        <First value="4" type="1"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="1"/>
+        <Second value="1" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="1"/>
+        <Second value="6" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="10800" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="1"/>
+        <Second value="7" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="1"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="4" type="1"/>
+        <Second value="21600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="8" type="1"/>
+        <Second value="21600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="3" type="1"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="3" type="1"/>
+        <Second value="7" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21600" type="0"/>
+        <Second value="10800" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="3" type="1"/>
+        <Second value="6" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="3" type="1"/>
+        <Second value="1" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="8" type="1"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+      </Coordinates>
+     </PropertyValue>
+     <PropertyValue name="Segments">
+      <Segments>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="14" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="1"/>
+       <EnhancedCustomShapeSegment command="15" count="1"/>
+       <EnhancedCustomShapeSegment command="14" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="1"/>
+       <EnhancedCustomShapeSegment command="15" count="1"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="14" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="1"/>
+       <EnhancedCustomShapeSegment command="15" count="1"/>
+       <EnhancedCustomShapeSegment command="14" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="1"/>
+       <EnhancedCustomShapeSegment command="15" count="1"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+      </Segments>
+     </PropertyValue>
+    </Path>
+   </PropertyValue>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
   </CustomShapeGeometry>
@@ -293,10 +2378,97 @@
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
   <CustomShapeGeometry>
-   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Type" handle="0" value="left-brace" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="ViewBox">
+    <ViewBox x="0" y="0" width="21600" height="21600"/>
+   </PropertyValue>
+   <PropertyValue name="Type" value="left-brace" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues">
+    <AdjustmentValues>
+     <EnhancedCustomShapeAdjustmentValue value="1800" propertyState="DIRECT_VALUE"/>
+     <EnhancedCustomShapeAdjustmentValue value="10800" propertyState="DIRECT_VALUE"/>
+    </AdjustmentValues>
+   </PropertyValue>
+   <PropertyValue name="Path">
+    <Path>
+     <PropertyValue name="GluePoints" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Coordinates">
+      <Coordinates>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21600" type="0"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="16200" type="0"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10800" type="0"/>
+        <Second value="0" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10800" type="0"/>
+        <Second value="1" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10800" type="0"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10800" type="0"/>
+        <Second value="3" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5400" type="0"/>
+        <Second value="4" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="4" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5400" type="0"/>
+        <Second value="4" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10800" type="0"/>
+        <Second value="5" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10800" type="0"/>
+        <Second value="6" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10800" type="0"/>
+        <Second value="7" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10800" type="0"/>
+        <Second value="8" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="16200" type="0"/>
+        <Second value="21600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21600" type="0"/>
+        <Second value="21600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+      </Coordinates>
+     </PropertyValue>
+     <PropertyValue name="Segments">
+      <Segments>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="3" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="1"/>
+       <EnhancedCustomShapeSegment command="3" count="2"/>
+       <EnhancedCustomShapeSegment command="2" count="1"/>
+       <EnhancedCustomShapeSegment command="3" count="1"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+      </Segments>
+     </PropertyValue>
+    </Path>
+   </PropertyValue>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
   </CustomShapeGeometry>
@@ -315,10 +2487,97 @@
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
   <CustomShapeGeometry>
-   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Type" handle="0" value="right-brace" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="ViewBox">
+    <ViewBox x="0" y="0" width="21600" height="21600"/>
+   </PropertyValue>
+   <PropertyValue name="Type" value="right-brace" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues">
+    <AdjustmentValues>
+     <EnhancedCustomShapeAdjustmentValue value="1800" propertyState="DIRECT_VALUE"/>
+     <EnhancedCustomShapeAdjustmentValue value="10800" propertyState="DIRECT_VALUE"/>
+    </AdjustmentValues>
+   </PropertyValue>
+   <PropertyValue name="Path">
+    <Path>
+     <PropertyValue name="GluePoints" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Coordinates">
+      <Coordinates>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5400" type="0"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10800" type="0"/>
+        <Second value="0" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10800" type="0"/>
+        <Second value="1" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10800" type="0"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10800" type="0"/>
+        <Second value="3" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="16200" type="0"/>
+        <Second value="4" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21600" type="0"/>
+        <Second value="4" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="16200" type="0"/>
+        <Second value="4" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10800" type="0"/>
+        <Second value="5" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10800" type="0"/>
+        <Second value="6" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10800" type="0"/>
+        <Second value="7" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="10800" type="0"/>
+        <Second value="8" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5400" type="0"/>
+        <Second value="21600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="21600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+      </Coordinates>
+     </PropertyValue>
+     <PropertyValue name="Segments">
+      <Segments>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="3" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="1"/>
+       <EnhancedCustomShapeSegment command="3" count="2"/>
+       <EnhancedCustomShapeSegment command="2" count="1"/>
+       <EnhancedCustomShapeSegment command="3" count="1"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+      </Segments>
+     </PropertyValue>
+    </Path>
+   </PropertyValue>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
   </CustomShapeGeometry>
@@ -337,10 +2596,130 @@
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
   <CustomShapeGeometry>
-   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Type" handle="0" value="quad-bevel" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="ViewBox">
+    <ViewBox x="0" y="0" width="21600" height="21600"/>
+   </PropertyValue>
+   <PropertyValue name="Type" value="quad-bevel" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues">
+    <AdjustmentValues>
+     <EnhancedCustomShapeAdjustmentValue value="2700" propertyState="DIRECT_VALUE"/>
+    </AdjustmentValues>
+   </PropertyValue>
+   <PropertyValue name="Path">
+    <Path>
+     <PropertyValue name="StretchX" value="10800" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="StretchY" value="10800" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Coordinates">
+      <Coordinates>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21600" type="0"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21600" type="0"/>
+        <Second value="21600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="21600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21600" type="0"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="1" type="1"/>
+        <Second value="0" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="1"/>
+        <Second value="0" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21600" type="0"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21600" type="0"/>
+        <Second value="21600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="1" type="1"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="1" type="1"/>
+        <Second value="0" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21600" type="0"/>
+        <Second value="21600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="21600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="1"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="1" type="1"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="21600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="1"/>
+        <Second value="0" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="1"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+      </Coordinates>
+     </PropertyValue>
+     <PropertyValue name="Segments">
+      <Segments>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="3"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="3"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="3"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="3"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="3"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+      </Segments>
+     </PropertyValue>
+    </Path>
+   </PropertyValue>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
   </CustomShapeGeometry>
@@ -359,10 +2738,224 @@
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
   <CustomShapeGeometry>
-   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Type" handle="0" value="col-60da8460" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="ViewBox">
+    <ViewBox x="0" y="0" width="21600" height="21600"/>
+   </PropertyValue>
+   <PropertyValue name="Type" value="col-60da8460" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues">
+    <AdjustmentValues>
+     <EnhancedCustomShapeAdjustmentValue value="2000" propertyState="DIRECT_VALUE"/>
+    </AdjustmentValues>
+   </PropertyValue>
+   <PropertyValue name="Path">
+    <Path>
+     <PropertyValue name="StretchX" value="10800" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="StretchY" value="10800" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Coordinates">
+      <Coordinates>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14" type="1"/>
+        <Second value="16" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="13" type="1"/>
+        <Second value="19" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="13" type="1"/>
+        <Second value="18" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14" type="1"/>
+        <Second value="17" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="15" type="1"/>
+        <Second value="17" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="12" type="1"/>
+        <Second value="18" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="12" type="1"/>
+        <Second value="19" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="15" type="1"/>
+        <Second value="16" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="4" type="1"/>
+        <Second value="6" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="3" type="1"/>
+        <Second value="9" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="13" type="1"/>
+        <Second value="19" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14" type="1"/>
+        <Second value="16" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5" type="1"/>
+        <Second value="7" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2" type="1"/>
+        <Second value="8" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="12" type="1"/>
+        <Second value="18" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="15" type="1"/>
+        <Second value="17" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="3" type="1"/>
+        <Second value="9" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="3" type="1"/>
+        <Second value="8" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="13" type="1"/>
+        <Second value="18" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="13" type="1"/>
+        <Second value="19" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="4" type="1"/>
+        <Second value="7" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5" type="1"/>
+        <Second value="7" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="15" type="1"/>
+        <Second value="17" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14" type="1"/>
+        <Second value="17" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="3" type="1"/>
+        <Second value="8" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="4" type="1"/>
+        <Second value="7" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14" type="1"/>
+        <Second value="17" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="13" type="1"/>
+        <Second value="18" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2" type="1"/>
+        <Second value="8" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2" type="1"/>
+        <Second value="9" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="12" type="1"/>
+        <Second value="19" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="12" type="1"/>
+        <Second value="18" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5" type="1"/>
+        <Second value="6" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="4" type="1"/>
+        <Second value="6" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="14" type="1"/>
+        <Second value="16" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="15" type="1"/>
+        <Second value="16" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="2" type="1"/>
+        <Second value="9" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5" type="1"/>
+        <Second value="6" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="15" type="1"/>
+        <Second value="16" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="12" type="1"/>
+        <Second value="19" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+      </Coordinates>
+     </PropertyValue>
+     <PropertyValue name="Segments">
+      <Segments>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="7"/>
+       <EnhancedCustomShapeSegment command="7" count="0"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="3"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="3"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="3"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="3"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="3"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="3"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="3"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="3"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+      </Segments>
+     </PropertyValue>
+    </Path>
+   </PropertyValue>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
   </CustomShapeGeometry>
@@ -381,10 +2974,129 @@
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
   <CustomShapeGeometry>
-   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Type" handle="0" value="col-502ad400" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="ViewBox">
+    <ViewBox x="0" y="0" width="21600" height="21600"/>
+   </PropertyValue>
+   <PropertyValue name="Type" value="col-502ad400" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues">
+    <AdjustmentValues>
+     <EnhancedCustomShapeAdjustmentValue value="4000" propertyState="DIRECT_VALUE"/>
+    </AdjustmentValues>
+   </PropertyValue>
+   <PropertyValue name="Path">
+    <Path>
+     <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="Coordinates">
+      <Coordinates>
+       <EnhancedCustomShapeParameterPair>
+        <First value="4" type="1"/>
+        <Second value="5" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="6" type="1"/>
+        <Second value="4" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="4" type="1"/>
+        <Second value="6" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5" type="1"/>
+        <Second value="4" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="4" type="1"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="1" type="1"/>
+        <Second value="4" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="6" type="1"/>
+        <Second value="4" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="4" type="1"/>
+        <Second value="5" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="1" type="1"/>
+        <Second value="4" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="4" type="1"/>
+        <Second value="3" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="4" type="1"/>
+        <Second value="6" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="6" type="1"/>
+        <Second value="4" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="4" type="1"/>
+        <Second value="3" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="1"/>
+        <Second value="4" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5" type="1"/>
+        <Second value="4" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="4" type="1"/>
+        <Second value="6" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="1"/>
+        <Second value="4" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="5" type="1"/>
+        <Second value="4" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="4" type="1"/>
+        <Second value="5" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="4" type="1"/>
+        <Second value="2" type="1"/>
+       </EnhancedCustomShapeParameterPair>
+      </Coordinates>
+     </PropertyValue>
+     <PropertyValue name="Segments">
+      <Segments>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="3"/>
+       <EnhancedCustomShapeSegment command="7" count="0"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="3"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="3"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="3"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="3"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+      </Segments>
+     </PropertyValue>
+    </Path>
+   </PropertyValue>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
   </CustomShapeGeometry>

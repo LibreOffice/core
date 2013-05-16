@@ -475,11 +475,27 @@ void EnhancedShapeDumper::dumpAdjustmentValuesAsElement(uno::Sequence< drawing::
         xmlTextWriterStartElement(xmlWriter, BAD_CAST( "EnhancedCustomShapeAdjustmentValue" ));
         uno::Any aAny = aAdjustmentValues[i].Value;
         OUString sValue;
+        float fValue;
+        sal_Int32 nValue;
+        sal_Bool bValue;
         if(aAny >>= sValue)
         {
             xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
                 OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
         }
+        else if(aAny >>= nValue)
+        {
+            xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%" SAL_PRIdINT32, nValue);
+        }
+        else if(aAny >>= fValue)
+        {
+            xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%f", fValue);
+        }
+        else if(aAny >>= bValue)
+        {
+            xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s", (bValue? "true": "false"));
+        }
+
         switch(aAdjustmentValues[i].State)
         {
             case beans::PropertyState_DIRECT_VALUE:
@@ -741,10 +757,25 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeParameter(drawing::EnhancedCust
 {
     uno::Any aAny = aParameter.Value;
     OUString sValue;
+    float fValue;
+    sal_Int32 nValue;
+    sal_Bool bValue;
     if(aAny >>= sValue)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
             OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
+    }
+    else if(aAny >>= nValue)
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%" SAL_PRIdINT32, nValue);
+    }
+    else if(aAny >>= fValue)
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%f", fValue);
+    }
+    else if(aAny >>= bValue)
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s", (bValue? "true": "false"));
     }
     sal_Int32 aType = aParameter.Type;
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%" SAL_PRIdINT32, aType);

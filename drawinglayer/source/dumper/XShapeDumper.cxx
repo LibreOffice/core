@@ -1090,41 +1090,99 @@ void dumpCustomShapeDataAsAttribute(OUString sCustomShapeData, xmlTextWriterPtr 
         OUStringToOString(sCustomShapeData, RTL_TEXTENCODING_UTF8).getStr());
 }
 
+void dumpPropertyValueAsElement(const beans::PropertyValue& rPropertyValue, xmlTextWriterPtr xmlWriter)
+{
+    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "PropertyValue" ));
+
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("name"), "%s",
+            OUStringToOString(rPropertyValue.Name, RTL_TEXTENCODING_UTF8).getStr());
+
+    uno::Any aAny = rPropertyValue.Value;
+    OUString sValue;
+    float fValue;
+    sal_Int32 nValue;
+    sal_Bool bValue;
+    awt::Rectangle aRectangleValue;
+    uno::Sequence< drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues;
+    uno::Sequence< drawing::EnhancedCustomShapeParameterPair > aCoordinates;
+    uno::Sequence< drawing::EnhancedCustomShapeSegment > aSegments;
+    uno::Sequence< beans::PropertyValue > aPropSeq;
+    if(aAny >>= sValue)
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
+                OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
+    }
+    else if(aAny >>= nValue)
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%" SAL_PRIdINT32, nValue);
+    }
+    else if(aAny >>= fValue)
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%f", fValue);
+    }
+    else if(aAny >>= bValue)
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s", (bValue? "true": "false"));
+    }
+    else if(rPropertyValue.Name == "ViewBox" && (aAny >>= aRectangleValue))
+    {
+        EnhancedShapeDumper enhancedDumper(xmlWriter);
+        enhancedDumper.dumpViewBoxAsElement(aRectangleValue);
+    }
+    else if(rPropertyValue.Name == "AdjustmentValues" && (aAny >>= aAdjustmentValues))
+    {
+        EnhancedShapeDumper enhancedDumper(xmlWriter);
+        enhancedDumper.dumpAdjustmentValuesAsElement(aAdjustmentValues);
+    }
+    else if(rPropertyValue.Name == "Coordinates" && (aAny >>= aCoordinates))
+    {
+        EnhancedShapeDumper enhancedDumper(xmlWriter);
+        enhancedDumper.dumpCoordinatesAsElement(aCoordinates);
+    }
+    else if(rPropertyValue.Name == "Segments" && (aAny >>= aSegments))
+    {
+        EnhancedShapeDumper enhancedDumper(xmlWriter);
+        enhancedDumper.dumpSegmentsAsElement(aSegments);
+    }
+    else if(aAny >>= aPropSeq)
+    {
+        xmlTextWriterStartElement(xmlWriter, BAD_CAST( OUStringToOString(rPropertyValue.Name, RTL_TEXTENCODING_UTF8).getStr() ));
+
+        sal_Int32 i = 0, nCount = aPropSeq.getLength();
+        for ( ; i < nCount; i++ )
+            dumpPropertyValueAsElement(aPropSeq[ i ], xmlWriter);
+
+        xmlTextWriterEndElement(xmlWriter);
+    }
+    // TODO more, if necessary
+
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("handle"), "%" SAL_PRIdINT32, rPropertyValue.Handle);
+
+    switch(rPropertyValue.State)
+    {
+        case beans::PropertyState_DIRECT_VALUE:
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "DIRECT_VALUE");
+            break;
+        case beans::PropertyState_DEFAULT_VALUE:
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "DEFAULT_VALUE");
+            break;
+        case beans::PropertyState_AMBIGUOUS_VALUE:
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "AMBIGUOUS_VALUE");
+            break;
+        default:
+            break;
+    }
+    xmlTextWriterEndElement( xmlWriter );
+}
+
 void dumpCustomShapeGeometryAsElement(uno::Sequence< beans::PropertyValue> aCustomShapeGeometry, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "CustomShapeGeometry" ));
+
     sal_Int32 nLength = aCustomShapeGeometry.getLength();
     for (sal_Int32 i = 0; i < nLength; ++i)
-    {
-        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "PropertyValue" ));
+        dumpPropertyValueAsElement(aCustomShapeGeometry[i], xmlWriter);
 
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("name"), "%s",
-            OUStringToOString(aCustomShapeGeometry[i].Name, RTL_TEXTENCODING_UTF8).getStr());
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("handle"), "%" SAL_PRIdINT32, aCustomShapeGeometry[i].Handle);
-
-        uno::Any aAny = aCustomShapeGeometry[i].Value;
-        OUString sValue;
-        if(aAny >>= sValue)
-        {
-            xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
-                OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
-        }
-        switch(aCustomShapeGeometry[i].State)
-        {
-            case beans::PropertyState_DIRECT_VALUE:
-                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "DIRECT_VALUE");
-                break;
-            case beans::PropertyState_DEFAULT_VALUE:
-                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "DEFAULT_VALUE");
-                break;
-            case beans::PropertyState_AMBIGUOUS_VALUE:
-                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "AMBIGUOUS_VALUE");
-                break;
-            default:
-                break;
-        }
-        xmlTextWriterEndElement( xmlWriter );
-    }
     xmlTextWriterEndElement( xmlWriter );
 }
 
