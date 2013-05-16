@@ -24,7 +24,7 @@ gb_GeneratedPackage__get_destdir = $(firstword $(subst :, ,$(1)))
 
 define gb_GeneratedPackage__command_cp
 mkdir -p $(dir $(INSTDIR)/$(2)) && \
-cp -r $(PACKAGE_SOURCEDIR)/$(1) $(INSTDIR)/$(2)
+cp -R $(PACKAGE_SOURCEDIR)/$(1) $(INSTDIR)/$(2)
 endef
 
 define gb_GeneratedPackage__command
