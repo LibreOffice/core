@@ -1604,8 +1604,8 @@ sal_Bool SvxAutoCorrect::CreateLanguageFile( LanguageType eLang, sal_Bool bNewFi
 {
     OSL_ENSURE(pLangTable->find(eLang) == pLangTable->end(), "Language already exists ");
 
-    String sUserDirFile( GetAutoCorrFileName( eLang, sal_True, sal_False ));
-    String sShareDirFile( sUserDirFile );
+    OUString sUserDirFile( GetAutoCorrFileName( eLang, sal_True, sal_False ));
+    OUString sShareDirFile( sUserDirFile );
 
     SvxAutoCorrectLanguageListsPtr pLists = 0;
 
@@ -1909,13 +1909,12 @@ sal_Bool SvxAutoCorrect::FindInCplSttExceptList(LanguageType eLang,
     return sal_False;
 }
 
-String SvxAutoCorrect::GetAutoCorrFileName( LanguageType eLang,
+OUString SvxAutoCorrect::GetAutoCorrFileName( LanguageType eLang,
                                             sal_Bool bNewFile, sal_Bool bTst ) const
 {
-    String sRet, sExt( LanguageTag( eLang ).getBcp47() );
+    OUString sRet, sExt( LanguageTag( eLang ).getBcp47() );
 
-    sExt.Insert('_', 0);
-    sExt.AppendAscii( ".dat" );
+    sExt = "_" + sExt + ".dat";
     if( bNewFile )
         ( sRet = sUserAutoCorrFile )  += sExt;
     else if( !bTst )

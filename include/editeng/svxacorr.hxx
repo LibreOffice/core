@@ -327,7 +327,7 @@ public:
 
     // Query/Set the name of the AutoCorrect file
     // the default is "autocorr.dat"
-    String GetAutoCorrFileName( LanguageType eLang = LANGUAGE_SYSTEM,
+    OUString GetAutoCorrFileName( LanguageType eLang = LANGUAGE_SYSTEM,
                                 sal_Bool bNewFile = sal_False,
                                 sal_Bool bTstUserExist = sal_False ) const;
 
