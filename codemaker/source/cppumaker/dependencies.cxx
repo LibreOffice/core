@@ -103,11 +103,11 @@ Dependencies::Dependencies(
         {
             rtl::Reference< unoidl::InterfaceTypeEntity > ent2(
                 static_cast< unoidl::InterfaceTypeEntity * >(ent.get()));
-            for (std::vector< OUString >::const_iterator i(
+            for (std::vector< unoidl::AnnotatedReference >::const_iterator i(
                      ent2->getDirectMandatoryBases().begin());
                  i != ent2->getDirectMandatoryBases().end(); ++i)
             {
-                insert(*i, true);
+                insert(i->name, true);
             }
             if (!(ent2->getDirectAttributes().empty()
                   && ent2->getDirectMethods().empty()))

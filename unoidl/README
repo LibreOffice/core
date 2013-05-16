@@ -27,6 +27,18 @@ quantities are stored LSB first, without alignment requirements.  Offsets are
 considered a limitation in practice (and avoids unnecessary bloat compared to
 64 bit offsets).
 
+Annotations can be added for (non-module) entities and certain parts of such
+entities (e.g., both for an interface type definition and for a direct method of
+an interface type definition; the idea is that it can be added for direct parts
+that forma a "many-to-one" relationship; there is a tradeoff between generality
+of concept and size of representation, esp. for the C++ representation types in
+namespace unoidl) and consist of arbitrary sequences of name/value strings.
+Each name/value string is encoded as a single UTF-8 string containing a name (an
+arbitrary sequence of Unicode code points not containing U+003D EQUALS SIGN),
+optionally followed by U+003D EQUALS SIGN and a value (an abritrary sequence of
+Unicode code points).  The only annotation name currently in use is "deprecated"
+(without a value).
+
 The following definitions are used throughout:
 
 * UInt16: 2-byte value, LSB first
@@ -34,10 +46,12 @@ The following definitions are used throughout:
 * UInt64: 8-byte value, LSB first
 * Offset: UInt32 value, counting bytes from start of file
 * NUL-Name: zero or more non-NUL US-ASCII bytes followed by a NUL byte
-* Len-Name: UInt32 number of characters, with 0x80000000 bit 1, followed by that
-   many (- 0x80000000) US-ASCII bytes
-* Idx-Name: either an Offset (with 0x80000000 bit 0) of a Len-Name, or a
-   Len-Name
+* Len-String: UInt32 number of characters, with 0x80000000 bit 0, followed by
+   that many US-ASCII (for UNOIDL related names) resp. UTF-8 (for annotations)
+   bytes
+* Idx-String: either an Offset (with 0x80000000 bit 1) of a Len-String, or a
+   Len-String
+* Annotations: UInt32 number N of annotations followed by N * Idx-String
 * Entry: Offset of NUL-Name followed by Offset of payload
 * Map: zero or more Entries
 
@@ -68,7 +82,7 @@ Layout of per-entry payload in the root or a module Map:
 
 ** otherwise:
 *** 0x80 bit: 1 if published
-*** 0x40 bit: 1 if deprecated
+*** 0x40 bit: 1 if annotated
 *** 0x20 bit: flag (may only be 1 for certain kinds, see below)
 *** remaining bits:
 
@@ -76,67 +90,77 @@ Layout of per-entry payload in the root or a module Map:
 ***** followed by:
 ****** UInt32 number N1 of members
 ****** N1 * tuple of:
-******* Offset of Idx-Name
+******* Idx-String
 ******* UInt32
+******* if annotated: Annotations
 
 **** 2: plain struct type (with base if flag is 1)
 ***** followed by:
-****** if "with base": Offset of Idx-Name
+****** if "with base": Idx-String
 ****** UInt32 number N1 of direct members
 ****** N1 * tuple of:
-******* Offset of Idx-Name name
-******* Offset of Idx-Name type
+******* Idx-String name
+******* Idx-String type
+******* if annotated: Annotations
 
 **** 3: polymorphic struct type template
 ***** followed by:
 ****** UInt32 number N1 of type parameters
-****** N1 * Offset of Idx-Name
+****** N1 * Idx-String
 ****** UInt32 number N2 of members
 ****** N2 * tuple of:
 ******* kind byte: 0x01 bit is 1 if parameterized type
-******* Offset of Idx-Name name
-******* Offset of Idx-Name type
+******* Idx-String name
+******* Idx-String type
+******* if annotated: Annotations
 
 **** 4: exception type (with base if flag is 1)
 ***** followed by:
-****** if "with base": Offset of Idx-Name
+****** if "with base": Idx-String
 ****** UInt32 number N1 of direct members
 ****** N1 * tuple of:
-******* Offset of Idx-Name name
-******* Offset of Idx-Name type
+******* Idx-String name
+******* Idx-String type
+******* if annotated: Annotations
 
 **** 5: interface type
 ***** followed by:
 ****** UInt32 number N1 of direct mandatory bases
-****** N1 * Offset of Idx-Name
+****** N1 * tuple of:
+******* Idx-String
+******* if annotated: Annotations
 ****** UInt32 number N2 of direct optional bases
-****** N2 * Offset of Idx-Name
+****** N2 * tuple of:
+******* Idx-String
+******* if annotated: Annotations
 ****** UInt32 number N3 of direct attributes
 ****** N3 * tuple of:
 ******* kind byte:
 ******** 0x02 bit: 1 if read-only
 ******** 0x01 bit: 1 if bound
-******* Offset of Idx-Name name
-******* Offset of Idx-Name type
+******* Idx-String name
+******* Idx-String type
 ******* UInt32 number N4 of get exceptions
-******* N4 * Offset of Idx-Name
+******* N4 * Idx-String
 ******* UInt32 number N5 of set exceptions
-******* N5 * Offset of Idx-Name
+******* N5 * Idx-String
+******* if annotated: Annotations
 ****** UInt32 number N6 of direct methods
 ****** N6 * tuple of:
-******* Offset of Idx-Name name
-******* Offset of Idx-Name return type
+******* Idx-String name
+******* Idx-String return type
 ******* UInt32 number N7 of parameters
 ******* N7 * tuple of:
 ******** direction byte: 0 for in, 1 for out, 2 for in-out
-******** Offset of Idx-Name name
-******** Offset of Idx-Name type
+******** Idx-String name
+******** Idx-String type
 ******* UInt32 number N8 of exceptions
-******* N8 * Offset of Idx-Name
+******* N8 * Idx-String
+******* if annotated: Annotations
 
 **** 6: typedef
 ***** followed by:
-****** Offset of Idx-Name
+****** Idx-String
 
 **** 7: constant group
 ***** followed by:
@@ -145,29 +169,38 @@ Layout of per-entry payload in the root or a module Map:
 
 **** 8: single-interface--based service (with default constructor if flag is 1)
 ***** followed by:
-****** Offset of Idx-Name
+****** Idx-String
 ****** if not "with default constructor":
 ******* UInt32 number N1 of constructors
 ******* N1 * tuple of:
-******** Offset of Idx-Name
+******** Idx-String
 ******** UInt32 number N2 of parameters
 ******** N2 * tuple of
 ********* kind byte: 0x04 bit is 1 if rest parameter
-********* Offset of Idx-Name name
-********* Offset of Idx-Name type
+********* Idx-String name
+********* Idx-String type
 ******** UInt32 number N3 of exceptions
-******** N3 * Offset of Idx-Name
+******** N3 * Idx-String
+******** if annotated: Annotations
 
 **** 9: accumulation-based service
 ***** followed by:
 ****** UInt32 number N1 of direct mandatory base services
-****** N1 * Offset of Idx-Name
+****** N1 * tuple of:
+******* Idx-String
+******* if annotated: Annotations
 ****** UInt32 number N2 of direct optional base services
-****** N2 * Offset of Idx-Name
+****** N2 * tuple of:
+******* Idx-String
+******* if annotated: Annotations
 ****** UInt32 number N3 of direct mandatory base interfaces
-****** N3 * Offset of Idx-Name
+****** N3 * tuple of:
+******* Idx-String
+******* if annotated: Annotations
 ****** UInt32 number N4 of direct optional base interfaces
-****** N4 * Offset of Idx-Name
+****** N4 * tuple of:
+******* Idx-String
+******* if annotated: Annotations
 ****** UInt32 number N5 of direct properties
 ****** N5 * tuple of:
 ******* UInt16 kind:
@@ -180,21 +213,24 @@ Layout of per-entry payload in the root or a module Map:
 ******** 0x0004 bit: 1 if constrained
 ******** 0x0002 bit: 1 if bound
 ******** 0x0001 bit: 1 if maybevoid
-******* Offset of Idx-Name name
-******* Offset of Idx-Name type
+******* Idx-String name
+******* Idx-String type
+******* if annotated: Annotations
 
 **** 10: interface-based singleton
 ***** followed by:
-****** Offset of Idx-Name
+****** Idx-String
 
 **** 11: service-based singleton
 ***** followed by:
-****** Offset of Idx-Name
+****** Idx-String
+
+*** if annotated, followed by: Annotations
 
 Layout of per-entry payload in a constant group Map:
 
 * kind byte:
-** 0x80 bit: 1 if deprecated
+** 0x80 bit: 1 if annotated
 ** remaining bits:
 
 *** 0: BOOLEAN
@@ -228,3 +264,5 @@ Layout of per-entry payload in a constant group Map:
 *** 9: DOUBLE
 **** followed by 8-byte value, representing values in ISO 60599 binary64 format,
       LSB first
+
+* if annotated, followed by: Annotations

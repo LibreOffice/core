@@ -1810,12 +1810,12 @@ void handleInterfaceType(
                 | ClassFile::ACC_ABSTRACT),
             className, "java/lang/Object", ""));
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    for (std::vector< OUString >::const_iterator i(
+    for (std::vector< unoidl::AnnotatedReference >::const_iterator i(
              entity->getDirectMandatoryBases().begin());
          i != entity->getDirectMandatoryBases().end(); ++i)
     {
-        dependencies->insert(*i);
-        cf->addInterface(codemaker::convertString(*i).replace('.', '/'));
+        dependencies->insert(i->name);
+        cf->addInterface(codemaker::convertString(i->name).replace('.', '/'));
     }
     // As a special case, let com.sun.star.lang.XEventListener extend
     // java.util.EventListener ("A tagging interface that all event listener

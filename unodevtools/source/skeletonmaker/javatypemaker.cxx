@@ -461,12 +461,12 @@ void printMethods(std::ostream & o,
         dynamic_cast< unoidl::InterfaceTypeEntity * >(ent.get()));
     assert(ent2.is());
     if ( options.all || defaultvalue ) {
-        for (std::vector< OUString >::const_iterator i(
+        for (std::vector< unoidl::AnnotatedReference >::const_iterator i(
                  ent2->getDirectMandatoryBases().begin());
              i != ent2->getDirectMandatoryBases().end(); ++i)
         {
             printMethods(
-                o, options, manager, *i, generated, delegate, indentation,
+                o, options, manager, i->name, generated, delegate, indentation,
                 defaultvalue, usepropertymixin);
         }
         if (!(ent2->getDirectAttributes().empty()
@@ -638,19 +638,19 @@ void printServiceMembers(
     OString const & delegate)
 {
     assert(entity.is());
-    for (std::vector< OUString >::const_iterator i(
+    for (std::vector< unoidl::AnnotatedReference >::const_iterator i(
              entity->getDirectMandatoryBaseServices().begin());
          i != entity->getDirectMandatoryBaseServices().end(); ++i)
     {
-        o << "\n// exported service " << *i << "\n";
-        generateDocumentation(o, options, manager, u2b(*i), delegate);
+        o << "\n// exported service " << i->name << "\n";
+        generateDocumentation(o, options, manager, u2b(i->name), delegate);
     }
-    for (std::vector< OUString >::const_iterator i(
+    for (std::vector< unoidl::AnnotatedReference >::const_iterator i(
              entity->getDirectMandatoryBaseInterfaces().begin());
          i != entity->getDirectMandatoryBaseInterfaces().end(); ++i)
     {
-        o << "\n// supported interface " << *i << "\n";
-        generateDocumentation(o, options, manager, u2b(*i), delegate);
+        o << "\n// supported interface " << i->name << "\n";
+        generateDocumentation(o, options, manager, u2b(i->name), delegate);
     }
     o << "\n// properties of service \""<< name << "\"\n";
     for (std::vector< unoidl::AccumulationBasedServiceEntity::Property >::

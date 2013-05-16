@@ -122,11 +122,11 @@ void checkAttributes(rtl::Reference< TypeManager > const & manager,
             rtl::Reference< unoidl::InterfaceTypeEntity > ent2(
                 dynamic_cast< unoidl::InterfaceTypeEntity * >(ent.get()));
             assert(ent2.is());
-            for (std::vector< OUString >::const_iterator i(
+            for (std::vector< unoidl::AnnotatedReference >::const_iterator i(
                      ent2->getDirectMandatoryBases().begin());
                  i != ent2->getDirectMandatoryBases().end(); ++i)
             {
-                checkAttributes(manager, *i, attributes, propinterfaces);
+                checkAttributes(manager, i->name, attributes, propinterfaces);
             }
             for (std::vector< unoidl::InterfaceTypeEntity::Attribute >::
                      const_iterator i(ent2->getDirectAttributes().begin());
@@ -146,7 +146,8 @@ void checkAttributes(rtl::Reference< TypeManager > const & manager,
                                   | (i->readOnly
                                      ? (unoidl::AccumulationBasedServiceEntity::
                                         Property::ATTRIBUTE_READ_ONLY)
-                                     : 0))))));
+                                     : 0)))),
+                            std::vector< OUString >()));
                 }
             }
             break;
@@ -157,17 +158,17 @@ void checkAttributes(rtl::Reference< TypeManager > const & manager,
                 dynamic_cast< unoidl::AccumulationBasedServiceEntity * >(
                     ent.get()));
             assert(ent2.is());
-            for (std::vector< OUString >::const_iterator i(
+            for (std::vector< unoidl::AnnotatedReference >::const_iterator i(
                      ent2->getDirectMandatoryBaseServices().begin());
                  i != ent2->getDirectMandatoryBaseServices().end(); ++i)
             {
-                checkAttributes(manager, *i, attributes, propinterfaces);
+                checkAttributes(manager, i->name, attributes, propinterfaces);
             }
-            for (std::vector< OUString >::const_iterator i(
+            for (std::vector< unoidl::AnnotatedReference >::const_iterator i(
                      ent2->getDirectMandatoryBaseInterfaces().begin());
                  i != ent2->getDirectMandatoryBaseInterfaces().end(); ++i)
             {
-                checkAttributes(manager, *i, attributes, propinterfaces);
+                checkAttributes(manager, i->name, attributes, propinterfaces);
             }
             for (std::vector<
                      unoidl::AccumulationBasedServiceEntity::Property >::
@@ -237,19 +238,19 @@ void checkType(rtl::Reference< TypeManager > const & manager,
                 dynamic_cast< unoidl::AccumulationBasedServiceEntity * >(
                     ent.get()));
             assert(ent2.is());
-            for (std::vector< OUString >::const_iterator i(
+            for (std::vector< unoidl::AnnotatedReference >::const_iterator i(
                      ent2->getDirectMandatoryBaseServices().begin());
                  i != ent2->getDirectMandatoryBaseServices().end(); ++i)
             {
                 checkType(
-                    manager, *i, interfaceTypes, serviceTypes, properties);
+                    manager, i->name, interfaceTypes, serviceTypes, properties);
             }
-            for (std::vector< OUString >::const_iterator i(
+            for (std::vector< unoidl::AnnotatedReference >::const_iterator i(
                      ent2->getDirectMandatoryBaseInterfaces().begin());
                  i != ent2->getDirectMandatoryBaseInterfaces().end(); ++i)
             {
                 checkType(
-                    manager, *i, interfaceTypes, serviceTypes, properties);
+                    manager, i->name, interfaceTypes, serviceTypes, properties);
             }
             for (std::vector<
                      unoidl::AccumulationBasedServiceEntity::Property >::
@@ -307,11 +308,11 @@ bool checkServiceProperties(rtl::Reference< TypeManager > const & manager,
         if (!ent2->getDirectProperties().empty()) {
             return true;
         }
-        for (std::vector< OUString >::const_iterator i(
+        for (std::vector< unoidl::AnnotatedReference >::const_iterator i(
                  ent2->getDirectMandatoryBaseServices().begin());
              i != ent2->getDirectMandatoryBaseServices().end(); ++i)
         {
-            if (checkServiceProperties(manager, *i)) {
+            if (checkServiceProperties(manager, i->name)) {
                 return true;
             }
         }
@@ -391,11 +392,11 @@ bool checkXComponentSupport(
     rtl::Reference< unoidl::InterfaceTypeEntity > ent2(
         dynamic_cast< unoidl::InterfaceTypeEntity * >(ent.get()));
     assert(ent2.is());
-    for (std::vector< OUString >::const_iterator i(
+    for (std::vector< unoidl::AnnotatedReference >::const_iterator i(
              ent2->getDirectMandatoryBases().begin());
          i != ent2->getDirectMandatoryBases().end(); ++i)
     {
-        if (checkXComponentSupport(manager, *i)) {
+        if (checkXComponentSupport(manager, i->name)) {
             return true;
         }
     }
@@ -587,12 +588,12 @@ void generateFunctionParameterMap(std::ostream& o,
     // check if the specified add-in functions supports valid types
     checkAddInTypes(manager, name, ent2);
 
-    for (std::vector< OUString >::const_iterator i(
+    for (std::vector< unoidl::AnnotatedReference >::const_iterator i(
              ent2->getDirectMandatoryBases().begin());
          i != ent2->getDirectMandatoryBases().end(); ++i)
     {
         generateFunctionParameterMap(
-            o, options, manager, *i, generated, bFirst);
+            o, options, manager, i->name, generated, bFirst);
     }
 
     if ( generated.contains(u2b(name)) )

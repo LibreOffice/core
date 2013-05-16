@@ -26,6 +26,15 @@ namespace unoidl {
 
 namespace {
 
+std::vector< OUString > translateAnnotations(OUString const & documentation) {
+    std::vector< OUString > ans;
+    if (documentation.indexOf("@deprecated") != -1) {
+        //TODO: this check is somewhat crude
+        ans.push_back("deprecated");
+    }
+    return ans;
+}
+
 ConstantValue translateConstantValue(
     RegistryKey & key, RTConstValue const & value)
 {
@@ -219,17 +228,22 @@ rtl::Reference< Entity > readEntity(
     switch (reader.getTypeClass()) {
     case RT_TYPE_INTERFACE:
         {
-            std::vector< OUString > mandBases;
+            std::vector< AnnotatedReference > mandBases;
             sal_uInt16 n = reader.getSuperTypeCount();
             for (sal_uInt16 j = 0; j != n; ++j) {
                 mandBases.push_back(
-                    reader.getSuperTypeName(j).replace('/', '.'));
+                    AnnotatedReference(
+                        reader.getSuperTypeName(j).replace('/', '.'),
+                        std::vector< OUString >()));
             }
-            std::vector< OUString > optBases;
+            std::vector< AnnotatedReference > optBases;
             n = reader.getReferenceCount();
             for (sal_uInt16 j = 0; j != n; ++j) {
                 optBases.push_back(
-                    reader.getReferenceTypeName(j).replace('/', '.'));
+                    AnnotatedReference(
+                        reader.getReferenceTypeName(j).replace('/', '.'),
+                        translateAnnotations(
+                            reader.getReferenceDocumentation(j))));
             }
             sal_uInt16 methodCount = reader.getMethodCount();
             std::vector< InterfaceTypeEntity::Attribute > attrs;
@@ -278,7 +292,8 @@ rtl::Reference< Entity > readEntity(
                     InterfaceTypeEntity::Attribute(
                         attrName, reader.getFieldTypeName(j).replace('/', '.'),
                         (flags & RT_ACCESS_BOUND) != 0,
-                        (flags & RT_ACCESS_READONLY) != 0, getExcs, setExcs));
+                        (flags & RT_ACCESS_READONLY) != 0, getExcs, setExcs,
+                        translateAnnotations(reader.getFieldDocumentation(j))));
             }
             std::vector< InterfaceTypeEntity::Method > meths;
             for (sal_uInt16 j = 0; j != methodCount; ++j) {
@@ -330,11 +345,14 @@ rtl::Reference< Entity > readEntity(
                         InterfaceTypeEntity::Method(
                             reader.getMethodName(j),
                             reader.getMethodReturnTypeName(j).replace('/', '.'),
-                            params, excs));
+                            params, excs,
+                            translateAnnotations(
+                                reader.getMethodDocumentation(j))));
                 }
             }
             return new InterfaceTypeEntity(
-                reader.isPublished(), mandBases, optBases, attrs, meths);
+                reader.isPublished(), mandBases, optBases, attrs, meths,
+                translateAnnotations(reader.getDocumentation()));
         }
     case RT_TYPE_MODULE:
         return new Module(manager, ucr, sub);
@@ -363,10 +381,13 @@ rtl::Reference< Entity > readEntity(
                     mems.push_back(
                         PlainStructTypeEntity::Member(
                             reader.getFieldName(j),
-                            reader.getFieldTypeName(j).replace('/', '.')));
+                            reader.getFieldTypeName(j).replace('/', '.'),
+                            translateAnnotations(
+                                reader.getFieldDocumentation(j))));
                 }
                 return new PlainStructTypeEntity(
-                    reader.isPublished(), base, mems);
+                    reader.isPublished(), base, mems,
+                    translateAnnotations(reader.getDocumentation()));
             } else {
                 if (reader.getSuperTypeCount() != 0) {
                     FileFormatException(
@@ -390,10 +411,13 @@ rtl::Reference< Entity > readEntity(
                             reader.getFieldTypeName(j).replace('/', '.'),
                             ((reader.getFieldFlags(j)
                               & RT_ACCESS_PARAMETERIZED_TYPE)
-                             != 0)));
+                             != 0),
+                            translateAnnotations(
+                                reader.getFieldDocumentation(j))));
                 }
                 return new PolymorphicStructTypeTemplateEntity(
-                    reader.isPublished(), params, mems);
+                    reader.isPublished(), params, mems,
+                    translateAnnotations(reader.getDocumentation()));
             }
         }
     case RT_TYPE_ENUM:
@@ -412,9 +436,13 @@ rtl::Reference< Entity > readEntity(
                 }
                 mems.push_back(
                     EnumTypeEntity::Member(
-                        reader.getFieldName(j), v.m_value.aLong));
+                        reader.getFieldName(j), v.m_value.aLong,
+                        translateAnnotations(reader.getFieldDocumentation(j))));
+
             }
-            return new EnumTypeEntity(reader.isPublished(), mems);
+            return new EnumTypeEntity(
+                reader.isPublished(), mems,
+                translateAnnotations(reader.getDocumentation()));
         }
     case RT_TYPE_EXCEPTION:
         {
@@ -439,9 +467,12 @@ rtl::Reference< Entity > readEntity(
                 mems.push_back(
                     ExceptionTypeEntity::Member(
                         reader.getFieldName(j),
-                        reader.getFieldTypeName(j).replace('/', '.')));
+                        reader.getFieldTypeName(j).replace('/', '.'),
+                        translateAnnotations(reader.getFieldDocumentation(j))));
             }
-            return new ExceptionTypeEntity(reader.isPublished(), base, mems);
+            return new ExceptionTypeEntity(
+                reader.isPublished(), base, mems,
+                translateAnnotations(reader.getDocumentation()));
         }
     case RT_TYPE_TYPEDEF:
         if (reader.getSuperTypeCount() != 1) {
@@ -452,36 +483,39 @@ rtl::Reference< Entity > readEntity(
                  + " of super-types of typedef with key " + sub.getName()));
         }
         return new TypedefEntity(
-            reader.isPublished(), reader.getSuperTypeName(0).replace('/', '.'));
+            reader.isPublished(), reader.getSuperTypeName(0).replace('/', '.'),
+            translateAnnotations(reader.getDocumentation()));
     case RT_TYPE_SERVICE:
         switch (reader.getSuperTypeCount()) {
         case 0:
             {
-                std::vector< OUString > mandServs;
-                std::vector< OUString > optServs;
-                std::vector< OUString > mandIfcs;
-                std::vector< OUString > optIfcs;
+                std::vector< AnnotatedReference > mandServs;
+                std::vector< AnnotatedReference > optServs;
+                std::vector< AnnotatedReference > mandIfcs;
+                std::vector< AnnotatedReference > optIfcs;
                 sal_uInt16 n = reader.getReferenceCount();
                 for (sal_uInt16 j = 0; j != n; ++j) {
-                    OUString refName(
-                        reader.getReferenceTypeName(j).replace('/', '.'));
+                    AnnotatedReference base(
+                        reader.getReferenceTypeName(j).replace('/', '.'),
+                        translateAnnotations(
+                            reader.getReferenceDocumentation(j)));
                     switch (reader.getReferenceSort(j)) {
                     case RT_REF_EXPORTS:
                         if ((reader.getReferenceFlags(j) & RT_ACCESS_OPTIONAL)
                             == 0)
                         {
-                            mandServs.push_back(refName);
+                            mandServs.push_back(base);
                         } else {
-                            optServs.push_back(refName);
+                            optServs.push_back(base);
                         }
                         break;
                     case RT_REF_SUPPORTS:
                         if ((reader.getReferenceFlags(j) & RT_ACCESS_OPTIONAL)
                             == 0)
                         {
-                            mandIfcs.push_back(refName);
+                            mandIfcs.push_back(base);
                         } else {
-                            optIfcs.push_back(refName);
+                            optIfcs.push_back(base);
                         }
                         break;
                     default:
@@ -540,11 +574,14 @@ rtl::Reference< Entity > readEntity(
                             reader.getFieldTypeName(j).replace('/', '.'),
                             static_cast<
                                 AccumulationBasedServiceEntity::Property::
-                                Attributes >(attrs)));
+                                Attributes >(attrs),
+                            translateAnnotations(
+                                reader.getFieldDocumentation(j))));
                 }
                 return new AccumulationBasedServiceEntity(
                     reader.isPublished(), mandServs, optServs, mandIfcs,
-                    optIfcs, props);
+                    optIfcs, props,
+                    translateAnnotations(reader.getDocumentation()));
             }
         case 1:
             {
@@ -615,17 +652,20 @@ rtl::Reference< Entity > readEntity(
                         m = reader.getMethodExceptionCount(j);
                         for (sal_uInt16 k = 0; k != m; ++k) {
                             excs.push_back(
-                                reader.getMethodExceptionTypeName(j, k).
-                                replace('/', '.'));
+                                reader.getMethodExceptionTypeName(j, k).replace(
+                                    '/', '.'));
                         }
                         ctors.push_back(
                             SingleInterfaceBasedServiceEntity::Constructor(
-                                reader.getMethodName(j), params, excs));
+                                reader.getMethodName(j), params, excs,
+                                translateAnnotations(
+                                    reader.getMethodDocumentation(j))));
                     }
                 }
                 return new SingleInterfaceBasedServiceEntity(
                     reader.isPublished(),
-                    reader.getSuperTypeName(0).replace('/', '.'), ctors);
+                    reader.getSuperTypeName(0).replace('/', '.'), ctors,
+                    translateAnnotations(reader.getDocumentation()));
             }
         default:
             throw FileFormatException(
@@ -702,10 +742,12 @@ rtl::Reference< Entity > readEntity(
             return newStyle
                 ? rtl::Reference< Entity >(
                     new InterfaceBasedSingletonEntity(
-                        reader.isPublished(), baseName))
+                        reader.isPublished(), baseName,
+                        translateAnnotations(reader.getDocumentation())))
                 : rtl::Reference< Entity >(
                     new ServiceBasedSingletonEntity(
-                        reader.isPublished(), baseName));
+                        reader.isPublished(), baseName,
+                        translateAnnotations(reader.getDocumentation())));
         }
     case RT_TYPE_CONSTANTS:
         {
@@ -715,9 +757,12 @@ rtl::Reference< Entity > readEntity(
                 mems.push_back(
                     ConstantGroupEntity::Member(
                         reader.getFieldName(j),
-                        translateConstantValue(sub, reader.getFieldValue(j))));
+                        translateConstantValue(sub, reader.getFieldValue(j)),
+                        translateAnnotations(reader.getFieldDocumentation(j))));
             }
-            return new ConstantGroupEntity(reader.isPublished(), mems);
+            return new ConstantGroupEntity(
+                reader.isPublished(), mems,
+                translateAnnotations(reader.getDocumentation()));
         }
     default:
         throw FileFormatException(

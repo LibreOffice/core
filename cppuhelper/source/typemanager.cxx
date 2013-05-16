@@ -926,7 +926,7 @@ private:
     getBaseType() throw (css::uno::RuntimeException) {
         return entity_->getDirectMandatoryBases().empty()
             ? css::uno::Reference< css::reflection::XTypeDescription >()
-            : manager_->resolve(entity_->getDirectMandatoryBases()[0]);
+            : manager_->resolve(entity_->getDirectMandatoryBases()[0].name);
     }
 
     virtual css::uno::Uik SAL_CALL getUik() throw (css::uno::RuntimeException)
@@ -988,7 +988,7 @@ InterfaceTypeDescription::getBaseTypes() throw (css::uno::RuntimeException) {
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > > s(n);
     for (sal_Int32 i = 0; i != n; ++i) {
-        s[i] = manager_->resolve(entity_->getDirectMandatoryBases()[i]);
+        s[i] = manager_->resolve(entity_->getDirectMandatoryBases()[i].name);
     }
     return s;
 }
@@ -1003,7 +1003,7 @@ InterfaceTypeDescription::getOptionalBaseTypes()
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > > s(n);
     for (sal_Int32 i = 0; i != n; ++i) {
-        s[i] = manager_->resolve(entity_->getDirectOptionalBases()[i]);
+        s[i] = manager_->resolve(entity_->getDirectOptionalBases()[i].name);
     }
     return s;
 }
@@ -1487,7 +1487,8 @@ AccumulationBasedServiceDescription::getMandatoryServices()
         css::uno::Reference< css::reflection::XServiceTypeDescription > > s(n);
     for (sal_Int32 i = 0; i != n; ++i) {
         s[i].set(
-            manager_->resolve(entity_->getDirectMandatoryBaseServices()[i]),
+            manager_->resolve(
+                entity_->getDirectMandatoryBaseServices()[i].name),
             css::uno::UNO_QUERY_THROW);
     }
     return s;
@@ -1505,7 +1506,7 @@ AccumulationBasedServiceDescription::getOptionalServices()
         css::uno::Reference< css::reflection::XServiceTypeDescription > > s(n);
     for (sal_Int32 i = 0; i != n; ++i) {
         s[i].set(
-            manager_->resolve(entity_->getDirectOptionalBaseServices()[i]),
+            manager_->resolve(entity_->getDirectOptionalBaseServices()[i].name),
             css::uno::UNO_QUERY_THROW);
     }
     return s;
@@ -1526,7 +1527,7 @@ AccumulationBasedServiceDescription::getMandatoryInterfaces()
         s[i].set(
             resolveTypedefs(
                 manager_->find(
-                    entity_->getDirectMandatoryBaseInterfaces()[i])),
+                    entity_->getDirectMandatoryBaseInterfaces()[i].name)),
             css::uno::UNO_QUERY_THROW);
     }
     return s;
@@ -1547,7 +1548,7 @@ AccumulationBasedServiceDescription::getOptionalInterfaces()
         s[i].set(
             resolveTypedefs(
                 manager_->find(
-                    entity_->getDirectOptionalBaseInterfaces()[i])),
+                    entity_->getDirectOptionalBaseInterfaces()[i].name)),
             css::uno::UNO_QUERY_THROW);
     }
     return s;

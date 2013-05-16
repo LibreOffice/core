@@ -930,9 +930,15 @@ OUString CppuType::indent() const {
     return buf.makeStringAndClear();
 }
 
-bool isDocumentedDeprecated(OUString const & documentation) {
-    return documentation.indexOf("@deprecated") != -1;
-        //TODO: this check is somewhat crude
+bool isDeprecated(std::vector< OUString > const & annotations) {
+    for (std::vector< OUString >::const_iterator i(annotations.begin());
+         i != annotations.end(); ++i)
+    {
+        if (*i == "deprecated") {
+            return true;
+        }
+    }
+    return false;
 }
 
 void dumpDeprecation(FileStream & out, bool deprecated) {
@@ -963,16 +969,17 @@ void BaseOffset::calculateBases(
     rtl::Reference< unoidl::InterfaceTypeEntity > const & entity)
 {
     assert(entity.is());
-    for (std::vector< OUString >::const_iterator i(
+    for (std::vector< unoidl::AnnotatedReference >::const_iterator i(
              entity->getDirectMandatoryBases().begin());
          i != entity->getDirectMandatoryBases().end(); ++i)
     {
-        if (set_.insert(*i).second) {
+        if (set_.insert(i->name).second) {
             rtl::Reference< unoidl::Entity > ent;
-            codemaker::UnoType::Sort sort = manager_->getSort(*i, &ent);
+            codemaker::UnoType::Sort sort = manager_->getSort(i->name, &ent);
             if (sort != codemaker::UnoType::SORT_INTERFACE_TYPE) {
                 throw CannotDumpException(
-                    "interface type base " + *i + " is not an interface type");
+                    "interface type base " + i->name
+                    + " is not an interface type");
             }
             rtl::Reference< unoidl::InterfaceTypeEntity > ent2(
                 dynamic_cast< unoidl::InterfaceTypeEntity * >(ent.get()));
@@ -1037,17 +1044,17 @@ InterfaceType::InterfaceType(
 {
     assert(entity.is());
     m_inheritedMemberCount = 0;
-    m_isDeprecated = isDocumentedDeprecated("TODO");
+    m_isDeprecated = isDeprecated(entity->getAnnotations());
 }
 
 void InterfaceType::dumpDeclaration(FileStream & out) {
     out << "\nclass SAL_NO_VTABLE " << id_;
-    for (std::vector< OUString >::const_iterator i(
+    for (std::vector< unoidl::AnnotatedReference >::const_iterator i(
              entity_->getDirectMandatoryBases().begin());
          i != entity_->getDirectMandatoryBases().end(); ++i)
     {
         out << (i == entity_->getDirectMandatoryBases().begin() ? " :" : ",")
-            << " public " << codemaker::cpp::scopedCppName(u2b(*i));
+            << " public " << codemaker::cpp::scopedCppName(u2b(i->name));
     }
     out << "\n{\npublic:\n";
     inc();
@@ -1094,7 +1101,7 @@ void InterfaceType::dumpAttributes(FileStream & out) {
              i(entity_->getDirectAttributes().begin());
          i != entity_->getDirectAttributes().end(); ++i)
     {
-        bool depr = m_isDeprecated || isDocumentedDeprecated("TODO");
+        bool depr = m_isDeprecated || isDeprecated(i->annotations);
         out << indent();
         dumpDeprecation(out, depr);
         out << "virtual ";
@@ -1124,7 +1131,7 @@ void InterfaceType::dumpMethods(FileStream & out) {
          i != entity_->getDirectMethods().end(); ++i)
     {
         out << indent();
-        dumpDeprecation(out, m_isDeprecated || isDocumentedDeprecated("TODO"));
+        dumpDeprecation(out, m_isDeprecated || isDeprecated(i->annotations));
         out << "virtual ";
         dumpType(out, i->returnType);
         out << " SAL_CALL " << i->name << "(";
@@ -1169,10 +1176,10 @@ void InterfaceType::dumpNormalGetCppuType(FileStream & out) {
         << "static typelib_TypeDescriptionReference * the_type = 0;\n"
         << indent() << "if ( !the_type )\n" << indent() << "{\n";
     inc();
-    std::vector< OUString >::size_type bases(
+    std::vector< unoidl::AnnotatedReference >::size_type bases(
         entity_->getDirectMandatoryBases().size());
     if (bases == 1
-        && (entity_->getDirectMandatoryBases()[0]
+        && (entity_->getDirectMandatoryBases()[0].name
             == "com.sun.star.uno.XInterface"))
     {
         bases = 0;
@@ -1180,13 +1187,13 @@ void InterfaceType::dumpNormalGetCppuType(FileStream & out) {
     if (bases != 0) {
         out << indent() << "typelib_TypeDescriptionReference * aSuperTypes["
             << entity_->getDirectMandatoryBases().size() << "];\n";
-        std::vector< OUString >::size_type n = 0;
-        for (std::vector< OUString >::const_iterator i(
+        std::vector< unoidl::AnnotatedReference >::size_type n = 0;
+        for (std::vector< unoidl::AnnotatedReference >::const_iterator i(
                  entity_->getDirectMandatoryBases().begin());
              i != entity_->getDirectMandatoryBases().end(); ++i)
         {
             out << indent() << "aSuperTypes[" << n++ << "] = ::cppu::UnoType< ";
-            dumpType(out, *i, true, false, false, true);
+            dumpType(out, i->name, true, false, false, true);
             out << " >::get().getTypeLibType();\n";
         }
     }
@@ -1215,13 +1222,13 @@ void InterfaceType::dumpComprehensiveGetCppuType(FileStream & out) {
         << indent() << "typelib_InterfaceTypeDescription * pTD = 0;\n\n";
     out << indent() << "typelib_TypeDescriptionReference * aSuperTypes["
         << entity_->getDirectMandatoryBases().size() << "];\n";
-    std::vector< OUString >::size_type n = 0;
-    for (std::vector< OUString >::const_iterator i(
+    std::vector< unoidl::AnnotatedReference >::size_type n = 0;
+    for (std::vector< unoidl::AnnotatedReference >::const_iterator i(
              entity_->getDirectMandatoryBases().begin());
          i != entity_->getDirectMandatoryBases().end(); ++i)
     {
         out << indent() << "aSuperTypes[" << n++ << "] = ::cppu::UnoType< ";
-        dumpType(out, *i, false, false, false, true);
+        dumpType(out, i->name, false, false, false, true);
         out << " >::get().getTypeLibType();\n";
     }
     std::size_t count = entity_->getDirectAttributes().size()
