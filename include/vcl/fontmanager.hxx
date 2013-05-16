@@ -129,14 +129,6 @@ struct CharacterMetric
     { return rOther.width != width || rOther.height != height; }
 };
 
-struct KernPair
-{
-    sal_Unicode first, second;
-    short int kern_x, kern_y;
-
-    KernPair() : first( 0 ), second( 0 ), kern_x( 0 ), kern_y( 0 ) {}
-};
-
 class FontCache;
 
 // a class to manage printable fonts
@@ -175,12 +167,9 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         // a single pass, then all bits should be set
         char                                        m_aPages[32];
 
-        bool                                        m_bKernPairsQueried;
-        std::list< KernPair >                     m_aXKernPairs;
-        std::list< KernPair >                     m_aYKernPairs;
         boost::unordered_map< sal_Unicode, bool >       m_bVerticalSubstitutions;
 
-        PrintFontMetrics() : m_bKernPairsQueried( false ) {}
+        PrintFontMetrics() {}
 
         bool isEmpty() const { return m_aMetrics.empty(); }
     };
@@ -470,10 +459,6 @@ public:
     // then *ppNonEncoded is set to the mapping for nonencoded glyphs.
     // the encoding vector contains -1 for non encoded glyphs
     const std::map< sal_Unicode, sal_Int32 >* getEncodingMap( fontID nFontID, const std::map< sal_Unicode, OString >** ppNonEncoded ) const;
-
-    // to get font substitution transparently use the
-    // getKernPairs method of PrinterGfx
-    const std::list< KernPair >& getKernPairs( fontID nFontID, bool bVertical = false ) const;
 
     // evaluates copyright flags for TrueType fonts for printing/viewing
     // type1 fonts do not have such a feature, so return for them is true
