@@ -44,6 +44,7 @@
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+#include <com/sun/star/awt/UnoControlDialogModel.hpp>
 #include <com/sun/star/awt/XToolkit.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/XControl.hpp>
@@ -89,7 +90,7 @@ Reference< XComponentContext > createInitialComponentContext(
 
 // -----------------------------------------------------------------------
 
-Reference< container::XNameContainer > importFile(
+Reference< awt::XUnoControlDialogModel > importFile(
     char const * fname,
     Reference< XComponentContext > const & xContext )
 {
@@ -105,8 +106,7 @@ Reference< container::XNameContainer > importFile(
         ::fread( bytes.getArray(), nLength, 1, f );
         ::fclose( f );
 
-        Reference< container::XNameContainer > xModel( xContext->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.awt.UnoControlDialogModel", xContext ), UNO_QUERY );
+        Reference< awt::XUnoControlDialogModel > xModel = awt::UnoControlDialogModel::create( xContext );
         ::xmlscript::importDialogModel( ::xmlscript::createInputStream( bytes ), xModel, xContext );
 
         return xModel;

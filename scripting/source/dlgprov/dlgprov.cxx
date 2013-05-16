@@ -21,6 +21,7 @@
 #include "DialogModelProvider.hxx"
 #include "dlgprov.hxx"
 #include "dlgevtatt.hxx"
+#include <com/sun/star/awt/UnoControlDialogModel.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
@@ -86,8 +87,6 @@ namespace dlgprov
 {
 //.........................................................................
 
-static OUString aResourceResolverPropName("ResourceResolver");
-
     Reference< resource::XStringResourceManager > lcl_getStringResourceManager(const Reference< XComponentContext >& i_xContext,const OUString& i_sURL)
     {
         INetURLObject aInetObj( i_sURL );
@@ -120,23 +119,20 @@ static OUString aResourceResolverPropName("ResourceResolver");
         }
         return xStringResourceManager;
     }
-    Reference< container::XNameContainer > lcl_createControlModel(const Reference< XComponentContext >& i_xContext)
+    static Reference< XUnoControlDialogModel > lcl_createControlModel(const Reference< XComponentContext >& i_xContext)
     {
-        Reference< XMultiComponentFactory > xSMgr_( i_xContext->getServiceManager(), UNO_QUERY_THROW );
-        Reference< container::XNameContainer > xControlModel( xSMgr_->createInstanceWithContext( OUString( "com.sun.star.awt.UnoControlDialogModel"  ), i_xContext ), UNO_QUERY_THROW );
+        Reference< XUnoControlDialogModel > xControlModel = UnoControlDialogModel::create( i_xContext );
         return xControlModel;
     }
-    Reference< container::XNameContainer > lcl_createDialogModel( const Reference< XComponentContext >& i_xContext,
+    Reference< XUnoControlDialogModel > lcl_createDialogModel( const Reference< XComponentContext >& i_xContext,
         const Reference< io::XInputStream >& xInput,
         const Reference< frame::XModel >& xModel,
         const Reference< resource::XStringResourceManager >& xStringResourceManager,
-        const Any &aDialogSourceURL) throw ( Exception )
+        const OUString& aDialogSourceURL) throw ( Exception )
     {
-        Reference< container::XNameContainer > xDialogModel(  lcl_createControlModel(i_xContext) );
+        Reference< XUnoControlDialogModel > xDialogModel(  lcl_createControlModel(i_xContext) );
 
-        OUString aDlgSrcUrlPropName( "DialogSourceURL"  );
-        Reference< beans::XPropertySet > xDlgPropSet( xDialogModel, UNO_QUERY );
-        xDlgPropSet->setPropertyValue( aDlgSrcUrlPropName, aDialogSourceURL );
+        xDialogModel->setDialogSourceURL( aDialogSourceURL );
 
         // #TODO we really need to detect the source of the Dialog, is it
         // the dialog. E.g. if the dialog was created from basic ( then we just
@@ -150,10 +146,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
         // Set resource property
         if( xStringResourceManager.is() )
         {
-            Reference< beans::XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY );
-            Any aStringResourceManagerAny;
-            aStringResourceManagerAny <<= xStringResourceManager;
-            xDlgPSet->setPropertyValue( aResourceResolverPropName, aStringResourceManagerAny );
+            xDialogModel->setResourceResolver( xStringResourceManager );
         }
 
         return xDialogModel;
@@ -255,15 +248,15 @@ static OUString aResourceResolverPropName("ResourceResolver");
         return xStringResourceManager;
     }
 
-    Reference< container::XNameContainer > DialogProviderImpl::createDialogModel(
+    Reference< XUnoControlDialogModel > DialogProviderImpl::createDialogModel(
         const Reference< io::XInputStream >& xInput,
         const Reference< resource::XStringResourceManager >& xStringResourceManager,
-        const Any &aDialogSourceURL) throw ( Exception )
+        const OUString &aDialogSourceURL) throw ( Exception )
     {
         return lcl_createDialogModel(m_xContext,xInput,m_xModel,xStringResourceManager,aDialogSourceURL);
     }
 
-    Reference< XControlModel > DialogProviderImpl::createDialogModelForBasic() throw ( Exception )
+    Reference< XUnoControlDialogModel > DialogProviderImpl::createDialogModelForBasic() throw ( Exception )
     {
         if ( !m_BasicInfo.get() )
             // shouln't get here
@@ -271,13 +264,10 @@ static OUString aResourceResolverPropName("ResourceResolver");
         Reference< resource::XStringResourceManager > xStringResourceManager = getStringResourceFromDialogLibrary( m_BasicInfo->mxDlgLib );
 
         OUString aURL("" );
-        Any aDialogSourceURL;
-        aDialogSourceURL <<= aURL;
-        Reference< XControlModel > xCtrlModel( createDialogModel( m_BasicInfo->mxInput, xStringResourceManager, aDialogSourceURL ), UNO_QUERY_THROW );
-        return xCtrlModel;
+        return createDialogModel( m_BasicInfo->mxInput, xStringResourceManager, aURL );
     }
 
-    Reference< XControlModel > DialogProviderImpl::createDialogModel( const OUString& sURL )
+    Reference< XUnoControlDialogModel > DialogProviderImpl::createDialogModel( const OUString& sURL )
     {
 
         OUString aURL( sURL );
@@ -447,7 +437,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
         }
 
         // import dialog model
-        Reference< XControlModel > xCtrlModel;
+        Reference< XUnoControlDialogModel > xCtrlModel;
         if ( xInput.is() && m_xContext.is() )
         {
             Reference< resource::XStringResourceManager > xStringResourceManager;
@@ -460,12 +450,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
                 xStringResourceManager = getStringResourceFromDialogLibrary( xDialogLib );
             }
 
-            Any aDialogSourceURLAny;
-            aDialogSourceURLAny <<= aURL;
-
-            Reference< container::XNameContainer > xDialogModel( createDialogModel( xInput , xStringResourceManager, aDialogSourceURLAny  ), UNO_QUERY_THROW);
-
-            xCtrlModel = Reference< XControlModel >( xDialogModel, UNO_QUERY );
+            xCtrlModel = createDialogModel( xInput , xStringResourceManager, aURL  );
         }
         return xCtrlModel;
     }

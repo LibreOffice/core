@@ -76,12 +76,9 @@ void SAL_CALL DialogModelProvider::initialize(const css::uno::Sequence< uno::Any
             if ( xInput.is() )
             {
                 xStringResourceManager = dlgprov::lcl_getStringResourceManager(m_xContext,sURL);
-                Any aDialogSourceURLAny;
-                aDialogSourceURLAny <<= sURL;
 
                 Reference< frame::XModel > xModel;
-                m_xDialogModel.set( dlgprov::lcl_createDialogModel( m_xContext, xInput , xModel, xStringResourceManager, aDialogSourceURLAny  ), UNO_QUERY_THROW);
-                m_xDialogModelProp.set(m_xDialogModel, UNO_QUERY_THROW);
+                m_xDialogModel = dlgprov::lcl_createDialogModel( m_xContext, xInput , xModel, xStringResourceManager, sURL  );
             }
         }
         catch( Exception& )
@@ -135,14 +132,14 @@ void SAL_CALL DialogModelProvider::removeByName(const OUString & aName) throw (c
 }
 uno::Reference< beans::XPropertySetInfo > SAL_CALL DialogModelProvider::getPropertySetInfo(  ) throw (uno::RuntimeException)
 {
-    return m_xDialogModelProp->getPropertySetInfo();
+    return m_xDialogModel->getPropertySetInfo();
 }
 void SAL_CALL DialogModelProvider::setPropertyValue( const OUString&, const uno::Any& ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
 uno::Any SAL_CALL DialogModelProvider::getPropertyValue( const OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    return m_xDialogModelProp->getPropertyValue(PropertyName);
+    return m_xDialogModel->getPropertyValue(PropertyName);
 }
 void SAL_CALL DialogModelProvider::addPropertyChangeListener( const OUString& , const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {

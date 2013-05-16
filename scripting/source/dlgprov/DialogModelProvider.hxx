@@ -23,6 +23,8 @@
 #include "com/sun/star/container/XNameContainer.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/beans/XPropertySet.hpp"
+#include "com/sun/star/awt/XUnoControlDialogModel.hpp"
+
 
 /// anonymous implementation namespace
 namespace dlgprov{
@@ -75,9 +77,8 @@ private:
 
     // destructor is private and will be called indirectly by the release call    virtual ~DialogModelProvider() {}
 
-    css::uno::Reference< css::uno::XComponentContext >      m_xContext;
-    css::uno::Reference< css::container::XNameContainer>    m_xDialogModel;
-    css::uno::Reference< css::beans::XPropertySet>          m_xDialogModelProp;
+    css::uno::Reference< css::uno::XComponentContext >       m_xContext;
+    css::uno::Reference< css::awt::XUnoControlDialogModel>   m_xDialogModel;
 };
 } // closing anonymous implementation namespace
 

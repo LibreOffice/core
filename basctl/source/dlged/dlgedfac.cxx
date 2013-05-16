@@ -24,6 +24,8 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
+#include <com/sun/star/awt/UnoControlDialogModel.hpp>
+
 
 namespace basctl
 {
@@ -46,17 +48,11 @@ DlgEdFactory::~DlgEdFactory()
 IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
 {
     static bool bNeedsInit = true;
-    static uno::Reference< lang::XMultiServiceFactory > xDialogSFact;
+    static uno::Reference< awt::XUnoControlDialogModel > xDialogSFact;
 
     if( bNeedsInit )
     {
-        uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        uno::Reference< container::XNameContainer > xC( xMSF->createInstance( "com.sun.star.awt.UnoControlDialogModel" ), uno::UNO_QUERY );
-        if( xC.is() )
-        {
-            uno::Reference< lang::XMultiServiceFactory > xModFact( xC, uno::UNO_QUERY );
-            xDialogSFact = xModFact;
-        }
+        xDialogSFact = awt::UnoControlDialogModel::create( ::comphelper::getProcessComponentContext() );
         bNeedsInit = false;
     }
 

@@ -146,7 +146,7 @@ OUString getPhysicalLocation( const ::com::sun::star::uno::Any& rbase, const ::c
 //  class UnoControlDialogModel
 //  ----------------------------------------------------
 UnoControlDialogModel::UnoControlDialogModel( const Reference< XComponentContext >& rxContext )
-    :ControlModelContainerBase( rxContext )
+    :UnoControlDialogModel_Base( rxContext )
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
 //  ImplRegisterProperty( BASEPROPERTY_BORDER );
@@ -180,7 +180,7 @@ UnoControlDialogModel::UnoControlDialogModel( const Reference< XComponentContext
 }
 
 UnoControlDialogModel::UnoControlDialogModel( const UnoControlDialogModel& rModel )
-    : ControlModelContainerBase( rModel )
+    : UnoControlDialogModel_Base( rModel )
 {
     // need to clone BASEPROPERTY_USERFORMCONTAINEES too
     Reference< XNameContainer > xSrcNameCont( const_cast< UnoControlDialogModel& >(rModel).getPropertyValue( GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ) ), UNO_QUERY );
@@ -274,6 +274,64 @@ void SAL_CALL UnoControlDialogModel::setFastPropertyValue_NoBroadcast( sal_Int32
         OSL_ENSURE( sal_False, "UnoControlDialogModel::setFastPropertyValue_NoBroadcast: caught an exception while setting ImageURL properties!" );
     }
 }
+
+OUString UnoControlDialogModel::getPropertyString(const OUString& aPropertyName) throw (css::uno::RuntimeException)
+{
+   uno::Any any = getPropertyValue(aPropertyName);
+   OUString b;
+   any >>= b;
+   return b;
+}
+
+sal_Bool UnoControlDialogModel::getPropertyBool(const OUString& aPropertyName) throw (css::uno::RuntimeException)
+{
+   uno::Any any = getPropertyValue(aPropertyName);
+   sal_Bool b = sal_False;
+   any >>= b;
+   return b;
+}
+
+sal_Int16 UnoControlDialogModel::getPropertyInt16(const OUString& aPropertyName) throw (css::uno::RuntimeException)
+{
+   uno::Any any = getPropertyValue(aPropertyName);
+   sal_Int16 b = 0;
+   any >>= b;
+   return b;
+}
+
+sal_Int32 UnoControlDialogModel::getPropertyInt32(const OUString& aPropertyName) throw (css::uno::RuntimeException)
+{
+   uno::Any any = getPropertyValue(aPropertyName);
+   sal_Int32 b = 0;
+   any >>= b;
+   return b;
+}
+
+Reference<css::resource::XStringResourceManager> UnoControlDialogModel::getResourceResolver() throw(css::uno::RuntimeException)
+{
+   uno::Any any = getPropertyValue("ResourceResolver");
+   Reference<css::resource::XStringResourceManager> b;
+   any >>= b;
+   return b;
+}
+
+css::awt::FontDescriptor UnoControlDialogModel::getFontDescriptor() throw(css::uno::RuntimeException)
+{
+   uno::Any any = getPropertyValue("FontDescriptor");
+   awt::FontDescriptor b;
+   any >>= b;
+   return b;
+}
+
+Reference<css::graphic::XGraphic> SAL_CALL UnoControlDialogModel::getGraphic() throw(::com::sun::star::uno::RuntimeException)
+{
+   uno::Any any = getPropertyValue("Graphic");
+   Reference<css::graphic::XGraphic> b;
+   any >>= b;
+   return b;
+}
+
+
 // ============================================================================
 // = class UnoDialogControl
 // ============================================================================

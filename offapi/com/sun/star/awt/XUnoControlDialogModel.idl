@@ -1,0 +1,169 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#ifndef __com_sun_star_awt_XUnoControlDialogModel_idl__
+#define __com_sun_star_awt_XUnoControlDialogModel_idl__
+
+#include <com/sun/star/awt/FontDescriptor.idl>
+#include <com/sun/star/awt/XControlModel.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/container/XContainer.idl>
+#include <com/sun/star/container/XNameContainer.idl>
+
+#include <com/sun/star/lang/XMultiServiceFactory.idl>
+#include <com/sun/star/util/Color.idl>
+#include <com/sun/star/graphic/XGraphic.idl>
+#include <com/sun/star/resource/XStringResourceManager.idl>
+
+
+module com {  module sun {  module star {  module awt {
+
+
+/**
+    Unified interface for the UnoControlDialogModel service.
+
+    @since LibreOffice 4.1
+ */
+published interface XUnoControlDialogModel
+{
+    interface com::sun::star::awt::XControlModel;
+
+    /** allows to create control models, which support the
+        <type>UnoControlDialogElement</type> service and can be inserted into
+        this container.
+     */
+    interface com::sun::star::lang::XMultiServiceFactory;
+
+    interface com::sun::star::beans::XPropertySet;
+
+    interface com::sun::star::container::XNameContainer; // -> XNameReplace -> XNameAccess -> XElementAccess
+
+    [attribute] string Name;
+
+    [attribute] boolean Decoration;
+
+    [attribute] long PositionX;
+
+    [attribute] long PositionY;
+
+    [attribute] long Width;
+
+    [attribute] long Height;
+
+    [attribute] string DialogSourceURL;
+
+    [attribute] com::sun::star::resource::XStringResourceManager ResourceResolver;
+
+    /** specifies the text that is displayed in the caption bar of the dialog.
+     */
+    [attribute] string Title;
+
+    /** specifies if the dialog is closeable.
+     */
+    [attribute] boolean Closeable;
+
+    /** determines whether a dialog is enabled or disabled.
+     */
+    [attribute] boolean Enabled;
+
+    /** specifies if the dialog is moveable.
+     */
+    [attribute] boolean Moveable;
+
+    /** specifies if the dialog is sizeable.
+     */
+    [attribute] boolean Sizeable;
+
+    /** If set to true the dialog will have the desktop as parent.
+
+        @since OOo 2.3
+     */
+    [attribute] boolean DesktopAsParent;
+
+    /** specifies the help URL of the dialog.
+     */
+    [attribute] string HelpURL;
+
+
+    /** specifies the background color (RGB) of the dialog.
+     */
+    [attribute] com::sun::star::util::Color BackgroundColor;
+
+
+    /** specifies the font attributes of the text in the caption bar of the dialog.
+     */
+    [attribute] com::sun::star::awt::FontDescriptor FontDescriptor;
+
+
+    /** specifies the <type scope="com::sun::star::text">FontEmphasis</type>
+        value of the text in the caption bar of the dialog.
+     */
+    [attribute] short FontEmphasisMark;
+
+
+    /** specifies the <type scope="com::sun::star::text">FontRelief</type>
+        value of the text in the caption bar of the dialog.
+     */
+    [attribute] short FontRelief;
+
+
+    /** specifies the help text of the dialog.
+     */
+    [attribute] string HelpText;
+
+
+    /** specifies the text color (RGB) of the dialog.
+     */
+    [attribute] com::sun::star::util::Color TextColor;
+
+
+    /** specifies the text line color (RGB) of the dialog.
+     */
+    [attribute] com::sun::star::util::Color TextLineColor;
+
+    /** specifies a URL that references a graphic that should be used as a
+        background image.
+            @see Graphic
+
+        @since OOo 2.4
+    */
+    [attribute] string ImageURL;
+
+    /** specifies a graphic to be displayed as a background image
+
+        <p>If this property is present, it interacts with the <member>ImageURL</member>in the
+        following way:
+        <ul><li>If <member>ImageURL</member> is set, <member>Graphic</member> will be reset
+            to an object as loaded from the given image URL, or <NULL/> if <member>ImageURL</member>
+            does not point to a valid image file.</li>
+            <li>If <member>Graphic</member> is set, <member>ImageURL</member> will be reset
+            to an empty string.</li>
+        </ul></p>
+
+        @since OOo 2.4
+     */
+    [attribute] com::sun::star::graphic::XGraphic Graphic;
+
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

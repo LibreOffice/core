@@ -25,6 +25,7 @@
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/bootstrap.hxx>
+#include <com/sun/star/awt/UnoControlDialogModel.hpp>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
@@ -940,24 +941,19 @@ sal_Bool T602ImportFilterDialog::OptionsDlg()
 #define _InstCtx(_path,_ctx)\
     rServiceManager->createInstanceWithContext(\
     OUString::createFromAscii(_path),_ctx);
-#define _Inst(_path)\
-    xMultiServiceFactory->createInstance(OUString::createFromAscii(_path) );
 #define _Insert(_cont,_nam,_obj) \
     any <<= _obj;\
     _cont->insertByName( OUString::createFromAscii(_nam), any );
 
     Reference < XComponentContext > rComponentContext = defaultBootstrap_InitialComponentContext();
     Reference < XMultiComponentFactory > rServiceManager = rComponentContext->getServiceManager();
-    Reference < XInterface > rInstance = _InstCtx("com.sun.star.awt.UnoControlDialogModel", rComponentContext );
+    Reference < XUnoControlDialogModel > rInstance = UnoControlDialogModel::create(rComponentContext );
 
-    Reference <XMultiServiceFactory> xMultiServiceFactory (rInstance,UNO_QUERY);
-
-    Reference < XPropertySet > xPSetDialog( rInstance, UNO_QUERY );
-    _propInt(xPSetDialog,"PositionX",100);
-    _propInt(xPSetDialog,"PositionY",100);
-    _propInt(xPSetDialog,"Width",130);
-    _propInt(xPSetDialog,"Height",90);
-    _propStringFromResId(xPSetDialog,"Title", T602FILTER_STR_IMPORT_DIALOG_TITLE);
+    rInstance->setPositionX(100);
+    rInstance->setPositionY(100);
+    rInstance->setWidth(130);
+    rInstance->setHeight(90);
+    rInstance->setTitle(getResStr(T602FILTER_STR_IMPORT_DIALOG_TITLE));
 
 #define T602DLG_OK_BUTTON    "ok_button"
 #define T602DLG_CANCEL_BUTTON    "cancel_button"
@@ -967,7 +963,7 @@ sal_Bool T602ImportFilterDialog::OptionsDlg()
 #define T602DLG_REFORMAT_CB    "reformat_cb"
 #define T602DLG_CODE_TXT    "code_txt"
 
-    Reference < XInterface > TextModel = _Inst("com.sun.star.awt.UnoControlFixedTextModel");
+    Reference < XInterface > TextModel = rInstance->createInstance("com.sun.star.awt.UnoControlFixedTextModel");
     Reference < XPropertySet > xPSetText( TextModel, UNO_QUERY );
     _propInt(xPSetText,"PositionX",10);
     _propInt(xPSetText,"PositionY",8);
@@ -976,7 +972,7 @@ sal_Bool T602ImportFilterDialog::OptionsDlg()
     _propString(xPSetText,"Name",T602DLG_CODE_TXT);
     _propStringFromResId(xPSetText,"Label",T602FILTER_STR_ENCODING_LABEL);
 
-    Reference < XInterface > ListBoxModel = _Inst("com.sun.star.awt.UnoControlListBoxModel");
+    Reference < XInterface > ListBoxModel = rInstance->createInstance("com.sun.star.awt.UnoControlListBoxModel");
     Reference < XPropertySet > xPSetCodeLB( ListBoxModel, UNO_QUERY );
     _propInt(xPSetCodeLB,"PositionX",40);
     _propInt(xPSetCodeLB,"PositionY",5);
@@ -1000,7 +996,7 @@ sal_Bool T602ImportFilterDialog::OptionsDlg()
     any <<= shr;
     xPSetCodeLB->setPropertyValue(OUString(  "SelectedItems" ), any);
 
-    Reference < XInterface > AzbCheckBoxModel = _Inst("com.sun.star.awt.UnoControlCheckBoxModel");
+    Reference < XInterface > AzbCheckBoxModel = rInstance->createInstance("com.sun.star.awt.UnoControlCheckBoxModel");
     Reference < XPropertySet > xPSetAzbukaCB( AzbCheckBoxModel, UNO_QUERY );
     _propInt(xPSetAzbukaCB,"PositionX",10);
     _propInt(xPSetAzbukaCB,"PositionY",25);
@@ -1011,7 +1007,7 @@ sal_Bool T602ImportFilterDialog::OptionsDlg()
     _propStringFromResId(xPSetAzbukaCB,"Label",T602FILTER_STR_CYRILLIC_MODE);
     _propShort(xPSetAzbukaCB,"State",ini.ruscode);
 
-    Reference < XInterface > RefCheckBoxModel = _Inst("com.sun.star.awt.UnoControlCheckBoxModel");
+    Reference < XInterface > RefCheckBoxModel = rInstance->createInstance("com.sun.star.awt.UnoControlCheckBoxModel");
     Reference < XPropertySet > xPSetRefCB( RefCheckBoxModel, UNO_QUERY );
     _propInt(xPSetRefCB,"PositionX",10);
     _propInt(xPSetRefCB,"PositionY",40);
@@ -1022,7 +1018,7 @@ sal_Bool T602ImportFilterDialog::OptionsDlg()
     _propStringFromResId(xPSetRefCB,"Label",T602FILTER_STR_REFORMAT_TEXT);
     _propShort(xPSetRefCB,"State",ini.reformatpars);
 
-    Reference < XInterface > CommCheckBoxModel = _Inst("com.sun.star.awt.UnoControlCheckBoxModel");
+    Reference < XInterface > CommCheckBoxModel = rInstance->createInstance("com.sun.star.awt.UnoControlCheckBoxModel");
     Reference < XPropertySet > xPSetCommCB( CommCheckBoxModel, UNO_QUERY );
     _propInt(xPSetCommCB,"PositionX",10);
     _propInt(xPSetCommCB,"PositionY",55);
@@ -1033,7 +1029,7 @@ sal_Bool T602ImportFilterDialog::OptionsDlg()
     _propStringFromResId(xPSetCommCB,"Label",T602FILTER_STR_DOT_COMMANDS);
     _propShort(xPSetCommCB,"State",ini.showcomm);
 
-    Reference < XInterface > CancelButtonModel = _Inst("com.sun.star.awt.UnoControlButtonModel");
+    Reference < XInterface > CancelButtonModel = rInstance->createInstance("com.sun.star.awt.UnoControlButtonModel");
     Reference < XPropertySet > xPSetCancelButton( CancelButtonModel, UNO_QUERY );
     _propInt(xPSetCancelButton,"PositionX",10);
     _propInt(xPSetCancelButton,"PositionY",70);
@@ -1044,7 +1040,7 @@ sal_Bool T602ImportFilterDialog::OptionsDlg()
     _propShort(xPSetCancelButton,"PushButtonType",2);
     _propStringFromResId(xPSetCancelButton,"Label",T602FILTER_STR_CANCEL_BUTTON);
 
-    Reference < XInterface > OkButtonModel = _Inst("com.sun.star.awt.UnoControlButtonModel");
+    Reference < XInterface > OkButtonModel = rInstance->createInstance("com.sun.star.awt.UnoControlButtonModel");
     Reference < XPropertySet > xPSetOkButton( OkButtonModel, UNO_QUERY );
     _propInt(xPSetOkButton,"PositionX",70);
     _propInt(xPSetOkButton,"PositionY",70);

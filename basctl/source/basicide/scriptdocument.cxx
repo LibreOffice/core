@@ -25,17 +25,18 @@
 #include "doceventnotifier.hxx"
 #include "documentenumeration.hxx"
 
-#include <com/sun/star/uri/UriReferenceFactory.hpp>
-#include <com/sun/star/util/theMacroExpander.hpp>
+#include <com/sun/star/awt/XWindow2.hpp>
+#include <com/sun/star/awt/UnoControlDialogModel.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
-#include <com/sun/star/awt/XWindow2.hpp>
-#include <com/sun/star/document/XEmbeddedScripts.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
+#include <com/sun/star/util/theMacroExpander.hpp>
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/app.hxx>
@@ -629,12 +630,7 @@ namespace basctl
                 if ( _rxExistingDialogModel.is() )
                     xDialogModel = _rxExistingDialogModel;
                 else
-                    xDialogModel.set(
-                        ( aContext->getServiceManager()->
-                          createInstanceWithContext(
-                              "com.sun.star.awt.UnoControlDialogModel",
-                              aContext ) ),
-                        UNO_QUERY_THROW );
+                    xDialogModel = css::awt::UnoControlDialogModel::create( aContext );
 
                 // import dialog model
                 Reference< XInputStreamProvider > xISP( aElement, UNO_QUERY_THROW );
@@ -753,14 +749,10 @@ namespace basctl
             // create new dialog model
             Reference< XComponentContext > aContext(
                 comphelper::getProcessComponentContext() );
-            Reference< XNameContainer > xDialogModel(
-                aContext->getServiceManager()->createInstanceWithContext(
-                    "com.sun.star.awt.UnoControlDialogModel", aContext ),
-                UNO_QUERY_THROW );
+            Reference< css::awt::XUnoControlDialogModel > xDialogModel = css::awt::UnoControlDialogModel::create( aContext );
 
             // set name property
-            Reference< XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY_THROW );
-            xDlgPSet->setPropertyValue( DLGED_PROP_NAME, makeAny( _rDialogName ) );
+            xDialogModel->setName( _rDialogName );
 
             // export dialog model
             _out_rDialogProvider = ::xmlscript::exportDialogModel( xDialogModel, aContext, isDocument() ? getDocument() : Reference< XModel >() );

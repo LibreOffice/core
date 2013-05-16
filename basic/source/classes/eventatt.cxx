@@ -22,6 +22,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
+#include <com/sun/star/awt/UnoControlDialogModel.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/XControl.hpp>
@@ -423,7 +424,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
     (void)pBasic;
     (void)bWrite;
 
-    Reference< XMultiServiceFactory > xMSF( comphelper::getProcessServiceFactory() );
+    Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
     // We need at least 1 parameter
     if ( rPar.Count() < 2 )
@@ -450,43 +451,22 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
     }
 
     // Create new uno dialog
-    Reference< XNameContainer > xDialogModel( xMSF->createInstance(
-                      OUString("com.sun.star.awt.UnoControlDialogModel")), UNO_QUERY );
-    if( !xDialogModel.is() )
-    {
-        return;
-    }
+    Reference< XUnoControlDialogModel > xDialogModel = UnoControlDialogModel::create( xContext );
     Reference< XInputStreamProvider > xISP;
     aAnyISP >>= xISP;
     if( !xISP.is() )
     {
         return;
     }
-    Reference< XComponentContext > xContext( comphelper::getComponentContext( xMSF ) );
 
     // Import the DialogModel
     Reference< XInputStream > xInput( xISP->createInputStream() );
 
     // i83963 Force decoration
-    uno::Reference< beans::XPropertySet > xDlgModPropSet( xDialogModel, uno::UNO_QUERY );
-    if( xDlgModPropSet.is() )
+    if( !xDialogModel->getDecoration() )
     {
-        bool bDecoration = true;
-        try
-        {
-            OUString aDecorationPropName("Decoration");
-            Any aDecorationAny = xDlgModPropSet->getPropertyValue( aDecorationPropName );
-            aDecorationAny >>= bDecoration;
-            if( !bDecoration )
-            {
-                xDlgModPropSet->setPropertyValue( aDecorationPropName, makeAny( true ) );
-
-                OUString aTitlePropName("Title");
-                xDlgModPropSet->setPropertyValue( aTitlePropName, makeAny( OUString() ) );
-            }
-        }
-        catch(const UnknownPropertyException& )
-        {}
+        xDialogModel->setDecoration( true );
+        xDialogModel->setTitle( OUString() );
     }
 
     Any aDlgLibAny;

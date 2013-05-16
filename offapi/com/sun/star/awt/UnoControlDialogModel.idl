@@ -19,14 +19,7 @@
 #ifndef __com_sun_star_awt_UnoControlDialogModel_idl__
 #define __com_sun_star_awt_UnoControlDialogModel_idl__
 
-#include <com/sun/star/awt/FontDescriptor.idl>
-#include <com/sun/star/awt/UnoControlModel.idl>
-#include <com/sun/star/container/XContainer.idl>
-#include <com/sun/star/container/XNameContainer.idl>
-
-#include <com/sun/star/lang/XMultiServiceFactory.idl>
-#include <com/sun/star/util/Color.idl>
-#include <com/sun/star/graphic/XGraphic.idl>
+#include <com/sun/star/awt/XUnoControlDialogModel.idl>
 
 
  module com {  module sun {  module star {  module awt {
@@ -34,118 +27,7 @@
 
 /** specifies the standard model of an <type>UnoControlDialog</type>.
  */
-published service UnoControlDialogModel
-{
-    service com::sun::star::awt::UnoControlModel;
-
-    /** allows to create control models, which support the
-        <type>UnoControlDialogElement</type> service and can be inserted into
-        this container.
-     */
-    interface com::sun::star::lang::XMultiServiceFactory;
-
-    interface com::sun::star::container::XContainer;
-
-    interface com::sun::star::container::XNameContainer;
-
-
-    /** specifies the background color (RGB) of the dialog.
-     */
-    [property] com::sun::star::util::Color BackgroundColor;
-
-
-    /** specifies if the dialog is closeable.
-     */
-    [property] boolean Closeable;
-
-
-    /** determines whether a dialog is enabled or disabled.
-     */
-    [property] boolean Enabled;
-
-
-    /** specifies the font attributes of the text in the caption bar of the dialog.
-     */
-    [property] com::sun::star::awt::FontDescriptor FontDescriptor;
-
-
-    /** specifies the <type scope="com::sun::star::text">FontEmphasis</type>
-        value of the text in the caption bar of the dialog.
-     */
-    [property] short FontEmphasisMark;
-
-
-    /** specifies the <type scope="com::sun::star::text">FontRelief</type>
-        value of the text in the caption bar of the dialog.
-     */
-    [property] short FontRelief;
-
-
-    /** specifies the help text of the dialog.
-     */
-    [property] string HelpText;
-
-
-    /** specifies the help URL of the dialog.
-     */
-    [property] string HelpURL;
-
-
-    /** specifies if the dialog is moveable.
-     */
-    [property] boolean Moveable;
-
-
-    /** specifies if the dialog is sizeable.
-     */
-    [property] boolean Sizeable;
-
-
-    /** specifies the text color (RGB) of the dialog.
-     */
-    [property] com::sun::star::util::Color TextColor;
-
-
-    /** specifies the text line color (RGB) of the dialog.
-     */
-    [property] com::sun::star::util::Color TextLineColor;
-
-
-    /** specifies the text that is displayed in the caption bar of the dialog.
-     */
-    [property] string Title;
-
-
-    /** If set to true the dialog will have the desktop as parent.
-
-        @since OOo 2.3
-     */
-    [optional, property] boolean DesktopAsParent;
-
-    /** specifies a URL that references a graphic that should be used as a
-        background image.
-            @see Graphic
-
-        @since OOo 2.4
-    */
-    [optional, property] string ImageURL;
-
-    /** specifies a graphic to be displayed as a background image
-
-        <p>If this property is present, it interacts with the <member>ImageURL</member>in the
-        following way:
-        <ul><li>If <member>ImageURL</member> is set, <member>Graphic</member> will be reset
-            to an object as loaded from the given image URL, or <NULL/> if <member>ImageURL</member>
-            does not point to a valid image file.</li>
-            <li>If <member>Graphic</member> is set, <member>ImageURL</member> will be reset
-            to an empty string.</li>
-        </ul></p>
-
-        @since OOo 2.4
-     */
-    [optional, property, transient] com::sun::star::graphic::XGraphic Graphic;
-
-};
+published service UnoControlDialogModel : XUnoControlDialogModel;
 
 
 }; }; }; };

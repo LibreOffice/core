@@ -19,15 +19,16 @@
 
 
 #include "unodialog.hxx"
-#include <com/sun/star/text/XTextRange.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <com/sun/star/view/XControlAccess.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/awt/UnoControlDialogModel.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/XMessageBoxFactory.hpp>
 #include <com/sun/star/awt/MessageBoxButtons.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/view/XControlAccess.hpp>
 
 // -------------
 // - UnoDialog -
@@ -43,23 +44,16 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::script;
 
-UnoDialog::UnoDialog( const Reference< XComponentContext > &rxMSF, Reference< XFrame >& rxFrame ) :
-    mxMSF( rxMSF ),
+UnoDialog::UnoDialog( const Reference< XComponentContext > &rxContext, Reference< XFrame >& rxFrame ) :
+    mxContext( rxContext ),
     mxController( rxFrame->getController() ),
-    mxDialogModel( mxMSF->getServiceManager()->createInstanceWithContext( OUString(
-        "com.sun.star.awt.UnoControlDialogModel" ), mxMSF ), UNO_QUERY_THROW ),
-    mxDialogModelMultiPropertySet( mxDialogModel, UNO_QUERY_THROW ),
-    mxDialogModelPropertySet( mxDialogModel, UNO_QUERY_THROW ),
-    mxDialogModelMSF( mxDialogModel, UNO_QUERY_THROW ),
-    mxDialogModelNameContainer( mxDialogModel, UNO_QUERY_THROW ),
-    mxDialogModelNameAccess( mxDialogModel, UNO_QUERY_THROW ),
-    mxControlModel( mxDialogModel, UNO_QUERY_THROW ),
-    mxDialog( mxMSF->getServiceManager()->createInstanceWithContext( OUString(
-        "com.sun.star.awt.UnoControlDialog" ), mxMSF ), UNO_QUERY_THROW ),
+    mxDialogModel( UnoControlDialogModel::create(rxContext) ),
+    mxDialog( mxContext->getServiceManager()->createInstanceWithContext( OUString(
+        "com.sun.star.awt.UnoControlDialog" ), mxContext ), UNO_QUERY_THROW ),
     mxControl( mxDialog, UNO_QUERY_THROW ),
     mbStatus( sal_False )
 {
-    mxControl->setModel( mxControlModel );
+    mxControl->setModel( mxDialogModel );
     mxDialogControlContainer = Reference< XControlContainer >( mxDialog, UNO_QUERY_THROW );
     mxDialogComponent = Reference< XComponent >( mxDialog, UNO_QUERY_THROW );
     mxDialogWindow = Reference< XWindow >( mxDialog, UNO_QUERY_THROW );
@@ -98,7 +92,7 @@ Reference< XWindowPeer > UnoDialog::createWindowPeer( Reference< XWindowPeer > x
     throw ( Exception )
 {
     mxDialogWindow->setVisible( sal_False );
-    Reference< XToolkit > xToolkit( Toolkit::create( mxMSF ), UNO_QUERY_THROW  );
+    Reference< XToolkit > xToolkit( Toolkit::create( mxContext ), UNO_QUERY_THROW  );
     if ( !xParentPeer.is() )
         xParentPeer = xToolkit->getDesktopWindow();
     mxReschedule = Reference< XReschedule >( xToolkit, UNO_QUERY );
@@ -115,10 +109,10 @@ Reference< XInterface > UnoDialog::insertControlModel( const OUString& rServiceN
     Reference< XInterface > xControlModel;
     try
     {
-        xControlModel = mxDialogModelMSF->createInstance( rServiceName );
+        xControlModel = mxDialogModel->createInstance( rServiceName );
         Reference< XMultiPropertySet > xMultiPropSet( xControlModel, UNO_QUERY_THROW );
         xMultiPropSet->setPropertyValues( rPropertyNames, rPropertyValues );
-        mxDialogModelNameContainer->insertByName( rName, Any( xControlModel ) );
+        mxDialogModel->insertByName( rName, Any( xControlModel ) );
     }
     catch( Exception& )
     {
@@ -300,9 +294,9 @@ void UnoDialog::setControlProperty( const OUString& rControlName, const OUString
 {
     try
     {
-        if ( mxDialogModelNameAccess->hasByName( rControlName ) )
+        if ( mxDialogModel->hasByName( rControlName ) )
         {
-            Reference< XPropertySet > xPropertySet( mxDialogModelNameAccess->getByName( rControlName ), UNO_QUERY_THROW );
+            Reference< XPropertySet > xPropertySet( mxDialogModel->getByName( rControlName ), UNO_QUERY_THROW );
             xPropertySet->setPropertyValue( rPropertyName, rPropertyValue );
         }
     }
@@ -318,9 +312,9 @@ Any UnoDialog::getControlProperty( const OUString& rControlName, const OUString&
     Any aRet;
     try
     {
-        if ( mxDialogModelNameAccess->hasByName( rControlName ) )
+        if ( mxDialogModel->hasByName( rControlName ) )
         {
-            Reference< XPropertySet > xPropertySet( mxDialogModelNameAccess->getByName( rControlName ), UNO_QUERY_THROW );
+            Reference< XPropertySet > xPropertySet( mxDialogModel->getByName( rControlName ), UNO_QUERY_THROW );
             aRet = xPropertySet->getPropertyValue( rPropertyName );
         }
     }

@@ -29,6 +29,7 @@
 #include "progresscapture.hxx"
 #include "progressmixer.hxx"
 
+#include <com/sun/star/awt/UnoControlDialogModel.hpp>
 #include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>
 #include <com/sun/star/sdb/XReportDocumentsSupplier.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
@@ -1821,7 +1822,7 @@ namespace dbmm
             Reference< XInputStreamProvider > xISP( _inout_rDialogLibraryElement, UNO_QUERY_THROW );
             Reference< XInputStream > xInput( xISP->createInputStream(), UNO_QUERY_THROW );
 
-            Reference< XNameContainer > xDialogModel( m_aContext->getServiceManager()->createInstanceWithContext("com.sun.star.awt.UnoControlDialogModel", m_aContext), UNO_QUERY_THROW );
+            Reference< css::awt::XUnoControlDialogModel > xDialogModel = css::awt::UnoControlDialogModel::create( m_aContext );
             ::xmlscript::importDialogModel( xInput, xDialogModel, m_aContext, m_xDocumentModel );
 
             // adjust the events of the dialog

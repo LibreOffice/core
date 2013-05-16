@@ -31,6 +31,7 @@
 
 #include <com/sun/star/style/VerticalAlignment.hpp>
 
+#include "com/sun/star/awt/UnoControlDialogModel.hpp"
 #include "com/sun/star/awt/ActionEvent.hpp"
 #include "com/sun/star/awt/PushButtonType.hpp"
 #include "com/sun/star/awt/VclWindowPeerAttribute.hpp"
@@ -1091,26 +1092,23 @@ void UpdateHandler::createDialog()
 
     loadStrings();
 
-    uno::Reference< lang::XMultiComponentFactory > xFactory( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
-    uno::Reference< awt::XControlModel > xControlModel( xFactory->createInstanceWithContext(
-                                                         "com.sun.star.awt.UnoControlDialogModel",
-                                                         mxContext), uno::UNO_QUERY_THROW );
+    uno::Reference< awt::XUnoControlDialogModel > xControlDialogModel = awt::UnoControlDialogModel::create( mxContext );
     {
         // @see awt/UnoControlDialogModel.idl
-        uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY_THROW );
-
-        xPropSet->setPropertyValue( "Title", uno::Any( msDlgTitle ) );
-        xPropSet->setPropertyValue( "Closeable", uno::Any( true ) );
-        xPropSet->setPropertyValue( "Enabled", uno::Any( true ) );
-        xPropSet->setPropertyValue( "Moveable", uno::Any( true ) );
-        xPropSet->setPropertyValue( "Sizeable", uno::Any( true ) );
-        xPropSet->setPropertyValue( "DesktopAsParent", uno::Any( true ) );
-        xPropSet->setPropertyValue( "PositionX", uno::Any(sal_Int32( 100 )) );
-        xPropSet->setPropertyValue( "PositionY", uno::Any(sal_Int32( 100 )) );
-        xPropSet->setPropertyValue( "Width", uno::Any(sal_Int32( DIALOG_WIDTH )) );
-        xPropSet->setPropertyValue( "Height", uno::Any(sal_Int32( DIALOG_HEIGHT )) );
-        xPropSet->setPropertyValue( "HelpURL", uno::makeAny( INET_HID_SCHEME + OUString::createFromAscii( HID_CHECK_FOR_UPD_DLG ) ) );
+        xControlDialogModel->setTitle( msDlgTitle);
+        xControlDialogModel->setCloseable( true );
+        xControlDialogModel->setEnabled( true );
+        xControlDialogModel->setMoveable( true );
+        xControlDialogModel->setSizeable( true );
+        xControlDialogModel->setDesktopAsParent( true );
+        xControlDialogModel->setPositionX( 100 );
+        xControlDialogModel->setPositionY( 100 );
+        xControlDialogModel->setWidth( DIALOG_WIDTH );
+        xControlDialogModel->setHeight( DIALOG_HEIGHT );
+        xControlDialogModel->setHelpURL( INET_HID_SCHEME + OUString::createFromAscii( HID_CHECK_FOR_UPD_DLG ) );
     }
+
+    uno::Reference< awt::XControlModel > xControlModel = xControlModel;
     {   // Label (fixed text) <status>
         uno::Sequence< beans::NamedValue > aProps(1);
 
@@ -1322,6 +1320,7 @@ void UpdateHandler::createDialog()
                             aProps);
     }
 
+    uno::Reference< lang::XMultiComponentFactory > xFactory( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
     uno::Reference< awt::XControl > xControl(
         xFactory->createInstanceWithContext( "com.sun.star.awt.UnoControlDialog", mxContext),
         uno::UNO_QUERY_THROW );
