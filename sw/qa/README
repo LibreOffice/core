@@ -1,0 +1,10 @@
+You can find different types of Writer tests here, the most interesting ones:
+
+- core/filters-test: loads different file types (see SwFiltersTest::testCVEs()
+  for the list of supported filter types), and only makes sure Writer does not
+  crash. To add new tests, you just need to drop in the test files to the
+  relevant directory, no code change is necessary.
+- core/uwriter: this test has access to private Writer symbols, add new tests
+  here if you need that.
+- extras: see its own README -- executes import and export filters and asserts
+  the UNO model to verify the resulting document is the expected one.
