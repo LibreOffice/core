@@ -30,27 +30,6 @@
 #define TP_INPUT            13
 #define TP_FORMULA          15
 
-// TP_CALC:
-#define BTN_ITERATE         1
-#define FT_STEPS            2
-#define FT_EPS              3
-#define ED_STEPS            4
-#define ED_EPS              5
-#define GB_ZREFS            6
-#define ED_PREC             7
-#define FT_PREC             8
-#define BTN_DATESTD         9
-#define BTN_DATESC10        10
-#define BTN_DATE1904        11
-#define FT_VALUE            13
-#define GB_DATE             14
-#define BTN_CASE            15
-#define BTN_CALC            17
-#define BTN_MATCH           18
-#define BTN_LOOKUP          19
-#define BTN_REGEX           20
-#define BTN_GENERAL_PREC    21
-
 // TP_VIEW:
 #define BTN_GRID            6
 

@@ -48,34 +48,30 @@ private:
                 ~ScTpCalcOptions();
 
 private:
-    FixedLine       aGbZRefs;
-    CheckBox        aBtnIterate;
-    FixedText       aFtSteps;
-    NumericField    aEdSteps;
-    FixedText       aFtEps;
-    ScDoubleField   aEdEps;
+    CheckBox*       m_pBtnIterate;
+    FixedText*      m_pFtSteps;
+    NumericField*   m_pEdSteps;
+    FixedText*      m_pFtEps;
+    ScDoubleField*  m_pEdEps;
 
-    FixedLine       aSeparatorFL;
-    FixedLine       aGbDate;
-    RadioButton     aBtnDateStd;
-    RadioButton     aBtnDateSc10;
-    RadioButton     aBtnDate1904;
+    RadioButton*    m_pBtnDateStd;
+    RadioButton*    m_pBtnDateSc10;
+    RadioButton*    m_pBtnDate1904;
 
-    CheckBox        aBtnCase;
-    CheckBox        aBtnCalc;
-    CheckBox        aBtnMatch;
-    CheckBox        aBtnRegex;
-    CheckBox        aBtnLookUp;
-    CheckBox        aBtnGeneralPrec;
+    CheckBox*       m_pBtnCase;
+    CheckBox*       m_pBtnCalc;
+    CheckBox*       m_pBtnMatch;
+    CheckBox*       m_pBtnRegex;
+    CheckBox*       m_pBtnLookUp;
+    CheckBox*       m_pBtnGeneralPrec;
 
-    FixedText       aFtPrec;
-    NumericField    aEdPrec;
+    FixedText*      m_pFtPrec;
+    NumericField*   m_pEdPrec;
 
     ScDocOptions*   pOldOptions;
     ScDocOptions*   pLocalOptions;
     sal_uInt16          nWhichCalc;
 
-#ifdef _TPCALC_CXX
 private:
     void            Init();
 
@@ -83,8 +79,6 @@ private:
     // Handler:
     DECL_LINK( RadioClickHdl, RadioButton* );
     DECL_LINK( CheckClickHdl, CheckBox* );
-
-#endif
 };
 
 

@@ -34,50 +34,38 @@
 #include "sc.hrc"       // -> Slot-IDs
 #include "optdlg.hrc"
 
-#define _TPCALC_CXX
 #include "tpcalc.hxx"
-#undef _TPCALC_CXX
 
 #include <math.h>
 
 //========================================================================
 
-ScTpCalcOptions::ScTpCalcOptions( Window*           pParent,
-                                  const SfxItemSet& rCoreAttrs )
-
-    :   SfxTabPage      ( pParent,
-                          ScResId( RID_SCPAGE_CALC ),
-                          rCoreAttrs ),
-
-        aGbZRefs        ( this, ScResId( GB_ZREFS ) ),
-        aBtnIterate     ( this, ScResId( BTN_ITERATE ) ),
-        aFtSteps        ( this, ScResId( FT_STEPS ) ),
-        aEdSteps        ( this, ScResId( ED_STEPS ) ),
-        aFtEps          ( this, ScResId( FT_EPS ) ),
-        aEdEps          ( this, ScResId( ED_EPS ) ),
-        aSeparatorFL    ( this, ScResId( FL_SEPARATOR ) ),
-        aGbDate         ( this, ScResId( GB_DATE ) ),
-        aBtnDateStd     ( this, ScResId( BTN_DATESTD ) ),
-        aBtnDateSc10    ( this, ScResId( BTN_DATESC10 ) ),
-        aBtnDate1904    ( this, ScResId( BTN_DATE1904 ) ),
-        aBtnCase        ( this, ScResId( BTN_CASE ) ),
-        aBtnCalc        ( this, ScResId( BTN_CALC ) ),
-        aBtnMatch       ( this, ScResId( BTN_MATCH ) ),
-        aBtnRegex       ( this, ScResId( BTN_REGEX ) ),
-        aBtnLookUp      ( this, ScResId( BTN_LOOKUP ) ),
-        aBtnGeneralPrec ( this, ScResId( BTN_GENERAL_PREC ) ),
-        aFtPrec         ( this, ScResId( FT_PREC ) ),
-        aEdPrec         ( this, ScResId( ED_PREC ) ),
-        pOldOptions     ( new ScDocOptions(
-                            ((const ScTpCalcItem&)rCoreAttrs.Get(
-                                GetWhich( SID_SCDOCOPTIONS ))).
-                                    GetDocOptions() ) ),
-        pLocalOptions   ( new ScDocOptions ),
-        nWhichCalc      ( GetWhich( SID_SCDOCOPTIONS ) )
+ScTpCalcOptions::ScTpCalcOptions(Window* pParent, const SfxItemSet& rCoreAttrs)
+    : SfxTabPage(pParent, "OptCalculatePage",
+        "modules/scalc/ui/optcalculatepage.ui", rCoreAttrs)
+    , pOldOptions(new ScDocOptions(
+        ((const ScTpCalcItem&)rCoreAttrs.Get(
+            GetWhich(SID_SCDOCOPTIONS))).GetDocOptions()))
+    , pLocalOptions(new ScDocOptions)
+    , nWhichCalc(GetWhich(SID_SCDOCOPTIONS))
 {
-    aSeparatorFL.SetStyle( aSeparatorFL.GetStyle() | WB_VERT );
+    get(m_pBtnIterate, "iterate");
+    get(m_pFtSteps, "stepsft");
+    get(m_pEdSteps, "steps");
+    get(m_pFtEps, "minchangeft");
+    get(m_pEdEps, "minchange");
+    get(m_pBtnDateStd, "datestd");
+    get(m_pBtnDateSc10, "datesc10");
+    get(m_pBtnDate1904, "date1904");
+    get(m_pBtnCase, "case");
+    get(m_pBtnCalc, "calc");
+    get(m_pBtnMatch, "match");
+    get(m_pBtnRegex, "regex");
+    get(m_pBtnLookUp, "lookup");
+    get(m_pBtnGeneralPrec, "generalprec");
+    get(m_pFtPrec, "precft");
+    get(m_pEdPrec, "prec");
     Init();
-    FreeResource();
     SetExchangeSupport();
 }
 
@@ -93,11 +81,11 @@ ScTpCalcOptions::~ScTpCalcOptions()
 
 void ScTpCalcOptions::Init()
 {
-    aBtnIterate .SetClickHdl( LINK( this, ScTpCalcOptions, CheckClickHdl ) );
-    aBtnGeneralPrec.SetClickHdl( LINK(this, ScTpCalcOptions, CheckClickHdl) );
-    aBtnDateStd .SetClickHdl( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
-    aBtnDateSc10.SetClickHdl( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
-    aBtnDate1904.SetClickHdl( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
+    m_pBtnIterate->SetClickHdl( LINK( this, ScTpCalcOptions, CheckClickHdl ) );
+    m_pBtnGeneralPrec->SetClickHdl( LINK(this, ScTpCalcOptions, CheckClickHdl) );
+    m_pBtnDateStd->SetClickHdl( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
+    m_pBtnDateSc10->SetClickHdl( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
+    m_pBtnDate1904->SetClickHdl( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
 }
 
 //-----------------------------------------------------------------------
@@ -115,46 +103,46 @@ void ScTpCalcOptions::Reset( const SfxItemSet& /* rCoreAttrs */ )
 
     *pLocalOptions  = *pOldOptions;
 
-    aBtnCase   .Check( !pLocalOptions->IsIgnoreCase() );
-    aBtnCalc   .Check( pLocalOptions->IsCalcAsShown() );
-    aBtnMatch  .Check( pLocalOptions->IsMatchWholeCell() );
-    aBtnRegex  .Check( pLocalOptions->IsFormulaRegexEnabled() );
-    aBtnLookUp .Check( pLocalOptions->IsLookUpColRowNames() );
-    aBtnIterate.Check( pLocalOptions->IsIter() );
-    aEdSteps   .SetValue( pLocalOptions->GetIterCount() );
-    aEdEps     .SetValue( pLocalOptions->GetIterEps(), 6 );
+    m_pBtnCase->Check( !pLocalOptions->IsIgnoreCase() );
+    m_pBtnCalc->Check( pLocalOptions->IsCalcAsShown() );
+    m_pBtnMatch->Check( pLocalOptions->IsMatchWholeCell() );
+    m_pBtnRegex->Check( pLocalOptions->IsFormulaRegexEnabled() );
+    m_pBtnLookUp->Check( pLocalOptions->IsLookUpColRowNames() );
+    m_pBtnIterate->Check( pLocalOptions->IsIter() );
+    m_pEdSteps->SetValue( pLocalOptions->GetIterCount() );
+    m_pEdEps->SetValue( pLocalOptions->GetIterEps(), 6 );
 
     pLocalOptions->GetDate( d, m, y );
 
     switch ( y )
     {
         case 1899:
-            aBtnDateStd.Check();
+            m_pBtnDateStd->Check();
             break;
         case 1900:
-            aBtnDateSc10.Check();
+            m_pBtnDateSc10->Check();
             break;
         case 1904:
-            aBtnDate1904.Check();
+            m_pBtnDate1904->Check();
             break;
     }
 
     sal_uInt16 nPrec = pLocalOptions->GetStdPrecision();
     if (nPrec == SvNumberFormatter::UNLIMITED_PRECISION)
     {
-        aFtPrec.Disable();
-        aEdPrec.Disable();
-        aBtnGeneralPrec.Check(false);
+        m_pFtPrec->Disable();
+        m_pEdPrec->Disable();
+        m_pBtnGeneralPrec->Check(false);
     }
     else
     {
-        aBtnGeneralPrec.Check();
-        aFtPrec.Enable();
-        aEdPrec.Enable();
-        aEdPrec.SetValue(nPrec);
+        m_pBtnGeneralPrec->Check();
+        m_pFtPrec->Enable();
+        m_pEdPrec->Enable();
+        m_pEdPrec->SetValue(nPrec);
     }
 
-    CheckClickHdl( &aBtnIterate );
+    CheckClickHdl(m_pBtnIterate);
 }
 
 
@@ -163,16 +151,16 @@ void ScTpCalcOptions::Reset( const SfxItemSet& /* rCoreAttrs */ )
 sal_Bool ScTpCalcOptions::FillItemSet( SfxItemSet& rCoreAttrs )
 {
     // alle weiteren Optionen werden in den Handlern aktualisiert
-    pLocalOptions->SetIterCount( (sal_uInt16)aEdSteps.GetValue() );
-    pLocalOptions->SetIgnoreCase( !aBtnCase.IsChecked() );
-    pLocalOptions->SetCalcAsShown( aBtnCalc.IsChecked() );
-    pLocalOptions->SetMatchWholeCell( aBtnMatch.IsChecked() );
-    pLocalOptions->SetFormulaRegexEnabled( aBtnRegex.IsChecked() );
-    pLocalOptions->SetLookUpColRowNames( aBtnLookUp.IsChecked() );
+    pLocalOptions->SetIterCount( (sal_uInt16)m_pEdSteps->GetValue() );
+    pLocalOptions->SetIgnoreCase( !m_pBtnCase->IsChecked() );
+    pLocalOptions->SetCalcAsShown( m_pBtnCalc->IsChecked() );
+    pLocalOptions->SetMatchWholeCell( m_pBtnMatch->IsChecked() );
+    pLocalOptions->SetFormulaRegexEnabled( m_pBtnRegex->IsChecked() );
+    pLocalOptions->SetLookUpColRowNames( m_pBtnLookUp->IsChecked() );
 
-    if (aBtnGeneralPrec.IsChecked())
+    if (m_pBtnGeneralPrec->IsChecked())
         pLocalOptions->SetStdPrecision(
-            static_cast<sal_uInt16>(aEdPrec.GetValue()) );
+            static_cast<sal_uInt16>(m_pEdPrec->GetValue()) );
     else
         pLocalOptions->SetStdPrecision( SvNumberFormatter::UNLIMITED_PRECISION );
 
@@ -192,7 +180,7 @@ int ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
     int nReturn = KEEP_PAGE;
 
     double fEps;
-    if( aEdEps.GetValue( fEps ) && (fEps > 0.0) )
+    if( m_pEdEps->GetValue( fEps ) && (fEps > 0.0) )
     {
         pLocalOptions->SetIterEps( fEps );
         nReturn = LEAVE_PAGE;
@@ -205,7 +193,7 @@ int ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
                   ScGlobal::GetRscString( STR_INVALID_EPS )
                 ).Execute();
 
-        aEdEps.GrabFocus();
+        m_pEdEps->GrabFocus();
     }
     else if ( pSetP )
         FillItemSet( *pSetP );
@@ -218,15 +206,15 @@ int ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
 
 IMPL_LINK( ScTpCalcOptions, RadioClickHdl, RadioButton*, pBtn )
 {
-    if ( pBtn == &aBtnDateStd )
+    if (pBtn == m_pBtnDateStd)
     {
         pLocalOptions->SetDate( 30, 12, 1899 );
     }
-    else if ( pBtn == &aBtnDateSc10 )
+    else if (pBtn == m_pBtnDateSc10)
     {
         pLocalOptions->SetDate( 1, 1, 1900 );
     }
-    else if ( pBtn == &aBtnDate1904 )
+    else if (pBtn == m_pBtnDate1904)
     {
         pLocalOptions->SetDate( 1, 1, 1904 );
     }
@@ -238,32 +226,32 @@ IMPL_LINK( ScTpCalcOptions, RadioClickHdl, RadioButton*, pBtn )
 
 IMPL_LINK( ScTpCalcOptions, CheckClickHdl, CheckBox*, pBtn )
 {
-    if (pBtn == &aBtnGeneralPrec)
+    if (pBtn == m_pBtnGeneralPrec)
     {
         if (pBtn->IsChecked())
         {
-            aEdPrec.Enable();
-            aFtPrec.Enable();
+            m_pEdPrec->Enable();
+            m_pFtPrec->Enable();
         }
         else
         {
-            aEdPrec.Disable();
-            aFtPrec.Disable();
+            m_pEdPrec->Disable();
+            m_pFtPrec->Disable();
         }
     }
-    else if (pBtn == &aBtnIterate)
+    else if (pBtn == m_pBtnIterate)
     {
         if ( pBtn->IsChecked() )
         {
-            pLocalOptions->SetIter( sal_True );
-            aFtSteps.Enable();  aEdSteps.Enable();
-            aFtEps  .Enable();  aEdEps  .Enable();
+            pLocalOptions->SetIter( true );
+            m_pFtSteps->Enable();  m_pEdSteps->Enable();
+            m_pFtEps->Enable();  m_pEdEps->Enable();
         }
         else
         {
             pLocalOptions->SetIter( false );
-            aFtSteps.Disable(); aEdSteps.Disable();
-            aFtEps  .Disable(); aEdEps  .Disable();
+            m_pFtSteps->Disable(); m_pEdSteps->Disable();
+            m_pFtEps->Disable(); m_pEdEps->Disable();
         }
     }
 

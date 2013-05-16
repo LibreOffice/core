@@ -25,6 +25,7 @@
 #include <comphelper/string.hxx>
 #include <rtl/math.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <vcl/builder.hxx>
 #include "global.hxx"
 
 // ============================================================================
@@ -48,6 +49,17 @@ sal_Unicode lclGetGroupSep()
 ScDoubleField::ScDoubleField( Window* pParent, const ResId& rResId ) :
     Edit( pParent, rResId )
 {
+}
+
+ScDoubleField::ScDoubleField( Window* pParent, WinBits nStyle ) :
+    Edit( pParent, nStyle )
+{
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScDoubleField(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    VclBuilder::ensureDefaultWidthChars(rMap);
+    return new ScDoubleField(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
 }
 
 bool ScDoubleField::GetValue( double& rfValue ) const
