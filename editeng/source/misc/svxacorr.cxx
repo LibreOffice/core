@@ -1604,9 +1604,7 @@ sal_Bool SvxAutoCorrect::CreateLanguageFile( LanguageType eLang, sal_Bool bNewFi
 {
     OSL_ENSURE(pLangTable->find(eLang) == pLangTable->end(), "Language already exists ");
 
-    String sUserDirFile( GetAutoCorrFileName( eLang, sal_True, sal_False ));
-    String sShareDirFile( sUserDirFile );
-
+    OUString sShareDirFile( GetAutoCorrFileName( eLang, sal_True, sal_False ));
     SvxAutoCorrectLanguageListsPtr pLists = 0;
 
     Time nMinTime( 0, 2 ), nAktTime( Time::SYSTEM ), nLastCheckTime( Time::EMPTY );
@@ -1620,18 +1618,17 @@ sal_Bool SvxAutoCorrect::CreateLanguageFile( LanguageType eLang, sal_Bool bNewFi
         // 2 minutes.
         if( bNewFile )
         {
-            sShareDirFile = sUserDirFile;
-            pLists = new SvxAutoCorrectLanguageLists( *this, sShareDirFile, sUserDirFile );
+            pLists = new SvxAutoCorrectLanguageLists( *this, sShareDirFile, sShareDirFile );
             pLangTable->insert(eLang, pLists);
             aLastFileTable.erase(nFndPos);
         }
     }
-    else if( ( FStatHelper::IsDocument( sUserDirFile ) ||
+    else if( ( FStatHelper::IsDocument( sShareDirFile ) ||
                 FStatHelper::IsDocument( sShareDirFile =
                               GetAutoCorrFileName( eLang, sal_False, sal_False ) ) ) ||
-        ( sShareDirFile = sUserDirFile, bNewFile ))
+        ( sShareDirFile = sShareDirFile, bNewFile ))
     {
-        pLists = new SvxAutoCorrectLanguageLists( *this, sShareDirFile, sUserDirFile );
+        pLists = new SvxAutoCorrectLanguageLists( *this, sShareDirFile, sShareDirFile );
         pLangTable->insert(eLang, pLists);
         if (nFndPos != aLastFileTable.end())
             aLastFileTable.erase(nFndPos);
@@ -1909,13 +1906,12 @@ sal_Bool SvxAutoCorrect::FindInCplSttExceptList(LanguageType eLang,
     return sal_False;
 }
 
-String SvxAutoCorrect::GetAutoCorrFileName( LanguageType eLang,
+OUString SvxAutoCorrect::GetAutoCorrFileName( LanguageType eLang,
                                             sal_Bool bNewFile, sal_Bool bTst ) const
 {
-    String sRet, sExt( LanguageTag( eLang ).getBcp47() );
+    OUString sRet, sExt( LanguageTag( eLang ).getBcp47() );
 
-    sExt.Insert('_', 0);
-    sExt.AppendAscii( ".dat" );
+    sExt = "_" + sExt + ".dat";
     if( bNewFile )
         ( sRet = sUserAutoCorrFile )  += sExt;
     else if( !bTst )
