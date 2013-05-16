@@ -8,7 +8,7 @@
 #
 
 
-ifeq (,$(filter WNT,$(OS)))
+ifeq (,$(filter WNT,$(OS_FOR_BUILD)))
 	gb_GENGAL = gengal.bin
 else # windows appends the .exe
 	gb_GENGAL = gengal
