@@ -8395,6 +8395,11 @@ else
     AC_MSG_RESULT([internal])
     SYSTEM_ICU="NO"
     BUILD_TYPE="$BUILD_TYPE ICU"
+    # surprisingly set these only for "internal" (to be used by various other
+    # external libs): the system icu-config is quite unhelpful and spits out
+    # dozens of weird flags and also default path -I/usr/include
+    ICU_CFLAGS="-I${WORKDIR}/UnpackedTarball/icu/source/i18n -I${WORKDIR}/UnpackedTarball/icu/source/common"
+    ICU_LIBS=""
 fi
 AC_SUBST(SYSTEM_ICU)
 AC_SUBST(SYSTEM_GENBRK)
@@ -8406,6 +8411,8 @@ AC_SUBST(ICU_RECLASSIFIED_CLOSE_PARENTHESIS)
 AC_SUBST(ICU_RECLASSIFIED_PREPEND_SET_EMPTY)
 AC_SUBST(ICU_RECLASSIFIED_CONDITIONAL_JAPANESE_STARTER)
 AC_SUBST(ICU_RECLASSIFIED_HEBREW_LETTER)
+AC_SUBST(ICU_CFLAGS)
+AC_SUBST(ICU_LIBS)
 
 dnl ===================================================================
 dnl Graphite

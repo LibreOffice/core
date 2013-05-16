@@ -21,11 +21,7 @@ $(eval $(call gb_ExternalProject_use_externals,harfbuzz,\
 
 $(call gb_ExternalProject_get_state_target,harfbuzz,build) :
 	$(call gb_ExternalProject_run,build,\
-		export ICU_LIBS=" " \
-		&& export ICU_CFLAGS="$(if $(filter NO,$(SYSTEM_ICU)),\
-			-I$(call gb_UnpackedTarball_get_dir,icu)/source/i18n \
-			-I$(call gb_UnpackedTarball_get_dir,icu)/source/common, )" \
-		&& ./configure \
+		./configure \
 			--enable-static \
 			--disable-shared \
 			--with-pic \

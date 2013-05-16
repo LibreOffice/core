@@ -25,10 +25,6 @@ $(eval $(call gb_ExternalProject_use_externals,libmspub,\
 $(call gb_ExternalProject_get_state_target,libmspub,build) :
 	$(call gb_ExternalProject_run,build,\
 		export PKG_CONFIG="" \
-		&& export ICU_LIBS=" " \
-		&& export ICU_CFLAGS="$(if $(filter NO,$(SYSTEM_ICU)),\
-			-I$(call gb_UnpackedTarball_get_dir,icu)/source/i18n \
-			-I$(call gb_UnpackedTarball_get_dir,icu)/source/common, )" \
 		&& ./configure \
 			--with-pic \
 			--enable-static \
