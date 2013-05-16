@@ -152,33 +152,6 @@ TabPage RID_SVXPAGE_INET_PROXY
         Size = MAP_APPFONT ( ED_PORT_WIDTH , 12 ) ;
         Border = TRUE ;
     };
-    FixedText FT_SOCKS_PROXY
-    {
-        Pos = MAP_APPFONT ( 12 , GB_TYPES_TOP + 77 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text [ en-US ] = "~SOCKS proxy" ;
-    };
-    Edit ED_SOCKS_PROXY
-    {
-        HelpID = "cui:Edit:RID_SVXPAGE_INET_PROXY:ED_SOCKS_PROXY";
-        Pos = MAP_APPFONT ( 65 , GB_TYPES_TOP + 75 ) ;
-        Size = MAP_APPFONT ( 123 , 12 ) ;
-        Border = TRUE ;
-    };
-    FixedText FT_SOCKS_PORT
-    {
-        Pos = MAP_APPFONT ( 190 , GB_TYPES_TOP + 77 ) ;
-        Size = MAP_APPFONT ( FT_PORT_WIDTH , 8 ) ;
-        Right = TRUE;
-        Text [ en-US ] = "Po~rt" ;
-    };
-    Edit ED_SOCKS_PORT
-    {
-        HelpID = "cui:Edit:RID_SVXPAGE_INET_PROXY:ED_SOCKS_PORT";
-        Pos = MAP_APPFONT ( ED_PORT_COL , GB_TYPES_TOP + 75 ) ;
-        Size = MAP_APPFONT ( ED_PORT_WIDTH , 12 ) ;
-        Border = TRUE ;
-    };
     FixedText FT_NOPROXYFOR
     {
         Pos = MAP_APPFONT ( 12 , GB_TYPES_TOP + 93 ) ;

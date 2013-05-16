@@ -34,10 +34,6 @@
 #define ED_FTP_PROXY                5
 #define FT_FTP_PORT                 6
 #define ED_FTP_PORT                 6
-#define FT_SOCKS_PROXY              7
-#define ED_SOCKS_PROXY              7
-#define FT_SOCKS_PORT               8
-#define ED_SOCKS_PORT               8
 #define FT_NOPROXYFOR               11
 #define ED_NOPROXYFOR               11
 #define ED_NOPROXYDESC              12
