@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//8ng\u003d",
+        "filename": "sw/source/ui/uno/SwXDocumentSettings.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 665,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2013-05-16T13:59:53Z",
+      "side": 1,
+      "message": "Yes, without this, it will crash on older documents which seem to have this property embedded inside them.\nSpecifically, there are some files in the unit tests that it will crash on.",
+      "revId": "0fd4d12c6233da2ac1936cd89838b006ffec5192",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
