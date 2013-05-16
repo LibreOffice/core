@@ -74,7 +74,7 @@
 struct ImplScrollBarData
 {
     AutoTimer       maTimer; // Timer
-    sal_Bool            mbHide;
+    bool            mbHide;
     Rectangle       maTrackRect; // TODO: move to ScrollBar class when binary incompatibility of ScrollBar class is no longer problematic
 };
 
@@ -102,7 +102,7 @@ void ScrollBar::ImplInit( Window* pParent, WinBits nStyle )
     {
         mpData = new ImplScrollBarData;
         mpData->maTimer.SetTimeoutHdl( LINK( this, ScrollBar, ImplAutoTimerHdl ) );
-        mpData->mbHide = sal_False;
+        mpData->mbHide = false;
     }
 
     ImplInitStyle( nStyle );
@@ -500,7 +500,7 @@ sal_Bool ScrollBar::ImplDrawNative( sal_uInt16 nDrawFlags )
     sal_Bool bNativeOK = IsNativeControlSupported(CTRL_SCROLLBAR, PART_ENTIRE_CONTROL);
     if( bNativeOK )
     {
-        sal_Bool bHorz = (GetStyle() & WB_HORZ ? true : false);
+        bool bHorz = (GetStyle() & WB_HORZ ? true : false);
 
         // Draw the entire background if the control supports it
         if( IsNativeControlSupported(CTRL_SCROLLBAR, bHorz ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT) )
@@ -820,7 +820,7 @@ void ScrollBar::ImplDoMouseAction( const Point& rMousePos, sal_Bool bCallAction 
 {
     sal_uInt16  nOldStateFlags = mnStateFlags;
     sal_Bool    bAction = sal_False;
-    sal_Bool    bHorizontal = ( GetStyle() & WB_HORZ )? sal_True: sal_False;
+    bool        bHorizontal = ( GetStyle() & WB_HORZ )? true: false;
     sal_Bool    bIsInside = sal_False;
 
     Point aPoint( 0, 0 );
@@ -930,9 +930,9 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
     {
         const Point&        rMousePos = rMEvt.GetPosPixel();
         sal_uInt16          nTrackFlags = 0;
-        sal_Bool            bHorizontal = ( GetStyle() & WB_HORZ )? sal_True: sal_False;
+        bool                bHorizontal = ( GetStyle() & WB_HORZ )? true: false;
         sal_Bool            bIsInside = sal_False;
-        sal_Bool            bDragToMouse = sal_False;
+        bool                bDragToMouse = false;
 
         Point aPoint( 0, 0 );
         Rectangle aControlRegion( aPoint, GetOutputSizePixel() );
@@ -974,7 +974,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
             {
                 if( mpData )
                 {
-                    mpData->mbHide = sal_True; // disable focus blinking
+                    mpData->mbHide = true; // disable focus blinking
                     if( HasFocus() )
                         ImplDraw( SCRBAR_DRAW_THUMB, this ); // paint without focus
                 }
@@ -988,7 +988,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
                     // calculate mouse offset
                     if (bWarp && (!bThumbHit || !bPrimaryWarping))
                     {
-                        bDragToMouse = sal_True;
+                        bDragToMouse = true;
                         if ( GetStyle() & WB_HORZ )
                             mnMouseOff = maThumbRect.GetWidth()/2;
                         else
@@ -1089,7 +1089,7 @@ void ScrollBar::Tracking( const TrackingEvent& rTEvt )
         meScrollType = SCROLL_DONTKNOW;
 
         if( mpData )
-            mpData->mbHide = sal_False; // re-enable focus blinking
+            mpData->mbHide = false; // re-enable focus blinking
     }
     else
     {
@@ -1194,7 +1194,7 @@ void ScrollBar::GetFocus()
     {
         mpData = new ImplScrollBarData;
         mpData->maTimer.SetTimeoutHdl( LINK( this, ScrollBar, ImplAutoTimerHdl ) );
-        mpData->mbHide = sal_False;
+        mpData->mbHide = false;
     }
     ImplInvert(); // react immediately
     mpData->maTimer.SetTimeout( GetSettings().GetStyleSettings().GetCursorBlinkTime() );
@@ -1266,7 +1266,7 @@ void ScrollBar::DataChanged( const DataChangedEvent& rDCEvt )
 
 Rectangle* ScrollBar::ImplFindPartRect( const Point& rPt )
 {
-    sal_Bool    bHorizontal = ( GetStyle() & WB_HORZ )? sal_True: sal_False;
+    bool    bHorizontal = ( GetStyle() & WB_HORZ )? true: false;
     sal_Bool    bIsInside = sal_False;
 
     Point aPoint( 0, 0 );

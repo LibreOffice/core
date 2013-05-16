@@ -250,7 +250,7 @@ long Slider::ImplCalcThumbPosPix( long nPos )
 
 void Slider::ImplCalc( sal_Bool bUpdate )
 {
-    sal_Bool bInvalidateAll = sal_False;
+    bool bInvalidateAll = false;
 
     if ( mbCalcSize )
     {
@@ -301,7 +301,7 @@ void Slider::ImplCalc( sal_Bool bUpdate )
              (nOldChannelPixRange != mnChannelPixRange) ||
              (nOldChannelPixTop != mnChannelPixTop) ||
              (nOldChannelPixBottom != mnChannelPixBottom) )
-            bInvalidateAll = sal_True;
+            bInvalidateAll = true;
 
         mbCalcSize = sal_False;
     }

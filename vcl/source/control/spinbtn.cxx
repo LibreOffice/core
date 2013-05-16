@@ -307,7 +307,7 @@ void SpinButton::KeyInput( const KeyEvent& rKEvt )
         case KEY_LEFT:
         case KEY_RIGHT:
         {
-            sal_Bool bUp = KEY_RIGHT == rKEvt.GetKeyCode().GetCode();
+            bool bUp = KEY_RIGHT == rKEvt.GetKeyCode().GetCode();
             if ( mbHorz && !ImplMoveFocus( bUp ) )
                 bUp ? Up() : Down();
         }
@@ -316,7 +316,7 @@ void SpinButton::KeyInput( const KeyEvent& rKEvt )
         case KEY_UP:
         case KEY_DOWN:
         {
-            sal_Bool bUp = KEY_UP == rKEvt.GetKeyCode().GetCode();
+            bool bUp = KEY_UP == rKEvt.GetKeyCode().GetCode();
             if ( !mbHorz && !ImplMoveFocus( KEY_UP == rKEvt.GetKeyCode().GetCode() ) )
                 bUp ? Up() : Down();
         }

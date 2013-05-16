@@ -307,7 +307,7 @@ sal_uInt16 ImplEntryList::FindMatchingEntry( const XubString& rStr, sal_uInt16 n
             n--;
 
         ImplEntryType* pImplEntry = GetEntry( n );
-        sal_Bool bMatch = bLazy ? rI18nHelper.MatchString( rStr, pImplEntry->maStr ) != 0 : ( rStr.Match( pImplEntry->maStr ) == STRING_MATCH );
+        bool bMatch = bLazy ? rI18nHelper.MatchString( rStr, pImplEntry->maStr ) != 0 : ( rStr.Match( pImplEntry->maStr ) == STRING_MATCH );
         if ( bMatch )
         {
             nPos = n;
@@ -658,8 +658,8 @@ void ImplListBoxWindow::SetUserItemSize( const Size& rSz )
 
 struct ImplEntryMetrics
 {
-    sal_Bool    bText;
-    sal_Bool    bImage;
+    bool    bText;
+    bool    bImage;
     long    nEntryWidth;
     long    nEntryHeight;
     long    nTextWidth;
@@ -672,7 +672,7 @@ struct ImplEntryMetrics
 void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
 {
     ImplEntryMetrics aMetrics;
-    aMetrics.bText = !rEntry.maStr.isEmpty() ? sal_True : sal_False;
+    aMetrics.bText = !rEntry.maStr.isEmpty();
     aMetrics.bImage = !!rEntry.maImage;
     aMetrics.nEntryWidth = 0;
     aMetrics.nEntryHeight = 0;
@@ -1089,7 +1089,7 @@ void ImplListBoxWindow::SelectEntry( sal_uInt16 nPos, sal_Bool bSelect )
 
 sal_Bool ImplListBoxWindow::SelectEntries( sal_uInt16 nSelect, LB_EVENT_TYPE eLET, sal_Bool bShift, sal_Bool bCtrl )
 {
-    sal_Bool bFocusChanged = sal_False;
+    bool bFocusChanged = false;
     sal_Bool bSelectionChanged = sal_False;
 
     if( IsEnabled() && mpEntryList->IsEntrySelectable( nSelect ) )
@@ -1102,7 +1102,7 @@ sal_Bool ImplListBoxWindow::SelectEntries( sal_uInt16 nSelect, LB_EVENT_TYPE eLE
             {
                 SelectEntry( nSelect, sal_True );
                 mpEntryList->SetLastSelected( nSelect );
-                bFocusChanged = sal_True;
+                bFocusChanged = true;
                 bSelectionChanged = sal_True;
             }
         }
@@ -1116,7 +1116,7 @@ sal_Bool ImplListBoxWindow::SelectEntries( sal_uInt16 nSelect, LB_EVENT_TYPE eLE
                 if ( mpEntryList->IsEntryPosSelected( nPos ) != bSelect )
                 {
                     SelectEntry( nPos, bSelect );
-                    bFocusChanged = sal_True;
+                    bFocusChanged = true;
                     bSelectionChanged = sal_True;
                 }
             }
@@ -1150,14 +1150,14 @@ sal_Bool ImplListBoxWindow::SelectEntries( sal_uInt16 nSelect, LB_EVENT_TYPE eLE
                 mpEntryList->SetSelectionAnchor( mbStackMode ? 0 : nSelect );
                 if ( !mpEntryList->IsEntryPosSelected( nSelect ) )
                     mpEntryList->SetSelectionAnchor( LISTBOX_ENTRY_NOTFOUND );
-                bFocusChanged = sal_True;
+                bFocusChanged = true;
                 bSelectionChanged = sal_True;
             }
             else if( ( ( eLET == LET_TRACKING ) && ( nSelect != mnCurrentPos ) ) ||
                      ( (bShift||mbStackMode) && ( ( eLET == LET_KEYMOVE ) || ( eLET == LET_MBDOWN ) ) ) )
             {
                 mnCurrentPos = nSelect;
-                bFocusChanged = sal_True;
+                bFocusChanged = true;
 
                 sal_uInt16 nAnchor = mpEntryList->GetSelectionAnchor();
                 if( ( nAnchor == LISTBOX_ENTRY_NOTFOUND ) && ( mpEntryList->GetSelectEntryCount() || mbStackMode ) )
@@ -1212,12 +1212,12 @@ sal_Bool ImplListBoxWindow::SelectEntries( sal_uInt16 nSelect, LB_EVENT_TYPE eLE
             {
                 ImplHideFocusRect();
                 ImplPaint( nSelect, sal_True );
-                bFocusChanged = sal_True;
+                bFocusChanged = true;
             }
         }
         else if( bShift )
         {
-            bFocusChanged = sal_True;
+            bFocusChanged = true;
         }
 
         if( bSelectionChanged )
@@ -2395,7 +2395,7 @@ IMPL_LINK( ImplListBox, ScrollBarHdl, ScrollBar*, pSB )
 
 void ImplListBox::ImplCheckScrollBars()
 {
-    sal_Bool bArrange = sal_False;
+    bool bArrange = false;
 
     Size aOutSz = GetOutputSizePixel();
     sal_uInt16 nEntries = GetEntryList()->GetEntryCount();
@@ -2405,7 +2405,7 @@ void ImplListBox::ImplCheckScrollBars()
     if( nEntries > nMaxVisEntries )
     {
         if( !mbVScroll )
-            bArrange = sal_True;
+            bArrange = true;
         mbVScroll = sal_True;
 
         // check of the scrolled-out region
@@ -2418,7 +2418,7 @@ void ImplListBox::ImplCheckScrollBars()
     else
     {
         if( mbVScroll )
-            bArrange = sal_True;
+            bArrange = true;
         mbVScroll = sal_False;
         SetTopEntry( 0 );
     }
@@ -2434,7 +2434,7 @@ void ImplListBox::ImplCheckScrollBars()
         if( nWidth < nMaxWidth )
         {
             if( !mbHScroll )
-                bArrange = sal_True;
+                bArrange = true;
             mbHScroll = sal_True;
 
             if ( !mbVScroll )   // maybe we do need one now
@@ -2442,7 +2442,7 @@ void ImplListBox::ImplCheckScrollBars()
                 nMaxVisEntries = (sal_uInt16) ( ( aOutSz.Height() - mpHScrollBar->GetSizePixel().Height() ) / GetEntryHeight() );
                 if( nEntries > nMaxVisEntries )
                 {
-                    bArrange = sal_True;
+                    bArrange = true;
                     mbVScroll = sal_True;
 
                     // check of the scrolled-out region
@@ -2462,7 +2462,7 @@ void ImplListBox::ImplCheckScrollBars()
         else
         {
             if( mbHScroll )
-                bArrange = sal_True;
+                bArrange = true;
             mbHScroll = sal_False;
             SetLeftIndent( 0 );
         }
@@ -2669,7 +2669,7 @@ sal_Bool ImplListBox::HandleWheelAsCursorTravel( const CommandEvent& rCEvt )
 
 void ImplListBox::SetMRUEntries( const OUString& rEntries, sal_Unicode cSep )
 {
-    sal_Bool bChanges = GetEntryList()->GetMRUCount() ? sal_True : sal_False;
+    bool bChanges = GetEntryList()->GetMRUCount() ? true : false;
 
     // Remove old MRU entries
     for ( sal_uInt16 n = GetEntryList()->GetMRUCount();n; )
@@ -2685,7 +2685,7 @@ void ImplListBox::SetMRUEntries( const OUString& rEntries, sal_Unicode cSep )
         {
             ImplEntryType* pNewEntry = new ImplEntryType( aEntry );
             maLBWindow.GetEntryList()->InsertEntry( nMRUCount++, pNewEntry, sal_False );
-            bChanges = sal_True;
+            bChanges = true;
         }
     }
     while ( nIndex >= 0 );
@@ -2903,7 +2903,7 @@ void ImplWin::DrawEntry( sal_Bool bDrawImage, sal_Bool bDrawText, sal_Bool bDraw
     long nBorder = 1;
     Size aOutSz = GetOutputSizePixel();
 
-    sal_Bool bImage = !!maImage;
+    bool bImage = !!maImage;
     if( bDrawImage && bImage && !bLayout )
     {
         sal_uInt16 nStyle = 0;

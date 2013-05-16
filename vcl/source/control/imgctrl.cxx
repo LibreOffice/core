@@ -159,7 +159,7 @@ void ImageControl::Paint( const Rectangle& /*rRect*/ )
     {
         Window *pWin = GetWindow( WINDOW_BORDER );
 
-        sal_Bool bFlat = (GetBorderStyle() == 2);
+        bool bFlat = (GetBorderStyle() == 2);
         Rectangle aRect( Point(0,0), pWin->GetOutputSizePixel() );
         Color oldLineCol = pWin->GetLineColor();
         Color oldFillCol = pWin->GetFillColor();
