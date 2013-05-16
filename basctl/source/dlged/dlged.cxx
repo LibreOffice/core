@@ -33,6 +33,7 @@
 #include "baside3.hxx"
 
 #include <com/sun/star/awt/XDialog.hpp>
+#include <com/sun/star/awt/UnoControlDialog.hpp>
 #include <com/sun/star/awt/UnoControlDialogModel.hpp>
 #include <com/sun/star/resource/StringResource.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
@@ -89,9 +90,10 @@ DlgEdHint::~DlgEdHint()
 void DlgEditor::ShowDialog()
 {
     uno::Reference< lang::XMultiServiceFactory >  xMSF = getProcessServiceFactory();
+    uno::Reference< uno::XComponentContext >  xContext = getProcessComponentContext();
 
     // create a dialog
-    uno::Reference< awt::XControl > xDlg( xMSF->createInstance( "com.sun.star.awt.UnoControlDialog" ), uno::UNO_QUERY );
+    uno::Reference< awt::XUnoControlDialog > xDlg = awt::UnoControlDialog::create( xContext );
 
     // clone the dialog model
     uno::Reference< util::XCloneable > xC( m_xUnoControlDialogModel, uno::UNO_QUERY );

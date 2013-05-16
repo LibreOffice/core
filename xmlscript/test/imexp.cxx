@@ -34,23 +34,20 @@
 
 #include <vcl/svapp.hxx>
 
-#include <com/sun/star/io/XActiveDataSource.hpp>
-
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
-#include <com/sun/star/registry/XImplementationRegistration.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-
+#include <com/sun/star/awt/UnoControlDialog.hpp>
 #include <com/sun/star/awt/UnoControlDialogModel.hpp>
 #include <com/sun/star/awt/XToolkit.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XDialog.hpp>
-
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/io/XActiveDataSource.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/registry/XSimpleRegistry.hpp>
+#include <com/sun/star/registry/XImplementationRegistration.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 
 using namespace ::rtl;
@@ -185,11 +182,10 @@ void MyApp::Main()
             importFile( aParam1.getStr(), xContext ) );
         OSL_ASSERT( xModel.is() );
 
-        Reference< awt::XControl > xDlg( xMSF->createInstance( "com.sun.star.awt.UnoControlDialog" ), UNO_QUERY );
-        xDlg->setModel( Reference< awt::XControlModel >::query( xModel ) );
+        Reference< awt::XUnoControlDialog > xDlg = UnoControlDialog::create( xContext );;
+        xDlg->setModel( xModel );
         xDlg->createPeer( xToolkit, 0 );
-        Reference< awt::XDialog > xD( xDlg, UNO_QUERY );
-        xD->execute();
+        xDlg->execute();
 
         if (GetCommandLineParamCount() == 3)
         {

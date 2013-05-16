@@ -24,16 +24,17 @@
 #include <com/sun/star/awt/XContainerWindowProvider.hpp>
 #include <com/sun/star/awt/XDialog.hpp>
 #include <com/sun/star/awt/XDialogProvider2.hpp>
+#include <com/sun/star/awt/XUnoControlDialog.hpp>
 #include <com/sun/star/awt/XUnoControlDialogModel.hpp>
+#include <com/sun/star/beans/XIntrospectionAccess.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/script/XScriptEventsAttacher.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/beans/XIntrospectionAccess.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/resource/XStringResourceManager.hpp>
+#include <com/sun/star/script/XScriptEventsAttacher.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase4.hxx>
 #include <osl/mutex.hxx>
@@ -85,7 +86,7 @@ namespace dlgprov
 
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XUnoControlDialogModel > createDialogModel( const OUString& sURL );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > createDialogControl(
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XUnoControlDialog > createDialogControl(
             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxDialogModel,
             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xParent );
 

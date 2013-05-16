@@ -31,9 +31,10 @@
 
 #include <com/sun/star/style/VerticalAlignment.hpp>
 
-#include "com/sun/star/awt/UnoControlDialogModel.hpp"
 #include "com/sun/star/awt/ActionEvent.hpp"
 #include "com/sun/star/awt/PushButtonType.hpp"
+#include "com/sun/star/awt/UnoControlDialog.hpp"
+#include "com/sun/star/awt/UnoControlDialogModel.hpp"
 #include "com/sun/star/awt/VclWindowPeerAttribute.hpp"
 #include "com/sun/star/awt/WindowAttribute.hpp"
 #include "com/sun/star/awt/XButton.hpp"
@@ -1320,26 +1321,19 @@ void UpdateHandler::createDialog()
                             aProps);
     }
 
-    uno::Reference< lang::XMultiComponentFactory > xFactory( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
-    uno::Reference< awt::XControl > xControl(
-        xFactory->createInstanceWithContext( "com.sun.star.awt.UnoControlDialog", mxContext),
-        uno::UNO_QUERY_THROW );
+    uno::Reference< awt::XUnoControlDialog > xControl = awt::UnoControlDialog::create( mxContext );
     xControl->setModel( xControlModel );
 
     if ( mbVisible == false )
     {
-        uno::Reference< awt::XWindow > xWindow( xControl, uno::UNO_QUERY );
-
-        if ( xWindow.is() )
-            xWindow->setVisible( false );
+        xControl->setVisible( false );
     }
 
     xControl->createPeer( NULL, NULL );
     {
-        uno::Reference< awt::XControlContainer > xContainer (xControl, uno::UNO_QUERY);
         for ( int i = 0; i < HELP_BUTTON; i++ )
         {
-            uno::Reference< awt::XButton > xButton ( xContainer->getControl( msButtonIDs[i] ), uno::UNO_QUERY);
+            uno::Reference< awt::XButton > xButton ( xControl->getControl( msButtonIDs[i] ), uno::UNO_QUERY);
             if (xButton.is())
             {
                 xButton->setActionCommand( msButtonIDs[i] );

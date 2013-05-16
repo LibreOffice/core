@@ -31,6 +31,7 @@
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/awt/UnoControlDialog.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XDialog.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
@@ -1062,33 +1063,20 @@ sal_Bool T602ImportFilterDialog::OptionsDlg()
     _Insert(xNameCont, T602DLG_CODE_LB, ListBoxModel);
     _Insert(xNameCont, T602DLG_CODE_TXT, TextModel);
 
-    Reference< XInterface > dialog = _InstCtx("com.sun.star.awt.UnoControlDialog",rComponentContext);
+    Reference< XUnoControlDialog > dialog = UnoControlDialog::create(rComponentContext);
 
-    Reference < XControl > xControl (dialog,UNO_QUERY);
     Reference < XControlModel > xControlModel (rInstance,UNO_QUERY);
 
-    if(!xControl.is())
-        return sal_False;
-
-    xControl->setModel( xControlModel );
+    dialog->setModel( xControlModel );
 
     Reference< XInterface > toolkit = _InstCtx("com.sun.star.awt.ExtToolkit", rComponentContext);
 
     Reference < XToolkit > xToolkit (toolkit,UNO_QUERY);
-    Reference < XWindow > xWindow (xControl,UNO_QUERY);
 
-    if(!xWindow.is())
-        return sal_False;
+    dialog->setVisible( false );
+    dialog->createPeer( xToolkit, NULL );
 
-    xWindow->setVisible( false );
-    xControl->createPeer( xToolkit, NULL );
-
-    Reference < XDialog > xDialog (dialog,UNO_QUERY);
-
-    if(!xDialog.is())
-        return sal_False;
-
-    ret = ( xDialog->execute() != 0 );
+    ret = ( dialog->execute() != 0 );
     if ( ret ) {
 
         sal_Int16 tt = 0;
@@ -1107,9 +1095,7 @@ sal_Bool T602ImportFilterDialog::OptionsDlg()
         }
     }
 
-    Reference < XComponent > xComponent (dialog,UNO_QUERY);
-
-    xComponent->dispose();
+    Reference<XControl>(dialog)->dispose();
 
     return ret;
 }

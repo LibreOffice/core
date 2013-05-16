@@ -21,6 +21,7 @@
 #include "DialogModelProvider.hxx"
 #include "dlgprov.hxx"
 #include "dlgevtatt.hxx"
+#include <com/sun/star/awt/UnoControlDialog.hpp>
 #include <com/sun/star/awt/UnoControlDialogModel.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
@@ -457,55 +458,44 @@ namespace dlgprov
 
     // -----------------------------------------------------------------------------
 
-    Reference< XControl > DialogProviderImpl::createDialogControl
+    Reference< XUnoControlDialog > DialogProviderImpl::createDialogControl
         ( const Reference< XControlModel >& rxDialogModel, const Reference< XWindowPeer >& xParent )
     {
         OSL_ENSURE( rxDialogModel.is(), "DialogProviderImpl::getDialogControl: no dialog model" );
 
-        Reference< XControl > xDialogControl;
+        Reference< XUnoControlDialog > xDialogControl;
 
         if ( m_xContext.is() )
         {
-            Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager() );
+            xDialogControl = UnoControlDialog::create( m_xContext );
 
-            if ( xSMgr.is() )
+            // set the model
+            if ( rxDialogModel.is() )
+                xDialogControl->setModel( rxDialogModel );
+
+            // set visible
+            xDialogControl->setVisible( sal_False );
+
+            // get the parent of the dialog control
+            Reference< XWindowPeer > xPeer;
+            if( xParent.is() )
             {
-                xDialogControl = Reference< XControl >( xSMgr->createInstanceWithContext(
-                    OUString( "com.sun.star.awt.UnoControlDialog"  ), m_xContext ), UNO_QUERY );
-
-                if ( xDialogControl.is() )
+                xPeer = xParent;
+            }
+            else if ( m_xModel.is() )
+            {
+                Reference< frame::XController > xController( m_xModel->getCurrentController(), UNO_QUERY );
+                if ( xController.is() )
                 {
-                    // set the model
-                    if ( rxDialogModel.is() )
-                        xDialogControl->setModel( rxDialogModel );
-
-                    // set visible
-                    Reference< XWindow > xW( xDialogControl, UNO_QUERY );
-                    if ( xW.is() )
-                        xW->setVisible( sal_False );
-
-                    // get the parent of the dialog control
-                    Reference< XWindowPeer > xPeer;
-                    if( xParent.is() )
-                    {
-                        xPeer = xParent;
-                    }
-                    else if ( m_xModel.is() )
-                    {
-                        Reference< frame::XController > xController( m_xModel->getCurrentController(), UNO_QUERY );
-                        if ( xController.is() )
-                        {
-                            Reference< frame::XFrame > xFrame( xController->getFrame(), UNO_QUERY );
-                            if ( xFrame.is() )
-                                xPeer = Reference< XWindowPeer>( xFrame->getContainerWindow(), UNO_QUERY );
-                        }
-                    }
-
-                    // create a peer
-                    Reference< XToolkit> xToolkit( Toolkit::create( m_xContext ), UNO_QUERY_THROW );
-                    xDialogControl->createPeer( xToolkit, xPeer );
+                    Reference< frame::XFrame > xFrame( xController->getFrame(), UNO_QUERY );
+                    if ( xFrame.is() )
+                        xPeer = Reference< XWindowPeer>( xFrame->getContainerWindow(), UNO_QUERY );
                 }
             }
+
+            // create a peer
+            Reference< XToolkit> xToolkit( Toolkit::create( m_xContext ), UNO_QUERY_THROW );
+            xDialogControl->createPeer( xToolkit, xPeer );
         }
 
         return xDialogControl;
