@@ -29,7 +29,6 @@ class ServerFont;
 class GlyphCachePeer;
 class ServerFontLayoutEngine;
 class ServerFontLayout;
-class ExtraKernInfo;
 struct ImplKernPairData;
 class ImplFontOptions;
 
@@ -75,8 +74,7 @@ public:
     static GlyphCache&      GetInstance();
 
     void                        AddFontFile( const OString& rNormalizedName,
-                                    int nFaceNum, sal_IntPtr nFontId, const ImplDevFontAttributes&,
-                                    const ExtraKernInfo* = NULL );
+                                    int nFaceNum, sal_IntPtr nFontId, const ImplDevFontAttributes&);
     void                        AnnounceFonts( ImplDevFontList* ) const;
 
     ServerFont*                 CacheFont( const FontSelectPattern& );
@@ -371,36 +369,6 @@ public:
     int             mnXOffset;
     int             mnYOffset;
 };
-
-// =======================================================================
-
-// ExtraKernInfo allows an on-demand query of extra kerning info #i29881#
-// The kerning values have to be scaled to match the font size before use
-class VCL_DLLPUBLIC ExtraKernInfo
-{
-public:
-    ExtraKernInfo( sal_IntPtr nFontId );
-    virtual ~ExtraKernInfo() {}
-
-    int     GetUnscaledKernPairs( ImplKernPairData** ) const;
-
-protected:
-    mutable bool mbInitialized;
-    virtual void Initialize() const = 0;
-
-protected:
-    sal_IntPtr     mnFontId;
-
-    // container to map a unicode pair to an unscaled kerning value
-    struct PairEqual{ int operator()(const ImplKernPairData& rA, const ImplKernPairData& rB) const
-                          { return (rA.mnChar1 == rB.mnChar1) && (rA.mnChar2 == rB.mnChar2); } };
-    struct PairHash{ int operator()(const ImplKernPairData& rA) const
-                         { return (rA.mnChar1) * 256 ^ rA.mnChar2; } };
-    typedef boost::unordered_set< ImplKernPairData, PairHash, PairEqual > UnicodeKernPairs;
-    mutable UnicodeKernPairs maUnicodeKernPairs;
-};
-
-// =======================================================================
 
 #endif // _SV_GLYPHCACHE_HXX
 
