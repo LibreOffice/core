@@ -17,6 +17,7 @@
  */
 package util;
 
+import com.sun.star.accessibility.AccessibleStateType;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleComponent;
 import com.sun.star.accessibility.XAccessibleContext;
@@ -32,7 +33,7 @@ import java.io.PrintWriter;
 
 
 public class AccessibilityTools {
-    public static XAccessible SearchedAccessible = null;
+    private XAccessible SearchedAccessible = null;
     private static boolean debug = false;
 
     public AccessibilityTools() {
@@ -91,19 +92,54 @@ public class AccessibilityTools {
 
     public static XAccessibleContext getAccessibleObjectForRole(XAccessible xacc,
         short role) {
-        SearchedAccessible = null;
         return getAccessibleObjectForRole_(xacc, role);
     }
 
     public static XAccessibleContext getAccessibleObjectForRole(XAccessible xacc,
         short role,
         boolean ignoreShowing) {
-        SearchedAccessible = null;
-
         if (ignoreShowing) {
             return getAccessibleObjectForRoleIgnoreShowing_(xacc, role);
         } else {
             return getAccessibleObjectForRole_(xacc, role);
+        }
+    }
+
+    public XAccessible getSearchedAccessibleObjectForRole(XAccessible xacc,
+        short role,
+        boolean ignoreShowing) {
+        SearchedAccessible = null;
+        getSearchedAccessibleObjectForRole_(xacc, role, ignoreShowing);
+        return SearchedAccessible;
+    }
+
+    private XAccessibleContext getSearchedAccessibleObjectForRole_(XAccessible xacc,
+            short role, boolean ignoreShowing) {
+        XAccessibleContext ac = xacc.getAccessibleContext();
+        boolean isShowing = isShowing(ac);
+
+        if ((ac.getAccessibleRole() == role) && (!ignoreShowing || isShowing)) {
+            SearchedAccessible = xacc;
+            return ac;
+        } else {
+            int k = ac.getAccessibleChildCount();
+
+            if (ac.getAccessibleChildCount() > 100) {
+                k = 50;
+            }
+
+            for (int i = 0; i < k; i++) {
+                try {
+                    XAccessibleContext ac2 = getSearchedAccessibleObjectForRole_(ac.getAccessibleChild(i), role, ignoreShowing);
+
+                    if (ac2 != null) {
+                        return ac2;
+                    }
+                } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                    System.out.println("Couldn't get Child");
+                }
+            }
+            return null;
         }
     }
 
@@ -112,7 +148,6 @@ public class AccessibilityTools {
         XAccessibleContext ac = xacc.getAccessibleContext();
 
         if (ac.getAccessibleRole() == role) {
-            SearchedAccessible = xacc;
             return ac;
         } else {
             int k = ac.getAccessibleChildCount();
@@ -140,11 +175,9 @@ public class AccessibilityTools {
     public static XAccessibleContext getAccessibleObjectForRole_(XAccessible xacc,
         short role) {
         XAccessibleContext ac = xacc.getAccessibleContext();
-        boolean isShowing = ac.getAccessibleStateSet()
-        .contains(com.sun.star.accessibility.AccessibleStateType.SHOWING);
+        boolean isShowing = isShowing(ac);
 
         if ((ac.getAccessibleRole() == role) && isShowing) {
-            SearchedAccessible = xacc;
             return ac;
         } else {
             int k = ac.getAccessibleChildCount();
@@ -194,7 +227,6 @@ public class AccessibilityTools {
         if ((ac.getAccessibleRole() == role) &&
             (ac.getAccessibleName().indexOf(name) > -1) &&
             (utils.getImplName(ac).indexOf(implName) > -1)) {
-            SearchedAccessible = xacc;
 
             //System.out.println("FOUND the desired component -- "+ ac.getAccessibleName() +isShowing);
             return ac;
@@ -228,8 +260,7 @@ public class AccessibilityTools {
         String name,
         String implName) {
         XAccessibleContext ac = xacc.getAccessibleContext();
-        boolean isShowing = ac.getAccessibleStateSet()
-        .contains(com.sun.star.accessibility.AccessibleStateType.SHOWING);
+        boolean isShowing = isShowing(ac);
 
         // hotfix for i91828:
         // if role to search is 0 then ignore the role.
@@ -237,7 +268,6 @@ public class AccessibilityTools {
             (ac.getAccessibleName().indexOf(name) > -1) &&
             (utils.getImplName(ac).indexOf(implName) > -1) &&
             isShowing) {
-            SearchedAccessible = xacc;
             //System.out.println("FOUND the desired component -- "+ ac.getAccessibleName() +isShowing);
             return ac;
         } else {
@@ -264,6 +294,45 @@ public class AccessibilityTools {
 
         return null;
     }
+
+    public XAccessible getSearchedAccessibleObjectForRole(XAccessible xacc,
+            short role,
+            String name,
+            String implName) {
+            XAccessibleContext ac = xacc.getAccessibleContext();
+            boolean isShowing = isShowing(ac);
+
+            // hotfix for i91828:
+            // if role to search is 0 then ignore the role.
+            if ( (role == 0 || ac.getAccessibleRole() == role) &&
+                (ac.getAccessibleName().indexOf(name) > -1) &&
+                (utils.getImplName(ac).indexOf(implName) > -1) &&
+                isShowing) {
+                SearchedAccessible = xacc;
+            } else {
+                int k = ac.getAccessibleChildCount();
+
+                if (ac.getAccessibleChildCount() > 100) {
+                    k = 50;
+                }
+
+                for (int i = 0; i < k; i++) {
+                    try {
+                        XAccessibleContext ac1 = getAccessibleObjectForRole(
+                            ac.getAccessibleChild(i),
+                            role, name, implName);
+
+                        if (ac1 != null) {
+                            break;
+                        }
+                    } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                        System.out.println("Couldn't get Child");
+                    }
+                }
+            }
+
+            return SearchedAccessible;
+        }
 
     /**
      * This methods retunrs the <CODE>XAccessibleContext</CODE> of a named Sheet-Cell like "G5".<p>
@@ -345,8 +414,7 @@ public class AccessibilityTools {
             logging(log,indent + indent + bounds);
         }
 
-        boolean isShowing = ac.getAccessibleStateSet()
-        .contains(com.sun.star.accessibility.AccessibleStateType.SHOWING);
+        boolean isShowing = isShowing(ac);
         logging(log,indent + indent + "StateType contains SHOWING: " +
             isShowing);
 
@@ -442,5 +510,9 @@ public class AccessibilityTools {
 
     private static void logging(PrintWriter log, String content){
         if (debug) log.println(content);
+    }
+
+    private static boolean isShowing(XAccessibleContext ac) {
+        return ac.getAccessibleStateSet().contains(AccessibleStateType.SHOWING);
     }
 }

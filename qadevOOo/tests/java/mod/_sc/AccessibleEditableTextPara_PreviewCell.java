@@ -142,9 +142,7 @@ public class AccessibleEditableTextPara_PreviewCell extends TestCase {
         XWindow xWindow = AccessibilityTools.getCurrentWindow( (XMultiServiceFactory) Param.getMSF(), xModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
         //AccessibilityTools.printAccessibleTree(log,xRoot);
-        AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE_CELL,true);
-
-        xRoot = AccessibilityTools.SearchedAccessible;
+        xRoot = new AccessibilityTools().getSearchedAccessibleObjectForRole(xRoot, AccessibleRole.TABLE_CELL,true);
 
         //AccessibilityTools.printAccessibleTree(log,xRoot);
 

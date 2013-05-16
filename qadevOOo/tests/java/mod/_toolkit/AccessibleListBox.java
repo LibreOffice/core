@@ -169,8 +169,10 @@ public class AccessibleListBox extends TestCase {
 
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL, "",
                                              "com.sun.star.comp.toolkit.AccessibleListBox");
+        XAccessible searchedAccessible = new AccessibilityTools().getSearchedAccessibleObjectForRole(xRoot, AccessibleRole.PANEL, "",
+                "com.sun.star.comp.toolkit.AccessibleListBox");
 
-        Object list = AccessibilityTools.getAccessibleObjectForRole(AccessibilityTools.SearchedAccessible,
+        Object list = AccessibilityTools.getAccessibleObjectForRole(searchedAccessible,
                                                     AccessibleRole.LIST);
 
         log.println("ImplementationName " + utils.getImplName(oObj));
