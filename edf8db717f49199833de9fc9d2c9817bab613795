@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//8n8\u003d",
+        "filename": "l10ntools/source/xrmmerge.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-05-16T13:46:45Z",
+      "side": 0,
+      "message": "this appears to initialize a bunch of variables, likely global ones - are you sure those are unused too?",
+      "revId": "edf8db717f49199833de9fc9d2c9817bab613795",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
