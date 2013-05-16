@@ -65,7 +65,7 @@ $(call gb_ExternalProject_get_state_target,redland,build):
 		&& $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),&& $(PERL) \
 			$(SOLARENV)/bin/macosx-change-install-names.pl shl OOO \
-			$(gb_Package_SOURCEDIR_redland)/librdf/.libs/librdf-lo.$(RASQAL_MAJOR).dylib) \
+			$(gb_Package_SOURCEDIR_redland)/src/.libs/librdf-lo.$(REDLAND_MAJOR).dylib) \
 	)
 endif
 
