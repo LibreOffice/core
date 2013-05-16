@@ -2362,7 +2362,6 @@ else # !SYSTEM_PYTHON
 
 # depend on external project because on MACOSX the Package is disabled...
 define gb_LinkTarget__use_python_headers
-$(call gb_LinkTarget_use_package,$(1),python3)
 $(call gb_LinkTarget_use_external_project,$(1),python3)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,python3) \
