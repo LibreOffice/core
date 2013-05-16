@@ -660,29 +660,6 @@ bool PspFontLayout::LayoutText( ImplLayoutArgs& rArgs )
         if( aMetric.width == -1 && aMetric.height == -1 )
             rArgs.NeedFallback( nCharPos, bRightToLeft );
 
-        // apply pair kerning to prev glyph if requested
-        if( SAL_LAYOUT_KERNING_PAIRS & rArgs.mnFlags )
-        {
-            if( nOldGlyphId > 0 )
-            {
-                const std::list< KernPair >& rKernPairs = mrPrinterGfx.getKernPairs(mbVertical);
-                for( std::list< KernPair >::const_iterator it = rKernPairs.begin();
-                     it != rKernPairs.end(); ++it )
-                {
-                    if( it->first == nOldGlyphId && it->second == nGlyphIndex )
-                    {
-                        int nTextScale = mrPrinterGfx.GetFontWidth();
-                        if( ! nTextScale )
-                            nTextScale = mrPrinterGfx.GetFontHeight();
-                        int nKern = (mbVertical ? it->kern_y : it->kern_x) * nTextScale;
-                        nGlyphWidth += nKern;
-                        aPrevItem.mnNewWidth = nGlyphWidth;
-                        break;
-                    }
-                }
-            }
-        }
-
         // finish previous glyph
         if( nOldGlyphId >= 0 )
             AppendGlyph( aPrevItem );
@@ -973,26 +950,9 @@ void GenPspGraphics::GetFontMetric( ImplFontMetricData *pMetric, int )
     }
 }
 
-sal_uLong GenPspGraphics::GetKernPairs( sal_uLong nPairs, ImplKernPairData *pKernPairs )
+sal_uLong GenPspGraphics::GetKernPairs( sal_uLong, ImplKernPairData* )
 {
-    const ::std::list< ::psp::KernPair >& rPairs( m_pPrinterGfx->getKernPairs() );
-    sal_uLong nHavePairs = rPairs.size();
-    if( pKernPairs && nPairs )
-    {
-        ::std::list< ::psp::KernPair >::const_iterator it;
-        unsigned int i;
-        int nTextScale = m_pPrinterGfx->GetFontWidth();
-        if( ! nTextScale )
-            nTextScale = m_pPrinterGfx->GetFontHeight();
-        for( i = 0, it = rPairs.begin(); i < nPairs && i < nHavePairs; i++, ++it )
-        {
-            pKernPairs[i].mnChar1   = it->first;
-            pKernPairs[i].mnChar2   = it->second;
-            pKernPairs[i].mnKern    = it->kern_x * nTextScale / 1000;
-        }
-
-    }
-    return nHavePairs;
+    return 0;
 }
 
 sal_Bool GenPspGraphics::GetGlyphBoundRect( sal_GlyphId nGlyphIndex, Rectangle& rRect )
