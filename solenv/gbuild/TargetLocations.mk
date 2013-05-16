@@ -122,6 +122,7 @@ gb_ExternalProject_get_target = $(WORKDIR)/ExternalProject/$(1).done
 gb_Gallery_get_target = $(WORKDIR)/Gallery/$(1).done
 gb_Gallery_get_workdir = $(WORKDIR)/Gallery/$(1)
 gb_GeneratedPackage_get_target = $(WORKDIR)/GeneratedPackage/$(1).filelist
+gb_GeneratedPackage_get_target_for_build = $(WORKDIR_FOR_BUILD)/GeneratedPackage/$(1).filelist
 gb_HelpIndexTarget_get_target = $(WORKDIR)/HelpIndexTarget/$(1).done
 gb_HelpJarTarget_get_target = $(WORKDIR)/HelpJarTarget/$(1).done
 gb_HelpLinkTarget_get_preparation_target = $(WORKDIR)/HelpLinkTarget/$(1).prepare

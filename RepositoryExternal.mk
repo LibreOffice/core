@@ -2997,7 +2997,7 @@ ifeq ($(OS),MACOSX)
 $(call gb_ExternalExecutable_set_external,python,$(call gb_UnpackedTarball_get_dir,python3)/python-inst/@__________________________________________________OOO/LibreOfficePython.framework/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/bin/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR))
 # the Zip ensures that internal python has been built (cannot use the Package
 # target, as that is not used on Mac)
-$(call gb_ExternalExecutable_add_dependencies,python,$(call gb_Zip_get_outdir_target_for_build,LibreOfficePython.framework))
+$(call gb_ExternalExecutable_add_dependencies,python,$(call gb_GeneratedPackage_get_target_for_build,python3))
 
 else
 
