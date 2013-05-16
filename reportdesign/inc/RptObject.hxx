@@ -169,6 +169,9 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape();
     virtual sal_uInt16 GetObjIdentifier() const;
     virtual sal_uInt32 GetObjInventor() const;
+
+private:
+    virtual void impl_setUnoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxUnoShape );
 };
 
 //============================================================================
@@ -182,6 +185,8 @@ class REPORTDESIGN_DLLPUBLIC OOle2Obj: public SdrOle2Obj , public OObjectBase
     sal_uInt16 m_nType;
     bool    m_bOnlyOnce;
     void impl_createDataProvider_nothrow( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& _xModel);
+    virtual void impl_setUnoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxUnoShape );
+
 public:
     static OOle2Obj* Create( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent,sal_uInt16 _nType )
     {
@@ -271,6 +276,7 @@ public:
     OUnoObject& operator=(const OUnoObject& rObj);
 
 private:
+    virtual void impl_setUnoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxUnoShape );
     void    impl_setReportComponent_nothrow();
     void    impl_initializeModel_nothrow();
 };

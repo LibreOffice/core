@@ -166,6 +166,9 @@ SdrObject* OObjectBase::createObject(const uno::Reference< report::XReportCompon
             break;
     }
 
+    if ( pNewObj )
+        pNewObj->SetDoNotInsertIntoPageAutomatically( true );
+
     ensureSdrObjectOwnership( _xComponent );
 
     return pNewObj;
@@ -609,6 +612,13 @@ uno::Reference< uno::XInterface > OCustomShape::getUnoShape()
     return xShape;
 }
 
+void OCustomShape::impl_setUnoShape( const uno::Reference< uno::XInterface >& rxUnoShape )
+{
+    SdrObjCustomShape::impl_setUnoShape( rxUnoShape );
+    releaseUnoShape();
+    m_xReportComponent.clear();
+}
+
 //----------------------------------------------------------------------------
 //----------------------------------------------------------------------------
 TYPEINIT1(OUnoObject, SdrUnoObj);
@@ -932,6 +942,12 @@ uno::Reference< uno::XInterface > OUnoObject::getUnoShape()
     return OObjectBase::getUnoShapeOf( *this );
 }
 
+void OUnoObject::impl_setUnoShape( const uno::Reference< uno::XInterface >& rxUnoShape )
+{
+    SdrUnoObj::impl_setUnoShape( rxUnoShape );
+    releaseUnoShape();
+}
+
 OUnoObject& OUnoObject::operator=(const OUnoObject& rObj)
 {
     if( this == &rObj )
@@ -1135,6 +1151,14 @@ uno::Reference< uno::XInterface > OOle2Obj::getUnoShape()
     }
     return xShape;
 }
+
+void OOle2Obj::impl_setUnoShape( const uno::Reference< uno::XInterface >& rxUnoShape )
+{
+    SdrOle2Obj::impl_setUnoShape( rxUnoShape );
+    releaseUnoShape();
+    m_xReportComponent.clear();
+}
+
 // -----------------------------------------------------------------------------
 uno::Reference< chart2::data::XDatabaseDataProvider > lcl_getDataProvider(const uno::Reference < embed::XEmbeddedObject >& _xObj)
 {
