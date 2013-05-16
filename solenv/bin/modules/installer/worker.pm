@@ -373,10 +373,15 @@ sub install_simple ($$$$$$)
             unlink "$destdir$destination";
         }
 
-        copy ("$sourcepath", "$destdir$destination") || die "Can't copy file: $sourcepath -> $destdir$destination $!";
-        my $sourcestat = stat($sourcepath);
-        utime ($sourcestat->atime, $sourcestat->mtime, "$destdir$destination");
-        chmod (oct($unixrights), "$destdir$destination") || die "Can't change permissions: $!";
+        if ( -l "$sourcepath" ) {
+            symlink (readlink ("$sourcepath"), "$destdir$destination") || die "Can't symlink $destdir$destination -> " . readlink ("$sourcepath") . "$!";
+        }
+        else {
+            copy ("$sourcepath", "$destdir$destination") || die "Can't copy file: $sourcepath -> $destdir$destination $!";
+            my $sourcestat = stat($sourcepath);
+            utime ($sourcestat->atime, $sourcestat->mtime, "$destdir$destination");
+            chmod (oct($unixrights), "$destdir$destination") || die "Can't change permissions: $!";
+        }
         push @lines, "$destination\n";
     }
 

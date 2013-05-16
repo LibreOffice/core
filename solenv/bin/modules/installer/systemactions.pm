@@ -292,9 +292,14 @@ sub copy_one_file
 {
     my ($source, $dest) = @_;
 
-    my ($returnvalue, $infoline);
+    my ($returnvalue, $infoline, $copyreturn);
 
-    my $copyreturn = copy($source, $dest);
+    if ( -l $source ) {
+        $copyreturn = symlink(readlink("$source"), "$dest");
+    }
+    else {
+        $copyreturn = copy($source, $dest);
+    }
 
     if ($copyreturn)
     {
