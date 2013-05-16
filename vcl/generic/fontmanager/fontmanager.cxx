@@ -2798,26 +2798,4 @@ std::list< sal_Unicode >  PrintFontManager::getUnicodeFromAdobeName( const OStri
     return aRet;
 }
 
-// -------------------------------------------------------------------------
-namespace
-{
-    OUString getString( const Any& rAny )
-    {
-        OUString aStr;
-        rAny >>= aStr;
-        return aStr;
-    }
-    bool getBool( const Any& rAny )
-    {
-        sal_Bool bBool = sal_False;
-        rAny >>= bBool;
-        return static_cast<bool>(bBool);
-    }
-    sal_Int32 getInt( const Any& rAny )
-    {
-        sal_Int32 n = 0;
-        rAny >>= n;
-        return n;
-    }
-}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
