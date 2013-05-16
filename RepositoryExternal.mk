@@ -1479,6 +1479,10 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 ))
 
 define gb_LinkTarget__use_wpd
+$(call gb_LinkTarget_set_include,$(1),\
+	$(WPD_CFLAGS) \
+	$$(INCLUDE) \
+)
 $(call gb_LinkTarget_use_package,$(1),\
 	libwpd \
 )

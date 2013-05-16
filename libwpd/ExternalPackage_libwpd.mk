@@ -9,23 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,libwpd,libwpd))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,libwpd,inc/external/libwpd,\
-	inc/libwpd/libwpd.h \
-	inc/libwpd/WPDocument.h \
-	inc/libwpd/WPXBinaryData.h \
-	inc/libwpd/WPXDocumentInterface.h \
-	inc/libwpd/WPXProperty.h \
-	inc/libwpd/WPXPropertyList.h \
-	inc/libwpd/WPXString.h \
-	inc/libwpd/WPXPropertyListVector.h \
-))
-
-$(eval $(call gb_ExternalPackage_add_unpacked_files,libwpd,inc/external/libwpd-stream,\
-	inc/libwpd-stream/libwpd-stream.h \
-	inc/libwpd-stream/WPXStream.h \
-	inc/libwpd-stream/WPXStreamImplementation.h \
-))
-
 $(eval $(call gb_ExternalPackage_use_external_project,libwpd,libwpd))
 
 ifeq ($(OS)$(COM),WNTMSC)
