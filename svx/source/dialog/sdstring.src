@@ -487,7 +487,7 @@ String RID_SVXSTR_COLOR_TURQUOISE_DEF
 /* DO NOT TRANSLATE */
 String RID_SVXSTR_COLOR_BLUE_CLASSIC_DEF
 {
-    Text [ en-US ] = "Blue classic" ;
+    Text = "Blue classic" ;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
