@@ -37,6 +37,8 @@
 
 #define debug_fprintf  NSP_WriteLog
 
+#include <config_lgpl.h>
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

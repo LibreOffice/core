@@ -6925,28 +6925,6 @@ if test "$enable_lotuswordpro" = "yes"; then
 fi
 AC_SUBST(ENABLE_LWP)
 
-AC_MSG_CHECKING([MPL subset])
-MPL_SUBSET=
-
-if test "$enable_mpl_subset" = "yes"; then
-   if test "x$enable_postgresql_sdbc" != "xno"; then
-        AC_MSG_ERROR([need to --disable-postgresql-sdbc - the postgress database backend.])
-   fi
-   if test "$enable_lotuswordpro" = "yes"; then
-        AC_MSG_ERROR([need to --disable-lotuswordpro - a Lotus Word Pro file format import filter.])
-   fi
-   if test "$enable_neon" != "no"; then
-        AC_MSG_ERROR([need to --disable-neon - webdav support.])
-   fi
-
-   MPL_SUBSET="TRUE"
-   AC_DEFINE(MPL_HAVE_SUBSET)
-   AC_MSG_RESULT([only])
-else
-   AC_MSG_RESULT([no restrictions])
-fi
-AC_SUBST(MPL_SUBSET)
-
 dnl ===================================================================
 dnl Check for gperf
 dnl ===================================================================
@@ -8403,7 +8381,7 @@ dnl ===================================================================
 dnl Check for NPAPI interface to plug browser plugins into LibreOffice documents
 dnl ===================================================================
 AC_MSG_CHECKING([whether to plug browser plugins into LibreOffice documents])
-# Obviously no such thing on iOS or Android. Also not possible when building 
+# Obviously no such thing on iOS or Android. Also not possible when building
 # 64-bit OS X code as the plugin code uses QuickTime and Carbon.
 if test "$_os" != Android -a "$_os" != iOS -a \( $_os != Darwin -o "$BITNESS_OVERRIDE" = "" \) -a \
         "$enable_headless" != yes
@@ -11711,6 +11689,43 @@ else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ICECREAM_RUN)
+
+dnl ===================================================================
+
+AC_MSG_CHECKING([MPL subset])
+MPL_SUBSET=
+
+if test "$enable_mpl_subset" = "yes"; then
+   if test "x$enable_postgresql_sdbc" != "xno"; then
+        AC_MSG_ERROR([need to --disable-postgresql-sdbc - the postgress database backend.])
+   fi
+   if test "$enable_lotuswordpro" = "yes"; then
+        AC_MSG_ERROR([need to --disable-lotuswordpro - a Lotus Word Pro file format import filter.])
+   fi
+   if test "$enable_neon" != "no"; then
+        AC_MSG_ERROR([need to --disable-neon - webdav support.])
+   fi
+   if test "x$enable_ext_mariadb_connector" = "xyes"; then
+        AC_MSG_ERROR([need to --disable-ext-mariadb-connector - mariadb/mysql support.])
+   fi
+   if test "x$ENABLE_PDFIMPORT" != "xFALSE"; then
+        if test "x$SYSTEM_POPPLER" != "xNO"; then
+                AC_MSG_ERROR([need to disable PDF import via xpdf/poplar or use system library])
+        fi
+   fi
+   # cf. m4/libo_check_extension.m4
+   if test "x$WITH_EXTRA_EXTENSIONS" != "x"; then
+        AC_MSG_ERROR([need to disable extra extensions '$WITH_EXTRA_EXTENSIONS'])
+   fi
+
+   MPL_SUBSET="TRUE"
+   AC_DEFINE(MPL_HAVE_SUBSET)
+   AC_MSG_RESULT([only])
+else
+   AC_MSG_RESULT([no restrictions])
+fi
+AC_SUBST(MPL_SUBSET)
+
 
 dnl ===================================================================
 dnl Setting up the environment.

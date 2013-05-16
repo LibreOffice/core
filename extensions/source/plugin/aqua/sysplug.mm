@@ -25,6 +25,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+#include <config_lgpl.h>
+
 #include <cstdarg>
 
 #include <sys/types.h>

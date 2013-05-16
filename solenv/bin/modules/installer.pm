@@ -1,29 +1,20 @@
-#*************************************************************************
 #
-# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# This file is part of the LibreOffice project.
 #
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
-# OpenOffice.org - a multi-platform office productivity suite
+# This file incorporates work covered by the following license notice:
 #
-# This file is part of OpenOffice.org.
+#   Licensed to the Apache Software Foundation (ASF) under one or more
+#   contributor license agreements. See the NOTICE file distributed
+#   with this work for additional information regarding copyright
+#   ownership. The ASF licenses this file to you under the Apache
+#   License, Version 2.0 (the "License"); you may not use this file
+#   except in compliance with the License. You may obtain a copy of
+#   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-# OpenOffice.org is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Lesser General Public License version 3
-# only, as published by the Free Software Foundation.
-#
-# OpenOffice.org is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Lesser General Public License version 3 for more details
-# (a copy is included in the LICENSE file that accompanied this code).
-#
-# You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.  If not, see
-# <http://www.openoffice.org/license.html>
-# for a copy of the LGPLv3 License.
-#
-#*************************************************************************
 
 package installer;
 
@@ -241,6 +232,11 @@ sub run {
 
     if ( $installer::globals::iswindowsbuild ) { installer::control::read_lcidlist($includepatharrayref); }
 
+    ####################################################################
+    # MacOS dmg build requires special DS_Store file to arrange icons
+    ####################################################################
+    # if (($installer::globals::ismacdmgbuild) && ($installer::globals::product eq "OpenOffice_Dev")) { $installer::globals::devsnapshotbuild = 1; }
+
     #####################################################################
     # Including additional inc files for variable settings, if defined
     #####################################################################
@@ -331,6 +327,7 @@ sub run {
 
     if ( $installer::globals::languagepack ) { installer::scriptitems::use_langpack_copy_scpaction($scpactionsinproductarrayref); }
     if ( $installer::globals::helppack ) { installer::scriptitems::use_langpack_copy_scpaction($scpactionsinproductarrayref); }
+#   if (($installer::globals::devsnapshotbuild)) { installer::scriptitems::use_dev_copy_scpaction($scpactionsinproductarrayref); }
     # TODO: why is this not done in scp2 based on the value of $(ENABLE_RELEASE_BUILD)?
     if ( $allvariableshashref->{'PRODUCTNAME'} eq "LibreOfficeDev" ) { installer::scriptitems::use_devversion_copy_scpaction($scpactionsinproductarrayref); }
 

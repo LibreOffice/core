@@ -1,35 +1,27 @@
-#*************************************************************************
 #
-# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# This file is part of the LibreOffice project.
 #
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
-# OpenOffice.org - a multi-platform office productivity suite
+# This file incorporates work covered by the following license notice:
 #
-# This file is part of OpenOffice.org.
+#   Licensed to the Apache Software Foundation (ASF) under one or more
+#   contributor license agreements. See the NOTICE file distributed
+#   with this work for additional information regarding copyright
+#   ownership. The ASF licenses this file to you under the Apache
+#   License, Version 2.0 (the "License"); you may not use this file
+#   except in compliance with the License. You may obtain a copy of
+#   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-# OpenOffice.org is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Lesser General Public License version 3
-# only, as published by the Free Software Foundation.
-#
-# OpenOffice.org is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Lesser General Public License version 3 for more details
-# (a copy is included in the LICENSE file that accompanied this code).
-#
-# You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.  If not, see
-# <http://www.openoffice.org/license.html>
-# for a copy of the LGPLv3 License.
-#
-#*************************************************************************
 
 package installer::windows::registry;
 
 use installer::files;
 use installer::globals;
 use installer::worker;
+use installer::windows::msiglobal;
 use installer::windows::idtglobal;
 
 #####################################################
@@ -116,7 +108,7 @@ sub get_registry_component_name
     }
     else
     {
-        if ( length($componentname) > 60 )
+        if ( length($componentname) > 70 )
         {
             $componentname = generate_new_short_registrycomponentname($componentname); # This has to be unique for the complete product, not only one package
         }
@@ -145,19 +137,11 @@ sub generate_new_short_registrycomponentname
 {
     my ($componentname) = @_;
 
-    my $shortcomponentname = "";
-    my $counter = 1;
-
     my $startversion = substr($componentname, 0, 60); # taking only the first 60 characters
-    $startversion = $startversion . "_";
+    my $subid = installer::windows::msiglobal::calculate_id($componentname, 9); # taking only the first 9 digits
+    my $shortcomponentname = $startversion . "_" . $subid;
 
-    $shortcomponentname = $startversion . $counter;
-
-    while ( exists($installer::globals::allshortregistrycomponents{$shortcomponentname}) )
-    {
-        $counter++;
-        $shortcomponentname = $startversion . $counter;
-    }
+    if ( exists($installer::globals::allshortregistrycomponents{$shortcomponentname}) ) { installer::exiter::exit_program("Failed to create unique component name: \"$shortcomponentname\"", "generate_new_short_registrycomponentname"); }
 
     $installer::globals::allshortregistrycomponents{$shortcomponentname} = 1;
 

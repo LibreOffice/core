@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #ifdef AIX
 #define _LINUX_SOURCE_COMPAT
 #include <sys/timer.h>
