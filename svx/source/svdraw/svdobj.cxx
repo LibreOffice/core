@@ -423,6 +423,7 @@ SdrObject::SdrObject()
     ,mnLayerID(0)
     ,mpSvxShape( NULL )
     ,maWeakUnoShape()
+    ,mbDoNotInsertIntoPageAutomatically(false)
 {
     DBG_CTOR(SdrObject,NULL);
     bVirtObj         =false;
@@ -497,6 +498,8 @@ SdrObject::~SdrObject()
         delete mpViewContact;
         mpViewContact = 0L;
     }
+
+    mnLayerID = static_cast<SdrLayerID>(0xdead);
 }
 
 void SdrObject::Free( SdrObject*& _rpObject )
@@ -585,7 +588,11 @@ void SdrObject::SetPage(SdrPage* pNewPage)
     // assume they create compatible UNO shape objects so we shouldn't have
     // to invalidate.
     if (pOldPage != pPage && !(pOldPage && pPage && pOldModel == pModel))
-        setUnoShape(NULL);
+    {
+        SvxShape* const pShape(getSvxShape());
+        if (pShape && !pShape->HasSdrObjectOwnership())
+            setUnoShape(NULL);
+    }
 }
 
 SdrPage* SdrObject::GetPage() const
@@ -3221,6 +3228,16 @@ void SdrObject::SetBLIPSizeRectangle( const Rectangle& aRect )
 void SdrObject::SetContextWritingMode( const sal_Int16 /*_nContextWritingMode*/ )
 {
     // this base class does not support different writing modes, so ignore the call
+}
+
+void SdrObject::SetDoNotInsertIntoPageAutomatically(const bool bSet)
+{
+    mbDoNotInsertIntoPageAutomatically = bSet;
+}
+
+bool SdrObject::IsDoNotInsertIntoPageAutomatically() const
+{
+    return mbDoNotInsertIntoPageAutomatically;
 }
 
 
