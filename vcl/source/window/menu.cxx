@@ -2613,7 +2613,7 @@ static String getShortenedString( const String& i_rLong, Window* i_pWin, long i_
     return aNonMnem;
 }
 
-void Menu::ImplPaint( Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemData* pThisItemOnly, sal_Bool bHighlighted, bool bLayout ) const
+void Menu::ImplPaint( Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemData* pThisItemOnly, sal_Bool bHighlighted, bool bLayout, bool bRollover ) const
 {
     // for symbols: nFontHeight x nFontHeight
     long nFontHeight = pWin->GetTextHeight();
@@ -2648,8 +2648,13 @@ void Menu::ImplPaint( Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemDa
         MenuItemData* pData = pItemList->GetDataFromPos( n );
         if ( ImplIsVisible( n ) && ( !pThisItemOnly || ( pData == pThisItemOnly ) ) )
         {
-            if ( pThisItemOnly && bHighlighted )
-                pWin->SetTextColor( rSettings.GetMenuHighlightTextColor() );
+            if ( pThisItemOnly )
+            {
+                if ( bIsMenuBar && bRollover )
+                    pWin->SetTextColor( rSettings.GetMenuBarRolloverTextColor() );
+                else if ( bHighlighted )
+                    pWin->SetTextColor( rSettings.GetMenuHighlightTextColor() );
+            }
 
             Point aPos( aTopLeft );
             aPos.Y() += nBorder;
@@ -5391,7 +5396,7 @@ void MenuBarWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     mbAutoPopup = sal_True;
     sal_uInt16 nEntry = ImplFindEntry( rMEvt.GetPosPixel() );
-    if ( ( nEntry != ITEMPOS_INVALID ) && ( nEntry != nHighlightedItem ) )
+    if ( ( nEntry != ITEMPOS_INVALID ) && !pActivePopup )
     {
         ChangeHighlightItem( nEntry, sal_False );
     }
@@ -5408,9 +5413,14 @@ void MenuBarWindow::MouseButtonUp( const MouseEvent& )
 
 void MenuBarWindow::MouseMove( const MouseEvent& rMEvt )
 {
-    // only highlight during Move if if was already highlighted.
-    if ( rMEvt.IsSynthetic() || rMEvt.IsLeaveWindow() || rMEvt.IsEnterWindow() || ( nHighlightedItem == ITEMPOS_INVALID ) )
+    if ( rMEvt.IsSynthetic() || rMEvt.IsEnterWindow() )
         return;
+
+    if ( rMEvt.IsLeaveWindow() && !pActivePopup )
+    {
+        ChangeHighlightItem( ITEMPOS_INVALID, sal_False );
+        return;
+    }
 
     if( bIgnoreFirstMove )
     {
@@ -5421,7 +5431,12 @@ void MenuBarWindow::MouseMove( const MouseEvent& rMEvt )
     sal_uInt16 nEntry = ImplFindEntry( rMEvt.GetPosPixel() );
     if ( ( nEntry != ITEMPOS_INVALID )
        && ( nEntry != nHighlightedItem ) )
+    {
+        if ( ! pActivePopup )
+            mbAutoPopup = sal_False;
+
         ChangeHighlightItem( nEntry, sal_False );
+    }
 }
 
 void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, sal_Bool bSelectEntry, sal_Bool bAllowRestoreFocus, sal_Bool bDefaultToDocument)
@@ -5525,6 +5540,7 @@ void MenuBarWindow::HighlightItem( sal_uInt16 nPos, sal_Bool bHighlight )
                 Rectangle aRect = Rectangle( Point( nX, 1 ), Size( pData->aSz.Width(), GetOutputSizePixel().Height()-2 ) );
                 Push( PUSH_CLIPREGION );
                 IntersectClipRegion( aRect );
+                bool bRollover = bHighlight && ( !pActivePopup && !mbAutoPopup );
                 if ( bHighlight )
                 {
                     if( IsNativeControlSupported( CTRL_MENUBAR, PART_MENU_ITEM ) &&
@@ -5550,15 +5566,23 @@ void MenuBarWindow::HighlightItem( sal_uInt16 nPos, sal_Bool bHighlight )
                         ImplAddNWFSeparator( this, aControlValue );
 
                         // draw selected item
+                        ControlState nState = CTRL_STATE_ENABLED;
+                        if ( bRollover )
+                            nState |= CTRL_STATE_ROLLOVER;
+                        else
+                            nState |= CTRL_STATE_SELECTED;
                         DrawNativeControl( CTRL_MENUBAR, PART_MENU_ITEM,
                                            aRect,
-                                           CTRL_STATE_ENABLED | CTRL_STATE_SELECTED,
+                                           nState,
                                            aControlValue,
                                            OUString() );
                     }
                     else
                     {
-                        SetFillColor( GetSettings().GetStyleSettings().GetMenuHighlightColor() );
+                        if ( bRollover )
+                            SetFillColor( GetSettings().GetStyleSettings().GetMenuBarRolloverColor() );
+                        else
+                            SetFillColor( GetSettings().GetStyleSettings().GetMenuHighlightColor() );
                         SetLineColor();
                         DrawRect( aRect );
                     }
@@ -5588,7 +5612,7 @@ void MenuBarWindow::HighlightItem( sal_uInt16 nPos, sal_Bool bHighlight )
                         Erase( aRect );
                 }
                 Pop();
-                pMenu->ImplPaint( this, 0, 0, pData, bHighlight );
+                pMenu->ImplPaint( this, 0, 0, pData, bHighlight, false, bRollover );
             }
             return;
         }

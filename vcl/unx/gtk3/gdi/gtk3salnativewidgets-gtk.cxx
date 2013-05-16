@@ -1175,10 +1175,12 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     gtk_style_context_get_background_color( mpMenuBarStyle, GTK_STATE_FLAG_NORMAL, &background_color );
     aBackColor = getColor( background_color );
     aStyleSet.SetMenuBarColor( aBackColor );
+    aStyleSet.SetMenuBarRolloverColor( aBackColor );
 
     gtk_style_context_get_color( mpMenuBarStyle, GTK_STATE_FLAG_NORMAL, &text_color );
     aTextColor = getColor( text_color );
     aStyleSet.SetMenuBarTextColor( aTextColor );
+    aStyleSet.SetMenuBarRolloverTextColor( aTextColor );
 
     // menu items
     gtk_style_context_get_color( mpMenuStyle, GTK_STATE_FLAG_NORMAL, &color );
