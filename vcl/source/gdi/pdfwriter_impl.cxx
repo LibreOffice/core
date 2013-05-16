@@ -5462,7 +5462,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                     // for radio buttons only the RadioButton field, not the
                     // CheckBox children should have a value, else acrobat reader
                     // does not always check the right button
-                    // of course real check boxes (not belonging to a readio group)
+                    // of course real check boxes (not belonging to a radio group)
                     // need their values, too
                     if( rWidget.m_eType == PDFWriter::RadioButton || rWidget.m_nRadioGroup < 0 )
                     {
