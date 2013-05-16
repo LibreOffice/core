@@ -51,7 +51,7 @@ sub resolve_filelist_flag
                     {
                         installer::logger::print_error("file '$path' is not in '$outdir'");
                     }
-                    if (!-f $path)
+                    if (!-e $path)
                     {
                         installer::logger::print_error("file '$path' does not exist");
                     }
