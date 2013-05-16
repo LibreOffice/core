@@ -191,25 +191,11 @@ void AboutDialog::StyleControls()
     aCancelButton.GrabFocus();
 }
 
-static bool loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWidth )
+static bool tryLoadBrandSvg(const OUString & rPath, BitmapEx &rBitmap, int nWidth )
 {
     // Load from disk
     // ---------------------------------------------------------------------
-    rtl::OUString aBaseName = ( rtl::OUString("/") +
-                                rtl::OUString::createFromAscii( pName ) );
-    rtl::OUString aSvg( ".svg" );
-
-    rtl_Locale *pLoc = NULL;
-    osl_getProcessLocale (&pLoc);
-    LanguageTag aLanguageTag( *pLoc);
-
-    rtl::OUString aName = aBaseName + aSvg;
-    rtl::OUString aLocaleName = ( aBaseName + rtl::OUString("-") +
-                                  aLanguageTag.getBcp47() +
-                                  aSvg );
-    rtl::OUString uri = rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ) + aBaseName+aSvg;
-    rtl::Bootstrap::expandMacros( uri );
-    INetURLObject aObj( uri );
+    INetURLObject aObj( rPath );
     SvgData aSvgData(aObj.PathToFileName());
 
     // transform into [0,0,width,width*aspect] std dimensions
@@ -264,7 +250,7 @@ static bool loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWidth )
                 if(xIntBmp.is())
                 {
                     rBitmap = vcl::unotools::bitmapExFromXBitmap(xIntBmp);
-                    return true;
+                    return !rBitmap.IsEmpty();
                 }
             }
         }
@@ -275,6 +261,35 @@ static bool loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWidth )
     }
     return false;
 }
+
+static bool tryLoadEditionBrandSvg(const OUString & rBaseDir, const OUString& rName, BitmapEx &rBitmap, int nWidth )
+{
+    return
+        tryLoadBrandSvg( rBaseDir + "/program/edition" + rName, rBitmap, nWidth) ||
+        tryLoadBrandSvg( rBaseDir + "/program" + rName, rBitmap, nWidth);
+}
+
+static bool loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWidth )
+{
+    rtl::OUString aBaseDir( "$BRAND_BASE_DIR");
+    rtl::Bootstrap::expandMacros( aBaseDir );
+    rtl::OUString aBaseName( "/" + rtl::OUString::createFromAscii( pName ) );
+    rtl::OUString aSvg( ".svg" );
+
+    rtl_Locale *pLoc = NULL;
+    osl_getProcessLocale (&pLoc);
+    LanguageTag aLanguageTag( *pLoc);
+
+    rtl::OUString aName = aBaseName + aSvg;
+    rtl::OUString aLocaleName = ( aBaseName + rtl::OUString("-") +
+                                  aLanguageTag.getBcp47() +
+                                  aSvg );
+
+    return
+        tryLoadEditionBrandSvg( aBaseDir, aLocaleName, rBitmap, nWidth) ||
+        tryLoadEditionBrandSvg( aBaseDir, aName, rBitmap, nWidth);
+}
+
 
 void AboutDialog::LayoutControls()
 {
