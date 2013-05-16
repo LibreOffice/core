@@ -1,0 +1,8 @@
+Contains non-graphical helper code for office applications.
+
+In particular the SfxItemSet is a property-bag like container that
+stores arbitrary sets of properties for everything from text run
+formats, to Chart regression line properties.
+
+There are lots of other useful helpers in here for various office
+tasks; much of this code was originally moved from svx/sfx2.
