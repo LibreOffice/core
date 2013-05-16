@@ -297,7 +297,8 @@ HTMLParser::HTMLParser( SvStream& rIn, bool bReadNewDoc ) :
     bEndTokenFound(false),
     bPre_IgnoreNewPara(false),
     bReadNextChar(false),
-    bReadComment(false)
+    bReadComment(false),
+    mnPendingOffToken(0)
 {
     //#i76649, default to UTF-8 for HTML unless we know differently
     SetSrcEncoding(RTL_TEXTENCODING_UTF8);
@@ -1057,6 +1058,15 @@ int HTMLParser::_GetNextToken()
     int nRet = 0;
     sSaveToken.Erase();
 
+    if (mnPendingOffToken)
+    {
+        // HTML_<TOKEN>_OFF generated for HTML_<TOKEN>_ON
+        nRet = mnPendingOffToken;
+        mnPendingOffToken = 0;
+        aToken.Erase();
+        return nRet;
+    }
+
     // Delete options
     if (!maOptions.empty())
         maOptions.clear();
@@ -1204,10 +1214,14 @@ int HTMLParser::_GetNextToken()
                         ScanText( '>' );
 
                         // fdo#34666 fdo#36080 fdo#36390: closing "/>"?:
-                        // return HTML_<TOKEN>_OFF instead of HTML_<TOKEN>_ON
+                        // generate pending HTML_<TOKEN>_OFF for HTML_<TOKEN>_ON
+                        // Do not convert this to a single HTML_<TOKEN>_OFF
+                        // which lead to fdo#56772.
                         if ((HTML_TOKEN_ONOFF & nRet) && (aToken.Len() >= 1) &&
-                            ('/' == aToken.GetChar(aToken.Len()-1))) {
-                            ++nRet; // HTML_<TOKEN>_ON -> HTML_<TOKEN>_OFF;
+                                ('/' == aToken.GetChar(aToken.Len()-1)))
+                        {
+                            mnPendingOffToken = nRet + 1;       // HTML_<TOKEN>_ON -> HTML_<TOKEN>_OFF
+                            aToken.Erase( aToken.Len()-1, 1);   // remove trailing '/'
                         }
                         if( sal_Unicode(EOF) == nNextCh && rInput.IsEof() )
                         {
