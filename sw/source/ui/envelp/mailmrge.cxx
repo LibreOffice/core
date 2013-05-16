@@ -210,6 +210,14 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     aAttachED.Show(sal_False);
     aAttachPB.Show(sal_False);
 
+    SwNewDBMgr* pNewDBMgr = rSh.GetNewDBMgr();
+    if(_xConnection.is())
+        pNewDBMgr->GetColumnNames(&aAddressFldLB, _xConnection, rTableName);
+    else
+        pNewDBMgr->GetColumnNames(&aAddressFldLB, rDBName, rTableName);
+    for(sal_uInt16 nEntry = 0; nEntry < aAddressFldLB.GetEntryCount(); nEntry++)
+        aColumnLB.InsertEntry(aAddressFldLB.GetEntry(nEntry));
+
     Point aMailPos = aMailingRB.GetPosPixel();
     Point aFilePos = aFileRB.GetPosPixel();
     aFilePos.X() -= (aFilePos.X() - aMailPos.X()) /2;
@@ -360,14 +368,6 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     aToNF.SetModifyHdl(aLk);
     aFromNF.SetMax(SAL_MAX_INT32);
     aToNF.SetMax(SAL_MAX_INT32);
-
-    SwNewDBMgr* pNewDBMgr = rSh.GetNewDBMgr();
-    if(_xConnection.is())
-        pNewDBMgr->GetColumnNames(&aAddressFldLB, _xConnection, rTableName);
-    else
-        pNewDBMgr->GetColumnNames(&aAddressFldLB, rDBName, rTableName);
-    for(sal_uInt16 nEntry = 0; nEntry < aAddressFldLB.GetEntryCount(); nEntry++)
-        aColumnLB.InsertEntry(aAddressFldLB.GetEntry(nEntry));
 
     aAddressFldLB.SelectEntry(rtl::OUString("EMAIL"));
 
