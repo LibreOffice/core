@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//8ms\u003d",
+        "filename": "editeng/source/misc/svxacorr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1609,
+      "author": {
+        "id": 1000186
+      },
+      "writtenOn": "2013-05-16T16:49:04Z",
+      "side": 1,
+      "message": "How about:\nOUString sShareDirFile( GetAutoCorrFileName( eLang, sal_True, sal_False ) );\n\nAnd drop the sUserDirFile?",
+      "revId": "55f7cecd189184ce5fe663d28fa426babdbcac47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
