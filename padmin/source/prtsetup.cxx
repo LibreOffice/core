@@ -91,9 +91,10 @@ RTSDialog::RTSDialog( const PrinterInfo& rJobData, const String& rPrinter, bool 
     get(m_pCancelButton, "cancel");
     get(m_pTabControl, "notebook");
 
-    String aTitle( GetText() );
-    aTitle.SearchAndReplace( String( "%s" ), m_aJobData.m_aPrinterName );
-    SetText( aTitle );
+    setDeferredProperties();
+
+    OUString aTitle(GetText());
+    SetText(aTitle.replaceAll("%s", m_aJobData.m_aPrinterName));
 
     if( ! bAllPages )
     {
@@ -117,16 +118,11 @@ RTSDialog::RTSDialog( const PrinterInfo& rJobData, const String& rPrinter, bool 
 
 RTSDialog::~RTSDialog()
 {
-    if( m_pPaperPage )
-        delete m_pPaperPage;
-    if( m_pDevicePage )
-        delete m_pDevicePage;
-    if( m_pOtherPage )
-        delete m_pOtherPage;
-    if( m_pFontSubstPage )
-        delete m_pFontSubstPage;
-    if( m_pCommandPage )
-        delete m_pCommandPage;
+    delete m_pPaperPage;
+    delete m_pDevicePage;
+    delete m_pOtherPage;
+    delete m_pFontSubstPage;
+    delete m_pCommandPage;
 }
 
 // --------------------------------------------------------------------------
