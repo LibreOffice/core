@@ -29,8 +29,6 @@ $(call gb_ExternalProject_get_state_target,libmspub,build) :
 		&& export ICU_CFLAGS="$(if $(filter NO,$(SYSTEM_ICU)),\
 			-I$(call gb_UnpackedTarball_get_dir,icu)/source/i18n \
 			-I$(call gb_UnpackedTarball_get_dir,icu)/source/common, )" \
-		&& export LIBMSPUB_CFLAGS="$(WPG_CFLAGS) $(WPD_CFLAGS)" \
-		&& export LIBMSPUB_LIBS="$(WPG_LIBS) $(WPD_LIBS)" \
 		&& ./configure \
 			--with-pic \
 			--enable-static \
