@@ -121,7 +121,6 @@ class Font3;
 class GlyphSet;
 class PrinterJob;
 class PrintFontManager;
-struct KernPair;
 struct CharacterMetric;
 
 /*
@@ -401,8 +400,6 @@ public:
     { maTextColor = rTextColor; }
     sal_Int32       GetCharWidth (sal_uInt16 nFrom, sal_uInt16 nTo,
                                   long *pWidthArray);
-    const ::std::list< KernPair >& getKernPairs( bool bVertical = false ) const;
-
     // for CTL
     void            DrawGlyphs( const Point& rPoint,
                                 sal_GlyphId* pGlyphIds,
