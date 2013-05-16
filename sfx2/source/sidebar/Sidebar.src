@@ -165,3 +165,8 @@ String SFX_STR_SIDEBAR_CLOSE_DECK
     Text [en-US] = "Close Sidebar Deck";
 };
 
+String SFX_STR_SIDEBAR_ACCESSIBILITY_PANEL_PREFIX
+{
+    Text [en-US] = "Panel: ";
+};
+
