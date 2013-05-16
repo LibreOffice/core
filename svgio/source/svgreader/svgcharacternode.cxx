@@ -248,9 +248,19 @@ namespace svgio
             if(nLength)
             {
                 // prepare FontAttribute
-                const rtl::OUString aFontFamily = rSvgStyleAttributes.getFontFamily().empty() ?
+                rtl::OUString aFontFamily = rSvgStyleAttributes.getFontFamily().empty() ?
                     rtl::OUString(rtl::OUString::createFromAscii("Times New Roman")) :
                     rSvgStyleAttributes.getFontFamily()[0];
+
+                // #122324# if the FontFamily name ends on ' embedded' it is probably a re-import
+                // of a SVG export with fiont embedding. Remove this to make font matching work. This
+                // is pretty safe since there should be no font family names ending on ' embedded'.
+                // Remove again when FontEmbedding is implemented in SVG import
+                if(aFontFamily.endsWithAsciiL(" embedded", 9))
+                {
+                    aFontFamily = aFontFamily.copy(0, aFontFamily.getLength() - 9);
+                }
+
                 const ::FontWeight nFontWeight(getVclFontWeight(rSvgStyleAttributes.getFontWeight()));
                 bool bSymbol(false);
                 bool bVertical(false);
