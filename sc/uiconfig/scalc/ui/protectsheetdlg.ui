@@ -224,7 +224,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="svxlo-SvxCheckListBox" id="checklist:border">
+                          <object class="svxcorelo-SvxCheckListBox" id="checklist:border">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
