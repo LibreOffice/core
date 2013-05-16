@@ -11551,34 +11551,22 @@ PREFIXDIR="$prefix"
 AC_MSG_RESULT([$PREFIXDIR])
 AC_SUBST(PREFIXDIR)
 
-AC_MSG_CHECKING([for libdir])
 LIBDIR=[$(eval echo $(eval echo $libdir))]
-AC_MSG_RESULT([$LIBDIR])
 AC_SUBST(LIBDIR)
 
-AC_MSG_CHECKING([for data dir])
 DATADIR=[$(eval echo $(eval echo $datadir))]
-AC_MSG_RESULT([$DATADIR])
 AC_SUBST(DATADIR)
 
-AC_MSG_CHECKING([for man dir])
 MANDIR=[$(eval echo $(eval echo $mandir))]
-AC_MSG_RESULT([$MANDIR])
 AC_SUBST(MANDIR)
 
-AC_MSG_CHECKING([for doc dir])
 DOCDIR=[$(eval echo $(eval echo $docdir))]
-AC_MSG_RESULT([$DOCDIR])
 AC_SUBST(DOCDIR)
 
-AC_MSG_CHECKING([for install dir])
 INSTALLDIR="$LIBDIR/$INSTALLDIRNAME"
-AC_MSG_RESULT([$INSTALLDIR])
 AC_SUBST(INSTALLDIR)
 
-AC_MSG_CHECKING([for dev-install dir])
 DEVINSTALLDIR="$OUTDIR/installation"
-AC_MSG_RESULT([$DEVINSTALLDIR])
 AC_SUBST(DEVINSTALLDIR)
 
 # ===================================================================
