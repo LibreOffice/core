@@ -640,7 +640,7 @@ evalnum(int c)
         c = cget();
     }
     if (c == 'u' || c == 'U')   /* Unsigned nonsense        */
-        c = cget();
+        cget();
     unget();
     return (value);
 }
