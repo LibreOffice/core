@@ -975,6 +975,23 @@ bool SwCrsrShell::IsSttPara() const
 bool SwCrsrShell::IsEndPara() const
 {   return m_pCurCrsr->GetPoint()->nContent == m_pCurCrsr->GetCntntNode()->Len(); }
 
+bool SwCrsrShell::IsEndOfTable() const
+{
+    if (IsTableMode() || IsBlockMode() || !IsEndPara())
+    {
+        return false;
+    }
+    SwTableNode const*const pTableNode( IsCrsrInTbl() );
+    if (!pTableNode)
+    {
+        return false;
+    }
+    SwEndNode const*const pEndTableNode(pTableNode->EndOfSectionNode());
+    SwNodeIndex const lastNode(*pEndTableNode, -2);
+    SAL_WARN_IF(!lastNode.GetNode().GetTxtNode(), "sw.core",
+            "text node expected");
+    return (lastNode == m_pCurCrsr->GetPoint()->nNode);
+}
 
 bool SwCrsrShell::IsInFrontOfLabel() const
 {

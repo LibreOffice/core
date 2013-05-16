@@ -456,7 +456,28 @@ long SwWrtShell::DelToEndOfSentence()
     if(IsEndOfDoc())
         return 0;
     OpenMark();
-    long nRet = _FwdSentence() ? Delete() : 0;
+    long nRet(0);
+    // fdo#60967: special case that is documented in help: delete
+    // paragraph following table if cursor is at end of last cell in table
+    if (IsEndOfTable())
+    {
+        Push();
+        ClearMark();
+        if (SwCrsrShell::Right(1,CRSR_SKIP_CHARS))
+        {
+            SetMark();
+            SwCrsrShell::MovePara(fnParaCurr, fnParaEnd);
+            if (!IsEndOfDoc()) // do not delete last paragraph in body text
+            {
+                nRet = DelFullPara() ? 1 : 0;
+            }
+        }
+        Pop(false);
+    }
+    else
+    {
+        nRet = _FwdSentence() ? Delete() : 0;
+    }
     CloseMark( 0 != nRet );
     return nRet;
 }
