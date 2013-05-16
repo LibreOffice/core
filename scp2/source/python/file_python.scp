@@ -155,6 +155,18 @@ Directory gid_Dir_PythonFramework_Versions_ver_bin
     Styles = (CREATE);
 End
 
+Directory gid_Dir_PythonFramework_Versions_ver_include
+    ParentID = gid_Dir_PythonFramework_Versions_ver;
+    HostName = "include";
+    Styles = (CREATE);
+End
+
+Directory gid_Dir_PythonFramework_Versions_ver_include_pythonver
+    ParentID = gid_Dir_PythonFramework_Versions_ver_include;
+    HostName = STRING(CONCAT3(python,PYMAJMIN,m));
+    Styles = (CREATE);
+End
+
 Directory gid_Dir_PythonFramework_Versions_ver_lib
     ParentID = gid_Dir_PythonFramework_Versions_ver;
     HostName = "lib";
