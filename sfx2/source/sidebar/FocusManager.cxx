@@ -554,6 +554,10 @@ IMPL_LINK(FocusManager, WindowEventListener, VclSimpleEvent*, pEvent)
         case VCLEVENT_WINDOW_GETFOCUS:
         case VCLEVENT_WINDOW_LOSEFOCUS:
             pSource->Invalidate();
+            return 1;
+
+        default:
+            break;
     }
 
     return 0;
@@ -608,14 +612,14 @@ IMPL_LINK(FocusManager, ChildEventListener, VclSimpleEvent*, pEvent)
                         break;
                 }
             }
-            break;
+            return 1;
         }
 
         default:
             break;
     }
 
-    return 1;
+    return 0;
 }
 
 
