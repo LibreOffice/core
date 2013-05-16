@@ -144,6 +144,8 @@ private:
 
     sal_uInt32 nPre_LinePos;            // Pos in der Line im PRE-Tag
 
+    int mnPendingOffToken;          ///< OFF token pending for a <XX.../> ON/OFF ON token
+
     String aEndToken;
 
 protected:
