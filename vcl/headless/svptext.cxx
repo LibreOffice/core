@@ -189,37 +189,6 @@ void SvpGlyphPeer::RemovingGlyph( GlyphData& rGlyphData )
     delete pGcpHelper;
 }
 
-
-// PspKernInfo allows on-demand-querying of psprint provided kerning info (#i29881#)
-class PspKernInfo : public ExtraKernInfo
-{
-public:
-    PspKernInfo( int nFontId ) : ExtraKernInfo(nFontId) {}
-protected:
-    virtual void Initialize() const;
-};
-
-
-void PspKernInfo::Initialize() const
-{
-    mbInitialized = true;
-
-    // get the kerning pairs from psprint
-    const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-    typedef std::list< psp::KernPair > PspKernPairs;
-    const PspKernPairs& rKernPairs = rMgr.getKernPairs( mnFontId );
-    if( rKernPairs.empty() )
-        return;
-
-    PspKernPairs::const_iterator it = rKernPairs.begin();
-    for(; it != rKernPairs.end(); ++it )
-    {
-        ImplKernPairData aKernPair = { it->first, it->second, it->kern_x };
-        maUnicodeKernPairs.insert( aKernPair );
-    }
-}
-
-
 sal_uInt16 SvpSalGraphics::SetFont( FontSelectPattern* pIFSD, int nFallbackLevel )
 {
     // release all no longer needed font resources
@@ -268,20 +237,9 @@ void SvpSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLe
 }
 
 
-sal_uLong SvpSalGraphics::GetKernPairs( sal_uLong nPairs, ImplKernPairData* pKernPairs )
+sal_uLong SvpSalGraphics::GetKernPairs( sal_uLong, ImplKernPairData* )
 {
-    sal_uLong nGotPairs = 0;
-
-    if( m_pServerFont[0] != NULL )
-    {
-        ImplKernPairData* pTmpKernPairs = NULL;
-        nGotPairs = m_pServerFont[0]->GetKernPairs( &pTmpKernPairs );
-        for( sal_uLong i = 0; i < nPairs && i < nGotPairs; ++i )
-            pKernPairs[ i ] = pTmpKernPairs[ i ];
-        delete[] pTmpKernPairs;
-    }
-
-    return nGotPairs;
+    return 0;
 }
 
 
@@ -325,17 +283,11 @@ void SvpSalGraphics::GetDevFontList( ImplDevFontList* pDevFontList )
         // normalize face number to the GlyphCache
         int nFaceNum = rMgr.getFontFaceNumber( aInfo.m_nID );
 
-        // for fonts where extra kerning info can be provided on demand
-        // an ExtraKernInfo object is supplied
-        const ExtraKernInfo* pExtraKernInfo = NULL;
-        if( aInfo.m_eType == psp::fonttype::Type1 )
-            pExtraKernInfo = new PspKernInfo( *it );
-
         // inform GlyphCache about this font provided by the PsPrint subsystem
         ImplDevFontAttributes aDFA = GenPspGraphics::Info2DevFontAttributes( aInfo );
         aDFA.mnQuality += 4096;
         const OString& rFileName = rMgr.getFontFileSysPath( aInfo.m_nID );
-        rGC.AddFontFile( rFileName, nFaceNum, aInfo.m_nID, aDFA, pExtraKernInfo );
+        rGC.AddFontFile( rFileName, nFaceNum, aInfo.m_nID, aDFA );
    }
 
     // announce glyphcache fonts
