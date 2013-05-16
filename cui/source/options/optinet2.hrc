@@ -41,7 +41,6 @@
 #define FT_NOPROXYFOR               11
 #define ED_NOPROXYFOR               11
 #define ED_NOPROXYDESC              12
-#define ST_PROXY_FROM_BROWSER       13
 #define FT_HTTPS_PROXY              14
 #define ED_HTTPS_PROXY              14
 #define FT_HTTPS_PORT               15

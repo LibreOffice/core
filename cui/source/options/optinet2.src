@@ -64,10 +64,6 @@ TabPage RID_SVXPAGE_INET_PROXY
             < "Manual" ; > ;
         };
     };
-    String ST_PROXY_FROM_BROWSER
-    {
-        Text [ en-US ] = "Use browser settings";
-    };
     FixedText FT_HTTP_PROXY
     {
         Pos = MAP_APPFONT ( 12 , GB_TYPES_TOP + 29 ) ;

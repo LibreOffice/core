@@ -84,8 +84,6 @@ private:
     Edit            aNoProxyForED;
     FixedText       aNoProxyDescFT;
 
-    String          sFromBrowser;
-
     const OUString aProxyModePN;
     const OUString aHttpProxyPN;
     const OUString aHttpPortPN;

@@ -167,7 +167,6 @@ SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aNoProxyForFT     (this, CUI_RES( FT_NOPROXYFOR     )),
     aNoProxyForED     (this, CUI_RES( ED_NOPROXYFOR     )),
     aNoProxyDescFT    (this, CUI_RES( ED_NOPROXYDESC    )),
-    sFromBrowser        (       CUI_RES( ST_PROXY_FROM_BROWSER ) ),
     aProxyModePN("ooInetProxyType"),
     aHttpProxyPN("ooInetHTTPProxyName"),
     aHttpPortPN("ooInetHTTPProxyPort"),
