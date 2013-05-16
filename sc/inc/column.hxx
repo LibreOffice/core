@@ -268,7 +268,7 @@ public:
     void        MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol);
 
 
-    bool               HasEditCells(SCROW nStartRow, SCROW nEndRow, SCROW& rFirst) const;
+    bool HasEditCells(SCROW nStartRow, SCROW nEndRow, SCROW& rFirst);
 
     bool SetString(
         SCROW nRow, SCTAB nTab, const String& rString, formula::FormulaGrammar::AddressConvention eConv,
@@ -411,7 +411,7 @@ public:
     void GetOptimalHeight(
         SCROW nStartRow, SCROW nEndRow, sal_uInt16* pHeight, OutputDevice* pDev,
         double nPPTX, double nPPTY, const Fraction& rZoomX, const Fraction& rZoomY,
-        bool bShrink, sal_uInt16 nMinHeight, SCROW nMinStart) const;
+        bool bShrink, sal_uInt16 nMinHeight, SCROW nMinStart);
 
                 /// Including current, may return -1
     SCsROW      GetNextUnprotected( SCROW nRow, bool bUp ) const;

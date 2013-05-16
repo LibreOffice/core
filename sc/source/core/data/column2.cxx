@@ -683,7 +683,7 @@ static sal_uInt16 lcl_GetAttribHeight( const ScPatternAttr& rPattern, sal_uInt16
 void ScColumn::GetOptimalHeight(
     SCROW nStartRow, SCROW nEndRow, sal_uInt16* pHeight, OutputDevice* pDev,
     double nPPTX, double nPPTY, const Fraction& rZoomX, const Fraction& rZoomY,
-    bool bShrink, sal_uInt16 nMinHeight, SCROW nMinStart) const
+    bool bShrink, sal_uInt16 nMinHeight, SCROW nMinStart)
 {
     ScAttrIterator aIter( pAttrArray, nStartRow, nEndRow );
 

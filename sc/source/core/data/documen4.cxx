@@ -661,28 +661,42 @@ const SfxPoolItem* ScDocument::GetEffItem(
 
 const SfxItemSet* ScDocument::GetCondResult( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
-    const ScPatternAttr* pPattern = GetPattern( nCol, nRow, nTab );
-    const std::vector<sal_uInt32>& rIndex = static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData();
     ScConditionalFormatList* pFormatList = GetCondFormList(nTab);
-    for(std::vector<sal_uInt32>::const_iterator itr = rIndex.begin(), itrEnd = rIndex.end();
-            itr != itrEnd; ++itr)
+    if (!pFormatList)
+        return NULL;
+
+    ScAddress aPos(nCol, nRow, nTab);
+    ScRefCellValue aCell;
+    aCell.assign(const_cast<ScDocument&>(*this), aPos);
+    const ScPatternAttr* pPattern = GetPattern( nCol, nRow, nTab );
+    const std::vector<sal_uInt32>& rIndex =
+        static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData();
+
+    return GetCondResult(aCell, aPos, *pFormatList, rIndex);
+}
+
+const SfxItemSet* ScDocument::GetCondResult(
+    ScRefCellValue& rCell, const ScAddress& rPos, const ScConditionalFormatList& rList,
+    const std::vector<sal_uInt32>& rIndex ) const
+{
+    std::vector<sal_uInt32>::const_iterator itr = rIndex.begin(), itrEnd = rIndex.end();
+    for (; itr != itrEnd; ++itr)
     {
-        ScConditionalFormat* pForm = pFormatList->GetFormat(*itr);
-        if(!pForm)
+        const ScConditionalFormat* pForm = rList.GetFormat(*itr);
+        if (!pForm)
             continue;
 
-        ScAddress aPos(nCol, nRow, nTab);
-        ScRefCellValue aCell;
-        aCell.assign(const_cast<ScDocument&>(*this), aPos);
-        const OUString& aStyle = pForm->GetCellStyle(aCell, aPos);
+        const OUString& aStyle = pForm->GetCellStyle(rCell, rPos);
         if (!aStyle.isEmpty())
         {
-            SfxStyleSheetBase* pStyleSheet = xPoolHelper->GetStylePool()->Find( aStyle, SFX_STYLE_FAMILY_PARA );
-            if ( pStyleSheet )
+            SfxStyleSheetBase* pStyleSheet =
+                xPoolHelper->GetStylePool()->Find(aStyle, SFX_STYLE_FAMILY_PARA);
+
+            if (pStyleSheet)
                 return &pStyleSheet->GetItemSet();
+
             // if style is not there, treat like no condition
         }
-
     }
 
     return NULL;

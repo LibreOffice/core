@@ -455,6 +455,7 @@ public:
     bool    CheckAllEntries();
 
     ScConditionalFormat* GetFormat( sal_uInt32 nKey );
+    const ScConditionalFormat* GetFormat( sal_uInt32 nKey ) const;
 
     void    CompileAll();
     void    CompileXML();

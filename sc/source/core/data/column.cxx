@@ -33,6 +33,7 @@
 #include "globalnames.hxx"
 #include "cellvalue.hxx"
 #include "tokenarray.hxx"
+#include "cellform.hxx"
 
 #include <svl/poolcach.hxx>
 #include <svl/zforlist.hxx>
@@ -2286,25 +2287,89 @@ void ScColumn::ResetChanged( SCROW nStartRow, SCROW nEndRow )
 }
 
 
-bool ScColumn::HasEditCells(SCROW nStartRow, SCROW nEndRow, SCROW& rFirst) const
+bool ScColumn::HasEditCells(SCROW nStartRow, SCROW nEndRow, SCROW& rFirst)
 {
     //  used in GetOptimalHeight - ambiguous script type counts as edit cell
 
-    SCROW nRow = 0;
-    SCSIZE nIndex;
-    Search(nStartRow,nIndex);
-    while ( (nIndex < maItems.size()) ? ((nRow=maItems[nIndex].nRow) <= nEndRow) : false )
+    std::vector<ColEntry>::const_iterator itCell = Search(nStartRow);
+    std::vector<ColEntry>::const_iterator itCellEnd = maItems.end();
+    if (itCell == itCellEnd)
+        return false;
+
+    SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
+    ScConditionalFormatList* pCFList = pDocument->GetCondFormList(nTab);
+
+    sc::CellTextAttrStoreType::iterator itAttrPos = maCellTextAttrs.begin();
+    for (; itCell != itCellEnd && itCell->nRow <= nEndRow; ++itCell)
     {
-        ScBaseCell* pCell = maItems[nIndex].pCell;
+        ScBaseCell* pCell = itCell->pCell;
+        SCROW nRow = itCell->nRow;
         CellType eCellType = pCell->GetCellType();
-        if ( eCellType == CELLTYPE_EDIT ||
-             IsAmbiguousScriptNonZero( pDocument->GetScriptType(nCol, nRow, nTab) ) ||
-             ((eCellType == CELLTYPE_FORMULA) && ((ScFormulaCell*)pCell)->IsMultilineResult()) )
+
+        // See if this is a real edit cell.
+        if (eCellType == CELLTYPE_EDIT)
         {
             rFirst = nRow;
             return true;
         }
-        ++nIndex;
+
+        // Check the script type next.
+        std::pair<sc::CellTextAttrStoreType::iterator,size_t> itPos =
+            maCellTextAttrs.position(itAttrPos, nRow);
+
+        sal_uInt16 nScriptType = 0;
+        itAttrPos = itPos.first; // Track the position of cell text attribute array.
+        if (itAttrPos->type == sc::element_type_celltextattr)
+        {
+            sc::CellTextAttr& rVal =
+                sc::custom_celltextattr_block::at(*itAttrPos->data, itPos.second);
+            nScriptType = rVal.mnScriptType;
+
+            if (nScriptType == SC_SCRIPTTYPE_UNKNOWN)
+            {
+                // Script type not yet determined. Determine the real script
+                // type, and store it.
+                const ScPatternAttr* pPattern = GetPattern(nRow);
+                if (pPattern)
+                {
+                    ScRefCellValue aCell;
+                    ScAddress aPos(nCol, nRow, nTab);
+                    aCell.assign(*pDocument, aPos);
+
+                    const SfxItemSet* pCondSet = NULL;
+                    if (pCFList)
+                    {
+                        const ScCondFormatItem& rItem =
+                            static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL));
+                        const std::vector<sal_uInt32>& rData = rItem.GetCondFormatData();
+                        pCondSet = pDocument->GetCondResult(aCell, aPos, *pCFList, rData);
+                    }
+
+                    OUString aStr;
+                    Color* pColor;
+                    sal_uLong nFormat = pPattern->GetNumberFormat(pFormatter, pCondSet);
+                    ScCellFormat::GetString(aCell, nFormat, aStr, &pColor, *pFormatter);
+                    nScriptType = pDocument->GetStringScriptType(aStr);
+
+                    if (nScriptType && nScriptType != SC_SCRIPTTYPE_UNKNOWN)
+                        // Store the real script type to the array.
+                        rVal.mnScriptType = nScriptType;
+                }
+            }
+        }
+
+        if (IsAmbiguousScriptNonZero(nScriptType))
+        {
+            rFirst = nRow;
+            return true;
+        }
+
+        // Lastly, see if this is a formula cell with multi-line result.
+        if (eCellType == CELLTYPE_FORMULA && static_cast<ScFormulaCell*>(pCell)->IsMultilineResult())
+        {
+            rFirst = nRow;
+            return true;
+        }
     }
 
     return false;

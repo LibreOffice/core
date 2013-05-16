@@ -2134,6 +2134,18 @@ ScConditionalFormat* ScConditionalFormatList::GetFormat( sal_uInt32 nKey )
     return NULL;
 }
 
+const ScConditionalFormat* ScConditionalFormatList::GetFormat( sal_uInt32 nKey ) const
+{
+    //! binaer suchen
+
+    for ( const_iterator itr = begin(); itr != end(); ++itr)
+        if (itr->GetKey() == nKey)
+            return &(*itr);
+
+    SAL_WARN("sc", "ScConditionalFormatList: Entry not found");
+    return NULL;
+}
+
 void ScConditionalFormatList::CompileAll()
 {
     for( iterator itr = begin(); itr != end(); ++itr)
