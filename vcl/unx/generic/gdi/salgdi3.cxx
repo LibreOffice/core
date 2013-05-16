@@ -88,37 +88,6 @@ struct _XRegion
     BOX *rects;
     BOX extents;
 };
-// ===========================================================================
-
-// PspKernInfo allows on-demand-querying of psprint provided kerning info (#i29881#)
-class PspKernInfo : public ExtraKernInfo
-{
-public:
-    PspKernInfo( int nFontId ) : ExtraKernInfo(nFontId) {}
-protected:
-    virtual void Initialize() const;
-};
-
-//--------------------------------------------------------------------------
-
-void PspKernInfo::Initialize() const
-{
-    mbInitialized = true;
-
-    // get the kerning pairs from psprint
-    const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-    typedef std::list< psp::KernPair > PspKernPairs;
-    const PspKernPairs& rKernPairs = rMgr.getKernPairs( mnFontId );
-    if( rKernPairs.empty() )
-        return;
-
-    PspKernPairs::const_iterator it = rKernPairs.begin();
-    for(; it != rKernPairs.end(); ++it )
-    {
-        ImplKernPairData aKernPair = { it->first, it->second, it->kern_x };
-        maUnicodeKernPairs.insert( aKernPair );
-    }
-}
 
 // ----------------------------------------------------------------------------
 //
@@ -593,17 +562,11 @@ void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
         // normalize face number to the GlyphCache
         int nFaceNum = rMgr.getFontFaceNumber( aInfo.m_nID );
 
-        // for fonts where extra kerning info can be provided on demand
-        // an ExtraKernInfo object is supplied
-        const ExtraKernInfo* pExtraKernInfo = NULL;
-        if( aInfo.m_eType == psp::fonttype::Type1 )
-            pExtraKernInfo = new PspKernInfo( *it );
-
         // inform GlyphCache about this font provided by the PsPrint subsystem
         ImplDevFontAttributes aDFA = GenPspGraphics::Info2DevFontAttributes( aInfo );
         aDFA.mnQuality += 4096;
         const OString& rFileName = rMgr.getFontFileSysPath( aInfo.m_nID );
-        rGC.AddFontFile( rFileName, nFaceNum, aInfo.m_nID, aDFA, pExtraKernInfo );
+        rGC.AddFontFile( rFileName, nFaceNum, aInfo.m_nID, aDFA );
    }
 
     // announce glyphcache fonts
@@ -665,20 +628,8 @@ X11SalGraphics::GetFontMetric( ImplFontMetricData *pMetric, int nFallbackLevel )
 // ---------------------------------------------------------------------------
 
 sal_uLong
-X11SalGraphics::GetKernPairs( sal_uLong nPairs, ImplKernPairData *pKernPairs )
+X11SalGraphics::GetKernPairs( sal_uLong, ImplKernPairData* )
 {
-    if( ! bPrinter_ )
-    {
-        if( mpServerFont[0] != NULL )
-        {
-            ImplKernPairData* pTmpKernPairs;
-            sal_uLong nGotPairs = mpServerFont[0]->GetKernPairs( &pTmpKernPairs );
-            for( unsigned int i = 0; i < nPairs && i < nGotPairs; ++i )
-                pKernPairs[ i ] = pTmpKernPairs[ i ];
-            delete[] pTmpKernPairs;
-            return nGotPairs;
-        }
-    }
     return 0;
 }
 

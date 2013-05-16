@@ -154,10 +154,10 @@ GlyphCache& GlyphCache::GetInstance()
 
 
 void GlyphCache::AddFontFile( const OString& rNormalizedName, int nFaceNum,
-    sal_IntPtr nFontId, const ImplDevFontAttributes& rDFA, const ExtraKernInfo* pExtraKern )
+    sal_IntPtr nFontId, const ImplDevFontAttributes& rDFA)
 {
     if( mpFtManager )
-        mpFtManager->AddFontFile( rNormalizedName, nFaceNum, nFontId, rDFA, pExtraKern );
+        mpFtManager->AddFontFile( rNormalizedName, nFaceNum, nFontId, rDFA);
 }
 
 
@@ -402,35 +402,4 @@ ImplServerFontEntry::~ImplServerFontEntry()
     if (mpServerFont)
         mpServerFont->Release();
 }
-
-
-ExtraKernInfo::ExtraKernInfo( sal_IntPtr nFontId )
-:   mbInitialized( false ),
-    mnFontId( nFontId ),
-    maUnicodeKernPairs( 0 )
-{}
-
-
-int ExtraKernInfo::GetUnscaledKernPairs( ImplKernPairData** ppKernPairs ) const
-{
-    if( !mbInitialized )
-        Initialize();
-
-    // return early if no kerning available
-    if( maUnicodeKernPairs.empty() )
-        return 0;
-
-    // allocate kern pair table
-    int nKernCount = maUnicodeKernPairs.size();
-    *ppKernPairs = new ImplKernPairData[ nKernCount ];
-
-    // fill in unicode kern pairs with the kern value scaled to the font width
-    ImplKernPairData* pKernData = *ppKernPairs;
-    UnicodeKernPairs::const_iterator it = maUnicodeKernPairs.begin();
-    for(; it != maUnicodeKernPairs.end(); ++it )
-        *(pKernData++) = *it;
-
-    return nKernCount;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -63,8 +63,7 @@ class FtFontInfo
 public:
                            FtFontInfo( const ImplDevFontAttributes&,
                                const OString& rNativeFileName,
-                               int nFaceNum, sal_IntPtr nFontId, int nSynthetic,
-                                const ExtraKernInfo* );
+                               int nFaceNum, sal_IntPtr nFontId, int nSynthetic);
                           ~FtFontInfo();
 
     const unsigned char*  GetTable( const char*, sal_uLong* pLength=0 ) const;
@@ -90,9 +89,6 @@ public:
     bool                  GetFontCodeRanges( CmapResult& ) const;
     const ImplFontCharMap* GetImplFontCharMap( void );
 
-    bool                  HasExtraKerning() const;
-    int                   GetExtraKernPairs( ImplKernPairData** ) const;
-
 private:
     FT_FaceRec_*    maFaceFT;
     FtFontFile*     mpFontFile;
@@ -114,8 +110,6 @@ private:
     mutable Int2IntMap* mpChar2Glyph;
     mutable Int2IntMap* mpGlyph2Char;
     void InitHashes() const;
-
-    const ExtraKernInfo* mpExtraKernInfo;
 };
 
 // these two inlines are very important for performance
@@ -147,8 +141,7 @@ public:
                         ~FreetypeManager();
 
     void                AddFontFile( const OString& rNormalizedName,
-                            int nFaceNum, sal_IntPtr nFontId, const ImplDevFontAttributes&,
-                            const ExtraKernInfo* );
+                            int nFaceNum, sal_IntPtr nFontId, const ImplDevFontAttributes&);
     void                AnnounceFonts( ImplDevFontList* ) const;
     void                ClearFontList();
 
