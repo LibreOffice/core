@@ -10,9 +10,9 @@
 $(eval $(call gb_ExternalPackage_ExternalPackage,libvisio,libvisio))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,libvisio,inc/external/libvisio,\
-	src/lib/libvisio.h \
-	src/lib/VisioDocument.h \
-	src/lib/VSDStringVector.h \
+	inc/libvisio/libvisio.h \
+	inc/libvisio/VisioDocument.h \
+	inc/libvisio/VSDStringVector.h \
 ))
 
 $(eval $(call gb_ExternalPackage_use_external_project,libvisio,libvisio))
