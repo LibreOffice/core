@@ -53,8 +53,13 @@ awt::Size lcl_getOptimalWidth(StyleSheetTablePtr pStyleSheet, OUString& rDefault
     sal_Int32 nWidth = pOut->GetTextWidth(aLongest);
 
     pOut->Pop();
+
+    // Border: see PDFWriterImpl::drawFieldBorder(), border size is font height / 4,
+    // so additional width / height needed is height / 2.
+    sal_Int32 nBorder = nHeight / 2;
+
     // Width: space for the text + the square having the dropdown arrow.
-    return awt::Size(nWidth + nHeight, nHeight);
+    return awt::Size(nWidth + nBorder + nHeight, nHeight + nBorder);
 }
 
 SdtHelper::SdtHelper(DomainMapper_Impl& rDM_Impl):
