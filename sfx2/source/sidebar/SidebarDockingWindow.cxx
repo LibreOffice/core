@@ -102,4 +102,34 @@ sal_Bool SidebarDockingWindow::Close (void)
 }
 
 
+
+
+SfxChildAlignment SidebarDockingWindow::CheckAlignment (
+    SfxChildAlignment eCurrentAlignment,
+    SfxChildAlignment eRequestedAlignment)
+{
+    switch (eRequestedAlignment)
+    {
+        case SFX_ALIGN_TOP:
+        case SFX_ALIGN_HIGHESTTOP:
+        case SFX_ALIGN_LOWESTTOP:
+        case SFX_ALIGN_BOTTOM:
+        case SFX_ALIGN_LOWESTBOTTOM:
+        case SFX_ALIGN_HIGHESTBOTTOM:
+            return eCurrentAlignment;
+
+        case SFX_ALIGN_LEFT:
+        case SFX_ALIGN_RIGHT:
+        case SFX_ALIGN_FIRSTLEFT:
+        case SFX_ALIGN_LASTLEFT:
+        case SFX_ALIGN_FIRSTRIGHT:
+        case SFX_ALIGN_LASTRIGHT:
+            return eRequestedAlignment;
+
+        default:
+            return eRequestedAlignment;
+    }
+}
+
+
 } } // end of namespace sfx2::sidebar

@@ -1014,11 +1014,13 @@ bool SidebarController::CanModifyChildWindowWidth (void)
 
     sal_uInt16 nRow (0xffff);
     sal_uInt16 nColumn (0xffff);
-    pSplitWindow->GetWindowPos(mpParentWindow, nColumn, nRow);
-
-    sal_uInt16 nRowCount (pSplitWindow->GetWindowCount(nColumn));
-
-    return nRowCount==1;
+    if (pSplitWindow->GetWindowPos(mpParentWindow, nColumn, nRow))
+    {
+        sal_uInt16 nRowCount (pSplitWindow->GetWindowCount(nColumn));
+        return nRowCount==1;
+    }
+    else
+        return false;
 }
 
 
@@ -1069,17 +1071,23 @@ void SidebarController::RestrictWidth (void)
 
 SfxSplitWindow* SidebarController::GetSplitWindow (void)
 {
-    if (mpSplitWindow == NULL)
+    if (mpParentWindow != NULL)
     {
-        if (mpParentWindow != NULL)
+        SfxSplitWindow* pSplitWindow = dynamic_cast<SfxSplitWindow*>(mpParentWindow->GetParent());
+        if (pSplitWindow != mpSplitWindow)
         {
-            mpSplitWindow = dynamic_cast<SfxSplitWindow*>(mpParentWindow->GetParent());
+            if (mpSplitWindow != NULL)
+                mpSplitWindow->RemoveEventListener(LINK(this, SidebarController, WindowEventHandler));
+
+            mpSplitWindow = pSplitWindow;
+
             if (mpSplitWindow != NULL)
                 mpSplitWindow->AddEventListener(LINK(this, SidebarController, WindowEventHandler));
         }
+        return mpSplitWindow;
     }
-
-    return mpSplitWindow;
+    else
+        return NULL;
 }
 
 
