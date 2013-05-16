@@ -303,14 +303,21 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         style.SetMenuBarColor( aMenuBack );
 
         style.SetMenuHighlightColor( toColor ( qMenuCG.color( QPalette::Highlight ) ) );
+        style.SetMenuBarRolloverColor( toColor ( qMenuCG.color( QPalette::Highlight ) ) );
 
         style.SetMenuHighlightTextColor( aMenuFore );
 
         // set special menubar higlight text color
         if ( kapp->style()->inherits( "HighContrastStyle" ) )
+        {
             ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = toColor( qMenuCG.color( QPalette::HighlightedText ) );
+            style.SetMenuBarRolloverTextColor( toColor( qMenuCG.color( QPalette::HighlightedText ) ) );
+        }
         else
+        {
             ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = aMenuFore;
+            style.SetMenuBarRolloverTextColor( aMenuFore );
+        }
 
         // Font
         aFont = toFont( pMenuBar->font(), rSettings.GetUILanguageTag().getLocale() );
