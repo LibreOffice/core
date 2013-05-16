@@ -699,14 +699,14 @@ namespace
 
         return eUnit;
     }
+}
 
-    void ensureDefaultWidthChars(VclBuilder::stringmap &rMap)
-    {
-        OString sWidthChars("width-chars");
-        VclBuilder::stringmap::iterator aFind = rMap.find(sWidthChars);
-        if (aFind == rMap.end())
-            rMap[sWidthChars] = "25";
-    }
+void VclBuilder::ensureDefaultWidthChars(VclBuilder::stringmap &rMap)
+{
+    OString sWidthChars("width-chars");
+    VclBuilder::stringmap::iterator aFind = rMap.find(sWidthChars);
+    if (aFind == rMap.end())
+        rMap[sWidthChars] = "25";
 }
 
 bool VclBuilder::extractGroup(const OString &id, stringmap &rMap)

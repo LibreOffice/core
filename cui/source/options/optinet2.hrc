@@ -22,26 +22,6 @@
 #include <sfx2/tabpage.hrc>
 #include <svtools/controldims.hrc>
 
-// Proxy ------------------------------------------------------------------
-#define GB_SETTINGS                 1
-#define FT_PROXYMODE                2
-#define LB_PROXYMODE                2
-#define FT_HTTP_PROXY               3
-#define ED_HTTP_PROXY               3
-#define FT_HTTP_PORT                4
-#define ED_HTTP_PORT                4
-#define FT_FTP_PROXY                5
-#define ED_FTP_PROXY                5
-#define FT_FTP_PORT                 6
-#define ED_FTP_PORT                 6
-#define FT_NOPROXYFOR               11
-#define ED_NOPROXYFOR               11
-#define ED_NOPROXYDESC              12
-#define FT_HTTPS_PROXY              14
-#define ED_HTTPS_PROXY              14
-#define FT_HTTPS_PORT               15
-#define ED_HTTPS_PORT               15
-
 // Defines - JavaScriptDisableQueryBox_Impl -------------------------------
 
 #define IMG_JSCPT_WARNING           220

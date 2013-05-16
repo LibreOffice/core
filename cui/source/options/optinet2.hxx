@@ -44,14 +44,15 @@ namespace uno = ::com::sun::star::uno;
 class SvxNoSpaceEdit : public Edit
 {
 private:
-    sal_Bool            bOnlyNumeric;
-
+    bool bOnlyNumeric;
 public:
-    SvxNoSpaceEdit(Window* pParent, ResId rResId, sal_Bool bNum = sal_False ) :
-        Edit( pParent, rResId ), bOnlyNumeric( bNum ) {}
-
-    virtual void    KeyInput( const KeyEvent& rKEvent );
-    virtual void    Modify();
+    SvxNoSpaceEdit(Window* pParent, WinBits nStyle)
+        : Edit(pParent, nStyle)
+        , bOnlyNumeric(false)
+    {}
+    virtual void KeyInput(const KeyEvent& rKEvent);
+    virtual void Modify();
+    virtual bool set_property(const OString &rKey, const OString &rValue);
 };
 
 // class SvxProxyTabPage -------------------------------------------------
@@ -59,30 +60,27 @@ public:
 class SvxProxyTabPage : public SfxTabPage
 {
 private:
-    FixedLine       aOptionGB;
 
-    FixedText       aProxyModeFT;
-    ListBox         aProxyModeLB;
+    ListBox*        m_pProxyModeLB;
 
-    FixedText       aHttpProxyFT;
-    SvxNoSpaceEdit  aHttpProxyED;
-    FixedText       aHttpPortFT;
-    SvxNoSpaceEdit  aHttpPortED;
+    FixedText*      m_pHttpProxyFT;
+    SvxNoSpaceEdit* m_pHttpProxyED;
+    FixedText*      m_pHttpPortFT;
+    SvxNoSpaceEdit* m_pHttpPortED;
 
-    FixedText       aHttpsProxyFT;
-    SvxNoSpaceEdit  aHttpsProxyED;
-    FixedText       aHttpsPortFT;
-    SvxNoSpaceEdit  aHttpsPortED;
+    FixedText*      m_pHttpsProxyFT;
+    SvxNoSpaceEdit* m_pHttpsProxyED;
+    FixedText*      m_pHttpsPortFT;
+    SvxNoSpaceEdit* m_pHttpsPortED;
 
+    FixedText*      m_pFtpProxyFT;
+    SvxNoSpaceEdit* m_pFtpProxyED;
+    FixedText*      m_pFtpPortFT;
+    SvxNoSpaceEdit* m_pFtpPortED;
 
-    FixedText       aFtpProxyFT;
-    SvxNoSpaceEdit  aFtpProxyED;
-    FixedText       aFtpPortFT;
-    SvxNoSpaceEdit  aFtpPortED;
-
-    FixedText       aNoProxyForFT;
-    Edit            aNoProxyForED;
-    FixedText       aNoProxyDescFT;
+    FixedText*      m_pNoProxyForFT;
+    Edit*           m_pNoProxyForED;
+    FixedText*      m_pNoProxyDescFT;
 
     const OUString aProxyModePN;
     const OUString aHttpProxyPN;
@@ -95,7 +93,6 @@ private:
 
     uno::Reference< uno::XInterface > m_xConfigurationUpdateAccess;
 
-    void ArrangeControls_Impl();
     void EnableControls_Impl(sal_Bool bEnable);
     void ReadConfigData_Impl();
     void ReadConfigDefaults_Impl();

@@ -99,6 +99,11 @@ using namespace ::sfx2;
 
 // -----------------------------------------------------------------------
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxNoSpaceEdit(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SvxNoSpaceEdit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
+}
+
 void SvxNoSpaceEdit::KeyInput( const KeyEvent& rKEvent )
 {
     if ( bOnlyNumeric )
@@ -136,57 +141,60 @@ void SvxNoSpaceEdit::Modify()
     }
 }
 
+bool SvxNoSpaceEdit::set_property(const OString &rKey, const OString &rValue)
+{
+    if (rKey == "only-numeric")
+        bOnlyNumeric = toBool(rValue);
+    else
+        return Edit::set_property(rKey, rValue);
+    return true;
+}
+
+
 /********************************************************************/
 /*                                                                  */
 /*  SvxProxyTabPage                                                 */
 /*                                                                  */
 /********************************************************************/
 
-SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet ) :
-    SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_INET_PROXY ), rSet ),
-    aOptionGB   (this, CUI_RES(GB_SETTINGS)),
-
-    aProxyModeFT  (this, CUI_RES(FT_PROXYMODE)),
-    aProxyModeLB  (this, CUI_RES(LB_PROXYMODE)),
-
-    aHttpProxyFT      (this, CUI_RES( FT_HTTP_PROXY   )),
-    aHttpProxyED      (this, CUI_RES( ED_HTTP_PROXY     )),
-    aHttpPortFT       (this, CUI_RES( FT_HTTP_PORT      )),
-    aHttpPortED       (this, CUI_RES( ED_HTTP_PORT      ), sal_True),
-
-    aHttpsProxyFT      (this, CUI_RES( FT_HTTPS_PROXY     )),
-    aHttpsProxyED      (this, CUI_RES( ED_HTTPS_PROXY     )),
-    aHttpsPortFT       (this, CUI_RES( FT_HTTPS_PORT      )),
-    aHttpsPortED       (this, CUI_RES( ED_HTTPS_PORT      ), sal_True),
-
-    aFtpProxyFT       (this, CUI_RES( FT_FTP_PROXY      )),
-    aFtpProxyED       (this, CUI_RES( ED_FTP_PROXY      )),
-    aFtpPortFT        (this, CUI_RES( FT_FTP_PORT       )),
-    aFtpPortED        (this, CUI_RES( ED_FTP_PORT       ), sal_True),
-
-    aNoProxyForFT     (this, CUI_RES( FT_NOPROXYFOR     )),
-    aNoProxyForED     (this, CUI_RES( ED_NOPROXYFOR     )),
-    aNoProxyDescFT    (this, CUI_RES( ED_NOPROXYDESC    )),
-    aProxyModePN("ooInetProxyType"),
-    aHttpProxyPN("ooInetHTTPProxyName"),
-    aHttpPortPN("ooInetHTTPProxyPort"),
-    aHttpsProxyPN("ooInetHTTPSProxyName"),
-    aHttpsPortPN("ooInetHTTPSProxyPort"),
-    aFtpProxyPN("ooInetFTPProxyName"),
-    aFtpPortPN("ooInetFTPProxyPort"),
-    aNoProxyDescPN("ooInetNoProxy")
+SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "OptProxyPage","cui/ui/optproxypage.ui", rSet)
+    , aProxyModePN("ooInetProxyType")
+    , aHttpProxyPN("ooInetHTTPProxyName")
+    , aHttpPortPN("ooInetHTTPProxyPort")
+    , aHttpsProxyPN("ooInetHTTPSProxyName")
+    , aHttpsPortPN("ooInetHTTPSProxyPort")
+    , aFtpProxyPN("ooInetFTPProxyName")
+    , aFtpPortPN("ooInetFTPProxyPort")
+    , aNoProxyDescPN("ooInetNoProxy")
 {
-    FreeResource();
+    get(m_pProxyModeLB, "proxymode");
 
-    aHttpPortED.SetMaxTextLen(5);
-    aHttpsPortED.SetMaxTextLen(5);
-    aFtpPortED.SetMaxTextLen(5);
+    get(m_pHttpProxyFT, "httpft");
+    get(m_pHttpProxyED, "http");
+    get(m_pHttpPortFT, "httpportft");
+    get(m_pHttpPortED, "httpport");
+
+    get(m_pHttpsProxyFT, "httpsft");
+    get(m_pHttpsProxyED, "https");
+    get(m_pHttpsPortFT, "httpsportft");
+    get(m_pHttpsPortED, "httpsport");
+
+    get(m_pFtpProxyFT, "ftpft");
+    get(m_pFtpProxyED, "ftp");
+    get(m_pFtpPortFT, "ftpportft");
+    get(m_pFtpPortED, "ftpport");
+
+    get(m_pNoProxyForFT, "noproxyft");
+    get(m_pNoProxyForED, "noproxy");
+    get(m_pNoProxyDescFT, "noproxydesc");
+
     Link aLink = LINK( this, SvxProxyTabPage, LoseFocusHdl_Impl );
-    aHttpPortED.SetLoseFocusHdl( aLink );
-    aHttpsPortED.SetLoseFocusHdl( aLink );
-    aFtpPortED.SetLoseFocusHdl( aLink );
+    m_pHttpPortED->SetLoseFocusHdl( aLink );
+    m_pHttpsPortED->SetLoseFocusHdl( aLink );
+    m_pFtpPortED->SetLoseFocusHdl( aLink );
 
-    aProxyModeLB.SetSelectHdl(LINK( this, SvxProxyTabPage, ProxyHdl_Impl ));
+    m_pProxyModeLB->SetSelectHdl(LINK( this, SvxProxyTabPage, ProxyHdl_Impl ));
 
     Reference< com::sun::star::lang::XMultiServiceFactory >
         xConfigurationProvider(
@@ -205,8 +213,6 @@ SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet ) :
     m_xConfigurationUpdateAccess = xConfigurationProvider->createInstanceWithArguments(
         OUString( "com.sun.star.configuration.ConfigurationUpdateAccess" ),
         aArgumentList );
-
-    ArrangeControls_Impl();
 }
 
 SvxProxyTabPage::~SvxProxyTabPage()
@@ -228,42 +234,42 @@ void SvxProxyTabPage::ReadConfigData_Impl()
 
         if( xNameAccess->getByName(aProxyModePN) >>= nIntValue )
         {
-            aProxyModeLB.SelectEntryPos( (sal_uInt16) nIntValue );
+            m_pProxyModeLB->SelectEntryPos( (sal_uInt16) nIntValue );
         }
 
         if( xNameAccess->getByName(aHttpProxyPN) >>= aStringValue )
         {
-            aHttpProxyED.SetText( aStringValue );
+            m_pHttpProxyED->SetText( aStringValue );
         }
 
         if( xNameAccess->getByName(aHttpPortPN) >>= nIntValue )
         {
-            aHttpPortED.SetText( OUString::number( nIntValue ));
+            m_pHttpPortED->SetText( OUString::number( nIntValue ));
         }
 
         if( xNameAccess->getByName(aHttpsProxyPN) >>= aStringValue )
         {
-            aHttpsProxyED.SetText( aStringValue );
+            m_pHttpsProxyED->SetText( aStringValue );
         }
 
         if( xNameAccess->getByName(aHttpsPortPN) >>= nIntValue )
         {
-            aHttpsPortED.SetText( OUString::number( nIntValue ));
+            m_pHttpsPortED->SetText( OUString::number( nIntValue ));
         }
 
         if( xNameAccess->getByName(aFtpProxyPN) >>= aStringValue )
         {
-            aFtpProxyED.SetText( aStringValue );
+            m_pFtpProxyED->SetText( aStringValue );
         }
 
         if( xNameAccess->getByName(aFtpPortPN) >>= nIntValue )
         {
-            aFtpPortED.SetText( OUString::number( nIntValue ));
+            m_pFtpPortED->SetText( OUString::number( nIntValue ));
         }
 
         if( xNameAccess->getByName(aNoProxyDescPN) >>= aStringValue )
         {
-            aNoProxyForED.SetText( aStringValue );
+            m_pNoProxyForED->SetText( aStringValue );
         }
     }
 
@@ -292,37 +298,37 @@ void SvxProxyTabPage::ReadConfigDefaults_Impl()
 
         if( xPropertyState->getPropertyDefault(aHttpProxyPN) >>= aStringValue )
         {
-            aHttpProxyED.SetText( aStringValue );
+            m_pHttpProxyED->SetText( aStringValue );
         }
 
         if( xPropertyState->getPropertyDefault(aHttpPortPN) >>= nIntValue )
         {
-            aHttpPortED.SetText( OUString::number( nIntValue ));
+            m_pHttpPortED->SetText( OUString::number( nIntValue ));
         }
 
         if( xPropertyState->getPropertyDefault(aHttpsProxyPN) >>= aStringValue )
         {
-            aHttpsProxyED.SetText( aStringValue );
+            m_pHttpsProxyED->SetText( aStringValue );
         }
 
         if( xPropertyState->getPropertyDefault(aHttpsPortPN) >>= nIntValue )
         {
-            aHttpsPortED.SetText( OUString::number( nIntValue ));
+            m_pHttpsPortED->SetText( OUString::number( nIntValue ));
         }
 
         if( xPropertyState->getPropertyDefault(aFtpProxyPN) >>= aStringValue )
         {
-            aFtpProxyED.SetText( aStringValue );
+            m_pFtpProxyED->SetText( aStringValue );
         }
 
         if( xPropertyState->getPropertyDefault(aFtpPortPN) >>= nIntValue )
         {
-            aFtpPortED.SetText( OUString::number( nIntValue ));
+            m_pFtpPortED->SetText( OUString::number( nIntValue ));
         }
 
         if( xPropertyState->getPropertyDefault(aNoProxyDescPN) >>= aStringValue )
         {
-            aNoProxyForED.SetText( aStringValue );
+            m_pNoProxyForED->SetText( aStringValue );
         }
     }
     catch (const beans::UnknownPropertyException &)
@@ -378,16 +384,16 @@ void SvxProxyTabPage::Reset(const SfxItemSet&)
 {
     ReadConfigData_Impl();
 
-    aProxyModeLB.SaveValue();
-    aHttpProxyED.SaveValue();
-    aHttpPortED.SaveValue();
-    aHttpsProxyED.SaveValue();
-    aHttpsPortED.SaveValue();
-    aFtpProxyED.SaveValue();
-    aFtpPortED.SaveValue();
-    aNoProxyForED.SaveValue();
+    m_pProxyModeLB->SaveValue();
+    m_pHttpProxyED->SaveValue();
+    m_pHttpPortED->SaveValue();
+    m_pHttpsProxyED->SaveValue();
+    m_pHttpsPortED->SaveValue();
+    m_pFtpProxyED->SaveValue();
+    m_pFtpPortED->SaveValue();
+    m_pNoProxyForED->SaveValue();
 
-    EnableControls_Impl( aProxyModeLB.GetSelectEntryPos() == 2 );
+    EnableControls_Impl( m_pProxyModeLB->GetSelectEntryPos() == 2 );
 }
 
 sal_Bool SvxProxyTabPage::FillItemSet(SfxItemSet& )
@@ -397,8 +403,8 @@ sal_Bool SvxProxyTabPage::FillItemSet(SfxItemSet& )
     try {
         Reference< beans::XPropertySet > xPropertySet(m_xConfigurationUpdateAccess, UNO_QUERY_THROW );
 
-        sal_uInt16 nSelPos = aProxyModeLB.GetSelectEntryPos();
-        if(aProxyModeLB.GetSavedValue() != nSelPos)
+        sal_uInt16 nSelPos = m_pProxyModeLB->GetSelectEntryPos();
+        if(m_pProxyModeLB->GetSavedValue() != nSelPos)
         {
             if( nSelPos == 1 )
             {
@@ -411,45 +417,45 @@ sal_Bool SvxProxyTabPage::FillItemSet(SfxItemSet& )
             bModified = sal_True;
         }
 
-        if(aHttpProxyED.GetSavedValue() != aHttpProxyED.GetText())
+        if(m_pHttpProxyED->GetSavedValue() != m_pHttpProxyED->GetText())
         {
-            xPropertySet->setPropertyValue( aHttpProxyPN, makeAny(aHttpProxyED.GetText()));
+            xPropertySet->setPropertyValue( aHttpProxyPN, makeAny(m_pHttpProxyED->GetText()));
             bModified = sal_True;
         }
 
-        if ( aHttpPortED.GetSavedValue() != aHttpPortED.GetText() )
+        if ( m_pHttpPortED->GetSavedValue() != m_pHttpPortED->GetText() )
         {
-            xPropertySet->setPropertyValue( aHttpPortPN, makeAny(aHttpPortED.GetText().toInt32()));
+            xPropertySet->setPropertyValue( aHttpPortPN, makeAny(m_pHttpPortED->GetText().toInt32()));
             bModified = sal_True;
         }
 
-        if( aHttpsProxyED.GetSavedValue() != aHttpsProxyED.GetText() )
+        if( m_pHttpsProxyED->GetSavedValue() != m_pHttpsProxyED->GetText() )
         {
-            xPropertySet->setPropertyValue( aHttpsProxyPN, makeAny(aHttpsProxyED.GetText()) );
+            xPropertySet->setPropertyValue( aHttpsProxyPN, makeAny(m_pHttpsProxyED->GetText()) );
             bModified = sal_True;
         }
 
-        if ( aHttpsPortED.GetSavedValue() != aHttpsPortED.GetText() )
+        if ( m_pHttpsPortED->GetSavedValue() != m_pHttpsPortED->GetText() )
         {
-            xPropertySet->setPropertyValue( aHttpsPortPN, makeAny(aHttpsPortED.GetText().toInt32()) );
+            xPropertySet->setPropertyValue( aHttpsPortPN, makeAny(m_pHttpsPortED->GetText().toInt32()) );
             bModified = sal_True;
         }
 
-        if( aFtpProxyED.GetSavedValue() != aFtpProxyED.GetText())
+        if( m_pFtpProxyED->GetSavedValue() != m_pFtpProxyED->GetText())
         {
-            xPropertySet->setPropertyValue( aFtpProxyPN, makeAny(aFtpProxyED.GetText()) );
+            xPropertySet->setPropertyValue( aFtpProxyPN, makeAny(m_pFtpProxyED->GetText()) );
             bModified = sal_True;
         }
 
-        if ( aFtpPortED.GetSavedValue() != aFtpPortED.GetText() )
+        if ( m_pFtpPortED->GetSavedValue() != m_pFtpPortED->GetText() )
         {
-            xPropertySet->setPropertyValue( aFtpPortPN, makeAny(aFtpPortED.GetText().toInt32()));
+            xPropertySet->setPropertyValue( aFtpPortPN, makeAny(m_pFtpPortED->GetText().toInt32()));
             bModified = sal_True;
         }
 
-        if ( aNoProxyForED.GetSavedValue() != aNoProxyForED.GetText() )
+        if ( m_pNoProxyForED->GetSavedValue() != m_pNoProxyForED->GetText() )
         {
-            xPropertySet->setPropertyValue( aNoProxyDescPN, makeAny( aNoProxyForED.GetText()));
+            xPropertySet->setPropertyValue( aNoProxyDescPN, makeAny( m_pNoProxyForED->GetText()));
             bModified = sal_True;
         }
 
@@ -480,76 +486,26 @@ sal_Bool SvxProxyTabPage::FillItemSet(SfxItemSet& )
     return bModified;
 }
 
-void SvxProxyTabPage::ArrangeControls_Impl()
-{
-    // calculate dynamic width of controls, to not cut-off translated strings #i71445#
-    long nWidth = aProxyModeFT.GetCtrlTextWidth( aProxyModeFT.GetText() );
-    long nTemp = aHttpProxyFT.GetCtrlTextWidth( aHttpProxyFT.GetText() );
-    if ( nTemp > nWidth )
-        nWidth = nTemp;
-    nTemp = aHttpsProxyFT.GetCtrlTextWidth( aHttpsProxyFT.GetText() );
-    if ( nTemp > nWidth )
-        nWidth = nTemp;
-    nTemp = aFtpProxyFT.GetCtrlTextWidth( aFtpProxyFT.GetText() );
-    if ( nTemp > nWidth )
-        nWidth = nTemp;
-    nTemp = aNoProxyForFT.GetCtrlTextWidth( aNoProxyForFT.GetText() );
-    if ( nTemp > nWidth )
-        nWidth = nTemp;
-
-    nWidth += 10; // To be sure the length of the FixedText is enough on all platforms
-    const long nFTWidth = aProxyModeFT.GetSizePixel().Width();
-    if ( nWidth > nFTWidth )
-    {
-        Size aNewSize = aProxyModeFT.GetSizePixel();
-        aNewSize.Width() = nWidth;
-
-        aProxyModeFT.SetSizePixel( aNewSize );
-        aHttpProxyFT.SetSizePixel( aNewSize );
-        aHttpsProxyFT.SetSizePixel( aNewSize );
-        aFtpProxyFT.SetSizePixel( aNewSize );
-        aNoProxyForFT.SetSizePixel( aNewSize );
-
-        const long nDelta = nWidth - nFTWidth;
-        Point aNewPos = aProxyModeLB.GetPosPixel();
-        aNewPos.X() += nDelta;
-
-        aProxyModeLB.SetPosPixel( aNewPos );
-
-        aNewSize = aHttpProxyED.GetSizePixel();
-        aNewSize.Width() -= nDelta;
-
-        aNewPos.Y() = aHttpProxyED.GetPosPixel().Y();
-        aHttpProxyED.SetPosSizePixel( aNewPos, aNewSize );
-        aNewPos.Y() = aHttpsProxyED.GetPosPixel().Y();
-        aHttpsProxyED.SetPosSizePixel( aNewPos, aNewSize );
-        aNewPos.Y() = aFtpProxyED.GetPosPixel().Y();
-        aFtpProxyED.SetPosSizePixel( aNewPos, aNewSize );
-        aNewPos.Y() = aNoProxyForED.GetPosPixel().Y();
-        aNoProxyForED.SetPosSizePixel( aNewPos, aNewSize );
-    }
-}
-
 void SvxProxyTabPage::EnableControls_Impl(sal_Bool bEnable)
 {
-    aHttpProxyFT.Enable(bEnable);
-    aHttpProxyED.Enable(bEnable);
-    aHttpPortFT.Enable(bEnable);
-    aHttpPortED.Enable(bEnable);
+    m_pHttpProxyFT->Enable(bEnable);
+    m_pHttpProxyED->Enable(bEnable);
+    m_pHttpPortFT->Enable(bEnable);
+    m_pHttpPortED->Enable(bEnable);
 
-    aHttpsProxyFT.Enable(bEnable);
-    aHttpsProxyED.Enable(bEnable);
-    aHttpsPortFT.Enable(bEnable);
-    aHttpsPortED.Enable(bEnable);
+    m_pHttpsProxyFT->Enable(bEnable);
+    m_pHttpsProxyED->Enable(bEnable);
+    m_pHttpsPortFT->Enable(bEnable);
+    m_pHttpsPortED->Enable(bEnable);
 
-    aFtpProxyFT.Enable(bEnable);
-    aFtpProxyED.Enable(bEnable);
-    aFtpPortFT.Enable(bEnable);
-    aFtpPortED.Enable(bEnable);
+    m_pFtpProxyFT->Enable(bEnable);
+    m_pFtpProxyED->Enable(bEnable);
+    m_pFtpPortFT->Enable(bEnable);
+    m_pFtpPortED->Enable(bEnable);
 
-    aNoProxyForFT.Enable(bEnable);
-    aNoProxyForED.Enable(bEnable);
-    aNoProxyDescFT.Enable(bEnable);
+    m_pNoProxyForFT->Enable(bEnable);
+    m_pNoProxyForED->Enable(bEnable);
+    m_pNoProxyDescFT->Enable(bEnable);
 }
 
 // -----------------------------------------------------------------------

@@ -283,6 +283,9 @@ public:
 
     static OString extractCustomProperty(stringmap &rMap);
 
+    //add a default value of 25 width-chars to a map if width-chars not set
+    static void ensureDefaultWidthChars(VclBuilder::stringmap &rMap);
+
     //see m_aDeferredProperties, you need this for toplevel dialogs
     //which build themselves from their ctor. The properties on
     //the top level are stored in m_aDeferredProperties and need

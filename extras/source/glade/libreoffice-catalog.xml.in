@@ -210,6 +210,18 @@
                         generic-name="NoSpace Edit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
 
+    <glade-widget-class title="Another NoSpace Edit" name="cuilo-SvxNoSpaceEdit"
+                        generic-name="Another NoSpace Edit" parent="GtkEntry"
+                        icon-name="widget-gtk-textentry">
+      <properties>
+        <property save="True" query="False" id="only-numeric" default="False" name="Allow only numbers">
+          <parameter-spec>
+            <type>GParamBoolean</type>
+          </parameter-spec>
+        </property>
+      </properties>
+    </glade-widget-class>
+
     <glade-widget-class title="Double Field" name="scuilo-ScDoubleField"
                         generic-name="Double Field" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
