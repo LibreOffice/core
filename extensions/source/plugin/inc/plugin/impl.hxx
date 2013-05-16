@@ -28,6 +28,8 @@
 #ifndef PLUGIN_SOURCE_MGR_IMPL_HXX
 #define PLUGIN_SOURCE_MGR_IMPL_HXX
 
+#include <config_lgpl.h>
+
 #ifdef SOLARIS
 #include <limits>
 #endif

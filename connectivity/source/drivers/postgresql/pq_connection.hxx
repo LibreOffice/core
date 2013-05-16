@@ -36,6 +36,8 @@
 
 #ifndef _PQ_CONNECTION_HXX_
 #define _PQ_CONNECTION_HXX_
+
+#include <config_lgpl.h>
 #include <boost/unordered_map.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

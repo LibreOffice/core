@@ -27,6 +27,8 @@
 #ifndef MYSQLC_SDRIVER_HXX
 #define MYSQLC_SDRIVER_HXX
 
+#include <config_lgpl.h>
+
 #include "mysqlc_connection.hxx"
 
 #include <com/sun/star/sdbc/XDriver.hpp>

@@ -20,6 +20,8 @@
 #ifndef _MYSQLC_GENERAL_
 #define _MYSQLC_GENERAL_
 
+#include <config_lgpl.h>
+
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 
