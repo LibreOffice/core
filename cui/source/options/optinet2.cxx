@@ -106,22 +106,20 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxNoSpaceEdit(Window *pPar
 
 void SvxNoSpaceEdit::KeyInput( const KeyEvent& rKEvent )
 {
-    if ( bOnlyNumeric )
+    bool bValid = rKEvent.GetKeyCode().GetCode() != KEY_SPACE;
+    if (bValid && bOnlyNumeric)
     {
         const KeyCode& rKeyCode = rKEvent.GetKeyCode();
         sal_uInt16 nGroup = rKeyCode.GetGroup();
         sal_uInt16 nKey = rKeyCode.GetCode();
-        sal_Bool bValid = ( KEYGROUP_NUM == nGroup || KEYGROUP_CURSOR == nGroup ||
-                        ( KEYGROUP_MISC == nGroup && ( nKey < KEY_ADD || nKey > KEY_EQUAL ) ) );
+        bValid = ( KEYGROUP_NUM == nGroup || KEYGROUP_CURSOR == nGroup ||
+                 ( KEYGROUP_MISC == nGroup && ( nKey < KEY_ADD || nKey > KEY_EQUAL ) ) );
         if ( !bValid && ( rKeyCode.IsMod1() && (
              KEY_A == nKey || KEY_C == nKey || KEY_V == nKey || KEY_X == nKey || KEY_Z == nKey ) ) )
             // Erase, Copy, Paste, Select All und Undo soll funktionieren
             bValid = sal_True;
-
-        if ( bValid )
-            Edit::KeyInput(rKEvent);
     }
-    else if( rKEvent.GetKeyCode().GetCode() != KEY_SPACE )
+    if (bValid)
         Edit::KeyInput(rKEvent);
 }
 
