@@ -664,28 +664,6 @@ PrinterGfx::GetCharWidth (sal_Unicode nFrom, sal_Unicode nTo, long *pWidthArray)
     return 1000;
 }
 
-const ::std::list< KernPair >& PrinterGfx::getKernPairs( bool bVertical ) const
-{
-    /*
-     *  Note: this is only a 80% solution: if a font is only
-     *  partially substituted in a string due to missing glyphs
-     *  the results may not be perfect; the more so the more the
-     *  substitution differs from the original metricwise. But
-     *  vcl only asks for KernPairs for each font once and NOT
-     *  in a string context this is the best we can do.
-     *  In future the kerning should be done on a per string basis.
-     */
-    fontID nFont = mnFontID;
-    if( mpFontSubstitutes )
-    {
-        ::boost::unordered_map< fontID, fontID >::const_iterator it =
-              mpFontSubstitutes->find( mnFontID );
-        if( it != mpFontSubstitutes->end() )
-            nFont = it->second;
-    }
-    return mrFontMgr.getKernPairs( nFont, bVertical );
-}
-
 /*
  * spool the converted truetype fonts to the page header after the page body is
  * complete

@@ -214,12 +214,6 @@ static hb_position_t getGlyphKerningH(hb_font_t* /*font*/, void* pFontData,
 {
     // This callback is for old style 'kern' table, GPOS kerning is handled by HarfBuzz directly
 
-    // XXX: there is ServerFont::GetKernPairs() but it does many "smart" things
-    // that I'm not sure about, so I'm using FreeType directly
-    // P.S. if we decided not to use ServerFont::GetKernPairs() then it and all
-    // other implementattions should be removed, don't seem to be used
-    // anywhere.
-
     ServerFont* pFont = (ServerFont*) pFontData;
     FT_Face aFace = pFont->GetFtFace();
 

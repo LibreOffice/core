@@ -65,14 +65,6 @@ typedef const FT_Vector* FT_Vector_CPtr;
 #include <sys/mman.h>
 #include "vcl/fontmanager.hxx"
 
-typedef const unsigned char* CPU8;
-inline sal_uInt16 NEXT_U16( CPU8& p ) { p+=2; return (p[-2]<<8)|p[-1]; }
-inline sal_Int16  NEXT_S16( CPU8& p ) { return (sal_Int16)NEXT_U16(p); }
-inline sal_uInt32 NEXT_U32( CPU8& p ) { p+=4; return (p[-4]<<24)|(p[-3]<<16)|(p[-2]<<8)|p[-1]; }
-//inline sal_Int32 NEXT_S32( U8*& p ) { return (sal_Int32)NEXT_U32(p); }
-
-// -----------------------------------------------------------------------
-
 // the gamma table makes artificial bold look better for CJK glyphs
 static unsigned char aGammaTable[257];
 
@@ -232,8 +224,7 @@ const void * graphiteFontTable(const void* appFaceHandle, unsigned int name, siz
 // =======================================================================
 
 FtFontInfo::FtFontInfo( const ImplDevFontAttributes& rDevFontAttributes,
-    const OString& rNativeFileName, int nFaceNum, sal_IntPtr nFontId, int nSynthetic,
-    const ExtraKernInfo* pExtraKernInfo )
+    const OString& rNativeFileName, int nFaceNum, sal_IntPtr nFontId, int nSynthetic)
 :
     maFaceFT( NULL ),
     mpFontFile( FtFontFile::FindFontFile( rNativeFileName ) ),
@@ -248,16 +239,12 @@ FtFontInfo::FtFontInfo( const ImplDevFontAttributes& rDevFontAttributes,
     maDevFontAttributes( rDevFontAttributes ),
     mpFontCharMap( NULL ),
     mpChar2Glyph( NULL ),
-    mpGlyph2Char( NULL ),
-    mpExtraKernInfo( pExtraKernInfo )
+    mpGlyph2Char( NULL )
 {
     // prefer font with low ID
     maDevFontAttributes.mnQuality += 10000 - nFontId;
     // prefer font with matching file names
     maDevFontAttributes.mnQuality += mpFontFile->GetLangBoost();
-    // prefer font with more external info
-    if( pExtraKernInfo )
-        maDevFontAttributes.mnQuality += 100;
 }
 
 // -----------------------------------------------------------------------
@@ -266,7 +253,6 @@ FtFontInfo::~FtFontInfo()
 {
     if( mpFontCharMap )
         mpFontCharMap->DeReference();
-    delete mpExtraKernInfo;
     delete mpChar2Glyph;
     delete mpGlyph2Char;
 #if ENABLE_GRAPHITE
@@ -331,27 +317,6 @@ void FtFontInfo::ReleaseFaceFT()
         maFaceFT = NULL;
         mpFontFile->Unmap();
     }
-}
-
-// -----------------------------------------------------------------------
-
-bool FtFontInfo::HasExtraKerning() const
-{
-    if( !mpExtraKernInfo )
-        return false;
-    // TODO: how to enable the line below without getting #i29881# back?
-    // on the other hand being too optimistic doesn't cause problems
-    // return mpExtraKernInfo->HasKernPairs();
-    return true;
-}
-
-// -----------------------------------------------------------------------
-
-int FtFontInfo::GetExtraKernPairs( ImplKernPairData** ppKernPairs ) const
-{
-    if( !mpExtraKernInfo )
-        return 0;
-    return mpExtraKernInfo->GetUnscaledKernPairs( ppKernPairs );
 }
 
 // -----------------------------------------------------------------------
@@ -454,8 +419,7 @@ FreetypeManager::~FreetypeManager()
 // -----------------------------------------------------------------------
 
 void FreetypeManager::AddFontFile( const OString& rNormalizedName,
-    int nFaceNum, sal_IntPtr nFontId, const ImplDevFontAttributes& rDevFontAttr,
-    const ExtraKernInfo* pExtraKernInfo )
+    int nFaceNum, sal_IntPtr nFontId, const ImplDevFontAttributes& rDevFontAttr)
 {
     if( rNormalizedName.isEmpty() )
         return;
@@ -464,7 +428,7 @@ void FreetypeManager::AddFontFile( const OString& rNormalizedName,
         return;
 
     FtFontInfo* pFontInfo = new FtFontInfo( rDevFontAttr,
-        rNormalizedName, nFaceNum, nFontId, 0, pExtraKernInfo );
+        rNormalizedName, nFaceNum, nFontId, 0);
     maFontList[ nFontId ] = pFontInfo;
     if( mnMaxFontId < nFontId )
         mnMaxFontId = nFontId;
@@ -727,7 +691,7 @@ void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
 
     rTo.mbScalableFont  = true;
     rTo.mbDevice        = true;
-    rTo.mbKernableFont  = (FT_HAS_KERNING( maFaceFT ) != 0) || mpFontInfo->HasExtraKerning();
+    rTo.mbKernableFont  = FT_HAS_KERNING( maFaceFT ) != 0;
     rTo.mnOrientation = GetFontSelData().mnOrientation;
 
     //Always consider [star]symbol as symbol fonts
@@ -1472,258 +1436,6 @@ bool ServerFont::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) c
     }
 
     return bRet;
-}
-
-// -----------------------------------------------------------------------
-
-sal_uLong ServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
-{
-    // if no kerning info is available in the font file
-    *ppKernPairs = NULL;
-    if( !FT_HAS_KERNING( maFaceFT ) || !FT_IS_SFNT( maFaceFT ) )
-    {
-        // then we have may have extra kerning info from e.g. psprint
-        int nCount = mpFontInfo->GetExtraKernPairs( ppKernPairs );
-        // scale the kern values to match the font size
-        const FontSelectPattern& rFSD = GetFontSelData();
-        int nFontWidth = rFSD.mnWidth ? rFSD.mnWidth : rFSD.mnHeight;
-        ImplKernPairData* pKernPair = *ppKernPairs;
-        for( int i = nCount; --i >= 0; ++pKernPair )
-        {
-            long& rVal = pKernPair->mnKern;
-            rVal = ((rVal * nFontWidth) + 500) / 1000;
-        }
-        return nCount;
-    }
-
-    // when font faces of different sizes share the same maFaceFT
-    // then we have to make sure that it uses the correct maSizeFT
-    FT_Activate_Size( maSizeFT );
-
-    // first figure out which glyph pairs are involved in kerning
-    sal_uLong nKernLength = 0;
-    const FT_Byte* const pKern = mpFontInfo->GetTable( "kern", &nKernLength );
-    if( !pKern )
-        return 0;
-
-    // combine TTF/OTF tables from the font file to build a vector of
-    // unicode kerning pairs using Freetype's glyph kerning calculation
-    // for the kerning value
-
-    // TODO: is it worth to share the glyph->unicode mapping between
-    // different instances of the same font face?
-
-    typedef std::vector<ImplKernPairData> KernVector;
-    KernVector aKernGlyphVector;
-    ImplKernPairData aKernPair;
-    aKernPair.mnKern = 0; // To prevent "is used uninitialized" warning...
-
-    const FT_Byte* pBuffer = pKern;
-    sal_uLong nVersion = GetUShort( pBuffer+0 );
-    sal_uInt16 nTableCnt = GetUShort( pBuffer+2 );
-
-    // Microsoft/Old TrueType style kern table
-    if ( nVersion == 0 )
-    {
-        pBuffer += 4;
-
-        for( sal_uInt16 nTableIdx = 0; nTableIdx < nTableCnt; ++nTableIdx )
-        {
-            // sal_uInt16 nSubVersion  = GetUShort( pBuffer+0 );
-            // sal_uInt16 nSubLength   = GetUShort( pBuffer+2 );
-            sal_uInt16 nSubCoverage = GetUShort( pBuffer+4 );
-            pBuffer += 6;
-            if( (nSubCoverage&0x03) != 0x01 )   // no interest in minimum info here
-                continue;
-            switch( nSubCoverage >> 8 )
-            {
-                case 0: // version 0, kerning format 0
-                {
-                    sal_uInt16 nPairs = GetUShort( pBuffer );
-                    pBuffer += 8;   // skip search hints
-                    aKernGlyphVector.reserve( aKernGlyphVector.size() + nPairs );
-                    for( int i = 0; i < nPairs; ++i )
-                    {
-                        aKernPair.mnChar1 = GetUShort( pBuffer+0 );
-                        aKernPair.mnChar2 = GetUShort( pBuffer+2 );
-                        //long nUnscaledKern= GetSShort( pBuffer );
-                        pBuffer += 6;
-                        aKernGlyphVector.push_back( aKernPair );
-                    }
-                }
-                break;
-
-                case 2: // version 0, kerning format 2
-                {
-                    const FT_Byte* pSubTable = pBuffer;
-                    //sal_uInt16 nRowWidth  = GetUShort( pBuffer+0 );
-                    sal_uInt16 nOfsLeft     = GetUShort( pBuffer+2 );
-                    sal_uInt16 nOfsRight    = GetUShort( pBuffer+4 );
-                    sal_uInt16 nOfsArray    = GetUShort( pBuffer+6 );
-                    pBuffer += 8;
-
-                    const FT_Byte* pTmp = pSubTable + nOfsLeft;
-                    sal_uInt16 nFirstLeft   = GetUShort( pTmp+0 );
-                    sal_uInt16 nLastLeft    = GetUShort( pTmp+2 ) + nFirstLeft - 1;
-
-                    pTmp = pSubTable + nOfsRight;
-                    sal_uInt16 nFirstRight  = GetUShort( pTmp+0 );
-                    sal_uInt16 nLastRight   = GetUShort( pTmp+2 ) + nFirstRight - 1;
-
-                    sal_uLong nPairs = (sal_uLong)(nLastLeft - nFirstLeft + 1) * (nLastRight - nFirstRight + 1);
-                    aKernGlyphVector.reserve( aKernGlyphVector.size() + nPairs );
-
-                    pTmp = pSubTable + nOfsArray;
-                    for( int nLeft = nFirstLeft; nLeft < nLastLeft; ++nLeft )
-                    {
-                        aKernPair.mnChar1 = nLeft;
-                        for( int nRight = 0; nRight < nLastRight; ++nRight )
-                        {
-                            if( GetUShort( pTmp ) != 0 )
-                            {
-                                aKernPair.mnChar2 = nRight;
-                                aKernGlyphVector.push_back( aKernPair );
-                            }
-                            pTmp += 2;
-                        }
-                    }
-                }
-                break;
-            }
-        }
-    }
-
-    // Apple New style kern table
-    pBuffer = pKern;
-    nVersion = NEXT_U32( pBuffer );
-    nTableCnt = NEXT_U32( pBuffer );
-    if ( nVersion == 0x00010000 )
-    {
-        for( sal_uInt16 nTableIdx = 0; nTableIdx < nTableCnt; ++nTableIdx )
-        {
-            /*sal_uLong  nLength  =*/ NEXT_U32( pBuffer );
-            sal_uInt16 nCoverage   = NEXT_U16( pBuffer );
-            /*sal_uInt16 nTupleIndex =*/ NEXT_U16( pBuffer );
-
-            // Kerning sub-table format, 0 through 3
-            sal_uInt8 nSubTableFormat  = nCoverage & 0x00FF;
-
-            switch( nSubTableFormat )
-            {
-                case 0: // version 0, kerning format 0
-                {
-                    sal_uInt16 nPairs = NEXT_U16( pBuffer );
-                    pBuffer += 6;   // skip search hints
-                    aKernGlyphVector.reserve( aKernGlyphVector.size() + nPairs );
-                    for( int i = 0; i < nPairs; ++i )
-                    {
-                        aKernPair.mnChar1 = NEXT_U16( pBuffer );
-                        aKernPair.mnChar2 = NEXT_U16( pBuffer );
-                        /*long nUnscaledKern=*/ NEXT_S16( pBuffer );
-                        aKernGlyphVector.push_back( aKernPair );
-                    }
-                }
-                break;
-
-                case 2: // version 0, kerning format 2
-                {
-                    const FT_Byte* pSubTable = pBuffer;
-                    /*sal_uInt16 nRowWidth  =*/ NEXT_U16( pBuffer );
-                    sal_uInt16 nOfsLeft     = NEXT_U16( pBuffer );
-                    sal_uInt16 nOfsRight    = NEXT_U16( pBuffer );
-                    sal_uInt16 nOfsArray    = NEXT_U16( pBuffer );
-
-                    const FT_Byte* pTmp = pSubTable + nOfsLeft;
-                    sal_uInt16 nFirstLeft   = NEXT_U16( pTmp );
-                    sal_uInt16 nLastLeft    = NEXT_U16( pTmp ) + nFirstLeft - 1;
-
-                    pTmp = pSubTable + nOfsRight;
-                    sal_uInt16 nFirstRight  = NEXT_U16( pTmp );
-                    sal_uInt16 nLastRight   = NEXT_U16( pTmp ) + nFirstRight - 1;
-
-                    sal_uLong nPairs = (sal_uLong)(nLastLeft - nFirstLeft + 1) * (nLastRight - nFirstRight + 1);
-                    aKernGlyphVector.reserve( aKernGlyphVector.size() + nPairs );
-
-                    pTmp = pSubTable + nOfsArray;
-                    for( int nLeft = nFirstLeft; nLeft < nLastLeft; ++nLeft )
-                    {
-                        aKernPair.mnChar1 = nLeft;
-                        for( int nRight = 0; nRight < nLastRight; ++nRight )
-                        {
-                            if( NEXT_S16( pTmp ) != 0 )
-                            {
-                                aKernPair.mnChar2 = nRight;
-                                aKernGlyphVector.push_back( aKernPair );
-                            }
-                        }
-                    }
-                }
-                break;
-
-                default:
-                    fprintf( stderr, "gcach_ftyp.cxx:  Found unsupported Apple-style kern subtable type %d.\n", nSubTableFormat );
-                    break;
-            }
-        }
-    }
-
-    // now create VCL's ImplKernPairData[] format for all glyph pairs
-    sal_uLong nKernCount = aKernGlyphVector.size();
-    if( nKernCount )
-    {
-        // prepare glyphindex to character mapping
-        // TODO: this is needed to support VCL's existing kerning infrastructure,
-        // eliminate it up by redesigning kerning infrastructure to work with glyph indices
-        typedef boost::unordered_multimap<sal_uInt16,sal_Unicode> Cmap;
-        Cmap aCmap;
-        for( sal_Unicode aChar = 0x0020; aChar < 0xFFFE; ++aChar )
-        {
-            sal_uInt16 nGlyphIndex = GetGlyphIndex( aChar );
-            if( nGlyphIndex )
-                aCmap.insert( Cmap::value_type( nGlyphIndex, aChar ) );
-        }
-
-        // translate both glyph indices in kerning pairs to characters
-        // problem is that these are 1:n mappings...
-        KernVector aKernCharVector;
-        aKernCharVector.reserve( nKernCount );
-        KernVector::iterator it;
-        for( it = aKernGlyphVector.begin(); it != aKernGlyphVector.end(); ++it )
-        {
-            FT_Vector aKernVal;
-            FT_Error rcFT = FT_Get_Kerning( maFaceFT, it->mnChar1, it->mnChar2,
-                FT_KERNING_DEFAULT, &aKernVal );
-            aKernPair.mnKern = aKernVal.x >> 6;
-            if( (aKernPair.mnKern == 0) || (rcFT != FT_Err_Ok) )
-                continue;
-
-            typedef std::pair<Cmap::iterator,Cmap::iterator> CPair;
-            const CPair p1 = aCmap.equal_range( it->mnChar1 );
-            const CPair p2 = aCmap.equal_range( it->mnChar2 );
-            for( Cmap::const_iterator i1 = p1.first; i1 != p1.second; ++i1 )
-            {
-                aKernPair.mnChar1 = (*i1).second;
-                for( Cmap::const_iterator i2 = p2.first; i2 != p2.second; ++i2 )
-                {
-                    aKernPair.mnChar2 = (*i2).second;
-                    aKernCharVector.push_back( aKernPair );
-                }
-            }
-        }
-
-        // now move the resulting vector into VCL's ImplKernPairData[] format
-        nKernCount = aKernCharVector.size();
-        ImplKernPairData* pTo = new ImplKernPairData[ nKernCount ];
-        *ppKernPairs = pTo;
-        for( it = aKernCharVector.begin(); it != aKernCharVector.end(); ++it, ++pTo )
-        {
-            pTo->mnChar1 = it->mnChar1;
-            pTo->mnChar2 = it->mnChar2;
-            pTo->mnKern = it->mnKern;
-        }
-    }
-
-    return nKernCount;
 }
 
 // -----------------------------------------------------------------------
