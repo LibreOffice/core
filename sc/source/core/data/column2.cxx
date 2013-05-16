@@ -1603,6 +1603,70 @@ sal_uInt8 ScColumn::GetScriptType( SCROW nRow ) const
     return maCellTextAttrs.get<sc::CellTextAttr>(nRow).mnScriptType;
 }
 
+sal_uInt8 ScColumn::GetRangeScriptType(
+    sc::CellTextAttrStoreType::iterator& itPos, SCROW nRow1, SCROW nRow2 )
+{
+    if (!ValidRow(nRow1) || !ValidRow(nRow2) || nRow1 > nRow2)
+        return 0;
+
+    SCROW nRow = nRow1;
+    std::pair<sc::CellTextAttrStoreType::iterator,size_t> aRet =
+        maCellTextAttrs.position(itPos, nRow1);
+
+    itPos = aRet.first; // Track the position of cell text attribute array.
+
+    sal_uInt8 nScriptType = 0;
+
+    if (itPos->type == sc::element_type_celltextattr)
+    {
+        sc::custom_celltextattr_block::iterator it = sc::custom_celltextattr_block::begin(*itPos->data);
+        sc::custom_celltextattr_block::iterator itEnd = sc::custom_celltextattr_block::end(*itPos->data);
+        std::advance(it, aRet.second);
+        for (; it != itEnd; ++it, ++nRow)
+        {
+            if (nRow > nRow2)
+                return nScriptType;
+
+            sc::CellTextAttr& rVal = *it;
+            UpdateScriptType(rVal, nRow);
+            nScriptType |= rVal.mnScriptType;
+        }
+    }
+    else
+    {
+        // Skip this whole block.
+        nRow += itPos->size - aRet.second;
+    }
+
+    while (nRow <= nRow2)
+    {
+        ++itPos;
+        if (itPos == maCellTextAttrs.end())
+            return nScriptType;
+
+        if (itPos->type != sc::element_type_celltextattr)
+        {
+            // Skip this whole block.
+            nRow += itPos->size;
+            continue;
+        }
+
+        sc::custom_celltextattr_block::iterator it = sc::custom_celltextattr_block::begin(*itPos->data);
+        sc::custom_celltextattr_block::iterator itEnd = sc::custom_celltextattr_block::end(*itPos->data);
+        for (; it != itEnd; ++it, ++nRow)
+        {
+            if (nRow > nRow2)
+                return nScriptType;
+
+            sc::CellTextAttr& rVal = *it;
+            UpdateScriptType(rVal, nRow);
+            nScriptType |= rVal.mnScriptType;
+        }
+    }
+
+    return nScriptType;
+}
+
 void ScColumn::SetScriptType( SCROW nRow, sal_uInt8 nType )
 {
     if (!ValidRow(nRow))
@@ -1999,7 +2063,7 @@ void ScColumn::EndListening( sc::EndListeningContext& rCxt, SCROW nRow, SvtListe
     rListener.EndListening(*pBC);
     if (!pBC->HasListeners())
         // There is no more listeners for this cell. Add it to the purge list for later purging.
-        rCxt.addEmptyBroadcasterPosition(nCol, nRow, nTab);
+        rCxt.addEmptyBroadcasterPosition(nTab, nCol, nRow);
 }
 
 void ScColumn::CompileDBFormula()

@@ -275,6 +275,43 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
     pDocument->SetAutoCalc( bOldAutoCalc );
 }
 
+void ScColumn::UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow )
+{
+    if (rAttr.mnScriptType != SC_SCRIPTTYPE_UNKNOWN)
+        // Already updated. Nothing to do.
+        return;
+
+    // Script type not yet determined. Determine the real script
+    // type, and store it.
+    const ScPatternAttr* pPattern = GetPattern(nRow);
+    if (!pPattern)
+        return;
+
+    ScRefCellValue aCell;
+    ScAddress aPos(nCol, nRow, nTab);
+    aCell.assign(*pDocument, aPos);
+
+    const SfxItemSet* pCondSet = NULL;
+    ScConditionalFormatList* pCFList = pDocument->GetCondFormList(nTab);
+    if (pCFList)
+    {
+        const ScCondFormatItem& rItem =
+            static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL));
+        const std::vector<sal_uInt32>& rData = rItem.GetCondFormatData();
+        pCondSet = pDocument->GetCondResult(aCell, aPos, *pCFList, rData);
+    }
+
+    SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
+
+    OUString aStr;
+    Color* pColor;
+    sal_uLong nFormat = pPattern->GetNumberFormat(pFormatter, pCondSet);
+    ScCellFormat::GetString(aCell, nFormat, aStr, &pColor, *pFormatter);
+
+    // Store the real script type to the array.
+    rAttr.mnScriptType = pDocument->GetStringScriptType(aStr);
+}
+
 namespace {
 
 bool isDate(const ScDocument& rDoc, const ScColumn& rCol, SCROW nRow)

@@ -2097,6 +2097,15 @@ void ScTable::SetScriptType( SCCOL nCol, SCROW nRow, sal_uInt8 nType )
     aCol[nCol].SetScriptType(nRow, nType);
 }
 
+sal_uInt8 ScTable::GetRangeScriptType(
+    sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SCROW nRow1, SCROW nRow2 )
+{
+    if (!ValidCol(nCol))
+        return 0;
+
+    return aCol[nCol].GetRangeScriptType(rBlockPos.miCellTextAttrPos, nRow1, nRow2);
+}
+
 size_t ScTable::GetFormulaHash( SCCOL nCol, SCROW nRow ) const
 {
     if (!ValidCol(nCol))

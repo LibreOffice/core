@@ -446,6 +446,8 @@ public:
     void SetTextWidth(SCROW nRow, sal_uInt16 nWidth);
 
     sal_uInt8 GetScriptType( SCROW nRow ) const;
+    sal_uInt8 GetRangeScriptType( sc::CellTextAttrStoreType::iterator& itPos, SCROW nRow1, SCROW nRow2 );
+
     void SetScriptType( SCROW nRow, sal_uInt8 nType );
 
     size_t GetFormulaHash( SCROW nRow ) const;
@@ -464,6 +466,8 @@ public:
     void DeleteBroadcasters( SCROW nRow1, SCROW nRow2 );
 
 private:
+    void UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow );
+
     void DeleteRange(
         SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDelFlag, std::vector<SCROW>& rDeletedRows );
 

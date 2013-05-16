@@ -33,6 +33,8 @@
 #include "poolhelp.hxx"
 #include "attrib.hxx"
 #include "globalnames.hxx"
+#include "columnspanset.hxx"
+#include "table.hxx"
 
 using namespace com::sun::star;
 
@@ -151,6 +153,62 @@ sal_uInt8 ScDocument::GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab )
     sal_uLong nFormat = pPattern->GetNumberFormat( xPoolHelper->GetFormTable(), pCondSet );
 
     return GetCellScriptType(aPos, nFormat);
+}
+
+namespace {
+
+class ScriptTypeAggregator : public sc::ColumnSpanSet::Action
+{
+    ScDocument& mrDoc;
+    sc::ColumnBlockPosition maBlockPos;
+    sal_uInt8 mnScriptType;
+
+public:
+    ScriptTypeAggregator(ScDocument& rDoc) : mrDoc(rDoc), mnScriptType(0) {}
+
+    virtual void startColumn(SCTAB nTab, SCCOL nCol)
+    {
+        mrDoc.InitColumnBlockPosition(maBlockPos, nTab, nCol);
+    }
+
+    virtual void execute(const ScAddress& rPos, SCROW nLength, bool bVal)
+    {
+        if (!bVal)
+            return;
+
+        mnScriptType |= mrDoc.GetRangeScriptType(maBlockPos, rPos, nLength);
+    };
+
+    sal_uInt8 getScriptType() const { return mnScriptType; }
+};
+
+}
+
+sal_uInt8 ScDocument::GetRangeScriptType(
+    sc::ColumnBlockPosition& rBlockPos, const ScAddress& rPos, SCROW nLength )
+{
+    if (!TableExists(rPos.Tab()))
+        return 0;
+
+    return maTabs[rPos.Tab()]->GetRangeScriptType(rBlockPos, rPos.Col(), rPos.Row(), rPos.Row()+nLength-1);
+}
+
+sal_uInt8 ScDocument::GetRangeScriptType( const ScRangeList& rRanges )
+{
+    sc::ColumnSpanSet aSet;
+    for (size_t i = 0, n = rRanges.size(); i < n; ++i)
+    {
+        const ScRange& rRange = *rRanges[i];
+        SCTAB nTab = rRange.aStart.Tab();
+        SCROW nRow1 = rRange.aStart.Row();
+        SCROW nRow2 = rRange.aEnd.Row();
+        for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
+            aSet.set(nTab, nCol, nRow1, nRow2, true);
+    }
+
+    ScriptTypeAggregator aAction(*this);
+    aSet.executeFromTop(aAction);
+    return aAction.getScriptType();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

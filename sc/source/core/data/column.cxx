@@ -2296,9 +2296,6 @@ bool ScColumn::HasEditCells(SCROW nStartRow, SCROW nEndRow, SCROW& rFirst)
     if (itCell == itCellEnd)
         return false;
 
-    SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
-    ScConditionalFormatList* pCFList = pDocument->GetCondFormList(nTab);
-
     sc::CellTextAttrStoreType::iterator itAttrPos = maCellTextAttrs.begin();
     for (; itCell != itCellEnd && itCell->nRow <= nEndRow; ++itCell)
     {
@@ -2313,51 +2310,7 @@ bool ScColumn::HasEditCells(SCROW nStartRow, SCROW nEndRow, SCROW& rFirst)
             return true;
         }
 
-        // Check the script type next.
-        std::pair<sc::CellTextAttrStoreType::iterator,size_t> itPos =
-            maCellTextAttrs.position(itAttrPos, nRow);
-
-        sal_uInt16 nScriptType = 0;
-        itAttrPos = itPos.first; // Track the position of cell text attribute array.
-        if (itAttrPos->type == sc::element_type_celltextattr)
-        {
-            sc::CellTextAttr& rVal =
-                sc::custom_celltextattr_block::at(*itAttrPos->data, itPos.second);
-            nScriptType = rVal.mnScriptType;
-
-            if (nScriptType == SC_SCRIPTTYPE_UNKNOWN)
-            {
-                // Script type not yet determined. Determine the real script
-                // type, and store it.
-                const ScPatternAttr* pPattern = GetPattern(nRow);
-                if (pPattern)
-                {
-                    ScRefCellValue aCell;
-                    ScAddress aPos(nCol, nRow, nTab);
-                    aCell.assign(*pDocument, aPos);
-
-                    const SfxItemSet* pCondSet = NULL;
-                    if (pCFList)
-                    {
-                        const ScCondFormatItem& rItem =
-                            static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL));
-                        const std::vector<sal_uInt32>& rData = rItem.GetCondFormatData();
-                        pCondSet = pDocument->GetCondResult(aCell, aPos, *pCFList, rData);
-                    }
-
-                    OUString aStr;
-                    Color* pColor;
-                    sal_uLong nFormat = pPattern->GetNumberFormat(pFormatter, pCondSet);
-                    ScCellFormat::GetString(aCell, nFormat, aStr, &pColor, *pFormatter);
-                    nScriptType = pDocument->GetStringScriptType(aStr);
-
-                    if (nScriptType && nScriptType != SC_SCRIPTTYPE_UNKNOWN)
-                        // Store the real script type to the array.
-                        rVal.mnScriptType = nScriptType;
-                }
-            }
-        }
-
+        sal_uInt8 nScriptType = GetRangeScriptType(itAttrPos, nRow, nRow);
         if (IsAmbiguousScriptNonZero(nScriptType))
         {
             rFirst = nRow;

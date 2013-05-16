@@ -15,6 +15,7 @@
 namespace sc {
 
 ColumnSpanSet::Action::~Action() {}
+void ColumnSpanSet::Action::startColumn(SCTAB /*nTab*/, SCCOL /*nCol*/) {}
 
 ColumnSpanSet::~ColumnSpanSet()
 {
@@ -30,11 +31,8 @@ ColumnSpanSet::~ColumnSpanSet()
     }
 }
 
-void ColumnSpanSet::set(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bVal)
+ColumnSpanSet::ColumnSpansType& ColumnSpanSet::getColumnSpans(SCTAB nTab, SCCOL nCol)
 {
-    if (!ValidTab(nTab) || !ValidCol(nCol) || !ValidRow(nRow))
-        return;
-
     if (static_cast<size_t>(nTab) >= maDoc.size())
         maDoc.resize(nTab+1, NULL);
 
@@ -48,8 +46,25 @@ void ColumnSpanSet::set(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bVal)
     if (!rTab[nCol])
         rTab[nCol] = new ColumnSpansType(0, MAXROW+1, false);
 
-    ColumnSpansType& rCol = *rTab[nCol];
+    return *rTab[nCol];
+}
+
+void ColumnSpanSet::set(SCTAB nTab, SCCOL nCol, SCROW nRow, bool bVal)
+{
+    if (!ValidTab(nTab) || !ValidCol(nCol) || !ValidRow(nRow))
+        return;
+
+    ColumnSpansType& rCol = getColumnSpans(nTab, nCol);
     rCol.insert_back(nRow, nRow+1, bVal);
+}
+
+void ColumnSpanSet::set(SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2, bool bVal)
+{
+    if (!ValidTab(nTab) || !ValidCol(nCol) || !ValidRow(nRow1) || !ValidRow(nRow2))
+        return;
+
+    ColumnSpansType& rCol = getColumnSpans(nTab, nCol);
+    rCol.insert_back(nRow1, nRow2+1, bVal);
 }
 
 void ColumnSpanSet::executeFromTop(Action& ac) const
@@ -65,6 +80,7 @@ void ColumnSpanSet::executeFromTop(Action& ac) const
             if (!rTab[nCol])
                 continue;
 
+            ac.startColumn(nTab, nCol);
             ColumnSpansType& rCol = *rTab[nCol];
             ColumnSpansType::const_iterator it = rCol.begin(), itEnd = rCol.end();
             SCROW nRow1, nRow2;
@@ -94,6 +110,7 @@ void ColumnSpanSet::executeFromBottom(Action& ac) const
             if (!rTab[nCol])
                 continue;
 
+            ac.startColumn(nTab, nCol);
             ColumnSpansType& rCol = *rTab[nCol];
             ColumnSpansType::const_reverse_iterator it = rCol.rbegin(), itEnd = rCol.rend();
             SCROW nRow1, nRow2;

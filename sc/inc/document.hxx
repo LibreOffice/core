@@ -1277,6 +1277,9 @@ public:
     SC_DLLPUBLIC sal_uInt8          GetStringScriptType( const OUString& rString );
     SC_DLLPUBLIC sal_uInt8 GetCellScriptType( const ScAddress& rPos, sal_uLong nNumberFormat );
     SC_DLLPUBLIC sal_uInt8 GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab );
+    sal_uInt8 GetRangeScriptType(
+        sc::ColumnBlockPosition& rBlockPos, const ScAddress& rPos, SCROW nLength );
+    sal_uInt8 GetRangeScriptType( const ScRangeList& rRanges );
 
     bool            HasDetectiveOperations() const;
     void            AddDetectiveOperation( const ScDetOpData& rData );

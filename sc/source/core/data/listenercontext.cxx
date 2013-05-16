@@ -35,9 +35,9 @@ ScDocument& EndListeningContext::getDoc()
     return mrDoc;
 }
 
-void EndListeningContext::addEmptyBroadcasterPosition(SCCOL nCol, SCROW nRow, SCTAB nTab)
+void EndListeningContext::addEmptyBroadcasterPosition(SCTAB nTab, SCCOL nCol, SCROW nRow)
 {
-    maSet.set(nCol, nRow, nTab, true);
+    maSet.set(nTab, nCol, nRow, true);
 }
 
 void EndListeningContext::purgeEmptyBroadcasters()

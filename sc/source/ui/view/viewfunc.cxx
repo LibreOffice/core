@@ -823,17 +823,7 @@ sal_uInt8 ScViewFunc::GetSelectionScriptType()
     {
         ScRangeList aRanges;
         rMark.FillRangeListWithMarks( &aRanges, false );
-        size_t nCount = aRanges.size();
-        for ( size_t i=0; i < nCount; i++ )
-        {
-            ScRange aRange = *aRanges[i];
-            ScCellIterator aIter( pDoc, aRange );
-            for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
-            {
-                nScript |= pDoc->GetScriptType(
-                    aIter.GetPos().Col(), aIter.GetPos().Row(), aIter.GetPos().Tab());
-            }
-        }
+        nScript = pDoc->GetRangeScriptType(aRanges);
     }
 
     if (nScript == 0)

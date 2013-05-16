@@ -27,7 +27,7 @@ public:
     EndListeningContext(ScDocument& rDoc);
     ScDocument& getDoc();
 
-    void addEmptyBroadcasterPosition(SCCOL nCol, SCROW nRow, SCTAB nTab);
+    void addEmptyBroadcasterPosition(SCTAB nTab, SCCOL nCol, SCROW nRow);
     void purgeEmptyBroadcasters();
 };
 

@@ -30,17 +30,21 @@ class ColumnSpanSet : boost::noncopyable
 
     DocType maDoc;
 
+    ColumnSpansType& getColumnSpans(SCTAB nTab, SCCOL nCol);
+
 public:
     class Action
     {
     public:
         virtual ~Action() = 0;
+        virtual void startColumn(SCTAB nTab, SCCOL nCol);
         virtual void execute(const ScAddress& rPos, SCROW nLength, bool bVal) = 0;
     };
 
     ~ColumnSpanSet();
 
-    void set(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bVal);
+    void set(SCTAB nTab, SCCOL nCol, SCROW nRow, bool bVal);
+    void set(SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2, bool bVal);
 
     void executeFromTop(Action& ac) const;
     void executeFromBottom(Action& ac) const;
