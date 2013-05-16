@@ -2238,16 +2238,19 @@ void ScHTMLTable::DataOn( const ImportInfo& rInfo )
                     OUString aProp("mso-number-format");
                     const ScHTMLStyles& rStyles = mpParser->GetStyles();
                     const OUString& rVal = rStyles.getPropertyValue(aElem, aClass, aProp);
-                    OUString aNumFmt = decodeNumberFormat(rVal);
-
-                    nNumberFormat = GetFormatTable()->GetEntryKey(aNumFmt);
-                    if (nNumberFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
+                    if (!rVal.isEmpty())
                     {
-                        sal_Int32 nErrPos  = 0;
-                        short nDummy;
-                        bool bValidFmt = GetFormatTable()->PutEntry(aNumFmt, nErrPos, nDummy, nNumberFormat);
-                        if (!bValidFmt)
-                            nNumberFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
+                        OUString aNumFmt = decodeNumberFormat(rVal);
+
+                        nNumberFormat = GetFormatTable()->GetEntryKey(aNumFmt);
+                        if (nNumberFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
+                        {
+                            sal_Int32 nErrPos  = 0;
+                            short nDummy;
+                            bool bValidFmt = GetFormatTable()->PutEntry(aNumFmt, nErrPos, nDummy, nNumberFormat);
+                            if (!bValidFmt)
+                                nNumberFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
+                        }
                     }
                 }
                 break;
