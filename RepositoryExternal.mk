@@ -2860,8 +2860,25 @@ $(call gb_Executable_add_runtime_dependencies,climaker,\
 )
 endef
 
+# Better duplication with gb_Gallery__UNO_COMPONENTS than nothing.
+# This is used to determine what we need for 'build' platform.
 define gb_Executable__register_gengal.bin
 $(call gb_Executable_add_runtime_dependencies,gengal.bin,\
+	$(foreach component, \
+		comphelper/util/comphelp \
+		configmgr/source/configmgr \
+		fileaccess/source/fileacc \
+		framework/util/fwk \
+		i18npool/util/i18npool \
+		package/source/xstor/xstor \
+		package/util/package2 \
+		sfx2/util/sfx \
+		svx/util/svx \
+		svx/util/svxcore \
+		ucb/source/core/ucb1 \
+		ucb/source/ucp/file/ucpfile1 \
+		unoxml/source/service/unoxml \
+	,$(call gb_ComponentTarget_get_outdir_target_for_build,$(component))) \
 	$(call gb_AllLangResTarget_get_target,ofa) \
 	$(call gb_Configuration_get_target,registry) \
 	$(call gb_Configuration_get_target,fcfg_langpack) \

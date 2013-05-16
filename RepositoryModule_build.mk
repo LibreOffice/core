@@ -63,6 +63,35 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 	$(call gb_Helper_optional,CLUCENE,clucene) \
 	$(call gb_Helper_optional,CPPUNIT,cppunit) \
 	$(call gb_Helper_optional_for_host,DESKTOP, \
+		$(if $(filter YES,$(WITH_GALLERY_BUILD)), \
+			avmedia \
+			basebmp \
+			basic \
+			canvas \
+			configmgr \
+			cppcanvas \
+			drawinglayer \
+			editeng \
+			fileaccess \
+			framework \
+			harfbuzz \
+			lcms2 \
+			linguistic \
+			nss \
+			package \
+			sfx2 \
+			sot \
+			svl \
+			svtools \
+			svx \
+			toolkit \
+			ucb \
+			unoxml \
+			vcl \
+			$(call gb_Helper_optional,VIGRA,vigra) \
+			xmloff \
+			xmlscript \
+		) \
 		helpcompiler \
 		xmlhelp \
 	) \

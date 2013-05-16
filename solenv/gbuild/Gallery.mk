@@ -51,7 +51,7 @@ define gb_Gallery__make_env_args
 "-env:UNO_TYPES=$(foreach item,$(gb_Gallery__UNO_TYPES),\
 	$(call gb_Helper_make_url,$(call gb_UnoApi_get_target,$(item))))" \
 $(foreach dir,URE_INTERNAL_LIB_DIR LO_LIB_DIR,\
-	-env:$(dir)=$(call gb_Helper_make_url,$(gb_Helper_OUTDIRLIBDIR)))
+	-env:$(dir)=$(call gb_Helper_make_url,$(gb_Helper_OUTDIR_FOR_BUILDLIBDIR)))
 endef
 
 define gb_Gallery__command
