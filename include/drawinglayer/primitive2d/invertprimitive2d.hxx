@@ -47,7 +47,7 @@ namespace drawinglayer
             explicit InvertPrimitive2D(const Primitive2DSequence& rChildren);
 
             /// provide unique ID
-            DeclPrimitrive2DIDBlock()
+            DeclPrimitive2DIDBlock()
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

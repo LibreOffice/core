@@ -29,16 +29,16 @@
 #include <basegfx/range/b3drange.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
-/** defines for DeclPrimitrive3DIDBlock and ImplPrimitrive3DIDBlock
+/** defines for DeclPrimitive3DIDBlock and ImplPrimitive3DIDBlock
     Added to be able to simply change identification stuff later, e.g. add
     a identification string and/or ID to the interface and to the implementation
     ATM used to delclare implement getPrimitive3DID()
  */
 
-#define DeclPrimitrive3DIDBlock() \
+#define DeclPrimitive3DIDBlock() \
     virtual sal_uInt32 getPrimitive3DID() const;
 
-#define ImplPrimitrive3DIDBlock(TheClass, TheID) \
+#define ImplPrimitive3DIDBlock(TheClass, TheID) \
     sal_uInt32 TheClass::getPrimitive3DID() const { return TheID; }
 
 //////////////////////////////////////////////////////////////////////////////

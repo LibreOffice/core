@@ -71,7 +71,7 @@ namespace drawinglayer
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
             /// provide unique ID
-            DeclPrimitrive2DIDBlock()
+            DeclPrimitive2DIDBlock()
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -136,7 +136,7 @@ namespace drawinglayer
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
             /// provide unique ID
-            DeclPrimitrive2DIDBlock()
+            DeclPrimitive2DIDBlock()
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -194,7 +194,7 @@ namespace drawinglayer
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
             /// provide unique ID
-            DeclPrimitrive2DIDBlock()
+            DeclPrimitive2DIDBlock()
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -249,7 +249,7 @@ namespace drawinglayer
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
             /// provide unique ID
-            DeclPrimitrive2DIDBlock()
+            DeclPrimitive2DIDBlock()
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -298,7 +298,7 @@ namespace drawinglayer
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
             /// provide unique ID
-            DeclPrimitrive2DIDBlock()
+            DeclPrimitive2DIDBlock()
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

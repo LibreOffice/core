@@ -59,7 +59,7 @@ namespace drawinglayer
             const vcl::PDFWriter::StructElement& getStructureElement() const { return maStructureElement; }
 
             /// provide unique ID
-            DeclPrimitrive2DIDBlock()
+            DeclPrimitive2DIDBlock()
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

@@ -899,7 +899,7 @@ namespace sdr { namespace contact {
         virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
         // declare unique ID for this primitive class
-        DeclPrimitrive2DIDBlock()
+        DeclPrimitive2DIDBlock()
 
         static void getTransformation( const ViewContactOfUnoControl& _rVOC, ::basegfx::B2DHomMatrix& _out_Transformation );
 
@@ -1698,7 +1698,7 @@ namespace sdr { namespace contact {
     }
 
     //--------------------------------------------------------------------
-    ImplPrimitrive2DIDBlock( LazyControlCreationPrimitive2D, PRIMITIVE2D_ID_SDRCONTROLPRIMITIVE2D )
+    ImplPrimitive2DIDBlock( LazyControlCreationPrimitive2D, PRIMITIVE2D_ID_SDRCONTROLPRIMITIVE2D )
 
     //====================================================================
     //= ViewObjectContactOfUnoControl

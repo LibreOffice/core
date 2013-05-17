@@ -67,7 +67,7 @@ namespace drawinglayer
             bool isCornerRadiusUsed() const { return (0.0 != mfCornerRadiusX || 0.0 != mfCornerRadiusY); }
 
             // provide unique ID
-            DeclPrimitrive2DIDBlock()
+            DeclPrimitive2DIDBlock()
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

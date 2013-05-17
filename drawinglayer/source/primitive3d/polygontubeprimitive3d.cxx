@@ -787,7 +787,7 @@ namespace drawinglayer
         }
 
         // provide unique ID
-        ImplPrimitrive3DIDBlock(PolygonTubePrimitive3D, PRIMITIVE3D_ID_POLYGONTUBEPRIMITIVE3D)
+        ImplPrimitive3DIDBlock(PolygonTubePrimitive3D, PRIMITIVE3D_ID_POLYGONTUBEPRIMITIVE3D)
 
     } // end of namespace primitive3d
 } // end of namespace drawinglayer

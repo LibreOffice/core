@@ -59,7 +59,7 @@ namespace drawinglayer
         }
 
         // provide unique ID
-        ImplPrimitrive3DIDBlock(TransformPrimitive3D, PRIMITIVE3D_ID_TRANSFORMPRIMITIVE3D)
+        ImplPrimitive3DIDBlock(TransformPrimitive3D, PRIMITIVE3D_ID_TRANSFORMPRIMITIVE3D)
 
     } // end of namespace primitive3d
 } // end of namespace drawinglayer

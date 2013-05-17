@@ -37,7 +37,7 @@ namespace drawinglayer
         }
 
         // provide unique ID
-        ImplPrimitrive2DIDBlock(InvertPrimitive2D, PRIMITIVE2D_ID_INVERTPRIMITIVE2D)
+        ImplPrimitive2DIDBlock(InvertPrimitive2D, PRIMITIVE2D_ID_INVERTPRIMITIVE2D)
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

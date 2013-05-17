@@ -87,7 +87,7 @@ public:
 
     virtual bool operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const;
 
-    DeclPrimitrive2DIDBlock()
+    DeclPrimitive2DIDBlock()
 };
 
 drawinglayer::primitive2d::Primitive2DSequence AnchorPrimitive::create2DDecomposition(
@@ -228,7 +228,7 @@ bool AnchorPrimitive::operator==( const drawinglayer::primitive2d::BasePrimitive
     return false;
 }
 
-ImplPrimitrive2DIDBlock(AnchorPrimitive, PRIMITIVE2D_ID_SWSIDEBARANCHORPRIMITIVE)
+ImplPrimitive2DIDBlock(AnchorPrimitive, PRIMITIVE2D_ID_SWSIDEBARANCHORPRIMITIVE)
 
 /*static*/ AnchorOverlayObject* AnchorOverlayObject::CreateAnchorOverlayObject(
                                                        SwView& rDocView,

@@ -94,7 +94,7 @@ namespace drawinglayer
             return false;
         }
 
-        ImplPrimitrive2DIDBlock(OverlayBitmapExPrimitive, PRIMITIVE2D_ID_OVERLAYBITMAPEXPRIMITIVE)
+        ImplPrimitive2DIDBlock(OverlayBitmapExPrimitive, PRIMITIVE2D_ID_OVERLAYBITMAPEXPRIMITIVE)
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -167,7 +167,7 @@ namespace drawinglayer
             return false;
         }
 
-        ImplPrimitrive2DIDBlock(OverlayCrosshairPrimitive, PRIMITIVE2D_ID_OVERLAYCROSSHAIRPRIMITIVE)
+        ImplPrimitive2DIDBlock(OverlayCrosshairPrimitive, PRIMITIVE2D_ID_OVERLAYCROSSHAIRPRIMITIVE)
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -262,7 +262,7 @@ namespace drawinglayer
             return false;
         }
 
-        ImplPrimitrive2DIDBlock(OverlayHatchRectanglePrimitive, PRIMITIVE2D_ID_OVERLAYHATCHRECTANGLEPRIMITIVE)
+        ImplPrimitive2DIDBlock(OverlayHatchRectanglePrimitive, PRIMITIVE2D_ID_OVERLAYHATCHRECTANGLEPRIMITIVE)
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -380,7 +380,7 @@ namespace drawinglayer
             return false;
         }
 
-        ImplPrimitrive2DIDBlock(OverlayHelplineStripedPrimitive, PRIMITIVE2D_ID_OVERLAYHELPLINESTRIPEDPRIMITIVE)
+        ImplPrimitive2DIDBlock(OverlayHelplineStripedPrimitive, PRIMITIVE2D_ID_OVERLAYHELPLINESTRIPEDPRIMITIVE)
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -475,7 +475,7 @@ namespace drawinglayer
             return false;
         }
 
-        ImplPrimitrive2DIDBlock(OverlayRollingRectanglePrimitive, PRIMITIVE2D_ID_OVERLAYROLLINGRECTANGLEPRIMITIVE)
+        ImplPrimitive2DIDBlock(OverlayRollingRectanglePrimitive, PRIMITIVE2D_ID_OVERLAYROLLINGRECTANGLEPRIMITIVE)
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

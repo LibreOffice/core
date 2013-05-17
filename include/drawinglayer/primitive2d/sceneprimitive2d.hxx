@@ -144,7 +144,7 @@ namespace drawinglayer
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
             /// provide unique ID
-            DeclPrimitrive2DIDBlock()
+            DeclPrimitive2DIDBlock()
 
             /// get local decomposition. Overloaded since this decomposition is view-dependent
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;

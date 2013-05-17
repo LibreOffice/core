@@ -65,7 +65,7 @@ public:
 
     virtual bool operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const;
 
-    DeclPrimitrive2DIDBlock()
+    DeclPrimitive2DIDBlock()
 };
 
 drawinglayer::primitive2d::Primitive2DSequence ShadowPrimitive::create2DDecomposition(
@@ -163,7 +163,7 @@ bool ShadowPrimitive::operator==( const drawinglayer::primitive2d::BasePrimitive
     return false;
 }
 
-ImplPrimitrive2DIDBlock(ShadowPrimitive, PRIMITIVE2D_ID_SWSIDEBARSHADOWPRIMITIVE)
+ImplPrimitive2DIDBlock(ShadowPrimitive, PRIMITIVE2D_ID_SWSIDEBARSHADOWPRIMITIVE)
 
 /* static */ ShadowOverlayObject* ShadowOverlayObject::CreateShadowOverlayObject( SwView& rDocView )
 {

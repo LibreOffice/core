@@ -57,7 +57,7 @@ namespace drawinglayer
         }
 
         // provide unique ID
-        ImplPrimitrive2DIDBlock(ClippedBorderLinePrimitive2D, PRIMITIVE2D_ID_CLIPPEDBORDERLINEPRIMITIVE2D)
+        ImplPrimitive2DIDBlock(ClippedBorderLinePrimitive2D, PRIMITIVE2D_ID_CLIPPEDBORDERLINEPRIMITIVE2D)
 
 
     } // namespace primitive2d

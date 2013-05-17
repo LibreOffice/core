@@ -202,7 +202,7 @@ namespace drawinglayer
         }
 
         // provide unique ID
-        ImplPrimitrive2DIDBlock(HelplinePrimitive2D, PRIMITIVE2D_ID_HELPLINEPRIMITIVE2D)
+        ImplPrimitive2DIDBlock(HelplinePrimitive2D, PRIMITIVE2D_ID_HELPLINEPRIMITIVE2D)
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

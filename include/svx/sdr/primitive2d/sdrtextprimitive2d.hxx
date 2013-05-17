@@ -139,7 +139,7 @@ namespace drawinglayer
             virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const;
 
             // provide unique ID
-            DeclPrimitrive2DIDBlock()
+            DeclPrimitive2DIDBlock()
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -181,7 +181,7 @@ namespace drawinglayer
             virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const;
 
             // provide unique ID
-            DeclPrimitrive2DIDBlock()
+            DeclPrimitive2DIDBlock()
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -243,7 +243,7 @@ namespace drawinglayer
             virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const;
 
             // provide unique ID
-            DeclPrimitrive2DIDBlock()
+            DeclPrimitive2DIDBlock()
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -285,7 +285,7 @@ namespace drawinglayer
             virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const;
 
             // provide unique ID
-            DeclPrimitrive2DIDBlock()
+            DeclPrimitive2DIDBlock()
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -326,7 +326,7 @@ namespace drawinglayer
             virtual SdrTextPrimitive2D* createTransformedClone(const ::basegfx::B2DHomMatrix& rTransform) const;
 
             // provide unique ID
-            DeclPrimitrive2DIDBlock()
+            DeclPrimitive2DIDBlock()
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

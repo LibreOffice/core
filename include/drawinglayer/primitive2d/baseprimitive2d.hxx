@@ -29,16 +29,16 @@
 #include <basegfx/range/b2drange.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
-/** defines for DeclPrimitrive2DIDBlock and ImplPrimitrive2DIDBlock
+/** defines for DeclPrimitive2DIDBlock and ImplPrimitive2DIDBlock
     Added to be able to simply change identification stuff later, e.g. add
     a identification string and/or ID to the interface and to the implementation
     ATM used to delclare implement getPrimitive2DID()
 */
 
-#define DeclPrimitrive2DIDBlock() \
+#define DeclPrimitive2DIDBlock() \
     virtual sal_uInt32 getPrimitive2DID() const;
 
-#define ImplPrimitrive2DIDBlock(TheClass, TheID) \
+#define ImplPrimitive2DIDBlock(TheClass, TheID) \
     sal_uInt32 TheClass::getPrimitive2DID() const { return TheID; }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -160,7 +160,7 @@ namespace drawinglayer
 
             /** provide unique ID for fast identifying of known primitive implementations in renderers. These use
                 the defines from drawinglayer_primitivetypes2d.hxx to define unique IDs.
-                This method is normally defined using DeclPrimitrive2DIDBlock()
+                This method is normally defined using DeclPrimitive2DIDBlock()
              */
             virtual sal_uInt32 getPrimitive2DID() const = 0;
 

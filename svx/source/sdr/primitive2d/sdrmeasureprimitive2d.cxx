@@ -492,7 +492,7 @@ namespace drawinglayer
         }
 
         // provide unique ID
-        ImplPrimitrive2DIDBlock(SdrMeasurePrimitive2D, PRIMITIVE2D_ID_SDRMEASUREPRIMITIVE2D)
+        ImplPrimitive2DIDBlock(SdrMeasurePrimitive2D, PRIMITIVE2D_ID_SDRMEASUREPRIMITIVE2D)
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

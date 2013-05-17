@@ -65,7 +65,7 @@ namespace drawinglayer
             // compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
 
-            DeclPrimitrive2DIDBlock()
+            DeclPrimitive2DIDBlock()
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -106,7 +106,7 @@ namespace drawinglayer
             // compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
 
-            DeclPrimitrive2DIDBlock()
+            DeclPrimitive2DIDBlock()
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -161,7 +161,7 @@ namespace drawinglayer
             // compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
 
-            DeclPrimitrive2DIDBlock()
+            DeclPrimitive2DIDBlock()
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -215,7 +215,7 @@ namespace drawinglayer
             // compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
 
-            DeclPrimitrive2DIDBlock()
+            DeclPrimitive2DIDBlock()
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -258,7 +258,7 @@ namespace drawinglayer
             // compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
 
-            DeclPrimitrive2DIDBlock()
+            DeclPrimitive2DIDBlock()
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

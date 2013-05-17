@@ -68,7 +68,7 @@ namespace drawinglayer
             sal_uInt32 getGraphicVersion() const { return mnGraphicVersion; }
 
             // provide unique ID
-            DeclPrimitrive2DIDBlock()
+            DeclPrimitive2DIDBlock()
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

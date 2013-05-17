@@ -99,7 +99,7 @@ namespace drawinglayer
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
 
             /// provide unique ID
-            DeclPrimitrive2DIDBlock()
+            DeclPrimitive2DIDBlock()
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -140,7 +140,7 @@ namespace drawinglayer
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
 
             /// provide unique ID
-            DeclPrimitrive2DIDBlock()
+            DeclPrimitive2DIDBlock()
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

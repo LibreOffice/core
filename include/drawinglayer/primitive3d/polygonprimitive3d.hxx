@@ -68,7 +68,7 @@ namespace drawinglayer
             virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const;
 
             /// provide unique ID
-            DeclPrimitrive3DIDBlock()
+            DeclPrimitive3DIDBlock()
         };
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
@@ -117,7 +117,7 @@ namespace drawinglayer
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
             /// provide unique ID
-            DeclPrimitrive3DIDBlock()
+            DeclPrimitive3DIDBlock()
         };
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
