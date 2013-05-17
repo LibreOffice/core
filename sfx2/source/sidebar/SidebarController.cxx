@@ -518,20 +518,6 @@ void SidebarController::SwitchToDeck (
         }
     }
 
-    if (mpCurrentDeck
-        && ArePanelSetsEqual(mpCurrentDeck->GetPanels(), aPanelContextDescriptors))
-    {
-        // Requested set of panels is identical to the current set of
-        // panels => Nothing to do.
-        return;
-    }
-
-        // When the document is read-only, check if there are any panels that can still be displayed.
-    if (mbIsDocumentReadOnly)
-    {
-    }
-
-
     // Provide a configuration and Deck object.
     if ( ! mpCurrentDeck)
     {

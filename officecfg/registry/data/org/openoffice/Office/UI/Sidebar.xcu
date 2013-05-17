@@ -724,6 +724,7 @@
           <value oor:separator=";">
             Calc,  Auditing, visible ;
             Calc,  Cell,     visible ;
+            Calc,  EditCell, visible ;
             Calc,  default,  visible ;
             Calc,  Pivot,    visible ;
           </value>
@@ -753,6 +754,7 @@
           <value oor:separator=";">
             Calc,  Auditing, hidden ;
             Calc,  Cell,     hidden ;
+            Calc,  EditCell, hidden ;
             Calc,  default,  hidden ;
             Calc,  Pivot,    hidden ;
           </value>
