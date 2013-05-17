@@ -85,6 +85,10 @@ namespace {
         MID_FIRST_PANEL,
         MID_FIRST_HIDE = 1000
     };
+
+    /** When in doubt, show this deck.
+    */
+    static const ::rtl::OUString gsDefaultDeckId(A2S("PropertyDeck"));
 }
 
 
@@ -102,7 +106,7 @@ SidebarController::SidebarController (
       mxFrame(rxFrame),
       maCurrentContext(OUString(), OUString()),
       maRequestedContext(),
-      msCurrentDeckId(A2S("PropertyDeck")),
+      msCurrentDeckId(gsDefaultDeckId),
       msCurrentDeckTitle(),
       maPropertyChangeForwarder(::boost::bind(&SidebarController::BroadcastPropertyChange, this)),
       maContextChangeUpdate(::boost::bind(&SidebarController::UpdateConfigurations, this)),
@@ -252,7 +256,10 @@ void SAL_CALL SidebarController::statusChanged (const css::frame::FeatureStateEv
         mbIsDocumentReadOnly = !bIsReadWrite;
 
         // Force the current deck to update its panel list.
-        SwitchToDeck(msCurrentDeckId);
+        if ( ! mbIsDocumentReadOnly)
+            msCurrentDeckId = gsDefaultDeckId;
+        maCurrentContext = Context();
+        maContextChangeUpdate.RequestCall();
     }
 }
 
