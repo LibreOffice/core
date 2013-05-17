@@ -19,7 +19,7 @@
 #ifndef com_sun_star_chart2_LinearScaling_idl
 #define com_sun_star_chart2_LinearScaling_idl
 
-#include <com/sun/star/chart2/Scaling.idl>
+#include <com/sun/star/chart2/XScaling.idl>
 
 
 module com {  module sun {  module star {  module chart2 {
@@ -32,10 +32,7 @@ module com {  module sun {  module star {  module chart2 {
     and <em>t</em> is 0.0, which means the transformation is an
     identical mapping.</p>
 */
-service LinearScaling
-{
-    service Scaling;
-};
+service LinearScaling : com::sun::star::chart2::XScaling;
 
 
 }; }; }; };

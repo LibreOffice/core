@@ -2750,7 +2750,7 @@ XclExpChValueRange::XclExpChValueRange( const XclExpChRoot& rRoot ) :
 void XclExpChValueRange::Convert( const ScaleData& rScaleData )
 {
     // scaling algorithm
-    bool bLogScale = ScfApiHelper::GetServiceName( rScaleData.Scaling ) == SERVICE_CHART2_LOGSCALING;
+    bool bLogScale = ScfApiHelper::GetServiceName( rScaleData.Scaling ) == "com.sun.star.chart2.LogarithmicScaling";
     ::set_flag( maData.mnFlags, EXC_CHVALUERANGE_LOGSCALE, bLogScale );
 
     // min/max

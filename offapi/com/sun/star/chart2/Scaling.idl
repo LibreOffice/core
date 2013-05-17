@@ -27,12 +27,7 @@ module com {  module sun {  module star {  module chart2 {
 
 /** stateless service
 */
-service Scaling
-{
-    /** required interface
-    */
-    interface com::sun::star::chart2::XScaling;
-};
+service Scaling : com::sun::star::chart2::XScaling;
 
 
 }; }; }; };

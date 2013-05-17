@@ -80,10 +80,15 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/awt/tree,\
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/chart2,\
 	CartesianCoordinateSystem2d \
 	CartesianCoordinateSystem3d \
+	ExponentialScaling \
 	FormattedString \
+	LogarithmicScaling \
+	LinearScaling \
 	PolarCoordinateSystem2d \
 	PolarCoordinateSystem3d \
+	PowerScaling \
 	RegressionEquation \
+	Scaling \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/chart2/data,\
 	DatabaseDataProvider \
@@ -622,17 +627,12 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/chart2,
 	DataSeries \
 	Diagram \
 	ErrorBar \
-	ExponentialScaling \
 	GridProperties \
 	Legend \
-	LinearScaling \
-	LogarithmicScaling \
 	LogicTargetModel \
-	PowerScaling \
 	PropertyPool \
 	RegressionCurve \
 	RegressionCurveEquation \
-	Scaling \
 	StandardDiagramCreationParameters \
 	Title \
 ))

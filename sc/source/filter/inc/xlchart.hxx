@@ -56,9 +56,7 @@ class XclRoot;
 #define SERVICE_CHART2_EXPREGCURVE          "com.sun.star.chart2.ExponentialRegressionCurve"
 #define SERVICE_CHART2_LEGEND               "com.sun.star.chart2.Legend"
 #define SERVICE_CHART2_LINEARREGCURVE       "com.sun.star.chart2.LinearRegressionCurve"
-#define SERVICE_CHART2_LINEARSCALING        "com.sun.star.chart2.LinearScaling"
 #define SERVICE_CHART2_LOGREGCURVE          "com.sun.star.chart2.LogarithmicRegressionCurve"
-#define SERVICE_CHART2_LOGSCALING           "com.sun.star.chart2.LogarithmicScaling"
 #define SERVICE_CHART2_POTREGCURVE          "com.sun.star.chart2.PotentialRegressionCurve"
 #define SERVICE_CHART2_TITLE                "com.sun.star.chart2.Title"
 

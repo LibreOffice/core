@@ -27,6 +27,8 @@
 #include <com/sun/star/chart/TimeUnit.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/TickmarkStyle.hpp>
+#include <com/sun/star/chart2/LinearScaling.hpp>
+#include <com/sun/star/chart2/LogarithmicScaling.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
@@ -34,6 +36,7 @@
 #include "oox/drawingml/chart/titleconverter.hxx"
 #include "oox/drawingml/chart/typegroupconverter.hxx"
 #include "oox/drawingml/lineproperties.hxx"
+#include "comphelper/processfactory.hxx"
 
 namespace oox {
 namespace drawingml {
@@ -219,7 +222,7 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
                 if( mrModel.mnTypeId == C_TOKEN( dateAx ) )
                 {
                     // scaling algorithm
-                    aScaleData.Scaling.set( createInstance( "com.sun.star.chart2.LinearScaling" ), UNO_QUERY );
+                    aScaleData.Scaling = LinearScaling::create( comphelper::getProcessComponentContext() );
                     // min/max
                     lclSetValueOrClearAny( aScaleData.Minimum, mrModel.mofMin );
                     lclSetValueOrClearAny( aScaleData.Maximum, mrModel.mofMax );
@@ -249,10 +252,10 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
             {
                 // scaling algorithm
                 bool bLogScale = lclIsLogarithmicScale( mrModel );
-                OUString aScalingService = bLogScale ?
-                    OUString( "com.sun.star.chart2.LogarithmicScaling" ) :
-                    OUString( "com.sun.star.chart2.LinearScaling" );
-                aScaleData.Scaling.set( createInstance( aScalingService ), UNO_QUERY );
+                if( bLogScale )
+                    aScaleData.Scaling = LogarithmicScaling::create( comphelper::getProcessComponentContext() );
+                else
+                    aScaleData.Scaling = LinearScaling::create( comphelper::getProcessComponentContext() );
                 // min/max
                 lclSetValueOrClearAny( aScaleData.Minimum, mrModel.mofMin );
                 lclSetValueOrClearAny( aScaleData.Maximum, mrModel.mofMax );

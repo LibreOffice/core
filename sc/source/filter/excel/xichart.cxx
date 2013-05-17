@@ -43,6 +43,8 @@
 #include <com/sun/star/chart2/CartesianCoordinateSystem2d.hpp>
 #include <com/sun/star/chart2/CartesianCoordinateSystem3d.hpp>
 #include <com/sun/star/chart2/FormattedString.hpp>
+#include <com/sun/star/chart2/LogarithmicScaling.hpp>
+#include <com/sun/star/chart2/LinearScaling.hpp>
 #include <com/sun/star/chart2/PolarCoordinateSystem2d.hpp>
 #include <com/sun/star/chart2/PolarCoordinateSystem3d.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -2982,7 +2984,7 @@ void XclImpChLabelRange::Convert( ScfPropertySet& rPropSet, ScaleData& rScaleDat
         /*  Chart2 requires axis type CATEGORY for automatic category/date axis
             (even if it is a date axis currently). */
         rScaleData.AxisType = rScaleData.AutoDateAxis ? cssc2::AxisType::CATEGORY : cssc2::AxisType::DATE;
-        rScaleData.Scaling.set( ScfApiHelper::CreateInstance( SERVICE_CHART2_LINEARSCALING ), UNO_QUERY );
+        rScaleData.Scaling = css::chart2::LinearScaling::create( comphelper::getProcessComponentContext() );
         /*  Min/max values depend on base time unit, they specify the number of
             days, months, or years starting from null date. */
         lclConvertTimeValue( GetRoot(), rScaleData.Minimum, maDateData.mnMinDate, ::get_flag( maDateData.mnFlags, EXC_CHDATERANGE_AUTOMIN ), maDateData.mnBaseUnit );
@@ -3066,8 +3068,10 @@ void XclImpChValueRange::Convert( ScaleData& rScaleData, bool bMirrorOrient ) co
 {
     // scaling algorithm
     bool bLogScale = ::get_flag( maData.mnFlags, EXC_CHVALUERANGE_LOGSCALE );
-    OUString aScalingService = bLogScale ? OUString( SERVICE_CHART2_LOGSCALING ) : OUString( SERVICE_CHART2_LINEARSCALING );
-    rScaleData.Scaling.set( ScfApiHelper::CreateInstance( aScalingService ), UNO_QUERY );
+    if( bLogScale )
+        rScaleData.Scaling = css::chart2::LogarithmicScaling::create( comphelper::getProcessComponentContext() );
+    else
+        rScaleData.Scaling = css::chart2::LinearScaling::create( comphelper::getProcessComponentContext() );
 
     // min/max
     lclSetExpValueOrClearAny( rScaleData.Minimum, maData.mfMin, bLogScale, ::get_flag( maData.mnFlags, EXC_CHVALUERANGE_AUTOMIN ) );
