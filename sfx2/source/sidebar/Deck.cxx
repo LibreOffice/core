@@ -299,8 +299,6 @@ const SharedPanelContainer& Deck::GetPanels (void) const
 
 void Deck::RequestLayout (void)
 {
-    //    PrintWindowTree();
-
     DeckLayouter::LayoutDeck(
         GetContentArea(),
         maPanels,
@@ -309,8 +307,6 @@ void Deck::RequestLayout (void)
         *mpScrollContainer,
         *mpFiller,
         *mpVerticalScrollBar);
-
-    Invalidate();
 }
 
 
