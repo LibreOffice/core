@@ -781,9 +781,10 @@ void ScColumn::GetOptimalHeight(
 
                     SCSIZE nIndex;
                     Search(nStart,nIndex);
+                    sc::CellTextAttrStoreType::iterator itAttr = maCellTextAttrs.begin();
                     while ( nIndex < maItems.size() && (nRow=maItems[nIndex].nRow) <= nEnd )
                     {
-                        sal_uInt8 nScript = pDocument->GetScriptType(nCol, nRow, nTab);
+                        sal_uInt8 nScript = GetRangeScriptType(itAttr, nRow, nRow);
                         if ( nScript != nDefScript )
                         {
                             if ( nScript == SCRIPTTYPE_ASIAN )
