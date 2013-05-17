@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//8jw\u003d",
+        "filename": "filter/source/pdf/pdfexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2013-05-17T14:41:45Z",
+      "side": 1,
+      "message": "Just don\u0027t add the line, instead of adding it commented. Since the SetIsViewPDF is not there anymore.",
+      "revId": "94650b1495aa6faf0398f6f4751fb77ebaa5b71f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
