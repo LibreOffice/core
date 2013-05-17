@@ -140,12 +140,12 @@ void SwRect::Justify()
 {
     if ( m_Size.getHeight() < 0 )
     {
-        m_Point.Y() += m_Size.getHeight() + 1;
+        m_Point.setY(m_Point.getY() + m_Size.getHeight() + 1);
         m_Size.setHeight(-m_Size.getHeight());
     }
     if ( m_Size.getWidth() < 0 )
     {
-        m_Point.X() += m_Size.getWidth() + 1;
+        m_Point.setX(m_Point.getX() + m_Size.getWidth() + 1);
         m_Size.setWidth(-m_Size.getWidth());
     }
 }
@@ -167,9 +167,9 @@ long SwRect::_Bottom() const{ return m_Point.getY() + m_Size.getHeight(); }
 
 void SwRect::AddWidth( const long nAdd ) { m_Size.Width() += nAdd; }
 void SwRect::AddHeight( const long nAdd ) { m_Size.Height() += nAdd; }
-void SwRect::SubLeft( const long nSub ){ m_Size.Width() += nSub; m_Point.X() -= nSub; }
+void SwRect::SubLeft( const long nSub ){ m_Size.Width() += nSub; m_Point.setX(m_Point.getX() - nSub); }
 void SwRect::AddRight( const long nAdd ){ m_Size.Width() += nAdd; }
-void SwRect::SubTop( const long nSub ){ m_Size.Height() += nSub; m_Point.Y() -= nSub; }
+void SwRect::SubTop( const long nSub ){ m_Size.Height() += nSub; m_Point.setY(m_Point.getY() - nSub); }
 void SwRect::AddBottom( const long nAdd ){ m_Size.Height() += nAdd; }
 void SwRect::SetPosX( const long nNew ){ m_Point.setX(nNew); }
 void SwRect::SetPosY( const long nNew ){ m_Point.setY(nNew); }

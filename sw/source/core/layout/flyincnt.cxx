@@ -47,9 +47,9 @@ SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     // OD 2004-05-27 #i26791# - member <aRelPos> moved to <SwAnchoredObject>
     Point aRelPos;
     if( pAnch && pAnch->IsVertical() )
-        aRelPos.X() = pAnch->IsReverse() ? nRel : -nRel;
+        aRelPos.setX(pAnch->IsReverse() ? nRel : -nRel);
     else
-        aRelPos.Y() = nRel;
+        aRelPos.setY(nRel);
     SetCurrRelPos( aRelPos );
 }
 

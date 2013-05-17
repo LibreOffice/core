@@ -98,8 +98,8 @@ sal_Bool SwCrsrShell::MoveColumn( SwWhichColumn fnWhichCol, SwPosColumn fnPosCol
                 Point aPt( pCnt->Frm().Pos() + pCnt->Prt().Pos() );
                 if( fnPosCol == GetColumnEnd )
                 {
-                    aPt.X() += pCnt->Prt().Width();
-                    aPt.Y() += pCnt->Prt().Height();
+                    aPt.setX(aPt.getX() + pCnt->Prt().Width());
+                    aPt.setY(aPt.getY() + pCnt->Prt().Height());
                 }
 
                 pCnt->GetCrsrOfst( m_pCurCrsr->GetPoint(), aPt );

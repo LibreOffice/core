@@ -1774,8 +1774,8 @@ sal_Bool SwCursor::UpDown( sal_Bool bUp, sal_uInt16 nCnt,
             aPt = aTmpRect.Pos();
 
             nUpDownX = pFrm->IsVertical() ?
-                aPt.Y() - pFrm->Frm().Top() :
-                aPt.X() - pFrm->Frm().Left();
+                aPt.getY() - pFrm->Frm().Top() :
+                aPt.getX() - pFrm->Frm().Left();
         }
 
         // It is allowed to move footnotes in other footnotes but not sections
@@ -1825,15 +1825,15 @@ sal_Bool SwCursor::UpDown( sal_Bool bUp, sal_uInt16 nCnt,
                 pFrm->GetCharRect( aTmpRect, *GetPoint(), &eTmpState );
                 if ( pFrm->IsVertical() )
                 {
-                    aPt.X() = aTmpRect.Center().X();
+                    aPt.setX(aTmpRect.Center().getX());
                     pFrm->Calc();
-                    aPt.Y() = pFrm->Frm().Top() + nUpDownX;
+                    aPt.setY(pFrm->Frm().Top() + nUpDownX);
                 }
                 else
                 {
-                    aPt.Y() = aTmpRect.Center().Y();
+                    aPt.setY(aTmpRect.Center().getY());
                     pFrm->Calc();
-                    aPt.X() = pFrm->Frm().Left() + nUpDownX;
+                    aPt.setX(pFrm->Frm().Left() + nUpDownX);
                 }
                 pFrm->GetCrsrOfst( GetPoint(), aPt, &eTmpState );
             }

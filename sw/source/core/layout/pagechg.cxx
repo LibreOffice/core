@@ -120,7 +120,7 @@ void SwBodyFrm::Format( const SwBorderAttrs * )
         Frm().Height( nHeight );
         //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
         if( IsVertical() && !IsVertLR() && !IsReverse() && nWidth != Frm().Width() )
-            Frm().Pos().X() += Frm().Width() - nWidth;
+            Frm().Pos().setX(Frm().Pos().getX() + Frm().Width() - nWidth);
         Frm().Width( nWidth );
     }
 
@@ -169,7 +169,8 @@ void SwBodyFrm::Format( const SwBorderAttrs * )
     }
     if( bNoGrid )
     {
-        Prt().Pos().X() = Prt().Pos().Y() = 0;
+        Prt().Pos().setX(0);
+        Prt().Pos().setY(0);
         Prt().Height( Frm().Height() );
         Prt().Width( Frm().Width() );
     }
@@ -1691,11 +1692,13 @@ void SwRootFrm::MakeAll()
 {
     if ( !mbValidPos )
     {   mbValidPos = sal_True;
-        maFrm.Pos().X() = maFrm.Pos().Y() = DOCUMENTBORDER;
+        maFrm.Pos().setX(DOCUMENTBORDER);
+        maFrm.Pos().setY(DOCUMENTBORDER);
     }
     if ( !mbValidPrtArea )
     {   mbValidPrtArea = sal_True;
-        maPrt.Pos().X() = maPrt.Pos().Y() = 0;
+        maPrt.Pos().setX(0);
+        maPrt.Pos().setY(0);
         maPrt.SSize( maFrm.SSize() );
     }
     if ( !mbValidSize )
@@ -2118,7 +2121,7 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
 
     maPageRects.clear();
 
-    const long nBorder = Frm().Pos().X();
+    const long nBorder = Frm().Pos().getX();
     const long nVisWidth = mnViewWidth - 2 * nBorder;
     const long nGapBetweenPages = GAPBETWEENPAGES;
 
@@ -2288,10 +2291,10 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
                 // RTL view layout: Calculate mirrored page position
                 if ( bRTL )
                 {
-                    const long nXOffsetInRow = aNewPagePos.X() - nRowStart;
-                    aNewPagePos.X() = nRowEnd - nXOffsetInRow - nCurrentPageWidth;
+                    const long nXOffsetInRow = aNewPagePos.getX() - nRowStart;
+                    aNewPagePos.setX(nRowEnd - nXOffsetInRow - nCurrentPageWidth);
                     aNewPagePosWithLeftOffset = aNewPagePos;
-                    aNewPagePosWithLeftOffset.X() += nLeftPageAddOffset;
+                    aNewPagePosWithLeftOffset.setX(aNewPagePosWithLeftOffset.getX() + nLeftPageAddOffset);
                 }
 
                 if ( aNewPagePosWithLeftOffset != aOldPagePos )
@@ -2307,12 +2310,12 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
                 const bool bLastColumn = pPageToAdjust->GetNext() == pEndOfRow;
                 const bool bLastRow = !pEndOfRow;
 
-                nMinPageLeft  = std::min( nMinPageLeft, aNewPagePos.X() );
-                nMaxPageRight = std::max( nMaxPageRight, aNewPagePos.X() + nCurrentPageWidth);
+                nMinPageLeft  = std::min( nMinPageLeft, aNewPagePos.getX() );
+                nMaxPageRight = std::max( nMaxPageRight, aNewPagePos.getX() + nCurrentPageWidth);
 
                 // border of nGapBetweenPages around the current page:
-                SwRect aPageRectWithBorders( aNewPagePos.X() - nGapBetweenPages,
-                                             aNewPagePos.Y(),
+                SwRect aPageRectWithBorders( aNewPagePos.getX() - nGapBetweenPages,
+                                             aNewPagePos.getY(),
                                              pPageToAdjust->Frm().SSize().Width() + nGapBetweenPages + nSidebarWidth,
                                              nCurrentRowHeight );
 

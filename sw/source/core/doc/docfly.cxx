@@ -315,7 +315,7 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, bool bNewFrms
                 aOldH.GetPos() == ((SwFmtHoriOrient*)pItem)->GetPos() ))
             {
                 SwTwips nPos = (FLY_AS_CHAR == nOld) ? 0 : aOldH.GetPos();
-                nPos += aOldAnchorPos.X() - aNewAnchorPos.X();
+                nPos += aOldAnchorPos.getX() - aNewAnchorPos.getX();
 
                 if( pItem )
                 {
@@ -337,7 +337,7 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, bool bNewFrms
                 aOldV.GetPos() == ((SwFmtVertOrient*)pItem)->GetPos() ) )
             {
                 SwTwips nPos = (FLY_AS_CHAR == nOld) ? 0 : aOldV.GetPos();
-                nPos += aOldAnchorPos.Y() - aNewAnchorPos.Y();
+                nPos += aOldAnchorPos.getY() - aNewAnchorPos.getY();
                 if( pItem )
                 {
                     SwFmtVertOrient* pV = (SwFmtVertOrient*)pItem;
@@ -692,7 +692,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                         SwCrsrMoveState aState( MV_SETONLYTEXT );
                         SwPosition aPos( GetNodes() );
                         Point aPoint( aPt );
-                        aPoint.X() -= 1;
+                        aPoint.setX(aPoint.getX() - 1);
                         GetCurrentLayout()->GetCrsrOfst( &aPos, aPoint, &aState );
                         // consider that drawing objects can be in
                         // header/footer. Thus, <GetFrm()> by left-top-corner
@@ -746,7 +746,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
 
                     bUnmark = ( 0 != i );
                     Point aPoint( aPt );
-                    aPoint.X() -= 1;    // Do not load in the DrawObj!
+                    aPoint.setX(aPoint.getX() - 1);    // Do not load in the DrawObj!
                     aNewAnch.SetType( FLY_AS_CHAR );
                     SwPosition aPos( *((SwCntntFrm*)pNewAnchorFrm)->GetNode() );
                     if ( pNewAnchorFrm->Frm().IsInside( aPoint ) )
