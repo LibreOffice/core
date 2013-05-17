@@ -938,7 +938,9 @@ namespace sfx2
             LINK( this, TaskPaneController_Impl, OnToolboxClicked )
         );
         m_rDockingWindow.SetEndDockingHdl( LINK( this, TaskPaneController_Impl, DockingChanged ) );
-        impl_setLayout(LAYOUT_TABS_RIGHT, true);
+        // MMeeks - this is the big switch changing how the tabs look ...
+//        impl_setLayout(LAYOUT_TABS_RIGHT, true);
+        impl_setLayout(LAYOUT_DRAWERS, true);
 
         m_rTaskPane.GetPanelDeck().AddListener( *this );
 
