@@ -20,11 +20,6 @@
 
 #include "sal/config.h"
 
-#include <list>
-#include <memory>
-#include <utility>
-#include <vector>
-#include <boost/unordered_map.hpp>
 #include <boost/shared_ptr.hpp>
 
 #include "com/sun/star/container/XNameAccess.hpp"
@@ -34,7 +29,6 @@
 #include "com/sun/star/packages/zip/ZipFileAccess.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Exception.hpp"
-#include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 
@@ -44,13 +38,6 @@
 #include "osl/diagnose.h"
 
 #include "rtl/bootstrap.hxx"
-#include "rtl/string.h"
-#include "rtl/textenc.h"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
-
-#include "sal/types.h"
 
 #include "tools/stream.hxx"
 #include "tools/urlobj.hxx"

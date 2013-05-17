@@ -22,8 +22,6 @@
 
 #include "sal/config.h"
 
-#include <list>
-#include <utility>
 #include <vector>
 
 #include <boost/unordered_map.hpp>
