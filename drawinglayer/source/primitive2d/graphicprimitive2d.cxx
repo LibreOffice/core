@@ -85,47 +85,25 @@ namespace drawinglayer
                     {
                         // calculate scalings between real image size and logic object size. This
                         // is necessary since the crop values are relative to original bitmap size
-                        double fFactorX(1.0);
-                        double fFactorY(1.0);
-
-                        {
-                            const MapMode aMapMode100thmm(MAP_100TH_MM);
-                            Size aBitmapSize(rGraphicObject.GetPrefSize());
-
-                            // #i95968# better support PrefMapMode; special for MAP_PIXEL was missing
-                            if(MAP_PIXEL == rGraphicObject.GetPrefMapMode().GetMapUnit())
-                            {
-                                aBitmapSize = Application::GetDefaultDevice()->PixelToLogic(aBitmapSize, aMapMode100thmm);
-                            }
-                            else
-                            {
-                                aBitmapSize = Application::GetDefaultDevice()->LogicToLogic(aBitmapSize, rGraphicObject.GetPrefMapMode(), aMapMode100thmm);
-                            }
-
-                            const double fDivX(aBitmapSize.Width() - getGraphicAttr().GetLeftCrop() - getGraphicAttr().GetRightCrop());
-                            const double fDivY(aBitmapSize.Height() - getGraphicAttr().GetTopCrop() - getGraphicAttr().GetBottomCrop());
-                            const basegfx::B2DVector aScale(aTransform * basegfx::B2DVector(1.0, 1.0));
-
-                            if(!basegfx::fTools::equalZero(fDivX))
-                            {
-                                fFactorX = fabs(aScale.getX()) / fDivX;
-                            }
-
-                            if(!basegfx::fTools::equalZero(fDivY))
-                            {
-                                fFactorY = fabs(aScale.getY()) / fDivY;
-                            }
-                        }
+                        const basegfx::B2DVector aObjectScale(aTransform * basegfx::B2DVector(1.0, 1.0));
+                        const basegfx::B2DVector aCropScaleFactor(
+                            rGraphicObject.calculateCropScaling(
+                                aObjectScale.getX(),
+                                aObjectScale.getY(),
+                                getGraphicAttr().GetLeftCrop(),
+                                getGraphicAttr().GetTopCrop(),
+                                getGraphicAttr().GetRightCrop(),
+                                getGraphicAttr().GetBottomCrop()));
 
                         // embed content in cropPrimitive
                         Primitive2DReference xPrimitive(
                             new CropPrimitive2D(
                                 aRetval,
                                 aTransform,
-                                getGraphicAttr().GetLeftCrop() * fFactorX,
-                                getGraphicAttr().GetTopCrop() * fFactorY,
-                                getGraphicAttr().GetRightCrop() * fFactorX,
-                                getGraphicAttr().GetBottomCrop() * fFactorY));
+                                getGraphicAttr().GetLeftCrop() * aCropScaleFactor.getX(),
+                                getGraphicAttr().GetTopCrop() * aCropScaleFactor.getY(),
+                                getGraphicAttr().GetRightCrop() * aCropScaleFactor.getX(),
+                                getGraphicAttr().GetBottomCrop() * aCropScaleFactor.getY()));
 
                         aRetval = Primitive2DSequence(&xPrimitive, 1);
                     }

@@ -822,7 +822,8 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                               ( rSettings.mnHeight != aSizePixel.Height() ) ) )
                         {
                             BitmapEx aBmpEx( aGraphic.GetBitmapEx() );
-                            aBmpEx.Scale( Size( rSettings.mnWidth, rSettings.mnHeight ) );
+                            // export: use highest quality
+                            aBmpEx.Scale( Size( rSettings.mnWidth, rSettings.mnHeight ), BMP_SCALE_LANCZOS );
                             aGraphic = aBmpEx;
                         }
 

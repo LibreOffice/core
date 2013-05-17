@@ -85,7 +85,7 @@ namespace drawinglayer
                 // with getSmallValue here, the original which uses rtl::math::approxEqual
                 // is too correct here. Maybe this changes with enhanced precision in aw080
                 // to the better so that this can be reduced to the more precise call again
-                if(basegfx::fTools::equal(fRotate, F_PI, 0.000000001))
+                if(basegfx::fTools::equal(fabs(fRotate), F_PI, 0.000000001))
                 {
                     aScale.setX(aScale.getX() * -1.0);
                     aScale.setY(aScale.getY() * -1.0);

@@ -842,24 +842,53 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
     }
     else if( GRAPHIC_BITMAP == eType )
     {
-        BitmapEx    aBitmapEx( aTransGraphic.GetBitmapEx() );
+        BitmapEx aBitmapEx( aTransGraphic.GetBitmapEx() );
+        Rectangle aCropRect;
 
-        // convert crops to pixel
-        aCropLeftTop = Application::GetDefaultDevice()->LogicToPixel( Size( rAttr.GetLeftCrop(),
-                                                                            rAttr.GetTopCrop() ),
-                                                                      aMap100 );
-        aCropRightBottom = Application::GetDefaultDevice()->LogicToPixel( Size( rAttr.GetRightCrop(),
-                                                                                rAttr.GetBottomCrop() ),
-                                                                          aMap100 );
+        // convert crops to pixel (crops are always in GraphicObject units)
+        if(rAttr.IsCropped())
+        {
+            aCropLeftTop = Application::GetDefaultDevice()->LogicToPixel(
+                Size(rAttr.GetLeftCrop(), rAttr.GetTopCrop()),
+                aMapGraph);
+            aCropRightBottom = Application::GetDefaultDevice()->LogicToPixel(
+                Size(rAttr.GetRightCrop(), rAttr.GetBottomCrop()),
+                aMapGraph);
 
-        // convert from prefmapmode to pixel
-        const Size aSrcSizePixel( Application::GetDefaultDevice()->LogicToPixel( aSrcSize,
-                                                                                 aMapGraph ) );
+            // convert from prefmapmode to pixel
+            Size aSrcSizePixel(
+                Application::GetDefaultDevice()->LogicToPixel(
+                    aSrcSize,
+                    aMapGraph));
 
-        // setup crop rectangle in pixel
-        Rectangle aCropRect( aCropLeftTop.Width(), aCropLeftTop.Height(),
-                             aSrcSizePixel.Width() - aCropRightBottom.Width(),
-                             aSrcSizePixel.Height() - aCropRightBottom.Height() );
+            if(rAttr.IsCropped()
+                && (aSrcSizePixel.Width() != aBitmapEx.GetSizePixel().Width() || aSrcSizePixel.Height() != aBitmapEx.GetSizePixel().Height())
+                && aSrcSizePixel.Width())
+            {
+                // the size in pixels calculated from Graphic's internal MapMode (aTransGraphic.GetPrefMapMode())
+                // and it's internal size (aTransGraphic.GetPrefSize()) is different from it's real pixel size.
+                // This can be interpreted as this values to be set wrong, but needs to be corrected since e.g.
+                // existing cropping is calculated based on this logic values already.
+                // aBitmapEx.Scale(aSrcSizePixel);
+
+                // another possibility is to adapt the values created so far with a factor; this
+                // will keep the original Bitmap untouched and thus quality will not change
+                const double fFactorX(aBitmapEx.GetSizePixel().Width() / aSrcSizePixel.Width());
+                const double fFactorY(aBitmapEx.GetSizePixel().Height() / aSrcSizePixel.Height());
+
+                aCropLeftTop.Width() = basegfx::fround(aCropLeftTop.Width() * fFactorX);
+                aCropLeftTop.Height() = basegfx::fround(aCropLeftTop.Height() * fFactorY);
+                aCropRightBottom.Width() = basegfx::fround(aCropRightBottom.Width() * fFactorX);
+                aCropRightBottom.Height() = basegfx::fround(aCropRightBottom.Height() * fFactorY);
+
+                aSrcSizePixel = aBitmapEx.GetSizePixel();
+            }
+
+            // setup crop rectangle in pixel
+            aCropRect = Rectangle( aCropLeftTop.Width(), aCropLeftTop.Height(),
+                                 aSrcSizePixel.Width() - aCropRightBottom.Width(),
+                                 aSrcSizePixel.Height() - aCropRightBottom.Height() );
+        }
 
         // #105641# Also crop animations
         if( aTransGraphic.IsAnimated() )
@@ -925,12 +954,10 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
         }
         else
         {
-            BitmapEx aBmpEx( aTransGraphic.GetBitmapEx() );
-
-            ImplTransformBitmap( aBmpEx, rAttr, aCropLeftTop, aCropRightBottom,
+            ImplTransformBitmap( aBitmapEx, rAttr, aCropLeftTop, aCropRightBottom,
                                  aCropRect, rDestSize, sal_True );
 
-            aTransGraphic = aBmpEx;
+            aTransGraphic = aBitmapEx;
         }
 
         aTransGraphic.SetPrefSize( rDestSize );
@@ -1173,6 +1200,46 @@ GraphicObject::InspectForGraphicObjectImageURL( const Reference< XInterface >& x
             InspectForGraphicObjectImageURL( xCtrl, rvEmbedImgUrls );
         }
     }
+}
+
+// calculate scalings between real image size and logic object size. This
+// is necessary since the crop values are relative to original bitmap size
+basegfx::B2DVector GraphicObject::calculateCropScaling(
+    double fWidth,
+    double fHeight,
+    double fLeftCrop,
+    double fTopCrop,
+    double fRightCrop,
+    double fBottomCrop) const
+{
+    const MapMode aMapMode100thmm(MAP_100TH_MM);
+    Size aBitmapSize(GetPrefSize());
+    double fFactorX(1.0);
+    double fFactorY(1.0);
+
+    if(MAP_PIXEL == GetPrefMapMode().GetMapUnit())
+    {
+        aBitmapSize = Application::GetDefaultDevice()->PixelToLogic(aBitmapSize, aMapMode100thmm);
+    }
+    else
+    {
+        aBitmapSize = Application::GetDefaultDevice()->LogicToLogic(aBitmapSize, GetPrefMapMode(), aMapMode100thmm);
+    }
+
+    const double fDivX(aBitmapSize.Width() - fLeftCrop - fRightCrop);
+    const double fDivY(aBitmapSize.Height() - fTopCrop - fBottomCrop);
+
+    if(!basegfx::fTools::equalZero(fDivX))
+    {
+        fFactorX = fabs(fWidth) / fDivX;
+    }
+
+    if(!basegfx::fTools::equalZero(fDivY))
+    {
+        fFactorY = fabs(fHeight) / fDivY;
+    }
+
+    return basegfx::B2DVector(fFactorX,fFactorY);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

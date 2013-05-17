@@ -57,6 +57,13 @@
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <vcl/lazydelete.hxx>
 
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
+#include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
+#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // #i15222#
 // Due to the resource problems in Win95/98 with bitmap resources I
@@ -2329,6 +2336,200 @@ void SdrCropHdl::CreateB2dIAObject()
     }
 }
 
-// --------------------------------------------------------------------
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+SdrCropViewHdl::SdrCropViewHdl(
+    const basegfx::B2DHomMatrix& rObjectTransform,
+    const Graphic& rGraphic,
+    double fCropLeft,
+    double fCropTop,
+    double fCropRight,
+    double fCropBottom,
+    bool bExtraMirrorXFromGraphic)
+:   SdrHdl(Point(), HDL_USER),
+    maObjectTransform(rObjectTransform),
+    maGraphic(rGraphic),
+    mfCropLeft(fCropLeft),
+    mfCropTop(fCropTop),
+    mfCropRight(fCropRight),
+    mfCropBottom(fCropBottom),
+    mbExtraMirrorXFromGraphic(bExtraMirrorXFromGraphic)
+{
+}
+
+void SdrCropViewHdl::CreateB2dIAObject()
+{
+    GetRidOfIAObject();
+    SdrMarkView* pView = pHdlList ? pHdlList->GetView() : 0;
+    SdrPageView* pPageView = pView ? pView->GetSdrPageView() : 0;
+
+    if(pPageView && pView->areMarkHandlesHidden())
+    {
+        return;
+    }
+
+    // decompose to have current translate and scale
+    basegfx::B2DVector aScale, aTranslate;
+    double fRotate, fShearX;
+
+    maObjectTransform.decompose(aScale, aTranslate, fRotate, fShearX);
+
+    if(aScale.equalZero())
+    {
+        return;
+    }
+
+    // detect 180 degree rotation, this is the same as mirrored in X and Y,
+    // thus change to mirroring. Prefer mirroring here. Use the equal call
+    // with getSmallValue here, the original which uses rtl::math::approxEqual
+    // is too correct here. Maybe this changes with enhanced precision in aw080
+    // to the better so that this can be reduced to the more precise call again
+    if(basegfx::fTools::equal(fabs(fRotate), F_PI, 0.000000001))
+    {
+        aScale.setX(aScale.getX() * -1.0);
+        aScale.setY(aScale.getY() * -1.0);
+        fRotate = 0.0;
+    }
+
+    // remember mirroring, reset at Scale and adapt crop values for usage;
+    // mirroring can stay in the object transformation, so do not have to
+    // cope with it here (except later for the CroppedImage transformation,
+    // see below)
+    const bool bMirroredX(aScale.getX() < 0.0);
+    const bool bMirroredY(aScale.getY() < 0.0);
+    double fCropLeft(mfCropLeft);
+    double fCropTop(mfCropTop);
+    double fCropRight(mfCropRight);
+    double fCropBottom(mfCropBottom);
+
+    if(bMirroredX)
+    {
+        aScale.setX(-aScale.getX());
+        fCropLeft = mfCropRight;
+        fCropRight = mfCropLeft;
+    }
+
+    if(bMirroredY)
+    {
+        aScale.setY(-aScale.getY());
+        fCropTop = mfCropBottom;
+        fCropBottom = mfCropTop;
+    }
+
+    // create target translate and scale
+    const basegfx::B2DVector aTargetScale(
+        aScale.getX() + fCropRight + fCropLeft,
+        aScale.getY() + fCropBottom + fCropTop);
+    const basegfx::B2DVector aTargetTranslate(
+        aTranslate.getX() - fCropLeft,
+        aTranslate.getY() - fCropTop);
+
+    // create ranges to make comparisons
+    const basegfx::B2DRange aCurrentForCompare(
+        aTranslate.getX(), aTranslate.getY(),
+        aTranslate.getX() + aScale.getX(), aTranslate.getY() + aScale.getY());
+    basegfx::B2DRange aCropped(
+        aTargetTranslate.getX(), aTargetTranslate.getY(),
+        aTargetTranslate.getX() + aTargetScale.getX(), aTargetTranslate.getY() + aTargetScale.getY());
+
+    if(aCropped.isEmpty())
+    {
+        // nothing to return since cropped content is completely empty
+        return;
+    }
+
+    if(aCurrentForCompare.equal(aCropped))
+    {
+        // no crop at all
+        return;
+    }
+
+    // back-transform to have values in unit coordinates
+    basegfx::B2DHomMatrix aBackToUnit;
+    aBackToUnit.translate(-aTranslate.getX(), -aTranslate.getY());
+    aBackToUnit.scale(
+        basegfx::fTools::equalZero(aScale.getX()) ? 1.0 : 1.0 / aScale.getX(),
+        basegfx::fTools::equalZero(aScale.getY()) ? 1.0 : 1.0 / aScale.getY());
+
+    // transform cropped back to unit coordinates
+    aCropped.transform(aBackToUnit);
+
+    // prepare crop PolyPolygon
+    basegfx::B2DPolyPolygon aCropPolyPolygon(
+        basegfx::tools::createPolygonFromRect(
+            aCropped));
+
+    // current range is unit range
+    basegfx::B2DRange aOverlap(0.0, 0.0, 1.0, 1.0);
+
+    aOverlap.intersect(aCropped);
+
+    if(!aOverlap.isEmpty())
+    {
+        aCropPolyPolygon.append(
+            basegfx::tools::createPolygonFromRect(
+                aOverlap));
+    }
+
+    // transform to object coordinates to prepare for clip
+    aCropPolyPolygon.transform(maObjectTransform);
+
+    // create cropped transformation
+    basegfx::B2DHomMatrix aCroppedTransform;
+    const bool bCombinedMirrorX(mbExtraMirrorXFromGraphic || bMirroredX);
+
+    aCroppedTransform.scale(
+        bCombinedMirrorX ? -aCropped.getWidth() : aCropped.getWidth(),
+        bMirroredY ? -aCropped.getHeight() : aCropped.getHeight());
+    aCroppedTransform.translate(
+        bCombinedMirrorX ? aCropped.getMaxX() : aCropped.getMinX(),
+        bMirroredY ? aCropped.getMaxY() : aCropped.getMinY());
+    aCroppedTransform = maObjectTransform * aCroppedTransform;
+
+    // prepare graphic primitive (tranformed)
+    const drawinglayer::primitive2d::Primitive2DReference aGraphic(
+        new drawinglayer::primitive2d::GraphicPrimitive2D(
+            aCroppedTransform,
+            maGraphic));
+
+    // embed to MaskPrimitive2D
+    const drawinglayer::primitive2d::Primitive2DReference aMaskedGraphic(
+        new drawinglayer::primitive2d::MaskPrimitive2D(
+            aCropPolyPolygon,
+            drawinglayer::primitive2d::Primitive2DSequence(&aGraphic, 1)));
+
+    // embed to UnifiedTransparencePrimitive2D
+    const drawinglayer::primitive2d::Primitive2DReference aTransparenceMaskedGraphic(
+        new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
+            drawinglayer::primitive2d::Primitive2DSequence(&aMaskedGraphic, 1),
+            0.8));
+
+    const drawinglayer::primitive2d::Primitive2DSequence aSequence(&aTransparenceMaskedGraphic, 1);
+
+    for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)
+    {
+        // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
+        const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
+
+        if(rPageWindow.GetPaintWindow().OutputToWindow())
+        {
+            rtl::Reference< ::sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+            if(xManager.is())
+            {
+                ::sdr::overlay::OverlayObject* pNew = new sdr::overlay::OverlayPrimitive2DSequenceObject(aSequence);
+                DBG_ASSERT(pNew, "Got NO new IAO!");
+
+                if(pNew)
+                {
+                    // only informative object, no hit
+                    pNew->setHittable(false);
+
+                    xManager->add(*pNew);
+                    maOverlayGroup.append(*pNew);
+                }
+            }
+        }
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

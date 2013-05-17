@@ -493,6 +493,17 @@ public:
     // will cater for XNameContainer objects and deepinspect any containees
     // if they exist
     static void InspectForGraphicObjectImageURL( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIf, std::vector< OUString >& rvEmbedImgUrls );
+
+    // create CropScaling information
+    // fWidth, fHeight: object size
+    // f*Crop: crop values relative to original bitmap size
+    basegfx::B2DVector calculateCropScaling(
+        double fWidth,
+        double fHeight,
+        double fLeftCrop,
+        double fTopCrop,
+        double fRightCrop,
+        double fBottomCrop) const;
 };
 
 typedef ::std::vector< GraphicObject* > GraphicObjectList_impl;
