@@ -46,25 +46,11 @@ uno::Reference< uno::XInterface > SAL_CALL ImplName##_NewInstance_Impl(const uno
 namespace svxform
 {
 
-#define DECL_SELFAWARE_SERVICE( ClassName )                                    \
-    uno::Reference< uno::XInterface > SAL_CALL ClassName##_Create(             \
-                const uno::Reference< lang::XMultiServiceFactory >& );         \
-    OUString SAL_CALL ClassName##_GetImplementationName();                     \
-    uno::Sequence< OUString > SAL_CALL ClassName##_GetSupportedServiceNames(); \
-
-
-#define REGISTER_SELFAWARE_SERVICE( ClassName )                     \
-    xSingleFactory = ::cppu::createSingleFactory( xServiceFactory,  \
-                        ClassName##_GetImplementationName(),        \
-                        ClassName##_Create,                         \
-                        ClassName##_GetSupportedServiceNames()      \
-                     );                                             \
-    if ( xSingleFactory.is() )                                      \
-        xSet->insert( uno::makeAny( xSingleFactory ) );
-
-
     // ------------------------------------------------------------------------
-    DECL_SELFAWARE_SERVICE( OAddConditionDialog )
+    // declare selfaware service
+    uno::Reference< uno::XInterface > SAL_CALL OAddConditionDialog_Create( const uno::Reference< lang::XMultiServiceFactory >& );
+    OUString SAL_CALL OAddConditionDialog_GetImplementationName();
+    uno::Sequence< OUString > SAL_CALL OAddConditionDialog_GetSupportedServiceNames();
 
     // ------------------------------------------------------------------------
     void ImplSmartRegisterUnoServices()
@@ -85,8 +71,14 @@ namespace svxform
         REGISTER_SERVICE( LegacyFormController, OUString( "com.sun.star.form.FormController" ) );
 
         // ------------------------------------------------------------------------
-        // FormController
-        REGISTER_SELFAWARE_SERVICE( OAddConditionDialog );
+        // FormController - register selfaware service
+        xSingleFactory = ::cppu::createSingleFactory( xServiceFactory,
+                             OAddConditionDialog_GetImplementationName(),
+                             OAddConditionDialog_Create,
+                             OAddConditionDialog_GetSupportedServiceNames()
+                         );
+        if ( xSingleFactory.is() )
+            xSet->insert( uno::makeAny( xSingleFactory ) );
 
         // ------------------------------------------------------------------------
         // DBGridControl
