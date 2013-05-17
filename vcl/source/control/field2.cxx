@@ -1360,7 +1360,7 @@ static void ImplDateIncrementMonth( Date& rDate, sal_Bool bUp )
         }
     }
 
-    sal_uInt16 nDaysInMonth = rDate.GetDaysInMonth();
+    sal_uInt16 nDaysInMonth = Date::GetDaysInMonth( rDate.GetMonth(), rDate.GetYear());
     if ( rDate.GetDay() > nDaysInMonth )
         rDate.SetDay( nDaysInMonth );
 }
