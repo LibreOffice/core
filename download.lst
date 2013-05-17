@@ -1,5 +1,5 @@
-CDR_MD5SUM := 75700c61b3a8e7d49a1f04c62048ff00
-export CDR_TARBALL := libcdr-0.0.13.tar.bz2
+CDR_MD5SUM := d88f9b94df880d2c05be943b000ca112
+export CDR_TARBALL := libcdr-0.0.14.tar.bz2
 MSPUB_MD5SUM := 1120705cd0f0d9bd5506360bf57b6c2e
 export MSPUB_TARBALL := libmspub-0.0.6.tar.bz2
 MWAW_MD5SUM := 2090daf6e8a27b52e8c5f26c915bd7c5
@@ -68,8 +68,8 @@ export MYSQLCPPCONN_TARBALL := 0981bda6548a8c8233ffce2b6e4b2a23-mysql-connector-
 export MYTHES_TARBALL := 46e92b68e31e858512b680b3b61dc4c1-mythes-1.2.3.tar.gz
 export NEON_TARBALL := ff369e69ef0f0143beb5626164e87ae2-neon-0.29.5.tar.gz
 export NSS_TARBALL := a0a861f539f0e7a91d05e6b9457e4db1-nss-3.13.5-with-nspr-4.9.1.tar.gz
-export OPENLDAP_TARBALL := 804c6cb5698db30b75ad0ff1c25baefd-openldap-2.4.31.tgz
 export ODFGEN_TARBALL := d77fa4a6e3e485553e30ced8d9bb3b50-libodfgen-0.0.1.tar.bz2
+export OPENLDAP_TARBALL := 804c6cb5698db30b75ad0ff1c25baefd-openldap-2.4.31.tgz
 export OPENSSL_TARBALL := 51a40a81b3b7abe8a5c33670bd3da0ce-openssl-0.9.8v.tar.gz
 export ORCUS_TARBALL := ea2acaf140ae40a87a952caa75184f4d-liborcus-0.5.1.tar.bz2
 export PIXMAN_TARBALL := c63f411b3ad147db2bcce1bf262a0e02-pixman-0.24.4.tar.bz2

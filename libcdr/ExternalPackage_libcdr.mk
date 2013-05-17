@@ -10,10 +10,10 @@
 $(eval $(call gb_ExternalPackage_ExternalPackage,libcdr,libcdr))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,libcdr,inc/external/libcdr,\
-	src/lib/libcdr.h \
-	src/lib/CDRDocument.h \
-	src/lib/CDRStringVector.h \
-	src/lib/CMXDocument.h \
+	inc/libcdr/libcdr.h \
+	inc/libcdr/CDRDocument.h \
+	inc/libcdr/CDRStringVector.h \
+	inc/libcdr/CMXDocument.h \
 ))
 
 $(eval $(call gb_ExternalPackage_use_external_project,libcdr,libcdr))

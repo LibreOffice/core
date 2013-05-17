@@ -11,10 +11,4 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,libcdr))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,libcdr,$(CDR_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,libcdr,1))
-
-$(eval $(call gb_UnpackedTarball_add_patches,libcdr,\
-       libcdr/libcdr-0.0.13.patch \
-))
-
 # vim: set noet sw=4 ts=4:
