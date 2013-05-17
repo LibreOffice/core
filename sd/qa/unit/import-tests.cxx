@@ -16,6 +16,14 @@
 #include <editeng/fhgtitem.hxx>
 
 #include <svx/svdotext.hxx>
+#include <animations/animationnodehelper.hxx>
+
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
+#include <com/sun/star/animations/XAnimationNode.hpp>
+#include <com/sun/star/animations/XAnimate.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace ::com::sun::star;
 
@@ -27,12 +35,14 @@ public:
     void testSmoketest();
     void testN759180();
     void testN778859();
+    void testFdo64512();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(testDocumentLayout);
     CPPUNIT_TEST(testSmoketest);
     CPPUNIT_TEST(testN759180);
     CPPUNIT_TEST(testN778859);
+    CPPUNIT_TEST(testFdo64512);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -152,6 +162,48 @@ void SdFiltersTest::testN778859()
         SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
         CPPUNIT_ASSERT(!pTxtObj->IsAutoFit());
     }
+}
+
+void SdFiltersTest::testFdo64512()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/fdo64512.odp"));
+    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
+    CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
+
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
+        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+    CPPUNIT_ASSERT_MESSAGE( "not exactly one page", xDoc->getDrawPages()->getCount() == 1 );
+
+    uno::Reference< drawing::XDrawPage > xPage(
+        xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+    CPPUNIT_ASSERT_MESSAGE( "no exactly three shapes", xPage->getCount() == 3 );
+
+    uno::Reference< beans::XPropertySet > xConnectorShape(
+        xPage->getByIndex(2), uno::UNO_QUERY );
+    CPPUNIT_ASSERT_MESSAGE( "no connector shape", xConnectorShape.is() );
+
+    uno::Reference< beans::XPropertySet > xSvgShape(
+        xConnectorShape->getPropertyValue("StartShape"), uno::UNO_QUERY );
+    CPPUNIT_ASSERT_MESSAGE( "no start shape", xSvgShape.is() );
+
+    uno::Reference< beans::XPropertySet > xCustomShape(
+        xConnectorShape->getPropertyValue("EndShape"), uno::UNO_QUERY );
+    CPPUNIT_ASSERT_MESSAGE( "no end shape", xCustomShape.is() );
+
+    uno::Reference< animations::XAnimationNodeSupplier > xAnimNodeSupplier(
+        xPage, uno::UNO_QUERY_THROW );
+    uno::Reference< animations::XAnimationNode > xRootNode(
+        xAnimNodeSupplier->getAnimationNode() );
+    std::vector< uno::Reference< animations::XAnimationNode > > aAnimVector;
+    anim::create_deep_vector(xRootNode, aAnimVector);
+    CPPUNIT_ASSERT_MESSAGE( "not 8 animation nodes", aAnimVector.size() == 8 );
+
+    uno::Reference< animations::XAnimate > xNode(
+        aAnimVector[7], uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XShape > xTargetShape(
+        xNode->getTarget(), uno::UNO_QUERY_THROW );
+    CPPUNIT_ASSERT_MESSAGE( "inner node not referencing svg shape",
+                            xTargetShape != xSvgShape );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdFiltersTest);
