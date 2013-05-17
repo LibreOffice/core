@@ -3061,7 +3061,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKMenubar(
 
     if( nPart == PART_MENU_ITEM )
     {
-        if( nState & (CTRL_STATE_SELECTED|CTRL_STATE_ROLLOVER) )
+        if( nState & CTRL_STATE_SELECTED )
         {
             gtk_widget_style_get( gWidgetData[m_nXScreen].gMenuItemMenubarWidget,
                                   "selected_shadow_type", &selected_shadow_type,
@@ -3106,7 +3106,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKMenubar(
 
         else if( nPart == PART_MENU_ITEM )
         {
-            if( nState & (CTRL_STATE_SELECTED|CTRL_STATE_ROLLOVER) )
+            if( nState & CTRL_STATE_SELECTED )
             {
                 gtk_paint_box( gWidgetData[m_nXScreen].gMenuItemMenubarWidget->style,
                                gdkDrawable,
@@ -3860,6 +3860,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
     aBackColor = getColor( pMenubarStyle->bg[GTK_STATE_NORMAL] );
     aStyleSet.SetMenuBarColor( aBackColor );
+    aStyleSet.SetMenuBarRolloverColor( aBackColor );
     aBackColor = getColor( pMenuStyle->bg[GTK_STATE_NORMAL] );
     aTextColor = getColor( pMenuTextStyle->fg[GTK_STATE_NORMAL] );
     aStyleSet.SetMenuColor( aBackColor );
@@ -3867,13 +3868,16 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
     aTextColor = getColor( pMenubarStyle->fg[GTK_STATE_NORMAL] );
     aStyleSet.SetMenuBarTextColor( aTextColor );
+    aStyleSet.SetMenuBarRolloverTextColor( aTextColor );
 
 #if OSL_DEBUG_LEVEL > 1
     std::fprintf( stderr, "==\n" );
     std::fprintf( stderr, "MenuColor = %x (%d)\n", (int)aStyleSet.GetMenuColor().GetColor(), aStyleSet.GetMenuColor().GetLuminance() );
     std::fprintf( stderr, "MenuTextColor = %x (%d)\n", (int)aStyleSet.GetMenuTextColor().GetColor(), aStyleSet.GetMenuTextColor().GetLuminance() );
     std::fprintf( stderr, "MenuBarColor = %x (%d)\n", (int)aStyleSet.GetMenuBarColor().GetColor(), aStyleSet.GetMenuBarColor().GetLuminance() );
+    std::fprintf( stderr, "MenuBarRolloverColor = %x (%d)\n", (int)aStyleSet.GetMenuBarRolloverColor().GetColor(), aStyleSet.GetMenuRolloverBarColor().GetLuminance() );
     std::fprintf( stderr, "MenuBarTextColor = %x (%d)\n", (int)aStyleSet.GetMenuBarTextColor().GetColor(), aStyleSet.GetMenuBarTextColor().GetLuminance() );
+    std::fprintf( stderr, "MenuBarRolloverTextColor = %x (%d)\n", (int)aStyleSet.GetMenuBarRolloverTextColor().GetColor(), aStyleSet.GetMenuBarRolloverTextColor().GetLuminance() );
     std::fprintf( stderr, "LightColor = %x (%d)\n", (int)aStyleSet.GetLightColor().GetColor(), aStyleSet.GetLightColor().GetLuminance() );
     std::fprintf( stderr, "ShadowColor = %x (%d)\n", (int)aStyleSet.GetShadowColor().GetColor(), aStyleSet.GetShadowColor().GetLuminance() );
     std::fprintf( stderr, "DarkShadowColor = %x (%d)\n", (int)aStyleSet.GetDarkShadowColor().GetColor(), aStyleSet.GetDarkShadowColor().GetLuminance() );

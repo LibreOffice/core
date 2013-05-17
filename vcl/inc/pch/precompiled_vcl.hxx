@@ -155,6 +155,7 @@
 #include <basegfx/vector/b2isize.hxx>
 #include <boost/bind.hpp>
 #include <boost/foreach.hpp>
+#include <boost/logic/tribool.hpp>
 #include <boost/optional.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_array.hpp>
