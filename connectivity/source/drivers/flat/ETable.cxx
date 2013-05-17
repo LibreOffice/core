@@ -604,7 +604,12 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
         m_bNeedToReadLine = false;
     }
 
-    OFlatConnection* pConnection = (OFlatConnection*)m_pConnection;
+#if OSL_DEBUG_LEVEL>1
+    OFlatConnection* pConnection = dynamic_cast<OFlatConnection*>(m_pConnection);
+    assert(pConnection);
+#else
+    OFlatConnection* pConnection = static_cast<OFlatConnection*>(m_pConnection);
+#endif
     const sal_Unicode cDecimalDelimiter = pConnection->getDecimalDelimiter();
     const sal_Unicode cThousandDelimiter = pConnection->getThousandDelimiter();
     // Fields:
