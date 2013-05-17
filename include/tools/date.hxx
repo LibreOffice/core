@@ -66,19 +66,47 @@ public:
     sal_uInt16      GetMonth() const { return (sal_uInt16)((nDate / 100) % 100); }
     sal_uInt16      GetYear() const { return (sal_uInt16)(nDate / 10000); }
 
-    /// Internally normalizes a copy of values.
+    /** Obtain the day of the week for the date.
+
+        Internally normalizes a copy of values.
+        The result may be unexpected for a non-normalized invalid date like
+        Date(31,11,2000) or a sequence of aDate.SetDay(31); aDate.SetMonth(11);
+     */
     DayOfWeek       GetDayOfWeek() const;
 
-    /// Internally normalizes a copy of values.
+    /** Obtain the day of the year for the date.
+
+        Internally normalizes a copy of values.
+        The result may be unexpected for a non-normalized invalid date like
+        Date(31,11,2000) or a sequence of aDate.SetDay(31); aDate.SetMonth(11);
+     */
     sal_uInt16      GetDayOfYear() const;
 
-    /** nMinimumNumberOfDaysInWeek: how many days of a week must reside in the
-        first week of a year.
-        Internally normalizes a copy of values. */
+    /** Obtain the week of the year for a date.
+
+        @param nMinimumNumberOfDaysInWeek
+               How many days of a week must reside in the first week of a year.
+
+        Internally normalizes a copy of values.
+        The result may be unexpected for a non-normalized invalid date like
+        Date(31,11,2000) or a sequence of aDate.SetDay(31); aDate.SetMonth(11);
+     */
     sal_uInt16      GetWeekOfYear( DayOfWeek eStartDay = MONDAY,
                                    sal_Int16 nMinimumNumberOfDaysInWeek = 4 ) const;
 
-    /// Internally normalizes a copy of values.
+    /** Obtain the number of days in the month of the year of the date.
+
+        Internally normalizes a copy of values.
+
+        The result may be unexpected for a non-normalized invalid date like
+        Date(31,11,2000) or a sequence of aDate.SetDay(31); aDate.SetMonth(11);
+
+        These would result in 31 as --11-31 rolls over to --12-01 and the
+        number of days in December is returned.
+
+        Instead, to obtain the value for the actual set use the static method
+        Date::GetDaysInMonth( aDate.GetMonth(), aDate.GetYear()) in such cases.
+     */
     sal_uInt16      GetDaysInMonth() const;
 
     sal_uInt16      GetDaysInYear() const { return (IsLeapYear()) ? 366 : 365; }
