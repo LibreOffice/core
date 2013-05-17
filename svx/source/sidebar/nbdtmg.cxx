@@ -478,7 +478,7 @@ sal_Bool BulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_
     return sal_True;
 }
 
-sal_Bool BulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel,sal_Bool isDefault,sal_Bool isResetSize)
+sal_Bool BulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel,sal_Bool /* isDefault */,sal_Bool isResetSize)
 {
     //if ( mLevel == (sal_uInt16)0xFFFF )
     //  return sal_False;
@@ -529,7 +529,7 @@ sal_Bool BulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uIn
     return sal_True;
 }
 
-String BulletsTypeMgr::GetDescription(sal_uInt16 nIndex,sal_Bool isDefault)
+String BulletsTypeMgr::GetDescription(sal_uInt16 nIndex,sal_Bool /* isDefault */)
 {
     String sRet;
     //sal_uInt16 nLength = 0;
@@ -657,7 +657,7 @@ void GraphyicBulletsTypeMgr::Init()
         aGrfDataLst.Insert( pEntry, LIST_APPEND );
     }
 }
-sal_uInt16 GraphyicBulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex)
+sal_uInt16 GraphyicBulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 /* nFromIndex */)
 {
     if ( mLevel == (sal_uInt16)0xFFFF || mLevel == 0)
         return (sal_uInt16)0xFFFF;
@@ -741,7 +741,7 @@ sal_Bool GraphyicBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIn
     return sal_True;
 }
 
-sal_Bool GraphyicBulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel,sal_Bool isDefault,sal_Bool isResetSize)
+sal_Bool GraphyicBulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel,sal_Bool /* isDefault */,sal_Bool /* isResetSize */)
 {
     //if ( mLevel == (sal_uInt16)0xFFFF )
     //  return sal_False;
@@ -786,7 +786,7 @@ sal_Bool GraphyicBulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex
 
     return sal_True;
 }
-String GraphyicBulletsTypeMgr::GetDescription(sal_uInt16 nIndex,sal_Bool isDefault)
+String GraphyicBulletsTypeMgr::GetDescription(sal_uInt16 nIndex,sal_Bool /* isDefault */)
 {
     String sRet;
     sal_uInt16 nLength = 0;
@@ -1780,7 +1780,7 @@ void OutlineTypeMgr::Init()
     }
 }
 
-sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex)
+sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /* mLevel */,sal_uInt16 nFromIndex)
 {
     sal_uInt16 nLength = sizeof(pOutlineSettingsArrs)/sizeof(OutlineSettings_Impl*);
     for(sal_uInt16 iDex = nFromIndex; iDex < nLength; iDex++)
@@ -1926,7 +1926,7 @@ sal_Bool OutlineTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_
     return sal_True;
 }
 
-sal_Bool OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 mLevel,sal_Bool isDefault,sal_Bool isResetSize)
+sal_Bool OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uInt16 /* mLevel */,sal_Bool isDefault,sal_Bool isResetSize)
 {
     //if ( mLevel == (sal_uInt16)0xFFFF )
     //  return sal_False;
