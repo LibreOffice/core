@@ -87,13 +87,13 @@ bool SwCrsrShell::GotoNextNum()
             pFrm->Calc();
             if( pFrm->IsVertical() )
             {
-                aPt.X() = m_aCharRect.Center().X();
-                aPt.Y() = pFrm->Frm().Top() + m_nUpDownX;
+                aPt.setX(m_aCharRect.Center().getX());
+                aPt.setY(pFrm->Frm().Top() + m_nUpDownX);
             }
             else
             {
-                aPt.Y() = m_aCharRect.Center().Y();
-                aPt.X() = pFrm->Frm().Left() + m_nUpDownX;
+                aPt.setY(m_aCharRect.Center().getY());
+                aPt.setX(pFrm->Frm().Left() + m_nUpDownX);
             }
             pFrm->GetCrsrOfst( m_pCurCrsr->GetPoint(), aPt );
             bRet = !m_pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
@@ -127,13 +127,13 @@ bool SwCrsrShell::GotoPrevNum()
             pFrm->Calc();
             if( pFrm->IsVertical() )
             {
-                aPt.X() = m_aCharRect.Center().X();
-                aPt.Y() = pFrm->Frm().Top() + m_nUpDownX;
+                aPt.setX(m_aCharRect.Center().getX());
+                aPt.setY(pFrm->Frm().Top() + m_nUpDownX);
             }
             else
             {
-                aPt.Y() = m_aCharRect.Center().Y();
-                aPt.X() = pFrm->Frm().Left() + m_nUpDownX;
+                aPt.setY(m_aCharRect.Center().getY());
+                aPt.setX(pFrm->Frm().Left() + m_nUpDownX);
             }
             pFrm->GetCrsrOfst( m_pCurCrsr->GetPoint(), aPt );
             bRet = !m_pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |

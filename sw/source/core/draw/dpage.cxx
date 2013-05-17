@@ -167,8 +167,8 @@ sal_Bool SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
                     // without MapMode-Offset, without Offset, w ... !!!!!
                     aPt = pWindow->LogicToPixel(
                             aPt, MapMode( MAP_TWIP ) );
-                    ((( sTxt += '?' ) += OUString::number( aPt.X() ))
-                             += ',' ) += OUString::number( aPt.Y() );
+                    ((( sTxt += '?' ) += OUString::number( aPt.getX() ))
+                             += ',' ) += OUString::number( aPt.getY() );
                 }
             }
 
