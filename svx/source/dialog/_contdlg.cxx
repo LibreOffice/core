@@ -264,6 +264,8 @@ SvxSuperContourDlg::SvxSuperContourDlg( SfxBindings *_pBindings, SfxChildWindow 
 
 SvxSuperContourDlg::~SvxSuperContourDlg()
 {
+    SvtMiscOptions aMiscOptions;
+    aMiscOptions.RemoveListenerLink( LINK(this, SvxSuperContourDlg, MiscHdl) );
 }
 
 // Resize methods
