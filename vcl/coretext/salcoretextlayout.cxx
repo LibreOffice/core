@@ -81,7 +81,6 @@ private:
 
     mutable CGSize* mpGlyphAdvances;
 
-    mutable CGPoint* mpGlyphPositions;
     mutable CTTypesetterRef mpTypesetter;
     mutable CTLineRef mpLine;
     mutable bool mbHasBoundRectangle;
@@ -108,7 +107,6 @@ CoreTextLayout::CoreTextLayout(CoreTextStyleInfo* style) :
     mpCharWidths(NULL),
     mpGlyphs2Chars(NULL),
     mpGlyphAdvances(NULL),
-    mpGlyphPositions(NULL),
     mpTypesetter(NULL),
     mpLine(NULL),
     mbHasBoundRectangle(false),
@@ -195,10 +193,6 @@ void CoreTextLayout::InvalidateMeasurements()
     if( mpGlyphAdvances ) {
         delete[] mpGlyphAdvances;
         mpGlyphAdvances = NULL;
-    }
-    if( mpGlyphPositions ) {
-        delete[] mpGlyphPositions;
-        mpGlyphPositions = NULL;
     }
     mbHasBoundRectangle = false;
 }
@@ -601,7 +595,6 @@ void CoreTextLayout::GetMeasurements()
     mpCharWidths = new CGFloat[ mnCharCount ];
     mpGlyphs2Chars = new int[ mnGlyphCount ];
     mpGlyphAdvances = new CGSize[ mnGlyphCount ];
-    mpGlyphPositions = new CGPoint[ mnGlyphCount ];
 
     CFArrayRef runs = CTLineGetGlyphRuns( mpLine );
     const CFIndex nRuns = CFArrayGetCount( runs );
@@ -630,7 +623,6 @@ void CoreTextLayout::GetMeasurements()
 
             CTRunGetGlyphs( run, CFRangeMake( 0, 0 ), &mpGlyphs[ lineGlyphIx ] );
 
-            CTRunGetPositions( run, CFRangeMake( 0, 0 ), &mpGlyphPositions[ lineGlyphIx ] );
             CTRunGetAdvances( run, CFRangeMake( 0, 0 ), &mpGlyphAdvances[ lineGlyphIx ] );
 
             for ( CFIndex runGlyphIx = 0 ; runGlyphIx < runGlyphCount; lineGlyphIx++, runGlyphIx++ )
@@ -645,7 +637,7 @@ void CoreTextLayout::GetMeasurements()
             for ( int i = 0; i < runGlyphCount; i++ ) {
                 const int ix = lineRunGlyphStartIx + i;
                 if ( i < 7 ) {
-                    glyphPositionInfo << " " << mpGlyphs[ ix ] << "@" << mpGlyphPositions[ ix ];
+                    glyphPositionInfo << " " << mpGlyphs[ ix ];
                     glyphAdvancesInfo << " " << mpGlyphAdvances[ ix ];
                 } else if (i == 7 ) {
                     glyphPositionInfo << "...";
