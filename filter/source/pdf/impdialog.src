@@ -182,7 +182,7 @@ TabPage  RID_PDF_TAB_GENER
     FixedLine FL_GENERAL_VERTICAL
     {
         Pos = MAP_APPFONT ( 175 , 3 ) ;
-        Size = MAP_APPFONT ( 4 , 171 ) ;
+        Size = MAP_APPFONT ( 4 , 190 ) ;
         Vert = TRUE;
     };
 
@@ -310,6 +310,13 @@ TabPage  RID_PDF_TAB_GENER
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "E~mbed standard fonts";
+    };
+        CheckBox CB_VIEWPDF
+    {
+        Pos = MAP_APPFONT ( 188 , 181 ) ;
+        Size = MAP_APPFONT ( 158 , 10 ) ;
+        TabStop = TRUE ;
+        Text[ en-US ] = "~View PDF after Export";
     };
 };
 
