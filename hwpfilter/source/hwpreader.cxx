@@ -1944,7 +1944,7 @@ void HwpReader::makeTableStyle(Table *tbl)
 // --------------- row ---------------- //
     for (size_t i = 0 ; i < tbl->rows.nCount -1 ; i++)
     {
-        sprintf(buf,"Table%d.row%ld",hbox->style.boxnum, i + 1);
+        sprintf(buf,"Table%d.row%" SAL_PRI_SIZET "d",hbox->style.boxnum, i + 1);
         padd(ascii("style:name"), sXML_CDATA, ascii( buf ));
         padd(ascii("style:family"), sXML_CDATA,ascii("table-row"));
         rstartEl(ascii("style:style"), rList);
