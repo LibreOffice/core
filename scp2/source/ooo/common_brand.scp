@@ -511,12 +511,14 @@ File gid_Brand_File_Bin_Spadmin
 End
 #endif
 
+#ifndef MACOSX
 File gid_Brand_File_Bin_Soffice_Bin
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
     Name = "soffice.bin";
 End
+#endif
 
 #if defined UNX && ! defined MACOSX
 
