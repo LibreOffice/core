@@ -15,10 +15,13 @@
 
 #include "rtl/ustring.hxx"
 
+#include <boost/noncopyable.hpp>
+
 class ScDocument;
 class ScAddress;
 class ScTokenArray;
 class ScBaseCell;
+struct ScDocumentImportImpl;
 
 /**
  * Accessor class to ScDocument.  Its purpose is to allow import filter to
@@ -27,15 +30,15 @@ class ScBaseCell;
  * position calculation, or anything else that requires expensive
  * computation which are unnecessary and undesirable during import.
  */
-class SC_DLLPUBLIC ScDocumentImport
+class SC_DLLPUBLIC ScDocumentImport : boost::noncopyable
 {
-    ScDocument& mrDoc;
+    ScDocumentImportImpl* mpImpl;
 
     ScDocumentImport(); // disabled
 
 public:
     ScDocumentImport(ScDocument& rDoc);
-    ScDocumentImport(const ScDocumentImport& r);
+    ~ScDocumentImport();
 
     ScDocument& getDoc();
     const ScDocument& getDoc() const;

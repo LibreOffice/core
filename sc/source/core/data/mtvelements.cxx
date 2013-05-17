@@ -9,6 +9,7 @@
 
 #include "mtvelements.hxx"
 #include "globalnames.hxx"
+#include "document.hxx"
 
 namespace sc {
 
@@ -23,6 +24,45 @@ CellTextAttr::CellTextAttr(const CellTextAttr& r) :
 CellTextAttr::CellTextAttr(sal_uInt16 nTextWidth, sal_uInt8 nScriptType) :
     mnTextWidth(nTextWidth),
     mnScriptType(nScriptType) {}
+
+ColumnBlockPositionSet::ColumnBlockPositionSet(ScDocument& rDoc) : mrDoc(rDoc) {}
+
+ColumnBlockPosition* ColumnBlockPositionSet::getBlockPosition(SCTAB nTab, SCCOL nCol)
+{
+    TablesType::iterator itTab = maTables.find(nTab);
+    if (itTab == maTables.end())
+    {
+        std::pair<TablesType::iterator,bool> r =
+            maTables.insert(TablesType::value_type(nTab, ColumnsType()));
+        if (!r.second)
+            // insertion failed.
+            return NULL;
+
+        itTab = r.first;
+    }
+
+    ColumnsType& rCols = itTab->second;
+
+    ColumnsType::iterator it = rCols.find(nCol);
+    if (it != rCols.end())
+        // Block position for this column has already been fetched.
+        return &it->second;
+
+    std::pair<ColumnsType::iterator,bool> r =
+        rCols.insert(
+            ColumnsType::value_type(nCol, ColumnBlockPosition()));
+
+    if (!r.second)
+        // insertion failed.
+        return NULL;
+
+    it = r.first;
+
+    if (!mrDoc.InitColumnBlockPosition(it->second, nTab, nCol))
+        return NULL;
+
+    return &it->second;
+}
 
 }
 

@@ -15,24 +15,36 @@
 #include "formulacell.hxx"
 #include "docoptio.hxx"
 #include "globalnames.hxx"
+#include "mtvelements.hxx"
 
-ScDocumentImport::ScDocumentImport(ScDocument& rDoc) : mrDoc(rDoc) {}
-ScDocumentImport::ScDocumentImport(const ScDocumentImport& r) : mrDoc(r.mrDoc) {}
+struct ScDocumentImportImpl
+{
+    ScDocument& mrDoc;
+    sc::ColumnBlockPositionSet maBlockPosSet;
+
+    ScDocumentImportImpl(ScDocument& rDoc) : mrDoc(rDoc), maBlockPosSet(rDoc) {}
+};
+
+ScDocumentImport::ScDocumentImport(ScDocument& rDoc) : mpImpl(new ScDocumentImportImpl(rDoc)) {}
+ScDocumentImport::~ScDocumentImport()
+{
+    delete mpImpl;
+}
 
 ScDocument& ScDocumentImport::getDoc()
 {
-    return mrDoc;
+    return mpImpl->mrDoc;
 }
 
 const ScDocument& ScDocumentImport::getDoc() const
 {
-    return mrDoc;
+    return mpImpl->mrDoc;
 }
 
 SCTAB ScDocumentImport::getSheetIndex(const OUString& rName) const
 {
     SCTAB nTab = -1;
-    if (!mrDoc.GetTable(rName, nTab))
+    if (!mpImpl->mrDoc.GetTable(rName, nTab))
         return -1;
 
     return nTab;
@@ -40,33 +52,34 @@ SCTAB ScDocumentImport::getSheetIndex(const OUString& rName) const
 
 SCTAB ScDocumentImport::getSheetCount() const
 {
-    return mrDoc.maTabs.size();
+    return mpImpl->mrDoc.maTabs.size();
 }
 
 bool ScDocumentImport::appendSheet(const OUString& rName)
 {
-    SCTAB nTabCount = mrDoc.maTabs.size();
+    SCTAB nTabCount = mpImpl->mrDoc.maTabs.size();
     if (!ValidTab(nTabCount))
         return false;
 
-    mrDoc.maTabs.push_back(new ScTable(&mrDoc, nTabCount, rName));
+    mpImpl->mrDoc.maTabs.push_back(new ScTable(&mpImpl->mrDoc, nTabCount, rName));
     return true;
 }
 
 void ScDocumentImport::setOriginDate(sal_uInt16 nYear, sal_uInt16 nMonth, sal_uInt16 nDay)
 {
-    if (!mrDoc.pDocOptions)
-        mrDoc.pDocOptions = new ScDocOptions;
+    if (!mpImpl->mrDoc.pDocOptions)
+        mpImpl->mrDoc.pDocOptions = new ScDocOptions;
 
-    mrDoc.pDocOptions->SetDate(nDay, nMonth, nYear);
+    mpImpl->mrDoc.pDocOptions->SetDate(nDay, nMonth, nYear);
 }
 
 void ScDocumentImport::setAutoInput(const ScAddress& rPos, const OUString& rStr)
 {
-    if (!mrDoc.TableExists(rPos.Tab()))
+    if (!mpImpl->mrDoc.TableExists(rPos.Tab()))
         return;
 
-    mrDoc.maTabs[rPos.Tab()]->aCol[rPos.Col()].SetString(rPos.Row(), rPos.Tab(), rStr, mrDoc.GetAddressConvention());
+    mpImpl->mrDoc.maTabs[rPos.Tab()]->aCol[rPos.Col()].SetString(
+        rPos.Row(), rPos.Tab(), rStr, mpImpl->mrDoc.GetAddressConvention());
 }
 
 void ScDocumentImport::setNumericCell(const ScAddress& rPos, double fVal)
@@ -82,18 +95,18 @@ void ScDocumentImport::setStringCell(const ScAddress& rPos, const OUString& rStr
 void ScDocumentImport::setFormulaCell(
     const ScAddress& rPos, const OUString& rFormula, formula::FormulaGrammar::Grammar eGrammar)
 {
-    insertCell(rPos, new ScFormulaCell(&mrDoc, rPos, rFormula, eGrammar));
+    insertCell(rPos, new ScFormulaCell(&mpImpl->mrDoc, rPos, rFormula, eGrammar));
 }
 
 void ScDocumentImport::setFormulaCell(const ScAddress& rPos, const ScTokenArray& rArray)
 {
-    insertCell(rPos, new ScFormulaCell(&mrDoc, rPos, &rArray));
+    insertCell(rPos, new ScFormulaCell(&mpImpl->mrDoc, rPos, &rArray));
 }
 
 void ScDocumentImport::finalize()
 {
     // Populate the text width and script type arrays in all columns.
-    ScDocument::TableContainer::iterator itTab = mrDoc.maTabs.begin(), itTabEnd = mrDoc.maTabs.end();
+    ScDocument::TableContainer::iterator itTab = mpImpl->mrDoc.maTabs.begin(), itTabEnd = mpImpl->mrDoc.maTabs.end();
     for (; itTab != itTabEnd; ++itTab)
     {
         if (!*itTab)
@@ -119,14 +132,18 @@ void ScDocumentImport::finalize()
 
 void ScDocumentImport::insertCell(const ScAddress& rPos, ScBaseCell* pCell)
 {
-    if (!mrDoc.TableExists(rPos.Tab()))
+    if (!mpImpl->mrDoc.TableExists(rPos.Tab()))
     {
         pCell->Delete();
         return;
     }
 
-    ScColumn& rCol = mrDoc.maTabs[rPos.Tab()]->aCol[rPos.Col()];
-    rCol.SetCell(rPos.Row(), pCell);
+    ScColumn& rCol = mpImpl->mrDoc.maTabs[rPos.Tab()]->aCol[rPos.Col()];
+    sc::ColumnBlockPosition* p = mpImpl->maBlockPosSet.getBlockPosition(rPos.Tab(), rPos.Col());
+    if (p)
+        rCol.SetCell(*p, rPos.Row(), pCell);
+    else
+        rCol.SetCell(rPos.Row(), pCell);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

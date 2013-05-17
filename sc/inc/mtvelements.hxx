@@ -10,6 +10,7 @@
 #ifndef SC_MTVELEMENTS_HXX
 #define SC_MTVELEMENTS_HXX
 
+#include "address.hxx"
 #include "svl/broadcast.hxx"
 
 #define DEBUG_COLUMN_STORAGE 0
@@ -24,6 +25,10 @@
 #include <mdds/multi_type_vector_macro.hpp>
 #include <mdds/multi_type_vector.hpp>
 #include <mdds/multi_type_vector_custom_func1.hpp>
+
+#include <boost/unordered_map.hpp>
+
+class ScDocument;
 
 namespace sc {
 
@@ -72,6 +77,20 @@ struct ColumnBlockPosition
 {
     BroadcasterStoreType::iterator miBroadcasterPos;
     CellTextAttrStoreType::iterator miCellTextAttrPos;
+};
+
+class ColumnBlockPositionSet
+{
+    typedef boost::unordered_map<SCCOL, ColumnBlockPosition> ColumnsType;
+    typedef boost::unordered_map<SCTAB, ColumnsType> TablesType;
+
+    ScDocument& mrDoc;
+    TablesType maTables;
+
+public:
+    ColumnBlockPositionSet(ScDocument& rDoc);
+
+    ColumnBlockPosition* getBlockPosition(SCTAB nTab, SCCOL nCol);
 };
 
 }
