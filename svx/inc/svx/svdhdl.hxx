@@ -42,6 +42,8 @@
 
 #include <svx/xpoly.hxx>
 #include <svx/svdoedge.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <svx/sdgcpitm.hxx>
 
 class VirtualDevice;
 class OutputDevice;
@@ -528,5 +530,41 @@ protected:
     static BitmapEx GetHandlesBitmap( bool bIsFineHdl, bool bIsHighContrast );
 };
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class SVX_DLLPUBLIC SdrCropViewHdl : public SdrHdl
+{
+private:
+    basegfx::B2DHomMatrix       maObjectTransform;
+    Graphic                     maGraphic;
+    double                      mfCropLeft;
+    double                      mfCropTop;
+    double                      mfCropRight;
+    double                      mfCropBottom;
+
+    // Argh! The old geometry stuff expresses Y-Mirror using 180 degree rotaton
+    // and the bMirrored bool at the SdrGrafObj, so for now I have to give
+    // this info here. I am sooo looking forward to aw080 and real transformations :-(
+    bool                        mbExtraMirrorXFromGraphic;
+
+public:
+    SdrCropViewHdl(
+        const basegfx::B2DHomMatrix& rObjectTransform,
+        const Graphic& rGraphic,
+        double fCropLeft,
+        double fCropTop,
+        double fCropRight,
+        double fCropBottom,
+        bool bExtraMirrorXFromGraphic);
+
+protected:
+    // create marker for this kind
+    virtual void CreateB2dIAObject();
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 #endif //_SVDHDL_HXX
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// eof

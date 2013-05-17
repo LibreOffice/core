@@ -209,7 +209,7 @@ public:
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    bool                    IsMirrored() { return bMirrored; }
+    bool                    IsMirrored() const { return bMirrored; }
     void                    SetMirrored( bool _bMirrored ) { bMirrored = _bMirrored; }
 
     // #111096#
