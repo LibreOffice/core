@@ -24,14 +24,12 @@
 #include "Panel.hxx"
 #include "sfx2/sidebar/Theme.hxx"
 #include "sfx2/sidebar/ControllerFactory.hxx"
+#include "sfx2/sidebar/Tools.hxx"
 #include <tools/svborder.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/image.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-#ifdef DEBUG
-#include "sfx2/sidebar/Tools.hxx"
-#endif
 
 using namespace css;
 using namespace cssu;
