@@ -53,6 +53,7 @@ namespace sc {
     class CopyFromClipContext;
     class CopyToClipContext;
     class CopyToDocContext;
+    class MixDocContext;
     struct ColumnBlockPosition;
 }
 
@@ -412,10 +413,13 @@ public:
                                 ScTable* pTransClip, sal_uInt16 nFlags, bool bAsLink );
 
                 // mark of this document
-    void        MixMarked( const ScMarkData& rMark, sal_uInt16 nFunction,
-                            bool bSkipEmpty, ScTable* pSrcTab );
-    void        MixData( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                            sal_uInt16 nFunction, bool bSkipEmpty, ScTable* pSrcTab );
+    void MixMarked(
+        sc::MixDocContext& rCxt, const ScMarkData& rMark, sal_uInt16 nFunction,
+        bool bSkipEmpty, const ScTable* pSrcTab );
+
+    void MixData(
+        sc::MixDocContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+        sal_uInt16 nFunction, bool bSkipEmpty, const ScTable* pSrcTab );
 
     void        CopyData( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                             SCCOL nDestCol, SCROW nDestRow, SCTAB nDestTab );

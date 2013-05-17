@@ -120,6 +120,9 @@ bool CopyToClipContext::isCloneNotes() const
 CopyToDocContext::CopyToDocContext(ScDocument& rDoc) : ClipContextBase(rDoc) {}
 CopyToDocContext::~CopyToDocContext() {}
 
+MixDocContext::MixDocContext(ScDocument& rDoc) : ClipContextBase(rDoc) {}
+MixDocContext::~MixDocContext() {}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

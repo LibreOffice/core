@@ -41,6 +41,7 @@ namespace sc {
     class CopyFromClipContext;
     class CopyToClipContext;
     class CopyToDocContext;
+    class MixDocContext;
     struct ColumnBlockPosition;
 }
 
@@ -231,10 +232,12 @@ public:
     void        RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow );
 
                 //  Selection (?) of this document
-    void        MixMarked( const ScMarkData& rMark, sal_uInt16 nFunction,
-                            bool bSkipEmpty, ScColumn& rSrcCol );
-    void        MixData( SCROW nRow1, SCROW nRow2, sal_uInt16 nFunction, bool bSkipEmpty,
-                            ScColumn& rSrcCol );
+    void MixMarked(
+        sc::MixDocContext& rCxt, const ScMarkData& rMark, sal_uInt16 nFunction,
+        bool bSkipEmpty, const ScColumn& rSrcCol );
+    void MixData(
+        sc::MixDocContext& rCxt, SCROW nRow1, SCROW nRow2, sal_uInt16 nFunction, bool bSkipEmpty,
+        const ScColumn& rSrcCol );
 
     ScFormulaCell*  CreateRefCell( ScDocument* pDestDoc, const ScAddress& rDestPos,
                                     SCSIZE nIndex, sal_uInt16 nFlags ) const;

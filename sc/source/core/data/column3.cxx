@@ -828,8 +828,9 @@ ScBaseCell* ScColumn::CloneCell(
 }
 
 
-void ScColumn::MixMarked( const ScMarkData& rMark, sal_uInt16 nFunction,
-                            bool bSkipEmpty, ScColumn& rSrcCol )
+void ScColumn::MixMarked(
+    sc::MixDocContext& rCxt, const ScMarkData& rMark, sal_uInt16 nFunction,
+    bool bSkipEmpty, const ScColumn& rSrcCol )
 {
     SCROW nRow1, nRow2;
 
@@ -837,7 +838,7 @@ void ScColumn::MixMarked( const ScMarkData& rMark, sal_uInt16 nFunction,
     {
         ScMarkArrayIter aIter( rMark.GetArray()+nCol );
         while (aIter.Next( nRow1, nRow2 ))
-            MixData( nRow1, nRow2, nFunction, bSkipEmpty, rSrcCol );
+            MixData(rCxt, nRow1, nRow2, nFunction, bSkipEmpty, rSrcCol);
     }
 }
 
@@ -885,9 +886,9 @@ static void lcl_AddCode( ScTokenArray& rArr, ScFormulaCell* pCell )
 }
 
 
-void ScColumn::MixData( SCROW nRow1, SCROW nRow2,
-                            sal_uInt16 nFunction, bool bSkipEmpty,
-                            ScColumn& rSrcCol )
+void ScColumn::MixData(
+    sc::MixDocContext& rCxt, SCROW nRow1, SCROW nRow2, sal_uInt16 nFunction,
+    bool bSkipEmpty, const ScColumn& rSrcCol )
 {
     SCSIZE nSrcCount = rSrcCol.maItems.size();
 
@@ -1023,12 +1024,18 @@ void ScColumn::MixData( SCROW nRow1, SCROW nRow2,
 
         if ( pNew || bDelete ) // New result?
         {
+            sc::ColumnBlockPosition* p = rCxt.getBlockPosition(nTab, nCol);
             if (pDest && !pNew) // Old cell present?
             {
                 Delete(nRow); // -> Delete
             }
             if (pNew)
-                Insert(nRow, pNew); // Insert new one
+            {
+                if (p)
+                    Insert(*p, nRow, pNew);
+                else
+                    Insert(nRow, pNew); // Insert new one
+            }
 
             Search( nRow, nIndex ); // Everything could have moved
             if (pNew)

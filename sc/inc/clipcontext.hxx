@@ -90,6 +90,13 @@ public:
     virtual ~CopyToDocContext();
 };
 
+class MixDocContext : public ClipContextBase
+{
+public:
+    MixDocContext(ScDocument& rDoc);
+    virtual ~MixDocContext();
+};
+
 }
 
 #endif

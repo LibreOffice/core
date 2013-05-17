@@ -2264,6 +2264,22 @@ bool ScDocument::TableExists( SCTAB nTab ) const
     return ValidTab(nTab) && static_cast<size_t>(nTab) < maTabs.size() && maTabs[nTab];
 }
 
+ScTable* ScDocument::FetchTable( SCTAB nTab )
+{
+    if (!TableExists(nTab))
+        return NULL;
+
+    return maTabs[nTab];
+}
+
+const ScTable* ScDocument::FetchTable( SCTAB nTab ) const
+{
+    if (!TableExists(nTab))
+        return NULL;
+
+    return maTabs[nTab];
+}
+
 void ScDocument::MergeNumberFormatter(ScDocument* pSrcDoc)
 {
     SvNumberFormatter* pThisFormatter = xPoolHelper->GetFormTable();
@@ -2849,12 +2865,20 @@ void ScDocument::MixDocument( const ScRange& rRange, sal_uInt16 nFunction, bool 
 {
     SCTAB nTab1 = rRange.aStart.Tab();
     SCTAB nTab2 = rRange.aEnd.Tab();
+    sc::MixDocContext aCxt(*this);
+    aCxt.setTabRange(nTab1, nTab2);
     SCTAB nMinSizeBothTabs = static_cast<SCTAB>(std::min(maTabs.size(), pSrcDoc->maTabs.size()));
     for (SCTAB i = nTab1; i <= nTab2 && i < nMinSizeBothTabs; i++)
-        if (maTabs[i] && pSrcDoc->maTabs[i])
-            maTabs[i]->MixData( rRange.aStart.Col(), rRange.aStart.Row(),
-                                rRange.aEnd.Col(), rRange.aEnd.Row(),
-                                nFunction, bSkipEmpty, pSrcDoc->maTabs[i] );
+    {
+        ScTable* pTab = FetchTable(i);
+        const ScTable* pSrcTab = pSrcDoc->FetchTable(i);
+        if (!pTab || !pSrcTab)
+            continue;
+
+        pTab->MixData(
+            aCxt, rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row(),
+            nFunction, bSkipEmpty, pSrcTab);
+    }
 }
 
 
@@ -2882,6 +2906,9 @@ void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
 
         sc::CopyToDocContext aCxt(*this);
         aCxt.setTabRange(rMark.GetFirstSelected(), rMark.GetLastSelected());
+        sc::MixDocContext aMixDocCxt(*this);
+        aMixDocCxt.setTabRange(rMark.GetFirstSelected(), rMark.GetLastSelected());
+
         SCTAB nCount = static_cast<SCTAB>(maTabs.size());
         ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
         for (; itr != itrEnd && *itr < nCount; ++itr)
@@ -2897,6 +2924,8 @@ void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
                     }
                     else
                         pMixDoc->AddUndoTab( i, i );
+
+                    // context used for copying content to the temporary mix document.
                     sc::CopyToDocContext aMixCxt(*pMixDoc);
                     aMixCxt.setTabRange(i, i);
                     maTabs[i]->CopyToTable(aMixCxt, nStartCol,nStartRow, nEndCol,nEndRow,
@@ -2907,7 +2936,7 @@ void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
                                                  nFlags, false, maTabs[i], NULL, bAsLink );
 
                 if (bDoMix)
-                    maTabs[i]->MixData( nStartCol,nStartRow, nEndCol,nEndRow,
+                    maTabs[i]->MixData(aMixDocCxt, nStartCol,nStartRow, nEndCol,nEndRow,
                                         nFunction, bSkipEmpty, pMixDoc->maTabs[i] );
             }
 
@@ -2945,6 +2974,8 @@ void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
 
         sc::CopyToDocContext aCxt(*this);
         aCxt.setTabRange(rMark.GetFirstSelected(), rMark.GetLastSelected());
+        sc::MixDocContext aMixDocCxt(*this);
+        aMixDocCxt.setTabRange(rMark.GetFirstSelected(), rMark.GetLastSelected());
         SCTAB nCount = static_cast<SCTAB>(maTabs.size());
         ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
         for (; itr != itrEnd && *itr < nCount; ++itr)
@@ -2972,7 +3003,7 @@ void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
                                              nFlags, true, maTabs[i], &rMark, bAsLink );
 
                 if (bDoMix)
-                    maTabs[i]->MixMarked( rMark, nFunction, bSkipEmpty, pMixDoc->maTabs[i] );
+                    maTabs[i]->MixMarked(aMixDocCxt, rMark, nFunction, bSkipEmpty, pMixDoc->maTabs[i]);
             }
 
         SetAutoCalc( bOldAutoCalc );
