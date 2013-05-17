@@ -5278,6 +5278,12 @@
               screen.</desc>
             </info>
             <value>false</value>
+          <prop oor:name="ViewPDFAfterExport" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Specifies if PDF automatically opens after export.</desc>
+            </info>
+            <value>false</value>
+          </prop>
           </prop>
           <!-- PDF Encryption -->
           <prop oor:name="Printing" oor:type="xs:int" oor:nillable="false">

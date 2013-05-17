@@ -98,6 +98,7 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
     mbUseTaggedPDF              ( sal_False ),
     mnPDFTypeSelection          ( 0 ),
     mbExportNotes               ( sal_True ),
+    mbViewPDF                   ( sal_True ),
     mbExportNotesPages          ( sal_False ),
     mbEmbedStandardFonts        ( sal_False ),//in preparation for i54636 and i76458.
                                               //already used for i59651 (PDF/A-1)
@@ -457,6 +458,8 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     rFilterData[ nData ].Value >>= mnPDFTypeSelection;
                 else if ( rFilterData[ nData ].Name == "ExportNotes" )
                     rFilterData[ nData ].Value >>= mbExportNotes;
+                else if ( rFilterData[ nData ].Name == "ViewPDFAfterExport" )
+                    rFilterData[ nData ].Value >>= mbViewPDF;
                 else if ( rFilterData[ nData ].Name == "ExportNotesPages" )
                     rFilterData[ nData ].Value >>= mbExportNotesPages;
                 else if ( rFilterData[ nData ].Name == "EmbedStandardFonts" )

@@ -87,6 +87,7 @@
 #define CB_WATERMARK                32
 #define FT_WATERMARK                33
 #define ED_WATERMARK                34
+#define CB_VIEWPDF                  35
 
 
 //controls for open options tab page
