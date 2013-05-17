@@ -5021,6 +5021,12 @@
             </info>
             <value>false</value>
           </prop>
+          <prop oor:name="ViewPDFAfterExport" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Specifies if PDF automatically opens after export.</desc>
+            </info>
+            <value>false</value>
+          </prop>
           <prop oor:name="ExportBookmarks" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies if bookmarks are exported to PDF.</desc>
@@ -5278,12 +5284,6 @@
               screen.</desc>
             </info>
             <value>false</value>
-          <prop oor:name="ViewPDFAfterExport" oor:type="xs:boolean" oor:nillable="false">
-            <info>
-              <desc>Specifies if PDF automatically opens after export.</desc>
-            </info>
-            <value>false</value>
-          </prop>
           </prop>
           <!-- PDF Encryption -->
           <prop oor:name="Printing" oor:type="xs:int" oor:nillable="false">
