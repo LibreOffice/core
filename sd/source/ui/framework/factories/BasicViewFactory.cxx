@@ -33,6 +33,7 @@
 #include "DrawViewShell.hxx"
 #include "GraphicViewShell.hxx"
 #include "OutlineViewShell.hxx"
+#include "taskpane/ToolPanelViewShell.hxx"
 #include "PresentationViewShell.hxx"
 #include "SlideSorterViewShell.hxx"
 #include "FrameView.hxx"
@@ -318,6 +319,7 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
             mxConfigurationController->addResourceFactory(FrameworkHelper::msNotesViewURL, this);
             mxConfigurationController->addResourceFactory(FrameworkHelper::msHandoutViewURL, this);
             mxConfigurationController->addResourceFactory(FrameworkHelper::msPresentationViewURL, this);
+            mxConfigurationController->addResourceFactory(FrameworkHelper::msTaskPaneURL, this);
             mxConfigurationController->addResourceFactory(FrameworkHelper::msSlideSorterURL, this);
         }
         catch (RuntimeException&)
@@ -456,6 +458,15 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
             pFrameView,
             bIsCenterPane);
     }
+    else if (rsViewURL.equals(FrameworkHelper::msTaskPaneURL))
+    {
+        pViewShell.reset(
+            new ::sd::toolpanel::ToolPanelViewShell(
+                &rFrame,
+                *mpBase,
+                &rWindow,
+                pFrameView));
+    }
 
     return pViewShell;
 }
@@ -522,6 +533,8 @@ bool BasicViewFactory::IsCacheable (const ::boost::shared_ptr<ViewDescriptor>& r
                 FrameworkHelper::msSlideSorterURL, FrameworkHelper::msLeftDrawPaneURL));
             maCacheableResources.push_back(pHelper->CreateResourceId(
                 FrameworkHelper::msSlideSorterURL, FrameworkHelper::msLeftImpressPaneURL));
+            maCacheableResources.push_back(pHelper->CreateResourceId(
+                FrameworkHelper::msTaskPaneURL, FrameworkHelper::msRightPaneURL));
         }
 
         ::std::vector<Reference<XResourceId> >::const_iterator iId;
