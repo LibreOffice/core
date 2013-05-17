@@ -53,8 +53,7 @@ public:
 
     void Dispose (void);
 
-    void SetShowMenuFunctor( const ::boost::function<void(void)>& rShowMenuFunctor );
-    TitleBar* GetTitleBar (void) const;
+    PanelTitleBar* GetTitleBar (void) const;
     bool IsTitleBarOptional (void) const;
     void SetUIElement (const cssu::Reference<css::ui::XUIElement>& rxElement);
     cssu::Reference<css::ui::XSidebarPanel> GetPanelComponent (void) const;

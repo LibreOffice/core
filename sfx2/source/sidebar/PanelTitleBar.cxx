@@ -23,15 +23,18 @@
 #include "Paint.hxx"
 #include "Panel.hxx"
 #include "sfx2/sidebar/Theme.hxx"
-
+#include "sfx2/sidebar/ControllerFactory.hxx"
 #include <tools/svborder.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/image.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #ifdef DEBUG
 #include "sfx2/sidebar/Tools.hxx"
 #endif
 
+using namespace css;
+using namespace cssu;
 
 namespace sfx2 { namespace sidebar {
 
@@ -48,7 +51,8 @@ PanelTitleBar::PanelTitleBar (
       mbIsLeftButtonDown(false),
       mpPanel(pPanel),
       mnMenuItemIndex(1),
-      maMenuAction()
+      mxFrame(),
+      msMoreOptionsCommand()
 {
     OSL_ASSERT(mpPanel != NULL);
 
@@ -73,23 +77,38 @@ PanelTitleBar::~PanelTitleBar (void)
 
 
 
-void PanelTitleBar::SetMenuAction ( const ::boost::function<void(void)>& rMenuAction )
+void PanelTitleBar::SetMoreOptionsCommand (
+    const ::rtl::OUString& rsCommandName,
+    const ::cssu::Reference<css::frame::XFrame>& rxFrame)
 {
-    if ( !maMenuAction && rMenuAction )
+    if ( ! rsCommandName.equals(msMoreOptionsCommand))
     {
-        maToolBox.InsertItem(
-            mnMenuItemIndex,
-            Theme::GetImage(Theme::Image_PanelMenu));
-        maToolBox.SetOutStyle(TOOLBOX_STYLE_FLAT);
-        maToolBox.SetQuickHelpText(
-            mnMenuItemIndex,
-            String(SfxResId(SFX_STR_SIDEBAR_MORE_OPTIONS)));
+        if (msMoreOptionsCommand.getLength() > 0)
+            maToolBox.RemoveItem(maToolBox.GetItemPos(mnMenuItemIndex));
+
+        msMoreOptionsCommand = rsCommandName;
+        mxFrame = rxFrame;
+
+        if (msMoreOptionsCommand.getLength() > 0)
+        {
+            maToolBox.InsertItem(
+                mnMenuItemIndex,
+                Theme::GetImage(Theme::Image_PanelMenu));
+            Reference<frame::XToolbarController> xController (
+                ControllerFactory::CreateToolBoxController(
+                    &maToolBox,
+                    mnMenuItemIndex,
+                    msMoreOptionsCommand,
+                    rxFrame,
+                    VCLUnoHelper::GetInterface(&maToolBox),
+                    0));
+            maToolBox.SetController(mnMenuItemIndex, xController, msMoreOptionsCommand);
+            maToolBox.SetOutStyle(TOOLBOX_STYLE_FLAT);
+            maToolBox.SetQuickHelpText(
+                mnMenuItemIndex,
+                String(SfxResId(SFX_STR_SIDEBAR_MORE_OPTIONS)));
+        }
     }
-    else if ( maMenuAction && !rMenuAction )
-    {
-        maToolBox.RemoveItem( maToolBox.GetItemPos( mnMenuItemIndex ) );
-    }
-    maMenuAction = rMenuAction;
 }
 
 
@@ -153,8 +172,21 @@ Color PanelTitleBar::GetTextColor (void)
 void PanelTitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
 {
     if (nItemIndex == mnMenuItemIndex)
-        if (maMenuAction)
-            maMenuAction();
+        if (msMoreOptionsCommand.getLength() > 0)
+        {
+            try
+            {
+                const util::URL aURL (Tools::GetURL(msMoreOptionsCommand));
+                Reference<frame::XDispatch> xDispatch (Tools::GetDispatch(mxFrame, aURL));
+                if (xDispatch.is())
+                    xDispatch->dispatch(aURL, Sequence<beans::PropertyValue>());
+            }
+            catch(Exception& rException)
+            {
+                OSL_TRACE("caught exception: %s",
+                    OUStringToOString(rException.Message, RTL_TEXTENCODING_ASCII_US).getStr());
+            }
+        }
 }
 
 

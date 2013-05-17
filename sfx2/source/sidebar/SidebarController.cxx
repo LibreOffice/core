@@ -19,6 +19,7 @@
 #include "Deck.hxx"
 #include "DeckTitleBar.hxx"
 #include "Panel.hxx"
+#include "PanelTitleBar.hxx"
 #include "SidebarPanel.hxx"
 #include "SidebarResource.hxx"
 #include "TabBar.hxx"
@@ -578,11 +579,15 @@ void SidebarController::SwitchToDeck (
         }
         if (aNewPanels[nWriteIndex] != NULL)
         {
-            // Depending on the context we have to apply the show menu functor.
-            aNewPanels[nWriteIndex]->SetShowMenuFunctor(
-                rPanelContexDescriptor.msMenuCommand.getLength()>0
-                ? ::boost::bind(&SidebarController::ShowDetailMenu,this,rPanelContexDescriptor.msMenuCommand)
-                : ::boost::function<void(void)>() );
+            // Depending on the context we have to change the command
+            // for the "more options" dialog.
+            PanelTitleBar* pTitleBar = aNewPanels[nWriteIndex]->GetTitleBar();
+            if (pTitleBar != NULL)
+            {
+                pTitleBar->SetMoreOptionsCommand(
+                    rPanelContexDescriptor.msMenuCommand,
+                    mxFrame);
+            }
 
             ++nWriteIndex;
         }
