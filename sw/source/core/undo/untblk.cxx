@@ -248,8 +248,9 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
                 pTxtNode->JoinNext();
             }
             // reset all text attributes in the paragraph!
-            pTxtNode->RstAttr( SwIndex(pTxtNode, 0), pTxtNode->Len(),
-                                0, 0, true );
+    //i121897, change the hints clearing method from 'RstAttr' to 'ClarSwpHints' as the certain tox mark index hint reason
+            if( pTxtNode && pTxtNode->GetpSwpHints() )
+                pTxtNode->ClearSwpHintsArr( true );
 
             // setze alle Attribute im Node zurueck
             pTxtNode->ResetAllAttr();
