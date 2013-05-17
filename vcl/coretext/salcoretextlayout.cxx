@@ -373,20 +373,25 @@ bool CoreTextLayout::GetBoundRect( SalGraphics& rGraphics, Rectangle& rVCLRect )
     return true;
 }
 
-void CoreTextLayout::GetCaretPositions( int max_index, sal_Int32* caret_position ) const
+void CoreTextLayout::GetCaretPositions(int nMaxIndex, sal_Int32* pCaretXArray) const
 {
-    SAL_INFO( "vcl.coretext.layout", "GetCaretPositions(" << this << ",max_index=" << max_index << ")" );
+    SAL_INFO( "vcl.coretext.layout", "GetCaretPositions(" << this << ",nMaxIndex=" << nMaxIndex << ")" );
 
-    int local_max = max_index < mnCharCount * 2 ? max_index : mnCharCount;
-    for( int i = 0 ; i < max_index - 1; i+=2 ) {
-        CGFloat primary, secondary;
-        primary = CTLineGetOffsetForStringIndex(mpLine, i >> 1, &secondary);
-        caret_position[i] = round_to_long(mnBaseAdvance + primary);
-        caret_position[i+1] = round_to_long(mnBaseAdvance + secondary);
-        i += 2;
-    }
-    for( int i = local_max ; i < max_index ; ++i ) {
-        caret_position[i] = -1;
+    // initialize the caret positions
+    for (int i = 0; i < nMaxIndex; ++i)
+        pCaretXArray[i] = -1;
+
+    for (int i = 0 ; i < mnCharCount; i++)
+    {
+        CGFloat fPrimary, fSecondary;
+        fPrimary = CTLineGetOffsetForStringIndex(mpLine, i, &fSecondary);
+        // update previous trailing position
+        if (i > 0)
+            pCaretXArray[2*i-1] = round_to_long(mnBaseAdvance + fPrimary);
+        // update current leading position
+        if (2*i >= nMaxIndex)
+            break;
+        pCaretXArray[2*i+0] = round_to_long(mnBaseAdvance + fPrimary);
     }
 }
 
