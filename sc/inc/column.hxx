@@ -257,7 +257,7 @@ public:
         ScColumn& rColumn, const ScMarkData* pMarkData = NULL, bool bAsLink = false) const;
 
     void UndoToColumn(
-        SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bMarked,
+        sc::CopyToDocContext& rCxt, SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bMarked,
         ScColumn& rColumn, const ScMarkData* pMarkData = NULL) const;
 
     void        CopyScenarioFrom( const ScColumn& rSrcCol );

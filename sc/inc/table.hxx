@@ -402,9 +402,9 @@ public:
         sal_uInt16 nFlags, bool bMarked, ScTable* pDestTab,
         const ScMarkData* pMarkData = NULL, bool bAsLink = false, bool bColRowFlags = true );
 
-    void        UndoToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                            sal_uInt16 nFlags, bool bMarked, ScTable* pDestTab,
-                            const ScMarkData* pMarkData = NULL);
+    void UndoToTable(
+        sc::CopyToDocContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+        sal_uInt16 nFlags, bool bMarked, ScTable* pDestTab, const ScMarkData* pMarkData = NULL );
 
     void        CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             SCsCOL nDx, SCsROW nDy, ScTable* pTable);

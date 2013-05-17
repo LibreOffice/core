@@ -1151,24 +1151,21 @@ void ScTable::CopyToTable(
 }
 
 
-void ScTable::UndoToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                            sal_uInt16 nFlags, bool bMarked, ScTable* pDestTab,
-                            const ScMarkData* pMarkData)
+void ScTable::UndoToTable(
+    sc::CopyToDocContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+    sal_uInt16 nFlags, bool bMarked, ScTable* pDestTab, const ScMarkData* pMarkData )
 {
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
     {
         bool bWidth  = (nRow1==0 && nRow2==MAXROW && pColWidth && pDestTab->pColWidth);
         bool bHeight = (nCol1==0 && nCol2==MAXCOL && mpRowHeights && pDestTab->mpRowHeights);
 
-        sc::CopyToDocContext aCopyCxt(*pDestTab->pDocument);
-        aCopyCxt.setTabRange(pDestTab->nTab, pDestTab->nTab);
         for ( SCCOL i = 0; i <= MAXCOL; i++)
         {
             if ( i >= nCol1 && i <= nCol2 )
-                aCol[i].UndoToColumn(nRow1, nRow2, nFlags, bMarked, pDestTab->aCol[i],
-                                        pMarkData);
+                aCol[i].UndoToColumn(rCxt, nRow1, nRow2, nFlags, bMarked, pDestTab->aCol[i], pMarkData);
             else
-                aCol[i].CopyToColumn(aCopyCxt, 0, MAXROW, IDF_FORMULA, false, pDestTab->aCol[i]);
+                aCol[i].CopyToColumn(rCxt, 0, MAXROW, IDF_FORMULA, false, pDestTab->aCol[i]);
         }
 
         //remove old notes

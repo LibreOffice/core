@@ -1873,11 +1873,13 @@ void ScDocument::UndoToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         if (nTab1 > 0)
             CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTab1-1, IDF_FORMULA, false, pDestDoc, pMarks );
 
+        sc::CopyToDocContext aCxt(*pDestDoc);
+        aCxt.setTabRange(nTab1, nTab2);
         OSL_ASSERT( nTab2 < static_cast<SCTAB>(maTabs.size()) && nTab2 < static_cast<SCTAB>(pDestDoc->maTabs.size()));
         for (SCTAB i = nTab1; i <= nTab2; i++)
         {
             if (maTabs[i] && pDestDoc->maTabs[i])
-                maTabs[i]->UndoToTable(nCol1, nRow1, nCol2, nRow2, nFlags,
+                maTabs[i]->UndoToTable(aCxt, nCol1, nRow1, nCol2, nRow2, nFlags,
                                     bOnlyMarked, pDestDoc->maTabs[i], pMarks);
         }
 
@@ -1927,6 +1929,8 @@ void ScDocument::UndoToDocument(const ScRange& rRange,
 
     bool bOldAutoCalc = pDestDoc->GetAutoCalc();
     pDestDoc->SetAutoCalc( false );     // avoid multiple calculations
+    sc::CopyToDocContext aCxt(*pDestDoc);
+    aCxt.setTabRange(nTab1, nTab2);
     if (nTab1 > 0)
         CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTab1-1, IDF_FORMULA, false, pDestDoc, pMarks );
 
@@ -1934,7 +1938,7 @@ void ScDocument::UndoToDocument(const ScRange& rRange,
     for (SCTAB i = nTab1; i <= nTab2 && i < nMinSizeBothTabs; i++)
     {
         if (maTabs[i] && pDestDoc->maTabs[i])
-            maTabs[i]->UndoToTable(aNewRange.aStart.Col(), aNewRange.aStart.Row(),
+            maTabs[i]->UndoToTable(aCxt, aNewRange.aStart.Col(), aNewRange.aStart.Row(),
                                     aNewRange.aEnd.Col(), aNewRange.aEnd.Row(),
                                     nFlags, bOnlyMarked, pDestDoc->maTabs[i], pMarks);
     }

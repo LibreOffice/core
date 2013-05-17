@@ -1475,18 +1475,16 @@ void ScColumn::CopyToColumn(
 
 
 void ScColumn::UndoToColumn(
-    SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bMarked, ScColumn& rColumn,
-    const ScMarkData* pMarkData) const
+    sc::CopyToDocContext& rCxt, SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bMarked,
+    ScColumn& rColumn, const ScMarkData* pMarkData ) const
 {
-    sc::CopyToDocContext aCxt(*rColumn.pDocument);
-    aCxt.setTabRange(rColumn.nTab, rColumn.nTab);
     if (nRow1 > 0)
-        CopyToColumn(aCxt, 0, nRow1-1, IDF_FORMULA, false, rColumn);
+        CopyToColumn(rCxt, 0, nRow1-1, IDF_FORMULA, false, rColumn);
 
-    CopyToColumn(aCxt, nRow1, nRow2, nFlags, bMarked, rColumn, pMarkData);      //! bMarked ????
+    CopyToColumn(rCxt, nRow1, nRow2, nFlags, bMarked, rColumn, pMarkData);      //! bMarked ????
 
     if (nRow2 < MAXROW)
-        CopyToColumn(aCxt, nRow2+1, MAXROW, IDF_FORMULA, false, rColumn);
+        CopyToColumn(rCxt, nRow2+1, MAXROW, IDF_FORMULA, false, rColumn);
 }
 
 
