@@ -30,6 +30,7 @@
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/ui/UIElementFactoryManager.hpp>
 
 #include <toolkit/unohlp.hxx>
 #include <vcl/splitwin.hxx>
@@ -3410,13 +3411,32 @@ bool SfxViewFrame::IsSidebarEnabled()
     if (!bInitialized)
     {
         bInitialized = true;
+        css::uno::Reference< css::uno::XComponentContext > xContext;
+        xContext = ::comphelper::getProcessComponentContext();
         try {
-            bEnabled = officecfg::Office::Common::Misc::ExperimentalSidebar::get(
-                           comphelper::getProcessComponentContext());
+            bEnabled = officecfg::Office::Common::Misc::ExperimentalSidebar::get( xContext );
         } catch (const uno::Exception &e) {
             SAL_WARN("sfx2.view", "don't have experimental sidebar option installed");
         }
+
+        // rip out the services from framework/ for good measure
+        if( !bEnabled )
+        {
+            try
+            {
+                uno::Reference< ui::XUIElementFactoryManager > xUIElementFactory = ui::UIElementFactoryManager::create( xContext );
+                xUIElementFactory->deregisterFactory( "toolpanel", "ScPanelFactory", "" );
+                xUIElementFactory->deregisterFactory( "toolpanel", "SwPanelFactory", "" );
+                xUIElementFactory->deregisterFactory( "toolpanel", "SvxPanelFactory", "" );
+                xUIElementFactory->deregisterFactory( "toolpanel", "SdPanelFactory", "" );
+            }
+            catch ( const uno::Exception &e )
+            {
+                SAL_WARN( "sfx2.view", "Exception de-registering sidebar factories " << e.Message );
+            }
+        }
     }
+
     return bEnabled;
 }
 

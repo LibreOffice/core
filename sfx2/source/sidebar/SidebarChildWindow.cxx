@@ -22,6 +22,7 @@
 #include "sfx2/sfxsids.hrc"
 #include "helpid.hrc"
 #include "sfx2/dockwin.hxx"
+#include "sfx2/viewfrm.hxx"
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 
 
@@ -73,5 +74,12 @@ sal_Int32 SidebarChildWindow::GetDefaultWidth (Window* pWindow)
         return 0;
 }
 
+void SidebarChildWindow::RegisterChildWindowIfEnabled (sal_Bool bVisible,
+						       SfxModule *pMod,
+						       sal_uInt16 nFlags)
+{
+    if ( SfxViewFrame::IsSidebarEnabled() )
+        RegisterChildWindow( bVisible, pMod, nFlags );
+}
 
 } } // end of namespace sfx2::sidebar
