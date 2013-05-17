@@ -570,15 +570,16 @@ sal_Bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName )
 
     try {
         uno::Sequence < beans::PropertyValue > aProps;
-          uno::Any aAny = m_pOwner->GetFilterConfiguration()->getByName( aFilterName );
-           if ( aAny >>= aProps )
-           {
-               sal_Int32 nPropertyCount = aProps.getLength();
-               for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
-                   if( aProps[nProperty].Name == "UIComponent" )
-                   {
+        uno::Any aAny = m_pOwner->GetFilterConfiguration()->getByName( aFilterName );
+        if ( aAny >>= aProps )
+        {
+            sal_Int32 nPropertyCount = aProps.getLength();
+            for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
+            {
+                if( aProps[nProperty].Name == "UIComponent" )
+                {
                     OUString aServiceName;
-                       aProps[nProperty].Value >>= aServiceName;
+                    aProps[nProperty].Value >>= aServiceName;
                     if( !aServiceName.isEmpty() )
                     {
                         uno::Reference< ui::dialogs::XExecutableDialog > xFilterDialog(
@@ -616,6 +617,7 @@ sal_Bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName )
 
                     break;
                 }
+            }
         }
     }
     catch( const container::NoSuchElementException& )
