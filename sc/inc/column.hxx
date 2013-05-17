@@ -40,6 +40,7 @@ namespace sc {
     class EndListeningContext;
     class CopyFromClipContext;
     class CopyToClipContext;
+    class CopyToDocContext;
     struct ColumnBlockPosition;
 }
 
@@ -252,7 +253,7 @@ public:
         ScFunctionData& rData, ScFlatBoolRowSegments& rHiddenRows, SCROW nStartRow, SCROW nEndRow) const;
 
     void CopyToColumn(
-        SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bMarked,
+        sc::CopyToDocContext& rCxt, SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bMarked,
         ScColumn& rColumn, const ScMarkData* pMarkData = NULL, bool bAsLink = false) const;
 
     void UndoToColumn(

@@ -117,6 +117,9 @@ bool CopyToClipContext::isCloneNotes() const
     return mbCloneNotes;
 }
 
+CopyToDocContext::CopyToDocContext(ScDocument& rDoc) : ClipContextBase(rDoc) {}
+CopyToDocContext::~CopyToDocContext() {}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

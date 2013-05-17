@@ -1368,6 +1368,7 @@ void ScColumn::CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDes
 }
 
 void ScColumn::CopyToColumn(
+    sc::CopyToDocContext& rCxt,
     SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bMarked, ScColumn& rColumn,
     const ScMarkData* pMarkData, bool bAsLink) const
 {
@@ -1381,7 +1382,7 @@ void ScColumn::CopyToColumn(
             while ( aIter.Next( nStart, nEnd ) && nStart <= nRow2 )
             {
                 if ( nEnd >= nRow1 )
-                    CopyToColumn( std::max(nRow1,nStart), std::min(nRow2,nEnd),
+                    CopyToColumn(rCxt, std::max(nRow1,nStart), std::min(nRow2,nEnd),
                                     nFlags, false, rColumn, pMarkData, bAsLink );
             }
         }
@@ -1443,6 +1444,7 @@ void ScColumn::CopyToColumn(
                     // Special case to allow removing of cell instances.  A
                     // string cell with empty content is used to indicate an
                     // empty cell.
+                    sc::ColumnBlockPosition* p = rCxt.getBlockPosition(nTab, nCol);
                     if (pNew->GetCellType() == CELLTYPE_STRING)
                     {
                         OUString aStr = static_cast<ScStringCell*>(pNew)->GetString();
@@ -1450,11 +1452,21 @@ void ScColumn::CopyToColumn(
                             // A string cell with empty string.  Delete the cell itself.
                             rColumn.Delete(maItems[i].nRow);
                         else
+                        {
                             // non-empty string cell
-                            rColumn.Insert(maItems[i].nRow, pNew);
+                            if (p)
+                                rColumn.Insert(*p, maItems[i].nRow, pNew);
+                            else
+                                rColumn.Insert(maItems[i].nRow, pNew);
+                        }
                     }
                     else
-                        rColumn.Insert(maItems[i].nRow, pNew);
+                    {
+                        if (p)
+                            rColumn.Insert(*p, maItems[i].nRow, pNew);
+                        else
+                            rColumn.Insert(maItems[i].nRow, pNew);
+                    }
                 }
             }
         }
@@ -1466,13 +1478,15 @@ void ScColumn::UndoToColumn(
     SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bMarked, ScColumn& rColumn,
     const ScMarkData* pMarkData) const
 {
+    sc::CopyToDocContext aCxt(*rColumn.pDocument);
+    aCxt.setTabRange(rColumn.nTab, rColumn.nTab);
     if (nRow1 > 0)
-        CopyToColumn( 0, nRow1-1, IDF_FORMULA, false, rColumn );
+        CopyToColumn(aCxt, 0, nRow1-1, IDF_FORMULA, false, rColumn);
 
-    CopyToColumn( nRow1, nRow2, nFlags, bMarked, rColumn, pMarkData );      //! bMarked ????
+    CopyToColumn(aCxt, nRow1, nRow2, nFlags, bMarked, rColumn, pMarkData);      //! bMarked ????
 
     if (nRow2 < MAXROW)
-        CopyToColumn( nRow2+1, MAXROW, IDF_FORMULA, false, rColumn );
+        CopyToColumn(aCxt, nRow2+1, MAXROW, IDF_FORMULA, false, rColumn);
 }
 
 
@@ -1501,7 +1515,8 @@ void ScColumn::CopyUpdated( const ScColumn& rPosCol, ScColumn& rDestCol ) const
 void ScColumn::CopyScenarioFrom( const ScColumn& rSrcCol )
 {
     //  This is the scenario table, the data is copied into it
-
+    sc::CopyToDocContext aCxt(*pDocument);
+    aCxt.setTabRange(nTab, nTab);
     ScAttrIterator aAttrIter( pAttrArray, 0, MAXROW );
     SCROW nStart = -1, nEnd = -1;
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
@@ -1511,7 +1526,7 @@ void ScColumn::CopyScenarioFrom( const ScColumn& rSrcCol )
         {
             DeleteArea( nStart, nEnd, IDF_CONTENTS );
             ((ScColumn&)rSrcCol).
-                CopyToColumn( nStart, nEnd, IDF_CONTENTS, false, *this );
+                CopyToColumn(aCxt, nStart, nEnd, IDF_CONTENTS, false, *this);
 
             //  UpdateUsed not needed, already done in TestCopyScenario (obsolete comment ?)
 
@@ -1532,7 +1547,8 @@ void ScColumn::CopyScenarioFrom( const ScColumn& rSrcCol )
 void ScColumn::CopyScenarioTo( ScColumn& rDestCol ) const
 {
     //  This is the scenario table, the data is copied to the other
-
+    sc::CopyToDocContext aCxt(*rDestCol.pDocument);
+    aCxt.setTabRange(rDestCol.nTab, rDestCol.nTab);
     ScAttrIterator aAttrIter( pAttrArray, 0, MAXROW );
     SCROW nStart = -1, nEnd = -1;
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
@@ -1542,7 +1558,7 @@ void ScColumn::CopyScenarioTo( ScColumn& rDestCol ) const
         {
             rDestCol.DeleteArea( nStart, nEnd, IDF_CONTENTS );
             ((ScColumn*)this)->
-                CopyToColumn( nStart, nEnd, IDF_CONTENTS, false, rDestCol );
+                CopyToColumn(aCxt, nStart, nEnd, IDF_CONTENTS, false, rDestCol);
 
             //  UpdateUsed not needed, is already done in TestCopyScenario (obsolete comment ?)
 

@@ -83,6 +83,13 @@ public:
     bool isCloneNotes() const;
 };
 
+class CopyToDocContext : public ClipContextBase
+{
+public:
+    CopyToDocContext(ScDocument& rDoc);
+    virtual ~CopyToDocContext();
+};
+
 }
 
 #endif

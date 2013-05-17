@@ -52,6 +52,7 @@ namespace sc {
     class EndListeningContext;
     class CopyFromClipContext;
     class CopyToClipContext;
+    class CopyToDocContext;
     struct ColumnBlockPosition;
 }
 
@@ -396,10 +397,11 @@ public:
     void        BroadcastInArea( SCCOL nCol1, SCROW nRow1,
                                     SCCOL nCol2, SCROW nRow2 );
 
-    void        CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                            sal_uInt16 nFlags, bool bMarked, ScTable* pDestTab,
-                            const ScMarkData* pMarkData = NULL,
-                            bool bAsLink = false, bool bColRowFlags = true);
+    void CopyToTable(
+        sc::CopyToDocContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+        sal_uInt16 nFlags, bool bMarked, ScTable* pDestTab,
+        const ScMarkData* pMarkData = NULL, bool bAsLink = false, bool bColRowFlags = true );
+
     void        UndoToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             sal_uInt16 nFlags, bool bMarked, ScTable* pDestTab,
                             const ScMarkData* pMarkData = NULL);

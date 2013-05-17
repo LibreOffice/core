@@ -406,9 +406,11 @@ void ScTable::InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
         nWhichArray[1] = ATTR_CONDITIONAL;
         nWhichArray[2] = 0;
 
+        sc::CopyToDocContext aCxt(*pDocument);
+        aCxt.setTabRange(nTab, nTab);
         for (SCSIZE i=0; i<nSize; i++)
         {
-            aCol[nStartCol-1].CopyToColumn( nStartRow, nEndRow, IDF_ATTRIB,
+            aCol[nStartCol-1].CopyToColumn(aCxt, nStartRow, nEndRow, IDF_ATTRIB,
                                                 false, aCol[nStartCol+i] );
             aCol[nStartCol+i].RemoveFlags( nStartRow, nEndRow,
                                                 SC_MF_HOR | SC_MF_VER | SC_MF_AUTO );
@@ -1018,17 +1020,17 @@ void ScTable::StartListeningInArea( SCCOL nCol1, SCROW nRow1,
 }
 
 
-void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                            sal_uInt16 nFlags, bool bMarked, ScTable* pDestTab,
-                            const ScMarkData* pMarkData,
-                            bool bAsLink, bool bColRowFlags)
+void ScTable::CopyToTable(
+    sc::CopyToDocContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+    sal_uInt16 nFlags, bool bMarked, ScTable* pDestTab, const ScMarkData* pMarkData,
+    bool bAsLink, bool bColRowFlags )
 {
     if (!ValidColRow(nCol1, nRow1) || !ValidColRow(nCol2, nRow2))
         return;
 
     if (nFlags)
         for (SCCOL i = nCol1; i <= nCol2; i++)
-            aCol[i].CopyToColumn(nRow1, nRow2, nFlags, bMarked,
+            aCol[i].CopyToColumn(rCxt, nRow1, nRow2, nFlags, bMarked,
                                 pDestTab->aCol[i], pMarkData, bAsLink);
 
     if (!bColRowFlags)      // Spaltenbreiten/Zeilenhoehen/Flags
@@ -1158,13 +1160,15 @@ void ScTable::UndoToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         bool bWidth  = (nRow1==0 && nRow2==MAXROW && pColWidth && pDestTab->pColWidth);
         bool bHeight = (nCol1==0 && nCol2==MAXCOL && mpRowHeights && pDestTab->mpRowHeights);
 
+        sc::CopyToDocContext aCopyCxt(*pDestTab->pDocument);
+        aCopyCxt.setTabRange(pDestTab->nTab, pDestTab->nTab);
         for ( SCCOL i = 0; i <= MAXCOL; i++)
         {
             if ( i >= nCol1 && i <= nCol2 )
                 aCol[i].UndoToColumn(nRow1, nRow2, nFlags, bMarked, pDestTab->aCol[i],
                                         pMarkData);
             else
-                aCol[i].CopyToColumn(0, MAXROW, IDF_FORMULA, false, pDestTab->aCol[i]);
+                aCol[i].CopyToColumn(aCopyCxt, 0, MAXROW, IDF_FORMULA, false, pDestTab->aCol[i]);
         }
 
         //remove old notes
