@@ -42,9 +42,11 @@ File gid_File_Help_Sdraw_Zip
 End
 #endif
 
+#ifndef MACOSX
 File gid_File_Exe_Sdraw
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Name = EXENAME(sdraw);
     Styles = (PACKED);
 End
+#endif

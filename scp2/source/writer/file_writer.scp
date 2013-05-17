@@ -27,12 +27,14 @@
 
 #include "macros.inc"
 
+#ifndef MACOSX
 File gid_File_Exe_Swriter
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Name = EXENAME(swriter);
     Styles = (PACKED);
 End
+#endif
 
 #ifdef WNT
 File gid_File_Exe_Sweb
