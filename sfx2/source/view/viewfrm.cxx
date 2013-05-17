@@ -3220,7 +3220,7 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
         }
         else if ( nSID == SID_TASKPANE )
         {
-            if  ( !KnowsChildWindow( nSID ) )
+            if ( !KnowsChildWindow( nSID ) )
             {
                 OSL_FAIL( "SID_TASKPANE state requested, but no task pane child window exists for this ID!" );
                 rState.DisableItem( nSID );
@@ -3236,6 +3236,11 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
         }
         else if ( nSID == SID_SIDEBAR )
         {
+            if ( !IsSidebarEnabled() )
+            {
+                rState.DisableItem( nSID );
+                rState.Put( SfxVisibilityItem( nSID, sal_False ) );
+            }
             if  ( !KnowsChildWindow( nSID ) )
             {
                 OSL_ENSURE( false, "SID_TASKPANE state requested, but no task pane child window exists for this ID!" );
