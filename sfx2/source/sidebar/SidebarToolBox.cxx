@@ -46,6 +46,7 @@ SidebarToolBox::SidebarToolBox (
 {
     SetBackground(Wallpaper());
     SetPaintTransparent(true);
+    SetToolboxButtonSize( TOOLBOX_BUTTONSIZE_SMALL );
 
     if (rxFrame.is())
     {
@@ -250,14 +251,12 @@ Reference<frame::XToolbarController> SidebarToolBox::GetControllerForItemId (con
 
 void SidebarToolBox::UpdateIcons (const Reference<frame::XFrame>& rxFrame)
 {
-    const sal_Bool bBigImages (SvtMiscOptions().AreCurrentSymbolsLarge());
-
     for (ControllerContainer::iterator iController(maControllers.begin()), iEnd(maControllers.end());
          iController!=iEnd;
          ++iController)
     {
         const ::rtl::OUString sCommandURL (iController->second.msCurrentCommand);
-        Image aImage (framework::GetImageFromURL(rxFrame, sCommandURL, bBigImages));
+        Image aImage (framework::GetImageFromURL(rxFrame, sCommandURL, false));
         SetItemImage(iController->first, aImage);
     }
 }
