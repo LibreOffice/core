@@ -75,8 +75,6 @@ private:
     // mutable members since these details are all lazy initialized
     mutable int mnGlyphCount;
 
-    mutable CTFontRef* mpGlyphFonts;
-
     mutable CGGlyph* mpGlyphs;
     mutable CGFloat* mpCharWidths;
     mutable int* mpGlyphs2Chars;
@@ -106,7 +104,6 @@ CoreTextLayout::CoreTextLayout(CoreTextStyleInfo* style) :
     mpStyle(style),
     mnCharCount(-1),
     mnGlyphCount(-1),
-    mpGlyphFonts(NULL),
     mpGlyphs(NULL),
     mpCharWidths(NULL),
     mpGlyphs2Chars(NULL),
@@ -183,10 +180,6 @@ void CoreTextLayout::Justify( long nNewWidth )
 
 void CoreTextLayout::InvalidateMeasurements()
 {
-    if( mpGlyphFonts ) {
-        delete[] mpGlyphFonts;
-        mpGlyphFonts = NULL;
-    }
     if( mpGlyphs ) {
         delete[] mpGlyphs;
         mpGlyphs = NULL;
@@ -243,29 +236,37 @@ void CoreTextLayout::DrawText( SalGraphics& rGraphics ) const
 
     CGContextTranslateCTM(gr.mrContext, pos.X(), pos.Y());
 
-    int i = 0;
-    while (i < mnGlyphCount)
+    CFArrayRef pRuns = CTLineGetGlyphRuns(mpLine);
+    const CFIndex nRuns = CFArrayGetCount(pRuns);
+
+    for (CFIndex nRun = 0; nRun < nRuns; nRun++)
     {
-        CTFontRef pCTFont = mpGlyphFonts[i];
+        CTRunRef pRun = (CTRunRef)CFArrayGetValueAtIndex(pRuns, nRun);
+        if (!pRun)
+            continue;
 
-        // Find the number of glyphs using the same font
-        int nGlyphs = 1;
-        while ((i + nGlyphs < mnGlyphCount) && CFEqual(mpGlyphFonts[i + nGlyphs], pCTFont))
-            nGlyphs++;
+        const CFIndex nGlyphs = CTRunGetGlyphCount(pRun);
+        if (nGlyphs)
+        {
+            CGGlyph pGlyphs[nGlyphs];
+            CGSize pAdvances[nGlyphs];
+            CTRunGetGlyphs(pRun, CFRangeMake(0, 0), pGlyphs);
+            CTRunGetAdvances(pRun, CFRangeMake(0, 0), pAdvances);
 
-        CGFontRef pCGFont = CTFontCopyGraphicsFont(pCTFont, NULL);
-        if (!pCGFont) {
-            SAL_INFO("vcl.coretext.layout", "Error pCGFont is NULL");
-            return;
+            CFDictionaryRef aAttributes = CTRunGetAttributes(pRun);
+            CTFontRef pCTFont = (CTFontRef)CFDictionaryGetValue(aAttributes, kCTFontAttributeName);
+            CGFontRef pCGFont = CTFontCopyGraphicsFont(pCTFont, NULL);
+            if (!pCGFont) {
+                SAL_INFO("vcl.coretext.layout", "Error pCGFont is NULL");
+                return;
+            }
+
+            CGContextSetFont(gr.mrContext, pCGFont);
+            CFRelease(pCGFont);
+            CGContextSetFontSize(gr.mrContext, CTFontGetSize(pCTFont));
+
+            CGContextShowGlyphsWithAdvances(gr.mrContext, pGlyphs, pAdvances, nGlyphs);
         }
-
-        CGContextSetFont(gr.mrContext, pCGFont);
-        CFRelease(pCGFont);
-        CGContextSetFontSize(gr.mrContext, CTFontGetSize(pCTFont));
-
-        CGContextShowGlyphsWithAdvances(gr.mrContext, &mpGlyphs[i], &mpGlyphAdvances[i], nGlyphs);
-
-        i += nGlyphs;
     }
 
 #ifndef IOS
@@ -596,7 +597,6 @@ void CoreTextLayout::GetMeasurements()
 {
     InvalidateMeasurements();
 
-    mpGlyphFonts = new CTFontRef[ mnGlyphCount ];
     mpGlyphs = new CGGlyph[ mnGlyphCount ];
     mpCharWidths = new CGFloat[ mnCharCount ];
     mpGlyphs2Chars = new int[ mnGlyphCount ];
@@ -612,9 +612,6 @@ void CoreTextLayout::GetMeasurements()
         CTRunRef run = (CTRunRef)CFArrayGetValueAtIndex( runs, runIx );
         if ( !run )
             continue;
-
-        CFDictionaryRef runAttributes = CTRunGetAttributes(run);
-        CTFontRef runFont = (CTFontRef)CFDictionaryGetValue(runAttributes, kCTFontAttributeName);
 
         std::ostringstream glyphPositionInfo;
         std::ostringstream glyphAdvancesInfo;
@@ -643,8 +640,6 @@ void CoreTextLayout::GetMeasurements()
                 mpGlyphs2Chars[ lineGlyphIx ] = charIx;
 
                 mpCharWidths[ charIx ] = mpGlyphAdvances[ lineGlyphIx ].width;
-
-                mpGlyphFonts[ lineGlyphIx ] = runFont;
             }
 #ifdef SAL_LOG_INFO
             for ( int i = 0; i < runGlyphCount; i++ ) {
