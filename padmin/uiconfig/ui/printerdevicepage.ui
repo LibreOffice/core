@@ -142,7 +142,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkTreeView" id="options">
+      <object class="GtkTreeView" id="options:border">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <child internal-child="selection">
@@ -157,7 +157,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkTreeView" id="values">
+      <object class="GtkTreeView" id="values:border">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <child internal-child="selection">
