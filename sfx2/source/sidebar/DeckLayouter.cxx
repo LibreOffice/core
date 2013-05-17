@@ -19,7 +19,7 @@
 #include "DeckLayouter.hxx"
 #include "sfx2/sidebar/Theme.hxx"
 #include "Panel.hxx"
-#include "TitleBar.hxx"
+#include "PanelTitleBar.hxx"
 #include "Deck.hxx"
 
 #include <vcl/window.hxx>
@@ -212,7 +212,7 @@ sal_Int32 DeckLayouter::PlacePanels (
         nY += nDeckSeparatorHeight;
 
         // Place the title bar.
-        TitleBar* pTitleBar = rPanel.GetTitleBar();
+        PanelTitleBar* pTitleBar = rPanel.GetTitleBar();
         if (pTitleBar != NULL)
         {
             if (iItem->mbShowTitleBar)

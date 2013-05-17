@@ -48,6 +48,8 @@ public:
         Window* pParentWindow,
         const ResId& rResId,
         const cssu::Reference<css::frame::XFrame>& rxFrame);
+    SidebarToolBox (
+        Window* pParentWindow);
     virtual ~SidebarToolBox (void);
 
     void SetBorderWindow (const Window* pBorderWindow);
@@ -67,6 +69,11 @@ public:
     sal_uInt16 GetItemIdForSubToolbarName (
         const ::rtl::OUString& rsCOmmandName) const;
 
+    void SetController (
+        const sal_uInt16 nItemId,
+        const cssu::Reference<css::frame::XToolbarController>& rxController,
+        const ::rtl::OUString& rsCommandName);
+
 private:
     bool mbParentIsBorder;
     Image maItemSeparator;
@@ -79,6 +86,7 @@ private:
     };
     typedef ::std::map<sal_uInt16, ItemDescriptor> ControllerContainer;
     ControllerContainer maControllers;
+    bool mbAreHandlersRegistered;
 
     DECL_LINK(DropDownClickHandler, ToolBox*);
     DECL_LINK(ClickHandler, ToolBox*);
@@ -93,6 +101,7 @@ private:
         const sal_Int32 nItemWidth = 0);
     void UpdateIcons (
         const cssu::Reference<css::frame::XFrame>& rxFrame);
+    void RegisterHandlers (void);
 };
 
 

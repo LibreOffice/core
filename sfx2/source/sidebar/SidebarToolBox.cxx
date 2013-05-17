@@ -43,7 +43,9 @@ SidebarToolBox::SidebarToolBox (
     const cssu::Reference<css::frame::XFrame>& rxFrame)
     : ToolBox(pParentWindow, rResId),
       mbParentIsBorder(false),
-      maItemSeparator(Theme::GetImage(Theme::Image_ToolBoxItemSeparator))
+      maItemSeparator(Theme::GetImage(Theme::Image_ToolBoxItemSeparator)),
+      maControllers(),
+      mbAreHandlersRegistered(false)
 {
     SetBackground(Wallpaper());
     SetPaintTransparent(true);
@@ -65,13 +67,26 @@ SidebarToolBox::SidebarToolBox (
 
         SetSizePixel(CalcWindowSizePixel());
 
-        SetDropdownClickHdl(LINK(this, SidebarToolBox, DropDownClickHandler));
-        SetClickHdl(LINK(this, SidebarToolBox, ClickHandler));
-        SetDoubleClickHdl(LINK(this, SidebarToolBox, DoubleClickHandler));
-        SetSelectHdl(LINK(this, SidebarToolBox, SelectHandler));
-        SetActivateHdl(LINK(this, SidebarToolBox, ActivateToolBox));
-        SetDeactivateHdl(LINK(this, SidebarToolBox, DeactivateToolBox));
+        RegisterHandlers();
     }
+
+#ifdef DEBUG
+    SetText(A2S("SidebarToolBox"));
+#endif
+}
+
+
+
+
+SidebarToolBox::SidebarToolBox (Window* pParentWindow)
+    : ToolBox(pParentWindow, 0),
+      mbParentIsBorder(false),
+      maItemSeparator(Theme::GetImage(Theme::Image_ToolBoxItemSeparator)),
+      maControllers(),
+      mbAreHandlersRegistered(false)
+{
+    SetBackground(Wallpaper());
+    SetPaintTransparent(true);
 
 #ifdef DEBUG
     SetText(A2S("SidebarToolBox"));
@@ -94,13 +109,15 @@ SidebarToolBox::~SidebarToolBox (void)
             xComponent->dispose();
     }
 
-    SetDropdownClickHdl(Link());
-    SetClickHdl(Link());
-    SetDoubleClickHdl(Link());
-    SetSelectHdl(Link());
-    SetActivateHdl(Link());
-    SetDeactivateHdl(Link());
-
+    if (mbAreHandlersRegistered)
+    {
+        SetDropdownClickHdl(Link());
+        SetClickHdl(Link());
+        SetDoubleClickHdl(Link());
+        SetSelectHdl(Link());
+        SetActivateHdl(Link());
+        SetDeactivateHdl(Link());
+    }
 }
 
 
@@ -261,6 +278,37 @@ Reference<frame::XToolbarController> SidebarToolBox::GetControllerForItemId (con
 
 
 
+void SidebarToolBox::SetController(
+    const sal_uInt16 nItemId,
+    const cssu::Reference<css::frame::XToolbarController>& rxController,
+    const ::rtl::OUString& rsCommandName)
+{
+    ItemDescriptor aDescriptor;
+    aDescriptor.mxController = rxController;
+    aDescriptor.maURL = sfx2::sidebar::Tools::GetURL(rsCommandName);
+    aDescriptor.msCurrentCommand = rsCommandName;
+
+    ControllerContainer::iterator iController (maControllers.find(nItemId));
+    if (iController != maControllers.end())
+    {
+        Reference<lang::XComponent> xComponent (iController->second.mxController, UNO_QUERY);
+        if (xComponent.is())
+            xComponent->dispose();
+
+        iController->second = aDescriptor;
+    }
+    else
+    {
+        maControllers[nItemId] = aDescriptor;
+    }
+
+    if (rxController.is())
+        RegisterHandlers();
+}
+
+
+
+
 void SidebarToolBox::UpdateIcons (const Reference<frame::XFrame>& rxFrame)
 {
     for (ControllerContainer::iterator iController(maControllers.begin()), iEnd(maControllers.end());
@@ -293,6 +341,24 @@ sal_uInt16 SidebarToolBox::GetItemIdForSubToolbarName (const OUString& rsSubTool
     }
     return 0;
 }
+
+
+
+
+void SidebarToolBox::RegisterHandlers (void)
+{
+    if ( ! mbAreHandlersRegistered)
+    {
+        mbAreHandlersRegistered = true;
+        SetDropdownClickHdl(LINK(this, SidebarToolBox, DropDownClickHandler));
+        SetClickHdl(LINK(this, SidebarToolBox, ClickHandler));
+        SetDoubleClickHdl(LINK(this, SidebarToolBox, DoubleClickHandler));
+        SetSelectHdl(LINK(this, SidebarToolBox, SelectHandler));
+        SetActivateHdl(LINK(this, SidebarToolBox, ActivateToolBox));
+        SetDeactivateHdl(LINK(this, SidebarToolBox, DeactivateToolBox));
+    }
+}
+
 
 
 
