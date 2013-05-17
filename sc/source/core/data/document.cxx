@@ -1995,6 +1995,8 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
     else
         pClipDoc->ResetClip(this, pMarks);
 
+    sc::CopyToClipContext aCxt(*pClipDoc);
+    aCxt.setTabRange(i, nEndTab-1);
     CopyRangeNamesToClip(pClipDoc, aClipRange, pMarks, bAllTabs);
 
     for ( ; i < nEndTab; ++i)
@@ -2005,7 +2007,7 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
         if ( !bUseRangeForVBA && ( pMarks && !pMarks->GetTableSelect(i) ) )
             continue;
 
-        maTabs[i]->CopyToClip(rClipParam.maRanges, pClipDoc->maTabs[i], bKeepScenarioFlags, bCloneNoteCaptions);
+        maTabs[i]->CopyToClip(aCxt, rClipParam.maRanges, pClipDoc->maTabs[i], bKeepScenarioFlags, bCloneNoteCaptions);
 
         if (pDrawLayer && bIncludeObjects)
         {
@@ -2091,9 +2093,11 @@ void ScDocument::CopyTabToClip(SCCOL nCol1, SCROW nRow1,
         rClipParam.maRanges.Append(ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0));
         pClipDoc->ResetClip( this, nTab );
 
+        sc::CopyToClipContext aCxt(*pClipDoc);
+        aCxt.setTabRange(nTab, nTab);
         if (nTab < static_cast<SCTAB>(maTabs.size()) && nTab < static_cast<SCTAB>(pClipDoc->maTabs.size()))
             if (maTabs[nTab] && pClipDoc->maTabs[nTab])
-                maTabs[nTab]->CopyToClip(nCol1, nRow1, nCol2, nRow2, pClipDoc->maTabs[nTab], false, true);
+                maTabs[nTab]->CopyToClip(aCxt, nCol1, nRow1, nCol2, nRow2, pClipDoc->maTabs[nTab], false, true);
 
         pClipDoc->GetClipParam().mbCutMode = false;
     }

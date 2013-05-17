@@ -34,6 +34,7 @@
 #include "cellvalue.hxx"
 #include "tokenarray.hxx"
 #include "cellform.hxx"
+#include "clipcontext.hxx"
 
 #include <svl/poolcach.hxx>
 #include <svl/zforlist.hxx>
@@ -1183,7 +1184,8 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
 }
 
 
-void ScColumn::CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, bool bKeepScenarioFlags) const
+void ScColumn::CopyToClip(
+    sc::CopyToClipContext& rCxt, SCROW nRow1, SCROW nRow2, ScColumn& rColumn, bool bKeepScenarioFlags) const
 {
     pAttrArray->CopyArea( nRow1, nRow2, 0, *rColumn.pAttrArray,
                             bKeepScenarioFlags ? (SC_MF_ALL & ~SC_MF_SCENARIO) : SC_MF_ALL );
@@ -1219,7 +1221,11 @@ void ScColumn::CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, bool bKee
             aOwnPos.SetRow( maItems[i].nRow );
             aDestPos.SetRow( maItems[i].nRow );
             ScBaseCell* pNewCell = maItems[i].pCell->Clone( *rColumn.pDocument, aDestPos, SC_CLONECELL_DEFAULT );
-            rColumn.Append( aDestPos.Row(), pNewCell );
+            sc::ColumnBlockPosition* p = rCxt.getBlockPosition(rColumn.nTab, rColumn.nCol);
+            if (p)
+                rColumn.Append(*p, aDestPos.Row(), pNewCell);
+            else
+                rColumn.Append(aDestPos.Row(), pNewCell);
         }
     }
 }

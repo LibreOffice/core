@@ -12,25 +12,28 @@
 
 namespace sc {
 
-CopyFromClipContext::CopyFromClipContext(ScDocument& rDoc,
-    ScDocument* pRefUndoDoc, ScDocument* pClipDoc, sal_uInt16 nInsertFlag,
-    bool bAsLink, bool bSkipAttrForEmptyCells) :
-    mrDoc(rDoc),
-    mpRefUndoDoc(pRefUndoDoc), mpClipDoc(pClipDoc), mnInsertFlag(nInsertFlag),
-    mnTabStart(-1), mnTabEnd(-1),
-    mbAsLink(bAsLink), mbSkipAttrForEmptyCells(bSkipAttrForEmptyCells) {}
+ClipContextBase::ClipContextBase(ScDocument& rDoc) :
+    mrDoc(rDoc), mnTabStart(-1), mnTabEnd(-1) {}
 
-CopyFromClipContext::~CopyFromClipContext()
-{
-}
+ClipContextBase::~ClipContextBase() {}
 
-void CopyFromClipContext::setTabRange(SCTAB nStart, SCTAB nEnd)
+void ClipContextBase::setTabRange(SCTAB nStart, SCTAB nEnd)
 {
     mnTabStart = nStart;
     mnTabEnd = nEnd;
 }
 
-ColumnBlockPosition* CopyFromClipContext::getBlockPosition(SCTAB nTab, SCCOL nCol)
+SCTAB ClipContextBase::getTabStart() const
+{
+    return mnTabStart;
+}
+
+SCTAB ClipContextBase::getTabEnd() const
+{
+    return mnTabEnd;
+}
+
+ColumnBlockPosition* ClipContextBase::getBlockPosition(SCTAB nTab, SCCOL nCol)
 {
     if (mnTabStart < 0 || mnTabEnd < 0 || mnTabStart > mnTabEnd)
         return NULL;
@@ -62,6 +65,17 @@ ColumnBlockPosition* CopyFromClipContext::getBlockPosition(SCTAB nTab, SCCOL nCo
     return &it->second;
 }
 
+CopyFromClipContext::CopyFromClipContext(ScDocument& rDoc,
+    ScDocument* pRefUndoDoc, ScDocument* pClipDoc, sal_uInt16 nInsertFlag,
+    bool bAsLink, bool bSkipAttrForEmptyCells) :
+    ClipContextBase(rDoc),
+    mpRefUndoDoc(pRefUndoDoc), mpClipDoc(pClipDoc), mnInsertFlag(nInsertFlag),
+    mbAsLink(bAsLink), mbSkipAttrForEmptyCells(bSkipAttrForEmptyCells) {}
+
+CopyFromClipContext::~CopyFromClipContext()
+{
+}
+
 ScDocument* CopyFromClipContext::getUndoDoc()
 {
     return mpRefUndoDoc;
@@ -77,16 +91,6 @@ sal_uInt16 CopyFromClipContext::getInsertFlag() const
     return mnInsertFlag;
 }
 
-SCTAB CopyFromClipContext::getTabStart() const
-{
-    return mnTabStart;
-}
-
-SCTAB CopyFromClipContext::getTabEnd() const
-{
-    return mnTabEnd;
-}
-
 bool CopyFromClipContext::isAsLink() const
 {
     return mbAsLink;
@@ -96,6 +100,9 @@ bool CopyFromClipContext::isSkipAttrForEmptyCells() const
 {
     return mbSkipAttrForEmptyCells;
 }
+
+CopyToClipContext::CopyToClipContext(ScDocument& rDoc) : ClipContextBase(rDoc) {}
+CopyToClipContext::~CopyToClipContext() {}
 
 }
 

@@ -51,6 +51,7 @@ namespace sc {
     struct FormulaGroupContext;
     class EndListeningContext;
     class CopyFromClipContext;
+    class CopyToClipContext;
     struct ColumnBlockPosition;
 }
 
@@ -379,10 +380,10 @@ public:
                             bool* pUndoOutline = NULL );
 
     void        DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sal_uInt16 nDelFlag);
-    void        CopyToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScTable* pTable,
-                            bool bKeepScenarioFlags, bool bCloneNoteCaptions);
-    void        CopyToClip(const ScRangeList& rRanges, ScTable* pTable,
-                           bool bKeepScenarioFlags, bool bCloneNoteCaptions);
+    void CopyToClip( sc::CopyToClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScTable* pTable,
+                     bool bKeepScenarioFlags, bool bCloneNoteCaptions );
+    void CopyToClip( sc::CopyToClipContext& rCxt, const ScRangeList& rRanges, ScTable* pTable,
+                     bool bKeepScenarioFlags, bool bCloneNoteCaptions );
     void CopyStaticToDocument(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScTable* pDestTab);
     void CopyCellToDocument( SCCOL nSrcCol, SCROW nSrcRow, SCCOL nDestCol, SCROW nDestRow, ScTable& rDestTab );
 

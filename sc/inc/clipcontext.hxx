@@ -20,20 +20,34 @@ class ScDocument;
 
 namespace sc {
 
-class CopyFromClipContext
+class ClipContextBase
 {
     typedef boost::unordered_map<SCCOL, ColumnBlockPosition> ColumnsType;
     typedef std::vector<ColumnsType> TablesType;
 
-    TablesType maTables;
-
     ScDocument& mrDoc;
+    TablesType maTables;
+    SCTAB mnTabStart;
+    SCTAB mnTabEnd;
+
+public:
+    ClipContextBase(ScDocument& rDoc);
+    virtual ~ClipContextBase();
+
+    void setTabRange(SCTAB nStart, SCTAB nEnd);
+
+    SCTAB getTabStart() const;
+    SCTAB getTabEnd() const;
+
+    ColumnBlockPosition* getBlockPosition(SCTAB nTab, SCCOL nCol);
+};
+
+class CopyFromClipContext : public ClipContextBase
+{
 
     ScDocument* mpRefUndoDoc;
     ScDocument* mpClipDoc;
     sal_uInt16  mnInsertFlag;
-    SCTAB       mnTabStart;
-    SCTAB       mnTabEnd;
     bool        mbAsLink:1;
     bool        mbSkipAttrForEmptyCells:1;
 
@@ -44,19 +58,20 @@ public:
         ScDocument* pRefUndoDoc, ScDocument* pClipDoc, sal_uInt16 nInsertFlag,
         bool bAsLink, bool bSkipAttrForEmptyCells);
 
-    ~CopyFromClipContext();
-
-    void setTabRange(SCTAB nStart, SCTAB nEnd);
-
-    ColumnBlockPosition* getBlockPosition(SCTAB nTab, SCCOL nCol);
+    virtual ~CopyFromClipContext();
 
     ScDocument* getUndoDoc();
     ScDocument* getClipDoc();
     sal_uInt16 getInsertFlag() const;
-    SCTAB getTabStart() const;
-    SCTAB getTabEnd() const;
     bool isAsLink() const;
     bool isSkipAttrForEmptyCells() const;
+};
+
+class CopyToClipContext : public ClipContextBase
+{
+public:
+    CopyToClipContext(ScDocument& rDoc);
+    virtual ~CopyToClipContext();
 };
 
 }
