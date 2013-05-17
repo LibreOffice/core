@@ -29,12 +29,12 @@
 #include <com/sun/star/inspection/PropertyLineElement.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart2/FormattedString.hpp>
+#include <com/sun/star/chart2/Title.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
-#include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/report/XReportDefinition.hpp>
@@ -233,27 +233,22 @@ void SAL_CALL DataProviderHandler::setPropertyValue(const OUString & PropertyNam
     }
 }
 // -----------------------------------------------------------------------------
-void DataProviderHandler::impl_updateChartTitle_throw(const uno::Any& _aValue)
+void DataProviderHandler::impl_updateChartTitle_throw(const OUString& sStr)
 {
     uno::Reference<chart2::XTitled> xTitled(m_xChartModel,uno::UNO_QUERY);
     if ( xTitled.is() )
     {
-        uno::Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
+        uno::Reference<chart2::XTitle2> xTitle = xTitled->getTitleObject();
         if ( !xTitle.is() )
         {
-            xTitle.set(m_xContext->getServiceManager()->createInstanceWithContext(OUString("com.sun.star.chart2.Title"),m_xContext),uno::UNO_QUERY);
+            xTitle = chart2::Title::create(m_xContext);
             xTitled->setTitleObject(xTitle);
         }
-        if ( xTitle.is() )
-        {
-            uno::Reference< chart2::XFormattedString2> xFormatted = chart2::FormattedString::create(m_xContext);
-            OUString sStr;
-            _aValue >>= sStr;
-            xFormatted->setString(sStr);
-            uno::Sequence< uno::Reference< chart2::XFormattedString> > aArgs(1);
-            aArgs[0] = xFormatted;
-            xTitle->setText(aArgs);
-        }
+        uno::Reference< chart2::XFormattedString2> xFormatted = chart2::FormattedString::create(m_xContext);
+        xFormatted->setString(sStr);
+        uno::Sequence< uno::Reference< chart2::XFormattedString> > aArgs(1);
+        aArgs[0] = xFormatted;
+        xTitle->setText(aArgs);
     }
 }
 
@@ -468,7 +463,11 @@ void SAL_CALL DataProviderHandler::actuatingPropertyChanged(const OUString & Act
     else if ( ActuatingPropertyName == PROPERTY_TITLE )
     {
         if ( NewValue != OldValue )
-            impl_updateChartTitle_throw(NewValue);
+        {
+            OUString aStr;
+            NewValue >>= aStr;
+            impl_updateChartTitle_throw(aStr);
+        }
     }
     else
     {

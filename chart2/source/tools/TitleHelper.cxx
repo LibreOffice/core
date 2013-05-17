@@ -23,6 +23,7 @@
 #include "AxisHelper.hxx"
 #include "DiagramHelper.hxx"
 #include <com/sun/star/chart2/FormattedString.hpp>
+#include <com/sun/star/chart2/Title.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <rtl/ustrbuf.hxx>
 
@@ -122,23 +123,23 @@ uno::Reference< XTitled > lcl_getTitleParent( TitleHelper::eTitleType nTitleInde
     return xResult;
 }
 
-uno::Reference< XTitle > TitleHelper::getTitle( TitleHelper::eTitleType nTitleIndex
+uno::Reference< XTitle2 > TitleHelper::getTitle( TitleHelper::eTitleType nTitleIndex
                             , const uno::Reference< frame::XModel >& xModel )
 {
     uno::Reference< XTitled > xTitled( lcl_getTitleParent( nTitleIndex, xModel ) );
     if( xTitled.is())
-        return xTitled->getTitleObject();
+        xTitled->getTitleObject();
     return NULL;
 }
 
-uno::Reference< XTitle > TitleHelper::createTitle(
+uno::Reference< XTitle2 > TitleHelper::createTitle(
       TitleHelper::eTitleType eTitleType
     , const OUString& rTitleText
     , const uno::Reference< frame::XModel >& xModel
     , const uno::Reference< uno::XComponentContext > & xContext
     , ReferenceSizeProvider * pRefSizeProvider )
 {
-    uno::Reference< XTitle > xTitle;
+    uno::Reference< XTitle2 > xTitle;
     uno::Reference< XTitled > xTitled( lcl_getTitleParent( eTitleType, xModel ) );
 
     if( !xTitled.is() )
@@ -168,71 +169,62 @@ uno::Reference< XTitle > TitleHelper::createTitle(
     {
         uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xModel ) );
 
-        xTitle.set( xContext->getServiceManager()->createInstanceWithContext(
-                        "com.sun.star.chart2.Title",
-                        xContext ), uno::UNO_QUERY );
+        xTitle = chart2::Title::create( xContext );
 
-        if(xTitle.is())
+        // default char height (main: 13.0 == default)
+        float fDefaultCharHeightSub = 11.0;
+        float fDefaultCharHeightAxis = 9.0;
+        switch( eTitleType )
         {
-            // default char height (main: 13.0 == default)
-            float fDefaultCharHeightSub = 11.0;
-            float fDefaultCharHeightAxis = 9.0;
-            switch( eTitleType )
+            case TitleHelper::SUB_TITLE:
+                TitleHelper::setCompleteString(
+                    rTitleText, xTitle, xContext, & fDefaultCharHeightSub );
+                break;
+            case TitleHelper::X_AXIS_TITLE:
+            case TitleHelper::Y_AXIS_TITLE:
+            case TitleHelper::Z_AXIS_TITLE:
+            case TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION:
+            case TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION:
+            case TitleHelper::SECONDARY_X_AXIS_TITLE:
+            case TitleHelper::SECONDARY_Y_AXIS_TITLE:
+                TitleHelper::setCompleteString(
+                    rTitleText, xTitle, xContext, & fDefaultCharHeightAxis );
+                break;
+            default:
+                TitleHelper::setCompleteString( rTitleText, xTitle, xContext );
+                break;
+        }
+
+        // set/clear autoscale
+        if( pRefSizeProvider )
+            pRefSizeProvider->setValuesAtTitle( xTitle );
+
+        xTitled->setTitleObject( xTitle );
+
+        //default rotation 90 degree for y axis title in normal coordinatesystems or for x axis title for swapped coordinatesystems
+        if( eTitleType == TitleHelper::X_AXIS_TITLE ||
+            eTitleType == TitleHelper::Y_AXIS_TITLE ||
+            eTitleType == TitleHelper::SECONDARY_X_AXIS_TITLE ||
+            eTitleType == TitleHelper::SECONDARY_Y_AXIS_TITLE )
+
+        {
+            try
             {
-                case TitleHelper::SUB_TITLE:
-                    TitleHelper::setCompleteString(
-                        rTitleText, xTitle, xContext, & fDefaultCharHeightSub );
-                    break;
-                case TitleHelper::X_AXIS_TITLE:
-                case TitleHelper::Y_AXIS_TITLE:
-                case TitleHelper::Z_AXIS_TITLE:
-                case TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION:
-                case TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION:
-                case TitleHelper::SECONDARY_X_AXIS_TITLE:
-                case TitleHelper::SECONDARY_Y_AXIS_TITLE:
-                    TitleHelper::setCompleteString(
-                        rTitleText, xTitle, xContext, & fDefaultCharHeightAxis );
-                    break;
-                default:
-                    TitleHelper::setCompleteString( rTitleText, xTitle, xContext );
-                    break;
+                bool bDummy = false;
+                bool bIsVertical = DiagramHelper::getVertical( xDiagram, bDummy, bDummy );
+
+                if( (!bIsVertical && eTitleType == TitleHelper::Y_AXIS_TITLE)
+                    || (bIsVertical && eTitleType == TitleHelper::X_AXIS_TITLE)
+                    || (!bIsVertical && eTitleType == TitleHelper::SECONDARY_Y_AXIS_TITLE)
+                    || (bIsVertical && eTitleType == TitleHelper::SECONDARY_X_AXIS_TITLE) )
+                {
+                    double fNewAngleDegree = 90.0;
+                    xTitle->setTextRotation( fNewAngleDegree );
+                }
             }
-
-            // set/clear autoscale
-            if( pRefSizeProvider )
-                pRefSizeProvider->setValuesAtTitle( xTitle );
-
-            xTitled->setTitleObject( xTitle );
-
-            //default rotation 90 degree for y axis title in normal coordinatesystems or for x axis title for swapped coordinatesystems
-            if( eTitleType == TitleHelper::X_AXIS_TITLE ||
-                eTitleType == TitleHelper::Y_AXIS_TITLE ||
-                eTitleType == TitleHelper::SECONDARY_X_AXIS_TITLE ||
-                eTitleType == TitleHelper::SECONDARY_Y_AXIS_TITLE )
-
+            catch( const uno::Exception & ex )
             {
-                try
-                {
-                    bool bDummy = false;
-                    bool bIsVertical = DiagramHelper::getVertical( xDiagram, bDummy, bDummy );
-
-                    Reference< beans::XPropertySet > xTitleProps( xTitle, uno::UNO_QUERY );
-                    if( xTitleProps.is() )
-                    {
-                        if( (!bIsVertical && eTitleType == TitleHelper::Y_AXIS_TITLE)
-                            || (bIsVertical && eTitleType == TitleHelper::X_AXIS_TITLE)
-                            || (!bIsVertical && eTitleType == TitleHelper::SECONDARY_Y_AXIS_TITLE)
-                            || (bIsVertical && eTitleType == TitleHelper::SECONDARY_X_AXIS_TITLE) )
-                        {
-                            double fNewAngleDegree = 90.0;
-                            xTitleProps->setPropertyValue( "TextRotation", uno::makeAny( fNewAngleDegree ));
-                        }
-                    }
-                }
-                catch( const uno::Exception & ex )
-                {
-                    ASSERT_EXCEPTION( ex );
-                }
+                ASSERT_EXCEPTION( ex );
             }
         }
     }
@@ -240,7 +232,7 @@ uno::Reference< XTitle > TitleHelper::createTitle(
 
 }
 
-OUString TitleHelper::getCompleteString( const uno::Reference< XTitle >& xTitle )
+OUString TitleHelper::getCompleteString( const uno::Reference< XTitle2 >& xTitle )
 {
     OUString aRet;
     if(!xTitle.is())
@@ -252,7 +244,7 @@ OUString TitleHelper::getCompleteString( const uno::Reference< XTitle >& xTitle 
 }
 
 void TitleHelper::setCompleteString( const OUString& rNewText
-                    , const uno::Reference< XTitle >& xTitle
+                    , const uno::Reference< XTitle2 >& xTitle
                     , const uno::Reference< uno::XComponentContext > & xContext
                     , float * pDefaultCharHeight /* = 0 */ )
 {
@@ -262,10 +254,7 @@ void TitleHelper::setCompleteString( const OUString& rNewText
 
     OUString aNewText = rNewText;
 
-    bool bStacked = false;
-    uno::Reference< beans::XPropertySet > xTitleProperties( xTitle, uno::UNO_QUERY );
-    if( xTitleProperties.is() )
-        xTitleProperties->getPropertyValue( "StackCharacters" ) >>= bStacked;
+    bool bStacked = xTitle->getStackCharacters();
 
     if( bStacked )
     {
@@ -337,14 +326,14 @@ void TitleHelper::removeTitle( TitleHelper::eTitleType nTitleIndex
 
 bool TitleHelper::getTitleType( eTitleType& rType
                     , const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::chart2::XTitle >& xTitle
+                        ::com::sun::star::chart2::XTitle2 >& xTitle
                     , const ::com::sun::star::uno::Reference<
                         ::com::sun::star::frame::XModel >& xModel )
 {
     if( !xTitle.is() || !xModel.is() )
         return false;
 
-    Reference< chart2::XTitle > xCurrentTitle;
+    Reference< chart2::XTitle2 > xCurrentTitle;
     for( sal_Int32 nTitleType = TITLE_BEGIN; nTitleType < NORMAL_TITLE_END; nTitleType++ )
     {
         xCurrentTitle = TitleHelper::getTitle( static_cast<eTitleType>(nTitleType), xModel );

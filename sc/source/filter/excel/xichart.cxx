@@ -47,6 +47,7 @@
 #include <com/sun/star/chart2/LinearScaling.hpp>
 #include <com/sun/star/chart2/PolarCoordinateSystem2d.hpp>
 #include <com/sun/star/chart2/PolarCoordinateSystem3d.hpp>
+#include <com/sun/star/chart2/Title.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
@@ -1145,9 +1146,9 @@ void XclImpChText::ConvertDataLabel( ScfPropertySet& rPropSet, const XclChTypeIn
     }
 }
 
-Reference< XTitle > XclImpChText::CreateTitle() const
+Reference< css::chart2::XTitle2 > XclImpChText::CreateTitle() const
 {
-    Reference< XTitle > xTitle;
+    Reference< css::chart2::XTitle2 > xTitle;
     if( mxSrcLink && mxSrcLink->HasString() )
     {
         // create the formatted strings
@@ -1156,16 +1157,13 @@ Reference< XTitle > XclImpChText::CreateTitle() const
         if( aStringSeq.hasElements() )
         {
             // create the title object
-            xTitle.set( ScfApiHelper::CreateInstance( SERVICE_CHART2_TITLE ), UNO_QUERY );
-            if( xTitle.is() )
-            {
-                // set the formatted strings
-                xTitle->setText( aStringSeq );
-                // more title formatting properties
-                ScfPropertySet aTitleProp( xTitle );
-                ConvertFrame( aTitleProp );
-                ConvertRotation( aTitleProp, true );
-            }
+            xTitle = css::chart2::Title::create( comphelper::getProcessComponentContext() );
+            // set the formatted strings
+            xTitle->setText( aStringSeq );
+            // more title formatting properties
+            ScfPropertySet aTitleProp( xTitle );
+            ConvertFrame( aTitleProp );
+            ConvertRotation( aTitleProp, true );
         }
     }
     return xTitle;
@@ -3747,7 +3745,7 @@ void XclImpChAxesSet::ConvertAxis(
             if( xChAxisTitle ) try
             {
                 Reference< XTitled > xTitled( xAxis, UNO_QUERY_THROW );
-                Reference< XTitle > xTitle( xChAxisTitle->CreateTitle(), UNO_SET_THROW );
+                Reference< css::chart2::XTitle2 > xTitle = xChAxisTitle->CreateTitle();
                 xTitled->setTitleObject( xTitle );
             }
             catch( Exception& )
@@ -3937,7 +3935,7 @@ void XclImpChChart::Convert( const Reference<XChartDocument>& xChartDoc,
     if( mxTitle ) try
     {
         Reference< XTitled > xTitled( xChartDoc, UNO_QUERY_THROW );
-        Reference< XTitle > xTitle( mxTitle->CreateTitle(), UNO_SET_THROW );
+        Reference< css::chart2::XTitle2 > xTitle = mxTitle->CreateTitle();
         xTitled->setTitleObject( xTitle );
     }
     catch( Exception& )

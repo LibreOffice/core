@@ -344,7 +344,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
     try
     {
         //title
-        Reference< XTitle > xTitle( xObject, uno::UNO_QUERY );
+        Reference< XTitle2 > xTitle( xObject, uno::UNO_QUERY );
         if( xTitle.is() )
         {
             TitleHelper::eTitleType aTitleType;

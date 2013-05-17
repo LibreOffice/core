@@ -95,7 +95,7 @@ namespace rptui
 
         bool impl_dialogLinkedFields_nothrow( ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
         bool impl_dialogChartType_nothrow( ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
-        void impl_updateChartTitle_throw(const ::com::sun::star::uno::Any& _aValue);
+        void impl_updateChartTitle_throw(const OUString& _aValue);
 
         // overload WeakComponentImplHelperBase::disposing()
         // This function is called upon disposing the component,

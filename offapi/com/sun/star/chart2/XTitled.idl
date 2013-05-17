@@ -20,7 +20,7 @@
 #define com_sun_star_chart2_XTitled_idl
 
 #include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/chart2/XTitle.idl>
+#include <com/sun/star/chart2/XTitle2.idl>
 
 module com
 {
@@ -38,11 +38,11 @@ interface XTitled : ::com::sun::star::uno::XInterface
 {
     /** get the object holding the title's content and formatting
      */
-    XTitle getTitleObject();
+    XTitle2 getTitleObject();
 
     /** set a new title object replacing the former one
      */
-    void setTitleObject( [in] XTitle Title );
+    void setTitleObject( [in] XTitle2 Title );
 };
 
 } ; // chart2

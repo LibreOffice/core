@@ -145,7 +145,7 @@ bool ChartController::EndTextEdit()
             ControllerLockGuard aCLGuard( getModel() );
 
             TitleHelper::setCompleteString( aString, uno::Reference<
-                ::com::sun::star::chart2::XTitle >::query( xPropSet ), m_xCC );
+                ::com::sun::star::chart2::XTitle2 >::query( xPropSet ), m_xCC );
 
             OSL_ENSURE( m_pTextActionUndoGuard.get(), "ChartController::EndTextEdit: no TextUndoGuard!" );
             if ( m_pTextActionUndoGuard.get() )

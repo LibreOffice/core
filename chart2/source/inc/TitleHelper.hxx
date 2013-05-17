@@ -52,13 +52,13 @@ public:
     };
 
     static ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XTitle >
+            ::com::sun::star::chart2::XTitle2 >
         getTitle( eTitleType nTitleIndex
                     , const ::com::sun::star::uno::Reference<
                     ::com::sun::star::frame::XModel >& xModel );
 
     static ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XTitle >
+            ::com::sun::star::chart2::XTitle2 >
         createTitle(  eTitleType nTitleIndex
                     , const OUString& rTitleText
                     , const ::com::sun::star::uno::Reference<
@@ -72,17 +72,17 @@ public:
                             ::com::sun::star::frame::XModel >& xModel );
 
     static OUString getCompleteString( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XTitle >& xTitle );
+        ::com::sun::star::chart2::XTitle2 >& xTitle );
     static void setCompleteString( const OUString& rNewText
         , const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XTitle >& xTitle
+            ::com::sun::star::chart2::XTitle2 >& xTitle
         , const ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > & xContext
         , float * pDefaultCharHeight = 0 );
 
     static bool getTitleType( eTitleType& rType
                     , const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::chart2::XTitle >& xTitle
+                        ::com::sun::star::chart2::XTitle2 >& xTitle
                     , const ::com::sun::star::uno::Reference<
                         ::com::sun::star::frame::XModel >& xModel );
 };

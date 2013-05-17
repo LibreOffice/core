@@ -26,6 +26,7 @@
 #include <com/sun/star/chart/XSecondAxisTitleSupplier.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
+#include <com/sun/star/chart2/XTitle2.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -71,7 +72,7 @@ struct TitleLayoutInfo
 {
     typedef Reference< XShape > (*GetShapeFunc)( const Reference< cssc::XChartDocument >& );
 
-    Reference< XTitle > mxTitle;        /// The API title object.
+    Reference< XTitle2 > mxTitle;        /// The API title object.
     ModelRef< LayoutModel > mxLayout;   /// The layout model, if existing.
     GetShapeFunc        mpGetShape;     /// Helper function to receive the title shape.
 
@@ -89,9 +90,7 @@ void TitleLayoutInfo::convertTitlePos( ConverterRoot& rRoot, const Reference< cs
         // try to get the title shape
         Reference< XShape > xTitleShape( mpGetShape( rxChart1Doc ), UNO_SET_THROW );
         // get title rotation angle, needed for correction of position of top-left edge
-        double fAngle = 0.0;
-        PropertySet aTitleProp( mxTitle );
-        aTitleProp.getProperty( fAngle, PROP_TextRotation );
+        double fAngle = mxTitle->getTextRotation();
         // convert the position
         LayoutModel& rLayout = mxLayout.getOrCreate();
         LayoutConverter aLayoutConv( rRoot, rLayout );
@@ -271,7 +270,7 @@ ObjectFormatter& ConverterRoot::getFormatter() const
     return mxData->maFormatter;
 }
 
-void ConverterRoot::registerTitleLayout( const Reference< XTitle >& rxTitle,
+void ConverterRoot::registerTitleLayout( const Reference< XTitle2 >& rxTitle,
         const ModelRef< LayoutModel >& rxLayout, ObjectType eObjType, sal_Int32 nMainIdx, sal_Int32 nSubIdx )
 {
     OSL_ENSURE( rxTitle.is(), "ConverterRoot::registerTitleLayout - missing title object" );

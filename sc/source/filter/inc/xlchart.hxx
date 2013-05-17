@@ -58,7 +58,6 @@ class XclRoot;
 #define SERVICE_CHART2_LINEARREGCURVE       "com.sun.star.chart2.LinearRegressionCurve"
 #define SERVICE_CHART2_LOGREGCURVE          "com.sun.star.chart2.LogarithmicRegressionCurve"
 #define SERVICE_CHART2_POTREGCURVE          "com.sun.star.chart2.PotentialRegressionCurve"
-#define SERVICE_CHART2_TITLE                "com.sun.star.chart2.Title"
 
 // property names
 #define EXC_CHPROP_ADDITIONALSHAPES         "AdditionalShapes"

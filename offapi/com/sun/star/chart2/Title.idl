@@ -19,68 +19,13 @@
 #ifndef com_sun_star_chart2_Title_idl
 #define com_sun_star_chart2_Title_idl
 
-#include <com/sun/star/style/ParagraphProperties.idl>
-#include <com/sun/star/chart2/XTitle.idl>
-#include <com/sun/star/chart2/RelativePosition.idl>
-#include <com/sun/star/beans/PropertySet.idl>
-#include <com/sun/star/drawing/LineProperties.idl>
-#include <com/sun/star/drawing/FillProperties.idl>
-//FIXME does not exist <com/sun/star/layout/LayoutElement.idl>
+#include <com/sun/star/chart2/XTitle2.idl>
 
-module com
-{
-module sun
-{
-module star
-{
-module chart2
-{
+module com { module sun { module star { module chart2 {
 
-service Title
-{
-    /** only mandatory properties
-     */
-    service                ::com::sun::star::style::ParagraphProperties;
-    service                ::com::sun::star::drawing::FillProperties;
-    service                ::com::sun::star::drawing::LineProperties;
-    service                ::com::sun::star::beans::PropertySet;
-//FIXME    [optional] service     ::com::sun::star::layout::LayoutElement;
+service Title : XTitle2;
 
-    /**
-     */
-    interface              XTitle;
-
-    /** the rotation of the title's text in degrees in the range
-        [0,360).
-     */
-    [property] double      TextRotation;
-
-    /** writes the characters of the title on top of each other if set
-        to <TRUE/>.
-     */
-    [property] boolean     StackCharacters;
-
-    /** The position is a relative position on the page.
-
-        <p>If a relative position is given the title is not automatically placed,
-        but instead is placed relative on the page.</p>
-     */
-    [property, maybevoid] ::com::sun::star::chart2::RelativePosition RelativePosition;
-
-
-    /** contains the size of the page at the time when properties were
-        set (e.g. the CharHeight).
-
-        <p>This way it is possible to resize objects (like text) in
-        the view without modifying the model.</p>
-     */
-    [property, maybevoid]  com::sun::star::awt::Size   ReferencePageSize;
-};
-
-} ; // chart2
-} ; // com
-} ; // sun
-} ; // star
+}; }; }; };
 
 #endif
 

@@ -106,11 +106,11 @@ protected:
 
     // ____ XTitled ____
     virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XTitle > SAL_CALL getTitleObject()
+                ::com::sun::star::chart2::XTitle2 > SAL_CALL getTitleObject()
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setTitleObject(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XTitle >& Title )
+            ::com::sun::star::chart2::XTitle2 >& Title )
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XCloneable ____
@@ -160,7 +160,7 @@ private: //member
             ::com::sun::star::beans::XPropertySet > >     m_aSubGridProperties;
 
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XTitle >          m_xTitle;
+        ::com::sun::star::chart2::XTitle2 >         m_xTitle;
 };
 
 } //  namespace chart

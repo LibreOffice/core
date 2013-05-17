@@ -62,10 +62,10 @@ void TitleDialogData::readFromModel( const uno::Reference< frame::XModel>& xChar
          nTitleIndex < static_cast< sal_Int32 >( TitleHelper::NORMAL_TITLE_END );
          nTitleIndex++)
     {
-        uno::Reference< XTitle > xTitle =  TitleHelper::getTitle(
+        uno::Reference< XTitle2 > xTitle =  TitleHelper::getTitle(
             static_cast< TitleHelper::eTitleType >( nTitleIndex ), xChartModel );
         this->aExistenceList[nTitleIndex] = xTitle.is();
-        this->aTextList[nTitleIndex]=TitleHelper::getCompleteString( xTitle );
+        this->aTextList[nTitleIndex] = TitleHelper::getCompleteString( xTitle );
     }
 }
 
@@ -97,8 +97,8 @@ bool TitleDialogData::writeDifferenceToModel(
         else if( !pOldState || ( pOldState->aTextList[nN] != this->aTextList[nN] ) )
         {
             //change content
-            uno::Reference< XTitle > xTitle(
-                TitleHelper::getTitle( static_cast< TitleHelper::eTitleType >( nN ), xChartModel ) );
+            uno::Reference< XTitle2 > xTitle =
+                TitleHelper::getTitle( static_cast< TitleHelper::eTitleType >( nN ), xChartModel );
             if(xTitle.is())
             {
                 TitleHelper::setCompleteString( this->aTextList[nN], xTitle, xContext );

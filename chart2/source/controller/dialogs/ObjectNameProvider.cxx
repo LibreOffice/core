@@ -393,7 +393,7 @@ OUString ObjectNameProvider::getTitleName( const OUString& rObjectCID
 {
     OUString aRet;
 
-    Reference< XTitle > xTitle(
+    Reference< XTitle2 > xTitle(
         ObjectIdentifier::getObjectPropertySet( rObjectCID , xChartModel ), uno::UNO_QUERY );
     if( xTitle.is() )
     {

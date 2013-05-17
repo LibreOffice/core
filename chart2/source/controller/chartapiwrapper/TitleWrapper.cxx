@@ -77,7 +77,7 @@ WrappedTitleStringProperty::~WrappedTitleStringProperty()
 void WrappedTitleStringProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    Reference< chart2::XTitle > xTitle(xInnerPropertySet,uno::UNO_QUERY);
+    Reference< chart2::XTitle2 > xTitle(xInnerPropertySet,uno::UNO_QUERY);
     if(xTitle.is())
     {
         OUString aString;
@@ -89,7 +89,7 @@ Any WrappedTitleStringProperty::getPropertyValue( const Reference< beans::XPrope
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet( getPropertyDefault( Reference< beans::XPropertyState >( xInnerPropertySet, uno::UNO_QUERY ) ) );
-    Reference< chart2::XTitle > xTitle(xInnerPropertySet,uno::UNO_QUERY);
+    Reference< chart2::XTitle2 > xTitle(xInnerPropertySet,uno::UNO_QUERY);
     if(xTitle.is())
     {
         Sequence< Reference< chart2::XFormattedString > > aStrings( xTitle->getText());
@@ -294,7 +294,7 @@ Reference< beans::XPropertySet > TitleWrapper::getFirstCharacterPropertySet()
 {
     Reference< beans::XPropertySet > xProp;
 
-    Reference< chart2::XTitle > xTitle( this->getTitleObject() );
+    Reference< chart2::XTitle2 > xTitle = this->getTitleObject();
     if( xTitle.is())
     {
         Sequence< Reference< chart2::XFormattedString > > aStrings( xTitle->getText());
@@ -333,7 +333,7 @@ void TitleWrapper::setFastCharacterPropertyValue(
     OSL_ASSERT( FAST_PROPERTY_ID_START_CHAR_PROP <= nHandle &&
                 nHandle < CharacterProperties::FAST_PROPERTY_ID_END_CHAR_PROP );
 
-    Reference< chart2::XTitle > xTitle( this->getTitleObject() );
+    Reference< chart2::XTitle2 > xTitle( this->getTitleObject() );
     if( xTitle.is())
     {
         Sequence< Reference< chart2::XFormattedString > > aStrings( xTitle->getText());
@@ -494,7 +494,7 @@ awt::Size TitleWrapper::getCurrentSizeForReference()
 
 // ================================================================================
 
-Reference< chart2::XTitle > TitleWrapper::getTitleObject()
+Reference< chart2::XTitle2 > TitleWrapper::getTitleObject()
 {
     return TitleHelper::getTitle( m_eTitleType, m_spChart2ModelContact->getChartModel() );
 }

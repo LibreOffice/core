@@ -341,7 +341,7 @@ Axis::Axis( const Axis & rOther ) :
         lcl_CloneSubGrids( rOther.m_aSubGridProperties, m_aSubGridProperties );
     ModifyListenerHelper::addListenerToAllSequenceElements( m_aSubGridProperties, m_xModifyEventForwarder );
 
-    m_xTitle.set( CloneHelper::CreateRefClone< Reference< chart2::XTitle > >()( rOther.m_xTitle ));
+    m_xTitle.set( CloneHelper::CreateRefClone< Reference< chart2::XTitle2 > >()( rOther.m_xTitle ));
     if( m_xTitle.is())
         ModifyListenerHelper::addListener( m_xTitle, m_xModifyEventForwarder );
 }
@@ -480,18 +480,18 @@ Sequence< Reference< beans::XPropertySet > > SAL_CALL Axis::getSubTickProperties
 
 
 // ____ XTitled ____
-Reference< chart2::XTitle > SAL_CALL Axis::getTitleObject()
+Reference< chart2::XTitle2 > SAL_CALL Axis::getTitleObject()
     throw (uno::RuntimeException)
 {
     MutexGuard aGuard( GetMutex() );
     return m_xTitle;
 }
 
-void SAL_CALL Axis::setTitleObject( const Reference< chart2::XTitle >& xNewTitle )
+void SAL_CALL Axis::setTitleObject( const Reference< chart2::XTitle2 >& xNewTitle )
     throw (uno::RuntimeException)
 {
     Reference< util::XModifyListener > xModifyEventForwarder;
-    Reference< chart2::XTitle > xOldTitle;
+    Reference< chart2::XTitle2 > xOldTitle;
     {
         MutexGuard aGuard( GetMutex() );
         xOldTitle = m_xTitle;

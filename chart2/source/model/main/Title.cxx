@@ -370,6 +370,40 @@ void Title::fireModifyEvent()
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 
+sal_Bool Title::getPropertyBool(const OUString& aPropertyName) throw (css::uno::RuntimeException)
+{
+   uno::Any any = getPropertyValue(aPropertyName);
+   sal_Bool b = sal_False;
+   any >>= b;
+   return b;
+}
+
+double Title::getPropertyDouble(const OUString& aPropertyName) throw (css::uno::RuntimeException)
+{
+   uno::Any any = getPropertyValue(aPropertyName);
+   double b = sal_False;
+   any >>= b;
+   return b;
+}
+
+awt::Size Title::getReferencePageSize() throw(css::uno::RuntimeException)
+{
+   uno::Any any = getPropertyValue("ReferencePageSize");
+   awt::Size b;
+   any >>= b;
+   return b;
+}
+
+chart2::RelativePosition Title::getRelativePosition() throw(css::uno::RuntimeException)
+{
+   uno::Any any = getPropertyValue("RelativePosition");
+   chart2::RelativePosition b;
+   any >>= b;
+   return b;
+}
+
+
+
 
 // ================================================================================
 

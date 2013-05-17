@@ -30,7 +30,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/chart2/XTitle.hpp>
+#include <com/sun/star/chart2/XTitle2.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <boost/shared_ptr.hpp>
@@ -112,7 +112,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getFirstCharacterPropertySet();
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitle > getTitleObject();
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitle2 > getTitleObject();
 
 private:
     ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
