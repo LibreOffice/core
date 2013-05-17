@@ -138,6 +138,13 @@ public:
     TOOLS_DLLPUBLIC friend Date     operator -( const Date& rDate, long nDays );
     TOOLS_DLLPUBLIC friend long     operator -( const Date& rDate1, const Date& rDate2 );
 
+    /** Obtain number of days in a month of a year.
+
+        Internally sanitizes nMonth to values 1 <= nMonth <= 12, does not
+        normalize values.
+     */
+    static sal_uInt16 GetDaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear );
+
     /// Internally normalizes values.
     static long DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear );
     /// Semantically identical to IsValidDate() member method.
