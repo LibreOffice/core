@@ -639,7 +639,6 @@ STD_LIB_FILE( gid_File_Lib_Pl , pl)
 
 #if defined(UNX) && ! defined(MACOSX)
 #ifdef ENABLE_TDE
-#ifndef MACOSX
 File gid_File_Lib_Vclplug_Tde
     Name = LIBNAME(vclplug_tde);
     LIB_FILE_BODY;
@@ -647,9 +646,7 @@ File gid_File_Lib_Vclplug_Tde
     Dir = SCP2_OOO_BIN_DIR;
 End
 #endif
-#endif
 #ifdef ENABLE_KDE
-#ifndef MACOSX
 File gid_File_Lib_Vclplug_Kde
     Name = LIBNAME(vclplug_kde);
     LIB_FILE_BODY;
@@ -657,16 +654,13 @@ File gid_File_Lib_Vclplug_Kde
     Dir = SCP2_OOO_BIN_DIR;
 End
 #endif
-#endif
 #ifdef ENABLE_KDE4
-#ifndef MACOSX
 File gid_File_Lib_Vclplug_Kde4
     Name = LIBNAME(vclplug_kde4);
     LIB_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
 End
-#endif
 #endif
 #endif
 
