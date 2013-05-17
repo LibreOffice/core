@@ -522,6 +522,7 @@ public:
     SAL_DLLPRIVATE void setReversePrint( sal_Bool i_bReverse );
     SAL_DLLPRIVATE bool getReversePrint() const;
     SAL_DLLPRIVATE void pushPropertiesToPrinter();
+    SAL_DLLPRIVATE void resetPaperToLastConfigured();
     VCL_PLUGIN_PUBLIC void setJobState( com::sun::star::view::PrintableState );
     SAL_DLLPRIVATE bool setupPrinter( Window* i_pDlgParent );
 

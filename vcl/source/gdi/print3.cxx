@@ -159,12 +159,14 @@ public:
 
     ImplPageCache                                               maPageCache;
 
-    // set by user through printer config dialog
+    // set by user through printer properties subdialog of printer settings dialog
+    Size                                                        maDefaultPageSize;
+    // Set by user through printer properties subdialog of print dialog.
     // if set, pages are centered and trimmed onto the fixed page
     Size                                                        maFixedPageSize;
-    // set by user through printer config dialog
+    // set by user through printer properties subdialog of printer settings dialog
     sal_Int32                                                   mnDefaultPaperBin;
-    // Set by user through printer preferences in print dialog.
+    // Set by user through printer properties subdialog of print dialog.
     // Overrides application-set tray for a page.
     sal_Int32                                                   mnFixedPaperBin;
 
@@ -203,6 +205,7 @@ public:
     bool isFixedPageSize() const
     { return maFixedPageSize.Width() != 0 && maFixedPageSize.Height() != 0; }
     PrinterController::PageSize modifyJobSetup( const Sequence< PropertyValue >& i_rProps, bool bNoNUP );
+    void resetPaperToLastConfigured();
 };
 
 PrinterController::PrinterController( const boost::shared_ptr<Printer>& i_pPrinter )
@@ -502,6 +505,8 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
 
     pController->getPrinter()->StartJob( String( aJobName ), pController );
 
+    pController->resetPaperToLastConfigured();
+
     pController->jobFinished( pController->getJobState() );
 }
 
@@ -756,10 +761,15 @@ void PrinterController::setPrinter( const boost::shared_ptr<Printer>& i_rPrinter
     setValue( OUString( "Name" ),
               makeAny( OUString( i_rPrinter->GetName() ) ) );
     mpImplData->mnDefaultPaperBin = mpImplData->mpPrinter->GetPaperBin();
+    mpImplData->mpPrinter->Push();
+    mpImplData->mpPrinter->SetMapMode(MapMode(MAP_100TH_MM));
+    mpImplData->maDefaultPageSize = mpImplData->mpPrinter->GetPaperSize();
+    mpImplData->mpPrinter->Pop();
     mpImplData->mnFixedPaperBin = -1;
+    mpImplData->maFixedPageSize = Size();
 }
 
-void PrinterController:: resetPrinterOptions( bool i_bFileOutput )
+void PrinterController::resetPrinterOptions( bool i_bFileOutput )
 {
     PrinterOptions aOpt;
     aOpt.ReadFromConfig( i_bFileOutput );
@@ -859,6 +869,28 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
         mpPrinter->SetPaperBin( nPaperBin );
 
     return aPageSize;
+}
+
+//fdo#61886
+//
+//when printing is finished, set the paper size of the printer to either what
+//the user explicitly set as the desired paper size, or fallback to whatever
+//the printer had before printing started. That way it doesn't contain the last
+//paper size of a multiple paper size using document when we are in our normal
+//auto accept document paper size mode and end up overwriting the original
+//paper size setting for file->printer_settings just by pressing "ok" in the
+//print dialog
+void vcl::ImplPrinterControllerData::resetPaperToLastConfigured()
+{
+    Size aPaperSize(maDefaultPageSize);
+    if (maFixedPageSize.Width() > 0 && maFixedPageSize.Height() > 0)
+        aPaperSize = maFixedPageSize;
+    mpPrinter->Push();
+    mpPrinter->SetMapMode(MapMode(MAP_100TH_MM));
+    Size aCurSize(mpPrinter->GetPaperSize());
+    if (aPaperSize != aCurSize)
+        mpPrinter->SetPaperSizeUser(aPaperSize, !isFixedPageSize());
+    mpPrinter->Pop();
 }
 
 int PrinterController::getPageCountProtected() const
@@ -1602,6 +1634,11 @@ void PrinterController::setMultipage( const MultiPageSetup& i_rMPS )
 const PrinterController::MultiPageSetup& PrinterController::getMultipage() const
 {
     return mpImplData->maMultiPage;
+}
+
+void PrinterController::resetPaperToLastConfigured()
+{
+    mpImplData->resetPaperToLastConfigured();
 }
 
 void PrinterController::pushPropertiesToPrinter()
