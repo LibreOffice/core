@@ -26,6 +26,7 @@
 #include "DeckLayouter.hxx"
 #include "DrawHelper.hxx"
 #include "DeckTitleBar.hxx"
+#include "PanelTitleBar.hxx"
 #include "Paint.hxx"
 #include "Panel.hxx"
 #include "ToolBoxBackground.hxx"

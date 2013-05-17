@@ -24,6 +24,7 @@
 
 #include "TitleBar.hxx"
 
+#include <com/sun/star/frame/XFrame.hpp>
 #include <boost/function.hpp>
 
 
@@ -41,7 +42,9 @@ public:
         Panel* pPanel );
     virtual ~PanelTitleBar (void);
 
-    void SetMenuAction ( const ::boost::function<void(void)>& rMenuAction );
+    void SetMoreOptionsCommand (
+        const ::rtl::OUString& rsCommandName,
+        const ::cssu::Reference<css::frame::XFrame>& rxFrame);
 
     virtual void DataChanged (const DataChangedEvent& rEvent);
     virtual void MouseButtonDown (const MouseEvent& rMouseEvent);
@@ -58,7 +61,8 @@ private:
     bool mbIsLeftButtonDown;
     Panel* mpPanel;
     const sal_uInt16 mnMenuItemIndex;
-    ::boost::function<void(void)> maMenuAction;
+    cssu::Reference<css::frame::XFrame> mxFrame;
+    ::rtl::OUString msMoreOptionsCommand;
 };
 
 

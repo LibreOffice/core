@@ -25,7 +25,7 @@
 #include "Paint.hxx"
 
 #include <vcl/window.hxx>
-#include <vcl/toolbox.hxx>
+#include "sfx2/sidebar/SidebarToolBox.hxx"
 
 
 namespace sfx2 { namespace sidebar {
@@ -56,7 +56,7 @@ public:
     const ToolBox& GetToolBox (void) const;
 
 protected:
-    ToolBox maToolBox;
+    SidebarToolBox maToolBox;
 
     virtual Rectangle GetTitleArea (const Rectangle& rTitleBarBox) = 0;
     virtual void PaintDecoration (const Rectangle& rTitleBarBox) = 0;
