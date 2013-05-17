@@ -7,10 +7,12 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,share,$(SRCDIR)/sysui/desktop/menus))
+$(eval $(call gb_Package_Package,share,$(share_WORKDIR)/libreoffice))
 
 $(eval $(call gb_Package_add_files,share,pck,\
 	$(addsuffix .desktop,$(LAUNCHERLIST)) \
 ))
+
+$(eval $(call gb_Package_use_custom_target,share,sysui/share))
 
 # vim: set noet sw=4 ts=4:

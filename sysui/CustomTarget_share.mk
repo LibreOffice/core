@@ -118,12 +118,9 @@ PKGVERSIONSHORT := $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR)
 PRODUCTNAME.libreoffice := LibreOffice
 PRODUCTNAME.libreofficeodev := LibreOfficeDev
 PRODUCTNAME.oxygenoffice := OxygenOffice
-PRODUCTNAMELC.libreoffice := libreoffice
-PRODUCTNAMELC.libreofficeodev := libreofficedev
-PRODUCTNAMELC.oxygenoffice := oxygenoffice
-UNIXFILENAME.libreoffice := $(PRODUCTNAMELC.libreoffice)$(PKGVERSIONSHORT)
-UNIXFILENAME.libreofficedev := $(PRODUCTNAMELC.libreofficedev)$(PKGVERSIONSHORT)
-UNIXFILENAME.oxygenoffice := $(PRODUCTNAMELC.oxygenoffice)$(PKGVERSIONSHORT)
+UNIXFILENAME.libreoffice := libreoffice$(PKGVERSIONSHORT)
+UNIXFILENAME.libreofficedev := libreofficedev$(PKGVERSIONSHORT)
+UNIXFILENAME.oxygenoffice := oxygenoffice$(PKGVERSIONSHORT)
 
 $(eval $(call gb_CustomTarget_CustomTarget,sysui/share))
 
@@ -153,7 +150,7 @@ $(share_WORKDIR)/%/openoffice.keys:  \
 	mkdir -p $(dir $@)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
 	$(PERL) $(share_SRCDIR)/share/brand.pl -p $* -u $(UNIXFILENAME.$*) \
-		--iconprefix $(UNIXFILENAME.$*) $^ $(share_WORKDIR)/$*
+		--iconprefix $(UNIXFILENAME.$*)- $^ $(share_WORKDIR)/$*
 	$(PERL) $(share_TRANSLATE) -p $* -d $(share_WORKDIR)/$* \
 		--ext "keys" --key "description" $(share_WORKDIR)/documents.ulf
 	cat $(MIMEKEYS) > $@
@@ -163,7 +160,7 @@ $(share_WORKDIR)/%/mimelnklist: $(MIMEDESKTOPS) $(share_SRCDIR)/share/brand.pl \
 	mkdir -p $(dir $@)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
 	$(PERL) $(share_SRCDIR)/share/brand.pl -p $* -u $(UNIXFILENAME.$*) \
-		--iconprefix $(UNIXFILENAME.$*) $^ $(share_WORKDIR)/$*
+		--iconprefix $(UNIXFILENAME.$*)- $^ $(share_WORKDIR)/$*
 	$(PERL) $(share_TRANSLATE) -p $* -d $(share_WORKDIR)/$* \
 		--ext "desktop" --key "Comment" $(share_WORKDIR)/documents.ulf
 	echo "$(MIMEDESKTOPS)" > $@
@@ -212,9 +209,9 @@ $(share_WORKDIR)/%/build.flag: $(share_SRCDIR)/share/brand.pl $(LAUNCHERS) \
 	$(share_TRANSLATE)  $(addprefix $(share_WORKDIR)/,$(ULFS))
 	mkdir -p $(dir $@)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
-	$(PERL) $(share_SRCDIR)/share/brand.pl -p $(PRODUCTNAME.$*)$(PRODUCTVERSION) -u '$$(UNIXPRODUCTNAME)$$(BRANDPACKAGEVERSION)' \
+	$(PERL) $(share_SRCDIR)/share/brand.pl -p '$${PRODUCTNAME} $${PRODUCTVERSION}' -u $(UNIXFILENAME.$*) \
 		$(brand_URIPARAM) \
-		--iconprefix '$$(UNIXBASISROOTNAME)' $^ $(share_WORKDIR)/$*
+		--iconprefix '$${UNIXBASISROOTNAME}-' $^ $(share_WORKDIR)/$*
 	$(PERL) $(share_TRANSLATE) -p $(PRODUCTNAME.$*)$(PRODUCTVERSION) -d $(share_WORKDIR)/$* \
 		--ext "desktop" --key "Comment" $(share_WORKDIR)/launcher_comment.ulf
 	$(PERL) $(share_TRANSLATE) -p $(PRODUCTNAME.$*)$(PRODUCTVERSION) -d $(share_WORKDIR)/$* \
@@ -227,7 +224,7 @@ ifneq ($(WITH_LANG),)
 $(share_WORKDIR)/%.ulf: $(share_SRCDIR)/share/%.ulf | $(call gb_Executable_get_runtime_dependencies,ulfex)
 	$(call gb_Output_announce,$@,$(true),SUM,1)
 	MERGEINPUT=`$(gb_MKTEMP)` && \
-	echo $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $@)).po) > $${MERGEINPUT} && \
+	echo $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/sysui/desktop/share.po) > $${MERGEINPUT} && \
 	$(call gb_Helper_abbreviate_dirs,\
 	$(call gb_Executable_get_command,ulfex) -i $< -o $@ -m $${MERGEINPUT} -l all ) && \
 	rm -rf $${MERGEINPUT}
