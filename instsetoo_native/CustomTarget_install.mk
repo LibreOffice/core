@@ -105,12 +105,14 @@ ifeq (TRUE,$(LIBO_DEV_INSTALL))
 	unzip -q -d $(DEVINSTALLDIR) $(instsetoo_OUT)/LibreOffice$(if $(filter TRUE,$(ENABLE_RELEASE_BUILD)),,_Dev)/archive/install/en-US/LibreOffice*_archive.zip
 	mv $(DEVINSTALLDIR)/LibreOffice*_archive/* $(DEVINSTALLDIR)/opt
 	rmdir $(DEVINSTALLDIR)/LibreOffice*_archive
+ifeq (ODK,$(filter ODK,$(BUILD_TYPE)))
 	$(call instsetoo_native_install_command,sdkoo,en-US,_SDK,,archive)
 	unzip -q -d $(DEVINSTALLDIR) $(instsetoo_OUT)/LibreOffice$(if $(filter TRUE,$(ENABLE_RELEASE_BUILD)),,_Dev)_SDK/archive/install/en-US/LibreOffice*_archive_sdk.zip
 	mv $(DEVINSTALLDIR)/LibreOffice*_archive_sdk/LibreOffice*_SDK/sdk \
         $(DEVINSTALLDIR)/opt/
 	rmdir $(DEVINSTALLDIR)/LibreOffice*_archive_sdk/LibreOffice*_SDK
 	rmdir $(DEVINSTALLDIR)/LibreOffice*_archive_sdk
+endif
 else # LIBO_DEV_INSTALL
 	$(call instsetoo_native_install_command,openoffice,$(if $(filter WNT,$(OS)),$(instsetoo_native_WITH_LANG),en-US),,,$(PKGFORMAT))
 ifeq (ODK,$(filter ODK,$(BUILD_TYPE)))
