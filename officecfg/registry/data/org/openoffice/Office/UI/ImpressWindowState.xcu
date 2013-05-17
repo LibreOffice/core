@@ -825,7 +825,7 @@
           <value>true</value>
         </prop>
       </node>
-      <node oor:name="private:resource/toolpanel/DrawingFramework/MasterPages" oor:op="replace">
+      <node oor:name="private:resource/toolpanel/MasterPages" oor:op="replace">
         <prop oor:name="Visible" oor:type="xs:boolean">
           <value>false</value>
         </prop>
@@ -836,7 +836,7 @@
           <value>private:commandimage/PresentationLayout</value>
         </prop>
       </node>
-      <node oor:name="private:resource/toolpanel/DrawingFramework/Layouts" oor:op="replace">
+      <node oor:name="private:resource/toolpanel/Layouts" oor:op="replace">
         <prop oor:name="Visible" oor:type="xs:boolean">
           <value>false</value>
         </prop>
@@ -847,7 +847,7 @@
           <value>private:commandimage/ModifyPage</value>
         </prop>
       </node>
-      <node oor:name="private:resource/toolpanel/DrawingFramework/TableDesign" oor:op="replace">
+      <node oor:name="private:resource/toolpanel/TableDesign" oor:op="replace">
         <prop oor:name="Visible" oor:type="xs:boolean">
           <value>false</value>
         </prop>
@@ -858,7 +858,7 @@
           <value>private:commandimage/InsertTable</value>
         </prop>
       </node>
-      <node oor:name="private:resource/toolpanel/DrawingFramework/CustomAnimations" oor:op="replace">
+      <node oor:name="private:resource/toolpanel/CustomAnimations" oor:op="replace">
         <prop oor:name="Visible" oor:type="xs:boolean">
           <value>false</value>
         </prop>
@@ -869,7 +869,7 @@
           <value>private:commandimage/CustomAnimation</value>
         </prop>
       </node>
-      <node oor:name="private:resource/toolpanel/DrawingFramework/SlideTransitions" oor:op="replace">
+      <node oor:name="private:resource/toolpanel/SlideTransitions" oor:op="replace">
         <prop oor:name="Visible" oor:type="xs:boolean">
           <value>false</value>
         </prop>

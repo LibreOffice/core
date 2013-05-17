@@ -218,7 +218,7 @@ Reference<XResource> SAL_CALL TaskPanelFactory::createResource (
             if ( pToolPanel != NULL )
                 xResource = new TaskPanelResource( rxResourceId );
 
-            OSL_POSTCOND( xResource.is(), "TaskPanelFactory::createResource: did not find the given resource!" );
+            OSL_POSTCOND( xResource.is(), "TaskPanelFactory::createResource: did not find the given resource!");
         }
     }
 

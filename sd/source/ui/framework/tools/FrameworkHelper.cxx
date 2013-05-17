@@ -20,6 +20,7 @@
 #include <osl/time.h>
 
 #include "sfx2/viewfrm.hxx"
+
 #include "framework/FrameworkHelper.hxx"
 
 #include "framework/ConfigurationController.hxx"
@@ -645,7 +646,7 @@ Reference<XResourceId> FrameworkHelper::RequestSidebarPanel (
             mxConfigurationController->requestResourceActivation(
                 CreateResourceId(aViewURL, aPaneURL),
                 ResourceActivationMode_REPLACE);
-            Reference<XResourceId> xPanelId (CreateResourceId(rsTaskPanelURL, aViewURL, aPanelURL));
+            Reference<XResourceId> xPanelId (CreateResourceId(rsTaskPanelURL, aViewURL, aPaneURL));
             mxConfigurationController->requestResourceActivation(
                 xPanelId,
                 ResourceActivationMode_REPLACE);

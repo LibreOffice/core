@@ -81,6 +81,9 @@
   <implementation name="com.sun.star.comp.draw.SdHtmlOptionsDialog">
     <service name="com.sun.star.ui.dialog.FilterOptionsDialog"/>
   </implementation>
+  <implementation name="com.sun.star.comp.drawing.ToolPanelFactory">
+    <service name="com.sun.star.drawing.DefaultToolPanelFactory"/>
+  </implementation>
   <implementation name="com.sun.star.comp.sd.InsertSlideController">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
