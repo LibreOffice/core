@@ -19,6 +19,7 @@
 
 #include <osl/time.h>
 
+#include "sfx2/viewfrm.hxx"
 #include "framework/FrameworkHelper.hxx"
 
 #include "framework/ConfigurationController.hxx"
@@ -608,6 +609,14 @@ Reference<XResourceId> FrameworkHelper::RequestSidebarPanel (
     const OUString& rsTaskPanelURL,
     const bool bEnsureTaskPaneIsVisible)
 {
+    OUString aViewURL, aPaneURL;
+    bool bSidebar = SfxViewFrame::IsSidebarEnabled();
+
+    aViewURL = bSidebar ? FrameworkHelper::msSidebarViewURL :
+                          FrameworkHelper::msTaskPaneURL;
+    aPaneURL = bSidebar ? FrameworkHelper::msSidebarPaneURL :
+                          FrameworkHelper::msRightPaneURL;
+
     try
     {
         if (mxConfigurationController.is())
@@ -619,7 +628,7 @@ Reference<XResourceId> FrameworkHelper::RequestSidebarPanel (
                     mxConfigurationController->getCurrentConfiguration());
                 if (xConfiguration.is())
                     if ( ! xConfiguration->hasResource(
-                            CreateResourceId(msSidebarViewURL, msSidebarPaneURL)))
+                            CreateResourceId(aViewURL, aPaneURL)))
                     {
                         // Task pane is not active.  Do not force it.
                         return NULL;
@@ -629,12 +638,12 @@ Reference<XResourceId> FrameworkHelper::RequestSidebarPanel (
             // Create the resource id from URLs for the sidebar pane
             // and view and the requested panel.
             mxConfigurationController->requestResourceActivation(
-                CreateResourceId(msSidebarPaneURL),
+                CreateResourceId(aPaneURL),
                 ResourceActivationMode_ADD);
             mxConfigurationController->requestResourceActivation(
-                CreateResourceId(msSidebarViewURL, msSidebarPaneURL),
+                CreateResourceId(aViewURL, aPaneURL),
                 ResourceActivationMode_REPLACE);
-            Reference<XResourceId> xPanelId (CreateResourceId(rsTaskPanelURL, msSidebarViewURL, msSidebarPaneURL));
+            Reference<XResourceId> xPanelId (CreateResourceId(rsTaskPanelURL, aViewURL, aPanelURL));
             mxConfigurationController->requestResourceActivation(
                 xPanelId,
                 ResourceActivationMode_REPLACE);

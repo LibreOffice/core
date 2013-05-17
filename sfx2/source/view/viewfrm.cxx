@@ -92,6 +92,10 @@
 #include <svtools/svtresid.hxx>
 #include <framework/framelistanalyzer.hxx>
 
+#include <comphelper/processfactory.hxx>
+#include <comphelper/configuration.hxx>
+#include "officecfg/Office/Common.hxx"
+
 #include <boost/optional.hpp>
 
 using namespace ::com::sun::star;
@@ -3389,6 +3393,26 @@ void SfxViewFrame::RemoveInfoBar( const OUString& sId )
         pInfoBars->removeInfoBar( pInfoBar );
         ShowChildWindow( nId );
     }
+}
+
+bool SfxViewFrame::IsSidebarEnabled()
+{
+    static bool bInitialized = false;
+    static bool bEnabled = false;
+
+    // read the setting once at start, and that's what we
+    // stick with for now.
+    if (!bInitialized)
+    {
+        bInitialized = true;
+        try {
+            bEnabled = officecfg::Office::Common::Misc::ExperimentalSidebar::get(
+                           comphelper::getProcessComponentContext());
+        } catch (const uno::Exception &e) {
+            SAL_WARN("sfx2.view", "don't have experimental sidebar option installed");
+        }
+    }
+    return bEnabled;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

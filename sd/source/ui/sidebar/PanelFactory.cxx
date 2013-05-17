@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -33,6 +34,10 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <vcl/window.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+
+#include <comphelper/processfactory.hxx>
+#include <comphelper/configuration.hxx>
+#include "officecfg/Office/Common.hxx"
 
 using namespace css;
 using namespace cssu;
@@ -71,6 +76,13 @@ Reference<lang::XEventListener> mxControllerDisposeListener;
 Reference<XInterface> SAL_CALL PanelFactory_createInstance (
     const Reference<XComponentContext>& rxContext)
 {
+    bool bSidebar = SfxViewFrame::IsSidebarEnabled();
+    if (!bSidebar)
+    {
+        SAL_WARN( "sd", "Creating a disabled sidebar factory" );
+	return NULL;
+    }
+
     return Reference<XInterface>(static_cast<XWeak*>(new PanelFactory(rxContext)));
 }
 
@@ -205,3 +217,5 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
 
 
 } } // end of namespace sd::sidebar
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

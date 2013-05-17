@@ -65,6 +65,7 @@ private:
     Timer                   m_aResetTimer;
 
     CheckBox*               m_pExperimentalCB;
+    CheckBox*               m_pExpSidebarCB;
     CheckBox*               m_pMacroCB;
 
     ::std::vector< JavaInfo* >
