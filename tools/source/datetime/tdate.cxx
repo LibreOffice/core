@@ -61,8 +61,7 @@ inline sal_Bool ImpIsLeapYear( sal_uInt16 nYear )
 // -----------------------------------------------------------------------
 
 // All callers must have sanitized or normalized month and year values!
-
-inline sal_uInt16 DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear )
+inline sal_uInt16 ImplDaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear )
 {
     if ( nMonth != 2 )
         return aDaysInMonth[nMonth-1];
@@ -73,6 +72,17 @@ inline sal_uInt16 DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear )
         else
             return aDaysInMonth[nMonth-1];
     }
+}
+
+// static
+sal_uInt16 Date::GetDaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear )
+{
+    SAL_WARN_IF( nMonth < 1 || 12 < nMonth, "tools", "Date::GetDaysInMonth - nMonth out of bounds " << nMonth);
+    if (nMonth < 1)
+        nMonth = 1;
+    else if (12 < nMonth)
+        nMonth = 12;
+    return ImplDaysInMonth( nMonth, nYear);
 }
 
 // -----------------------------------------------------------------------
@@ -86,7 +96,7 @@ long Date::DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear )
     nDays = ((sal_uIntPtr)nYear-1) * 365;
     nDays += ((nYear-1) / 4) - ((nYear-1) / 100) + ((nYear-1) / 400);
     for( sal_uInt16 i = 1; i < nMonth; i++ )
-        nDays += DaysInMonth(i,nYear);
+        nDays += ImplDaysInMonth(i,nYear);
     nDays += nDay;
     return nDays;
 }
@@ -127,9 +137,9 @@ static void DaysToDate( long nDays,
     while ( bCalc );
 
     rMonth = 1;
-    while ( (sal_uIntPtr)nTempDays > DaysInMonth( rMonth, rYear ) )
+    while ( (sal_uIntPtr)nTempDays > ImplDaysInMonth( rMonth, rYear ) )
     {
-        nTempDays -= DaysInMonth( rMonth, rYear );
+        nTempDays -= ImplDaysInMonth( rMonth, rYear );
         rMonth++;
     }
     rDay = (sal_uInt16)nTempDays;
@@ -213,7 +223,7 @@ sal_uInt16 Date::GetDayOfYear() const
     Normalize( nDay, nMonth, nYear);
 
     for( sal_uInt16 i = 1; i < nMonth; i++ )
-         nDay = nDay + ::DaysInMonth( i, nYear );   // += yields a warning on MSVC, so don't use it
+         nDay = nDay + ::ImplDaysInMonth( i, nYear );   // += yields a warning on MSVC, so don't use it
     return nDay;
 }
 
@@ -318,7 +328,7 @@ sal_uInt16 Date::GetDaysInMonth() const
     sal_uInt16 nYear  = GetYear();
     Normalize( nDay, nMonth, nYear);
 
-    return DaysInMonth( nMonth, nYear );
+    return ImplDaysInMonth( nMonth, nYear );
 }
 
 // -----------------------------------------------------------------------
@@ -339,7 +349,7 @@ sal_Bool Date::IsValidAndGregorian() const
 
     if ( !nMonth || (nMonth > 12) )
         return sal_False;
-    if ( !nDay || (nDay > DaysInMonth( nMonth, nYear )) )
+    if ( !nDay || (nDay > ImplDaysInMonth( nMonth, nYear )) )
         return sal_False;
     else if ( nYear <= 1582 )
     {
@@ -368,7 +378,7 @@ bool Date::IsValidDate( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear )
 {
     if ( !nMonth || (nMonth > 12) )
         return false;
-    if ( !nDay || (nDay > DaysInMonth( nMonth, nYear )) )
+    if ( !nDay || (nDay > ImplDaysInMonth( nMonth, nYear )) )
         return false;
     return true;
 }
@@ -422,7 +432,7 @@ bool Date::Normalize( sal_uInt16 & rDay, sal_uInt16 & rMonth, sal_uInt16 & rYear
         }
     }
     sal_uInt16 nDays;
-    while (rDay > (nDays = DaysInMonth( rMonth, rYear)))
+    while (rDay > (nDays = ImplDaysInMonth( rMonth, rYear)))
     {
         rDay -= nDays;
         if (rMonth < 12)
