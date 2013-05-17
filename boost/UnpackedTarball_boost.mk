@@ -40,6 +40,7 @@ boost_patches += boost.wundef.patch.1
 
 boost_patches += boost.windows.patch
 boost_patches += boost.vc2012.patch
+boost_patches += boost.libcdr.warnings.patch.1
 
 # Help static analysis tools (see SAL_UNUSED_PARAMETER in sal/types.h):
 ifeq (GCC,$(COM))
