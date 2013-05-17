@@ -27,6 +27,7 @@ class ToolBox;
 
 namespace sfx2 { namespace sidebar {
 
+/// Draws the sidebar ToolBoxes (groups of toolbar buttons).
 class ToolBoxBackground
     : public Window
 {

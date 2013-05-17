@@ -21,8 +21,8 @@
 #include "sfx2/sidebar/Tools.hxx"
 #include "sfx2/sidebar/Theme.hxx"
 
+#include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/gradient.hxx>
 #include <svl/smplhint.hxx>
 
 
@@ -32,8 +32,6 @@ ToolBoxBackground::ToolBoxBackground (Window* pParentWindow)
     : Window(pParentWindow, WB_DIALOGCONTROL),
       maPadding(Tools::RectangleToSvBorder(Theme::GetRectangle(Theme::Rect_ToolBoxPadding)))
 {
-    SetBackground(Theme::GetPaint(Theme::Paint_ToolBoxBackground).GetWallpaper());
-
 #ifdef DEBUG
     SetText(A2S("ToolBoxBackground"));
 #endif
@@ -87,19 +85,11 @@ void ToolBoxBackground::Paint (const Rectangle& rRect)
 {
     Window::Paint(rRect);
 
-    Rectangle aBox (Point(0,0), GetSizePixel());
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    SetFillColor();
+    SetLineColor( rStyleSettings.GetShadowColor() );
 
-    const sidebar::Paint aTopLeftBorderPaint (Theme::GetPaint(Theme::Paint_ToolBoxBorderTopLeft));
-    const sidebar::Paint aCenterBorderPaint (Theme::GetPaint(Theme::Paint_ToolBoxBorderCenterCorners));
-    const sidebar::Paint aBottomRightBorderPaint (Theme::GetPaint(Theme::Paint_ToolBoxBorderBottomRight));
-    const Rectangle aBorderSize (Theme::GetRectangle(Theme::Rect_ToolBoxBorder));
-    DrawHelper::DrawBevelBorder (
-        *this,
-        aBox,
-        Tools::RectangleToSvBorder(aBorderSize),
-        aTopLeftBorderPaint,
-        aCenterBorderPaint,
-        aBottomRightBorderPaint);
+    DrawRect( Rectangle( Point( 0, 0 ), GetSizePixel() ) );
 }
 
 
@@ -109,7 +99,6 @@ void ToolBoxBackground::DataChanged (const DataChangedEvent& rEvent)
 {
     (void)rEvent;
 
-    SetBackground(Theme::GetPaint(Theme::Paint_ToolBoxBackground).GetWallpaper());
     maPadding = Tools::RectangleToSvBorder(Theme::GetRectangle(Theme::Rect_ToolBoxPadding));
 }
 
