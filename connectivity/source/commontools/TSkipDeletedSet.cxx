@@ -54,7 +54,7 @@ sal_Bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPositio
             nDelOffset = 1;
             break;
         case IResultSetHelper::LAST:
-            eDelPosition = IResultSetHelper::PRIOR; // lsat row is invalid so position before
+            eDelPosition = IResultSetHelper::PRIOR; // last row is invalid so position before
             nDelOffset = 1;
             break;
         case IResultSetHelper::RELATIVE:
@@ -89,7 +89,7 @@ sal_Bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPositio
         }
 
 
-        // and than move forward until we are after the last row
+        // and then move forward until we are after the last row
         while(bDataFound)
         {
             bDataFound = m_pHelper->move(IResultSetHelper::NEXT, 1, sal_False); // we don't need the data here
