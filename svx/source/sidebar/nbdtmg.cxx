@@ -386,7 +386,6 @@ sal_uInt16 BulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLe
 
     SvxNumberFormat aFmt(aNum.GetLevel(nActLv));
     sal_Unicode cChar = aFmt.GetBulletChar();
-    const Font* pFont = aFmt.GetBulletFont();
     //sal_uInt16 nLength = 0;
     /*if( Application::GetSettings().GetLayoutRTL() )
     {
@@ -676,7 +675,6 @@ sal_uInt16 GraphyicBulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uI
 
     if ( pGrf )
     {
-        const String* pGrfName = pBrsh->GetGraphicLink();
         Graphic aGraphic;
         for(sal_uInt16 i=0;i<aGrfDataLst.Count();i++)
         {
@@ -1054,8 +1052,6 @@ sal_uInt16 MixBulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 
 
         if ( pGrf )
         {
-            const String* pGrfName = pBrsh->GetGraphicLink();
-            //String* pGrfName = (String*)(pBrsh->GetGraphicLink());
             for(sal_uInt16 i = nFromIndex; i < DEFAULT_BULLET_TYPES; i++)
             {
                 if ( pActualBullets[i]->eType == eNBType::GRAPHICBULLETS )
@@ -1537,8 +1533,6 @@ sal_uInt16 NumberingTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 m
         return (sal_uInt16)0xFFFF;
 
     SvxNumberFormat aFmt(aNum.GetLevel(nActLv));
-    sal_Unicode cPrefix = rtl::OUString(aFmt.GetPrefix()).getStr()[0];
-    sal_Unicode cSuffix = rtl::OUString(aFmt.GetSuffix()).getStr()[0];
     String sPreFix = aFmt.GetPrefix();
     String sSuffix = aFmt.GetSuffix();
     String sEmpty;
@@ -1798,12 +1792,8 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLe
         {
             NumSettings_ImplPtr _pSet = pItemArr->pNumSettingsArr->GetObject(iLevel);
             sal_Int16 eNType = _pSet->nNumberType;
-                const sal_Unicode cLocalPrefix = _pSet->sPrefix.getLength() ? _pSet->sPrefix.getStr()[0] : 0;
-            const sal_Unicode cLocalSuffix = _pSet->sSuffix.getLength() ? _pSet->sSuffix.getStr()[0] : 0;
 
                 SvxNumberFormat aFmt(aNum.GetLevel(iLevel));
-            sal_Unicode cPrefix = rtl::OUString(aFmt.GetPrefix()).getStr()[0];
-            sal_Unicode cSuffix = rtl::OUString(aFmt.GetSuffix()).getStr()[0];
             String sPreFix = aFmt.GetPrefix();
             String sSuffix = aFmt.GetSuffix();
             String sEmpty;
@@ -1811,7 +1801,6 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLe
                 if( eNumType == SVX_NUM_CHAR_SPECIAL)
             {
                 sal_Unicode cChar = aFmt.GetBulletChar();
-                const Font* pFont = aFmt.GetBulletFont();
                 sal_Unicode ccChar = _pSet->sBulletChar.getStr()[0];
                 rtl::OUString sFont = _pSet->sBulletFont;
                 if ( !((cChar == ccChar) && //pFont && sFont.compareTo(pFont->GetName()) &&
@@ -1881,8 +1870,6 @@ sal_Bool OutlineTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_
     for (sal_uInt16 iLevel=0;iLevel < nCount;iLevel++)
     {
         SvxNumberFormat aFmt(aNum.GetLevel(iLevel));
-        sal_Unicode cPrefix = rtl::OUString(aFmt.GetPrefix()).getStr()[0];
-        sal_Unicode cSuffix = rtl::OUString(aFmt.GetSuffix()).getStr()[0];
         sal_Int16 eNumType = aFmt.GetNumberingType();
 
         NumSettings_ImplPtr _pSet = pItemArr->pNumSettingsArr->GetObject(iLevel);
@@ -1958,7 +1945,6 @@ sal_Bool OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uIn
 
     NumSettings_ImplPtr pLevelSettings = 0;
     String sBulletCharFmtName = GetBulCharFmtName();
-    sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < aNum.GetLevelCount(); i++)
     {
         if(pNumSettingsArr->Count() > i)
