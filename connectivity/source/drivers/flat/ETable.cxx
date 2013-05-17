@@ -863,15 +863,29 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
             break;
         case IResultSetHelper::BOOKMARK:
             {
+                m_nRowPos = 0;
                 TRowPositionsInFile::const_iterator aFind = m_aFilePosToEndLinePos.find(nOffset);
                 m_bNeedToReadLine = aFind != m_aFilePosToEndLinePos.end();
                 if ( m_bNeedToReadLine )
                 {
                     m_nFilePos  = aFind->first;
                     nCurPos = aFind->second;
+                    for(::std::map<sal_Int32, TRowPositionsInFile::iterator>::const_iterator p = m_aRowPosToFilePos.begin();
+                        p != m_aRowPosToFilePos.end();
+                        ++p)
+                    {
+                        assert(p->second->first <= nOffset);
+                        if(p->second->first == nOffset)
+                        {
+                            m_nRowPos = p->first;
+                            break;
+                        }
+                    }
+                    assert(m_nRowPos > 0);
                 }
                 else
                 {
+                    assert(false);
                     m_nFilePos = nOffset;
                     m_pFileStream->Seek(nOffset);
                     if (m_pFileStream->IsEof() || !readLine(nCurPos) )
