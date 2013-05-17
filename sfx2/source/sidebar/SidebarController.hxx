@@ -159,6 +159,7 @@ private:
     /** Make maRequestedContext the current context.
     */
     void UpdateConfigurations (void);
+
     bool ArePanelSetsEqual (
         const SharedPanelContainer& rCurrentPanels,
         const ResourceManager::PanelContextDescriptorContainer& rRequestedPanels);
