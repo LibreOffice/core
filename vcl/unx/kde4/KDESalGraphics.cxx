@@ -297,6 +297,9 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         if (part == PART_MENU_ITEM)
         {
             QStyleOptionMenuItem option;
+            if ( nControlState & CTRL_STATE_ROLLOVER )
+                option.state |= QStyle::State_Selected;
+
             draw( QStyle::CE_MenuBarItem, &option, m_image,
                   vclStateValue2StateFlag(nControlState, value) );
         }

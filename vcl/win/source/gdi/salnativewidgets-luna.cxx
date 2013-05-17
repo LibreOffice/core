@@ -973,10 +973,24 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         }
         else if( nPart == PART_MENU_ITEM )
         {
-            if( (nState & CTRL_STATE_ENABLED) )
-                iState = (nState & CTRL_STATE_SELECTED) ? MBI_HOT : MBI_NORMAL;
+            if( nState & CTRL_STATE_ENABLED )
+            {
+                if( nState & CTRL_STATE_SELECTED )
+                    iState = MBI_PUSHED;
+                else if( nState & CTRL_STATE_ROLLOVER )
+                    iState = MBI_HOT;
+                else
+                    iState = MBI_NORMAL;
+            }
             else
-                iState = (nState & CTRL_STATE_SELECTED) ? MBI_DISABLEDHOT : MBI_DISABLED;
+            {
+                if( nState & CTRL_STATE_SELECTED )
+                    iState = MBI_DISABLEDPUSHED;
+                else if( nState & CTRL_STATE_ROLLOVER )
+                    iState = MBI_DISABLEDHOT;
+                else
+                    iState = MBI_DISABLED;
+            }
             return ImplDrawTheme( hTheme, hDC, MENU_BARITEM, iState, rc, aCaption );
         }
     }
@@ -1506,6 +1520,7 @@ void WinSalGraphics::updateSettingsNative( AllSettings& rSettings )
     {
         // in aero menuitem highlight text is drawn in the same color as normal
         aStyleSettings.SetMenuHighlightTextColor( aStyleSettings.GetMenuTextColor() );
+        aStyleSettings.SetMenuBarRolloverTextColor( aStyleSettings.GetMenuTextColor() );
         pSVData->maNWFData.mnMenuFormatBorderX = 2;
         pSVData->maNWFData.mnMenuFormatBorderY = 2;
         pSVData->maNWFData.maMenuBarHighlightTextColor = aStyleSettings.GetMenuTextColor();

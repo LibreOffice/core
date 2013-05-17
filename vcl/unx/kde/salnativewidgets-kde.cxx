@@ -777,6 +777,9 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
             int nMenuItem = ( nStyle & QStyle::Style_Enabled )? m_nMenuBarEnabledItem: m_nMenuBarDisabledItem;
             QMenuItem *pMenuItem = static_cast<QMenuBar*>( pWidget )->findItem( nMenuItem );
 
+            if ( nStyle & QStyle::Style_MouseOver )
+                nStyle |= QStyle::Style_Active;
+
             if ( nStyle & QStyle::Style_Selected )
                 nStyle |= QStyle::Style_Active | QStyle::Style_Down | QStyle::Style_HasFocus;
 
@@ -1983,6 +1986,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         aStyleSettings.SetMenuBarColor( aMenuBack );
 
         aStyleSettings.SetMenuHighlightColor( toColor ( qMenuCG.highlight() ) );
+        aStyleSettings.SetMenuBarRolloverColor( toColor ( qMenuCG.highlight() ) );
 
         // Menu items higlight text color, theme specific
         if ( kapp->style().inherits( "HighContrastStyle" ) ||
@@ -1998,10 +2002,15 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
 
         // set special menubar higlight text color
         if ( kapp->style().inherits( "HighContrastStyle" ) )
+        {
             ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = toColor( qMenuCG.highlightedText() );
+            aStyleSettings.SetMenuBarRolloverTextColor( toColor( qMenuCG.highlightedText() ) );
+        }
         else
+        {
             ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = aMenuFore;
-
+            aStyleSettings.SetMenuBarRolloverTextColor( aMenuFore );
+        }
         // Font
         aFont = toFont( pMenuBar->font(), rSettings.GetUILanguageTag().getLocale() );
         aStyleSettings.SetMenuFont( aFont );
