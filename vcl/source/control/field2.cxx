@@ -1372,6 +1372,7 @@ static void ImplDateIncrementYear( Date& rDate, sal_Bool bUp )
     DateFormatter::ExpandCentury( rDate );
 
     sal_uInt16 nYear = rDate.GetYear();
+    sal_uInt16 nMonth = rDate.GetMonth();
     if ( bUp )
     {
         if ( nYear < 9999 )
@@ -1381,6 +1382,20 @@ static void ImplDateIncrementYear( Date& rDate, sal_Bool bUp )
     {
         if ( nYear > 0 )
             rDate.SetYear( nYear - 1 );
+    }
+    if (nMonth == 2)
+    {
+        // Handle February 29 from leap year to non-leap year.
+        sal_uInt16 nDay = rDate.GetDay();
+        if (nDay > 28)
+        {
+            // The check would not be necessary if it was guaranteed that the
+            // date was valid before and actually was a leap year,
+            // de-/incrementing a leap year with 29 always results in 28.
+            sal_uInt16 nDaysInMonth = Date::GetDaysInMonth( nMonth, rDate.GetYear());
+            if (nDay > nDaysInMonth)
+                rDate.SetDay( nDaysInMonth);
+        }
     }
 }
 
