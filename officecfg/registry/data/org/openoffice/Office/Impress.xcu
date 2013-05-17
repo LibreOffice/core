@@ -82,6 +82,11 @@
                 <value>private:resource/pane/LeftDrawPane</value>
               </prop>
             </node>
+            <node oor:name="R3" oor:op="replace">
+              <prop oor:name="URL">
+                <value>private:resource/pane/RightPane</value>
+              </prop>
+            </node>
           </node>
         </node>
         <node oor:name="F1" oor:op="replace">
@@ -121,6 +126,11 @@
             </node>
             <node oor:name="R6" oor:op="replace">
               <prop oor:name="URL">
+                <value>private:resource/view/TaskPane</value>
+              </prop>
+            </node>
+            <node oor:name="R7" oor:op="replace">
+              <prop oor:name="URL">
                 <value>private:resource/view/PresentationView</value>
               </prop>
             </node>
@@ -140,7 +150,7 @@
         </node>
         <node oor:name="F3" oor:op="replace">
           <prop oor:name="ServiceName">
-            <value>com.sun.star.comp.Draw.framework.TaskPanelFactory</value>
+            <value>com.sun.star.drawing.framework.TaskPanelFactory</value> <!-- MMeeks -->
           </prop>
           <node oor:name="ResourceList">
             <node oor:name="R0a" oor:op="replace">

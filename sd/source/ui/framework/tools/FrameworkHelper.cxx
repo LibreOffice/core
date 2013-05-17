@@ -197,12 +197,14 @@ const OUString FrameworkHelper::msViewTabBarURL( msToolBarURLPrefix + "ViewTabBa
 
 
 // Task panel URLs.
-// FIXME: MMeeks - this set of urls changed:
 const OUString FrameworkHelper::msTaskPanelURLPrefix( "private:resource/toolpanel/" );
 const OUString FrameworkHelper::msMasterPagesTaskPanelURL( msTaskPanelURLPrefix + "MasterPages");
+
+// these three appear to be unused ...
 const OUString FrameworkHelper::msAllMasterPagesTaskPanelURL( msTaskPanelURLPrefix + "AllMasterPages" );
 const OUString FrameworkHelper::msRecentMasterPagesTaskPanelURL( msTaskPanelURLPrefix + "RecentMasterPages" );
 const OUString FrameworkHelper::msUsedMasterPagesTaskPanelURL( msTaskPanelURLPrefix + "UsedMasterPages" );
+
 const OUString FrameworkHelper::msLayoutTaskPanelURL( msTaskPanelURLPrefix + "Layouts" );
 const OUString FrameworkHelper::msTableDesignPanelURL( msTaskPanelURLPrefix + "TableDesign" );
 const OUString FrameworkHelper::msCustomAnimationTaskPanelURL( msTaskPanelURLPrefix + "CustomAnimations" );

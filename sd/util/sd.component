@@ -63,6 +63,9 @@
   <implementation name="com.sun.star.comp.Draw.framework.ResourceId">
     <service name="com.sun.star.drawing.framework.ResourceId"/>
   </implementation>
+  <implementation name="com.sun.star.comp.Draw.framework.TaskPanelFactory">
+    <service name="com.sun.star.drawing.framework.TaskPanelFactory"/>
+  </implementation>
   <implementation name="org.openoffice.comp.Draw.framework.PanelFactory">
     <service name="com.sun.star.drawing.framework.PanelFactory"/>
   </implementation>
