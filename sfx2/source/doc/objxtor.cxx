@@ -1066,12 +1066,11 @@ SfxObjectShell* SfxObjectShell::CreateObject( const String& rServiceName, SfxObj
 {
     if ( rServiceName.Len() )
     {
-        ::com::sun::star::uno::Reference < ::com::sun::star::frame::XModel > xDoc(
-        ::comphelper::getProcessServiceFactory()->createInstance( rServiceName ), UNO_QUERY );
+        uno::Reference < frame::XModel > xDoc( ::comphelper::getProcessServiceFactory()->createInstance( rServiceName ), UNO_QUERY );
         if ( xDoc.is() )
         {
-            ::com::sun::star::uno::Reference < ::com::sun::star::lang::XUnoTunnel > xObj( xDoc, UNO_QUERY );
-            ::com::sun::star::uno::Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
+            uno::Reference < lang::XUnoTunnel > xObj( xDoc, UNO_QUERY );
+            uno::Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
             sal_Int64 nHandle = xObj->getSomething( aSeq );
             if ( nHandle )
             {

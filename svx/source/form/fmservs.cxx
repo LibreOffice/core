@@ -22,17 +22,19 @@
 #include <comphelper/processfactory.hxx>
 #include "fmservs.hxx"
 
+using namespace com::sun::star;
+
 // ------------------------------------------------------------------------
 #define DECL_SERVICE(ImplName)                      \
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ImplName##_NewInstance_Impl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > &) throw( ::com::sun::star::uno::Exception );
+uno::Reference< uno::XInterface > SAL_CALL ImplName##_NewInstance_Impl(const uno::Reference< lang::XMultiServiceFactory > &) throw( uno::Exception );
 
-#define REGISTER_SERVICE(ImplName, ServiceName)                         \
+#define REGISTER_SERVICE(ImplName, ServiceName)                     \
     sString = (ServiceName);                                        \
-    xSingleFactory = ::cppu::createSingleFactory(xServiceFactory,               \
-                        OUString(), ImplName##_NewInstance_Impl,             \
-                        ::com::sun::star::uno::Sequence< OUString>(&sString, 1));    \
-    if (xSingleFactory.is())                                            \
-        xSet->insert(::com::sun::star::uno::makeAny(xSingleFactory));
+    xSingleFactory = ::cppu::createSingleFactory(xServiceFactory,   \
+                        OUString(), ImplName##_NewInstance_Impl,    \
+                        uno::Sequence< OUString>(&sString, 1));     \
+    if (xSingleFactory.is())                                        \
+        xSet->insert(uno::makeAny(xSingleFactory));
 
 
     DECL_SERVICE( FmXGridControl )
@@ -44,11 +46,11 @@
 namespace svxform
 {
 
-#define DECL_SELFAWARE_SERVICE( ClassName )                     \
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ClassName##_Create(      \
-                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );  \
-    OUString SAL_CALL ClassName##_GetImplementationName();                                           \
-    ::com::sun::star::uno::Sequence< OUString > SAL_CALL ClassName##_GetSupportedServiceNames();     \
+#define DECL_SELFAWARE_SERVICE( ClassName )                                    \
+    uno::Reference< uno::XInterface > SAL_CALL ClassName##_Create(             \
+                const uno::Reference< lang::XMultiServiceFactory >& );         \
+    OUString SAL_CALL ClassName##_GetImplementationName();                     \
+    uno::Sequence< OUString > SAL_CALL ClassName##_GetSupportedServiceNames(); \
 
 
 #define REGISTER_SELFAWARE_SERVICE( ClassName )                     \
@@ -58,7 +60,7 @@ namespace svxform
                         ClassName##_GetSupportedServiceNames()      \
                      );                                             \
     if ( xSingleFactory.is() )                                      \
-        xSet->insert( ::com::sun::star::uno::makeAny( xSingleFactory ) );
+        xSet->insert( uno::makeAny( xSingleFactory ) );
 
 
     // ------------------------------------------------------------------------
@@ -67,13 +69,13 @@ namespace svxform
     // ------------------------------------------------------------------------
     void ImplSmartRegisterUnoServices()
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xServiceFactory(::comphelper::getProcessServiceFactory(), ::com::sun::star::uno::UNO_QUERY);
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XSet >  xSet(xServiceFactory, ::com::sun::star::uno::UNO_QUERY);
+        uno::Reference< lang::XMultiServiceFactory >  xServiceFactory(::comphelper::getProcessServiceFactory(), uno::UNO_QUERY);
+        uno::Reference< container::XSet >  xSet(xServiceFactory, uno::UNO_QUERY);
         if (!xSet.is())
             return;
 
-        ::com::sun::star::uno::Sequence< OUString> aServices;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory >  xSingleFactory;
+        uno::Sequence< OUString> aServices;
+        uno::Reference< lang::XSingleServiceFactory >  xSingleFactory;
 
         OUString sString;
 
