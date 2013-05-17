@@ -125,7 +125,6 @@ namespace connectivity
             sal_Int32                               m_nFilePos;
             sal_Int32                               m_nLastVisitedPos;
             sal_Int32                               m_nRowCountResult;
-            sal_Int32                               m_nCurrentPosition;     // current position of the resultset is returned when ask for getRow()
             sal_Int32                               m_nColumnCount;
             sal_Bool                                m_bWasNull;
             sal_Bool                                m_bEOF;                 // after last record

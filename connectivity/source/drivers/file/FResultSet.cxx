@@ -99,7 +99,6 @@ OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIte
                         ,m_nFilePos(0)
                         ,m_nLastVisitedPos(-1)
                         ,m_nRowCountResult(-1)
-                        ,m_nCurrentPosition(0)
                         ,m_nColumnCount(0)
                         ,m_bWasNull(sal_False)
                         ,m_bEOF(sal_False)
