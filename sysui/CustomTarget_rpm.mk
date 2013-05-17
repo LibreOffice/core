@@ -10,7 +10,7 @@
 rpm_WORKDIR := $(call gb_CustomTarget_get_workdir,sysui/rpm)
 rpm_SRCDIR := $(SRCDIR)/sysui/desktop
 
-RPMDISTROS := suse mandriva freedesktop
+RPMDISTROS := freedesktop
 
 define rpm_register_target
 $(call gb_CustomTarget_get_target,sysui/rpm): $(rpm_WORKDIR)/$(1)/$(1)$(PKGVERSIONSHORT)-$(2)-menus-$(PKGVERSION)-$(LIBO_VERSION_PATCH).noarch.rpm

@@ -45,6 +45,6 @@ Module gid_Module_Optional_Systemintegration
   #else
     PackageName = "";
   #endif
-	InstallOrder = "desktop-integration:1050, suse-menus:1060, freedesktop-menus:1250, redhat-menus:1260";
+	InstallOrder = "desktop-integration:1050, freedesktop-menus:1250";
 End
 
