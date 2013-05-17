@@ -4131,6 +4131,7 @@ if test "$cross_compiling" = "yes"; then
         --with-parallelism="$with_parallelism" \
         --without-doxygen \
         --without-java \
+        --without-system-jpeg \
         ENABLE_PDFIMPORT=FALSE \
         $sub_conf_opts \
         --srcdir=$srcdir \
