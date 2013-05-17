@@ -68,6 +68,9 @@
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbstit.hxx>
 #include <svx/svdpntv.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <svx/svditer.hxx>
+#include <svx/svdogrp.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -476,63 +479,130 @@ void ImpSdrGDIMetaFileImport::InsertObj(SdrObject* pObj, bool bScale)
         const SdrLayerID aOldLayer(pObj->GetLayer());
         const SfxItemSet aOldItemSet(pObj->GetMergedItemSet());
         const SdrGrafObj* pSdrGrafObj = dynamic_cast< SdrGrafObj* >(pObj);
-        BitmapEx aBitmapEx;
+        const SdrTextObj* pSdrTextObj = dynamic_cast< SdrTextObj* >(pObj);
 
-        if(pSdrGrafObj)
+        if(pSdrTextObj && pSdrTextObj->HasText())
         {
-            aBitmapEx = pSdrGrafObj->GetGraphic().GetBitmapEx();
-        }
-
-        SdrObject::Free(pObj);
-
-        if(!aOldRange.isEmpty())
-        {
-            // clip against ClipRegion
-            const basegfx::B2DPolyPolygon aNewPoly(
-                basegfx::tools::clipPolyPolygonOnPolyPolygon(
-                    aPoly,
-                    maClip,
-                    true,
-                    aPoly.isClosed() ? false : true));
-            const basegfx::B2DRange aNewRange(aNewPoly.getB2DRange());
-
-            if(!aNewRange.isEmpty())
+            // all text objects are created from ImportText and have no line or fill attributes, so
+            // it is okay to concentrate on the text itself
+            while(true)
             {
-                pObj = new SdrPathObj(
-                    aNewPoly.isClosed() ? OBJ_POLY : OBJ_PLIN,
-                    aNewPoly);
+                const basegfx::B2DPolyPolygon aTextContour(pSdrTextObj->TakeContour());
+                const basegfx::B2DRange aTextRange(aTextContour.getB2DRange());
+                const basegfx::B2DRange aClipRange(maClip.getB2DRange());
 
-                pObj->SetLayer(aOldLayer);
-                pObj->SetMergedItemSet(aOldItemSet);
-
-                if(!!aBitmapEx)
+                // no overlap -> completely outside
+                if(!aClipRange.overlaps(aTextRange))
                 {
-                    // aNewRange is inside of aOldRange and defines which part of aBitmapEx is used
-                    const double fLclScaleX(aBitmapEx.GetSizePixel().Width() / (aOldRange.getWidth() ? aOldRange.getWidth() : 1.0));
-                    const double fLclScaleY(aBitmapEx.GetSizePixel().Height() / (aOldRange.getHeight() ? aOldRange.getHeight() : 1.0));
-                    basegfx::B2DRange aPixel(aNewRange);
-                    basegfx::B2DHomMatrix aTrans;
+                    SdrObject::Free(pObj);
+                    break;
+                }
 
-                    aTrans.translate(-aOldRange.getMinX(), -aOldRange.getMinY());
-                    aTrans.scale(fLclScaleX, fLclScaleY);
-                    aPixel.transform(aTrans);
+                // when the clip is a rectangle fast check for inside is possible
+                if(basegfx::tools::isRectangle(maClip) && aClipRange.isInside(aTextRange))
+                {
+                    // completely inside ClipRect
+                    break;
+                }
 
-                    const Size aOrigSizePixel(aBitmapEx.GetSizePixel());
-                    const Point aClipTopLeft(
-                        basegfx::fround(floor(std::max(0.0, aPixel.getMinX()))),
-                        basegfx::fround(floor(std::max(0.0, aPixel.getMinY()))));
-                    const Size aClipSize(
-                        basegfx::fround(ceil(std::min((double)aOrigSizePixel.Width(), aPixel.getWidth()))),
-                        basegfx::fround(ceil(std::min((double)aOrigSizePixel.Height(), aPixel.getHeight()))));
-                    const BitmapEx aClippedBitmap(
-                        aBitmapEx,
-                        aClipTopLeft,
-                        aClipSize);
+                // here text needs to be clipped; to do so, convert to SdrObjects with polygons
+                // and add these recursively. Delete original object, do not add in this run
+                SdrObject* pConverted = pSdrTextObj->ConvertToPolyObj(true, true);
+                SdrObject::Free(pObj);
 
-                    pObj->SetMergedItem(XFillStyleItem(XFILL_BITMAP));
-                    pObj->SetMergedItem(XFillBitmapItem(String(), Graphic(aClippedBitmap)));
-                    pObj->SetMergedItem(XFillBmpTileItem(false));
-                    pObj->SetMergedItem(XFillBmpStretchItem(true));
+                if(pConverted)
+                {
+                    // recursively add created conversion; per definition this shall not
+                    // contain further SdrTextObjs. Visit only non-group objects
+                    SdrObjListIter aIter(*pConverted, IM_DEEPNOGROUPS);
+
+                    // work with clones; the created conversion may contain group objects
+                    // and when working with the original objects the loop itself could
+                    // break and the cleanup later would be pretty complicated (only delete group
+                    // objects, are these empty, ...?)
+                    while(aIter.IsMore())
+                    {
+                        SdrObject* pCandidate = aIter.Next();
+                        OSL_ENSURE(pCandidate && 0 == dynamic_cast< SdrObjGroup* >(pCandidate), "SdrObjListIter with IM_DEEPNOGROUPS error (!)");
+                        SdrObject* pNewClone = pCandidate->Clone();
+
+                        if(pNewClone)
+                        {
+                            InsertObj(pNewClone, false);
+                        }
+                        else
+                        {
+                            OSL_ENSURE(false, "SdrObject::Clone() failed (!)");
+                        }
+                    }
+
+                    // cleanup temporary conversion objects
+                    SdrObject::Free(pConverted);
+                }
+
+                break;
+            }
+        }
+        else
+        {
+            BitmapEx aBitmapEx;
+
+            if(pSdrGrafObj)
+            {
+                aBitmapEx = pSdrGrafObj->GetGraphic().GetBitmapEx();
+            }
+
+            SdrObject::Free(pObj);
+
+            if(!aOldRange.isEmpty())
+            {
+                // clip against ClipRegion
+                const basegfx::B2DPolyPolygon aNewPoly(
+                    basegfx::tools::clipPolyPolygonOnPolyPolygon(
+                        aPoly,
+                        maClip,
+                        true,
+                        aPoly.isClosed() ? false : true));
+                const basegfx::B2DRange aNewRange(aNewPoly.getB2DRange());
+
+                if(!aNewRange.isEmpty())
+                {
+                    pObj = new SdrPathObj(
+                        aNewPoly.isClosed() ? OBJ_POLY : OBJ_PLIN,
+                        aNewPoly);
+
+                    pObj->SetLayer(aOldLayer);
+                    pObj->SetMergedItemSet(aOldItemSet);
+
+                    if(!!aBitmapEx)
+                    {
+                        // aNewRange is inside of aOldRange and defines which part of aBitmapEx is used
+                        const double fScaleX(aBitmapEx.GetSizePixel().Width() / (aOldRange.getWidth() ? aOldRange.getWidth() : 1.0));
+                        const double fScaleY(aBitmapEx.GetSizePixel().Height() / (aOldRange.getHeight() ? aOldRange.getHeight() : 1.0));
+                        basegfx::B2DRange aPixel(aNewRange);
+                        basegfx::B2DHomMatrix aTrans;
+
+                        aTrans.translate(-aOldRange.getMinX(), -aOldRange.getMinY());
+                        aTrans.scale(fScaleX, fScaleY);
+                        aPixel.transform(aTrans);
+
+                        const Size aOrigSizePixel(aBitmapEx.GetSizePixel());
+                        const Point aClipTopLeft(
+                            basegfx::fround(floor(std::max(0.0, aPixel.getMinX()))),
+                            basegfx::fround(floor(std::max(0.0, aPixel.getMinY()))));
+                        const Size aClipSize(
+                            basegfx::fround(ceil(std::min((double)aOrigSizePixel.Width(), aPixel.getWidth()))),
+                            basegfx::fround(ceil(std::min((double)aOrigSizePixel.Height(), aPixel.getHeight()))));
+                        const BitmapEx aClippedBitmap(
+                            aBitmapEx,
+                            aClipTopLeft,
+                            aClipSize);
+
+                        pObj->SetMergedItem(XFillStyleItem(XFILL_BITMAP));
+                        pObj->SetMergedItem(XFillBitmapItem(String(), Graphic(aClippedBitmap)));
+                        pObj->SetMergedItem(XFillBmpTileItem(false));
+                        pObj->SetMergedItem(XFillBmpStretchItem(true));
+                    }
                 }
             }
         }
@@ -948,19 +1018,22 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const XubString& rS
     Rectangle aTextRect( aPos, aSize );
     SdrRectObj* pText =new SdrRectObj( OBJ_TEXT, aTextRect );
 
+    pText->SetMergedItem ( SdrTextUpperDistItem (0));
+    pText->SetMergedItem ( SdrTextLowerDistItem (0));
+    pText->SetMergedItem ( SdrTextRightDistItem (0));
+    pText->SetMergedItem ( SdrTextLeftDistItem (0));
+
     if ( aFnt.GetWidth() || ( rAct.GetType() == META_STRETCHTEXT_ACTION ) )
     {
         pText->ClearMergedItem( SDRATTR_TEXT_AUTOGROWWIDTH );
         pText->SetMergedItem( SdrTextAutoGrowHeightItem( false ) );
         // don't let the margins eat the space needed for the text
-        pText->SetMergedItem ( SdrTextUpperDistItem (0));
-        pText->SetMergedItem ( SdrTextLowerDistItem (0));
-        pText->SetMergedItem ( SdrTextRightDistItem (0));
-        pText->SetMergedItem ( SdrTextLeftDistItem (0));
         pText->SetMergedItem( SdrTextFitToSizeTypeItem( SDRTEXTFIT_ALLLINES ) );
     }
     else
+    {
         pText->SetMergedItem( SdrTextAutoGrowWidthItem( true ) );
+    }
 
     pText->SetModel(mpModel);
     pText->SetLayer(mnLayer);
