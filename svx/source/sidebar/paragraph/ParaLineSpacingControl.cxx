@@ -392,6 +392,8 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
                         mbUseLineSPCustom = USE_CUSTOM;
                     }
                     break;
+                default:
+                    break;
                 }
             }
             break;
@@ -446,6 +448,8 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
                 aLineDist.SelectEntryPos( LLINESPACE_MIN );
                 mbUseLineSPCustom = USE_CUSTOM;
             }
+            break;
+        default:
             break;
         }
     }
