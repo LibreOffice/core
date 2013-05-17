@@ -37,7 +37,7 @@
 //===============================================================position=============================================
 
 #define MBOX_WIDTH                          28
-#define TOOLBOX_ITEM_HEIGHT                 12
+#define LOCAL_TOOLBOX_ITEM_HEIGHT                   12
 #define CHECKBOX_HEIGHT                     10
 
 #define FT_CATEGORY_X                       SECTIONPAGE_MARGIN_HORIZONTAL
@@ -49,7 +49,7 @@
 #define TBX_CATEGORY_Y                      LB_CATEGORY_Y + MBOX_HEIGHT + CONTROL_SPACING_VERTICAL
 
 #define FT_DECIMALS_X                       SECTIONPAGE_MARGIN_HORIZONTAL
-#define FT_DECIMALS_Y                       TBX_CATEGORY_Y + TOOLBOX_ITEM_HEIGHT + 4 + CONTROL_SPACING_VERTICAL
+#define FT_DECIMALS_Y                       TBX_CATEGORY_Y + LOCAL_TOOLBOX_ITEM_HEIGHT + 4 + CONTROL_SPACING_VERTICAL
 #define LB_DECIMALS_X                       FT_CATEGORY_X
 #define LB_DECIMALS_Y                       FT_DECIMALS_Y + TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL
 
