@@ -1085,6 +1085,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
+        case HANDLE_USE_OLD_PRINTER_METRICS:
+        {
+            sal_Bool bTmp = sal_False;
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
         case HANDLE_TABS_RELATIVE_TO_INDENT:
         {
             sal_Bool bTmp = mpDoc->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT);
