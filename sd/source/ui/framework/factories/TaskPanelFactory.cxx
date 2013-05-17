@@ -151,7 +151,7 @@ void SAL_CALL TaskPanelFactory::initialize(
             catch(RuntimeException&)
             {}
 
-
+            SAL_DEBUG( "TaskPanelFactory::initialize !" );
             Reference<XControllerManager> xCM (xController, UNO_QUERY_THROW);
             Reference<XConfigurationController> xCC (
                 xCM->getConfigurationController(), UNO_QUERY_THROW);
