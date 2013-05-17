@@ -1,0 +1,694 @@
+--- boost/boost/archive/basic_archive.hpp	2010-08-11 20:15:46.000000000 +0200
++++ boost/boost/archive/basic_archive.hpp	2013-05-17 15:39:58.624333369 +0200
+@@ -54,7 +54,7 @@
+         return *this;
+     }
+     // used for text output
+-    operator const base_type () const {
++    operator base_type () const {
+         return t;
+     }                
+     // used for text input
+@@ -90,7 +90,7 @@
+         return *this;
+     }
+     // used for text output
+-    operator const base_type () const {
++    operator base_type () const {
+         return t;
+     }                
+     // used for text intput
+@@ -127,7 +127,7 @@
+     }
+ 
+     // used for text output
+-    operator const int () const {
++    operator int () const {
+         return t;
+     }                
+     // used for text input
+@@ -161,7 +161,7 @@
+         return *this;
+     }
+     // used for text output
+-    operator const uint_least32_t () const {
++    operator uint_least32_t () const {
+         return t;
+     }                
+     // used for text input
+@@ -254,7 +254,7 @@
+ #define BOOST_ARCHIVE_STRONG_TYPEDEF(T, D)         \
+     class D : public T {                           \
+     public:                                        \
+-        explicit D(const T t) : T(t){}             \
++        explicit D(const T t_) : T(t_){}             \
+     };                                             \
+ /**/
+ 
+--- boost/boost/multi_index/detail/index_matcher.hpp	2008-07-03 18:51:53.000000000 +0200
++++ boost/boost/multi_index/detail/index_matcher.hpp	2013-05-17 15:30:12.539099597 +0200
+@@ -132,17 +132,17 @@
+         entries(),entries()+size_,
+         entry(node),entry::less_by_node()); /* localize entry */
+     ent->ordered=false;
+-    std::size_t n=ent->pos;                 /* get its position */
++    std::size_t n_=ent->pos;                 /* get its position */
+ 
+     entry dummy(0);
+-    dummy.pile_top=n;
++    dummy.pile_top=n_;
+ 
+     entry* pile_ent=                        /* find the first available pile */
+       std::lower_bound(                     /* to stack the entry            */
+         entries(),entries()+num_piles,
+         dummy,entry::less_by_pile_top());
+ 
+-    pile_ent->pile_top=n;                   /* stack the entry */
++    pile_ent->pile_top=n_;                   /* stack the entry */
+     pile_ent->pile_top_entry=ent;        
+ 
+     /* if not the first pile, link entry to top of the preceding pile */
+@@ -164,7 +164,7 @@
+        */
+ 
+       entry* ent=entries()[num_piles-1].pile_top_entry;
+-      for(std::size_t n=num_piles;n--;){
++      for(std::size_t n_=num_piles;n_--;){
+         ent->ordered=true;
+         ent=ent->previous;
+       }
+--- boost/boost/multi_index/ordered_index.hpp	2010-07-25 12:44:55.000000000 +0200
++++ boost/boost/multi_index/ordered_index.hpp	2013-05-17 15:33:42.785182819 +0200
+@@ -436,9 +436,9 @@
+ 
+   template<typename CompatibleKey,typename CompatibleCompare>
+   iterator find(
+-    const CompatibleKey& x,const CompatibleCompare& comp)const
++    const CompatibleKey& x,const CompatibleCompare& comp_)const
+   {
+-    return make_iterator(ordered_index_find(root(),header(),key,x,comp));
++    return make_iterator(ordered_index_find(root(),header(),key,x,comp_));
+   }
+ 
+   template<typename CompatibleKey>
+@@ -448,9 +448,9 @@
+   }
+ 
+   template<typename CompatibleKey,typename CompatibleCompare>
+-  size_type count(const CompatibleKey& x,const CompatibleCompare& comp)const
++  size_type count(const CompatibleKey& x,const CompatibleCompare& comp_)const
+   {
+-    std::pair<iterator,iterator> p=equal_range(x,comp);
++    std::pair<iterator,iterator> p=equal_range(x,comp_);
+     size_type n=std::distance(p.first,p.second);
+     return n;
+   }
+@@ -464,10 +464,10 @@
+ 
+   template<typename CompatibleKey,typename CompatibleCompare>
+   iterator lower_bound(
+-    const CompatibleKey& x,const CompatibleCompare& comp)const
++    const CompatibleKey& x,const CompatibleCompare& comp_)const
+   {
+     return make_iterator(
+-      ordered_index_lower_bound(root(),header(),key,x,comp));
++      ordered_index_lower_bound(root(),header(),key,x,comp_));
+   }
+ 
+   template<typename CompatibleKey>
+@@ -479,10 +479,10 @@
+ 
+   template<typename CompatibleKey,typename CompatibleCompare>
+   iterator upper_bound(
+-    const CompatibleKey& x,const CompatibleCompare& comp)const
++    const CompatibleKey& x,const CompatibleCompare& comp_)const
+   {
+     return make_iterator(
+-      ordered_index_upper_bound(root(),header(),key,x,comp));
++      ordered_index_upper_bound(root(),header(),key,x,comp_));
+   }
+ 
+   template<typename CompatibleKey>
+@@ -497,10 +497,10 @@
+ 
+   template<typename CompatibleKey,typename CompatibleCompare>
+   std::pair<iterator,iterator> equal_range(
+-    const CompatibleKey& x,const CompatibleCompare& comp)const
++    const CompatibleKey& x,const CompatibleCompare& comp_)const
+   {
+     std::pair<node_type*,node_type*> p=
+-      ordered_index_equal_range(root(),header(),key,x,comp);
++      ordered_index_equal_range(root(),header(),key,x,comp_);
+     return std::pair<iterator,iterator>(
+       make_iterator(p.first),make_iterator(p.second));
+   }
+--- boost/boost/multi_index/sequenced_index.hpp	2008-07-03 18:51:53.000000000 +0200
++++ boost/boost/multi_index/sequenced_index.hpp	2013-05-17 15:44:15.265289335 +0200
+@@ -346,7 +346,7 @@
+   }
+ 
+   template<typename Modifier,typename Rollback>
+-  bool modify(iterator position,Modifier mod,Rollback back)
++  bool modify(iterator position,Modifier mod,Rollback back_)
+   {
+     BOOST_MULTI_INDEX_CHECK_VALID_ITERATOR(position);
+     BOOST_MULTI_INDEX_CHECK_DEREFERENCEABLE_ITERATOR(position);
+@@ -363,7 +363,7 @@
+ #endif
+ 
+     return this->final_modify_(
+-      mod,back,static_cast<final_node_type*>(position.get_node()));
++      mod,back_,static_cast<final_node_type*>(position.get_node()));
+   }
+ 
+   void swap(sequenced_index<SuperMeta,TagList>& x)
+--- boost/boost/multi_index_container.hpp	2010-07-24 11:20:29.000000000 +0200
++++ boost/boost/multi_index_container.hpp	2013-05-17 15:45:56.723899853 +0200
+@@ -360,7 +360,7 @@
+     IteratorType it
+     BOOST_APPEND_EXPLICIT_TEMPLATE_NON_TYPE(int,N))
+   {
+-    typedef typename nth_index<N>::type index;
++    typedef typename nth_index<N>::type index_;
+ 
+ #if !defined(__SUNPRO_CC)||!(__SUNPRO_CC<0x580) /* fails in Sun C++ 5.7 */
+     BOOST_STATIC_ASSERT(
+@@ -371,7 +371,7 @@
+     BOOST_MULTI_INDEX_CHECK_IS_OWNER(
+       it,static_cast<typename IteratorType::container_type&>(*this));
+ 
+-    return index::make_iterator(static_cast<node_type*>(it.get_node()));
++    return index_::make_iterator(static_cast<node_type*>(it.get_node()));
+   }
+ 
+   template<int N,typename IteratorType>
+@@ -379,7 +379,7 @@
+     IteratorType it
+     BOOST_APPEND_EXPLICIT_TEMPLATE_NON_TYPE(int,N))const
+   {
+-    typedef typename nth_index<N>::type index;
++    typedef typename nth_index<N>::type index_;
+ 
+ #if !defined(__SUNPRO_CC)||!(__SUNPRO_CC<0x580) /* fails in Sun C++ 5.7 */
+     BOOST_STATIC_ASSERT((
+@@ -390,7 +390,7 @@
+     BOOST_MULTI_INDEX_CHECK_VALID_ITERATOR(it);
+     BOOST_MULTI_INDEX_CHECK_IS_OWNER(
+       it,static_cast<const typename IteratorType::container_type&>(*this));
+-    return index::make_iterator(static_cast<node_type*>(it.get_node()));
++    return index_::make_iterator(static_cast<node_type*>(it.get_node()));
+   }
+ #endif
+ 
+@@ -414,7 +414,7 @@
+     IteratorType it
+     BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(Tag))
+   {
+-    typedef typename index<Tag>::type index;
++    typedef typename index<Tag>::type index_;
+ 
+ #if !defined(__SUNPRO_CC)||!(__SUNPRO_CC<0x580) /* fails in Sun C++ 5.7 */
+     BOOST_STATIC_ASSERT(
+@@ -424,7 +424,7 @@
+     BOOST_MULTI_INDEX_CHECK_VALID_ITERATOR(it);
+     BOOST_MULTI_INDEX_CHECK_IS_OWNER(
+       it,static_cast<typename IteratorType::container_type&>(*this));
+-    return index::make_iterator(static_cast<node_type*>(it.get_node()));
++    return index_::make_iterator(static_cast<node_type*>(it.get_node()));
+   }
+ 
+   template<typename Tag,typename IteratorType>
+@@ -432,7 +432,7 @@
+     IteratorType it
+     BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(Tag))const
+   {
+-    typedef typename index<Tag>::type index;
++    typedef typename index<Tag>::type index_;
+ 
+ #if !defined(__SUNPRO_CC)||!(__SUNPRO_CC<0x580) /* fails in Sun C++ 5.7 */
+     BOOST_STATIC_ASSERT((
+@@ -443,7 +443,7 @@
+     BOOST_MULTI_INDEX_CHECK_VALID_ITERATOR(it);
+     BOOST_MULTI_INDEX_CHECK_IS_OWNER(
+       it,static_cast<const typename IteratorType::container_type&>(*this));
+-    return index::make_iterator(static_cast<node_type*>(it.get_node()));
++    return index_::make_iterator(static_cast<node_type*>(it.get_node()));
+   }
+ #endif
+ 
+--- boost/boost/property_tree/detail/exception_implementation.hpp	2009-09-01 23:27:45.000000000 +0200
++++ boost/boost/property_tree/detail/exception_implementation.hpp	2013-05-17 15:28:28.599529530 +0200
+@@ -30,8 +30,8 @@
+     ///////////////////////////////////////////////////////////////////////////
+     // ptree_error
+ 
+-    inline ptree_error::ptree_error(const std::string &what): 
+-        std::runtime_error(what) 
++    inline ptree_error::ptree_error(const std::string &what_): 
++        std::runtime_error(what_) 
+     {
+     }
+ 
+@@ -43,8 +43,8 @@
+     // ptree_bad_data
+ 
+     template<class D> inline
+-    ptree_bad_data::ptree_bad_data(const std::string &what, const D &data):
+-        ptree_error(what), m_data(data)
++    ptree_bad_data::ptree_bad_data(const std::string &what_, const D &data_):
++        ptree_error(what_), m_data(data_)
+     {
+     }
+ 
+@@ -62,8 +62,8 @@
+     // ptree_bad_path
+ 
+     template<class P> inline
+-    ptree_bad_path::ptree_bad_path(const std::string &what, const P &path):
+-        ptree_error(detail::prepare_bad_path_what(what, path)), m_path(path)
++    ptree_bad_path::ptree_bad_path(const std::string &what_, const P &path_):
++        ptree_error(detail::prepare_bad_path_what(what_, path_)), m_path(path_)
+     {
+ 
+     }
+--- boost/boost/property_tree/detail/file_parser_error.hpp	2009-09-01 23:27:45.000000000 +0200
++++ boost/boost/property_tree/detail/file_parser_error.hpp	2013-05-17 15:36:01.615914822 +0200
+@@ -26,11 +26,11 @@
+         // Construction & destruction
+ 
+         // Construct error
+-        file_parser_error(const std::string &message,
+-                          const std::string &filename,
+-                          unsigned long line) :
+-            ptree_error(format_what(message, filename, line)),
+-            m_message(message), m_filename(filename), m_line(line)
++        file_parser_error(const std::string &message_,
++                          const std::string &filename_,
++                          unsigned long line_) :
++            ptree_error(format_what(message_, filename_, line_)),
++            m_message(message_), m_filename(filename_), m_line(line_)
+         {
+         }
+ 
+@@ -69,20 +69,20 @@
+         unsigned long m_line;
+ 
+         // Format error message to be returned by std::runtime_error::what()
+-        std::string format_what(const std::string &message,
+-                                const std::string &filename,
+-                                unsigned long line)
++        std::string format_what(const std::string &message_,
++                                const std::string &filename_,
++                                unsigned long line_)
+         {
+             std::stringstream stream;
+-            if (line > 0)
+-                stream << (filename.empty() ? "<unspecified file>"
+-                                            : filename.c_str())
+-                       << '(' << line << "): "
+-                       << message;
++            if (line_ > 0)
++                stream << (filename_.empty() ? "<unspecified file>"
++                                            : filename_.c_str())
++                       << '(' << line_ << "): "
++                       << message_;
+             else
+-                stream << (filename.empty() ? "<unspecified file>"
+-                                            : filename.c_str())
+-                       << ": " << message;
++                stream << (filename_.empty() ? "<unspecified file>"
++                                            : filename_.c_str())
++                       << ": " << message_;
+             return stream.str();
+         }
+ 
+--- boost/boost/property_tree/detail/json_parser_error.hpp	2007-05-13 00:02:53.000000000 +0200
++++ boost/boost/property_tree/detail/json_parser_error.hpp	2013-05-17 15:36:44.605902442 +0200
+@@ -20,10 +20,10 @@
+     class json_parser_error: public file_parser_error
+     {
+     public:
+-        json_parser_error(const std::string &message, 
+-                          const std::string &filename, 
+-                          unsigned long line): 
+-            file_parser_error(message, filename, line)
++        json_parser_error(const std::string &message_, 
++                          const std::string &filename_, 
++                          unsigned long line_): 
++            file_parser_error(message_, filename_, line_)
+         { 
+         }
+     };
+--- boost/boost/property_tree/detail/json_parser_read.hpp	2013-05-17 15:57:23.740638395 +0200
++++ boost/boost/property_tree/detail/json_parser_read.hpp	2013-05-17 15:31:05.666857356 +0200
+@@ -45,7 +45,7 @@
+         struct a_object_s
+         {
+             context &c;
+-            a_object_s(context &c): c(c) { }
++            a_object_s(context &c_): c(c_) { }
+             void operator()(Ch) const
+             {
+                 if (c.stack.empty())
+@@ -63,7 +63,7 @@
+         struct a_object_e
+         {
+             context &c;
+-            a_object_e(context &c): c(c) { }
++            a_object_e(context &c_): c(c_) { }
+             void operator()(Ch) const
+             {
+                 BOOST_ASSERT(c.stack.size() >= 1);
+@@ -74,7 +74,7 @@
+         struct a_name
+         {
+             context &c;
+-            a_name(context &c): c(c) { }
++            a_name(context &c_): c(c_) { }
+             void operator()(It, It) const
+             {
+                 c.name.swap(c.string);
+@@ -85,7 +85,7 @@
+         struct a_string_val
+         {
+             context &c;
+-            a_string_val(context &c): c(c) { }
++            a_string_val(context &c_): c(c_) { }
+             void operator()(It, It) const
+             {
+                 BOOST_ASSERT(c.stack.size() >= 1);
+@@ -98,7 +98,7 @@
+         struct a_literal_val
+         {
+             context &c;
+-            a_literal_val(context &c): c(c) { }
++            a_literal_val(context &c_): c(c_) { }
+             void operator()(It b, It e) const
+             {
+                 BOOST_ASSERT(c.stack.size() >= 1);
+@@ -111,8 +111,8 @@
+         struct a_char
+         {
+             context &c;
+-            a_char(context &c): c(c) { }
+-            void operator()(It b, It e) const
++            a_char(context &c_): c(c_) { }
++            void operator()(It b, It /* e */) const
+             {
+                 c.string += *b;
+             }
+@@ -121,7 +121,7 @@
+         struct a_escape
+         {
+             context &c;
+-            a_escape(context &c): c(c) { }
++            a_escape(context &c_): c(c_) { }
+             void operator()(Ch ch) const
+             {
+                 switch (ch)
+@@ -142,7 +142,7 @@
+         struct a_unicode
+         {
+             context &c;
+-            a_unicode(context &c): c(c) { }
++            a_unicode(context &c_): c(c_) { }
+             void operator()(unsigned long u) const
+             {
+                 u = (std::min)(u, static_cast<unsigned long>((std::numeric_limits<Ch>::max)()));
+--- boost/boost/property_tree/detail/ptree_implementation.hpp	2010-07-03 22:59:45.000000000 +0200
++++ boost/boost/property_tree/detail/ptree_implementation.hpp	2013-05-17 15:55:56.449713452 +0200
+@@ -183,8 +183,8 @@
+     }
+ 
+     template<class K, class D, class C> inline
+-    basic_ptree<K, D, C>::basic_ptree(const data_type &data)
+-        : m_data(data), m_children(new typename subs::base_container)
++    basic_ptree<K, D, C>::basic_ptree(const data_type &data_)
++        : m_data(data_), m_children(new typename subs::base_container)
+     {
+     }
+ 
+@@ -539,48 +539,48 @@
+ 
+     template<class K, class D, class C>
+     basic_ptree<K, D, C> &
+-        basic_ptree<K, D, C>::get_child(const path_type &path)
++        basic_ptree<K, D, C>::get_child(const path_type &path_)
+     {
+-        path_type p(path);
++        path_type p(path_);
+         self_type *n = walk_path(p);
+         if (!n) {
+-            BOOST_PROPERTY_TREE_THROW(ptree_bad_path("No such node", path));
++            BOOST_PROPERTY_TREE_THROW(ptree_bad_path("No such node", path_));
+         }
+         return *n;
+     }
+ 
+     template<class K, class D, class C> inline
+     const basic_ptree<K, D, C> &
+-        basic_ptree<K, D, C>::get_child(const path_type &path) const
++        basic_ptree<K, D, C>::get_child(const path_type &path_) const
+     {
+-        return const_cast<self_type*>(this)->get_child(path);
++        return const_cast<self_type*>(this)->get_child(path_);
+     }
+ 
+     template<class K, class D, class C> inline
+     basic_ptree<K, D, C> &
+-        basic_ptree<K, D, C>::get_child(const path_type &path,
++        basic_ptree<K, D, C>::get_child(const path_type &path_,
+                                         self_type &default_value)
+     {
+-        path_type p(path);
++        path_type p(path_);
+         self_type *n = walk_path(p);
+         return n ? *n : default_value;
+     }
+ 
+     template<class K, class D, class C> inline
+     const basic_ptree<K, D, C> &
+-        basic_ptree<K, D, C>::get_child(const path_type &path,
++        basic_ptree<K, D, C>::get_child(const path_type &path_,
+                                         const self_type &default_value) const
+     {
+-        return const_cast<self_type*>(this)->get_child(path,
++        return const_cast<self_type*>(this)->get_child(path_,
+             const_cast<self_type&>(default_value));
+     }
+ 
+ 
+     template<class K, class D, class C>
+     optional<basic_ptree<K, D, C> &>
+-        basic_ptree<K, D, C>::get_child_optional(const path_type &path)
++        basic_ptree<K, D, C>::get_child_optional(const path_type &path_)
+     {
+-        path_type p(path);
++        path_type p(path_);
+         self_type *n = walk_path(p);
+         if (!n) {
+             return optional<self_type&>();
+@@ -590,9 +590,9 @@
+ 
+     template<class K, class D, class C>
+     optional<const basic_ptree<K, D, C> &>
+-        basic_ptree<K, D, C>::get_child_optional(const path_type &path) const
++        basic_ptree<K, D, C>::get_child_optional(const path_type &path_) const
+     {
+-        path_type p(path);
++        path_type p(path_);
+         self_type *n = walk_path(p);
+         if (!n) {
+             return optional<const self_type&>();
+@@ -602,10 +602,10 @@
+ 
+     template<class K, class D, class C>
+     basic_ptree<K, D, C> &
+-        basic_ptree<K, D, C>::put_child(const path_type &path,
++        basic_ptree<K, D, C>::put_child(const path_type &path_,
+                                         const self_type &value)
+     {
+-        path_type p(path);
++        path_type p(path_);
+         self_type &parent = force_path(p);
+         // Got the parent. Now get the correct child.
+         key_type fragment = p.reduce();
+@@ -620,10 +620,10 @@
+ 
+     template<class K, class D, class C>
+     basic_ptree<K, D, C> &
+-        basic_ptree<K, D, C>::add_child(const path_type &path,
++        basic_ptree<K, D, C>::add_child(const path_type &path_,
+                                         const self_type &value)
+     {
+-        path_type p(path);
++        path_type p(path_);
+         self_type &parent = force_path(p);
+         // Got the parent.
+         key_type fragment = p.reduce();
+@@ -709,26 +709,26 @@
+     template<class K, class D, class C>
+     template<class Type, class Translator> inline
+     typename boost::enable_if<detail::is_translator<Translator>, Type>::type
+-    basic_ptree<K, D, C>::get(const path_type &path,
++    basic_ptree<K, D, C>::get(const path_type &path_,
+                               Translator tr) const
+     {
+-        return get_child(path).BOOST_NESTED_TEMPLATE get_value<Type>(tr);
++        return get_child(path_).BOOST_NESTED_TEMPLATE get_value<Type>(tr);
+     }
+ 
+     template<class K, class D, class C>
+     template<class Type> inline
+-    Type basic_ptree<K, D, C>::get(const path_type &path) const
++    Type basic_ptree<K, D, C>::get(const path_type &path_) const
+     {
+-        return get_child(path).BOOST_NESTED_TEMPLATE get_value<Type>();
++        return get_child(path_).BOOST_NESTED_TEMPLATE get_value<Type>();
+     }
+ 
+     template<class K, class D, class C>
+     template<class Type, class Translator> inline
+-    Type basic_ptree<K, D, C>::get(const path_type &path,
++    Type basic_ptree<K, D, C>::get(const path_type &path_,
+                                    const Type &default_value,
+                                    Translator tr) const
+     {
+-        return get_optional<Type>(path, tr).get_value_or(default_value);
++        return get_optional<Type>(path_, tr).get_value_or(default_value);
+     }
+ 
+     template<class K, class D, class C>
+@@ -738,18 +738,18 @@
+         std::basic_string<Ch>
+     >::type
+     basic_ptree<K, D, C>::get(
+-        const path_type &path, const Ch *default_value, Translator tr) const
++        const path_type &path_, const Ch *default_value, Translator tr) const
+     {
+-        return get<std::basic_string<Ch>, Translator>(path, default_value, tr);
++        return get<std::basic_string<Ch>, Translator>(path_, default_value, tr);
+     }
+ 
+     template<class K, class D, class C>
+     template<class Type> inline
+     typename boost::disable_if<detail::is_translator<Type>, Type>::type
+-    basic_ptree<K, D, C>::get(const path_type &path,
++    basic_ptree<K, D, C>::get(const path_type &path_,
+                               const Type &default_value) const
+     {
+-        return get_optional<Type>(path).get_value_or(default_value);
++        return get_optional<Type>(path_).get_value_or(default_value);
+     }
+ 
+     template<class K, class D, class C>
+@@ -759,17 +759,17 @@
+         std::basic_string<Ch>
+     >::type
+     basic_ptree<K, D, C>::get(
+-        const path_type &path, const Ch *default_value) const
++        const path_type &path_, const Ch *default_value) const
+     {
+-        return get< std::basic_string<Ch> >(path, default_value);
++        return get< std::basic_string<Ch> >(path_, default_value);
+     }
+ 
+     template<class K, class D, class C>
+     template<class Type, class Translator>
+-    optional<Type> basic_ptree<K, D, C>::get_optional(const path_type &path,
++    optional<Type> basic_ptree<K, D, C>::get_optional(const path_type &path_,
+                                                          Translator tr) const
+     {
+-        if (optional<const self_type&> child = get_child_optional(path))
++        if (optional<const self_type&> child = get_child_optional(path_))
+             return child.get().BOOST_NESTED_TEMPLATE get_value_optional<Type>(tr);
+         else
+             return optional<Type>();
+@@ -778,9 +778,9 @@
+     template<class K, class D, class C>
+     template<class Type>
+     optional<Type> basic_ptree<K, D, C>::get_optional(
+-                                                const path_type &path) const
++                                                const path_type &path_) const
+     {
+-        if (optional<const self_type&> child = get_child_optional(path))
++        if (optional<const self_type&> child = get_child_optional(path_))
+             return child.get().BOOST_NESTED_TEMPLATE get_value_optional<Type>();
+         else
+             return optional<Type>();
+@@ -809,13 +809,13 @@
+     template<class K, class D, class C>
+     template<class Type, typename Translator>
+     basic_ptree<K, D, C> & basic_ptree<K, D, C>::put(
+-        const path_type &path, const Type &value, Translator tr)
++        const path_type &path_, const Type &value, Translator tr)
+     {
+-        if(optional<self_type &> child = get_child_optional(path)) {
++        if(optional<self_type &> child = get_child_optional(path_)) {
+             child.get().put_value(value, tr);
+             return *child;
+         } else {
+-            self_type &child2 = put_child(path, self_type());
++            self_type &child2 = put_child(path_, self_type());
+             child2.put_value(value, tr);
+             return child2;
+         }
+@@ -824,18 +824,18 @@
+     template<class K, class D, class C>
+     template<class Type> inline
+     basic_ptree<K, D, C> & basic_ptree<K, D, C>::put(
+-        const path_type &path, const Type &value)
++        const path_type &path_, const Type &value)
+     {
+-        return put(path, value,
++        return put(path_, value,
+                    typename translator_between<data_type, Type>::type());
+     }
+ 
+     template<class K, class D, class C>
+     template<class Type, typename Translator> inline
+     basic_ptree<K, D, C> & basic_ptree<K, D, C>::add(
+-        const path_type &path, const Type &value, Translator tr)
++        const path_type &path_, const Type &value, Translator tr)
+     {
+-        self_type &child = add_child(path, self_type());
++        self_type &child = add_child(path_, self_type());
+         child.put_value(value, tr);
+         return child;
+     }
+@@ -843,9 +843,9 @@
+     template<class K, class D, class C>
+     template<class Type> inline
+     basic_ptree<K, D, C> & basic_ptree<K, D, C>::add(
+-        const path_type &path, const Type &value)
++        const path_type &path_, const Type &value)
+     {
+-        return add(path, value,
++        return add(path_, value,
+                    typename translator_between<data_type, Type>::type());
+     }
+ 
+--- boost/boost/serialization/collection_size_type.hpp	2010-07-09 18:50:03.000000000 +0200
++++ boost/boost/serialization/collection_size_type.hpp	2013-05-17 15:40:32.789528782 +0200
+@@ -37,7 +37,7 @@
+         return *this;
+     }
+     // used for text output
+-    operator const base_type () const {
++    operator base_type () const {
+         return t;
+     }                
+     // used for text input
+--- boost/boost/spirit/home/classic/error_handling/exceptions.hpp	2013-05-17 15:57:23.722638823 +0200
++++ boost/boost/spirit/home/classic/error_handling/exceptions.hpp	2013-05-17 15:26:32.319247352 +0200
+@@ -126,8 +126,8 @@
+         typedef unary<ParserT, parser<self_t> >         base_t;
+         typedef unary_parser_category                   parser_category_t;
+ 
+-        assertive_parser(ParserT const& parser, ErrorDescrT descriptor_)
+-        : base_t(parser), descriptor(descriptor_) {}
++        assertive_parser(ParserT const& parser_, ErrorDescrT descriptor_)
++        : base_t(parser_), descriptor(descriptor_) {}
+ 
+         template <typename ScannerT>
+         struct result
