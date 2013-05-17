@@ -857,7 +857,6 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
     if (bValid)
     {
         sc::CopyToDocContext aCxt(*this);
-        aCxt.setTabRange(nNewPos, nNewPos);
         SetNoListening( true );     // noch nicht bei CopyToTable/Insert
         maTabs[nOldPos]->CopyToTable(aCxt, 0, 0, MAXCOL, MAXROW, IDF_ALL, (pOnlyMarked != NULL),
                                         maTabs[nNewPos], pOnlyMarked );
@@ -965,7 +964,6 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             NumFmtMergeHandler aNumFmtMergeHdl(this, pSrcDoc);
 
             sc::CopyToDocContext aCxt(*this);
-            aCxt.setTabRange(nDestPos, nDestPos);
             nDestPos = std::min(nDestPos, (SCTAB)(GetTableCount() - 1));
             {   // scope for bulk broadcast
                 ScBulkBroadcast aBulkBroadcast( pBASM);

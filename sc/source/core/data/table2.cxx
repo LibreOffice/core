@@ -407,7 +407,6 @@ void ScTable::InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
         nWhichArray[2] = 0;
 
         sc::CopyToDocContext aCxt(*pDocument);
-        aCxt.setTabRange(nTab, nTab);
         for (SCSIZE i=0; i<nSize; i++)
         {
             aCol[nStartCol-1].CopyToColumn(aCxt, nStartRow, nEndRow, IDF_ATTRIB,

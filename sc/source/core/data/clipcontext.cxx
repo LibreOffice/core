@@ -13,67 +13,41 @@
 namespace sc {
 
 ClipContextBase::ClipContextBase(ScDocument& rDoc) :
-    mrDoc(rDoc), mnTabStart(-1), mnTabEnd(-1) {}
+    maSet(rDoc) {}
 
 ClipContextBase::~ClipContextBase() {}
 
-void ClipContextBase::setTabRange(SCTAB nStart, SCTAB nEnd)
-{
-    mnTabStart = nStart;
-    mnTabEnd = nEnd;
-}
-
-SCTAB ClipContextBase::getTabStart() const
-{
-    return mnTabStart;
-}
-
-SCTAB ClipContextBase::getTabEnd() const
-{
-    return mnTabEnd;
-}
-
 ColumnBlockPosition* ClipContextBase::getBlockPosition(SCTAB nTab, SCCOL nCol)
 {
-    if (mnTabStart < 0 || mnTabEnd < 0 || mnTabStart > mnTabEnd)
-        return NULL;
-
-    size_t nTabIndex = nTab - mnTabStart;
-    if (nTabIndex >= maTables.size())
-        maTables.resize(nTabIndex+1);
-
-    ColumnsType& rCols = maTables[nTabIndex];
-
-    ColumnsType::iterator it = rCols.find(nCol);
-    if (it != rCols.end())
-        // Block position for this column has already been fetched.
-        return &it->second;
-
-    std::pair<ColumnsType::iterator,bool> r =
-        rCols.insert(
-            ColumnsType::value_type(nCol, ColumnBlockPosition()));
-
-    if (!r.second)
-        // insertion failed.
-        return NULL;
-
-    it = r.first;
-
-    if (!mrDoc.InitColumnBlockPosition(it->second, nTab, nCol))
-        return NULL;
-
-    return &it->second;
+    return maSet.getBlockPosition(nTab, nCol);
 }
 
 CopyFromClipContext::CopyFromClipContext(ScDocument& rDoc,
     ScDocument* pRefUndoDoc, ScDocument* pClipDoc, sal_uInt16 nInsertFlag,
     bool bAsLink, bool bSkipAttrForEmptyCells) :
     ClipContextBase(rDoc),
+    mnTabStart(-1), mnTabEnd(-1),
     mpRefUndoDoc(pRefUndoDoc), mpClipDoc(pClipDoc), mnInsertFlag(nInsertFlag),
     mbAsLink(bAsLink), mbSkipAttrForEmptyCells(bSkipAttrForEmptyCells) {}
 
 CopyFromClipContext::~CopyFromClipContext()
 {
+}
+
+void CopyFromClipContext::setTabRange(SCTAB nStart, SCTAB nEnd)
+{
+    mnTabStart = nStart;
+    mnTabEnd = nEnd;
+}
+
+SCTAB CopyFromClipContext::getTabStart() const
+{
+    return mnTabStart;
+}
+
+SCTAB CopyFromClipContext::getTabEnd() const
+{
+    return mnTabEnd;
 }
 
 ScDocument* CopyFromClipContext::getUndoDoc()

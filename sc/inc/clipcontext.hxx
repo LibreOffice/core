@@ -22,13 +22,7 @@ namespace sc {
 
 class ClipContextBase
 {
-    typedef boost::unordered_map<SCCOL, ColumnBlockPosition> ColumnsType;
-    typedef std::vector<ColumnsType> TablesType;
-
-    ScDocument& mrDoc;
-    TablesType maTables;
-    SCTAB mnTabStart;
-    SCTAB mnTabEnd;
+    sc::ColumnBlockPositionSet maSet;
 
     ClipContextBase(); // disabled
 
@@ -36,16 +30,13 @@ public:
     ClipContextBase(ScDocument& rDoc);
     virtual ~ClipContextBase();
 
-    void setTabRange(SCTAB nStart, SCTAB nEnd);
-
-    SCTAB getTabStart() const;
-    SCTAB getTabEnd() const;
-
     ColumnBlockPosition* getBlockPosition(SCTAB nTab, SCCOL nCol);
 };
 
 class CopyFromClipContext : public ClipContextBase
 {
+    SCTAB mnTabStart;
+    SCTAB mnTabEnd;
     ScDocument* mpRefUndoDoc;
     ScDocument* mpClipDoc;
     sal_uInt16  mnInsertFlag;
@@ -60,6 +51,11 @@ public:
         bool bAsLink, bool bSkipAttrForEmptyCells);
 
     virtual ~CopyFromClipContext();
+
+    void setTabRange(SCTAB nStart, SCTAB nEnd);
+
+    SCTAB getTabStart() const;
+    SCTAB getTabEnd() const;
 
     ScDocument* getUndoDoc();
     ScDocument* getClipDoc();

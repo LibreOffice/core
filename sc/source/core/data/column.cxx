@@ -1514,7 +1514,6 @@ void ScColumn::CopyScenarioFrom( const ScColumn& rSrcCol )
 {
     //  This is the scenario table, the data is copied into it
     sc::CopyToDocContext aCxt(*pDocument);
-    aCxt.setTabRange(nTab, nTab);
     ScAttrIterator aAttrIter( pAttrArray, 0, MAXROW );
     SCROW nStart = -1, nEnd = -1;
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
@@ -1546,7 +1545,6 @@ void ScColumn::CopyScenarioTo( ScColumn& rDestCol ) const
 {
     //  This is the scenario table, the data is copied to the other
     sc::CopyToDocContext aCxt(*rDestCol.pDocument);
-    aCxt.setTabRange(rDestCol.nTab, rDestCol.nTab);
     ScAttrIterator aAttrIter( pAttrArray, 0, MAXROW );
     SCROW nStart = -1, nEnd = -1;
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
