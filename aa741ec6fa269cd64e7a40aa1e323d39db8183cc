@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//8i4\u003d",
+        "filename": "scp2/InstallModule_gnome.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2013-05-17T15:23:48Z",
+      "side": 0,
+      "message": "This one is still used in the scp files",
+      "revId": "aa741ec6fa269cd64e7a40aa1e323d39db8183cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//8i0\u003d",
+        "filename": "scp2/InstallModule_gnome.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2013-05-17T15:23:48Z",
+      "side": 0,
+      "message": "this one is also used in the scp files",
+      "revId": "aa741ec6fa269cd64e7a40aa1e323d39db8183cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
