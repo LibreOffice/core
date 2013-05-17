@@ -8,6 +8,8 @@
 #
 
 boost_patches :=
+#https://svn.boost.org/trac/boost/ticket/3093
+boost_patches += boost.3093.warnings.patch
 #https://svn.boost.org/trac/boost/ticket/3780
 boost_patches += boost.3780.aliasing.patch
 #https://svn.boost.org/trac/boost/ticket/4127
