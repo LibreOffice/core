@@ -284,7 +284,7 @@ IMPL_LINK_NOARG(MyWin, DigitalSignaturesWithServiceHdl)
 {
     OUString aDocFileName = maEditDOCFileName.GetText();
     uno::Reference < embed::XStorage > xStore = ::comphelper::OStorageHelper::GetStorageFromURL(
-            aDocFileName, embed::ElementModes::READWRITE, comphelper::getProcessServiceFactory() );
+            aDocFileName, embed::ElementModes::READWRITE, comphelper::getProcessComponentContext() );
 
     uno::Reference< security::XDocumentDigitalSignatures > xD(
         security::DocumentDigitalSignatures::createDefault(comphelper::getProcessComponentContext()) );
