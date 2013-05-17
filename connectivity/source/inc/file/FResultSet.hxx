@@ -47,9 +47,6 @@ namespace connectivity
 {
     namespace file
     {
-        /*
-        **  java_sql_ResultSet
-        */
         typedef ::cppu::WeakComponentImplHelper12<  ::com::sun::star::sdbc::XResultSet,
                                                     ::com::sun::star::sdbc::XRow,
                                                     ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
@@ -89,8 +86,6 @@ namespace connectivity
             TIntVector::iterator                    m_aEvaluateIter;
 
 
-//          TInt2IntMap                             m_aBookmarks;         // map from bookmarks to logical position
-//          ::std::vector<TInt2IntMap::iterator>    m_aBookmarksPositions;// vector of iterators to bookmark map, the order is the logical position
             OSkipDeletedSet                         m_aSkipDeletedSet;
 
             ::rtl::Reference<OKeySet>                   m_pFileSet;
@@ -319,7 +314,7 @@ namespace connectivity
             sal_Int32   map = column;
 
             OSL_ENSURE(column > 0, "file::OResultSet::mapColumn: invalid column index!");
-                // the first column (index 0) is for convenience only. The first real select column is no 1.
+            // the first column (index 0) is for convenience only. The first real select column is number 1.
             if ((column > 0) && (column < (sal_Int32)m_aColMapping.size()))
                 map = m_aColMapping[column];
 
