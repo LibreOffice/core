@@ -52,7 +52,7 @@
 -else
 -LD_SONAME = -Wl,-compatibility_version -Wl,$(SO_TARGET_VERSION_MAJOR) -Wl,-current_version -Wl,$(SO_TARGET_VERSION) -install_name $(notdir $(MIDDLE_SO_TARGET))
 -endif
-+LD_SONAME = -Wl,-compatibility_version -Wl,$(SO_TARGET_VERSION_MAJOR) -Wl,-current_version -Wl,$(SO_TARGET_VERSION) -install_name @executable_path/$(notdir $(MIDDLE_SO_TARGET))
++LD_SONAME = -Wl,-compatibility_version -Wl,$(SO_TARGET_VERSION_MAJOR) -Wl,-current_version -Wl,$(SO_TARGET_VERSION) -install_name @__________________________________________________OOO/$(notdir $(MIDDLE_SO_TARGET))
  
  ## Compiler switch to embed a runtime search path
  LD_RPATH=

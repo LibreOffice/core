@@ -74,13 +74,19 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 			$(if $(filter IOS ANDROID,$(OS)),--disable-dyload) \
 			$(if $(filter ANDROID,$(OS)),--disable-strict) \
 			$(if $(filter SOLARIS AIX,$(OS)),--disable-64bit-libs) \
-			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),\
 				--enable-static --disable-shared,\
 				--disable-static --enable-shared $(if $(filter ANDROID,$(OS)),--with-library-suffix=lo)) \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)\
 				--with-cross-build=$(subst $(INPATH),$(INPATH_FOR_BUILD),$(call gb_UnpackedTarball_get_dir,icu))/source)\
 		&& $(MAKE) \
+		$(if $(filter MACOSX,$(OS)),&& $(PERL) \
+			$(SOLARENV)/bin/macosx-change-install-names.pl shl OOO \
+			$(gb_Package_SOURCEDIR_icu)/source/lib/libicudata$(gb_Library_DLLEXT).$(icu_VERSION) \
+			$(gb_Package_SOURCEDIR_icu)/source/lib/libicuuc$(gb_Library_DLLEXT).$(icu_VERSION) \
+			$(gb_Package_SOURCEDIR_icu)/source/lib/libicui18n$(gb_Library_DLLEXT).$(icu_VERSION) \
+			$(gb_Package_SOURCEDIR_icu)/source/lib/libicule$(gb_Library_DLLEXT).$(icu_VERSION) \
+			$(gb_Package_SOURCEDIR_icu)/source/lib/libicutu$(gb_Library_DLLEXT).$(icu_VERSION)) \
 	,source)
 
 endif
