@@ -636,13 +636,6 @@ void CoreTextLayout::GetMeasurements()
             CTRunGetPositions( run, CFRangeMake( 0, 0 ), &mpGlyphPositions[ lineGlyphIx ] );
             CTRunGetAdvances( run, CFRangeMake( 0, 0 ), &mpGlyphAdvances[ lineGlyphIx ] );
 
-            bool isVerticalRun = false;
-            CFDictionaryRef aDict = CTRunGetAttributes( run );
-            if ( aDict ) {
-                const CFBooleanRef aValue = (const CFBooleanRef)CFDictionaryGetValue( aDict, kCTVerticalFormsAttributeName );
-                isVerticalRun = (aValue == kCFBooleanTrue);
-            }
-
             for ( CFIndex runGlyphIx = 0 ; runGlyphIx < runGlyphCount; lineGlyphIx++, runGlyphIx++ )
             {
                 const CFIndex charIx = runStringIndices[ runGlyphIx ];
