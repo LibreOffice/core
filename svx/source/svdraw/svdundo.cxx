@@ -738,7 +738,7 @@ SdrUndoObjList::SdrUndoObjList(SdrObject& rNewObj, bool bOrdNumDirect)
         nOrdNum=pObj->GetOrdNum();
     }
 
-    m_pListener = new ObjListListener(*this, *pObj, *pObjList->GetModel());
+    m_pListener = new ObjListListener(*this, *pObj, *pObj->GetModel());
 }
 
 SdrUndoObjList::~SdrUndoObjList()
