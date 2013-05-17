@@ -606,7 +606,7 @@ void ScTable::DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark )
 // pTable = Clipboard
 void ScTable::CopyToClip(
     sc::CopyToClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-    ScTable* pTable, bool bKeepScenarioFlags, bool bCloneNoteCaptions )
+    ScTable* pTable )
 {
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
     {
@@ -616,12 +616,13 @@ void ScTable::CopyToClip(
             pTable->mpRangeName = new ScRangeName(*mpRangeName);
 
         // notes
-        maNotes.clone(pTable->pDocument, nCol1, nRow1, nCol2, nRow2, bCloneNoteCaptions, nTab, pTable->maNotes);
+        maNotes.clone(
+            pTable->pDocument, nCol1, nRow1, nCol2, nRow2, rCxt.isCloneNotes(), nTab, pTable->maNotes);
 
         SCCOL i;
 
         for ( i = nCol1; i <= nCol2; i++)
-            aCol[i].CopyToClip(rCxt, nRow1, nRow2, pTable->aCol[i], bKeepScenarioFlags);
+            aCol[i].CopyToClip(rCxt, nRow1, nRow2, pTable->aCol[i]);
 
         //  copy widths/heights, and only "hidden", "filtered" and "manual" flags
         //  also for all preceding columns/rows, to have valid positions for drawing objects
@@ -656,15 +657,14 @@ void ScTable::CopyToClip(
 }
 
 void ScTable::CopyToClip(
-    sc::CopyToClipContext& rCxt, const ScRangeList& rRanges, ScTable* pTable,
-    bool bKeepScenarioFlags, bool bCloneNoteCaptions )
+    sc::CopyToClipContext& rCxt, const ScRangeList& rRanges, ScTable* pTable )
 {
     ScRangeList aRanges(rRanges);
     for ( size_t i = 0, nListSize = aRanges.size(); i < nListSize; ++i )
     {
         ScRange* p = aRanges[ i ];
-        CopyToClip(rCxt, p->aStart.Col(), p->aStart.Row(), p->aEnd.Col(), p->aEnd.Row(),
-                   pTable, bKeepScenarioFlags, bCloneNoteCaptions);
+        CopyToClip(
+            rCxt, p->aStart.Col(), p->aStart.Row(), p->aEnd.Col(), p->aEnd.Row(), pTable);
     }
 }
 

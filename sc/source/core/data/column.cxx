@@ -1185,10 +1185,10 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
 
 
 void ScColumn::CopyToClip(
-    sc::CopyToClipContext& rCxt, SCROW nRow1, SCROW nRow2, ScColumn& rColumn, bool bKeepScenarioFlags) const
+    sc::CopyToClipContext& rCxt, SCROW nRow1, SCROW nRow2, ScColumn& rColumn ) const
 {
     pAttrArray->CopyArea( nRow1, nRow2, 0, *rColumn.pAttrArray,
-                            bKeepScenarioFlags ? (SC_MF_ALL & ~SC_MF_SCENARIO) : SC_MF_ALL );
+                          rCxt.isKeepScenarioFlags() ? (SC_MF_ALL & ~SC_MF_SCENARIO) : SC_MF_ALL );
 
     SCSIZE i;
     SCSIZE nBlockCount = 0;

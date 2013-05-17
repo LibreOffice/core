@@ -30,6 +30,8 @@ class ClipContextBase
     SCTAB mnTabStart;
     SCTAB mnTabEnd;
 
+    ClipContextBase(); // disabled
+
 public:
     ClipContextBase(ScDocument& rDoc);
     virtual ~ClipContextBase();
@@ -44,7 +46,6 @@ public:
 
 class CopyFromClipContext : public ClipContextBase
 {
-
     ScDocument* mpRefUndoDoc;
     ScDocument* mpClipDoc;
     sal_uInt16  mnInsertFlag;
@@ -69,9 +70,17 @@ public:
 
 class CopyToClipContext : public ClipContextBase
 {
+    bool mbKeepScenarioFlags:1;
+    bool mbCloneNotes:1;
+
+    CopyToClipContext(); // disabled
+
 public:
-    CopyToClipContext(ScDocument& rDoc);
+    CopyToClipContext(ScDocument& rDoc, bool bKeepScenarioFlags, bool bCloneNotes);
     virtual ~CopyToClipContext();
+
+    bool isKeepScenarioFlags() const;
+    bool isCloneNotes() const;
 };
 
 }

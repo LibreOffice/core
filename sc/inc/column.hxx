@@ -216,7 +216,8 @@ public:
     void        InsertRow( SCROW nStartRow, SCSIZE nSize );
     void        DeleteRow( SCROW nStartRow, SCSIZE nSize );
     void        DeleteArea(SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag );
-    void CopyToClip( sc::CopyToClipContext& rCxt, SCROW nRow1, SCROW nRow2, ScColumn& rColumn, bool bKeepScenarioFlags ) const;
+    void CopyToClip(
+        sc::CopyToClipContext& rCxt, SCROW nRow1, SCROW nRow2, ScColumn& rColumn ) const;
     void CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol);
     void CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDestCol );
     bool InitBlockPosition( sc::ColumnBlockPosition& rBlockPos );

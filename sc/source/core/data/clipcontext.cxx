@@ -101,8 +101,21 @@ bool CopyFromClipContext::isSkipAttrForEmptyCells() const
     return mbSkipAttrForEmptyCells;
 }
 
-CopyToClipContext::CopyToClipContext(ScDocument& rDoc) : ClipContextBase(rDoc) {}
+CopyToClipContext::CopyToClipContext(
+    ScDocument& rDoc, bool bKeepScenarioFlags, bool bCloneNotes) :
+    ClipContextBase(rDoc), mbKeepScenarioFlags(bKeepScenarioFlags), mbCloneNotes(bCloneNotes) {}
+
 CopyToClipContext::~CopyToClipContext() {}
+
+bool CopyToClipContext::isKeepScenarioFlags() const
+{
+    return mbKeepScenarioFlags;
+}
+
+bool CopyToClipContext::isCloneNotes() const
+{
+    return mbCloneNotes;
+}
 
 }
 
