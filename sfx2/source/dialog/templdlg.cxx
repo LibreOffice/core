@@ -398,6 +398,8 @@ SfxTemplatePanelControl::SfxTemplatePanelControl (
     OSL_ASSERT(mpBindings!=NULL);
 
     pImpl->updateNonFamilyImages();
+
+    SetStyle(GetStyle() & ~WB_DOCKABLE);
 }
 
 

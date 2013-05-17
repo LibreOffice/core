@@ -755,10 +755,19 @@ void DockingWindow::Resizing( Size& )
 
 void DockingWindow::StateChanged( StateChangedType nType )
 {
-    if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
+    switch(nType)
     {
-        ImplInitSettings();
-        Invalidate();
+        case STATE_CHANGE_CONTROLBACKGROUND:
+            ImplInitSettings();
+            Invalidate();
+            break;
+
+        case STATE_CHANGE_STYLE:
+            mbDockable = (GetStyle() & WB_DOCKABLE) != 0;
+            break;
+
+        default:
+            break;
     }
 
     Window::StateChanged( nType );
