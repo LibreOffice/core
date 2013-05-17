@@ -116,9 +116,9 @@ PageSizeControl::PageSizeControl(
                 maWidthHeightField.IsUseThousandSep(),
                 maWidthHeightField.IsShowTrailingZeros() );
 
-            ItemText2 = HeightStr;
+            ItemText2 = WidthStr;
             ItemText2 += String::CreateFromAscii(" x ");
-            ItemText2 += WidthStr;
+            ItemText2 += HeightStr;
             ItemText2 += String::CreateFromAscii(" ");
             ItemText2 += aMetricStr;
 
