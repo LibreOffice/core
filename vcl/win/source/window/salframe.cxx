@@ -2774,11 +2774,13 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     GetSalData()->mbThemeMenuSupport = FALSE;
     aStyleSettings.SetMenuColor( ImplWinColorToSal( GetSysColor( COLOR_MENU ) ) );
     aStyleSettings.SetMenuBarColor( aStyleSettings.GetMenuColor() );
+    aStyleSettings.SetMenuBarRolloverColor( aStyleSettings.GetHighlightColor() );
     aStyleSettings.SetMenuBorderColor( aStyleSettings.GetLightBorderColor() ); // overriden below for flat menus
     aStyleSettings.SetUseFlatBorders( FALSE );
     aStyleSettings.SetUseFlatMenus( FALSE );
     aStyleSettings.SetMenuTextColor( ImplWinColorToSal( GetSysColor( COLOR_MENUTEXT ) ) );
     aStyleSettings.SetMenuBarTextColor( ImplWinColorToSal( GetSysColor( COLOR_MENUTEXT ) ) );
+    aStyleSettings.SetMenuBarRolloverTextColor( ImplWinColorToSal( GetSysColor( COLOR_HIGHLIGHTTEXT ) ) );
     aStyleSettings.SetActiveColor( ImplWinColorToSal( GetSysColor( COLOR_ACTIVECAPTION ) ) );
     aStyleSettings.SetActiveTextColor( ImplWinColorToSal( GetSysColor( COLOR_CAPTIONTEXT ) ) );
     aStyleSettings.SetDeactiveColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVECAPTION ) ) );
@@ -2793,6 +2795,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
             aStyleSettings.SetUseFlatMenus( TRUE );
             aStyleSettings.SetMenuBarColor( ImplWinColorToSal( GetSysColor( COLOR_MENUBAR ) ) );
             aStyleSettings.SetMenuHighlightColor( ImplWinColorToSal( GetSysColor( COLOR_MENUHILIGHT ) ) );
+            aStyleSettings.SetMenuBarRolloverColor( ImplWinColorToSal( GetSysColor( COLOR_MENUHILIGHT ) ) );
             aStyleSettings.SetMenuBorderColor( ImplWinColorToSal( GetSysColor( COLOR_3DSHADOW ) ) );
 
             // flat borders for our controls etc. as well in this mode (ie, no 3d borders)

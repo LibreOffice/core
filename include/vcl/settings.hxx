@@ -278,12 +278,14 @@ private:
     Color                           maLightColor;
     Color                           maLinkColor;
     Color                           maMenuBarColor;
+    Color                           maMenuBarRolloverColor;
     Color                           maMenuBorderColor;
     Color                           maMenuColor;
     Color                           maMenuHighlightColor;
     Color                           maMenuHighlightTextColor;
     Color                           maMenuTextColor;
     Color                           maMenuBarTextColor;
+    Color                           maMenuBarRolloverTextColor;
     Color                           maMonoColor;
     Color                           maRadioCheckTextColor;
     Color                           maShadowColor;
@@ -581,6 +583,10 @@ public:
                                         { CopyData(); mpData->maMenuBarColor = rColor; }
     const Color&                    GetMenuBarColor() const
                                         { return mpData->maMenuBarColor; }
+    void                            SetMenuBarRolloverColor( const Color& rColor )
+                                        { CopyData(); mpData->maMenuBarRolloverColor = rColor; }
+    const Color&                    GetMenuBarRolloverColor() const
+                                        { return mpData->maMenuBarRolloverColor; }
     void                            SetMenuBorderColor( const Color& rColor )
                                         { CopyData(); mpData->maMenuBorderColor = rColor; }
     const Color&                    GetMenuBorderColor() const
@@ -593,6 +599,10 @@ public:
                                         { CopyData(); mpData->maMenuBarTextColor = rColor; }
     const Color&                    GetMenuBarTextColor() const
                                         { return mpData->maMenuBarTextColor; }
+    void                            SetMenuBarRolloverTextColor( const Color& rColor )
+                                        { CopyData(); mpData->maMenuBarRolloverTextColor = rColor; }
+    const Color&                    GetMenuBarRolloverTextColor() const
+                                        { return mpData->maMenuBarRolloverTextColor; }
     void                            SetMenuHighlightColor( const Color& rColor )
                                         { CopyData(); mpData->maMenuHighlightColor = rColor; }
     const Color&                    GetMenuHighlightColor() const

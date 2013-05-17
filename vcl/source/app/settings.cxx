@@ -282,12 +282,14 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maLightColor( rData.maLightColor ),
     maLinkColor( rData.maLinkColor ),
     maMenuBarColor( rData.maMenuBarColor ),
+    maMenuBarRolloverColor( rData.maMenuBarRolloverColor ),
     maMenuBorderColor( rData.maMenuBorderColor ),
     maMenuColor( rData.maMenuColor ),
     maMenuHighlightColor( rData.maMenuHighlightColor ),
     maMenuHighlightTextColor( rData.maMenuHighlightTextColor ),
     maMenuTextColor( rData.maMenuTextColor ),
     maMenuBarTextColor( rData.maMenuBarTextColor ),
+    maMenuBarRolloverTextColor( rData.maMenuBarRolloverTextColor ),
     maMonoColor( rData.maMonoColor ),
     maRadioCheckTextColor( rData.maRadioCheckTextColor ),
     maShadowColor( rData.maShadowColor ),
@@ -420,9 +422,11 @@ void ImplStyleData::SetStandardStyles()
     maDeactiveBorderColor       = Color( COL_LIGHTGRAY );
     maMenuColor                 = Color( COL_LIGHTGRAY );
     maMenuBarColor              = Color( COL_LIGHTGRAY );
+    maMenuBarRolloverColor      = Color( COL_BLUE );
     maMenuBorderColor           = Color( COL_LIGHTGRAY );
     maMenuTextColor             = Color( COL_BLACK );
     maMenuBarTextColor          = Color( COL_BLACK );
+    maMenuBarRolloverTextColor  = Color( COL_WHITE );
     maMenuHighlightColor        = Color( COL_BLUE );
     maMenuHighlightTextColor    = Color( COL_WHITE );
     maHighlightColor            = Color( COL_BLUE );
@@ -930,9 +934,11 @@ sal_Bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->maDeactiveBorderColor     == rSet.mpData->maDeactiveBorderColor)      &&
          (mpData->maMenuColor               == rSet.mpData->maMenuColor)                &&
          (mpData->maMenuBarColor            == rSet.mpData->maMenuBarColor)             &&
+         (mpData->maMenuBarRolloverColor    == rSet.mpData->maMenuBarRolloverColor)     &&
          (mpData->maMenuBorderColor         == rSet.mpData->maMenuBorderColor)          &&
          (mpData->maMenuTextColor           == rSet.mpData->maMenuTextColor)            &&
          (mpData->maMenuBarTextColor        == rSet.mpData->maMenuBarTextColor)         &&
+         (mpData->maMenuBarRolloverTextColor == rSet.mpData->maMenuBarRolloverTextColor) &&
          (mpData->maMenuHighlightColor      == rSet.mpData->maMenuHighlightColor)       &&
          (mpData->maMenuHighlightTextColor  == rSet.mpData->maMenuHighlightTextColor)   &&
          (mpData->maHighlightColor          == rSet.mpData->maHighlightColor)           &&
