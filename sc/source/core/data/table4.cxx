@@ -1253,8 +1253,7 @@ void ScTable::IncDate(double& rVal, sal_uInt16& nDayOfMonth, double nStep, FillD
                 {
                     aDate.SetMonth((sal_uInt16) nMonth);
                     aDate.SetYear((sal_uInt16) nYear);
-                    if ( nDayOfMonth > 28 )
-                        aDate.SetDay( Min( aDate.GetDaysInMonth(), nDayOfMonth ) );
+                    aDate.SetDay( std::min( Date::GetDaysInMonth( nMonth, nYear), nDayOfMonth ) );
                 }
             }
             break;
