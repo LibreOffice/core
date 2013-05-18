@@ -38,6 +38,7 @@ $(eval $(call gb_Library_use_libraries,dba,\
     sfx \
     svl \
     svt \
+    svxcore \
     tl \
     ucbhelper \
     utl \

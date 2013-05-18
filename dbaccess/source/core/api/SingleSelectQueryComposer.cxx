@@ -226,7 +226,7 @@ OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAcc
                                const Reference<XComponentContext>& _rContext )
     :OSubComponent(m_aMutex,_xConnection)
     ,OPropertyContainer(m_aBHelper)
-    ,m_aSqlParser( _rContext )
+    ,m_aSqlParser( _rContext, &m_aParseContext )
     ,m_aSqlIterator( _xConnection, _rxTables, m_aSqlParser, NULL )
     ,m_aAdditiveIterator( _xConnection, _rxTables, m_aSqlParser, NULL )
     ,m_aElementaryParts( (size_t)SQLPartCount )
@@ -248,7 +248,7 @@ OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAcc
 
     m_aCurrentColumns.resize(4);
 
-    m_aLocale = SvtSysLocale().GetLanguageTag().getLocale();
+    m_aLocale = m_aParseContext.getPreferredLocale();
     m_xNumberFormatsSupplier = dbtools::getNumberFormats( m_xConnection, sal_True, m_aContext );
     Reference< XLocaleData4 > xLocaleData( LocaleData::create(m_aContext) );
     LocaleDataItem aData = xLocaleData->getLocaleItem(m_aLocale);
@@ -1507,7 +1507,7 @@ namespace
 void SAL_CALL OSingleSelectQueryComposer::setStructuredFilter( const Sequence< Sequence< PropertyValue > >& filter ) throw (SQLException, ::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OSingleSelectQueryComposer::setStructuredFilter" );
-    OPredicateInputController aPredicateInput(m_aContext, m_xConnection);
+    OPredicateInputController aPredicateInput(m_aContext, m_xConnection, &m_aParseContext);
     setFilter(lcl_getCondition(filter,aPredicateInput,getColumns()));
 }
 
