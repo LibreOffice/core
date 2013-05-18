@@ -770,8 +770,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
 
 sal_uInt16 GraphicFilter::ImpTestOrFindFormat( const String& rPath, SvStream& rStream, sal_uInt16& rFormat )
 {
-    // ggf. Filter bzw. Format durch anlesen ermitteln,
-    // oder durch anlesen zusichern, dass das Format stimmt:
+    // determine or check the filter/format by reading into it
     if( rFormat == GRFILTER_FORMAT_DONTKNOW )
     {
         String aFormatExt;
@@ -781,7 +780,7 @@ sal_uInt16 GraphicFilter::ImpTestOrFindFormat( const String& rPath, SvStream& rS
             if( rFormat != GRFILTER_FORMAT_DONTKNOW )
                 return GRFILTER_OK;
         }
-        // ggf. Filter anhand der Datei-Endung raussuchen:
+        // determine filter by file extension
         if( rPath.Len() )
         {
             String aExt( ImpGetExtension( rPath ) );
