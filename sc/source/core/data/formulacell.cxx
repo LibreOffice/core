@@ -3188,53 +3188,32 @@ void ScFormulaCell::StartListeningTo( ScDocument* pDoc )
         switch( eType )
         {
             case svSingleRef:
-                rRef1.CalcAbsIfRel(aPos);
-                if ( rRef1.Valid() )
-                {
-                    pDoc->StartListeningCell(
-                        ScAddress( rRef1.nCol,
-                                   rRef1.nRow,
-                                   rRef1.nTab ), this );
-                }
+            {
+                ScAddress aCell = rRef1.toAbs(aPos);
+                if (aCell.IsValid())
+                    pDoc->StartListeningCell(aCell, this);
+            }
             break;
             case svDoubleRef:
-                t->CalcAbsIfRel(aPos);
-                if ( rRef1.Valid() && rRef2.Valid() )
+            {
+                ScAddress aCell1 = rRef1.toAbs(aPos);
+                ScAddress aCell2 = rRef2.toAbs(aPos);
+                if (aCell1.IsValid() && aCell2.IsValid())
                 {
-                    if ( t->GetOpCode() == ocColRowNameAuto )
+                    if (t->GetOpCode() == ocColRowNameAuto)
                     {   // automagically
                         if ( rRef1.IsColRel() )
                         {   // ColName
-                            pDoc->StartListeningArea( ScRange (
-                                rRef1.nCol,
-                                rRef1.nRow,
-                                rRef1.nTab,
-                                rRef2.nCol,
-                                MAXROW,
-                                rRef2.nTab ), this );
+                            aCell2.SetRow(MAXROW);
                         }
                         else
                         {   // RowName
-                            pDoc->StartListeningArea( ScRange (
-                                rRef1.nCol,
-                                rRef1.nRow,
-                                rRef1.nTab,
-                                MAXCOL,
-                                rRef2.nRow,
-                                rRef2.nTab ), this );
+                            aCell2.SetCol(MAXCOL);
                         }
                     }
-                    else
-                    {
-                        pDoc->StartListeningArea( ScRange (
-                            rRef1.nCol,
-                            rRef1.nRow,
-                            rRef1.nTab,
-                            rRef2.nCol,
-                            rRef2.nRow,
-                            rRef2.nTab ), this );
-                    }
+                    pDoc->StartListeningArea(ScRange(aCell1, aCell2), this);
                 }
+            }
             break;
             default:
                 ;   // nothing
