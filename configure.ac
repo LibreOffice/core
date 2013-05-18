@@ -5222,7 +5222,7 @@ AC_DEFINE_UNQUOTED(SAL_TYPES_ALIGNMENT8,$SAL_TYPES_ALIGNMENT8)
 dnl ===================================================================
 dnl Check if valgrind headers are available
 dnl ===================================================================
-if test "$cross_compiling" = yes -o "$ENABLE_DBGUTIL" != TRUE; then
+if test "$cross_compiling" = yes; then
     ENABLE_VALGRIND=FALSE
 else
     prev_cppflags=$CPPFLAGS
