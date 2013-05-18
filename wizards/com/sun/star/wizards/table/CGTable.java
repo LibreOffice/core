@@ -74,7 +74,7 @@ public class CGTable
             }
             for (int i = 0; i < fieldnames.length; i++)
             {
-                fieldnames[i] = Desktop.removeSpecialCharacters(xMSF, Configuration.getOfficeLocale(xMSF), fieldnames[i]);
+                fieldnames[i] = Desktop.removeSpecialCharacters(xMSF, Configuration.getLocale(xMSF), fieldnames[i]);
             }
             return fieldnames;
         }

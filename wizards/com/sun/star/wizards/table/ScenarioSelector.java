@@ -70,7 +70,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         super(_CurUnoDialog, TableWizard.SOMAINPAGE, 91, 108, 230, 80, _reslblFields, _reslblSelFields, 41209, true);
         CurTableWizardUnoDialog =  _CurUnoDialog;
         xMSF = CurUnoDialog.xMSF;
-        aLocale = Configuration.getOfficeLocale(xMSF);
+        aLocale = Configuration.getLocale(xMSF);
         curtabledescriptor = _curtabledescriptor;
         imaxcolumnchars = this.curtabledescriptor.getMaxColumnNameLength();
         bcolumnnameislimited = (imaxcolumnchars > 0) && (imaxcolumnchars < 16);

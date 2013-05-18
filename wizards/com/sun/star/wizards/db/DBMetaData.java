@@ -169,7 +169,7 @@ public class DBMetaData
             {
                 XNumberFormatsSupplier xNumberFormatsSupplier = (XNumberFormatsSupplier) AnyConverter.toObject(XNumberFormatsSupplier.class, xDataSourcePropertySet.getPropertyValue("NumberFormatsSupplier"));
                 //TODO get the locale from the datasource
-                aLocale = Configuration.getOfficeLocale(xMSF);
+                aLocale = Configuration.getLocale(xMSF);
                 oNumberFormatter = new NumberFormatter(xMSF, xNumberFormatsSupplier, aLocale);
                 lDateCorrection = oNumberFormatter.getNullDateCorrection();
             }
@@ -529,7 +529,7 @@ public class DBMetaData
         }
         if (this.isSQL92CheckEnabled())
         {
-            return Desktop.removeSpecialCharacters(xMSF, Configuration.getOfficeLocale(xMSF), _sname);
+            return Desktop.removeSpecialCharacters(xMSF, Configuration.getLocale(xMSF), _sname);
         }
         return _sname;
     }

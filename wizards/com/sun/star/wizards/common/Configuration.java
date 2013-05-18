@@ -200,26 +200,30 @@ public abstract class Configuration
         }
     }
 
-    public static String getOfficeLocaleString(XMultiServiceFactory xMSF)
+    public static String getLocaleString(XMultiServiceFactory xMSF, String root, String key)
     {
         String sLocale = PropertyNames.EMPTY_STRING;
         try
         {
             Locale aLocLocale = new Locale();
-            Object oMasterKey = getConfigurationRoot(xMSF, "org.openoffice.Setup/L10N/", false);
-            sLocale = (String) Helper.getUnoObjectbyName(oMasterKey, "ooLocale");
+            Object oMasterKey = getConfigurationRoot(xMSF, root, false);
+            sLocale = (String) Helper.getUnoObjectbyName(oMasterKey, key);
         }
         catch (Exception exception)
         {
             exception.printStackTrace(System.err);
         }
+        if (sLocale.length() == 0 && (!key.equals("Locale") || !root.equals("org.openoffice.System/L10N/")))
+        {
+            return getLocaleString(xMSF, "org.openoffice.System/L10N/", "Locale");
+        }
         return sLocale;
     }
 
-    public static Locale getOfficeLocale(XMultiServiceFactory xMSF)
+    public static Locale getLocale(XMultiServiceFactory xMSF, String root, String key)
     {
         Locale aLocLocale = new Locale();
-        String sLocale = getOfficeLocaleString(xMSF);
+        String sLocale = getLocaleString(xMSF, root, key);
         String[] sLocaleList = JavaTools.ArrayoutofString(sLocale, "-");
         aLocLocale.Language = sLocaleList[0];
         if (sLocaleList.length > 1)
@@ -229,18 +233,24 @@ public abstract class Configuration
         return aLocLocale;
     }
 
-    public static String getOfficeLinguistic(XMultiServiceFactory xMSF)
+    public static Locale getLocale(XMultiServiceFactory xMSF)
     {
-        try
-        {
-            Object oMasterKey = getConfigurationRoot(xMSF, "org.openoffice.Setup/L10N/", false);
-            return (String) Helper.getUnoObjectbyName(oMasterKey, "ooLocale");
-        }
-        catch (Exception exception)
-        {
-            exception.printStackTrace();
-            return null;
-        }
+        return getLocale(xMSF, "org.openoffice.Setup/L10N/", "ooSetupSystemLocale");
+    }
+
+    public static Locale getUILocale(XMultiServiceFactory xMSF)
+    {
+        return getLocale(xMSF, "org.openoffice.Setup/L10N/", "ooLocale");
+    }
+
+    public static String getLocaleString(XMultiServiceFactory xMSF)
+    {
+        return getLocaleString(xMSF, "org.openoffice.Setup/L10N/", "ooSetupSystemLocale");
+    }
+
+    public static String getUILocaleString(XMultiServiceFactory xMSF)
+    {
+        return getLocaleString(xMSF, "org.openoffice.Setup/L10N/", "ooLocale");
     }
 
     /**
