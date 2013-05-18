@@ -842,11 +842,12 @@ void ScColumn::MixMarked(
     }
 }
 
+namespace {
 
 // Result in rVal1
-static sal_Bool lcl_DoFunction( double& rVal1, double nVal2, sal_uInt16 nFunction )
+bool lcl_DoFunction( double& rVal1, double nVal2, sal_uInt16 nFunction )
 {
-    sal_Bool bOk = false;
+    bool bOk = false;
     switch (nFunction)
     {
         case PASTE_ADD:
@@ -866,8 +867,7 @@ static sal_Bool lcl_DoFunction( double& rVal1, double nVal2, sal_uInt16 nFunctio
     return bOk;
 }
 
-
-static void lcl_AddCode( ScTokenArray& rArr, ScFormulaCell* pCell )
+void lcl_AddCode( ScTokenArray& rArr, ScFormulaCell* pCell )
 {
     rArr.AddOpCode(ocOpen);
 
@@ -885,6 +885,15 @@ static void lcl_AddCode( ScTokenArray& rArr, ScFormulaCell* pCell )
     rArr.AddOpCode(ocClose);
 }
 
+struct FindRemovedCell : std::unary_function<ColEntry, bool>
+{
+    bool operator() (const ColEntry& rEntry) const
+    {
+        return rEntry.pCell == NULL;
+    }
+};
+
+}
 
 void ScColumn::MixData(
     sc::MixDocContext& rCxt, SCROW nRow1, SCROW nRow2, sal_uInt16 nFunction,
@@ -892,11 +901,13 @@ void ScColumn::MixData(
 {
     SCSIZE nSrcCount = rSrcCol.maItems.size();
 
+    sc::ColumnBlockPosition* p = rCxt.getBlockPosition(nTab, nCol);
+
     SCSIZE nIndex;
     Search( nRow1, nIndex );
 
 //  SCSIZE nSrcIndex = 0;
-    SCSIZE nSrcIndex;
+    SCSIZE nSrcIndex, nDestIndex;
     rSrcCol.Search( nRow1, nSrcIndex ); // See if data is at the beginning
 
     SCROW nNextThis = MAXROW+1;
@@ -906,6 +917,7 @@ void ScColumn::MixData(
     if ( nSrcIndex < nSrcCount )
         nNextSrc = rSrcCol.maItems[nSrcIndex].nRow;
 
+    bool bDeferredDelete = false;
     while ( nNextThis <= nRow2 || nNextSrc <= nRow2 )
     {
         SCROW nRow = std::min( nNextThis, nNextSrc );
@@ -913,13 +925,16 @@ void ScColumn::MixData(
         ScBaseCell* pSrc = NULL;
         ScBaseCell* pDest = NULL;
         ScBaseCell* pNew = NULL;
-        sal_Bool bDelete = false;
+        bool bDelete = false;
 
         if ( nSrcIndex < nSrcCount && nNextSrc == nRow )
             pSrc = rSrcCol.maItems[nSrcIndex].pCell;
 
         if ( nIndex < maItems.size() && nNextThis == nRow )
+        {
             pDest = maItems[nIndex].pCell;
+            nDestIndex = nIndex;
+        }
 
         OSL_ENSURE( pSrc || pDest, "What happened?" );
 
@@ -1024,10 +1039,18 @@ void ScColumn::MixData(
 
         if ( pNew || bDelete ) // New result?
         {
-            sc::ColumnBlockPosition* p = rCxt.getBlockPosition(nTab, nCol);
             if (pDest && !pNew) // Old cell present?
             {
-                Delete(nRow); // -> Delete
+                // Delete the destination cell because the cell was originally
+                // empty.  Don't erase its slot in the cell array yet.
+                OSL_ASSERT(pDest == maItems[nDestIndex].pCell);
+                maItems[nDestIndex].pCell = NULL;
+
+                if (pDest->GetCellType() == CELLTYPE_FORMULA)
+                    static_cast<ScFormulaCell*>(pDest)->EndListeningTo(pDocument);
+                pDest->Delete();
+
+                bDeferredDelete = true;
             }
             if (pNew)
             {
@@ -1056,6 +1079,19 @@ void ScColumn::MixData(
                             rSrcCol.maItems[nSrcIndex].nRow :
                             MAXROW+1;
         }
+    }
+
+    if (bDeferredDelete)
+    {
+        // Erase all the slots in the cell array where the deleted cells
+        // previously occupied.
+        std::vector<ColEntry>::iterator it =
+            std::remove_if(maItems.begin(), maItems.end(), FindRemovedCell());
+
+        maItems.erase(it, maItems.end());
+
+        // Reset the cell text attriute array to keep it in sync again.
+        ResetCellTextAttrs();
     }
 }
 

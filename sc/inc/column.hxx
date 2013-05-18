@@ -497,6 +497,12 @@ private:
     void SetCell( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, ScBaseCell* pNewCell );
     void SetCell( SCROW nRow, ScBaseCell* pNewCell );
     void PostSetCell( SCROW nRow, ScBaseCell* pNewCell );
+
+    /**
+     * Clear and re-populate the cell text attribute array from the non-empty
+     * cells stored in the cell array.
+     */
+    void ResetCellTextAttrs();
 };
 
 

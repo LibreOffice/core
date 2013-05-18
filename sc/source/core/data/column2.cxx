@@ -1569,6 +1569,32 @@ void ScColumn::PostSetCell( SCROW nRow, ScBaseCell* pNewCell )
     }
 }
 
+namespace {
+
+class SetEmptyAttr : std::unary_function<ColEntry, void>
+{
+    sc::CellTextAttrStoreType& mrAttrStore;
+    sc::CellTextAttrStoreType::iterator miPos;
+public:
+    SetEmptyAttr(sc::CellTextAttrStoreType& rAttrStore) :
+        mrAttrStore(rAttrStore), miPos(rAttrStore.begin()) {}
+
+    void operator() (const ColEntry& rEntry)
+    {
+        miPos = mrAttrStore.set(miPos, rEntry.nRow, sc::CellTextAttr());
+    }
+};
+
+}
+
+void ScColumn::ResetCellTextAttrs()
+{
+    maCellTextAttrs.clear();
+    maCellTextAttrs.resize(MAXROWCOUNT);
+
+    std::for_each(maItems.begin(), maItems.end(), SetEmptyAttr(maCellTextAttrs));
+}
+
 SvtBroadcaster* ScColumn::GetBroadcaster(SCROW nRow)
 {
     return maBroadcasters.get<SvtBroadcaster*>(nRow);
