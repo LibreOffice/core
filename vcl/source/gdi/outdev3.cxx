@@ -695,8 +695,8 @@ PhysicalFontFace::PhysicalFontFace( const ImplDevFontAttributes& rDFA, int nMagi
 {
     // StarSymbol is a unicode font, but it still deserves the symbol flag
     if( !IsSymbolFont() )
-        if( 0 == GetFamilyName().compareTo( "starsymbol", 10)
-        ||  0 == GetFamilyName().compareTo( "opensymbol", 10) )
+        if( GetFamilyName().startsWith( "starsymbol")
+        ||  GetFamilyName().startsWith( "opensymbol") )
             SetSymbolFlag( true );
 }
 
@@ -755,11 +755,11 @@ bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSD, FontMatchSt
     int nMatch = 0;
 
     const OUString& rFontName = rFSD.maTargetName;
-    if( (rFontName == GetFamilyName()) || rFontName.compareTo( GetFamilyName() ) )
+    if( (rFontName == GetFamilyName()) || rFontName == GetFamilyName() )
         nMatch += 240000;
 
     if( rStatus.mpTargetStyleName
-    &&  GetStyleName().compareTo( rStatus.mpTargetStyleName ) )
+    &&  GetStyleName() == rStatus.mpTargetStyleName )
         nMatch += 120000;
 
     if( (rFSD.GetPitch() != PITCH_DONTKNOW) && (rFSD.GetPitch() == GetPitch()) )

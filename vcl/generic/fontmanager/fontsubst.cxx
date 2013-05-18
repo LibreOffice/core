@@ -160,8 +160,8 @@ bool FcPreMatchSubstititution::FindFontSubstitute( FontSelectPattern &rFontSelDa
     if( rFontSelData.IsSymbolFont() )
         return false;
     // StarSymbol is a unicode font, but it still deserves the symbol flag
-    if( 0 == rFontSelData.maSearchName.compareTo( "starsymbol", 10)
-    ||  0 == rFontSelData.maSearchName.compareTo( "opensymbol", 10) )
+    if(rFontSelData.maSearchName.startsWith( "starsymbol" )
+    || rFontSelData.maSearchName.startsWith( "opensymbol" ) )
         return false;
 
     //see fdo#41556 and fdo#47636
@@ -229,8 +229,8 @@ bool FcGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFont
     if( rFontSelData.IsSymbolFont() )
         return false;
     // StarSymbol is a unicode font, but it still deserves the symbol flag
-    if( 0 == rFontSelData.maSearchName.compareTo( "starsymbol", 10)
-    ||  0 == rFontSelData.maSearchName.compareTo( "opensymbol", 10) )
+    if(rFontSelData.maSearchName.startsWith( "starsymbol" )
+    || rFontSelData.maSearchName.startsWith( "opensymbol" ) )
         return false;
 
     const FontSelectPattern aOut = GetFcSubstitute( rFontSelData, rMissingCodes );

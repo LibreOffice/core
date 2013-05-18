@@ -8856,8 +8856,6 @@ sal_uInt16 Window::getDefaultAccessibleRole() const
 
 sal_uInt16 Window::GetAccessibleRole() const
 {
-    using namespace ::com::sun::star;
-
     sal_uInt16 nRole = mpWindowImpl->mpAccessibleInfos ? mpWindowImpl->mpAccessibleInfos->nAccessibleRole : 0xFFFF;
     if ( nRole == 0xFFFF )
         nRole = getDefaultAccessibleRole();
