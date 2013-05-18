@@ -1233,7 +1233,7 @@ void SdXMLEllipseShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
 
         if(mnCX != 0 || mnCY != 0 || mnRX != 1 || mnRY != 1)
         {
-            // #121972# center/radius is used, put to pos and size
+            // #i121972# center/radius is used, put to pos and size
             maSize.Width = 2 * mnRX;
             maSize.Height = 2 * mnRY;
             maPosition.X = mnCX - mnRX;
