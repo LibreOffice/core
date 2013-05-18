@@ -130,42 +130,41 @@ sal_Bool GraphicDescriptor::ImpDetectBMP( SvStream& rStm, sal_Bool bExtendedInfo
             sal_uInt32  nTemp32;
             sal_uInt32  nCompression;
 
-            // bis zur ersten Information
+            // up to first info
             rStm.SeekRel( 0x10 );
 
-            // PixelBreite auslesen
+            // Pixel width
             rStm >> nTemp32;
             aPixSize.Width() = nTemp32;
 
-            // PixelHoehe auslesen
+            // Pixel height
             rStm >> nTemp32;
             aPixSize.Height() = nTemp32;
 
-            // Planes auslesen
+            // Planes
             rStm >> nTemp16;
             nPlanes = nTemp16;
 
-            // BitCount auslesen
+            // BitCount
             rStm >> nTemp16;
             nBitsPerPixel = nTemp16;
 
-            // Compression auslesen
+            // Compression
             rStm >> nTemp32;
             bCompressed = ( ( nCompression = nTemp32 ) > 0 );
 
-            // logische Breite
+            // logical width
             rStm.SeekRel( 4 );
             rStm >> nTemp32;
             if ( nTemp32 )
                 aLogSize.Width() = ( aPixSize.Width() * 100000 ) / nTemp32;
 
-            // logische Hoehe
+            // logical height
             rStm >> nTemp32;
             if ( nTemp32 )
                 aLogSize.Height() = ( aPixSize.Height() * 100000 ) / nTemp32;
 
-            // Wir wollen noch etwas feiner differenzieren und
-            // auf sinnvolle Werte ueberpruefen ( Bug-Id #29001 )
+            // further validation, check for rational values
             if ( ( nBitsPerPixel > 24 ) || ( nCompression > 3 ) )
             {
                 nFormat = GFF_NOT;
@@ -200,15 +199,15 @@ sal_Bool GraphicDescriptor::ImpDetectGIF( SvStream& rStm, sal_Bool bExtendedInfo
             {
                 sal_uInt16 nTemp16;
 
-                // PixelBreite auslesen
+                // Pixel width
                 rStm >> nTemp16;
                 aPixSize.Width() = nTemp16;
 
-                // PixelHoehe auslesen
+                // Pixel height
                 rStm >> nTemp16;
                 aPixSize.Height() = nTemp16;
 
-                // Bits/Pixel auslesen
+                // Bits/Pixel
                 rStm >> cByte;
                 nBitsPerPixel = ( ( cByte & 112 ) >> 4 ) + 1;
             }
@@ -461,17 +460,17 @@ sal_Bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm, sal_Bool bExtendedInfo
 
             rStm.SeekRel( 1 );
 
-            // Kompression lesen
+            // compression
             rStm >> cByte;
             bCompressed = ( cByte > 0 );
 
             bRet = (cByte==0 || cByte ==1);
 
-            // Bits/Pixel lesen
+            // Bits/Pixel
             rStm >> cByte;
             nBitsPerPixel = cByte;
 
-            // Bildabmessungen
+            // image dimensions
             rStm >> nTemp16;
             nXmin = nTemp16;
             rStm >> nTemp16;
@@ -484,20 +483,20 @@ sal_Bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm, sal_Bool bExtendedInfo
             aPixSize.Width() = nXmax - nXmin + 1;
             aPixSize.Height() = nYmax - nYmin + 1;
 
-            // Aufloesung
+            // resolution
             rStm >> nTemp16;
             nDPIx = nTemp16;
             rStm >> nTemp16;
             nDPIy = nTemp16;
 
-            // logische Groesse setzen
+            // set logical size
             MapMode aMap( MAP_INCH, Point(),
                           Fraction( 1, nDPIx ), Fraction( 1, nDPIy ) );
             aLogSize = OutputDevice::LogicToLogic( aPixSize, aMap,
                                                    MapMode( MAP_100TH_MM ) );
 
 
-            // Anzahl Farbebenen
+            // number of color planes
             rStm.SeekRel( 49 );
             rStm >> cByte;
             nPlanes = cByte;
@@ -534,20 +533,20 @@ sal_Bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, sal_Bool bExtendedInfo
                 // IHDR-Chunk
                 rStm.SeekRel( 8 );
 
-                // Breite einlesen
+                // width
                 rStm >> nTemp32;
                 aPixSize.Width() = nTemp32;
 
-                // Hoehe einlesen
+                // height
                 rStm >> nTemp32;
                 aPixSize.Height() = nTemp32;
 
-                // Bits/Pixel einlesen
+                // Bits/Pixel
                 rStm >> cByte;
                 nBitsPerPixel = cByte;
 
-                // Planes immer 1;
-                // Kompression immer
+                // Planes always 1;
+                // compression always
                 nPlanes = 1;
                 bCompressed = sal_True;
 
@@ -555,8 +554,7 @@ sal_Bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, sal_Bool bExtendedInfo
 
                 rStm.SeekRel( 8 );
 
-                // so lange ueberlesen, bis wir den pHYs-Chunk haben oder
-                // den Anfang der Bilddaten
+                // read up to the pHYs-Chunk or the start of the image
                 rStm >> nLen32;
                 rStm >> nTemp32;
                 while( ( nTemp32 != 0x70485973 ) && ( nTemp32 != 0x49444154 ) )
@@ -571,15 +569,15 @@ sal_Bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, sal_Bool bExtendedInfo
                     sal_uLong   nXRes;
                     sal_uLong   nYRes;
 
-                    // horizontale Aufloesung
+                    // horizontal resolution
                     rStm >> nTemp32;
                     nXRes = nTemp32;
 
-                    // vertikale Aufloesung
+                    // vertical resolution
                     rStm >> nTemp32;
                     nYRes = nTemp32;
 
-                    // Unit einlesen
+                    // unit
                     rStm >> cByte;
 
                     if ( cByte )
@@ -640,14 +638,14 @@ sal_Bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, sal_Bool bExtendedInfo
                     sal_uInt32  nTemp32;
                     sal_Bool    bOk = sal_False;
 
-                    // Offset des ersten IFD einlesen
+                    // Offset of the first IFD
                     rStm >> nTemp32;
                     rStm.SeekRel( ( nCount = ( nTemp32 + 2 ) ) - 0x08 );
 
                     if ( nCount < nMax )
                     {
-                        // Tag's lesen, bis wir auf Tag256 ( Width ) treffen
-                        // nicht mehr Bytes als DATA_SIZE lesen
+                        // read tags till we find Tag256 ( Width )
+                        // do not read more bytes than DATA_SIZE
                         rStm >> nTemp16;
                         while ( nTemp16 != 256 )
                         {
@@ -663,7 +661,7 @@ sal_Bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, sal_Bool bExtendedInfo
 
                         if ( bOk )
                         {
-                            // Breite lesen
+                            // width
                             rStm >> nTemp16;
                             rStm.SeekRel( 4 );
                             if ( nTemp16 == 3 )
@@ -679,7 +677,7 @@ sal_Bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, sal_Bool bExtendedInfo
                             }
                             nCount += 12;
 
-                            // Hoehe lesen
+                            // height
                             rStm.SeekRel( 2 );
                             rStm >> nTemp16;
                             rStm.SeekRel( 4 );
@@ -696,7 +694,7 @@ sal_Bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, sal_Bool bExtendedInfo
                             }
                             nCount += 12;
 
-                            // ggf. Bits/Pixel lesen
+                            // Bits/Pixel
                             rStm >> nTemp16;
                             if ( nTemp16 == 258 )
                             {
@@ -709,7 +707,7 @@ sal_Bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, sal_Bool bExtendedInfo
                             else
                                 rStm.SeekRel( -2 );
 
-                            // ggf. Compression lesen
+                            // compression
                             rStm >> nTemp16;
                             if ( nTemp16 == 259 )
                             {
@@ -753,9 +751,7 @@ sal_Bool GraphicDescriptor::ImpDetectPBM( SvStream& rStm, sal_Bool )
 {
     sal_Bool bRet = sal_False;
 
-    // erst auf Datei Extension pruefen, da diese aussagekraeftiger ist
-    // als die 2 ID Bytes
-
+    // check file extension first, as this trumps the 2 ID bytes
     if ( aPathExt.CompareToAscii( "pbm", 3 ) == COMPARE_EQUAL )
         bRet = sal_True;
     else
@@ -898,9 +894,7 @@ sal_Bool GraphicDescriptor::ImpDetectPSD( SvStream& rStm, sal_Bool bExtendedInfo
 
 sal_Bool GraphicDescriptor::ImpDetectEPS( SvStream& rStm, sal_Bool )
 {
-    // es wird die EPS mit Vorschaubild Variante und die Extensionuebereinstimmung
-    // geprueft
-
+    // check the EPS preview and the file extension
     sal_uInt32  nFirstLong;
     sal_uInt8   nFirstBytes[20];
     sal_Bool        bRet = sal_False;
@@ -1020,15 +1014,15 @@ sal_Bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, sal_Bool bExtendedInfo
 
                 rStm.SeekRel( 0x04 );
 
-                // Breite auslesen
+                // width
                 rStm >> nTemp32;
                 aLogSize.Width() = nTemp32;
 
-                // Hoehe auslesen
+                // height
                 rStm >> nTemp32;
                 aLogSize.Height() = nTemp32;
 
-                // Map-Unit auslesen und PrefSize ermitteln
+                // read MapUnit and determine PrefSize
                 rStm >> nTemp16;
                 aLogSize = OutputDevice::LogicToLogic( aLogSize,
                                                        MapMode( (MapUnit) nTemp16 ),
