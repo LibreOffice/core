@@ -139,7 +139,7 @@ sal_Bool ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& 
     TextSelection aSel( rSel );
     aSel.Justify();
 
-    sal_Bool bSearchInSelection = (0 != (rSearchOptions.searchFlag & util::SearchFlags::REG_NOT_BEGINOFLINE) );
+    bool bSearchInSelection = (0 != (rSearchOptions.searchFlag & util::SearchFlags::REG_NOT_BEGINOFLINE) );
 
     TextPaM aStartPaM( aSel.GetEnd() );
     if ( aSel.HasRange() && ( ( bSearchInSelection && bForward ) || ( !bSearchInSelection && !bForward ) ) )
@@ -301,7 +301,7 @@ sal_uInt16 ExtTextView::Replace( const util::SearchOptions& rSearchOptions, sal_
         // HideSelection();
         TextSelection aSel;
 
-        sal_Bool bSearchInSelection = (0 != (rSearchOptions.searchFlag & util::SearchFlags::REG_NOT_BEGINOFLINE) );
+        bool bSearchInSelection = (0 != (rSearchOptions.searchFlag & util::SearchFlags::REG_NOT_BEGINOFLINE) );
         if ( bSearchInSelection )
         {
             aSel = GetSelection();

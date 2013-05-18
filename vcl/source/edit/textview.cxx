@@ -129,7 +129,7 @@ uno::Any TETextDataObject::getTransferData( const datatransfer::DataFlavor& rFla
 uno::Sequence< datatransfer::DataFlavor > TETextDataObject::getTransferDataFlavors(  ) throw(uno::RuntimeException)
 {
     GetHTMLStream().Seek( STREAM_SEEK_TO_END );
-    sal_Bool bHTML = GetHTMLStream().Tell() > 0;
+    bool bHTML = GetHTMLStream().Tell() > 0;
     uno::Sequence< datatransfer::DataFlavor > aDataFlavors( bHTML ? 2 : 1 );
     SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aDataFlavors.getArray()[0] );
     if ( bHTML )
@@ -2186,7 +2186,7 @@ void TextView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDr
     Point aDocPos = GetDocPos( aMousePos );
     mpImpl->mpDDInfo->maDropPos = mpImpl->mpTextEngine->GetPaM( aDocPos );
 
-    sal_Bool bProtected = sal_False;
+    bool bProtected = false;
     if(mpImpl->mbSupportProtectAttribute)
     {
         const TextCharAttrib* pStartAttr = mpImpl->mpTextEngine->FindCharAttrib(

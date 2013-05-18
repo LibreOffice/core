@@ -677,7 +677,7 @@ TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, 
         sal_Bool bDoOverwrite = ( bOverwrite &&
                 ( aPaM.GetIndex() < pNode->GetText().Len() ) ) ? sal_True : sal_False;
 
-        sal_Bool bUndoAction = ( rCurSel.HasRange() || bDoOverwrite );
+        bool bUndoAction = ( rCurSel.HasRange() || bDoOverwrite );
 
         if ( bUndoAction )
             UndoActionStart();
@@ -846,7 +846,7 @@ TextPaM TextEngine::ImpInsertParaBreak( const TextPaM& rPaM, sal_Bool bKeepEndin
         InsertUndo( new TextUndoSplitPara( this, rPaM.GetPara(), rPaM.GetIndex() ) );
 
     TextNode* pNode = mpDoc->GetNodes().GetObject( rPaM.GetPara() );
-    sal_Bool bFirstParaContentChanged = rPaM.GetIndex() < pNode->GetText().Len();
+    bool bFirstParaContentChanged = rPaM.GetIndex() < pNode->GetText().Len();
 
     TextPaM aPaM( mpDoc->InsertParaBreak( rPaM, bKeepEndingAttribs ) );
 
@@ -1563,7 +1563,7 @@ void TextEngine::FormatDoc()
     mbHasMultiLineParas = sal_False;
 
     long nY = 0;
-    sal_Bool bGrow = sal_False;
+    bool bGrow = false;
 
     maInvalidRect = Rectangle(); // clear
     for ( sal_uLong nPara = 0; nPara < mpTEParaPortions->Count(); nPara++ )
@@ -1578,7 +1578,7 @@ void TextEngine::FormatDoc()
             ImpFormattingParagraph( nPara );
 
             if ( CreateLines( nPara ) )
-                bGrow = sal_True;
+                bGrow = true;
 
             // set InvalidRect only once
             if ( maInvalidRect.IsEmpty() )
@@ -1661,13 +1661,13 @@ void TextEngine::CreateAndInsertEmptyLine( sal_uLong nPara )
     else
         pTmpLine->SetStartX( mpDoc->GetLeftMargin() );
 
-    sal_Bool bLineBreak = pNode->GetText().Len() ? sal_True : sal_False;
+    bool bLineBreak = pNode->GetText().Len() ? true : false;
 
     TETextPortion* pDummyPortion = new TETextPortion( 0 );
     pDummyPortion->GetWidth() = 0;
     pTEParaPortion->GetTextPortions().push_back( pDummyPortion );
 
-    if ( bLineBreak == sal_True )
+    if ( bLineBreak )
     {
         // -2: The new one is already inserted.
         OSL_ENSURE(
@@ -1715,8 +1715,8 @@ void TextEngine::ImpBreakLine( sal_uLong nPara, TextLine* pLine, TETextPortion*,
     pLine->SetEnd( nBreakPos );
     sal_uInt16 nEndPortion = SplitTextPortion( nPara, nBreakPos );
 
-    sal_Bool bBlankSeparator = ( ( nBreakPos >= pLine->GetStart() ) &&
-                                 ( pNode->GetText().GetChar( nBreakPos ) == ' ' ) ) ? sal_True : sal_False;
+    bool bBlankSeparator = ( ( nBreakPos >= pLine->GetStart() ) &&
+                             ( pNode->GetText().GetChar( nBreakPos ) == ' ' ) );
     if ( bBlankSeparator )
     {
         // generally suppress blanks at the end of line
@@ -1962,7 +1962,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
     TextPaM const* pSelEnd = 0;
     if ( pSelection && pSelection->HasRange() )
     {
-        sal_Bool bInvers = pSelection->GetEnd() < pSelection->GetStart();
+        bool bInvers = pSelection->GetEnd() < pSelection->GetStart();
         pSelStart = !bInvers ? &pSelection->GetStart() : &pSelection->GetEnd();
         pSelEnd = bInvers ? &pSelection->GetStart() : &pSelection->GetEnd();
     }
@@ -2046,7 +2046,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                             }
                                         }
 
-                                        sal_Bool bDone = sal_False;
+                                        bool bDone = false;
                                         if ( pSelStart )
                                         {
                                             // is a part of it in the selection?
@@ -2089,7 +2089,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                                     aPos.X() = rStartPos.X() + ImpGetOutputOffset( nPara, pLine, nTmpIndex, nTmpIndex+nL );
                                                     pOutDev->DrawText( aPos, pPortion->GetNode()->GetText(), nTmpIndex, nEnd-nTmpIndex );
                                                 }
-                                                bDone = sal_True;
+                                                bDone = true;
                                             }
                                         }
                                         if ( !bDone )
@@ -2107,7 +2107,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                     if ( pSelStart || pPaintRange )
                                     {
                                         Rectangle aTabArea( aTmpPos, Point( aTmpPos.X()+nTxtWidth, aTmpPos.Y()+mnCharHeight-1 ) );
-                                        sal_Bool bDone = sal_False;
+                                        bool bDone = false;
                                         if ( pSelStart )
                                         {
                                             // is the Tab in the Selection???
@@ -2119,7 +2119,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                                 pOutDev->SetFillColor( rStyleSettings.GetHighlightColor() );
                                                 pOutDev->DrawRect( aTabArea );
                                                 pOutDev->SetFillColor( aOldColor );
-                                                bDone = sal_True;
+                                                bDone = true;
                                             }
                                         }
                                         if ( !bDone )
@@ -2189,7 +2189,7 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
     const short nInvalidDiff = pTEParaPortion->GetInvalidDiff();
     const sal_uInt16 nInvalidStart = pTEParaPortion->GetInvalidPosStart();
     const sal_uInt16 nInvalidEnd =  nInvalidStart + std::abs( nInvalidDiff );
-    sal_Bool bQuickFormat = sal_False;
+    bool bQuickFormat = false;
 
     if ( pTEParaPortion->GetWritingDirectionInfos().empty() )
         ImpInitWritingDirections( nPara );
@@ -2198,14 +2198,14 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
     {
         if ( pTEParaPortion->IsSimpleInvalid() && ( nInvalidDiff > 0 ) )
         {
-            bQuickFormat = sal_True;
+            bQuickFormat = true;
         }
         else if ( ( pTEParaPortion->IsSimpleInvalid() ) && ( nInvalidDiff < 0 ) )
         {
             // check if deleting across Portion border
             sal_uInt16 nStart = nInvalidStart;  // duplicate!!!
             sal_uInt16 nEnd = nStart - nInvalidDiff;  // neg.
-            bQuickFormat = sal_True;
+            bQuickFormat = true;
             sal_uInt16 nPos = 0;
             sal_uInt16 nPortions = pTEParaPortion->GetTextPortions().size();
             for ( sal_uInt16 nTP = 0; nTP < nPortions; nTP++ )
@@ -2215,7 +2215,7 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
                 nPos = nPos + pTP->GetLen();
                 if ( ( nPos > nStart ) && ( nPos < nEnd ) )
                 {
-                    bQuickFormat = sal_False;
+                    bQuickFormat = false;
                     break;
                 }
             }
@@ -2250,18 +2250,18 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
 
     // format all lines starting here
     size_t nDelFromLine = std::numeric_limits<size_t>::max();
-    sal_Bool bLineBreak = sal_False;
+    bool bLineBreak = false;
 
     sal_uInt16 nIndex = pLine->GetStart();
     TextLine aSaveLine( *pLine );
 
     Font aFont;
 
-    sal_Bool bCalcPortion = sal_True;
+    bool bCalcPortion = true;
 
     while ( nIndex < pNode->GetText().Len() )
     {
-        sal_Bool bEOL = sal_False;
+        bool bEOL = false;
         sal_uInt16 nPortionStart = 0;
         sal_uInt16 nPortionEnd = 0;
 
@@ -2275,8 +2275,8 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
 
         // search for Portion that does not fit anymore into line
         TETextPortion* pPortion = 0;
-        sal_Bool bBrokenLine = sal_False;
-        bLineBreak = sal_False;
+        bool bBrokenLine = false;
+        bLineBreak = false;
 
         while ( ( nTmpWidth <= nXWidth ) && !bEOL && ( nTmpPortion < pTEParaPortion->GetTextPortions().size() ) )
         {
@@ -2294,8 +2294,8 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
                     // adjust Tab
                     pPortion->GetWidth() = nXWidth-1;
                     nTmpWidth = pPortion->GetWidth();
-                    bEOL = sal_True;
-                    bBrokenLine = sal_True;
+                    bEOL = true;
+                    bBrokenLine = true;
                 }
                 pPortion->GetKind() = PORTIONKIND_TAB;
             }
@@ -2316,25 +2316,25 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
         }
 
         // this was perhaps one Portion too far
-        sal_Bool bFixedEnd = sal_False;
+        bool bFixedEnd = false;
         if ( nTmpWidth > nXWidth )
         {
             nPortionEnd = nTmpPos;
             nTmpPos = nTmpPos - pPortion->GetLen();
             nPortionStart = nTmpPos;
             nTmpPortion--;
-            bEOL = sal_False;
+            bEOL = false;
 
             nTmpWidth -= pPortion->GetWidth();
             if ( pPortion->GetKind() == PORTIONKIND_TAB )
             {
-                bEOL = sal_True;
-                bFixedEnd = sal_True;
+                bEOL = true;
+                bFixedEnd = true;
             }
         }
         else
         {
-            bEOL = sal_True;
+            bEOL = true;
             pLine->SetEnd( nPortionEnd );
             OSL_ENSURE(pTEParaPortion->GetTextPortions().size(),
                     "CreateLines: No TextPortions?");
@@ -2410,7 +2410,7 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
                         pLine->SetValid();
                         if ( bCalcPortion && bQuickFormat )
                         {
-                            bCalcPortion = sal_False;
+                            bCalcPortion = false;
                             pTEParaPortion->CorrectValuesBehindLastFormattedLine( nLine );
                             break;
                         }
@@ -2423,7 +2423,7 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
                     // the text width does not have to be recalculated.
                     if ( nEnd == ( aSaveLine.GetEnd() + nInvalidDiff ) )
                     {
-                        bCalcPortion = sal_False;
+                        bCalcPortion = false;
                         pTEParaPortion->CorrectValuesBehindLastFormattedLine( nLine );
                         break;
                     }
@@ -2473,7 +2473,7 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
 
     DBG_ASSERT( pTEParaPortion->GetLines().size(), "CreateLines: No Line!" );
 
-    if ( bLineBreak == sal_True )
+    if ( bLineBreak )
         CreateAndInsertEmptyLine( nPara );
 
     pTEParaPortion->SetValid();

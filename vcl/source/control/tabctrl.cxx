@@ -749,8 +749,8 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
     Rectangle               aRect = pItem->maRect;
     long                    nLeftBottom = aRect.Bottom();
     long                    nRightBottom = aRect.Bottom();
-    sal_Bool                    bLeftBorder = sal_True;
-    sal_Bool                    bRightBorder = sal_True;
+    bool                    bLeftBorder = true;
+    bool                    bRightBorder = true;
     sal_uInt16                  nOff;
     sal_Bool                    bNativeOK = sal_False;
 
@@ -777,10 +777,10 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
         {
             aLeftTestPos.X() -= 2;
             if ( rCurRect.IsInside( aLeftTestPos ) )
-                bLeftBorder = sal_False;
+                bLeftBorder = false;
             aRightTestPos.X() += 2;
             if ( rCurRect.IsInside( aRightTestPos ) )
-                bRightBorder = sal_False;
+                bRightBorder = false;
         }
         else
         {
@@ -1068,11 +1068,11 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
     // increased to avoid round corners that might be drawn by a theme
     // in this case we're only interested in the top border of the tabpage because the tabitems are used
     // standalone (eg impress)
-    sal_Bool bNoTabPage = sal_False;
+    bool bNoTabPage = false;
     TabPage* pCurPage = pCurItem ? pCurItem->mpTabPage : NULL;
     if( !pCurPage || !pCurPage->IsVisible() )
     {
-        bNoTabPage = sal_True;
+        bNoTabPage = true;
         aRect.Left()-=10;
         aRect.Right()+=10;
     }
@@ -1426,7 +1426,7 @@ void TabControl::Command( const CommandEvent& rCEvt )
     if( (mpTabCtrlData->mpListBox == NULL) && (rCEvt.GetCommand() == COMMAND_CONTEXTMENU) && (GetPageCount() > 1) )
     {
         Point   aMenuPos;
-        sal_Bool    bMenu;
+        bool    bMenu;
         if ( rCEvt.IsMouseEvent() )
         {
             aMenuPos = rCEvt.GetMousePosPixel();
@@ -1435,7 +1435,7 @@ void TabControl::Command( const CommandEvent& rCEvt )
         else
         {
             aMenuPos = ImplGetTabRect( GetPagePos( mnCurPageId ) ).Center();
-            bMenu = sal_True;
+            bMenu = true;
         }
 
         if ( bMenu )

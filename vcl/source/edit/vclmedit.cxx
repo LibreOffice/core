@@ -41,7 +41,7 @@ private:
     ExtTextEngine*  mpExtTextEngine;
     ExtTextView*    mpExtTextView;
 
-    sal_Bool            mbInMBDown;
+    bool            mbInMBDown;
     sal_Bool            mbFocusSelectionHide;
     sal_Bool            mbIgnoreTab;
     sal_Bool            mbActivePopup;
@@ -168,14 +168,14 @@ ImpVclMEdit::ImpVclMEdit( VclMultiLineEdit* pEdt, WinBits nWinStyle )
 
 void ImpVclMEdit::ImpUpdateSrollBarVis( WinBits nWinStyle )
 {
-    const sal_Bool bHaveVScroll = (NULL != mpVScrollBar);
-    const sal_Bool bHaveHScroll = (NULL != mpHScrollBar);
-    const sal_Bool bHaveScrollBox = (NULL != mpScrollBox);
+    const bool bHaveVScroll = (NULL != mpVScrollBar);
+    const bool bHaveHScroll = (NULL != mpHScrollBar);
+    const bool bHaveScrollBox = (NULL != mpScrollBox);
 
-          sal_Bool bNeedVScroll = ( nWinStyle & WB_VSCROLL ) == WB_VSCROLL;
-    const sal_Bool bNeedHScroll = ( nWinStyle & WB_HSCROLL ) == WB_HSCROLL;
+          bool bNeedVScroll = ( nWinStyle & WB_VSCROLL ) == WB_VSCROLL;
+    const bool bNeedHScroll = ( nWinStyle & WB_HSCROLL ) == WB_HSCROLL;
 
-    const sal_Bool bAutoVScroll = ( nWinStyle & WB_AUTOVSCROLL ) == WB_AUTOVSCROLL;
+    const bool bAutoVScroll = ( nWinStyle & WB_AUTOVSCROLL ) == WB_AUTOVSCROLL;
     if ( !bNeedVScroll && bAutoVScroll )
     {
         TextEngine& rEngine( *mpTextWindow->GetTextEngine() );
@@ -186,9 +186,9 @@ void ImpVclMEdit::ImpUpdateSrollBarVis( WinBits nWinStyle )
             bNeedVScroll = true;
     }
 
-    const sal_Bool bNeedScrollBox = bNeedVScroll && bNeedHScroll;
+    const bool bNeedScrollBox = bNeedVScroll && bNeedHScroll;
 
-    sal_Bool bScrollbarsChanged = false;
+    bool bScrollbarsChanged = false;
     if ( bHaveVScroll != bNeedVScroll )
     {
         delete mpVScrollBar;
@@ -200,7 +200,7 @@ void ImpVclMEdit::ImpUpdateSrollBarVis( WinBits nWinStyle )
             mpVScrollBar->SetScrollHdl( LINK( this, ImpVclMEdit, ScrollHdl ) );
         }
 
-        bScrollbarsChanged = sal_True;
+        bScrollbarsChanged = true;
     }
 
     if ( bHaveHScroll != bNeedHScroll )
@@ -214,7 +214,7 @@ void ImpVclMEdit::ImpUpdateSrollBarVis( WinBits nWinStyle )
             mpHScrollBar->SetScrollHdl( LINK( this, ImpVclMEdit, ScrollHdl ) );
         }
 
-        bScrollbarsChanged = sal_True;
+        bScrollbarsChanged = true;
     }
 
     if ( bHaveScrollBox != bNeedScrollBox )
@@ -701,7 +701,7 @@ sal_Bool ImpVclMEdit::HandleCommand( const CommandEvent& rCEvt )
 
 TextWindow::TextWindow( Window* pParent ) : Window( pParent )
 {
-    mbInMBDown = sal_False;
+    mbInMBDown = false;
     mbFocusSelectionHide = sal_False;
     mbIgnoreTab = sal_False;
     mbActivePopup = sal_False;
@@ -742,11 +742,11 @@ void TextWindow::MouseButtonDown( const MouseEvent& rMEvt )
     if ( !mbTextSelectable )
         return;
 
-    mbInMBDown = sal_True;  // so that GetFocus does not select everything
+    mbInMBDown = true;  // so that GetFocus does not select everything
     mpExtTextView->MouseButtonDown( rMEvt );
     Window::MouseButtonDown( rMEvt );
     GrabFocus();
-    mbInMBDown = sal_False;
+    mbInMBDown = false;
 }
 
 void TextWindow::MouseButtonUp( const MouseEvent& rMEvt )
@@ -1329,8 +1329,8 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& 
     // Border/Background
     pDev->SetLineColor();
     pDev->SetFillColor();
-    sal_Bool bBorder = !(nFlags & WINDOW_DRAW_NOBORDER ) && (GetStyle() & WB_BORDER);
-    sal_Bool bBackground = !(nFlags & WINDOW_DRAW_NOBACKGROUND) && IsControlBackground();
+    bool bBorder = !(nFlags & WINDOW_DRAW_NOBORDER ) && (GetStyle() & WB_BORDER);
+    bool bBackground = !(nFlags & WINDOW_DRAW_NOBACKGROUND) && IsControlBackground();
     if ( bBorder || bBackground )
     {
         Rectangle aRect( aPos, aSize );

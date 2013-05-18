@@ -73,14 +73,14 @@ void TextCharAttribList::InsertAttrib( TextCharAttrib* pAttrib )
 
     const sal_uInt16 nCount = size();
     const sal_uInt16 nStart = pAttrib->GetStart(); // maybe better for Comp.Opt.
-    sal_Bool bInserted = sal_False;
+    bool bInserted = false;
     for ( sal_uInt16 x = 0; x < nCount; x++ )
     {
         TextCharAttrib* pCurAttrib = GetAttrib( x );
         if ( pCurAttrib->GetStart() > nStart )
         {
             insert( begin() + x, pAttrib );
-            bInserted = sal_True;
+            bInserted = true;
             break;
         }
     }
@@ -197,7 +197,7 @@ void TextNode::ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNew )
     if ( !nNew )
         return;
 
-    sal_Bool bResort = sal_False;
+    bool bResort = false;
     sal_uInt16 nAttribs = maCharAttribs.Count();
     for ( sal_uInt16 nAttr = 0; nAttr < nAttribs; nAttr++ )
     {
@@ -228,7 +228,7 @@ void TextNode::ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNew )
                     pAttrib->Expand( nNew );
                 }
                 else
-                    bResort = sal_True;
+                    bResort = true;
             }
             // 2: attribute starts before and reaches past the index
             else if ( ( pAttrib->GetStart() < nIndex ) && ( pAttrib->GetEnd() > nIndex ) )
@@ -261,13 +261,13 @@ void TextNode::CollapsAttribs( sal_uInt16 nIndex, sal_uInt16 nDeleted )
     if ( !nDeleted )
         return;
 
-    sal_Bool bResort = sal_False;
+    bool bResort = false;
     sal_uInt16 nEndChanges = nIndex+nDeleted;
 
     for ( sal_uInt16 nAttr = 0; nAttr < maCharAttribs.Count(); nAttr++ )
     {
         TextCharAttrib* pAttrib = maCharAttribs.GetAttrib( nAttr );
-        sal_Bool bDelAttr = sal_False;
+        bool bDelAttr = false;
         if ( pAttrib->GetEnd() >= nIndex )
         {
             // move all attributes that are behind the cursor
@@ -283,7 +283,7 @@ void TextNode::CollapsAttribs( sal_uInt16 nIndex, sal_uInt16 nDeleted )
                 if ( ( pAttrib->GetStart() == nIndex ) && ( pAttrib->GetEnd() == nEndChanges ) )
                     pAttrib->GetEnd() = nIndex; // empty
                 else
-                    bDelAttr = sal_True;
+                    bDelAttr = true;
             }
             // 2. attribute starts before, ends inside or after
             else if ( ( pAttrib->GetStart() <= nIndex ) && ( pAttrib->GetEnd() > nIndex ) )
@@ -306,7 +306,7 @@ void TextNode::CollapsAttribs( sal_uInt16 nIndex, sal_uInt16 nDeleted )
         DBG_ASSERT( ( pAttrib->GetEnd() <= maText.Len()) || bDelAttr, "Collaps: Attrib groesser als Absatz!" );
         if ( bDelAttr /* || pAttrib->IsEmpty() */ )
         {
-            bResort = sal_True;
+            bResort = true;
             maCharAttribs.RemoveAttrib( nAttr );
             delete pAttrib;
             nAttr--;
@@ -403,7 +403,7 @@ void TextNode::Append( const TextNode& rNode )
     for ( sal_uInt16 nAttr = 0; nAttr < nAttribs; nAttr++ )
     {
         TextCharAttrib* pAttrib = rNode.GetCharAttribs().GetAttrib( nAttr );
-        sal_Bool bMelted = sal_False;
+        bool bMelted = false;
         if ( pAttrib->GetStart() == 0 )
         {
             // potentially merge attributes
@@ -419,7 +419,7 @@ void TextNode::Append( const TextNode& rNode )
                     {
                         pTmpAttrib->GetEnd() =
                             pTmpAttrib->GetEnd() + pAttrib->GetLen();
-                        bMelted = sal_True;
+                        bMelted = true;
                         break;  // there can be only one of this type at this position
                     }
                 }
