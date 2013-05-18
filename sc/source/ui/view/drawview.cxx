@@ -843,6 +843,9 @@ void ScDrawView::SyncForGrid( SdrObject* pObj )
         Point aCurPos =  pViewData->GetScrPos(  aOldStt.Col(), aOldStt.Row(), eWhich, sal_True );
         Point aCurPosHmm = pGridWin->PixelToLogic(aCurPos, aDrawMode );
         Point aGridOff = ( aCurPosHmm - aOldPos );
+        // fdo#63878 Fix the X position for RTL Sheet
+        if( pDoc->IsNegativePage( GetTab() ) )
+            aGridOff.setX( aCurPosHmm.getX() + aOldPos.getX() );
         pObj->SetGridOffset( aGridOff );
     }
 }
