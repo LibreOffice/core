@@ -2562,7 +2562,7 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
             OUString sName = xContent->getIdentifier()->getContentIdentifier();
             sal_Int32 nIndex = 0;
             sName = sName.copy(sName.getToken(0,'/',nIndex).getLength() + 1);
-            if ( m_aAsyncDrop.aUrl.Len() >= sName.getLength() && 0 == sName.compareTo(m_aAsyncDrop.aUrl,sName.getLength()) )
+            if ( m_aAsyncDrop.aUrl.Len() >= sName.getLength() && sName == m_aAsyncDrop.aUrl)
             {
                 m_aAsyncDrop.aDroppedData.clear();
                 return DND_ACTION_NONE;

@@ -242,7 +242,7 @@ namespace dbaui
                 ::comphelper::SequenceAsHashMap aFilterProperties( aProps );
                 OUString sDocumentService = aFilterProperties.getUnpackedValueOrDefault(
                     OUString( "DocumentService" ), OUString() );
-                if ( sDocumentService.equalsAscii( _pAsciiModuleName ) )
+                if ( sDocumentService == *_pAsciiModuleName )
                 {
                     // yes, it's a Base document
                     INetURLObject aURL;

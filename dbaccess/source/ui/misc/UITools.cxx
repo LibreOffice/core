@@ -943,7 +943,7 @@ sal_Bool appendToFilter(const Reference<XConnection>& _xConnection,
                 if(pBegin->indexOf('%') != -1)
                 {
                     sal_Int32 nLen;
-                    if((nLen = pBegin->lastIndexOf('.')) != -1 && !pBegin->compareTo(_sName,nLen))
+                    if((nLen = pBegin->lastIndexOf('.')) != -1 && *pBegin == _sName)
                         bHasToInsert = sal_False;
                     else if(pBegin->getLength() == 1)
                         bHasToInsert = sal_False;
