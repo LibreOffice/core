@@ -906,8 +906,7 @@ void ScColumn::MixData(
     SCSIZE nIndex;
     Search( nRow1, nIndex );
 
-//  SCSIZE nSrcIndex = 0;
-    SCSIZE nSrcIndex, nDestIndex;
+    SCSIZE nSrcIndex = 0, nDestIndex = 0;
     rSrcCol.Search( nRow1, nSrcIndex ); // See if data is at the beginning
 
     SCROW nNextThis = MAXROW+1;
