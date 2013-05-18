@@ -25,11 +25,15 @@
 #include <com/sun/star/awt/XPrinter.hpp>
 #include <com/sun/star/awt/XPrinterServer.hpp>
 #include <com/sun/star/awt/XInfoPrinter.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
+#include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
 
+#include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/mutexandbroadcasthelper.hxx>
+#include <toolkit/helper/servicenames.hxx>
 #include <cppuhelper/propshlp.hxx>
 
 #include "vcl/oldprintadaptor.hxx"
@@ -190,29 +194,17 @@ public:
 //  class VCLXPrinterServer
 //  ----------------------------------------------------
 
-class VCLXPrinterServer :   public ::com::sun::star::awt::XPrinterServer,
-                            public ::com::sun::star::lang::XTypeProvider,
-                            public ::cppu::OWeakObject
+class VCLXPrinterServer : public ::cppu::WeakImplHelper2<com::sun::star::awt::XPrinterServer,
+    com::sun::star::lang::XServiceInfo>
 {
 public:
-
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
-
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
-
     // ::com::sun::star::awt::XPrinterServer
     ::com::sun::star::uno::Sequence< OUString > SAL_CALL getPrinterNames(  ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPrinter > SAL_CALL createPrinter( const OUString& printerName ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XInfoPrinter > SAL_CALL createInfoPrinter( const OUString& printerName ) throw(::com::sun::star::uno::RuntimeException);
+
+    DECLIMPL_SERVICEINFO(VCLXPrinterServer, szServiceName2_PrinterServer);
 };
-
-
-
 
 #endif // _TOOLKIT_AWT_VCLXPRINTER_HXX_
 

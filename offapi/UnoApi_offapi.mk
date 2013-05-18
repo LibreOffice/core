@@ -1744,6 +1744,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/awt,\
 	PopupMenuDirection \
 	PosSize \
 	PrinterException \
+	PrinterServer \
 	PushButtonType \
 	RasterOperation \
 	Rectangle \

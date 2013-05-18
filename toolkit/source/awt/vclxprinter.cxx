@@ -406,19 +406,6 @@ IMPL_XTYPEPROVIDER_END
 //  class VCLXPrinterServer
 //  ----------------------------------------------------
 
-// ::com::sun::star::uno::XInterface
-::com::sun::star::uno::Any VCLXPrinterServer::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< ::com::sun::star::awt::XPrinterServer* >(this)) );
-    return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
-}
-
-// ::com::sun::star::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXPrinterServer )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPrinterServer>* ) NULL )
-IMPL_XTYPEPROVIDER_END
-
 // ::com::sun::star::awt::XPrinterServer
 ::com::sun::star::uno::Sequence< OUString > VCLXPrinterServer::getPrinterNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
