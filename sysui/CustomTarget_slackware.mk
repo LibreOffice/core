@@ -7,6 +7,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+include $(SRCDIR)/sysui/productlist.mk
+
 slack_WORKDIR := $(call gb_CustomTarget_get_workdir,sysui/slackware)
 slack_SRCDIR := $(SRCDIR)/sysui/desktop/slackware
 

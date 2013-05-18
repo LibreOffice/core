@@ -7,6 +7,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+include $(SRCDIR)/sysui/productlist.mk
+
 $(eval $(call gb_Package_Package,desktop,$(WORKDIR)/CustomTarget))
 
 ifneq ($(filter deb,$(PKGFORMAT)),)

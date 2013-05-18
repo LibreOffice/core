@@ -7,6 +7,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+include $(SRCDIR)/sysui/productlist.mk
+
 rpm_WORKDIR := $(call gb_CustomTarget_get_workdir,sysui/rpm)
 rpm_SRCDIR := $(SRCDIR)/sysui/desktop
 

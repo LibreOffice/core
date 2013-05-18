@@ -7,6 +7,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+include $(SRCDIR)/sysui/productlist.mk
+
 solaris_WORKDIR := $(call gb_CustomTarget_get_workdir,sysui/solaris)
 solaris_SRCDIR := $(SRCDIR)/sysui/desktop/solaris
 

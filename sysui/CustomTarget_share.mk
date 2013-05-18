@@ -7,6 +7,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+include $(SRCDIR)/sysui/productlist.mk
+
 ifeq ($(ENABLE_GIO),TRUE)
 	brand_URIPARAM := --urls
 else
@@ -111,16 +113,6 @@ ULFS := documents.ulf \
 	launcher_comment.ulf \
 	launcher_genericname.ulf \
 	launcher_unityquicklist.ulf
-
-PRODUCTLIST := libreoffice libreofficedev oxygenoffice
-PKGVERSION := $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO)
-PKGVERSIONSHORT := $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR)
-PRODUCTNAME.libreoffice := LibreOffice
-PRODUCTNAME.libreofficeodev := LibreOfficeDev
-PRODUCTNAME.oxygenoffice := OxygenOffice
-UNIXFILENAME.libreoffice := libreoffice$(PKGVERSIONSHORT)
-UNIXFILENAME.libreofficedev := libreofficedev$(PKGVERSIONSHORT)
-UNIXFILENAME.oxygenoffice := oxygenoffice$(PKGVERSIONSHORT)
 
 $(eval $(call gb_CustomTarget_CustomTarget,sysui/share))
 
