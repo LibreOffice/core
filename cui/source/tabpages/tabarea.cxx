@@ -135,7 +135,7 @@ void SvxAreaTabDialog::SavePalettes()
 
     // save the tables when they have been changed
 
-    const String aPath( SvtPathOptions().GetPalettePath() );
+    const OUString aPath( SvtPathOptions().GetPalettePath() );
 
     if( mnHatchingListState & CT_MODIFIED )
     {
