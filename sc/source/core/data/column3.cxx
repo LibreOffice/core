@@ -1103,38 +1103,40 @@ ScAttrIterator* ScColumn::CreateAttrIterator( SCROW nStartRow, SCROW nEndRow ) c
 
 void ScColumn::StartAllListeners()
 {
-    if ( !maItems.empty() )
-        for (SCSIZE i = 0; i < maItems.size(); i++)
+    if (maItems.empty())
+        return;
+
+    for (SCSIZE i = 0; i < maItems.size(); i++)
+    {
+        ScBaseCell* pCell = maItems[i].pCell;
+        if ( pCell->GetCellType() == CELLTYPE_FORMULA )
         {
-            ScBaseCell* pCell = maItems[i].pCell;
-            if ( pCell->GetCellType() == CELLTYPE_FORMULA )
-            {
-                SCROW nRow = maItems[i].nRow;
-                ((ScFormulaCell*)pCell)->StartListeningTo( pDocument );
-                if ( nRow != maItems[i].nRow )
-                    Search( nRow, i ); // Insert Listener?
-            }
+            SCROW nRow = maItems[i].nRow;
+            ((ScFormulaCell*)pCell)->StartListeningTo( pDocument );
+            if ( nRow != maItems[i].nRow )
+                Search( nRow, i ); // Insert Listener?
         }
+    }
 }
 
 
 void ScColumn::StartNeededListeners()
 {
-    if ( !maItems.empty() )
+    if (maItems.empty())
+        return;
+
+    for (SCSIZE i = 0; i < maItems.size(); i++)
     {
-        for (SCSIZE i = 0; i < maItems.size(); i++)
+        ScBaseCell* pCell = maItems[i].pCell;
+        if ( pCell->GetCellType() == CELLTYPE_FORMULA )
         {
-            ScBaseCell* pCell = maItems[i].pCell;
-            if ( pCell->GetCellType() == CELLTYPE_FORMULA )
+            ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
+            if (pFCell->NeedsListening())
             {
-                ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
-                if (pFCell->NeedsListening())
-                {
-                    SCROW nRow = maItems[i].nRow;
-                    pFCell->StartListeningTo( pDocument );
-                    if ( nRow != maItems[i].nRow )
-                        Search( nRow, i ); // Insert Listener?
-                }
+                SCROW nRow = maItems[i].nRow;
+                pFCell->StartListeningTo( pDocument );
+                if ( nRow != maItems[i].nRow )
+                    Search( nRow, i ); // Insert Listener?
             }
         }
     }
@@ -1166,20 +1168,21 @@ void ScColumn::BroadcastInArea( SCROW nRow1, SCROW nRow2 )
 
 void ScColumn::StartListeningInArea( SCROW nRow1, SCROW nRow2 )
 {
-    if ( !maItems.empty() )
+    if (maItems.empty())
+        return;
+
+    SCROW nRow;
+    SCSIZE nIndex;
+    Search( nRow1, nIndex );
+    while ( nIndex < maItems.size() && (nRow = maItems[nIndex].nRow) <= nRow2 )
     {
-        SCROW nRow;
-        SCSIZE nIndex;
-        Search( nRow1, nIndex );
-        while ( nIndex < maItems.size() && (nRow = maItems[nIndex].nRow) <= nRow2 )
-        {
-            ScBaseCell* pCell = maItems[nIndex].pCell;
-            if ( pCell->GetCellType() == CELLTYPE_FORMULA )
-                ((ScFormulaCell*)pCell)->StartListeningTo( pDocument );
-            if ( nRow != maItems[nIndex].nRow )
-                Search( nRow, nIndex ); // Inserted via Listening
-            nIndex++;
-        }
+        ScBaseCell* pCell = maItems[nIndex].pCell;
+        if ( pCell->GetCellType() == CELLTYPE_FORMULA )
+            ((ScFormulaCell*)pCell)->StartListeningTo( pDocument );
+        if ( nRow != maItems[nIndex].nRow )
+            Search( nRow, nIndex ); // Inserted via Listening
+
+        ++nIndex;
     }
 }
 
