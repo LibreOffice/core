@@ -23,6 +23,7 @@
 #include <osl/diagnose.h>
 #include <osl/time.h>
 #include <time.h>
+#include <assert.h>
 
 /* FIXME: detection should be done in configure script */
 #if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD) || \
@@ -33,6 +34,12 @@
 #define HAS_ALTZONE 1
 #endif
 
+#if defined(LINUX)
+typedef struct timespec osl_time_t;
+#else
+typedef struct timeval osl_time_t;
+#endif
+
 /*--------------------------------------------------
  * osl_getSystemTime
  *-------------------------------------------------*/
@@ -40,13 +47,10 @@
 sal_Bool SAL_CALL osl_getSystemTime(TimeValue* tv)
 {
     int res;
+    osl_time_t tp;
 #if defined(LINUX)
-    struct timespec tp;
-
     res = clock_gettime(CLOCK_REALTIME, &tp);
 #else
-    struct timeval tp;
-
     res = gettimeofday(&tp, NULL);
 #endif
 
@@ -253,28 +257,44 @@ sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( TimeValue* pLocalTimeVal, Time
     return sal_False;
 }
 
+static osl_time_t startTime;
 
-
-static struct timeval startTime;
-static sal_Bool bGlobalTimer = sal_False;
+void sal_initGlobalTimer()
+{
+  int res;
+  #if defined(LINUX)
+  res = clock_gettime(CLOCK_REALTIME, &startTime);
+  #else
+  res = gettimeofday( &startTime, NULL );
+  #endif
+  assert(res == 0);
+}
 
 sal_uInt32 SAL_CALL osl_getGlobalTimer()
 {
-  struct timeval currentTime;
+  osl_time_t currentTime;
+
+  int res;
   sal_uInt32 nSeconds;
 
-  // FIXME: not thread safe !!
-  if ( bGlobalTimer == sal_False )
-  {
-      gettimeofday( &startTime, NULL );
-      bGlobalTimer=sal_True;
-  }
+  #if defined(LINUX)
+  res = clock_gettime(CLOCK_REALTIME, &startTime);
+  #else
+  res = gettimeofday( &startTime, NULL );
+  #endif
 
-  gettimeofday( &currentTime, NULL );
+  assert(res == 0);
+
+  if (res != 0)
+    return 0;
 
   nSeconds = (sal_uInt32)( currentTime.tv_sec - startTime.tv_sec );
-
-  return ( nSeconds * 1000 ) + (long) (( currentTime.tv_usec - startTime.tv_usec) / 1000 );
+  #if defined(LINUX)
+  nSeconds = ( nSeconds * 1000 ) + (long) (( currentTime.tv_nsec - startTime.tv_nsec) / 1000000 );
+  #else
+  nSeconds = ( nSeconds * 1000 ) + (long) (( currentTime.tv_usec - startTime.tv_usec) / 1000 );
+  #endif
+  return nSeconds;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
