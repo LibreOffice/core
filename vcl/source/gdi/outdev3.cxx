@@ -755,11 +755,11 @@ bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSD, FontMatchSt
     int nMatch = 0;
 
     const OUString& rFontName = rFSD.maTargetName;
-    if( rFontName == GetFamilyName() )
+    if( rFontName == GetFamilyName() || rFontName.equalsIgnoreAsciiCase( GetFamilyName() ) )
         nMatch += 240000;
 
     if( rStatus.mpTargetStyleName
-    &&  GetStyleName() == rStatus.mpTargetStyleName )
+    &&  GetStyleName().equalsIgnoreAsciiCase( rStatus.mpTargetStyleName ) )
         nMatch += 120000;
 
     if( (rFSD.GetPitch() != PITCH_DONTKNOW) && (rFSD.GetPitch() == GetPitch()) )
