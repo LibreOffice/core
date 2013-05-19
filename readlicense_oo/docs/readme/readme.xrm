@@ -275,7 +275,7 @@
 			<h3 id="howtostart" xml:lang="en-US">How to Start</h3>
 			<p id="howtostart1" xml:lang="en-US">The best way to start contributing is to subscribe to one or more of the mailing lists, lurk for a while, and gradually use the mail archives to familiarize yourself with many of the topics covered since the ${PRODUCTNAME} source code was released back in October 2000. When you're comfortable, all you need to do is send an email self-introduction and jump right in.</p>
 			<h3 id="subscribe" xml:lang="en-US">Subscribe</h3>
-			<p id="subscribe1" xml:lang="en-US">Here are a few of the Project mailing lists to which you can subscribe at <a href="http://openoffice.apache.org/mailing-lists.html">http://openoffice.apache.org/mailing-lists.html</a></p>
+			<p id="subscribe1" xml:lang="en-US">Here are a few of the ${PRODUCTNAME} mailing lists to which you can subscribe at <a href="http://openoffice.apache.org/mailing-lists.html">http://openoffice.apache.org/mailing-lists.html</a></p>
 			<ul>
 				<li>
 					<p id="subscribelist1" xml:lang="en-US">News: announce@openoffice.apache.org *recommended to all users* (light traffic)</p>
@@ -291,7 +291,7 @@
 			</ul>
 			<h3 xml:lang="en-US">Joining the Project</h3>
 			<p id="joining" xml:lang="en-US">You can make major contributions to this important open source project even if you have limited software design or coding experience. Yes, you!</p>
-			<p id="joining1" url="ahead" xml:lang="en-US">At <a href="http://openoffice.apache.org/get-involved.html">http://openoffice.apache.org/get-involved.html</a> you will find a first overview where you can start with, ranging from Localization, QA, user support to some real core coding projects. If you are not a developer, try the Documentation or the Marketing Project. The Apache OpenOffice Marketing Project is applying both guerilla and traditional commercial techniques to marketing open source software, and we are doing it across language and cultural barriers, so you can help just by spreading the word and telling a friend about this office suite.</p>
+			<p id="joining1" url="ahead" xml:lang="en-US">At <a href="http://openoffice.apache.org/get-involved.html">http://openoffice.apache.org/get-involved.html</a> you will find a first overview where you can start with, ranging from Localization, QA, user support to some real core coding projects. If you are not a developer, you can help with Documentation or Marketing, for example. The ${PRODUCTNAME} marketing is applying both guerrilla and traditional commercial techniques to marketing open source software, and we are doing it across language and cultural barriers, so you can help just by spreading the word and telling a friend about this office suite.</p>
 			<p id="joining3" xml:lang="en-US">You can help by joining the marketing mailing list marketing@openoffice.apache.org where you can provide point communication contact with press, media, government agencies, consultants, schools, Linux Users Groups and developers in your country and local community.</p>
 		</div>
 
