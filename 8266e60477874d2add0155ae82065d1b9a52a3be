@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//8hQ\u003d",
+        "filename": "vcl/source/gdi/outdev3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 758,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-05-19T07:01:07Z",
+      "side": 1,
+      "message": "you can just drop the second one (i\u0027ll do it in a second commit)",
+      "revId": "8266e60477874d2add0155ae82065d1b9a52a3be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

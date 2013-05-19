@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//8hU\u003d",
+        "filename": "vcl/source/window/window.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 8859,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-05-19T07:01:07Z",
+      "side": 0,
+      "message": "intended?",
+      "revId": "d48ae82a74f65c68bd70db382796168b3545fe86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
