@@ -6465,7 +6465,7 @@ static const sal_uInt16 mso_sptTextRingInsideSegm[] =
 static const SvxMSDffHandle mso_sptTextRingInsideHandle[] =
 {
     {   MSDFF_HANDLE_FLAGS_RANGE| MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL,
-        10800, 0x100, 10800, 10800, 0x80000000, 0x7fffffff, 10800, 21600 }
+        10800, 0x100, 10800, 10800, MIN_INT32, 0x7fffffff, 10800, 21600 }
 };
 static const mso_CustomShape msoTextRingInside =
 {
@@ -6475,7 +6475,7 @@ static const mso_CustomShape msoTextRingInside =
     (sal_Int32*)mso_sptDefault13500,
     (SvxMSDffTextRectangles*)mso_sptFontWorkTextRect, sizeof( mso_sptFontWorkTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000,
+    MIN_INT32, MIN_INT32,
     NULL, 0,
     (SvxMSDffHandle*)mso_sptTextRingInsideHandle, sizeof( mso_sptTextRingInsideHandle ) / sizeof( SvxMSDffHandle )
 };
