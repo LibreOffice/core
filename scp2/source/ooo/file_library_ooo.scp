@@ -378,7 +378,7 @@ File gid_File_Lib_Lcms2
     #ifdef MACOSX
        Name = STRING(CONCAT3(liblcms2,.2,UNXSUFFIX));
     #else
-       Name = STRING(CONCAT3(liblcms2,UNXSUFFIX,.2));
+       Name = STRING(CONCAT2(liblcms2,UNXSUFFIX));
     #endif
   #elif defined(WNT)
     #ifdef _gcc3
