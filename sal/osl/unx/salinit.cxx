@@ -38,6 +38,9 @@ extern bool sal_use_syslog;
 
 extern "C" {
 
+//From time.c
+void sal_initGlobalTimer();
+
 void sal_detail_initialize(int argc, char ** argv) {
 #if defined MACOSX
     // On Mac OS X, soffice can restart itself via exec (see restartOnMac in
@@ -64,6 +67,7 @@ void sal_detail_initialize(int argc, char ** argv) {
         close(fd);
     }
 #endif
+    sal_initGlobalTimer();
 #if HAVE_SYSLOG_H
     const char *use_syslog = getenv("SAL_LOG_SYSLOG");
     sal_use_syslog = use_syslog != NULL && !strcmp(use_syslog, "1");
