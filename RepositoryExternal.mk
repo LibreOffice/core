@@ -1643,18 +1643,14 @@ endef
 
 else
 
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	lcms2 \
-))
-
 define gb_LinkTarget__use_lcms2
 $(call gb_LinkTarget_use_package,$(1),lcms2)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,lcms2/include) \
 	$$(INCLUDE) \
 )
-$(call gb_LinkTarget_use_libraries,$(1),\
-	lcms2 \
+$(call gb_LinkTarget_add_libs,$(1),\
+	-llcms2 \
 )
 
 endef
