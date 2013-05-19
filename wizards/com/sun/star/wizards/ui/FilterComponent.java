@@ -270,6 +270,7 @@ public class FilterComponent
                             case DataType.DATE:
                                 value = ((Double) value) - oQueryMetaData.getNullDateCorrection();
                                 break;
+                                // TODO: TIME case?
                         }
                         column.removeProperty("Value");
                         final short operator = currentControlRow.getSelectedOperator();
@@ -777,10 +778,12 @@ public class FilterComponent
                     String sValue = AnyConverter.toString(_filtercondition.Value);
                     if (sValue.indexOf("{D '") > -1)
                     {
+                        // TODO: this seems to never happen?
                         sValue = JavaTools.replaceSubString(sValue, PropertyNames.EMPTY_STRING, "{D '");
                         sValue = JavaTools.replaceSubString(sValue, PropertyNames.EMPTY_STRING, "' }");
                         try
                         {
+                            //Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "EffectiveValue", );
                             oQueryMetaData.getNumberFormatter().convertStringToNumber(iDateFormat, sValue);
                         }
                         catch (java.lang.Exception ex)
@@ -790,16 +793,24 @@ public class FilterComponent
                     }
                     else if (sValue.indexOf("{T '") > -1)
                     {
+                        // TODO: this seems to never happen?
                         sValue = JavaTools.replaceSubString(sValue, PropertyNames.EMPTY_STRING, "{T '");
                         sValue = JavaTools.replaceSubString(sValue, PropertyNames.EMPTY_STRING, "' }");
                         try
                         {
+                            //Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "EffectiveValue", );
                             oQueryMetaData.getNumberFormatter().convertStringToNumber(iTimeFormat, sValue);
                         }
                         catch (java.lang.Exception ex)
                         {
                             Logger.getLogger(FilterComponent.class.getName()).log(Level.SEVERE, null, ex);
                         }
+                    }
+                    // TODO: TS case?
+                    //TODO: other datetime formats?
+                    else
+                    {
+                        //Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "EffectiveValue", sValue);
                     }
                 }
                 else if (AnyConverter.isBoolean(_filtercondition.Value))
