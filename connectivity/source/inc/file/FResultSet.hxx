@@ -134,7 +134,7 @@ namespace connectivity
 
             void initializeRow(OValueRefRow& _rRow,sal_Int32 _nColumnCount);
             void construct();
-            sal_Bool evaluate();
+            //sal_Bool evaluate();
 
             sal_Bool ExecuteRow(IResultSetHelper::Movement eFirstCursorPosition,
                                 sal_Int32 nOffset = 1,

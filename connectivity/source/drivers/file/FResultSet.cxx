@@ -546,37 +546,37 @@ sal_Bool SAL_CALL OResultSet::isBeforeFirst(  ) throw(SQLException, RuntimeExcep
     return m_nRowPos == -1;
 }
 // -------------------------------------------------------------------------
-sal_Bool OResultSet::evaluate()
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OResultSet::evaluate" );
-    OSL_ENSURE(m_pSQLAnalyzer,"OResultSet::evaluate: Analyzer isn't set!");
-    sal_Bool bRet = sal_True;
-    while(!m_pSQLAnalyzer->evaluateRestriction())
-    {
-        if(m_pEvaluationKeySet)
-        {
-            if(m_aEvaluateIter == m_pEvaluationKeySet->end())
-                return sal_False;
-            bRet = m_pTable->seekRow(IResultSetHelper::BOOKMARK,(*m_aEvaluateIter),m_nRowPos);
-            ++m_aEvaluateIter;
-        }
-        else
-            bRet = m_pTable->seekRow(IResultSetHelper::NEXT,1,m_nRowPos);
-        if(bRet)
-        {
-            if(m_pEvaluationKeySet)
-            {
-                bRet = m_pTable->fetchRow(m_aEvaluateRow,*(m_pTable->getTableColumns()),sal_True,sal_True);
-                evaluate();
+// sal_Bool OResultSet::evaluate()
+// {
+//     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OResultSet::evaluate" );
+//     OSL_ENSURE(m_pSQLAnalyzer,"OResultSet::evaluate: Analyzer isn't set!");
+//     sal_Bool bRet = sal_True;
+//     while(!m_pSQLAnalyzer->evaluateRestriction())
+//     {
+//         if(m_pEvaluationKeySet)
+//         {
+//             if(m_aEvaluateIter == m_pEvaluationKeySet->end())
+//                 return sal_False;
+//             bRet = m_pTable->seekRow(IResultSetHelper::BOOKMARK,(*m_aEvaluateIter),m_nRowPos);
+//             ++m_aEvaluateIter;
+//         }
+//         else
+//             bRet = m_pTable->seekRow(IResultSetHelper::NEXT,1,m_nRowPos);
+//         if(bRet)
+//         {
+//             if(m_pEvaluationKeySet)
+//             {
+//                 bRet = m_pTable->fetchRow(m_aEvaluateRow,*(m_pTable->getTableColumns()),sal_True,sal_True);
+//                 evaluate();
 
-            }
-            else
-                bRet = m_pTable->fetchRow(m_aRow,*m_xColumns,sal_False,sal_True);
-        }
-    }
+//             }
+//             else
+//                 bRet = m_pTable->fetchRow(m_aRow,*m_xColumns,sal_False,sal_True);
+//         }
+//     }
 
-    return bRet;
-}
+//     return bRet;
+// }
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL OResultSet::next(  ) throw(SQLException, RuntimeException)
