@@ -60,38 +60,51 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
+using std::vector;
+using std::lower_bound;
 
 // -------------------------------------------------------------------------
 void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "flat", "Ocke.Janssen@sun.com", "OFlatTable::fillColumns" );
-    sal_Bool bRead = sal_True;
+    m_bNeedToReadLine = true; // we overwrite m_aCurrentLine, seek the stream, ...
+    m_pFileStream->Seek(0);
+    m_aCurrentLine = QuotedTokenizedString();
+    bool bRead = true;
+
+    const OFlatConnection* const pConnection = getFlatConnection();
+    const bool bHasHeaderLine = pConnection->isHeaderLine();
 
     QuotedTokenizedString aHeaderLine;
-    OFlatConnection* pConnection = (OFlatConnection*)m_pConnection;
-    const rtl_TextEncoding nEncoding = m_pConnection->getTextEncoding();
-    const sal_Bool bHasHeaderLine = pConnection->isHeaderLine();
+    TRowPositionInFile rowPos(0, 0);
+    sal_Int32 rowNum(0);
     if ( bHasHeaderLine )
     {
-        while(bRead && !aHeaderLine.Len())
-        {
-            bRead = m_pFileStream->ReadByteStringLine(aHeaderLine,nEncoding);
-        }
-        m_nStartRowFilePos = m_pFileStream->Tell();
+        bRead = readLine(&rowPos.second, &rowPos.first, true);
+        if(bRead)
+            aHeaderLine = m_aCurrentLine;
     }
+    setRowPos(rowNum++, rowPos);
 
     // read first row
     QuotedTokenizedString aFirstLine;
-    bRead = m_pFileStream->ReadByteStringLine(aFirstLine,nEncoding);
+    if(bRead)
+    {
+        bRead = readLine(&rowPos.second, &rowPos.first, false);
+        if(bRead)
+            setRowPos(rowNum++, rowPos);
+    }
 
     if ( !bHasHeaderLine || !aHeaderLine.Len())
     {
-        while(bRead && !aFirstLine.Len())
+        // use first non-empty row as headerline because we need the number of columns
+        while(bRead && m_aCurrentLine.Len() == 0)
         {
-            bRead = m_pFileStream->ReadByteStringLine(aFirstLine,nEncoding);
+            bRead = readLine(&rowPos.second, &rowPos.first, false);
+            if(bRead)
+                setRowPos(rowNum++, rowPos);
         }
-        // use first row as headerline because we need the number of columns
-        aHeaderLine = aFirstLine;
+        aHeaderLine = m_aCurrentLine;
     }
     // column count
     const xub_StrLen nFieldCount = aHeaderLine.GetTokenCount(m_cFieldDelimiter,m_cStringDelimiter);
@@ -117,15 +130,16 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
     const sal_Unicode cThousandDelimiter = pConnection->getThousandDelimiter();
     OUString aColumnName;
     ::comphelper::UStringMixEqual aCase(bCase);
-    ::std::vector<OUString> aColumnNames;
-    ::std::vector<String> m_aTypeNames;
+    vector<OUString> aColumnNames;
+    vector<String> m_aTypeNames;
     m_aTypeNames.resize(nFieldCount);
     const sal_Int32 nMaxRowsToScan = pConnection->getMaxRowsToScan();
     sal_Int32 nRowCount = 0;
+
     do
     {
-        xub_StrLen nStartPosHeaderLine = 0; // use for eficient way to get the tokens
-        xub_StrLen nStartPosFirstLine = 0; // use for eficient way to get the tokens
+        xub_StrLen nStartPosHeaderLine = 0; // use for efficient way to get the tokens
+        xub_StrLen nStartPosFirstLine = 0; // use for efficient way to get the tokens
         xub_StrLen nStartPosFirstLine2 = 0;
         for (xub_StrLen i = 0; i < nFieldCount; i++)
         {
@@ -146,11 +160,15 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
                 }
                 aColumnNames.push_back(aColumnName);
             }
-            impl_fillColumnInfo_nothrow(aFirstLine,nStartPosFirstLine,nStartPosFirstLine2,m_aTypes[i],m_aPrecisions[i],m_aScales[i],m_aTypeNames[i],cDecimalDelimiter,cThousandDelimiter,aCharClass);
+            if(bRead)
+                impl_fillColumnInfo_nothrow(m_aCurrentLine,nStartPosFirstLine,nStartPosFirstLine2,m_aTypes[i],m_aPrecisions[i],m_aScales[i],m_aTypeNames[i],cDecimalDelimiter,cThousandDelimiter,aCharClass);
         }
         ++nRowCount;
+        bRead = readLine(&rowPos.second, &rowPos.first, false);
+        if(bRead)
+            setRowPos(rowNum++, rowPos);
     }
-    while(nRowCount < nMaxRowsToScan && m_pFileStream->ReadByteStringLine(aFirstLine,nEncoding) && !m_pFileStream->IsEof());
+    while(nRowCount < nMaxRowsToScan && bRead);
 
     for (xub_StrLen i = 0; i < nFieldCount; i++)
     {
@@ -177,7 +195,8 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
         Reference< XPropertySet> xCol = pColumn;
         m_aColumns->get().push_back(xCol);
     }
-    m_pFileStream->Seek(m_nStartRowFilePos);
+
+    m_pFileStream->Seek(m_aRowPosToFilePos[0].second);
 }
 void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,xub_StrLen& nStartPosFirstLine,xub_StrLen& nStartPosFirstLine2
                                              ,sal_Int32& io_nType,sal_Int32& io_nPrecisions,sal_Int32& io_nScales,String& o_sTypeName
@@ -400,7 +419,6 @@ OFlatTable::OFlatTable(sdbcx::OCollection* _pTables,OFlatConnection* _pConnectio
                                   _Description,
                                   _SchemaName,
                                   _CatalogName)
-    ,m_nStartRowFilePos(0)
     ,m_nRowPos(0)
     ,m_nMaxRowCount(0)
     ,m_cStringDelimiter(_pConnection->getStringDelimiter())
@@ -530,7 +548,7 @@ void SAL_CALL OFlatTable::disposing(void)
 Sequence< Type > SAL_CALL OFlatTable::getTypes(  ) throw(RuntimeException)
 {
     Sequence< Type > aTypes = OTable_TYPEDEF::getTypes();
-    ::std::vector<Type> aOwnTypes;
+    vector<Type> aOwnTypes;
     aOwnTypes.reserve(aTypes.getLength());
     const Type* pBegin = aTypes.getConstArray();
     const Type* pEnd = pBegin + aTypes.getLength();
@@ -589,27 +607,29 @@ sal_Int64 OFlatTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (Ru
                 : OFlatTable_BASE::getSomething(rId);
 }
 //------------------------------------------------------------------
-sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal_Bool bIsTable,sal_Bool bRetrieveData)
+sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, sal_Bool bIsTable, sal_Bool bRetrieveData)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "flat", "Ocke.Janssen@sun.com", "OFlatTable::fetchRow" );
     *(_rRow->get())[0] = m_nFilePos;
 
     if (!bRetrieveData)
         return sal_True;
+
+    sal_Bool result = sal_False;
     if ( m_bNeedToReadLine )
     {
-        sal_Int32 nCurrentPos = 0;
         m_pFileStream->Seek(m_nFilePos);
-        readLine(nCurrentPos);
-        m_bNeedToReadLine = false;
+        TRowPositionInFile rowPos(0, 0);
+        if(readLine(&rowPos.second, &rowPos.first))
+        {
+            setRowPos(m_nRowPos, rowPos);
+            m_bNeedToReadLine = false;
+            result = sal_True;
+        }
+        // else let run through so that we set _rRow to all NULL
     }
 
-#if OSL_DEBUG_LEVEL>1
-    OFlatConnection* pConnection = dynamic_cast<OFlatConnection*>(m_pConnection);
-    assert(pConnection);
-#else
-    OFlatConnection* pConnection = static_cast<OFlatConnection*>(m_pConnection);
-#endif
+    const OFlatConnection * const pConnection = getFlatConnection();
     const sal_Unicode cDecimalDelimiter = pConnection->getDecimalDelimiter();
     const sal_Unicode cThousandDelimiter = pConnection->getThousandDelimiter();
     // Fields:
@@ -617,7 +637,8 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
     OSQLColumns::Vector::const_iterator aIter = _rCols.get().begin();
     OSQLColumns::Vector::const_iterator aEnd = _rCols.get().end();
     const OValueRefVector::Vector::size_type nCount = _rRow->get().size();
-    for (OValueRefVector::Vector::size_type i = 1; aIter != aEnd && i < nCount;
+    for (OValueRefVector::Vector::size_type i = 1;
+         aIter != aEnd && i < nCount;
          ++aIter, i++)
     {
         String aStr = m_aCurrentLine.GetTokenSpecial(nStartPos,m_cFieldDelimiter,m_cStringDelimiter);
@@ -724,11 +745,22 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
             (_rRow->get())[i]->setTypeKind(nType);
         }
     }
-    return sal_True;
+    return result;
 }
+
+// -----------------------------------------------------------------------------
 void OFlatTable::refreshHeader()
 {
-    m_nRowPos = 0;
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "flat", "lionel@mamane.lu", "OFlatTable::refreshHeader" );
+}
+
+// -----------------------------------------------------------------------------
+namespace
+{
+    template< typename Tp, typename Te> bool pairFirstLess(const Tp &p, const Te &e)
+    {
+        return p.first < e;
+    }
 }
 // -----------------------------------------------------------------------------
 sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
@@ -736,8 +768,6 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "flat", "Ocke.Janssen@sun.com", "OFlatTable::seekRow" );
     OSL_ENSURE(m_pFileStream,"OFlatTable::seekRow: FileStream is NULL!");
     // ----------------------------------------------------------
-    // Prepare positioning:
-    m_nFilePos = nCurPos;
 
     switch(eCursorPosition)
     {
@@ -746,29 +776,37 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
             // run through
         case IResultSetHelper::NEXT:
             {
+                assert(m_nRowPos >= 0);
                 if(m_nMaxRowCount != 0 && m_nRowPos > m_nMaxRowCount)
                     return sal_False;
                 ++m_nRowPos;
-                ::std::map<sal_Int32,TRowPositionsInFile::iterator>::const_iterator aFind = m_aRowPosToFilePos.find(m_nRowPos);
-                m_bNeedToReadLine = aFind != m_aRowPosToFilePos.end();
-                if ( m_bNeedToReadLine )
+                if(m_aRowPosToFilePos.size() > static_cast< vector< TRowPositionInFile >::size_type >(m_nRowPos))
                 {
-                    m_nFilePos  = aFind->second->first;
-                    nCurPos     = aFind->second->second;
-                } // if ( m_bNeedToReadLine )
+                    m_bNeedToReadLine = true;
+                    m_nFilePos  = m_aRowPosToFilePos[m_nRowPos].first;
+                    nCurPos     = m_aRowPosToFilePos[m_nRowPos].second;
+                }
                 else
                 {
-                    if ( m_nRowPos == 1 )
-                        m_nFilePos = m_nStartRowFilePos;
-                    m_pFileStream->Seek(m_nFilePos);
-                    if ( m_pFileStream->IsEof() || !readLine(nCurPos) /*|| !checkHeaderLine()*/)
-                    {
-                        m_nMaxRowCount = m_nRowPos -1;
-                        return sal_False;
-                    } // if ( m_pFileStream->IsEof() || !readLine(nCurPos) /*|| !checkHeaderLine()*/)
+                    assert(m_aRowPosToFilePos.size() == static_cast< vector< TRowPositionInFile >::size_type >(m_nRowPos));
+                    const TRowPositionInFile &lastRowPos(m_aRowPosToFilePos.back());
+                    // Our ResultSet is allowed to disagree with us only
+                    // on the position of the first line
+                    // (because of the special case of the header...)
+                    assert(m_nRowPos == 1 || nCurPos == lastRowPos.second);
 
-                    TRowPositionsInFile::iterator aPos = m_aFilePosToEndLinePos.insert(TRowPositionsInFile::value_type(m_nFilePos,nCurPos)).first;
-                    m_aRowPosToFilePos.insert(::std::map<sal_Int32,TRowPositionsInFile::iterator>::value_type(m_nRowPos,aPos));
+                    m_nFilePos = lastRowPos.second;
+                    m_pFileStream->Seek(m_nFilePos);
+
+                    TRowPositionInFile newRowPos;
+                    if(!readLine(&newRowPos.second, &newRowPos.first, false))
+                    {
+                        m_nMaxRowCount = m_nRowPos - 1;
+                        return sal_False;
+                    }
+
+                    nCurPos = newRowPos.second;
+                    setRowPos(m_nRowPos, newRowPos);
                 }
             }
 
@@ -781,39 +819,29 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
 
             --m_nRowPos;
             {
-                assert(m_aRowPosToFilePos.find(m_nRowPos) != m_aRowPosToFilePos.end());
-                TRowPositionsInFile::iterator aPositions = m_aRowPosToFilePos[m_nRowPos];
-                m_nFilePos = aPositions->first;
-                nCurPos = aPositions->second;
+                assert (m_nRowPos >= 0);
+                assert(m_aRowPosToFilePos.size() >= static_cast< vector< TRowPositionInFile >::size_type >(m_nRowPos));
+                const TRowPositionInFile &aPositions(m_aRowPosToFilePos[m_nRowPos]);
+                m_nFilePos = aPositions.first;
+                nCurPos = aPositions.second;
                 m_bNeedToReadLine = true;
             }
 
             break;
         case IResultSetHelper::LAST:
-            if ( m_nMaxRowCount )
+            if (m_nMaxRowCount == 0)
             {
-                ::std::map<sal_Int32,TRowPositionsInFile::iterator>::reverse_iterator aLastPos = m_aRowPosToFilePos.rbegin();
-                m_nRowPos  = aLastPos->first;
-                m_nFilePos = aLastPos->second->first;
-                nCurPos    = aLastPos->second->second;
-
-                //m_pFileStream->Seek(m_nFilePos);
-                m_bNeedToReadLine = true;
-                //if ( m_pFileStream->IsEof() /*|| !checkHeaderLine()*/ || !readLine(nCurPos) )
-                //  return sal_False;
+                while(seekRow(IResultSetHelper::NEXT, 1, nCurPos)) ; // run through after last row
             }
-            else
-            {
-                while(seekRow(IResultSetHelper::NEXT,1,nCurPos)) ; // run through after last row
-                // now I know all
-                seekRow(IResultSetHelper::PRIOR,1,nCurPos);
-            }
+            // m_nMaxRowCount can still be zero, but now it means there a genuinely zero rows in the table
+            return seekRow(IResultSetHelper::ABSOLUTE, m_nMaxRowCount, nCurPos);
             break;
         case IResultSetHelper::RELATIVE:
             {
                 const sal_Int32 nNewRowPos = m_nRowPos + nOffset;
-                if (nNewRowPos <= 0)
+                if (nNewRowPos < 0)
                     return sal_False;
+                // ABSOLUTE will take care of case nNewRowPos > nMaxRowCount
                 return seekRow(IResultSetHelper::ABSOLUTE, nNewRowPos, nCurPos);
             }
         case IResultSetHelper::ABSOLUTE:
@@ -825,112 +853,116 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
                         if (!seekRow(IResultSetHelper::LAST, 0, nCurPos))
                             return sal_False;
                     }
-                    assert(m_nMaxRowCount != 0);
-                    nOffset = m_nMaxRowCount + nOffset + 1;
+                    // m_nMaxRowCount can still be zero, but now it means there a genuinely zero rows in the table
+                    nOffset = m_nMaxRowCount + nOffset;
                 }
                 if(nOffset < 0)
                 {
-                    m_nRowPos = 0;
+                    seekRow(IResultSetHelper::ABSOLUTE, 0, nCurPos);
                     return sal_False;
                 }
                 if(m_nMaxRowCount && nOffset > m_nMaxRowCount)
                 {
                     m_nRowPos = m_nMaxRowCount + 1;
+                    const TRowPositionInFile &lastRowPos(m_aRowPosToFilePos.back());
+                    m_nFilePos = lastRowPos.second;
+                    nCurPos = lastRowPos.second;
                     return sal_False;
                 }
 
-                ::std::map<sal_Int32,TRowPositionsInFile::iterator>::const_iterator aIter = m_aRowPosToFilePos.find(nOffset);
-                if(aIter != m_aRowPosToFilePos.end())
+                assert(m_nRowPos >=0);
+                assert(m_aRowPosToFilePos.size() > static_cast< vector< TRowPositionInFile >::size_type >(m_nRowPos));
+                assert(nOffset >= 0);
+                if(m_aRowPosToFilePos.size() > static_cast< vector< TRowPositionInFile >::size_type >(nOffset))
                 {
-                    m_nFilePos  = aIter->second->first;
-                    nCurPos     = aIter->second->second;
+                    m_nFilePos  = m_aRowPosToFilePos[nOffset].first;
+                    nCurPos     = m_aRowPosToFilePos[nOffset].second;
                     m_nRowPos   = nOffset;
                     m_bNeedToReadLine = true;
                 }
                 else
                 {
-                    aIter = m_aRowPosToFilePos.upper_bound(nOffset);
-                    if(aIter == m_aRowPosToFilePos.end())
+                    assert(m_nRowPos < nOffset);
+                    while(m_nRowPos < nOffset)
                     {
-                        ::std::map<sal_Int32,TRowPositionsInFile::iterator>::reverse_iterator aLastPos = m_aRowPosToFilePos.rbegin();
-                        m_nRowPos   = aLastPos->first;
-                        m_nFilePos  = aIter->second->first;
-                        nCurPos     = aIter->second->second;
-                        while(m_nRowPos < nOffset)
-                        {
-                            if(!seekRow(IResultSetHelper::NEXT,1,nCurPos))
-                                return sal_False;
-                        }
-                        assert(m_nRowPos == nOffset);
+                        if(!seekRow(IResultSetHelper::NEXT, 1, nCurPos))
+                            return sal_False;
                     }
-                    else
-                    {
-                        // This is very fishy... The rows numbering has holes???
-                        assert(false);
-                        --aIter;
-                        m_nRowPos   = aIter->first;
-                        m_nFilePos  = aIter->second->first;
-                        nCurPos     = aIter->second->second;
-                        m_bNeedToReadLine = true;
-                    }
+                    assert(m_nRowPos == nOffset);
                 }
             }
 
             break;
         case IResultSetHelper::BOOKMARK:
             {
-                m_nRowPos = 0;
-                TRowPositionsInFile::const_iterator aFind = m_aFilePosToEndLinePos.find(nOffset);
-                if(aFind == m_aFilePosToEndLinePos.end())
+                vector< TRowPositionInFile >::const_iterator aFind = lower_bound(m_aRowPosToFilePos.begin(),
+                                                                                 m_aRowPosToFilePos.end(),
+                                                                                 nOffset,
+                                                                                 pairFirstLess< TRowPositionInFile, sal_Int32 >);
+
+                if(aFind == m_aRowPosToFilePos.end() || aFind->first != nOffset)
                     //invalid bookmark
                     return sal_False;
+
                 m_bNeedToReadLine = true;
                 m_nFilePos  = aFind->first;
                 nCurPos     = aFind->second;
-                for(::std::map<sal_Int32, TRowPositionsInFile::iterator>::const_iterator p = m_aRowPosToFilePos.begin();
-                    p != m_aRowPosToFilePos.end();
-                    ++p)
-                {
-                    assert(p->second->first <= nOffset);
-                    if(p->second->first == nOffset)
-                    {
-                        m_nRowPos = p->first;
-                        break;
-                    }
-                }
-                assert(m_nRowPos > 0);
+                m_nRowPos = aFind - m_aRowPosToFilePos.begin();
                 break;
             }
     }
 
-    //nCurPos = m_nFilePos;
-
     return sal_True;
 }
+
 // -----------------------------------------------------------------------------
-sal_Bool OFlatTable::readLine(sal_Int32& _rnCurrentPos)
+bool OFlatTable::readLine(sal_Int32 * const pEndPos, sal_Int32 * const pStartPos, const bool nonEmpty)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "flat", "Ocke.Janssen@sun.com", "OFlatTable::readLine" );
     const rtl_TextEncoding nEncoding = m_pConnection->getTextEncoding();
-    m_pFileStream->ReadByteStringLine(m_aCurrentLine,nEncoding);
-    if (m_pFileStream->IsEof())
-        return sal_False;
-
-    QuotedTokenizedString sLine = m_aCurrentLine; // check if the string continues on next line
-    while( (comphelper::string::getTokenCount(sLine.GetString(), m_cStringDelimiter) % 2) != 1 )
+    m_aCurrentLine = QuotedTokenizedString();
+    do
     {
-        m_pFileStream->ReadByteStringLine(sLine,nEncoding);
-        if ( !m_pFileStream->IsEof() )
+        if (pStartPos)
+            *pStartPos = m_pFileStream->Tell();
+        m_pFileStream->ReadByteStringLine(m_aCurrentLine,nEncoding);
+        if (m_pFileStream->IsEof())
+            return false;
+
+        QuotedTokenizedString sLine = m_aCurrentLine; // check if the string continues on next line
+        while( (comphelper::string::getTokenCount(sLine.GetString(), m_cStringDelimiter) % 2) != 1 )
         {
-            m_aCurrentLine.GetString().Append('\n');
-            m_aCurrentLine.GetString() += sLine.GetString();
-            sLine = m_aCurrentLine;
+            m_pFileStream->ReadByteStringLine(sLine,nEncoding);
+            if ( !m_pFileStream->IsEof() )
+            {
+                m_aCurrentLine.GetString().Append('\n');
+                m_aCurrentLine.GetString() += sLine.GetString();
+                sLine = m_aCurrentLine;
+            }
+            else
+                break;
         }
-        else
-            break;
+    } while(nonEmpty && m_aCurrentLine.Len() == 0);
+
+    if(pEndPos)
+        *pEndPos = m_pFileStream->Tell();
+    return true;
+}
+
+// -----------------------------------------------------------------------------
+void OFlatTable::setRowPos(const vector<TRowPositionInFile>::size_type rowNum, const TRowPositionInFile &rowPos)
+{
+    assert(m_aRowPosToFilePos.size() >= rowNum);
+    if(m_aRowPosToFilePos.size() == rowNum)
+        m_aRowPosToFilePos.push_back(rowPos);
+    else
+    {
+        SAL_WARN_IF(m_aRowPosToFilePos[rowNum] != rowPos,
+                    "connectivity.flat",
+                    "Setting position for row " << rowNum << " to (" << rowPos.first << ", " << rowPos.second << "), " <<
+                    "but already had different position (" << m_aRowPosToFilePos[rowNum].first << ", " << m_aRowPosToFilePos[rowNum].second << ")");
+        m_aRowPosToFilePos[rowNum] = rowPos;
     }
-    _rnCurrentPos = m_pFileStream->Tell();
-    return sal_True;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

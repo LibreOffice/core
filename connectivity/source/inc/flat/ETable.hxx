@@ -21,6 +21,7 @@
 #define _CONNECTIVITY_FLAT_TABLE_HXX_
 
 #include "file/FTable.hxx"
+#include "flat/EConnection.hxx"
 #include "connectivity/sdbcx/VColumn.hxx"
 #include "connectivity/CommonTools.hxx"
 #include <tools/urlobj.hxx>
@@ -34,15 +35,14 @@ namespace connectivity
         typedef file::OFileTable OFlatTable_BASE;
         class OFlatConnection;
 
-        typedef ::std::map< OUString,
-                        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed>, comphelper::UStringMixLess > OContainer;
-        typedef ::std::map<sal_Int32, sal_Int32>    TRowPositionsInFile;
+        typedef ::std::pair<sal_Int32, sal_Int32> TRowPositionInFile;
 
         class OFlatTable :  public OFlatTable_BASE
         {
             // maps a row position to a file position
-            TRowPositionsInFile             m_aFilePosToEndLinePos;
-            ::std::map<sal_Int32, TRowPositionsInFile::iterator>
+            // row n is positions [m_aRowPosToFilePos[n]->first, m_aRowPosToFilePos[n]->second) in file
+            // "real" row indexes start at 1; for the purposes of m_aRowPosToFilePos, row 0 is headers
+            ::std::vector<TRowPositionInFile>
                                             m_aRowPosToFilePos;
             ::std::vector<sal_Int32>        m_aTypes;       // holds all type for columns just to avoid to ask the propertyset
             ::std::vector<sal_Int32>        m_aPrecisions;  // same as aboth
@@ -50,7 +50,6 @@ namespace connectivity
             QuotedTokenizedString           m_aCurrentLine;
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > m_xNumberFormatter;
             ::com::sun::star::util::Date    m_aNullDate;
-            sal_Int32                       m_nStartRowFilePos;
             sal_Int32                       m_nRowPos;
             sal_Int32                       m_nMaxRowCount; // will be set if stream is once eof
             sal_Unicode                     m_cStringDelimiter;     // delimiter for strings m_cStringDelimiter blabla m_cStringDelimiter
@@ -59,10 +58,21 @@ namespace connectivity
         private:
             void fillColumns(const ::com::sun::star::lang::Locale& _aLocale);
             sal_Bool CreateFile(const INetURLObject& aFile, sal_Bool& bCreateMemo);
-            sal_Bool readLine(sal_Int32& _rnCurrentPos);
+            bool readLine(sal_Int32 *pEndPos = NULL, sal_Int32 *pStartPos = NULL, bool nonEmpty = false);
+            void setRowPos(::std::vector<TRowPositionInFile>::size_type rowNum, const TRowPositionInFile &rowPos);
             void impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,xub_StrLen& nStartPosFirstLine,xub_StrLen& nStartPosFirstLine2
                                              ,sal_Int32& io_nType,sal_Int32& io_nPrecisions,sal_Int32& io_nScales,String& o_sTypeName
                                              ,const sal_Unicode cDecimalDelimiter,const sal_Unicode cThousandDelimiter,const CharClass& aCharClass);
+            OFlatConnection* getFlatConnection()
+            {
+#if OSL_DEBUG_LEVEL>1
+                OFlatConnection* pConnection = dynamic_cast<OFlatConnection*>(m_pConnection);
+                assert(pConnection);
+#else
+                OFlatConnection* pConnection = static_cast<OFlatConnection*>(m_pConnection);
+#endif
+                return pConnection;
+            }
         public:
             virtual void refreshColumns();
 
@@ -79,7 +89,7 @@ namespace connectivity
             void construct(); // can throw any exception
 
             virtual sal_Bool seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos);
-            virtual sal_Bool fetchRow(OValueRefRow& _rRow,const OSQLColumns& _rCols, sal_Bool bIsTable,sal_Bool bRetrieveData);
+            virtual sal_Bool fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, sal_Bool bIsTable, sal_Bool bRetrieveData);
             virtual void refreshHeader();
 
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
