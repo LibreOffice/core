@@ -253,22 +253,37 @@ sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( TimeValue* pLocalTimeVal, Time
     return sal_False;
 }
 
+#if defined(LINUX)
 
+void sal_initGlobalTimer() {}
+
+sal_uInt32 SAL_CALL osl_getGlobalTimer()
+{
+    struct timespec currentTime;
+    int res;
+
+    res = clock_gettime(CLOCK_PROCESS_CPUTIME_ID , NULL);
+    if (res != 0)
+    {
+       return 0;
+    }
+
+    return currentTime.tv_sec + (currentTime.tv_nsec / 1000);
+}
+
+#else
 
 static struct timeval startTime;
-static sal_Bool bGlobalTimer = sal_False;
+
+void sal_initGlobalTimer()
+{
+    gettimeofday( &startTime, NULL );
+}
 
 sal_uInt32 SAL_CALL osl_getGlobalTimer()
 {
   struct timeval currentTime;
   sal_uInt32 nSeconds;
-
-  // FIXME: not thread safe !!
-  if ( bGlobalTimer == sal_False )
-  {
-      gettimeofday( &startTime, NULL );
-      bGlobalTimer=sal_True;
-  }
 
   gettimeofday( &currentTime, NULL );
 
@@ -276,5 +291,7 @@ sal_uInt32 SAL_CALL osl_getGlobalTimer()
 
   return ( nSeconds * 1000 ) + (long) (( currentTime.tv_usec - startTime.tv_usec) / 1000 );
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

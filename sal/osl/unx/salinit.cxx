@@ -38,6 +38,8 @@ extern bool sal_use_syslog;
 
 extern "C" {
 
+void sal_initGlobalTimer();
+
 void sal_detail_initialize(int argc, char ** argv) {
 #if defined MACOSX
     // On Mac OS X, soffice can restart itself via exec (see restartOnMac in
