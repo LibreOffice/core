@@ -381,9 +381,15 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
 	ApplicationServices \
 ))
 else
+ifeq ($(MACOSX_SDK_VERSION),1060)
+$(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
+	ApplicationServices \
+))
+else
 $(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
 	CoreText \
 ))
+endif
 endif
 
 else # ATSUI

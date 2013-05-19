@@ -10663,7 +10663,7 @@ dnl ===================================================================
 ENABLE_CORETEXT=NO
 if test "$_os" = "Darwin"; then
     AC_MSG_CHECKING([whether to use CoreText framework])
-    if test "$enable_coretext" = yes -o "$BITNESS_OVERRIDE" = 64; then
+    if test "$enable_coretext" != no -o "$BITNESS_OVERRIDE" = 64; then
         AC_MSG_RESULT([yes])
         ENABLE_CORETEXT=YES
     else
