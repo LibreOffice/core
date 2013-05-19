@@ -24,6 +24,7 @@
 #include <osl/time.h>
 #include <time.h>
 #include <assert.h>
+#include <unistd>
 
 /* FIXME: detection should be done in configure script */
 #if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD) || \
@@ -34,7 +35,11 @@
 #define HAS_ALTZONE 1
 #endif
 
-#if defined(LINUX)
+#if defined(_POSIX_TIMERS) && (_POSIX_TIMERS > 0)
+#define USE_CLOCK_GETTIME 1
+#endif
+
+#if USE_CLOCK_GETTIME
 typedef struct timespec osl_time_t;
 #else
 typedef struct timeval osl_time_t;
@@ -48,7 +53,7 @@ sal_Bool SAL_CALL osl_getSystemTime(TimeValue* tv)
 {
     int res;
     osl_time_t tp;
-#if defined(LINUX)
+#if defined(USE_CLOCK_GETTIME)
     res = clock_gettime(CLOCK_REALTIME, &tp);
 #else
     res = gettimeofday(&tp, NULL);
@@ -60,7 +65,7 @@ sal_Bool SAL_CALL osl_getSystemTime(TimeValue* tv)
     }
 
     tv->Seconds = tp.tv_sec;
-    #if defined(LINUX)
+    #if defined(USE_CLOCK_GETTIME)
     tv->Nanosec = tp.tv_nsec;
     #else
     tv->Nanosec = tp.tv_usec * 1000;
@@ -262,7 +267,7 @@ static osl_time_t startTime;
 void sal_initGlobalTimer()
 {
   int res;
-  #if defined(LINUX)
+  #if defined(USE_CLOCK_GETTIME)
   res = clock_gettime(CLOCK_REALTIME, &startTime);
   #else
   res = gettimeofday( &startTime, NULL );
@@ -277,7 +282,7 @@ sal_uInt32 SAL_CALL osl_getGlobalTimer()
   int res;
   sal_uInt32 nSeconds;
 
-  #if defined(LINUX)
+  #if defined(USE_CLOCK_GETTIME)
   res = clock_gettime(CLOCK_REALTIME, &startTime);
   #else
   res = gettimeofday( &startTime, NULL );
@@ -289,7 +294,7 @@ sal_uInt32 SAL_CALL osl_getGlobalTimer()
     return 0;
 
   nSeconds = (sal_uInt32)( currentTime.tv_sec - startTime.tv_sec );
-  #if defined(LINUX)
+  #if defined(USE_CLOCK_GETTIME)
   nSeconds = ( nSeconds * 1000 ) + (long) (( currentTime.tv_nsec - startTime.tv_nsec) / 1000000 );
   #else
   nSeconds = ( nSeconds * 1000 ) + (long) (( currentTime.tv_usec - startTime.tv_usec) / 1000 );
