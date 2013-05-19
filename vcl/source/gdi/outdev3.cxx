@@ -695,8 +695,8 @@ PhysicalFontFace::PhysicalFontFace( const ImplDevFontAttributes& rDFA, int nMagi
 {
     // StarSymbol is a unicode font, but it still deserves the symbol flag
     if( !IsSymbolFont() )
-        if( GetFamilyName().startsWith( "starsymbol")
-        ||  GetFamilyName().startsWith( "opensymbol") )
+        if( GetFamilyName().startsWithIgnoreAsciiCase( "starsymbol" )
+        ||  GetFamilyName().startsWithIgnoreAsciiCase( "opensymbol" ) )
             SetSymbolFlag( true );
 }
 
