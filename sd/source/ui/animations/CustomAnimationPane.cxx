@@ -1092,10 +1092,10 @@ void CustomAnimationPane::UpdateLook (void)
         mpFTSpeed->SetBackground(aBackground);
     if (mpFTChangeOrder != NULL)
         mpFTChangeOrder->SetBackground(aBackground);
-    if (mpFLSeperator1 != NULL)
-        mpFLSeperator1->SetBackground(aBackground);
-    if (mpFLSeperator2 != NULL)
-        mpFLSeperator2->SetBackground(aBackground);
+    if (mpFLSeparator1 != NULL)
+        mpFLSeparator1->SetBackground(aBackground);
+    if (mpFLSeparator2 != NULL)
+        mpFLSeparator2->SetBackground(aBackground);
 }
 
 
