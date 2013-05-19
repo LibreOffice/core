@@ -2309,6 +2309,13 @@ ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
         maFontInstanceList[ aFontSelData ] = pEntry;
     }
 
+    // We might have selected a non-symbol font as a fallback for a
+    // symbol font. Ensure that conversion is done
+    if (aFontSelData.IsSymbolFont() && !pEntry->maMetric.IsSymbolFont() && !pEntry->mpConversion)
+    {
+        pEntry->mpConversion = ConvertChar::GetRecodeData( aFontSelData.maTargetName, aFontSelData.maSearchName );
+    }
+
     mpFirstEntry = pEntry;
     return pEntry;
 }
