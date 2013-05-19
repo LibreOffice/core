@@ -187,13 +187,13 @@ void SmElementsControl::Paint(const Rectangle&)
     SetLayoutMode( TEXT_LAYOUT_BIDI_LTR );
     SetDigitLanguage( LANGUAGE_ENGLISH );
 
-    sal_uInt32 boxX = maMaxElementDimensions.Width()  + 10;
-    sal_uInt32 boxY = maMaxElementDimensions.Height() + 10;
+    sal_Int32 boxX = maMaxElementDimensions.Width()  + 10;
+    sal_Int32 boxY = maMaxElementDimensions.Height() + 10;
 
-    sal_uInt32 x = 0;
-    sal_uInt32 y = 0;
+    sal_Int32 x = 0;
+    sal_Int32 y = 0;
 
-    sal_uInt32 perLine = GetOutputSizePixel().Width() / boxX;
+    sal_Int32 perLine = GetOutputSizePixel().Width() / boxX;
 
     if(perLine <= 0) {
         perLine = 1;
@@ -393,17 +393,16 @@ void SmElementsControl::build()
         break;
         case RID_CATERGORY_EXAMPLES:
         {
-            OUString aFunctionList[] = {
-                "C=%pi cdot d = 2 cdot %pi cdot r",
-                "E=mc^2",
-                "a^2 + b^2 = c^2",
-                "f ( x ) = sum from { { i = 0 } } to { infinity } { {f^{(i)}(0)} over {i!} x^i}",
-                "f ( x ) = {1} over {%sigma sqrt{2%pi} }e^-{{(x-%mu)^2} over {2%sigma^2}}"
-            };
-            for (sal_uInt16 i = 0; i < 5 ; i++)
-            {
-                addElement(aFunctionList[i], aFunctionList[i]);
-            }
+            OUString aEquation = OUString("C=%pi cdot d = 2 cdot %pi cdot r");
+            addElement(aEquation, aEquation);
+            aEquation = OUString("E=mc^2");
+            addElement(aEquation, aEquation);
+            aEquation = OUString("a^2 + b^2 = c^2");
+            addElement(aEquation, aEquation);
+            aEquation = OUString("f ( x ) = sum from { { i = 0 } } to { infinity } { {f^{(i)}(0)} over {i!} x^i}");
+            addElement(aEquation, aEquation);
+            aEquation = OUString("f ( x ) = {1} over {%sigma sqrt{2%pi} }e^-{{(x-%mu)^2} over {2%sigma^2}}");
+            addElement(aEquation, aEquation);
         }
         break;
     }
