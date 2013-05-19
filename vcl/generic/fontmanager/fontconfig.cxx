@@ -811,11 +811,17 @@ namespace
 
         sLangAttrib = OUStringToOString(rLangTag.getBcp47(), RTL_TEXTENCODING_UTF8).toAsciiLowerCase();
         if (FcStrSetMember(pLangSet, (const FcChar8*)sLangAttrib.getStr()))
+        {
+            FcStrSetDestroy(pLangSet);
             return sLangAttrib;
+        }
 
         sLangAttrib = OUStringToOString(rLangTag.getLanguageAndScript(), RTL_TEXTENCODING_UTF8).toAsciiLowerCase();
         if (FcStrSetMember(pLangSet, (const FcChar8*)sLangAttrib.getStr()))
+        {
+            FcStrSetDestroy(pLangSet);
             return sLangAttrib;
+        }
 
         OString sLang = OUStringToOString(rLangTag.getLanguage(), RTL_TEXTENCODING_UTF8).toAsciiLowerCase();
         OString sRegion = OUStringToOString(rLangTag.getCountry(), RTL_TEXTENCODING_UTF8).toAsciiLowerCase();
@@ -824,11 +830,17 @@ namespace
         {
             sLangAttrib = sLang + OString('-') + sRegion;
             if (FcStrSetMember(pLangSet, (const FcChar8*)sLangAttrib.getStr()))
+            {
+                FcStrSetDestroy(pLangSet);
                 return sLangAttrib;
+            }
         }
 
         if (FcStrSetMember(pLangSet, (const FcChar8*)sLang.getStr()))
+        {
+            FcStrSetDestroy(pLangSet);
             return sLang;
+        }
 
         return OString();
 #else
