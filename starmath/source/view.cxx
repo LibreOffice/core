@@ -70,12 +70,13 @@
 #include "mathmlimport.hxx"
 #include "cursor.hxx"
 #include "accessibility.hxx"
+#include "ElementsDockingWindow.hxx"
 
 #define MINZOOM         25
 #define MAXZOOM         800
 
 // space around the edit window, in pixels
-#define CMD_BOX_PADDING 4
+#define CMD_BOX_PADDING 10
 
 #define SmViewShell
 #include "smslots.hxx"
@@ -382,27 +383,30 @@ void SmGraphicWindow::Paint(const Rectangle&)
     rDoc.DrawFormula(*this, aPoint, true);  //! modifies aPoint to be the topleft
                                 //! corner of the formula
     SetFormulaDrawPos(aPoint);
-    if(IsInlineEditEnabled()) {
+    if(IsInlineEditEnabled())
+    {
         //Draw cursor if any...
         if(pViewShell->GetDoc()->HasCursor() && IsLineVisible())
             pViewShell->GetDoc()->GetCursor().Draw(*this, aPoint, IsCursorVisible());
-    } else {
-    SetIsCursorVisible(false);  // (old) cursor must be drawn again
-
-    const SmEditWindow *pEdit = pViewShell->GetEditWindow();
-    if (pEdit)
-    {   // get new position for formula-cursor (for possible altered formula)
-        sal_Int32  nRow;
-        sal_uInt16 nCol;
-        SmGetLeftSelectionPart(pEdit->GetSelection(), nRow, nCol);
-        nRow++;
-        nCol++;
-        const SmNode *pFound = SetCursorPos(static_cast<sal_uInt16>(nRow), nCol);
-
-        SmModule  *pp = SM_MOD();
-        if (pFound && pp->GetConfig()->IsShowFormulaCursor())
-            ShowCursor(true);
     }
+    else
+    {
+        SetIsCursorVisible(false);  // (old) cursor must be drawn again
+
+        const SmEditWindow *pEdit = pViewShell->GetEditWindow();
+        if (pEdit)
+        {   // get new position for formula-cursor (for possible altered formula)
+            sal_Int32  nRow;
+            sal_uInt16 nCol;
+            SmGetLeftSelectionPart(pEdit->GetSelection(), nRow, nCol);
+            nRow++;
+            nCol++;
+            const SmNode *pFound = SetCursorPos(static_cast<sal_uInt16>(nRow), nCol);
+
+            SmModule  *pp = SM_MOD();
+            if (pFound && pp->GetConfig()->IsShowFormulaCursor())
+                ShowCursor(true);
+        }
     }
 }
 
@@ -927,6 +931,7 @@ SFX_IMPL_INTERFACE(SmViewShell, SfxViewShell, SmResId(0))
     SFX_CHILDWINDOW_REGISTRATION(SID_TASKPANE);
     SFX_CHILDWINDOW_REGISTRATION(SmToolBoxWrapper::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(SmCmdBoxWrapper::GetChildWindowId());
+    SFX_CHILDWINDOW_REGISTRATION(SmElementsDockingWindowWrapper::GetChildWindowId());
 }
 
 
@@ -1705,6 +1710,23 @@ void SmViewShell::Execute(SfxRequest& rReq)
             break;
         }
 
+        case SID_INSERTCOMMANDTEXT:
+        {
+            const SfxStringItem& rItem = (const SfxStringItem&)rReq.GetArgs()->Get(SID_INSERTCOMMANDTEXT);
+
+            if (pWin && (bInsertIntoEditWindow || !IsInlineEditEnabled()))
+            {
+                pWin->InsertText(rItem.GetValue());
+            }
+            if (IsInlineEditEnabled() && (GetDoc() && !bInsertIntoEditWindow))
+            {
+                GetDoc()->GetCursor().InsertCommandText(rItem.GetValue());
+                GetGraphicWindow().GrabFocus();
+            }
+            break;
+
+        }
+
         case SID_INSERTSYMBOL:
         {
             const SfxStringItem& rItem =
@@ -1837,6 +1859,15 @@ void SmViewShell::Execute(SfxRequest& rReq)
         }
         break;
 
+        case SID_ELEMENTSDOCKINGWINDOW:
+        {
+            GetViewFrame()->ToggleChildWindow( SmElementsDockingWindowWrapper::GetChildWindowId() );
+            GetViewFrame()->GetBindings().Invalidate( SID_ELEMENTSDOCKINGWINDOW );
+
+            rReq.Ignore ();
+        }
+        break;
+
         case SID_SYMBOLS_CATALOGUE:
         {
 
@@ -1927,7 +1958,16 @@ void SmViewShell::GetState(SfxItemSet &rSet)
                 rSet.Put(SfxBoolItem(nWh, pp->GetConfig()->IsShowFormulaCursor()));
             }
             break;
-
+        case SID_ELEMENTSDOCKINGWINDOW:
+            {
+                bool bState = false;
+                SfxChildWindow *pChildWnd = GetViewFrame()->
+                        GetChildWindow( SmElementsDockingWindowWrapper::GetChildWindowId() );
+                if (pChildWnd  &&  pChildWnd->GetWindow()->IsVisible())
+                    bState = true;
+                rSet.Put(SfxBoolItem(SID_ELEMENTSDOCKINGWINDOW, bState));
+            }
+            break;
         case SID_TOOLBOX:
             {
                 bool bState = false;

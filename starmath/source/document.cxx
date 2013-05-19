@@ -481,8 +481,6 @@ void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSel
         rDev.SetDrawMode( nOldDrawMode );
 }
 
-
-
 Size SmDocShell::GetSize()
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::GetSize" );
@@ -645,7 +643,7 @@ void SmDocShell::SetPrinter( SfxPrinter *pNew )
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SetPrinter" );
 
     delete pPrinter;
-    pPrinter = pNew;    //Eigentumsuebergang!
+    pPrinter = pNew;    //Transfer ownership
     pPrinter->SetMapMode( MapMode(MAP_100TH_MM) );
     SetFormulaArranged(false);
     Repaint();

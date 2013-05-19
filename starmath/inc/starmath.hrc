@@ -56,6 +56,7 @@
 #define SID_INSERTSYMBOL            (SID_SMA_START + 104)
 /** Command for inserting a math construction specified in commands.src */
 #define SID_INSERTCOMMAND           (SID_SMA_START + 105)
+#define SID_INSERTCOMMANDTEXT       (SID_SMA_START + 106)
 
 #define SID_LOADSYMBOLS             (SID_SMA_START + 107)
 #define SID_SAVESYMBOLS             (SID_SMA_START + 108)
@@ -77,6 +78,7 @@
 #define SID_TOOLBOXWINDOW           (SID_SMA_START + 123)
 #define SID_NO_RIGHT_SPACES         (SID_SMA_START + 124)
 #define SID_SAVE_ONLY_USED_SYMBOLS  (SID_SMA_START + 125)
+#define SID_ELEMENTSDOCKINGWINDOW   (SID_SMA_START + 126)
 
 
 #define RID_FONTDIALOG              (RID_APP_START + 2)
@@ -110,6 +112,7 @@
 #define RID_SYMBOLFILESSTR          (RID_APP_START + 809)
 #define RID_ALLFILESSTR             (RID_APP_START + 810)
 #define RID_STATUSBAR               (RID_APP_START + 816)
+#define RID_ELEMENTSDOCKINGWINDOW   (RID_APP_START + 817)
 
 #define STR_MATH_DOCUMENT_FULLTYPE_CURRENT  (RID_APP_START + 821)
 #define STR_STATSTR_READING                 (RID_APP_START + 823)
@@ -281,6 +284,39 @@
 #define RID_LIMINFX                 (RID_APP_START + 1616)
 #define RID_LIMSUPX                 (RID_APP_START + 1617)
 
+#define RID_LIM_FROMX               (RID_APP_START + 1621)
+#define RID_SUM_FROMX               (RID_APP_START + 1622)
+#define RID_PROD_FROMX              (RID_APP_START + 1623)
+#define RID_COPROD_FROMX            (RID_APP_START + 1624)
+#define RID_INT_FROMX               (RID_APP_START + 1625)
+#define RID_IINT_FROMX              (RID_APP_START + 1626)
+#define RID_IIINT_FROMX             (RID_APP_START + 1627)
+#define RID_LINT_FROMX              (RID_APP_START + 1629)
+#define RID_LLINT_FROMX             (RID_APP_START + 1630)
+#define RID_LLLINT_FROMX            (RID_APP_START + 1631)
+
+#define RID_LIM_TOX                 (RID_APP_START + 1641)
+#define RID_SUM_TOX                 (RID_APP_START + 1642)
+#define RID_PROD_TOX                (RID_APP_START + 1643)
+#define RID_COPROD_TOX              (RID_APP_START + 1644)
+#define RID_INT_TOX                 (RID_APP_START + 1645)
+#define RID_IINT_TOX                (RID_APP_START + 1646)
+#define RID_IIINT_TOX               (RID_APP_START + 1647)
+#define RID_LINT_TOX                (RID_APP_START + 1649)
+#define RID_LLINT_TOX               (RID_APP_START + 1650)
+#define RID_LLLINT_TOX              (RID_APP_START + 1651)
+
+#define RID_LIM_FROMTOX             (RID_APP_START + 1661)
+#define RID_SUM_FROMTOX             (RID_APP_START + 1662)
+#define RID_PROD_FROMTOX            (RID_APP_START + 1663)
+#define RID_COPROD_FROMTOX          (RID_APP_START + 1664)
+#define RID_INT_FROMTOX             (RID_APP_START + 1665)
+#define RID_IINT_FROMTOX            (RID_APP_START + 1666)
+#define RID_IIINT_FROMTOX           (RID_APP_START + 1667)
+#define RID_LINT_FROMTOX            (RID_APP_START + 1669)
+#define RID_LLINT_FROMTOX           (RID_APP_START + 1670)
+#define RID_LLLINT_FROMTOX          (RID_APP_START + 1671)
+
 #define RID_ACUTEX                  (RID_APP_START + 1701)
 #define RID_GRAVEX                  (RID_APP_START + 1702)
 #define RID_CHECKX                  (RID_APP_START + 1703)
@@ -396,6 +432,16 @@
 #define RID_SPANISH_50_NAMES            (RID_APP_START + 3113)
 #define RID_SPANISH_60_NAMES            (RID_APP_START + 3114)
 
+#define RID_CATERGORY_UNARY_BINARY_OPERATORS (RID_APP_START + 4001)
+#define RID_CATERGORY_RELATIONS              (RID_APP_START + 4002)
+#define RID_CATERGORY_SET_OPERATIONS         (RID_APP_START + 4003)
+#define RID_CATERGORY_FUNCTIONS              (RID_APP_START + 4004)
+#define RID_CATERGORY_OPERATORS              (RID_APP_START + 4005)
+#define RID_CATERGORY_ATTRIBUTES             (RID_APP_START + 4006)
+#define RID_CATERGORY_BRACKETS               (RID_APP_START + 4007)
+#define RID_CATERGORY_FORMATS                (RID_APP_START + 4008)
+#define RID_CATERGORY_OTHERS                 (RID_APP_START + 4009)
+#define RID_CATERGORY_EXAMPLES               (RID_APP_START + 4010)
 
 #define BMP_ARROW_RIGHT     1
 
@@ -405,6 +451,8 @@
 #define MN_SUB_GRAPHIC 33
 #define MN_SUB_SPELLING 34
 #define MN_SUB_TEMPLATES 35
+
+#define FT_1 1
 
 // 342 == SCH_IF_SMAVIEWSHELL, because SFX_INTERFACE_LIB is no
 // Define but latterly an Enum

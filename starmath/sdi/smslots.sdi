@@ -260,6 +260,11 @@ interface FormulaView
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
+    SID_INSERTCOMMANDTEXT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
     //idlpp kein Menueeintrag , also keine Texte
     SID_INSERTSYMBOL //idlpp ole : no , status : no
     [
@@ -296,6 +301,11 @@ interface FormulaView
         ExecMethod = NoExec ;
         StateMethod = NoState ;
     ]
+    SID_ELEMENTSDOCKINGWINDOW
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
     //idlpp kein Menueeintrag , also keine Texte
     SID_TOOLBOXWINDOW //idlpp ole : no , status : no
     [
@@ -320,4 +330,3 @@ shell SmViewShell
 }
 
 }
-

@@ -165,6 +165,31 @@ SfxVoidItem CommandWindow SID_CMDBOXWINDOW
 ]
 
 //--------------------------------------------------------------------------
+SfxVoidItem ElementsDockingWindow SID_ELEMENTSDOCKINGWINDOW
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_VIEW;
+]
+
+//--------------------------------------------------------------------------
 SfxVoidItem Preferences SID_PREFERENCES
 ()
 [
@@ -345,6 +370,30 @@ SfxInt16Item Graphic SID_GAPHIC_SM
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertCommand SID_INSERTCOMMAND
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_INSERT;
+]
+
+SfxVoidItem InsertCommandText SID_INSERTCOMMANDTEXT
 ()
 [
     /* flags: */
@@ -777,7 +826,7 @@ SfxStringItem TextStatus SID_TEXTSTATUS
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem ToolBowWindow SID_TOOLBOXWINDOW
+SfxVoidItem ToolBoxWindow SID_TOOLBOXWINDOW
 ()
 [
     /* flags: */
@@ -952,4 +1001,3 @@ SfxVoidItem ZoomOut SID_ZOOMOUT
     ToolBoxConfig = TRUE,
     GroupId = GID_VIEW;
 ]
-

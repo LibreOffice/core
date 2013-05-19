@@ -33,6 +33,8 @@
 #include <toolbox.hxx>
 #include <view.hxx>
 
+#include <ElementsDockingWindow.hxx>
+
 #include <starmath.hrc>
 
 #include <svx/xmlsecctrl.hxx>
@@ -72,6 +74,7 @@ namespace
 
         SmToolBoxWrapper::RegisterChildWindow(true);
         SmCmdBoxWrapper::RegisterChildWindow(true);
+        SmElementsDockingWindowWrapper::RegisterChildWindow(true);
 
         ::sfx2::TaskPaneWrapper::RegisterChildWindow(false, pModule);
     }
