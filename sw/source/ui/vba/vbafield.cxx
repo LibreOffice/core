@@ -32,8 +32,6 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-// *** SwVbaField ***********************************************
-
 SwVbaField::SwVbaField(  const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& rDocument, const  uno::Reference< css::text::XTextField >& xTextField) throw ( uno::RuntimeException ) : SwVbaField_BASE( rParent, rContext ), mxTextDocument( rDocument )
 {
     mxTextField.set( xTextField, uno::UNO_QUERY_THROW );
@@ -69,7 +67,7 @@ SwVbaField::getServiceNames()
     return aServiceNames;
 }
 
-// *** SwVbaReadFieldParams ***********************************************
+// SwVbaReadFieldParams
 // the codes are copied from ww8par5.cxx
 class SwVbaReadFieldParams
 {
@@ -90,15 +88,12 @@ public:
     String GetFieldName()const { return aFieldName; }
 };
 
-
 SwVbaReadFieldParams::SwVbaReadFieldParams( const String& _rData )
     : aData( _rData ), nLen( _rData.Len() ), nNext( 0 )
 {
-    /*
-        erstmal nach einer oeffnenden Klammer oder einer Leerstelle oder einem
-        Anfuehrungszeichen oder einem Backslash suchen, damit der Feldbefehl
-        (also INCLUDEPICTURE bzw EINFUeGENGRAFIK bzw ...) ueberlesen wird
-    */
+    // First search for an opening parenthesis or a space or a quotation mark
+    // or a backslash, so that the field command
+    // (thus INCLUDEPICTURE or ...) is ignored.
     while( (nLen > nNext) && (aData.GetChar( nNext ) == ' ') )
         ++nNext;
 
@@ -116,7 +111,6 @@ SwVbaReadFieldParams::SwVbaReadFieldParams( const String& _rData )
     aFieldName = aData.Copy( 0, nFnd );
 }
 
-
 SwVbaReadFieldParams::~SwVbaReadFieldParams()
 {
 }
@@ -129,11 +123,10 @@ String SwVbaReadFieldParams::GetResult() const
             : aData.Copy( nFnd, (nSavPtr - nFnd) );
 }
 
-
 // ret: -2: NOT a '\' parameter but normal Text
 long SwVbaReadFieldParams::SkipToNextToken()
 {
-    long nRet = -1;     // Ende
+    long nRet = -1;     // end
     if (
          (STRING_NOTFOUND != nNext) && (nLen > nNext) &&
          STRING_NOTFOUND != (nFnd = FindNextStringPiece(nNext))
@@ -144,7 +137,7 @@ long SwVbaReadFieldParams::SkipToNextToken()
         if ('\\' == aData.GetChar(nFnd) && '\\' != aData.GetChar(nFnd + 1))
         {
             nRet = aData.GetChar(++nFnd);
-            nNext = ++nFnd;             // und dahinter setzen
+            nNext = ++nFnd;             // and set behind
         }
         else
         {
@@ -164,21 +157,20 @@ long SwVbaReadFieldParams::SkipToNextToken()
     return nRet;
 }
 
-// FindNextPara sucht naechsten Backslash-Parameter oder naechste Zeichenkette
-// bis zum Blank oder naechsten "\" oder zum schliessenden Anfuehrungszeichen
-// oder zum String-Ende von pStr.
+// FindNextPara is searching for the next Backslash-Parameter or the next string
+// until blank or the next "\" or until the closing quotation mark
+// or until the string end of pStr.
 //
-// Ausgabe ppNext (falls ppNext != 0) Suchbeginn fuer naechsten Parameter bzw. 0
+// Output ppNext (if ppNext != 0) beginning of the search for the next parameter or 0
 //
-// Returnwert: 0 falls String-Ende erreicht,
-//             ansonsten Anfang des Paramters bzw. der Zeichenkette
-//
+// Return value: 0 if String-End reached, otherwise begin of the paramater or the string
+
 xub_StrLen SwVbaReadFieldParams::FindNextStringPiece(const xub_StrLen nStart)
 {
-    xub_StrLen  n = ( STRING_NOTFOUND == nStart ) ? nFnd : nStart;  // Anfang
-    xub_StrLen n2;          // Ende
+    xub_StrLen  n = ( STRING_NOTFOUND == nStart ) ? nFnd : nStart;  // Start
+    xub_StrLen n2;          // End
 
-    nNext = STRING_NOTFOUND;        // Default fuer nicht gefunden
+    nNext = STRING_NOTFOUND;        // Default for not found
 
     while( (nLen > n) && (aData.GetChar( n ) == ' ') )
         ++n;
@@ -186,36 +178,36 @@ xub_StrLen SwVbaReadFieldParams::FindNextStringPiece(const xub_StrLen nStart)
     if( nLen == n )
         return STRING_NOTFOUND;     // String End reached!
 
-    if(     (aData.GetChar( n ) == '"')     // Anfuehrungszeichen vor Para?
+    if(     (aData.GetChar( n ) == '"')     // quotation marks are in front of parenthesis?
         ||  (aData.GetChar( n ) == 0x201c)
         ||  (aData.GetChar( n ) == 132) )
     {
-        n++;                        // Anfuehrungszeichen ueberlesen
-        n2 = n;                     // ab hier nach Ende suchen
+        n++;                        // ignore quotation marks
+        n2 = n;                     // From here search for the end
         while(     (nLen > n2)
                 && (aData.GetChar( n2 ) != '"')
                 && (aData.GetChar( n2 ) != 0x201d)
                 && (aData.GetChar( n2 ) != 147) )
-            n2++;                   // Ende d. Paras suchen
+            n2++;                   // Search for the end of the parenthesis
     }
-    else                        // keine Anfuehrungszeichen
+    else                        // no quotation marks
     {
-        n2 = n;                     // ab hier nach Ende suchen
-        while( (nLen > n2) && (aData.GetChar( n2 ) != ' ') ) // Ende d. Paras suchen
+        n2 = n;                     // from here search for the end
+        while( (nLen > n2) && (aData.GetChar( n2 ) != ' ') ) // Search for the end of the parenthesis
         {
             if( aData.GetChar( n2 ) == '\\' )
             {
                 if( aData.GetChar( n2+1 ) == '\\' )
-                    n2 += 2;        // Doppel-Backslash -> OK
+                    n2 += 2;        // double-backslash -> OK
                 else
                 {
                     if( n2 > n )
                         n2--;
-                    break;          // einfach-Backslash -> Ende
+                    break;          // single-backslash -> End
                 }
             }
             else
-                n2++;               // kein Backslash -> OK
+                n2++;               // no backslash -> OK
         }
     }
     if( nLen > n2 )
@@ -226,7 +218,7 @@ xub_StrLen SwVbaReadFieldParams::FindNextStringPiece(const xub_StrLen nStart)
     return n;
 }
 
-// *** SwVbaFields ***********************************************
+// SwVbaFields
 
 static uno::Any lcl_createField( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel, const uno::Any& aSource )
 {
