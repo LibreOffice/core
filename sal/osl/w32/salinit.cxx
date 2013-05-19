@@ -31,6 +31,9 @@
 extern "C" {
 #endif
 
+//From time.c
+void sal_initGlobalTimer();
+
 // _set_invalid_parameter_handler appears unavailable with MinGW:
 #if defined _MSC_VER
 namespace {
@@ -52,6 +55,7 @@ extern "C" void invalidParameterHandler(
 
 void sal_detail_initialize(int argc, char ** argv)
 {
+    sal_initGlobalTimer();
     // SetProcessDEPPolicy(PROCESS_DEP_ENABLE);
     // SetDllDirectoryW(L"");
     // SetSearchPathMode(
