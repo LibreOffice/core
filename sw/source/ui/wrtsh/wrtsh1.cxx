@@ -422,8 +422,8 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
                 else
                     CalcAndSetScale( xObj );
 
-                //#50270# Error brauchen wir nicht handeln, das erledigt das
-                //DoVerb in der SfxViewShell
+                //#50270# We don't need to handle error, this is handled by the
+                //DoVerb in the SfxViewShell
                 pClient->DoVerb( SVVERB_SHOW );
 
                 // TODO/LATER: set document name - should be done in Client
@@ -989,7 +989,7 @@ void SwWrtShell::SplitNode( sal_Bool bAutoFmt, sal_Bool bCheckTableStart )
 //              this indicates a position if it is possible to convert them
 //              into a number and less than nMaxRules.
 
-// zum Testen der CharFormate an der Numerierung
+// To test the CharFormats at the numbering
 // external void SetNumChrFmt( SwWrtShell*, SwNumRules& );
 
 // -> #i40041#
