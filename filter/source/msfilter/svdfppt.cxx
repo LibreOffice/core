@@ -1053,7 +1053,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                         bAutoGrowWidth = sal_False;
 
                         // #119885# re-activationg bFitShapeToText here, could not find deeper explanations
-                        // for it (it was from 2005). Keeping the old commeht here for reference
+                        // for it (it was from 2005). Keeping the old comment here for reference
                         // old comment: // bFitShapeToText; can't be used, because we cut the text if it is too height,
                         bAutoGrowHeight = bFitShapeToText;
                     }
