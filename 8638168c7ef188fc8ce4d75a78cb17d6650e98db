@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//8gM\u003d",
+        "filename": "sal/osl/unx/time.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-05-19T14:42:55Z",
+      "side": 1,
+      "message": "from the man page: \nThe CLOCK_PROCESS_CPUTIME_ID and CLOCK_THREAD_CPUTIME_ID clocks are realized on many platforms using timers from the CPUs (TSC on i386, AR.ITC on Itanium).  These registers may differ between CPUs and as a consequence these clocks  may  return  bogus\n       results if a process is migrated to another CPU.\n\niow since you introduced a initGlobalTimer (needed for MacOSX anyway)\nyou might as well use CLOCK_REALTIME here and return\nthe delta from the init",
+      "revId": "8638168c7ef188fc8ce4d75a78cb17d6650e98db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
