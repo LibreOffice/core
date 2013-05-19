@@ -184,20 +184,16 @@ sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( TimeValue* pLocalTimeVal, Time
     return sal_False;
 }
 
-
 static struct _timeb startTime;
-static sal_Bool bGlobalTimer = sal_False;
+void sal_initGlobalTimer()
+{
+    _ftime( &startTime );
+}
 
 sal_uInt32 SAL_CALL osl_getGlobalTimer(void)
 {
   struct _timeb currentTime;
   sal_uInt32 nSeconds;
-
-  if ( bGlobalTimer == sal_False )
-  {
-      _ftime( &startTime );
-      bGlobalTimer=sal_True;
-  }
 
   _ftime( &currentTime );
 
