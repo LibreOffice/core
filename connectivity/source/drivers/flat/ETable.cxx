@@ -746,6 +746,8 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
             // run through
         case IResultSetHelper::NEXT:
             {
+                if(m_nMaxRowCount != 0 && m_nRowPos > m_nMaxRowCount)
+                    return sal_False;
                 ++m_nRowPos;
                 ::std::map<sal_Int32,TRowPositionsInFile::iterator>::const_iterator aFind = m_aRowPosToFilePos.find(m_nRowPos);
                 m_bNeedToReadLine = aFind != m_aRowPosToFilePos.end();
@@ -772,16 +774,19 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
 
             break;
         case IResultSetHelper::PRIOR:
+            assert(m_nRowPos >= 0);
+
+            if(m_nRowPos == 0)
+                return sal_False;
+
             --m_nRowPos;
-            if(m_nRowPos > 0)
             {
+                assert(m_aRowPosToFilePos.find(m_nRowPos) != m_aRowPosToFilePos.end());
                 TRowPositionsInFile::iterator aPositions = m_aRowPosToFilePos[m_nRowPos];
                 m_nFilePos = aPositions->first;
                 nCurPos = aPositions->second;
                 m_bNeedToReadLine = true;
             }
-            else
-                m_nRowPos = 0;
 
             break;
         case IResultSetHelper::LAST:
@@ -805,35 +810,42 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
             }
             break;
         case IResultSetHelper::RELATIVE:
-            if(nOffset > 0)
             {
-                for(sal_Int32 i = 0;i<nOffset;++i)
-                    seekRow(IResultSetHelper::NEXT,1,nCurPos);
+                const sal_Int32 nNewRowPos = m_nRowPos + nOffset;
+                if (nNewRowPos <= 0)
+                    return sal_False;
+                return seekRow(IResultSetHelper::ABSOLUTE, nNewRowPos, nCurPos);
             }
-            else if(nOffset < 0)
-            {
-                for(sal_Int32 i = nOffset;i;++i)
-                    seekRow(IResultSetHelper::PRIOR,1,nCurPos);
-            }
-            break;
         case IResultSetHelper::ABSOLUTE:
             {
                 if(nOffset < 0)
-                    nOffset = m_nRowPos + nOffset;
+                {
+                    if (m_nMaxRowCount == 0)
+                    {
+                        if (!seekRow(IResultSetHelper::LAST, 0, nCurPos))
+                            return sal_False;
+                    }
+                    assert(m_nMaxRowCount != 0);
+                    nOffset = m_nMaxRowCount + nOffset + 1;
+                }
+                if(nOffset < 0)
+                {
+                    m_nRowPos = 0;
+                    return sal_False;
+                }
+                if(m_nMaxRowCount && nOffset > m_nMaxRowCount)
+                {
+                    m_nRowPos = m_nMaxRowCount + 1;
+                    return sal_False;
+                }
+
                 ::std::map<sal_Int32,TRowPositionsInFile::iterator>::const_iterator aIter = m_aRowPosToFilePos.find(nOffset);
                 if(aIter != m_aRowPosToFilePos.end())
                 {
                     m_nFilePos  = aIter->second->first;
                     nCurPos     = aIter->second->second;
-                    //m_pFileStream->Seek(m_nFilePos);
+                    m_nRowPos   = nOffset;
                     m_bNeedToReadLine = true;
-                    //if ( m_pFileStream->IsEof() /*|| !checkHeaderLine()*/ || !readLine(nCurPos) )
-                    //  return sal_False;
-                }
-                else if(m_nMaxRowCount && nOffset > m_nMaxRowCount) // offset is outside the table
-                {
-                    m_nRowPos = m_nMaxRowCount;
-                    return sal_False;
                 }
                 else
                 {
@@ -842,20 +854,24 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
                     {
                         ::std::map<sal_Int32,TRowPositionsInFile::iterator>::reverse_iterator aLastPos = m_aRowPosToFilePos.rbegin();
                         m_nRowPos   = aLastPos->first;
-                        nCurPos = m_nFilePos = aLastPos->second->first;
-                        while(m_nRowPos != nOffset)
-                            seekRow(IResultSetHelper::NEXT,1,nCurPos);
+                        m_nFilePos  = aIter->second->first;
+                        nCurPos     = aIter->second->second;
+                        while(m_nRowPos < nOffset)
+                        {
+                            if(!seekRow(IResultSetHelper::NEXT,1,nCurPos))
+                                return sal_False;
+                        }
+                        assert(m_nRowPos == nOffset);
                     }
                     else
                     {
+                        // This is very fishy... The rows numbering has holes???
+                        assert(false);
                         --aIter;
                         m_nRowPos   = aIter->first;
                         m_nFilePos  = aIter->second->first;
                         nCurPos     = aIter->second->second;
-                        //m_pFileStream->Seek(m_nFilePos);
                         m_bNeedToReadLine = true;
-                        //if ( m_pFileStream->IsEof() /*|| !checkHeaderLine()*/ || !readLine(nCurPos) )
-                        //  return sal_False;
                     }
                 }
             }
@@ -865,32 +881,24 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
             {
                 m_nRowPos = 0;
                 TRowPositionsInFile::const_iterator aFind = m_aFilePosToEndLinePos.find(nOffset);
-                m_bNeedToReadLine = aFind != m_aFilePosToEndLinePos.end();
-                if ( m_bNeedToReadLine )
+                if(aFind == m_aFilePosToEndLinePos.end())
+                    //invalid bookmark
+                    return sal_False;
+                m_bNeedToReadLine = true;
+                m_nFilePos  = aFind->first;
+                nCurPos     = aFind->second;
+                for(::std::map<sal_Int32, TRowPositionsInFile::iterator>::const_iterator p = m_aRowPosToFilePos.begin();
+                    p != m_aRowPosToFilePos.end();
+                    ++p)
                 {
-                    m_nFilePos  = aFind->first;
-                    nCurPos = aFind->second;
-                    for(::std::map<sal_Int32, TRowPositionsInFile::iterator>::const_iterator p = m_aRowPosToFilePos.begin();
-                        p != m_aRowPosToFilePos.end();
-                        ++p)
+                    assert(p->second->first <= nOffset);
+                    if(p->second->first == nOffset)
                     {
-                        assert(p->second->first <= nOffset);
-                        if(p->second->first == nOffset)
-                        {
-                            m_nRowPos = p->first;
-                            break;
-                        }
+                        m_nRowPos = p->first;
+                        break;
                     }
-                    assert(m_nRowPos > 0);
                 }
-                else
-                {
-                    assert(false);
-                    m_nFilePos = nOffset;
-                    m_pFileStream->Seek(nOffset);
-                    if (m_pFileStream->IsEof() || !readLine(nCurPos) )
-                        return sal_False;
-                }
+                assert(m_nRowPos > 0);
                 break;
             }
     }
