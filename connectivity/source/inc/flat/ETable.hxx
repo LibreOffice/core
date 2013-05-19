@@ -40,7 +40,7 @@ namespace connectivity
 
         class OFlatTable :  public OFlatTable_BASE
         {
-            // maps a row postion to a file position
+            // maps a row position to a file position
             TRowPositionsInFile             m_aFilePosToEndLinePos;
             ::std::map<sal_Int32, TRowPositionsInFile::iterator>
                                             m_aRowPosToFilePos;
