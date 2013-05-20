@@ -195,6 +195,7 @@ certain functionality.
 
 @section svtools
 
+@li @c svtools
 @li @c svtools.config
 @li @c svtools.contnr
 @li @c svtools.control
