@@ -344,7 +344,6 @@ void  SvxNumValueSet2::UserDraw( const UserDrawEvent& rUDEvt )
         pDev->DrawOutDev(   aRect.TopLeft(), aRectSize,
                             aOrgRect.TopLeft(), aRectSize,
                             *pVDev );
-    const OUString sValue(C2U(cValue));
 
     Point aStart(aBLPos.X() + nRectWidth / 9,0);
     if ( nItemId == DEFAULT_NONE)

@@ -1070,7 +1070,6 @@ void PosSizePropertyPanel::executePosX()
             lX = -lX;
         long lY = GetCoreValue( *mpMtrPosY, mePoolUnit );
 
-        Size aPageSize;
         Rectangle aRect;
         maRect = mpView->GetAllMarkedRect();
         aRect = mpView->GetAllMarkedRect();
@@ -1098,7 +1097,6 @@ void PosSizePropertyPanel::executePosY()
         long lX = GetCoreValue( *mpMtrPosX, mePoolUnit );
         long lY = GetCoreValue( *mpMtrPosY, mePoolUnit );
 
-        Size aPageSize;
         Rectangle aRect;
         maRect = mpView->GetAllMarkedRect();
         aRect = mpView->GetAllMarkedRect();
