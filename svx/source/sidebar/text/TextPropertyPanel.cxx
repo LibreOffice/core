@@ -80,14 +80,6 @@ PopupControl* TextPropertyPanel::CreateUnderlinePopupControl (PopupContainer* pP
     return new TextUnderlineControl(pParent, *this, mpBindings);
 }
 
-namespace
-{
-    Color GetAutomaticColor(void)
-    {
-        return COL_AUTO;
-    }
-} // end of anonymous namespace
-
 long TextPropertyPanel::GetSelFontSize()
 {
     long nH = 240;
