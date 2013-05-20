@@ -127,8 +127,8 @@ SvxLineTabPage::SvxLineTabPage
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXLStyle            ( XLINE_DASH ),
     aXWidth             ( 1 ),
-    aXDash              ( String(), XDash( XDASH_RECT, 3, 7, 2, 40, 15 ) ),
-    aXColor             ( String(), COL_LIGHTRED ),
+    aXDash              ( OUString(), XDash( XDASH_RECT, 3, 7, 2, 40, 15 ) ),
+    aXColor             ( OUString(), COL_LIGHTRED ),
     aXLineAttr          ( pXPool ),
     rXLSet              ( aXLineAttr.GetItemSet() ),
      pnLineEndListState( 0 ),
@@ -136,17 +136,17 @@ SvxLineTabPage::SvxLineTabPage
     pnColorListState( 0 ),
    nPageType           ( 0 )
 {
-    aLbEndStyle.SetAccessibleName(String(CUI_RES(STR_STYLE)));
-    aLbStartStyle.SetAccessibleName(String(CUI_RES( STR_LB_START_STYLE ) ) );
-    aMtrStartWidth.SetAccessibleName(String(CUI_RES( STR_MTR_FLD_START_WIDTH ) ) );
-    aLbEndStyle.SetAccessibleName(String(CUI_RES( STR_LB_END_STYLE ) ) );
-    aMtrEndWidth.SetAccessibleName(String(CUI_RES( STR_MTR_FLD_END_WIDTH ) ) );
-    aTsbCenterStart.SetAccessibleName(String(CUI_RES( STR_CENTER_START ) ) );
-    aTsbCenterEnd.SetAccessibleName(String(CUI_RES( STR_CENTER_END ) ) );
+    aLbEndStyle.SetAccessibleName(OUString(CUI_RES(STR_STYLE)));
+    aLbStartStyle.SetAccessibleName(OUString(CUI_RES( STR_LB_START_STYLE ) ) );
+    aMtrStartWidth.SetAccessibleName(OUString(CUI_RES( STR_MTR_FLD_START_WIDTH ) ) );
+    aLbEndStyle.SetAccessibleName(OUString(CUI_RES( STR_LB_END_STYLE ) ) );
+    aMtrEndWidth.SetAccessibleName(OUString(CUI_RES( STR_MTR_FLD_END_WIDTH ) ) );
+    aTsbCenterStart.SetAccessibleName(OUString(CUI_RES( STR_CENTER_START ) ) );
+    aTsbCenterEnd.SetAccessibleName(OUString(CUI_RES( STR_CENTER_END ) ) );
 
     FreeResource();
 
-    aCtlPreview.SetAccessibleName(String(CUI_RES(STR_EXAMPLE)));
+    aCtlPreview.SetAccessibleName(OUString(CUI_RES(STR_EXAMPLE)));
 
     // This Page requires ExchangeSupport
     SetExchangeSupport();
@@ -518,7 +518,7 @@ void SvxLineTabPage::FillListboxes()
     aLbLineStyle.SelectEntryPos( nOldSelect );
 
     // Line end style
-    String sNone( SVX_RES( RID_SVXSTR_NONE ) );
+    OUString sNone( SVX_RES( RID_SVXSTR_NONE ) );
     nOldSelect = aLbStartStyle.GetSelectEntryPos();
     aLbStartStyle.Clear();
     aLbStartStyle.InsertEntry( sNone );
@@ -586,7 +586,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             *pnLineEndListState = CT_NONE;
 
             nPos = aLbLineStyle.GetSelectEntryPos();
-            String sNone( SVX_RES( RID_SVXSTR_NONE ) );
+            OUString sNone( SVX_RES( RID_SVXSTR_NONE ) );
             aLbStartStyle.Clear();
             aLbStartStyle.InsertEntry( sNone );
 
@@ -1293,7 +1293,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
                             Get( XATTR_LINEWIDTH ) ).GetValue(), ePoolUnit );
     }
     else
-        aMtrLineWidth.SetText( String() );
+        aMtrLineWidth.SetText( OUString() );
 
     // Line color
     aLbColor.SetNoSelection();
@@ -1304,7 +1304,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
         aLbColor.SelectEntry( aCol );
         if( aLbColor.GetSelectEntryCount() == 0 )
         {
-            aLbColor.InsertEntry( aCol, String() );
+            aLbColor.InsertEntry( aCol, OUString() );
             aLbColor.SelectEntry( aCol );
         }
     }
@@ -1387,7 +1387,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
                             Get( XATTR_LINESTARTWIDTH ) ).GetValue(), ePoolUnit );
     }
     else
-        aMtrStartWidth.SetText( String() );
+        aMtrStartWidth.SetText( OUString() );
 
     // Line end strength
     if( bObjSelected &&
@@ -1401,7 +1401,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
                             Get( XATTR_LINEENDWIDTH ) ).GetValue(), ePoolUnit );
     }
     else
-        aMtrEndWidth.SetText( String() );
+        aMtrEndWidth.SetText( OUString() );
 
     // Centered line end (start)
     if( bObjSelected &&
@@ -1452,7 +1452,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
         ChangeTransparentHdl_Impl( NULL );
     }
     else
-        aMtrTransparent.SetText( String() );
+        aMtrTransparent.SetText( OUString() );
 
     if( !aLbStartStyle.IsEnabled()  &&
         !aLbEndStyle.IsEnabled()    &&
@@ -1469,8 +1469,8 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
 
     // Synchronize
     // We get the value from the INI file now
-    String aStr = GetUserData();
-    aCbxSynchronize.Check( (sal_Bool)aStr.ToInt32() );
+    OUString aStr = GetUserData();
+    aCbxSynchronize.Check( (sal_Bool)aStr.toInt32() );
 
     // #116827#
     if(bObjSelected && SFX_ITEM_DEFAULT == rAttrs.GetItemState(XATTR_LINEJOINT))
