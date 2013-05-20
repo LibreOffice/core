@@ -534,6 +534,7 @@ PrintDialog::OutputOptPage::OutputOptPage( VclBuilder *pUIBuilder )
 {
     pUIBuilder->get(mpToFileBox, "printtofile");
     pUIBuilder->get(mpCollateSingleJobsBox, "singleprintjob");
+    pUIBuilder->get(mpPapersizeFromSetup, "papersizefromsetup");
 }
 
 void PrintDialog::OutputOptPage::readFromSettings()
@@ -671,6 +672,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     maJobPage.mpSetupButton->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maNUpPage.mpBorderCB->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maOptionsPage.mpToFileBox->SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
+    maOptionsPage.mpPapersizeFromSetup->SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
     maJobPage.mpReverseOrderBox->SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
     maOptionsPage.mpCollateSingleJobsBox->SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
     maNUpPage.mpPagesBtn->SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
@@ -723,7 +725,7 @@ void PrintDialog::readFromSettings()
     maNUpPage.readFromSettings();
     maOptionsPage.readFromSettings();
 
-    // read last selected tab page; if it exists, actiavte it
+    // read last selected tab page; if it exists, activate it
     SettingsConfigItem* pItem = SettingsConfigItem::get();
     OUString aValue = pItem->getValue( OUString( "PrintDialog"  ),
                                             OUString( "LastPage"  ) );
@@ -1532,6 +1534,14 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
     {
         mpOKButton->SetText( maOptionsPage.mpToFileBox->IsChecked() ? maPrintToFileText : maPrintText );
         maPController->resetPrinterOptions( maOptionsPage.mpToFileBox->IsChecked() );
+        preparePreview( true, true );
+    }
+    else if( pButton == maOptionsPage.mpPapersizeFromSetup )
+    {
+        sal_Bool bChecked = maOptionsPage.mpPapersizeFromSetup->IsChecked();
+        maPController->setPapersizeFromSetup( bChecked );
+        maPController->setValue( OUString( "PapersizeFromSetup"  ),
+                                 makeAny( bChecked ) );
         preparePreview( true, true );
     }
     else if( pButton == maNUpPage.mpBrochureBtn )

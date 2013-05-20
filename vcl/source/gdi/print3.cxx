@@ -151,6 +151,7 @@ public:
     sal_Bool                                                    mbFirstPage;
     sal_Bool                                                    mbLastPage;
     sal_Bool                                                    mbReversePageOrder;
+    sal_Bool                                                    mbPapersizeFromSetup;
     view::PrintableState                                        meJobState;
 
     vcl::PrinterController::MultiPageSetup                      maMultiPage;
@@ -161,9 +162,6 @@ public:
 
     // set by user through printer properties subdialog of printer settings dialog
     Size                                                        maDefaultPageSize;
-    // Set by user through printer properties subdialog of print dialog.
-    // if set, pages are centered and trimmed onto the fixed page
-    Size                                                        maFixedPageSize;
     // set by user through printer properties subdialog of printer settings dialog
     sal_Int32                                                   mnDefaultPaperBin;
     // Set by user through printer properties subdialog of print dialog.
@@ -187,6 +185,7 @@ public:
         mbFirstPage( sal_True ),
         mbLastPage( sal_False ),
         mbReversePageOrder( sal_False ),
+        mbPapersizeFromSetup( sal_False ),
         meJobState( view::PrintableState_JOB_STARTED ),
         mpProgress( NULL ),
         mnDefaultPaperBin( -1 ),
@@ -196,14 +195,14 @@ public:
 
     Size getRealPaperSize( const Size& i_rPageSize, bool bNoNUP ) const
     {
-        if( maFixedPageSize.Width() > 0 && maFixedPageSize.Height() > 0 )
-            return maFixedPageSize;
+        if( mbPapersizeFromSetup )
+            return maDefaultPageSize;
         if( maMultiPage.nRows * maMultiPage.nColumns > 1 && ! bNoNUP )
             return maMultiPage.aPaperSize;
         return i_rPageSize;
     }
     bool isFixedPageSize() const
-    { return maFixedPageSize.Width() != 0 && maFixedPageSize.Height() != 0; }
+    { return mbPapersizeFromSetup; }
     PrinterController::PageSize modifyJobSetup( const Sequence< PropertyValue >& i_rProps, bool bNoNUP );
     void resetPaperToLastConfigured();
 };
@@ -405,6 +404,14 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
         sal_Bool bReverse = sal_False;
         pReverseVal->Value >>= bReverse;
         pController->setReversePrint( bReverse );
+    }
+
+    beans::PropertyValue* pPapersizeFromSetupVal = i_pController->getValue( OUString( "PapersizeFromSetup" ) );
+    if( pPapersizeFromSetupVal )
+    {
+        sal_Bool bPapersizeFromSetup = sal_False;
+        pPapersizeFromSetupVal->Value >>= bPapersizeFromSetup;
+        pController->setPapersizeFromSetup( bPapersizeFromSetup );
     }
 
     // setup NUp printing from properties
@@ -766,7 +773,6 @@ void PrinterController::setPrinter( const boost::shared_ptr<Printer>& i_rPrinter
     mpImplData->maDefaultPageSize = mpImplData->mpPrinter->GetPaperSize();
     mpImplData->mpPrinter->Pop();
     mpImplData->mnFixedPaperBin = -1;
-    mpImplData->maFixedPageSize = Size();
 }
 
 void PrinterController::resetPrinterOptions( bool i_bFileOutput )
@@ -797,19 +803,25 @@ bool PrinterController::setupPrinter( Window* i_pParent )
         Size aNewPaperSize(mpImplData->mpPrinter->GetPaperSize());
         if (bRet)
         {
-            // was papersize or bin overridden ? if so we need to take action
-            if( aNewPaperSize != aPaperSize )
+            bool bInvalidateCache = false;
+
+            // was papersize overridden ? if so we need to take action if we're
+            // configured to use the driver papersize
+            if (aNewPaperSize != mpImplData->maDefaultPageSize)
             {
-                mpImplData->maFixedPageSize = aNewPaperSize;
+                mpImplData->maDefaultPageSize = aNewPaperSize;
+                bInvalidateCache = getPapersizeFromSetup();
             }
 
+            // was bin overridden ? if so we need to take action
             sal_uInt16 nNewPaperBin = mpImplData->mpPrinter->GetPaperBin();
-            if( nNewPaperBin != nPaperBin )
+            if (nNewPaperBin != nPaperBin)
             {
                 mpImplData->mnFixedPaperBin = nNewPaperBin;
+                bInvalidateCache = true;
             }
 
-            if( aNewPaperSize != aPaperSize || nNewPaperBin != nPaperBin )
+            if (bInvalidateCache)
             {
                 mpImplData->maPageCache.invalidate();
             }
@@ -897,14 +909,11 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
 //print dialog
 void vcl::ImplPrinterControllerData::resetPaperToLastConfigured()
 {
-    Size aPaperSize(maDefaultPageSize);
-    if (maFixedPageSize.Width() > 0 && maFixedPageSize.Height() > 0)
-        aPaperSize = maFixedPageSize;
     mpPrinter->Push();
     mpPrinter->SetMapMode(MapMode(MAP_100TH_MM));
     Size aCurSize(mpPrinter->GetPaperSize());
-    if (aPaperSize != aCurSize)
-        mpPrinter->SetPaperSizeUser(aPaperSize, !isFixedPageSize());
+    if (aCurSize != maDefaultPageSize)
+        mpPrinter->SetPaperSizeUser(maDefaultPageSize, !isFixedPageSize());
     mpPrinter->Pop();
 }
 
@@ -1329,6 +1338,16 @@ void PrinterController::setReversePrint( sal_Bool i_bReverse )
 bool PrinterController::getReversePrint() const
 {
     return mpImplData->mbReversePageOrder;
+}
+
+void PrinterController::setPapersizeFromSetup( sal_Bool i_bPapersizeFromSetup )
+{
+    mpImplData->mbPapersizeFromSetup = i_bPapersizeFromSetup;
+}
+
+bool PrinterController::getPapersizeFromSetup() const
+{
+    return mpImplData->mbPapersizeFromSetup;
 }
 
 Sequence< PropertyValue > PrinterController::getJobProperties( const Sequence< PropertyValue >& i_rMergeList ) const

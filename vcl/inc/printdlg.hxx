@@ -175,6 +175,7 @@ namespace vcl
         public:
             CheckBox*                           mpToFileBox;
             CheckBox*                           mpCollateSingleJobsBox;
+            CheckBox*                           mpPapersizeFromSetup;
 
             OutputOptPage( VclBuilder* );
 

@@ -521,6 +521,8 @@ public:
     VCL_PLUGIN_PUBLIC void setLastPage( sal_Bool i_bLastPage );
     SAL_DLLPRIVATE void setReversePrint( sal_Bool i_bReverse );
     SAL_DLLPRIVATE bool getReversePrint() const;
+    SAL_DLLPRIVATE void setPapersizeFromSetup( sal_Bool i_bPapersizeFromSetup );
+    SAL_DLLPRIVATE bool getPapersizeFromSetup() const;
     SAL_DLLPRIVATE void pushPropertiesToPrinter();
     SAL_DLLPRIVATE void resetPaperToLastConfigured();
     VCL_PLUGIN_PUBLIC void setJobState( com::sun::star::view::PrintableState );
