@@ -5684,8 +5684,8 @@ void Test::testCopyPaste()
     ScClipParam aClipParam(aRange, false);
     ScMarkData aMark;
     aMark.SetMarkArea(aRange);
-    ScDocument* pClipDoc = new ScDocument(SCDOCMODE_CLIP);
-    m_pDoc->CopyToClip(aClipParam, pClipDoc, &aMark);
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark);
 
     sal_uInt16 nFlags = IDF_ALL;
     aRange = ScRange(0,1,1,2,1,1);//target: Sheet2.A2:C2
@@ -5694,9 +5694,9 @@ void Test::testCopyPaste()
     ScMarkData aMarkData2;
     aMarkData2.SetMarkArea(aRange);
     ScRefUndoData* pRefUndoData= new ScRefUndoData(m_pDoc);
-    SfxUndoAction* pUndo = new ScUndoPaste(
+    ScUndoPaste aUndo(
         &m_xDocShRef, ScRange(0, 1, 1, 2, 1, 1), aMarkData2, pUndoDoc, NULL, IDF_ALL, pRefUndoData, false);
-    m_pDoc->CopyFromClip(aRange, aMarkData2, nFlags, NULL, pClipDoc);
+    m_pDoc->CopyFromClip(aRange, aMarkData2, nFlags, NULL, &aClipDoc);
 
     //check values after copying
     OUString aString;
@@ -5718,13 +5718,13 @@ void Test::testCopyPaste()
 
 
     //check undo and redo
-    pUndo->Undo();
+    aUndo.Undo();
     m_pDoc->GetValue(1,1,1, aValue);
     ASSERT_DOUBLES_EQUAL_MESSAGE("after undo formula should return nothing", aValue, 0);
     aString = m_pDoc->GetString(2, 1, 1);
     CPPUNIT_ASSERT_MESSAGE("after undo string should be removed", aString.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("")));
 
-    pUndo->Redo();
+    aUndo.Redo();
     m_pDoc->GetValue(1,1,1, aValue);
     ASSERT_DOUBLES_EQUAL_MESSAGE("formula should return 2 after redo", aValue, 2);
     aString = m_pDoc->GetString(2, 1, 1);
@@ -5732,9 +5732,6 @@ void Test::testCopyPaste()
     m_pDoc->GetFormula(1,1,1, aString);
     CPPUNIT_ASSERT_MESSAGE("Formula should be correct again", aString == aFormulaString);
 
-    //clear all variables
-    delete pClipDoc;
-    delete pUndoDoc;
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }
