@@ -3,11 +3,11 @@
 LIBRARY      "so_activex.dll"
 
 EXPORTS
-	DllCanUnloadNow     @1 PRIVATE
-	DllGetClassObject   @2 PRIVATE
-	DllRegisterServer   @3 PRIVATE
-	DllUnregisterServer	@4 PRIVATE
-	DllRegisterServerNative		@5 PRIVATE
-	DllRegisterServerDoc		@6 PRIVATE
-	DllUnregisterServerNative	@7 PRIVATE
-	DllUnregisterServerDoc		@8 PRIVATE
+	DllCanUnloadNow     PRIVATE
+	DllGetClassObject   PRIVATE
+	DllRegisterServer   PRIVATE
+	DllUnregisterServer	PRIVATE
+	DllRegisterServerNative		PRIVATE
+	DllRegisterServerDoc		PRIVATE
+	DllUnregisterServerNative	PRIVATE
+	DllUnregisterServerDoc		PRIVATE
