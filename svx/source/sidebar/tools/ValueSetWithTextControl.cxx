@@ -48,8 +48,6 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::style;
 using rtl::OUString;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
-
 namespace svx { namespace sidebar {
 static const sal_Char cValue[] = "Value";
 
