@@ -68,8 +68,7 @@ String GetConvDicMainURL( const String &rDicName, const String &rDirectoryURL )
 {
     // build URL to use for new (persistent) dictionaries
 
-    String aFullDicName( rDicName );
-    aFullDicName.AppendAscii( CONV_DIC_DOT_EXT );
+    OUString aFullDicName = OUString(rDicName) + CONV_DIC_DOT_EXT;
 
     INetURLObject aURLObj;
     aURLObj.SetSmartProtocol( INET_PROT_FILE );

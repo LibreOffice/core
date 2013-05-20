@@ -250,8 +250,12 @@ Config& padmin::getPadminRC()
     if( ! pRC )
     {
         static const char* pEnv = getenv( "HOME" );
-        String aFileName( pEnv ? pEnv : "", osl_getThreadTextEncoding() );
-        aFileName.AppendAscii( "/.padminrc" );
+        OUString aFileName;
+        if( pEnv )
+            aFileName = OUString::createFromAscii( pEnv ) + "/.padminrc";
+        else
+            aFileName += OStringToOUString( "", osl_getThreadTextEncoding() ) + "/.padminrc";
+
         pRC = new Config( aFileName );
     }
     return *pRC;

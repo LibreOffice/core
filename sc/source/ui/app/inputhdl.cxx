@@ -201,15 +201,15 @@ void ScInputHandler::InitRangeFinder( const String& rFormula )
     if ( !pActiveViewSh || !SC_MOD()->GetInputOptions().GetRangeFinder() )
         return;
 
-    String aDelimiters = ScEditUtil::ModifyDelimiters(
+    OUString aDelimiters = ScEditUtil::ModifyDelimiters(
                             OUString::createFromAscii( pMinDelimiters ) );
 
-    xub_StrLen nColon = aDelimiters.Search(':');
+    sal_Int32 nColon = aDelimiters.indexOf( ':' );
     if ( nColon != STRING_NOTFOUND )
-        aDelimiters.Erase( nColon, 1 );             // Delimiter ohne Doppelpunkt
-    xub_StrLen nDot = aDelimiters.Search(cSheetSep);
+        aDelimiters = aDelimiters.replaceAt( nColon, 1, "");             // Delimiter ohne Doppelpunkt
+    sal_Int32 nDot = aDelimiters.indexOf(cSheetSep);
     if ( nDot != STRING_NOTFOUND )
-        aDelimiters.Erase( nDot, 1 );               // Delimiter ohne Punkt
+        aDelimiters = aDelimiters.replaceAt( nDot, 1 , "");               // Delimiter ohne Punkt
 
     const sal_Unicode* pChar = rFormula.GetBuffer();
     xub_StrLen nLen = rFormula.Len();
@@ -220,7 +220,7 @@ void ScInputHandler::InitRangeFinder( const String& rFormula )
     while ( nPos < nLen && nCount < RANGEFIND_MAX )
     {
         //  Trenner ueberlesen
-        while ( nPos<nLen && ScGlobal::UnicodeStrChr( aDelimiters.GetBuffer(), pChar[nPos] ) )
+        while ( nPos<nLen && ScGlobal::UnicodeStrChr( aDelimiters.getStr(), pChar[nPos] ) )
         {
             if ( pChar[nPos] == '"' )                       // String
             {
@@ -234,7 +234,7 @@ void ScInputHandler::InitRangeFinder( const String& rFormula )
         //  Text zwischen Trennern
         nStart = nPos;
 handle_r1c1:
-        while ( nPos<nLen && !ScGlobal::UnicodeStrChr( aDelimiters.GetBuffer(), pChar[nPos] ) )
+        while ( nPos<nLen && !ScGlobal::UnicodeStrChr( aDelimiters.getStr(), pChar[nPos] ) )
             ++nPos;
 
         // for R1C1 '-' in R[-]... or C[-]... are not delimiters

@@ -51,7 +51,7 @@ class ScEditUtil
     static const char pCalcDelimiters[];
 
 public:
-    static String ModifyDelimiters( const String& rOld );
+    static OUString ModifyDelimiters( const OUString& rOld );
 
     /// Retrieves string with paragraphs delimited by spaces
     static String GetSpaceDelimitedString( const EditEngine& rEngine );
