@@ -1309,7 +1309,7 @@ namespace drawinglayer
                         // write LineGeometry start marker
                         impStartSvtGraphicStroke(pSvtGraphicStroke);
 
-                        // #116162# When B&W is set as DrawMode, DRAWMODE_WHITEFILL is used
+                        // #i116162# When B&W is set as DrawMode, DRAWMODE_WHITEFILL is used
                         // to let all fills be just white; for lines DRAWMODE_BLACKLINE is used
                         // so all line geometry is supposed to get black. Since in the in-between
                         // stages of line geometry drawing filled polygons are used (e.g. line
@@ -1544,7 +1544,7 @@ namespace drawinglayer
 
                     if(!basegfx::fTools::equalZero(fRotate) || !basegfx::fTools::equalZero(fShearX))
                     {
-                        // #121185# When rotation or shear is used, a VCL Gradient cannot be used directly.
+                        // #i121185# When rotation or shear is used, a VCL Gradient cannot be used directly.
                         // This is because VCL Gradient mechanism does *not* support to rotate the gradient
                         // with objects and this case is not expressable in a Metafile (and cannot be added
                         // since the FileFormats used, e.g. *.wmf, do not support it either).
