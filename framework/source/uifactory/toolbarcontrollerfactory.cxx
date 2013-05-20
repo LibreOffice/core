@@ -53,7 +53,7 @@ namespace framework
 //*****************************************************************************************************************
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   ToolbarControllerFactory                        ,
                                             ::cppu::OWeakObject                             ,
-                                            DECLARE_ASCII("com.sun.star.frame.ToolBarControllerFactory"),
+                                            SERVICENAME_TOOLBARCONTROLLERFACTORY            ,
                                             IMPLEMENTATIONNAME_TOOLBARCONTROLLERFACTORY
                                         )
 
