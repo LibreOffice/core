@@ -290,6 +290,7 @@ void sal_initGlobalTimer()
   res = gettimeofday( &startTime, NULL );
 #endif /* NDef USE_CLOCK_GETTIME */
   assert(res == 0);
+  (void) res;
 #endif /* ! (MACOSX || IOS) */
 }
 
