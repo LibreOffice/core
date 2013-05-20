@@ -781,26 +781,46 @@ bool PrinterController::setupPrinter( Window* i_pParent )
     bool bRet = false;
     if( mpImplData->mpPrinter.get() )
     {
-        // get old data
-        Size aPaperSize( mpImplData->mpPrinter->PixelToLogic(
-            mpImplData->mpPrinter->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) ) );
+        mpImplData->mpPrinter->Push();
+        mpImplData->mpPrinter->SetMapMode(MapMode(MAP_100TH_MM));
+
+        // get current data
+        Size aPaperSize(mpImplData->mpPrinter->GetPaperSize());
         sal_uInt16 nPaperBin = mpImplData->mpPrinter->GetPaperBin();
+
+        // reset paper size back to last configured size, not
+        // whatever happens to be the current page
+        resetPaperToLastConfigured();
 
         // call driver setup
         bRet = mpImplData->mpPrinter->Setup( i_pParent );
-        if( bRet )
+        Size aNewPaperSize(mpImplData->mpPrinter->GetPaperSize());
+        if (bRet)
         {
-            // was papersize or bin  overridden ? if so we need to take action
-            Size aNewPaperSize( mpImplData->mpPrinter->PixelToLogic(
-                mpImplData->mpPrinter->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) ) );
-            sal_uInt16 nNewPaperBin = mpImplData->mpPrinter->GetPaperBin();
-            if( aNewPaperSize != aPaperSize || nNewPaperBin != nPaperBin )
+            // was papersize or bin overridden ? if so we need to take action
+            if( aNewPaperSize != aPaperSize )
             {
                 mpImplData->maFixedPageSize = aNewPaperSize;
-                mpImplData->maPageCache.invalidate();
+            }
+
+            sal_uInt16 nNewPaperBin = mpImplData->mpPrinter->GetPaperBin();
+            if( nNewPaperBin != nPaperBin )
+            {
                 mpImplData->mnFixedPaperBin = nNewPaperBin;
             }
+
+            if( aNewPaperSize != aPaperSize || nNewPaperBin != nPaperBin )
+            {
+                mpImplData->maPageCache.invalidate();
+            }
         }
+        else
+        {
+            //restore to whatever it was before we entered this method
+            if (aPaperSize != aNewPaperSize)
+                mpImplData->mpPrinter->SetPaperSizeUser(aPaperSize, !mpImplData->isFixedPageSize());
+        }
+        mpImplData->mpPrinter->Pop();
     }
     return bRet;
 }
