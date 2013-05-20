@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//8bI\u003d",
+        "filename": "extensions/source/propctrlr/browserline.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1000186
+      },
+      "writtenOn": "2013-05-20T10:53:19Z",
+      "side": 1,
+      "message": "As we concatenate strings \"some times\", what do you think abou changing aText to OUStringBuffer?",
+      "revId": "beace1717c55a9a86a232e3dfcf521641a644f43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//8bA\u003d",
+        "filename": "extensions/source/scanner/sanedlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1000186
+      },
+      "writtenOn": "2013-05-20T10:53:19Z",
+      "side": 1,
+      "message": "I think the real case here is: Create a new String using pEnv or nothing, but using the encoding osl_getThreadTextEncoding().\n\nIs this is true, we can avoid the else statement(we\u0027re justing adding a empty string...).\n\nWhat do you think?",
+      "revId": "beace1717c55a9a86a232e3dfcf521641a644f43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//8a8\u003d",
+        "filename": "padmin/source/helper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000186
+      },
+      "writtenOn": "2013-05-20T10:53:19Z",
+      "side": 1,
+      "message": "Same here: I believe you can remove the else statement",
+      "revId": "beace1717c55a9a86a232e3dfcf521641a644f43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//8a4\u003d",
+        "filename": "sc/source/core/tool/editutil.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000186
+      },
+      "writtenOn": "2013-05-20T10:53:19Z",
+      "side": 1,
+      "message": "The interesting part is, using opengrok this method is not used in any place...\n\nIf this is true, I believe we can remove this\n\nhttp://opengrok.libreoffice.org/search?q\u003d\u0026project\u003dcore\u0026defs\u003dModifyDelimiters\u0026refs\u003d\u0026path\u003d\u0026hist\u003d",
+      "revId": "beace1717c55a9a86a232e3dfcf521641a644f43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//8a0\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2375,
+      "author": {
+        "id": 1000186
+      },
+      "writtenOn": "2013-05-20T10:53:19Z",
+      "side": 1,
+      "message": "Did you verified how many places calls this function?\n\nhttp://opengrok.libreoffice.org/more/core/sc/source/core/tool/interpr1.cxx?defs\u003dgetFormatString\u0026full\u003dsc",
+      "revId": "beace1717c55a9a86a232e3dfcf521641a644f43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
