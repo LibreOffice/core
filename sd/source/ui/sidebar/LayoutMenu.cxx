@@ -880,13 +880,6 @@ IMPL_LINK(LayoutMenu, WindowEventHandler, VclWindowEvent*, pEvent)
             default:
                 return sal_False;
         }
-
-        const SfxSimpleHint* pSimpleHint = PTR_CAST(SfxSimpleHint, pEvent);
-        if (pSimpleHint != NULL
-            && pSimpleHint->GetId() == SFX_HINT_DYING)
-        {
-            return sal_True;
-        }
     }
 
     return sal_False;
