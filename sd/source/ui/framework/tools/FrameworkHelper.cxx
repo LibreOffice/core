@@ -198,7 +198,9 @@ const OUString FrameworkHelper::msViewTabBarURL( msToolBarURLPrefix + "ViewTabBa
 
 
 // Task panel URLs.
-const OUString FrameworkHelper::msTaskPanelURLPrefix("private:resource/toolpanel/DrawingFramework/"); // MMeeks - checkout uielementfactorymanager.cxx (WindowContentFactoryManager::RetrieveTypeNameFromResourceURL) to get somewhere here ...
+// cf. uielementfactorymanager.cxx (WindowContentFactoryManager::RetrieveTypeNameFromResourceURL) which
+// requires the DrawingFramework/ sub-path to get it's lookup right.
+const OUString FrameworkHelper::msTaskPanelURLPrefix("private:resource/toolpanel/DrawingFramework/");
 // const OUString FrameworkHelper::msTaskPanelURLPrefix( "private:resource/toolpanel/" );
 const OUString FrameworkHelper::msMasterPagesTaskPanelURL( msTaskPanelURLPrefix + "MasterPages");
 

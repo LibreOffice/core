@@ -410,7 +410,7 @@ void ToolPanelViewShell_Impl::Setup()
         else
         {
             ::boost::shared_ptr< FrameworkHelper > pFrameworkHelper( FrameworkHelper::Instance( GetAntiImpl().GetViewShellBase() ) );
-            pFrameworkHelper->RequestSidebarPanel( aInitialPanel.sPanelResourceURL ); // MMeeks
+            pFrameworkHelper->RequestSidebarPanel( aInitialPanel.sPanelResourceURL );
         }
     }
 
@@ -804,7 +804,7 @@ void ToolPanelViewShell_Impl::ActivePanelChanged( const ::boost::optional< size_
     {
         // activate the resource belonging to the new panel. This will automatically de-activate the previously active
         // panel resource (since ResourceActivationMode_REPLACE is used)
-        pFrameworkHelper->RequestSidebarPanel( sNewPanelURL ); // MMeeks
+        pFrameworkHelper->RequestSidebarPanel( sNewPanelURL );
     }
     else if ( !sOldPanelURL.isEmpty() )
     {

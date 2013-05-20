@@ -194,7 +194,7 @@ void ToolPanelChildWindow::ActivateToolPanel( const OUString& i_rPanelURL )
     if ( i_rPanelURL.indexOf( framework::FrameworkHelper::msTaskPanelURLPrefix ) == 0 )
     {
         // it's one of our standard panels known to the drawing framework
-        pFrameworkHelper->RequestSidebarPanel( i_rPanelURL ); // MMeeks
+        pFrameworkHelper->RequestSidebarPanel( i_rPanelURL );
     }
     else
     {

@@ -150,7 +150,7 @@
         </node>
         <node oor:name="F3" oor:op="replace">
           <prop oor:name="ServiceName">
-            <value>com.sun.star.drawing.framework.TaskPanelFactory</value> <!-- MMeeks -->
+            <value>com.sun.star.drawing.framework.TaskPanelFactory</value>
           </prop>
           <node oor:name="ResourceList">
             <node oor:name="R0a" oor:op="replace">
@@ -164,7 +164,7 @@
               </prop>
             </node>
             <node oor:name="R0c" oor:op="replace">
-              <prop oor:name="URL"> <!-- MMeeks renamed from UsedMasterPages -->
+              <prop oor:name="URL">
                 <value>private:resource/toolpanel/DrawingFramework/MasterPages</value>
               </prop>
             </node>
