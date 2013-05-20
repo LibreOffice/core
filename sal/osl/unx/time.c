@@ -31,7 +31,7 @@
 #endif
 
 /* FIXME: detection should be done in configure script */
-#if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD) || \
+#if defined(MACOSX) || defined(IOS) || defined(FREEBSD) || defined(NETBSD) || \
     defined(LINUX) || defined(OPENBSD) || defined(DRAGONFLY)
 #define STRUCT_TM_HAS_GMTOFF 1
 
