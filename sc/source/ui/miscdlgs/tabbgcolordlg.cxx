@@ -98,8 +98,6 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
     if ( pColorList.is() )
     {
         nColorCount = pColorList->Count();
-        Color aColWhite( COL_WHITE );
-        String aStrWhite( EditResId( RID_SVXITEMS_COLOR_WHITE ) );
         aTabBgColorSet.addEntriesForXColorList(*pColorList);
     }
 
