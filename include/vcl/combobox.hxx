@@ -120,7 +120,7 @@ public:
     void            SetDropDownLineCount( sal_uInt16 nLines );
     sal_uInt16      GetDropDownLineCount() const;
 
-    void            EnableAutoSize( sal_Bool bAuto );
+    void            EnableAutoSize( bool bAuto );
     sal_Bool        IsAutoSizeEnabled() const               { return mbDDAutoSize; }
 
     void            EnableDDAutoWidth( sal_Bool b );

@@ -44,7 +44,7 @@ namespace svt
     ComboBoxControl::ComboBoxControl(Window* pParent, WinBits nWinStyle)
                    :ComboBox(pParent, nWinStyle|WB_DROPDOWN|WB_NOBORDER)
     {
-        EnableAutoSize(sal_False);
+        EnableAutoSize(false);
         EnableAutocomplete(sal_True);
         SetDropDownLineCount(5);
     }
@@ -151,7 +151,7 @@ namespace svt
     ListBoxControl::ListBoxControl(Window* pParent, WinBits nWinStyle)
                   :ListBox(pParent, nWinStyle|WB_DROPDOWN|WB_NOBORDER)
     {
-        EnableAutoSize(sal_False);
+        EnableAutoSize(false);
         EnableMultiSelection(sal_False);
         SetDropDownLineCount(20);
     }

@@ -634,7 +634,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_COMBOBOX:
                 pNewWindow = new ComboBox( pParent, nWinBits|WB_AUTOHSCROLL );
-                ((ComboBox*)pNewWindow)->EnableAutoSize( sal_False );
+                ((ComboBox*)pNewWindow)->EnableAutoSize( false );
                 *ppNewComp = new VCLXComboBox;
             break;
             case WINDOW_CURRENCYBOX:
@@ -722,7 +722,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_LISTBOX:
                 pNewWindow = new ListBox( pParent, nWinBits|WB_SIMPLEMODE|WB_AUTOHSCROLL );
-                ((ListBox*)pNewWindow)->EnableAutoSize( sal_False );
+                ((ListBox*)pNewWindow)->EnableAutoSize( false );
                 *ppNewComp = new VCLXListBox;
             break;
             case WINDOW_LONGCURRENCYBOX:

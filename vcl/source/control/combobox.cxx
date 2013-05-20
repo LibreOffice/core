@@ -531,7 +531,7 @@ void ComboBox::DoubleClick()
 
 // -----------------------------------------------------------------------
 
-void ComboBox::EnableAutoSize( sal_Bool bAuto )
+void ComboBox::EnableAutoSize( bool bAuto )
 {
     mbDDAutoSize = bAuto;
     if ( mpFloatWin )
