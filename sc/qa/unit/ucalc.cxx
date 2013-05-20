@@ -511,6 +511,86 @@ void Test::testPerf()
         }
     }
 
+    clearRange(m_pDoc, ScRange(0,0,0,1,MAXROW,0)); // Clear columns A:B.
+    CPPUNIT_ASSERT_MESSAGE("Column A shouldn't have any broadcasters.", !m_pDoc->HasBroadcaster(0,0));
+    CPPUNIT_ASSERT_MESSAGE("Column B shouldn't have any broadcasters.", !m_pDoc->HasBroadcaster(0,1));
+
+    {
+        ScAddress aPos(0,0,0);
+        m_pDoc->SetString(aPos, "test");
+        ScMarkData aMark;
+        aMark.SelectOneTable(0);
+
+        // Copy cell A1 to clipboard.
+        ScDocument aClipDoc(SCDOCMODE_CLIP);
+        ScClipParam aParam(aPos, false);
+        m_pDoc->CopyToClip(aParam, &aClipDoc, &aMark);
+        CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(aPos), aClipDoc.GetString(aPos));
+
+        ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
+        pUndoDoc->InitUndo(m_pDoc, 0, 0);
+        m_pDoc->CopyToDocument(ScRange(aPos), IDF_CONTENTS, false, pUndoDoc, &aMark);
+
+        // Paste it to A2:A100000, and measure its duration.
+        ScRange aPasteRange(0,1,0,0,99999,0);
+        aMark.SetMarkArea(aPasteRange);
+
+        osl_getSystemTime(&aTimeBefore);
+        m_pDoc->CopyFromClip(aPasteRange, aMark, IDF_CONTENTS, pUndoDoc, &aClipDoc);
+        osl_getSystemTime(&aTimeAfter);
+        diff = getTimeDiff(aTimeAfter, aTimeBefore);
+        if (diff >= 1.0)
+        {
+            std::ostringstream os;
+            os << "Pasting a single cell to A2:A100000 took " << diff << " seconds. It should be instant.";
+            CPPUNIT_FAIL(os.str().c_str());
+        }
+
+        ScDocument* pRedoDoc = new ScDocument(SCDOCMODE_UNDO);
+        pRedoDoc->InitUndo(m_pDoc, 0, 0);
+        m_pDoc->CopyToDocument(aPasteRange, IDF_CONTENTS, false, pRedoDoc, &aMark);
+
+        // Create an undo object for this.
+        ScRefUndoData* pRefUndoData = new ScRefUndoData(m_pDoc);
+        ScUndoPaste aUndo(&(*m_xDocShRef), aPasteRange, aMark, pUndoDoc, pRedoDoc, IDF_CONTENTS, pRefUndoData);
+
+        // Make sure it did what it's supposed to do.
+        CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(aPos), m_pDoc->GetString(aPasteRange.aStart));
+        CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(aPos), m_pDoc->GetString(aPasteRange.aEnd));
+
+        osl_getSystemTime(&aTimeBefore);
+        aUndo.Undo();
+        osl_getSystemTime(&aTimeAfter);
+        diff = getTimeDiff(aTimeAfter, aTimeBefore);
+        if (diff >= 1.0)
+        {
+            std::ostringstream os;
+            os << "Undoing a pasting of a cell to A2:A100000 took " << diff << " seconds. It should be instant.";
+            CPPUNIT_FAIL(os.str().c_str());
+        }
+
+        // Make sure it's really undone.
+        CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, m_pDoc->GetCellType(aPos));
+        CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(aPasteRange.aStart));
+        CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(aPasteRange.aEnd));
+
+        // Now redo.
+        osl_getSystemTime(&aTimeBefore);
+        aUndo.Redo();
+        osl_getSystemTime(&aTimeAfter);
+        diff = getTimeDiff(aTimeAfter, aTimeBefore);
+        if (diff >= 1.0)
+        {
+            std::ostringstream os;
+            os << "Redoing a pasting of a cell to A2:A100000 took " << diff << " seconds. It should be instant.";
+            CPPUNIT_FAIL(os.str().c_str());
+        }
+
+        // Make sure it's really redone.
+        CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(aPos), m_pDoc->GetString(aPasteRange.aStart));
+        CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(aPos), m_pDoc->GetString(aPasteRange.aEnd));
+    }
+
     m_pDoc->DeleteTab(0);
 }
 

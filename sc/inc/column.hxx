@@ -472,6 +472,7 @@ public:
     SvtBroadcaster* GetBroadcaster( SCROW nRow );
     const SvtBroadcaster* GetBroadcaster( SCROW nRow ) const;
     void DeleteBroadcasters( sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2 );
+    bool HasBroadcaster() const;
 
 private:
     void UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow );

@@ -1611,6 +1611,18 @@ void ScColumn::DeleteBroadcasters( sc::ColumnBlockPosition& rBlockPos, SCROW nRo
         maBroadcasters.set_empty(rBlockPos.miBroadcasterPos, nRow1, nRow2);
 }
 
+bool ScColumn::HasBroadcaster() const
+{
+    sc::BroadcasterStoreType::const_iterator it = maBroadcasters.begin(), itEnd = maBroadcasters.end();
+    for (; it != itEnd; ++it)
+    {
+        if (it->type == sc::element_type_broadcaster)
+            // Having a broadcaster block automatically means there is at least one broadcaster.
+            return true;
+    }
+    return false;
+}
+
 sal_uInt16 ScColumn::GetTextWidth(SCROW nRow) const
 {
     return maCellTextAttrs.get<sc::CellTextAttr>(nRow).mnTextWidth;

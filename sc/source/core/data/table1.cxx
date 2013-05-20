@@ -2186,6 +2186,14 @@ void ScTable::DeleteBroadcasters(
     aCol[nCol].DeleteBroadcasters(rBlockPos, nRow1, nRow2);
 }
 
+bool ScTable::HasBroadcaster( SCCOL nCol ) const
+{
+    if (!ValidCol(nCol))
+        return false;
+
+    return aCol[nCol].HasBroadcaster();
+}
+
 const SvtBroadcaster* ScTable::GetBroadcaster( SCCOL nCol, SCROW nRow ) const
 {
     if (!ValidColRow(nCol, nRow))

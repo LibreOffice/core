@@ -2257,6 +2257,15 @@ void ScDocument::DeleteBroadcasters( sc::ColumnBlockPosition& rBlockPos, const S
     pTab->DeleteBroadcasters(rBlockPos, rTopPos.Col(), rTopPos.Row(), rTopPos.Row()+nLength-1);
 }
 
+bool ScDocument::HasBroadcaster( SCTAB nTab, SCCOL nCol ) const
+{
+    const ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return false;
+
+    return pTab->HasBroadcaster(nCol);
+}
+
 bool ScDocument::TableExists( SCTAB nTab ) const
 {
     return ValidTab(nTab) && static_cast<size_t>(nTab) < maTabs.size() && maTabs[nTab];

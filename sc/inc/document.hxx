@@ -1972,6 +1972,11 @@ public:
     const SvtBroadcaster* GetBroadcaster( const ScAddress& rPos ) const;
     void DeleteBroadcasters( sc::ColumnBlockPosition& rBlockPos, const ScAddress& rTopPos, SCROW nLength );
 
+    /**
+     * See if specified column has any broadcaster at all.
+     */
+    bool HasBroadcaster( SCTAB nTab, SCCOL nCol ) const;
+
 private: // CLOOK-Impl-methods
 
     /**
