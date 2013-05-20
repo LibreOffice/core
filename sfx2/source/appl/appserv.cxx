@@ -171,7 +171,7 @@ namespace
                 SolarMutexGuard aGuard;
                 executeRestartDialog(comphelper::getProcessComponentContext(), NULL, RESTART_REASON_BIBLIOGRAPHY_INSTALL);
             }
-            catch (Exception & e)
+            catch (const Exception & e)
             {
                 SAL_INFO(
                     "sfx2.appl",
@@ -179,10 +179,19 @@ namespace
             }
             return;
         }
-        SfxStringItem aURL(SID_FILE_NAME, OUString(".component:Bibliography/View1"));
-        SfxStringItem aRef(SID_REFERER, OUString("private:user"));
-        SfxStringItem aTarget(SID_TARGETNAME, OUString("_blank"));
-        SfxViewFrame::Current()->GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, &aURL, &aRef, &aTarget, 0L);
+
+        try // fdo#48775
+        {
+            SfxStringItem aURL(SID_FILE_NAME, OUString(".component:Bibliography/View1"));
+            SfxStringItem aRef(SID_REFERER, OUString("private:user"));
+            SfxStringItem aTarget(SID_TARGETNAME, OUString("_blank"));
+            SfxViewFrame::Current()->GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, &aURL, &aRef, &aTarget, 0L);
+        }
+        catch (const Exception & e)
+        {
+            SAL_INFO( "sfx2.appl",
+                      "trying to load bibliography database, caught " << e.Message);
+        }
     }
 }
 /// Find the correct location of the document (LICENSE.odt, etc.), and return
