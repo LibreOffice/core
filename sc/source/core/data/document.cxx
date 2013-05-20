@@ -2232,26 +2232,29 @@ ScDocument::NumFmtMergeHandler::~NumFmtMergeHandler()
 
 SvtBroadcaster* ScDocument::GetBroadcaster( const ScAddress& rPos )
 {
-    if (!TableExists(rPos.Tab()))
+    ScTable* pTab = FetchTable(rPos.Tab());
+    if (!pTab)
         return NULL;
 
-    return maTabs[rPos.Tab()]->GetBroadcaster(rPos.Col(), rPos.Row());
+    return pTab->GetBroadcaster(rPos.Col(), rPos.Row());
 }
 
 const SvtBroadcaster* ScDocument::GetBroadcaster( const ScAddress& rPos ) const
 {
-    if (!TableExists(rPos.Tab()))
+    ScTable* pTab = FetchTable(rPos.Tab());
+    if (!pTab)
         return NULL;
 
-    return maTabs[rPos.Tab()]->GetBroadcaster(rPos.Col(), rPos.Row());
+    return pTab->GetBroadcaster(rPos.Col(), rPos.Row());
 }
 
 void ScDocument::DeleteBroadcasters( const ScAddress& rTopPos, SCROW nLength )
 {
-    if (!TableExists(rTopPos.Tab()) || nLength <= 0)
+    ScTable* pTab = FetchTable(rTopPos.Tab());
+    if (!pTab || nLength <= 0)
         return;
 
-    maTabs[rTopPos.Tab()]->DeleteBroadcasters(rTopPos.Col(), rTopPos.Row(), rTopPos.Row()+nLength-1);
+    pTab->DeleteBroadcasters(rTopPos.Col(), rTopPos.Row(), rTopPos.Row()+nLength-1);
 }
 
 bool ScDocument::TableExists( SCTAB nTab ) const
