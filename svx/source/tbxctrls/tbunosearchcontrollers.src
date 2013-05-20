@@ -24,4 +24,9 @@ String RID_SVXSTR_FINDBAR_FIND
     Text [ en-US ] = "Find" ;
 };
 
+String RID_SVXSTR_FINDBAR_MATCHCASE
+{
+    Text [ en-US ] = "Match Case" ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -33,6 +33,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weak.hxx>
 #include <svtools/toolboxcontroller.hxx>
+#include <vcl/button.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/window.hxx>
 
@@ -215,6 +216,47 @@ private:
     Type meType;
 };
 
+class MatchCaseToolboxController : public svt::ToolboxController,
+                                      public css::lang::XServiceInfo
+{
+public:
+    MatchCaseToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    ~MatchCaseToolboxController();
+
+    // XInterface
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw ( css::uno::RuntimeException );
+    virtual void SAL_CALL acquire() throw ();
+    virtual void SAL_CALL release() throw ();
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException );
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException );
+
+    static OUString getImplementationName_Static( ) throw()
+    {
+        return OUString( "com.sun.star.svx.MatchCaseToolboxController" );
+    }
+
+    static css::uno::Sequence< OUString >  getSupportedServiceNames_Static() throw();
+
+    // XComponent
+    virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException );
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException);
+
+    // XToolbarController
+    virtual void SAL_CALL execute( sal_Int16 KeyModifier ) throw ( css::uno::RuntimeException );
+    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) throw ( css::uno::RuntimeException );
+
+    // XStatusListener
+    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException );
+
+private:
+    CheckBox* m_pMatchCaseControl;
+};
+
 // protocol handler for "vnd.sun.star.findbar:*" URLs
 // The dispatch object will be used for shortcut commands for findbar
 class FindbarDispatcher : public css::lang::XServiceInfo,
@@ -267,6 +309,7 @@ private:
 css::uno::Reference< css::uno::XInterface > SAL_CALL FindTextToolbarController_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr );
 css::uno::Reference< css::uno::XInterface > SAL_CALL DownSearchToolboxController_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr );
 css::uno::Reference< css::uno::XInterface > SAL_CALL UpSearchToolboxController_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr );
+css::uno::Reference< css::uno::XInterface > SAL_CALL MatchCaseToolboxController_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr );
 css::uno::Reference< css::uno::XInterface > SAL_CALL ExitFindbarToolboxController_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr );
 css::uno::Reference< css::uno::XInterface > SAL_CALL FindbarDispatcher_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr );
 
