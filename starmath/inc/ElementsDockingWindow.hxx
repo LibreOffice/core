@@ -19,34 +19,33 @@
 #ifndef _ELEMENTSDOCKINGWINDOW_HXX_
 #define _ELEMENTSDOCKINGWINDOW_HXX_
 
-#include <sfx2/ctrlitem.hxx>
 #include <sfx2/dockwin.hxx>
-#include <vcl/toolbox.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/group.hxx>
-#include <vcl/graph.hxx>
-
 #include <svx/dlgctrl.hxx>
+
 #include <document.hxx>
+#include <node.hxx>
 
 class SmElement
 {
-    SmNode* mpNode;
-    OUString maText;
+    SmNodePointer   mpNode;
+    OUString        maText;
 public:
-    SmElement(SmNode* pNode, OUString aText);
-    virtual ~SmElement();
-    SmNode* getNode();
+    Point mBoxLocation;
+    Size  mBoxSize;
 
-    OUString getText() { return maText; }
+    SmElement(SmNodePointer pNode, OUString aText);
+    virtual ~SmElement();
+
+    SmNodePointer getNode();
+    OUString      getText()
+    {
+        return maText;
+    }
 
     virtual bool isSeparator()
     {
         return false;
     }
-
-    Point mBoxLocation;
-    Size  mBoxSize;
 };
 
 class SmElementSeparator : public SmElement
@@ -79,13 +78,16 @@ class SmElementsControl : public Control
     virtual void MouseButtonDown(const MouseEvent& rMEvt);
     virtual void MouseMove( const MouseEvent& rMEvt );
 
-    SmDocShell* mpDocShell;
-    SmFormat    maFormat;
-    sal_uInt16  maCurrentSetId;
-    SmElement*  mpCurrentElement;
+    typedef boost::shared_ptr<SmElement>    SmElementPointer;
+    typedef std::vector< SmElementPointer > SmElementList;
 
-    std::vector<SmElement*> maElementList;
-    Size                    maMaxElementDimensions;
+    SmDocShell*   mpDocShell;
+    SmFormat      maFormat;
+    sal_uInt16    maCurrentSetId;
+    SmElement*    mpCurrentElement;
+
+    SmElementList maElementList;
+    Size          maMaxElementDimensions;
 
     void addElement(OUString aElementVisual, OUString aElementSource);
 

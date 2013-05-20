@@ -18,11 +18,10 @@
  */
 
 #include <ElementsDockingWindow.hxx>
+
 #include <starmath.hrc>
 #include <smmod.hxx>
 #include <config.hxx>
-
-#include <node.hxx>
 #include <view.hxx>
 #include <visitors.hxx>
 
@@ -32,7 +31,7 @@
 SV_DECL_REF(SmDocShell)
 SV_IMPL_REF(SmDocShell)
 
-SmElement::SmElement(SmNode* pNode, OUString aText) :
+SmElement::SmElement(SmNodePointer pNode, OUString aText) :
     mpNode(pNode),
     maText(aText)
 {}
@@ -40,14 +39,14 @@ SmElement::SmElement(SmNode* pNode, OUString aText) :
 SmElement::~SmElement()
 {}
 
-SmElementSeparator::SmElementSeparator() :
-    SmElement(NULL, OUString())
-{}
-
-SmNode* SmElement::getNode()
+SmNodePointer SmElement::getNode()
 {
     return mpNode;
 }
+
+SmElementSeparator::SmElementSeparator() :
+    SmElement(SmNodePointer(), OUString())
+{}
 
 //////////////////////////////////
 
@@ -203,7 +202,7 @@ void SmElementsControl::Paint(const Rectangle&)
 
     for (sal_uInt16 i = 0; i < maElementList.size() ; i++)
     {
-        SmElement* element = maElementList[i];
+        SmElement* element = maElementList[i].get();
         if (element->isSeparator())
         {
             x = 0;
@@ -235,7 +234,7 @@ void SmElementsControl::Paint(const Rectangle&)
             }
 
             Point location(x + ((boxX-aSizePixel.Width())/2), y + ((boxY-aSizePixel.Height())/2));
-            SmDrawingVisitor(*this, PixelToLogic(location), element->getNode());
+            SmDrawingVisitor(*this, PixelToLogic(location), element->getNode().get());
 
             element->mBoxLocation = Point(x,y);
             element->mBoxSize     = Size(boxX, boxY);
@@ -254,7 +253,7 @@ void SmElementsControl::MouseMove( const MouseEvent& rMouseEvent )
     {
         for (sal_uInt16 i = 0; i < maElementList.size() ; i++)
         {
-            SmElement* element = maElementList[i];
+            SmElement* element = maElementList[i].get();
             Rectangle rect(element->mBoxLocation, element->mBoxSize);
             if (rect.IsInside(rMouseEvent.GetPosPixel()))
             {
@@ -280,7 +279,7 @@ void SmElementsControl::MouseButtonDown(const MouseEvent& rMouseEvent)
     {
         for (sal_uInt16 i = 0; i < maElementList.size() ; i++)
         {
-            SmElement* element = maElementList[i];
+            SmElement* element = maElementList[i].get();
             Rectangle rect(element->mBoxLocation, element->mBoxSize);
             if (rect.IsInside(rMouseEvent.GetPosPixel()))
             {
@@ -297,13 +296,14 @@ void SmElementsControl::MouseButtonDown(const MouseEvent& rMouseEvent)
 
 void SmElementsControl::addSeparator()
 {
-    SmElement* pElement = new SmElementSeparator();
+    SmElementPointer pElement(new SmElementSeparator());
     maElementList.push_back(pElement);
 }
 
 void SmElementsControl::addElement(OUString aElementVisual, OUString aElementSource)
 {
-    SmNode* pNode = SmParser().ParseExpression(aElementVisual);
+    SmNodePointer pNode(SmParser().ParseExpression(aElementVisual));
+
     pNode->Prepare(maFormat, *mpDocShell);
     pNode->SetSize(Fraction(10,8));
     pNode->Arrange(*this, maFormat);
@@ -317,7 +317,7 @@ void SmElementsControl::addElement(OUString aElementVisual, OUString aElementSou
         maMaxElementDimensions.Height() = aSizePixel.Height();
     }
 
-    SmElement* pElement = new SmElement(pNode, aElementSource);
+    SmElementPointer pElement(new SmElement(pNode, aElementSource));
     maElementList.push_back(pElement);
 }
 
@@ -328,9 +328,9 @@ void SmElementsControl::setElementSetId(sal_uInt16 aSetId)
     build();
 }
 
-void SmElementsControl::addElements(const sal_uInt16 aElementsArray[], sal_uInt16 size)
+void SmElementsControl::addElements(const sal_uInt16 aElementsArray[], sal_uInt16 aElementsArraySize)
 {
-    for (sal_uInt16 i = 0; i < size ; i++)
+    for (sal_uInt16 i = 0; i < aElementsArraySize ; i++)
     {
         sal_uInt16 aElementId = aElementsArray[i];
         if (aElementId == 0xFFFF) {

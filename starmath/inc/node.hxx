@@ -57,6 +57,7 @@ class SmDocShell;
 class SmNode;
 class SmStructureNode;
 
+typedef boost::shared_ptr<SmNode> SmNodePointer;
 typedef std::vector< SmNode * > SmNodeArray;
 typedef std::vector< SmStructureNode * > SmStructureNodeArray;
 
