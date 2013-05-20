@@ -291,7 +291,7 @@ void SwHeaderFooterWin::Paint( const Rectangle& )
     GetTextBoundRect( aTextRect, String( m_sLabel ) );
 
     FontMetric aFontMetric = GetFontMetric( GetFont() );
-    double nTextOffsetY = aFontMetric.GetHeight() - aFontMetric.GetDescent() + TEXT_PADDING;
+    double nTextOffsetY = aFontMetric.GetAscent() + TEXT_PADDING;
     Point aTextPos( TEXT_PADDING, nTextOffsetY );
 
     basegfx::B2DHomMatrix aTextMatrix( createScaleTranslateB2DHomMatrix(
