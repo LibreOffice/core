@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//8co\u003d",
+        "filename": "vcl/source/gdi/outdev3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 758,
+      "author": {
+        "id": 1000226
+      },
+      "writtenOn": "2013-05-20T05:21:37Z",
+      "side": 1,
+      "message": "I just feel that there is no difference between (rFontName \u003d\u003d GetFamilyName() and rFontName \u003d\u003d GetFamilyName(). Can anyone please justified on this?",
+      "revId": "3384f229a4a3812f57bd8864e9c916e6443a4899",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
