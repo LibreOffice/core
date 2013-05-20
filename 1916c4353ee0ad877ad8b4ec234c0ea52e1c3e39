@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//8cU\u003d",
+        "filename": "sw/source/ui/vba/vbafield.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-05-20T08:22:41Z",
+      "side": 1,
+      "message": "both describe the same. I remove the second.",
+      "revId": "1916c4353ee0ad877ad8b4ec234c0ea52e1c3e39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
