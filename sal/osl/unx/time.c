@@ -298,8 +298,6 @@ sal_uInt32 SAL_CALL osl_getGlobalTimer()
     sal_uInt32 nSeconds;
 
 #if defined(MACOSX) || defined(IOS)
-    startTime = mach_absolute_time();
-
     double diff = (double)(mach_absolute_time() - startTime) * adjust_time_factor * 1000;
     nSeconds = (sal_uInt32)diff;
 #else
@@ -307,9 +305,9 @@ sal_uInt32 SAL_CALL osl_getGlobalTimer()
     int res;
 
 #if defined(USE_CLOCK_GETTIME)
-    res = clock_gettime(CLOCK_REALTIME, &startTime);
+    res = clock_gettime(CLOCK_REALTIME, &currentTime);
 #else
-    res = gettimeofday( &startTime, NULL );
+    res = gettimeofday( &currentTime, NULL );
 #endif
     assert(res == 0);
 
