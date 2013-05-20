@@ -184,13 +184,9 @@ namespace dbp
                 getContext().xObjectModel->setPropertyValue(OUString("BoundColumn"), makeAny((sal_Int16)1));
 
                 // build the statement to set as list source
-                String sStatement;
-                sStatement.AppendAscii("SELECT ");
-                sStatement += getSettings().sListContentField;
-                sStatement.AppendAscii(", ");
-                sStatement += getSettings().sLinkedListField;
-                sStatement.AppendAscii(" FROM ");
-                sStatement += getSettings().sListContentTable;
+                OUString sStatement = "SELECT " +
+                    OUString( getSettings().sListContentField ) +  ", " + OUString( getSettings().sLinkedListField ) +
+                    " FROM " + OUString( getSettings().sListContentTable );
                 Sequence< OUString > aListSource(1);
                 aListSource[0] = sStatement;
                 getContext().xObjectModel->setPropertyValue(OUString("ListSource"), makeAny(aListSource));
@@ -198,12 +194,10 @@ namespace dbp
             else
             {
                 // build the statement to set as list source
-                String sStatement;
-                sStatement.AppendAscii("SELECT DISTINCT ");
-                sStatement += getSettings().sListContentField;
-                sStatement.AppendAscii(" FROM ");
-                sStatement += getSettings().sListContentTable;
-                getContext().xObjectModel->setPropertyValue(OUString("ListSource"), makeAny(OUString(sStatement)));
+                OUString sStatement = "SELECT DISTINCT " +
+                    OUString( getSettings().sListContentField ) +
+                    " FROM " + OUString( getSettings().sListContentTable );
+                getContext().xObjectModel->setPropertyValue( "ListSource", makeAny(OUString(sStatement)));
             }
 
             // the bound field

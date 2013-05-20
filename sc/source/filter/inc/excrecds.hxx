@@ -366,7 +366,7 @@ public:
     inline bool             HasEqual() const    { return (nOper == EXC_AFOPER_EQUAL); }
     sal_uLong               GetTextBytes() const;
 
-    void                    SetCondition( sal_uInt8 nTp, sal_uInt8 nOp, double fV, String* pT );
+    void                    SetCondition( sal_uInt8 nTp, sal_uInt8 nOp, double fV, OUString* pT );
 
     void                    Save( XclExpStream& rStrm );
     void                    SaveXml( XclExpXmlStream& rStrm );
@@ -386,7 +386,7 @@ private:
     std::vector<OUString> maMultiValues;
 
     bool                    AddCondition( ScQueryConnect eConn, sal_uInt8 nType,
-                                sal_uInt8 nOp, double fVal, String* pText,
+                                sal_uInt8 nOp, double fVal, OUString* pText,
                                 bool bSimple = false );
 
     virtual void            WriteBody( XclExpStream& rStrm );
