@@ -714,6 +714,12 @@ void SmEditWindow::InsertCommand(sal_uInt16 nCommand)
 
         OSL_ENSURE( pEditView, "NULL pointer" );
         OUString aText = SM_RESSTR(nCommand);
+
+        OUString selected(pEditView->GetSelected());
+        // if we have a formula selected, apply the command around the formula
+        if (selected.getLength())
+            aText = aText.replaceAll("<?>", selected);
+
         pEditView->InsertText(aText);
 
         if (HasMark(aText))
