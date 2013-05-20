@@ -1036,7 +1036,6 @@ sal_Int32 SidebarController::SetChildWindowWidth (const sal_Int32 nNewWidth)
     const long nColumnWidth (pSplitWindow->GetLineSize(nColumn));
 
     Window* pWindow = mpParentWindow;
-    const Point aWindowPosition (pWindow->GetPosPixel());
     const Size aWindowSize (pWindow->GetSizePixel());
 
     pSplitWindow->MoveWindow(
