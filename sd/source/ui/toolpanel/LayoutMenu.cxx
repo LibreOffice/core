@@ -223,8 +223,6 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
     GetShellManager()->AddSubShell(SHELLID_SD_TASK_PANE_PREVIEW_LAYOUTS,this,this);
 }
 
-
-
 LayoutMenu::~LayoutMenu (void)
 {
     // Tell the shell factory that this object is no longer available.
@@ -240,17 +238,11 @@ LayoutMenu::~LayoutMenu (void)
     mrBase.GetEventMultiplexer()->RemoveEventListener (aLink);
 }
 
-
-
-
 ::std::auto_ptr<ControlFactory> LayoutMenu::CreateControlFactory (
     ToolPanelViewShell& i_rPanelViewShell )
 {
     return ::std::auto_ptr<ControlFactory>(new LayoutMenuRootFactory(i_rPanelViewShell));
 }
-
-
-
 
 AutoLayout LayoutMenu::GetSelectedAutoLayout (void)
 {
@@ -266,9 +258,6 @@ AutoLayout LayoutMenu::GetSelectedAutoLayout (void)
     return aResult;
 }
 
-
-
-
 /** The preferred size depends on the preferred number of columns, the
     number of items, and the size of the items.
 */
@@ -281,9 +270,6 @@ Size LayoutMenu::GetPreferredSize (void)
         (sal_uInt16)CalculateRowCount (aItemSize,mnPreferredColumnCount));
     return aPreferredWindowSize;
 }
-
-
-
 
 sal_Int32 LayoutMenu::GetPreferredWidth (sal_Int32 nHeight)
 {
@@ -304,9 +290,6 @@ sal_Int32 LayoutMenu::GetPreferredWidth (sal_Int32 nHeight)
 
     return nPreferredWidth;
 }
-
-
-
 
 sal_Int32 LayoutMenu::GetPreferredHeight (sal_Int32 nWidth)
 {
@@ -331,9 +314,6 @@ sal_Int32 LayoutMenu::GetPreferredHeight (sal_Int32 nWidth)
     return nPreferredHeight;
 }
 
-
-
-
 sal_Int32 LayoutMenu::GetMinimumWidth (void)
 {
     sal_Int32 nMinimumWidth = 0;
@@ -346,16 +326,10 @@ sal_Int32 LayoutMenu::GetMinimumWidth (void)
     return nMinimumWidth;
 }
 
-
-
-
 bool LayoutMenu::IsResizable (void)
 {
     return true;
 }
-
-
-
 
 void LayoutMenu::UpdateEnabledState (const MasterMode eMode)
 {
@@ -422,16 +396,10 @@ void LayoutMenu::UpdateEnabledState (const MasterMode eMode)
     }
 }
 
-
-
-
 ::Window* LayoutMenu::GetWindow (void)
 {
     return this;
 }
-
-
-
 
 void LayoutMenu::Paint (const Rectangle& rRect)
 {
@@ -446,9 +414,6 @@ void LayoutMenu::Paint (const Rectangle& rRect)
 
     SetBackground (Wallpaper());
 }
-
-
-
 
 void LayoutMenu::Resize (void)
 {
@@ -479,9 +444,6 @@ void LayoutMenu::Resize (void)
     ValueSet::Resize ();
 }
 
-
-
-
 void LayoutMenu::MouseButtonDown (const MouseEvent& rEvent)
 {
     // As a preparation for the context menu the item under the mouse is
@@ -496,9 +458,6 @@ void LayoutMenu::MouseButtonDown (const MouseEvent& rEvent)
 
     ValueSet::MouseButtonDown (rEvent);
 }
-
-
-
 
 void LayoutMenu::Execute (SfxRequest& rRequest)
 {
@@ -517,9 +476,6 @@ void LayoutMenu::Execute (SfxRequest& rRequest)
     }
 }
 
-
-
-
 void LayoutMenu::GetState (SfxItemSet& rItemSet)
 {
     // Cut and paste is not supported.  The SID_(CUT,COPY,PASTE) entries
@@ -536,9 +492,6 @@ void LayoutMenu::GetState (SfxItemSet& rItemSet)
     if (aState == SFX_ITEM_DISABLED)
         rItemSet.DisableItem(SID_INSERTPAGE_LAYOUT_MENU);
 }
-
-
-
 
 void LayoutMenu::InsertPageWithLayout (AutoLayout aLayout)
 {
@@ -567,9 +520,6 @@ void LayoutMenu::InsertPageWithLayout (AutoLayout aLayout)
     UpdateSelection();
 }
 
-
-
-
 TaskPaneShellManager* LayoutMenu::GetShellManager()
 {
     if ( mpShellManager )
@@ -588,9 +538,6 @@ void LayoutMenu::InvalidateContent (void)
     Fill();
 }
 
-
-
-
 int LayoutMenu::CalculateRowCount (const Size&, int nColumnCount)
 {
     int nRowCount = 0;
@@ -606,17 +553,11 @@ int LayoutMenu::CalculateRowCount (const Size&, int nColumnCount)
     return nRowCount;
 }
 
-
-
-
 IMPL_LINK_NOARG(LayoutMenu, ClickHandler)
 {
     AssignLayoutToSelectedSlides (GetSelectedAutoLayout());
     return 0;
 }
-
-
-
 
 /** The specified layout is assigned to the current page of the view shell
     in the center pane.
@@ -707,9 +648,6 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
     while(false);
 }
 
-
-
-
 SfxRequest LayoutMenu::CreateRequest (
     sal_uInt16 nSlotId,
     AutoLayout aLayout)
@@ -746,9 +684,6 @@ SfxRequest LayoutMenu::CreateRequest (
 
     return aRequest;
 }
-
-
-
 
 void LayoutMenu::Fill (void)
 {
@@ -813,9 +748,6 @@ void LayoutMenu::Fill (void)
     mbSelectionUpdatePending = true;
 }
 
-
-
-
 void LayoutMenu::Clear (void)
 {
     for (sal_uInt16 nId=1; nId<=GetItemCount(); nId++)
@@ -823,30 +755,19 @@ void LayoutMenu::Clear (void)
     ValueSet::Clear();
 }
 
-
-
 void LayoutMenu::StartDrag (sal_Int8 , const Point& )
 {
 }
-
-
-
 
 sal_Int8 LayoutMenu::AcceptDrop (const AcceptDropEvent& )
 {
     return 0;
 }
 
-
-
-
 sal_Int8 LayoutMenu::ExecuteDrop (const ExecuteDropEvent& )
 {
     return 0;
 }
-
-
-
 
 void LayoutMenu::Command (const CommandEvent& rEvent)
 {
@@ -891,17 +812,11 @@ void LayoutMenu::Command (const CommandEvent& rEvent)
     }
 }
 
-
-
-
 IMPL_LINK_NOARG(LayoutMenu, StateChangeHandler)
 {
     InvalidateContent();
     return 0;
 }
-
-
-
 
 void LayoutMenu::UpdateSelection (void)
 {
@@ -940,9 +855,6 @@ void LayoutMenu::UpdateSelection (void)
     if ( ! bItemSelected)
         SetNoSelection();
 }
-
-
-
 
 IMPL_LINK(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent*, pEvent)
 {
@@ -987,15 +899,11 @@ IMPL_LINK(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiplexerEve
     return 0;
 }
 
-
-
-
 void LayoutMenu::DataChanged (const DataChangedEvent& rEvent)
 {
     Fill();
     ValueSet::DataChanged(rEvent);
 }
-
 
 } } // end of namespace ::sd::toolpanel
 
