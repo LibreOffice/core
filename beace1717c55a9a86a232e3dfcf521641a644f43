@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXH//8as\u003d",
+        "filename": "extensions/source/propctrlr/browserline.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1000176
+      },
+      "writtenOn": "2013-05-20T11:22:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAXH//8bI\u003d",
+      "revId": "beace1717c55a9a86a232e3dfcf521641a644f43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXH//8bA\u003d",
         "filename": "extensions/source/scanner/sanedlg.cxx",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXH//8ag\u003d",
+        "filename": "extensions/source/scanner/sanedlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1000176
+      },
+      "writtenOn": "2013-05-20T11:22:57Z",
+      "side": 1,
+      "message": "I think it is. But, what about:\n\nif( pEnv )\n    OUString aFileName \u003d OUString::createFromAscii(pEnv) + \"/.so_sane_state\";\nelse\n    OUString aFileName  \u003d OStringToOUString(\"\", osl_getThreadTextEncoding()) + \"/.so_sane_state\";\n\nAnd like that we can remove the next aFileName append.",
+      "parentUuid": "AAAAXH//8bA\u003d",
+      "revId": "beace1717c55a9a86a232e3dfcf521641a644f43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXH//8a8\u003d",
         "filename": "padmin/source/helper.cxx",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2013-05-20T10:53:19Z",
       "side": 1,
       "message": "Same here: I believe you can remove the else statement",
+      "revId": "beace1717c55a9a86a232e3dfcf521641a644f43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//8ac\u003d",
+        "filename": "padmin/source/helper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000176
+      },
+      "writtenOn": "2013-05-20T11:22:57Z",
+      "side": 1,
+      "message": "Same question :)",
+      "parentUuid": "AAAAXH//8a8\u003d",
       "revId": "beace1717c55a9a86a232e3dfcf521641a644f43",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -99,6 +153,24 @@
       "writtenOn": "2013-05-20T10:53:19Z",
       "side": 1,
       "message": "Did you verified how many places calls this function?\n\nhttp://opengrok.libreoffice.org/more/core/sc/source/core/tool/interpr1.cxx?defs\u003dgetFormatString\u0026full\u003dsc",
+      "revId": "beace1717c55a9a86a232e3dfcf521641a644f43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//8aY\u003d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2375,
+      "author": {
+        "id": 1000176
+      },
+      "writtenOn": "2013-05-20T11:22:57Z",
+      "side": 1,
+      "message": "Yes.. No problem I think.",
+      "parentUuid": "AAAAXH//8a0\u003d",
       "revId": "beace1717c55a9a86a232e3dfcf521641a644f43",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
