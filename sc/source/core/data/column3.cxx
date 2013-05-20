@@ -1166,7 +1166,7 @@ void ScColumn::BroadcastInArea( SCROW nRow1, SCROW nRow2 )
 }
 
 
-void ScColumn::StartListeningInArea( SCROW nRow1, SCROW nRow2 )
+void ScColumn::StartListeningInArea( sc::StartListeningContext& rCxt, SCROW nRow1, SCROW nRow2 )
 {
     if (maItems.empty())
         return;
@@ -1178,7 +1178,7 @@ void ScColumn::StartListeningInArea( SCROW nRow1, SCROW nRow2 )
     {
         ScBaseCell* pCell = maItems[nIndex].pCell;
         if ( pCell->GetCellType() == CELLTYPE_FORMULA )
-            ((ScFormulaCell*)pCell)->StartListeningTo( pDocument );
+            ((ScFormulaCell*)pCell)->StartListeningTo(rCxt);
         if ( nRow != maItems[nIndex].nRow )
             Search( nRow, nIndex ); // Inserted via Listening
 

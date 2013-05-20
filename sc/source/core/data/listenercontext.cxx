@@ -28,6 +28,18 @@ public:
 
 }
 
+StartListeningContext::StartListeningContext(ScDocument& rDoc) : mrDoc(rDoc), maSet(rDoc) {}
+
+ScDocument& StartListeningContext::getDoc()
+{
+    return mrDoc;
+}
+
+ColumnBlockPosition* StartListeningContext::getBlockPosition(SCTAB nTab, SCCOL nCol)
+{
+    return maSet.getBlockPosition(nTab, nCol);
+}
+
 EndListeningContext::EndListeningContext(ScDocument& rDoc) : mrDoc(rDoc) {}
 
 ScDocument& EndListeningContext::getDoc()

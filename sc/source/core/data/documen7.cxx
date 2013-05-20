@@ -201,13 +201,24 @@ void ScDocument::EndListeningCell( const ScAddress& rAddress,
         maTabs[nTab]->EndListening( rAddress, pListener );
 }
 
+void ScDocument::StartListeningCell(
+    sc::StartListeningContext& rCxt, const ScAddress& rPos, SvtListener& rListener )
+{
+    ScTable* pTab = FetchTable(rPos.Tab());
+    if (!pTab)
+        return;
+
+    pTab->StartListening(rCxt, rPos.Col(), rPos.Row(), rListener);
+}
+
 void ScDocument::EndListeningCell(
     sc::EndListeningContext& rCxt, const ScAddress& rPos, SvtListener& rListener )
 {
-    if (!TableExists(rPos.Tab()))
+    ScTable* pTab = FetchTable(rPos.Tab());
+    if (!pTab)
         return;
 
-    maTabs[rPos.Tab()]->EndListening(rCxt, rPos.Col(), rPos.Row(), rListener);
+    pTab->EndListening(rCxt, rPos.Col(), rPos.Row(), rListener);
 }
 
 void ScDocument::EndListeningFormulaCells( std::vector<ScFormulaCell*>& rCells )

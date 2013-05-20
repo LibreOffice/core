@@ -2013,17 +2013,18 @@ void ScColumn::FindUsed( SCROW nStartRow, SCROW nEndRow, bool* pUsed ) const
     }
 }
 
-void ScColumn::StartListening( SvtListener& rLst, SCROW nRow )
+namespace {
+
+void startListening(
+    sc::BroadcasterStoreType& rStore, sc::BroadcasterStoreType::iterator& itBlockPos, size_t nElemPos,
+    SCROW nRow, SvtListener& rLst)
 {
-    std::pair<sc::BroadcasterStoreType::iterator,size_t> aPos = maBroadcasters.position(nRow);
-    sc::BroadcasterStoreType::iterator it = aPos.first; // block position.
-    size_t nElemPos = aPos.second; // element position within the block.
-    switch (it->type)
+    switch (itBlockPos->type)
     {
         case sc::element_type_broadcaster:
         {
             // Broadcaster already exists here.
-            SvtBroadcaster* pBC = sc::custom_broadcaster_block::at(*it->data, nElemPos);
+            SvtBroadcaster* pBC = sc::custom_broadcaster_block::at(*itBlockPos->data, nElemPos);
             rLst.StartListening(*pBC);
         }
         break;
@@ -2032,7 +2033,7 @@ void ScColumn::StartListening( SvtListener& rLst, SCROW nRow )
             // No broadcaster exists at this position yet.
             SvtBroadcaster* pBC = new SvtBroadcaster;
             rLst.StartListening(*pBC);
-            maBroadcasters.set(it, nRow, pBC);
+            itBlockPos = rStore.set(itBlockPos, nRow, pBC); // Store the block position for next iteration.
         }
         break;
         default:
@@ -2044,6 +2045,14 @@ void ScColumn::StartListening( SvtListener& rLst, SCROW nRow )
             ;
 #endif
     }
+}
+
+}
+
+void ScColumn::StartListening( SvtListener& rLst, SCROW nRow )
+{
+    std::pair<sc::BroadcasterStoreType::iterator,size_t> aPos = maBroadcasters.position(nRow);
+    startListening(maBroadcasters, aPos.first, aPos.second, nRow, rLst);
 }
 
 void ScColumn::MoveListeners( SvtBroadcaster& rSource, SCROW nDestRow )
@@ -2079,6 +2088,21 @@ void ScColumn::EndListening( SvtListener& rLst, SCROW nRow )
     if (!pBC->HasListeners())
         // There is no more listeners for this cell. Remove the broadcaster.
         maBroadcasters.set_empty(nRow, nRow);
+}
+
+void ScColumn::StartListening( sc::StartListeningContext& rCxt, SCROW nRow, SvtListener& rLst )
+{
+    if (!ValidRow(nRow))
+        return;
+
+    sc::ColumnBlockPosition* p = rCxt.getBlockPosition(nTab, nCol);
+    if (!p)
+        return;
+
+    sc::BroadcasterStoreType::iterator& it = p->miBroadcasterPos;
+    std::pair<sc::BroadcasterStoreType::iterator,size_t> aPos = maBroadcasters.position(it, nRow);
+    it = aPos.first; // store the block position for next iteration.
+    startListening(maBroadcasters, it, aPos.second, nRow, rLst);
 }
 
 void ScColumn::EndListening( sc::EndListeningContext& rCxt, SCROW nRow, SvtListener& rListener )

@@ -91,6 +91,7 @@
 #include "formulaiter.hxx"
 #include "formulacell.hxx"
 #include "clipcontext.hxx"
+#include "listenercontext.hxx"
 
 #include <map>
 #include <limits>
@@ -2314,11 +2315,12 @@ void ScDocument::StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
 {
     if (nInsFlag & IDF_CONTENTS)
     {
+        sc::StartListeningContext aCxt(*this);
         SCTAB nMax = static_cast<SCTAB>(maTabs.size());
         ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
         for (; itr != itrEnd && *itr < nMax; ++itr)
             if (maTabs[*itr])
-                maTabs[*itr]->StartListeningInArea( nCol1, nRow1, nCol2, nRow2 );
+                maTabs[*itr]->StartListeningInArea(aCxt, nCol1, nRow1, nCol2, nRow2);
     }
 }
 

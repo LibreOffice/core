@@ -1097,6 +1097,14 @@ void ScTable::EndListening( const ScAddress& rAddress, SvtListener* pListener )
     aCol[rAddress.Col()].EndListening( *pListener, rAddress.Row() );
 }
 
+void ScTable::StartListening( sc::StartListeningContext& rCxt, SCCOL nCol, SCROW nRow, SvtListener& rListener )
+{
+    if (!ValidCol(nCol))
+        return;
+
+    aCol[nCol].StartListening(rCxt, nRow, rListener);
+}
+
 void ScTable::EndListening( sc::EndListeningContext& rCxt, SCCOL nCol, SCROW nRow, SvtListener& rListener )
 {
     if (!ValidCol(nCol))

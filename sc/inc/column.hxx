@@ -37,6 +37,7 @@ namespace editeng { class SvxBorderLine; }
 
 namespace sc {
     struct FormulaGroupContext;
+    class StartListeningContext;
     class EndListeningContext;
     class CopyFromClipContext;
     class CopyToClipContext;
@@ -226,7 +227,7 @@ public:
     void CopyFromClip(
         sc::CopyFromClipContext& rCxt, SCROW nRow1, SCROW nRow2, long nDy, ScColumn& rColumn );
 
-    void        StartListeningInArea( SCROW nRow1, SCROW nRow2 );
+    void StartListeningInArea( sc::StartListeningContext& rCxt, SCROW nRow1, SCROW nRow2 );
     void        BroadcastInArea( SCROW nRow1, SCROW nRow2 );
 
     void        RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow );
@@ -433,6 +434,7 @@ public:
 
     void        StartListening( SvtListener& rLst, SCROW nRow );
     void        EndListening( SvtListener& rLst, SCROW nRow );
+    void StartListening( sc::StartListeningContext& rCxt, SCROW nRow, SvtListener& rListener );
     void EndListening( sc::EndListeningContext& rCxt, SCROW nRow, SvtListener& rListener );
     void        MoveListeners( SvtBroadcaster& rSource, SCROW nDestRow );
     void        StartAllListeners();

@@ -49,6 +49,7 @@ namespace com { namespace sun { namespace star {
 
 namespace sc {
     struct FormulaGroupContext;
+    class StartListeningContext;
     class EndListeningContext;
     class CopyFromClipContext;
     class CopyToClipContext;
@@ -393,8 +394,9 @@ public:
         sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         SCsCOL nDx, SCsROW nDy, ScTable* pTable );
 
-    void        StartListeningInArea( SCCOL nCol1, SCROW nRow1,
-                                        SCCOL nCol2, SCROW nRow2 );
+    void StartListeningInArea(
+        sc::StartListeningContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
+
     void        BroadcastInArea( SCCOL nCol1, SCROW nRow1,
                                     SCCOL nCol2, SCROW nRow2 );
 
@@ -948,6 +950,7 @@ private:
 
     void        StartListening( const ScAddress& rAddress, SvtListener* pListener );
     void        EndListening( const ScAddress& rAddress, SvtListener* pListener );
+    void StartListening( sc::StartListeningContext& rCxt, SCCOL nCol, SCROW nRow, SvtListener& rListener );
     void EndListening( sc::EndListeningContext& rCxt, SCCOL nCol, SCROW nRow, SvtListener& rListener );
     void        StartAllListeners();
     void        StartNeededListeners(); // only for cells where NeedsListening()==TRUE

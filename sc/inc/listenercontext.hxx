@@ -12,12 +12,24 @@
 
 #include "address.hxx"
 #include "columnspanset.hxx"
+#include "mtvelements.hxx"
 
 #include <boost/noncopyable.hpp>
 
 class ScDocument;
 
 namespace sc {
+
+class StartListeningContext : boost::noncopyable
+{
+    ScDocument& mrDoc;
+    ColumnBlockPositionSet maSet;
+public:
+    StartListeningContext(ScDocument& rDoc);
+    ScDocument& getDoc();
+
+    ColumnBlockPosition* getBlockPosition(SCTAB nTab, SCCOL nCol);
+};
 
 class EndListeningContext : boost::noncopyable
 {

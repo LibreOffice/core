@@ -30,6 +30,7 @@
 
 namespace sc {
 
+class StartListeningContext;
 class EndListeningContext;
 
 }
@@ -313,6 +314,7 @@ public:
 
     // nOnlyNames may be one or more of SC_LISTENING_NAMES_*
     void StartListeningTo( ScDocument* pDoc );
+    void StartListeningTo( sc::StartListeningContext& rCxt );
     void EndListeningTo(
         ScDocument* pDoc, ScTokenArray* pArr = NULL, ScAddress aPos = ScAddress() );
     void EndListeningTo( sc::EndListeningContext& rCxt );

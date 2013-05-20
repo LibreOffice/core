@@ -3162,6 +3162,34 @@ bool ScFormulaCell::InterpretInvariantFormulaGroup()
     return true;
 }
 
+namespace {
+
+void startListeningArea(
+    ScFormulaCell* pCell, ScDocument& rDoc, const ScAddress& rPos, const ScToken& rToken)
+{
+    const ScSingleRefData& rRef1 = rToken.GetSingleRef();
+    const ScSingleRefData& rRef2 = rToken.GetSingleRef2();
+    ScAddress aCell1 = rRef1.toAbs(rPos);
+    ScAddress aCell2 = rRef2.toAbs(rPos);
+    if (aCell1.IsValid() && aCell2.IsValid())
+    {
+        if (rToken.GetOpCode() == ocColRowNameAuto)
+        {   // automagically
+            if ( rRef1.IsColRel() )
+            {   // ColName
+                aCell2.SetRow(MAXROW);
+            }
+            else
+            {   // RowName
+                aCell2.SetCol(MAXCOL);
+            }
+        }
+        rDoc.StartListeningArea(ScRange(aCell1, aCell2), pCell);
+    }
+}
+
+}
+
 void ScFormulaCell::StartListeningTo( ScDocument* pDoc )
 {
     if (pDoc->IsClipOrUndo() || pDoc->GetNoListening() || IsInChangeTrack())
@@ -3181,39 +3209,57 @@ void ScFormulaCell::StartListeningTo( ScDocument* pDoc )
     ScToken* t;
     while ( ( t = static_cast<ScToken*>(pArr->GetNextReferenceRPN()) ) != NULL )
     {
-        StackVar eType = t->GetType();
-        ScSingleRefData& rRef1 = t->GetSingleRef();
-        ScSingleRefData& rRef2 = (eType == svDoubleRef ?
-            t->GetDoubleRef().Ref2 : rRef1);
-        switch( eType )
+        switch (t->GetType())
         {
             case svSingleRef:
             {
-                ScAddress aCell = rRef1.toAbs(aPos);
+                ScAddress aCell =  t->GetSingleRef().toAbs(aPos);
                 if (aCell.IsValid())
                     pDoc->StartListeningCell(aCell, this);
             }
             break;
             case svDoubleRef:
+                startListeningArea(this, *pDoc, aPos, *t);
+            break;
+            default:
+                ;   // nothing
+        }
+    }
+    SetNeedsListening( false);
+}
+
+void ScFormulaCell::StartListeningTo( sc::StartListeningContext& rCxt )
+{
+    ScDocument& rDoc = rCxt.getDoc();
+
+    if (rDoc.IsClipOrUndo() || rDoc.GetNoListening() || IsInChangeTrack())
+        return;
+
+    rDoc.SetDetectiveDirty(true);  // It has changed something
+
+    ScTokenArray* pArr = GetCode();
+    if( pArr->IsRecalcModeAlways() )
+    {
+        rDoc.StartListeningArea(BCA_LISTEN_ALWAYS, this);
+        SetNeedsListening( false);
+        return;
+    }
+
+    pArr->Reset();
+    ScToken* t;
+    while ( ( t = static_cast<ScToken*>(pArr->GetNextReferenceRPN()) ) != NULL )
+    {
+        switch (t->GetType())
+        {
+            case svSingleRef:
             {
-                ScAddress aCell1 = rRef1.toAbs(aPos);
-                ScAddress aCell2 = rRef2.toAbs(aPos);
-                if (aCell1.IsValid() && aCell2.IsValid())
-                {
-                    if (t->GetOpCode() == ocColRowNameAuto)
-                    {   // automagically
-                        if ( rRef1.IsColRel() )
-                        {   // ColName
-                            aCell2.SetRow(MAXROW);
-                        }
-                        else
-                        {   // RowName
-                            aCell2.SetCol(MAXCOL);
-                        }
-                    }
-                    pDoc->StartListeningArea(ScRange(aCell1, aCell2), this);
-                }
+                ScAddress aCell = t->GetSingleRef().toAbs(aPos);
+                if (aCell.IsValid())
+                    rDoc.StartListeningCell(rCxt, aCell, *this);
             }
+            break;
+            case svDoubleRef:
+                startListeningArea(this, rDoc, aPos, *t);
             break;
             default:
                 ;   // nothing

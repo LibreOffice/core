@@ -49,6 +49,7 @@
 namespace editeng { class SvxBorderLine; }
 namespace sc {
     struct FormulaGroupContext;
+    class StartListeningContext;
     class EndListeningContext;
     class CopyFromClipContext;
     struct ColumnBlockPosition;
@@ -1765,6 +1766,7 @@ public:
     void                EndListeningCell( const ScAddress& rAddress,
                                             SvtListener* pListener );
 
+    void StartListeningCell( sc::StartListeningContext& rCxt, const ScAddress& rPos, SvtListener& rListener );
     void EndListeningCell( sc::EndListeningContext& rCxt, const ScAddress& rPos, SvtListener& rListener );
 
     void EndListeningFormulaCells( std::vector<ScFormulaCell*>& rCells );
