@@ -117,6 +117,9 @@
     <glade-widget-class title="Print Preview" name="vcllo-PrintPreviewWindow"
                         generic-name="Print Preview" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="NUP Preview" name="vcllo-ShowNupOrderWindow"
+                        generic-name="NUP Preview" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Rectangle Control" name="svxlo-SvxRectCtl"
                         generic-name="Rectangle Control" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
