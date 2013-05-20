@@ -69,7 +69,6 @@ public:
         const bool bAvl);
 
 private:
-    SfxBindings* mpBindings;
     SvxColorValueSet maVSColor;
     FloatingWindow* mpFloatingWindow;
     const String msNoColorString;

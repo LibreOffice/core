@@ -93,7 +93,6 @@ ColorControl::ColorControl (
     FloatingWindow* pFloatingWindow,
     const ResId* pNoColorStringResId) // const sal_uInt32 nNoColorStringResId)
     : PopupControl(pParent, rControlResId),
-      mpBindings(pBindings),
       maVSColor(this, rValueSetResId),
       mpFloatingWindow(pFloatingWindow),
       msNoColorString(
