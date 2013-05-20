@@ -1584,11 +1584,6 @@ AC_ARG_WITH(system-boost,
         [Use boost already on system.]),,
     [with_system_boost="$with_system_headers"])
 
-AC_ARG_WITH(system-mdds,
-    AS_HELP_STRING([--with-system-mdds],
-        [Use mdds already on system.]),,
-    [with_system_mdds="$with_system_headers"])
-
 AC_ARG_WITH(system-vigra,
     AS_HELP_STRING([--with-system-vigra],
         [Use vigra already on system.]),,
@@ -8051,47 +8046,19 @@ AC_SUBST(SYSTEM_BOOST)
 dnl ===================================================================
 dnl Check for system mdds
 dnl ===================================================================
-AC_MSG_CHECKING([which mdds to use])
-if test "$with_system_mdds" = "yes"; then
-    AC_MSG_RESULT([external])
-    SYSTEM_MDDS=YES
+libo_CHECK_SYSTEM_MODULE([mdds], [MDDS], [mdds >= 0.8.0])
 
-    dnl ===================================================================
-    dnl Determine which hash container mdds shall use
-    dnl ===================================================================
-    AC_MSG_CHECKING([which hash container mdds shall use])
-    if test "x$HAVE_CXX0X" = "xTRUE"; then
-        MDDS_CPPFLAGS=$CXXFLAGS_CXX11
-        AC_MSG_RESULT([std::unordered_map])
-    else
-        MDDS_CPPFLAGS="-DMDDS_HASH_CONTAINER_BOOST"
-        AC_MSG_RESULT([boost::unordered_map])
-    fi
-
-    AC_LANG_PUSH([C++])
-    save_CPPFLAGS="$CPPFLAGS"
-    CPPFLAGS="$CPPFLAGS $MDDS_CPPFLAGS"
-    AC_CHECK_HEADER(mdds/multi_type_vector.hpp, [],
-        [AC_MSG_ERROR(mdds/multi_type_vector.hpp not found. Install mdds >= 0.8.0)], [])
-    AC_CHECK_TYPE(mdds::multi_type_vector<int>::iterator, [],
-        [AC_MSG_ERROR(mdds/multi_type_matrix.hpp does not define multi_type_vector::iterator. Install mdds >= 0.8.0)], [#include <mdds/multi_type_vector.hpp>])
-    AC_CHECK_HEADER(mdds/multi_type_vector_custom_func1.hpp, [],
-        [AC_MSG_ERROR(mdds/multi_type_vector_custom_func1.hpp not found. Install mdds >= 0.8.0)], [])
-    CPPFLAGS="$save_CPPFLAGS"
-    AC_LANG_POP([C++])
+dnl ===================================================================
+dnl Determine which hash container mdds shall use
+dnl ===================================================================
+AC_MSG_CHECKING([which hash container mdds shall use])
+if test "x$HAVE_CXX0X" = "xTRUE" -a test "x$SYSTEM_MDDS" = "xYES"; then
+    MDDS_CPPFLAGS=$CXXFLAGS_CXX11
+    AC_MSG_RESULT([std::unordered_map])
 else
-    AC_MSG_RESULT([internal])
-    BUILD_TYPE="$BUILD_TYPE MDDS"
-    SYSTEM_MDDS=NO
-
-    dnl ===================================================================
-    dnl Determine which hash container mdds shall use
-    dnl ===================================================================
-    AC_MSG_CHECKING([which hash container mdds shall use])
     MDDS_CPPFLAGS="-DMDDS_HASH_CONTAINER_BOOST"
     AC_MSG_RESULT([boost::unordered_map])
 fi
-AC_SUBST(SYSTEM_MDDS)
 AC_SUBST([MDDS_CPPFLAGS])
 
 dnl ===================================================================
