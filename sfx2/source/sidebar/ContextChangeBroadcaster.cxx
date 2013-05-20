@@ -113,7 +113,6 @@ OUString ContextChangeBroadcaster::GetModuleName (const cssu::Reference<css::fra
 {
     if ( ! rxFrame.is() || ! rxFrame->getController().is())
         return OUString();
-    OUString sModuleName;
     try
     {
         const ::comphelper::ComponentContext aContext (::comphelper::getProcessServiceFactory());
