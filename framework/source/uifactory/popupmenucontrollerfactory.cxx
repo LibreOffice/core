@@ -54,7 +54,7 @@ namespace framework
 //*****************************************************************************************************************
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   PopupMenuControllerFactory                      ,
                                             ::cppu::OWeakObject                             ,
-                                            DECLARE_ASCII("com.sun.star.frame.PopupMenuControllerFactory"),
+                                            SERVICENAME_POPUPMENUCONTROLLERFACTORY          ,
                                             IMPLEMENTATIONNAME_POPUPMENUCONTROLLERFACTORY
                                         )
 

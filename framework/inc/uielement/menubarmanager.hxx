@@ -34,7 +34,6 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
-#include <com/sun/star/frame/XToolbarControllerFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/awt/XSystemDependentMenuPeer.hpp>
@@ -236,7 +235,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         Menu*                                                                                  m_pVCLMenu;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                    m_xFrame;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >           m_xUICommandLabels;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XToolbarControllerFactory > m_xPopupMenuControllerRegistration;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XUIControllerRegistration > m_xPopupMenuControllerRegistration;
         ::std::vector< MenuItemHandler* >                                                      m_aMenuItemHandlerVector;
         ::cppu::OMultiTypeInterfaceContainerHelper                                             m_aListenerContainer;   /// container for ALL Listener
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >         m_xDispatchProvider;
