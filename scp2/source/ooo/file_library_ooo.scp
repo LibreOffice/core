@@ -1356,7 +1356,7 @@ File gid_File_Lib_PresentationMinimizer
   #ifdef UNX
     Name = STRING(CONCAT2(PresentationMinimizer.uno,UNXSUFFIX));
   #elif defined OS2
-    Name = "PresentationMinimizer.dll";
+    Name = "PreMin.dll";
   #else
     Name = "PresentationMinimizer.uno.dll";
   #endif
@@ -1369,7 +1369,7 @@ File gid_File_Lib_PresenterScreen
   #ifdef UNX
     Name = STRING(CONCAT2(PresenterScreen.uno,UNXSUFFIX));
   #elif defined OS2
-    Name = "PresenterScreen.dll";
+    Name = "PreScr.dll";
   #else
     Name = "PresenterScreen.uno.dll";
   #endif

@@ -55,7 +55,11 @@ SLOFILES=\
 
 # --- Library -----------------------------------
 
+.IF "$(GUI)"=="OS2"
+SHL1TARGET=PreMin
+.ELSE
 SHL1TARGET= $(TARGET).uno
+.ENDIF
 
 SHL1STDLIBS=\
     $(CPPUHELPERLIB)\
