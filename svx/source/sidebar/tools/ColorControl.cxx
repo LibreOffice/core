@@ -85,7 +85,7 @@ namespace {
 
 ColorControl::ColorControl (
     Window* pParent,
-    SfxBindings* pBindings,
+    SfxBindings* /* pBindings */,
     const ResId& rControlResId,
     const ResId& rValueSetResId,
     const ::boost::function<Color(void)>& rNoColorGetter,
