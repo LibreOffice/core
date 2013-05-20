@@ -35,9 +35,12 @@ class EndListeningContext : boost::noncopyable
 {
     ScDocument& mrDoc;
     ColumnSpanSet maSet;
+    ColumnBlockPositionSet maPosSet;
 public:
     EndListeningContext(ScDocument& rDoc);
     ScDocument& getDoc();
+
+    ColumnBlockPosition* getBlockPosition(SCTAB nTab, SCCOL nCol);
 
     void addEmptyBroadcasterPosition(SCTAB nTab, SCCOL nCol, SCROW nRow);
     void purgeEmptyBroadcasters();

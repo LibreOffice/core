@@ -40,11 +40,16 @@ ColumnBlockPosition* StartListeningContext::getBlockPosition(SCTAB nTab, SCCOL n
     return maSet.getBlockPosition(nTab, nCol);
 }
 
-EndListeningContext::EndListeningContext(ScDocument& rDoc) : mrDoc(rDoc) {}
+EndListeningContext::EndListeningContext(ScDocument& rDoc) : mrDoc(rDoc), maPosSet(rDoc) {}
 
 ScDocument& EndListeningContext::getDoc()
 {
     return mrDoc;
+}
+
+ColumnBlockPosition* EndListeningContext::getBlockPosition(SCTAB nTab, SCCOL nCol)
+{
+    return maPosSet.getBlockPosition(nTab, nCol);
 }
 
 void EndListeningContext::addEmptyBroadcasterPosition(SCTAB nTab, SCCOL nCol, SCROW nRow)

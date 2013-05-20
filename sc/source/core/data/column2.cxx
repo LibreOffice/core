@@ -2107,9 +2107,18 @@ void ScColumn::StartListening( sc::StartListeningContext& rCxt, SCROW nRow, SvtL
 
 void ScColumn::EndListening( sc::EndListeningContext& rCxt, SCROW nRow, SvtListener& rListener )
 {
-    SvtBroadcaster* pBC = GetBroadcaster(nRow);
-    if (!pBC)
+    sc::ColumnBlockPosition* p = rCxt.getBlockPosition(nTab, nCol);
+    if (!p)
         return;
+
+    sc::BroadcasterStoreType::iterator& it = p->miBroadcasterPos;
+    std::pair<sc::BroadcasterStoreType::iterator,size_t> aPos = maBroadcasters.position(it, nRow);
+    it = aPos.first; // store the block position for next iteration.
+    if (it->type != sc::element_type_broadcaster)
+        return;
+
+    SvtBroadcaster* pBC = sc::custom_broadcaster_block::at(*it->data, aPos.second);
+    OSL_ASSERT(pBC);
 
     rListener.EndListening(*pBC);
     if (!pBC->HasListeners())
