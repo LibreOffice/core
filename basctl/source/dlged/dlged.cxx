@@ -32,9 +32,10 @@
 #include "localizationmgr.hxx"
 #include "baside3.hxx"
 
-#include <com/sun/star/awt/XDialog.hpp>
+#include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/UnoControlDialog.hpp>
 #include <com/sun/star/awt/UnoControlDialogModel.hpp>
+#include <com/sun/star/awt/XDialog.hpp>
 #include <com/sun/star/resource/StringResource.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/NumberFormatsSupplier.hpp>
@@ -89,7 +90,6 @@ DlgEdHint::~DlgEdHint()
 
 void DlgEditor::ShowDialog()
 {
-    uno::Reference< lang::XMultiServiceFactory >  xMSF = getProcessServiceFactory();
     uno::Reference< uno::XComponentContext >  xContext = getProcessComponentContext();
 
     // create a dialog
@@ -137,7 +137,7 @@ void DlgEditor::ShowDialog()
     xDlg->setModel( xDlgMod );
 
     // create a peer
-    uno::Reference< awt::XToolkit> xToolkit( xMSF->createInstance( "com.sun.star.awt.ExtToolkit" ), uno::UNO_QUERY );
+    uno::Reference< awt::XToolkit> xToolkit = awt::Toolkit::create( xContext );
     xDlg->createPeer( xToolkit, rWindow.GetComponentInterface() );
 
     uno::Reference< awt::XDialog > xD( xDlg, uno::UNO_QUERY );

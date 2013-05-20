@@ -34,6 +34,7 @@
 
 #include <vcl/svapp.hxx>
 
+#include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/UnoControlDialog.hpp>
 #include <com/sun/star/awt/UnoControlDialogModel.hpp>
 #include <com/sun/star/awt/XToolkit.hpp>
@@ -172,7 +173,7 @@ void MyApp::Main()
     {
         ::comphelper::setProcessServiceFactory( xMSF );
 
-        Reference< awt::XToolkit> xToolkit( xMSF->createInstance( "com.sun.star.awt.ExtToolkit" ), UNO_QUERY );
+        Reference< awt::XToolkit> xToolkit = awt::Toolkit::create( xContext );
 
         // import dialogs
         OString aParam1( OUStringToOString(

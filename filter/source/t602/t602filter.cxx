@@ -25,6 +25,7 @@
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/bootstrap.hxx>
+#include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/UnoControlDialogModel.hpp>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -939,9 +940,6 @@ sal_Bool T602ImportFilterDialog::OptionsDlg()
     _prop->setPropertyValue(OUString::createFromAscii(_nam), any);
 #define _propGet(_prop,_nam) \
     _prop->getPropertyValue(OUString::createFromAscii(_nam));
-#define _InstCtx(_path,_ctx)\
-    rServiceManager->createInstanceWithContext(\
-    OUString::createFromAscii(_path),_ctx);
 #define _Insert(_cont,_nam,_obj) \
     any <<= _obj;\
     _cont->insertByName( OUString::createFromAscii(_nam), any );
@@ -1069,9 +1067,7 @@ sal_Bool T602ImportFilterDialog::OptionsDlg()
 
     dialog->setModel( xControlModel );
 
-    Reference< XInterface > toolkit = _InstCtx("com.sun.star.awt.ExtToolkit", rComponentContext);
-
-    Reference < XToolkit > xToolkit (toolkit,UNO_QUERY);
+    Reference < XToolkit > xToolkit = Toolkit::create( rComponentContext );
 
     dialog->setVisible( false );
     dialog->createPeer( xToolkit, NULL );
