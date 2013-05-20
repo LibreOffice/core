@@ -25,6 +25,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
+#include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/util/URL.hpp>
@@ -42,12 +43,14 @@ namespace svx
 static const char SEARCHITEM_SEARCHSTRING[] = "SearchItem.SearchString";
 static const char SEARCHITEM_SEARCHBACKWARD[] = "SearchItem.Backward";
 static const char SEARCHITEM_SEARCHFLAGS[] = "SearchItem.SearchFlags";
+static const char SEARCHITEM_TRANSLITERATEFLAGS[] = "SearchItem.TransliterateFlags";
 
 static const char COMMAND_EXECUTESEARCH[] = ".uno:ExecuteSearch";
 static const char COMMAND_FINDTEXT[] = ".uno:FindText";
 static const char COMMAND_DOWNSEARCH[] = ".uno:DownSearch";
 static const char COMMAND_UPSEARCH[] = ".uno:UpSearch";
 static const char COMMAND_EXITSEARCH[] = ".uno:ExitSearch";
+static const char COMMAND_MATCHCASE[] = ".uno:MatchCase";
 static const char COMMAND_APPENDSEARCHHISTORY[] = "AppendSearchHistory";
 
 static const sal_Int32       REMEMBER_SIZE = 10;
@@ -163,8 +166,27 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
             {
                 Remember_Impl(GetText());
 
+                sal_Bool aMatchCase;
+                Window* pWindow = GetParent();
+                ToolBox* pToolBox = (ToolBox*)pWindow;
+                if ( pToolBox )
+                {
+                    sal_uInt16 nItemCount = pToolBox->GetItemCount();
+                    for ( sal_uInt16 i=0; i<nItemCount; ++i )
+                    {
+                        OUString sItemCommand = pToolBox->GetItemCommand(i);
+                        if ( sItemCommand == COMMAND_MATCHCASE )
+                        {
+                            CheckBox* pItemWin = (CheckBox*) pToolBox->GetItemWindow(i);
+                            if (pItemWin)
+                                aMatchCase = pItemWin->IsChecked();
+                            break;
+                        }
+                    }
+                }
+
                 OUString sFindText = GetText();
-                css::uno::Sequence< css::beans::PropertyValue > lArgs(3);
+                css::uno::Sequence< css::beans::PropertyValue > lArgs(4);
 
                 lArgs[0].Name = OUString(SEARCHITEM_SEARCHSTRING);
                 lArgs[0].Value <<= sFindText;
@@ -177,6 +199,10 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
 
                 lArgs[2].Name = OUString(SEARCHITEM_SEARCHFLAGS);
                 lArgs[2].Value <<= (sal_Int32)0;
+
+                lArgs[3].Name = OUString(SEARCHITEM_TRANSLITERATEFLAGS);
+                lArgs[3].Value <<= !aMatchCase ?
+                        com::sun::star::i18n::TransliterationModules_IGNORE_CASE : 0;
 
                 impl_executeSearch( m_xContext, m_xFrame, lArgs);
                 nRet = 1;
@@ -561,6 +587,7 @@ void SAL_CALL UpDownSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ 
         throw css::lang::DisposedException();
 
     OUString sFindText;
+    sal_Bool aMatchCase;
     Window* pWindow = VCLUnoHelper::GetWindow( getParent() );
     ToolBox* pToolBox = (ToolBox*)pWindow;
     if ( pToolBox )
@@ -574,18 +601,25 @@ void SAL_CALL UpDownSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ 
                 Window* pItemWin = pToolBox->GetItemWindow(i);
                 if (pItemWin)
                     sFindText = pItemWin->GetText();
-                break;
+            } else if ( sItemCommand == COMMAND_MATCHCASE )
+            {
+                CheckBox* pItemWin = (CheckBox*) pToolBox->GetItemWindow(i);
+                if (pItemWin)
+                    aMatchCase = pItemWin->IsChecked();
             }
         }
     }
 
-    css::uno::Sequence< css::beans::PropertyValue > lArgs(3);
+    css::uno::Sequence< css::beans::PropertyValue > lArgs(4);
     lArgs[0].Name = OUString(SEARCHITEM_SEARCHSTRING);
     lArgs[0].Value <<= sFindText;
     lArgs[1].Name = OUString(SEARCHITEM_SEARCHBACKWARD);
     lArgs[1].Value <<= sal_Bool( meType == UP );
     lArgs[2].Name = OUString(SEARCHITEM_SEARCHFLAGS);
     lArgs[2].Value <<= (sal_Int32)0;
+    lArgs[3].Name = OUString(SEARCHITEM_TRANSLITERATEFLAGS);
+    lArgs[3].Value <<= !aMatchCase ?
+        com::sun::star::i18n::TransliterationModules_IGNORE_CASE : 0;
 
     impl_executeSearch(m_xContext, m_xFrame, lArgs);
 
@@ -603,6 +637,177 @@ void SAL_CALL UpDownSearchToolboxController::statusChanged( const css::frame::Fe
     if ( m_bDisposed )
         return;
 }
+
+//-----------------------------------------------------------------------------------------------------------
+// MatchCaseToolboxController
+
+MatchCaseToolboxController::MatchCaseToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
+    :svt::ToolboxController( rxContext,
+    css::uno::Reference< css::frame::XFrame >(),
+    OUString(COMMAND_MATCHCASE) )
+{
+}
+
+MatchCaseToolboxController::~MatchCaseToolboxController()
+{
+}
+
+// XInterface
+css::uno::Any SAL_CALL MatchCaseToolboxController::queryInterface( const css::uno::Type& aType ) throw ( css::uno::RuntimeException )
+{
+    css::uno::Any a = ToolboxController::queryInterface( aType );
+    if ( a.hasValue() )
+        return a;
+
+    return ::cppu::queryInterface( aType, static_cast< css::lang::XServiceInfo* >( this ) );
+}
+
+void SAL_CALL MatchCaseToolboxController::acquire() throw ()
+{
+    ToolboxController::acquire();
+}
+
+void SAL_CALL MatchCaseToolboxController::release() throw ()
+{
+    ToolboxController::release();
+}
+
+// XServiceInfo
+OUString SAL_CALL MatchCaseToolboxController::getImplementationName() throw( css::uno::RuntimeException )
+{
+    return getImplementationName_Static();
+}
+
+sal_Bool SAL_CALL MatchCaseToolboxController::supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException )
+{
+    const css::uno::Sequence< OUString > aSNL( getSupportedServiceNames() );
+    const OUString * pArray = aSNL.getConstArray();
+
+    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
+        if( pArray[i] == ServiceName )
+            return true;
+
+    return false;
+}
+
+css::uno::Sequence< OUString > SAL_CALL MatchCaseToolboxController::getSupportedServiceNames() throw( css::uno::RuntimeException )
+{
+    return getSupportedServiceNames_Static();
+}
+
+css::uno::Sequence< OUString >  MatchCaseToolboxController::getSupportedServiceNames_Static() throw()
+{
+    css::uno::Sequence< OUString > aSNS( 1 );
+    aSNS.getArray()[0] = OUString( "com.sun.star.frame.ToolbarController" );
+    return aSNS;
+}
+
+// XComponent
+void SAL_CALL MatchCaseToolboxController::dispose() throw ( css::uno::RuntimeException )
+{
+    SolarMutexGuard aSolarMutexGuard;
+
+    SearchToolbarControllersManager::createControllersManager().freeController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
+
+    svt::ToolboxController::dispose();
+
+    delete m_pMatchCaseControl;
+    m_pMatchCaseControl = 0;
+}
+
+// XInitialization
+void SAL_CALL MatchCaseToolboxController::initialize( const css::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException)
+{
+    svt::ToolboxController::initialize(aArguments);
+
+    SearchToolbarControllersManager::createControllersManager().registryController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
+}
+
+// XToolbarController
+void SAL_CALL MatchCaseToolboxController::execute( sal_Int16 /*KeyModifier*/ ) throw ( css::uno::RuntimeException )
+{
+}
+
+css::uno::Reference< css::awt::XWindow > SAL_CALL MatchCaseToolboxController::createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) throw ( css::uno::RuntimeException )
+{
+    css::uno::Reference< css::awt::XWindow > xItemWindow;
+
+    css::uno::Reference< css::awt::XWindow > xParent( Parent );
+    Window* pParent = VCLUnoHelper::GetWindow( xParent );
+    if ( pParent )
+    {
+        ToolBox* pToolbar =  ( ToolBox* )pParent;
+        m_pMatchCaseControl = new CheckBox( pToolbar, 0 );
+        m_pMatchCaseControl->SetText( SVX_RESSTR( RID_SVXSTR_FINDBAR_MATCHCASE ) );
+        Size aSize( m_pMatchCaseControl->GetTextWidth(SVX_RESSTR( RID_SVXSTR_FINDBAR_MATCHCASE )) + 35,
+                                    m_pMatchCaseControl->GetTextHeight() + 15);
+        m_pMatchCaseControl->SetSizePixel( aSize );
+        m_pMatchCaseControl->SetClickHdl(LINK(this, MatchCaseToolboxController, ClickHdl));
+    }
+    xItemWindow = VCLUnoHelper::GetInterface( m_pMatchCaseControl );
+
+    return xItemWindow;
+}
+
+// XStatusListener
+void SAL_CALL MatchCaseToolboxController::statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException )
+{
+    (void) rEvent;
+    SolarMutexGuard aSolarMutexGuard;
+    if ( m_bDisposed )
+        return;
+}
+
+IMPL_LINK_NOARG(MatchCaseToolboxController, ClickHdl)
+{
+    if ( m_bDisposed )
+        throw css::lang::DisposedException();
+
+    OUString sFindText;
+    sal_Bool aMatchCase;
+    Window* pWindow = VCLUnoHelper::GetWindow( getParent() );
+    ToolBox* pToolBox = (ToolBox*)pWindow;
+    if ( pToolBox )
+    {
+        sal_uInt16 nItemCount = pToolBox->GetItemCount();
+        for ( sal_uInt16 i=0; i<nItemCount; ++i )
+        {
+            OUString sItemCommand = pToolBox->GetItemCommand(i);
+            if ( sItemCommand == COMMAND_FINDTEXT )
+            {
+                Window* pItemWin = pToolBox->GetItemWindow(i);
+                if (pItemWin)
+                    sFindText = pItemWin->GetText();
+            } else if ( sItemCommand == COMMAND_MATCHCASE )
+            {
+                CheckBox* pItemWin = (CheckBox*) pToolBox->GetItemWindow(i);
+                if (pItemWin)
+                    aMatchCase = pItemWin->IsChecked();
+            }
+        }
+    }
+
+    css::uno::Sequence< css::beans::PropertyValue > lArgs(4);
+    lArgs[0].Name = OUString(SEARCHITEM_SEARCHSTRING);
+    lArgs[0].Value <<= sFindText;
+    lArgs[1].Name = OUString(SEARCHITEM_SEARCHBACKWARD);
+    lArgs[1].Value <<= sal_False;
+    lArgs[2].Name = OUString(SEARCHITEM_SEARCHFLAGS);
+    lArgs[2].Value <<= (sal_Int32)0;
+    lArgs[3].Name = OUString(SEARCHITEM_TRANSLITERATEFLAGS);
+    lArgs[3].Value <<= !aMatchCase ?
+        com::sun::star::i18n::TransliterationModules_IGNORE_CASE : 0;
+
+    impl_executeSearch(m_xContext, m_xFrame, lArgs);
+
+    css::frame::FeatureStateEvent aEvent;
+    aEvent.FeatureURL.Complete = OUString(COMMAND_APPENDSEARCHHISTORY);
+    css::uno::Reference< css::frame::XStatusListener > xStatusListener = SearchToolbarControllersManager::createControllersManager().findController(m_xFrame, COMMAND_FINDTEXT);
+    if (xStatusListener.is())
+        xStatusListener->statusChanged( aEvent );
+    return 0;
+}
+
 //-----------------------------------------------------------------------------------------------------------
 // class ExitSearchToolboxController
 
@@ -897,6 +1102,13 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL UpSearchToolboxController_c
     return static_cast< cppu::OWeakObject * >(
         new UpDownSearchToolboxController(
             comphelper::getComponentContext(rSMgr), UpDownSearchToolboxController::UP ) );
+}
+
+css::uno::Reference< css::uno::XInterface > SAL_CALL MatchCaseToolboxController_createInstance(
+    const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr )
+{
+    return static_cast< cppu::OWeakObject * >(
+        new MatchCaseToolboxController( comphelper::getComponentContext(rSMgr) ) );
 }
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL ExitFindbarToolboxController_createInstance(
