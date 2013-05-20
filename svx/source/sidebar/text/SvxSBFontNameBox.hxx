@@ -52,7 +52,6 @@ private:
     Font            aCurFont;
     String          aCurText;
     sal_uInt16 nFtCount;
-    bool bInput;
     void            EnableControls_Impl();
     SfxBindings*    pBindings;//
 protected:

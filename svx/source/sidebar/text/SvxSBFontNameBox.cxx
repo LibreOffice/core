@@ -87,7 +87,6 @@ SvxSBFontNameBox::SvxSBFontNameBox( Window* pParent,  const ResId& rResId  ) :
     FontNameBox ( pParent, rResId )
 ,   pFontList   ( NULL )
 ,   nFtCount    ( 0 )
-,   bInput(false)
 ,   pBindings(NULL)
 {
     EnableControls_Impl();
