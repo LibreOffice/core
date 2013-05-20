@@ -442,6 +442,25 @@ public:
     }
 };
 
+class MeasureTimeSwitch
+{
+    double& mrDiff;
+    TimeValue maTimeBefore;
+public:
+    MeasureTimeSwitch(double& rDiff) : mrDiff(rDiff)
+    {
+        mrDiff = 9999.0;
+        osl_getSystemTime(&maTimeBefore);
+    }
+
+    ~MeasureTimeSwitch()
+    {
+        TimeValue aTimeAfter;
+        osl_getSystemTime(&aTimeAfter);
+        mrDiff = getTimeDiff(aTimeAfter, maTimeBefore);
+    }
+};
+
 Test::Test()
     : m_pDoc(0)
 {
@@ -471,15 +490,15 @@ void Test::testPerf()
 {
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet", m_pDoc->InsertTab (0, "foo"));
 
-    TimeValue aTimeBefore, aTimeAfter;
+    double diff = 9999.0;
 
     // Clearing an already empty sheet should finish in a fraction of a
     // second.  Flag failure if it takes more than one second.  Clearing 100
     // columns should be large enough to flag if something goes wrong.
-    osl_getSystemTime(&aTimeBefore);
-    clearRange(m_pDoc, ScRange(0,0,0,99,MAXROW,0));
-    osl_getSystemTime(&aTimeAfter);
-    double diff = getTimeDiff(aTimeAfter, aTimeBefore);
+    {
+        MeasureTimeSwitch aTime(diff);
+        clearRange(m_pDoc, ScRange(0,0,0,99,MAXROW,0));
+    }
     if (diff >= 1.0)
     {
         std::ostringstream os;
@@ -499,10 +518,10 @@ void Test::testPerf()
 
         // Now, Delete B2:B100000. This should complete in a fraction of a second
         // (0.06 sec on my machine).
-        osl_getSystemTime(&aTimeBefore);
-        clearRange(m_pDoc, ScRange(1,1,0,1,99999,0));
-        osl_getSystemTime(&aTimeAfter);
-        diff = getTimeDiff(aTimeAfter, aTimeBefore);
+        {
+            MeasureTimeSwitch aTime(diff);
+            clearRange(m_pDoc, ScRange(1,1,0,1,99999,0));
+        }
         if (diff >= 1.0)
         {
             std::ostringstream os;
@@ -535,10 +554,10 @@ void Test::testPerf()
         ScRange aPasteRange(0,1,0,0,99999,0);
         aMark.SetMarkArea(aPasteRange);
 
-        osl_getSystemTime(&aTimeBefore);
-        m_pDoc->CopyFromClip(aPasteRange, aMark, IDF_CONTENTS, pUndoDoc, &aClipDoc);
-        osl_getSystemTime(&aTimeAfter);
-        diff = getTimeDiff(aTimeAfter, aTimeBefore);
+        {
+            MeasureTimeSwitch aTime(diff);
+            m_pDoc->CopyFromClip(aPasteRange, aMark, IDF_CONTENTS, pUndoDoc, &aClipDoc);
+        }
         if (diff >= 1.0)
         {
             std::ostringstream os;
@@ -558,10 +577,10 @@ void Test::testPerf()
         CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(aPos), m_pDoc->GetString(aPasteRange.aStart));
         CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(aPos), m_pDoc->GetString(aPasteRange.aEnd));
 
-        osl_getSystemTime(&aTimeBefore);
-        aUndo.Undo();
-        osl_getSystemTime(&aTimeAfter);
-        diff = getTimeDiff(aTimeAfter, aTimeBefore);
+        {
+            MeasureTimeSwitch aTime(diff);
+            aUndo.Undo();
+        }
         if (diff >= 1.0)
         {
             std::ostringstream os;
@@ -575,10 +594,10 @@ void Test::testPerf()
         CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(aPasteRange.aEnd));
 
         // Now redo.
-        osl_getSystemTime(&aTimeBefore);
-        aUndo.Redo();
-        osl_getSystemTime(&aTimeAfter);
-        diff = getTimeDiff(aTimeAfter, aTimeBefore);
+        {
+            MeasureTimeSwitch aTime(diff);
+            aUndo.Redo();
+        }
         if (diff >= 1.0)
         {
             std::ostringstream os;
