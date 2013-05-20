@@ -164,6 +164,7 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
     OSL_ENSURE( mrBase.GetDocument()->GetDocSh() == &rDocumentShell,
         "LayoutMenu::implConstruct: hmm?" );
     // if this fires, then my assumption that the rDocumentShell parameter to our first ctor is superfluous ...
+    (void) rDocumentShell;
 
     SetStyle (
         ( GetStyle()  & ~(WB_ITEMBORDER) )
