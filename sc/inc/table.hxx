@@ -850,7 +850,7 @@ public:
 
     SvtBroadcaster* GetBroadcaster( SCCOL nCol, SCROW nRow );
     const SvtBroadcaster* GetBroadcaster( SCCOL nCol, SCROW nRow ) const;
-    void DeleteBroadcasters( SCCOL nCol, SCROW nRow1, SCROW nRow2 );
+    void DeleteBroadcasters( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SCROW nRow1, SCROW nRow2 );
 
     /** Replace behaves differently to the Search; adjust the rCol and rRow accordingly.
 

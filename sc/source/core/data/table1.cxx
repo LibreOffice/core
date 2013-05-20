@@ -2177,12 +2177,13 @@ SvtBroadcaster* ScTable::GetBroadcaster( SCCOL nCol, SCROW nRow )
     return aCol[nCol].GetBroadcaster(nRow);
 }
 
-void ScTable::DeleteBroadcasters( SCCOL nCol, SCROW nRow1, SCROW nRow2 )
+void ScTable::DeleteBroadcasters(
+    sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SCROW nRow1, SCROW nRow2 )
 {
     if (!ValidCol(nCol))
         return;
 
-    aCol[nCol].DeleteBroadcasters(nRow1, nRow2);
+    aCol[nCol].DeleteBroadcasters(rBlockPos, nRow1, nRow2);
 }
 
 const SvtBroadcaster* ScTable::GetBroadcaster( SCCOL nCol, SCROW nRow ) const

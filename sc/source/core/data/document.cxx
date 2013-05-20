@@ -2241,20 +2241,20 @@ SvtBroadcaster* ScDocument::GetBroadcaster( const ScAddress& rPos )
 
 const SvtBroadcaster* ScDocument::GetBroadcaster( const ScAddress& rPos ) const
 {
-    ScTable* pTab = FetchTable(rPos.Tab());
+    const ScTable* pTab = FetchTable(rPos.Tab());
     if (!pTab)
         return NULL;
 
     return pTab->GetBroadcaster(rPos.Col(), rPos.Row());
 }
 
-void ScDocument::DeleteBroadcasters( const ScAddress& rTopPos, SCROW nLength )
+void ScDocument::DeleteBroadcasters( sc::ColumnBlockPosition& rBlockPos, const ScAddress& rTopPos, SCROW nLength )
 {
     ScTable* pTab = FetchTable(rTopPos.Tab());
     if (!pTab || nLength <= 0)
         return;
 
-    pTab->DeleteBroadcasters(rTopPos.Col(), rTopPos.Row(), rTopPos.Row()+nLength-1);
+    pTab->DeleteBroadcasters(rBlockPos, rTopPos.Col(), rTopPos.Row(), rTopPos.Row()+nLength-1);
 }
 
 bool ScDocument::TableExists( SCTAB nTab ) const

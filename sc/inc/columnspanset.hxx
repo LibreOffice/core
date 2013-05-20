@@ -47,7 +47,6 @@ public:
     void set(SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2, bool bVal);
 
     void executeFromTop(Action& ac) const;
-    void executeFromBottom(Action& ac) const;
 };
 
 }

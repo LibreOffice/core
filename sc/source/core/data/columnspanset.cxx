@@ -85,43 +85,14 @@ void ColumnSpanSet::executeFromTop(Action& ac) const
             ColumnSpansType::const_iterator it = rCol.begin(), itEnd = rCol.end();
             SCROW nRow1, nRow2;
             nRow1 = it->first;
+            bool bVal = it->second;
             for (++it; it != itEnd; ++it)
             {
                 nRow2 = it->first-1;
-                bool bVal = it->second;
                 ac.execute(ScAddress(nCol, nRow1, nTab), nRow2-nRow1+1, bVal);
 
                 nRow1 = nRow2+1; // for the next iteration.
-            }
-        }
-    }
-}
-
-void ColumnSpanSet::executeFromBottom(Action& ac) const
-{
-    for (size_t nTab = 0; nTab < maDoc.size(); ++nTab)
-    {
-        if (!maDoc[nTab])
-            continue;
-
-        const TableType& rTab = *maDoc[nTab];
-        for (size_t nCol = 0; nCol < rTab.size(); ++nCol)
-        {
-            if (!rTab[nCol])
-                continue;
-
-            ac.startColumn(nTab, nCol);
-            ColumnSpansType& rCol = *rTab[nCol];
-            ColumnSpansType::const_reverse_iterator it = rCol.rbegin(), itEnd = rCol.rend();
-            SCROW nRow1, nRow2;
-            nRow2 = it->first-1;
-            for (++it; it != itEnd; ++it)
-            {
-                nRow1 = it->first;
-                bool bVal = it->second;
-                ac.execute(ScAddress(nCol, nRow1, nTab), nRow2-nRow1+1, bVal);
-
-                nRow2 = nRow1-1; // for the next iteration.
+                bVal = it->second;
             }
         }
     }

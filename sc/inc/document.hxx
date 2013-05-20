@@ -1970,7 +1970,7 @@ public:
 
     SvtBroadcaster* GetBroadcaster( const ScAddress& rPos );
     const SvtBroadcaster* GetBroadcaster( const ScAddress& rPos ) const;
-    void DeleteBroadcasters( const ScAddress& rTopPos, SCROW nLength );
+    void DeleteBroadcasters( sc::ColumnBlockPosition& rBlockPos, const ScAddress& rTopPos, SCROW nLength );
 
 private: // CLOOK-Impl-methods
 

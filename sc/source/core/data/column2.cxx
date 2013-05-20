@@ -1605,9 +1605,10 @@ const SvtBroadcaster* ScColumn::GetBroadcaster(SCROW nRow) const
     return maBroadcasters.get<SvtBroadcaster*>(nRow);
 }
 
-void ScColumn::DeleteBroadcasters( SCROW nRow1, SCROW nRow2 )
+void ScColumn::DeleteBroadcasters( sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2 )
 {
-    maBroadcasters.set_empty(nRow1, nRow2);
+    rBlockPos.miBroadcasterPos =
+        maBroadcasters.set_empty(rBlockPos.miBroadcasterPos, nRow1, nRow2);
 }
 
 sal_uInt16 ScColumn::GetTextWidth(SCROW nRow) const
