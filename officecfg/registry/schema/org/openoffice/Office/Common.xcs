@@ -6255,7 +6255,7 @@
           </desc>
           <label>Defines the number of columns that will be shown in a ColorValueSet.</label>
         </info>
-        <value>12</value>
+        <value>8</value>
       </prop>
     </group>
     <group oor:name="ExternalApps" oor:extensible="true">
