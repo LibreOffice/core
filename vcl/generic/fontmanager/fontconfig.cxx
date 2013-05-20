@@ -806,20 +806,18 @@ namespace
     OString mapToFontConfigLangTag(const LanguageTag &rLangTag)
     {
 #if defined(FC_VERSION) && (FC_VERSION >= 20492)
-        FcStrSet *pLangSet = FcGetLangs();
+        boost::shared_ptr<FcStrSet> xLangSet(FcGetLangs(), FcStrSetDestroy);
         OString sLangAttrib;
 
         sLangAttrib = OUStringToOString(rLangTag.getBcp47(), RTL_TEXTENCODING_UTF8).toAsciiLowerCase();
-        if (FcStrSetMember(pLangSet, (const FcChar8*)sLangAttrib.getStr()))
+        if (FcStrSetMember(xLangSet.get(), (const FcChar8*)sLangAttrib.getStr()))
         {
-            FcStrSetDestroy(pLangSet);
             return sLangAttrib;
         }
 
         sLangAttrib = OUStringToOString(rLangTag.getLanguageAndScript(), RTL_TEXTENCODING_UTF8).toAsciiLowerCase();
-        if (FcStrSetMember(pLangSet, (const FcChar8*)sLangAttrib.getStr()))
+        if (FcStrSetMember(xLangSet.get(), (const FcChar8*)sLangAttrib.getStr()))
         {
-            FcStrSetDestroy(pLangSet);
             return sLangAttrib;
         }
 
@@ -829,16 +827,14 @@ namespace
         if (!sRegion.isEmpty())
         {
             sLangAttrib = sLang + OString('-') + sRegion;
-            if (FcStrSetMember(pLangSet, (const FcChar8*)sLangAttrib.getStr()))
+            if (FcStrSetMember(xLangSet.get(), (const FcChar8*)sLangAttrib.getStr()))
             {
-                FcStrSetDestroy(pLangSet);
                 return sLangAttrib;
             }
         }
 
-        if (FcStrSetMember(pLangSet, (const FcChar8*)sLang.getStr()))
+        if (FcStrSetMember(xLangSet.get(), (const FcChar8*)sLang.getStr()))
         {
-            FcStrSetDestroy(pLangSet);
             return sLang;
         }
 
