@@ -40,8 +40,6 @@ public:
     virtual void DataChanged (const DataChangedEvent& rEvent);
 
 private:
-    int mnPreferredColumnCount;
-
     /** Depending on the given number of columns and the item size
         calculate the number of rows that are necessary to display all
         items.
