@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//8b4\u003d",
+        "filename": "dbaccess/source/ui/app/AppController.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2565,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-05-20T08:54:17Z",
+      "side": 1,
+      "message": "See Noels comment, equals is not the right one.\n\nMoreover m_aAsyncDrop.aUrl is from type String so startsWith is not available (dbaccess/source/ui/inc/TableCopyHelper.hxx).",
+      "revId": "e7b08514494707d225f686d739ddeb24aa398011",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//8cA\u003d",
+        "filename": "dbaccess/source/ui/control/opendoccontrols.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-05-20T08:54:17Z",
+      "side": 1,
+      "message": "I would leave it as it was before, because it\u0027s easier to understand. We only want to substitute equals with \u003d\u003d for pure OUString comparisons.",
+      "revId": "e7b08514494707d225f686d739ddeb24aa398011",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//8b8\u003d",
+        "filename": "dbaccess/source/ui/misc/UITools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 946,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-05-20T08:54:17Z",
+      "side": 1,
+      "message": "That\u0027s not right. The old one compares nLen chars, not the entire string.",
+      "revId": "e7b08514494707d225f686d739ddeb24aa398011",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
