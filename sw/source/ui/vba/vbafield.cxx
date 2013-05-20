@@ -68,6 +68,7 @@ SwVbaField::getServiceNames()
 }
 
 // SwVbaReadFieldParams
+// FIXME? copy and paste code
 // the codes are copied from ww8par5.cxx
 class SwVbaReadFieldParams
 {
