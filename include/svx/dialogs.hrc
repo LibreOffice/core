@@ -961,6 +961,7 @@
 
 #define RID_SVXSTR_TEXTCOLOR                                (RID_SVX_START + 1178)
 
+#define RID_SVXSTR_FINDBAR_MATCHCASE                        (RID_SVX_START + 1189)
 #define RID_SVXSTR_FINDBAR_FIND                             (RID_SVX_START + 1190)
 
 #define RID_SVXSTR_NUMBULLET_NONE                           (RID_SVX_START + 1191)
