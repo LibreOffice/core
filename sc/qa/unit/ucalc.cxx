@@ -702,6 +702,100 @@ void Test::testPerf()
         CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(aPos), m_pDoc->GetString(aPasteRange.aEnd));
     }
 
+    clearRange(m_pDoc, ScRange(0,0,0,1,MAXROW,0)); // Clear columns A:B.
+    CPPUNIT_ASSERT_MESSAGE("Column A shouldn't have any broadcasters.", !m_pDoc->HasBroadcaster(0,0));
+    CPPUNIT_ASSERT_MESSAGE("Column B shouldn't have any broadcasters.", !m_pDoc->HasBroadcaster(0,1));
+
+    {
+        // Measure the performance of repeat-pasting 2 adjacent cells to a
+        // large cell range, undoing it, and redoing it.  The bottom one of
+        // the two source cells is empty.  In this scenario, the non-empty
+        // cell is a formula cell referencing a cell to the right, which
+        // inserts a broadcaster to cell it references. So it has a higher
+        // overhead than the previous scenario.
+
+        ScRange aSrcRange(0,0,0,0,1,0); // A1:A2
+
+        ScAddress aPos(0,0,0);
+        m_pDoc->SetString(aPos, "=B1");
+        ScMarkData aMark;
+        aMark.SetMarkArea(aSrcRange);
+
+        // Copy to clipboard.
+        ScDocument aClipDoc(SCDOCMODE_CLIP);
+        ScClipParam aParam(aSrcRange, false);
+        m_pDoc->CopyToClip(aParam, &aClipDoc, &aMark);
+        CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(aPos), aClipDoc.GetString(aPos));
+
+        ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
+        pUndoDoc->InitUndo(m_pDoc, 0, 0);
+        m_pDoc->CopyToDocument(aSrcRange, IDF_CONTENTS, false, pUndoDoc, &aMark);
+
+        // Paste it to A3:A50001, and measure its duration.
+        ScRange aPasteRange(0,2,0,0,50000,0);
+        aMark.SetMarkArea(aPasteRange);
+
+        {
+            MeasureTimeSwitch aTime(diff);
+            m_pDoc->CopyFromClip(aPasteRange, aMark, IDF_CONTENTS, pUndoDoc, &aClipDoc);
+        }
+        if (diff >= 1.0)
+        {
+            std::ostringstream os;
+            os << "Pasting took " << diff << " seconds. It should be instant.";
+            CPPUNIT_FAIL(os.str().c_str());
+        }
+
+        ScDocument* pRedoDoc = new ScDocument(SCDOCMODE_UNDO);
+        pRedoDoc->InitUndo(m_pDoc, 0, 0);
+        m_pDoc->CopyToDocument(aPasteRange, IDF_CONTENTS, false, pRedoDoc, &aMark);
+
+        // Create an undo object for this.
+        ScRefUndoData* pRefUndoData = new ScRefUndoData(m_pDoc);
+        ScUndoPaste aUndo(&(*m_xDocShRef), aPasteRange, aMark, pUndoDoc, pRedoDoc, IDF_CONTENTS, pRefUndoData);
+
+        // Make sure it did what it's supposed to do.
+        CPPUNIT_ASSERT_EQUAL(CELLTYPE_FORMULA, m_pDoc->GetCellType(aPasteRange.aStart));
+        CPPUNIT_ASSERT_EQUAL(CELLTYPE_FORMULA, m_pDoc->GetCellType(aPasteRange.aEnd));
+        ScAddress aTmp = aPasteRange.aStart;
+        aTmp.IncRow();
+        CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(aTmp));
+
+#if 0 // TODO: Undo and redo of this scenario is currently not fast enough to be tested reliably.
+        {
+            MeasureTimeSwitch aTime(diff);
+            aUndo.Undo();
+        }
+        if (diff >= 1.0)
+        {
+            std::ostringstream os;
+            os << "Undoing took " << diff << " seconds. It should be instant.";
+            CPPUNIT_FAIL(os.str().c_str());
+        }
+
+        // Make sure it's really undone.
+        CPPUNIT_ASSERT_EQUAL(CELLTYPE_FORMULA, m_pDoc->GetCellType(aPos));
+        CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(aPasteRange.aStart));
+        CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(aPasteRange.aEnd));
+
+        // Now redo.
+        {
+            MeasureTimeSwitch aTime(diff);
+            aUndo.Redo();
+        }
+        if (diff >= 1.0)
+        {
+            std::ostringstream os;
+            os << "Redoing took " << diff << " seconds. It should be instant.";
+            CPPUNIT_FAIL(os.str().c_str());
+        }
+
+        // Make sure it's really redone.
+        CPPUNIT_ASSERT_EQUAL(CELLTYPE_FORMULA, m_pDoc->GetCellType(aPasteRange.aStart));
+        CPPUNIT_ASSERT_EQUAL(CELLTYPE_FORMULA, m_pDoc->GetCellType(aPasteRange.aEnd));
+#endif
+    }
+
     m_pDoc->DeleteTab(0);
 }
 
