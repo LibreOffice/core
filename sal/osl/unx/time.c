@@ -26,7 +26,7 @@
 #include <assert.h>
 #include <unistd.h>
 
-#if defined(MACOSX)
+#if defined(MACOSX) || defined(IOS)
 #include <mach/mach_time.h>
 #endif
 
@@ -39,7 +39,7 @@
 #define HAS_ALTZONE 1
 #endif
 
-#if defined(MACOSX)
+#if defined(MACOSX) || defined(IOS)
 typedef sal_uInt64 osl_time_t;
 static double adjust_time_factor;
 #else
@@ -59,7 +59,7 @@ static osl_time_t startTime;
 
 sal_Bool SAL_CALL osl_getSystemTime(TimeValue* tv)
 {
-#if defined(MACOSX)
+#if defined(MACOSX) || defined(IOS)
     double diff = (double)(mach_absolute_time() - startTime) * adjust_time_factor;
     tv->Seconds = (sal_uInt32)diff;
     tv->Nanosec = (sal_uInt32)((diff - tv->Seconds) * 1e9);
@@ -277,12 +277,12 @@ sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( TimeValue* pLocalTimeVal, Time
 
 void sal_initGlobalTimer()
 {
-#if defined(MACOSX)
+#if defined(MACOSX) || defined(IOS)
   mach_timebase_info_data_t timebase;
   mach_timebase_info(&timebase);
   adjust_time_factor = 1e-9 * (double)timebase.numer / (double)(timebase.denom);
   startTime = mach_absolute_time();
-#else /* NDef MACOSX */
+#else /* ! (MACOSX || IOS) */
   int res;
 #if defined(USE_CLOCK_GETTIME)
   res = clock_gettime(CLOCK_REALTIME, &startTime);
@@ -290,14 +290,14 @@ void sal_initGlobalTimer()
   res = gettimeofday( &startTime, NULL );
 #endif /* NDef USE_CLOCK_GETTIME */
   assert(res == 0);
-#endif /* NDef MACOSX */
+#endif /* ! (MACOSX || IOS) */
 }
 
 sal_uInt32 SAL_CALL osl_getGlobalTimer()
 {
     sal_uInt32 nSeconds;
 
-#if defined(MACOSX)
+#if defined(MACOSX) || defined(IOS)
     startTime = mach_absolute_time();
 
     double diff = (double)(mach_absolute_time() - startTime) * adjust_time_factor * 1000;
