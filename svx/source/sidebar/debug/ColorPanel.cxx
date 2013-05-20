@@ -24,8 +24,7 @@
 namespace svx { namespace sidebar {
 
 ColorPanel::ColorPanel (::Window* pParent)
-    : ValueSet(pParent, WB_ITEMBORDER),
-      mnPreferredColumnCount(2)
+    : ValueSet(pParent, WB_ITEMBORDER)
 {
     WinBits aStyle =
         WB_ITEMBORDER
