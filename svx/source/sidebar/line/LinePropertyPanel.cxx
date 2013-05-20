@@ -60,29 +60,6 @@ using ::sfx2::sidebar::Theme;
 #define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
 
 namespace {
-    short GetItemId_Impl_line( ValueSet& rValueSet, const Color& rCol )
-    {
-        if(rCol == COL_AUTO)
-            return 0;
-
-        bool    bFound = false;
-        sal_uInt16 nCount = rValueSet.GetItemCount();
-        sal_uInt16  n      = 1;
-
-        while ( !bFound && n <= nCount )
-        {
-            Color aValCol = rValueSet.GetItemColor(n);
-
-            bFound = (   aValCol.GetRed()   == rCol.GetRed()
-                && aValCol.GetGreen() == rCol.GetGreen()
-                && aValCol.GetBlue()  == rCol.GetBlue() );
-
-            if ( !bFound )
-                n++;
-        }
-        return bFound ? n : -1;
-    }
-
     void FillLineEndListBox(ListBox& rListBoxStart, ListBox& rListBoxEnd, const XLineEndList& rList)
     {
         const sal_uInt32 nCount(rList.Count());
