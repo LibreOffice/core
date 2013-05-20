@@ -140,7 +140,7 @@
                 <property name="column_spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="filedlg">
-                    <property name="label" translatable="yes">_Use LibreOffice dialogs</property>
+                    <property name="label" translatable="yes">_Use %PRODUCTNAME dialogs</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -205,7 +205,7 @@
             <property name="left_padding">12</property>
             <child>
               <object class="GtkCheckButton" id="printdlg">
-                <property name="label" translatable="yes">Use LibreOffice _dialogs</property>
+                <property name="label" translatable="yes">Use %PRODUCTNAME _dialogs</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
