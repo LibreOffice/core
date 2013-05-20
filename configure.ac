@@ -8052,7 +8052,7 @@ dnl ===================================================================
 dnl Determine which hash container mdds shall use
 dnl ===================================================================
 AC_MSG_CHECKING([which hash container mdds shall use])
-if test "x$HAVE_CXX0X" = "xTRUE" -a test "x$SYSTEM_MDDS" = "xYES"; then
+if test "x$HAVE_CXX0X" = "xTRUE" -a "x$SYSTEM_MDDS" = "xYES"; then
     MDDS_CPPFLAGS=$CXXFLAGS_CXX11
     AC_MSG_RESULT([std::unordered_map])
 else
