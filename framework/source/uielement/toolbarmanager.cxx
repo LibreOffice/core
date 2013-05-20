@@ -34,7 +34,6 @@
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/UICommandDescription.hpp>
-#include <com/sun/star/frame/ToolBarControllerFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XDockableWindow.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>

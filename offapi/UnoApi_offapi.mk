@@ -201,7 +201,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/frame,\
 	PopupMenuControllerFactory \
     SessionListener \
     StartModule \
-    ToolBarControllerFactory \
     TaskCreator \
 	UICommandDescription \
 ))
