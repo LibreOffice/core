@@ -713,7 +713,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
     for( sal_Int32 nPara = 0; nPara < nParaCount; ++nPara )
     {
         ESelection aSel( nPara, 0 );
-        String aParaText;
+        OUString aParaText;
         sal_Int32 nParaHeight = 0;
         std::vector<sal_uInt16> aPosList;
         mrEE.GetPortions( nPara, aPosList );
@@ -741,7 +741,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                                  (aFontData.mbItalic != aNewData.mbItalic);
                 if( bNewFont || (bNewStyle && pFontList) )
                 {
-                    aParaText.AppendAscii( "&\"" ).Append( aNewData.maName );
+                    aParaText = "&\"" + OUString(aNewData.maName);
                     if( pFontList )
                     {
                         FontInfo aFontInfo( pFontList->Get(
@@ -750,9 +750,9 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                             aNewData.mbItalic ? ITALIC_NORMAL : ITALIC_NONE ) );
                         aNewData.maStyle = pFontList->GetStyleName( aFontInfo );
                         if( aNewData.maStyle.Len() )
-                            aParaText.Append( ',' ).Append( aNewData.maStyle );
+                            aParaText += "," + OUString(aNewData.maStyle);
                     }
-                    aParaText.Append( '"' );
+                    aParaText += "\"";
                 }
 
                 // height
@@ -762,7 +762,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                 (aNewData.mnHeight += 10) /= 20;
                 bool bFontHtChanged = (aFontData.mnHeight != aNewData.mnHeight);
                 if( bFontHtChanged )
-                    aParaText.Append( '&' ).Append( OUString::number( aNewData.mnHeight ) );
+                    aParaText += "&" + OUString::number( aNewData.mnHeight );
                 // update maximum paragraph height, convert to twips
                 nParaHeight = ::std::max< sal_Int32 >( nParaHeight, aNewData.mnHeight * 20 );
 
@@ -779,13 +779,13 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                 {
                     sal_uInt8 nTmpUnderl = (aNewData.mnUnderline == EXC_FONTUNDERL_NONE) ?
                         aFontData.mnUnderline : aNewData.mnUnderline;
-                    aParaText.AppendAscii( (nTmpUnderl == EXC_FONTUNDERL_SINGLE) ? "&U" : "&E" );
+                    (nTmpUnderl == EXC_FONTUNDERL_SINGLE)? aParaText += "&U" : aParaText += "&E";
                 }
 
                 // strikeout
                 aNewData.mbStrikeout = (aFont.GetStrikeout() != STRIKEOUT_NONE);
                 if( aFontData.mbStrikeout != aNewData.mbStrikeout )
-                    aParaText.AppendAscii( "&S" );
+                    aParaText += "&S";
 
                 // super/sub script
                 const SvxEscapementItem& rEscapeItem = GETITEM( aEditSet, SvxEscapementItem, EE_CHAR_ESCAPEMENT );
@@ -795,9 +795,9 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                     switch(aNewData.mnEscapem)
                     {
                         // close the previous super/sub script.
-                        case EXC_FONTESC_NONE:  aParaText.AppendAscii( (aFontData.mnEscapem == EXC_FONTESC_SUPER) ? "&X" : "&Y" ); break;
-                        case EXC_FONTESC_SUPER: aParaText.AppendAscii( "&X" );  break;
-                        case EXC_FONTESC_SUB:   aParaText.AppendAscii( "&Y" );  break;
+                        case EXC_FONTESC_NONE:  (aFontData.mnEscapem == EXC_FONTESC_SUPER) ? aParaText += "&X" : aParaText += "&Y"; break;
+                        case EXC_FONTESC_SUPER: aParaText += "&X";  break;
+                        case EXC_FONTESC_SUB:   aParaText += "&Y";  break;
                         default: break;
                     }
                 }
@@ -813,30 +813,30 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                     if( const SvxFieldData* pFieldData = static_cast< const SvxFieldItem* >( pItem )->GetField() )
                     {
                         if( pFieldData->ISA( SvxPageField ) )
-                            aParaText.AppendAscii( "&P" );
+                            aParaText += "&P";
                         else if( pFieldData->ISA( SvxPagesField ) )
-                            aParaText.AppendAscii( "&N" );
+                            aParaText += "&N";
                         else if( pFieldData->ISA( SvxDateField ) )
-                            aParaText.AppendAscii( "&D" );
+                            aParaText += "&D";
                         else if( pFieldData->ISA( SvxTimeField ) || pFieldData->ISA( SvxExtTimeField ) )
-                            aParaText.AppendAscii( "&T" );
+                            aParaText += "&T";
                         else if( pFieldData->ISA( SvxTableField ) )
-                            aParaText.AppendAscii( "&A" );
+                            aParaText += "&A";
                         else if( pFieldData->ISA( SvxFileField ) )  // title -> file name
-                            aParaText.AppendAscii( "&F" );
+                            aParaText += "&F";
                         else if( const SvxExtFileField* pFileField = PTR_CAST( SvxExtFileField, pFieldData ) )
                         {
                             switch( pFileField->GetFormat() )
                             {
                                 case SVXFILEFORMAT_NAME_EXT:
                                 case SVXFILEFORMAT_NAME:
-                                    aParaText.AppendAscii( "&F" );
+                                    aParaText += "&F";
                                 break;
                                 case SVXFILEFORMAT_PATH:
-                                    aParaText.AppendAscii( "&Z" );
+                                    aParaText += "&Z";
                                 break;
                                 case SVXFILEFORMAT_FULLPATH:
-                                    aParaText.AppendAscii( "&Z&F" );
+                                    aParaText += "&Z&F";
                                 break;
                                 default:
                                     OSL_FAIL( "XclExpHFConverter::AppendPortion - unknown file field" );
@@ -849,14 +849,14 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                     String aPortionText( mrEE.GetText( aSel ) );
                     aPortionText.SearchAndReplaceAll( OUString('&'), OUString("&&") );
                     // #i17440# space between font height and numbers in text
-                    if( bFontHtChanged && aParaText.Len() && aPortionText.Len() )
+                    if( bFontHtChanged && aParaText.getLength() && aPortionText.Len() )
                     {
-                        sal_Unicode cLast = aParaText.GetChar( aParaText.Len() - 1 );
+                        sal_Unicode cLast = aParaText[ aParaText.getLength() - 1 ];
                         sal_Unicode cFirst = aPortionText.GetChar( 0 );
                         if( ('0' <= cLast) && (cLast <= '9') && ('0' <= cFirst) && (cFirst <= '9') )
-                            aParaText.Append( ' ' );
+                            aParaText += " ";
                     }
-                    aParaText.Append( aPortionText );
+                    aParaText += aPortionText;
                 }
             }
 

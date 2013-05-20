@@ -59,12 +59,12 @@ const sal_Char ScEditUtil::pCalcDelimiters[] = "=()+-*/^&<>";
 
 //------------------------------------------------------------------------
 
-String ScEditUtil::ModifyDelimiters( const String& rOld )
+OUString ScEditUtil::ModifyDelimiters( const OUString& rOld )
 {
     // underscore is used in function argument names
-    String aRet = comphelper::string::remove(rOld, '_');
-    aRet.AppendAscii( RTL_CONSTASCII_STRINGPARAM( pCalcDelimiters ) );
-    aRet.Append(ScCompiler::GetNativeSymbol(ocSep)); // argument separator is localized.
+    OUString aRet = OUString( comphelper::string::remove(rOld, '_') ) +
+        OUString::createFromAscii( pCalcDelimiters ) +
+        ScCompiler::GetNativeSymbol(ocSep); // argument separator is localized.
     return aRet;
 }
 

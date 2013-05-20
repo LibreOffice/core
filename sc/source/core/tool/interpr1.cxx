@@ -2371,7 +2371,7 @@ static inline bool lcl_FormatHasOpenPar( const SvNumberformat* pFormat )
 
 namespace {
 
-void getFormatString(SvNumberFormatter* pFormatter, sal_uLong nFormat, String& rFmtStr)
+void getFormatString(SvNumberFormatter* pFormatter, sal_uLong nFormat, OUString& rFmtStr)
 {
     bool        bAppendPrec = true;
     sal_uInt16  nPrec, nLeading;
@@ -2380,10 +2380,10 @@ void getFormatString(SvNumberFormatter* pFormatter, sal_uLong nFormat, String& r
 
     switch( pFormatter->GetType( nFormat ) )
     {
-        case NUMBERFORMAT_NUMBER:       rFmtStr = (bThousand ? ',' : 'F');  break;
-        case NUMBERFORMAT_CURRENCY:     rFmtStr = 'C';                      break;
-        case NUMBERFORMAT_SCIENTIFIC:   rFmtStr = 'S';                      break;
-        case NUMBERFORMAT_PERCENT:      rFmtStr = 'P';                      break;
+        case NUMBERFORMAT_NUMBER:       if(bThousand) rFmtStr = ","; else rFmtStr = "F"; break;
+        case NUMBERFORMAT_CURRENCY:     rFmtStr = "C";                                   break;
+        case NUMBERFORMAT_SCIENTIFIC:   rFmtStr = "S";                                   break;
+        case NUMBERFORMAT_PERCENT:      rFmtStr = "P";                                   break;
         default:
         {
             bAppendPrec = false;
@@ -2396,18 +2396,18 @@ void getFormatString(SvNumberFormatter* pFormatter, sal_uLong nFormat, String& r
                 case NF_DATE_SYS_DMMMYYYY:
                 case NF_DATE_DIN_DMMMYYYY:
                 case NF_DATE_SYS_DMMMMYYYY:
-                case NF_DATE_DIN_DMMMMYYYY: rFmtStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D1" ) );  break;
-                case NF_DATE_SYS_DDMMM:     rFmtStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D2" ) );  break;
-                case NF_DATE_SYS_MMYY:      rFmtStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D3" ) );  break;
+                case NF_DATE_DIN_DMMMMYYYY: rFmtStr = "D1"; break;
+                case NF_DATE_SYS_DDMMM:     rFmtStr = "D2"; break;
+                case NF_DATE_SYS_MMYY:      rFmtStr = "D3"; break;
                 case NF_DATETIME_SYSTEM_SHORT_HHMM:
                 case NF_DATETIME_SYS_DDMMYYYY_HHMMSS:
-                                            rFmtStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D4" ) );  break;
-                case NF_DATE_DIN_MMDD:      rFmtStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D5" ) );  break;
-                case NF_TIME_HHMMSSAMPM:    rFmtStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D6" ) );  break;
-                case NF_TIME_HHMMAMPM:      rFmtStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D7" ) );  break;
-                case NF_TIME_HHMMSS:        rFmtStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D8" ) );  break;
-                case NF_TIME_HHMM:          rFmtStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D9" ) );  break;
-                default:                    rFmtStr = 'G';
+                                            rFmtStr = "D4"; break;
+                case NF_DATE_DIN_MMDD:      rFmtStr = "D5"; break;
+                case NF_TIME_HHMMSSAMPM:    rFmtStr = "D6"; break;
+                case NF_TIME_HHMMAMPM:      rFmtStr = "D7"; break;
+                case NF_TIME_HHMMSS:        rFmtStr = "D8"; break;
+                case NF_TIME_HHMM:          rFmtStr = "D9"; break;
+                default:                    rFmtStr = "G";
             }
         }
     }
@@ -2415,9 +2415,9 @@ void getFormatString(SvNumberFormatter* pFormatter, sal_uLong nFormat, String& r
         rFmtStr += OUString::number(nPrec);
     const SvNumberformat* pFormat = pFormatter->GetEntry( nFormat );
     if( lcl_FormatHasNegColor( pFormat ) )
-        rFmtStr += '-';
+        rFmtStr += "-";
     if( lcl_FormatHasOpenPar( pFormat ) )
-        rFmtStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "()" ) );
+        rFmtStr += "()";
 }
 
 }
@@ -2584,7 +2584,7 @@ void ScInterpreter::ScCell()
 // *** FORMATTING ***
             else if( aInfoType.EqualsAscii( "FORMAT" ) )
             {   // specific format code for standard formats
-                String aFuncResult;
+                OUString aFuncResult;
                 sal_uLong   nFormat = pDok->GetNumberFormat( aCellPos );
                 getFormatString(pFormatter, nFormat, aFuncResult);
                 PushString( aFuncResult );
@@ -2720,7 +2720,7 @@ void ScInterpreter::ScCellExternal()
     }
     else if ( aInfoType == "FORMAT" )
     {
-        String aFmtStr;
+        OUString aFmtStr;
         sal_uLong nFmt = aFmt.mbIsSet ? aFmt.mnIndex : 0;
         getFormatString(pFormatter, nFmt, aFmtStr);
         PushString(aFmtStr);

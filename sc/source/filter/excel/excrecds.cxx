@@ -552,14 +552,14 @@ sal_Size ExcFilterCondition::GetTextBytes() const
     return pText ? (1 + pText->GetBufferSize()) : 0;
 }
 
-void ExcFilterCondition::SetCondition( sal_uInt8 nTp, sal_uInt8 nOp, double fV, String* pT )
+void ExcFilterCondition::SetCondition( sal_uInt8 nTp, sal_uInt8 nOp, double fV, OUString* pT )
 {
     nType = nTp;
     nOper = nOp;
     fVal = fV;
 
     delete pText;
-    pText = pT ? new XclExpString( *pT, EXC_STR_8BITLENGTH ) : NULL;
+    (pT) ? pText = new XclExpString( *pT, EXC_STR_8BITLENGTH ) : pText =  NULL;
 }
 
 void ExcFilterCondition::Save( XclExpStream& rStrm )
@@ -641,7 +641,7 @@ XclExpAutofilter::XclExpAutofilter( const XclExpRoot& rRoot, sal_uInt16 nC ) :
 }
 
 bool XclExpAutofilter::AddCondition( ScQueryConnect eConn, sal_uInt8 nType, sal_uInt8 nOp,
-                                     double fVal, String* pText, bool bSimple )
+                                     double fVal, OUString* pText, bool bSimple )
 {
     if( !aCond[ 1 ].IsEmpty() )
         return false;
@@ -675,28 +675,27 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
         return AddMultiValueEntry(rEntry);
 
     bool bConflict = false;
-    String  sText;
+    OUString  sText;
     const ScQueryEntry::Item& rItem = rItems[0];
     const OUString& rQueryStr = rItem.maString;
     if (!rQueryStr.isEmpty())
     {
-        sText.Assign(rQueryStr);
+        sText = rQueryStr;
         switch( rEntry.eOp )
         {
             case SC_CONTAINS:
             case SC_DOES_NOT_CONTAIN:
             {
-                sText.InsertAscii( "*" , 0 );
-                sText.AppendAscii( "*" );
+                sText = "*" + sText + "*";
             }
             break;
             case SC_BEGINS_WITH:
             case SC_DOES_NOT_BEGIN_WITH:
-                sText.AppendAscii( "*" );
+                sText += "*";
             break;
             case SC_ENDS_WITH:
             case SC_DOES_NOT_END_WITH:
-                sText.InsertAscii( "*" , 0 );
+                sText = "*" + sText;
             break;
             default:
             {
@@ -705,7 +704,7 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
         }
     }
 
-    bool bLen = sText.Len() > 0;
+    bool bLen = sText.getLength() > 0;
 
     // empty/nonempty fields
     if (rEntry.IsQueryByEmpty())
@@ -718,7 +717,8 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
         double  fVal    = 0.0;
         sal_uInt32  nIndex  = 0;
         bool bIsNum  = bLen ? GetFormatter().IsNumberFormat( sText, nIndex, fVal ) : true;
-        String* pText   = bIsNum ? NULL : &sText;
+        OUString* pText;
+        (bIsNum) ? pText = NULL : pText = &sText;
 
         // top10 flags
         sal_uInt16 nNewFlags = 0x0000;

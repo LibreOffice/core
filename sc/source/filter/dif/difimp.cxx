@@ -533,12 +533,9 @@ DATASET DifParser::GetNextDataset( void )
                 ReadNextLine( aTmpLine );
                 if ( eRet == D_SYNT_ERROR )
                 {   // for broken records write "#ERR: data" to cell
-                    String aTmp( RTL_CONSTASCII_USTRINGPARAM( "#ERR: " ));
-                    aTmp += pAktBuffer;
-                    aTmp.AppendAscii( " (" );
-                    OSL_ENSURE( aTmpLine.getLength() <= STRING_MAXLEN - aTmp.Len() - 1, "GetNextDataset(): line doesn't fit into data");
-                    aTmp += aTmpLine;
-                    aTmp += sal_Unicode(')');
+                    OUString aTmp = "#ERR: " + OUString( pAktBuffer ) + " (";
+                    OSL_ENSURE( aTmpLine.getLength() <= STRING_MAXLEN - aTmp.getLength() - 1, "GetNextDataset(): line doesn't fit into data");
+                    aTmp += aTmpLine + ")";
                     aData = aTmp;
                     eRet = D_STRING;
                 }

@@ -1244,8 +1244,14 @@ void SaneDlg::SaveState()
         return;
 
     const char* pEnv = getenv( "HOME" );
-    String aFileName( pEnv ? pEnv : "", osl_getThreadTextEncoding() );
-    aFileName.AppendAscii( "/.so_sane_state" );
+    OUString aFileName;
+
+    if( pEnv )
+        aFileName = OUString::createFromAscii(pEnv);
+    else
+        aFileName = OStringToOUString("", osl_getThreadTextEncoding());
+
+    aFileName += "/.so_sane_state";
 
     Config aConfig( aFileName );
     aConfig.DeleteGroup( "SANE" );
