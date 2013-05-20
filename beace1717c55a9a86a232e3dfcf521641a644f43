@@ -70,6 +70,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXH//8ao\u003d",
+        "filename": "sc/source/core/tool/editutil.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2013-05-20T11:06:48Z",
+      "side": 1,
+      "message": "The method is used:\n\nhttp://opengrok.libreoffice.org/search?q\u003dModifyDelimiters\u0026project\u003dcore\u0026defs\u003d\u0026refs\u003d\u0026path\u003d\u0026hist\u003d",
+      "parentUuid": "AAAAXH//8a4\u003d",
+      "revId": "beace1717c55a9a86a232e3dfcf521641a644f43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXH//8a0\u003d",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 1
