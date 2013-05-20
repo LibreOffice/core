@@ -3415,7 +3415,7 @@ bool SfxViewFrame::IsSidebarEnabled()
         xContext = ::comphelper::getProcessComponentContext();
         try {
             bEnabled = officecfg::Office::Common::Misc::ExperimentalSidebar::get( xContext );
-        } catch (const uno::Exception &e) {
+        } catch (const uno::Exception &) {
             SAL_WARN("sfx2.view", "don't have experimental sidebar option installed");
         }
 
