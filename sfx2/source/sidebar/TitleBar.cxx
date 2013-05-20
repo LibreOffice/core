@@ -23,8 +23,6 @@
 #include <vcl/gradient.hxx>
 #include <vcl/lineinfo.hxx>
 
-ToolbarValue::~ToolbarValue (void) {}
-
 namespace
 {
     const static sal_Int32 gnLeftIconSpace (3);
