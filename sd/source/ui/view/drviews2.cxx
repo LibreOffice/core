@@ -2876,7 +2876,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
 {
     SdDrawDocument* pDoc = GetDoc();
     if (!pDoc || !mpDrawView)
-    return;
+        return;
 
     SfxItemSet aEditAttr( pDoc->GetPool() );
     mpDrawView->GetAttributes( aEditAttr );
